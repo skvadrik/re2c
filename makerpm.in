@@ -18,7 +18,7 @@ sleep 1 ; echo -n . ; sleep 1 ; echo -n . ; sleep 1 ; echo -n .
 echo
 
 TAR=@PACKAGE_TARNAME@-$VERSION.tar.gz
-SPEC=re2c.spec
+SPEC=re2c-${VERSION}.spec
 
 RPMBASE=/usr/src/redhat
 for i in /usr/src/redhat /usr/src/packages /usr/src/RPM; do
@@ -35,9 +35,11 @@ SRCDIR=${RPMBASE}/SOURCES
 make dist
 cp $TAR $SRCDIR
 
-echo "CP: (`pwd`) cp -a $SPEC $SPECDIR/${SPEC}"
+cat re2c.spec | sed -e "s/RPM_RELEASE/${RELEASE}/g" > ${SPEC}
+
+echo "CP: (`pwd`) cp -a $SPECDIR/${SPEC} $SPEC"
 cp -a $SPEC $SPECDIR/${SPEC}
 #cp -a *.patch $SRCDIR
 cd $SPECDIR
-echo "RPM: rpm -ba -vv ${SPEC}"
+echo "RPM: rpm -ba ${SPEC}"
 rpm -ba ${SPEC}
