@@ -25,7 +25,7 @@ EXTRA_DIST   = $(man_MANS) README parser.y scanner.re makerpm.in re2c.spec.in \
 			   examples/cnokw.re examples/cunroll.re examples/modula.re \
 			   examples/sample.re examples/simple.re examples/rexx/README \
 			   examples/rexx/rexx.l examples/rexx/scanio.c doc/loplas.ps \
-			   doc/sample.bib website/index.html
+			   doc/sample.bib
 
 rpm-files:	$(bin_PROGRAMS) $(EXTRA_DIST)
 
