@@ -4,16 +4,20 @@
 
 #include "substr.h"
 
-class Token {
-  public:
-    Str			text;
-    uint		line;
-  public:
-    Token(SubStr, uint);
+class Token
+{
+
+public:
+	Str	text;
+	uint	line;
+
+public:
+	Token(SubStr, uint);
 };
 
-inline Token::Token(SubStr t, uint l) : text(t), line(l) {
-    ;
+inline Token::Token(SubStr t, uint l) : text(t), line(l)
+{
+	;
 }
 
 #endif

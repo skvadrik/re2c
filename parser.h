@@ -6,15 +6,18 @@
 #include "re.h"
 #include <iosfwd>
 
-class Symbol {
+class Symbol
+{
+
 public:
-    static Symbol	*first;
-    Symbol		*next;
-    Str			name;
-    RegExp		*re;
+	static Symbol	*first;
+	Symbol	*next;
+	Str	name;
+	RegExp	*re;
+
 public:
-    Symbol(const SubStr&);
-    static Symbol *find(const SubStr&);
+	Symbol(const SubStr&);
+	static Symbol *find(const SubStr&);
 };
 
 void line_source(unsigned int, std::ostream&);

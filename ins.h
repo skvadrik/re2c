@@ -14,28 +14,39 @@ const uint TERM = 3;
 const uint CTXT = 4;
 
 union Ins {
-    struct {
-	byte	tag;
-	byte	marked;
-	void	*link;
-    }			i;
-    struct {
-	ushort	value;
-	ushort	bump;
-	void	*link;
-    }			c;
+
+	struct
+	{
+		byte	tag;
+		byte	marked;
+		void	*link;
+	}
+
+	i;
+
+	struct
+	{
+		ushort	value;
+		ushort	bump;
+		void	*link;
+	}
+
+	c;
 };
 
-inline bool isMarked(Ins *i){
-    return i->i.marked != 0;
+inline bool isMarked(Ins *i)
+{
+	return i->i.marked != 0;
 }
 
-inline void mark(Ins *i){
-    i->i.marked = true;
+inline void mark(Ins *i)
+{
+	i->i.marked = true;
 }
 
-inline void unmark(Ins *i){
-    i->i.marked = false;
+inline void unmark(Ins *i)
+{
+	i->i.marked = false;
 }
 
 #endif

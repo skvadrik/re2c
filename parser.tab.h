@@ -3,10 +3,10 @@
 
 #ifndef YYSTYPE
 typedef union {
-    Symbol	*symbol;
-    RegExp	*regexp;
-    Token	*token;
-    char	op;
+	Symbol	*symbol;
+	RegExp	*regexp;
+	Token	*token;
+	char	op;
 } yystype;
 # define YYSTYPE yystype
 # define YYSTYPE_IS_TRIVIAL 1

@@ -43,19 +43,19 @@ typedef unsigned long dword;
 #endif
 
 #ifndef HAVE_UINT
-typedef unsigned int 	uint;
+typedef unsigned int uint;
 #endif
 
 #ifndef HAVE_UCHAR
-typedef unsigned char 	uchar;
+typedef unsigned char uchar;
 #endif
 
 #ifndef HAVE_USHORT
-typedef unsigned short 	ushort;
+typedef unsigned short ushort;
 #endif
 
 #ifndef HAVE_ULONG
-typedef unsigned long 	ulong;
+typedef unsigned long ulong;
 #endif
 
 #endif
