@@ -250,15 +250,15 @@ void BitMap::stats()
 	first = NULL;
 }
 
-void genGoTo(std::ostream &o, State *from, State *to, bool & readCh)
+void genGoTo(std::ostream &o, State *from, State *to, bool & readCh, const char *indent = "\t")
 {
 	if (readCh && from->label + 1 != to->label)
 	{
-		o << "\tyych = *YYCURSOR;\n";
+		o << indent << "yych = *YYCURSOR;\n";
 		readCh = false;
 	}
 
-	o << "\tgoto yy" << to->label << ";\n";
+	o << indent << "goto yy" << to->label << ";\n";
 	++oline;
 	vUsedLabels.append(to->label);
 }
@@ -701,8 +701,11 @@ void Go::genGoto(std::ostream &o, State *from, State *next, bool &readCh)
 						o << "yych";
 					}
 
-					o << "] & " << (uint) b->m << ")";
-					genGoTo(o, from, to, readCh);
+					o << "] & " << (uint) b->m << ") {\n";
+					oline++;
+					genGoTo(o, from, to, readCh, "\t\t");
+					o << "\t}\n";
+					oline++;
 					go.genBase(o, from, next, readCh);
 					delete [] go.span;
 					return ;
