@@ -1,5 +1,4 @@
-#include <stdlib.h>
-#include <string.h>
+#include <stdlib.h> #include <string.h>
 #include <iostream.h>
 #include <unistd.h>
 #include "scanner.h"
@@ -69,6 +68,11 @@ digit		= [0-9];
 
 int Scanner::echo(ostream &out){
     char *cursor = cur;
+
+    // Catch EOF
+    if (eof && cursor == eof)
+    	return 0;
+
     tok = cursor;
 echo:
 /*!re2c
