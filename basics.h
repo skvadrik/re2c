@@ -1,3 +1,4 @@
+/* $Id$ */
 #ifndef _basics_h
 #define _basics_h
 

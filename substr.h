@@ -1,3 +1,4 @@
+/* $Id$ */
 #ifndef _substr_h
 #define _substr_h
 

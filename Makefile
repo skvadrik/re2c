@@ -1,63 +1,81 @@
-# $Log$
-# Revision 1.2  2004/01/12 04:36:00  nuffer
-# Integrated in bug fixes from yasm.  1. Fix detection of EOF in the re2c scanner.  2. Correctly output #line directives so that debugging the generated output is possible.
-#
-# Revision 1.1.1.1  2003/12/13 04:58:19  nuffer
-# Initial import
-#
-#Revision 1.1  1994/04/08  16:30:37  peter
-#Initial revision
-#
+# $Id$
 
 BIN = /usr/local/bin
 MAN = /usr/local/man
+RE2C_VERSION = 0.9.2
 
 %.o : %.cc ; $(CC) -o $@ $(CFLAGS) -c $<
 %.cc : %.y ; $(YACC)  $(YFLAGS) $<; mv $(YTAB).c $@
-%.cc : %.l ; $(LEX)   $(LFLAGS) $<; mv $(LEXYY).c $@
 
 %.cc:	%.re
-	./re2c -s $< >$@
+	-@if test -x re2c; then \
+		echo "re2c -s $< >$@"; \
+		re2c -s $< >$@; \
+	else \
+		echo "cp -f bootstrap/$@ $@"; \
+		cp -f bootstrap/$@ $@; \
+	fi
 
 SOURCES	= code.cc dfa.cc main.cc parser.y actions.cc scanner.re substr.cc\
 	translate.cc
 OBJS	= code.o dfa.o main.o parser.o actions.o scanner.o substr.o\
 	translate.o
 
-CC		= g++
-CFLAGS		= -O2 -Wall -I. -Wno-unused -Wno-parentheses
+CC			= g++
+CFLAGS		= -O2 -Wall -I. -Wno-unused -Wno-parentheses -Wno-deprecated
+YACC		= bison -y
 YFLAGS		= -d
 LDFLAGS		= 
 
 default:	re2c
 
-clean:
-	rm -f *.o *.s y.tab.c y.tab.h scanner.cc parser.cc .version version.h re2c
+dist-clean:
+	rm -f *.o *.s y.tab.c y.tab.h parser.cc .version version.h
+
+clean:	dist-clean
+	rm -f re2c scanner.cc README re2c.1 re2c.ps re2c*.spec makerpm
 
 parser.cc:	parser.y
-	bison -d parser.y
-	mv -f parser.tab.c parser.cc
+	$(YACC) $(YFLAGS) parser.y
+	mv -f y.tab.c parser.cc
 
-re2c:	$(OBJS)
+re2c:	README re2c.1 $(OBJS)
 	$(CC) -o $@ $(OBJS) $(LDFLAGS) -lstdc++
 
-.version: README
-	egrep "^Version" README | sed 's/Version //' > .version
+re2c.ps:
+	gunzip -c doc/loplas.ps.gz > re2c.ps
 
-version.h: .version
-	echo "#define RE2C_VERSION" `cat .version` > version.h
+.version:
+	echo $(RE2C_VERSION) > .version
 
-install: re2c
+version.h:
+	echo "#define RE2C_VERSION \"$(RE2C_VERSION)\"" > version.h
+
+README:
+	cat README.in | sed 's/RE2C_VERSION/$(RE2C_VERSION)/g' > README
+
+makerpm:
+	cat makerpm.in | sed 's/RE2C_VERSION/$(RE2C_VERSION)/g' > makerpm
+	chmod +x makerpm
+
+re2c.1:
+	cat re2c.1.in | sed 's/RE2C_VERSION/$(RE2C_VERSION)/g' > re2c.1
+
+install: re2c re2c.1
 	install -d $(BIN)
 	install -s re2c $(BIN)
 	install -d $(MAN)/man1
 	install -m 0644 re2c.1 $(MAN)/man1
 
-dist: re2c scanner.cc .version
-	mkdir re2c-`cat .version`
-	cp -P `p4 files ... | sed s/\\\\/\\\\/depot\\\\/home\\\\/re2c\\\\/// | sed '/- delete/d' | sed s/#.*$$//` re2c-`cat .version`/
-	tar zcf re2c-`cat .version`.tar.gz re2c-`cat .version`/
-	rm -rf re2c-`cat .version`
+uninstall:
+	rm -f $(BIN)/re2c
+	rm -f $(MAN)/man1/re2c.1*
+
+dist: re2c scanner.cc
+	mkdir re2c-$(RE2C_VERSION)
+	cp -P `p4 files ... | sed s/\\\\/\\\\/depot\\\\/home\\\\/re2c\\\\/// | sed '/- delete/d' | sed s/#.*$$//` re2c-$(RE2C_VERSION)/
+	tar zcf re2c-$(RE2C_VERSION).tar.gz re2c-$(RE2C_VERSION)/
+	rm -rf re2c-$(RE2C_VERSION)
 
 #
 # generated with "gcc -I. -MM -x c++ *.cc *.y *.re"
@@ -76,4 +94,4 @@ translate.o : translate.cc globals.h basics.h
 scanner.o : scanner.re scanner.h token.h substr.h basics.h \
   parser.h re.h ins.h ./parser.o
 parser.o : parser.y globals.h basics.h parser.h scanner.h token.h \
-  substr.h re.h ins.h 
+  substr.h re.h ins.h  version.h

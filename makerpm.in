@@ -1,0 +1,105 @@
+#! /bin/sh
+
+# $Id$
+# M.Boerger <re2c@somabo.de>
+
+PREFIX="re2c"
+#VERSION=RE2C_VERSION
+TARDIR="`basename \`pwd\``"
+RELEASE=${1:-1}
+VERSION=${2:-`echo $TARDIR | sed "s/$PREFIX-//g"`}
+
+echo "Usage:"
+echo "$0 <release>"
+echo
+echo "e.g.:"
+echo "$0"
+echo -n "Building RPM version $VERSION, release: $RELEASE "
+sleep 1 ; echo -n . ; sleep 1 ; echo -n . ; sleep 1 ; echo -n .
+echo
+
+TAR=re2c-$VERSION.tar.gz
+SPEC=re2c-$VERSION.spec
+
+# write out the .spec file
+sed -e "s/RPMVERSION/$VERSION/g" \
+    -e "s/RPMRELEASE/$RELEASE/g" \
+    -e "s/RPMTARDIR/$TARDIR/g" \
+    > $SPEC <<'EOF'
+Summary: re2c - A tool for generating C-based recognizers from regular expressions
+Name: re2c
+Version: RPMVERSION
+Release: RPMRELEASE
+Group: Development
+License: public domain
+URL: http://sourceforge.net/projects/re2c/
+Source: %{name}-%{version}.tar.gz
+BuildRoot: %{_tmppath}/%{name}-%{version}-root
+
+%description
+re2c is a great tool for writing fast and flexible lexers. It has
+served many people well for many years and it deserves to be
+maintained more actively. re2c is on the order of 2-3 times faster
+than a flex based scanner, and its input model is much more
+flexible.
+
+%prep
+%setup -q -n RPMTARDIR
+
+%build
+make clean
+make re2c
+#regenerate file scanner.cc
+rm -f scanner.cc
+make scanner.cc
+#regenerate re2c itself
+rm -f re2c
+make re2c
+make dist-clean
+
+%install
+rm -rf $RPM_BUILD_ROOT
+mkdir -p $RPM_BUILD_ROOT%{_bindir}
+install -m 0755 re2c $RPM_BUILD_ROOT%{_bindir}
+
+mkdir -p $RPM_BUILD_ROOT%{_mandir}/man1
+install -m 0755 re2c.1 $RPM_BUILD_ROOT%{_mandir}/man1 
+
+%clean
+rm -rf $RPM_BUILD_ROOT
+
+%changelog
+* Sun Jan 04 2003 Marcus Boerger <re2c@somabo.de>
+- Initial version.
+
+%files
+%defattr(-,root,root)
+%{_bindir}/re2c
+%{_mandir}/man1/re2c.1*
+
+%doc README examples doc/*
+EOF
+
+RPMBASE=/usr/src/redhat
+for i in /usr/src/redhat /usr/src/packages /usr/src/RPM; do
+  if test -d $i; then
+    RPMBASE=$i
+    break
+  fi
+done
+
+RPMDIR=${RPMBASE}/RPMS
+SPECDIR=${RPMBASE}/SPECS
+SRCDIR=${RPMBASE}/SOURCES
+
+(
+make clean
+cd ..
+tar czvf ${SRCDIR}/${TAR} $TARDIR )
+
+echo "CP: (`pwd`) cp -a $SPEC $SPECDIR/${SPEC}"
+cp -a $SPEC $SPECDIR/${SPEC}
+#cp -a *.patch $SRCDIR
+cd $SPECDIR
+echo "RPM: rpm -ba -vv ${SPEC}"
+rpm -ba ${SPEC}

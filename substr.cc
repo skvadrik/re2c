@@ -1,10 +1,11 @@
+/* $Id$ */
 #include <string.h>
 #include "substr.h"
 #include "globals.h"
 
 void SubStr::out(ostream& o) const {
     o.write(str, len);
-    for (int i = 0; i < len; ++i)
+    for (size_t i = 0; i < (size_t)len; ++i)
     {
     	if (str[i] == '\n')
 	    ++oline;

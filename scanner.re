@@ -1,4 +1,6 @@
-#include <stdlib.h> #include <string.h>
+/* $Id$ */
+#include <stdlib.h>
+#include <string.h>
 #include <iostream.h>
 #include <unistd.h>
 #include "scanner.h"
@@ -9,7 +11,7 @@ extern YYSTYPE yylval;
 
 #define	BSIZE	8192
 
-#define	YYCTYPE		char
+#define	YYCTYPE		uchar
 #define	YYCURSOR	cursor
 #define	YYLIMIT		lim
 #define	YYMARKER	ptr
@@ -24,7 +26,7 @@ Scanner::Scanner(int i) : in(i),
     ;
 }
 
-char *Scanner::fill(char *cursor){
+uchar *Scanner::fill(uchar *cursor){
     if(!eof){
 	uint cnt = tok - bot;
 	if(cnt){
@@ -36,7 +38,7 @@ char *Scanner::fill(char *cursor){
 	    lim -= cnt;
 	}
 	if((top - lim) < BSIZE){
-	    char *buf = new char[(lim - bot) + BSIZE];
+	    uchar *buf = new uchar[(lim - bot) + BSIZE];
 	    memcpy(buf, tok, lim - tok);
 	    tok = buf;
 	    ptr = &buf[ptr - bot];
@@ -67,7 +69,7 @@ digit		= [0-9];
 */
 
 int Scanner::echo(ostream &out){
-    char *cursor = cur;
+    uchar *cursor = cur;
 
     // Catch EOF
     if (eof && cursor == eof)
@@ -76,11 +78,11 @@ int Scanner::echo(ostream &out){
     tok = cursor;
 echo:
 /*!re2c
-	"/*!re2c"		{ out.write((char *)tok, &cursor[-7] - tok);
+	"/*!re2c"		{ out.write((const char*)(tok), &cursor[-7] - tok);
 				  tok = cursor;
 				  RETURN(1); }
 	"\n"			{ if(cursor == eof) RETURN(0);
-				  out.write((char *)tok, cursor - tok);
+				  out.write((const char*)(tok), cursor - tok);
 				  tok = pos = cursor; cline++;
 				  goto echo; }
         any			{ goto echo; }
@@ -89,7 +91,7 @@ echo:
 
 
 int Scanner::scan(){
-    char *cursor = cur;
+    uchar *cursor = cur;
     uint depth;
 
 scan:

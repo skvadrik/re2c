@@ -1,3 +1,4 @@
+/* $Id$ */
 #ifndef _scanner_h
 #define	_scanner_h
 
@@ -6,10 +7,10 @@
 class Scanner {
   private:
     int			in;
-    char		*bot, *tok, *ptr, *cur, *pos, *lim, *top, *eof;
+    uchar		*bot, *tok, *ptr, *cur, *pos, *lim, *top, *eof;
     uint		tchar, tline, cline;
   private:
-    char *fill(char*);
+    uchar *fill(uchar*);
   public:
     Scanner(int);
     int echo(ostream&);

@@ -1,3 +1,4 @@
+/* $Id$ */
 #ifndef _dfa_h
 #define _dfa_h
 

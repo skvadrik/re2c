@@ -1,3 +1,4 @@
+/* $Id$ */
 #include "globals.h"
 
 uchar asc2asc[256] = {

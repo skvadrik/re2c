@@ -1,5 +1,7 @@
 %{
 
+/* $Id$ */
+
 #include <time.h>
 #include <iostream.h>
 #include <string.h>
@@ -18,6 +20,13 @@ void yyerror(char*);
 static uint accept;
 static RegExp *spec;
 static Scanner *in;
+
+/* Bison version 1.875 emits a definition that is not working
+ * with several g++ version. Hence we disable it here.
+ */
+#if defined(__GNUC__)
+#define __attribute__(x)
+#endif
 
 %}
 

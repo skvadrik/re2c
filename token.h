@@ -1,3 +1,4 @@
+/* $Id$ */
 #ifndef _token_h
 #define	_token_h
 
