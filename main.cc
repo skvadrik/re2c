@@ -37,7 +37,6 @@ int main(int argc, char *argv[])
 {
 	int c;
     fileName = NULL;
-    outputFileName = NULL;
 
     if (argc == 1) {
 		goto usage;
@@ -57,9 +56,6 @@ int main(int argc, char *argv[])
 			break;
 	    case 'h':
 			goto usage;
-		case 'f':
-			outputFileName = opt_arg;
-			break;
 	    case 's':
 			sFlag = true;
 			break;
@@ -97,10 +93,25 @@ int main(int argc, char *argv[])
     return 0;
 
 usage:
-    cerr << "usage: re2c [-esbvh] file\n";
+    cerr << "usage: re2c [-esbvh] file\n"
+			"\n"
+			"-? -h   --help          Display this info.\n"
+			"\n"
+			"-b      --bit-vectors   Implies -s. Use bit vectors as well in the attempt to\n"
+			"                        coax better code out of the compiler. Most useful for\n"
+			"                        specifications with more than a few keywords (e.g. for\n"
+			"                        most programming languages).\n"
+			"\n"
+			"-e      --ecb           Cross-compile from an ASCII platform to\n"
+			"                        an EBCDIC one.\n"
+			"\n"
+			"-s      --nested-ifs    Generate nested ifs for some switches. Many compilers\n"
+			"                        need this assist to generate better code.\n"
+			"\n"
+			"-v      --version       Show version information.\n";
     return 2;
 
 version:
-    cerr << "re2c " << PACKAGE_VERSION << "\n";
+	cerr << "re2c " << PACKAGE_VERSION << "\n";
     return 2;
 }
