@@ -32,6 +32,20 @@ static Scanner *in;
 #define __attribute__(x)
 #endif
 
+/* strdup() isn't standard C, so if we don't have it, we'll create our
+ * own version
+ */
+#if !defined(HAVE_STRDUP)
+static char* strdup(const char* s)
+{
+	char* rv = (char*)malloc(strlen(s) + 1);
+	if (rv == NULL)
+		return NULL;
+	strcpy(rv, s);
+	return rv;
+}
+#endif
+
 %}
 
 %start	spec
