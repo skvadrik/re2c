@@ -54,6 +54,13 @@ AC_CHECK_TYPE([ulong], [
   AC_DEFINE([HAVE_ULONG], [1],  [Define to 1 if you have ulong type definition])
 ])
 
-AC_CONFIG_FILES([Makefile README makerpm re2c.1 re2c.spec])
-AC_OUTPUT_COMMANDS([chmod +x makerpm])
+AC_CONFIG_FILES([\
+Makefile \
+README \
+makerpm \
+re2c.1 \
+re2c.spec \
+test/run_tests.sh \
+])
+AC_OUTPUT_COMMANDS([chmod +x makerpm test/run_tests.sh])
 AC_OUTPUT

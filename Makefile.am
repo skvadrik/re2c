@@ -21,11 +21,13 @@ DISTCLEANFILES = makerpm re2c.spec README scanner.cc re2c$(EXEEXT)
 
 EXTRA_DIST   = $(man_MANS) README parser.y scanner.re makerpm.in re2c.spec.in \
                README.in y.tab.h \
-               examples/basemmap.c examples/c.re examples/cmmap.re \
-			   examples/cnokw.re examples/cunroll.re examples/modula.re \
-			   examples/sample.re examples/simple.re examples/rexx/README \
-			   examples/rexx/rexx.l examples/rexx/scanio.c doc/loplas.ps \
-			   doc/sample.bib
+               doc examples test
+
+dist-hook:
+	rm -rf `find $(distdir)/doc -name CVS`
+	rm -rf `find $(distdir)/examples -name CVS`
+	rm -rf `find $(distdir)/test -name CVS`
+
 
 rpm-files:	$(bin_PROGRAMS) $(EXTRA_DIST)
 
@@ -45,3 +47,6 @@ scanner.cc: $(top_srcdir)/scanner.re
 
 .version:
 	echo $(PACKAGE_VERSION) > .version
+
+TESTS = test/run_tests.sh
+
