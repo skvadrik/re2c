@@ -20,10 +20,14 @@ x86. You can compile your own version with other gcc version if you
 have yacc or any working bison version (tested up to bison 1.875).
 
 You can install this software by simple typing the following commands:
+    ./autogen.sh
+    ./configure
     make
     make install
 
 Or you can create a rpm package and install it by the following commands:
+    ./autogen.sh
+    ./configure
     make makerpm
     ./makerpm <release>
     rpm -Uhv <packagedir>/re2c-RE2C_VERSION-<release>.rpm
