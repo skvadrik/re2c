@@ -9,6 +9,9 @@
 #include "dfa.h"
 #include "parser.h"
 
+namespace re2c
+{
+
 // there must be at least one span in list;  all spans must cover
 // same range
 
@@ -1133,3 +1136,6 @@ void DFA::emit(std::ostream &o)
 	delete [] saves;
 	delete [] rules;
 }
+
+} // end namespace re2c
+

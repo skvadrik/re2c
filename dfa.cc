@@ -5,6 +5,9 @@
 #include "substr.h"
 #include "dfa.h"
 
+namespace re2c
+{
+
 inline char octCh(uint c)
 {
 	return '0' + c % 8;
@@ -355,3 +358,6 @@ unmarkAll:
 
 	return s;
 }
+
+} // end namespace re2c
+

@@ -6,6 +6,9 @@
 #include "re.h"
 #include <iosfwd>
 
+namespace re2c
+{
+
 class Symbol
 {
 
@@ -22,5 +25,7 @@ public:
 
 void line_source(unsigned int, std::ostream&);
 void parse(std::istream&, std::ostream&);
+
+} // end namespace re2c
 
 #endif

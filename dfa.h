@@ -5,6 +5,9 @@
 #include <iosfwd>
 #include "re.h"
 
+namespace re2c
+{
+
 extern void prtCh(std::ostream&, uchar);
 extern void prtChOrHex(std::ostream&, uchar);
 extern void printSpan(std::ostream&, uint, uint);
@@ -222,5 +225,7 @@ inline std::ostream& operator<<(std::ostream &o, const DFA *dfa)
 {
 	return o << *dfa;
 }
+
+} // end namespace re2c
 
 #endif

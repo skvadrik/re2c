@@ -22,6 +22,8 @@ extern YYSTYPE yylval;
 
 #define	RETURN(i)	{cur = cursor; return i;}
 
+namespace re2c
+{
 
 Scanner::Scanner(std::istream& i) : in(i),
 	bot(NULL), tok(NULL), ptr(NULL), cur(NULL), pos(NULL), lim(NULL),
@@ -199,3 +201,6 @@ void Scanner::fatal(char *msg){
 	<< msg << std::endl;
     exit(1);
 }
+
+} // end namespace re2c
+

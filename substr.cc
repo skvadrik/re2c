@@ -3,6 +3,9 @@
 #include "substr.h"
 #include "globals.h"
 
+namespace re2c
+{
+
 void SubStr::out(std::ostream& o) const
 {
 	o.write(str, len);
@@ -42,3 +45,6 @@ Str::~Str()
 	str = (char*) - 1;
 	len = (uint) - 1;
 }
+
+} // end namespace re2c
+

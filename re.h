@@ -6,6 +6,9 @@
 #include "token.h"
 #include "ins.h"
 
+namespace re2c
+{
+
 typedef struct extop
 {
 	char op;
@@ -292,5 +295,7 @@ extern RegExp *mkDiff(RegExp*, RegExp*);
 extern RegExp *strToRE(SubStr);
 extern RegExp *ranToRE(SubStr);
 extern RegExp *strToCaseInsensitiveRE(SubStr s);
+
+} // end namespace re2c
 
 #endif

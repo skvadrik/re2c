@@ -13,6 +13,8 @@
 #define OPTERRNF (2)
 #define OPTERRARG (3)
 
+namespace re2c
+{
 
 static int mbo_opt_error(int argc, char * const *argv, int oint, int optchr, int err, int show_err)
 {
@@ -194,3 +196,6 @@ int mbo_getopt(int argc, char* const *argv, const mbo_opt_struct opts[], char **
 	assert(0);
 	return (0);	/* never reached */
 }
+
+} // end namespace re2c
+

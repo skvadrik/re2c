@@ -9,6 +9,9 @@
 #include "parser.h"
 #include "dfa.h"
 
+namespace re2c
+{
+
 Symbol *Symbol::first = NULL;
 
 Symbol::Symbol(const SubStr &str) : next(first), name(str), re(NULL)
@@ -810,3 +813,6 @@ void genCode(std::ostream& o, RegExp *re)
 	delete dfa;
 	delete [] ins;
 }
+
+} // end namespace re2c
+

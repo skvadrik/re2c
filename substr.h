@@ -5,6 +5,9 @@
 #include <iostream>
 #include "basics.h"
 
+namespace re2c
+{
+
 class SubStr
 {
 
@@ -52,5 +55,7 @@ inline SubStr::SubStr(char *s, uint l)
 inline SubStr::SubStr(const SubStr &s)
 		: str(s.str), len(s.len)
 { }
+
+} // end namespace re2c
 
 #endif

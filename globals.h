@@ -4,6 +4,9 @@
 
 #include "basics.h"
 
+namespace re2c
+{
+
 extern char *fileName;
 extern char *outputFileName;
 extern bool sFlag;
@@ -14,5 +17,7 @@ extern uchar asc2ebc[256];
 extern uchar ebc2asc[256];
 
 extern uchar *xlat, *talx;
+
+} // end namespace re2c
 
 #endif

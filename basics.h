@@ -6,6 +6,9 @@
 #include "config.h"
 #endif
 
+namespace re2c
+{
+
 #if SIZEOF_CHAR == 1
 typedef unsigned char byte;
 #elif SIZEOF_SHORT == 1
@@ -42,20 +45,11 @@ typedef unsigned long dword;
 typedef unsigned long dword;
 #endif
 
-#ifndef HAVE_UINT
 typedef unsigned int uint;
-#endif
-
-#ifndef HAVE_UCHAR
 typedef unsigned char uchar;
-#endif
-
-#ifndef HAVE_USHORT
 typedef unsigned short ushort;
-#endif
-
-#ifndef HAVE_ULONG
 typedef unsigned long ulong;
-#endif
+
+} // end namespace re2c
 
 #endif

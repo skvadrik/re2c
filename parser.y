@@ -13,6 +13,9 @@
 
 #include "globals.h"
 #include "parser.h"
+#include "basics.h"
+
+using namespace re2c;
 
 extern "C"
 {
@@ -21,7 +24,7 @@ int yylex();
 void yyerror(char*);
 }
 
-static uint accept;
+static re2c::uint accept;
 static RegExp *spec;
 static Scanner *in;
 
@@ -51,11 +54,11 @@ static char* strdup(const char* s)
 %start	spec
 
 %union {
-    Symbol	*symbol;
-    RegExp	*regexp;
-    Token	*token;
+    re2c::Symbol	*symbol;
+    re2c::RegExp	*regexp;
+    re2c::Token	*token;
     char	op;
-    ExtOp	extop;
+    re2c::ExtOp	extop;
 };
 
 %token		CLOSESIZE   CLOSE	ID	CODE	RANGE	STRING
@@ -167,6 +170,9 @@ int yylex(){
 }
 } // end extern "C"
 
+namespace re2c
+{
+
 void line_source(unsigned int line, std::ostream& o)
 {
     char *	fnamebuf;
@@ -209,3 +215,6 @@ void parse(std::istream& i, std::ostream &o){
 	line_source(in->line(), o);
     }
 }
+
+} // end namespace re2c
+

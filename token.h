@@ -4,6 +4,9 @@
 
 #include "substr.h"
 
+namespace re2c
+{
+
 class Token
 {
 
@@ -19,5 +22,7 @@ inline Token::Token(SubStr t, uint l) : text(t), line(l)
 {
 	;
 }
+
+} // end namespace re2c
 
 #endif

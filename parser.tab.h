@@ -3,9 +3,9 @@
 
 #ifndef YYSTYPE
 typedef union {
-	Symbol	*symbol;
-	RegExp	*regexp;
-	Token	*token;
+	re2c::Symbol	*symbol;
+	re2c::RegExp	*regexp;
+	re2c::Token	*token;
 	char	op;
 } yystype;
 # define YYSTYPE yystype

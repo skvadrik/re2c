@@ -13,6 +13,9 @@
 #include "dfa.h"
 #include "mbo_getopt.h"
 
+namespace re2c
+{
+
 char *fileName = 0;
 char *outputFileName = 0;
 bool sFlag = false;
@@ -59,6 +62,10 @@ static void usage()
 	"\n"
 	"-v      --version       Show version information.\n";
 }
+
+} // end namespace re2c
+
+using namespace re2c;
 
 int main(int argc, char *argv[])
 {
@@ -168,3 +175,4 @@ int main(int argc, char *argv[])
 	return 0;
 
 }
+

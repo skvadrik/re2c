@@ -4,6 +4,9 @@
 
 #include "basics.h"
 
+namespace re2c
+{
+
 const uint nChars = 256;
 typedef uchar Char;
 
@@ -48,5 +51,7 @@ inline void unmark(Ins *i)
 {
 	i->i.marked = false;
 }
+
+} // end namespace re2c
 
 #endif

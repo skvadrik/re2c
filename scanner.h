@@ -5,6 +5,9 @@
 #include <iosfwd>
 #include "token.h"
 
+namespace re2c
+{
+
 class Scanner
 {
 
@@ -36,5 +39,7 @@ inline uint Scanner::line()
 {
 	return cline;
 }
+
+} // end namespace re2c
 
 #endif
