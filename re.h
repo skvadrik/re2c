@@ -6,6 +6,12 @@
 #include "token.h"
 #include "ins.h"
 
+typedef struct extop {
+      char      op;
+      int	minsize;
+      int	maxsize;
+} ExtOp;
+
 struct CharPtn {
     uint	card;
     CharPtn	*fix;
@@ -161,6 +167,26 @@ public:
 public:
     CloseOp(RegExp *e)
 	{ exp = e; }
+    char *typeOf()
+	{ return type; }
+    void split(CharSet&);
+    void calcSize(Char*);
+    void compile(Char*, Ins*);
+    void display(ostream &o) const {
+	o << exp << "+";
+    }
+};
+
+class CloseVOp: public RegExp {
+private:
+    RegExp	*exp;
+    int		min;
+    int		max;
+public:
+    static char *type;
+public:
+    CloseVOp(RegExp *e, int lb, int ub)
+	{ exp = e; min = lb; max = ub; }
     char *typeOf()
 	{ return type; }
     void split(CharSet&);

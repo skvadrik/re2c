@@ -9,6 +9,10 @@
 
 extern YYSTYPE yylval;
 
+#ifndef MAX
+#define MAX(a,b) (((a)>(b))?(a):(b))
+#endif
+
 #define	BSIZE	8192
 
 #define	YYCTYPE		char
@@ -78,11 +82,11 @@ int Scanner::echo(ostream &out){
     tok = cursor;
 echo:
 /*!re2c
-	"/*!re2c"		{ out.write((const char*)(tok), &cursor[-7] - tok);
+	"/*!re2c"		{ out.write((const char*)(tok), (const char*)(&cursor[-7]) - (const char*)(tok));
 				  tok = cursor;
 				  RETURN(1); }
 	"\n"			{ if(cursor == eof) RETURN(0);
-				  out.write((const char*)(tok), cursor - tok);
+				  out.write((const char*)(tok), (const char*)(cursor) - (const char*)(tok));
 				  tok = pos = cursor; cline++;
 				  goto echo; }
         any			{ goto echo; }
@@ -122,6 +126,18 @@ scan:
 
 	[*+?]			{ yylval.op = *tok;
 				  RETURN(CLOSE); }
+
+	"{" [0-9]+ "}"		{ yylval.extop.minsize = atoi((char *)tok+1);
+				  yylval.extop.maxsize = atoi((char *)tok+1);
+				  RETURN(CLOSESIZE); }
+
+	"{" [0-9]+ "," [0-9]+ "}"	{ yylval.extop.minsize = atoi((char *)tok+1);
+				  yylval.extop.maxsize = MAX(yylval.extop.minsize,atoi(strchr((char *)tok, ',')+1));
+				  RETURN(CLOSESIZE); }
+
+	"{" [0-9]+ ",}"		{ yylval.extop.minsize = atoi((char *)tok+1);
+				  yylval.extop.maxsize = -1;
+				  RETURN(CLOSESIZE); }
 
 	letter (letter|digit)*	{ cur = cursor;
 				  yylval.symbol = Symbol::find(token());

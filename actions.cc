@@ -324,6 +324,42 @@ void CloseOp::split(CharSet &s){
     exp->split(s);
 }
 
+char *CloseVOp::type = "CloseVOp";
+
+void CloseVOp::calcSize(Char *rep){
+    exp->calcSize(rep);
+    if(max >= 0)
+      size = (exp->size * min) + ((1 + exp->size) * (max - min));
+    else
+      size = (exp->size * min) + 1;
+}
+
+void CloseVOp::compile(Char *rep, Ins *i){
+    Ins *jumppoint;
+    int st = 0;
+    jumppoint = i + ((1 + exp->size) * (max - min));
+    for(st = min; st < max; st++) {
+      i->i.tag = FORK;
+      i->i.link = jumppoint;
+      i+=1;
+      exp->compile(rep, &i[0]);
+      i += exp->size;
+    }
+    for(st = 0; st < min; st++) {
+      exp->compile(rep, &i[0]);
+      i += exp->size;
+      if(max < 0 && st == 0) {
+        i->i.tag = FORK;
+        i->i.link = i - exp->size;
+        i++;
+      }
+    }
+}
+
+void CloseVOp::split(CharSet &s){
+    exp->split(s);
+}
+
 RegExp *expr(Scanner &);
 
 uchar unescape(SubStr &s){
