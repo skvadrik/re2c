@@ -38,6 +38,7 @@ static const mbo_opt_struct OPTIONS[] =
         {'s', 0, "nested-ifs"},
         {'o', 1, "output"},
         {'v', 0, "version"},
+        {'V', 0, "vernum"},
         {'-', 0, NULL} /* end of args */ 
     };
 
@@ -60,7 +61,9 @@ static void usage()
 	"\n"
 	"-o      --output=output Specify the output file instead of stdout\n"
 	"\n"
-	"-v      --version       Show version information.\n";
+	"-v      --version       Show version information.\n"
+	"-V      --vernum        Show version as one number.\n"
+	;
 }
 
 } // end namespace re2c
@@ -104,6 +107,15 @@ int main(int argc, char *argv[])
 			case 'v':
 			cerr << "re2c " << PACKAGE_VERSION << "\n";
 			return 2;
+			
+			case 'V': {
+				int v1, v2, v3;
+				char version[16];
+				sscanf(PACKAGE_VERSION, "%d.%d.%d", &v1, &v2, &v3);
+				sprintf(version, "%02d%02d%02d", v1, v2, v3);
+				cerr << version << "\n";
+				return 2;
+			}
 
 			case 'h':
 
