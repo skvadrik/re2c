@@ -3,7 +3,7 @@
 #include "substr.h"
 #include "globals.h"
 
-void SubStr::out(ostream& o) const {
+void SubStr::out(std::ostream& o) const {
     o.write(str, len);
     for (size_t i = 0; i < (size_t)len; ++i)
     {

@@ -4,6 +4,7 @@
 
 #include "scanner.h"
 #include "re.h"
+#include <iosfwd>
 
 class Symbol {
 public:
@@ -16,7 +17,7 @@ public:
     static Symbol *find(const SubStr&);
 };
 
-void line_source(unsigned int, ostream&);
-void parse(int, ostream&);
+void line_source(unsigned int, std::ostream&);
+void parse(std::istream&, std::ostream&);
 
 #endif

@@ -2,11 +2,11 @@
 #ifndef _dfa_h
 #define _dfa_h
 
-#include <iostream.h>
+#include <iosfwd>
 #include "re.h"
 
-extern void prtCh(ostream&, uchar);
-extern void printSpan(ostream&, uint, uint);
+extern void prtCh(std::ostream&, uchar);
+extern void printSpan(std::ostream&, uint, uint);
 
 class DFA;
 class State;
@@ -16,7 +16,7 @@ public:
     State		*state;
 public:
     Action(State*);
-    virtual void emit(ostream&, bool&) = 0;
+    virtual void emit(std::ostream&, bool&) = 0;
     virtual bool isRule() const;
     virtual bool isMatch() const;
     virtual bool readAhead() const;
@@ -25,7 +25,7 @@ public:
 class Match: public Action {
 public:
     Match(State*);
-    void emit(ostream&, bool&);
+    void emit(std::ostream&, bool&);
     bool isMatch() const;
 };
 
@@ -34,7 +34,7 @@ public:
     uint		label;
 public:
     Enter(State*, uint);
-    void emit(ostream&, bool&);
+    void emit(std::ostream&, bool&);
 };
 
 class Save: public Match {
@@ -42,14 +42,14 @@ public:
     uint		selector;
 public:
     Save(State*, uint);
-    void emit(ostream&, bool&);
+    void emit(std::ostream&, bool&);
     bool isMatch() const;
 };
 
 class Move: public Action {
 public:
     Move(State*);
-    void emit(ostream&, bool&);
+    void emit(std::ostream&, bool&);
 };
 
 class Accept: public Action {
@@ -59,7 +59,7 @@ public:
     State		**rules;
 public:
     Accept(State*, uint, uint*, State**);
-    void emit(ostream&, bool&);
+    void emit(std::ostream&, bool&);
 };
 
 class Rule: public Action {
@@ -67,7 +67,7 @@ public:
     RuleOp		*rule;
 public:
     Rule(State*, RuleOp*);
-    void emit(ostream&, bool&);
+    void emit(std::ostream&, bool&);
     bool isRule() const;
 };
 
@@ -76,7 +76,7 @@ public:
     uint		ub;
     State		*to;
 public:
-    uint show(ostream&, uint);
+    uint show(std::ostream&, uint);
 };
 
 class Go {
@@ -84,11 +84,11 @@ public:
     uint		nSpans;
     Span		*span;
 public:
-    void genGoto(ostream&, State *from, State*, bool &readCh);
-    void genBase(ostream&, State *from, State*, bool &readCh);
-    void genLinear(ostream&, State *from, State*, bool &readCh);
-    void genBinary(ostream&, State *from, State*, bool &readCh);
-    void genSwitch(ostream&, State *from, State*, bool &readCh);
+    void genGoto(std::ostream&, State *from, State*, bool &readCh);
+    void genBase(std::ostream&, State *from, State*, bool &readCh);
+    void genLinear(std::ostream&, State *from, State*, bool &readCh);
+    void genBinary(std::ostream&, State *from, State*, bool &readCh);
+    void genSwitch(std::ostream&, State *from, State*, bool &readCh);
     void compact();
     void unmap(Go*, State*);
 };
@@ -108,9 +108,9 @@ public:
 public:
     State();
     ~State();
-    void emit(ostream&, bool&);
-    friend ostream& operator<<(ostream&, const State&);
-    friend ostream& operator<<(ostream&, const State*);
+    void emit(std::ostream&, bool&);
+    friend std::ostream& operator<<(std::ostream&, const State&);
+    friend std::ostream& operator<<(std::ostream&, const State*);
 };
 
 class DFA {
@@ -128,10 +128,10 @@ public:
     void split(State*);
 
     void findSCCs();
-    void emit(ostream&);
+    void emit(std::ostream&);
 
-    friend ostream& operator<<(ostream&, const DFA&);
-    friend ostream& operator<<(ostream&, const DFA*);
+    friend std::ostream& operator<<(std::ostream&, const DFA&);
+    friend std::ostream& operator<<(std::ostream&, const DFA*);
 };
 
 inline Action::Action(State *s) : state(s) {
@@ -165,10 +165,10 @@ inline bool Save::isMatch() const
 inline bool Rule::isRule() const
 	{ return true; }
 
-inline ostream& operator<<(ostream &o, const State *s)
+inline std::ostream& operator<<(std::ostream &o, const State *s)
     { return o << *s; }
 
-inline ostream& operator<<(ostream &o, const DFA *dfa)
+inline std::ostream& operator<<(std::ostream &o, const DFA *dfa)
     { return o << *dfa; }
 
 #endif

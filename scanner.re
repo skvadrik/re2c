@@ -1,8 +1,7 @@
 /* $Id$ */
 #include <stdlib.h>
 #include <string.h>
-#include <iostream.h>
-#include <unistd.h>
+#include <iostream>
 #include "scanner.h"
 #include "parser.h"
 #include "y.tab.h"
@@ -24,7 +23,7 @@ extern YYSTYPE yylval;
 #define	RETURN(i)	{cur = cursor; return i;}
 
 
-Scanner::Scanner(int i) : in(i),
+Scanner::Scanner(std::istream& i) : in(i),
 	bot(NULL), tok(NULL), ptr(NULL), cur(NULL), pos(NULL), lim(NULL),
 	top(NULL), eof(NULL), tchar(0), tline(0), cline(1) {
     ;
@@ -53,7 +52,7 @@ char *Scanner::fill(char *cursor){
 	    delete [] bot;
 	    bot = buf;
 	}
-	if((cnt = read(in, (char*) lim, BSIZE)) != BSIZE){
+	if((cnt = in.rdbuf()->sgetn((char*) lim, BSIZE)) != BSIZE){
 	    eof = &lim[cnt]; *eof++ = '\n';
 	}
 	lim += cnt;
@@ -72,7 +71,7 @@ letter		= [a-zA-Z];
 digit		= [0-9];
 */
 
-int Scanner::echo(ostream &out){
+int Scanner::echo(std::ostream &out){
     char *cursor = cur;
 
     // Catch EOF
@@ -157,7 +156,7 @@ scan:
 				  goto scan;
 	    			}
 
-	any			{ cerr << "unexpected character: " << *tok << endl;
+	any			{ std::cerr << "unexpected character: " << *tok << std::endl;
 				  goto scan;
 				}
 */
@@ -196,7 +195,7 @@ comment:
 }
 
 void Scanner::fatal(char *msg){
-    cerr << "line " << tline << ", column " << (tchar + 1) << ": "
-	<< msg << endl;
+    std::cerr << "line " << tline << ", column " << (tchar + 1) << ": "
+	<< msg << std::endl;
     exit(1);
 }

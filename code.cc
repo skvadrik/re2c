@@ -2,7 +2,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
-#include <iomanip.h>
+#include <iomanip>
+#include <iostream>
 #include "substr.h"
 #include "globals.h"
 #include "dfa.h"
@@ -73,7 +74,7 @@ void doGen(Go *g, State *s, uchar *bm, uchar m)
 	}
 }
 
-void prt(ostream& o, Go *g, State *s)
+void prt(std::ostream& o, Go *g, State *s)
 {
 	Span *b = g->span, *e = &b[g->nSpans];
 	uint lb = 0;
@@ -129,7 +130,7 @@ public:
 	public:
 	static BitMap *find(Go*, State*);
 	static BitMap *find(State*);
-	static void gen(ostream&, uint, uint);
+	static void gen(std::ostream&, uint, uint);
 	static void stats();
 	BitMap(Go*, State*);
 };
@@ -165,7 +166,7 @@ BitMap *BitMap::find(State *x)
     return NULL;
 }
 
-void BitMap::gen(ostream &o, uint lb, uint ub)
+void BitMap::gen(std::ostream &o, uint lb, uint ub)
 {
 	BitMap *b = first;
 	if(b)
@@ -187,7 +188,7 @@ void BitMap::gen(ostream &o, uint lb, uint ub)
 				{
 					o << "\n\t"; ++oline;
 				}
-				o << setw(3) << (uint) bm[j] << ", ";
+				o << std::setw(3) << (uint) bm[j] << ", ";
 			}
 		}
 		o << "\n\t};\n";
@@ -200,14 +201,14 @@ void BitMap::stats()
 	uint n = 0;
 	for(BitMap *b = first; b; b = b->next)
 	{
-		prt(cerr, b->go, b->on); cerr << endl;
+		prt(std::cerr, b->go, b->on); std::cerr << std::endl;
 		++n;
 	}
-	cerr << n << " bitmaps\n";
+	std::cerr << n << " bitmaps\n";
 	first = NULL;
 }
 
-void genGoTo(ostream &o, State *from, State *to, bool & readCh)
+void genGoTo(std::ostream &o, State *from, State *to, bool & readCh)
 {
 	if (readCh && from->label + 1 != to->label)
 	{
@@ -218,7 +219,7 @@ void genGoTo(ostream &o, State *from, State *to, bool & readCh)
 	++oline;
 }
 
-void genIf(ostream &o, char *cmp, uint v, bool &readCh)
+void genIf(std::ostream &o, char *cmp, uint v, bool &readCh)
 {
 	if (readCh)
 	{
@@ -234,7 +235,7 @@ void genIf(ostream &o, char *cmp, uint v, bool &readCh)
 	o << "')";
 }
 
-void indent(ostream &o, uint i)
+void indent(std::ostream &o, uint i)
 {
 	while(i-- > 0)
 	{
@@ -242,7 +243,7 @@ void indent(ostream &o, uint i)
 	}
 }
 
-static void need(ostream &o, uint n, bool & readCh)
+static void need(std::ostream &o, uint n, bool & readCh)
 {
 	if(n == 1)
 	{
@@ -259,7 +260,7 @@ static void need(ostream &o, uint n, bool & readCh)
 	++oline;
 }
 
-void Match::emit(ostream &o, bool &readCh)
+void Match::emit(std::ostream &o, bool &readCh)
 {
 	if (state->link)
 	{
@@ -284,7 +285,7 @@ void Match::emit(ostream &o, bool &readCh)
 	}
 }
 
-void Enter::emit(ostream &o, bool &readCh)
+void Enter::emit(std::ostream &o, bool &readCh)
 {
 	if(state->link){
 		o << "\t++YYCURSOR;\n";
@@ -300,7 +301,7 @@ void Enter::emit(ostream &o, bool &readCh)
 	}
 }
 
-void Save::emit(ostream &o, bool &readCh)
+void Save::emit(std::ostream &o, bool &readCh)
 {
 	o << "\tyyaccept = " << selector << ";\n";
 	++oline;
@@ -319,7 +320,7 @@ Move::Move(State *s) : Action(s) {
     ;
 }
 
-void Move::emit(ostream &o, bool &readCh){
+void Move::emit(std::ostream &o, bool &readCh){
     ;
 }
 
@@ -328,7 +329,7 @@ Accept::Accept(State *x, uint n, uint *s, State **r)
     ;
 }
 
-void Accept::emit(ostream &o, bool &readCh)
+void Accept::emit(std::ostream &o, bool &readCh)
 {
 	bool first = true;
 	for(uint i = 0; i < nRules; ++i)
@@ -355,7 +356,7 @@ Rule::Rule(State *s, RuleOp *r) : Action(s), rule(r) {
     ;
 }
 
-void Rule::emit(ostream &o, bool &readCh)
+void Rule::emit(std::ostream &o, bool &readCh)
 {
 	uint back = rule->ctx->fixedLength();
 	if(back != ~0u && back > 0u) {
@@ -374,7 +375,7 @@ void Rule::emit(ostream &o, bool &readCh)
 	//      << "\n\t" << rule->code->text << "\n";
 }
 
-void doLinear(ostream &o, uint i, Span *s, uint n, State *from, State *next, bool &readCh)
+void doLinear(std::ostream &o, uint i, Span *s, uint n, State *from, State *next, bool &readCh)
 {
 	for(;;)
 	{
@@ -415,12 +416,12 @@ void doLinear(ostream &o, uint i, Span *s, uint n, State *from, State *next, boo
 	indent(o, i); genGoTo(o, from, next, readCh);
 }
 
-void Go::genLinear(ostream &o, State *from, State *next, bool &readCh)
+void Go::genLinear(std::ostream &o, State *from, State *next, bool &readCh)
 {
 	doLinear(o, 0, span, nSpans, from, next, readCh);
 }
 
-void genCases(ostream &o, uint lb, Span *s)
+void genCases(std::ostream &o, uint lb, Span *s)
 {
 	if(lb < s->ub)
 	{
@@ -437,7 +438,7 @@ void genCases(ostream &o, uint lb, Span *s)
 	}
 }
 
-void Go::genSwitch(ostream &o, State *from, State *next, bool &readCh)
+void Go::genSwitch(std::ostream &o, State *from, State *next, bool &readCh)
 {
 	if(nSpans <= 2){
 		genLinear(o, from, next, readCh);
@@ -497,7 +498,7 @@ void Go::genSwitch(ostream &o, State *from, State *next, bool &readCh)
 	}
 }
 
-void doBinary(ostream &o, uint i, Span *s, uint n, State *from, State *next, bool &readCh)
+void doBinary(std::ostream &o, uint i, Span *s, uint n, State *from, State *next, bool &readCh)
 {
 	if(n <= 4)
 	{
@@ -517,12 +518,12 @@ void doBinary(ostream &o, uint i, Span *s, uint n, State *from, State *next, boo
 	}
 }
 
-void Go::genBinary(ostream &o, State *from, State *next, bool &readCh)
+void Go::genBinary(std::ostream &o, State *from, State *next, bool &readCh)
 {
 	doBinary(o, 0, span, nSpans, from, next, readCh);
 }
 
-void Go::genBase(ostream &o, State *from, State *next, bool &readCh)
+void Go::genBase(std::ostream &o, State *from, State *next, bool &readCh)
 {
 	if(nSpans == 0)
 	{
@@ -568,7 +569,7 @@ void Go::genBase(ostream &o, State *from, State *next, bool &readCh)
 	}
 }
 
-void Go::genGoto(ostream &o, State *from, State *next, bool &readCh)
+void Go::genGoto(std::ostream &o, State *from, State *next, bool &readCh)
 {
 	if(bFlag)
 	{
@@ -604,7 +605,7 @@ void Go::genGoto(ostream &o, State *from, State *next, bool &readCh)
 	genBase(o, from, next, readCh);
 }
 
-void State::emit(ostream &o, bool &readCh){
+void State::emit(std::ostream &o, bool &readCh){
 	o << "yy" << label << ":";
 /*    o << "\nfprintf(stderr, \"<" << label << ">\");\n";*/
 	action->emit(o, readCh);
@@ -797,7 +798,7 @@ void DFA::split(State *s)
 	s->go.span[0].to = move;
 }
 
-void DFA::emit(ostream &o)
+void DFA::emit(std::ostream &o)
 {
 	static uint label = 0;
 	State *s;

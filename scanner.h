@@ -2,18 +2,21 @@
 #ifndef _scanner_h
 #define	_scanner_h
 
+#include <iosfwd>
 #include "token.h"
 
 class Scanner {
   private:
-    int			in;
+    std::istream&	in;
     char		*bot, *tok, *ptr, *cur, *pos, *lim, *top, *eof;
     uint		tchar, tline, cline;
   private:
     char *fill(char*);
+    Scanner(const Scanner&); //unimplemented
+    Scanner& operator=(const Scanner&); //unimplemented
   public:
-    Scanner(int);
-    int echo(ostream&);
+    Scanner(std::istream&);
+    int echo(std::ostream&);
     int scan();
     void fatal(char*);
     SubStr token();

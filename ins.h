@@ -2,7 +2,6 @@
 #ifndef _ins_h
 #define _ins_h
 
-#include <iostream.h>
 #include "basics.h"
 
 const uint nChars = 256;
