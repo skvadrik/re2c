@@ -7,6 +7,9 @@
 .ds rx regular expression
 .ds lx \fIl\fP-expression
 \"$Log$
+\"Revision 1.8  2004/04/19 22:32:48  helly
+\"Update
+\"
 \"Revision 1.7  2004/04/19 02:13:48  helly
 \"Featurerequest #869298 (Add case insensitive string literals)
 \"
@@ -38,7 +41,7 @@
 re2c \- convert regular expressions to C/C++
 
 .SH SYNOPSIS
-\*(re [\fB-esb\fP] \fIname\fP
+\*(re [\fB-esbvh\fP] \ffile\fP
 
 .SH DESCRIPTION
 \*(re is a preprocessor that generates C-based recognizers from regular
@@ -130,6 +133,13 @@ assist to generate better code.
 Implies \fB-s\fP.  Use bit vectors as well in the attempt to coax better
 code out of the compiler.  Most useful for specifications with more than a
 few keywords (e.g. for most programming languages).
+.TP
+\fB-h\fP
+\fB-?\fP
+Invoke a short help.
+.TP
+\fB-v\fP
+Show version information.
 
 .SH "INTERFACE CODE"
 Unlike other scanner generators, \*(re does not generate complete scanners:
