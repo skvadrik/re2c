@@ -201,5 +201,6 @@ extern void genCode(ostream&, RegExp*);
 extern RegExp *mkDiff(RegExp*, RegExp*);
 extern RegExp *strToRE(SubStr);
 extern RegExp *ranToRE(SubStr);
-
+extern RegExp *strToCaseInsensitiveRE(SubStr s);
+	
 #endif

@@ -423,6 +423,32 @@ RegExp *strToRE(SubStr s){
     return re;
 }
 
+RegExp *strToCaseInsensitiveRE(SubStr s){
+    s.len -= 2; s.str += 1;
+    if(s.len == 0)
+	return new NullOp;
+	uchar c = unescape(s);
+	RegExp *re, *reL, *reU;
+	if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z')) {
+	    reL = matchChar(tolower(c));
+    	reU = matchChar(toupper(c));
+	    re = mkAlt(reL, reU);
+	} else {
+	    re = matchChar(c);
+	}
+    while(s.len > 0) {
+		uchar c = unescape(s);
+		if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z')) {
+		    reL = matchChar(tolower(c));
+    		reU = matchChar(toupper(c));
+			re = new CatOp(re, mkAlt(reL, reU));
+    	} else {
+			re = new CatOp(re, matchChar(c));
+		}
+	}
+    return re;
+}
+
 RegExp *ranToRE(SubStr s){
     s.len -= 2; s.str += 1;
     if(s.len == 0)

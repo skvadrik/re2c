@@ -115,6 +115,11 @@ scan:
 	dstring			{ cur = cursor;
 				  yylval.regexp = strToRE(token());
 				  return STRING; }
+
+	sstring			{ cur = cursor;
+				  yylval.regexp = strToCaseInsensitiveRE(token());
+				  return STRING; }
+
 	"\""			{ fatal("bad string"); }
 
 	cstring			{ cur = cursor;

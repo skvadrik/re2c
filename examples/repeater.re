@@ -13,9 +13,9 @@ char *q;
 #define YYMARKER        q
 #define YYFILL(n)
 /*!re2c
-	"a"{1}"\n"	    {RET(1);}
-	"a"{2,3}"\n"	{RET(2);}
-	"a"{4,}"\n"	    {RET(3);}
+	'a'{1}"\n"	    {RET(1);}
+	'a'{2,3}"\n"	{RET(2);}
+	'a'{4,}"\n"	    {RET(3);}
 	[^aq]|"\n"      {RET(0);}
 */
 }
@@ -30,6 +30,12 @@ main()
 	do_scan("aaaa\n");
 	do_scan("q");
 	do_scan("a");
+	do_scan("A\n");
+	do_scan("AA\n");
+	do_scan("aAa\n");
+	do_scan("AaaA\n");
+	do_scan("Q");
+	do_scan("A");
 	do_scan("\n");
 	do_scan("0");
 }
