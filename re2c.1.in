@@ -7,6 +7,9 @@
 .ds rx regular expression
 .ds lx \fIl\fP-expression
 \"$Log$
+\"Revision 1.6  2004/04/17 15:49:13  helly
+\"Fix example, cur must be set to make the uncommented printf's working
+\"
 \"Revision 1.5  2004/03/30 01:02:45  helly
 \"Update docu
 \"
@@ -346,6 +349,7 @@ uchar *fill(Scanner *s, uchar *cursor){
         }
         s->lim += cnt;
     }
+    s->cur = cursor;
     return cursor;
 }
 
