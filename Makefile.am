@@ -17,7 +17,7 @@ RE2CFLAGS    = -s
 
 CLEANFILES   = parser.cc y.tab.c y.tab.h parser.cc re2c.1 .version
 
-DISTCLEANFILES = makerpm re2c.spec README scanner.cc re2c
+DISTCLEANFILES = makerpm re2c.spec README scanner.cc re2c$(EXEEXT)
 
 EXTRA_DIST   = $(man_MANS) README parser.y scanner.re makerpm.in re2c.spec.in \
                README.in y.tab.h \
@@ -29,17 +29,18 @@ EXTRA_DIST   = $(man_MANS) README parser.y scanner.re makerpm.in re2c.spec.in \
 
 rpm-files:	$(bin_PROGRAMS) $(EXTRA_DIST)
 
-parser.cc:	parser.y
-	$(YACC) $(YFLAGS) parser.y
-	mv -f y.tab.c parser.cc
+parser.cc:	$(top_srcdir)/parser.y
+	$(YACC) $(YFLAGS) $(top_srcdir)/parser.y
+	mv -f y.tab.c $(top_srcdir)/parser.cc
+	mv -f y.tab.h $(top_srcdir)/y.tab.h
 
-scanner.cc: scanner.re
-	@if test -x ./re2c; then \
+scanner.cc: $(top_srcdir)/scanner.re
+	@if test -x ./re2c$(EXEEXT); then \
 		echo "re2c $(RE2CFLAGS) -o $@ $<"; \
-		./re2c $(RE2CFLAGS) -o $@ $< && cp $@ bootstrap/; \
+		./re2c $(RE2CFLAGS) -o $(top_srcdir)/$@ $(top_srcdir)/$< && cp $(top_srcdir)/$@ $(top_srcdir)/bootstrap/; \
 	else \
-		echo "cp -f bootstrap/$@ $@"; \
-		cp -f bootstrap/$@ $@; \
+		echo "cp -f $(top_srcdir)/bootstrap/$@ $@"; \
+		cp -f $(top_srcdir)/bootstrap/$@ $(top_srcdir)/$@; \
 	fi
 
 .version:
