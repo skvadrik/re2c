@@ -35,8 +35,8 @@ parser.cc:	parser.y
 
 scanner.cc: scanner.re
 	@if test -x ./re2c; then \
-		echo "re2c $(RE2CFLAGS) $< >$@.tmp"; \
-		./re2c $(RE2CFLAGS) $< >$@.tmp && mv $@.tmp $@ && cp $@ bootstrap/; \
+		echo "re2c $(RE2CFLAGS) -o $@ $<"; \
+		./re2c $(RE2CFLAGS) -o $@ $< && cp $@ bootstrap/; \
 	else \
 		echo "cp -f bootstrap/$@ $@"; \
 		cp -f bootstrap/$@ $@; \

@@ -13,7 +13,8 @@
 #include "dfa.h"
 #include "mbo_getopt.h"
 
-char *fileName;
+char *fileName = 0;
+char *outputFileName = 0;
 bool sFlag = false;
 bool bFlag = false;
 unsigned int oline = 1;
@@ -29,6 +30,7 @@ static const mbo_opt_struct OPTIONS[] = {
 	{'e', 0, "ecb"},
 	{'h', 0, "help"},
 	{'s', 0, "nested-ifs"},
+	{'o', 1, "output"},
 	{'v', 0, "version"}
 };
 
@@ -48,6 +50,8 @@ static void usage()
 		"\n"
 		"-s      --nested-ifs    Generate nested ifs for some switches. Many compilers\n"
 		"                        need this assist to generate better code.\n"
+		"\n"
+		"-o      --output=output Specify the output file instead of stdout\n"
 		"\n"
 		"-v      --version       Show version information.\n";
 }
@@ -75,6 +79,9 @@ int main(int argc, char *argv[])
 			case 's':
 				sFlag = true;
 				break;
+			case 'o':
+				outputFileName = opt_arg;
+				break;
 			case 'v':
 				cerr << "re2c " << PACKAGE_VERSION << "\n";
 				return 2;
@@ -96,6 +103,7 @@ int main(int argc, char *argv[])
 		return 2;
 	}
 
+	// set up the input stream
 	istream* input = 0;
 	ifstream inputFile;
 	if (fileName[0] == '-' && fileName[1] == '\0')
@@ -113,7 +121,27 @@ int main(int argc, char *argv[])
 		}
 		input = &inputFile;
 	}
-	parse(*input, cout);
+
+	// set up the output stream
+	ostream* output = 0;
+	ofstream outputFile;
+	if (outputFileName == 0 || (fileName[0] == '-' && fileName[1] == '\0'))
+	{
+		outputFileName = "<stdout>";
+		output = &cout;
+	}
+	else
+	{
+		outputFile.open(outputFileName);
+		if (!outputFile)
+		{
+			cerr << "can't open " << outputFileName << "\n";
+			return 1;
+		}
+		output = &outputFile;
+	}
+
+	parse(*input, *output);
 	return 0;
 
 }

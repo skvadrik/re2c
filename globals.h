@@ -5,6 +5,7 @@
 #include "basics.h"
 
 extern char *fileName;
+extern char *outputFileName;
 extern bool sFlag;
 extern bool bFlag;
 extern unsigned int oline;

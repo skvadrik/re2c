@@ -369,8 +369,7 @@ void Rule::emit(std::ostream &o, bool &readCh)
 	// not sure if we need this or not.    oline += std::count(rule->code->text, rule->code->text + ::strlen(rule->code->text), '\n');
 	o << "\n";
 	++oline;
-	o << "#line " << ++oline << " \"re2c-output.c\"\n";
-	// TODO: use this once we get an output filename: o << "#line " << ++oline << " \"" << outputFileName << "\"\n";
+	o << "#line " << ++oline << " \"" << outputFileName << "\"\n";
 	//    o << "\n#line " << rule->code->line
 	//      << "\n\t" << rule->code->text << "\n";
 }
@@ -930,8 +929,7 @@ void DFA::emit(std::ostream &o)
 	delete head->action;
 
 	++oline;
-	o << "\n#line " << ++oline << " \"re2c-output.c\"\n";
-	// TODO: Switch to use this once we have an outputFileName: o << "\n#line " << ++oline << " \"" << outputFileName << "\"\n";
+	o << "\n#line " << ++oline << " \"" << outputFileName << "\"\n";
 	o << "{\n\tYYCTYPE yych;\n\tunsigned int yyaccept;\n";
 	oline += 3;
 
