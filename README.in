@@ -12,12 +12,12 @@ The re2c distribution can be found at:
 
     http://sourceforge.net/projects/re2c/
 
-This distribution is a cleaned up version of the 0.5 release
-maintained by me (Brian Young).  Several bugs were fixed as well
-as code cleanup for warning free compilation.  It has been developed
-and tested with egcs 1.0.2 and gcc 2.7.2.3, 2.96 and 3.3.1 on Linux 
-x86. You can compile your own version with other gcc version if you 
-have yacc or any working bison version (tested up to bison 1.875).
+This distribution is a cleaned up version of the 0.5 release. Several 
+bugs were fixed as well as code cleanup for warning free compilation.  
+It has been developed and tested with egcs 1.0.2 and gcc 2.7.2.3, 2.96 
+and 3.3.1 on Linux x86. You can compile your own version with other gcc 
+version if you have yacc or any working bison version (tested up to bison
+1.875).
 
 You can build this software by simply typing the following commands:
     ./autogen.sh
@@ -42,25 +42,12 @@ Or you can create a rpm package and install it by the following commands:
 Here <realease> should be a number like 1. And <packagedir> must equal 
 the directory where the makerpm step has written the generated rpm to.
 
-Peter Bumbulis' original release can be found at:
-
-    ftp://csg.uwaterloo.ca/pub/peter/re2c.0.5.tar.gz
-
-re2c is a great tool for writing fast and flexible lexers.  It has
-served many people well for many years and it deserves to be
-maintained more actively.  re2c is on the order of 2-3 times faster
-than a flex based scanner, and its input model is much more
-flexible.
-
-Patches and requests for features will be entertained. Areas of
-particular interest to me are porting (a Solaris and an NT
-version will be forthcoming) and wide character support.  Note
-that the code is already quite portable and should be buildable
-on any platform with minor makefile changes.
+re2c is a great tool for writing fast and flexible lexers. It has
+served many people well for many years. re2c is on the order of 2-3 
+times faster than a flex based scanner, and its input model is much 
+more flexible.
 
 Peter's original version 0.5 ANNOUNCE and README follows.
-
-Brian
 
 --
 
