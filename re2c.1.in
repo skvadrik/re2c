@@ -7,6 +7,9 @@
 .ds rx regular expression
 .ds lx \fIl\fP-expression
 \"$Log$
+\"Revision 1.10  2004/07/27 05:19:55  nuffer
+\"Replaced YYCHAR with YYCTYPE.
+\"
 \"Revision 1.9  2004/05/26 13:33:25  nuffer
 \"Added description of -o option.
 \"
@@ -152,25 +155,25 @@ Unlike other scanner generators, \*(re does not generate complete scanners:
 the user must supply some interface code.
 In particular, the user must define the following macros:
 .TP
-\fCYYCHAR\fP
+\fCYYCTYPE\fP
 Type used to hold an input symbol.
 Usually \fCchar\fP or \fCunsigned char\fP.
 .TP
 \fCYYCURSOR\fP
-\*(lx of type \fC*YYCHAR\fP that points to the current input symbol.
+\*(lx of type \fC*YYCTYPE\fP that points to the current input symbol.
 The generated code advances \fCYYCURSOR\fP as symbols are matched.
 On entry, \fCYYCURSOR\fP is assumed to point to the first character of the
 current token.  On exit, \fCYYCURSOR\fP will point to the first character of
 the following token.
 .TP
 \fCYLIMIT\fP
-Expression of type \fC*YYCHAR\fP that marks the end of the buffer
+Expression of type \fC*YYCTYPE\fP that marks the end of the buffer
 (\fCYLIMIT[-1]\fP is the last character in the buffer).
 The generated code repeatedly compares \fCYYCURSOR\fP to \fCYLIMIT\fP
 to determine when the buffer needs (re)filling.
 .TP
 \fCYYMARKER\fP
-\*(lx of type \fC*YYCHAR\fP.
+\*(lx of type \fC*YYCTYPE\fP.
 The generated code saves backtracking information in \fCYYMARKER\fP.
 .TP
 \fCYYFILL(\fP\fIn\fP\fC)\fP
