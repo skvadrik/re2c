@@ -24,6 +24,8 @@ flexible.
 make re2c
 #regenerate file scanner.cc
 rm -f scanner.cc
+make scanner.cc
+rm -f re2c
 make
 
 %install
