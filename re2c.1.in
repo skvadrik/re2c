@@ -7,6 +7,9 @@
 .ds rx regular expression
 .ds lx \fIl\fP-expression
 \"$Log$
+\"Revision 1.9  2004/05/26 13:33:25  nuffer
+\"Added description of -o option.
+\"
 \"Revision 1.8  2004/04/19 22:32:48  helly
 \"Update
 \"
@@ -41,7 +44,7 @@
 re2c \- convert regular expressions to C/C++
 
 .SH SYNOPSIS
-\*(re [\fB-esbvh\fP] \ffile\fP
+\*(re [\fB-esbvh\fP] [\fB-o output\fP] file\fP
 
 .SH DESCRIPTION
 \*(re is a preprocessor that generates C-based recognizers from regular
@@ -140,6 +143,9 @@ Invoke a short help.
 .TP
 \fB-v\fP
 Show version information.
+.TP
+\fB-o output\fP
+Specify the output file.
 
 .SH "INTERFACE CODE"
 Unlike other scanner generators, \*(re does not generate complete scanners:
