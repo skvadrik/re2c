@@ -10,6 +10,7 @@
 char *fileName;
 bool sFlag = false;
 bool bFlag = false;
+unsigned int oline = 1;
 
 using namespace std;
 

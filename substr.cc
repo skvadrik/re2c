@@ -1,8 +1,14 @@
 #include <string.h>
 #include "substr.h"
+#include "globals.h"
 
 void SubStr::out(ostream& o) const {
     o.write(str, len);
+    for (int i = 0; i < len; ++i)
+    {
+    	if (str[i] == '\n')
+	    ++oline;
+    }
 }
 
 bool operator==(const SubStr &s1, const SubStr &s2){

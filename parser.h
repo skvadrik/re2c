@@ -15,6 +15,7 @@ public:
     static Symbol *find(const SubStr&);
 };
 
+void line_source(unsigned int, ostream&);
 void parse(int, ostream&);
 
 #endif

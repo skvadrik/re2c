@@ -56,6 +56,7 @@ ostream& operator<<(ostream &o, const State &s){
     if(s.rule)
 	o << " accepts " << s.rule->accept;
     o << "\n";
+    ++oline;
     uint lb = 0;
     for(uint i = 0; i < s.go.nSpans; ++i)
 	lb = s.go.span[i].show(o, lb);
@@ -64,7 +65,10 @@ ostream& operator<<(ostream &o, const State &s){
 
 ostream& operator<<(ostream &o, const DFA &dfa){
     for(State *s = dfa.head; s; s = s->next)
+    {
 	o << s << "\n\n";
+	++oline;
+    }
     return o;
 }
 

@@ -1,22 +1,12 @@
-#ifndef BISON_Y_TAB_H
-# define BISON_Y_TAB_H
-
-#ifndef YYSTYPE
+#define CLOSE 257
+#define ID 258
+#define CODE 259
+#define RANGE 260
+#define STRING 261
 typedef union {
     Symbol	*symbol;
     RegExp	*regexp;
     Token	*token;
     char	op;
-} yystype;
-# define YYSTYPE yystype
-#endif
-# define	CLOSE	257
-# define	ID	258
-# define	CODE	259
-# define	RANGE	260
-# define	STRING	261
-
-
+} YYSTYPE;
 extern YYSTYPE yylval;
-
-#endif /* not BISON_Y_TAB_H */

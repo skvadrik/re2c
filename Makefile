@@ -1,6 +1,9 @@
 # $Log$
-# Revision 1.1  2003/12/13 04:58:19  nuffer
-# Initial revision
+# Revision 1.2  2004/01/12 04:36:00  nuffer
+# Integrated in bug fixes from yasm.  1. Fix detection of EOF in the re2c scanner.  2. Correctly output #line directives so that debugging the generated output is possible.
+#
+# Revision 1.1.1.1  2003/12/13 04:58:19  nuffer
+# Initial import
 #
 #Revision 1.1  1994/04/08  16:30:37  peter
 #Initial revision
@@ -14,7 +17,7 @@ MAN = /usr/local/man
 %.cc : %.l ; $(LEX)   $(LFLAGS) $<; mv $(LEXYY).c $@
 
 %.cc:	%.re
-	re2c -s $< >$@
+	./re2c -s $< >$@
 
 SOURCES	= code.cc dfa.cc main.cc parser.y actions.cc scanner.re substr.cc\
 	translate.cc
@@ -32,8 +35,8 @@ clean:
 	rm -f *.o *.s y.tab.c y.tab.h scanner.cc parser.cc .version version.h re2c
 
 parser.cc:	parser.y
-	yacc -d parser.y
-	mv -f y.tab.c parser.cc
+	bison -d parser.y
+	mv -f parser.tab.c parser.cc
 
 re2c:	$(OBJS)
 	$(CC) -o $@ $(OBJS) $(LDFLAGS) -lstdc++

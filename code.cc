@@ -5,6 +5,7 @@
 #include "substr.h"
 #include "globals.h"
 #include "dfa.h"
+#include "parser.h"
 
 // there must be at least one span in list;  all spans must cover
 // same range
@@ -130,11 +131,12 @@ void BitMap::gen(ostream &o, uint lb, uint ub){
 		doGen(b->go, b->on, bm-lb, m);
 	    }
 	    for(uint j = 0; j < n; ++j){
-		if(j%8 == 0) o << "\n\t";
+		if(j%8 == 0) { o << "\n\t"; ++oline; }
 		o << setw(3) << (uint) bm[j] << ", ";
 	    }
 	}
 	o << "\n\t};\n";
+	oline += 2;
     }
 }
 
@@ -150,6 +152,7 @@ prt(cerr, b->go, b->on); cerr << endl;
 
 void genGoTo(ostream &o, State *to){
     o  << "\tgoto yy" << to->label << ";\n";
+    ++oline;
 }
 
 void genIf(ostream &o, char *cmp, uint v){
@@ -165,18 +168,27 @@ void indent(ostream &o, uint i){
 
 static void need(ostream &o, uint n){
     if(n == 1)
+    {
 	o << "\tif(YYLIMIT == YYCURSOR) YYFILL(1);\n";
+	++oline;
+    }
     else
+    {
 	o << "\tif((YYLIMIT - YYCURSOR) < " << n << ") YYFILL(" << n << ");\n";
+	++oline;
+    }
     o << "\tyych = *YYCURSOR;\n";
+    ++oline;
 }
 
 void Match::emit(ostream &o){
     if(state->link){
 	o << "\t++YYCURSOR;\n";
+	++oline;
 	need(o, state->depth);
     } else {
 	o << "\tyych = *++YYCURSOR;\n";
+	++oline;
     }
 }
 
@@ -184,20 +196,25 @@ void Enter::emit(ostream &o){
     if(state->link){
 	o << "\t++YYCURSOR;\n";
 	o << "yy" << label << ":\n";
+	oline += 2;
 	need(o, state->depth);
     } else {
 	o << "\tyych = *++YYCURSOR;\n";
 	o << "yy" << label << ":\n";
+	oline += 2;
     }
 }
 
 void Save::emit(ostream &o){
     o << "\tyyaccept = " << selector << ";\n";
+    ++oline;
     if(state->link){
 	o << "\tYYMARKER = ++YYCURSOR;\n";
+	++oline;
 	need(o, state->depth);
     } else {
 	o << "\tyych = *(YYMARKER = ++YYCURSOR);\n";
+	++oline;
     }
 }
 
@@ -222,12 +239,16 @@ void Accept::emit(ostream &o){
 		first = false;
 		o << "\tYYCURSOR = YYMARKER;\n";
 		o << "\tswitch(yyaccept){\n";
+		oline += 2;
 	    }
 	    o << "\tcase " << saves[i] << ":";
 	    genGoTo(o, rules[i]);
 	}
     if(!first)
+    {
 	o << "\t}\n";
+	++oline;
+    }
 }
 
 Rule::Rule(State *s, RuleOp *r) : Action(s), rule(r) {
@@ -238,8 +259,17 @@ void Rule::emit(ostream &o){
     uint back = rule->ctx->fixedLength();
     if(back != ~0u && back > 0u)
 	o << "\tYYCURSOR -= " << back << ";";
-    o << "\n#line " << rule->code->line
-      << "\n\t" << rule->code->text << "\n";
+    o << "\n";
+    ++oline;
+    line_source(rule->code->line, o);
+    o << rule->code->text;
+// not sure if we need this or not.    oline += std::count(rule->code->text, rule->code->text + ::strlen(rule->code->text), '\n');
+    o << "\n";
+    ++oline;
+    o << "#line " << ++oline << " \"re2c-output.c\"\n";
+    // TODO: use this once we get an output filename: o << "#line " << ++oline << " \"" << outputFileName << "\"\n";
+//    o << "\n#line " << rule->code->line
+//      << "\n\t" << rule->code->text << "\n";
 }
 
 void doLinear(ostream &o, uint i, Span *s, uint n, State *next){
@@ -280,6 +310,7 @@ void genCases(ostream &o, uint lb, Span *s){
 	    if(++lb == s->ub)
 		break;
 	    o << "\n";
+	    ++oline;
 	}
     }
 }
@@ -297,6 +328,7 @@ void Go::genSwitch(ostream &o, State *next){
 		*(t++) = &span[i];
 
 	o << "\tswitch(yych){\n";
+	++oline;
 	while(t != &sP[0]){
 	    r = s = &sP[0];
 	    if(*s == &span[0])
@@ -316,6 +348,7 @@ void Go::genSwitch(ostream &o, State *next){
 	o << "\tdefault:";
 	genGoTo(o, def);
 	o << "\t}\n";
+	++oline;
 
 	delete [] sP;
     }
@@ -327,10 +360,13 @@ void doBinary(ostream &o, uint i, Span *s, uint n, State *next){
     } else {
 	uint h = n/2;
 	indent(o, i); genIf(o, "<=", s[h-1].ub - 1); o << "{\n";
+	++oline;
 	doBinary(o, i+1, &s[0], h, next);
 	indent(o, i); o << "\t} else {\n";
+	++oline;
 	doBinary(o, i+1, &s[h], n - h, next);
 	indent(o, i); o << "\t}\n";
+	++oline;
     }
 }
 
@@ -641,12 +677,18 @@ void DFA::emit(ostream &o){
 
     delete head->action;
 
+    ++oline;
+    o << "\n#line " << ++oline << " \"re2c-output.c\"\n";
+    // TODO: Switch to use this once we have an outputFileName: o << "\n#line " << ++oline << " \"" << outputFileName << "\"\n";
     o << "{\n\tYYCTYPE yych;\n\tunsigned int yyaccept;\n";
+    oline += 3;
+
 
     if(bFlag)
 	BitMap::gen(o, lbChar, ubChar);
 
     o << "\tgoto yy" << label << ";\n";
+    ++oline;
     (void) new Enter(head, label++);
 
     for(s = head; s; s = s->next)
@@ -657,6 +699,7 @@ void DFA::emit(ostream &o){
 	s->go.genGoto(o, s->next);
     }
     o << "}\n";
+    ++oline;
 
     BitMap::first = NULL;
 
