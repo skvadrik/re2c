@@ -7,6 +7,9 @@
 .ds rx regular expression
 .ds lx \fIl\fP-expression
 \"$Log$
+\"Revision 1.5  2004/03/30 01:02:45  helly
+\"Update docu
+\"
 \"Revision 1.4  2004/03/14 14:23:40  helly
 \"Update
 \"
@@ -207,6 +210,16 @@ either an \fIr\fP or an \fIs\fP
 \fIr\fP\fC/\fP\fIs\fP
 an \fIr\fP but only if it is followed by an \fIs\fP. The s is not part of
 the matched text. This type of \*(rx is called "trailing context".
+.TP
+\fIr\fP\fC{\fP\fIn\fP\fC}\fP
+matches \fIr\fP exactly \fIn\fP times.
+.TP
+\fIr\fP\fC{\fP\fIn\fP\fC,}\fP
+matches \fIr\fP at least \fIn\fP times.
+.TP
+\fIr\fP\fC{\fP\fIn\fP\fC,\fP\fIm\fP\fC}\fP
+matches \fIr\fP at least \fIn\fP but not more than \fIm\fP times.
+
 .LP
 The regular expressions listed above are grouped according to
 precedence, from highest precedence at the top to lowest at the bottom.
