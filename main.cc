@@ -29,9 +29,7 @@ static int opt_ind = 1;
 
 static const mbo_opt_struct OPTIONS[] =
     {
-        {'?', 0, "help"
-        },
-
+        {'?', 0, "help"},
         {'b', 0, "bit-vectors"},
         {'e', 0, "ecb"},
         {'h', 0, "help"},
@@ -105,7 +103,7 @@ int main(int argc, char *argv[])
 			break;
 
 			case 'v':
-			cerr << "re2c " << PACKAGE_VERSION << "\n";
+			cout << "re2c " << PACKAGE_VERSION << "\n";
 			return 2;
 			
 			case 'V': {
@@ -113,7 +111,7 @@ int main(int argc, char *argv[])
 				char version[16];
 				sscanf(PACKAGE_VERSION, "%d.%d.%d", &v1, &v2, &v3);
 				sprintf(version, "%02d%02d%02d", v1, v2, v3);
-				cerr << version << "\n";
+				cout << version << "\n";
 				return 2;
 			}
 
