@@ -261,7 +261,11 @@ static void need(ostream &o, uint n, bool & readCh)
 
 void Match::emit(ostream &o, bool &readCh)
 {
-	if (state->link || !readAhead())
+	if (state->link)
+	{
+		o << "\t++YYCURSOR;\n";
+	}
+	else if (!readAhead())
 	{
 		/* do not read next char if match */
 		o << "\t++YYCURSOR;\n";
