@@ -42,4 +42,4 @@ cp -a $SPEC $SPECDIR/${SPEC}
 #cp -a *.patch $SRCDIR
 cd $SPECDIR
 echo "RPM: rpm -ba ${SPEC}"
-rpm -ba ${SPEC}
+rpmbuild -ba ${SPEC}
