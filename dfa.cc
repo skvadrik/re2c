@@ -9,6 +9,31 @@ inline char octCh(uint c){
     return '0' + c%8;
 }
 
+inline char hexCh(uint c){
+    if (c < 10)
+    {
+        return '0' + c%16;
+    }
+    else
+    {
+        return 'A' + c%16 - 10;
+    }
+}
+
+void prtChOrHex(std::ostream& o, uchar c){
+    uchar oc = talx[c];
+    if (isprint(oc))
+    {
+        o << '\'';
+       	prtCh(o, c);
+       	o << '\'';
+    }
+    else
+    {
+        o << "0x" << hexCh(c>>4) << hexCh(c);
+    }
+}
+
 void prtCh(std::ostream &o, uchar c){
     uchar oc = talx[c];
     switch(oc){

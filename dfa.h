@@ -6,6 +6,7 @@
 #include "re.h"
 
 extern void prtCh(std::ostream&, uchar);
+extern void prtChOrHex(std::ostream&, uchar);
 extern void printSpan(std::ostream&, uint, uint);
 
 class DFA;

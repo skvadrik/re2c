@@ -230,9 +230,9 @@ void genIf(std::ostream &o, char *cmp, uint v, bool &readCh)
 	{
 		o << "\tif(yych ";
 	}
-	o << cmp << " '";
-	prtCh(o, v);
-	o << "')";
+	o << cmp << " ";
+	prtChOrHex(o, v);
+	o << ")";
 }
 
 void indent(std::ostream &o, uint i)
@@ -426,7 +426,7 @@ void genCases(std::ostream &o, uint lb, Span *s)
 	{
 		for(;;)
 		{
-			o << "\tcase '"; prtCh(o, lb); o << "':";
+			o << "\tcase "; prtChOrHex(o, lb); o << ":";
 			if(++lb == s->ub)
 			{
 				break;
