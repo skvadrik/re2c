@@ -55,7 +55,7 @@ char *Scanner::fill(char *cursor){
 	    bot = buf;
 	}
 	if((cnt = in.rdbuf()->sgetn((char*) lim, BSIZE)) != BSIZE){
-	    eof = &lim[cnt]; *eof++ = '\n';
+	    eof = &lim[cnt]; *eof++ = '\0';
 	}
 	lim += cnt;
     }
@@ -63,6 +63,7 @@ char *Scanner::fill(char *cursor){
 }
 
 /*!re2c
+zero		= "\000";
 any		= [\000-\377];
 dot		= any \ [\n];
 esc		= dot \ [\\];
@@ -78,7 +79,9 @@ int Scanner::echo(std::ostream &out){
 
     // Catch EOF
     if (eof && cursor == eof)
+	{
     	return 0;
+	}
 
     tok = cursor;
 echo:
@@ -86,11 +89,12 @@ echo:
 	"/*!re2c"		{ out.write((const char*)(tok), (const char*)(&cursor[-7]) - (const char*)(tok));
 				  tok = cursor;
 				  RETURN(1); }
-	"\n"			{ if(cursor == eof) RETURN(0);
-				  out.write((const char*)(tok), (const char*)(cursor) - (const char*)(tok));
+	"\n"			{ out.write((const char*)(tok), (const char*)(cursor) - (const char*)(tok));
 				  tok = pos = cursor; cline++;
 				  goto echo; }
-        any			{ goto echo; }
+	zero			{ out.write((const char*)(tok), (const char*)(cursor) - (const char*)(tok) - 1); // -1 so we don't write out the \0
+				  if(cursor == eof) { RETURN(0); } }
+	any			{ goto echo; }
 */
 }
 
