@@ -1,4 +1,4 @@
-#include <fstream.h>
+#include <fstream>
 #include <stdlib.h>
 #include <fcntl.h>
 #include <unistd.h>
@@ -10,6 +10,8 @@
 char *fileName;
 bool sFlag = false;
 bool bFlag = false;
+
+using namespace std;
 
 int main(unsigned argc, char *argv[]){
     fileName = NULL;

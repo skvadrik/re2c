@@ -72,11 +72,11 @@ int Scanner::echo(ostream &out){
     tok = cursor;
 echo:
 /*!re2c
-	"/*!re2c"		{ out.write(tok, &cursor[-7] - tok);
+	"/*!re2c"		{ out.write((char *)tok, &cursor[-7] - tok);
 				  tok = cursor;
 				  RETURN(1); }
 	"\n"			{ if(cursor == eof) RETURN(0);
-				  out.write(tok, cursor - tok);
+				  out.write((char *)tok, cursor - tok);
 				  tok = pos = cursor; cline++;
 				  goto echo; }
         any			{ goto echo; }
