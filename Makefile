@@ -29,10 +29,10 @@ LDFLAGS		=
 
 default:	re2c
 
-dist-clean:
+clean:
 	rm -f *.o *.s y.tab.c y.tab.h parser.cc .version version.h
 
-clean:	dist-clean
+dist-clean: clean
 	rm -f re2c scanner.cc README re2c.1 re2c.ps re2c*.spec makerpm
 
 parser.cc:	parser.y
