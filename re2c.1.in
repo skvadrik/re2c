@@ -1,12 +1,15 @@
 ./" 
 ./" $Id$
 ./"
-.TH RE2C 1 "8 April 1994" "Version RE2C_VERSION"
+.TH RE2C 1 "8 April 1994" "Version @PACKAGE_VERSION@"
 .ds re \fBre2c\fP
 .ds le \fBlex\fP
 .ds rx regular expression
 .ds lx \fIl\fP-expression
 \"$Log$
+\"Revision 1.2  2004/03/13 20:35:12  helly
+\"Updated configure stuff
+\"
 \"Revision 1.1  2004/01/31 15:44:39  nuffer
 \"Applied patch from Marcus Boerger
 \"

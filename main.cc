@@ -1,4 +1,8 @@
 /* $Id$ */
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include <fstream>
 #include <stdlib.h>
 #include <fcntl.h>
@@ -73,6 +77,6 @@ usage:
     return 2;
 
 version:
-    cerr << "re2c " << RE2C_VERSION << "\n";
+    cerr << "re2c " << PACKAGE_VERSION << "\n";
     return 2;
 }

@@ -3,11 +3,16 @@
 bin_PROGRAMS = re2c
 re2c_SOURCES = code.cc dfa.cc main.cc parser.cc actions.cc scanner.re substr.cc\
 	translate.cc scanner.cc
-man_MANS     = re2c.1
+include_HEADERS=basics.h dfa.h globals.h ins.h parser.h re.h scanner.h \
+	substr.h token.h version.h
+man_MANS    = re2c.1
 CXXFLAGS     = -O2 -Wall -I. -Wno-unused -Wno-parentheses -Wno-deprecated
 YFLAGS       = -d
-CLEANFILES   = y.tab.c y.tab.h parser.cc re2c.1 version.h .version makerpm
-EXTRA_DIST   = $(man_MANS) README
+RE2C         = re2c
+RE2CFLAGS    =
+CLEANFILES   = y.tab.c y.tab.h parser.cc re2c.1 version.h .version \
+DISTCLEANFILES = makerpm re2c*.spec README scanner.cc re2c
+EXTRA_DIST   = $(man_MANS) README parser.y scanner.re
 
 rpm-files:	$(bin_PROGRAMS) $(EXTRA_DIST)
 
@@ -20,7 +25,7 @@ parser.cc:	version.h parser.y
 scanner.cc: scanner.re
 	-@if test -x re2c; then \
 		echo "re2c -s $< >$@"; \
-		re2c -s $< >$@; \
+		./re2c -s $< >$@; \
 	else \
 		echo "cp -f bootstrap/$@ $@"; \
 		cp -f bootstrap/$@ $@; \
@@ -34,14 +39,4 @@ re2c.ps:
 
 version.h:
 	echo "#define RE2C_VERSION \"$(PACKAGE_VERSION)\"" > version.h
-
-README:
-	cat README.in | sed 's/RE2C_VERSION/$(PACKAGE_VERSION)/g' > README
-
-makerpm:
-	cat makerpm.in | sed 's/RE2C_VERSION/$(PACKAGE_VERSION)/g' > makerpm
-	chmod +x makerpm
-
-re2c.1:
-	cat re2c.1.in | sed 's/RE2C_VERSION/$(PACKAGE_VERSION)/g' > re2c.1
 

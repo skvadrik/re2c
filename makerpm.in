@@ -3,8 +3,8 @@
 # $Id$
 # M.Boerger <re2c@somabo.de>
 
-PREFIX="re2c"
-VERSION=RE2C_VERSION
+PREFIX="@PACKAGE_NAME@"
+VERSION="@PACKAGE_VERSION@"
 TARDIR="`basename \`pwd\``"
 RELEASE=${1:-1}
 #VERSION=${2:-`echo $TARDIR | sed "s/$PREFIX-//g"`}

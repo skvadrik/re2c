@@ -1,11 +1,12 @@
 AC_PREREQ([2.57])
-AC_INIT([re2c], [0.9.2])
-AM_INIT_AUTOMAKE
+AC_INIT(re2c, 0.9.2)
+AM_INIT_AUTOMAKE(re2c, 0.9.2)
 AC_CONFIG_SRCDIR(actions.cc)
 AM_CONFIG_HEADER(config.h)
 
-RE2C_VERSION=0.9.2
 AC_SUBST(PACKAGE_VERSION)
+AC_SUBST(PACKAGE_NAME)
+AC_SUBST(PACKAGE_TARNAME)
 
 # Checks for programs.
 AC_PROG_YACC
@@ -41,14 +42,15 @@ AC_CHECK_TYPE([uchar], [
   AC_DEFINE([HAVE_UCHAR], [1],  [Define to 1 if you have uchar type definition])
 ])
 AC_CHECK_TYPE([ushort], [
-  AC_DEFINE([HAVE_USHORT], [1],  [Define to 1 if you have uchar type definition])
+  AC_DEFINE([HAVE_USHORT], [1],  [Define to 1 if you have ushort type definition])
 ])
 AC_CHECK_TYPE([uint], [
-  AC_DEFINE([HAVE_UINT], [1],  [Define to 1 if you have uchar type definition])
+  AC_DEFINE([HAVE_UINT], [1],  [Define to 1 if you have uint type definition])
 ])
 AC_CHECK_TYPE([ulong], [
-  AC_DEFINE([HAVE_ULONG], [1],  [Define to 1 if you have uchar type definition])
+  AC_DEFINE([HAVE_ULONG], [1],  [Define to 1 if you have ulong type definition])
 ])
 
-AC_CONFIG_FILES([Makefile])
+AC_CONFIG_FILES([Makefile README makerpm re2c.1])
+AC_OUTPUT_COMMANDS([chmod +x makerpm])
 AC_OUTPUT

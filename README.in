@@ -1,4 +1,4 @@
-re2c Version RE2C_VERSION
+re2c Version @PACKAGE_VERSION@
 ------------------
 
 Originally written by Peter Bumbulis (peter@csg.uwaterloo.ca)
