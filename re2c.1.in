@@ -7,6 +7,9 @@
 .ds rx regular expression
 .ds lx \fIl\fP-expression
 \"$Log$
+\"Revision 1.4  2004/03/14 14:23:40  helly
+\"Update
+\"
 \"Revision 1.3  2004/03/14 12:54:19  helly
 \"Next step of autogen patch
 \"
@@ -490,10 +493,6 @@ main(){
 .fi
 .in -3
 
-.SH "SEE ALSO"
-.LP
-flex(1), lex(1).
-
 .SH FEATURES
 .LP
 \*(re does not provide a default action:
@@ -531,15 +530,32 @@ Difference only works for character sets.
 .LP
 The \*(re internal algorithms need documentation.
 
-.SH AUTHOR
+.SH "SEE ALSO"
 .LP
-Please send bug reports, fixes and feedback to:
-.LP
-.nf
-Peter Bumbulis
-Computer Systems Group
-University of Waterloo
-Waterloo, Ontario
-N2L 3G1
-Internet:  peter@csg.uwaterloo.ca
+flex(1), lex(1).
+.P
+More information on \fBre2c\fP can be found here:
+.PD 0
+.P
+.B http://sourceforge.net/projects/re2c/
+.PD 1
+
+.SH AUTHORS
+.PD 0
+.P
+Peter Bumbulis <peter@csg.uwaterloo.ca>
+.P
+Brian Young <bayoung@acm.org>
+.P
+Dan Nuffer <nuffer@users.sourceforge.net>
+.P
+Marcus Boerger <helly@users.sourceforge.net>
+.P
+Hartmut Kaiser <hkaiser@users.sourceforge.net>
+.P
+.PD 1
+
+.SH VERSION INFORMATION
+This manpage describes \fBre2c\fP, version @PACKAGE_VERSION@.
+
 .fi
