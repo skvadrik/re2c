@@ -279,6 +279,7 @@ void doLinear(ostream &o, uint i, Span *s, uint n, State *next){
 	while(n >= 3 && s[2].to == bg && (s[1].ub - s[0].ub) == 1){
 	    if(s[1].to == next && n == 3){
 		indent(o, i); genIf(o, "!=", s[0].ub); genGoTo(o, bg);
+		indent(o, i); genGoTo(o, next);
 		return;
 	    } else {
 		indent(o, i); genIf(o, "==", s[0].ub); genGoTo(o, s[1].to);
@@ -286,18 +287,20 @@ void doLinear(ostream &o, uint i, Span *s, uint n, State *next){
 	    n -= 2; s += 2;
 	}
 	if(n == 1){
-	    if(bg != next){
+//	    if(bg != next){
 		indent(o, i); genGoTo(o, s[0].to);
-	    }
+//	    }
 	    return;
 	} else if(n == 2 && bg == next){
 	    indent(o, i); genIf(o, ">=", s[0].ub); genGoTo(o, s[1].to);
+	    indent(o, i); genGoTo(o, next);
 	    return;
 	} else {
 	    indent(o, i); genIf(o, "<=", s[0].ub - 1); genGoTo(o, bg);
 	    n -= 1; s += 1;
 	}
     }
+    indent(o, i); genGoTo(o, next);
 }
 
 void Go::genLinear(ostream &o, State *next){
