@@ -19,18 +19,25 @@ and tested with egcs 1.0.2 and gcc 2.7.2.3, 2.96 and 3.3.1 on Linux
 x86. You can compile your own version with other gcc version if you 
 have yacc or any working bison version (tested up to bison 1.875).
 
-You can install this software by simple typing the following commands:
+You can build this software by simply typing the following commands:
     ./autogen.sh
     ./configure
     make
+
+The above version will be based on the pregenerated scanner.cc file. 
+If you want to build that file yourself (recommended when installing
+re2c) you need the following steps:
+    ./autogen.sh
+    ./configure
+    make
+    rm -f scanner.cc
     make install
 
 Or you can create a rpm package and install it by the following commands:
     ./autogen.sh
     ./configure
-    make makerpm
     ./makerpm <release>
-    rpm -Uhv <packagedir>/re2c-RE2C_VERSION-<release>.rpm
+    rpm -Uhv <packagedir>/re2c-@PACKAGE_VERSION@-<release>.rpm
 
 Here <realease> should be a number like 1. And <packagedir> must equal 
 the directory where the makerpm step has written the generated rpm to.
