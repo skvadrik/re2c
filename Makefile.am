@@ -48,5 +48,5 @@ scanner.cc: $(top_srcdir)/scanner.re
 .version:
 	echo $(PACKAGE_VERSION) > .version
 
-TESTS = test/run_tests.sh
+TESTS = run_tests.sh
 

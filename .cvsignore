@@ -36,3 +36,4 @@ version.h
 *.o
 *.spec
 .#*
+run_tests.sh
