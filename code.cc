@@ -260,6 +260,7 @@ void genGoTo(std::ostream &o, State *from, State *to, bool & readCh)
 
 	o << "\tgoto yy" << to->label << ";\n";
 	++oline;
+	vUsedLabels.append(to->label);
 }
 
 void genIf(std::ostream &o, char *cmp, uint v, bool &readCh)
@@ -715,7 +716,10 @@ void Go::genGoto(std::ostream &o, State *from, State *next, bool &readCh)
 
 void State::emit(std::ostream &o, bool &readCh)
 {
-	o << "yy" << label << ":";
+	if (vUsedLabels.contains(label))
+	{
+		o << "yy" << label << ":";
+	}
 	/*    o << "\nfprintf(stderr, \"<" << label << ">\");\n";*/
 	action->emit(o, readCh);
 }
@@ -947,6 +951,38 @@ void DFA::split(State *s)
 	s->go.span[0].to = move;
 }
 
+class null_stream: public std::ostream
+{
+public:
+	null_stream()
+		: std::ostream(&ns)
+	{
+	}
+
+	null_stream& put(char_type)
+	{
+		// nothing to do
+		return *this;
+	}
+	
+	null_stream& write(const char_type *, std::streamsize)
+	{
+		// nothing to do
+		return *this;
+	}
+
+protected:
+	class null_streambuf: public std::streambuf
+	{
+	public:
+		null_streambuf()
+			: std::streambuf()
+		{
+		}	
+	};
+	null_streambuf   ns;
+};
+
 void DFA::emit(std::ostream &o)
 {
 	static uint label = 0;
@@ -1114,12 +1150,24 @@ void DFA::emit(std::ostream &o)
 
 	o << "\tgoto yy" << label << ";\n";
 	++oline;
+	vUsedLabels.append(label);
 	(void) new Enter(head, label++);
 
 	for (s = head; s; s = s->next)
 	{
 		s->label = label++;
 	}
+
+	null_stream noWhere;
+
+	unsigned int nOrgOline = oline;
+	for (s = head; s; s = s->next)
+	{
+		bool readCh = false;
+		s->emit(noWhere, readCh);
+		s->go.genGoto(noWhere, s, s->next, readCh);
+	}
+	oline = nOrgOline;
 
 	for (s = head; s; s = s->next)
 	{

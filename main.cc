@@ -21,6 +21,7 @@ char *outputFileName = 0;
 bool sFlag = false;
 bool bFlag = false;
 unsigned int oline = 1;
+label_list<uint> vUsedLabels;
 
 using namespace std;
 
