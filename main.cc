@@ -12,7 +12,6 @@
 #include "globals.h"
 #include "parser.h"
 #include "dfa.h"
-#include "version.h"
 
 char *fileName;
 bool sFlag = false;
