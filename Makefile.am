@@ -32,7 +32,7 @@ rpm-files:	$(bin_PROGRAMS) $(EXTRA_DIST)
 parser.cc:	$(top_srcdir)/parser.y
 	$(YACC) $(YFLAGS) $(top_srcdir)/parser.y
 	mv -f y.tab.c $(top_srcdir)/parser.cc
-	mv -f y.tab.h $(top_srcdir)/y.tab.h
+	if cmp -s y.tab.h $(top_srcdir)/y.tab.h; then :; else mv -f y.tab.h $(top_srcdir)/y.tab.h; fi
 
 scanner.cc: $(top_srcdir)/scanner.re
 	@if test -x ./re2c$(EXEEXT); then \
