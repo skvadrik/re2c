@@ -590,7 +590,7 @@ void Go::genGoto(std::ostream &o, State *from, State *next, bool &readCh)
 					}
 					else
 					{
-						o << "ych";
+						o << "yych";
 					}
 					o << "] & " << (uint) b->m << ")";
 					genGoTo(o, from, to, readCh);
