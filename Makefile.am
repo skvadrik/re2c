@@ -2,8 +2,8 @@
 
 bin_PROGRAMS = re2c
 re2c_SOURCES = code.cc dfa.cc main.cc parser.cc actions.cc scanner.re substr.cc\
-	translate.cc scanner.cc
-include_HEADERS=basics.h dfa.h globals.h ins.h parser.h re.h scanner.h \
+	translate.cc scanner.cc \
+	basics.h dfa.h globals.h ins.h parser.h re.h scanner.h \
 	substr.h token.h
 man_MANS     = re2c.1
 CXXFLAGS     = -O2 -Wall -I. -Wno-unused -Wno-parentheses -Wno-deprecated
