@@ -16,13 +16,17 @@ public:
     State		*state;
 public:
     Action(State*);
-    virtual void emit(ostream&) = 0;
+    virtual void emit(ostream&, bool&) = 0;
+    virtual bool isRule() const;
+    virtual bool isMatch() const;
+    virtual bool readAhead() const;
 };
 
 class Match: public Action {
 public:
     Match(State*);
-    void emit(ostream&);
+    void emit(ostream&, bool&);
+    bool isMatch() const;
 };
 
 class Enter: public Action {
@@ -30,7 +34,7 @@ public:
     uint		label;
 public:
     Enter(State*, uint);
-    void emit(ostream&);
+    void emit(ostream&, bool&);
 };
 
 class Save: public Match {
@@ -38,13 +42,14 @@ public:
     uint		selector;
 public:
     Save(State*, uint);
-    void emit(ostream&);
+    void emit(ostream&, bool&);
+    bool isMatch() const;
 };
 
 class Move: public Action {
 public:
     Move(State*);
-    void emit(ostream&);
+    void emit(ostream&, bool&);
 };
 
 class Accept: public Action {
@@ -54,7 +59,7 @@ public:
     State		**rules;
 public:
     Accept(State*, uint, uint*, State**);
-    void emit(ostream&);
+    void emit(ostream&, bool&);
 };
 
 class Rule: public Action {
@@ -62,7 +67,8 @@ public:
     RuleOp		*rule;
 public:
     Rule(State*, RuleOp*);
-    void emit(ostream&);
+    void emit(ostream&, bool&);
+    bool isRule() const;
 };
 
 class Span {
@@ -78,11 +84,11 @@ public:
     uint		nSpans;
     Span		*span;
 public:
-    void genGoto(ostream&, State*);
-    void genBase(ostream&, State*);
-    void genLinear(ostream&, State*);
-    void genBinary(ostream&, State*);
-    void genSwitch(ostream&, State*);
+    void genGoto(ostream&, State *from, State*, bool &readCh);
+    void genBase(ostream&, State *from, State*, bool &readCh);
+    void genLinear(ostream&, State *from, State*, bool &readCh);
+    void genBinary(ostream&, State *from, State*, bool &readCh);
+    void genSwitch(ostream&, State *from, State*, bool &readCh);
     void compact();
     void unmap(Go*, State*);
 };
@@ -102,7 +108,7 @@ public:
 public:
     State();
     ~State();
-    void emit(ostream&);
+    void emit(ostream&, bool&);
     friend ostream& operator<<(ostream&, const State&);
     friend ostream& operator<<(ostream&, const State*);
 };
@@ -132,14 +138,32 @@ inline Action::Action(State *s) : state(s) {
     s->action = this;
 }
 
+inline bool Action::isRule() const
+	{ return false; }
+
+inline bool Action::isMatch() const
+	{ return false; }
+
+inline bool Action::readAhead() const
+	{ return !isMatch() || !state->next->action->isRule(); }
+
 inline Match::Match(State *s) : Action(s)
     { }
+
+inline bool Match::isMatch() const
+	{ return true; }
 
 inline Enter::Enter(State *s, uint l) : Action(s), label(l)
     { }
 
 inline Save::Save(State *s, uint i) : Match(s), selector(i)
     { }
+
+inline bool Save::isMatch() const
+	{ return false; }
+
+inline bool Rule::isRule() const
+	{ return true; }
 
 inline ostream& operator<<(ostream &o, const State *s)
     { return o << *s; }
