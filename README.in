@@ -2,7 +2,11 @@ re2c Version RE2C_VERSION
 ------------------
 
 Originally written by Peter Bumbulis (peter@csg.uwaterloo.ca)
-Currently maintained by Brian Young (bayoung@acm.org)
+
+Currently maintained by:
+    Dan Nuffer <nuffer at users.sourceforge.net>
+    Marcus Boerger <helly at users.sourceforge.net>
+    Hartmut Kaiser <hkaiser at users.sourceforge.net>
 
 The re2c distribution can be found at:
 
