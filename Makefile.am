@@ -6,11 +6,11 @@ re2c_SOURCES = code.cc dfa.cc main.cc parser.cc actions.cc scanner.re substr.cc\
 	basics.h dfa.h globals.h ins.h parser.h re.h scanner.h \
 	substr.h token.h mbo_getopt.h
 man_MANS     = re2c.1
-CXXFLAGS     = -O2 -Wall -I. -Wno-unused -Wno-parentheses -Wno-deprecated
+#CXXFLAGS     = -O2 -Wall -I. -Wno-unused -Wno-parentheses -Wno-deprecated
 YFLAGS       = -d
 RE2C         = re2c
 RE2CFLAGS    = -s
-CLEANFILES   = parser.cc y.tab.c y.tab.h parser.cc re2c.1 .version \
+CLEANFILES   = parser.cc y.tab.c y.tab.h parser.cc re2c.1 .version
 DISTCLEANFILES = makerpm re2c.spec README scanner.cc re2c
 EXTRA_DIST   = $(man_MANS) README parser.y scanner.re makerpm.in re2c.spec.in \
                README.in y.tab.h \
@@ -27,16 +27,13 @@ parser.cc:	parser.y
 	mv -f y.tab.c parser.cc
 
 scanner.cc: scanner.re
-	-@if test -x ./re2c; then \
-		echo "re2c $(RE2CFLAGS) $< >$@"; \
-		./re2c $(RE2CFLAGS) $< >$@; \
+	@if test -x ./re2c; then \
+		echo "re2c $(RE2CFLAGS) $< >$@.tmp"; \
+		./re2c $(RE2CFLAGS) $< >$@.tmp && mv $@.tmp $@; \
 	else \
 		echo "cp -f bootstrap/$@ $@"; \
 		cp -f bootstrap/$@ $@; \
 	fi
-
-re2c.ps:
-	gunzip -c doc/loplas.ps.gz > re2c.ps
 
 .version:
 	echo $(PACKAGE_VERSION) > .version
