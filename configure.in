@@ -18,7 +18,10 @@ AC_PROG_INSTALL
 
 # Checks for header files.
 AC_HEADER_STDC
-AC_CHECK_HEADERS([fcntl.h malloc.h stddef.h stdlib.h string.h strings.h unistd.h memory.h])
+
+# We only rely on standard C/C++ headers.  If we ever have a pressing need
+# for something non-standard, we should add a check for it here.
+# AC_CHECK_HEADERS([stddef.h stdlib.h string.h])
 
 # Checks for typedefs, structures, and compiler characteristics.
 AC_HEADER_STDBOOL
