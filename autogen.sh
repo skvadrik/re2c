@@ -2,5 +2,5 @@
 ./cvsclean.sh
 aclocal
 autoheader
-automake -a -c -i --foreign
+automake -a -c --foreign
 autoconf
