@@ -37,7 +37,7 @@ cp $TAR $SRCDIR
 
 cat re2c.spec | sed -e "s/RPM_RELEASE/${RELEASE}/g" > ${SPEC}
 
-echo "CP: (`pwd`) cp -a $SPECDIR/${SPEC} $SPEC"
+echo "CP: (`pwd`) cp -a $SPEC $SPECDIR/${SPEC}"
 cp -a $SPEC $SPECDIR/${SPEC}
 #cp -a *.patch $SRCDIR
 cd $SPECDIR
