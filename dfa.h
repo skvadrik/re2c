@@ -145,7 +145,7 @@ inline bool Action::isMatch() const
 	{ return false; }
 
 inline bool Action::readAhead() const
-	{ return !isMatch() || !state->next->action->isRule(); }
+	{ return !isMatch() || (state && state->next && state->next->action && !state->next->action->isRule()); }
 
 inline Match::Match(State *s) : Action(s)
     { }
