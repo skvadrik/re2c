@@ -29,15 +29,15 @@ static int opt_ind = 1;
 
 static const mbo_opt_struct OPTIONS[] =
     {
-        {'?', 0, "help"},
-        {'b', 0, "bit-vectors"},
-        {'e', 0, "ecb"},
-        {'h', 0, "help"},
-        {'s', 0, "nested-ifs"},
-        {'o', 1, "output"},
-        {'v', 0, "version"},
-        {'V', 0, "vernum"},
-        {'-', 0, NULL} /* end of args */ 
+        mbo_opt_struct('?', 0, "help"),
+        mbo_opt_struct('b', 0, "bit-vectors"),
+        mbo_opt_struct('e', 0, "ecb"),
+        mbo_opt_struct('h', 0, "help"),
+        mbo_opt_struct('s', 0, "nested-ifs"),
+        mbo_opt_struct('o', 1, "output"),
+        mbo_opt_struct('v', 0, "version"),
+        mbo_opt_struct('V', 0, "vernum"),
+        mbo_opt_struct('-', 0, NULL) /* end of args */ 
     };
 
 static void usage()
