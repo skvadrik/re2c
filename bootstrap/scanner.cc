@@ -12,7 +12,7 @@ extern YYSTYPE yylval;
 
 #define	BSIZE	8192
 
-#define	YYCTYPE		uchar
+#define	YYCTYPE		char
 #define	YYCURSOR	cursor
 #define	YYLIMIT		lim
 #define	YYMARKER	ptr
@@ -27,7 +27,7 @@ Scanner::Scanner(int i) : in(i),
     ;
 }
 
-uchar *Scanner::fill(uchar *cursor){
+char *Scanner::fill(char *cursor){
     if(!eof){
 	uint cnt = tok - bot;
 	if(cnt){
@@ -39,7 +39,7 @@ uchar *Scanner::fill(uchar *cursor){
 	    lim -= cnt;
 	}
 	if((top - lim) < BSIZE){
-	    uchar *buf = new uchar[(lim - bot) + BSIZE];
+	    char *buf = new char[(lim - bot) + BSIZE];
 	    memcpy(buf, tok, lim - tok);
 	    tok = buf;
 	    ptr = &buf[ptr - bot];
@@ -62,7 +62,7 @@ uchar *Scanner::fill(uchar *cursor){
 
 
 int Scanner::echo(ostream &out){
-    uchar *cursor = cur;
+    char *cursor = cur;
     tok = cursor;
 echo:
 {
@@ -117,7 +117,7 @@ yy14:
 
 
 int Scanner::scan(){
-    uchar *cursor = cur;
+    char *cursor = cur;
     uint depth;
 
 scan:

@@ -10,7 +10,7 @@ RE2C_VERSION = 0.9.2
 %.cc:	%.re
 	-@if test -x re2c; then \
 		echo "re2c -s $< >$@"; \
-		re2c -s $< >$@; \
+		./re2c -s $< >$@; \
 	else \
 		echo "cp -f bootstrap/$@ $@"; \
 		cp -f bootstrap/$@ $@; \
@@ -40,7 +40,7 @@ parser.cc:	parser.y
 	mv -f y.tab.c parser.cc
 
 re2c:	README re2c.1 $(OBJS)
-	$(CC) -o $@ $(OBJS) $(LDFLAGS) -lstdc++
+	$(CC) -o $@ $(OBJS) $(LDFLAGS)
 
 re2c.ps:
 	gunzip -c doc/loplas.ps.gz > re2c.ps

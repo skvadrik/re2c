@@ -12,6 +12,8 @@
 #line 1 "parser.y"
 
 
+/* $Id$ */
+
 #include <time.h>
 #include <iostream.h>
 #include <string.h>
@@ -31,8 +33,15 @@ static uint accept;
 static RegExp *spec;
 static Scanner *in;
 
+/* Bison version 1.875 emits a definition that is not working
+ * with several g++ version. Hence we disable it here.
+ */
+#if defined(__GNUC__)
+#define __attribute__(x)
+#endif
 
-#line 26 "parser.y"
+
+#line 35 "parser.y"
 #ifndef YYSTYPE
 typedef union {
     Symbol	*symbol;
@@ -111,9 +120,9 @@ static const short yyrhs[] =
 /* YYRLINE[YYN] -- source line where rule number YYN was defined. */
 static const short yyrline[] =
 {
-       0,    44,    47,    49,    52,    58,    62,    64,    68,    70,
-      74,    76,    83,    85,    89,    91,   107,   109,   113,   117,
-     119,   121
+       0,    53,    56,    58,    61,    67,    71,    73,    77,    79,
+      83,    85,    92,    94,    98,   100,   116,   118,   122,   126,
+     128,   130
 };
 #endif
 
@@ -901,65 +910,65 @@ yyreduce:
   switch (yyn) {
 
 case 1:
-#line 45 "parser.y"
+#line 54 "parser.y"
 { accept = 0;
-		  spec = NULL; ;
-    break;}
+		  spec = NULL; }
+    break;
 case 2:
-#line 48 "parser.y"
-{ spec = spec? mkAlt(spec, yyvsp[0].regexp) : yyvsp[0].regexp; ;
-    break;}
+#line 57 "parser.y"
+{ spec = spec? mkAlt(spec, yyvsp[0].regexp) : yyvsp[0].regexp; }
+    break;
 case 4:
-#line 53 "parser.y"
+#line 62 "parser.y"
 { if(yyvsp[-3].symbol->re)
 		      in->fatal("sym already defined");
-		  yyvsp[-3].symbol->re = yyvsp[-1].regexp; ;
-    break;}
+		  yyvsp[-3].symbol->re = yyvsp[-1].regexp; }
+    break;
 case 5:
-#line 59 "parser.y"
-{ yyval.regexp = new RuleOp(yyvsp[-2].regexp, yyvsp[-1].regexp, yyvsp[0].token, accept++); ;
-    break;}
+#line 68 "parser.y"
+{ yyval.regexp = new RuleOp(yyvsp[-2].regexp, yyvsp[-1].regexp, yyvsp[0].token, accept++); }
+    break;
 case 6:
-#line 63 "parser.y"
-{ yyval.regexp = new NullOp; ;
-    break;}
+#line 72 "parser.y"
+{ yyval.regexp = new NullOp; }
+    break;
 case 7:
-#line 65 "parser.y"
-{ yyval.regexp = yyvsp[0].regexp; ;
-    break;}
+#line 74 "parser.y"
+{ yyval.regexp = yyvsp[0].regexp; }
+    break;
 case 8:
-#line 69 "parser.y"
-{ yyval.regexp = yyvsp[0].regexp; ;
-    break;}
+#line 78 "parser.y"
+{ yyval.regexp = yyvsp[0].regexp; }
+    break;
 case 9:
-#line 71 "parser.y"
-{ yyval.regexp =  mkAlt(yyvsp[-2].regexp, yyvsp[0].regexp); ;
-    break;}
+#line 80 "parser.y"
+{ yyval.regexp =  mkAlt(yyvsp[-2].regexp, yyvsp[0].regexp); }
+    break;
 case 10:
-#line 75 "parser.y"
-{ yyval.regexp = yyvsp[0].regexp; ;
-    break;}
+#line 84 "parser.y"
+{ yyval.regexp = yyvsp[0].regexp; }
+    break;
 case 11:
-#line 77 "parser.y"
+#line 86 "parser.y"
 { yyval.regexp =  mkDiff(yyvsp[-2].regexp, yyvsp[0].regexp);
 		  if(!yyval.regexp)
 		       in->fatal("can only difference char sets");
-		;
-    break;}
+		}
+    break;
 case 12:
-#line 84 "parser.y"
-{ yyval.regexp = yyvsp[0].regexp; ;
-    break;}
+#line 93 "parser.y"
+{ yyval.regexp = yyvsp[0].regexp; }
+    break;
 case 13:
-#line 86 "parser.y"
-{ yyval.regexp = new CatOp(yyvsp[-1].regexp, yyvsp[0].regexp); ;
-    break;}
+#line 95 "parser.y"
+{ yyval.regexp = new CatOp(yyvsp[-1].regexp, yyvsp[0].regexp); }
+    break;
 case 14:
-#line 90 "parser.y"
-{ yyval.regexp = yyvsp[0].regexp; ;
-    break;}
+#line 99 "parser.y"
+{ yyval.regexp = yyvsp[0].regexp; }
+    break;
 case 15:
-#line 92 "parser.y"
+#line 101 "parser.y"
 {
 		    switch(yyvsp[0].op){
 		    case '*':
@@ -972,34 +981,34 @@ case 15:
 			yyval.regexp = mkAlt(yyvsp[-1].regexp, new NullOp());
 			break;
 		    }
-		;
-    break;}
+		}
+    break;
 case 16:
-#line 108 "parser.y"
-{ yyval.op = yyvsp[0].op; ;
-    break;}
+#line 117 "parser.y"
+{ yyval.op = yyvsp[0].op; }
+    break;
 case 17:
-#line 110 "parser.y"
-{ yyval.op = (yyvsp[-1].op == yyvsp[0].op) ? yyvsp[-1].op : '*'; ;
-    break;}
+#line 119 "parser.y"
+{ yyval.op = (yyvsp[-1].op == yyvsp[0].op) ? yyvsp[-1].op : '*'; }
+    break;
 case 18:
-#line 114 "parser.y"
+#line 123 "parser.y"
 { if(!yyvsp[0].symbol->re)
 		      in->fatal("can't find symbol");
-		  yyval.regexp = yyvsp[0].symbol->re; ;
-    break;}
+		  yyval.regexp = yyvsp[0].symbol->re; }
+    break;
 case 19:
-#line 118 "parser.y"
-{ yyval.regexp = yyvsp[0].regexp; ;
-    break;}
+#line 127 "parser.y"
+{ yyval.regexp = yyvsp[0].regexp; }
+    break;
 case 20:
-#line 120 "parser.y"
-{ yyval.regexp = yyvsp[0].regexp; ;
-    break;}
+#line 129 "parser.y"
+{ yyval.regexp = yyvsp[0].regexp; }
+    break;
 case 21:
-#line 122 "parser.y"
-{ yyval.regexp = yyvsp[-1].regexp; ;
-    break;}
+#line 131 "parser.y"
+{ yyval.regexp = yyvsp[-1].regexp; }
+    break;
 }
 
 #line 705 "/usr/share/bison/bison.simple"
@@ -1233,7 +1242,7 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 125 "parser.y"
+#line 134 "parser.y"
 
 
 extern "C" {

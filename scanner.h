@@ -7,10 +7,10 @@
 class Scanner {
   private:
     int			in;
-    uchar		*bot, *tok, *ptr, *cur, *pos, *lim, *top, *eof;
+    char		*bot, *tok, *ptr, *cur, *pos, *lim, *top, *eof;
     uint		tchar, tline, cline;
   private:
-    uchar *fill(uchar*);
+    char *fill(char*);
   public:
     Scanner(int);
     int echo(ostream&);

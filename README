@@ -1,23 +1,33 @@
-re2c
-----
+re2c Version 0.9.2
+------------------
 
-Version 0.9.1
 Originally written by Peter Bumbulis (peter@csg.uwaterloo.ca)
 Currently maintained by Brian Young (bayoung@acm.org)
 
 The re2c distribution can be found at:
 
-    http://www.tildeslash.org/re2c/index.html
-
-The source distribution is available from:
-
-    http://www.tildeslash.org/re2c/re2c-0.9.1.tar.gz
+    http://sourceforge.net/projects/re2c/
 
 This distribution is a cleaned up version of the 0.5 release
 maintained by me (Brian Young).  Several bugs were fixed as well
 as code cleanup for warning free compilation.  It has been developed
-and tested with egcs 1.0.2 and gcc 2.7.2.3 on Linux x86.  Peter
-Bumbulis' original release can be found at:
+and tested with egcs 1.0.2 and gcc 2.7.2.3, 2.96 and 3.3.1 on Linux 
+x86. You can compile your own version with other gcc version if you 
+have yacc or any working bison version (tested up to bison 1.875).
+
+You can install this software by simple typing the following commands:
+    make
+    make install
+
+Or you can create a rpm package and install it by the following commands:
+    make makerpm
+    ./makerpm <release>
+    rpm -Uhv <packagedir>/re2c-0.9.2-<release>.rpm
+
+Here <realease> should be a number like 1. And <packagedir> must equal 
+the directory where the makerpm step has written the generated rpm to.
+
+Peter Bumbulis' original release can be found at:
 
     ftp://csg.uwaterloo.ca/pub/peter/re2c.0.5.tar.gz
 
@@ -27,7 +37,7 @@ maintained more actively.  re2c is on the order of 2-3 times faster
 than a flex based scanner, and its input model is much more
 flexible.
 
-Patches and requests for features will be entertained.  Areas of
+Patches and requests for features will be entertained. Areas of
 particular interest to me are porting (a Solaris and an NT
 version will be forthcoming) and wide character support.  Note
 that the code is already quite portable and should be buildable
