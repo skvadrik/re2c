@@ -34,7 +34,7 @@ static const mbo_opt_struct OPTIONS[] =
         {'h', 0, "help"},
         {'s', 0, "nested-ifs"},
         {'o', 1, "output"},
-        {'v', 0, "version"}
+        {'v', 0, "version"},
         {'-', 0, NULL} /* end of args */ 
     };
 
