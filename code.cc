@@ -11,144 +11,200 @@
 // there must be at least one span in list;  all spans must cover
 // same range
 
-void Go::compact(){
-    // arrange so that adjacent spans have different targets
-    uint i = 0;
-    for(uint j = 1; j < nSpans; ++j){
-	if(span[j].to != span[i].to){
-	    ++i; span[i].to = span[j].to;
-	}
-	span[i].ub = span[j].ub;
-    }
-    nSpans = i + 1;
-}
-
-void Go::unmap(Go *base, State *x){
-    Span *s = span, *b = base->span, *e = &b[base->nSpans];
-    uint lb = 0;
-    s->ub = 0;
-    s->to = NULL;
-    for(; b != e; ++b){
-	if(b->to == x){
-	    if((s->ub - lb) > 1)
-		s->ub = b->ub;
-	} else {
-	    if(b->to != s->to){
-		if(s->ub){
-		    lb = s->ub; ++s;
+void Go::compact()
+{
+	// arrange so that adjacent spans have different targets
+	uint i = 0;
+	for(uint j = 1; j < nSpans; ++j)
+	{
+		if(span[j].to != span[i].to)
+		{
+			++i; span[i].to = span[j].to;
 		}
-		s->to = b->to;
-	    }
-	    s->ub = b->ub;
+		span[i].ub = span[j].ub;
 	}
-    }
-    s->ub = e[-1].ub; ++s;
-    nSpans = s - span;
+	nSpans = i + 1;
 }
 
-void doGen(Go *g, State *s, uchar *bm, uchar m){
-Span *b = g->span, *e = &b[g->nSpans];
-uint lb = 0;
-for(; b < e; ++b){
-    if(b->to == s)
-	for(; lb < b->ub; ++lb) bm[lb] |= m;
-    lb = b->ub;
-}
+void Go::unmap(Go *base, State *x)
+{
+	Span *s = span, *b = base->span, *e = &b[base->nSpans];
+	uint lb = 0;
+	s->ub = 0;
+	s->to = NULL;
+	for(; b != e; ++b)
+	{
+		if(b->to == x)
+		{
+			if((s->ub - lb) > 1)
+			{
+				s->ub = b->ub;
+			}
+		} else {
+			if(b->to != s->to)
+			{
+				if(s->ub)
+				{
+					lb = s->ub; ++s;
+				}
+				s->to = b->to;
+			}
+			s->ub = b->ub;
+		}
+	}
+	s->ub = e[-1].ub; ++s;
+	nSpans = s - span;
 }
 
-void prt(ostream& o, Go *g, State *s){
-Span *b = g->span, *e = &b[g->nSpans];
-uint lb = 0;
-for(; b < e; ++b){
-    if(b->to == s)
-	printSpan(o, lb, b->ub);
-    lb = b->ub;
-}
+void doGen(Go *g, State *s, uchar *bm, uchar m)
+{
+	Span *b = g->span, *e = &b[g->nSpans];
+	uint lb = 0;
+	for(; b < e; ++b)
+	{
+		if(b->to == s)
+		{
+			for(; lb < b->ub; ++lb)
+			{
+				bm[lb] |= m;
+			}
+		}
+		lb = b->ub;
+	}
 }
 
-bool matches(Go *g1, State *s1, Go *g2, State *s2){
-Span *b1 = g1->span, *e1 = &b1[g1->nSpans];
-uint lb1 = 0;
-Span *b2 = g2->span, *e2 = &b2[g2->nSpans];
-uint lb2 = 0;
-for(;;){
-    for(; b1 < e1 && b1->to != s1; ++b1) lb1 = b1->ub;
-    for(; b2 < e2 && b2->to != s2; ++b2) lb2 = b2->ub;
-    if(b1 == e1) return b2 == e2;
-    if(b2 == e2) return false;
-    if(lb1 != lb2 || b1->ub != b2->ub) return false;
-    ++b1; ++b2;
+void prt(ostream& o, Go *g, State *s)
+{
+	Span *b = g->span, *e = &b[g->nSpans];
+	uint lb = 0;
+	for(; b < e; ++b)
+	{
+		if(b->to == s)
+		{
+			printSpan(o, lb, b->ub);
+		}
+		lb = b->ub;
+	}
 }
+
+bool matches(Go *g1, State *s1, Go *g2, State *s2)
+{
+	Span *b1 = g1->span, *e1 = &b1[g1->nSpans];
+	uint lb1 = 0;
+	Span *b2 = g2->span, *e2 = &b2[g2->nSpans];
+	uint lb2 = 0;
+	for(;;)
+	{
+		for(; b1 < e1 && b1->to != s1; ++b1)
+		{
+			lb1 = b1->ub;
+		}
+		for(; b2 < e2 && b2->to != s2; ++b2)
+		{
+			lb2 = b2->ub;
+		}
+		if(b1 == e1)
+		{
+			return b2 == e2;
+		}
+		if(b2 == e2){
+			return false;
+		}
+		if(lb1 != lb2 || b1->ub != b2->ub)
+		{
+			return false;
+		}
+		++b1; ++b2;
+	}
 }
 
 class BitMap {
 public:
-static BitMap	*first;
-Go			*go;
-State		*on;
-BitMap		*next;
-uint		i;
-uchar		m;
-public:
-static BitMap *find(Go*, State*);
-static BitMap *find(State*);
-static void gen(ostream&, uint, uint);
-static void stats();
-BitMap(Go*, State*);
+	static BitMap	*first;
+	Go			*go;
+	State		*on;
+	BitMap		*next;
+	uint		i;
+	uchar		m;
+	public:
+	static BitMap *find(Go*, State*);
+	static BitMap *find(State*);
+	static void gen(ostream&, uint, uint);
+	static void stats();
+	BitMap(Go*, State*);
 };
 
 BitMap *BitMap::first = NULL;
 
-BitMap::BitMap(Go *g, State *x) : go(g), on(x), next(first) {
-first = this;
+BitMap::BitMap(Go *g, State *x) : go(g), on(x), next(first)
+{
+	first = this;
 }
 
-BitMap *BitMap::find(Go *g, State *x){
-for(BitMap *b = first; b; b = b->next){
-    if(matches(b->go, b->on, g, x))
-	    return b;
+BitMap *BitMap::find(Go *g, State *x)
+{
+	for(BitMap *b = first; b; b = b->next)
+	{
+    	if(matches(b->go, b->on, g, x))
+    	{
+	    	return b;
+	    }
     }
     return new BitMap(g, x);
 }
 
-BitMap *BitMap::find(State *x){
-    for(BitMap *b = first; b; b = b->next){
-	if(b->on == x)
-	    return b;
+BitMap *BitMap::find(State *x)
+{
+    for(BitMap *b = first; b; b = b->next)
+    {
+		if(b->on == x)
+		{
+	    	return b;
+	    }
     }
     return NULL;
 }
 
-void BitMap::gen(ostream &o, uint lb, uint ub){
-    BitMap *b = first;
-    if(b){
-	o << "\tstatic unsigned char yybm[] = {";
-	uint n = ub - lb;
-	uchar *bm = new uchar[n];
-	memset(bm, 0, n);
-	for(uint i = 0; b; i += n){
-	    for(uchar m = 0x80; b && m; b = b->next, m >>= 1){
-		b->i = i; b->m = m;
-		doGen(b->go, b->on, bm-lb, m);
-	    }
-	    for(uint j = 0; j < n; ++j){
-		if(j%8 == 0) { o << "\n\t"; ++oline; }
-		o << setw(3) << (uint) bm[j] << ", ";
-	    }
+void BitMap::gen(ostream &o, uint lb, uint ub)
+{
+	BitMap *b = first;
+	if(b)
+	{
+		o << "\tstatic unsigned char yybm[] = {";
+		uint n = ub - lb;
+		uchar *bm = new uchar[n];
+		memset(bm, 0, n);
+		for(uint i = 0; b; i += n)
+		{
+			for(uchar m = 0x80; b && m; b = b->next, m >>= 1)
+			{
+				b->i = i; b->m = m;
+				doGen(b->go, b->on, bm-lb, m);
+			}
+			for(uint j = 0; j < n; ++j)
+			{
+				if(j%8 == 0)
+				{
+					o << "\n\t"; ++oline;
+				}
+				o << setw(3) << (uint) bm[j] << ", ";
+			}
+		}
+		o << "\n\t};\n";
+		oline += 2;
 	}
-	o << "\n\t};\n";
-	oline += 2;
-    }
 }
 
-void BitMap::stats(){
-    uint n = 0;
-    for(BitMap *b = first; b; b = b->next){
-prt(cerr, b->go, b->on); cerr << endl;
-	 ++n;
-    }
-    cerr << n << " bitmaps\n";
-    first = NULL;
+void BitMap::stats()
+{
+	uint n = 0;
+	for(BitMap *b = first; b; b = b->next)
+	{
+		prt(cerr, b->go, b->on); cerr << endl;
+		++n;
+	}
+	cerr << n << " bitmaps\n";
+	first = NULL;
 }
 
 void genGoTo(ostream &o, State *from, State *to, bool & readCh)
@@ -360,16 +416,21 @@ void Go::genLinear(ostream &o, State *from, State *next, bool &readCh)
 	doLinear(o, 0, span, nSpans, from, next, readCh);
 }
 
-void genCases(ostream &o, uint lb, Span *s){
-    if(lb < s->ub){
-	for(;;){
-	    o << "\tcase '"; prtCh(o, lb); o << "':";
-	    if(++lb == s->ub)
-		break;
-	    o << "\n";
-	    ++oline;
+void genCases(ostream &o, uint lb, Span *s)
+{
+	if(lb < s->ub)
+	{
+		for(;;)
+		{
+			o << "\tcase '"; prtCh(o, lb); o << "':";
+			if(++lb == s->ub)
+			{
+				break;
+			}
+			o << "\n";
+			++oline;
+		}
 	}
-    }
 }
 
 void Go::genSwitch(ostream &o, State *from, State *next, bool &readCh)
