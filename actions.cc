@@ -3,6 +3,7 @@
 #include <string.h>
 #include <iostream>
 #include <iomanip>
+#include <cctype>
 
 #include "globals.h"
 #include "parser.h"
