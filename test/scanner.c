@@ -1,6 +1,6 @@
 
 #line 1 "scanner.re"
-/* $Id$ */
+
 #include <stdlib.h>
 #include <string.h>
 #include <iostream>
