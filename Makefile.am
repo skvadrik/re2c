@@ -30,17 +30,17 @@ EXTRA_DIST   = $(man_MANS) README parser.y scanner.re makerpm.in re2c.spec.in \
 rpm-files:	$(bin_PROGRAMS) $(EXTRA_DIST)
 
 parser.cc:	$(top_srcdir)/parser.y
-	$(YACC) $(YFLAGS) $(top_srcdir)/parser.y
+	$(YACC) $(YFLAGS) $<
 	mv -f y.tab.c $(top_srcdir)/parser.cc
 	if cmp -s y.tab.h $(top_srcdir)/y.tab.h; then :; else mv -f y.tab.h $(top_srcdir)/y.tab.h; fi
 
 scanner.cc: $(top_srcdir)/scanner.re
 	@if test -x ./re2c$(EXEEXT); then \
 		echo "re2c $(RE2CFLAGS) -o $@ $<"; \
-		./re2c $(RE2CFLAGS) -o $(top_srcdir)/$@ $(top_srcdir)/$< && cp $(top_srcdir)/$@ $(top_srcdir)/bootstrap/; \
+		./re2c $(RE2CFLAGS) -o $@ $< && cp $@ $(top_srcdir)/bootstrap/; \
 	else \
 		echo "cp -f $(top_srcdir)/bootstrap/$@ $@"; \
-		cp -f $(top_srcdir)/bootstrap/$@ $(top_srcdir)/$@; \
+		cp -f $(top_srcdir)/bootstrap/$@ $@; \
 	fi
 
 .version:
