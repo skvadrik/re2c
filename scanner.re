@@ -120,12 +120,14 @@ scan:
 				  yylval.regexp = strToCaseInsensitiveRE(token());
 				  return STRING; }
 
-	"\""			{ fatal("bad string"); }
+	"\""			{ fatal("unterminated string constant (missing \")"); }
+	"'"				{ fatal("unterminated string constant (missing ')"); }
 
 	cstring			{ cur = cursor;
 				  yylval.regexp = ranToRE(token());
 				  return RANGE; }
-	"["			{ fatal("bad character constant"); }
+
+	"["			{ fatal("unterminated range (missing ])"); }
 
 	[()|=;/\\]		{ RETURN(*tok); }
 
