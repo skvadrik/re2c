@@ -23,7 +23,7 @@ parser.cc:	version.h parser.y
 	mv -f y.tab.c parser.cc
 
 scanner.cc: scanner.re
-	-@if test -x re2c; then \
+	-@if test -x ./re2c; then \
 		echo "re2c -s $< >$@"; \
 		./re2c -s $< >$@; \
 	else \
