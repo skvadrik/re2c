@@ -133,7 +133,7 @@ std:
 	goto yy0;
 	++YYCURSOR;
 yy0:
-	if((YYLIMIT - YYCURSOR) < 5) YYFILL(5);
+	if((YYLIMIT - YYCURSOR) < 4) YYFILL(4);
 	yych = *YYCURSOR;
 	switch(yych){
 	case 0x09:	case 0x0B:

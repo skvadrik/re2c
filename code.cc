@@ -875,7 +875,11 @@ uint maxDist(State *s)
 
 			if (!t->link)
 			{
-				m += maxDist(t);
+				if (t->depth == -1)
+				{
+					t->depth = maxDist(t);
+				}
+				m += t->depth;
 			}
 
 			if (m > mm)
