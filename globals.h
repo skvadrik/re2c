@@ -36,6 +36,7 @@ extern char *outputFileName;
 extern bool sFlag;
 extern bool bFlag;
 extern unsigned int oline;
+extern uint maxFill;
 
 extern uchar asc2ebc[256];
 extern uchar ebc2asc[256];

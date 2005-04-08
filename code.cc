@@ -997,9 +997,14 @@ void DFA::emit(std::ostream &o)
 
 	uint nRules = 0;
 
+	maxFill = 1;
 	for (s = head; s; s = s->next)
 	{
 		s->depth = maxDist(s);
+		if (maxFill < s->depth)
+		{
+			maxFill = s->depth;
+		}
 		if (s->rule && s->rule->accept >= nRules)
 		{
 			nRules = s->rule->accept + 1;
@@ -1144,7 +1149,6 @@ void DFA::emit(std::ostream &o)
 	o << "\n#line " << ++oline << " \"" << outputFileName << "\"\n";
 	o << "{\n\tYYCTYPE yych;\n\tunsigned int yyaccept;\n";
 	oline += 3;
-
 
 	if (bFlag)
 	{

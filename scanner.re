@@ -5,6 +5,7 @@
 #include "scanner.h"
 #include "parser.h"
 #include "y.tab.h"
+#include "globals.h"
 
 extern YYSTYPE yylval;
 
@@ -76,6 +77,7 @@ digit		= [0-9];
 
 int Scanner::echo(std::ostream &out){
     char *cursor = cur;
+    bool ignore_eoc = false;
 
     // Catch EOF
     if (eof && cursor == eof)
@@ -86,15 +88,40 @@ int Scanner::echo(std::ostream &out){
     tok = cursor;
 echo:
 /*!re2c
-	"/*!re2c"		{ out.write((const char*)(tok), (const char*)(&cursor[-7]) - (const char*)(tok));
-				  tok = cursor;
-				  RETURN(1); }
-	"\n"			{ out.write((const char*)(tok), (const char*)(cursor) - (const char*)(tok));
-				  tok = pos = cursor; cline++;
-				  goto echo; }
-	zero			{ out.write((const char*)(tok), (const char*)(cursor) - (const char*)(tok) - 1); // -1 so we don't write out the \0
-				  if(cursor == eof) { RETURN(0); } }
-	any			{ goto echo; }
+	"/*!re2c"	{ 
+					out.write((const char*)(tok), (const char*)(&cursor[-7]) - (const char*)(tok));
+					tok = cursor;
+					RETURN(1);
+				}
+	"/*!max:re2c" {
+					out << "#define YYMAXFILL " << maxFill << std::endl;
+					tok = pos = cursor;
+					ignore_eoc = true;
+					goto echo;
+				}
+	"*" "/"		{
+					if (ignore_eoc) {
+						ignore_eoc = false;
+					} else {
+						out.write((const char*)(tok), (const char*)(cursor) - (const char*)(tok));
+					}
+					tok = pos = cursor;
+					goto echo;
+				}
+	"\n"		{
+					out.write((const char*)(tok), (const char*)(cursor) - (const char*)(tok));
+					tok = pos = cursor; cline++;
+				  	goto echo;
+				}
+	zero		{
+					out.write((const char*)(tok), (const char*)(cursor) - (const char*)(tok) - 1); // -1 so we don't write out the \0
+					if(cursor == eof) {
+						RETURN(0);
+					}
+				}
+	any			{
+					goto echo;
+				}
 */
 }
 
