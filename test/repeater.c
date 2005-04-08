@@ -20,7 +20,7 @@ char *q;
 	YYCTYPE yych;
 	unsigned int yyaccept;
 	goto yy0;
-yy1:	++YYCURSOR;
+	++YYCURSOR;
 yy0:
 	if((YYLIMIT - YYCURSOR) < 7) YYFILL(7);
 	yych = *YYCURSOR;

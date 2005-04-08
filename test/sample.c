@@ -6,7 +6,7 @@
 	YYCTYPE yych;
 	unsigned int yyaccept;
 	goto yy0;
-yy1:	++YYCURSOR;
+	++YYCURSOR;
 yy0:
 	if((YYLIMIT - YYCURSOR) < 6) YYFILL(6);
 	yych = *YYCURSOR;

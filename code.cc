@@ -994,12 +994,12 @@ void DFA::emit(std::ostream &o)
 
 	findSCCs();
 	head->link = head;
-	head->depth = maxDist(head);
 
 	uint nRules = 0;
 
 	for (s = head; s; s = s->next)
 	{
+		s->depth = maxDist(s);
 		if (s->rule && s->rule->accept >= nRules)
 		{
 			nRules = s->rule->accept + 1;

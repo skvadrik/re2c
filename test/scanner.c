@@ -80,7 +80,7 @@ echo:
 	YYCTYPE yych;
 	unsigned int yyaccept;
 	goto yy0;
-yy1:	++YYCURSOR;
+	++YYCURSOR;
 yy0:
 	if((YYLIMIT - YYCURSOR) < 7) YYFILL(7);
 	yych = *YYCURSOR;
@@ -167,7 +167,7 @@ scan:
 	YYCTYPE yych;
 	unsigned int yyaccept;
 	goto yy15;
-yy16:	++YYCURSOR;
+	++YYCURSOR;
 yy15:
 	if((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
 	yych = *YYCURSOR;
@@ -515,7 +515,7 @@ yy62:
 				  goto comment; }
 #line 439 "<stdout>"
 yy63:	++YYCURSOR;
-	if(YYLIMIT == YYCURSOR) YYFILL(1);
+	if((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
 	yych = *YYCURSOR;
 	goto yy64;
 yy64:	switch(yych){
@@ -591,7 +591,7 @@ code:
 	YYCTYPE yych;
 	unsigned int yyaccept;
 	goto yy74;
-yy75:	++YYCURSOR;
+	++YYCURSOR;
 yy74:
 	if((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
 	yych = *YYCURSOR;
@@ -697,7 +697,7 @@ comment:
 	YYCTYPE yych;
 	unsigned int yyaccept;
 	goto yy93;
-yy94:	++YYCURSOR;
+	++YYCURSOR;
 yy93:
 	if((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
 	yych = *YYCURSOR;

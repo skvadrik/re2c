@@ -131,7 +131,7 @@ std:
 	YYCTYPE yych;
 	unsigned int yyaccept;
 	goto yy0;
-yy1:	++YYCURSOR;
+	++YYCURSOR;
 yy0:
 	if((YYLIMIT - YYCURSOR) < 5) YYFILL(5);
 	yych = *YYCURSOR;
@@ -745,7 +745,7 @@ yy116:	yych = *++YYCURSOR;
 	}
 yy117:	yyaccept = 3;
 	YYMARKER = ++YYCURSOR;
-	if(YYLIMIT == YYCURSOR) YYFILL(1);
+	if((YYLIMIT - YYCURSOR) < 3) YYFILL(3);
 	yych = *YYCURSOR;
 	goto yy118;
 yy118:	switch(yych){
@@ -933,7 +933,7 @@ yy136:	yyaccept = 3;
 	}
 yy137:	yyaccept = 0;
 	YYMARKER = ++YYCURSOR;
-	if((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
+	if((YYLIMIT - YYCURSOR) < 4) YYFILL(4);
 	yych = *YYCURSOR;
 	goto yy138;
 yy138:	switch(yych){
@@ -1009,7 +1009,7 @@ yy144:	switch(yych){
 	}
 yy145:	yyaccept = 3;
 	YYMARKER = ++YYCURSOR;
-	if(YYLIMIT == YYCURSOR) YYFILL(1);
+	if((YYLIMIT - YYCURSOR) < 3) YYFILL(3);
 	yych = *YYCURSOR;
 	goto yy146;
 yy146:	switch(yych){
@@ -1300,7 +1300,7 @@ comment:
 	YYCTYPE yych;
 	unsigned int yyaccept;
 	goto yy170;
-yy171:	++YYCURSOR;
+	++YYCURSOR;
 yy170:
 	if((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
 	yych = *YYCURSOR;

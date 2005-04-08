@@ -6,7 +6,7 @@
 	YYCTYPE yych;
 	unsigned int yyaccept;
 	goto yy0;
-yy1:	++YYCURSOR;
+	++YYCURSOR;
 yy0:
 	if((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
 	yych = *YYCURSOR;
@@ -27,7 +27,7 @@ yy3:
 yy4:	yych = *++YYCURSOR;
 	goto yy3;
 yy5:	++YYCURSOR;
-	if(YYLIMIT == YYCURSOR) YYFILL(1);
+	if((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
 	yych = *YYCURSOR;
 	goto yy6;
 yy6:	switch(yych){
