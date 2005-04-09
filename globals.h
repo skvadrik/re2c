@@ -18,13 +18,13 @@ public:
 	void append(const _Ty &val)
 	{
 		push_back(val);
-		sort();
-		unique();
+		std::list<_Ty>::sort();
+		std::list<_Ty>::unique();
 	}
 	
 	bool contains(const _Ty &val)
 	{
-		return std::find(begin(), end(), val) != end();
+		return std::find(std::list<_Ty>::begin(), std::list<_Ty>::end(), val) != std::list<_Ty>::end();
 	}
 };
 
