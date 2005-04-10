@@ -7,6 +7,9 @@
 .ds rx regular expression
 .ds lx \fIl\fP-expression
 \"$Log$
+\"Revision 1.11  2005/04/10 18:06:18  helly
+\"- Update
+\"
 \"Revision 1.10  2004/07/27 05:19:55  nuffer
 \"Replaced YYCHAR with YYCTYPE.
 \"
@@ -125,6 +128,10 @@ yy7:    if(yych <= '/') goto yy3;
 .fi
 .in -3
 
+After the \fC/*!re2c */\fP blocks you can place a \fC/*!max:re2c */\fP block
+that will output a define that holds the maximum number of characters required
+to parse the input. That is the maximum value \fCYYFILL()\fP will receive.
+
 .SH OPTIONS
 \*(re provides the following options:
 .TP
@@ -146,6 +153,9 @@ Invoke a short help.
 .TP
 \fB-v\fP
 Show version information.
+.TP
+\fB-V\fP
+Show the version as a number XXYYZZ.
 .TP
 \fB-o output\fP
 Specify the output file.
