@@ -1,18 +1,52 @@
 re2c
 ----
 
+Version 0.9.6
+-------------
+- Fix build with gcc >= 3.4.
+
+Version 0.9.5
+-------------
+- Added /*!max:re2c */ which emits a '#define YYMAXFILL <max>\n' line
+  This allows to define buffers of the minimum required length. Occurence
+  must follow '/*re2c */ and cannot preceed it.
+- Changed re2c to two pass generation to generates warning free code.
+- Fixed bug 1163046 re2c hangs when processing valid re-file.
+- Fixed bug 1022799 re2c scanner has buffering bug.
+
+Version 0.9.4
+-------------
+- Added --vernum support.
+- Fixed bug 1054496 incorrect code generated with -b option.
+- Fixed bug 1012748 re2c does not emit last line if '\n' missing.
+- Fixed bug 999104 --output=output option does not work as documented.
+- Fixed bug 999103 Invalid options prefixed with two dashes cause program crash.
+
+Version 0.9.3
+-------------
+- Added -o option to specify the output file which also will set the #line 
+  directives to something useful.
+- Fixed bug 960144 minor cosmetic problem.
+- Fixed bug 953181 cannot compile with.
+- Fixed bug 869297 Input buffer overrun. 
+- Print version to cout instead cerr.
+
+Version 0.9.2
+-------------
+- Moved development to http://sourceforge.net/projects/re2c .
+- Changed to use autoconf by autogent.sh.
+- Added -h and -- style options.
+
 Version 0.9.1
 -------------
-
-- removed rcs comments in source files
+- Removed rcs comments in source files.
 
 Version 0.9
 -----------
-
-- redistribution based on version 0.5
-- added parentheses to assignment expressions in 'if' statements
-- rearranged class members to match initialization order
-- substr fix
-- use array delete [] when necessary
-- other minor fixes for subduing compiler warnings
+- Redistribution based on version 0.5.
+- Added parentheses to assignment expressions in 'if' statements.
+- Rearranged class members to match initialization order.
+- Substr fix.
+- Use array delete [] when necessary.
+- Other minor fixes for subduing compiler warnings.
 
