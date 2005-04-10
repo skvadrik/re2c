@@ -10,7 +10,7 @@ Version 0.9.5
 - Added /*!max:re2c */ which emits a '#define YYMAXFILL <max>\n' line
   This allows to define buffers of the minimum required length. Occurence
   must follow '/*re2c */ and cannot preceed it.
-- Changed re2c to two pass generation to generates warning free code.
+- Changed re2c to two pass generation to output warning free code.
 - Fixed bug 1163046 re2c hangs when processing valid re-file.
 - Fixed bug 1022799 re2c scanner has buffering bug.
 
