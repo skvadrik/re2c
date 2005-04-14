@@ -1,6 +1,9 @@
 re2c
 ----
 
+Version 0.9.7
+-------------
+
 Version 0.9.6
 -------------
 - Fix build with gcc >= 3.4.
