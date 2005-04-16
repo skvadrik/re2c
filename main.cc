@@ -22,6 +22,8 @@ bool sFlag = false;
 bool bFlag = false;
 unsigned int oline = 1;
 uint maxFill = 1;
+
+int vFillIndexes = -1;
 label_list<uint> vUsedLabels;
 
 using namespace std;
@@ -36,6 +38,7 @@ static const mbo_opt_struct OPTIONS[] =
         mbo_opt_struct('e', 0, "ecb"),
         mbo_opt_struct('h', 0, "help"),
         mbo_opt_struct('s', 0, "nested-ifs"),
+	mbo_opt_struct('f', 0, "storable-state"),
         mbo_opt_struct('o', 1, "output"),
         mbo_opt_struct('v', 0, "version"),
         mbo_opt_struct('V', 0, "vernum"),
@@ -58,6 +61,8 @@ static void usage()
 	"\n"
 	"-s      --nested-ifs    Generate nested ifs for some switches. Many compilers\n"
 	"                        need this assist to generate better code.\n"
+	"\n"
+	"-f      --storable-state Generate a scanner with support for storable state\n"
 	"\n"
 	"-o      --output=output Specify the output file instead of stdout\n"
 	"\n"
@@ -98,6 +103,10 @@ int main(int argc, char *argv[])
 
 			case 's':
 			sFlag = true;
+			break;
+
+			case 'f':
+			vFillIndexes = 0;
 			break;
 
 			case 'o':

@@ -43,6 +43,7 @@ extern uchar ebc2asc[256];
 
 extern uchar *xlat, *talx;
 
+extern int vFillIndexes;
 extern label_list<uint> vUsedLabels;
 
 } // end namespace re2c

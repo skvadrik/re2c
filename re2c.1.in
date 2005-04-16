@@ -7,6 +7,9 @@
 .ds rx regular expression
 .ds lx \fIl\fP-expression
 \"$Log$
+\"Revision 1.12  2005/04/16 14:20:51  helly
+\"- Apply #1181535 please integrate storable state patch
+\"
 \"Revision 1.11  2005/04/10 18:06:18  helly
 \"- Update
 \"
@@ -50,7 +53,7 @@
 re2c \- convert regular expressions to C/C++
 
 .SH SYNOPSIS
-\*(re [\fB-esbvh\fP] [\fB-o output\fP] file\fP
+\*(re [\fB-efsbvh\fP] [\fB-o output\fP] file\fP
 
 .SH DESCRIPTION
 \*(re is a preprocessor that generates C-based recognizers from regular
@@ -138,6 +141,9 @@ to parse the input. That is the maximum value \fCYYFILL()\fP will receive.
 \fB-e\fP
 Cross-compile from an ASCII platform to an EBCDIC one. 
 .TP
+\fB-f\fP
+Generate a scanner with support for storable state.
+.TP
 \fB-s\fP
 Generate nested \fCif\fPs for some \fCswitch\fPes.  Many compilers need this
 assist to generate better code.
@@ -192,6 +198,46 @@ The generated code "calls" \fCYYFILL\fP when the buffer needs
 be provided.  \fCYYFILL\fP should adjust \fCYYCURSOR\fP, \fCYYLIMIT\fP and
 \fCYYMARKER\fP as needed.  Note that for typical programming languages
 \fIn\fP will be the length of the longest keyword plus one.
+.TP
+\fCYYGETSTATE()\fP
+The user only needs to define this macro if the \fB-f\fP flag was specified.
+In that case, the generated code "calls" \fCYYGETSTATE\fP at the very beginning
+of the scanner in order to obtain the saved state. YYGETSTATE must return a signed
+integer. The value must be either -1, indicating that the scanner is entered for the
+first time, or a value previously saved by \fCYYSETSTATE\fP.  In the second case, the
+scanner will resume operations right after where the last \fCYYFILL\fP was called.
+.TP
+\fCYYSETSTATE(\fP\fIn\fP\fC)\fP
+The user only needs to define this macro if the \fB-f\fP flag was specified.
+In that case, the generated code "calls" \fCYYSETSTATE\fP just before calling
+\fCYYFILL\fP.  The parameter to \fCYYSETSTATE\fP is a signed integer that uniquely
+identifies the specific instance of \fCYYFILL\fP that is about to be called.
+Should the user wish to save the state of the scanner and have \fCYYFILL\fP return
+to the caller, all he has to do is store that unique identifer in a variable.
+Later, when the scannered is called again, it will call \fCYYGETSTATE()\fP and
+resume execution right where it left off.
+
+.SH "SCANNER WITH STORABLE STATES"
+When the \fB-f\fP flag is specified, re2c generates a scanner that
+can store its current state, return to the caller, and later resume
+operations exactly where it left off.
+
+The default operation of re2c is a "pull" model, where the scanner asks
+for extra input whenever it needs it. However, this mode of operation
+assumes that the scanner is the "owner" the parsing loop, and that may
+not always be convenient.
+
+Typically, if there is a preprocessor ahead of the scanner in the stream,
+or for that matter any other procedural source of data, the scanner cannot
+"ask" for more data unless both scanner and source live in a separate threads.
+
+The \fB-f\fP flag is useful for just this situation : it lets users design
+scanners that work in a "push" model, i.e. where data is fed to the scanner
+chunk by chunk. When the scanner runs out of data to consume, it just stores
+its state, and return to the caller. When more input data is fed to the scanner,
+it resumes operations exactly where it left off.
+
+Please see examples/push.re for push-model scanner.
 
 .SH "SCANNER SPECIFICATIONS"
 Each scanner specification consists of a set of \fIrules\fP and name
@@ -605,6 +651,8 @@ Dan Nuffer <nuffer@users.sourceforge.net>
 Marcus Boerger <helly@users.sourceforge.net>
 .P
 Hartmut Kaiser <hkaiser@users.sourceforge.net>
+.P
+Emmanuel Mogenet <mgix@mgix.com> added storable state
 .P
 .PD 1
 

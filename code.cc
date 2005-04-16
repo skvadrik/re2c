@@ -290,6 +290,15 @@ void indent(std::ostream &o, uint i)
 
 static void need(std::ostream &o, uint n, bool & readCh)
 {
+	uint fillIndex;
+	bool hasFillIndex = (0<=vFillIndexes);
+	if ( hasFillIndex == true )
+	{
+		fillIndex = vFillIndexes++;
+		o << "\tYYSETSTATE(" << fillIndex << ");\n";
+		++oline;
+	}
+
 	if (n == 1)
 	{
 		o << "\tif(YYLIMIT == YYCURSOR) YYFILL(1);\n";
@@ -298,6 +307,12 @@ static void need(std::ostream &o, uint n, bool & readCh)
 	else
 	{
 		o << "\tif((YYLIMIT - YYCURSOR) < " << n << ") YYFILL(" << n << ");\n";
+		++oline;
+	}
+
+	if ( hasFillIndex == true )
+	{
+		o << "yyFillLabel" << fillIndex << ":\n";
 		++oline;
 	}
 
@@ -1149,18 +1164,33 @@ void DFA::emit(std::ostream &o)
 
 	delete head->action;
 
-	++oline;
+	bool hasFillLabels = (0<=vFillIndexes);
+
+	oline++;
 	o << "\n#line " << ++oline << " \"" << outputFileName << "\"\n";
-	o << "{\n\tYYCTYPE yych;\n\tunsigned int yyaccept;\n";
-	oline += 3;
+
+	if ( hasFillLabels == false )
+	{
+		o << "{\n\tYYCTYPE yych;\n\tunsigned int yyaccept;\n";
+		oline += 3;
+	}
+	else
+	{
+		o << "{\n\n";
+		oline += 2;
+	}
 
 	if (bFlag)
 	{
 		BitMap::gen(o, lbChar, ubChar);
 	}
 
-	o << "\tgoto yy" << label << ";\n";
-	++oline;
+	if ( hasFillLabels == false )
+	{
+		o << "\tgoto yy" << label << ";\n";
+		++oline;
+	}
+
 	vUsedLabels.append(label);
 	(void) new Enter(head, label++);
 
@@ -1170,15 +1200,37 @@ void DFA::emit(std::ostream &o)
 	}
 
 	null_stream noWhere;
-
 	unsigned int nOrgOline = oline;
+	int maxFillIndexes = vFillIndexes;
+	int orgVFillIndexes = vFillIndexes;
 	for (s = head; s; s = s->next)
 	{
 		bool readCh = false;
 		s->emit(noWhere, readCh);
 		s->go.genGoto(noWhere, s, s->next, readCh);
 	}
+	maxFillIndexes = vFillIndexes;
+	vFillIndexes = orgVFillIndexes;
 	oline = nOrgOline;
+
+	if (hasFillLabels == true )
+	{
+		o << "        switch(YYGETSTATE())\n";
+		o << "        {\n";
+		o << "            case -1: goto yy0;\n";
+
+		for (size_t i=0; i<maxFillIndexes; ++i)
+		{
+			o << "            case " << i << ": goto yyFillLabel" << i << ";\n";
+		}
+
+		o << "            default: /* abort() */;\n";
+		o << "        }\n";
+		o << "yyNext:\n";
+
+		oline += maxFillIndexes;
+		oline += 6;
+	}
 
 	for (s = head; s; s = s->next)
 	{
