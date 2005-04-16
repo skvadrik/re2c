@@ -1,5 +1,6 @@
 #!/bin/sh
 mkdir @builddir@/test
+result=0
 for x in @top_srcdir@/test/*.re; do
 	echo $x
 	# don't use the -o flag, since it makes it harder to diff.
@@ -10,7 +11,7 @@ for x in @top_srcdir@/test/*.re; do
 		rm $outname
 	else
 		echo "Failed: ${x%.re}.c ${x%.re}.temp differ."
-		exit 1
+		result=1
 	fi
 done
-
+exit $result
