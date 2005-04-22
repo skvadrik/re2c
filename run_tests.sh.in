@@ -1,5 +1,4 @@
 #!/bin/sh
-mkdir @builddir@/test
 result=0
 for x in @top_srcdir@/test/*.re; do
 	echo $x
