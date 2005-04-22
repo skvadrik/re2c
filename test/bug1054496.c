@@ -23,7 +23,6 @@ cont:
 #line 6 "<stdout>"
 {
 	YYCTYPE yych;
-	unsigned int yyaccept;
 	goto yy0;
 	++YYCURSOR;
 yy0:
@@ -91,13 +90,13 @@ yy2:	++YYCURSOR;
 yy3:
 #line 25 "bug1054496.re"
 { goto cont; }
-#line 77 "<stdout>"
+#line 76 "<stdout>"
 yy4:	++YYCURSOR;
 	goto yy5;
 yy5:
 #line 24 "bug1054496.re"
 { RET(TAG_EOI); }
-#line 83 "<stdout>"
+#line 82 "<stdout>"
 yy6:	yych = *++YYCURSOR;
 	goto yy3;
 yy7:	++YYCURSOR;
@@ -158,7 +157,7 @@ yy7:	++YYCURSOR;
 yy8:
 #line 22 "bug1054496.re"
 { RET(TAG_A); }
-#line 144 "<stdout>"
+#line 143 "<stdout>"
 yy9:	++YYCURSOR;
 	if(YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
@@ -220,7 +219,7 @@ yy10:	switch(yych){
 yy11:
 #line 23 "bug1054496.re"
 { RET(TAG_TAG); }
-#line 207 "<stdout>"
+#line 206 "<stdout>"
 }
 #line 26 "bug1054496.re"
 

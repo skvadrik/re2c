@@ -1839,7 +1839,6 @@ comment:
 #line 1733 "<stdout>"
 {
 	YYCTYPE yych;
-	unsigned int yyaccept;
 	goto yy185;
 	++YYCURSOR;
 yy185:
@@ -1859,7 +1858,7 @@ yy187:	++YYCURSOR;
 yy188:
 #line 242 "cunroll.re"
 { goto comment; }
-#line 1756 "<stdout>"
+#line 1755 "<stdout>"
 yy189:	++YYCURSOR;
 	switch((yych = *YYCURSOR)) {
 	case '*':	case '/':	goto yy190;
@@ -1872,7 +1871,7 @@ yy190:
 		s->tok = s->pos = cursor; s->line++;
 		goto comment;
 	    }
-#line 1769 "<stdout>"
+#line 1768 "<stdout>"
 yy191:	++YYCURSOR;
 	switch((yych = *YYCURSOR)) {
 	case '*':	case '/':	goto yy192;
@@ -1881,7 +1880,7 @@ yy191:	++YYCURSOR;
 yy192:
 #line 234 "cunroll.re"
 { goto comment; }
-#line 1778 "<stdout>"
+#line 1777 "<stdout>"
 yy193:	yych = *++YYCURSOR;
 	goto yy188;
 yy194:	++YYCURSOR;
@@ -1892,7 +1891,7 @@ yy194:	++YYCURSOR;
 yy195:
 #line 235 "cunroll.re"
 { goto comment; }
-#line 1789 "<stdout>"
+#line 1788 "<stdout>"
 yy196:	++YYCURSOR;
 	switch((yych = *YYCURSOR)) {
 	case '*':	case '/':	goto yy197;
@@ -1901,7 +1900,7 @@ yy196:	++YYCURSOR;
 yy197:
 #line 236 "cunroll.re"
 { goto comment; }
-#line 1798 "<stdout>"
+#line 1797 "<stdout>"
 yy198:	++YYCURSOR;
 	switch((yych = *YYCURSOR)) {
 	case '*':	case '/':	goto yy199;
@@ -1910,7 +1909,7 @@ yy198:	++YYCURSOR;
 yy199:
 #line 237 "cunroll.re"
 { goto comment; }
-#line 1807 "<stdout>"
+#line 1806 "<stdout>"
 yy200:	++YYCURSOR;
 	switch((yych = *YYCURSOR)) {
 	case '*':	case '/':	goto yy201;
@@ -1919,7 +1918,7 @@ yy200:	++YYCURSOR;
 yy201:
 #line 238 "cunroll.re"
 { goto comment; }
-#line 1816 "<stdout>"
+#line 1815 "<stdout>"
 yy202:	++YYCURSOR;
 	switch((yych = *YYCURSOR)) {
 	case '*':	case '/':	goto yy203;
@@ -1928,7 +1927,7 @@ yy202:	++YYCURSOR;
 yy203:
 #line 239 "cunroll.re"
 { goto comment; }
-#line 1825 "<stdout>"
+#line 1824 "<stdout>"
 yy204:	++YYCURSOR;
 	switch((yych = *YYCURSOR)) {
 	case '*':	case '/':	goto yy205;
@@ -1937,19 +1936,19 @@ yy204:	++YYCURSOR;
 yy205:
 #line 240 "cunroll.re"
 { goto comment; }
-#line 1834 "<stdout>"
+#line 1833 "<stdout>"
 yy206:	++YYCURSOR;
 	goto yy207;
 yy207:
 #line 241 "cunroll.re"
 { goto comment; }
-#line 1840 "<stdout>"
+#line 1839 "<stdout>"
 yy208:	++YYCURSOR;
 	goto yy209;
 yy209:
 #line 227 "cunroll.re"
 { goto std; }
-#line 1846 "<stdout>"
+#line 1845 "<stdout>"
 }
 #line 243 "cunroll.re"
 

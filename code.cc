@@ -369,8 +369,11 @@ void Enter::emit(std::ostream &o, bool &readCh)
 
 void Save::emit(std::ostream &o, bool &readCh)
 {
-	o << "\tyyaccept = " << selector << ";\n";
-	++oline;
+	if (bUsedYYAccept)
+	{
+		o << "\tyyaccept = " << selector << ";\n";
+		++oline;
+	}
 
 	if (state->link)
 	{
@@ -412,6 +415,7 @@ void Accept::emit(std::ostream &o, bool &readCh)
 			if (first)
 			{
 				first = false;
+				bUsedYYAccept = true;
 				o << "\tYYCURSOR = YYMARKER;\n";
 				o << "\tswitch(yyaccept){\n";
 				oline += 2;
@@ -1164,32 +1168,14 @@ void DFA::emit(std::ostream &o)
 
 	delete head->action;
 
-	bool hasFillLabels = (0<=vFillIndexes);
-
-	oline++;
-	o << "\n#line " << ++oline << " \"" << outputFileName << "\"\n";
-
-	if ( hasFillLabels == false )
-	{
-		o << "{\n\tYYCTYPE yych;\n\tunsigned int yyaccept;\n";
-		oline += 3;
-	}
-	else
-	{
-		o << "{\n\n";
-		oline += 2;
-	}
-
 	if (bFlag)
 	{
 		BitMap::gen(o, lbChar, ubChar);
 	}
 
-	if ( hasFillLabels == false )
-	{
-		o << "\tgoto yy" << label << ";\n";
-		++oline;
-	}
+	bUsedYYAccept = false;
+	
+	uint start_label = label;
 
 	vUsedLabels.append(label);
 	(void) new Enter(head, label++);
@@ -1203,6 +1189,7 @@ void DFA::emit(std::ostream &o)
 	unsigned int nOrgOline = oline;
 	int maxFillIndexes = vFillIndexes;
 	int orgVFillIndexes = vFillIndexes;
+
 	for (s = head; s; s = s->next)
 	{
 		bool readCh = false;
@@ -1212,6 +1199,32 @@ void DFA::emit(std::ostream &o)
 	maxFillIndexes = vFillIndexes;
 	vFillIndexes = orgVFillIndexes;
 	oline = nOrgOline;
+
+	bool hasFillLabels = (0<=vFillIndexes);
+
+	oline++;
+	o << "\n#line " << ++oline << " \"" << outputFileName << "\"\n";
+
+	if ( hasFillLabels == false )
+	{
+		o << "{\n\tYYCTYPE yych;\n";
+		oline += 2;
+		if (bUsedYYAccept) {
+			o << "\tunsigned int yyaccept;\n";
+			oline++;
+		}
+	}
+	else
+	{
+		o << "{\n\n";
+		oline += 2;
+	}
+
+	if ( hasFillLabels == false )
+	{
+		o << "\tgoto yy" << start_label << ";\n";
+		++oline;
+	}
 
 	if (hasFillLabels == true )
 	{

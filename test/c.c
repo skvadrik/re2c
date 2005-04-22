@@ -4030,7 +4030,6 @@ comment:
 #line 3924 "<stdout>"
 {
 	YYCTYPE yych;
-	unsigned int yyaccept;
 	goto yy343;
 	++YYCURSOR;
 yy343:
@@ -4049,7 +4048,7 @@ yy345:	++YYCURSOR;
 yy346:
 #line 256 "c.re"
 { goto comment; }
-#line 3946 "<stdout>"
+#line 3945 "<stdout>"
 yy347:	++YYCURSOR;
 	goto yy348;
 yy348:
@@ -4059,7 +4058,7 @@ yy348:
 		s->tok = s->pos = cursor; s->line++;
 		goto comment;
 	    }
-#line 3956 "<stdout>"
+#line 3955 "<stdout>"
 yy349:	yych = *++YYCURSOR;
 	goto yy346;
 yy350:	++YYCURSOR;
@@ -4067,7 +4066,7 @@ yy350:	++YYCURSOR;
 yy351:
 #line 249 "c.re"
 { goto std; }
-#line 3964 "<stdout>"
+#line 3963 "<stdout>"
 }
 #line 257 "c.re"
 

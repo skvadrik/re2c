@@ -695,7 +695,6 @@ comment:
 #line 618 "<stdout>"
 {
 	YYCTYPE yych;
-	unsigned int yyaccept;
 	goto yy93;
 	++YYCURSOR;
 yy93:
@@ -715,7 +714,7 @@ yy95:	++YYCURSOR;
 yy96:
 #line 193 "scanner.re"
 { goto comment; }
-#line 641 "<stdout>"
+#line 640 "<stdout>"
 yy97:	yych = *++YYCURSOR;
 	switch(yych){
 	case '*':	goto yy101;
@@ -729,7 +728,7 @@ yy99:
 				  tok = pos = cursor; cline++;
 				  goto comment;
 				}
-#line 655 "<stdout>"
+#line 654 "<stdout>"
 yy100:	yych = *++YYCURSOR;
 	goto yy96;
 yy101:	++YYCURSOR;
@@ -738,7 +737,7 @@ yy102:
 #line 187 "scanner.re"
 { ++depth;
 				  goto comment; }
-#line 664 "<stdout>"
+#line 663 "<stdout>"
 yy103:	++YYCURSOR;
 	goto yy104;
 yy104:
@@ -747,7 +746,7 @@ yy104:
 					goto scan;
 				    else
 					goto comment; }
-#line 673 "<stdout>"
+#line 672 "<stdout>"
 }
 #line 194 "scanner.re"
 

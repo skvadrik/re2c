@@ -20,6 +20,7 @@ char *fileName = 0;
 char *outputFileName = 0;
 bool sFlag = false;
 bool bFlag = false;
+bool bUsedYYAccept = false;
 unsigned int oline = 1;
 uint maxFill = 1;
 

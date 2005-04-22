@@ -4,7 +4,6 @@
 #line 6 "<stdout>"
 {
 	YYCTYPE yych;
-	unsigned int yyaccept;
 	goto yy0;
 	++YYCURSOR;
 yy0:
@@ -33,7 +32,7 @@ yy6:	++YYCURSOR;
 yy7:
 #line 3 "input2.re"
 { return 1; }
-#line 39 "<stdout>"
+#line 38 "<stdout>"
 }
 #line 5 "input2.re"
 

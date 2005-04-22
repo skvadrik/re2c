@@ -4038,7 +4038,6 @@ comment:
 #line 3982 "<stdout>"
 {
 	YYCTYPE yych;
-	unsigned int yyaccept;
 	goto yy299;
 	++YYCURSOR;
 yy299:
@@ -4058,7 +4057,7 @@ yy301:	++YYCURSOR;
 yy302:
 #line 179 "modula.re"
 { goto comment; }
-#line 4005 "<stdout>"
+#line 4004 "<stdout>"
 yy303:	yych = *++YYCURSOR;
 	switch(yych){
 	case '*':	goto yy307;
@@ -4073,7 +4072,7 @@ yy305:
 		s->tok = s->pos = cursor; s->line++;
 		goto comment;
 	    }
-#line 4020 "<stdout>"
+#line 4019 "<stdout>"
 yy306:	yych = *++YYCURSOR;
 	goto yy302;
 yy307:	++YYCURSOR;
@@ -4081,7 +4080,7 @@ yy307:	++YYCURSOR;
 yy308:
 #line 172 "modula.re"
 { ++depth; goto comment; }
-#line 4028 "<stdout>"
+#line 4027 "<stdout>"
 yy309:	++YYCURSOR;
 	goto yy310;
 yy310:
@@ -4092,7 +4091,7 @@ yy310:
 		else
 		    goto comment;
 	    }
-#line 4039 "<stdout>"
+#line 4038 "<stdout>"
 }
 #line 180 "modula.re"
 

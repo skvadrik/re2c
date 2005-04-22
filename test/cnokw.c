@@ -1298,7 +1298,6 @@ comment:
 #line 1191 "<stdout>"
 {
 	YYCTYPE yych;
-	unsigned int yyaccept;
 	goto yy170;
 	++YYCURSOR;
 yy170:
@@ -1317,7 +1316,7 @@ yy172:	++YYCURSOR;
 yy173:
 #line 223 "cnokw.re"
 { goto comment; }
-#line 1213 "<stdout>"
+#line 1212 "<stdout>"
 yy174:	++YYCURSOR;
 	goto yy175;
 yy175:
@@ -1327,7 +1326,7 @@ yy175:
 		s->tok = s->pos = cursor; s->line++;
 		goto comment;
 	    }
-#line 1223 "<stdout>"
+#line 1222 "<stdout>"
 yy176:	yych = *++YYCURSOR;
 	goto yy173;
 yy177:	++YYCURSOR;
@@ -1335,7 +1334,7 @@ yy177:	++YYCURSOR;
 yy178:
 #line 216 "cnokw.re"
 { goto std; }
-#line 1231 "<stdout>"
+#line 1230 "<stdout>"
 }
 #line 224 "cnokw.re"
 

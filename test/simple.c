@@ -12,7 +12,6 @@ char *q;
 #line 6 "<stdout>"
 {
 	YYCTYPE yych;
-	unsigned int yyaccept;
 	goto yy0;
 	++YYCURSOR;
 yy0:
@@ -37,13 +36,13 @@ yy2:	++YYCURSOR;
 yy3:
 #line 10 "simple.re"
 {return YYCURSOR;}
-#line 33 "<stdout>"
+#line 32 "<stdout>"
 yy4:	++YYCURSOR;
 	goto yy5;
 yy5:
 #line 11 "simple.re"
 {return NULL;}
-#line 39 "<stdout>"
+#line 38 "<stdout>"
 yy6:	++YYCURSOR;
 	if(YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
