@@ -1,12 +1,15 @@
 ./" 
 ./" $Id$
 ./"
-.TH RE2C 1 "14 March 1994" "Version @PACKAGE_VERSION@"
+.TH RE2C 1 "22 April 2005" "Version @PACKAGE_VERSION@"
 .ds re \fBre2c\fP
 .ds le \fBlex\fP
 .ds rx regular expression
 .ds lx \fIl\fP-expression
 \"$Log$
+\"Revision 1.13  2005/04/22 21:50:33  helly
+\"- Update date
+\"
 \"Revision 1.12  2005/04/16 14:20:51  helly
 \"- Apply #1181535 please integrate storable state patch
 \"
