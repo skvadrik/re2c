@@ -566,7 +566,7 @@ void Go::genSwitch(std::ostream &o, State *from, State *next, bool &readCh)
 
 		if (dFlag)
 		{
-			o << "\tfprintf(stderr, \"[%c]\\n\", yych);\n";
+			o << "\tYYDEBUG(-1, yych);\n";
 		}
 
 		if (readCh)
@@ -749,7 +749,7 @@ void State::emit(std::ostream &o, bool &readCh)
 	}
 	if (dFlag)
 	{
-		o << "\nfprintf(stderr, \"<" << label << ">[%c]\\n\", *YYCURSOR);\n";
+		o << "\n\tYYDEBUG(" << label << ", *YYCURSOR);\n";
 	}
 	action->emit(o, readCh);
 }

@@ -7,6 +7,9 @@
 .ds rx regular expression
 .ds lx \fIl\fP-expression
 \"$Log$
+\"Revision 1.15  2005/04/22 22:15:52  helly
+\"- Change original fprintf base -d patch by Derick to use YYDEBUG() lines
+\"
 \"Revision 1.14  2005/04/22 22:03:08  helly
 \"- Added -d flag which outputs a debugable parser.
 \"
@@ -162,7 +165,10 @@ few keywords (e.g. for most programming languages).
 \fB-d\fP
 Creates a parser that dumps information about the current position and in 
 which state the parser is while parsing the input. This is useful to debug 
-parser issues and states.
+parser issues and states. If you use this switch you need to deine a macro
+\fCYYDEBUG\fP that is called like a function with two parameters. the first 
+parameter receives the state or -1 and the second parameter receives the input 
+at the current cursor.
 .TP
 \fB-h\fP
 \fB-?\fP
