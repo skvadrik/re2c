@@ -15,14 +15,9 @@ inline char octCh(uint c)
 
 inline char hexCh(uint c)
 {
-	if (c < 10)
-	{
-		return '0' + c % 16;
-	}
-	else
-	{
-		return 'A' + c % 16 - 10;
-	}
+	const char * sHex = "0123456789ABCDEF";
+	
+	return sHex[c & 0x0F];
 }
 
 void prtChOrHex(std::ostream& o, uchar c)
