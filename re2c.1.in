@@ -7,6 +7,9 @@
 .ds rx regular expression
 .ds lx \fIl\fP-expression
 \"$Log$
+\"Revision 1.14  2005/04/22 22:03:08  helly
+\"- Added -d flag which outputs a debugable parser.
+\"
 \"Revision 1.13  2005/04/22 21:50:33  helly
 \"- Update date
 \"
@@ -56,7 +59,7 @@
 re2c \- convert regular expressions to C/C++
 
 .SH SYNOPSIS
-\*(re [\fB-efsbvh\fP] [\fB-o output\fP] file\fP
+\*(re [\fB-efsbvhd\fP] [\fB-o output\fP] file\fP
 
 .SH DESCRIPTION
 \*(re is a preprocessor that generates C-based recognizers from regular
@@ -155,6 +158,11 @@ assist to generate better code.
 Implies \fB-s\fP.  Use bit vectors as well in the attempt to coax better
 code out of the compiler.  Most useful for specifications with more than a
 few keywords (e.g. for most programming languages).
+.TP
+\fB-d\fP
+Creates a parser that dumps information about the current position and in 
+which state the parser is while parsing the input. This is useful to debug 
+parser issues and states.
 .TP
 \fB-h\fP
 \fB-?\fP

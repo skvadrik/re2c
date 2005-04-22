@@ -35,6 +35,7 @@ extern char *fileName;
 extern char *outputFileName;
 extern bool sFlag;
 extern bool bFlag;
+extern bool dFlag;
 extern bool bUsedYYAccept;
 extern unsigned int oline;
 extern uint maxFill;

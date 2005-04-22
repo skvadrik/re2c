@@ -20,6 +20,7 @@ char *fileName = 0;
 char *outputFileName = 0;
 bool sFlag = false;
 bool bFlag = false;
+bool dFlag = false; 
 bool bUsedYYAccept = false;
 unsigned int oline = 1;
 uint maxFill = 1;
@@ -40,6 +41,7 @@ static const mbo_opt_struct OPTIONS[] =
 	mbo_opt_struct('h', 0, "help"),
 	mbo_opt_struct('s', 0, "nested-ifs"),
 	mbo_opt_struct('f', 0, "storable-state"),
+	mbo_opt_struct('d', 0, "debug-output"),
 	mbo_opt_struct('o', 1, "output"),
 	mbo_opt_struct('v', 0, "version"),
 	mbo_opt_struct('V', 0, "vernum"),
@@ -48,7 +50,7 @@ static const mbo_opt_struct OPTIONS[] =
 
 static void usage()
 {
-	cerr << "usage: re2c [-esbvh] file\n"
+	cerr << "usage: re2c [-esbvhd] file\n"
 	"\n"
 	"-? -h   --help          Display this info.\n"
 	"\n"
@@ -66,6 +68,10 @@ static void usage()
 	"-f      --storable-state Generate a scanner with support for storable state\n"
 	"\n"
 	"-o      --output=output Specify the output file instead of stdout\n"
+	"\n"
+	"-d      --debug-output  Creates a parser that dumps information during\n"
+	"                        about the current position and in which state the\n"
+	"                        parser is.\n"
 	"\n"
 	"-v      --version       Show version information.\n"
 	"-V      --vernum        Show version as one number.\n"
@@ -104,6 +110,10 @@ int main(int argc, char *argv[])
 
 			case 's':
 			sFlag = true;
+			break;
+
+			case 'd':
+			dFlag = true;
 			break;
 
 			case 'f':

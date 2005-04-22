@@ -564,6 +564,11 @@ void Go::genSwitch(std::ostream &o, State *from, State *next, bool &readCh)
 			}
 		}
 
+		if (dFlag)
+		{
+			o << "\tfprintf(stderr, \"[%c]\\n\", yych);\n";
+		}
+
 		if (readCh)
 		{
 			o << "\tswitch((yych = *YYCURSOR)) {\n";
@@ -742,7 +747,10 @@ void State::emit(std::ostream &o, bool &readCh)
 	{
 		o << "yy" << label << ":";
 	}
-	/*    o << "\nfprintf(stderr, \"<" << label << ">\");\n";*/
+	if (dFlag)
+	{
+		o << "\nfprintf(stderr, \"<" << label << ">[%c]\\n\", *YYCURSOR);\n";
+	}
 	action->emit(o, readCh);
 }
 
