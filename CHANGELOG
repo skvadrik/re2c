@@ -1,6 +1,7 @@
 Version 0.9.7 (200?-??-??)
 --------------------------
 - Applied #1181535 storable state patch.
+- Fixed bug #1187785 Re2c fails to generate valid code.
 
 Version 0.9.6 (2005-04-14)
 --------------------------
