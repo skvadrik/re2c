@@ -7,6 +7,9 @@
 .ds rx regular expression
 .ds lx \fIl\fP-expression
 \"$Log$
+\"Revision 1.16  2005/04/23 08:45:10  helly
+\"- Issue an error with -f option if multiple /*!re2c blocks are used
+\"
 \"Revision 1.15  2005/04/22 22:15:52  helly
 \"- Change original fprintf base -d patch by Derick to use YYDEBUG() lines
 \"
@@ -253,6 +256,10 @@ scanners that work in a "push" model, i.e. where data is fed to the scanner
 chunk by chunk. When the scanner runs out of data to consume, it just stores
 its state, and return to the caller. When more input data is fed to the scanner,
 it resumes operations exactly where it left off.
+
+At this point, the -f option only works with "mono-block" re2c scanners:
+if the scanner is described with more than one /*!re2c ... */ block, re2c -f
+fails with an error.
 
 Please see examples/push.re for push-model scanner.
 

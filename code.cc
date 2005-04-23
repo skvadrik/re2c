@@ -1023,6 +1023,14 @@ void DFA::emit(std::ostream &o)
 	State *s;
 	uint i;
 
+	bool hasFillLabels = (0<=vFillIndexes);
+	if (hasFillLabels==true && label!=0)
+	{
+		std::cerr << "re2c : error : multiple /*!re2c blocks aren't supported when -f is specified\n";
+		exit(1);
+	}
+
+
 	findSCCs();
 	head->link = head;
 
@@ -1207,8 +1215,6 @@ void DFA::emit(std::ostream &o)
 	maxFillIndexes = vFillIndexes;
 	vFillIndexes = orgVFillIndexes;
 	oline = nOrgOline;
-
-	bool hasFillLabels = (0<=vFillIndexes);
 
 	oline++;
 	o << "\n#line " << ++oline << " \"" << outputFileName << "\"\n";
