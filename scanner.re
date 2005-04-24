@@ -110,7 +110,7 @@ echo:
 				}
 	"\n"		{
 					out.write((const char*)(tok), (const char*)(cursor) - (const char*)(tok));
-					tok = pos = cursor; cline++;
+					tok = pos = cursor; cline++; oline++;
 				  	goto echo;
 				}
 	zero		{

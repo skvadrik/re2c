@@ -255,6 +255,7 @@ void genGoTo(std::ostream &o, State *from, State *to, bool & readCh, const char 
 	if (readCh && from->label + 1 != to->label)
 	{
 		o << indent << "yych = *YYCURSOR;\n";
+		++oline;
 		readCh = false;
 	}
 
@@ -343,7 +344,6 @@ void Match::emit(std::ostream &o, bool &readCh)
 
 	if (state->link)
 	{
-		++oline;
 		need(o, state->depth, readCh);
 	}
 }
@@ -453,7 +453,7 @@ void Rule::emit(std::ostream &o, bool &readCh)
 	// not sure if we need this or not.    oline += std::count(rule->code->text, rule->code->text + ::strlen(rule->code->text), '\n');
 	o << "\n";
 	++oline;
-	o << "#line " << ++oline << " \"" << outputFileName << "\"\n";
+	o << "#line " << oline++ << " \"" << outputFileName << "\"\n";
 	//    o << "\n#line " << rule->code->line
 	//      << "\n\t" << rule->code->text << "\n";
 }
@@ -1217,7 +1217,7 @@ void DFA::emit(std::ostream &o)
 	oline = nOrgOline;
 
 	oline++;
-	o << "\n#line " << ++oline << " \"" << outputFileName << "\"\n";
+	o << "\n#line " << oline++ << " \"" << outputFileName << "\"\n";
 
 	if ( hasFillLabels == false )
 	{
