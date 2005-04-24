@@ -2,6 +2,7 @@ Version 0.9.7 (200?-??-??)
 --------------------------
 - Applied #1181535 storable state patch.
 - Added -d flag which outputs a debugable parser.
+- Fixed generation of '#line' directives (according to ISO-C99).
 - Fixed bug #1187785 Re2c fails to generate valid code.
 - Fixed bug #1187452 unused variable `yyaccept'.
 
