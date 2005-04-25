@@ -7,6 +7,9 @@
 .ds rx regular expression
 .ds lx \fIl\fP-expression
 \"$Log$
+\"Revision 1.17  2005/04/25 06:32:30  helly
+\"- Show the required signature for YYDEBUG()
+\"
 \"Revision 1.16  2005/04/23 08:45:10  helly
 \"- Issue an error with -f option if multiple /*!re2c blocks are used
 \"
@@ -169,9 +172,9 @@ few keywords (e.g. for most programming languages).
 Creates a parser that dumps information about the current position and in 
 which state the parser is while parsing the input. This is useful to debug 
 parser issues and states. If you use this switch you need to deine a macro
-\fCYYDEBUG\fP that is called like a function with two parameters. the first 
-parameter receives the state or -1 and the second parameter receives the input 
-at the current cursor.
+\fCYYDEBUG\fP that is called like a function with two parameters:
+\fCvoid func(int state, char current)\fP. The first parameter receives the 
+state or -1 and the second parameter receives the input at the current cursor.
 .TP
 \fB-h\fP
 \fB-?\fP
