@@ -7,6 +7,10 @@
 .ds rx regular expression
 .ds lx \fIl\fP-expression
 \"$Log$
+\"Revision 1.18  2005/04/25 06:48:31  helly
+\"- Change \fC to \fI in -d explanation
+\"- Drop bug info that was fixed by introduction of '/*!max:re2c */'
+\"
 \"Revision 1.17  2005/04/25 06:32:30  helly
 \"- Show the required signature for YYDEBUG()
 \"
@@ -172,8 +176,8 @@ few keywords (e.g. for most programming languages).
 Creates a parser that dumps information about the current position and in 
 which state the parser is while parsing the input. This is useful to debug 
 parser issues and states. If you use this switch you need to deine a macro
-\fCYYDEBUG\fP that is called like a function with two parameters:
-\fCvoid func(int state, char current)\fP. The first parameter receives the 
+\fIYYDEBUG\fP that is called like a function with two parameters:
+\fIvoid func(int state, char current)\fP. The first parameter receives the 
 state or -1 and the second parameter receives the input at the current cursor.
 .TP
 \fB-h\fP
@@ -644,13 +648,6 @@ No [^x].  Use difference instead.
 .SH BUGS
 .LP
 Only fixed length trailing context can be handled.
-.LP
-The maximum value appearing as a parameter \fIn\fP to \fCYYFILL\fP is not
-provided to the generated code (this value is needed for constructing
-the interface code).
-Note that this value is usually relatively small: for
-typical programming languages \fIn\fP will be the length of the longest
-keyword plus one.
 .LP
 Difference only works for character sets.
 .LP
