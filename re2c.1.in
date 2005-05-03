@@ -7,6 +7,9 @@
 .ds rx regular expression
 .ds lx \fIl\fP-expression
 \"$Log$
+\"Revision 1.20  2005/05/03 15:46:46  helly
+\"- Add missing YYDEBUG() section
+\"
 \"Revision 1.19  2005/04/25 20:28:08  helly
 \"- Speling
 \"
@@ -246,6 +249,13 @@ Should the user wish to save the state of the scanner and have \fCYYFILL\fP retu
 to the caller, all he has to do is store that unique identifer in a variable.
 Later, when the scannered is called again, it will call \fCYYGETSTATE()\fP and
 resume execution right where it left off.
+.TP
+\fCYYDEBUG(\fP\fIstate\fP,\fIcurrent\fC)\fP
+This is only needed if the \fB-d\fP flag was specified. It allows to easily debug
+the generated parser by calling a user defined function for every state. The function
+should have the following signature: \fIvoid YYDEBUG(int state, char current)\fP. 
+The first parameter receives the state or -1 and the second parameter receives the 
+input at the current cursor.
 
 .SH "SCANNER WITH STORABLE STATES"
 When the \fB-f\fP flag is specified, re2c generates a scanner that
