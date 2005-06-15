@@ -1021,7 +1021,7 @@ void DFA::emit(std::ostream &o)
 {
 	static uint label = 0;
 	State *s;
-	uint i;
+	uint i, bitmap_brace = 0;
 
 	bool hasFillLabels = (0<=vFillIndexes);
 	if (hasFillLabels==true && label!=0)
@@ -1186,6 +1186,9 @@ void DFA::emit(std::ostream &o)
 
 	if (bFlag)
 	{
+		o << "{\n";
+		++oline;
+		bitmap_brace = 1;
 		BitMap::gen(o, lbChar, ubChar);
 	}
 
@@ -1267,6 +1270,10 @@ void DFA::emit(std::ostream &o)
 	}
 
 	o << "}\n";
+	if (bitmap_brace) {
+		o << "}\n";
+		++oline;
+	}
 	++oline;
 
 	BitMap::first = NULL;
