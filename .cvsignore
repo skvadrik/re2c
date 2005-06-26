@@ -37,3 +37,6 @@ version.h
 *.spec
 .#*
 run_tests.sh
+Release
+re2c.ncb
+re2c.suo
