@@ -20,7 +20,7 @@ CLEANFILES   = parser.cc y.tab.c y.tab.h parser.cc re2c.1 .version
 DISTCLEANFILES = makerpm re2c.spec README scanner.cc re2c$(EXEEXT)
 
 EXTRA_DIST   = $(man_MANS) README parser.y scanner.re makerpm.in re2c.spec.in \
-               README.in y.tab.h \
+               README.in y.tab.h CHANGELOG \
                doc examples test
 
 dist-hook:
