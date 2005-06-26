@@ -1,6 +1,7 @@
 Version 0.9.8 (2005-06-26)
 --------------------------
 - Fixed code generation for -b switch.
+- Added Microsoft Visual C .NET build files.
 
 Version 0.9.7 (2005-04-30)
 --------------------------
