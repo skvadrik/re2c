@@ -19,6 +19,7 @@ public:
 	friend bool operator==(const SubStr &, const SubStr &);
 	SubStr(uchar*, uint);
 	SubStr(char*, uint);
+	SubStr(char*);
 	SubStr(const SubStr&);
 	void out(std::ostream&) const;
 };
@@ -50,6 +51,10 @@ inline SubStr::SubStr(uchar *s, uint l)
 
 inline SubStr::SubStr(char *s, uint l)
 		: str(s), len(l)
+{ }
+
+inline SubStr::SubStr(char *s)
+		: str(s), len(strlen(s))
 { }
 
 inline SubStr::SubStr(const SubStr &s)

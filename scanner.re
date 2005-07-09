@@ -64,15 +64,16 @@ char *Scanner::fill(char *cursor){
 }
 
 /*!re2c
-zero		= "\000";
-any		= [\000-\377];
-dot		= any \ [\n];
-esc		= dot \ [\\];
-cstring		= "["  ((esc \ [\]]) | "\\" dot)* "]" ;
-dstring		= "\"" ((esc \ ["] ) | "\\" dot)* "\"";
-sstring		= "'"  ((esc \ ['] ) | "\\" dot)* "'" ;
-letter		= [a-zA-Z];
-digit		= [0-9];
+zero    = "\000";
+any     = [\000-\377];
+dot     = any \ [\n];
+esc     = dot \ [\\];
+istring = "[" "^" ((esc \ [\]]) | "\\" dot)* "]" ;
+cstring = "["     ((esc \ [\]]) | "\\" dot)* "]" ;
+dstring = "\""    ((esc \ ["] ) | "\\" dot)* "\"";
+sstring = "'"     ((esc \ ['] ) | "\\" dot)* "'" ;
+letter  = [a-zA-Z];
+digit   = [0-9];
 */
 
 int Scanner::echo(std::ostream &out){
@@ -154,6 +155,10 @@ scan:
 
 	"\""			{ fatal("unterminated string constant (missing \")"); }
 	"'"				{ fatal("unterminated string constant (missing ')"); }
+
+	istring			{ cur = cursor;
+				  yylval.regexp = invToRE(token());
+				  return RANGE; }
 
 	cstring			{ cur = cursor;
 				  yylval.regexp = ranToRE(token());

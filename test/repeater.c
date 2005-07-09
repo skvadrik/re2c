@@ -4,11 +4,11 @@
 #include <stdio.h>
 #include <string.h>
 
-#define RET(n) printf("%d\n", n); return n
+#define RET(n) return n
 
-int scan(char *s, int l){
-char *p = s;
-char *q;
+int scan(const char *s, int l){
+const char *p = s;
+const char *q;
 #define YYCTYPE         char
 #define YYCURSOR        p
 #define YYLIMIT         (s+l)
@@ -25,119 +25,137 @@ yy0:
 	if((YYLIMIT - YYCURSOR) < 7) YYFILL(7);
 	yych = *YYCURSOR;
 	switch(yych){
-	case 0x0A:	case '^':	case 'q':	goto yy6;
-	case 'A':	goto yy3;
+	case 0x0A:	case 'q':	goto yy7;
+	case 'A':	goto yy2;
 	case 'a':	goto yy4;
-	default:	goto yy2;
+	default:	goto yy6;
 	}
-yy2:	YYCURSOR = YYMARKER;
-	switch(yyaccept){
-	case 0:	goto yy5;
-	}
-yy3:	yych = *++YYCURSOR;
-	switch(yych){
-	case 0x0A:	goto yy8;
-	case 'A':	case 'a':	goto yy7;
-	default:	goto yy2;
-	}
-yy4:	yyaccept = 0;
+yy2:	yyaccept = 0;
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch(yych){
-	case 0x0A:	goto yy8;
-	case 'A':	case 'a':	goto yy7;
+	case 0x0A:	goto yy10;
+	case 'A':	case 'a':	goto yy8;
+	default:	goto yy3;
+	}
+yy3:
+#line 22 "repeater.re"
+{RET(5);}
+#line 44 "<stdout>"
+yy4:	yyaccept = 1;
+	yych = *(YYMARKER = ++YYCURSOR);
+	switch(yych){
+	case 0x0A:	goto yy10;
+	case 'A':	case 'a':	goto yy8;
 	default:	goto yy5;
 	}
 yy5:
-#line 20 "repeater.re"
+#line 23 "repeater.re"
 {RET(0);}
-#line 54 "<stdout>"
+#line 55 "<stdout>"
 yy6:	yych = *++YYCURSOR;
-	goto yy5;
+	goto yy3;
 yy7:	yych = *++YYCURSOR;
+	goto yy5;
+yy8:	yych = *++YYCURSOR;
 	switch(yych){
-	case 0x0A:	goto yy11;
-	case 'A':	case 'a':	goto yy10;
-	default:	goto yy2;
+	case 0x0A:	goto yy13;
+	case 'A':	case 'a':	goto yy12;
+	default:	goto yy9;
 	}
-yy8:	++YYCURSOR;
-	goto yy9;
-yy9:
-#line 16 "repeater.re"
-{RET(1);}
-#line 68 "<stdout>"
-yy10:	yych = *++YYCURSOR;
-	switch(yych){
-	case 0x0A:	goto yy11;
-	case 'A':	case 'a':	goto yy13;
-	default:	goto yy2;
+yy9:	YYCURSOR = YYMARKER;
+	switch(yyaccept){
+	case 0:	goto yy3;
+	case 1:	goto yy5;
 	}
-yy11:	++YYCURSOR;
-	goto yy12;
-yy12:
-#line 17 "repeater.re"
-{RET(2);}
-#line 80 "<stdout>"
-yy13:	yych = *++YYCURSOR;
-	switch(yych){
-	case 0x0A:	goto yy15;
-	case 'A':	case 'a':	goto yy14;
-	default:	goto yy2;
-	}
-yy14:	yych = *++YYCURSOR;
-	switch(yych){
-	case 0x0A:	goto yy15;
-	case 'A':	case 'a':	goto yy17;
-	default:	goto yy2;
-	}
-yy15:	++YYCURSOR;
-	goto yy16;
-yy16:
-#line 19 "repeater.re"
-{RET(3);}
-#line 98 "<stdout>"
-yy17:	yych = *++YYCURSOR;
-	switch(yych){
-	case 0x0A:	goto yy18;
-	default:	goto yy21;
-	}
-yy18:	++YYCURSOR;
-	goto yy19;
-yy19:
+yy10:	++YYCURSOR;
+	goto yy11;
+yy11:
 #line 18 "repeater.re"
+{RET(1);}
+#line 76 "<stdout>"
+yy12:	yych = *++YYCURSOR;
+	switch(yych){
+	case 0x0A:	goto yy13;
+	case 'A':	case 'a':	goto yy15;
+	default:	goto yy9;
+	}
+yy13:	++YYCURSOR;
+	goto yy14;
+yy14:
+#line 19 "repeater.re"
+{RET(2);}
+#line 88 "<stdout>"
+yy15:	yych = *++YYCURSOR;
+	switch(yych){
+	case 0x0A:	goto yy17;
+	case 'A':	case 'a':	goto yy16;
+	default:	goto yy9;
+	}
+yy16:	yych = *++YYCURSOR;
+	switch(yych){
+	case 0x0A:	goto yy17;
+	case 'A':	case 'a':	goto yy19;
+	default:	goto yy9;
+	}
+yy17:	++YYCURSOR;
+	goto yy18;
+yy18:
+#line 21 "repeater.re"
 {RET(4);}
-#line 109 "<stdout>"
+#line 106 "<stdout>"
+yy19:	yych = *++YYCURSOR;
+	switch(yych){
+	case 0x0A:	goto yy20;
+	default:	goto yy23;
+	}
 yy20:	++YYCURSOR;
+	goto yy21;
+yy21:
+#line 20 "repeater.re"
+{RET(3);}
+#line 117 "<stdout>"
+yy22:	++YYCURSOR;
 	if(YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
-	goto yy21;
-yy21:	switch(yych){
-	case 0x0A:	goto yy15;
-	case 'A':	case 'a':	goto yy20;
-	default:	goto yy2;
+	goto yy23;
+yy23:	switch(yych){
+	case 0x0A:	goto yy17;
+	case 'A':	case 'a':	goto yy22;
+	default:	goto yy9;
 	}
 }
-#line 21 "repeater.re"
+#line 24 "repeater.re"
 
 }
 
-#define do_scan(str) scan(str, strlen(str))
+void _do_scan(int exp, const char * str, int len)
+{
+	int ret = scan(str, len);
+	
+	printf("%d %s %d\n", exp, exp == ret ? "==" : "!=", ret);
+}
+
+#define do_scan(exp, str) _do_scan(exp, str, sizeof(str) - 1)
 
 main()
 {
-	do_scan("a\n");
-	do_scan("aa\n");
-	do_scan("aaa\n");
-	do_scan("aaaa\n");
-	do_scan("q");
-	do_scan("a");
-	do_scan("A\n");
-	do_scan("AA\n");
-	do_scan("aAa\n");
-	do_scan("AaaA\n");
-	do_scan("Q");
-	do_scan("AaaAa\n");
-	do_scan("AaaAaA\n");
-	do_scan("A");
-	do_scan("\n");
-	do_scan("0");
+	do_scan(1, "a\n");
+	do_scan(2, "aa\n");
+	do_scan(2, "aaa\n");
+	do_scan(4, "aaaa\n");
+	do_scan(0, "q");
+	do_scan(0, "a");
+	do_scan(1, "A\n");
+	do_scan(2, "AA\n");
+	do_scan(2, "aAa\n");
+	do_scan(4, "AaaA\n");
+	do_scan(5, "Q");
+	do_scan(4, "AaaAa\n");
+	do_scan(3, "AaaAaA\n");
+	do_scan(5, "A");
+	do_scan(0, "\n");
+	do_scan(5, "0");
+	do_scan(0, "a");
+	do_scan(0, "q");
+	do_scan(5, "x");
 }

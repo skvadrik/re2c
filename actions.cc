@@ -673,6 +673,21 @@ RegExp *ranToRE(SubStr s)
 	return new MatchOp(r);
 }
 
+RegExp *invToRE(SubStr s)
+{
+	s.len--;
+	s.str++;
+
+	RegExp * any = ranToRE(SubStr("[\\000-\\377]"));
+	RegExp * ran = ranToRE(s);
+	RegExp * inv = mkDiff(any, ran);
+	
+	delete ran;
+	delete any;
+	
+	return inv;
+}
+
 char *RuleOp::type = "RuleOp";
 
 RuleOp::RuleOp(RegExp *e, RegExp *c, Token *t, uint a)

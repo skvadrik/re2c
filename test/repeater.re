@@ -2,43 +2,56 @@
 #include <stdio.h>
 #include <string.h>
 
-#define RET(n) printf("%d\n", n); return n
+#define RET(n) return n
 
-int scan(char *s, int l){
-char *p = s;
-char *q;
+int scan(const char *s, int l){
+const char *p = s;
+const char *q;
 #define YYCTYPE         char
 #define YYCURSOR        p
 #define YYLIMIT         (s+l)
 #define YYMARKER        q
 #define YYFILL(n)
 /*!re2c
-	'a'{1}"\n"	    {RET(1);}
-	'a'{2,3}"\n"	{RET(2);}
-	'a'{6}"\n"	    {RET(4);}
-	'a'{4,}"\n"	    {RET(3);}
-	[^aq]|"\n"      {RET(0);}
+	any     = [\000-\377];
+
+	'a'{1}"\n"      {RET(1);}
+	'a'{2,3}"\n"    {RET(2);}
+	'a'{6}"\n"      {RET(3);}
+	'a'{4,}"\n"	    {RET(4);}
+	[^aq\n]         {RET(5);}
+	any             {RET(0);}
 */
 }
 
-#define do_scan(str) scan(str, strlen(str))
+void _do_scan(int exp, const char * str, int len)
+{
+	int ret = scan(str, len);
+	
+	printf("%d %s %d\n", exp, exp == ret ? "==" : "!=", ret);
+}
+
+#define do_scan(exp, str) _do_scan(exp, str, sizeof(str) - 1)
 
 main()
 {
-	do_scan("a\n");
-	do_scan("aa\n");
-	do_scan("aaa\n");
-	do_scan("aaaa\n");
-	do_scan("q");
-	do_scan("a");
-	do_scan("A\n");
-	do_scan("AA\n");
-	do_scan("aAa\n");
-	do_scan("AaaA\n");
-	do_scan("Q");
-	do_scan("AaaAa\n");
-	do_scan("AaaAaA\n");
-	do_scan("A");
-	do_scan("\n");
-	do_scan("0");
+	do_scan(1, "a\n");
+	do_scan(2, "aa\n");
+	do_scan(2, "aaa\n");
+	do_scan(4, "aaaa\n");
+	do_scan(0, "q");
+	do_scan(0, "a");
+	do_scan(1, "A\n");
+	do_scan(2, "AA\n");
+	do_scan(2, "aAa\n");
+	do_scan(4, "AaaA\n");
+	do_scan(5, "Q");
+	do_scan(4, "AaaAa\n");
+	do_scan(3, "AaaAaA\n");
+	do_scan(5, "A");
+	do_scan(0, "\n");
+	do_scan(5, "0");
+	do_scan(0, "a");
+	do_scan(0, "q");
+	do_scan(5, "x");
 }

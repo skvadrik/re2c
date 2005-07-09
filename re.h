@@ -294,6 +294,7 @@ extern void genCode(std::ostream&, RegExp*);
 extern RegExp *mkDiff(RegExp*, RegExp*);
 extern RegExp *strToRE(SubStr);
 extern RegExp *ranToRE(SubStr);
+extern RegExp *invToRE(SubStr);
 extern RegExp *strToCaseInsensitiveRE(SubStr s);
 
 } // end namespace re2c
