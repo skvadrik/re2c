@@ -694,6 +694,18 @@ RegExp *invToRE(SubStr s)
 	return inv;
 }
 
+RegExp *mkDot()
+{
+	RegExp * any = ranToRE(SubStr("[\\000-\\377]"));
+	RegExp * ran = matchChar('\n');
+	RegExp * inv = mkDiff(any, ran);
+	
+	delete ran;
+	delete any;
+	
+	return inv;
+}
+
 char *RuleOp::type = "RuleOp";
 
 RuleOp::RuleOp(RegExp *e, RegExp *c, Token *t, uint a)

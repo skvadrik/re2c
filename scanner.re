@@ -195,7 +195,7 @@ scan:
 	    			}
 
 	"."			{ cur = cursor;
-				  yylval.regexp = ranToRE("[\\000-\\377]");
+				  yylval.regexp = mkDot();
 				  return RANGE;
 				}
 

@@ -292,6 +292,7 @@ public:
 
 extern void genCode(std::ostream&, RegExp*);
 extern RegExp *mkDiff(RegExp*, RegExp*);
+extern RegExp *mkDot();
 extern RegExp *strToRE(SubStr);
 extern RegExp *ranToRE(SubStr);
 extern RegExp *invToRE(SubStr);
