@@ -194,6 +194,11 @@ scan:
 				  goto scan;
 	    			}
 
+	"."			{ cur = cursor;
+				  yylval.regexp = ranToRE("[\\000-\\377]");
+				  return RANGE;
+				}
+
 	any			{ std::cerr << "unexpected character: " << *tok << std::endl;
 				  goto scan;
 				}
