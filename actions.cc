@@ -677,8 +677,14 @@ RegExp *invToRE(SubStr s)
 {
 	s.len--;
 	s.str++;
-
+	
 	RegExp * any = ranToRE(SubStr("[\\000-\\377]"));
+
+	if (s.len <= 2)
+	{
+		return any;
+	}
+
 	RegExp * ran = ranToRE(s);
 	RegExp * inv = mkDiff(any, ran);
 	
