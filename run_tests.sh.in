@@ -1,5 +1,6 @@
 #!/bin/sh
 result=0
+errcnt=0
 for x in @top_srcdir@/test/*.re; do
 	echo $x
 	# don't use the -o flag, since it makes it harder to diff.
@@ -11,6 +12,12 @@ for x in @top_srcdir@/test/*.re; do
 	else
 		echo "Failed: ${x%.re}.c ${x%.re}.temp differ."
 		result=1
+		errcnt=$(($errcnt+1))
 	fi
 done
+if test $result = 0; then
+	echo "All tests passed successfully."
+else
+	echo "Error: $errcnt tests failed."
+fi
 exit $result
