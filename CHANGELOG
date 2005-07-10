@@ -1,6 +1,6 @@
 Version 0.9.9 (????-??-??)
 --------------------------
-- Implemented #1232777 negated char classes and '.'.
+- Implemented #1232777 negated char classes '[^...]' and the dot operator '.'.
 
 Version 0.9.8 (2005-06-26)
 --------------------------
