@@ -93,10 +93,22 @@
 				RelativePath="mbo_getopt.cc">
 			</File>
 			<File
-				RelativePath="parser.cc">
+				RelativePath="bootstrap\parser.cc">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						AdditionalIncludeDirectories="./"/>
+				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="scanner.cc">
+				RelativePath="bootstrap\scanner.cc">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						AdditionalIncludeDirectories="./"/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="substr.cc">
