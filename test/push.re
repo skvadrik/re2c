@@ -233,7 +233,7 @@ public:
             digit = [0-9];
             integer = digit+;
             alpha = [A-Za-z_];
-            any = [\000-\0377];
+            any = [\000-\377];
             space = [ \h\t\v\f\r];
 
             "if"                    { SEND(kIf);             }

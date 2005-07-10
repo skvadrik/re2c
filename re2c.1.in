@@ -7,6 +7,12 @@
 .ds rx regular expression
 .ds lx \fIl\fP-expression
 \"$Log$
+\"Revision 1.21  2005/07/10 13:48:03  helly
+\"- Moved some actions into class Scanner to be able to issue fatal errors
+\"- Added hexadecimal character definitions
+\"- Check for consistency of octal character definitions
+\"- Update man page
+\"
 \"Revision 1.20  2005/05/03 15:46:46  helly
 \"- Add missing YYDEBUG() section
 \"
@@ -310,6 +316,9 @@ a "character class" with a range in it;
 matches an '\fCa\fP', a '\fCb\fP', any letter from '\fCj\fP' through '\fCo\fP',
 or a '\fCZ\fP'.
 .TP
+\fC[^\fIclass\fP\fC]\fP
+an inverted "character class".
+.TP
 \fIr\fP\fC\e\fP\fIs\fP
 match any \fIr\fP which isn't an \fIs\fP. \fIr\fP and \fIs\fP must be regular expressions
 which can be expressed as character classes.
@@ -348,7 +357,19 @@ matches \fIr\fP at least \fIn\fP times.
 .TP
 \fIr\fP\fC{\fP\fIn\fP\fC,\fP\fIm\fP\fC}\fP
 matches \fIr\fP at least \fIn\fP but not more than \fIm\fP times.
-
+.TP
+\fC.\fP
+match any character except newline (\\n).
+.TP
+\fIdef\fP
+matches named definition as specified by \fIdef\fP.
+.LP
+Character classes and string literals may contain octoal or hexadecimal 
+character definitions and the following set of escape sequences (\fC\\n\fP,
+ \fC\\t\fP, \fC\\v\fP, \fC\\b\fP, \fC\\r\fP, \fC\\f\fP, \fC\\a\fP, \fC\\\\\fP).
+An octal character is defined by a backslash followed by its three octal digits
+and a hexadecimal character is defined by backslash, a lower cased 'x' and its
+two hexadecimal digits.
 .LP
 The regular expressions listed above are grouped according to
 precedence, from highest precedence at the top to lowest at the bottom.
@@ -656,8 +677,6 @@ and act accordingly.
 .LP
 \*(re does not provide start conditions:  use a separate scanner
 specification for each start condition (as illustrated in the above example).
-.LP
-No [^x].  Use difference instead.
 .SH BUGS
 .LP
 Only fixed length trailing context can be handled.

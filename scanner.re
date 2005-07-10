@@ -187,17 +187,17 @@ scan:
 				  yylval.symbol = Symbol::find(token());
 				  return ID; }
 
+	"."			{ cur = cursor;
+				  yylval.regexp = mkDot();
+				  return RANGE;
+				}
+
 	[ \t]+			{ goto scan; }
 
 	"\n"			{ if(cursor == eof) RETURN(0);
 				  pos = cursor; cline++;
 				  goto scan;
 	    			}
-
-	"."			{ cur = cursor;
-				  yylval.regexp = mkDot();
-				  return RANGE;
-				}
 
 	any			{ std::cerr << "unexpected character: " << *tok << std::endl;
 				  goto scan;
@@ -237,9 +237,10 @@ comment:
 */
 }
 
-void Scanner::fatal(char *msg){
+void Scanner::fatal(char *msg) const
+{
     std::cerr << "line " << tline << ", column " << (tchar + 1) << ": "
-	<< msg << std::endl;
+		<< msg << std::endl;
     exit(1);
 }
 

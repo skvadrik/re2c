@@ -4,6 +4,7 @@
 
 #include <iosfwd>
 #include "token.h"
+#include "re.h"
 
 namespace re2c
 {
@@ -25,9 +26,18 @@ public:
 	Scanner(std::istream&);
 	int echo(std::ostream&);
 	int scan();
-	void fatal(char*);
+	void fatal(char*) const;
 	SubStr token();
 	uint line();
+	
+	uchar unescape(SubStr &s) const;
+	Range * getRange(SubStr &s) const;
+	RegExp * matchChar(uint c) const;
+	RegExp * strToRE(SubStr s) const;
+	RegExp * strToCaseInsensitiveRE(SubStr s) const;
+	RegExp * ranToRE(SubStr s) const;
+	RegExp * invToRE(SubStr s) const;
+	RegExp * mkDot() const;
 };
 
 inline SubStr Scanner::token()

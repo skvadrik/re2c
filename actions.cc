@@ -313,7 +313,7 @@ void MatchOp::split(CharSet &s)
 			s.fix->nxt = NULL;
 }
 
-RegExp *mkDiff(RegExp *e1, RegExp *e2)
+RegExp * mkDiff(RegExp *e1, RegExp *e2)
 {
 	MatchOp *m1, *m2;
 
@@ -505,7 +505,7 @@ void CloseVOp::split(CharSet &s)
 
 RegExp *expr(Scanner &);
 
-uchar unescape(SubStr &s)
+uchar Scanner::unescape(SubStr &s) const
 {
 	s.len--;
 	uchar c;
@@ -538,6 +538,24 @@ uchar unescape(SubStr &s)
 
 		case 'a':
 		return xlat['\a'];
+		
+		case 'x':
+		{
+			static const char * hex = "0123456789abcdef";
+			char *p1, *p2;
+
+			if (s.len < 2 || !(p1 = strchr(hex, tolower(s.str[0]))) 
+			              || !(p2 = strchr(hex, tolower(s.str[1]))))
+			{
+				fatal("Illegal hexadecimal character code");
+			}
+			s.len -= 2;
+			s.str += 2;
+			
+			uchar v = (uchar)((p1 - hex) << 4) + (uchar)(p2 - hex);
+
+			return v;
+		}
 
 		case '0':
 
@@ -555,10 +573,19 @@ uchar unescape(SubStr &s)
 
 		case '7':
 		{
-			uchar v = c - '0';
+			static const char * oct = "01234567";
+			char *p0, *p1, *p2;
 
-			for (; s.len != 0 && '0' <= (c = *s.str) && c <= '7'; s.len--, s.str++)
-				v = v * 8 + (c - '0');
+			if (s.len < 2 || !(p0 = strchr(oct, c)) || c > '3'
+			              || !(p1 = strchr(oct, s.str[0])) 
+			              || !(p2 = strchr(oct, s.str[1])))
+			{
+				fatal("Illegal octal character code");
+			}
+			s.len -= 2;
+			s.str += 2;
+			
+			uchar v = (uchar)((p0 - oct) << 6) + (uchar)((p1 - oct) << 3) + (uchar)(p2 - oct);
 
 			return v;
 		}
@@ -568,7 +595,7 @@ uchar unescape(SubStr &s)
 	}
 }
 
-Range *getRange(SubStr &s)
+Range * Scanner::getRange(SubStr &s) const
 {
 	uchar lb = unescape(s), ub;
 
@@ -594,12 +621,12 @@ Range *getRange(SubStr &s)
 	return new Range(lb, ub + 1);
 }
 
-RegExp *matchChar(uint c)
+RegExp * Scanner::matchChar(uint c) const
 {
 	return new MatchOp(new Range(c, c + 1));
 }
 
-RegExp *strToRE(SubStr s)
+RegExp * Scanner::strToRE(SubStr s) const
 {
 	s.len -= 2;
 	s.str += 1;
@@ -615,7 +642,7 @@ RegExp *strToRE(SubStr s)
 	return re;
 }
 
-RegExp *strToCaseInsensitiveRE(SubStr s)
+RegExp * Scanner::strToCaseInsensitiveRE(SubStr s) const
 {
 	s.len -= 2;
 	s.str += 1;
@@ -657,7 +684,7 @@ RegExp *strToCaseInsensitiveRE(SubStr s)
 	return re;
 }
 
-RegExp *ranToRE(SubStr s)
+RegExp * Scanner::ranToRE(SubStr s) const
 {
 	s.len -= 2;
 	s.str += 1;
@@ -673,7 +700,7 @@ RegExp *ranToRE(SubStr s)
 	return new MatchOp(r);
 }
 
-RegExp *invToRE(SubStr s)
+RegExp * Scanner::invToRE(SubStr s) const
 {
 	s.len--;
 	s.str++;
@@ -694,7 +721,7 @@ RegExp *invToRE(SubStr s)
 	return inv;
 }
 
-RegExp *mkDot()
+RegExp * Scanner::mkDot() const
 {
 	RegExp * any = ranToRE(SubStr("[\\000-\\377]"));
 	RegExp * ran = matchChar('\n');
