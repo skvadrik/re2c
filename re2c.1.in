@@ -7,6 +7,9 @@
 .ds rx regular expression
 .ds lx \fIl\fP-expression
 \"$Log$
+\"Revision 1.22  2005/07/10 14:16:26  helly
+\"- Update
+\"
 \"Revision 1.21  2005/07/10 13:48:03  helly
 \"- Moved some actions into class Scanner to be able to issue fatal errors
 \"- Added hexadecimal character definitions
@@ -163,8 +166,9 @@ yy7:    if(yych <= '/') goto yy3;
 .in -3
 
 After the \fC/*!re2c */\fP blocks you can place a \fC/*!max:re2c */\fP block
-that will output a define that holds the maximum number of characters required
-to parse the input. That is the maximum value \fCYYFILL()\fP will receive.
+that will output a define (\fCYYMAXFILL\fP) that holds the maximum number of 
+characters required to parse the input. That is the maximum value \fCYYFILL()\fP 
+will receive.
 
 .SH OPTIONS
 \*(re provides the following options:
@@ -262,6 +266,9 @@ the generated parser by calling a user defined function for every state. The fun
 should have the following signature: \fIvoid YYDEBUG(int state, char current)\fP. 
 The first parameter receives the state or -1 and the second parameter receives the 
 input at the current cursor.
+.TP
+\fCYYMAXFILL
+This will be automatically defined by \fC/*!max:re2c */\fP blocks as explained above.
 
 .SH "SCANNER WITH STORABLE STATES"
 When the \fB-f\fP flag is specified, re2c generates a scanner that
