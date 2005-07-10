@@ -1,6 +1,8 @@
 Version 0.9.9 (????-??-??)
 --------------------------
 - Implemented #1232777 negated char classes '[^...]' and the dot operator '.'.
+- Added hexadecimal character definitions.
+- Added consistency check for octal character definitions.
 
 Version 0.9.8 (2005-06-26)
 --------------------------
