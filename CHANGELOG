@@ -1,4 +1,4 @@
-Version 0.9.9 (????-??-??)
+Version 0.9.9 (2005-07-21)
 --------------------------
 - Implemented #1232777 negated char classes '[^...]' and the dot operator '.'.
 - Added hexadecimal character definitions.
