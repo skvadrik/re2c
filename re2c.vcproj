@@ -47,6 +47,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				InlineFunctionExpansion="2"
+				AdditionalIncludeDirectories=""
 				PreprocessorDefinitions="HAVE_CONFIG_H"
 				BufferSecurityCheck="TRUE"
 				RuntimeTypeInfo="FALSE"
@@ -98,7 +99,7 @@
 					Name="Release|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalIncludeDirectories="./"/>
+						AdditionalIncludeDirectories=".\."/>
 				</FileConfiguration>
 			</File>
 			<File
@@ -107,7 +108,7 @@
 					Name="Release|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalIncludeDirectories="./"/>
+						AdditionalIncludeDirectories=".\."/>
 				</FileConfiguration>
 			</File>
 			<File
@@ -115,6 +116,9 @@
 			</File>
 			<File
 				RelativePath="translate.cc">
+			</File>
+			<File
+				RelativePath="bootstrap\y.tab.h">
 			</File>
 		</Filter>
 		<Filter
