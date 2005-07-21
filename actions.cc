@@ -421,7 +421,7 @@ uint CatOp::fixedLength()
 		if ((l2 = exp2->fixedLength()) != ~0u)
 			return l1 + l2;
 
-	return ~0;
+	return ~0u;
 }
 
 void CatOp::compile(Char *rep, Ins *i)
