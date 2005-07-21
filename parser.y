@@ -178,6 +178,10 @@ void line_source(unsigned int line, std::ostream& o)
     char *	fnamebuf;
     char *	token;
 
+	if (iFlag)
+	{
+		return;
+	}
     o << "#line " << line << " \"";
     if( fileName != NULL ) {
     	fnamebuf = strdup( fileName );

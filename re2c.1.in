@@ -7,6 +7,9 @@
 .ds rx regular expression
 .ds lx \fIl\fP-expression
 \"$Log$
+\"Revision 1.23  2005/07/21 16:25:24  helly
+\"- Add -i switch to avoid generating #line information.
+\"
 \"Revision 1.22  2005/07/10 14:16:26  helly
 \"- Update
 \"
@@ -195,6 +198,11 @@ parser issues and states. If you use this switch you need to define a macro
 \fIYYDEBUG\fP that is called like a function with two parameters:
 \fIvoid YYDEBUG(int state, char current)\fP. The first parameter receives the 
 state or -1 and the second parameter receives the input at the current cursor.
+.TP
+\fB-d\fP
+Do not output #line information. This is usefull when you want use a CMS tool
+with the re2c output which you might want if you do not require your users to 
+have re2c themselves when building from your source.
 .TP
 \fB-h\fP
 \fB-?\fP

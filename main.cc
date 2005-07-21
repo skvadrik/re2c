@@ -21,7 +21,7 @@ char *outputFileName = 0;
 bool sFlag = false;
 bool bFlag = false;
 bool dFlag = false; 
-bool qFlag = false;
+bool iFlag = false;
 bool bUsedYYAccept = false;
 unsigned int oline = 1;
 uint maxFill = 1;
@@ -42,6 +42,7 @@ static const mbo_opt_struct OPTIONS[] =
 	mbo_opt_struct('e', 0, "ecb"),
 	mbo_opt_struct('f', 0, "storable-state"),
 	mbo_opt_struct('h', 0, "help"),
+	mbo_opt_struct('i', 0, "debug-info"),
 	mbo_opt_struct('o', 1, "output"),
 	mbo_opt_struct('s', 0, "nested-ifs"),
 	mbo_opt_struct('v', 0, "version"),
@@ -73,6 +74,8 @@ static void usage()
 	"-d      --debug-output  Creates a parser that dumps information during\n"
 	"                        about the current position and in which state the\n"
 	"                        parser is.\n"
+	"\n"
+	"-i      --no-debug-info Do not generate '#line' info (usefull for versioning).\n"
 	"\n"
 	"-v      --version       Show version information.\n"
 	"-V      --vernum        Show version as one number.\n"
@@ -119,6 +122,10 @@ int main(int argc, char *argv[])
 
 			case 'f':
 			vFillIndexes = 0;
+			break;
+
+			case 'i':
+			iFlag = true;
 			break;
 
 			case 'o':

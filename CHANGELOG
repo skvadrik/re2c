@@ -1,5 +1,6 @@
 Version 0.9.10 (????-??-??)
 ---------------------------
+- Add -i switch to avoid generating #line information.
 
 Version 0.9.9 (2005-07-21)
 --------------------------

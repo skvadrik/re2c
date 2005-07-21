@@ -452,10 +452,13 @@ void Rule::emit(std::ostream &o, bool &readCh)
 	o << rule->code->text;
 	// not sure if we need this or not.    oline += std::count(rule->code->text, rule->code->text + ::strlen(rule->code->text), '\n');
 	o << "\n";
-	++oline;
-	o << "#line " << oline++ << " \"" << outputFileName << "\"\n";
-	//    o << "\n#line " << rule->code->line
-	//      << "\n\t" << rule->code->text << "\n";
+	if (!iFlag)
+	{
+		++oline;
+		o << "#line " << oline++ << " \"" << outputFileName << "\"\n";
+		//    o << "\n#line " << rule->code->line
+		//      << "\n\t" << rule->code->text << "\n";
+	}
 }
 
 void doLinear(std::ostream &o, uint i, Span *s, uint n, State *from, State *next, bool &readCh)
@@ -1220,7 +1223,11 @@ void DFA::emit(std::ostream &o)
 	oline = nOrgOline;
 
 	oline++;
-	o << "\n#line " << oline++ << " \"" << outputFileName << "\"\n";
+	o << "\n";
+	if (!iFlag)
+	{
+		o << "#line " << oline++ << " \"" << outputFileName << "\"\n";
+	}
 
 	if ( hasFillLabels == false )
 	{
