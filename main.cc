@@ -195,7 +195,7 @@ int main(int argc, char *argv[])
 
 	if (outputFileName == 0 || (fileName[0] == '-' && fileName[1] == '\0'))
 	{
-		outputFileName = "<stdout>";
+		outputFileName = strdup("<stdout>");
 		output = &cout;
 	}
 	else
@@ -209,9 +209,25 @@ int main(int argc, char *argv[])
 		}
 
 		output = &outputFile;
+		
+		int len = strlen(outputFileName);
+		char *src, *dst, *tmp = (char*)malloc((len+1)*2);
+
+		for (src = outputFileName, dst = tmp; *src; ++src)
+		{
+			if (*src == '\\')
+			{
+				*dst++ = *src;
+			}
+			*dst++ = *src;
+		}
+		*dst = '\0';
+		
+		outputFileName = tmp;
 	}
 
 	parse(*input, *output);
+	free(outputFileName);
 	return 0;
 
 }
