@@ -42,7 +42,7 @@ static const mbo_opt_struct OPTIONS[] =
 	mbo_opt_struct('e', 0, "ecb"),
 	mbo_opt_struct('f', 0, "storable-state"),
 	mbo_opt_struct('h', 0, "help"),
-	mbo_opt_struct('i', 0, "debug-info"),
+	mbo_opt_struct('i', 0, "no-debug-info"),
 	mbo_opt_struct('o', 1, "output"),
 	mbo_opt_struct('s', 0, "nested-ifs"),
 	mbo_opt_struct('v', 0, "version"),
