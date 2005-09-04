@@ -1,4 +1,4 @@
-Version 0.9.10 (????-??-??)
+Version 0.9.10 (2005-09-04)
 ---------------------------
 - Add -i switch to avoid generating #line information.
 - Fixed bug #1251653 re2c generate some invalid #line on WIN32.
