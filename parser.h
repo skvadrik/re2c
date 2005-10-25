@@ -5,22 +5,40 @@
 #include "scanner.h"
 #include "re.h"
 #include <iosfwd>
+#include <map>
 
 namespace re2c
 {
 
 class Symbol
 {
-
 public:
-	static Symbol	*first;
-	Symbol	*next;
-	Str	name;
-	RegExp	*re;
 
-public:
-	Symbol(const SubStr&);
+	RegExp*   re;
+
 	static Symbol *find(const SubStr&);
+	static void ClearTable();
+
+	~Symbol()
+	{
+		/** \todo should we delete 're'? */
+	}
+
+protected:
+
+	Symbol(const SubStr& str)
+		: name(str)
+		, re(NULL)
+	{
+	}
+
+private:
+
+	typedef std::map<std::string, Symbol*> SymbolTable;
+
+	static SymbolTable symbol_table;
+
+	Str	name;
 };
 
 void line_source(unsigned int, std::ostream&);

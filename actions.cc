@@ -12,20 +12,24 @@
 namespace re2c
 {
 
-Symbol *Symbol::first = NULL;
-
-Symbol::Symbol(const SubStr &str) : next(first), name(str), re(NULL)
+void Symbol::ClearTable()
 {
-	first = this;
+	symbol_table.clear();
 }
+
+Symbol::SymbolTable Symbol::symbol_table;
 
 Symbol *Symbol::find(const SubStr &str)
 {
-	for (Symbol *sym = first; sym; sym = sym->next)
-		if (sym->name == str)
-			return sym;
+	const std::string ss(str.to_string());
+	SymbolTable::const_iterator it = symbol_table.find(ss);
 
-	return new Symbol(str);
+	if (it == symbol_table.end())
+	{
+		return (*symbol_table.insert(SymbolTable::value_type(ss, new Symbol(str))).first).second;
+	}
+	
+	return (*it).second;
 }
 
 void showIns(std::ostream &o, const Ins &i, const Ins &base)

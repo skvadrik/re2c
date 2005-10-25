@@ -3,6 +3,7 @@
 #define _substr_h
 
 #include <iostream>
+#include <string>
 #include "basics.h"
 
 namespace re2c
@@ -22,6 +23,10 @@ public:
 	SubStr(char*);
 	SubStr(const SubStr&);
 	void out(std::ostream&) const;
+	std::string to_string() const
+	{
+		return std::string(str, len);
+	}
 };
 
 class Str: public SubStr
