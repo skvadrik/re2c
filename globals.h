@@ -3,28 +3,26 @@
 #define	_globals_h
 
 #include "basics.h"
-#include <list>
+#include <set>
 #include <algorithm>
 
 template<typename _Ty>
-class label_list: protected std::list<_Ty>
+class label_list: protected std::set<_Ty>
 {
 public:
 	label_list()
-		: std::list<_Ty>()
+		: std::set<_Ty>()
 	{
 	}
 	
 	void append(const _Ty &val)
 	{
-		push_back(val);
-		std::list<_Ty>::sort();
-		std::list<_Ty>::unique();
+		std::set<_Ty>::insert(val);
 	}
 	
 	bool contains(const _Ty &val)
 	{
-		return std::find(std::list<_Ty>::begin(), std::list<_Ty>::end(), val) != std::list<_Ty>::end();
+		return find(val) != std::set<_Ty>::end();
 	}
 };
 
