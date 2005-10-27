@@ -12,7 +12,7 @@ man_MANS     = re2c.1
 #CXXFLAGS     = -O2 -Wall -I. -Wno-unused -Wno-parentheses -Wno-deprecated
 YFLAGS       = -d
 
-RE2C         = re2c
+RE2C         = re2c$(EXEEXT)
 RE2CFLAGS    = -s
 
 CLEANFILES   = parser.cc y.tab.c y.tab.h parser.cc re2c.1 .version

@@ -1,5 +1,6 @@
 Version 0.9.11 (????-??-??)
 ---------------------------
+- Applied #1339483 Avoid rebuilds of re2c when running subtargets.
 - Implemented #1335305 symbol table reimplementation, just slightly modifed.
 
 Version 0.9.10 (2005-09-04)
