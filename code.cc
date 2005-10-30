@@ -944,7 +944,6 @@ void calcDepth(State *head)
 		}
 		else
 		{
-
 inSCC:
 			s->depth = maxDist(s);
 		}
@@ -1234,7 +1233,7 @@ void DFA::emit(std::ostream &o)
 		o << "{\n\tYYCTYPE yych;\n";
 		oline += 2;
 		if (bUsedYYAccept) {
-			o << "\tunsigned int yyaccept;\n";
+			o << "\tunsigned int yyaccept = 0;\n";
 			oline++;
 		}
 	}
