@@ -660,8 +660,8 @@ RegExp * Scanner::strToCaseInsensitiveRE(SubStr s) const
 
 	if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z'))
 	{
-		reL = matchChar(tolower(c));
-		reU = matchChar(toupper(c));
+		reL = matchChar(xlat[tolower(c)]);
+		reU = matchChar(xlat[toupper(c)]);
 		re = mkAlt(reL, reU);
 	}
 	else
@@ -675,8 +675,8 @@ RegExp * Scanner::strToCaseInsensitiveRE(SubStr s) const
 
 		if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z'))
 		{
-			reL = matchChar(tolower(c));
-			reU = matchChar(toupper(c));
+			reL = matchChar(xlat[tolower(c)]);
+			reU = matchChar(xlat[toupper(c)]);
 			re = new CatOp(re, mkAlt(reL, reU));
 		}
 		else
@@ -728,7 +728,7 @@ RegExp * Scanner::invToRE(SubStr s) const
 RegExp * Scanner::mkDot() const
 {
 	RegExp * any = ranToRE(SubStr("[\\000-\\377]"));
-	RegExp * ran = matchChar('\n');
+	RegExp * ran = matchChar(xlat['\n']);
 	RegExp * inv = mkDiff(any, ran);
 	
 	delete ran;
