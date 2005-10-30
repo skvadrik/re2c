@@ -78,7 +78,7 @@ echo:
 #line 79 "<stdout>"
 {
 	YYCTYPE yych;
-	unsigned int yyaccept;
+	unsigned int yyaccept = 0;
 	goto yy0;
 	++YYCURSOR;
 yy0:
@@ -165,7 +165,7 @@ scan:
 #line 166 "<stdout>"
 {
 	YYCTYPE yych;
-	unsigned int yyaccept;
+	unsigned int yyaccept = 0;
 	goto yy15;
 	++YYCURSOR;
 yy15:
@@ -589,7 +589,7 @@ code:
 #line 590 "<stdout>"
 {
 	YYCTYPE yych;
-	unsigned int yyaccept;
+	unsigned int yyaccept = 0;
 	goto yy74;
 	++YYCURSOR;
 yy74:

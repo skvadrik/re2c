@@ -19,7 +19,7 @@ next:
 #line 20 "<stdout>"
 {
 	YYCTYPE yych;
-	unsigned int yyaccept;
+	unsigned int yyaccept = 0;
 	goto yy0;
 	++YYCURSOR;
 yy0:
