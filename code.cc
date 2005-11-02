@@ -891,8 +891,38 @@ void SCC::traverse(State *x)
 	}
 }
 
+static
+bool state_is_in_non_trivial_SCC( const State* s )
+{
+
+  // does not link to self
+  if (  s->link != s ){
+    return true;
+  }
+
+  // or exists i: (s->go.spans[i].to->link == s)
+  //
+  // Note: (s->go.spans[i].to == s) is allowed, corresponds to s
+  // looping back to itself.
+  //
+  for (uint i = 0; i < s->go.nSpans; ++i)
+    {
+      const State* t = s->go.span[i].to;
+
+      if (t &&  t->link == s){
+	return true;
+      }
+    }
+  // otherwise no
+  return false;
+}
+
 uint maxDist(State *s)
 {
+  if ( s->depth != cInfinity ){
+    // Already calculated, just return result.
+    return s->depth;
+  }
 	uint mm = 0;
 
 	for (uint i = 0; i < s->go.nSpans; ++i)
@@ -903,7 +933,7 @@ uint maxDist(State *s)
 		{
 			uint m = 1;
 
-			if (!t->link)
+			if (!t->link) // marked as non-key state
 			{
 				if (t->depth == -1)
 				{
@@ -919,34 +949,32 @@ uint maxDist(State *s)
 		}
 	}
 
+	s->depth = mm;
 	return mm;
 }
 
 void calcDepth(State *head)
 {
-	State *t;
-
-	for (State *s = head; s; s = s->next)
+	// mark non-key states by s->link = NULL ;
+	for (State* s = head; s; s = s->next )
 	{
-		if (s->link == s)
+		if ( (s!=head) &&  !state_is_in_non_trivial_SCC(s) )
 		{
-			for (uint i = 0; i < s->go.nSpans; ++i)
-			{
-				t = s->go.span[i].to;
-
-				if (t && t->link == s)
-				{
-					goto inSCC;
-				}
-			}
-
-			s->link = NULL;
+			s->link=NULL;
+		} else {
+				// key state, leave alone
 		}
-		else
-		{
-inSCC:
-			s->depth = maxDist(s);
-		}
+	}
+	
+	for (State* s = head; s; s = s->next )
+	{
+		s->depth = cInfinity;
+	}
+
+	// calculate max number of transitions before guarantied to reach
+	// a key state.
+	for (State* s = head; s; s = s->next ){
+		maxDist(s);
 	}
 }
 
