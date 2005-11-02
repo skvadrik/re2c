@@ -601,7 +601,7 @@ uchar Scanner::unescape(SubStr &s) const
 
 Range * Scanner::getRange(SubStr &s) const
 {
-	uchar lb = unescape(s), ub;
+	uint lb = unescape(s), ub, xlb, xub, c;
 
 	if (s.len < 2 || *s.str != '-')
 	{
@@ -615,11 +615,30 @@ Range * Scanner::getRange(SubStr &s) const
 
 		if (ub < lb)
 		{
-			uchar tmp;
-			tmp = lb;
+			uint tmp = lb;
 			lb = ub;
 			ub = tmp;
 		}
+		
+		xlb = xlat[lb];
+		xub = xlat[ub];
+		
+		for(c = lb; c <= ub; c++)
+		{
+			if (!(xlb <= xlat[c] && xlat[c] <= ub))
+			{
+				/* range doesn't work */
+				Range * r = new Range(xlb, xlb + 1);
+				for (c = lb + 1; c <= ub; c++)
+				{
+					r = doUnion(r, new Range(xlat[c], xlat[c] + 1));
+				}
+				return r;
+			}
+		}
+		
+		lb = xlb;
+		ub = xub;
 	}
 
 	return new Range(lb, ub + 1);
