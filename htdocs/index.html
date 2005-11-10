@@ -7,35 +7,42 @@
 </head>
 <body>
 <h1>re2c</h1>
-<b>re2c</b> is a great tool and has been unmaintained for quite some time,
-and in fact doesn't even compile with recent versions of gcc. I've used
-re2c in a few of my projects (e.g. OpenWBEM), and I have an interest in lexers
-(I wrote a dynamic lexer called slex as an example for the Spirit parser
-framework (see <a href="http://spirit.sf.net/">http://spirit.sf.net/</a>)).
-I didn't want to see it suffer bit-rot as there are a few bugs which need to be 
-fixed as well as some new features that would be nice to add. So, after 
-trying to contact either Peter Bumbulis or Brian Young, I decided to adopt the 
-project and use SourceForge.net to host it.<br />
-<br />
+<p>
+<b>re2c</b> is a great tool and was unmaintained for quite some time, and in 
+fact didn't even compile with newer versions of gcc. I've used re2c in a few 
+of my projects (e.g. OpenWBEM), and I have an interest in lexers (I wrote a 
+dynamic lexer called slex as an example for the Spirit parser framework (see 
+<a href="http://spirit.sf.net/">http://spirit.sf.net/</a>)). I didn't want to 
+see it suffer bit-rot as there are a few bugs which need to be fixed as well 
+as some new features that would be nice to add. So, after trying to contact 
+either Peter Bumbulis or Brian Young, I decided to adopt the project and use 
+SourceForge.net to host it.
+</p>
+<p>
 I very much welcome anyone who would like to contribute to the project, either
 as a developer with CVS access or by simply sending patches, bug reports, or
 suggestions for improvement. I have created a mailing list: re2c-general
 at lists dot sourceforge dot net which should be used for all communication
-about re2c.<br />
-<br />
+about re2c.
+</p>
+<p>
 Please use the <a href="http://sourceforge.net/projects/re2c">SourceForge
 facilities</a> to download re2c, report bugs, subscribe to the mailing list,
-etc.<br />
-<br />
-You can view the manual online <a href="manual.html">here</a>.<br />
-<br />
-Dan Nuffer (nuffer@users.sourceforge.net)<br />
-<br />
-re2c is hosted at<br />
+etc.
+</p>
+<p>
+You can view the manual online <a href="manual.html">here</a>.
+</p>
+<p>
+Dan Nuffer (nuffer@users.sourceforge.net)
+</p>
+<p>
+re2c is hosted at
 <a href="http://sourceforge.net"><img src=
 "http://sourceforge.net/sflogo.php?group_id=72099&amp;type=5" width="210"
-height="62" border="0" alt="SourceForge.net" /></a><br />
-<br />
+height="62" border="0" alt="SourceForge.net" /></a>
+</p>
+<p>
 Other re2c links:
 <ul>
 <li>yasm is a tool which uses re2c, they created a C version and did some good
@@ -48,8 +55,27 @@ fixes which I incorporated. <a href=
 <li>Also the <a href="http://debian.org">debian</a> and <a href=
 "http://gentoo.org">Gentoo</a> Linux distributions have a package of re2c.</li>
 </ul>
+</p>
 <hr />
 <h1>Changelog</h1>
+<h2>2005-11-10: 0.9.11.rc1</h2>
+<ul>
+<li>Fixed #1313083 -e (EBCDIC cross compile) broken.</li>
+<li>Fixed #1297658 underestimation of n in YYFILL(n).</li>
+<li>Applied #1339483 Avoid rebuilds of re2c when running subtargets.</li>
+<li>Implemented #1335305 symbol table reimplementation, just slightly modifed.</li>
+</ul>
+<h2>2005-09-04: 0.9.10</h2>
+<ul>
+<li>Add -i switch to avoid generating #line information.</li>
+<li>Fixed bug #1251653 re2c generate some invalid #line on WIN32.</li>
+</ul>
+<h2>2005-07-21: 0.9.9</h2>
+<ul>
+<li>Implemented #1232777 negated char classes '[^...]' and the dot operator '.'.</li>
+<li>Added hexadecimal character definitions.</li>
+<li>Added consistency check for octal character definitions.</li>
+</ul>
 <h2>2005-06-26: 0.9.8 released</h2>
 <ul>
 <li>Fixed code generation for -b switch. </li>
