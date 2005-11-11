@@ -139,10 +139,10 @@ must define the following macros:</p>
 symbol. The generated code advances YYCURSOR as symbols are matched. On entry,
 YYCURSOR is assumed to point to the first character of the current token. On
 exit, YYCURSOR will point to the first character of the following token.<br /><br /></dd>
-<dt>YLIMIT</dt>
-<dd>Expression of type *YYCTYPE that marks the end of the buffer (YLIMIT[-1] is
+<dt>YYLIMIT</dt>
+<dd>Expression of type *YYCTYPE that marks the end of the buffer (YYLIMIT[-1] is
 the last character in the buffer). The generated code repeatedly compares
-YYCURSOR to YLIMIT to determine when the buffer needs (re)filling.<br /><br /></dd>
+YYCURSOR to YYLIMIT to determine when the buffer needs (re)filling.<br /><br /></dd>
 <dt>YYMARKER</dt>
 <dd><i>l</i>-expression of type *YYCTYPE. The generated code saves backtracking
 information in YYMARKER.<br /><br /></dd>

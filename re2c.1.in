@@ -7,6 +7,9 @@
 .ds rx regular expression
 .ds lx \fIl\fP-expression
 \"$Log$
+\"Revision 1.25  2005/11/11 07:39:53  helly
+\"- Fix docu (found by Greg Beaver)
+\"
 \"Revision 1.24  2005/09/04 11:41:21  helly
 \"- The 2nd switch of course describes -i not -d again
 \"
@@ -236,10 +239,10 @@ On entry, \fCYYCURSOR\fP is assumed to point to the first character of the
 current token.  On exit, \fCYYCURSOR\fP will point to the first character of
 the following token.
 .TP
-\fCYLIMIT\fP
+\fCYYLIMIT\fP
 Expression of type \fC*YYCTYPE\fP that marks the end of the buffer
-(\fCYLIMIT[-1]\fP is the last character in the buffer).
-The generated code repeatedly compares \fCYYCURSOR\fP to \fCYLIMIT\fP
+(\fCYYLIMIT[-1]\fP is the last character in the buffer).
+The generated code repeatedly compares \fCYYCURSOR\fP to \fCYYLIMIT\fP
 to determine when the buffer needs (re)filling.
 .TP
 \fCYYMARKER\fP
