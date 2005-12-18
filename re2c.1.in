@@ -7,6 +7,9 @@
 .ds rx regular expression
 .ds lx \fIl\fP-expression
 \"$Log$
+\"Revision 1.26  2005/12/18 18:47:06  helly
+\"- Apply #1362806 Addition to man on flag -f
+\"
 \"Revision 1.25  2005/11/11 07:39:53  helly
 \"- Fix docu (found by Greg Beaver)
 \"
@@ -187,6 +190,7 @@ Cross-compile from an ASCII platform to an EBCDIC one.
 .TP
 \fB-f\fP
 Generate a scanner with support for storable state.
+For details see below at \fBSCANNER WITH STORABLE STATES\fP.
 .TP
 \fB-s\fP
 Generate nested \fCif\fPs for some \fCswitch\fPes.  Many compilers need this
@@ -307,6 +311,30 @@ it resumes operations exactly where it left off.
 At this point, the -f option only works with "mono-block" re2c scanners:
 if the scanner is described with more than one /*!re2c ... */ block, re2c -f
 fails with an error.
+
+Changes needed compared to the "pull" model.
+
+1. User has to supply macros YYSETSTATE() YYGETSTATE(state)
+
+2. The \fB-f\fP option inhibits declaration of \fIyych\fP and
+\fIyyaccept\fP. So the user has to declare these. Also the user has
+to save and restore these. In the example \fIexamples/push.re\fP these
+are declared as fields of the (C++) class of which the scanner is a
+method, so they do not need to be saved/restored explicitly. For C
+they could e.g. be made macros that select fields from a structure
+passed in as parameter. Alternatively, they could be declared as local
+variables, saved with YYFILL(n) when it decides to return and restored
+at entry to the function. Also, it could be more efficient to save the
+state from YYFILL(n) because YYSETSTATE(state) is called
+unconditionally. YYFILL(n) however does not get \fIstate\fP as
+parameter, so we would have to store state in a local variable by
+YYSETSTATE(state).
+
+3. Modify YYFILL(n) to return (from the function calling it) if more
+input is needed.
+
+4. Modify caller to recognise "more input is needed" and respond
+appropriately.
 
 Please see examples/push.re for push-model scanner.
 
