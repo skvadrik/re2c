@@ -1,4 +1,4 @@
-Version 0.9.11 (????-??-??)
+Version 0.9.11 (2005-12-18)
 ---------------------------
 - Fixed #1313083 -e (EBCDIC cross compile) broken.
 - Fixed #1297658 underestimation of n in YYFILL(n).
