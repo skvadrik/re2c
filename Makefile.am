@@ -23,13 +23,17 @@ EXTRA_DIST   = $(man_MANS) README parser.y scanner.re makerpm.in re2c.spec.in \
                re2c.spec README.in y.tab.h CHANGELOG \
                doc examples test
 
-dist-hook:
+dist-hook: re2c.spec
+	cat re2c.spec | sed -e "s/RPM_RELEASE/1/g" > $(distdir)/re2c.spec
 	rm -rf `find $(distdir)/doc -name CVS`
 	rm -rf `find $(distdir)/examples -name CVS`
 	rm -rf `find $(distdir)/test -name CVS`
 
 
 rpm-files:	$(bin_PROGRAMS) $(EXTRA_DIST)
+
+rpm: dist
+	rpmbuild -tb re2c-$(PACKAGE_VERSION).tar.gz
 
 parser.cc:	$(top_srcdir)/parser.y
 	$(YACC) $(YFLAGS) $<
