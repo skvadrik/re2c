@@ -55,4 +55,5 @@ scanner.cc: $(top_srcdir)/scanner.re
 TESTS = run_tests.sh
 
 test: all $(TESTS)
+	test -x $(TESTS) || chmod +x $(TESTS)
 	./$(TESTS)
