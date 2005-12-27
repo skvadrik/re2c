@@ -175,29 +175,29 @@ namespace re2c
 
 void line_source(unsigned int line, std::ostream& o)
 {
-    char *	fnamebuf;
-    char *	token;
-
+	char *	fnamebuf;
+	char *	token;
+	
 	if (iFlag)
 	{
 		return;
 	}
-    o << "#line " << line << " \"";
-    if( fileName != NULL ) {
-    	fnamebuf = strdup( fileName );
-    } else {
-	fnamebuf = strdup( "<stdin>" );
-    }
-    token = strtok( fnamebuf, "\\" );
-    for(;;) {
-	o << token;
-	token = strtok( NULL, "\\" );
-	if( token == NULL ) break;
-	o << "\\\\";
-    }
-    o << "\"\n";
-    ++oline;
-    free( fnamebuf );
+	o << "#line " << line << " \"";
+	if( fileName != NULL ) {
+		fnamebuf = strdup( fileName );
+	} else {
+		fnamebuf = strdup( "<stdin>" );
+	}
+	token = strtok( fnamebuf, "\\" );
+	for(;;) {
+		o << token;
+		token = strtok( NULL, "\\" );
+		if( token == NULL ) break;
+		o << "\\\\";
+	}
+	o << "\"\n";
+	++oline;
+	free( fnamebuf );
 }
 
 void parse(std::istream& i, std::ostream &o){
