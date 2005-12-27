@@ -171,6 +171,9 @@ scan:
 	[*+?]			{ yylval.op = *tok;
 				  RETURN(CLOSE); }
 
+	"{0,}"		{ yylval.op = '*';
+				  RETURN(CLOSE); }
+
 	"{" [0-9]+ "}"		{ yylval.extop.minsize = atoi((char *)tok+1);
 				  yylval.extop.maxsize = atoi((char *)tok+1);
 				  RETURN(CLOSESIZE); }
