@@ -186,6 +186,8 @@ scan:
 				  yylval.extop.maxsize = -1;
 				  RETURN(CLOSESIZE); }
 
+	"{" [0-9]* ","		{ fatal("illegal closure form, use '{n}', '{n,}', '{n,m}' where n and m are numbers"); }
+
 	letter (letter|digit)*	{ cur = cursor;
 				  yylval.symbol = Symbol::find(token());
 				  return ID; }
