@@ -36,8 +36,17 @@ re2c) you need the following steps:
 Or you can create a rpm package and install it by the following commands:
     ./autogen.sh
     ./configure
+    make rpm
+    rpm -Uhv <packagedir>/re2c-@PACKAGE_VERSION@-1.rpm
+
+If you need to generate rpm packages for cvs builds use these commands:
+    ./autogen.sh
+    ./configure
     ./makerpm <release>
     rpm -Uhv <packagedir>/re2c-@PACKAGE_VERSION@-<release>.rpm
+
+If you are on a debian system you can use the tool 'alien' to convert rpms
+to debian packages.
 
 Here <realease> should be a number like 1. And <packagedir> must equal 
 the directory where the makerpm step has written the generated rpm to.
