@@ -54,3 +54,5 @@ scanner.cc: $(top_srcdir)/scanner.re
 
 TESTS = run_tests.sh
 
+test: all $(TESTS)
+	./$(TESTS)
