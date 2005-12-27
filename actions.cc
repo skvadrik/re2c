@@ -468,22 +468,26 @@ void CloseVOp::calcSize(Char *rep)
 	exp->calcSize(rep);
 
 	if (max >= 0)
+	{
 		size = (exp->size * min) + ((1 + exp->size) * (max - min));
+	}
 	else
+	{
 		size = (exp->size * min) + 1;
+	}
 }
 
 void CloseVOp::compile(Char *rep, Ins *i)
 {
 	Ins *jumppoint;
-	int st = 0;
+	int st;
 	jumppoint = i + ((1 + exp->size) * (max - min));
 
 	for (st = min; st < max; st++)
 	{
 		i->i.tag = FORK;
 		i->i.link = jumppoint;
-		i += 1;
+		i++;
 		exp->compile(rep, &i[0]);
 		i += exp->size;
 	}
