@@ -293,6 +293,7 @@ static void need(std::ostream &o, uint n, bool & readCh)
 {
 	uint fillIndex;
 	bool hasFillIndex = (0<=vFillIndexes);
+
 	if ( hasFillIndex == true )
 	{
 		fillIndex = vFillIndexes++;
@@ -891,38 +892,40 @@ void SCC::traverse(State *x)
 	}
 }
 
-static
-bool state_is_in_non_trivial_SCC( const State* s )
+static bool state_is_in_non_trivial_SCC( const State* s )
 {
-
-  // does not link to self
-  if (  s->link != s ){
-    return true;
-  }
-
-  // or exists i: (s->go.spans[i].to->link == s)
-  //
-  // Note: (s->go.spans[i].to == s) is allowed, corresponds to s
-  // looping back to itself.
-  //
-  for (uint i = 0; i < s->go.nSpans; ++i)
-    {
-      const State* t = s->go.span[i].to;
-
-      if (t &&  t->link == s){
-	return true;
-      }
-    }
-  // otherwise no
-  return false;
+	
+	// does not link to self
+	if (s->link != s)
+	{
+		return true;
+	}
+	
+	// or exists i: (s->go.spans[i].to->link == s)
+	//
+	// Note: (s->go.spans[i].to == s) is allowed, corresponds to s
+	// looping back to itself.
+	//
+	for (uint i = 0; i < s->go.nSpans; ++i)
+	{
+		const State* t = s->go.span[i].to;
+	
+		if (t &&  t->link == s)
+		{
+			return true;
+		}
+	}
+	// otherwise no
+	return false;
 }
 
 uint maxDist(State *s)
 {
-  if ( s->depth != cInfinity ){
-    // Already calculated, just return result.
-    return s->depth;
-  }
+	if (s->depth != cInfinity)
+	{
+		// Already calculated, just return result.
+    	return s->depth;
+	}
 	uint mm = 0;
 
 	for (uint i = 0; i < s->go.nSpans; ++i)
@@ -956,7 +959,7 @@ uint maxDist(State *s)
 void calcDepth(State *head)
 {
 	// mark non-key states by s->link = NULL ;
-	for (State* s = head; s; s = s->next )
+	for (State* s = head; s; s = s->next)
 	{
 		if ( (s!=head) &&  !state_is_in_non_trivial_SCC(s) )
 		{
@@ -966,14 +969,15 @@ void calcDepth(State *head)
 		}
 	}
 	
-	for (State* s = head; s; s = s->next )
+	for (State* s = head; s; s = s->next)
 	{
 		s->depth = cInfinity;
 	}
 
 	// calculate max number of transitions before guarantied to reach
 	// a key state.
-	for (State* s = head; s; s = s->next ){
+	for (State* s = head; s; s = s->next)
+	{
 		maxDist(s);
 	}
 }
@@ -1260,7 +1264,8 @@ void DFA::emit(std::ostream &o)
 	{
 		o << "{\n\tYYCTYPE yych;\n";
 		oline += 2;
-		if (bUsedYYAccept) {
+		if (bUsedYYAccept)
+		{
 			o << "\tunsigned int yyaccept = 0;\n";
 			oline++;
 		}
