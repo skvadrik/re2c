@@ -36,8 +36,10 @@ rpm: dist
 	rpmbuild -ta re2c-$(PACKAGE_VERSION).tar.gz
 
 parser.cc:	$(top_srcdir)/parser.y
-	$(YACC) $(YFLAGS) $<
-	mv -f y.tab.c $(top_srcdir)/parser.cc
+	$(YACC) $(YFLAGS) $< || exit
+	cat y.tab.c | sed 's/"y\.tab\.c"/"parser.cc"/g' > $(top_srcdir)/parser.cc
+	rm -f y.tab.c
+	if cmp -s $(top_srcdir)/parser.cc $(top_srcdir)/bootstrap/parser.cc; then :; else cp -f $(top_srcdir)/parser.cc $(top_srcdir)/bootstrap/parser.cc; fi
 	if cmp -s y.tab.h $(top_srcdir)/y.tab.h; then :; else mv -f y.tab.h $(top_srcdir)/y.tab.h; fi
 
 scanner.cc: $(top_srcdir)/scanner.re
