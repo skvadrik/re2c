@@ -33,7 +33,7 @@ dist-hook: re2c.spec
 rpm-files:	$(bin_PROGRAMS) $(EXTRA_DIST)
 
 rpm: dist
-	rpmbuild -tb re2c-$(PACKAGE_VERSION).tar.gz
+	rpmbuild -ta re2c-$(PACKAGE_VERSION).tar.gz
 
 parser.cc:	$(top_srcdir)/parser.y
 	$(YACC) $(YFLAGS) $<
