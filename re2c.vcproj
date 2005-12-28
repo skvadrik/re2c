@@ -17,7 +17,8 @@
 			ConfigurationType="1">
 			<Tool
 				Name="VCCLCompilerTool"
-				PreprocessorDefinitions="HAVE_CONFIG_H"/>
+				PreprocessorDefinitions="HAVE_CONFIG_H"
+				DebugInformationFormat="3"/>
 			<Tool
 				Name="VCCustomBuildTool"/>
 			<Tool
@@ -101,11 +102,23 @@
 						Name="VCCLCompilerTool"
 						AdditionalIncludeDirectories=".\."/>
 				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						AdditionalIncludeDirectories=".\."/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="bootstrap\scanner.cc">
 				<FileConfiguration
 					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						AdditionalIncludeDirectories=".\."/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
 						AdditionalIncludeDirectories=".\."/>
