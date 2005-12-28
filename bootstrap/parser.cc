@@ -158,7 +158,7 @@ typedef union YYSTYPE {
     re2c::ExtOp	extop;
 } YYSTYPE;
 /* Line 196 of yacc.c.  */
-#line 162 "y.tab.c"
+#line 162 "parser.cc"
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1
 # define YYSTYPE_IS_TRIVIAL 1
@@ -170,7 +170,7 @@ typedef union YYSTYPE {
 
 
 /* Line 219 of yacc.c.  */
-#line 174 "y.tab.c"
+#line 174 "parser.cc"
 
 #if ! defined (YYSIZE_T) && defined (__SIZE_TYPE__)
 # define YYSIZE_T __SIZE_TYPE__
@@ -1303,8 +1303,8 @@ yyreduce:
     }
 
 /* Line 1126 of yacc.c.  */
-#line 1307 "y.tab.c"
-
+#line 1307 "parser.cc"
+
   yyvsp -= yylen;
   yyssp -= yylen;
 
