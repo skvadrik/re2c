@@ -39,5 +39,6 @@ version.h
 .#*
 run_tests.sh
 Release
+Debug
 re2c.ncb
 re2c.suo
