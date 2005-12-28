@@ -31,21 +31,38 @@ namespace re2c
 
 extern char *fileName;
 extern char *outputFileName;
-extern bool sFlag;
 extern bool bFlag;
 extern bool dFlag;
+extern bool eFlag;
 extern bool iFlag;
+extern bool sFlag;
+extern bool wFlag;
+
 extern bool bUsedYYAccept;
 extern unsigned int oline;
 extern uint maxFill;
 
-extern uchar asc2ebc[256];
-extern uchar ebc2asc[256];
+extern uint asc2ebc[256];
+extern uint ebc2asc[256];
 
-extern uchar *xlat, *talx;
+extern uint *xlat, *talx;
 
 extern int vFillIndexes;
 extern label_list<uint> vUsedLabels;
+
+extern uint nRealChars;
+
+inline char octCh(uint c)
+{
+	return '0' + c % 8;
+}
+
+inline char hexCh(uint c)
+{
+	static const char * sHex = "0123456789ABCDEF";
+	
+	return sHex[c & 0x0F];
+}
 
 } // end namespace re2c
 

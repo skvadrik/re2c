@@ -5,6 +5,7 @@
 #include <iosfwd>
 #include "token.h"
 #include "re.h"
+#include "globals.h"
 
 namespace re2c
 {
@@ -27,10 +28,10 @@ public:
 	int echo(std::ostream&);
 	int scan();
 	void fatal(char*) const;
-	SubStr token();
-	uint line();
-	
-	uchar unescape(SubStr &s) const;
+	SubStr token() const;
+	uint line() const;	
+	uint xlat(uint c) const;
+	uint unescape(SubStr &s) const;
 	Range * getRange(SubStr &s) const;
 	RegExp * matchChar(uint c) const;
 	RegExp * strToRE(SubStr s) const;
@@ -40,14 +41,19 @@ public:
 	RegExp * mkDot() const;
 };
 
-inline SubStr Scanner::token()
+inline SubStr Scanner::token() const
 {
 	return SubStr(tok, cur - tok);
 }
 
-inline uint Scanner::line()
+inline uint Scanner::line() const
 {
 	return cline;
+}
+
+inline uint Scanner::xlat(uint c) const
+{
+	return re2c::wFlag ? c : re2c::xlat[c];
 }
 
 } // end namespace re2c

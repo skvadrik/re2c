@@ -513,40 +513,28 @@ void CloseVOp::split(CharSet &s)
 
 RegExp *expr(Scanner &);
 
-uchar Scanner::unescape(SubStr &s) const
+uint Scanner::unescape(SubStr &s) const
 {
 	s.len--;
-	uchar c;
+	uint c;
 
 	if ((c = *s.str++) != '\\' || s.len == 0)
-		return xlat[c];
+	{
+		return xlat(c);
+	}
 
 	s.len--;
 
 	switch (c = *s.str++)
 	{
+		case 'n': return xlat('\n');
+		case 't': return xlat('\t');
+		case 'v': return xlat('\v');
+		case 'b': return xlat('\b');
+		case 'r': return xlat('\r');
+		case 'f': return xlat('\f');
+		case 'a': return xlat('\a');
 
-		case 'n':
-		return xlat['\n'];
-
-		case 't':
-		return xlat['\t'];
-
-		case 'v':
-		return xlat['\v'];
-
-		case 'b':
-		return xlat['\b'];
-
-		case 'r':
-		return xlat['\r'];
-
-		case 'f':
-		return xlat['\f'];
-
-		case 'a':
-		return xlat['\a'];
-		
 		case 'x':
 		{
 			static const char * hex = "0123456789abcdef";
@@ -560,25 +548,42 @@ uchar Scanner::unescape(SubStr &s) const
 			s.len -= 2;
 			s.str += 2;
 			
-			uchar v = (uchar)((p1 - hex) << 4) + (uchar)(p2 - hex);
+			uint v = (uint)((p1 - hex) << 4) 
+			       + (uint)((p2 - hex));
+
+			return v;
+		}
+
+		case 'X':
+		{
+			static const char * hex = "0123456789abcdef";
+			char *p1, *p2, *p3, *p4;
+
+			if (s.len < 4 || !(p1 = strchr(hex, tolower(s.str[0]))) 
+			              || !(p2 = strchr(hex, tolower(s.str[1])))
+			              || !(p3 = strchr(hex, tolower(s.str[2])))
+			              || !(p4 = strchr(hex, tolower(s.str[3]))))
+			{
+				fatal("Illegal hexadecimal character code");
+			}
+			s.len -= 4;
+			s.str += 4;
+			
+			uint v = (uint)((p1 - hex) << 12) 
+			       + (uint)((p2 - hex) <<  8)
+			       + (uint)((p3 - hex) <<  4)
+			       + (uint)((p4 - hex));
 
 			return v;
 		}
 
 		case '0':
-
 		case '1':
-
 		case '2':
-
 		case '3':
-
 		case '4':
-
 		case '5':
-
 		case '6':
-
 		case '7':
 		{
 			static const char * oct = "01234567";
@@ -593,13 +598,13 @@ uchar Scanner::unescape(SubStr &s) const
 			s.len -= 2;
 			s.str += 2;
 			
-			uchar v = (uchar)((p0 - oct) << 6) + (uchar)((p1 - oct) << 3) + (uchar)(p2 - oct);
+			uint v = (uint)((p0 - oct) << 6) + (uint)((p1 - oct) << 3) + (uint)(p2 - oct);
 
 			return v;
 		}
 
 		default:
-		return xlat[c];
+		return xlat(c);
 	}
 }
 
@@ -624,18 +629,18 @@ Range * Scanner::getRange(SubStr &s) const
 			ub = tmp;
 		}
 		
-		xlb = xlat[lb];
-		xub = xlat[ub];
+		xlb = xlat(lb);
+		xub = xlat(ub);
 		
 		for(c = lb; c <= ub; c++)
 		{
-			if (!(xlb <= xlat[c] && xlat[c] <= ub))
+			if (!(xlb <= xlat(c) && xlat(c) <= ub))
 			{
 				/* range doesn't work */
 				Range * r = new Range(xlb, xlb + 1);
 				for (c = lb + 1; c <= ub; c++)
 				{
-					r = doUnion(r, new Range(xlat[c], xlat[c] + 1));
+					r = doUnion(r, new Range(xlat(c), xlat(c) + 1));
 				}
 				return r;
 			}
@@ -677,14 +682,14 @@ RegExp * Scanner::strToCaseInsensitiveRE(SubStr s) const
 	if (s.len == 0)
 		return new NullOp;
 
-	uchar c = unescape(s);
+	uint c = unescape(s);
 
 	RegExp *re, *reL, *reU;
 
 	if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z'))
 	{
-		reL = matchChar(xlat[tolower(c)]);
-		reU = matchChar(xlat[toupper(c)]);
+		reL = matchChar(xlat(tolower(c)));
+		reU = matchChar(xlat(toupper(c)));
 		re = mkAlt(reL, reU);
 	}
 	else
@@ -694,12 +699,12 @@ RegExp * Scanner::strToCaseInsensitiveRE(SubStr s) const
 
 	while (s.len > 0)
 	{
-		uchar c = unescape(s);
+		uint c = unescape(s);
 
 		if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z'))
 		{
-			reL = matchChar(xlat[tolower(c)]);
-			reU = matchChar(xlat[toupper(c)]);
+			reL = matchChar(xlat(tolower(c)));
+			reU = matchChar(xlat(toupper(c)));
 			re = new CatOp(re, mkAlt(reL, reU));
 		}
 		else
@@ -751,7 +756,7 @@ RegExp * Scanner::invToRE(SubStr s) const
 RegExp * Scanner::mkDot() const
 {
 	RegExp * any = ranToRE(SubStr("[\\000-\\377]"));
-	RegExp * ran = matchChar(xlat['\n']);
+	RegExp * ran = matchChar(xlat('\n'));
 	RegExp * inv = mkDiff(any, ran);
 	
 	delete ran;
@@ -843,7 +848,7 @@ void genCode(std::ostream& o, RegExp *re)
 	uint j;
 	memset(&cs, 0, sizeof(cs));
 
-	for (j = 0; j < nChars; ++j)
+	for (j = 0; j < nRealChars; ++j)
 	{
 		cs.rep[j] = &cs.ptn[0];
 		cs.ptn[j].nxt = &cs.ptn[j + 1];
@@ -863,7 +868,7 @@ void genCode(std::ostream& o, RegExp *re)
 	*/
 	Char rep[nChars];
 
-	for (j = 0; j < nChars; ++j)
+	for (j = 0; j < nRealChars; ++j)
 	{
 		if (!cs.rep[j]->nxt)
 			cs.rep[j]->nxt = &cs.ptn[j];
@@ -895,7 +900,7 @@ void genCode(std::ostream& o, RegExp *re)
 		}
 	}
 
-	DFA *dfa = new DFA(ins, re->size, 0, 256, rep);
+	DFA *dfa = new DFA(ins, re->size, 0, nRealChars, rep);
 	dfa->emit(o);
 	delete dfa;
 	delete [] ins;

@@ -7,8 +7,8 @@
 namespace re2c
 {
 
-const uint nChars = 256;
-typedef uchar Char;
+const uint nChars = (1<<16);
+typedef unsigned short Char;
 
 const uint CHAR = 0;
 const uint GOTO = 1;

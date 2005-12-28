@@ -28,39 +28,45 @@ namespace re2c
 
 Scanner::Scanner(std::istream& i) : in(i),
 	bot(NULL), tok(NULL), ptr(NULL), cur(NULL), pos(NULL), lim(NULL),
-	top(NULL), eof(NULL), tchar(0), tline(0), cline(1) {
+	top(NULL), eof(NULL), tchar(0), tline(0), cline(1)
+{
     ;
 }
 
-char *Scanner::fill(char *cursor){
-    if(!eof){
-	uint cnt = tok - bot;
-	if(cnt){
-	    memcpy(bot, tok, lim - tok);
-	    tok = bot;
-	    ptr -= cnt;
-	    cursor -= cnt;
-	    pos -= cnt;
-	    lim -= cnt;
+char *Scanner::fill(char *cursor)
+{
+	if(!eof)
+	{
+		uint cnt = tok - bot;
+		if(cnt)
+		{
+			memcpy(bot, tok, lim - tok);
+			tok = bot;
+			ptr -= cnt;
+			cursor -= cnt;
+			pos -= cnt;
+			lim -= cnt;
+		}
+		if((top - lim) < BSIZE)
+		{
+			char *buf = new char[(lim - bot) + BSIZE];
+			memcpy(buf, tok, lim - tok);
+			tok = buf;
+			ptr = &buf[ptr - bot];
+			cursor = &buf[cursor - bot];
+			pos = &buf[pos - bot];
+			lim = &buf[lim - bot];
+			top = &lim[BSIZE];
+			delete [] bot;
+			bot = buf;
+		}
+		if((cnt = in.rdbuf()->sgetn((char*) lim, BSIZE)) != BSIZE)
+		{
+			eof = &lim[cnt]; *eof++ = '\0';
+		}
+		lim += cnt;
 	}
-	if((top - lim) < BSIZE){
-	    char *buf = new char[(lim - bot) + BSIZE];
-	    memcpy(buf, tok, lim - tok);
-	    tok = buf;
-	    ptr = &buf[ptr - bot];
-	    cursor = &buf[cursor - bot];
-	    pos = &buf[pos - bot];
-	    lim = &buf[lim - bot];
-	    top = &lim[BSIZE];
-	    delete [] bot;
-	    bot = buf;
-	}
-	if((cnt = in.rdbuf()->sgetn((char*) lim, BSIZE)) != BSIZE){
-	    eof = &lim[cnt]; *eof++ = '\0';
-	}
-	lim += cnt;
-    }
-    return cursor;
+	return cursor;
 }
 
 /*!re2c
@@ -199,12 +205,25 @@ scan:
 
 	[ \t]+			{ goto scan; }
 
+	"\r\n"			{ if(cursor == eof) RETURN(0);
+				  pos = cursor; cline++;
+				  goto scan;
+	    			}
 	"\n"			{ if(cursor == eof) RETURN(0);
 				  pos = cursor; cline++;
 				  goto scan;
 	    			}
 
-	any			{ std::cerr << "unexpected character: " << *tok << std::endl;
+	any			{ std::cerr << "line " << tline << ", column " << (tchar + 1) 
+						<< ": unexpected character: ";
+				  if (isprint(*tok))
+				  {
+				  	std::cerr << *tok << std::endl;
+				  }
+				  else
+				  {
+					std::cerr << "0x" << hexCh(*tok >> 4) << hexCh(*tok) << std::endl;
+				  }
 				  goto scan;
 				}
 */
@@ -250,4 +269,3 @@ void Scanner::fatal(char *msg) const
 }
 
 } // end namespace re2c
-

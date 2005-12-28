@@ -8,41 +8,38 @@
 namespace re2c
 {
 
-inline char octCh(uint c)
+void prtChOrHex(std::ostream& o, uint c)
 {
-	return '0' + c % 8;
-}
+	int oc = (int)(re2c::wFlag ? c : re2c::talx[c]);
 
-inline char hexCh(uint c)
-{
-	const char * sHex = "0123456789ABCDEF";
-	
-	return sHex[c & 0x0F];
-}
-
-void prtChOrHex(std::ostream& o, uchar c)
-{
-	uchar oc = talx[c];
-
-	if (isprint(oc))
+	if ((oc < 256) && isprint(oc))
 	{
 		o << '\'';
-		prtCh(o, c);
+		prtCh(o, oc);
 		o << '\'';
+	}
+	else if (re2c::wFlag)
+	{
+		o << "0x"
+		  << hexCh(oc >> 12)
+		  << hexCh(oc >>  8)
+		  << hexCh(oc >>  4)
+		  << hexCh(oc);
 	}
 	else
 	{
-		o << "0x" << hexCh(c >> 4) << hexCh(c);
+		o << "0x"
+		  << hexCh(oc >>  4) 
+		  << hexCh(oc);
 	}
 }
 
-void prtCh(std::ostream &o, uchar c)
+void prtCh(std::ostream &o, uint c)
 {
-	uchar oc = talx[c];
+	int oc = (int)(re2c::wFlag ? c : re2c::talx[c]);
 
 	switch (oc)
 	{
-
 		case '\'':
 		o << "\\'";
 		break;
@@ -81,17 +78,31 @@ void prtCh(std::ostream &o, uchar c)
 
 		default:
 
-		if (isprint(oc))
+		if ((oc < 256) && isprint(oc))
+		{
 			o << (char) oc;
+		}
+		else if (re2c::wFlag)
+		{
+			o << "0x"
+			  << hexCh(oc >> 12)
+			  << hexCh(oc >>  8)
+			  << hexCh(oc >>  4)
+			  << hexCh(oc);
+		}
 		else
-			o << '\\' << octCh(c / 64) << octCh(c / 8) << octCh(c);
+		{
+			o << '\\' << octCh(oc / 64) << octCh(oc / 8) << octCh(oc);
+		}
 	}
 }
 
 void printSpan(std::ostream &o, uint lb, uint ub)
 {
 	if (lb > ub)
+	{
 		o << "*";
+	}
 
 	o << "[";
 
@@ -125,7 +136,9 @@ std::ostream& operator<<(std::ostream &o, const State &s)
 	o << "state " << s.label;
 
 	if (s.rule)
+	{
 		o << " accepts " << s.rule->accept;
+	}
 
 	o << "\n";
 
@@ -134,7 +147,9 @@ std::ostream& operator<<(std::ostream &o, const State &s)
 	uint lb = 0;
 
 	for (uint i = 0; i < s.go.nSpans; ++i)
+	{
 		lb = s.go.span[i].show(o, lb);
+	}
 
 	return o;
 }
@@ -252,9 +267,8 @@ DFA::DFA(Ins *ins, uint ni, uint lb, uint ub, Char *rep)
 		{
 			State *to = (State*) goTo[rep[j]].to;
 
-			while (++j < nc && goTo[rep[j]].to == to)
+			while (++j < nc && goTo[rep[j]].to == to) ;
 
-				;
 			span[s->go.nSpans].ub = lb + j;
 
 			span[s->go.nSpans].to = to;

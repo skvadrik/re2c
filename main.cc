@@ -18,13 +18,16 @@ namespace re2c
 
 char *fileName = 0;
 char *outputFileName = 0;
-bool sFlag = false;
 bool bFlag = false;
-bool dFlag = false; 
+bool dFlag = false;
+bool eFlag = false;
 bool iFlag = false;
+bool sFlag = false;
+bool wFlag = false;
 bool bUsedYYAccept = false;
 unsigned int oline = 1;
 uint maxFill = 1;
+uint nRealChars = 256;
 
 int vFillIndexes = -1;
 label_list<uint> vUsedLabels;
@@ -47,6 +50,7 @@ static const mbo_opt_struct OPTIONS[] =
 	mbo_opt_struct('s', 0, "nested-ifs"),
 	mbo_opt_struct('v', 0, "version"),
 	mbo_opt_struct('V', 0, "vernum"),
+	mbo_opt_struct('w', 0, "wide-chars"),      
 	mbo_opt_struct('-', 0, NULL) /* end of args */
 };
 
@@ -54,31 +58,34 @@ static void usage()
 {
 	cerr << "usage: re2c [-esbvhd] file\n"
 	"\n"
-	"-? -h   --help          Display this info.\n"
+	"-? -h  --help           Display this info.\n"
 	"\n"
-	"-b      --bit-vectors   Implies -s. Use bit vectors as well in the attempt to\n"
+	"-b     --bit-vectors    Implies -s. Use bit vectors as well in the attempt to\n"
 	"                        coax better code out of the compiler. Most useful for\n"
 	"                        specifications with more than a few keywords (e.g. for\n"
 	"                        most programming languages).\n"
 	"\n"
-	"-e      --ecb           Cross-compile from an ASCII platform to\n"
-	"                        an EBCDIC one.\n"
-	"\n"
-	"-s      --nested-ifs    Generate nested ifs for some switches. Many compilers\n"
-	"                        need this assist to generate better code.\n"
-	"\n"
-	"-f      --storable-state Generate a scanner with support for storable state\n"
-	"\n"
-	"-o      --output=output Specify the output file instead of stdout\n"
-	"\n"
-	"-d      --debug-output  Creates a parser that dumps information during\n"
+	"-d     --debug-output   Creates a parser that dumps information during\n"
 	"                        about the current position and in which state the\n"
 	"                        parser is.\n"
 	"\n"
-	"-i      --no-debug-info Do not generate '#line' info (usefull for versioning).\n"
+	"-e     --ecb            Cross-compile from an ASCII platform to\n"
+	"                        an EBCDIC one.\n"
 	"\n"
-	"-v      --version       Show version information.\n"
-	"-V      --vernum        Show version as one number.\n"
+	"-f     --storable-state Generate a scanner with support for storable state\n"
+	"\n"
+	"-i     --no-debug-info  Do not generate '#line' info (usefull for versioning).\n"
+	"\n"
+	"-o     --output=output  Specify the output file instead of stdout\n"
+	"                        This cannot be used together with switches -b or -e.\n"
+	"\n"
+	"-s     --nested-ifs     Generate nested ifs for some switches. Many compilers\n"
+	"                        need this assist to generate better code.\n"
+	"\n"
+	"-v     --version        Show version information.\n"
+	"-V     --vernum         Show version as one number.\n"
+	"\n"
+	"-w     --wide-chars     Create a parser that supports wide chars (UCS-2).\n"
 	;
 }
 
@@ -110,6 +117,7 @@ int main(int argc, char *argv[])
 			case 'e':
 			xlat = asc2ebc;
 			talx = ebc2asc;
+			eFlag = true;
 			break;
 
 			case 's':
@@ -135,7 +143,7 @@ int main(int argc, char *argv[])
 			case 'v':
 			cout << "re2c " << PACKAGE_VERSION << "\n";
 			return 2;
-			
+
 			case 'V': {
 				int v1, v2, v3;
 				char version[16];
@@ -145,17 +153,25 @@ int main(int argc, char *argv[])
 				return 2;
 			}
 			
+			case 'w':
+			nRealChars = (1<<16);
+			wFlag = true;
+			break;
+	  
 			case 'h':
-
 			case '?':
-
 			default:
 			usage();
 			return 2;
 		}
 	}
 
-	if (argc == opt_ind + 1)
+	if (wFlag && (bFlag || eFlag))
+	{
+		usage();
+		return 2;
+	}
+	else if (argc == opt_ind + 1)
 	{
 		fileName = argv[opt_ind];
 	}
