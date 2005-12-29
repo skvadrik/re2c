@@ -24,6 +24,8 @@ public:
 		/** \todo should we delete 're'? */
 	}
 
+	typedef std::map<std::string, Symbol*> SymbolTable;
+
 protected:
 
 	Symbol(const SubStr& str)
@@ -33,8 +35,6 @@ protected:
 	}
 
 private:
-
-	typedef std::map<std::string, Symbol*> SymbolTable;
 
 	static SymbolTable symbol_table;
 
