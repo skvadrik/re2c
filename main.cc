@@ -85,7 +85,9 @@ static void usage()
 	"-v     --version        Show version information.\n"
 	"-V     --vernum         Show version as one number.\n"
 	"\n"
-	"-w     --wide-chars     Create a parser that supports wide chars (UCS-2).\n"
+	"-w     --wide-chars     Create a parser that supports wide chars (UCS-2). This\n"
+	"                        implies -s and cannot be used together with switches \n"
+	"                        -b or -e.\n"
 	;
 }
 
@@ -155,6 +157,7 @@ int main(int argc, char *argv[])
 			
 			case 'w':
 			nRealChars = (1<<16);
+			sFlag = true;
 			wFlag = true;
 			break;
 	  

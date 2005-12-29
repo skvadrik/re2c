@@ -7,6 +7,9 @@
 .ds rx regular expression
 .ds lx \fIl\fP-expression
 \"$Log$
+\"Revision 1.28  2005/12/29 12:23:10  helly
+\"- Imply -s if -w is being used (makes no sense without)
+\"
 \"Revision 1.27  2005/12/28 18:33:37  helly
 \"- Added experimental unicode support
 \"
@@ -230,8 +233,8 @@ Show version information.
 Show the version as a number XXYYZZ.
 .TP
 \fB-w\fP
-Create a parser that supports wide chars (UCS-2). This cannot be used together 
-with switches \fB-b\fP or \fB-e\fP.
+Create a parser that supports wide chars (UCS-2). This implies \fB-s\fP and 
+cannot be used together with switches \fB-b\fP or \fB-e\fP.
 .SH "INTERFACE CODE"
 Unlike other scanner generators, \*(re does not generate complete scanners:
 the user must supply some interface code.
