@@ -17,13 +17,19 @@
 			ConfigurationType="1">
 			<Tool
 				Name="VCCLCompilerTool"
+				Optimization="0"
+				FavorSizeOrSpeed="1"
+				OptimizeForProcessor="1"
 				PreprocessorDefinitions="HAVE_CONFIG_H"
+				DisableLanguageExtensions="FALSE"
+				BrowseInformation="1"
 				DebugInformationFormat="3"/>
 			<Tool
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				IgnoreDefaultLibraryNames="winspool.lib comdlg32.lib advapi32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib"/>
+				IgnoreDefaultLibraryNames="winspool.lib comdlg32.lib advapi32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib"
+				GenerateDebugInformation="TRUE"/>
 			<Tool
 				Name="VCMIDLTool"/>
 			<Tool
@@ -48,9 +54,16 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				InlineFunctionExpansion="2"
+				EnableIntrinsicFunctions="TRUE"
+				FavorSizeOrSpeed="1"
+				OmitFramePointers="TRUE"
+				EnableFiberSafeOptimizations="TRUE"
+				OptimizeForProcessor="1"
 				AdditionalIncludeDirectories=""
 				PreprocessorDefinitions="HAVE_CONFIG_H"
-				BufferSecurityCheck="TRUE"
+				SmallerTypeCheck="FALSE"
+				BufferSecurityCheck="FALSE"
+				DisableLanguageExtensions="FALSE"
 				RuntimeTypeInfo="FALSE"
 				DebugInformationFormat="3"/>
 			<Tool
@@ -97,13 +110,13 @@
 			<File
 				RelativePath="bootstrap\parser.cc">
 				<FileConfiguration
-					Name="Release|Win32">
+					Name="Debug|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
 						AdditionalIncludeDirectories=".\."/>
 				</FileConfiguration>
 				<FileConfiguration
-					Name="Debug|Win32">
+					Name="Release|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
 						AdditionalIncludeDirectories=".\."/>
@@ -112,13 +125,13 @@
 			<File
 				RelativePath="bootstrap\scanner.cc">
 				<FileConfiguration
-					Name="Release|Win32">
+					Name="Debug|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
 						AdditionalIncludeDirectories=".\."/>
 				</FileConfiguration>
 				<FileConfiguration
-					Name="Debug|Win32">
+					Name="Release|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
 						AdditionalIncludeDirectories=".\."/>
