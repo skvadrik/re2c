@@ -102,7 +102,7 @@ yy15:	++YYCURSOR;
 	goto yy16;
 yy16:
 #line 48 "cvsignore.s.re"
-{ APPEND(L"$Date$"); goto loop; }
+{ APPEND(L"$" L"Date$"); goto loop; }
 #line 107 "<stdout>"
 yy17:	++YYCURSOR;
 	if(YYLIMIT == YYCURSOR) YYFILL(1);
@@ -122,7 +122,7 @@ yy21:	++YYCURSOR;
 	goto yy22;
 yy22:
 #line 49 "cvsignore.s.re"
-{ APPEND(L"$Id$"); goto loop; }
+{ APPEND(L"$" L"Id$"); goto loop; }
 #line 127 "<stdout>"
 yy23:	++YYCURSOR;
 	if(YYLIMIT == YYCURSOR) YYFILL(1);
@@ -145,11 +145,7 @@ yy28:	++YYCURSOR;
 	goto yy29;
 yy29:
 #line 50 "cvsignore.s.re"
-{ APPEND(L"$Log$
-{ APPEND(L"Revision 1.1  2005/12/29 15:42:02  helly
-{ APPEND(L"- Allow to test with specific switches by providing them in test filename
-{ APPEND(L"- Add first unicode tests
-{ APPEND(L""); goto loop; }
+{ APPEND(L"$" L"Log$"); goto loop; }
 #line 150 "<stdout>"
 yy30:	++YYCURSOR;
 	if(YYLIMIT == YYCURSOR) YYFILL(1);
@@ -187,7 +183,7 @@ yy40:	++YYCURSOR;
 	goto yy41;
 yy41:
 #line 51 "cvsignore.s.re"
-{ APPEND(L"$Revision$"); goto loop; }
+{ APPEND(L"$" L"Revision$"); goto loop; }
 #line 188 "<stdout>"
 yy42:	++YYCURSOR;
 	if(YYLIMIT == YYCURSOR) YYFILL(1);
@@ -219,7 +215,7 @@ yy50:	++YYCURSOR;
 	goto yy51;
 yy51:
 #line 52 "cvsignore.s.re"
-{ APPEND(L"$Source$"); goto loop; }
+{ APPEND(L"$" L"Source$"); goto loop; }
 #line 220 "<stdout>"
 yy52:	++YYCURSOR;
 	if(YYLIMIT == YYCURSOR) YYFILL(1);
