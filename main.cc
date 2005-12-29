@@ -1,6 +1,8 @@
 /* $Id$ */
 #ifdef HAVE_CONFIG_H
 #include "config.h"
+#elif defined(_WIN32)
+#include "config_w32.h"
 #endif
 
 #include <fstream>
