@@ -574,6 +574,11 @@ uint Scanner::unescape(SubStr &s) const
 			       + (uint)((p3 - hex) <<  4)
 			       + (uint)((p4 - hex));
 
+			if (v >= nRealChars)
+			{
+				fatal("Illegal hexadecimal character code");
+			}
+
 			return v;
 		}
 
