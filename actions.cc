@@ -538,7 +538,7 @@ uint Scanner::unescape(SubStr &s) const
 		case 'x':
 		{
 			static const char * hex = "0123456789abcdef";
-			char *p1, *p2;
+			const char *p1, *p2;
 
 			if (s.len < 2 || !(p1 = strchr(hex, tolower(s.str[0]))) 
 			              || !(p2 = strchr(hex, tolower(s.str[1]))))
@@ -557,7 +557,7 @@ uint Scanner::unescape(SubStr &s) const
 		case 'X':
 		{
 			static const char * hex = "0123456789abcdef";
-			char *p1, *p2, *p3, *p4;
+			const char *p1, *p2, *p3, *p4;
 
 			if (s.len < 4 || !(p1 = strchr(hex, tolower(s.str[0]))) 
 			              || !(p2 = strchr(hex, tolower(s.str[1])))
@@ -587,7 +587,7 @@ uint Scanner::unescape(SubStr &s) const
 		case '7':
 		{
 			static const char * oct = "01234567";
-			char *p0, *p1, *p2;
+			const char *p0, *p1, *p2;
 
 			if (s.len < 2 || !(p0 = strchr(oct, c)) || c > '3'
 			              || !(p1 = strchr(oct, s.str[0])) 
