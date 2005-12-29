@@ -2,6 +2,7 @@ Version 0.9.13 (????-??-??)
 ---------------------------
 - Added support for DOS line endings.
 - Added experimental unicode support.
+- Added config_w32.h to build out of the box on windows (using msvc 2002+).
 - Applied #1307467 Unicode patch for 0.9.7.
 
 Version 0.9.12 (2005-12-28)
