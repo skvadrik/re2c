@@ -7,6 +7,9 @@
 .ds rx regular expression
 .ds lx \fIl\fP-expression
 \"$Log$
+\"Revision 1.29  2005/12/29 16:46:49  helly
+\"- Update docu
+\"
 \"Revision 1.28  2005/12/29 12:23:10  helly
 \"- Imply -s if -w is being used (makes no sense without)
 \"
@@ -422,11 +425,13 @@ match any character except newline (\\n).
 matches named definition as specified by \fIdef\fP.
 .LP
 Character classes and string literals may contain octoal or hexadecimal 
-character definitions and the following set of escape sequences (\fC\\n\fP,
- \fC\\t\fP, \fC\\v\fP, \fC\\b\fP, \fC\\r\fP, \fC\\f\fP, \fC\\a\fP, \fC\\\\\fP).
+character definitions and the following set of escape sequences (\fB\\n\fP,
+ \fB\\t\fP, \fB\\v\fP, \fB\\b\fP, \fB\\r\fP, \fB\\f\fP, \fB\\a\fP, \fB\\\\\fP).
 An octal character is defined by a backslash followed by its three octal digits
 and a hexadecimal character is defined by backslash, a lower cased 'x' and its
-two hexadecimal digits.
+two hexadecimal digits or a backslash, an upper cased 'X' and its four 
+hexadecimal digits. Since characters greater \fB0X00FF\fP are not allowed in 
+non unicode mode the only portable "\fBany\fP" rule is \fB(.|"\\n")\fP.
 .LP
 The regular expressions listed above are grouped according to
 precedence, from highest precedence at the top to lowest at the bottom.
