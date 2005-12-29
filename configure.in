@@ -34,7 +34,7 @@ AC_C_VOLATILE
 AC_FUNC_MALLOC
 AC_FUNC_MEMCMP
 AC_FUNC_MMAP
-AC_CHECK_FUNCS([memset munmap strdup])
+AC_CHECK_FUNCS([memset munmap strdup strndup])
 
 AC_CHECK_SIZEOF([char])
 AC_CHECK_SIZEOF([short])

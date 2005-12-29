@@ -13,14 +13,14 @@ class SubStr
 {
 
 public:
-	char	*str;
-	uint	len;
+	const char * str;
+	uint         len;
 
 public:
 	friend bool operator==(const SubStr &, const SubStr &);
-	SubStr(uchar*, uint);
-	SubStr(char*, uint);
-	SubStr(char*);
+	SubStr(const uchar*, uint);
+	SubStr(const char*, uint);
+	SubStr(const char*);
 	SubStr(const SubStr&);
 	void out(std::ostream&) const;
 	std::string to_string() const
@@ -50,15 +50,15 @@ inline std::ostream& operator<<(std::ostream& o, const SubStr* s)
 	return o << *s;
 }
 
-inline SubStr::SubStr(uchar *s, uint l)
+inline SubStr::SubStr(const uchar *s, uint l)
 		: str((char*) s), len(l)
 { }
 
-inline SubStr::SubStr(char *s, uint l)
+inline SubStr::SubStr(const char *s, uint l)
 		: str(s), len(l)
 { }
 
-inline SubStr::SubStr(char *s)
+inline SubStr::SubStr(const char *s)
 		: str(s), len(strlen(s))
 { }
 
@@ -67,5 +67,11 @@ inline SubStr::SubStr(const SubStr &s)
 { }
 
 } // end namespace re2c
+
+#ifndef HAVE_STRNDUP
+
+char *strndup(const char *str, size_t len);
+
+#endif
 
 #endif
