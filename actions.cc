@@ -844,36 +844,36 @@ void optimize(Ins *i)
 
 void genCode(std::ostream& o, RegExp *re)
 {
-	CharSet cs;
+	CharSet *cs = new CharSet();
 	uint j;
-	memset(&cs, 0, sizeof(cs));
+	memset(cs, 0, sizeof(CharSet));
 
 	for (j = 0; j < nRealChars; ++j)
 	{
-		cs.rep[j] = &cs.ptn[0];
-		cs.ptn[j].nxt = &cs.ptn[j + 1];
+		cs->rep[j] = &cs->ptn[0];
+		cs->ptn[j].nxt = &cs->ptn[j + 1];
 	}
 
-	cs.freeHead = &cs.ptn[1];
-	*(cs.freeTail = &cs.ptn[nChars - 1].nxt) = NULL;
-	cs.ptn[0].card = nChars;
-	cs.ptn[0].nxt = NULL;
-	re->split(cs);
+	cs->freeHead = &cs->ptn[1];
+	*(cs->freeTail = &cs->ptn[nChars - 1].nxt) = NULL;
+	cs->ptn[0].card = nChars;
+	cs->ptn[0].nxt = NULL;
+	re->split(*cs);
 	/*
 	    for(uint k = 0; k < nChars;){
-		for(j = k; ++k < nChars && cs.rep[k] == cs.rep[j];);
+		for(j = k; ++k < nChars && cs->rep[k] == cs->rep[j];);
 		printSpan(cerr, j, k);
-		cerr << "\t" << cs.rep[j] - &cs.ptn[0] << endl;
+		cerr << "\t" << cs->rep[j] - &cs->ptn[0] << endl;
 	    }
 	*/
 	Char rep[nChars];
 
 	for (j = 0; j < nRealChars; ++j)
 	{
-		if (!cs.rep[j]->nxt)
-			cs.rep[j]->nxt = &cs.ptn[j];
+		if (!cs->rep[j]->nxt)
+			cs->rep[j]->nxt = &cs->ptn[j];
 
-		rep[j] = (Char) (cs.rep[j]->nxt - &cs.ptn[0]);
+		rep[j] = (Char) (cs->rep[j]->nxt - &cs->ptn[0]);
 	}
 
 	re->calcSize(rep);
@@ -904,6 +904,7 @@ void genCode(std::ostream& o, RegExp *re)
 	dfa->emit(o);
 	delete dfa;
 	delete [] ins;
+	delete cs;
 }
 
 } // end namespace re2c
