@@ -8,6 +8,7 @@
 #include "globals.h"
 #include "dfa.h"
 #include "parser.h"
+#include "code.h"
 
 namespace re2c
 {
@@ -72,7 +73,7 @@ void Go::unmap(Go *base, State *x)
 	nSpans = s - span;
 }
 
-void doGen(Go *g, State *s, uchar *bm, uchar m)
+void doGen(const Go *g, const State *s, uchar *bm, uchar m)
 {
 	Span *b = g->span, *e = &b[g->nSpans];
 	uint lb = 0;
@@ -91,7 +92,7 @@ void doGen(Go *g, State *s, uchar *bm, uchar m)
 	}
 }
 
-void prt(std::ostream& o, Go *g, State *s)
+void prt(std::ostream& o, const Go *g, const State *s)
 {
 	Span *b = g->span, *e = &b[g->nSpans];
 	uint lb = 0;
@@ -107,7 +108,7 @@ void prt(std::ostream& o, Go *g, State *s)
 	}
 }
 
-bool matches(Go *g1, State *s1, Go *g2, State *s2)
+bool matches(const Go *g1, const State *s1, const Go *g2, const State *s2)
 {
 	Span *b1 = g1->span, *e1 = &b1[g1->nSpans];
 	uint lb1 = 0;
@@ -146,35 +147,24 @@ bool matches(Go *g1, State *s1, Go *g2, State *s2)
 	}
 }
 
-class BitMap
-{
-
-public:
-	static BitMap	*first;
-	Go	*go;
-	State	*on;
-	BitMap	*next;
-	uint	i;
-	uchar	m;
-
-public:
-	static BitMap *find(Go*, State*);
-	static BitMap *find(State*);
-	static void gen(std::ostream&, uint, uint);
-	static void stats();
-	BitMap(Go*, State*);
-};
-
 BitMap *BitMap::first = NULL;
 
-BitMap::BitMap(Go *g, State *x) : go(g), on(x), next(first)
+BitMap::BitMap(const Go *g, const State *x) : go(g), on(x), next(first)
 {
 	first = this;
 }
 
-BitMap *BitMap::find(Go *g, State *x)
+BitMap::~BitMap()
 {
-	for (BitMap *b = first; b; b = b->next)
+	if (next)
+	{
+		delete next;
+	}
+}
+
+const BitMap *BitMap::find(const Go *g, const State *x)
+{
+	for (const BitMap *b = first; b; b = b->next)
 	{
 		if (matches(b->go, b->on, g, x))
 		{
@@ -185,9 +175,9 @@ BitMap *BitMap::find(Go *g, State *x)
 	return new BitMap(g, x);
 }
 
-BitMap *BitMap::find(State *x)
+const BitMap *BitMap::find(const State *x)
 {
-	for (BitMap *b = first; b; b = b->next)
+	for (const BitMap *b = first; b; b = b->next)
 	{
 		if (b->on == x)
 		{
@@ -211,7 +201,7 @@ void BitMap::gen(std::ostream &o, uint lb, uint ub)
 
 		for (uint i = 0; b; i += n)
 		{
-			for (uchar m = 0x80; b && m; b = b->next, m >>= 1)
+			for (uchar m = 0x80; b && m; b = const_cast<BitMap*>(b->next), m >>= 1)
 			{
 				b->i = i;
 				b->m = m;
@@ -239,7 +229,7 @@ void BitMap::stats()
 {
 	uint n = 0;
 
-	for (BitMap *b = first; b; b = b->next)
+	for (const BitMap *b = first; b; b = b->next)
 	{
 		prt(std::cerr, b->go, b->on);
 		std::cerr << std::endl;
@@ -711,7 +701,7 @@ void Go::genGoto(std::ostream &o, State *from, State *next, bool &readCh)
 
 			if (to && to->isBase)
 			{
-				BitMap *b = BitMap::find(to);
+				const BitMap *b = BitMap::find(to);
 
 				if (b && matches(b->go, b->on, this, to))
 				{
@@ -1309,13 +1299,18 @@ void DFA::emit(std::ostream &o)
 	}
 
 	o << "}\n";
-	if (bitmap_brace) {
+	if (bitmap_brace)
+	{
 		o << "}\n";
 		++oline;
 	}
 	++oline;
 
-	BitMap::first = NULL;
+	if (BitMap::first)
+	{
+		delete BitMap::first;
+		BitMap::first = NULL;
+	}
 
 	delete [] saves;
 	delete [] rules;
