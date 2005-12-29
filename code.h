@@ -28,6 +28,38 @@ public:
 	~BitMap();
 };
 
+class null_stream: public std::ostream
+{
+public:
+	null_stream()
+		: std::ostream(&ns)
+	{
+	}
+
+	null_stream& put(char_type)
+	{
+		// nothing to do
+		return *this;
+	}
+	
+	null_stream& write(const char_type *, std::streamsize)
+	{
+		// nothing to do
+		return *this;
+	}
+
+protected:
+	class null_streambuf: public std::streambuf
+	{
+	public:
+		null_streambuf()
+			: std::streambuf()
+		{
+		}	
+	};
+	null_streambuf   ns;
+};
+
 } // end namespace re2c
 
 #endif
