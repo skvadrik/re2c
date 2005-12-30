@@ -79,7 +79,7 @@ static void usage()
 	"-i     --no-debug-info  Do not generate '#line' info (usefull for versioning).\n"
 	"\n"
 	"-o     --output=output  Specify the output file instead of stdout\n"
-	"                        This cannot be used together with switches -b or -e.\n"
+	"                        This cannot be used together with -e switch.\n"
 	"\n"
 	"-s     --nested-ifs     Generate nested ifs for some switches. Many compilers\n"
 	"                        need this assist to generate better code.\n"
@@ -171,7 +171,7 @@ int main(int argc, char *argv[])
 		}
 	}
 
-	if (wFlag && (bFlag || eFlag))
+	if (wFlag && eFlag)
 	{
 		usage();
 		return 2;

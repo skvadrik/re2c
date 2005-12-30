@@ -7,6 +7,10 @@
 .ds rx regular expression
 .ds lx \fIl\fP-expression
 \"$Log$
+\"Revision 1.30  2005/12/30 16:24:07  helly
+\"- Allow to use -w with -b
+\"# Still quite some work to do but it is possible
+\"
 \"Revision 1.29  2005/12/29 16:46:49  helly
 \"- Update docu
 \"
@@ -237,7 +241,7 @@ Show the version as a number XXYYZZ.
 .TP
 \fB-w\fP
 Create a parser that supports wide chars (UCS-2). This implies \fB-s\fP and 
-cannot be used together with switches \fB-b\fP or \fB-e\fP.
+cannot be used together with \fB-e\fP switch.
 .SH "INTERFACE CODE"
 Unlike other scanner generators, \*(re does not generate complete scanners:
 the user must supply some interface code.

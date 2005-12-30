@@ -279,7 +279,7 @@ void indent(std::ostream &o, uint i)
 	}
 }
 
-static void need(std::ostream &o, uint n, bool & readCh)
+static void need(std::ostream &o, uint n, bool & readCh, uint mask)
 {
 	uint fillIndex;
 	bool hasFillIndex = (0<=vFillIndexes);
@@ -335,7 +335,7 @@ void Match::emit(std::ostream &o, bool &readCh)
 
 	if (state->link)
 	{
-		need(o, state->depth, readCh);
+		need(o, state->depth, readCh, 0);
 	}
 }
 
@@ -346,7 +346,7 @@ void Enter::emit(std::ostream &o, bool &readCh)
 		o << "\t++YYCURSOR;\n";
 		o << "yy" << label << ":\n";
 		oline += 2;
-		need(o, state->depth, readCh);
+		need(o, state->depth, readCh, 0);
 	}
 	else
 	{
@@ -370,7 +370,7 @@ void Save::emit(std::ostream &o, bool &readCh)
 	{
 		o << "\tYYMARKER = ++YYCURSOR;\n";
 		++oline;
-		need(o, state->depth, readCh);
+		need(o, state->depth, readCh, 0);
 	}
 	else
 	{
@@ -452,7 +452,7 @@ void Rule::emit(std::ostream &o, bool &readCh)
 	}
 }
 
-void doLinear(std::ostream &o, uint i, Span *s, uint n, const State *from, const State *next, bool &readCh)
+void doLinear(std::ostream &o, uint i, Span *s, uint n, const State *from, const State *next, bool &readCh, uint mask)
 {
 	for (;;)
 	{
@@ -462,18 +462,24 @@ void doLinear(std::ostream &o, uint i, Span *s, uint n, const State *from, const
 		{
 			if (s[1].to == next && n == 3)
 			{
-				indent(o, i);
-				genIf(o, "!=", s[0].ub, readCh);
-				genGoTo(o, from, bg, readCh);
+				if (!mask || (s[0].ub > 0x00FF))
+				{
+					indent(o, i);
+					genIf(o, "!=", s[0].ub, readCh);
+					genGoTo(o, from, bg, readCh);
+				}
 				indent(o, i);
 				genGoTo(o, from, next, readCh);
 				return ;
 			}
 			else
 			{
-				indent(o, i);
-				genIf(o, "==", s[0].ub, readCh);
-				genGoTo(o, from, s[1].to, readCh);
+				if (!mask || (s[0].ub > 0x00FF))
+				{
+					indent(o, i);
+					genIf(o, "==", s[0].ub, readCh);
+					genGoTo(o, from, s[1].to, readCh);
+				}
 			}
 
 			n -= 2;
@@ -490,18 +496,24 @@ void doLinear(std::ostream &o, uint i, Span *s, uint n, const State *from, const
 		}
 		else if (n == 2 && bg == next)
 		{
-			indent(o, i);
-			genIf(o, ">=", s[0].ub, readCh);
-			genGoTo(o, from, s[1].to, readCh);
+			if (!mask || (s[0].ub > 0x00FF))
+			{
+				indent(o, i);
+				genIf(o, ">=", s[0].ub, readCh);
+				genGoTo(o, from, s[1].to, readCh);
+			}
 			indent(o, i);
 			genGoTo(o, from, next, readCh);
 			return ;
 		}
 		else
 		{
-			indent(o, i);
-			genIf(o, "<=", s[0].ub - 1, readCh);
-			genGoTo(o, from, bg, readCh);
+			if (!mask || ((s[0].ub - 1) > 0x00FF))
+			{
+				indent(o, i);
+				genIf(o, "<=", s[0].ub - 1, readCh);
+				genGoTo(o, from, bg, readCh);
+			}
 			n -= 1;
 			s += 1;
 		}
@@ -511,9 +523,9 @@ void doLinear(std::ostream &o, uint i, Span *s, uint n, const State *from, const
 	genGoTo(o, from, next, readCh);
 }
 
-void Go::genLinear(std::ostream &o, const State *from, const State *next, bool &readCh) const
+void Go::genLinear(std::ostream &o, const State *from, const State *next, bool &readCh, uint mask) const
 {
-	doLinear(o, 0, span, nSpans, from, next, readCh);
+	doLinear(o, 0, span, nSpans, from, next, readCh, mask);
 }
 
 void genCases(std::ostream &o, uint lb, Span *s)
@@ -537,11 +549,11 @@ void genCases(std::ostream &o, uint lb, Span *s)
 	}
 }
 
-void Go::genSwitch(std::ostream &o, const State *from, const State *next, bool &readCh) const
+void Go::genSwitch(std::ostream &o, const State *from, const State *next, bool &readCh, uint mask) const
 {
 	if (nSpans <= 2)
 	{
-		genLinear(o, from, next, readCh);
+		genLinear(o, from, next, readCh, mask);
 	}
 	else
 	{
@@ -611,11 +623,11 @@ void Go::genSwitch(std::ostream &o, const State *from, const State *next, bool &
 	}
 }
 
-void doBinary(std::ostream &o, uint i, Span *s, uint n, const State *from, const State *next, bool &readCh)
+void doBinary(std::ostream &o, uint i, Span *s, uint n, const State *from, const State *next, bool &readCh, uint mask)
 {
 	if (n <= 4)
 	{
-		doLinear(o, i, s, n, from, next, readCh);
+		doLinear(o, i, s, n, from, next, readCh, mask);
 	}
 	else
 	{
@@ -624,23 +636,23 @@ void doBinary(std::ostream &o, uint i, Span *s, uint n, const State *from, const
 		genIf(o, "<=", s[h - 1].ub - 1, readCh);
 		o << "{\n";
 		++oline;
-		doBinary(o, i + 1, &s[0], h, from, next, readCh);
+		doBinary(o, i + 1, &s[0], h, from, next, readCh, mask);
 		indent(o, i);
 		o << "\t} else {\n";
 		++oline;
-		doBinary(o, i + 1, &s[h], n - h, from, next, readCh);
+		doBinary(o, i + 1, &s[h], n - h, from, next, readCh, mask);
 		indent(o, i);
 		o << "\t}\n";
 		++oline;
 	}
 }
 
-void Go::genBinary(std::ostream &o, const State *from, const State *next, bool &readCh) const
+void Go::genBinary(std::ostream &o, const State *from, const State *next, bool &readCh, uint mask) const
 {
-	doBinary(o, 0, span, nSpans, from, next, readCh);
+	doBinary(o, 0, span, nSpans, from, next, readCh, mask);
 }
 
-void Go::genBase(std::ostream &o, const State *from, const State *next, bool &readCh) const
+void Go::genBase(std::ostream &o, const State *from, const State *next, bool &readCh, uint mask) const
 {
 	if (nSpans == 0)
 	{
@@ -649,7 +661,7 @@ void Go::genBase(std::ostream &o, const State *from, const State *next, bool &re
 
 	if (!sFlag)
 	{
-		genSwitch(o, from, next, readCh);
+		genSwitch(o, from, next, readCh, mask);
 		return ;
 	}
 
@@ -676,18 +688,18 @@ void Go::genBase(std::ostream &o, const State *from, const State *next, bool &re
 
 		if (util <= 2)
 		{
-			genSwitch(o, from, next, readCh);
+			genSwitch(o, from, next, readCh, mask);
 			return ;
 		}
 	}
 
 	if (nSpans > 5)
 	{
-		genBinary(o, from, next, readCh);
+		genBinary(o, from, next, readCh, mask);
 	}
 	else
 	{
-		genLinear(o, from, next, readCh);
+		genLinear(o, from, next, readCh, mask);
 	}
 }
 
@@ -721,7 +733,7 @@ void Go::genGoto(std::ostream &o, const State *from, const State *next, bool &re
 						o << "\tif (yyh & 0xFF00) {\n";
 						oline++;
 						/* here we need to reduce to those having high byte set */
-						genBase(o, from, next, readCh);
+						genBase(o, from, next, readCh, 1);
 						o << "\t} else ";
 					}
 					else if (readCh)
@@ -740,7 +752,7 @@ void Go::genGoto(std::ostream &o, const State *from, const State *next, bool &re
 					genGoTo(o, from, to, readCh, "\t\t");
 					o << "\t}\n";
 					oline++;
-					go.genBase(o, from, next, readCh);
+					go.genBase(o, from, next, readCh, 0);
 					delete [] go.span;
 					return ;
 				}
@@ -748,7 +760,7 @@ void Go::genGoto(std::ostream &o, const State *from, const State *next, bool &re
 		}
 	}
 
-	genBase(o, from, next, readCh);
+	genBase(o, from, next, readCh, 0);
 }
 
 void State::emit(std::ostream &o, bool &readCh)

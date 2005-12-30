@@ -115,10 +115,10 @@ public:
 
 public:
 	void genGoto(  std::ostream&, const State *from, const State *next, bool &readCh);
-	void genBase(  std::ostream&, const State *from, const State *next, bool &readCh) const;
-	void genLinear(std::ostream&, const State *from, const State *next, bool &readCh) const;
-	void genBinary(std::ostream&, const State *from, const State *next, bool &readCh) const;
-	void genSwitch(std::ostream&, const State *from, const State *next, bool &readCh) const;
+	void genBase(  std::ostream&, const State *from, const State *next, bool &readCh, uint mask) const;
+	void genLinear(std::ostream&, const State *from, const State *next, bool &readCh, uint mask) const;
+	void genBinary(std::ostream&, const State *from, const State *next, bool &readCh, uint mask) const;
+	void genSwitch(std::ostream&, const State *from, const State *next, bool &readCh, uint mask) const;
 	void compact();
 	void unmap(Go*, const State*);
 };
