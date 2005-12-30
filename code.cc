@@ -35,7 +35,7 @@ void Go::compact()
 	nSpans = i + 1;
 }
 
-void Go::unmap(Go *base, State *x)
+void Go::unmap(Go *base, const State *x)
 {
 	Span *s = span, *b = base->span, *e = &b[base->nSpans];
 	uint lb = 0;
@@ -73,7 +73,7 @@ void Go::unmap(Go *base, State *x)
 	nSpans = s - span;
 }
 
-void doGen(const Go *g, const State *s, uchar *bm, uchar m)
+void doGen(const Go *g, const State *s, uint *bm, uint f, uint m)
 {
 	Span *b = g->span, *e = &b[g->nSpans];
 	uint lb = 0;
@@ -82,9 +82,9 @@ void doGen(const Go *g, const State *s, uchar *bm, uchar m)
 	{
 		if (b->to == s)
 		{
-			for (; lb < b->ub; ++lb)
+			for (; lb < b->ub && lb < 256; ++lb)
 			{
-				bm[lb] |= m;
+				bm[lb-f] |= m;
 			}
 		}
 
@@ -196,16 +196,16 @@ void BitMap::gen(std::ostream &o, uint lb, uint ub)
 	{
 		o << "\tstatic unsigned char yybm[] = {";
 		uint n = ub - lb;
-		uchar *bm = new uchar[n];
+		uint *bm = new uint[n];
 		memset(bm, 0, n);
 
 		for (uint i = 0; b; i += n)
 		{
-			for (uchar m = 0x80; b && m; b = const_cast<BitMap*>(b->next), m >>= 1)
+			for (uint m = 0x80; b && m; b = const_cast<BitMap*>(b->next), m >>= 1)
 			{
 				b->i = i;
 				b->m = m;
-				doGen(b->go, b->on, bm - lb, m);
+				doGen(b->go, b->on, bm, lb, m);
 			}
 
 			for (uint j = 0; j < n; ++j)
@@ -240,7 +240,7 @@ void BitMap::stats()
 	first = NULL;
 }
 
-void genGoTo(std::ostream &o, State *from, State *to, bool & readCh, const char *indent = "\t")
+void genGoTo(std::ostream &o, const State *from, const State *to, bool & readCh, const char *indent = "\t")
 {
 	if (readCh && from->label + 1 != to->label)
 	{
@@ -452,7 +452,7 @@ void Rule::emit(std::ostream &o, bool &readCh)
 	}
 }
 
-void doLinear(std::ostream &o, uint i, Span *s, uint n, State *from, State *next, bool &readCh)
+void doLinear(std::ostream &o, uint i, Span *s, uint n, const State *from, const State *next, bool &readCh)
 {
 	for (;;)
 	{
@@ -511,7 +511,7 @@ void doLinear(std::ostream &o, uint i, Span *s, uint n, State *from, State *next
 	genGoTo(o, from, next, readCh);
 }
 
-void Go::genLinear(std::ostream &o, State *from, State *next, bool &readCh)
+void Go::genLinear(std::ostream &o, const State *from, const State *next, bool &readCh) const
 {
 	doLinear(o, 0, span, nSpans, from, next, readCh);
 }
@@ -537,7 +537,7 @@ void genCases(std::ostream &o, uint lb, Span *s)
 	}
 }
 
-void Go::genSwitch(std::ostream &o, State *from, State *next, bool &readCh)
+void Go::genSwitch(std::ostream &o, const State *from, const State *next, bool &readCh) const
 {
 	if (nSpans <= 2)
 	{
@@ -611,7 +611,7 @@ void Go::genSwitch(std::ostream &o, State *from, State *next, bool &readCh)
 	}
 }
 
-void doBinary(std::ostream &o, uint i, Span *s, uint n, State *from, State *next, bool &readCh)
+void doBinary(std::ostream &o, uint i, Span *s, uint n, const State *from, const State *next, bool &readCh)
 {
 	if (n <= 4)
 	{
@@ -635,12 +635,12 @@ void doBinary(std::ostream &o, uint i, Span *s, uint n, State *from, State *next
 	}
 }
 
-void Go::genBinary(std::ostream &o, State *from, State *next, bool &readCh)
+void Go::genBinary(std::ostream &o, const State *from, const State *next, bool &readCh) const
 {
 	doBinary(o, 0, span, nSpans, from, next, readCh);
 }
 
-void Go::genBase(std::ostream &o, State *from, State *next, bool &readCh)
+void Go::genBase(std::ostream &o, const State *from, const State *next, bool &readCh) const
 {
 	if (nSpans == 0)
 	{
@@ -691,7 +691,7 @@ void Go::genBase(std::ostream &o, State *from, State *next, bool &readCh)
 	}
 }
 
-void Go::genGoto(std::ostream &o, State *from, State *next, bool &readCh)
+void Go::genGoto(std::ostream &o, const State *from, const State *next, bool &readCh)
 {
 	if (bFlag)
 	{
@@ -702,24 +702,40 @@ void Go::genGoto(std::ostream &o, State *from, State *next, bool &readCh)
 			if (to && to->isBase)
 			{
 				const BitMap *b = BitMap::find(to);
+				const char * sYych;
 
 				if (b && matches(b->go, b->on, this, to))
 				{
 					Go go;
 					go.span = new Span[nSpans];
 					go.unmap(this, to);
-					o << "\tif(yybm[" << b->i << "+";
-
-					if (readCh)
+					if (wFlag)
 					{
-						o << "(yych = *YYCURSOR)";
+						if (readCh)
+						{
+							o << "\tyych = *YYCURSOR;\n";
+							oline++;
+							readCh = false;
+						}
+						sYych = "yych";
+						o << "\tif (yyh & 0xFF00) {\n";
+						oline++;
+						/* here we need to reduce to those having high byte set */
+						genBase(o, from, next, readCh);
+						o << "\t} else ";
+					}
+					else if (readCh)
+					{
+						sYych = "(yych = *YYCURSOR)";
+						readCh = false;
+						o << "\t";
 					}
 					else
 					{
-						o << "yych";
+						sYych = "yych";
+						o << "\t";
 					}
-
-					o << "] & " << (uint) b->m << ") {\n";
+					o << "if(yybm[" << b->i << "+" << sYych << "] & " << (uint) b->m << ") {\n";
 					oline++;
 					genGoTo(o, from, to, readCh, "\t\t");
 					o << "\t}\n";
@@ -1009,6 +1025,40 @@ void DFA::split(State *s)
 	s->go.span[0].to = move;
 }
 
+void DFA::findBaseState()
+{
+	Span *span = new Span[ubChar - lbChar];
+
+	for (State *s = head; s; s = s->next)
+	{
+		if (!s->link)
+		{
+			for (uint i = 0; i < s->go.nSpans; ++i)
+			{
+				State *to = s->go.span[i].to;
+
+				if (to && to->isBase)
+				{
+					to = to->go.span[0].to;
+					uint nSpans = merge(span, s, to);
+
+					if (nSpans < s->go.nSpans)
+					{
+						delete [] s->go.span;
+						s->go.nSpans = nSpans;
+						s->go.span = new Span[nSpans];
+						memcpy(s->go.span, span, nSpans*sizeof(Span));
+					}
+
+					break;
+				}
+			}
+		}
+	}
+
+	delete [] span;
+}
+
 void DFA::emit(std::ostream &o)
 {
 	static uint label = 0;
@@ -1143,36 +1193,7 @@ void DFA::emit(std::ostream &o)
 	}
 
 	// find ``base'' state, if possible
-	Span *span = new Span[ubChar - lbChar];
-
-	for (s = head; s; s = s->next)
-	{
-		if (!s->link)
-		{
-			for (i = 0; i < s->go.nSpans; ++i)
-			{
-				State *to = s->go.span[i].to;
-
-				if (to && to->isBase)
-				{
-					to = to->go.span[0].to;
-					uint nSpans = merge(span, s, to);
-
-					if (nSpans < s->go.nSpans)
-					{
-						delete [] s->go.span;
-						s->go.nSpans = nSpans;
-						s->go.span = new Span[nSpans];
-						memcpy(s->go.span, span, nSpans*sizeof(Span));
-					}
-
-					break;
-				}
-			}
-		}
-	}
-
-	delete [] span;
+	findBaseState();
 
 	delete head->action;
 
@@ -1181,7 +1202,7 @@ void DFA::emit(std::ostream &o)
 		o << "{\n";
 		++oline;
 		bitmap_brace = 1;
-		BitMap::gen(o, lbChar, ubChar);
+		BitMap::gen(o, lbChar, ubChar <= 256 ? ubChar : 256);
 	}
 
 	bUsedYYAccept = false;
@@ -1285,4 +1306,3 @@ void DFA::emit(std::ostream &o)
 }
 
 } // end namespace re2c
-

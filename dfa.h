@@ -114,13 +114,13 @@ public:
 	Span	*span;
 
 public:
-	void genGoto(std::ostream&, State *from, State*, bool &readCh);
-	void genBase(std::ostream&, State *from, State*, bool &readCh);
-	void genLinear(std::ostream&, State *from, State*, bool &readCh);
-	void genBinary(std::ostream&, State *from, State*, bool &readCh);
-	void genSwitch(std::ostream&, State *from, State*, bool &readCh);
+	void genGoto(  std::ostream&, const State *from, const State *next, bool &readCh);
+	void genBase(  std::ostream&, const State *from, const State *next, bool &readCh) const;
+	void genLinear(std::ostream&, const State *from, const State *next, bool &readCh) const;
+	void genBinary(std::ostream&, const State *from, const State *next, bool &readCh) const;
+	void genSwitch(std::ostream&, const State *from, const State *next, bool &readCh) const;
 	void compact();
-	void unmap(Go*, State*);
+	void unmap(Go*, const State*);
 };
 
 class State
@@ -133,12 +133,11 @@ public:
 	State	*link;
 	uint	depth;		// for finding SCCs
 	uint	kCount;
-	Ins	**kernel;
+	Ins 	**kernel;
 
-bool	isBase:
-	1;
-	Go	go;
-	Action	*action;
+	bool    isBase;
+	Go      go;
+	Action  *action;
 
 public:
 	State();
@@ -166,6 +165,7 @@ public:
 	void split(State*);
 
 	void findSCCs();
+	void findBaseState();
 	void emit(std::ostream&);
 
 	friend std::ostream& operator<<(std::ostream&, const DFA&);

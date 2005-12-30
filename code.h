@@ -17,7 +17,7 @@ public:
 	const State     *on;
 	const BitMap    *next;
 	uint            i;
-	uchar           m;
+	uint            m;
 
 public:
 	static const BitMap *find(const Go*, const State*);
