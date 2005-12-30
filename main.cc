@@ -29,6 +29,7 @@ bool wFlag = false;
 bool bUsedYYAccept = false;
 unsigned int oline = 1;
 uint maxFill = 1;
+uint topIndent = 0;
 uint nRealChars = 256;
 
 int vFillIndexes = -1;

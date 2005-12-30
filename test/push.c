@@ -317,127 +317,150 @@ yy0:
 	case 'w':	goto yy8;
 	default:	goto yy34;
 	}
-yy2:	++YYCURSOR;
+yy2:
+	++YYCURSOR;
 	switch((yych = *YYCURSOR)) {
 	case 'f':	goto yy67;
 	default:	goto yy39;
 	}
 yy3:
 #line 246 "push.re"
-{ SEND(kIdentifier);     }
-#line 321 "<stdout>"
-yy4:	yych = *++YYCURSOR;
+	{ SEND(kIdentifier);     }
+#line 322 "<stdout>"
+yy4:
+	yych = *++YYCURSOR;
 	switch(yych){
 	case 'o':	goto yy64;
 	default:	goto yy39;
 	}
-yy5:	yych = *++YYCURSOR;
+yy5:
+	yych = *++YYCURSOR;
 	switch(yych){
 	case 'l':	goto yy60;
 	default:	goto yy39;
 	}
-yy6:	yych = *++YYCURSOR;
+yy6:
+	yych = *++YYCURSOR;
 	switch(yych){
 	case 'o':	goto yy56;
 	default:	goto yy39;
 	}
-yy7:	yych = *++YYCURSOR;
+yy7:
+	yych = *++YYCURSOR;
 	switch(yych){
 	case 'r':	goto yy51;
 	default:	goto yy39;
 	}
-yy8:	yych = *++YYCURSOR;
+yy8:
+	yych = *++YYCURSOR;
 	switch(yych){
 	case 'h':	goto yy46;
 	default:	goto yy39;
 	}
-yy9:	yych = *++YYCURSOR;
+yy9:
+	yych = *++YYCURSOR;
 	switch(yych){
 	case 'e':	goto yy40;
 	default:	goto yy39;
 	}
-yy10:	yych = *++YYCURSOR;
+yy10:
+	yych = *++YYCURSOR;
 	goto yy39;
-yy11:	yych = *++YYCURSOR;
+yy11:
+	yych = *++YYCURSOR;
 	goto yy39;
-yy12:	++YYCURSOR;
+yy12:
+	++YYCURSOR;
 	yych = *YYCURSOR;
 	goto yy37;
 yy13:
 #line 247 "push.re"
-{ SEND(kDecimalConstant);}
-#line 362 "<stdout>"
-yy14:	++YYCURSOR;
+	{ SEND(kDecimalConstant);}
+#line 372 "<stdout>"
+yy14:
+	++YYCURSOR;
 	goto yy15;
 yy15:
 #line 249 "push.re"
-{ SEND(kEqual);          }
-#line 368 "<stdout>"
-yy16:	++YYCURSOR;
+	{ SEND(kEqual);          }
+#line 379 "<stdout>"
+yy16:
+	++YYCURSOR;
 	goto yy17;
 yy17:
 #line 250 "push.re"
-{ SEND(kLeftParen);      }
-#line 374 "<stdout>"
-yy18:	++YYCURSOR;
+	{ SEND(kLeftParen);      }
+#line 386 "<stdout>"
+yy18:
+	++YYCURSOR;
 	goto yy19;
 yy19:
 #line 251 "push.re"
-{ SEND(kRightParen);     }
-#line 380 "<stdout>"
-yy20:	++YYCURSOR;
+	{ SEND(kRightParen);     }
+#line 393 "<stdout>"
+yy20:
+	++YYCURSOR;
 	goto yy21;
 yy21:
 #line 252 "push.re"
-{ SEND(kMinus);          }
-#line 386 "<stdout>"
-yy22:	++YYCURSOR;
+	{ SEND(kMinus);          }
+#line 400 "<stdout>"
+yy22:
+	++YYCURSOR;
 	goto yy23;
 yy23:
 #line 253 "push.re"
-{ SEND(kPlus);           }
-#line 392 "<stdout>"
-yy24:	++YYCURSOR;
+	{ SEND(kPlus);           }
+#line 407 "<stdout>"
+yy24:
+	++YYCURSOR;
 	goto yy25;
 yy25:
 #line 254 "push.re"
-{ SEND(kStar);           }
-#line 398 "<stdout>"
-yy26:	++YYCURSOR;
+	{ SEND(kStar);           }
+#line 414 "<stdout>"
+yy26:
+	++YYCURSOR;
 	goto yy27;
 yy27:
 #line 255 "push.re"
-{ SEND(kSlash);          }
-#line 404 "<stdout>"
-yy28:	++YYCURSOR;
+	{ SEND(kSlash);          }
+#line 421 "<stdout>"
+yy28:
+	++YYCURSOR;
 	goto yy29;
 yy29:
 #line 257 "push.re"
-{ SKIP();                }
-#line 410 "<stdout>"
-yy30:	++YYCURSOR;
+	{ SKIP();                }
+#line 428 "<stdout>"
+yy30:
+	++YYCURSOR;
 	goto yy31;
 yy31:
 #line 258 "push.re"
-{ SKIP();                }
-#line 416 "<stdout>"
-yy32:	++YYCURSOR;
+	{ SKIP();                }
+#line 435 "<stdout>"
+yy32:
+	++YYCURSOR;
 	goto yy33;
 yy33:
 #line 259 "push.re"
-{ send(kEOF); return 1;  }
-#line 422 "<stdout>"
-yy34:	++YYCURSOR;
+	{ send(kEOF); return 1;  }
+#line 442 "<stdout>"
+yy34:
+	++YYCURSOR;
 	goto yy35;
 yy35:
 #line 260 "push.re"
-{ SEND(kUnknown);        }
-#line 428 "<stdout>"
-yy36:	++YYCURSOR;
+	{ SEND(kUnknown);        }
+#line 449 "<stdout>"
+yy36:
+	++YYCURSOR;
 	if(YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	goto yy37;
-yy37:	switch(yych){
+yy37:
+	switch(yych){
 	case '0':
 	case '1':
 	case '2':
@@ -450,11 +473,13 @@ yy37:	switch(yych){
 	case '9':	goto yy36;
 	default:	goto yy13;
 	}
-yy38:	++YYCURSOR;
+yy38:
+	++YYCURSOR;
 	if(YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	goto yy39;
-yy39:	switch(yych){
+yy39:
+	switch(yych){
 	case '0':
 	case '1':
 	case '2':
@@ -520,27 +545,32 @@ yy39:	switch(yych){
 	case 'z':	goto yy38;
 	default:	goto yy3;
 	}
-yy40:	yych = *++YYCURSOR;
+yy40:
+	yych = *++YYCURSOR;
 	switch(yych){
 	case 't':	goto yy41;
 	default:	goto yy39;
 	}
-yy41:	yych = *++YYCURSOR;
+yy41:
+	yych = *++YYCURSOR;
 	switch(yych){
 	case 'u':	goto yy42;
 	default:	goto yy39;
 	}
-yy42:	yych = *++YYCURSOR;
+yy42:
+	yych = *++YYCURSOR;
 	switch(yych){
 	case 'r':	goto yy43;
 	default:	goto yy39;
 	}
-yy43:	yych = *++YYCURSOR;
+yy43:
+	yych = *++YYCURSOR;
 	switch(yych){
 	case 'n':	goto yy44;
 	default:	goto yy39;
 	}
-yy44:	++YYCURSOR;
+yy44:
+	++YYCURSOR;
 	switch((yych = *YYCURSOR)) {
 	case '0':
 	case '1':
@@ -609,24 +639,28 @@ yy44:	++YYCURSOR;
 	}
 yy45:
 #line 245 "push.re"
-{ SEND(kReturn);         }
-#line 600 "<stdout>"
-yy46:	yych = *++YYCURSOR;
+	{ SEND(kReturn);         }
+#line 630 "<stdout>"
+yy46:
+	yych = *++YYCURSOR;
 	switch(yych){
 	case 'i':	goto yy47;
 	default:	goto yy39;
 	}
-yy47:	yych = *++YYCURSOR;
+yy47:
+	yych = *++YYCURSOR;
 	switch(yych){
 	case 'l':	goto yy48;
 	default:	goto yy39;
 	}
-yy48:	yych = *++YYCURSOR;
+yy48:
+	yych = *++YYCURSOR;
 	switch(yych){
 	case 'e':	goto yy49;
 	default:	goto yy39;
 	}
-yy49:	++YYCURSOR;
+yy49:
+	++YYCURSOR;
 	switch((yych = *YYCURSOR)) {
 	case '0':
 	case '1':
@@ -695,24 +729,28 @@ yy49:	++YYCURSOR;
 	}
 yy50:
 #line 244 "push.re"
-{ SEND(kWhile);          }
-#line 683 "<stdout>"
-yy51:	yych = *++YYCURSOR;
+	{ SEND(kWhile);          }
+#line 717 "<stdout>"
+yy51:
+	yych = *++YYCURSOR;
 	switch(yych){
 	case 'e':	goto yy52;
 	default:	goto yy39;
 	}
-yy52:	yych = *++YYCURSOR;
+yy52:
+	yych = *++YYCURSOR;
 	switch(yych){
 	case 'a':	goto yy53;
 	default:	goto yy39;
 	}
-yy53:	yych = *++YYCURSOR;
+yy53:
+	yych = *++YYCURSOR;
 	switch(yych){
 	case 'k':	goto yy54;
 	default:	goto yy39;
 	}
-yy54:	++YYCURSOR;
+yy54:
+	++YYCURSOR;
 	switch((yych = *YYCURSOR)) {
 	case '0':
 	case '1':
@@ -781,19 +819,22 @@ yy54:	++YYCURSOR;
 	}
 yy55:
 #line 243 "push.re"
-{ SEND(kBreak);          }
-#line 766 "<stdout>"
-yy56:	yych = *++YYCURSOR;
+	{ SEND(kBreak);          }
+#line 804 "<stdout>"
+yy56:
+	yych = *++YYCURSOR;
 	switch(yych){
 	case 't':	goto yy57;
 	default:	goto yy39;
 	}
-yy57:	yych = *++YYCURSOR;
+yy57:
+	yych = *++YYCURSOR;
 	switch(yych){
 	case 'o':	goto yy58;
 	default:	goto yy39;
 	}
-yy58:	++YYCURSOR;
+yy58:
+	++YYCURSOR;
 	switch((yych = *YYCURSOR)) {
 	case '0':
 	case '1':
@@ -862,19 +903,22 @@ yy58:	++YYCURSOR;
 	}
 yy59:
 #line 242 "push.re"
-{ SEND(kGoto);           }
-#line 844 "<stdout>"
-yy60:	yych = *++YYCURSOR;
+	{ SEND(kGoto);           }
+#line 885 "<stdout>"
+yy60:
+	yych = *++YYCURSOR;
 	switch(yych){
 	case 's':	goto yy61;
 	default:	goto yy39;
 	}
-yy61:	yych = *++YYCURSOR;
+yy61:
+	yych = *++YYCURSOR;
 	switch(yych){
 	case 'e':	goto yy62;
 	default:	goto yy39;
 	}
-yy62:	++YYCURSOR;
+yy62:
+	++YYCURSOR;
 	switch((yych = *YYCURSOR)) {
 	case '0':
 	case '1':
@@ -943,14 +987,16 @@ yy62:	++YYCURSOR;
 	}
 yy63:
 #line 241 "push.re"
-{ SEND(kElse);           }
-#line 922 "<stdout>"
-yy64:	yych = *++YYCURSOR;
+	{ SEND(kElse);           }
+#line 966 "<stdout>"
+yy64:
+	yych = *++YYCURSOR;
 	switch(yych){
 	case 'r':	goto yy65;
 	default:	goto yy39;
 	}
-yy65:	++YYCURSOR;
+yy65:
+	++YYCURSOR;
 	switch((yych = *YYCURSOR)) {
 	case '0':
 	case '1':
@@ -1019,9 +1065,10 @@ yy65:	++YYCURSOR;
 	}
 yy66:
 #line 240 "push.re"
-{ SEND(kFor);            }
-#line 995 "<stdout>"
-yy67:	++YYCURSOR;
+	{ SEND(kFor);            }
+#line 1041 "<stdout>"
+yy67:
+	++YYCURSOR;
 	switch((yych = *YYCURSOR)) {
 	case '0':
 	case '1':
@@ -1090,8 +1137,8 @@ yy67:	++YYCURSOR;
 	}
 yy68:
 #line 239 "push.re"
-{ SEND(kIf);             }
-#line 1063 "<stdout>"
+	{ SEND(kIf);             }
+#line 1110 "<stdout>"
 }
 #line 261 "push.re"
 

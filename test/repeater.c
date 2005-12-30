@@ -31,7 +31,8 @@ yy0:
 	case 'a':	goto yy4;
 	default:	goto yy6;
 	}
-yy2:	yyaccept = 0;
+yy2:
+	yyaccept = 0;
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch(yych){
 	case 0x0A:	goto yy10;
@@ -41,9 +42,10 @@ yy2:	yyaccept = 0;
 	}
 yy3:
 #line 22 "repeater.re"
-{RET(5);}
-#line 44 "<stdout>"
-yy4:	yyaccept = 1;
+	{RET(5);}
+#line 45 "<stdout>"
+yy4:
+	yyaccept = 1;
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch(yych){
 	case 0x0A:	goto yy10;
@@ -53,79 +55,93 @@ yy4:	yyaccept = 1;
 	}
 yy5:
 #line 23 "repeater.re"
-{RET(0);}
-#line 55 "<stdout>"
-yy6:	yych = *++YYCURSOR;
+	{RET(0);}
+#line 57 "<stdout>"
+yy6:
+	yych = *++YYCURSOR;
 	goto yy3;
-yy7:	yych = *++YYCURSOR;
+yy7:
+	yych = *++YYCURSOR;
 	goto yy5;
-yy8:	yych = *++YYCURSOR;
+yy8:
+	yych = *++YYCURSOR;
 	switch(yych){
 	case 0x0A:	goto yy13;
 	case 'A':
 	case 'a':	goto yy12;
 	default:	goto yy9;
 	}
-yy9:	YYCURSOR = YYMARKER;
+yy9:
+	YYCURSOR = YYMARKER;
 	switch(yyaccept){
 	case 0:	goto yy3;
 	case 1:	goto yy5;
 	}
-yy10:	++YYCURSOR;
+yy10:
+	++YYCURSOR;
 	goto yy11;
 yy11:
 #line 18 "repeater.re"
-{RET(1);}
-#line 76 "<stdout>"
-yy12:	yych = *++YYCURSOR;
+	{RET(1);}
+#line 83 "<stdout>"
+yy12:
+	yych = *++YYCURSOR;
 	switch(yych){
 	case 0x0A:	goto yy13;
 	case 'A':
 	case 'a':	goto yy15;
 	default:	goto yy9;
 	}
-yy13:	++YYCURSOR;
+yy13:
+	++YYCURSOR;
 	goto yy14;
 yy14:
 #line 19 "repeater.re"
-{RET(2);}
-#line 88 "<stdout>"
-yy15:	yych = *++YYCURSOR;
+	{RET(2);}
+#line 97 "<stdout>"
+yy15:
+	yych = *++YYCURSOR;
 	switch(yych){
 	case 0x0A:	goto yy17;
 	case 'A':
 	case 'a':	goto yy16;
 	default:	goto yy9;
 	}
-yy16:	yych = *++YYCURSOR;
+yy16:
+	yych = *++YYCURSOR;
 	switch(yych){
 	case 0x0A:	goto yy17;
 	case 'A':
 	case 'a':	goto yy19;
 	default:	goto yy9;
 	}
-yy17:	++YYCURSOR;
+yy17:
+	++YYCURSOR;
 	goto yy18;
 yy18:
 #line 21 "repeater.re"
-{RET(4);}
-#line 106 "<stdout>"
-yy19:	yych = *++YYCURSOR;
+	{RET(4);}
+#line 118 "<stdout>"
+yy19:
+	yych = *++YYCURSOR;
 	switch(yych){
 	case 0x0A:	goto yy20;
 	default:	goto yy23;
 	}
-yy20:	++YYCURSOR;
+yy20:
+	++YYCURSOR;
 	goto yy21;
 yy21:
 #line 20 "repeater.re"
-{RET(3);}
-#line 117 "<stdout>"
-yy22:	++YYCURSOR;
+	{RET(3);}
+#line 131 "<stdout>"
+yy22:
+	++YYCURSOR;
 	if(YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	goto yy23;
-yy23:	switch(yych){
+yy23:
+	switch(yych){
 	case 0x0A:	goto yy17;
 	case 'A':
 	case 'a':	goto yy22;

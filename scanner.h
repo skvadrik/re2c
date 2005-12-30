@@ -16,7 +16,7 @@ class Scanner
 private:
 	std::istream&	in;
 	char	*bot, *tok, *ptr, *cur, *pos, *lim, *top, *eof;
-	uint	tchar, tline, cline;
+	uint	tchar, tline, cline, iscfg;
 
 private:
 	char *fill(char*);
@@ -28,12 +28,15 @@ public:
 	int echo(std::ostream&);
 	int scan();
 	void fatal(char*) const;
+	void config(const Str*, const Str *);
+	void config(const Str*, int);
 	SubStr token() const;
 	uint line() const;	
 	uint xlat(uint c) const;
 	uint unescape(SubStr &s) const;
 	Range * getRange(SubStr &s) const;
 	RegExp * matchChar(uint c) const;
+	RegExp * strToName(SubStr s) const;
 	RegExp * strToRE(SubStr s) const;
 	RegExp * strToCaseInsensitiveRE(SubStr s) const;
 	RegExp * ranToRE(SubStr s) const;

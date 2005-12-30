@@ -440,11 +440,10 @@ void Rule::emit(std::ostream &o, uint ind, bool &readCh) const
 		o << indent(ind) << "YYCURSOR -= " << back << ";";
 	}
 
-	o << "\n";
-	++oline;
 	line_source(rule->code->line, o);
+	o << indent(ind);
 	o << rule->code->text;
-	// not sure if we need this or not.    oline += std::count(rule->code->text, rule->code->text + ::strlen(rule->code->text), '\n');
+	// Counting the oline's is done by SubStr::out()
 	o << "\n";
 	if (!iFlag)
 	{
@@ -772,12 +771,13 @@ void State::emit(std::ostream &o, uint ind, bool &readCh) const
 {
 	if (vUsedLabels.contains(label))
 	{
-		o << "yy" << label << ":";
+		o << "yy" << label << ":\n";
+		oline++;
 	}
 	if (dFlag)
 	{
-		o << "\n" << indent(ind) << "YYDEBUG(" << label << ", *YYCURSOR);\n";
-		oline += 2;
+		o << indent(ind) << "YYDEBUG(" << label << ", *YYCURSOR);\n";
+		oline++;
 	}
 	action->emit(o, ind, readCh);
 }
@@ -1077,11 +1077,11 @@ void DFA::findBaseState()
 	delete [] span;
 }
 
-void DFA::emit(std::ostream &o)
+void DFA::emit(std::ostream &o, uint ind)
 {
 	static uint label = 0;
 	State *s;
-	uint i, ind = 0, bitmap_brace = 0;
+	uint i, bitmap_brace = 0;
 
 	bool hasFillLabels = (0<=vFillIndexes);
 	if (hasFillLabels==true && label!=0)

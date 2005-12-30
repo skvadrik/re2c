@@ -28,7 +28,7 @@ namespace re2c
 
 Scanner::Scanner(std::istream& i) : in(i),
 	bot(NULL), tok(NULL), ptr(NULL), cur(NULL), pos(NULL), lim(NULL),
-	top(NULL), eof(NULL), tchar(0), tline(0), cline(1)
+	top(NULL), eof(NULL), tchar(0), tline(0), cline(1), iscfg(0)
 {
     ;
 }
@@ -80,6 +80,12 @@ dstring = "\""    ((esc \ ["] ) | "\\" dot)* "\"";
 sstring = "'"     ((esc \ ['] ) | "\\" dot)* "'" ;
 letter  = [a-zA-Z];
 digit   = [0-9];
+number  = "0" | ("-"? [1-9] digit*);
+name    = letter (letter|digit)*;
+space   = [ \t];
+eol     = ("\r\n" | "\n");
+config  = "re2c:" name;
+value   = [^\r\n; \t]* | dstring | sstring;
 */
 
 int Scanner::echo(std::ostream &out){
@@ -142,6 +148,14 @@ scan:
     tchar = cursor - pos;
     tline = cline;
     tok = cursor;
+	if (iscfg == 1)
+	{
+		goto config;
+	}
+	else if (iscfg == 2)
+	{
+   		goto value;
+    }
 /*!re2c
 	"{"			{ depth = 1;
 				  goto code;
@@ -195,22 +209,25 @@ scan:
 
 	"{" [0-9]* ","		{ fatal("illegal closure form, use '{n}', '{n,}', '{n,m}' where n and m are numbers"); }
 
-	letter (letter|digit)*	{ cur = cursor;
+	name		{ cur = cursor;
 				  yylval.symbol = Symbol::find(token());
 				  return ID; }
+
+	config		{ cur = cursor;
+				  tok+= 5; /* skip "re2c:" */
+				  iscfg = 1;
+				  yylval.str = new Str(token());
+				  return CONFIG;
+				}
 
 	"."			{ cur = cursor;
 				  yylval.regexp = mkDot();
 				  return RANGE;
 				}
 
-	[ \t]+			{ goto scan; }
+	space+			{ goto scan; }
 
-	"\r\n"			{ if(cursor == eof) RETURN(0);
-				  pos = cursor; cline++;
-				  goto scan;
-	    			}
-	"\n"			{ if(cursor == eof) RETURN(0);
+	eol			{ if(cursor == eof) RETURN(0);
 				  pos = cursor; cline++;
 				  goto scan;
 	    			}
@@ -248,18 +265,42 @@ code:
 
 comment:
 /*!re2c
-	"*/"			{ if(--depth == 0)
+	"*/"		{ if(--depth == 0)
 					goto scan;
 				    else
 					goto comment; }
-	"/*"			{ ++depth;
-					fatal("ambiguous /* found");
-					goto comment; }
-	"\n"			{ if(cursor == eof) RETURN(0);
+	"/*"		{ ++depth;
+				  fatal("ambiguous /* found");
+				  goto comment; }
+	"\n"		{ if(cursor == eof) RETURN(0);
 				  tok = pos = cursor; cline++;
 				  goto comment;
 				}
-        any			{ goto comment; }
+	any			{ goto comment; }
+*/
+
+config:
+/*!re2c
+	space+		{ goto config; }
+	"=" space*	{ iscfg = 2;
+				  cur = cursor;
+				  RETURN('='); 
+				}
+	any			{ fatal("missing '='"); }
+*/
+
+value:
+/*!re2c
+	number		{ cur = cursor;
+				  yylval.number = atoi(token().to_string().c_str());
+				  iscfg = 0;
+				  return NUMBER;
+				}
+	value		{ cur = cursor;
+				  yylval.str = new Str(token());
+				  iscfg = 0;
+				  return VALUE;
+				}
 */
 }
 
@@ -268,6 +309,21 @@ void Scanner::fatal(char *msg) const
     std::cerr << "line " << tline << ", column " << (tchar + 1) << ": "
 		<< msg << std::endl;
     exit(1);
+}
+
+void Scanner::config(const Str* cfg, int num)
+{
+	if (cfg->to_string() == "indent")
+	{
+		topIndent = num;
+		return;
+	}
+	fatal("unrecognized configuration name or illegal integer value");
+}
+
+void Scanner::config(const Str* cfg, const Str *value)
+{
+	fatal("unrecognized configuration name or illegal string value");
 }
 
 } // end namespace re2c

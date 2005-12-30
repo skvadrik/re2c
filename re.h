@@ -291,6 +291,7 @@ public:
 };
 
 extern void genCode(std::ostream&, RegExp*);
+extern void genCode(std::ostream&, uint ind, RegExp*);
 extern RegExp *mkDiff(RegExp*, RegExp*);
 
 } // end namespace re2c

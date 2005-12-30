@@ -30,7 +30,8 @@ yy0:
 	case 'a':	goto yy2;
 	default:	goto yy6;
 	}
-yy2:	yyaccept = 0;
+yy2:
+	yyaccept = 0;
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch(yych){
 	case 0x0A:	goto yy7;
@@ -40,29 +41,35 @@ yy2:	yyaccept = 0;
 	}
 yy3:
 #line 19 "bug1390174.re"
-{RET(0);}
-#line 43 "<stdout>"
-yy4:	++YYCURSOR;
+	{RET(0);}
+#line 44 "<stdout>"
+yy4:
+	++YYCURSOR;
 	goto yy5;
 yy5:
 #line 18 "bug1390174.re"
-{RET(1);}
-#line 49 "<stdout>"
-yy6:	yych = *++YYCURSOR;
+	{RET(1);}
+#line 51 "<stdout>"
+yy6:
+	yych = *++YYCURSOR;
 	goto yy3;
-yy7:	yych = *++YYCURSOR;
+yy7:
+	yych = *++YYCURSOR;
 	goto yy5;
-yy8:	++YYCURSOR;
+yy8:
+	++YYCURSOR;
 	if(YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	goto yy9;
-yy9:	switch(yych){
+yy9:
+	switch(yych){
 	case 0x0A:	goto yy7;
 	case 'A':
 	case 'a':	goto yy8;
 	default:	goto yy10;
 	}
-yy10:	YYCURSOR = YYMARKER;
+yy10:
+	YYCURSOR = YYMARKER;
 	switch(yyaccept){
 	case 0:	goto yy3;
 	}

@@ -30,24 +30,28 @@ yy0:
 	case '9':	goto yy2;
 	default:	goto yy4;
 	}
-yy2:	++YYCURSOR;
+yy2:
+	++YYCURSOR;
 	yych = *YYCURSOR;
 	goto yy7;
 yy3:
 #line 10 "simple.re"
-{return YYCURSOR;}
-#line 40 "<stdout>"
-yy4:	++YYCURSOR;
+	{return YYCURSOR;}
+#line 41 "<stdout>"
+yy4:
+	++YYCURSOR;
 	goto yy5;
 yy5:
 #line 11 "simple.re"
-{return NULL;}
-#line 46 "<stdout>"
-yy6:	++YYCURSOR;
+	{return NULL;}
+#line 48 "<stdout>"
+yy6:
+	++YYCURSOR;
 	if(YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	goto yy7;
-yy7:	switch(yych){
+yy7:
+	switch(yych){
 	case '0':
 	case '1':
 	case '2':

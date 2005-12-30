@@ -28,18 +28,20 @@ yy0:
 	case 'a':	goto yy2;
 	default:	goto yy4;
 	}
-yy2:	++YYCURSOR;
+yy2:
+	++YYCURSOR;
 	goto yy3;
 yy3:
 #line 18 "error3.re"
-{RET(1);}
-#line 36 "<stdout>"
-yy4:	++YYCURSOR;
+	{RET(1);}
+#line 37 "<stdout>"
+yy4:
+	++YYCURSOR;
 	goto yy5;
 yy5:
 #line 19 "error3.re"
-{RET(0);}
-#line 42 "<stdout>"
+	{RET(0);}
+#line 44 "<stdout>"
 }
 #line 20 "error3.re"
 

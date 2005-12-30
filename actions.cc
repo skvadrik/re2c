@@ -849,6 +849,11 @@ void optimize(Ins *i)
 
 void genCode(std::ostream& o, RegExp *re)
 {
+	genCode(o, 0, re);
+}
+
+void genCode(std::ostream& o, uint ind, RegExp *re)
+{
 	CharSet *cs = new CharSet();
 	uint j;
 	memset(cs, 0, sizeof(CharSet));
@@ -906,7 +911,7 @@ void genCode(std::ostream& o, RegExp *re)
 	}
 
 	DFA *dfa = new DFA(ins, re->size, 0, nRealChars, rep);
-	dfa->emit(o);
+	dfa->emit(o, ind);
 	delete dfa;
 	delete [] ins;
 	delete cs;

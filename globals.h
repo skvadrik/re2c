@@ -41,6 +41,7 @@ extern bool wFlag;
 extern bool bUsedYYAccept;
 extern unsigned int oline;
 extern uint maxFill;
+extern uint topIndent;
 
 extern uint asc2ebc[256];
 extern uint ebc2asc[256];

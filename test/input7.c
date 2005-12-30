@@ -13,18 +13,20 @@ yy0:
 	case 0x0A:	goto yy4;
 	default:	goto yy2;
 	}
-yy2:	++YYCURSOR;
+yy2:
+	++YYCURSOR;
 	goto yy3;
 yy3:
 #line 5 "input7.re"
-{ return 0; }
-#line 22 "<stdout>"
-yy4:	++YYCURSOR;
+	{ return 0; }
+#line 23 "<stdout>"
+yy4:
+	++YYCURSOR;
 	goto yy5;
 yy5:
 #line 6 "input7.re"
-{ return 1; }
-#line 28 "<stdout>"
+	{ return 1; }
+#line 30 "<stdout>"
 }
 #line 8 "input7.re"
 

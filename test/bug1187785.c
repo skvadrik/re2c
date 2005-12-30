@@ -33,7 +33,8 @@ yy0:
 	case '"':	goto yy2;
 	default:	goto yy4;
 	}
-yy2:	yyaccept = 0;
+yy2:
+	yyaccept = 0;
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch(yych){
 	case 0x00:
@@ -294,15 +295,18 @@ yy2:	yyaccept = 0;
 	}
 yy3:
 #line 23 "bug1187785.re"
-{ goto cont; }
-#line 298 "<stdout>"
-yy4:	yych = *++YYCURSOR;
+	{ goto cont; }
+#line 299 "<stdout>"
+yy4:
+	yych = *++YYCURSOR;
 	goto yy3;
-yy5:	++YYCURSOR;
+yy5:
+	++YYCURSOR;
 	if(YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	goto yy6;
-yy6:	switch(yych){
+yy6:
+	switch(yych){
 	case 0x00:
 	case 0x01:
 	case 0x02:
@@ -560,16 +564,18 @@ yy6:	switch(yych){
 	case '"':	goto yy8;
 	default:	goto yy7;
 	}
-yy7:	YYCURSOR = YYMARKER;
+yy7:
+	YYCURSOR = YYMARKER;
 	switch(yyaccept){
 	case 0:	goto yy3;
 	}
-yy8:	++YYCURSOR;
+yy8:
+	++YYCURSOR;
 	goto yy9;
 yy9:
 #line 22 "bug1187785.re"
-{ RET(1); }
-#line 571 "<stdout>"
+	{ RET(1); }
+#line 577 "<stdout>"
 }
 #line 24 "bug1187785.re"
 

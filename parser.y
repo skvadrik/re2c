@@ -56,12 +56,15 @@ static char* strdup(const char* s)
 %union {
     re2c::Symbol	*symbol;
     re2c::RegExp	*regexp;
-    re2c::Token	*token;
-    char	op;
-    re2c::ExtOp	extop;
+    re2c::Token 	*token;
+    char        	op;
+    int         	number;
+    re2c::ExtOp 	extop;
+    re2c::Str   	*str;
 };
 
 %token		CLOSESIZE   CLOSE	ID	CODE	RANGE	STRING
+%token		CONFIG	VALUE	NUMBER
 
 %type	<op>		CLOSE
 %type	<op>		close
@@ -70,6 +73,8 @@ static char* strdup(const char* s)
 %type	<token>		CODE
 %type	<regexp>	RANGE	STRING
 %type	<regexp>	rule	look	expr	diff	term	factor	primary
+%type	<str>		CONFIG	VALUE
+%type	<number>	NUMBER
 
 %%
 
@@ -85,6 +90,10 @@ decl	:	ID '=' expr ';'
 		{ if($1->re)
 		      in->fatal("sym already defined");
 		  $1->re = $3; }
+	|	CONFIG '=' VALUE ';'
+		{ in->config($1, $3); }
+	|	CONFIG '=' NUMBER ';'
+		{ in->config($1, $3); }
 	;
 
 rule	:	expr look CODE
@@ -217,11 +226,10 @@ void parse(std::istream& i, std::ostream &o){
 		yyparse();
 		if(spec)
 		{
-			genCode(o, spec);
+			genCode(o, topIndent, spec);
 		}
 		line_source(in->line(), o);
 	}
 }
 
 } // end namespace re2c
-

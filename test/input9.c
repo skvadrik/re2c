@@ -24,89 +24,103 @@ yy0:
 	case 0xEE:	goto yy14;
 	default:	goto yy26;
 	}
-yy2:	++YYCURSOR;
+yy2:
+	++YYCURSOR;
 	goto yy3;
 yy3:
 #line 5 "input9.re"
-{ return 1; }
-#line 33 "<stdout>"
-yy4:	++YYCURSOR;
+	{ return 1; }
+#line 34 "<stdout>"
+yy4:
+	++YYCURSOR;
 	goto yy5;
 yy5:
 #line 6 "input9.re"
-{ return 2; }
-#line 39 "<stdout>"
-yy6:	++YYCURSOR;
+	{ return 2; }
+#line 41 "<stdout>"
+yy6:
+	++YYCURSOR;
 	goto yy7;
 yy7:
 #line 7 "input9.re"
-{ return 3; }
-#line 45 "<stdout>"
-yy8:	++YYCURSOR;
+	{ return 3; }
+#line 48 "<stdout>"
+yy8:
+	++YYCURSOR;
 	goto yy9;
 yy9:
 #line 8 "input9.re"
-{ return 4; }
-#line 51 "<stdout>"
-yy10:	++YYCURSOR;
+	{ return 4; }
+#line 55 "<stdout>"
+yy10:
+	++YYCURSOR;
 	goto yy11;
 yy11:
 #line 9 "input9.re"
-{ return 5; }
-#line 57 "<stdout>"
-yy12:	++YYCURSOR;
+	{ return 5; }
+#line 62 "<stdout>"
+yy12:
+	++YYCURSOR;
 	goto yy13;
 yy13:
 #line 10 "input9.re"
-{ return 6; }
-#line 63 "<stdout>"
-yy14:	++YYCURSOR;
+	{ return 6; }
+#line 69 "<stdout>"
+yy14:
+	++YYCURSOR;
 	switch((yych = *YYCURSOR)) {
 	case '7':	goto yy27;
 	default:	goto yy15;
 	}
 yy15:
 #line 18 "input9.re"
-{ return 0; }
-#line 72 "<stdout>"
-yy16:	++YYCURSOR;
+	{ return 0; }
+#line 79 "<stdout>"
+yy16:
+	++YYCURSOR;
 	goto yy17;
 yy17:
 #line 13 "input9.re"
-{ return 8; }
-#line 78 "<stdout>"
-yy18:	++YYCURSOR;
+	{ return 8; }
+#line 86 "<stdout>"
+yy18:
+	++YYCURSOR;
 	goto yy19;
 yy19:
 #line 14 "input9.re"
-{ return 9; }
-#line 84 "<stdout>"
-yy20:	++YYCURSOR;
+	{ return 9; }
+#line 93 "<stdout>"
+yy20:
+	++YYCURSOR;
 	goto yy21;
 yy21:
 #line 15 "input9.re"
-{ return 10; }
-#line 90 "<stdout>"
-yy22:	++YYCURSOR;
+	{ return 10; }
+#line 100 "<stdout>"
+yy22:
+	++YYCURSOR;
 	goto yy23;
 yy23:
 #line 16 "input9.re"
-{ return 11; }
-#line 96 "<stdout>"
-yy24:	++YYCURSOR;
+	{ return 11; }
+#line 107 "<stdout>"
+yy24:
+	++YYCURSOR;
 	goto yy25;
 yy25:
 #line 17 "input9.re"
-{ return 12; }
-#line 102 "<stdout>"
-yy26:	yych = *++YYCURSOR;
+	{ return 12; }
+#line 114 "<stdout>"
+yy26:
+	yych = *++YYCURSOR;
 	goto yy15;
-yy27:	++YYCURSOR;
+yy27:
+	++YYCURSOR;
 	goto yy28;
 yy28:
 #line 11 "input9.re"
-{ return 7; }
-#line 110 "<stdout>"
+	{ return 7; }
+#line 124 "<stdout>"
 }
 #line 20 "input9.re"
 

@@ -14,7 +14,8 @@ yy0:
 	case 0x0A:	goto yy4;
 	default:	goto yy2;
 	}
-yy2:	yyaccept = 0;
+yy2:
+	yyaccept = 0;
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch(yych){
 	case 0x00:	goto yy6;
@@ -23,15 +24,17 @@ yy2:	yyaccept = 0;
 	}
 yy3:
 #line 6 "input8.re"
-{ return 1; }
-#line 28 "<stdout>"
-yy4:	++YYCURSOR;
+	{ return 1; }
+#line 29 "<stdout>"
+yy4:
+	++YYCURSOR;
 	goto yy5;
 yy5:
 #line 7 "input8.re"
-{ return 2; }
-#line 34 "<stdout>"
-yy6:	yyaccept = 1;
+	{ return 2; }
+#line 36 "<stdout>"
+yy6:
+	yyaccept = 1;
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch(yych){
 	case 0x00:	goto yy10;
@@ -40,26 +43,31 @@ yy6:	yyaccept = 1;
 	}
 yy7:
 #line 5 "input8.re"
-{ return 0; }
-#line 45 "<stdout>"
-yy8:	yych = *++YYCURSOR;
+	{ return 0; }
+#line 48 "<stdout>"
+yy8:
+	yych = *++YYCURSOR;
 	switch(yych){
 	case 0x00:	goto yy10;
 	case 0x0A:	goto yy9;
 	default:	goto yy11;
 	}
-yy9:	YYCURSOR = YYMARKER;
+yy9:
+	YYCURSOR = YYMARKER;
 	switch(yyaccept){
 	case 1:	goto yy7;
 	case 0:	goto yy3;
 	}
-yy10:	yych = *++YYCURSOR;
+yy10:
+	yych = *++YYCURSOR;
 	if(yych <= 0x00) goto yy12;
 	goto yy7;
-yy11:	yych = *++YYCURSOR;
+yy11:
+	yych = *++YYCURSOR;
 	if(yych >= 0x01) goto yy9;
 	goto yy12;
-yy12:	++YYCURSOR;
+yy12:
+	++YYCURSOR;
 	yych = *YYCURSOR;
 	goto yy7;
 }

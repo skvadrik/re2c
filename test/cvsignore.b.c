@@ -85,7 +85,8 @@ yy0:
 		yych = *YYCURSOR;
 		if(yych != '$') goto yy4;
 		goto yy2;
-yy2:		yyaccept = 0;
+yy2:
+		yyaccept = 0;
 		yych = *(YYMARKER = ++YYCURSOR);
 		switch(yych){
 		case 'D':	goto yy10;
@@ -97,168 +98,213 @@ yy2:		yyaccept = 0;
 		}
 yy3:
 #line 53 "cvsignore.b.re"
-{ output[outsize++] = cursor[-1]; if (cursor >= limit) break; goto loop; }
-#line 102 "<stdout>"
-yy4:		yych = *++YYCURSOR;
+		{ output[outsize++] = cursor[-1]; if (cursor >= limit) break; goto loop; }
+#line 103 "<stdout>"
+yy4:
+		yych = *++YYCURSOR;
 		goto yy3;
-yy5:		yych = *++YYCURSOR;
+yy5:
+		yych = *++YYCURSOR;
 		if(yych == 'o') goto yy44;
 		goto yy6;
-yy6:		YYCURSOR = YYMARKER;
+yy6:
+		YYCURSOR = YYMARKER;
 		switch(yyaccept){
 		case 0:	goto yy3;
 		}
-yy7:		yych = *++YYCURSOR;
+yy7:
+		yych = *++YYCURSOR;
 		if(yych == 'e') goto yy32;
 		goto yy6;
-yy8:		yych = *++YYCURSOR;
+yy8:
+		yych = *++YYCURSOR;
 		if(yych == 'o') goto yy25;
 		goto yy6;
-yy9:		yych = *++YYCURSOR;
+yy9:
+		yych = *++YYCURSOR;
 		if(yych == 'd') goto yy19;
 		goto yy6;
-yy10:		yych = *++YYCURSOR;
+yy10:
+		yych = *++YYCURSOR;
 		if(yych != 'a') goto yy6;
 		goto yy11;
-yy11:		yych = *++YYCURSOR;
+yy11:
+		yych = *++YYCURSOR;
 		if(yych != 't') goto yy6;
 		goto yy12;
-yy12:		yych = *++YYCURSOR;
+yy12:
+		yych = *++YYCURSOR;
 		if(yych != 'e') goto yy6;
 		goto yy13;
-yy13:		yych = *++YYCURSOR;
+yy13:
+		yych = *++YYCURSOR;
 		if(yych == '$') goto yy15;
 		if(yych != ':') goto yy6;
 		goto yy14;
-yy14:		yych = *++YYCURSOR;
+yy14:
+		yych = *++YYCURSOR;
 		if(yych == '$') goto yy6;
 		goto yy18;
-yy15:		++YYCURSOR;
+yy15:
+		++YYCURSOR;
 		goto yy16;
 yy16:
 #line 48 "cvsignore.b.re"
-{ APPEND(L"$" L"Date$"); goto loop; }
-#line 142 "<stdout>"
-yy17:		++YYCURSOR;
+		{ APPEND(L"$" L"Date$"); goto loop; }
+#line 155 "<stdout>"
+yy17:
+		++YYCURSOR;
 		if(YYLIMIT == YYCURSOR) YYFILL(1);
 		yych = *YYCURSOR;
 		goto yy18;
-yy18:		if(yybm[0+yych] & 128) {
+yy18:
+		if(yybm[0+yych] & 128) {
 			goto yy17;
 		}
 		if(yych <= '#') goto yy6;
 		goto yy15;
-yy19:		yych = *++YYCURSOR;
+yy19:
+		yych = *++YYCURSOR;
 		if(yych == '$') goto yy21;
 		if(yych != ':') goto yy6;
 		goto yy20;
-yy20:		yych = *++YYCURSOR;
+yy20:
+		yych = *++YYCURSOR;
 		if(yych == '$') goto yy6;
 		goto yy24;
-yy21:		++YYCURSOR;
+yy21:
+		++YYCURSOR;
 		goto yy22;
 yy22:
 #line 49 "cvsignore.b.re"
-{ APPEND(L"$" L"Id$"); goto loop; }
-#line 164 "<stdout>"
-yy23:		++YYCURSOR;
+		{ APPEND(L"$" L"Id$"); goto loop; }
+#line 182 "<stdout>"
+yy23:
+		++YYCURSOR;
 		if(YYLIMIT == YYCURSOR) YYFILL(1);
 		yych = *YYCURSOR;
 		goto yy24;
-yy24:		if(yych == 0x0A) goto yy6;
+yy24:
+		if(yych == 0x0A) goto yy6;
 		if(yych == '$') goto yy21;
 		goto yy23;
-yy25:		yych = *++YYCURSOR;
+yy25:
+		yych = *++YYCURSOR;
 		if(yych != 'g') goto yy6;
 		goto yy26;
-yy26:		yych = *++YYCURSOR;
+yy26:
+		yych = *++YYCURSOR;
 		if(yych == '$') goto yy28;
 		if(yych != ':') goto yy6;
 		goto yy27;
-yy27:		yych = *++YYCURSOR;
+yy27:
+		yych = *++YYCURSOR;
 		if(yych == '$') goto yy6;
 		goto yy31;
-yy28:		++YYCURSOR;
+yy28:
+		++YYCURSOR;
 		goto yy29;
 yy29:
 #line 50 "cvsignore.b.re"
-{ APPEND(L"$" L"Log$"); goto loop; }
-#line 187 "<stdout>"
-yy30:		++YYCURSOR;
+		{ APPEND(L"$" L"Log$"); goto loop; }
+#line 211 "<stdout>"
+yy30:
+		++YYCURSOR;
 		if(YYLIMIT == YYCURSOR) YYFILL(1);
 		yych = *YYCURSOR;
 		goto yy31;
-yy31:		if(yych == 0x0A) goto yy6;
+yy31:
+		if(yych == 0x0A) goto yy6;
 		if(yych == '$') goto yy28;
 		goto yy30;
-yy32:		yych = *++YYCURSOR;
+yy32:
+		yych = *++YYCURSOR;
 		if(yych != 'v') goto yy6;
 		goto yy33;
-yy33:		yych = *++YYCURSOR;
+yy33:
+		yych = *++YYCURSOR;
 		if(yych != 'i') goto yy6;
 		goto yy34;
-yy34:		yych = *++YYCURSOR;
+yy34:
+		yych = *++YYCURSOR;
 		if(yych != 's') goto yy6;
 		goto yy35;
-yy35:		yych = *++YYCURSOR;
+yy35:
+		yych = *++YYCURSOR;
 		if(yych != 'i') goto yy6;
 		goto yy36;
-yy36:		yych = *++YYCURSOR;
+yy36:
+		yych = *++YYCURSOR;
 		if(yych != 'o') goto yy6;
 		goto yy37;
-yy37:		yych = *++YYCURSOR;
+yy37:
+		yych = *++YYCURSOR;
 		if(yych != 'n') goto yy6;
 		goto yy38;
-yy38:		yych = *++YYCURSOR;
+yy38:
+		yych = *++YYCURSOR;
 		if(yych == '$') goto yy40;
 		if(yych != ':') goto yy6;
 		goto yy39;
-yy39:		yych = *++YYCURSOR;
+yy39:
+		yych = *++YYCURSOR;
 		if(yych == '$') goto yy6;
 		goto yy43;
-yy40:		++YYCURSOR;
+yy40:
+		++YYCURSOR;
 		goto yy41;
 yy41:
 #line 51 "cvsignore.b.re"
-{ APPEND(L"$" L"Revision$"); goto loop; }
-#line 225 "<stdout>"
-yy42:		++YYCURSOR;
+		{ APPEND(L"$" L"Revision$"); goto loop; }
+#line 260 "<stdout>"
+yy42:
+		++YYCURSOR;
 		if(YYLIMIT == YYCURSOR) YYFILL(1);
 		yych = *YYCURSOR;
 		goto yy43;
-yy43:		if(yych == 0x0A) goto yy6;
+yy43:
+		if(yych == 0x0A) goto yy6;
 		if(yych == '$') goto yy40;
 		goto yy42;
-yy44:		yych = *++YYCURSOR;
+yy44:
+		yych = *++YYCURSOR;
 		if(yych != 'u') goto yy6;
 		goto yy45;
-yy45:		yych = *++YYCURSOR;
+yy45:
+		yych = *++YYCURSOR;
 		if(yych != 'r') goto yy6;
 		goto yy46;
-yy46:		yych = *++YYCURSOR;
+yy46:
+		yych = *++YYCURSOR;
 		if(yych != 'c') goto yy6;
 		goto yy47;
-yy47:		yych = *++YYCURSOR;
+yy47:
+		yych = *++YYCURSOR;
 		if(yych != 'e') goto yy6;
 		goto yy48;
-yy48:		yych = *++YYCURSOR;
+yy48:
+		yych = *++YYCURSOR;
 		if(yych == '$') goto yy50;
 		if(yych != ':') goto yy6;
 		goto yy49;
-yy49:		yych = *++YYCURSOR;
+yy49:
+		yych = *++YYCURSOR;
 		if(yych == '$') goto yy6;
 		goto yy53;
-yy50:		++YYCURSOR;
+yy50:
+		++YYCURSOR;
 		goto yy51;
 yy51:
 #line 52 "cvsignore.b.re"
-{ APPEND(L"$" L"Source$"); goto loop; }
-#line 257 "<stdout>"
-yy52:		++YYCURSOR;
+		{ APPEND(L"$" L"Source$"); goto loop; }
+#line 301 "<stdout>"
+yy52:
+		++YYCURSOR;
 		if(YYLIMIT == YYCURSOR) YYFILL(1);
 		yych = *YYCURSOR;
 		goto yy53;
-yy53:		if(yych == 0x0A) goto yy6;
+yy53:
+		if(yych == 0x0A) goto yy6;
 		if(yych == '$') goto yy50;
 		goto yy52;
 	}

@@ -166,7 +166,7 @@ public:
 
 	void findSCCs();
 	void findBaseState();
-	void emit(std::ostream&);
+	void emit(std::ostream&, uint);
 
 	friend std::ostream& operator<<(std::ostream&, const DFA&);
 	friend std::ostream& operator<<(std::ostream&, const DFA*);

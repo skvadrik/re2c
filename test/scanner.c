@@ -89,7 +89,8 @@ yy0:
 	case '/':	goto yy2;
 	default:	goto yy6;
 	}
-yy2:	yyaccept = 0;
+yy2:
+	yyaccept = 0;
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch(yych){
 	case '*':	goto yy7;
@@ -97,56 +98,65 @@ yy2:	yyaccept = 0;
 	}
 yy3:
 #line 91 "scanner.re"
-{ goto echo; }
-#line 102 "<stdout>"
-yy4:	++YYCURSOR;
+	{ goto echo; }
+#line 103 "<stdout>"
+yy4:
+	++YYCURSOR;
 	goto yy5;
 yy5:
 #line 87 "scanner.re"
-{ if(cursor == eof) RETURN(0);
+	{ if(cursor == eof) RETURN(0);
 				  out.write((const char*)(tok), (const char*)(cursor) - (const char*)(tok));
 				  tok = pos = cursor; cline++;
 				  goto echo; }
-#line 111 "<stdout>"
-yy6:	yych = *++YYCURSOR;
+#line 113 "<stdout>"
+yy6:
+	yych = *++YYCURSOR;
 	goto yy3;
-yy7:	yych = *++YYCURSOR;
+yy7:
+	yych = *++YYCURSOR;
 	switch(yych){
 	case '!':	goto yy9;
 	default:	goto yy8;
 	}
-yy8:	YYCURSOR = YYMARKER;
+yy8:
+	YYCURSOR = YYMARKER;
 	switch(yyaccept){
 	case 0:	goto yy3;
 	}
-yy9:	yych = *++YYCURSOR;
+yy9:
+	yych = *++YYCURSOR;
 	switch(yych){
 	case 'r':	goto yy10;
 	default:	goto yy8;
 	}
-yy10:	yych = *++YYCURSOR;
+yy10:
+	yych = *++YYCURSOR;
 	switch(yych){
 	case 'e':	goto yy11;
 	default:	goto yy8;
 	}
-yy11:	yych = *++YYCURSOR;
+yy11:
+	yych = *++YYCURSOR;
 	switch(yych){
 	case '2':	goto yy12;
 	default:	goto yy8;
 	}
-yy12:	yych = *++YYCURSOR;
+yy12:
+	yych = *++YYCURSOR;
 	switch(yych){
 	case 'c':	goto yy13;
 	default:	goto yy8;
 	}
-yy13:	++YYCURSOR;
+yy13:
+	++YYCURSOR;
 	goto yy14;
 yy14:
 #line 84 "scanner.re"
-{ out.write((const char*)(tok), (const char*)(&cursor[-7]) - (const char*)(tok));
+	{ out.write((const char*)(tok), (const char*)(&cursor[-7]) - (const char*)(tok));
 				  tok = cursor;
 				  RETURN(1); }
-#line 150 "<stdout>"
+#line 160 "<stdout>"
 }
 #line 92 "scanner.re"
 
@@ -162,7 +172,7 @@ scan:
     tline = cline;
     tok = cursor;
 
-#line 166 "<stdout>"
+#line 176 "<stdout>"
 {
 	YYCTYPE yych;
 	unsigned int yyaccept = 0;
@@ -243,7 +253,8 @@ yy15:
 	case '{':	goto yy17;
 	default:	goto yy37;
 	}
-yy17:	yyaccept = 0;
+yy17:
+	yyaccept = 0;
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch(yych){
 	case '0':
@@ -260,30 +271,33 @@ yy17:	yyaccept = 0;
 	}
 yy18:
 #line 105 "scanner.re"
-{ depth = 1;
+	{ depth = 1;
 				  goto code;
 				}
-#line 260 "<stdout>"
-yy19:	++YYCURSOR;
+#line 271 "<stdout>"
+yy19:
+	++YYCURSOR;
 	switch((yych = *YYCURSOR)) {
 	case '*':	goto yy61;
 	default:	goto yy20;
 	}
 yy20:
 #line 131 "scanner.re"
-{ RETURN(*tok); }
-#line 269 "<stdout>"
-yy21:	++YYCURSOR;
+	{ RETURN(*tok); }
+#line 281 "<stdout>"
+yy21:
+	++YYCURSOR;
 	switch((yych = *YYCURSOR)) {
 	case '/':	goto yy59;
 	default:	goto yy22;
 	}
 yy22:
 #line 133 "scanner.re"
-{ yylval.op = *tok;
+	{ yylval.op = *tok;
 				  RETURN(CLOSE); }
-#line 279 "<stdout>"
-yy23:	yyaccept = 1;
+#line 292 "<stdout>"
+yy23:
+	yyaccept = 1;
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch(yych){
 	case 0x0A:	goto yy24;
@@ -291,9 +305,10 @@ yy23:	yyaccept = 1;
 	}
 yy24:
 #line 122 "scanner.re"
-{ fatal("unterminated string constant (missing \")"); }
-#line 289 "<stdout>"
-yy25:	yyaccept = 2;
+	{ fatal("unterminated string constant (missing \")"); }
+#line 303 "<stdout>"
+yy25:
+	yyaccept = 2;
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch(yych){
 	case 0x0A:	goto yy26;
@@ -301,9 +316,10 @@ yy25:	yyaccept = 2;
 	}
 yy26:
 #line 123 "scanner.re"
-{ fatal("unterminated string constant (missing ')"); }
-#line 299 "<stdout>"
-yy27:	yyaccept = 3;
+	{ fatal("unterminated string constant (missing ')"); }
+#line 314 "<stdout>"
+yy27:
+	yyaccept = 3;
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch(yych){
 	case 0x0A:	goto yy28;
@@ -311,59 +327,69 @@ yy27:	yyaccept = 3;
 	}
 yy28:
 #line 129 "scanner.re"
-{ fatal("unterminated range (missing ])"); }
-#line 309 "<stdout>"
-yy29:	yych = *++YYCURSOR;
+	{ fatal("unterminated range (missing ])"); }
+#line 325 "<stdout>"
+yy29:
+	yych = *++YYCURSOR;
 	goto yy20;
-yy30:	yych = *++YYCURSOR;
+yy30:
+	yych = *++YYCURSOR;
 	goto yy22;
-yy31:	++YYCURSOR;
+yy31:
+	++YYCURSOR;
 	yych = *YYCURSOR;
 	goto yy42;
 yy32:
 #line 148 "scanner.re"
-{ cur = cursor;
+	{ cur = cursor;
 				  yylval.symbol = Symbol::find(token());
 				  return ID; }
-#line 322 "<stdout>"
-yy33:	++YYCURSOR;
+#line 341 "<stdout>"
+yy33:
+	++YYCURSOR;
 	yych = *YYCURSOR;
 	goto yy40;
 yy34:
 #line 152 "scanner.re"
-{ goto scan; }
-#line 329 "<stdout>"
-yy35:	++YYCURSOR;
+	{ goto scan; }
+#line 349 "<stdout>"
+yy35:
+	++YYCURSOR;
 	goto yy36;
 yy36:
 #line 154 "scanner.re"
-{ if(cursor == eof) RETURN(0);
+	{ if(cursor == eof) RETURN(0);
 				  pos = cursor; cline++;
 				  goto scan;
 	    			}
-#line 338 "<stdout>"
-yy37:	++YYCURSOR;
+#line 359 "<stdout>"
+yy37:
+	++YYCURSOR;
 	goto yy38;
 yy38:
 #line 159 "scanner.re"
-{ std::cerr << "unexpected character: " << *tok << std::endl;
+	{ std::cerr << "unexpected character: " << *tok << std::endl;
 				  goto scan;
 				}
-#line 346 "<stdout>"
-yy39:	++YYCURSOR;
+#line 368 "<stdout>"
+yy39:
+	++YYCURSOR;
 	if(YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	goto yy40;
-yy40:	switch(yych){
+yy40:
+	switch(yych){
 	case 0x09:
 	case ' ':	goto yy39;
 	default:	goto yy34;
 	}
-yy41:	++YYCURSOR;
+yy41:
+	++YYCURSOR;
 	if(YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	goto yy42;
-yy42:	switch(yych){
+yy42:
+	switch(yych){
 	case '0':
 	case '1':
 	case '2':
@@ -428,107 +454,124 @@ yy42:	switch(yych){
 	case 'z':	goto yy41;
 	default:	goto yy32;
 	}
-yy43:	++YYCURSOR;
+yy43:
+	++YYCURSOR;
 	if(YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	goto yy44;
-yy44:	switch(yych){
+yy44:
+	switch(yych){
 	case 0x0A:	goto yy45;
 	case '\\':	goto yy46;
 	case ']':	goto yy47;
 	default:	goto yy43;
 	}
-yy45:	YYCURSOR = YYMARKER;
+yy45:
+	YYCURSOR = YYMARKER;
 	switch(yyaccept){
 	case 0:	goto yy18;
 	case 1:	goto yy24;
 	case 2:	goto yy26;
 	case 3:	goto yy28;
 	}
-yy46:	++YYCURSOR;
+yy46:
+	++YYCURSOR;
 	if(YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	switch(yych){
 	case 0x0A:	goto yy45;
 	default:	goto yy43;
 	}
-yy47:	++YYCURSOR;
+yy47:
+	++YYCURSOR;
 	goto yy48;
 yy48:
 #line 125 "scanner.re"
-{ cur = cursor;
+	{ cur = cursor;
 				  yylval.regexp = ranToRE(token());
 				  return RANGE; }
-#line 453 "<stdout>"
-yy49:	++YYCURSOR;
+#line 484 "<stdout>"
+yy49:
+	++YYCURSOR;
 	if(YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	goto yy50;
-yy50:	switch(yych){
+yy50:
+	switch(yych){
 	case 0x0A:	goto yy45;
 	case '\'':	goto yy52;
 	case '\\':	goto yy51;
 	default:	goto yy49;
 	}
-yy51:	++YYCURSOR;
+yy51:
+	++YYCURSOR;
 	if(YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	switch(yych){
 	case 0x0A:	goto yy45;
 	default:	goto yy49;
 	}
-yy52:	++YYCURSOR;
+yy52:
+	++YYCURSOR;
 	goto yy53;
 yy53:
 #line 118 "scanner.re"
-{ cur = cursor;
+	{ cur = cursor;
 				  yylval.regexp = strToCaseInsensitiveRE(token());
 				  return STRING; }
-#line 478 "<stdout>"
-yy54:	++YYCURSOR;
+#line 513 "<stdout>"
+yy54:
+	++YYCURSOR;
 	if(YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	goto yy55;
-yy55:	switch(yych){
+yy55:
+	switch(yych){
 	case 0x0A:	goto yy45;
 	case '"':	goto yy57;
 	case '\\':	goto yy56;
 	default:	goto yy54;
 	}
-yy56:	++YYCURSOR;
+yy56:
+	++YYCURSOR;
 	if(YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	switch(yych){
 	case 0x0A:	goto yy45;
 	default:	goto yy54;
 	}
-yy57:	++YYCURSOR;
+yy57:
+	++YYCURSOR;
 	goto yy58;
 yy58:
 #line 114 "scanner.re"
-{ cur = cursor;
+	{ cur = cursor;
 				  yylval.regexp = strToRE(token());
 				  return STRING; }
-#line 503 "<stdout>"
-yy59:	++YYCURSOR;
+#line 542 "<stdout>"
+yy59:
+	++YYCURSOR;
 	goto yy60;
 yy60:
 #line 111 "scanner.re"
-{ tok = cursor;
+	{ tok = cursor;
 				  RETURN(0); }
-#line 510 "<stdout>"
-yy61:	++YYCURSOR;
+#line 550 "<stdout>"
+yy61:
+	++YYCURSOR;
 	goto yy62;
 yy62:
 #line 108 "scanner.re"
-{ depth = 1;
+	{ depth = 1;
 				  goto comment; }
-#line 517 "<stdout>"
-yy63:	++YYCURSOR;
+#line 558 "<stdout>"
+yy63:
+	++YYCURSOR;
 	if((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
 	yych = *YYCURSOR;
 	goto yy64;
-yy64:	switch(yych){
+yy64:
+	switch(yych){
 	case ',':	goto yy67;
 	case '0':
 	case '1':
@@ -543,32 +586,37 @@ yy64:	switch(yych){
 	case '}':	goto yy65;
 	default:	goto yy45;
 	}
-yy65:	++YYCURSOR;
+yy65:
+	++YYCURSOR;
 	goto yy66;
 yy66:
 #line 136 "scanner.re"
-{ yylval.extop.minsize = atoi((char *)tok+1);
+	{ yylval.extop.minsize = atoi((char *)tok+1);
 				  yylval.extop.maxsize = atoi((char *)tok+1);
 				  RETURN(CLOSESIZE); }
-#line 544 "<stdout>"
-yy67:	yych = *++YYCURSOR;
+#line 588 "<stdout>"
+yy67:
+	yych = *++YYCURSOR;
 	switch(yych){
 	case '}':	goto yy68;
 	default:	goto yy71;
 	}
-yy68:	++YYCURSOR;
+yy68:
+	++YYCURSOR;
 	goto yy69;
 yy69:
 #line 144 "scanner.re"
-{ yylval.extop.minsize = atoi((char *)tok+1);
+	{ yylval.extop.minsize = atoi((char *)tok+1);
 				  yylval.extop.maxsize = -1;
 				  RETURN(CLOSESIZE); }
-#line 557 "<stdout>"
-yy70:	++YYCURSOR;
+#line 603 "<stdout>"
+yy70:
+	++YYCURSOR;
 	if(YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	goto yy71;
-yy71:	switch(yych){
+yy71:
+	switch(yych){
 	case '0':
 	case '1':
 	case '2':
@@ -582,21 +630,22 @@ yy71:	switch(yych){
 	case '}':	goto yy72;
 	default:	goto yy45;
 	}
-yy72:	++YYCURSOR;
+yy72:
+	++YYCURSOR;
 	goto yy73;
 yy73:
 #line 140 "scanner.re"
-{ yylval.extop.minsize = atoi((char *)tok+1);
+	{ yylval.extop.minsize = atoi((char *)tok+1);
 				  yylval.extop.maxsize = MAX(yylval.extop.minsize,atoi(strchr((char *)tok, ',')+1));
 				  RETURN(CLOSESIZE); }
-#line 583 "<stdout>"
+#line 632 "<stdout>"
 }
 #line 162 "scanner.re"
 
 
 code:
 
-#line 590 "<stdout>"
+#line 639 "<stdout>"
 {
 	YYCTYPE yych;
 	unsigned int yyaccept = 0;
@@ -613,83 +662,96 @@ yy74:
 	case '}':	goto yy76;
 	default:	goto yy82;
 	}
-yy76:	++YYCURSOR;
+yy76:
+	++YYCURSOR;
 	goto yy77;
 yy77:
 #line 166 "scanner.re"
-{ if(--depth == 0){
+	{ if(--depth == 0){
 					cur = cursor;
 					yylval.token = new Token(token(), tline);
 					return CODE;
 				  }
 				  goto code; }
-#line 617 "<stdout>"
-yy78:	++YYCURSOR;
+#line 667 "<stdout>"
+yy78:
+	++YYCURSOR;
 	goto yy79;
 yy79:
 #line 172 "scanner.re"
-{ ++depth;
+	{ ++depth;
 				  goto code; }
-#line 624 "<stdout>"
-yy80:	++YYCURSOR;
+#line 675 "<stdout>"
+yy80:
+	++YYCURSOR;
 	goto yy81;
 yy81:
 #line 174 "scanner.re"
-{ if(cursor == eof) fatal("missing '}'");
+	{ if(cursor == eof) fatal("missing '}'");
 				  pos = cursor; cline++;
 				  goto code;
 				}
-#line 633 "<stdout>"
-yy82:	++YYCURSOR;
+#line 685 "<stdout>"
+yy82:
+	++YYCURSOR;
 	goto yy83;
 yy83:
 #line 178 "scanner.re"
-{ goto code; }
-#line 639 "<stdout>"
-yy84:	yyaccept = 0;
+	{ goto code; }
+#line 692 "<stdout>"
+yy84:
+	yyaccept = 0;
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch(yych){
 	case 0x0A:	goto yy83;
 	default:	goto yy91;
 	}
-yy85:	yyaccept = 0;
+yy85:
+	yyaccept = 0;
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch(yych){
 	case 0x0A:	goto yy83;
 	default:	goto yy87;
 	}
-yy86:	++YYCURSOR;
+yy86:
+	++YYCURSOR;
 	if(YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	goto yy87;
-yy87:	switch(yych){
+yy87:
+	switch(yych){
 	case 0x0A:	goto yy88;
 	case '\'':	goto yy82;
 	case '\\':	goto yy89;
 	default:	goto yy86;
 	}
-yy88:	YYCURSOR = YYMARKER;
+yy88:
+	YYCURSOR = YYMARKER;
 	switch(yyaccept){
 	case 0:	goto yy83;
 	}
-yy89:	++YYCURSOR;
+yy89:
+	++YYCURSOR;
 	if(YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	switch(yych){
 	case 0x0A:	goto yy88;
 	default:	goto yy86;
 	}
-yy90:	++YYCURSOR;
+yy90:
+	++YYCURSOR;
 	if(YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	goto yy91;
-yy91:	switch(yych){
+yy91:
+	switch(yych){
 	case 0x0A:	goto yy88;
 	case '"':	goto yy82;
 	case '\\':	goto yy92;
 	default:	goto yy90;
 	}
-yy92:	++YYCURSOR;
+yy92:
+	++YYCURSOR;
 	if(YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	switch(yych){
@@ -702,7 +764,7 @@ yy92:	++YYCURSOR;
 
 comment:
 
-#line 696 "<stdout>"
+#line 758 "<stdout>"
 {
 	YYCTYPE yych;
 	goto yy93;
@@ -716,47 +778,53 @@ yy93:
 	case '/':	goto yy97;
 	default:	goto yy100;
 	}
-yy95:	++YYCURSOR;
+yy95:
+	++YYCURSOR;
 	switch((yych = *YYCURSOR)) {
 	case '/':	goto yy103;
 	default:	goto yy96;
 	}
 yy96:
 #line 193 "scanner.re"
-{ goto comment; }
-#line 718 "<stdout>"
-yy97:	yych = *++YYCURSOR;
+	{ goto comment; }
+#line 781 "<stdout>"
+yy97:
+	yych = *++YYCURSOR;
 	switch(yych){
 	case '*':	goto yy101;
 	default:	goto yy96;
 	}
-yy98:	++YYCURSOR;
+yy98:
+	++YYCURSOR;
 	goto yy99;
 yy99:
 #line 189 "scanner.re"
-{ if(cursor == eof) RETURN(0);
+	{ if(cursor == eof) RETURN(0);
 				  tok = pos = cursor; cline++;
 				  goto comment;
 				}
-#line 732 "<stdout>"
-yy100:	yych = *++YYCURSOR;
+#line 797 "<stdout>"
+yy100:
+	yych = *++YYCURSOR;
 	goto yy96;
-yy101:	++YYCURSOR;
+yy101:
+	++YYCURSOR;
 	goto yy102;
 yy102:
 #line 187 "scanner.re"
-{ ++depth;
+	{ ++depth;
 				  goto comment; }
-#line 741 "<stdout>"
-yy103:	++YYCURSOR;
+#line 808 "<stdout>"
+yy103:
+	++YYCURSOR;
 	goto yy104;
 yy104:
 #line 183 "scanner.re"
-{ if(--depth == 0)
+	{ if(--depth == 0)
 					goto scan;
 				    else
 					goto comment; }
-#line 750 "<stdout>"
+#line 818 "<stdout>"
 }
 #line 194 "scanner.re"
 
