@@ -1,5 +1,6 @@
 Version 0.10.0 (????-??-??)
 ---------------------------
+- Made scanner error out in case an ambiguous /* is found.
 - Fixed indendation of generated code.
 - Added support for DOS line endings.
 - Added experimental unicode support.
@@ -19,7 +20,7 @@ Version 0.9.11 (2005-12-18)
 
 Version 0.9.10 (2005-09-04)
 ---------------------------
-- Add -i switch to avoid generating #line information.
+- Added -i switch to avoid generating #line information.
 - Fixed bug #1251653 re2c generate some invalid #line on WIN32.
 
 Version 0.9.9 (2005-07-21)

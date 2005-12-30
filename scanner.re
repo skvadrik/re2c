@@ -133,7 +133,8 @@ echo:
 }
 
 
-int Scanner::scan(){
+int Scanner::scan()
+{
     char *cursor = cur;
     uint depth;
 
@@ -252,7 +253,8 @@ comment:
 				    else
 					goto comment; }
 	"/*"			{ ++depth;
-				  goto comment; }
+					fatal("ambiguous /* found");
+					goto comment; }
 	"\n"			{ if(cursor == eof) RETURN(0);
 				  tok = pos = cursor; cline++;
 				  goto comment;
