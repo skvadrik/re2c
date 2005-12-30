@@ -35,7 +35,8 @@ yy0:
 	}
 yy2:	++YYCURSOR;
 	switch((yych = *YYCURSOR)) {
-	case 'A':	case 'a':	goto yy7;
+	case 'A':
+	case 'a':	goto yy7;
 	case 'B':
 	case 'C':
 	case 'D':
@@ -60,7 +61,8 @@ yy2:	++YYCURSOR;
 	case 'W':
 	case 'X':
 	case 'Y':
-	case 'Z':	case 'b':
+	case 'Z':
+	case 'b':
 	case 'c':
 	case 'd':
 	case 'e':
@@ -126,7 +128,8 @@ yy7:	++YYCURSOR;
 	case 'W':
 	case 'X':
 	case 'Y':
-	case 'Z':	case 'a':
+	case 'Z':
+	case 'a':
 	case 'b':
 	case 'c':
 	case 'd':
@@ -188,7 +191,8 @@ yy10:	switch(yych){
 	case 'W':
 	case 'X':
 	case 'Y':
-	case 'Z':	case 'a':
+	case 'Z':
+	case 'a':
 	case 'b':
 	case 'c':
 	case 'd':

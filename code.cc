@@ -16,6 +16,17 @@ namespace re2c
 // there must be at least one span in list;  all spans must cover
 // same range
 
+std::string indent(uint ind)
+{
+	std::string str;
+
+	while (ind-- > 0)
+	{
+		str += "\t";
+	}
+	return str;
+}
+
 void Go::compact()
 {
 	// arrange so that adjacent spans have different targets
@@ -188,13 +199,13 @@ const BitMap *BitMap::find(const State *x)
 	return NULL;
 }
 
-void BitMap::gen(std::ostream &o, uint lb, uint ub)
+void BitMap::gen(std::ostream &o, uint ind, uint lb, uint ub)
 {
 	BitMap *b = first;
 
 	if (b)
 	{
-		o << "\tstatic unsigned char yybm[] = {";
+		o << indent(ind) << "static unsigned char yybm[] = {";
 		uint n = ub - lb;
 		uint *bm = new uint[n];
 		memset(bm, 0, n);
@@ -212,7 +223,7 @@ void BitMap::gen(std::ostream &o, uint lb, uint ub)
 			{
 				if (j % 8 == 0)
 				{
-					o << "\n\t";
+					o << "\n" << indent(ind+1);
 					++oline;
 				}
 
@@ -220,7 +231,7 @@ void BitMap::gen(std::ostream &o, uint lb, uint ub)
 			}
 		}
 
-		o << "\n\t};\n";
+		o << "\n" << indent(ind) << "};\n";
 		oline += 2;
 	}
 }
@@ -240,46 +251,38 @@ void BitMap::stats()
 	first = NULL;
 }
 
-void genGoTo(std::ostream &o, const State *from, const State *to, bool & readCh, const char *indent = "\t")
+void genGoTo(std::ostream &o, uint ind, const State *from, const State *to, bool & readCh)
 {
 	if (readCh && from->label + 1 != to->label)
 	{
-		o << indent << "yych = *YYCURSOR;\n";
+		o << indent(ind) << "yych = *YYCURSOR;\n";
 		++oline;
 		readCh = false;
 	}
 
-	o << indent << "goto yy" << to->label << ";\n";
+	o << indent(ind) << "goto yy" << to->label << ";\n";
 	++oline;
 	vUsedLabels.append(to->label);
 }
 
-void genIf(std::ostream &o, char *cmp, uint v, bool &readCh)
+void genIf(std::ostream &o, uint ind, char *cmp, uint v, bool &readCh)
 {
 	if (readCh)
 	{
-		o << "\tif((yych = *YYCURSOR) ";
+		o << indent(ind) << "if((yych = *YYCURSOR) ";
 		readCh = false;
 	}
 	else
 	{
-		o << "\tif(yych ";
+		o << indent(ind) << "if(yych ";
 	}
 
 	o << cmp << " ";
 	prtChOrHex(o, v);
-	o << ")";
+	o << ") ";
 }
 
-void indent(std::ostream &o, uint i)
-{
-	while (i-- > 0)
-	{
-		o << "\t";
-	}
-}
-
-static void need(std::ostream &o, uint n, bool & readCh, uint mask)
+static void need(std::ostream &o, uint ind, uint n, bool & readCh, uint mask)
 {
 	uint fillIndex;
 	bool hasFillIndex = (0<=vFillIndexes);
@@ -287,18 +290,18 @@ static void need(std::ostream &o, uint n, bool & readCh, uint mask)
 	if ( hasFillIndex == true )
 	{
 		fillIndex = vFillIndexes++;
-		o << "\tYYSETSTATE(" << fillIndex << ");\n";
+		o << indent(ind) << "YYSETSTATE(" << fillIndex << ");\n";
 		++oline;
 	}
 
 	if (n == 1)
 	{
-		o << "\tif(YYLIMIT == YYCURSOR) YYFILL(1);\n";
+		o << indent(ind) << "if(YYLIMIT == YYCURSOR) YYFILL(1);\n";
 		++oline;
 	}
 	else
 	{
-		o << "\tif((YYLIMIT - YYCURSOR) < " << n << ") YYFILL(" << n << ");\n";
+		o << indent(ind) << "if((YYLIMIT - YYCURSOR) < " << n << ") YYFILL(" << n << ");\n";
 		++oline;
 	}
 
@@ -308,26 +311,26 @@ static void need(std::ostream &o, uint n, bool & readCh, uint mask)
 		++oline;
 	}
 
-	o << "\tyych = *YYCURSOR;\n";
+	o << indent(ind) << "yych = *YYCURSOR;\n";
 	readCh = false;
 	++oline;
 }
 
-void Match::emit(std::ostream &o, bool &readCh)
+void Match::emit(std::ostream &o, uint ind, bool &readCh) const
 {
 	if (state->link)
 	{
-		o << "\t++YYCURSOR;\n";
+		o << indent(ind) << "++YYCURSOR;\n";
 	}
 	else if (!readAhead())
 	{
 		/* do not read next char if match */
-		o << "\t++YYCURSOR;\n";
+		o << indent(ind) << "++YYCURSOR;\n";
 		readCh = true;
 	}
 	else
 	{
-		o << "\tyych = *++YYCURSOR;\n";
+		o << indent(ind) << "yych = *++YYCURSOR;\n";
 		readCh = false;
 	}
 
@@ -335,46 +338,46 @@ void Match::emit(std::ostream &o, bool &readCh)
 
 	if (state->link)
 	{
-		need(o, state->depth, readCh, 0);
+		need(o, ind, state->depth, readCh, 0);
 	}
 }
 
-void Enter::emit(std::ostream &o, bool &readCh)
+void Enter::emit(std::ostream &o, uint ind, bool &readCh) const
 {
 	if (state->link)
 	{
-		o << "\t++YYCURSOR;\n";
+		o << indent(ind) << "++YYCURSOR;\n";
 		o << "yy" << label << ":\n";
 		oline += 2;
-		need(o, state->depth, readCh, 0);
+		need(o, ind, state->depth, readCh, 0);
 	}
 	else
 	{
 		/* we shouldn't need 'rule-following' protection here */
-		o << "\tyych = *++YYCURSOR;\n";
+		o << indent(ind) << "yych = *++YYCURSOR;\n";
 		o << "yy" << label << ":\n";
 		oline += 2;
 		readCh = false;
 	}
 }
 
-void Save::emit(std::ostream &o, bool &readCh)
+void Save::emit(std::ostream &o, uint ind, bool &readCh) const
 {
 	if (bUsedYYAccept)
 	{
-		o << "\tyyaccept = " << selector << ";\n";
+		o << indent(ind) << "yyaccept = " << selector << ";\n";
 		++oline;
 	}
 
 	if (state->link)
 	{
-		o << "\tYYMARKER = ++YYCURSOR;\n";
+		o << indent(ind) << "YYMARKER = ++YYCURSOR;\n";
 		++oline;
-		need(o, state->depth, readCh, 0);
+		need(o, ind, state->depth, readCh, 0);
 	}
 	else
 	{
-		o << "\tyych = *(YYMARKER = ++YYCURSOR);\n";
+		o << indent(ind) << "yych = *(YYMARKER = ++YYCURSOR);\n";
 		++oline;
 		readCh = false;
 	}
@@ -385,7 +388,7 @@ Move::Move(State *s) : Action(s)
 	;
 }
 
-void Move::emit(std::ostream &o, bool &readCh)
+void Move::emit(std::ostream &, uint, bool &) const
 {
 	;
 }
@@ -396,7 +399,7 @@ Accept::Accept(State *x, uint n, uint *s, State **r)
 	;
 }
 
-void Accept::emit(std::ostream &o, bool &readCh)
+void Accept::emit(std::ostream &o, uint ind, bool &readCh) const
 {
 	bool first = true;
 
@@ -407,18 +410,18 @@ void Accept::emit(std::ostream &o, bool &readCh)
 			{
 				first = false;
 				bUsedYYAccept = true;
-				o << "\tYYCURSOR = YYMARKER;\n";
-				o << "\tswitch(yyaccept){\n";
+				o << indent(ind) << "YYCURSOR = YYMARKER;\n";
+				o << indent(ind) << "switch(yyaccept){\n";
 				oline += 2;
 			}
 
-			o << "\tcase " << saves[i] << ":";
-			genGoTo(o, state, rules[i], readCh);
+			o << indent(ind) << "case " << saves[i] << ":";
+			genGoTo(o, 1, state, rules[i], readCh);
 		}
 
 	if (!first)
 	{
-		o << "\t}\n";
+		o << indent(ind) << "}\n";
 		++oline;
 	}
 }
@@ -428,13 +431,13 @@ Rule::Rule(State *s, RuleOp *r) : Action(s), rule(r)
 	;
 }
 
-void Rule::emit(std::ostream &o, bool &readCh)
+void Rule::emit(std::ostream &o, uint ind, bool &readCh) const
 {
 	uint back = rule->ctx->fixedLength();
 
 	if (back != ~0u && back > 0u)
 	{
-		o << "\tYYCURSOR -= " << back << ";";
+		o << indent(ind) << "YYCURSOR -= " << back << ";";
 	}
 
 	o << "\n";
@@ -452,7 +455,7 @@ void Rule::emit(std::ostream &o, bool &readCh)
 	}
 }
 
-void doLinear(std::ostream &o, uint i, Span *s, uint n, const State *from, const State *next, bool &readCh, uint mask)
+void doLinear(std::ostream &o, uint ind, Span *s, uint n, const State *from, const State *next, bool &readCh, uint mask)
 {
 	for (;;)
 	{
@@ -464,21 +467,18 @@ void doLinear(std::ostream &o, uint i, Span *s, uint n, const State *from, const
 			{
 				if (!mask || (s[0].ub > 0x00FF))
 				{
-					indent(o, i);
-					genIf(o, "!=", s[0].ub, readCh);
-					genGoTo(o, from, bg, readCh);
+					genIf(o, ind, "!=", s[0].ub, readCh);
+					genGoTo(o, 0, from, bg, readCh);
 				}
-				indent(o, i);
-				genGoTo(o, from, next, readCh);
+				genGoTo(o, ind, from, next, readCh);
 				return ;
 			}
 			else
 			{
 				if (!mask || (s[0].ub > 0x00FF))
 				{
-					indent(o, i);
-					genIf(o, "==", s[0].ub, readCh);
-					genGoTo(o, from, s[1].to, readCh);
+					genIf(o, ind, "==", s[0].ub, readCh);
+					genGoTo(o, 0, from, s[1].to, readCh);
 				}
 			}
 
@@ -489,8 +489,7 @@ void doLinear(std::ostream &o, uint i, Span *s, uint n, const State *from, const
 		if (n == 1)
 		{
 			//	    	if(bg != next){
-			indent(o, i);
-			genGoTo(o, from, s[0].to, readCh);
+			genGoTo(o, ind, from, s[0].to, readCh);
 			//	    	}
 			return ;
 		}
@@ -498,48 +497,50 @@ void doLinear(std::ostream &o, uint i, Span *s, uint n, const State *from, const
 		{
 			if (!mask || (s[0].ub > 0x00FF))
 			{
-				indent(o, i);
-				genIf(o, ">=", s[0].ub, readCh);
-				genGoTo(o, from, s[1].to, readCh);
+				genIf(o, ind, ">=", s[0].ub, readCh);
+				genGoTo(o, 0, from, s[1].to, readCh);
 			}
-			indent(o, i);
-			genGoTo(o, from, next, readCh);
+			genGoTo(o, ind, from, next, readCh);
 			return ;
 		}
 		else
 		{
 			if (!mask || ((s[0].ub - 1) > 0x00FF))
 			{
-				indent(o, i);
-				genIf(o, "<=", s[0].ub - 1, readCh);
-				genGoTo(o, from, bg, readCh);
+				genIf(o, ind, "<=", s[0].ub - 1, readCh);
+				genGoTo(o, 0, from, bg, readCh);
 			}
 			n -= 1;
 			s += 1;
 		}
 	}
 
-	indent(o, i);
-	genGoTo(o, from, next, readCh);
+	genGoTo(o, ind, from, next, readCh);
 }
 
-void Go::genLinear(std::ostream &o, const State *from, const State *next, bool &readCh, uint mask) const
+void Go::genLinear(std::ostream &o, uint ind, const State *from, const State *next, bool &readCh, uint mask) const
 {
-	doLinear(o, 0, span, nSpans, from, next, readCh, mask);
+	doLinear(o, ind, span, nSpans, from, next, readCh, mask);
 }
 
-void genCases(std::ostream &o, uint lb, Span *s)
+void genCases(std::ostream &o, uint ind, uint lb, Span *s, bool &newLine)
 {
+	if (!newLine)
+	{
+		o << "\n";
+	}
+	newLine = true;
 	if (lb < s->ub)
 	{
 		for (;;)
 		{
-			o << "\tcase ";
+			o << indent(ind) << "case ";
 			prtChOrHex(o, lb);
 			o << ":";
 
 			if (++lb == s->ub)
 			{
+				newLine = false;
 				break;
 			}
 
@@ -549,11 +550,13 @@ void genCases(std::ostream &o, uint lb, Span *s)
 	}
 }
 
-void Go::genSwitch(std::ostream &o, const State *from, const State *next, bool &readCh, uint mask) const
+void Go::genSwitch(std::ostream &o, uint ind, const State *from, const State *next, bool &readCh, uint mask) const
 {
+	bool newLine = true;
+
 	if (nSpans <= 2)
 	{
-		genLinear(o, from, next, readCh, mask);
+		genLinear(o, ind, from, next, readCh, mask);
 	}
 	else
 	{
@@ -572,17 +575,17 @@ void Go::genSwitch(std::ostream &o, const State *from, const State *next, bool &
 
 		if (dFlag)
 		{
-			o << "\tYYDEBUG(-1, yych);\n";
+			o << indent(ind) << "YYDEBUG(-1, yych);\n";
 		}
 
 		if (readCh)
 		{
-			o << "\tswitch((yych = *YYCURSOR)) {\n";
+			o << indent(ind) << "switch((yych = *YYCURSOR)) {\n";
 			readCh = false;
 		}
 		else
 		{
-			o << "\tswitch(yych){\n";
+			o << indent(ind) << "switch(yych){\n";
 		}
 
 		++oline;
@@ -592,9 +595,13 @@ void Go::genSwitch(std::ostream &o, const State *from, const State *next, bool &
 			r = s = &sP[0];
 
 			if (*s == &span[0])
-				genCases(o, 0, *s);
+			{
+				genCases(o, ind, 0, *s, newLine);
+			}
 			else
-				genCases(o, (*s)[ -1].ub, *s);
+			{
+				genCases(o, ind, (*s)[ -1].ub, *s, newLine);
+			}
 
 			State *to = (*s)->to;
 
@@ -602,7 +609,7 @@ void Go::genSwitch(std::ostream &o, const State *from, const State *next, bool &
 			{
 				if ((*s)->to == to)
 				{
-					genCases(o, (*s)[ -1].ub, *s);
+					genCases(o, ind, (*s)[ -1].ub, *s, newLine);
 				}
 				else
 				{
@@ -610,49 +617,47 @@ void Go::genSwitch(std::ostream &o, const State *from, const State *next, bool &
 				}
 			}
 
-			genGoTo(o, from, to, readCh);
+			genGoTo(o, newLine ? ind+1 : 1, from, to, readCh);
+			newLine = true;
 			t = r;
 		}
 
-		o << "\tdefault:";
-		genGoTo(o, from, def, readCh);
-		o << "\t}\n";
+		o << indent(ind) << "default:";
+		genGoTo(o, 1, from, def, readCh);
+		o << indent(ind) << "}\n";
 		++oline;
 
 		delete [] sP;
 	}
 }
 
-void doBinary(std::ostream &o, uint i, Span *s, uint n, const State *from, const State *next, bool &readCh, uint mask)
+void doBinary(std::ostream &o, uint ind, Span *s, uint n, const State *from, const State *next, bool &readCh, uint mask)
 {
 	if (n <= 4)
 	{
-		doLinear(o, i, s, n, from, next, readCh, mask);
+		doLinear(o, ind, s, n, from, next, readCh, mask);
 	}
 	else
 	{
 		uint h = n / 2;
-		indent(o, i);
-		genIf(o, "<=", s[h - 1].ub - 1, readCh);
+		genIf(o, ind, "<=", s[h - 1].ub - 1, readCh);
 		o << "{\n";
 		++oline;
-		doBinary(o, i + 1, &s[0], h, from, next, readCh, mask);
-		indent(o, i);
-		o << "\t} else {\n";
+		doBinary(o, ind+1, &s[0], h, from, next, readCh, mask);
+		o << indent(ind) << "} else {\n";
 		++oline;
-		doBinary(o, i + 1, &s[h], n - h, from, next, readCh, mask);
-		indent(o, i);
-		o << "\t}\n";
+		doBinary(o, ind+1, &s[h], n - h, from, next, readCh, mask);
+		o << indent(ind) << "}\n";
 		++oline;
 	}
 }
 
-void Go::genBinary(std::ostream &o, const State *from, const State *next, bool &readCh, uint mask) const
+void Go::genBinary(std::ostream &o, uint ind, const State *from, const State *next, bool &readCh, uint mask) const
 {
-	doBinary(o, 0, span, nSpans, from, next, readCh, mask);
+	doBinary(o, ind, span, nSpans, from, next, readCh, mask);
 }
 
-void Go::genBase(std::ostream &o, const State *from, const State *next, bool &readCh, uint mask) const
+void Go::genBase(std::ostream &o, uint ind, const State *from, const State *next, bool &readCh, uint mask) const
 {
 	if (nSpans == 0)
 	{
@@ -661,7 +666,7 @@ void Go::genBase(std::ostream &o, const State *from, const State *next, bool &re
 
 	if (!sFlag)
 	{
-		genSwitch(o, from, next, readCh, mask);
+		genSwitch(o, ind, from, next, readCh, mask);
 		return ;
 	}
 
@@ -688,22 +693,22 @@ void Go::genBase(std::ostream &o, const State *from, const State *next, bool &re
 
 		if (util <= 2)
 		{
-			genSwitch(o, from, next, readCh, mask);
+			genSwitch(o, ind, from, next, readCh, mask);
 			return ;
 		}
 	}
 
 	if (nSpans > 5)
 	{
-		genBinary(o, from, next, readCh, mask);
+		genBinary(o, ind, from, next, readCh, mask);
 	}
 	else
 	{
-		genLinear(o, from, next, readCh, mask);
+		genLinear(o, ind, from, next, readCh, mask);
 	}
 }
 
-void Go::genGoto(std::ostream &o, const State *from, const State *next, bool &readCh)
+void Go::genGoto(std::ostream &o, uint ind, const State *from, const State *next, bool &readCh)
 {
 	if (bFlag)
 	{
@@ -725,34 +730,34 @@ void Go::genGoto(std::ostream &o, const State *from, const State *next, bool &re
 					{
 						if (readCh)
 						{
-							o << "\tyych = *YYCURSOR;\n";
+							o << indent(ind) << "yych = *YYCURSOR;\n";
 							oline++;
 							readCh = false;
 						}
 						sYych = "yych";
-						o << "\tif (yyh & 0xFF00) {\n";
+						o << indent(ind) << "if(yyh & 0xFF00) {\n";
 						oline++;
 						/* here we need to reduce to those having high byte set */
-						genBase(o, from, next, readCh, 1);
-						o << "\t} else ";
+						genBase(o, ind+1, from, next, readCh, 1);
+						o << indent(ind) << "} else ";
 					}
 					else if (readCh)
 					{
 						sYych = "(yych = *YYCURSOR)";
 						readCh = false;
-						o << "\t";
+						o << indent(ind);
 					}
 					else
 					{
 						sYych = "yych";
-						o << "\t";
+						o << indent(ind);
 					}
 					o << "if(yybm[" << b->i << "+" << sYych << "] & " << (uint) b->m << ") {\n";
 					oline++;
-					genGoTo(o, from, to, readCh, "\t\t");
-					o << "\t}\n";
+					genGoTo(o, ind+1, from, to, readCh);
+					o << indent(ind) << "}\n";
 					oline++;
-					go.genBase(o, from, next, readCh, 0);
+					go.genBase(o, ind, from, next, readCh, 0);
 					delete [] go.span;
 					return ;
 				}
@@ -760,10 +765,10 @@ void Go::genGoto(std::ostream &o, const State *from, const State *next, bool &re
 		}
 	}
 
-	genBase(o, from, next, readCh, 0);
+	genBase(o, ind, from, next, readCh, 0);
 }
 
-void State::emit(std::ostream &o, bool &readCh)
+void State::emit(std::ostream &o, uint ind, bool &readCh) const
 {
 	if (vUsedLabels.contains(label))
 	{
@@ -771,9 +776,10 @@ void State::emit(std::ostream &o, bool &readCh)
 	}
 	if (dFlag)
 	{
-		o << "\n\tYYDEBUG(" << label << ", *YYCURSOR);\n";
+		o << "\n" << indent(ind) << "YYDEBUG(" << label << ", *YYCURSOR);\n";
+		oline += 2;
 	}
-	action->emit(o, readCh);
+	action->emit(o, ind, readCh);
 }
 
 uint merge(Span *x0, State *fg, State *bg)
@@ -1075,7 +1081,7 @@ void DFA::emit(std::ostream &o)
 {
 	static uint label = 0;
 	State *s;
-	uint i, bitmap_brace = 0;
+	uint i, ind = 0, bitmap_brace = 0;
 
 	bool hasFillLabels = (0<=vFillIndexes);
 	if (hasFillLabels==true && label!=0)
@@ -1211,10 +1217,10 @@ void DFA::emit(std::ostream &o)
 
 	if (bFlag)
 	{
-		o << "{\n";
+		o << indent(ind++) << "{\n";
 		++oline;
 		bitmap_brace = 1;
-		BitMap::gen(o, lbChar, ubChar <= 256 ? ubChar : 256);
+		BitMap::gen(o, ind, lbChar, ubChar <= 256 ? ubChar : 256);
 	}
 
 	bUsedYYAccept = false;
@@ -1237,8 +1243,8 @@ void DFA::emit(std::ostream &o)
 	for (s = head; s; s = s->next)
 	{
 		bool readCh = false;
-		s->emit(noWhere, readCh);
-		s->go.genGoto(noWhere, s, s->next, readCh);
+		s->emit(noWhere, ind, readCh);
+		s->go.genGoto(noWhere, ind, s, s->next, readCh);
 	}
 	maxFillIndexes = vFillIndexes;
 	vFillIndexes = orgVFillIndexes;
@@ -1253,39 +1259,40 @@ void DFA::emit(std::ostream &o)
 
 	if ( hasFillLabels == false )
 	{
-		o << "{\n\tYYCTYPE yych;\n";
+		o << indent(ind++) << "{\n";
+		o << indent(ind) << "YYCTYPE yych;\n";
 		oline += 2;
 		if (bUsedYYAccept)
 		{
-			o << "\tunsigned int yyaccept = 0;\n";
+			o << indent(ind) << "unsigned int yyaccept = 0;\n";
 			oline++;
 		}
 	}
 	else
 	{
-		o << "{\n\n";
+		o << indent(ind++) << "{\n\n";
 		oline += 2;
 	}
 
 	if ( hasFillLabels == false )
 	{
-		o << "\tgoto yy" << start_label << ";\n";
+		o << indent(ind) << "goto yy" << start_label << ";\n";
 		++oline;
 	}
 
 	if (hasFillLabels == true )
 	{
-		o << "        switch(YYGETSTATE())\n";
-		o << "        {\n";
-		o << "            case -1: goto yy0;\n";
+		o << indent(ind) << "switch(YYGETSTATE())\n";
+		o << indent(ind) << "{\n";
+		o << indent(ind) << "case -1: goto yy0;\n";
 
 		for (size_t i=0; i<maxFillIndexes; ++i)
 		{
-			o << "            case " << i << ": goto yyFillLabel" << i << ";\n";
+			o << indent(ind) << "case " << i << ": goto yyFillLabel" << i << ";\n";
 		}
 
-		o << "            default: /* abort() */;\n";
-		o << "        }\n";
+		o << indent(ind) << "default: /* abort() */;\n";
+		o << indent(ind) << "}\n";
 		o << "yyNext:\n";
 
 		oline += maxFillIndexes;
@@ -1295,14 +1302,14 @@ void DFA::emit(std::ostream &o)
 	for (s = head; s; s = s->next)
 	{
 		bool readCh = false;
-		s->emit(o, readCh);
-		s->go.genGoto(o, s, s->next, readCh);
+		s->emit(o, ind, readCh);
+		s->go.genGoto(o, ind, s, s->next, readCh);
 	}
 
-	o << "}\n";
+	o << indent(--ind) << "}\n";
 	if (bitmap_brace)
 	{
-		o << "}\n";
+		o << indent(--ind) << "}\n";
 		++oline;
 	}
 	++oline;

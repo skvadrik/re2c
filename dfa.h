@@ -24,7 +24,7 @@ public:
 
 public:
 	Action(State*);
-	virtual void emit(std::ostream&, bool&) = 0;
+	virtual void emit(std::ostream&, uint, bool&) const = 0;
 	virtual bool isRule() const;
 	virtual bool isMatch() const;
 	virtual bool readAhead() const;
@@ -35,7 +35,7 @@ class Match: public Action
 
 public:
 	Match(State*);
-	void emit(std::ostream&, bool&);
+	void emit(std::ostream&, uint, bool&) const;
 	bool isMatch() const;
 };
 
@@ -47,7 +47,7 @@ public:
 
 public:
 	Enter(State*, uint);
-	void emit(std::ostream&, bool&);
+	void emit(std::ostream&, uint, bool&) const;
 };
 
 class Save: public Match
@@ -58,7 +58,7 @@ public:
 
 public:
 	Save(State*, uint);
-	void emit(std::ostream&, bool&);
+	void emit(std::ostream&, uint, bool&) const;
 	bool isMatch() const;
 };
 
@@ -67,7 +67,7 @@ class Move: public Action
 
 public:
 	Move(State*);
-	void emit(std::ostream&, bool&);
+	void emit(std::ostream&, uint, bool&) const;
 };
 
 class Accept: public Action
@@ -80,7 +80,7 @@ public:
 
 public:
 	Accept(State*, uint, uint*, State**);
-	void emit(std::ostream&, bool&);
+	void emit(std::ostream&, uint, bool&) const;
 };
 
 class Rule: public Action
@@ -91,7 +91,7 @@ public:
 
 public:
 	Rule(State*, RuleOp*);
-	void emit(std::ostream&, bool&);
+	void emit(std::ostream&, uint, bool&) const;
 	bool isRule() const;
 };
 
@@ -114,11 +114,11 @@ public:
 	Span	*span;
 
 public:
-	void genGoto(  std::ostream&, const State *from, const State *next, bool &readCh);
-	void genBase(  std::ostream&, const State *from, const State *next, bool &readCh, uint mask) const;
-	void genLinear(std::ostream&, const State *from, const State *next, bool &readCh, uint mask) const;
-	void genBinary(std::ostream&, const State *from, const State *next, bool &readCh, uint mask) const;
-	void genSwitch(std::ostream&, const State *from, const State *next, bool &readCh, uint mask) const;
+	void genGoto(  std::ostream&, uint ind, const State *from, const State *next, bool &readCh);
+	void genBase(  std::ostream&, uint ind, const State *from, const State *next, bool &readCh, uint mask) const;
+	void genLinear(std::ostream&, uint ind, const State *from, const State *next, bool &readCh, uint mask) const;
+	void genBinary(std::ostream&, uint ind, const State *from, const State *next, bool &readCh, uint mask) const;
+	void genSwitch(std::ostream&, uint ind, const State *from, const State *next, bool &readCh, uint mask) const;
 	void compact();
 	void unmap(Go*, const State*);
 };
@@ -142,7 +142,7 @@ public:
 public:
 	State();
 	~State();
-	void emit(std::ostream&, bool&);
+	void emit(std::ostream&, uint, bool&) const;
 	friend std::ostream& operator<<(std::ostream&, const State&);
 	friend std::ostream& operator<<(std::ostream&, const State*);
 };

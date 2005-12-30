@@ -69,7 +69,8 @@ yy2:	yyaccept = 0;
 	case 0x1E:
 	case 0x1F:
 	case ' ':
-	case '!':	case '#':
+	case '!':
+	case '#':
 	case '$':
 	case '%':
 	case '&':
@@ -335,7 +336,8 @@ yy6:	switch(yych){
 	case 0x1E:
 	case 0x1F:
 	case ' ':
-	case '!':	case '#':
+	case '!':
+	case '#':
 	case '$':
 	case '%':
 	case '&':

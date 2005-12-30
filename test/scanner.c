@@ -172,14 +172,20 @@ yy15:
 	if((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
 	yych = *YYCURSOR;
 	switch(yych){
-	case 0x09:	case ' ':	goto yy33;
+	case 0x09:
+	case ' ':	goto yy33;
 	case 0x0A:	goto yy35;
 	case '"':	goto yy23;
 	case '\'':	goto yy25;
 	case '(':
-	case ')':	case ';':	case '=':	case '\\':	case '|':	goto yy29;
+	case ')':
+	case ';':
+	case '=':
+	case '\\':
+	case '|':	goto yy29;
 	case '*':	goto yy21;
-	case '+':	case '?':	goto yy30;
+	case '+':
+	case '?':	goto yy30;
 	case '/':	goto yy19;
 	case 'A':
 	case 'B':
@@ -206,7 +212,8 @@ yy15:
 	case 'W':
 	case 'X':
 	case 'Y':
-	case 'Z':	case 'a':
+	case 'Z':
+	case 'a':
 	case 'b':
 	case 'c':
 	case 'd':
@@ -348,7 +355,8 @@ yy39:	++YYCURSOR;
 	yych = *YYCURSOR;
 	goto yy40;
 yy40:	switch(yych){
-	case 0x09:	case ' ':	goto yy39;
+	case 0x09:
+	case ' ':	goto yy39;
 	default:	goto yy34;
 	}
 yy41:	++YYCURSOR;
@@ -365,7 +373,8 @@ yy42:	switch(yych){
 	case '6':
 	case '7':
 	case '8':
-	case '9':	case 'A':
+	case '9':
+	case 'A':
 	case 'B':
 	case 'C':
 	case 'D':
@@ -390,7 +399,8 @@ yy42:	switch(yych){
 	case 'W':
 	case 'X':
 	case 'Y':
-	case 'Z':	case 'a':
+	case 'Z':
+	case 'a':
 	case 'b':
 	case 'c':
 	case 'd':

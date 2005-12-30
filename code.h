@@ -22,7 +22,7 @@ public:
 public:
 	static const BitMap *find(const Go*, const State*);
 	static const BitMap *find(const State*);
-	static void gen(std::ostream&, uint, uint);
+	static void gen(std::ostream&, uint ind, uint, uint);
 	static void stats();
 	BitMap(const Go*, const State*);
 	~BitMap();

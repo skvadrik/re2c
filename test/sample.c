@@ -35,7 +35,8 @@ yy0:
 	case 'l':
 	case 'm':
 	case 'n':
-	case 'o':	case 'q':
+	case 'o':
+	case 'q':
 	case 'r':
 	case 's':
 	case 't':
@@ -105,7 +106,8 @@ yy12:	yych = *++YYCURSOR;
 	case '6':
 	case '7':
 	case '8':
-	case '9':	case 'a':
+	case '9':
+	case 'a':
 	case 'b':
 	case 'c':
 	case 'd':
@@ -131,7 +133,8 @@ yy15:	switch(yych){
 	case '6':
 	case '7':
 	case '8':
-	case '9':	case 'a':
+	case '9':
+	case 'a':
 	case 'b':
 	case 'c':
 	case 'd':

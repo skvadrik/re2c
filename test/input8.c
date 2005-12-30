@@ -54,10 +54,10 @@ yy9:	YYCURSOR = YYMARKER;
 	case 0:	goto yy3;
 	}
 yy10:	yych = *++YYCURSOR;
-	if(yych <= 0x00)	goto yy12;
+	if(yych <= 0x00) goto yy12;
 	goto yy7;
 yy11:	yych = *++YYCURSOR;
-	if(yych >= 0x01)	goto yy9;
+	if(yych >= 0x01) goto yy9;
 	goto yy12;
 yy12:	++YYCURSOR;
 	yych = *YYCURSOR;

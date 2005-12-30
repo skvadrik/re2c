@@ -239,9 +239,11 @@ yy0:
 	yych = *YYCURSOR;
 	switch(yych){
 	case 0x00:	goto yy32;
-	case 0x09:	case 0x0B:
+	case 0x09:
+	case 0x0B:
 	case 0x0C:
-	case 0x0D:	case ' ':	goto yy30;
+	case 0x0D:
+	case ' ':	goto yy30;
 	case 0x0A:	goto yy28;
 	case '(':	goto yy16;
 	case ')':	goto yy18;
@@ -285,18 +287,24 @@ yy0:
 	case 'W':
 	case 'X':
 	case 'Y':
-	case 'Z':	case '_':	case 'a':	case 'c':
-	case 'd':	case 'j':
+	case 'Z':
+	case '_':
+	case 'a':
+	case 'c':
+	case 'd':
+	case 'j':
 	case 'k':
 	case 'l':
 	case 'm':
 	case 'n':
 	case 'o':
 	case 'p':
-	case 'q':	case 's':
+	case 'q':
+	case 's':
 	case 't':
 	case 'u':
-	case 'v':	case 'x':
+	case 'v':
+	case 'x':
 	case 'y':
 	case 'z':	goto yy10;
 	case 'b':	goto yy7;
@@ -456,7 +464,8 @@ yy39:	switch(yych){
 	case '6':
 	case '7':
 	case '8':
-	case '9':	case 'A':
+	case '9':
+	case 'A':
 	case 'B':
 	case 'C':
 	case 'D':
@@ -481,7 +490,9 @@ yy39:	switch(yych){
 	case 'W':
 	case 'X':
 	case 'Y':
-	case 'Z':	case '_':	case 'a':
+	case 'Z':
+	case '_':
+	case 'a':
 	case 'b':
 	case 'c':
 	case 'd':
@@ -540,7 +551,8 @@ yy44:	++YYCURSOR;
 	case '6':
 	case '7':
 	case '8':
-	case '9':	case 'A':
+	case '9':
+	case 'A':
 	case 'B':
 	case 'C':
 	case 'D':
@@ -565,7 +577,9 @@ yy44:	++YYCURSOR;
 	case 'W':
 	case 'X':
 	case 'Y':
-	case 'Z':	case '_':	case 'a':
+	case 'Z':
+	case '_':
+	case 'a':
 	case 'b':
 	case 'c':
 	case 'd':
@@ -623,7 +637,8 @@ yy49:	++YYCURSOR;
 	case '6':
 	case '7':
 	case '8':
-	case '9':	case 'A':
+	case '9':
+	case 'A':
 	case 'B':
 	case 'C':
 	case 'D':
@@ -648,7 +663,9 @@ yy49:	++YYCURSOR;
 	case 'W':
 	case 'X':
 	case 'Y':
-	case 'Z':	case '_':	case 'a':
+	case 'Z':
+	case '_':
+	case 'a':
 	case 'b':
 	case 'c':
 	case 'd':
@@ -706,7 +723,8 @@ yy54:	++YYCURSOR;
 	case '6':
 	case '7':
 	case '8':
-	case '9':	case 'A':
+	case '9':
+	case 'A':
 	case 'B':
 	case 'C':
 	case 'D':
@@ -731,7 +749,9 @@ yy54:	++YYCURSOR;
 	case 'W':
 	case 'X':
 	case 'Y':
-	case 'Z':	case '_':	case 'a':
+	case 'Z':
+	case '_':
+	case 'a':
 	case 'b':
 	case 'c':
 	case 'd':
@@ -784,7 +804,8 @@ yy58:	++YYCURSOR;
 	case '6':
 	case '7':
 	case '8':
-	case '9':	case 'A':
+	case '9':
+	case 'A':
 	case 'B':
 	case 'C':
 	case 'D':
@@ -809,7 +830,9 @@ yy58:	++YYCURSOR;
 	case 'W':
 	case 'X':
 	case 'Y':
-	case 'Z':	case '_':	case 'a':
+	case 'Z':
+	case '_':
+	case 'a':
 	case 'b':
 	case 'c':
 	case 'd':
@@ -862,7 +885,8 @@ yy62:	++YYCURSOR;
 	case '6':
 	case '7':
 	case '8':
-	case '9':	case 'A':
+	case '9':
+	case 'A':
 	case 'B':
 	case 'C':
 	case 'D':
@@ -887,7 +911,9 @@ yy62:	++YYCURSOR;
 	case 'W':
 	case 'X':
 	case 'Y':
-	case 'Z':	case '_':	case 'a':
+	case 'Z':
+	case '_':
+	case 'a':
 	case 'b':
 	case 'c':
 	case 'd':
@@ -935,7 +961,8 @@ yy65:	++YYCURSOR;
 	case '6':
 	case '7':
 	case '8':
-	case '9':	case 'A':
+	case '9':
+	case 'A':
 	case 'B':
 	case 'C':
 	case 'D':
@@ -960,7 +987,9 @@ yy65:	++YYCURSOR;
 	case 'W':
 	case 'X':
 	case 'Y':
-	case 'Z':	case '_':	case 'a':
+	case 'Z':
+	case '_':
+	case 'a':
 	case 'b':
 	case 'c':
 	case 'd':
@@ -1003,7 +1032,8 @@ yy67:	++YYCURSOR;
 	case '6':
 	case '7':
 	case '8':
-	case '9':	case 'A':
+	case '9':
+	case 'A':
 	case 'B':
 	case 'C':
 	case 'D':
@@ -1028,7 +1058,9 @@ yy67:	++YYCURSOR;
 	case 'W':
 	case 'X':
 	case 'Y':
-	case 'Z':	case '_':	case 'a':
+	case 'Z':
+	case '_':
+	case 'a':
 	case 'b':
 	case 'c':
 	case 'd':
