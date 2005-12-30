@@ -1,5 +1,6 @@
-Version 0.9.13 (????-??-??)
+Version 0.10.0 (????-??-??)
 ---------------------------
+- Fixed indendation of generated code.
 - Added support for DOS line endings.
 - Added experimental unicode support.
 - Added config_w32.h to build out of the box on windows (using msvc 2002+).
