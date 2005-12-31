@@ -315,6 +315,10 @@ void Scanner::config(const Str* cfg, int num)
 {
 	if (cfg->to_string() == "indent")
 	{
+		if (num < 0)
+		{
+			fatal("configuration 'indent' must be a positive integer");
+		}
 		topIndent = num;
 		return;
 	}
