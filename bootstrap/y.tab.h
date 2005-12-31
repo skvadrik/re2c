@@ -34,7 +34,10 @@
      ID = 260,
      CODE = 261,
      RANGE = 262,
-     STRING = 263
+     STRING = 263,
+     CONFIG = 264,
+     VALUE = 265,
+     NUMBER = 266
    };
 #endif
 /* Tokens.  */
@@ -44,6 +47,9 @@
 #define CODE 261
 #define RANGE 262
 #define STRING 263
+#define CONFIG 264
+#define VALUE 265
+#define NUMBER 266
 
 
 
@@ -53,12 +59,14 @@
 typedef union YYSTYPE {
     re2c::Symbol	*symbol;
     re2c::RegExp	*regexp;
-    re2c::Token	*token;
-    char	op;
-    re2c::ExtOp	extop;
+    re2c::Token 	*token;
+    char        	op;
+    int         	number;
+    re2c::ExtOp 	extop;
+    re2c::Str   	*str;
 } YYSTYPE;
 /* Line 1447 of yacc.c.  */
-#line 62 "y.tab.h"
+#line 70 "y.tab.h"
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1
 # define YYSTYPE_IS_TRIVIAL 1
