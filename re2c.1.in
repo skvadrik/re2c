@@ -7,6 +7,9 @@
 .ds rx regular expression
 .ds lx \fIl\fP-expression
 \"$Log$
+\"Revision 1.31  2005/12/31 00:02:25  helly
+\"- Fix Synopsis
+\"
 \"Revision 1.30  2005/12/30 16:24:07  helly
 \"- Allow to use -w with -b
 \"# Still quite some work to do but it is possible
@@ -112,7 +115,7 @@
 re2c \- convert regular expressions to C/C++
 
 .SH SYNOPSIS
-\*(re [\fB-efsbvhd\fP] [\fB-o output\fP] file\fP
+\*(re [\fB-bdefhisvVw\fP] [\fB-o output\fP] file\fP
 
 .SH DESCRIPTION
 \*(re is a preprocessor that generates C-based recognizers from regular
