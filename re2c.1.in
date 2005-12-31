@@ -7,6 +7,9 @@
 .ds rx regular expression
 .ds lx \fIl\fP-expression
 \"$Log$
+\"Revision 1.32  2005/12/31 00:54:55  helly
+\"- Update docu
+\"
 \"Revision 1.31  2005/12/31 00:02:25  helly
 \"- Fix Synopsis
 \"
@@ -357,12 +360,28 @@ appropriately.
 Please see examples/push.re for push-model scanner.
 
 .SH "SCANNER SPECIFICATIONS"
-Each scanner specification consists of a set of \fIrules\fP and name
-definitions.
-Rules consist of a regular expression along with a block of C/C++ code that
-is to be executed when the associated regular expression is matched.
-Name definitions are of the form
-``\fIname\fP \fC=\fP \fIregular expression\fP\fC;\fP''.
+Each scanner specification consists of a set of \fIrules\fP, \fIname
+definitions\fP and \fIconfigurations\fP.
+.LP
+\fIRules\fP consist of a regular expression along with a block of C/C++ code that
+is to be executed when the associated \fIregular expression\fP is matched.
+.P
+.RS
+\fIregular expression\fP \fC{\fP \fIC/C++ code\fP \fC}\fP
+.RE
+.LP
+Name definitions are of the form:
+.P
+.RS
+\fIname\fP \fC=\fP \fIregular expression\fP\fC;\fP
+.RE
+.LP
+Configurations look like name definitions whose names start 
+with "\fBre2c:\fP":
+.P
+.RS
+\fCre2c:\fP\fIname\fP \fC=\fP \fIvalue\fP\fC;\fP
+.RE
 
 .SH "SUMMARY OF RE2C REGULAR EXPRESSIONS"
 .TP
@@ -443,6 +462,14 @@ non unicode mode the only portable "\fBany\fP" rule is \fB(.|"\\n")\fP.
 The regular expressions listed above are grouped according to
 precedence, from highest precedence at the top to lowest at the bottom.
 Those grouped together have equal precedence.
+
+.SH "INPLACE CONFIGURATION"
+.LP
+It is possible to configure code generation inside re2c blocks. The following
+lists the available configurations (without "\fBre2c:\fP" prefix):
+.LP
+\fIindent\fP
+Specifies the minimum number of tabs to use for indendation.
 
 .SH "A LARGER EXAMPLE"
 .LP
