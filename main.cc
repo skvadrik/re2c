@@ -89,8 +89,7 @@ static void usage()
 	"-V     --vernum         Show version as one number.\n"
 	"\n"
 	"-w     --wide-chars     Create a parser that supports wide chars (UCS-2). This\n"
-	"                        implies -s and cannot be used together with switches \n"
-	"                        -b or -e.\n"
+	"                        implies -s and cannot be used together with -e switch.\n"
 	;
 }
 
