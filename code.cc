@@ -639,15 +639,23 @@ void doBinary(std::ostream &o, uint ind, Span *s, uint n, const State *from, con
 	else
 	{
 		uint h = n / 2;
-		genIf(o, ind, "<=", s[h - 1].ub - 1, readCh);
-		o << "{\n";
-		++oline;
-		doBinary(o, ind+1, &s[0], h, from, next, readCh, mask);
-		o << indent(ind) << "} else {\n";
-		++oline;
-		doBinary(o, ind+1, &s[h], n - h, from, next, readCh, mask);
-		o << indent(ind) << "}\n";
-		++oline;
+
+		if (!mask || (s[h - 1].ub - 1) > 0x00FF)
+		{
+			genIf(o, ind, "<=", s[h - 1].ub - 1, readCh);
+			o << "{\n";
+			++oline;
+			doBinary(o, ind+1, &s[0], h, from, next, readCh, mask);
+			o << indent(ind) << "} else {\n";
+			++oline;
+			doBinary(o, ind+1, &s[h], n - h, from, next, readCh, mask);
+			o << indent(ind) << "}\n";
+			++oline;
+		}
+		else
+		{
+			doBinary(o, ind, &s[h], n - h, from, next, readCh, mask);
+		}
 	}
 }
 
