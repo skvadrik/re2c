@@ -522,8 +522,10 @@ void Go::genLinear(std::ostream &o, uint ind, const State *from, const State *ne
 	doLinear(o, ind, span, nSpans, from, next, readCh, mask);
 }
 
-void genCases(std::ostream &o, uint ind, uint lb, Span *s, bool &newLine)
+bool genCases(std::ostream &o, uint ind, uint lb, Span *s, bool &newLine, uint mask)
 {
+	bool used = false;
+
 	if (!newLine)
 	{
 		o << "\n";
@@ -533,20 +535,26 @@ void genCases(std::ostream &o, uint ind, uint lb, Span *s, bool &newLine)
 	{
 		for (;;)
 		{
-			o << indent(ind) << "case ";
-			prtChOrHex(o, lb);
-			o << ":";
+			if (!mask || lb > 0x00FF)
+			{
+				o << indent(ind) << "case ";
+				prtChOrHex(o, lb);
+				o << ":";
+				newLine = false;
+				used = true;
+			}
 
 			if (++lb == s->ub)
 			{
-				newLine = false;
 				break;
 			}
 
 			o << "\n";
 			++oline;
+			newLine = true;
 		}
 	}
+	return used;
 }
 
 void Go::genSwitch(std::ostream &o, uint ind, const State *from, const State *next, bool &readCh, uint mask) const
@@ -591,15 +599,17 @@ void Go::genSwitch(std::ostream &o, uint ind, const State *from, const State *ne
 
 		while (t != &sP[0])
 		{
+			bool used = false;
+
 			r = s = &sP[0];
 
 			if (*s == &span[0])
 			{
-				genCases(o, ind, 0, *s, newLine);
+				used |= genCases(o, ind, 0, *s, newLine, mask);
 			}
 			else
 			{
-				genCases(o, ind, (*s)[ -1].ub, *s, newLine);
+				used |= genCases(o, ind, (*s)[ -1].ub, *s, newLine, mask);
 			}
 
 			State *to = (*s)->to;
@@ -608,7 +618,7 @@ void Go::genSwitch(std::ostream &o, uint ind, const State *from, const State *ne
 			{
 				if ((*s)->to == to)
 				{
-					genCases(o, ind, (*s)[ -1].ub, *s, newLine);
+					used |= genCases(o, ind, (*s)[ -1].ub, *s, newLine, mask);
 				}
 				else
 				{
@@ -616,8 +626,11 @@ void Go::genSwitch(std::ostream &o, uint ind, const State *from, const State *ne
 				}
 			}
 
-			genGoTo(o, newLine ? ind+1 : 1, from, to, readCh);
-			newLine = true;
+			if (used)
+			{
+				genGoTo(o, newLine ? ind+1 : 1, from, to, readCh);
+				newLine = true;
+			}
 			t = r;
 		}
 
