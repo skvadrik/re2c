@@ -28,6 +28,7 @@ public:
 	int echo(std::ostream&);
 	int scan();
 	void fatal(const char*) const;
+	void fatal(uint, const char*) const;
 	void config(const Str*, const Str *);
 	void config(const Str*, int);
 	SubStr token() const;

@@ -13,6 +13,7 @@ class SubStr
 {
 public:
 	const char * str;
+	const char * const org;
 	uint         len;
 
 public:
@@ -23,10 +24,9 @@ public:
 	SubStr(const SubStr&);
 	virtual ~SubStr();
 	void out(std::ostream&) const;
-	std::string to_string() const
-	{
-		return std::string(str, len);
-	}
+	std::string to_string() const;
+	uint ofs() const;
+
 #ifdef PEDANTIC
 protected:
 	SubStr& operator = (const SubStr& oth);
@@ -54,28 +54,38 @@ inline std::ostream& operator<<(std::ostream& o, const SubStr* s)
 }
 
 inline SubStr::SubStr(const uchar *s, uint l)
-		: str((char*) s), len(l)
+		: str((char*)s), org((char*)s), len(l)
 { }
 
 inline SubStr::SubStr(const char *s, uint l)
-		: str(s), len(l)
+		: str(s), org(s), len(l)
 { }
 
 inline SubStr::SubStr(const char *s)
-		: str(s), len(strlen(s))
+		: str(s), org(s), len(strlen(s))
 { }
 
 inline SubStr::SubStr(const SubStr &s)
-		: str(s.str), len(s.len)
+		: str(s.str), org(s.str), len(s.len)
 { }
 
 inline SubStr::~SubStr()
 { }
 
+inline std::string SubStr::to_string() const
+{
+	return std::string(str, len);
+}
+
+inline uint SubStr::ofs() const
+{
+	return str - org;
+}
+
 #ifdef PEDANTIC
 inline SubStr& SubStr::operator = (const SubStr& oth)
 {
-	str = oth.str;
+	new(this) SubStr(oth);
 	return *this;
 }
 #endif

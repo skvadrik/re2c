@@ -304,11 +304,16 @@ value:
 */
 }
 
-void Scanner::fatal(char *msg) const
+void Scanner::fatal(uint ofs, const char *msg) const
 {
-    std::cerr << "line " << tline << ", column " << (tchar + 1) << ": "
+    std::cerr << "line " << tline << ", column " << (tchar + ofs + 1) << ": "
 		<< msg << std::endl;
     exit(1);
+}
+
+void Scanner::fatal(const char *msg) const
+{
+    fatal(0, msg);
 }
 
 void Scanner::config(const Str* cfg, int num)

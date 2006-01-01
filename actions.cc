@@ -515,6 +515,9 @@ RegExp *expr(Scanner &);
 
 uint Scanner::unescape(SubStr &s) const
 {
+	static const char * hex = "0123456789abcdef";
+	static const char * oct = "01234567";
+
 	s.len--;
 	uint c;
 
@@ -537,13 +540,18 @@ uint Scanner::unescape(SubStr &s) const
 
 		case 'x':
 		{
-			static const char * hex = "0123456789abcdef";
-			const char *p1, *p2;
-
-			if (s.len < 2 || !(p1 = strchr(hex, tolower(s.str[0]))) 
-			              || !(p2 = strchr(hex, tolower(s.str[1]))))
+			if (s.len < 2)
 			{
-				fatal("Illegal hexadecimal character code");
+				fatal(s.ofs()+s.len, "Illegal hexadecimal character code, two hexadecimal digits are required");
+				return ~0;
+			}
+			
+			const char *p1 = strchr(hex, tolower(s.str[0]));
+			const char *p2 = strchr(hex, tolower(s.str[1]));
+
+			if (!p1 || !p2)
+			{
+				fatal(s.ofs()+(p1?1:0), "Illegal hexadecimal character code");
 				return ~0;
 			}
 			else
@@ -560,15 +568,20 @@ uint Scanner::unescape(SubStr &s) const
 
 		case 'X':
 		{
-			static const char * hex = "0123456789abcdef";
-			const char *p1, *p2, *p3, *p4;
-
-			if (s.len < 4 || !(p1 = strchr(hex, tolower(s.str[0]))) 
-			              || !(p2 = strchr(hex, tolower(s.str[1])))
-			              || !(p3 = strchr(hex, tolower(s.str[2])))
-			              || !(p4 = strchr(hex, tolower(s.str[3]))))
+			if (s.len < 4)
 			{
-				fatal("Illegal hexadecimal character code");
+				fatal(s.ofs()+s.len, "Illegal hexadecimal character code, four hexadecimal digits are required");
+				return ~0;
+			}
+			
+			const char *p1 = strchr(hex, tolower(s.str[0]));
+			const char *p2 = strchr(hex, tolower(s.str[1]));
+			const char *p3 = strchr(hex, tolower(s.str[2]));
+			const char *p4 = strchr(hex, tolower(s.str[3]));
+
+			if (!p1 || !p2 || !p3 || !p4)
+			{
+				fatal(s.ofs()+(p1?1:0)+(p2?1:0)+(p3?1:0), "Illegal hexadecimal character code");
 				return ~0;
 			}
 			else
@@ -583,30 +596,40 @@ uint Scanner::unescape(SubStr &s) const
 	
 				if (v >= nRealChars)
 				{
-					fatal("Illegal hexadecimal character code");
+					fatal(s.ofs(), "Illegal hexadecimal character code, out of range");
 				}
 	
 				return v;
 			}
 		}
 
-		case '0':
-		case '1':
-		case '2':
-		case '3':
 		case '4':
 		case '5':
 		case '6':
 		case '7':
 		{
-			static const char * oct = "01234567";
-			const char *p0, *p1, *p2;
+			fatal(s.ofs()-1, "Illegal octal character code, first digit must be 0 thru 3");
+			return ~0;
+		}
 
-			if (s.len < 2 || !(p0 = strchr(oct, c)) || c > '3'
-			              || !(p1 = strchr(oct, s.str[0])) 
-			              || !(p2 = strchr(oct, s.str[1])))
+		case '0':
+		case '1':
+		case '2':
+		case '3':
+		{
+			if (s.len < 2)
 			{
-				fatal("Illegal octal character code");
+				fatal(s.ofs()+s.len, "Illegal octal character code, three octal digits are required");
+				return ~0;
+			}
+
+			const char *p0 = strchr(oct, c);
+			const char *p1 = strchr(oct, s.str[0]);
+			const char *p2 = strchr(oct, s.str[1]);
+
+			if (!p0 || !p1 || !p2)
+			{
+				fatal(s.ofs()+(p1?1:0), "Illegal octal character code");
 				return ~0;
 			}
 			else
