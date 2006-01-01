@@ -1,7 +1,9 @@
 #!/bin/sh
 result=0
 errcnt=0
+tstcnt=0;
 for x in @top_srcdir@/test/*.re; do
+	tstcnt=$(($tstcnt+1))
 	echo $x
 	switches=`basename $x|sed -e 's/^.*\.\([^.]*\)\..*$/-\1/g' -e 's/^[^-].*//'g`
 	# don't use the -o flag, since it makes it harder to diff.
@@ -19,8 +21,8 @@ for x in @top_srcdir@/test/*.re; do
 	test -f ${x%.re}.diff -a ! -s $difname && rm -f $difname
 done
 if test $result = 0; then
-	echo "All tests passed successfully."
+	echo "All $tstcnt tests passed successfully."
 else
-	echo "Error: $errcnt tests failed."
+	echo "Error: $errcnt out $tstcnt tests failed."
 fi
 exit $result
