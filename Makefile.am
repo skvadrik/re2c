@@ -9,13 +9,14 @@ BUILT_SOURCES = parser.cc scanner.cc
 
 man_MANS     = re2c.1
 
-#CXXFLAGS     = -O2 -Wall -I. -Wno-unused -Wno-parentheses -Wno-deprecated
+#CXXFLAGS     = -O2 -Wall -Wno-unused -Wno-parentheses -Wno-deprecated
+#CXXFLAGS     = -O2 -Wall -Wextra -pedantic -Wconversion -Wpointer-arith -Wwrite-strings -Wredundant-decls -Werror -Wunused-function -DPEDANTIC
 YFLAGS       = -d
 
 RE2C         = re2c$(EXEEXT)
 RE2CFLAGS    = -s
 
-CLEANFILES   = parser.cc y.tab.c y.tab.h parser.cc re2c.1 .version
+CLEANFILES   = parser.cc y.tab.c y.tab.h scanner.cc re2c.1 .version
 
 DISTCLEANFILES = makerpm re2c.spec README scanner.cc re2c$(EXEEXT)
 
@@ -24,11 +25,10 @@ EXTRA_DIST   = $(man_MANS) README parser.y scanner.re makerpm.in re2c.spec.in \
                doc examples test
 
 dist-hook: re2c.spec
-	cat re2c.spec | sed -e "s/RPM_RELEASE/1/g" > $(distdir)/re2c.spec
+	cat re2c.spec | sed -e "s/RPM_RELEASE/$(PACKAGE_RELEASE)/g" > $(distdir)/re2c.spec
 	rm -rf `find $(distdir)/doc -name CVS`
 	rm -rf `find $(distdir)/examples -name CVS`
 	rm -rf `find $(distdir)/test -name CVS`
-
 
 rpm-files:	$(bin_PROGRAMS) $(EXTRA_DIST)
 
