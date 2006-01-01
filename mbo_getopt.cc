@@ -16,7 +16,7 @@
 namespace re2c
 {
 
-static int mbo_opt_error(int argc, char * const *argv, int oint, int optchr, int err, int show_err)
+static int mbo_opt_error(int, char * const *argv, int oint, int optchr, int err, int show_err)
 {
 	if (show_err)
 	{
