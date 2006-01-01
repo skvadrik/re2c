@@ -210,16 +210,16 @@ scan:
 
 	"{" [0-9]* ","		{ fatal("illegal closure form, use '{n}', '{n,}', '{n,m}' where n and m are numbers"); }
 
-	name		{ cur = cursor;
-				  yylval.symbol = Symbol::find(token());
-				  return ID; }
-
 	config		{ cur = cursor;
 				  tok+= 5; /* skip "re2c:" */
 				  iscfg = 1;
 				  yylval.str = new Str(token());
 				  return CONFIG;
 				}
+
+	name		{ cur = cursor;
+				  yylval.symbol = Symbol::find(token());
+				  return ID; }
 
 	"."			{ cur = cursor;
 				  yylval.regexp = mkDot();
