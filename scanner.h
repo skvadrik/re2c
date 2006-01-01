@@ -3,6 +3,7 @@
 #define	_scanner_h
 
 #include <iosfwd>
+#include <string>
 #include "token.h"
 #include "re.h"
 #include "globals.h"
@@ -27,14 +28,20 @@ public:
 	Scanner(std::istream&);
 	int echo(std::ostream&);
 	int scan();
+
 	void fatal(const char*) const;
 	void fatal(uint, const char*) const;
-	void config(const Str*, const Str *);
-	void config(const Str*, int);
+
+	void config(const Str&, int);
+	void config(const Str&, const Str&);
+
 	SubStr token() const;
 	uint line() const;	
 	uint xlat(uint c) const;
+
 	uint unescape(SubStr &s) const;
+	std::string& unescape(SubStr & in, std::string & out) const;
+
 	Range * getRange(SubStr &s) const;
 	RegExp * matchChar(uint c) const;
 	RegExp * strToName(SubStr s) const;

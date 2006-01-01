@@ -5,6 +5,7 @@
 #include "basics.h"
 #include <set>
 #include <algorithm>
+#include <string>
 
 namespace re2c
 {
@@ -22,6 +23,7 @@ extern bool bUsedYYAccept;
 extern unsigned int oline;
 extern uint maxFill;
 extern uint topIndent;
+extern std::string indString;
 
 extern uint asc2ebc[256];
 extern uint ebc2asc[256];

@@ -82,9 +82,10 @@ letter  = [a-zA-Z];
 digit   = [0-9];
 number  = "0" | ("-"? [1-9] digit*);
 name    = letter (letter|digit)*;
+cname   = letter (letter|digit|[:_])*;
 space   = [ \t];
 eol     = ("\r\n" | "\n");
-config  = "re2c:" name;
+config  = "re2c:" cname;
 value   = [^\r\n; \t]* | dstring | sstring;
 */
 
@@ -316,13 +317,13 @@ void Scanner::fatal(const char *msg) const
     fatal(0, msg);
 }
 
-void Scanner::config(const Str* cfg, int num)
+void Scanner::config(const Str& cfg, int num)
 {
-	if (cfg->to_string() == "indent")
+	if (cfg.to_string() == "indent:top")
 	{
 		if (num < 0)
 		{
-			fatal("configuration 'indent' must be a positive integer");
+			fatal("configuration 'indent:top' must be a positive integer");
 		}
 		topIndent = num;
 		return;
@@ -330,8 +331,22 @@ void Scanner::config(const Str* cfg, int num)
 	fatal("unrecognized configuration name or illegal integer value");
 }
 
-void Scanner::config(const Str*, const Str*)
+void Scanner::config(const Str& cfg, const Str& val)
 {
+	if (cfg.to_string() == "indent:string")
+	{
+		if (val.len >= 2 && val.str[0] == val.str[val.len-1] 
+		&& (val.str[0] == '"' || val.str[0] == '\''))
+		{
+			SubStr tmp(val.str + 1, val.len - 2);
+			unescape(tmp, indString);
+		}
+		else
+		{
+			indString = val.to_string();
+		}
+		return;
+	}
 	fatal("unrecognized configuration name or illegal string value");
 }
 

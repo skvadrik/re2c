@@ -695,6 +695,25 @@ uint Scanner::unescape(SubStr &s) const
 	}
 }
 
+std::string& Scanner::unescape(SubStr & in, std::string & out) const
+{
+	out.clear();
+
+	while(in.len)
+	{
+		uint c = unescape(in);
+		
+		if (c > 0xFF)
+		{
+			fatal(in.ofs(), "Illegal character");
+		}
+
+		out += static_cast<char>(c);
+	}
+
+	return out;
+}
+
 Range * Scanner::getRange(SubStr &s) const
 {
 	uint lb = unescape(s), ub, xlb, xub, c;

@@ -22,7 +22,7 @@ std::string indent(uint ind)
 
 	while (ind-- > 0)
 	{
-		str += "\t";
+		str += indString;
 	}
 	return str;
 }

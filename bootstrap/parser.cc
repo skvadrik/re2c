@@ -1204,12 +1204,12 @@ yyreduce:
 
   case 6:
 #line 96 "parser.y"
-    { in->config((yyvsp[-3].str), (yyvsp[-1].str)); }
+    { in->config(*(yyvsp[-3].str), *(yyvsp[-1].str)); }
     break;
 
   case 7:
 #line 98 "parser.y"
-    { in->config((yyvsp[-3].str), (yyvsp[-1].number)); }
+    { in->config(*(yyvsp[-3].str), (yyvsp[-1].number)); }
     break;
 
   case 8:

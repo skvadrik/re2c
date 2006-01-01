@@ -9,7 +9,7 @@ char *scan0(char *p)
 {
 	char *q;
 /*!re2c
-	re2c:indent = 0;
+	re2c:indent:top = 0;
 	[0-9]+		{ return YYCURSOR; }
 	[\000-\377]	{ return NULL; }
 */
@@ -19,7 +19,7 @@ char *scan1(char *p)
 {
 	char *q;
 /*!re2c
-	re2c:indent = 1;
+	re2c:indent:top = 1;
 	[0-9]+		{ return YYCURSOR; }
 	[\000-\377]	{ return NULL; }
 */

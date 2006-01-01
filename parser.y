@@ -93,9 +93,9 @@ decl	:	ID '=' expr ';'
 		      in->fatal("sym already defined");
 		  $1->re = $3; }
 	|	CONFIG '=' VALUE ';'
-		{ in->config($1, $3); }
+		{ in->config(*$1, *$3); }
 	|	CONFIG '=' NUMBER ';'
-		{ in->config($1, $3); }
+		{ in->config(*$1, $3); }
 	;
 
 rule	:	expr look CODE
