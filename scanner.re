@@ -325,7 +325,7 @@ void Scanner::config(const Str* cfg, int num)
 	fatal("unrecognized configuration name or illegal integer value");
 }
 
-void Scanner::config(const Str* cfg, const Str *value)
+void Scanner::config(const Str*, const Str*)
 {
 	fatal("unrecognized configuration name or illegal string value");
 }
