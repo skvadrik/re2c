@@ -11,7 +11,6 @@ namespace re2c
 
 class SubStr
 {
-
 public:
 	const char * str;
 	uint         len;
@@ -22,16 +21,20 @@ public:
 	SubStr(const char*, uint);
 	SubStr(const char*);
 	SubStr(const SubStr&);
+	virtual ~SubStr();
 	void out(std::ostream&) const;
 	std::string to_string() const
 	{
 		return std::string(str, len);
 	}
+#ifdef PEDANTIC
+protected:
+	SubStr& operator = (const SubStr& oth);
+#endif
 };
 
 class Str: public SubStr
 {
-
 public:
 	Str(const SubStr&);
 	Str(Str&);
@@ -65,6 +68,17 @@ inline SubStr::SubStr(const char *s)
 inline SubStr::SubStr(const SubStr &s)
 		: str(s.str), len(s.len)
 { }
+
+inline SubStr::~SubStr()
+{ }
+
+#ifdef PEDANTIC
+inline SubStr& SubStr::operator = (const SubStr& oth)
+{
+	str = oth.str;
+	return *this;
+}
+#endif
 
 } // end namespace re2c
 

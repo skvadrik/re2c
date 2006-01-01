@@ -55,7 +55,7 @@
 
 
 #if ! defined (YYSTYPE) && ! defined (YYSTYPE_IS_DECLARED)
-#line 56 "parser.y"
+#line 58 "parser.y"
 typedef union YYSTYPE {
     re2c::Symbol	*symbol;
     re2c::RegExp	*regexp;

@@ -165,10 +165,18 @@ std::ostream& operator<<(std::ostream &o, const DFA &dfa)
 	return o;
 }
 
-State::State() : rule(NULL), link(NULL), kCount(0), kernel(NULL), action(NULL)
+State::State()
+	: label(0)
+	, rule(NULL)
+	, next(0)
+	, link(NULL)
+	, depth(0)
+	, kCount(0)
+	, kernel(NULL)
+	, isBase(0)
+	, go()
+	, action(NULL)
 {
-	go.nSpans = 0;
-	go.span = NULL;
 }
 
 State::~State()
@@ -207,17 +215,18 @@ struct GoTo
 };
 
 DFA::DFA(Ins *ins, uint ni, uint lb, uint ub, Char *rep)
-		: lbChar(lb), ubChar(ub)
+	: lbChar(lb)
+	, ubChar(ub)
+	, nStates(0)
+	, head(NULL)
+	, tail(&head)
+	, toDo(NULL)
 {
 	Ins **work = new Ins * [ni + 1];
 	uint nc = ub - lb;
 	GoTo *goTo = new GoTo[nc];
 	Span *span = new Span[nc];
 	memset((char*) goTo, 0, nc*sizeof(GoTo));
-	tail = &head;
-	head = NULL;
-	nStates = 0;
-	toDo = NULL;
 	findState(work, closure(work, &ins[0]) - work);
 
 	while (toDo)

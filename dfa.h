@@ -24,10 +24,25 @@ public:
 
 public:
 	Action(State*);
+	virtual ~Action();
+
 	virtual void emit(std::ostream&, uint, bool&) const = 0;
 	virtual bool isRule() const;
 	virtual bool isMatch() const;
 	virtual bool readAhead() const;
+
+#ifdef PEDANTIC
+protected:
+	Action(const Action& oth)
+		: state(oth.state)
+	{
+	}
+	Action& operator = (const Action& oth)
+	{
+		state = oth.state;
+		return *this;
+	}
+#endif
 };
 
 class Match: public Action
@@ -81,6 +96,22 @@ public:
 public:
 	Accept(State*, uint, uint*, State**);
 	void emit(std::ostream&, uint, bool&) const;
+
+#ifdef PEDANTIC
+private:
+	Accept(const Accept& oth)
+		: Action(oth)
+		, nRules(oth.nRules)
+		, saves(oth.saves)
+		, rules(oth.rules)
+	{
+	}
+	Accept& operator=(const Accept& oth)
+	{
+		new(this) Accept(oth);
+		return *this;
+	}
+#endif
 };
 
 class Rule: public Action
@@ -93,6 +124,20 @@ public:
 	Rule(State*, RuleOp*);
 	void emit(std::ostream&, uint, bool&) const;
 	bool isRule() const;
+
+#ifdef PEDANTIC
+private:
+	Rule (const Rule& oth)
+		: Action(oth)
+		, rule(oth.rule)
+	{
+	}
+	Rule& operator=(const Rule& oth)
+	{
+		new(this) Rule(oth);
+		return *this;
+	}
+#endif
 };
 
 class Span
@@ -145,6 +190,28 @@ public:
 	void emit(std::ostream&, uint, bool&) const;
 	friend std::ostream& operator<<(std::ostream&, const State&);
 	friend std::ostream& operator<<(std::ostream&, const State*);
+
+#ifdef PEDANTIC
+private:
+	State(const State& oth)
+		: label(oth.label)
+		, rule(oth.rule)
+		, next(oth.next)
+		, link(oth.link)
+		, depth(oth.depth)
+		, kCount(oth.kCount)
+		, kernel(oth.kernel)
+		, isBase(oth.isBase)
+		, go(oth.go)
+		, action(oth.action)
+	{
+	}
+	State& operator = (const State& oth)
+	{
+		new(this) State(oth);
+		return *this;
+	}
+#endif
 };
 
 class DFA
@@ -170,11 +237,32 @@ public:
 
 	friend std::ostream& operator<<(std::ostream&, const DFA&);
 	friend std::ostream& operator<<(std::ostream&, const DFA*);
+
+#ifdef PEDANTIC
+	DFA(const DFA& oth)
+		: lbChar(oth.lbChar)
+		, ubChar(oth.ubChar)
+		, nStates(oth.nStates)
+		, head(oth.head)
+		, tail(oth.tail)
+		, toDo(oth.toDo)
+	{
+	}
+	DFA& operator = (const DFA& oth)
+	{
+		new(this) DFA(oth);
+		return *this;
+	}
+#endif
 };
 
 inline Action::Action(State *s) : state(s)
 {
 	s->action = this;
+}
+
+inline Action::~Action()
+{
 }
 
 inline bool Action::isRule() const

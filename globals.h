@@ -6,30 +6,10 @@
 #include <set>
 #include <algorithm>
 
-template<typename _Ty>
-class label_list: protected std::set<_Ty>
-{
-public:
-	label_list()
-		: std::set<_Ty>()
-	{
-	}
-	
-	void append(const _Ty &val)
-	{
-		std::set<_Ty>::insert(val);
-	}
-	
-	bool contains(const _Ty &val)
-	{
-		return find(val) != std::set<_Ty>::end();
-	}
-};
-
 namespace re2c
 {
 
-extern char *fileName;
+extern const char *fileName;
 extern char *outputFileName;
 extern bool bFlag;
 extern bool dFlag;
@@ -49,7 +29,7 @@ extern uint ebc2asc[256];
 extern uint *xlat, *talx;
 
 extern int vFillIndexes;
-extern label_list<uint> vUsedLabels;
+extern std::set<uint> vUsedLabels;
 
 extern uint nRealChars;
 

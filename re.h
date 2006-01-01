@@ -63,8 +63,13 @@ public:
 	uint	size;
 
 public:
-	virtual char *typeOf() = 0;
-	RegExp *isA(char *t)
+	RegExp() : size(0)
+	{
+	}
+
+	virtual ~RegExp() {}
+	virtual const char *typeOf() = 0;
+	RegExp *isA(const char *t)
 	{
 		return typeOf() == t ? this : NULL;
 	}
@@ -93,10 +98,10 @@ class NullOp: public RegExp
 {
 
 public:
-	static char *type;
+	static const char *type;
 
 public:
-	char *typeOf()
+	const char *typeOf()
 	{
 		return type;
 	}
@@ -115,14 +120,15 @@ class MatchOp: public RegExp
 {
 
 public:
-	static char *type;
+	static const char *type;
 	Range	*match;
 
 public:
 	MatchOp(Range *m) : match(m)
-	{ }
+	{
+	}
 
-	char *typeOf()
+	const char *typeOf()
 	{
 		return type;
 	}
@@ -132,25 +138,41 @@ public:
 	uint fixedLength();
 	void compile(Char*, Ins*);
 	void display(std::ostream&) const;
+
+#ifdef PEDANTIC
+private:
+	MatchOp(const MatchOp& oth)
+		: RegExp(oth)
+		, match(oth.match)
+	{
+	}
+	
+	MatchOp& operator = (const MatchOp& oth)
+	{
+		new(this) MatchOp(oth);
+		return *this;
+	}
+#endif
 };
 
 class RuleOp: public RegExp
 {
+public:
+	static const char *type;
 
 private:
-	RegExp	*exp;
+	RegExp   *exp;
 
 public:
-	RegExp	*ctx;
-	static char *type;
-	Ins	*ins;
-	uint	accept;
-	Token	*code;
-	uint	line;
+	RegExp   *ctx;
+	Ins      *ins;
+	uint     accept;
+	Token    *code;
+	uint     line;
 
 public:
 	RuleOp(RegExp*, RegExp*, Token*, uint);
-	char *typeOf()
+	const char *typeOf()
 	{
 		return type;
 	}
@@ -162,6 +184,25 @@ public:
 	{
 		o << exp << "/" << ctx << ";";
 	}
+
+#ifdef PEDANTIC
+private:
+	RuleOp(const RuleOp& oth)
+		: RegExp(oth)
+		, exp(oth.exp)
+		, ctx(oth.ctx)
+		, ins(oth.ins)
+		, accept(oth.accept)
+		, code(oth.code)
+		, line(oth.line)
+	{
+	}
+	RuleOp& operator = (const RuleOp& oth)
+	{
+		new(this) RuleOp(oth);
+		return *this;
+	}
+#endif
 };
 
 class AltOp: public RegExp
@@ -171,16 +212,16 @@ private:
 	RegExp	*exp1, *exp2;
 
 public:
-	static char *type;
+	static const char *type;
 
 public:
 	AltOp(RegExp *e1, RegExp *e2)
+		: exp1(e1)
+		, exp2(e2)
 	{
-		exp1 = e1;
-		exp2 = e2;
 	}
 
-	char *typeOf()
+	const char *typeOf()
 	{
 		return type;
 	}
@@ -195,6 +236,21 @@ public:
 	}
 
 	friend RegExp *mkAlt(RegExp*, RegExp*);
+
+#ifdef PEDANTIC
+private:
+	AltOp(const AltOp& oth)
+		: RegExp(oth)
+		, exp1(oth.exp1)
+		, exp2(oth.exp2)
+	{
+	}
+	AltOp& operator = (const AltOp& oth)
+	{
+		new(this) AltOp(oth);
+		return *this;
+	}
+#endif
 };
 
 class CatOp: public RegExp
@@ -204,16 +260,16 @@ private:
 	RegExp	*exp1, *exp2;
 
 public:
-	static char *type;
+	static const char *type;
 
 public:
 	CatOp(RegExp *e1, RegExp *e2)
+		: exp1(e1)
+		, exp2(e2)
 	{
-		exp1 = e1;
-		exp2 = e2;
 	}
 
-	char *typeOf()
+	const char *typeOf()
 	{
 		return type;
 	}
@@ -226,6 +282,21 @@ public:
 	{
 		o << exp1 << exp2;
 	}
+
+#ifdef PEDANTIC
+private:
+	CatOp(const CatOp& oth)
+		: RegExp(oth)
+		, exp1(oth.exp1)
+		, exp2(oth.exp2)
+	{
+	}
+	CatOp& operator = (const CatOp& oth)
+	{
+		new(this) CatOp(oth);
+		return *this;
+	}
+#endif
 };
 
 class CloseOp: public RegExp
@@ -235,15 +306,15 @@ private:
 	RegExp	*exp;
 
 public:
-	static char *type;
+	static const char *type;
 
 public:
 	CloseOp(RegExp *e)
+		: exp(e)
 	{
-		exp = e;
 	}
 
-	char *typeOf()
+	const char *typeOf()
 	{
 		return type;
 	}
@@ -255,6 +326,20 @@ public:
 	{
 		o << exp << "+";
 	}
+
+#ifdef PEDANTIC
+private:
+	CloseOp(const CloseOp& oth)
+		: RegExp(oth)
+		, exp(oth.exp)
+	{
+	}
+	CloseOp& operator = (const CloseOp& oth)
+	{
+		new(this) CloseOp(oth);
+		return *this;
+	}
+#endif
 };
 
 class CloseVOp: public RegExp
@@ -266,17 +351,17 @@ private:
 	int	max;
 
 public:
-	static char *type;
+	static const char *type;
 
 public:
 	CloseVOp(RegExp *e, int lb, int ub)
+		: exp(e)
+		, min(lb)
+		, max(ub)
 	{
-		exp = e;
-		min = lb;
-		max = ub;
 	}
 
-	char *typeOf()
+	const char *typeOf()
 	{
 		return type;
 	}
@@ -288,6 +373,21 @@ public:
 	{
 		o << exp << "+";
 	}
+#ifdef PEDANTIC
+private:
+	CloseVOp(const CloseVOp& oth)
+		: RegExp(oth)
+		, exp(oth.exp)
+		, min(oth.min)
+		, max(oth.max)
+	{
+	}
+	CloseVOp& operator = (const CloseVOp& oth)
+	{
+		new(this) CloseVOp(oth);
+		return *this;
+	}
+#endif
 };
 
 extern void genCode(std::ostream&, RegExp*);

@@ -160,7 +160,12 @@ bool matches(const Go *g1, const State *s1, const Go *g2, const State *s2)
 
 BitMap *BitMap::first = NULL;
 
-BitMap::BitMap(const Go *g, const State *x) : go(g), on(x), next(first)
+BitMap::BitMap(const Go *g, const State *x)
+	: go(g)
+	, on(x)
+	, next(first)
+	, i(0)
+	, m(0)
 {
 	first = this;
 }
@@ -262,10 +267,10 @@ void genGoTo(std::ostream &o, uint ind, const State *from, const State *to, bool
 
 	o << indent(ind) << "goto yy" << to->label << ";\n";
 	++oline;
-	vUsedLabels.append(to->label);
+	vUsedLabels.insert(to->label);
 }
 
-void genIf(std::ostream &o, uint ind, char *cmp, uint v, bool &readCh)
+void genIf(std::ostream &o, uint ind, const char *cmp, uint v, bool &readCh)
 {
 	if (readCh)
 	{
@@ -282,16 +287,20 @@ void genIf(std::ostream &o, uint ind, char *cmp, uint v, bool &readCh)
 	o << ") ";
 }
 
-static void need(std::ostream &o, uint ind, uint n, bool & readCh, uint mask)
+static void need(std::ostream &o, uint ind, uint n, bool & readCh)
 {
 	uint fillIndex;
 	bool hasFillIndex = (0<=vFillIndexes);
 
-	if ( hasFillIndex == true )
+	if (hasFillIndex)
 	{
 		fillIndex = vFillIndexes++;
 		o << indent(ind) << "YYSETSTATE(" << fillIndex << ");\n";
 		++oline;
+	}
+	else
+	{
+		fillIndex = ~0;
 	}
 
 	if (n == 1)
@@ -338,7 +347,7 @@ void Match::emit(std::ostream &o, uint ind, bool &readCh) const
 
 	if (state->link)
 	{
-		need(o, ind, state->depth, readCh, 0);
+		need(o, ind, state->depth, readCh);
 	}
 }
 
@@ -349,7 +358,7 @@ void Enter::emit(std::ostream &o, uint ind, bool &readCh) const
 		o << indent(ind) << "++YYCURSOR;\n";
 		o << "yy" << label << ":\n";
 		oline += 2;
-		need(o, ind, state->depth, readCh, 0);
+		need(o, ind, state->depth, readCh);
 	}
 	else
 	{
@@ -373,7 +382,7 @@ void Save::emit(std::ostream &o, uint ind, bool &readCh) const
 	{
 		o << indent(ind) << "YYMARKER = ++YYCURSOR;\n";
 		++oline;
-		need(o, ind, state->depth, readCh, 0);
+		need(o, ind, state->depth, readCh);
 	}
 	else
 	{
@@ -431,7 +440,7 @@ Rule::Rule(State *s, RuleOp *r) : Action(s), rule(r)
 	;
 }
 
-void Rule::emit(std::ostream &o, uint ind, bool &readCh) const
+void Rule::emit(std::ostream &o, uint ind, bool &) const
 {
 	uint back = rule->ctx->fixedLength();
 
@@ -790,7 +799,7 @@ void Go::genGoto(std::ostream &o, uint ind, const State *from, const State *next
 
 void State::emit(std::ostream &o, uint ind, bool &readCh) const
 {
-	if (vUsedLabels.contains(label))
+	if (vUsedLabels.count(label))
 	{
 		o << "yy" << label << ":\n";
 		oline++;
@@ -890,11 +899,26 @@ public:
 	SCC(uint);
 	~SCC();
 	void traverse(State*);
+
+#ifdef PEDANTIC
+private:
+	SCC(const SCC& oth)
+		: top(oth.top)
+		, stk(oth.stk)
+	{
+	}
+	SCC& operator = (const SCC& oth)
+	{
+		new(this) SCC(oth);
+		return *this;
+	}
+#endif
 };
 
 SCC::SCC(uint size)
+	: top(new State * [size])
+	, stk(top)
 {
-	top = stk = new State * [size];
 }
 
 SCC::~SCC()
@@ -983,7 +1007,7 @@ uint maxDist(State *s)
 
 			if (!t->link) // marked as non-key state
 			{
-				if (t->depth == -1)
+				if (t->depth == cInfinity)
 				{
 					t->depth = maxDist(t);
 				}
@@ -1248,7 +1272,7 @@ void DFA::emit(std::ostream &o, uint ind)
 	
 	uint start_label = label;
 
-	vUsedLabels.append(label);
+	vUsedLabels.insert(label);
 	(void) new Enter(head, label++);
 
 	for (s = head; s; s = s->next)
@@ -1258,8 +1282,8 @@ void DFA::emit(std::ostream &o, uint ind)
 
 	null_stream noWhere;
 	unsigned int nOrgOline = oline;
-	int maxFillIndexes = vFillIndexes;
-	int orgVFillIndexes = vFillIndexes;
+	uint maxFillIndexes = vFillIndexes;
+	uint orgVFillIndexes = vFillIndexes;
 
 	for (s = head; s; s = s->next)
 	{

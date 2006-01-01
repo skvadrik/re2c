@@ -18,7 +18,7 @@
 namespace re2c
 {
 
-char *fileName = 0;
+const char *fileName = 0;
 char *outputFileName = 0;
 bool bFlag = false;
 bool dFlag = false;
@@ -33,7 +33,7 @@ uint topIndent = 0;
 uint nRealChars = 256;
 
 int vFillIndexes = -1;
-label_list<uint> vUsedLabels;
+std::set<uint> vUsedLabels;
 
 using namespace std;
 
@@ -187,7 +187,8 @@ int main(int argc, char *argv[])
 	}
 
 	// set up the input stream
-	istream* input = 0;
+	//istream* input = 0;
+	basic_istream<char> *input = 0;
 
 	ifstream inputFile;
 

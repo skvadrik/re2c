@@ -26,39 +26,61 @@ public:
 	static void stats();
 	BitMap(const Go*, const State*);
 	~BitMap();
+
+#if PEDANTIC
+	BitMap(const BitMap& oth)
+		: go(oth.go)
+		, on(oth.on)
+		, next(oth.next)
+		, i(oth.i)
+		, m(oth.m)
+	{
+	}
+	BitMap& operator = (const BitMap& oth)
+	{
+		new(this) BitMap(oth);
+		return *this;
+	}
+#endif
 };
 
-class null_stream: public std::ostream
+template<class char_type>
+class basic_null_streambuf
+	: public std::basic_streambuf<char_type>
 {
 public:
-	null_stream()
-		: std::ostream(&ns)
+	basic_null_streambuf()
+		: std::basic_streambuf<char_type>()
+	{
+	}	
+};
+
+template <class char_type>
+class basic_null_stream
+	: protected basic_null_streambuf<char_type>
+	, public std::basic_ostream<char_type>
+{
+public:
+	basic_null_stream()
+		: basic_null_streambuf<char_type>()
+		, std::basic_ostream<char_type>(static_cast<basic_null_streambuf<char_type>*>(this))
 	{
 	}
 
-	null_stream& put(char_type)
+	basic_null_stream& put(char_type)
 	{
 		// nothing to do
 		return *this;
 	}
 	
-	null_stream& write(const char_type *, std::streamsize)
+	basic_null_stream& write(const char_type *, std::streamsize)
 	{
 		// nothing to do
 		return *this;
 	}
-
-protected:
-	class null_streambuf: public std::streambuf
-	{
-	public:
-		null_streambuf()
-			: std::streambuf()
-		{
-		}	
-	};
-	null_streambuf   ns;
 };
+
+typedef basic_null_stream<char> null_stream;
 
 } // end namespace re2c
 

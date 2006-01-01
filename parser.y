@@ -15,13 +15,15 @@
 #include "parser.h"
 #include "basics.h"
 
+#define YYMALLOC malloc
+#define YYFREE free
+
 using namespace re2c;
 
 extern "C"
 {
-int yyparse();
 int yylex();
-void yyerror(char*);
+void yyerror(const char*);
 }
 
 static re2c::uint accept;
@@ -170,7 +172,8 @@ primary	:	ID
 %%
 
 extern "C" {
-void yyerror(char* s){
+void yyerror(const char* s)
+{
     in->fatal(s);
 }
 

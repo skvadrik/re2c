@@ -75,7 +75,7 @@ uint RegExp::fixedLength()
 	return ~0;
 }
 
-char *NullOp::type = "NullOp";
+const char *NullOp::type = "NullOp";
 
 void NullOp::calcSize(Char*)
 {
@@ -233,7 +233,7 @@ MatchOp *merge(MatchOp *m1, MatchOp *m2)
 	return new MatchOp(doUnion(m1->match, m2->match));
 }
 
-char *MatchOp::type = "MatchOp";
+const char *MatchOp::type = "MatchOp";
 
 void MatchOp::display(std::ostream &o) const
 {
@@ -371,7 +371,7 @@ RegExp *mkAlt(RegExp *e1, RegExp *e2)
 	return doAlt(merge(m1, m2), doAlt(e1, e2));
 }
 
-char *AltOp::type = "AltOp";
+const char *AltOp::type = "AltOp";
 
 void AltOp::calcSize(Char *rep)
 {
@@ -408,7 +408,7 @@ void AltOp::split(CharSet &s)
 	exp2->split(s);
 }
 
-char *CatOp::type = "CatOp";
+const char *CatOp::type = "CatOp";
 
 void CatOp::calcSize(Char *rep)
 {
@@ -440,7 +440,7 @@ void CatOp::split(CharSet &s)
 	exp2->split(s);
 }
 
-char *CloseOp::type = "CloseOp";
+const char *CloseOp::type = "CloseOp";
 
 void CloseOp::calcSize(Char *rep)
 {
@@ -461,7 +461,7 @@ void CloseOp::split(CharSet &s)
 	exp->split(s);
 }
 
-char *CloseVOp::type = "CloseVOp";
+const char *CloseVOp::type = "CloseVOp";
 
 void CloseVOp::calcSize(Char *rep)
 {
@@ -544,14 +544,18 @@ uint Scanner::unescape(SubStr &s) const
 			              || !(p2 = strchr(hex, tolower(s.str[1]))))
 			{
 				fatal("Illegal hexadecimal character code");
+				return ~0;
 			}
-			s.len -= 2;
-			s.str += 2;
-			
-			uint v = (uint)((p1 - hex) << 4) 
-			       + (uint)((p2 - hex));
-
-			return v;
+			else
+			{
+				s.len -= 2;
+				s.str += 2;
+				
+				uint v = (uint)((p1 - hex) << 4) 
+				       + (uint)((p2 - hex));
+	
+				return v;
+			}
 		}
 
 		case 'X':
@@ -770,10 +774,15 @@ RegExp * Scanner::mkDot() const
 	return inv;
 }
 
-char *RuleOp::type = "RuleOp";
+const char *RuleOp::type = "RuleOp";
 
 RuleOp::RuleOp(RegExp *e, RegExp *c, Token *t, uint a)
-		: exp(e), ctx(c), ins(NULL), accept(a), code(t)
+	: exp(e)
+	, ctx(c)
+	, ins(NULL)
+	, accept(a)
+	, code(t)
+	, line(0)
 {
 	;
 }
@@ -801,8 +810,6 @@ void RuleOp::split(CharSet &s)
 	exp->split(s);
 	ctx->split(s);
 }
-
-extern void printSpan(std::ostream&, uint, uint);
 
 void optimize(Ins *i)
 {

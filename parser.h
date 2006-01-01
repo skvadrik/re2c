@@ -29,8 +29,8 @@ public:
 protected:
 
 	Symbol(const SubStr& str)
-		: name(str)
-		, re(NULL)
+		: re(NULL)
+		, name(str)
 	{
 	}
 
@@ -39,6 +39,19 @@ private:
 	static SymbolTable symbol_table;
 
 	Str	name;
+
+#if PEDANTIC
+	Symbol(const Symbol& oth)
+		: re(oth.re)
+		, name(oth.name)
+	{
+	}
+	Symbol& operator = (const Symbol& oth)
+	{
+		new(this) Symbol(oth);
+		return *this;
+	}
+#endif
 };
 
 void line_source(unsigned int, std::ostream&);

@@ -100,13 +100,15 @@
 #include "parser.h"
 #include "basics.h"
 
+#define YYMALLOC malloc
+#define YYFREE free
+
 using namespace re2c;
 
 extern "C"
 {
-int yyparse();
 int yylex();
-void yyerror(char*);
+void yyerror(const char*);
 }
 
 static re2c::uint accept;
@@ -155,7 +157,7 @@ static char* strdup(const char* s)
 #endif
 
 #if ! defined (YYSTYPE) && ! defined (YYSTYPE_IS_DECLARED)
-#line 56 "parser.y"
+#line 58 "parser.y"
 typedef union YYSTYPE {
     re2c::Symbol	*symbol;
     re2c::RegExp	*regexp;
@@ -166,7 +168,7 @@ typedef union YYSTYPE {
     re2c::Str   	*str;
 } YYSTYPE;
 /* Line 196 of yacc.c.  */
-#line 170 "parser.cc"
+#line 172 "parser.cc"
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1
 # define YYSTYPE_IS_TRIVIAL 1
@@ -178,7 +180,7 @@ typedef union YYSTYPE {
 
 
 /* Line 219 of yacc.c.  */
-#line 182 "parser.cc"
+#line 184 "parser.cc"
 
 #if ! defined (YYSIZE_T) && defined (__SIZE_TYPE__)
 # define YYSIZE_T __SIZE_TYPE__
@@ -405,9 +407,9 @@ static const yysigned_char yyrhs[] =
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const unsigned char yyrline[] =
 {
-       0,    82,    82,    84,    86,    89,    93,    95,    99,   104,
-     105,   109,   111,   115,   117,   124,   126,   130,   132,   146,
-     152,   154,   158,   162,   164,   166
+       0,    84,    84,    86,    88,    91,    95,    97,   101,   106,
+     107,   111,   113,   117,   119,   126,   128,   132,   134,   148,
+     154,   156,   160,   164,   166,   168
 };
 #endif
 
@@ -1183,65 +1185,65 @@ yyreduce:
   switch (yyn)
     {
         case 2:
-#line 82 "parser.y"
+#line 84 "parser.y"
     { accept = 0;
 		  spec = NULL; }
     break;
 
   case 3:
-#line 85 "parser.y"
+#line 87 "parser.y"
     { spec = spec? mkAlt(spec, (yyvsp[0].regexp)) : (yyvsp[0].regexp); }
     break;
 
   case 5:
-#line 90 "parser.y"
+#line 92 "parser.y"
     { if((yyvsp[-3].symbol)->re)
 		      in->fatal("sym already defined");
 		  (yyvsp[-3].symbol)->re = (yyvsp[-1].regexp); }
     break;
 
   case 6:
-#line 94 "parser.y"
+#line 96 "parser.y"
     { in->config((yyvsp[-3].str), (yyvsp[-1].str)); }
     break;
 
   case 7:
-#line 96 "parser.y"
+#line 98 "parser.y"
     { in->config((yyvsp[-3].str), (yyvsp[-1].number)); }
     break;
 
   case 8:
-#line 100 "parser.y"
+#line 102 "parser.y"
     { (yyval.regexp) = new RuleOp((yyvsp[-2].regexp), (yyvsp[-1].regexp), (yyvsp[0].token), accept++); }
     break;
 
   case 9:
-#line 104 "parser.y"
+#line 106 "parser.y"
     { (yyval.regexp) = new NullOp; }
     break;
 
   case 10:
-#line 106 "parser.y"
+#line 108 "parser.y"
     { (yyval.regexp) = (yyvsp[0].regexp); }
     break;
 
   case 11:
-#line 110 "parser.y"
+#line 112 "parser.y"
     { (yyval.regexp) = (yyvsp[0].regexp); }
     break;
 
   case 12:
-#line 112 "parser.y"
+#line 114 "parser.y"
     { (yyval.regexp) =  mkAlt((yyvsp[-2].regexp), (yyvsp[0].regexp)); }
     break;
 
   case 13:
-#line 116 "parser.y"
+#line 118 "parser.y"
     { (yyval.regexp) = (yyvsp[0].regexp); }
     break;
 
   case 14:
-#line 118 "parser.y"
+#line 120 "parser.y"
     { (yyval.regexp) =  mkDiff((yyvsp[-2].regexp), (yyvsp[0].regexp));
 		  if(!(yyval.regexp))
 		       in->fatal("can only difference char sets");
@@ -1249,22 +1251,22 @@ yyreduce:
     break;
 
   case 15:
-#line 125 "parser.y"
+#line 127 "parser.y"
     { (yyval.regexp) = (yyvsp[0].regexp); }
     break;
 
   case 16:
-#line 127 "parser.y"
+#line 129 "parser.y"
     { (yyval.regexp) = new CatOp((yyvsp[-1].regexp), (yyvsp[0].regexp)); }
     break;
 
   case 17:
-#line 131 "parser.y"
+#line 133 "parser.y"
     { (yyval.regexp) = (yyvsp[0].regexp); }
     break;
 
   case 18:
-#line 133 "parser.y"
+#line 135 "parser.y"
     {
 		    switch((yyvsp[0].op)){
 		    case '*':
@@ -1281,41 +1283,41 @@ yyreduce:
     break;
 
   case 19:
-#line 147 "parser.y"
+#line 149 "parser.y"
     {
 			(yyval.regexp) = new CloseVOp((yyvsp[-1].regexp), (yyvsp[0].extop).minsize, (yyvsp[0].extop).maxsize);
 		}
     break;
 
   case 20:
-#line 153 "parser.y"
+#line 155 "parser.y"
     { (yyval.op) = (yyvsp[0].op); }
     break;
 
   case 21:
-#line 155 "parser.y"
+#line 157 "parser.y"
     { (yyval.op) = ((yyvsp[-1].op) == (yyvsp[0].op)) ? (yyvsp[-1].op) : '*'; }
     break;
 
   case 22:
-#line 159 "parser.y"
+#line 161 "parser.y"
     { if(!(yyvsp[0].symbol)->re)
 		      in->fatal("can't find symbol");
 		  (yyval.regexp) = (yyvsp[0].symbol)->re; }
     break;
 
   case 23:
-#line 163 "parser.y"
-    { (yyval.regexp) = (yyvsp[0].regexp); }
-    break;
-
-  case 24:
 #line 165 "parser.y"
     { (yyval.regexp) = (yyvsp[0].regexp); }
     break;
 
-  case 25:
+  case 24:
 #line 167 "parser.y"
+    { (yyval.regexp) = (yyvsp[0].regexp); }
+    break;
+
+  case 25:
+#line 169 "parser.y"
     { (yyval.regexp) = (yyvsp[-1].regexp); }
     break;
 
@@ -1324,7 +1326,7 @@ yyreduce:
     }
 
 /* Line 1126 of yacc.c.  */
-#line 1328 "parser.cc"
+#line 1330 "parser.cc"
 
   yyvsp -= yylen;
   yyssp -= yylen;
@@ -1592,11 +1594,12 @@ yyreturn:
 }
 
 
-#line 170 "parser.y"
+#line 172 "parser.y"
 
 
 extern "C" {
-void yyerror(char* s){
+void yyerror(const char* s)
+{
     in->fatal(s);
 }
 
