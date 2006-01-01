@@ -566,11 +566,52 @@ uint Scanner::unescape(SubStr &s) const
 			}
 		}
 
+		case 'U':
+		{
+			if (s.len < 8)
+			{
+				fatal(s.ofs()+s.len, "Illegal unicode character, eight hexadecimal digits are required");
+				return ~0;
+			}
+
+			uint l = 0;
+						
+			if (s.str[0] == '0')
+			{
+				l++;
+				if (s.str[1] == '0')
+				{
+					l++;
+					if (s.str[2] == '0')
+					{
+						l++;
+						if (s.str[3] == '0')
+						{
+							l++;
+						}
+					}
+				}
+			}
+
+			if (l != 4)
+			{
+				fatal(s.ofs()+l, "Illegal unicode character, eight hexadecimal digits are required");
+			}
+
+			s.len -= 4;
+			s.str += 4;
+			
+			// no break;
+		}
 		case 'X':
+		case 'u':
 		{
 			if (s.len < 4)
 			{
-				fatal(s.ofs()+s.len, "Illegal hexadecimal character code, four hexadecimal digits are required");
+				fatal(s.ofs()+s.len, 
+					c == 'X'
+					? "Illegal hexadecimal character code, four hexadecimal digits are required"
+					: "Illegal unicode character, four hexadecimal digits are required");
 				return ~0;
 			}
 			
@@ -581,7 +622,10 @@ uint Scanner::unescape(SubStr &s) const
 
 			if (!p1 || !p2 || !p3 || !p4)
 			{
-				fatal(s.ofs()+(p1?1:0)+(p2?1:0)+(p3?1:0), "Illegal hexadecimal character code");
+				fatal(s.ofs()+(p1?1:0)+(p2?1:0)+(p3?1:0), 
+					c == 'X'
+					? "Illegal hexadecimal character code, non hexxdecimal digit found"
+					: "Illegal unicode character, non hexadecimal digit found");
 				return ~0;
 			}
 			else
@@ -596,7 +640,10 @@ uint Scanner::unescape(SubStr &s) const
 	
 				if (v >= nRealChars)
 				{
-					fatal(s.ofs(), "Illegal hexadecimal character code, out of range");
+					fatal(s.ofs(),
+						c == 'X'
+						? "Illegal hexadecimal character code, out of range"
+						: "Illegal unicode character, out of range");
 				}
 	
 				return v;
@@ -629,7 +676,7 @@ uint Scanner::unescape(SubStr &s) const
 
 			if (!p0 || !p1 || !p2)
 			{
-				fatal(s.ofs()+(p1?1:0), "Illegal octal character code");
+				fatal(s.ofs()+(p1?1:0), "Illegal octal character code, non octal digit found");
 				return ~0;
 			}
 			else

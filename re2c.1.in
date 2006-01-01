@@ -7,6 +7,9 @@
 .ds rx regular expression
 .ds lx \fIl\fP-expression
 \"$Log$
+\"Revision 1.33  2006/01/01 17:13:56  helly
+\"- Added support for c/c++ compatible \u and \U unicode notation.
+\"
 \"Revision 1.32  2005/12/31 00:54:55  helly
 \"- Update docu
 \"
@@ -454,10 +457,15 @@ Character classes and string literals may contain octoal or hexadecimal
 character definitions and the following set of escape sequences (\fB\\n\fP,
  \fB\\t\fP, \fB\\v\fP, \fB\\b\fP, \fB\\r\fP, \fB\\f\fP, \fB\\a\fP, \fB\\\\\fP).
 An octal character is defined by a backslash followed by its three octal digits
-and a hexadecimal character is defined by backslash, a lower cased 'x' and its
-two hexadecimal digits or a backslash, an upper cased 'X' and its four 
-hexadecimal digits. Since characters greater \fB0X00FF\fP are not allowed in 
-non unicode mode the only portable "\fBany\fP" rule is \fB(.|"\\n")\fP.
+and a hexadecimal character is defined by backslash, a lower cased '\fBx\fP' 
+and its two hexadecimal digits or a backslash, an upper cased \fBX\fP and its 
+four hexadecimal digits. Since characters greater \fB\\X00FF\fP are not allowed 
+in non unicode mode, the only portable "\fBany\fP" rule is \fB(.|"\\n")\fP. re2c
+further more supports the c/c++ unicode notation. That is a backslash followed
+by either a lowercased \fBu\fP and its four hexadecimal digits or an uppercased 
+\fBU\fP and its eight hexadecimal digits. However using the U notation it is 
+not possible to support characters greater \fB\\U0000FFFF\fP due to an internal 
+limitation of re2c.
 .LP
 The regular expressions listed above are grouped according to
 precedence, from highest precedence at the top to lowest at the bottom.

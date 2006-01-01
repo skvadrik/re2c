@@ -1,5 +1,6 @@
 Version 0.10.0 (????-??-??)
 ---------------------------
+- Added support for c/c++ compatible \u and \U unicode notation.
 - Added ability to control indendation.
 - Made scanner error out in case an ambiguous /* is found.
 - Fixed indendation of generated code.
