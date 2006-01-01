@@ -44,41 +44,49 @@ public:
 #endif
 };
 
-template<class char_type>
+template<class char_t>
 class basic_null_streambuf
-	: public std::basic_streambuf<char_type>
+	: public std::basic_streambuf<char_t>
 {
 public:
 	basic_null_streambuf()
-		: std::basic_streambuf<char_type>()
+		: std::basic_streambuf<char_t>()
 	{
 	}	
 };
 
-template <class char_type>
+#ifdef _MSC_VER
+# pragma warning(disable: 4355) /* 'this' : used in base member initializer list */
+#endif
+
+template<class char_t>
 class basic_null_stream
-	: protected basic_null_streambuf<char_type>
-	, public std::basic_ostream<char_type>
+	: protected basic_null_streambuf<char_t>
+	, public std::basic_ostream<char_t>
 {
 public:
 	basic_null_stream()
-		: basic_null_streambuf<char_type>()
-		, std::basic_ostream<char_type>(static_cast<basic_null_streambuf<char_type>*>(this))
+		: basic_null_streambuf<char_t>()
+		, std::basic_ostream<char_t>(static_cast<basic_null_streambuf<char_t>*>(this))
 	{
 	}
 
-	basic_null_stream& put(char_type)
+	basic_null_stream& put(char_t)
 	{
 		// nothing to do
 		return *this;
 	}
 	
-	basic_null_stream& write(const char_type *, std::streamsize)
+	basic_null_stream& write(const char_t *, std::streamsize)
 	{
 		// nothing to do
 		return *this;
 	}
 };
+
+#ifdef _MSC_VER
+# pragma warning(default: 4355)
+#endif
 
 typedef basic_null_stream<char> null_stream;
 
