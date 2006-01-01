@@ -569,21 +569,25 @@ uint Scanner::unescape(SubStr &s) const
 			              || !(p4 = strchr(hex, tolower(s.str[3]))))
 			{
 				fatal("Illegal hexadecimal character code");
+				return ~0;
 			}
-			s.len -= 4;
-			s.str += 4;
-			
-			uint v = (uint)((p1 - hex) << 12) 
-			       + (uint)((p2 - hex) <<  8)
-			       + (uint)((p3 - hex) <<  4)
-			       + (uint)((p4 - hex));
-
-			if (v >= nRealChars)
+			else
 			{
-				fatal("Illegal hexadecimal character code");
+				s.len -= 4;
+				s.str += 4;
+				
+				uint v = (uint)((p1 - hex) << 12) 
+				       + (uint)((p2 - hex) <<  8)
+				       + (uint)((p3 - hex) <<  4)
+				       + (uint)((p4 - hex));
+	
+				if (v >= nRealChars)
+				{
+					fatal("Illegal hexadecimal character code");
+				}
+	
+				return v;
 			}
-
-			return v;
 		}
 
 		case '0':
@@ -603,13 +607,17 @@ uint Scanner::unescape(SubStr &s) const
 			              || !(p2 = strchr(oct, s.str[1])))
 			{
 				fatal("Illegal octal character code");
+				return ~0;
 			}
-			s.len -= 2;
-			s.str += 2;
-			
-			uint v = (uint)((p0 - oct) << 6) + (uint)((p1 - oct) << 3) + (uint)(p2 - oct);
-
-			return v;
+			else
+			{
+				s.len -= 2;
+				s.str += 2;
+				
+				uint v = (uint)((p0 - oct) << 6) + (uint)((p1 - oct) << 3) + (uint)(p2 - oct);
+	
+				return v;
+			}
 		}
 
 		default:
