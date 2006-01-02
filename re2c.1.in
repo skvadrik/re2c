@@ -7,6 +7,9 @@
 .ds rx regular expression
 .ds lx \fIl\fP-expression
 \"$Log$
+\"Revision 1.36  2006/01/02 16:00:59  helly
+\"- Update docu
+\"
 \"Revision 1.35  2006/01/02 11:19:31  helly
 \"- Add configuration to generate yybm in hexadecimal (much better for manual
 \"  verification)
@@ -467,13 +470,17 @@ character definitions and the following set of escape sequences (\fB\\n\fP,
 An octal character is defined by a backslash followed by its three octal digits
 and a hexadecimal character is defined by backslash, a lower cased '\fBx\fP' 
 and its two hexadecimal digits or a backslash, an upper cased \fBX\fP and its 
-four hexadecimal digits. Since characters greater \fB\\X00FF\fP are not allowed 
-in non unicode mode, the only portable "\fBany\fP" rule is \fB(.|"\\n")\fP. re2c
+four hexadecimal digits.
+.LP
+re2c
 further more supports the c/c++ unicode notation. That is a backslash followed
 by either a lowercased \fBu\fP and its four hexadecimal digits or an uppercased 
 \fBU\fP and its eight hexadecimal digits. However using the U notation it is 
 not possible to support characters greater \fB\\U0000FFFF\fP due to an internal 
 limitation of re2c.
+.LP
+Since characters greater \fB\\X00FF\fP are not allowed in non unicode mode, the 
+only portable "\fBany\fP" rules are \fB(.|"\\n")\fP and \fB[^]\fP.
 .LP
 The regular expressions listed above are grouped according to
 precedence, from highest precedence at the top to lowest at the bottom.
@@ -484,15 +491,19 @@ Those grouped together have equal precedence.
 It is possible to configure code generation inside re2c blocks. The following
 lists the available configurations:
 .TP
-\fIre2c:indent:top\fP
-Specifies the minimum number of indendation to use (default is 0).
+\fIre2c:indent:top\fP \fB=\fP 0 \fB;\fP
+Specifies the minimum number of indendation to use. Requires a numeric value 
+greater than or equal zero.
 .TP
-\fIre2c:indent:string\fP
-Specifies the string to use for indendation (default is "\\t").
+\fIre2c:indent:string\fP \fB=\fP "\\t" \fB;\fP
+Specifies the string to use for indendation. Requires a string that should 
+contain only whitespace unless you need this for external tools. The easiest 
+way to specify spaces is to enclude them in single or double quotes. If you do 
+not want any indendation at all you can simply set this to \fB""\fP.
 .TP
-\fIre2c:yybm:hex\fP
-If set to zero then a  decimal table is being used else a hexadecimal table 
-will be generated (default is 0).
+\fIre2c:yybm:hex\fP \fB=\fP 0 \fB;\fP
+If set to zero then a decimal table is being used else a hexadecimal table 
+will be generated.
 
 .SH "A LARGER EXAMPLE"
 .LP
