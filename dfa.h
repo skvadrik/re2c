@@ -8,8 +8,9 @@
 namespace re2c
 {
 
-extern void prtCh(std::ostream&, uint);
-extern void prtChOrHex(std::ostream&, uint);
+extern void prtCh(std::ostream&, uint, bool useTalx = true);
+extern void prtHex(std::ostream&, uint, bool useTalx = true);
+extern void prtChOrHex(std::ostream&, uint, bool useTalx = true);
 extern void printSpan(std::ostream&, uint, uint);
 
 class DFA;

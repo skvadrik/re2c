@@ -22,8 +22,11 @@ extern bool wFlag;
 extern bool bUsedYYAccept;
 extern unsigned int oline;
 extern uint maxFill;
+
+/* configurations */
 extern uint topIndent;
 extern std::string indString;
+extern bool yybmHexTable;
 
 extern uint asc2ebc[256];
 extern uint ebc2asc[256];

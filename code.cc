@@ -232,7 +232,15 @@ void BitMap::gen(std::ostream &o, uint ind, uint lb, uint ub)
 					++oline;
 				}
 
-				o << std::setw(3) << (uint) bm[j] << ", ";
+				if (yybmHexTable)
+				{
+					prtHex(o, bm[j], false);
+				}
+				else
+				{
+					o << std::setw(3) << (uint)bm[j];
+				}
+				o  << ", ";
 			}
 		}
 
@@ -781,7 +789,16 @@ void Go::genGoto(std::ostream &o, uint ind, const State *from, const State *next
 						sYych = "yych";
 						o << indent(ind);
 					}
-					o << "if(yybm[" << b->i << "+" << sYych << "] & " << (uint) b->m << ") {\n";
+					o << "if(yybm[" << b->i << "+" << sYych << "] & ";
+					if (yybmHexTable)
+					{
+						prtHex(o, b->m, false);
+					}
+					else
+					{
+						o << (uint) b->m;
+					}
+					o << ") {\n";
 					oline++;
 					genGoTo(o, ind+1, from, to, readCh);
 					o << indent(ind) << "}\n";
