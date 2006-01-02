@@ -82,10 +82,10 @@ letter  = [a-zA-Z];
 digit   = [0-9];
 number  = "0" | ("-"? [1-9] digit*);
 name    = letter (letter|digit)*;
-cname   = letter (letter|digit|[:_])*;
+cname   = ":" letter (letter|digit|"_")*;
 space   = [ \t];
 eol     = ("\r\n" | "\n");
-config  = "re2c:" cname;
+config  = "re2c" cname+;
 value   = [^\r\n; \t]* | dstring | sstring;
 */
 
