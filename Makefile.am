@@ -25,7 +25,6 @@ EXTRA_DIST   = $(man_MANS) README parser.y scanner.re makerpm.in re2c.spec.in \
                doc examples test
 
 dist-hook: re2c.spec
-	cat re2c.spec | sed -e "s/RPM_RELEASE/$(PACKAGE_RELEASE)/g" > $(distdir)/re2c.spec
 	rm -rf `find $(distdir)/doc -name CVS`
 	rm -rf `find $(distdir)/examples -name CVS`
 	rm -rf `find $(distdir)/test -name CVS`
