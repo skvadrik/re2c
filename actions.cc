@@ -960,7 +960,6 @@ void genCode(std::ostream& o, uint ind, RegExp *re)
 {
 	CharSet *cs = new CharSet();
 	uint j;
-	memset(cs, 0, sizeof(CharSet));
 
 	for (j = 0; j < nRealChars; ++j)
 	{
@@ -969,18 +968,18 @@ void genCode(std::ostream& o, uint ind, RegExp *re)
 	}
 
 	cs->freeHead = &cs->ptn[1];
-	*(cs->freeTail = &cs->ptn[nChars - 1].nxt) = NULL;
-	cs->ptn[0].card = nChars;
+	*(cs->freeTail = &cs->ptn[nRealChars - 1].nxt) = NULL;
+	cs->ptn[0].card = nRealChars;
 	cs->ptn[0].nxt = NULL;
 	re->split(*cs);
 	/*
 	    for(uint k = 0; k < nChars;){
-		for(j = k; ++k < nChars && cs->rep[k] == cs->rep[j];);
+		for(j = k; ++k < nRealChars && cs->rep[k] == cs->rep[j];);
 		printSpan(cerr, j, k);
 		cerr << "\t" << cs->rep[j] - &cs->ptn[0] << endl;
 	    }
 	*/
-	Char rep[nChars];
+	Char *rep = new Char[nRealChars];
 
 	for (j = 0; j < nRealChars; ++j)
 	{
@@ -1018,6 +1017,7 @@ void genCode(std::ostream& o, uint ind, RegExp *re)
 	dfa->emit(o, ind);
 	delete dfa;
 	delete [] ins;
+	delete [] rep;
 	delete cs;
 }
 

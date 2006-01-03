@@ -7,7 +7,6 @@
 namespace re2c
 {
 
-const uint nChars = (1<<16);
 typedef unsigned short Char;
 
 const uint CHAR = 0;
