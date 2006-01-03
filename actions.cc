@@ -966,7 +966,7 @@ CharSet::CharSet()
 	for (uint j = 0; j < nRealChars; ++j)
 	{
 		rep[j] = &ptn[0];
-		ptn[j].nxt = &ptn[j + 1];
+		ptn[j].nxt = &ptn[j + 1]; /* wrong for j=nRealChars but will be corrected below */
 	}
 
 	freeHead = &ptn[1];
