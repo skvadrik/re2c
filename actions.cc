@@ -956,37 +956,52 @@ void genCode(std::ostream& o, RegExp *re)
 	genCode(o, 0, re);
 }
 
-void genCode(std::ostream& o, uint ind, RegExp *re)
+CharSet::CharSet()
+	: fix(0)
+	, freeHead(0)
+	, freeTail(0)
+	, rep(new CharPtr[nRealChars])
+	, ptn(new CharPtn[nRealChars])
 {
-	CharSet *cs = new CharSet();
-	uint j;
-
-	for (j = 0; j < nRealChars; ++j)
+	for (uint j = 0; j < nRealChars; ++j)
 	{
-		cs->rep[j] = &cs->ptn[0];
-		cs->ptn[j].nxt = &cs->ptn[j + 1];
+		rep[j] = &ptn[0];
+		ptn[j].nxt = &ptn[j + 1];
 	}
 
-	cs->freeHead = &cs->ptn[1];
-	*(cs->freeTail = &cs->ptn[nRealChars - 1].nxt) = NULL;
-	cs->ptn[0].card = nRealChars;
-	cs->ptn[0].nxt = NULL;
-	re->split(*cs);
+	freeHead = &ptn[1];
+	*(freeTail = &ptn[nRealChars - 1].nxt) = NULL;
+	ptn[0].card = nRealChars;
+	ptn[0].nxt = NULL;
+}
+	
+CharSet::~CharSet()
+{
+	delete[] rep;
+	delete[] ptn;
+}
+
+void genCode(std::ostream& o, uint ind, RegExp *re)
+{
+	CharSet cs;
+	uint j;
+
+	re->split(cs);
 	/*
 	    for(uint k = 0; k < nChars;){
-		for(j = k; ++k < nRealChars && cs->rep[k] == cs->rep[j];);
+		for(j = k; ++k < nRealChars && cs.rep[k] == cs.rep[j];);
 		printSpan(cerr, j, k);
-		cerr << "\t" << cs->rep[j] - &cs->ptn[0] << endl;
+		cerr << "\t" << cs.rep[j] - &cs.ptn[0] << endl;
 	    }
 	*/
 	Char *rep = new Char[nRealChars];
 
 	for (j = 0; j < nRealChars; ++j)
 	{
-		if (!cs->rep[j]->nxt)
-			cs->rep[j]->nxt = &cs->ptn[j];
+		if (!cs.rep[j]->nxt)
+			cs.rep[j]->nxt = &cs.ptn[j];
 
-		rep[j] = (Char) (cs->rep[j]->nxt - &cs->ptn[0]);
+		rep[j] = (Char) (cs.rep[j]->nxt - &cs.ptn[0]);
 	}
 
 	re->calcSize(rep);
@@ -1018,7 +1033,6 @@ void genCode(std::ostream& o, uint ind, RegExp *re)
 	delete dfa;
 	delete [] ins;
 	delete [] rep;
-	delete cs;
 }
 
 } // end namespace re2c

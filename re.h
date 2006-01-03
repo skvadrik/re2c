@@ -30,20 +30,8 @@ typedef CharPtn *CharPtr;
 
 struct CharSet
 {
-	CharSet()
-		: fix(0)
-		, freeHead(0)
-		, freeTail(0)
-		, rep(new CharPtr[nRealChars])
-		, ptn(new CharPtn[nRealChars])
-	{
-	}
-	
-	~CharSet()
-	{
-		delete[] rep;
-		delete[] ptn;
-	}
+	CharSet();
+	~CharSet();
 
 	CharPtn	*fix;
 	CharPtn	*freeHead, **freeTail;
