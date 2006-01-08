@@ -60,7 +60,7 @@ char *Scanner::fill(char *cursor)
 			delete [] bot;
 			bot = buf;
 		}
-		if((cnt = in.rdbuf()->sgetn((char*) lim, BSIZE)) != BSIZE)
+		if((cnt = in.readsome((char*) lim, BSIZE)) != BSIZE)
 		{
 			eof = &lim[cnt]; *eof++ = '\0';
 		}
