@@ -19,7 +19,7 @@ namespace re2c
 {
 
 const char *fileName = 0;
-char *outputFileName = 0;
+const char *outputFileName = 0;
 bool bFlag = false;
 bool dFlag = false;
 bool eFlag = false;
@@ -153,11 +153,24 @@ int main(int argc, char *argv[])
 			return 2;
 
 			case 'V': {
-				int v1, v2, v3;
-				char version[16];
-				sscanf(PACKAGE_VERSION, "%d.%d.%d", &v1, &v2, &v3);
-				sprintf(version, "%02d%02d%02d", v1, v2, v3);
-				cout << version << "\n";
+				string vernum(PACKAGE_VERSION);
+
+				if (vernum[1] == '.')
+				{
+					vernum.insert(0, "0");
+				}
+				vernum.erase(2, 1);
+				if (vernum[3] == '.')
+				{
+					vernum.insert(2, "0");
+				}
+				vernum.erase(4, 1);
+				if (vernum.length() < 6 || vernum[5] < '0' || vernum[5] > '9')
+				{
+					vernum.insert(4, "0");
+				}
+				vernum.resize(6);
+				cout << vernum << endl;
 				return 2;
 			}
 			
@@ -221,7 +234,7 @@ int main(int argc, char *argv[])
 
 	if (outputFileName == 0 || (fileName[0] == '-' && fileName[1] == '\0'))
 	{
-		outputFileName = strdup("<stdout>");
+		outputFileName = "<stdout>";
 		output = &cout;
 	}
 	else
@@ -237,9 +250,10 @@ int main(int argc, char *argv[])
 		output = &outputFile;
 		
 		int len = strlen(outputFileName);
-		char *src, *dst, *tmp = (char*)malloc((len+1)*2);
+		char *tmp = (char*)malloc((len+1)*2);
+		char *dst = tmp;
 
-		for (src = outputFileName, dst = tmp; *src; ++src)
+		for (const char *src = outputFileName; *src; ++src)
 		{
 			if (*src == '\\')
 			{
@@ -253,7 +267,6 @@ int main(int argc, char *argv[])
 	}
 
 	parse(*input, *output);
-	free(outputFileName);
 	return 0;
 
 }

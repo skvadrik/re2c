@@ -11,7 +11,7 @@ namespace re2c
 {
 
 extern const char *fileName;
-extern char *outputFileName;
+extern const char *outputFileName;
 extern bool bFlag;
 extern bool dFlag;
 extern bool eFlag;
