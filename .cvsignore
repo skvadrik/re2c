@@ -42,3 +42,7 @@ Release
 Debug
 re2c.ncb
 re2c.suo
+Debug-2005
+Release-2005
+*.suo
+*.ncb
