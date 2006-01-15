@@ -578,7 +578,7 @@ void Go::genSwitch(std::ostream &o, uint ind, const State *from, const State *ne
 {
 	bool newLine = true;
 
-	if (nSpans <= 2)
+	if ((mask ? wSpans : nSpans) <= 2)
 	{
 		genLinear(o, ind, from, next, readCh, mask);
 	}
@@ -670,33 +670,45 @@ void doBinary(std::ostream &o, uint ind, Span *s, uint n, const State *from, con
 	{
 		uint h = n / 2;
 
-		if (!mask || (s[h - 1].ub - 1) > 0x00FF)
-		{
-			genIf(o, ind, "<=", s[h - 1].ub - 1, readCh);
-			o << "{\n";
-			++oline;
-			doBinary(o, ind+1, &s[0], h, from, next, readCh, mask);
-			o << indent(ind) << "} else {\n";
-			++oline;
-			doBinary(o, ind+1, &s[h], n - h, from, next, readCh, mask);
-			o << indent(ind) << "}\n";
-			++oline;
-		}
-		else
-		{
-			doBinary(o, ind, &s[h], n - h, from, next, readCh, mask);
-		}
+		genIf(o, ind, "<=", s[h - 1].ub - 1, readCh);
+		o << "{\n";
+		++oline;
+		doBinary(o, ind+1, &s[0], h, from, next, readCh, mask);
+		o << indent(ind) << "} else {\n";
+		++oline;
+		doBinary(o, ind+1, &s[h], n - h, from, next, readCh, mask);
+		o << indent(ind) << "}\n";
+		++oline;
 	}
 }
 
 void Go::genBinary(std::ostream &o, uint ind, const State *from, const State *next, bool &readCh, uint mask) const
 {
-	doBinary(o, ind, span, nSpans, from, next, readCh, mask);
+	if (mask)
+	{
+		Span * sc = new Span[wSpans];
+		
+		for (uint i = 0, j = 0; i < nSpans; i++)
+		{
+			if (span[i].ub > 0xFF)
+			{
+				sc[j++] = span[i];
+			}
+		}
+
+		doBinary(o, ind, sc, wSpans, from, next, readCh, mask);
+
+		delete[] sc;
+	}
+	else
+	{
+		doBinary(o, ind, span, nSpans, from, next, readCh, mask);
+	}
 }
 
 void Go::genBase(std::ostream &o, uint ind, const State *from, const State *next, bool &readCh, uint mask) const
 {
-	if (nSpans == 0)
+	if ((mask ? wSpans : nSpans) == 0)
 	{
 		return ;
 	}
@@ -707,7 +719,7 @@ void Go::genBase(std::ostream &o, uint ind, const State *from, const State *next
 		return ;
 	}
 
-	if (nSpans > 8)
+	if ((mask ? wSpans : nSpans) > 8)
 	{
 		Span *bot = &span[0], *top = &span[nSpans - 1];
 		uint util;
@@ -735,7 +747,7 @@ void Go::genBase(std::ostream &o, uint ind, const State *from, const State *next
 		}
 	}
 
-	if (nSpans > 5)
+	if ((mask ? wSpans : nSpans) > 5)
 	{
 		genBinary(o, ind, from, next, readCh, mask);
 	}
@@ -749,6 +761,18 @@ void Go::genGoto(std::ostream &o, uint ind, const State *from, const State *next
 {
 	if (bFlag)
 	{
+		if (wSpans == ~0u && wFlag)
+		{
+			wSpans = 0;
+			for (uint p = 0; p < nSpans; p++)
+			{
+				if (span[p].ub > 0xFF)
+				{
+					wSpans++;
+				}
+			}
+		}
+
 		for (uint i = 0; i < nSpans; ++i)
 		{
 			State *to = span[i].to;
@@ -1233,6 +1257,7 @@ void DFA::emit(std::ostream &o, uint ind)
 		}
 
 		for (i = 0; i < s->go.nSpans; ++i)
+		{
 			if (!s->go.span[i].to)
 			{
 				if (!ow)
@@ -1244,6 +1269,7 @@ void DFA::emit(std::ostream &o, uint ind)
 
 				s->go.span[i].to = ow;
 			}
+		}
 	}
 
 	// split ``base'' states into two parts

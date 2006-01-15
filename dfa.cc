@@ -130,7 +130,7 @@ void printSpan(std::ostream &o, uint lb, uint ub)
 	o << "]";
 }
 
-uint Span::show(std::ostream &o, uint lb)
+uint Span::show(std::ostream &o, uint lb) const
 {
 	if (to)
 	{

@@ -149,14 +149,22 @@ public:
 	State	*to;
 
 public:
-	uint show(std::ostream&, uint);
+	uint show(std::ostream&, uint) const;
 };
 
 class Go
 {
+public:
+	Go()
+		: nSpans(0)
+		, wSpans(~0u)
+		, span(NULL)
+	{
+	}
 
 public:
 	uint	nSpans;
+	uint    wSpans;
 	Span	*span;
 
 public:
