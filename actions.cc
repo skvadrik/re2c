@@ -967,6 +967,7 @@ CharSet::CharSet()
 	{
 		rep[j] = &ptn[0];
 		ptn[j].nxt = &ptn[j + 1]; /* wrong for j=nRealChars but will be corrected below */
+		ptn[j].card = 0;
 	}
 
 	freeHead = &ptn[1];
