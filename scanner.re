@@ -60,7 +60,8 @@ char *Scanner::fill(char *cursor)
 			delete [] bot;
 			bot = buf;
 		}
-		if((cnt = in.readsome((char*) lim, BSIZE)) != BSIZE)
+		in.read(lim, BSIZE);
+		if ((cnt = in.gcount()) != BSIZE )
 		{
 			eof = &lim[cnt]; *eof++ = '\0';
 		}
