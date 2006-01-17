@@ -132,16 +132,13 @@ yy14:
 	}
 yy15:
 	++YYCURSOR;
-	goto yy16;
-yy16:
 #line 48 "cvsignore.re"
 	{ APPEND(L"$" L"Date$"); goto loop; }
-#line 140 "<stdout>"
+#line 138 "<stdout>"
 yy17:
 	++YYCURSOR;
 	if(YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
-	goto yy18;
 yy18:
 	switch(yych){
 	case 0x0A:	goto yy6;
@@ -163,16 +160,13 @@ yy20:
 	}
 yy21:
 	++YYCURSOR;
-	goto yy22;
-yy22:
 #line 49 "cvsignore.re"
 	{ APPEND(L"$" L"Id$"); goto loop; }
-#line 171 "<stdout>"
+#line 166 "<stdout>"
 yy23:
 	++YYCURSOR;
 	if(YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
-	goto yy24;
 yy24:
 	switch(yych){
 	case 0x0A:	goto yy6;
@@ -200,16 +194,13 @@ yy27:
 	}
 yy28:
 	++YYCURSOR;
-	goto yy29;
-yy29:
 #line 50 "cvsignore.re"
 	{ APPEND(L"$" L"Log$"); goto loop; }
-#line 208 "<stdout>"
+#line 200 "<stdout>"
 yy30:
 	++YYCURSOR;
 	if(YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
-	goto yy31;
 yy31:
 	switch(yych){
 	case 0x0A:	goto yy6;
@@ -267,16 +258,13 @@ yy39:
 	}
 yy40:
 	++YYCURSOR;
-	goto yy41;
-yy41:
 #line 51 "cvsignore.re"
 	{ APPEND(L"$" L"Revision$"); goto loop; }
-#line 275 "<stdout>"
+#line 264 "<stdout>"
 yy42:
 	++YYCURSOR;
 	if(YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
-	goto yy43;
 yy43:
 	switch(yych){
 	case 0x0A:	goto yy6;
@@ -322,16 +310,13 @@ yy49:
 	}
 yy50:
 	++YYCURSOR;
-	goto yy51;
-yy51:
 #line 52 "cvsignore.re"
 	{ APPEND(L"$" L"Source$"); goto loop; }
-#line 330 "<stdout>"
+#line 316 "<stdout>"
 yy52:
 	++YYCURSOR;
 	if(YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
-	goto yy53;
 yy53:
 	switch(yych){
 	case 0x0A:	goto yy6;

@@ -40,16 +40,13 @@ yy3:
 #line 41 "<stdout>"
 yy4:
 	++YYCURSOR;
-	goto yy5;
-yy5:
 #line 11 "simple.re"
 	{return NULL;}
-#line 48 "<stdout>"
+#line 46 "<stdout>"
 yy6:
 	++YYCURSOR;
 	if(YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
-	goto yy7;
 yy7:
 	switch(yych){
 	case '0':

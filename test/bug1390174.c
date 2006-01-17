@@ -45,11 +45,10 @@ yy3:
 #line 44 "<stdout>"
 yy4:
 	++YYCURSOR;
-	goto yy5;
 yy5:
 #line 18 "bug1390174.re"
 	{RET(1);}
-#line 51 "<stdout>"
+#line 50 "<stdout>"
 yy6:
 	yych = *++YYCURSOR;
 	goto yy3;
@@ -60,8 +59,6 @@ yy8:
 	++YYCURSOR;
 	if(YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
-	goto yy9;
-yy9:
 	switch(yych){
 	case 0x0A:	goto yy7;
 	case 'A':

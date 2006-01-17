@@ -101,15 +101,13 @@ yy5:
 #line 102 "<stdout>"
 yy6:
 	++YYCURSOR;
-	goto yy7;
-yy7:
 #line 66 "bug1297658.re"
 	{
 		s.line++;
 		if(1||s.cur == s.eof) RET(EOI);
 		goto std;
 	}
-#line 113 "<stdout>"
+#line 111 "<stdout>"
 yy8:
 	yych = *++YYCURSOR;
 	goto yy3;
@@ -133,8 +131,6 @@ yy12:
 	++YYCURSOR;
 	if((YYLIMIT - YYCURSOR) < 3) YYFILL(3);
 	yych = *YYCURSOR;
-	goto yy13;
-yy13:
 	switch(yych){
 	case '.':	goto yy11;
 	case '0':	goto yy12;

@@ -96,11 +96,9 @@ yy3:
 #line 95 "<stdout>"
 yy4:
 	++YYCURSOR;
-	goto yy5;
-yy5:
 #line 24 "bug1054496.re"
 	{ RET(TAG_EOI); }
-#line 102 "<stdout>"
+#line 100 "<stdout>"
 yy6:
 	yych = *++YYCURSOR;
 	goto yy3;
@@ -164,13 +162,11 @@ yy7:
 yy8:
 #line 22 "bug1054496.re"
 	{ RET(TAG_A); }
-#line 165 "<stdout>"
+#line 163 "<stdout>"
 yy9:
 	++YYCURSOR;
 	if(YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
-	goto yy10;
-yy10:
 	switch(yych){
 	case 'A':
 	case 'B':
@@ -229,7 +225,7 @@ yy10:
 yy11:
 #line 23 "bug1054496.re"
 	{ RET(TAG_TAG); }
-#line 229 "<stdout>"
+#line 225 "<stdout>"
 }
 #line 26 "bug1054496.re"
 

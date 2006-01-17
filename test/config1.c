@@ -42,16 +42,13 @@ yy3:
 #line 43 "<stdout>"
 yy4:
 	++YYCURSOR;
-	goto yy5;
-yy5:
 #line 14 "config1.re"
 	{ return NULL; }
-#line 50 "<stdout>"
+#line 48 "<stdout>"
 yy6:
 	++YYCURSOR;
 	if(YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
-	goto yy7;
 yy7:
 	switch(yych){
 	case '0':
@@ -75,7 +72,7 @@ char *scan1(char *p)
 {
 	char *q;
 
-#line 79 "<stdout>"
+#line 76 "<stdout>"
 	{
 		YYCTYPE yych;
 		goto yy8;
@@ -103,19 +100,16 @@ yy10:
 yy11:
 #line 23 "config1.re"
 		{ return YYCURSOR; }
-#line 107 "<stdout>"
+#line 104 "<stdout>"
 yy12:
 		++YYCURSOR;
-		goto yy13;
-yy13:
 #line 24 "config1.re"
 		{ return NULL; }
-#line 114 "<stdout>"
+#line 109 "<stdout>"
 yy14:
 		++YYCURSOR;
 		if(YYLIMIT == YYCURSOR) YYFILL(1);
 		yych = *YYCURSOR;
-		goto yy15;
 yy15:
 		switch(yych){
 		case '0':
@@ -139,7 +133,7 @@ char *scan(char *p)
 {
 	char *q;
 
-#line 143 "<stdout>"
+#line 137 "<stdout>"
 	{
 		YYCTYPE yych;
 		goto yy16;
@@ -167,19 +161,16 @@ yy18:
 yy19:
 #line 32 "config1.re"
 		{ return YYCURSOR; }
-#line 171 "<stdout>"
+#line 165 "<stdout>"
 yy20:
 		++YYCURSOR;
-		goto yy21;
-yy21:
 #line 33 "config1.re"
 		{ return NULL; }
-#line 178 "<stdout>"
+#line 170 "<stdout>"
 yy22:
 		++YYCURSOR;
 		if(YYLIMIT == YYCURSOR) YYFILL(1);
 		yych = *YYCURSOR;
-		goto yy23;
 yy23:
 		switch(yych){
 		case '0':

@@ -514,81 +514,59 @@ yy50:
 #line 504 "<stdout>"
 yy51:
 	++YYCURSOR;
-	goto yy52;
-yy52:
 #line 188 "cmmap.re"
 	{ RET(';'); }
-#line 511 "<stdout>"
+#line 509 "<stdout>"
 yy53:
 	++YYCURSOR;
-	goto yy54;
-yy54:
 #line 189 "cmmap.re"
 	{ RET('{'); }
-#line 518 "<stdout>"
+#line 514 "<stdout>"
 yy55:
 	++YYCURSOR;
-	goto yy56;
-yy56:
 #line 190 "cmmap.re"
 	{ RET('}'); }
-#line 525 "<stdout>"
+#line 519 "<stdout>"
 yy57:
 	++YYCURSOR;
-	goto yy58;
-yy58:
 #line 191 "cmmap.re"
 	{ RET(','); }
-#line 532 "<stdout>"
+#line 524 "<stdout>"
 yy59:
 	++YYCURSOR;
-	goto yy60;
-yy60:
 #line 192 "cmmap.re"
 	{ RET(':'); }
-#line 539 "<stdout>"
+#line 529 "<stdout>"
 yy61:
 	++YYCURSOR;
-	goto yy62;
-yy62:
 #line 194 "cmmap.re"
 	{ RET('('); }
-#line 546 "<stdout>"
+#line 534 "<stdout>"
 yy63:
 	++YYCURSOR;
-	goto yy64;
-yy64:
 #line 195 "cmmap.re"
 	{ RET(')'); }
-#line 553 "<stdout>"
+#line 539 "<stdout>"
 yy65:
 	++YYCURSOR;
-	goto yy66;
-yy66:
 #line 196 "cmmap.re"
 	{ RET('['); }
-#line 560 "<stdout>"
+#line 544 "<stdout>"
 yy67:
 	++YYCURSOR;
-	goto yy68;
-yy68:
 #line 197 "cmmap.re"
 	{ RET(']'); }
-#line 567 "<stdout>"
+#line 549 "<stdout>"
 yy69:
 	++YYCURSOR;
-	goto yy70;
-yy70:
 #line 201 "cmmap.re"
 	{ RET('~'); }
-#line 574 "<stdout>"
+#line 554 "<stdout>"
 yy71:
 	++YYCURSOR;
-	goto yy72;
-yy72:
 #line 211 "cmmap.re"
 	{ RET('?'); }
-#line 581 "<stdout>"
+#line 559 "<stdout>"
 yy73:
 	++YYCURSOR;
 	yych = *YYCURSOR;
@@ -596,18 +574,16 @@ yy73:
 yy74:
 #line 214 "cmmap.re"
 	{ goto std; }
-#line 589 "<stdout>"
+#line 567 "<stdout>"
 yy75:
 	++YYCURSOR;
-	goto yy76;
-yy76:
 #line 217 "cmmap.re"
 	{
 		if(cursor == s->eof) RET(EOI);
 		s->pos = cursor; s->line++;
 		goto std;
 	    }
-#line 600 "<stdout>"
+#line 576 "<stdout>"
 yy77:
 	yych = *++YYCURSOR;
 	goto yy25;
@@ -615,7 +591,6 @@ yy78:
 	++YYCURSOR;
 	if(YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
-	goto yy79;
 yy79:
 	switch(yych){
 	case 0x09:
@@ -626,109 +601,79 @@ yy79:
 	}
 yy80:
 	++YYCURSOR;
-	goto yy81;
-yy81:
 #line 187 "cmmap.re"
 	{ RET(NEQ); }
-#line 621 "<stdout>"
+#line 594 "<stdout>"
 yy82:
 	++YYCURSOR;
-	goto yy83;
-yy83:
 #line 186 "cmmap.re"
 	{ RET(EQL); }
-#line 628 "<stdout>"
+#line 599 "<stdout>"
 yy84:
 	++YYCURSOR;
-	goto yy85;
-yy85:
 #line 183 "cmmap.re"
 	{ RET(OROR); }
-#line 635 "<stdout>"
+#line 604 "<stdout>"
 yy86:
 	++YYCURSOR;
-	goto yy87;
-yy87:
 #line 176 "cmmap.re"
 	{ RET(OREQ); }
-#line 642 "<stdout>"
+#line 609 "<stdout>"
 yy88:
 	++YYCURSOR;
-	goto yy89;
-yy89:
 #line 175 "cmmap.re"
 	{ RET(XOREQ); }
-#line 649 "<stdout>"
+#line 614 "<stdout>"
 yy90:
 	++YYCURSOR;
-	goto yy91;
-yy91:
 #line 182 "cmmap.re"
 	{ RET(ANDAND); }
-#line 656 "<stdout>"
+#line 619 "<stdout>"
 yy92:
 	++YYCURSOR;
-	goto yy93;
-yy93:
 #line 174 "cmmap.re"
 	{ RET(ANDEQ); }
-#line 663 "<stdout>"
+#line 624 "<stdout>"
 yy94:
 	++YYCURSOR;
-	goto yy95;
-yy95:
 #line 173 "cmmap.re"
 	{ RET(MODEQ); }
-#line 670 "<stdout>"
+#line 629 "<stdout>"
 yy96:
 	++YYCURSOR;
-	goto yy97;
-yy97:
 #line 171 "cmmap.re"
 	{ RET(MULEQ); }
-#line 677 "<stdout>"
+#line 634 "<stdout>"
 yy98:
 	++YYCURSOR;
-	goto yy99;
-yy99:
 #line 181 "cmmap.re"
 	{ RET(DEREF); }
-#line 684 "<stdout>"
+#line 639 "<stdout>"
 yy100:
 	++YYCURSOR;
-	goto yy101;
-yy101:
 #line 180 "cmmap.re"
 	{ RET(DECR); }
-#line 691 "<stdout>"
+#line 644 "<stdout>"
 yy102:
 	++YYCURSOR;
-	goto yy103;
-yy103:
 #line 170 "cmmap.re"
 	{ RET(SUBEQ); }
-#line 698 "<stdout>"
+#line 649 "<stdout>"
 yy104:
 	++YYCURSOR;
-	goto yy105;
-yy105:
 #line 179 "cmmap.re"
 	{ RET(INCR); }
-#line 705 "<stdout>"
+#line 654 "<stdout>"
 yy106:
 	++YYCURSOR;
-	goto yy107;
-yy107:
 #line 169 "cmmap.re"
 	{ RET(ADDEQ); }
-#line 712 "<stdout>"
+#line 659 "<stdout>"
 yy108:
 	++YYCURSOR;
-	goto yy109;
-yy109:
 #line 184 "cmmap.re"
 	{ RET(LEQ); }
-#line 719 "<stdout>"
+#line 664 "<stdout>"
 yy110:
 	++YYCURSOR;
 	switch((yych = *YYCURSOR)) {
@@ -738,21 +683,17 @@ yy110:
 yy111:
 #line 178 "cmmap.re"
 	{ RET(LSHIFT); }
-#line 729 "<stdout>"
+#line 674 "<stdout>"
 yy112:
 	++YYCURSOR;
-	goto yy113;
-yy113:
 #line 168 "cmmap.re"
 	{ RET(LSHIFTEQ); }
-#line 736 "<stdout>"
+#line 679 "<stdout>"
 yy114:
 	++YYCURSOR;
-	goto yy115;
-yy115:
 #line 185 "cmmap.re"
 	{ RET(GEQ); }
-#line 743 "<stdout>"
+#line 684 "<stdout>"
 yy116:
 	++YYCURSOR;
 	switch((yych = *YYCURSOR)) {
@@ -762,19 +703,16 @@ yy116:
 yy117:
 #line 177 "cmmap.re"
 	{ RET(RSHIFT); }
-#line 753 "<stdout>"
+#line 694 "<stdout>"
 yy118:
 	++YYCURSOR;
-	goto yy119;
-yy119:
 #line 167 "cmmap.re"
 	{ RET(RSHIFTEQ); }
-#line 760 "<stdout>"
+#line 699 "<stdout>"
 yy120:
 	++YYCURSOR;
 	if(YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
-	goto yy121;
 yy121:
 	switch(yych){
 	case 0x0A:	goto yy122;
@@ -819,11 +757,9 @@ yy123:
 	}
 yy124:
 	++YYCURSOR;
-	goto yy125;
-yy125:
 #line 164 "cmmap.re"
 	{ RET(SCON); }
-#line 805 "<stdout>"
+#line 741 "<stdout>"
 yy126:
 	++YYCURSOR;
 	if(YYLIMIT == YYCURSOR) YYFILL(1);
@@ -857,8 +793,6 @@ yy127:
 	++YYCURSOR;
 	if(YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
-	goto yy128;
-yy128:
 	switch(yych){
 	case 0x0A:	goto yy122;
 	case '"':	goto yy124;
@@ -877,8 +811,6 @@ yy129:
 	++YYCURSOR;
 	if(YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
-	goto yy130;
-yy130:
 	switch(yych){
 	case 0x0A:	goto yy122;
 	case '"':	goto yy124;
@@ -918,8 +850,6 @@ yy132:
 	YYMARKER = ++YYCURSOR;
 	if((YYLIMIT - YYCURSOR) < 3) YYFILL(3);
 	yych = *YYCURSOR;
-	goto yy133;
-yy133:
 	switch(yych){
 	case '0':
 	case '1':
@@ -942,7 +872,7 @@ yy133:
 yy134:
 #line 161 "cmmap.re"
 	{ RET(FCON); }
-#line 916 "<stdout>"
+#line 846 "<stdout>"
 yy135:
 	yych = *++YYCURSOR;
 	switch(yych){
@@ -982,8 +912,6 @@ yy138:
 	++YYCURSOR;
 	if(YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
-	goto yy139;
-yy139:
 	switch(yych){
 	case '0':
 	case '1':
@@ -1003,16 +931,13 @@ yy139:
 	}
 yy140:
 	++YYCURSOR;
-	goto yy141;
-yy141:
 #line 166 "cmmap.re"
 	{ RET(ELLIPSIS); }
-#line 977 "<stdout>"
+#line 903 "<stdout>"
 yy142:
 	++YYCURSOR;
 	if(YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
-	goto yy143;
 yy143:
 	switch(yych){
 	case 0x0A:	goto yy122;
@@ -1083,8 +1008,6 @@ yy147:
 	++YYCURSOR;
 	if(YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
-	goto yy148;
-yy148:
 	switch(yych){
 	case 0x0A:	goto yy122;
 	case '\'':	goto yy145;
@@ -1103,8 +1026,6 @@ yy149:
 	++YYCURSOR;
 	if(YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
-	goto yy150;
-yy150:
 	switch(yych){
 	case 0x0A:	goto yy122;
 	case '\'':	goto yy145;
@@ -1146,7 +1067,6 @@ yy152:
 	YYMARKER = ++YYCURSOR;
 	if((YYLIMIT - YYCURSOR) < 4) YYFILL(4);
 	yych = *YYCURSOR;
-	goto yy153;
 yy153:
 	switch(yych){
 	case '.':	goto yy151;
@@ -1189,8 +1109,6 @@ yy155:
 	++YYCURSOR;
 	if(YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
-	goto yy156;
-yy156:
 	switch(yych){
 	case 'L':
 	case 'U':
@@ -1217,8 +1135,6 @@ yy158:
 	++YYCURSOR;
 	if(YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
-	goto yy159;
-yy159:
 	switch(yych){
 	case '0':
 	case '1':
@@ -1241,7 +1157,6 @@ yy160:
 	YYMARKER = ++YYCURSOR;
 	if((YYLIMIT - YYCURSOR) < 3) YYFILL(3);
 	yych = *YYCURSOR;
-	goto yy161;
 yy161:
 	switch(yych){
 	case '0':
@@ -1298,8 +1213,6 @@ yy164:
 	++YYCURSOR;
 	if(YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
-	goto yy165;
-yy165:
 	switch(yych){
 	case '0':
 	case '1':
@@ -1353,8 +1266,6 @@ yy168:
 	++YYCURSOR;
 	if(YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
-	goto yy169;
-yy169:
 	switch(yych){
 	case '0':
 	case '1':
@@ -1377,7 +1288,6 @@ yy170:
 	YYMARKER = ++YYCURSOR;
 	if((YYLIMIT - YYCURSOR) < 4) YYFILL(4);
 	yych = *YYCURSOR;
-	goto yy171;
 yy171:
 	switch(yych){
 	case '.':	goto yy151;
@@ -1430,8 +1340,6 @@ yy173:
 	++YYCURSOR;
 	if(YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
-	goto yy174;
-yy174:
 	switch(yych){
 	case '0':
 	case '1':
@@ -1465,8 +1373,6 @@ yy175:
 	++YYCURSOR;
 	if(YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
-	goto yy176;
-yy176:
 	switch(yych){
 	case 'L':
 	case 'U':
@@ -1478,8 +1384,6 @@ yy177:
 	++YYCURSOR;
 	if(YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
-	goto yy178;
-yy178:
 	switch(yych){
 	case 'L':
 	case 'U':
@@ -1491,7 +1395,6 @@ yy179:
 	++YYCURSOR;
 	if(YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
-	goto yy180;
 yy180:
 	switch(yych){
 	case '0':
@@ -1648,7 +1551,7 @@ yy184:
 yy185:
 #line 152 "cmmap.re"
 	{ RET(WHILE); }
-#line 1558 "<stdout>"
+#line 1461 "<stdout>"
 yy186:
 	yych = *++YYCURSOR;
 	switch(yych){
@@ -1763,7 +1666,7 @@ yy193:
 yy194:
 #line 151 "cmmap.re"
 	{ RET(VOLATILE); }
-#line 1670 "<stdout>"
+#line 1573 "<stdout>"
 yy195:
 	++YYCURSOR;
 	switch((yych = *YYCURSOR)) {
@@ -1835,7 +1738,7 @@ yy195:
 yy196:
 #line 150 "cmmap.re"
 	{ RET(VOID); }
-#line 1739 "<stdout>"
+#line 1642 "<stdout>"
 yy197:
 	yych = *++YYCURSOR;
 	switch(yych){
@@ -1950,7 +1853,7 @@ yy204:
 yy205:
 #line 149 "cmmap.re"
 	{ RET(UNSIGNED); }
-#line 1851 "<stdout>"
+#line 1754 "<stdout>"
 yy206:
 	yych = *++YYCURSOR;
 	switch(yych){
@@ -2028,7 +1931,7 @@ yy207:
 yy208:
 #line 148 "cmmap.re"
 	{ RET(UNION); }
-#line 1926 "<stdout>"
+#line 1829 "<stdout>"
 yy209:
 	yych = *++YYCURSOR;
 	switch(yych){
@@ -2130,7 +2033,7 @@ yy214:
 yy215:
 #line 147 "cmmap.re"
 	{ RET(TYPEDEF); }
-#line 2025 "<stdout>"
+#line 1928 "<stdout>"
 yy216:
 	yych = *++YYCURSOR;
 	switch(yych){
@@ -2246,7 +2149,7 @@ yy223:
 yy224:
 #line 146 "cmmap.re"
 	{ RET(SWITCH); }
-#line 2138 "<stdout>"
+#line 2041 "<stdout>"
 yy225:
 	yych = *++YYCURSOR;
 	switch(yych){
@@ -2342,7 +2245,7 @@ yy229:
 yy230:
 #line 145 "cmmap.re"
 	{ RET(STRUCT); }
-#line 2231 "<stdout>"
+#line 2134 "<stdout>"
 yy231:
 	yych = *++YYCURSOR;
 	switch(yych){
@@ -2426,7 +2329,7 @@ yy233:
 yy234:
 #line 144 "cmmap.re"
 	{ RET(STATIC); }
-#line 2312 "<stdout>"
+#line 2215 "<stdout>"
 yy235:
 	yych = *++YYCURSOR;
 	switch(yych){
@@ -2522,7 +2425,7 @@ yy239:
 yy240:
 #line 143 "cmmap.re"
 	{ RET(SIZEOF); }
-#line 2405 "<stdout>"
+#line 2308 "<stdout>"
 yy241:
 	yych = *++YYCURSOR;
 	switch(yych){
@@ -2606,7 +2509,7 @@ yy243:
 yy244:
 #line 142 "cmmap.re"
 	{ RET(SIGNED); }
-#line 2486 "<stdout>"
+#line 2389 "<stdout>"
 yy245:
 	yych = *++YYCURSOR;
 	switch(yych){
@@ -2690,7 +2593,7 @@ yy247:
 yy248:
 #line 141 "cmmap.re"
 	{ RET(SHORT); }
-#line 2567 "<stdout>"
+#line 2470 "<stdout>"
 yy249:
 	yych = *++YYCURSOR;
 	switch(yych){
@@ -2793,7 +2696,7 @@ yy254:
 yy255:
 #line 140 "cmmap.re"
 	{ RET(RETURN); }
-#line 2667 "<stdout>"
+#line 2570 "<stdout>"
 yy256:
 	yych = *++YYCURSOR;
 	switch(yych){
@@ -2889,7 +2792,7 @@ yy260:
 yy261:
 #line 139 "cmmap.re"
 	{ RET(REGISTER); }
-#line 2760 "<stdout>"
+#line 2663 "<stdout>"
 yy262:
 	yych = *++YYCURSOR;
 	switch(yych){
@@ -2973,7 +2876,7 @@ yy264:
 yy265:
 #line 138 "cmmap.re"
 	{ RET(LONG); }
-#line 2841 "<stdout>"
+#line 2744 "<stdout>"
 yy266:
 	++YYCURSOR;
 	switch((yych = *YYCURSOR)) {
@@ -3045,7 +2948,7 @@ yy266:
 yy267:
 #line 136 "cmmap.re"
 	{ RET(IF); }
-#line 2910 "<stdout>"
+#line 2813 "<stdout>"
 yy268:
 	yych = *++YYCURSOR;
 	switch(yych){
@@ -3123,7 +3026,7 @@ yy269:
 yy270:
 #line 137 "cmmap.re"
 	{ RET(INT); }
-#line 2985 "<stdout>"
+#line 2888 "<stdout>"
 yy271:
 	yych = *++YYCURSOR;
 	switch(yych){
@@ -3207,7 +3110,7 @@ yy273:
 yy274:
 #line 135 "cmmap.re"
 	{ RET(GOTO); }
-#line 3066 "<stdout>"
+#line 2969 "<stdout>"
 yy275:
 	yych = *++YYCURSOR;
 	switch(yych){
@@ -3291,7 +3194,7 @@ yy277:
 yy278:
 #line 134 "cmmap.re"
 	{ RET(FOR); }
-#line 3147 "<stdout>"
+#line 3050 "<stdout>"
 yy279:
 	yych = *++YYCURSOR;
 	switch(yych){
@@ -3375,7 +3278,7 @@ yy281:
 yy282:
 #line 133 "cmmap.re"
 	{ RET(FLOAT); }
-#line 3228 "<stdout>"
+#line 3131 "<stdout>"
 yy283:
 	yych = *++YYCURSOR;
 	switch(yych){
@@ -3483,7 +3386,7 @@ yy289:
 yy290:
 #line 132 "cmmap.re"
 	{ RET(EXTERN); }
-#line 3333 "<stdout>"
+#line 3236 "<stdout>"
 yy291:
 	yych = *++YYCURSOR;
 	switch(yych){
@@ -3561,7 +3464,7 @@ yy292:
 yy293:
 #line 131 "cmmap.re"
 	{ RET(ENUM); }
-#line 3408 "<stdout>"
+#line 3311 "<stdout>"
 yy294:
 	yych = *++YYCURSOR;
 	switch(yych){
@@ -3639,7 +3542,7 @@ yy295:
 yy296:
 #line 130 "cmmap.re"
 	{ RET(ELSE); }
-#line 3483 "<stdout>"
+#line 3386 "<stdout>"
 yy297:
 	yych = *++YYCURSOR;
 	switch(yych){
@@ -3717,7 +3620,7 @@ yy298:
 yy299:
 #line 128 "cmmap.re"
 	{ RET(DO); }
-#line 3557 "<stdout>"
+#line 3460 "<stdout>"
 yy300:
 	yych = *++YYCURSOR;
 	switch(yych){
@@ -3807,7 +3710,7 @@ yy303:
 yy304:
 #line 129 "cmmap.re"
 	{ RET(DOUBLE); }
-#line 3644 "<stdout>"
+#line 3547 "<stdout>"
 yy305:
 	yych = *++YYCURSOR;
 	switch(yych){
@@ -3903,7 +3806,7 @@ yy309:
 yy310:
 #line 127 "cmmap.re"
 	{ RET(DEFAULT); }
-#line 3737 "<stdout>"
+#line 3640 "<stdout>"
 yy311:
 	yych = *++YYCURSOR;
 	switch(yych){
@@ -4030,7 +3933,7 @@ yy320:
 yy321:
 #line 126 "cmmap.re"
 	{ RET(CONTINUE); }
-#line 3861 "<stdout>"
+#line 3764 "<stdout>"
 yy322:
 	++YYCURSOR;
 	switch((yych = *YYCURSOR)) {
@@ -4102,7 +4005,7 @@ yy322:
 yy323:
 #line 125 "cmmap.re"
 	{ RET(CONST); }
-#line 3930 "<stdout>"
+#line 3833 "<stdout>"
 yy324:
 	yych = *++YYCURSOR;
 	switch(yych){
@@ -4180,7 +4083,7 @@ yy325:
 yy326:
 #line 124 "cmmap.re"
 	{ RET(CHAR); }
-#line 4005 "<stdout>"
+#line 3908 "<stdout>"
 yy327:
 	yych = *++YYCURSOR;
 	switch(yych){
@@ -4258,7 +4161,7 @@ yy328:
 yy329:
 #line 123 "cmmap.re"
 	{ RET(CASE); }
-#line 4080 "<stdout>"
+#line 3983 "<stdout>"
 yy330:
 	yych = *++YYCURSOR;
 	switch(yych){
@@ -4348,7 +4251,7 @@ yy333:
 yy334:
 #line 122 "cmmap.re"
 	{ RET(BREAK); }
-#line 4167 "<stdout>"
+#line 4070 "<stdout>"
 yy335:
 	yych = *++YYCURSOR;
 	switch(yych){
@@ -4432,28 +4335,24 @@ yy337:
 yy338:
 #line 121 "cmmap.re"
 	{ RET(AUTO); }
-#line 4248 "<stdout>"
+#line 4151 "<stdout>"
 yy339:
 	++YYCURSOR;
-	goto yy340;
-yy340:
 #line 172 "cmmap.re"
 	{ RET(DIVEQ); }
-#line 4255 "<stdout>"
+#line 4156 "<stdout>"
 yy341:
 	++YYCURSOR;
-	goto yy342;
-yy342:
 #line 119 "cmmap.re"
 	{ goto comment; }
-#line 4262 "<stdout>"
+#line 4161 "<stdout>"
 }
 #line 228 "cmmap.re"
 
 
 comment:
 
-#line 4269 "<stdout>"
+#line 4168 "<stdout>"
 {
 	YYCTYPE yych;
 	goto yy343;
@@ -4475,28 +4374,24 @@ yy345:
 yy346:
 #line 239 "cmmap.re"
 	{ goto comment; }
-#line 4291 "<stdout>"
+#line 4190 "<stdout>"
 yy347:
 	++YYCURSOR;
-	goto yy348;
-yy348:
 #line 234 "cmmap.re"
 	{
 		if(cursor == s->eof) RET(EOI);
 		s->tok = s->pos = cursor; s->line++;
 		goto comment;
 	    }
-#line 4302 "<stdout>"
+#line 4199 "<stdout>"
 yy349:
 	yych = *++YYCURSOR;
 	goto yy346;
 yy350:
 	++YYCURSOR;
-	goto yy351;
-yy351:
 #line 232 "cmmap.re"
 	{ goto std; }
-#line 4312 "<stdout>"
+#line 4207 "<stdout>"
 }
 #line 240 "cmmap.re"
 

@@ -28,11 +28,9 @@ yy3:
 #line 29 "<stdout>"
 yy4:
 	++YYCURSOR;
-	goto yy5;
-yy5:
 #line 7 "input8.re"
 	{ return 2; }
-#line 36 "<stdout>"
+#line 34 "<stdout>"
 yy6:
 	yyaccept = 1;
 	yych = *(YYMARKER = ++YYCURSOR);
@@ -44,7 +42,7 @@ yy6:
 yy7:
 #line 5 "input8.re"
 	{ return 0; }
-#line 48 "<stdout>"
+#line 46 "<stdout>"
 yy8:
 	yych = *++YYCURSOR;
 	switch(yych){
@@ -65,7 +63,6 @@ yy10:
 yy11:
 	yych = *++YYCURSOR;
 	if(yych >= 0x01) goto yy9;
-	goto yy12;
 yy12:
 	++YYCURSOR;
 	yych = *YYCURSOR;

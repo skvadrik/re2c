@@ -304,8 +304,6 @@ yy5:
 	++YYCURSOR;
 	if(YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
-	goto yy6;
-yy6:
 	switch(yych){
 	case 0x00:
 	case 0x01:
@@ -571,11 +569,9 @@ yy7:
 	}
 yy8:
 	++YYCURSOR;
-	goto yy9;
-yy9:
 #line 22 "bug1187785.re"
 	{ RET(1); }
-#line 577 "<stdout>"
+#line 573 "<stdout>"
 }
 #line 24 "bug1187785.re"
 

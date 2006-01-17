@@ -27,18 +27,14 @@ yy0:
 	}
 yy2:
 	++YYCURSOR;
-	goto yy3;
-yy3:
 #line 8 "input10.re"
 	{ return 1; }
-#line 33 "<stdout>"
+#line 31 "<stdout>"
 yy4:
 	++YYCURSOR;
-	goto yy5;
-yy5:
 #line 10 "input10.re"
 	{ return -1; }
-#line 40 "<stdout>"
+#line 36 "<stdout>"
 }
 #line 12 "input10.re"
 

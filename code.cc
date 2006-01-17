@@ -486,7 +486,10 @@ void doLinear(std::ostream &o, uint ind, Span *s, uint n, const State *from, con
 					genIf(o, ind, "!=", s[0].ub, readCh);
 					genGoTo(o, 0, from, bg, readCh);
 				}
-				genGoTo(o, ind, from, next, readCh);
+				if (next->label != from->label + 1)
+				{
+					genGoTo(o, ind, from, next, readCh);
+				}
 				return ;
 			}
 			else
@@ -505,7 +508,10 @@ void doLinear(std::ostream &o, uint ind, Span *s, uint n, const State *from, con
 		if (n == 1)
 		{
 			//	    	if(bg != next){
-			genGoTo(o, ind, from, s[0].to, readCh);
+			if (s[0].to->label != from->label + 1)
+			{
+				genGoTo(o, ind, from, s[0].to, readCh);
+			}
 			//	    	}
 			return ;
 		}
@@ -516,7 +522,10 @@ void doLinear(std::ostream &o, uint ind, Span *s, uint n, const State *from, con
 				genIf(o, ind, ">=", s[0].ub, readCh);
 				genGoTo(o, 0, from, s[1].to, readCh);
 			}
-			genGoTo(o, ind, from, next, readCh);
+			if (next->label != from->label + 1)
+			{
+				genGoTo(o, ind, from, next, readCh);
+			}
 			return ;
 		}
 		else
@@ -531,7 +540,10 @@ void doLinear(std::ostream &o, uint ind, Span *s, uint n, const State *from, con
 		}
 	}
 
-	genGoTo(o, ind, from, next, readCh);
+	if (next->label != from->label + 1)
+	{
+		genGoTo(o, ind, from, next, readCh);
+	}
 }
 
 void Go::genLinear(std::ostream &o, uint ind, const State *from, const State *next, bool &readCh, uint mask) const

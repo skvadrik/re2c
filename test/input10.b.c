@@ -13,27 +13,21 @@ yy0:
 		if(yych <= 'E') {
 			if(yych <= '@') goto yy4;
 			if(yych >= 'E') goto yy4;
-			goto yy2;
 		} else {
 			if(yych <= 'G') goto yy2;
 			if(yych <= '`') goto yy4;
 			if(yych >= 'h') goto yy4;
-			goto yy2;
 		}
 yy2:
 		++YYCURSOR;
-		goto yy3;
-yy3:
 #line 8 "input10.b.re"
 		{ return 1; }
-#line 30 "<stdout>"
+#line 26 "<stdout>"
 yy4:
 		++YYCURSOR;
-		goto yy5;
-yy5:
 #line 10 "input10.b.re"
 		{ return -1; }
-#line 37 "<stdout>"
+#line 31 "<stdout>"
 	}
 }
 #line 12 "input10.b.re"

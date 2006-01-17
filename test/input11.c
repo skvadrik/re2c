@@ -91,11 +91,10 @@ yy4:
 	goto yy14;
 yy5:
 	++YYCURSOR;
-	goto yy6;
 yy6:
 #line 11 "input11.re"
 	{ return 2; }
-#line 97 "<stdout>"
+#line 96 "<stdout>"
 yy7:
 	++YYCURSOR;
 	switch((yych = *YYCURSOR)) {
@@ -113,7 +112,7 @@ yy7:
 yy8:
 #line 13 "input11.re"
 	{ return -1; }
-#line 115 "<stdout>"
+#line 114 "<stdout>"
 yy9:
 	yych = *++YYCURSOR;
 	goto yy12;
@@ -124,7 +123,6 @@ yy11:
 	++YYCURSOR;
 	if(YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
-	goto yy12;
 yy12:
 	switch(yych){
 	case '0':
@@ -143,7 +141,6 @@ yy13:
 	++YYCURSOR;
 	if(YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
-	goto yy14;
 yy14:
 	switch(yych){
 	case '0':
@@ -296,8 +293,6 @@ yy20:
 	++YYCURSOR;
 	if(YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
-	goto yy21;
-yy21:
 	switch(yych){
 	case '0':
 	case '1':
@@ -368,7 +363,7 @@ yy21:
 yy22:
 #line 9 "input11.re"
 	{ return 0; }
-#line 363 "<stdout>"
+#line 358 "<stdout>"
 }
 #line 15 "input11.re"
 

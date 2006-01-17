@@ -30,18 +30,14 @@ yy0:
 	}
 yy2:
 	++YYCURSOR;
-	goto yy3;
-yy3:
 #line 18 "error3.re"
 	{RET(1);}
-#line 37 "<stdout>"
+#line 35 "<stdout>"
 yy4:
 	++YYCURSOR;
-	goto yy5;
-yy5:
 #line 19 "error3.re"
 	{RET(0);}
-#line 44 "<stdout>"
+#line 40 "<stdout>"
 }
 #line 20 "error3.re"
 

@@ -18,8 +18,6 @@ yy3:
 	++YYCURSOR;
 	if((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
 	yych = *YYCURSOR;
-	goto yy4;
-yy4:
 	switch(yych){
 	case 'a':	goto yy3;
 	case 'b':	goto yy5;
@@ -33,11 +31,9 @@ yy5:
 	}
 yy6:
 	++YYCURSOR;
-	goto yy7;
-yy7:
 #line 3 "input3.re"
 	{ return 1; }
-#line 41 "<stdout>"
+#line 37 "<stdout>"
 }
 #line 5 "input3.re"
 

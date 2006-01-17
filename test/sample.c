@@ -78,16 +78,13 @@ yy7:
 	goto yy11;
 yy8:
 	++YYCURSOR;
-	goto yy9;
-yy9:
 #line 6 "sample.re"
 	{return ERR;}
-#line 85 "<stdout>"
+#line 83 "<stdout>"
 yy10:
 	++YYCURSOR;
 	if(YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
-	goto yy11;
 yy11:
 	switch(yych){
 	case '0':
@@ -132,8 +129,6 @@ yy14:
 	++YYCURSOR;
 	if(YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
-	goto yy15;
-yy15:
 	switch(yych){
 	case '0':
 	case '1':
@@ -156,12 +151,11 @@ yy15:
 yy16:
 #line 5 "sample.re"
 	{return HEX;}
-#line 157 "<stdout>"
+#line 152 "<stdout>"
 yy17:
 	++YYCURSOR;
 	if(YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
-	goto yy18;
 yy18:
 	switch(yych){
 	case 'a':
@@ -244,7 +238,7 @@ yy22:
 yy23:
 #line 2 "sample.re"
 	{return PRINT;}
-#line 245 "<stdout>"
+#line 239 "<stdout>"
 }
 #line 7 "sample.re"
 
