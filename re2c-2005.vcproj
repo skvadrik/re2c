@@ -40,6 +40,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				FavorSizeOrSpeed="1"
+				PreprocessorDefinitions="_SCL_SECURE_NO_DEPRECATE"
 				DisableLanguageExtensions="false"
 				BrowseInformation="1"
 				DebugInformationFormat="3"
@@ -114,6 +115,7 @@
 				OmitFramePointers="true"
 				EnableFiberSafeOptimizations="true"
 				AdditionalIncludeDirectories=""
+				PreprocessorDefinitions="_SCL_SECURE_NO_DEPRECATE"
 				SmallerTypeCheck="false"
 				BufferSecurityCheck="false"
 				DisableLanguageExtensions="false"
@@ -235,10 +237,6 @@
 				RelativePath="translate.cc"
 				>
 			</File>
-			<File
-				RelativePath="bootstrap\y.tab.h"
-				>
-			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"
@@ -290,6 +288,10 @@
 			</File>
 			<File
 				RelativePath="token.h"
+				>
+			</File>
+			<File
+				RelativePath="bootstrap\y.tab.h"
 				>
 			</File>
 		</Filter>
