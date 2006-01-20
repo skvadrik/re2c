@@ -7,6 +7,9 @@
 .ds rx regular expression
 .ds lx \fIl\fP-expression
 \"$Log$
+\"Revision 1.38  2006/01/20 20:53:59  helly
+\"- Update docu
+\"
 \"Revision 1.37  2006/01/20 00:13:52  helly
 \"- Added re2c:startlabel configuration.
 \"- Fixed code generation to not generate unreachable code for initial state.
@@ -450,7 +453,7 @@ an \fIr\fP followed by an \fIs\fP ("concatenation")
 either an \fIr\fP or an \fIs\fP
 .TP
 \fIr\fP\fC/\fP\fIs\fP
-an \fIr\fP but only if it is followed by an \fIs\fP. The s is not part of
+an \fIr\fP but only if it is followed by an \fIs\fP. The \fIs\fP is not part of
 the matched text. This type of \*(rx is called "trailing context".
 .TP
 \fIr\fP\fC{\fP\fIn\fP\fC}\fP
@@ -820,8 +823,6 @@ and act accordingly.
 \*(re does not provide start conditions:  use a separate scanner
 specification for each start condition (as illustrated in the above example).
 .SH BUGS
-.LP
-Only fixed length trailing context can be handled.
 .LP
 Difference only works for character sets.
 .LP
