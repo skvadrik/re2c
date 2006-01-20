@@ -40,8 +40,6 @@
 	{
 		YYCTYPE yych;
 		unsigned int yyaccept = 0;
-		goto yy0;
-		++YYCURSOR;
 yy0:
 		if((YYLIMIT - YYCURSOR) < 6) YYFILL(6);
 		yych = *YYCURSOR;
@@ -72,7 +70,7 @@ yy2:
 yy3:
 #line 12 "input11.b.re"
 		{ return 1; }
-#line 76 "<stdout>"
+#line 74 "<stdout>"
 yy4:
 		yych = *++YYCURSOR;
 		goto yy14;
@@ -81,7 +79,7 @@ yy5:
 yy6:
 #line 13 "input11.b.re"
 		{ return 2; }
-#line 85 "<stdout>"
+#line 83 "<stdout>"
 yy7:
 		++YYCURSOR;
 		if((yych = *YYCURSOR) <= '0') goto yy8;
@@ -89,7 +87,7 @@ yy7:
 yy8:
 #line 15 "input11.b.re"
 		{ return -1; }
-#line 93 "<stdout>"
+#line 91 "<stdout>"
 yy9:
 		yych = *++YYCURSOR;
 		goto yy12;
@@ -144,7 +142,7 @@ yy20:
 		}
 #line 11 "input11.b.re"
 		{ return 0; }
-#line 148 "<stdout>"
+#line 146 "<stdout>"
 	}
 }
 #line 17 "input11.b.re"

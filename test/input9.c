@@ -4,8 +4,6 @@
 #line 5 "<stdout>"
 {
 	YYCTYPE yych;
-	goto yy0;
-	++YYCURSOR;
 yy0:
 	if((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
 	yych = *YYCURSOR;
@@ -28,32 +26,32 @@ yy2:
 	++YYCURSOR;
 #line 5 "input9.re"
 	{ return 1; }
-#line 32 "<stdout>"
+#line 30 "<stdout>"
 yy4:
 	++YYCURSOR;
 #line 6 "input9.re"
 	{ return 2; }
-#line 37 "<stdout>"
+#line 35 "<stdout>"
 yy6:
 	++YYCURSOR;
 #line 7 "input9.re"
 	{ return 3; }
-#line 42 "<stdout>"
+#line 40 "<stdout>"
 yy8:
 	++YYCURSOR;
 #line 8 "input9.re"
 	{ return 4; }
-#line 47 "<stdout>"
+#line 45 "<stdout>"
 yy10:
 	++YYCURSOR;
 #line 9 "input9.re"
 	{ return 5; }
-#line 52 "<stdout>"
+#line 50 "<stdout>"
 yy12:
 	++YYCURSOR;
 #line 10 "input9.re"
 	{ return 6; }
-#line 57 "<stdout>"
+#line 55 "<stdout>"
 yy14:
 	++YYCURSOR;
 	switch((yych = *YYCURSOR)) {
@@ -63,32 +61,32 @@ yy14:
 yy15:
 #line 18 "input9.re"
 	{ return 0; }
-#line 67 "<stdout>"
+#line 65 "<stdout>"
 yy16:
 	++YYCURSOR;
 #line 13 "input9.re"
 	{ return 8; }
-#line 72 "<stdout>"
+#line 70 "<stdout>"
 yy18:
 	++YYCURSOR;
 #line 14 "input9.re"
 	{ return 9; }
-#line 77 "<stdout>"
+#line 75 "<stdout>"
 yy20:
 	++YYCURSOR;
 #line 15 "input9.re"
 	{ return 10; }
-#line 82 "<stdout>"
+#line 80 "<stdout>"
 yy22:
 	++YYCURSOR;
 #line 16 "input9.re"
 	{ return 11; }
-#line 87 "<stdout>"
+#line 85 "<stdout>"
 yy24:
 	++YYCURSOR;
 #line 17 "input9.re"
 	{ return 12; }
-#line 92 "<stdout>"
+#line 90 "<stdout>"
 yy26:
 	yych = *++YYCURSOR;
 	goto yy15;
@@ -96,7 +94,7 @@ yy27:
 	++YYCURSOR;
 #line 11 "input9.re"
 	{ return 7; }
-#line 100 "<stdout>"
+#line 98 "<stdout>"
 }
 #line 20 "input9.re"
 

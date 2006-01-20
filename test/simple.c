@@ -12,8 +12,6 @@ char *q;
 #line 13 "<stdout>"
 {
 	YYCTYPE yych;
-	goto yy0;
-	++YYCURSOR;
 yy0:
 	if((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
 	yych = *YYCURSOR;
@@ -37,12 +35,12 @@ yy2:
 yy3:
 #line 10 "simple.re"
 	{return YYCURSOR;}
-#line 41 "<stdout>"
+#line 39 "<stdout>"
 yy4:
 	++YYCURSOR;
 #line 11 "simple.re"
 	{return NULL;}
-#line 46 "<stdout>"
+#line 44 "<stdout>"
 yy6:
 	++YYCURSOR;
 	if(YYLIMIT == YYCURSOR) YYFILL(1);

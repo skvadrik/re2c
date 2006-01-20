@@ -79,8 +79,6 @@ echo:
 {
 	YYCTYPE yych;
 	unsigned int yyaccept = 0;
-	goto yy0;
-	++YYCURSOR;
 yy0:
 	if((YYLIMIT - YYCURSOR) < 7) YYFILL(7);
 	yych = *YYCURSOR;
@@ -99,7 +97,7 @@ yy2:
 yy3:
 #line 91 "scanner.re"
 	{ goto echo; }
-#line 103 "<stdout>"
+#line 101 "<stdout>"
 yy4:
 	++YYCURSOR;
 #line 87 "scanner.re"
@@ -107,7 +105,7 @@ yy4:
 				  out.write((const char*)(tok), (const char*)(cursor) - (const char*)(tok));
 				  tok = pos = cursor; cline++;
 				  goto echo; }
-#line 111 "<stdout>"
+#line 109 "<stdout>"
 yy6:
 	yych = *++YYCURSOR;
 	goto yy3;
@@ -152,7 +150,7 @@ yy13:
 	{ out.write((const char*)(tok), (const char*)(&cursor[-7]) - (const char*)(tok));
 				  tok = cursor;
 				  RETURN(1); }
-#line 156 "<stdout>"
+#line 154 "<stdout>"
 }
 #line 92 "scanner.re"
 
@@ -168,13 +166,10 @@ scan:
     tline = cline;
     tok = cursor;
 
-#line 172 "<stdout>"
+#line 170 "<stdout>"
 {
 	YYCTYPE yych;
 	unsigned int yyaccept = 0;
-	goto yy15;
-	++YYCURSOR;
-yy15:
 	if((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
 	yych = *YYCURSOR;
 	switch(yych){
@@ -270,7 +265,7 @@ yy18:
 	{ depth = 1;
 				  goto code;
 				}
-#line 267 "<stdout>"
+#line 262 "<stdout>"
 yy19:
 	++YYCURSOR;
 	switch((yych = *YYCURSOR)) {
@@ -280,7 +275,7 @@ yy19:
 yy20:
 #line 131 "scanner.re"
 	{ RETURN(*tok); }
-#line 277 "<stdout>"
+#line 272 "<stdout>"
 yy21:
 	++YYCURSOR;
 	switch((yych = *YYCURSOR)) {
@@ -291,7 +286,7 @@ yy22:
 #line 133 "scanner.re"
 	{ yylval.op = *tok;
 				  RETURN(CLOSE); }
-#line 288 "<stdout>"
+#line 283 "<stdout>"
 yy23:
 	yyaccept = 1;
 	yych = *(YYMARKER = ++YYCURSOR);
@@ -302,7 +297,7 @@ yy23:
 yy24:
 #line 122 "scanner.re"
 	{ fatal("unterminated string constant (missing \")"); }
-#line 299 "<stdout>"
+#line 294 "<stdout>"
 yy25:
 	yyaccept = 2;
 	yych = *(YYMARKER = ++YYCURSOR);
@@ -313,7 +308,7 @@ yy25:
 yy26:
 #line 123 "scanner.re"
 	{ fatal("unterminated string constant (missing ')"); }
-#line 310 "<stdout>"
+#line 305 "<stdout>"
 yy27:
 	yyaccept = 3;
 	yych = *(YYMARKER = ++YYCURSOR);
@@ -324,7 +319,7 @@ yy27:
 yy28:
 #line 129 "scanner.re"
 	{ fatal("unterminated range (missing ])"); }
-#line 321 "<stdout>"
+#line 316 "<stdout>"
 yy29:
 	yych = *++YYCURSOR;
 	goto yy20;
@@ -340,7 +335,7 @@ yy32:
 	{ cur = cursor;
 				  yylval.symbol = Symbol::find(token());
 				  return ID; }
-#line 337 "<stdout>"
+#line 332 "<stdout>"
 yy33:
 	++YYCURSOR;
 	yych = *YYCURSOR;
@@ -348,7 +343,7 @@ yy33:
 yy34:
 #line 152 "scanner.re"
 	{ goto scan; }
-#line 345 "<stdout>"
+#line 340 "<stdout>"
 yy35:
 	++YYCURSOR;
 #line 154 "scanner.re"
@@ -356,14 +351,14 @@ yy35:
 				  pos = cursor; cline++;
 				  goto scan;
 	    			}
-#line 353 "<stdout>"
+#line 348 "<stdout>"
 yy37:
 	++YYCURSOR;
 #line 159 "scanner.re"
 	{ std::cerr << "unexpected character: " << *tok << std::endl;
 				  goto scan;
 				}
-#line 360 "<stdout>"
+#line 355 "<stdout>"
 yy39:
 	++YYCURSOR;
 	if(YYLIMIT == YYCURSOR) YYFILL(1);
@@ -477,7 +472,7 @@ yy47:
 	{ cur = cursor;
 				  yylval.regexp = ranToRE(token());
 				  return RANGE; }
-#line 471 "<stdout>"
+#line 466 "<stdout>"
 yy49:
 	++YYCURSOR;
 	if(YYLIMIT == YYCURSOR) YYFILL(1);
@@ -503,7 +498,7 @@ yy52:
 	{ cur = cursor;
 				  yylval.regexp = strToCaseInsensitiveRE(token());
 				  return STRING; }
-#line 497 "<stdout>"
+#line 492 "<stdout>"
 yy54:
 	++YYCURSOR;
 	if(YYLIMIT == YYCURSOR) YYFILL(1);
@@ -529,19 +524,19 @@ yy57:
 	{ cur = cursor;
 				  yylval.regexp = strToRE(token());
 				  return STRING; }
-#line 523 "<stdout>"
+#line 518 "<stdout>"
 yy59:
 	++YYCURSOR;
 #line 111 "scanner.re"
 	{ tok = cursor;
 				  RETURN(0); }
-#line 529 "<stdout>"
+#line 524 "<stdout>"
 yy61:
 	++YYCURSOR;
 #line 108 "scanner.re"
 	{ depth = 1;
 				  goto comment; }
-#line 535 "<stdout>"
+#line 530 "<stdout>"
 yy63:
 	++YYCURSOR;
 	if((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
@@ -567,7 +562,7 @@ yy65:
 	{ yylval.extop.minsize = atoi((char *)tok+1);
 				  yylval.extop.maxsize = atoi((char *)tok+1);
 				  RETURN(CLOSESIZE); }
-#line 561 "<stdout>"
+#line 556 "<stdout>"
 yy67:
 	yych = *++YYCURSOR;
 	switch(yych){
@@ -580,7 +575,7 @@ yy68:
 	{ yylval.extop.minsize = atoi((char *)tok+1);
 				  yylval.extop.maxsize = -1;
 				  RETURN(CLOSESIZE); }
-#line 574 "<stdout>"
+#line 569 "<stdout>"
 yy70:
 	++YYCURSOR;
 	if(YYLIMIT == YYCURSOR) YYFILL(1);
@@ -606,20 +601,17 @@ yy72:
 	{ yylval.extop.minsize = atoi((char *)tok+1);
 				  yylval.extop.maxsize = MAX(yylval.extop.minsize,atoi(strchr((char *)tok, ',')+1));
 				  RETURN(CLOSESIZE); }
-#line 600 "<stdout>"
+#line 595 "<stdout>"
 }
 #line 162 "scanner.re"
 
 
 code:
 
-#line 607 "<stdout>"
+#line 602 "<stdout>"
 {
 	YYCTYPE yych;
 	unsigned int yyaccept = 0;
-	goto yy74;
-	++YYCURSOR;
-yy74:
 	if((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
 	yych = *YYCURSOR;
 	switch(yych){
@@ -639,13 +631,13 @@ yy76:
 					return CODE;
 				  }
 				  goto code; }
-#line 633 "<stdout>"
+#line 625 "<stdout>"
 yy78:
 	++YYCURSOR;
 #line 172 "scanner.re"
 	{ ++depth;
 				  goto code; }
-#line 639 "<stdout>"
+#line 631 "<stdout>"
 yy80:
 	++YYCURSOR;
 #line 174 "scanner.re"
@@ -653,13 +645,13 @@ yy80:
 				  pos = cursor; cline++;
 				  goto code;
 				}
-#line 647 "<stdout>"
+#line 639 "<stdout>"
 yy82:
 	++YYCURSOR;
 yy83:
 #line 178 "scanner.re"
 	{ goto code; }
-#line 653 "<stdout>"
+#line 645 "<stdout>"
 yy84:
 	yyaccept = 0;
 	yych = *(YYMARKER = ++YYCURSOR);
@@ -723,12 +715,9 @@ yy92:
 
 comment:
 
-#line 717 "<stdout>"
+#line 709 "<stdout>"
 {
 	YYCTYPE yych;
-	goto yy93;
-	++YYCURSOR;
-yy93:
 	if((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
 	yych = *YYCURSOR;
 	switch(yych){
@@ -746,7 +735,7 @@ yy95:
 yy96:
 #line 193 "scanner.re"
 	{ goto comment; }
-#line 740 "<stdout>"
+#line 729 "<stdout>"
 yy97:
 	yych = *++YYCURSOR;
 	switch(yych){
@@ -760,7 +749,7 @@ yy98:
 				  tok = pos = cursor; cline++;
 				  goto comment;
 				}
-#line 754 "<stdout>"
+#line 743 "<stdout>"
 yy100:
 	yych = *++YYCURSOR;
 	goto yy96;
@@ -769,7 +758,7 @@ yy101:
 #line 187 "scanner.re"
 	{ ++depth;
 				  goto comment; }
-#line 763 "<stdout>"
+#line 752 "<stdout>"
 yy103:
 	++YYCURSOR;
 #line 183 "scanner.re"
@@ -777,7 +766,7 @@ yy103:
 					goto scan;
 				    else
 					goto comment; }
-#line 771 "<stdout>"
+#line 760 "<stdout>"
 }
 #line 194 "scanner.re"
 

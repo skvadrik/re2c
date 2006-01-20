@@ -20,6 +20,8 @@ extern bool sFlag;
 extern bool wFlag;
 
 extern bool bUsedYYAccept;
+extern bool bUseStartLabel;
+extern std::string startLabelName;
 extern unsigned int oline;
 extern uint maxFill;
 

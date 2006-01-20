@@ -5,8 +5,6 @@
 {
 	YYCTYPE yych;
 	unsigned int yyaccept = 0;
-	goto yy0;
-	++YYCURSOR;
 yy0:
 	if((YYLIMIT - YYCURSOR) < 6) YYFILL(6);
 	yych = *YYCURSOR;
@@ -58,7 +56,7 @@ yy2:
 yy3:
 #line 3 "sample.re"
 	{return ID;}
-#line 61 "<stdout>"
+#line 59 "<stdout>"
 yy4:
 	yych = *++YYCURSOR;
 	goto yy18;
@@ -72,7 +70,7 @@ yy5:
 yy6:
 #line 4 "sample.re"
 	{return DEC;}
-#line 75 "<stdout>"
+#line 73 "<stdout>"
 yy7:
 	yych = *++YYCURSOR;
 	goto yy11;
@@ -80,7 +78,7 @@ yy8:
 	++YYCURSOR;
 #line 6 "sample.re"
 	{return ERR;}
-#line 83 "<stdout>"
+#line 81 "<stdout>"
 yy10:
 	++YYCURSOR;
 	if(YYLIMIT == YYCURSOR) YYFILL(1);
@@ -151,7 +149,7 @@ yy14:
 yy16:
 #line 5 "sample.re"
 	{return HEX;}
-#line 152 "<stdout>"
+#line 150 "<stdout>"
 yy17:
 	++YYCURSOR;
 	if(YYLIMIT == YYCURSOR) YYFILL(1);
@@ -238,7 +236,7 @@ yy22:
 yy23:
 #line 2 "sample.re"
 	{return PRINT;}
-#line 239 "<stdout>"
+#line 237 "<stdout>"
 }
 #line 7 "sample.re"
 

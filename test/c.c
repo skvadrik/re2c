@@ -130,8 +130,6 @@ std:
 {
 	YYCTYPE yych;
 	unsigned int yyaccept = 0;
-	goto yy0;
-	++YYCURSOR;
 yy0:
 	if((YYLIMIT - YYCURSOR) < 9) YYFILL(9);
 	yych = *YYCURSOR;
@@ -242,7 +240,7 @@ yy2:
 yy3:
 #line 222 "c.re"
 	{ RET('/'); }
-#line 239 "<stdout>"
+#line 237 "<stdout>"
 yy4:
 	++YYCURSOR;
 	switch((yych = *YYCURSOR)) {
@@ -252,7 +250,7 @@ yy4:
 yy5:
 #line 171 "c.re"
 	{ RET(ID); }
-#line 249 "<stdout>"
+#line 247 "<stdout>"
 yy6:
 	yych = *++YYCURSOR;
 	switch(yych){
@@ -365,7 +363,7 @@ yy21:
 yy22:
 #line 175 "c.re"
 	{ RET(ICON); }
-#line 358 "<stdout>"
+#line 356 "<stdout>"
 yy23:
 	yyaccept = 0;
 	yych = *(YYMARKER = ++YYCURSOR);
@@ -383,7 +381,7 @@ yy25:
 		printf("unexpected character: %c\n", *s->tok);
 		goto std;
 	    }
-#line 376 "<stdout>"
+#line 374 "<stdout>"
 yy26:
 	yyaccept = 2;
 	yych = *(YYMARKER = ++YYCURSOR);
@@ -404,7 +402,7 @@ yy26:
 yy27:
 #line 215 "c.re"
 	{ RET('.'); }
-#line 397 "<stdout>"
+#line 395 "<stdout>"
 yy28:
 	yyaccept = 1;
 	yych = *(YYMARKER = ++YYCURSOR);
@@ -422,7 +420,7 @@ yy29:
 yy30:
 #line 225 "c.re"
 	{ RET('>'); }
-#line 415 "<stdout>"
+#line 413 "<stdout>"
 yy31:
 	++YYCURSOR;
 	switch((yych = *YYCURSOR)) {
@@ -433,7 +431,7 @@ yy31:
 yy32:
 #line 224 "c.re"
 	{ RET('<'); }
-#line 426 "<stdout>"
+#line 424 "<stdout>"
 yy33:
 	++YYCURSOR;
 	switch((yych = *YYCURSOR)) {
@@ -444,7 +442,7 @@ yy33:
 yy34:
 #line 220 "c.re"
 	{ RET('+'); }
-#line 437 "<stdout>"
+#line 435 "<stdout>"
 yy35:
 	++YYCURSOR;
 	switch((yych = *YYCURSOR)) {
@@ -456,7 +454,7 @@ yy35:
 yy36:
 #line 219 "c.re"
 	{ RET('-'); }
-#line 449 "<stdout>"
+#line 447 "<stdout>"
 yy37:
 	++YYCURSOR;
 	switch((yych = *YYCURSOR)) {
@@ -466,7 +464,7 @@ yy37:
 yy38:
 #line 221 "c.re"
 	{ RET('*'); }
-#line 459 "<stdout>"
+#line 457 "<stdout>"
 yy39:
 	++YYCURSOR;
 	switch((yych = *YYCURSOR)) {
@@ -476,7 +474,7 @@ yy39:
 yy40:
 #line 223 "c.re"
 	{ RET('%'); }
-#line 469 "<stdout>"
+#line 467 "<stdout>"
 yy41:
 	++YYCURSOR;
 	switch((yych = *YYCURSOR)) {
@@ -487,7 +485,7 @@ yy41:
 yy42:
 #line 216 "c.re"
 	{ RET('&'); }
-#line 480 "<stdout>"
+#line 478 "<stdout>"
 yy43:
 	++YYCURSOR;
 	switch((yych = *YYCURSOR)) {
@@ -497,7 +495,7 @@ yy43:
 yy44:
 #line 226 "c.re"
 	{ RET('^'); }
-#line 490 "<stdout>"
+#line 488 "<stdout>"
 yy45:
 	++YYCURSOR;
 	switch((yych = *YYCURSOR)) {
@@ -508,7 +506,7 @@ yy45:
 yy46:
 #line 227 "c.re"
 	{ RET('|'); }
-#line 501 "<stdout>"
+#line 499 "<stdout>"
 yy47:
 	++YYCURSOR;
 	switch((yych = *YYCURSOR)) {
@@ -518,7 +516,7 @@ yy47:
 yy48:
 #line 210 "c.re"
 	{ RET('='); }
-#line 511 "<stdout>"
+#line 509 "<stdout>"
 yy49:
 	++YYCURSOR;
 	switch((yych = *YYCURSOR)) {
@@ -528,62 +526,62 @@ yy49:
 yy50:
 #line 217 "c.re"
 	{ RET('!'); }
-#line 521 "<stdout>"
+#line 519 "<stdout>"
 yy51:
 	++YYCURSOR;
 #line 205 "c.re"
 	{ RET(';'); }
-#line 526 "<stdout>"
+#line 524 "<stdout>"
 yy53:
 	++YYCURSOR;
 #line 206 "c.re"
 	{ RET('{'); }
-#line 531 "<stdout>"
+#line 529 "<stdout>"
 yy55:
 	++YYCURSOR;
 #line 207 "c.re"
 	{ RET('}'); }
-#line 536 "<stdout>"
+#line 534 "<stdout>"
 yy57:
 	++YYCURSOR;
 #line 208 "c.re"
 	{ RET(','); }
-#line 541 "<stdout>"
+#line 539 "<stdout>"
 yy59:
 	++YYCURSOR;
 #line 209 "c.re"
 	{ RET(':'); }
-#line 546 "<stdout>"
+#line 544 "<stdout>"
 yy61:
 	++YYCURSOR;
 #line 211 "c.re"
 	{ RET('('); }
-#line 551 "<stdout>"
+#line 549 "<stdout>"
 yy63:
 	++YYCURSOR;
 #line 212 "c.re"
 	{ RET(')'); }
-#line 556 "<stdout>"
+#line 554 "<stdout>"
 yy65:
 	++YYCURSOR;
 #line 213 "c.re"
 	{ RET('['); }
-#line 561 "<stdout>"
+#line 559 "<stdout>"
 yy67:
 	++YYCURSOR;
 #line 214 "c.re"
 	{ RET(']'); }
-#line 566 "<stdout>"
+#line 564 "<stdout>"
 yy69:
 	++YYCURSOR;
 #line 218 "c.re"
 	{ RET('~'); }
-#line 571 "<stdout>"
+#line 569 "<stdout>"
 yy71:
 	++YYCURSOR;
 #line 228 "c.re"
 	{ RET('?'); }
-#line 576 "<stdout>"
+#line 574 "<stdout>"
 yy73:
 	++YYCURSOR;
 	yych = *YYCURSOR;
@@ -591,7 +589,7 @@ yy73:
 yy74:
 #line 231 "c.re"
 	{ goto std; }
-#line 584 "<stdout>"
+#line 582 "<stdout>"
 yy75:
 	++YYCURSOR;
 #line 234 "c.re"
@@ -600,7 +598,7 @@ yy75:
 		s->pos = cursor; s->line++;
 		goto std;
 	    }
-#line 593 "<stdout>"
+#line 591 "<stdout>"
 yy77:
 	yych = *++YYCURSOR;
 	goto yy25;
@@ -620,77 +618,77 @@ yy80:
 	++YYCURSOR;
 #line 204 "c.re"
 	{ RET(NEQ); }
-#line 611 "<stdout>"
+#line 609 "<stdout>"
 yy82:
 	++YYCURSOR;
 #line 203 "c.re"
 	{ RET(EQL); }
-#line 616 "<stdout>"
+#line 614 "<stdout>"
 yy84:
 	++YYCURSOR;
 #line 200 "c.re"
 	{ RET(OROR); }
-#line 621 "<stdout>"
+#line 619 "<stdout>"
 yy86:
 	++YYCURSOR;
 #line 193 "c.re"
 	{ RET(OREQ); }
-#line 626 "<stdout>"
+#line 624 "<stdout>"
 yy88:
 	++YYCURSOR;
 #line 192 "c.re"
 	{ RET(XOREQ); }
-#line 631 "<stdout>"
+#line 629 "<stdout>"
 yy90:
 	++YYCURSOR;
 #line 199 "c.re"
 	{ RET(ANDAND); }
-#line 636 "<stdout>"
+#line 634 "<stdout>"
 yy92:
 	++YYCURSOR;
 #line 191 "c.re"
 	{ RET(ANDEQ); }
-#line 641 "<stdout>"
+#line 639 "<stdout>"
 yy94:
 	++YYCURSOR;
 #line 190 "c.re"
 	{ RET(MODEQ); }
-#line 646 "<stdout>"
+#line 644 "<stdout>"
 yy96:
 	++YYCURSOR;
 #line 188 "c.re"
 	{ RET(MULEQ); }
-#line 651 "<stdout>"
+#line 649 "<stdout>"
 yy98:
 	++YYCURSOR;
 #line 198 "c.re"
 	{ RET(DEREF); }
-#line 656 "<stdout>"
+#line 654 "<stdout>"
 yy100:
 	++YYCURSOR;
 #line 197 "c.re"
 	{ RET(DECR); }
-#line 661 "<stdout>"
+#line 659 "<stdout>"
 yy102:
 	++YYCURSOR;
 #line 187 "c.re"
 	{ RET(SUBEQ); }
-#line 666 "<stdout>"
+#line 664 "<stdout>"
 yy104:
 	++YYCURSOR;
 #line 196 "c.re"
 	{ RET(INCR); }
-#line 671 "<stdout>"
+#line 669 "<stdout>"
 yy106:
 	++YYCURSOR;
 #line 186 "c.re"
 	{ RET(ADDEQ); }
-#line 676 "<stdout>"
+#line 674 "<stdout>"
 yy108:
 	++YYCURSOR;
 #line 201 "c.re"
 	{ RET(LEQ); }
-#line 681 "<stdout>"
+#line 679 "<stdout>"
 yy110:
 	++YYCURSOR;
 	switch((yych = *YYCURSOR)) {
@@ -700,17 +698,17 @@ yy110:
 yy111:
 #line 195 "c.re"
 	{ RET(LSHIFT); }
-#line 691 "<stdout>"
+#line 689 "<stdout>"
 yy112:
 	++YYCURSOR;
 #line 185 "c.re"
 	{ RET(LSHIFTEQ); }
-#line 696 "<stdout>"
+#line 694 "<stdout>"
 yy114:
 	++YYCURSOR;
 #line 202 "c.re"
 	{ RET(GEQ); }
-#line 701 "<stdout>"
+#line 699 "<stdout>"
 yy116:
 	++YYCURSOR;
 	switch((yych = *YYCURSOR)) {
@@ -720,12 +718,12 @@ yy116:
 yy117:
 #line 194 "c.re"
 	{ RET(RSHIFT); }
-#line 711 "<stdout>"
+#line 709 "<stdout>"
 yy118:
 	++YYCURSOR;
 #line 184 "c.re"
 	{ RET(RSHIFTEQ); }
-#line 716 "<stdout>"
+#line 714 "<stdout>"
 yy120:
 	++YYCURSOR;
 	if(YYLIMIT == YYCURSOR) YYFILL(1);
@@ -776,7 +774,7 @@ yy124:
 	++YYCURSOR;
 #line 181 "c.re"
 	{ RET(SCON); }
-#line 758 "<stdout>"
+#line 756 "<stdout>"
 yy126:
 	++YYCURSOR;
 	if(YYLIMIT == YYCURSOR) YYFILL(1);
@@ -889,7 +887,7 @@ yy132:
 yy134:
 #line 178 "c.re"
 	{ RET(FCON); }
-#line 863 "<stdout>"
+#line 861 "<stdout>"
 yy135:
 	yych = *++YYCURSOR;
 	switch(yych){
@@ -950,7 +948,7 @@ yy140:
 	++YYCURSOR;
 #line 183 "c.re"
 	{ RET(ELLIPSIS); }
-#line 920 "<stdout>"
+#line 918 "<stdout>"
 yy142:
 	++YYCURSOR;
 	if(YYLIMIT == YYCURSOR) YYFILL(1);
@@ -1568,7 +1566,7 @@ yy184:
 yy185:
 #line 169 "c.re"
 	{ RET(WHILE); }
-#line 1478 "<stdout>"
+#line 1476 "<stdout>"
 yy186:
 	yych = *++YYCURSOR;
 	switch(yych){
@@ -1683,7 +1681,7 @@ yy193:
 yy194:
 #line 168 "c.re"
 	{ RET(VOLATILE); }
-#line 1590 "<stdout>"
+#line 1588 "<stdout>"
 yy195:
 	++YYCURSOR;
 	switch((yych = *YYCURSOR)) {
@@ -1755,7 +1753,7 @@ yy195:
 yy196:
 #line 167 "c.re"
 	{ RET(VOID); }
-#line 1659 "<stdout>"
+#line 1657 "<stdout>"
 yy197:
 	yych = *++YYCURSOR;
 	switch(yych){
@@ -1870,7 +1868,7 @@ yy204:
 yy205:
 #line 166 "c.re"
 	{ RET(UNSIGNED); }
-#line 1771 "<stdout>"
+#line 1769 "<stdout>"
 yy206:
 	yych = *++YYCURSOR;
 	switch(yych){
@@ -1948,7 +1946,7 @@ yy207:
 yy208:
 #line 165 "c.re"
 	{ RET(UNION); }
-#line 1846 "<stdout>"
+#line 1844 "<stdout>"
 yy209:
 	yych = *++YYCURSOR;
 	switch(yych){
@@ -2050,7 +2048,7 @@ yy214:
 yy215:
 #line 164 "c.re"
 	{ RET(TYPEDEF); }
-#line 1945 "<stdout>"
+#line 1943 "<stdout>"
 yy216:
 	yych = *++YYCURSOR;
 	switch(yych){
@@ -2166,7 +2164,7 @@ yy223:
 yy224:
 #line 163 "c.re"
 	{ RET(SWITCH); }
-#line 2058 "<stdout>"
+#line 2056 "<stdout>"
 yy225:
 	yych = *++YYCURSOR;
 	switch(yych){
@@ -2262,7 +2260,7 @@ yy229:
 yy230:
 #line 162 "c.re"
 	{ RET(STRUCT); }
-#line 2151 "<stdout>"
+#line 2149 "<stdout>"
 yy231:
 	yych = *++YYCURSOR;
 	switch(yych){
@@ -2346,7 +2344,7 @@ yy233:
 yy234:
 #line 161 "c.re"
 	{ RET(STATIC); }
-#line 2232 "<stdout>"
+#line 2230 "<stdout>"
 yy235:
 	yych = *++YYCURSOR;
 	switch(yych){
@@ -2442,7 +2440,7 @@ yy239:
 yy240:
 #line 160 "c.re"
 	{ RET(SIZEOF); }
-#line 2325 "<stdout>"
+#line 2323 "<stdout>"
 yy241:
 	yych = *++YYCURSOR;
 	switch(yych){
@@ -2526,7 +2524,7 @@ yy243:
 yy244:
 #line 159 "c.re"
 	{ RET(SIGNED); }
-#line 2406 "<stdout>"
+#line 2404 "<stdout>"
 yy245:
 	yych = *++YYCURSOR;
 	switch(yych){
@@ -2610,7 +2608,7 @@ yy247:
 yy248:
 #line 158 "c.re"
 	{ RET(SHORT); }
-#line 2487 "<stdout>"
+#line 2485 "<stdout>"
 yy249:
 	yych = *++YYCURSOR;
 	switch(yych){
@@ -2713,7 +2711,7 @@ yy254:
 yy255:
 #line 157 "c.re"
 	{ RET(RETURN); }
-#line 2587 "<stdout>"
+#line 2585 "<stdout>"
 yy256:
 	yych = *++YYCURSOR;
 	switch(yych){
@@ -2809,7 +2807,7 @@ yy260:
 yy261:
 #line 156 "c.re"
 	{ RET(REGISTER); }
-#line 2680 "<stdout>"
+#line 2678 "<stdout>"
 yy262:
 	yych = *++YYCURSOR;
 	switch(yych){
@@ -2893,7 +2891,7 @@ yy264:
 yy265:
 #line 155 "c.re"
 	{ RET(LONG); }
-#line 2761 "<stdout>"
+#line 2759 "<stdout>"
 yy266:
 	++YYCURSOR;
 	switch((yych = *YYCURSOR)) {
@@ -2965,7 +2963,7 @@ yy266:
 yy267:
 #line 153 "c.re"
 	{ RET(IF); }
-#line 2830 "<stdout>"
+#line 2828 "<stdout>"
 yy268:
 	yych = *++YYCURSOR;
 	switch(yych){
@@ -3043,7 +3041,7 @@ yy269:
 yy270:
 #line 154 "c.re"
 	{ RET(INT); }
-#line 2905 "<stdout>"
+#line 2903 "<stdout>"
 yy271:
 	yych = *++YYCURSOR;
 	switch(yych){
@@ -3127,7 +3125,7 @@ yy273:
 yy274:
 #line 152 "c.re"
 	{ RET(GOTO); }
-#line 2986 "<stdout>"
+#line 2984 "<stdout>"
 yy275:
 	yych = *++YYCURSOR;
 	switch(yych){
@@ -3211,7 +3209,7 @@ yy277:
 yy278:
 #line 151 "c.re"
 	{ RET(FOR); }
-#line 3067 "<stdout>"
+#line 3065 "<stdout>"
 yy279:
 	yych = *++YYCURSOR;
 	switch(yych){
@@ -3295,7 +3293,7 @@ yy281:
 yy282:
 #line 150 "c.re"
 	{ RET(FLOAT); }
-#line 3148 "<stdout>"
+#line 3146 "<stdout>"
 yy283:
 	yych = *++YYCURSOR;
 	switch(yych){
@@ -3403,7 +3401,7 @@ yy289:
 yy290:
 #line 149 "c.re"
 	{ RET(EXTERN); }
-#line 3253 "<stdout>"
+#line 3251 "<stdout>"
 yy291:
 	yych = *++YYCURSOR;
 	switch(yych){
@@ -3481,7 +3479,7 @@ yy292:
 yy293:
 #line 148 "c.re"
 	{ RET(ENUM); }
-#line 3328 "<stdout>"
+#line 3326 "<stdout>"
 yy294:
 	yych = *++YYCURSOR;
 	switch(yych){
@@ -3559,7 +3557,7 @@ yy295:
 yy296:
 #line 147 "c.re"
 	{ RET(ELSE); }
-#line 3403 "<stdout>"
+#line 3401 "<stdout>"
 yy297:
 	yych = *++YYCURSOR;
 	switch(yych){
@@ -3637,7 +3635,7 @@ yy298:
 yy299:
 #line 145 "c.re"
 	{ RET(DO); }
-#line 3477 "<stdout>"
+#line 3475 "<stdout>"
 yy300:
 	yych = *++YYCURSOR;
 	switch(yych){
@@ -3727,7 +3725,7 @@ yy303:
 yy304:
 #line 146 "c.re"
 	{ RET(DOUBLE); }
-#line 3564 "<stdout>"
+#line 3562 "<stdout>"
 yy305:
 	yych = *++YYCURSOR;
 	switch(yych){
@@ -3823,7 +3821,7 @@ yy309:
 yy310:
 #line 144 "c.re"
 	{ RET(DEFAULT); }
-#line 3657 "<stdout>"
+#line 3655 "<stdout>"
 yy311:
 	yych = *++YYCURSOR;
 	switch(yych){
@@ -3950,7 +3948,7 @@ yy320:
 yy321:
 #line 143 "c.re"
 	{ RET(CONTINUE); }
-#line 3781 "<stdout>"
+#line 3779 "<stdout>"
 yy322:
 	++YYCURSOR;
 	switch((yych = *YYCURSOR)) {
@@ -4022,7 +4020,7 @@ yy322:
 yy323:
 #line 142 "c.re"
 	{ RET(CONST); }
-#line 3850 "<stdout>"
+#line 3848 "<stdout>"
 yy324:
 	yych = *++YYCURSOR;
 	switch(yych){
@@ -4100,7 +4098,7 @@ yy325:
 yy326:
 #line 141 "c.re"
 	{ RET(CHAR); }
-#line 3925 "<stdout>"
+#line 3923 "<stdout>"
 yy327:
 	yych = *++YYCURSOR;
 	switch(yych){
@@ -4178,7 +4176,7 @@ yy328:
 yy329:
 #line 140 "c.re"
 	{ RET(CASE); }
-#line 4000 "<stdout>"
+#line 3998 "<stdout>"
 yy330:
 	yych = *++YYCURSOR;
 	switch(yych){
@@ -4268,7 +4266,7 @@ yy333:
 yy334:
 #line 139 "c.re"
 	{ RET(BREAK); }
-#line 4087 "<stdout>"
+#line 4085 "<stdout>"
 yy335:
 	yych = *++YYCURSOR;
 	switch(yych){
@@ -4352,29 +4350,26 @@ yy337:
 yy338:
 #line 138 "c.re"
 	{ RET(AUTO); }
-#line 4168 "<stdout>"
+#line 4166 "<stdout>"
 yy339:
 	++YYCURSOR;
 #line 189 "c.re"
 	{ RET(DIVEQ); }
-#line 4173 "<stdout>"
+#line 4171 "<stdout>"
 yy341:
 	++YYCURSOR;
 #line 136 "c.re"
 	{ goto comment; }
-#line 4178 "<stdout>"
+#line 4176 "<stdout>"
 }
 #line 245 "c.re"
 
 
 comment:
 
-#line 4185 "<stdout>"
+#line 4183 "<stdout>"
 {
 	YYCTYPE yych;
-	goto yy343;
-	++YYCURSOR;
-yy343:
 	if((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
 	yych = *YYCURSOR;
 	switch(yych){
@@ -4391,7 +4386,7 @@ yy345:
 yy346:
 #line 256 "c.re"
 	{ goto comment; }
-#line 4207 "<stdout>"
+#line 4202 "<stdout>"
 yy347:
 	++YYCURSOR;
 #line 251 "c.re"
@@ -4400,7 +4395,7 @@ yy347:
 		s->tok = s->pos = cursor; s->line++;
 		goto comment;
 	    }
-#line 4216 "<stdout>"
+#line 4211 "<stdout>"
 yy349:
 	yych = *++YYCURSOR;
 	goto yy346;
@@ -4408,7 +4403,7 @@ yy350:
 	++YYCURSOR;
 #line 249 "c.re"
 	{ goto std; }
-#line 4224 "<stdout>"
+#line 4219 "<stdout>"
 }
 #line 257 "c.re"
 

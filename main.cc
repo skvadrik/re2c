@@ -27,6 +27,8 @@ bool iFlag = false;
 bool sFlag = false;
 bool wFlag = false;
 bool bUsedYYAccept = false;
+bool bUseStartLabel= true;
+std::string startLabelName;
 unsigned int oline = 1;
 uint maxFill = 1;
 

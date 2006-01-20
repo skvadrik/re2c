@@ -48,7 +48,6 @@ protected:
 
 class Match: public Action
 {
-
 public:
 	Match(State*);
 	void emit(std::ostream&, uint, bool&) const;
@@ -57,12 +56,18 @@ public:
 
 class Enter: public Action
 {
-
 public:
 	uint	label;
 
 public:
 	Enter(State*, uint);
+	void emit(std::ostream&, uint, bool&) const;
+};
+
+class Initial: public Enter
+{
+public:
+	Initial(State*, uint);
 	void emit(std::ostream&, uint, bool&) const;
 };
 
@@ -298,6 +303,9 @@ inline bool Match::isMatch() const
 }
 
 inline Enter::Enter(State *s, uint l) : Action(s), label(l)
+{ }
+
+inline Initial::Initial(State *s, uint l) : Enter(s, l)
 { }
 
 inline Save::Save(State *s, uint i) : Match(s), selector(i)

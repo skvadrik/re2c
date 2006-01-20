@@ -5,8 +5,6 @@
 {
 	YYCTYPE yych;
 	unsigned int yyaccept = 0;
-	goto yy0;
-	++YYCURSOR;
 yy0:
 	if((YYLIMIT - YYCURSOR) < 4) YYFILL(4);
 	yych = *YYCURSOR;
@@ -25,12 +23,12 @@ yy2:
 yy3:
 #line 6 "input8.re"
 	{ return 1; }
-#line 29 "<stdout>"
+#line 27 "<stdout>"
 yy4:
 	++YYCURSOR;
 #line 7 "input8.re"
 	{ return 2; }
-#line 34 "<stdout>"
+#line 32 "<stdout>"
 yy6:
 	yyaccept = 1;
 	yych = *(YYMARKER = ++YYCURSOR);
@@ -42,7 +40,7 @@ yy6:
 yy7:
 #line 5 "input8.re"
 	{ return 0; }
-#line 46 "<stdout>"
+#line 44 "<stdout>"
 yy8:
 	yych = *++YYCURSOR;
 	switch(yych){

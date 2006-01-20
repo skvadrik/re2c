@@ -1,5 +1,7 @@
 Version 0.10.0 (????-??-??)
 ---------------------------
+- Added re2c:startlabel configuration.
+- Fixed code generation to not generate unreachable code for initial state.
 - Added support for c/c++ compatible \u and \U unicode notation.
 - Added ability to control indendation.
 - Made scanner error out in case an ambiguous /* is found.

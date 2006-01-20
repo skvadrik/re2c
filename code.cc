@@ -364,16 +364,46 @@ void Enter::emit(std::ostream &o, uint ind, bool &readCh) const
 	if (state->link)
 	{
 		o << indent(ind) << "++YYCURSOR;\n";
-		o << "yy" << label << ":\n";
-		oline += 2;
+		oline++;
+		if (vUsedLabels.count(label))
+		{
+			o << "yy" << label << ":\n";
+			oline++;
+		}
 		need(o, ind, state->depth, readCh);
 	}
 	else
 	{
 		/* we shouldn't need 'rule-following' protection here */
 		o << indent(ind) << "yych = *++YYCURSOR;\n";
+		oline++;
+		if (vUsedLabels.count(label))
+		{
+			o << "yy" << label << ":\n";
+			oline++;
+		}
+		readCh = false;
+	}
+}
+
+void Initial::emit(std::ostream &o, uint ind, bool &readCh) const
+{
+	if (!startLabelName.empty())
+	{
+		o << startLabelName << ":\n";
+		oline++;
+	}
+	if (vUsedLabels.count(label))
+	{
 		o << "yy" << label << ":\n";
-		oline += 2;
+		oline++;
+	}
+	if (state->link)
+	{
+		need(o, ind, state->depth, readCh);
+	}
+	else
+	{
 		readCh = false;
 	}
 }
@@ -1327,8 +1357,15 @@ void DFA::emit(std::ostream &o, uint ind)
 	
 	uint start_label = label;
 
-	vUsedLabels.insert(label);
-	(void) new Enter(head, label++);
+	(void) new Initial(head, label++);
+
+	if (bUseStartLabel)
+	{
+		if (startLabelName.empty())
+		{
+			vUsedLabels.insert(start_label);
+		}
+	}
 
 	for (s = head; s; s = s->next)
 	{
@@ -1357,7 +1394,7 @@ void DFA::emit(std::ostream &o, uint ind)
 		o << "#line " << oline++ << " \"" << outputFileName << "\"\n";
 	}
 
-	if ( hasFillLabels == false )
+	if (hasFillLabels == false)
 	{
 		o << indent(ind++) << "{\n";
 		o << indent(ind) << "YYCTYPE yych;\n";
@@ -1374,17 +1411,12 @@ void DFA::emit(std::ostream &o, uint ind)
 		oline += 2;
 	}
 
-	if ( hasFillLabels == false )
+	if (hasFillLabels == true)
 	{
-		o << indent(ind) << "goto yy" << start_label << ";\n";
-		++oline;
-	}
-
-	if (hasFillLabels == true )
-	{
+		vUsedLabels.insert(start_label);
 		o << indent(ind) << "switch(YYGETSTATE())\n";
 		o << indent(ind) << "{\n";
-		o << indent(ind) << "case -1: goto yy0;\n";
+		o << indent(ind) << "case -1: goto yy" << start_label << ";\n";
 
 		for (size_t i=0; i<maxFillIndexes; ++i)
 		{
@@ -1407,12 +1439,12 @@ void DFA::emit(std::ostream &o, uint ind)
 	}
 
 	o << indent(--ind) << "}\n";
+	++oline;
 	if (bitmap_brace)
 	{
 		o << indent(--ind) << "}\n";
 		++oline;
 	}
-	++oline;
 
 	if (BitMap::first)
 	{
@@ -1422,6 +1454,69 @@ void DFA::emit(std::ostream &o, uint ind)
 
 	delete [] saves;
 	delete [] rules;
+
+	bUseStartLabel = false;
+}
+
+void Scanner::config(const Str& cfg, int num)
+{
+	if (cfg.to_string() == "indent:top")
+	{
+		if (num < 0)
+		{
+			fatal("configuration 'indent:top' must be a positive integer");
+		}
+		topIndent = num;
+	}
+	else if (cfg.to_string() == "yybm:hex")
+	{
+		yybmHexTable = num != 0;
+	}
+	else if (cfg.to_string() == "startlabel")
+	{
+		bUseStartLabel = num ? 1 : 0;
+		startLabelName = "";
+	}
+	else
+	{
+		fatal("unrecognized configuration name or illegal integer value");
+	}
+}
+
+void Scanner::config(const Str& cfg, const Str& val)
+{
+	if (cfg.to_string() == "indent:string")
+	{
+		if (val.len >= 2 && val.str[0] == val.str[val.len-1] 
+		&& (val.str[0] == '"' || val.str[0] == '\''))
+		{
+			SubStr tmp(val.str + 1, val.len - 2);
+			unescape(tmp, indString);
+		}
+		else
+		{
+			indString = val.to_string();
+		}
+		return;
+	}
+	else if (cfg.to_string() == "startlabel")
+	{
+		if (val.len >= 2 && val.str[0] == val.str[val.len-1] 
+		&& (val.str[0] == '"' || val.str[0] == '\''))
+		{
+			SubStr tmp(val.str + 1, val.len - 2);
+			unescape(tmp, startLabelName);
+		}
+		else
+		{
+			startLabelName = val.to_string();
+		}
+		bUseStartLabel = !startLabelName.empty();
+	}
+	else
+	{
+		fatal("unrecognized configuration name or illegal string value");
+	}
 }
 
 } // end namespace re2c

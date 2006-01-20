@@ -318,46 +318,4 @@ void Scanner::fatal(const char *msg) const
     fatal(0, msg);
 }
 
-void Scanner::config(const Str& cfg, int num)
-{
-	if (cfg.to_string() == "indent:top")
-	{
-		if (num < 0)
-		{
-			fatal("configuration 'indent:top' must be a positive integer");
-		}
-		topIndent = num;
-	}
-	else if (cfg.to_string() == "yybm:hex")
-	{
-		yybmHexTable = num != 0;
-	}
-	else
-	{
-		fatal("unrecognized configuration name or illegal integer value");
-	}
-}
-
-void Scanner::config(const Str& cfg, const Str& val)
-{
-	if (cfg.to_string() == "indent:string")
-	{
-		if (val.len >= 2 && val.str[0] == val.str[val.len-1] 
-		&& (val.str[0] == '"' || val.str[0] == '\''))
-		{
-			SubStr tmp(val.str + 1, val.len - 2);
-			unescape(tmp, indString);
-		}
-		else
-		{
-			indString = val.to_string();
-		}
-		return;
-	}
-	else
-	{
-		fatal("unrecognized configuration name or illegal string value");
-	}
-}
-
 } // end namespace re2c

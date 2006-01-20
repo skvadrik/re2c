@@ -19,8 +19,6 @@ const char *q;
 #line 19 "<stdout>"
 {
 	YYCTYPE yych;
-	goto yy0;
-	++YYCURSOR;
 yy0:
 	if(YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
@@ -32,12 +30,12 @@ yy2:
 	++YYCURSOR;
 #line 18 "error3.re"
 	{RET(1);}
-#line 35 "<stdout>"
+#line 33 "<stdout>"
 yy4:
 	++YYCURSOR;
 #line 19 "error3.re"
 	{RET(0);}
-#line 40 "<stdout>"
+#line 38 "<stdout>"
 }
 #line 20 "error3.re"
 

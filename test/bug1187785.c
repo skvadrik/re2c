@@ -24,8 +24,6 @@ cont:
 {
 	YYCTYPE yych;
 	unsigned int yyaccept = 0;
-	goto yy0;
-	++YYCURSOR;
 yy0:
 	if((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
 	yych = *YYCURSOR;
@@ -296,7 +294,7 @@ yy2:
 yy3:
 #line 23 "bug1187785.re"
 	{ goto cont; }
-#line 299 "<stdout>"
+#line 297 "<stdout>"
 yy4:
 	yych = *++YYCURSOR;
 	goto yy3;
@@ -571,7 +569,7 @@ yy8:
 	++YYCURSOR;
 #line 22 "bug1187785.re"
 	{ RET(1); }
-#line 573 "<stdout>"
+#line 571 "<stdout>"
 }
 #line 24 "bug1187785.re"
 

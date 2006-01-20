@@ -78,8 +78,6 @@ loop:
 	{
 		YYCTYPE yych;
 		unsigned int yyaccept = 0;
-		goto yy0;
-		++YYCURSOR;
 yy0:
 		if((YYLIMIT - YYCURSOR) < 11) YYFILL(11);
 		yych = *YYCURSOR;
@@ -97,7 +95,7 @@ yy0:
 yy3:
 #line 53 "cvsignore.wb.re"
 		{ output[outsize++] = cursor[-1]; if (cursor >= limit) break; goto loop; }
-#line 101 "<stdout>"
+#line 99 "<stdout>"
 yy4:
 		yych = *++YYCURSOR;
 		goto yy3;
@@ -138,7 +136,7 @@ yy15:
 		++YYCURSOR;
 #line 48 "cvsignore.wb.re"
 		{ APPEND(L"$" L"Date$"); goto loop; }
-#line 142 "<stdout>"
+#line 140 "<stdout>"
 yy17:
 		++YYCURSOR;
 		if(YYLIMIT == YYCURSOR) YYFILL(1);
@@ -162,7 +160,7 @@ yy21:
 		++YYCURSOR;
 #line 49 "cvsignore.wb.re"
 		{ APPEND(L"$" L"Id$"); goto loop; }
-#line 166 "<stdout>"
+#line 164 "<stdout>"
 yy23:
 		++YYCURSOR;
 		if(YYLIMIT == YYCURSOR) YYFILL(1);
@@ -184,7 +182,7 @@ yy28:
 		++YYCURSOR;
 #line 50 "cvsignore.wb.re"
 		{ APPEND(L"$" L"Log$"); goto loop; }
-#line 188 "<stdout>"
+#line 186 "<stdout>"
 yy30:
 		++YYCURSOR;
 		if(YYLIMIT == YYCURSOR) YYFILL(1);
@@ -216,7 +214,7 @@ yy40:
 		++YYCURSOR;
 #line 51 "cvsignore.wb.re"
 		{ APPEND(L"$" L"Revision$"); goto loop; }
-#line 220 "<stdout>"
+#line 218 "<stdout>"
 yy42:
 		++YYCURSOR;
 		if(YYLIMIT == YYCURSOR) YYFILL(1);
@@ -244,7 +242,7 @@ yy50:
 		++YYCURSOR;
 #line 52 "cvsignore.wb.re"
 		{ APPEND(L"$" L"Source$"); goto loop; }
-#line 248 "<stdout>"
+#line 246 "<stdout>"
 yy52:
 		++YYCURSOR;
 		if(YYLIMIT == YYCURSOR) YYFILL(1);

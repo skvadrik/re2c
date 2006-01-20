@@ -7,6 +7,10 @@
 .ds rx regular expression
 .ds lx \fIl\fP-expression
 \"$Log$
+\"Revision 1.37  2006/01/20 00:13:52  helly
+\"- Added re2c:startlabel configuration.
+\"- Fixed code generation to not generate unreachable code for initial state.
+\"
 \"Revision 1.36  2006/01/02 16:00:59  helly
 \"- Update docu
 \"
@@ -504,6 +508,14 @@ not want any indendation at all you can simply set this to \fB""\fP.
 \fIre2c:yybm:hex\fP \fB=\fP 0 \fB;\fP
 If set to zero then a decimal table is being used else a hexadecimal table 
 will be generated.
+.TP
+\fIre2c:startlabel\fP \fB=\fP 1 \fB;\fP
+If set to a non zero integer then the start label of the next scanner blocks 
+will be generated even if not used by the scanner itself. Otherwise the normal 
+\fByy0\fP like start label is only being generated if needed. If set to a text 
+value then a label with that text will be generated regardless of whether the 
+normal start label is being used or not. This setting is being reset to \fB0\fP
+after a start label has been generated.
 
 .SH "A LARGER EXAMPLE"
 .LP

@@ -20,8 +20,6 @@ next:
 {
 	YYCTYPE yych;
 	unsigned int yyaccept = 0;
-	goto yy0;
-	++YYCURSOR;
 yy0:
 	if((YYLIMIT - YYCURSOR) < 45) YYFILL(45);
 	yych = *YYCURSOR;
@@ -41,7 +39,7 @@ yy2:
 yy3:
 #line 23 "bug1163046.re"
 	{ goto next; }
-#line 44 "<stdout>"
+#line 42 "<stdout>"
 yy4:
 	yych = *++YYCURSOR;
 	goto yy3;
@@ -49,7 +47,7 @@ yy5:
 	++YYCURSOR;
 #line 25 "bug1163046.re"
 	{ return false; }
-#line 52 "<stdout>"
+#line 50 "<stdout>"
 yy7:
 	yych = *++YYCURSOR;
 	switch(yych){
@@ -352,7 +350,7 @@ yy51:
 		if (token == start || *(token - 1) == '\n')
 		return true; else goto next;
 	}
-#line 323 "<stdout>"
+#line 321 "<stdout>"
 }
 #line 26 "bug1163046.re"
 
