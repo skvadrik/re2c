@@ -194,6 +194,7 @@ public:
 	uint	kCount;
 	Ins 	**kernel;
 
+	bool    isPreCtxt;
 	bool    isBase;
 	Go      go;
 	Action  *action;

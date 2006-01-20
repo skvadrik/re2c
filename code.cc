@@ -482,9 +482,10 @@ void Rule::emit(std::ostream &o, uint ind, bool &) const
 {
 	uint back = rule->ctx->fixedLength();
 
-	if (back != ~0u && back > 0u)
+	if (back != 0u)
 	{
-		o << indent(ind) << "YYCURSOR -= " << back << ";";
+		o << indent(ind) << "YYCURSOR = yyctxmarker;\n";
+		oline++;
 	}
 
 	line_source(rule->code->line, o);
@@ -891,6 +892,12 @@ void State::emit(std::ostream &o, uint ind, bool &readCh) const
 	{
 		o << indent(ind) << "YYDEBUG(" << label << ", *YYCURSOR);\n";
 		oline++;
+	}
+	if (isPreCtxt)
+	{
+		o << indent(ind) << "yyctxmarker = YYCURSOR + 1;\n";
+		oline++;
+		bUsedCtxMarker = true;
 	}
 	action->emit(o, ind, readCh);
 }
@@ -1409,6 +1416,12 @@ void DFA::emit(std::ostream &o, uint ind)
 	{
 		o << indent(ind++) << "{\n\n";
 		oline += 2;
+	}
+
+	if (bUsedCtxMarker)
+	{
+		o << indent(ind) << "YYCTYPE *yyctxmarker = YYCURSOR;\n";
+		oline++;
 	}
 
 	if (hasFillLabels == true)

@@ -183,7 +183,8 @@ State::State()
 	, depth(0)
 	, kCount(0)
 	, kernel(NULL)
-	, isBase(0)
+	, isPreCtxt(false)
+	, isBase(false)
 	, go()
 	, action(NULL)
 {
@@ -207,7 +208,7 @@ static Ins **closure(Ins **cP, Ins *i)
 			cP = closure(cP, i + 1);
 			i = (Ins*) i->i.link;
 		}
-		else if (i->i.tag == GOTO)
+		else if (i->i.tag == GOTO || i->i.tag == CTXT)
 		{
 			i = (Ins*) i->i.link;
 		}
@@ -266,6 +267,10 @@ DFA::DFA(Ins *ins, uint ni, uint lb, uint ub, Char *rep)
 			{
 				if (!s->rule || ((RuleOp*) i->i.link)->accept < s->rule->accept)
 					s->rule = (RuleOp*) i->i.link;
+			}
+			else if (i->i.tag == CTXT)
+			{
+				s->isPreCtxt = true;
 			}
 		}
 
@@ -343,7 +348,7 @@ State *DFA::findState(Ins **kernel, uint kCount)
 
 	for (iP = kernel; (i = *iP); ++iP)
 	{
-		if (i->i.tag == CHAR || i->i.tag == TERM)
+		if (i->i.tag == CHAR || i->i.tag == TERM || i->i.tag == CTXT)
 		{
 			*cP++ = i;
 		}

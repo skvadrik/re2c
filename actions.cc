@@ -59,7 +59,7 @@ void showIns(std::ostream &o, const Ins &i, const Ins &base)
 		break;
 
 		case CTXT:
-		o << "term " << ((RuleOp*) i.i.link)->accept;
+		o << "ctxt";
 		break;
 
 		case TERM:
@@ -888,7 +888,7 @@ void RuleOp::calcSize(Char *rep)
 {
 	exp->calcSize(rep);
 	ctx->calcSize(rep);
-	size = exp->size + ctx->size + 1;
+	size = exp->size + (ctx->size ? ctx->size + 2 : 1);
 }
 
 void RuleOp::compile(Char *rep, Ins *i)
@@ -896,8 +896,14 @@ void RuleOp::compile(Char *rep, Ins *i)
 	ins = i;
 	exp->compile(rep, &i[0]);
 	i += exp->size;
-	ctx->compile(rep, &i[0]);
-	i += ctx->size;
+	if (ctx->size)
+	{
+		i->i.tag = CTXT;
+		i->i.link = &i[1];
+		i++;
+		ctx->compile(rep, &i[0]);
+		i += ctx->size;
+	}
 	i->i.tag = TERM;
 	i->i.link = this;
 }
