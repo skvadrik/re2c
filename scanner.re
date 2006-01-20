@@ -278,7 +278,8 @@ comment:
 				  tok = pos = cursor; cline++;
 				  goto comment;
 				}
-	any			{ goto comment; }
+	any			{ if(cursor == eof) RETURN(0);
+				  goto comment; }
 */
 
 config:
