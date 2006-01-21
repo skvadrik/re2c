@@ -18,11 +18,8 @@
 namespace re2c
 {
 
-const char *fileName = 0;
 file_info sourceFileInfo;
-const char *outputFileName = 0;
 file_info outputFileInfo;
-std::ostream *output;
 
 bool bFlag = false;
 bool dFlag = false;
@@ -111,7 +108,9 @@ using namespace re2c;
 int main(int argc, char *argv[])
 {
 	int c;
-	fileName = NULL;
+	const char *fileName = 0;
+	const char *outputFileName = 0;
+	re2c::ofstream_lc output;
 
 	if (argc == 1)
 	{
@@ -211,8 +210,7 @@ int main(int argc, char *argv[])
 	}
 
 	// set up the input stream
-	//istream* input = 0;
-	basic_istream<char> *input = 0;
+	istream* input = 0;
 
 	ifstream inputFile;
 
@@ -235,29 +233,20 @@ int main(int argc, char *argv[])
 	}
 
 	// set up the output stream
-	ofstream_lc outputFile;
-
 	if (outputFileName == 0 || (fileName[0] == '-' && fileName[1] == '\0'))
 	{
 		outputFileName = "<stdout>";
-		outputFile.open(stdout);
-		output = &outputFile;
+		output.open(stdout);
 	}
 	else
 	{
-		outputFile.open(outputFileName);
-		output = &outputFile;
+		output.open(outputFileName);
 
-		if (!outputFile)
+		if (!output.is_open())
 		{
 			cerr << "can't open " << outputFileName << "\n";
 			return 1;
 		}
-	}
-
-	if (fileName == NULL)
-	{
-		fileName = "<stdin>";
 	}
 
 	Scanner in(*input);
@@ -265,9 +254,9 @@ int main(int argc, char *argv[])
 	if (!iFlag)
 	{
 		sourceFileInfo = file_info(fileName, &in);
-		outputFileInfo = file_info(outputFileName, &outputFile);
+		outputFileInfo = file_info(outputFileName, &output);
 	}
 
-	parse(in, *output);
+	parse(in, output);
 	return 0;
 }
