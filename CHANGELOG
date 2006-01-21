@@ -9,6 +9,7 @@ Version 0.10.0 (????-??-??)
 - Added support for DOS line endings.
 - Added experimental unicode support.
 - Added config_w32.h to build out of the box on windows (using msvc 2002+).
+- Added Microsoft Visual C .NET 2005 build files.
 - Applied #1411087 variable length trailing context.
 - Applied #1408326 do not generate goto next state.
 - Applied #1408282 CharSet initialization fix.
