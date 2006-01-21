@@ -56,7 +56,7 @@ yy2:
 yy3:
 #line 3 "sample.re"
 	{return ID;}
-#line 59 "<stdout>"
+#line 60 "<stdout>"
 yy4:
 	yych = *++YYCURSOR;
 	goto yy18;
@@ -70,7 +70,7 @@ yy5:
 yy6:
 #line 4 "sample.re"
 	{return DEC;}
-#line 73 "<stdout>"
+#line 74 "<stdout>"
 yy7:
 	yych = *++YYCURSOR;
 	goto yy11;
@@ -78,7 +78,7 @@ yy8:
 	++YYCURSOR;
 #line 6 "sample.re"
 	{return ERR;}
-#line 81 "<stdout>"
+#line 82 "<stdout>"
 yy10:
 	++YYCURSOR;
 	if(YYLIMIT == YYCURSOR) YYFILL(1);
@@ -149,7 +149,7 @@ yy14:
 yy16:
 #line 5 "sample.re"
 	{return HEX;}
-#line 150 "<stdout>"
+#line 153 "<stdout>"
 yy17:
 	++YYCURSOR;
 	if(YYLIMIT == YYCURSOR) YYFILL(1);
@@ -236,7 +236,7 @@ yy22:
 yy23:
 #line 2 "sample.re"
 	{return PRINT;}
-#line 237 "<stdout>"
+#line 240 "<stdout>"
 }
 #line 7 "sample.re"
 

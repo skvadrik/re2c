@@ -40,13 +40,13 @@ yy2:
 yy3:
 #line 19 "bug1390174.re"
 	{RET(0);}
-#line 42 "<stdout>"
+#line 44 "<stdout>"
 yy4:
 	++YYCURSOR;
 yy5:
 #line 18 "bug1390174.re"
 	{RET(1);}
-#line 48 "<stdout>"
+#line 50 "<stdout>"
 yy6:
 	yych = *++YYCURSOR;
 	goto yy3;

@@ -240,7 +240,7 @@ yy2:
 yy3:
 #line 200 "cunroll.re"
 	{ RET('/'); }
-#line 240 "<stdout>"
+#line 244 "<stdout>"
 yy4:
 	++YYCURSOR;
 	switch((yych = *YYCURSOR)) {
@@ -312,7 +312,7 @@ yy4:
 yy5:
 #line 141 "cunroll.re"
 	{ RET(ID); }
-#line 309 "<stdout>"
+#line 316 "<stdout>"
 yy6:
 	yyaccept = 0;
 	yych = *(YYMARKER = ++YYCURSOR);
@@ -328,7 +328,7 @@ yy6:
 yy7:
 #line 153 "cunroll.re"
 	{ RET(ICON); }
-#line 321 "<stdout>"
+#line 332 "<stdout>"
 yy8:
 	yyaccept = 0;
 	yych = *(YYMARKER = ++YYCURSOR);
@@ -346,7 +346,7 @@ yy10:
 		printf("unexpected character: %c\n", *s->tok);
 		goto std;
 	    }
-#line 339 "<stdout>"
+#line 350 "<stdout>"
 yy11:
 	yyaccept = 2;
 	yych = *(YYMARKER = ++YYCURSOR);
@@ -367,7 +367,7 @@ yy11:
 yy12:
 #line 193 "cunroll.re"
 	{ RET('.'); }
-#line 360 "<stdout>"
+#line 371 "<stdout>"
 yy13:
 	yyaccept = 1;
 	yych = *(YYMARKER = ++YYCURSOR);
@@ -385,7 +385,7 @@ yy14:
 yy15:
 #line 203 "cunroll.re"
 	{ RET('>'); }
-#line 378 "<stdout>"
+#line 389 "<stdout>"
 yy16:
 	++YYCURSOR;
 	switch((yych = *YYCURSOR)) {
@@ -396,7 +396,7 @@ yy16:
 yy17:
 #line 202 "cunroll.re"
 	{ RET('<'); }
-#line 389 "<stdout>"
+#line 400 "<stdout>"
 yy18:
 	++YYCURSOR;
 	switch((yych = *YYCURSOR)) {
@@ -407,7 +407,7 @@ yy18:
 yy19:
 #line 198 "cunroll.re"
 	{ RET('+'); }
-#line 400 "<stdout>"
+#line 411 "<stdout>"
 yy20:
 	++YYCURSOR;
 	switch((yych = *YYCURSOR)) {
@@ -419,7 +419,7 @@ yy20:
 yy21:
 #line 197 "cunroll.re"
 	{ RET('-'); }
-#line 412 "<stdout>"
+#line 423 "<stdout>"
 yy22:
 	++YYCURSOR;
 	switch((yych = *YYCURSOR)) {
@@ -429,7 +429,7 @@ yy22:
 yy23:
 #line 199 "cunroll.re"
 	{ RET('*'); }
-#line 422 "<stdout>"
+#line 433 "<stdout>"
 yy24:
 	++YYCURSOR;
 	switch((yych = *YYCURSOR)) {
@@ -439,7 +439,7 @@ yy24:
 yy25:
 #line 201 "cunroll.re"
 	{ RET('%'); }
-#line 432 "<stdout>"
+#line 443 "<stdout>"
 yy26:
 	++YYCURSOR;
 	switch((yych = *YYCURSOR)) {
@@ -450,7 +450,7 @@ yy26:
 yy27:
 #line 194 "cunroll.re"
 	{ RET('&'); }
-#line 443 "<stdout>"
+#line 454 "<stdout>"
 yy28:
 	++YYCURSOR;
 	switch((yych = *YYCURSOR)) {
@@ -460,7 +460,7 @@ yy28:
 yy29:
 #line 204 "cunroll.re"
 	{ RET('^'); }
-#line 453 "<stdout>"
+#line 464 "<stdout>"
 yy30:
 	++YYCURSOR;
 	switch((yych = *YYCURSOR)) {
@@ -471,7 +471,7 @@ yy30:
 yy31:
 #line 205 "cunroll.re"
 	{ RET('|'); }
-#line 464 "<stdout>"
+#line 475 "<stdout>"
 yy32:
 	++YYCURSOR;
 	switch((yych = *YYCURSOR)) {
@@ -481,7 +481,7 @@ yy32:
 yy33:
 #line 188 "cunroll.re"
 	{ RET('='); }
-#line 474 "<stdout>"
+#line 485 "<stdout>"
 yy34:
 	++YYCURSOR;
 	switch((yych = *YYCURSOR)) {
@@ -491,62 +491,62 @@ yy34:
 yy35:
 #line 195 "cunroll.re"
 	{ RET('!'); }
-#line 484 "<stdout>"
+#line 495 "<stdout>"
 yy36:
 	++YYCURSOR;
 #line 183 "cunroll.re"
 	{ RET(';'); }
-#line 489 "<stdout>"
+#line 500 "<stdout>"
 yy38:
 	++YYCURSOR;
 #line 184 "cunroll.re"
 	{ RET('{'); }
-#line 494 "<stdout>"
+#line 505 "<stdout>"
 yy40:
 	++YYCURSOR;
 #line 185 "cunroll.re"
 	{ RET('}'); }
-#line 499 "<stdout>"
+#line 510 "<stdout>"
 yy42:
 	++YYCURSOR;
 #line 186 "cunroll.re"
 	{ RET(','); }
-#line 504 "<stdout>"
+#line 515 "<stdout>"
 yy44:
 	++YYCURSOR;
 #line 187 "cunroll.re"
 	{ RET(':'); }
-#line 509 "<stdout>"
+#line 520 "<stdout>"
 yy46:
 	++YYCURSOR;
 #line 189 "cunroll.re"
 	{ RET('('); }
-#line 514 "<stdout>"
+#line 525 "<stdout>"
 yy48:
 	++YYCURSOR;
 #line 190 "cunroll.re"
 	{ RET(')'); }
-#line 519 "<stdout>"
+#line 530 "<stdout>"
 yy50:
 	++YYCURSOR;
 #line 191 "cunroll.re"
 	{ RET('['); }
-#line 524 "<stdout>"
+#line 535 "<stdout>"
 yy52:
 	++YYCURSOR;
 #line 192 "cunroll.re"
 	{ RET(']'); }
-#line 529 "<stdout>"
+#line 540 "<stdout>"
 yy54:
 	++YYCURSOR;
 #line 196 "cunroll.re"
 	{ RET('~'); }
-#line 534 "<stdout>"
+#line 545 "<stdout>"
 yy56:
 	++YYCURSOR;
 #line 206 "cunroll.re"
 	{ RET('?'); }
-#line 539 "<stdout>"
+#line 550 "<stdout>"
 yy58:
 	++YYCURSOR;
 	yych = *YYCURSOR;
@@ -554,7 +554,7 @@ yy58:
 yy59:
 #line 209 "cunroll.re"
 	{ goto std; }
-#line 547 "<stdout>"
+#line 558 "<stdout>"
 yy60:
 	++YYCURSOR;
 #line 212 "cunroll.re"
@@ -563,7 +563,7 @@ yy60:
 		s->pos = cursor; s->line++;
 		goto std;
 	    }
-#line 556 "<stdout>"
+#line 567 "<stdout>"
 yy62:
 	yych = *++YYCURSOR;
 	goto yy10;
@@ -583,77 +583,77 @@ yy65:
 	++YYCURSOR;
 #line 182 "cunroll.re"
 	{ RET(NEQ); }
-#line 574 "<stdout>"
+#line 587 "<stdout>"
 yy67:
 	++YYCURSOR;
 #line 181 "cunroll.re"
 	{ RET(EQL); }
-#line 579 "<stdout>"
+#line 592 "<stdout>"
 yy69:
 	++YYCURSOR;
 #line 178 "cunroll.re"
 	{ RET(OROR); }
-#line 584 "<stdout>"
+#line 597 "<stdout>"
 yy71:
 	++YYCURSOR;
 #line 171 "cunroll.re"
 	{ RET(OREQ); }
-#line 589 "<stdout>"
+#line 602 "<stdout>"
 yy73:
 	++YYCURSOR;
 #line 170 "cunroll.re"
 	{ RET(XOREQ); }
-#line 594 "<stdout>"
+#line 607 "<stdout>"
 yy75:
 	++YYCURSOR;
 #line 177 "cunroll.re"
 	{ RET(ANDAND); }
-#line 599 "<stdout>"
+#line 612 "<stdout>"
 yy77:
 	++YYCURSOR;
 #line 169 "cunroll.re"
 	{ RET(ANDEQ); }
-#line 604 "<stdout>"
+#line 617 "<stdout>"
 yy79:
 	++YYCURSOR;
 #line 168 "cunroll.re"
 	{ RET(MODEQ); }
-#line 609 "<stdout>"
+#line 622 "<stdout>"
 yy81:
 	++YYCURSOR;
 #line 166 "cunroll.re"
 	{ RET(MULEQ); }
-#line 614 "<stdout>"
+#line 627 "<stdout>"
 yy83:
 	++YYCURSOR;
 #line 176 "cunroll.re"
 	{ RET(DEREF); }
-#line 619 "<stdout>"
+#line 632 "<stdout>"
 yy85:
 	++YYCURSOR;
 #line 175 "cunroll.re"
 	{ RET(DECR); }
-#line 624 "<stdout>"
+#line 637 "<stdout>"
 yy87:
 	++YYCURSOR;
 #line 165 "cunroll.re"
 	{ RET(SUBEQ); }
-#line 629 "<stdout>"
+#line 642 "<stdout>"
 yy89:
 	++YYCURSOR;
 #line 174 "cunroll.re"
 	{ RET(INCR); }
-#line 634 "<stdout>"
+#line 647 "<stdout>"
 yy91:
 	++YYCURSOR;
 #line 164 "cunroll.re"
 	{ RET(ADDEQ); }
-#line 639 "<stdout>"
+#line 652 "<stdout>"
 yy93:
 	++YYCURSOR;
 #line 179 "cunroll.re"
 	{ RET(LEQ); }
-#line 644 "<stdout>"
+#line 657 "<stdout>"
 yy95:
 	++YYCURSOR;
 	switch((yych = *YYCURSOR)) {
@@ -663,17 +663,17 @@ yy95:
 yy96:
 #line 173 "cunroll.re"
 	{ RET(LSHIFT); }
-#line 654 "<stdout>"
+#line 667 "<stdout>"
 yy97:
 	++YYCURSOR;
 #line 163 "cunroll.re"
 	{ RET(LSHIFTEQ); }
-#line 659 "<stdout>"
+#line 672 "<stdout>"
 yy99:
 	++YYCURSOR;
 #line 180 "cunroll.re"
 	{ RET(GEQ); }
-#line 664 "<stdout>"
+#line 677 "<stdout>"
 yy101:
 	++YYCURSOR;
 	switch((yych = *YYCURSOR)) {
@@ -683,12 +683,12 @@ yy101:
 yy102:
 #line 172 "cunroll.re"
 	{ RET(RSHIFT); }
-#line 674 "<stdout>"
+#line 687 "<stdout>"
 yy103:
 	++YYCURSOR;
 #line 162 "cunroll.re"
 	{ RET(RSHIFTEQ); }
-#line 679 "<stdout>"
+#line 692 "<stdout>"
 yy105:
 	++YYCURSOR;
 	if(YYLIMIT == YYCURSOR) YYFILL(1);
@@ -739,7 +739,7 @@ yy109:
 	++YYCURSOR;
 #line 159 "cunroll.re"
 	{ RET(SCON); }
-#line 721 "<stdout>"
+#line 743 "<stdout>"
 yy111:
 	++YYCURSOR;
 	if(YYLIMIT == YYCURSOR) YYFILL(1);
@@ -852,7 +852,7 @@ yy117:
 yy119:
 #line 156 "cunroll.re"
 	{ RET(FCON); }
-#line 826 "<stdout>"
+#line 856 "<stdout>"
 yy120:
 	yych = *++YYCURSOR;
 	switch(yych){
@@ -913,7 +913,7 @@ yy125:
 	++YYCURSOR;
 #line 161 "cunroll.re"
 	{ RET(ELLIPSIS); }
-#line 883 "<stdout>"
+#line 917 "<stdout>"
 yy127:
 	++YYCURSOR;
 	if(YYLIMIT == YYCURSOR) YYFILL(1);
@@ -1442,7 +1442,7 @@ yy164:
 yy165:
 #line 142 "cunroll.re"
 	{ RET(ID); }
-#line 1355 "<stdout>"
+#line 1446 "<stdout>"
 yy166:
 	++YYCURSOR;
 	switch((yych = *YYCURSOR)) {
@@ -1514,7 +1514,7 @@ yy166:
 yy167:
 #line 143 "cunroll.re"
 	{ RET(ID); }
-#line 1424 "<stdout>"
+#line 1518 "<stdout>"
 yy168:
 	++YYCURSOR;
 	switch((yych = *YYCURSOR)) {
@@ -1586,7 +1586,7 @@ yy168:
 yy169:
 #line 144 "cunroll.re"
 	{ RET(ID); }
-#line 1493 "<stdout>"
+#line 1590 "<stdout>"
 yy170:
 	++YYCURSOR;
 	switch((yych = *YYCURSOR)) {
@@ -1658,7 +1658,7 @@ yy170:
 yy171:
 #line 145 "cunroll.re"
 	{ RET(ID); }
-#line 1562 "<stdout>"
+#line 1662 "<stdout>"
 yy172:
 	++YYCURSOR;
 	switch((yych = *YYCURSOR)) {
@@ -1730,7 +1730,7 @@ yy172:
 yy173:
 #line 146 "cunroll.re"
 	{ RET(ID); }
-#line 1631 "<stdout>"
+#line 1734 "<stdout>"
 yy174:
 	++YYCURSOR;
 	switch((yych = *YYCURSOR)) {
@@ -1802,7 +1802,7 @@ yy174:
 yy175:
 #line 147 "cunroll.re"
 	{ RET(ID); }
-#line 1700 "<stdout>"
+#line 1806 "<stdout>"
 yy176:
 	++YYCURSOR;
 	switch((yych = *YYCURSOR)) {
@@ -1874,7 +1874,7 @@ yy176:
 yy177:
 #line 148 "cunroll.re"
 	{ RET(ID); }
-#line 1769 "<stdout>"
+#line 1878 "<stdout>"
 yy178:
 	++YYCURSOR;
 	if(YYLIMIT == YYCURSOR) YYFILL(1);
@@ -1948,24 +1948,24 @@ yy178:
 yy180:
 #line 149 "cunroll.re"
 	{ RET(ID); }
-#line 1840 "<stdout>"
+#line 1952 "<stdout>"
 yy181:
 	++YYCURSOR;
 #line 167 "cunroll.re"
 	{ RET(DIVEQ); }
-#line 1845 "<stdout>"
+#line 1957 "<stdout>"
 yy183:
 	++YYCURSOR;
 #line 138 "cunroll.re"
 	{ goto comment; }
-#line 1850 "<stdout>"
+#line 1962 "<stdout>"
 }
 #line 223 "cunroll.re"
 
 
 comment:
 
-#line 1857 "<stdout>"
+#line 1969 "<stdout>"
 {
 	YYCTYPE yych;
 	if((YYLIMIT - YYCURSOR) < 8) YYFILL(8);
@@ -1985,7 +1985,7 @@ yy187:
 yy188:
 #line 242 "cunroll.re"
 	{ goto comment; }
-#line 1877 "<stdout>"
+#line 1989 "<stdout>"
 yy189:
 	++YYCURSOR;
 	switch((yych = *YYCURSOR)) {
@@ -2000,7 +2000,7 @@ yy190:
 		s->tok = s->pos = cursor; s->line++;
 		goto comment;
 	    }
-#line 1891 "<stdout>"
+#line 2004 "<stdout>"
 yy191:
 	++YYCURSOR;
 	switch((yych = *YYCURSOR)) {
@@ -2011,7 +2011,7 @@ yy191:
 yy192:
 #line 234 "cunroll.re"
 	{ goto comment; }
-#line 1901 "<stdout>"
+#line 2015 "<stdout>"
 yy193:
 	yych = *++YYCURSOR;
 	goto yy188;
@@ -2025,7 +2025,7 @@ yy194:
 yy195:
 #line 235 "cunroll.re"
 	{ goto comment; }
-#line 1914 "<stdout>"
+#line 2029 "<stdout>"
 yy196:
 	++YYCURSOR;
 	switch((yych = *YYCURSOR)) {
@@ -2036,7 +2036,7 @@ yy196:
 yy197:
 #line 236 "cunroll.re"
 	{ goto comment; }
-#line 1924 "<stdout>"
+#line 2040 "<stdout>"
 yy198:
 	++YYCURSOR;
 	switch((yych = *YYCURSOR)) {
@@ -2047,7 +2047,7 @@ yy198:
 yy199:
 #line 237 "cunroll.re"
 	{ goto comment; }
-#line 1934 "<stdout>"
+#line 2051 "<stdout>"
 yy200:
 	++YYCURSOR;
 	switch((yych = *YYCURSOR)) {
@@ -2058,7 +2058,7 @@ yy200:
 yy201:
 #line 238 "cunroll.re"
 	{ goto comment; }
-#line 1944 "<stdout>"
+#line 2062 "<stdout>"
 yy202:
 	++YYCURSOR;
 	switch((yych = *YYCURSOR)) {
@@ -2069,7 +2069,7 @@ yy202:
 yy203:
 #line 239 "cunroll.re"
 	{ goto comment; }
-#line 1954 "<stdout>"
+#line 2073 "<stdout>"
 yy204:
 	++YYCURSOR;
 	switch((yych = *YYCURSOR)) {
@@ -2080,17 +2080,17 @@ yy204:
 yy205:
 #line 240 "cunroll.re"
 	{ goto comment; }
-#line 1964 "<stdout>"
+#line 2084 "<stdout>"
 yy206:
 	++YYCURSOR;
 #line 241 "cunroll.re"
 	{ goto comment; }
-#line 1969 "<stdout>"
+#line 2089 "<stdout>"
 yy208:
 	++YYCURSOR;
 #line 227 "cunroll.re"
 	{ goto std; }
-#line 1974 "<stdout>"
+#line 2094 "<stdout>"
 }
 #line 243 "cunroll.re"
 

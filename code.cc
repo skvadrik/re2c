@@ -493,9 +493,9 @@ void Rule::emit(std::ostream &o, uint ind, bool &) const
 	o << rule->code->text;
 	// Counting the oline's is done by SubStr::out()
 	o << "\n";
+	++oline;
 	if (!iFlag)
 	{
-		++oline;
 		o << "#line " << oline++ << " \"" << outputFileName << "\"\n";
 		//    o << "\n#line " << rule->code->line
 		//      << "\n\t" << rule->code->text << "\n";
@@ -589,6 +589,7 @@ bool genCases(std::ostream &o, uint ind, uint lb, Span *s, bool &newLine, uint m
 	if (!newLine)
 	{
 		o << "\n";
+		++oline;
 	}
 	newLine = true;
 	if (lb < s->ub)
@@ -643,6 +644,7 @@ void Go::genSwitch(std::ostream &o, uint ind, const State *from, const State *ne
 		if (dFlag)
 		{
 			o << indent(ind) << "YYDEBUG(-1, yych);\n";
+			++oline;
 		}
 
 		if (readCh)
@@ -1394,8 +1396,8 @@ void DFA::emit(std::ostream &o, uint ind)
 	vFillIndexes = orgVFillIndexes;
 	oline = nOrgOline;
 
-	oline++;
 	o << "\n";
+	++oline;
 	if (!iFlag)
 	{
 		o << "#line " << oline++ << " \"" << outputFileName << "\"\n";
@@ -1421,7 +1423,7 @@ void DFA::emit(std::ostream &o, uint ind)
 	if (bUsedCtxMarker)
 	{
 		o << indent(ind) << "YYCTYPE *yyctxmarker = YYCURSOR;\n";
-		oline++;
+		++oline;
 	}
 
 	if (hasFillLabels == true)

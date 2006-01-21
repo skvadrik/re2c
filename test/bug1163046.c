@@ -39,7 +39,7 @@ yy2:
 yy3:
 #line 23 "bug1163046.re"
 	{ goto next; }
-#line 42 "<stdout>"
+#line 43 "<stdout>"
 yy4:
 	yych = *++YYCURSOR;
 	goto yy3;
@@ -47,7 +47,7 @@ yy5:
 	++YYCURSOR;
 #line 25 "bug1163046.re"
 	{ return false; }
-#line 50 "<stdout>"
+#line 51 "<stdout>"
 yy7:
 	yych = *++YYCURSOR;
 	switch(yych){
@@ -350,7 +350,7 @@ yy51:
 		if (token == start || *(token - 1) == '\n')
 		return true; else goto next;
 	}
-#line 321 "<stdout>"
+#line 354 "<stdout>"
 }
 #line 26 "bug1163046.re"
 

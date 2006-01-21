@@ -90,7 +90,7 @@ yy3:
 	{
 		return UNEXPECTED;
 	}
-#line 92 "<stdout>"
+#line 94 "<stdout>"
 yy4:
 	++YYCURSOR;
 	yych = *YYCURSOR;
@@ -98,7 +98,7 @@ yy4:
 yy5:
 #line 48 "ctx.re"
 	{ return NUMBER;  }
-#line 100 "<stdout>"
+#line 102 "<stdout>"
 yy6:
 	++YYCURSOR;
 yy7:
@@ -109,7 +109,7 @@ yy7:
 		cursor = s.cur;
 		goto std;
 	}
-#line 111 "<stdout>"
+#line 113 "<stdout>"
 yy8:
 	yych = *++YYCURSOR;
 	goto yy7;
@@ -155,7 +155,7 @@ yy14:
 	YYCURSOR = yyctxmarker;
 #line 47 "ctx.re"
 	{ return KEYWORD; }
-#line 157 "<stdout>"
+#line 159 "<stdout>"
 yy15:
 	++YYCURSOR;
 	switch((yych = *YYCURSOR)) {
@@ -175,7 +175,7 @@ yy16:
 	YYCURSOR = yyctxmarker;
 #line 46 "ctx.re"
 	{ return KEYWORD; }
-#line 177 "<stdout>"
+#line 179 "<stdout>"
 }
 #line 61 "ctx.re"
 

@@ -83,7 +83,7 @@ yy2:
 yy3:
 #line 10 "input11.re"
 	{ return 1; }
-#line 85 "<stdout>"
+#line 87 "<stdout>"
 yy4:
 	yych = *++YYCURSOR;
 	goto yy14;
@@ -92,7 +92,7 @@ yy5:
 yy6:
 #line 11 "input11.re"
 	{ return 2; }
-#line 94 "<stdout>"
+#line 96 "<stdout>"
 yy7:
 	++YYCURSOR;
 	switch((yych = *YYCURSOR)) {
@@ -110,7 +110,7 @@ yy7:
 yy8:
 #line 13 "input11.re"
 	{ return -1; }
-#line 112 "<stdout>"
+#line 114 "<stdout>"
 yy9:
 	yych = *++YYCURSOR;
 	goto yy12;
@@ -361,7 +361,7 @@ yy20:
 yy22:
 #line 9 "input11.re"
 	{ return 0; }
-#line 356 "<stdout>"
+#line 365 "<stdout>"
 }
 #line 15 "input11.re"
 

@@ -27,12 +27,12 @@ yy2:
 	++YYCURSOR;
 #line 8 "input10.re"
 	{ return 1; }
-#line 29 "<stdout>"
+#line 31 "<stdout>"
 yy4:
 	++YYCURSOR;
 #line 10 "input10.re"
 	{ return -1; }
-#line 34 "<stdout>"
+#line 36 "<stdout>"
 }
 #line 12 "input10.re"
 
