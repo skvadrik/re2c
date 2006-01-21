@@ -40,7 +40,7 @@
 	{
 		YYCTYPE yych;
 		unsigned int yyaccept = 0;
-yy0:
+
 		if((YYLIMIT - YYCURSOR) < 6) YYFILL(6);
 		yych = *YYCURSOR;
 		if(yych <= '@') {

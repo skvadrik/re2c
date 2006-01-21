@@ -19,7 +19,7 @@ const char *q;
 #line 19 "<stdout>"
 {
 	YYCTYPE yych;
-yy0:
+
 	if(YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	switch(yych){

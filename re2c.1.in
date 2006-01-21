@@ -7,6 +7,11 @@
 .ds rx regular expression
 .ds lx \fIl\fP-expression
 \"$Log$
+\"Revision 1.39  2006/01/21 15:51:02  helly
+\"- Generic fix for oline generation (by providing specialized ostream whose
+\"  stream_buffer count '\n's)
+\"- Change re2c:startlabel to 0 (makes more sense and results in clean code)
+\"
 \"Revision 1.38  2006/01/20 20:53:59  helly
 \"- Update docu
 \"
@@ -512,7 +517,7 @@ not want any indendation at all you can simply set this to \fB""\fP.
 If set to zero then a decimal table is being used else a hexadecimal table 
 will be generated.
 .TP
-\fIre2c:startlabel\fP \fB=\fP 1 \fB;\fP
+\fIre2c:startlabel\fP \fB=\fP 0 \fB;\fP
 If set to a non zero integer then the start label of the next scanner blocks 
 will be generated even if not used by the scanner itself. Otherwise the normal 
 \fByy0\fP like start label is only being generated if needed. If set to a text 

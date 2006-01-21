@@ -20,7 +20,7 @@ next:
 {
 	YYCTYPE yych;
 	unsigned int yyaccept = 0;
-yy0:
+
 	if((YYLIMIT - YYCURSOR) < 45) YYFILL(45);
 	yych = *YYCURSOR;
 	switch(yych){

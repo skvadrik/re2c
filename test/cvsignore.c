@@ -43,7 +43,7 @@ loop:
 {
 	YYCTYPE yych;
 	unsigned int yyaccept = 0;
-yy0:
+
 	if((YYLIMIT - YYCURSOR) < 11) YYFILL(11);
 	yych = *YYCURSOR;
 	switch(yych){

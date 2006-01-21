@@ -44,51 +44,9 @@ public:
 #endif
 };
 
-template<class char_t>
-class basic_null_streambuf
-	: public std::basic_streambuf<char_t>
-{
-public:
-	basic_null_streambuf()
-		: std::basic_streambuf<char_t>()
-	{
-	}	
-};
-
 #ifdef _MSC_VER
 # pragma warning(disable: 4355) /* 'this' : used in base member initializer list */
 #endif
-
-template<class char_t>
-class basic_null_stream
-	: protected basic_null_streambuf<char_t>
-	, public std::basic_ostream<char_t>
-{
-public:
-	basic_null_stream()
-		: basic_null_streambuf<char_t>()
-		, std::basic_ostream<char_t>(static_cast<basic_null_streambuf<char_t>*>(this))
-	{
-	}
-
-	basic_null_stream& put(char_t)
-	{
-		// nothing to do
-		return *this;
-	}
-	
-	basic_null_stream& write(const char_t *, std::streamsize)
-	{
-		// nothing to do
-		return *this;
-	}
-};
-
-#ifdef _MSC_VER
-# pragma warning(default: 4355)
-#endif
-
-typedef basic_null_stream<char> null_stream;
 
 } // end namespace re2c
 

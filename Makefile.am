@@ -4,7 +4,7 @@ bin_PROGRAMS = re2c
 re2c_SOURCES = code.cc dfa.cc main.cc parser.cc actions.cc scanner.re substr.cc\
 	translate.cc scanner.cc mbo_getopt.cc \
 	basics.h dfa.h globals.h ins.h parser.h re.h scanner.h \
-	substr.h token.h mbo_getopt.h code.h
+	substr.h token.h mbo_getopt.h code.h stream_lc.h
 BUILT_SOURCES = parser.cc scanner.cc
 
 man_MANS     = re2c.1

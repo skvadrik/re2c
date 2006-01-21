@@ -54,8 +54,7 @@ private:
 #endif
 };
 
-void line_source(unsigned int, std::ostream&);
-void parse(std::istream&, std::ostream&);
+void parse(Scanner&, std::ostream&);
 
 } // end namespace re2c
 

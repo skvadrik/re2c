@@ -19,7 +19,7 @@ const char *q;
 {
 	YYCTYPE yych;
 	unsigned int yyaccept = 0;
-yy0:
+
 	if((YYLIMIT - YYCURSOR) < 7) YYFILL(7);
 	yych = *YYCURSOR;
 	switch(yych){

@@ -22,9 +22,6 @@ namespace re2c
 void SubStr::out(std::ostream& o) const
 {
 	o.write(str, len);
-	oline += std::count(str, str + len, '\n');
-	// This is only to be used in Rule::emit(), if this is going to change then
-	// oline counting must be done there and probably in other emit()'s, too.
 }
 
 bool operator==(const SubStr &s1, const SubStr &s2)

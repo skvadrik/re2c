@@ -68,7 +68,7 @@ std:
 	YYCTYPE yych;
 	unsigned int yyaccept = 0;
 	YYCTYPE *yyctxmarker = YYCURSOR;
-yy0:
+
 	if((YYLIMIT - YYCURSOR) < 15) YYFILL(15);
 	yych = *YYCURSOR;
 	switch(yych){

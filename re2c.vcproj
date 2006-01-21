@@ -152,6 +152,9 @@
 				RelativePath="basics.h">
 			</File>
 			<File
+				RelativePath="code.h">
+			</File>
+			<File
 				RelativePath="config_w32.h">
 			</File>
 			<File
@@ -177,6 +180,9 @@
 			</File>
 			<File
 				RelativePath="scanner.h">
+			</File>
+			<File
+				RelativePath="stream_lc.h">
 			</File>
 			<File
 				RelativePath="substr.h">

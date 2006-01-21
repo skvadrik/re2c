@@ -11,9 +11,9 @@
 namespace re2c
 {
 
-class Scanner
+class Scanner:
+	public line_number
 {
-
 private:
 	std::istream&	in;
 	char	*bot, *tok, *ptr, *cur, *pos, *lim, *top, *eof;
@@ -36,7 +36,7 @@ public:
 	void config(const Str&, const Str&);
 
 	SubStr token() const;
-	uint line() const;	
+	virtual uint get_line() const;	
 	uint xlat(uint c) const;
 
 	uint unescape(SubStr &s) const;
@@ -55,11 +55,6 @@ public:
 inline SubStr Scanner::token() const
 {
 	return SubStr(tok, cur - tok);
-}
-
-inline uint Scanner::line() const
-{
-	return cline;
 }
 
 inline uint Scanner::xlat(uint c) const

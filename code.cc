@@ -229,7 +229,6 @@ void BitMap::gen(std::ostream &o, uint ind, uint lb, uint ub)
 				if (j % 8 == 0)
 				{
 					o << "\n" << indent(ind+1);
-					++oline;
 				}
 
 				if (yybmHexTable)
@@ -245,7 +244,6 @@ void BitMap::gen(std::ostream &o, uint ind, uint lb, uint ub)
 		}
 
 		o << "\n" << indent(ind) << "};\n";
-		oline += 2;
 	}
 }
 
@@ -269,12 +267,10 @@ void genGoTo(std::ostream &o, uint ind, const State *from, const State *to, bool
 	if (readCh && from->label + 1 != to->label)
 	{
 		o << indent(ind) << "yych = *YYCURSOR;\n";
-		++oline;
 		readCh = false;
 	}
 
 	o << indent(ind) << "goto yy" << to->label << ";\n";
-	++oline;
 	vUsedLabels.insert(to->label);
 }
 
@@ -304,7 +300,6 @@ static void need(std::ostream &o, uint ind, uint n, bool & readCh)
 	{
 		fillIndex = vFillIndexes++;
 		o << indent(ind) << "YYSETSTATE(" << fillIndex << ");\n";
-		++oline;
 	}
 	else
 	{
@@ -314,23 +309,19 @@ static void need(std::ostream &o, uint ind, uint n, bool & readCh)
 	if (n == 1)
 	{
 		o << indent(ind) << "if(YYLIMIT == YYCURSOR) YYFILL(1);\n";
-		++oline;
 	}
 	else
 	{
 		o << indent(ind) << "if((YYLIMIT - YYCURSOR) < " << n << ") YYFILL(" << n << ");\n";
-		++oline;
 	}
 
 	if ( hasFillIndex == true )
 	{
 		o << "yyFillLabel" << fillIndex << ":\n";
-		++oline;
 	}
 
 	o << indent(ind) << "yych = *YYCURSOR;\n";
 	readCh = false;
-	++oline;
 }
 
 void Match::emit(std::ostream &o, uint ind, bool &readCh) const
@@ -351,8 +342,6 @@ void Match::emit(std::ostream &o, uint ind, bool &readCh) const
 		readCh = false;
 	}
 
-	++oline;
-
 	if (state->link)
 	{
 		need(o, ind, state->depth, readCh);
@@ -364,11 +353,9 @@ void Enter::emit(std::ostream &o, uint ind, bool &readCh) const
 	if (state->link)
 	{
 		o << indent(ind) << "++YYCURSOR;\n";
-		oline++;
 		if (vUsedLabels.count(label))
 		{
 			o << "yy" << label << ":\n";
-			oline++;
 		}
 		need(o, ind, state->depth, readCh);
 	}
@@ -376,11 +363,9 @@ void Enter::emit(std::ostream &o, uint ind, bool &readCh) const
 	{
 		/* we shouldn't need 'rule-following' protection here */
 		o << indent(ind) << "yych = *++YYCURSOR;\n";
-		oline++;
 		if (vUsedLabels.count(label))
 		{
 			o << "yy" << label << ":\n";
-			oline++;
 		}
 		readCh = false;
 	}
@@ -391,12 +376,14 @@ void Initial::emit(std::ostream &o, uint ind, bool &readCh) const
 	if (!startLabelName.empty())
 	{
 		o << startLabelName << ":\n";
-		oline++;
 	}
 	if (vUsedLabels.count(label))
 	{
 		o << "yy" << label << ":\n";
-		oline++;
+	}
+	else if (!label)
+	{
+		o << "\n";
 	}
 	if (state->link)
 	{
@@ -413,19 +400,16 @@ void Save::emit(std::ostream &o, uint ind, bool &readCh) const
 	if (bUsedYYAccept)
 	{
 		o << indent(ind) << "yyaccept = " << selector << ";\n";
-		++oline;
 	}
 
 	if (state->link)
 	{
 		o << indent(ind) << "YYMARKER = ++YYCURSOR;\n";
-		++oline;
 		need(o, ind, state->depth, readCh);
 	}
 	else
 	{
 		o << indent(ind) << "yych = *(YYMARKER = ++YYCURSOR);\n";
-		++oline;
 		readCh = false;
 	}
 }
@@ -459,7 +443,6 @@ void Accept::emit(std::ostream &o, uint ind, bool &readCh) const
 				bUsedYYAccept = true;
 				o << indent(ind) << "YYCURSOR = YYMARKER;\n";
 				o << indent(ind) << "switch(yyaccept){\n";
-				oline += 2;
 			}
 
 			o << indent(ind) << "case " << saves[i] << ":";
@@ -469,7 +452,6 @@ void Accept::emit(std::ostream &o, uint ind, bool &readCh) const
 	if (!first)
 	{
 		o << indent(ind) << "}\n";
-		++oline;
 	}
 }
 
@@ -485,21 +467,15 @@ void Rule::emit(std::ostream &o, uint ind, bool &) const
 	if (back != 0u)
 	{
 		o << indent(ind) << "YYCURSOR = yyctxmarker;\n";
-		oline++;
 	}
 
-	line_source(rule->code->line, o);
+	RuleLine rl(*rule);
+
+	o << file_info(sourceFileInfo, &rl);
 	o << indent(ind);
 	o << rule->code->text;
-	// Counting the oline's is done by SubStr::out()
 	o << "\n";
-	++oline;
-	if (!iFlag)
-	{
-		o << "#line " << oline++ << " \"" << outputFileName << "\"\n";
-		//    o << "\n#line " << rule->code->line
-		//      << "\n\t" << rule->code->text << "\n";
-	}
+	o << outputFileInfo;
 }
 
 void doLinear(std::ostream &o, uint ind, Span *s, uint n, const State *from, const State *next, bool &readCh, uint mask)
@@ -589,7 +565,6 @@ bool genCases(std::ostream &o, uint ind, uint lb, Span *s, bool &newLine, uint m
 	if (!newLine)
 	{
 		o << "\n";
-		++oline;
 	}
 	newLine = true;
 	if (lb < s->ub)
@@ -611,7 +586,6 @@ bool genCases(std::ostream &o, uint ind, uint lb, Span *s, bool &newLine, uint m
 			}
 
 			o << "\n";
-			++oline;
 			newLine = true;
 		}
 	}
@@ -644,7 +618,6 @@ void Go::genSwitch(std::ostream &o, uint ind, const State *from, const State *ne
 		if (dFlag)
 		{
 			o << indent(ind) << "YYDEBUG(-1, yych);\n";
-			++oline;
 		}
 
 		if (readCh)
@@ -656,8 +629,6 @@ void Go::genSwitch(std::ostream &o, uint ind, const State *from, const State *ne
 		{
 			o << indent(ind) << "switch(yych){\n";
 		}
-
-		++oline;
 
 		while (t != &sP[0])
 		{
@@ -699,7 +670,6 @@ void Go::genSwitch(std::ostream &o, uint ind, const State *from, const State *ne
 		o << indent(ind) << "default:";
 		genGoTo(o, 1, from, def, readCh);
 		o << indent(ind) << "}\n";
-		++oline;
 
 		delete [] sP;
 	}
@@ -717,13 +687,10 @@ void doBinary(std::ostream &o, uint ind, Span *s, uint n, const State *from, con
 
 		genIf(o, ind, "<=", s[h - 1].ub - 1, readCh);
 		o << "{\n";
-		++oline;
 		doBinary(o, ind+1, &s[0], h, from, next, readCh, mask);
 		o << indent(ind) << "} else {\n";
-		++oline;
 		doBinary(o, ind+1, &s[h], n - h, from, next, readCh, mask);
 		o << indent(ind) << "}\n";
-		++oline;
 	}
 }
 
@@ -837,13 +804,10 @@ void Go::genGoto(std::ostream &o, uint ind, const State *from, const State *next
 						if (readCh)
 						{
 							o << indent(ind) << "yych = *YYCURSOR;\n";
-							oline++;
 							readCh = false;
 						}
 						sYych = "yych";
 						o << indent(ind) << "if(yyh & 0xFF00) {\n";
-						oline++;
-						/* here we need to reduce to those having high byte set */
 						genBase(o, ind+1, from, next, readCh, 1);
 						o << indent(ind) << "} else ";
 					}
@@ -868,10 +832,8 @@ void Go::genGoto(std::ostream &o, uint ind, const State *from, const State *next
 						o << (uint) b->m;
 					}
 					o << ") {\n";
-					oline++;
 					genGoTo(o, ind+1, from, to, readCh);
 					o << indent(ind) << "}\n";
-					oline++;
 					go.genBase(o, ind, from, next, readCh, 0);
 					delete [] go.span;
 					return ;
@@ -888,17 +850,14 @@ void State::emit(std::ostream &o, uint ind, bool &readCh) const
 	if (vUsedLabels.count(label))
 	{
 		o << "yy" << label << ":\n";
-		oline++;
 	}
 	if (dFlag)
 	{
 		o << indent(ind) << "YYDEBUG(" << label << ", *YYCURSOR);\n";
-		oline++;
 	}
 	if (isPreCtxt)
 	{
 		o << indent(ind) << "yyctxmarker = YYCURSOR + 1;\n";
-		oline++;
 		bUsedCtxMarker = true;
 	}
 	action->emit(o, ind, readCh);
@@ -1357,7 +1316,6 @@ void DFA::emit(std::ostream &o, uint ind)
 	if (bFlag)
 	{
 		o << indent(ind++) << "{\n";
-		++oline;
 		bitmap_brace = 1;
 		BitMap::gen(o, ind, lbChar, ubChar <= 256 ? ubChar : 256);
 	}
@@ -1381,49 +1339,38 @@ void DFA::emit(std::ostream &o, uint ind)
 		s->label = label++;
 	}
 
-	null_stream noWhere;
-	unsigned int nOrgOline = oline;
 	uint maxFillIndexes = vFillIndexes;
 	uint orgVFillIndexes = vFillIndexes;
+	null_stream  null_dev;
 
 	for (s = head; s; s = s->next)
 	{
 		bool readCh = false;
-		s->emit(noWhere, ind, readCh);
-		s->go.genGoto(noWhere, ind, s, s->next, readCh);
+		s->emit(null_dev, ind, readCh);
+		s->go.genGoto(null_dev, ind, s, s->next, readCh);
 	}
 	maxFillIndexes = vFillIndexes;
 	vFillIndexes = orgVFillIndexes;
-	oline = nOrgOline;
 
-	o << "\n";
-	++oline;
-	if (!iFlag)
-	{
-		o << "#line " << oline++ << " \"" << outputFileName << "\"\n";
-	}
+	o << "\n" << outputFileInfo;
 
 	if (hasFillLabels == false)
 	{
 		o << indent(ind++) << "{\n";
 		o << indent(ind) << "YYCTYPE yych;\n";
-		oline += 2;
 		if (bUsedYYAccept)
 		{
 			o << indent(ind) << "unsigned int yyaccept = 0;\n";
-			oline++;
 		}
 	}
 	else
 	{
 		o << indent(ind++) << "{\n\n";
-		oline += 2;
 	}
 
 	if (bUsedCtxMarker)
 	{
 		o << indent(ind) << "YYCTYPE *yyctxmarker = YYCURSOR;\n";
-		++oline;
 	}
 
 	if (hasFillLabels == true)
@@ -1441,9 +1388,6 @@ void DFA::emit(std::ostream &o, uint ind)
 		o << indent(ind) << "default: /* abort() */;\n";
 		o << indent(ind) << "}\n";
 		o << "yyNext:\n";
-
-		oline += maxFillIndexes;
-		oline += 6;
 	}
 
 	for (s = head; s; s = s->next)
@@ -1454,11 +1398,9 @@ void DFA::emit(std::ostream &o, uint ind)
 	}
 
 	o << indent(--ind) << "}\n";
-	++oline;
 	if (bitmap_brace)
 	{
 		o << indent(--ind) << "}\n";
-		++oline;
 	}
 
 	if (BitMap::first)
@@ -1471,6 +1413,20 @@ void DFA::emit(std::ostream &o, uint ind)
 	delete [] rules;
 
 	bUseStartLabel = false;
+}
+
+std::ostream& operator << (std::ostream& o, const file_info& li)
+{
+	if (li.ln)
+	{
+		o << "#line " << li.ln->get_line() << " \"" << li.fname << "\"\n";
+	}
+	return o;
+}
+
+uint Scanner::get_line() const
+{
+	return cline;
 }
 
 void Scanner::config(const Str& cfg, int num)

@@ -19,18 +19,22 @@ namespace re2c
 {
 
 const char *fileName = 0;
+file_info sourceFileInfo;
 const char *outputFileName = 0;
+file_info outputFileInfo;
+std::ostream *output;
+
 bool bFlag = false;
 bool dFlag = false;
 bool eFlag = false;
 bool iFlag = false;
 bool sFlag = false;
 bool wFlag = false;
+
 bool bUsedYYAccept = false;
 bool bUsedCtxMarker= false;
-bool bUseStartLabel= true;
+bool bUseStartLabel= false;
 std::string startLabelName;
-unsigned int oline = 1;
 uint maxFill = 1;
 
 uint topIndent = 0;
@@ -231,46 +235,39 @@ int main(int argc, char *argv[])
 	}
 
 	// set up the output stream
-	ostream* output = 0;
-
-	ofstream outputFile;
+	ofstream_lc outputFile;
 
 	if (outputFileName == 0 || (fileName[0] == '-' && fileName[1] == '\0'))
 	{
 		outputFileName = "<stdout>";
-		output = &cout;
+		outputFile.open(stdout);
+		output = &outputFile;
 	}
 	else
 	{
 		outputFile.open(outputFileName);
+		output = &outputFile;
 
 		if (!outputFile)
 		{
 			cerr << "can't open " << outputFileName << "\n";
 			return 1;
 		}
-
-		output = &outputFile;
-		
-		int len = strlen(outputFileName);
-		char *tmp = (char*)malloc((len+1)*2);
-		char *dst = tmp;
-
-		for (const char *src = outputFileName; *src; ++src)
-		{
-			if (*src == '\\')
-			{
-				*dst++ = *src;
-			}
-			*dst++ = *src;
-		}
-		*dst = '\0';
-		
-		outputFileName = tmp;
 	}
 
-	parse(*input, *output);
+	if (fileName == NULL)
+	{
+		fileName = "<stdin>";
+	}
+
+	Scanner in(*input);
+	
+	if (!iFlag)
+	{
+		sourceFileInfo = file_info(fileName, &in);
+		outputFileInfo = file_info(outputFileName, &outputFile);
+	}
+
+	parse(in, *output);
 	return 0;
-
 }
-

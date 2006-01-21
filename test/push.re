@@ -226,8 +226,8 @@ public:
 
     start:
 
-        /*!re2c
-
+        /*!re2c      
+        	re2c:startlabel = 1;
             eol = "\n";
             eof = "\000";
             digit = [0-9];

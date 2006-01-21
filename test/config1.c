@@ -14,7 +14,7 @@ char *scan0(char *p)
 #line 15 "<stdout>"
 {
 	YYCTYPE yych;
-yy0:
+
 	if((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
 	yych = *YYCURSOR;
 	switch(yych){

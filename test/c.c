@@ -130,7 +130,7 @@ std:
 {
 	YYCTYPE yych;
 	unsigned int yyaccept = 0;
-yy0:
+
 	if((YYLIMIT - YYCURSOR) < 9) YYFILL(9);
 	yych = *YYCURSOR;
 	switch(yych){

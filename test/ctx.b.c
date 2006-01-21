@@ -83,7 +83,7 @@ std:
 	{
 		YYCTYPE yych;
 		YYCTYPE *yyctxmarker = YYCURSOR;
-yy0:
+
 		if((YYLIMIT - YYCURSOR) < 3) YYFILL(3);
 		yych = *YYCURSOR;
 		if(yych <= ' ') {

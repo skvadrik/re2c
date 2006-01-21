@@ -23,7 +23,7 @@ cont:
 #line 24 "<stdout>"
 {
 	YYCTYPE yych;
-yy0:
+
 	if((YYLIMIT - YYCURSOR) < 3) YYFILL(3);
 	yych = *YYCURSOR;
 	switch(yych){

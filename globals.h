@@ -6,12 +6,14 @@
 #include <set>
 #include <algorithm>
 #include <string>
+#include "stream_lc.h"
 
 namespace re2c
 {
 
-extern const char *fileName;
-extern const char *outputFileName;
+extern file_info sourceFileInfo;
+extern file_info outputFileInfo;
+
 extern bool bFlag;
 extern bool dFlag;
 extern bool eFlag;
@@ -23,7 +25,6 @@ extern bool bUsedYYAccept;
 extern bool bUsedCtxMarker;
 extern bool bUseStartLabel;
 extern std::string startLabelName;
-extern unsigned int oline;
 extern uint maxFill;
 
 /* configurations */

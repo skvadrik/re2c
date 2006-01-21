@@ -44,7 +44,7 @@ void prtHex(std::ostream& o, uint c, bool useTalx)
 	}
 }
 
-void prtCh(std::ostream &o, uint c, bool useTalx)
+void prtCh(std::ostream& o, uint c, bool useTalx)
 {
 	int oc = (int)(re2c::wFlag || !useTalx ? c : re2c::talx[c]);
 
@@ -107,7 +107,7 @@ void prtCh(std::ostream &o, uint c, bool useTalx)
 	}
 }
 
-void printSpan(std::ostream &o, uint lb, uint ub)
+void printSpan(std::ostream& o, uint lb, uint ub)
 {
 	if (lb > ub)
 	{
@@ -152,8 +152,6 @@ std::ostream& operator<<(std::ostream &o, const State &s)
 
 	o << "\n";
 
-	++oline;
-
 	uint lb = 0;
 
 	for (uint i = 0; i < s.go.nSpans; ++i)
@@ -169,7 +167,6 @@ std::ostream& operator<<(std::ostream &o, const DFA &dfa)
 	for (State *s = dfa.head; s; s = s->next)
 	{
 		o << s << "\n\n";
-		++oline;
 	}
 
 	return o;
