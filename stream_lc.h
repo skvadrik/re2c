@@ -165,7 +165,8 @@ protected:
 		}
 		else
 		{
-			return fputc(_Tr::to_char_type(c), fp) ? c : _Tr::eof();
+			buffer += _Tr::to_char_type(c);
+			return c;
 		}
 	}
 
@@ -210,6 +211,8 @@ protected:
 
 	virtual int sync()
 	{
+		fwrite(buffer.c_str(), sizeof(_E), buffer.length(), fp);
+		buffer.clear();
 		return fp == 0
 			|| _Tr::eq_int_type(_Tr::eof(), overflow())
 			|| 0 <= fflush(fp) ? 0 : -1;
@@ -222,6 +225,8 @@ protected:
 
 	std::streamsize xsputn(const _E *buf, std::streamsize cnt)
 	{
+		fwrite(buffer.c_str(), sizeof(_E), buffer.length(), fp);
+		buffer.clear();
 		oline += std::count(buf, buf + cnt, '\n');
 		return fwrite(buf, sizeof(_E), cnt, fp);
 	}
@@ -231,6 +236,7 @@ private:
 	FILE * fp;
 	bool   must_close;
 	uint   oline;
+	std::basic_string<_E, _Tr> buffer;
 };
 
 typedef basic_filebuf_lc<char> filebuf_lc;

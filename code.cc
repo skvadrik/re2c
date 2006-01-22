@@ -1182,7 +1182,8 @@ void DFA::emit(std::ostream &o, uint ind)
 	bool hasFillLabels = (0<=vFillIndexes);
 	if (hasFillLabels==true && label!=0)
 	{
-		std::cerr << "re2c : error : multiple /*!re2c blocks aren't supported when -f is specified\n";
+		o.flush();
+		std::cerr << "re2c: error: multiple /*!re2c blocks aren't supported when -f is specified\n";
 		exit(1);
 	}
 

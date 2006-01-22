@@ -249,7 +249,7 @@ int main(int argc, char *argv[])
 		}
 	}
 
-	Scanner in(*input);
+	Scanner in(*input, output);
 	
 	if (!iFlag)
 	{

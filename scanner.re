@@ -2,10 +2,12 @@
 #include <stdlib.h>
 #include <string.h>
 #include <iostream>
+#include <sstream>
 #include "scanner.h"
 #include "parser.h"
 #include "y.tab.h"
 #include "globals.h"
+#include "dfa.h"
 
 extern YYSTYPE yylval;
 
@@ -26,9 +28,11 @@ extern YYSTYPE yylval;
 namespace re2c
 {
 
-Scanner::Scanner(std::istream& i) : in(i),
-	bot(NULL), tok(NULL), ptr(NULL), cur(NULL), pos(NULL), lim(NULL),
-	top(NULL), eof(NULL), tchar(0), tline(0), cline(1), iscfg(0)
+Scanner::Scanner(std::istream& i, std::ostream& o)
+	: in(i)
+	, out(o)
+	, bot(NULL), tok(NULL), ptr(NULL), cur(NULL), pos(NULL), lim(NULL)
+	, top(NULL), eof(NULL), tchar(0), tline(0), cline(1), iscfg(0)
 {
     ;
 }
@@ -234,16 +238,10 @@ scan:
 				  goto scan;
 	    			}
 
-	any			{ std::cerr << "line " << tline << ", column " << (tchar + 1) 
-						<< ": unexpected character: ";
-				  if (isprint(*tok))
-				  {
-				  	std::cerr << *tok << std::endl;
-				  }
-				  else
-				  {
-					std::cerr << "0x" << hexCh(*tok >> 4) << hexCh(*tok) << std::endl;
-				  }
+	any			{ std::ostringstream msg;
+				  msg << "unexpected character: ";
+				  prtChOrHex(msg, *tok);
+				  fatal(msg.str().c_str());
 				  goto scan;
 				}
 */
@@ -309,14 +307,12 @@ value:
 
 void Scanner::fatal(uint ofs, const char *msg) const
 {
-    std::cerr << "line " << tline << ", column " << (tchar + ofs + 1) << ": "
+	out.flush();
+	std::cerr << "re2c: error: "
+		<< "line " << tline << ", column " << (tchar + ofs + 1) << ": "
 		<< msg << std::endl;
-    exit(1);
-}
-
-void Scanner::fatal(const char *msg) const
-{
-    fatal(0, msg);
+   	exit(1);
 }
 
 } // end namespace re2c
+

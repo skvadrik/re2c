@@ -16,6 +16,7 @@ class Scanner:
 {
 private:
 	std::istream&	in;
+	std::ostream&   out;
 	char	*bot, *tok, *ptr, *cur, *pos, *lim, *top, *eof;
 	uint	tchar, tline, cline, iscfg;
 
@@ -25,10 +26,10 @@ private:
 	Scanner& operator=(const Scanner&); //unimplemented
 
 public:
-	Scanner(std::istream&);
+	Scanner(std::istream&, std::ostream&);
 	int echo(std::ostream&);
 	int scan();
-
+	
 	void fatal(const char*) const;
 	void fatal(uint, const char*) const;
 
@@ -51,6 +52,11 @@ public:
 	RegExp * invToRE(SubStr s) const;
 	RegExp * mkDot() const;
 };
+
+inline void Scanner::fatal(const char *msg) const
+{
+	fatal(0, msg);
+}
 
 inline SubStr Scanner::token() const
 {
