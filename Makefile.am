@@ -23,6 +23,7 @@ DISTCLEANFILES = makerpm re2c.spec README scanner.cc re2c$(EXEEXT)
 EXTRA_DIST   = $(man_MANS) README parser.y scanner.re makerpm.in re2c.spec.in \
                re2c.spec README.in y.tab.h CHANGELOG \
                doc examples test
+EXTRA_ZIP    = $(EXTRA_DIST) config_w32.h *.sln *.vcproj bootstrap/*.cc bootstrap/*.h
 
 dist-hook: re2c.spec
 	rm -rf `find $(distdir)/doc -name CVS`
@@ -33,6 +34,10 @@ rpm-files:	$(bin_PROGRAMS) $(EXTRA_DIST)
 
 rpm: dist
 	rpmbuild -ta re2c-$(PACKAGE_VERSION).tar.gz
+
+zip: $(EXTRA_ZIP)
+	test -f re2c-$(PACKAGE_VERSION).zip && rm -f re2c-$(PACKAGE_VERSION).zip
+	zip -q -o -9 re2c-$(PACKAGE_VERSION).zip $(re2c_SOURCES) $(EXTRA_ZIP)
 
 parser.cc:	$(top_srcdir)/parser.y
 	$(YACC) $(YFLAGS) $< || exit
