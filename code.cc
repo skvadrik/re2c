@@ -213,7 +213,7 @@ void BitMap::gen(std::ostream &o, uint ind, uint lb, uint ub)
 		o << indent(ind) << "static unsigned char yybm[] = {";
 		uint n = ub - lb;
 		uint *bm = new uint[n];
-		memset(bm, 0, n);
+		memset(bm, 0, n*sizeof(uint));
 
 		for (uint i = 0; b; i += n)
 		{
