@@ -1,4 +1,4 @@
-Version 0.10.0 (????-??-??)
+Version 0.10.0 (2006-??-??)
 ---------------------------
 - Added re2c:startlabel configuration.
 - Fixed code generation to not generate unreachable code for initial state.

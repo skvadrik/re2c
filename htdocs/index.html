@@ -78,6 +78,24 @@ provide re2c packages.</li>
 </p>
 <hr />
 <h1>Changelog</h1>
+<h2>2006-??-??: 0.10.0</h2>
+<li>Added re2c:startlabel configuration.</li>
+<li>Fixed code generation to not generate unreachable code for initial state.</li>
+<li>Added support for c/c++ compatible \u and \U unicode notation.</li>
+<li>Added ability to control indendation.</li>
+<li>Made scanner error out in case an ambiguous /* is found.</li>
+<li>Fixed indendation of generated code.</li>
+<li>Added support for DOS line endings.</li>
+<li>Added experimental unicode support.</li>
+<li>Added config_w32.h to build out of the box on windows (using msvc 2002+).</li>
+<li>Added Microsoft Visual C .NET 2005 build files.</li>
+<li>Applied #1411087 variable length trailing context.</li>
+<li>Applied #1408326 do not generate goto next state.</li>
+<li>Applied #1408282 CharSet initialization fix.</li>
+<li>Applied #1408278 readsome with MSVC.</li>
+<li>Applied #1307467 Unicode patch for 0.9.7.</li>
+<ul>
+</ul>
 <h2>2005-12-28: 0.9.12</h2>
 <ul>
 <li>Fixed bug #1390174 re2c cannot accept {0,}.</li>
