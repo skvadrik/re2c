@@ -108,9 +108,8 @@ using namespace re2c;
 int main(int argc, char *argv[])
 {
 	int c;
-	const char *fileName = 0;
+	const char *sourceFileName = 0;
 	const char *outputFileName = 0;
-	re2c::ofstream_lc output;
 
 	if (argc == 1)
 	{
@@ -201,7 +200,7 @@ int main(int argc, char *argv[])
 	}
 	else if (argc == opt_ind + 1)
 	{
-		fileName = argv[opt_ind];
+		sourceFileName = argv[opt_ind];
 	}
 	else
 	{
@@ -209,54 +208,37 @@ int main(int argc, char *argv[])
 		return 2;
 	}
 
-	// set up the input stream
-	istream* input = 0;
+	// set up the source stream
+	re2c::ifstream_lc source;
 
-	ifstream inputFile;
-
-	if (fileName[0] == '-' && fileName[1] == '\0')
+	if (sourceFileName[0] == '-' && sourceFileName[1] == '\0')
 	{
-		fileName = "<stdin>";
-		input = &cin;
+		sourceFileName = "<stdin>";
+		source.open(stdin);
 	}
-	else
+	else if (!source.open(sourceFileName).is_open())
 	{
-		inputFile.open(fileName);
-
-		if (!inputFile)
-		{
-			cerr << "can't open " << fileName << "\n";
-			return 1;
-		}
-
-		input = &inputFile;
+		cerr << "re2c: error: cannot open " << sourceFileName << "\n";
+		return 1;
 	}
 
 	// set up the output stream
-	if (outputFileName == 0 || (fileName[0] == '-' && fileName[1] == '\0'))
+	re2c::ofstream_lc output;
+
+	if (outputFileName == 0 || (sourceFileName[0] == '-' && sourceFileName[1] == '\0'))
 	{
 		outputFileName = "<stdout>";
 		output.open(stdout);
 	}
-	else
+	else if (!output.open(outputFileName).is_open())
 	{
-		output.open(outputFileName);
-
-		if (!output.is_open())
-		{
-			cerr << "can't open " << outputFileName << "\n";
-			return 1;
-		}
+		cerr << "re2c: error: cannot open " << outputFileName << "\n";
+		return 1;
 	}
+	Scanner scanner(source, output);
+	sourceFileInfo = file_info(sourceFileName, &scanner);
+	outputFileInfo = file_info(outputFileName, &output);
 
-	Scanner in(*input, output);
-	
-	if (!iFlag)
-	{
-		sourceFileInfo = file_info(fileName, &in);
-		outputFileInfo = file_info(outputFileName, &output);
-	}
-
-	parse(in, output);
+	parse(scanner, output);
 	return 0;
 }

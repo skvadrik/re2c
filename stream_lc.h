@@ -83,7 +83,7 @@ public:
 		: _Mybase()
 		, fp(_fp)
 		, must_close(false)
-		, oline(1)
+		, fline(1)
 	{
 	}
 
@@ -98,7 +98,7 @@ public:
 
 	uint get_line() const
 	{
-		return oline + 1;
+		return fline + 1;
 	}
 
 	bool is_open() const
@@ -113,8 +113,8 @@ public:
 			return 0;
 		}
 		const char * fmode = (mode & std::ios_base::out)
-		                   ? "w"
-		                   : "r";
+		                   ? "wt"
+		                   : "rt";
 		if ((fp = fopen(filename, fmode)) == 0)
 		{
 			return 0;
@@ -157,7 +157,7 @@ protected:
 	{
 		if (c == '\n')
 		{
-			++oline;
+			++fline;
 		}
 		if (_Tr::eq_int_type(_Tr::eof(), c))
 		{
@@ -172,35 +172,42 @@ protected:
 
 	virtual int_type pbackfail(int_type c = _Tr::eof())
 	{
+		assert(0);
 		c = 0;
-		assert(0);
-		return 0;
+		return _Tr::eof();
 	}
 
-	virtual int_type underflow()
+	virtual int_type underflow() // don't point past it
 	{
 		assert(0);
-		return 0;
+		return _Tr::eof();
 	}
 
-	virtual int_type uflow()
+	virtual int_type uflow() // point past it
 	{
-		assert(0);
-		return 0;
+		int_type c;
+
+		if (fp == 0 || (_Tr::eq_int_type(_Tr::eof(), (c = fgetc(fp)))))
+		{
+			return _Tr::eof();
+		}
+		else if (c == '\n')
+		{
+			++fline;
+		}
+		return c;
 	}
 
-	virtual pos_type seekoff(off_type, std::ios_base::seekdir,
+	virtual pos_type seekoff(off_type off, std::ios_base::seekdir whence,
 		std::ios_base::openmode = (std::ios_base::openmode)(std::ios_base::in | std::ios_base::out))
 	{
-		assert(0);
-		return pos_type(~0);
+		return fseek(fp, off, whence);
 	}
 
-	virtual pos_type seekpos(pos_type,
+	virtual pos_type seekpos(pos_type fpos,
 		std::ios_base::openmode = (std::ios_base::openmode)(std::ios_base::in | std::ios_base::out))
 	{
-		assert(0);
-		return pos_type(~0);
+		return fseek(fp, fpos, SEEK_SET);
 	}
 
 	virtual _Mybase * setbuf(_E *, std::streamsize)
@@ -227,7 +234,7 @@ protected:
 	{
 		fwrite(buffer.c_str(), sizeof(_E), buffer.length(), fp);
 		buffer.clear();
-		oline += std::count(buf, buf + cnt, '\n');
+		fline += std::count(buf, buf + cnt, '\n');
 		return fwrite(buf, sizeof(_E), cnt, fp);
 	}
 
@@ -235,29 +242,34 @@ private:
 
 	FILE * fp;
 	bool   must_close;
-	uint   oline;
+	uint   fline;
+	_E     pbchar;
 	std::basic_string<_E, _Tr> buffer;
 };
 
 typedef basic_filebuf_lc<char> filebuf_lc;
 
-template<class _E, class _Tr = std::char_traits<_E> >
-class basic_ofstream_lc
-	: public std::basic_ostream<_E, _Tr>
+template<
+	class _E, 
+	class _BaseStream,
+	std::ios_base::openmode  _DefOpenMode,
+	class _Tr = std::char_traits<_E> >
+class basic_fstream_lc
+	: public _BaseStream
 	, public line_number
 {
 public:
-	typedef std::basic_ios<    _E, _Tr> _Myios;
-	typedef std::basic_ostream<_E, _Tr> _Mybase;
-	typedef basic_ofstream_lc< _E, _Tr> _Myt;
+	typedef basic_fstream_lc< _E, _BaseStream, _DefOpenMode, _Tr> _Myt;
+	typedef std::basic_ios<_E, _Tr> _Myios;
+	typedef _BaseStream _Mybase;
 	typedef basic_filebuf_lc<  _E, _Tr> _Mybuf;
 
-	basic_ofstream_lc()
+	basic_fstream_lc()
 		: _Mybase(&mybuf)  
 	{
 	}
 
-	virtual ~basic_ofstream_lc()
+	virtual ~basic_fstream_lc()
 	{
 	}
 
@@ -266,20 +278,22 @@ public:
 		return mybuf.is_open();
 	}
 
-	void open(const char * filename, std::ios_base::openmode mode = std::ios_base::out)
+	_Myt& open(const char * filename, std::ios_base::openmode mode = _DefOpenMode)
 	{
-		if ((mode & std::ios_base::out) == 0 || mybuf.open(filename, mode) == 0)
+		if ((mode & _DefOpenMode) == 0 || mybuf.open(filename, mode) == 0)
 		{
 			_Myios::setstate(std::ios_base::failbit);
 		}
+		return *this;
 	}
 	
-	void open(FILE *fp)
+	_Myt& open(FILE *fp)
 	{
 		if (mybuf.open(fp) == 0)
 		{
 			_Myios::setstate(std::ios_base::failbit);
 		}
+		return *this;
 	}
 	
 	void close()
@@ -299,7 +313,21 @@ protected:
 	mutable _Mybuf mybuf;
 };
 
+template<class _E, class _Tr = std::char_traits<_E> >
+class basic_ofstream_lc
+	: public basic_fstream_lc<_E, std::basic_ostream<_E, _Tr>, std::ios_base::out, _Tr>
+{
+};
+
 typedef basic_ofstream_lc<char> ofstream_lc;
+
+template<class _E, class _Tr = std::char_traits<_E> >
+class basic_ifstream_lc
+	: public basic_fstream_lc<_E, std::basic_istream<_E, _Tr>, std::ios_base::in, _Tr>
+{
+};
+
+typedef basic_ifstream_lc<char> ifstream_lc;
 
 class file_info
 {
