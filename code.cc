@@ -1215,8 +1215,6 @@ void DFA::emit(std::ostream &o, uint ind)
 
 	for (s = head; s; s = s->next)
 	{
-		RuleOp * ignore = NULL;
-
 		if (s->rule)
 		{
 			for (i = 0; i < s->go.nSpans; ++i)
@@ -1234,8 +1232,6 @@ void DFA::emit(std::ostream &o, uint ind)
 					continue;
 				}
 			}
-
-			ignore = s->rule;
 		}
 	}
 
