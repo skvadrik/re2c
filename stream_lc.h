@@ -222,13 +222,13 @@ protected:
 	virtual pos_type seekoff(off_type off, std::ios_base::seekdir whence,
 		std::ios_base::openmode = (std::ios_base::openmode)(std::ios_base::in | std::ios_base::out))
 	{
-		return fseek(fp, off, whence);
+		return fseek(fp, (long)off, whence);
 	}
 
 	virtual pos_type seekpos(pos_type fpos,
 		std::ios_base::openmode = (std::ios_base::openmode)(std::ios_base::in | std::ios_base::out))
 	{
-		return fseek(fp, fpos, SEEK_SET);
+		return fseek(fp, (long)fpos, SEEK_SET);
 	}
 
 	virtual _Mybase * setbuf(_E *, std::streamsize)
@@ -383,7 +383,8 @@ public:
 
 	file_info& operator = (const file_info& oth)
 	{
-		new (this) file_info(oth.fname, oth.ln, false);
+		*(const_cast<std::string*>(&this->fname)) = oth.fname;
+		ln = oth.ln;
 		return *this;
 	}
 
