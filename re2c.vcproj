@@ -3,8 +3,8 @@
 	ProjectType="Visual C++"
 	Version="7.00"
 	Name="re2c"
-	ProjectGUID="{18C5E289-8D90-400D-9F80-766F174CEDC9}"
-	Keyword="MakeFileProj">
+	ProjectGUID="{831DB149-B845-4969-9782-E07F2B566CDE}"
+	Keyword="Win32Proj">
 	<Platforms>
 		<Platform
 			Name="Win32"/>
