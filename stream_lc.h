@@ -33,8 +33,13 @@ class basic_null_stream
 {
 public:
 	basic_null_stream()
-		: std::basic_ostream<_E>(&null_buf)
+		: std::basic_ostream<_E>(null_buf = new basic_null_streambuf<_E>())
 	{
+	}
+	
+	virtual ~basic_null_stream()
+	{
+		delete null_buf;
 	}
 
 	basic_null_stream& put(_E)
@@ -50,7 +55,7 @@ public:
 	}
 
 protected:
-	basic_null_streambuf<_E>  null_buf;
+	basic_null_streambuf<_E> * null_buf;
 };
 
 typedef basic_null_stream<char> null_stream;
@@ -179,14 +184,30 @@ protected:
 
 	virtual int_type underflow() // don't point past it
 	{
-		assert(0);
-		return _Tr::eof();
+		int_type c;
+
+		if (buffer.length())
+		{
+			return buffer[0];
+		}
+		if (fp == 0 || (_Tr::eq_int_type(_Tr::eof(), (c = fgetc(fp)))))
+		{
+			return _Tr::eof();
+		}
+		buffer += (char)c;
+		return c;
 	}
 
 	virtual int_type uflow() // point past it
 	{
 		int_type c;
 
+		if (buffer.length())
+		{
+			c = buffer[0];
+			buffer.erase(0, 1);
+			return c;
+		}
 		if (fp == 0 || (_Tr::eq_int_type(_Tr::eof(), (c = fgetc(fp)))))
 		{
 			return _Tr::eof();
@@ -225,11 +246,6 @@ protected:
 			|| 0 <= fflush(fp) ? 0 : -1;
 	}
 
-	virtual void imbue(const std::locale&)
-	{
-		assert(0);
-	}
-
 	std::streamsize xsputn(const _E *buf, std::streamsize cnt)
 	{
 		fwrite(buffer.c_str(), sizeof(_E), buffer.length(), fp);
@@ -243,7 +259,6 @@ private:
 	FILE * fp;
 	bool   must_close;
 	uint   fline;
-	_E     pbchar;
 	std::basic_string<_E, _Tr> buffer;
 };
 
@@ -265,22 +280,23 @@ public:
 	typedef basic_filebuf_lc<  _E, _Tr> _Mybuf;
 
 	basic_fstream_lc()
-		: _Mybase(&mybuf)  
+		: _Mybase(mybuf = new _Mybuf())
 	{
 	}
 
 	virtual ~basic_fstream_lc()
 	{
+		delete mybuf;
 	}
 
 	bool is_open() const
 	{
-		return mybuf.is_open();
+		return mybuf->is_open();
 	}
 
 	_Myt& open(const char * filename, std::ios_base::openmode mode = _DefOpenMode)
 	{
-		if ((mode & _DefOpenMode) == 0 || mybuf.open(filename, mode) == 0)
+		if ((mode & _DefOpenMode) == 0 || mybuf->open(filename, mode) == 0)
 		{
 			_Myios::setstate(std::ios_base::failbit);
 		}
@@ -289,7 +305,7 @@ public:
 	
 	_Myt& open(FILE *fp)
 	{
-		if (mybuf.open(fp) == 0)
+		if (mybuf->open(fp) == 0)
 		{
 			_Myios::setstate(std::ios_base::failbit);
 		}
@@ -298,7 +314,7 @@ public:
 	
 	void close()
 	{
-		if (mybuf.close() == 0)
+		if (mybuf->close() == 0)
 		{
 			_Myios::setstate(std::ios_base::failbit);
 		}
@@ -306,11 +322,11 @@ public:
 	
 	uint get_line() const
 	{
-		return mybuf.get_line();
+		return mybuf->get_line();
 	}
 
 protected:
-	mutable _Mybuf mybuf;
+	mutable _Mybuf *mybuf;
 };
 
 template<class _E, class _Tr = std::char_traits<_E> >

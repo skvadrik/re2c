@@ -1,4 +1,5 @@
 #!/bin/sh
+_XPG=1
 result=0
 errcnt=0
 tstcnt=0;
