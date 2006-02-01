@@ -49,6 +49,7 @@ makerpm \
 re2c.1 \
 re2c.spec \
 run_tests.sh \
+config_w32.h \
 ])
 AC_OUTPUT_COMMANDS([chmod +x makerpm run_tests.sh])
 AC_OUTPUT
