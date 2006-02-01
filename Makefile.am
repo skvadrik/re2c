@@ -20,10 +20,10 @@ CLEANFILES   = parser.cc y.tab.c y.tab.h scanner.cc re2c.1 .version
 
 DISTCLEANFILES = makerpm re2c.spec README scanner.cc re2c$(EXEEXT)
 
-EXTRA_DIST   = $(man_MANS) README parser.y scanner.re makerpm.in re2c.spec.in \
-               re2c.spec README.in y.tab.h CHANGELOG \
+EXTRA_SRC    = $(man_MANS) README parser.y scanner.re y.tab.h CHANGELOG \
                doc examples test
-EXTRA_ZIP    = $(EXTRA_DIST) config_w32.h *.sln *.vcproj bootstrap/*.cc bootstrap/*.h
+EXTRA_DIST   = $(EXTRA_SRC) makerpm.in re2c.spec.in re2c.spec README.in 
+EXTRA_ZIP    = $(EXTRA_SRC) config_w32.h *.sln *.vcproj bootstrap/*.cc bootstrap/*.h
 
 dist-hook: re2c.spec
 	rm -rf `find $(distdir)/doc -name CVS`
@@ -35,9 +35,9 @@ rpm-files:	$(bin_PROGRAMS) $(EXTRA_DIST)
 rpm: dist
 	rpmbuild -ta re2c-$(PACKAGE_VERSION).tar.gz
 
-zip: $(EXTRA_ZIP)
-	test -f re2c-$(PACKAGE_VERSION).zip && rm -f re2c-$(PACKAGE_VERSION).zip
-	zip -q -o -9 re2c-$(PACKAGE_VERSION).zip $(re2c_SOURCES) $(EXTRA_ZIP)
+zip: $(bin_PROGRAMS) $(EXTRA_ZIP)
+	if test -f re2c-$(PACKAGE_VERSION)-src.zip; then rm -f re2c-$(PACKAGE_VERSION)-src.zip; fi
+	zip -q -o -9 re2c-$(PACKAGE_VERSION)-src.zip $(re2c_SOURCES) $(EXTRA_ZIP)
 
 parser.cc:	$(top_srcdir)/parser.y
 	$(YACC) $(YFLAGS) $< || exit
