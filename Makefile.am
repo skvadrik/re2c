@@ -1,6 +1,7 @@
 # $Id$
 
 bin_PROGRAMS = re2c
+win_BINARIES = Release-2005/re2c.exe Release-2005/re2c.exe.intermediate.manifest
 re2c_SOURCES = code.cc dfa.cc main.cc parser.cc actions.cc scanner.re substr.cc\
 	translate.cc scanner.cc mbo_getopt.cc \
 	basics.h dfa.h globals.h ins.h parser.h re.h scanner.h \
@@ -21,9 +22,9 @@ CLEANFILES   = parser.cc y.tab.c y.tab.h scanner.cc re2c.1 .version
 DISTCLEANFILES = makerpm re2c.spec README scanner.cc re2c$(EXEEXT)
 
 EXTRA_SRC    = $(man_MANS) README parser.y scanner.re y.tab.h CHANGELOG \
-               doc examples test
+               doc examples test bootstrap/*.cc bootstrap/*.h
 EXTRA_DIST   = $(EXTRA_SRC) makerpm.in re2c.spec.in re2c.spec README.in config_w32.h.in
-EXTRA_ZIP    = $(EXTRA_SRC) config_w32.h *.sln *.vcproj bootstrap/*.cc bootstrap/*.h
+EXTRA_ZIP    = $(EXTRA_SRC) config_w32.h *.sln *.vcproj
 
 dist-hook: re2c.spec
 	rm -rf `find $(distdir)/doc -name CVS`
@@ -35,9 +36,19 @@ rpm-files:	$(bin_PROGRAMS) $(EXTRA_DIST)
 rpm: dist
 	rpmbuild -ta re2c-$(PACKAGE_VERSION).tar.gz
 
+src-rpm: dist
+	rpmbuild -ts re2c-$(PACKAGE_VERSION).tar.gz
+	cp -f `rpm --eval "%{_srcrpmdir}"`/re2c-$(PACKAGE_VERSION)-$(PACKAGE_RELEASE).src.rpm .
+
 zip: $(bin_PROGRAMS) $(EXTRA_ZIP)
 	if test -f re2c-$(PACKAGE_VERSION)-src.zip; then rm -f re2c-$(PACKAGE_VERSION)-src.zip; fi
 	zip -q -o -9 re2c-$(PACKAGE_VERSION)-src.zip $(re2c_SOURCES) $(EXTRA_ZIP)
+	if test -f re2c-$(PACKAGE_VERSION)-bin.zip; then rm -f re2c-$(PACKAGE_VERSION)-bin.zip; fi
+	if test -f Release-2005/re2c.exe; then \
+	zip -q -o -9 -D re2c-$(PACKAGE_VERSION)-bin.zip $(win_BINARIES); \
+	fi;
+
+release: dist zip src-rpm
 
 parser.cc:	$(top_srcdir)/parser.y
 	$(YACC) $(YFLAGS) $< || exit
