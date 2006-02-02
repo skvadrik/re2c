@@ -46,3 +46,4 @@ Debug-2005
 Release-2005
 *.suo
 *.ncb
+re2c-2005.vcproj.*
