@@ -18,26 +18,27 @@ compilers on various platforms. Building re2c requires autoconf 2.57 and bison
 and can use the pregenerated files.
 
 You can build this software by simply typing the following commands:
-    ./autogen.sh
     ./configure
     make
 
 The above version will be based on the pregenerated scanner.cc file. 
 If you want to build that file yourself (recommended when installing
 re2c) you need the following steps:
-    ./autogen.sh
     ./configure
     make
     rm -f scanner.cc
     make install
 
 Or you can create a rpm package and install it by the following commands:
-    ./autogen.sh
     ./configure
     make rpm
-    rpm -Uhv <packagedir>/re2c-@PACKAGE_VERSION@-1.rpm
+    rpm -Uhv <packagedir>/re2c-@PACKAGE_VERSION@-@PACKAGE_RELEASE@.rpm
 
-If you need to generate rpm packages for cvs builds use these commands:
+If you want to build from CVS then the first thing you should do is 
+regenerating all build files using the following command:
+	./autogen.sh
+and then continue with one of the above described build methods. Or if you 
+need to generate RPM packages for cvs builds use these commands:
     ./autogen.sh
     ./configure
     ./makerpm <release>
