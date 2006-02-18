@@ -1,3 +1,6 @@
+Version 0.10.1 (????-??-??)
+---------------------------
+
 Version 0.10.0 (2006-02-18)
 ---------------------------
 - Added make target zip to create windows source packages as zip files.
