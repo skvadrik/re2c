@@ -14,26 +14,26 @@
 namespace re2c
 {
 
-template<class _E>
+template<class _E, class _Tr = std::char_traits<_E> >
 class basic_null_streambuf
-	: public std::basic_streambuf<_E>
+	: public std::basic_streambuf<_E, _Tr>
 {
 public:
 	basic_null_streambuf()
-		: std::basic_streambuf<_E>()
+		: std::basic_streambuf<_E, _Tr>()
 	{
 	}	
 };
 
 typedef basic_null_streambuf<char> null_streambuf;
 
-template<class _E>
+template<class _E, class _Tr = std::char_traits<_E> >
 class basic_null_stream
-	: public std::basic_ostream<_E>
+	: public std::basic_ostream<_E, _Tr>
 {
 public:
 	basic_null_stream()
-		: std::basic_ostream<_E>(null_buf = new basic_null_streambuf<_E>())
+		: std::basic_ostream<_E, _Tr>(null_buf = new basic_null_streambuf<_E, _Tr>())
 	{
 	}
 	
@@ -55,7 +55,7 @@ public:
 	}
 
 protected:
-	basic_null_streambuf<_E> * null_buf;
+	basic_null_streambuf<_E, _Tr> * null_buf;
 };
 
 typedef basic_null_stream<char> null_stream;
@@ -184,13 +184,13 @@ protected:
 
 	virtual int_type underflow() // don't point past it
 	{
-		int_type c;
+		int c;
 
 		if (buffer.length())
 		{
 			return buffer[0];
 		}
-		if (fp == 0 || (_Tr::eq_int_type(_Tr::eof(), (c = fgetc(fp)))))
+		if (fp == 0 || ((c = fgetc(fp)) == EOF))
 		{
 			return _Tr::eof();
 		}
@@ -200,7 +200,7 @@ protected:
 
 	virtual int_type uflow() // point past it
 	{
-		int_type c;
+		int c;
 
 		if (buffer.length())
 		{
@@ -208,7 +208,7 @@ protected:
 			buffer.erase(0, 1);
 			return c;
 		}
-		if (fp == 0 || (_Tr::eq_int_type(_Tr::eof(), (c = fgetc(fp)))))
+		if (fp == 0 || ((c = fgetc(fp)) == EOF))
 		{
 			return _Tr::eof();
 		}
@@ -250,7 +250,14 @@ protected:
 	{
 		fwrite(buffer.c_str(), sizeof(_E), buffer.length(), fp);
 		buffer.clear();
-		fline += std::count(buf, buf + cnt, '\n');
+		/*fline += std::count(buf, buf + cnt, '\n');*/
+		for (std::streamsize pos = 0; pos < cnt; ++pos) 
+		{
+			if (buf[pos] == '\n')
+			{
+				++fline;
+			}
+		}
 		return fwrite(buf, sizeof(_E), cnt, fp);
 	}
 
@@ -274,10 +281,10 @@ class basic_fstream_lc
 	, public line_number
 {
 public:
-	typedef basic_fstream_lc< _E, _BaseStream, _DefOpenMode, _Tr> _Myt;
+	typedef basic_fstream_lc<_E, _BaseStream, _DefOpenMode, _Tr> _Myt;
 	typedef std::basic_ios<_E, _Tr> _Myios;
 	typedef _BaseStream _Mybase;
-	typedef basic_filebuf_lc<  _E, _Tr> _Mybuf;
+	typedef basic_filebuf_lc<_E, _Tr> _Mybuf;
 
 	basic_fstream_lc()
 		: _Mybase(mybuf = new _Mybuf())
