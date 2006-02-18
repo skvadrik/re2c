@@ -45,7 +45,7 @@ zip: $(bin_PROGRAMS) $(EXTRA_ZIP)
 	zip -q -o -9 re2c-$(PACKAGE_VERSION)-src.zip $(re2c_SOURCES) $(EXTRA_ZIP)
 	if test -f re2c-$(PACKAGE_VERSION)-bin.zip; then rm -f re2c-$(PACKAGE_VERSION)-bin.zip; fi
 	if test -f Release-2005/re2c.exe; then \
-	zip -q -o -9 -D re2c-$(PACKAGE_VERSION)-bin.zip $(win_BINARIES); \
+	zip -q -o -9 -j re2c-$(PACKAGE_VERSION)-bin.zip $(win_BINARIES); \
 	fi;
 
 release: dist zip src-rpm
