@@ -87,19 +87,14 @@ yy7:    if(yych &lt;= '/') goto yy3;
 <br />
 <br />
 <p>After the /*!re2c */ blocks you can place a /*!max:re2c */ block that will
-output a define that holds the maximum number of characters required to parse
+output a define (YYMAXFILL) that holds the maximum number of characters required to parse
 the input. That is the maximum value YYFILL() will receive.</p>
 <a name="lbAE" id="lbAE"> </a>
 <h2>OPTIONS</h2>
 <p><b>re2c</b> provides the following options:</p>
 <dl compact="compact">
-<dt><b>-e</b></dt>
-<dd>Cross-compile from an ASCII platform to an EBCDIC one.<br /><br /></dd>
-<dt><b>-f</b></dt>
-<dd>Generate a scanner with support for storable state.<br /><br /></dd>
-<dt><b>-s</b></dt>
-<dd>Generate nested ifs for some switches. Many compilers need this assist to
-generate better code.<br /><br /></dd>
+<dt><b>-?</b></dt>
+<dd><b>-h</b> Invoke a short help.<br /><br /></dd>
 <dt><b>-b</b></dt>
 <dd>Implies <b>-s</b>. Use bit vectors as well in the attempt to coax better
 code out of the compiler. Most useful for specifications with more than a few
@@ -111,18 +106,26 @@ parser issues and states. If you use this switch you need to define a macro
 <i>YYDEBUG</i> that is called like a function with two parameters: <i>void
 YYDEBUG(int state, char current)</i>. The first parameter receives the state or
 -1 and the second parameter receives the input at the current cursor.<br /><br /></dd>
+<dt><b>-e</b></dt>
+<dd>Cross-compile from an ASCII platform to an EBCDIC one.<br /><br /></dd>
+<dt><b>-f</b></dt>
+<dd>Generate a scanner with support for storable state. For details see below
+at <b>SCANNER WITH STORABLE STATES</b>.<br /><br /></dd>
 <dt><b>-i</b></dt>
 <dd>Do not output #line information. This is usefull when you want use a CMS
 tool with the re2c output which you might want if you do not require your users
-to have re2c themselves when building from your source.<br /><br /></dd>
-<dt><b>-h</b></dt>
-<dd><b>-?</b> Invoke a short help.<br /><br /></dd>
+to have re2c themselves when building from your source. <b>-o output</b>
+Specify the output file.<br /><br /></dd>
+<dt><b>-s</b></dt>
+<dd>Generate nested ifs for some switches. Many compilers need this assist to
+generate better code.<br /><br /></dd>
 <dt><b>-v</b></dt>
 <dd>Show version information.<br /><br /></dd>
 <dt><b>-V</b></dt>
 <dd>Show the version as a number XXYYZZ.<br /><br /></dd>
-<dt><b>-o output</b></dt>
-<dd>Specify the output file.<br /><br /></dd>
+<dt><b>-w</b></dt>
+<dd>Create a parser that supports wide chars (UCS-2). This implies <b>-s</b>
+and cannot be used together with <b>-e</b> switch.<br /><br /></dd>
 </dl>
 <br />
 <br />
@@ -200,14 +203,48 @@ scanner, it resumes operations exactly where it left off.</p>
 <p>At this point, the -f option only works with "mono-block" re2c scanners: if
 the scanner is described with more than one /*!re2c ... */ block, re2c -f fails
 with an error.</p>
+<p>Changes needed compared to the "pull" model.</p>
+<p>1. User has to supply macros YYSETSTATE() YYGETSTATE(state)</p>
+<p>2. The <b>-f</b> option inhibits declaration of <i>yych</i> and
+<i>yyaccept</i>. So the user has to declare these. Also the user has to save
+and restore these. In the example <i>examples/push.re</i> these are declared as
+fields of the (C++) class of which the scanner is a method, so they do not need
+to be saved/restored explicitly. For C they could e.g. be made macros that
+select fields from a structure passed in as parameter. Alternatively, they
+could be declared as local variables, saved with <a href=
+"http://localhost/cgi-bin/man/man2html?n+YYFILL">YYFILL</a>(n) when it decides
+to return and restored at entry to the function. Also, it could be more
+efficient to save the state from <a href=
+"http://localhost/cgi-bin/man/man2html?n+YYFILL">YYFILL</a>(n) because
+YYSETSTATE(state) is called unconditionally. <a href=
+"http://localhost/cgi-bin/man/man2html?n+YYFILL">YYFILL</a>(n) however does not
+get <i>state</i> as parameter, so we would have to store state in a local
+variable by YYSETSTATE(state).</p>
+<p>3. Modify <a href=
+"http://localhost/cgi-bin/man/man2html?n+YYFILL">YYFILL</a>(n) to return (from
+the function calling it) if more input is needed.</p>
+<p>4. Modify caller to recognise "more input is needed" and respond
+appropriately.</p>
 <p>Please see examples/push.re for push-model scanner.</p>
 <a name="lbAH" id="lbAH"> </a>
 <h2>SCANNER SPECIFICATIONS</h2>
-<p>Each scanner specification consists of a set of <i>rules</i> and name
-definitions. Rules consist of a regular expression along with a block of C/C++
-code that is to be executed when the associated regular expression is matched.
-Name definitions are of the form ``<i>name</i> = <i>regular
-expression</i>;''.</p>
+<p>Each scanner specification consists of a set of <i>rules</i>, <i>name
+definitions</i> and <i>configurations</i>.</p>
+<p><i>Rules</i> consist of a regular expression along with a block of C/C++
+code that is to be executed when the associated <i>regular expression</i> is
+matched.</p>
+<dl compact="compact">
+<dd><i>regular expression</i> { <i>C/C++ code</i> }</dd>
+</dl>
+<p>Name definitions are of the form:</p>
+<dl compact="compact">
+<dd><i>name</i> = <i>regular expression</i>;</dd>
+</dl>
+<p>Configurations look like name definitions whose names start with
+"<b>re2c:</b>":</p>
+<dl compact="compact">
+<dd>re2c:<i>name</i> = <i>value</i>;</dd>
+</dl>
 <a name="lbAI" id="lbAI"> </a>
 <h2>SUMMARY OF RE2C REGULAR EXPRESSIONS</h2>
 <dl compact="compact">
@@ -242,7 +279,7 @@ regular expressions which can be expressed as character classes.</dd>
 <dt><i>r</i>|<i>s</i></dt>
 <dd>either an <i>r</i> or an <i>s</i></dd>
 <dt><i>r</i>/<i>s</i></dt>
-<dd>an <i>r</i> but only if it is followed by an <i>s</i>. The s is not part of
+<dd>an <i>r</i> but only if it is followed by an <i>s</i>. The <i>s</i> is not part of
 the matched text. This type of regular expression is called "trailing
 context".</dd>
 <dt><i>r</i>{<i>n</i>}</dt>
@@ -259,14 +296,48 @@ context".</dd>
 <br />
 <br />
 <p>Character classes and string literals may contain octoal or hexadecimal
-character definitions and the following set of escape sequences (\n,<br />
- \t, \v, \b, \r, \f, \a, \\). An octal character is defined by a backslash
-followed by its three octal digits and a hexadecimal character is defined by
-backslash, a lower cased 'x' and its two hexadecimal digits.</p>
+character definitions and the following set of escape sequences
+(<b>\n</b>,<br />
+ <b>\t</b>, <b>\v</b>, <b>\b</b>, <b>\r</b>, <b>\f</b>, <b>\a</b>, <b>\\</b>).
+An octal character is defined by a backslash followed by its three octal digits
+and a hexadecimal character is defined by backslash, a lower cased '<b>x</b>'
+and its two hexadecimal digits or a backslash, an upper cased <b>X</b> and its
+four hexadecimal digits.</p>
+<p>re2c further more supports the c/c++ unicode notation. That is a backslash
+followed by either a lowercased <b>u</b> and its four hexadecimal digits or an
+uppercased <b>U</b> and its eight hexadecimal digits. However using the U
+notation it is not possible to support characters greater <b>\U0000FFFF</b> due
+to an internal limitation of re2c.</p>
+<p>Since characters greater <b>\X00FF</b> are not allowed in non unicode mode,
+the only portable "<b>any</b>" rules are <b>(.|"\n")</b> and <b>[^]</b>.</p>
 <p>The regular expressions listed above are grouped according to precedence,
 from highest precedence at the top to lowest at the bottom. Those grouped
 together have equal precedence.</p>
 <a name="lbAJ" id="lbAJ"> </a>
+<h2>INPLACE CONFIGURATION</h2>
+<p>It is possible to configure code generation inside re2c blocks. The
+following lists the available configurations:</p>
+<dl compact="compact">
+<dt><i>re2c:indent:top</i> <b>=</b> 0 <b>;</b></dt>
+<dd>Specifies the minimum number of indendation to use. Requires a numeric
+value greater than or equal zero.</dd>
+<dt><i>re2c:indent:string</i> <b>=</b> "\t" <b>;</b></dt>
+<dd>Specifies the string to use for indendation. Requires a string that should
+contain only whitespace unless you need this for external tools. The easiest
+way to specify spaces is to enclude them in single or double quotes. If you do
+not want any indendation at all you can simply set this to <b>""</b>.</dd>
+<dt><i>re2c:yybm:hex</i> <b>=</b> 0 <b>;</b></dt>
+<dd>If set to zero then a decimal table is being used else a hexadecimal table
+will be generated.</dd>
+<dt><i>re2c:startlabel</i> <b>=</b> 0 <b>;</b></dt>
+<dd>If set to a non zero integer then the start label of the next scanner
+blocks will be generated even if not used by the scanner itself. Otherwise the
+normal <b>yy0</b> like start label is only being generated if needed. If set to
+a text value then a label with that text will be generated regardless of
+whether the normal start label is being used or not. This setting is being
+reset to <b>0</b> after a start label has been generated.</dd>
+</dl>
+<a name="lbAK" id="lbAK"> </a>
 <h2>A LARGER EXAMPLE</h2>
 <pre>
 #include &lt;stdlib.h&gt;
@@ -593,7 +664,7 @@ specification for each start condition (as illustrated in the above example).
 <br />
 <a name="lbAO" id="lbAO"> </a>
 <h2>VERSION INFORMATION</h2>
-<p>This manpage describes <b>re2c</b>, version 0.9.10.</p>
+<p>This manpage describes <b>re2c</b>, version 0.10.0.</p>
 <hr />
 <a name="index" id="index"> </a>
 <h2>Index</h2>
@@ -617,6 +688,6 @@ specification for each start condition (as illustrated in the above example).
 <br />
 <hr />
 <p>This document was created by man2html, using the manual pages.<br />
-Time: 11:33:44 GMT, September 04, 2005</p>
+Time: 23:55:44 GMT, Februar 18, 2006</p>
 </body>
 </html>
