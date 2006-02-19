@@ -1,7 +1,7 @@
 # $Id$
 
 bin_PROGRAMS = re2c
-win_BINARIES = Release-2005/re2c.exe Release-2005/re2c.exe.intermediate.manifest
+win_BINARIES = Release-2005/re2c.exe
 re2c_SOURCES = code.cc dfa.cc main.cc parser.cc actions.cc scanner.re substr.cc\
 	translate.cc scanner.cc mbo_getopt.cc \
 	basics.h dfa.h globals.h ins.h parser.h re.h scanner.h \
