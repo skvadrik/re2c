@@ -29,7 +29,6 @@ bool sFlag = false;
 bool wFlag = false;
 
 bool bUsedYYAccept = false;
-bool bUsedCtxMarker= false;
 bool bUseStartLabel= false;
 std::string startLabelName;
 uint maxFill = 1;

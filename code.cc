@@ -466,7 +466,7 @@ void Rule::emit(std::ostream &o, uint ind, bool &) const
 
 	if (back != 0u)
 	{
-		o << indent(ind) << "YYCURSOR = yyctxmarker;\n";
+		o << indent(ind) << "YYCURSOR = YYCTXMARKER;\n";
 	}
 
 	RuleLine rl(*rule);
@@ -857,8 +857,7 @@ void State::emit(std::ostream &o, uint ind, bool &readCh) const
 	}
 	if (isPreCtxt)
 	{
-		o << indent(ind) << "yyctxmarker = YYCURSOR + 1;\n";
-		bUsedCtxMarker = true;
+		o << indent(ind) << "YYCTXMARKER = YYCURSOR + 1;\n";
 	}
 	action->emit(o, ind, readCh);
 }
@@ -1363,11 +1362,6 @@ void DFA::emit(std::ostream &o, uint ind)
 	else
 	{
 		o << indent(ind++) << "{\n\n";
-	}
-
-	if (bUsedCtxMarker)
-	{
-		o << indent(ind) << "YYCTYPE *yyctxmarker = YYCURSOR;\n";
 	}
 
 	if (hasFillLabels == true)

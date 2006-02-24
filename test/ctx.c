@@ -13,6 +13,7 @@ struct Scanner
 	char    *cur;
 	char    *lim;
 	char	*ptr;
+	char	*ctx;
 	char    *tok;
 };
 
@@ -20,6 +21,7 @@ struct Scanner
 #define	YYCURSOR	s.cur
 #define	YYLIMIT		s.lim
 #define	YYMARKER	s.ptr
+#define	YYCTXMARKER	s.ctx
 #define	YYFILL(n)	
 
 enum What
@@ -44,10 +46,9 @@ std:
 	s.tok = cursor;
 
 
-#line 48 "<stdout>"
+#line 50 "<stdout>"
 {
 	YYCTYPE yych;
-	YYCTYPE *yyctxmarker = YYCURSOR;
 
 	if((YYLIMIT - YYCURSOR) < 3) YYFILL(3);
 	yych = *YYCURSOR;
@@ -70,7 +71,7 @@ std:
 	default:	goto yy9;
 	}
 yy2:
-	yyctxmarker = YYCURSOR + 1;
+	YYCTXMARKER = YYCURSOR + 1;
 	++YYCURSOR;
 	switch((yych = *YYCURSOR)) {
 	case '0':
@@ -86,30 +87,30 @@ yy2:
 	default:	goto yy3;
 	}
 yy3:
-#line 58 "ctx.re"
+#line 60 "ctx.re"
 	{
 		return UNEXPECTED;
 	}
-#line 94 "<stdout>"
+#line 95 "<stdout>"
 yy4:
 	++YYCURSOR;
 	yych = *YYCURSOR;
 	goto yy11;
 yy5:
-#line 48 "ctx.re"
+#line 50 "ctx.re"
 	{ return NUMBER;  }
-#line 102 "<stdout>"
+#line 103 "<stdout>"
 yy6:
 	++YYCURSOR;
 yy7:
-#line 51 "ctx.re"
+#line 53 "ctx.re"
 	{
 		if(s.cur == s.lim)
 			return EOI;
 		cursor = s.cur;
 		goto std;
 	}
-#line 113 "<stdout>"
+#line 114 "<stdout>"
 yy8:
 	yych = *++YYCURSOR;
 	goto yy7;
@@ -152,10 +153,10 @@ yy12:
 	default:	goto yy14;
 	}
 yy14:
-	YYCURSOR = yyctxmarker;
-#line 47 "ctx.re"
+	YYCURSOR = YYCTXMARKER;
+#line 49 "ctx.re"
 	{ return KEYWORD; }
-#line 159 "<stdout>"
+#line 160 "<stdout>"
 yy15:
 	++YYCURSOR;
 	switch((yych = *YYCURSOR)) {
@@ -172,12 +173,12 @@ yy15:
 	default:	goto yy16;
 	}
 yy16:
-	YYCURSOR = yyctxmarker;
-#line 46 "ctx.re"
+	YYCURSOR = YYCTXMARKER;
+#line 48 "ctx.re"
 	{ return KEYWORD; }
-#line 179 "<stdout>"
+#line 180 "<stdout>"
 }
-#line 61 "ctx.re"
+#line 63 "ctx.re"
 
 }
 

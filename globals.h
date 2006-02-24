@@ -22,7 +22,6 @@ extern bool sFlag;
 extern bool wFlag;
 
 extern bool bUsedYYAccept;
-extern bool bUsedCtxMarker;
 extern bool bUseStartLabel;
 extern std::string startLabelName;
 extern uint maxFill;

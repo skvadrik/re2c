@@ -7,6 +7,9 @@
 .ds rx regular expression
 .ds lx \fIl\fP-expression
 \"$Log$
+\"Revision 1.40  2006/02/24 21:16:17  helly
+\"- Applied #1438160 expose YYCTXMARKER.
+\"
 \"Revision 1.39  2006/01/21 15:51:02  helly
 \"- Generic fix for oline generation (by providing specialized ostream whose
 \"  stream_buffer count '\n's)
@@ -299,6 +302,12 @@ to determine when the buffer needs (re)filling.
 \fCYYMARKER\fP
 \*(lx of type \fC*YYCTYPE\fP.
 The generated code saves backtracking information in \fCYYMARKER\fP.
+.TP
+\fCYYCTXMARKER\fP
+\*(lx of type \fC*YYCTYPE\fP.
+The generated code saves trailing context backtracking information in \fCYYCTXMARKER\fP.
+The user only needs to define this macro if a scanner specification uses trailing
+context in one or more of its regular expressions.
 .TP
 \fCYYFILL(\fP\fIn\fP\fC)\fP
 The generated code "calls" \fCYYFILL\fP when the buffer needs

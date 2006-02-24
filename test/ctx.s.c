@@ -13,6 +13,7 @@ struct Scanner
 	char    *cur;
 	char    *lim;
 	char	*ptr;
+	char	*ctx;
 	char    *tok;
 };
 
@@ -20,6 +21,7 @@ struct Scanner
 #define	YYCURSOR	s.cur
 #define	YYLIMIT		s.lim
 #define	YYMARKER	s.ptr
+#define	YYCTXMARKER	s.ctx
 #define	YYFILL(n)	
 
 enum What
@@ -44,10 +46,9 @@ std:
 	s.tok = cursor;
 
 
-#line 48 "<stdout>"
+#line 50 "<stdout>"
 {
 	YYCTYPE yych;
-	YYCTYPE *yyctxmarker = YYCURSOR;
 
 	if((YYLIMIT - YYCURSOR) < 3) YYFILL(3);
 	yych = *YYCURSOR;
@@ -69,36 +70,36 @@ std:
 			if(yych >= 'c') goto yy9;
 		}
 	}
-	yyctxmarker = YYCURSOR + 1;
+	YYCTXMARKER = YYCURSOR + 1;
 	++YYCURSOR;
 	if((yych = *YYCURSOR) <= '/') goto yy3;
 	if(yych == '1') goto yy15;
 	if(yych <= '9') goto yy12;
 yy3:
-#line 58 "ctx.s.re"
+#line 60 "ctx.s.re"
 	{
 		return UNEXPECTED;
 	}
-#line 83 "<stdout>"
+#line 84 "<stdout>"
 yy4:
 	++YYCURSOR;
 	yych = *YYCURSOR;
 	goto yy11;
 yy5:
-#line 48 "ctx.s.re"
+#line 50 "ctx.s.re"
 	{ return NUMBER;  }
-#line 91 "<stdout>"
+#line 92 "<stdout>"
 yy6:
 	++YYCURSOR;
 yy7:
-#line 51 "ctx.s.re"
+#line 53 "ctx.s.re"
 	{
 		if(s.cur == s.lim)
 			return EOI;
 		cursor = s.cur;
 		goto std;
 	}
-#line 102 "<stdout>"
+#line 103 "<stdout>"
 yy8:
 	yych = *++YYCURSOR;
 	goto yy7;
@@ -120,21 +121,21 @@ yy12:
 	if(yych <= '/') goto yy14;
 	if(yych <= '9') goto yy12;
 yy14:
-	YYCURSOR = yyctxmarker;
-#line 47 "ctx.s.re"
+	YYCURSOR = YYCTXMARKER;
+#line 49 "ctx.s.re"
 	{ return KEYWORD; }
-#line 127 "<stdout>"
+#line 128 "<stdout>"
 yy15:
 	++YYCURSOR;
 	if((yych = *YYCURSOR) <= '/') goto yy16;
 	if(yych <= '9') goto yy12;
 yy16:
-	YYCURSOR = yyctxmarker;
-#line 46 "ctx.s.re"
+	YYCURSOR = YYCTXMARKER;
+#line 48 "ctx.s.re"
 	{ return KEYWORD; }
-#line 136 "<stdout>"
+#line 137 "<stdout>"
 }
-#line 61 "ctx.s.re"
+#line 63 "ctx.s.re"
 
 }
 

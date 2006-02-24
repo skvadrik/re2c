@@ -11,6 +11,7 @@ struct Scanner
 	char    *cur;
 	char    *lim;
 	char	*ptr;
+	char	*ctx;
 	char    *tok;
 };
 
@@ -18,6 +19,7 @@ struct Scanner
 #define	YYCURSOR	s.cur
 #define	YYLIMIT		s.lim
 #define	YYMARKER	s.ptr
+#define	YYCTXMARKER	s.ctx
 #define	YYFILL(n)	
 
 enum What

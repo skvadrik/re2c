@@ -149,10 +149,13 @@ YYCURSOR to YYLIMIT to determine when the buffer needs (re)filling.<br /><br /><
 <dt>YYMARKER</dt>
 <dd><i>l</i>-expression of type *YYCTYPE. The generated code saves backtracking
 information in YYMARKER.<br /><br /></dd>
+<dt>YYCTXMARKER</dt>
+<dd><i>l</i>-expression of type *YYCTYPE. The generated code saves context backtracking
+information in YYCTXMARKER.<br /><br /></dd>
 <dt>YYFILL(<i>n</i>)</dt>
 <dd>The generated code "calls" YYFILL when the buffer needs (re)filling: at
 least <i>n</i> additional characters should be provided. YYFILL should adjust
-YYCURSOR, YYLIMIT and YYMARKER as needed. Note that for typical programming
+YYCURSOR, YYLIMIT, YYMARKER and YYCTXMARKER as needed. Note that for typical programming
 languages <i>n</i> will be the length of the longest keyword plus one.<br /><br /></dd>
 <dt>YYGETSTATE()</dt>
 <dd>The user only needs to define this macro if the <b>-f</b> flag was
@@ -636,7 +639,6 @@ accordingly.</p>
 specification for each start condition (as illustrated in the above example).
 <a name="lbAL" id="lbAL"> </a></p>
 <h2>BUGS</h2>
-<p>Only fixed length trailing context can be handled.</p>
 <p>Difference only works for character sets.</p>
 <p>The <b>re2c</b> internal algorithms need documentation.</p>
 <a name="lbAM" id="lbAM"> </a>

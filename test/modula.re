@@ -11,13 +11,14 @@ typedef unsigned char uchar;
 #define	YYCURSOR	cursor
 #define	YYLIMIT		s->lim
 #define	YYMARKER	s->ptr
+#define	YYCTXMARKER	s->ctx
 #define	YYFILL		{cursor = fill(s, cursor);}
 
 #define	RETURN(i)	{s->cur = cursor; return i;}
 
 typedef struct Scanner {
     int			fd;
-    uchar		*bot, *tok, *ptr, *cur, *pos, *lim, *top, *eof;
+    uchar		*bot, *tok, *ptr, *ctx, *cur, *pos, *lim, *top, *eof;
     uint		line;
 } Scanner;
 
