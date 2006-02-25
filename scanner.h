@@ -27,7 +27,7 @@ private:
 
 public:
 	Scanner(std::istream&, std::ostream&);
-	int echo(std::ostream&);
+	int echo();
 	int scan();
 	
 	void fatal(const char*) const;

@@ -1621,7 +1621,7 @@ void parse(Scanner& i, std::ostream& o)
 	o << " */\n";
 	o << sourceFileInfo;
 	
-	while(i.echo(o))
+	while(i.echo())
 	{
 		yyparse();
 		if(spec)

@@ -94,12 +94,12 @@ config  = "re2c" cname+;
 value   = [^\r\n; \t]* | dstring | sstring;
 */
 
-int Scanner::echo(std::ostream &out){
+int Scanner::echo()
+{
     char *cursor = cur;
     bool ignore_eoc = false;
 
-    // Catch EOF
-    if (eof && cursor == eof)
+    if (eof && cursor == eof) // Catch EOF
 	{
     	return 0;
 	}
