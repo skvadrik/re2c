@@ -41,7 +41,7 @@ public:
 	uint xlat(uint c) const;
 
 	uint unescape(SubStr &s) const;
-	std::string& unescape(SubStr & in, std::string & out) const;
+	std::string& unescape(SubStr& str_in, std::string& str_out) const;
 
 	Range * getRange(SubStr &s) const;
 	RegExp * matchChar(uint c) const;

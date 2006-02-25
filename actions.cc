@@ -695,23 +695,23 @@ uint Scanner::unescape(SubStr &s) const
 	}
 }
 
-std::string& Scanner::unescape(SubStr & in, std::string & out) const
+std::string& Scanner::unescape(SubStr& str_in, std::string& str_out) const
 {
-	out.clear();
+	str_out.clear();
 
-	while(in.len)
+	while(str_in.len)
 	{
-		uint c = unescape(in);
+		uint c = unescape(str_in);
 		
 		if (c > 0xFF)
 		{
-			fatal(in.ofs(), "Illegal character");
+			fatal(str_in.ofs(), "Illegal character");
 		}
 
-		out += static_cast<char>(c);
+		str_out += static_cast<char>(c);
 	}
 
-	return out;
+	return str_out;
 }
 
 Range * Scanner::getRange(SubStr &s) const
