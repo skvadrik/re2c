@@ -50,6 +50,9 @@ the directory where the makerpm step has written the generated rpm to.
 If you are on a debian system you can use the tool 'alien' to convert rpms
 to debian packages.
 
+When building with native SUN compilers you need to set the following compiler
+flags: CXXFLAGS='-g -compat5 -library=stlport4'.
+
 If you want to build re2c on a windows system you can either use cygwin and one
 of the methods described above or use Microsoft Visual C .NET 2002 or later
 with the solution files provided (re2c.sln for 2002/2003 and re2c-2005.sln for
