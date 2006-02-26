@@ -220,6 +220,7 @@ protected:
 		return c;
 	}
 
+#if 0
 	virtual std::streamsize xsgetn(_E* buf, std::streamsize n)
 	{
 		std::streamsize r = 0;
@@ -235,6 +236,7 @@ protected:
 		buf[r] = '\0';
 		return r;
 	}
+#endif
 
 	virtual pos_type seekoff(off_type off, std::ios_base::seekdir whence,
 		std::ios_base::openmode = (std::ios_base::openmode)(std::ios_base::in | std::ios_base::out))
