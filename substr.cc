@@ -1,5 +1,6 @@
 /* $Id$ */
 #include <string.h>
+#include <stdlib.h>
 #include "substr.h"
 #include "globals.h"
 

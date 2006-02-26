@@ -10,6 +10,7 @@
 #include <iosfwd>
 #include <fstream>
 #include <assert.h>
+#include <stdio.h>
 
 namespace re2c
 {
@@ -219,6 +220,22 @@ protected:
 		return c;
 	}
 
+	virtual std::streamsize xsgetn(_E* buf, std::streamsize n)
+	{
+		std::streamsize r = 0;
+		while(n--)
+		{
+			int_type c = underflow();
+			if (_Tr::eq_int_type(_Tr::eof(), c))
+			{
+				break;
+			}
+			buf[r++] = c;
+		}
+		buf[r] = '\0';
+		return r;
+	}
+
 	virtual pos_type seekoff(off_type off, std::ios_base::seekdir whence,
 		std::ios_base::openmode = (std::ios_base::openmode)(std::ios_base::in | std::ios_base::out))
 	{
@@ -246,7 +263,7 @@ protected:
 			|| 0 <= fflush(fp) ? 0 : -1;
 	}
 
-	std::streamsize xsputn(const _E *buf, std::streamsize cnt)
+	virtual std::streamsize xsputn(const _E *buf, std::streamsize cnt)
 	{
 		fwrite(buffer.c_str(), sizeof(_E), buffer.length(), fp);
 		buffer.clear();
