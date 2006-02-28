@@ -7,6 +7,9 @@
 .ds rx regular expression
 .ds lx \fIl\fP-expression
 \"$Log$
+\"Revision 1.41  2006/02/28 18:46:42  helly
+\"- Updates before release
+\"
 \"Revision 1.40  2006/02/24 21:16:17  helly
 \"- Applied #1438160 expose YYCTXMARKER.
 \"
@@ -312,9 +315,9 @@ context in one or more of its regular expressions.
 \fCYYFILL(\fP\fIn\fP\fC)\fP
 The generated code "calls" \fCYYFILL\fP when the buffer needs
 (re)filling:  at least \fIn\fP additional characters should
-be provided.  \fCYYFILL\fP should adjust \fCYYCURSOR\fP, \fCYYLIMIT\fP and
-\fCYYMARKER\fP as needed.  Note that for typical programming languages
-\fIn\fP will be the length of the longest keyword plus one.
+be provided.  \fCYYFILL\fP should adjust \fCYYCURSOR\fP, \fCYYLIMIT\fP,
+\fCYYMARKER\fP and \fCYYCTXMARKER\fP as needed.  Note that for typical 
+programming languages \fIn\fP will be the length of the longest keyword plus one.
 .TP
 \fCYYGETSTATE()\fP
 The user only needs to define this macro if the \fB-f\fP flag was specified.

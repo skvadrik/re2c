@@ -150,13 +150,16 @@ YYCURSOR to YYLIMIT to determine when the buffer needs (re)filling.<br /><br /><
 <dd><i>l</i>-expression of type *YYCTYPE. The generated code saves backtracking
 information in YYMARKER.<br /><br /></dd>
 <dt>YYCTXMARKER</dt>
-<dd><i>l</i>-expression of type *YYCTYPE. The generated code saves context backtracking
-information in YYCTXMARKER.<br /><br /></dd>
+<dd><i>l</i>-expression of type *YYCTYPE. The generated code saves context 
+backtracking information in YYCTXMARKER. The user only  needs to define this 
+macro if a scanner specification uses trailing context in one or more of its 
+regular expressions.<br /><br /></dd>
 <dt>YYFILL(<i>n</i>)</dt>
 <dd>The generated code "calls" YYFILL when the buffer needs (re)filling: at
 least <i>n</i> additional characters should be provided. YYFILL should adjust
-YYCURSOR, YYLIMIT, YYMARKER and YYCTXMARKER as needed. Note that for typical programming
-languages <i>n</i> will be the length of the longest keyword plus one.<br /><br /></dd>
+YYCURSOR, YYLIMIT, YYMARKER and YYCTXMARKER as needed. Note that for typical 
+programming languages <i>n</i> will be the length of the longest keyword plus 
+one.<br /><br /></dd>
 <dt>YYGETSTATE()</dt>
 <dd>The user only needs to define this macro if the <b>-f</b> flag was
 specified. In that case, the generated code "calls" YYGETSTATE at the very
