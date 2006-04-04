@@ -1,6 +1,7 @@
 Version 0.10.2 (????-??-??)
 ---------------------------
-- Added docu, examples and tests to .src.zip package (0.10.1 was repackaged).
+- Fixed #1463639 Missing forward declaration
+- Added docu, examples and tests to .src.zip package (0.10.1 zip was repackaged).
 
 Version 0.10.1 (2006-02-28)
 ---------------------------
