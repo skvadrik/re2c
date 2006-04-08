@@ -4,7 +4,6 @@
 #line 5 "<stdout>"
 {
 	YYCTYPE yych;
-	unsigned int yyaccept = 0;
 
 	if((YYLIMIT - YYCURSOR) < 6) YYFILL(6);
 	yych = *YYCURSOR;
@@ -56,12 +55,11 @@ yy2:
 yy3:
 #line 3 "sample.re"
 	{return ID;}
-#line 60 "<stdout>"
+#line 59 "<stdout>"
 yy4:
 	yych = *++YYCURSOR;
 	goto yy18;
 yy5:
-	yyaccept = 0;
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch(yych){
 	case 'x':	goto yy12;
@@ -70,7 +68,7 @@ yy5:
 yy6:
 #line 4 "sample.re"
 	{return DEC;}
-#line 74 "<stdout>"
+#line 72 "<stdout>"
 yy7:
 	yych = *++YYCURSOR;
 	goto yy11;
@@ -78,7 +76,7 @@ yy8:
 	++YYCURSOR;
 #line 6 "sample.re"
 	{return ERR;}
-#line 82 "<stdout>"
+#line 80 "<stdout>"
 yy10:
 	++YYCURSOR;
 	if(YYLIMIT == YYCURSOR) YYFILL(1);
@@ -120,9 +118,7 @@ yy12:
 	}
 yy13:
 	YYCURSOR = YYMARKER;
-	if (yyaccept == 0) {
-		goto yy6;
-	}
+	goto yy6;
 yy14:
 	++YYCURSOR;
 	if(YYLIMIT == YYCURSOR) YYFILL(1);
@@ -149,7 +145,7 @@ yy14:
 yy16:
 #line 5 "sample.re"
 	{return HEX;}
-#line 153 "<stdout>"
+#line 149 "<stdout>"
 yy17:
 	++YYCURSOR;
 	if(YYLIMIT == YYCURSOR) YYFILL(1);
@@ -236,7 +232,7 @@ yy22:
 yy23:
 #line 2 "sample.re"
 	{return PRINT;}
-#line 240 "<stdout>"
+#line 236 "<stdout>"
 }
 #line 7 "sample.re"
 

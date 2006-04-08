@@ -18,7 +18,6 @@ const char *q;
 #line 19 "<stdout>"
 {
 	YYCTYPE yych;
-	unsigned int yyaccept = 0;
 
 	if((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
 	yych = *YYCURSOR;
@@ -29,7 +28,6 @@ const char *q;
 	default:	goto yy6;
 	}
 yy2:
-	yyaccept = 0;
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch(yych){
 	case 0x0A:	goto yy7;
@@ -40,13 +38,13 @@ yy2:
 yy3:
 #line 19 "bug1390174.re"
 	{RET(0);}
-#line 44 "<stdout>"
+#line 42 "<stdout>"
 yy4:
 	++YYCURSOR;
 yy5:
 #line 18 "bug1390174.re"
 	{RET(1);}
-#line 50 "<stdout>"
+#line 48 "<stdout>"
 yy6:
 	yych = *++YYCURSOR;
 	goto yy3;
@@ -65,9 +63,7 @@ yy8:
 	}
 yy10:
 	YYCURSOR = YYMARKER;
-	if (yyaccept == 0) {
-		goto yy3;
-	}
+	goto yy3;
 }
 #line 20 "bug1390174.re"
 

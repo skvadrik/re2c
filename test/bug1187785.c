@@ -23,7 +23,6 @@ cont:
 #line 24 "<stdout>"
 {
 	YYCTYPE yych;
-	unsigned int yyaccept = 0;
 
 	if((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
 	yych = *YYCURSOR;
@@ -32,7 +31,6 @@ cont:
 	default:	goto yy4;
 	}
 yy2:
-	yyaccept = 0;
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch(yych){
 	case 0x00:
@@ -294,7 +292,7 @@ yy2:
 yy3:
 #line 23 "bug1187785.re"
 	{ goto cont; }
-#line 298 "<stdout>"
+#line 296 "<stdout>"
 yy4:
 	yych = *++YYCURSOR;
 	goto yy3;
@@ -562,14 +560,12 @@ yy5:
 	}
 yy7:
 	YYCURSOR = YYMARKER;
-	if (yyaccept == 0) {
-		goto yy3;
-	}
+	goto yy3;
 yy8:
 	++YYCURSOR;
 #line 22 "bug1187785.re"
 	{ RET(1); }
-#line 573 "<stdout>"
+#line 569 "<stdout>"
 }
 #line 24 "bug1187785.re"
 

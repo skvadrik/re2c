@@ -39,7 +39,6 @@
 #line 40 "<stdout>"
 	{
 		YYCTYPE yych;
-		unsigned int yyaccept = 0;
 
 		if((YYLIMIT - YYCURSOR) < 6) YYFILL(6);
 		yych = *YYCURSOR;
@@ -70,7 +69,7 @@ yy2:
 yy3:
 #line 12 "input11.b.re"
 		{ return 1; }
-#line 74 "<stdout>"
+#line 73 "<stdout>"
 yy4:
 		yych = *++YYCURSOR;
 		goto yy14;
@@ -79,7 +78,7 @@ yy5:
 yy6:
 #line 13 "input11.b.re"
 		{ return 2; }
-#line 83 "<stdout>"
+#line 82 "<stdout>"
 yy7:
 		++YYCURSOR;
 		if((yych = *YYCURSOR) <= '0') goto yy8;
@@ -87,7 +86,7 @@ yy7:
 yy8:
 #line 15 "input11.b.re"
 		{ return -1; }
-#line 91 "<stdout>"
+#line 90 "<stdout>"
 yy9:
 		yych = *++YYCURSOR;
 		goto yy12;
@@ -117,7 +116,6 @@ yy15:
 		if(yych != '2') goto yy14;
 		yych = *++YYCURSOR;
 		if(yych != 'c') goto yy14;
-		yyaccept = 0;
 		yych = *(YYMARKER = ++YYCURSOR);
 		if(yych != ':') goto yy14;
 		yych = *++YYCURSOR;
@@ -130,9 +128,7 @@ yy15:
 		}
 yy19:
 		YYCURSOR = YYMARKER;
-		if (yyaccept == 0) {
-			goto yy3;
-		}
+		goto yy3;
 yy20:
 		++YYCURSOR;
 		if(YYLIMIT == YYCURSOR) YYFILL(1);
@@ -142,7 +138,7 @@ yy20:
 		}
 #line 11 "input11.b.re"
 		{ return 0; }
-#line 146 "<stdout>"
+#line 142 "<stdout>"
 	}
 }
 #line 17 "input11.b.re"

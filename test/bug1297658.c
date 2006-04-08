@@ -60,7 +60,6 @@ std:
 #line 61 "<stdout>"
 {
 	YYCTYPE yych;
-	unsigned int yyaccept = 0;
 
 	if((YYLIMIT - YYCURSOR) < 4) YYFILL(4);
 	yych = *YYCURSOR;
@@ -71,7 +70,6 @@ std:
 	default:	goto yy8;
 	}
 yy2:
-	yyaccept = 0;
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch(yych){
 	case '.':	goto yy11;
@@ -83,7 +81,7 @@ yy3:
 	{
 		RET(UNEXPECTED);
 	}
-#line 87 "<stdout>"
+#line 85 "<stdout>"
 yy4:
 	++YYCURSOR;
 	switch((yych = *YYCURSOR)) {
@@ -96,7 +94,7 @@ yy5:
 	{
 		RET(FCON);
 	}
-#line 100 "<stdout>"
+#line 98 "<stdout>"
 yy6:
 	++YYCURSOR;
 #line 66 "bug1297658.re"
@@ -105,7 +103,7 @@ yy6:
 		if(1||s.cur == s.eof) RET(EOI);
 		goto std;
 	}
-#line 109 "<stdout>"
+#line 107 "<stdout>"
 yy8:
 	yych = *++YYCURSOR;
 	goto yy3;
@@ -136,9 +134,7 @@ yy12:
 	}
 yy14:
 	YYCURSOR = YYMARKER;
-	if (yyaccept == 0) {
-		goto yy3;
-	}
+	goto yy3;
 yy15:
 	++YYCURSOR;
 	switch((yych = *YYCURSOR)) {
