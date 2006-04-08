@@ -1255,7 +1255,7 @@ void DFA::emit(std::ostream &o, uint ind)
 						saves[s->rule->accept] = nSaves++;
 					}
 
-					(void) new Save(s, saves[s->rule->accept]);
+					(void) new Save(s, saves[s->rule->accept]); // sets s->action
 					continue;
 				}
 			}
@@ -1363,7 +1363,8 @@ void DFA::emit(std::ostream &o, uint ind)
 		s->label = label++;
 	}
 
-	uint maxFillIndexes = vFillIndexes;
+	// Save 'vFillIndexes' and compute information about code generation
+	// while writing to null device.
 	uint orgVFillIndexes = vFillIndexes;
 	null_stream  null_dev;
 
@@ -1373,9 +1374,10 @@ void DFA::emit(std::ostream &o, uint ind)
 		s->emit(null_dev, ind, readCh);
 		s->go.genGoto(null_dev, ind, s, s->next, readCh);
 	}
-	maxFillIndexes = vFillIndexes;
+	uint maxFillIndexes = vFillIndexes;
 	vFillIndexes = orgVFillIndexes;
 
+	// Generate prolog
 	o << "\n" << outputFileInfo;
 
 	if (hasFillLabels == false)
@@ -1409,6 +1411,7 @@ void DFA::emit(std::ostream &o, uint ind)
 		o << "yyNext:\n";
 	}
 
+	// Generate code
 	for (s = head; s; s = s->next)
 	{
 		bool readCh = false;
@@ -1416,12 +1419,14 @@ void DFA::emit(std::ostream &o, uint ind)
 		s->go.genGoto(o, ind, s, s->next, readCh);
 	}
 
+	// Generate epilog
 	o << indent(--ind) << "}\n";
 	if (bitmap_brace)
 	{
 		o << indent(--ind) << "}\n";
 	}
 
+	// Cleanup
 	if (BitMap::first)
 	{
 		delete BitMap::first;
