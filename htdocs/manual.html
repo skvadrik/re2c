@@ -7,7 +7,7 @@
 <body>
 <h1>RE2C</h1>
 Section: User Commands (1)<br />
-Updated: 18 Februar 2006<br />
+Updated: 8 April 2006<br />
 <a href="#index">Index</a>
 <hr />
 <a name="lbAB" id="lbAB">&nbsp;</a>
@@ -206,9 +206,10 @@ scanners that work in a "push" model, i.e. where data is fed to the scanner
 chunk by chunk. When the scanner runs out of data to consume, it just stores
 its state, and return to the caller. When more input data is fed to the
 scanner, it resumes operations exactly where it left off.</p>
-<p>At this point, the -f option only works with "mono-block" re2c scanners: if
-the scanner is described with more than one /*!re2c ... */ block, re2c -f fails
-with an error.</p>
+<p>When using the -f option re2c does not accept stdin because it has to do the 
+full generation process twice which means it has to read the input twice. That
+means re2c would fail in case it cannot open the input twice or reading the
+input for the first time influences the second read attempt.</p>
 <p>Changes needed compared to the "pull" model.</p>
 <p>1. User has to supply macros YYSETSTATE() YYGETSTATE(state)</p>
 <p>2. The <b>-f</b> option inhibits declaration of <i>yych</i> and
@@ -669,7 +670,7 @@ specification for each start condition (as illustrated in the above example).
 <br />
 <a name="lbAO" id="lbAO"> </a>
 <h2>VERSION INFORMATION</h2>
-<p>This manpage describes <b>re2c</b>, version 0.10.1.</p>
+<p>This manpage describes <b>re2c</b>, version 0.10.2.</p>
 <hr />
 <a name="index" id="index"> </a>
 <h2>Index</h2>
@@ -693,6 +694,6 @@ specification for each start condition (as illustrated in the above example).
 <br />
 <hr />
 <p>This document was created by man2html, using the manual pages.<br />
-Time: 23:55:44 GMT, Februar 18, 2006</p>
+Time: 22:32:44 GMT, April 8, 2006</p>
 </body>
 </html>

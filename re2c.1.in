@@ -7,6 +7,9 @@
 .ds rx regular expression
 .ds lx \fIl\fP-expression
 \"$Log$
+\"Revision 1.42  2006/04/08 21:33:02  helly
+\"- Update docu
+\"
 \"Revision 1.41  2006/02/28 18:46:42  helly
 \"- Updates before release
 \"
@@ -367,9 +370,10 @@ chunk by chunk. When the scanner runs out of data to consume, it just stores
 its state, and return to the caller. When more input data is fed to the scanner,
 it resumes operations exactly where it left off.
 
-At this point, the -f option only works with "mono-block" re2c scanners:
-if the scanner is described with more than one /*!re2c ... */ block, re2c -f
-fails with an error.
+When using the -f option re2c does not accept stdin because it has to do the 
+full generation process twice which means it has to read the input twice. That
+means re2c would fail in case it cannot open the input twice or reading the
+input for the first time influences the second read attempt.
 
 Changes needed compared to the "pull" model.
 
