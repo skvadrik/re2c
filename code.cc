@@ -454,14 +454,14 @@ void Accept::emit(std::ostream &o, uint ind, bool &readCh) const
 				o << indent(ind) << "YYCURSOR = YYMARKER;\n";
 				if (cases > 1)
 				{
-					o << indent(ind) << "switch(yyaccept){\n";
+					o << indent(ind) << "switch(yyaccept) {\n";
 				}
 			}
 
 			if (cases > 1)
 			{
-				o << indent(ind) << "case " << saves[i] << ":";
-				genGoTo(o, 1, state, rules[i], readCh);
+				o << indent(ind) << "case " << saves[i] << ":\t";
+				genGoTo(o, 0, state, rules[i], readCh);
 			}
 			else
 			{

@@ -2149,7 +2149,7 @@ yy51:
 	}
 yy53:
 	YYCURSOR = YYMARKER;
-	switch(yyaccept){
+	switch(yyaccept) {
 	case 26:	goto yy1310;
 	case 24:	goto yy1279;
 	case 25:	goto yy1287;
