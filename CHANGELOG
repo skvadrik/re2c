@@ -2,8 +2,9 @@ Version 0.10.2 (????-??-??)
 ---------------------------
 - Change to not generate yyaccept code unless needed.
 - Change to use if- instead of switch-expression when yyaccpt has only one case.
-- Fixed #1463639 Missing forward declaration
 - Added docu, examples and tests to .src.zip package (0.10.1 zip was repackaged).
+- Fixed #1463639 Missing forward declaration.
+- Implemented #1187127 savable state support for multiple re2c blocks.
 
 Version 0.10.1 (2006-02-28)
 ---------------------------

@@ -293,12 +293,11 @@ void genIf(std::ostream &o, uint ind, const char *cmp, uint v, bool &readCh)
 
 static void need(std::ostream &o, uint ind, uint n, bool & readCh)
 {
-	uint fillIndex = vFillIndexes;
-	bool hasFillIndex = (0<=vFillIndexes);
+	uint fillIndex = next_fill_index;
 
-	if (hasFillIndex)
+	if (fFlag)
 	{
-		vFillIndexes++;
+		next_fill_index++;
 		o << indent(ind) << "YYSETSTATE(" << fillIndex << ");\n";
 	}
 
@@ -311,7 +310,7 @@ static void need(std::ostream &o, uint ind, uint n, bool & readCh)
 		o << indent(ind) << "if((YYLIMIT - YYCURSOR) < " << n << ") YYFILL(" << n << ");\n";
 	}
 
-	if ( hasFillIndex == true )
+	if (fFlag)
 	{
 		o << "yyFillLabel" << fillIndex << ":\n";
 	}
@@ -1198,18 +1197,8 @@ void DFA::findBaseState()
 
 void DFA::emit(std::ostream &o, uint ind)
 {
-	static uint label = 0;
 	State *s;
 	uint i, bitmap_brace = 0;
-
-	bool hasFillLabels = (0<=vFillIndexes);
-	if (hasFillLabels==true && label!=0)
-	{
-		o.flush();
-		std::cerr << "re2c: error: multiple /*!re2c blocks aren't supported when -f is specified\n";
-		exit(1);
-	}
-
 
 	findSCCs();
 	head->link = head;
@@ -1342,9 +1331,9 @@ void DFA::emit(std::ostream &o, uint ind)
 
 	bUsedYYAccept = false;
 	
-	uint start_label = label;
+	uint start_label = next_label;
 
-	(void) new Initial(head, label++);
+	(void) new Initial(head, next_label++);
 
 	if (bUseStartLabel)
 	{
@@ -1356,12 +1345,12 @@ void DFA::emit(std::ostream &o, uint ind)
 
 	for (s = head; s; s = s->next)
 	{
-		s->label = label++;
+		s->label = next_label++;
 	}
 
-	// Save 'vFillIndexes' and compute information about code generation
+	// Save 'next_fill_index' and compute information about code generation
 	// while writing to null device.
-	uint orgVFillIndexes = vFillIndexes;
+	uint save_fill_index = next_fill_index;
 	null_stream  null_dev;
 
 	for (s = head; s; s = s->next)
@@ -1370,13 +1359,16 @@ void DFA::emit(std::ostream &o, uint ind)
 		s->emit(null_dev, ind, readCh);
 		s->go.genGoto(null_dev, ind, s, s->next, readCh);
 	}
-	uint maxFillIndexes = vFillIndexes;
-	vFillIndexes = orgVFillIndexes;
+	if (last_fill_index < next_fill_index)
+	{
+		last_fill_index = next_fill_index;
+	}
+	next_fill_index = save_fill_index;
 
 	// Generate prolog
 	o << "\n" << outputFileInfo;
 
-	if (hasFillLabels == false)
+	if (!fFlag)
 	{
 		o << indent(ind++) << "{\n";
 		o << indent(ind) << "YYCTYPE yych;\n";
@@ -1390,14 +1382,14 @@ void DFA::emit(std::ostream &o, uint ind)
 		o << indent(ind++) << "{\n\n";
 	}
 
-	if (hasFillLabels == true)
+	if (fFlag && start_label == 0)
 	{
 		vUsedLabels.insert(start_label);
 		o << indent(ind) << "switch(YYGETSTATE())\n";
 		o << indent(ind) << "{\n";
 		o << indent(ind) << "case -1: goto yy" << start_label << ";\n";
 
-		for (size_t i=0; i<maxFillIndexes; ++i)
+		for (size_t i=0; i<last_fill_index; ++i)
 		{
 			o << indent(ind) << "case " << i << ": goto yyFillLabel" << i << ";\n";
 		}

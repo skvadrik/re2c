@@ -24,6 +24,7 @@ file_info outputFileInfo;
 bool bFlag = false;
 bool dFlag = false;
 bool eFlag = false;
+bool fFlag = false;
 bool iFlag = false;
 bool sFlag = false;
 bool wFlag = false;
@@ -32,6 +33,7 @@ bool bUsedYYAccept = false;
 bool bUseStartLabel= false;
 std::string startLabelName;
 uint maxFill = 1;
+uint next_label = 0;
 
 uint topIndent = 0;
 std::string indString("\t");
@@ -39,7 +41,8 @@ bool yybmHexTable = false;
 
 uint nRealChars = 256;
 
-int vFillIndexes = -1;
+uint next_fill_index = 0;
+uint last_fill_index = 0;
 std::set<uint> vUsedLabels;
 
 using namespace std;
@@ -141,7 +144,7 @@ int main(int argc, char *argv[])
 			break;
 
 			case 'f':
-			vFillIndexes = 0;
+			fFlag = true;
 			break;
 
 			case 'i':
@@ -212,6 +215,11 @@ int main(int argc, char *argv[])
 
 	if (sourceFileName[0] == '-' && sourceFileName[1] == '\0')
 	{
+		if (fFlag)
+		{
+			std::cerr << "re2c: error: multiple /*!re2c stdin is not acceptable when -f is specified\n";
+			return 1;
+		}
 		sourceFileName = "<stdin>";
 		source.open(stdin);
 	}
@@ -237,6 +245,24 @@ int main(int argc, char *argv[])
 	Scanner scanner(source, output);
 	sourceFileInfo = file_info(sourceFileName, &scanner);
 	outputFileInfo = file_info(outputFileName, &output);
+
+	if (fFlag)
+	{
+		re2c::ifstream_lc null_source;
+
+		if (!null_source.open(sourceFileName).is_open())
+		{
+			cerr << "re2c: error: cannot re-open " << sourceFileName << "\n";
+			return 1;
+		}
+
+		null_stream  null_dev;
+		Scanner null_scanner(null_source, null_dev);
+		parse(null_scanner, null_dev);
+		next_label = 0;
+		next_fill_index = 0;
+		Symbol::ClearTable();
+	}
 
 	parse(scanner, output);
 	return 0;
