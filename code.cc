@@ -433,8 +433,18 @@ Accept::Accept(State *x, uint n, uint *s, State **r)
 void Accept::emit(std::ostream &o, uint ind, bool &readCh) const
 {
 	bool first = true;
+	uint cases = 0;
 
 	for (uint i = 0; i < nRules; ++i)
+	{
+		if (saves[i] != ~0u)
+		{
+			cases++;
+		}
+	}
+
+	for (uint i = 0; i < nRules; ++i)
+	{
 		if (saves[i] != ~0u)
 		{
 			if (first)
@@ -442,15 +452,31 @@ void Accept::emit(std::ostream &o, uint ind, bool &readCh) const
 				first = false;
 				bUsedYYAccept = true;
 				o << indent(ind) << "YYCURSOR = YYMARKER;\n";
-				o << indent(ind) << "switch(yyaccept){\n";
+				if (cases > 1)
+				{
+					o << indent(ind) << "switch(yyaccept){\n";
+				}
 			}
 
-			o << indent(ind) << "case " << saves[i] << ":";
-			genGoTo(o, 1, state, rules[i], readCh);
+			if (cases > 1)
+			{
+				o << indent(ind) << "case " << saves[i] << ":";
+				genGoTo(o, 1, state, rules[i], readCh);
+			}
+			else
+			{
+				o << indent(ind) << "if (yyaccept == " << saves[i] << ") {\n";
+				genGoTo(o, ++ind, state, rules[i], readCh);
+			}
 		}
+	}
 
 	if (!first)
 	{
+		if (cases == 1)
+		{
+			ind--;
+		}
 		o << indent(ind) << "}\n";
 	}
 }

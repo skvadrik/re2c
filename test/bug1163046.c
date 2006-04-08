@@ -57,8 +57,8 @@ yy7:
 	}
 yy8:
 	YYCURSOR = YYMARKER;
-	switch(yyaccept){
-	case 0:	goto yy3;
+	if (yyaccept == 0) {
+		goto yy3;
 	}
 yy9:
 	yych = *++YYCURSOR;

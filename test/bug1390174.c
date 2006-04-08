@@ -65,8 +65,8 @@ yy8:
 	}
 yy10:
 	YYCURSOR = YYMARKER;
-	switch(yyaccept){
-	case 0:	goto yy3;
+	if (yyaccept == 0) {
+		goto yy3;
 	}
 }
 #line 20 "bug1390174.re"
