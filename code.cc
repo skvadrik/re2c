@@ -293,17 +293,13 @@ void genIf(std::ostream &o, uint ind, const char *cmp, uint v, bool &readCh)
 
 static void need(std::ostream &o, uint ind, uint n, bool & readCh)
 {
-	uint fillIndex;
+	uint fillIndex = vFillIndexes;
 	bool hasFillIndex = (0<=vFillIndexes);
 
 	if (hasFillIndex)
 	{
-		fillIndex = vFillIndexes++;
+		vFillIndexes++;
 		o << indent(ind) << "YYSETSTATE(" << fillIndex << ");\n";
-	}
-	else
-	{
-		fillIndex = ~0;
 	}
 
 	if (n == 1)
