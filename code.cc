@@ -1367,10 +1367,10 @@ void DFA::emit(std::ostream &o, uint ind)
 
 	// Generate prolog
 	o << "\n" << outputFileInfo;
+	o << indent(ind++) << "{\n";
 
 	if (!fFlag)
 	{
-		o << indent(ind++) << "{\n";
 		o << indent(ind) << "YYCTYPE yych;\n";
 		if (bUsedYYAccept)
 		{
@@ -1379,7 +1379,7 @@ void DFA::emit(std::ostream &o, uint ind)
 	}
 	else
 	{
-		o << indent(ind++) << "{\n\n";
+		o << "\n";
 	}
 
 	if (fFlag && start_label == 0)
