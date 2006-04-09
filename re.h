@@ -414,9 +414,10 @@ private:
 };
 
 extern void genCode(std::ostream&, RegExp*);
-extern void genCode(std::ostream&, uint ind, RegExp*);
+extern void genCode(std::ostream&, uint, RegExp*);
+extern void genGetState(std::ostream&, uint&, uint);
 extern RegExp *mkDiff(RegExp*, RegExp*);
-extern RegExp *mkAlt(RegExp *e1, RegExp *e2);
+extern RegExp *mkAlt(RegExp*, RegExp*);
 
 } // end namespace re2c
 

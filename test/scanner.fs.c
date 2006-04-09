@@ -97,7 +97,7 @@ echo:
 
 	switch(YYGETSTATE())
 	{
-	case -1: goto yy0;
+	default: goto yy0;
 	case 0: goto yyFillLabel0;
 	case 1: goto yyFillLabel1;
 	case 2: goto yyFillLabel2;
@@ -134,9 +134,7 @@ echo:
 	case 33: goto yyFillLabel33;
 	case 34: goto yyFillLabel34;
 	case 35: goto yyFillLabel35;
-	default: /* abort() */;
 	}
-yyNext:
 yy0:
 	YYSETSTATE(0);
 	if((YYLIMIT - YYCURSOR) < 11) YYFILL(11);
@@ -157,7 +155,7 @@ yy3:
 	{
 					goto echo;
 				}
-#line 161 "<stdout>"
+#line 159 "<stdout>"
 yy4:
 	yych = *++YYCURSOR;
 	if(yych == '/') goto yy10;
@@ -170,7 +168,7 @@ yy5:
 					tok = pos = cursor; cline++;
 				  	goto echo;
 				}
-#line 174 "<stdout>"
+#line 172 "<stdout>"
 yy7:
 	++YYCURSOR;
 #line 135 "scanner.fs.re"
@@ -180,7 +178,7 @@ yy7:
 						RETURN(0);
 					}
 				}
-#line 184 "<stdout>"
+#line 182 "<stdout>"
 yy9:
 	yych = *++YYCURSOR;
 	goto yy3;
@@ -196,7 +194,7 @@ yy10:
 					tok = pos = cursor;
 					goto echo;
 				}
-#line 200 "<stdout>"
+#line 198 "<stdout>"
 yy12:
 	yych = *++YYCURSOR;
 	if(yych == '!') goto yy14;
@@ -226,7 +224,7 @@ yy16:
 					tok = cursor;
 					RETURN(1);
 				}
-#line 230 "<stdout>"
+#line 228 "<stdout>"
 yy21:
 	yych = *++YYCURSOR;
 	if(yych != 'x') goto yy13;
@@ -248,7 +246,7 @@ yy21:
 					ignore_eoc = true;
 					goto echo;
 				}
-#line 252 "<stdout>"
+#line 250 "<stdout>"
 }
 #line 144 "scanner.fs.re"
 
@@ -273,7 +271,7 @@ scan:
    		goto value;
     }
 
-#line 277 "<stdout>"
+#line 275 "<stdout>"
 {
 
 	YYSETSTATE(1);
@@ -352,14 +350,14 @@ yy32:
 	{ depth = 1;
 				  goto code;
 				}
-#line 356 "<stdout>"
+#line 354 "<stdout>"
 yy33:
 	++YYCURSOR;
 	if((yych = *YYCURSOR) == '*') goto yy92;
 yy34:
 #line 196 "scanner.fs.re"
 	{ RETURN(*tok); }
-#line 363 "<stdout>"
+#line 361 "<stdout>"
 yy35:
 	++YYCURSOR;
 	if((yych = *YYCURSOR) == '/') goto yy90;
@@ -367,7 +365,7 @@ yy36:
 #line 198 "scanner.fs.re"
 	{ yylval.op = *tok;
 				  RETURN(CLOSE); }
-#line 371 "<stdout>"
+#line 369 "<stdout>"
 yy37:
 	yyaccept = 1;
 	yych = *(YYMARKER = ++YYCURSOR);
@@ -375,7 +373,7 @@ yy37:
 yy38:
 #line 183 "scanner.fs.re"
 	{ fatal("unterminated string constant (missing \")"); }
-#line 379 "<stdout>"
+#line 377 "<stdout>"
 yy39:
 	yyaccept = 2;
 	yych = *(YYMARKER = ++YYCURSOR);
@@ -383,7 +381,7 @@ yy39:
 yy40:
 #line 184 "scanner.fs.re"
 	{ fatal("unterminated string constant (missing ')"); }
-#line 387 "<stdout>"
+#line 385 "<stdout>"
 yy41:
 	yyaccept = 3;
 	yych = *(YYMARKER = ++YYCURSOR);
@@ -393,7 +391,7 @@ yy41:
 yy42:
 #line 194 "scanner.fs.re"
 	{ fatal("unterminated range (missing ])"); }
-#line 397 "<stdout>"
+#line 395 "<stdout>"
 yy43:
 	yych = *++YYCURSOR;
 	goto yy34;
@@ -409,7 +407,7 @@ yy46:
 	{ cur = cursor;
 				  yylval.symbol = Symbol::find(token());
 				  return ID; }
-#line 413 "<stdout>"
+#line 411 "<stdout>"
 yy47:
 	yych = *++YYCURSOR;
 	goto yy61;
@@ -420,7 +418,7 @@ yy48:
 				  yylval.regexp = mkDot();
 				  return RANGE;
 				}
-#line 424 "<stdout>"
+#line 422 "<stdout>"
 yy50:
 	++YYCURSOR;
 	yych = *YYCURSOR;
@@ -428,7 +426,7 @@ yy50:
 yy51:
 #line 234 "scanner.fs.re"
 	{ goto scan; }
-#line 432 "<stdout>"
+#line 430 "<stdout>"
 yy52:
 	++YYCURSOR;
 yy53:
@@ -437,7 +435,7 @@ yy53:
 				  pos = cursor; cline++;
 				  goto scan;
 	    			}
-#line 441 "<stdout>"
+#line 439 "<stdout>"
 yy54:
 	++YYCURSOR;
 	if((yych = *YYCURSOR) == 0x0A) goto yy57;
@@ -449,7 +447,7 @@ yy55:
 				  fatal(msg.str().c_str());
 				  goto scan;
 				}
-#line 453 "<stdout>"
+#line 451 "<stdout>"
 yy56:
 	yych = *++YYCURSOR;
 	goto yy55;
@@ -542,7 +540,7 @@ yy69:
 				  yylval.str = new Str(token());
 				  return CONFIG;
 				}
-#line 546 "<stdout>"
+#line 544 "<stdout>"
 yy70:
 	++YYCURSOR;
 	YYSETSTATE(6);
@@ -586,7 +584,7 @@ yy75:
 	{ cur = cursor;
 				  yylval.regexp = ranToRE(token());
 				  return RANGE; }
-#line 590 "<stdout>"
+#line 588 "<stdout>"
 yy77:
 	++YYCURSOR;
 	YYSETSTATE(9);
@@ -601,7 +599,7 @@ yy78:
 	{ cur = cursor;
 				  yylval.regexp = invToRE(token());
 				  return RANGE; }
-#line 605 "<stdout>"
+#line 603 "<stdout>"
 yy80:
 	++YYCURSOR;
 	YYSETSTATE(10);
@@ -629,7 +627,7 @@ yy83:
 	{ cur = cursor;
 				  yylval.regexp = strToCaseInsensitiveRE(token());
 				  return STRING; }
-#line 633 "<stdout>"
+#line 631 "<stdout>"
 yy85:
 	++YYCURSOR;
 	YYSETSTATE(12);
@@ -657,19 +655,19 @@ yy88:
 	{ cur = cursor;
 				  yylval.regexp = strToRE(token());
 				  return STRING; }
-#line 661 "<stdout>"
+#line 659 "<stdout>"
 yy90:
 	++YYCURSOR;
 #line 172 "scanner.fs.re"
 	{ tok = cursor;
 				  RETURN(0); }
-#line 667 "<stdout>"
+#line 665 "<stdout>"
 yy92:
 	++YYCURSOR;
 #line 169 "scanner.fs.re"
 	{ depth = 1;
 				  goto comment; }
-#line 673 "<stdout>"
+#line 671 "<stdout>"
 yy94:
 	yych = *++YYCURSOR;
 	if(yych == ',') goto yy108;
@@ -694,14 +692,14 @@ yy97:
 yy98:
 #line 216 "scanner.fs.re"
 	{ fatal("illegal closure form, use '{n}', '{n,}', '{n,m}' where n and m are numbers"); }
-#line 698 "<stdout>"
+#line 696 "<stdout>"
 yy99:
 	++YYCURSOR;
 #line 204 "scanner.fs.re"
 	{ yylval.extop.minsize = atoi((char *)tok+1);
 				  yylval.extop.maxsize = atoi((char *)tok+1);
 				  RETURN(CLOSESIZE); }
-#line 705 "<stdout>"
+#line 703 "<stdout>"
 yy101:
 	yyaccept = 6;
 	yych = *(YYMARKER = ++YYCURSOR);
@@ -713,7 +711,7 @@ yy101:
 	{ yylval.extop.minsize = atoi((char *)tok+1);
 				  yylval.extop.maxsize = -1;
 				  RETURN(CLOSESIZE); }
-#line 717 "<stdout>"
+#line 715 "<stdout>"
 yy104:
 	++YYCURSOR;
 	YYSETSTATE(15);
@@ -728,7 +726,7 @@ yyFillLabel15:
 	{ yylval.extop.minsize = atoi((char *)tok+1);
 				  yylval.extop.maxsize = MAX(yylval.extop.minsize,atoi(strchr((char *)tok, ',')+1));
 				  RETURN(CLOSESIZE); }
-#line 732 "<stdout>"
+#line 730 "<stdout>"
 yy108:
 	yyaccept = 6;
 	yych = *(YYMARKER = ++YYCURSOR);
@@ -739,14 +737,14 @@ yy108:
 #line 201 "scanner.fs.re"
 	{ yylval.op = '*';
 				  RETURN(CLOSE); }
-#line 743 "<stdout>"
+#line 741 "<stdout>"
 }
 #line 247 "scanner.fs.re"
 
 
 code:
 
-#line 750 "<stdout>"
+#line 748 "<stdout>"
 {
 
 	YYSETSTATE(16);
@@ -778,13 +776,13 @@ yyFillLabel16:
 					return CODE;
 				  }
 				  goto code; }
-#line 782 "<stdout>"
+#line 780 "<stdout>"
 yy115:
 	++YYCURSOR;
 #line 257 "scanner.fs.re"
 	{ ++depth;
 				  goto code; }
-#line 788 "<stdout>"
+#line 786 "<stdout>"
 yy117:
 	++YYCURSOR;
 #line 259 "scanner.fs.re"
@@ -792,13 +790,13 @@ yy117:
 				  pos = cursor; cline++;
 				  goto code;
 				}
-#line 796 "<stdout>"
+#line 794 "<stdout>"
 yy119:
 	++YYCURSOR;
 yy120:
 #line 263 "scanner.fs.re"
 	{ goto code; }
-#line 802 "<stdout>"
+#line 800 "<stdout>"
 yy121:
 	yych = *(YYMARKER = ++YYCURSOR);
 	if(yych == 0x0A) goto yy120;
@@ -859,7 +857,7 @@ yyFillLabel20:
 
 comment:
 
-#line 863 "<stdout>"
+#line 861 "<stdout>"
 {
 
 	YYSETSTATE(21);
@@ -881,7 +879,7 @@ yy133:
 #line 279 "scanner.fs.re"
 	{ if(cursor == eof) RETURN(0);
 				  goto comment; }
-#line 885 "<stdout>"
+#line 883 "<stdout>"
 yy134:
 	yych = *++YYCURSOR;
 	if(yych == '*') goto yy138;
@@ -893,7 +891,7 @@ yy135:
 				  tok = pos = cursor; cline++;
 				  goto comment;
 				}
-#line 897 "<stdout>"
+#line 895 "<stdout>"
 yy137:
 	yych = *++YYCURSOR;
 	goto yy133;
@@ -903,7 +901,7 @@ yy138:
 	{ ++depth;
 				  fatal("ambiguous /* found");
 				  goto comment; }
-#line 907 "<stdout>"
+#line 905 "<stdout>"
 yy140:
 	++YYCURSOR;
 #line 268 "scanner.fs.re"
@@ -911,14 +909,14 @@ yy140:
 					goto scan;
 				    else
 					goto comment; }
-#line 915 "<stdout>"
+#line 913 "<stdout>"
 }
 #line 281 "scanner.fs.re"
 
 
 config:
 
-#line 922 "<stdout>"
+#line 920 "<stdout>"
 {
 
 	YYSETSTATE(22);
@@ -939,7 +937,7 @@ yy144:
 yy145:
 #line 285 "scanner.fs.re"
 	{ goto config; }
-#line 943 "<stdout>"
+#line 941 "<stdout>"
 yy146:
 	++YYCURSOR;
 	yych = *YYCURSOR;
@@ -950,12 +948,12 @@ yy147:
 				  cur = cursor;
 				  RETURN('='); 
 				}
-#line 954 "<stdout>"
+#line 952 "<stdout>"
 yy148:
 	++YYCURSOR;
 #line 290 "scanner.fs.re"
 	{ fatal("missing '='"); }
-#line 959 "<stdout>"
+#line 957 "<stdout>"
 yy150:
 	++YYCURSOR;
 	YYSETSTATE(23);
@@ -982,7 +980,7 @@ yy153:
 
 value:
 
-#line 986 "<stdout>"
+#line 984 "<stdout>"
 {
 
 	YYSETSTATE(25);
@@ -1023,7 +1021,7 @@ yy156:
 				  iscfg = 0;
 				  return VALUE;
 				}
-#line 1027 "<stdout>"
+#line 1025 "<stdout>"
 yy157:
 	++YYCURSOR;
 	if((yych = *YYCURSOR) <= 0x0D) {
@@ -1044,7 +1042,7 @@ yy158:
 				  iscfg = 0;
 				  return NUMBER;
 				}
-#line 1048 "<stdout>"
+#line 1046 "<stdout>"
 yy159:
 	yych = *++YYCURSOR;
 	if(yych <= '0') goto yy163;

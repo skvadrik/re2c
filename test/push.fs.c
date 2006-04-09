@@ -23,13 +23,11 @@ start:
 
 	switch(YYGETSTATE())
 	{
-	case -1: goto yy0;
+	default: goto yy0;
 	case 0: goto yyFillLabel0;
 	case 1: goto yyFillLabel1;
 	case 2: goto yyFillLabel2;
-	default: /* abort() */;
 	}
-yyNext:
 yy0:
 	YYSETSTATE(0);
 	if((YYLIMIT - YYCURSOR) < 7) YYFILL(7);
@@ -117,7 +115,7 @@ yyFillLabel0:
 yy3:
 #line 35 "push.fs.re"
 	{ SEND(kIdentifier);     }
-#line 121 "<stdout>"
+#line 119 "<stdout>"
 yy4:
 	yych = *++YYCURSOR;
 	if(yych == 'o') goto yy64;
@@ -155,62 +153,62 @@ yy12:
 yy13:
 #line 36 "push.fs.re"
 	{ SEND(kDecimalConstant);}
-#line 159 "<stdout>"
+#line 157 "<stdout>"
 yy14:
 	++YYCURSOR;
 #line 38 "push.fs.re"
 	{ SEND(kEqual);          }
-#line 164 "<stdout>"
+#line 162 "<stdout>"
 yy16:
 	++YYCURSOR;
 #line 39 "push.fs.re"
 	{ SEND(kLeftParen);      }
-#line 169 "<stdout>"
+#line 167 "<stdout>"
 yy18:
 	++YYCURSOR;
 #line 40 "push.fs.re"
 	{ SEND(kRightParen);     }
-#line 174 "<stdout>"
+#line 172 "<stdout>"
 yy20:
 	++YYCURSOR;
 #line 41 "push.fs.re"
 	{ SEND(kMinus);          }
-#line 179 "<stdout>"
+#line 177 "<stdout>"
 yy22:
 	++YYCURSOR;
 #line 42 "push.fs.re"
 	{ SEND(kPlus);           }
-#line 184 "<stdout>"
+#line 182 "<stdout>"
 yy24:
 	++YYCURSOR;
 #line 43 "push.fs.re"
 	{ SEND(kStar);           }
-#line 189 "<stdout>"
+#line 187 "<stdout>"
 yy26:
 	++YYCURSOR;
 #line 44 "push.fs.re"
 	{ SEND(kSlash);          }
-#line 194 "<stdout>"
+#line 192 "<stdout>"
 yy28:
 	++YYCURSOR;
 #line 46 "push.fs.re"
 	{ SKIP();                }
-#line 199 "<stdout>"
+#line 197 "<stdout>"
 yy30:
 	++YYCURSOR;
 #line 47 "push.fs.re"
 	{ SKIP();                }
-#line 204 "<stdout>"
+#line 202 "<stdout>"
 yy32:
 	++YYCURSOR;
 #line 48 "push.fs.re"
 	{ send(kEOF); return 1;  }
-#line 209 "<stdout>"
+#line 207 "<stdout>"
 yy34:
 	++YYCURSOR;
 #line 49 "push.fs.re"
 	{ SEND(kUnknown);        }
-#line 214 "<stdout>"
+#line 212 "<stdout>"
 yy36:
 	++YYCURSOR;
 	YYSETSTATE(1);
@@ -268,7 +266,7 @@ yy40:
 yy45:
 #line 34 "push.fs.re"
 	{ SEND(kReturn);         }
-#line 272 "<stdout>"
+#line 270 "<stdout>"
 yy46:
 	yych = *++YYCURSOR;
 	if(yych != 'i') goto yy39;
@@ -292,7 +290,7 @@ yy46:
 yy50:
 #line 33 "push.fs.re"
 	{ SEND(kWhile);          }
-#line 296 "<stdout>"
+#line 294 "<stdout>"
 yy51:
 	yych = *++YYCURSOR;
 	if(yych != 'e') goto yy39;
@@ -316,7 +314,7 @@ yy51:
 yy55:
 #line 32 "push.fs.re"
 	{ SEND(kBreak);          }
-#line 320 "<stdout>"
+#line 318 "<stdout>"
 yy56:
 	yych = *++YYCURSOR;
 	if(yych != 't') goto yy39;
@@ -338,7 +336,7 @@ yy56:
 yy59:
 #line 31 "push.fs.re"
 	{ SEND(kGoto);           }
-#line 342 "<stdout>"
+#line 340 "<stdout>"
 yy60:
 	yych = *++YYCURSOR;
 	if(yych != 's') goto yy39;
@@ -360,7 +358,7 @@ yy60:
 yy63:
 #line 30 "push.fs.re"
 	{ SEND(kElse);           }
-#line 364 "<stdout>"
+#line 362 "<stdout>"
 yy64:
 	yych = *++YYCURSOR;
 	if(yych != 'r') goto yy39;
@@ -380,7 +378,7 @@ yy64:
 yy66:
 #line 29 "push.fs.re"
 	{ SEND(kFor);            }
-#line 384 "<stdout>"
+#line 382 "<stdout>"
 yy67:
 	++YYCURSOR;
 	if((yych = *YYCURSOR) <= 'Z') {
@@ -398,7 +396,7 @@ yy67:
 yy68:
 #line 28 "push.fs.re"
 	{ SEND(kIf);             }
-#line 402 "<stdout>"
+#line 400 "<stdout>"
 }
 #line 50 "push.fs.re"
 

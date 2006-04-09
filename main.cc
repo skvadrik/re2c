@@ -31,6 +31,7 @@ bool wFlag = false;
 
 bool bUsedYYAccept = false;
 bool bUseStartLabel= false;
+bool bUseStateNext = false;
 std::string startLabelName;
 uint maxFill = 1;
 uint next_label = 0;
@@ -38,6 +39,8 @@ uint next_label = 0;
 uint topIndent = 0;
 std::string indString("\t");
 bool yybmHexTable = false;
+bool bUseStateAbort = false;
+bool bWroteGetState = false;
 
 uint nRealChars = 256;
 
@@ -262,6 +265,7 @@ int main(int argc, char *argv[])
 		next_label = 0;
 		next_fill_index = 0;
 		Symbol::ClearTable();
+		bWroteGetState = false;
 	}
 
 	parse(scanner, output);

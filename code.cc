@@ -1382,22 +1382,7 @@ void DFA::emit(std::ostream &o, uint ind)
 		o << "\n";
 	}
 
-	if (fFlag && start_label == 0)
-	{
-		vUsedLabels.insert(start_label);
-		o << indent(ind) << "switch(YYGETSTATE())\n";
-		o << indent(ind) << "{\n";
-		o << indent(ind) << "case -1: goto yy" << start_label << ";\n";
-
-		for (size_t i=0; i<last_fill_index; ++i)
-		{
-			o << indent(ind) << "case " << i << ": goto yyFillLabel" << i << ";\n";
-		}
-
-		o << indent(ind) << "default: /* abort() */;\n";
-		o << indent(ind) << "}\n";
-		o << "yyNext:\n";
-	}
+	genGetState(o, ind, start_label);
 
 	// Generate code
 	for (s = head; s; s = s->next)
@@ -1425,6 +1410,37 @@ void DFA::emit(std::ostream &o, uint ind)
 	delete [] rules;
 
 	bUseStartLabel = false;
+}
+
+void genGetState(std::ostream &o, uint& ind, uint start_label)
+{
+	if (fFlag && !bWroteGetState)
+	{
+		vUsedLabels.insert(start_label);
+		o << indent(ind) << "switch(YYGETSTATE())\n";
+		o << indent(ind) << "{\n";
+		if (bUseStateAbort)
+		{
+			o << indent(ind) << "default: abort();\n";
+			o << indent(ind) << "case -1: goto yy" << start_label << ";\n";
+		}
+		else
+		{
+			o << indent(ind) << "default: goto yy" << start_label << ";\n";
+		}
+
+		for (size_t i=0; i<last_fill_index; ++i)
+		{
+			o << indent(ind) << "case " << i << ": goto yyFillLabel" << i << ";\n";
+		}
+
+		o << indent(ind) << "}\n";
+		if (bUseStateNext)
+		{
+			o << "yyNext:\n";
+		}
+		bWroteGetState = true;
+	}
 }
 
 std::ostream& operator << (std::ostream& o, const file_info& li)
@@ -1457,8 +1473,16 @@ void Scanner::config(const Str& cfg, int num)
 	}
 	else if (cfg.to_string() == "startlabel")
 	{
-		bUseStartLabel = num ? 1 : 0;
+		bUseStartLabel = num != 0;
 		startLabelName = "";
+	}
+	else if (cfg.to_string() == "state:abort")
+	{
+		bUseStateAbort = num != 0;
+	}
+	else if (cfg.to_string() == "state:nextlabel")
+	{
+		bUseStateNext = num != 0;
 	}
 	else
 	{

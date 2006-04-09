@@ -32,6 +32,9 @@ extern uint next_label;
 extern uint topIndent;
 extern std::string indString;
 extern bool yybmHexTable;
+extern bool bUseStateAbort;
+extern bool bUseStateNext;
+extern bool bWroteGetState;
 
 extern uint asc2ebc[256];
 extern uint ebc2asc[256];
