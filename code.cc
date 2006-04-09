@@ -291,7 +291,7 @@ void genIf(std::ostream &o, uint ind, const char *cmp, uint v, bool &readCh)
 	o << ") ";
 }
 
-static void need(std::ostream &o, uint ind, uint n, bool & readCh)
+static void need(std::ostream &o, uint ind, uint n, bool & readCh, bool bSetMarker)
 {
 	uint fillIndex = next_fill_index;
 
@@ -315,7 +315,14 @@ static void need(std::ostream &o, uint ind, uint n, bool & readCh)
 		o << "yyFillLabel" << fillIndex << ":\n";
 	}
 
-	o << indent(ind) << "yych = *YYCURSOR;\n";
+	if (bSetMarker)
+	{
+		o << indent(ind) << "yych = *(YYMARKER = YYCURSOR);\n";
+	}
+	else
+	{
+		o << indent(ind) << "yych = *YYCURSOR;\n";
+	}
 	readCh = false;
 }
 
@@ -339,7 +346,7 @@ void Match::emit(std::ostream &o, uint ind, bool &readCh) const
 
 	if (state->link)
 	{
-		need(o, ind, state->depth, readCh);
+		need(o, ind, state->depth, readCh, false);
 	}
 }
 
@@ -352,7 +359,7 @@ void Enter::emit(std::ostream &o, uint ind, bool &readCh) const
 		{
 			o << "yy" << label << ":\n";
 		}
-		need(o, ind, state->depth, readCh);
+		need(o, ind, state->depth, readCh, false);
 	}
 	else
 	{
@@ -382,10 +389,14 @@ void Initial::emit(std::ostream &o, uint ind, bool &readCh) const
 	}
 	if (state->link)
 	{
-		need(o, ind, state->depth, readCh);
+		need(o, ind, state->depth, readCh, setMarker);
 	}
 	else
 	{
+		if (setMarker)
+		{
+			o << indent(ind) << "YYMARKER = YYCURSOR;\n";
+		}
 		readCh = false;
 	}
 }
@@ -400,7 +411,7 @@ void Save::emit(std::ostream &o, uint ind, bool &readCh) const
 	if (state->link)
 	{
 		o << indent(ind) << "YYMARKER = ++YYCURSOR;\n";
-		need(o, ind, state->depth, readCh);
+		need(o, ind, state->depth, readCh, false);
 	}
 	else
 	{
@@ -1224,6 +1235,7 @@ void DFA::emit(std::ostream &o, uint ind)
 	memset(saves, ~0, (nRules)*sizeof(*saves));
 
 	// mark backtracking points
+	bool bSaveOnHead = false;
 
 	for (s = head; s; s = s->next)
 	{
@@ -1240,8 +1252,8 @@ void DFA::emit(std::ostream &o, uint ind)
 						saves[s->rule->accept] = nSaves++;
 					}
 
+					bSaveOnHead |= s == head;
 					(void) new Save(s, saves[s->rule->accept]); // sets s->action
-					continue;
 				}
 			}
 		}
@@ -1333,7 +1345,7 @@ void DFA::emit(std::ostream &o, uint ind)
 	
 	uint start_label = next_label;
 
-	(void) new Initial(head, next_label++);
+	(void) new Initial(head, next_label++, bSaveOnHead);
 
 	if (bUseStartLabel)
 	{

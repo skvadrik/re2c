@@ -24,7 +24,7 @@ size_t scan(const char *s, int l, char *r)
 	YYCTYPE yych;
 
 	if((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
-	yych = *YYCURSOR;
+	yych = *(YYMARKER = YYCURSOR);
 	if(yych <= 0x00) goto yy5;
 	if(yych == '?') goto yy3;
 	goto yy7;
@@ -50,7 +50,6 @@ yy3:
 		}
 	}
 yy4:
-	YYMARKER = YYCURSOR + 1;
 	YYCURSOR = YYMARKER;
 	goto yy2;
 yy5:

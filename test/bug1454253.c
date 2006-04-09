@@ -24,7 +24,7 @@ size_t scan(const char *s, int l, char *r)
 	YYCTYPE yych;
 
 	if((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
-	yych = *YYCURSOR;
+	yych = *(YYMARKER = YYCURSOR);
 	switch(yych){
 	case 0x00:	goto yy5;
 	case '?':	goto yy3;
@@ -107,7 +107,6 @@ yy3:
 	default:	goto yy4;
 	}
 yy4:
-	YYMARKER = YYCURSOR + 1;
 	YYCURSOR = YYMARKER;
 	goto yy2;
 yy5:

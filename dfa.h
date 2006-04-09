@@ -67,7 +67,10 @@ public:
 class Initial: public Enter
 {
 public:
-	Initial(State*, uint);
+	bool setMarker;
+
+public:
+	Initial(State*, uint, bool);
 	void emit(std::ostream&, uint, bool&) const;
 };
 
@@ -306,7 +309,7 @@ inline bool Match::isMatch() const
 inline Enter::Enter(State *s, uint l) : Action(s), label(l)
 { }
 
-inline Initial::Initial(State *s, uint l) : Enter(s, l)
+inline Initial::Initial(State *s, uint l, bool b) : Enter(s, l), setMarker(b)
 { }
 
 inline Save::Save(State *s, uint i) : Match(s), selector(i)
