@@ -30,6 +30,7 @@ public:
 	virtual void emit(std::ostream&, uint, bool&) const = 0;
 	virtual bool isRule() const;
 	virtual bool isMatch() const;
+	virtual bool isInitial() const;
 	virtual bool readAhead() const;
 
 #ifdef PEDANTIC
@@ -72,6 +73,7 @@ public:
 public:
 	Initial(State*, uint, bool);
 	void emit(std::ostream&, uint, bool&) const;
+	bool isInitial() const;
 };
 
 class Save: public Match
@@ -293,6 +295,11 @@ inline bool Action::isMatch() const
 	return false;
 }
 
+inline bool Action::isInitial() const
+{
+	return false;
+}
+
 inline bool Action::readAhead() const
 {
 	return !isMatch() || (state && state->next && state->next->action && !state->next->action->isRule());
@@ -311,6 +318,11 @@ inline Enter::Enter(State *s, uint l) : Action(s), label(l)
 
 inline Initial::Initial(State *s, uint l, bool b) : Enter(s, l), setMarker(b)
 { }
+
+inline bool Initial::isInitial() const
+{
+	return true;
+}
 
 inline Save::Save(State *s, uint i) : Match(s), selector(i)
 { }

@@ -387,6 +387,10 @@ void Initial::emit(std::ostream &o, uint ind, bool &readCh) const
 	{
 		o << "\n";
 	}
+	if (dFlag)
+	{
+		o << indent(ind) << "YYDEBUG(" << label << ", *YYCURSOR);\n";
+	}
 	if (state->link)
 	{
 		need(o, ind, state->depth, readCh, setMarker);
@@ -885,7 +889,7 @@ void State::emit(std::ostream &o, uint ind, bool &readCh) const
 	{
 		o << "yy" << label << ":\n";
 	}
-	if (dFlag)
+	if (dFlag && !action->isInitial())
 	{
 		o << indent(ind) << "YYDEBUG(" << label << ", *YYCURSOR);\n";
 	}
