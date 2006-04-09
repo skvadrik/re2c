@@ -232,7 +232,8 @@ variable by YYSETSTATE(state).</p>
 the function calling it) if more input is needed.</p>
 <p>4. Modify caller to recognise "more input is needed" and respond
 appropriately.</p>
-<p>Please see examples/push.re for push-model scanner.</p>
+<p>Please see examples/push.re for push-model scanner. The generated code can be
+tweaked using configurations "state:abort" and "state:nextlabel".</p>
 <a name="lbAH" id="lbAH"> </a>
 <h2>SCANNER SPECIFICATIONS</h2>
 <p>Each scanner specification consists of a set of <i>rules</i>, <i>name
@@ -348,7 +349,10 @@ reset to <b>0</b> after a start label has been generated.</dd>
 contain a default case that aborts and a -1 case used for initialization.</dd>
 <dt><i>re2c:state:nextlabel</i> <b>=</b> 0 <b>;</b></dt>
 <dd>Used when -f is active to control whether the YYGETSTATE block is 
-followed by a yyNext: label line.</dd>
+followed by a yyNext: label line. Instead of using yyNext you can 
+usually also use configuration <i>startlabel</i> to force a specific start label
+or default to yy0 as start label.
+</dd>
 </dl>
 <a name="lbAK" id="lbAK"> </a>
 <h2>A LARGER EXAMPLE</h2>

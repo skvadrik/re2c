@@ -7,6 +7,9 @@
 .ds rx regular expression
 .ds lx \fIl\fP-expression
 \"$Log$
+\"Revision 1.44  2006/04/09 00:17:30  helly
+\"- Update docu
+\"
 \"Revision 1.43  2006/04/09 00:06:33  helly
 \"- Added configuration 'state:abort'.
 \"- Changed to not generate yyNext unless configuration 'state:nextlabel' is
@@ -405,7 +408,8 @@ input is needed.
 4. Modify caller to recognise "more input is needed" and respond
 appropriately.
 
-Please see examples/push.re for push-model scanner.
+Please see examples/push.re for push-model scanner. The generated code can be
+tweaked using configurations "\fBstate:abort\fP" and "\fBstate:nextlabel\fP".
 
 .SH "SCANNER SPECIFICATIONS"
 Each scanner specification consists of a set of \fIrules\fP, \fIname
@@ -553,7 +557,9 @@ contain a default case that aborts and a -1 case used for initialization.
 .TP
 \fIre2c:state:nextlabel\fP \fB=\fP 0 \fB;\fP
 Used when -f is active to control whether the \fCYYGETSTATE\fP block is 
-followed by a \fCyyNext:\fP label line.
+followed by a \fCyyNext:\fP label line. Instead of using \fCyyNext\fP you can 
+usually also use configuration \fIstartlabel\fP to force a specific start label
+or default to \fCyy0\fP as start label.
 
 .SH "A LARGER EXAMPLE"
 .LP
