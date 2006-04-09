@@ -7,6 +7,10 @@
 .ds rx regular expression
 .ds lx \fIl\fP-expression
 \"$Log$
+\"Revision 1.45  2006/04/09 00:47:37  helly
+\"- Added /*!getstate:re2c */ which triggers generation of the YYGETSTATE()
+\"  block.
+\"
 \"Revision 1.44  2006/04/09 00:17:30  helly
 \"- Update docu
 \"
@@ -386,7 +390,7 @@ input for the first time influences the second read attempt.
 
 Changes needed compared to the "pull" model.
 
-1. User has to supply macros YYSETSTATE() YYGETSTATE(state)
+1. User has to supply macros YYSETSTATE() and YYGETSTATE(state)
 
 2. The \fB-f\fP option inhibits declaration of \fIyych\fP and
 \fIyyaccept\fP. So the user has to declare these. Also the user has
@@ -407,6 +411,13 @@ input is needed.
 
 4. Modify caller to recognise "more input is needed" and respond
 appropriately.
+
+5. The generated code will contain a switch block that is used to restores 
+the last state by jumping behind the corrspoding YYFILL() call. This code is
+automatically generated in the epilog of the first "\fC/*!re2c */\fP" block. 
+It is possible to trigger generation of the YYGETSTATE() block by placing 
+a "\fC/*!getstate:re2c */\fP" comment earlier. This is especially usefull when
+the scanner code should be wrapped inside a loop.
 
 Please see examples/push.re for push-model scanner. The generated code can be
 tweaked using configurations "\fBstate:abort\fP" and "\fBstate:nextlabel\fP".

@@ -118,6 +118,12 @@ echo:
 					ignore_eoc = true;
 					goto echo;
 				}
+	"/*!getstate:re2c" {
+					tok = pos = cursor;
+					genGetState(out, topIndent, 0);
+					ignore_eoc = true;
+					goto echo;
+				}
 	"*" "/"		{
 					if (ignore_eoc) {
 						ignore_eoc = false;

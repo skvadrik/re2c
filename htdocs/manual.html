@@ -211,7 +211,7 @@ full generation process twice which means it has to read the input twice. That
 means re2c would fail in case it cannot open the input twice or reading the
 input for the first time influences the second read attempt.</p>
 <p>Changes needed compared to the "pull" model.</p>
-<p>1. User has to supply macros YYSETSTATE() YYGETSTATE(state)</p>
+<p>1. User has to supply macros YYSETSTATE() and YYGETSTATE(state)</p>
 <p>2. The <b>-f</b> option inhibits declaration of <i>yych</i> and
 <i>yyaccept</i>. So the user has to declare these. Also the user has to save
 and restore these. In the example <i>examples/push.re</i> these are declared as
@@ -232,6 +232,12 @@ variable by YYSETSTATE(state).</p>
 the function calling it) if more input is needed.</p>
 <p>4. Modify caller to recognise "more input is needed" and respond
 appropriately.</p>
+<p>5.The generated code will contain a switch block that is used to restores 
+the last state by jumping behind the corrspoding YYFILL() call. This code is
+automatically generated in the epilog of the first "/*!re2c */" block. 
+It is possible to trigger generation of the YYGETSTATE() block by placing 
+a "/*!getstate:re2c */" comment earlier. This is especially usefull when
+the scanner code should be wrapped inside a loop.</p>
 <p>Please see examples/push.re for push-model scanner. The generated code can be
 tweaked using configurations "state:abort" and "state:nextlabel".</p>
 <a name="lbAH" id="lbAH"> </a>
