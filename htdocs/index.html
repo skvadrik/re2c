@@ -96,7 +96,14 @@ provide re2c packages.</li>
 <h1>Changelog</h1>
 <h2>????-??-??: 0.10.2</h2>
 <ul>
-<li>Added docu, examples and tests to .src.zip package (0.10.1 was repackaged).</li>
+<li>Added /*!getstate:re2c */ which triggers generation of the YYGETSTATE() block.</li>
+<li>Added configuration 'state:abort'.</li>
+<li>Changed to not generate yyNext unless configuration 'state:nextlabel' is used.</li>
+<li>Changed to not generate yyaccept code unless needed.</li>
+<li>Changed to use if- instead of switch-expression when yyaccpt has only one case.</li>
+<li>Added docu, examples and tests to .src.zip package (0.10.1 zip was repackaged).</li>
+<li>Fixed #1463639 Missing forward declaration.</li>
+<li>Implemented #1187127 savable state support for multiple re2c blocks.</li>
 </ul>
 <h2>2006-02-28: 0.10.1</h2>
 <ul>
