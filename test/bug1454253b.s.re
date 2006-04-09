@@ -60,8 +60,15 @@ void _do_scan(const char * str, size_t str_len, size_t scn_len, const char * exp
 
 main()
 {
+	do_scan("?1??",         4, "20");
 	do_scan("#",            1, "0");
+	do_scan("##",           1, "0");
+	do_scan("##?",          1, "0");
+	do_scan("##|",          1, "0");
+	do_scan("?!|",          3, "10");
+	do_scan("?!?1|",        5, "120");
 	do_scan("?!?a+",        5, "120");
+	do_scan("?2!1?2??",     3, "20");
 	do_scan("?1?2!1?2??",   5, "220");
 	do_scan("?1?2?!1?2??", 11, "22120");
 	do_scan("?1?2?!1?2?!", 12, "221210");
