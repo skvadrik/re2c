@@ -235,8 +235,8 @@ appropriately.</p>
 <p>5.The generated code will contain a switch block that is used to restores 
 the last state by jumping behind the corrspoding YYFILL() call. This code is
 automatically generated in the epilog of the first "/*!re2c */" block. 
-It is possible to trigger generation of the YYGETSTATE() block by placing 
-a "/*!getstate:re2c */" comment earlier. This is especially usefull when
+It is possible to trigger generation of the YYGETSTATE() block earlier by 
+placing a "/*!getstate:re2c */" comment. This is especially useful when
 the scanner code should be wrapped inside a loop.</p>
 <p>Please see examples/push.re for push-model scanner. The generated code can be
 tweaked using configurations "state:abort" and "state:nextlabel".</p>
@@ -352,12 +352,14 @@ whether the normal start label is being used or not. This setting is being
 reset to <b>0</b> after a start label has been generated.</dd>
 <dt><i>re2c:state:abort</i> <b>=</b> 0 <b>;</b></dt>
 <dd>When not zero and switch -f is active then the YYGETSTATE block will 
-contain a default case that aborts and a -1 case used for initialization.</dd>
+contain a default case that aborts and a -1 case is used for initialization.</dd>
 <dt><i>re2c:state:nextlabel</i> <b>=</b> 0 <b>;</b></dt>
 <dd>Used when -f is active to control whether the YYGETSTATE block is 
 followed by a yyNext: label line. Instead of using yyNext you can 
 usually also use configuration <i>startlabel</i> to force a specific start label
-or default to yy0 as start label.
+or default to yy0 as start label. Instead of using a dedicated label it 
+is often better to separate the YYGETSTATE code from the actual scanner code by
+placing a "/*!getstate:re2c */" comment.
 </dd>
 </dl>
 <a name="lbAK" id="lbAK"> </a>

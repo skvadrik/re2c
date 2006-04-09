@@ -7,6 +7,9 @@
 .ds rx regular expression
 .ds lx \fIl\fP-expression
 \"$Log$
+\"Revision 1.46  2006/04/09 02:26:28  helly
+\"- Improve YYGETSTATE docu
+\"
 \"Revision 1.45  2006/04/09 00:47:37  helly
 \"- Added /*!getstate:re2c */ which triggers generation of the YYGETSTATE()
 \"  block.
@@ -415,8 +418,8 @@ appropriately.
 5. The generated code will contain a switch block that is used to restores 
 the last state by jumping behind the corrspoding YYFILL() call. This code is
 automatically generated in the epilog of the first "\fC/*!re2c */\fP" block. 
-It is possible to trigger generation of the YYGETSTATE() block by placing 
-a "\fC/*!getstate:re2c */\fP" comment earlier. This is especially usefull when
+It is possible to trigger generation of the YYGETSTATE() block earlier by 
+placing a "\fC/*!getstate:re2c */\fP" comment. This is especially useful when
 the scanner code should be wrapped inside a loop.
 
 Please see examples/push.re for push-model scanner. The generated code can be
@@ -564,13 +567,15 @@ after a start label has been generated.
 .TP
 \fIre2c:state:abort\fP \fB=\fP 0 \fB;\fP
 When not zero and switch -f is active then the \fCYYGETSTATE\fP block will 
-contain a default case that aborts and a -1 case used for initialization.
+contain a default case that aborts and a -1 case is used for initialization.
 .TP
 \fIre2c:state:nextlabel\fP \fB=\fP 0 \fB;\fP
 Used when -f is active to control whether the \fCYYGETSTATE\fP block is 
 followed by a \fCyyNext:\fP label line. Instead of using \fCyyNext\fP you can 
 usually also use configuration \fIstartlabel\fP to force a specific start label
-or default to \fCyy0\fP as start label.
+or default to \fCyy0\fP as start label. Instead of using a dedicated label it 
+is often better to separate the YYGETSTATE code from the actual scanner code by
+placing a "\fC/*!getstate:re2c */\fP" comment.
 
 .SH "A LARGER EXAMPLE"
 .LP
