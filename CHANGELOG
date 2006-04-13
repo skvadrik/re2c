@@ -1,4 +1,4 @@
-Version 0.10.2 (????-??-??)
+Version 0.10.2 (2006-04-13)
 ---------------------------
 - Fixed generation of YYDEBUG() when using -d switch.
 - Added /*!getstate:re2c */ which triggers generation of the YYGETSTATE() block.

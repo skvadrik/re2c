@@ -75,6 +75,35 @@ provide re2c packages.</li>
 <a href="http://sourceforge.net/project/showfiles.php?group_id=96864">files pages</a>.</li>
 </ul>
 <hr />
+<h1>Changelog</h1>
+<h2>2006-04-13: 0.10.2</h2>
+<ul>
+<li>Fixed generation of YYDEBUG() when using -d switch.</li>
+<li>Added /*!getstate:re2c */ which triggers generation of the YYGETSTATE() block.</li>
+<li>Added configuration 'state:abort'.</li>
+<li>Changed to not generate yyNext unless configuration 'state:nextlabel' is used.</li>
+<li>Changed to not generate yyaccept code unless needed.</li>
+<li>Changed to use if- instead of switch-expression when yyaccpt has only one case.</li>
+<li>Added docu, examples and tests to .src.zip package (0.10.1 zip was repackaged).</li>
+<li>Fixed #1454253 Piece of code saving a backtracking point not generated.</li>
+<li>Fixed #1463639 Missing forward declaration.</li>
+<li>Implemented #1187127 savable state support for multiple re2c blocks.</li>
+</ul>
+<h2>re2c 0.10.2 has been tested with the following compilers:</h2>
+<ul>
+<li>gcc version 4.0.3 (4.0.3-0.20060215.2mdk for Mandriva Linux release 2006.1)</li>
+<li>gcc version 3.4.4 (cygming special) (gdc 0.12, using dmd 0.125)</li>
+<li>Microsoft (R) 32-bit C/C++ Optimizing Compiler Version 14.00.50727.42 for 80x86 (Microsoft Visual C 2005)</li>
+<li>Microsoft (R) 32-bit C/C++ Optimizing Compiler Version 13.00.9466 for 80x86 (Microsoft Visual C 2002)</li>
+</ul>
+<ul>
+<li>bison 2.1, 1.875d, 1.875b, 1.875
+</ul>
+<h2>2006-02-28: 0.10.1</h2>
+<ul>
+<li>Added support for Solaris and native SUN compiler.</li>
+<li>Applied #1438160 expose YYCTXMARKER.</li>
+</ul>
 <h2>re2c 0.10.1 has been tested with the following compilers:</h2>
 <ul>
 <li>gcc version 4.0.3 (4.0.3-0.20060215.2mdk for Mandriva Linux release 2006.1)</li>
@@ -91,26 +120,6 @@ provide re2c packages.</li>
 </ul>
 <ul>
 <li>bison 2.1, 1.875d, 1.875b, 1.875
-</ul>
-<hr />
-<h1>Changelog</h1>
-<h2>????-??-??: 0.10.2</h2>
-<ul>
-<li>Fixed generation of YYDEBUG() when using -d switch.</li>
-<li>Added /*!getstate:re2c */ which triggers generation of the YYGETSTATE() block.</li>
-<li>Added configuration 'state:abort'.</li>
-<li>Changed to not generate yyNext unless configuration 'state:nextlabel' is used.</li>
-<li>Changed to not generate yyaccept code unless needed.</li>
-<li>Changed to use if- instead of switch-expression when yyaccpt has only one case.</li>
-<li>Added docu, examples and tests to .src.zip package (0.10.1 zip was repackaged).</li>
-<li>Fixed #1454253 Piece of code saving a backtracking point not generated.</li>
-<li>Fixed #1463639 Missing forward declaration.</li>
-<li>Implemented #1187127 savable state support for multiple re2c blocks.</li>
-</ul>
-<h2>2006-02-28: 0.10.1</h2>
-<ul>
-<li>Added support for Solaris and native SUN compiler.</li>
-<li>Applied #1438160 expose YYCTXMARKER.</li>
 </ul>
 <h2>2006-02-18: 0.10.0</h2>
 <ul>
