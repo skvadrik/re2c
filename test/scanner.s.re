@@ -1,4 +1,4 @@
-/* $Id$ */
+/* Id: scanner.re,v 1.37 2006/02/25 12:41:41 helly Exp */
 #include <stdlib.h>
 #include <string.h>
 #include <iostream>
