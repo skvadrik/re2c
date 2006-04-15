@@ -32,4 +32,9 @@ then endless switch/case expressions where appropriate. Note that the file name
 extension is actually '.s.re' to tell the test system to use the -s switch. To
 invoke re2 you do the following:
 
-  re2c -s -o test.c  calc_006.s.re
+  re2c -s -o test.c calc_006.s.re
+
+Finally we use the -b switch to have the code use a decision table. The -b 
+switch also contains the -s behavior. 
+
+  re2c -b -o test.c calc_007.b.re
