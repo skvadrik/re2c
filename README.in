@@ -63,6 +63,8 @@ served many people well for many years. re2c is on the order of 2-3
 times faster than a flex based scanner, and its input model is much 
 more flexible.
 
+For an introduction to re2c refer to the lessons sub directory.
+
 Peter's original version 0.5 ANNOUNCE and README follows.
 
 --
