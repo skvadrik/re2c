@@ -192,7 +192,7 @@ yy19:
 
 int main(int argc, char **argv)
 {
-	if (argc > 0)
+	if (argc > 1)
 	{
 		char *inp;
 		int res = 0, argp = 0, len;
@@ -229,7 +229,7 @@ int main(int argc, char **argv)
 	}
 	else
 	{
-		fprintf(stderr, "%s <expr>\n", argv[1]);
+		fprintf(stderr, "%s <expr>\n", argv[0]);
 		return 0;
 	}
 }

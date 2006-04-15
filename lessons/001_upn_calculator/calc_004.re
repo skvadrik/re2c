@@ -66,13 +66,13 @@ int scan(char *s, int l)
 
 int main(int argc, char **argv)
 {
-	if (argc > 0)
+	if (argc > 1)
 	{
 		return scan(argv[1], strlen(argv[1]));
 	}
 	else
 	{
-		fprintf(stderr, "%s <expr>\n", argv[1]);
+		fprintf(stderr, "%s <expr>\n", argv[0]);
 		return 0;
 	}
 }
