@@ -16022,7 +16022,6 @@ yy1314:
 
 #define YYMAXFILL 26
 
-
 timelib_time* timelib_strtotime(char *s, int len, int *errors, timelib_tzdb *tzdb)
 {
 	Scanner in;

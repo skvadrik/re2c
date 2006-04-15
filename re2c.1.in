@@ -7,6 +7,10 @@
 .ds rx regular expression
 .ds lx \fIl\fP-expression
 \"$Log$
+\"Revision 1.49  2006/04/15 13:00:04  helly
+\"- Added /*!ignore!re2c */ to support documenting of re2c source.
+\"- Fixed issue with multiline re2c comments (/*!max:re2c ... */ and alike).
+\"
 \"Revision 1.48  2006/04/15 11:58:34  helly
 \"- Update docu
 \"
@@ -255,6 +259,9 @@ After the \fC/*!re2c */\fP blocks you can place a \fC/*!max:re2c */\fP block
 that will output a define (\fCYYMAXFILL\fP) that holds the maximum number of 
 characters required to parse the input. That is the maximum value \fCYYFILL()\fP 
 will receive.
+
+You can also use \fC/*!ignore:re2c */\fP blocks that allows to document the
+scanner code and will not be part of the output.
 
 .SH OPTIONS
 \*(re provides the following options:

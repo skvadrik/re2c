@@ -124,6 +124,20 @@ echo:
 					ignore_eoc = true;
 					goto echo;
 				}
+	"/*!ignore:re2c" {
+					tok = pos = cursor;
+					ignore_eoc = true;
+					goto echo;
+				}
+	"*" "/"	"\r"? "\n"	{
+					if (ignore_eoc) {
+						ignore_eoc = false;
+					} else {
+						out.write((const char*)(tok), (const char*)(cursor) - (const char*)(tok));
+					}
+					tok = pos = cursor; cline++;
+					goto echo;
+				}
 	"*" "/"		{
 					if (ignore_eoc) {
 						ignore_eoc = false;
@@ -134,12 +148,16 @@ echo:
 					goto echo;
 				}
 	"\n"		{
-					out.write((const char*)(tok), (const char*)(cursor) - (const char*)(tok));
+					if (!ignore_eoc) {
+						out.write((const char*)(tok), (const char*)(cursor) - (const char*)(tok));
+					}
 					tok = pos = cursor; cline++;
 				  	goto echo;
 				}
 	zero		{
-					out.write((const char*)(tok), (const char*)(cursor) - (const char*)(tok) - 1); // -1 so we don't write out the \0
+					if (!ignore_eoc) {
+						out.write((const char*)(tok), (const char*)(cursor) - (const char*)(tok) - 1); // -1 so we don't write out the \0
+					}
 					if(cursor == eof) {
 						RETURN(0);
 					}

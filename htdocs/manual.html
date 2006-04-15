@@ -85,6 +85,8 @@ yy7:    if(yych &lt;= '/') goto yy3;
 <p>After the /*!re2c */ blocks you can place a /*!max:re2c */ block that will
 output a define (YYMAXFILL) that holds the maximum number of characters required to parse
 the input. That is the maximum value YYFILL() will receive.</p>
+<p>You can also use /*!ignore:re2c */ blocks that allows to document the
+scanner code and will not be part of the output.</p>
 <a name="lbAE" id="lbAE"> </a>
 <h2>OPTIONS</h2>
 <p><b>re2c</b> provides the following options:</p>

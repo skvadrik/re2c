@@ -19,11 +19,10 @@ char *scan(char *p)
 	case 1: goto yyFillLabel1;
 	}
 
-
 	// after getstate
 
 
-#line 27 "<stdout>"
+#line 26 "<stdout>"
 	{
 
 yy0:
@@ -51,12 +50,12 @@ yy2:
 yy3:
 #line 21 "config4f.f.re"
 		{ return YYCURSOR; }
-#line 55 "<stdout>"
+#line 54 "<stdout>"
 yy4:
 		++YYCURSOR;
 #line 22 "config4f.f.re"
 		{ return NULL; }
-#line 60 "<stdout>"
+#line 59 "<stdout>"
 yy6:
 		++YYCURSOR;
 		YYSETSTATE(1);
