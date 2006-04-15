@@ -343,6 +343,10 @@ not want any indendation at all you can simply set this to <b>""</b>.</dd>
 <dt><i>re2c:yybm:hex</i> <b>=</b> 0 <b>;</b></dt>
 <dd>If set to zero then a decimal table is being used else a hexadecimal table
 will be generated.</dd>
+<dt><i>re2c:yyfill:enable</i> <b>=</b> 1 <b>;</b></dt>
+<dd>Set this to zero to suppress generation of YYFILL(). When using this be sure
+to verify that the generated scanner does not read behind input. Allowing
+this behavior might introduce sever security issues to you programs.</dd>
 <dt><i>re2c:startlabel</i> <b>=</b> 0 <b>;</b></dt>
 <dd>If set to a non zero integer then the start label of the next scanner
 blocks will be generated even if not used by the scanner itself. Otherwise the

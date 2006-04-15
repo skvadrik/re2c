@@ -32,6 +32,8 @@ bool wFlag = false;
 bool bUsedYYAccept = false;
 bool bUseStartLabel= false;
 bool bUseStateNext = false;
+bool bUseYYFill    = true;
+
 std::string startLabelName;
 uint maxFill = 1;
 uint next_label = 0;

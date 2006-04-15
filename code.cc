@@ -301,13 +301,16 @@ static void need(std::ostream &o, uint ind, uint n, bool & readCh, bool bSetMark
 		o << indent(ind) << "YYSETSTATE(" << fillIndex << ");\n";
 	}
 
-	if (n == 1)
+	if (bUseYYFill)
 	{
-		o << indent(ind) << "if(YYLIMIT == YYCURSOR) YYFILL(1);\n";
-	}
-	else
-	{
-		o << indent(ind) << "if((YYLIMIT - YYCURSOR) < " << n << ") YYFILL(" << n << ");\n";
+		if (n == 1)
+		{
+			o << indent(ind) << "if(YYLIMIT == YYCURSOR) YYFILL(1);\n";
+		}
+		else
+		{
+			o << indent(ind) << "if((YYLIMIT - YYCURSOR) < " << n << ") YYFILL(" << n << ");\n";
+		}
 	}
 
 	if (fFlag)
@@ -1461,7 +1464,7 @@ void genGetState(std::ostream &o, uint& ind, uint start_label)
 
 std::ostream& operator << (std::ostream& o, const file_info& li)
 {
-	if (li.ln)
+	if (li.ln && !iFlag)
 	{
 		o << "#line " << li.ln->get_line() << " \"" << li.fname << "\"\n";
 	}
@@ -1499,6 +1502,10 @@ void Scanner::config(const Str& cfg, int num)
 	else if (cfg.to_string() == "state:nextlabel")
 	{
 		bUseStateNext = num != 0;
+	}
+	else if (cfg.to_string() == "yyfill:enable")
+	{
+		bUseYYFill = num != 0;
 	}
 	else
 	{

@@ -35,6 +35,7 @@ extern bool yybmHexTable;
 extern bool bUseStateAbort;
 extern bool bUseStateNext;
 extern bool bWroteGetState;
+extern bool bUseYYFill;
 
 extern uint asc2ebc[256];
 extern uint ebc2asc[256];

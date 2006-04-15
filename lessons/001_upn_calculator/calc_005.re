@@ -1,4 +1,4 @@
-/* re2c lesson_001, calc_004, (c) M. Boerger 2006 */
+/* re2c lesson_001, calc_005, (c) M. Boerger 2006 */
 /*!ignore:re2c
 
 - turning this lesson into an easy calculator

@@ -25,3 +25,11 @@ followed by the output filename:
 
 The input files *.re each contain basic step by comments that explain what is
 going on and what you can see in the examples.
+
+In order to optimize the generated code we will use the -s command line switch
+of re2c. This tells re2c to generate code that uses if statements rather 
+then endless switch/case expressions where appropriate. Note that the file name
+extension is actually '.s.re' to tell the test system to use the -s switch. To
+invoke re2 you do the following:
+
+  re2c -s -o test.c  calc_006.s.re
