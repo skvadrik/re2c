@@ -48,4 +48,4 @@ rm -rf $RPM_BUILD_ROOT
 %{_bindir}/re2c
 %{_mandir}/man1/re2c.1*
 
-%doc README examples doc/*
+%doc README examples doc/* lessons/*

@@ -22,7 +22,7 @@ CLEANFILES   = parser.cc y.tab.c y.tab.h scanner.cc re2c.1 .version
 DISTCLEANFILES = makerpm re2c.spec README scanner.cc re2c$(EXEEXT)
 
 EXTRA_SRC    = $(man_MANS) README parser.y scanner.re y.tab.h CHANGELOG \
-               doc examples test bootstrap/*.cc bootstrap/*.h
+               doc examples test bootstrap/*.cc bootstrap/*.h lessons
 EXTRA_DIST   = $(EXTRA_SRC) makerpm.in re2c.spec.in re2c.spec README.in config_w32.h.in
 EXTRA_ZIP    = $(EXTRA_SRC) config_w32.h *.sln *.vcproj
 
@@ -30,6 +30,7 @@ dist-hook: re2c.spec
 	rm -rf `find $(distdir)/doc -name CVS`
 	rm -rf `find $(distdir)/examples -name CVS`
 	rm -rf `find $(distdir)/test -name CVS`
+	rm -rf `find $(distdir)/lessons -name CVS -o -name .cvsignore`
 
 rpm-files:	$(bin_PROGRAMS) $(EXTRA_DIST)
 
@@ -44,6 +45,7 @@ zip: $(bin_PROGRAMS) $(EXTRA_ZIP)
 	if test -f re2c-$(PACKAGE_VERSION)-src.zip; then rm -f re2c-$(PACKAGE_VERSION)-src.zip; fi
 	zip -q -o -9 -r re2c-$(PACKAGE_VERSION)-src.zip $(re2c_SOURCES) $(EXTRA_ZIP)
 	zipinfo -1      re2c-$(PACKAGE_VERSION)-src.zip | grep CVS | xargs zip -d re2c-$(PACKAGE_VERSION)-src.zip >/dev/null
+	zipinfo -1      re2c-$(PACKAGE_VERSION)-src.zip | grep .cvsignore | xargs zip -d re2c-$(PACKAGE_VERSION)-src.zip >/dev/null
 	if test -f re2c-$(PACKAGE_VERSION)-bin.zip; then rm -f re2c-$(PACKAGE_VERSION)-bin.zip; fi
 	if test -f Release-2005/re2c.exe; then \
 	zip -q -o -9 -j re2c-$(PACKAGE_VERSION)-bin.zip $(win_BINARIES); \
