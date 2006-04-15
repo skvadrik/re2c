@@ -7,6 +7,9 @@
 .ds rx regular expression
 .ds lx \fIl\fP-expression
 \"$Log$
+\"Revision 1.51  2006/04/15 16:27:28  helly
+\"- Fix heading
+\"
 \"Revision 1.50  2006/04/15 16:03:35  helly
 \"- Added tutorial like lessons to re2c.
 \"
@@ -595,7 +598,7 @@ or default to \fCyy0\fP as start label. Instead of using a dedicated label it
 is often better to separate the YYGETSTATE code from the actual scanner code by
 placing a "\fC/*!getstate:re2c */\fP" comment.
 
-.SH "A LARGER EXAMPLE"
+.SH "UNDERSTANDING RE2C"
 .LP
 The subdirectory lessons of the re2c distribution contains a few step by step
 lessons to get you started with re2c. All examples in the lessons subdirectory
