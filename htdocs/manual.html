@@ -144,7 +144,7 @@ the last character in the buffer). The generated code repeatedly compares
 YYCURSOR to YYLIMIT to determine when the buffer needs (re)filling.<br /><br /></dd>
 <dt>YYMARKER</dt>
 <dd><i>l</i>-expression of type *YYCTYPE. The generated code saves backtracking
-information in YYMARKER.<br /><br /></dd>
+information in YYMARKER. Some easy scanners might not use this.<br /><br /></dd>
 <dt>YYCTXMARKER</dt>
 <dd><i>l</i>-expression of type *YYCTYPE. The generated code saves context 
 backtracking information in YYCTXMARKER. The user only  needs to define this 
@@ -155,7 +155,9 @@ regular expressions.<br /><br /></dd>
 least <i>n</i> additional characters should be provided. YYFILL should adjust
 YYCURSOR, YYLIMIT, YYMARKER and YYCTXMARKER as needed. Note that for typical 
 programming languages <i>n</i> will be the length of the longest keyword plus 
-one.<br /><br /></dd>
+one. The user can place a comment of the form /*!max:re2c */ after the 
+end of the last scanner block to insert a YYMAXFILL definition that is 
+set to the maximum length value.<br /><br /></dd>
 <dt>YYGETSTATE()</dt>
 <dd>The user only needs to define this macro if the <b>-f</b> flag was
 specified. In that case, the generated code "calls" YYGETSTATE at the very

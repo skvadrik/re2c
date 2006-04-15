@@ -7,6 +7,9 @@
 .ds rx regular expression
 .ds lx \fIl\fP-expression
 \"$Log$
+\"Revision 1.48  2006/04/15 11:58:34  helly
+\"- Update docu
+\"
 \"Revision 1.47  2006/04/15 11:50:21  helly
 \"- Update docu
 \"
@@ -324,7 +327,8 @@ to determine when the buffer needs (re)filling.
 .TP
 \fCYYMARKER\fP
 \*(lx of type \fC*YYCTYPE\fP.
-The generated code saves backtracking information in \fCYYMARKER\fP.
+The generated code saves backtracking information in \fCYYMARKER\fP. Some easy
+scanners might not use this.
 .TP
 \fCYYCTXMARKER\fP
 \*(lx of type \fC*YYCTYPE\fP.
@@ -338,6 +342,9 @@ The generated code "calls" \fCYYFILL\fP when the buffer needs
 be provided.  \fCYYFILL\fP should adjust \fCYYCURSOR\fP, \fCYYLIMIT\fP,
 \fCYYMARKER\fP and \fCYYCTXMARKER\fP as needed.  Note that for typical 
 programming languages \fIn\fP will be the length of the longest keyword plus one.
+The user can place a comment of the form \fC/*!max:re2c */\fP after the end of
+the last scanner block to insert a \fCYYMAXFILL\fP definition that is set to 
+the maximum length value.
 .TP
 \fCYYGETSTATE()\fP
 The user only needs to define this macro if the \fB-f\fP flag was specified.
