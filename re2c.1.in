@@ -7,6 +7,9 @@
 .ds rx regular expression
 .ds lx \fIl\fP-expression
 \"$Log$
+\"Revision 1.52  2006/04/15 17:06:10  helly
+\"- Update docu
+\"
 \"Revision 1.51  2006/04/15 16:27:28  helly
 \"- Fix heading
 \"
@@ -617,10 +620,11 @@ The user must arrange for a sentinel token to appear at the end of input
 \*(re does not provide an \fC<<EOF>>\fP expression.
 If the source is from a null-byte terminated string, a
 rule matching a null character will suffice.  If the source is from a
-file then the approach taken in the example can be used: pad the input with
-a newline (or some other character that can't appear within another token);
-upon recognizing such a character check to see if it is the sentinel
-and act accordingly.
+file then you could pad the input with a newline (or some other character that 
+cannot appear within another token); upon recognizing such a character check 
+to see if it is the sentinel and act accordingly. And you can also use YYFILL
+to end the scanner in case not enough characters are available which is nothing
+else then e detection of end of data/file.
 .LP
 \*(re does not provide start conditions:  use a separate scanner
 specification for each start condition (as illustrated in the above example).

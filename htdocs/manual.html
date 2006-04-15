@@ -377,10 +377,11 @@ example above.</p>
 (and provide a rule for matching it): <b>re2c</b> does not provide an
 &lt;&lt;EOF&gt;&gt; expression. If the source is from a null-byte terminated
 string, a rule matching a null character will suffice. If the source is from a
-file then the approach taken in the example can be used: pad the input with a
-newline (or some other character that can't appear within another token); upon
-recognizing such a character check to see if it is the sentinel and act
-accordingly.</p>
+file then you could pad the input with a newline (or some other character that 
+cannot appear within another token); upon recognizing such a character check 
+to see if it is the sentinel and act accordingly. And you can also use YYFILL
+to end the scanner in case not enough characters are available which is nothing
+else then e detection of end of data/file.</p>
 <p><b>re2c</b> does not provide start conditions: use a separate scanner
 specification for each start condition (as illustrated in the above example).
 <a name="lbAL" id="lbAL"> </a></p>
