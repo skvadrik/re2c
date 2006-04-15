@@ -29,6 +29,12 @@
     arise when the second last character is a "0" and the last is any digit.
     
     if (l > 1 && s[l-2] == '0' && s[l-1] >= '0' && s[l-1] <= '9') return 2;
+    
+    However in this example the above check is only necessary if the input is 
+    not terminated by a trailing zero check. In other words it would be used 
+    when reading from a file and directly working on the read buffers. For 
+    zero terminated string input the generated scanner will always find the 
+    terminating zero.
 
 - optimizing the generated code by using -s command line switch of re2c
   . This tells re2c to generate code that uses if statements rather 
