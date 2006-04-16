@@ -15,7 +15,7 @@ Updated: 8 April 2006<br />
 <p>re2c - convert regular expressions to C/C++</p>
 <a name="lbAC" id="lbAC">&nbsp;</a>
 <h2>SYNOPSIS</h2>
-<p><b>re2c</b> [<b>-bdefhisvVw</b>] [<b>-o output</b>] file</p>
+<p><b>re2c</b> [<b>-bdefhistvVw</b>] [<b>-o output</b>] file</p>
 <a name="lbAD" id="lbAD">&nbsp;</a>
 <h2>DESCRIPTION</h2>
 <p><b>re2c</b> is a preprocessor that generates C-based recognizers from
@@ -82,9 +82,11 @@ yy7:    if(yych &lt;= '/') goto yy3;
 </pre>
 <br />
 <br />
-<p>After the /*!re2c */ blocks you can place a /*!max:re2c */ block that will
-output a define (YYMAXFILL) that holds the maximum number of characters required to parse
-the input. That is the maximum value YYFILL(n) will receive.</p>
+<p>After the /*!re2c */ blocks you can place one /*!max:re2c */ comment 
+that will output a define (YYMAXFILL) that holds the maximum number of 
+characters required to parse the input. That is the maximum value YYFILL(n)
+will receive. If -t is in effect then YYMAXFILL can be triggered once anywhere
+in the code.</p>
 <p>You can also use /*!ignore:re2c */ blocks that allows to document the
 scanner code and will not be part of the output.</p>
 <a name="lbAE" id="lbAE"> </a>
@@ -107,7 +109,7 @@ YYDEBUG(int state, char current)</i>. The first parameter receives the state or
 <dt><b>-e</b></dt>
 <dd>Cross-compile from an ASCII platform to an EBCDIC one.<br /><br /></dd>
 <dt><b>-f</b></dt>
-<dd>Generate a scanner with support for storable state. For details see below
+<dd>Implies -t. Generate a scanner with support for storable state. For details see below
 at <b>SCANNER WITH STORABLE STATES</b>.<br /><br /></dd>
 <dt><b>-i</b></dt>
 <dd>Do not output #line information. This is usefull when you want use a CMS
@@ -117,6 +119,9 @@ Specify the output file.<br /><br /></dd>
 <dt><b>-s</b></dt>
 <dd>Generate nested ifs for some switches. Many compilers need this assist to
 generate better code.<br /><br /></dd>
+<dt><b>-t</b></dt>
+<dd>Force two pass generation, allows YYMAXFILL generation prior to last re2c 
+block.<br /><br /></dd>
 <dt><b>-v</b></dt>
 <dd>Show version information.<br /><br /></dd>
 <dt><b>-V</b></dt>
@@ -157,9 +162,10 @@ regular expressions.<br /><br /></dd>
 least <i>n</i> additional characters should be provided. YYFILL(n) should adjust
 YYCURSOR, YYLIMIT, YYMARKER and YYCTXMARKER as needed. Note that for typical 
 programming languages <i>n</i> will be the length of the longest keyword plus 
-one. The user can place a comment of the form /*!max:re2c */ after the 
+one. The user can place a comment of the form /*!max:re2c */ once after the 
 end of the last scanner block to insert a YYMAXFILL definition that is 
-set to the maximum length value.<br /><br /></dd>
+set to the maximum length value. If -t switch is used then YYMAXFILL can be 
+triggered once anywhere in the code.<br /><br /></dd>
 <dt>YYGETSTATE()</dt>
 <dd>The user only needs to define this macro if the <b>-f</b> flag was
 specified. In that case, the generated code "calls" YYGETSTATE at the very

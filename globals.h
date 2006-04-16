@@ -21,8 +21,14 @@ extern bool fFlag;
 extern bool iFlag;
 extern bool sFlag;
 extern bool wFlag;
+extern bool tFlag;
+
+extern bool bLastPass;
 
 extern bool bUsedYYAccept;
+extern bool bUsedYYMaxFill;
+extern bool bUsedYYMarker;
+
 extern bool bUseStartLabel;
 extern std::string startLabelName;
 extern uint maxFill;
@@ -36,7 +42,6 @@ extern bool bUseStateAbort;
 extern bool bUseStateNext;
 extern bool bWroteGetState;
 extern bool bUseYYFill;
-extern bool bUseYYMarker;
 
 extern uint asc2ebc[256];
 extern uint ebc2asc[256];

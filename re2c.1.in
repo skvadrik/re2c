@@ -10,7 +10,7 @@
 re2c \- convert regular expressions to C/C++
 
 .SH SYNOPSIS
-\*(re [\fB-bdefhisvVw\fP] [\fB-o output\fP] file\fP
+\*(re [\fB-bdefhistvVw\fP] [\fB-o output\fP] file\fP
 
 .SH DESCRIPTION
 \*(re is a preprocessor that generates C-based recognizers from regular
@@ -86,10 +86,11 @@ yy7:    if(yych <= '/') goto yy3;
 .fi
 .in -3
 
-After the \fC/*!re2c */\fP blocks you can place a \fC/*!max:re2c */\fP block
+After the \fC/*!re2c */\fP blocks you can place one \fC/*!max:re2c */\fP comment
 that will output a define (\fCYYMAXFILL\fP) that holds the maximum number of 
 characters required to parse the input. That is the maximum value \fCYYFILL\fP(n)
-will receive.
+will receive. If -t is in effect then YYMAXFILL can be triggered once anywhere 
+in the code.
 
 You can also use \fC/*!ignore:re2c */\fP blocks that allows to document the
 scanner code and will not be part of the output.
@@ -118,7 +119,7 @@ state or -1 and the second parameter receives the input at the current cursor.
 Cross-compile from an ASCII platform to an EBCDIC one. 
 .TP
 \fB-f\fP
-Generate a scanner with support for storable state.
+Implies \fB-t\fP. Generate a scanner with support for storable state.
 For details see below at \fBSCANNER WITH STORABLE STATES\fP.
 .TP
 \fB-i\fP
@@ -131,6 +132,9 @@ Specify the output file.
 \fB-s\fP
 Generate nested \fCif\fPs for some \fCswitch\fPes.  Many compilers need this
 assist to generate better code.
+.TP
+\fB-t\fP
+Force two pass generation, allows YYMAXFILL generation prior to last re2c block.
 .TP
 \fB-v\fP
 Show version information.
@@ -180,9 +184,10 @@ The generated code "calls" \fCYYFILL\fP(n) when the buffer needs
 be provided.  \fCYYFILL\fP(n) should adjust \fCYYCURSOR\fP, \fCYYLIMIT\fP,
 \fCYYMARKER\fP and \fCYYCTXMARKER\fP as needed.  Note that for typical 
 programming languages \fIn\fP will be the length of the longest keyword plus one.
-The user can place a comment of the form \fC/*!max:re2c */\fP after the end of
-the last scanner block to insert a \fCYYMAXFILL\fP definition that is set to 
-the maximum length value.
+The user can place a comment of the form \fC/*!max:re2c */\fP once after the 
+end of the last scanner block to insert a \fCYYMAXFILL\fP definition that is 
+set to the maximum length value. If -t switch is used then YYMAXFILL can be 
+triggered once anywhere in the code.
 .TP
 \fCYYGETSTATE()\fP
 The user only needs to define this macro if the \fB-f\fP flag was specified.

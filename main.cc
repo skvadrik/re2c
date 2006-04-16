@@ -28,12 +28,17 @@ bool fFlag = false;
 bool iFlag = false;
 bool sFlag = false;
 bool wFlag = false;
+bool tFlag = false;
 
-bool bUsedYYAccept = false;
+bool bLastPass = false;
+
+bool bUsedYYAccept  = false;
+bool bUsedYYMaxFill = false;
+bool bUsedYYMarker  = false;
+
 bool bUseStartLabel= false;
 bool bUseStateNext = false;
 bool bUseYYFill    = true;
-bool bUseYYMarker  = false;
 
 std::string startLabelName;
 uint maxFill = 1;
@@ -67,6 +72,7 @@ static const mbo_opt_struct OPTIONS[] =
 	mbo_opt_struct('i', 0, "no-debug-info"),
 	mbo_opt_struct('o', 1, "output"),
 	mbo_opt_struct('s', 0, "nested-ifs"),
+	mbo_opt_struct('t', 0, "two-pass"),
 	mbo_opt_struct('v', 0, "version"),
 	mbo_opt_struct('V', 0, "vernum"),
 	mbo_opt_struct('w', 0, "wide-chars"),      
@@ -91,7 +97,8 @@ static void usage()
 	"-e     --ecb            Cross-compile from an ASCII platform to\n"
 	"                        an EBCDIC one.\n"
 	"\n"
-	"-f     --storable-state Generate a scanner with support for storable state\n"
+	"-f     --storable-state Implies -t. Generate a scanner that supports storable\n"
+	"                        states.\n"
 	"\n"
 	"-i     --no-debug-info  Do not generate '#line' info (usefull for versioning).\n"
 	"\n"
@@ -100,6 +107,9 @@ static void usage()
 	"\n"
 	"-s     --nested-ifs     Generate nested ifs for some switches. Many compilers\n"
 	"                        need this assist to generate better code.\n"
+	"\n"
+	"-t     --two-pass       Force two pass generation, allows YYMAXFILL generation\n"
+	"                        prior to last re2c block.\n"
 	"\n"
 	"-v     --version        Show version information.\n"
 	"-V     --vernum         Show version as one number.\n"
@@ -141,16 +151,13 @@ int main(int argc, char *argv[])
 			eFlag = true;
 			break;
 
-			case 's':
-			sFlag = true;
-			break;
-
 			case 'd':
 			dFlag = true;
 			break;
 
 			case 'f':
 			fFlag = true;
+			tFlag = true;
 			break;
 
 			case 'i':
@@ -159,6 +166,14 @@ int main(int argc, char *argv[])
 
 			case 'o':
 			outputFileName = opt_arg;
+			break;
+
+			case 's':
+			sFlag = true;
+			break;
+			
+			case 't':
+			tFlag = true;
 			break;
 
 			case 'v':
@@ -252,10 +267,10 @@ int main(int argc, char *argv[])
 	sourceFileInfo = file_info(sourceFileName, &scanner);
 	outputFileInfo = file_info(outputFileName, &output);
 
-	if (fFlag)
+	if (tFlag)
 	{
 		re2c::ifstream_lc null_source;
-
+		
 		if (!null_source.open(sourceFileName).is_open())
 		{
 			cerr << "re2c: error: cannot re-open " << sourceFileName << "\n";
@@ -269,8 +284,10 @@ int main(int argc, char *argv[])
 		next_fill_index = 0;
 		Symbol::ClearTable();
 		bWroteGetState = false;
+		bUsedYYMaxFill = false;
 	}
 
+	bLastPass = true;
 	parse(scanner, output);
 	return 0;
 }

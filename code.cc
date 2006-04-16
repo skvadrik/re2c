@@ -396,11 +396,11 @@ void Initial::emit(std::ostream &o, uint ind, bool &readCh) const
 	}
 	if (state->link)
 	{
-		need(o, ind, state->depth, readCh, setMarker && bUseYYMarker);
+		need(o, ind, state->depth, readCh, setMarker && bUsedYYMarker);
 	}
 	else
 	{
-		if (setMarker && bUseYYMarker)
+		if (setMarker && bUsedYYMarker)
 		{
 			o << indent(ind) << "YYMARKER = YYCURSOR;\n";
 		}
@@ -417,7 +417,7 @@ void Save::emit(std::ostream &o, uint ind, bool &readCh) const
 
 	if (state->link)
 	{
-		if (bUseYYMarker)
+		if (bUsedYYMarker)
 		{
 			o << indent(ind) << "YYMARKER = ++YYCURSOR;\n";
 		}
@@ -425,7 +425,7 @@ void Save::emit(std::ostream &o, uint ind, bool &readCh) const
 	}
 	else
 	{
-		if (bUseYYMarker)
+		if (bUsedYYMarker)
 		{
 			o << indent(ind) << "yych = *(YYMARKER = ++YYCURSOR);\n";
 		}
@@ -474,7 +474,7 @@ void Accept::emit(std::ostream &o, uint ind, bool &readCh) const
 			if (first)
 			{
 				first = false;
-				bUseYYMarker = true;
+				bUsedYYMarker = true;
 				o << indent(ind) << "YYCURSOR = YYMARKER;\n";
 				if (bUsedYYAccept && cases > 1)
 				{
@@ -1234,7 +1234,6 @@ void DFA::emit(std::ostream &o, uint ind)
 
 	uint nRules = 0;
 
-	maxFill = 1;
 	for (s = head; s; s = s->next)
 	{
 		s->depth = maxDist(s);

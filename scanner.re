@@ -107,15 +107,22 @@ int Scanner::echo()
     tok = cursor;
 echo:
 /*!re2c
-	"/*!re2c"	{ 
+	"/*!re2c"	{
+					if (bUsedYYMaxFill && bLastPass && !tFlag) {
+						fatal("found scanner block after YYMAXFILL declaration");
+					}
 					out.write((const char*)(tok), (const char*)(&cursor[-7]) - (const char*)(tok));
 					tok = cursor;
 					RETURN(1);
 				}
 	"/*!max:re2c" {
+					if (bUsedYYMaxFill) {
+						fatal("cannot generate YYMAXFILL twice");
+					}
 					out << "#define YYMAXFILL " << maxFill << std::endl;
 					tok = pos = cursor;
 					ignore_eoc = true;
+					bUsedYYMaxFill = true;
 					goto echo;
 				}
 	"/*!getstate:re2c" {
