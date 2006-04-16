@@ -28,9 +28,9 @@ bool fFlag = false;
 bool iFlag = false;
 bool sFlag = false;
 bool wFlag = false;
-bool tFlag = false;
 
-bool bLastPass = false;
+bool bSinglePass = false;
+bool bLastPass   = false;
 
 bool bUsedYYAccept  = false;
 bool bUsedYYMaxFill = false;
@@ -72,16 +72,16 @@ static const mbo_opt_struct OPTIONS[] =
 	mbo_opt_struct('i', 0, "no-debug-info"),
 	mbo_opt_struct('o', 1, "output"),
 	mbo_opt_struct('s', 0, "nested-ifs"),
-	mbo_opt_struct('t', 0, "two-pass"),
 	mbo_opt_struct('v', 0, "version"),
 	mbo_opt_struct('V', 0, "vernum"),
 	mbo_opt_struct('w', 0, "wide-chars"),      
+	mbo_opt_struct('1', 0, "two-pass"),
 	mbo_opt_struct('-', 0, NULL) /* end of args */
 };
 
 static void usage()
 {
-	cerr << "usage: re2c [-esbvhd] file\n"
+	cerr << "usage: re2c [-bdefhisvVw1] [-o file] file\n"
 	"\n"
 	"-? -h  --help           Display this info.\n"
 	"\n"
@@ -97,8 +97,7 @@ static void usage()
 	"-e     --ecb            Cross-compile from an ASCII platform to\n"
 	"                        an EBCDIC one.\n"
 	"\n"
-	"-f     --storable-state Implies -t. Generate a scanner that supports storable\n"
-	"                        states.\n"
+	"-f     --storable-state Generate a scanner that supports storable states.\n"
 	"\n"
 	"-i     --no-debug-info  Do not generate '#line' info (usefull for versioning).\n"
 	"\n"
@@ -108,14 +107,14 @@ static void usage()
 	"-s     --nested-ifs     Generate nested ifs for some switches. Many compilers\n"
 	"                        need this assist to generate better code.\n"
 	"\n"
-	"-t     --two-pass       Force two pass generation, allows YYMAXFILL generation\n"
-	"                        prior to last re2c block.\n"
-	"\n"
 	"-v     --version        Show version information.\n"
 	"-V     --vernum         Show version as one number.\n"
 	"\n"
 	"-w     --wide-chars     Create a parser that supports wide chars (UCS-2). This\n"
 	"                        implies -s and cannot be used together with -e switch.\n"
+	"\n"
+	"-1     --single-pass    Force two pass generation, allows YYMAXFILL generation\n"
+	"                        prior to last re2c block.\n"
 	;
 }
 
@@ -157,7 +156,10 @@ int main(int argc, char *argv[])
 
 			case 'f':
 			fFlag = true;
-			tFlag = true;
+			if (bSinglePass) {
+				std::cerr << "re2c: error: cannot combine -1 and -f switch\n";
+				return 1;
+			}
 			break;
 
 			case 'i':
@@ -172,8 +174,12 @@ int main(int argc, char *argv[])
 			sFlag = true;
 			break;
 			
-			case 't':
-			tFlag = true;
+			case '1':
+			if (bFlag) {
+				std::cerr << "re2c: error: cannot combine -1 and -f switch\n";
+				return 1;
+			}
+			bSinglePass = true;
 			break;
 
 			case 'v':
@@ -267,7 +273,7 @@ int main(int argc, char *argv[])
 	sourceFileInfo = file_info(sourceFileName, &scanner);
 	outputFileInfo = file_info(outputFileName, &output);
 
-	if (tFlag)
+	if (!bSinglePass)
 	{
 		bUsedYYMarker = false;
 

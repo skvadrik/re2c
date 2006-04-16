@@ -108,7 +108,7 @@ int Scanner::echo()
 echo:
 /*!re2c
 	"/*!re2c"	{
-					if (bUsedYYMaxFill && bLastPass && !tFlag) {
+					if (bUsedYYMaxFill && bSinglePass) {
 						fatal("found scanner block after YYMAXFILL declaration");
 					}
 					out.write((const char*)(tok), (const char*)(&cursor[-7]) - (const char*)(tok));
