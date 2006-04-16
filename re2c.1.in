@@ -345,7 +345,8 @@ either an \fIr\fP or an \fIs\fP
 .TP
 \fIr\fP\fC/\fP\fIs\fP
 an \fIr\fP but only if it is followed by an \fIs\fP. The \fIs\fP is not part of
-the matched text. This type of \*(rx is called "trailing context".
+the matched text. This type of \*(rx is called "trailing context". A trailing
+context can only be the end of a rule and not part of a named definition.
 .TP
 \fIr\fP\fC{\fP\fIn\fP\fC}\fP
 matches \fIr\fP exactly \fIn\fP times.
