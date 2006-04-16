@@ -33,6 +33,7 @@ bool bUsedYYAccept = false;
 bool bUseStartLabel= false;
 bool bUseStateNext = false;
 bool bUseYYFill    = true;
+bool bUseYYMarker  = false;
 
 std::string startLabelName;
 uint maxFill = 1;

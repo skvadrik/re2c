@@ -36,6 +36,7 @@ extern bool bUseStateAbort;
 extern bool bUseStateNext;
 extern bool bWroteGetState;
 extern bool bUseYYFill;
+extern bool bUseYYMarker;
 
 extern uint asc2ebc[256];
 extern uint ebc2asc[256];

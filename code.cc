@@ -396,11 +396,11 @@ void Initial::emit(std::ostream &o, uint ind, bool &readCh) const
 	}
 	if (state->link)
 	{
-		need(o, ind, state->depth, readCh, setMarker);
+		need(o, ind, state->depth, readCh, setMarker && bUseYYMarker);
 	}
 	else
 	{
-		if (setMarker)
+		if (setMarker && bUseYYMarker)
 		{
 			o << indent(ind) << "YYMARKER = YYCURSOR;\n";
 		}
@@ -417,12 +417,22 @@ void Save::emit(std::ostream &o, uint ind, bool &readCh) const
 
 	if (state->link)
 	{
-		o << indent(ind) << "YYMARKER = ++YYCURSOR;\n";
+		if (bUseYYMarker)
+		{
+			o << indent(ind) << "YYMARKER = ++YYCURSOR;\n";
+		}
 		need(o, ind, state->depth, readCh, false);
 	}
 	else
 	{
-		o << indent(ind) << "yych = *(YYMARKER = ++YYCURSOR);\n";
+		if (bUseYYMarker)
+		{
+			o << indent(ind) << "yych = *(YYMARKER = ++YYCURSOR);\n";
+		}
+		else
+		{
+			o << indent(ind) << "yych = *++YYCURSOR;\n";
+		}
 		readCh = false;
 	}
 }
@@ -464,6 +474,7 @@ void Accept::emit(std::ostream &o, uint ind, bool &readCh) const
 			if (first)
 			{
 				first = false;
+				bUseYYMarker = true;
 				o << indent(ind) << "YYCURSOR = YYMARKER;\n";
 				if (bUsedYYAccept && cases > 1)
 				{
