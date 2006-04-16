@@ -34,7 +34,7 @@ bool bLastPass = false;
 
 bool bUsedYYAccept  = false;
 bool bUsedYYMaxFill = false;
-bool bUsedYYMarker  = false;
+bool bUsedYYMarker  = true;
 
 bool bUseStartLabel= false;
 bool bUseStateNext = false;
@@ -269,6 +269,8 @@ int main(int argc, char *argv[])
 
 	if (tFlag)
 	{
+		bUsedYYMarker = false;
+
 		re2c::ifstream_lc null_source;
 		
 		if (!null_source.open(sourceFileName).is_open())

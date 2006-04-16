@@ -1,7 +1,7 @@
 Version 0.10.2 (2006-??-??)
 ---------------------------
+- Changed to generate YYMARKER only when needed or in single pass mode.
 - Added -t switch to force two pass generation.
-- Changed to not generate YYMARKER unless needed.
 - Fixed -i switch.
 - Added configuration 'yyfill:enable' to allow suppression of YYFILL() blocks.
 - Added tutorial like lessons to re2c.
