@@ -98,6 +98,10 @@ decl	:	ID '=' expr ';'
 		{ in->config(*$1, $3); }
 	;
 
+decl	:	ID '=' expr '/'
+		{ in->fatal("trailing contexts are not allowed in named definitions"); }
+	;
+
 rule	:	expr look CODE
 		{ $$ = new RuleOp($1, $2, $3, accept++); }
 	;

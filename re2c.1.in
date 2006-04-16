@@ -282,7 +282,7 @@ is to be executed when the associated \fIregular expression\fP is matched.
 \fIregular expression\fP \fC{\fP \fIC/C++ code\fP \fC}\fP
 .RE
 .LP
-Name definitions are of the form:
+Named definitions are of the form:
 .P
 .RS
 \fIname\fP \fC=\fP \fIregular expression\fP\fC;\fP
