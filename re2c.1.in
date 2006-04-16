@@ -88,7 +88,7 @@ yy7:    if(yych <= '/') goto yy3;
 
 After the \fC/*!re2c */\fP blocks you can place a \fC/*!max:re2c */\fP block
 that will output a define (\fCYYMAXFILL\fP) that holds the maximum number of 
-characters required to parse the input. That is the maximum value \fCYYFILL()\fP 
+characters required to parse the input. That is the maximum value \fCYYFILL\fP(n)
 will receive.
 
 You can also use \fC/*!ignore:re2c */\fP blocks that allows to document the
@@ -175,9 +175,9 @@ The user only needs to define this macro if a scanner specification uses trailin
 context in one or more of its regular expressions.
 .TP
 \fCYYFILL(\fP\fIn\fP\fC)\fP
-The generated code "calls" \fCYYFILL\fP when the buffer needs
+The generated code "calls" \fCYYFILL\fP(n) when the buffer needs
 (re)filling:  at least \fIn\fP additional characters should
-be provided.  \fCYYFILL\fP should adjust \fCYYCURSOR\fP, \fCYYLIMIT\fP,
+be provided.  \fCYYFILL\fP(n) should adjust \fCYYCURSOR\fP, \fCYYLIMIT\fP,
 \fCYYMARKER\fP and \fCYYCTXMARKER\fP as needed.  Note that for typical 
 programming languages \fIn\fP will be the length of the longest keyword plus one.
 The user can place a comment of the form \fC/*!max:re2c */\fP after the end of
@@ -190,14 +190,14 @@ In that case, the generated code "calls" \fCYYGETSTATE\fP at the very beginning
 of the scanner in order to obtain the saved state. YYGETSTATE must return a signed
 integer. The value must be either -1, indicating that the scanner is entered for the
 first time, or a value previously saved by \fCYYSETSTATE\fP.  In the second case, the
-scanner will resume operations right after where the last \fCYYFILL\fP was called.
+scanner will resume operations right after where the last \fCYYFILL\fP(n) was called.
 .TP
 \fCYYSETSTATE(\fP\fIn\fP\fC)\fP
 The user only needs to define this macro if the \fB-f\fP flag was specified.
 In that case, the generated code "calls" \fCYYSETSTATE\fP just before calling
-\fCYYFILL\fP.  The parameter to \fCYYSETSTATE\fP is a signed integer that uniquely
-identifies the specific instance of \fCYYFILL\fP that is about to be called.
-Should the user wish to save the state of the scanner and have \fCYYFILL\fP return
+\fCYYFILL\fP(n).  The parameter to \fCYYSETSTATE\fP is a signed integer that uniquely
+identifies the specific instance of \fCYYFILL\fP(n) that is about to be called.
+Should the user wish to save the state of the scanner and have \fCYYFILL\fP(n) return
 to the caller, all he has to do is store that unique identifer in a variable.
 Later, when the scannered is called again, it will call \fCYYGETSTATE()\fP and
 resume execution right where it left off.
@@ -262,7 +262,7 @@ input is needed.
 appropriately.
 
 5. The generated code will contain a switch block that is used to restores 
-the last state by jumping behind the corrspoding YYFILL() call. This code is
+the last state by jumping behind the corrspoding YYFILL(n) call. This code is
 automatically generated in the epilog of the first "\fC/*!re2c */\fP" block. 
 It is possible to trigger generation of the YYGETSTATE() block earlier by 
 placing a "\fC/*!getstate:re2c */\fP" comment. This is especially useful when
@@ -404,7 +404,7 @@ If set to zero then a decimal table is being used else a hexadecimal table
 will be generated.
 .TP
 \fIre2c:yyfill:enable\fP \fB=\fP 1 \fB;\fP
-Set this to zero to suppress generation of YYFILL(). When using this be sure
+Set this to zero to suppress generation of YYFILL(n). When using this be sure
 to verify that the generated scanner does not read behind input. Allowing
 this behavior might introduce sever security issues to you programs.
 .TP
@@ -449,7 +449,7 @@ If the source is from a null-byte terminated string, a
 rule matching a null character will suffice.  If the source is from a
 file then you could pad the input with a newline (or some other character that 
 cannot appear within another token); upon recognizing such a character check 
-to see if it is the sentinel and act accordingly. And you can also use YYFILL
+to see if it is the sentinel and act accordingly. And you can also use YYFILL(n)
 to end the scanner in case not enough characters are available which is nothing
 else then e detection of end of data/file.
 .LP
