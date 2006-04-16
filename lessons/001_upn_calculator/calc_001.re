@@ -38,7 +38,7 @@
     Another way would be to only use two rules:
     "0" [0-9]+
     "0" | ( [1-9] [0-9]* )
-
+    A full description of re2c rule syntax can be found in the manual.
 */
 
 #include <stdlib.h>

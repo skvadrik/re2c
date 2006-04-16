@@ -14,27 +14,18 @@
     In the example suppose "0" is passed. The scanner reads the first "0" and
     then is in an undecided state. The scanner can earliest decide on the next 
     char what  the token is. In case of a zero the input ends and it was a 
-    number, 0 to be precise. In case of a didit it is and the next character
-    needs to be read. In case of any other character the scanner has found an 
-    error with the any rule [^]. 
+    number, 0 to be precise. In case of a digit it is an octal number and the 
+    next character needs to be read. In case of any other character the scanner
+    will detect an error with the any rule [^]. 
     
-    Now the above shows that re2c may read two characters directly. But only if 
-    the first is a "0". So we could easily check that if the first char is "0"
-    another charcter is present.
+    Now the above shows that the scanner may read two characters directly. But 
+    only if the first is a "0". So we could easily check that if the first char
+    is "0" and the next char is a digit then yet another charcter is present.
+    But we require our inut to be zero terminated. And that means we do not 
+    have to check anything for this scanner.
     
-    if (p[0] == '0' && p[1] == '\0') return 2;
-    
-    But instead of doing so in every loop we can optimize by taking into 
-    account what we know from our input analysis. That is a problem can only
-    arise when the second last character is a "0" and the last is any digit.
-    
-    if (l > 1 && s[l-2] == '0' && s[l-1] >= '0' && s[l-1] <= '9') return 2;
-    
-    However in this example the above check is only necessary if the input is 
-    not terminated by a trailing zero check. In other words it would be used 
-    when reading from a file and directly working on the read buffers. For 
-    zero terminated string input the generated scanner will always find the 
-    terminating zero.
+    However with other rule sets re2c might read more then one character in a 
+    row. In those cases it is normally hard to impossible to avoid YYFILL.
 
 - optimizing the generated code by using -s command line switch of re2c
   . This tells re2c to generate code that uses if statements rather 
@@ -76,6 +67,7 @@ int stack_add()
 	
 	--depth;
 	stack[depth-1] = stack[depth-1] + stack[depth];
+	DEBUG(printf("+\n"));
 	return 0;
 }
 
@@ -85,10 +77,11 @@ int stack_sub()
 
 	--depth;
 	stack[depth-1] = stack[depth-1] - stack[depth];
+	DEBUG(printf("-\n"));
 	return 0;
 }
 
-int scan(char *s, int l)
+int scan(char *s)
 {
 	char *p = s;
 	char *t;
@@ -97,8 +90,6 @@ int scan(char *s, int l)
 	#define YYCTYPE         char
 	#define YYCURSOR        p
 	
-    if (l > 1 && s[l-2] == '0' && s[l-1] >= '0' && s[l-1] <= '9') return 2;
-
 	while(!res)
 	{
 		t = p;
@@ -139,7 +130,7 @@ int main(int argc, char **argv)
 				++inp;
 				len -=2;
 			}
-			res = scan(inp, len);
+			res = scan(inp);
 		}
 		switch(res)
 		{

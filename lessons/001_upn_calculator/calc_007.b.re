@@ -1,4 +1,4 @@
-/* re2c lesson_001, calc_006, (c) M. Boerger 2006 */
+/* re2c lesson_001, calc_007, (c) M. Boerger 2006 */
 /*!ignore:re2c
 
 - optimizing the generated code by using -b command line switch of re2c
@@ -41,6 +41,7 @@ int stack_add()
 	
 	--depth;
 	stack[depth-1] = stack[depth-1] + stack[depth];
+	DEBUG(printf("+\n"));
 	return 0;
 }
 
@@ -50,10 +51,11 @@ int stack_sub()
 
 	--depth;
 	stack[depth-1] = stack[depth-1] - stack[depth];
+	DEBUG(printf("+\n"));
 	return 0;
 }
 
-int scan(char *s, int l)
+int scan(char *s)
 {
 	char *p = s;
 	char *t;
@@ -62,8 +64,6 @@ int scan(char *s, int l)
 	#define YYCTYPE         char
 	#define YYCURSOR        p
 	
-    if (l > 1 && s[l-2] == '0' && s[l-1] >= '0' && s[l-1] <= '9') return 2;
-
 	while(!res)
 	{
 		t = p;
@@ -104,7 +104,7 @@ int main(int argc, char **argv)
 				++inp;
 				len -=2;
 			}
-			res = scan(inp, len);
+			res = scan(inp);
 		}
 		switch(res)
 		{
