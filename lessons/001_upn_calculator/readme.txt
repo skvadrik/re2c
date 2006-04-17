@@ -1,7 +1,7 @@
 re2c lesson 001_upn_calculator, (c) M. Boerger 2006
 
-This lesson gets you started with re2c. In the end you will have an easy UPN
-calculator for use at command line.
+This lesson gets you started with re2c. In the end you will have an easy RPN
+(reverse polish notation) calculator for use at command line.
 
 You will learn about the basic interface of re2c when scanning input strings. 
 How to detect the end of the input and use that to stop scanning in order to
@@ -49,7 +49,7 @@ switch also contains the -s behavior.
 
 -------------------------------------------------------------------------------
 
-For windows users Lynn Allen provided some additional stuff to get you started 
+For windows users Lynn Allan provided some additional stuff to get you started 
 in the Microsoft world. This addon resides in the windows subdirectory and 
 gives you something to expereiment with. The code in that directory is based 
 on the first step and has the following changes:
@@ -76,3 +76,8 @@ as strncmp for this test and can probably be made significantly faster.
 
 * If you want to build the other steps of this lesson using windows tools 
 simply copy the *.re files into the windows directory as main.re and rebuild.
+
+
+-------------------------------------------------------------------------------
+Sidenote: UPN is the german translation of RPN, somehow hardcoded into the 
+authors brain :-)
