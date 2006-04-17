@@ -2,14 +2,10 @@
 /*!ignore:re2c
 
 - more complexity
-  . Additional to what we strip out already what about two consequtive comment 
-    blocks? When two comments are only separated by whitespace we want to drop 
-    both. In other words when detecting the end of a comment block we need to 
-    check whether it is followed by only whitespace and the a new comment in
-    which case we continure ignoring the input. If it is followed only by white
-    space and a new line we strip out the new white space and new line. In any
-    other case we start outputting all that follows.
-  . The solution to the above is to use trailing contexts.
+  . Right now we strip out trailing white space and new lines after a comment
+    block. This can be a problem when the comment block was not preceeded by 
+    a new line.
+  . The solution is to use trailing contexts.
 
 -  trailing contexts
   . Re2c allows to check for a portion of input and only recognize it when it 
@@ -24,7 +20,19 @@
     a pointer variable needs to be provided.
   . As with YYMARKER the corrsponding variable needs to be corrected if we 
     shift in some buffer.
+  . Still this is not all we need to solve the problem. What is left is that
+    the information whether we detected a trailing context was detected has to 
+    be stored somewhere. This is done by the new variable nlcomment.
 
+- formatting
+  . Until now we only used single line expression code and we always had the 
+    opening { on the same line as the rule itself. If we have multiline rule
+    code and care for formatting we can nolonger rely on re2c. Now we have 
+    to indent the rule code ourself. Also we need to take care of the opening
+    {. If we keep it on the same line as the rule then re2c will indent it 
+    correctly and the emitted #line informations will be correct. If we place
+    it on the next line then the #line directivy will also point to that line
+    and not to the rule.
 */
 
 #include <stdlib.h>

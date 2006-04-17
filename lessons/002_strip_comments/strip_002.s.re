@@ -4,6 +4,13 @@
 - complexity
   . When a comemnt is preceeded by a new line and followed by whitespace and a 
     new line then we can drop the trailing whitespace and new line.
+  . Additional to what we strip out already what about two consequtive comment 
+    blocks? When two comments are only separated by whitespace we want to drop 
+    both. In other words when detecting the end of a comment block we need to 
+    check whether it is followed by only whitespace and the a new comment in
+    which case we continure ignoring the input. If it is followed only by white
+    space and a new line we strip out the new white space and new line. In any
+    other case we start outputting all that follows.
     But we cannot simply use the following two rules:
 	  "*" "/" WS* "/" "*" { continue; }
 	  "*" "/" WS* NL      { continue; }
@@ -21,15 +28,6 @@
   . When shifting buffer contents as done in our fill function the marker needs
     to be corrected, too.
 
-- formatting
-  . Until now we only used single line expression code and we always had the 
-    opening { on the same line as the rule itself. If we have multiline rule
-    code and care for formatting we can nolonger rely on re2c. Now we have 
-    to indent the rule code ourself. Also we need to take care of the opening
-    {. If we keep it on the same line as the rule then re2c will indent it 
-    correctly and the emitted #line informations will be correct. If we place
-    it on the next line then the #line directivy will also point to that line
-    and not to the rule.
 */
 
 #include <stdlib.h>
@@ -97,7 +95,6 @@ void echo(Scanner *s)
 int scan(FILE *fp)
 {
 	int  res = 0;
-	int  nlcomment = 0;
     Scanner s;
 
 	if (!fp)
@@ -132,16 +129,9 @@ comment:
 commentws:
 		s.tok = s.cur;
 /*!re2c
-	NL			{
-				if (!nlcomment)
-				{
-					echo(&s);
-				}
-				nlcomment = 0;
-				continue;
-			}
+	NL			{ echo(&s); continue; }
 	WS			{ goto commentws; }
-	ANY			{ echo(&s); nlcomment = 0; continue; }
+	ANY			{ echo(&s); continue; }
 */
 cppcomment:
 		s.tok = s.cur;
