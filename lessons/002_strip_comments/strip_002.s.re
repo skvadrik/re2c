@@ -2,7 +2,7 @@
 /*!ignore:re2c
 
 - complexity
-  . When a comemnt is preceeded by a new line and followed by whitespace and a 
+  . When a comment is preceeded by a new line and followed by whitespace and a 
     new line then we can drop the trailing whitespace and new line.
   . Additional to what we strip out already what about two consequtive comment 
     blocks? When two comments are only separated by whitespace we want to drop 

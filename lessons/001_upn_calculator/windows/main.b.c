@@ -42,11 +42,11 @@ int ScanFullSpeed(char *pzStrToScan, size_t lenStrToScan)
 {
 	char *pzCurScanPos = pzStrToScan;
 	char *pzBacktrackInfo = 0;
-	#define YYCTYPE         char
-	#define YYCURSOR        pzCurScanPos
-	#define YYLIMIT         (pzStrToScan+lenStrToScan)
-	#define YYMARKER        pzBacktrackInfo
-	#define YYFILL(n)
+#define YYCTYPE         char
+#define YYCURSOR        pzCurScanPos
+#define YYLIMIT         (pzStrToScan+lenStrToScan)
+#define YYMARKER        pzBacktrackInfo
+#define YYFILL(n)
 	
 	for(;;)
 	{
@@ -171,11 +171,11 @@ int scan(char *pzStrToScan, size_t lenStrToScan)
 {
 	char *pzCurScanPos = pzStrToScan;
 	char *pzBacktrackInfo = 0;
-	#define YYCTYPE         char
-	#define YYCURSOR        pzCurScanPos
-	#define YYLIMIT         (pzStrToScan+lenStrToScan)
-	#define YYMARKER        pzBacktrackInfo
-	#define YYFILL(n)
+#define YYCTYPE         char
+#define YYCURSOR        pzCurScanPos
+#define YYLIMIT         (pzStrToScan+lenStrToScan)
+#define YYMARKER        pzBacktrackInfo
+#define YYFILL(n)
 	
 	for(;;)
 	{

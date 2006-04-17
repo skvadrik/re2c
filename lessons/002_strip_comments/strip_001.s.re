@@ -20,7 +20,7 @@
 
 - multiple scanner blocks
   . We use a main scanner block that outputs every input character unless the
-    input is two /s or a / followed by a *. In the lattertwo cases we switch
+    input is two /s or a / followed by a *. In the latter two cases we switch
     to a special c++ comment and a comment block respectively.
   . Both special blocks simply detect their end ignore any other character.
   . The c++ block is a bit special. Since the terminating new line needs to

@@ -61,8 +61,8 @@ int scan(char *s)
 	char *t;
 	int res = 0;
 	
-	#define YYCTYPE         char
-	#define YYCURSOR        p
+#define YYCTYPE         char
+#define YYCURSOR        p
 	
 	while(!res)
 	{

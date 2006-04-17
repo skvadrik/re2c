@@ -57,11 +57,11 @@ int scan(char *s, int l)
 	char *t;
 	int res = 0;
 
-	#define YYCTYPE         char
-	#define YYCURSOR        p
-	#define YYLIMIT         (s+l+1)
-	#define YYMARKER        q
-	#define YYFILL(n)		{ return depth == 1 ? 0 : 2; }
+#define YYCTYPE         char
+#define YYCURSOR        p
+#define YYLIMIT         (s+l+1)
+#define YYMARKER        q
+#define YYFILL(n)		{ return depth == 1 ? 0 : 2; }
 	
 	while(!res)
 	{

@@ -27,11 +27,11 @@
 - formatting
   . Until now we only used single line expression code and we always had the 
     opening { on the same line as the rule itself. If we have multiline rule
-    code and care for formatting we can nolonger rely on re2c. Now we have 
+    code and care for formatting we can no longer rely on re2c. Now we have 
     to indent the rule code ourself. Also we need to take care of the opening
     {. If we keep it on the same line as the rule then re2c will indent it 
     correctly and the emitted #line informations will be correct. If we place
-    it on the next line then the #line directivy will also point to that line
+    it on the next line then the #line directive will also point to that line
     and not to the rule.
 */
 

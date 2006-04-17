@@ -33,11 +33,11 @@ int scan(char *s)
 	char *p = s;
 	char *l = s;
 	char *q = 0;
-	#define YYCTYPE         char
-	#define YYCURSOR        p
-	#define YYLIMIT         l
-	#define YYMARKER        q
-	#define YYFILL(n)		{ if (!fill(p, n, &l)) break; }
+#define YYCTYPE         char
+#define YYCURSOR        p
+#define YYLIMIT         l
+#define YYMARKER        q
+#define YYFILL(n)		{ if (!fill(p, n, &l)) break; }
 	
 	for(;;)
 	{

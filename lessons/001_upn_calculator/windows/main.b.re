@@ -17,13 +17,13 @@
     in this lesson. In the next example we see one way to get rid of it.
   . We use a 'for(;;)'-loop around the scanner block. We could have used a
     'while(1)'-loop instead but some compilers generate a warning for it.
-  . To make the output more readable we use 're2c:indent:top' scanenr 
+  . To make the output more readable we use 're2c:indent:top' scanner 
     configuration that configures re2c to prepend a single tab (the default)
     to the beginning of each output line.
   . The following lines are expressions and for each expression we output the 
     token name and continue the scanner loop.
   . The second last token detects the end of our input, the terminating zero in
-    out input string. In other scanners detecting the end of input may vary.
+    our input string. In other scanners detecting the end of input may vary.
     For example binary code may contain \0 as valid input.
   . The last expression accepts any input character. It tells re2c to accept 
     the opposit of the empty range. This includes numbers and our tokens but
@@ -80,11 +80,11 @@ int ScanFullSpeed(char *pzStrToScan, size_t lenStrToScan)
 {
 	char *pzCurScanPos = pzStrToScan;
 	char *pzBacktrackInfo = 0;
-	#define YYCTYPE         char
-	#define YYCURSOR        pzCurScanPos
-	#define YYLIMIT         (pzStrToScan+lenStrToScan)
-	#define YYMARKER        pzBacktrackInfo
-	#define YYFILL(n)
+#define YYCTYPE         char
+#define YYCURSOR        pzCurScanPos
+#define YYLIMIT         (pzStrToScan+lenStrToScan)
+#define YYMARKER        pzBacktrackInfo
+#define YYFILL(n)
 	
 	for(;;)
 	{
@@ -107,11 +107,11 @@ int scan(char *pzStrToScan, size_t lenStrToScan)
 {
 	char *pzCurScanPos = pzStrToScan;
 	char *pzBacktrackInfo = 0;
-	#define YYCTYPE         char
-	#define YYCURSOR        pzCurScanPos
-	#define YYLIMIT         (pzStrToScan+lenStrToScan)
-	#define YYMARKER        pzBacktrackInfo
-	#define YYFILL(n)
+#define YYCTYPE         char
+#define YYCURSOR        pzCurScanPos
+#define YYLIMIT         (pzStrToScan+lenStrToScan)
+#define YYMARKER        pzBacktrackInfo
+#define YYFILL(n)
 	
 	for(;;)
 	{

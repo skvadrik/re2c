@@ -11,11 +11,11 @@ int scan(char *s, int l)
 {
 	char *p = s;
 	char *q = 0;
-	#define YYCTYPE         char
-	#define YYCURSOR        p
-	#define YYLIMIT         (s+l+2)
-	#define YYMARKER        q
-	#define YYFILL(n)		{ printf("OOD\n"); return 2; }
+#define YYCTYPE         char
+#define YYCURSOR        p
+#define YYLIMIT         (s+l+2)
+#define YYMARKER        q
+#define YYFILL(n)		{ printf("OOD\n"); return 2; }
 	
 	for(;;)
 	{

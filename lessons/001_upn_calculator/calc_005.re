@@ -5,7 +5,7 @@
   . We are going to write an UPN calculator so we need an additional rule to
     ignore white space.
   . Then we need to store the scanned input somewhere and do our math on it.
-  . Also we need to scann all arguments since the main c code gets the input
+  . Also we need to scan all arguments since the main c code gets the input
     split up into chunks.
   . In contrast to what we did before we now add a variable res that holds the 
     scanner state. We initialize that variable to 0 and quit the loop when it
@@ -71,11 +71,11 @@ int scan(char *s, int l)
 	char *t;
 	int res = 0;
 
-	#define YYCTYPE         char
-	#define YYCURSOR        p
-	#define YYLIMIT         (s+l+1)
-	#define YYMARKER        q
-	#define YYFILL(n)		{ return depth == 1 ? 0 : 2; }
+#define YYCTYPE         char
+#define YYCURSOR        p
+#define YYLIMIT         (s+l+1)
+#define YYMARKER        q
+#define YYFILL(n)		{ return depth == 1 ? 0 : 2; }
 	
 	while(!res)
 	{
