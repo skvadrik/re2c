@@ -1,4 +1,4 @@
-/* re2c lesson_002, strip_001.s, (c) M. Boerger 2006 */
+/* re2c lesson 002_strip_comments, strip_001.s, (c) M. Boerger 2006 */
 /*!ignore:re2c
 
 - basic interface for file reading

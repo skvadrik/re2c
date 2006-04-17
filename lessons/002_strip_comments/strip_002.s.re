@@ -1,4 +1,4 @@
-/* re2c lesson_002, strip_002.s, (c) M. Boerger 2006 */
+/* re2c lesson 002_strip_comments, strip_002.s, (c) M. Boerger 2006 */
 /*!ignore:re2c
 
 - complexity

@@ -1,4 +1,4 @@
-/* re2c lesson_001, calc_001, (c) M. Boerger 2006 */
+/* re2c lesson 001_upn_calculator, calc_001, (c) M. Boerger 2006 */
 /*!ignore:re2c
 
 - basic interface for string reading
@@ -12,7 +12,7 @@
     expression handlers, the code blocks after re2c expressions, this can be 
     used to identify the end of the token.
   . YYMARKER is not always being used so we set an initial value to avoid
-    a compiler warning.
+    a compiler warning. Here we could also omit it compleley.
   . YYLIMIT stores the end of the input. Unfortunatley we have to use strlen() 
     in this lesson. In the next example we see one way to get rid of it.
   . We use a 'for(;;)'-loop around the scanner block. We could have used a

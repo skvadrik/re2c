@@ -1,4 +1,4 @@
-/* re2c lesson_001, calc_006, (c) M. Boerger 2006 */
+/* re2c lesson 001_upn_calculator, calc_006, (c) M. Boerger 2006 */
 /*!ignore:re2c
 
 - avoiding YYFILL()

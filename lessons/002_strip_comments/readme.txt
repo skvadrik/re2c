@@ -1,4 +1,4 @@
-re2c lesson_002, (c) M. Boerger 2006
+re2c lesson 002_strip_comments, (c) M. Boerger 2006
 
 In this lesson you will learn how to use multiple scanner blocks and how to 
 read the input from a file instead of a zero terminated string. In the end you
