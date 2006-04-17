@@ -26,7 +26,7 @@ struct mbo_opt_struct
 	const char * opt_name;
 };
 
-int mbo_getopt(int argc, char* const *argv, const mbo_opt_struct opts[], char **optarg, int *optind, int show_err);
+int mbo_getopt(int argc, char* const *argv, const mbo_opt_struct *opts, char **optarg, int *optind, int show_err);
 
 } // end namespace re2c
 

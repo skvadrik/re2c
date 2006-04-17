@@ -46,7 +46,7 @@ static int mbo_opt_error(int, char * const *argv, int oint, int optchr, int err,
 	return ('?');
 }
 
-int mbo_getopt(int argc, char* const *argv, const mbo_opt_struct opts[], char **optarg, int *optind, int show_err)
+int mbo_getopt(int argc, char* const *argv, const mbo_opt_struct *opts, char **optarg, int *optind, int show_err)
 {
 	static int optchr = 0;
 	static int dash = 0; /* have already seen the - */
