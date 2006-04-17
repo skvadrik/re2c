@@ -98,6 +98,7 @@ int Scanner::echo()
 {
     char *cursor = cur;
     bool ignore_eoc = false;
+    int  ignore_cnt = 0;
 
     if (eof && cursor == eof) // Catch EOF
 	{
@@ -137,17 +138,26 @@ echo:
 					goto echo;
 				}
 	"*" "/"	"\r"? "\n"	{
+					cline++;
 					if (ignore_eoc) {
+						if (ignore_cnt) {
+							out << sourceFileInfo;
+						}
 						ignore_eoc = false;
+						ignore_cnt = 0;
 					} else {
 						out.write((const char*)(tok), (const char*)(cursor) - (const char*)(tok));
 					}
-					tok = pos = cursor; cline++;
+					tok = pos = cursor;
 					goto echo;
 				}
 	"*" "/"		{
 					if (ignore_eoc) {
+						if (ignore_cnt) {
+							out << "\n" << sourceFileInfo;
+						}
 						ignore_eoc = false;
+						ignore_cnt = 0;
 					} else {
 						out.write((const char*)(tok), (const char*)(cursor) - (const char*)(tok));
 					}
@@ -155,7 +165,9 @@ echo:
 					goto echo;
 				}
 	"\n"		{
-					if (!ignore_eoc) {
+					if (ignore_eoc) {
+						ignore_cnt++;
+					} else {
 						out.write((const char*)(tok), (const char*)(cursor) - (const char*)(tok));
 					}
 					tok = pos = cursor; cline++;
