@@ -132,13 +132,13 @@ commentws:
 /*!re2c
 	NL? "/" "*"	{ goto comment; }
 	NL			{
-				if (!nlcomment)
-				{
-					echo(&s);
+					if (!nlcomment)
+					{
+						echo(&s);
+					}
+					nlcomment = 0;
+					continue;
 				}
-				nlcomment = 0;
-				continue;
-			}
 	WS			{ goto commentws; }
 	ANY			{ echo(&s); nlcomment = 0; continue; }
 */

@@ -216,13 +216,13 @@ yy27:
 yy28:
 #line 134 "strip_003.b.re"
 				{
-				if (!nlcomment)
-				{
-					echo(&s);
+					if (!nlcomment)
+					{
+						echo(&s);
+					}
+					nlcomment = 0;
+					continue;
 				}
-				nlcomment = 0;
-				continue;
-			}
 #line 227 "<stdout>"
 yy29:
 				++YYCURSOR;
