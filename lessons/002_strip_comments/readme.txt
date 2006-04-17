@@ -10,4 +10,12 @@ The first scanner can be generated with:
   re2c -s -o t.c strip_001.s.re
 
 In the second step we will learn about YYMARKER that stores backtracking 
-information and YYCTXMARKER that is used for trailing contexts.
+information.
+
+  re2c -s -0 t.c strip_002.b.re
+
+The third step brings trailing contexts that are stored in YYCTXMARKER. We also
+change to use -b instead of -s option since the scanner gets more and more
+complex.
+
+  re2c -b -0 t.c strip_002.b.re

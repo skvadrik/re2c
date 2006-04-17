@@ -1,35 +1,30 @@
-/* re2c lesson 002_strip_comments, strip_002.s, (c) M. Boerger 2006 */
+/* re2c lesson 002_strip_comments, strip_003.b, (c) M. Boerger 2006 */
 /*!ignore:re2c
 
-- complexity
-  . When a comemnt is preceeded by a new line and followed by whitespace and a 
-    new line then we can drop the trailing whitespace and new line.
-    But we cannot simply use the following two rules:
-	  "*" "/" WS* "/" "*" { continue; }
-	  "*" "/" WS* NL      { continue; }
-	The main problem is that WS* can get bigger then our buffer, so we need a 
-	new scanner.
-  . Meanwhile our scanner gets a bit more complex and we have to add two more 
-    things. First the scanner code now uses a YYMARKER to store backtracking 
-    information.
+- more complexity
+  . Additional to what we strip out already what about two consequtive comment 
+    blocks? When two comments are only separated by whitespace we want to drop 
+    both. In other words when detecting the end of a comment block we need to 
+    check whether it is followed by only whitespace and the a new comment in
+    which case we continure ignoring the input. If it is followed only by white
+    space and a new line we strip out the new white space and new line. In any
+    other case we start outputting all that follows.
+  . The solution to the above is to use trailing contexts.
 
-- backtracking information
-  . When the scanner has two rules that can have the same beginning but a 
-    different ending then it needs to store the position that identifies the
-    common part. This is called backtracking. As mentioned above re2c expects
-    you to provide compiler define YYMARKER and a pointer variable.
-  . When shifting buffer contents as done in our fill function the marker needs
-    to be corrected, too.
+-  trailing contexts
+  . Re2c allows to check for a portion of input and only recognize it when it 
+    is followed by another portion. This is called a trailing context.
+  . The trailing context is not part of the identified input. That means that
+    it follows exactly at the cursor. A consequence is that the scanner has
+    already read more input and on the next run you need to restore begining
+    of input, in our case s.tok, from the cursor, here s.cur, rather then 
+    restoring to the beginning of the buffer. This way the scanner can reuse
+    the portion it has already read.
+  . The position of the trailing context is stored in YYCTXMARKER for which
+    a pointer variable needs to be provided.
+  . As with YYMARKER the corrsponding variable needs to be corrected if we 
+    shift in some buffer.
 
-- formatting
-  . Until now we only used single line expression code and we always had the 
-    opening { on the same line as the rule itself. If we have multiline rule
-    code and care for formatting we can nolonger rely on re2c. Now we have 
-    to indent the rule code ourself. Also we need to take care of the opening
-    {. If we keep it on the same line as the rule then re2c will indent it 
-    correctly and the emitted #line informations will be correct. If we place
-    it on the next line then the #line directivy will also point to that line
-    and not to the rule.
 */
 
 #include <stdlib.h>
@@ -47,12 +42,13 @@
 #define	YYCURSOR	s.cur
 #define	YYLIMIT		s.lim
 #define YYMARKER	s.mrk
+#define YYCTXMARKER s.ctx
 #define	YYFILL(n)	{ if ((res = fill(&s, n)) >= 0) break; }
 
 typedef struct Scanner
 {
 	FILE		*fp;
-	char		*cur, *tok, *lim, *eof, *mrk;
+	char		*cur, *tok, *lim, *eof, *ctx, *mrk;
 	char 		buffer[BSIZE];
 } Scanner;
 
@@ -74,6 +70,7 @@ int fill(Scanner *s, int len)
 			s->cur -= cnt;
 			s->lim -= cnt;
 			s->mrk -= cnt;
+			s->ctx -= cnt;
 		}
 		cnt = BSIZE - cnt;
 		if ((got = fread(s->lim, 1, cnt, s->fp)) != cnt)
@@ -120,6 +117,7 @@ int scan(FILE *fp)
 	ANY			= [^] ;
 
 	"/" "/"		{ goto cppcomment; }
+	NL / "/""*"	{ echo(&s); nlcomment = 1; continue; }
 	"/" "*"		{ goto comment; }
 	ANY			{ fputc(*s.tok, stdout); continue; }
 */
@@ -132,6 +130,7 @@ comment:
 commentws:
 		s.tok = s.cur;
 /*!re2c
+	NL? "/" "*"	{ goto comment; }
 	NL			{
 				if (!nlcomment)
 				{
