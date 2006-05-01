@@ -221,7 +221,7 @@ void BitMap::gen(std::ostream &o, uint ind, uint lb, uint ub)
 
 		uint *bm = new uint[n];
 		
-		for (uint i = 0, t = 0; b; i += n)
+		for (uint i = 0, t = 1; b; i += n, t += 8)
 		{
 			memset(bm, 0, n * sizeof(uint));
 
@@ -235,7 +235,7 @@ void BitMap::gen(std::ostream &o, uint ind, uint lb, uint ub)
 
 			if (c > 8)
 			{
-				o << "\n" << indent(ind+1) << "/* table " << ++t << ": " << i << " */";
+				o << "\n" << indent(ind+1) << "/* table " << t << " .. " << std::min(c, t+7) << ": " << i << " */";
 			}
 
 			for (uint j = 0; j < n; ++j)
