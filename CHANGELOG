@@ -1,4 +1,4 @@
-Version 0.10.2 (2006-??-??)
+Version 0.10.2 (2006-05-01)
 ---------------------------
 - Changed to generate YYMARKER only when needed or in single pass mode.
 - Added -1 switch to force single pass generation and make two pass the default.
