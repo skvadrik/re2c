@@ -399,6 +399,19 @@ void Initial::emit(std::ostream &o, uint ind, bool &readCh) const
 	{
 		o << startLabelName << ":\n";
 	}
+
+	if (vUsedLabels.count(1))
+	{
+		if (state->link)
+		{
+			o << indent(ind) << "++YYCURSOR;\n";
+		}
+		else
+		{
+			o << indent(ind) << "yych = *++YYCURSOR;\n";
+		}
+	}
+
 	if (vUsedLabels.count(label))
 	{
 		o << "yy" << label << ":\n";
@@ -407,10 +420,12 @@ void Initial::emit(std::ostream &o, uint ind, bool &readCh) const
 	{
 		o << "\n";
 	}
+
 	if (dFlag)
 	{
 		o << indent(ind) << "YYDEBUG(" << label << ", *YYCURSOR);\n";
 	}
+
 	if (state->link)
 	{
 		need(o, ind, state->depth, readCh, setMarker && bUsedYYMarker);
@@ -1429,6 +1444,12 @@ void DFA::emit(std::ostream &o, uint ind)
 	}
 
 	genGetState(o, ind, start_label);
+
+	if (vUsedLabels.count(1))
+	{
+		vUsedLabels.insert(0);
+		o << indent(ind) << "goto yy0;\n";
+	}
 
 	// Generate code
 	for (s = head; s; s = s->next)

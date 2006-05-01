@@ -15,6 +15,7 @@ Version 0.10.2 (2006-??-??)
 - Changed to use if- instead of switch-expression when yyaccpt has only one case.
 - Added docu, examples and tests to .src.zip package (0.10.1 zip was repackaged).
 - Fixed #1479044 incorrect code generated when using -b.
+- Fixed #1472770 re2c creates an infinite loop.
 - Fixed #1454253 Piece of code saving a backtracking point not generated.
 - Fixed #1463639 Missing forward declaration.
 - Implemented #1187127 savable state support for multiple re2c blocks.
