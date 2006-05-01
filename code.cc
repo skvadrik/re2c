@@ -208,20 +208,34 @@ void BitMap::gen(std::ostream &o, uint ind, uint lb, uint ub)
 {
 	BitMap *b = first;
 
-	if (b)
+	if (b && bLastPass)
 	{
 		o << indent(ind) << "static unsigned char yybm[] = {";
-		uint n = ub - lb;
-		uint *bm = new uint[n];
-		memset(bm, 0, n*sizeof(uint));
 
-		for (uint i = 0; b; i += n)
+		uint c = 1, n = ub - lb;
+
+		while((b = const_cast<BitMap*>(b->next)) != NULL) {
+			++c;
+		}
+		b = first;
+
+		uint *bm = new uint[n];
+		
+		for (uint i = 0, t = 0; b; i += n)
 		{
-			for (uint m = 0x80; b && m; b = const_cast<BitMap*>(b->next), m >>= 1)
+			memset(bm, 0, n * sizeof(uint));
+
+			for (uint m = 0x80; b && m; m >>= 1)
 			{
 				b->i = i;
 				b->m = m;
 				doGen(b->go, b->on, bm, lb, m);
+				b = const_cast<BitMap*>(b->next);
+			}
+
+			if (c > 8)
+			{
+				o << "\n" << indent(ind+1) << "/* table " << ++t << ": " << i << " */";
 			}
 
 			for (uint j = 0; j < n; ++j)
@@ -244,6 +258,9 @@ void BitMap::gen(std::ostream &o, uint ind, uint lb, uint ub)
 		}
 
 		o << "\n" << indent(ind) << "};\n";
+		/* stats(); */
+		
+		delete[] bm;
 	}
 }
 
