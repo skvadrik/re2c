@@ -893,13 +893,45 @@ void Go::genBase(std::ostream &o, uint ind, const State *from, const State *next
 
 void Go::genGoto(std::ostream &o, uint ind, const State *from, const State *next, bool &readCh)
 {
-	if (gFlag && !wFlag && nSpans >= 16)
+	uint xSpans = nSpans;
+
+	if (wSpans == ~0u && wFlag)
 	{
-		o << indent(ind++) << "{\n";
+		wSpans = 0;
+		xSpans = 1;
+		for (uint p = 0; p < nSpans; p++)
+		{
+			if (span[p].ub > 0xFF)
+			{
+				wSpans++;
+			}
+			if (span[p].ub < 0x100)
+			{
+				xSpans++;
+			}
+		}
+	}
+
+	if (gFlag && xSpans >= 16)
+	{
+		const char * sYych = readCh ? "(yych = *YYCURSOR)" : "yych";
+
+		readCh = false;
+		if (wFlag)
+		{
+			o << indent(ind) << "if(" << sYych <<" & 0xFF00) {\n";
+			genBase(o, ind+1, from, next, readCh, 1);
+			o << indent(ind) << "} else {\n";
+			sYych = "yych";
+		}
+		else
+		{
+			o << indent(ind++) << "{\n";
+		}
 		o << indent(ind++) << "static void *yytarget[256] = {\n";
 		o << indent(ind);
 		uint ch = 0;
-		for (uint i = 0; i < nSpans; ++i)
+		for (uint i = 0; i < xSpans && ch < 0x100u; ++i)
 		{
 			for(; ch < span[i].ub; ++ch)
 			{
@@ -916,32 +948,12 @@ void Go::genGoto(std::ostream &o, uint ind, const State *from, const State *next
 			vUsedLabels.insert(span[i].to->label);
 		}
 		o << indent(--ind) << "};\n";
-		if (readCh)
-		{
-			o << indent(ind) << "goto *yytarget[yych = *YYCURSOR];\n";
-			o << "";
-		}
-		else
-		{
-			o << indent(ind) << "goto *yytarget[yych];\n";
-		}
+		o << indent(ind) << "goto *yytarget[" << sYych << "];\n";
 		o << indent(--ind) << "}\n";
 		return;
 	}
 	else if (bFlag)
 	{
-		if (wSpans == ~0u && wFlag)
-		{
-			wSpans = 0;
-			for (uint p = 0; p < nSpans; p++)
-			{
-				if (span[p].ub > 0xFF)
-				{
-					wSpans++;
-				}
-			}
-		}
-
 		for (uint i = 0; i < nSpans; ++i)
 		{
 			State *to = span[i].to;
@@ -956,27 +968,17 @@ void Go::genGoto(std::ostream &o, uint ind, const State *from, const State *next
 					Go go;
 					go.span = new Span[nSpans];
 					go.unmap(this, to);
+					sYych = readCh ? "(yych = *YYCURSOR)" : "yych";
+					readCh = false;
 					if (wFlag)
 					{
-						if (readCh)
-						{
-							o << indent(ind) << "yych = *YYCURSOR;\n";
-							readCh = false;
-						}
+						o << indent(ind) << "if(" << sYych << " & 0xFF00) {\n";
 						sYych = "yych";
-						o << indent(ind) << "if(yyh & 0xFF00) {\n";
 						genBase(o, ind+1, from, next, readCh, 1);
 						o << indent(ind) << "} else ";
 					}
-					else if (readCh)
-					{
-						sYych = "(yych = *YYCURSOR)";
-						readCh = false;
-						o << indent(ind);
-					}
 					else
 					{
-						sYych = "yych";
 						o << indent(ind);
 					}
 					o << "if(yybm[" << b->i << "+" << sYych << "] & ";
