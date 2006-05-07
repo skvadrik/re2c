@@ -27,6 +27,14 @@ std::string indent(uint ind)
 	return str;
 }
 
+static std::string space(uint this_label)
+{
+	int nl = next_label > 9999 ? 4 : next_label > 999 ? 3 : next_label > 99 ? 2 : next_label > 9 ? 1 : 0;
+	int tl = this_label > 9999 ? 4 : this_label > 999 ? 3 : this_label > 99 ? 2 : this_label > 9 ? 1 : 0;
+
+	return std::string(std::max(1, nl - tl + 1), ' ');
+}
+
 void Go::compact()
 {
 	// arrange so that adjacent spans have different targets
@@ -879,7 +887,42 @@ void Go::genBase(std::ostream &o, uint ind, const State *from, const State *next
 
 void Go::genGoto(std::ostream &o, uint ind, const State *from, const State *next, bool &readCh)
 {
-	if (bFlag)
+	if (gFlag && !wFlag && nSpans >= 16)
+	{
+		o << indent(ind++) << "{\n";
+		o << indent(ind++) << "static void *yytarget[256] = {\n";
+		o << indent(ind);
+		uint ch = 0;
+		for (uint i = 0; i < nSpans; ++i)
+		{
+			for(; ch < span[i].ub; ++ch)
+			{
+				o << "&&yy" << span[i].to->label  << ",";
+				if (ch % 8 == 7)
+				{
+					o << "\n" << indent(ind);
+				}
+				else
+				{
+					o << space(span[i].to->label);
+				}
+			}
+			vUsedLabels.insert(span[i].to->label);
+		}
+		o << indent(--ind) << "};\n";
+		if (readCh)
+		{
+			o << indent(ind) << "goto *yytarget[yych = *YYCURSOR];\n";
+			o << "";
+		}
+		else
+		{
+			o << indent(ind) << "goto *yytarget[yych];\n";
+		}
+		o << indent(--ind) << "}\n";
+		return;
+	}
+	else if (bFlag)
 	{
 		if (wSpans == ~0u && wFlag)
 		{
