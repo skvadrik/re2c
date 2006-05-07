@@ -224,11 +224,18 @@ yy18:
 		if(yych <= '9') goto yy22;
 yy19:
 		YYCURSOR = YYMARKER;
-		switch(yyaccept) {
-		case 3:	goto yy132;
-		case 2:	goto yy107;
-		case 1:	goto yy63;
-		case 0:	goto yy3;
+		if(yyaccept <= 1) {
+			if(yyaccept <= 0) {
+				goto yy3;
+			} else {
+				goto yy63;
+			}
+		} else {
+			if(yyaccept <= 2) {
+				goto yy107;
+			} else {
+				goto yy132;
+			}
 		}
 yy20:
 		++YYCURSOR;
@@ -596,7 +603,7 @@ yy63:
 		{
 		return "edu";
 	}
-#line 600 "<stdout>"
+#line 607 "<stdout>"
 yy64:
 		yych = *++YYCURSOR;
 		if(yych != 't') goto yy33;
@@ -932,7 +939,7 @@ yy107:
 		{
 		return "resnet";
 	}
-#line 936 "<stdout>"
+#line 943 "<stdout>"
 yy108:
 		yych = *++YYCURSOR;
 		if(yych != 't') goto yy19;
@@ -1086,7 +1093,7 @@ yy132:
 		{
 		return "dsl";
 	}
-#line 1090 "<stdout>"
+#line 1097 "<stdout>"
 yy133:
 		yych = *++YYCURSOR;
 		if(yych != 's') goto yy19;

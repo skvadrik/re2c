@@ -2308,34 +2308,110 @@ yy51:
 yy53:
 		YYDEBUG(53, *YYCURSOR);
 		YYCURSOR = YYMARKER;
-		switch(yyaccept) {
-		case 26:	goto yy1413;
-		case 24:	goto yy1382;
-		case 25:	goto yy1390;
-		case 23:	goto yy1304;
-		case 22:	goto yy1301;
-		case 11:	goto yy713;
-		case 20:	goto yy1238;
-		case 21:	goto yy1246;
-		case 13:	goto yy870;
-		case 18:	goto yy1134;
-		case 12:	goto yy860;
-		case 8:	goto yy491;
-		case 17:	goto yy978;
-		case 6:	goto yy426;
-		case 10:	goto yy698;
-		case 16:	goto yy1032;
-		case 19:	goto yy1026;
-		case 15:	goto yy1005;
-		case 14:	goto yy971;
-		case 9:	goto yy601;
-		case 5:	goto yy405;
-		case 4:	goto yy176;
-		case 0:	goto yy3;
-		case 7:	goto yy448;
-		case 3:	goto yy69;
-		case 2:	goto yy46;
-		case 1:	goto yy12;
+		if(yyaccept <= 13) {
+			if(yyaccept <= 6) {
+				if(yyaccept <= 3) {
+					if(yyaccept <= 1) {
+						if(yyaccept <= 0) {
+							goto yy3;
+						} else {
+							goto yy12;
+						}
+					} else {
+						if(yyaccept <= 2) {
+							goto yy46;
+						} else {
+							goto yy69;
+						}
+					}
+				} else {
+					if(yyaccept <= 5) {
+						if(yyaccept <= 4) {
+							goto yy176;
+						} else {
+							goto yy405;
+						}
+					} else {
+						goto yy426;
+					}
+				}
+			} else {
+				if(yyaccept <= 10) {
+					if(yyaccept <= 8) {
+						if(yyaccept <= 7) {
+							goto yy448;
+						} else {
+							goto yy491;
+						}
+					} else {
+						if(yyaccept <= 9) {
+							goto yy601;
+						} else {
+							goto yy698;
+						}
+					}
+				} else {
+					if(yyaccept <= 12) {
+						if(yyaccept <= 11) {
+							goto yy713;
+						} else {
+							goto yy860;
+						}
+					} else {
+						goto yy870;
+					}
+				}
+			}
+		} else {
+			if(yyaccept <= 20) {
+				if(yyaccept <= 17) {
+					if(yyaccept <= 15) {
+						if(yyaccept <= 14) {
+							goto yy971;
+						} else {
+							goto yy1005;
+						}
+					} else {
+						if(yyaccept <= 16) {
+							goto yy1032;
+						} else {
+							goto yy978;
+						}
+					}
+				} else {
+					if(yyaccept <= 19) {
+						if(yyaccept <= 18) {
+							goto yy1134;
+						} else {
+							goto yy1026;
+						}
+					} else {
+						goto yy1238;
+					}
+				}
+			} else {
+				if(yyaccept <= 23) {
+					if(yyaccept <= 22) {
+						if(yyaccept <= 21) {
+							goto yy1246;
+						} else {
+							goto yy1301;
+						}
+					} else {
+						goto yy1304;
+					}
+				} else {
+					if(yyaccept <= 25) {
+						if(yyaccept <= 24) {
+							goto yy1382;
+						} else {
+							goto yy1390;
+						}
+					} else {
+						goto yy1413;
+					}
+				}
+			}
 		}
 yy54:
 		YYDEBUG(54, *YYCURSOR);
@@ -2540,7 +2616,7 @@ yy69:
 		TIMELIB_DEINIT;
 		return TIMELIB_RELATIVE;
 	}
-#line 2544 "<stdout>"
+#line 2620 "<stdout>"
 yy70:
 		YYDEBUG(70, *YYCURSOR);
 		yych = *++YYCURSOR;
@@ -3774,7 +3850,7 @@ yy176:
 		TIMELIB_DEINIT;
 		return TIMELIB_RELATIVE;
 	}
-#line 3778 "<stdout>"
+#line 3854 "<stdout>"
 yy177:
 		YYDEBUG(177, *YYCURSOR);
 		yych = *++YYCURSOR;
@@ -7035,7 +7111,7 @@ yy405:
 		TIMELIB_DEINIT;
 		return TIMELIB_WEEKDAY;
 	}
-#line 7039 "<stdout>"
+#line 7115 "<stdout>"
 yy406:
 		YYDEBUG(406, *YYCURSOR);
 		yych = *++YYCURSOR;
@@ -7376,7 +7452,7 @@ yy426:
 		TIMELIB_DEINIT;
 		return TIMELIB_DATE_TEXT;
 	}
-#line 7380 "<stdout>"
+#line 7456 "<stdout>"
 yy427:
 		YYDEBUG(427, *YYCURSOR);
 		yyaccept = 6;
@@ -7644,7 +7720,7 @@ yy448:
 		TIMELIB_DEINIT;
 		return TIMELIB_SHORTDATE_WITH_TIME;
 	}
-#line 7648 "<stdout>"
+#line 7724 "<stdout>"
 yy449:
 		YYDEBUG(449, *YYCURSOR);
 		yyaccept = 7;
@@ -8082,7 +8158,7 @@ yy491:
 		TIMELIB_DEINIT;
 		return TIMELIB_DATE_NO_DAY;
 	}
-#line 8086 "<stdout>"
+#line 8162 "<stdout>"
 yy492:
 		YYDEBUG(492, *YYCURSOR);
 		yyaccept = 6;
@@ -8471,7 +8547,7 @@ yy517:
 		TIMELIB_DEINIT;
 		return TIMELIB_PG_TEXT;
 	}
-#line 8475 "<stdout>"
+#line 8551 "<stdout>"
 yy518:
 		YYDEBUG(518, *YYCURSOR);
 		yych = *++YYCURSOR;
@@ -10431,7 +10507,7 @@ yy601:
 		TIMELIB_DEINIT;
 		return TIMELIB_AGO;
 	}
-#line 10435 "<stdout>"
+#line 10511 "<stdout>"
 yy602:
 		YYDEBUG(602, *YYCURSOR);
 		yyaccept = 0;
@@ -12894,7 +12970,7 @@ yy698:
 		TIMELIB_DEINIT;
 		return TIMELIB_DATE_TEXT;
 	}
-#line 12898 "<stdout>"
+#line 12974 "<stdout>"
 yy699:
 		YYDEBUG(699, *YYCURSOR);
 		yyaccept = 10;
@@ -13051,7 +13127,7 @@ yy710:
 		TIMELIB_DEINIT;
 		return TIMELIB_TIME12;
 	}
-#line 13055 "<stdout>"
+#line 13131 "<stdout>"
 yy712:
 		YYDEBUG(712, *YYCURSOR);
 		yyaccept = 11;
@@ -13089,7 +13165,7 @@ yy713:
 		TIMELIB_DEINIT;
 		return TIMELIB_TIME24_WITH_ZONE;
 	}
-#line 13093 "<stdout>"
+#line 13169 "<stdout>"
 yy714:
 		YYDEBUG(714, *YYCURSOR);
 		yyaccept = 11;
@@ -13370,7 +13446,7 @@ yy741:
 		TIMELIB_DEINIT;
 		return TIMELIB_DATE_FULL;
 	}
-#line 13374 "<stdout>"
+#line 13450 "<stdout>"
 yy742:
 		YYDEBUG(742, *YYCURSOR);
 		yych = *++YYCURSOR;
@@ -14137,7 +14213,7 @@ yy813:
 		TIMELIB_DEINIT;
 		return TIMELIB_DATE_FULL_POINTED;
 	}
-#line 14141 "<stdout>"
+#line 14217 "<stdout>"
 yy814:
 		YYDEBUG(814, *YYCURSOR);
 		yych = *++YYCURSOR;
@@ -14776,7 +14852,7 @@ yy860:
 		TIMELIB_DEINIT;
 		return TIMELIB_ISO_DATE;
 	}
-#line 14780 "<stdout>"
+#line 14856 "<stdout>"
 yy861:
 		YYDEBUG(861, *YYCURSOR);
 		yyaccept = 12;
@@ -14896,7 +14972,7 @@ yy870:
 		TIMELIB_DEINIT;
 		return TIMELIB_AMERICAN;
 	}
-#line 14900 "<stdout>"
+#line 14976 "<stdout>"
 yy871:
 		YYDEBUG(871, *YYCURSOR);
 		yyaccept = 13;
@@ -15139,7 +15215,7 @@ yy903:
 		TIMELIB_DEINIT;
 		return TIMELIB_CLF;
 	}
-#line 15143 "<stdout>"
+#line 15219 "<stdout>"
 yy904:
 		YYDEBUG(904, *YYCURSOR);
 		yych = *++YYCURSOR;
@@ -15600,7 +15676,7 @@ yy958:
 		TIMELIB_DEINIT;
 		return TIMELIB_PG_TEXT;
 	}
-#line 15604 "<stdout>"
+#line 15680 "<stdout>"
 yy960:
 		YYDEBUG(960, *YYCURSOR);
 		yych = *++YYCURSOR;
@@ -15746,7 +15822,7 @@ yy971:
 		TIMELIB_DEINIT;
 		return TIMELIB_CLF;
 	}
-#line 15750 "<stdout>"
+#line 15826 "<stdout>"
 yy972:
 		YYDEBUG(972, *YYCURSOR);
 		yych = *++YYCURSOR;
@@ -15861,7 +15937,7 @@ yy978:
 		TIMELIB_DEINIT;
 		return TIMELIB_DATE_NO_DAY;
 	}
-#line 15865 "<stdout>"
+#line 15941 "<stdout>"
 yy979:
 		YYDEBUG(979, *YYCURSOR);
 		yych = *++YYCURSOR;
@@ -16092,7 +16168,7 @@ yy999:
 		TIMELIB_DEINIT;
 		return TIMELIB_ISO_WEEK;
 	}
-#line 16096 "<stdout>"
+#line 16172 "<stdout>"
 yy1000:
 		YYDEBUG(1000, *YYCURSOR);
 		++YYCURSOR;
@@ -16115,7 +16191,7 @@ yy1000:
 		TIMELIB_DEINIT;
 		return TIMELIB_ISO_WEEK;
 	}
-#line 16119 "<stdout>"
+#line 16195 "<stdout>"
 yy1002:
 		YYDEBUG(1002, *YYCURSOR);
 		yych = *++YYCURSOR;
@@ -16191,7 +16267,7 @@ yy1005:
 		TIMELIB_DEINIT;
 		return TIMELIB_PG_YEARDAY;
 	}
-#line 16195 "<stdout>"
+#line 16271 "<stdout>"
 yy1006:
 		YYDEBUG(1006, *YYCURSOR);
 		yych = *++YYCURSOR;
@@ -16319,7 +16395,7 @@ yy1026:
 		TIMELIB_DEINIT;
 		return TIMELIB_XMLRPC_SOAP;
 	}
-#line 16323 "<stdout>"
+#line 16399 "<stdout>"
 yy1027:
 		YYDEBUG(1027, *YYCURSOR);
 		yych = *++YYCURSOR;
@@ -16596,7 +16672,7 @@ yy1032:
 		TIMELIB_DEINIT;
 		return TIMELIB_DATE_NOCOLON;
 	}
-#line 16600 "<stdout>"
+#line 16676 "<stdout>"
 yy1033:
 		YYDEBUG(1033, *YYCURSOR);
 		yych = *++YYCURSOR;
@@ -17291,7 +17367,7 @@ yy1134:
 		TIMELIB_DEINIT;
 		return TIMELIB_ISO_DATE;
 	}
-#line 17295 "<stdout>"
+#line 17371 "<stdout>"
 yy1135:
 		YYDEBUG(1135, *YYCURSOR);
 		yyaccept = 18;
@@ -18375,7 +18451,7 @@ yy1238:
 		TIMELIB_DEINIT;
 		return TIMELIB_GNU_NOCOLON;
 	}
-#line 18379 "<stdout>"
+#line 18455 "<stdout>"
 yy1239:
 		YYDEBUG(1239, *YYCURSOR);
 		yych = *++YYCURSOR;
@@ -18486,7 +18562,7 @@ yy1246:
 		TIMELIB_DEINIT;
 		return TIMELIB_ISO_NOCOLON;
 	}
-#line 18490 "<stdout>"
+#line 18566 "<stdout>"
 yy1247:
 		YYDEBUG(1247, *YYCURSOR);
 		yyaccept = 21;
@@ -19120,7 +19196,7 @@ yy1271:
 		TIMELIB_DEINIT;
 		return TIMELIB_RELATIVE;
 	}
-#line 19124 "<stdout>"
+#line 19200 "<stdout>"
 yy1272:
 		YYDEBUG(1272, *YYCURSOR);
 		yych = *++YYCURSOR;
@@ -19567,7 +19643,7 @@ yy1301:
 		TIMELIB_DEINIT;
 		return TIMELIB_RELATIVE;
 	}
-#line 19571 "<stdout>"
+#line 19647 "<stdout>"
 yy1302:
 		YYDEBUG(1302, *YYCURSOR);
 		yych = *++YYCURSOR;
@@ -19611,7 +19687,7 @@ yy1304:
 		TIMELIB_DEINIT;
 		return TIMELIB_RELATIVE;
 	}
-#line 19615 "<stdout>"
+#line 19691 "<stdout>"
 yy1305:
 		YYDEBUG(1305, *YYCURSOR);
 		yych = *++YYCURSOR;
@@ -21392,7 +21468,7 @@ yy1382:
 		TIMELIB_DEINIT;
 		return TIMELIB_RELATIVE;
 	}
-#line 21396 "<stdout>"
+#line 21472 "<stdout>"
 yy1383:
 		YYDEBUG(1383, *YYCURSOR);
 		yych = *++YYCURSOR;
@@ -21542,7 +21618,7 @@ yy1390:
 		TIMELIB_DEINIT;
 		return TIMELIB_RELATIVE;
 	}
-#line 21546 "<stdout>"
+#line 21622 "<stdout>"
 yy1391:
 		YYDEBUG(1391, *YYCURSOR);
 		yyaccept = 0;
@@ -22049,7 +22125,7 @@ yy1413:
 		TIMELIB_DEINIT;
 		return TIMELIB_RELATIVE;
 	}
-#line 22053 "<stdout>"
+#line 22129 "<stdout>"
 yy1414:
 		YYDEBUG(1414, *YYCURSOR);
 		yyaccept = 0;

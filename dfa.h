@@ -3,6 +3,7 @@
 #define _dfa_h
 
 #include <iosfwd>
+#include <map>
 #include "re.h"
 
 namespace re2c
@@ -100,13 +101,18 @@ class Accept: public Action
 {
 
 public:
+	typedef std::map<uint, State*> RuleMap;
+
 	uint	nRules;
 	uint	*saves;
 	State	**rules;
+	RuleMap mapRules;
 
 public:
 	Accept(State*, uint, uint*, State**);
 	void emit(std::ostream&, uint, bool&) const;
+	void emitBinary(std::ostream &o, uint ind, uint l, uint r, bool &readCh) const;
+	void genRuleMap();
 
 #ifdef PEDANTIC
 private:

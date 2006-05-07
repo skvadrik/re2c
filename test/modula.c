@@ -4029,11 +4029,11 @@ yy269:
 yy270:
 	YYCURSOR = YYMARKER;
 	switch(yyaccept) {
-	case 0:	goto yy5;
-	case 3:	goto yy294;
-	case 4:	goto yy296;
-	case 2:	goto yy276;
-	case 1:	goto yy8;
+	case 0: 	goto yy5;
+	case 1: 	goto yy8;
+	case 2: 	goto yy276;
+	case 3: 	goto yy294;
+	case 4: 	goto yy296;
 	}
 yy271:
 	++YYCURSOR;

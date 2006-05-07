@@ -485,57 +485,68 @@ Accept::Accept(State *x, uint n, uint *s, State **r)
 	;
 }
 
-void Accept::emit(std::ostream &o, uint ind, bool &readCh) const
+void Accept::genRuleMap()
 {
-	bool first = true;
-	uint cases = 0;
-
 	for (uint i = 0; i < nRules; ++i)
 	{
 		if (saves[i] != ~0u)
 		{
-			cases++;
-			bUsedYYAccept |= saves[i] != 0;
+			mapRules[saves[i]] = rules[i];
 		}
 	}
+}
 
-	for (uint i = 0; i < nRules; ++i)
+void Accept::emitBinary(std::ostream &o, uint ind, uint l, uint r, bool &readCh) const
+{
+	if (l < r)
 	{
-		if (saves[i] != ~0u)
-		{
-			if (first)
-			{
-				first = false;
-				bUsedYYMarker = true;
-				o << indent(ind) << "YYCURSOR = YYMARKER;\n";
-				if (bUsedYYAccept && cases > 1)
-				{
-					o << indent(ind) << "switch(yyaccept) {\n";
-				}
-			}
+		uint m = (l + r) >> 1;
 
-			if (cases > 1)
+		o << indent(ind) << "if(yyaccept <= " << m << ") {\n";
+		emitBinary(o, ++ind, l, m, readCh);
+		o << indent(--ind) << "} else {\n";
+		emitBinary(o, ++ind, m + 1, r, readCh);
+		o << indent(--ind) << "}\n";
+	}
+	else
+	{
+		genGoTo(o, ind, state, mapRules.find(l)->second, readCh);
+	}
+}
+
+void Accept::emit(std::ostream &o, uint ind, bool &readCh) const
+{
+	if (mapRules.size() > 0)
+	{
+		bUsedYYMarker = true;
+		o << indent(ind) << "YYCURSOR = YYMARKER;\n";
+
+		if (mapRules.size() > 1)
+		{
+			bUsedYYAccept = true;
+			
+			if (sFlag)
 			{
-				o << indent(ind) << "case " << saves[i] << ":\t";
-				genGoTo(o, 0, state, rules[i], readCh);
+				emitBinary(o, ind, 0, mapRules.size() - 1, readCh);
 			}
 			else
 			{
-				if (bUsedYYAccept) {
-					o << indent(ind++) << "if (yyaccept == " << saves[i] << ") {\n";
+				o << indent(ind) << "switch(yyaccept) {\n";
+		
+				for (RuleMap::const_iterator it = mapRules.begin(); it != mapRules.end(); ++it)
+				{
+					o << indent(ind) << "case " << it->first << ": \t";
+					genGoTo(o, 0, state, it->second, readCh);
 				}
-				genGoTo(o, ind, state, rules[i], readCh);
+			
+				o << indent(ind) << "}\n";
 			}
 		}
-	}
-
-	if (!first && bUsedYYAccept)
-	{
-		if (cases == 1)
+		else
 		{
-			ind--;
+			// no need to write if statement here since there is only case 0.
+			genGoTo(o, ind, state, mapRules.find(0)->second, readCh);
 		}
-		o << indent(ind) << "}\n";
 	}
 }
 
@@ -1315,6 +1326,7 @@ void DFA::emit(std::ostream &o, uint ind)
 	memset(rules, 0, (nRules)*sizeof(*rules));
 
 	State *accept = NULL;
+	Accept *accfixup = NULL;
 
 	for (s = head; s; s = s->next)
 	{
@@ -1344,13 +1356,18 @@ void DFA::emit(std::ostream &o, uint ind)
 				if (!ow)
 				{
 					ow = accept = new State;
-					(void) new Accept(accept, nRules, saves, rules);
+					accfixup = new Accept(accept, nRules, saves, rules);
 					addState(&s->next, accept);
 				}
 
 				s->go.span[i].to = ow;
 			}
 		}
+	}
+	
+	if (accfixup)
+	{
+		accfixup->genRuleMap();
 	}
 
 	// split ``base'' states into two parts

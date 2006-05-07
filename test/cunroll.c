@@ -703,10 +703,10 @@ yy106:
 yy107:
 	YYCURSOR = YYMARKER;
 	switch(yyaccept) {
-	case 0:	goto yy7;
-	case 3:	goto yy119;
-	case 2:	goto yy12;
-	case 1:	goto yy10;
+	case 0: 	goto yy7;
+	case 1: 	goto yy10;
+	case 2: 	goto yy12;
+	case 3: 	goto yy119;
 	}
 yy108:
 	++YYCURSOR;

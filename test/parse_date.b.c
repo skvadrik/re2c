@@ -2178,34 +2178,110 @@ yy51:
 		}
 yy53:
 		YYCURSOR = YYMARKER;
-		switch(yyaccept) {
-		case 26:	goto yy1310;
-		case 24:	goto yy1279;
-		case 25:	goto yy1287;
-		case 23:	goto yy1203;
-		case 22:	goto yy1200;
-		case 11:	goto yy634;
-		case 20:	goto yy1146;
-		case 21:	goto yy1154;
-		case 13:	goto yy784;
-		case 18:	goto yy1043;
-		case 12:	goto yy775;
-		case 8:	goto yy420;
-		case 17:	goto yy889;
-		case 6:	goto yy363;
-		case 10:	goto yy620;
-		case 16:	goto yy943;
-		case 19:	goto yy937;
-		case 15:	goto yy916;
-		case 14:	goto yy880;
-		case 9:	goto yy526;
-		case 5:	goto yy341;
-		case 4:	goto yy172;
-		case 1:	goto yy3;
-		case 7:	goto yy385;
-		case 3:	goto yy69;
-		case 2:	goto yy46;
-		case 0:	goto yy12;
+		if(yyaccept <= 13) {
+			if(yyaccept <= 6) {
+				if(yyaccept <= 3) {
+					if(yyaccept <= 1) {
+						if(yyaccept <= 0) {
+							goto yy12;
+						} else {
+							goto yy3;
+						}
+					} else {
+						if(yyaccept <= 2) {
+							goto yy46;
+						} else {
+							goto yy69;
+						}
+					}
+				} else {
+					if(yyaccept <= 5) {
+						if(yyaccept <= 4) {
+							goto yy172;
+						} else {
+							goto yy341;
+						}
+					} else {
+						goto yy363;
+					}
+				}
+			} else {
+				if(yyaccept <= 10) {
+					if(yyaccept <= 8) {
+						if(yyaccept <= 7) {
+							goto yy385;
+						} else {
+							goto yy420;
+						}
+					} else {
+						if(yyaccept <= 9) {
+							goto yy526;
+						} else {
+							goto yy620;
+						}
+					}
+				} else {
+					if(yyaccept <= 12) {
+						if(yyaccept <= 11) {
+							goto yy634;
+						} else {
+							goto yy775;
+						}
+					} else {
+						goto yy784;
+					}
+				}
+			}
+		} else {
+			if(yyaccept <= 20) {
+				if(yyaccept <= 17) {
+					if(yyaccept <= 15) {
+						if(yyaccept <= 14) {
+							goto yy880;
+						} else {
+							goto yy916;
+						}
+					} else {
+						if(yyaccept <= 16) {
+							goto yy943;
+						} else {
+							goto yy889;
+						}
+					}
+				} else {
+					if(yyaccept <= 19) {
+						if(yyaccept <= 18) {
+							goto yy1043;
+						} else {
+							goto yy937;
+						}
+					} else {
+						goto yy1146;
+					}
+				}
+			} else {
+				if(yyaccept <= 23) {
+					if(yyaccept <= 22) {
+						if(yyaccept <= 21) {
+							goto yy1154;
+						} else {
+							goto yy1200;
+						}
+					} else {
+						goto yy1203;
+					}
+				} else {
+					if(yyaccept <= 25) {
+						if(yyaccept <= 24) {
+							goto yy1279;
+						} else {
+							goto yy1287;
+						}
+					} else {
+						goto yy1310;
+					}
+				}
+			}
 		}
 yy54:
 		++YYCURSOR;
@@ -2357,7 +2433,7 @@ yy69:
 		TIMELIB_DEINIT;
 		return TIMELIB_RELATIVE;
 	}
-#line 2361 "<stdout>"
+#line 2437 "<stdout>"
 yy70:
 		yych = *++YYCURSOR;
 		if(yych == 'D') goto yy71;
@@ -3210,7 +3286,7 @@ yy172:
 		TIMELIB_DEINIT;
 		return TIMELIB_RELATIVE;
 	}
-#line 3214 "<stdout>"
+#line 3290 "<stdout>"
 yy173:
 		yych = *++YYCURSOR;
 		if(yych == 'D') goto yy174;
@@ -4710,7 +4786,7 @@ yy341:
 		TIMELIB_DEINIT;
 		return TIMELIB_WEEKDAY;
 	}
-#line 4714 "<stdout>"
+#line 4790 "<stdout>"
 yy342:
 		yyaccept = 1;
 		yych = *(YYMARKER = ++YYCURSOR);
@@ -4947,7 +5023,7 @@ yy363:
 		TIMELIB_DEINIT;
 		return TIMELIB_DATE_TEXT;
 	}
-#line 4951 "<stdout>"
+#line 5027 "<stdout>"
 yy364:
 		yych = *++YYCURSOR;
 		if(yych <= 'm') {
@@ -5156,7 +5232,7 @@ yy385:
 		TIMELIB_DEINIT;
 		return TIMELIB_SHORTDATE_WITH_TIME;
 	}
-#line 5160 "<stdout>"
+#line 5236 "<stdout>"
 yy386:
 		yyaccept = 7;
 		yych = *(YYMARKER = ++YYCURSOR);
@@ -5450,7 +5526,7 @@ yy420:
 		TIMELIB_DEINIT;
 		return TIMELIB_DATE_NO_DAY;
 	}
-#line 5454 "<stdout>"
+#line 5530 "<stdout>"
 yy421:
 		yyaccept = 6;
 		yych = *(YYMARKER = ++YYCURSOR);
@@ -5800,7 +5876,7 @@ yy446:
 		TIMELIB_DEINIT;
 		return TIMELIB_PG_TEXT;
 	}
-#line 5804 "<stdout>"
+#line 5880 "<stdout>"
 yy447:
 		yych = *++YYCURSOR;
 		if(yych <= '/') goto yy446;
@@ -7089,7 +7165,7 @@ yy526:
 		TIMELIB_DEINIT;
 		return TIMELIB_AGO;
 	}
-#line 7093 "<stdout>"
+#line 7169 "<stdout>"
 yy527:
 		yyaccept = 1;
 		yych = *(YYMARKER = ++YYCURSOR);
@@ -8975,7 +9051,7 @@ yy620:
 		TIMELIB_DEINIT;
 		return TIMELIB_DATE_TEXT;
 	}
-#line 8979 "<stdout>"
+#line 9055 "<stdout>"
 yy621:
 		yyaccept = 10;
 		yych = *(YYMARKER = ++YYCURSOR);
@@ -9086,7 +9162,7 @@ yy631:
 		TIMELIB_DEINIT;
 		return TIMELIB_TIME12;
 	}
-#line 9090 "<stdout>"
+#line 9166 "<stdout>"
 yy632:
 		yych = *++YYCURSOR;
 		goto yy631;
@@ -9123,7 +9199,7 @@ yy634:
 		TIMELIB_DEINIT;
 		return TIMELIB_TIME24_WITH_ZONE;
 	}
-#line 9127 "<stdout>"
+#line 9203 "<stdout>"
 yy635:
 		yyaccept = 11;
 		yych = *(YYMARKER = ++YYCURSOR);
@@ -9325,7 +9401,7 @@ yy660:
 		TIMELIB_DEINIT;
 		return TIMELIB_DATE_FULL;
 	}
-#line 9329 "<stdout>"
+#line 9405 "<stdout>"
 yy661:
 		yych = *++YYCURSOR;
 		if(yych == 'M') goto yy662;
@@ -9850,7 +9926,7 @@ yy729:
 		TIMELIB_DEINIT;
 		return TIMELIB_DATE_FULL_POINTED;
 	}
-#line 9854 "<stdout>"
+#line 9930 "<stdout>"
 yy730:
 		yych = *++YYCURSOR;
 		if(yych <= '/') goto yy729;
@@ -10378,7 +10454,7 @@ yy775:
 		TIMELIB_DEINIT;
 		return TIMELIB_ISO_DATE;
 	}
-#line 10382 "<stdout>"
+#line 10458 "<stdout>"
 yy776:
 		yyaccept = 12;
 		yych = *(YYMARKER = ++YYCURSOR);
@@ -10460,7 +10536,7 @@ yy784:
 		TIMELIB_DEINIT;
 		return TIMELIB_AMERICAN;
 	}
-#line 10464 "<stdout>"
+#line 10540 "<stdout>"
 yy785:
 		yyaccept = 13;
 		yych = *(YYMARKER = ++YYCURSOR);
@@ -10663,7 +10739,7 @@ yy817:
 		TIMELIB_DEINIT;
 		return TIMELIB_CLF;
 	}
-#line 10667 "<stdout>"
+#line 10743 "<stdout>"
 yy818:
 		yych = *++YYCURSOR;
 		if(yych <= '5') {
@@ -10996,7 +11072,7 @@ yy867:
 		TIMELIB_DEINIT;
 		return TIMELIB_PG_TEXT;
 	}
-#line 11000 "<stdout>"
+#line 11076 "<stdout>"
 yy869:
 		yych = *++YYCURSOR;
 		if(yych == 'V') goto yy862;
@@ -11140,7 +11216,7 @@ yy880:
 		TIMELIB_DEINIT;
 		return TIMELIB_CLF;
 	}
-#line 11144 "<stdout>"
+#line 11220 "<stdout>"
 yy881:
 		yych = *++YYCURSOR;
 		switch(yych){
@@ -11299,7 +11375,7 @@ yy889:
 		TIMELIB_DEINIT;
 		return TIMELIB_DATE_NO_DAY;
 	}
-#line 11303 "<stdout>"
+#line 11379 "<stdout>"
 yy890:
 		yych = *++YYCURSOR;
 		if(yych == 'I') goto yy1021;
@@ -11509,7 +11585,7 @@ yy910:
 		TIMELIB_DEINIT;
 		return TIMELIB_ISO_WEEK;
 	}
-#line 11513 "<stdout>"
+#line 11589 "<stdout>"
 yy911:
 		++YYCURSOR;
 #line 1200 "parse_date.b.re"
@@ -11530,7 +11606,7 @@ yy911:
 		TIMELIB_DEINIT;
 		return TIMELIB_ISO_WEEK;
 	}
-#line 11534 "<stdout>"
+#line 11610 "<stdout>"
 yy913:
 		yych = *++YYCURSOR;
 		if(yych <= '/') goto yy57;
@@ -11598,7 +11674,7 @@ yy916:
 		TIMELIB_DEINIT;
 		return TIMELIB_PG_YEARDAY;
 	}
-#line 11602 "<stdout>"
+#line 11678 "<stdout>"
 yy917:
 		yych = *++YYCURSOR;
 		if(yych <= '/') goto yy57;
@@ -11703,7 +11779,7 @@ yy937:
 		TIMELIB_DEINIT;
 		return TIMELIB_XMLRPC_SOAP;
 	}
-#line 11707 "<stdout>"
+#line 11783 "<stdout>"
 yy938:
 		yych = *++YYCURSOR;
 		if(yych <= '2') {
@@ -11851,7 +11927,7 @@ yy943:
 		TIMELIB_DEINIT;
 		return TIMELIB_DATE_NOCOLON;
 	}
-#line 11855 "<stdout>"
+#line 11931 "<stdout>"
 yy944:
 		yych = *++YYCURSOR;
 		if(yych <= 'H') {
@@ -12412,7 +12488,7 @@ yy1043:
 		TIMELIB_DEINIT;
 		return TIMELIB_ISO_DATE;
 	}
-#line 12416 "<stdout>"
+#line 12492 "<stdout>"
 yy1044:
 		yyaccept = 18;
 		yych = *(YYMARKER = ++YYCURSOR);
@@ -13395,7 +13471,7 @@ yy1146:
 		TIMELIB_DEINIT;
 		return TIMELIB_GNU_NOCOLON;
 	}
-#line 13399 "<stdout>"
+#line 13475 "<stdout>"
 yy1147:
 		yych = *++YYCURSOR;
 		if(yych <= '/') goto yy57;
@@ -13492,7 +13568,7 @@ yy1154:
 		TIMELIB_DEINIT;
 		return TIMELIB_ISO_NOCOLON;
 	}
-#line 13496 "<stdout>"
+#line 13572 "<stdout>"
 yy1155:
 		yyaccept = 21;
 		yych = *(YYMARKER = ++YYCURSOR);
@@ -13881,7 +13957,7 @@ yy1179:
 		TIMELIB_DEINIT;
 		return TIMELIB_RELATIVE;
 	}
-#line 13885 "<stdout>"
+#line 13961 "<stdout>"
 yy1180:
 		yych = *++YYCURSOR;
 		if(yych <= 'N') {
@@ -14146,7 +14222,7 @@ yy1200:
 		TIMELIB_DEINIT;
 		return TIMELIB_RELATIVE;
 	}
-#line 14150 "<stdout>"
+#line 14226 "<stdout>"
 yy1201:
 		yych = *++YYCURSOR;
 		if(yych <= 'X') {
@@ -14168,7 +14244,7 @@ yy1203:
 		TIMELIB_DEINIT;
 		return TIMELIB_RELATIVE;
 	}
-#line 14172 "<stdout>"
+#line 14248 "<stdout>"
 yy1204:
 		yych = *++YYCURSOR;
 		if(yych <= 'R') {
@@ -15468,7 +15544,7 @@ yy1279:
 		TIMELIB_DEINIT;
 		return TIMELIB_RELATIVE;
 	}
-#line 15472 "<stdout>"
+#line 15548 "<stdout>"
 yy1280:
 		yych = *++YYCURSOR;
 		if(yych <= 'N') {
@@ -15557,7 +15633,7 @@ yy1287:
 		TIMELIB_DEINIT;
 		return TIMELIB_RELATIVE;
 	}
-#line 15561 "<stdout>"
+#line 15637 "<stdout>"
 yy1288:
 		yyaccept = 1;
 		yych = *(YYMARKER = ++YYCURSOR);
@@ -15953,7 +16029,7 @@ yy1310:
 		TIMELIB_DEINIT;
 		return TIMELIB_RELATIVE;
 	}
-#line 15957 "<stdout>"
+#line 16033 "<stdout>"
 yy1311:
 		yyaccept = 1;
 		yych = *(YYMARKER = ++YYCURSOR);

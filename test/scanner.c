@@ -663,13 +663,13 @@ yy65:
 yy66:
 	YYCURSOR = YYMARKER;
 	switch(yyaccept) {
-	case 0:	goto yy32;
-	case 1:	goto yy38;
-	case 2:	goto yy40;
-	case 3:	goto yy42;
-	case 6:	goto yy98;
-	case 5:	goto yy69;
-	case 4:	goto yy46;
+	case 0: 	goto yy32;
+	case 1: 	goto yy38;
+	case 2: 	goto yy40;
+	case 3: 	goto yy42;
+	case 4: 	goto yy46;
+	case 5: 	goto yy69;
+	case 6: 	goto yy98;
 	}
 yy67:
 	yyaccept = 5;
