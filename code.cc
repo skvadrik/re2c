@@ -529,6 +529,12 @@ void Accept::emit(std::ostream &o, uint ind, bool &readCh) const
 		bUsedYYMarker = true;
 		o << indent(ind) << "YYCURSOR = YYMARKER;\n";
 
+		if (readCh) // shouldn't be necessary, but might become at some point
+		{
+			o << indent(ind) << "yych = *YYCURSOR;\n";
+			readCh = false;
+		}
+
 		if (mapRules.size() > 1)
 		{
 			bUsedYYAccept = true;
