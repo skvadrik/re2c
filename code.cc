@@ -524,8 +524,21 @@ void Accept::emit(std::ostream &o, uint ind, bool &readCh) const
 		if (mapRules.size() > 1)
 		{
 			bUsedYYAccept = true;
-			
-			if (sFlag)
+
+			if (gFlag)
+			{
+				o << indent(ind++) << "{\n";
+				o << indent(ind++) << "static void *yytarget[" << mapRules.size() << "] = {\n";
+				for (RuleMap::const_iterator it = mapRules.begin(); it != mapRules.end(); ++it)
+				{
+					o << indent(ind) << "&&yy" << it->second->label << ",\n";
+					vUsedLabels.insert(it->second->label);
+				}
+				o << indent(--ind) << "};\n";
+				o << indent(ind) << "goto *yytarget[yyaccept];\n";
+				o << indent(--ind) << "}\n";
+			}
+			else if (sFlag)
 			{
 				emitBinary(o, ind, 0, mapRules.size() - 1, readCh);
 			}

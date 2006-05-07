@@ -1,5 +1,6 @@
 Version 0.10.3 (????-??-??)
 ---------------------------
+- Added -g switch to support gcc's computed goto's.
 - Changed to use nested if's instead of "switch(yyaccept)" in -s mode.
 
 Version 0.10.2 (2006-05-01)

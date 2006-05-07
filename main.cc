@@ -25,6 +25,7 @@ bool bFlag = false;
 bool dFlag = false;
 bool eFlag = false;
 bool fFlag = false;
+bool gFlag = false;
 bool iFlag = false;
 bool sFlag = false;
 bool wFlag = false;
@@ -68,6 +69,7 @@ static const mbo_opt_struct OPTIONS[] =
 	mbo_opt_struct('d', 0, "debug-output"),
 	mbo_opt_struct('e', 0, "ecb"),
 	mbo_opt_struct('f', 0, "storable-state"),
+	mbo_opt_struct('g', 0, "computed-gotos"),
 	mbo_opt_struct('h', 0, "help"),
 	mbo_opt_struct('i', 0, "no-debug-info"),
 	mbo_opt_struct('o', 1, "output"),
@@ -98,6 +100,9 @@ static void usage()
 	"                        an EBCDIC one.\n"
 	"\n"
 	"-f     --storable-state Generate a scanner that supports storable states.\n"
+	"\n"
+	"-g     --computed-gotos Implies -b. Generate computed goto code (only useable \n"
+	"                        with gcc).\n"
 	"\n"
 	"-i     --no-debug-info  Do not generate '#line' info (usefull for versioning).\n"
 	"\n"
@@ -140,8 +145,8 @@ int main(int argc, char *argv[])
 		{
 
 			case 'b':
-			sFlag = true;
 			bFlag = true;
+			sFlag = true;
 			break;
 
 			case 'e':
@@ -160,6 +165,12 @@ int main(int argc, char *argv[])
 				std::cerr << "re2c: error: cannot combine -1 and -f switch\n";
 				return 1;
 			}
+			break;
+
+			case 'g':
+			gFlag = true;
+			bFlag = true;
+			sFlag = true;
 			break;
 
 			case 'i':
