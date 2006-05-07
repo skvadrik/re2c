@@ -893,26 +893,31 @@ void Go::genBase(std::ostream &o, uint ind, const State *from, const State *next
 
 void Go::genGoto(std::ostream &o, uint ind, const State *from, const State *next, bool &readCh)
 {
-	uint xSpans = nSpans;
-
-	if (wSpans == ~0u && wFlag)
+	if (gFlag || wFlag)
 	{
-		wSpans = 0;
-		xSpans = 1;
-		for (uint p = 0; p < nSpans; p++)
+		if (wSpans == ~0u)
 		{
-			if (span[p].ub > 0xFF)
+			wSpans = 0;
+			lSpans = 1;
+			for (uint p = 0; p < nSpans; p++)
 			{
-				wSpans++;
+				if (span[p].ub > 0xFF)
+				{
+					wSpans++;
+				}
+				if (span[p].ub < 0x100)
+				{
+					lSpans++;
+				}
 			}
-			if (span[p].ub < 0x100)
-			{
-				xSpans++;
-			}
+		}
+		else
+		{
+			lSpans = nSpans;
 		}
 	}
 
-	if (gFlag && xSpans >= 16)
+	if (gFlag && lSpans >= 16)
 	{
 		const char * sYych = readCh ? "(yych = *YYCURSOR)" : "yych";
 
@@ -921,7 +926,7 @@ void Go::genGoto(std::ostream &o, uint ind, const State *from, const State *next
 		{
 			o << indent(ind) << "if(" << sYych <<" & 0xFF00) {\n";
 			genBase(o, ind+1, from, next, readCh, 1);
-			o << indent(ind) << "} else {\n";
+			o << indent(ind++) << "} else {\n";
 			sYych = "yych";
 		}
 		else
@@ -930,22 +935,29 @@ void Go::genGoto(std::ostream &o, uint ind, const State *from, const State *next
 		}
 		o << indent(ind++) << "static void *yytarget[256] = {\n";
 		o << indent(ind);
+
 		uint ch = 0;
-		for (uint i = 0; i < xSpans && ch < 0x100u; ++i)
+		for (uint i = 0; i < lSpans; ++i)
 		{
+			vUsedLabels.insert(span[i].to->label);
 			for(; ch < span[i].ub; ++ch)
 			{
-				o << "&&yy" << span[i].to->label  << ",";
-				if (ch % 8 == 7)
+				o << "&&yy" << span[i].to->label;
+				if (ch == 255)
 				{
-					o << "\n" << indent(ind);
+					o << "\n";
+					i = lSpans;
+					break;
+				}
+				else if (ch % 8 == 7)
+				{
+					o << ",\n" << indent(ind);
 				}
 				else
 				{
-					o << space(span[i].to->label);
+					o << "," << space(span[i].to->label);
 				}
 			}
-			vUsedLabels.insert(span[i].to->label);
 		}
 		o << indent(--ind) << "};\n";
 		o << indent(ind) << "goto *yytarget[" << sYych << "];\n";

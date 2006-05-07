@@ -174,6 +174,7 @@ public:
 	Go()
 		: nSpans(0)
 		, wSpans(~0u)
+		, lSpans(~0u)
 		, span(NULL)
 	{
 	}
@@ -181,6 +182,7 @@ public:
 public:
 	uint	nSpans;
 	uint    wSpans;
+	uint    lSpans;
 	Span	*span;
 
 public:
