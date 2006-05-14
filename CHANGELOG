@@ -1,4 +1,4 @@
-Version 0.10.3 (????-??-??)
+Version 0.10.3 (2006-05-14)
 ---------------------------
 - Fixed issue with -wb and -ws.
 - Added -g switch to support gcc's computed goto's.
