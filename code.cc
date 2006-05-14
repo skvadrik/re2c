@@ -539,7 +539,7 @@ void Accept::emit(std::ostream &o, uint ind, bool &readCh) const
 		{
 			bUsedYYAccept = true;
 
-			if (gFlag)
+			if (gFlag && mapRules.size() >= cGotoThreshold)
 			{
 				o << indent(ind++) << "{\n";
 				o << indent(ind++) << "static void *yytarget[" << mapRules.size() << "] = {\n";
@@ -891,77 +891,102 @@ void Go::genBase(std::ostream &o, uint ind, const State *from, const State *next
 	}
 }
 
-void Go::genGoto(std::ostream &o, uint ind, const State *from, const State *next, bool &readCh)
+void Go::genCpGoto(std::ostream &o, uint ind, const State *from, const State *next, bool &readCh) const
 {
-	if (gFlag || wFlag)
+	const char * sYych = readCh ? "(yych = *YYCURSOR)" : "yych";
+
+	readCh = false;
+	if (wFlag)
 	{
-		if (wSpans == ~0u)
+		o << indent(ind) << "if(" << sYych <<" & 0xFF00) {\n";
+		genBase(o, ind+1, from, next, readCh, 1);
+		o << indent(ind++) << "} else {\n";
+		sYych = "yych";
+	}
+	else
+	{
+		o << indent(ind++) << "{\n";
+	}
+	o << indent(ind++) << "static void *yytarget[256] = {\n";
+	o << indent(ind);
+
+	uint ch = 0;
+	for (uint i = 0; i < lSpans; ++i)
+	{
+		vUsedLabels.insert(span[i].to->label);
+		for(; ch < span[i].ub; ++ch)
 		{
-			wSpans = 0;
-			lSpans = 1;
-			for (uint p = 0; p < nSpans; p++)
+			o << "&&yy" << span[i].to->label;
+			if (ch == 255)
 			{
-				if (span[p].ub > 0xFF)
-				{
-					wSpans++;
-				}
-				if (span[p].ub < 0x100)
-				{
-					lSpans++;
-				}
+				o << "\n";
+				i = lSpans;
+				break;
+			}
+			else if (ch % 8 == 7)
+			{
+				o << ",\n" << indent(ind);
+			}
+			else
+			{
+				o << "," << space(span[i].to->label);
 			}
 		}
-		else
-		{
-			lSpans = nSpans;
-		}
 	}
+	o << indent(--ind) << "};\n";
+	o << indent(ind) << "goto *yytarget[" << sYych << "];\n";
+	o << indent(--ind) << "}\n";
+}
 
-	if (gFlag && lSpans >= 16)
+void Go::genGoto(std::ostream &o, uint ind, const State *from, const State *next, bool &readCh)
+{
+	if ((gFlag || wFlag) && wSpans == ~0u)
 	{
-		const char * sYych = readCh ? "(yych = *YYCURSOR)" : "yych";
-
-		readCh = false;
-		if (wFlag)
+		uint nBitmaps = 0;
+		std::set<uint> vTargets;
+		wSpans = 0;
+		lSpans = 1;
+		dSpans = 0;
+		for (uint i = 0; i < nSpans; ++i)
 		{
-			o << indent(ind) << "if(" << sYych <<" & 0xFF00) {\n";
-			genBase(o, ind+1, from, next, readCh, 1);
-			o << indent(ind++) << "} else {\n";
-			sYych = "yych";
-		}
-		else
-		{
-			o << indent(ind++) << "{\n";
-		}
-		o << indent(ind++) << "static void *yytarget[256] = {\n";
-		o << indent(ind);
-
-		uint ch = 0;
-		for (uint i = 0; i < lSpans; ++i)
-		{
-			vUsedLabels.insert(span[i].to->label);
-			for(; ch < span[i].ub; ++ch)
+			if (span[i].ub > 0xFF)
 			{
-				o << "&&yy" << span[i].to->label;
-				if (ch == 255)
+				wSpans++;
+			}
+			if (span[i].ub < 0x100 || !wFlag)
+			{
+				lSpans++;
+
+				State *to = span[i].to;
+	
+				if (to && to->isBase)
 				{
-					o << "\n";
-					i = lSpans;
-					break;
-				}
-				else if (ch % 8 == 7)
-				{
-					o << ",\n" << indent(ind);
+					const BitMap *b = BitMap::find(to);
+					const char * sYych;
+	
+					if (b && matches(b->go, b->on, this, to))
+					{
+						nBitmaps++;
+					}
+					else
+					{
+						dSpans++;
+						vTargets.insert(to->label);
+					}
 				}
 				else
 				{
-					o << "," << space(span[i].to->label);
+					dSpans++;
+					vTargets.insert(to->label);
 				}
 			}
 		}
-		o << indent(--ind) << "};\n";
-		o << indent(ind) << "goto *yytarget[" << sYych << "];\n";
-		o << indent(--ind) << "}\n";
+		lTargets = vTargets.size() >> nBitmaps;
+	}
+
+	if (gFlag && (lTargets >= cGotoThreshold || dSpans >= cGotoThreshold))
+	{
+		genCpGoto(o, ind, from, next, readCh);
 		return;
 	}
 	else if (bFlag)
@@ -1648,6 +1673,10 @@ void Scanner::config(const Str& cfg, int num)
 	else if (cfg.to_string() == "yyfill:enable")
 	{
 		bUseYYFill = num != 0;
+	}
+	else if (cfg.to_string() == "cgoto:threshold")
+	{
+		cGotoThreshold = num;
 	}
 	else
 	{

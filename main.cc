@@ -44,6 +44,7 @@ bool bUseYYFill    = true;
 std::string startLabelName;
 uint maxFill = 1;
 uint next_label = 0;
+uint cGotoThreshold = 9;
 
 uint topIndent = 0;
 std::string indString("\t");
@@ -83,7 +84,7 @@ static const mbo_opt_struct OPTIONS[] =
 
 static void usage()
 {
-	cerr << "usage: re2c [-bdefhisvVw1] [-o file] file\n"
+	cerr << "usage: re2c [-bdefghisvVw1] [-o file] file\n"
 	"\n"
 	"-? -h  --help           Display this info.\n"
 	"\n"
@@ -101,7 +102,7 @@ static void usage()
 	"\n"
 	"-f     --storable-state Generate a scanner that supports storable states.\n"
 	"\n"
-	"-g     --computed-gotos Implies -b. Generate computed goto code (only useable \n"
+	"-g     --computed-gotos Implies -b. Generate computed goto code (only useable\n"
 	"                        with gcc).\n"
 	"\n"
 	"-i     --no-debug-info  Do not generate '#line' info (usefull for versioning).\n"
@@ -118,8 +119,9 @@ static void usage()
 	"-w     --wide-chars     Create a parser that supports wide chars (UCS-2). This\n"
 	"                        implies -s and cannot be used together with -e switch.\n"
 	"\n"
-	"-1     --single-pass    Force two pass generation, allows YYMAXFILL generation\n"
-	"                        prior to last re2c block.\n"
+	"-1     --single-pass    Force single pass generation, this cannot be combined\n"
+	"                        with -f and disables YYMAXFILL generation prior to last\n"
+	"                        re2c block.\n"
 	;
 }
 

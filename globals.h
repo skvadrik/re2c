@@ -34,6 +34,7 @@ extern bool bUseStartLabel;
 extern std::string startLabelName;
 extern uint maxFill;
 extern uint next_label;
+extern uint cGotoThreshold;
 
 /* configurations */
 extern uint topIndent;
