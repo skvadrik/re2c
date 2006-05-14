@@ -7,7 +7,7 @@
 <body>
 <h1>RE2C</h1>
 Section: User Commands (1)<br />
-Updated: 1 May 2006<br />
+Updated: 8 May 2006<br />
 <a href="#index">Index</a>
 <hr />
 <a name="lbAB" id="lbAB">&nbsp;</a>
@@ -15,7 +15,7 @@ Updated: 1 May 2006<br />
 <p>re2c - convert regular expressions to C/C++</p>
 <a name="lbAC" id="lbAC">&nbsp;</a>
 <h2>SYNOPSIS</h2>
-<p><b>re2c</b> [<b>-bdefhisvVw1</b>] [<b>-o output</b>] file</p>
+<p><b>re2c</b> [<b>-bdefghisvVw1</b>] [<b>-o output</b>] file</p>
 <a name="lbAD" id="lbAD">&nbsp;</a>
 <h2>DESCRIPTION</h2>
 <p><b>re2c</b> is a preprocessor that generates C-based recognizers from
@@ -54,7 +54,6 @@ char *scan(char *p)
 #define YYFILL(n)
 {
         YYCTYPE yych;
-        unsigned int yyaccept;
 
         if((YYLIMIT - YYCURSOR) &lt; 2) YYFILL(2);
         yych = *YYCURSOR;
@@ -111,6 +110,13 @@ YYDEBUG(int state, char current)</i>. The first parameter receives the state or
 <dt><b>-f</b></dt>
 <dd>Generate a scanner with support for storable state. For details see below
 at <b>SCANNER WITH STORABLE STATES</b>.<br /><br /></dd>
+<dt><b>-g</b></dt>
+<dd>Generate a scanner that utilizes GCC's computed goto feature. That is re2c
+generates jump tables whenever a decision is of a certain complexity (e.g. a 
+lot of if conditions are otherwise necessary). This is only useable with GCC 
+and produces output that cannot be compiled with any other compiler. Note that
+this implies -b and that the complexity threshold can be configured using the
+inplace configuration "cgoto:threshold".</dd>
 <dt><b>-i</b></dt>
 <dd>Do not output #line information. This is usefull when you want use a CMS
 tool with the re2c output which you might want if you do not require your users
@@ -127,7 +133,8 @@ generate better code.<br /><br /></dd>
 <dd>Create a parser that supports wide chars (UCS-2). This implies <b>-s</b>
 and cannot be used together with <b>-e</b> switch.<br /><br /></dd>
 <dt><b>-1</b></dt>
-<dd>Force single pass generation. This cannot be combined with -f.<br /><br /></dd>
+<dd>Force single pass generation, this cannot be combined with -f and disables 
+YYMAXFILL generation prior to last re2c block.<br /><br /></dd>
 </dl>
 <br />
 <br />
@@ -240,7 +247,7 @@ It is possible to trigger generation of the YYGETSTATE() block earlier by
 placing a "/*!getstate:re2c */" comment. This is especially useful when
 the scanner code should be wrapped inside a loop.</p>
 <p>Please see examples/push.re for push-model scanner. The generated code can be
-tweaked using configurations "state:abort" and "state:nextlabel".</p>
+tweaked using inplace configurations "state:abort" and "state:nextlabel".</p>
 <a name="lbAH" id="lbAH"> </a>
 <h2>SCANNER SPECIFICATIONS</h2>
 <p>Each scanner specification consists of a set of <i>rules</i>, <i>name
@@ -366,6 +373,11 @@ or default to yy0 as start label. Instead of using a dedicated label it
 is often better to separate the YYGETSTATE code from the actual scanner code by
 placing a "/*!getstate:re2c */" comment.
 </dd>
+<dd><i>re2c:cgoto:threshold</i> <b>=</b> 9 <b>;</b></dt>
+<dd>When -g is active this value specifies the complexity threshold that triggers
+generation of jump tables rather than using nested if's and decision bitfields.
+The threshold is compared against a calculated estimation of if-s needed where 
+every used bitmap divides the threshold by 2.</dd>
 </dl>
 <a name="lbAK" id="lbAK"> </a>
 <h2>UNDERSTANDING RE2C</h2>
@@ -418,7 +430,7 @@ specification for each start condition (as illustrated in the above example).
 <br />
 <a name="lbAO" id="lbAO"> </a>
 <h2>VERSION INFORMATION</h2>
-<p>This manpage describes <b>re2c</b>, version 0.10.2.</p>
+<p>This manpage describes <b>re2c</b>, version 0.10.3.</p>
 <hr />
 <a name="index" id="index"> </a>
 <h2>Index</h2>
@@ -442,6 +454,6 @@ specification for each start condition (as illustrated in the above example).
 <br />
 <hr />
 <p>This document was created by man2html, using the manual pages.<br />
-Time: 23:39:44 GMT, May 1, 2006</p>
+Time: 23:39:44 GMT, May 8, 2006</p>
 </body>
 </html>

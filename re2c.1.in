@@ -10,7 +10,7 @@
 re2c \- convert regular expressions to C/C++
 
 .SH SYNOPSIS
-\*(re [\fB-bdefhisvVw1\fP] [\fB-o output\fP] file\fP
+\*(re [\fB-bdefghisvVw1\fP] [\fB-o output\fP] file\fP
 
 .SH DESCRIPTION
 \*(re is a preprocessor that generates C-based recognizers from regular
@@ -122,6 +122,14 @@ Cross-compile from an ASCII platform to an EBCDIC one.
 Generate a scanner with support for storable state.
 For details see below at \fBSCANNER WITH STORABLE STATES\fP.
 .TP
+\fB-g\fP
+Generate a scanner that utilizes GCC's computed goto feature. That is re2c
+generates jump tables whenever a decision is of a certain complexity (e.g. a 
+lot of if conditions are otherwise necessary). This is only useable with GCC 
+and produces output that cannot be compiled with any other compiler. Note that
+this implies -b and that the complexity threshold can be configured using the
+inplace configuration "cgoto:threshold".
+.TP
 \fB-i\fP
 Do not output #line information. This is usefull when you want use a CMS tool
 with the re2c output which you might want if you do not require your users to 
@@ -144,7 +152,8 @@ Create a parser that supports wide chars (UCS-2). This implies \fB-s\fP and
 cannot be used together with \fB-e\fP switch.
 .TP
 \fB-1\fP
-Force single pass generation, this cannot be combined with -f.
+Force single pass generation, this cannot be combined with -f and disables 
+YYMAXFILL generation prior to last re2c block.
 .SH "INTERFACE CODE"
 Unlike other scanner generators, \*(re does not generate complete scanners:
 the user must supply some interface code.
@@ -274,7 +283,7 @@ placing a "\fC/*!getstate:re2c */\fP" comment. This is especially useful when
 the scanner code should be wrapped inside a loop.
 
 Please see examples/push.re for push-model scanner. The generated code can be
-tweaked using configurations "\fBstate:abort\fP" and "\fBstate:nextlabel\fP".
+tweaked using inplace configurations "\fBstate:abort\fP" and "\fBstate:nextlabel\fP".
 
 .SH "SCANNER SPECIFICATIONS"
 Each scanner specification consists of a set of \fIrules\fP, \fIname
@@ -433,6 +442,12 @@ usually also use configuration \fIstartlabel\fP to force a specific start label
 or default to \fCyy0\fP as start label. Instead of using a dedicated label it 
 is often better to separate the YYGETSTATE code from the actual scanner code by
 placing a "\fC/*!getstate:re2c */\fP" comment.
+.TP
+\fIre2c:cgoto:threshold\fP \fB=\fP 9 \fB;\fP
+When -g is active this value specifies the complexity threshold that triggers
+generation of jump tables rather than using nested if's and decision bitfields.
+The threshold is compared against a calculated estimation of if-s needed where 
+every used bitmap divides the threshold by 2.
 
 .SH "UNDERSTANDING RE2C"
 .LP
