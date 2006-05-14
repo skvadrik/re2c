@@ -38,12 +38,10 @@ yy8:
 		if(yych != 0x0A) goto yy11;
 yy9:
 		YYCURSOR = YYMARKER;
-		{
-			static void *yytarget[2] = {
-				&&yy3,
-				&&yy7,
-			};
-			goto *yytarget[yyaccept];
+		if(yyaccept <= 0) {
+			goto yy3;
+		} else {
+			goto yy7;
 		}
 yy10:
 		yych = *++YYCURSOR;

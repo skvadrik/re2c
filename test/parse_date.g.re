@@ -734,8 +734,8 @@ std:
 	s->tok = cursor;
 	s->len = 0;
 /*!re2c
+re2c:cgoto:threshold = 16;
 any = [\000-\377];
-
 space = [ ]+;
 frac = "."[0-9]+;
 
