@@ -12,8 +12,7 @@ char *scan(char *p)
 	char *q;
 #line 13 "config4f.f.re"
 
-	switch(YYGETSTATE())
-	{
+	switch(YYGETSTATE()) {
 	default: goto yy0;
 	case 0: goto yyFillLabel0;
 	case 1: goto yyFillLabel1;
@@ -22,7 +21,7 @@ char *scan(char *p)
 	// after getstate
 
 
-#line 26 "<stdout>"
+#line 25 "<stdout>"
 	{
 
 yy0:
@@ -30,7 +29,7 @@ yy0:
 		if((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
 yyFillLabel0:
 		yych = *YYCURSOR;
-		switch(yych){
+		switch(yych) {
 		case '0':
 		case '1':
 		case '2':
@@ -50,12 +49,12 @@ yy2:
 yy3:
 #line 21 "config4f.f.re"
 		{ return YYCURSOR; }
-#line 54 "<stdout>"
+#line 53 "<stdout>"
 yy4:
 		++YYCURSOR;
 #line 22 "config4f.f.re"
 		{ return NULL; }
-#line 59 "<stdout>"
+#line 58 "<stdout>"
 yy6:
 		++YYCURSOR;
 		YYSETSTATE(1);
@@ -63,7 +62,7 @@ yy6:
 yyFillLabel1:
 		yych = *YYCURSOR;
 yy7:
-		switch(yych){
+		switch(yych) {
 		case '0':
 		case '1':
 		case '2':

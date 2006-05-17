@@ -8,14 +8,14 @@
 
 	if((YYLIMIT - YYCURSOR) < 4) YYFILL(4);
 	yych = *YYCURSOR;
-	switch(yych){
+	switch(yych) {
 	case 0x0A:	goto yy4;
 	default:	goto yy2;
 	}
 yy2:
 	yyaccept = 0;
 	yych = *(YYMARKER = ++YYCURSOR);
-	switch(yych){
+	switch(yych) {
 	case 0x00:	goto yy6;
 	case 0x0A:	goto yy3;
 	default:	goto yy8;
@@ -32,7 +32,7 @@ yy4:
 yy6:
 	yyaccept = 1;
 	yych = *(YYMARKER = ++YYCURSOR);
-	switch(yych){
+	switch(yych) {
 	case 0x00:	goto yy10;
 	case 0x0A:	goto yy7;
 	default:	goto yy11;
@@ -43,7 +43,7 @@ yy7:
 #line 44 "<stdout>"
 yy8:
 	yych = *++YYCURSOR;
-	switch(yych){
+	switch(yych) {
 	case 0x00:	goto yy10;
 	case 0x0A:	goto yy9;
 	default:	goto yy11;

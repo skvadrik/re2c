@@ -15,7 +15,7 @@ char *q;
 
 	if((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
 	yych = *YYCURSOR;
-	switch(yych){
+	switch(yych) {
 	case '0':
 	case '1':
 	case '2':
@@ -46,7 +46,7 @@ yy6:
 	if(YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 yy7:
-	switch(yych){
+	switch(yych) {
 	case '0':
 	case '1':
 	case '2':

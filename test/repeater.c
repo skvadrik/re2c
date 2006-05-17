@@ -22,7 +22,7 @@ const char *q;
 
 	if((YYLIMIT - YYCURSOR) < 7) YYFILL(7);
 	yych = *YYCURSOR;
-	switch(yych){
+	switch(yych) {
 	case 0x0A:
 	case 'q':	goto yy7;
 	case 'A':	goto yy2;
@@ -32,7 +32,7 @@ const char *q;
 yy2:
 	yyaccept = 0;
 	yych = *(YYMARKER = ++YYCURSOR);
-	switch(yych){
+	switch(yych) {
 	case 0x0A:	goto yy10;
 	case 'A':
 	case 'a':	goto yy8;
@@ -45,7 +45,7 @@ yy3:
 yy4:
 	yyaccept = 1;
 	yych = *(YYMARKER = ++YYCURSOR);
-	switch(yych){
+	switch(yych) {
 	case 0x0A:	goto yy10;
 	case 'A':
 	case 'a':	goto yy8;
@@ -63,7 +63,7 @@ yy7:
 	goto yy5;
 yy8:
 	yych = *++YYCURSOR;
-	switch(yych){
+	switch(yych) {
 	case 0x0A:	goto yy13;
 	case 'A':
 	case 'a':	goto yy12;
@@ -82,7 +82,7 @@ yy10:
 #line 83 "<stdout>"
 yy12:
 	yych = *++YYCURSOR;
-	switch(yych){
+	switch(yych) {
 	case 0x0A:	goto yy13;
 	case 'A':
 	case 'a':	goto yy15;
@@ -95,7 +95,7 @@ yy13:
 #line 96 "<stdout>"
 yy15:
 	yych = *++YYCURSOR;
-	switch(yych){
+	switch(yych) {
 	case 0x0A:	goto yy17;
 	case 'A':
 	case 'a':	goto yy16;
@@ -103,7 +103,7 @@ yy15:
 	}
 yy16:
 	yych = *++YYCURSOR;
-	switch(yych){
+	switch(yych) {
 	case 0x0A:	goto yy17;
 	case 'A':
 	case 'a':	goto yy19;
@@ -116,7 +116,7 @@ yy17:
 #line 117 "<stdout>"
 yy19:
 	yych = *++YYCURSOR;
-	switch(yych){
+	switch(yych) {
 	case 0x0A:	goto yy20;
 	default:	goto yy23;
 	}
@@ -130,7 +130,7 @@ yy22:
 	if(YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 yy23:
-	switch(yych){
+	switch(yych) {
 	case 0x0A:	goto yy17;
 	case 'A':
 	case 'a':	goto yy22;

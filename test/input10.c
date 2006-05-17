@@ -7,7 +7,7 @@
 
 	if(YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
-	switch(yych){
+	switch(yych) {
 	case 'A':
 	case 'B':
 	case 'C':

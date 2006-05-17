@@ -7,7 +7,7 @@
 
 	if((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
 	yych = *YYCURSOR;
-	switch(yych){
+	switch(yych) {
 	case 0x00:	goto yy2;
 	case 0x01:	goto yy4;
 	case 0x02:	goto yy16;

@@ -17,7 +17,7 @@ char *scan0(char *p)
 
 	if((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
 	yych = *YYCURSOR;
-	switch(yych){
+	switch(yych) {
 	case '0':
 	case '1':
 	case '2':
@@ -48,7 +48,7 @@ yy6:
 	if(YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 yy7:
-	switch(yych){
+	switch(yych) {
 	case '0':
 	case '1':
 	case '2':
@@ -75,7 +75,7 @@ char *scan1(char *p)
 		YYCTYPE yych;
 		if((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
 		yych = *YYCURSOR;
-		switch(yych){
+		switch(yych) {
 		case '0':
 		case '1':
 		case '2':
@@ -106,7 +106,7 @@ yy14:
 		if(YYLIMIT == YYCURSOR) YYFILL(1);
 		yych = *YYCURSOR;
 yy15:
-		switch(yych){
+		switch(yych) {
 		case '0':
 		case '1':
 		case '2':
@@ -133,7 +133,7 @@ char *scan(char *p)
 		YYCTYPE yych;
 		if((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
 		yych = *YYCURSOR;
-		switch(yych){
+		switch(yych) {
 		case '0':
 		case '1':
 		case '2':
@@ -164,7 +164,7 @@ yy22:
 		if(YYLIMIT == YYCURSOR) YYFILL(1);
 		yych = *YYCURSOR;
 yy23:
-		switch(yych){
+		switch(yych) {
 		case '0':
 		case '1':
 		case '2':

@@ -26,7 +26,7 @@ cont:
 
 	if((YYLIMIT - YYCURSOR) < 3) YYFILL(3);
 	yych = *YYCURSOR;
-	switch(yych){
+	switch(yych) {
 	case 0x00:	goto yy4;
 	case '<':	goto yy2;
 	default:	goto yy6;
@@ -165,7 +165,7 @@ yy9:
 	++YYCURSOR;
 	if(YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
-	switch(yych){
+	switch(yych) {
 	case 'A':
 	case 'B':
 	case 'C':

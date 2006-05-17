@@ -803,7 +803,7 @@ std:
 		if((YYLIMIT - YYCURSOR) < 29) YYFILL(29);
 		yych = *YYCURSOR;
 		YYDEBUG(-1, yych);
-		switch(yych){
+		switch(yych) {
 		case 0x00:
 		case 0x0A:	goto yy48;
 		case 0x09:
@@ -1078,7 +1078,7 @@ yy9:
 		yyaccept = 0;
 		yych = *(YYMARKER = ++YYCURSOR);
 		YYDEBUG(-1, yych);
-		switch(yych){
+		switch(yych) {
 		case ')':	goto yy132;
 		case '0':
 		case '1':	goto yy1277;
@@ -1149,7 +1149,7 @@ yy10:
 		yyaccept = 0;
 		yych = *(YYMARKER = ++YYCURSOR);
 		YYDEBUG(-1, yych);
-		switch(yych){
+		switch(yych) {
 		case ')':	goto yy132;
 		case '0':
 		case '1':	goto yy1277;
@@ -1235,7 +1235,7 @@ yy13:
 		yyaccept = 1;
 		yych = *(YYMARKER = ++YYCURSOR);
 		YYDEBUG(-1, yych);
-		switch(yych){
+		switch(yych) {
 		case 0x09:	goto yy1230;
 		case ' ':
 		case 'A':
@@ -1287,7 +1287,7 @@ yy14:
 		yyaccept = 1;
 		yych = *(YYMARKER = ++YYCURSOR);
 		YYDEBUG(-1, yych);
-		switch(yych){
+		switch(yych) {
 		case 0x09:	goto yy682;
 		case ' ':
 		case 'A':
@@ -1341,7 +1341,7 @@ yy15:
 		yyaccept = 1;
 		yych = *(YYMARKER = ++YYCURSOR);
 		YYDEBUG(-1, yych);
-		switch(yych){
+		switch(yych) {
 		case 0x09:	goto yy682;
 		case ' ':
 		case 'A':
@@ -1395,7 +1395,7 @@ yy16:
 		yyaccept = 1;
 		yych = *(YYMARKER = ++YYCURSOR);
 		YYDEBUG(-1, yych);
-		switch(yych){
+		switch(yych) {
 		case 0x09:	goto yy682;
 		case ' ':
 		case 'A':
@@ -1449,7 +1449,7 @@ yy17:
 		yyaccept = 1;
 		yych = *(YYMARKER = ++YYCURSOR);
 		YYDEBUG(-1, yych);
-		switch(yych){
+		switch(yych) {
 		case 0x09:	goto yy682;
 		case ' ':
 		case 'A':
@@ -5091,7 +5091,7 @@ yy321:
 		yyaccept = 0;
 		yych = *(YYMARKER = ++YYCURSOR);
 		YYDEBUG(-1, yych);
-		switch(yych){
+		switch(yych) {
 		case 0x09:
 		case ' ':	goto yy163;
 		case ')':	goto yy132;
@@ -5544,7 +5544,7 @@ yy345:
 		yyaccept = 0;
 		yych = *(YYMARKER = ++YYCURSOR);
 		YYDEBUG(-1, yych);
-		switch(yych){
+		switch(yych) {
 		case 0x09:
 		case ' ':	goto yy163;
 		case ')':	goto yy132;
@@ -6345,7 +6345,7 @@ yy376:
 		yyaccept = 0;
 		yych = *(YYMARKER = ++YYCURSOR);
 		YYDEBUG(-1, yych);
-		switch(yych){
+		switch(yych) {
 		case 0x09:
 		case ' ':	goto yy163;
 		case ')':	goto yy132;
@@ -6766,7 +6766,7 @@ yy394:
 		yyaccept = 0;
 		yych = *(YYMARKER = ++YYCURSOR);
 		YYDEBUG(-1, yych);
-		switch(yych){
+		switch(yych) {
 		case 0x09:
 		case ' ':	goto yy163;
 		case ')':	goto yy132;
@@ -10252,7 +10252,7 @@ yy591:
 		yyaccept = 0;
 		yych = *(YYMARKER = ++YYCURSOR);
 		YYDEBUG(-1, yych);
-		switch(yych){
+		switch(yych) {
 		case 0x09:
 		case ' ':
 		case 'D':
@@ -12677,7 +12677,7 @@ yy683:
 yy684:
 		YYDEBUG(684, *YYCURSOR);
 		YYDEBUG(-1, yych);
-		switch(yych){
+		switch(yych) {
 		case 0x09:
 		case ' ':	goto yy683;
 		case '-':
@@ -12862,7 +12862,7 @@ yy694:
 		YYDEBUG(694, *YYCURSOR);
 		yych = *++YYCURSOR;
 		YYDEBUG(-1, yych);
-		switch(yych){
+		switch(yych) {
 		case '0':
 		case '1':
 		case '2':	goto yy869;
@@ -12895,7 +12895,7 @@ yy695:
 		YYDEBUG(695, *YYCURSOR);
 		yych = *++YYCURSOR;
 		YYDEBUG(-1, yych);
-		switch(yych){
+		switch(yych) {
 		case '0':	goto yy819;
 		case '1':	goto yy820;
 		case '2':
@@ -13913,7 +13913,7 @@ yy783:
 yy784:
 		YYDEBUG(784, *YYCURSOR);
 		YYDEBUG(-1, yych);
-		switch(yych){
+		switch(yych) {
 		case 0x09:
 		case ' ':
 		case '-':
@@ -15394,7 +15394,7 @@ yy930:
 		YYDEBUG(930, *YYCURSOR);
 		yych = *++YYCURSOR;
 		YYDEBUG(-1, yych);
-		switch(yych){
+		switch(yych) {
 		case 'A':
 		case 'a':	goto yy876;
 		case 'D':
@@ -15453,7 +15453,7 @@ yy936:
 		YYDEBUG(936, *YYCURSOR);
 		yych = *++YYCURSOR;
 		YYDEBUG(-1, yych);
-		switch(yych){
+		switch(yych) {
 		case '0':	goto yy945;
 		case '1':	goto yy946;
 		case '2':
@@ -15766,7 +15766,7 @@ yy970:
 		yyaccept = 14;
 		yych = *(YYMARKER = ++YYCURSOR);
 		YYDEBUG(-1, yych);
-		switch(yych){
+		switch(yych) {
 		case 0x09:
 		case ' ':
 		case 'A':
@@ -15827,7 +15827,7 @@ yy972:
 		YYDEBUG(972, *YYCURSOR);
 		yych = *++YYCURSOR;
 		YYDEBUG(-1, yych);
-		switch(yych){
+		switch(yych) {
 		case '0':	goto yy1156;
 		case '1':	goto yy1157;
 		case '2':
@@ -15872,7 +15872,7 @@ yy974:
 yy975:
 		YYDEBUG(975, *YYCURSOR);
 		YYDEBUG(-1, yych);
-		switch(yych){
+		switch(yych) {
 		case 0x09:
 		case ' ':	goto yy974;
 		case '-':
@@ -17246,7 +17246,7 @@ yy1120:
 yy1121:
 		YYDEBUG(1121, *YYCURSOR);
 		YYDEBUG(-1, yych);
-		switch(yych){
+		switch(yych) {
 		case 0x09:
 		case ' ':
 		case '-':
@@ -18292,7 +18292,7 @@ yy1231:
 yy1232:
 		YYDEBUG(1232, *YYCURSOR);
 		YYDEBUG(-1, yych);
-		switch(yych){
+		switch(yych) {
 		case 0x09:
 		case ' ':	goto yy1231;
 		case '-':
@@ -18381,7 +18381,7 @@ yy1236:
 		yyaccept = 20;
 		yych = *(YYMARKER = ++YYCURSOR);
 		YYDEBUG(-1, yych);
-		switch(yych){
+		switch(yych) {
 		case 0x09:
 		case ' ':
 		case 'A':

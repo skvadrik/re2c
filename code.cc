@@ -749,7 +749,7 @@ void Go::genSwitch(std::ostream &o, uint ind, const State *from, const State *ne
 		}
 		else
 		{
-			o << indent(ind) << "switch(yych){\n";
+			o << indent(ind) << "switch(yych) {\n";
 		}
 
 		while (t != &sP[0])
@@ -1603,8 +1603,7 @@ void genGetState(std::ostream &o, uint& ind, uint start_label)
 	if (fFlag && !bWroteGetState)
 	{
 		vUsedLabels.insert(start_label);
-		o << indent(ind) << "switch(YYGETSTATE())\n";
-		o << indent(ind) << "{\n";
+		o << indent(ind) << "switch(YYGETSTATE()) {\n";
 		if (bUseStateAbort)
 		{
 			o << indent(ind) << "default: abort();\n";

@@ -28,8 +28,7 @@ start:
 #line 29 "<stdout>"
 {
 
-	switch(YYGETSTATE())
-	{
+	switch(YYGETSTATE()) {
 	default: goto yy0;
 	case 0: goto yyFillLabel0;
 	}
@@ -41,7 +40,7 @@ yy0:
 	if(YYLIMIT == YYCURSOR) YYFILL(1);
 yyFillLabel0:
 	yych = *YYCURSOR;
-	switch(yych){
+	switch(yych) {
 	case 0x00:	goto yy5;
 	case 0x0A:	goto yy3;
 	default:	goto yy1;
@@ -53,14 +52,14 @@ yy3:
 		++n;
 		goto start;
 	}
-#line 57 "<stdout>"
+#line 56 "<stdout>"
 yy5:
 	++YYCURSOR;
 #line 32 "bug1472770.f.re"
 	{
 		return n;
 	}
-#line 64 "<stdout>"
+#line 63 "<stdout>"
 }
 #line 35 "bug1472770.f.re"
 

@@ -19,7 +19,7 @@ int scan(char *s)
 			YYCTYPE yych;
 
 			yych = *YYCURSOR;
-			switch(yych){
+			switch(yych) {
 			case 0x00:	goto yy10;
 			case '+':	goto yy6;
 			case '-':	goto yy8;
@@ -86,7 +86,7 @@ yy14:
 			++YYCURSOR;
 			yych = *YYCURSOR;
 yy15:
-			switch(yych){
+			switch(yych) {
 			case '0':
 			case '1':
 			case '2':
@@ -102,7 +102,7 @@ yy15:
 yy16:
 			++YYCURSOR;
 			yych = *YYCURSOR;
-			switch(yych){
+			switch(yych) {
 			case '0':
 			case '1':
 			case '2':
