@@ -29,13 +29,16 @@ scanner.cc
 y.tab.c
 y.tab.h
 version.h
-*.tar.gz
-*.tar.bz2
-*.zip
 *~
+*.bak
+*.ncb
 *.o
 *.rpm
 *.spec
+*.suo
+*.tar.gz
+*.tar.bz2
+*.zip
 .#*
 run_tests.sh
 Release
@@ -44,6 +47,4 @@ re2c.ncb
 re2c.suo
 Debug-2005
 Release-2005
-*.suo
-*.ncb
 re2c-2005.vcproj.*
