@@ -1,0 +1,6 @@
+0.7: 7 May 2006
+- Made error handling much better by getting rid of at_eof and adding
+  last_read_result to take its place.
+
+0.6:
+- create project

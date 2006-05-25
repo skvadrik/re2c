@@ -1,0 +1,3 @@
+$compare arg1
+STDERR:
+You must specify two files to compare.

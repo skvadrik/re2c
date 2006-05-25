@@ -1,0 +1,53 @@
+- Write a script that will update the re2c library in your project.
+	./update-libre2c
+  That will download files directly out of the re2c repository
+  (maybe using the viewcvs interface)?
+
+- Readprocs should probably have a strerror call that translates
+  a negative return value into a human-readable string.  I don't
+  see an easy way to add this to the API however.
+
+- Change scanners so that cursor and limit are automatic variables.
+  This should help the compiler optimize.  Don't do this optimization
+  without performance numbers and profiling though!
+
+- Is there a way to decouple scanstates and readprocs?  It would
+  certainly help when piggybacking a readproc if it didn't have
+  to know about the entire scanstate.
+  In addition, it would be good for the comparison scanner -- you
+  could set up TWO readprocs and then pass them to a comparison
+  routine that would return the final result.
+
+- Is there a way to standardize destructors?  How can we tell
+  each of the procs that the scanstate is going
+  away and they need to release their resources?
+
+  Yes, we can set up a linked list of destructor elements.
+  If a readproc, scanproc, etc wants to have its destructor called, it
+  just adds a malloc'd linked list item.  Then, on destruction:
+  	so, struct { destproc *proc, destelem *next, void *refcon } destelem;
+	void destroy(destelem *dd) {
+		destroy(dd->next);	
+		(*dd->proc)(dd->refcon);
+		free(dd);
+	}
+  But is this worth it?  None of the builtins need this sort of
+  heavyweight functionality.
+
+- Make the re2c library handle push mode.
+
+
+Ideas about re2c itself:
+
+re2c should follow include files!  How hard would it be to just
+	send files to the preprocessor before scanning them?  Easy?
+	Just fork and process the child's stdout.
+Get rid of the one scanner per file limit.  I should be able to
+    start a new scanner and use all declarations from scanners
+	defined previously in the file.  That would even allow you
+	to put shared tokens into header files.
+Add an option to output a state transition graph to graphviz
+	(maybe it would be possible to parse re2c's output?)
+Allow C++ comments inside the re2c section
+capturing parentheses -- this would be really handy.
+

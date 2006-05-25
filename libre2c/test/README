@@ -1,0 +1,12 @@
+This directory contains the unit tests for the re2c library.
+To run the tests, simply run the executable with no arguments.
+
+	zutest: the unit tests for the zutest unit test library.
+		(note that some tests should fail)
+
+	retest: the unit tests for the re2c library.
+
+Right now only the compare example contains unit tests.
+TODO: write more.  In particular, read_shiftbuf seems a
+good candidate for unit tests.  Also maybe the error handling.
+

@@ -1,0 +1,10 @@
+MKFILE file <<-EOL
+	Blah
+EOL
+
+$compare $file - <<-EOL
+	Bloh
+EOL
+
+STDOUT:
+Files differ.

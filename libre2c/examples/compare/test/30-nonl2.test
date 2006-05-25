@@ -1,0 +1,8 @@
+MKFILE file <<EOL
+Bogus
+EOL
+
+echo -n Bogus | $compare - $file
+
+STDOUT:
+Second file has 1 more newline than the first file.

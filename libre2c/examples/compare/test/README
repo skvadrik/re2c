@@ -1,0 +1,12 @@
+You need tmtest to run the testfiles in this directory.
+	http://tmtest.berlios.de
+
+tmtest is still very very prerelease.  You probably don't want to
+use it until it reaches 0.98 or so.
+
+
+TODO: should write functional tests to ensure that this code handles
+		read errors correctly.  That requires a custom readproc that
+		piggybacks onto the original readproc, returns a certain number
+		of bytes, then returns an error.  Not hard, but I won't do it
+		tonight...

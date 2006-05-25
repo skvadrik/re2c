@@ -1,0 +1,15 @@
+MKFILE file1 <<-EOL
+	This is
+	some
+	garbage.
+EOL
+
+MKFILE file2 <<-EOL
+	This is
+	some
+	garbage.
+EOL
+
+$compare $file1 $file2
+STDOUT:
+Files are identical.

@@ -1,0 +1,17 @@
+re2c Library README
+
+
+This is a library intended to make it easier to use re2c scanners.
+
+To use the library, just copy the re2c directory into your project tree.
+See examples/skeleton for a quick way to get started.
+
+To view the documentation:
+
+	$ make docs
+	$ www-browser docs/html/index.html
+
+You can also view the documentation online at http://u32.net/re2c
+
+All code in this library, like re2c itself, is released to the public domain.
+

@@ -1,0 +1,21 @@
+This directory contains a number of programs that demonstrate how
+to use the re2c library.
+
+
+skeleton: Get started quick by filling in the blanks.
+
+numscan-coupled: a very simple scanner and parser contained in a
+	single file.  Its documentation is inteded to be used as a tutorial.
+
+numscan-modular: Separates numscan-coupled into separate a separate
+	scanner and parser.  Also shows how to read data using fopen/fread.
+	Also intended to be used as a tutorial.
+
+startstate: How to use start states.  Implements a scanner that recognizes
+	C-style comments by swiching start states depending on whether it's
+	currently parsing a comment or not.
+
+compare: The re2c library can be useful even if you don't actually need
+	a scanner.  For example, recently I needed to compare two bytestreams
+	without reading either one entirely into memory.  Readprocs are a
+	good way of implementing this surprisingly complex task.

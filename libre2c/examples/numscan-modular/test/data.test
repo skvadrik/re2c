@@ -1,0 +1,23 @@
+# Ensures that a file consisting of a single newline works.
+
+$test <<EOL
+one: 1
+two: 22
+eight: 88888888 ten: 10 00
+EOL
+
+STDOUT:
+ 1: STR         <<one: >>
+ 1: NUM         <<1>>
+ 2: NEWLINE     
+ 2: STR         <<two: >>
+ 2: NUM         <<22>>
+ 3: NEWLINE     
+ 3: STR         <<eight: >>
+ 3: NUM         <<88888888>>
+ 3: STR         << ten: >>
+ 3: NUM         <<10>>
+ 3: STR         << >>
+ 3: NUM         <<00>>
+ 4: NEWLINE     
+ 4: EOF         <<>>

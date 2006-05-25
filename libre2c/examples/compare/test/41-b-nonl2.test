@@ -1,0 +1,14 @@
+MKFILE file <<-EOL
+	This is
+	some
+	garbage.
+EOL
+
+$compare --brief $file - <<-EOL
+	This is
+	some
+	garbage.
+EOL
+
+STDOUT:
+Files are identical.

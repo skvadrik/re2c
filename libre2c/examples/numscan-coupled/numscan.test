@@ -1,0 +1,16 @@
+# Ensure that the numscan example program produces the correct result.
+
+$MYDIR/numscan
+
+STDOUT:
+ 1: STR         <<Zero=>>
+ 1: NUM         <<0000>>
+ 2: NEWLINE     
+ 2: STR         <<one=>>
+ 2: NUM         <<1>>
+ 2: STR         << two is >>
+ 2: NUM         <<22222222>>
+ 3: NEWLINE     
+ 3: STR         <<etc.>>
+ 4: NEWLINE     
+ 4: EOF         <<>>

@@ -1,0 +1,6 @@
+# Ensures that a file consisting of a single newline works.
+
+$test < /dev/null
+
+STDOUT:
+ 1: EOF         <<>>

@@ -1,0 +1,7 @@
+# Ensures that a file consisting of a single newline works.
+
+echo | $test
+
+STDOUT:
+ 2: NEWLINE     
+ 2: EOF         <<>>

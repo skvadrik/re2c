@@ -1,0 +1,15 @@
+MKFILE file <<-EOL
+	This is
+	some
+	garbage.
+EOL
+
+$compare $file - <<-EOL
+	This is
+	some
+	garbage.
+
+EOL
+
+STDOUT:
+Second file has 1 more newline than the first file.
