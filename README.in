@@ -12,9 +12,18 @@ The re2c distribution can be found at:
 
     http://sourceforge.net/projects/re2c/
 
-re2c has been developed and tested with gcc 3.3 to 4.0.2, Microsoft and Intel
-compilers on various platforms. Building re2c requires autoconf 2.57 and bison
-(tested with 1.875 and later). Under windows you don't need autoconf or bison 
+re2c has been developed and tested with the following compilers on various 
+platforms in 32 bit and 64 bit mode:
+- GCC 3.3 ... 4.1
+- Microsoft VC 7, 7.1, 8
+- Intel 9.0
+- Sun C++ 5.8 (CXXFLAGS='-compat5 -library=stlport4')
+- MIPSpro Compilers: Version 7.4.4m
+
+GCC 2.x and Microsoft VC 6 are not capable of compiling re2c.
+
+Building re2c on unix like platforms requires autoconf 2.57 and bison (tested 
+with 1.875 and later). Under windows you don't need autoconf or bison 
 and can use the pregenerated files.
 
 You can build this software by simply typing the following commands:
