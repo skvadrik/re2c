@@ -14,6 +14,11 @@ namespace re2c
 
 void Symbol::ClearTable()
 {
+	for (SymbolTable::iterator it = symbol_table.begin(); it != symbol_table.end(); ++it)
+	{
+		delete it->second;
+	}
+	
 	symbol_table.clear();
 }
 
