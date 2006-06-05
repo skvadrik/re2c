@@ -178,6 +178,12 @@ public:
 
 public:
 	RuleOp(RegExp*, RegExp*, Token*, uint);
+
+	~RuleOp()
+	{
+		delete code;
+	}
+
 	const char *typeOf()
 	{
 		return type;
