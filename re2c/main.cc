@@ -58,6 +58,9 @@ uint next_fill_index = 0;
 uint last_fill_index = 0;
 std::set<uint> vUsedLabels;
 
+free_list<RegExp*> RegExp::vFreeList;
+free_list<Range*>  Range::vFreeList;
+
 using namespace std;
 
 static char *opt_arg = NULL;
