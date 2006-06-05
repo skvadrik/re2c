@@ -1204,12 +1204,12 @@ yyreduce:
 
   case 6:
 #line 96 "parser.y"
-    { in->config(*(yyvsp[-3].str), *(yyvsp[-1].str)); }
+    { in->config(*(yyvsp[-3].str), *(yyvsp[-1].str)); delete (yyvsp[-3].str); delete (yyvsp[-1].str); }
     break;
 
   case 7:
 #line 98 "parser.y"
-    { in->config(*(yyvsp[-3].str), (yyvsp[-1].number)); }
+    { in->config(*(yyvsp[-3].str), (yyvsp[-1].number)); delete (yyvsp[-3].str); }
     break;
 
   case 8:
@@ -1635,6 +1635,10 @@ void parse(Scanner& i, std::ostream& o)
 		}
 		o << sourceFileInfo;
 	}
+
+	RegExp::vFreeList.clear();
+	Range::vFreeList.clear();
+	Symbol::ClearTable();
 }
 
 } // end namespace re2c
