@@ -11,7 +11,7 @@ BUILT_SOURCES = parser.cc scanner.cc
 man_MANS     = re2c.1
 
 #CXXFLAGS     = -O2 -Wall -Wno-unused -Wno-parentheses -Wno-deprecated
-#CXXFLAGS     = -O2 -Wall -Wextra -pedantic -Wconversion -Wpointer-arith -Wwrite-strings -Wredundant-decls -Werror -Wunused-function -DPEDANTIC
+#CXXFLAGS     = -O0 -ggdb -Wall -Wextra -pedantic -Wconversion -Wpointer-arith -Wwrite-strings -Wredundant-decls -Werror -Wunused-function -DPEDANTIC
 YFLAGS       = -d
 
 RE2C         = re2c$(EXEEXT)
