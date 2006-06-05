@@ -180,10 +180,7 @@ BitMap::BitMap(const Go *g, const State *x)
 
 BitMap::~BitMap()
 {
-	if (next)
-	{
-		delete next;
-	}
+	delete next;
 }
 
 const BitMap *BitMap::find(const Go *g, const State *x)
