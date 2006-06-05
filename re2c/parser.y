@@ -93,9 +93,16 @@ decl	:	ID '=' expr ';'
 		      in->fatal("sym already defined");
 		  $1->re = $3; }
 	|	CONFIG '=' VALUE ';'
-		{ in->config(*$1, *$3); }
+		{
+			in->config(*$1, *$3);
+			delete $1;
+			delete $3;
+		}
 	|	CONFIG '=' NUMBER ';'
-		{ in->config(*$1, $3); }
+		{
+			in->config(*$1, $3);
+			delete $1;
+		}
 	;
 
 decl	:	ID '=' expr '/'
