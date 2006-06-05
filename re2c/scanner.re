@@ -357,5 +357,12 @@ void Scanner::fatal(uint ofs, const char *msg) const
    	exit(1);
 }
 
-} // end namespace re2c
+Scanner::~Scanner()
+{
+	if (bot)
+	{
+		delete [] bot;
+	}
+}
 
+} // end namespace re2c

@@ -27,6 +27,8 @@ private:
 
 public:
 	Scanner(std::istream&, std::ostream&);
+	~Scanner();
+
 	int echo();
 	int scan();
 	
