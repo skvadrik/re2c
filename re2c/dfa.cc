@@ -189,6 +189,7 @@ State::State()
 
 State::~State()
 {
+	delete action;
 	delete [] kernel;
 	delete [] go.span;
 }

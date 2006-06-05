@@ -1407,6 +1407,7 @@ void DFA::emit(std::ostream &o, uint ind)
 				if (s->go.span[i].to && !s->go.span[i].to->rule)
 				{
 					delete s->action;
+					s->action = NULL;
 
 					if (saves[s->rule->accept] == ~0u)
 					{
@@ -1500,6 +1501,7 @@ void DFA::emit(std::ostream &o, uint ind)
 	findBaseState();
 
 	delete head->action;
+	head->action = NULL;
 
 	if (bFlag)
 	{
