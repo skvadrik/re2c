@@ -306,7 +306,6 @@ int main(int argc, char *argv[])
 		parse(null_scanner, null_dev);
 		next_label = 0;
 		next_fill_index = 0;
-		Symbol::ClearTable();
 		bWroteGetState = false;
 		bUsedYYMaxFill = false;
 	}

@@ -215,6 +215,10 @@ void parse(Scanner& i, std::ostream& o)
 		}
 		o << sourceFileInfo;
 	}
+
+	RegExp::vFreeList.clear();
+	Range::vFreeList.clear();
+	Symbol::ClearTable();
 }
 
 } // end namespace re2c
