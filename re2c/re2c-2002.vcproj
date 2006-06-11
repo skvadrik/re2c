@@ -12,8 +12,8 @@
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory="Debug"
-			IntermediateDirectory="Debug"
+			OutputDirectory="Debug-2002"
+			IntermediateDirectory="Debug-2002"
 			ConfigurationType="1">
 			<Tool
 				Name="VCCLCompilerTool"
@@ -46,8 +46,8 @@
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory="Release"
-			IntermediateDirectory="Release"
+			OutputDirectory="Release-2002"
+			IntermediateDirectory="Release-2002"
 			ConfigurationType="1">
 			<Tool
 				Name="VCCLCompilerTool"
