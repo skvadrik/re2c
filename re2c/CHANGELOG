@@ -1,4 +1,4 @@
-Version 0.10.5 (200?-??-??)
+Version 0.10.5 (2006-06-11)
 ---------------------------
 - Fixed long form of -1 switch to --single-pass as noted in man page and help.
 - Added MSVC 2003 project files and renamed old 2002 ones.
