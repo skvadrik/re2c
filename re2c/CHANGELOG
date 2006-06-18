@@ -20,7 +20,7 @@ Version 0.10.2 (2006-05-01)
 - Fixed -i switch.
 - Added configuration 'yyfill:enable' to allow suppression of YYFILL() blocks.
 - Added tutorial like lessons to re2c.
-- Added /*!ignore!re2c */ to support documenting of re2c source.
+- Added /*!ignore:re2c */ to support documenting of re2c source.
 - Fixed issue with multiline re2c comments (/*!max:re2c ... */ and alike).
 - Fixed generation of YYDEBUG() when using -d switch.
 - Added /*!getstate:re2c */ which triggers generation of the YYGETSTATE() block.
