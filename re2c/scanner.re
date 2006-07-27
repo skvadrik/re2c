@@ -17,7 +17,7 @@ extern YYSTYPE yylval;
 
 #define	BSIZE	8192
 
-#define	YYCTYPE		char
+#define	YYCTYPE		unsigned char
 #define	YYCURSOR	cursor
 #define	YYLIMIT		lim
 #define	YYMARKER	ptr

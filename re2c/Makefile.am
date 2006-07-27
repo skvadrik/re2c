@@ -15,7 +15,7 @@ man_MANS     = re2c.1
 YFLAGS       = -d
 
 RE2C         = re2c$(EXEEXT)
-RE2CFLAGS    = -s
+RE2CFLAGS    = -b
 
 CLEANFILES   = parser.cc y.tab.c y.tab.h scanner.cc re2c.1 .version
 
