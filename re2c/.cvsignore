@@ -15,6 +15,7 @@ config.status
 config.log
 config.sub
 config.guess
+config_w32.h
 config.h
 depcomp
 compile
