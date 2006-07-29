@@ -299,8 +299,14 @@ code:
 				  goto code; }
 	"{"			{ ++depth;
 				  goto code; }
-	"\n"			{ if(cursor == eof) fatal("missing '}'");
+	"\n"		{ if(cursor == eof) fatal("missing '}'");
 				  pos = cursor; cline++;
+				  goto code;
+				}
+	zero		{ if(cursor == eof) {
+					if (depth) fatal("missing '}'");
+					RETURN(0);
+				  }
 				  goto code;
 				}
 	dstring | sstring | any	{ goto code; }

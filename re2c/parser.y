@@ -28,7 +28,7 @@ void yyerror(const char*);
 
 static re2c::uint accept;
 static RegExp *spec;
-static Scanner *in;
+static Scanner *in = NULL;
 
 /* Bison version 1.875 emits a definition that is not working
  * with several g++ version. Hence we disable it here.
@@ -182,7 +182,7 @@ void yyerror(const char* s)
 }
 
 int yylex(){
-    return in->scan();
+    return in ? in->scan() : 0;
 }
 } // end extern "C"
 
@@ -212,6 +212,7 @@ void parse(Scanner& i, std::ostream& o)
 	RegExp::vFreeList.clear();
 	Range::vFreeList.clear();
 	Symbol::ClearTable();
+	in = NULL;
 }
 
 } // end namespace re2c

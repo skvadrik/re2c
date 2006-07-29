@@ -1,5 +1,9 @@
 Version 0.11.0 (????-??-??)
 ---------------------------
+
+Version 0.10.6 (2006-??-??)
+---------------------------
+- Fixed #1529351 Segv bug on unterminated code blocks
 - Fixed #1528269 Invalid code generation.
 
 Version 0.10.5 (2006-06-11)
