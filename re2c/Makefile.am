@@ -11,7 +11,7 @@ BUILT_SOURCES = parser.cc scanner.cc
 man_MANS     = re2c.1
 
 #CXXFLAGS     = -O2 -Wall -Wno-unused -Wno-parentheses -Wno-deprecated
-#CXXFLAGS     = -O0 -ggdb -Wall -Wextra -pedantic -Wconversion -Wpointer-arith -Wwrite-strings -Wredundant-decls -Werror -Wunused-function -DPEDANTIC
+#CXXFLAGS     = -O2 -Wall -Wextra -pedantic -Wconversion -Wpointer-arith -Wwrite-strings -Wredundant-decls -Werror -Wunused-function -DPEDANTIC
 YFLAGS       = -d
 
 RE2C         = re2c$(EXEEXT)
@@ -27,10 +27,10 @@ EXTRA_DIST   = $(EXTRA_SRC) makerpm.in re2c.spec.in re2c.spec README.in config_w
 EXTRA_ZIP    = $(EXTRA_SRC) config_w32.h *.sln *.vcproj
 
 dist-hook: re2c.spec
-	rm -rf `find $(distdir)/doc -name CVS`
-	rm -rf `find $(distdir)/examples -name CVS`
-	rm -rf `find $(distdir)/test -name CVS`
-	rm -rf `find $(distdir)/lessons -name CVS -o -name .cvsignore`
+	rm -rf `find $(distdir)/doc -name .svn`
+	rm -rf `find $(distdir)/examples -name .svn`
+	rm -rf `find $(distdir)/test -name .svn -o -name .cvsignore`
+	rm -rf `find $(distdir)/lessons -name .svn -o -name .cvsignore`
 
 rpm-files:	$(bin_PROGRAMS) $(EXTRA_DIST)
 
