@@ -17,7 +17,7 @@ platforms in 32 bit and 64 bit mode:
 - GCC 3.3 ... 4.1
 - Microsoft VC 7, 7.1, 8
 - Intel 9.0
-- Sun C++ 5.8 (CXXFLAGS='-compat5 -library=stlport4')
+- Sun C++ 5.8 (CXXFLAGS='-library=stlport4')
 - MIPSpro Compilers: Version 7.4.4m
 
 GCC 2.x and Microsoft VC 6 are not capable of compiling re2c.
