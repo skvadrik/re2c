@@ -7,7 +7,7 @@
 <body>
 <h1>RE2C</h1>
 Section: User Commands (1)<br />
-Updated: 5 Aug 2006<br />
+Updated: 5 Nov 2006<br />
 <a href="#index">Index</a>
 <hr />
 <a name="lbAB" id="lbAB">&nbsp;</a>
@@ -125,6 +125,11 @@ Specify the output file.<br /><br /></dd>
 <dt><b>-s</b></dt>
 <dd>Generate nested ifs for some switches. Many compilers need this assist to
 generate better code.<br /><br /></dd>
+<dt><b>-u</b></dt>
+<dd>Generate a parser that supports Unicode chars (UTF-32). This means the 
+generated code can deal with any valid Unicode character up to 0x10FFFF. When
+UTF-8 or UTF-16 needs to be supported you need to convert the incoming stream
+to UTF-32 upon input yourself.<br /><br /></dd>
 <dt><b>-v</b></dt>
 <dd>Show version information.<br /><br /></dd>
 <dt><b>-V</b></dt>
@@ -430,7 +435,7 @@ specification for each start condition (as illustrated in the above example).
 <br />
 <a name="lbAO" id="lbAO"> </a>
 <h2>VERSION INFORMATION</h2>
-<p>This manpage describes <b>re2c</b>, version 0.10.6.</p>
+<p>This manpage describes <b>re2c</b>, version 0.11.0.</p>
 <hr />
 <a name="index" id="index"> </a>
 <h2>Index</h2>
@@ -454,6 +459,6 @@ specification for each start condition (as illustrated in the above example).
 <br />
 <hr />
 <p>This document was created by man2html, using the manual pages.<br />
-Time: 00:00:00 GMT, August 5, 2006</p>
+Time: 00:00:00 GMT, November 5, 2006</p>
 </body>
 </html>

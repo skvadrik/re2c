@@ -141,6 +141,12 @@ Specify the output file.
 Generate nested \fCif\fPs for some \fCswitch\fPes.  Many compilers need this
 assist to generate better code.
 .TP
+\fB-u\fP
+Generate a parser that supports Unicode chars (UTF-32). This means the 
+generated code can deal with any valid Unicode character up to 0x10FFFF. When
+UTF-8 or UTF-16 needs to be supported you need to convert the incoming stream
+to UTF-32 upon input yourself.
+.TP
 \fB-v\fP
 Show version information.
 .TP
