@@ -21,6 +21,7 @@ extern bool fFlag;
 extern bool gFlag;
 extern bool iFlag;
 extern bool sFlag;
+extern bool uFlag;
 extern bool wFlag;
 
 extern bool bSinglePass;

@@ -28,6 +28,7 @@ bool fFlag = false;
 bool gFlag = false;
 bool iFlag = false;
 bool sFlag = false;
+bool uFlag = false;
 bool wFlag = false;
 
 bool bSinglePass = false;
@@ -78,6 +79,7 @@ static const mbo_opt_struct OPTIONS[] =
 	mbo_opt_struct('i', 0, "no-debug-info"),
 	mbo_opt_struct('o', 1, "output"),
 	mbo_opt_struct('s', 0, "nested-ifs"),
+	mbo_opt_struct('u', 0, "unicode"),
 	mbo_opt_struct('v', 0, "version"),
 	mbo_opt_struct('V', 0, "vernum"),
 	mbo_opt_struct('w', 0, "wide-chars"),      
@@ -115,6 +117,8 @@ static void usage()
 	"\n"
 	"-s     --nested-ifs     Generate nested ifs for some switches. Many compilers\n"
 	"                        need this assist to generate better code.\n"
+	"\n"
+	"-u     --unicode        Implies -w but supports the full Unicode character set.\n"
 	"\n"
 	"-v     --version        Show version information.\n"
 	"-V     --vernum         Show version as one number.\n"
@@ -191,10 +195,6 @@ int main(int argc, char *argv[])
 			break;
 			
 			case '1':
-			if (bFlag) {
-				std::cerr << "re2c: error: cannot combine -1 and -f switch\n";
-				return 1;
-			}
 			bSinglePass = true;
 			break;
 
@@ -225,9 +225,21 @@ int main(int argc, char *argv[])
 			}
 			
 			case 'w':
-			nRealChars = (1<<16);
+			if (uFlag)
+			{
+				std::cerr << "re2c: error: cannot combine -w and -u switch\n";
+				return 1;
+			}
+			nRealChars = (1<<16); /* 0x10000 */
 			sFlag = true;
 			wFlag = true;
+			break;
+
+			case 'u':
+			nRealChars = 0x110000; /* 17 times w-Flag */
+			sFlag = true;
+			wFlag = true;
+			uFlag = true;
 			break;
 	  
 			case 'h':
@@ -236,6 +248,11 @@ int main(int argc, char *argv[])
 			usage();
 			return 2;
 		}
+	}
+
+	if (bFlag && bSinglePass) {
+		std::cerr << "re2c: error: cannot combine -1 and -f switch\n";
+		return 1;
 	}
 
 	if (wFlag && eFlag)
