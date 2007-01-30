@@ -39,7 +39,7 @@ void scan(YYCTYPE *pText, size_t *pSize, int *pbChanged)
 	while(1) {
 loop:
 {
-	static unsigned char yybm[] = {
+	static const unsigned char yybm[] = {
 		128, 128, 128, 128, 128, 128, 128, 128, 
 		128, 128,   0, 128, 128, 128, 128, 128, 
 		128, 128, 128, 128, 128, 128, 128, 128, 

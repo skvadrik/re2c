@@ -19,7 +19,7 @@ int scan(char *p)
 	printf("]--------------\n");
 start:
 {
-	static unsigned char yybm[] = {
+	static const unsigned char yybm[] = {
 		  0, 128, 128, 128, 128, 128, 128, 128, 
 		128, 128,   0, 128, 128, 128, 128, 128, 
 		128, 128, 128, 128, 128, 128, 128, 128, 

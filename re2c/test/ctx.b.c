@@ -46,7 +46,7 @@ std:
 	s.tok = cursor;
 
 {
-	static unsigned char yybm[] = {
+	static const unsigned char yybm[] = {
 		  0,   0,   0,   0,   0,   0,   0,   0, 
 		  0,   0,   0,   0,   0,   0,   0,   0, 
 		  0,   0,   0,   0,   0,   0,   0,   0, 

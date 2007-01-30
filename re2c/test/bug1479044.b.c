@@ -14,7 +14,7 @@ char *scan281(char *p)
 	char *q;
 start:
 {
-	static unsigned char yybm[] = {
+	static const unsigned char yybm[] = {
 		/* table 1 .. 8: 0 */
 		170, 170, 170, 170, 170, 170, 170, 170, 
 		170, 170,   0, 170, 170, 170, 170, 170, 

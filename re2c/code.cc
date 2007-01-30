@@ -215,7 +215,7 @@ void BitMap::gen(std::ostream &o, uint ind, uint lb, uint ub)
 
 	if (b && bLastPass)
 	{
-		o << indent(ind) << "static unsigned char yybm[] = {";
+		o << indent(ind) << "static const unsigned char yybm[] = {";
 
 		uint c = 1, n = ub - lb;
 

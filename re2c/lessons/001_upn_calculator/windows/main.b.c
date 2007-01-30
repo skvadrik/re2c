@@ -51,7 +51,7 @@ int ScanFullSpeed(char *pzStrToScan, size_t lenStrToScan)
 	for(;;)
 	{
 		{
-			static unsigned char yybm[] = {
+			static const unsigned char yybm[] = {
 				  0,   0,   0,   0,   0,   0,   0,   0, 
 				  0,   0,   0,   0,   0,   0,   0,   0, 
 				  0,   0,   0,   0,   0,   0,   0,   0, 
@@ -180,7 +180,7 @@ int scan(char *pzStrToScan, size_t lenStrToScan)
 	for(;;)
 	{
 		{
-			static unsigned char yybm[] = {
+			static const unsigned char yybm[] = {
 				  0,   0,   0,   0,   0,   0,   0,   0, 
 				  0,   0,   0,   0,   0,   0,   0,   0, 
 				  0,   0,   0,   0,   0,   0,   0,   0, 

@@ -65,7 +65,7 @@ int scan(char *s)
 	{
 		t = p;
 		{
-			static unsigned char yybm[] = {
+			static const unsigned char yybm[] = {
 				  0,   0,   0,   0,   0,   0,   0,   0, 
 				  0, 128,   0,   0,   0,   0,   0,   0, 
 				  0,   0,   0,   0,   0,   0,   0,   0, 
