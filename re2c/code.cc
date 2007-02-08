@@ -211,18 +211,17 @@ const BitMap *BitMap::find(const State *x)
 
 void BitMap::gen(std::ostream &o, uint ind, uint lb, uint ub)
 {
-	BitMap *b = first;
-
-	if (b && bLastPass)
+	if (first && bLastPass)
 	{
 		o << indent(ind) << "static const unsigned char yybm[] = {";
 
 		uint c = 1, n = ub - lb;
+		const BitMap *cb = first;
 
-		while((b = const_cast<BitMap*>(b->next)) != NULL) {
+		while((cb = cb->next) != NULL) {
 			++c;
 		}
-		b = first;
+		BitMap *b = first;
 
 		uint *bm = new uint[n];
 		
