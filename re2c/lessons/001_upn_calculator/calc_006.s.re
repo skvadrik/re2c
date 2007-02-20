@@ -29,7 +29,9 @@
 
 - optimizing the generated code by using -s command line switch of re2c
   . This tells re2c to generate code that uses if statements rather 
-    then endless switch/case expressions where appropriate. 
+    then endless switch/case expressions where appropriate. Note that the 
+    generated code now requires the input to be unsigned char rather than char
+    due to the way comparisons are generated.
 */
 
 #include <stdlib.h>
@@ -41,7 +43,7 @@
 int  stack[4];
 int  depth = 0;
 
-int push_num(const char *t, const char *l, int radix)
+int push_num(const unsigned char *t, const unsigned char *l, int radix)
 {
 	int num = 0;
 	
@@ -53,7 +55,7 @@ int push_num(const char *t, const char *l, int radix)
 	--t;
 	while(++t < l)
 	{
-		num = num * radix + (*t - '0');
+		num = num * radix + (*t - (unsigned char)'0');
 	}
 	DEBUG(printf("Num: %d\n", num));
 
@@ -83,11 +85,11 @@ int stack_sub()
 
 int scan(char *s)
 {
-	char *p = s;
-	char *t;
+	unsigned char *p = (unsigned char*)s;
+	unsigned char *t;
 	int res = 0;
 	
-#define YYCTYPE         char
+#define YYCTYPE         unsigned char
 #define YYCURSOR        p
 	
 	while(!res)
@@ -107,7 +109,7 @@ int scan(char *s)
 	INT		{ res = push_num(t, p, 10); continue; }
 	"+"		{ res = stack_add();		continue; }
 	"-"		{ res = stack_sub();		continue; }
-	"\000"  { res = depth == 1 ? 0 : 2;	continue; }
+	"\000"  { res = depth == 1 ? 0 : 2;	break; }
 	[^]		{ res = 1; 					continue; }
 */
 	}
@@ -123,14 +125,15 @@ int main(int argc, char **argv)
 		
 		while(!res && ++argp < argc)
 		{
-			inp = argv[argp];
+			inp = strdup(argv[argp]);
 			len = strlen(inp);
 			if (inp[0] == '\"' && inp[len-1] == '\"')
 			{
+				inp[len - 1] = '\0';
 				++inp;
-				len -=2;
 			}
 			res = scan(inp);
+			free(inp);
 		}
 		switch(res)
 		{

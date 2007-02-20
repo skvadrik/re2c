@@ -46,7 +46,7 @@
 # error BSIZE must be greater YYMAXFILL
 #endif
 
-#define	YYCTYPE		char
+#define	YYCTYPE		unsigned char
 #define	YYCURSOR	s.cur
 #define	YYLIMIT		s.lim
 #define YYMARKER	s.mrk
@@ -55,16 +55,16 @@
 
 typedef struct Scanner
 {
-	FILE		*fp;
-	char		*cur, *tok, *lim, *eof, *ctx, *mrk;
-	char 		buffer[BSIZE];
+	FILE			*fp;
+	unsigned char	*cur, *tok, *lim, *eof, *ctx, *mrk;
+	unsigned char 	buffer[BSIZE];
 } Scanner;
 
 int fill(Scanner *s, int len)
 {
 	if (!len)
 	{
-		s->tok = s->cur = s->lim = s->mrk = s->buffer;
+		s->cur = s->tok = s->lim = s->mrk = s->buffer;
 		s->eof = 0;
 	}
 	if (!s->eof)

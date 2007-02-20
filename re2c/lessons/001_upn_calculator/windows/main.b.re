@@ -78,9 +78,9 @@ void InitHiResTimerAndVerifyWorking(void)
  */
 int ScanFullSpeed(char *pzStrToScan, size_t lenStrToScan)
 {
-	char *pzCurScanPos = pzStrToScan;
-	char *pzBacktrackInfo = 0;
-#define YYCTYPE         char
+	unsigned char *pzCurScanPos = (unsigned char*)pzStrToScan;
+	unsigned char *pzBacktrackInfo = 0;
+#define YYCTYPE         unsigned char
 #define YYCURSOR        pzCurScanPos
 #define YYLIMIT         (pzStrToScan+lenStrToScan)
 #define YYMARKER        pzBacktrackInfo
@@ -105,9 +105,9 @@ int ScanFullSpeed(char *pzStrToScan, size_t lenStrToScan)
  */
 int scan(char *pzStrToScan, size_t lenStrToScan)
 {
-	char *pzCurScanPos = pzStrToScan;
-	char *pzBacktrackInfo = 0;
-#define YYCTYPE         char
+	unsigned char *pzCurScanPos = (unsigned char*)pzStrToScan;
+	unsigned char *pzBacktrackInfo = 0;
+#define YYCTYPE         unsigned char
 #define YYCURSOR        pzCurScanPos
 #define YYLIMIT         (pzStrToScan+lenStrToScan)
 #define YYMARKER        pzBacktrackInfo

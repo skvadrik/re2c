@@ -14,23 +14,23 @@
 # error BSIZE must be greater YYMAXFILL
 #endif
 
-#define	YYCTYPE		char
+#define	YYCTYPE		unsigned char
 #define	YYCURSOR	s.cur
 #define	YYLIMIT		s.lim
 #define	YYFILL(n)	{ if ((res = fill(&s, n)) >= 0) break; }
 
 typedef struct Scanner
 {
-	FILE		*fp;
-	char		*cur, *tok, *lim, *eof;
-	char 		buffer[BSIZE];
+	FILE			*fp;
+	unsigned char	*cur, *tok, *lim, *eof;
+	unsigned char 	buffer[BSIZE];
 } Scanner;
 
 int fill(Scanner *s, int len)
 {
 	if (!len)
 	{
-		s->tok = s->cur = buf = s->lim = s->buffer
+		s->cur = s->tok = s->lim = s->buffer;
 		s->eof = 0;
 	}
 	if (!s->eof)
