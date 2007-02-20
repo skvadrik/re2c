@@ -43,6 +43,7 @@ bool bUseStateNext = false;
 bool bUseYYFill    = true;
 
 std::string startLabelName;
+std::string labelPrefix("yy");
 uint maxFill = 1;
 uint next_label = 0;
 uint cGotoThreshold = 9;
@@ -58,6 +59,7 @@ uint nRealChars = 256;
 uint next_fill_index = 0;
 uint last_fill_index = 0;
 std::set<uint> vUsedLabels;
+re2c::CodeNames mapCodeName;
 
 free_list<RegExp*> RegExp::vFreeList;
 free_list<Range*>  Range::vFreeList;

@@ -7,6 +7,7 @@
 #include <algorithm>
 #include <string>
 #include "stream_lc.h"
+#include "code_names.h"
 
 namespace re2c
 {
@@ -33,6 +34,7 @@ extern bool bUsedYYMarker;
 
 extern bool bUseStartLabel;
 extern std::string startLabelName;
+extern std::string labelPrefix;
 extern uint maxFill;
 extern uint next_label;
 extern uint cGotoThreshold;
@@ -54,6 +56,7 @@ extern uint *xlat, *talx;
 extern uint next_fill_index;
 extern uint last_fill_index;
 extern std::set<uint> vUsedLabels;
+extern re2c::CodeNames mapCodeName;
 
 extern uint nRealChars;
 
