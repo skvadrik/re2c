@@ -367,6 +367,9 @@ normal <b>yy0</b> like start label is only being generated if needed. If set to
 a text value then a label with that text will be generated regardless of
 whether the normal start label is being used or not. This setting is being
 reset to <b>0</b> after a start label has been generated.</dd>
+<dt><i>re2c:labelprefix</i> <b>=</b> yy <b>;</b></dt>
+<dd>Allows to change the prefix of numbered labels. The default is \fByy\fP and
+can be set any string that is a valid label.</dd>
 <dt><i>re2c:state:abort</i> <b>=</b> 0 <b>;</b></dt>
 <dd>When not zero and switch -f is active then the YYGETSTATE block will 
 contain a default case that aborts and a -1 case is used for initialization.</dd>
@@ -376,10 +379,9 @@ followed by a yyNext: label line. Instead of using yyNext you can
 usually also use configuration <i>startlabel</i> to force a specific start label
 or default to yy0 as start label. Instead of using a dedicated label it 
 is often better to separate the YYGETSTATE code from the actual scanner code by
-placing a "/*!getstate:re2c */" comment.
-</dd>
+placing a "/*!getstate:re2c */" comment.</dd>
 <dd><i>re2c:cgoto:threshold</i> <b>=</b> 9 <b>;</b></dt>
-<dd>When -g is active this value specifies the complexity threshold that triggers
+<dt>When -g is active this value specifies the complexity threshold that triggers
 generation of jump tables rather than using nested if's and decision bitfields.
 The threshold is compared against a calculated estimation of if-s needed where 
 every used bitmap divides the threshold by 2.</dd>

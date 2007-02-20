@@ -436,6 +436,10 @@ value then a label with that text will be generated regardless of whether the
 normal start label is being used or not. This setting is being reset to \fB0\fP
 after a start label has been generated.
 .TP
+\fIre2c:labelprefix\fP \fB=\fP yy \fB;\fP
+Allows to change the prefix of numbered labels. The default is \fByy\fP and
+can be set any string that is a valid label.
+.TP
 \fIre2c:state:abort\fP \fB=\fP 0 \fB;\fP
 When not zero and switch -f is active then the \fCYYGETSTATE\fP block will 
 contain a default case that aborts and a -1 case is used for initialization.
