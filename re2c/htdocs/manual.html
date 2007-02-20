@@ -332,9 +332,9 @@ and its two hexadecimal digits or a backslash, an upper cased <b>X</b> and its
 four hexadecimal digits.</p>
 <p>re2c further more supports the c/c++ unicode notation. That is a backslash
 followed by either a lowercased <b>u</b> and its four hexadecimal digits or an
-uppercased <b>U</b> and its eight hexadecimal digits. However using the U
-notation it is not possible to support characters greater <b>\U0000FFFF</b> due
-to an internal limitation of re2c.</p>
+uppercased <b>U</b> and its eight hexadecimal digits. However only in \fB-u\fP 
+mode the generated code can deal with any valid Unicode character up to 
+0x10FFFF.</p>
 <p>Since characters greater <b>\X00FF</b> are not allowed in non unicode mode,
 the only portable "<b>any</b>" rules are <b>(.|"\n")</b> and <b>[^]</b>.</p>
 <p>The regular expressions listed above are grouped according to precedence,
@@ -435,7 +435,7 @@ specification for each start condition (as illustrated in the above example).
 <br />
 <a name="lbAO" id="lbAO"> </a>
 <h2>VERSION INFORMATION</h2>
-<p>This manpage describes <b>re2c</b>, version 0.11.1.</p>
+<p>This manpage describes <b>re2c</b>, version 0.11.2.</p>
 <hr />
 <a name="index" id="index"> </a>
 <h2>Index</h2>

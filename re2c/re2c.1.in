@@ -394,9 +394,8 @@ four hexadecimal digits.
 re2c
 further more supports the c/c++ unicode notation. That is a backslash followed
 by either a lowercased \fBu\fP and its four hexadecimal digits or an uppercased 
-\fBU\fP and its eight hexadecimal digits. However using the U notation it is 
-not possible to support characters greater \fB\\U0000FFFF\fP due to an internal 
-limitation of re2c.
+\fBU\fP and its eight hexadecimal digits. However only in \fB-u\fP mode the
+generated code can deal with any valid Unicode character up to 0x10FFFF.
 .LP
 Since characters greater \fB\\X00FF\fP are not allowed in non unicode mode, the 
 only portable "\fBany\fP" rules are \fB(.|"\\n")\fP and \fB[^]\fP.
