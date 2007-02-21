@@ -82,7 +82,7 @@ yy7:    if(yych &lt;= '/') goto yy3;
 <br />
 <br />
 <p>You can place one /*!max:re2c */ comment that will output a "#define YYMAXFILL
-&lt;n&gt" line that holds the maximum number of characters 
+&lt;n&gt;" line that holds the maximum number of characters 
 required to parse the input. That is the maximum value YYFILL(n)
 will receive. If -1 is in effect then YYMAXFILL can be triggered once 
 after the last /*!re2c */.</p>
@@ -380,11 +380,50 @@ usually also use configuration <i>startlabel</i> to force a specific start label
 or default to yy0 as start label. Instead of using a dedicated label it 
 is often better to separate the YYGETSTATE code from the actual scanner code by
 placing a "/*!getstate:re2c */" comment.</dd>
-<dd><i>re2c:cgoto:threshold</i> <b>=</b> 9 <b>;</b></dt>
-<dt>When -g is active this value specifies the complexity threshold that triggers
+<dt><i>re2c:cgoto:threshold</i> <b>=</b> 9 <b>;</b></dt>
+<dd>When -g is active this value specifies the complexity threshold that triggers
 generation of jump tables rather than using nested if's and decision bitfields.
 The threshold is compared against a calculated estimation of if-s needed where 
 every used bitmap divides the threshold by 2.</dd>
+<dt><i>re2c:code:yyaccept</i> <b>=</b> yyaccept <b>;</b></dt>
+<dd>Allows to overwrite the name of the variable yyaccept.</dd>
+<dt><i>re2c:code:yybm</i> <b>=</b> yybm <b>;</b></dt>
+<dd>Allows to overwrite the name of the variable yybm.</dd>
+<dt><i>re2c:code:yych</i> <b>=</b> yych <b>;</b></dt>
+<dd>Allows to overwrite the name of the variable yych.</dd>
+<dt><i>re2c:code:yytarget</i> <b>=</b> yytarget <b>;</b></dt>
+<dd>Allows to overwrite the name of the variable yytarget.</dd>
+<dt><i>re2c:define:YYCTXMARKER</i> <b>=</b> YYCTXMARKER <b>;</b></dt>
+<dd>Allows to overwrite the define YYCTXMARKER and thus avoiding it by setting the
+value to the actual code needed.</dd>
+<dt><i>re2c:define:YYCTYPE</i> <b>=</b> YYCTYPE <b>;</b></dt>
+<dd>Allows to overwrite the define YYCTYPE and thus avoiding it by setting the
+value to the actual code needed.</dd>
+<dt><i>re2c:define:YYCURSOR</i> <b>=</b> YYCURSOR <b>;</b></dt>
+<dd>Allows to overwrite the define YYCURSOR and thus avoiding it by setting the
+value to the actual code needed.</dd>
+<dt><i>re2c:define:YYDEBUG</i> <b>=</b> YYDEBUG <b>;</b></dt>
+<dd>Allows to overwrite the define YYDEBUG and thus avoiding it by setting the
+value to the actual code needed.</dd>
+<dt><i>re2c:define:YYFILL</i> <b>=</b> YYFILL <b>;</b></dt>
+<dd>Allows to overwrite the define YYFILL and thus avoiding it by setting the
+value to the actual code needed.</dd>
+<dt><i>re2c:define:YYGETSTATE</i> <b>=</b> YYGETSTATE <b>;</b></dt>
+<dd>Allows to overwrite the define YYGETSTATE and thus avoiding it by setting the
+value to the actual code needed.</dd>
+<dt><i>re2c:define:YYLIMIT</i> <b>=</b> YYLIMIT <b>;</b></dt>
+<dd>Allows to overwrite the define YYLIMIT and thus avoiding it by setting the
+value to the actual code needed.</dd>
+<dt><i>re2c:define:YYMARKER</i> <b>=</b> YYMARKER <b>;</b></dt>
+<dd>Allows to overwrite the define YYMARKER and thus avoiding it by setting the
+value to the actual code needed.</dd>
+<dt><i>re2c:define:YYSETSTATE</i> <b>=</b> YYSETSTATE <b>;</b></dt>
+<dd>Allows to overwrite the define YYSETSTATE and thus avoiding it by setting the
+value to the actual code needed.</dd>
+<dt><i>re2c:label:yyFillLabel</i> <b>=</b> yyFillLabel <b>;</b></dt>
+<dd>Allows to overwrite the name of the label yyFillLabel.</dd>
+<dt><i>re2c:label:yyNext</i> <b>=</b> yyNext <b>;</b></dt>
+<dd>Allows to overwrite the name of the label yyNext.</dd>
 </dl>
 <a name="lbAK" id="lbAK"> </a>
 <h2>UNDERSTANDING RE2C</h2>

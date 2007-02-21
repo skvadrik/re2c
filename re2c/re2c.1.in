@@ -123,7 +123,7 @@ Generate a scanner with support for storable state.
 For details see below at \fBSCANNER WITH STORABLE STATES\fP.
 .TP
 \fB-g\fP
-Generate a scanner that utilizes GCC's computed goto feature. That is re2c
+Generate a scanner that utilizes GCC's computed goto feature. That is \*(re
 generates jump tables whenever a decision is of a certain complexity (e.g. a 
 lot of if conditions are otherwise necessary). This is only useable with GCC 
 and produces output that cannot be compiled with any other compiler. Note that
@@ -132,8 +132,8 @@ inplace configuration "cgoto:threshold".
 .TP
 \fB-i\fP
 Do not output #line information. This is usefull when you want use a CMS tool
-with the re2c output which you might want if you do not require your users to 
-have re2c themselves when building from your source.
+with the \*(re output which you might want if you do not require your users to 
+have \*(re themselves when building from your source.
 \fB-o output\fP
 Specify the output file.
 .TP
@@ -159,7 +159,7 @@ cannot be used together with \fB-e\fP switch.
 .TP
 \fB-1\fP
 Force single pass generation, this cannot be combined with -f and disables 
-YYMAXFILL generation prior to last re2c block.
+YYMAXFILL generation prior to last \*(re block.
 .SH "INTERFACE CODE"
 Unlike other scanner generators, \*(re does not generate complete scanners:
 the user must supply some interface code.
@@ -233,11 +233,11 @@ input at the current cursor.
 This will be automatically defined by \fC/*!max:re2c */\fP blocks as explained above.
 
 .SH "SCANNER WITH STORABLE STATES"
-When the \fB-f\fP flag is specified, re2c generates a scanner that
+When the \fB-f\fP flag is specified, \*(re generates a scanner that
 can store its current state, return to the caller, and later resume
 operations exactly where it left off.
 
-The default operation of re2c is a "pull" model, where the scanner asks
+The default operation of \*(re is a "pull" model, where the scanner asks
 for extra input whenever it needs it. However, this mode of operation
 assumes that the scanner is the "owner" the parsing loop, and that may
 not always be convenient.
@@ -252,9 +252,9 @@ chunk by chunk. When the scanner runs out of data to consume, it just stores
 its state, and return to the caller. When more input data is fed to the scanner,
 it resumes operations exactly where it left off.
 
-When using the -f option re2c does not accept stdin because it has to do the 
+When using the -f option \*(re does not accept stdin because it has to do the 
 full generation process twice which means it has to read the input twice. That
-means re2c would fail in case it cannot open the input twice or reading the
+means \*(re would fail in case it cannot open the input twice or reading the
 input for the first time influences the second read attempt.
 
 Changes needed compared to the "pull" model.
@@ -391,8 +391,7 @@ and a hexadecimal character is defined by backslash, a lower cased '\fBx\fP'
 and its two hexadecimal digits or a backslash, an upper cased \fBX\fP and its 
 four hexadecimal digits.
 .LP
-re2c
-further more supports the c/c++ unicode notation. That is a backslash followed
+\*(re further more supports the c/c++ unicode notation. That is a backslash followed
 by either a lowercased \fBu\fP and its four hexadecimal digits or an uppercased 
 \fBU\fP and its eight hexadecimal digits. However only in \fB-u\fP mode the
 generated code can deal with any valid Unicode character up to 0x10FFFF.
@@ -406,7 +405,7 @@ Those grouped together have equal precedence.
 
 .SH "INPLACE CONFIGURATION"
 .LP
-It is possible to configure code generation inside re2c blocks. The following
+It is possible to configure code generation inside \*(re blocks. The following
 lists the available configurations:
 .TP
 \fIre2c:indent:top\fP \fB=\fP 0 \fB;\fP
@@ -457,11 +456,65 @@ When -g is active this value specifies the complexity threshold that triggers
 generation of jump tables rather than using nested if's and decision bitfields.
 The threshold is compared against a calculated estimation of if-s needed where 
 every used bitmap divides the threshold by 2.
+.TP
+\fIre2c:code:yyaccept\fP \fB=\fP yyaccept \fB;\fP
+Allows to overwrite the name of the variable yyaccept.
+.TP
+\fIre2c:code:yybm\fP \fB=\fP yybm \fB;\fP
+Allows to overwrite the name of the variable yybm.
+.TP
+\fIre2c:code:yych\fP \fB=\fP yych \fB;\fP
+Allows to overwrite the name of the variable yych.
+.TP
+\fIre2c:code:yytarget\fP \fB=\fP yytarget \fB;\fP
+Allows to overwrite the name of the variable yytarget.
+.TP
+\fIre2c:define:YYCTXMARKER\fP \fB=\fP YYCTXMARKER \fB;\fP
+Allows to overwrite the define YYCTXMARKER and thus avoiding it by setting the
+value to the actual code needed.
+.TP
+\fIre2c:define:YYCTYPE\fP \fB=\fP YYCTYPE \fB;\fP
+Allows to overwrite the define YYCTYPE and thus avoiding it by setting the
+value to the actual code needed.
+.TP
+\fIre2c:define:YYCURSOR\fP \fB=\fP YYCURSOR \fB;\fP
+Allows to overwrite the define YYCURSOR and thus avoiding it by setting the
+value to the actual code needed.
+.TP
+\fIre2c:define:YYDEBUG\fP \fB=\fP YYDEBUG \fB;\fP
+Allows to overwrite the define YYDEBUG and thus avoiding it by setting the
+value to the actual code needed.
+.TP
+\fIre2c:define:YYFILL\fP \fB=\fP YYFILL \fB;\fP
+Allows to overwrite the define YYFILL and thus avoiding it by setting the
+value to the actual code needed.
+.TP
+\fIre2c:define:YYGETSTATE\fP \fB=\fP YYGETSTATE \fB;\fP
+Allows to overwrite the define YYGETSTATE and thus avoiding it by setting the
+value to the actual code needed.
+.TP
+\fIre2c:define:YYLIMIT\fP \fB=\fP YYLIMIT \fB;\fP
+Allows to overwrite the define YYLIMIT and thus avoiding it by setting the
+value to the actual code needed.
+.TP
+\fIre2c:define:YYMARKER\fP \fB=\fP YYMARKER \fB;\fP
+Allows to overwrite the define YYMARKER and thus avoiding it by setting the
+value to the actual code needed.
+.TP
+\fIre2c:define:YYSETSTATE\fP \fB=\fP YYSETSTATE \fB;\fP
+Allows to overwrite the define YYSETSTATE and thus avoiding it by setting the
+value to the actual code needed.
+.TP
+\fIre2c:label:yyFillLabel\fP \fB=\fP yyFillLabel \fB;\fP
+Allows to overwrite the name of the label yyFillLabel.
+.TP
+\fIre2c:label:yyNext\fP \fB=\fP yyNext \fB;\fP
+Allows to overwrite the name of the label yyNext.
 
 .SH "UNDERSTANDING RE2C"
 .LP
-The subdirectory lessons of the re2c distribution contains a few step by step
-lessons to get you started with re2c. All examples in the lessons subdirectory
+The subdirectory lessons of the \*(re distribution contains a few step by step
+lessons to get you started with \*(re. All examples in the lessons subdirectory
 can be compiled and actually work.
 
 .SH FEATURES
@@ -496,7 +549,7 @@ The \*(re internal algorithms need documentation.
 .LP
 flex(1), lex(1).
 .P
-More information on \fBre2c\fP can be found here:
+More information on \*(re can be found here:
 .PD 0
 .P
 .B http://sourceforge.net/projects/re2c/
@@ -520,6 +573,6 @@ Emmanuel Mogenet <mgix@mgix.com> added storable state
 .PD 1
 
 .SH VERSION INFORMATION
-This manpage describes \fBre2c\fP, version @PACKAGE_VERSION@.
+This manpage describes \*(re, version @PACKAGE_VERSION@.
 
 .fi
