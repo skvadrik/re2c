@@ -1697,13 +1697,18 @@ void Scanner::config(const Str& cfg, int num)
 	}
 }
 
-static std::set<std::string> mapDefineKeys;
 static std::set<std::string> mapCodeKeys;
+static std::set<std::string> mapDefineKeys;
+static std::set<std::string> mapLabelKeys;
 
 void Scanner::config(const Str& cfg, const Str& val)
 {
 	if (mapDefineKeys.empty())
 	{
+		mapCodeKeys.insert("code:yyaccept");
+		mapCodeKeys.insert("code:yybm");
+		mapCodeKeys.insert("code:yych");
+		mapCodeKeys.insert("code:yytarget");
 		mapDefineKeys.insert("define:YYCTXMARKER");
 		mapDefineKeys.insert("define:YYCTYPE");
 		mapDefineKeys.insert("define:YYCURSOR");
@@ -1713,12 +1718,8 @@ void Scanner::config(const Str& cfg, const Str& val)
 		mapDefineKeys.insert("define:YYLIMIT");
 		mapDefineKeys.insert("define:YYMARKER");
 		mapDefineKeys.insert("define:YYSETSTATE");
-		mapCodeKeys.insert("code:yyFillLabel");
-		mapCodeKeys.insert("code:yyNext");
-		mapCodeKeys.insert("code:yyaccept");
-		mapCodeKeys.insert("code:yybm");
-		mapCodeKeys.insert("code:yych");
-		mapCodeKeys.insert("code:yytarget");
+		mapLabelKeys.insert("label:yyFillLabel");
+		mapLabelKeys.insert("label:yyNext");
 	}
 
 	std::string strVal;
@@ -1747,13 +1748,17 @@ void Scanner::config(const Str& cfg, const Str& val)
 	{
 		labelPrefix = strVal;
 	}
+	else if (mapCodeKeys.find(cfg.to_string()) != mapCodeKeys.end())
+    {
+    	mapCodeName[cfg.to_string().c_str() + sizeof("code:") - 1] = strVal;
+    }
 	else if (mapDefineKeys.find(cfg.to_string()) != mapDefineKeys.end())
     {
     	mapCodeName[cfg.to_string().c_str() + sizeof("define:") - 1] = strVal;
     }
-	else if (mapCodeKeys.find(cfg.to_string()) != mapCodeKeys.end())
+	else if (mapLabelKeys.find(cfg.to_string()) != mapLabelKeys.end())
     {
-    	mapCodeName[cfg.to_string().c_str() + sizeof("code:") - 1] = strVal;
+    	mapCodeName[cfg.to_string().c_str() + sizeof("label:") - 1] = strVal;
     }
 	else
 	{
