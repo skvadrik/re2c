@@ -1,6 +1,6 @@
 Version 0.11.2 (????-??-??)
 ---------------------------
-- Added ability to avoid defines and overwrite generated variable names.
+- Added ability to avoid defines and overwrite variable and label names.
 
 Version 0.11.1 (2007-02-20)
 ---------------------------
