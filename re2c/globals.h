@@ -26,6 +26,7 @@ extern bool uFlag;
 extern bool wFlag;
 
 extern bool bSinglePass;
+extern bool bFirstPass;
 extern bool bLastPass;
 
 extern bool bUsedYYAccept;

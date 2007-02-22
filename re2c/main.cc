@@ -32,6 +32,7 @@ bool uFlag = false;
 bool wFlag = false;
 
 bool bSinglePass = false;
+bool bFirstPass  = true;
 bool bLastPass   = false;
 
 bool bUsedYYAccept  = false;
@@ -327,6 +328,7 @@ int main(int argc, char *argv[])
 		next_fill_index = 0;
 		bWroteGetState = false;
 		bUsedYYMaxFill = false;
+		bFirstPass = false;
 	}
 
 	bLastPass = true;
