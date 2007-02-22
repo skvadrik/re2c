@@ -1750,15 +1750,27 @@ void Scanner::config(const Str& cfg, const Str& val)
 	}
 	else if (mapCodeKeys.find(cfg.to_string()) != mapCodeKeys.end())
     {
-    	mapCodeName[cfg.to_string().c_str() + sizeof("code:") - 1] = strVal;
+    	if ((bSinglePass || !bLastPass) 
+    	&& !mapCodeName.insert(std::make_pair(cfg.to_string().substr(sizeof("code:") - 1), strVal)).second)
+    	{
+			fatal("variable already being used and cannot be changed");
+    	}
     }
 	else if (mapDefineKeys.find(cfg.to_string()) != mapDefineKeys.end())
     {
-    	mapCodeName[cfg.to_string().c_str() + sizeof("define:") - 1] = strVal;
+    	if ((bSinglePass || !bLastPass) 
+    	&& !mapCodeName.insert(std::make_pair(cfg.to_string().substr(sizeof("define:") - 1), strVal)).second)
+    	{
+ 			fatal("define already being used and cannot be changed");
+ 		}
     }
 	else if (mapLabelKeys.find(cfg.to_string()) != mapLabelKeys.end())
     {
-    	mapCodeName[cfg.to_string().c_str() + sizeof("label:") - 1] = strVal;
+    	if ((bSinglePass || !bLastPass) 
+    	&& !mapCodeName.insert(std::make_pair(cfg.to_string().substr(sizeof("label:") - 1), strVal)).second)
+    	{
+			fatal("label already being used and cannot be changed");
+    	}
     }
 	else
 	{
