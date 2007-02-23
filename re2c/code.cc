@@ -1697,7 +1697,7 @@ void Scanner::config(const Str& cfg, int num)
 	}
 }
 
-static std::set<std::string> mapCodeKeys;
+static std::set<std::string> mapVariableKeys;
 static std::set<std::string> mapDefineKeys;
 static std::set<std::string> mapLabelKeys;
 
@@ -1705,10 +1705,10 @@ void Scanner::config(const Str& cfg, const Str& val)
 {
 	if (mapDefineKeys.empty())
 	{
-		mapCodeKeys.insert("code:yyaccept");
-		mapCodeKeys.insert("code:yybm");
-		mapCodeKeys.insert("code:yych");
-		mapCodeKeys.insert("code:yytarget");
+		mapVariableKeys.insert("variable:yyaccept");
+		mapVariableKeys.insert("variable:yybm");
+		mapVariableKeys.insert("variable:yych");
+		mapVariableKeys.insert("variable:yytarget");
 		mapDefineKeys.insert("define:YYCTXMARKER");
 		mapDefineKeys.insert("define:YYCTYPE");
 		mapDefineKeys.insert("define:YYCURSOR");
@@ -1748,10 +1748,10 @@ void Scanner::config(const Str& cfg, const Str& val)
 	{
 		labelPrefix = strVal;
 	}
-	else if (mapCodeKeys.find(cfg.to_string()) != mapCodeKeys.end())
+	else if (mapVariableKeys.find(cfg.to_string()) != mapVariableKeys.end())
     {
     	if (bFirstPass && !mapCodeName.insert(
-    			std::make_pair(cfg.to_string().substr(sizeof("code:") - 1), strVal)
+    			std::make_pair(cfg.to_string().substr(sizeof("variable:") - 1), strVal)
     			).second)
     	{
 			fatal("variable already being used and cannot be changed");

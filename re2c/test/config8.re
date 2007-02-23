@@ -48,7 +48,7 @@ re2c:define:YYMARKER	= s.ptr;
 re2c:define:YYCTXMARKER	= s.ctx;
 re2c:define:YYFILL      = fill;
 
-re2c:code:yych          = curr;
+re2c:variable:yych      = curr;
 re2c:labelprefix        = xx;
 
 ("a"|"b")/[1]    { return KEYWORD; }
