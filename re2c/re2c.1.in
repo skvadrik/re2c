@@ -457,18 +457,6 @@ generation of jump tables rather than using nested if's and decision bitfields.
 The threshold is compared against a calculated estimation of if-s needed where 
 every used bitmap divides the threshold by 2.
 .TP
-\fIre2c:code:yyaccept\fP \fB=\fP yyaccept \fB;\fP
-Allows to overwrite the name of the variable yyaccept.
-.TP
-\fIre2c:code:yybm\fP \fB=\fP yybm \fB;\fP
-Allows to overwrite the name of the variable yybm.
-.TP
-\fIre2c:code:yych\fP \fB=\fP yych \fB;\fP
-Allows to overwrite the name of the variable yych.
-.TP
-\fIre2c:code:yytarget\fP \fB=\fP yytarget \fB;\fP
-Allows to overwrite the name of the variable yytarget.
-.TP
 \fIre2c:define:YYCTXMARKER\fP \fB=\fP YYCTXMARKER \fB;\fP
 Allows to overwrite the define YYCTXMARKER and thus avoiding it by setting the
 value to the actual code needed.
@@ -510,6 +498,18 @@ Allows to overwrite the name of the label yyFillLabel.
 .TP
 \fIre2c:label:yyNext\fP \fB=\fP yyNext \fB;\fP
 Allows to overwrite the name of the label yyNext.
+.TP
+\fIre2c:variable:yyaccept\fP \fB=\fP yyaccept \fB;\fP
+Allows to overwrite the name of the variable yyaccept.
+.TP
+\fIre2c:variable:yybm\fP \fB=\fP yybm \fB;\fP
+Allows to overwrite the name of the variable yybm.
+.TP
+\fIre2c:variable:yych\fP \fB=\fP yych \fB;\fP
+Allows to overwrite the name of the variable yych.
+.TP
+\fIre2c:variable:yytarget\fP \fB=\fP yytarget \fB;\fP
+Allows to overwrite the name of the variable yytarget.
 
 .SH "UNDERSTANDING RE2C"
 .LP
