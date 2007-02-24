@@ -904,7 +904,7 @@ void Go::genCpGoto(std::ostream &o, uint ind, const State *from, const State *ne
 	readCh = false;
 	if (wFlag)
 	{
-		o << indent(ind) << "if(" << sYych <<" & 0xFF00) {\n";
+		o << indent(ind) << "if(" << sYych <<" & ~0xFF) {\n";
 		genBase(o, ind+1, from, next, readCh, 1);
 		o << indent(ind++) << "} else {\n";
 		sYych = mapCodeName["yych"];
@@ -1021,7 +1021,7 @@ void Go::genGoto(std::ostream &o, uint ind, const State *from, const State *next
 					readCh = false;
 					if (wFlag)
 					{
-						o << indent(ind) << "if(" << sYych << " & 0xFF00) {\n";
+						o << indent(ind) << "if(" << sYych << " & ~0xFF) {\n";
 						sYych = mapCodeName["yych"];
 						genBase(o, ind+1, from, next, readCh, 1);
 						o << indent(ind) << "} else ";

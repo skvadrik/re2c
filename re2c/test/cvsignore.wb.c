@@ -138,7 +138,7 @@ yy17:
 		if(YYLIMIT == YYCURSOR) YYFILL(1);
 		yych = *YYCURSOR;
 yy18:
-		if(yych & 0xFF00) {
+		if(yych & ~0xFF) {
 			goto yy17;
 		} else if(yybm[0+yych] & 128) {
 			goto yy17;
