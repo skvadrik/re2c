@@ -2,7 +2,7 @@
 #line 1 "cvsignore.u.re"
 
 #define YYFILL(n) if (cursor >= limit) break;
-#define YYCTYPE unsigned short
+#define YYCTYPE unsigned int
 #define YYCURSOR cursor
 #define YYLIMIT limit
 #define YYMARKER marker
