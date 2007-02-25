@@ -39,9 +39,10 @@ bool bUsedYYAccept  = false;
 bool bUsedYYMaxFill = false;
 bool bUsedYYMarker  = true;
 
-bool bUseStartLabel= false;
-bool bUseStateNext = false;
-bool bUseYYFill    = true;
+bool bUseStartLabel  = false;
+bool bUseStateNext   = false;
+bool bUseYYFill      = true;
+bool bUseYYFillParam = true;
 
 std::string startLabelName;
 std::string labelPrefix("yy");

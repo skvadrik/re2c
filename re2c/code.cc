@@ -327,12 +327,17 @@ static void need(std::ostream &o, uint ind, uint n, bool & readCh, bool bSetMark
 	{
 		if (n == 1)
 		{
-			o << indent(ind) << "if(" << mapCodeName["YYLIMIT"] << " == " << mapCodeName["YYCURSOR"] << ") " << mapCodeName["YYFILL"] << "(1);\n";
+			o << indent(ind) << "if(" << mapCodeName["YYLIMIT"] << " == " << mapCodeName["YYCURSOR"] << ") " << mapCodeName["YYFILL"];
 		}
 		else
 		{
-			o << indent(ind) << "if((" << mapCodeName["YYLIMIT"] << " - " << mapCodeName["YYCURSOR"] << ") < " << n << ") " << mapCodeName["YYFILL"] << "(" << n << ");\n";
+			o << indent(ind) << "if((" << mapCodeName["YYLIMIT"] << " - " << mapCodeName["YYCURSOR"] << ") < " << n << ") " << mapCodeName["YYFILL"];
 		}
+		if (bUseYYFillParam)
+		{
+			o << "(" << n << ")";
+		}
+		o << ";\n";
 	}
 
 	if (fFlag)
@@ -1686,6 +1691,10 @@ void Scanner::config(const Str& cfg, int num)
 	else if (cfg.to_string() == "yyfill:enable")
 	{
 		bUseYYFill = num != 0;
+	}
+	else if (cfg.to_string() == "yyfill:parameter")
+	{
+		bUseYYFillParam = num != 0;
 	}
 	else if (cfg.to_string() == "cgoto:threshold")
 	{

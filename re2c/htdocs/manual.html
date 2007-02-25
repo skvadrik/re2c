@@ -360,6 +360,11 @@ will be generated.</dd>
 <dd>Set this to zero to suppress generation of YYFILL(n). When using this be sure
 to verify that the generated scanner does not read behind input. Allowing
 this behavior might introduce sever security issues to you programs.</dd>
+<dt><i>re2c:yyfill:parameter</i> <b>=</b> 1 <b>;</b></dt>
+<dd>Allows to suppress parameter passing to <b>YYFILL</b> calls. If set to zero 
+then no parameter is passed to <b>YYFILL</b>. If set to a non zero value then
+<b>YYFILL</b> usage will be followed by the number of requested characters in
+braces.</dd>
 <dt><i>re2c:startlabel</i> <b>=</b> 0 <b>;</b></dt>
 <dd>If set to a non zero integer then the start label of the next scanner
 blocks will be generated even if not used by the scanner itself. Otherwise the
@@ -385,7 +390,6 @@ placing a "/*!getstate:re2c */" comment.</dd>
 generation of jump tables rather than using nested if's and decision bitfields.
 The threshold is compared against a calculated estimation of if-s needed where 
 every used bitmap divides the threshold by 2.</dd>
-.TP
 <dt><i>re2c:yych:conversion</i> <b>=</b> 0 <b>;</b></dt>
 <dd>When the input uses signed characters and <b>-s</b> or <b>-b</b> switches are
 in effect re2c allows to automatically convert to the unsigned character type

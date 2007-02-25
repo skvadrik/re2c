@@ -427,6 +427,12 @@ Set this to zero to suppress generation of YYFILL(n). When using this be sure
 to verify that the generated scanner does not read behind input. Allowing
 this behavior might introduce sever security issues to you programs.
 .TP
+\fIre2c:yyfill:parameter\fP \fB=\fP 1 \fB;\fP
+Allows to suppress parameter passing to \fBYYFILL\fP calls. If set to zero 
+then no parameter is passed to \fBYYFILL\fP. If set to a non zero value then
+\fBYYFILL\fP usage will be followed by the number of requested characters in
+braces.
+.TP
 \fIre2c:startlabel\fP \fB=\fP 0 \fB;\fP
 If set to a non zero integer then the start label of the next scanner blocks 
 will be generated even if not used by the scanner itself. Otherwise the normal 
