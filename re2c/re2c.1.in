@@ -457,6 +457,18 @@ generation of jump tables rather than using nested if's and decision bitfields.
 The threshold is compared against a calculated estimation of if-s needed where 
 every used bitmap divides the threshold by 2.
 .TP
+\fIre2c:yych:conversion\fP \fB=\fP 0 \fB;\fP
+When the input uses signed characters and \fB-s\fP or \fB-b\fP switches are 
+in effect re2c allows to automatically convert to the unsigned character type 
+that is then necessary for its internal single character. When this setting 
+is zero or an empty string the conversion is disabled. Using a non zero number
+the conversion is taken from \fBYYCTYPE\fP. If that is given by an inplace 
+configuration that value is being used. Otherwise it will be \fB(YYCTYPE)\fP 
+and changes to that configuration are  no longer possible. When this setting is
+a string the braces must be specified. Now assuming your input is a \fBchar*\fP
+buffer and you are using above mentioned switches you can set \fBYYCTYPE\fP to
+\fBunsigned char\fP and this setting to either \fB1\fP or \fB"(unsigned char)"\fP.
+.TP
 \fIre2c:define:YYCTXMARKER\fP \fB=\fP YYCTXMARKER \fB;\fP
 Allows to overwrite the define YYCTXMARKER and thus avoiding it by setting the
 value to the actual code needed.

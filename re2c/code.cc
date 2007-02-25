@@ -287,7 +287,7 @@ void genGoTo(std::ostream &o, uint ind, const State *from, const State *to, bool
 {
 	if (readCh && from->label + 1 != to->label)
 	{
-		o << indent(ind) << mapCodeName["yych"] << " = *" << mapCodeName["YYCURSOR"] << ";\n";
+		o << indent(ind) << mapCodeName["yych"] << " = " << yychConversion << "*" << mapCodeName["YYCURSOR"] << ";\n";
 		readCh = false;
 	}
 
@@ -300,7 +300,7 @@ void genIf(std::ostream &o, uint ind, const char *cmp, uint v, bool &readCh)
 	o << indent(ind) << "if(";
 	if (readCh)
 	{
-		o << "(" << mapCodeName["yych"] << " = *" << mapCodeName["YYCURSOR"] << ")";
+		o << "(" << mapCodeName["yych"] << " = " << yychConversion << "*" << mapCodeName["YYCURSOR"] << ")";
 		readCh = false;
 	}
 	else
@@ -342,11 +342,11 @@ static void need(std::ostream &o, uint ind, uint n, bool & readCh, bool bSetMark
 
 	if (bSetMarker)
 	{
-		o << indent(ind) << mapCodeName["yych"] << " = *(" << mapCodeName["YYMARKER"] << " = " << mapCodeName["YYCURSOR"] << ");\n";
+		o << indent(ind) << mapCodeName["yych"] << " = " << yychConversion << "*(" << mapCodeName["YYMARKER"] << " = " << mapCodeName["YYCURSOR"] << ");\n";
 	}
 	else
 	{
-		o << indent(ind) << mapCodeName["yych"] << " = *" << mapCodeName["YYCURSOR"] << ";\n";
+		o << indent(ind) << mapCodeName["yych"] << " = " << yychConversion << "*" << mapCodeName["YYCURSOR"] << ";\n";
 	}
 	readCh = false;
 }
@@ -365,7 +365,7 @@ void Match::emit(std::ostream &o, uint ind, bool &readCh) const
 	}
 	else
 	{
-		o << indent(ind) << mapCodeName["yych"] << " = *++" << mapCodeName["YYCURSOR"] << ";\n";
+		o << indent(ind) << mapCodeName["yych"] << " = " << yychConversion << "*++" << mapCodeName["YYCURSOR"] << ";\n";
 		readCh = false;
 	}
 
@@ -389,7 +389,7 @@ void Enter::emit(std::ostream &o, uint ind, bool &readCh) const
 	else
 	{
 		/* we shouldn't need 'rule-following' protection here */
-		o << indent(ind) << mapCodeName["yych"] << " = *++" << mapCodeName["YYCURSOR"] << ";\n";
+		o << indent(ind) << mapCodeName["yych"] << " = " << yychConversion << "*++" << mapCodeName["YYCURSOR"] << ";\n";
 		if (vUsedLabels.count(label))
 		{
 			o << labelPrefix << label << ":\n";
@@ -413,7 +413,7 @@ void Initial::emit(std::ostream &o, uint ind, bool &readCh) const
 		}
 		else
 		{
-			o << indent(ind) << mapCodeName["yych"] << " = *++" << mapCodeName["YYCURSOR"] << ";\n";
+			o << indent(ind) << mapCodeName["yych"] << " = " << yychConversion << "*++" << mapCodeName["YYCURSOR"] << ";\n";
 		}
 	}
 
@@ -464,11 +464,11 @@ void Save::emit(std::ostream &o, uint ind, bool &readCh) const
 	{
 		if (bUsedYYMarker)
 		{
-			o << indent(ind) << mapCodeName["yych"] << " = *(" << mapCodeName["YYMARKER"] << " = ++" << mapCodeName["YYCURSOR"] << ");\n";
+			o << indent(ind) << mapCodeName["yych"] << " = " << yychConversion << "*(" << mapCodeName["YYMARKER"] << " = ++" << mapCodeName["YYCURSOR"] << ");\n";
 		}
 		else
 		{
-			o << indent(ind) << mapCodeName["yych"] << " = *++" << mapCodeName["YYCURSOR"] << ";\n";
+			o << indent(ind) << mapCodeName["yych"] << " = " << yychConversion << "*++" << mapCodeName["YYCURSOR"] << ";\n";
 		}
 		readCh = false;
 	}
@@ -528,7 +528,7 @@ void Accept::emit(std::ostream &o, uint ind, bool &readCh) const
 
 		if (readCh) // shouldn't be necessary, but might become at some point
 		{
-			o << indent(ind) << mapCodeName["yych"] << " = *" << mapCodeName["YYCURSOR"] << ";\n";
+			o << indent(ind) << mapCodeName["yych"] << " = " << yychConversion << "*" << mapCodeName["YYCURSOR"] << ";\n";
 			readCh = false;
 		}
 
@@ -741,7 +741,7 @@ void Go::genSwitch(std::ostream &o, uint ind, const State *from, const State *ne
 
 		if (readCh)
 		{
-			o << indent(ind) << "switch((" << mapCodeName["yych"] << " = *" << mapCodeName["YYCURSOR"] << ")) {\n";
+			o << indent(ind) << "switch((" << mapCodeName["yych"] << " = " << yychConversion << "*" << mapCodeName["YYCURSOR"] << ")) {\n";
 			readCh = false;
 		}
 		else
@@ -894,7 +894,7 @@ void Go::genCpGoto(std::ostream &o, uint ind, const State *from, const State *ne
 	
 	if (readCh)
 	{
-		sYych = "(" + mapCodeName["yych"] + " = *" + mapCodeName["YYCURSOR"] + ")";
+		sYych = "(" + mapCodeName["yych"] + " = " + yychConversion + "*" + mapCodeName["YYCURSOR"] + ")";
 	}
 	else
 	{
@@ -1012,7 +1012,7 @@ void Go::genGoto(std::ostream &o, uint ind, const State *from, const State *next
 					go.unmap(this, to);
 					if (readCh)
 					{
-						sYych = "(" + mapCodeName["yych"] + " = *" + mapCodeName["YYCURSOR"] + ")";
+						sYych = "(" + mapCodeName["yych"] + " = " + yychConversion + "*" + mapCodeName["YYCURSOR"] + ")";
 					}
 					else
 					{
@@ -1691,6 +1691,19 @@ void Scanner::config(const Str& cfg, int num)
 	{
 		cGotoThreshold = num;
 	}
+	else if (cfg.to_string() == "yych:conversion")
+	{
+		if (num)
+		{
+			yychConversion  = "(";
+			yychConversion += mapCodeName["YYCTYPE"];
+			yychConversion += ")";
+		}
+		else
+		{
+			yychConversion  = "";
+		}
+	}
 	else
 	{
 		fatal("unrecognized configuration name or illegal integer value");
@@ -1747,6 +1760,10 @@ void Scanner::config(const Str& cfg, const Str& val)
 	else if (cfg.to_string() == "labelprefix")
 	{
 		labelPrefix = strVal;
+	}
+	else if (cfg.to_string() == "yych:conversion")
+	{
+		yychConversion = mapCodeName["YYCTYPE"];
 	}
 	else if (mapVariableKeys.find(cfg.to_string()) != mapVariableKeys.end())
     {
