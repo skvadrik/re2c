@@ -140,7 +140,8 @@ YYMAXFILL generation prior to last re2c block.<br /><br /></dd>
 <h2>INTERFACE CODE</h2>
 <p>Unlike other scanner generators, <b>re2c</b> does not generate complete
 scanners: the user must supply some interface code. In particular, the user
-must define the following macros:</p>
+must define the following macros or use the 
+corresponding inplace configurations:</p>
 <dl compact="compact">
 <dt>YYCTYPE</dt>
 <dd>Type used to hold an input symbol. Usually char or unsigned char.<br /><br /></dd>
@@ -168,25 +169,27 @@ YYCURSOR, YYLIMIT, YYMARKER and YYCTXMARKER as needed. Note that for typical
 programming languages <i>n</i> will be the length of the longest keyword plus 
 one. The user can place a comment of the form /*!max:re2c */ once to insert 
 a YYMAXFILL definition that is set to the maximum length value. If -1 
-switch is used then YYMAXFILL can be triggered once after the last /*!re2c */
-block.<br /><br /></dd>
+switch is used then YYMAXFILL can be triggered only once after the 
+last /*!re2c */ block.<br /><br /></dd>
 <dt>YYGETSTATE()</dt>
 <dd>The user only needs to define this macro if the <b>-f</b> flag was
-specified. In that case, the generated code "calls" YYGETSTATE at the very
-beginning of the scanner in order to obtain the saved state. YYGETSTATE must
+specified. In that case, the generated code "calls" YYGETSTATE() at the very
+beginning of the scanner in order to obtain the saved state. YYGETSTATE() must
 return a signed integer. The value must be either -1, indicating that the
 scanner is entered for the first time, or a value previously saved by
-YYSETSTATE. In the second case, the scanner will resume operations right after
+YYSETSTATE(s). In the second case, the scanner will resume operations right after
 where the last YYFILL(n) was called.<br /><br /></dd>
-<dt>YYSETSTATE(<i>n</i>)</dt>
+<dt>YYSETSTATE(<i>s</i>)</dt>
 <dd>The user only needs to define this macro if the <b>-f</b> flag was
 specified. In that case, the generated code "calls" YYSETSTATE just before
-calling YYFILL(n). The parameter to YYSETSTATE is a signed integer that uniquely
+calling YYFILL(n). The parameter to YYSETSTATE(s) is a signed integer that uniquely
 identifies the specific instance of YYFILL(n) that is about to be called. Should
 the user wish to save the state of the scanner and have YYFILL(n) return to the
 caller, all he has to do is store that unique identifer in a variable. Later,
-when the scannered is called again, it will call YYGETSTATE() and resume
-execution right where it left off.<br /><br /></dd>
+when the scanner is called again, it will call YYGETSTATE() and resume
+execution right where it left off. The generated code will contain 
+both YYSETSTATE(s) and YYGETSTATE() even if YYFILL(n) is being
+disabled.<br /><br /></dd>
 <dt>YYDEBUG(<i>state</i>,<i>current</i>)</dt>
 <dd>This is only needed if the <b>-d</b> flag was specified. It allows to
 easily debug the generated parser by calling a user defined function for every

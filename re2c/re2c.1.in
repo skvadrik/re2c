@@ -153,7 +153,8 @@ YYMAXFILL generation prior to last \*(re block.
 .SH "INTERFACE CODE"
 Unlike other scanner generators, \*(re does not generate complete scanners:
 the user must supply some interface code.
-In particular, the user must define the following macros:
+In particular, the user must define the following macros or use the 
+corresponding inplace configurations:
 .TP
 \fCYYCTYPE\fP
 Type used to hold an input symbol.
@@ -183,26 +184,27 @@ The generated code saves trailing context backtracking information in \fCYYCTXMA
 The user only needs to define this macro if a scanner specification uses trailing
 context in one or more of its regular expressions.
 .TP
-\fCYYFILL(\fP\fIn\fP\fC)\fP
+\fCYYFILL\fP(\fIn\fP\fC\fP)
 The generated code "calls" \fCYYFILL\fP(n) when the buffer needs
 (re)filling:  at least \fIn\fP additional characters should
 be provided.  \fCYYFILL\fP(n) should adjust \fCYYCURSOR\fP, \fCYYLIMIT\fP,
 \fCYYMARKER\fP and \fCYYCTXMARKER\fP as needed.  Note that for typical 
 programming languages \fIn\fP will be the length of the longest keyword plus one.
 The user can place a comment of the form \fC/*!max:re2c */\fP once to insert 
-a \fCYYMAXFILL\fP definition that is set to the maximum length value. If -1 
-switch is used then YYMAXFILL can be triggered once after the last \fC/*!re2c */\fP
+a \fCYYMAXFILL\fP(n) definition that is set to the maximum length value. If -1 
+switch is used then \fCYYMAXFILL\fP can be triggered only once after the 
+last \fC/*!re2c */\fP
 block.
 .TP
-\fCYYGETSTATE()\fP
+\fCYYGETSTATE\fP()
 The user only needs to define this macro if the \fB-f\fP flag was specified.
-In that case, the generated code "calls" \fCYYGETSTATE\fP at the very beginning
-of the scanner in order to obtain the saved state. YYGETSTATE must return a signed
+In that case, the generated code "calls" \fCYYGETSTATE\fP() at the very beginning
+of the scanner in order to obtain the saved state. \fCYYGETSTATE\fP() must return a signed
 integer. The value must be either -1, indicating that the scanner is entered for the
-first time, or a value previously saved by \fCYYSETSTATE\fP.  In the second case, the
+first time, or a value previously saved by \fCYYSETSTATE\fP(s).  In the second case, the
 scanner will resume operations right after where the last \fCYYFILL\fP(n) was called.
 .TP
-\fCYYSETSTATE(\fP\fIn\fP\fC)\fP
+\fCYYSETSTATE(\fP\fIs\fP\fC)\fP
 The user only needs to define this macro if the \fB-f\fP flag was specified.
 In that case, the generated code "calls" \fCYYSETSTATE\fP just before calling
 \fCYYFILL\fP(n).  The parameter to \fCYYSETSTATE\fP is a signed integer that uniquely
@@ -210,7 +212,9 @@ identifies the specific instance of \fCYYFILL\fP(n) that is about to be called.
 Should the user wish to save the state of the scanner and have \fCYYFILL\fP(n) return
 to the caller, all he has to do is store that unique identifer in a variable.
 Later, when the scannered is called again, it will call \fCYYGETSTATE()\fP and
-resume execution right where it left off.
+resume execution right where it left off. The generated code will contain 
+both \fCYYSETSTATE\fP(s) and \fCYYGETSTATE\fP even if \fCYYFILL\fP(n) is being
+disabled.
 .TP
 \fCYYDEBUG(\fP\fIstate\fP,\fIcurrent\fC)\fP
 This is only needed if the \fB-d\fP flag was specified. It allows to easily debug
