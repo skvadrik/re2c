@@ -292,7 +292,7 @@ Please see examples/push.re for push-model scanner. The generated code can be
 tweaked using inplace configurations "\fBstate:abort\fP" and "\fBstate:nextlabel\fP".
 
 .SH "SCANNER SPECIFICATIONS"
-Each scanner specification consists of a set of \fIrules\fP, \fIname
+Each scanner specification consists of a set of \fIrules\fP, \fInamed
 definitions\fP and \fIconfigurations\fP.
 .LP
 \fIRules\fP consist of a regular expression along with a block of C/C++ code that
@@ -308,11 +308,14 @@ Named definitions are of the form:
 \fIname\fP \fC=\fP \fIregular expression\fP\fC;\fP
 .RE
 .LP
-Configurations look like name definitions whose names start 
+Configurations look like named definitions whose names start 
 with "\fBre2c:\fP":
 .P
 .RS
 \fCre2c:\fP\fIname\fP \fC=\fP \fIvalue\fP\fC;\fP
+.RE
+.RS
+\fCre2c:\fP\fIname\fP \fC=\fP \fB"\fP\fIvalue\fP\fB"\fP\fC;\fP
 .RE
 
 .SH "SUMMARY OF RE2C REGULAR EXPRESSIONS"
@@ -570,7 +573,7 @@ flex(1), lex(1).
 More information on \*(re can be found here:
 .PD 0
 .P
-.B http://sourceforge.net/projects/re2c/
+.B http://re2c.org/
 .PD 1
 
 .SH AUTHORS

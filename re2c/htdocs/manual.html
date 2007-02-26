@@ -255,7 +255,7 @@ the scanner code should be wrapped inside a loop.</p>
 tweaked using inplace configurations "state:abort" and "state:nextlabel".</p>
 <a name="lbAH" id="lbAH"> </a>
 <h2>SCANNER SPECIFICATIONS</h2>
-<p>Each scanner specification consists of a set of <i>rules</i>, <i>name
+<p>Each scanner specification consists of a set of <i>rules</i>, <i>named
 definitions</i> and <i>configurations</i>.</p>
 <p><i>Rules</i> consist of a regular expression along with a block of C/C++
 code that is to be executed when the associated <i>regular expression</i> is
@@ -267,10 +267,11 @@ matched.</p>
 <dl compact="compact">
 <dd><i>name</i> = <i>regular expression</i>;</dd>
 </dl>
-<p>Configurations look like name definitions whose names start with
+<p>Configurations look like named definitions whose names start with
 "<b>re2c:</b>":</p>
 <dl compact="compact">
 <dd>re2c:<i>name</i> = <i>value</i>;</dd>
+<dd>re2c:<i>name</i> = <b>"</b><i>value</i><b>"</b>;</dd>
 </dl>
 <a name="lbAI" id="lbAI"> </a>
 <h2>SUMMARY OF RE2C REGULAR EXPRESSIONS</h2>
@@ -471,7 +472,7 @@ specification for each start condition (as illustrated in the above example).
 <h2>SEE ALSO</h2>
 <p>flex(1), lex(1). More information on <b>re2c</b> can be found here:
 <b><a href=
-"http://sourceforge.net/projects/re2c/">http://sourceforge.net/projects/re2c/</a></b></p>
+"http://re2c.org/">http://re2c.org/</a></b></p>
 <a name="lbAN" id="lbAN"> </a>
 <h2>AUTHORS</h2>
 <ul>
