@@ -354,7 +354,7 @@ one or more \fIr\fP's
 zero or one \fIr\fP's (that is, "an optional \fIr\fP")
 .TP
 name
-the expansion of the "name" definition (see above)
+the expansion of the "named definition" (see above)
 .TP
 \fC(\fP\fIr\fP\fC)\fP
 an \fIr\fP; parentheses are used to override precedence
