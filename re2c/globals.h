@@ -25,6 +25,8 @@ extern bool sFlag;
 extern bool uFlag;
 extern bool wFlag;
 
+extern bool bNoGenerationDate;
+
 extern bool bSinglePass;
 extern bool bFirstPass;
 extern bool bLastPass;

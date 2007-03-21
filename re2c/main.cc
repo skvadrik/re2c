@@ -31,6 +31,8 @@ bool sFlag = false;
 bool uFlag = false;
 bool wFlag = false;
 
+bool bNoGenerationDate = false;
+
 bool bSinglePass = false;
 bool bFirstPass  = true;
 bool bLastPass   = false;
@@ -89,6 +91,7 @@ static const mbo_opt_struct OPTIONS[] =
 	mbo_opt_struct('V', 0, "vernum"),
 	mbo_opt_struct('w', 0, "wide-chars"),      
 	mbo_opt_struct('1', 0, "single-pass"),
+	mbo_opt_struct(10,  0, "no-generation-date"),
 	mbo_opt_struct('-', 0, NULL) /* end of args */
 };
 
@@ -134,6 +137,9 @@ static void usage()
 	"-1     --single-pass    Force single pass generation, this cannot be combined\n"
 	"                        with -f and disables YYMAXFILL generation prior to last\n"
 	"                        re2c block.\n"
+	"\n"
+	"--no-generation-date    Suppress date output in the generated output so that it\n"
+	"                        only shows the re2c version.\n"
 	;
 }
 
@@ -252,6 +258,10 @@ int main(int argc, char *argv[])
 			default:
 			usage();
 			return 2;
+
+			case 10:
+			bNoGenerationDate = true;
+			break;
 		}
 	}
 

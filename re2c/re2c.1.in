@@ -150,6 +150,10 @@ cannot be used together with \fB-e\fP switch.
 \fB-1\fP
 Force single pass generation, this cannot be combined with -f and disables 
 YYMAXFILL generation prior to last \*(re block.
+.TP
+\fb--no-generation-date\fP
+Suppress date output in the generated output so that it only shows the re2c
+version.
 .SH "INTERFACE CODE"
 Unlike other scanner generators, \*(re does not generate complete scanners:
 the user must supply some interface code.

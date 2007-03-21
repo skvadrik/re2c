@@ -1,5 +1,7 @@
-Version 0.11.3 (????-??-??)
+Version 0.11.3 (2007-??-??)
 ---------------------------
+- Added new option --no-generation-date.
+- Fixed issue with long form of switches.
 
 Version 0.11.2 (2007-03-01)
 ---------------------------
