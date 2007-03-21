@@ -98,22 +98,24 @@ int mbo_getopt(int argc, char* const *argv, const mbo_opt_struct *opts, char **o
 		}
 
 		optchr = 0;
-		dash = 1;
+		dash = 0;
 		arg_start = 2 + strlen(opts[opts_idx].opt_name);
 	}
-
-	if (!dash)
+	else
 	{
-		dash = 1;
-		optchr = 1;
-	}
+		if (!dash)
+		{
+			dash = 1;
+			optchr = 1;
+		}
 
-	/* Check if the guy tries to do a -: kind of flag */
-	if (argv[*optind][optchr] == ':')
-	{
-		dash = 0;
-		(*optind)++;
-		return (mbo_opt_error(argc, argv, *optind - 1, optchr, OPTERRCOLON, show_err));
+		/* Check if the guy tries to do a -: kind of flag */
+		if (argv[*optind][optchr] == ':')
+		{
+			dash = 0;
+			(*optind)++;
+			return (mbo_opt_error(argc, argv, *optind - 1, optchr, OPTERRCOLON, show_err));
+		}
 	}
 
 	if (opts_idx < 0)
