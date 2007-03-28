@@ -1,5 +1,6 @@
 Version 0.11.3 (2007-??-??)
 ---------------------------
+- Added support for underscores in named definitions.
 - Added new option --no-generation-date.
 - Fixed issue with long form of switches.
 
