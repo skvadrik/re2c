@@ -34,7 +34,7 @@ Scanner::Scanner(std::istream& i, std::ostream& o)
 	, bot(NULL), tok(NULL), ptr(NULL), cur(NULL), pos(NULL), lim(NULL)
 	, top(NULL), eof(NULL), tchar(0), tline(0), cline(1), iscfg(0)
 {
-    ;
+	;
 }
 
 char *Scanner::fill(char *cursor)
@@ -65,9 +65,10 @@ char *Scanner::fill(char *cursor)
 			bot = buf;
 		}
 		in.read(lim, BSIZE);
-		if ((cnt = in.gcount()) != BSIZE )
+		if((cnt = in.gcount()) != BSIZE)
 		{
-			eof = &lim[cnt]; *eof++ = '\0';
+			eof = &lim[cnt];
+			*eof++ = '\0';
 		}
 		lim += cnt;
 	}
@@ -96,20 +97,21 @@ value   = [^\r\n; \t]* | dstring | sstring;
 
 int Scanner::echo()
 {
-    char *cursor = cur;
-    bool ignore_eoc = false;
-    int  ignore_cnt = 0;
+	char *cursor = cur;
+	bool ignore_eoc = false;
+	int  ignore_cnt = 0;
 
-    if (eof && cursor == eof) // Catch EOF
+	if (eof && cursor == eof) // Catch EOF
 	{
-    	return 0;
+		return 0;
 	}
-
-    tok = cursor;
+	
+	tok = cursor;
 echo:
 /*!re2c
 	"/*!re2c"	{
-					if (bUsedYYMaxFill && bSinglePass) {
+					if (bUsedYYMaxFill && bSinglePass)
+					{
 						fatal("found scanner block after YYMAXFILL declaration");
 					}
 					out.write((const char*)(tok), (const char*)(&cursor[-7]) - (const char*)(tok));
@@ -117,7 +119,8 @@ echo:
 					RETURN(1);
 				}
 	"/*!max:re2c" {
-					if (bUsedYYMaxFill) {
+					if (bUsedYYMaxFill)
+					{
 						fatal("cannot generate YYMAXFILL twice");
 					}
 					out << "#define YYMAXFILL " << maxFill << std::endl;
@@ -139,45 +142,60 @@ echo:
 				}
 	"*" "/"	"\r"? "\n"	{
 					cline++;
-					if (ignore_eoc) {
-						if (ignore_cnt) {
+					if (ignore_eoc)
+					{
+						if (ignore_cnt)
+						{
 							out << sourceFileInfo;
 						}
 						ignore_eoc = false;
 						ignore_cnt = 0;
-					} else {
+					}
+					else
+					{
 						out.write((const char*)(tok), (const char*)(cursor) - (const char*)(tok));
 					}
 					tok = pos = cursor;
 					goto echo;
 				}
 	"*" "/"		{
-					if (ignore_eoc) {
-						if (ignore_cnt) {
+					if (ignore_eoc)
+					{
+						if (ignore_cnt)
+						{
 							out << "\n" << sourceFileInfo;
 						}
 						ignore_eoc = false;
 						ignore_cnt = 0;
-					} else {
+					}
+					else
+					{
 						out.write((const char*)(tok), (const char*)(cursor) - (const char*)(tok));
 					}
 					tok = pos = cursor;
 					goto echo;
 				}
 	"\n"		{
-					if (ignore_eoc) {
+					if (ignore_eoc)
+					{
 						ignore_cnt++;
-					} else {
+					}
+					else
+					{
 						out.write((const char*)(tok), (const char*)(cursor) - (const char*)(tok));
 					}
-					tok = pos = cursor; cline++;
-				  	goto echo;
+					tok = pos = cursor;
+					cline++;
+					goto echo;
 				}
 	zero		{
-					if (!ignore_eoc) {
-						out.write((const char*)(tok), (const char*)(cursor) - (const char*)(tok) - 1); // -1 so we don't write out the \0
+					if (!ignore_eoc)
+					{
+						out.write((const char*)(tok), (const char*)(cursor) - (const char*)(tok) - 1);
+						// -1 so we don't write out the \0
 					}
-					if(cursor == eof) {
+					if(cursor == eof)
+					{
 						RETURN(0);
 					}
 				}
@@ -190,166 +208,251 @@ echo:
 
 int Scanner::scan()
 {
-    char *cursor = cur;
-    uint depth;
+	char *cursor = cur;
+	uint depth;
 
 scan:
-    tchar = cursor - pos;
-    tline = cline;
-    tok = cursor;
+	tchar = cursor - pos;
+	tline = cline;
+	tok = cursor;
 	if (iscfg == 1)
 	{
 		goto config;
 	}
 	else if (iscfg == 2)
 	{
-   		goto value;
-    }
+		goto value;
+	}
 /*!re2c
-	"{"			{ depth = 1;
-				  goto code;
-				}
-	"/*"			{ depth = 1;
-				  goto comment; }
-
-	"*/"			{ tok = cursor;
-				  RETURN(0); }
-
-	dstring			{ cur = cursor;
-				  yylval.regexp = strToRE(token());
-				  return STRING; }
-
-	sstring			{ cur = cursor;
-				  yylval.regexp = strToCaseInsensitiveRE(token());
-				  return STRING; }
-
-	"\""			{ fatal("unterminated string constant (missing \")"); }
-	"'"				{ fatal("unterminated string constant (missing ')"); }
-
-	istring			{ cur = cursor;
-				  yylval.regexp = invToRE(token());
-				  return RANGE; }
-
-	cstring			{ cur = cursor;
-				  yylval.regexp = ranToRE(token());
-				  return RANGE; }
-
-	"["			{ fatal("unterminated range (missing ])"); }
-
-	[()|=;/\\]		{ RETURN(*tok); }
-
-	[*+?]			{ yylval.op = *tok;
-				  RETURN(CLOSE); }
-
-	"{0,}"		{ yylval.op = '*';
-				  RETURN(CLOSE); }
-
-	"{" [0-9]+ "}"		{ yylval.extop.minsize = atoi((char *)tok+1);
-				  yylval.extop.maxsize = atoi((char *)tok+1);
-				  RETURN(CLOSESIZE); }
-
-	"{" [0-9]+ "," [0-9]+ "}"	{ yylval.extop.minsize = atoi((char *)tok+1);
-				  yylval.extop.maxsize = MAX(yylval.extop.minsize,atoi(strchr((char *)tok, ',')+1));
-				  RETURN(CLOSESIZE); }
-
-	"{" [0-9]+ ",}"		{ yylval.extop.minsize = atoi((char *)tok+1);
-				  yylval.extop.maxsize = -1;
-				  RETURN(CLOSESIZE); }
-
-	"{" [0-9]* ","		{ fatal("illegal closure form, use '{n}', '{n,}', '{n,m}' where n and m are numbers"); }
-
-	config		{ cur = cursor;
-				  tok+= 5; /* skip "re2c:" */
-				  iscfg = 1;
-				  yylval.str = new Str(token());
-				  return CONFIG;
+	"{"			{
+					depth = 1;
+					goto code;
 				}
 
-	name		{ cur = cursor;
-				  yylval.symbol = Symbol::find(token());
-				  return ID; }
-
-	"."			{ cur = cursor;
-				  yylval.regexp = mkDot();
-				  return RANGE;
+	"/*"		{
+					depth = 1;
+					goto comment;
 				}
 
-	space+			{ goto scan; }
+	"*/"		{
+					tok = cursor;
+					RETURN(0);
+				}
 
-	eol			{ if(cursor == eof) RETURN(0);
-				  pos = cursor; cline++;
-				  goto scan;
-	    			}
+	dstring		{
+					cur = cursor;
+					yylval.regexp = strToRE(token());
+					return STRING;
+				}
 
-	any			{ std::ostringstream msg;
-				  msg << "unexpected character: ";
-				  prtChOrHex(msg, *tok);
-				  fatal(msg.str().c_str());
-				  goto scan;
+	sstring		{
+					cur = cursor;
+					yylval.regexp = strToCaseInsensitiveRE(token());
+					return STRING;
+				}
+
+	"\""		{
+					fatal("unterminated string constant (missing \")");
+				}
+	"'"			{
+					fatal("unterminated string constant (missing ')");
+				}
+
+	istring		{
+					cur = cursor;
+					yylval.regexp = invToRE(token());
+					return RANGE;
+				}
+
+	cstring		{
+					cur = cursor;
+					yylval.regexp = ranToRE(token());
+					return RANGE;
+				}
+
+	"["			{
+					fatal("unterminated range (missing ])");
+				}
+
+	[()|=;/\\]	{
+					RETURN(*tok);
+				}
+
+	[*+?]		{
+					yylval.op = *tok;
+					RETURN(CLOSE);
+				}
+
+	"{0,}"		{
+					yylval.op = '*';
+					RETURN(CLOSE);
+				}
+
+	"{" [0-9]+ "}"	{
+					yylval.extop.minsize = atoi((char *)tok+1);
+					yylval.extop.maxsize = atoi((char *)tok+1);
+					RETURN(CLOSESIZE);
+				}
+
+	"{" [0-9]+ "," [0-9]+ "}"	{
+					yylval.extop.minsize = atoi((char *)tok+1);
+					yylval.extop.maxsize = MAX(yylval.extop.minsize,atoi(strchr((char *)tok, ',')+1));
+					RETURN(CLOSESIZE);
+				}
+
+	"{" [0-9]+ ",}"		{
+					yylval.extop.minsize = atoi((char *)tok+1);
+					yylval.extop.maxsize = -1;
+					RETURN(CLOSESIZE);
+				}
+
+	"{" [0-9]* ","		{
+					fatal("illegal closure form, use '{n}', '{n,}', '{n,m}' where n and m are numbers");
+				}
+
+	config		{
+					cur = cursor;
+					tok+= 5; /* skip "re2c:" */
+					iscfg = 1;
+					yylval.str = new Str(token());
+					return CONFIG;
+				}
+
+	name		{
+					cur = cursor;
+					yylval.symbol = Symbol::find(token());
+					return ID;
+				}
+
+	"."			{
+					cur = cursor;
+					yylval.regexp = mkDot();
+					return RANGE;
+				}
+
+	space+		{
+					goto scan;
+				}
+
+	eol			{
+					if(cursor == eof) RETURN(0);
+					pos = cursor;
+					cline++;
+					goto scan;
+				}
+
+	any			{
+					std::ostringstream msg;
+					msg << "unexpected character: ";
+					prtChOrHex(msg, *tok);
+					fatal(msg.str().c_str());
+					goto scan;
 				}
 */
 
 code:
 /*!re2c
-	"}"			{ if(--depth == 0){
-					cur = cursor;
-					yylval.token = new Token(token(), tline);
-					return CODE;
-				  }
-				  goto code; }
-	"{"			{ ++depth;
-				  goto code; }
-	"\n"		{ if(cursor == eof) fatal("missing '}'");
-				  pos = cursor; cline++;
-				  goto code;
+	"}"			{
+					if(--depth == 0)
+					{
+						cur = cursor;
+						yylval.token = new Token(token(), tline);
+						return CODE;
+					}
+					goto code;
 				}
-	zero		{ if(cursor == eof) {
-					if (depth) fatal("missing '}'");
-					RETURN(0);
-				  }
-				  goto code;
+	"{"			{
+					++depth;
+					goto code;
 				}
-	dstring | sstring | any	{ goto code; }
+	"\n"		{
+					if(cursor == eof)
+					{
+						fatal("missing '}'");
+					}
+					pos = cursor;
+					cline++;
+					goto code;
+				}
+	zero		{
+					if(cursor == eof)
+					{
+						if (depth)
+						{
+							fatal("missing '}'");
+						}
+						RETURN(0);
+					}
+					goto code;
+				}
+	dstring | sstring | any	{
+					goto code;
+				}
 */
 
 comment:
 /*!re2c
-	"*/"		{ if(--depth == 0)
-					goto scan;
-				    else
-					goto comment; }
-	"/*"		{ ++depth;
-				  fatal("ambiguous /* found");
-				  goto comment; }
-	"\n"		{ if(cursor == eof) RETURN(0);
-				  tok = pos = cursor; cline++;
-				  goto comment;
+	"*/"		{
+					if(--depth == 0)
+					{
+						goto scan;
+					}
+					else
+					{
+						goto comment;
+					}
 				}
-	any			{ if(cursor == eof) RETURN(0);
-				  goto comment; }
+	"/*"		{
+					++depth;
+					fatal("ambiguous /* found");
+					goto comment;
+				}
+	"\n"		{
+					if(cursor == eof)
+					{
+						RETURN(0);
+					}
+					tok = pos = cursor;
+					cline++;
+					goto comment;
+				}
+	any			{
+					if(cursor == eof)
+					{
+						RETURN(0);
+					}
+					goto comment;
+				}
 */
 
 config:
 /*!re2c
-	space+		{ goto config; }
-	"=" space*	{ iscfg = 2;
-				  cur = cursor;
-				  RETURN('='); 
+	space+		{
+					goto config;
 				}
-	any			{ fatal("missing '='"); }
+	"=" space*	{
+					iscfg = 2;
+					cur = cursor;
+					RETURN('=');
+				}
+	any			{
+					fatal("missing '='");
+				}
 */
 
 value:
 /*!re2c
-	number		{ cur = cursor;
-				  yylval.number = atoi(token().to_string().c_str());
-				  iscfg = 0;
-				  return NUMBER;
+	number		{
+					cur = cursor;
+					yylval.number = atoi(token().to_string().c_str());
+					iscfg = 0;
+					return NUMBER;
 				}
-	value		{ cur = cursor;
-				  yylval.str = new Str(token());
-				  iscfg = 0;
-				  return VALUE;
+	value		{
+					cur = cursor;
+					yylval.str = new Str(token());
+					iscfg = 0;
+					return VALUE;
 				}
 */
 }
@@ -360,7 +463,7 @@ void Scanner::fatal(uint ofs, const char *msg) const
 	std::cerr << "re2c: error: "
 		<< "line " << tline << ", column " << (tchar + ofs + 1) << ": "
 		<< msg << std::endl;
-   	exit(1);
+	exit(1);
 }
 
 Scanner::~Scanner()
