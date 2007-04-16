@@ -44,8 +44,11 @@ static Scanner *in = NULL;
 static char* strdup(const char* s)
 {
 	char* rv = (char*)malloc(strlen(s) + 1);
+
 	if (rv == NULL)
+	{
 		return NULL;
+	}
 	strcpy(rv, s);
 	return rv;
 }
@@ -56,16 +59,16 @@ static char* strdup(const char* s)
 %start	spec
 
 %union {
-    re2c::Symbol	*symbol;
-    re2c::RegExp	*regexp;
-    re2c::Token 	*token;
-    char        	op;
-    int         	number;
-    re2c::ExtOp 	extop;
-    re2c::Str   	*str;
+	re2c::Symbol	*symbol;
+	re2c::RegExp	*regexp;
+	re2c::Token 	*token;
+	char        	op;
+	int         	number;
+	re2c::ExtOp 	extop;
+	re2c::Str   	*str;
 };
 
-%token		CLOSESIZE   CLOSE	ID	CODE	RANGE	STRING
+%token		CLOSESIZE	CLOSE	ID	CODE	RANGE	STRING
 %token		CONFIG	VALUE	NUMBER
 
 %type	<op>		CLOSE
@@ -80,109 +83,173 @@ static char* strdup(const char* s)
 
 %%
 
-spec	:
-		{ accept = 0;
-		  spec = NULL; }
-	|	spec rule
-		{ spec = spec? mkAlt(spec, $2) : $2; }
-	|	spec decl
-	;
-
-decl	:	ID '=' expr ';'
-		{ if($1->re)
-		      in->fatal("sym already defined");
-		  $1->re = $3; }
-	|	CONFIG '=' VALUE ';'
-		{ in->config(*$1, *$3); delete $1; delete $3; }
-	|	CONFIG '=' NUMBER ';'
-		{ in->config(*$1, $3); delete $1; }
-	;
-
-decl	:	ID '=' expr '/'
-		{ in->fatal("trailing contexts are not allowed in named definitions"); }
-	;
-
-rule	:	expr look CODE
-		{ $$ = new RuleOp($1, $2, $3, accept++); }
-	;
-
-look	:
-		{ $$ = new NullOp; }
-	|	'/' expr
-		{ $$ = $2; }
-	;
-
-expr	:	diff
-		{ $$ = $1; }
-	|	expr '|' diff
-		{ $$ =  mkAlt($1, $3); }
-	;
-
-diff	:	term
-		{ $$ = $1; }
-	|	diff '\\' term
-		{ $$ =  mkDiff($1, $3);
-		  if(!$$)
-		       in->fatal("can only difference char sets");
+spec:
+		/* empty */
+		{
+			accept = 0;
+			spec = NULL;
 		}
-	;
+	|	spec rule
+		{
+			spec = spec? mkAlt(spec, $2) : $2;
+		}
+	|	spec decl
+;
 
-term	:	factor
-		{ $$ = $1; }
+decl:
+		ID '=' expr ';'
+		{
+			if($1->re)
+			{
+				in->fatal("sym already defined");
+			}
+			$1->re = $3;
+		}
+	|	CONFIG '=' VALUE ';'
+		{
+			in->config(*$1, *$3);
+			delete $1;
+			delete $3;
+		}
+	|	CONFIG '=' NUMBER ';'
+		{
+			in->config(*$1, $3);
+			delete $1;
+		}
+;
+
+decl:
+		ID '=' expr '/'
+		{
+			in->fatal("trailing contexts are not allowed in named definitions");
+		}
+;
+
+rule:
+		expr look CODE
+		{
+			$$ = new RuleOp($1, $2, $3, accept++);
+		}
+;
+
+look:
+		/* empty */
+		{
+			$$ = new NullOp;
+		}
+	|	'/' expr
+		{
+			$$ = $2;
+		}
+;
+
+expr:
+		diff
+		{
+			$$ = $1;
+		}
+	|	expr '|' diff
+		{
+			$$ = mkAlt($1, $3);
+		}
+;
+
+diff:
+		term
+		{
+			$$ = $1;
+		}
+	|	diff '\\' term
+		{
+			$$ = mkDiff($1, $3);
+			if(!$$)
+			{
+				in->fatal("can only difference char sets");
+			}
+		}
+;
+
+term:
+		factor
+		{
+			$$ = $1;
+		}
 	|	term factor
-		{ $$ = new CatOp($1, $2); }
-	;
+		{
+			$$ = new CatOp($1, $2);
+		}
+;
 
-factor	:	primary
-		{ $$ = $1; }
+factor:
+		primary
+		{
+			$$ = $1;
+			}
 	|	primary close
 		{
-		    switch($2){
-		    case '*':
-			$$ = mkAlt(new CloseOp($1), new NullOp());
-			break;
-		    case '+':
-			$$ = new CloseOp($1);
-			break;
-		    case '?':
-			$$ = mkAlt($1, new NullOp());
-			break;
-		    }
+			switch($2)
+			{
+			case '*':
+				$$ = mkAlt(new CloseOp($1), new NullOp());
+				break;
+			case '+':
+				$$ = new CloseOp($1);
+				break;
+			case '?':
+				$$ = mkAlt($1, new NullOp());
+				break;
+			}
 		}
 	|	primary CLOSESIZE
 		{
 			$$ = new CloseVOp($1, $2.minsize, $2.maxsize);
 		}
-	;
+;
 
-close	:	CLOSE
-		{ $$ = $1; }
+close:
+		CLOSE
+		{
+			$$ = $1;
+		}
 	|	close CLOSE
-		{ $$ = ($1 == $2) ? $1 : '*'; }
-	;
+		{
+			$$ = ($1 == $2) ? $1 : '*';
+		}
+;
 
-primary	:	ID
-		{ if(!$1->re)
-		      in->fatal("can't find symbol");
-		  $$ = $1->re; }
+primary:
+		ID
+		{
+			if(!$1->re)
+			{
+				in->fatal("can't find symbol");
+			}
+			$$ = $1->re;
+		}
 	|	RANGE
-		{ $$ = $1; }
+		{
+			$$ = $1;
+		}
 	|	STRING
-		{ $$ = $1; }
+		{
+			$$ = $1;
+		}
 	|	'(' expr ')'
-		{ $$ = $2; }
-	;
+		{
+			$$ = $2;
+		}
+;
 
 %%
 
 extern "C" {
 void yyerror(const char* s)
 {
-    in->fatal(s);
+	in->fatal(s);
 }
 
 int yylex(){
-    return in ? in->scan() : 0;
+	return in ? in->scan() : 0;
 }
 } // end extern "C"
 
