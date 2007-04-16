@@ -274,11 +274,15 @@ scan:
 					fatal("unterminated range (missing ])");
 				}
 
-	[()|=;/\\]	{
+	[<>,()|=;/\\]	{
 					RETURN(*tok);
 				}
 
-	[*+?]		{
+	"*"			{
+					yylval.op = *tok;
+					RETURN(STAR);
+				}
+	[+?]		{
 					yylval.op = *tok;
 					RETURN(CLOSE);
 				}

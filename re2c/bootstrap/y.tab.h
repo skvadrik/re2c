@@ -31,42 +31,45 @@
    enum yytokentype {
      CLOSESIZE = 258,
      CLOSE = 259,
-     ID = 260,
-     CODE = 261,
-     RANGE = 262,
-     STRING = 263,
-     CONFIG = 264,
-     VALUE = 265,
-     NUMBER = 266
+     STAR = 260,
+     ID = 261,
+     CODE = 262,
+     RANGE = 263,
+     STRING = 264,
+     CONFIG = 265,
+     VALUE = 266,
+     NUMBER = 267
    };
 #endif
 /* Tokens.  */
 #define CLOSESIZE 258
 #define CLOSE 259
-#define ID 260
-#define CODE 261
-#define RANGE 262
-#define STRING 263
-#define CONFIG 264
-#define VALUE 265
-#define NUMBER 266
+#define STAR 260
+#define ID 261
+#define CODE 262
+#define RANGE 263
+#define STRING 264
+#define CONFIG 265
+#define VALUE 266
+#define NUMBER 267
 
 
 
 
 #if ! defined (YYSTYPE) && ! defined (YYSTYPE_IS_DECLARED)
-#line 58 "parser.y"
+#line 62 "parser.y"
 typedef union YYSTYPE {
-    re2c::Symbol	*symbol;
-    re2c::RegExp	*regexp;
-    re2c::Token 	*token;
-    char        	op;
-    int         	number;
-    re2c::ExtOp 	extop;
-    re2c::Str   	*str;
+	re2c::Symbol	*symbol;
+	re2c::RegExp	*regexp;
+	re2c::Token 	*token;
+	char        	op;
+	int         	number;
+	re2c::ExtOp 	extop;
+	re2c::Str   	*str;
+	re2c::CondList	*clist;
 } YYSTYPE;
 /* Line 1447 of yacc.c.  */
-#line 70 "y.tab.h"
+#line 73 "y.tab.h"
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1
 # define YYSTYPE_IS_TRIVIAL 1

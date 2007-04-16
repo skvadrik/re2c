@@ -22,6 +22,7 @@ file_info sourceFileInfo;
 file_info outputFileInfo;
 
 bool bFlag = false;
+bool cFlag = false;
 bool dFlag = false;
 bool eFlag = false;
 bool fFlag = false;
@@ -78,6 +79,7 @@ static const mbo_opt_struct OPTIONS[] =
 {
 	mbo_opt_struct('?', 0, "help"),
 	mbo_opt_struct('b', 0, "bit-vectors"),
+	mbo_opt_struct('c', 0, "start-conditions"),
 	mbo_opt_struct('d', 0, "debug-output"),
 	mbo_opt_struct('e', 0, "ecb"),
 	mbo_opt_struct('f', 0, "storable-state"),
@@ -106,6 +108,8 @@ static void usage()
 	"                        specifications with more than a few keywords (e.g. for\n"
 	"                        most programming languages).\n"
 	"\n"
+	"-c     --conditions     Require start conditions.\n"
+	"\n"
 	"-d     --debug-output   Creates a parser that dumps information during\n"
 	"                        about the current position and in which state the\n"
 	"                        parser is.\n"
@@ -129,6 +133,7 @@ static void usage()
 	"-u     --unicode        Implies -w but supports the full Unicode character set.\n"
 	"\n"
 	"-v     --version        Show version information.\n"
+	"\n"
 	"-V     --vernum         Show version as one number.\n"
 	"\n"
 	"-w     --wide-chars     Create a parser that supports wide chars (UCS-2). This\n"
@@ -167,6 +172,10 @@ int main(int argc, char *argv[])
 			case 'b':
 			bFlag = true;
 			sFlag = true;
+			break;
+
+			case 'c':
+			cFlag = true;
 			break;
 
 			case 'e':

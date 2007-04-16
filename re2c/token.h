@@ -9,16 +9,21 @@ namespace re2c
 
 class Token
 {
-
 public:
-	Str	text;
+	Str 	text;
 	uint	line;
 
 public:
-	Token(SubStr, uint);
+	Token(const SubStr&, uint);
+	Token(const Token& oth);
 };
 
-inline Token::Token(SubStr t, uint l) : text(t), line(l)
+inline Token::Token(const SubStr& t, uint l) : text(t), line(l)
+{
+	;
+}
+
+inline Token::Token(const Token& oth) : text(oth.text), line(oth.line)
 {
 	;
 }

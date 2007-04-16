@@ -26,9 +26,10 @@ int yylex();
 void yyerror(const char*);
 }
 
-static re2c::uint accept;
-static RegExp *spec;
-static Scanner *in = NULL;
+static re2c::uint       accept;
+static re2c::RegExpMap  specmap;
+static RegExp           *spec;
+static Scanner          *in = NULL;
 
 /* Bison version 1.875 emits a definition that is not working
  * with several g++ version. Hence we disable it here.
@@ -66,12 +67,13 @@ static char* strdup(const char* s)
 	int         	number;
 	re2c::ExtOp 	extop;
 	re2c::Str   	*str;
+	re2c::CondList	*clist;
 };
 
-%token		CLOSESIZE	CLOSE	ID	CODE	RANGE	STRING
+%token		CLOSESIZE	CLOSE	STAR	ID	CODE	RANGE	STRING
 %token		CONFIG	VALUE	NUMBER
 
-%type	<op>		CLOSE
+%type	<op>		CLOSE	STAR
 %type	<op>		close
 %type	<extop>		CLOSESIZE
 %type	<symbol>	ID
@@ -79,6 +81,7 @@ static char* strdup(const char* s)
 %type	<regexp>	RANGE	STRING
 %type	<regexp>	rule	look	expr	diff	term	factor	primary
 %type	<str>		CONFIG	VALUE
+%type   <clist>		cond	clist
 %type	<number>	NUMBER
 
 %%
@@ -90,9 +93,6 @@ spec:
 			spec = NULL;
 		}
 	|	spec rule
-		{
-			spec = spec? mkAlt(spec, $2) : $2;
-		}
 	|	spec decl
 ;
 
@@ -104,6 +104,10 @@ decl:
 				in->fatal("sym already defined");
 			}
 			$1->re = $3;
+		}
+	|	ID '=' expr '/'
+		{
+			in->fatal("trailing contexts are not allowed in named definitions");
 		}
 	|	CONFIG '=' VALUE ';'
 		{
@@ -118,17 +122,76 @@ decl:
 		}
 ;
 
-decl:
-		ID '=' expr '/'
-		{
-			in->fatal("trailing contexts are not allowed in named definitions");
-		}
-;
-
 rule:
 		expr look CODE
 		{
+			if (cFlag)
+			{
+				in->fatal("condition or '<*>' required when using -c switch");
+			}
 			$$ = new RuleOp($1, $2, $3, accept++);
+			spec = spec? mkAlt(spec, $$) : $$;
+		}
+	|	'<' cond '>' expr look CODE
+		{
+			if (!cFlag)
+			{
+				delete $2;
+				in->fatal("conditions are only allowed when using -c switch");
+			}
+			for(CondList::const_iterator it = $2->begin(); it != $2->end(); ++it)
+			{
+				// Duplicating stuff, slow but safe
+				$$ = new RuleOp($4, $5, new Token(*$6), accept++);
+				
+				RegExpMap::iterator itRE = specmap.find(*it);
+				
+				if (itRE != specmap.end())
+				{
+					$$ = mkAlt(itRE->second, $$);
+				}
+				specmap[*it] = $$;
+			}
+			delete $2;
+			delete $6;
+		}
+	|	'<' cond '>' look CODE
+		{
+			delete $2;
+			if (!cFlag)
+			{
+				in->fatal("conditions are only allowed when using -c switch");
+			}
+			in->fatal("no expression specified");
+		}
+;
+
+cond:
+		/* empty */
+		{
+			in->fatal("unnamed condition not supported");
+		}
+	|	STAR
+		{
+			$$ = new CondList();
+			$$->insert("*");
+		}
+	|	clist
+		{
+			$$ = $1;
+		}
+	;
+
+clist:
+		ID
+		{
+			$$ = new CondList();
+			$$->insert($1->GetName().to_string());
+		}
+	|	clist ',' ID
+		{
+			$1->insert($3->GetName().to_string());
+			$$ = $1;
 		}
 ;
 
@@ -211,7 +274,15 @@ close:
 		{
 			$$ = $1;
 		}
+	|	STAR
+		{
+			$$ = $1;
+		}
 	|	close CLOSE
+		{
+			$$ = ($1 == $2) ? $1 : '*';
+		}
+	|	close STAR
 		{
 			$$ = ($1 == $2) ? $1 : '*';
 		}
@@ -273,7 +344,19 @@ void parse(Scanner& i, std::ostream& o)
 	while(i.echo())
 	{
 		yyparse();
-		if(spec)
+		if (cFlag)
+		{
+			for(RegExpMap::const_iterator it = specmap.begin(); it != specmap.end(); ++it)
+			{
+				if (it->second)
+				{
+					o << "yyc_" << it->first << ":\n";
+					spec = it->second;
+					genCode(o, topIndent, spec);
+				}
+			}
+		}
+		else if(spec)
 		{
 			genCode(o, topIndent, spec);
 		}
@@ -283,6 +366,7 @@ void parse(Scanner& i, std::ostream& o)
 	RegExp::vFreeList.clear();
 	Range::vFreeList.clear();
 	Symbol::ClearTable();
+	specmap.clear();
 	in = NULL;
 }
 
