@@ -184,7 +184,7 @@ factor:
 		primary
 		{
 			$$ = $1;
-			}
+		}
 	|	primary close
 		{
 			switch($2)
