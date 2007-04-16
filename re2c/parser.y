@@ -81,7 +81,7 @@ static char* strdup(const char* s)
 %type	<regexp>	RANGE	STRING
 %type	<regexp>	rule	look	expr	diff	term	factor	primary
 %type	<str>		CONFIG	VALUE
-%type   <clist>		cond	clist
+%type	<clist>		cond	clist
 %type	<number>	NUMBER
 
 %%
