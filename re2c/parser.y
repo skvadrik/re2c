@@ -27,8 +27,9 @@ void yyerror(const char*);
 }
 
 static re2c::uint       accept;
-static re2c::RegExpMap  specmap;
-static RegExp           *spec;
+static re2c::RegExpMap  specMap;
+static RegExp           *spec, *specNone = NULL;
+static RuleOpList       specStar;
 static Scanner          *in = NULL;
 
 /* Bison version 1.875 emits a definition that is not working
@@ -70,7 +71,7 @@ static char* strdup(const char* s)
 	re2c::CondList	*clist;
 };
 
-%token		CLOSESIZE	CLOSE	STAR	ID	CODE	RANGE	STRING
+%token		CLOSESIZE	CLOSE	STAR	NOCOND	ID	CODE	RANGE	STRING
 %token		CONFIG	VALUE	NUMBER
 
 %type	<op>		CLOSE	STAR
@@ -144,13 +145,13 @@ rule:
 				// Duplicating stuff, slow but safe
 				$$ = new RuleOp($4, $5, new Token(*$6), accept++);
 				
-				RegExpMap::iterator itRE = specmap.find(*it);
+				RegExpMap::iterator itRE = specMap.find(*it);
 				
-				if (itRE != specmap.end())
+				if (itRE != specMap.end())
 				{
 					$$ = mkAlt(itRE->second, $$);
 				}
-				specmap[*it] = $$;
+				specMap[*it] = $$;
 			}
 			delete $2;
 			delete $6;
@@ -164,17 +165,40 @@ rule:
 			}
 			in->fatal("no expression specified");
 		}
+	|	'<' STAR '>' expr look CODE
+		{
+			if (!cFlag)
+			{
+				in->fatal("conditions are only allowed when using -c switch");
+			}
+			specStar.push_back(new RuleOp($4, $5, $6, accept++));
+		}
+	|	'<' STAR '>' look CODE
+		{
+			if (!cFlag)
+			{
+				in->fatal("conditions are only allowed when using -c switch");
+			}
+			in->fatal("no expression specified");
+		}
+	|	NOCOND CODE
+		{
+			if (!cFlag)
+			{
+				in->fatal("conditions are only allowed when using -c switch");
+			}
+			if (specNone)
+			{
+				in->fatal("code to handle illegal condition already defined");
+			}
+			$$ = specNone = new RuleOp(new NullOp(), new NullOp(), $2, accept++);
+		}
 ;
 
 cond:
 		/* empty */
 		{
 			in->fatal("unnamed condition not supported");
-		}
-	|	STAR
-		{
-			$$ = new CondList();
-			$$->insert("*");
 		}
 	|	clist
 		{
@@ -346,14 +370,43 @@ void parse(Scanner& i, std::ostream& o)
 		yyparse();
 		if (cFlag)
 		{
-			for(RegExpMap::const_iterator it = specmap.begin(); it != specmap.end(); ++it)
+			RegExpMap::iterator it;
+
+			if (!specStar.empty())
 			{
-				if (it->second)
+				for(it = specMap.begin(); it != specMap.end(); ++it)
 				{
-					o << "yyc_" << it->first << ":\n";
-					spec = it->second;
-					genCode(o, topIndent, spec);
+					assert(it->second);
+					for(RuleOpList::const_iterator itOp = specStar.begin(); itOp != specStar.end(); ++itOp)
+					{
+						it->second = mkAlt((*itOp)->copy(accept++), it->second);
+					}
 				}
+				if (!specNone)
+				{
+					RuleOpList::const_iterator itOp = specStar.begin();
+
+					specNone = (*itOp)->copy(accept++);
+					while(++itOp != specStar.end())
+					{
+						specNone = mkAlt((*itOp)->copy(accept++), specNone);
+					}
+				}
+			}
+
+			genCondCheck(o, topIndent, specMap);
+
+			if (specNone)
+			{
+				genCode(o, topIndent, specNone);
+			}
+
+			for(it = specMap.begin(); it != specMap.end(); ++it)
+			{
+				assert(it->second);
+				o << condPrefix << it->first << ":\n";
+				spec = it->second;
+				genCode(o, topIndent, spec);
 			}
 		}
 		else if(spec)
@@ -366,7 +419,9 @@ void parse(Scanner& i, std::ostream& o)
 	RegExp::vFreeList.clear();
 	Range::vFreeList.clear();
 	Symbol::ClearTable();
-	specmap.clear();
+	specMap.clear();
+	specStar.clear();
+	specNone = NULL;
 	in = NULL;
 }
 

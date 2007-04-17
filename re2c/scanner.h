@@ -17,7 +17,7 @@ class Scanner:
 private:
 	std::istream&	in;
 	std::ostream&   out;
-	char	*bot, *tok, *ptr, *cur, *pos, *lim, *top, *eof;
+	char	*bot, *tok, *ptr, *cur, *pos, *lim, *top, *eof, *ctx;
 	uint	tchar, tline, cline, iscfg;
 
 private:

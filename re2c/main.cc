@@ -49,6 +49,7 @@ bool bUseYYFillParam = true;
 
 std::string startLabelName;
 std::string labelPrefix("yy");
+std::string condPrefix("yyc_");
 std::string yychConversion("");
 uint maxFill = 1;
 uint next_label = 0;

@@ -32,32 +32,34 @@
      CLOSESIZE = 258,
      CLOSE = 259,
      STAR = 260,
-     ID = 261,
-     CODE = 262,
-     RANGE = 263,
-     STRING = 264,
-     CONFIG = 265,
-     VALUE = 266,
-     NUMBER = 267
+     NOCOND = 261,
+     ID = 262,
+     CODE = 263,
+     RANGE = 264,
+     STRING = 265,
+     CONFIG = 266,
+     VALUE = 267,
+     NUMBER = 268
    };
 #endif
 /* Tokens.  */
 #define CLOSESIZE 258
 #define CLOSE 259
 #define STAR 260
-#define ID 261
-#define CODE 262
-#define RANGE 263
-#define STRING 264
-#define CONFIG 265
-#define VALUE 266
-#define NUMBER 267
+#define NOCOND 261
+#define ID 262
+#define CODE 263
+#define RANGE 264
+#define STRING 265
+#define CONFIG 266
+#define VALUE 267
+#define NUMBER 268
 
 
 
 
 #if ! defined (YYSTYPE) && ! defined (YYSTYPE_IS_DECLARED)
-#line 62 "parser.y"
+#line 63 "parser.y"
 typedef union YYSTYPE {
 	re2c::Symbol	*symbol;
 	re2c::RegExp	*regexp;
@@ -69,7 +71,7 @@ typedef union YYSTYPE {
 	re2c::CondList	*clist;
 } YYSTYPE;
 /* Line 1447 of yacc.c.  */
-#line 73 "y.tab.h"
+#line 75 "y.tab.h"
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1
 # define YYSTYPE_IS_TRIVIAL 1

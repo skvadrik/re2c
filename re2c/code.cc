@@ -1647,6 +1647,33 @@ void genGetState(std::ostream &o, uint& ind, uint start_label)
 	}
 }
 
+void genCondCheck(std::ostream &o, uint& ind, const RegExpMap& specMap)
+{
+	if (gFlag)
+	{
+		o << indent(ind++) << "{\n";
+		o << indent(ind++) << "static void *" << mapCodeName["yycond"] << "[" << specMap.size() << "] = {\n";
+	}
+	for(RegExpMap::const_iterator it = specMap.begin(); it != specMap.end(); ++it)
+	{
+		if (gFlag)
+		{
+			o << indent(ind) << "&&" << condPrefix << it->first << ",\n";
+		}
+		else
+		{
+			o << indent(ind) << "if(" << mapCodeName["YYCOND"] << " == " << it->first << ")";
+			o << " goto " << condPrefix << it->first << ";\n";
+		}
+	}
+	if (gFlag)
+	{
+		o << indent(--ind) << "};\n";
+		o << indent(ind) << "goto *" << mapCodeName["yycond"] << "[" << mapCodeName["YYCOND"] << "];\n";
+		o << indent(--ind) << "}\n";
+	}
+}
+
 std::ostream& operator << (std::ostream& o, const file_info& li)
 {
 	if (li.ln && !iFlag)
@@ -1769,6 +1796,10 @@ void Scanner::config(const Str& cfg, const Str& val)
 	else if (cfg.to_string() == "labelprefix")
 	{
 		labelPrefix = strVal;
+	}
+	else if (cfg.to_string() == "condprefix")
+	{
+		condPrefix = strVal;
 	}
 	else if (cfg.to_string() == "yych:conversion")
 	{

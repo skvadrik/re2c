@@ -5,8 +5,6 @@
 #include "scanner.h"
 #include "re.h"
 #include <iosfwd>
-#include <map>
-#include <set>
 
 namespace re2c
 {
@@ -54,9 +52,6 @@ private:
 	}
 #endif
 };
-
-typedef std::set<std::string>           CondList;
-typedef std::map<std::string, RegExp*>  RegExpMap;
 
 void parse(Scanner&, std::ostream&);
 

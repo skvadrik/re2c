@@ -4,6 +4,8 @@
 
 #include <iostream>
 #include <set>
+#include <map>
+#include <list>
 #include "token.h"
 #include "ins.h"
 #include "globals.h"
@@ -260,6 +262,7 @@ public:
 	{
 		o << exp << "/" << ctx << ";";
 	}
+	RuleOp* copy(uint) const;
 
 #ifdef PEDANTIC
 private:
@@ -483,9 +486,15 @@ private:
 #endif
 };
 
+typedef std::set<std::string>           CondList;
+typedef std::map<std::string, RegExp*>  RegExpMap;
+typedef std::list<RuleOp*>              RuleOpList;
+
 extern void genCode(std::ostream&, RegExp*);
 extern void genCode(std::ostream&, uint, RegExp*);
 extern void genGetState(std::ostream&, uint&, uint);
+extern void genCondCheck(std::ostream &o, uint& ind, const RegExpMap& specmap);
+
 extern RegExp *mkDiff(RegExp*, RegExp*);
 extern RegExp *mkAlt(RegExp*, RegExp*);
 

@@ -39,6 +39,7 @@ extern bool bUsedYYMarker;
 extern bool bUseStartLabel;
 extern std::string startLabelName;
 extern std::string labelPrefix;
+extern std::string condPrefix;
 extern std::string yychConversion;
 extern uint maxFill;
 extern uint next_label;

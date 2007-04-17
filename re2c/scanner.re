@@ -21,6 +21,7 @@ extern YYSTYPE yylval;
 #define	YYCURSOR	cursor
 #define	YYLIMIT		lim
 #define	YYMARKER	ptr
+#define YYCTXMARKER ctx
 #define	YYFILL(n)	{cursor = fill(cursor);}
 
 #define	RETURN(i)	{cur = cursor; return i;}
@@ -32,7 +33,7 @@ Scanner::Scanner(std::istream& i, std::ostream& o)
 	: in(i)
 	, out(o)
 	, bot(NULL), tok(NULL), ptr(NULL), cur(NULL), pos(NULL), lim(NULL)
-	, top(NULL), eof(NULL), tchar(0), tline(0), cline(1), iscfg(0)
+	, top(NULL), eof(NULL), ctx(NULL), tchar(0), tline(0), cline(1), iscfg(0)
 {
 	;
 }
@@ -90,6 +91,7 @@ number  = "0" | ("-"? [1-9] digit*);
 name    = (letter|"_") (letter|digit|"_")*;
 cname   = ":" name;
 space   = [ \t];
+ws      = (space | [\r\n]);
 eol     = ("\r\n" | "\n");
 config  = "re2c" cname+;
 value   = [^\r\n; \t]* | dstring | sstring;
@@ -274,6 +276,9 @@ scan:
 					fatal("unterminated range (missing ])");
 				}
 
+	"<>" / (ws* "{") {
+					RETURN(NOCOND);
+				}
 	[<>,()|=;/\\]	{
 					RETURN(*tok);
 				}
