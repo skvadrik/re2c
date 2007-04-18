@@ -1686,11 +1686,12 @@ void genCondGoto(std::ostream &o, uint ind, const RegExpMap* specMap)
 		}
 		else
 		{
+			o << indent(ind) << "switch(" << mapCodeName["YYCOND"] << ") {\n";
 			for(RegExpMap::const_iterator it = specMap->begin(); it != specMap->end(); ++it)
 			{
-				o << indent(ind) << "if(" << mapCodeName["YYCOND"] << " == " << it->first << ")"
-				  << " goto " << condPrefix << it->first << ";\n";
+				o << indent(ind) << "case " << it->first << ": goto " << condPrefix << it->first << ";\n";
 			}
+			o << indent(ind) << "}\n";
 		}
 		bWroteCondCheck = true;
 	}

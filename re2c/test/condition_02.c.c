@@ -4,15 +4,17 @@
 #line 5 "<stdout>"
 {
 	YYCTYPE yych;
-	if(YYCOND == 0) goto yyc_0;
-	if(YYCOND == r1) goto yyc_r1;
-	if(YYCOND == r2) goto yyc_r2;
+	switch(YYCOND) {
+	case 0: goto yyc_0;
+	case r1: goto yyc_r1;
+	case r2: goto yyc_r2;
+	}
 /* *********************************** */
 yyc_0:
 
 #line 3 "condition_02.c.re"
 	{ return NULL; }
-#line 16 "<stdout>"
+#line 18 "<stdout>"
 /* *********************************** */
 yyc_r1:
 	if(YYLIMIT == YYCURSOR) YYFILL(1);
@@ -27,12 +29,12 @@ yy6:
 	++YYCURSOR;
 #line 4 "condition_02.c.re"
 	{ return "a"; }
-#line 31 "<stdout>"
+#line 33 "<stdout>"
 yy8:
 	++YYCURSOR;
 #line 5 "condition_02.c.re"
 	{ return "b"; }
-#line 36 "<stdout>"
+#line 38 "<stdout>"
 /* *********************************** */
 yyc_r2:
 	if(YYLIMIT == YYCURSOR) YYFILL(1);
@@ -46,7 +48,7 @@ yy13:
 	++YYCURSOR;
 #line 5 "condition_02.c.re"
 	{ return "b"; }
-#line 50 "<stdout>"
+#line 52 "<stdout>"
 }
 #line 7 "condition_02.c.re"
 

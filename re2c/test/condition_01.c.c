@@ -4,8 +4,10 @@
 #line 5 "<stdout>"
 {
 	YYCTYPE yych;
-	if(YYCOND == a) goto yyc_a;
-	if(YYCOND == b) goto yyc_b;
+	switch(YYCOND) {
+	case a: goto yyc_a;
+	case b: goto yyc_b;
+	}
 /* *********************************** */
 yyc_a:
 
@@ -26,7 +28,7 @@ yy4:
 	++YYCURSOR;
 #line 3 "condition_01.c.re"
 	{ }
-#line 30 "<stdout>"
+#line 32 "<stdout>"
 /* *********************************** */
 yyc_b:
 	if((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
@@ -46,7 +48,7 @@ yy10:
 	++YYCURSOR;
 #line 3 "condition_01.c.re"
 	{ }
-#line 50 "<stdout>"
+#line 52 "<stdout>"
 }
 #line 5 "condition_01.c.re"
 
