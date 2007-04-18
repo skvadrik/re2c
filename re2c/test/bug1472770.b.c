@@ -18,7 +18,10 @@ int scan(char *p)
 	printf("%s\n", p);
 	printf("]--------------\n");
 start:
+
+#line 23 "<stdout>"
 {
+	YYCTYPE yych;
 	static const unsigned char yybm[] = {
 		  0, 128, 128, 128, 128, 128, 128, 128, 
 		128, 128,   0, 128, 128, 128, 128, 128, 
@@ -53,35 +56,30 @@ start:
 		128, 128, 128, 128, 128, 128, 128, 128, 
 		128, 128, 128, 128, 128, 128, 128, 128, 
 	};
-
-#line 58 "<stdout>"
-	{
-		YYCTYPE yych;
-		goto yy0;
+	goto yy0;
 yy1:
-		++YYCURSOR;
+	++YYCURSOR;
 yy0:
-		if(YYLIMIT == YYCURSOR) YYFILL(1);
-		yych = *YYCURSOR;
-		if(yybm[0+yych] & 128) {
-			goto yy1;
-		}
-		if(yych <= 0x00) goto yy5;
-		++YYCURSOR;
+	if(YYLIMIT == YYCURSOR) YYFILL(1);
+	yych = *YYCURSOR;
+	if(yybm[0+yych] & 128) {
+		goto yy1;
+	}
+	if(yych <= 0x00) goto yy5;
+	++YYCURSOR;
 #line 21 "bug1472770.b.re"
-		{
+	{
 		++n;
 		goto start;
 	}
-#line 77 "<stdout>"
+#line 76 "<stdout>"
 yy5:
-		++YYCURSOR;
+	++YYCURSOR;
 #line 26 "bug1472770.b.re"
-		{
+	{
 		return n;
 	}
-#line 84 "<stdout>"
-	}
+#line 83 "<stdout>"
 }
 #line 29 "bug1472770.b.re"
 

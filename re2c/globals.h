@@ -52,6 +52,7 @@ extern bool yybmHexTable;
 extern bool bUseStateAbort;
 extern bool bUseStateNext;
 extern bool bWroteGetState;
+extern bool bWroteCondCheck;
 extern bool bUseYYFill;
 extern bool bUseYYFillParam;
 

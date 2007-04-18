@@ -323,7 +323,7 @@ static void need(std::ostream &o, uint ind, uint n, bool & readCh, bool bSetMark
 		o << indent(ind) << mapCodeName["YYSETSTATE"] << "(" << fillIndex << ");\n";
 	}
 
-	if (bUseYYFill)
+	if (bUseYYFill && n > 0)
 	{
 		if (n == 1)
 		{
@@ -345,15 +345,18 @@ static void need(std::ostream &o, uint ind, uint n, bool & readCh, bool bSetMark
 		o << mapCodeName["yyFillLabel"] << fillIndex << ":\n";
 	}
 
-	if (bSetMarker)
+	if (n > 0)
 	{
-		o << indent(ind) << mapCodeName["yych"] << " = " << yychConversion << "*(" << mapCodeName["YYMARKER"] << " = " << mapCodeName["YYCURSOR"] << ");\n";
+		if (bSetMarker)
+		{
+			o << indent(ind) << mapCodeName["yych"] << " = " << yychConversion << "*(" << mapCodeName["YYMARKER"] << " = " << mapCodeName["YYCURSOR"] << ");\n";
+		}
+		else
+		{
+			o << indent(ind) << mapCodeName["yych"] << " = " << yychConversion << "*" << mapCodeName["YYCURSOR"] << ";\n";
+		}
+		readCh = false;
 	}
-	else
-	{
-		o << indent(ind) << mapCodeName["yych"] << " = " << yychConversion << "*" << mapCodeName["YYCURSOR"] << ";\n";
-	}
-	readCh = false;
 }
 
 void Match::emit(std::ostream &o, uint ind, bool &readCh) const
@@ -1386,15 +1389,16 @@ void DFA::findBaseState()
 	delete [] span;
 }
 
-void DFA::emit(std::ostream &o, uint ind)
+void DFA::emit(std::ostream &o, uint& ind, const RegExpMap* specMap, const std::string& condName, bool isLastCond)
 {
 	State *s;
-	uint i, bitmap_brace = 0;
+	uint i;
 
 	findSCCs();
 	head->link = head;
 
 	uint nRules = 0;
+	bool bProlog = (!cFlag || !bWroteCondCheck);
 
 	for (s = head; s; s = s->next)
 	{
@@ -1521,13 +1525,6 @@ void DFA::emit(std::ostream &o, uint ind)
 	delete head->action;
 	head->action = NULL;
 
-	if (bFlag)
-	{
-		o << indent(ind++) << "{\n";
-		bitmap_brace = 1;
-		BitMap::gen(o, ind, lbChar, ubChar <= 256 ? ubChar : 256);
-	}
-
 	bUsedYYAccept = false;
 	
 	uint start_label = next_label;
@@ -1565,23 +1562,42 @@ void DFA::emit(std::ostream &o, uint ind)
 	next_fill_index = save_fill_index;
 
 	// Generate prolog
-	o << "\n" << outputFileInfo;
-	o << indent(ind++) << "{\n";
-
-	if (!fFlag)
+	if (bProlog)
 	{
-		o << indent(ind) << mapCodeName["YYCTYPE"] << " " << mapCodeName["yych"] << ";\n";
-		if (bUsedYYAccept)
+		o << "\n" << outputFileInfo;
+		o << indent(ind++) << "{\n";
+	
+		if (!fFlag)
 		{
-			o << indent(ind) << "unsigned int "<< mapCodeName["yyaccept"] << " = 0;\n";
+			o << indent(ind) << mapCodeName["YYCTYPE"] << " " << mapCodeName["yych"] << ";\n";
+			if (bUsedYYAccept)
+			{
+				o << indent(ind) << "unsigned int "<< mapCodeName["yyaccept"] << " = 0;\n";
+			}
+		}
+		else
+		{
+			o << "\n";
 		}
 	}
-	else
+	if (bFlag)
 	{
-		o << "\n";
+		BitMap::gen(o, ind, lbChar, ubChar <= 256 ? ubChar : 256);
+	}
+	if (bProlog)
+	{
+
+		genCondTable(o, ind, specMap);
+		genGetState(o, ind, start_label);
+		genCondGoto(o, ind, specMap);
 	}
 
-	genGetState(o, ind, start_label);
+	if (cFlag && (bFlag || !condName.empty()))
+	{
+		// TODO: Drop marker
+		o << "/* *********************************** */\n";
+		o << condPrefix << condName << ":\n";
+	}
 
 	if (vUsedLabels.count(1))
 	{
@@ -1598,8 +1614,7 @@ void DFA::emit(std::ostream &o, uint ind)
 	}
 
 	// Generate epilog
-	o << indent(--ind) << "}\n";
-	if (bitmap_brace)
+	if (!cFlag || isLastCond)
 	{
 		o << indent(--ind) << "}\n";
 	}
@@ -1647,30 +1662,37 @@ void genGetState(std::ostream &o, uint& ind, uint start_label)
 	}
 }
 
-void genCondCheck(std::ostream &o, uint& ind, const RegExpMap& specMap)
+void genCondTable(std::ostream &o, uint ind, const RegExpMap* specMap)
 {
-	if (gFlag)
+	if (cFlag && !bWroteCondCheck && gFlag)
 	{
-		o << indent(ind++) << "{\n";
-		o << indent(ind++) << "static void *" << mapCodeName["yycond"] << "[" << specMap.size() << "] = {\n";
-	}
-	for(RegExpMap::const_iterator it = specMap.begin(); it != specMap.end(); ++it)
-	{
-		if (gFlag)
+		o << indent(ind++) << "static void *" << mapCodeName["yycond"] << "[" << specMap->size() << "] = {\n";
+
+		for(RegExpMap::const_iterator it = specMap->begin(); it != specMap->end(); ++it)
 		{
 			o << indent(ind) << "&&" << condPrefix << it->first << ",\n";
 		}
+		o << indent(--ind) << "};\n";
+	}
+}
+
+void genCondGoto(std::ostream &o, uint ind, const RegExpMap* specMap)
+{
+	if (cFlag && !bWroteCondCheck)
+	{
+		if (gFlag)
+		{
+			o << indent(ind) << "goto *" << mapCodeName["yycond"] << "[" << mapCodeName["YYCOND"] << "];\n";
+		}
 		else
 		{
-			o << indent(ind) << "if(" << mapCodeName["YYCOND"] << " == " << it->first << ")";
-			o << " goto " << condPrefix << it->first << ";\n";
+			for(RegExpMap::const_iterator it = specMap->begin(); it != specMap->end(); ++it)
+			{
+				o << indent(ind) << "if(" << mapCodeName["YYCOND"] << " == " << it->first << ")"
+				  << " goto " << condPrefix << it->first << ";\n";
+			}
 		}
-	}
-	if (gFlag)
-	{
-		o << indent(--ind) << "};\n";
-		o << indent(ind) << "goto *" << mapCodeName["yycond"] << "[" << mapCodeName["YYCOND"] << "];\n";
-		o << indent(--ind) << "}\n";
+		bWroteCondCheck = true;
 	}
 }
 

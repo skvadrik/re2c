@@ -41,7 +41,10 @@ int scan(Scanner &s)
 std:
 	s.tok = cursor;
 
+
+#line 46 "<stdout>"
 {
+	unsigned char curr;
 	static const unsigned char yybm[] = {
 		  0,   0,   0,   0,   0,   0,   0,   0, 
 		  0,   0,   0,   0,   0,   0,   0,   0, 
@@ -77,96 +80,91 @@ std:
 		  0,   0,   0,   0,   0,   0,   0,   0, 
 	};
 
-#line 81 "<stdout>"
-	{
-		unsigned char curr;
-
-		if((s.lim - s.cur) < 3) fill(3);
-		curr = (unsigned char)*s.cur;
-		if(curr <= ' ') {
-			if(curr <= 0x09) {
-				if(curr <= 0x08) goto xx9;
-				goto xx6;
-			} else {
-				if(curr <= 0x0A) goto xx8;
-				if(curr <= 0x1F) goto xx9;
-				goto xx6;
-			}
+	if((s.lim - s.cur) < 3) fill(3);
+	curr = (unsigned char)*s.cur;
+	if(curr <= ' ') {
+		if(curr <= 0x09) {
+			if(curr <= 0x08) goto xx9;
+			goto xx6;
 		} else {
-			if(curr <= '9') {
-				if(curr <= '/') goto xx9;
-				goto xx4;
-			} else {
-				if(curr <= '`') goto xx9;
-				if(curr >= 'c') goto xx9;
-			}
+			if(curr <= 0x0A) goto xx8;
+			if(curr <= 0x1F) goto xx9;
+			goto xx6;
 		}
-		s.ctx = s.cur + 1;
-		++s.cur;
-		if((curr = (unsigned char)*s.cur) <= '/') goto xx3;
-		if(curr == '1') goto xx15;
-		if(curr <= '9') goto xx12;
+	} else {
+		if(curr <= '9') {
+			if(curr <= '/') goto xx9;
+			goto xx4;
+		} else {
+			if(curr <= '`') goto xx9;
+			if(curr >= 'c') goto xx9;
+		}
+	}
+	s.ctx = s.cur + 1;
+	++s.cur;
+	if((curr = (unsigned char)*s.cur) <= '/') goto xx3;
+	if(curr == '1') goto xx15;
+	if(curr <= '9') goto xx12;
 xx3:
 #line 68 "config9.b.re"
-		{
+	{
 		return UNEXPECTED;
 	}
-#line 115 "<stdout>"
+#line 114 "<stdout>"
 xx4:
-		++s.cur;
-		curr = (unsigned char)*s.cur;
-		goto xx11;
+	++s.cur;
+	curr = (unsigned char)*s.cur;
+	goto xx11;
 xx5:
 #line 58 "config9.b.re"
-		{ return NUMBER;  }
-#line 123 "<stdout>"
+	{ return NUMBER;  }
+#line 122 "<stdout>"
 xx6:
-		++s.cur;
+	++s.cur;
 xx7:
 #line 61 "config9.b.re"
-		{
+	{
 		if(s.cur == s.lim)
 			return EOI;
 		cursor = s.cur;
 		goto std;
 	}
-#line 134 "<stdout>"
+#line 133 "<stdout>"
 xx8:
-		curr = (unsigned char)*++s.cur;
-		goto xx7;
+	curr = (unsigned char)*++s.cur;
+	goto xx7;
 xx9:
-		curr = (unsigned char)*++s.cur;
-		goto xx3;
+	curr = (unsigned char)*++s.cur;
+	goto xx3;
 xx10:
-		++s.cur;
-		if(s.lim == s.cur) fill(1);
-		curr = (unsigned char)*s.cur;
+	++s.cur;
+	if(s.lim == s.cur) fill(1);
+	curr = (unsigned char)*s.cur;
 xx11:
-		if(yybm[0+curr] & 128) {
-			goto xx10;
-		}
-		goto xx5;
-xx12:
-		++s.cur;
-		if(s.lim == s.cur) fill(1);
-		curr = (unsigned char)*s.cur;
-		if(curr <= '/') goto xx14;
-		if(curr <= '9') goto xx12;
-xx14:
-		s.cur = s.ctx;
-#line 57 "config9.b.re"
-		{ return KEYWORD; }
-#line 160 "<stdout>"
-xx15:
-		++s.cur;
-		if((curr = (unsigned char)*s.cur) <= '/') goto xx16;
-		if(curr <= '9') goto xx12;
-xx16:
-		s.cur = s.ctx;
-#line 56 "config9.b.re"
-		{ return KEYWORD; }
-#line 169 "<stdout>"
+	if(yybm[0+curr] & 128) {
+		goto xx10;
 	}
+	goto xx5;
+xx12:
+	++s.cur;
+	if(s.lim == s.cur) fill(1);
+	curr = (unsigned char)*s.cur;
+	if(curr <= '/') goto xx14;
+	if(curr <= '9') goto xx12;
+xx14:
+	s.cur = s.ctx;
+#line 57 "config9.b.re"
+	{ return KEYWORD; }
+#line 159 "<stdout>"
+xx15:
+	++s.cur;
+	if((curr = (unsigned char)*s.cur) <= '/') goto xx16;
+	if(curr <= '9') goto xx12;
+xx16:
+	s.cur = s.ctx;
+#line 56 "config9.b.re"
+	{ return KEYWORD; }
+#line 168 "<stdout>"
 }
 #line 71 "config9.b.re"
 

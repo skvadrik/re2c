@@ -1292,9 +1292,9 @@ yyreduce:
 				
 				if (itRE != specMap.end())
 				{
-					(yyval.regexp) = mkAlt(itRE->second, (yyval.regexp));
+					(yyval.regexp) = mkAlt(itRE->second.second, (yyval.regexp));
 				}
-				specMap[*it] = (yyval.regexp);
+				specMap[*it] = std::make_pair(specMap.size(), (yyval.regexp));
 			}
 			delete (yyvsp[-4].clist);
 			delete (yyvsp[0].token);
@@ -1847,42 +1847,33 @@ void parse(Scanner& i, std::ostream& o)
 			{
 				for(it = specMap.begin(); it != specMap.end(); ++it)
 				{
-					assert(it->second);
+					assert(it->second.second);
 					for(RuleOpList::const_iterator itOp = specStar.begin(); itOp != specStar.end(); ++itOp)
 					{
-						it->second = mkAlt((*itOp)->copy(accept++), it->second);
-					}
-				}
-				if (!specNone)
-				{
-					RuleOpList::const_iterator itOp = specStar.begin();
-
-					specNone = (*itOp)->copy(accept++);
-					while(++itOp != specStar.end())
-					{
-						specNone = mkAlt((*itOp)->copy(accept++), specNone);
+						it->second.second = mkAlt((*itOp)->copy(accept++), it->second.second);
 					}
 				}
 			}
-
-			genCondCheck(o, topIndent, specMap);
 
 			if (specNone)
 			{
-				genCode(o, topIndent, specNone);
+				// After merging star rules merge none code to specmap
+				// this simplifies some stuff.
+				// Note that 0 inserts first, which is important.
+				// Also "0" won't necessarily get index 0!
+				specMap["0"] = std::make_pair(specMap.size(), specNone);
 			}
 
+			size_t nCount = specMap.size();
 			for(it = specMap.begin(); it != specMap.end(); ++it)
 			{
-				assert(it->second);
-				o << condPrefix << it->first << ":\n";
-				spec = it->second;
-				genCode(o, topIndent, spec);
+				assert(it->second.second);
+				genCode(o, topIndent, it->second.second, &specMap, it->first, !--nCount);
 			}
 		}
 		else if(spec)
 		{
-			genCode(o, topIndent, spec);
+			genCode(o, topIndent, spec, NULL, "", 0);
 		}
 		o << sourceFileInfo;
 	}

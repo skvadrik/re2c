@@ -978,11 +978,6 @@ void optimize(Ins *i)
 	}
 }
 
-void genCode(std::ostream& o, RegExp *re)
-{
-	genCode(o, 0, re);
-}
-
 CharSet::CharSet()
 	: fix(0)
 	, freeHead(0)
@@ -1009,7 +1004,7 @@ CharSet::~CharSet()
 	delete[] ptn;
 }
 
-void genCode(std::ostream& o, uint ind, RegExp *re)
+void genCode(std::ostream& o, uint& ind, RegExp *re, const RegExpMap* specMap, const std::string& condName, bool isLastCond)
 {
 	CharSet cs;
 	uint j;
@@ -1057,7 +1052,7 @@ void genCode(std::ostream& o, uint ind, RegExp *re)
 	}
 
 	DFA *dfa = new DFA(ins, re->size, 0, nRealChars, rep);
-	dfa->emit(o, ind);
+	dfa->emit(o, ind, specMap, condName, isLastCond);
 	delete dfa;
 	delete [] ins;
 	delete [] rep;
