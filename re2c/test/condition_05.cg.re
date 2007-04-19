@@ -61,6 +61,7 @@ re2c:define:YYMARKER    = s->ptr;
 re2c:define:YYFILL      = "{ if(fill(s, 2) >= 0) break; }";
 re2c:define:YYCONDITION = state;
 re2c:yyfill:parameter   = 0;
+re2c:indent:top         = 2;
 
 <normal>	"/*"
 			{

@@ -56,63 +56,63 @@ char scan(Scanner *s)
 		s->tok = s->cur;
 
 #line 59 "<stdout>"
-{
-	unsigned char yych;
-	static void *yyctable[2] = {
-		&&yyc_comment,
-		&&yyc_normal,
-	};
-	goto *yyctable[state];
+		{
+			unsigned char yych;
+			static void *yyctable[2] = {
+				&&yyc_comment,
+				&&yyc_normal,
+			};
+			goto *yyctable[state];
 /* *********************************** */
 yyc_comment:
 
-	if((s->lim - s->cur) < 2) { if(fill(s, 2) >= 0) break; };
-	yych = *s->cur;
-	if(yych != '*') goto yy4;
-	++s->cur;
-	if((yych = *s->cur) == '/') goto yy5;
+			if((s->lim - s->cur) < 2) { if(fill(s, 2) >= 0) break; };
+			yych = *s->cur;
+			if(yych != '*') goto yy4;
+			++s->cur;
+			if((yych = *s->cur) == '/') goto yy5;
 yy3:
-#line 79 "condition_05.cg.re"
-	{
+#line 80 "condition_05.cg.re"
+			{
 				goto yyc_comment;
 			}
 #line 80 "<stdout>"
 yy4:
-	yych = *++s->cur;
-	goto yy3;
+			yych = *++s->cur;
+			goto yy3;
 yy5:
-	++s->cur;
-#line 75 "condition_05.cg.re"
-	{
+			++s->cur;
+#line 76 "condition_05.cg.re"
+			{
 				continue;
 			}
 #line 90 "<stdout>"
 /* *********************************** */
 yyc_normal:
-	if((s->lim - s->cur) < 2) { if(fill(s, 2) >= 0) break; };
-	yych = *s->cur;
-	if(yych != '/') goto yy11;
-	++s->cur;
-	if((yych = *s->cur) == '*') goto yy12;
+			if((s->lim - s->cur) < 2) { if(fill(s, 2) >= 0) break; };
+			yych = *s->cur;
+			if(yych != '/') goto yy11;
+			++s->cur;
+			if((yych = *s->cur) == '*') goto yy12;
 yy10:
-#line 70 "condition_05.cg.re"
-	{
+#line 71 "condition_05.cg.re"
+			{
 				fputc(*s->tok, stdout);
 				continue;
 			}
 #line 104 "<stdout>"
 yy11:
-	yych = *++s->cur;
-	goto yy10;
+			yych = *++s->cur;
+			goto yy10;
 yy12:
-	++s->cur;
-#line 66 "condition_05.cg.re"
-	{
+			++s->cur;
+#line 67 "condition_05.cg.re"
+			{
 				goto yyc_comment;
 			}
 #line 114 "<stdout>"
-}
-#line 83 "condition_05.cg.re"
+		}
+#line 84 "condition_05.cg.re"
 
 	}
 }
