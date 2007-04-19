@@ -1666,7 +1666,7 @@ void genCondTable(std::ostream &o, uint ind, const RegExpMap* specMap)
 {
 	if (cFlag && !bWroteCondCheck && gFlag)
 	{
-		o << indent(ind++) << "static void *" << mapCodeName["yycond"] << "[" << specMap->size() << "] = {\n";
+		o << indent(ind++) << "static void *" << mapCodeName["yyctable"] << "[" << specMap->size() << "] = {\n";
 
 		for(RegExpMap::const_iterator it = specMap->begin(); it != specMap->end(); ++it)
 		{
@@ -1682,11 +1682,11 @@ void genCondGoto(std::ostream &o, uint ind, const RegExpMap* specMap)
 	{
 		if (gFlag)
 		{
-			o << indent(ind) << "goto *" << mapCodeName["yycond"] << "[" << mapCodeName["YYCOND"] << "];\n";
+			o << indent(ind) << "goto *" << mapCodeName["yyctable"] << "[" << mapCodeName["YYCONDITION"] << "];\n";
 		}
 		else
 		{
-			o << indent(ind) << "switch(" << mapCodeName["YYCOND"] << ") {\n";
+			o << indent(ind) << "switch(" << mapCodeName["YYCONDITION"] << ") {\n";
 			for(RegExpMap::const_iterator it = specMap->begin(); it != specMap->end(); ++it)
 			{
 				o << indent(ind) << "case " << it->first << ": goto " << condPrefix << it->first << ";\n";
@@ -1780,7 +1780,9 @@ void Scanner::config(const Str& cfg, const Str& val)
 		mapVariableKeys.insert("variable:yyaccept");
 		mapVariableKeys.insert("variable:yybm");
 		mapVariableKeys.insert("variable:yych");
+		mapVariableKeys.insert("variable:yyctable");
 		mapVariableKeys.insert("variable:yytarget");
+		mapDefineKeys.insert("define:YYCONDITION");
 		mapDefineKeys.insert("define:YYCTXMARKER");
 		mapDefineKeys.insert("define:YYCTYPE");
 		mapDefineKeys.insert("define:YYCURSOR");

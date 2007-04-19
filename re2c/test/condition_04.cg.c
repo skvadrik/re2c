@@ -4,11 +4,11 @@
 #line 5 "<stdout>"
 {
 	YYCTYPE yych;
-	static void *yycond[2] = {
+	static void *yyctable[2] = {
 		&&yyc_r1,
 		&&yyc_r2,
 	};
-	goto *yycond[YYCOND];
+	goto *yyctable[YYCONDITION];
 /* *********************************** */
 yyc_r1:
 

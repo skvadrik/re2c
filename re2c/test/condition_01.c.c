@@ -4,7 +4,7 @@
 #line 5 "<stdout>"
 {
 	YYCTYPE yych;
-	switch(YYCOND) {
+	switch(YYCONDITION) {
 	case a: goto yyc_a;
 	case b: goto yyc_b;
 	}
