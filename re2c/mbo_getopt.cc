@@ -120,6 +120,7 @@ int mbo_getopt(int argc, char* const *argv, const mbo_opt_struct *opts, char **o
 			(*optind)++;
 			return (mbo_opt_error(argc, argv, *optind - 1, optchr, OPTERRCOLON, show_err));
 		}
+		arg_start = 1 + optchr;
 	}
 
 	if (opts_idx < 0)
@@ -179,7 +180,7 @@ int mbo_getopt(int argc, char* const *argv, const mbo_opt_struct *opts, char **o
 	}
 	else
 	{
-		if (arg_start == 2)
+		if (arg_start >= 2)
 		{
 			if (!argv[*optind][optchr + 1])
 			{
