@@ -81,7 +81,7 @@ will receive. If -1 is in effect then YYMAXFILL can be triggered once
 after the last /*!re2c */.</p>
 <p>You can also use /*!ignore:re2c */ blocks that allows to document the
 scanner code and will not be part of the output.</p>
-<a name="lbAE" id="lbAE"> </a>
+<a name="lbAE" id="lbAE">&nbsp;</a>
 <h2>OPTIONS</h2>
 <p><b>re2c</b> provides the following options:</p>
 <dl compact="compact">
@@ -144,7 +144,7 @@ version.<br /><br /></dd>
 </dl>
 <br />
 <br />
-<a name="lbAF" id="lbAF"> </a>
+<a name="lbAF" id="lbAF">&nbsp;</a>
 <h2>INTERFACE CODE</h2>
 <p>Unlike other scanner generators, <b>re2c</b> does not generate complete
 scanners: the user must supply some interface code. In particular, the user
@@ -219,7 +219,7 @@ disabled.<br /><br /></dd>
 </dl>
 <br />
 <br />
-<a name="lbAG" id="lbAG"> </a>
+<a name="lbAG" id="lbAG">&nbsp;</a>
 <h2>SCANNER WITH STORABLE STATES</h2>
 <p>When the <b>-f</b> flag is specified, re2c generates a scanner that can
 store its current state, return to the caller, and later resume operations
@@ -266,7 +266,7 @@ placing a "/*!getstate:re2c */" comment. This is especially useful when
 the scanner code should be wrapped inside a loop.</p>
 <p>Please see examples/push.re for push-model scanner. The generated code can be
 tweaked using inplace configurations "state:abort" and "state:nextlabel".</p>
-<a name="lbAH" id="lbAH"> </a>
+<a name="lbAH" id="lbAH">&nbsp;</a>
 <h2>SCANNER WITH CONDITION SUPPORT</h2>
 <p>
 You can preceed regular-expressions with a list of condition names when using the <b>-c</b>
@@ -280,7 +280,7 @@ provide a code block that does not have a scanner part. Meaning it does not
 allow any regular expression. The condition value referring to this special 
 block is always the one with the enumeration value 0.
 </p>
-<a name="lbAI" id="lbAI"> </a>
+<a name="lbAI" id="lbAI">&nbsp;</a>
 <h2>SCANNER SPECIFICATIONS</h2>
 <p>Each scanner specification consists of a set of <i>rules</i>, <i>named
 definitions</i> and <i>configurations</i>.</p>
@@ -311,7 +311,7 @@ name at all. In the latter case the rule cannot have a regular expression.
 <dd>re2c:<i>name</i> = <i>value</i>;</dd>
 <dd>re2c:<i>name</i> = <b>"</b><i>value</i><b>"</b>;</dd>
 </dl>
-<a name="lbAJ" id="lbAJ"> </a>
+<a name="lbAJ" id="lbAJ">&nbsp;</a>
 <h2>SUMMARY OF RE2C REGULAR EXPRESSIONS</h2>
 <dl compact="compact">
 <dt>"foo"</dt>
@@ -379,7 +379,7 @@ the only portable "<b>any</b>" rules are <b>(.|"\n")</b> and <b>[^]</b>.</p>
 <p>The regular expressions listed above are grouped according to precedence,
 from highest precedence at the top to lowest at the bottom. Those grouped
 together have equal precedence.</p>
-<a name="lbAK" id="lbAK"> </a>
+<a name="lbAK" id="lbAK">&nbsp;</a>
 <h2>INPLACE CONFIGURATION</h2>
 <p>It is possible to configure code generation inside re2c blocks. The
 following lists the available configurations:</p>
@@ -487,12 +487,12 @@ generate a static jump table for conditions.</dd>
 <dt><i>re2c:variable:yytarget</i> <b>=</b> yytarget <b>;</b></dt>
 <dd>Allows to overwrite the name of the variable yytarget.</dd>
 </dl>
-<a name="lbAL" id="lbAL"> </a>
+<a name="lbAL" id="lbAL">&nbsp;</a>
 <h2>UNDERSTANDING RE2C</h2>
 <p>The subdirectory lessons of the re2c distribution contains a few step by step
 lessons to get you started with re2c. All examples in the lessons subdirectory
 can be compiled and actually work.</p>
-<a name="lbAM" id="lbAM"> </a>
+<a name="lbAM" id="lbAM">&nbsp;</a>
 <h2>FEATURES</h2>
 <p><b>re2c</b> does not provide a default action: the generated code assumes
 that the input will consist of a sequence of tokens. Typically this can be
@@ -508,17 +508,17 @@ to see if it is the sentinel and act accordingly. And you can also use YYFILL(n)
 to end the scanner in case not enough characters are available which is nothing
 else then e detection of end of data/file.</p>
 <p><b>re2c</b> does not provide start conditions: use a separate scanner
-specification for each start condition (as illustrated in the above example).
-<a name="lbAN" id="lbAN"> </a></p>
+specification for each start condition (as illustrated in the above example).</p>
+<a name="lbAN" id="lbAN">&nbsp;</a>
 <h2>BUGS</h2>
 <p>Difference only works for character sets.</p>
 <p>The <b>re2c</b> internal algorithms need documentation.</p>
-<a name="lbAO" id="lbAO"> </a>
+<a name="lbAO" id="lbAO">&nbsp;</a>
 <h2>SEE ALSO</h2>
 <p>flex(1), lex(1). More information on <b>re2c</b> can be found here:
 <b><a href=
 "http://re2c.org/">http://re2c.org/</a></b></p>
-<a name="lbAP" id="lbAP"> </a>
+<a name="lbAP" id="lbAP">&nbsp;</a>
 <h2>AUTHORS</h2>
 <ul>
 <li>Peter Bumbulis &lt;<a href=
@@ -536,11 +536,11 @@ specification for each start condition (as illustrated in the above example).
 </ul>
 <br />
 <br />
-<a name="lbAQ" id="lbAQ"> </a>
+<a name="lbAQ" id="lbAQ">&nbsp;</a>
 <h2>VERSION INFORMATION</h2>
 <p>This manpage describes <b>re2c</b>, version 0.13.0.</p>
 <hr />
-<a name="index" id="index"> </a>
+<a name="index" id="index">&nbsp;</a>
 <h2>Index</h2>
 <dl>
 <dt><a href="#lbAB">NAME</a><br /></dt>
