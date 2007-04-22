@@ -493,8 +493,9 @@ typedef std::list<RuleOp*>              RuleOpList;
 
 extern void genCode(std::ostream&, uint&, RegExp*, const RegExpMap*, const std::string&, bool);
 extern void genGetState(std::ostream&, uint&, uint);
-extern void genCondTable(std::ostream &o, uint, const RegExpMap*);
-extern void genCondGoto(std::ostream &o, uint, const RegExpMap*);
+extern void genCondTable(std::ostream &o, uint, const RegExpMap&);
+extern void genCondGoto(std::ostream &o, uint, const RegExpMap&);
+extern void genHeader(std::ostream &o, uint, const RegExpMap&);
 
 extern RegExp *mkDiff(RegExp*, RegExp*);
 extern RegExp *mkAlt(RegExp*, RegExp*);

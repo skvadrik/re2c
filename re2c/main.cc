@@ -90,6 +90,7 @@ static const mbo_opt_struct OPTIONS[] =
 	mbo_opt_struct('i', 0, "no-debug-info"),
 	mbo_opt_struct('o', 1, "output"),
 	mbo_opt_struct('s', 0, "nested-ifs"),
+	mbo_opt_struct('t', 1, "header"),
 	mbo_opt_struct('u', 0, "unicode"),
 	mbo_opt_struct('v', 0, "version"),
 	mbo_opt_struct('V', 0, "vernum"),
@@ -132,6 +133,8 @@ static void usage()
 	"-s     --nested-ifs     Generate nested ifs for some switches. Many compilers\n"
 	"                        need this assist to generate better code.\n"
 	"\n"
+	"-t     --header         Generate a header file with type definitions.\n"
+	"\n"
 	"-u     --unicode        Implies -w but supports the full Unicode character set.\n"
 	"\n"
 	"-v     --version        Show version information.\n"
@@ -159,6 +162,7 @@ int main(int argc, char *argv[])
 	int c;
 	const char *sourceFileName = 0;
 	const char *outputFileName = 0;
+	const char *headerFileName = 0;
 
 	if (argc == 1)
 	{
@@ -192,10 +196,6 @@ int main(int argc, char *argv[])
 
 			case 'f':
 			fFlag = true;
-			if (bSinglePass) {
-				std::cerr << "re2c: error: cannot combine -1 and -f switch\n";
-				return 1;
-			}
 			break;
 
 			case 'g':
@@ -214,6 +214,10 @@ int main(int argc, char *argv[])
 
 			case 's':
 			sFlag = true;
+			break;
+
+			case 't':
+			headerFileName = opt_arg;
 			break;
 			
 			case '1':
@@ -247,11 +251,6 @@ int main(int argc, char *argv[])
 			}
 			
 			case 'w':
-			if (uFlag)
-			{
-				std::cerr << "re2c: error: cannot combine -w and -u switch\n";
-				return 1;
-			}
 			nRealChars = (1<<16); /* 0x10000 */
 			sFlag = true;
 			wFlag = true;
@@ -260,7 +259,6 @@ int main(int argc, char *argv[])
 			case 'u':
 			nRealChars = 0x110000; /* 17 times w-Flag */
 			sFlag = true;
-			wFlag = true;
 			uFlag = true;
 			break;
 	  
@@ -276,17 +274,33 @@ int main(int argc, char *argv[])
 		}
 	}
 
-	if (bFlag && bSinglePass) {
-		std::cerr << "re2c: error: cannot combine -1 and -f switch\n";
+	if ((bFlag || fFlag) && bSinglePass) {
+		std::cerr << "re2c: error: Cannot combine -1 and -b or -f switch\n";
 		return 1;
+	}
+	if (!cFlag && headerFileName)
+	{
+		std::cerr << "re2c: error: Can only output a header file when using -c switch\n";
+		return 2;
 	}
 
 	if (wFlag && eFlag)
 	{
-		usage();
+		std::cerr << "re2c: error: Cannot combine -e with -w or -u switch\n";
 		return 2;
 	}
-	else if (argc == opt_ind + 1)
+	if (wFlag && uFlag)
+	{
+		std::cerr << "re2c: error: Cannot combine -u with -w switch\n";
+		return 2;
+	}
+
+	if (uFlag)
+	{
+		wFlag = true;
+	}
+
+	if (argc == opt_ind + 1)
 	{
 		sourceFileName = argv[opt_ind];
 	}
@@ -317,6 +331,7 @@ int main(int argc, char *argv[])
 
 	// set up the output stream
 	re2c::ofstream_lc output;
+	re2c::ofstream_lc header;
 
 	if (outputFileName == 0 || (sourceFileName[0] == '-' && sourceFileName[1] == '\0'))
 	{
@@ -327,6 +342,14 @@ int main(int argc, char *argv[])
 	{
 		cerr << "re2c: error: cannot open " << outputFileName << "\n";
 		return 1;
+	}
+	if (headerFileName)
+	{
+		if (!header.open(headerFileName).is_open())
+		{
+			cerr << "re2c: error: cannot open " << headerFileName << "\n";
+			return 1;
+		}
 	}
 	Scanner scanner(source, output);
 	sourceFileInfo = file_info(sourceFileName, &scanner);
@@ -346,7 +369,7 @@ int main(int argc, char *argv[])
 
 		null_stream  null_dev;
 		Scanner null_scanner(null_source, null_dev);
-		parse(null_scanner, null_dev);
+		parse(null_scanner, null_dev, NULL);
 		next_label = 0;
 		next_fill_index = 0;
 		bWroteGetState = false;
@@ -356,6 +379,6 @@ int main(int argc, char *argv[])
 	}
 
 	bLastPass = true;
-	parse(scanner, output);
+	parse(scanner, output, header.is_open() ? &header : NULL);
 	return 0;
 }

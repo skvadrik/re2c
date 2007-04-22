@@ -53,7 +53,7 @@ private:
 #endif
 };
 
-void parse(Scanner&, std::ostream&);
+extern void parse(Scanner&, std::ostream&, std::ostream*);
 
 } // end namespace re2c
 

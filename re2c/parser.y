@@ -351,7 +351,7 @@ int yylex(){
 namespace re2c
 {
 
-void parse(Scanner& i, std::ostream& o)
+void parse(Scanner& i, std::ostream& o, std::ostream* h)
 {
 	in = &i;
 
@@ -398,6 +398,10 @@ void parse(Scanner& i, std::ostream& o)
 			{
 				assert(it->second.second);
 				genCode(o, topIndent, it->second.second, &specMap, it->first, !--nCount);
+			}
+			if (h)
+			{
+				genHeader(*h, 0, specMap);
 			}
 		}
 		else if(spec)
