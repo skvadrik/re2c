@@ -1599,6 +1599,7 @@ void DFA::emit(std::ostream &o, uint& ind, const RegExpMap* specMap, const std::
 		o << condPrefix << condName << ":\n";
 	}
 
+	// TODO: Shouldn't labels 0 and 1 be variable?
 	if (vUsedLabels.count(1))
 	{
 		vUsedLabels.insert(0);
