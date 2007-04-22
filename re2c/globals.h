@@ -14,6 +14,7 @@ namespace re2c
 
 extern file_info sourceFileInfo;
 extern file_info outputFileInfo;
+extern file_info headerFileInfo;
 
 extern bool bFlag;
 extern bool cFlag;

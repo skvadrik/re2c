@@ -20,6 +20,7 @@ namespace re2c
 
 file_info sourceFileInfo;
 file_info outputFileInfo;
+file_info headerFileInfo;
 
 bool bFlag = false;
 bool cFlag = false;
@@ -350,6 +351,7 @@ int main(int argc, char *argv[])
 			cerr << "re2c: error: cannot open " << headerFileName << "\n";
 			return 1;
 		}
+		headerFileInfo = file_info(headerFileName, &header);
 	}
 	Scanner scanner(source, output);
 	sourceFileInfo = file_info(sourceFileName, &scanner);

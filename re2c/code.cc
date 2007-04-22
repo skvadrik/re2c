@@ -1708,7 +1708,9 @@ void genHeader(std::ostream &o, uint ind, const RegExpMap& specMap)
 		o.write(ctime(&now), 24);
 	}
 	o << " */\n";
-	//TODO: o << headerFileInfo;
+	o << headerFileInfo;
+	o << "\n";
+	// now the type(s)
 	o << indent(ind++) << "enum " << mapCodeName["YYCONDTYPE"] << " {\n";
 	for(RegExpMap::const_iterator it = specMap.begin(); it != specMap.end(); ++it)
 	{

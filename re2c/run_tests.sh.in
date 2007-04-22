@@ -28,6 +28,7 @@ for x in @top_srcdir@/test/*.re `find @top_srcdir@/lessons -name '*.re'|sort`; d
 		rm $headers
 		if ${diff} ${x%.re}.h $typname > $typdiff; then
 			echo "Passed header test."
+			rm $typname
 		else
 			echo "Failed: ${x%.re}.h ${x%.re}.h.temp differ."
 			result=1
