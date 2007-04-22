@@ -142,6 +142,7 @@ int mbo_getopt(int argc, char* const *argv, const mbo_opt_struct *opts, char **o
 				else
 				{
 					optchr++;
+					arg_start++;
 				}
 
 				return (mbo_opt_error(argc, argv, errind, errchr, OPTERRNF, show_err));
