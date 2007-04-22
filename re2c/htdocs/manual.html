@@ -7,7 +7,7 @@
 <body>
 <h1>RE2C</h1>
 Section: User Commands (1)<br />
-Updated: 01 Apr 2007<br />
+Updated: 22 Apr 2007<br />
 <a href="#index">Index</a>
 <hr />
 <a name="lbAB" id="lbAB">&nbsp;</a>
@@ -15,7 +15,7 @@ Updated: 01 Apr 2007<br />
 <p>re2c - convert regular expressions to C/C++</p>
 <a name="lbAC" id="lbAC">&nbsp;</a>
 <h2>SYNOPSIS</h2>
-<p><b>re2c</b> [<b>-bdefghisuvVw1</b>] [<b>-o output</b>] file</p>
+<p><b>re2c</b> [<b>-bdefghisuvVw1</b>] [<b>-o output</b>] [<b>-c</b> [<b>-t header</b>]] file</p>
 <a name="lbAD" id="lbAD">&nbsp;</a>
 <h2>DESCRIPTION</h2>
 <p><b>re2c</b> is a preprocessor that generates C-based recognizers from
@@ -91,6 +91,8 @@ scanner code and will not be part of the output.</p>
 <dd>Implies <b>-s</b>. Use bit vectors as well in the attempt to coax better
 code out of the compiler. Most useful for specifications with more than a few
 keywords (e.g. for most programming languages).<br /><br /></dd>
+<dt><b>-c</b></dt>
+<dd>Used to support (f)lex-like condition support.<br /><br /></dd>
 <dt><b>-d</b></dt>
 <dd>Creates a parser that dumps information about the current position and in
 which state the parser is while parsing the input. This is useful to debug
@@ -98,9 +100,6 @@ parser issues and states. If you use this switch you need to define a macro
 <i>YYDEBUG</i> that is called like a function with two parameters: <i>void
 YYDEBUG(int state, char current)</i>. The first parameter receives the state or
 -1 and the second parameter receives the input at the current cursor.<br /><br /></dd>
-<dt><b>--no-generation-date</b></dt>
-<dd>Suppress date output in the generated output so that it only shows the re2c
-version.</dd>
 <dt><b>-e</b></dt>
 <dd>Cross-compile from an ASCII platform to an EBCDIC one.<br /><br /></dd>
 <dt><b>-f</b></dt>
@@ -121,6 +120,9 @@ Specify the output file.<br /><br /></dd>
 <dt><b>-s</b></dt>
 <dd>Generate nested ifs for some switches. Many compilers need this assist to
 generate better code.<br /><br /></dd>
+<dt><b>-t</b></dt>
+<dd>Create a header file that contains types for the (f)lex-like condition support.
+This can only be activated when <b>-c</b> is in use.<br /><br /></dd>
 <dt><b>-u</b></dt>
 <dd>Generate a parser that supports Unicode chars (UTF-32). This means the 
 generated code can deal with any valid Unicode character up to 0x10FFFF. When
@@ -136,6 +138,9 @@ and cannot be used together with <b>-e</b> switch.<br /><br /></dd>
 <dt><b>-1</b></dt>
 <dd>Force single pass generation, this cannot be combined with -f and disables 
 YYMAXFILL generation prior to last re2c block.<br /><br /></dd>
+<dt><b>--no-generation-date</b></dt>
+<dd>Suppress date output in the generated output so that it only shows the re2c
+version.<br /><br /></dd>
 </dl>
 <br />
 <br />
@@ -146,6 +151,20 @@ scanners: the user must supply some interface code. In particular, the user
 must define the following macros or use the 
 corresponding inplace configurations:</p>
 <dl compact="compact">
+<dt>YYCONDITION</dt>
+<dd>
+This variable holdes the condition prior to entering the scanner code when using 
+<b>-c</b> switch. The value must be initialized with a value from the enumeration
+YYCONDTYPE type.</dd>
+<dt>YYCONDTYPE</dt>
+<dd>In <b>-c</b> mode you can use <b>-t</b> to generate a file that contains the 
+enumeration used as conditions. Each of the values refers to a condition of
+a rule set.</dd>
+<dt>YYCTXMARKER</dt>
+<dd><i>l</i>-expression of type *YYCTYPE. The generated code saves context 
+backtracking information in YYCTXMARKER. The user only  needs to define this 
+macro if a scanner specification uses trailing context in one or more of its 
+regular expressions.<br /><br /></dd>
 <dt>YYCTYPE</dt>
 <dd>Type used to hold an input symbol. Usually char or unsigned char.<br /><br /></dd>
 <dt>YYCURSOR</dt>
@@ -153,18 +172,12 @@ corresponding inplace configurations:</p>
 symbol. The generated code advances YYCURSOR as symbols are matched. On entry,
 YYCURSOR is assumed to point to the first character of the current token. On
 exit, YYCURSOR will point to the first character of the following token.<br /><br /></dd>
-<dt>YYLIMIT</dt>
-<dd>Expression of type *YYCTYPE that marks the end of the buffer (YYLIMIT[-1] is
-the last character in the buffer). The generated code repeatedly compares
-YYCURSOR to YYLIMIT to determine when the buffer needs (re)filling.<br /><br /></dd>
-<dt>YYMARKER</dt>
-<dd><i>l</i>-expression of type *YYCTYPE. The generated code saves backtracking
-information in YYMARKER. Some easy scanners might not use this.<br /><br /></dd>
-<dt>YYCTXMARKER</dt>
-<dd><i>l</i>-expression of type *YYCTYPE. The generated code saves context 
-backtracking information in YYCTXMARKER. The user only  needs to define this 
-macro if a scanner specification uses trailing context in one or more of its 
-regular expressions.<br /><br /></dd>
+<dt>YYDEBUG(<i>state</i>,<i>current</i>)</dt>
+<dd>This is only needed if the <b>-d</b> flag was specified. It allows to
+easily debug the generated parser by calling a user defined function for every
+state. The function should have the following signature: <i>void YYDEBUG(int
+state, char current)</i>. The first parameter receives the state or -1 and the
+second parameter receives the input at the current cursor.<br /><br /></dd>
 <dt>YYFILL(<i>n</i>)</dt>
 <dd>The generated code "calls" YYFILL(n) when the buffer needs (re)filling: at
 least <i>n</i> additional characters should be provided. YYFILL(n) should adjust
@@ -182,6 +195,16 @@ return a signed integer. The value must be either -1, indicating that the
 scanner is entered for the first time, or a value previously saved by
 YYSETSTATE(s). In the second case, the scanner will resume operations right after
 where the last YYFILL(n) was called.<br /><br /></dd>
+<dt>YYLIMIT</dt>
+<dd>Expression of type *YYCTYPE that marks the end of the buffer (YYLIMIT[-1] is
+the last character in the buffer). The generated code repeatedly compares
+YYCURSOR to YYLIMIT to determine when the buffer needs (re)filling.<br /><br /></dd>
+<dt>YYMARKER</dt>
+<dd><i>l</i>-expression of type *YYCTYPE. The generated code saves backtracking
+information in YYMARKER. Some easy scanners might not use this.<br /><br /></dd>
+<dt>YYMAXFILL</dt>
+<dd>This will be automatically defined by /*!max:re2c */ blocks as explained
+above.<br /><br /></dd>
 <dt>YYSETSTATE(<i>s</i>)</dt>
 <dd>The user only needs to define this macro if the <b>-f</b> flag was
 specified. In that case, the generated code "calls" YYSETSTATE just before
@@ -193,15 +216,6 @@ when the scanner is called again, it will call YYGETSTATE() and resume
 execution right where it left off. The generated code will contain 
 both YYSETSTATE(s) and YYGETSTATE() even if YYFILL(n) is being
 disabled.<br /><br /></dd>
-<dt>YYDEBUG(<i>state</i>,<i>current</i>)</dt>
-<dd>This is only needed if the <b>-d</b> flag was specified. It allows to
-easily debug the generated parser by calling a user defined function for every
-state. The function should have the following signature: <i>void YYDEBUG(int
-state, char current)</i>. The first parameter receives the state or -1 and the
-second parameter receives the input at the current cursor.<br /><br /></dd>
-<dt>YYMAXFILL</dt>
-<dd>This will be automatically defined by /*!max:re2c */ blocks as explained
-above.<br /><br /></dd>
 </dl>
 <br />
 <br />
@@ -253,6 +267,20 @@ the scanner code should be wrapped inside a loop.</p>
 <p>Please see examples/push.re for push-model scanner. The generated code can be
 tweaked using inplace configurations "state:abort" and "state:nextlabel".</p>
 <a name="lbAH" id="lbAH"> </a>
+<h2>SCANNER WITH CONDITION SUPPORT</h2>
+<p>
+You can preceed regular-expressions with a list of condition names when using the <b>-c</b>
+switch. In this case <b>re2c</b> generates scanners for each conditon. Each of the
+generated scanners has its own precondition. The precondition is given by the 
+interface variable <b>YYCONDITON</b> and must be of type <b>YYCONDTYPE</b>.
+</p><p>
+There are two special conditons. First the rules of the condition '*' are 
+merged to all  conditions. And second the empty condition list allows to 
+provide a code block that does not have a scanner part. Meaning it does not 
+allow any regular expression. The condition value referring to this special 
+block is always the one with the enumeration value 0.
+</p>
+<a name="lbAI" id="lbAI"> </a>
 <h2>SCANNER SPECIFICATIONS</h2>
 <p>Each scanner specification consists of a set of <i>rules</i>, <i>named
 definitions</i> and <i>configurations</i>.</p>
@@ -260,7 +288,18 @@ definitions</i> and <i>configurations</i>.</p>
 code that is to be executed when the associated <i>regular expression</i> is
 matched.</p>
 <dl compact="compact">
-<dd><i>regular expression</i> { <i>C/C++ code</i> }</dd>
+<dd><i>regular-expression</i> { <i>C/C++ code</i> }</dd>
+</dl>
+<p>
+If <b>-c</b> is active then each regular expression is preceeded by a list of 
+comma separated condition names. Besides normal naming rules there are two 
+special cases. A rule may contain the single condition name '*' and no contition 
+name at all. In the latter case the rule cannot have a regular expression.
+</p>
+<dl compact="compact">
+<dd>&lt;<i>condition-list</i>&gt; <i>regular-expression</i> { <i>C/C++ code</i> }</dd>
+<dd>&lt;<i>*</i>&gt; <i>regular-expression</i> { <i>C/C++ code</i> }</dd>
+<dd>&lt;&gt; { <i>C/C++ code</i> }</dd>
 </dl>
 <p>Named definitions are of the form:</p>
 <dl compact="compact">
@@ -272,7 +311,7 @@ matched.</p>
 <dd>re2c:<i>name</i> = <i>value</i>;</dd>
 <dd>re2c:<i>name</i> = <b>"</b><i>value</i><b>"</b>;</dd>
 </dl>
-<a name="lbAI" id="lbAI"> </a>
+<a name="lbAJ" id="lbAJ"> </a>
 <h2>SUMMARY OF RE2C REGULAR EXPRESSIONS</h2>
 <dl compact="compact">
 <dt>"foo"</dt>
@@ -340,7 +379,7 @@ the only portable "<b>any</b>" rules are <b>(.|"\n")</b> and <b>[^]</b>.</p>
 <p>The regular expressions listed above are grouped according to precedence,
 from highest precedence at the top to lowest at the bottom. Those grouped
 together have equal precedence.</p>
-<a name="lbAJ" id="lbAJ"> </a>
+<a name="lbAK" id="lbAK"> </a>
 <h2>INPLACE CONFIGURATION</h2>
 <p>It is possible to configure code generation inside re2c blocks. The
 following lists the available configurations:</p>
@@ -401,6 +440,10 @@ and changes to that configuration are  no longer possible. When this setting is
 a string the braces must be specified. Now assuming your input is a <b>char*</b>
 buffer and you are using above mentioned switches you can set <b>YYCTYPE</b> to
 <b>unsigned char</b> and this setting to either <b>1</b> or <b>"(unsigned char)"</b>.</dd>
+<dt><i>re2c:define:define:YYCONDITION</i> <b>=</b> YYCONDITION <b>;</b></dt>
+<dd>Variable or function of type YYCONDTYPE used in <b>-c</b> mode.</dd>
+<dt><i>re2c:define:define:YYCONDTYPE</i> <b>=</b> YYCONDTYPE <b>;</b></dt>
+<dd>Enumeration used for condition support with <b>-c</b> mode.</dd>
 <dt><i>re2c:define:YYCTXMARKER</i> <b>=</b> YYCTXMARKER <b>;</b></dt>
 <dd>Allows to overwrite the define YYCTXMARKER and thus avoiding it by setting the
 value to the actual code needed.</dd>
@@ -438,15 +481,18 @@ value to the actual code needed.</dd>
 <dd>Allows to overwrite the name of the variable yybm.</dd>
 <dt><i>re2c:variable:yych</i> <b>=</b> yych <b>;</b></dt>
 <dd>Allows to overwrite the name of the variable yych.</dd>
+<dt><i>re2c:variable:yyctable</i> <b>=</b> yyctable <b>;</b></dt>
+<dd>When both <b>-c</b> and <b>-g</b> are active then <b>re2c</b> uses this variable to 
+generate a static jump table for conditions.</dd>
 <dt><i>re2c:variable:yytarget</i> <b>=</b> yytarget <b>;</b></dt>
 <dd>Allows to overwrite the name of the variable yytarget.</dd>
 </dl>
-<a name="lbAK" id="lbAK"> </a>
+<a name="lbAL" id="lbAL"> </a>
 <h2>UNDERSTANDING RE2C</h2>
 <p>The subdirectory lessons of the re2c distribution contains a few step by step
 lessons to get you started with re2c. All examples in the lessons subdirectory
 can be compiled and actually work.</p>
-<a name="lbAK" id="lbAK"> </a>
+<a name="lbAM" id="lbAM"> </a>
 <h2>FEATURES</h2>
 <p><b>re2c</b> does not provide a default action: the generated code assumes
 that the input will consist of a sequence of tokens. Typically this can be
@@ -463,16 +509,16 @@ to end the scanner in case not enough characters are available which is nothing
 else then e detection of end of data/file.</p>
 <p><b>re2c</b> does not provide start conditions: use a separate scanner
 specification for each start condition (as illustrated in the above example).
-<a name="lbAL" id="lbAL"> </a></p>
+<a name="lbAN" id="lbAN"> </a></p>
 <h2>BUGS</h2>
 <p>Difference only works for character sets.</p>
 <p>The <b>re2c</b> internal algorithms need documentation.</p>
-<a name="lbAM" id="lbAM"> </a>
+<a name="lbAO" id="lbAO"> </a>
 <h2>SEE ALSO</h2>
 <p>flex(1), lex(1). More information on <b>re2c</b> can be found here:
 <b><a href=
 "http://re2c.org/">http://re2c.org/</a></b></p>
-<a name="lbAN" id="lbAN"> </a>
+<a name="lbAP" id="lbAP"> </a>
 <h2>AUTHORS</h2>
 <ul>
 <li>Peter Bumbulis &lt;<a href=
@@ -490,7 +536,7 @@ specification for each start condition (as illustrated in the above example).
 </ul>
 <br />
 <br />
-<a name="lbAO" id="lbAO"> </a>
+<a name="lbAQ" id="lbAQ"> </a>
 <h2>VERSION INFORMATION</h2>
 <p>This manpage describes <b>re2c</b>, version 0.13.0.</p>
 <hr />
@@ -503,19 +549,21 @@ specification for each start condition (as illustrated in the above example).
 <dt><a href="#lbAE">OPTIONS</a><br /></dt>
 <dt><a href="#lbAF">INTERFACE CODE</a><br /></dt>
 <dt><a href="#lbAG">SCANNER WITH STORABLE STATES</a><br /></dt>
-<dt><a href="#lbAH">SCANNER SPECIFICATIONS</a><br /></dt>
-<dt><a href="#lbAI">SUMMARY OF RE2C REGULAR EXPRESSIONS</a><br /></dt>
-<dt><a href="#lbAJ">A LARGER EXAMPLE</a><br /></dt>
-<dt><a href="#lbAK">FEATURES</a><br /></dt>
-<dt><a href="#lbAL">BUGS</a><br /></dt>
-<dt><a href="#lbAM">SEE ALSO</a><br /></dt>
-<dt><a href="#lbAN">AUTHORS</a><br /></dt>
-<dt><a href="#lbAO">VERSION INFORMATION</a><br /></dt>
+<dt><a href="#lbAH">SCANNER WITH CONDITION SUPPORT</a><br /></dt>
+<dt><a href="#lbAI">SCANNER SPECIFICATIONS</a><br /></dt>
+<dt><a href="#lbAJ">SUMMARY OF RE2C REGULAR EXPRESSIONS</a><br /></dt>
+<dt><a href="#lbAK">INPLACE CONFIGURATION</a><br /></dt>
+<dt><a href="#lbAL">UNDERSTANDING RE2C</a><br /></dt>
+<dt><a href="#lbAM">FEATURES</a><br /></dt>
+<dt><a href="#lbAN">BUGS</a><br /></dt>
+<dt><a href="#lbAO">SEE ALSO</a><br /></dt>
+<dt><a href="#lbAP">AUTHORS</a><br /></dt>
+<dt><a href="#lbAQ">VERSION INFORMATION</a><br /></dt>
 </dl>
 <br />
 <br />
 <hr />
 <p>This document was created by man2html, using the manual pages.<br />
-Time: 00:00:00 GMT, April 01, 2007</p>
+Date: 22 Apr, 2007</p>
 </body>
 </html>
