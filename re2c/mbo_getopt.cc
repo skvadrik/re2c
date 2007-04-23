@@ -181,7 +181,7 @@ int mbo_getopt(int argc, char* const *argv, const mbo_opt_struct *opts, char **o
 	}
 	else
 	{
-		if (arg_start >= 2)
+		if (arg_start >= 2 && !((argv[*optind][0] == '-') && (argv[*optind][1] == '-')))
 		{
 			if (!argv[*optind][optchr + 1])
 			{
