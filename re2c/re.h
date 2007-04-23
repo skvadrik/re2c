@@ -6,6 +6,7 @@
 #include <set>
 #include <map>
 #include <list>
+#include <vector>
 #include "token.h"
 #include "ins.h"
 #include "globals.h"
@@ -489,6 +490,7 @@ private:
 typedef std::set<std::string>           CondList;
 typedef std::pair<int, RegExp*>         NRegExp;
 typedef std::map<std::string, NRegExp>  RegExpMap;
+typedef std::vector<std::string>        RegExpIndices;
 typedef std::list<RuleOp*>              RuleOpList;
 
 extern void genCode(std::ostream&, uint&, RegExp*, const RegExpMap*, const std::string&, bool);
