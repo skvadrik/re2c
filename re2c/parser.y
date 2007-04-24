@@ -144,14 +144,19 @@ rule:
 			{
 				// Duplicating stuff, slow but safe
 				$$ = new RuleOp($4, $5, new Token(*$6), accept++);
-				
+
 				RegExpMap::iterator itRE = specMap.find(*it);
-				
+
 				if (itRE != specMap.end())
 				{
-					$$ = mkAlt(itRE->second.second, $$);
+					itRE->second.second = mkAlt(itRE->second.second, $$);
 				}
-				specMap[*it] = std::make_pair(specMap.size(), $$);
+				else
+				{
+					size_t nIndex = specMap.size() + 1; // 0 is reserved for "0"-spec
+					specMap[*it] = std::make_pair(nIndex, $$);
+				}
+				
 			}
 			delete $2;
 			delete $6;
