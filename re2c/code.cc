@@ -1662,29 +1662,15 @@ void genGetState(std::ostream &o, uint& ind, uint start_label)
 	}
 }
 
-static RegExpIndices genCondList(const RegExpMap& specMap)
-{
-	RegExpIndices  vCondList;
-
-	for(RegExpMap::const_iterator it = specMap.begin(); it != specMap.end(); ++it)
-	{
-		vCondList.push_back(it->first);
-	}
-
-	return vCondList;
-}
-
 void genCondTable(std::ostream &o, uint ind, const RegExpMap& specMap)
 {
 	if (cFlag && !bWroteCondCheck && gFlag && specMap.size())
 	{
 		o << indent(ind++) << "static void *" << mapCodeName["yyctable"] << "[" << specMap.size() << "] = {\n";
 
-		RegExpIndices  vCondList = genCondList(specMap);
-
-		for(RegExpIndices::const_iterator it = vCondList.begin(); it != vCondList.end(); ++it)
+		for(RegExpMap::const_iterator it = specMap.begin(); it != specMap.end(); ++it)
 		{
-			o << indent(ind) << "&&" << condPrefix << *it << ",\n";
+			o << indent(ind) << "&&" << condPrefix << it->first << ",\n";
 		}
 		o << indent(--ind) << "};\n";
 	}
@@ -1718,19 +1704,24 @@ void genCondGoto(std::ostream &o, uint ind, const RegExpMap& specMap)
 		}
 		else
 		{
-			RegExpIndices  vCondList = genCondList(specMap);
-
 			if (sFlag)
 			{
+				RegExpIndices  vCondList(specMap.size());
+				size_t nCnt = 0;
+			
+				for(RegExpMap::const_iterator it = specMap.begin(); it != specMap.end(); ++it)
+				{
+					vCondList[nCnt++] = it->first;
+				}
 				genCondGotoSub(o, ind, vCondList, 0, vCondList.size() - 1);
 			}
 			else
 			{
 				o << indent(ind) << "switch(" << mapCodeName["YYCONDITION"] << ") {\n";
 	
-				for(RegExpIndices::const_iterator it = vCondList.begin(); it != vCondList.end(); ++it)
+				for(RegExpMap::const_iterator it = specMap.begin(); it != specMap.end(); ++it)
 				{
-					o << indent(ind) << "case " << *it << ": goto " << condPrefix << *it << ";\n";
+					o << indent(ind) << "case " << it->first << ": goto " << condPrefix << it->first << ";\n";
 				}
 				o << indent(ind) << "}\n";
 			}
