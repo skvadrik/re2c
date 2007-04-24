@@ -388,9 +388,8 @@ void parse(Scanner& i, std::ostream& o, std::ostream* h)
 			{
 				// After merging star rules merge none code to specmap
 				// this simplifies some stuff.
-				// Note that 0 inserts first, which is important.
-				// Also "0" won't necessarily get index 0!
-				specMap["0"] = std::make_pair(specMap.size(), specNone);
+				// Note that "0" inserts first, which is important.
+				specMap["0"] = std::make_pair(0, specNone);
 			}
 
 			size_t nCount = specMap.size();
