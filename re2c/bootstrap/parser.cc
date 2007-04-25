@@ -1867,6 +1867,15 @@ void parse(Scanner& i, std::ostream& o, std::ostream* h)
 				// Note that "0" inserts first, which is important.
 				specMap["0"] = std::make_pair(0, specNone);
 			}
+			else
+			{
+				// We reserved 0 for specNone but is isn't present,
+				// so we can decrease all specs.
+				for(it = specMap.begin(); it != specMap.end(); ++it)
+				{
+					it->second.first--;
+				}
+			}
 
 			size_t nCount = specMap.size();
 			for(it = specMap.begin(); it != specMap.end(); ++it)
