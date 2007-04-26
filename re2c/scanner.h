@@ -67,7 +67,7 @@ inline SubStr Scanner::token() const
 
 inline uint Scanner::xlat(uint c) const
 {
-	return re2c::wFlag ? c : re2c::xlat[c];
+	return re2c::wFlag ? c : re2c::xlat[c & 0xFF];
 }
 
 } // end namespace re2c
