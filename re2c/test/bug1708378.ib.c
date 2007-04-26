@@ -2494,20 +2494,20 @@ yy1038:
 	goto yy20;
 yy1039:
 	yych = *++YYCURSOR;
-	if(yych <= '`') {
+	if(yych <= 'c') {
 		if(yych <= '2') {
 			if(yych <= '1') goto yy20;
 		} else {
-			if(yych == 'R') goto yy1041;
+			if(yych == 'a') goto yy1042;
 			goto yy20;
 		}
 	} else {
-		if(yych <= 'd') {
-			if(yych <= 'a') goto yy1042;
-			if(yych <= 'c') goto yy20;
-			goto yy1043;
+		if(yych <= 'm') {
+			if(yych <= 'd') goto yy1043;
+			if(yych <= 'l') goto yy20;
+			goto yy1044;
 		} else {
-			if(yych == 'm') goto yy1044;
+			if(yych == 0xE2) goto yy1041;
 			goto yy20;
 		}
 	}
@@ -2516,7 +2516,7 @@ yy1039:
 	goto yy20;
 yy1041:
 	yych = *++YYCURSOR;
-	if(yych == '(') goto yy1274;
+	if(yych == 0x80) goto yy1274;
 	goto yy20;
 yy1042:
 	yych = *++YYCURSOR;
@@ -2993,7 +2993,7 @@ yy1230:
 	{RET("__ZMIde_BIOMETDE3");}
 yy1274:
 	yych = *++YYCURSOR;
-	if(yych != ';') goto yy20;
+	if(yych != 0x93) goto yy20;
 	yych = *++YYCURSOR;
 	if(yych != ' ') goto yy20;
 	yych = *++YYCURSOR;
@@ -5568,11 +5568,11 @@ yy2474:
 	yych = *++YYCURSOR;
 	if(yych != ' ') goto yy20;
 	yych = *++YYCURSOR;
-	if(yych != 'R') goto yy20;
+	if(yych != 0xE2) goto yy20;
 	yych = *++YYCURSOR;
-	if(yych != '(') goto yy20;
+	if(yych != 0x80) goto yy20;
 	yych = *++YYCURSOR;
-	if(yych != ';') goto yy20;
+	if(yych != 0x93) goto yy20;
 	yych = *++YYCURSOR;
 	if(yych != ' ') goto yy20;
 	yych = *++YYCURSOR;
