@@ -5,8 +5,8 @@
 {
 	YYCTYPE yych;
 	switch(YYCONDITION) {
-	case a: goto yyc_a;
-	case b: goto yyc_b;
+	case yyca: goto yyc_a;
+	case yycb: goto yyc_b;
 	}
 /* *********************************** */
 yyc_a:

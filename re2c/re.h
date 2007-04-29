@@ -7,6 +7,7 @@
 #include <map>
 #include <list>
 #include <vector>
+#include <string>
 #include "token.h"
 #include "ins.h"
 #include "globals.h"
@@ -495,9 +496,10 @@ typedef std::list<RuleOp*>              RuleOpList;
 
 extern void genCode(std::ostream&, uint&, RegExp*, const RegExpMap*, const std::string&, bool);
 extern void genGetState(std::ostream&, uint&, uint);
-extern void genCondTable(std::ostream &o, uint, const RegExpMap&);
-extern void genCondGoto(std::ostream &o, uint, const RegExpMap&);
-extern void genHeader(std::ostream &o, uint, const RegExpMap&);
+extern void genCondTable(std::ostream&, uint, const RegExpMap&);
+extern void genCondGoto(std::ostream&, uint, const RegExpMap&);
+extern void genTypes(std::string&, uint, const RegExpMap&);
+extern void genHeader(std::ostream&, uint, const RegExpMap&);
 
 extern RegExp *mkDiff(RegExp*, RegExp*);
 extern RegExp *mkAlt(RegExp*, RegExp*);

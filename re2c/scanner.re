@@ -142,6 +142,23 @@ echo:
 					ignore_eoc = true;
 					goto echo;
 				}
+	"/*!types:re2c" {
+					if (bSinglePass)
+					{
+						fatal("cannot generate types inline in single pass mode");
+					}
+					tok = pos = cursor;
+					ignore_eoc = true;
+					if (bLastPass)
+					{
+						out << outputFileInfo;
+						out << "\n";
+						out << typesInline;
+						out << "\n";
+						out << sourceFileInfo;
+					}
+					goto echo;
+				}
 	"*" "/"	"\r"? "\n"	{
 					cline++;
 					if (ignore_eoc)

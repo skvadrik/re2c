@@ -313,6 +313,28 @@ void genIf(std::ostream &o, uint ind, const char *cmp, uint v, bool &readCh)
 	o << ") ";
 }
 
+static void genYyfill(std::ostream &o, uint ind, uint need)
+{
+	if (bUseYYFillParam)
+	{
+		o << mapCodeName["YYFILL"] << "(" << need << ")";
+	}
+	else
+	{
+		std::string yyfill(mapCodeName["YYFILL"]);
+		std::string::size_type pos;
+		char cnt[16];
+
+		sprintf(cnt, "%d", need);
+
+		while((pos = yyfill.find(yyfillLength)) != std::string::npos)
+		{
+			yyfill.replace(pos, yyfillLength.length(), cnt);
+		}
+		o << yyfill;
+	}
+}
+
 static void need(std::ostream &o, uint ind, uint n, bool & readCh, bool bSetMarker)
 {
 	uint fillIndex = next_fill_index;
@@ -327,15 +349,13 @@ static void need(std::ostream &o, uint ind, uint n, bool & readCh, bool bSetMark
 	{
 		if (n == 1)
 		{
-			o << indent(ind) << "if(" << mapCodeName["YYLIMIT"] << " == " << mapCodeName["YYCURSOR"] << ") " << mapCodeName["YYFILL"];
+			o << indent(ind) << "if(" << mapCodeName["YYLIMIT"] << " == " << mapCodeName["YYCURSOR"] << ") ";
+			genYyfill(o, ind, n);
 		}
 		else
 		{
-			o << indent(ind) << "if((" << mapCodeName["YYLIMIT"] << " - " << mapCodeName["YYCURSOR"] << ") < " << n << ") " << mapCodeName["YYFILL"];
-		}
-		if (bUseYYFillParam)
-		{
-			o << "(" << n << ")";
+			o << indent(ind) << "if((" << mapCodeName["YYLIMIT"] << " - " << mapCodeName["YYCURSOR"] << ") < " << n << ") ";
+			genYyfill(o, ind, n);
 		}
 		o << ";\n";
 	}
@@ -1721,13 +1741,25 @@ void genCondGoto(std::ostream &o, uint ind, const RegExpMap& specMap)
 	
 				for(RegExpMap::const_iterator it = specMap.begin(); it != specMap.end(); ++it)
 				{
-					o << indent(ind) << "case " << it->first << ": goto " << condPrefix << it->first << ";\n";
+					o << indent(ind) << "case " << condEnumPrefix << it->first << ": goto " << condPrefix << it->first << ";\n";
 				}
 				o << indent(ind) << "}\n";
 			}
 		}
 		bWroteCondCheck = true;
 	}
+}
+
+void genTypes(std::string& o, uint ind, const RegExpMap& specMap)
+{
+	o.clear();
+
+	o += indent(ind++) + "enum " + mapCodeName["YYCONDTYPE"] + " {\n";
+	for(RegExpMap::const_iterator it = specMap.begin(); it != specMap.end(); ++it)
+	{
+		o += indent(ind) + condEnumPrefix + it->first + ",\n";
+	}
+	o += indent(--ind) + "};\n";
 }
 
 void genHeader(std::ostream &o, uint ind, const RegExpMap& specMap)
@@ -1743,12 +1775,8 @@ void genHeader(std::ostream &o, uint ind, const RegExpMap& specMap)
 	o << headerFileInfo;
 	o << "\n";
 	// now the type(s)
-	o << indent(ind++) << "enum " << mapCodeName["YYCONDTYPE"] << " {\n";
-	for(RegExpMap::const_iterator it = specMap.begin(); it != specMap.end(); ++it)
-	{
-		o << indent(ind) << it->first << ",\n";
-	}
-	o << indent(--ind) << "}\n";
+	genTypes(typesInline, ind, specMap);
+	o << typesInline;
 }
 
 std::ostream& operator << (std::ostream& o, const file_info& li)
@@ -1881,9 +1909,13 @@ void Scanner::config(const Str& cfg, const Str& val)
 	{
 		condPrefix = strVal;
 	}
-	else if (cfg.to_string() == "yych:conversion")
+	else if (cfg.to_string() == "condenumprefix")
 	{
-		yychConversion = mapCodeName["YYCTYPE"];
+		condEnumPrefix = strVal;
+	}
+	else if (cfg.to_string() == "define:YYFILL:len")
+	{
+		yyfillLength = strVal;
 	}
 	else if (mapVariableKeys.find(cfg.to_string()) != mapVariableKeys.end())
     {

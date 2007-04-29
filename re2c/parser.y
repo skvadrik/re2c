@@ -416,6 +416,10 @@ void parse(Scanner& i, std::ostream& o, std::ostream* h)
 			{
 				genHeader(*h, 0, specMap);
 			}
+			else
+			{
+				genTypes(typesInline, 0, specMap);
+			}
 		}
 		else if(spec)
 		{

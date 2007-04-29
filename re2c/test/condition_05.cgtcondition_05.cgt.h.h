@@ -2,6 +2,6 @@
 #line 3 "condition_05.cgt.h"
 
 enum YYCONDTYPE {
-	comment,
-	normal,
-}
+	yyccomment,
+	yycnormal,
+};
