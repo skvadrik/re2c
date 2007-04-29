@@ -5,7 +5,12 @@ errcnt=0
 tstcnt=0;
 #diff='diff -u -I "#line [0-9]*"'
 diff='diff -u'
-for x in @top_srcdir@/test/*.re `find @top_srcdir@/lessons -name '*.re'|sort`; do
+if test $# = 0; then
+tests=`for i in test lessons; do find @top_srcdir@/$i -name '*.re'; done|sort`
+else
+tests="$@"
+fi;
+for x in $tests; do
 	tstcnt=$(($tstcnt+1))
 	switches=`basename $x|sed -e 's/^[^.]*\.\(.*\)\.re$/-\1/g' -e 's/^[^-].*//g'`
 	genname=`echo $switches|sed -e 's,^.[^o]*$,,g' -e 's,^[^ot]*t.*o.*$,,g' -e 's,^-[^o]*o\(.*\),@builddir@/test/\1,g'`
