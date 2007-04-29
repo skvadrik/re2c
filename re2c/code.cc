@@ -1600,7 +1600,7 @@ void DFA::emit(std::ostream &o, uint& ind, const RegExpMap* specMap, const std::
 			o << "\n";
 		}
 	}
-	if (bFlag)
+	if (bFlag && !cFlag)
 	{
 		BitMap::gen(o, ind, lbChar, ubChar <= 256 ? ubChar : 256);
 	}
@@ -1611,11 +1611,19 @@ void DFA::emit(std::ostream &o, uint& ind, const RegExpMap* specMap, const std::
 		genCondGoto(o, ind, *specMap);
 	}
 
-	if (cFlag && (bFlag || !condName.empty()))
+	if (cFlag)
 	{
-		// TODO: Drop marker
-		o << "/* *********************************** */\n";
-		o << condPrefix << condName << ":\n";
+		if (!condName.empty())
+		{
+			// TODO: Drop marker
+			o << "/* *********************************** */\n";
+			o << condPrefix << condName << ":\n";
+		}
+		if (bFlag && BitMap::first)
+		{
+			o << indent(ind++) << "{\n";
+			BitMap::gen(o, ind, lbChar, ubChar <= 256 ? ubChar : 256);
+		}
 	}
 
 	// TODO: Shouldn't labels 0 and 1 be variable?
@@ -1633,6 +1641,10 @@ void DFA::emit(std::ostream &o, uint& ind, const RegExpMap* specMap, const std::
 		s->go.genGoto(o, ind, s, s->next, readCh);
 	}
 
+	if (cFlag && bFlag && BitMap::first)
+	{
+		o << indent(--ind) << "}\n";
+	}
 	// Generate epilog
 	if (!cFlag || isLastCond)
 	{
