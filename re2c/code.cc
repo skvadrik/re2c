@@ -1733,11 +1733,18 @@ void genCondTable(std::ostream &o, uint ind, const RegExpMap& specMap)
 {
 	if (cFlag && !bWroteCondCheck && gFlag && specMap.size())
 	{
+		RegExpIndices  vCondList(specMap.size());
+
+		for(RegExpMap::const_iterator itSpec = specMap.begin(); itSpec != specMap.end(); ++itSpec)
+		{
+			vCondList[itSpec->second.first] = itSpec->first;
+		}
+
 		o << indent(ind++) << "static void *" << mapCodeName["yyctable"] << "[" << specMap.size() << "] = {\n";
 
-		for(RegExpMap::const_iterator it = specMap.begin(); it != specMap.end(); ++it)
+		for(RegExpIndices::const_iterator it = vCondList.begin(); it != vCondList.end(); ++it)
 		{
-			o << indent(ind) << "&&" << condPrefix << it->first << ",\n";
+			o << indent(ind) << "&&" << condPrefix << *it << ",\n";
 		}
 		o << indent(--ind) << "};\n";
 	}

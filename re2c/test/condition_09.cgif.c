@@ -75,8 +75,8 @@ void scan(Scanner *s)
 		{
 
 			static void *yyctable[4] = {
-				&&yyc_Comment,
 				&&yyc_Normal,
+				&&yyc_Comment,
 				&&yyc_Skiptoeol,
 				&&yyc_String,
 			};

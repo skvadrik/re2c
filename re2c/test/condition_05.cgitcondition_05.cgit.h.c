@@ -57,8 +57,8 @@ char scan(Scanner *s)
 		{
 			unsigned char yych;
 			static void *yyctable[2] = {
-				&&yyc_comment,
 				&&yyc_normal,
+				&&yyc_comment,
 			};
 			goto *yyctable[state];
 /* *********************************** */
