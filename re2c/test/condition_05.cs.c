@@ -59,14 +59,14 @@ char scan(Scanner *s)
 		{
 			unsigned char yych;
 			if (state < 1) {
-				goto yyc_comment;
-			} else {
 				goto yyc_normal;
+			} else {
+				goto yyc_comment;
 			}
 /* *********************************** */
 yyc_comment:
 
-			if((s->lim - s->cur) < 2) { if(fill(s, 2) >= 0) break; };
+			if((s->lim - s->cur) < 2) { if(fill(s, 2) >= 0) break; }
 			yych = *s->cur;
 			if(yych != '*') goto yy4;
 			++s->cur;
@@ -89,7 +89,7 @@ yy5:
 #line 90 "<stdout>"
 /* *********************************** */
 yyc_normal:
-			if((s->lim - s->cur) < 2) { if(fill(s, 2) >= 0) break; };
+			if((s->lim - s->cur) < 2) { if(fill(s, 2) >= 0) break; }
 			yych = *s->cur;
 			if(yych != '/') goto yy11;
 			++s->cur;

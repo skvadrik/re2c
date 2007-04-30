@@ -313,25 +313,30 @@ void genIf(std::ostream &o, uint ind, const char *cmp, uint v, bool &readCh)
 	o << ") ";
 }
 
+static std::string replaceParam(std::string str, const std::string& param, int value)
+{
+	std::string::size_type pos;
+	char tmp[16];
+
+	sprintf(tmp, "%d", value);
+
+	while((pos = str.find(param)) != std::string::npos)
+	{
+		str.replace(pos, param.length(), tmp);
+	}
+
+	return str;
+}
+
 static void genYyfill(std::ostream &o, uint ind, uint need)
 {
 	if (bUseYYFillParam)
 	{
-		o << mapCodeName["YYFILL"] << "(" << need << ")";
+		o << mapCodeName["YYFILL"] << "(" << need << ");\n";
 	}
 	else
 	{
-		std::string yyfill(mapCodeName["YYFILL"]);
-		std::string::size_type pos;
-		char cnt[16];
-
-		sprintf(cnt, "%d", need);
-
-		while((pos = yyfill.find(yyfillLength)) != std::string::npos)
-		{
-			yyfill.replace(pos, yyfillLength.length(), cnt);
-		}
-		o << yyfill;
+		o << replaceParam(mapCodeName["YYFILL"], yyFillLength, need) << "\n";
 	}
 }
 
@@ -342,7 +347,14 @@ static void need(std::ostream &o, uint ind, uint n, bool & readCh, bool bSetMark
 	if (fFlag)
 	{
 		next_fill_index++;
-		o << indent(ind) << mapCodeName["YYSETSTATE"] << "(" << fillIndex << ");\n";
+		if (bUseYYSetStateParam)
+		{
+			o << indent(ind) << mapCodeName["YYSETSTATE"] << "(" << fillIndex << ");\n";
+		}
+		else
+		{
+			o << indent(ind) << replaceParam(mapCodeName["YYSETSTATE"], yySetStateParam, fillIndex) << "\n";
+		}
 	}
 
 	if (bUseYYFill && n > 0)
@@ -357,7 +369,6 @@ static void need(std::ostream &o, uint ind, uint n, bool & readCh, bool bSetMark
 			o << indent(ind) << "if((" << mapCodeName["YYLIMIT"] << " - " << mapCodeName["YYCURSOR"] << ") < " << n << ") ";
 			genYyfill(o, ind, n);
 		}
-		o << ";\n";
 	}
 
 	if (fFlag)
@@ -428,7 +439,7 @@ void Enter::emit(std::ostream &o, uint ind, bool &readCh) const
 
 void Initial::emit(std::ostream &o, uint ind, bool &readCh) const
 {
-	if (!startLabelName.empty())
+	if (!cFlag && !startLabelName.empty())
 	{
 		o << startLabelName << ":\n";
 	}
@@ -445,7 +456,7 @@ void Initial::emit(std::ostream &o, uint ind, bool &readCh) const
 		}
 	}
 
-	if (vUsedLabels.count(label))
+	if (!cFlag && vUsedLabels.count(label))
 	{
 		o << labelPrefix << label << ":\n";
 	}
@@ -614,6 +625,11 @@ void Rule::emit(std::ostream &o, uint ind, bool &) const
 	if (back != 0u)
 	{
 		o << indent(ind) << mapCodeName["YYCURSOR"] << " = " << mapCodeName["YYCTXMARKER"] << ";\n";
+	}
+
+	if (rule->code->newcond)
+	{
+		o << indent(ind) << mapCodeName["YYCONDITION"] << " = " << condEnumPrefix << rule->code->newcond << ";\n";
 	}
 
 	RuleLine rl(*rule);
@@ -1589,7 +1605,10 @@ void DFA::emit(std::ostream &o, uint& ind, const RegExpMap* specMap, const std::
 	
 		if (!fFlag)
 		{
-			o << indent(ind) << mapCodeName["YYCTYPE"] << " " << mapCodeName["yych"] << ";\n";
+			if (bEmitYYCh)
+			{
+				o << indent(ind) << mapCodeName["YYCTYPE"] << " " << mapCodeName["yych"] << ";\n";
+			}
 			if (bUsedYYAccept)
 			{
 				o << indent(ind) << "unsigned int "<< mapCodeName["yyaccept"] << " = 0;\n";
@@ -1608,6 +1627,17 @@ void DFA::emit(std::ostream &o, uint& ind, const RegExpMap* specMap, const std::
 	{
 		genCondTable(o, ind, *specMap);
 		genGetState(o, ind, start_label);
+		if (cFlag)
+		{
+			if (vUsedLabels.count(start_label))
+			{
+				o << labelPrefix << start_label << ":\n";
+			}
+			if (!startLabelName.empty())
+			{
+				o << startLabelName << ":\n";
+			}
+		}
 		genCondGoto(o, ind, *specMap);
 	}
 
@@ -1669,7 +1699,12 @@ void genGetState(std::ostream &o, uint& ind, uint start_label)
 	if (fFlag && !bWroteGetState)
 	{
 		vUsedLabels.insert(start_label);
-		o << indent(ind) << "switch(" << mapCodeName["YYGETSTATE"] << "()) {\n";
+		o << indent(ind) << "switch(" << mapCodeName["YYGETSTATE"];
+		if (bUseYYGetStateFunc)
+		{
+			o << "()";
+		}
+		o << ") {\n";
 		if (bUseStateAbort)
 		{
 			o << indent(ind) << "default: abort();\n";
@@ -1739,11 +1774,10 @@ void genCondGoto(std::ostream &o, uint ind, const RegExpMap& specMap)
 			if (sFlag)
 			{
 				RegExpIndices  vCondList(specMap.size());
-				size_t nCnt = 0;
 			
 				for(RegExpMap::const_iterator it = specMap.begin(); it != specMap.end(); ++it)
 				{
-					vCondList[nCnt++] = it->first;
+					vCondList[it->second.first] = it->first;
 				}
 				genCondGotoSub(o, ind, vCondList, 0, vCondList.size() - 1);
 			}
@@ -1857,6 +1891,14 @@ void Scanner::config(const Str& cfg, int num)
 			yychConversion  = "";
 		}
 	}
+	else if (cfg.to_string() == "yych:emit")
+	{
+		bEmitYYCh = num != 0;
+	}
+	else if (cfg.to_string() == "define:YYGETSTATE:func")
+	{
+		bUseYYGetStateFunc = num != 0;
+	}
 	else
 	{
 		fatal("unrecognized configuration name or illegal integer value");
@@ -1927,7 +1969,13 @@ void Scanner::config(const Str& cfg, const Str& val)
 	}
 	else if (cfg.to_string() == "define:YYFILL:len")
 	{
-		yyfillLength = strVal;
+		yyFillLength = strVal;
+		bUseYYFillParam = false;
+	}
+	else if (cfg.to_string() == "define:YYSETSTATE:state")
+	{
+		yySetStateParam = strVal;
+		bUseYYSetStateParam = false;
 	}
 	else if (mapVariableKeys.find(cfg.to_string()) != mapVariableKeys.end())
     {

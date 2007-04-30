@@ -43,17 +43,21 @@ bool bUsedYYAccept  = false;
 bool bUsedYYMaxFill = false;
 bool bUsedYYMarker  = true;
 
+bool bEmitYYCh       = true;
 bool bUseStartLabel  = false;
 bool bUseStateNext   = false;
 bool bUseYYFill      = true;
 bool bUseYYFillParam = true;
+bool bUseYYSetStateParam = true;
+bool bUseYYGetStateFunc  = true;
 
 std::string startLabelName;
 std::string labelPrefix("yy");
 std::string condPrefix("yyc_");
 std::string condEnumPrefix("yyc");
 std::string yychConversion("");
-std::string yyfillLength("@@");
+std::string yyFillLength("@@");
+std::string yySetStateParam("@@");
 uint maxFill = 1;
 uint next_label = 0;
 uint cGotoThreshold = 9;

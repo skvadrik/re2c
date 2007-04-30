@@ -79,9 +79,9 @@ void scan(Scanner *s)
 			unsigned char yych;
 			if (state < 2) {
 				if (state < 1) {
-					goto yyc_Comment;
-				} else {
 					goto yyc_Normal;
+				} else {
+					goto yyc_Comment;
 				}
 			} else {
 				if (state < 3) {
@@ -93,7 +93,7 @@ void scan(Scanner *s)
 /* *********************************** */
 yyc_Comment:
 
-			if((s->lim - s->cur) < 2) { if(fill(s, 2) >= 0) break; };
+			if((s->lim - s->cur) < 2) { if(fill(s, 2) >= 0) break; }
 			yych = *s->cur;
 			if(yych != '*') goto yy4;
 			++s->cur;
@@ -116,7 +116,7 @@ yy5:
 #line 117 "<stdout>"
 /* *********************************** */
 yyc_Normal:
-			if((s->lim - s->cur) < 3) { if(fill(s, 3) >= 0) break; };
+			if((s->lim - s->cur) < 3) { if(fill(s, 3) >= 0) break; }
 			yych = *s->cur;
 			if(yych <= '.') {
 				if(yych == '"') goto yy12;
@@ -256,7 +256,7 @@ yy37:
 #line 257 "<stdout>"
 /* *********************************** */
 yyc_Skiptoeol:
-			if((s->lim - s->cur) < 5) { if(fill(s, 5) >= 0) break; };
+			if((s->lim - s->cur) < 5) { if(fill(s, 5) >= 0) break; }
 			yych = *s->cur;
 			if(yych <= '>') {
 				if(yych == 0x0A) goto yy44;
@@ -320,7 +320,7 @@ yy54:
 #line 321 "<stdout>"
 /* *********************************** */
 yyc_String:
-			if((s->lim - s->cur) < 2) { if(fill(s, 2) >= 0) break; };
+			if((s->lim - s->cur) < 2) { if(fill(s, 2) >= 0) break; }
 			yych = *s->cur;
 			if(yych == '"') goto yy60;
 			if(yych != '\\') goto yy62;

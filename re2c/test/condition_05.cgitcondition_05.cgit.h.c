@@ -64,7 +64,7 @@ char scan(Scanner *s)
 /* *********************************** */
 yyc_comment:
 
-			if((s->lim - s->cur) < 2) { if(fill(s, 2) >= 0) break; };
+			if((s->lim - s->cur) < 2) { if(fill(s, 2) >= 0) break; }
 			yych = *s->cur;
 			if(yych != '*') goto yy4;
 			++s->cur;
@@ -83,7 +83,7 @@ yy5:
 			}
 /* *********************************** */
 yyc_normal:
-			if((s->lim - s->cur) < 2) { if(fill(s, 2) >= 0) break; };
+			if((s->lim - s->cur) < 2) { if(fill(s, 2) >= 0) break; }
 			yych = *s->cur;
 			if(yych != '/') goto yy11;
 			++s->cur;

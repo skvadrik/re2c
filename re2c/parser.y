@@ -81,7 +81,7 @@ static char* strdup(const char* s)
 %type	<token>		CODE
 %type	<regexp>	RANGE	STRING
 %type	<regexp>	rule	look	expr	diff	term	factor	primary
-%type	<str>		CONFIG	VALUE
+%type	<str>		CONFIG	VALUE	newcond
 %type	<clist>		cond	clist
 %type	<number>	NUMBER
 
@@ -133,17 +133,18 @@ rule:
 			$$ = new RuleOp($1, $2, $3, accept++);
 			spec = spec? mkAlt(spec, $$) : $$;
 		}
-	|	'<' cond '>' expr look CODE
+	|	'<' cond '>' expr look newcond CODE
 		{
 			if (!cFlag)
 			{
 				delete $2;
 				in->fatal("conditions are only allowed when using -c switch");
 			}
+			$7->newcond = $6;
 			for(CondList::const_iterator it = $2->begin(); it != $2->end(); ++it)
 			{
 				// Duplicating stuff, slow but safe
-				$$ = new RuleOp($4, $5, new Token(*$6), accept++);
+				$$ = new RuleOp($4, $5, new Token(*$7), accept++);
 
 				RegExpMap::iterator itRE = specMap.find(*it);
 
@@ -159,7 +160,7 @@ rule:
 				
 			}
 			delete $2;
-			delete $6;
+			delete $7;
 		}
 	|	'<' cond '>' look CODE
 		{
@@ -170,13 +171,14 @@ rule:
 			}
 			in->fatal("no expression specified");
 		}
-	|	'<' STAR '>' expr look CODE
+	|	'<' STAR '>' expr look newcond CODE
 		{
 			if (!cFlag)
 			{
 				in->fatal("conditions are only allowed when using -c switch");
 			}
-			specStar.push_back(new RuleOp($4, $5, $6, accept++));
+			$7->newcond = $6;
+			specStar.push_back(new RuleOp($4, $5, $7, accept++));
 		}
 	|	'<' STAR '>' look CODE
 		{
@@ -221,6 +223,17 @@ clist:
 		{
 			$1->insert($3->GetName().to_string());
 			$$ = $1;
+		}
+;
+
+newcond:
+		/* empty */
+		{
+			$$ = NULL;
+		}
+	|	'=' '>' ID
+		{
+			$$ = new Str($3->GetName().to_string().c_str());
 		}
 ;
 
