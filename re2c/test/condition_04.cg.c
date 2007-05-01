@@ -8,7 +8,7 @@
 		&&yyc_r1,
 		&&yyc_r2,
 	};
-	goto *yyctable[YYCONDITION];
+	goto *yyctable[YYGETCONDITION()];
 /* *********************************** */
 yyc_r1:
 

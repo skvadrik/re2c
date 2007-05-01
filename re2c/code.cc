@@ -16,7 +16,7 @@ namespace re2c
 // there must be at least one span in list;  all spans must cover
 // same range
 
-std::string indent(uint ind)
+static std::string indent(uint ind)
 {
 	std::string str;
 
@@ -25,6 +25,73 @@ std::string indent(uint ind)
 		str += indString;
 	}
 	return str;
+}
+
+static std::string replaceParam(std::string str, const std::string& param, const std::string& value)
+{
+	std::string::size_type pos;
+
+	while((pos = str.find(param)) != std::string::npos)
+	{
+		str.replace(pos, param.length(), value);
+	}
+
+	return str;
+}
+
+static std::string replaceParam(std::string str, const std::string& param, int value)
+{
+	char tmp[16];
+
+	sprintf(tmp, "%d", value);
+
+	return replaceParam(str, param, tmp);
+}
+
+static void genYYFill(std::ostream &o, uint ind, uint need)
+{
+	if (bUseYYFillParam)
+	{
+		o << mapCodeName["YYFILL"];
+		if (!bUseYYFillNaked)
+		{
+			o << "(" << need << ");";
+		}
+		o << "\n";
+	}
+	else
+	{
+		o << replaceParam(mapCodeName["YYFILL"], yyFillLength, need);
+		if (!bUseYYFillNaked)
+		{
+			o << ";";
+		}
+		o << "\n";
+	}
+}
+
+static void genGetCondition(std::ostream &o)
+{
+	if (bUseYYGetConditionNaked)
+	{
+		o << mapCodeName["YYGETCONDITION"];
+	}
+	else
+	{
+		o << mapCodeName["YYGETCONDITION"] << "()";
+	}
+}
+
+static void genSetCondition(std::ostream& o, uint ind, const std::string& newcond)
+{
+	if (bUseYYSetConditionParam)
+	{
+		o << indent(ind) << mapCodeName["YYSETCONDITION"] << "(" << condEnumPrefix << newcond << ");\n";
+	}
+	else
+	{
+		o << indent(ind) << replaceParam(mapCodeName["YYSETCONDITION"], yySetConditionParam, condEnumPrefix + newcond) << "\n";
+	}
 }
 
 static std::string space(uint this_label)
@@ -311,43 +378,6 @@ void genIf(std::ostream &o, uint ind, const char *cmp, uint v, bool &readCh)
 	o << " " << cmp << " ";
 	prtChOrHex(o, v);
 	o << ") ";
-}
-
-static std::string replaceParam(std::string str, const std::string& param, int value)
-{
-	std::string::size_type pos;
-	char tmp[16];
-
-	sprintf(tmp, "%d", value);
-
-	while((pos = str.find(param)) != std::string::npos)
-	{
-		str.replace(pos, param.length(), tmp);
-	}
-
-	return str;
-}
-
-static void genYYFill(std::ostream &o, uint ind, uint need)
-{
-	if (bUseYYFillParam)
-	{
-		o << mapCodeName["YYFILL"];
-		if (!bUseYYFillNaked)
-		{
-			o << "(" << need << ");";
-		}
-		o << "\n";
-	}
-	else
-	{
-		o << replaceParam(mapCodeName["YYFILL"], yyFillLength, need);
-		if (!bUseYYFillNaked)
-		{
-			o << ";";
-		}
-		o << "\n";
-	}
 }
 
 static void need(std::ostream &o, uint ind, uint n, bool & readCh, bool bSetMarker)
@@ -639,7 +669,7 @@ void Rule::emit(std::ostream &o, uint ind, bool &) const
 
 	if (rule->code->newcond)
 	{
-		o << indent(ind) << mapCodeName["YYCONDITION"] << " = " << condEnumPrefix << rule->code->newcond << ";\n";
+		genSetCondition(o, ind, rule->code->newcond->to_string());
 	}
 
 	RuleLine rl(*rule);
@@ -1770,7 +1800,9 @@ static void genCondGotoSub(std::ostream &o, uint ind, RegExpIndices& vCondList, 
 	{
 		uint cMid = cMin + ((cMax - cMin + 1) / 2);
 
-		o << indent(ind) << "if (" << mapCodeName["YYCONDITION"] << " < " << cMid << ") {\n";
+		o << indent(ind) << "if (";
+		genGetCondition(o);
+		o << " < " << cMid << ") {\n";
 		genCondGotoSub(o, ind + 1, vCondList, cMin, cMid - 1);
 		o << indent(ind) << "} else {\n";
 		genCondGotoSub(o, ind + 1, vCondList, cMid, cMax);
@@ -1784,7 +1816,9 @@ void genCondGoto(std::ostream &o, uint ind, const RegExpMap& specMap)
 	{
 		if (gFlag)
 		{
-			o << indent(ind) << "goto *" << mapCodeName["yyctable"] << "[" << mapCodeName["YYCONDITION"] << "];\n";
+			o << indent(ind) << "goto *" << mapCodeName["yyctable"] << "[";
+			genGetCondition(o);
+			o << "];\n";
 		}
 		else
 		{
@@ -1800,7 +1834,9 @@ void genCondGoto(std::ostream &o, uint ind, const RegExpMap& specMap)
 			}
 			else
 			{
-				o << indent(ind) << "switch(" << mapCodeName["YYCONDITION"] << ") {\n";
+				o << indent(ind) << "switch(";
+				genGetCondition(o);
+				o << ") {\n";
 	
 				for(RegExpMap::const_iterator it = specMap.begin(); it != specMap.end(); ++it)
 				{
@@ -1891,10 +1927,6 @@ void Scanner::config(const Str& cfg, int num)
 	{
 		bUseYYFillParam = num != 0;
 	}
-	else if (cfg.to_string() == "define:YYFILL:naked")
-	{
-		bUseYYFillNaked = num != 0;
-	}
 	else if (cfg.to_string() == "cgoto:threshold")
 	{
 		cGotoThreshold = num;
@@ -1916,13 +1948,24 @@ void Scanner::config(const Str& cfg, int num)
 	{
 		bEmitYYCh = num != 0;
 	}
+	else if (cfg.to_string() == "define:YYFILL:naked")
+	{
+		bUseYYFillNaked = num != 0;
+	}
+	else if (cfg.to_string() == "define:YYGETCONDITION:naked")
+	{
+		bUseYYGetConditionNaked = num != 0;
+	}
 	else if (cfg.to_string() == "define:YYGETSTATE:naked")
 	{
 		bUseYYGetStateNaked = num != 0;
 	}
 	else
 	{
-		fatal("unrecognized configuration name or illegal integer value");
+		std::string msg = "unrecognized configuration name '";
+		msg += cfg.to_string();
+		msg += "' or illegal integer value";
+		fatal(msg.c_str());
 	}
 }
 
@@ -1939,16 +1982,17 @@ void Scanner::config(const Str& cfg, const Str& val)
 		mapVariableKeys.insert("variable:yych");
 		mapVariableKeys.insert("variable:yyctable");
 		mapVariableKeys.insert("variable:yytarget");
-		mapDefineKeys.insert("define:YYCONDITION");
 		mapDefineKeys.insert("define:YYCONDTYPE");
 		mapDefineKeys.insert("define:YYCTXMARKER");
 		mapDefineKeys.insert("define:YYCTYPE");
 		mapDefineKeys.insert("define:YYCURSOR");
 		mapDefineKeys.insert("define:YYDEBUG");
 		mapDefineKeys.insert("define:YYFILL");
+		mapDefineKeys.insert("define:YYGETCONDITION");
 		mapDefineKeys.insert("define:YYGETSTATE");
 		mapDefineKeys.insert("define:YYLIMIT");
 		mapDefineKeys.insert("define:YYMARKER");
+		mapDefineKeys.insert("define:YYSETCONDITION");
 		mapDefineKeys.insert("define:YYSETSTATE");
 		mapLabelKeys.insert("label:yyFillLabel");
 		mapLabelKeys.insert("label:yyNext");
@@ -1993,6 +2037,11 @@ void Scanner::config(const Str& cfg, const Str& val)
 		yyFillLength = strVal;
 		bUseYYFillParam = false;
 	}
+	else if (cfg.to_string() == "define:YYSETCONDITION@cond")
+	{
+		yySetConditionParam = strVal;
+		bUseYYSetConditionParam = false;
+	}
 	else if (cfg.to_string() == "define:YYSETSTATE@state")
 	{
 		yySetStateParam = strVal;
@@ -2027,7 +2076,10 @@ void Scanner::config(const Str& cfg, const Str& val)
     }
 	else
 	{
-		fatal("unrecognized configuration name or illegal string value");
+		std::string msg = "unrecognized configuration name '";
+		msg += cfg.to_string();
+		msg += "' or illegal string value";
+		fatal(msg.c_str());
 	}
 }
 

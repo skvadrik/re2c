@@ -47,7 +47,7 @@ int fill(Scanner *s, int len)
 
 char scan(Scanner *s)
 {
-	int state = 1;
+	int cond = 1;
 	
 	fill(s, 0);
 
@@ -58,7 +58,7 @@ char scan(Scanner *s)
 #line 59 "<stdout>"
 		{
 			unsigned char yych;
-			if (state < 1) {
+			if (cond < 1) {
 				goto yyc_normal;
 			} else {
 				goto yyc_comment;
@@ -72,7 +72,7 @@ yyc_comment:
 			++s->cur;
 			if((yych = *s->cur) == '/') goto yy5;
 yy3:
-#line 82 "condition_05.cs.re"
+#line 83 "condition_05.cs.re"
 			{
 				goto yyc_comment;
 			}
@@ -82,7 +82,7 @@ yy4:
 			goto yy3;
 yy5:
 			++s->cur;
-#line 78 "condition_05.cs.re"
+#line 79 "condition_05.cs.re"
 			{
 				continue;
 			}
@@ -95,7 +95,7 @@ yyc_normal:
 			++s->cur;
 			if((yych = *s->cur) == '*') goto yy12;
 yy10:
-#line 73 "condition_05.cs.re"
+#line 74 "condition_05.cs.re"
 			{
 				fputc(*s->tok, stdout);
 				continue;
@@ -106,13 +106,13 @@ yy11:
 			goto yy10;
 yy12:
 			++s->cur;
-#line 69 "condition_05.cs.re"
+#line 70 "condition_05.cs.re"
 			{
 				goto yyc_comment;
 			}
 #line 114 "<stdout>"
 		}
-#line 86 "condition_05.cs.re"
+#line 87 "condition_05.cs.re"
 
 	}
 }

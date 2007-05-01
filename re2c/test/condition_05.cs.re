@@ -45,7 +45,7 @@ int fill(Scanner *s, int len)
 
 char scan(Scanner *s)
 {
-	int state = 1;
+	int cond = 1;
 	
 	fill(s, 0);
 
@@ -61,7 +61,8 @@ re2c:define:YYMARKER    = s->ptr;
 re2c:define:YYFILL@len  = #;
 re2c:define:YYFILL:naked= 1;
 re2c:define:YYFILL      = "{ if(fill(s, #) >= 0) break; }";
-re2c:define:YYCONDITION = state;
+re2c:define:YYGETCONDITION       = cond;
+re2c:define:YYGETCONDITION:naked = 1;
 re2c:yyfill:parameter   = 0;
 re2c:indent:top         = 2;
 

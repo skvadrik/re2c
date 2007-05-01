@@ -46,7 +46,7 @@ int fill(Scanner *s, int len)
 
 char scan(Scanner *s)
 {
-	int state = 1;
+	int cond = 1;
 	
 	fill(s, 0);
 
@@ -60,7 +60,7 @@ char scan(Scanner *s)
 				&&yyc_normal,
 				&&yyc_comment,
 			};
-			goto *yyctable[state];
+			goto *yyctable[cond];
 /* *********************************** */
 yyc_comment:
 

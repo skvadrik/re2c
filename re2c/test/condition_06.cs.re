@@ -55,7 +55,7 @@ void fputl(const char *s, size_t len, FILE *stream)
 
 void scan(Scanner *s)
 {
-	int state = EStateNormal;
+	int cond = EStateNormal;
 	
 	fill(s, 0);
 
@@ -71,7 +71,8 @@ re2c:define:YYMARKER    = s->tok;
 re2c:define:YYFILL@len  = #;
 re2c:define:YYFILL:naked= 1;
 re2c:define:YYFILL      = "{ if(fill(s, #) >= 0) break; }";
-re2c:define:YYCONDITION = state;
+re2c:define:YYGETCONDITION       = cond;
+re2c:define:YYGETCONDITION:naked = 1;
 re2c:yyfill:parameter   = 0;
 re2c:indent:top         = 2;
 re2c:condenumprefix     = EState;

@@ -50,6 +50,8 @@ bool bUseStateNext   = false;
 bool bUseYYFill      = true;
 bool bUseYYFillParam = true;
 bool bUseYYFillNaked = false;
+bool bUseYYSetConditionParam = true;
+bool bUseYYGetConditionNaked = false;
 bool bUseYYSetStateParam = true;
 bool bUseYYGetStateNaked = false;
 
@@ -59,6 +61,7 @@ std::string condPrefix("yyc_");
 std::string condEnumPrefix("yyc");
 std::string yychConversion("");
 std::string yyFillLength("@@");
+std::string yySetConditionParam("@@");
 std::string yySetStateParam("@@");
 uint maxFill = 1;
 uint next_label = 0;

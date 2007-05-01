@@ -61,7 +61,7 @@ enum YYCONDTYPE {
 
 void scan(Scanner *s)
 {
-	int state = EStateR1;
+	int cond = EStateR1;
 	
 	fill(s, 0);
 
@@ -71,7 +71,7 @@ void scan(Scanner *s)
 
 		{
 			unsigned char yych;
-			if (state < 1) {
+			if (cond < 1) {
 				goto yyc_R1;
 			} else {
 				goto yyc_R2;

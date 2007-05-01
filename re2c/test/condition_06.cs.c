@@ -66,7 +66,7 @@ enum YYCONDTYPE {
 
 void scan(Scanner *s)
 {
-	int state = EStateNormal;
+	int cond = EStateNormal;
 	
 	fill(s, 0);
 
@@ -77,14 +77,14 @@ void scan(Scanner *s)
 #line 78 "<stdout>"
 		{
 			unsigned char yych;
-			if (state < 2) {
-				if (state < 1) {
+			if (cond < 2) {
+				if (cond < 1) {
 					goto yyc_Normal;
 				} else {
 					goto yyc_Comment;
 				}
 			} else {
-				if (state < 3) {
+				if (cond < 3) {
 					goto yyc_Skiptoeol;
 				} else {
 					goto yyc_String;
@@ -99,7 +99,7 @@ yyc_Comment:
 			++s->cur;
 			if((yych = *s->cur) == '/') goto yy5;
 yy3:
-#line 148 "condition_06.cs.re"
+#line 149 "condition_06.cs.re"
 			{
 				goto yyc_Comment;
 			}
@@ -109,7 +109,7 @@ yy4:
 			goto yy3;
 yy5:
 			++s->cur;
-#line 144 "condition_06.cs.re"
+#line 145 "condition_06.cs.re"
 			{
 				continue;
 			}
@@ -128,7 +128,7 @@ yyc_Normal:
 			yych = *(s->tok = ++s->cur);
 			if(yych == '?') goto yy19;
 yy10:
-#line 139 "condition_06.cs.re"
+#line 140 "condition_06.cs.re"
 			{
 				fputc(*s->tok, stdout);
 				continue;
@@ -141,7 +141,7 @@ yy11:
 			goto yy10;
 yy12:
 			++s->cur;
-#line 133 "condition_06.cs.re"
+#line 134 "condition_06.cs.re"
 			{
 				fputc(*s->tok, stdout);
 				state = EStateString;
@@ -153,14 +153,14 @@ yy14:
 			goto yy10;
 yy15:
 			++s->cur;
-#line 129 "condition_06.cs.re"
+#line 130 "condition_06.cs.re"
 			{
 				goto yyc_Skiptoeol;
 			}
 #line 161 "<stdout>"
 yy17:
 			++s->cur;
-#line 125 "condition_06.cs.re"
+#line 126 "condition_06.cs.re"
 			{
 				goto yyc_Comment;
 			}
@@ -184,7 +184,7 @@ yy20:
 			goto yy10;
 yy21:
 			++s->cur;
-#line 80 "condition_06.cs.re"
+#line 81 "condition_06.cs.re"
 			{
 				fputc('[', stdout);
 				continue;
@@ -192,7 +192,7 @@ yy21:
 #line 193 "<stdout>"
 yy23:
 			++s->cur;
-#line 85 "condition_06.cs.re"
+#line 86 "condition_06.cs.re"
 			{
 				fputc(']', stdout);
 				continue;
@@ -200,7 +200,7 @@ yy23:
 #line 201 "<stdout>"
 yy25:
 			++s->cur;
-#line 90 "condition_06.cs.re"
+#line 91 "condition_06.cs.re"
 			{
 				fputc('{', stdout);
 				continue;
@@ -208,7 +208,7 @@ yy25:
 #line 209 "<stdout>"
 yy27:
 			++s->cur;
-#line 95 "condition_06.cs.re"
+#line 96 "condition_06.cs.re"
 			{
 				fputc('}', stdout);
 				continue;
@@ -216,7 +216,7 @@ yy27:
 #line 217 "<stdout>"
 yy29:
 			++s->cur;
-#line 100 "condition_06.cs.re"
+#line 101 "condition_06.cs.re"
 			{
 				fputc('#', stdout);
 				continue;
@@ -224,7 +224,7 @@ yy29:
 #line 225 "<stdout>"
 yy31:
 			++s->cur;
-#line 105 "condition_06.cs.re"
+#line 106 "condition_06.cs.re"
 			{
 				fputc('\\', stdout);
 				continue;
@@ -232,7 +232,7 @@ yy31:
 #line 233 "<stdout>"
 yy33:
 			++s->cur;
-#line 110 "condition_06.cs.re"
+#line 111 "condition_06.cs.re"
 			{
 				fputc('^', stdout);
 				continue;
@@ -240,7 +240,7 @@ yy33:
 #line 241 "<stdout>"
 yy35:
 			++s->cur;
-#line 115 "condition_06.cs.re"
+#line 116 "condition_06.cs.re"
 			{
 				fputc('|', stdout);
 				continue;
@@ -248,7 +248,7 @@ yy35:
 #line 249 "<stdout>"
 yy37:
 			++s->cur;
-#line 120 "condition_06.cs.re"
+#line 121 "condition_06.cs.re"
 			{
 				fputc('~', stdout);
 				continue;
@@ -270,7 +270,7 @@ yy41:
 			yych = *(s->tok = ++s->cur);
 			if(yych == '?') goto yy51;
 yy42:
-#line 164 "condition_06.cs.re"
+#line 165 "condition_06.cs.re"
 			{
 				goto yyc_Skiptoeol;
 			}
@@ -282,7 +282,7 @@ yy43:
 			goto yy42;
 yy44:
 			++s->cur;
-#line 160 "condition_06.cs.re"
+#line 161 "condition_06.cs.re"
 			{
 				continue;
 			}
@@ -298,7 +298,7 @@ yy48:
 			goto yy42;
 yy49:
 			++s->cur;
-#line 156 "condition_06.cs.re"
+#line 157 "condition_06.cs.re"
 			{
 				goto yyc_Skiptoeol;
 			}
@@ -313,7 +313,7 @@ yy51:
 			if(yych != 0x0A) goto yy48;
 yy54:
 			++s->cur;
-#line 152 "condition_06.cs.re"
+#line 153 "condition_06.cs.re"
 			{
 				goto yyc_Skiptoeol;
 			}
@@ -327,7 +327,7 @@ yyc_String:
 			++s->cur;
 			if((yych = *s->cur) != 0x0A) goto yy63;
 yy59:
-#line 178 "condition_06.cs.re"
+#line 179 "condition_06.cs.re"
 			{
 				fputc(*s->tok, stdout);
 				continue;
@@ -335,7 +335,7 @@ yy59:
 #line 336 "<stdout>"
 yy60:
 			++s->cur;
-#line 173 "condition_06.cs.re"
+#line 174 "condition_06.cs.re"
 			{
 				fputc(*s->tok, stdout);
 				continue;
@@ -346,14 +346,14 @@ yy62:
 			goto yy59;
 yy63:
 			++s->cur;
-#line 168 "condition_06.cs.re"
+#line 169 "condition_06.cs.re"
 			{
 				fputl((const char*)s->tok, 2, stdout);
 				continue;
 			}
 #line 355 "<stdout>"
 		}
-#line 182 "condition_06.cs.re"
+#line 183 "condition_06.cs.re"
 
 	}
 }
