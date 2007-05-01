@@ -4,6 +4,7 @@
 #include <ctype.h>
 #include <iomanip>
 #include <iostream>
+#include <sstream>
 #include "substr.h"
 #include "globals.h"
 #include "dfa.h"
@@ -27,25 +28,21 @@ static std::string indent(uint ind)
 	return str;
 }
 
-static std::string replaceParam(std::string str, const std::string& param, const std::string& value)
+template<typename _Ty>
+std::string replaceParam(std::string str, const std::string& param, const _Ty& value)
 {
+	std::ostringstream strValue;
+
+	strValue << value;
+
 	std::string::size_type pos;
 
 	while((pos = str.find(param)) != std::string::npos)
 	{
-		str.replace(pos, param.length(), value);
+		str.replace(pos, param.length(), strValue.str());
 	}
 
 	return str;
-}
-
-static std::string replaceParam(std::string str, const std::string& param, int value)
-{
-	char tmp[16];
-
-	sprintf(tmp, "%d", value);
-
-	return replaceParam(str, param, tmp);
 }
 
 static void genYYFill(std::ostream &o, uint ind, uint need)
