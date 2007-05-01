@@ -72,7 +72,7 @@ yyc_comment:
 			++s->cur;
 			if((yych = *s->cur) == '/') goto yy5;
 yy3:
-#line 80 "condition_05.cs.re"
+#line 82 "condition_05.cs.re"
 			{
 				goto yyc_comment;
 			}
@@ -82,7 +82,7 @@ yy4:
 			goto yy3;
 yy5:
 			++s->cur;
-#line 76 "condition_05.cs.re"
+#line 78 "condition_05.cs.re"
 			{
 				continue;
 			}
@@ -95,7 +95,7 @@ yyc_normal:
 			++s->cur;
 			if((yych = *s->cur) == '*') goto yy12;
 yy10:
-#line 71 "condition_05.cs.re"
+#line 73 "condition_05.cs.re"
 			{
 				fputc(*s->tok, stdout);
 				continue;
@@ -106,13 +106,13 @@ yy11:
 			goto yy10;
 yy12:
 			++s->cur;
-#line 67 "condition_05.cs.re"
+#line 69 "condition_05.cs.re"
 			{
 				goto yyc_comment;
 			}
 #line 114 "<stdout>"
 		}
-#line 84 "condition_05.cs.re"
+#line 86 "condition_05.cs.re"
 
 	}
 }

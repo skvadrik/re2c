@@ -46,7 +46,7 @@ re2c:define:YYCURSOR	= s.cur;
 re2c:define:YYLIMIT		= s.lim;
 re2c:define:YYMARKER	= s.ptr;
 re2c:define:YYCTXMARKER	= s.ctx;
-re2c:define:YYFILL      = "fill();";
+re2c:define:YYFILL      = "fill()";
 
 re2c:yyfill:parameter   = 0;
 re2c:variable:yych      = curr;

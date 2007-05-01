@@ -59,8 +59,9 @@ extern bool bUseStateAbort;
 extern bool bUseStateNext;
 extern bool bUseYYFill;
 extern bool bUseYYFillParam;
+extern bool bUseYYFillNaked;
 extern bool bUseYYSetStateParam;
-extern bool bUseYYGetStateFunc;
+extern bool bUseYYGetStateNaked;
 extern bool bWroteGetState;
 extern bool bWroteCondCheck;
 

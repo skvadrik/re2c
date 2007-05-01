@@ -328,15 +328,25 @@ static std::string replaceParam(std::string str, const std::string& param, int v
 	return str;
 }
 
-static void genYyfill(std::ostream &o, uint ind, uint need)
+static void genYYFill(std::ostream &o, uint ind, uint need)
 {
 	if (bUseYYFillParam)
 	{
-		o << mapCodeName["YYFILL"] << "(" << need << ");\n";
+		o << mapCodeName["YYFILL"];
+		if (!bUseYYFillNaked)
+		{
+			o << "(" << need << ");";
+		}
+		o << "\n";
 	}
 	else
 	{
-		o << replaceParam(mapCodeName["YYFILL"], yyFillLength, need) << "\n";
+		o << replaceParam(mapCodeName["YYFILL"], yyFillLength, need);
+		if (!bUseYYFillNaked)
+		{
+			o << ";";
+		}
+		o << "\n";
 	}
 }
 
@@ -362,12 +372,12 @@ static void need(std::ostream &o, uint ind, uint n, bool & readCh, bool bSetMark
 		if (n == 1)
 		{
 			o << indent(ind) << "if(" << mapCodeName["YYLIMIT"] << " == " << mapCodeName["YYCURSOR"] << ") ";
-			genYyfill(o, ind, n);
+			genYYFill(o, ind, n);
 		}
 		else
 		{
 			o << indent(ind) << "if((" << mapCodeName["YYLIMIT"] << " - " << mapCodeName["YYCURSOR"] << ") < " << n << ") ";
-			genYyfill(o, ind, n);
+			genYYFill(o, ind, n);
 		}
 	}
 
@@ -1700,7 +1710,7 @@ void genGetState(std::ostream &o, uint& ind, uint start_label)
 	{
 		vUsedLabels.insert(start_label);
 		o << indent(ind) << "switch(" << mapCodeName["YYGETSTATE"];
-		if (bUseYYGetStateFunc)
+		if (!bUseYYGetStateNaked)
 		{
 			o << "()";
 		}
@@ -1881,6 +1891,10 @@ void Scanner::config(const Str& cfg, int num)
 	{
 		bUseYYFillParam = num != 0;
 	}
+	else if (cfg.to_string() == "define:YYFILL:naked")
+	{
+		bUseYYFillNaked = num != 0;
+	}
 	else if (cfg.to_string() == "cgoto:threshold")
 	{
 		cGotoThreshold = num;
@@ -1902,9 +1916,9 @@ void Scanner::config(const Str& cfg, int num)
 	{
 		bEmitYYCh = num != 0;
 	}
-	else if (cfg.to_string() == "define:YYGETSTATE:func")
+	else if (cfg.to_string() == "define:YYGETSTATE:naked")
 	{
-		bUseYYGetStateFunc = num != 0;
+		bUseYYGetStateNaked = num != 0;
 	}
 	else
 	{
