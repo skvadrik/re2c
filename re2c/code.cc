@@ -5,6 +5,7 @@
 #include <iomanip>
 #include <iostream>
 #include <sstream>
+#include <time.h>
 #include "substr.h"
 #include "globals.h"
 #include "dfa.h"
