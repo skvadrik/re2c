@@ -24,36 +24,44 @@ typedef struct Scanner
 	int                 state;
 } Scanner;
 
-int fill(Scanner *s, int len)
+size_t fill(Scanner *s, size_t len)
 {
-	if (!len)
-	{
-		s->cur = s->tok = s->lim = s->buffer;
-		s->eof = 0;
-	}
-	if (!s->eof)
-	{
-		int got, cnt = s->tok - s->buffer;
+	size_t got = ~0, cnt;
 
-		if (cnt > 0)
+	if (!s->eof && s->lim - s->tok < len)
+	{
+		if (s->tok > s->buffer)
 		{
+			cnt = s->tok - s->buffer;
 			memcpy(s->buffer, s->tok, s->lim - s->tok);
 			s->tok -= cnt;
 			s->cur -= cnt;
 			s->lim -= cnt;
+			cnt = &s->buffer[BSIZE] - s->lim;
 		}
-		cnt = BSIZE - cnt;
+		else
+		{
+			cnt = BSIZE;
+		}
 		if ((got = fread(s->lim, 1, cnt, s->fp)) != cnt)
 		{
 			s->eof = &s->lim[got];
 		}
 		s->lim += got;
 	}
-	else if (s->cur + len > s->eof)
+	if (s->eof && s->cur + len > s->eof)
 	{
-		return 0; /* not enough input data */
+		return ~0; /* not enough input data */
 	}
-	return -1;
+	return got;
+}
+
+size_t init(Scanner *s)
+{
+	s->cur = s->tok = s->lim = s->buffer;
+	s->eof = 0;
+
+	return fill(s, 0);
 }
 
 void fputl(const char *s, size_t len, FILE *stream)
@@ -66,8 +74,6 @@ void fputl(const char *s, size_t len, FILE *stream)
 
 void scan(Scanner *s)
 {
-	fill(s, 0);
-
 	for(;;)
 	{
 		s->tok = s->cur;
@@ -93,7 +99,7 @@ yy0:
 yyc_Comment:
 
 			s->state = 0;
-			if((s->lim - s->cur) < 2) if(fill(s, 2) >= 0) break;
+			if((s->lim - s->cur) < 2) if(fill(s, 2) == ~0) break;
 yyFillLabel0:
 			s->yych = *s->cur;
 			if(s->yych != '*') goto yy4;
@@ -115,7 +121,7 @@ yy5:
 /* *********************************** */
 yyc_Normal:
 			s->state = 1;
-			if((s->lim - s->cur) < 4) if(fill(s, 4) >= 0) break;
+			if((s->lim - s->cur) < 4) if(fill(s, 4) == ~0) break;
 yyFillLabel1:
 			s->yych = *s->cur;
 			{
@@ -308,7 +314,7 @@ yy43:
 /* *********************************** */
 yyc_Skiptoeol:
 			s->state = 2;
-			if((s->lim - s->cur) < 5) if(fill(s, 5) >= 0) break;
+			if((s->lim - s->cur) < 5) if(fill(s, 5) == ~0) break;
 yyFillLabel2:
 			s->yych = *s->cur;
 			if(s->yych <= '>') {
@@ -367,7 +373,7 @@ yy60:
 /* *********************************** */
 yyc_String:
 			s->state = 3;
-			if((s->lim - s->cur) < 2) if(fill(s, 2) >= 0) break;
+			if((s->lim - s->cur) < 2) if(fill(s, 2) == ~0) break;
 yyFillLabel3:
 			s->yych = *s->cur;
 			if(s->yych == '"') goto yy66;
@@ -424,7 +430,11 @@ int main(int argc, char **argv)
 	}
 
  	in.cond = EStateNormal;
- 	scan(&in);
+
+	if (init(&in) > 0)
+	{
+ 		scan(&in);
+ 	}
 
 	if (in.fp != stdin)
 	{

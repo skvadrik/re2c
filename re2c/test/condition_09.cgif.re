@@ -16,36 +16,44 @@ typedef struct Scanner
 	int                 state;
 } Scanner;
 
-int fill(Scanner *s, int len)
+size_t fill(Scanner *s, size_t len)
 {
-	if (!len)
-	{
-		s->cur = s->tok = s->lim = s->buffer;
-		s->eof = 0;
-	}
-	if (!s->eof)
-	{
-		int got, cnt = s->tok - s->buffer;
+	size_t got = ~0, cnt;
 
-		if (cnt > 0)
+	if (!s->eof && s->lim - s->tok < len)
+	{
+		if (s->tok > s->buffer)
 		{
+			cnt = s->tok - s->buffer;
 			memcpy(s->buffer, s->tok, s->lim - s->tok);
 			s->tok -= cnt;
 			s->cur -= cnt;
 			s->lim -= cnt;
+			cnt = &s->buffer[BSIZE] - s->lim;
 		}
-		cnt = BSIZE - cnt;
+		else
+		{
+			cnt = BSIZE;
+		}
 		if ((got = fread(s->lim, 1, cnt, s->fp)) != cnt)
 		{
 			s->eof = &s->lim[got];
 		}
 		s->lim += got;
 	}
-	else if (s->cur + len > s->eof)
+	if (s->eof && s->cur + len > s->eof)
 	{
-		return 0; /* not enough input data */
+		return ~0; /* not enough input data */
 	}
-	return -1;
+	return got;
+}
+
+size_t init(Scanner *s)
+{
+	s->cur = s->tok = s->lim = s->buffer;
+	s->eof = 0;
+
+	return fill(s, 0);
 }
 
 void fputl(const char *s, size_t len, FILE *stream)
@@ -58,8 +66,6 @@ void fputl(const char *s, size_t len, FILE *stream)
 
 void scan(Scanner *s)
 {
-	fill(s, 0);
-
 	for(;;)
 	{
 		s->tok = s->cur;
@@ -71,7 +77,7 @@ re2c:define:YYLIMIT          = s->lim;
 re2c:define:YYMARKER         = s->tok;
 re2c:define:YYFILL@len       = #;
 re2c:define:YYFILL:naked     = 1;
-re2c:define:YYFILL           = "if(fill(s, #) >= 0) break;";
+re2c:define:YYFILL           = "if(fill(s, #) == ~0) break;";
 re2c:define:YYSETSTATE@state = #;
 re2c:define:YYSETSTATE       = "s->state = #;";
 re2c:define:YYGETSTATE       = "s->state";
@@ -221,7 +227,11 @@ int main(int argc, char **argv)
 	}
 
  	in.cond = EStateNormal;
- 	scan(&in);
+
+	if (init(&in) > 0)
+	{
+ 		scan(&in);
+ 	}
 
 	if (in.fp != stdin)
 	{
