@@ -30,6 +30,7 @@ bool fFlag = false;
 bool gFlag = false;
 bool iFlag = false;
 bool sFlag = false;
+bool tFlag = false;
 bool uFlag = false;
 bool wFlag = false;
 
@@ -98,7 +99,7 @@ static const mbo_opt_struct OPTIONS[] =
 	mbo_opt_struct('i', 0, "no-debug-info"),
 	mbo_opt_struct('o', 1, "output"),
 	mbo_opt_struct('s', 0, "nested-ifs"),
-	mbo_opt_struct('t', 1, "header"),
+	mbo_opt_struct('t', 1, "type-header"),
 	mbo_opt_struct('u', 0, "unicode"),
 	mbo_opt_struct('v', 0, "version"),
 	mbo_opt_struct('V', 0, "vernum"),
@@ -141,7 +142,7 @@ static void usage()
 	"-s     --nested-ifs     Generate nested ifs for some switches. Many compilers\n"
 	"                        need this assist to generate better code.\n"
 	"\n"
-	"-t     --header         Generate a header file with type definitions.\n"
+	"-t     --type-header    Generate a header file with type definitions.\n"
 	"\n"
 	"-u     --unicode        Implies -w but supports the full Unicode character set.\n"
 	"\n"
@@ -225,6 +226,7 @@ int main(int argc, char *argv[])
 			break;
 
 			case 't':
+			tFlag = true;
 			headerFileName = opt_arg;
 			break;
 			
