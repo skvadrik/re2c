@@ -93,7 +93,7 @@ cname   = ":" name;
 space   = [ \t];
 ws      = (space | [\r\n]);
 eol     = ("\r\n" | "\n");
-config  = "re2c" cname+;
+config  = "re2c" cname+ ("@" name)?;
 value   = [^\r\n; \t]* | dstring | sstring;
 */
 

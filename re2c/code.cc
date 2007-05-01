@@ -1988,12 +1988,12 @@ void Scanner::config(const Str& cfg, const Str& val)
 	{
 		condEnumPrefix = strVal;
 	}
-	else if (cfg.to_string() == "define:YYFILL:len")
+	else if (cfg.to_string() == "define:YYFILL@len")
 	{
 		yyFillLength = strVal;
 		bUseYYFillParam = false;
 	}
-	else if (cfg.to_string() == "define:YYSETSTATE:state")
+	else if (cfg.to_string() == "define:YYSETSTATE@state")
 	{
 		yySetStateParam = strVal;
 		bUseYYSetStateParam = false;

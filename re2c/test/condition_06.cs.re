@@ -68,7 +68,7 @@ re2c:define:YYCTYPE     = "unsigned char";
 re2c:define:YYCURSOR    = s->cur;
 re2c:define:YYLIMIT     = s->lim;
 re2c:define:YYMARKER    = s->tok;
-re2c:define:YYFILL:len  = #;
+re2c:define:YYFILL@len  = #;
 re2c:define:YYFILL:naked= 1;
 re2c:define:YYFILL      = "{ if(fill(s, #) >= 0) break; }";
 re2c:define:YYCONDITION = state;
