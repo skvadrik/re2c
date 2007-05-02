@@ -15,7 +15,7 @@ void prtChOrHex(std::ostream& o, uint c, bool useTalx)
 	if ((oc < 256) && isprint(oc))
 	{
 		o << '\'';
-		prtCh(o, oc);
+		prtCh(o, c);
 		o << '\'';
 	}
 	else
