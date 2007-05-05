@@ -3,6 +3,7 @@
 #include <string.h>
 #include <iostream>
 #include <sstream>
+#include <stdarg.h>
 #include "scanner.h"
 #include "parser.h"
 #include "y.tab.h"
@@ -15,8 +16,7 @@ extern YYSTYPE yylval;
 #define MAX(a,b) (((a)>(b))?(a):(b))
 #endif
 
-#define	BSIZE	8192
-
+#define	BSIZE		8192
 #define	YYCTYPE		unsigned char
 #define	YYCURSOR	cursor
 #define	YYLIMIT		lim
@@ -490,6 +490,21 @@ void Scanner::fatal(uint ofs, const char *msg) const
 		<< "line " << tline << ", column " << (tchar + ofs + 1) << ": "
 		<< msg << std::endl;
 	exit(1);
+}
+
+void Scanner::fatalf(const char *fmt, ...) const
+{
+	char szBuf[4096];
+
+	va_list args;
+	
+	va_start(args, fmt);
+	vsnprintf(szBuf, sizeof(szBuf), fmt, args);
+	va_end(args);
+	
+	szBuf[sizeof(szBuf)-1] = '0';
+	
+	fatal(szBuf);
 }
 
 Scanner::~Scanner()

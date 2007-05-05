@@ -2051,7 +2051,7 @@ void Scanner::config(const Str& cfg, const Str& val)
     			std::make_pair(cfg.to_string().substr(sizeof("variable:") - 1), strVal)
     			).second)
     	{
-			fatal("variable already being used and cannot be changed");
+			fatalf("variable '%s' already being used and cannot be changed", cfg.to_string().c_str());
     	}
     }
 	else if (mapDefineKeys.find(cfg.to_string()) != mapDefineKeys.end())
@@ -2060,7 +2060,7 @@ void Scanner::config(const Str& cfg, const Str& val)
     			std::make_pair(cfg.to_string().substr(sizeof("define:") - 1), strVal)
     			).second)
     	{
- 			fatal("define already being used and cannot be changed");
+ 			fatalf("define '%s' already being used and cannot be changed", cfg.to_string().c_str());
  		}
     }
 	else if (mapLabelKeys.find(cfg.to_string()) != mapLabelKeys.end())
@@ -2069,7 +2069,7 @@ void Scanner::config(const Str& cfg, const Str& val)
     			std::make_pair(cfg.to_string().substr(sizeof("label:") - 1), strVal)
     			).second)
     	{
-			fatal("label already being used and cannot be changed");
+			fatalf("label '%s' already being used and cannot be changed", cfg.to_string().c_str());
     	}
     }
 	else

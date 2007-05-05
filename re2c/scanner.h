@@ -32,6 +32,7 @@ public:
 	int echo();
 	int scan();
 	
+	void fatalf(const char*, ...) const;
 	void fatal(const char*) const;
 	void fatal(uint, const char*) const;
 
