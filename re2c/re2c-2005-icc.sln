@@ -1,0 +1,23 @@
+Microsoft Visual Studio Solution File, Format Version 9.00
+# Visual Studio 2005
+Project("{EAF909A5-FA59-4C3D-9431-0FCC20D5BCF9}") = "re2c", "re2c-2005-icc.icproj", "{E968DE52-387C-40C1-96C3-C5116DDC5540}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E968DE52-387C-40C1-96C3-C5116DDC5540}.Debug|Win32.ActiveCfg = Debug|Win32
+		{E968DE52-387C-40C1-96C3-C5116DDC5540}.Debug|Win32.Build.0 = Debug|Win32
+		{E968DE52-387C-40C1-96C3-C5116DDC5540}.Release|Win32.ActiveCfg = Release|Win32
+		{E968DE52-387C-40C1-96C3-C5116DDC5540}.Release|Win32.Build.0 = Release|Win32
+		{18C5E289-8D90-400D-9F80-766F174CEDC9}.Release|Win32.Build.0 = Release|Win32
+		{18C5E289-8D90-400D-9F80-766F174CEDC9}.Release|Win32.ActiveCfg = Release|Win32
+		{18C5E289-8D90-400D-9F80-766F174CEDC9}.Debug|Win32.Build.0 = Debug|Win32
+		{18C5E289-8D90-400D-9F80-766F174CEDC9}.Debug|Win32.ActiveCfg = Debug|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
