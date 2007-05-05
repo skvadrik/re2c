@@ -52,4 +52,7 @@ Debug-2003
 Release-2003
 Debug-2005
 Release-2005
+Debug-2005-ICC
+Release-2005-ICC
 re2c-2005.vcproj.*
+re2c-2005-icc.vcproj.*
