@@ -133,7 +133,7 @@ echo:
 				}
 	"/*!getstate:re2c" {
 					tok = pos = cursor;
-					genGetState(out, topIndent, 0);
+					genGetStateGoto(out, topIndent, 0);
 					ignore_eoc = true;
 					goto echo;
 				}

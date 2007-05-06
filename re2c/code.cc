@@ -68,15 +68,27 @@ static void genYYFill(std::ostream &o, uint ind, uint need)
 	}
 }
 
-static void genGetCondition(std::ostream &o)
+static std::string genGetState()
 {
-	if (bUseYYGetConditionNaked)
+	if (bUseYYGetStateNaked)
 	{
-		o << mapCodeName["YYGETCONDITION"];
+		return mapCodeName["YYGETSTATE"];
 	}
 	else
 	{
-		o << mapCodeName["YYGETCONDITION"] << "()";
+		return mapCodeName["YYGETSTATE"] + "()";
+	}
+}
+
+static std::string genGetCondition()
+{
+	if (bUseYYGetConditionNaked)
+	{
+		return mapCodeName["YYGETCONDITION"];
+	}
+	else
+	{
+		return mapCodeName["YYGETCONDITION"] + "()";
 	}
 }
 
@@ -1664,7 +1676,7 @@ void DFA::emit(std::ostream &o, uint& ind, const RegExpMap* specMap, const std::
 	if (bProlog)
 	{
 		genCondTable(o, ind, *specMap);
-		genGetState(o, ind, start_label);
+		genGetStateGoto(o, ind, start_label);
 		if (cFlag)
 		{
 			if (vUsedLabels.count(start_label))
@@ -1732,7 +1744,32 @@ void DFA::emit(std::ostream &o, uint& ind, const RegExpMap* specMap, const std::
 	bUseStartLabel = false;
 }
 
-void genGetState(std::ostream &o, uint& ind, uint start_label)
+void genGetStateGotoSub(std::ostream &o, uint ind, uint start_label, int cMin, int cMax)
+{
+	if (cMin == cMax)
+	{
+		if (cMin == -1)
+		{
+			o << indent(ind) << "goto " << labelPrefix << start_label << ";\n";
+		}
+		else
+		{
+			o << indent(ind) << "goto " << mapCodeName["yyFillLabel"] << cMin << ";\n";
+		}
+	}
+	else
+	{
+		int cMid = cMin + ((cMax - cMin + 1) / 2);
+
+		o << indent(ind) << "if (" << genGetState() << " < " << cMid << ") {\n";
+		genGetStateGotoSub(o, ind + 1, start_label, cMin, cMid - 1);
+		o << indent(ind) << "} else {\n";
+		genGetStateGotoSub(o, ind + 1, start_label, cMid, cMax);
+		o << indent(ind) << "}\n";
+	}
+}
+
+void genGetStateGoto(std::ostream &o, uint& ind, uint start_label)
 {
 	if (fFlag && !bWroteGetState)
 	{
@@ -1749,11 +1786,7 @@ void genGetState(std::ostream &o, uint& ind, uint start_label)
 			o << indent(--ind) << "};\n";
 			o << "\n";
 
-			o << indent(ind) << "if(" << mapCodeName["YYGETSTATE"];
-			if (!bUseYYGetStateNaked)
-			{
-				o << "()";
-			}
+			o << indent(ind) << "if(" << genGetState();
 			if (bUseStateAbort)
 			{
 				o << " == -1) {";
@@ -1766,31 +1799,24 @@ void genGetState(std::ostream &o, uint& ind, uint start_label)
 			o << " goto " << labelPrefix << start_label << ";\n";
 			if (bUseStateAbort)
 			{
-				o << indent(--ind) << "} else if (" << mapCodeName["YYGETSTATE"];
-				if (!bUseYYGetStateNaked)
-				{
-					o << "()";
-				}
-				o << " < -1) {\n";
+				o << indent(--ind) << "} else if (" << genGetState() << " < -1) {\n";
 				o << indent(++ind) << "abort();\n";
 				o << indent(--ind) << "}\n";
 			}
 
-			o << indent(ind) << "goto *" << mapCodeName["yystable"] << "[" << mapCodeName["YYGETSTATE"];
-			if (!bUseYYGetStateNaked)
+			o << indent(ind) << "goto *" << mapCodeName["yystable"] << "[" << genGetState() << "];\n";
+		}
+		else if (bFlag)
+		{
+			genGetStateGotoSub(o, ind, start_label, -1, last_fill_index-1);
+			if (bUseStateAbort)
 			{
-				o << "()";
+				o << indent(ind) << "abort();\n";
 			}
-			o << "];\n";
 		}
 		else
 		{
-			o << indent(ind) << "switch(" << mapCodeName["YYGETSTATE"];
-			if (!bUseYYGetStateNaked)
-			{
-				o << "()";
-			}
-			o << ") {\n";
+			o << indent(ind) << "switch(" << genGetState() << ") {\n";
 			if (bUseStateAbort)
 			{
 				o << indent(ind) << "default: abort();\n";
@@ -1847,9 +1873,7 @@ static void genCondGotoSub(std::ostream &o, uint ind, RegExpIndices& vCondList, 
 	{
 		uint cMid = cMin + ((cMax - cMin + 1) / 2);
 
-		o << indent(ind) << "if (";
-		genGetCondition(o);
-		o << " < " << cMid << ") {\n";
+		o << indent(ind) << "if (" << genGetCondition() << " < " << cMid << ") {\n";
 		genCondGotoSub(o, ind + 1, vCondList, cMin, cMid - 1);
 		o << indent(ind) << "} else {\n";
 		genCondGotoSub(o, ind + 1, vCondList, cMid, cMax);
@@ -1863,9 +1887,7 @@ void genCondGoto(std::ostream &o, uint ind, const RegExpMap& specMap)
 	{
 		if (gFlag)
 		{
-			o << indent(ind) << "goto *" << mapCodeName["yyctable"] << "[";
-			genGetCondition(o);
-			o << "];\n";
+			o << indent(ind) << "goto *" << mapCodeName["yyctable"] << "[" << genGetCondition() << "];\n";
 		}
 		else
 		{
@@ -1881,9 +1903,7 @@ void genCondGoto(std::ostream &o, uint ind, const RegExpMap& specMap)
 			}
 			else
 			{
-				o << indent(ind) << "switch(";
-				genGetCondition(o);
-				o << ") {\n";
+				o << indent(ind) << "switch(" << genGetCondition() << ") {\n";
 	
 				for(RegExpMap::const_iterator it = specMap.begin(); it != specMap.end(); ++it)
 				{

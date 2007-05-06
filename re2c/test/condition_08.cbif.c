@@ -74,12 +74,22 @@ void scan(Scanner *s)
 
 		{
 
-			switch(s->state) {
-			default: goto yy0;
-			case 0: goto yyFillLabel0;
-			case 1: goto yyFillLabel1;
-			case 2: goto yyFillLabel2;
-			case 3: goto yyFillLabel3;
+			if (s->state < 1) {
+				if (s->state < 0) {
+					goto yy0;
+				} else {
+					goto yyFillLabel0;
+				}
+			} else {
+				if (s->state < 2) {
+					goto yyFillLabel1;
+				} else {
+					if (s->state < 3) {
+						goto yyFillLabel2;
+					} else {
+						goto yyFillLabel3;
+					}
+				}
 			}
 yy0:
 			if (s->cond < 2) {
