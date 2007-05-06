@@ -52,6 +52,8 @@ size_t init(Scanner *s)
 {
 	s->cur = s->tok = s->lim = s->buffer;
 	s->eof = 0;
+	s->cond = EStateNormal;
+	s->state = -1;
 
 	return fill(s, 0);
 }
@@ -66,6 +68,14 @@ void fputl(const char *s, size_t len, FILE *stream)
 
 void scan(Scanner *s)
 {
+	s->tok = s->cur;
+/*!re2c
+re2c:define:YYGETSTATE       = "s->state";
+re2c:define:YYGETSTATE:naked = 1;
+re2c:define:YYCONDTYPE       = ScanContition;
+re2c:indent:top              = 1;
+*/
+/*!getstate:re2c */
 	for(;;)
 	{
 		s->tok = s->cur;
@@ -80,13 +90,10 @@ re2c:define:YYFILL:naked     = 1;
 re2c:define:YYFILL           = "if(fill(s, #) == ~0) break;";
 re2c:define:YYSETSTATE@state = #;
 re2c:define:YYSETSTATE       = "s->state = #;";
-re2c:define:YYGETSTATE       = "s->state";
-re2c:define:YYGETSTATE:naked = 1;
 re2c:define:YYSETCONDITION       = "s->cond = #;";
 re2c:define:YYSETCONDITION@cond  = #;
 re2c:define:YYGETCONDITION       = s->cond;
 re2c:define:YYGETCONDITION:naked = 1;
-re2c:define:YYCONDTYPE       = ScanContition;
 re2c:variable:yych           = s->yych;
 re2c:yych:emit               = 0;
 re2c:indent:top              = 2;
@@ -137,7 +144,7 @@ re2c:condenumprefix          = EState;
 				fputc('~', stdout);
 				continue;
 			}
-<Normal>	"/*" => Normal
+<Normal>	"/*" => Comment
 			{
 				goto yyc_Comment;
 			}
@@ -206,7 +213,6 @@ re2c:condenumprefix          = EState;
 int main(int argc, char **argv)
 {
 	Scanner in;
-	char c;
 
 	if (argc != 2)
 	{
@@ -225,8 +231,6 @@ int main(int argc, char **argv)
 		fprintf(stderr, "Cannot open file '%s'\n", argv[1]);
 		return 1;
 	}
-
- 	in.cond = EStateNormal;
 
 	if (init(&in) > 0)
 	{

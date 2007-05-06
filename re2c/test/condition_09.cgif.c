@@ -7,8 +7,8 @@
 
 
 enum ScanContition {
-	EStateComment,
 	EStateNormal,
+	EStateComment,
 	EStateSkiptoeol,
 	EStateString,
 };
@@ -60,6 +60,8 @@ size_t init(Scanner *s)
 {
 	s->cur = s->tok = s->lim = s->buffer;
 	s->eof = 0;
+	s->cond = EStateNormal;
+	s->state = -1;
 
 	return fill(s, 0);
 }
@@ -74,6 +76,15 @@ void fputl(const char *s, size_t len, FILE *stream)
 
 void scan(Scanner *s)
 {
+	s->tok = s->cur;
+
+	switch(s->state) {
+	default: goto yy0;
+	case 0: goto yyFillLabel0;
+	case 1: goto yyFillLabel1;
+	case 2: goto yyFillLabel2;
+	case 3: goto yyFillLabel3;
+	}
 	for(;;)
 	{
 		s->tok = s->cur;
@@ -86,13 +97,6 @@ void scan(Scanner *s)
 				&&yyc_Skiptoeol,
 				&&yyc_String,
 			};
-			switch(s->state) {
-			default: goto yy0;
-			case 0: goto yyFillLabel0;
-			case 1: goto yyFillLabel1;
-			case 2: goto yyFillLabel2;
-			case 3: goto yyFillLabel3;
-			}
 yy0:
 			goto *yyctable[s->cond];
 /* *********************************** */
@@ -214,7 +218,7 @@ yy22:
 			}
 yy24:
 			++s->cur;
-			s->cond = EStateNormal;
+			s->cond = EStateComment;
 			{
 				goto yyc_Comment;
 			}
@@ -409,7 +413,6 @@ yy69:
 int main(int argc, char **argv)
 {
 	Scanner in;
-	char c;
 
 	if (argc != 2)
 	{
@@ -428,8 +431,6 @@ int main(int argc, char **argv)
 		fprintf(stderr, "Cannot open file '%s'\n", argv[1]);
 		return 1;
 	}
-
- 	in.cond = EStateNormal;
 
 	if (init(&in) > 0)
 	{

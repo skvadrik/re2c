@@ -7,8 +7,8 @@
 
 
 enum ScanContition {
-	EStateComment,
 	EStateNormal,
+	EStateComment,
 	EStateSkiptoeol,
 	EStateString,
 };

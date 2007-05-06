@@ -56,8 +56,8 @@ void fputl(const char *s, size_t len, FILE *stream)
 #line 57 "<stdout>"
 
 enum YYCONDTYPE {
-	EStateComment,
 	EStateNormal,
+	EStateComment,
 	EStateSkiptoeol,
 	EStateString,
 };

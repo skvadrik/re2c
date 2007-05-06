@@ -1852,10 +1852,19 @@ void genTypes(std::string& o, uint ind, const RegExpMap& specMap)
 	o.clear();
 
 	o += indent(ind++) + "enum " + mapCodeName["YYCONDTYPE"] + " {\n";
-	for(RegExpMap::const_iterator it = specMap.begin(); it != specMap.end(); ++it)
+
+	RegExpIndices  vCondList(specMap.size());
+
+	for(RegExpMap::const_iterator itSpecMap = specMap.begin(); itSpecMap != specMap.end(); ++itSpecMap)
 	{
-		o += indent(ind) + condEnumPrefix + it->first + ",\n";
+		vCondList[itSpecMap->second.first] = itSpecMap->first;
 	}
+
+	for(RegExpIndices::const_iterator itCondType = vCondList.begin(); itCondType != vCondList.end(); ++itCondType)
+	{
+		o += indent(ind) + condEnumPrefix + *itCondType + ",\n";
+	}
+
 	o += indent(--ind) + "};\n";
 }
 
