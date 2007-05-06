@@ -385,6 +385,7 @@ void parse(Scanner& i, std::ostream& o, std::ostream* h)
 	
 	while(i.echo())
 	{
+		bool bPrologBrace = false;
 		yyparse();
 		if (cFlag)
 		{
@@ -423,7 +424,7 @@ void parse(Scanner& i, std::ostream& o, std::ostream* h)
 			for(it = specMap.begin(); it != specMap.end(); ++it)
 			{
 				assert(it->second.second);
-				genCode(o, topIndent, it->second.second, &specMap, it->first, !--nCount);
+				genCode(o, topIndent, it->second.second, &specMap, it->first, !--nCount, bPrologBrace);
 			}
 			if (h)
 			{
@@ -436,7 +437,7 @@ void parse(Scanner& i, std::ostream& o, std::ostream* h)
 		}
 		else if(spec)
 		{
-			genCode(o, topIndent, spec, NULL, "", 0);
+			genCode(o, topIndent, spec, NULL, "", 0, bPrologBrace);
 		}
 		o << sourceFileInfo;
 	}

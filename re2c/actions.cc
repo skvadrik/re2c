@@ -1004,7 +1004,7 @@ CharSet::~CharSet()
 	delete[] ptn;
 }
 
-void genCode(std::ostream& o, uint& ind, RegExp *re, const RegExpMap* specMap, const std::string& condName, bool isLastCond)
+void genCode(std::ostream& o, uint& ind, RegExp *re, const RegExpMap* specMap, const std::string& condName, bool isLastCond, bool &bPrologBrace)
 {
 	CharSet cs;
 	uint j;
@@ -1052,7 +1052,7 @@ void genCode(std::ostream& o, uint& ind, RegExp *re, const RegExpMap* specMap, c
 	}
 
 	DFA *dfa = new DFA(ins, re->size, 0, nRealChars, rep);
-	dfa->emit(o, ind, specMap, condName, isLastCond);
+	dfa->emit(o, ind, specMap, condName, isLastCond, bPrologBrace);
 	delete dfa;
 	delete [] ins;
 	delete [] rep;

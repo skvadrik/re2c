@@ -26,7 +26,6 @@ int scan(char *p)
 start:
 
 #line 29 "<stdout>"
-{
 
 	switch(YYGETSTATE()) {
 	default: goto yy0;
@@ -52,15 +51,14 @@ yy3:
 		++n;
 		goto start;
 	}
-#line 56 "<stdout>"
+#line 55 "<stdout>"
 yy5:
 	++YYCURSOR;
 #line 32 "bug1472770.f.re"
 	{
 		return n;
 	}
-#line 63 "<stdout>"
-}
+#line 62 "<stdout>"
 #line 35 "bug1472770.f.re"
 
 }

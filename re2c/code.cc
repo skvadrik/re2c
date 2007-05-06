@@ -1475,7 +1475,7 @@ void DFA::findBaseState()
 	delete [] span;
 }
 
-void DFA::emit(std::ostream &o, uint& ind, const RegExpMap* specMap, const std::string& condName, bool isLastCond)
+void DFA::emit(std::ostream &o, uint& ind, const RegExpMap* specMap, const std::string& condName, bool isLastCond, bool& bPrologBrace)
 {
 	State *s;
 	uint i;
@@ -1651,7 +1651,20 @@ void DFA::emit(std::ostream &o, uint& ind, const RegExpMap* specMap, const std::
 	if (bProlog)
 	{
 		o << "\n" << outputFileInfo;
-		o << indent(ind++) << "{\n";
+		if ((!fFlag && bUsedYYAccept)
+		||  (!fFlag && bEmitYYCh)
+		||  (bFlag && !cFlag && BitMap::first)
+		||  (cFlag && !bWroteCondCheck && gFlag && !specMap->empty())
+		||  (fFlag && !bWroteGetState && gFlag)
+		)
+		{
+			bPrologBrace = true;
+			o << indent(ind++) << "{\n";
+		}
+		else if (ind == 0)
+		{
+			ind = 1;
+		}
 	
 		if (!fFlag)
 		{
@@ -1691,19 +1704,16 @@ void DFA::emit(std::ostream &o, uint& ind, const RegExpMap* specMap, const std::
 		genCondGoto(o, ind, *specMap);
 	}
 
-	if (cFlag)
+	if (cFlag && !condName.empty())
 	{
-		if (!condName.empty())
-		{
-			// TODO: Drop marker
-			o << "/* *********************************** */\n";
-			o << condPrefix << condName << ":\n";
-		}
-		if (bFlag && BitMap::first)
-		{
-			o << indent(ind++) << "{\n";
-			BitMap::gen(o, ind, lbChar, ubChar <= 256 ? ubChar : 256);
-		}
+		// TODO: Drop marker
+		o << "/* *********************************** */\n";
+		o << condPrefix << condName << ":\n";
+	}
+	if (cFlag && bFlag && BitMap::first)
+	{
+		o << indent(ind++) << "{\n";
+		BitMap::gen(o, ind, lbChar, ubChar <= 256 ? ubChar : 256);
 	}
 
 	// TODO: Shouldn't labels 0 and 1 be variable?
@@ -1726,7 +1736,7 @@ void DFA::emit(std::ostream &o, uint& ind, const RegExpMap* specMap, const std::
 		o << indent(--ind) << "}\n";
 	}
 	// Generate epilog
-	if (!cFlag || isLastCond)
+	if ((!cFlag || isLastCond) && bPrologBrace)
 	{
 		o << indent(--ind) << "}\n";
 	}

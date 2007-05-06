@@ -12,7 +12,6 @@ char *scan(char *p)
 	char *q;
 
 #line 15 "<stdout>"
-{
 
 	switch(YYGETSTATE()) {
 	default: goto yy0;
@@ -45,12 +44,12 @@ yy2:
 yy3:
 #line 15 "config4e.f.re"
 	{ return YYCURSOR; }
-#line 49 "<stdout>"
+#line 48 "<stdout>"
 yy4:
 	++YYCURSOR;
 #line 16 "config4e.f.re"
 	{ return NULL; }
-#line 54 "<stdout>"
+#line 53 "<stdout>"
 yy6:
 	++YYCURSOR;
 	YYSETSTATE(1);
@@ -71,7 +70,6 @@ yy7:
 	case '9':	goto yy6;
 	default:	goto yy3;
 	}
-}
 #line 17 "config4e.f.re"
 
 }

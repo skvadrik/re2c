@@ -230,7 +230,6 @@ public:
 
         
 #line 233 "<stdout>"
-{
 
 	switch(YYGETSTATE()) {
 	default: goto yy0;
@@ -332,7 +331,7 @@ yy2:
 yy3:
 #line 246 "push.f.re"
 	{ SEND(kIdentifier);     }
-#line 336 "<stdout>"
+#line 335 "<stdout>"
 yy4:
 	yych = *++YYCURSOR;
 	switch(yych) {
@@ -382,62 +381,62 @@ yy12:
 yy13:
 #line 247 "push.f.re"
 	{ SEND(kDecimalConstant);}
-#line 386 "<stdout>"
+#line 385 "<stdout>"
 yy14:
 	++YYCURSOR;
 #line 249 "push.f.re"
 	{ SEND(kEqual);          }
-#line 391 "<stdout>"
+#line 390 "<stdout>"
 yy16:
 	++YYCURSOR;
 #line 250 "push.f.re"
 	{ SEND(kLeftParen);      }
-#line 396 "<stdout>"
+#line 395 "<stdout>"
 yy18:
 	++YYCURSOR;
 #line 251 "push.f.re"
 	{ SEND(kRightParen);     }
-#line 401 "<stdout>"
+#line 400 "<stdout>"
 yy20:
 	++YYCURSOR;
 #line 252 "push.f.re"
 	{ SEND(kMinus);          }
-#line 406 "<stdout>"
+#line 405 "<stdout>"
 yy22:
 	++YYCURSOR;
 #line 253 "push.f.re"
 	{ SEND(kPlus);           }
-#line 411 "<stdout>"
+#line 410 "<stdout>"
 yy24:
 	++YYCURSOR;
 #line 254 "push.f.re"
 	{ SEND(kStar);           }
-#line 416 "<stdout>"
+#line 415 "<stdout>"
 yy26:
 	++YYCURSOR;
 #line 255 "push.f.re"
 	{ SEND(kSlash);          }
-#line 421 "<stdout>"
+#line 420 "<stdout>"
 yy28:
 	++YYCURSOR;
 #line 257 "push.f.re"
 	{ SKIP();                }
-#line 426 "<stdout>"
+#line 425 "<stdout>"
 yy30:
 	++YYCURSOR;
 #line 258 "push.f.re"
 	{ SKIP();                }
-#line 431 "<stdout>"
+#line 430 "<stdout>"
 yy32:
 	++YYCURSOR;
 #line 259 "push.f.re"
 	{ send(kEOF); return 1;  }
-#line 436 "<stdout>"
+#line 435 "<stdout>"
 yy34:
 	++YYCURSOR;
 #line 260 "push.f.re"
 	{ SEND(kUnknown);        }
-#line 441 "<stdout>"
+#line 440 "<stdout>"
 yy36:
 	++YYCURSOR;
 	YYSETSTATE(1);
@@ -626,7 +625,7 @@ yy44:
 yy45:
 #line 245 "push.f.re"
 	{ SEND(kReturn);         }
-#line 630 "<stdout>"
+#line 629 "<stdout>"
 yy46:
 	yych = *++YYCURSOR;
 	switch(yych) {
@@ -716,7 +715,7 @@ yy49:
 yy50:
 #line 244 "push.f.re"
 	{ SEND(kWhile);          }
-#line 720 "<stdout>"
+#line 719 "<stdout>"
 yy51:
 	yych = *++YYCURSOR;
 	switch(yych) {
@@ -806,7 +805,7 @@ yy54:
 yy55:
 #line 243 "push.f.re"
 	{ SEND(kBreak);          }
-#line 810 "<stdout>"
+#line 809 "<stdout>"
 yy56:
 	yych = *++YYCURSOR;
 	switch(yych) {
@@ -890,7 +889,7 @@ yy58:
 yy59:
 #line 242 "push.f.re"
 	{ SEND(kGoto);           }
-#line 894 "<stdout>"
+#line 893 "<stdout>"
 yy60:
 	yych = *++YYCURSOR;
 	switch(yych) {
@@ -974,7 +973,7 @@ yy62:
 yy63:
 #line 241 "push.f.re"
 	{ SEND(kElse);           }
-#line 978 "<stdout>"
+#line 977 "<stdout>"
 yy64:
 	yych = *++YYCURSOR;
 	switch(yych) {
@@ -1052,7 +1051,7 @@ yy65:
 yy66:
 #line 240 "push.f.re"
 	{ SEND(kFor);            }
-#line 1056 "<stdout>"
+#line 1055 "<stdout>"
 yy67:
 	++YYCURSOR;
 	switch((yych = *YYCURSOR)) {
@@ -1124,8 +1123,7 @@ yy67:
 yy68:
 #line 239 "push.f.re"
 	{ SEND(kIf);             }
-#line 1128 "<stdout>"
-}
+#line 1127 "<stdout>"
 #line 261 "push.f.re"
 
 
