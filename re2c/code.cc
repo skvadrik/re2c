@@ -1737,28 +1737,77 @@ void genGetState(std::ostream &o, uint& ind, uint start_label)
 	if (fFlag && !bWroteGetState)
 	{
 		vUsedLabels.insert(start_label);
-		o << indent(ind) << "switch(" << mapCodeName["YYGETSTATE"];
-		if (!bUseYYGetStateNaked)
+		if (gFlag)
 		{
-			o << "()";
-		}
-		o << ") {\n";
-		if (bUseStateAbort)
-		{
-			o << indent(ind) << "default: abort();\n";
-			o << indent(ind) << "case -1: goto " << labelPrefix << start_label << ";\n";
+			o << indent(ind++) << "static void *" << mapCodeName["yystable"] << "[" << "] = {\n";
+
+			for (size_t i=0; i<last_fill_index; ++i)
+			{
+				o << indent(ind) << "&&" << mapCodeName["yyFillLabel"] << i << ",\n";
+			}
+
+			o << indent(--ind) << "};\n";
+			o << "\n";
+
+			o << indent(ind) << "if(" << mapCodeName["YYGETSTATE"];
+			if (!bUseYYGetStateNaked)
+			{
+				o << "()";
+			}
+			if (bUseStateAbort)
+			{
+				o << " == -1) {";
+				++ind;
+			}
+			else
+			{
+				o << " < 0)";
+			}
+			o << " goto " << labelPrefix << start_label << ";\n";
+			if (bUseStateAbort)
+			{
+				o << indent(--ind) << "} else if (" << mapCodeName["YYGETSTATE"];
+				if (!bUseYYGetStateNaked)
+				{
+					o << "()";
+				}
+				o << " < -1) {\n";
+				o << indent(++ind) << "abort();\n";
+				o << indent(--ind) << "}\n";
+			}
+
+			o << indent(ind) << "goto *" << mapCodeName["yystable"] << "[" << mapCodeName["YYGETSTATE"];
+			if (!bUseYYGetStateNaked)
+			{
+				o << "()";
+			}
+			o << "];\n";
 		}
 		else
 		{
-			o << indent(ind) << "default: goto " << labelPrefix << start_label << ";\n";
+			o << indent(ind) << "switch(" << mapCodeName["YYGETSTATE"];
+			if (!bUseYYGetStateNaked)
+			{
+				o << "()";
+			}
+			o << ") {\n";
+			if (bUseStateAbort)
+			{
+				o << indent(ind) << "default: abort();\n";
+				o << indent(ind) << "case -1: goto " << labelPrefix << start_label << ";\n";
+			}
+			else
+			{
+				o << indent(ind) << "default: goto " << labelPrefix << start_label << ";\n";
+			}
+	
+			for (size_t i=0; i<last_fill_index; ++i)
+			{
+				o << indent(ind) << "case " << i << ": goto " << mapCodeName["yyFillLabel"] << i << ";\n";
+			}
+	
+			o << indent(ind) << "}\n";
 		}
-
-		for (size_t i=0; i<last_fill_index; ++i)
-		{
-			o << indent(ind) << "case " << i << ": goto " << mapCodeName["yyFillLabel"] << i << ";\n";
-		}
-
-		o << indent(ind) << "}\n";
 		if (bUseStateNext)
 		{
 			o << mapCodeName["yyNext"] << ":\n";
@@ -1988,6 +2037,7 @@ void Scanner::config(const Str& cfg, const Str& val)
 		mapVariableKeys.insert("variable:yybm");
 		mapVariableKeys.insert("variable:yych");
 		mapVariableKeys.insert("variable:yyctable");
+		mapVariableKeys.insert("variable:yystable");
 		mapVariableKeys.insert("variable:yytarget");
 		mapDefineKeys.insert("define:YYCONDTYPE");
 		mapDefineKeys.insert("define:YYCTXMARKER");

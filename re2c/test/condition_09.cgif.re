@@ -159,12 +159,12 @@ re2c:condenumprefix          = EState;
 			}
 <Normal>	'"' => String
 			{
-				fputc(*s->tok, stdout);
+				fputc(s->cur[-1], stdout);
 				continue;
 			}
 <Normal>	[^]
 			{
-				fputc(*s->tok, stdout);
+				fputc(s->cur[-1], stdout);
 				continue;
 			}
 <Comment>	"*" "/" => Normal
@@ -183,8 +183,15 @@ re2c:condenumprefix          = EState;
 			{
 				goto yyc_Skiptoeol;
 			}
+<Skiptoeol>	"\r" "\n" => Normal
+			{
+				fputc('\r', stdout);
+				fputc('\n', stdout);
+				continue;
+			}
 <Skiptoeol>	"\n" => Normal
 			{
+				fputc('\n', stdout);
 				continue;
 			}
 <Skiptoeol> [^]
@@ -193,17 +200,17 @@ re2c:condenumprefix          = EState;
 			}
 <String>	'\\' .
 			{
-				fputl((const char*)s->tok, 2, stdout);
+				fputl((const char*)s->cur-2, 2, stdout);
 				continue;
 			}
 <String>	'"' => Normal
 			{
-				fputc(*s->tok, stdout);
+				fputc(s->cur[-1], stdout);
 				continue;
 			}
 <String>	[^]
 			{
-				fputc(*s->tok, stdout);
+				fputc(s->cur[-1], stdout);
 				continue;
 			}
 */
