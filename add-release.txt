@@ -10,10 +10,10 @@
 3. For a BRANCH edit version in:
    - configure.in
 
-4. Keep CHANGELOG, htdocs/index.html insynch
+4. Keep CHANGELOG, htdocs/index.html in synch
 
 5. Commit preparation phase:
-   > svn ci -m "- Prepare new releases <new>"
+   > svn ci -m "- Prepare new release <new>"
 
 6. For HEAD:
    > svn mkdir tags/RELEASE_<new>
