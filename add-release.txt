@@ -28,7 +28,7 @@
 
 9. Check version in config_w32.h
 
-10. Build windowsversions
+10. Build window sversions
 
 11. Test windows build using cygwin
 
