@@ -1,12 +1,12 @@
-Summary: re2c - A tool for generating C-based recognizers from regular expressions
-Name: @PACKAGE_NAME@
-Version: @PACKAGE_VERSION@
-Release: @PACKAGE_RELEASE@
-Group: Development
-License: public domain
-URL: http://sourceforge.net/projects/re2c/
-Source: %{name}-%{version}.tar.gz
-BuildRoot: %{_tmppath}/%{name}-%{version}-root
+Summary:	A tool for generating C-based recognizers from regular expressions
+Name:		@PACKAGE_NAME@
+Version:	@PACKAGE_VERSION@
+Release:	@PACKAGE_RELEASE@
+License:	Public Domain
+Group:		Development/Tools
+URL:		http://re2c.org/
+Source0:	http://prdownloads.sourceforge.net/re2c/re2c-%{version}.tar.gz
+BuildRoot:	%{_tmppath}/%{name}-%{version}-root
 
 %description
 re2c is a great tool for writing fast and flexible lexers. It has
@@ -16,7 +16,8 @@ than a flex based scanner, and its input model is much more
 flexible.
 
 %prep
-%setup -q -n @PACKAGE_NAME@-@PACKAGE_VERSION@
+
+%setup -q
 
 %build
 ./configure \
