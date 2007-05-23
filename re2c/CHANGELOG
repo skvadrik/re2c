@@ -4,7 +4,7 @@ Version 0.13.0 (2007-??-??)
 - Fixed issue with short form of switches and parameter if not first switch.
 - Fixed #1708378 segfault in actions.cc.
 
-Version 0.12.1 (2007-??-??
+Version 0.12.1 (2007-05-23
 ---------------------------
 - Fixed #1711240 problem with '"' and 7F on EBCDIC plattforms.
 
