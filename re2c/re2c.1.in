@@ -1,7 +1,7 @@
 ./" 
 ./" $Id$
 ./"
-.TH RE2C 1 "22 April 2005" "Version @PACKAGE_VERSION@"
+.TH RE2C 1 "24 June 2007" "Version @PACKAGE_VERSION@"
 .ds re \fBre2c\fP
 .ds le \fBlex\fP
 .ds rx regular-expression
@@ -10,7 +10,7 @@
 re2c \- convert \*(rxs to C/C++
 
 .SH SYNOPSIS
-\*(re [\fB-bdefghisuvVw1\fP] [\fB-o output\fP] [\fB-c\fP [\fB-t header\fP]] file\fP
+\*(re [\fB-bdefghisuvVw1\fP] [\fB-o output\fP] [\fB-c\fP [\fB-t header\fP]] \fBfile\fP
 
 .SH DESCRIPTION
 \*(re is a preprocessor that generates C-based recognizers from regular
@@ -167,11 +167,6 @@ the user must supply some interface code.
 In particular, the user must define the following macros or use the 
 corresponding inplace configurations:
 .TP
-\fCYYCONDITION\fP
-This variable holdes the condition prior to entering the scanner code when using 
-\fB-c\fP switch. The value must be initialized with a value from the enumeration
-\fCYYCONDTYPE\fP type.
-.TP
 \fCYYCONDTYPE\fP
 In \fB-c\fP mode you can use \fB-t\fP to generate a file that contains the 
 enumeration used as conditions. Each of the values refers to a condition of
@@ -213,6 +208,11 @@ switch is used then \fCYYMAXFILL\fP can be triggered only once after the
 last \fC/*!re2c */\fP
 block.
 .TP
+\fCYYGETCONDITION\fP()
+This define is used to get the condition prior to entering the scanner code
+when using \fB-c\fP switch. The value must be initialized with a value from
+the enumeration \fCYYCONDTYPE\fP type.
+.TP
 \fCYYGETSTATE\fP()
 The user only needs to define this macro if the \fB-f\fP flag was specified.
 In that case, the generated code "calls" \fCYYGETSTATE\fP() at the very beginning
@@ -234,6 +234,10 @@ scanners might not use this.
 .TP
 \fCYYMAXFILL
 This will be automatically defined by \fC/*!max:re2c */\fP blocks as explained above.
+.TP
+\fCYYSETCONDITION(\fP\fIc\fP\fC)\fP
+This define is used to set the condition in transition rules.  This is only
+being used when \fB-c\fP is active and transition rules are being used.
 .TP
 \fCYYSETSTATE(\fP\fIs\fP\fC)\fP
 The user only needs to define this macro if the \fB-f\fP flag was specified.
@@ -308,15 +312,20 @@ tweaked using inplace configurations "\fBstate:abort\fP" and "\fBstate:nextlabel
 
 .SH "SCANNER WITH CONDITION SUPPORT"
 You can preceed \*(rxs with a list of condition names when using the \fB-c\fP 
-switch. In this case \*(re generates scanners for each conditon. Each of the
-generated scanners has its own precondition. The precondition is given by the 
-interface variable \fBYYCONDITON\fP and must be of type \fBYYCONDTYPE\fP.
+switch. In this case \*(re generates scanner blocks for each conditon. Each of the
+generated blocks has its own precondition. The precondition is given by the 
+interface define \fBYYGETCONDITON\fP and must be of type \fBYYCONDTYPE\fP.
 .LP
 There are two special conditons. First the rules of the condition '*' are 
 merged to all  conditions. And second the empty condition list allows to 
 provide a code block that does not have a scanner part. Meaning it does not 
 allow any regular expression. The condition value referring to this special 
 block is always the one with the enumeration value 0.
+.LP
+Non empty rules allow to specify the new condition, which makes them
+transition rules. Besides generating calls for the define \fBYYSETCONDTITION\fP
+no other special code is generated.
+
 
 .SH "SCANNER SPECIFICATIONS"
 Each scanner specification consists of a set of \fIrules\fP, \fInamed
@@ -332,9 +341,15 @@ is to be executed when the associated \fI\*(rx\fP is matched.
 If \fB-c\fP is active then each \*(rx is preceeded by a list of 
 comma separated condition names. Besides normal naming rules there are two 
 special cases. A rule may contain the single condition name '*' and no contition 
-name at all. In the latter case the rule cannot have a \*(rx.
+name at all. In the latter case the rule cannot have a \*(rx. Non 
+empty rules may further more specify the new condition. In that case \*(re will
+generated the necessary code to chnage the condition automatically.
 .P
 .RS
+\fC<\fP\fIcondition-list\fP\fC>\fP \fI\*(rx\fP \fC=>\fP \fP\fIcondition\fP \fC{\fP \fIC/C++ code\fP \fC}\fP
+.P
+\fC<\fP\fI*\fP\fC>\fP \fI\*(rx\fP \fC=>\fP \fP\fIcondition\fP \fC{\fP \fIC/C++ code\fP \fC}\fP
+.P
 \fC<\fP\fIcondition-list\fP\fC>\fP \fI\*(rx\fP \fC{\fP \fIC/C++ code\fP \fC}\fP
 .P
 \fC<\fP\fI*\fP\fC>\fP \fI\*(rx\fP \fC{\fP \fIC/C++ code\fP \fC}\fP
@@ -451,6 +466,14 @@ Those grouped together have equal precedence.
 It is possible to configure code generation inside \*(re blocks. The following
 lists the available configurations:
 .TP
+\fIre2c:condprefix\fP \fB=\fP yyc_ \fB;\fP
+Allows to specify the prefix used for condition labels. That is this text is 
+prepended to any condition label in the generated output file.
+.TP
+\fIre2c:condenumprefix\fP \fB=\fP yyc \fB;\fP
+Allows to specify the prefix used for condition values. That is this text is 
+prepended to any condition enum value in the generated output file. 
+.TP
 \fIre2c:indent:top\fP \fB=\fP 0 \fB;\fP
 Specifies the minimum number of indendation to use. Requires a numeric value 
 greater than or equal zero.
@@ -460,6 +483,14 @@ Specifies the string to use for indendation. Requires a string that should
 contain only whitespace unless you need this for external tools. The easiest 
 way to specify spaces is to enclude them in single or double quotes. If you do 
 not want any indendation at all you can simply set this to \fB""\fP.
+.TP
+\fIre2c:yych:conversion\fP \fB=\fP 0 \fB;\fP
+When this setting is non zero, then \*(re automatically generates conversion 
+code whenever yych gets read. In this case the type must be defined using
+\fBre2c:define:YYCTYPE\fP.
+.TP
+\fIre2c:yych:emit\fP \fB=\fP 1 \fB;\fP
+Generation of \fByych\fP can be suppressed by setting this to 0.
 .TP
 \fIre2c:yybm:hex\fP \fB=\fP 0 \fB;\fP
 If set to zero then a decimal table is being used else a hexadecimal table 
@@ -472,9 +503,11 @@ this behavior might introduce sever security issues to you programs.
 .TP
 \fIre2c:yyfill:parameter\fP \fB=\fP 1 \fB;\fP
 Allows to suppress parameter passing to \fBYYFILL\fP calls. If set to zero 
-then no parameter is passed to \fBYYFILL\fP. If set to a non zero value then
-\fBYYFILL\fP usage will be followed by the number of requested characters in
-braces.
+then no parameter is passed to \fBYYFILL\fP. However \fBdefine:YYFILL@LEN\fP
+allows to specify a replacement string for the actual length value. If set to
+a non zero value then \fBYYFILL\fP usage will be followed by the number of 
+requested characters in braces unless \fBre2c:define:YYFILL:naked\fP is set. 
+Also look at \fBre2c:define:YYFILL:naked\fP and \fBre2c:define:YYFILL@LEN\fP.
 .TP
 \fIre2c:startlabel\fP \fB=\fP 0 \fB;\fP
 If set to a non zero integer then the start label of the next scanner blocks 
@@ -518,9 +551,6 @@ a string the braces must be specified. Now assuming your input is a \fBchar*\fP
 buffer and you are using above mentioned switches you can set \fBYYCTYPE\fP to
 \fBunsigned char\fP and this setting to either \fB1\fP or \fB"(unsigned char)"\fP.
 .TP
-\fIre2c:define:define:YYCONDITION\fP \fB=\fP YYCONDITION \fB;\fP
-Variable or function of type YYCONDTYPE used in \fB-c\fP mode.
-.TP
 \fIre2c:define:define:YYCONDTYPE\fP \fB=\fP YYCONDTYPE \fB;\fP
 Enumeration used for condition support with \fB-c\fP mode.
 .TP
@@ -537,28 +567,56 @@ Allows to overwrite the define YYCURSOR and thus avoiding it by setting the
 value to the actual code needed.
 .TP
 \fIre2c:define:YYDEBUG\fP \fB=\fP YYDEBUG \fB;\fP
-Allows to overwrite the define YYDEBUG and thus avoiding it by setting the
+Allows to overwrite the define \fBYYDEBUG\fP and thus avoiding it by setting the
 value to the actual code needed.
 .TP
 \fIre2c:define:YYFILL\fP \fB=\fP YYFILL \fB;\fP
-Allows to overwrite the define YYFILL and thus avoiding it by setting the
+Allows to overwrite the define \fBYYFILL\fP and thus avoiding it by setting the
 value to the actual code needed.
+.TP
+\fIre2c:define:YYFILL:naked\fP \fB=\fP 0 \fB;\fP
+Wehn set to 1 neither braces, parameter nor semicolon gets emitted.
+.TP
+\fIre2c:define:YYFILL@LEN\fP \fB=\fP @@ \fB;\fP
+When using \fIre2c:define:YYFILL\fP and \fIre2c:yyfill:parameter\fP is 0 then
+any occurence of this text inside \fBYYFILL\fP will be replaced with the actual
+length value.
+.TP
+\fIre2c:define:YYGETCONDITION\fP \fB=\fP YYGETCONDITION \fB;\fP
+Allows to overwrite the define \fBYYGETCONDITION\fP.
+.TP
+\fIre2c:define:YYGETCONDITION:naked\fP \fB=\fP  \fB;\fP
+Wehn set to 1 neither braces, parameter nor semicolon gets emitted.
 .TP
 \fIre2c:define:YYGETSTATE\fP \fB=\fP YYGETSTATE \fB;\fP
-Allows to overwrite the define YYGETSTATE and thus avoiding it by setting the
+Allows to overwrite the define \fBYYGETSTATE\fP and thus avoiding it by setting the
 value to the actual code needed.
 .TP
+\fIre2c:define:YYGETSTATE:naked\fP \fB=\fP 0 \fB;\fP
+Wehn set to 1 neither braces, parameter nor semicolon gets emitted.
+.TP
 \fIre2c:define:YYLIMIT\fP \fB=\fP YYLIMIT \fB;\fP
-Allows to overwrite the define YYLIMIT and thus avoiding it by setting the
+Allows to overwrite the define \fBYYLIMIT\fP and thus avoiding it by setting the
 value to the actual code needed.
 .TP
 \fIre2c:define:YYMARKER\fP \fB=\fP YYMARKER \fB;\fP
-Allows to overwrite the define YYMARKER and thus avoiding it by setting the
+Allows to overwrite the define \fBYYMARKER\fP and thus avoiding it by setting the
 value to the actual code needed.
 .TP
+\fIre2c:define:YYSETCONDITION\fP \fB=\fP YYSETCONDITION \fB;\fP
+Allows to overwrite the define \fBYYSETCONDITION\fP.
+.TP
+\fIre2c:define:YYSETCONDITION@cond\fP \fB=\fP @@ \fB;\fP
+When using \fIre2c:define:YYSETCONDITION\fP then any occurence of this text 
+inside \fBYYSETCONDITION\fP will be replaced with the actual new condition value.
+.TP
 \fIre2c:define:YYSETSTATE\fP \fB=\fP YYSETSTATE \fB;\fP
-Allows to overwrite the define YYSETSTATE and thus avoiding it by setting the
+Allows to overwrite the define \fBYYSETSTATE\fP and thus avoiding it by setting the
 value to the actual code needed.
+.TP
+\fIre2c:define:YYSETSTATE@state\fP \fB=\fP @@ \fB;\fP
+When using \fIre2c:define:YYSETSTATE\fP then any occurence of this text 
+inside \fBYYSETSTATE\fP will be replaced with the actual new state value.
 .TP
 \fIre2c:label:yyFillLabel\fP \fB=\fP yyFillLabel \fB;\fP
 Allows to overwrite the name of the label yyFillLabel.
@@ -577,7 +635,11 @@ Allows to overwrite the name of the variable yych.
 .TP
 \fIre2c:variable:yyctable\fP \fB=\fP yyctable \fB;\fP
 When both \fB-c\fP and \fB-g\fP are active then \*(re uses this variable to 
-generate a static jump table for conditions.
+generate a static jump table for YYGETCONDITION.
+.TP
+\fIre2c:variable:yystable\fP \fB=\fP yystable \fB;\fP
+When both \fB-f\fP and \fB-g\fP are active then \*(re uses this variable to 
+generate a static jump table for YYGETSTATE.
 .TP
 \fIre2c:variable:yytarget\fP \fB=\fP yytarget \fB;\fP
 Allows to overwrite the name of the variable yytarget.
@@ -606,9 +668,6 @@ cannot appear within another token); upon recognizing such a character check
 to see if it is the sentinel and act accordingly. And you can also use YYFILL(n)
 to end the scanner in case not enough characters are available which is nothing
 else then e detection of end of data/file.
-.LP
-\*(re does not provide start conditions:  use a separate scanner
-specification for each start condition (as illustrated in the above example).
 
 .SH BUGS
 .LP
