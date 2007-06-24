@@ -316,7 +316,7 @@ switch. In this case \*(re generates scanner blocks for each conditon. Each of t
 generated blocks has its own precondition. The precondition is given by the 
 interface define \fBYYGETCONDITON\fP and must be of type \fBYYCONDTYPE\fP.
 .LP
-There are two special conditons. First the rules of the condition '*' are 
+There are two special rule types. First the rules of the condition '*' are 
 merged to all  conditions. And second the empty condition list allows to 
 provide a code block that does not have a scanner part. Meaning it does not 
 allow any regular expression. The condition value referring to this special 

@@ -1,4 +1,4 @@
-Version 0.13.0 (2007-??-??)
+Version 0.13.0 (2007-06-24)
 ---------------------------
 - Added -c and -t to generate scanners with (f)lex-like condition support.
 - Fixed issue with short form of switches and parameter if not first switch.

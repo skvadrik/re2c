@@ -1,7 +1,9 @@
 # $Id$
 
+WINBUILDDIR = Release-2003
+
 bin_PROGRAMS = re2c
-win_BINARIES = Release-2005/re2c.exe
+win_BINARIES = $(WINBUILDDIR)/re2c.exe
 re2c_SOURCES = code.cc dfa.cc main.cc parser.cc actions.cc scanner.re substr.cc\
 	translate.cc scanner.cc mbo_getopt.cc \
 	basics.h dfa.h globals.h ins.h parser.h re.h scanner.h \
@@ -35,10 +37,12 @@ dist-hook: re2c.spec
 rpm-files:	$(bin_PROGRAMS) $(EXTRA_DIST)
 
 rpm: dist
-	rpmbuild -ta re2c-$(PACKAGE_VERSION).tar.gz
+	rpmbuild -ba re2c.spec
 
 src-rpm: dist
-	rpmbuild -ts re2c-$(PACKAGE_VERSION).tar.gz
+	cp -f re2c-$(PACKAGE_VERSION).tar.gz `rpm --eval "%{_sourcedir}"`
+	cp -f re2c.spec `rpm --eval "%{_specdir}"`
+	rpmbuild -bs re2c.spec
 	cp -f `rpm --eval "%{_srcrpmdir}"`/re2c-$(PACKAGE_VERSION)-$(PACKAGE_RELEASE).src.rpm .
 
 zip: $(bin_PROGRAMS) $(EXTRA_ZIP)
@@ -47,7 +51,7 @@ zip: $(bin_PROGRAMS) $(EXTRA_ZIP)
 	zipinfo -1      re2c-$(PACKAGE_VERSION)-src.zip | grep .svn | xargs zip -d re2c-$(PACKAGE_VERSION)-src.zip >/dev/null
 	zipinfo -1      re2c-$(PACKAGE_VERSION)-src.zip | grep .cvsignore | xargs zip -d re2c-$(PACKAGE_VERSION)-src.zip >/dev/null
 	if test -f re2c-$(PACKAGE_VERSION)-bin.zip; then rm -f re2c-$(PACKAGE_VERSION)-bin.zip; fi
-	if test -f Release-2005/re2c.exe; then \
+	if test -f $(WINBUILDDIR)/re2c.exe; then \
 	zip -q -o -9 -j re2c-$(PACKAGE_VERSION)-bin.zip $(win_BINARIES); \
 	fi;
 

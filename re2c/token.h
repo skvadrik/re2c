@@ -26,7 +26,7 @@ inline Token::Token(const SubStr& t, uint l) : text(t), newcond(NULL), line(l)
 }
 
 inline Token::Token(const Token& oth)
-	: text(oth.text)
+	: text(oth.text.to_string().c_str())
 	, newcond(oth.newcond ? new Str(*oth.newcond) : NULL)
 	, line(oth.line)
 {

@@ -98,4 +98,8 @@ char *strndup(const char *str, size_t len);
 
 #endif
 
+#if defined(_MSC_VER) && !defined(vsnprintf)
+#define vsnprintf _vsnprintf
+#endif
+
 #endif
