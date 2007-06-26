@@ -37,6 +37,8 @@ dist-hook: re2c.spec
 rpm-files:	$(bin_PROGRAMS) $(EXTRA_DIST)
 
 rpm: dist
+	cp -f re2c-$(PACKAGE_VERSION).tar.gz `rpm --eval "%{_sourcedir}"`
+	cp -f re2c.spec `rpm --eval "%{_specdir}"`
 	rpmbuild -ba re2c.spec
 
 src-rpm: dist
@@ -57,8 +59,8 @@ zip: $(bin_PROGRAMS) $(EXTRA_ZIP)
 
 release: dist zip src-rpm
 
-parser.cc:	$(top_srcdir)/parser.y
-	$(YACC) $(YFLAGS) $< || exit
+parser.cc: $(top_srcdir)/parser.y
+	$(YACC) $(YFLAGS) $(top_srcdir)/parser.y || exit
 	cat y.tab.c | sed 's/"y\.tab\.c"/"parser.cc"/g' > $(top_srcdir)/parser.cc
 	rm -f y.tab.c
 	if cmp -s $(top_srcdir)/parser.cc $(top_srcdir)/bootstrap/parser.cc; then :; else cp -f $(top_srcdir)/parser.cc $(top_srcdir)/bootstrap/parser.cc; fi
@@ -67,8 +69,8 @@ parser.cc:	$(top_srcdir)/parser.y
 
 scanner.cc: $(top_srcdir)/scanner.re
 	@if test -x ./re2c$(EXEEXT); then \
-		echo "re2c $(RE2CFLAGS) -o $@ $<"; \
-		./re2c $(RE2CFLAGS) -o $@ $< && cp $@ $(top_srcdir)/bootstrap/; \
+		echo "re2c $(RE2CFLAGS) -o $@ $(top_srcdir)/scanner.re"; \
+		./re2c $(RE2CFLAGS) -o $@ $(top_srcdir)/scanner.re && cp $@ $(top_srcdir)/bootstrap/; \
 	else \
 		echo "cp -f $(top_srcdir)/bootstrap/$@ $@"; \
 		cp -f $(top_srcdir)/bootstrap/$@ $@; \
