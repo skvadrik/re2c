@@ -303,6 +303,8 @@ public:
 	const RuleOp& op;
 };
 
+RegExp *mkAlt(RegExp*, RegExp*);
+
 class AltOp: public RegExp
 {
 
