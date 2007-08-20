@@ -3,8 +3,8 @@ _XPG=1
 result=0
 errcnt=0
 tstcnt=0;
-#diff='diff -u -I "#line [0-9]*"'
-diff='diff -u'
+diff -u $0 $0 >/dev/null 2>&1 && diff='diff -u' || diff='diff'
+#diff="${diff} -I '#line [0-9]*'"
 if test $# = 0; then
 tests=`for i in test lessons; do find @top_srcdir@/$i -name '*.re'; done|sort`
 else

@@ -1,6 +1,7 @@
 Version 0.13.1 (2007-??-??)
 ---------------------------
 - Fixed issue with some compilers.
+- Fixed #1776177 Build on AIX.
 - Fixed #1743180 fwrite with 0 length crashes on OS X.
 
 Version 0.13.0 (2007-06-24)
