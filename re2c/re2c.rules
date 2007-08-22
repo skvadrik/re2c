@@ -1,0 +1,152 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<VisualStudioToolFile
+	Name="re2c"
+	Version="8.00"
+	>
+	<Rules>
+		<CustomBuildRule
+			Name="re2c"
+			DisplayName="re2c"
+			CommandLine="re2c.exe [AllOptions] [AdditionalOptions] [inputs]"
+			Outputs="[$OutputFileName]"
+			FileExtensions="*.re"
+			ExecutionDescription="Compiling regular expressions..."
+			>
+			<Properties>
+				<StringProperty
+					Name="OutputFileName"
+					DisplayName="Output File Name"
+					Description="Specifies the name of the output source file.     (-o[file])"
+					Switch="-o&quot;[value]&quot;"
+					DefaultValue="$(InputDir)$(InputName).cpp"
+				/>
+				<EnumProperty
+					Name="Version"
+					DisplayName="Show Version Information"
+					Description="Displays version information at compile-time.     (-v -V)"
+					>
+					<Values>
+						<EnumValue
+							Value="0"
+							DisplayName="Default"
+						/>
+						<EnumValue
+							Value="1"
+							Switch="-v"
+							DisplayName="Show Version (-v)"
+						/>
+						<EnumValue
+							Value="2"
+							Switch="-V"
+							DisplayName="Show Version as a Number (-V)"
+						/>
+					</Values>
+				</EnumProperty>
+				<BooleanProperty
+					Name="NoLineInfo"
+					DisplayName="Suppress Line Information"
+					Description="Suppress line-number debugging information in the output file.     (-i)"
+					Switch="-i"
+				/>
+				<BooleanProperty
+					Name="NoGenerationDate"
+					DisplayName="Suppress Generation Date"
+					Description="Suppress generation-date information in the output file.     (--no-generation-date)"
+					Switch="--no-generation-date"
+				/>
+				<EnumProperty
+					Name="CharacterSet"
+					DisplayName="Scanner Character Set"
+					PropertyPageName="Code Generation"
+					Description="Specifies the generated scanner&apos;s character set.     (-e, -w, -u)"
+					>
+					<Values>
+						<EnumValue
+							Value="0"
+							DisplayName="Default"
+						/>
+						<EnumValue
+							Value="1"
+							Switch="-e"
+							DisplayName="EBCDIC (-e)"
+						/>
+						<EnumValue
+							Value="2"
+							Switch="-w"
+							DisplayName="UCS-16 (-w)"
+						/>
+						<EnumValue
+							Value="3"
+							Switch="-u"
+							DisplayName="UTF-32 (-u)"
+						/>
+					</Values>
+				</EnumProperty>
+				<EnumProperty
+					Name="Optimization"
+					DisplayName="Optimization Level"
+					PropertyPageName="Code Generation"
+					Description="Specifies the optimizations used in the scanner.     (-s, -b, -g)"
+					DefaultValue="2"
+					>
+					<Values>
+						<EnumValue
+							Value="0"
+							DisplayName="None"
+						/>
+						<EnumValue
+							Value="1"
+							Switch="-s"
+							DisplayName="Use Nested If&apos;s (-s)"
+						/>
+						<EnumValue
+							Value="2"
+							Switch="-b"
+							DisplayName="Use Bit Vectors (-b)"
+						/>
+						<EnumValue
+							Value="3"
+							Switch="-g"
+							DisplayName="Use Computed Goto&apos;s (GCC Only) (-g)"
+						/>
+					</Values>
+				</EnumProperty>
+				<BooleanProperty
+					Name="StorableState"
+					DisplayName="Enable Storable State"
+					PropertyPageName="Code Generation"
+					Description="Generates a scanner with support for storable state.     (-r)"
+					Switch="-r"
+				/>
+				<BooleanProperty
+					Name="DebugOutput"
+					DisplayName="Enable Debugging Output"
+					PropertyPageName="Code Generation"
+					Description="Generates a scanner that outputs its current position and state. You must define a YYDEBUG(int state, char current) macro to recieve this information.     (-d)"
+					Switch="-d"
+				/>
+				<BooleanProperty
+					Name="SinglePass"
+					DisplayName="Single Pass Code Generation"
+					PropertyPageName="Code Generation"
+					Description="Forces single pass code generation. This disables YYMAXFILL generation prior to last block and cannot be used with storable state.     (-1)"
+					Switch="-1"
+				/>
+				<BooleanProperty
+					Name="Conditions"
+					DisplayName="Require Start Conditions"
+					PropertyPageName="Code Generation"
+					Description="Enables support for (f)lex-like conditions.     (-c)"
+					Switch="-c"
+				/>
+				<StringProperty
+					Name="TypeHeader"
+					DisplayName="Condition Header File"
+					PropertyPageName="Code Generation"
+					Description="Generates a header file that contains types for the (f)lex-like condition support.     (-t[file])"
+					Switch="-t&quot;[value]&quot;"
+				/>
+			</Properties>
+		</CustomBuildRule>
+	</Rules>
+</VisualStudioToolFile>
