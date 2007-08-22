@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="8,00"
+	Version="8.00"
 	Name="re2c"
 	ProjectGUID="{18C5E289-8D90-400D-9F80-766F174CEDC9}"
+	RootNamespace="re2c"
 	Keyword="MakeFileProj"
 	>
 	<Platforms>
@@ -12,6 +13,9 @@
 		/>
 	</Platforms>
 	<ToolFiles>
+		<ToolFile
+			RelativePath=".\re2c.rules"
+		/>
 	</ToolFiles>
 	<Configurations>
 		<Configuration
@@ -26,6 +30,9 @@
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="re2c"
 			/>
 			<Tool
 				Name="VCXMLDataGeneratorTool"
@@ -96,6 +103,9 @@
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="re2c"
 			/>
 			<Tool
 				Name="VCXMLDataGeneratorTool"

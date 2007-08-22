@@ -1,5 +1,6 @@
 Version 0.13.1 (2007-??-??)
 ---------------------------
+- Added custom build rules for Visual Studio 2005 (re2c.rules). (William Swanson)
 - Fixed issue with some compilers.
 - Fixed #1776177 Build on AIX.
 - Fixed #1743180 fwrite with 0 length crashes on OS X.

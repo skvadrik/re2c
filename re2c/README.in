@@ -67,6 +67,19 @@ of the methods described above or use Microsoft Visual C .NET 2002 or later
 with the solution files provided (re2c.sln for 2002/2003 and re2c-2005.sln for
 version 2005). re2c cannot be built with Microsoft Visual C 6.0 or earlier.
 
+Using Visual Studio 2005 you can automate handling of .re files by adding the
+custom build rules file (re2c.rules) to your project. Just load your Visual 
+C++ project in Visual Studio, select "Custom Build Rules..." from its context 
+menu, and add re2c.rules to the list with the "Find Existing..." button. 
+Activate the check mark, and you are done! Any .re files you add to the project
+will now automatically be built with re2c. Of course, re2c.exe also has to be
+available in your environment for this to work. With the rules active Visual
+Studio will automatically recognize .re files and compile then with re2c. The
+output file has the same name as the input file but with the .cpp extension.
+This, and all other re2c compiler settings, are fully configurable from within
+the Visual Studio IDE. Just right-click on the .re file in Visual Studio, go
+to the properties dialog, and pick your options.
+
 re2c is a great tool for writing fast and flexible lexers. It has
 served many people well for many years. re2c is on the order of 2-3 
 times faster than a flex based scanner, and its input model is much 
