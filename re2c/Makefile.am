@@ -1,7 +1,5 @@
 # $Id$
 
-WINBUILDDIR = Release-2003
-
 bin_PROGRAMS = re2c
 win_BINARIES = $(WINBUILDDIR)/re2c.exe
 re2c_SOURCES = code.cc dfa.cc main.cc parser.cc actions.cc scanner.re substr.cc\
