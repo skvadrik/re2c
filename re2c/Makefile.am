@@ -59,7 +59,10 @@ release: dist zip src-rpm
 
 parser.cc: $(top_srcdir)/parser.y
 	$(YACC) $(YFLAGS) $(top_srcdir)/parser.y || exit
-	cat y.tab.c | sed 's/"y\.tab\.c"/"parser.cc"/g' > $(top_srcdir)/parser.cc
+	cat y.tab.c | sed -e 's/"y\.tab\.c"/"parser.cc"/g' -e 's/"\.\/parser\.y"/"parser.y"/g' > $(top_srcdir)/parser.cc
+	rm -f y.tab.c
+	mv -f y.tab.h y.tab.c
+	cat y.tab.c | sed -e 's/"\.\/parser\.y"/"parser.y"/g' > y.tab.h
 	rm -f y.tab.c
 	if cmp -s $(top_srcdir)/parser.cc $(top_srcdir)/bootstrap/parser.cc; then :; else cp -f $(top_srcdir)/parser.cc $(top_srcdir)/bootstrap/parser.cc; fi
 	if cmp -s y.tab.h $(top_srcdir)/y.tab.h; then :; else mv -f y.tab.h $(top_srcdir)/y.tab.h; fi
