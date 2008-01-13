@@ -248,6 +248,13 @@ scan:
 					goto code;
 				}
 
+	":="		{
+					cur = cursor;
+					tok+= 2; /* skip ":=" */
+					depth = 0;
+					goto code;
+				}
+
 	"/*"		{
 					depth = 1;
 					goto comment;
@@ -379,7 +386,11 @@ scan:
 code:
 /*!re2c
 	"}"			{
-					if(--depth == 0)
+					if (depth == 0)
+					{
+						fatal("Curly braces are not allowed after #:='");
+					}
+					else if (--depth == 0)
 					{
 						cur = cursor;
 						yylval.token = new Token(token(), tline);
@@ -388,11 +399,42 @@ code:
 					goto code;
 				}
 	"{"			{
-					++depth;
+					if (depth == 0)
+					{
+						fatal("Curly braces are not allowed after #:='");
+					}
+					else
+					{
+						++depth;
+					}
+					goto code;
+				}
+	"\n" /  ws	{
+					if (depth == 0)
+					{
+						goto code;
+					}
+					else if (cursor == eof)
+					{
+						fatal("missing '}'");
+					}
+					pos = cursor;
+					cline++;
 					goto code;
 				}
 	"\n"		{
-					if(cursor == eof)
+					if (depth == 0)
+					{
+						cur = cursor;
+						tok += strspn(tok, " \t\r\n");
+						while (cur > tok && strchr(" \t\r\n", cur[-1]))
+						{
+							--cur;
+						}
+						yylval.token = new Token(token(), tline);
+						return CODE;
+					}
+					else if (cursor == eof)
 					{
 						fatal("missing '}'");
 					}
@@ -401,7 +443,7 @@ code:
 					goto code;
 				}
 	zero		{
-					if(cursor == eof)
+					if (cursor == eof)
 					{
 						if (depth)
 						{
