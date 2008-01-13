@@ -300,7 +300,7 @@ scan:
 					fatal("unterminated range (missing ])");
 				}
 
-	"<>" / (ws* "{") {
+	"<>" / (ws* ("{" | "=>" | ":=")) {
 					RETURN(NOCOND);
 				}
 	[<>,()|=;/\\]	{

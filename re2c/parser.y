@@ -162,7 +162,7 @@ rule:
 			delete $2;
 			delete $7;
 		}
-	|	'<' cond '>' look CODE
+	|	'<' cond '>' look newcond CODE
 		{
 			delete $2;
 			if (!cFlag)
@@ -180,7 +180,7 @@ rule:
 			$7->newcond = $6;
 			specStar.push_back(new RuleOp($4, $5, $7, accept++));
 		}
-	|	'<' STAR '>' look CODE
+	|	'<' STAR '>' look newcond CODE
 		{
 			if (!cFlag)
 			{
@@ -188,7 +188,7 @@ rule:
 			}
 			in->fatal("no expression specified");
 		}
-	|	NOCOND CODE
+	|	NOCOND newcond CODE
 		{
 			if (!cFlag)
 			{
@@ -198,7 +198,8 @@ rule:
 			{
 				in->fatal("code to handle illegal condition already defined");
 			}
-			$$ = specNone = new RuleOp(new NullOp(), new NullOp(), $2, accept++);
+			$3->newcond = $2;
+			$$ = specNone = new RuleOp(new NullOp(), new NullOp(), $3, accept++);
 		}
 ;
 
