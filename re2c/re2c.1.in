@@ -332,10 +332,16 @@ Each scanner specification consists of a set of \fIrules\fP, \fInamed
 definitions\fP and \fIconfigurations\fP.
 .LP
 \fIRules\fP consist of a \*(rx along with a block of C/C++ code that
-is to be executed when the associated \fI\*(rx\fP is matched.
+is to be executed when the associated \fI\*(rx\fP is matched. You can either
+start the code with an opening curly brace or the sequence '\fB:=\fP'. When
+the code with a curly brace then \*(re counts the brace depth and stops looking
+for code automatically. Otherwise curly braces are not allowed and \*(re stops
+looking for code at the first line that does not begin with whitespace.
 .P
 .RS
 \fI\*(rx\fP \fC{\fP \fIC/C++ code\fP \fC}\fP
+.P
+\fI\*(rx\fP \fC:=\fP \fIC/C++ code\fP
 .RE
 .P
 If \fB-c\fP is active then each \*(rx is preceeded by a list of 
@@ -343,7 +349,8 @@ comma separated condition names. Besides normal naming rules there are two
 special cases. A rule may contain the single condition name '*' and no contition 
 name at all. In the latter case the rule cannot have a \*(rx. Non 
 empty rules may further more specify the new condition. In that case \*(re will
-generated the necessary code to chnage the condition automatically.
+generated the necessary code to chnage the condition automatically. Just as above
+code can be started with a curly brace of the sequence '\fB:=\fP'.
 .P
 .RS
 \fC<\fP\fIcondition-list\fP\fC>\fP \fI\*(rx\fP \fC=>\fP \fP\fIcondition\fP \fC{\fP \fIC/C++ code\fP \fC}\fP
