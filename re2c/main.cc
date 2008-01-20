@@ -61,6 +61,8 @@ std::string condPrefix("yyc_");
 std::string condEnumPrefix("yyc");
 std::string condDivider("/* *********************************** */");
 std::string condDividerParam("@@");
+std::string condGoto("goto @@;");
+std::string condGotoParam("@@");
 std::string yychConversion("");
 std::string yyFillLength("@@");
 std::string yySetConditionParam("@@");

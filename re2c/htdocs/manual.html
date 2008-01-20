@@ -421,6 +421,15 @@ using <i>re2c:cond:divider@cond</i>.</dd>
 <dt><i>re2c:cond:divider@cond</i> <b>=</b> @@ <b>;</b></dt>
 <dd>Specify the placeholder that will be replaced with the condition name
 in <i>re2c:cond:divider\fP</i>.</dd>
+<dt><i>re2c:cond:goto</i> <b>=</b> "goto @@;" <b>;</b></dt>
+<dd>Allows to customize the condition goto statements used with ':=>' style rules.
+You can use '@@' to put the name of the condition or ustomize the plaeholder
+using <i>re2c:cond:goto@cond</i>. You can also change this to 'continue;',
+which would allow you to continue with the next loop cycle including any code
+between loop start and re2c block.</dd>
+<dt><i>re2c:cond:goto@cond</i> <b>=</b> @@ <b>;</b></dt>
+<dd>Spcifies the placeholder that will be replaced with the condition label
+in <i>re2c:cond:goto</i>.</dd>
 <dt><i>re2c:indent:top</i> <b>=</b> 0 <b>;</b></dt>
 <dd>Specifies the minimum number of indendation to use. Requires a numeric
 value greater than or equal zero.</dd>

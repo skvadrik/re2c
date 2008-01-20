@@ -688,9 +688,9 @@ void Rule::emit(std::ostream &o, uint ind, bool &) const
 	o << indent(ind);
 	if (rule->code->autogen)
 	{
-		// TODO: When an empty rule is present, we need to go there. So we need
-		// an option to generate a 'continue' rather than the 'goto' line.
-		o << "goto " << condPrefix << rule->code->newcond << ";";
+		std::string condLabel(condPrefix);
+		condLabel += rule->code->newcond->to_string();
+		o << replaceParam(condGoto, condGotoParam, condLabel);
 	}
 	else
 	{
@@ -2137,6 +2137,14 @@ void Scanner::config(const Str& cfg, const Str& val)
 	else if (cfg.to_string() == "cond:divider@cond")
 	{
 		condDividerParam = strVal;
+	}
+	else if (cfg.to_string() == "cond:goto")
+	{
+		condGoto = strVal;
+	}
+	else if (cfg.to_string() == "cond:goto@cond")
+	{
+		condGotoParam = strVal;
 	}
 	else if (cfg.to_string() == "define:YYFILL@len")
 	{

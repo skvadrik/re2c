@@ -45,6 +45,8 @@ extern std::string condPrefix;
 extern std::string condEnumPrefix;
 extern std::string condDivider;
 extern std::string condDividerParam;
+extern std::string condGoto;
+extern std::string condGotoParam;
 extern std::string yychConversion;
 extern std::string yyFillLength;
 extern std::string yySetConditionParam;
