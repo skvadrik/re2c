@@ -677,7 +677,7 @@ void Rule::emit(std::ostream &o, uint ind, bool &) const
 		o << indent(ind) << mapCodeName["YYCURSOR"] << " = " << mapCodeName["YYCTXMARKER"] << ";\n";
 	}
 
-	if (rule->code->newcond)
+	if (rule->code->newcond && rule->code->condchange)
 	{
 		genSetCondition(o, ind, rule->code->newcond->to_string());
 	}
@@ -686,7 +686,16 @@ void Rule::emit(std::ostream &o, uint ind, bool &) const
 
 	o << file_info(sourceFileInfo, &rl);
 	o << indent(ind);
-	o << rule->code->text;
+	if (rule->code->autogen)
+	{
+		// TODO: When an empty rule is present, we need to go there. So we need
+		// an option to generate a 'continue' rather than the 'goto' line.
+		o << "goto " << condPrefix << rule->code->newcond << ";";
+	}
+	else
+	{
+		o << rule->code->text;
+	}
 	o << "\n";
 	o << outputFileInfo;
 }

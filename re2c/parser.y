@@ -56,6 +56,50 @@ static char* strdup(const char* s)
 }
 #endif
 
+void context_check(CondList *clist)
+{
+	if (!cFlag)
+	{
+		delete clist;
+		in->fatal("conditions are only allowed when using -c switch");
+	}
+}
+
+void context_none(CondList *clist)
+{
+	delete clist;
+	context_check(NULL);
+	in->fatal("no expression specified");
+}
+
+void context_rule(CondList *clist, RegExp *expr, RegExp *look, Str *newcond, Token *code)
+{
+	context_check(clist);
+	bool condchange = !newcond || clist->size() > 1
+	                || clist->find(newcond->to_string()) == clist->end();
+	for(CondList::const_iterator it = clist->begin(); it != clist->end(); ++it)
+	{
+		Str *condcpy = newcond ? new Str(*newcond) : newcond;
+		Token *token = new Token(code, in->get_line(), condcpy, condchange);
+		RuleOp *rule = new RuleOp(expr, look, token, accept++);
+
+		RegExpMap::iterator itRE = specMap.find(*it);
+
+		if (itRE != specMap.end())
+		{
+			itRE->second.second = mkAlt(itRE->second.second, rule);
+		}
+		else
+		{
+			size_t nIndex = specMap.size() + 1; // 0 is reserved for "0"-spec
+			specMap[*it] = std::make_pair(nIndex, rule);
+		}
+		
+	}
+	delete clist;
+	delete code;
+}
+
 %}
 
 %start	spec
@@ -135,71 +179,64 @@ rule:
 		}
 	|	'<' cond '>' expr look newcond CODE
 		{
-			if (!cFlag)
-			{
-				delete $2;
-				in->fatal("conditions are only allowed when using -c switch");
-			}
-			$7->newcond = $6;
-			for(CondList::const_iterator it = $2->begin(); it != $2->end(); ++it)
-			{
-				// Duplicating stuff, slow but safe
-				$$ = new RuleOp($4, $5, new Token(*$7), accept++);
-
-				RegExpMap::iterator itRE = specMap.find(*it);
-
-				if (itRE != specMap.end())
-				{
-					itRE->second.second = mkAlt(itRE->second.second, $$);
-				}
-				else
-				{
-					size_t nIndex = specMap.size() + 1; // 0 is reserved for "0"-spec
-					specMap[*it] = std::make_pair(nIndex, $$);
-				}
-				
-			}
-			delete $2;
-			delete $7;
+			context_rule($2, $4, $5, $6, $7);
+		}
+	|	'<' cond '>' expr look ':' newcond
+		{
+			assert($7);
+			context_rule($2, $4, $5, $7, NULL);
 		}
 	|	'<' cond '>' look newcond CODE
 		{
-			delete $2;
-			if (!cFlag)
-			{
-				in->fatal("conditions are only allowed when using -c switch");
-			}
-			in->fatal("no expression specified");
+			context_none($2);
+		}
+	|	'<' cond '>' look ':' newcond
+		{
+			assert($6);
+			context_none($2);
 		}
 	|	'<' STAR '>' expr look newcond CODE
 		{
-			if (!cFlag)
-			{
-				in->fatal("conditions are only allowed when using -c switch");
-			}
+			context_check(NULL);
 			$7->newcond = $6;
 			specStar.push_back(new RuleOp($4, $5, $7, accept++));
 		}
+	|	'<' STAR '>' expr look ':' newcond
+		{
+			assert($7);
+			context_check(NULL);
+			Token *token = new Token(NULL, in->get_line(), $7, true);
+			specStar.push_back(new RuleOp($4, $5, token, accept++));
+		}
 	|	'<' STAR '>' look newcond CODE
 		{
-			if (!cFlag)
-			{
-				in->fatal("conditions are only allowed when using -c switch");
-			}
-			in->fatal("no expression specified");
+			context_none(NULL);
+		}
+	|	'<' STAR '>' look ':' newcond
+		{
+			assert($6);
+			context_none(NULL);
 		}
 	|	NOCOND newcond CODE
 		{
-			if (!cFlag)
-			{
-				in->fatal("conditions are only allowed when using -c switch");
-			}
+			context_check(NULL);
 			if (specNone)
 			{
 				in->fatal("code to handle illegal condition already defined");
 			}
 			$3->newcond = $2;
 			$$ = specNone = new RuleOp(new NullOp(), new NullOp(), $3, accept++);
+		}
+	|	NOCOND ':' newcond
+		{
+			assert($3);
+			context_check(NULL);
+			if (specNone)
+			{
+				in->fatal("code to handle illegal condition already defined");
+			}
+			Token *token = new Token(NULL, in->get_line(), $3, true);
+			$$ = specNone = new RuleOp(new NullOp(), new NullOp(), token, accept++);
 		}
 ;
 

@@ -35,7 +35,7 @@ char *scan(char *p)
         re2c:yych:conversion = 1;
         re2c:indent:top      = 1;
         [0-9]+          {return p;}
-        [\000-\377]     {return (char*)0;}
+        [^]             {return (char*)0;}
 */
 }
 </pre>
@@ -308,14 +308,28 @@ special cases. A rule may contain the single condition name '*' and no contition
 name at all. In the latter case the rule cannot have a regular expression. Non 
 empty rules may further more specify the new condition. In that case re2c will
 generated the necessary code to chnage the condition automatically. Just as above
-code can be started with a curly brace of the sequence '<b>:=</b>'.
+code can be started with a curly brace of the sequence '<b>:=</b>'. Further more
+rules can use ':=>' as a shortcut to automatically generate code that not only
+sets the new condition state but also continues execution with the new state. A
+shortcutrule should not be used in a loop where there is code between the start
+of the loop and the <b>re2c</b> block.
 </p>
 <dl compact="compact">
-<dd>&lt;<i>condition-list</i>&gt; <i>regular-expression</i> =&gt; <i>condition</i> { <i>C/C++ code</i> }</dd>
-<dd>&lt;<i>*</i>&gt; <i>regular-expression</i> =&gt; <i>condition</i> { <i>C/C++ code</i> }</dd>
 <dd>&lt;<i>condition-list</i>&gt; <i>regular-expression</i> { <i>C/C++ code</i> }</dd>
+<dd>&lt;<i>condition-list</i>&gt; <i>regular-expression</i> := <i>C/C++ code</i></dd>
+<dd>&lt;<i>condition-list</i>&gt; <i>regular-expression</i> =&gt; <i>condition</i> { <i>C/C++ code</i> }</dd>
+<dd>&lt;<i>condition-list</i>&gt; <i>regular-expression</i> =&gt; <i>condition</i> := <i>C/C++ code</i></dd>
+<dd>&lt;<i>condition-list</i>&gt; <i>regular-expression</i> :=&gt; <i>condition</i></dd>
 <dd>&lt;<i>*</i>&gt; <i>regular-expression</i> { <i>C/C++ code</i> }</dd>
+<dd>&lt;<i>*</i>&gt; <i>regular-expression</i> := <i>C/C++ code</i></dd>
+<dd>&lt;<i>*</i>&gt; <i>regular-expression</i> =&gt; <i>condition</i> { <i>C/C++ code</i> }</dd>
+<dd>&lt;<i>*</i>&gt; <i>regular-expression</i> =&gt; <i>condition</i> := <i>C/C++ code</i></dd>
+<dd>&lt;<i>*</i>&gt; <i>regular-expression</i> :=&gt; <i>condition</i></dd>
 <dd>&lt;&gt; { <i>C/C++ code</i> }</dd>
+<dd>&lt;&gt; := <i>C/C++ code</i></dd>
+<dd>&lt;&gt; =&gt; <i>condition</i> { <i>C/C++ code</i> }</dd>
+<dd>&lt;&gt; =&gt; <i>condition</i> := <i>C/C++ code</i></dd>
+<dd>&lt;&gt; :=&gt; <i>condition</i></dd>
 </dl>
 <p>Named definitions are of the form:</p>
 <dl compact="compact">

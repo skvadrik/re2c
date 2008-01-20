@@ -902,7 +902,8 @@ RuleOp::RuleOp(RegExp *e, RegExp *c, Token *t, uint a)
 
 RuleOp* RuleOp::copy(uint a) const
 {
-	return new RuleOp(exp, ctx, new Token(code->text, code->line), a);
+	Token *token = new Token(*code);
+	return new RuleOp(exp, ctx, token, a);
 }
 
 void RuleOp::calcSize(Char *rep)

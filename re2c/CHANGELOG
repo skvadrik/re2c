@@ -1,6 +1,8 @@
 Version 0.13.2 (2007-??-??)
 ---------------------------
-- Add support for ':=' style rules
+- Add support for ':=' style rules.
+- Add support for ':=>' style rules.
+- Fix issue with star rules that use '=>'.
 
 Version 0.13.1 (2007-08-24)
 ---------------------------

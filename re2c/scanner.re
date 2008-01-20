@@ -248,6 +248,10 @@ scan:
 					goto code;
 				}
 
+	":" / "=>"	{
+					RETURN(*tok);
+				}
+
 	":="		{
 					cur = cursor;
 					tok+= 2; /* skip ":=" */
@@ -388,7 +392,7 @@ code:
 	"}"			{
 					if (depth == 0)
 					{
-						fatal("Curly braces are not allowed after #:='");
+						fatal("Curly braces are not allowed after ':='");
 					}
 					else if (--depth == 0)
 					{
@@ -401,7 +405,7 @@ code:
 	"{"			{
 					if (depth == 0)
 					{
-						fatal("Curly braces are not allowed after #:='");
+						fatal("Curly braces are not allowed after ':='");
 					}
 					else
 					{
