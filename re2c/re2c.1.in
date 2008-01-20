@@ -35,7 +35,7 @@ char *scan(char *p)
         re2c:yych:conversion = 1;
         re2c:indent:top      = 1;
         [0-9]+          {return p;}
-        [\000-\377]     {return (char*)0;}
+        [^]             {return (char*)0;}
 */
 }
 .fi
@@ -350,18 +350,43 @@ special cases. A rule may contain the single condition name '*' and no contition
 name at all. In the latter case the rule cannot have a \*(rx. Non 
 empty rules may further more specify the new condition. In that case \*(re will
 generated the necessary code to chnage the condition automatically. Just as above
-code can be started with a curly brace of the sequence '\fB:=\fP'.
+code can be started with a curly brace of the sequence '\fB:=\fP'. Further more
+rules can use ':=>' as a shortcut to automatically generate code that not only
+sets the new condition state but also continues execution with the new state. A
+shortcut rule should not be used in a loop where there is code between the start
+of the loop and the \*(re block unless \fIre2c:cond:goto\fP is changed
+to '\fIcontinue;\fP'.
 .P
 .RS
+\fC<\fP\fIcondition-list\fP\fC>\fP \fI\*(rx\fP \fC{\fP \fIC/C++ code\fP \fC}\fP
+.P
+\fC<\fP\fIcondition-list\fP\fC>\fP \fI\*(rx\fP \fC:=\fP \fIC/C++ code\fP
+.P
 \fC<\fP\fIcondition-list\fP\fC>\fP \fI\*(rx\fP \fC=>\fP \fP\fIcondition\fP \fC{\fP \fIC/C++ code\fP \fC}\fP
 .P
-\fC<\fP\fI*\fP\fC>\fP \fI\*(rx\fP \fC=>\fP \fP\fIcondition\fP \fC{\fP \fIC/C++ code\fP \fC}\fP
+\fC<\fP\fIcondition-list\fP\fC>\fP \fI\*(rx\fP \fC=>\fP \fP\fIcondition\fP \fC:=\fP \fIC/C++ code\fP
 .P
-\fC<\fP\fIcondition-list\fP\fC>\fP \fI\*(rx\fP \fC{\fP \fIC/C++ code\fP \fC}\fP
+\fC<\fP\fIcondition-list\fP\fC>\fP \fI\*(rx\fP \fC:=>\fP \fP\fIcondition\fP
 .P
 \fC<\fP\fI*\fP\fC>\fP \fI\*(rx\fP \fC{\fP \fIC/C++ code\fP \fC}\fP
 .P
+\fC<\fP\fI*\fP\fC>\fP \fI\*(rx\fP \fC:=\fP \fIC/C++ code\fP
+.P
+\fC<\fP\fI*\fP\fC>\fP \fI\*(rx\fP \fC=>\fP \fP\fIcondition\fP \fC{\fP \fIC/C++ code\fP \fC}\fP
+.P
+\fC<\fP\fI*\fP\fC>\fP \fI\*(rx\fP \fC=>\fP \fP\fIcondition\fP \fC:=\fP \fIC/C++ code\fP
+.P
+\fC<\fP\fI*\fP\fC>\fP \fI\*(rx\fP \fC:=>\fP \fP\fIcondition\fP
+.P
 \fC<>\fP \fC{\fP \fIC/C++ code\fP \fC}\fP
+.P
+\fC<>\fP \fC:=\fP \fIC/C++ code\fP
+.P
+\fC<>\fP \fC=>\fP \fP\fIcondition\fP \fC{\fP \fIC/C++ code\fP \fC}\fP
+.P
+\fC<>\fP \fC=>\fP \fP\fIcondition\fP \fC:=\fP \fIC/C++ code\fP
+.P
+\fC<>\fP \fC:=>\fP \fP\fIcondition\fP
 .RE
 .LP
 Named definitions are of the form:
@@ -481,6 +506,26 @@ prepended to any condition label in the generated output file.
 Allows to specify the prefix used for condition values. That is this text is 
 prepended to any condition enum value in the generated output file. 
 .TP
+\fIre2c:cond:divider\fP \fB=\fP "/* *********************************** */" \fB;\fP
+Allows to customize the devider for condition blocks. You can use '@@' to 
+put the name of the condition or ustomize the plaeholder
+using \fIre2c:cond:divider@cond\fP.
+.TP
+\fIre2c:cond:divider@cond\fP \fB=\fP @@ \fB;\fP
+Specifies the placeholder that will be replaced with the condition name
+in \fIre2c:cond:divider\fP.
+.TP
+\fIre2c:cond:goto\fP \fB=\fP "goto @@;" \fB;\fP
+Allows to customize the condition goto statements used with ':=>' style rules.
+You can use '@@' to put the name of the condition or ustomize the plaeholder
+using \fIre2c:cond:goto@cond\fP. You can also change this to 'continue;',
+which would allow you to continue with the next loop cycle including any code
+between loop start and re2c block.
+.TP
+\fIre2c:cond:goto@cond\fP \fB=\fP @@ \fB;\fP
+Spcifies the placeholder that will be replaced with the condition label
+in \fIre2c:cond:goto\fP.
+.TP
 \fIre2c:indent:top\fP \fB=\fP 0 \fB;\fP
 Specifies the minimum number of indendation to use. Requires a numeric value 
 greater than or equal zero.
@@ -584,7 +629,7 @@ value to the actual code needed.
 \fIre2c:define:YYFILL:naked\fP \fB=\fP 0 \fB;\fP
 Wehn set to 1 neither braces, parameter nor semicolon gets emitted.
 .TP
-\fIre2c:define:YYFILL@LEN\fP \fB=\fP @@ \fB;\fP
+\fIre2c:define:YYFILL@len\fP \fB=\fP @@ \fB;\fP
 When using \fIre2c:define:YYFILL\fP and \fIre2c:yyfill:parameter\fP is 0 then
 any occurence of this text inside \fBYYFILL\fP will be replaced with the actual
 length value.

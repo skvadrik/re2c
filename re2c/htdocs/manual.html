@@ -311,8 +311,9 @@ generated the necessary code to chnage the condition automatically. Just as abov
 code can be started with a curly brace of the sequence '<b>:=</b>'. Further more
 rules can use ':=>' as a shortcut to automatically generate code that not only
 sets the new condition state but also continues execution with the new state. A
-shortcutrule should not be used in a loop where there is code between the start
-of the loop and the <b>re2c</b> block.
+shortcut rule should not be used in a loop where there is code between the start
+of the loop and the <b>re2c</b> block unless <i>re2c:cond:goto</i> is changed
+to '<i>continue;</i>'.
 </p>
 <dl compact="compact">
 <dd>&lt;<i>condition-list</i>&gt; <i>regular-expression</i> { <i>C/C++ code</i> }</dd>
