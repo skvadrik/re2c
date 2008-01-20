@@ -1715,9 +1715,9 @@ void DFA::emit(std::ostream &o, uint& ind, const RegExpMap* specMap, const std::
 
 	if (cFlag && !condName.empty())
 	{
-		if (condDevider.length())
+		if (condDivider.length())
 		{
-			o << replaceParam(condDevider, condDeviderState, condName) << "\n";
+			o << replaceParam(condDivider, condDividerParam, condName) << "\n";
 		}
 		o << condPrefix << condName << ":\n";
 	}
@@ -2130,13 +2130,13 @@ void Scanner::config(const Str& cfg, const Str& val)
 	{
 		condEnumPrefix = strVal;
 	}
-	else if (cfg.to_string() == "cond:devider")
+	else if (cfg.to_string() == "cond:divider")
 	{
-		condDevider = strVal;
+		condDivider = strVal;
 	}
-	else if (cfg.to_string() == "cond:devider@state")
+	else if (cfg.to_string() == "cond:divider@cond")
 	{
-		condDeviderState = strVal;
+		condDividerParam = strVal;
 	}
 	else if (cfg.to_string() == "define:YYFILL@len")
 	{

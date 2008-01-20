@@ -1,5 +1,5 @@
 /*!re2c
-re2c:cond:devider = "/**** State @@ ***\/";
+re2c:cond:divider = "/**** State @@ ***\/";
 < a , b >	"ab"	{ }
 
 */

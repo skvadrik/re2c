@@ -414,6 +414,13 @@ together have equal precedence.</p>
 <p>It is possible to configure code generation inside re2c blocks. The
 following lists the available configurations:</p>
 <dl compact="compact">
+<dt><i>re2c:cond:divider</i> <b>=</b> "/* *********************************** */" <b>;</b></dt>
+<dd>Allows to customize the devider for condition blocks. You can use '@@' to 
+put the name of the condition or ustomize the plaeholder
+using <i>re2c:cond:divider@cond</i>.</dd>
+<dt><i>re2c:cond:divider@cond</i> <b>=</b> @@ <b>;</b></dt>
+<dd>Specify the placeholder that will be replaced with the condition name
+in <i>re2c:cond:divider\fP</i>.</dd>
 <dt><i>re2c:indent:top</i> <b>=</b> 0 <b>;</b></dt>
 <dd>Specifies the minimum number of indendation to use. Requires a numeric
 value greater than or equal zero.</dd>

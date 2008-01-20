@@ -1,5 +1,5 @@
 /*!re2c
-re2c:cond:devider = ;
+re2c:cond:divider = ;
 < a , b >	"ab"	{ }
 
 */
