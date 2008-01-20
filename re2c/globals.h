@@ -43,6 +43,8 @@ extern std::string startLabelName;
 extern std::string labelPrefix;
 extern std::string condPrefix;
 extern std::string condEnumPrefix;
+extern std::string condDevider;
+extern std::string condDeviderState;
 extern std::string yychConversion;
 extern std::string yyFillLength;
 extern std::string yySetConditionParam;

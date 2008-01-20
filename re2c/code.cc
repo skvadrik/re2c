@@ -1715,8 +1715,10 @@ void DFA::emit(std::ostream &o, uint& ind, const RegExpMap* specMap, const std::
 
 	if (cFlag && !condName.empty())
 	{
-		// TODO: Drop marker
-		o << "/* *********************************** */\n";
+		if (condDevider.length())
+		{
+			o << replaceParam(condDevider, condDeviderState, condName) << "\n";
+		}
 		o << condPrefix << condName << ":\n";
 	}
 	if (cFlag && bFlag && BitMap::first)
@@ -2127,6 +2129,14 @@ void Scanner::config(const Str& cfg, const Str& val)
 	else if (cfg.to_string() == "condenumprefix")
 	{
 		condEnumPrefix = strVal;
+	}
+	else if (cfg.to_string() == "cond:devider")
+	{
+		condDevider = strVal;
+	}
+	else if (cfg.to_string() == "cond:devider@state")
+	{
+		condDeviderState = strVal;
 	}
 	else if (cfg.to_string() == "define:YYFILL@len")
 	{
