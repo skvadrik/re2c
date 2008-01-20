@@ -278,6 +278,7 @@ private:
 		, line(oth.line)
 	{
 	}
+
 	RuleOp& operator = (const RuleOp& oth)
 	{
 		new(this) RuleOp(oth);
