@@ -679,6 +679,8 @@ void Rule::emit(std::ostream &o, uint ind, bool &) const
 
 	if (rule->code->newcond && rule->code->condchange)
 	{
+		// TODO: rather than using condchange we can do this by comparing the
+		// sourcecondition with the destination condition.
 		genSetCondition(o, ind, rule->code->newcond->to_string());
 	}
 
