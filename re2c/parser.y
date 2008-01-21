@@ -450,7 +450,7 @@ void parse(Scanner& i, std::ostream& o, std::ostream* h)
 			}
 			else
 			{
-				// We reserved 0 for specNone but is isn't present,
+				// We reserved 0 for specNone but it is not present,
 				// so we can decrease all specs.
 				for(it = specMap.begin(); it != specMap.end(); ++it)
 				{
