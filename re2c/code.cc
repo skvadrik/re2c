@@ -440,7 +440,7 @@ static void need(std::ostream &o, uint ind, uint n, bool & readCh, bool bSetMark
 	}
 }
 
-void Match::emit(std::ostream &o, uint ind, bool &readCh) const
+void Match::emit(std::ostream &o, uint ind, bool &readCh, const std::string&) const
 {
 	if (state->link)
 	{
@@ -464,7 +464,7 @@ void Match::emit(std::ostream &o, uint ind, bool &readCh) const
 	}
 }
 
-void Enter::emit(std::ostream &o, uint ind, bool &readCh) const
+void Enter::emit(std::ostream &o, uint ind, bool &readCh, const std::string&) const
 {
 	if (state->link)
 	{
@@ -487,7 +487,7 @@ void Enter::emit(std::ostream &o, uint ind, bool &readCh) const
 	}
 }
 
-void Initial::emit(std::ostream &o, uint ind, bool &readCh) const
+void Initial::emit(std::ostream &o, uint ind, bool &readCh, const std::string&) const
 {
 	if (!cFlag && !startLabelName.empty())
 	{
@@ -534,7 +534,7 @@ void Initial::emit(std::ostream &o, uint ind, bool &readCh) const
 	}
 }
 
-void Save::emit(std::ostream &o, uint ind, bool &readCh) const
+void Save::emit(std::ostream &o, uint ind, bool &readCh, const std::string&) const
 {
 	if (bUsedYYAccept)
 	{
@@ -568,7 +568,7 @@ Move::Move(State *s) : Action(s)
 	;
 }
 
-void Move::emit(std::ostream &, uint, bool &) const
+void Move::emit(std::ostream &, uint, bool &, const std::string&) const
 {
 	;
 }
@@ -608,7 +608,7 @@ void Accept::emitBinary(std::ostream &o, uint ind, uint l, uint r, bool &readCh)
 	}
 }
 
-void Accept::emit(std::ostream &o, uint ind, bool &readCh) const
+void Accept::emit(std::ostream &o, uint ind, bool &readCh, const std::string&) const
 {
 	if (mapRules.size() > 0)
 	{
@@ -668,7 +668,7 @@ Rule::Rule(State *s, RuleOp *r) : Action(s), rule(r)
 	;
 }
 
-void Rule::emit(std::ostream &o, uint ind, bool &) const
+void Rule::emit(std::ostream &o, uint ind, bool &, const std::string& condName) const
 {
 	uint back = rule->ctx->fixedLength();
 
@@ -677,11 +677,9 @@ void Rule::emit(std::ostream &o, uint ind, bool &) const
 		o << indent(ind) << mapCodeName["YYCURSOR"] << " = " << mapCodeName["YYCTXMARKER"] << ";\n";
 	}
 
-	if (rule->code->newcond && rule->code->condchange)
+	if (rule->code->newcond.length() && condName != rule->code->newcond)
 	{
-		// TODO: rather than using condchange we can do this by comparing the
-		// sourcecondition with the destination condition.
-		genSetCondition(o, ind, rule->code->newcond->to_string());
+		genSetCondition(o, ind, rule->code->newcond);
 	}
 
 	RuleLine rl(*rule);
@@ -690,9 +688,7 @@ void Rule::emit(std::ostream &o, uint ind, bool &) const
 	o << indent(ind);
 	if (rule->code->autogen)
 	{
-		std::string condLabel(condPrefix);
-		condLabel += rule->code->newcond->to_string();
-		o << replaceParam(condGoto, condGotoParam, condLabel);
+		o << replaceParam(condGoto, condGotoParam, condPrefix + rule->code->newcond);
 	}
 	else
 	{
@@ -1158,7 +1154,7 @@ void Go::genGoto(std::ostream &o, uint ind, const State *from, const State *next
 	genBase(o, ind, from, next, readCh, 0);
 }
 
-void State::emit(std::ostream &o, uint ind, bool &readCh) const
+void State::emit(std::ostream &o, uint ind, bool &readCh, const std::string& condName) const
 {
 	if (vUsedLabels.count(label))
 	{
@@ -1172,7 +1168,7 @@ void State::emit(std::ostream &o, uint ind, bool &readCh) const
 	{
 		o << indent(ind) << mapCodeName["YYCTXMARKER"] << " = " << mapCodeName["YYCURSOR"] << " + 1;\n";
 	}
-	action->emit(o, ind, readCh);
+	action->emit(o, ind, readCh, condName);
 }
 
 uint merge(Span *x0, State *fg, State *bg)
@@ -1649,7 +1645,7 @@ void DFA::emit(std::ostream &o, uint& ind, const RegExpMap* specMap, const std::
 	for (s = head; s; s = s->next)
 	{
 		bool readCh = false;
-		s->emit(null_dev, ind, readCh);
+		s->emit(null_dev, ind, readCh, condName);
 		s->go.genGoto(null_dev, ind, s, s->next, readCh);
 	}
 	if (last_fill_index < next_fill_index)
@@ -1740,7 +1736,7 @@ void DFA::emit(std::ostream &o, uint& ind, const RegExpMap* specMap, const std::
 	for (s = head; s; s = s->next)
 	{
 		bool readCh = false;
-		s->emit(o, ind, readCh);
+		s->emit(o, ind, readCh, condName);
 		s->go.genGoto(o, ind, s, s->next, readCh);
 	}
 

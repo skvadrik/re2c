@@ -10,52 +10,47 @@ namespace re2c
 class Token
 {
 public:
-	const Str   text;
-	const Str*  newcond;
-	const uint  line;
-	const bool  autogen;
-	const bool  condchange;
+	const Str          text;
+	const std::string  newcond;
+	const uint         line;
+	const bool         autogen;
 
 public:
 	Token(const SubStr&, uint);
-	Token(const Token*, uint, Str*, bool);
+	Token(const Token*, uint, const Str*);
 	Token(const Token& oth);
 	~Token();
 };
 
 inline Token::Token(const SubStr& t, uint l)
 	: text(t)
-	, newcond(NULL)
+	, newcond()
 	, line(l)
 	, autogen(false)
-	, condchange(false)
 {
 	;
 }
 
-inline Token::Token(const Token* t, uint l, Str *c, bool chg)
+inline Token::Token(const Token* t, uint l, const Str *c)
 	: text(t ? t->text.to_string().c_str() : "")
-	, newcond(c)
+	, newcond(c ? c->to_string() : "")
 	, line(t ? t->line : l)
 	, autogen(t == NULL)
-	, condchange(chg)
 {
 	;
 }
 
 inline Token::Token(const Token& oth)
 	: text(oth.text.to_string().c_str())
-	, newcond(oth.newcond ? new Str(*oth.newcond) : NULL)
+	, newcond(oth.newcond)
 	, line(oth.line)
 	, autogen(oth.autogen)
-	, condchange(oth.autogen)
 {
 	;
 }
 
 inline Token::~Token()
 {
-	delete newcond;
 }
 
 } // end namespace re2c

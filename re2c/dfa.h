@@ -28,7 +28,7 @@ public:
 	Action(State*);
 	virtual ~Action();
 
-	virtual void emit(std::ostream&, uint, bool&) const = 0;
+	virtual void emit(std::ostream&, uint, bool&, const std::string&) const = 0;
 	virtual bool isRule() const;
 	virtual bool isMatch() const;
 	virtual bool isInitial() const;
@@ -52,7 +52,7 @@ class Match: public Action
 {
 public:
 	Match(State*);
-	void emit(std::ostream&, uint, bool&) const;
+	void emit(std::ostream&, uint, bool&, const std::string&) const;
 	bool isMatch() const;
 };
 
@@ -63,7 +63,7 @@ public:
 
 public:
 	Enter(State*, uint);
-	void emit(std::ostream&, uint, bool&) const;
+	void emit(std::ostream&, uint, bool&, const std::string&) const;
 };
 
 class Initial: public Enter
@@ -73,7 +73,7 @@ public:
 
 public:
 	Initial(State*, uint, bool);
-	void emit(std::ostream&, uint, bool&) const;
+	void emit(std::ostream&, uint, bool&, const std::string&) const;
 	bool isInitial() const;
 };
 
@@ -85,7 +85,7 @@ public:
 
 public:
 	Save(State*, uint);
-	void emit(std::ostream&, uint, bool&) const;
+	void emit(std::ostream&, uint, bool&, const std::string&) const;
 	bool isMatch() const;
 };
 
@@ -94,7 +94,7 @@ class Move: public Action
 
 public:
 	Move(State*);
-	void emit(std::ostream&, uint, bool&) const;
+	void emit(std::ostream&, uint, bool&, const std::string&) const;
 };
 
 class Accept: public Action
@@ -110,7 +110,7 @@ public:
 
 public:
 	Accept(State*, uint, uint*, State**);
-	void emit(std::ostream&, uint, bool&) const;
+	void emit(std::ostream&, uint, bool&, const std::string&) const;
 	void emitBinary(std::ostream &o, uint ind, uint l, uint r, bool &readCh) const;
 	void genRuleMap();
 
@@ -139,7 +139,7 @@ public:
 
 public:
 	Rule(State*, RuleOp*);
-	void emit(std::ostream&, uint, bool&) const;
+	void emit(std::ostream&, uint, bool&, const std::string&) const;
 	bool isRule() const;
 
 #ifdef PEDANTIC
@@ -220,7 +220,7 @@ public:
 public:
 	State();
 	~State();
-	void emit(std::ostream&, uint, bool&) const;
+	void emit(std::ostream&, uint, bool&, const std::string&) const;
 	friend std::ostream& operator<<(std::ostream&, const State&);
 	friend std::ostream& operator<<(std::ostream&, const State*);
 

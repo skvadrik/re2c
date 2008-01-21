@@ -33,28 +33,26 @@ yyc_r1:
 yy5:
 yy6:
 	++YYCURSOR;
-	YYSETCONDITION(yycr1);
 #line 5 "condition_13.cg.re"
 	goto yyc_r1;
-#line 40 "<stdout>"
+#line 39 "<stdout>"
 yy8:
 	++YYCURSOR;
-	YYSETCONDITION(yycr1);
 #line 4 "condition_13.cg.re"
 	goto yyc_r1;
-#line 46 "<stdout>"
+#line 44 "<stdout>"
 yy10:
 	++YYCURSOR;
 	YYSETCONDITION(yycr2);
 #line 6 "condition_13.cg.re"
 	goto yyc_r2;
-#line 52 "<stdout>"
+#line 50 "<stdout>"
 yy12:
 	++YYCURSOR;
 	YYSETCONDITION(yycr2);
 #line 7 "condition_13.cg.re"
 	goto yyc_r2;
-#line 58 "<stdout>"
+#line 56 "<stdout>"
 /* *********************************** */
 yyc_r2:
 	if(YYLIMIT == YYCURSOR) YYFILL(1);
@@ -72,19 +70,18 @@ yy17:
 	YYSETCONDITION(yycr1);
 #line 5 "condition_13.cg.re"
 	goto yyc_r1;
-#line 76 "<stdout>"
+#line 74 "<stdout>"
 yy19:
 	++YYCURSOR;
 	YYSETCONDITION(yycr1);
 #line 4 "condition_13.cg.re"
 	goto yyc_r1;
-#line 82 "<stdout>"
+#line 80 "<stdout>"
 yy21:
 	++YYCURSOR;
-	YYSETCONDITION(yyc);
 #line 7 "condition_13.cg.re"
-	goto yyc_;
-#line 88 "<stdout>"
+	goto yyc_r2;
+#line 85 "<stdout>"
 }
 #line 9 "condition_13.cg.re"
 

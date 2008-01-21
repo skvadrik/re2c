@@ -74,7 +74,7 @@ inline SubStr::~SubStr()
 
 inline std::string SubStr::to_string() const
 {
-	return std::string(str, len);
+	return str && len ? std::string(str, len) : std::string();
 }
 
 inline uint SubStr::ofs() const

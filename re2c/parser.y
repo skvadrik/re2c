@@ -75,12 +75,10 @@ void context_none(CondList *clist)
 void context_rule(CondList *clist, RegExp *expr, RegExp *look, Str *newcond, Token *code)
 {
 	context_check(clist);
-	bool condchange = !newcond || clist->size() > 1
-	                || clist->find(newcond->to_string()) == clist->end();
 	for(CondList::const_iterator it = clist->begin(); it != clist->end(); ++it)
 	{
-		Str *condcpy = newcond ? new Str(*newcond) : newcond;
-		Token *token = new Token(code, in->get_line(), condcpy, condchange);
+		//Str *condcpy = newcond ? new Str(*newcond) : newcond;
+		Token *token = new Token(code, in->get_line(), newcond);//condcpy);
 		RuleOp *rule = new RuleOp(expr, look, token, accept++);
 
 		RegExpMap::iterator itRE = specMap.find(*it);
@@ -97,6 +95,7 @@ void context_rule(CondList *clist, RegExp *expr, RegExp *look, Str *newcond, Tok
 		
 	}
 	delete clist;
+	delete newcond;
 	delete code;
 }
 
@@ -189,33 +188,40 @@ rule:
 	|	'<' cond '>' look newcond CODE
 		{
 			context_none($2);
+			delete $5;
 		}
 	|	'<' cond '>' look ':' newcond
 		{
 			assert($6);
 			context_none($2);
+			delete $6;
 		}
 	|	'<' STAR '>' expr look newcond CODE
 		{
 			context_check(NULL);
-			$7->newcond = $6;
-			specStar.push_back(new RuleOp($4, $5, $7, accept++));
+			Token *token = new Token($7, $7->line, $6);
+			delete $7;
+			delete $6;
+			specStar.push_back(new RuleOp($4, $5, token, accept++));
 		}
 	|	'<' STAR '>' expr look ':' newcond
 		{
 			assert($7);
 			context_check(NULL);
-			Token *token = new Token(NULL, in->get_line(), $7, true);
+			Token *token = new Token(NULL, in->get_line(), $7);
+			delete $7;
 			specStar.push_back(new RuleOp($4, $5, token, accept++));
 		}
 	|	'<' STAR '>' look newcond CODE
 		{
 			context_none(NULL);
+			delete $5;
 		}
 	|	'<' STAR '>' look ':' newcond
 		{
 			assert($6);
 			context_none(NULL);
+			delete $6;
 		}
 	|	NOCOND newcond CODE
 		{
@@ -224,8 +230,10 @@ rule:
 			{
 				in->fatal("code to handle illegal condition already defined");
 			}
-			$3->newcond = $2;
-			$$ = specNone = new RuleOp(new NullOp(), new NullOp(), $3, accept++);
+			Token *token = new Token($3, $3->line, $2);
+			delete $2;
+			delete $3;
+			$$ = specNone = new RuleOp(new NullOp(), new NullOp(), token, accept++);
 		}
 	|	NOCOND ':' newcond
 		{
@@ -235,7 +243,8 @@ rule:
 			{
 				in->fatal("code to handle illegal condition already defined");
 			}
-			Token *token = new Token(NULL, in->get_line(), $3, true);
+			Token *token = new Token(NULL, in->get_line(), $3);
+			delete $3;
 			$$ = specNone = new RuleOp(new NullOp(), new NullOp(), token, accept++);
 		}
 ;

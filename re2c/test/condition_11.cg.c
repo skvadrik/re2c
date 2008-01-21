@@ -13,9 +13,10 @@
 /* *********************************** */
 yyc_0:
 
+	YYSETCONDITION(yycr1);
 #line 3 "condition_11.cg.re"
 	{ return NULL; }
-#line 19 "<stdout>"
+#line 20 "<stdout>"
 /* *********************************** */
 yyc_r1:
 	if(YYLIMIT == YYCURSOR) YYFILL(1);
@@ -34,24 +35,24 @@ yy6:
 	++YYCURSOR;
 #line 5 "condition_11.cg.re"
 	{ return "2"; }
-#line 38 "<stdout>"
+#line 39 "<stdout>"
 yy8:
 	++YYCURSOR;
 #line 4 "condition_11.cg.re"
 	{ return "1"; }
-#line 43 "<stdout>"
+#line 44 "<stdout>"
 yy10:
 	++YYCURSOR;
 	YYSETCONDITION(yycr2);
 #line 6 "condition_11.cg.re"
 	{ return "a"; }
-#line 49 "<stdout>"
+#line 50 "<stdout>"
 yy12:
 	++YYCURSOR;
 	YYSETCONDITION(yycr2);
 #line 7 "condition_11.cg.re"
 	{ return "b"; }
-#line 55 "<stdout>"
+#line 56 "<stdout>"
 /* *********************************** */
 yyc_r2:
 	if(YYLIMIT == YYCURSOR) YYFILL(1);
@@ -66,20 +67,21 @@ yyc_r2:
 yy16:
 yy17:
 	++YYCURSOR;
+	YYSETCONDITION(yycr1);
 #line 5 "condition_11.cg.re"
 	{ return "2"; }
-#line 72 "<stdout>"
+#line 74 "<stdout>"
 yy19:
 	++YYCURSOR;
+	YYSETCONDITION(yycr1);
 #line 4 "condition_11.cg.re"
 	{ return "1"; }
-#line 77 "<stdout>"
+#line 80 "<stdout>"
 yy21:
 	++YYCURSOR;
-	YYSETCONDITION(yyc);
 #line 7 "condition_11.cg.re"
 	{ return "b"; }
-#line 83 "<stdout>"
+#line 85 "<stdout>"
 }
 #line 9 "condition_11.cg.re"
 
