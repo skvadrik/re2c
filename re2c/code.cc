@@ -1681,7 +1681,7 @@ void DFA::emit(std::ostream &o, uint& ind, const RegExpMap* specMap, const std::
 			}
 			if (bUsedYYAccept)
 			{
-				o << indent(ind) << "unsigned int "<< mapCodeName["yyaccept"] << " = 0;\n";
+				o << indent(ind) << "unsigned int " << mapCodeName["yyaccept"] << " = 0;\n";
 			}
 		}
 		else
