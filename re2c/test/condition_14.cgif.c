@@ -107,7 +107,7 @@ yy0:
 yyc_Comment:
 
 			s->state = 0;
-			if ((s->lim - s->cur) < 2) if(fill(s, 2) == ~0) break;
+			if ((s->lim - s->cur) < 2) if (fill(s, 2) == ~0) break;
 yyFillLabel0:
 			s->yych = *s->cur;
 			if (s->yych != '*') goto yy4;
@@ -125,7 +125,7 @@ yy5:
 /* *********************************** */
 yyc_Normal:
 			s->state = 1;
-			if ((s->lim - s->cur) < 4) if(fill(s, 4) == ~0) break;
+			if ((s->lim - s->cur) < 4) if (fill(s, 4) == ~0) break;
 yyFillLabel1:
 			s->yych = *s->cur;
 			{
@@ -290,7 +290,7 @@ yy43:
 /* *********************************** */
 yyc_Skiptoeol:
 			s->state = 2;
-			if ((s->lim - s->cur) < 5) if(fill(s, 5) == ~0) break;
+			if ((s->lim - s->cur) < 5) if (fill(s, 5) == ~0) break;
 yyFillLabel2:
 			s->yych = *s->cur;
 			{
@@ -381,7 +381,7 @@ yy63:
 /* *********************************** */
 yyc_String:
 			s->state = 3;
-			if ((s->lim - s->cur) < 2) if(fill(s, 2) == ~0) break;
+			if ((s->lim - s->cur) < 2) if (fill(s, 2) == ~0) break;
 yyFillLabel3:
 			s->yych = *s->cur;
 			if (s->yych == '"') goto yy69;

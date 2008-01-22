@@ -101,64 +101,64 @@ re2c:indent:top              = 2;
 re2c:condenumprefix          = EState;
 
 <Normal>	"??(" :=
-			fputc('[', stdout);
-			continue;
+		fputc('[', stdout);
+		continue;
 <Normal>	"??)" :=
-			fputc(']', stdout);
-			continue;
+		fputc(']', stdout);
+		continue;
 <Normal>	"??<" :=
-			fputc('{', stdout);
-			continue;
+		fputc('{', stdout);
+		continue;
 <Normal>	"??>" :=
-			fputc('}', stdout);
-			continue;
+		fputc('}', stdout);
+		continue;
 <Normal>	"??=" :=
-			fputc('#', stdout);
-			continue;
+		fputc('#', stdout);
+		continue;
 <Normal>	"??/" :=
-			fputc('\\', stdout);
-			continue;
+		fputc('\\', stdout);
+		continue;
 <Normal>	"??'" :=
-			fputc('^', stdout);
-			continue;
+		fputc('^', stdout);
+		continue;
 <Normal>	"??!" :=
-			fputc('|', stdout);
-			continue;
+		fputc('|', stdout);
+		continue;
 <Normal>	"??-" :=
-			fputc('~', stdout);
-			continue;
+		fputc('~', stdout);
+		continue;
 <Normal>	"/*" :=> Comment
 <Normal>	"//" :=> Skiptoeol
 <Normal>	"'\\\"'"|"'\"'" :=
-			fputl("'\"'", 3, stdout);
-			continue;
+		fputl("'\"'", 3, stdout);
+		continue;
 <Normal>	'"' => String :=
-			fputc(s->cur[-1], stdout);
-			continue;
+		fputc(s->cur[-1], stdout);
+		continue;
 <Normal>	[^] :=
-			fputc(s->cur[-1], stdout);
-			continue;
+		fputc(s->cur[-1], stdout);
+		continue;
 <Comment>	"*" "/" :=> Normal
 <Comment>	[^] :=> Comment
 <Skiptoeol>	"??/" "\r"? "\n" :=> Skiptoeol
 <Skiptoeol>	"\\" "\r"? "\n" :=> Skiptoeol
 <Skiptoeol>	"\r" "\n" => Normal :=
-			fputc('\r', stdout);
-			fputc('\n', stdout);
-			continue;
+		fputc('\r', stdout);
+		fputc('\n', stdout);
+		continue;
 <Skiptoeol>	"\n" => Normal :=
-			fputc('\n', stdout);
-			continue;
+		fputc('\n', stdout);
+		continue;
 <Skiptoeol>	[^] :=> Skiptoeol
 <String>	'\\' . :=
-			fputl((const char*)s->cur-2, 2, stdout);
-			continue;
+		fputl((const char*)s->cur-2, 2, stdout);
+		continue;
 <String>	'"' => Normal :=
-			fputc(s->cur[-1], stdout);
-			continue;
+		fputc(s->cur[-1], stdout);
+		continue;
 <String>	[^] :=
-			fputc(s->cur[-1], stdout);
-			continue;
+		fputc(s->cur[-1], stdout);
+		continue;
 */
 	}
 }
