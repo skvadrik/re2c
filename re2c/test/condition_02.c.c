@@ -17,7 +17,7 @@ yyc_0:
 #line 18 "<stdout>"
 /* *********************************** */
 yyc_r1:
-	if(YYLIMIT == YYCURSOR) YYFILL(1);
+	if (YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	switch(yych) {
 	case 'a':	goto yy6;
@@ -37,7 +37,7 @@ yy8:
 #line 38 "<stdout>"
 /* *********************************** */
 yyc_r2:
-	if(YYLIMIT == YYCURSOR) YYFILL(1);
+	if (YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	switch(yych) {
 	case 'b':	goto yy13;

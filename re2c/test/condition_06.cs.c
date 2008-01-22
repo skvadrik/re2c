@@ -93,11 +93,11 @@ void scan(Scanner *s)
 /* *********************************** */
 yyc_Comment:
 
-			if((s->lim - s->cur) < 2) { if(fill(s, 2) >= 0) break; }
+			if ((s->lim - s->cur) < 2) { if(fill(s, 2) >= 0) break; }
 			yych = *s->cur;
-			if(yych != '*') goto yy4;
+			if (yych != '*') goto yy4;
 			++s->cur;
-			if((yych = *s->cur) == '/') goto yy5;
+			if ((yych = *s->cur) == '/') goto yy5;
 yy3:
 #line 149 "condition_06.cs.re"
 			{
@@ -116,17 +116,17 @@ yy5:
 #line 117 "<stdout>"
 /* *********************************** */
 yyc_Normal:
-			if((s->lim - s->cur) < 3) { if(fill(s, 3) >= 0) break; }
+			if ((s->lim - s->cur) < 3) { if(fill(s, 3) >= 0) break; }
 			yych = *s->cur;
-			if(yych <= '.') {
-				if(yych == '"') goto yy12;
+			if (yych <= '.') {
+				if (yych == '"') goto yy12;
 				goto yy14;
 			} else {
-				if(yych <= '/') goto yy11;
-				if(yych != '?') goto yy14;
+				if (yych <= '/') goto yy11;
+				if (yych != '?') goto yy14;
 			}
 			yych = *(s->tok = ++s->cur);
-			if(yych == '?') goto yy19;
+			if (yych == '?') goto yy19;
 yy10:
 #line 140 "condition_06.cs.re"
 			{
@@ -136,8 +136,8 @@ yy10:
 #line 137 "<stdout>"
 yy11:
 			yych = *++s->cur;
-			if(yych == '*') goto yy17;
-			if(yych == '/') goto yy15;
+			if (yych == '*') goto yy17;
+			if (yych == '/') goto yy15;
 			goto yy10;
 yy12:
 			++s->cur;
@@ -256,19 +256,19 @@ yy37:
 #line 257 "<stdout>"
 /* *********************************** */
 yyc_Skiptoeol:
-			if((s->lim - s->cur) < 5) { if(fill(s, 5) >= 0) break; }
+			if ((s->lim - s->cur) < 5) { if(fill(s, 5) >= 0) break; }
 			yych = *s->cur;
-			if(yych <= '>') {
-				if(yych == 0x0A) goto yy44;
+			if (yych <= '>') {
+				if (yych == 0x0A) goto yy44;
 				goto yy46;
 			} else {
-				if(yych <= '?') goto yy41;
-				if(yych == '\\') goto yy43;
+				if (yych <= '?') goto yy41;
+				if (yych == '\\') goto yy43;
 				goto yy46;
 			}
 yy41:
 			yych = *(s->tok = ++s->cur);
-			if(yych == '?') goto yy51;
+			if (yych == '?') goto yy51;
 yy42:
 #line 165 "condition_06.cs.re"
 			{
@@ -277,8 +277,8 @@ yy42:
 #line 278 "<stdout>"
 yy43:
 			yych = *(s->tok = ++s->cur);
-			if(yych == 0x0A) goto yy49;
-			if(yych == 0x0D) goto yy47;
+			if (yych == 0x0A) goto yy49;
+			if (yych == 0x0D) goto yy47;
 			goto yy42;
 yy44:
 			++s->cur;
@@ -292,7 +292,7 @@ yy46:
 			goto yy42;
 yy47:
 			yych = *++s->cur;
-			if(yych == 0x0A) goto yy49;
+			if (yych == 0x0A) goto yy49;
 yy48:
 			s->cur = s->tok;
 			goto yy42;
@@ -305,12 +305,12 @@ yy49:
 #line 306 "<stdout>"
 yy51:
 			yych = *++s->cur;
-			if(yych != '/') goto yy48;
+			if (yych != '/') goto yy48;
 			yych = *++s->cur;
-			if(yych == 0x0A) goto yy54;
-			if(yych != 0x0D) goto yy48;
+			if (yych == 0x0A) goto yy54;
+			if (yych != 0x0D) goto yy48;
 			yych = *++s->cur;
-			if(yych != 0x0A) goto yy48;
+			if (yych != 0x0A) goto yy48;
 yy54:
 			++s->cur;
 #line 153 "condition_06.cs.re"
@@ -320,12 +320,12 @@ yy54:
 #line 321 "<stdout>"
 /* *********************************** */
 yyc_String:
-			if((s->lim - s->cur) < 2) { if(fill(s, 2) >= 0) break; }
+			if ((s->lim - s->cur) < 2) { if(fill(s, 2) >= 0) break; }
 			yych = *s->cur;
-			if(yych == '"') goto yy60;
-			if(yych != '\\') goto yy62;
+			if (yych == '"') goto yy60;
+			if (yych != '\\') goto yy62;
 			++s->cur;
-			if((yych = *s->cur) != 0x0A) goto yy63;
+			if ((yych = *s->cur) != 0x0A) goto yy63;
 yy59:
 #line 179 "condition_06.cs.re"
 			{

@@ -24,7 +24,7 @@ int scan(char *s, int l)
 		{
 			YYCTYPE yych;
 
-			if((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
+			if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
 			yych = *YYCURSOR;
 			switch(yych) {
 			case 0x00:	goto yy10;
@@ -91,7 +91,7 @@ yy12:
 #line 92 "<stdout>"
 yy14:
 			++YYCURSOR;
-			if(YYLIMIT == YYCURSOR) YYFILL(1);
+			if (YYLIMIT == YYCURSOR) YYFILL(1);
 			yych = *YYCURSOR;
 yy15:
 			switch(yych) {
@@ -109,7 +109,7 @@ yy15:
 			}
 yy16:
 			++YYCURSOR;
-			if(YYLIMIT == YYCURSOR) YYFILL(1);
+			if (YYLIMIT == YYCURSOR) YYFILL(1);
 			yych = *YYCURSOR;
 			switch(yych) {
 			case '0':

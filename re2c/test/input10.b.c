@@ -5,15 +5,15 @@
 {
 	YYCTYPE yych;
 
-	if(YYLIMIT == YYCURSOR) YYFILL(1);
+	if (YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
-	if(yych <= 'E') {
-		if(yych <= '@') goto yy4;
-		if(yych >= 'E') goto yy4;
+	if (yych <= 'E') {
+		if (yych <= '@') goto yy4;
+		if (yych >= 'E') goto yy4;
 	} else {
-		if(yych <= 'G') goto yy2;
-		if(yych <= '`') goto yy4;
-		if(yych >= 'h') goto yy4;
+		if (yych <= 'G') goto yy2;
+		if (yych <= '`') goto yy4;
+		if (yych >= 'h') goto yy4;
 	}
 yy2:
 	++YYCURSOR;

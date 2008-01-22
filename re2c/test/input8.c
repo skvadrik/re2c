@@ -6,7 +6,7 @@
 	YYCTYPE yych;
 	unsigned int yyaccept = 0;
 
-	if((YYLIMIT - YYCURSOR) < 4) YYFILL(4);
+	if ((YYLIMIT - YYCURSOR) < 4) YYFILL(4);
 	yych = *YYCURSOR;
 	switch(yych) {
 	case 0x0A:	goto yy4;
@@ -56,11 +56,11 @@ yy9:
 	}
 yy10:
 	yych = *++YYCURSOR;
-	if(yych <= 0x00) goto yy12;
+	if (yych <= 0x00) goto yy12;
 	goto yy7;
 yy11:
 	yych = *++YYCURSOR;
-	if(yych >= 0x01) goto yy9;
+	if (yych >= 0x01) goto yy9;
 yy12:
 	++YYCURSOR;
 	yych = *YYCURSOR;

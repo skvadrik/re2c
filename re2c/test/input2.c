@@ -5,7 +5,7 @@
 {
 	YYCTYPE yych;
 
-	if(YYLIMIT == YYCURSOR) YYFILL(1);
+	if (YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	switch(yych) {
 	case 'a':	goto yy3;
@@ -14,7 +14,7 @@
 yy2:
 yy3:
 	++YYCURSOR;
-	if((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
+	if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
 	yych = *YYCURSOR;
 	switch(yych) {
 	case 'a':	goto yy3;

@@ -15,7 +15,7 @@ char *scan0(char *p)
 {
 	YYCTYPE yych;
 
-	if((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
+	if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
 	yych = *YYCURSOR;
 	switch(yych) {
 	case '0':
@@ -45,7 +45,7 @@ yy4:
 #line 46 "<stdout>"
 yy6:
 	++YYCURSOR;
-	if(YYLIMIT == YYCURSOR) YYFILL(1);
+	if (YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 yy7:
 	switch(yych) {
@@ -74,7 +74,7 @@ char *scan1(char *p)
 {
 	YYCTYPE yych;
 yy8:
-	if((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
+	if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
 	yych = *YYCURSOR;
 	switch(yych) {
 	case '0':
@@ -104,7 +104,7 @@ yy12:
 #line 105 "<stdout>"
 yy14:
 	++YYCURSOR;
-	if(YYLIMIT == YYCURSOR) YYFILL(1);
+	if (YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 yy15:
 	switch(yych) {
@@ -133,7 +133,7 @@ char *scan2(char *p)
 {
 	YYCTYPE yych;
 startLabel:
-	if((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
+	if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
 	yych = *YYCURSOR;
 	switch(yych) {
 	case '0':
@@ -163,7 +163,7 @@ yy20:
 #line 164 "<stdout>"
 yy22:
 	++YYCURSOR;
-	if(YYLIMIT == YYCURSOR) YYFILL(1);
+	if (YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 yy23:
 	switch(yych) {
@@ -191,7 +191,7 @@ char *scan(char *p)
 #line 192 "<stdout>"
 {
 	YYCTYPE yych;
-	if((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
+	if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
 	yych = *YYCURSOR;
 	switch(yych) {
 	case '0':
@@ -221,7 +221,7 @@ yy28:
 #line 222 "<stdout>"
 yy30:
 	++YYCURSOR;
-	if(YYLIMIT == YYCURSOR) YYFILL(1);
+	if (YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 yy31:
 	switch(yych) {

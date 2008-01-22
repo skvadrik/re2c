@@ -46,7 +46,7 @@ std:
 {
 	char curr;
 
-	if((s.lim - s.cur) < 3) fill();
+	if ((s.lim - s.cur) < 3) fill();
 	curr = *s.cur;
 	switch(curr) {
 	case 0x09:
@@ -115,7 +115,7 @@ xx9:
 	goto xx3;
 xx10:
 	++s.cur;
-	if(s.lim == s.cur) fill();
+	if (s.lim == s.cur) fill();
 	curr = *s.cur;
 xx11:
 	switch(curr) {
@@ -133,7 +133,7 @@ xx11:
 	}
 xx12:
 	++s.cur;
-	if(s.lim == s.cur) fill();
+	if (s.lim == s.cur) fill();
 	curr = *s.cur;
 	switch(curr) {
 	case '0':

@@ -374,7 +374,7 @@ void genGoTo(std::ostream &o, uint ind, const State *from, const State *to, bool
 
 void genIf(std::ostream &o, uint ind, const char *cmp, uint v, bool &readCh)
 {
-	o << indent(ind) << "if(";
+	o << indent(ind) << "if (";
 	if (readCh)
 	{
 		o << "(" << mapCodeName["yych"] << " = " << yychConversion << "*" << mapCodeName["YYCURSOR"] << ")";
@@ -411,12 +411,12 @@ static void need(std::ostream &o, uint ind, uint n, bool & readCh, bool bSetMark
 	{
 		if (n == 1)
 		{
-			o << indent(ind) << "if(" << mapCodeName["YYLIMIT"] << " == " << mapCodeName["YYCURSOR"] << ") ";
+			o << indent(ind) << "if (" << mapCodeName["YYLIMIT"] << " == " << mapCodeName["YYCURSOR"] << ") ";
 			genYYFill(o, ind, n);
 		}
 		else
 		{
-			o << indent(ind) << "if((" << mapCodeName["YYLIMIT"] << " - " << mapCodeName["YYCURSOR"] << ") < " << n << ") ";
+			o << indent(ind) << "if ((" << mapCodeName["YYLIMIT"] << " - " << mapCodeName["YYCURSOR"] << ") < " << n << ") ";
 			genYYFill(o, ind, n);
 		}
 	}
@@ -596,7 +596,7 @@ void Accept::emitBinary(std::ostream &o, uint ind, uint l, uint r, bool &readCh)
 	{
 		uint m = (l + r) >> 1;
 
-		o << indent(ind) << "if(" << mapCodeName["yyaccept"] << " <= " << m << ") {\n";
+		o << indent(ind) << "if (" << mapCodeName["yyaccept"] << " <= " << m << ") {\n";
 		emitBinary(o, ++ind, l, m, readCh);
 		o << indent(--ind) << "} else {\n";
 		emitBinary(o, ++ind, m + 1, r, readCh);
@@ -1005,7 +1005,7 @@ void Go::genCpGoto(std::ostream &o, uint ind, const State *from, const State *ne
 	readCh = false;
 	if (wFlag)
 	{
-		o << indent(ind) << "if(" << sYych <<" & ~0xFF) {\n";
+		o << indent(ind) << "if (" << sYych <<" & ~0xFF) {\n";
 		genBase(o, ind+1, from, next, readCh, 1);
 		o << indent(ind++) << "} else {\n";
 		sYych = mapCodeName["yych"];
@@ -1122,7 +1122,7 @@ void Go::genGoto(std::ostream &o, uint ind, const State *from, const State *next
 					readCh = false;
 					if (wFlag)
 					{
-						o << indent(ind) << "if(" << sYych << " & ~0xFF) {\n";
+						o << indent(ind) << "if (" << sYych << " & ~0xFF) {\n";
 						sYych = mapCodeName["yych"];
 						genBase(o, ind+1, from, next, readCh, 1);
 						o << indent(ind) << "} else ";
@@ -1131,7 +1131,7 @@ void Go::genGoto(std::ostream &o, uint ind, const State *from, const State *next
 					{
 						o << indent(ind);
 					}
-					o << "if(" << mapCodeName["yybm"] << "[" << b->i << "+" << sYych << "] & ";
+					o << "if (" << mapCodeName["yybm"] << "[" << b->i << "+" << sYych << "] & ";
 					if (yybmHexTable)
 					{
 						prtHex(o, b->m, false);
@@ -1805,23 +1805,22 @@ void genGetStateGoto(std::ostream &o, uint& ind, uint start_label)
 			o << indent(--ind) << "};\n";
 			o << "\n";
 
-			o << indent(ind) << "if(" << genGetState();
+			o << indent(ind) << "if (" << genGetState();
 			if (bUseStateAbort)
 			{
-				o << " == -1) {";
-				++ind;
+				o << " == -1) {\n";
 			}
 			else
 			{
-				o << " < 0)";
+				o << " < 0) {\n";
 			}
-			o << " goto " << labelPrefix << start_label << ";\n";
+			o << indent(++ind) << "goto " << labelPrefix << start_label << ";\n";
 			if (bUseStateAbort)
 			{
 				o << indent(--ind) << "} else if (" << genGetState() << " < -1) {\n";
 				o << indent(++ind) << "abort();\n";
-				o << indent(--ind) << "}\n";
 			}
+			o << indent(--ind) << "}\n";
 
 			o << indent(ind) << "goto *" << mapCodeName["yystable"] << "[" << genGetState() << "];\n";
 		}

@@ -23,10 +23,10 @@ size_t scan(const char *s, int l, char *r)
 {
 	YYCTYPE yych;
 
-	if((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
+	if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
 	yych = *(YYMARKER = YYCURSOR);
-	if(yych <= 0x00) goto yy5;
-	if(yych == '?') goto yy3;
+	if (yych <= 0x00) goto yy5;
+	if (yych == '?') goto yy3;
 	goto yy7;
 yy2:
 #line 40 "bug1454253.s.re"
@@ -38,15 +38,15 @@ yy2:
 #line 39 "<stdout>"
 yy3:
 	yych = *++YYCURSOR;
-	if(yych <= '9') {
-		if(yych == '!') goto yy12;
-		if(yych >= '0') goto yy9;
+	if (yych <= '9') {
+		if (yych == '!') goto yy12;
+		if (yych >= '0') goto yy9;
 	} else {
-		if(yych <= 'Z') {
-			if(yych >= 'A') goto yy9;
+		if (yych <= 'Z') {
+			if (yych >= 'A') goto yy9;
 		} else {
-			if(yych <= '`') goto yy4;
-			if(yych <= 'z') goto yy9;
+			if (yych <= '`') goto yy4;
+			if (yych <= 'z') goto yy9;
 		}
 	}
 yy4:
@@ -63,22 +63,22 @@ yy5:
 #line 64 "<stdout>"
 yy7:
 	++YYCURSOR;
-	if(YYLIMIT == YYCURSOR) YYFILL(1);
+	if (YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
-	if(yych <= 0x00) goto yy2;
-	if(yych == '?') goto yy2;
+	if (yych <= 0x00) goto yy2;
+	if (yych == '?') goto yy2;
 	goto yy7;
 yy9:
 	++YYCURSOR;
-	if(YYLIMIT == YYCURSOR) YYFILL(1);
+	if (YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
-	if(yych <= '@') {
-		if(yych <= '/') goto yy11;
-		if(yych <= '9') goto yy9;
+	if (yych <= '@') {
+		if (yych <= '/') goto yy11;
+		if (yych <= '9') goto yy9;
 	} else {
-		if(yych <= 'Z') goto yy9;
-		if(yych <= '`') goto yy11;
-		if(yych <= 'z') goto yy9;
+		if (yych <= 'Z') goto yy9;
+		if (yych <= '`') goto yy11;
+		if (yych <= 'z') goto yy9;
 	}
 yy11:
 #line 29 "bug1454253.s.re"
@@ -89,15 +89,15 @@ yy11:
 #line 90 "<stdout>"
 yy12:
 	++YYCURSOR;
-	if(YYLIMIT == YYCURSOR) YYFILL(1);
+	if (YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
-	if(yych <= '@') {
-		if(yych <= '/') goto yy14;
-		if(yych <= '9') goto yy12;
+	if (yych <= '@') {
+		if (yych <= '/') goto yy14;
+		if (yych <= '9') goto yy12;
 	} else {
-		if(yych <= 'Z') goto yy12;
-		if(yych <= '`') goto yy14;
-		if(yych <= 'z') goto yy12;
+		if (yych <= 'Z') goto yy12;
+		if (yych <= '`') goto yy14;
+		if (yych <= 'z') goto yy12;
 	}
 yy14:
 #line 24 "bug1454253.s.re"

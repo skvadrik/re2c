@@ -239,7 +239,7 @@ public:
 	}
 yy0:
 	YYSETSTATE(0);
-	if((YYLIMIT - YYCURSOR) < 7) YYFILL(7);
+	if ((YYLIMIT - YYCURSOR) < 7) YYFILL(7);
 yyFillLabel0:
 	yych = *YYCURSOR;
 	switch(yych) {
@@ -440,7 +440,7 @@ yy34:
 yy36:
 	++YYCURSOR;
 	YYSETSTATE(1);
-	if(YYLIMIT == YYCURSOR) YYFILL(1);
+	if (YYLIMIT == YYCURSOR) YYFILL(1);
 yyFillLabel1:
 	yych = *YYCURSOR;
 yy37:
@@ -460,7 +460,7 @@ yy37:
 yy38:
 	++YYCURSOR;
 	YYSETSTATE(2);
-	if(YYLIMIT == YYCURSOR) YYFILL(1);
+	if (YYLIMIT == YYCURSOR) YYFILL(1);
 yyFillLabel2:
 	yych = *YYCURSOR;
 yy39:

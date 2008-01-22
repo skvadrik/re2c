@@ -50,31 +50,31 @@ std:
 {
 	YYCTYPE yych;
 
-	if((YYLIMIT - YYCURSOR) < 3) YYFILL(3);
+	if ((YYLIMIT - YYCURSOR) < 3) YYFILL(3);
 	yych = *YYCURSOR;
-	if(yych <= ' ') {
-		if(yych <= 0x09) {
-			if(yych <= 0x08) goto yy9;
+	if (yych <= ' ') {
+		if (yych <= 0x09) {
+			if (yych <= 0x08) goto yy9;
 			goto yy6;
 		} else {
-			if(yych <= 0x0A) goto yy8;
-			if(yych <= 0x1F) goto yy9;
+			if (yych <= 0x0A) goto yy8;
+			if (yych <= 0x1F) goto yy9;
 			goto yy6;
 		}
 	} else {
-		if(yych <= '9') {
-			if(yych <= '/') goto yy9;
+		if (yych <= '9') {
+			if (yych <= '/') goto yy9;
 			goto yy4;
 		} else {
-			if(yych <= '`') goto yy9;
-			if(yych >= 'c') goto yy9;
+			if (yych <= '`') goto yy9;
+			if (yych >= 'c') goto yy9;
 		}
 	}
 	YYCTXMARKER = YYCURSOR + 1;
 	++YYCURSOR;
-	if((yych = *YYCURSOR) <= '/') goto yy3;
-	if(yych == '1') goto yy15;
-	if(yych <= '9') goto yy12;
+	if ((yych = *YYCURSOR) <= '/') goto yy3;
+	if (yych == '1') goto yy15;
+	if (yych <= '9') goto yy12;
 yy3:
 #line 60 "ctx.s.re"
 	{
@@ -108,18 +108,18 @@ yy9:
 	goto yy3;
 yy10:
 	++YYCURSOR;
-	if(YYLIMIT == YYCURSOR) YYFILL(1);
+	if (YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 yy11:
-	if(yych <= '/') goto yy5;
-	if(yych <= '9') goto yy10;
+	if (yych <= '/') goto yy5;
+	if (yych <= '9') goto yy10;
 	goto yy5;
 yy12:
 	++YYCURSOR;
-	if(YYLIMIT == YYCURSOR) YYFILL(1);
+	if (YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
-	if(yych <= '/') goto yy14;
-	if(yych <= '9') goto yy12;
+	if (yych <= '/') goto yy14;
+	if (yych <= '9') goto yy12;
 yy14:
 	YYCURSOR = YYCTXMARKER;
 #line 49 "ctx.s.re"
@@ -127,8 +127,8 @@ yy14:
 #line 128 "<stdout>"
 yy15:
 	++YYCURSOR;
-	if((yych = *YYCURSOR) <= '/') goto yy16;
-	if(yych <= '9') goto yy12;
+	if ((yych = *YYCURSOR) <= '/') goto yy16;
+	if (yych <= '9') goto yy12;
 yy16:
 	YYCURSOR = YYCTXMARKER;
 #line 48 "ctx.s.re"

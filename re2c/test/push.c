@@ -233,7 +233,7 @@ public:
 {
 	YYCTYPE yych;
 yy0:
-	if((YYLIMIT - YYCURSOR) < 7) YYFILL(7);
+	if ((YYLIMIT - YYCURSOR) < 7) YYFILL(7);
 	yych = *YYCURSOR;
 	switch(yych) {
 	case 0x00:	goto yy32;
@@ -432,7 +432,7 @@ yy34:
 #line 433 "<stdout>"
 yy36:
 	++YYCURSOR;
-	if(YYLIMIT == YYCURSOR) YYFILL(1);
+	if (YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 yy37:
 	switch(yych) {
@@ -450,7 +450,7 @@ yy37:
 	}
 yy38:
 	++YYCURSOR;
-	if(YYLIMIT == YYCURSOR) YYFILL(1);
+	if (YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 yy39:
 	switch(yych) {

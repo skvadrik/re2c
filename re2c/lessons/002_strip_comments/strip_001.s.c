@@ -80,12 +80,12 @@ int scan(FILE *fp)
 		{
 			YYCTYPE yych;
 
-			if((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
+			if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
 			yych = *YYCURSOR;
-			if(yych != '/') goto yy4;
+			if (yych != '/') goto yy4;
 			++YYCURSOR;
-			if((yych = *YYCURSOR) == '*') goto yy5;
-			if(yych == '/') goto yy7;
+			if ((yych = *YYCURSOR) == '*') goto yy5;
+			if (yych == '/') goto yy7;
 yy3:
 #line 113 "strip_001.s.re"
 			{ fputc(*s.tok, stdout); continue; }
@@ -112,11 +112,11 @@ comment:
 #line 113 "<stdout>"
 		{
 			YYCTYPE yych;
-			if((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
+			if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
 			yych = *YYCURSOR;
-			if(yych != '*') goto yy13;
+			if (yych != '*') goto yy13;
 			++YYCURSOR;
-			if((yych = *YYCURSOR) == '/') goto yy14;
+			if ((yych = *YYCURSOR) == '/') goto yy14;
 yy12:
 #line 119 "strip_001.s.re"
 			{ goto comment; }
@@ -138,12 +138,12 @@ cppcomment:
 #line 139 "<stdout>"
 		{
 			YYCTYPE yych;
-			if((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
+			if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
 			yych = *YYCURSOR;
-			if(yych == 0x0A) goto yy20;
-			if(yych != 0x0D) goto yy22;
+			if (yych == 0x0A) goto yy20;
+			if (yych != 0x0D) goto yy22;
 			++YYCURSOR;
-			if((yych = *YYCURSOR) == 0x0A) goto yy23;
+			if ((yych = *YYCURSOR) == 0x0A) goto yy23;
 yy19:
 #line 125 "strip_001.s.re"
 			{ goto cppcomment; }

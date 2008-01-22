@@ -4,6 +4,7 @@ Version 0.13.2 (2007-??-??)
 - Added support for ':=' style rules.
 - Added support for ':=>' style rules.
 - Added re2c:cond:divider and re2c:con:goto inplace configuration.
+- Fixed code generation to emit space after 'if'.
 
 Version 0.13.1 (2007-08-24)
 ---------------------------

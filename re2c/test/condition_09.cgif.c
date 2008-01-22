@@ -85,7 +85,9 @@ void scan(Scanner *s)
 		&&yyFillLabel3,
 	};
 
-	if(s->state < 0) goto yy0;
+	if (s->state < 0) {
+		goto yy0;
+	}
 	goto *yystable[s->state];
 	for(;;)
 	{
@@ -105,12 +107,12 @@ yy0:
 yyc_Comment:
 
 			s->state = 0;
-			if((s->lim - s->cur) < 2) if(fill(s, 2) == ~0) break;
+			if ((s->lim - s->cur) < 2) if(fill(s, 2) == ~0) break;
 yyFillLabel0:
 			s->yych = *s->cur;
-			if(s->yych != '*') goto yy4;
+			if (s->yych != '*') goto yy4;
 			++s->cur;
-			if((s->yych = *s->cur) == '/') goto yy5;
+			if ((s->yych = *s->cur) == '/') goto yy5;
 yy3:
 			{
 				goto yyc_Comment;
@@ -127,7 +129,7 @@ yy5:
 /* *********************************** */
 yyc_Normal:
 			s->state = 1;
-			if((s->lim - s->cur) < 4) if(fill(s, 4) == ~0) break;
+			if ((s->lim - s->cur) < 4) if(fill(s, 4) == ~0) break;
 yyFillLabel1:
 			s->yych = *s->cur;
 			{
@@ -169,7 +171,7 @@ yyFillLabel1:
 			}
 yy9:
 			s->yych = *(s->tok = ++s->cur);
-			if(s->yych == '?') goto yy26;
+			if (s->yych == '?') goto yy26;
 yy10:
 			{
 				fputc(s->cur[-1], stdout);
@@ -177,13 +179,13 @@ yy10:
 			}
 yy11:
 			s->yych = *++s->cur;
-			if(s->yych == '*') goto yy24;
-			if(s->yych == '/') goto yy22;
+			if (s->yych == '*') goto yy24;
+			if (s->yych == '/') goto yy22;
 			goto yy10;
 yy12:
 			s->yych = *(s->tok = ++s->cur);
-			if(s->yych == '"') goto yy16;
-			if(s->yych == '\\') goto yy18;
+			if (s->yych == '"') goto yy16;
+			if (s->yych == '\\') goto yy18;
 			goto yy10;
 yy13:
 			++s->cur;
@@ -197,15 +199,15 @@ yy15:
 			goto yy10;
 yy16:
 			s->yych = *++s->cur;
-			if(s->yych == '\'') goto yy20;
+			if (s->yych == '\'') goto yy20;
 yy17:
 			s->cur = s->tok;
 			goto yy10;
 yy18:
 			s->yych = *++s->cur;
-			if(s->yych != '"') goto yy17;
+			if (s->yych != '"') goto yy17;
 			s->yych = *++s->cur;
-			if(s->yych != '\'') goto yy17;
+			if (s->yych != '\'') goto yy17;
 yy20:
 			++s->cur;
 			{
@@ -320,7 +322,7 @@ yy43:
 /* *********************************** */
 yyc_Skiptoeol:
 			s->state = 2;
-			if((s->lim - s->cur) < 5) if(fill(s, 5) == ~0) break;
+			if ((s->lim - s->cur) < 5) if(fill(s, 5) == ~0) break;
 yyFillLabel2:
 			s->yych = *s->cur;
 			{
@@ -362,19 +364,19 @@ yyFillLabel2:
 			}
 yy47:
 			s->yych = *(s->tok = ++s->cur);
-			if(s->yych == '?') goto yy60;
+			if (s->yych == '?') goto yy60;
 yy48:
 			{
 				goto yyc_Skiptoeol;
 			}
 yy49:
 			s->yych = *(s->tok = ++s->cur);
-			if(s->yych == 0x0A) goto yy58;
-			if(s->yych == 0x0D) goto yy56;
+			if (s->yych == 0x0A) goto yy58;
+			if (s->yych == 0x0D) goto yy56;
 			goto yy48;
 yy50:
 			s->yych = *++s->cur;
-			if(s->yych == 0x0A) goto yy54;
+			if (s->yych == 0x0A) goto yy54;
 			goto yy48;
 yy51:
 			++s->cur;
@@ -396,7 +398,7 @@ yy54:
 			}
 yy56:
 			s->yych = *++s->cur;
-			if(s->yych == 0x0A) goto yy58;
+			if (s->yych == 0x0A) goto yy58;
 yy57:
 			s->cur = s->tok;
 			goto yy48;
@@ -407,12 +409,12 @@ yy58:
 			}
 yy60:
 			s->yych = *++s->cur;
-			if(s->yych != '/') goto yy57;
+			if (s->yych != '/') goto yy57;
 			s->yych = *++s->cur;
-			if(s->yych == 0x0A) goto yy63;
-			if(s->yych != 0x0D) goto yy57;
+			if (s->yych == 0x0A) goto yy63;
+			if (s->yych != 0x0D) goto yy57;
 			s->yych = *++s->cur;
-			if(s->yych != 0x0A) goto yy57;
+			if (s->yych != 0x0A) goto yy57;
 yy63:
 			++s->cur;
 			{
@@ -421,13 +423,13 @@ yy63:
 /* *********************************** */
 yyc_String:
 			s->state = 3;
-			if((s->lim - s->cur) < 2) if(fill(s, 2) == ~0) break;
+			if ((s->lim - s->cur) < 2) if(fill(s, 2) == ~0) break;
 yyFillLabel3:
 			s->yych = *s->cur;
-			if(s->yych == '"') goto yy69;
-			if(s->yych != '\\') goto yy71;
+			if (s->yych == '"') goto yy69;
+			if (s->yych != '\\') goto yy71;
 			++s->cur;
-			if((s->yych = *s->cur) != 0x0A) goto yy72;
+			if ((s->yych = *s->cur) != 0x0A) goto yy72;
 yy68:
 			{
 				fputc(s->cur[-1], stdout);

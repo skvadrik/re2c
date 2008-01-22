@@ -43,7 +43,7 @@ loop:
 {
 	YYCTYPE yych;
 
-	if((YYLIMIT - YYCURSOR) < 11) YYFILL(11);
+	if ((YYLIMIT - YYCURSOR) < 11) YYFILL(11);
 	yych = *YYCURSOR;
 	switch(yych) {
 	case '$':	goto yy2;
@@ -131,7 +131,7 @@ yy15:
 #line 132 "<stdout>"
 yy17:
 	++YYCURSOR;
-	if(YYLIMIT == YYCURSOR) YYFILL(1);
+	if (YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 yy18:
 	switch(yych) {
@@ -159,7 +159,7 @@ yy21:
 #line 160 "<stdout>"
 yy23:
 	++YYCURSOR;
-	if(YYLIMIT == YYCURSOR) YYFILL(1);
+	if (YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 yy24:
 	switch(yych) {
@@ -193,7 +193,7 @@ yy28:
 #line 194 "<stdout>"
 yy30:
 	++YYCURSOR;
-	if(YYLIMIT == YYCURSOR) YYFILL(1);
+	if (YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 yy31:
 	switch(yych) {
@@ -257,7 +257,7 @@ yy40:
 #line 258 "<stdout>"
 yy42:
 	++YYCURSOR;
-	if(YYLIMIT == YYCURSOR) YYFILL(1);
+	if (YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 yy43:
 	switch(yych) {
@@ -309,7 +309,7 @@ yy50:
 #line 310 "<stdout>"
 yy52:
 	++YYCURSOR;
-	if(YYLIMIT == YYCURSOR) YYFILL(1);
+	if (YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 yy53:
 	switch(yych) {

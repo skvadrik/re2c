@@ -20,7 +20,7 @@ next:
 {
 	YYCTYPE yych;
 
-	if((YYLIMIT - YYCURSOR) < 45) YYFILL(45);
+	if ((YYLIMIT - YYCURSOR) < 45) YYFILL(45);
 	yych = *YYCURSOR;
 	switch(yych) {
 	case 0x00:	goto yy5;

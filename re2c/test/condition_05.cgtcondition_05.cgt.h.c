@@ -66,11 +66,11 @@ char scan(Scanner *s)
 /* *********************************** */
 yyc_comment:
 
-			if((s->lim - s->cur) < 2) { if(fill(s, 2) >= 0) break; }
+			if ((s->lim - s->cur) < 2) { if(fill(s, 2) >= 0) break; }
 			yych = *s->cur;
-			if(yych != '*') goto yy4;
+			if (yych != '*') goto yy4;
 			++s->cur;
-			if((yych = *s->cur) == '/') goto yy5;
+			if ((yych = *s->cur) == '/') goto yy5;
 yy3:
 #line 83 "condition_05.cgtcondition_05.cgt.h.re"
 			{
@@ -89,11 +89,11 @@ yy5:
 #line 90 "<stdout>"
 /* *********************************** */
 yyc_normal:
-			if((s->lim - s->cur) < 2) { if(fill(s, 2) >= 0) break; }
+			if ((s->lim - s->cur) < 2) { if(fill(s, 2) >= 0) break; }
 			yych = *s->cur;
-			if(yych != '/') goto yy11;
+			if (yych != '/') goto yy11;
 			++s->cur;
-			if((yych = *s->cur) == '*') goto yy12;
+			if ((yych = *s->cur) == '*') goto yy12;
 yy10:
 #line 74 "condition_05.cgtcondition_05.cgt.h.re"
 			{

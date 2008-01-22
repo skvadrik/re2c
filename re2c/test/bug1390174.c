@@ -19,7 +19,7 @@ const char *q;
 {
 	YYCTYPE yych;
 
-	if((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
+	if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
 	yych = *YYCURSOR;
 	switch(yych) {
 	case 0x0A:	goto yy4;
@@ -53,7 +53,7 @@ yy7:
 	goto yy5;
 yy8:
 	++YYCURSOR;
-	if(YYLIMIT == YYCURSOR) YYFILL(1);
+	if (YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	switch(yych) {
 	case 0x0A:	goto yy7;

@@ -104,22 +104,22 @@ int scan(char *s)
 			};
 
 			yych = *YYCURSOR;
-			if(yych <= '*') {
-				if(yych <= 0x09) {
-					if(yych <= 0x00) goto yy11;
-					if(yych <= 0x08) goto yy13;
+			if (yych <= '*') {
+				if (yych <= 0x09) {
+					if (yych <= 0x00) goto yy11;
+					if (yych <= 0x08) goto yy13;
 				} else {
-					if(yych != ' ') goto yy13;
+					if (yych != ' ') goto yy13;
 				}
 			} else {
-				if(yych <= '-') {
-					if(yych <= '+') goto yy7;
-					if(yych <= ',') goto yy13;
+				if (yych <= '-') {
+					if (yych <= '+') goto yy7;
+					if (yych <= ',') goto yy13;
 					goto yy9;
 				} else {
-					if(yych <= '/') goto yy13;
-					if(yych <= '0') goto yy4;
-					if(yych <= '9') goto yy6;
+					if (yych <= '/') goto yy13;
+					if (yych <= '0') goto yy4;
+					if (yych <= '9') goto yy6;
 					goto yy13;
 				}
 			}
@@ -132,8 +132,8 @@ yy3:
 #line 133 "<stdout>"
 yy4:
 			++YYCURSOR;
-			if((yych = *YYCURSOR) <= '/') goto yy5;
-			if(yych <= '9') goto yy17;
+			if ((yych = *YYCURSOR) <= '/') goto yy5;
+			if (yych <= '9') goto yy17;
 yy5:
 #line 82 "calc_007.b.re"
 			{ res = push_num(t, p, 10); continue; }
@@ -165,15 +165,15 @@ yy15:
 			++YYCURSOR;
 			yych = *YYCURSOR;
 yy16:
-			if(yybm[0+yych] & 64) {
+			if (yybm[0+yych] & 64) {
 				goto yy15;
 			}
 			goto yy5;
 yy17:
 			++YYCURSOR;
 			yych = *YYCURSOR;
-			if(yych <= '/') goto yy19;
-			if(yych <= '9') goto yy17;
+			if (yych <= '/') goto yy19;
+			if (yych <= '9') goto yy17;
 yy19:
 #line 81 "calc_007.b.re"
 			{ res = push_num(t, p, 8);	continue; }
@@ -182,7 +182,7 @@ yy20:
 			++YYCURSOR;
 			yych = *YYCURSOR;
 yy21:
-			if(yybm[0+yych] & 128) {
+			if (yybm[0+yych] & 128) {
 				goto yy20;
 			}
 			goto yy3;

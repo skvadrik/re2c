@@ -15,14 +15,14 @@ char *scan0(char *p)
 {
    YYCTYPE yych;
 
-   if(YYLIMIT == YYCURSOR) YYFILL(1);
+   if (YYLIMIT == YYCURSOR) YYFILL(1);
    yych = *YYCURSOR;
-   if(yych <= 'b') {
-      if(yych <= '`') goto yy10;
-      if(yych >= 'b') goto yy4;
+   if (yych <= 'b') {
+      if (yych <= '`') goto yy10;
+      if (yych >= 'b') goto yy4;
    } else {
-      if(yych <= 'c') goto yy6;
-      if(yych <= 'd') goto yy8;
+      if (yych <= 'c') goto yy6;
+      if (yych <= 'd') goto yy8;
       goto yy10;
    }
    ++YYCURSOR;
@@ -61,14 +61,14 @@ char *scan1(char *p)
 #line 62 "<stdout>"
 {
 	YYCTYPE yych;
-	if(YYLIMIT == YYCURSOR) YYFILL(1);
+	if (YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
-	if(yych <= 'b') {
-		if(yych <= '`') goto yy22;
-		if(yych >= 'b') goto yy16;
+	if (yych <= 'b') {
+		if (yych <= '`') goto yy22;
+		if (yych >= 'b') goto yy16;
 	} else {
-		if(yych <= 'c') goto yy18;
-		if(yych <= 'd') goto yy20;
+		if (yych <= 'c') goto yy18;
+		if (yych <= 'd') goto yy20;
 		goto yy22;
 	}
 	++YYCURSOR;
@@ -107,14 +107,14 @@ char *scan(char *p)
 #line 108 "<stdout>"
 {
 YYCTYPE yych;
-if(YYLIMIT == YYCURSOR) YYFILL(1);
+if (YYLIMIT == YYCURSOR) YYFILL(1);
 yych = *YYCURSOR;
-if(yych <= 'b') {
-if(yych <= '`') goto yy34;
-if(yych >= 'b') goto yy28;
+if (yych <= 'b') {
+if (yych <= '`') goto yy34;
+if (yych >= 'b') goto yy28;
 } else {
-if(yych <= 'c') goto yy30;
-if(yych <= 'd') goto yy32;
+if (yych <= 'c') goto yy30;
+if (yych <= 'd') goto yy32;
 goto yy34;
 }
 ++YYCURSOR;

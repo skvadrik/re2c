@@ -18,11 +18,11 @@ yyc_0:
 #line 19 "<stdout>"
 /* *********************************** */
 yyc_r1:
-	if(YYLIMIT == YYCURSOR) YYFILL(1);
+	if (YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
-	if(yych <= '`') goto yy5;
-	if(yych <= 'a') goto yy6;
-	if(yych <= 'b') goto yy8;
+	if (yych <= '`') goto yy5;
+	if (yych <= 'a') goto yy6;
+	if (yych <= 'b') goto yy8;
 yy5:
 yy6:
 	++YYCURSOR;
@@ -36,9 +36,9 @@ yy8:
 #line 37 "<stdout>"
 /* *********************************** */
 yyc_r2:
-	if(YYLIMIT == YYCURSOR) YYFILL(1);
+	if (YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
-	if(yych == 'b') goto yy13;
+	if (yych == 'b') goto yy13;
 yy13:
 	++YYCURSOR;
 #line 5 "condition_02.cg.re"

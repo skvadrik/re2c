@@ -39,22 +39,22 @@
 		  0,   0,   0,   0,   0,   0,   0,   0, 
 	};
 
-	if(YYLIMIT == YYCURSOR) YYFILL(1);
+	if (YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
-	if(yybm[0+yych] & 128) {
+	if (yybm[0+yych] & 128) {
 		goto yy3;
 	}
 yy2:
 yy3:
 	++YYCURSOR;
-	if((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
+	if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
 	yych = *YYCURSOR;
-	if(yybm[0+yych] & 128) {
+	if (yybm[0+yych] & 128) {
 		goto yy3;
 	}
-	if(yych != 'b') goto yy2;
+	if (yych != 'b') goto yy2;
 	yych = *++YYCURSOR;
-	if(yych != 'b') goto yy2;
+	if (yych != 'b') goto yy2;
 	++YYCURSOR;
 #line 3 "input12.boinput12.c.re"
 	{ return 1; }

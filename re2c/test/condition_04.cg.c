@@ -12,16 +12,16 @@
 /* *********************************** */
 yyc_r1:
 
-	if(YYLIMIT == YYCURSOR) YYFILL(1);
+	if (YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
-	if(yych <= '2') {
-		if(yych <= '0') goto yy2;
-		if(yych <= '1') goto yy5;
+	if (yych <= '2') {
+		if (yych <= '0') goto yy2;
+		if (yych <= '1') goto yy5;
 		goto yy3;
 	} else {
-		if(yych <= '`') goto yy2;
-		if(yych <= 'a') goto yy7;
-		if(yych <= 'b') goto yy9;
+		if (yych <= '`') goto yy2;
+		if (yych <= 'a') goto yy7;
+		if (yych <= 'b') goto yy9;
 	}
 yy2:
 yy3:
@@ -46,14 +46,14 @@ yy9:
 #line 47 "<stdout>"
 /* *********************************** */
 yyc_r2:
-	if(YYLIMIT == YYCURSOR) YYFILL(1);
+	if (YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
-	if(yych <= '2') {
-		if(yych <= '0') goto yy13;
-		if(yych <= '1') goto yy16;
+	if (yych <= '2') {
+		if (yych <= '0') goto yy13;
+		if (yych <= '1') goto yy16;
 		goto yy14;
 	} else {
-		if(yych == 'b') goto yy18;
+		if (yych == 'b') goto yy18;
 	}
 yy13:
 yy14:

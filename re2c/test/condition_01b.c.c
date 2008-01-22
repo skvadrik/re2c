@@ -10,7 +10,7 @@
 	}
 yyc_a:
 
-	if((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
+	if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
 	yych = *YYCURSOR;
 	switch(yych) {
 	case 'a':	goto yy3;
@@ -29,7 +29,7 @@ yy4:
 	{ }
 #line 31 "<stdout>"
 yyc_b:
-	if((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
+	if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
 	yych = *YYCURSOR;
 	switch(yych) {
 	case 'a':	goto yy9;

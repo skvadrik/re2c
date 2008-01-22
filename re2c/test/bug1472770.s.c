@@ -26,10 +26,10 @@ start:
 yy1:
 	++YYCURSOR;
 yy0:
-	if(YYLIMIT == YYCURSOR) YYFILL(1);
+	if (YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
-	if(yych <= 0x00) goto yy5;
-	if(yych != 0x0A) goto yy1;
+	if (yych <= 0x00) goto yy5;
+	if (yych != 0x0A) goto yy1;
 	++YYCURSOR;
 #line 21 "bug1472770.s.re"
 	{

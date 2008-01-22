@@ -13,7 +13,7 @@ char *q;
 {
 	YYCTYPE yych;
 
-	if((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
+	if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
 	yych = *YYCURSOR;
 	switch(yych) {
 	case '0':
@@ -43,7 +43,7 @@ yy4:
 #line 44 "<stdout>"
 yy6:
 	++YYCURSOR;
-	if(YYLIMIT == YYCURSOR) YYFILL(1);
+	if (YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 yy7:
 	switch(yych) {

@@ -77,9 +77,9 @@ loop:
 		128, 128, 128, 128, 128, 128, 128, 128, 
 	};
 
-	if((YYLIMIT - YYCURSOR) < 11) YYFILL(11);
+	if ((YYLIMIT - YYCURSOR) < 11) YYFILL(11);
 	yych = *YYCURSOR;
-	if(yych != '$') goto yy4;
+	if (yych != '$') goto yy4;
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch(yych) {
 	case 'D':	goto yy10;
@@ -98,34 +98,34 @@ yy4:
 	goto yy3;
 yy5:
 	yych = *++YYCURSOR;
-	if(yych == 'o') goto yy44;
+	if (yych == 'o') goto yy44;
 yy6:
 	YYCURSOR = YYMARKER;
 	goto yy3;
 yy7:
 	yych = *++YYCURSOR;
-	if(yych == 'e') goto yy32;
+	if (yych == 'e') goto yy32;
 	goto yy6;
 yy8:
 	yych = *++YYCURSOR;
-	if(yych == 'o') goto yy25;
+	if (yych == 'o') goto yy25;
 	goto yy6;
 yy9:
 	yych = *++YYCURSOR;
-	if(yych == 'd') goto yy19;
+	if (yych == 'd') goto yy19;
 	goto yy6;
 yy10:
 	yych = *++YYCURSOR;
-	if(yych != 'a') goto yy6;
+	if (yych != 'a') goto yy6;
 	yych = *++YYCURSOR;
-	if(yych != 't') goto yy6;
+	if (yych != 't') goto yy6;
 	yych = *++YYCURSOR;
-	if(yych != 'e') goto yy6;
+	if (yych != 'e') goto yy6;
 	yych = *++YYCURSOR;
-	if(yych == '$') goto yy15;
-	if(yych != ':') goto yy6;
+	if (yych == '$') goto yy15;
+	if (yych != ':') goto yy6;
 	yych = *++YYCURSOR;
-	if(yych == '$') goto yy6;
+	if (yych == '$') goto yy6;
 	goto yy18;
 yy15:
 	++YYCURSOR;
@@ -134,20 +134,20 @@ yy15:
 #line 135 "<stdout>"
 yy17:
 	++YYCURSOR;
-	if(YYLIMIT == YYCURSOR) YYFILL(1);
+	if (YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 yy18:
-	if(yybm[0+yych] & 128) {
+	if (yybm[0+yych] & 128) {
 		goto yy17;
 	}
-	if(yych <= '#') goto yy6;
+	if (yych <= '#') goto yy6;
 	goto yy15;
 yy19:
 	yych = *++YYCURSOR;
-	if(yych == '$') goto yy21;
-	if(yych != ':') goto yy6;
+	if (yych == '$') goto yy21;
+	if (yych != ':') goto yy6;
 	yych = *++YYCURSOR;
-	if(yych == '$') goto yy6;
+	if (yych == '$') goto yy6;
 	goto yy24;
 yy21:
 	++YYCURSOR;
@@ -156,20 +156,20 @@ yy21:
 #line 157 "<stdout>"
 yy23:
 	++YYCURSOR;
-	if(YYLIMIT == YYCURSOR) YYFILL(1);
+	if (YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 yy24:
-	if(yych == 0x0A) goto yy6;
-	if(yych == '$') goto yy21;
+	if (yych == 0x0A) goto yy6;
+	if (yych == '$') goto yy21;
 	goto yy23;
 yy25:
 	yych = *++YYCURSOR;
-	if(yych != 'g') goto yy6;
+	if (yych != 'g') goto yy6;
 	yych = *++YYCURSOR;
-	if(yych == '$') goto yy28;
-	if(yych != ':') goto yy6;
+	if (yych == '$') goto yy28;
+	if (yych != ':') goto yy6;
 	yych = *++YYCURSOR;
-	if(yych == '$') goto yy6;
+	if (yych == '$') goto yy6;
 	goto yy31;
 yy28:
 	++YYCURSOR;
@@ -178,30 +178,30 @@ yy28:
 #line 179 "<stdout>"
 yy30:
 	++YYCURSOR;
-	if(YYLIMIT == YYCURSOR) YYFILL(1);
+	if (YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 yy31:
-	if(yych == 0x0A) goto yy6;
-	if(yych == '$') goto yy28;
+	if (yych == 0x0A) goto yy6;
+	if (yych == '$') goto yy28;
 	goto yy30;
 yy32:
 	yych = *++YYCURSOR;
-	if(yych != 'v') goto yy6;
+	if (yych != 'v') goto yy6;
 	yych = *++YYCURSOR;
-	if(yych != 'i') goto yy6;
+	if (yych != 'i') goto yy6;
 	yych = *++YYCURSOR;
-	if(yych != 's') goto yy6;
+	if (yych != 's') goto yy6;
 	yych = *++YYCURSOR;
-	if(yych != 'i') goto yy6;
+	if (yych != 'i') goto yy6;
 	yych = *++YYCURSOR;
-	if(yych != 'o') goto yy6;
+	if (yych != 'o') goto yy6;
 	yych = *++YYCURSOR;
-	if(yych != 'n') goto yy6;
+	if (yych != 'n') goto yy6;
 	yych = *++YYCURSOR;
-	if(yych == '$') goto yy40;
-	if(yych != ':') goto yy6;
+	if (yych == '$') goto yy40;
+	if (yych != ':') goto yy6;
 	yych = *++YYCURSOR;
-	if(yych == '$') goto yy6;
+	if (yych == '$') goto yy6;
 	goto yy43;
 yy40:
 	++YYCURSOR;
@@ -210,26 +210,26 @@ yy40:
 #line 211 "<stdout>"
 yy42:
 	++YYCURSOR;
-	if(YYLIMIT == YYCURSOR) YYFILL(1);
+	if (YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 yy43:
-	if(yych == 0x0A) goto yy6;
-	if(yych == '$') goto yy40;
+	if (yych == 0x0A) goto yy6;
+	if (yych == '$') goto yy40;
 	goto yy42;
 yy44:
 	yych = *++YYCURSOR;
-	if(yych != 'u') goto yy6;
+	if (yych != 'u') goto yy6;
 	yych = *++YYCURSOR;
-	if(yych != 'r') goto yy6;
+	if (yych != 'r') goto yy6;
 	yych = *++YYCURSOR;
-	if(yych != 'c') goto yy6;
+	if (yych != 'c') goto yy6;
 	yych = *++YYCURSOR;
-	if(yych != 'e') goto yy6;
+	if (yych != 'e') goto yy6;
 	yych = *++YYCURSOR;
-	if(yych == '$') goto yy50;
-	if(yych != ':') goto yy6;
+	if (yych == '$') goto yy50;
+	if (yych != ':') goto yy6;
 	yych = *++YYCURSOR;
-	if(yych == '$') goto yy6;
+	if (yych == '$') goto yy6;
 	goto yy53;
 yy50:
 	++YYCURSOR;
@@ -238,11 +238,11 @@ yy50:
 #line 239 "<stdout>"
 yy52:
 	++YYCURSOR;
-	if(YYLIMIT == YYCURSOR) YYFILL(1);
+	if (YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 yy53:
-	if(yych == 0x0A) goto yy6;
-	if(yych == '$') goto yy50;
+	if (yych == 0x0A) goto yy6;
+	if (yych == '$') goto yy50;
 	goto yy52;
 }
 #line 55 "cvsignore.b.re"

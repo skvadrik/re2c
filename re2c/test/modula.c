@@ -69,7 +69,7 @@ std:
 	YYCTYPE yych;
 	unsigned int yyaccept = 0;
 
-	if((YYLIMIT - YYCURSOR) < 15) YYFILL(15);
+	if ((YYLIMIT - YYCURSOR) < 15) YYFILL(15);
 	yych = *YYCURSOR;
 	switch(yych) {
 	case 0x09:
@@ -492,7 +492,7 @@ yy77:
 	goto yy8;
 yy78:
 	++YYCURSOR;
-	if(YYLIMIT == YYCURSOR) YYFILL(1);
+	if (YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 yy79:
 	switch(yych) {
@@ -502,7 +502,7 @@ yy79:
 	}
 yy80:
 	++YYCURSOR;
-	if(YYLIMIT == YYCURSOR) YYFILL(1);
+	if (YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 yy81:
 	switch(yych) {
@@ -4018,7 +4018,7 @@ yy266:
 #line 4019 "<stdout>"
 yy268:
 	++YYCURSOR;
-	if(YYLIMIT == YYCURSOR) YYFILL(1);
+	if (YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 yy269:
 	switch(yych) {
@@ -4042,7 +4042,7 @@ yy271:
 #line 4043 "<stdout>"
 yy273:
 	++YYCURSOR;
-	if(YYLIMIT == YYCURSOR) YYFILL(1);
+	if (YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 yy274:
 	switch(yych) {
@@ -4065,7 +4065,7 @@ yy277:
 	YYCTXMARKER = YYCURSOR + 1;
 	yyaccept = 0;
 	YYMARKER = ++YYCURSOR;
-	if((YYLIMIT - YYCURSOR) < 4) YYFILL(4);
+	if ((YYLIMIT - YYCURSOR) < 4) YYFILL(4);
 	yych = *YYCURSOR;
 yy278:
 	switch(yych) {
@@ -4091,7 +4091,7 @@ yy278:
 	}
 yy279:
 	++YYCURSOR;
-	if(YYLIMIT == YYCURSOR) YYFILL(1);
+	if (YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	switch(yych) {
 	case '0':
@@ -4127,7 +4127,7 @@ yy283:
 yy285:
 	yyaccept = 2;
 	YYMARKER = ++YYCURSOR;
-	if((YYLIMIT - YYCURSOR) < 3) YYFILL(3);
+	if ((YYLIMIT - YYCURSOR) < 3) YYFILL(3);
 	yych = *YYCURSOR;
 yy286:
 	switch(yych) {
@@ -4178,7 +4178,7 @@ yy288:
 	}
 yy289:
 	++YYCURSOR;
-	if(YYLIMIT == YYCURSOR) YYFILL(1);
+	if (YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	switch(yych) {
 	case '0':
@@ -4197,7 +4197,7 @@ yy291:
 	YYCTXMARKER = YYCURSOR + 1;
 	yyaccept = 0;
 	YYMARKER = ++YYCURSOR;
-	if((YYLIMIT - YYCURSOR) < 4) YYFILL(4);
+	if ((YYLIMIT - YYCURSOR) < 4) YYFILL(4);
 	yych = *YYCURSOR;
 yy292:
 	switch(yych) {
@@ -4288,7 +4288,7 @@ comment:
 #line 4289 "<stdout>"
 {
 	YYCTYPE yych;
-	if((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
+	if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
 	yych = *YYCURSOR;
 	switch(yych) {
 	case 0x0A:	goto yy304;

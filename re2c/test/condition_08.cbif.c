@@ -108,12 +108,12 @@ yy0:
 yyc_Comment:
 
 		s->state = 0;
-		if((s->lim - s->cur) < 2) if(fill(s, 2) >= 0) break;
+		if ((s->lim - s->cur) < 2) if(fill(s, 2) >= 0) break;
 yyFillLabel0:
 		s->yych = *s->cur;
-		if(s->yych != '*') goto yy4;
+		if (s->yych != '*') goto yy4;
 		++s->cur;
-		if((s->yych = *s->cur) == '/') goto yy5;
+		if ((s->yych = *s->cur) == '/') goto yy5;
 yy3:
 		{
 				goto yyc_Comment;
@@ -130,23 +130,23 @@ yy5:
 /* *********************************** */
 yyc_Normal:
 		s->state = 1;
-		if((s->lim - s->cur) < 4) if(fill(s, 4) >= 0) break;
+		if ((s->lim - s->cur) < 4) if(fill(s, 4) >= 0) break;
 yyFillLabel1:
 		s->yych = *s->cur;
-		if(s->yych <= '\'') {
-			if(s->yych == '"') goto yy13;
-			if(s->yych <= '&') goto yy15;
+		if (s->yych <= '\'') {
+			if (s->yych == '"') goto yy13;
+			if (s->yych <= '&') goto yy15;
 			goto yy12;
 		} else {
-			if(s->yych <= '/') {
-				if(s->yych <= '.') goto yy15;
+			if (s->yych <= '/') {
+				if (s->yych <= '.') goto yy15;
 				goto yy11;
 			} else {
-				if(s->yych != '?') goto yy15;
+				if (s->yych != '?') goto yy15;
 			}
 		}
 		s->yych = *(s->tok = ++s->cur);
-		if(s->yych == '?') goto yy26;
+		if (s->yych == '?') goto yy26;
 yy10:
 		{
 				fputc(*s->tok, stdout);
@@ -154,13 +154,13 @@ yy10:
 			}
 yy11:
 		s->yych = *++s->cur;
-		if(s->yych == '*') goto yy24;
-		if(s->yych == '/') goto yy22;
+		if (s->yych == '*') goto yy24;
+		if (s->yych == '/') goto yy22;
 		goto yy10;
 yy12:
 		s->yych = *(s->tok = ++s->cur);
-		if(s->yych == '"') goto yy16;
-		if(s->yych == '\\') goto yy18;
+		if (s->yych == '"') goto yy16;
+		if (s->yych == '\\') goto yy18;
 		goto yy10;
 yy13:
 		++s->cur;
@@ -174,15 +174,15 @@ yy15:
 		goto yy10;
 yy16:
 		s->yych = *++s->cur;
-		if(s->yych == '\'') goto yy20;
+		if (s->yych == '\'') goto yy20;
 yy17:
 		s->cur = s->tok;
 		goto yy10;
 yy18:
 		s->yych = *++s->cur;
-		if(s->yych != '"') goto yy17;
+		if (s->yych != '"') goto yy17;
 		s->yych = *++s->cur;
-		if(s->yych != '\'') goto yy17;
+		if (s->yych != '\'') goto yy17;
 yy20:
 		++s->cur;
 		{
@@ -272,28 +272,28 @@ yy43:
 /* *********************************** */
 yyc_Skiptoeol:
 		s->state = 2;
-		if((s->lim - s->cur) < 5) if(fill(s, 5) >= 0) break;
+		if ((s->lim - s->cur) < 5) if(fill(s, 5) >= 0) break;
 yyFillLabel2:
 		s->yych = *s->cur;
-		if(s->yych <= '>') {
-			if(s->yych == 0x0A) goto yy50;
+		if (s->yych <= '>') {
+			if (s->yych == 0x0A) goto yy50;
 			goto yy52;
 		} else {
-			if(s->yych <= '?') goto yy47;
-			if(s->yych == '\\') goto yy49;
+			if (s->yych <= '?') goto yy47;
+			if (s->yych == '\\') goto yy49;
 			goto yy52;
 		}
 yy47:
 		s->yych = *(s->tok = ++s->cur);
-		if(s->yych == '?') goto yy57;
+		if (s->yych == '?') goto yy57;
 yy48:
 		{
 				goto yyc_Skiptoeol;
 			}
 yy49:
 		s->yych = *(s->tok = ++s->cur);
-		if(s->yych == 0x0A) goto yy55;
-		if(s->yych == 0x0D) goto yy53;
+		if (s->yych == 0x0A) goto yy55;
+		if (s->yych == 0x0D) goto yy53;
 		goto yy48;
 yy50:
 		++s->cur;
@@ -306,7 +306,7 @@ yy52:
 		goto yy48;
 yy53:
 		s->yych = *++s->cur;
-		if(s->yych == 0x0A) goto yy55;
+		if (s->yych == 0x0A) goto yy55;
 yy54:
 		s->cur = s->tok;
 		goto yy48;
@@ -317,12 +317,12 @@ yy55:
 			}
 yy57:
 		s->yych = *++s->cur;
-		if(s->yych != '/') goto yy54;
+		if (s->yych != '/') goto yy54;
 		s->yych = *++s->cur;
-		if(s->yych == 0x0A) goto yy60;
-		if(s->yych != 0x0D) goto yy54;
+		if (s->yych == 0x0A) goto yy60;
+		if (s->yych != 0x0D) goto yy54;
 		s->yych = *++s->cur;
-		if(s->yych != 0x0A) goto yy54;
+		if (s->yych != 0x0A) goto yy54;
 yy60:
 		++s->cur;
 		{
@@ -331,13 +331,13 @@ yy60:
 /* *********************************** */
 yyc_String:
 		s->state = 3;
-		if((s->lim - s->cur) < 2) if(fill(s, 2) >= 0) break;
+		if ((s->lim - s->cur) < 2) if(fill(s, 2) >= 0) break;
 yyFillLabel3:
 		s->yych = *s->cur;
-		if(s->yych == '"') goto yy66;
-		if(s->yych != '\\') goto yy68;
+		if (s->yych == '"') goto yy66;
+		if (s->yych != '\\') goto yy68;
 		++s->cur;
-		if((s->yych = *s->cur) != 0x0A) goto yy69;
+		if ((s->yych = *s->cur) != 0x0A) goto yy69;
 yy65:
 		{
 				fputc(*s->tok, stdout);

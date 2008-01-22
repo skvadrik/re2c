@@ -20,7 +20,7 @@ char *scan(char *p)
 	}
 yy0:
 	YYSETSTATE(0);
-	if((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
+	if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
 yyFillLabel0:
 	yych = *YYCURSOR;
 	switch(yych) {
@@ -52,7 +52,7 @@ yy4:
 yy6:
 	++YYCURSOR;
 	YYSETSTATE(1);
-	if(YYLIMIT == YYCURSOR) YYFILL(1);
+	if (YYLIMIT == YYCURSOR) YYFILL(1);
 yyFillLabel1:
 	yych = *YYCURSOR;
 yy7:

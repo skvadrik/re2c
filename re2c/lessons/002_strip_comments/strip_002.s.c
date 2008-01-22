@@ -87,12 +87,12 @@ int scan(FILE *fp)
 		{
 			YYCTYPE yych;
 
-			if((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
+			if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
 			yych = *YYCURSOR;
-			if(yych != '/') goto yy4;
+			if (yych != '/') goto yy4;
 			++YYCURSOR;
-			if((yych = *YYCURSOR) == '*') goto yy5;
-			if(yych == '/') goto yy7;
+			if ((yych = *YYCURSOR) == '*') goto yy5;
+			if (yych == '/') goto yy7;
 yy3:
 #line 121 "strip_002.s.re"
 			{ fputc(*s.tok, stdout); continue; }
@@ -119,11 +119,11 @@ comment:
 #line 120 "<stdout>"
 		{
 			YYCTYPE yych;
-			if((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
+			if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
 			yych = *YYCURSOR;
-			if(yych != '*') goto yy13;
+			if (yych != '*') goto yy13;
 			++YYCURSOR;
-			if((yych = *YYCURSOR) == '/') goto yy14;
+			if ((yych = *YYCURSOR) == '/') goto yy14;
 yy12:
 #line 127 "strip_002.s.re"
 			{ goto comment; }
@@ -145,21 +145,21 @@ commentws:
 #line 146 "<stdout>"
 		{
 			YYCTYPE yych;
-			if((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
+			if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
 			yych = *YYCURSOR;
-			if(yych <= 0x0C) {
-				if(yych <= 0x08) goto yy23;
-				if(yych <= 0x09) goto yy22;
-				if(yych <= 0x0A) goto yy20;
+			if (yych <= 0x0C) {
+				if (yych <= 0x08) goto yy23;
+				if (yych <= 0x09) goto yy22;
+				if (yych <= 0x0A) goto yy20;
 				goto yy23;
 			} else {
-				if(yych <= 0x0D) goto yy18;
-				if(yych == ' ') goto yy22;
+				if (yych <= 0x0D) goto yy18;
+				if (yych == ' ') goto yy22;
 				goto yy23;
 			}
 yy18:
 			++YYCURSOR;
-			if((yych = *YYCURSOR) == 0x0A) goto yy25;
+			if ((yych = *YYCURSOR) == 0x0A) goto yy25;
 yy19:
 #line 133 "strip_002.s.re"
 			{ goto commentws; }
@@ -191,12 +191,12 @@ cppcomment:
 #line 192 "<stdout>"
 		{
 			YYCTYPE yych;
-			if((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
+			if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
 			yych = *YYCURSOR;
-			if(yych == 0x0A) goto yy30;
-			if(yych != 0x0D) goto yy32;
+			if (yych == 0x0A) goto yy30;
+			if (yych != 0x0D) goto yy32;
 			++YYCURSOR;
-			if((yych = *YYCURSOR) == 0x0A) goto yy33;
+			if ((yych = *YYCURSOR) == 0x0A) goto yy33;
 yy29:
 #line 140 "strip_002.s.re"
 			{ goto cppcomment; }

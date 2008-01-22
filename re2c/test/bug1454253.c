@@ -23,7 +23,7 @@ size_t scan(const char *s, int l, char *r)
 {
 	YYCTYPE yych;
 
-	if((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
+	if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
 	yych = *(YYMARKER = YYCURSOR);
 	switch(yych) {
 	case 0x00:	goto yy5;
@@ -120,7 +120,7 @@ yy5:
 #line 121 "<stdout>"
 yy7:
 	++YYCURSOR;
-	if(YYLIMIT == YYCURSOR) YYFILL(1);
+	if (YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	switch(yych) {
 	case 0x00:
@@ -129,7 +129,7 @@ yy7:
 	}
 yy9:
 	++YYCURSOR;
-	if(YYLIMIT == YYCURSOR) YYFILL(1);
+	if (YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	switch(yych) {
 	case '0':
@@ -205,7 +205,7 @@ yy11:
 #line 206 "<stdout>"
 yy12:
 	++YYCURSOR;
-	if(YYLIMIT == YYCURSOR) YYFILL(1);
+	if (YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	switch(yych) {
 	case '0':

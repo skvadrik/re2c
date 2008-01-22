@@ -23,19 +23,19 @@ size_t scan(const char *s, int l, char *r)
 {
 	YYCTYPE yych;
 
-	if((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
+	if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
 	yych = *YYCURSOR;
-	if(yych != '?') goto yy4;
+	if (yych != '?') goto yy4;
 	yych = *++YYCURSOR;
-	if(yych <= '9') {
-		if(yych == '!') goto yy9;
-		if(yych >= '0') goto yy6;
+	if (yych <= '9') {
+		if (yych == '!') goto yy9;
+		if (yych >= '0') goto yy6;
 	} else {
-		if(yych <= 'Z') {
-			if(yych >= 'A') goto yy6;
+		if (yych <= 'Z') {
+			if (yych >= 'A') goto yy6;
 		} else {
-			if(yych <= '`') goto yy3;
-			if(yych <= 'z') goto yy6;
+			if (yych <= '`') goto yy3;
+			if (yych <= 'z') goto yy6;
 		}
 	}
 yy3:
@@ -50,15 +50,15 @@ yy4:
 #line 51 "<stdout>"
 yy6:
 	++YYCURSOR;
-	if(YYLIMIT == YYCURSOR) YYFILL(1);
+	if (YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
-	if(yych <= '@') {
-		if(yych <= '/') goto yy8;
-		if(yych <= '9') goto yy6;
+	if (yych <= '@') {
+		if (yych <= '/') goto yy8;
+		if (yych <= '9') goto yy6;
 	} else {
-		if(yych <= 'Z') goto yy6;
-		if(yych <= '`') goto yy8;
-		if(yych <= 'z') goto yy6;
+		if (yych <= 'Z') goto yy6;
+		if (yych <= '`') goto yy8;
+		if (yych <= 'z') goto yy6;
 	}
 yy8:
 #line 28 "bug1454253b.s.re"
@@ -69,15 +69,15 @@ yy8:
 #line 70 "<stdout>"
 yy9:
 	++YYCURSOR;
-	if(YYLIMIT == YYCURSOR) YYFILL(1);
+	if (YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
-	if(yych <= '@') {
-		if(yych <= '/') goto yy11;
-		if(yych <= '9') goto yy9;
+	if (yych <= '@') {
+		if (yych <= '/') goto yy11;
+		if (yych <= '9') goto yy9;
 	} else {
-		if(yych <= 'Z') goto yy9;
-		if(yych <= '`') goto yy11;
-		if(yych <= 'z') goto yy9;
+		if (yych <= 'Z') goto yy9;
+		if (yych <= '`') goto yy11;
+		if (yych <= 'z') goto yy9;
 	}
 yy11:
 #line 23 "bug1454253b.s.re"

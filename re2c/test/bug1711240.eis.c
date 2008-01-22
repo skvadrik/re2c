@@ -5,14 +5,14 @@ char scan(const unsigned char *s)
 {
 	YYCTYPE yych;
 
-	if(YYLIMIT == YYCURSOR) YYFILL(1);
+	if (YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
-	if(yych <= '=') {
-		if(yych == 0x07) goto yy5;
+	if (yych <= '=') {
+		if (yych == 0x07) goto yy5;
 		goto yy7;
 	} else {
-		if(yych <= '"') goto yy3;
-		if(yych <= 0xFF) goto yy7;
+		if (yych <= '"') goto yy3;
+		if (yych <= 0xFF) goto yy7;
 	}
 yy3:
 	++YYCURSOR;

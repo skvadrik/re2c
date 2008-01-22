@@ -20,7 +20,7 @@ const char *q;
 	YYCTYPE yych;
 	unsigned int yyaccept = 0;
 
-	if((YYLIMIT - YYCURSOR) < 7) YYFILL(7);
+	if ((YYLIMIT - YYCURSOR) < 7) YYFILL(7);
 	yych = *YYCURSOR;
 	switch(yych) {
 	case 0x0A:
@@ -127,7 +127,7 @@ yy20:
 #line 128 "<stdout>"
 yy22:
 	++YYCURSOR;
-	if(YYLIMIT == YYCURSOR) YYFILL(1);
+	if (YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 yy23:
 	switch(yych) {

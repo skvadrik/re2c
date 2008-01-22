@@ -135,19 +135,19 @@ echo:
 	}
 yy0:
 	YYSETSTATE(0);
-	if((YYLIMIT - YYCURSOR) < 11) YYFILL(11);
+	if ((YYLIMIT - YYCURSOR) < 11) YYFILL(11);
 yyFillLabel0:
 	yych = *YYCURSOR;
-	if(yych <= ')') {
-		if(yych <= 0x00) goto yy7;
-		if(yych == 0x0A) goto yy5;
+	if (yych <= ')') {
+		if (yych <= 0x00) goto yy7;
+		if (yych == 0x0A) goto yy5;
 		goto yy9;
 	} else {
-		if(yych <= '*') goto yy4;
-		if(yych != '/') goto yy9;
+		if (yych <= '*') goto yy4;
+		if (yych != '/') goto yy9;
 	}
 	yych = *(YYMARKER = ++YYCURSOR);
-	if(yych == '*') goto yy12;
+	if (yych == '*') goto yy12;
 yy3:
 #line 141 "scanner.fs.re"
 	{
@@ -156,7 +156,7 @@ yy3:
 #line 157 "<stdout>"
 yy4:
 	yych = *++YYCURSOR;
-	if(yych == '/') goto yy10;
+	if (yych == '/') goto yy10;
 	goto yy3;
 yy5:
 	++YYCURSOR;
@@ -195,26 +195,26 @@ yy10:
 #line 196 "<stdout>"
 yy12:
 	yych = *++YYCURSOR;
-	if(yych == '!') goto yy14;
+	if (yych == '!') goto yy14;
 yy13:
 	YYCURSOR = YYMARKER;
 	goto yy3;
 yy14:
 	yych = *++YYCURSOR;
-	if(yych == 'm') goto yy15;
-	if(yych == 'r') goto yy16;
+	if (yych == 'm') goto yy15;
+	if (yych == 'r') goto yy16;
 	goto yy13;
 yy15:
 	yych = *++YYCURSOR;
-	if(yych == 'a') goto yy21;
+	if (yych == 'a') goto yy21;
 	goto yy13;
 yy16:
 	yych = *++YYCURSOR;
-	if(yych != 'e') goto yy13;
+	if (yych != 'e') goto yy13;
 	yych = *++YYCURSOR;
-	if(yych != '2') goto yy13;
+	if (yych != '2') goto yy13;
 	yych = *++YYCURSOR;
-	if(yych != 'c') goto yy13;
+	if (yych != 'c') goto yy13;
 	++YYCURSOR;
 #line 110 "scanner.fs.re"
 	{ 
@@ -225,17 +225,17 @@ yy16:
 #line 226 "<stdout>"
 yy21:
 	yych = *++YYCURSOR;
-	if(yych != 'x') goto yy13;
+	if (yych != 'x') goto yy13;
 	yych = *++YYCURSOR;
-	if(yych != ':') goto yy13;
+	if (yych != ':') goto yy13;
 	yych = *++YYCURSOR;
-	if(yych != 'r') goto yy13;
+	if (yych != 'r') goto yy13;
 	yych = *++YYCURSOR;
-	if(yych != 'e') goto yy13;
+	if (yych != 'e') goto yy13;
 	yych = *++YYCURSOR;
-	if(yych != '2') goto yy13;
+	if (yych != '2') goto yy13;
 	yych = *++YYCURSOR;
-	if(yych != 'c') goto yy13;
+	if (yych != 'c') goto yy13;
 	++YYCURSOR;
 #line 115 "scanner.fs.re"
 	{
@@ -271,62 +271,62 @@ scan:
 #line 272 "<stdout>"
 
 	YYSETSTATE(1);
-	if((YYLIMIT - YYCURSOR) < 5) YYFILL(5);
+	if ((YYLIMIT - YYCURSOR) < 5) YYFILL(5);
 yyFillLabel1:
 	yych = *YYCURSOR;
-	if(yych <= '/') {
-		if(yych <= '!') {
-			if(yych <= 0x0C) {
-				if(yych <= 0x08) goto yy56;
-				if(yych <= 0x09) goto yy50;
-				if(yych <= 0x0A) goto yy52;
+	if (yych <= '/') {
+		if (yych <= '!') {
+			if (yych <= 0x0C) {
+				if (yych <= 0x08) goto yy56;
+				if (yych <= 0x09) goto yy50;
+				if (yych <= 0x0A) goto yy52;
 				goto yy56;
 			} else {
-				if(yych <= 0x0D) goto yy54;
-				if(yych == ' ') goto yy50;
+				if (yych <= 0x0D) goto yy54;
+				if (yych == ' ') goto yy50;
 				goto yy56;
 			}
 		} else {
-			if(yych <= ')') {
-				if(yych <= '"') goto yy37;
-				if(yych <= '&') goto yy56;
-				if(yych <= '\'') goto yy39;
+			if (yych <= ')') {
+				if (yych <= '"') goto yy37;
+				if (yych <= '&') goto yy56;
+				if (yych <= '\'') goto yy39;
 				goto yy43;
 			} else {
-				if(yych <= '+') {
-					if(yych <= '*') goto yy35;
+				if (yych <= '+') {
+					if (yych <= '*') goto yy35;
 					goto yy44;
 				} else {
-					if(yych <= '-') goto yy56;
-					if(yych <= '.') goto yy48;
+					if (yych <= '-') goto yy56;
+					if (yych <= '.') goto yy48;
 					goto yy33;
 				}
 			}
 		}
 	} else {
-		if(yych <= 'Z') {
-			if(yych <= '=') {
-				if(yych == ';') goto yy43;
-				if(yych <= '<') goto yy56;
+		if (yych <= 'Z') {
+			if (yych <= '=') {
+				if (yych == ';') goto yy43;
+				if (yych <= '<') goto yy56;
 				goto yy43;
 			} else {
-				if(yych == '?') goto yy44;
-				if(yych <= '@') goto yy56;
+				if (yych == '?') goto yy44;
+				if (yych <= '@') goto yy56;
 				goto yy47;
 			}
 		} else {
-			if(yych <= 'q') {
-				if(yych <= '[') goto yy41;
-				if(yych <= '\\') goto yy43;
-				if(yych <= '`') goto yy56;
+			if (yych <= 'q') {
+				if (yych <= '[') goto yy41;
+				if (yych <= '\\') goto yy43;
+				if (yych <= '`') goto yy56;
 				goto yy47;
 			} else {
-				if(yych <= 'z') {
-					if(yych <= 'r') goto yy45;
+				if (yych <= 'z') {
+					if (yych <= 'r') goto yy45;
 					goto yy47;
 				} else {
-					if(yych <= '{') goto yy31;
-					if(yych <= '|') goto yy43;
+					if (yych <= '{') goto yy31;
+					if (yych <= '|') goto yy43;
 					goto yy56;
 				}
 			}
@@ -335,11 +335,11 @@ yyFillLabel1:
 yy31:
 	yyaccept = 0;
 	yych = *(YYMARKER = ++YYCURSOR);
-	if(yych <= '/') {
-		if(yych == ',') goto yy97;
+	if (yych <= '/') {
+		if (yych == ',') goto yy97;
 	} else {
-		if(yych <= '0') goto yy94;
-		if(yych <= '9') goto yy95;
+		if (yych <= '0') goto yy94;
+		if (yych <= '9') goto yy95;
 	}
 yy32:
 #line 166 "scanner.fs.re"
@@ -349,14 +349,14 @@ yy32:
 #line 350 "<stdout>"
 yy33:
 	++YYCURSOR;
-	if((yych = *YYCURSOR) == '*') goto yy92;
+	if ((yych = *YYCURSOR) == '*') goto yy92;
 yy34:
 #line 196 "scanner.fs.re"
 	{ RETURN(*tok); }
 #line 357 "<stdout>"
 yy35:
 	++YYCURSOR;
-	if((yych = *YYCURSOR) == '/') goto yy90;
+	if ((yych = *YYCURSOR) == '/') goto yy90;
 yy36:
 #line 198 "scanner.fs.re"
 	{ yylval.op = *tok;
@@ -365,7 +365,7 @@ yy36:
 yy37:
 	yyaccept = 1;
 	yych = *(YYMARKER = ++YYCURSOR);
-	if(yych != 0x0A) goto yy86;
+	if (yych != 0x0A) goto yy86;
 yy38:
 #line 183 "scanner.fs.re"
 	{ fatal("unterminated string constant (missing \")"); }
@@ -373,7 +373,7 @@ yy38:
 yy39:
 	yyaccept = 2;
 	yych = *(YYMARKER = ++YYCURSOR);
-	if(yych != 0x0A) goto yy81;
+	if (yych != 0x0A) goto yy81;
 yy40:
 #line 184 "scanner.fs.re"
 	{ fatal("unterminated string constant (missing ')"); }
@@ -381,8 +381,8 @@ yy40:
 yy41:
 	yyaccept = 3;
 	yych = *(YYMARKER = ++YYCURSOR);
-	if(yych == 0x0A) goto yy42;
-	if(yych == '^') goto yy72;
+	if (yych == 0x0A) goto yy42;
+	if (yych == '^') goto yy72;
 	goto yy71;
 yy42:
 #line 194 "scanner.fs.re"
@@ -396,7 +396,7 @@ yy44:
 	goto yy36;
 yy45:
 	++YYCURSOR;
-	if((yych = *YYCURSOR) == 'e') goto yy62;
+	if ((yych = *YYCURSOR) == 'e') goto yy62;
 	goto yy61;
 yy46:
 #line 225 "scanner.fs.re"
@@ -434,7 +434,7 @@ yy53:
 #line 435 "<stdout>"
 yy54:
 	++YYCURSOR;
-	if((yych = *YYCURSOR) == 0x0A) goto yy57;
+	if ((yych = *YYCURSOR) == 0x0A) goto yy57;
 yy55:
 #line 241 "scanner.fs.re"
 	{ std::ostringstream msg;
@@ -453,67 +453,67 @@ yy57:
 yy58:
 	++YYCURSOR;
 	YYSETSTATE(2);
-	if(YYLIMIT == YYCURSOR) YYFILL(1);
+	if (YYLIMIT == YYCURSOR) YYFILL(1);
 yyFillLabel2:
 	yych = *YYCURSOR;
 yy59:
-	if(yych == 0x09) goto yy58;
-	if(yych == ' ') goto yy58;
+	if (yych == 0x09) goto yy58;
+	if (yych == ' ') goto yy58;
 	goto yy51;
 yy60:
 	++YYCURSOR;
 	YYSETSTATE(3);
-	if(YYLIMIT == YYCURSOR) YYFILL(1);
+	if (YYLIMIT == YYCURSOR) YYFILL(1);
 yyFillLabel3:
 	yych = *YYCURSOR;
 yy61:
-	if(yych <= '@') {
-		if(yych <= '/') goto yy46;
-		if(yych <= '9') goto yy60;
+	if (yych <= '@') {
+		if (yych <= '/') goto yy46;
+		if (yych <= '9') goto yy60;
 		goto yy46;
 	} else {
-		if(yych <= 'Z') goto yy60;
-		if(yych <= '`') goto yy46;
-		if(yych <= 'z') goto yy60;
+		if (yych <= 'Z') goto yy60;
+		if (yych <= '`') goto yy46;
+		if (yych <= 'z') goto yy60;
 		goto yy46;
 	}
 yy62:
 	yych = *++YYCURSOR;
-	if(yych != '2') goto yy61;
+	if (yych != '2') goto yy61;
 	yych = *++YYCURSOR;
-	if(yych != 'c') goto yy61;
+	if (yych != 'c') goto yy61;
 	yyaccept = 4;
 	yych = *(YYMARKER = ++YYCURSOR);
-	if(yych != ':') goto yy61;
+	if (yych != ':') goto yy61;
 yy65:
 	++YYCURSOR;
 	YYSETSTATE(4);
-	if(YYLIMIT == YYCURSOR) YYFILL(1);
+	if (YYLIMIT == YYCURSOR) YYFILL(1);
 yyFillLabel4:
 	yych = *YYCURSOR;
-	if(yych <= '@') goto yy66;
-	if(yych <= 'Z') goto yy67;
-	if(yych <= '`') goto yy66;
-	if(yych <= 'z') goto yy67;
+	if (yych <= '@') goto yy66;
+	if (yych <= 'Z') goto yy67;
+	if (yych <= '`') goto yy66;
+	if (yych <= 'z') goto yy67;
 yy66:
 	YYCURSOR = YYMARKER;
-	if(yyaccept <= 3) {
-		if(yyaccept <= 1) {
-			if(yyaccept <= 0) {
+	if (yyaccept <= 3) {
+		if (yyaccept <= 1) {
+			if (yyaccept <= 0) {
 				goto yy32;
 			} else {
 				goto yy38;
 			}
 		} else {
-			if(yyaccept <= 2) {
+			if (yyaccept <= 2) {
 				goto yy40;
 			} else {
 				goto yy42;
 			}
 		}
 	} else {
-		if(yyaccept <= 5) {
-			if(yyaccept <= 4) {
+		if (yyaccept <= 5) {
+			if (yyaccept <= 4) {
 				goto yy46;
 			} else {
 				goto yy69;
@@ -526,22 +526,22 @@ yy67:
 	yyaccept = 5;
 	YYMARKER = ++YYCURSOR;
 	YYSETSTATE(5);
-	if(YYLIMIT == YYCURSOR) YYFILL(1);
+	if (YYLIMIT == YYCURSOR) YYFILL(1);
 yyFillLabel5:
 	yych = *YYCURSOR;
-	if(yych <= 'Z') {
-		if(yych <= '9') {
-			if(yych >= '0') goto yy67;
+	if (yych <= 'Z') {
+		if (yych <= '9') {
+			if (yych >= '0') goto yy67;
 		} else {
-			if(yych <= ':') goto yy65;
-			if(yych >= 'A') goto yy67;
+			if (yych <= ':') goto yy65;
+			if (yych >= 'A') goto yy67;
 		}
 	} else {
-		if(yych <= '_') {
-			if(yych >= '_') goto yy67;
+		if (yych <= '_') {
+			if (yych >= '_') goto yy67;
 		} else {
-			if(yych <= '`') goto yy69;
-			if(yych <= 'z') goto yy67;
+			if (yych <= '`') goto yy69;
+			if (yych <= 'z') goto yy67;
 		}
 	}
 yy69:
@@ -556,39 +556,39 @@ yy69:
 yy70:
 	++YYCURSOR;
 	YYSETSTATE(6);
-	if(YYLIMIT == YYCURSOR) YYFILL(1);
+	if (YYLIMIT == YYCURSOR) YYFILL(1);
 yyFillLabel6:
 	yych = *YYCURSOR;
 yy71:
-	if(yych <= '[') {
-		if(yych == 0x0A) goto yy66;
+	if (yych <= '[') {
+		if (yych == 0x0A) goto yy66;
 		goto yy70;
 	} else {
-		if(yych <= '\\') goto yy74;
-		if(yych <= ']') goto yy75;
+		if (yych <= '\\') goto yy74;
+		if (yych <= ']') goto yy75;
 		goto yy70;
 	}
 yy72:
 	++YYCURSOR;
 	YYSETSTATE(7);
-	if(YYLIMIT == YYCURSOR) YYFILL(1);
+	if (YYLIMIT == YYCURSOR) YYFILL(1);
 yyFillLabel7:
 	yych = *YYCURSOR;
-	if(yych <= '[') {
-		if(yych == 0x0A) goto yy66;
+	if (yych <= '[') {
+		if (yych == 0x0A) goto yy66;
 		goto yy72;
 	} else {
-		if(yych <= '\\') goto yy77;
-		if(yych <= ']') goto yy78;
+		if (yych <= '\\') goto yy77;
+		if (yych <= ']') goto yy78;
 		goto yy72;
 	}
 yy74:
 	++YYCURSOR;
 	YYSETSTATE(8);
-	if(YYLIMIT == YYCURSOR) YYFILL(1);
+	if (YYLIMIT == YYCURSOR) YYFILL(1);
 yyFillLabel8:
 	yych = *YYCURSOR;
-	if(yych == 0x0A) goto yy66;
+	if (yych == 0x0A) goto yy66;
 	goto yy70;
 yy75:
 	++YYCURSOR;
@@ -600,10 +600,10 @@ yy75:
 yy77:
 	++YYCURSOR;
 	YYSETSTATE(9);
-	if(YYLIMIT == YYCURSOR) YYFILL(1);
+	if (YYLIMIT == YYCURSOR) YYFILL(1);
 yyFillLabel9:
 	yych = *YYCURSOR;
-	if(yych == 0x0A) goto yy66;
+	if (yych == 0x0A) goto yy66;
 	goto yy72;
 yy78:
 	++YYCURSOR;
@@ -615,23 +615,23 @@ yy78:
 yy80:
 	++YYCURSOR;
 	YYSETSTATE(10);
-	if(YYLIMIT == YYCURSOR) YYFILL(1);
+	if (YYLIMIT == YYCURSOR) YYFILL(1);
 yyFillLabel10:
 	yych = *YYCURSOR;
 yy81:
-	if(yych <= '&') {
-		if(yych == 0x0A) goto yy66;
+	if (yych <= '&') {
+		if (yych == 0x0A) goto yy66;
 		goto yy80;
 	} else {
-		if(yych <= '\'') goto yy83;
-		if(yych != '\\') goto yy80;
+		if (yych <= '\'') goto yy83;
+		if (yych != '\\') goto yy80;
 	}
 	++YYCURSOR;
 	YYSETSTATE(11);
-	if(YYLIMIT == YYCURSOR) YYFILL(1);
+	if (YYLIMIT == YYCURSOR) YYFILL(1);
 yyFillLabel11:
 	yych = *YYCURSOR;
-	if(yych == 0x0A) goto yy66;
+	if (yych == 0x0A) goto yy66;
 	goto yy80;
 yy83:
 	++YYCURSOR;
@@ -643,23 +643,23 @@ yy83:
 yy85:
 	++YYCURSOR;
 	YYSETSTATE(12);
-	if(YYLIMIT == YYCURSOR) YYFILL(1);
+	if (YYLIMIT == YYCURSOR) YYFILL(1);
 yyFillLabel12:
 	yych = *YYCURSOR;
 yy86:
-	if(yych <= '!') {
-		if(yych == 0x0A) goto yy66;
+	if (yych <= '!') {
+		if (yych == 0x0A) goto yy66;
 		goto yy85;
 	} else {
-		if(yych <= '"') goto yy88;
-		if(yych != '\\') goto yy85;
+		if (yych <= '"') goto yy88;
+		if (yych != '\\') goto yy85;
 	}
 	++YYCURSOR;
 	YYSETSTATE(13);
-	if(YYLIMIT == YYCURSOR) YYFILL(1);
+	if (YYLIMIT == YYCURSOR) YYFILL(1);
 yyFillLabel13:
 	yych = *YYCURSOR;
-	if(yych == 0x0A) goto yy66;
+	if (yych == 0x0A) goto yy66;
 	goto yy85;
 yy88:
 	++YYCURSOR;
@@ -682,21 +682,21 @@ yy92:
 #line 683 "<stdout>"
 yy94:
 	yych = *++YYCURSOR;
-	if(yych == ',') goto yy108;
+	if (yych == ',') goto yy108;
 	goto yy96;
 yy95:
 	++YYCURSOR;
 	YYSETSTATE(14);
-	if((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
+	if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
 yyFillLabel14:
 	yych = *YYCURSOR;
 yy96:
-	if(yych <= '/') {
-		if(yych == ',') goto yy101;
+	if (yych <= '/') {
+		if (yych == ',') goto yy101;
 		goto yy66;
 	} else {
-		if(yych <= '9') goto yy95;
-		if(yych == '}') goto yy99;
+		if (yych <= '9') goto yy95;
+		if (yych == '}') goto yy99;
 		goto yy66;
 	}
 yy97:
@@ -715,9 +715,9 @@ yy99:
 yy101:
 	yyaccept = 6;
 	yych = *(YYMARKER = ++YYCURSOR);
-	if(yych <= '/') goto yy98;
-	if(yych <= '9') goto yy104;
-	if(yych != '}') goto yy98;
+	if (yych <= '/') goto yy98;
+	if (yych <= '9') goto yy104;
+	if (yych != '}') goto yy98;
 	++YYCURSOR;
 #line 212 "scanner.fs.re"
 	{ yylval.extop.minsize = atoi((char *)tok+1);
@@ -727,12 +727,12 @@ yy101:
 yy104:
 	++YYCURSOR;
 	YYSETSTATE(15);
-	if(YYLIMIT == YYCURSOR) YYFILL(1);
+	if (YYLIMIT == YYCURSOR) YYFILL(1);
 yyFillLabel15:
 	yych = *YYCURSOR;
-	if(yych <= '/') goto yy66;
-	if(yych <= '9') goto yy104;
-	if(yych != '}') goto yy66;
+	if (yych <= '/') goto yy66;
+	if (yych <= '9') goto yy104;
+	if (yych != '}') goto yy66;
 	++YYCURSOR;
 #line 208 "scanner.fs.re"
 	{ yylval.extop.minsize = atoi((char *)tok+1);
@@ -742,9 +742,9 @@ yyFillLabel15:
 yy108:
 	yyaccept = 6;
 	yych = *(YYMARKER = ++YYCURSOR);
-	if(yych <= '/') goto yy98;
-	if(yych <= '9') goto yy104;
-	if(yych != '}') goto yy98;
+	if (yych <= '/') goto yy98;
+	if (yych <= '9') goto yy104;
+	if (yych != '}') goto yy98;
 	++YYCURSOR;
 #line 201 "scanner.fs.re"
 	{ yylval.op = '*';
@@ -758,24 +758,24 @@ code:
 #line 759 "<stdout>"
 
 	YYSETSTATE(16);
-	if((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
+	if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
 yyFillLabel16:
 	yych = *YYCURSOR;
-	if(yych <= '&') {
-		if(yych <= 0x0A) {
-			if(yych <= 0x09) goto yy119;
+	if (yych <= '&') {
+		if (yych <= 0x0A) {
+			if (yych <= 0x09) goto yy119;
 			goto yy117;
 		} else {
-			if(yych == '"') goto yy121;
+			if (yych == '"') goto yy121;
 			goto yy119;
 		}
 	} else {
-		if(yych <= '{') {
-			if(yych <= '\'') goto yy122;
-			if(yych <= 'z') goto yy119;
+		if (yych <= '{') {
+			if (yych <= '\'') goto yy122;
+			if (yych <= 'z') goto yy119;
 			goto yy115;
 		} else {
-			if(yych != '}') goto yy119;
+			if (yych != '}') goto yy119;
 		}
 	}
 	++YYCURSOR;
@@ -809,24 +809,24 @@ yy120:
 #line 810 "<stdout>"
 yy121:
 	yych = *(YYMARKER = ++YYCURSOR);
-	if(yych == 0x0A) goto yy120;
+	if (yych == 0x0A) goto yy120;
 	goto yy128;
 yy122:
 	yych = *(YYMARKER = ++YYCURSOR);
-	if(yych == 0x0A) goto yy120;
+	if (yych == 0x0A) goto yy120;
 	goto yy124;
 yy123:
 	++YYCURSOR;
 	YYSETSTATE(17);
-	if(YYLIMIT == YYCURSOR) YYFILL(1);
+	if (YYLIMIT == YYCURSOR) YYFILL(1);
 yyFillLabel17:
 	yych = *YYCURSOR;
 yy124:
-	if(yych <= '&') {
-		if(yych != 0x0A) goto yy123;
+	if (yych <= '&') {
+		if (yych != 0x0A) goto yy123;
 	} else {
-		if(yych <= '\'') goto yy119;
-		if(yych == '\\') goto yy126;
+		if (yych <= '\'') goto yy119;
+		if (yych == '\\') goto yy126;
 		goto yy123;
 	}
 yy125:
@@ -835,31 +835,31 @@ yy125:
 yy126:
 	++YYCURSOR;
 	YYSETSTATE(18);
-	if(YYLIMIT == YYCURSOR) YYFILL(1);
+	if (YYLIMIT == YYCURSOR) YYFILL(1);
 yyFillLabel18:
 	yych = *YYCURSOR;
-	if(yych == 0x0A) goto yy125;
+	if (yych == 0x0A) goto yy125;
 	goto yy123;
 yy127:
 	++YYCURSOR;
 	YYSETSTATE(19);
-	if(YYLIMIT == YYCURSOR) YYFILL(1);
+	if (YYLIMIT == YYCURSOR) YYFILL(1);
 yyFillLabel19:
 	yych = *YYCURSOR;
 yy128:
-	if(yych <= '!') {
-		if(yych == 0x0A) goto yy125;
+	if (yych <= '!') {
+		if (yych == 0x0A) goto yy125;
 		goto yy127;
 	} else {
-		if(yych <= '"') goto yy119;
-		if(yych != '\\') goto yy127;
+		if (yych <= '"') goto yy119;
+		if (yych != '\\') goto yy127;
 	}
 	++YYCURSOR;
 	YYSETSTATE(20);
-	if(YYLIMIT == YYCURSOR) YYFILL(1);
+	if (YYLIMIT == YYCURSOR) YYFILL(1);
 yyFillLabel20:
 	yych = *YYCURSOR;
-	if(yych == 0x0A) goto yy125;
+	if (yych == 0x0A) goto yy125;
 	goto yy127;
 #line 264 "scanner.fs.re"
 
@@ -869,20 +869,20 @@ comment:
 #line 870 "<stdout>"
 
 	YYSETSTATE(21);
-	if((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
+	if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
 yyFillLabel21:
 	yych = *YYCURSOR;
-	if(yych <= ')') {
-		if(yych == 0x0A) goto yy135;
+	if (yych <= ')') {
+		if (yych == 0x0A) goto yy135;
 		goto yy137;
 	} else {
-		if(yych <= '*') goto yy132;
-		if(yych == '/') goto yy134;
+		if (yych <= '*') goto yy132;
+		if (yych == '/') goto yy134;
 		goto yy137;
 	}
 yy132:
 	++YYCURSOR;
-	if((yych = *YYCURSOR) == '/') goto yy140;
+	if ((yych = *YYCURSOR) == '/') goto yy140;
 yy133:
 #line 279 "scanner.fs.re"
 	{ if(cursor == eof) RETURN(0);
@@ -890,7 +890,7 @@ yy133:
 #line 891 "<stdout>"
 yy134:
 	yych = *++YYCURSOR;
-	if(yych == '*') goto yy138;
+	if (yych == '*') goto yy138;
 	goto yy133;
 yy135:
 	++YYCURSOR;
@@ -926,14 +926,14 @@ config:
 #line 927 "<stdout>"
 
 	YYSETSTATE(22);
-	if((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
+	if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
 yyFillLabel22:
 	yych = *YYCURSOR;
-	if(yych <= 0x1F) {
-		if(yych != 0x09) goto yy148;
+	if (yych <= 0x1F) {
+		if (yych != 0x09) goto yy148;
 	} else {
-		if(yych <= ' ') goto yy144;
-		if(yych == '=') goto yy146;
+		if (yych <= ' ') goto yy144;
+		if (yych == '=') goto yy146;
 		goto yy148;
 	}
 yy144:
@@ -963,22 +963,22 @@ yy148:
 yy150:
 	++YYCURSOR;
 	YYSETSTATE(23);
-	if(YYLIMIT == YYCURSOR) YYFILL(1);
+	if (YYLIMIT == YYCURSOR) YYFILL(1);
 yyFillLabel23:
 	yych = *YYCURSOR;
 yy151:
-	if(yych == 0x09) goto yy150;
-	if(yych == ' ') goto yy150;
+	if (yych == 0x09) goto yy150;
+	if (yych == ' ') goto yy150;
 	goto yy147;
 yy152:
 	++YYCURSOR;
 	YYSETSTATE(24);
-	if(YYLIMIT == YYCURSOR) YYFILL(1);
+	if (YYLIMIT == YYCURSOR) YYFILL(1);
 yyFillLabel24:
 	yych = *YYCURSOR;
 yy153:
-	if(yych == 0x09) goto yy152;
-	if(yych == ' ') goto yy152;
+	if (yych == 0x09) goto yy152;
+	if (yych == ' ') goto yy152;
 	goto yy145;
 #line 291 "scanner.fs.re"
 
@@ -988,33 +988,33 @@ value:
 #line 989 "<stdout>"
 
 	YYSETSTATE(25);
-	if((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
+	if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
 yyFillLabel25:
 	yych = *YYCURSOR;
-	if(yych <= '&') {
-		if(yych <= 0x0D) {
-			if(yych <= 0x08) goto yy162;
-			if(yych <= 0x0A) goto yy156;
-			if(yych <= 0x0C) goto yy162;
+	if (yych <= '&') {
+		if (yych <= 0x0D) {
+			if (yych <= 0x08) goto yy162;
+			if (yych <= 0x0A) goto yy156;
+			if (yych <= 0x0C) goto yy162;
 		} else {
-			if(yych <= ' ') {
-				if(yych <= 0x1F) goto yy162;
+			if (yych <= ' ') {
+				if (yych <= 0x1F) goto yy162;
 			} else {
-				if(yych == '"') goto yy164;
+				if (yych == '"') goto yy164;
 				goto yy162;
 			}
 		}
 	} else {
-		if(yych <= '/') {
-			if(yych <= '\'') goto yy166;
-			if(yych == '-') goto yy159;
+		if (yych <= '/') {
+			if (yych <= '\'') goto yy166;
+			if (yych == '-') goto yy159;
 			goto yy162;
 		} else {
-			if(yych <= '9') {
-				if(yych <= '0') goto yy157;
+			if (yych <= '9') {
+				if (yych <= '0') goto yy157;
 				goto yy160;
 			} else {
-				if(yych != ';') goto yy162;
+				if (yych != ';') goto yy162;
 			}
 		}
 	}
@@ -1028,15 +1028,15 @@ yy156:
 #line 1029 "<stdout>"
 yy157:
 	++YYCURSOR;
-	if((yych = *YYCURSOR) <= 0x0D) {
-		if(yych <= 0x08) goto yy162;
-		if(yych <= 0x0A) goto yy158;
-		if(yych <= 0x0C) goto yy162;
+	if ((yych = *YYCURSOR) <= 0x0D) {
+		if (yych <= 0x08) goto yy162;
+		if (yych <= 0x0A) goto yy158;
+		if (yych <= 0x0C) goto yy162;
 	} else {
-		if(yych <= ' ') {
-			if(yych <= 0x1F) goto yy162;
+		if (yych <= ' ') {
+			if (yych <= 0x1F) goto yy162;
 		} else {
-			if(yych != ';') goto yy162;
+			if (yych != ';') goto yy162;
 		}
 	}
 yy158:
@@ -1049,110 +1049,110 @@ yy158:
 #line 1050 "<stdout>"
 yy159:
 	yych = *++YYCURSOR;
-	if(yych <= '0') goto yy163;
-	if(yych >= ':') goto yy163;
+	if (yych <= '0') goto yy163;
+	if (yych >= ':') goto yy163;
 yy160:
 	++YYCURSOR;
 	YYSETSTATE(26);
-	if(YYLIMIT == YYCURSOR) YYFILL(1);
+	if (YYLIMIT == YYCURSOR) YYFILL(1);
 yyFillLabel26:
 	yych = *YYCURSOR;
-	if(yych <= 0x1F) {
-		if(yych <= 0x0A) {
-			if(yych >= 0x09) goto yy158;
+	if (yych <= 0x1F) {
+		if (yych <= 0x0A) {
+			if (yych >= 0x09) goto yy158;
 		} else {
-			if(yych == 0x0D) goto yy158;
+			if (yych == 0x0D) goto yy158;
 		}
 	} else {
-		if(yych <= '9') {
-			if(yych <= ' ') goto yy158;
-			if(yych >= '0') goto yy160;
+		if (yych <= '9') {
+			if (yych <= ' ') goto yy158;
+			if (yych >= '0') goto yy160;
 		} else {
-			if(yych == ';') goto yy158;
+			if (yych == ';') goto yy158;
 		}
 	}
 yy162:
 	++YYCURSOR;
 	YYSETSTATE(27);
-	if(YYLIMIT == YYCURSOR) YYFILL(1);
+	if (YYLIMIT == YYCURSOR) YYFILL(1);
 yyFillLabel27:
 	yych = *YYCURSOR;
 yy163:
-	if(yych <= 0x0D) {
-		if(yych <= 0x08) goto yy162;
-		if(yych <= 0x0A) goto yy156;
-		if(yych <= 0x0C) goto yy162;
+	if (yych <= 0x0D) {
+		if (yych <= 0x08) goto yy162;
+		if (yych <= 0x0A) goto yy156;
+		if (yych <= 0x0C) goto yy162;
 		goto yy156;
 	} else {
-		if(yych <= ' ') {
-			if(yych <= 0x1F) goto yy162;
+		if (yych <= ' ') {
+			if (yych <= 0x1F) goto yy162;
 			goto yy156;
 		} else {
-			if(yych == ';') goto yy156;
+			if (yych == ';') goto yy156;
 			goto yy162;
 		}
 	}
 yy164:
 	YYMARKER = ++YYCURSOR;
 	YYSETSTATE(28);
-	if(YYLIMIT == YYCURSOR) YYFILL(1);
+	if (YYLIMIT == YYCURSOR) YYFILL(1);
 yyFillLabel28:
 	yych = *YYCURSOR;
-	if(yych <= ' ') {
-		if(yych <= 0x0A) {
-			if(yych <= 0x08) goto yy164;
-			if(yych <= 0x09) goto yy174;
+	if (yych <= ' ') {
+		if (yych <= 0x0A) {
+			if (yych <= 0x08) goto yy164;
+			if (yych <= 0x09) goto yy174;
 			goto yy156;
 		} else {
-			if(yych == 0x0D) goto yy174;
-			if(yych <= 0x1F) goto yy164;
+			if (yych == 0x0D) goto yy174;
+			if (yych <= 0x1F) goto yy164;
 			goto yy174;
 		}
 	} else {
-		if(yych <= ':') {
-			if(yych == '"') goto yy162;
+		if (yych <= ':') {
+			if (yych == '"') goto yy162;
 			goto yy164;
 		} else {
-			if(yych <= ';') goto yy174;
-			if(yych == '\\') goto yy176;
+			if (yych <= ';') goto yy174;
+			if (yych == '\\') goto yy176;
 			goto yy164;
 		}
 	}
 yy166:
 	YYMARKER = ++YYCURSOR;
 	YYSETSTATE(29);
-	if(YYLIMIT == YYCURSOR) YYFILL(1);
+	if (YYLIMIT == YYCURSOR) YYFILL(1);
 yyFillLabel29:
 	yych = *YYCURSOR;
-	if(yych <= ' ') {
-		if(yych <= 0x0A) {
-			if(yych <= 0x08) goto yy166;
-			if(yych >= 0x0A) goto yy156;
+	if (yych <= ' ') {
+		if (yych <= 0x0A) {
+			if (yych <= 0x08) goto yy166;
+			if (yych >= 0x0A) goto yy156;
 		} else {
-			if(yych == 0x0D) goto yy168;
-			if(yych <= 0x1F) goto yy166;
+			if (yych == 0x0D) goto yy168;
+			if (yych <= 0x1F) goto yy166;
 		}
 	} else {
-		if(yych <= ':') {
-			if(yych == '\'') goto yy162;
+		if (yych <= ':') {
+			if (yych == '\'') goto yy162;
 			goto yy166;
 		} else {
-			if(yych <= ';') goto yy168;
-			if(yych == '\\') goto yy171;
+			if (yych <= ';') goto yy168;
+			if (yych == '\\') goto yy171;
 			goto yy166;
 		}
 	}
 yy168:
 	++YYCURSOR;
 	YYSETSTATE(30);
-	if(YYLIMIT == YYCURSOR) YYFILL(1);
+	if (YYLIMIT == YYCURSOR) YYFILL(1);
 yyFillLabel30:
 	yych = *YYCURSOR;
-	if(yych <= '&') {
-		if(yych != 0x0A) goto yy168;
+	if (yych <= '&') {
+		if (yych != 0x0A) goto yy168;
 	} else {
-		if(yych <= '\'') goto yy172;
-		if(yych == '\\') goto yy173;
+		if (yych <= '\'') goto yy172;
+		if (yych == '\\') goto yy173;
 		goto yy168;
 	}
 yy170:
@@ -1161,24 +1161,24 @@ yy170:
 yy171:
 	YYMARKER = ++YYCURSOR;
 	YYSETSTATE(31);
-	if(YYLIMIT == YYCURSOR) YYFILL(1);
+	if (YYLIMIT == YYCURSOR) YYFILL(1);
 yyFillLabel31:
 	yych = *YYCURSOR;
-	if(yych <= 0x0D) {
-		if(yych <= 0x09) {
-			if(yych <= 0x08) goto yy166;
+	if (yych <= 0x0D) {
+		if (yych <= 0x09) {
+			if (yych <= 0x08) goto yy166;
 			goto yy168;
 		} else {
-			if(yych <= 0x0A) goto yy156;
-			if(yych <= 0x0C) goto yy166;
+			if (yych <= 0x0A) goto yy156;
+			if (yych <= 0x0C) goto yy166;
 			goto yy168;
 		}
 	} else {
-		if(yych <= ' ') {
-			if(yych <= 0x1F) goto yy166;
+		if (yych <= ' ') {
+			if (yych <= 0x1F) goto yy166;
 			goto yy168;
 		} else {
-			if(yych == ';') goto yy168;
+			if (yych == ';') goto yy168;
 			goto yy166;
 		}
 	}
@@ -1188,56 +1188,56 @@ yy172:
 yy173:
 	++YYCURSOR;
 	YYSETSTATE(32);
-	if(YYLIMIT == YYCURSOR) YYFILL(1);
+	if (YYLIMIT == YYCURSOR) YYFILL(1);
 yyFillLabel32:
 	yych = *YYCURSOR;
-	if(yych == 0x0A) goto yy170;
+	if (yych == 0x0A) goto yy170;
 	goto yy168;
 yy174:
 	++YYCURSOR;
 	YYSETSTATE(33);
-	if(YYLIMIT == YYCURSOR) YYFILL(1);
+	if (YYLIMIT == YYCURSOR) YYFILL(1);
 yyFillLabel33:
 	yych = *YYCURSOR;
-	if(yych <= '!') {
-		if(yych == 0x0A) goto yy170;
+	if (yych <= '!') {
+		if (yych == 0x0A) goto yy170;
 		goto yy174;
 	} else {
-		if(yych <= '"') goto yy172;
-		if(yych == '\\') goto yy177;
+		if (yych <= '"') goto yy172;
+		if (yych == '\\') goto yy177;
 		goto yy174;
 	}
 yy176:
 	YYMARKER = ++YYCURSOR;
 	YYSETSTATE(34);
-	if(YYLIMIT == YYCURSOR) YYFILL(1);
+	if (YYLIMIT == YYCURSOR) YYFILL(1);
 yyFillLabel34:
 	yych = *YYCURSOR;
-	if(yych <= 0x0D) {
-		if(yych <= 0x09) {
-			if(yych <= 0x08) goto yy164;
+	if (yych <= 0x0D) {
+		if (yych <= 0x09) {
+			if (yych <= 0x08) goto yy164;
 			goto yy174;
 		} else {
-			if(yych <= 0x0A) goto yy156;
-			if(yych <= 0x0C) goto yy164;
+			if (yych <= 0x0A) goto yy156;
+			if (yych <= 0x0C) goto yy164;
 			goto yy174;
 		}
 	} else {
-		if(yych <= ' ') {
-			if(yych <= 0x1F) goto yy164;
+		if (yych <= ' ') {
+			if (yych <= 0x1F) goto yy164;
 			goto yy174;
 		} else {
-			if(yych == ';') goto yy174;
+			if (yych == ';') goto yy174;
 			goto yy164;
 		}
 	}
 yy177:
 	++YYCURSOR;
 	YYSETSTATE(35);
-	if(YYLIMIT == YYCURSOR) YYFILL(1);
+	if (YYLIMIT == YYCURSOR) YYFILL(1);
 yyFillLabel35:
 	yych = *YYCURSOR;
-	if(yych == 0x0A) goto yy170;
+	if (yych == 0x0A) goto yy170;
 	goto yy174;
 #line 305 "scanner.fs.re"
 

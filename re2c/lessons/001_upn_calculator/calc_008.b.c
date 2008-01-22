@@ -100,22 +100,22 @@ int scan(char *p)
 			};
 
 			curr = (unsigned char)*p;
-			if(curr <= '*') {
-				if(curr <= 0x09) {
-					if(curr <= 0x00) goto scan11;
-					if(curr <= 0x08) goto scan13;
+			if (curr <= '*') {
+				if (curr <= 0x09) {
+					if (curr <= 0x00) goto scan11;
+					if (curr <= 0x08) goto scan13;
 				} else {
-					if(curr != ' ') goto scan13;
+					if (curr != ' ') goto scan13;
 				}
 			} else {
-				if(curr <= '-') {
-					if(curr <= '+') goto scan7;
-					if(curr <= ',') goto scan13;
+				if (curr <= '-') {
+					if (curr <= '+') goto scan7;
+					if (curr <= ',') goto scan13;
 					goto scan9;
 				} else {
-					if(curr <= '/') goto scan13;
-					if(curr <= '0') goto scan4;
-					if(curr <= '9') goto scan6;
+					if (curr <= '/') goto scan13;
+					if (curr <= '0') goto scan4;
+					if (curr <= '9') goto scan6;
 					goto scan13;
 				}
 			}
@@ -128,8 +128,8 @@ scan3:
 #line 129 "<stdout>"
 scan4:
 			++p;
-			if((curr = (unsigned char)*p) <= '/') goto scan5;
-			if(curr <= '9') goto scan17;
+			if ((curr = (unsigned char)*p) <= '/') goto scan5;
+			if (curr <= '9') goto scan17;
 scan5:
 #line 105 "calc_008.b.re"
 			{ res = push_num(t, p, 10); continue; }
@@ -161,15 +161,15 @@ scan15:
 			++p;
 			curr = (unsigned char)*p;
 scan16:
-			if(yybm[0+curr] & 64) {
+			if (yybm[0+curr] & 64) {
 				goto scan15;
 			}
 			goto scan5;
 scan17:
 			++p;
 			curr = (unsigned char)*p;
-			if(curr <= '/') goto scan19;
-			if(curr <= '9') goto scan17;
+			if (curr <= '/') goto scan19;
+			if (curr <= '9') goto scan17;
 scan19:
 #line 104 "calc_008.b.re"
 			{ res = push_num(t, p, 8);	continue; }
@@ -178,7 +178,7 @@ scan20:
 			++p;
 			curr = (unsigned char)*p;
 scan21:
-			if(yybm[0+curr] & 128) {
+			if (yybm[0+curr] & 128) {
 				goto scan20;
 			}
 			goto scan3;

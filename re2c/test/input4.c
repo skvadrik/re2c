@@ -5,7 +5,7 @@
 {
 	YYCTYPE yych;
 
-	if(YYLIMIT == YYCURSOR) YYFILL(1);
+	if (YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	goto yy3;
 #line 3 "input4.re"

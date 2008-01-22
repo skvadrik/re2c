@@ -61,7 +61,7 @@ std:
 {
 	YYCTYPE yych;
 
-	if((YYLIMIT - YYCURSOR) < 4) YYFILL(4);
+	if ((YYLIMIT - YYCURSOR) < 4) YYFILL(4);
 	yych = *YYCURSOR;
 	switch(yych) {
 	case 0x0A:	goto yy6;
@@ -125,7 +125,7 @@ yy11:
 	}
 yy12:
 	++YYCURSOR;
-	if((YYLIMIT - YYCURSOR) < 3) YYFILL(3);
+	if ((YYLIMIT - YYCURSOR) < 3) YYFILL(3);
 	yych = *YYCURSOR;
 	switch(yych) {
 	case '.':	goto yy11;
