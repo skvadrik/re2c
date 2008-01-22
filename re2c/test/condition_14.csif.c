@@ -78,7 +78,7 @@ void scan(Scanner *s)
 {
 	s->tok = s->cur;
 
-	switch(s->state) {
+	switch (s->state) {
 	default: goto yy0;
 	case 0: goto yyFillLabel0;
 	case 1: goto yyFillLabel1;
@@ -189,7 +189,7 @@ yy24:
 		continue;
 yy26:
 		s->yych = *++s->cur;
-		switch(s->yych) {
+		switch (s->yych) {
 		case '!':	goto yy41;
 		case '\'':	goto yy39;
 		case '(':	goto yy27;

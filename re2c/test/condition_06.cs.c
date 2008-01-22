@@ -167,7 +167,7 @@ yy17:
 #line 168 "<stdout>"
 yy19:
 			yych = *++s->cur;
-			switch(yych) {
+			switch (yych) {
 			case '!':	goto yy35;
 			case '\'':	goto yy33;
 			case '(':	goto yy21;

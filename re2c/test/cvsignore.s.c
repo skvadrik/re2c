@@ -47,7 +47,7 @@ loop:
 	yych = *YYCURSOR;
 	if (yych != '$') goto yy4;
 	yych = *(YYMARKER = ++YYCURSOR);
-	switch(yych) {
+	switch (yych) {
 	case 'D':	goto yy10;
 	case 'I':	goto yy9;
 	case 'L':	goto yy8;

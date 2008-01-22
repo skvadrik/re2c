@@ -7,7 +7,7 @@
 
 	if (YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
-	switch(yych) {
+	switch (yych) {
 	case 0x0A:	goto yy4;
 	default:	goto yy2;
 	}

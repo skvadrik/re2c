@@ -8,7 +8,7 @@ char *scan(char *p)
 		unsigned char yych;
 
 		yych = (unsigned char)*p;
-		switch(yych) {
+		switch (yych) {
 		case '0':
 		case '1':
 		case '2':
@@ -38,7 +38,7 @@ yy6:
 		++p;
 		yych = (unsigned char)*p;
 yy7:
-		switch(yych) {
+		switch (yych) {
 		case '0':
 		case '1':
 		case '2':

@@ -21,7 +21,7 @@ const char *q;
 
 	if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
 	yych = *YYCURSOR;
-	switch(yych) {
+	switch (yych) {
 	case 0x0A:	goto yy4;
 	case 'A':
 	case 'a':	goto yy2;
@@ -29,7 +29,7 @@ const char *q;
 	}
 yy2:
 	yych = *(YYMARKER = ++YYCURSOR);
-	switch(yych) {
+	switch (yych) {
 	case 0x0A:	goto yy7;
 	case 'A':
 	case 'a':	goto yy8;
@@ -55,7 +55,7 @@ yy8:
 	++YYCURSOR;
 	if (YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
-	switch(yych) {
+	switch (yych) {
 	case 0x0A:	goto yy7;
 	case 'A':
 	case 'a':	goto yy8;

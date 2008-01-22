@@ -94,7 +94,7 @@ echo:
 
 #line 96 "<stdout>"
 
-	switch(YYGETSTATE()) {
+	switch (YYGETSTATE()) {
 	default: goto yy0;
 	case 0: goto yyFillLabel0;
 	case 1: goto yyFillLabel1;

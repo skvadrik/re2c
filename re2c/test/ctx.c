@@ -52,7 +52,7 @@ std:
 
 	if ((YYLIMIT - YYCURSOR) < 3) YYFILL(3);
 	yych = *YYCURSOR;
-	switch(yych) {
+	switch (yych) {
 	case 0x09:
 	case ' ':	goto yy6;
 	case 0x0A:	goto yy8;
@@ -73,7 +73,7 @@ std:
 yy2:
 	YYCTXMARKER = YYCURSOR + 1;
 	++YYCURSOR;
-	switch((yych = *YYCURSOR)) {
+	switch ((yych = *YYCURSOR)) {
 	case '0':
 	case '2':
 	case '3':
@@ -122,7 +122,7 @@ yy10:
 	if (YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 yy11:
-	switch(yych) {
+	switch (yych) {
 	case '0':
 	case '1':
 	case '2':
@@ -139,7 +139,7 @@ yy12:
 	++YYCURSOR;
 	if (YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
-	switch(yych) {
+	switch (yych) {
 	case '0':
 	case '1':
 	case '2':
@@ -159,7 +159,7 @@ yy14:
 #line 160 "<stdout>"
 yy15:
 	++YYCURSOR;
-	switch((yych = *YYCURSOR)) {
+	switch ((yych = *YYCURSOR)) {
 	case '0':
 	case '1':
 	case '2':

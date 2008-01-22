@@ -4,7 +4,7 @@
 #line 5 "<stdout>"
 {
 	YYCTYPE yych;
-	switch(YYGETCONDITION()) {
+	switch (YYGETCONDITION()) {
 	case yyca: goto yyc_a;
 	case yycb: goto yyc_b;
 	}
@@ -13,14 +13,14 @@ yyc_a:
 
 	if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
 	yych = *YYCURSOR;
-	switch(yych) {
+	switch (yych) {
 	case 'a':	goto yy3;
 	default:	goto yy2;
 	}
 yy2:
 yy3:
 	yych = *++YYCURSOR;
-	switch(yych) {
+	switch (yych) {
 	case 'b':	goto yy4;
 	default:	goto yy2;
 	}
@@ -33,14 +33,14 @@ yy4:
 yyc_b:
 	if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
 	yych = *YYCURSOR;
-	switch(yych) {
+	switch (yych) {
 	case 'a':	goto yy9;
 	default:	goto yy8;
 	}
 yy8:
 yy9:
 	yych = *++YYCURSOR;
-	switch(yych) {
+	switch (yych) {
 	case 'b':	goto yy10;
 	default:	goto yy8;
 	}

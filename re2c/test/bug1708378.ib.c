@@ -210,7 +210,7 @@ yy15:
 yy16:
 	yyaccept = 0;
 	yych = *(YYMARKER = ++YYCURSOR);
-	switch(yych) {
+	switch (yych) {
 	case 'a':	goto yy782;
 	case 'e':	goto yy781;
 	case 'i':	goto yy780;
@@ -1873,7 +1873,7 @@ yy776:
 	goto yy20;
 yy777:
 	yych = *++YYCURSOR;
-	switch(yych) {
+	switch (yych) {
 	case 'a':	goto yy2059;
 	case 'e':	goto yy2060;
 	case 'i':	goto yy2061;
@@ -8263,7 +8263,7 @@ yy3799:
 	yych = *++YYCURSOR;
 	if (yych != ' ') goto yy20;
 	yych = *++YYCURSOR;
-	switch(yych) {
+	switch (yych) {
 	case 'a':	goto yy3806;
 	case 'g':	goto yy3805;
 	case 'l':	goto yy3804;
@@ -8941,7 +8941,7 @@ yy4134:
 	goto yy20;
 yy4135:
 	yych = *++YYCURSOR;
-	switch(yych) {
+	switch (yych) {
 	case 'c':	goto yy4734;
 	case 'i':	goto yy4735;
 	case 'o':	goto yy4736;

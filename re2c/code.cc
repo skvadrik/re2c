@@ -644,7 +644,7 @@ void Accept::emit(std::ostream &o, uint ind, bool &readCh, const std::string&) c
 			}
 			else
 			{
-				o << indent(ind) << "switch(" << mapCodeName["yyaccept"] << ") {\n";
+				o << indent(ind) << "switch (" << mapCodeName["yyaccept"] << ") {\n";
 		
 				for (RuleMap::const_iterator it = mapRules.begin(); it != mapRules.end(); ++it)
 				{
@@ -842,12 +842,12 @@ void Go::genSwitch(std::ostream &o, uint ind, const State *from, const State *ne
 
 		if (readCh)
 		{
-			o << indent(ind) << "switch((" << mapCodeName["yych"] << " = " << yychConversion << "*" << mapCodeName["YYCURSOR"] << ")) {\n";
+			o << indent(ind) << "switch ((" << mapCodeName["yych"] << " = " << yychConversion << "*" << mapCodeName["YYCURSOR"] << ")) {\n";
 			readCh = false;
 		}
 		else
 		{
-			o << indent(ind) << "switch(" << mapCodeName["yych"] << ") {\n";
+			o << indent(ind) << "switch (" << mapCodeName["yych"] << ") {\n";
 		}
 
 		while (t != &sP[0])
@@ -1834,7 +1834,7 @@ void genGetStateGoto(std::ostream &o, uint& ind, uint start_label)
 		}
 		else
 		{
-			o << indent(ind) << "switch(" << genGetState() << ") {\n";
+			o << indent(ind) << "switch (" << genGetState() << ") {\n";
 			if (bUseStateAbort)
 			{
 				o << indent(ind) << "default: abort();\n";
@@ -1921,7 +1921,7 @@ void genCondGoto(std::ostream &o, uint ind, const RegExpMap& specMap)
 			}
 			else
 			{
-				o << indent(ind) << "switch(" << genGetCondition() << ") {\n";
+				o << indent(ind) << "switch (" << genGetCondition() << ") {\n";
 	
 				for(RegExpMap::const_iterator it = specMap.begin(); it != specMap.end(); ++it)
 				{

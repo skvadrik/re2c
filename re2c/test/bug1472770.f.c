@@ -27,7 +27,7 @@ start:
 
 #line 29 "<stdout>"
 
-	switch(YYGETSTATE()) {
+	switch (YYGETSTATE()) {
 	default: goto yy0;
 	case 0: goto yyFillLabel0;
 	}
@@ -39,7 +39,7 @@ yy0:
 	if (YYLIMIT == YYCURSOR) YYFILL(1);
 yyFillLabel0:
 	yych = *YYCURSOR;
-	switch(yych) {
+	switch (yych) {
 	case 0x00:	goto yy5;
 	case 0x0A:	goto yy3;
 	default:	goto yy1;

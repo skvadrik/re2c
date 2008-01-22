@@ -180,7 +180,7 @@ yy24:
 			}
 yy26:
 		s->yych = *++s->cur;
-		switch(s->yych) {
+		switch (s->yych) {
 		case '!':	goto yy41;
 		case '\'':	goto yy39;
 		case '(':	goto yy27;

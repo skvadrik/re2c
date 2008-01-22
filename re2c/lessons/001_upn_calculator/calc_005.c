@@ -73,7 +73,7 @@ int scan(char *s, int l)
 
 			if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
 			yych = *YYCURSOR;
-			switch(yych) {
+			switch (yych) {
 			case 0x09:
 			case ' ':	goto yy2;
 			case '+':	goto yy7;
@@ -100,7 +100,7 @@ yy3:
 #line 101 "<stdout>"
 yy4:
 			++YYCURSOR;
-			switch((yych = *YYCURSOR)) {
+			switch ((yych = *YYCURSOR)) {
 			case '0':
 			case '1':
 			case '2':
@@ -140,7 +140,7 @@ yy13:
 			if (YYLIMIT == YYCURSOR) YYFILL(1);
 			yych = *YYCURSOR;
 yy14:
-			switch(yych) {
+			switch (yych) {
 			case '0':
 			case '1':
 			case '2':
@@ -157,7 +157,7 @@ yy15:
 			++YYCURSOR;
 			if (YYLIMIT == YYCURSOR) YYFILL(1);
 			yych = *YYCURSOR;
-			switch(yych) {
+			switch (yych) {
 			case '0':
 			case '1':
 			case '2':
@@ -179,7 +179,7 @@ yy18:
 			if (YYLIMIT == YYCURSOR) YYFILL(1);
 			yych = *YYCURSOR;
 yy19:
-			switch(yych) {
+			switch (yych) {
 			case 0x09:
 			case ' ':	goto yy18;
 			default:	goto yy3;

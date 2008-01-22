@@ -7,7 +7,7 @@
 
 	if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
 	yych = *YYCURSOR;
-	switch(yych) {
+	switch (yych) {
 	case 0x00:	goto yy2;
 	case 0x01:	goto yy4;
 	case 0x02:	goto yy16;
@@ -54,7 +54,7 @@ yy12:
 #line 55 "<stdout>"
 yy14:
 	++YYCURSOR;
-	switch((yych = *YYCURSOR)) {
+	switch ((yych = *YYCURSOR)) {
 	case '7':	goto yy27;
 	default:	goto yy15;
 	}

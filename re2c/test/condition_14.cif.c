@@ -78,7 +78,7 @@ void scan(Scanner *s)
 {
 	s->tok = s->cur;
 
-	switch(s->state) {
+	switch (s->state) {
 	default: goto yy0;
 	case 0: goto yyFillLabel0;
 	case 1: goto yyFillLabel1;
@@ -91,7 +91,7 @@ void scan(Scanner *s)
 
 
 yy0:
-		switch(s->cond) {
+		switch (s->cond) {
 		case EStateComment: goto yyc_Comment;
 		case EStateNormal: goto yyc_Normal;
 		case EStateSkiptoeol: goto yyc_Skiptoeol;
@@ -104,13 +104,13 @@ yyc_Comment:
 		if ((s->lim - s->cur) < 2) if (fill(s, 2) == ~0) break;
 yyFillLabel0:
 		s->yych = *s->cur;
-		switch(s->yych) {
+		switch (s->yych) {
 		case '*':	goto yy2;
 		default:	goto yy4;
 		}
 yy2:
 		++s->cur;
-		switch((s->yych = *s->cur)) {
+		switch ((s->yych = *s->cur)) {
 		case '/':	goto yy5;
 		default:	goto yy3;
 		}
@@ -129,7 +129,7 @@ yyc_Normal:
 		if ((s->lim - s->cur) < 4) if (fill(s, 4) == ~0) break;
 yyFillLabel1:
 		s->yych = *s->cur;
-		switch(s->yych) {
+		switch (s->yych) {
 		case '"':	goto yy13;
 		case '\'':	goto yy12;
 		case '/':	goto yy11;
@@ -138,7 +138,7 @@ yyFillLabel1:
 		}
 yy9:
 		s->yych = *(s->tok = ++s->cur);
-		switch(s->yych) {
+		switch (s->yych) {
 		case '?':	goto yy26;
 		default:	goto yy10;
 		}
@@ -147,14 +147,14 @@ yy10:
 		continue;
 yy11:
 		s->yych = *++s->cur;
-		switch(s->yych) {
+		switch (s->yych) {
 		case '*':	goto yy24;
 		case '/':	goto yy22;
 		default:	goto yy10;
 		}
 yy12:
 		s->yych = *(s->tok = ++s->cur);
-		switch(s->yych) {
+		switch (s->yych) {
 		case '"':	goto yy16;
 		case '\\':	goto yy18;
 		default:	goto yy10;
@@ -169,7 +169,7 @@ yy15:
 		goto yy10;
 yy16:
 		s->yych = *++s->cur;
-		switch(s->yych) {
+		switch (s->yych) {
 		case '\'':	goto yy20;
 		default:	goto yy17;
 		}
@@ -178,13 +178,13 @@ yy17:
 		goto yy10;
 yy18:
 		s->yych = *++s->cur;
-		switch(s->yych) {
+		switch (s->yych) {
 		case '"':	goto yy19;
 		default:	goto yy17;
 		}
 yy19:
 		s->yych = *++s->cur;
-		switch(s->yych) {
+		switch (s->yych) {
 		case '\'':	goto yy20;
 		default:	goto yy17;
 		}
@@ -202,7 +202,7 @@ yy24:
 		continue;
 yy26:
 		s->yych = *++s->cur;
-		switch(s->yych) {
+		switch (s->yych) {
 		case '!':	goto yy41;
 		case '\'':	goto yy39;
 		case '(':	goto yy27;
@@ -256,7 +256,7 @@ yyc_Skiptoeol:
 		if ((s->lim - s->cur) < 5) if (fill(s, 5) == ~0) break;
 yyFillLabel2:
 		s->yych = *s->cur;
-		switch(s->yych) {
+		switch (s->yych) {
 		case 0x0A:	goto yy51;
 		case 0x0D:	goto yy50;
 		case '?':	goto yy47;
@@ -265,7 +265,7 @@ yyFillLabel2:
 		}
 yy47:
 		s->yych = *(s->tok = ++s->cur);
-		switch(s->yych) {
+		switch (s->yych) {
 		case '?':	goto yy60;
 		default:	goto yy48;
 		}
@@ -273,14 +273,14 @@ yy48:
 		continue;
 yy49:
 		s->yych = *(s->tok = ++s->cur);
-		switch(s->yych) {
+		switch (s->yych) {
 		case 0x0A:	goto yy58;
 		case 0x0D:	goto yy56;
 		default:	goto yy48;
 		}
 yy50:
 		s->yych = *++s->cur;
-		switch(s->yych) {
+		switch (s->yych) {
 		case 0x0A:	goto yy54;
 		default:	goto yy48;
 		}
@@ -300,7 +300,7 @@ yy54:
 		continue;
 yy56:
 		s->yych = *++s->cur;
-		switch(s->yych) {
+		switch (s->yych) {
 		case 0x0A:	goto yy58;
 		default:	goto yy57;
 		}
@@ -312,20 +312,20 @@ yy58:
 		continue;
 yy60:
 		s->yych = *++s->cur;
-		switch(s->yych) {
+		switch (s->yych) {
 		case '/':	goto yy61;
 		default:	goto yy57;
 		}
 yy61:
 		s->yych = *++s->cur;
-		switch(s->yych) {
+		switch (s->yych) {
 		case 0x0A:	goto yy63;
 		case 0x0D:	goto yy62;
 		default:	goto yy57;
 		}
 yy62:
 		s->yych = *++s->cur;
-		switch(s->yych) {
+		switch (s->yych) {
 		case 0x0A:	goto yy63;
 		default:	goto yy57;
 		}
@@ -338,14 +338,14 @@ yyc_String:
 		if ((s->lim - s->cur) < 2) if (fill(s, 2) == ~0) break;
 yyFillLabel3:
 		s->yych = *s->cur;
-		switch(s->yych) {
+		switch (s->yych) {
 		case '"':	goto yy69;
 		case '\\':	goto yy67;
 		default:	goto yy71;
 		}
 yy67:
 		++s->cur;
-		switch((s->yych = *s->cur)) {
+		switch ((s->yych = *s->cur)) {
 		case 0x0A:	goto yy68;
 		default:	goto yy72;
 		}

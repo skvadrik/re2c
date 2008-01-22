@@ -48,7 +48,7 @@ std:
 
 	if ((s.lim - s.cur) < 3) fill();
 	curr = *s.cur;
-	switch(curr) {
+	switch (curr) {
 	case 0x09:
 	case ' ':	goto xx6;
 	case 0x0A:	goto xx8;
@@ -69,7 +69,7 @@ std:
 xx2:
 	s.ctx = s.cur + 1;
 	++s.cur;
-	switch((curr = *s.cur)) {
+	switch ((curr = *s.cur)) {
 	case '0':
 	case '2':
 	case '3':
@@ -118,7 +118,7 @@ xx10:
 	if (s.lim == s.cur) fill();
 	curr = *s.cur;
 xx11:
-	switch(curr) {
+	switch (curr) {
 	case '0':
 	case '1':
 	case '2':
@@ -135,7 +135,7 @@ xx12:
 	++s.cur;
 	if (s.lim == s.cur) fill();
 	curr = *s.cur;
-	switch(curr) {
+	switch (curr) {
 	case '0':
 	case '1':
 	case '2':
@@ -155,7 +155,7 @@ xx14:
 #line 156 "<stdout>"
 xx15:
 	++s.cur;
-	switch((curr = *s.cur)) {
+	switch ((curr = *s.cur)) {
 	case '0':
 	case '1':
 	case '2':

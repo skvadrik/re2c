@@ -13,7 +13,7 @@ char *scan(char *p)
 
 #line 15 "<stdout>"
 
-	switch(YYGETSTATE()) {
+	switch (YYGETSTATE()) {
 	default: goto yy0;
 	case 0: goto yyFillLabel0;
 	case 1: goto yyFillLabel1;
@@ -24,7 +24,7 @@ yy0:
 	if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
 yyFillLabel0:
 	yych = *YYCURSOR;
-	switch(yych) {
+	switch (yych) {
 	case '0':
 	case '1':
 	case '2':
@@ -57,7 +57,7 @@ yy6:
 yyFillLabel1:
 	yych = *YYCURSOR;
 yy7:
-	switch(yych) {
+	switch (yych) {
 	case '0':
 	case '1':
 	case '2':
