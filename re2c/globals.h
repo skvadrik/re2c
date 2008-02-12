@@ -51,6 +51,7 @@ extern std::string yychConversion;
 extern std::string yyFillLength;
 extern std::string yySetConditionParam;
 extern std::string yySetStateParam;
+extern std::string yySetupRule;
 extern uint maxFill;
 extern uint next_label;
 extern uint cGotoThreshold;

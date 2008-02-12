@@ -496,6 +496,7 @@ typedef std::pair<int, RegExp*>         NRegExp;
 typedef std::map<std::string, NRegExp>  RegExpMap;
 typedef std::vector<std::string>        RegExpIndices;
 typedef std::list<RuleOp*>              RuleOpList;
+typedef std::map<std::string, std::string> StringMap;
 
 extern void genCode(std::ostream&, uint&, RegExp*, const RegExpMap*, const std::string&, bool, bool&);
 extern void genGetStateGoto(std::ostream&, uint&, uint);

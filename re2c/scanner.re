@@ -307,6 +307,9 @@ scan:
 	"<>" / (ws* ("{" | "=>" | ":=")) {
 					RETURN(NOCOND);
 				}
+	"<!"		{
+					RETURN(SETUP);
+				}
 	[<>,()|=;/\\]	{
 					RETURN(*tok);
 				}

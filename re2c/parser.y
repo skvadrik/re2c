@@ -10,6 +10,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <iostream>
+#include <set>
 
 #include "globals.h"
 #include "parser.h"
@@ -31,6 +32,7 @@ static re2c::RegExpMap  specMap;
 static RegExp           *spec, *specNone = NULL;
 static RuleOpList       specStar;
 static Scanner          *in = NULL;
+static StringMap        ruleSetupMap;
 
 /* Bison version 1.875 emits a definition that is not working
  * with several g++ version. Hence we disable it here.
@@ -99,6 +101,25 @@ void context_rule(CondList *clist, RegExp *expr, RegExp *look, Str *newcond, Tok
 	delete code;
 }
 
+void setup_rule(CondList *clist, Token *code)
+{
+	assert(clist);
+	assert(code);
+	context_check(clist);
+	if (bFirstPass) {
+		for(CondList::const_iterator it = clist->begin(); it != clist->end(); ++it)
+		{
+			if (ruleSetupMap.find(*it) != ruleSetupMap.end())
+			{
+				in->fatalf("code to setup rule '%s' is already defined", it->c_str());
+			}
+			ruleSetupMap[*it] = code->text.to_string();
+		}
+	}
+	delete clist;
+	delete code;
+}
+
 %}
 
 %start	spec
@@ -115,9 +136,9 @@ void context_rule(CondList *clist, RegExp *expr, RegExp *look, Str *newcond, Tok
 };
 
 %token		CLOSESIZE	CLOSE	STAR	NOCOND	ID	CODE	RANGE	STRING
-%token		CONFIG	VALUE	NUMBER
+%token		CONFIG		VALUE	NUMBER	SETUP
 
-%type	<op>		CLOSE	STAR
+%type	<op>		CLOSE	STAR	SETUP
 %type	<op>		close
 %type	<extop>		CLOSESIZE
 %type	<symbol>	ID
@@ -246,6 +267,16 @@ rule:
 			Token *token = new Token(NULL, in->get_line(), $3);
 			delete $3;
 			$$ = specNone = new RuleOp(new NullOp(), new NullOp(), token, accept++);
+		}
+	|	SETUP STAR '>' CODE
+		{
+			CondList *clist = new CondList();
+			clist->insert("*");
+			setup_rule(clist, $4);
+		}
+	|	SETUP cond '>' CODE
+		{
+			setup_rule($2, $4);
 		}
 ;
 
@@ -430,20 +461,21 @@ void parse(Scanner& i, std::ostream& o, std::ostream* h)
 	o << " */\n";
 	o << sourceFileInfo;
 	
-	while(i.echo())
+	while (i.echo())
 	{
 		bool bPrologBrace = false;
 		yyparse();
 		if (cFlag)
 		{
 			RegExpMap::iterator it;
+			StringMap::const_iterator itRuleSetup;
 
 			if (!specStar.empty())
 			{
-				for(it = specMap.begin(); it != specMap.end(); ++it)
+				for (it = specMap.begin(); it != specMap.end(); ++it)
 				{
 					assert(it->second.second);
-					for(RuleOpList::const_iterator itOp = specStar.begin(); itOp != specStar.end(); ++itOp)
+					for (RuleOpList::const_iterator itOp = specStar.begin(); itOp != specStar.end(); ++itOp)
 					{
 						it->second.second = mkAlt((*itOp)->copy(accept++), it->second.second);
 					}
@@ -461,16 +493,46 @@ void parse(Scanner& i, std::ostream& o, std::ostream* h)
 			{
 				// We reserved 0 for specNone but it is not present,
 				// so we can decrease all specs.
-				for(it = specMap.begin(); it != specMap.end(); ++it)
+				for (it = specMap.begin(); it != specMap.end(); ++it)
 				{
 					it->second.first--;
 				}
 			}
 
 			size_t nCount = specMap.size();
-			for(it = specMap.begin(); it != specMap.end(); ++it)
+
+			for (itRuleSetup = ruleSetupMap.begin(); itRuleSetup != ruleSetupMap.end(); ++itRuleSetup)
+			{
+				if (itRuleSetup->first != "*" && specMap.find(itRuleSetup->first) == specMap.end())
+				{
+					in->fatalf("Setup for non existing rule '%s' found", itRuleSetup->first.c_str());
+				}
+			}
+			if (nCount < (ruleSetupMap.find("*") == ruleSetupMap.end() ? ruleSetupMap.size() : ruleSetupMap.size()))
+			{
+				in->fatalf("Setup for all rules with '*' not possible when all rules are setup explicitly");
+			}
+			for (it = specMap.begin(); it != specMap.end(); ++it)
 			{
 				assert(it->second.second);
+
+				itRuleSetup = ruleSetupMap.find(it->first);				
+				if (itRuleSetup != ruleSetupMap.end())
+				{
+					yySetupRule = itRuleSetup->second;
+				}
+				else
+				{
+					itRuleSetup = ruleSetupMap.find("*");
+					if (itRuleSetup != ruleSetupMap.end())
+					{
+						yySetupRule = itRuleSetup->second;
+					}
+					else
+					{
+						yySetupRule = "";
+					}
+				}
 				genCode(o, topIndent, it->second.second, &specMap, it->first, !--nCount, bPrologBrace);
 			}
 			if (h)
@@ -482,7 +544,7 @@ void parse(Scanner& i, std::ostream& o, std::ostream* h)
 				genTypes(typesInline, 0, specMap);
 			}
 		}
-		else if(spec)
+		else if (spec)
 		{
 			genCode(o, topIndent, spec, NULL, "", 0, bPrologBrace);
 		}

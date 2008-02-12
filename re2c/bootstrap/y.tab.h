@@ -49,7 +49,8 @@
      STRING = 265,
      CONFIG = 266,
      VALUE = 267,
-     NUMBER = 268
+     NUMBER = 268,
+     SETUP = 269
    };
 #endif
 /* Tokens.  */
@@ -64,13 +65,14 @@
 #define CONFIG 266
 #define VALUE 267
 #define NUMBER 268
+#define SETUP 269
 
 
 
 
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 typedef union YYSTYPE
-#line 106 "parser.y"
+#line 127 "parser.y"
 {
 	re2c::Symbol	*symbol;
 	re2c::RegExp	*regexp;
@@ -82,7 +84,7 @@ typedef union YYSTYPE
 	re2c::CondList	*clist;
 }
 /* Line 1489 of yacc.c.  */
-#line 86 "y.tab.h"
+#line 88 "y.tab.h"
 	YYSTYPE;
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1

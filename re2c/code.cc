@@ -684,6 +684,11 @@ void Rule::emit(std::ostream &o, uint ind, bool &, const std::string& condName) 
 
 	RuleLine rl(*rule);
 
+	if (!yySetupRule.empty() && !rule->code->autogen)
+	{
+		o << indent(ind) << yySetupRule << "\n";
+	}
+
 	o << file_info(sourceFileInfo, &rl);
 	o << indent(ind);
 	if (rule->code->autogen)

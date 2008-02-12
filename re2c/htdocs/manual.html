@@ -313,7 +313,8 @@ rules can use ':=>' as a shortcut to automatically generate code that not only
 sets the new condition state but also continues execution with the new state. A
 shortcut rule should not be used in a loop where there is code between the start
 of the loop and the <b>re2c</b> block unless <i>re2c:cond:goto</i> is changed
-to '<i>continue;</i>'.
+to '<i>continue;</i>'. If code is necessary before all rule (though not simple
+jumps) you can doso by using &lt;! pseudo-rules.
 </p>
 <dl compact="compact">
 <dd>&lt;<i>condition-list</i>&gt; <i>regular-expression</i> { <i>C/C++ code</i> }</dd>
@@ -331,6 +332,10 @@ to '<i>continue;</i>'.
 <dd>&lt;&gt; =&gt; <i>condition</i> { <i>C/C++ code</i> }</dd>
 <dd>&lt;&gt; =&gt; <i>condition</i> := <i>C/C++ code</i></dd>
 <dd>&lt;&gt; :=&gt; <i>condition</i></dd>
+<dd>&lt;!<i>condition-list</i>&gt; { <i>C/C++ code</i> }</dd>
+<dd>&lt;!<i>condition-list</i>&gt; := <i>C/C++ code</i></dd>
+<dd>&lt;!*&gt; { <i>C/C++ code</i> }</dd>
+<dd>&lt;!*&gt; := <i>C/C++ code</i></dd>
 </dl>
 <p>Named definitions are of the form:</p>
 <dl compact="compact">

@@ -355,7 +355,8 @@ rules can use ':=>' as a shortcut to automatically generate code that not only
 sets the new condition state but also continues execution with the new state. A
 shortcut rule should not be used in a loop where there is code between the start
 of the loop and the \*(re block unless \fIre2c:cond:goto\fP is changed
-to '\fIcontinue;\fP'.
+to '\fIcontinue;\fP'. If code is necessary before all rule (though not simple
+jumps) you can doso by using <! pseudo-rules.
 .P
 .RS
 \fC<\fP\fIcondition-list\fP\fC>\fP \fI\*(rx\fP \fC{\fP \fIC/C++ code\fP \fC}\fP
@@ -387,6 +388,14 @@ to '\fIcontinue;\fP'.
 \fC<>\fP \fC=>\fP \fP\fIcondition\fP \fC:=\fP \fIC/C++ code\fP
 .P
 \fC<>\fP \fC:=>\fP \fP\fIcondition\fP
+.P
+\fC<!\fIcondition-list\fP>\fP \fC{\fP \fIC/C++ code\fP \fC}\fP
+.P
+\fC<!\fIcondition-list\fP>\fP \fC:=\fP \fIC/C++ code\fP
+.P
+\fC<!*>\fP \fC{\fP \fIC/C++ code\fP \fC}\fP
+.P
+\fC<!*>\fP \fC:=\fP \fIC/C++ code\fP
 .RE
 .LP
 Named definitions are of the form:

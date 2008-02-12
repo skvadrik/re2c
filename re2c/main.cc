@@ -67,6 +67,7 @@ std::string yychConversion("");
 std::string yyFillLength("@@");
 std::string yySetConditionParam("@@");
 std::string yySetStateParam("@@");
+std::string yySetupRule("");
 uint maxFill = 1;
 uint next_label = 0;
 uint cGotoThreshold = 9;
