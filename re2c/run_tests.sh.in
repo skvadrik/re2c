@@ -10,6 +10,9 @@ re2c='@WINBUILDDIR@/re2c.exe'
 else
 re2c='@builddir@/re2c'
 fi
+if test ! -x "${re2c}"; then
+  echo "Cannot find re2c executable (${re2c})."
+fi
 echo "Testing: ${re2c}"
 if ${re2c} -v|grep -q 're2c @PACKAGE_VERSION@ *\r*'; then
 echo "Version: @PACKAGE_VERSION@"
@@ -25,9 +28,9 @@ fi;
 for x in $tests; do
 	tstcnt=$(($tstcnt+1))
 	switches=`basename $x|sed -e 's/^[^.]*\.\(.*\)\.re$/-\1/g' -e 's/^[^-].*//g'`
-	genname=`echo $switches|sed -e 's,^.[^o]*$,,g' -e 's,^[^ot]*t.*o.*$,,g' -e 's,^-[^o]*o\(.*\),@builddir@/test/\1,g'`
-	headers=`echo $switches|sed -e 's,^.[^t]*$,,g' -e 's,^[^ot]*o.*t.*$,,g' -e 's,^-[^t]*t\(.*\),@builddir@/test/\1,g'`
-	switches=`echo $switches|sed -e 's,^-\([^ot]*[ot]\)\(.*\)$,-\1@builddir@/test/\2,g'`
+	genname=`echo $switches|sed -e 's,^.[^o]*$,,g' -e 's,^--.*$,,g' -e 's,^[^ot]*t.*o.*$,,g' -e 's,^-[^o]*o\(.*\),@builddir@/test/\1,g'`
+	headers=`echo $switches|sed -e 's,^.[^t]*$,,g' -e 's,^--.*$,,g' -e 's,^[^ot]*o.*t.*$,,g' -e 's,^-[^t]*t\(.*\),@builddir@/test/\1,g'`
+	switches=`echo $switches|sed -e 's,^-\([^ot-]*[ot]\)\(.*\)$,-\1@builddir@/test/\2,g'`
 	# don't use the -o flag, since it makes it harder to diff.
 	echo $x: $switches
 	outname=@builddir@/test/`basename ${x%.re}.c.temp`

@@ -161,6 +161,10 @@ YYMAXFILL generation prior to last \*(re block.
 \fB--no-generation-date\fP
 Suppress date output in the generated output so that it only shows the re2c
 version.
+.TP
+\fb--case-insensitive\fP
+All strings are case insensitive, so all "-expressions are treated
+in the same way '-expressions are.
 .SH "INTERFACE CODE"
 Unlike other scanner generators, \*(re does not generate complete scanners:
 the user must supply some interface code.

@@ -271,7 +271,14 @@ scan:
 
 	dstring		{
 					cur = cursor;
-					yylval.regexp = strToRE(token());
+					if (bCaseInsensitive)
+					{
+						yylval.regexp = strToCaseInsensitiveRE(token());
+					}
+					else
+					{
+						yylval.regexp = strToRE(token());
+					}
 					return STRING;
 				}
 

@@ -1,5 +1,6 @@
-Version 0.13.2 (2007-??-??)
+Version 0.13.2 (2008-??-??)
 ---------------------------
+- Added flag --case-insensitive.
 - Added support for '<!...>' to enable rule setup.
 - Added support for '=>' style rules.
 - Added support for ':=' style rules.

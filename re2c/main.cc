@@ -78,6 +78,7 @@ bool yybmHexTable = false;
 bool bUseStateAbort = false;
 bool bWroteGetState = false;
 bool bWroteCondCheck = false;
+bool bCaseInsensitive = false;
 
 uint nRealChars = 256;
 
@@ -115,6 +116,7 @@ static const mbo_opt_struct OPTIONS[] =
 	mbo_opt_struct('w', 0, "wide-chars"),      
 	mbo_opt_struct('1', 0, "single-pass"),
 	mbo_opt_struct(10,  0, "no-generation-date"),
+	mbo_opt_struct(11,  0, "case-insensitive"),
 	mbo_opt_struct('-', 0, NULL) /* end of args */
 };
 
@@ -168,6 +170,9 @@ static void usage()
 	"\n"
 	"--no-generation-date    Suppress date output in the generated output so that it\n"
 	"                        only shows the re2c version.\n"
+	"\n"
+	"--case-insensitive      All strings are case insensitive, so all \"-expressions\n"
+	"                        are treated in the same way '-expressions are.\n"
 	;
 }
 
@@ -289,6 +294,10 @@ int main(int argc, char *argv[])
 
 			case 10:
 			bNoGenerationDate = true;
+			break;
+
+			case 11:
+			bCaseInsensitive = true;
 			break;
 		}
 	}
