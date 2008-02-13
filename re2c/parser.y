@@ -501,17 +501,6 @@ void parse(Scanner& i, std::ostream& o, std::ostream* h)
 
 			size_t nCount = specMap.size();
 
-			for (itRuleSetup = ruleSetupMap.begin(); itRuleSetup != ruleSetupMap.end(); ++itRuleSetup)
-			{
-				if (itRuleSetup->first != "*" && specMap.find(itRuleSetup->first) == specMap.end())
-				{
-					in->fatalf("Setup for non existing rule '%s' found", itRuleSetup->first.c_str());
-				}
-			}
-			if (nCount < (ruleSetupMap.find("*") == ruleSetupMap.end() ? ruleSetupMap.size() : ruleSetupMap.size()))
-			{
-				in->fatalf("Setup for all rules with '*' not possible when all rules are setup explicitly");
-			}
 			for (it = specMap.begin(); it != specMap.end(); ++it)
 			{
 				assert(it->second.second);
@@ -549,6 +538,22 @@ void parse(Scanner& i, std::ostream& o, std::ostream* h)
 			genCode(o, topIndent, spec, NULL, "", 0, bPrologBrace);
 		}
 		o << sourceFileInfo;
+	}
+
+	if (cFlag)
+	{
+		StringMap::const_iterator itRuleSetup;
+		for (itRuleSetup = ruleSetupMap.begin(); itRuleSetup != ruleSetupMap.end(); ++itRuleSetup)
+		{
+			if (itRuleSetup->first != "*" && specMap.find(itRuleSetup->first) == specMap.end())
+			{
+				in->fatalf("Setup for non existing rule '%s' found", itRuleSetup->first.c_str());
+			}
+		}
+		if (specMap.size() < (ruleSetupMap.find("*") == ruleSetupMap.end() ? ruleSetupMap.size() : ruleSetupMap.size()))
+		{
+			in->fatalf("Setup for all rules with '*' not possible when all rules are setup explicitly");
+		}
 	}
 
 	RegExp::vFreeList.clear();
