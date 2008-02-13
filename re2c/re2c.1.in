@@ -5,9 +5,10 @@
 .ds re \fBre2c\fP
 .ds le \fBlex\fP
 .ds rx regular-expression
+.ds rxs regular-expressions
 .ds lx \fIl\fP-expression
 .SH NAME
-re2c \- convert \*(rxs to C/C++
+\*(re \- convert \*(rxs to C/C++
 
 .SH SYNOPSIS
 \*(re [\fB-bdefghisuvVw1\fP] [\fB-o output\fP] [\fB-c\fP [\fB-t header\fP]] \fBfile\fP
@@ -393,9 +394,9 @@ jumps) you can doso by using <! pseudo-rules.
 .P
 \fC<>\fP \fC:=>\fP \fP\fIcondition\fP
 .P
-\fC<!\fIcondition-list\fP>\fP \fC{\fP \fIC/C++ code\fP \fC}\fP
+\fC<!\fIcondition-list\fP\fC>\fP \fC{\fP \fIC/C++ code\fP \fC}\fP
 .P
-\fC<!\fIcondition-list\fP>\fP \fC:=\fP \fIC/C++ code\fP
+\fC<!\fIcondition-list\fP\fC>\fP \fC:=\fP \fIC/C++ code\fP
 .P
 \fC<!*>\fP \fC{\fP \fIC/C++ code\fP \fC}\fP
 .P
