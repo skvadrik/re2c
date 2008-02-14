@@ -275,19 +275,33 @@ tweaked using inplace configurations "state:abort" and "state:nextlabel".</p>
 <h2>SCANNER WITH CONDITION SUPPORT</h2>
 <p>
 You can preceed regular-expressions with a list of condition names when using the <b>-c</b>
-switch. In this case <b>re2c</b> generates scanner blocks for each conditon. Each of the
+switch. In this case <b>re2c</b> generates scanner blocks for each conditon. Where each of the
 generated scanners has its own precondition. The precondition is given by the 
 interface define <b>YYGETCONDITON</b> and must be of type <b>YYCONDTYPE</b>.
 </p><p>
-There are two special rule types. First the rules of the condition '*' are 
+There are two special rule types. First, the rules of the condition '*' are 
 merged to all  conditions. And second the empty condition list allows to 
 provide a code block that does not have a scanner part. Meaning it does not 
 allow any regular expression. The condition value referring to this special 
-block is always the one with the enumeration value 0.
+block is always the one with the enumeration value 0. This way the code of this
+special rule can be used to initialize a scanner. It is in no way necessary to
+have these rules: but sometimes it is helpful to have a dedicated uninitialized
+condition state.
 </p><p>
 Non empty rules allow to specify the new condition, which makes them
 transition rules. Besides generating calls for the define <b>YYSETCONDTITION</b>
 no other special code is generated.
+</p>
+<p>
+There is another kind of special rules that allow to prepend code to any code
+block of all rules of a certain set of conditions or to all code blocks to all
+rules. This can be helpful when some operation is common among rules. For
+instance this can be used to store the length of the scanned string. These
+special prefix rules start with an exclamation mark followed by either a list
+of conditions <b>&lt;! condition, ... &gt;</b> or a star <b>&lt;!*&gt;</b>.
+When <b>re2c</b> generates the code for a rule whose state does not have a
+prefix rule and a star'd prefix rule is present, than that code will be used
+as prefix code.
 </p>
 <a name="lbAI" id="lbAI">&nbsp;</a>
 <h2>SCANNER SPECIFICATIONS</h2>
