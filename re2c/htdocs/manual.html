@@ -144,6 +144,10 @@ version.<br /><br /></dd>
 <dt><b>--case-insensitive</b></dt>
 <dd>All strings are case insensitive, so all "-expressions are treated
 in the same way '-expressions are.<br /><br /></dd>
+<dt><b>--case-inverted</b></dt>
+<dd>Invert the meaning of single and double quoted strings.
+With this switch single quotes are case sensitive and
+double quotes are case insensitive.<br /><br /></dd>
 </dl>
 <br />
 <br />
@@ -207,7 +211,7 @@ information in YYMARKER. Some easy scanners might not use this.<br /><br /></dd>
 <dt>YYMAXFILL</dt>
 <dd>This will be automatically defined by /*!max:re2c */ blocks as explained
 above.<br /><br /></dd>
-<dt>YYSETCONDITION</dt>(<i>c</i>)
+<dt>YYSETCONDITION(<i>c</i>)</dt>
 <dd>This define is used to set the condition in transition rules. This is only
 being used when <b>-c</b> is active and transition rules are being used.</dd>
 <dt>YYSETSTATE(<i>s</i>)</dt>
@@ -297,11 +301,11 @@ There is another kind of special rules that allow to prepend code to any code
 block of all rules of a certain set of conditions or to all code blocks to all
 rules. This can be helpful when some operation is common among rules. For
 instance this can be used to store the length of the scanned string. These
-special prefix rules start with an exclamation mark followed by either a list
+special setup rules start with an exclamation mark followed by either a list
 of conditions <b>&lt;! condition, ... &gt;</b> or a star <b>&lt;!*&gt;</b>.
 When <b>re2c</b> generates the code for a rule whose state does not have a
-prefix rule and a star'd prefix rule is present, than that code will be used
-as prefix code.
+setup rule and a star'd setup rule is present, than that code will be used
+as setup code.
 </p>
 <a name="lbAI" id="lbAI">&nbsp;</a>
 <h2>SCANNER SPECIFICATIONS</h2>

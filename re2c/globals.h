@@ -73,6 +73,7 @@ extern bool bUseYYGetStateNaked;
 extern bool bWroteGetState;
 extern bool bWroteCondCheck;
 extern bool bCaseInsensitive;
+extern bool bCaseInverted;
 
 extern uint asc2ebc[256];
 extern uint ebc2asc[256];

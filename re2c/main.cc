@@ -79,6 +79,7 @@ bool bUseStateAbort = false;
 bool bWroteGetState = false;
 bool bWroteCondCheck = false;
 bool bCaseInsensitive = false;
+bool bCaseInverted = false;
 
 uint nRealChars = 256;
 
@@ -117,6 +118,7 @@ static const mbo_opt_struct OPTIONS[] =
 	mbo_opt_struct('1', 0, "single-pass"),
 	mbo_opt_struct(10,  0, "no-generation-date"),
 	mbo_opt_struct(11,  0, "case-insensitive"),
+	mbo_opt_struct(12,  0, "case-inverted"),
 	mbo_opt_struct('-', 0, NULL) /* end of args */
 };
 
@@ -173,6 +175,10 @@ static void usage()
 	"\n"
 	"--case-insensitive      All strings are case insensitive, so all \"-expressions\n"
 	"                        are treated in the same way '-expressions are.\n"
+	"\n"
+	"--case-inverted         Invert the meaning of single and double quoted strings.\n"
+	"                        With this switch single quotes are case sensitive and\n"
+	"                        double quotes are case insensitive.\n"
 	;
 }
 
@@ -298,6 +304,10 @@ int main(int argc, char *argv[])
 
 			case 11:
 			bCaseInsensitive = true;
+			break;
+
+			case 12:
+			bCaseInverted = true;
 			break;
 		}
 	}

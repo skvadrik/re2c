@@ -166,6 +166,12 @@ version.
 \fb--case-insensitive\fP
 All strings are case insensitive, so all "-expressions are treated
 in the same way '-expressions are.
+.TP
+\fB--case-inverted\fP
+Invert the meaning of single and double quoted strings.
+With this switch single quotes are case sensitive and
+double quotes are case insensitive.
+
 .SH "INTERFACE CODE"
 Unlike other scanner generators, \*(re does not generate complete scanners:
 the user must supply some interface code.
@@ -338,11 +344,11 @@ There is another kind of special rules that allow to prepend code to any code
 block of all rules of a certain set of conditions or to all code blocks to all
 rules. This can be helpful when some operation is common among rules. For
 instance this can be used to store the length of the scanned string. These
-special prefix rules start with an exclamation mark followed by either a list
+special setup rules start with an exclamation mark followed by either a list
 of conditions \fB<! condition, ... >\fP or a star \fB<!*>\fP.
 When \*(re generates the code for a rule whose state does not have a
-prefix rule and a star'd prefix rule is present, than that code will be used
-as prefix code.
+setup rule and a star'd setup rule is present, than that code will be used
+as setup code.
 
 .SH "SCANNER SPECIFICATIONS"
 Each scanner specification consists of a set of \fIrules\fP, \fInamed
