@@ -596,6 +596,7 @@ void Accept::emitBinary(std::ostream &o, uint ind, uint l, uint r, bool &readCh)
 	{
 		uint m = (l + r) >> 1;
 
+		assert(bUsedYYAccept);
 		o << indent(ind) << "if (" << mapCodeName["yyaccept"] << " <= " << m << ") {\n";
 		emitBinary(o, ++ind, l, m, readCh);
 		o << indent(--ind) << "} else {\n";
@@ -1623,7 +1624,10 @@ void DFA::emit(std::ostream &o, uint& ind, const RegExpMap* specMap, const std::
 	delete head->action;
 	head->action = NULL;
 
-	bUsedYYAccept = false;
+	if (!cFlag)
+	{
+		bUsedYYAccept = false;
+	}
 	
 	uint start_label = next_label;
 
