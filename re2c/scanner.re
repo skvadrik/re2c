@@ -364,6 +364,15 @@ scan:
 					fatal("illegal closure form, use '{n}', '{n,}', '{n,m}' where n and m are numbers");
 				}
 
+	"{" name "}"	{
+					if (!FFlag) {
+						fatal("curly braces for names only allowed with -F switch");
+					}
+					cur = cursor;
+					yylval.symbol = Symbol::find(token(1, cur - tok - 2));
+					return ID;
+				}
+
 	config		{
 					cur = cursor;
 					tok+= 5; /* skip "re2c:" */

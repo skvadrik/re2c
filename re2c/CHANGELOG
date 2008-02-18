@@ -1,5 +1,6 @@
 Version 0.13.3 (2008-??-??)
 ---------------------------
+- Partial support for flex syntax.
 - Changed to allow /* comments with -c switch.
 
 Version 0.13.2 (2008-02-14)

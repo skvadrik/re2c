@@ -40,6 +40,7 @@ public:
 	void config(const Str&, const Str&);
 
 	SubStr token() const;
+	SubStr token(uint start, uint len) const;
 	virtual uint get_line() const;	
 	uint xlat(uint c) const;
 
@@ -64,6 +65,11 @@ inline void Scanner::fatal(const char *msg) const
 inline SubStr Scanner::token() const
 {
 	return SubStr(tok, cur - tok);
+}
+
+inline SubStr Scanner::token(uint start, uint len) const
+{
+	return SubStr(tok + start, len);
 }
 
 inline uint Scanner::xlat(uint c) const

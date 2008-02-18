@@ -11,7 +11,7 @@
 \*(re \- convert \*(rxs to C/C++
 
 .SH SYNOPSIS
-\*(re [\fB-bdefghisuvVw1\fP] [\fB-o output\fP] [\fB-c\fP [\fB-t header\fP]] \fBfile\fP
+\*(re [\fB-bdefFghisuvVw1\fP] [\fB-o output\fP] [\fB-c\fP [\fB-t header\fP]] \fBfile\fP
 
 .SH DESCRIPTION
 \*(re is a preprocessor that generates C-based recognizers from regular
@@ -115,6 +115,9 @@ Cross-compile from an ASCII platform to an EBCDIC one.
 \fB-f\fP
 Generate a scanner with support for storable state.
 For details see below at \fBSCANNER WITH STORABLE STATES\fP.
+.TP
+\fB-F\fP
+Partial support for flex syntax.
 .TP
 \fB-g\fP
 Generate a scanner that utilizes GCC's computed goto feature. That is \*(re

@@ -27,6 +27,7 @@ bool cFlag = false;
 bool dFlag = false;
 bool eFlag = false;
 bool fFlag = false;
+bool FFlag = false;
 bool gFlag = false;
 bool iFlag = false;
 bool sFlag = false;
@@ -105,6 +106,7 @@ static const mbo_opt_struct OPTIONS[] =
 	mbo_opt_struct('d', 0, "debug-output"),
 	mbo_opt_struct('e', 0, "ecb"),
 	mbo_opt_struct('f', 0, "storable-state"),
+	mbo_opt_struct('F', 0, "flex-syntax"),
 	mbo_opt_struct('g', 0, "computed-gotos"),
 	mbo_opt_struct('h', 0, "help"),
 	mbo_opt_struct('i', 0, "no-debug-info"),
@@ -143,6 +145,8 @@ static void usage()
 	"                        an EBCDIC one.\n"
 	"\n"
 	"-f     --storable-state Generate a scanner that supports storable states.\n"
+	"\n"
+	"-F     --flex-syntax    Partial support for flex syntax.\n"
 	"\n"
 	"-g     --computed-gotos Implies -b. Generate computed goto code (only useable\n"
 	"                        with gcc).\n"
@@ -225,6 +229,10 @@ int main(int argc, char *argv[])
 
 			case 'f':
 			fFlag = true;
+			break;
+
+			case 'F':
+			FFlag = true;
 			break;
 
 			case 'g':

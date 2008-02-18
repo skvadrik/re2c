@@ -15,7 +15,7 @@ Updated: 23 Aug 2007<br />
 <p>re2c - convert regular expressions to C/C++</p>
 <a name="lbAC" id="lbAC">&nbsp;</a>
 <h2>SYNOPSIS</h2>
-<p><b>re2c</b> [<b>-bdefghisuvVw1</b>] [<b>-o output</b>] [<b>-c</b> [<b>-t header</b>]] file</p>
+<p><b>re2c</b> [<b>-bdefFghisuvVw1</b>] [<b>-o output</b>] [<b>-c</b> [<b>-t header</b>]] file</p>
 <a name="lbAD" id="lbAD">&nbsp;</a>
 <h2>DESCRIPTION</h2>
 <p><b>re2c</b> is a preprocessor that generates C-based recognizers from
@@ -105,6 +105,8 @@ YYDEBUG(int state, char current)</i>. The first parameter receives the state or
 <dt><b>-f</b></dt>
 <dd>Generate a scanner with support for storable state. For details see below
 at <b>SCANNER WITH STORABLE STATES</b>.<br /><br /></dd>
+<dt><b>-F</b><dt>
+<dd>Partial support for flex syntax.<br /><br /></dd>
 <dt><b>-g</b></dt>
 <dd>Generate a scanner that utilizes GCC's computed goto feature. That is re2c
 generates jump tables whenever a decision is of a certain complexity (e.g. a 
@@ -213,7 +215,7 @@ information in YYMARKER. Some easy scanners might not use this.<br /><br /></dd>
 above.<br /><br /></dd>
 <dt>YYSETCONDITION(<i>c</i>)</dt>
 <dd>This define is used to set the condition in transition rules. This is only
-being used when <b>-c</b> is active and transition rules are being used.</dd>
+being used when <b>-c</b> is active and transition rules are being used.<br /><br /></dd>
 <dt>YYSETSTATE(<i>s</i>)</dt>
 <dd>The user only needs to define this macro if the <b>-f</b> flag was
 specified. In that case, the generated code "calls" YYSETSTATE just before
