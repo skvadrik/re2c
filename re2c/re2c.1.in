@@ -11,7 +11,7 @@
 \*(re \- convert \*(rxs to C/C++
 
 .SH SYNOPSIS
-\*(re [\fB-bdefFghisuvVw1\fP] [\fB-o output\fP] [\fB-c\fP [\fB-t header\fP]] \fBfile\fP
+\*(re [\fB-bdDefFghisuvVw1\fP] [\fB-o output\fP] [\fB-c\fP [\fB-t header\fP]] \fBfile\fP
 
 .SH DESCRIPTION
 \*(re is a preprocessor that generates C-based recognizers from regular
@@ -108,6 +108,11 @@ parser issues and states. If you use this switch you need to define a macro
 \fIYYDEBUG\fP that is called like a function with two parameters:
 \fIvoid YYDEBUG(int state, char current)\fP. The first parameter receives the 
 state or -1 and the second parameter receives the input at the current cursor.
+.TP
+\fB-D\fP
+Emit Graphviz dot data. It can then be processed with e.g.
+"dot -Tpng input.dot > output.png". Please note that scanners with many states
+may crash dot.
 .TP
 \fB-e\fP
 Cross-compile from an ASCII platform to an EBCDIC one. 

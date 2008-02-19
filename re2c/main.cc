@@ -25,6 +25,7 @@ file_info headerFileInfo;
 bool bFlag = false;
 bool cFlag = false;
 bool dFlag = false;
+bool DFlag = false;
 bool eFlag = false;
 bool fFlag = false;
 bool FFlag = false;
@@ -104,6 +105,7 @@ static const mbo_opt_struct OPTIONS[] =
 	mbo_opt_struct('b', 0, "bit-vectors"),
 	mbo_opt_struct('c', 0, "start-conditions"),
 	mbo_opt_struct('d', 0, "debug-output"),
+	mbo_opt_struct('D', 0, "emit-dot"),
 	mbo_opt_struct('e', 0, "ecb"),
 	mbo_opt_struct('f', 0, "storable-state"),
 	mbo_opt_struct('F', 0, "flex-syntax"),
@@ -116,7 +118,7 @@ static const mbo_opt_struct OPTIONS[] =
 	mbo_opt_struct('u', 0, "unicode"),
 	mbo_opt_struct('v', 0, "version"),
 	mbo_opt_struct('V', 0, "vernum"),
-	mbo_opt_struct('w', 0, "wide-chars"),      
+	mbo_opt_struct('w', 0, "wide-chars"),
 	mbo_opt_struct('1', 0, "single-pass"),
 	mbo_opt_struct(10,  0, "no-generation-date"),
 	mbo_opt_struct(11,  0, "case-insensitive"),
@@ -126,7 +128,7 @@ static const mbo_opt_struct OPTIONS[] =
 
 static void usage()
 {
-	cerr << "usage: re2c [-bdefghisvVw1] [-o file] file\n"
+	cerr << "usage: re2c [-bcdDefFghisvVw1] [-o file] file\n"
 	"\n"
 	"-? -h  --help           Display this info.\n"
 	"\n"
@@ -140,6 +142,8 @@ static void usage()
 	"-d     --debug-output   Creates a parser that dumps information during\n"
 	"                        about the current position and in which state the\n"
 	"                        parser is.\n"
+	"\n"
+	"-D     --emit-dot       Emit a Graphviz dot view of the DFA graph\n"
 	"\n"
 	"-e     --ecb            Cross-compile from an ASCII platform to\n"
 	"                        an EBCDIC one.\n"
@@ -225,6 +229,11 @@ int main(int argc, char *argv[])
 
 			case 'd':
 			dFlag = true;
+			break;
+
+			case 'D':
+			DFlag = true;
+			iFlag = true;
 			break;
 
 			case 'f':

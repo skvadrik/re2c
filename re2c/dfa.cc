@@ -14,13 +14,15 @@ void prtChOrHex(std::ostream& o, uint c, bool useTalx)
 
 	if ((oc < 256) && isprint(oc))
 	{
-		o << '\'';
+		o << (DFlag ? '"' : '\'');
 		prtCh(o, c);
-		o << '\'';
+		o << (DFlag ? '"' : '\'');
 	}
 	else
 	{
+		if (DFlag) o << '"';
 		prtHex(o, c);
+		if (DFlag) o << '"';
 	}
 }
 
@@ -63,7 +65,11 @@ void prtCh(std::ostream& o, uint c, bool useTalx)
 	switch (oc)
 	{
 		case '\'':
-		o << "\\'";
+		o << (DFlag ? "'" : "\\'");
+		break;
+
+		case '"':
+		o << (DFlag ? "\\\"" : "\"");
 		break;
 
 		case '\n':

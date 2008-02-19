@@ -19,6 +19,7 @@ extern file_info headerFileInfo;
 extern bool bFlag;
 extern bool cFlag;
 extern bool dFlag;
+extern bool DFlag;
 extern bool eFlag;
 extern bool fFlag;
 extern bool FFlag;

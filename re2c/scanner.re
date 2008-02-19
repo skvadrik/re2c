@@ -116,7 +116,10 @@ echo:
 					{
 						fatal("found scanner block after YYMAXFILL declaration");
 					}
-					out.write((const char*)(tok), (const char*)(&cursor[-7]) - (const char*)(tok));
+					if (!DFlag)
+					{
+						out.write((const char*)(tok), (const char*)(&cursor[-7]) - (const char*)(tok));
+					}
 					tok = cursor;
 					RETURN(1);
 				}
@@ -125,7 +128,10 @@ echo:
 					{
 						fatal("cannot generate YYMAXFILL twice");
 					}
-					out << "#define YYMAXFILL " << maxFill << std::endl;
+					if (!DFlag)
+					{
+						out << "#define YYMAXFILL " << maxFill << std::endl;
+					}
 					tok = pos = cursor;
 					ignore_eoc = true;
 					bUsedYYMaxFill = true;
@@ -149,7 +155,7 @@ echo:
 					}
 					tok = pos = cursor;
 					ignore_eoc = true;
-					if (bLastPass)
+					if (bLastPass && !DFlag)
 					{
 						out << outputFileInfo;
 						out << "\n";
@@ -170,7 +176,7 @@ echo:
 						ignore_eoc = false;
 						ignore_cnt = 0;
 					}
-					else
+					else if (!DFlag)
 					{
 						out.write((const char*)(tok), (const char*)(cursor) - (const char*)(tok));
 					}
@@ -187,7 +193,7 @@ echo:
 						ignore_eoc = false;
 						ignore_cnt = 0;
 					}
-					else
+					else if (!DFlag)
 					{
 						out.write((const char*)(tok), (const char*)(cursor) - (const char*)(tok));
 					}
@@ -199,7 +205,7 @@ echo:
 					{
 						ignore_cnt++;
 					}
-					else
+					else if (!DFlag)
 					{
 						out.write((const char*)(tok), (const char*)(cursor) - (const char*)(tok));
 					}
@@ -208,7 +214,7 @@ echo:
 					goto echo;
 				}
 	zero		{
-					if (!ignore_eoc)
+					if (!ignore_eoc && !DFlag)
 					{
 						out.write((const char*)(tok), (const char*)(cursor) - (const char*)(tok) - 1);
 						// -1 so we don't write out the \0

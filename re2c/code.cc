@@ -22,7 +22,7 @@ static std::string indent(uint ind)
 {
 	std::string str;
 
-	while (ind-- > 0)
+	while (!DFlag && ind-- > 0)
 	{
 		str += indString;
 	}
@@ -362,6 +362,12 @@ void BitMap::stats()
 
 void genGoTo(std::ostream &o, uint ind, const State *from, const State *to, bool & readCh)
 {
+	if (DFlag)
+	{
+		o << from->label << " -> " << to->label << "\n";
+		return;
+	}
+
 	if (readCh && from->label + 1 != to->label)
 	{
 		o << indent(ind) << mapCodeName["yych"] << " = " << yychConversion << "*" << mapCodeName["YYCURSOR"] << ";\n";
@@ -392,6 +398,11 @@ void genIf(std::ostream &o, uint ind, const char *cmp, uint v, bool &readCh)
 
 static void need(std::ostream &o, uint ind, uint n, bool & readCh, bool bSetMarker)
 {
+	if (DFlag)
+	{
+		return;
+	}
+
 	uint fillIndex = next_fill_index;
 
 	if (fFlag)
@@ -442,6 +453,11 @@ static void need(std::ostream &o, uint ind, uint n, bool & readCh, bool bSetMark
 
 void Match::emit(std::ostream &o, uint ind, bool &readCh, const std::string&) const
 {
+	if (DFlag)
+	{
+		return;
+	}
+
 	if (state->link)
 	{
 		o << indent(ind) << "++" << mapCodeName["YYCURSOR"] << ";\n";
@@ -536,6 +552,11 @@ void Initial::emit(std::ostream &o, uint ind, bool &readCh, const std::string&) 
 
 void Save::emit(std::ostream &o, uint ind, bool &readCh, const std::string&) const
 {
+	if (DFlag)
+	{
+		return;
+	}
+
 	if (bUsedYYAccept)
 	{
 		o << indent(ind) << mapCodeName["yyaccept"] << " = " << selector << ";\n";
@@ -614,7 +635,10 @@ void Accept::emit(std::ostream &o, uint ind, bool &readCh, const std::string&) c
 	if (mapRules.size() > 0)
 	{
 		bUsedYYMarker = true;
-		o << indent(ind) << mapCodeName["YYCURSOR"] << " = " << mapCodeName["YYMARKER"] << ";\n";
+		if (!DFlag)
+		{
+			o << indent(ind) << mapCodeName["YYCURSOR"] << " = " << mapCodeName["YYMARKER"] << ";\n";
+		}
 
 		if (readCh) // shouldn't be necessary, but might become at some point
 		{
@@ -642,6 +666,14 @@ void Accept::emit(std::ostream &o, uint ind, bool &readCh, const std::string&) c
 			else if (sFlag)
 			{
 				emitBinary(o, ind, 0, mapRules.size() - 1, readCh);
+			}
+			else if (DFlag)
+			{
+				for (RuleMap::const_iterator it = mapRules.begin(); it != mapRules.end(); ++it)
+				{
+					o << state->label << " -> " << it->second->label;
+					o << " [label=\"yyaccept=" << it->first << "\"]\n";
+				}
 			}
 			else
 			{
@@ -671,6 +703,12 @@ Rule::Rule(State *s, RuleOp *r) : Action(s), rule(r)
 
 void Rule::emit(std::ostream &o, uint ind, bool &, const std::string& condName) const
 {
+	if (DFlag)
+	{
+		o << state->label << " [label=\"" << sourceFileInfo.fname << ":" << rule->code->line << "\"];\n";
+		return;
+	}
+
 	uint back = rule->ctx->fixedLength();
 
 	if (back != 0u)
@@ -719,7 +757,7 @@ void doLinear(std::ostream &o, uint ind, Span *s, uint n, const State *from, con
 					genIf(o, ind, "!=", s[0].ub, readCh);
 					genGoTo(o, 0, from, bg, readCh);
 				}
-				if (next->label != from->label + 1)
+				if (next->label != from->label + 1 || DFlag)
 				{
 					genGoTo(o, ind, from, next, readCh);
 				}
@@ -741,7 +779,7 @@ void doLinear(std::ostream &o, uint ind, Span *s, uint n, const State *from, con
 		if (n == 1)
 		{
 			//	    	if(bg != next){
-			if (s[0].to->label != from->label + 1)
+			if (s[0].to->label != from->label + 1 || DFlag)
 			{
 				genGoTo(o, ind, from, s[0].to, readCh);
 			}
@@ -755,7 +793,7 @@ void doLinear(std::ostream &o, uint ind, Span *s, uint n, const State *from, con
 				genIf(o, ind, ">=", s[0].ub, readCh);
 				genGoTo(o, 0, from, s[1].to, readCh);
 			}
-			if (next->label != from->label + 1)
+			if (next->label != from->label + 1 || DFlag)
 			{
 				genGoTo(o, ind, from, next, readCh);
 			}
@@ -773,7 +811,7 @@ void doLinear(std::ostream &o, uint ind, Span *s, uint n, const State *from, con
 		}
 	}
 
-	if (next->label != from->label + 1)
+	if (next->label != from->label + 1 || DFlag)
 	{
 		genGoTo(o, ind, from, next, readCh);
 	}
@@ -784,7 +822,7 @@ void Go::genLinear(std::ostream &o, uint ind, const State *from, const State *ne
 	doLinear(o, ind, span, nSpans, from, next, readCh, mask);
 }
 
-bool genCases(std::ostream &o, uint ind, uint lb, Span *s, bool &newLine, uint mask)
+bool genCases(std::ostream &o, uint ind, uint lb, Span *s, bool &newLine, uint mask, const State *from, const State *to)
 {
 	bool used = false;
 
@@ -799,9 +837,19 @@ bool genCases(std::ostream &o, uint ind, uint lb, Span *s, bool &newLine, uint m
 		{
 			if (!mask || lb > 0x00FF)
 			{
-				o << indent(ind) << "case ";
-				prtChOrHex(o, lb);
-				o << ":";
+				if (DFlag)
+				{
+					o << from->label << " -> " << to->label;
+					o << " [label=";
+					prtChOrHex(o, lb);
+					o << "]";
+				}
+				else
+				{
+					o << indent(ind) << "case ";
+					prtChOrHex(o, lb);
+					o << ":";
+				}
 				newLine = false;
 				used = true;
 			}
@@ -841,19 +889,22 @@ void Go::genSwitch(std::ostream &o, uint ind, const State *from, const State *ne
 			}
 		}
 
-		if (dFlag)
+		if (!DFlag)
 		{
-			o << indent(ind) << mapCodeName["YYDEBUG"] << "(-1, " << mapCodeName["yych"] << ");\n";
-		}
+			if (dFlag)
+			{
+				o << indent(ind) << mapCodeName["YYDEBUG"] << "(-1, " << mapCodeName["yych"] << ");\n";
+			}
 
-		if (readCh)
-		{
-			o << indent(ind) << "switch ((" << mapCodeName["yych"] << " = " << yychConversion << "*" << mapCodeName["YYCURSOR"] << ")) {\n";
-			readCh = false;
-		}
-		else
-		{
-			o << indent(ind) << "switch (" << mapCodeName["yych"] << ") {\n";
+			if (readCh)
+			{
+				o << indent(ind) << "switch ((" << mapCodeName["yych"] << " = " << yychConversion << "*" << mapCodeName["YYCURSOR"] << ")) {\n";
+				readCh = false;
+			}
+			else
+			{
+				o << indent(ind) << "switch (" << mapCodeName["yych"] << ") {\n";
+			}
 		}
 
 		while (t != &sP[0])
@@ -862,22 +913,22 @@ void Go::genSwitch(std::ostream &o, uint ind, const State *from, const State *ne
 
 			r = s = &sP[0];
 
+			const State *to = (*s)->to;
+
 			if (*s == &span[0])
 			{
-				used |= genCases(o, ind, 0, *s, newLine, mask);
+				used |= genCases(o, ind, 0, *s, newLine, mask, from, to);
 			}
 			else
 			{
-				used |= genCases(o, ind, (*s)[ -1].ub, *s, newLine, mask);
+				used |= genCases(o, ind, (*s)[ -1].ub, *s, newLine, mask, from, to);
 			}
-
-			State *to = (*s)->to;
 
 			while (++s < t)
 			{
 				if ((*s)->to == to)
 				{
-					used |= genCases(o, ind, (*s)[ -1].ub, *s, newLine, mask);
+					used |= genCases(o, ind, (*s)[ -1].ub, *s, newLine, mask, from, to);
 				}
 				else
 				{
@@ -885,7 +936,7 @@ void Go::genSwitch(std::ostream &o, uint ind, const State *from, const State *ne
 				}
 			}
 
-			if (used)
+			if (used && !DFlag)
 			{
 				genGoTo(o, newLine ? ind+1 : 1, from, to, readCh);
 				newLine = true;
@@ -893,9 +944,17 @@ void Go::genSwitch(std::ostream &o, uint ind, const State *from, const State *ne
 			t = r;
 		}
 
-		o << indent(ind) << "default:";
-		genGoTo(o, 1, from, def, readCh);
-		o << indent(ind) << "}\n";
+		if (DFlag)
+		{
+			o << "\n" << from->label << " -> " << def->label;
+			o << " [label=default]\n" ;
+		}
+		else
+		{
+			o << indent(ind) << "default:";
+			genGoTo(o, 1, from, def, readCh);
+			o << indent(ind) << "}\n";
+		}
 
 		delete [] sP;
 	}
@@ -1667,7 +1726,13 @@ void DFA::emit(std::ostream &o, uint& ind, const RegExpMap* specMap, const std::
 	if (bProlog)
 	{
 		o << "\n" << outputFileInfo;
-		if ((!fFlag && bUsedYYAccept)
+
+		if (DFlag)
+		{
+			bPrologBrace = true;
+			o << "digraph re2c {\n";
+		}
+		else if ((!fFlag && bUsedYYAccept)
 		||  (!fFlag && bEmitYYCh)
 		||  (bFlag && !cFlag && BitMap::first)
 		||  (cFlag && !bWroteCondCheck && gFlag && !specMap->empty())
@@ -1681,8 +1746,8 @@ void DFA::emit(std::ostream &o, uint& ind, const RegExpMap* specMap, const std::
 		{
 			ind = 1;
 		}
-	
-		if (!fFlag)
+
+		if (!fFlag && !DFlag)
 		{
 			if (bEmitYYCh)
 			{
@@ -1726,7 +1791,15 @@ void DFA::emit(std::ostream &o, uint& ind, const RegExpMap* specMap, const std::
 		{
 			o << replaceParam(condDivider, condDividerParam, condName) << "\n";
 		}
-		o << condPrefix << condName << ":\n";
+
+		if (DFlag)
+		{
+			o << condName << " -> " << (start_label+1) << "\n";
+		}
+		else
+		{
+			o << condPrefix << condName << ":\n";
+		}
 	}
 	if (cFlag && bFlag && BitMap::first)
 	{
@@ -1927,6 +2000,13 @@ void genCondGoto(std::ostream &o, uint ind, const RegExpMap& specMap)
 					vCondList[it->second.first] = it->first;
 				}
 				genCondGotoSub(o, ind, vCondList, 0, vCondList.size() - 1);
+			}
+			else if (DFlag)
+			{
+				for(RegExpMap::const_iterator it = specMap.begin(); it != specMap.end(); ++it)
+				{
+					o << "0 -> " << it->first << " [label=\"state=" << it->first << "\"]\n";
+				}
 			}
 			else
 			{

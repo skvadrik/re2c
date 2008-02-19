@@ -100,6 +100,10 @@ parser issues and states. If you use this switch you need to define a macro
 <i>YYDEBUG</i> that is called like a function with two parameters: <i>void
 YYDEBUG(int state, char current)</i>. The first parameter receives the state or
 -1 and the second parameter receives the input at the current cursor.<br /><br /></dd>
+<dt><b>-D</b></dt>
+<dd>Emit Graphviz dot data. It can then be processed with e.g.
+"dot -Tpng input.dot > output.png". Please note that scanners with many states
+may crash dot.<br /><br /></dd>
 <dt><b>-e</b></dt>
 <dd>Cross-compile from an ASCII platform to an EBCDIC one.<br /><br /></dd>
 <dt><b>-f</b></dt>
