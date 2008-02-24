@@ -350,6 +350,12 @@ int main(int argc, char *argv[])
 		return 2;
 	}
 
+	if (dFlag && DFlag)
+	{
+		std::cerr << "re2c: error: Cannot combine -d with -D switch\n";
+		return 2;
+	}
+
 	if (uFlag)
 	{
 		wFlag = true;
