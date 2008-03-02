@@ -45,7 +45,7 @@ char *Scanner::fill(char *cursor)
 		uint cnt = tok - bot;
 		if(cnt)
 		{
-			memcpy(bot, tok, lim - tok);
+			memcpy(bot, tok, cnt);
 			tok = bot;
 			ptr -= cnt;
 			cursor -= cnt;
