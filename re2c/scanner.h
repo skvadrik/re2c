@@ -41,6 +41,7 @@ public:
 
 	SubStr token() const;
 	SubStr token(uint start, uint len) const;
+	SubStr raw_token(std::string enclosure) const;
 	virtual uint get_line() const;	
 	uint xlat(uint c) const;
 

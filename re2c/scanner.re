@@ -324,7 +324,7 @@ scan:
 					fatal("unterminated range (missing ])");
 				}
 
-	"<>" / (ws* ("{" | "=>" | ":=")) {
+	"<>" / (space* ("{" | "=>" | ":=")) {
 					RETURN(NOCOND);
 				}
 	"<!"		{
@@ -387,10 +387,30 @@ scan:
 					return CONFIG;
 				}
 
-	name		{
-					cur = cursor;
+	name / (space* ("="|">"|","))	{
+					cur = ptr > tok ? ptr - 1 : cursor;
 					yylval.symbol = Symbol::find(token());
 					return ID;
+				}
+
+	name / [^]	{
+					if (!FFlag) {
+						cur = cursor;
+						yylval.symbol = Symbol::find(token());
+						return ID;
+					} else {
+						/* Add one char in front and one behind instead of 's or "s */
+						cur = cursor;
+						if (bCaseInsensitive || bCaseInverted)
+						{
+							yylval.regexp = strToCaseInsensitiveRE(raw_token("\""));
+						}
+						else
+						{
+							yylval.regexp = strToRE(raw_token("\""));
+						}
+						return STRING;
+					}
 				}
 
 	"."			{
@@ -591,6 +611,11 @@ Scanner::~Scanner()
 	{
 		delete [] bot;
 	}
+}
+
+SubStr Scanner::raw_token(std::string enclosure) const
+{
+	return SubStr(std::string(enclosure + token().to_string() + enclosure).c_str());
 }
 
 } // end namespace re2c

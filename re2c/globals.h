@@ -39,6 +39,7 @@ extern bool bLastPass;
 extern bool bUsedYYAccept;
 extern bool bUsedYYMaxFill;
 extern bool bUsedYYMarker;
+extern bool bUsedYYBitmap;
 
 extern bool bUseStartLabel;
 extern std::string startLabelName;

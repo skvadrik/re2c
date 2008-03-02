@@ -288,7 +288,7 @@ const BitMap *BitMap::find(const State *x)
 
 void BitMap::gen(std::ostream &o, uint ind, uint lb, uint ub)
 {
-	if (first && bLastPass)
+	if (first && bLastPass && bUsedYYBitmap)
 	{
 		o << indent(ind) << "static const unsigned char " << mapCodeName["yybm"] << "[] = {";
 
@@ -1196,6 +1196,7 @@ void Go::genGoto(std::ostream &o, uint ind, const State *from, const State *next
 					{
 						o << indent(ind);
 					}
+					bUsedYYBitmap = true;
 					o << "if (" << mapCodeName["yybm"] << "[" << b->i << "+" << sYych << "] & ";
 					if (yybmHexTable)
 					{
@@ -1552,6 +1553,8 @@ void DFA::emit(std::ostream &o, uint& ind, const RegExpMap* specMap, const std::
 	State *s;
 	uint i;
 
+	bUsedYYBitmap = false;
+
 	findSCCs();
 	head->link = head;
 
@@ -1763,7 +1766,7 @@ void DFA::emit(std::ostream &o, uint& ind, const RegExpMap* specMap, const std::
 			o << "\n";
 		}
 	}
-	if (bFlag && !cFlag)
+	if (bFlag && !cFlag && BitMap::first)
 	{
 		BitMap::gen(o, ind, lbChar, ubChar <= 256 ? ubChar : 256);
 	}

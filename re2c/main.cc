@@ -41,6 +41,7 @@ bool bNoGenerationDate = false;
 bool bSinglePass = false;
 bool bFirstPass  = true;
 bool bLastPass   = false;
+bool bUsedYYBitmap  = false;
 
 bool bUsedYYAccept  = false;
 bool bUsedYYMaxFill = false;
