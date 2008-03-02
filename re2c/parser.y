@@ -136,12 +136,12 @@ void setup_rule(CondList *clist, Token *code)
 };
 
 %token		CLOSESIZE	CLOSE	STAR	NOCOND	ID	CODE	RANGE	STRING
-%token		CONFIG		VALUE	NUMBER	SETUP
+%token		CONFIG		VALUE	NUMBER	SETUP	FID
 
 %type	<op>		CLOSE	STAR	SETUP
 %type	<op>		close
 %type	<extop>		CLOSESIZE
-%type	<symbol>	ID
+%type	<symbol>	ID	FID
 %type	<token>		CODE
 %type	<regexp>	RANGE	STRING
 %type	<regexp>	rule	look	expr	diff	term	factor	primary
@@ -164,13 +164,29 @@ spec:
 decl:
 		ID '=' expr ';'
 		{
-			if($1->re)
+			if ($1->re)
 			{
 				in->fatal("sym already defined");
 			}
 			$1->re = $3;
 		}
+	|	FID expr
+		{
+			if ($1->re)
+			{
+				in->fatal("sym already defined");
+			}
+			$1->re = $2;
+		}
 	|	ID '=' expr '/'
+		{
+			in->fatal("trailing contexts are not allowed in named definitions");
+		}
+	|	ID '=' expr '/'
+		{
+			in->fatal("trailing contexts are not allowed in named definitions");
+		}
+	|	FID expr '/'
 		{
 			in->fatal("trailing contexts are not allowed in named definitions");
 		}

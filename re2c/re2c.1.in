@@ -122,7 +122,10 @@ Generate a scanner with support for storable state.
 For details see below at \fBSCANNER WITH STORABLE STATES\fP.
 .TP
 \fB-F\fP
-Partial support for flex syntax.
+Partial support for flex syntax. When this flag is active then named
+definitions must be surrounded by curly braces and can be defined without an
+equal sign and the terminating semi colon. Instead names are treated as direct
+double quoted strings.
 .TP
 \fB-g\fP
 Generate a scanner that utilizes GCC's computed goto feature. That is \*(re
@@ -435,6 +438,12 @@ Named definitions are of the form:
 \fIname\fP \fC=\fP \fI\*(rx\fP\fC;\fP
 .RE
 .LP
+When \fB-F\fP is active, then named definitions are also of the form:
+.P
+.RS
+\fIname\fP \fI\*(rx\fP
+.RE
+.LP
 Configurations look like named definitions whose names start 
 with "\fBre2c:\fP":
 .P
@@ -511,7 +520,9 @@ matches \fIr\fP at least \fIn\fP but not more than \fIm\fP times.
 match any character except newline (\\n).
 .TP
 \fIdef\fP
-matches named definition as specified by \fIdef\fP.
+matches named definition as specified by \fIdef\fP only if \fB-F\fP is
+off. If the switch \fB-F\fP is active then this behaves like it was enclosed
+in double quotes and matches the string \fIdef\fP.
 .LP
 Character classes and string literals may contain octoal or hexadecimal 
 character definitions and the following set of escape sequences (\fB\\n\fP,

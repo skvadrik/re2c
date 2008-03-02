@@ -50,7 +50,8 @@
      CONFIG = 266,
      VALUE = 267,
      NUMBER = 268,
-     SETUP = 269
+     SETUP = 269,
+     FID = 270
    };
 #endif
 /* Tokens.  */
@@ -66,6 +67,7 @@
 #define VALUE 267
 #define NUMBER 268
 #define SETUP 269
+#define FID 270
 
 
 
@@ -84,7 +86,7 @@ typedef union YYSTYPE
 	re2c::CondList	*clist;
 }
 /* Line 1489 of yacc.c.  */
-#line 88 "y.tab.h"
+#line 90 "y.tab.h"
 	YYSTYPE;
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1

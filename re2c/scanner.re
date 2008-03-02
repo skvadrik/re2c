@@ -387,7 +387,20 @@ scan:
 					return CONFIG;
 				}
 
-	name / (space* ("="|">"|","))	{
+	name / (space+ [^=>,])	{
+					if (FFlag)
+					{
+						cur = ptr > tok ? ptr - 1 : cursor;
+						yylval.symbol = Symbol::find(token());
+						return FID;
+					} else {
+						cur = ptr > tok ? ptr - 1 : cursor;
+						yylval.symbol = Symbol::find(token());
+						return ID;
+					}
+				}
+
+	name / (space* [=>,])	{
 					cur = ptr > tok ? ptr - 1 : cursor;
 					yylval.symbol = Symbol::find(token());
 					return ID;

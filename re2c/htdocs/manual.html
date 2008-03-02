@@ -110,7 +110,10 @@ may crash dot.<br /><br /></dd>
 <dd>Generate a scanner with support for storable state. For details see below
 at <b>SCANNER WITH STORABLE STATES</b>.<br /><br /></dd>
 <dt><b>-F</b><dt>
-<dd>Partial support for flex syntax.<br /><br /></dd>
+<dd>Partial support for flex syntax. When this flag is active then named 
+definitions must be surrounded by curly braces and can be defined without an
+equal sign and the terminating semi colon. Instead names are treated as direct
+double quoted strings.<br /><br /></dd>
 <dt><b>-g</b></dt>
 <dd>Generate a scanner that utilizes GCC's computed goto feature. That is re2c
 generates jump tables whenever a decision is of a certain complexity (e.g. a 
@@ -368,6 +371,10 @@ jumps) you can doso by using &lt;! pseudo-rules.
 <dl compact="compact">
 <dd><i>name</i> = <i>regular expression</i>;</dd>
 </dl>
+<p>When <b>-F</b> is active, then named definitions are also of the form:</p>
+<dl compact="compact">
+<dd><i>name</i> <i>regular expression</i></dd>
+</dl>
 <p>Configurations look like named definitions whose names start with
 "<b>re2c:</b>":</p>
 <dl compact="compact">
@@ -420,7 +427,9 @@ context can only be the end of a rule and not part of a named definition.</dd>
 <dt>.</dt>
 <dd>match any character except newline (\n).</dd>
 <dt><i>def</i></dt>
-<dd>matches named definition as specified by <i>def</i>.</dd>
+<dd>matches named definition as specified by <i>def</i> only if <b>-F</b> is
+off. If the switch <b>-F</b> is active then this behaves like it was enclosed
+in double quotes and matches the string <i>def</i>.</dd>
 </dl>
 <br />
 <br />
