@@ -626,6 +626,14 @@ Scanner::~Scanner()
 	}
 }
 
+void Scanner::check_token_length(uint len) const
+{
+	if (len >= BSIZE)
+	{
+		fatal("Token exceeds limit");
+	}
+}
+
 SubStr Scanner::raw_token(std::string enclosure) const
 {
 	return SubStr(std::string(enclosure + token().to_string() + enclosure).c_str());

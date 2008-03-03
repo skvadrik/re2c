@@ -39,6 +39,7 @@ public:
 	void config(const Str&, int);
 	void config(const Str&, const Str&);
 
+	void check_token_length(uint len) const;
 	SubStr token() const;
 	SubStr token(uint start, uint len) const;
 	SubStr raw_token(std::string enclosure) const;
@@ -65,11 +66,13 @@ inline void Scanner::fatal(const char *msg) const
 
 inline SubStr Scanner::token() const
 {
+	check_token_length(cur - tok);
 	return SubStr(tok, cur - tok);
 }
 
 inline SubStr Scanner::token(uint start, uint len) const
 {
+	check_token_length(len);
 	return SubStr(tok + start, len);
 }
 
