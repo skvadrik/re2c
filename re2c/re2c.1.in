@@ -438,7 +438,7 @@ Named definitions are of the form:
 \fIname\fP \fC=\fP \fI\*(rx\fP\fC;\fP
 .RE
 .LP
-When Sco	\fB-F\fP is active, then named definitions are also of the form:
+\fB-F\fP is active, then named definitions are also of the form:
 .P
 .RS
 \fIname\fP \fI\*(rx\fP
