@@ -18,7 +18,7 @@ private:
 	std::istream&	in;
 	std::ostream&   out;
 	char	*bot, *tok, *ptr, *cur, *pos, *lim, *top, *eof, *ctx;
-	uint	tchar, tline, cline, iscfg;
+	uint	tchar, tline, cline, iscfg, buf_size;
 
 private:
 	char *fill(char*);
@@ -39,7 +39,7 @@ public:
 	void config(const Str&, int);
 	void config(const Str&, const Str&);
 
-	void check_token_length(uint len) const;
+	void check_token_length(char *pos, uint len) const;
 	SubStr token() const;
 	SubStr token(uint start, uint len) const;
 	SubStr raw_token(std::string enclosure) const;
@@ -66,13 +66,13 @@ inline void Scanner::fatal(const char *msg) const
 
 inline SubStr Scanner::token() const
 {
-	check_token_length(cur - tok);
+	check_token_length(tok, cur - tok);
 	return SubStr(tok, cur - tok);
 }
 
 inline SubStr Scanner::token(uint start, uint len) const
 {
-	check_token_length(len);
+	check_token_length(tok + start, len);
 	return SubStr(tok + start, len);
 }
 

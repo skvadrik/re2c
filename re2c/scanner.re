@@ -626,9 +626,9 @@ Scanner::~Scanner()
 	}
 }
 
-void Scanner::check_token_length(uint len) const
+void Scanner::check_token_length(char *pos, uint len) const
 {
-	if (len >= BSIZE)
+	if (pos < bot || pos + len >= top)
 	{
 		fatal("Token exceeds limit");
 	}
