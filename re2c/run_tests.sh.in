@@ -8,7 +8,12 @@ diff -u $0 $0 >/dev/null 2>&1 && diff='diff -u' || diff='diff'
 if uname|grep -q -i 'CYGWIN' && test -x "@WINBUILDDIR@/re2c.exe"; then
 re2c='@WINBUILDDIR@/re2c.exe'
 else
-re2c='@builddir@/re2c'
+valgrind=`which valgrind`
+if test -n "${valgrind}"; then
+  valgrind="${valgrind} -q "
+  echo "Using valgrind"
+fi
+re2c="${valgrind}@builddir@/re2c"
 fi
 if test ! -x "${re2c}"; then
   echo "Cannot find re2c executable (${re2c})."
