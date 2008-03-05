@@ -21,7 +21,7 @@ private:
 	uint	tchar, tline, cline, iscfg, buf_size;
 
 private:
-	char *fill(char*);
+	char *fill(char*, uint);
 	Scanner(const Scanner&); //unimplemented
 	Scanner& operator=(const Scanner&); //unimplemented
 

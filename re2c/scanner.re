@@ -21,8 +21,8 @@ extern YYSTYPE yylval;
 #define	YYCURSOR	cursor
 #define	YYLIMIT		lim
 #define	YYMARKER	ptr
-#define YYCTXMARKER ctx
-#define	YYFILL(n)	{cursor = fill(cursor);}
+#define	YYCTXMARKER ctx
+#define	YYFILL(n)	{cursor = fill(cursor, n);}
 
 #define	RETURN(i)	{cur = cursor; return i;}
 
@@ -38,23 +38,28 @@ Scanner::Scanner(std::istream& i, std::ostream& o)
 	;
 }
 
-char *Scanner::fill(char *cursor)
+char *Scanner::fill(char *cursor, uint need)
 {
 	if(!eof)
 	{
 		uint cnt = tok - bot;
 		if(cnt)
 		{
-			memcpy(bot, tok, cnt);
+			memcpy(bot, tok, top - tok);
 			tok = bot;
 			ptr -= cnt;
 			cursor -= cnt;
 			pos -= cnt;
 			lim -= cnt;
 		}
-		if((top - lim) < BSIZE)
+		need = MAX(need, BSIZE);
+		if((top - lim) < need)
 		{
-			char *buf = new char[(lim - bot) + BSIZE];
+			char *buf = new char[(lim - bot) + need];
+			if (!buf)
+			{
+				fatal("Out of memory");
+			}
 			memcpy(buf, tok, lim - tok);
 			tok = buf;
 			ptr = &buf[ptr - bot];
@@ -65,8 +70,8 @@ char *Scanner::fill(char *cursor)
 			delete [] bot;
 			bot = buf;
 		}
-		in.read(lim, BSIZE);
-		if((cnt = in.gcount()) != BSIZE)
+		in.read(lim, need);
+		if((cnt = in.gcount()) != need)
 		{
 			eof = &lim[cnt];
 			*eof++ = '\0';
