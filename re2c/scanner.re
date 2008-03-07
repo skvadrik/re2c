@@ -66,7 +66,7 @@ char *Scanner::fill(char *cursor, uint need)
 			cursor = &buf[cursor - bot];
 			pos = &buf[pos - bot];
 			lim = &buf[lim - bot];
-			top = &lim[BSIZE];
+			top = &lim[need];
 			delete [] bot;
 			bot = buf;
 		}
