@@ -45,7 +45,7 @@ char *Scanner::fill(char *cursor, uint need)
 		uint cnt = tok - bot;
 		if(cnt)
 		{
-			memcpy(bot, tok, top - tok);
+			memmove(bot, tok, top - tok);
 			tok = bot;
 			ptr -= cnt;
 			cursor -= cnt;
@@ -102,7 +102,7 @@ config  = "re2c" cname+ ("@" name)?;
 value   = [^\r\n; \t]* | dstring | sstring;
 */
 
-int Scanner::echo()
+Scanner::EchoState Scanner::echo()
 {
 	char *cursor = cur;
 	bool ignore_eoc = false;
@@ -110,13 +110,17 @@ int Scanner::echo()
 
 	if (eof && cursor == eof) // Catch EOF
 	{
-		return 0;
+		return Stop;
 	}
 	
 	tok = cursor;
 echo:
 /*!re2c
 	"/*!re2c"	{
+					if (rFlag)
+					{
+						mapCodeName.clear();
+					}
 					if (bUsedYYMaxFill && bSinglePass)
 					{
 						fatal("found scanner block after YYMAXFILL declaration");
@@ -126,7 +130,28 @@ echo:
 						out.write((const char*)(tok), (const char*)(&cursor[-7]) - (const char*)(tok));
 					}
 					tok = cursor;
-					RETURN(1);
+					RETURN(Parse);
+				}
+	"/*!repeat:re2c"	{
+					if (!rFlag)
+					{
+						fatal("Cannot reuse scanner definition without -r flag");
+					}
+					next_label = 0;
+					next_fill_index = 0;
+					bWroteGetState = false;
+					bWroteCondCheck = false;
+					mapCodeName.clear();
+					if (bUsedYYMaxFill && bSinglePass)
+					{
+						fatal("found scanner block after YYMAXFILL declaration");
+					}
+					if (!DFlag)
+					{
+						out.write((const char*)(tok), (const char*)(&cursor[-14]) - (const char*)(tok));
+					}
+					tok = cursor;
+					RETURN(Reuse);
 				}
 	"/*!max:re2c" {
 					if (bUsedYYMaxFill)
@@ -226,7 +251,7 @@ echo:
 					}
 					if(cursor == eof)
 					{
-						RETURN(0);
+						RETURN(Stop);
 					}
 				}
 	any			{

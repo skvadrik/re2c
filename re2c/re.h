@@ -498,7 +498,9 @@ typedef std::vector<std::string>        RegExpIndices;
 typedef std::list<RuleOp*>              RuleOpList;
 typedef std::map<std::string, std::string> StringMap;
 
-extern void genCode(std::ostream&, uint&, RegExp*, const RegExpMap*, const std::string&, bool, bool&);
+class DFA;
+
+extern DFA* genCode(std::ostream&, uint&, RegExp*, const RegExpMap*, const std::string&, bool, bool&);
 extern void genGetStateGoto(std::ostream&, uint&, uint);
 extern void genCondTable(std::ostream&, uint, const RegExpMap&);
 extern void genCondGoto(std::ostream&, uint, const RegExpMap&);

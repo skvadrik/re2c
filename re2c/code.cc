@@ -2252,7 +2252,7 @@ void Scanner::config(const Str& cfg, const Str& val)
 	}
 	else if (mapVariableKeys.find(cfg.to_string()) != mapVariableKeys.end())
     {
-    	if (bFirstPass && !mapCodeName.insert(
+    	if ((bFirstPass || rFlag) && !mapCodeName.insert(
     			std::make_pair(cfg.to_string().substr(sizeof("variable:") - 1), strVal)
     			).second)
     	{
@@ -2261,7 +2261,7 @@ void Scanner::config(const Str& cfg, const Str& val)
     }
 	else if (mapDefineKeys.find(cfg.to_string()) != mapDefineKeys.end())
     {
-    	if (bFirstPass && !mapCodeName.insert(
+    	if ((bFirstPass || rFlag) && !mapCodeName.insert(
     			std::make_pair(cfg.to_string().substr(sizeof("define:") - 1), strVal)
     			).second)
     	{
@@ -2270,7 +2270,7 @@ void Scanner::config(const Str& cfg, const Str& val)
     }
 	else if (mapLabelKeys.find(cfg.to_string()) != mapLabelKeys.end())
     {
-    	if (bFirstPass && !mapCodeName.insert(
+    	if ((bFirstPass || rFlag) && !mapCodeName.insert(
     			std::make_pair(cfg.to_string().substr(sizeof("label:") - 1), strVal)
     			).second)
     	{

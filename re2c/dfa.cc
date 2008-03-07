@@ -251,13 +251,15 @@ struct GoTo
 	void	*to;
 };
 
-DFA::DFA(Ins *ins, uint ni, uint lb, uint ub, Char *rep)
+DFA::DFA(Ins *ins, uint ni, uint lb, uint ub, const Char *rep)
 	: lbChar(lb)
 	, ubChar(ub)
 	, nStates(0)
 	, head(NULL)
 	, tail(&head)
 	, toDo(NULL)
+	, free_ins(ins)
+	, free_rep(rep)
 {
 	Ins **work = new Ins * [ni + 1];
 	uint nc = ub - lb;
@@ -351,6 +353,8 @@ DFA::~DFA()
 		head = s->next;
 		delete s;
 	}
+	delete [] free_ins;
+	delete [] free_rep;
 }
 
 void DFA::addState(State **a, State *s)

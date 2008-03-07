@@ -256,9 +256,11 @@ public:
 	uint	nStates;
 	State	*head, **tail;
 	State	*toDo;
+	const Ins     *free_ins;
+	const Char    *free_rep;
 
 public:
-	DFA(Ins*, uint, uint, uint, Char*);
+	DFA(Ins*, uint, uint, uint, const Char*);
 	~DFA();
 	void addState(State**, State*);
 	State *findState(Ins**, uint);

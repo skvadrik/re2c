@@ -142,6 +142,9 @@ have \*(re themselves when building from your source.
 \fB-o output\fP
 Specify the output file.
 .TP
+\fB-r\fP
+Allows reuse of scanner definitions with '/*!repeat:re2c' after '/*!re2c'.
+.TP
 \fB-s\fP
 Generate nested \fCif\fPs for some \fCswitch\fPes.  Many compilers need this
 assist to generate better code.

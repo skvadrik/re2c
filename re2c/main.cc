@@ -31,6 +31,7 @@ bool fFlag = false;
 bool FFlag = false;
 bool gFlag = false;
 bool iFlag = false;
+bool rFlag = false;
 bool sFlag = false;
 bool tFlag = false;
 bool uFlag = false;
@@ -83,6 +84,7 @@ bool bWroteGetState = false;
 bool bWroteCondCheck = false;
 bool bCaseInsensitive = false;
 bool bCaseInverted = false;
+bool bTypesDone = false;
 
 uint nRealChars = 256;
 
@@ -114,6 +116,7 @@ static const mbo_opt_struct OPTIONS[] =
 	mbo_opt_struct('h', 0, "help"),
 	mbo_opt_struct('i', 0, "no-debug-info"),
 	mbo_opt_struct('o', 1, "output"),
+	mbo_opt_struct('r', 0, "reusable"),
 	mbo_opt_struct('s', 0, "nested-ifs"),
 	mbo_opt_struct('t', 1, "type-header"),
 	mbo_opt_struct('u', 0, "unicode"),
@@ -160,6 +163,8 @@ static void usage()
 	"\n"
 	"-o     --output=output  Specify the output file instead of stdout\n"
 	"                        This cannot be used together with -e switch.\n"
+	"\n"
+	"-r     --reusable       Allow reuse of scanner definitions.\n"
 	"\n"
 	"-s     --nested-ifs     Generate nested ifs for some switches. Many compilers\n"
 	"                        need this assist to generate better code.\n"
@@ -257,6 +262,10 @@ int main(int argc, char *argv[])
 
 			case 'o':
 			outputFileName = opt_arg;
+			break;
+
+			case 'r':
+			rFlag = true;
 			break;
 
 			case 's':

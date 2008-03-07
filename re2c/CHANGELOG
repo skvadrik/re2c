@@ -1,5 +1,6 @@
 Version 0.13.3 (2008-??-??)
 ---------------------------
+- Added -r flag to allow reuse of scanner definitions.
 - Added -F flag to support flex syntax in rules.
 - Fixed SEGV in scanner that occurs with very large blocks.
 - Fixed issue with unused yybm.

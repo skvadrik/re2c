@@ -29,7 +29,13 @@ public:
 	Scanner(std::istream&, std::ostream&);
 	~Scanner();
 
-	int echo();
+	enum EchoState {
+		Stop,
+		Parse,
+		Reuse,
+	};
+
+	EchoState echo();
 	int scan();
 	
 	void fatalf(const char*, ...) const;

@@ -25,6 +25,7 @@ extern bool fFlag;
 extern bool FFlag;
 extern bool gFlag;
 extern bool iFlag;
+extern bool rFlag;
 extern bool sFlag;
 extern bool tFlag;
 extern bool uFlag;
@@ -77,6 +78,7 @@ extern bool bWroteGetState;
 extern bool bWroteCondCheck;
 extern bool bCaseInsensitive;
 extern bool bCaseInverted;
+extern bool bTypesDone;
 
 extern uint asc2ebc[256];
 extern uint ebc2asc[256];
