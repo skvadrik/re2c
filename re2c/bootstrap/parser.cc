@@ -136,7 +136,8 @@ static re2c::RegExpMap  specMap;
 static RegExp           *spec, *specNone = NULL;
 static RuleOpList       specStar;
 static Scanner          *in = NULL;
-static StringMap        ruleSetupMap;
+static Scanner::ParseMode  parseMode;
+static SetupMap            ruleSetupMap;
 
 /* Bison version 1.875 emits a definition that is not working
  * with several g++ version. Hence we disable it here.
@@ -210,14 +211,15 @@ void setup_rule(CondList *clist, Token *code)
 	assert(clist);
 	assert(code);
 	context_check(clist);
-	if (bFirstPass) {
+	if (bFirstPass)
+	{
 		for(CondList::const_iterator it = clist->begin(); it != clist->end(); ++it)
 		{
 			if (ruleSetupMap.find(*it) != ruleSetupMap.end())
 			{
-				in->fatalf("code to setup rule '%s' is already defined", it->c_str());
+				in->fatalf_at(code->line, "code to setup rule '%s' is already defined", it->c_str());
 			}
-			ruleSetupMap[*it] = code->text.to_string();
+			ruleSetupMap[*it] = std::make_pair(code->line, code->text.to_string());
 		}
 	}
 	delete clist;
@@ -246,7 +248,7 @@ void setup_rule(CondList *clist, Token *code)
 
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 typedef union YYSTYPE
-#line 128 "parser.y"
+#line 130 "parser.y"
 {
 	re2c::Symbol	*symbol;
 	re2c::RegExp	*regexp;
@@ -258,7 +260,7 @@ typedef union YYSTYPE
 	re2c::CondList	*clist;
 }
 /* Line 187 of yacc.c.  */
-#line 262 "parser.cc"
+#line 264 "parser.cc"
 	YYSTYPE;
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1
@@ -271,7 +273,7 @@ typedef union YYSTYPE
 
 
 /* Line 216 of yacc.c.  */
-#line 275 "parser.cc"
+#line 277 "parser.cc"
 
 #ifdef short
 # undef short
@@ -576,11 +578,11 @@ static const yytype_int8 yyrhs[] =
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint16 yyrline[] =
 {
-       0,   157,   157,   161,   162,   166,   174,   182,   186,   190,
-     194,   200,   208,   217,   221,   226,   231,   237,   245,   253,
-     258,   264,   276,   288,   294,   302,   305,   312,   317,   326,
-     329,   337,   340,   347,   351,   358,   362,   373,   377,   384,
-     388,   403,   410,   414,   418,   422,   429,   437,   441,   445
+       0,   159,   159,   163,   170,   174,   182,   190,   194,   198,
+     202,   208,   216,   225,   229,   234,   239,   245,   253,   261,
+     266,   272,   284,   296,   302,   310,   313,   320,   325,   334,
+     337,   345,   348,   355,   359,   366,   370,   381,   385,   392,
+     396,   411,   418,   422,   426,   430,   437,   445,   449,   453
 };
 #endif
 
@@ -1537,15 +1539,25 @@ yyreduce:
   switch (yyn)
     {
         case 2:
-#line 157 "parser.y"
+#line 159 "parser.y"
     {
 			accept = 0;
 			spec = NULL;
 		}
     break;
 
+  case 3:
+#line 164 "parser.y"
+    {
+			if (parseMode == Scanner::Reuse)
+			{
+				in->fatal("Rules not allowed in 'repeat:re2c' block");
+			}
+		}
+    break;
+
   case 5:
-#line 167 "parser.y"
+#line 175 "parser.y"
     {
 			if ((yyvsp[(1) - (4)].symbol)->re)
 			{
@@ -1556,7 +1568,7 @@ yyreduce:
     break;
 
   case 6:
-#line 175 "parser.y"
+#line 183 "parser.y"
     {
 			if ((yyvsp[(1) - (2)].symbol)->re)
 			{
@@ -1567,28 +1579,28 @@ yyreduce:
     break;
 
   case 7:
-#line 183 "parser.y"
-    {
-			in->fatal("trailing contexts are not allowed in named definitions");
-		}
-    break;
-
-  case 8:
-#line 187 "parser.y"
-    {
-			in->fatal("trailing contexts are not allowed in named definitions");
-		}
-    break;
-
-  case 9:
 #line 191 "parser.y"
     {
 			in->fatal("trailing contexts are not allowed in named definitions");
 		}
     break;
 
-  case 10:
+  case 8:
 #line 195 "parser.y"
+    {
+			in->fatal("trailing contexts are not allowed in named definitions");
+		}
+    break;
+
+  case 9:
+#line 199 "parser.y"
+    {
+			in->fatal("trailing contexts are not allowed in named definitions");
+		}
+    break;
+
+  case 10:
+#line 203 "parser.y"
     {
 			in->config(*(yyvsp[(1) - (4)].str), *(yyvsp[(3) - (4)].str));
 			delete (yyvsp[(1) - (4)].str);
@@ -1597,7 +1609,7 @@ yyreduce:
     break;
 
   case 11:
-#line 201 "parser.y"
+#line 209 "parser.y"
     {
 			in->config(*(yyvsp[(1) - (4)].str), (yyvsp[(3) - (4)].number));
 			delete (yyvsp[(1) - (4)].str);
@@ -1605,7 +1617,7 @@ yyreduce:
     break;
 
   case 12:
-#line 209 "parser.y"
+#line 217 "parser.y"
     {
 			if (cFlag)
 			{
@@ -1617,14 +1629,14 @@ yyreduce:
     break;
 
   case 13:
-#line 218 "parser.y"
+#line 226 "parser.y"
     {
 			context_rule((yyvsp[(2) - (7)].clist), (yyvsp[(4) - (7)].regexp), (yyvsp[(5) - (7)].regexp), (yyvsp[(6) - (7)].str), (yyvsp[(7) - (7)].token));
 		}
     break;
 
   case 14:
-#line 222 "parser.y"
+#line 230 "parser.y"
     {
 			assert((yyvsp[(7) - (7)].str));
 			context_rule((yyvsp[(2) - (7)].clist), (yyvsp[(4) - (7)].regexp), (yyvsp[(5) - (7)].regexp), (yyvsp[(7) - (7)].str), NULL);
@@ -1632,7 +1644,7 @@ yyreduce:
     break;
 
   case 15:
-#line 227 "parser.y"
+#line 235 "parser.y"
     {
 			context_none((yyvsp[(2) - (6)].clist));
 			delete (yyvsp[(5) - (6)].str);
@@ -1640,7 +1652,7 @@ yyreduce:
     break;
 
   case 16:
-#line 232 "parser.y"
+#line 240 "parser.y"
     {
 			assert((yyvsp[(6) - (6)].str));
 			context_none((yyvsp[(2) - (6)].clist));
@@ -1649,7 +1661,7 @@ yyreduce:
     break;
 
   case 17:
-#line 238 "parser.y"
+#line 246 "parser.y"
     {
 			context_check(NULL);
 			Token *token = new Token((yyvsp[(7) - (7)].token), (yyvsp[(7) - (7)].token)->line, (yyvsp[(6) - (7)].str));
@@ -1660,7 +1672,7 @@ yyreduce:
     break;
 
   case 18:
-#line 246 "parser.y"
+#line 254 "parser.y"
     {
 			assert((yyvsp[(7) - (7)].str));
 			context_check(NULL);
@@ -1671,7 +1683,7 @@ yyreduce:
     break;
 
   case 19:
-#line 254 "parser.y"
+#line 262 "parser.y"
     {
 			context_none(NULL);
 			delete (yyvsp[(5) - (6)].str);
@@ -1679,7 +1691,7 @@ yyreduce:
     break;
 
   case 20:
-#line 259 "parser.y"
+#line 267 "parser.y"
     {
 			assert((yyvsp[(6) - (6)].str));
 			context_none(NULL);
@@ -1688,7 +1700,7 @@ yyreduce:
     break;
 
   case 21:
-#line 265 "parser.y"
+#line 273 "parser.y"
     {
 			context_check(NULL);
 			if (specNone)
@@ -1703,7 +1715,7 @@ yyreduce:
     break;
 
   case 22:
-#line 277 "parser.y"
+#line 285 "parser.y"
     {
 			assert((yyvsp[(3) - (3)].str));
 			context_check(NULL);
@@ -1718,7 +1730,7 @@ yyreduce:
     break;
 
   case 23:
-#line 289 "parser.y"
+#line 297 "parser.y"
     {
 			CondList *clist = new CondList();
 			clist->insert("*");
@@ -1727,28 +1739,28 @@ yyreduce:
     break;
 
   case 24:
-#line 295 "parser.y"
+#line 303 "parser.y"
     {
 			setup_rule((yyvsp[(2) - (4)].clist), (yyvsp[(4) - (4)].token));
 		}
     break;
 
   case 25:
-#line 302 "parser.y"
+#line 310 "parser.y"
     {
 			in->fatal("unnamed condition not supported");
 		}
     break;
 
   case 26:
-#line 306 "parser.y"
+#line 314 "parser.y"
     {
 			(yyval.clist) = (yyvsp[(1) - (1)].clist);
 		}
     break;
 
   case 27:
-#line 313 "parser.y"
+#line 321 "parser.y"
     {
 			(yyval.clist) = new CondList();
 			(yyval.clist)->insert((yyvsp[(1) - (1)].symbol)->GetName().to_string());
@@ -1756,7 +1768,7 @@ yyreduce:
     break;
 
   case 28:
-#line 318 "parser.y"
+#line 326 "parser.y"
     {
 			(yyvsp[(1) - (3)].clist)->insert((yyvsp[(3) - (3)].symbol)->GetName().to_string());
 			(yyval.clist) = (yyvsp[(1) - (3)].clist);
@@ -1764,56 +1776,56 @@ yyreduce:
     break;
 
   case 29:
-#line 326 "parser.y"
+#line 334 "parser.y"
     {
 			(yyval.str) = NULL;
 		}
     break;
 
   case 30:
-#line 330 "parser.y"
+#line 338 "parser.y"
     {
 			(yyval.str) = new Str((yyvsp[(3) - (3)].symbol)->GetName().to_string().c_str());
 		}
     break;
 
   case 31:
-#line 337 "parser.y"
+#line 345 "parser.y"
     {
 			(yyval.regexp) = new NullOp;
 		}
     break;
 
   case 32:
-#line 341 "parser.y"
+#line 349 "parser.y"
     {
 			(yyval.regexp) = (yyvsp[(2) - (2)].regexp);
 		}
     break;
 
   case 33:
-#line 348 "parser.y"
+#line 356 "parser.y"
     {
 			(yyval.regexp) = (yyvsp[(1) - (1)].regexp);
 		}
     break;
 
   case 34:
-#line 352 "parser.y"
+#line 360 "parser.y"
     {
 			(yyval.regexp) = mkAlt((yyvsp[(1) - (3)].regexp), (yyvsp[(3) - (3)].regexp));
 		}
     break;
 
   case 35:
-#line 359 "parser.y"
+#line 367 "parser.y"
     {
 			(yyval.regexp) = (yyvsp[(1) - (1)].regexp);
 		}
     break;
 
   case 36:
-#line 363 "parser.y"
+#line 371 "parser.y"
     {
 			(yyval.regexp) = mkDiff((yyvsp[(1) - (3)].regexp), (yyvsp[(3) - (3)].regexp));
 			if(!(yyval.regexp))
@@ -1824,28 +1836,28 @@ yyreduce:
     break;
 
   case 37:
-#line 374 "parser.y"
+#line 382 "parser.y"
     {
 			(yyval.regexp) = (yyvsp[(1) - (1)].regexp);
 		}
     break;
 
   case 38:
-#line 378 "parser.y"
+#line 386 "parser.y"
     {
 			(yyval.regexp) = new CatOp((yyvsp[(1) - (2)].regexp), (yyvsp[(2) - (2)].regexp));
 		}
     break;
 
   case 39:
-#line 385 "parser.y"
+#line 393 "parser.y"
     {
 			(yyval.regexp) = (yyvsp[(1) - (1)].regexp);
 		}
     break;
 
   case 40:
-#line 389 "parser.y"
+#line 397 "parser.y"
     {
 			switch((yyvsp[(2) - (2)].op))
 			{
@@ -1863,42 +1875,42 @@ yyreduce:
     break;
 
   case 41:
-#line 404 "parser.y"
+#line 412 "parser.y"
     {
 			(yyval.regexp) = new CloseVOp((yyvsp[(1) - (2)].regexp), (yyvsp[(2) - (2)].extop).minsize, (yyvsp[(2) - (2)].extop).maxsize);
 		}
     break;
 
   case 42:
-#line 411 "parser.y"
+#line 419 "parser.y"
     {
 			(yyval.op) = (yyvsp[(1) - (1)].op);
 		}
     break;
 
   case 43:
-#line 415 "parser.y"
+#line 423 "parser.y"
     {
 			(yyval.op) = (yyvsp[(1) - (1)].op);
 		}
     break;
 
   case 44:
-#line 419 "parser.y"
+#line 427 "parser.y"
     {
 			(yyval.op) = ((yyvsp[(1) - (2)].op) == (yyvsp[(2) - (2)].op)) ? (yyvsp[(1) - (2)].op) : '*';
 		}
     break;
 
   case 45:
-#line 423 "parser.y"
+#line 431 "parser.y"
     {
 			(yyval.op) = ((yyvsp[(1) - (2)].op) == (yyvsp[(2) - (2)].op)) ? (yyvsp[(1) - (2)].op) : '*';
 		}
     break;
 
   case 46:
-#line 430 "parser.y"
+#line 438 "parser.y"
     {
 			if(!(yyvsp[(1) - (1)].symbol)->re)
 			{
@@ -1909,21 +1921,21 @@ yyreduce:
     break;
 
   case 47:
-#line 438 "parser.y"
+#line 446 "parser.y"
     {
 			(yyval.regexp) = (yyvsp[(1) - (1)].regexp);
 		}
     break;
 
   case 48:
-#line 442 "parser.y"
+#line 450 "parser.y"
     {
 			(yyval.regexp) = (yyvsp[(1) - (1)].regexp);
 		}
     break;
 
   case 49:
-#line 446 "parser.y"
+#line 454 "parser.y"
     {
 			(yyval.regexp) = (yyvsp[(2) - (3)].regexp);
 		}
@@ -1931,7 +1943,7 @@ yyreduce:
 
 
 /* Line 1267 of yacc.c.  */
-#line 1935 "parser.cc"
+#line 1947 "parser.cc"
       default: break;
     }
   YY_SYMBOL_PRINT ("-> $$ =", yyr1[yyn], &yyval, &yyloc);
@@ -2145,7 +2157,7 @@ yyreturn:
 }
 
 
-#line 451 "parser.y"
+#line 459 "parser.y"
 
 
 extern "C" {
@@ -2166,7 +2178,6 @@ void parse(Scanner& i, std::ostream& o, std::ostream* h)
 {
 	DFA *dfa = NULL;
 	std::map<std::string, DFA*>  dfa_map;
-	Scanner::EchoState echo;
 
 	in = &i;
 
@@ -2180,15 +2191,21 @@ void parse(Scanner& i, std::ostream& o, std::ostream* h)
 	o << " */\n";
 	o << sourceFileInfo;
 	
-	while ((echo = i.echo()) != Scanner::Stop)
+	while ((parseMode = i.echo()) != Scanner::Stop)
 	{
 		bool bPrologBrace = false;
+		if (rFlag && parseMode == Scanner::Parse && (dfa || dfa_map.size()))
+		{
+			in->fatal("Cannot have another 're2c' block after a block containing rules");
+		}
+		in->set_in_parse(true);
 		yyparse();
-		if (echo == Scanner::Reuse)
+		in->set_in_parse(false);
+		if (parseMode == Scanner::Reuse)
 		{
 			if (!dfa && dfa_map.empty())
 			{
-				in->fatal("Got 'repeaet:re2c' without 're2c'");
+				in->fatal("Got 'repeat:re2c' without 're2c'");
 			}
 		}
 		else
@@ -2202,38 +2219,38 @@ void parse(Scanner& i, std::ostream& o, std::ostream* h)
 		if (cFlag)
 		{
 			RegExpMap::iterator it;
-			StringMap::const_iterator itRuleSetup;
+			SetupMap::const_iterator itRuleSetup;
 
-					if (echo != Scanner::Reuse)
+			if (parseMode != Scanner::Reuse)
+			{
+				if (!specStar.empty())
+				{
+					for (it = specMap.begin(); it != specMap.end(); ++it)
 					{
-						if (!specStar.empty())
+						assert(it->second.second);
+						for (RuleOpList::const_iterator itOp = specStar.begin(); itOp != specStar.end(); ++itOp)
 						{
-							for (it = specMap.begin(); it != specMap.end(); ++it)
-							{
-								assert(it->second.second);
-								for (RuleOpList::const_iterator itOp = specStar.begin(); itOp != specStar.end(); ++itOp)
-								{
-									it->second.second = mkAlt((*itOp)->copy(accept++), it->second.second);
-								}
-							}
+							it->second.second = mkAlt((*itOp)->copy(accept++), it->second.second);
 						}
-			
-						if (specNone)
-						{
-							// After merging star rules merge none code to specmap
-							// this simplifies some stuff.
-							// Note that "0" inserts first, which is important.
-							specMap["0"] = std::make_pair(0, specNone);
-						}
-						else
-						{
-							// We reserved 0 for specNone but it is not present,
-							// so we can decrease all specs.
-							for (it = specMap.begin(); it != specMap.end(); ++it)
-							{
-								it->second.first--;
-							}
-						}
+					}
+				}
+	
+				if (specNone)
+				{
+					// After merging star rules merge none code to specmap
+					// this simplifies some stuff.
+					// Note that "0" inserts first, which is important.
+					specMap["0"] = std::make_pair(0, specNone);
+				}
+				else
+				{
+					// We reserved 0 for specNone but it is not present,
+					// so we can decrease all specs.
+					for (it = specMap.begin(); it != specMap.end(); ++it)
+					{
+						it->second.first--;
+					}
+				}
 			}
 
 			size_t nCount = specMap.size();
@@ -2242,29 +2259,29 @@ void parse(Scanner& i, std::ostream& o, std::ostream* h)
 			{
 				assert(it->second.second);
 
-				if (echo == Scanner::Reuse)
+				if (parseMode == Scanner::Reuse)
 				{
 					dfa_map[it->first]->emit(o, topIndent, &specMap, it->first, !--nCount, bPrologBrace);
 				}
 				else
 				{
-				itRuleSetup = ruleSetupMap.find(it->first);				
-				if (itRuleSetup != ruleSetupMap.end())
-				{
-					yySetupRule = itRuleSetup->second;
-				}
-				else
-				{
-					itRuleSetup = ruleSetupMap.find("*");
+					itRuleSetup = ruleSetupMap.find(it->first);				
 					if (itRuleSetup != ruleSetupMap.end())
 					{
-						yySetupRule = itRuleSetup->second;
+						yySetupRule = itRuleSetup->second.second;
 					}
 					else
 					{
-						yySetupRule = "";
+						itRuleSetup = ruleSetupMap.find("*");
+						if (itRuleSetup != ruleSetupMap.end())
+						{
+							yySetupRule = itRuleSetup->second.second;
+						}
+						else
+						{
+							yySetupRule = "";
+						}
 					}
-				}
 					dfa_map[it->first] = genCode(o, topIndent, it->second.second, &specMap, it->first, !--nCount, bPrologBrace);
 				}
 			}
@@ -2275,7 +2292,7 @@ void parse(Scanner& i, std::ostream& o, std::ostream* h)
 		}
 		else if (spec)
 		{
-			if (echo == Scanner::Reuse)
+			if (parseMode == Scanner::Reuse)
 			{
 				dfa->emit(o, topIndent, NULL, "", 0, bPrologBrace);
 			}
@@ -2294,17 +2311,23 @@ void parse(Scanner& i, std::ostream& o, std::ostream* h)
 
 	if (cFlag)
 	{
-		StringMap::const_iterator itRuleSetup;
+		SetupMap::const_iterator itRuleSetup;
 		for (itRuleSetup = ruleSetupMap.begin(); itRuleSetup != ruleSetupMap.end(); ++itRuleSetup)
 		{
 			if (itRuleSetup->first != "*" && specMap.find(itRuleSetup->first) == specMap.end())
 			{
-				in->fatalf("Setup for non existing rule '%s' found", itRuleSetup->first.c_str());
+				in->fatalf_at(itRuleSetup->second.first, "Setup for non existing rule '%s' found", itRuleSetup->first.c_str());
 			}
 		}
-		if (specMap.size() < (ruleSetupMap.find("*") == ruleSetupMap.end() ? ruleSetupMap.size() : ruleSetupMap.size()))
+		if (specMap.size() < ruleSetupMap.size())
 		{
-			in->fatalf("Setup for all rules with '*' not possible when all rules are setup explicitly");
+			uint line = in->get_cline();
+			itRuleSetup = ruleSetupMap.find("*");
+			if (itRuleSetup != ruleSetupMap.end())
+			{
+				line = itRuleSetup->second.first;
+			}
+			in->fatalf_at(line, "Setup for all rules with '*' not possible when all rules are setup explicitly");
 		}
 	}
 
