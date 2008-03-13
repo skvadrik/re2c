@@ -77,7 +77,7 @@ void showIns(std::ostream &o, const Ins &i, const Ins &base)
 
 uint RegExp::fixedLength()
 {
-	return ~0;
+	return ~0u;
 }
 
 const char *NullOp::type = "NullOp";
@@ -391,7 +391,7 @@ uint AltOp::fixedLength()
 	uint l2 = exp1->fixedLength();
 
 	if (l1 != l2 || l1 == ~0u)
-		return ~0;
+		return ~0u;
 
 	return l1;
 }
@@ -548,7 +548,7 @@ uint Scanner::unescape(SubStr &s) const
 			if (s.len < 2)
 			{
 				fatal(s.ofs()+s.len, "Illegal hexadecimal character code, two hexadecimal digits are required");
-				return ~0;
+				return ~0u;
 			}
 			
 			const char *p1 = strchr(hex, tolower(s.str[0]));
@@ -557,7 +557,7 @@ uint Scanner::unescape(SubStr &s) const
 			if (!p1 || !p2)
 			{
 				fatal(s.ofs()+(p1?1:0), "Illegal hexadecimal character code");
-				return ~0;
+				return ~0u;
 			}
 			else
 			{
@@ -576,7 +576,7 @@ uint Scanner::unescape(SubStr &s) const
 			if (s.len < 8)
 			{
 				fatal(s.ofs()+s.len, "Illegal unicode character, eight hexadecimal digits are required");
-				return ~0;
+				return ~0u;
 			}
 
 			uint l = 0;
@@ -627,7 +627,7 @@ uint Scanner::unescape(SubStr &s) const
 					c == 'X'
 					? "Illegal hexadecimal character code, four hexadecimal digits are required"
 					: "Illegal unicode character, four hexadecimal digits are required");
-				return ~0;
+				return ~0u;
 			}
 			
 			const char *p1 = strchr(hex, tolower(s.str[0]));
@@ -641,7 +641,7 @@ uint Scanner::unescape(SubStr &s) const
 					c == 'X'
 					? "Illegal hexadecimal character code, non hexxdecimal digit found"
 					: "Illegal unicode character, non hexadecimal digit found");
-				return ~0;
+				return ~0u;
 			}
 			else
 			{
@@ -672,7 +672,7 @@ uint Scanner::unescape(SubStr &s) const
 		case '7':
 		{
 			fatal(s.ofs()-1, "Illegal octal character code, first digit must be 0 thru 3");
-			return ~0;
+			return ~0u;
 		}
 
 		case '0':
@@ -683,7 +683,7 @@ uint Scanner::unescape(SubStr &s) const
 			if (s.len < 2)
 			{
 				fatal(s.ofs()+s.len, "Illegal octal character code, three octal digits are required");
-				return ~0;
+				return ~0u;
 			}
 
 			const char *p0 = strchr(oct, c);
@@ -693,7 +693,7 @@ uint Scanner::unescape(SubStr &s) const
 			if (!p0 || !p1 || !p2)
 			{
 				fatal(s.ofs()+(p1?1:0), "Illegal octal character code, non octal digit found");
-				return ~0;
+				return ~0u;
 			}
 			else
 			{
