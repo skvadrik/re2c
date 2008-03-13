@@ -3,21 +3,27 @@ _XPG=1
 result=0
 errcnt=0
 tstcnt=0;
+if test "$1" == "--valgrind"; then
+valgrind=`which valgrind`
+shift
+else
+valgrind=
+fi
 diff -u $0 $0 >/dev/null 2>&1 && diff='diff -u' || diff='diff'
 #diff="${diff} -I '#line [0-9]*'"
 if uname|grep -q -i 'CYGWIN' && test -x "@WINBUILDDIR@/re2c.exe"; then
 re2c='@WINBUILDDIR@/re2c.exe'
 else
-valgrind=`which valgrind`
-if test -n "${valgrind}"; then
-  valgrind="${valgrind} -q "
-  echo "Using valgrind"
-fi
-re2c="${valgrind}@builddir@/re2c"
+re2c='@builddir@/re2c'
 fi
 if test ! -x "${re2c}"; then
   echo "Cannot find re2c executable (${re2c})."
 fi
+if test -n "${valgrind}"; then
+  valgrind="${valgrind} -q "
+  echo "Using valgrind"
+fi
+re2c="${valgrind}${re2c}"
 echo "Testing: ${re2c}"
 if ${re2c} -v|grep -q 're2c @PACKAGE_VERSION@ *\r*'; then
 echo "Version: @PACKAGE_VERSION@"
