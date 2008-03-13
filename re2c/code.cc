@@ -46,7 +46,7 @@ std::string replaceParam(std::string str, const std::string& param, const _Ty& v
 	return str;
 }
 
-static void genYYFill(std::ostream &o, uint ind, uint need)
+static void genYYFill(std::ostream &o, uint, uint need)
 {
 	if (bUseYYFillParam)
 	{
@@ -1312,7 +1312,7 @@ uint merge(Span *x0, State *fg, State *bg)
 	}
 }
 
-const uint cInfinity = ~0;
+const uint cInfinity = ~0u;
 
 class SCC
 {
@@ -2036,6 +2036,8 @@ void genTypes(std::string& o, uint ind, const RegExpMap& specMap)
 
 	for(RegExpMap::const_iterator itSpecMap = specMap.begin(); itSpecMap != specMap.end(); ++itSpecMap)
 	{
+		// If an entry is < 0 then we did the 0/empty correction twice.
+		assert(itSpecMap->second.first >= 0);
 		vCondList[itSpecMap->second.first] = itSpecMap->first;
 	}
 
