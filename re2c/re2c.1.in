@@ -143,7 +143,13 @@ have \*(re themselves when building from your source.
 Specify the output file.
 .TP
 \fB-r\fP
-Allows reuse of scanner definitions with '/*!repeat:re2c' after '/*!re2c'.
+Allows reuse of scanner definitions with '\fB/*!repeat:re2c\fP' after
+'\fB/*!re2c\fP'. In this mode only one '\fB/*!re2c\fP' block, the last,
+can contain rules. Its rules are being saved and reused by every
+'\fB/*!repeat:re2c\fP' block that follows. These blocks can contain
+inplace configurations. That way it is possible to create the same scanner
+multiple times for different character types, different input mechanisms or
+different output mechanisms.
 .TP
 \fB-s\fP
 Generate nested \fCif\fPs for some \fCswitch\fPes.  Many compilers need this
