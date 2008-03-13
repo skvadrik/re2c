@@ -34,6 +34,7 @@ Scanner::Scanner(std::istream& i, std::ostream& o)
 	, out(o)
 	, bot(NULL), tok(NULL), ptr(NULL), cur(NULL), pos(NULL), lim(NULL)
 	, top(NULL), eof(NULL), ctx(NULL), tchar(0), tline(0), cline(1), iscfg(0)
+	, in_parse(false)
 {
 	;
 }
@@ -53,7 +54,7 @@ char *Scanner::fill(char *cursor, uint need)
 			lim -= cnt;
 		}
 		need = MAX(need, BSIZE);
-		if((top - lim) < need)
+		if(static_cast<uint>(top - lim) < need)
 		{
 			char *buf = new char[(lim - bot) + need];
 			if (!buf)
@@ -102,7 +103,7 @@ config  = "re2c" cname+ ("@" name)?;
 value   = [^\r\n; \t]* | dstring | sstring;
 */
 
-Scanner::EchoState Scanner::echo()
+Scanner::ParseMode Scanner::echo()
 {
 	char *cursor = cur;
 	bool ignore_eoc = false;
@@ -112,7 +113,7 @@ Scanner::EchoState Scanner::echo()
 	{
 		return Stop;
 	}
-	
+
 	tok = cursor;
 echo:
 /*!re2c
@@ -259,7 +260,6 @@ echo:
 				}
 */
 }
-
 
 int Scanner::scan()
 {
@@ -624,13 +624,38 @@ value:
 */
 }
 
-void Scanner::fatal(uint ofs, const char *msg) const
+void Scanner::set_in_parse(bool new_in_parse)
+{
+	in_parse = new_in_parse;
+}
+
+void Scanner::fatal_at(uint line, uint ofs, const char *msg) const
 {
 	out.flush();
 	std::cerr << "re2c: error: "
-		<< "line " << tline << ", column " << (tchar + ofs + 1) << ": "
+		<< "line " << line << ", column " << (tchar + ofs + 1) << ": "
 		<< msg << std::endl;
 	exit(1);
+}
+
+void Scanner::fatal(uint ofs, const char *msg) const
+{
+	fatal_at(in_parse ? tline : cline, ofs, msg);
+}
+
+void Scanner::fatalf_at(uint line, const char* fmt, ...) const
+{
+	char szBuf[4096];
+
+	va_list args;
+	
+	va_start(args, fmt);
+	vsnprintf(szBuf, sizeof(szBuf), fmt, args);
+	va_end(args);
+	
+	szBuf[sizeof(szBuf)-1] = '0';
+	
+	fatal_at(line, 0, szBuf);
 }
 
 void Scanner::fatalf(const char *fmt, ...) const

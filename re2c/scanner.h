@@ -19,6 +19,7 @@ private:
 	std::ostream&   out;
 	char	*bot, *tok, *ptr, *cur, *pos, *lim, *top, *eof, *ctx;
 	uint	tchar, tline, cline, iscfg, buf_size;
+	bool    in_parse;
 
 private:
 	char *fill(char*, uint);
@@ -29,15 +30,19 @@ public:
 	Scanner(std::istream&, std::ostream&);
 	~Scanner();
 
-	enum EchoState {
+	enum ParseMode {
 		Stop,
 		Parse,
-		Reuse,
+		Reuse
 	};
 
-	EchoState echo();
+	ParseMode echo();
 	int scan();
-	
+
+	uint get_cline() const;
+	void set_in_parse(bool new_in_parse);
+	void fatal_at(uint line, uint ofs, const char *msg) const;
+	void fatalf_at(uint line, const char*, ...) const;
 	void fatalf(const char*, ...) const;
 	void fatal(const char*) const;
 	void fatal(uint, const char*) const;
@@ -64,6 +69,11 @@ public:
 	RegExp * invToRE(SubStr s) const;
 	RegExp * mkDot() const;
 };
+
+inline uint Scanner::get_cline() const
+{
+	return cline;
+}
 
 inline void Scanner::fatal(const char *msg) const
 {
