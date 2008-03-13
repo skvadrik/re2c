@@ -33,7 +33,8 @@ static re2c::RegExpMap  specMap;
 static RegExp           *spec, *specNone = NULL;
 static RuleOpList       specStar;
 static Scanner          *in = NULL;
-static StringMap        ruleSetupMap;
+static Scanner::ParseMode  parseMode;
+static SetupMap            ruleSetupMap;
 
 /* Bison version 1.875 emits a definition that is not working
  * with several g++ version. Hence we disable it here.
@@ -107,14 +108,15 @@ void setup_rule(CondList *clist, Token *code)
 	assert(clist);
 	assert(code);
 	context_check(clist);
-	if (bFirstPass) {
+	if (bFirstPass)
+	{
 		for(CondList::const_iterator it = clist->begin(); it != clist->end(); ++it)
 		{
 			if (ruleSetupMap.find(*it) != ruleSetupMap.end())
 			{
-				in->fatalf("code to setup rule '%s' is already defined", it->c_str());
+				in->fatalf_at(code->line, "code to setup rule '%s' is already defined", it->c_str());
 			}
-			ruleSetupMap[*it] = code->text.to_string();
+			ruleSetupMap[*it] = std::make_pair(code->line, code->text.to_string());
 		}
 	}
 	delete clist;
@@ -159,6 +161,12 @@ spec:
 			spec = NULL;
 		}
 	|	spec rule
+		{
+			if (parseMode == Scanner::Reuse)
+			{
+				in->fatal("Rules not allowed in 'repeat:re2c' block");
+			}
+		}
 	|	spec decl
 ;
 
@@ -468,7 +476,6 @@ void parse(Scanner& i, std::ostream& o, std::ostream* h)
 {
 	DFA *dfa = NULL;
 	std::map<std::string, DFA*>  dfa_map;
-	Scanner::EchoState echo;
 
 	in = &i;
 
@@ -482,15 +489,21 @@ void parse(Scanner& i, std::ostream& o, std::ostream* h)
 	o << " */\n";
 	o << sourceFileInfo;
 	
-	while ((echo = i.echo()) != Scanner::Stop)
+	while ((parseMode = i.echo()) != Scanner::Stop)
 	{
 		bool bPrologBrace = false;
+		if (rFlag && parseMode == Scanner::Parse && (dfa || dfa_map.size()))
+		{
+			in->fatal("Cannot have another 're2c' block after a block containing rules");
+		}
+		in->set_in_parse(true);
 		yyparse();
-		if (echo == Scanner::Reuse)
+		in->set_in_parse(false);
+		if (parseMode == Scanner::Reuse)
 		{
 			if (!dfa && dfa_map.empty())
 			{
-				in->fatal("Got 'repeaet:re2c' without 're2c'");
+				in->fatal("Got 'repeat:re2c' without 're2c'");
 			}
 		}
 		else
@@ -504,38 +517,38 @@ void parse(Scanner& i, std::ostream& o, std::ostream* h)
 		if (cFlag)
 		{
 			RegExpMap::iterator it;
-			StringMap::const_iterator itRuleSetup;
+			SetupMap::const_iterator itRuleSetup;
 
-					if (echo != Scanner::Reuse)
+			if (parseMode != Scanner::Reuse)
+			{
+				if (!specStar.empty())
+				{
+					for (it = specMap.begin(); it != specMap.end(); ++it)
 					{
-						if (!specStar.empty())
+						assert(it->second.second);
+						for (RuleOpList::const_iterator itOp = specStar.begin(); itOp != specStar.end(); ++itOp)
 						{
-							for (it = specMap.begin(); it != specMap.end(); ++it)
-							{
-								assert(it->second.second);
-								for (RuleOpList::const_iterator itOp = specStar.begin(); itOp != specStar.end(); ++itOp)
-								{
-									it->second.second = mkAlt((*itOp)->copy(accept++), it->second.second);
-								}
-							}
+							it->second.second = mkAlt((*itOp)->copy(accept++), it->second.second);
 						}
-			
-						if (specNone)
-						{
-							// After merging star rules merge none code to specmap
-							// this simplifies some stuff.
-							// Note that "0" inserts first, which is important.
-							specMap["0"] = std::make_pair(0, specNone);
-						}
-						else
-						{
-							// We reserved 0 for specNone but it is not present,
-							// so we can decrease all specs.
-							for (it = specMap.begin(); it != specMap.end(); ++it)
-							{
-								it->second.first--;
-							}
-						}
+					}
+				}
+	
+				if (specNone)
+				{
+					// After merging star rules merge none code to specmap
+					// this simplifies some stuff.
+					// Note that "0" inserts first, which is important.
+					specMap["0"] = std::make_pair(0, specNone);
+				}
+				else
+				{
+					// We reserved 0 for specNone but it is not present,
+					// so we can decrease all specs.
+					for (it = specMap.begin(); it != specMap.end(); ++it)
+					{
+						it->second.first--;
+					}
+				}
 			}
 
 			size_t nCount = specMap.size();
@@ -544,29 +557,29 @@ void parse(Scanner& i, std::ostream& o, std::ostream* h)
 			{
 				assert(it->second.second);
 
-				if (echo == Scanner::Reuse)
+				if (parseMode == Scanner::Reuse)
 				{
 					dfa_map[it->first]->emit(o, topIndent, &specMap, it->first, !--nCount, bPrologBrace);
 				}
 				else
 				{
-				itRuleSetup = ruleSetupMap.find(it->first);				
-				if (itRuleSetup != ruleSetupMap.end())
-				{
-					yySetupRule = itRuleSetup->second;
-				}
-				else
-				{
-					itRuleSetup = ruleSetupMap.find("*");
+					itRuleSetup = ruleSetupMap.find(it->first);				
 					if (itRuleSetup != ruleSetupMap.end())
 					{
-						yySetupRule = itRuleSetup->second;
+						yySetupRule = itRuleSetup->second.second;
 					}
 					else
 					{
-						yySetupRule = "";
+						itRuleSetup = ruleSetupMap.find("*");
+						if (itRuleSetup != ruleSetupMap.end())
+						{
+							yySetupRule = itRuleSetup->second.second;
+						}
+						else
+						{
+							yySetupRule = "";
+						}
 					}
-				}
 					dfa_map[it->first] = genCode(o, topIndent, it->second.second, &specMap, it->first, !--nCount, bPrologBrace);
 				}
 			}
@@ -577,7 +590,7 @@ void parse(Scanner& i, std::ostream& o, std::ostream* h)
 		}
 		else if (spec)
 		{
-			if (echo == Scanner::Reuse)
+			if (parseMode == Scanner::Reuse)
 			{
 				dfa->emit(o, topIndent, NULL, "", 0, bPrologBrace);
 			}
@@ -596,17 +609,23 @@ void parse(Scanner& i, std::ostream& o, std::ostream* h)
 
 	if (cFlag)
 	{
-		StringMap::const_iterator itRuleSetup;
+		SetupMap::const_iterator itRuleSetup;
 		for (itRuleSetup = ruleSetupMap.begin(); itRuleSetup != ruleSetupMap.end(); ++itRuleSetup)
 		{
 			if (itRuleSetup->first != "*" && specMap.find(itRuleSetup->first) == specMap.end())
 			{
-				in->fatalf("Setup for non existing rule '%s' found", itRuleSetup->first.c_str());
+				in->fatalf_at(itRuleSetup->second.first, "Setup for non existing rule '%s' found", itRuleSetup->first.c_str());
 			}
 		}
-		if (specMap.size() < (ruleSetupMap.find("*") == ruleSetupMap.end() ? ruleSetupMap.size() : ruleSetupMap.size()))
+		if (specMap.size() < ruleSetupMap.size())
 		{
-			in->fatalf("Setup for all rules with '*' not possible when all rules are setup explicitly");
+			uint line = in->get_cline();
+			itRuleSetup = ruleSetupMap.find("*");
+			if (itRuleSetup != ruleSetupMap.end())
+			{
+				line = itRuleSetup->second.first;
+			}
+			in->fatalf_at(line, "Setup for all rules with '*' not possible when all rules are setup explicitly");
 		}
 	}
 

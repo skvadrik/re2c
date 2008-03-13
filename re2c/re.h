@@ -496,7 +496,8 @@ typedef std::pair<int, RegExp*>         NRegExp;
 typedef std::map<std::string, NRegExp>  RegExpMap;
 typedef std::vector<std::string>        RegExpIndices;
 typedef std::list<RuleOp*>              RuleOpList;
-typedef std::map<std::string, std::string> StringMap;
+typedef std::pair<uint, std::string>    LineCode;
+typedef std::map<std::string, LineCode> SetupMap;
 
 class DFA;
 
