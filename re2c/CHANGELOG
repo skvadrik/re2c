@@ -1,4 +1,7 @@
-Version 0.13.3 (2008-??-??)
+Version 0.13.4 (2008-??-??)
+---------------------------
+
+Version 0.13.3 (2008-03-14)
 ---------------------------
 - Added -r flag to allow reuse of scanner definitions.
 - Added -F flag to support flex syntax in rules.
