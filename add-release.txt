@@ -17,7 +17,7 @@
 
 6. For HEAD:
    > svn mkdir tags/RELEASE_<new>
-   > svn cp re2c/trunk/re2c tags/RELEASE_<new>
+   > svn cp trunk/re2c tags/RELEASE_<new>
 
 7. For HEAD edit version in:
    - tags/RELEASE_<new>/re2c/configure.in   (del ".dev")
@@ -28,7 +28,7 @@
 
 9. Check version in config_w32.h
 
-10. Build window sversions
+10. Build windows versions
 
 11. Test windows build using cygwin
 
