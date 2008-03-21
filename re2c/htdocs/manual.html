@@ -508,6 +508,9 @@ will be generated.</dd>
 <dd>Set this to zero to suppress generation of YYFILL(n). When using this be sure
 to verify that the generated scanner does not read behind input. Allowing
 this behavior might introduce sever security issues to you programs.</dd>
+<dt><i>re2c:yyfill:check</i> <b>=</b> 1 </b>;</b></dt>
+<dd>This can be set 0 to suppress output of the pre condition using YYCURSOR and
+YYLIMIT which becomes usefull when YYLIMIT + max(YYFILL) is always accessible.</dd>
 <dt><i>re2c:yyfill:parameter</i> <b>=</b> 1 <b>;</b></dt>
 <dd>Allows to suppress parameter passing to <b>YYFILL</b> calls. If set to zero 
 then no parameter is passed to <b>YYFILL</b>. However <b>define:YYFILL@LEN</b>
@@ -597,6 +600,8 @@ inside <b>YYSETCONDITION</b> will be replaced with the actual new condition valu
 <dt><i>re2c:define:YYSETSTATE</i> <b>=</b> YYSETSTATE <b>;</b></dt>
 <dd>Allows to overwrite the define <b>YYSETSTATE</b> and thus avoiding it by setting the
 value to the actual code needed.</dd>
+<dt><i>re2c:define:YYSETSTATE:naked</i> <b>=</b> 0 <b>;</b></dt>
+<dt>Wehn set to 1 neither braces, parameter nor semicolon gets emitted.</dt>
 <dt><i>re2c:define:YYSETSTATE@state</i> <b>=</b> @@ <b>;</b></dt>
 <dd>When using <b>re2c:define:YYSETSTATE</b> then any occurence of this text 
 inside <b>YYSETSTATE</b> will be replaced with the actual new state value.</dd>

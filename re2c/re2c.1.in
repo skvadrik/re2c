@@ -613,6 +613,10 @@ Set this to zero to suppress generation of YYFILL(n). When using this be sure
 to verify that the generated scanner does not read behind input. Allowing
 this behavior might introduce sever security issues to you programs.
 .TP
+\fIre2c:yyfill:check\fP \fB=\fP 1 \fB;\fP
+This can be set 0 to suppress output of the pre condition using YYCURSOR and
+YYLIMIT which becomes usefull when YYLIMIT + max(YYFILL) is always accessible.
+.TP
 \fIre2c:yyfill:parameter\fP \fB=\fP 1 \fB;\fP
 Allows to suppress parameter passing to \fBYYFILL\fP calls. If set to zero 
 then no parameter is passed to \fBYYFILL\fP. However \fBdefine:YYFILL@LEN\fP
@@ -725,6 +729,9 @@ inside \fBYYSETCONDITION\fP will be replaced with the actual new condition value
 \fIre2c:define:YYSETSTATE\fP \fB=\fP YYSETSTATE \fB;\fP
 Allows to overwrite the define \fBYYSETSTATE\fP and thus avoiding it by setting the
 value to the actual code needed.
+.TP
+\fIre2c:define:YYSETSTATE:naked\fP \fB=\fP 0 \fB;\fP
+Wehn set to 1 neither braces, parameter nor semicolon gets emitted.
 .TP
 \fIre2c:define:YYSETSTATE@state\fP \fB=\fP @@ \fB;\fP
 When using \fIre2c:define:YYSETSTATE\fP then any occurence of this text 

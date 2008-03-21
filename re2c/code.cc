@@ -420,14 +420,21 @@ static void need(std::ostream &o, uint ind, uint n, bool & readCh, bool bSetMark
 
 	if (bUseYYFill && n > 0)
 	{
+		o << indent(ind);
 		if (n == 1)
 		{
-			o << indent(ind) << "if (" << mapCodeName["YYLIMIT"] << " == " << mapCodeName["YYCURSOR"] << ") ";
+			if (bUseYYFillCheck)
+			{
+				o << "if (" << mapCodeName["YYLIMIT"] << " == " << mapCodeName["YYCURSOR"] << ") ";
+			}
 			genYYFill(o, ind, n);
 		}
 		else
 		{
-			o << indent(ind) << "if ((" << mapCodeName["YYLIMIT"] << " - " << mapCodeName["YYCURSOR"] << ") < " << n << ") ";
+			if (bUseYYFillCheck)
+			{
+				o << "if ((" << mapCodeName["YYLIMIT"] << " - " << mapCodeName["YYCURSOR"] << ") < " << n << ") ";
+			}
 			genYYFill(o, ind, n);
 		}
 	}
@@ -2115,6 +2122,10 @@ void Scanner::config(const Str& cfg, int num)
 	{
 		bUseYYFillParam = num != 0;
 	}
+	else if (cfg.to_string() == "yyfill:check")
+	{
+		bUseYYFillCheck = num != 0;
+	}
 	else if (cfg.to_string() == "cgoto:threshold")
 	{
 		cGotoThreshold = num;
@@ -2147,6 +2158,10 @@ void Scanner::config(const Str& cfg, int num)
 	else if (cfg.to_string() == "define:YYGETSTATE:naked")
 	{
 		bUseYYGetStateNaked = num != 0;
+	}
+	else if (cfg.to_string() == "define:YYSETSTATE:naked")
+	{
+		bUseYYSetStateNaked = num != 0;
 	}
 	else
 	{

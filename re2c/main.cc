@@ -53,10 +53,12 @@ bool bUseStartLabel  = false;
 bool bUseStateNext   = false;
 bool bUseYYFill      = true;
 bool bUseYYFillParam = true;
+bool bUseYYFillCheck = true;
 bool bUseYYFillNaked = false;
 bool bUseYYSetConditionParam = true;
 bool bUseYYGetConditionNaked = false;
 bool bUseYYSetStateParam = true;
+bool bUseYYSetStateNaked = false;
 bool bUseYYGetStateNaked = false;
 
 std::string startLabelName;

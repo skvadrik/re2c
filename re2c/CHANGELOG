@@ -1,5 +1,7 @@
 Version 0.13.4 (2008-??-??)
 ---------------------------
+- Added re2c:yyfill:check inplace configuration.
+- Added re2c:define:YYSETSTATE:naked inplace configuration.
 
 Version 0.13.3 (2008-03-14)
 ---------------------------
