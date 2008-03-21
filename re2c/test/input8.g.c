@@ -8,11 +8,11 @@
 
 	if ((YYLIMIT - YYCURSOR) < 4) YYFILL(4);
 	yych = *YYCURSOR;
-	if (yych == 0x0A) goto yy4;
+	if (yych == '\n') goto yy4;
 	yyaccept = 0;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= 0x00) goto yy6;
-	if (yych != 0x0A) goto yy8;
+	if (yych != '\n') goto yy8;
 yy3:
 #line 6 "input8.g.re"
 	{ return 1; }
@@ -26,7 +26,7 @@ yy6:
 	yyaccept = 1;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= 0x00) goto yy10;
-	if (yych != 0x0A) goto yy11;
+	if (yych != '\n') goto yy11;
 yy7:
 #line 5 "input8.g.re"
 	{ return 0; }
@@ -34,7 +34,7 @@ yy7:
 yy8:
 	yych = *++YYCURSOR;
 	if (yych <= 0x00) goto yy10;
-	if (yych != 0x0A) goto yy11;
+	if (yych != '\n') goto yy11;
 yy9:
 	YYCURSOR = YYMARKER;
 	if (yyaccept <= 0) {

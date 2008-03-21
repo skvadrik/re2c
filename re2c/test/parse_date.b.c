@@ -782,7 +782,7 @@ std:
 	yych = *YYCURSOR;
 	switch (yych) {
 	case 0x00:
-	case 0x0A:	goto yy48;
+	case '\n':	goto yy48;
 	case ' ':	goto yy45;
 	case '(':	goto yy42;
 	case '+':

@@ -53,9 +53,9 @@ std:
 	if ((YYLIMIT - YYCURSOR) < 3) YYFILL(3);
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 0x09:
+	case '\t':
 	case ' ':	goto yy6;
-	case 0x0A:	goto yy8;
+	case '\n':	goto yy8;
 	case '0':
 	case '1':
 	case '2':

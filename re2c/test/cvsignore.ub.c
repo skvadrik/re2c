@@ -161,7 +161,7 @@ yy23:
 	if (YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 yy24:
-	if (yych == 0x0000000A) goto yy6;
+	if (yych == '\n') goto yy6;
 	if (yych == '$') goto yy21;
 	goto yy23;
 yy25:
@@ -183,7 +183,7 @@ yy30:
 	if (YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 yy31:
-	if (yych == 0x0000000A) goto yy6;
+	if (yych == '\n') goto yy6;
 	if (yych == '$') goto yy28;
 	goto yy30;
 yy32:
@@ -215,7 +215,7 @@ yy42:
 	if (YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 yy43:
-	if (yych == 0x0000000A) goto yy6;
+	if (yych == '\n') goto yy6;
 	if (yych == '$') goto yy40;
 	goto yy42;
 yy44:
@@ -243,7 +243,7 @@ yy52:
 	if (YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 yy53:
-	if (yych == 0x0000000A) goto yy6;
+	if (yych == '\n') goto yy6;
 	if (yych == '$') goto yy50;
 	goto yy52;
 }

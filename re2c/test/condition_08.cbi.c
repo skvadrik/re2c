@@ -251,7 +251,7 @@ yyc_Skiptoeol:
 		if ((s->lim - s->cur) < 5) if(fill(s, 5) >= 0) break;
 		s->yych = *s->cur;
 		if (s->yych <= '>') {
-			if (s->yych == 0x0A) goto yy50;
+			if (s->yych == '\n') goto yy50;
 			goto yy52;
 		} else {
 			if (s->yych <= '?') goto yy47;
@@ -267,8 +267,8 @@ yy48:
 			}
 yy49:
 		s->yych = *(s->tok = ++s->cur);
-		if (s->yych == 0x0A) goto yy55;
-		if (s->yych == 0x0D) goto yy53;
+		if (s->yych == '\n') goto yy55;
+		if (s->yych == '\r') goto yy53;
 		goto yy48;
 yy50:
 		++s->cur;
@@ -281,7 +281,7 @@ yy52:
 		goto yy48;
 yy53:
 		s->yych = *++s->cur;
-		if (s->yych == 0x0A) goto yy55;
+		if (s->yych == '\n') goto yy55;
 yy54:
 		s->cur = s->tok;
 		goto yy48;
@@ -294,10 +294,10 @@ yy57:
 		s->yych = *++s->cur;
 		if (s->yych != '/') goto yy54;
 		s->yych = *++s->cur;
-		if (s->yych == 0x0A) goto yy60;
-		if (s->yych != 0x0D) goto yy54;
+		if (s->yych == '\n') goto yy60;
+		if (s->yych != '\r') goto yy54;
 		s->yych = *++s->cur;
-		if (s->yych != 0x0A) goto yy54;
+		if (s->yych != '\n') goto yy54;
 yy60:
 		++s->cur;
 		{
@@ -310,7 +310,7 @@ yyc_String:
 		if (s->yych == '"') goto yy66;
 		if (s->yych != '\\') goto yy68;
 		++s->cur;
-		if ((s->yych = *s->cur) != 0x0A) goto yy69;
+		if ((s->yych = *s->cur) != '\n') goto yy69;
 yy65:
 		{
 				fputc(*s->tok, stdout);

@@ -83,11 +83,11 @@ std:
 	if ((s.lim - s.cur) < 3) fill(3);
 	curr = (unsigned char)*s.cur;
 	if (curr <= ' ') {
-		if (curr <= 0x09) {
+		if (curr <= '\t') {
 			if (curr <= 0x08) goto xx9;
 			goto xx6;
 		} else {
-			if (curr <= 0x0A) goto xx8;
+			if (curr <= '\n') goto xx8;
 			if (curr <= 0x1F) goto xx9;
 			goto xx6;
 		}

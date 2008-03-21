@@ -42,11 +42,11 @@ yy2:
 	case 0x06:
 	case 0x07:
 	case 0x08:
-	case 0x09:
-	case 0x0A:
-	case 0x0B:
-	case 0x0C:
-	case 0x0D:
+	case '\t':
+	case '\n':
+	case '\v':
+	case '\f':
+	case '\r':
 	case 0x0E:
 	case 0x0F:
 	case 0x10:
@@ -310,11 +310,11 @@ yy5:
 	case 0x06:
 	case 0x07:
 	case 0x08:
-	case 0x09:
-	case 0x0A:
-	case 0x0B:
-	case 0x0C:
-	case 0x0D:
+	case '\t':
+	case '\n':
+	case '\v':
+	case '\f':
+	case '\r':
 	case 0x0E:
 	case 0x0F:
 	case 0x10:

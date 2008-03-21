@@ -140,10 +140,10 @@ cppcomment:
 			YYCTYPE yych;
 			if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
 			yych = *YYCURSOR;
-			if (yych == 0x0A) goto yy20;
-			if (yych != 0x0D) goto yy22;
+			if (yych == '\n') goto yy20;
+			if (yych != '\r') goto yy22;
 			++YYCURSOR;
-			if ((yych = *YYCURSOR) == 0x0A) goto yy23;
+			if ((yych = *YYCURSOR) == '\n') goto yy23;
 yy19:
 #line 125 "strip_001.s.re"
 			{ goto cppcomment; }

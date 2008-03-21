@@ -259,7 +259,7 @@ yyc_Skiptoeol:
 			if ((s->lim - s->cur) < 5) { if(fill(s, 5) >= 0) break; }
 			yych = *s->cur;
 			if (yych <= '>') {
-				if (yych == 0x0A) goto yy44;
+				if (yych == '\n') goto yy44;
 				goto yy46;
 			} else {
 				if (yych <= '?') goto yy41;
@@ -277,8 +277,8 @@ yy42:
 #line 278 "<stdout>"
 yy43:
 			yych = *(s->tok = ++s->cur);
-			if (yych == 0x0A) goto yy49;
-			if (yych == 0x0D) goto yy47;
+			if (yych == '\n') goto yy49;
+			if (yych == '\r') goto yy47;
 			goto yy42;
 yy44:
 			++s->cur;
@@ -292,7 +292,7 @@ yy46:
 			goto yy42;
 yy47:
 			yych = *++s->cur;
-			if (yych == 0x0A) goto yy49;
+			if (yych == '\n') goto yy49;
 yy48:
 			s->cur = s->tok;
 			goto yy42;
@@ -307,10 +307,10 @@ yy51:
 			yych = *++s->cur;
 			if (yych != '/') goto yy48;
 			yych = *++s->cur;
-			if (yych == 0x0A) goto yy54;
-			if (yych != 0x0D) goto yy48;
+			if (yych == '\n') goto yy54;
+			if (yych != '\r') goto yy48;
 			yych = *++s->cur;
-			if (yych != 0x0A) goto yy48;
+			if (yych != '\n') goto yy48;
 yy54:
 			++s->cur;
 #line 153 "condition_06.cs.re"
@@ -325,7 +325,7 @@ yyc_String:
 			if (yych == '"') goto yy60;
 			if (yych != '\\') goto yy62;
 			++s->cur;
-			if ((yych = *s->cur) != 0x0A) goto yy63;
+			if ((yych = *s->cur) != '\n') goto yy63;
 yy59:
 #line 179 "condition_06.cs.re"
 			{

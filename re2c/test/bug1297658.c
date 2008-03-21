@@ -64,7 +64,7 @@ std:
 	if ((YYLIMIT - YYCURSOR) < 4) YYFILL(4);
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 0x0A:	goto yy6;
+	case '\n':	goto yy6;
 	case '.':	goto yy4;
 	case '0':	goto yy2;
 	default:	goto yy8;

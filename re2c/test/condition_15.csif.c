@@ -255,9 +255,9 @@ yyc_Skiptoeol:
 		if ((s->lim - s->cur) < 5) if (fill(s, 5) == ~0) break;
 yyFillLabel2:
 		s->yych = *s->cur;
-		if (s->yych <= 0x0D) {
-			if (s->yych == 0x0A) goto yy51;
-			if (s->yych <= 0x0C) goto yy53;
+		if (s->yych <= '\r') {
+			if (s->yych == '\n') goto yy51;
+			if (s->yych <= '\f') goto yy53;
 			goto yy50;
 		} else {
 			if (s->yych <= '?') {
@@ -273,12 +273,12 @@ yy48:
 		continue;
 yy49:
 		s->yych = *(s->tok = ++s->cur);
-		if (s->yych == 0x0A) goto yy58;
-		if (s->yych == 0x0D) goto yy56;
+		if (s->yych == '\n') goto yy58;
+		if (s->yych == '\r') goto yy56;
 		goto yy48;
 yy50:
 		s->yych = *++s->cur;
-		if (s->yych == 0x0A) goto yy54;
+		if (s->yych == '\n') goto yy54;
 		goto yy48;
 yy51:
 		++s->cur;
@@ -298,7 +298,7 @@ yy54:
 		continue;
 yy56:
 		s->yych = *++s->cur;
-		if (s->yych == 0x0A) goto yy58;
+		if (s->yych == '\n') goto yy58;
 yy57:
 		s->cur = s->tok;
 		goto yy48;
@@ -309,10 +309,10 @@ yy60:
 		s->yych = *++s->cur;
 		if (s->yych != '/') goto yy57;
 		s->yych = *++s->cur;
-		if (s->yych == 0x0A) goto yy63;
-		if (s->yych != 0x0D) goto yy57;
+		if (s->yych == '\n') goto yy63;
+		if (s->yych != '\r') goto yy57;
 		s->yych = *++s->cur;
-		if (s->yych != 0x0A) goto yy57;
+		if (s->yych != '\n') goto yy57;
 yy63:
 		++s->cur;
 		continue;
@@ -325,7 +325,7 @@ yyFillLabel3:
 		if (s->yych == '"') goto yy69;
 		if (s->yych != '\\') goto yy71;
 		++s->cur;
-		if ((s->yych = *s->cur) != 0x0A) goto yy72;
+		if ((s->yych = *s->cur) != '\n') goto yy72;
 yy68:
 		fprintf(stderr, "Normal\n");
 		fputc(s->cur[-1], stdout);

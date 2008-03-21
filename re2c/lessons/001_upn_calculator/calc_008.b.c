@@ -101,7 +101,7 @@ int scan(char *p)
 
 			curr = (unsigned char)*p;
 			if (curr <= '*') {
-				if (curr <= 0x09) {
+				if (curr <= '\t') {
 					if (curr <= 0x00) goto scan11;
 					if (curr <= 0x08) goto scan13;
 				} else {

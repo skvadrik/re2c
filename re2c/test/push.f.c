@@ -244,12 +244,12 @@ yyFillLabel0:
 	yych = *YYCURSOR;
 	switch (yych) {
 	case 0x00:	goto yy32;
-	case 0x09:
-	case 0x0B:
-	case 0x0C:
-	case 0x0D:
+	case '\t':
+	case '\v':
+	case '\f':
+	case '\r':
 	case ' ':	goto yy30;
-	case 0x0A:	goto yy28;
+	case '\n':	goto yy28;
 	case '(':	goto yy16;
 	case ')':	goto yy18;
 	case '*':	goto yy24;

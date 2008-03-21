@@ -134,11 +134,11 @@ std:
 	if ((YYLIMIT - YYCURSOR) < 5) YYFILL(5);
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 0x09:
-	case 0x0B:
-	case 0x0C:
+	case '\t':
+	case '\v':
+	case '\f':
 	case ' ':	goto yy58;
-	case 0x0A:	goto yy60;
+	case '\n':	goto yy60;
 	case '!':	goto yy34;
 	case '"':	goto yy13;
 	case '%':	goto yy24;
@@ -273,7 +273,7 @@ yy9:
 	yyaccept = 1;
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
-	case 0x0A:	goto yy10;
+	case '\n':	goto yy10;
 	default:	goto yy128;
 	}
 yy10:
@@ -308,7 +308,7 @@ yy13:
 	yyaccept = 1;
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
-	case 0x0A:	goto yy10;
+	case '\n':	goto yy10;
 	default:	goto yy106;
 	}
 yy14:
@@ -509,9 +509,9 @@ yy63:
 	yych = *YYCURSOR;
 yy64:
 	switch (yych) {
-	case 0x09:
-	case 0x0B:
-	case 0x0C:
+	case '\t':
+	case '\v':
+	case '\f':
 	case ' ':	goto yy63;
 	default:	goto yy59;
 	}
@@ -631,7 +631,7 @@ yy105:
 	yych = *YYCURSOR;
 yy106:
 	switch (yych) {
-	case 0x0A:	goto yy107;
+	case '\n':	goto yy107;
 	case '"':	goto yy109;
 	case '\\':	goto yy108;
 	default:	goto yy105;
@@ -710,7 +710,7 @@ yy112:
 	if (YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 0x0A:	goto yy107;
+	case '\n':	goto yy107;
 	case '"':	goto yy109;
 	case '0':
 	case '1':
@@ -728,7 +728,7 @@ yy114:
 	if (YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 0x0A:	goto yy107;
+	case '\n':	goto yy107;
 	case '"':	goto yy109;
 	case '0':
 	case '1':
@@ -856,7 +856,7 @@ yy127:
 	yych = *YYCURSOR;
 yy128:
 	switch (yych) {
-	case 0x0A:	goto yy107;
+	case '\n':	goto yy107;
 	case '\'':	goto yy130;
 	case '\\':	goto yy129;
 	default:	goto yy127;
@@ -925,7 +925,7 @@ yy132:
 	if (YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 0x0A:	goto yy107;
+	case '\n':	goto yy107;
 	case '\'':	goto yy130;
 	case '0':
 	case '1':
@@ -943,7 +943,7 @@ yy134:
 	if (YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 0x0A:	goto yy107;
+	case '\n':	goto yy107;
 	case '\'':	goto yy130;
 	case '0':
 	case '1':
@@ -1400,7 +1400,7 @@ comment:
 	if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 0x0A:	goto yy174;
+	case '\n':	goto yy174;
 	case '*':	goto yy172;
 	default:	goto yy176;
 	}

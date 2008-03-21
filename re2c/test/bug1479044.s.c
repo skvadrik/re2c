@@ -219,7 +219,7 @@ yy32:
 	if (YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 yy33:
-	if (yych == 0x0A) goto yy19;
+	if (yych == '\n') goto yy19;
 	if (yych == 'm') goto yy35;
 	goto yy32;
 yy34:
@@ -231,7 +231,7 @@ yy35:
 	if (YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	if (yych <= 'l') {
-		if (yych == 0x0A) goto yy19;
+		if (yych == '\n') goto yy19;
 		goto yy32;
 	} else {
 		if (yych <= 'm') goto yy35;
@@ -241,7 +241,7 @@ yy35:
 	if (YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	if (yych <= 'c') {
-		if (yych == 0x0A) goto yy19;
+		if (yych == '\n') goto yy19;
 		goto yy32;
 	} else {
 		if (yych <= 'd') goto yy38;
@@ -253,7 +253,7 @@ yy38:
 	if (YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	if (yych <= 'd') {
-		if (yych == 0x0A) goto yy19;
+		if (yych == '\n') goto yy19;
 		goto yy32;
 	} else {
 		if (yych <= 'e') goto yy39;
@@ -264,14 +264,14 @@ yy39:
 	++YYCURSOR;
 	if (YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
-	if (yych == 0x0A) goto yy19;
+	if (yych == '\n') goto yy19;
 	if (yych != 'm') goto yy32;
 yy40:
 	++YYCURSOR;
 	if (YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	if (yych <= '.') {
-		if (yych == 0x0A) goto yy19;
+		if (yych == '\n') goto yy19;
 		if (yych >= '.') goto yy44;
 	} else {
 		if (yych <= 'm') {
@@ -285,7 +285,7 @@ yy42:
 	if (YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	if (yych <= '-') {
-		if (yych == 0x0A) goto yy19;
+		if (yych == '\n') goto yy19;
 		goto yy42;
 	} else {
 		if (yych <= '.') goto yy44;
@@ -297,7 +297,7 @@ yy44:
 	if (YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	if (yych <= '.') {
-		if (yych == 0x0A) goto yy19;
+		if (yych == '\n') goto yy19;
 		if (yych <= '-') goto yy42;
 		goto yy44;
 	} else {
@@ -314,7 +314,7 @@ yy46:
 	if (YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	if (yych <= '.') {
-		if (yych == 0x0A) goto yy19;
+		if (yych == '\n') goto yy19;
 		if (yych <= '-') goto yy42;
 		goto yy44;
 	} else {
@@ -329,7 +329,7 @@ yy46:
 	if (YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	if (yych <= '.') {
-		if (yych == 0x0A) goto yy19;
+		if (yych == '\n') goto yy19;
 		if (yych <= '-') goto yy42;
 		goto yy44;
 	} else {
@@ -344,7 +344,7 @@ yy46:
 	if (YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	if (yych <= '-') {
-		if (yych == 0x0A) goto yy19;
+		if (yych == '\n') goto yy19;
 		goto yy42;
 	} else {
 		if (yych <= '.') goto yy44;
@@ -356,7 +356,7 @@ yy49:
 	if (YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	if (yych <= '.') {
-		if (yych == 0x0A) goto yy19;
+		if (yych == '\n') goto yy19;
 		if (yych <= '-') goto yy42;
 		goto yy44;
 	} else {
@@ -371,7 +371,7 @@ yy49:
 	if (YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	if (yych <= '.') {
-		if (yych == 0x0A) goto yy19;
+		if (yych == '\n') goto yy19;
 		if (yych <= '-') goto yy42;
 		goto yy44;
 	} else {
@@ -386,7 +386,7 @@ yy49:
 	if (YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	if (yych <= '.') {
-		if (yych == 0x0A) goto yy19;
+		if (yych == '\n') goto yy19;
 		if (yych <= '-') goto yy42;
 		goto yy44;
 	} else {
@@ -401,7 +401,7 @@ yy49:
 	if (YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	if (yych <= '.') {
-		if (yych == 0x0A) goto yy19;
+		if (yych == '\n') goto yy19;
 		if (yych <= '-') goto yy42;
 		goto yy44;
 	} else {
@@ -416,7 +416,7 @@ yy49:
 	if (YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	if (yych <= '.') {
-		if (yych == 0x0A) goto yy19;
+		if (yych == '\n') goto yy19;
 		if (yych <= '-') goto yy42;
 		goto yy44;
 	} else {
@@ -428,7 +428,7 @@ yy49:
 	if (YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	if (yych <= '.') {
-		if (yych == 0x0A) goto yy19;
+		if (yych == '\n') goto yy19;
 		if (yych <= '-') goto yy42;
 		goto yy44;
 	} else {
@@ -443,7 +443,7 @@ yy49:
 	if (YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	if (yych <= '.') {
-		if (yych == 0x0A) goto yy19;
+		if (yych == '\n') goto yy19;
 		if (yych <= '-') goto yy42;
 		goto yy44;
 	} else {
@@ -458,7 +458,7 @@ yy49:
 	if (YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	if (yych <= '.') {
-		if (yych == 0x0A) goto yy19;
+		if (yych == '\n') goto yy19;
 		if (yych <= '-') goto yy42;
 		goto yy44;
 	} else {
@@ -473,7 +473,7 @@ yy49:
 	if (YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	if (yych <= '.') {
-		if (yych == 0x0A) goto yy19;
+		if (yych == '\n') goto yy19;
 		if (yych <= '-') goto yy42;
 		goto yy44;
 	} else {
@@ -485,7 +485,7 @@ yy49:
 	if (YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	if (yych <= '-') {
-		if (yych == 0x0A) goto yy19;
+		if (yych == '\n') goto yy19;
 		goto yy42;
 	} else {
 		if (yych <= '.') goto yy59;
@@ -497,8 +497,8 @@ yy59:
 	if (YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	if (yych <= 'd') {
-		if (yych <= 0x0A) {
-			if (yych <= 0x09) goto yy42;
+		if (yych <= '\n') {
+			if (yych <= '\t') goto yy42;
 			goto yy19;
 		} else {
 			if (yych == '.') goto yy44;
@@ -519,7 +519,7 @@ yy60:
 	if (YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	if (yych <= '.') {
-		if (yych == 0x0A) goto yy19;
+		if (yych == '\n') goto yy19;
 		if (yych <= '-') goto yy42;
 		goto yy44;
 	} else {
@@ -534,7 +534,7 @@ yy60:
 	if (YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	if (yych <= '.') {
-		if (yych == 0x0A) goto yy19;
+		if (yych == '\n') goto yy19;
 		if (yych <= '-') goto yy42;
 		goto yy44;
 	} else {
@@ -550,7 +550,7 @@ yy60:
 	if (YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	if (yych <= '-') {
-		if (yych != 0x0A) goto yy42;
+		if (yych != '\n') goto yy42;
 	} else {
 		if (yych <= '.') goto yy44;
 		if (yych == 'm') goto yy40;
@@ -584,14 +584,14 @@ yy71:
 	++YYCURSOR;
 	if (YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
-	if (yych == 0x0A) goto yy19;
+	if (yych == '\n') goto yy19;
 	if (yych != '-') goto yy71;
 yy73:
 	++YYCURSOR;
 	if (YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	if (yych <= ',') {
-		if (yych == 0x0A) goto yy19;
+		if (yych == '\n') goto yy19;
 		goto yy71;
 	} else {
 		if (yych <= '-') goto yy73;
@@ -603,7 +603,7 @@ yy75:
 	if (YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	if (yych <= ',') {
-		if (yych == 0x0A) goto yy19;
+		if (yych == '\n') goto yy19;
 		goto yy71;
 	} else {
 		if (yych <= '-') goto yy77;
@@ -616,7 +616,7 @@ yy77:
 	if (YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	if (yych <= ',') {
-		if (yych == 0x0A) goto yy19;
+		if (yych == '\n') goto yy19;
 		goto yy71;
 	} else {
 		if (yych <= '-') goto yy73;
@@ -628,7 +628,7 @@ yy78:
 	if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
 	yych = *YYCURSOR;
 	if (yych <= '-') {
-		if (yych == 0x0A) goto yy19;
+		if (yych == '\n') goto yy19;
 		if (yych <= ',') goto yy71;
 		goto yy77;
 	} else {
@@ -646,7 +646,7 @@ yy81:
 	yych = *YYCURSOR;
 yy82:
 	if (yych <= ',') {
-		if (yych == 0x0A) goto yy19;
+		if (yych == '\n') goto yy19;
 		goto yy81;
 	} else {
 		if (yych <= '-') goto yy83;
@@ -658,7 +658,7 @@ yy83:
 	if (YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	if (yych <= '-') {
-		if (yych == 0x0A) goto yy19;
+		if (yych == '\n') goto yy19;
 		if (yych <= ',') goto yy81;
 		goto yy83;
 	} else {
@@ -672,7 +672,7 @@ yy85:
 	if (YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	if (yych <= '-') {
-		if (yych == 0x0A) goto yy19;
+		if (yych == '\n') goto yy19;
 		if (yych <= ',') goto yy81;
 		goto yy83;
 	} else {
@@ -685,7 +685,7 @@ yy87:
 	if (YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	if (yych <= '-') {
-		if (yych == 0x0A) goto yy19;
+		if (yych == '\n') goto yy19;
 		if (yych <= ',') goto yy81;
 	} else {
 		if (yych <= '.') goto yy85;
@@ -698,7 +698,7 @@ yy89:
 	if (YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	if (yych <= '-') {
-		if (yych == 0x0A) goto yy19;
+		if (yych == '\n') goto yy19;
 		if (yych <= ',') goto yy81;
 		goto yy83;
 	} else {
@@ -711,7 +711,7 @@ yy90:
 	if (YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	if (yych <= '-') {
-		if (yych == 0x0A) goto yy19;
+		if (yych == '\n') goto yy19;
 		if (yych <= ',') goto yy81;
 		goto yy89;
 	} else {
@@ -725,7 +725,7 @@ yy92:
 	if (YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	if (yych <= '-') {
-		if (yych == 0x0A) goto yy19;
+		if (yych == '\n') goto yy19;
 		if (yych <= ',') goto yy81;
 		goto yy83;
 	} else {
@@ -736,7 +736,7 @@ yy92:
 	if (YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	if (yych <= '-') {
-		if (yych == 0x0A) goto yy19;
+		if (yych == '\n') goto yy19;
 		if (yych <= ',') goto yy81;
 		goto yy83;
 	} else {
@@ -747,7 +747,7 @@ yy92:
 	if (YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	if (yych <= '-') {
-		if (yych == 0x0A) goto yy19;
+		if (yych == '\n') goto yy19;
 		if (yych <= ',') goto yy81;
 		goto yy83;
 	} else {
@@ -758,7 +758,7 @@ yy92:
 	if (YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	if (yych <= '-') {
-		if (yych == 0x0A) goto yy19;
+		if (yych == '\n') goto yy19;
 		if (yych <= ',') goto yy81;
 		goto yy83;
 	} else {
@@ -769,7 +769,7 @@ yy92:
 	if (YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	if (yych <= '-') {
-		if (yych == 0x0A) goto yy19;
+		if (yych == '\n') goto yy19;
 		if (yych <= ',') goto yy81;
 		goto yy83;
 	} else {
@@ -780,7 +780,7 @@ yy92:
 	if (YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	if (yych <= ',') {
-		if (yych == 0x0A) goto yy19;
+		if (yych == '\n') goto yy19;
 		goto yy81;
 	} else {
 		if (yych <= '-') goto yy83;
@@ -790,8 +790,8 @@ yy92:
 	if (YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	if (yych <= '.') {
-		if (yych <= 0x0A) {
-			if (yych <= 0x09) goto yy81;
+		if (yych <= '\n') {
+			if (yych <= '\t') goto yy81;
 			goto yy19;
 		} else {
 			if (yych <= ',') goto yy81;
@@ -810,7 +810,7 @@ yy92:
 	if (YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	if (yych <= '-') {
-		if (yych == 0x0A) goto yy19;
+		if (yych == '\n') goto yy19;
 		if (yych <= ',') goto yy81;
 		goto yy83;
 	} else {
@@ -821,7 +821,7 @@ yy92:
 	if (YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	if (yych <= '-') {
-		if (yych == 0x0A) goto yy19;
+		if (yych == '\n') goto yy19;
 		if (yych <= ',') goto yy81;
 		goto yy83;
 	} else {
@@ -832,7 +832,7 @@ yy92:
 	if (YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	if (yych <= '-') {
-		if (yych == 0x0A) goto yy19;
+		if (yych == '\n') goto yy19;
 		if (yych <= ',') goto yy81;
 		goto yy83;
 	} else {
@@ -843,7 +843,7 @@ yy92:
 	if (YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	if (yych <= ',') {
-		if (yych == 0x0A) goto yy19;
+		if (yych == '\n') goto yy19;
 		goto yy81;
 	} else {
 		if (yych <= '-') goto yy83;
@@ -853,8 +853,8 @@ yy92:
 	if (YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	if (yych <= '.') {
-		if (yych <= 0x0A) {
-			if (yych <= 0x09) goto yy81;
+		if (yych <= '\n') {
+			if (yych <= '\t') goto yy81;
 			goto yy19;
 		} else {
 			if (yych <= ',') goto yy81;
@@ -873,7 +873,7 @@ yy92:
 	if (YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	if (yych <= '-') {
-		if (yych == 0x0A) goto yy19;
+		if (yych == '\n') goto yy19;
 		if (yych <= ',') goto yy81;
 		goto yy83;
 	} else {
@@ -884,7 +884,7 @@ yy92:
 	if (YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	if (yych <= '-') {
-		if (yych == 0x0A) goto yy19;
+		if (yych == '\n') goto yy19;
 		if (yych <= ',') goto yy81;
 		goto yy83;
 	} else {
@@ -896,7 +896,7 @@ yy92:
 	if (YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	if (yych <= ',') {
-		if (yych != 0x0A) goto yy81;
+		if (yych != '\n') goto yy81;
 	} else {
 		if (yych <= '-') goto yy83;
 		if (yych <= '.') goto yy85;
@@ -941,19 +941,19 @@ yy116:
 		goto yy19;
 	}
 	yych = *++YYCURSOR;
-	if (yych == 0x0A) goto yy19;
+	if (yych == '\n') goto yy19;
 yy118:
 	++YYCURSOR;
 	if (YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
-	if (yych == 0x0A) goto yy19;
+	if (yych == '\n') goto yy19;
 	if (yych != '.') goto yy118;
 yy120:
 	++YYCURSOR;
 	if (YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	if (yych <= '-') {
-		if (yych == 0x0A) goto yy19;
+		if (yych == '\n') goto yy19;
 		goto yy118;
 	} else {
 		if (yych <= '.') goto yy120;
@@ -964,7 +964,7 @@ yy122:
 	if (YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	if (yych <= '-') {
-		if (yych == 0x0A) goto yy19;
+		if (yych == '\n') goto yy19;
 		goto yy118;
 	} else {
 		if (yych <= '.') goto yy120;
@@ -974,7 +974,7 @@ yy122:
 	if (YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	if (yych <= '-') {
-		if (yych == 0x0A) goto yy19;
+		if (yych == '\n') goto yy19;
 		goto yy118;
 	} else {
 		if (yych <= '.') goto yy120;
@@ -984,7 +984,7 @@ yy122:
 	if (YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	if (yych <= '-') {
-		if (yych == 0x0A) goto yy19;
+		if (yych == '\n') goto yy19;
 		goto yy118;
 	} else {
 		if (yych <= '.') goto yy120;
@@ -994,7 +994,7 @@ yy122:
 	if (YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	if (yych <= '-') {
-		if (yych == 0x0A) goto yy19;
+		if (yych == '\n') goto yy19;
 		goto yy118;
 	} else {
 		if (yych <= '.') goto yy120;
@@ -1004,7 +1004,7 @@ yy122:
 	if (YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	if (yych <= '-') {
-		if (yych == 0x0A) goto yy19;
+		if (yych == '\n') goto yy19;
 		goto yy118;
 	} else {
 		if (yych <= '.') goto yy120;
@@ -1013,13 +1013,13 @@ yy122:
 	++YYCURSOR;
 	if (YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
-	if (yych == 0x0A) goto yy19;
+	if (yych == '\n') goto yy19;
 	if (yych != '.') goto yy118;
 	++YYCURSOR;
 	if (YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	if (yych <= '.') {
-		if (yych == 0x0A) goto yy19;
+		if (yych == '\n') goto yy19;
 		if (yych <= '-') goto yy118;
 		goto yy120;
 	} else {
@@ -1034,7 +1034,7 @@ yy122:
 	if (YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	if (yych <= '-') {
-		if (yych == 0x0A) goto yy19;
+		if (yych == '\n') goto yy19;
 		goto yy118;
 	} else {
 		if (yych <= '.') goto yy120;
@@ -1044,7 +1044,7 @@ yy122:
 	if (YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	if (yych <= '-') {
-		if (yych == 0x0A) goto yy19;
+		if (yych == '\n') goto yy19;
 		goto yy118;
 	} else {
 		if (yych <= '.') goto yy120;
@@ -1054,7 +1054,7 @@ yy122:
 	YYMARKER = ++YYCURSOR;
 	if (YYLIMIT == YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
-	if (yych == 0x0A) goto yy132;
+	if (yych == '\n') goto yy132;
 	if (yych == '.') goto yy120;
 	goto yy118;
 yy132:

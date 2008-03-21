@@ -33,14 +33,14 @@ yyFillLabel0:
 	yych = *YYCURSOR;
 	if (yych <= '=') {
 		if (yych <= '(') {
-			if (yych <= 0x0A) {
+			if (yych <= '\n') {
 				if (yych <= 0x00) goto yy32;
 				if (yych <= 0x08) goto yy34;
-				if (yych <= 0x09) goto yy30;
+				if (yych <= '\t') goto yy30;
 				goto yy28;
 			} else {
 				if (yych <= 0x1F) {
-					if (yych <= 0x0D) goto yy30;
+					if (yych <= '\r') goto yy30;
 					goto yy34;
 				} else {
 					if (yych <= ' ') goto yy30;

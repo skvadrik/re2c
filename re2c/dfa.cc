@@ -12,7 +12,7 @@ void prtChOrHex(std::ostream& o, uint c, bool useTalx)
 {
 	int oc = (int)(re2c::wFlag || !useTalx ? c : re2c::talx[c]);
 
-	if ((oc < 256) && isprint(oc))
+	if ((oc < 256) && (isprint(oc) || isspace(oc)))
 	{
 		o << (DFlag ? '"' : '\'');
 		prtCh(o, c);

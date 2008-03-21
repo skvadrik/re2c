@@ -105,7 +105,7 @@ int scan(char *s)
 
 			yych = *YYCURSOR;
 			if (yych <= '*') {
-				if (yych <= 0x09) {
+				if (yych <= '\t') {
 					if (yych <= 0x00) goto yy11;
 					if (yych <= 0x08) goto yy13;
 				} else {

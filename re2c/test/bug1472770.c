@@ -30,7 +30,7 @@ yy0:
 	yych = *YYCURSOR;
 	switch (yych) {
 	case 0x00:	goto yy5;
-	case 0x0A:	goto yy3;
+	case '\n':	goto yy3;
 	default:	goto yy1;
 	}
 yy3:

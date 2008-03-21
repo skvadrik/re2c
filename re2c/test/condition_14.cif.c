@@ -257,8 +257,8 @@ yyc_Skiptoeol:
 yyFillLabel2:
 		s->yych = *s->cur;
 		switch (s->yych) {
-		case 0x0A:	goto yy51;
-		case 0x0D:	goto yy50;
+		case '\n':	goto yy51;
+		case '\r':	goto yy50;
 		case '?':	goto yy47;
 		case '\\':	goto yy49;
 		default:	goto yy53;
@@ -274,14 +274,14 @@ yy48:
 yy49:
 		s->yych = *(s->tok = ++s->cur);
 		switch (s->yych) {
-		case 0x0A:	goto yy58;
-		case 0x0D:	goto yy56;
+		case '\n':	goto yy58;
+		case '\r':	goto yy56;
 		default:	goto yy48;
 		}
 yy50:
 		s->yych = *++s->cur;
 		switch (s->yych) {
-		case 0x0A:	goto yy54;
+		case '\n':	goto yy54;
 		default:	goto yy48;
 		}
 yy51:
@@ -301,7 +301,7 @@ yy54:
 yy56:
 		s->yych = *++s->cur;
 		switch (s->yych) {
-		case 0x0A:	goto yy58;
+		case '\n':	goto yy58;
 		default:	goto yy57;
 		}
 yy57:
@@ -319,14 +319,14 @@ yy60:
 yy61:
 		s->yych = *++s->cur;
 		switch (s->yych) {
-		case 0x0A:	goto yy63;
-		case 0x0D:	goto yy62;
+		case '\n':	goto yy63;
+		case '\r':	goto yy62;
 		default:	goto yy57;
 		}
 yy62:
 		s->yych = *++s->cur;
 		switch (s->yych) {
-		case 0x0A:	goto yy63;
+		case '\n':	goto yy63;
 		default:	goto yy57;
 		}
 yy63:
@@ -346,7 +346,7 @@ yyFillLabel3:
 yy67:
 		++s->cur;
 		switch ((s->yych = *s->cur)) {
-		case 0x0A:	goto yy68;
+		case '\n':	goto yy68;
 		default:	goto yy72;
 		}
 yy68:

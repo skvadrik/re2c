@@ -87,11 +87,11 @@ std:
 	if ((YYLIMIT - YYCURSOR) < 3) YYFILL(3);
 	yych = *YYCURSOR;
 	if (yych <= ' ') {
-		if (yych <= 0x09) {
+		if (yych <= '\t') {
 			if (yych <= 0x08) goto yy9;
 			goto yy6;
 		} else {
-			if (yych <= 0x0A) goto yy8;
+			if (yych <= '\n') goto yy8;
 			if (yych <= 0x1F) goto yy9;
 			goto yy6;
 		}

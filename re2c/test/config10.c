@@ -49,9 +49,9 @@ std:
 	if ((s.lim - s.cur) < 3) fill();
 	curr = *s.cur;
 	switch (curr) {
-	case 0x09:
+	case '\t':
 	case ' ':	goto xx6;
-	case 0x0A:	goto xx8;
+	case '\n':	goto xx8;
 	case '0':
 	case '1':
 	case '2':
