@@ -691,7 +691,7 @@ Allows to overwrite the define \fBYYFILL\fP and thus avoiding it by setting the
 value to the actual code needed.
 .TP
 \fIre2c:define:YYFILL:naked\fP \fB=\fP 0 \fB;\fP
-Wehn set to 1 neither braces, parameter nor semicolon gets emitted.
+When set to 1 neither braces, parameter nor semicolon gets emitted.
 .TP
 \fIre2c:define:YYFILL@len\fP \fB=\fP @@ \fB;\fP
 When using \fIre2c:define:YYFILL\fP and \fIre2c:yyfill:parameter\fP is 0 then
@@ -702,14 +702,14 @@ length value.
 Allows to overwrite the define \fBYYGETCONDITION\fP.
 .TP
 \fIre2c:define:YYGETCONDITION:naked\fP \fB=\fP  \fB;\fP
-Wehn set to 1 neither braces, parameter nor semicolon gets emitted.
+When set to 1 neither braces, parameter nor semicolon gets emitted.
 .TP
 \fIre2c:define:YYGETSTATE\fP \fB=\fP YYGETSTATE \fB;\fP
 Allows to overwrite the define \fBYYGETSTATE\fP and thus avoiding it by setting the
 value to the actual code needed.
 .TP
 \fIre2c:define:YYGETSTATE:naked\fP \fB=\fP 0 \fB;\fP
-Wehn set to 1 neither braces, parameter nor semicolon gets emitted.
+When set to 1 neither braces, parameter nor semicolon gets emitted.
 .TP
 \fIre2c:define:YYLIMIT\fP \fB=\fP YYLIMIT \fB;\fP
 Allows to overwrite the define \fBYYLIMIT\fP and thus avoiding it by setting the
@@ -731,7 +731,7 @@ Allows to overwrite the define \fBYYSETSTATE\fP and thus avoiding it by setting 
 value to the actual code needed.
 .TP
 \fIre2c:define:YYSETSTATE:naked\fP \fB=\fP 0 \fB;\fP
-Wehn set to 1 neither braces, parameter nor semicolon gets emitted.
+When set to 1 neither braces, parameter nor semicolon gets emitted.
 .TP
 \fIre2c:define:YYSETSTATE@state\fP \fB=\fP @@ \fB;\fP
 When using \fIre2c:define:YYSETSTATE\fP then any occurence of this text 
