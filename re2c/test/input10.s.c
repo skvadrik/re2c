@@ -5,7 +5,7 @@
 {
 	YYCTYPE yych;
 
-	if (YYLIMIT == YYCURSOR) YYFILL(1);
+	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	if (yych <= 'E') {
 		if (yych <= '@') goto yy4;

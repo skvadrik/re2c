@@ -2284,7 +2284,7 @@ yy53:
 	}
 yy54:
 	++YYCURSOR;
-	if (YYLIMIT == YYCURSOR) YYFILL(1);
+	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	if (yybm[0+yych] & 16) {
 		goto yy54;
@@ -2820,12 +2820,12 @@ yy137:
 	}
 yy138:
 	++YYCURSOR;
-	if (YYLIMIT == YYCURSOR) YYFILL(1);
+	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	if (yych <= '@') goto yy53;
 	if (yych >= '[') goto yy53;
 	++YYCURSOR;
-	if (YYLIMIT == YYCURSOR) YYFILL(1);
+	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	if (yybm[0+yych] & 32) {
 		goto yy140;
@@ -2834,7 +2834,7 @@ yy138:
 yy140:
 	yyaccept = 1;
 	YYMARKER = ++YYCURSOR;
-	if (YYLIMIT == YYCURSOR) YYFILL(1);
+	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	if (yybm[0+yych] & 32) {
 		goto yy140;
@@ -2860,7 +2860,7 @@ yy142:
 	}
 yy143:
 	++YYCURSOR;
-	if (YYLIMIT == YYCURSOR) YYFILL(1);
+	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 yy144:
 	if (yych <= '^') {
@@ -5401,19 +5401,19 @@ yy401:
 	}
 yy403:
 	++YYCURSOR;
-	if (YYLIMIT == YYCURSOR) YYFILL(1);
+	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	if (yych <= '@') goto yy53;
 	if (yych >= '[') goto yy53;
 	++YYCURSOR;
-	if (YYLIMIT == YYCURSOR) YYFILL(1);
+	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	if (yych <= '`') goto yy53;
 	if (yych >= '{') goto yy53;
 yy405:
 	yyaccept = 7;
 	YYMARKER = ++YYCURSOR;
-	if (YYLIMIT == YYCURSOR) YYFILL(1);
+	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	if (yych <= '^') {
 		if (yych == '/') goto yy403;
@@ -5442,7 +5442,7 @@ yy407:
 	}
 yy408:
 	++YYCURSOR;
-	if (YYLIMIT == YYCURSOR) YYFILL(1);
+	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	if (yych <= '^') {
 		if (yych == '/') goto yy403;
@@ -9234,7 +9234,7 @@ yy640:
 	if (yych >= ':') goto yy53;
 yy641:
 	++YYCURSOR;
-	if (YYLIMIT == YYCURSOR) YYFILL(1);
+	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	if (yych <= '/') goto yy634;
 	if (yych <= '9') goto yy641;
@@ -13928,7 +13928,7 @@ yy1176:
 	if (yych >= ':') goto yy53;
 yy1177:
 	++YYCURSOR;
-	if (YYLIMIT == YYCURSOR) YYFILL(1);
+	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	if (yych <= '/') goto yy1179;
 	if (yych <= '9') goto yy1177;

@@ -18,7 +18,7 @@ yyc_0:
 #line 19 "<stdout>"
 /* *********************************** */
 yyc_r1:
-	if (YYLIMIT == YYCURSOR) YYFILL(1);
+	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	if (yych <= '`') goto yy5;
 	if (yych <= 'a') goto yy6;
@@ -36,7 +36,7 @@ yy8:
 #line 37 "<stdout>"
 /* *********************************** */
 yyc_r2:
-	if (YYLIMIT == YYCURSOR) YYFILL(1);
+	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	if (yych == 'b') goto yy13;
 yy13:

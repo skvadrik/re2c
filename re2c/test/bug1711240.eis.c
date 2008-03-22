@@ -5,7 +5,7 @@ char scan(const unsigned char *s)
 {
 	YYCTYPE yych;
 
-	if (YYLIMIT == YYCURSOR) YYFILL(1);
+	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	if (yych <= '=') {
 		if (yych == 0x07) goto yy5;

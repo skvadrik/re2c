@@ -118,7 +118,7 @@ yy10:
 	goto yy8;
 yy11:
 	++YYCURSOR;
-	if (YYLIMIT == YYCURSOR) YYFILL(1);
+	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 yy12:
 	switch (yych) {
@@ -136,7 +136,7 @@ yy12:
 	}
 yy13:
 	++YYCURSOR;
-	if (YYLIMIT == YYCURSOR) YYFILL(1);
+	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 yy14:
 	switch (yych) {
@@ -285,7 +285,7 @@ yy19:
 	goto yy3;
 yy20:
 	++YYCURSOR;
-	if (YYLIMIT == YYCURSOR) YYFILL(1);
+	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	switch (yych) {
 	case '0':

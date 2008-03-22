@@ -2415,7 +2415,7 @@ yy53:
 yy54:
 	YYDEBUG(54, *YYCURSOR);
 	++YYCURSOR;
-	if (YYLIMIT == YYCURSOR) YYFILL(1);
+	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	YYDEBUG(55, *YYCURSOR);
 	if (yybm[0+yych] & 16) {
@@ -3094,13 +3094,13 @@ yy139:
 yy140:
 	YYDEBUG(140, *YYCURSOR);
 	++YYCURSOR;
-	if (YYLIMIT == YYCURSOR) YYFILL(1);
+	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	if (yych <= '@') goto yy53;
 	if (yych >= '[') goto yy53;
 	YYDEBUG(141, *YYCURSOR);
 	++YYCURSOR;
-	if (YYLIMIT == YYCURSOR) YYFILL(1);
+	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	if (yybm[0+yych] & 32) {
 		goto yy142;
@@ -3110,7 +3110,7 @@ yy142:
 	YYDEBUG(142, *YYCURSOR);
 	yyaccept = 0;
 	YYMARKER = ++YYCURSOR;
-	if (YYLIMIT == YYCURSOR) YYFILL(1);
+	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	YYDEBUG(143, *YYCURSOR);
 	if (yybm[0+yych] & 32) {
@@ -3183,7 +3183,7 @@ yy146:
 yy147:
 	YYDEBUG(147, *YYCURSOR);
 	++YYCURSOR;
-	if (YYLIMIT == YYCURSOR) YYFILL(1);
+	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 yy148:
 	YYDEBUG(148, *YYCURSOR);
@@ -7932,13 +7932,13 @@ yy466:
 yy468:
 	YYDEBUG(468, *YYCURSOR);
 	++YYCURSOR;
-	if (YYLIMIT == YYCURSOR) YYFILL(1);
+	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	if (yych <= '@') goto yy53;
 	if (yych >= '[') goto yy53;
 	YYDEBUG(469, *YYCURSOR);
 	++YYCURSOR;
-	if (YYLIMIT == YYCURSOR) YYFILL(1);
+	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	if (yych <= '`') goto yy53;
 	if (yych >= '{') goto yy53;
@@ -7946,7 +7946,7 @@ yy470:
 	YYDEBUG(470, *YYCURSOR);
 	yyaccept = 7;
 	YYMARKER = ++YYCURSOR;
-	if (YYLIMIT == YYCURSOR) YYFILL(1);
+	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	YYDEBUG(471, *YYCURSOR);
 	if (yych <= '^') {
@@ -8020,7 +8020,7 @@ yy472:
 yy475:
 	YYDEBUG(475, *YYCURSOR);
 	++YYCURSOR;
-	if (YYLIMIT == YYCURSOR) YYFILL(1);
+	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	YYDEBUG(476, *YYCURSOR);
 	if (yych <= '^') {
@@ -13207,7 +13207,7 @@ yy719:
 yy720:
 	YYDEBUG(720, *YYCURSOR);
 	++YYCURSOR;
-	if (YYLIMIT == YYCURSOR) YYFILL(1);
+	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	YYDEBUG(721, *YYCURSOR);
 	if (yych <= '/') goto yy713;
@@ -19165,7 +19165,7 @@ yy1268:
 yy1269:
 	YYDEBUG(1269, *YYCURSOR);
 	++YYCURSOR;
-	if (YYLIMIT == YYCURSOR) YYFILL(1);
+	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	YYDEBUG(1270, *YYCURSOR);
 	if (yych <= '/') goto yy1271;

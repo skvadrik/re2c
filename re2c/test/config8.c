@@ -115,7 +115,7 @@ xx9:
 	goto xx3;
 xx10:
 	++s.cur;
-	if (s.lim == s.cur) fill(1);
+	if (s.lim <= s.cur) fill(1);
 	curr = *s.cur;
 xx11:
 	switch (curr) {
@@ -133,7 +133,7 @@ xx11:
 	}
 xx12:
 	++s.cur;
-	if (s.lim == s.cur) fill(1);
+	if (s.lim <= s.cur) fill(1);
 	curr = *s.cur;
 	switch (curr) {
 	case '0':

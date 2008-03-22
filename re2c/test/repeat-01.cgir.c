@@ -21,7 +21,7 @@ void scan(unsigned char* in)
 /* *********************************** */
 yyc_r1:
 
-	if (YYLIMIT == YYCURSOR) YYFILL(1);
+	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	if (yych <= '2') {
 		if (yych <= '0') goto yy2;
@@ -51,7 +51,7 @@ yy10:
 /* *********************************** */
 yyc_r2:
 yy12:
-	if (YYLIMIT == YYCURSOR) YYFILL(1);
+	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	if (yych <= '2') {
 		if (yych <= '0') goto yy13;

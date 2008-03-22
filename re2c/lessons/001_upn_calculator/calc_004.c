@@ -98,7 +98,7 @@ yy11:
 #line 99 "<stdout>"
 yy13:
 			++YYCURSOR;
-			if (YYLIMIT == YYCURSOR) YYFILL(1);
+			if (YYLIMIT <= YYCURSOR) YYFILL(1);
 			yych = *YYCURSOR;
 yy14:
 			switch (yych) {
@@ -116,7 +116,7 @@ yy14:
 			}
 yy15:
 			++YYCURSOR;
-			if (YYLIMIT == YYCURSOR) YYFILL(1);
+			if (YYLIMIT <= YYCURSOR) YYFILL(1);
 			yych = *YYCURSOR;
 			switch (yych) {
 			case '0':

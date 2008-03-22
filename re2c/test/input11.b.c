@@ -94,7 +94,7 @@ yy10:
 	goto yy8;
 yy11:
 	++YYCURSOR;
-	if (YYLIMIT == YYCURSOR) YYFILL(1);
+	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 yy12:
 	if (yybm[0+yych] & 0x20) {
@@ -103,7 +103,7 @@ yy12:
 	goto yy6;
 yy13:
 	++YYCURSOR;
-	if (YYLIMIT == YYCURSOR) YYFILL(1);
+	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 yy14:
 	if (yybm[0+yych] & 0x40) {
@@ -130,7 +130,7 @@ yy19:
 	goto yy3;
 yy20:
 	++YYCURSOR;
-	if (YYLIMIT == YYCURSOR) YYFILL(1);
+	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	if (yybm[0+yych] & 0x80) {
 		goto yy20;

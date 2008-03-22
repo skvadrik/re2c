@@ -139,7 +139,7 @@ yy4:
 				}
 yy6:
 				++s->cur;
-				if (s->lim == s->cur) { if(fill(s, 1) >= 0) break; }
+				if (s->lim <= s->cur) { if(fill(s, 1) >= 0) break; }
 				yych = *s->cur;
 yy7:
 				if (yybm[0+yych] & 128) {
@@ -209,7 +209,7 @@ yy12:
 				}
 yy14:
 				++s->cur;
-				if (s->lim == s->cur) { if(fill(s, 1) >= 0) break; }
+				if (s->lim <= s->cur) { if(fill(s, 1) >= 0) break; }
 				yych = *s->cur;
 yy15:
 				if (yybm[0+yych] & 128) {

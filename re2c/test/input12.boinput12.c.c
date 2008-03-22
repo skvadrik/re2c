@@ -39,7 +39,7 @@
 		  0,   0,   0,   0,   0,   0,   0,   0, 
 	};
 
-	if (YYLIMIT == YYCURSOR) YYFILL(1);
+	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	if (yybm[0+yych] & 128) {
 		goto yy3;

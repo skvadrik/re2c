@@ -15,7 +15,7 @@ char *scan0(char *p)
 {
    YYCTYPE yych;
 
-   if (YYLIMIT == YYCURSOR) YYFILL(1);
+   if (YYLIMIT <= YYCURSOR) YYFILL(1);
    yych = *YYCURSOR;
    if (yych <= 'b') {
       if (yych <= '`') goto yy10;
@@ -61,7 +61,7 @@ char *scan1(char *p)
 #line 62 "<stdout>"
 {
 	YYCTYPE yych;
-	if (YYLIMIT == YYCURSOR) YYFILL(1);
+	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	if (yych <= 'b') {
 		if (yych <= '`') goto yy22;
@@ -107,7 +107,7 @@ char *scan(char *p)
 #line 108 "<stdout>"
 {
 YYCTYPE yych;
-if (YYLIMIT == YYCURSOR) YYFILL(1);
+if (YYLIMIT <= YYCURSOR) YYFILL(1);
 yych = *YYCURSOR;
 if (yych <= 'b') {
 if (yych <= '`') goto yy34;

@@ -26,7 +26,7 @@ start:
 yy1:
 	++YYCURSOR;
 yy0:
-	if (YYLIMIT == YYCURSOR) YYFILL(1);
+	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	switch (yych) {
 	case 0x00:	goto yy5;

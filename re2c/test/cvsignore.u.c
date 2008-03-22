@@ -100,7 +100,7 @@ yy15:
 #line 101 "<stdout>"
 yy17:
 	++YYCURSOR;
-	if (YYLIMIT == YYCURSOR) YYFILL(1);
+	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 yy18:
 	if (yych == '\n') goto yy6;
@@ -120,7 +120,7 @@ yy21:
 #line 121 "<stdout>"
 yy23:
 	++YYCURSOR;
-	if (YYLIMIT == YYCURSOR) YYFILL(1);
+	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 yy24:
 	if (yych == '\n') goto yy6;
@@ -142,7 +142,7 @@ yy28:
 #line 143 "<stdout>"
 yy30:
 	++YYCURSOR;
-	if (YYLIMIT == YYCURSOR) YYFILL(1);
+	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 yy31:
 	if (yych == '\n') goto yy6;
@@ -174,7 +174,7 @@ yy40:
 #line 175 "<stdout>"
 yy42:
 	++YYCURSOR;
-	if (YYLIMIT == YYCURSOR) YYFILL(1);
+	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 yy43:
 	if (yych == '\n') goto yy6;
@@ -202,7 +202,7 @@ yy50:
 #line 203 "<stdout>"
 yy52:
 	++YYCURSOR;
-	if (YYLIMIT == YYCURSOR) YYFILL(1);
+	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 yy53:
 	if (yych == '\n') goto yy6;

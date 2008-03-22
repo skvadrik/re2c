@@ -53,7 +53,7 @@ yy7:
 	goto yy5;
 yy8:
 	++YYCURSOR;
-	if (YYLIMIT == YYCURSOR) YYFILL(1);
+	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	switch (yych) {
 	case '\n':	goto yy7;

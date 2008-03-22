@@ -43,7 +43,7 @@ yy4:
 #line 44 "<stdout>"
 yy6:
 	++YYCURSOR;
-	if (YYLIMIT == YYCURSOR) YYFILL(1);
+	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 yy7:
 	switch (yych) {

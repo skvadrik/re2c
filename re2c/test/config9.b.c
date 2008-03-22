@@ -138,7 +138,7 @@ xx9:
 	goto xx3;
 xx10:
 	++s.cur;
-	if (s.lim == s.cur) fill(1);
+	if (s.lim <= s.cur) fill(1);
 	curr = (unsigned char)*s.cur;
 xx11:
 	if (yybm[0+curr] & 128) {
@@ -147,7 +147,7 @@ xx11:
 	goto xx5;
 xx12:
 	++s.cur;
-	if (s.lim == s.cur) fill(1);
+	if (s.lim <= s.cur) fill(1);
 	curr = (unsigned char)*s.cur;
 	if (curr <= '/') goto xx14;
 	if (curr <= '9') goto xx12;

@@ -60,7 +60,7 @@ yy10:
 	goto yy8;
 yy11:
 	++YYCURSOR;
-	if (YYLIMIT == YYCURSOR) YYFILL(1);
+	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 yy12:
 	if (yych <= '/') goto yy6;
@@ -68,7 +68,7 @@ yy12:
 	goto yy6;
 yy13:
 	++YYCURSOR;
-	if (YYLIMIT == YYCURSOR) YYFILL(1);
+	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 yy14:
 	if (yych <= '@') {
@@ -101,7 +101,7 @@ yy19:
 	goto yy3;
 yy20:
 	++YYCURSOR;
-	if (YYLIMIT == YYCURSOR) YYFILL(1);
+	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	if (yych <= 'Z') {
 		if (yych <= '/') goto yy22;

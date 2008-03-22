@@ -36,7 +36,7 @@ yy1:
 	++YYCURSOR;
 yy0:
 	YYSETSTATE(0);
-	if (YYLIMIT == YYCURSOR) YYFILL(1);
+	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 yyFillLabel0:
 	yych = *YYCURSOR;
 	switch (yych) {

@@ -60,7 +60,7 @@ start:
 yy1:
 	++YYCURSOR;
 yy0:
-	if (YYLIMIT == YYCURSOR) YYFILL(1);
+	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	if (yybm[0+yych] & 128) {
 		goto yy1;

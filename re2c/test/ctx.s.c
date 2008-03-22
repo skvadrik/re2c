@@ -108,7 +108,7 @@ yy9:
 	goto yy3;
 yy10:
 	++YYCURSOR;
-	if (YYLIMIT == YYCURSOR) YYFILL(1);
+	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 yy11:
 	if (yych <= '/') goto yy5;
@@ -116,7 +116,7 @@ yy11:
 	goto yy5;
 yy12:
 	++YYCURSOR;
-	if (YYLIMIT == YYCURSOR) YYFILL(1);
+	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	if (yych <= '/') goto yy14;
 	if (yych <= '9') goto yy12;

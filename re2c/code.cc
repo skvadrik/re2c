@@ -425,7 +425,7 @@ static void need(std::ostream &o, uint ind, uint n, bool & readCh, bool bSetMark
 		{
 			if (bUseYYFillCheck)
 			{
-				o << "if (" << mapCodeName["YYLIMIT"] << " == " << mapCodeName["YYCURSOR"] << ") ";
+				o << "if (" << mapCodeName["YYLIMIT"] << " <= " << mapCodeName["YYCURSOR"] << ") ";
 			}
 			genYYFill(o, ind, n);
 		}

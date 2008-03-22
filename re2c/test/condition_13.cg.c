@@ -19,7 +19,7 @@ yyc_0:
 #line 20 "<stdout>"
 /* *********************************** */
 yyc_r1:
-	if (YYLIMIT == YYCURSOR) YYFILL(1);
+	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	if (yych <= '2') {
 		if (yych <= '0') goto yy5;
@@ -55,7 +55,7 @@ yy12:
 #line 56 "<stdout>"
 /* *********************************** */
 yyc_r2:
-	if (YYLIMIT == YYCURSOR) YYFILL(1);
+	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	if (yych <= '2') {
 		if (yych <= '0') goto yy16;

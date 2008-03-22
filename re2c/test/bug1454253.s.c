@@ -63,14 +63,14 @@ yy5:
 #line 64 "<stdout>"
 yy7:
 	++YYCURSOR;
-	if (YYLIMIT == YYCURSOR) YYFILL(1);
+	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	if (yych <= 0x00) goto yy2;
 	if (yych == '?') goto yy2;
 	goto yy7;
 yy9:
 	++YYCURSOR;
-	if (YYLIMIT == YYCURSOR) YYFILL(1);
+	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	if (yych <= '@') {
 		if (yych <= '/') goto yy11;
@@ -89,7 +89,7 @@ yy11:
 #line 90 "<stdout>"
 yy12:
 	++YYCURSOR;
-	if (YYLIMIT == YYCURSOR) YYFILL(1);
+	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	if (yych <= '@') {
 		if (yych <= '/') goto yy14;

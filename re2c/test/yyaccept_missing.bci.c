@@ -103,7 +103,7 @@ yyc_ST_VALUE:
 					  0,   0,   0,   0,   0,   0,   0,   0, 
 					  0,   0,   0,   0,   0,   0,   0,   0, 
 				};
-				if (YYLIMIT == YYCURSOR) YYFILL(1);
+				if (YYLIMIT <= YYCURSOR) YYFILL(1);
 				yych = *(YYMARKER = YYCURSOR);
 				if (yybm[0+yych] & 128) {
 					goto yy14;
@@ -116,7 +116,7 @@ yy11:
 	}
 yy12:
 				++YYCURSOR;
-				if (YYLIMIT == YYCURSOR) YYFILL(1);
+				if (YYLIMIT <= YYCURSOR) YYFILL(1);
 				yych = *YYCURSOR;
 				if (yych <= '@') goto yy13;
 				if (yych <= 'Z') goto yy16;
@@ -131,7 +131,7 @@ yy13:
 				}
 yy14:
 				++YYCURSOR;
-				if (YYLIMIT == YYCURSOR) YYFILL(1);
+				if (YYLIMIT <= YYCURSOR) YYFILL(1);
 				yych = *YYCURSOR;
 				if (yybm[0+yych] & 128) {
 					goto yy14;
@@ -140,7 +140,7 @@ yy14:
 yy16:
 				yyaccept = 1;
 				YYMARKER = ++YYCURSOR;
-				if (YYLIMIT == YYCURSOR) YYFILL(1);
+				if (YYLIMIT <= YYCURSOR) YYFILL(1);
 				yych = *YYCURSOR;
 				if (yych == '$') goto yy12;
 yy17:
