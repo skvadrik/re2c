@@ -854,12 +854,24 @@ RegExp * Scanner::ranToRE(SubStr s) const
 	return new MatchOp(r);
 }
 
+RegExp * Scanner::getAnyRE() const
+{
+	if (eFlag)
+	{
+		return ranToRE(SubStr("[\\000-\\377]"));
+	}
+	else
+	{
+		return new MatchOp(new Range(0, nRealChars));
+	}
+}
+
 RegExp * Scanner::invToRE(SubStr s) const
 {
 	s.len--;
 	s.str++;
 	
-	RegExp * any = ranToRE(SubStr(wFlag ? "[\\X0000-\\XFFFF]" : "[\\000-\\377]"));
+	RegExp * any = getAnyRE();
 
 	if (s.len <= 2)
 	{
@@ -877,7 +889,7 @@ RegExp * Scanner::invToRE(SubStr s) const
 
 RegExp * Scanner::mkDot() const
 {
-	RegExp * any = ranToRE(SubStr(wFlag ? "[\\X0000-\\XFFFF]" : "[\\000-\\377]"));
+	RegExp * any = getAnyRE();
 	RegExp * ran = matchChar(xlat('\n'));
 	RegExp * inv = mkDiff(any, ran);
 	

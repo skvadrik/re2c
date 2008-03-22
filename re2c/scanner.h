@@ -66,6 +66,7 @@ public:
 	RegExp * strToRE(SubStr s) const;
 	RegExp * strToCaseInsensitiveRE(SubStr s) const;
 	RegExp * ranToRE(SubStr s) const;
+	RegExp * getAnyRE() const;
 	RegExp * invToRE(SubStr s) const;
 	RegExp * mkDot() const;
 };
