@@ -134,7 +134,7 @@ static const mbo_opt_struct OPTIONS[] =
 
 static void usage()
 {
-	cerr << "usage: re2c [-bcdDefFghisvVw1] [-o file] file\n"
+	std::cerr << "usage: re2c [-bcdDefFghirsuvVw1] [-o of] [-t th] file\n"
 	"\n"
 	"-? -h  --help           Display this info.\n"
 	"\n"
@@ -163,17 +163,17 @@ static void usage()
 	"\n"
 	"-i     --no-debug-info  Do not generate '#line' info (usefull for versioning).\n"
 	"\n"
-	"-o     --output=output  Specify the output file instead of stdout\n"
-	"                        This cannot be used together with -e switch.\n"
+	"-o of  --output=of      Specify the output file (of) instead of stdout\n"
 	"\n"
 	"-r     --reusable       Allow reuse of scanner definitions.\n"
 	"\n"
 	"-s     --nested-ifs     Generate nested ifs for some switches. Many compilers\n"
 	"                        need this assist to generate better code.\n"
 	"\n"
-	"-t     --type-header    Generate a header file with type definitions.\n"
+	"-t th  --type-header=th Generate a type header file (th) with type definitions.\n"
 	"\n"
 	"-u     --unicode        Implies -w but supports the full Unicode character set.\n"
+	"                        This cannot be used together with -e switch.\n"
 	"\n"
 	"-v     --version        Show version information.\n"
 	"\n"
@@ -215,7 +215,7 @@ int main(int argc, char *argv[])
 		return 2;
 	}
 
-	while ((c = mbo_getopt(argc, argv, OPTIONS, &opt_arg, &opt_ind, 0)) != -1)
+	while ((c = mbo_getopt(argc, argv, OPTIONS, &opt_arg, &opt_ind, 1)) != -1)
 	{
 		switch (c)
 		{
@@ -321,9 +321,9 @@ int main(int argc, char *argv[])
 			uFlag = true;
 			break;
 	  
+			default:
 			case 'h':
 			case '?':
-			default:
 			usage();
 			return 2;
 
@@ -379,6 +379,7 @@ int main(int argc, char *argv[])
 	}
 	else
 	{
+		std::cerr << "Unexpected argument: " << argv[argc-1] << "\n\n";
 		usage();
 		return 2;
 	}
