@@ -151,8 +151,8 @@ static void usage()
 	"\n"
 	"-D     --emit-dot       Emit a Graphviz dot view of the DFA graph\n"
 	"\n"
-	"-e     --ecb            Cross-compile from an ASCII platform to\n"
-	"                        an EBCDIC one.\n"
+	"-e     --ecb            Cross-compile from an ASCII platform to an EBCDIC one.\n"
+	"                        This cannot be combined with -w, -u or -r.\n"
 	"\n"
 	"-f     --storable-state Generate a scanner that supports storable states.\n"
 	"\n"
@@ -166,6 +166,7 @@ static void usage()
 	"-o of  --output=of      Specify the output file (of) instead of stdout\n"
 	"\n"
 	"-r     --reusable       Allow reuse of scanner definitions.\n"
+	"                        This cannot be used together with -e switch.\n"
 	"\n"
 	"-s     --nested-ifs     Generate nested ifs for some switches. Many compilers\n"
 	"                        need this assist to generate better code.\n"
@@ -351,6 +352,11 @@ int main(int argc, char *argv[])
 		return 2;
 	}
 
+	if (rFlag && eFlag)
+	{
+		std::cerr << "re2c: error: Cannot combine -e with -r switch\n";
+		return 2;
+	}
 	if (wFlag && eFlag)
 	{
 		std::cerr << "re2c: error: Cannot combine -e with -w or -u switch\n";
