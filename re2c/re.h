@@ -501,7 +501,7 @@ typedef std::map<std::string, LineCode> SetupMap;
 
 class DFA;
 
-extern DFA* genCode(std::ostream&, uint&, RegExp*, const RegExpMap*, const std::string&, bool, bool&);
+extern DFA* genCode(RegExp*);
 extern void genGetStateGoto(std::ostream&, uint&, uint);
 extern void genCondTable(std::ostream&, uint, const RegExpMap&);
 extern void genCondGoto(std::ostream&, uint, const RegExpMap&);

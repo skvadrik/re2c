@@ -1,1 +1,1 @@
-re2c: error: line 21, column 10: Rules not allowed in 'repeat:re2c' block
+re2c: error: line 21, column 10: rules not allowed in 'use:re2c' block

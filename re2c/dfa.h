@@ -259,6 +259,11 @@ public:
 	const Ins     *free_ins;
 	const Char    *free_rep;
 
+protected:
+	bool    bSaveOnHead;
+	uint    *saves;
+	State   **rules;
+
 public:
 	DFA(Ins*, uint, uint, uint, const Char*);
 	~DFA();
@@ -268,6 +273,7 @@ public:
 
 	void findSCCs();
 	void findBaseState();
+	void prepare();
 	void emit(std::ostream&, uint&, const RegExpMap*, const std::string&, bool, bool&);
 
 	friend std::ostream& operator<<(std::ostream&, const DFA&);

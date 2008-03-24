@@ -1017,7 +1017,7 @@ CharSet::~CharSet()
 	delete[] ptn;
 }
 
-DFA* genCode(std::ostream& o, uint& ind, RegExp *re, const RegExpMap* specMap, const std::string& condName, bool isLastCond, bool &bPrologBrace)
+DFA* genCode(RegExp *re)
 {
 	CharSet cs;
 	uint j;
@@ -1064,9 +1064,7 @@ DFA* genCode(std::ostream& o, uint& ind, RegExp *re, const RegExpMap* specMap, c
 		}
 	}
 
-	DFA *dfa = new DFA(ins, re->size, 0, nRealChars, rep);
-	dfa->emit(o, ind, specMap, condName, isLastCond, bPrologBrace);
-	return dfa;
+	return new DFA(ins, re->size, 0, nRealChars, rep);
 }
 
 } // end namespace re2c

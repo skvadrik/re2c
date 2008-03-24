@@ -144,9 +144,9 @@ Specify the output file.
 .TP
 \fB-r\fP
 Allows reuse of scanner definitions with '\fB/*!repeat:re2c\fP' after
-'\fB/*!re2c\fP'. In this mode only one '\fB/*!re2c\fP' block, the last,
-can contain rules. Its rules are being saved and reused by every
-'\fB/*!repeat:re2c\fP' block that follows. These blocks can contain
+'\fB/*!rules:re2c\fP'. In this mode no '\fB/*!re2c\fP' block and exactly one
+'\fB/*!rules:re2c\fP' must be present. The rules are being saved and used by
+every '\fB/*!use:re2c\fP' block that follows. These blocks can contain
 inplace configurations. That way it is possible to create the same scanner
 multiple times for different character types, different input mechanisms or
 different output mechanisms.

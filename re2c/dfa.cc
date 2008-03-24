@@ -355,6 +355,8 @@ DFA::~DFA()
 	}
 	delete [] free_ins;
 	delete [] free_rep;
+	delete [] saves;
+	delete [] rules;
 }
 
 void DFA::addState(State **a, State *s)

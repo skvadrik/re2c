@@ -33,7 +33,8 @@ public:
 	enum ParseMode {
 		Stop,
 		Parse,
-		Reuse
+		Reuse,
+		Rules
 	};
 
 	ParseMode echo();

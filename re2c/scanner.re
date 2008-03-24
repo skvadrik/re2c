@@ -120,7 +120,7 @@ echo:
 	"/*!re2c"	{
 					if (rFlag)
 					{
-						mapCodeName.clear();
+						fatal("found standard 're2c' block while using -r flag");
 					}
 					if (bUsedYYMaxFill && bSinglePass)
 					{
@@ -133,10 +133,26 @@ echo:
 					tok = cursor;
 					RETURN(Parse);
 				}
-	"/*!repeat:re2c"	{
+	"/*!rules:re2c"	{
+					if (rFlag)
+					{
+						mapCodeName.clear();
+					}
+					else
+					{
+						fatal("found 'reules:re2c' block without -r flag");
+					}
+					if (bUsedYYMaxFill && bSinglePass)
+					{
+						fatal("found scanner block after YYMAXFILL declaration");
+					}
+					tok = cursor;
+					RETURN(Rules);
+				}
+	"/*!use:re2c"	{
 					if (!rFlag)
 					{
-						fatal("Cannot reuse scanner definition without -r flag");
+						fatal("found 'use:re2c' block without -r flag");
 					}
 					next_label = 0;
 					next_fill_index = 0;
@@ -149,7 +165,7 @@ echo:
 					}
 					if (!DFlag)
 					{
-						out.write((const char*)(tok), (const char*)(&cursor[-14]) - (const char*)(tok));
+						out.write((const char*)(tok), (const char*)(&cursor[-11]) - (const char*)(tok));
 					}
 					tok = cursor;
 					RETURN(Reuse);

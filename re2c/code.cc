@@ -1555,7 +1555,7 @@ void DFA::findBaseState()
 	delete [] span;
 }
 
-void DFA::emit(std::ostream &o, uint& ind, const RegExpMap* specMap, const std::string& condName, bool isLastCond, bool& bPrologBrace)
+void DFA::prepare()
 {
 	State *s;
 	uint i;
@@ -1566,7 +1566,6 @@ void DFA::emit(std::ostream &o, uint& ind, const RegExpMap* specMap, const std::
 	head->link = head;
 
 	uint nRules = 0;
-	bool bProlog = (!cFlag || !bWroteCondCheck);
 
 	for (s = head; s; s = s->next)
 	{
@@ -1582,11 +1581,11 @@ void DFA::emit(std::ostream &o, uint& ind, const RegExpMap* specMap, const std::
 	}
 
 	uint nSaves = 0;
-	uint *saves = new uint[nRules];
+	saves = new uint[nRules];
 	memset(saves, ~0, (nRules)*sizeof(*saves));
 
 	// mark backtracking points
-	bool bSaveOnHead = false;
+	bSaveOnHead = false;
 
 	for (s = head; s; s = s->next)
 	{
@@ -1612,7 +1611,7 @@ void DFA::emit(std::ostream &o, uint& ind, const RegExpMap* specMap, const std::
 	}
 
 	// insert actions
-	State **rules = new State * [nRules];
+	rules = new State * [nRules];
 
 	memset(rules, 0, (nRules)*sizeof(*rules));
 
@@ -1692,6 +1691,12 @@ void DFA::emit(std::ostream &o, uint& ind, const RegExpMap* specMap, const std::
 
 	delete head->action;
 	head->action = NULL;
+}
+
+
+void DFA::emit(std::ostream &o, uint& ind, const RegExpMap* specMap, const std::string& condName, bool isLastCond, bool& bPrologBrace)
+{
+	bool bProlog = (!cFlag || !bWroteCondCheck);
 
 	if (!cFlag)
 	{
@@ -1709,6 +1714,8 @@ void DFA::emit(std::ostream &o, uint& ind, const RegExpMap* specMap, const std::
 			vUsedLabels.insert(start_label);
 		}
 	}
+
+	State *s;
 
 	for (s = head; s; s = s->next)
 	{
@@ -1848,9 +1855,6 @@ void DFA::emit(std::ostream &o, uint& ind, const RegExpMap* specMap, const std::
 		delete BitMap::first;
 		BitMap::first = NULL;
 	}
-
-	delete [] saves;
-	delete [] rules;
 
 	bUseStartLabel = false;
 }
@@ -2163,12 +2167,25 @@ void Scanner::config(const Str& cfg, int num)
 	{
 		bUseYYSetStateNaked = num != 0;
 	}
+	else if (cfg.to_string() == "flags:u")
+	{
+		if (!rFlag)
+		{
+			fatalf("cannot use configuration name '%s' without -r flag", cfg.to_string().c_str());
+		}
+		uFlag = num != 0;
+	}
+	else if (cfg.to_string() == "flags:w")
+	{
+		if (!rFlag)
+		{
+			fatalf("cannot use configuration name '%s' without -r flag", cfg.to_string().c_str());
+		}
+		wFlag = num != 0;
+	}
 	else
 	{
-		std::string msg = "unrecognized configuration name '";
-		msg += cfg.to_string();
-		msg += "' or illegal integer value";
-		fatal(msg.c_str());
+		fatalf("unrecognized configuration name '%s' or illegal integer value", cfg.to_string().c_str());
 	}
 }
 

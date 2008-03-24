@@ -4,7 +4,7 @@
 
 void scan(unsigned char* in)
 {
-/*!re2c
+/*!rules:re2c
 
 <*>		"1"	{ return "1"; }
 <*>		"2"	{ return "2"; }
@@ -16,7 +16,7 @@ void scan(unsigned char* in)
 
 void scan(unsigned short* in)
 {
-/*!repeat:re2c
+/*!use:re2c
 
 <r1>	"c" { return "c"; }
 

@@ -38,19 +38,15 @@ yy3:
 	{ return "2"; }
 yy5:
 	++cursor1;
-yy6:
 	{ return "1"; }
 yy7:
 	++cursor1;
-yy8:
 	{ return "a"; }
 yy9:
 	++cursor1;
-yy10:
 	{ return "b"; }
 /* *********************************** */
 yyc_r2:
-yy12:
 	if (limit1 <= cursor1) fill1(1);
 	yych = *cursor1;
 	if (yych <= '2') {
@@ -63,11 +59,9 @@ yy12:
 yy13:
 yy14:
 	++cursor1;
-yy15:
 	{ return "2"; }
 yy16:
 	++cursor1;
-yy17:
 	{ return "1"; }
 yy18:
 	++cursor1;
@@ -89,77 +83,50 @@ void scan(unsigned short* in)
 /* *********************************** */
 yyc_r1:
 
-	if ((limit2 - cursor2) < 2) fill2(2);
+	if (limit2 <= cursor2) fill2(1);
 	yych = *cursor2;
 	if (yych <= '2') {
 		if (yych <= '0') goto yy2;
-		if (yych <= '1') goto yy6;
+		if (yych <= '1') goto yy5;
 		goto yy3;
 	} else {
 		if (yych <= '`') goto yy2;
-		if (yych <= 'a') goto yy9;
-		if (yych <= 'b') goto yy12;
+		if (yych <= 'a') goto yy7;
+		if (yych <= 'b') goto yy9;
 	}
 yy2:
 yy3:
-	yych = *++cursor2;
-	goto yy5;
+	++cursor2;
 	{ return "2"; }
 yy5:
-	{ return "2"; }
-yy6:
-	yych = *++cursor2;
-	goto yy8;
+	++cursor2;
+	{ return "1"; }
 yy7:
-	{ return "1"; }
-yy8:
-	{ return "1"; }
+	++cursor2;
+	{ return "a"; }
 yy9:
-	yych = *++cursor2;
-	goto yy11;
-yy10:
-	{ return "a"; }
-yy11:
-	{ return "a"; }
-yy12:
-	yych = *++cursor2;
-	goto yy14;
-yy13:
-	{ return "b"; }
-yy14:
+	++cursor2;
 	{ return "b"; }
 /* *********************************** */
 yyc_r2:
-yy16:
-	if ((limit2 - cursor2) < 2) fill2(2);
+	if (limit2 <= cursor2) fill2(1);
 	yych = *cursor2;
 	if (yych <= '2') {
-		if (yych <= '0') goto yy17;
-		if (yych <= '1') goto yy21;
-		goto yy18;
+		if (yych <= '0') goto yy13;
+		if (yych <= '1') goto yy16;
+		goto yy14;
 	} else {
-		if (yych == 'b') goto yy24;
+		if (yych == 'b') goto yy18;
 	}
-yy17:
+yy13:
+yy14:
+	++cursor2;
+	{ return "2"; }
+yy16:
+	++cursor2;
+	{ return "1"; }
 yy18:
-	yych = *++cursor2;
-	goto yy20;
-	{ return "2"; }
-yy20:
-	{ return "2"; }
-yy21:
-	yych = *++cursor2;
-	goto yy23;
-yy22:
-	{ return "1"; }
-yy23:
-	{ return "1"; }
-yy24:
-	yych = *++cursor2;
-	goto yy26;
-yy25:
-	{ return "b"; }
-yy26:
+	++cursor2;
 	{ return "b"; }
 }
 
@@ -178,88 +145,50 @@ void scan(unsigned int* in)
 /* *********************************** */
 yyc_r1:
 
-	if ((limit3 - cursor3) < 2) fill3(2);
+	if (limit3 <= cursor3) fill3(1);
 	yych = *cursor3;
 	if (yych <= '2') {
 		if (yych <= '0') goto yy2;
-		if (yych <= '1') goto yy7;
+		if (yych <= '1') goto yy5;
 		goto yy3;
 	} else {
 		if (yych <= '`') goto yy2;
-		if (yych <= 'a') goto yy11;
-		if (yych <= 'b') goto yy15;
+		if (yych <= 'a') goto yy7;
+		if (yych <= 'b') goto yy9;
 	}
 yy2:
 yy3:
-	yych = *++cursor3;
-	goto yy6;
+	++cursor3;
 	{ return "2"; }
 yy5:
-	{ return "2"; }
-yy6:
-	{ return "2"; }
+	++cursor3;
+	{ return "1"; }
 yy7:
-	yych = *++cursor3;
-	goto yy10;
-yy8:
-	{ return "1"; }
+	++cursor3;
+	{ return "a"; }
 yy9:
-	{ return "1"; }
-yy10:
-	{ return "1"; }
-yy11:
-	yych = *++cursor3;
-	goto yy14;
-yy12:
-	{ return "a"; }
-yy13:
-	{ return "a"; }
-yy14:
-	{ return "a"; }
-yy15:
-	yych = *++cursor3;
-	goto yy18;
-yy16:
-	{ return "b"; }
-yy17:
-	{ return "b"; }
-yy18:
+	++cursor3;
 	{ return "b"; }
 /* *********************************** */
 yyc_r2:
-yy20:
-	if ((limit3 - cursor3) < 2) fill3(2);
+	if (limit3 <= cursor3) fill3(1);
 	yych = *cursor3;
 	if (yych <= '2') {
-		if (yych <= '0') goto yy21;
-		if (yych <= '1') goto yy26;
-		goto yy22;
+		if (yych <= '0') goto yy13;
+		if (yych <= '1') goto yy16;
+		goto yy14;
 	} else {
-		if (yych == 'b') goto yy30;
+		if (yych == 'b') goto yy18;
 	}
-yy21:
-yy22:
-	yych = *++cursor3;
-	goto yy25;
-yy23:
+yy13:
+yy14:
+	++cursor3;
 	{ return "2"; }
-yy24:
-	{ return "2"; }
-yy25:
-	{ return "2"; }
-yy26:
-	yych = *++cursor3;
-	goto yy29;
+yy16:
+	++cursor3;
 	{ return "1"; }
-	{ return "1"; }
-yy29:
-	{ return "1"; }
-yy30:
-	yych = *++cursor3;
-	goto yy33;
-	{ return "b"; }
-	{ return "b"; }
-yy33:
+yy18:
+	++cursor3;
 	{ return "b"; }
 }
 

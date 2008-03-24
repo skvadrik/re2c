@@ -164,7 +164,7 @@ spec:
 		{
 			if (parseMode == Scanner::Reuse)
 			{
-				in->fatal("Rules not allowed in 'repeat:re2c' block");
+				in->fatal("rules not allowed in 'use:re2c' block");
 			}
 		}
 	|	spec decl
@@ -489,21 +489,22 @@ void parse(Scanner& i, std::ostream& o, std::ostream* h)
 	o << " */\n";
 	o << sourceFileInfo;
 	
+	bool uFlagOld = uFlag;
+	bool wFlagOld = wFlag;
+	uint nRealCharsOld = nRealChars;
+	
 	while ((parseMode = i.echo()) != Scanner::Stop)
 	{
 		bool bPrologBrace = false;
-		if (rFlag && parseMode == Scanner::Parse && (dfa || dfa_map.size()))
+		if (rFlag && parseMode == Scanner::Rules && (dfa || dfa_map.size()))
 		{
-			in->fatal("Cannot have another 're2c' block after a block containing rules");
+			in->fatal("cannot have a second 'rules:re2c' block");
 		}
-		in->set_in_parse(true);
-		yyparse();
-		in->set_in_parse(false);
 		if (parseMode == Scanner::Reuse)
 		{
 			if (!dfa && dfa_map.empty())
 			{
-				in->fatal("Got 'repeat:re2c' without 're2c'");
+				in->fatal("got 'use:re2c' without 'rules:re2c'");
 			}
 		}
 		else
@@ -512,6 +513,30 @@ void parse(Scanner& i, std::ostream& o, std::ostream* h)
 			{
 				delete dfa;
 				dfa = NULL;
+			}
+			dfa_map.clear();
+		}
+		in->set_in_parse(true);
+		yyparse();
+		in->set_in_parse(false);
+		if (rFlag)
+		{
+			uint nRealCharsLast = nRealChars;
+			if (uFlag)
+			{
+				nRealChars = 0x110000; /* 17 times w-Flag */
+			}
+			else if (wFlag)
+			{
+				nRealChars = (1<<16); /* 0x10000 */
+			}
+			else
+			{
+				nRealChars = (1<<8); /* 0x100 */
+			}
+			if (nRealCharsLast != nRealChars)
+			{
+				/* Char width changed, so we need to regenerate the dfa. */
 			}
 		}
 		if (cFlag)
@@ -580,7 +605,12 @@ void parse(Scanner& i, std::ostream& o, std::ostream* h)
 							yySetupRule = "";
 						}
 					}
-					dfa_map[it->first] = genCode(o, topIndent, it->second.second, &specMap, it->first, !--nCount, bPrologBrace);
+					dfa_map[it->first] = genCode(it->second.second);
+					dfa_map[it->first]->prepare();
+					if (!rFlag)
+					{
+						dfa_map[it->first]->emit(o, topIndent, &specMap, it->first, !--nCount, bPrologBrace);
+					}
 				}
 			}
 			if (!h && !bTypesDone)
@@ -588,7 +618,7 @@ void parse(Scanner& i, std::ostream& o, std::ostream* h)
 				genTypes(typesInline, 0, specMap);
 			}
 		}
-		else if (spec)
+		else if (spec || dfa)
 		{
 			if (parseMode == Scanner::Reuse)
 			{
@@ -596,15 +626,21 @@ void parse(Scanner& i, std::ostream& o, std::ostream* h)
 			}
 			else
 			{
-				dfa = genCode(o, topIndent, spec, NULL, "", 0, bPrologBrace);
+				dfa = genCode(spec);
+				dfa->prepare();
 				if (!rFlag)
 				{
+					dfa->emit(o, topIndent, NULL, "", 0, bPrologBrace);
 					delete dfa;
 					dfa = NULL;
 				}
 			}
 		}
 		o << sourceFileInfo;
+		/* restore original char handling mode*/
+		uFlag = uFlagOld;
+		wFlag = wFlagOld;
+		nRealChars = nRealCharsOld;
 	}
 
 	if (cFlag)
@@ -614,7 +650,7 @@ void parse(Scanner& i, std::ostream& o, std::ostream* h)
 		{
 			if (itRuleSetup->first != "*" && specMap.find(itRuleSetup->first) == specMap.end())
 			{
-				in->fatalf_at(itRuleSetup->second.first, "Setup for non existing rule '%s' found", itRuleSetup->first.c_str());
+				in->fatalf_at(itRuleSetup->second.first, "setup for non existing rule '%s' found", itRuleSetup->first.c_str());
 			}
 		}
 		if (specMap.size() < ruleSetupMap.size())
@@ -625,7 +661,7 @@ void parse(Scanner& i, std::ostream& o, std::ostream* h)
 			{
 				line = itRuleSetup->second.first;
 			}
-			in->fatalf_at(line, "Setup for all rules with '*' not possible when all rules are setup explicitly");
+			in->fatalf_at(line, "setup for all rules with '*' not possible when all rules are setup explicitly");
 		}
 	}
 
