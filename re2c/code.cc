@@ -2086,11 +2086,6 @@ std::ostream& operator << (std::ostream& o, const file_info& li)
 	return o;
 }
 
-uint Scanner::get_line() const
-{
-	return cline;
-}
-
 void Scanner::config(const Str& cfg, int num)
 {
 	if (cfg.to_string() == "indent:top")

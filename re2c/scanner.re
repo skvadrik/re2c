@@ -29,14 +29,16 @@ extern YYSTYPE yylval;
 namespace re2c
 {
 
-Scanner::Scanner(std::istream& i, std::ostream& o)
-	: in(i)
-	, out(o)
-	, bot(NULL), tok(NULL), ptr(NULL), cur(NULL), pos(NULL), lim(NULL)
+ScannerState::ScannerState()
+	: bot(NULL), tok(NULL), ptr(NULL), cur(NULL), pos(NULL), lim(NULL)
 	, top(NULL), eof(NULL), ctx(NULL), tchar(0), tline(0), cline(1), iscfg(0)
 	, in_parse(false)
 {
-	;
+}
+
+Scanner::Scanner(std::istream& i, std::ostream& o)
+	: in(i), out(o)
+{
 }
 
 char *Scanner::fill(char *cursor, uint need)
@@ -52,7 +54,7 @@ char *Scanner::fill(char *cursor, uint need)
 			if (cnt)
 			{
 				memmove(bot, tok, top - tok);
-				tok = bot;
+				tok  = bot;
 				ptr -= cnt;
 				cursor -= cnt;
 				pos -= cnt;
@@ -314,7 +316,7 @@ scan:
 
 	":="		{
 					cur = cursor;
-					tok+= 2; /* skip ":=" */
+					tok += 2; /* skip ":=" */
 					depth = 0;
 					goto code;
 				}
@@ -435,23 +437,16 @@ scan:
 
 	config		{
 					cur = cursor;
-					tok+= 5; /* skip "re2c:" */
+					tok += 5; /* skip "re2c:" */
 					iscfg = 1;
 					yylval.str = new Str(token());
 					return CONFIG;
 				}
 
 	name / (space+ [^=>,])	{
-					if (FFlag)
-					{
-						cur = ptr > tok ? ptr - 1 : cursor;
-						yylval.symbol = Symbol::find(token());
-						return FID;
-					} else {
-						cur = ptr > tok ? ptr - 1 : cursor;
-						yylval.symbol = Symbol::find(token());
-						return ID;
-					}
+					cur = ptr > tok ? ptr - 1 : cursor;
+					yylval.symbol = Symbol::find(token());
+					return FFlag ? FID : ID;
 				}
 
 	name / (space* [=>,])	{
@@ -491,7 +486,7 @@ scan:
 				}
 
 	eol			{
-					if(cursor == eof) RETURN(0);
+					if (cursor == eof) RETURN(0);
 					pos = cursor;
 					cline++;
 					goto scan;
@@ -584,7 +579,7 @@ code:
 comment:
 /*!re2c
 	"*/"		{
-					if(--depth == 0)
+					if (--depth == 0)
 					{
 						goto scan;
 					}
@@ -599,7 +594,7 @@ comment:
 					goto comment;
 				}
 	"\n"		{
-					if(cursor == eof)
+					if (cursor == eof)
 					{
 						RETURN(0);
 					}
@@ -608,7 +603,7 @@ comment:
 					goto comment;
 				}
 	any			{
-					if(cursor == eof)
+					if (cursor == eof)
 					{
 						RETURN(0);
 					}

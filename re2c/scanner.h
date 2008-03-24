@@ -11,15 +11,21 @@
 namespace re2c
 {
 
+struct ScannerState
+{
+	ScannerState();
+
+	char	*bot, *tok, *ptr, *cur, *pos, *lim, *top, *eof, *ctx;
+	uint	tchar, tline, cline, iscfg, buf_size;
+	bool    in_parse;
+};
+
 class Scanner:
-	public line_number
+	public line_number, private ScannerState
 {
 private:
 	std::istream&	in;
 	std::ostream&   out;
-	char	*bot, *tok, *ptr, *cur, *pos, *lim, *top, *eof, *ctx;
-	uint	tchar, tline, cline, iscfg, buf_size;
-	bool    in_parse;
 
 private:
 	char *fill(char*, uint);
@@ -39,6 +45,10 @@ public:
 
 	ParseMode echo();
 	int scan();
+	
+	size_t get_pos() const;
+	void save_state(ScannerState&) const;
+	void restore_state(const ScannerState&);
 
 	uint get_cline() const;
 	void set_in_parse(bool new_in_parse);
@@ -72,9 +82,33 @@ public:
 	RegExp * mkDot() const;
 };
 
+inline size_t Scanner::get_pos() const
+{
+	return cur - bot;
+}
+
+inline uint Scanner::get_line() const
+{
+	return cline;
+}
+
 inline uint Scanner::get_cline() const
 {
 	return cline;
+}
+
+inline void Scanner::save_state(ScannerState& state) const
+{
+	state = *this;
+}
+
+inline void Scanner::restore_state(const ScannerState& state)
+{
+	if (bot != state.bot)
+	{
+		fatal("illegal internal restore operation");
+	}
+	*(ScannerState*)this = state;
 }
 
 inline void Scanner::fatal(const char *msg) const
