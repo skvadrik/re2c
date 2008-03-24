@@ -164,11 +164,7 @@ echo:
 					{
 						fatal("found 'use:re2c' block without -r flag");
 					}
-					next_label = 0;
-					next_fill_index = 0;
-					bWroteGetState = false;
-					bWroteCondCheck = false;
-					mapCodeName.clear();
+					reuse();
 					if (bUsedYYMaxFill && bSinglePass)
 					{
 						fatal("found scanner block after YYMAXFILL declaration");
@@ -711,6 +707,15 @@ void Scanner::check_token_length(char *pos, uint len) const
 SubStr Scanner::raw_token(std::string enclosure) const
 {
 	return SubStr(std::string(enclosure + token().to_string() + enclosure).c_str());
+}
+
+void Scanner::reuse()
+{
+	next_label = 0;
+	next_fill_index = 0;
+	bWroteGetState = false;
+	bWroteCondCheck = false;
+	mapCodeName.clear();
 }
 
 } // end namespace re2c

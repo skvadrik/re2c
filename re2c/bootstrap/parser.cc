@@ -133,11 +133,12 @@ void yyerror(const char*);
 
 static re2c::uint       accept;
 static re2c::RegExpMap  specMap;
-static RegExp           *spec, *specNone = NULL;
+static RegExp           *spec = NULL, *specNone = NULL;
 static RuleOpList       specStar;
 static Scanner          *in = NULL;
 static Scanner::ParseMode  parseMode;
 static SetupMap            ruleSetupMap;
+static bool                foundRules;
 
 /* Bison version 1.875 emits a definition that is not working
  * with several g++ version. Hence we disable it here.
@@ -248,7 +249,7 @@ void setup_rule(CondList *clist, Token *code)
 
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 typedef union YYSTYPE
-#line 130 "parser.y"
+#line 131 "parser.y"
 {
 	re2c::Symbol	*symbol;
 	re2c::RegExp	*regexp;
@@ -260,7 +261,7 @@ typedef union YYSTYPE
 	re2c::CondList	*clist;
 }
 /* Line 187 of yacc.c.  */
-#line 264 "parser.cc"
+#line 265 "parser.cc"
 	YYSTYPE;
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1
@@ -273,7 +274,7 @@ typedef union YYSTYPE
 
 
 /* Line 216 of yacc.c.  */
-#line 277 "parser.cc"
+#line 278 "parser.cc"
 
 #ifdef short
 # undef short
@@ -495,7 +496,7 @@ union yyalloc
 /* YYNNTS -- Number of nonterminals.  */
 #define YYNNTS  14
 /* YYNRULES -- Number of rules.  */
-#define YYNRULES  49
+#define YYNRULES  48
 /* YYNRULES -- Number of states.  */
 #define YYNSTATES  91
 
@@ -544,11 +545,11 @@ static const yytype_uint8 yytranslate[] =
    YYRHS.  */
 static const yytype_uint8 yyprhs[] =
 {
-       0,     0,     3,     4,     7,    10,    15,    18,    23,    28,
-      32,    37,    42,    46,    54,    62,    69,    76,    84,    92,
-      99,   106,   110,   114,   119,   124,   125,   127,   129,   133,
-     134,   138,   139,   142,   144,   148,   150,   154,   156,   159,
-     161,   164,   167,   169,   171,   174,   177,   179,   181,   183
+       0,     0,     3,     4,     7,    10,    15,    18,    23,    27,
+      32,    37,    41,    49,    57,    64,    71,    79,    87,    94,
+     101,   105,   109,   114,   119,   120,   122,   124,   128,   129,
+     133,   134,   137,   139,   143,   145,   149,   151,   154,   156,
+     159,   162,   164,   166,   169,   172,   174,   176,   178
 };
 
 /* YYRHS -- A `-1'-separated list of the rules' RHS.  */
@@ -556,33 +557,33 @@ static const yytype_int8 yyrhs[] =
 {
       28,     0,    -1,    -1,    28,    30,    -1,    28,    29,    -1,
        7,    16,    35,    17,    -1,    15,    35,    -1,     7,    16,
-      35,    18,    -1,     7,    16,    35,    18,    -1,    15,    35,
-      18,    -1,    11,    16,    12,    17,    -1,    11,    16,    13,
-      17,    -1,    35,    34,     8,    -1,    19,    31,    20,    35,
-      34,    33,     8,    -1,    19,    31,    20,    35,    34,    21,
-      33,    -1,    19,    31,    20,    34,    33,     8,    -1,    19,
-      31,    20,    34,    21,    33,    -1,    19,     5,    20,    35,
-      34,    33,     8,    -1,    19,     5,    20,    35,    34,    21,
-      33,    -1,    19,     5,    20,    34,    33,     8,    -1,    19,
-       5,    20,    34,    21,    33,    -1,     6,    33,     8,    -1,
-       6,    21,    33,    -1,    14,     5,    20,     8,    -1,    14,
-      31,    20,     8,    -1,    -1,    32,    -1,     7,    -1,    32,
-      22,     7,    -1,    -1,    16,    20,     7,    -1,    -1,    18,
-      35,    -1,    36,    -1,    35,    23,    36,    -1,    37,    -1,
-      36,    24,    37,    -1,    38,    -1,    37,    38,    -1,    40,
-      -1,    40,    39,    -1,    40,     3,    -1,     4,    -1,     5,
-      -1,    39,     4,    -1,    39,     5,    -1,     7,    -1,     9,
-      -1,    10,    -1,    25,    35,    26,    -1
+      35,    18,    -1,    15,    35,    18,    -1,    11,    16,    12,
+      17,    -1,    11,    16,    13,    17,    -1,    35,    34,     8,
+      -1,    19,    31,    20,    35,    34,    33,     8,    -1,    19,
+      31,    20,    35,    34,    21,    33,    -1,    19,    31,    20,
+      34,    33,     8,    -1,    19,    31,    20,    34,    21,    33,
+      -1,    19,     5,    20,    35,    34,    33,     8,    -1,    19,
+       5,    20,    35,    34,    21,    33,    -1,    19,     5,    20,
+      34,    33,     8,    -1,    19,     5,    20,    34,    21,    33,
+      -1,     6,    33,     8,    -1,     6,    21,    33,    -1,    14,
+       5,    20,     8,    -1,    14,    31,    20,     8,    -1,    -1,
+      32,    -1,     7,    -1,    32,    22,     7,    -1,    -1,    16,
+      20,     7,    -1,    -1,    18,    35,    -1,    36,    -1,    35,
+      23,    36,    -1,    37,    -1,    36,    24,    37,    -1,    38,
+      -1,    37,    38,    -1,    40,    -1,    40,    39,    -1,    40,
+       3,    -1,     4,    -1,     5,    -1,    39,     4,    -1,    39,
+       5,    -1,     7,    -1,     9,    -1,    10,    -1,    25,    35,
+      26,    -1
 };
 
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint16 yyrline[] =
 {
-       0,   159,   159,   163,   170,   174,   182,   190,   194,   198,
-     202,   208,   216,   225,   229,   234,   239,   245,   253,   261,
-     266,   272,   284,   296,   302,   310,   313,   320,   325,   334,
-     337,   345,   348,   355,   359,   366,   370,   381,   385,   392,
-     396,   411,   418,   422,   426,   430,   437,   445,   449,   453
+       0,   160,   160,   162,   166,   170,   178,   186,   190,   194,
+     200,   208,   217,   221,   226,   231,   237,   245,   253,   258,
+     264,   276,   288,   294,   302,   305,   312,   317,   326,   329,
+     337,   340,   347,   351,   358,   362,   373,   377,   384,   388,
+     403,   410,   414,   418,   422,   429,   437,   441,   445
 };
 #endif
 
@@ -614,20 +615,20 @@ static const yytype_uint16 yytoknum[] =
 static const yytype_uint8 yyr1[] =
 {
        0,    27,    28,    28,    28,    29,    29,    29,    29,    29,
-      29,    29,    30,    30,    30,    30,    30,    30,    30,    30,
-      30,    30,    30,    30,    30,    31,    31,    32,    32,    33,
-      33,    34,    34,    35,    35,    36,    36,    37,    37,    38,
-      38,    38,    39,    39,    39,    39,    40,    40,    40,    40
+      29,    30,    30,    30,    30,    30,    30,    30,    30,    30,
+      30,    30,    30,    30,    31,    31,    32,    32,    33,    33,
+      34,    34,    35,    35,    36,    36,    37,    37,    38,    38,
+      38,    39,    39,    39,    39,    40,    40,    40,    40
 };
 
 /* YYR2[YYN] -- Number of symbols composing right hand side of rule YYN.  */
 static const yytype_uint8 yyr2[] =
 {
-       0,     2,     0,     2,     2,     4,     2,     4,     4,     3,
-       4,     4,     3,     7,     7,     6,     6,     7,     7,     6,
-       6,     3,     3,     4,     4,     0,     1,     1,     3,     0,
-       3,     0,     2,     1,     3,     1,     3,     1,     2,     1,
-       2,     2,     1,     1,     2,     2,     1,     1,     1,     3
+       0,     2,     0,     2,     2,     4,     2,     4,     3,     4,
+       4,     3,     7,     7,     6,     6,     7,     7,     6,     6,
+       3,     3,     4,     4,     0,     1,     1,     3,     0,     3,
+       0,     2,     1,     3,     1,     3,     1,     2,     1,     2,
+       2,     1,     1,     2,     2,     1,     1,     1,     3
 };
 
 /* YYDEFACT[STATE-NAME] -- Default rule to reduce with in state
@@ -635,16 +636,16 @@ static const yytype_uint8 yyr2[] =
    means the default is an error.  */
 static const yytype_uint8 yydefact[] =
 {
-       2,     0,     1,    29,    46,    47,    48,     0,    25,     0,
-      25,     0,     4,     3,    31,    33,    35,    37,    39,     0,
-      29,     0,     0,     0,     0,    27,     0,    26,    46,     6,
-       0,     0,     0,     0,     0,     0,     0,    38,    41,    42,
-      43,    40,     0,    22,    21,     0,     0,     0,     0,     0,
-       0,     9,    31,    31,    49,    32,    34,    12,    36,    44,
-      45,    30,     5,     7,    10,    11,    23,    24,    28,    29,
-      31,    29,    31,    29,     0,    29,    29,     0,    29,    20,
-      19,    29,     0,    16,    15,    29,     0,    18,    17,    14,
-      13
+       2,     0,     1,    28,    45,    46,    47,     0,    24,     0,
+      24,     0,     4,     3,    30,    32,    34,    36,    38,     0,
+      28,     0,     0,     0,     0,    26,     0,    25,    45,     6,
+       0,     0,     0,     0,     0,     0,     0,    37,    40,    41,
+      42,    39,     0,    21,    20,     0,     0,     0,     0,     0,
+       0,     8,    30,    30,    48,    31,    33,    11,    35,    43,
+      44,    29,     5,     7,     9,    10,    22,    23,    27,    28,
+      30,    28,    30,    28,     0,    28,    28,     0,    28,    19,
+      18,    28,     0,    15,    14,    28,     0,    17,    16,    13,
+      12
 };
 
 /* YYDEFGOTO[NTERM-NUM].  */
@@ -1539,25 +1540,20 @@ yyreduce:
   switch (yyn)
     {
         case 2:
-#line 159 "parser.y"
+#line 160 "parser.y"
     {
-			accept = 0;
-			spec = NULL;
 		}
     break;
 
   case 3:
-#line 164 "parser.y"
+#line 163 "parser.y"
     {
-			if (parseMode == Scanner::Reuse)
-			{
-				in->fatal("rules not allowed in 'use:re2c' block");
-			}
+			foundRules = true;
 		}
     break;
 
   case 5:
-#line 175 "parser.y"
+#line 171 "parser.y"
     {
 			if ((yyvsp[(1) - (4)].symbol)->re)
 			{
@@ -1568,7 +1564,7 @@ yyreduce:
     break;
 
   case 6:
-#line 183 "parser.y"
+#line 179 "parser.y"
     {
 			if ((yyvsp[(1) - (2)].symbol)->re)
 			{
@@ -1579,28 +1575,21 @@ yyreduce:
     break;
 
   case 7:
-#line 191 "parser.y"
+#line 187 "parser.y"
     {
 			in->fatal("trailing contexts are not allowed in named definitions");
 		}
     break;
 
   case 8:
-#line 195 "parser.y"
+#line 191 "parser.y"
     {
 			in->fatal("trailing contexts are not allowed in named definitions");
 		}
     break;
 
   case 9:
-#line 199 "parser.y"
-    {
-			in->fatal("trailing contexts are not allowed in named definitions");
-		}
-    break;
-
-  case 10:
-#line 203 "parser.y"
+#line 195 "parser.y"
     {
 			in->config(*(yyvsp[(1) - (4)].str), *(yyvsp[(3) - (4)].str));
 			delete (yyvsp[(1) - (4)].str);
@@ -1608,16 +1597,16 @@ yyreduce:
 		}
     break;
 
-  case 11:
-#line 209 "parser.y"
+  case 10:
+#line 201 "parser.y"
     {
 			in->config(*(yyvsp[(1) - (4)].str), (yyvsp[(3) - (4)].number));
 			delete (yyvsp[(1) - (4)].str);
 		}
     break;
 
-  case 12:
-#line 217 "parser.y"
+  case 11:
+#line 209 "parser.y"
     {
 			if (cFlag)
 			{
@@ -1628,31 +1617,31 @@ yyreduce:
 		}
     break;
 
-  case 13:
-#line 226 "parser.y"
+  case 12:
+#line 218 "parser.y"
     {
 			context_rule((yyvsp[(2) - (7)].clist), (yyvsp[(4) - (7)].regexp), (yyvsp[(5) - (7)].regexp), (yyvsp[(6) - (7)].str), (yyvsp[(7) - (7)].token));
 		}
     break;
 
-  case 14:
-#line 230 "parser.y"
+  case 13:
+#line 222 "parser.y"
     {
 			assert((yyvsp[(7) - (7)].str));
 			context_rule((yyvsp[(2) - (7)].clist), (yyvsp[(4) - (7)].regexp), (yyvsp[(5) - (7)].regexp), (yyvsp[(7) - (7)].str), NULL);
 		}
     break;
 
-  case 15:
-#line 235 "parser.y"
+  case 14:
+#line 227 "parser.y"
     {
 			context_none((yyvsp[(2) - (6)].clist));
 			delete (yyvsp[(5) - (6)].str);
 		}
     break;
 
-  case 16:
-#line 240 "parser.y"
+  case 15:
+#line 232 "parser.y"
     {
 			assert((yyvsp[(6) - (6)].str));
 			context_none((yyvsp[(2) - (6)].clist));
@@ -1660,8 +1649,8 @@ yyreduce:
 		}
     break;
 
-  case 17:
-#line 246 "parser.y"
+  case 16:
+#line 238 "parser.y"
     {
 			context_check(NULL);
 			Token *token = new Token((yyvsp[(7) - (7)].token), (yyvsp[(7) - (7)].token)->line, (yyvsp[(6) - (7)].str));
@@ -1671,8 +1660,8 @@ yyreduce:
 		}
     break;
 
-  case 18:
-#line 254 "parser.y"
+  case 17:
+#line 246 "parser.y"
     {
 			assert((yyvsp[(7) - (7)].str));
 			context_check(NULL);
@@ -1682,16 +1671,16 @@ yyreduce:
 		}
     break;
 
-  case 19:
-#line 262 "parser.y"
+  case 18:
+#line 254 "parser.y"
     {
 			context_none(NULL);
 			delete (yyvsp[(5) - (6)].str);
 		}
     break;
 
-  case 20:
-#line 267 "parser.y"
+  case 19:
+#line 259 "parser.y"
     {
 			assert((yyvsp[(6) - (6)].str));
 			context_none(NULL);
@@ -1699,8 +1688,8 @@ yyreduce:
 		}
     break;
 
-  case 21:
-#line 273 "parser.y"
+  case 20:
+#line 265 "parser.y"
     {
 			context_check(NULL);
 			if (specNone)
@@ -1714,8 +1703,8 @@ yyreduce:
 		}
     break;
 
-  case 22:
-#line 285 "parser.y"
+  case 21:
+#line 277 "parser.y"
     {
 			assert((yyvsp[(3) - (3)].str));
 			context_check(NULL);
@@ -1729,8 +1718,8 @@ yyreduce:
 		}
     break;
 
-  case 23:
-#line 297 "parser.y"
+  case 22:
+#line 289 "parser.y"
     {
 			CondList *clist = new CondList();
 			clist->insert("*");
@@ -1738,94 +1727,94 @@ yyreduce:
 		}
     break;
 
-  case 24:
-#line 303 "parser.y"
+  case 23:
+#line 295 "parser.y"
     {
 			setup_rule((yyvsp[(2) - (4)].clist), (yyvsp[(4) - (4)].token));
 		}
     break;
 
-  case 25:
-#line 310 "parser.y"
+  case 24:
+#line 302 "parser.y"
     {
 			in->fatal("unnamed condition not supported");
 		}
     break;
 
-  case 26:
-#line 314 "parser.y"
+  case 25:
+#line 306 "parser.y"
     {
 			(yyval.clist) = (yyvsp[(1) - (1)].clist);
 		}
     break;
 
-  case 27:
-#line 321 "parser.y"
+  case 26:
+#line 313 "parser.y"
     {
 			(yyval.clist) = new CondList();
 			(yyval.clist)->insert((yyvsp[(1) - (1)].symbol)->GetName().to_string());
 		}
     break;
 
-  case 28:
-#line 326 "parser.y"
+  case 27:
+#line 318 "parser.y"
     {
 			(yyvsp[(1) - (3)].clist)->insert((yyvsp[(3) - (3)].symbol)->GetName().to_string());
 			(yyval.clist) = (yyvsp[(1) - (3)].clist);
 		}
     break;
 
-  case 29:
-#line 334 "parser.y"
+  case 28:
+#line 326 "parser.y"
     {
 			(yyval.str) = NULL;
 		}
     break;
 
-  case 30:
-#line 338 "parser.y"
+  case 29:
+#line 330 "parser.y"
     {
 			(yyval.str) = new Str((yyvsp[(3) - (3)].symbol)->GetName().to_string().c_str());
 		}
     break;
 
-  case 31:
-#line 345 "parser.y"
+  case 30:
+#line 337 "parser.y"
     {
 			(yyval.regexp) = new NullOp;
 		}
     break;
 
-  case 32:
-#line 349 "parser.y"
+  case 31:
+#line 341 "parser.y"
     {
 			(yyval.regexp) = (yyvsp[(2) - (2)].regexp);
 		}
     break;
 
-  case 33:
-#line 356 "parser.y"
+  case 32:
+#line 348 "parser.y"
     {
 			(yyval.regexp) = (yyvsp[(1) - (1)].regexp);
 		}
     break;
 
-  case 34:
-#line 360 "parser.y"
+  case 33:
+#line 352 "parser.y"
     {
 			(yyval.regexp) = mkAlt((yyvsp[(1) - (3)].regexp), (yyvsp[(3) - (3)].regexp));
 		}
     break;
 
-  case 35:
-#line 367 "parser.y"
+  case 34:
+#line 359 "parser.y"
     {
 			(yyval.regexp) = (yyvsp[(1) - (1)].regexp);
 		}
     break;
 
-  case 36:
-#line 371 "parser.y"
+  case 35:
+#line 363 "parser.y"
     {
 			(yyval.regexp) = mkDiff((yyvsp[(1) - (3)].regexp), (yyvsp[(3) - (3)].regexp));
 			if(!(yyval.regexp))
@@ -1835,29 +1824,29 @@ yyreduce:
 		}
     break;
 
-  case 37:
-#line 382 "parser.y"
+  case 36:
+#line 374 "parser.y"
     {
 			(yyval.regexp) = (yyvsp[(1) - (1)].regexp);
 		}
     break;
 
-  case 38:
-#line 386 "parser.y"
+  case 37:
+#line 378 "parser.y"
     {
 			(yyval.regexp) = new CatOp((yyvsp[(1) - (2)].regexp), (yyvsp[(2) - (2)].regexp));
 		}
     break;
 
-  case 39:
-#line 393 "parser.y"
+  case 38:
+#line 385 "parser.y"
     {
 			(yyval.regexp) = (yyvsp[(1) - (1)].regexp);
 		}
     break;
 
-  case 40:
-#line 397 "parser.y"
+  case 39:
+#line 389 "parser.y"
     {
 			switch((yyvsp[(2) - (2)].op))
 			{
@@ -1874,43 +1863,43 @@ yyreduce:
 		}
     break;
 
-  case 41:
-#line 412 "parser.y"
+  case 40:
+#line 404 "parser.y"
     {
 			(yyval.regexp) = new CloseVOp((yyvsp[(1) - (2)].regexp), (yyvsp[(2) - (2)].extop).minsize, (yyvsp[(2) - (2)].extop).maxsize);
 		}
     break;
 
+  case 41:
+#line 411 "parser.y"
+    {
+			(yyval.op) = (yyvsp[(1) - (1)].op);
+		}
+    break;
+
   case 42:
-#line 419 "parser.y"
+#line 415 "parser.y"
     {
 			(yyval.op) = (yyvsp[(1) - (1)].op);
 		}
     break;
 
   case 43:
-#line 423 "parser.y"
+#line 419 "parser.y"
     {
-			(yyval.op) = (yyvsp[(1) - (1)].op);
+			(yyval.op) = ((yyvsp[(1) - (2)].op) == (yyvsp[(2) - (2)].op)) ? (yyvsp[(1) - (2)].op) : '*';
 		}
     break;
 
   case 44:
-#line 427 "parser.y"
+#line 423 "parser.y"
     {
 			(yyval.op) = ((yyvsp[(1) - (2)].op) == (yyvsp[(2) - (2)].op)) ? (yyvsp[(1) - (2)].op) : '*';
 		}
     break;
 
   case 45:
-#line 431 "parser.y"
-    {
-			(yyval.op) = ((yyvsp[(1) - (2)].op) == (yyvsp[(2) - (2)].op)) ? (yyvsp[(1) - (2)].op) : '*';
-		}
-    break;
-
-  case 46:
-#line 438 "parser.y"
+#line 430 "parser.y"
     {
 			if(!(yyvsp[(1) - (1)].symbol)->re)
 			{
@@ -1920,22 +1909,22 @@ yyreduce:
 		}
     break;
 
+  case 46:
+#line 438 "parser.y"
+    {
+			(yyval.regexp) = (yyvsp[(1) - (1)].regexp);
+		}
+    break;
+
   case 47:
-#line 446 "parser.y"
+#line 442 "parser.y"
     {
 			(yyval.regexp) = (yyvsp[(1) - (1)].regexp);
 		}
     break;
 
   case 48:
-#line 450 "parser.y"
-    {
-			(yyval.regexp) = (yyvsp[(1) - (1)].regexp);
-		}
-    break;
-
-  case 49:
-#line 454 "parser.y"
+#line 446 "parser.y"
     {
 			(yyval.regexp) = (yyvsp[(2) - (3)].regexp);
 		}
@@ -1943,7 +1932,7 @@ yyreduce:
 
 
 /* Line 1267 of yacc.c.  */
-#line 1947 "parser.cc"
+#line 1936 "parser.cc"
       default: break;
     }
   YY_SYMBOL_PRINT ("-> $$ =", yyr1[yyn], &yyval, &yyloc);
@@ -2157,7 +2146,7 @@ yyreturn:
 }
 
 
-#line 459 "parser.y"
+#line 451 "parser.y"
 
 
 extern "C" {
@@ -2177,6 +2166,7 @@ namespace re2c
 void parse(Scanner& i, std::ostream& o, std::ostream* h)
 {
 	std::map<std::string, DFA*>  dfa_map;
+	ScannerState rules_state;
 
 	in = &i;
 
@@ -2197,6 +2187,11 @@ void parse(Scanner& i, std::ostream& o, std::ostream* h)
 	while ((parseMode = i.echo()) != Scanner::Stop)
 	{
 		bool bPrologBrace = false;
+		ScannerState curr_state;
+
+		i.save_state(curr_state);
+		foundRules = false;
+
 		if (rFlag && parseMode == Scanner::Rules && dfa_map.size())
 		{
 			in->fatal("cannot have a second 'rules:re2c' block");
@@ -2208,32 +2203,58 @@ void parse(Scanner& i, std::ostream& o, std::ostream* h)
 				in->fatal("got 'use:re2c' without 'rules:re2c'");
 			}
 		}
+		else if (parseMode == Scanner::Rules)
+		{
+			i.save_state(rules_state);
+		}
 		else
 		{
 			dfa_map.clear();
 		}
+		accept = 0;
+		spec = NULL;
 		in->set_in_parse(true);
 		yyparse();
 		in->set_in_parse(false);
-		if (rFlag)
+		if (rFlag && parseMode == Scanner::Reuse)
 		{
 			uint nRealCharsLast = nRealChars;
 			if (uFlag)
 			{
-				nRealChars = 0x110000; /* 17 times w-Flag */
+				nRealChars = 0x110000; // 17 times w-Flag
 			}
 			else if (wFlag)
 			{
-				nRealChars = (1<<16); /* 0x10000 */
+				nRealChars = (1<<16); // 0x10000
 			}
 			else
 			{
-				nRealChars = (1<<8); /* 0x100 */
+				nRealChars = (1<<8); // 0x100
 			}
-			if (nRealCharsLast != nRealChars)
+			if (foundRules || nRealCharsLast != nRealChars)
 			{
-				/* Char width changed, so we need to regenerate the dfa. */
+				// Re-parse rules
+				parseMode = Scanner::Parse;
+				i.restore_state(rules_state);
+				i.reuse();
+				dfa_map.clear();
+				parse_cleanup();
+				spec = NULL;
+				accept = 0;
+				in->set_in_parse(true);
+				yyparse();
+				in->set_in_parse(false);
+
+				// Now append potential new rules
+				i.restore_state(curr_state);
+				parseMode = Scanner::Parse;
+				in->set_in_parse(true);
+				yyparse();
+				in->set_in_parse(false);
 			}
+			uFlagOld = uFlag;
+			wFlagOld = wFlag;
+			nRealCharsOld = nRealChars;
 		}
 		if (cFlag)
 		{
@@ -2278,11 +2299,7 @@ void parse(Scanner& i, std::ostream& o, std::ostream* h)
 			{
 				assert(it->second.second);
 
-				if (parseMode == Scanner::Reuse)
-				{
-					dfa_map[it->first]->emit(o, topIndent, &specMap, it->first, !--nCount, bPrologBrace);
-				}
-				else
+				if (parseMode != Scanner::Reuse)
 				{
 					itRuleSetup = ruleSetupMap.find(it->first);				
 					if (itRuleSetup != ruleSetupMap.end())
@@ -2303,10 +2320,10 @@ void parse(Scanner& i, std::ostream& o, std::ostream* h)
 					}
 					dfa_map[it->first] = genCode(it->second.second);
 					dfa_map[it->first]->prepare();
-					if (!rFlag)
-					{
-						dfa_map[it->first]->emit(o, topIndent, &specMap, it->first, !--nCount, bPrologBrace);
-					}
+				}
+				if (parseMode != Scanner::Rules && dfa_map.find(it->first) != dfa_map.end())
+				{
+					dfa_map[it->first]->emit(o, topIndent, &specMap, it->first, !--nCount, bPrologBrace);
 				}
 			}
 			if (!h && !bTypesDone)
@@ -2316,19 +2333,14 @@ void parse(Scanner& i, std::ostream& o, std::ostream* h)
 		}
 		else if (spec || !dfa_map.empty())
 		{
-			if (parseMode == Scanner::Reuse)
-			{
-				dfa_map[""]->emit(o, topIndent, NULL, "", 0, bPrologBrace);
-			}
-			else
+			if (parseMode != Scanner::Reuse)
 			{
 				dfa_map[""] = genCode(spec);
 				dfa_map[""]->prepare();
-				if (!rFlag)
-				{
-					dfa_map[""]->emit(o, topIndent, NULL, "", 0, bPrologBrace);
-					dfa_map.clear();
-				}
+			}
+			if (parseMode != Scanner::Rules && dfa_map.find("") != dfa_map.end())
+			{
+				dfa_map[""]->emit(o, topIndent, NULL, "", 0, bPrologBrace);
 			}
 		}
 		o << sourceFileInfo;
@@ -2364,14 +2376,19 @@ void parse(Scanner& i, std::ostream& o, std::ostream* h)
 	{
 		genHeader(*h, 0, specMap);
 	}
+	
+	parse_cleanup();
+	in = NULL;
+}
 
+void parse_cleanup()
+{
 	RegExp::vFreeList.clear();
 	Range::vFreeList.clear();
 	Symbol::ClearTable();
 	specMap.clear();
 	specStar.clear();
 	specNone = NULL;
-	in = NULL;
 }
 
 } // end namespace re2c

@@ -45,6 +45,7 @@ public:
 
 	ParseMode echo();
 	int scan();
+	void reuse();
 	
 	size_t get_pos() const;
 	void save_state(ScannerState&) const;

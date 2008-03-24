@@ -127,13 +127,15 @@ tool with the re2c output which you might want if you do not require your users
 to have re2c themselves when building from your source. <b>-o output</b>
 Specify the output file.<br /><br /></dd>
 <dt><b>-r</b></dt>
-<dd>Allows reuse of scanner definitions with '<b>/*!repeat:re2c</b>' after
+<dd>Allows reuse of scanner definitions with '<b>/*!use:re2c</b>' after
 '<b>/*!rules:re2c</b>'. In this mode no '<b>/*!re2c</b>' block and exactly one
 '<b>/*!use:re2c</b>' must be present. The rules are being saved and used by
 every '<b>/*!repeat:re2c</b>' block that follows. These blocks can contain
-inplace configurations. That way it is possible to create the same scanner
-multiple times for different character types, different input mechanisms or
-different output mechanisms.
+inplace configurations, especially '<b>re2c:flags:w</b>' and '<b>re2c:flags:u</b>'.
+That way it is possible to create the same scanner multiple times for different
+character types, different input mechanisms or different output mechanisms.
+The '<b>/*!use:re2c</b>' blocks can also contain additional rules that will be
+appended to the set of rules in '<b>/*!rules:re2c</b>'.
 <br /><br /></dd>
 <dt><b>-s</b></dt>
 <dd>Generate nested ifs for some switches. Many compilers need this assist to

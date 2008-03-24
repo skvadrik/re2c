@@ -54,6 +54,7 @@ private:
 };
 
 extern void parse(Scanner&, std::ostream&, std::ostream*);
+extern void parse_cleanup();
 
 } // end namespace re2c
 

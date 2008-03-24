@@ -30,11 +30,12 @@ void yyerror(const char*);
 
 static re2c::uint       accept;
 static re2c::RegExpMap  specMap;
-static RegExp           *spec, *specNone = NULL;
+static RegExp           *spec = NULL, *specNone = NULL;
 static RuleOpList       specStar;
 static Scanner          *in = NULL;
 static Scanner::ParseMode  parseMode;
 static SetupMap            ruleSetupMap;
+static bool                foundRules;
 
 /* Bison version 1.875 emits a definition that is not working
  * with several g++ version. Hence we disable it here.
@@ -157,15 +158,10 @@ void setup_rule(CondList *clist, Token *code)
 spec:
 		/* empty */
 		{
-			accept = 0;
-			spec = NULL;
 		}
 	|	spec rule
 		{
-			if (parseMode == Scanner::Reuse)
-			{
-				in->fatal("rules not allowed in 'use:re2c' block");
-			}
+			foundRules = true;
 		}
 	|	spec decl
 ;
@@ -186,10 +182,6 @@ decl:
 				in->fatal("sym already defined");
 			}
 			$1->re = $2;
-		}
-	|	ID '=' expr '/'
-		{
-			in->fatal("trailing contexts are not allowed in named definitions");
 		}
 	|	ID '=' expr '/'
 		{
@@ -475,6 +467,7 @@ namespace re2c
 void parse(Scanner& i, std::ostream& o, std::ostream* h)
 {
 	std::map<std::string, DFA*>  dfa_map;
+	ScannerState rules_state;
 
 	in = &i;
 
@@ -495,6 +488,11 @@ void parse(Scanner& i, std::ostream& o, std::ostream* h)
 	while ((parseMode = i.echo()) != Scanner::Stop)
 	{
 		bool bPrologBrace = false;
+		ScannerState curr_state;
+
+		i.save_state(curr_state);
+		foundRules = false;
+
 		if (rFlag && parseMode == Scanner::Rules && dfa_map.size())
 		{
 			in->fatal("cannot have a second 'rules:re2c' block");
@@ -506,32 +504,58 @@ void parse(Scanner& i, std::ostream& o, std::ostream* h)
 				in->fatal("got 'use:re2c' without 'rules:re2c'");
 			}
 		}
+		else if (parseMode == Scanner::Rules)
+		{
+			i.save_state(rules_state);
+		}
 		else
 		{
 			dfa_map.clear();
 		}
+		accept = 0;
+		spec = NULL;
 		in->set_in_parse(true);
 		yyparse();
 		in->set_in_parse(false);
-		if (rFlag)
+		if (rFlag && parseMode == Scanner::Reuse)
 		{
 			uint nRealCharsLast = nRealChars;
 			if (uFlag)
 			{
-				nRealChars = 0x110000; /* 17 times w-Flag */
+				nRealChars = 0x110000; // 17 times w-Flag
 			}
 			else if (wFlag)
 			{
-				nRealChars = (1<<16); /* 0x10000 */
+				nRealChars = (1<<16); // 0x10000
 			}
 			else
 			{
-				nRealChars = (1<<8); /* 0x100 */
+				nRealChars = (1<<8); // 0x100
 			}
-			if (nRealCharsLast != nRealChars)
+			if (foundRules || nRealCharsLast != nRealChars)
 			{
-				/* Char width changed, so we need to regenerate the dfa. */
+				// Re-parse rules
+				parseMode = Scanner::Parse;
+				i.restore_state(rules_state);
+				i.reuse();
+				dfa_map.clear();
+				parse_cleanup();
+				spec = NULL;
+				accept = 0;
+				in->set_in_parse(true);
+				yyparse();
+				in->set_in_parse(false);
+
+				// Now append potential new rules
+				i.restore_state(curr_state);
+				parseMode = Scanner::Parse;
+				in->set_in_parse(true);
+				yyparse();
+				in->set_in_parse(false);
 			}
+			uFlagOld = uFlag;
+			wFlagOld = wFlag;
+			nRealCharsOld = nRealChars;
 		}
 		if (cFlag)
 		{
@@ -576,11 +600,7 @@ void parse(Scanner& i, std::ostream& o, std::ostream* h)
 			{
 				assert(it->second.second);
 
-				if (parseMode == Scanner::Reuse)
-				{
-					dfa_map[it->first]->emit(o, topIndent, &specMap, it->first, !--nCount, bPrologBrace);
-				}
-				else
+				if (parseMode != Scanner::Reuse)
 				{
 					itRuleSetup = ruleSetupMap.find(it->first);				
 					if (itRuleSetup != ruleSetupMap.end())
@@ -601,10 +621,10 @@ void parse(Scanner& i, std::ostream& o, std::ostream* h)
 					}
 					dfa_map[it->first] = genCode(it->second.second);
 					dfa_map[it->first]->prepare();
-					if (!rFlag)
-					{
-						dfa_map[it->first]->emit(o, topIndent, &specMap, it->first, !--nCount, bPrologBrace);
-					}
+				}
+				if (parseMode != Scanner::Rules && dfa_map.find(it->first) != dfa_map.end())
+				{
+					dfa_map[it->first]->emit(o, topIndent, &specMap, it->first, !--nCount, bPrologBrace);
 				}
 			}
 			if (!h && !bTypesDone)
@@ -614,19 +634,14 @@ void parse(Scanner& i, std::ostream& o, std::ostream* h)
 		}
 		else if (spec || !dfa_map.empty())
 		{
-			if (parseMode == Scanner::Reuse)
-			{
-				dfa_map[""]->emit(o, topIndent, NULL, "", 0, bPrologBrace);
-			}
-			else
+			if (parseMode != Scanner::Reuse)
 			{
 				dfa_map[""] = genCode(spec);
 				dfa_map[""]->prepare();
-				if (!rFlag)
-				{
-					dfa_map[""]->emit(o, topIndent, NULL, "", 0, bPrologBrace);
-					dfa_map.clear();
-				}
+			}
+			if (parseMode != Scanner::Rules && dfa_map.find("") != dfa_map.end())
+			{
+				dfa_map[""]->emit(o, topIndent, NULL, "", 0, bPrologBrace);
 			}
 		}
 		o << sourceFileInfo;
@@ -662,14 +677,19 @@ void parse(Scanner& i, std::ostream& o, std::ostream* h)
 	{
 		genHeader(*h, 0, specMap);
 	}
+	
+	parse_cleanup();
+	in = NULL;
+}
 
+void parse_cleanup()
+{
 	RegExp::vFreeList.clear();
 	Range::vFreeList.clear();
 	Symbol::ClearTable();
 	specMap.clear();
 	specStar.clear();
 	specNone = NULL;
-	in = NULL;
 }
 
 } // end namespace re2c
