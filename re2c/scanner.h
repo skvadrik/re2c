@@ -15,7 +15,8 @@ struct ScannerState
 {
 	ScannerState();
 
-	char	*bot, *tok, *ptr, *cur, *pos, *lim, *top, *eof, *ctx;
+	char	*tok, *ptr, *cur, *pos, *ctx;  // positioning
+	char    *bot, *lim, *top, *eof;        // buffer
 	uint	tchar, tline, cline, iscfg, buf_size;
 	bool    in_parse;
 };
@@ -101,15 +102,6 @@ inline uint Scanner::get_cline() const
 inline void Scanner::save_state(ScannerState& state) const
 {
 	state = *this;
-}
-
-inline void Scanner::restore_state(const ScannerState& state)
-{
-	if (bot != state.bot)
-	{
-		fatal("illegal internal restore operation");
-	}
-	*(ScannerState*)this = state;
 }
 
 inline void Scanner::fatal(const char *msg) const

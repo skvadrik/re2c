@@ -12,6 +12,8 @@
 namespace re2c
 {
 
+enum { BSIZE = 8192};
+
 extern file_info sourceFileInfo;
 extern file_info outputFileInfo;
 extern file_info headerFileInfo;

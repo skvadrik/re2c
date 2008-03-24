@@ -1,4 +1,5 @@
 /* $Id$ */
+#include <stdarg.h>
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
@@ -2312,6 +2313,176 @@ void Scanner::config(const Str& cfg, const Str& val)
 		msg += cfg.to_string();
 		msg += "' or illegal string value";
 		fatal(msg.c_str());
+	}
+}
+
+ScannerState::ScannerState()
+	: tok(NULL), ptr(NULL), cur(NULL), pos(NULL), ctx(NULL)
+	, bot(NULL), lim(NULL), top(NULL), eof(NULL)
+	, tchar(0), tline(0), cline(1), iscfg(0)
+	, in_parse(false)
+{
+}
+
+Scanner::Scanner(std::istream& i, std::ostream& o)
+	: ScannerState(), in(i), out(o)
+{
+}
+
+char *Scanner::fill(char *cursor, uint need)
+{
+	if(!eof)
+	{
+		uint cnt;
+		/* Do not get rid of anything when rFlag is active. Otherwise
+		 * get rid of everything that was already handedout. */
+		if (!rFlag)
+		{
+			cnt = tok - bot;
+			if (cnt)
+			{
+				memmove(bot, tok, top - tok);
+				tok  = bot;
+				ptr -= cnt;
+				cursor -= cnt;
+				pos -= cnt;
+				lim -= cnt;
+			}
+		}
+		/* In crease buffer size. */
+		if (BSIZE > need)
+		{
+			need = BSIZE;
+		}
+		if (static_cast<uint>(top - lim) < need)
+		{
+			char *buf = new char[(lim - bot) + need];
+			if (!buf)
+			{
+				fatal("Out of memory");
+			}
+			memcpy(buf, bot, lim - bot);
+			tok = &buf[tok - bot];
+			ptr = &buf[ptr - bot];
+			cur = &buf[cur - bot];
+			pos = &buf[pos - bot];
+			lim = &buf[lim - bot];
+			top = &lim[need];
+			ctx = &buf[ctx - bot];
+			cursor = &buf[cursor - bot];
+			delete [] bot;
+			bot = buf;
+		}
+		/* Append to buffer. */
+		in.read(lim, need);
+		if ((cnt = in.gcount()) != need)
+		{
+			eof = &lim[cnt];
+			*eof++ = '\0';
+		}
+		lim += cnt;
+	}
+	return cursor;
+}
+
+void Scanner::set_in_parse(bool new_in_parse)
+{
+	in_parse = new_in_parse;
+}
+
+void Scanner::fatal_at(uint line, uint ofs, const char *msg) const
+{
+	out.flush();
+	std::cerr << "re2c: error: "
+		<< "line " << line << ", column " << (tchar + ofs + 1) << ": "
+		<< msg << std::endl;
+	exit(1);
+}
+
+void Scanner::fatal(uint ofs, const char *msg) const
+{
+	fatal_at(in_parse ? tline : cline, ofs, msg);
+}
+
+void Scanner::fatalf_at(uint line, const char* fmt, ...) const
+{
+	char szBuf[4096];
+
+	va_list args;
+	
+	va_start(args, fmt);
+	vsnprintf(szBuf, sizeof(szBuf), fmt, args);
+	va_end(args);
+	
+	szBuf[sizeof(szBuf)-1] = '0';
+	
+	fatal_at(line, 0, szBuf);
+}
+
+void Scanner::fatalf(const char *fmt, ...) const
+{
+	char szBuf[4096];
+
+	va_list args;
+	
+	va_start(args, fmt);
+	vsnprintf(szBuf, sizeof(szBuf), fmt, args);
+	va_end(args);
+	
+	szBuf[sizeof(szBuf)-1] = '0';
+	
+	fatal(szBuf);
+}
+
+Scanner::~Scanner()
+{
+	if (bot)
+	{
+		delete [] bot;
+	}
+}
+
+void Scanner::check_token_length(char *pos, uint len) const
+{
+	if (pos < bot || pos + len >= top)
+	{
+		fatal("Token exceeds limit");
+	}
+}
+
+SubStr Scanner::raw_token(std::string enclosure) const
+{
+	return SubStr(std::string(enclosure + token().to_string() + enclosure).c_str());
+}
+
+void Scanner::reuse()
+{
+	next_label = 0;
+	next_fill_index = 0;
+	bWroteGetState = false;
+	bWroteCondCheck = false;
+	mapCodeName.clear();
+}
+
+void Scanner::restore_state(const ScannerState& state)
+{
+	int diff = bot - state.bot;
+	char *old_bot = bot;
+	char *old_lim = lim;
+	char *old_top = top;
+	char *old_eof = eof;
+	*(ScannerState*)this = state;
+	if (diff)
+	{
+		tok -= diff;
+		ptr -= diff;
+		cur -= diff;
+		pos -= diff;
+		ctx -= diff;		
+		bot = old_bot;
+		lim = old_lim;
+		top = old_top;
+		eof = old_eof;
 	}
 }
 
