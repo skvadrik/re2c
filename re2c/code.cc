@@ -2444,7 +2444,7 @@ Scanner::~Scanner()
 
 void Scanner::check_token_length(char *pos, uint len) const
 {
-	if (pos < bot || pos + len >= top)
+	if (pos < bot || pos + len > top)
 	{
 		fatal("Token exceeds limit");
 	}
