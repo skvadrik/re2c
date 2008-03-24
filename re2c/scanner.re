@@ -43,18 +43,25 @@ char *Scanner::fill(char *cursor, uint need)
 {
 	if(!eof)
 	{
-		uint cnt = tok - bot;
-		if(cnt)
+		uint cnt;
+		/* Do not get rid of anything when rFlag is active. Otherwise
+		 * get rid of everything that was already handedout. */
+		if (!rFlag)
 		{
-			memmove(bot, tok, top - tok);
-			tok = bot;
-			ptr -= cnt;
-			cursor -= cnt;
-			pos -= cnt;
-			lim -= cnt;
+			cnt = tok - bot;
+			if (cnt)
+			{
+				memmove(bot, tok, top - tok);
+				tok = bot;
+				ptr -= cnt;
+				cursor -= cnt;
+				pos -= cnt;
+				lim -= cnt;
+			}
 		}
+		/* In crease buffer size. */
 		need = MAX(need, BSIZE);
-		if(static_cast<uint>(top - lim) < need)
+		if (static_cast<uint>(top - lim) < need)
 		{
 			char *buf = new char[(lim - bot) + need];
 			if (!buf)
@@ -71,8 +78,9 @@ char *Scanner::fill(char *cursor, uint need)
 			delete [] bot;
 			bot = buf;
 		}
+		/* Append to buffer. */
 		in.read(lim, need);
-		if((cnt = in.gcount()) != need)
+		if ((cnt = in.gcount()) != need)
 		{
 			eof = &lim[cnt];
 			*eof++ = '\0';
