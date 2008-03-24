@@ -2176,7 +2176,6 @@ namespace re2c
 
 void parse(Scanner& i, std::ostream& o, std::ostream* h)
 {
-	DFA *dfa = NULL;
 	std::map<std::string, DFA*>  dfa_map;
 
 	in = &i;
@@ -2198,24 +2197,19 @@ void parse(Scanner& i, std::ostream& o, std::ostream* h)
 	while ((parseMode = i.echo()) != Scanner::Stop)
 	{
 		bool bPrologBrace = false;
-		if (rFlag && parseMode == Scanner::Rules && (dfa || dfa_map.size()))
+		if (rFlag && parseMode == Scanner::Rules && dfa_map.size())
 		{
 			in->fatal("cannot have a second 'rules:re2c' block");
 		}
 		if (parseMode == Scanner::Reuse)
 		{
-			if (!dfa && dfa_map.empty())
+			if (dfa_map.empty())
 			{
 				in->fatal("got 'use:re2c' without 'rules:re2c'");
 			}
 		}
 		else
 		{
-			if (dfa)
-			{
-				delete dfa;
-				dfa = NULL;
-			}
 			dfa_map.clear();
 		}
 		in->set_in_parse(true);
@@ -2320,21 +2314,20 @@ void parse(Scanner& i, std::ostream& o, std::ostream* h)
 				genTypes(typesInline, 0, specMap);
 			}
 		}
-		else if (spec || dfa)
+		else if (spec || !dfa_map.empty())
 		{
 			if (parseMode == Scanner::Reuse)
 			{
-				dfa->emit(o, topIndent, NULL, "", 0, bPrologBrace);
+				dfa_map[""]->emit(o, topIndent, NULL, "", 0, bPrologBrace);
 			}
 			else
 			{
-				dfa = genCode(spec);
-				dfa->prepare();
+				dfa_map[""] = genCode(spec);
+				dfa_map[""]->prepare();
 				if (!rFlag)
 				{
-					dfa->emit(o, topIndent, NULL, "", 0, bPrologBrace);
-					delete dfa;
-					dfa = NULL;
+					dfa_map[""]->emit(o, topIndent, NULL, "", 0, bPrologBrace);
+					dfa_map.clear();
 				}
 			}
 		}
@@ -2379,10 +2372,6 @@ void parse(Scanner& i, std::ostream& o, std::ostream* h)
 	specStar.clear();
 	specNone = NULL;
 	in = NULL;
-	if (dfa)
-	{
-		delete dfa;
-	}
 }
 
 } // end namespace re2c
