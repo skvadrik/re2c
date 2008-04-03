@@ -1,5 +1,6 @@
 Version 0.13.4 (2008-??-??)
 ---------------------------
+- Added transparent handling of #line directives in input files.
 - Added re2c:yyfill:check inplace configuration.
 - Added re2c:define:YYSETSTATE:naked inplace configuration.
 - Added re2c:flags:w and re2c:flags:u inplace configurations.

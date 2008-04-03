@@ -38,6 +38,7 @@ dstring = "\""    ((esc \ ["] ) | "\\" dot)* "\"";
 sstring = "'"     ((esc \ ['] ) | "\\" dot)* "'" ;
 letter  = [a-zA-Z];
 digit   = [0-9];
+lineno  = [1-9] digit*;
 number  = "0" | ("-"? [1-9] digit*);
 name    = (letter|"_") (letter|digit|"_")*;
 cname   = ":" name;
@@ -46,6 +47,7 @@ ws      = (space | [\r\n]);
 eol     = ("\r\n" | "\n");
 config  = "re2c" cname+ ("@" name)?;
 value   = [^\r\n; \t]* | dstring | sstring;
+lineinf = lineno (space+ dstring)? eol;
 */
 
 Scanner::ParseMode Scanner::echo()
@@ -186,6 +188,10 @@ echo:
 						out.write((const char*)(tok), (const char*)(cursor) - (const char*)(tok));
 					}
 					tok = pos = cursor;
+					goto echo;
+				}
+	"\n" space* "#" space* "line" space+ / lineinf {
+					set_sourceline(cursor);
 					goto echo;
 				}
 	"\n"		{
@@ -416,6 +422,11 @@ scan:
 					goto scan;
 				}
 
+	eol space* "#" space* "line" space+ / lineinf {
+					set_sourceline(cursor);
+					goto scan;
+				}
+
 	eol			{
 					if (cursor == eof) RETURN(0);
 					pos = cursor;
@@ -442,7 +453,7 @@ code:
 					else if (--depth == 0)
 					{
 						cur = cursor;
-						yylval.token = new Token(token(), tline);
+						yylval.token = new Token(token(), sourceFileInfo.fname, tline);
 						return CODE;
 					}
 					goto code;
@@ -456,6 +467,10 @@ code:
 					{
 						++depth;
 					}
+					goto code;
+				}
+	"\n" space* "#" space* "line" space+ / lineinf {
+					set_sourceline(cursor);
 					goto code;
 				}
 	"\n" /  ws	{
@@ -480,7 +495,7 @@ code:
 						{
 							--cur;
 						}
-						yylval.token = new Token(token(), tline);
+						yylval.token = new Token(token(), sourceFileInfo.fname, tline);
 						return CODE;
 					}
 					else if (cursor == eof)
@@ -522,6 +537,10 @@ comment:
 	"/*"		{
 					++depth;
 					fatal("ambiguous /* found");
+					goto comment;
+				}
+	"\n" space* "#" space* "line" space+ / lineinf {
+					set_sourceline(cursor);
 					goto comment;
 				}
 	"\n"		{
@@ -571,6 +590,39 @@ value:
 					iscfg = 0;
 					return VALUE;
 				}
+*/
+}
+
+void Scanner::set_sourceline(char *& cursor) 
+{
+sourceline:
+	tok = cursor;
+/*!re2c	
+	lineno		{
+					cur = cursor;
+					cline = atoi(token().to_string().c_str());
+					goto sourceline; 
+				}
+	dstring		{
+					cur = cursor;
+					sourceFileInfo.set_fname(token(1, cur - tok - 2).to_string());
+			  		goto sourceline; 
+				}
+	"\n"			{
+  					if (cursor == eof)
+  					{
+						--cursor; 
+					}
+			  		else
+			  		{
+			  			pos = cursor; 
+			  		}
+			  		tok = cursor;
+			  		return; 
+				}
+	any			{
+  					goto sourceline;
+  				}
 */
 }
 

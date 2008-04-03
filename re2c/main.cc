@@ -457,6 +457,7 @@ int main(int argc, char *argv[])
 		bWroteCondCheck = false;
 		bUsedYYMaxFill = false;
 		bFirstPass = false;
+		sourceFileInfo.set_fname(sourceFileName);
 	}
 
 	bLastPass = true;

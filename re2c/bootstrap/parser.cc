@@ -186,7 +186,7 @@ void context_rule(CondList *clist, RegExp *expr, RegExp *look, Str *newcond, Tok
 	for(CondList::const_iterator it = clist->begin(); it != clist->end(); ++it)
 	{
 		//Str *condcpy = newcond ? new Str(*newcond) : newcond;
-		Token *token = new Token(code, in->get_line(), newcond);//condcpy);
+		Token *token = new Token(code, sourceFileInfo, newcond);//condcpy);
 		RuleOp *rule = new RuleOp(expr, look, token, accept++);
 
 		RegExpMap::iterator itRE = specMap.find(*it);
@@ -1653,7 +1653,7 @@ yyreduce:
 #line 238 "parser.y"
     {
 			context_check(NULL);
-			Token *token = new Token((yyvsp[(7) - (7)].token), (yyvsp[(7) - (7)].token)->line, (yyvsp[(6) - (7)].str));
+			Token *token = new Token((yyvsp[(7) - (7)].token), (yyvsp[(7) - (7)].token)->source, (yyvsp[(7) - (7)].token)->line, (yyvsp[(6) - (7)].str));
 			delete (yyvsp[(7) - (7)].token);
 			delete (yyvsp[(6) - (7)].str);
 			specStar.push_back(new RuleOp((yyvsp[(4) - (7)].regexp), (yyvsp[(5) - (7)].regexp), token, accept++));
@@ -1665,7 +1665,7 @@ yyreduce:
     {
 			assert((yyvsp[(7) - (7)].str));
 			context_check(NULL);
-			Token *token = new Token(NULL, in->get_line(), (yyvsp[(7) - (7)].str));
+			Token *token = new Token(NULL, sourceFileInfo, (yyvsp[(7) - (7)].str));
 			delete (yyvsp[(7) - (7)].str);
 			specStar.push_back(new RuleOp((yyvsp[(4) - (7)].regexp), (yyvsp[(5) - (7)].regexp), token, accept++));
 		}
@@ -1696,7 +1696,7 @@ yyreduce:
 			{
 				in->fatal("code to handle illegal condition already defined");
 			}
-			Token *token = new Token((yyvsp[(3) - (3)].token), (yyvsp[(3) - (3)].token)->line, (yyvsp[(2) - (3)].str));
+			Token *token = new Token((yyvsp[(3) - (3)].token), (yyvsp[(3) - (3)].token)->source, (yyvsp[(3) - (3)].token)->line, (yyvsp[(2) - (3)].str));
 			delete (yyvsp[(2) - (3)].str);
 			delete (yyvsp[(3) - (3)].token);
 			(yyval.regexp) = specNone = new RuleOp(new NullOp(), new NullOp(), token, accept++);
@@ -1712,7 +1712,7 @@ yyreduce:
 			{
 				in->fatal("code to handle illegal condition already defined");
 			}
-			Token *token = new Token(NULL, in->get_line(), (yyvsp[(3) - (3)].str));
+			Token *token = new Token(NULL, sourceFileInfo, (yyvsp[(3) - (3)].str));
 			delete (yyvsp[(3) - (3)].str);
 			(yyval.regexp) = specNone = new RuleOp(new NullOp(), new NullOp(), token, accept++);
 		}

@@ -736,7 +736,7 @@ void Rule::emit(std::ostream &o, uint ind, bool &, const std::string& condName) 
 		o << indent(ind) << yySetupRule << "\n";
 	}
 
-	o << file_info(sourceFileInfo, &rl);
+	o << file_info(rule->code->source, &rl);
 	o << indent(ind);
 	if (rule->code->autogen)
 	{

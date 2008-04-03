@@ -32,6 +32,7 @@ private:
 	char *fill(char*, uint);
 	Scanner(const Scanner&); //unimplemented
 	Scanner& operator=(const Scanner&); //unimplemented
+	void set_sourceline(char *& cursor);
 
 public:
 	Scanner(std::istream&, std::ostream&);

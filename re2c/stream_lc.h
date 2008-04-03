@@ -422,6 +422,11 @@ public:
 		return *this;
 	}
 
+	void set_fname(const std::string& _fname)
+	{
+		*(const_cast<std::string*>(&this->fname)) = _fname;
+	}
+
 	const std::string  fname;
 	const line_number* ln;
 };
