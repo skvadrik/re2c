@@ -1,7 +1,7 @@
 ./" 
 ./" $Id$
 ./"
-.TH RE2C 1 "14 March 2008" "Version @PACKAGE_VERSION@"
+.TH RE2C 1 "05 April 2008" "Version @PACKAGE_VERSION@"
 .ds re \fBre2c\fP
 .ds le \fBlex\fP
 .ds rx regular-expression
