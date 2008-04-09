@@ -67,7 +67,7 @@ public:
 	void check_token_length(char *pos, uint len) const;
 	SubStr token() const;
 	SubStr token(uint start, uint len) const;
-	SubStr raw_token(std::string enclosure) const;
+	Str raw_token(std::string enclosure) const;
 	virtual uint get_line() const;	
 	uint xlat(uint c) const;
 

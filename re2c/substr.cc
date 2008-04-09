@@ -43,6 +43,12 @@ Str::Str(Str& s)
 	s.len = 0;
 }
 
+Str::Str(const char *s)
+	: SubStr(strdup(s), strlen(s))
+{
+	;
+}
+
 Str::Str()
 	: SubStr((char*) NULL, 0)
 {
@@ -55,8 +61,8 @@ Str::~Str()
 	if (str) {
 		free((void*)str);
 	}
-	str = (char*) - 1;
-	len = (uint) - 1;
+	str = NULL;
+	len = 0;
 }
 
 } // end namespace re2c

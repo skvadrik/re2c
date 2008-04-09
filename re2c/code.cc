@@ -2450,9 +2450,9 @@ void Scanner::check_token_length(char *pos, uint len) const
 	}
 }
 
-SubStr Scanner::raw_token(std::string enclosure) const
+Str Scanner::raw_token(std::string enclosure) const
 {
-	return SubStr(std::string(enclosure + token().to_string() + enclosure).c_str());
+	return Str(std::string(enclosure + token().to_string() + enclosure).c_str());
 }
 
 void Scanner::reuse()

@@ -38,6 +38,7 @@ class Str: public SubStr
 public:
 	Str(const SubStr&);
 	Str(Str&);
+	Str(const char*);
 	Str();
 	~Str();
 };
