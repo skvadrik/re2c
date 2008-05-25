@@ -2344,9 +2344,11 @@ char *Scanner::fill(char *cursor, uint need)
 				memmove(bot, tok, top - tok);
 				tok  = bot;
 				ptr -= cnt;
-				cursor -= cnt;
+				cur -= cnt;
 				pos -= cnt;
 				lim -= cnt;
+				ctx -= cnt;
+				cursor -= cnt;
 			}
 		}
 		/* In crease buffer size. */
