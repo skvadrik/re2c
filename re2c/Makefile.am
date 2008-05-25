@@ -17,7 +17,7 @@ YFLAGS       = -d
 RE2C         = re2c$(EXEEXT)
 RE2CFLAGS    = -bi
 
-CLEANFILES   = parser.cc y.tab.c y.tab.h scanner.cc re2c.1 .version
+CLEANFILES   = parser.cc y.tab.c y.tab.h scanner.cc re2c.1 .version htdocs/manual.html.in
 
 DISTCLEANFILES = makerpm re2c.spec README scanner.cc re2c$(EXEEXT)
 

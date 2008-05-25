@@ -1,6 +1,11 @@
 Version 0.13.5 (2008-??-??)
 ---------------------------
 
+Version 0.13.5 (2008-05-25)
+---------------------------
+- Fixed #1952896 Segfault in re2c::Scanner::scan.
+- Fixed #1952842 Regression.
+
 Version 0.13.4 (2008-04-05)
 ---------------------------
 - Added transparent handling of #line directives in input files.

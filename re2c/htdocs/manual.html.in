@@ -7,7 +7,7 @@
 <body>
 <h1>RE2C</h1>
 Section: User Commands (1)<br />
-Updated: 05 Apr 2008<br />
+Updated: @PACKAGE_DATE@<br />
 <a href="#index">Index</a>
 <hr />
 <a name="lbAB" id="lbAB">&nbsp;</a>
@@ -675,7 +675,7 @@ else then e detection of end of data/file.</p>
 <br />
 <a name="lbAQ" id="lbAQ">&nbsp;</a>
 <h2>VERSION INFORMATION</h2>
-<p>This manpage describes <b>re2c</b>, version 0.13.1.</p>
+<p>This manpage describes <b>re2c</b>, version @PACKAGE_VERSION@.</p>
 <hr />
 <a name="index" id="index">&nbsp;</a>
 <h2>Index</h2>
@@ -701,6 +701,6 @@ else then e detection of end of data/file.</p>
 <br />
 <hr />
 <p>This document was created by man2html, using the manual pages.<br />
-Date: 05 Apr, 2008</p>
+Date: @PACKAGE_DATE@</p>
 </body>
 </html>
