@@ -5,7 +5,6 @@
 2. Edit dates in the following files:
    - CHANGELOG
    - htdocs/index.html
-   - htdocs/manual.html (two times)
 
 3. For a BRANCH edit version in:
    - configure.in
