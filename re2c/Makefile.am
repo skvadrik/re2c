@@ -17,13 +17,13 @@ YFLAGS       = -d
 RE2C         = re2c$(EXEEXT)
 RE2CFLAGS    = -bi
 
-CLEANFILES   = parser.cc y.tab.c y.tab.h scanner.cc re2c.1 .version htdocs/manual.html.in
+CLEANFILES   = parser.cc y.tab.c y.tab.h scanner.cc re2c.1 .version htdocs/manual.html
 
 DISTCLEANFILES = makerpm re2c.spec README scanner.cc re2c$(EXEEXT)
 
 EXTRA_SRC    = $(man_MANS) README parser.y scanner.re y.tab.h CHANGELOG \
                doc examples test bootstrap/*.cc bootstrap/*.h lessons
-EXTRA_DIST   = $(EXTRA_SRC) makerpm.in re2c.spec.in re2c.spec README.in config_w32.h.in
+EXTRA_DIST   = $(EXTRA_SRC) makerpm.in re2c.spec.in re2c.spec README.in config_w32.h.in htdocs/manual.html.in
 EXTRA_ZIP    = $(EXTRA_SRC) config_w32.h *.sln *.vcproj re2c.rules
 
 dist-hook: vtest re2c.spec
