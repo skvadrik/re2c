@@ -368,9 +368,9 @@ int main(int argc, char *argv[])
 		return 2;
 	}
 
-	if (dFlag && DFlag)
+	if (DFlag && (dFlag || bFlag))
 	{
-		std::cerr << "re2c: error: Cannot combine -d with -D switch\n";
+		std::cerr << "re2c: error: Cannot combine -D with -d or -b switch\n";
 		return 2;
 	}
 
