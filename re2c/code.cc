@@ -170,7 +170,7 @@ void Go::unmap(Go *base, const State *x)
 	nSpans = s - span;
 }
 
-void doGen(const Go *g, const State *s, uint *bm, uint f, uint m)
+static void doGen(const Go *g, const State *s, uint *bm, uint f, uint m)
 {
 	Span *b = g->span, *e = &b[g->nSpans];
 	uint lb = 0;
@@ -189,7 +189,7 @@ void doGen(const Go *g, const State *s, uint *bm, uint f, uint m)
 	}
 }
 
-void prt(std::ostream& o, const Go *g, const State *s)
+static void prt(std::ostream& o, const Go *g, const State *s)
 {
 	Span *b = g->span, *e = &b[g->nSpans];
 	uint lb = 0;
@@ -205,7 +205,7 @@ void prt(std::ostream& o, const Go *g, const State *s)
 	}
 }
 
-bool matches(const Go *g1, const State *s1, const Go *g2, const State *s2)
+static bool matches(const Go *g1, const State *s1, const Go *g2, const State *s2)
 {
 	Span *b1 = g1->span, *e1 = &b1[g1->nSpans];
 	uint lb1 = 0;
@@ -361,7 +361,7 @@ void BitMap::stats()
 	first = NULL;
 }
 
-void genGoTo(std::ostream &o, uint ind, const State *from, const State *to, bool & readCh)
+static void genGoTo(std::ostream &o, uint ind, const State *from, const State *to, bool & readCh)
 {
 	if (DFlag)
 	{
@@ -379,7 +379,7 @@ void genGoTo(std::ostream &o, uint ind, const State *from, const State *to, bool
 	vUsedLabels.insert(to->label);
 }
 
-void genIf(std::ostream &o, uint ind, const char *cmp, uint v, bool &readCh)
+static void genIf(std::ostream &o, uint ind, const char *cmp, uint v, bool &readCh)
 {
 	o << indent(ind) << "if (";
 	if (readCh)
@@ -750,7 +750,7 @@ void Rule::emit(std::ostream &o, uint ind, bool &, const std::string& condName) 
 	o << outputFileInfo;
 }
 
-void doLinear(std::ostream &o, uint ind, Span *s, uint n, const State *from, const State *next, bool &readCh, uint mask)
+static void doLinear(std::ostream &o, uint ind, Span *s, uint n, const State *from, const State *next, bool &readCh, uint mask)
 {
 	for (;;)
 	{
@@ -830,7 +830,7 @@ void Go::genLinear(std::ostream &o, uint ind, const State *from, const State *ne
 	doLinear(o, ind, span, nSpans, from, next, readCh, mask);
 }
 
-bool genCases(std::ostream &o, uint ind, uint lb, Span *s, bool &newLine, uint mask, const State *from, const State *to)
+static bool genCases(std::ostream &o, uint ind, uint lb, Span *s, bool &newLine, uint mask, const State *from, const State *to)
 {
 	bool used = false;
 
@@ -968,7 +968,7 @@ void Go::genSwitch(std::ostream &o, uint ind, const State *from, const State *ne
 	}
 }
 
-void doBinary(std::ostream &o, uint ind, Span *s, uint n, const State *from, const State *next, bool &readCh, uint mask)
+static void doBinary(std::ostream &o, uint ind, Span *s, uint n, const State *from, const State *next, bool &readCh, uint mask)
 {
 	if (n <= 4)
 	{
@@ -1245,7 +1245,7 @@ void State::emit(std::ostream &o, uint ind, bool &readCh, const std::string& con
 	action->emit(o, ind, readCh, condName);
 }
 
-uint merge(Span *x0, State *fg, State *bg)
+static uint merge(Span *x0, State *fg, State *bg)
 {
 	Span *x = x0, *f = fg->go.span, *b = bg->go.span;
 	uint nf = fg->go.nSpans, nb = bg->go.nSpans;
@@ -1320,7 +1320,7 @@ uint merge(Span *x0, State *fg, State *bg)
 	}
 }
 
-const uint cInfinity = ~0u;
+static const uint cInfinity = ~0u;
 
 class SCC
 {
@@ -1421,7 +1421,7 @@ static bool state_is_in_non_trivial_SCC(const State* s)
 	return false;
 }
 
-uint maxDist(State *s)
+static uint maxDist(State *s)
 {
 	if (s->depth != cInfinity)
 	{
@@ -1458,7 +1458,7 @@ uint maxDist(State *s)
 	return mm;
 }
 
-void calcDepth(State *head)
+static void calcDepth(State *head)
 {
 	State* s;
 
@@ -1860,7 +1860,7 @@ void DFA::emit(std::ostream &o, uint& ind, const RegExpMap* specMap, const std::
 	bUseStartLabel = false;
 }
 
-void genGetStateGotoSub(std::ostream &o, uint ind, uint start_label, int cMin, int cMax)
+static void genGetStateGotoSub(std::ostream &o, uint ind, uint start_label, int cMin, int cMax)
 {
 	if (cMin == cMax)
 	{
