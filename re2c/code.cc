@@ -830,9 +830,45 @@ void Go::genLinear(std::ostream &o, uint ind, const State *from, const State *ne
 	doLinear(o, ind, span, nSpans, from, next, readCh, mask);
 }
 
+static void printDotCharInterval(std::ostream &o, uint lastPrintableChar, uint chr, const State *from, const State *to, bool multipleIntervals)
+{
+	o << from->label << " -> " << to->label;
+	o << " [label=";
+
+	if (lastPrintableChar != 0)
+	{
+		--chr; // we are already one char past the end
+
+		// make an interval (e.g. [A-Z])
+		if (lastPrintableChar != chr)
+		{
+			o << "\"[" << (char)lastPrintableChar << "-" << (char)chr << "]\"";
+
+			if (multipleIntervals)
+			{
+				o << "]\n";
+				o << from->label << " -> " << to->label;
+				o << " [label=";
+				prtChOrHex(o, ++chr);
+			}
+		}
+		else
+		{
+			prtChOrHex(o, chr);
+		}
+	}
+	else
+	{
+		prtChOrHex(o, chr);
+	}
+
+	o << "]";
+}
+
 static bool genCases(std::ostream &o, uint ind, uint lb, Span *s, bool &newLine, uint mask, const State *from, const State *to)
 {
 	bool used = false;
+	uint lastPrintableChar = 0;
 
 	if (!newLine)
 	{
@@ -847,10 +883,22 @@ static bool genCases(std::ostream &o, uint ind, uint lb, Span *s, bool &newLine,
 			{
 				if (DFlag)
 				{
-					o << from->label << " -> " << to->label;
-					o << " [label=";
-					prtChOrHex(o, lb);
-					o << "]";
+					if ((lb >= 'A' && lb <= 'Z') || (lb >= 'a' && lb <= 'z') || (lb >= '0' && lb <= '9'))
+					{
+						if (lastPrintableChar == 0)
+						{
+							lastPrintableChar = lb;
+						}
+
+						if (++lb == s->ub)
+						{
+							break;
+						}
+						continue;
+					}
+
+					printDotCharInterval(o, lastPrintableChar, lb, from, to, true);
+					lastPrintableChar = 0;
 				}
 				else
 				{
@@ -871,6 +919,15 @@ static bool genCases(std::ostream &o, uint ind, uint lb, Span *s, bool &newLine,
 			newLine = true;
 		}
 	}
+
+	if (lastPrintableChar != 0)
+	{
+		printDotCharInterval(o, lastPrintableChar, lb, from, to, false);
+
+		o << "\n";
+		newLine = true;
+	}
+
 	return used;
 }
 
@@ -954,7 +1011,13 @@ void Go::genSwitch(std::ostream &o, uint ind, const State *from, const State *ne
 
 		if (DFlag)
 		{
-			o << "\n" << from->label << " -> " << def->label;
+			if (!newLine)
+			{
+				o << "\n";
+				newLine = true;
+			}
+
+			o << from->label << " -> " << def->label;
 			o << " [label=default]\n" ;
 		}
 		else
