@@ -671,7 +671,7 @@ void Accept::emit(std::ostream &o, uint ind, bool &readCh, const std::string&) c
 				o << indent(ind) << "goto *" << mapCodeName["yytarget"] << "[" << mapCodeName["yyaccept"] << "];\n";
 				o << indent(--ind) << "}\n";
 			}
-			else if (sFlag || mapRules.size() == 2)
+			else if (sFlag || (mapRules.size() == 2 && !DFlag))
 			{
 				emitBinary(o, ind, 0, mapRules.size() - 1, readCh);
 			}
