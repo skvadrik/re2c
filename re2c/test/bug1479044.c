@@ -181,7 +181,7 @@ yy19:
 	case 0: 	goto yy3;
 	case 1: 	goto yy63;
 	case 2: 	goto yy107;
-	case 3: 	goto yy132;
+	default:	goto yy132;
 	}
 yy20:
 	++YYCURSOR;

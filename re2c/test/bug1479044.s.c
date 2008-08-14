@@ -155,13 +155,13 @@ yy18:
 yy19:
 	YYCURSOR = YYMARKER;
 	if (yyaccept <= 1) {
-		if (yyaccept <= 0) {
+		if (yyaccept == 0) {
 			goto yy3;
 		} else {
 			goto yy63;
 		}
 	} else {
-		if (yyaccept <= 2) {
+		if (yyaccept == 2) {
 			goto yy107;
 		} else {
 			goto yy132;

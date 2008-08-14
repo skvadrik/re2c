@@ -642,7 +642,7 @@ yy107:
 	case 0: 	goto yy7;
 	case 1: 	goto yy10;
 	case 2: 	goto yy12;
-	case 3: 	goto yy119;
+	default:	goto yy119;
 	}
 yy108:
 	++YYCURSOR;

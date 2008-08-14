@@ -37,7 +37,7 @@ yy8:
 	if (yych != '\n') goto yy11;
 yy9:
 	YYCURSOR = YYMARKER;
-	if (yyaccept <= 0) {
+	if (yyaccept == 0) {
 		goto yy3;
 	} else {
 		goto yy7;

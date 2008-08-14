@@ -256,7 +256,7 @@ yy20:
 	YYCURSOR = YYMARKER;
 	if (yyaccept <= 2) {
 		if (yyaccept <= 1) {
-			if (yyaccept <= 0) {
+			if (yyaccept == 0) {
 				goto yy3;
 			} else {
 				goto yy46;
@@ -265,7 +265,7 @@ yy20:
 			goto yy738;
 		}
 	} else {
-		if (yyaccept <= 3) {
+		if (yyaccept == 3) {
 			goto yy2116;
 		} else {
 			goto yy3187;

@@ -626,7 +626,7 @@ void Accept::emitBinary(std::ostream &o, uint ind, uint l, uint r, bool &readCh)
 		uint m = (l + r) >> 1;
 
 		assert(bUsedYYAccept);
-		o << indent(ind) << "if (" << mapCodeName["yyaccept"] << " <= " << m << ") {\n";
+		o << indent(ind) << "if (" << mapCodeName["yyaccept"] << (r == l+1 ? " == " : " <= ") << m << ") {\n";
 		emitBinary(o, ++ind, l, m, readCh);
 		o << indent(--ind) << "} else {\n";
 		emitBinary(o, ++ind, m + 1, r, readCh);
@@ -671,7 +671,7 @@ void Accept::emit(std::ostream &o, uint ind, bool &readCh, const std::string&) c
 				o << indent(ind) << "goto *" << mapCodeName["yytarget"] << "[" << mapCodeName["yyaccept"] << "];\n";
 				o << indent(--ind) << "}\n";
 			}
-			else if (sFlag)
+			else if (sFlag || mapRules.size() == 2)
 			{
 				emitBinary(o, ind, 0, mapRules.size() - 1, readCh);
 			}
@@ -686,11 +686,23 @@ void Accept::emit(std::ostream &o, uint ind, bool &readCh, const std::string&) c
 			else
 			{
 				o << indent(ind) << "switch (" << mapCodeName["yyaccept"] << ") {\n";
+
+				RuleMap::const_iterator it = mapRules.begin(), end = mapRules.end();
 		
-				for (RuleMap::const_iterator it = mapRules.begin(); it != mapRules.end(); ++it)
+				while (it != end)
 				{
-					o << indent(ind) << "case " << it->first << ": \t";
-					genGoTo(o, 0, state, it->second, readCh);
+					RuleMap::const_iterator tmp = it;
+
+					if (++it == end)
+					{
+						o << indent(ind) << "default:\t";
+					}
+					else
+					{
+						o << indent(ind) << "case " << tmp->first << ": \t";
+					}
+
+					genGoTo(o, 0, state, tmp->second, readCh);
 				}
 			
 				o << indent(ind) << "}\n";

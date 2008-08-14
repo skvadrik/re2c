@@ -3332,7 +3332,7 @@ yy53:
 	case 23: 	goto yy1203;
 	case 24: 	goto yy1279;
 	case 25: 	goto yy1287;
-	case 26: 	goto yy1310;
+	default:	goto yy1310;
 	}
 yy54:
 	++YYCURSOR;

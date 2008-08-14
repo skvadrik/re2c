@@ -71,15 +71,16 @@ yy8:
 	}
 yy9:
 	YYCURSOR = YYMARKER;
-	switch (yyaccept) {
-	case 0: 	goto yy3;
-	case 1: 	goto yy5;
+	if (yyaccept == 0) {
+		goto yy3;
+	} else {
+		goto yy5;
 	}
 yy10:
 	++YYCURSOR;
 #line 18 "repeater.re"
 	{RET(1);}
-#line 83 "<stdout>"
+#line 84 "<stdout>"
 yy12:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -92,7 +93,7 @@ yy13:
 	++YYCURSOR;
 #line 19 "repeater.re"
 	{RET(2);}
-#line 96 "<stdout>"
+#line 97 "<stdout>"
 yy15:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -113,7 +114,7 @@ yy17:
 	++YYCURSOR;
 #line 21 "repeater.re"
 	{RET(4);}
-#line 117 "<stdout>"
+#line 118 "<stdout>"
 yy19:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -124,7 +125,7 @@ yy20:
 	++YYCURSOR;
 #line 20 "repeater.re"
 	{RET(3);}
-#line 128 "<stdout>"
+#line 129 "<stdout>"
 yy22:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);

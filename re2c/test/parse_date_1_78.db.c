@@ -2422,7 +2422,7 @@ yy54:
 			if (yyaccept <= 4) {
 				if (yyaccept <= 2) {
 					if (yyaccept <= 1) {
-						if (yyaccept <= 0) {
+						if (yyaccept == 0) {
 							goto yy3;
 						} else {
 							goto yy12;
@@ -2431,7 +2431,7 @@ yy54:
 						goto yy47;
 					}
 				} else {
-					if (yyaccept <= 3) {
+					if (yyaccept == 3) {
 						goto yy70;
 					} else {
 						goto yy184;
@@ -2439,13 +2439,13 @@ yy54:
 				}
 			} else {
 				if (yyaccept <= 6) {
-					if (yyaccept <= 5) {
+					if (yyaccept == 5) {
 						goto yy278;
 					} else {
 						goto yy288;
 					}
 				} else {
-					if (yyaccept <= 7) {
+					if (yyaccept == 7) {
 						goto yy315;
 					} else {
 						goto yy320;
@@ -2455,13 +2455,13 @@ yy54:
 		} else {
 			if (yyaccept <= 12) {
 				if (yyaccept <= 10) {
-					if (yyaccept <= 9) {
+					if (yyaccept == 9) {
 						goto yy344;
 					} else {
 						goto yy417;
 					}
 				} else {
-					if (yyaccept <= 11) {
+					if (yyaccept == 11) {
 						goto yy573;
 					} else {
 						goto yy656;
@@ -2469,13 +2469,13 @@ yy54:
 				}
 			} else {
 				if (yyaccept <= 14) {
-					if (yyaccept <= 13) {
+					if (yyaccept == 13) {
 						goto yy671;
 					} else {
 						goto yy787;
 					}
 				} else {
-					if (yyaccept <= 15) {
+					if (yyaccept == 15) {
 						goto yy836;
 					} else {
 						goto yy846;
@@ -2488,7 +2488,7 @@ yy54:
 			if (yyaccept <= 21) {
 				if (yyaccept <= 19) {
 					if (yyaccept <= 18) {
-						if (yyaccept <= 17) {
+						if (yyaccept == 17) {
 							goto yy937;
 						} else {
 							goto yy957;
@@ -2497,7 +2497,7 @@ yy54:
 						goto yy988;
 					}
 				} else {
-					if (yyaccept <= 20) {
+					if (yyaccept == 20) {
 						goto yy995;
 					} else {
 						goto yy1022;
@@ -2505,13 +2505,13 @@ yy54:
 				}
 			} else {
 				if (yyaccept <= 23) {
-					if (yyaccept <= 22) {
+					if (yyaccept == 22) {
 						goto yy967;
 					} else {
 						goto yy635;
 					}
 				} else {
-					if (yyaccept <= 24) {
+					if (yyaccept == 24) {
 						goto yy1147;
 					} else {
 						goto yy1016;
@@ -2521,13 +2521,13 @@ yy54:
 		} else {
 			if (yyaccept <= 29) {
 				if (yyaccept <= 27) {
-					if (yyaccept <= 26) {
+					if (yyaccept == 26) {
 						goto yy1241;
 					} else {
 						goto yy1249;
 					}
 				} else {
-					if (yyaccept <= 28) {
+					if (yyaccept == 28) {
 						goto yy1278;
 					} else {
 						goto yy1364;
@@ -2535,13 +2535,13 @@ yy54:
 				}
 			} else {
 				if (yyaccept <= 31) {
-					if (yyaccept <= 30) {
+					if (yyaccept == 30) {
 						goto yy1367;
 					} else {
 						goto yy1447;
 					}
 				} else {
-					if (yyaccept <= 32) {
+					if (yyaccept == 32) {
 						goto yy1455;
 					} else {
 						goto yy1478;

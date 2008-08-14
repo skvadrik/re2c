@@ -669,7 +669,7 @@ yy66:
 	case 3: 	goto yy42;
 	case 4: 	goto yy46;
 	case 5: 	goto yy69;
-	case 6: 	goto yy98;
+	default:	goto yy98;
 	}
 yy67:
 	yyaccept = 5;

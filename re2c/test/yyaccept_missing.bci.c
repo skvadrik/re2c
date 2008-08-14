@@ -124,7 +124,7 @@ yy12:
 				if (yych <= 'z') goto yy16;
 yy13:
 				YYCURSOR = YYMARKER;
-				if (yyaccept <= 0) {
+				if (yyaccept == 0) {
 					goto yy11;
 				} else {
 					goto yy17;

@@ -499,13 +499,13 @@ yy66:
 	YYCURSOR = YYMARKER;
 	if (yyaccept <= 3) {
 		if (yyaccept <= 1) {
-			if (yyaccept <= 0) {
+			if (yyaccept == 0) {
 				goto yy32;
 			} else {
 				goto yy38;
 			}
 		} else {
-			if (yyaccept <= 2) {
+			if (yyaccept == 2) {
 				goto yy40;
 			} else {
 				goto yy42;
@@ -513,7 +513,7 @@ yy66:
 		}
 	} else {
 		if (yyaccept <= 5) {
-			if (yyaccept <= 4) {
+			if (yyaccept == 4) {
 				goto yy46;
 			} else {
 				goto yy69;
