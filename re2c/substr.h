@@ -20,7 +20,7 @@ public:
 	friend bool operator==(const SubStr &, const SubStr &);
 	SubStr(const uchar*, uint);
 	SubStr(const char*, uint);
-	SubStr(const char*);
+	explicit SubStr(const char*);
 	SubStr(const SubStr&);
 	virtual ~SubStr();
 	void out(std::ostream&) const;
@@ -36,11 +36,10 @@ protected:
 class Str: public SubStr
 {
 public:
+	explicit Str(const char*);
 	Str(const SubStr&);
-	Str(Str&);
-	Str(const char*);
 	Str();
-	~Str();
+	virtual ~Str();
 };
 
 inline std::ostream& operator<<(std::ostream& o, const SubStr &s)

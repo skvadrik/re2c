@@ -36,13 +36,6 @@ Str::Str(const SubStr& s)
 	;
 }
 
-Str::Str(Str& s)
-	: SubStr(s.str, s.len)
-{
-	s.str = NULL;
-	s.len = 0;
-}
-
 Str::Str(const char *s)
 	: SubStr(strdup(s), strlen(s))
 {
