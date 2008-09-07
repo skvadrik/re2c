@@ -1,6 +1,7 @@
 Version 0.13.6 (2008-??-??)
 ---------------------------
 - Fixed #2088583 Compile problemon AIX.
+- Fixed #2038610 ebcdic problem.
 
 Version 0.13.5 (2008-05-25)
 ---------------------------
