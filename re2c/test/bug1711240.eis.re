@@ -5,11 +5,11 @@ char scan(const unsigned char *s)
 	{
 		return '"';
 	}
-	'\x2F'
+	"\x2F"
 	{
 		return '\x2F';
 	}
-	'\x7F'
+	"\x7F"
 	{
 		return '\x7F';
 	}
