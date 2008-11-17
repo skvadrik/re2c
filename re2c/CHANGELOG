@@ -1,5 +1,6 @@
 Version 0.13.6 (2008-??-??)
 ---------------------------
+- Fixed inplace configuration in -e mode.
 - Fixed #2088583 Compile problemon AIX.
 - Fixed #2038610 ebcdic problem.
 
