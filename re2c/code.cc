@@ -2296,7 +2296,15 @@ void Scanner::config(const Str& cfg, const Str& val)
 	&& (val.str[0] == '"' || val.str[0] == '\''))
 	{
 		SubStr tmp(val.str + 1, val.len - 2);
+		if (eFlag) {
+			re2c::xlat = asc2asc;
+			re2c::talx = asc2asc;
+		}
 		unescape(tmp, strVal);
+		if (eFlag) {
+			re2c::xlat = asc2ebc;
+			re2c::talx = ebc2asc;
+		}
 	}
 	else
 	{
