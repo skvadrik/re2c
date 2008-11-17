@@ -10,7 +10,7 @@ namespace re2c
 
 void prtChOrHex(std::ostream& o, uint c, bool useTalx)
 {
-	int oc = (int)((re2c::wFlag && !re2c::eFlag) || !useTalx ? c : re2c::talx[c]);
+	uint oc = eFlag && !wFlag && useTalx ? re2c::talx[c] : c;
 
 	if ((oc < 256) && (isprint(oc) || isspace(oc)))
 	{
@@ -28,7 +28,7 @@ void prtChOrHex(std::ostream& o, uint c, bool useTalx)
 
 void prtHex(std::ostream& o, uint c, bool useTalx)
 {
-	int oc = (int)((re2c::wFlag && !re2c::eFlag) || !useTalx ? c : re2c::talx[c]);
+	uint oc = eFlag && !wFlag && useTalx ? re2c::talx[c] : c;
 
 	if (re2c::uFlag)
 	{
@@ -60,7 +60,7 @@ void prtHex(std::ostream& o, uint c, bool useTalx)
 
 void prtCh(std::ostream& o, uint c, bool useTalx)
 {
-	int oc = (int)((re2c::wFlag && !re2c::eFlag) || !useTalx ? c : re2c::talx[c]);
+	uint oc = eFlag && !wFlag && useTalx ? re2c::talx[c] : c;
 
 	switch (oc)
 	{
