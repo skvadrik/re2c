@@ -10,8 +10,8 @@ re2c:define:YYFILL      = fill;
 re2c:variable:yych      = ch;
 re2c:yyfill:enable      = 0;
 
-'a' := return 'a';
-'b' := return 'b';
+"a" := return 'a';
+"b" := return 'b';
 
 */
 }
