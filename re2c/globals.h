@@ -84,10 +84,12 @@ extern bool bCaseInsensitive;
 extern bool bCaseInverted;
 extern bool bTypesDone;
 
-extern uint asc2ebc[256];
-extern uint ebc2asc[256];
+extern const uint asc2asc[256];
+extern const uint asc2ebc[256];
+extern const uint ebc2asc[256];
 
-extern uint *xlat, *talx;
+extern const uint *xlat;
+extern const uint *talx;
 
 extern uint next_fill_index;
 extern uint last_fill_index;
