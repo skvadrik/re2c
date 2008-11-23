@@ -1,8 +1,9 @@
 Version 0.13.6 (2008-??-??)
 ---------------------------
 - Fixed inplace configuration in -e mode.
+- Fixed #2186718 Unescaped backslash in file name of #line directive.
 - Fixed #2088583 Compile problemon AIX.
-- Fixed #2038610 ebcdic problem.
+- Fixed #2038610 Ebcdic problem.
 
 Version 0.13.5 (2008-05-25)
 ---------------------------

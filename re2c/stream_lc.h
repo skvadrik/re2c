@@ -422,9 +422,9 @@ public:
 		return *this;
 	}
 
-	void set_fname(const std::string& _fname)
+	void set_fname(const std::string& _fname, bool _escape = true)
 	{
-		*(const_cast<std::string*>(&this->fname)) = _fname;
+		*(const_cast<std::string*>(&this->fname)) = _escape ? escape(_fname) : _fname;
 	}
 
 	const std::string  fname;
