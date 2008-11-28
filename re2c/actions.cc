@@ -711,7 +711,7 @@ uint Scanner::unescape(SubStr &s) const
 	}
 }
 
-std::string& Scanner::unescape(SubStr& str_in, std::string& str_out, bool translate) const
+std::string& Scanner::unescape(SubStr& str_in, std::string& str_out) const
 {
 	str_out.clear();
 
@@ -724,7 +724,7 @@ std::string& Scanner::unescape(SubStr& str_in, std::string& str_out, bool transl
 			fatal(str_in.ofs(), "Illegal character");
 		}
 
-		str_out += static_cast<char>(translate ? xlat(c) : c);
+		str_out += static_cast<char>(c);
 	}
 
 	return str_out;
@@ -774,7 +774,8 @@ Range * Scanner::getRange(SubStr &s) const
 
 RegExp * Scanner::matchChar(uint c) const
 {
-	return new MatchOp(new Range(c, c + 1));
+	uint xc = xlat(c);
+	return new MatchOp(new Range(xc, xc + 1));
 }
 
 RegExp * Scanner::strToRE(SubStr s) const
@@ -785,10 +786,10 @@ RegExp * Scanner::strToRE(SubStr s) const
 	if (s.len == 0)
 		return new NullOp;
 
-	RegExp *re = matchChar(xlat(unescape(s)));
+	RegExp *re = matchChar(unescape(s));
 
 	while (s.len > 0)
-		re = new CatOp(re, matchChar(xlat(unescape(s))));
+		re = new CatOp(re, matchChar(unescape(s)));
 
 	return re;
 }
@@ -807,13 +808,13 @@ RegExp * Scanner::strToCaseInsensitiveRE(SubStr s) const
 
 	if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z'))
 	{
-		reL = matchChar(xlat(tolower(c)));
-		reU = matchChar(xlat(toupper(c)));
+		reL = matchChar(tolower(c));
+		reU = matchChar(toupper(c));
 		re = mkAlt(reL, reU);
 	}
 	else
 	{
-		re = matchChar(xlat(c));
+		re = matchChar(c);
 	}
 
 	while (s.len > 0)
@@ -822,13 +823,13 @@ RegExp * Scanner::strToCaseInsensitiveRE(SubStr s) const
 
 		if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z'))
 		{
-			reL = matchChar(xlat(tolower(c)));
-			reU = matchChar(xlat(toupper(c)));
+			reL = matchChar(tolower(c));
+			reU = matchChar(toupper(c));
 			re = new CatOp(re, mkAlt(reL, reU));
 		}
 		else
 		{
-			re = new CatOp(re, matchChar(xlat(c)));
+			re = new CatOp(re, matchChar(c));
 		}
 	}
 
@@ -887,7 +888,7 @@ RegExp * Scanner::invToRE(SubStr s) const
 RegExp * Scanner::mkDot() const
 {
 	RegExp * any = getAnyRE();
-	RegExp * ran = matchChar(xlat('\n'));
+	RegExp * ran = matchChar('\n');
 	RegExp * inv = mkDiff(any, ran);
 	
 	delete ran;

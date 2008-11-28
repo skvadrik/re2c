@@ -2300,7 +2300,7 @@ void Scanner::config(const Str& cfg, const Str& val)
 	&& (val.str[0] == '"' || val.str[0] == '\''))
 	{
 		SubStr tmp(val.str + 1, val.len - 2);
-		unescape(tmp, strVal, false);
+		unescape(tmp, strVal);
 	}
 	else
 	{
