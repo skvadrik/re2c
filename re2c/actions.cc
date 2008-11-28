@@ -535,13 +535,13 @@ uint Scanner::unescape(SubStr &s) const
 
 	switch (c = *s.str++)
 	{
-		case 'n': return xlat('\n');
-		case 't': return xlat('\t');
-		case 'v': return xlat('\v');
-		case 'b': return xlat('\b');
-		case 'r': return xlat('\r');
-		case 'f': return xlat('\f');
-		case 'a': return xlat('\a');
+		case 'n': return '\n';
+		case 't': return '\t';
+		case 'v': return '\v';
+		case 'b': return '\b';
+		case 'r': return '\r';
+		case 'f': return '\f';
+		case 'a': return '\a';
 
 		case 'x':
 		{
