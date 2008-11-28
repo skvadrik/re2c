@@ -528,7 +528,7 @@ uint Scanner::unescape(SubStr &s) const
 
 	if ((c = *s.str++) != '\\' || s.len == 0)
 	{
-		return xlat(c);
+		return c;
 	}
 
 	s.len--;
@@ -707,24 +707,24 @@ uint Scanner::unescape(SubStr &s) const
 		}
 
 		default:
-		return xlat(c);
+		return c;
 	}
 }
 
-std::string& Scanner::unescape(SubStr& str_in, std::string& str_out) const
+std::string& Scanner::unescape(SubStr& str_in, std::string& str_out, bool translate) const
 {
 	str_out.clear();
 
 	while(str_in.len)
 	{
 		uint c = unescape(str_in);
-		
+
 		if (c > 0xFF)
 		{
 			fatal(str_in.ofs(), "Illegal character");
 		}
 
-		str_out += static_cast<char>(c);
+		str_out += static_cast<char>(translate ? xlat(c) : c);
 	}
 
 	return str_out;
@@ -767,12 +767,9 @@ Range * Scanner::getRange(SubStr &s) const
 				return r;
 			}
 		}
-		
-		lb = xlb;
-		ub = xub;
 	}
 
-	return new Range(lb, ub + 1);
+	return new Range(xlat(lb), xlat(ub) + 1);
 }
 
 RegExp * Scanner::matchChar(uint c) const
@@ -788,10 +785,10 @@ RegExp * Scanner::strToRE(SubStr s) const
 	if (s.len == 0)
 		return new NullOp;
 
-	RegExp *re = matchChar(unescape(s));
+	RegExp *re = matchChar(xlat(unescape(s)));
 
 	while (s.len > 0)
-		re = new CatOp(re, matchChar(unescape(s)));
+		re = new CatOp(re, matchChar(xlat(unescape(s))));
 
 	return re;
 }
@@ -816,7 +813,7 @@ RegExp * Scanner::strToCaseInsensitiveRE(SubStr s) const
 	}
 	else
 	{
-		re = matchChar(c);
+		re = matchChar(xlat(c));
 	}
 
 	while (s.len > 0)
@@ -831,7 +828,7 @@ RegExp * Scanner::strToCaseInsensitiveRE(SubStr s) const
 		}
 		else
 		{
-			re = new CatOp(re, matchChar(c));
+			re = new CatOp(re, matchChar(xlat(c)));
 		}
 	}
 

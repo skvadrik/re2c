@@ -7,12 +7,13 @@ char scan(const unsigned char *s)
 
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
-	if (yych <= '=') {
-		if (yych == 0x07) goto yy5;
-		goto yy7;
+	if (yych <= 0x61) {
+		if (yych == 0x07) goto yy7;
+		if (yych <= 0x60) goto yy9;
+		goto yy5;
 	} else {
-		if (yych <= '"') goto yy3;
-		if (yych <= 0xFF) goto yy7;
+		if (yych == 0x7F) goto yy3;
+		if (yych <= 0xDF) goto yy9;
 	}
 yy3:
 	++YYCURSOR;
@@ -25,6 +26,11 @@ yy5:
 		return '\x2F';
 	}
 yy7:
+	++YYCURSOR;
+	{
+		return '\x7F';
+	}
+yy9:
 	++YYCURSOR;
 	{
 		return '\0';

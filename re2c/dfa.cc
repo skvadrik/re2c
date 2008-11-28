@@ -8,11 +8,15 @@
 namespace re2c
 {
 
-void prtChOrHex(std::ostream& o, uint c, bool useTalx)
+void prtChOrHex(std::ostream& o, uint c)
 {
-	uint oc = eFlag && !wFlag && useTalx ? re2c::talx[c] : c;
-
-	if ((oc < 256) && (isprint(oc) || isspace(oc)))
+	if (eFlag && !wFlag)
+	{
+		if (DFlag) o << '"';
+		prtHex(o, c);
+		if (DFlag) o << '"';
+	}
+	else if ((c < 256u) && (isprint(c) || isspace(c)))
 	{
 		o << (DFlag ? '"' : '\'');
 		prtCh(o, c);
@@ -26,9 +30,9 @@ void prtChOrHex(std::ostream& o, uint c, bool useTalx)
 	}
 }
 
-void prtHex(std::ostream& o, uint c, bool useTalx)
+void prtHex(std::ostream& o, uint c)
 {
-	uint oc = eFlag && !wFlag && useTalx ? re2c::talx[c] : c;
+	int oc = (int)(c);
 
 	if (re2c::uFlag)
 	{
@@ -58,9 +62,15 @@ void prtHex(std::ostream& o, uint c, bool useTalx)
 	}
 }
 
-void prtCh(std::ostream& o, uint c, bool useTalx)
+void prtCh(std::ostream& o, uint c)
 {
-	uint oc = eFlag && !wFlag && useTalx ? re2c::talx[c] : c;
+	if (eFlag && !wFlag)
+	{
+		prtHex(o, c);
+		return;
+	}
+
+	int oc = (int)(c);
 
 	switch (oc)
 	{

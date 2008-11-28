@@ -9,8 +9,8 @@ unsigned char scan(const unsigned char *s)
 
 	ch = *cr;
 	switch (ch) {
-	case 'a':	goto yy3;
-	case 'b':	goto yy5;
+	case 0x81:	goto yy3;
+	case 0x82:	goto yy5;
 	default:	goto yy2;
 	}
 yy2:

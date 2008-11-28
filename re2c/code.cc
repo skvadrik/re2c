@@ -329,7 +329,7 @@ void BitMap::gen(std::ostream &o, uint ind, uint lb, uint ub)
 
 				if (yybmHexTable)
 				{
-					prtHex(o, bm[j], false);
+					prtHex(o, bm[j]);
 				}
 				else
 				{
@@ -917,6 +917,10 @@ static bool genCases(std::ostream &o, uint ind, uint lb, Span *s, bool &newLine,
 					o << indent(ind) << "case ";
 					prtChOrHex(o, lb);
 					o << ":";
+					if (dFlag && eFlag && lb < 256u && isprint(talx[lb]))
+					{
+						o << " /* " << std::string(1, talx[lb]) << " */";
+					}
 				}
 				newLine = false;
 				used = true;
@@ -1283,7 +1287,7 @@ void Go::genGoto(std::ostream &o, uint ind, const State *from, const State *next
 					o << "if (" << mapCodeName["yybm"] << "[" << b->i << "+" << sYych << "] & ";
 					if (yybmHexTable)
 					{
-						prtHex(o, b->m, false);
+						prtHex(o, b->m);
 					}
 					else
 					{
@@ -2296,15 +2300,7 @@ void Scanner::config(const Str& cfg, const Str& val)
 	&& (val.str[0] == '"' || val.str[0] == '\''))
 	{
 		SubStr tmp(val.str + 1, val.len - 2);
-		if (eFlag) {
-			re2c::xlat = asc2asc;
-			re2c::talx = asc2asc;
-		}
-		unescape(tmp, strVal);
-		if (eFlag) {
-			re2c::xlat = asc2ebc;
-			re2c::talx = ebc2asc;
-		}
+		unescape(tmp, strVal, false);
 	}
 	else
 	{
