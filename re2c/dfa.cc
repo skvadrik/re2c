@@ -10,7 +10,7 @@ namespace re2c
 
 void prtChOrHex(std::ostream& o, uint c)
 {
-	if (eFlag && !wFlag)
+	if (eFlag)
 	{
 		if (DFlag) o << '"';
 		prtHex(o, c);
@@ -64,7 +64,7 @@ void prtHex(std::ostream& o, uint c)
 
 void prtCh(std::ostream& o, uint c)
 {
-	if (eFlag && !wFlag)
+	if (eFlag)
 	{
 		prtHex(o, c);
 		return;
