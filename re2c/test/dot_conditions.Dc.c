@@ -5,31 +5,30 @@ digraph re2c {
 0 -> state1 [label="state=state1"]
 0 -> state2 [label="state=state2"]
 /* *********************************** */
-state1 -> 1
-
-1 -> 3 [label="a"]
-1 -> 4 [label="f"]
-1 -> 2 [label=default]
-3 -> 8 [label="b"]
-3 -> 2 [label=default]
-4 -> 5 [label="o"]
-4 -> 2 [label=default]
+state1 -> 2
+2 -> 4 [label="a"]
+2 -> 5 [label="f"]
+2 -> 3 [label=default]
+4 -> 9 [label="b"]
+4 -> 3 [label=default]
 5 -> 6 [label="o"]
-5 -> 2 [label=default]
-6 -> 7
-7 [label="dot_conditions.Dc.re:8"];
-8 -> 9 [label="c"]
-8 -> 2 [label=default]
-9 -> 10
-10 [label="dot_conditions.Dc.re:6"];
+5 -> 3 [label=default]
+6 -> 7 [label="o"]
+6 -> 3 [label=default]
+7 -> 8
+8 [label="dot_conditions.Dc.re:8"];
+9 -> 10 [label="c"]
+9 -> 3 [label=default]
+10 -> 11
+11 [label="dot_conditions.Dc.re:6"];
 /* *********************************** */
-state2 -> 12
-12 -> 14 [label="a"]
-12 -> 13 [label=default]
-14 -> 15 [label="b"]
-14 -> 13 [label=default]
-15 -> 16 [label="c"]
-15 -> 13 [label=default]
-16 -> 17
-17 [label="dot_conditions.Dc.re:7"];
+state2 -> 13
+13 -> 15 [label="a"]
+13 -> 14 [label=default]
+15 -> 16 [label="b"]
+15 -> 14 [label=default]
+16 -> 17 [label="c"]
+16 -> 14 [label=default]
+17 -> 18
+18 [label="dot_conditions.Dc.re:7"];
 }

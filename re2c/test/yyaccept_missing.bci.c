@@ -42,25 +42,24 @@ int scan(char *s, int l)
 			}
 /* *********************************** */
 yyc_INITIAL:
-
 			if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
 			yych = *YYCURSOR;
-			if (yych <= 0x00) goto yy4;
-			if (yych != '$') goto yy6;
+			if (yych <= 0x00) goto yy5;
+			if (yych != '$') goto yy7;
 			++YYCURSOR;
-			if ((yych = *YYCURSOR) <= '@') goto yy3;
-			if (yych <= 'Z') goto yy7;
-			if (yych <= '`') goto yy3;
-			if (yych <= 'z') goto yy7;
-yy3:
-			{ printf("ERR\n");	return 1; }
+			if ((yych = *YYCURSOR) <= '@') goto yy4;
+			if (yych <= 'Z') goto yy8;
+			if (yych <= '`') goto yy4;
+			if (yych <= 'z') goto yy8;
 yy4:
+			{ printf("ERR\n");	return 1; }
+yy5:
 			++YYCURSOR;
 			{ printf("EOF\n");	return 0; }
-yy6:
-			yych = *++YYCURSOR;
-			goto yy3;
 yy7:
+			yych = *++YYCURSOR;
+			goto yy4;
+yy8:
 			++YYCURSOR;
 			{
 		printf("FOUND %s\n", t);
@@ -106,44 +105,44 @@ yyc_ST_VALUE:
 				if (YYLIMIT <= YYCURSOR) YYFILL(1);
 				yych = *(YYMARKER = YYCURSOR);
 				if (yybm[0+yych] & 128) {
-					goto yy14;
+					goto yy15;
 				}
-				if (yych == '$') goto yy12;
-yy11:
+				if (yych == '$') goto yy13;
+yy12:
 				{
 		YYSETCONDITION(STATE(INITIAL));
 		printf("Found spaces\n");
 	}
-yy12:
+yy13:
 				++YYCURSOR;
 				if (YYLIMIT <= YYCURSOR) YYFILL(1);
 				yych = *YYCURSOR;
-				if (yych <= '@') goto yy13;
-				if (yych <= 'Z') goto yy16;
-				if (yych <= '`') goto yy13;
-				if (yych <= 'z') goto yy16;
-yy13:
+				if (yych <= '@') goto yy14;
+				if (yych <= 'Z') goto yy17;
+				if (yych <= '`') goto yy14;
+				if (yych <= 'z') goto yy17;
+yy14:
 				YYCURSOR = YYMARKER;
 				if (yyaccept == 0) {
-					goto yy11;
+					goto yy12;
 				} else {
-					goto yy17;
+					goto yy18;
 				}
-yy14:
+yy15:
 				++YYCURSOR;
 				if (YYLIMIT <= YYCURSOR) YYFILL(1);
 				yych = *YYCURSOR;
 				if (yybm[0+yych] & 128) {
-					goto yy14;
+					goto yy15;
 				}
-				goto yy11;
-yy16:
+				goto yy12;
+yy17:
 				yyaccept = 1;
 				YYMARKER = ++YYCURSOR;
 				if (YYLIMIT <= YYCURSOR) YYFILL(1);
 				yych = *YYCURSOR;
-				if (yych == '$') goto yy12;
-yy17:
+				if (yych == '$') goto yy13;
+yy18:
 				{
 		printf("Found $ or $\\<x>\n");
 		continue;

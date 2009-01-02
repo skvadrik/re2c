@@ -1,6 +1,7 @@
-Version 0.13.6 (2008-??-??)
+Version 0.13.6 (2009-??-??)
 ---------------------------
 - Fixed inplace configuration in -e mode.
+- Fixed #2478216 Wrong start_label in -c mode.
 - Fixed #2186718 Unescaped backslash in file name of #line directive.
 - Fixed #2102138 Duplicate case labels on EBCDIC.
 - Fixed #2088583 Compile problemon AIX.

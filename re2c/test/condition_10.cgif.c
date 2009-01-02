@@ -105,20 +105,19 @@ yy0:
 			goto *yyctable[s->cond];
 /* *********************************** */
 yyc_Comment:
-
 			s->state = 0;
 			if ((s->lim - s->cur) < 2) if(fill(s, 2) == ~0) break;
 yyFillLabel0:
 			s->yych = *s->cur;
-			if (s->yych != '*') goto yy4;
+			if (s->yych != '*') goto yy5;
 			++s->cur;
-			if ((s->yych = *s->cur) == '/') goto yy5;
-yy3:
-			goto yyc_Comment;
+			if ((s->yych = *s->cur) == '/') goto yy6;
 yy4:
-			s->yych = *++s->cur;
-			goto yy3;
+			goto yyc_Comment;
 yy5:
+			s->yych = *++s->cur;
+			goto yy4;
+yy6:
 			++s->cur;
 			s->cond = EStateNormal;
 			continue;
@@ -130,160 +129,160 @@ yyFillLabel1:
 			s->yych = *s->cur;
 			{
 				static void *yytarget[256] = {
-					&&yy15, &&yy15, &&yy15, &&yy15, &&yy15, &&yy15, &&yy15, &&yy15,
-					&&yy15, &&yy15, &&yy15, &&yy15, &&yy15, &&yy15, &&yy15, &&yy15,
-					&&yy15, &&yy15, &&yy15, &&yy15, &&yy15, &&yy15, &&yy15, &&yy15,
-					&&yy15, &&yy15, &&yy15, &&yy15, &&yy15, &&yy15, &&yy15, &&yy15,
-					&&yy15, &&yy15, &&yy13, &&yy15, &&yy15, &&yy15, &&yy15, &&yy12,
-					&&yy15, &&yy15, &&yy15, &&yy15, &&yy15, &&yy15, &&yy15, &&yy11,
-					&&yy15, &&yy15, &&yy15, &&yy15, &&yy15, &&yy15, &&yy15, &&yy15,
-					&&yy15, &&yy15, &&yy15, &&yy15, &&yy15, &&yy15, &&yy15, &&yy9,
-					&&yy15, &&yy15, &&yy15, &&yy15, &&yy15, &&yy15, &&yy15, &&yy15,
-					&&yy15, &&yy15, &&yy15, &&yy15, &&yy15, &&yy15, &&yy15, &&yy15,
-					&&yy15, &&yy15, &&yy15, &&yy15, &&yy15, &&yy15, &&yy15, &&yy15,
-					&&yy15, &&yy15, &&yy15, &&yy15, &&yy15, &&yy15, &&yy15, &&yy15,
-					&&yy15, &&yy15, &&yy15, &&yy15, &&yy15, &&yy15, &&yy15, &&yy15,
-					&&yy15, &&yy15, &&yy15, &&yy15, &&yy15, &&yy15, &&yy15, &&yy15,
-					&&yy15, &&yy15, &&yy15, &&yy15, &&yy15, &&yy15, &&yy15, &&yy15,
-					&&yy15, &&yy15, &&yy15, &&yy15, &&yy15, &&yy15, &&yy15, &&yy15,
-					&&yy15, &&yy15, &&yy15, &&yy15, &&yy15, &&yy15, &&yy15, &&yy15,
-					&&yy15, &&yy15, &&yy15, &&yy15, &&yy15, &&yy15, &&yy15, &&yy15,
-					&&yy15, &&yy15, &&yy15, &&yy15, &&yy15, &&yy15, &&yy15, &&yy15,
-					&&yy15, &&yy15, &&yy15, &&yy15, &&yy15, &&yy15, &&yy15, &&yy15,
-					&&yy15, &&yy15, &&yy15, &&yy15, &&yy15, &&yy15, &&yy15, &&yy15,
-					&&yy15, &&yy15, &&yy15, &&yy15, &&yy15, &&yy15, &&yy15, &&yy15,
-					&&yy15, &&yy15, &&yy15, &&yy15, &&yy15, &&yy15, &&yy15, &&yy15,
-					&&yy15, &&yy15, &&yy15, &&yy15, &&yy15, &&yy15, &&yy15, &&yy15,
-					&&yy15, &&yy15, &&yy15, &&yy15, &&yy15, &&yy15, &&yy15, &&yy15,
-					&&yy15, &&yy15, &&yy15, &&yy15, &&yy15, &&yy15, &&yy15, &&yy15,
-					&&yy15, &&yy15, &&yy15, &&yy15, &&yy15, &&yy15, &&yy15, &&yy15,
-					&&yy15, &&yy15, &&yy15, &&yy15, &&yy15, &&yy15, &&yy15, &&yy15,
-					&&yy15, &&yy15, &&yy15, &&yy15, &&yy15, &&yy15, &&yy15, &&yy15,
-					&&yy15, &&yy15, &&yy15, &&yy15, &&yy15, &&yy15, &&yy15, &&yy15,
-					&&yy15, &&yy15, &&yy15, &&yy15, &&yy15, &&yy15, &&yy15, &&yy15,
-					&&yy15, &&yy15, &&yy15, &&yy15, &&yy15, &&yy15, &&yy15, &&yy15
+					&&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16,
+					&&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16,
+					&&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16,
+					&&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16,
+					&&yy16, &&yy16, &&yy14, &&yy16, &&yy16, &&yy16, &&yy16, &&yy13,
+					&&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy12,
+					&&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16,
+					&&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy10,
+					&&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16,
+					&&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16,
+					&&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16,
+					&&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16,
+					&&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16,
+					&&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16,
+					&&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16,
+					&&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16,
+					&&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16,
+					&&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16,
+					&&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16,
+					&&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16,
+					&&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16,
+					&&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16,
+					&&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16,
+					&&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16,
+					&&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16,
+					&&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16,
+					&&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16,
+					&&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16,
+					&&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16,
+					&&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16,
+					&&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16,
+					&&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16
 				};
 				goto *yytarget[s->yych];
 			}
-yy9:
-			s->yych = *(s->tok = ++s->cur);
-			if (s->yych == '?') goto yy26;
 yy10:
+			s->yych = *(s->tok = ++s->cur);
+			if (s->yych == '?') goto yy27;
+yy11:
 			fputc(s->cur[-1], stdout);
 			continue;
-yy11:
-			s->yych = *++s->cur;
-			if (s->yych == '*') goto yy24;
-			if (s->yych == '/') goto yy22;
-			goto yy10;
 yy12:
-			s->yych = *(s->tok = ++s->cur);
-			if (s->yych == '"') goto yy16;
-			if (s->yych == '\\') goto yy18;
-			goto yy10;
+			s->yych = *++s->cur;
+			if (s->yych == '*') goto yy25;
+			if (s->yych == '/') goto yy23;
+			goto yy11;
 yy13:
+			s->yych = *(s->tok = ++s->cur);
+			if (s->yych == '"') goto yy17;
+			if (s->yych == '\\') goto yy19;
+			goto yy11;
+yy14:
 			++s->cur;
 			s->cond = EStateString;
 			fputc(s->cur[-1], stdout);
 			continue;
-yy15:
-			s->yych = *++s->cur;
-			goto yy10;
 yy16:
 			s->yych = *++s->cur;
-			if (s->yych == '\'') goto yy20;
+			goto yy11;
 yy17:
-			s->cur = s->tok;
-			goto yy10;
+			s->yych = *++s->cur;
+			if (s->yych == '\'') goto yy21;
 yy18:
+			s->cur = s->tok;
+			goto yy11;
+yy19:
 			s->yych = *++s->cur;
-			if (s->yych != '"') goto yy17;
+			if (s->yych != '"') goto yy18;
 			s->yych = *++s->cur;
-			if (s->yych != '\'') goto yy17;
-yy20:
+			if (s->yych != '\'') goto yy18;
+yy21:
 			++s->cur;
 			fputl("'\"'", 3, stdout);
 			continue;
-yy22:
+yy23:
 			++s->cur;
 			s->cond = EStateSkiptoeol;
 			goto yyc_Skiptoeol;
-yy24:
+yy25:
 			++s->cur;
 			s->cond = EStateComment;
 			goto yyc_Comment;
-yy26:
+yy27:
 			s->yych = *++s->cur;
 			{
 				static void *yytarget[256] = {
-					&&yy17, &&yy17, &&yy17, &&yy17, &&yy17, &&yy17, &&yy17, &&yy17,
-					&&yy17, &&yy17, &&yy17, &&yy17, &&yy17, &&yy17, &&yy17, &&yy17,
-					&&yy17, &&yy17, &&yy17, &&yy17, &&yy17, &&yy17, &&yy17, &&yy17,
-					&&yy17, &&yy17, &&yy17, &&yy17, &&yy17, &&yy17, &&yy17, &&yy17,
-					&&yy17, &&yy41, &&yy17, &&yy17, &&yy17, &&yy17, &&yy17, &&yy39,
-					&&yy27, &&yy29, &&yy17, &&yy17, &&yy17, &&yy43, &&yy17, &&yy37,
-					&&yy17, &&yy17, &&yy17, &&yy17, &&yy17, &&yy17, &&yy17, &&yy17,
-					&&yy17, &&yy17, &&yy17, &&yy17, &&yy31, &&yy35, &&yy33, &&yy17,
-					&&yy17, &&yy17, &&yy17, &&yy17, &&yy17, &&yy17, &&yy17, &&yy17,
-					&&yy17, &&yy17, &&yy17, &&yy17, &&yy17, &&yy17, &&yy17, &&yy17,
-					&&yy17, &&yy17, &&yy17, &&yy17, &&yy17, &&yy17, &&yy17, &&yy17,
-					&&yy17, &&yy17, &&yy17, &&yy17, &&yy17, &&yy17, &&yy17, &&yy17,
-					&&yy17, &&yy17, &&yy17, &&yy17, &&yy17, &&yy17, &&yy17, &&yy17,
-					&&yy17, &&yy17, &&yy17, &&yy17, &&yy17, &&yy17, &&yy17, &&yy17,
-					&&yy17, &&yy17, &&yy17, &&yy17, &&yy17, &&yy17, &&yy17, &&yy17,
-					&&yy17, &&yy17, &&yy17, &&yy17, &&yy17, &&yy17, &&yy17, &&yy17,
-					&&yy17, &&yy17, &&yy17, &&yy17, &&yy17, &&yy17, &&yy17, &&yy17,
-					&&yy17, &&yy17, &&yy17, &&yy17, &&yy17, &&yy17, &&yy17, &&yy17,
-					&&yy17, &&yy17, &&yy17, &&yy17, &&yy17, &&yy17, &&yy17, &&yy17,
-					&&yy17, &&yy17, &&yy17, &&yy17, &&yy17, &&yy17, &&yy17, &&yy17,
-					&&yy17, &&yy17, &&yy17, &&yy17, &&yy17, &&yy17, &&yy17, &&yy17,
-					&&yy17, &&yy17, &&yy17, &&yy17, &&yy17, &&yy17, &&yy17, &&yy17,
-					&&yy17, &&yy17, &&yy17, &&yy17, &&yy17, &&yy17, &&yy17, &&yy17,
-					&&yy17, &&yy17, &&yy17, &&yy17, &&yy17, &&yy17, &&yy17, &&yy17,
-					&&yy17, &&yy17, &&yy17, &&yy17, &&yy17, &&yy17, &&yy17, &&yy17,
-					&&yy17, &&yy17, &&yy17, &&yy17, &&yy17, &&yy17, &&yy17, &&yy17,
-					&&yy17, &&yy17, &&yy17, &&yy17, &&yy17, &&yy17, &&yy17, &&yy17,
-					&&yy17, &&yy17, &&yy17, &&yy17, &&yy17, &&yy17, &&yy17, &&yy17,
-					&&yy17, &&yy17, &&yy17, &&yy17, &&yy17, &&yy17, &&yy17, &&yy17,
-					&&yy17, &&yy17, &&yy17, &&yy17, &&yy17, &&yy17, &&yy17, &&yy17,
-					&&yy17, &&yy17, &&yy17, &&yy17, &&yy17, &&yy17, &&yy17, &&yy17,
-					&&yy17, &&yy17, &&yy17, &&yy17, &&yy17, &&yy17, &&yy17, &&yy17
+					&&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18,
+					&&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18,
+					&&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18,
+					&&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18,
+					&&yy18, &&yy42, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy40,
+					&&yy28, &&yy30, &&yy18, &&yy18, &&yy18, &&yy44, &&yy18, &&yy38,
+					&&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18,
+					&&yy18, &&yy18, &&yy18, &&yy18, &&yy32, &&yy36, &&yy34, &&yy18,
+					&&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18,
+					&&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18,
+					&&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18,
+					&&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18,
+					&&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18,
+					&&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18,
+					&&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18,
+					&&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18,
+					&&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18,
+					&&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18,
+					&&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18,
+					&&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18,
+					&&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18,
+					&&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18,
+					&&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18,
+					&&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18,
+					&&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18,
+					&&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18,
+					&&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18,
+					&&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18,
+					&&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18,
+					&&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18,
+					&&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18,
+					&&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18
 				};
 				goto *yytarget[s->yych];
 			}
-yy27:
+yy28:
 			++s->cur;
 			fputc('[', stdout);
 			continue;
-yy29:
+yy30:
 			++s->cur;
 			fputc(']', stdout);
 			continue;
-yy31:
+yy32:
 			++s->cur;
 			fputc('{', stdout);
 			continue;
-yy33:
+yy34:
 			++s->cur;
 			fputc('}', stdout);
 			continue;
-yy35:
+yy36:
 			++s->cur;
 			fputc('#', stdout);
 			continue;
-yy37:
+yy38:
 			++s->cur;
 			fputc('\\', stdout);
 			continue;
-yy39:
+yy40:
 			++s->cur;
 			fputc('^', stdout);
 			continue;
-yy41:
+yy42:
 			++s->cur;
 			fputc('|', stdout);
 			continue;
-yy43:
+yy44:
 			++s->cur;
 			fputc('~', stdout);
 			continue;
@@ -295,87 +294,87 @@ yyFillLabel2:
 			s->yych = *s->cur;
 			{
 				static void *yytarget[256] = {
-					&&yy53, &&yy53, &&yy53, &&yy53, &&yy53, &&yy53, &&yy53, &&yy53,
-					&&yy53, &&yy53, &&yy51, &&yy53, &&yy53, &&yy50, &&yy53, &&yy53,
-					&&yy53, &&yy53, &&yy53, &&yy53, &&yy53, &&yy53, &&yy53, &&yy53,
-					&&yy53, &&yy53, &&yy53, &&yy53, &&yy53, &&yy53, &&yy53, &&yy53,
-					&&yy53, &&yy53, &&yy53, &&yy53, &&yy53, &&yy53, &&yy53, &&yy53,
-					&&yy53, &&yy53, &&yy53, &&yy53, &&yy53, &&yy53, &&yy53, &&yy53,
-					&&yy53, &&yy53, &&yy53, &&yy53, &&yy53, &&yy53, &&yy53, &&yy53,
-					&&yy53, &&yy53, &&yy53, &&yy53, &&yy53, &&yy53, &&yy53, &&yy47,
-					&&yy53, &&yy53, &&yy53, &&yy53, &&yy53, &&yy53, &&yy53, &&yy53,
-					&&yy53, &&yy53, &&yy53, &&yy53, &&yy53, &&yy53, &&yy53, &&yy53,
-					&&yy53, &&yy53, &&yy53, &&yy53, &&yy53, &&yy53, &&yy53, &&yy53,
-					&&yy53, &&yy53, &&yy53, &&yy53, &&yy49, &&yy53, &&yy53, &&yy53,
-					&&yy53, &&yy53, &&yy53, &&yy53, &&yy53, &&yy53, &&yy53, &&yy53,
-					&&yy53, &&yy53, &&yy53, &&yy53, &&yy53, &&yy53, &&yy53, &&yy53,
-					&&yy53, &&yy53, &&yy53, &&yy53, &&yy53, &&yy53, &&yy53, &&yy53,
-					&&yy53, &&yy53, &&yy53, &&yy53, &&yy53, &&yy53, &&yy53, &&yy53,
-					&&yy53, &&yy53, &&yy53, &&yy53, &&yy53, &&yy53, &&yy53, &&yy53,
-					&&yy53, &&yy53, &&yy53, &&yy53, &&yy53, &&yy53, &&yy53, &&yy53,
-					&&yy53, &&yy53, &&yy53, &&yy53, &&yy53, &&yy53, &&yy53, &&yy53,
-					&&yy53, &&yy53, &&yy53, &&yy53, &&yy53, &&yy53, &&yy53, &&yy53,
-					&&yy53, &&yy53, &&yy53, &&yy53, &&yy53, &&yy53, &&yy53, &&yy53,
-					&&yy53, &&yy53, &&yy53, &&yy53, &&yy53, &&yy53, &&yy53, &&yy53,
-					&&yy53, &&yy53, &&yy53, &&yy53, &&yy53, &&yy53, &&yy53, &&yy53,
-					&&yy53, &&yy53, &&yy53, &&yy53, &&yy53, &&yy53, &&yy53, &&yy53,
-					&&yy53, &&yy53, &&yy53, &&yy53, &&yy53, &&yy53, &&yy53, &&yy53,
-					&&yy53, &&yy53, &&yy53, &&yy53, &&yy53, &&yy53, &&yy53, &&yy53,
-					&&yy53, &&yy53, &&yy53, &&yy53, &&yy53, &&yy53, &&yy53, &&yy53,
-					&&yy53, &&yy53, &&yy53, &&yy53, &&yy53, &&yy53, &&yy53, &&yy53,
-					&&yy53, &&yy53, &&yy53, &&yy53, &&yy53, &&yy53, &&yy53, &&yy53,
-					&&yy53, &&yy53, &&yy53, &&yy53, &&yy53, &&yy53, &&yy53, &&yy53,
-					&&yy53, &&yy53, &&yy53, &&yy53, &&yy53, &&yy53, &&yy53, &&yy53,
-					&&yy53, &&yy53, &&yy53, &&yy53, &&yy53, &&yy53, &&yy53, &&yy53
+					&&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54,
+					&&yy54, &&yy54, &&yy52, &&yy54, &&yy54, &&yy51, &&yy54, &&yy54,
+					&&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54,
+					&&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54,
+					&&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54,
+					&&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54,
+					&&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54,
+					&&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy48,
+					&&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54,
+					&&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54,
+					&&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54,
+					&&yy54, &&yy54, &&yy54, &&yy54, &&yy50, &&yy54, &&yy54, &&yy54,
+					&&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54,
+					&&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54,
+					&&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54,
+					&&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54,
+					&&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54,
+					&&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54,
+					&&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54,
+					&&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54,
+					&&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54,
+					&&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54,
+					&&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54,
+					&&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54,
+					&&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54,
+					&&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54,
+					&&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54,
+					&&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54,
+					&&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54,
+					&&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54,
+					&&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54,
+					&&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54
 				};
 				goto *yytarget[s->yych];
 			}
-yy47:
-			s->yych = *(s->tok = ++s->cur);
-			if (s->yych == '?') goto yy60;
 yy48:
-			goto yyc_Skiptoeol;
-yy49:
 			s->yych = *(s->tok = ++s->cur);
-			if (s->yych == '\n') goto yy58;
-			if (s->yych == '\r') goto yy56;
-			goto yy48;
+			if (s->yych == '?') goto yy61;
+yy49:
+			goto yyc_Skiptoeol;
 yy50:
-			s->yych = *++s->cur;
-			if (s->yych == '\n') goto yy54;
-			goto yy48;
+			s->yych = *(s->tok = ++s->cur);
+			if (s->yych == '\n') goto yy59;
+			if (s->yych == '\r') goto yy57;
+			goto yy49;
 yy51:
+			s->yych = *++s->cur;
+			if (s->yych == '\n') goto yy55;
+			goto yy49;
+yy52:
 			++s->cur;
 			s->cond = EStateNormal;
 			fputc('\n', stdout);
 			continue;
-yy53:
-			s->yych = *++s->cur;
-			goto yy48;
 yy54:
+			s->yych = *++s->cur;
+			goto yy49;
+yy55:
 			++s->cur;
 			s->cond = EStateNormal;
 			fputc('\r', stdout);
 			fputc('\n', stdout);
 			continue;
-yy56:
-			s->yych = *++s->cur;
-			if (s->yych == '\n') goto yy58;
 yy57:
-			s->cur = s->tok;
-			goto yy48;
+			s->yych = *++s->cur;
+			if (s->yych == '\n') goto yy59;
 yy58:
+			s->cur = s->tok;
+			goto yy49;
+yy59:
 			++s->cur;
 			goto yyc_Skiptoeol;
-yy60:
+yy61:
 			s->yych = *++s->cur;
-			if (s->yych != '/') goto yy57;
+			if (s->yych != '/') goto yy58;
 			s->yych = *++s->cur;
-			if (s->yych == '\n') goto yy63;
-			if (s->yych != '\r') goto yy57;
+			if (s->yych == '\n') goto yy64;
+			if (s->yych != '\r') goto yy58;
 			s->yych = *++s->cur;
-			if (s->yych != '\n') goto yy57;
-yy63:
+			if (s->yych != '\n') goto yy58;
+yy64:
 			++s->cur;
 			goto yyc_Skiptoeol;
 /* *********************************** */
@@ -384,22 +383,22 @@ yyc_String:
 			if ((s->lim - s->cur) < 2) if(fill(s, 2) == ~0) break;
 yyFillLabel3:
 			s->yych = *s->cur;
-			if (s->yych == '"') goto yy69;
-			if (s->yych != '\\') goto yy71;
+			if (s->yych == '"') goto yy70;
+			if (s->yych != '\\') goto yy72;
 			++s->cur;
-			if ((s->yych = *s->cur) != '\n') goto yy72;
-yy68:
+			if ((s->yych = *s->cur) != '\n') goto yy73;
+yy69:
 			fputc(s->cur[-1], stdout);
 			continue;
-yy69:
+yy70:
 			++s->cur;
 			s->cond = EStateNormal;
 			fputc(s->cur[-1], stdout);
 			continue;
-yy71:
-			s->yych = *++s->cur;
-			goto yy68;
 yy72:
+			s->yych = *++s->cur;
+			goto yy69;
+yy73:
 			++s->cur;
 			fputl((const char*)s->cur-2, 2, stdout);
 			continue;

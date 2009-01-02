@@ -12,38 +12,37 @@
 	goto *yyctable[YYGETCONDITION()];
 /* *********************************** */
 yyc_0:
-
 #line 3 "condition_02.cg.re"
 	{ return NULL; }
-#line 19 "<stdout>"
+#line 18 "<stdout>"
 /* *********************************** */
 yyc_r1:
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
-	if (yych <= '`') goto yy5;
-	if (yych <= 'a') goto yy6;
-	if (yych <= 'b') goto yy8;
-yy5:
+	if (yych <= '`') goto yy6;
+	if (yych <= 'a') goto yy7;
+	if (yych <= 'b') goto yy9;
 yy6:
+yy7:
 	++YYCURSOR;
 #line 4 "condition_02.cg.re"
 	{ return "a"; }
-#line 32 "<stdout>"
-yy8:
+#line 31 "<stdout>"
+yy9:
 	++YYCURSOR;
 #line 5 "condition_02.cg.re"
 	{ return "b"; }
-#line 37 "<stdout>"
+#line 36 "<stdout>"
 /* *********************************** */
 yyc_r2:
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
-	if (yych == 'b') goto yy13;
-yy13:
+	if (yych == 'b') goto yy14;
+yy14:
 	++YYCURSOR;
 #line 5 "condition_02.cg.re"
 	{ return "b"; }
-#line 47 "<stdout>"
+#line 46 "<stdout>"
 }
 #line 7 "condition_02.cg.re"
 

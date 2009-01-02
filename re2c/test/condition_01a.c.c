@@ -10,45 +10,44 @@
 	}
 /**** State a ***/
 yyc_a:
-
 	if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 'a':	goto yy3;
-	default:	goto yy2;
+	case 'a':	goto yy4;
+	default:	goto yy3;
 	}
-yy2:
 yy3:
+yy4:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case 'b':	goto yy4;
-	default:	goto yy2;
+	case 'b':	goto yy5;
+	default:	goto yy3;
 	}
-yy4:
+yy5:
 	++YYCURSOR;
 #line 3 "condition_01a.c.re"
 	{ }
-#line 32 "<stdout>"
+#line 31 "<stdout>"
 /**** State b ***/
 yyc_b:
 	if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 'a':	goto yy9;
-	default:	goto yy8;
+	case 'a':	goto yy10;
+	default:	goto yy9;
 	}
-yy8:
 yy9:
+yy10:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case 'b':	goto yy10;
-	default:	goto yy8;
+	case 'b':	goto yy11;
+	default:	goto yy9;
 	}
-yy10:
+yy11:
 	++YYCURSOR;
 #line 3 "condition_01a.c.re"
 	{ }
-#line 52 "<stdout>"
+#line 51 "<stdout>"
 }
 #line 5 "condition_01a.c.re"
 

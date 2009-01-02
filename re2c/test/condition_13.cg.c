@@ -12,76 +12,75 @@
 	goto *yyctable[YYGETCONDITION()];
 /* *********************************** */
 yyc_0:
-
 	YYSETCONDITION(yycr1);
 #line 3 "condition_13.cg.re"
 	goto yyc_r1;
-#line 20 "<stdout>"
+#line 19 "<stdout>"
 /* *********************************** */
 yyc_r1:
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	if (yych <= '2') {
-		if (yych <= '0') goto yy5;
-		if (yych <= '1') goto yy8;
-		goto yy6;
+		if (yych <= '0') goto yy6;
+		if (yych <= '1') goto yy9;
+		goto yy7;
 	} else {
-		if (yych <= '`') goto yy5;
-		if (yych <= 'a') goto yy10;
-		if (yych <= 'b') goto yy12;
+		if (yych <= '`') goto yy6;
+		if (yych <= 'a') goto yy11;
+		if (yych <= 'b') goto yy13;
 	}
-yy5:
 yy6:
+yy7:
 	++YYCURSOR;
 #line 5 "condition_13.cg.re"
 	goto yyc_r1;
-#line 39 "<stdout>"
-yy8:
+#line 38 "<stdout>"
+yy9:
 	++YYCURSOR;
 #line 4 "condition_13.cg.re"
 	goto yyc_r1;
-#line 44 "<stdout>"
-yy10:
+#line 43 "<stdout>"
+yy11:
 	++YYCURSOR;
 	YYSETCONDITION(yycr2);
 #line 6 "condition_13.cg.re"
 	goto yyc_r2;
-#line 50 "<stdout>"
-yy12:
+#line 49 "<stdout>"
+yy13:
 	++YYCURSOR;
 	YYSETCONDITION(yycr2);
 #line 7 "condition_13.cg.re"
 	goto yyc_r2;
-#line 56 "<stdout>"
+#line 55 "<stdout>"
 /* *********************************** */
 yyc_r2:
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	if (yych <= '2') {
-		if (yych <= '0') goto yy16;
-		if (yych <= '1') goto yy19;
-		goto yy17;
+		if (yych <= '0') goto yy17;
+		if (yych <= '1') goto yy20;
+		goto yy18;
 	} else {
-		if (yych == 'b') goto yy21;
+		if (yych == 'b') goto yy22;
 	}
-yy16:
 yy17:
+yy18:
 	++YYCURSOR;
 	YYSETCONDITION(yycr1);
 #line 5 "condition_13.cg.re"
 	goto yyc_r1;
-#line 74 "<stdout>"
-yy19:
+#line 73 "<stdout>"
+yy20:
 	++YYCURSOR;
 	YYSETCONDITION(yycr1);
 #line 4 "condition_13.cg.re"
 	goto yyc_r1;
-#line 80 "<stdout>"
-yy21:
+#line 79 "<stdout>"
+yy22:
 	++YYCURSOR;
 #line 7 "condition_13.cg.re"
 	goto yyc_r2;
-#line 85 "<stdout>"
+#line 84 "<stdout>"
 }
 #line 9 "condition_13.cg.re"
 

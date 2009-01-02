@@ -92,54 +92,53 @@ void scan(Scanner *s)
 			}
 /* *********************************** */
 yyc_Comment:
-
 			if ((s->lim - s->cur) < 2) { if(fill(s, 2) >= 0) break; }
 			yych = *s->cur;
-			if (yych != '*') goto yy4;
+			if (yych != '*') goto yy5;
 			++s->cur;
-			if ((yych = *s->cur) == '/') goto yy5;
-yy3:
+			if ((yych = *s->cur) == '/') goto yy6;
+yy4:
 #line 149 "condition_06.cs.re"
 			{
 				goto yyc_Comment;
 			}
-#line 107 "<stdout>"
-yy4:
-			yych = *++s->cur;
-			goto yy3;
+#line 106 "<stdout>"
 yy5:
+			yych = *++s->cur;
+			goto yy4;
+yy6:
 			++s->cur;
 #line 145 "condition_06.cs.re"
 			{
 				continue;
 			}
-#line 117 "<stdout>"
+#line 116 "<stdout>"
 /* *********************************** */
 yyc_Normal:
 			if ((s->lim - s->cur) < 3) { if(fill(s, 3) >= 0) break; }
 			yych = *s->cur;
 			if (yych <= '.') {
-				if (yych == '"') goto yy12;
-				goto yy14;
+				if (yych == '"') goto yy13;
+				goto yy15;
 			} else {
-				if (yych <= '/') goto yy11;
-				if (yych != '?') goto yy14;
+				if (yych <= '/') goto yy12;
+				if (yych != '?') goto yy15;
 			}
 			yych = *(s->tok = ++s->cur);
-			if (yych == '?') goto yy19;
-yy10:
+			if (yych == '?') goto yy20;
+yy11:
 #line 140 "condition_06.cs.re"
 			{
 				fputc(*s->tok, stdout);
 				continue;
 			}
-#line 137 "<stdout>"
-yy11:
-			yych = *++s->cur;
-			if (yych == '*') goto yy17;
-			if (yych == '/') goto yy15;
-			goto yy10;
+#line 136 "<stdout>"
 yy12:
+			yych = *++s->cur;
+			if (yych == '*') goto yy18;
+			if (yych == '/') goto yy16;
+			goto yy11;
+yy13:
 			++s->cur;
 #line 134 "condition_06.cs.re"
 			{
@@ -147,211 +146,211 @@ yy12:
 				state = EStateString;
 				continue;
 			}
-#line 151 "<stdout>"
-yy14:
-			yych = *++s->cur;
-			goto yy10;
+#line 150 "<stdout>"
 yy15:
+			yych = *++s->cur;
+			goto yy11;
+yy16:
 			++s->cur;
 #line 130 "condition_06.cs.re"
 			{
 				goto yyc_Skiptoeol;
 			}
-#line 161 "<stdout>"
-yy17:
+#line 160 "<stdout>"
+yy18:
 			++s->cur;
 #line 126 "condition_06.cs.re"
 			{
 				goto yyc_Comment;
 			}
-#line 168 "<stdout>"
-yy19:
+#line 167 "<stdout>"
+yy20:
 			yych = *++s->cur;
 			switch (yych) {
-			case '!':	goto yy35;
-			case '\'':	goto yy33;
-			case '(':	goto yy21;
-			case ')':	goto yy23;
-			case '-':	goto yy37;
-			case '/':	goto yy31;
-			case '<':	goto yy25;
-			case '=':	goto yy29;
-			case '>':	goto yy27;
-			default:	goto yy20;
+			case '!':	goto yy36;
+			case '\'':	goto yy34;
+			case '(':	goto yy22;
+			case ')':	goto yy24;
+			case '-':	goto yy38;
+			case '/':	goto yy32;
+			case '<':	goto yy26;
+			case '=':	goto yy30;
+			case '>':	goto yy28;
+			default:	goto yy21;
 			}
-yy20:
-			s->cur = s->tok;
-			goto yy10;
 yy21:
+			s->cur = s->tok;
+			goto yy11;
+yy22:
 			++s->cur;
 #line 81 "condition_06.cs.re"
 			{
 				fputc('[', stdout);
 				continue;
 			}
-#line 193 "<stdout>"
-yy23:
+#line 192 "<stdout>"
+yy24:
 			++s->cur;
 #line 86 "condition_06.cs.re"
 			{
 				fputc(']', stdout);
 				continue;
 			}
-#line 201 "<stdout>"
-yy25:
+#line 200 "<stdout>"
+yy26:
 			++s->cur;
 #line 91 "condition_06.cs.re"
 			{
 				fputc('{', stdout);
 				continue;
 			}
-#line 209 "<stdout>"
-yy27:
+#line 208 "<stdout>"
+yy28:
 			++s->cur;
 #line 96 "condition_06.cs.re"
 			{
 				fputc('}', stdout);
 				continue;
 			}
-#line 217 "<stdout>"
-yy29:
+#line 216 "<stdout>"
+yy30:
 			++s->cur;
 #line 101 "condition_06.cs.re"
 			{
 				fputc('#', stdout);
 				continue;
 			}
-#line 225 "<stdout>"
-yy31:
+#line 224 "<stdout>"
+yy32:
 			++s->cur;
 #line 106 "condition_06.cs.re"
 			{
 				fputc('\\', stdout);
 				continue;
 			}
-#line 233 "<stdout>"
-yy33:
+#line 232 "<stdout>"
+yy34:
 			++s->cur;
 #line 111 "condition_06.cs.re"
 			{
 				fputc('^', stdout);
 				continue;
 			}
-#line 241 "<stdout>"
-yy35:
+#line 240 "<stdout>"
+yy36:
 			++s->cur;
 #line 116 "condition_06.cs.re"
 			{
 				fputc('|', stdout);
 				continue;
 			}
-#line 249 "<stdout>"
-yy37:
+#line 248 "<stdout>"
+yy38:
 			++s->cur;
 #line 121 "condition_06.cs.re"
 			{
 				fputc('~', stdout);
 				continue;
 			}
-#line 257 "<stdout>"
+#line 256 "<stdout>"
 /* *********************************** */
 yyc_Skiptoeol:
 			if ((s->lim - s->cur) < 5) { if(fill(s, 5) >= 0) break; }
 			yych = *s->cur;
 			if (yych <= '>') {
-				if (yych == '\n') goto yy44;
-				goto yy46;
+				if (yych == '\n') goto yy45;
+				goto yy47;
 			} else {
-				if (yych <= '?') goto yy41;
-				if (yych == '\\') goto yy43;
-				goto yy46;
+				if (yych <= '?') goto yy42;
+				if (yych == '\\') goto yy44;
+				goto yy47;
 			}
-yy41:
-			yych = *(s->tok = ++s->cur);
-			if (yych == '?') goto yy51;
 yy42:
+			yych = *(s->tok = ++s->cur);
+			if (yych == '?') goto yy52;
+yy43:
 #line 165 "condition_06.cs.re"
 			{
 				goto yyc_Skiptoeol;
 			}
-#line 278 "<stdout>"
-yy43:
-			yych = *(s->tok = ++s->cur);
-			if (yych == '\n') goto yy49;
-			if (yych == '\r') goto yy47;
-			goto yy42;
+#line 277 "<stdout>"
 yy44:
+			yych = *(s->tok = ++s->cur);
+			if (yych == '\n') goto yy50;
+			if (yych == '\r') goto yy48;
+			goto yy43;
+yy45:
 			++s->cur;
 #line 161 "condition_06.cs.re"
 			{
 				continue;
 			}
-#line 290 "<stdout>"
-yy46:
-			yych = *++s->cur;
-			goto yy42;
+#line 289 "<stdout>"
 yy47:
 			yych = *++s->cur;
-			if (yych == '\n') goto yy49;
+			goto yy43;
 yy48:
-			s->cur = s->tok;
-			goto yy42;
+			yych = *++s->cur;
+			if (yych == '\n') goto yy50;
 yy49:
+			s->cur = s->tok;
+			goto yy43;
+yy50:
 			++s->cur;
 #line 157 "condition_06.cs.re"
 			{
 				goto yyc_Skiptoeol;
 			}
-#line 306 "<stdout>"
-yy51:
+#line 305 "<stdout>"
+yy52:
 			yych = *++s->cur;
-			if (yych != '/') goto yy48;
+			if (yych != '/') goto yy49;
 			yych = *++s->cur;
-			if (yych == '\n') goto yy54;
-			if (yych != '\r') goto yy48;
+			if (yych == '\n') goto yy55;
+			if (yych != '\r') goto yy49;
 			yych = *++s->cur;
-			if (yych != '\n') goto yy48;
-yy54:
+			if (yych != '\n') goto yy49;
+yy55:
 			++s->cur;
 #line 153 "condition_06.cs.re"
 			{
 				goto yyc_Skiptoeol;
 			}
-#line 321 "<stdout>"
+#line 320 "<stdout>"
 /* *********************************** */
 yyc_String:
 			if ((s->lim - s->cur) < 2) { if(fill(s, 2) >= 0) break; }
 			yych = *s->cur;
-			if (yych == '"') goto yy60;
-			if (yych != '\\') goto yy62;
+			if (yych == '"') goto yy61;
+			if (yych != '\\') goto yy63;
 			++s->cur;
-			if ((yych = *s->cur) != '\n') goto yy63;
-yy59:
+			if ((yych = *s->cur) != '\n') goto yy64;
+yy60:
 #line 179 "condition_06.cs.re"
 			{
 				fputc(*s->tok, stdout);
 				continue;
 			}
-#line 336 "<stdout>"
-yy60:
+#line 335 "<stdout>"
+yy61:
 			++s->cur;
 #line 174 "condition_06.cs.re"
 			{
 				fputc(*s->tok, stdout);
 				continue;
 			}
-#line 344 "<stdout>"
-yy62:
-			yych = *++s->cur;
-			goto yy59;
+#line 343 "<stdout>"
 yy63:
+			yych = *++s->cur;
+			goto yy60;
+yy64:
 			++s->cur;
 #line 169 "condition_06.cs.re"
 			{
 				fputl((const char*)s->tok, 2, stdout);
 				continue;
 			}
-#line 355 "<stdout>"
+#line 354 "<stdout>"
 		}
 #line 183 "condition_06.cs.re"
 

@@ -12,71 +12,70 @@
 	goto *yyctable[YYGETCONDITION()];
 /* *********************************** */
 yyc_0:
-
 #line 3 "condition_03.cg.re"
 	{ return NULL; }
-#line 19 "<stdout>"
+#line 18 "<stdout>"
 /* *********************************** */
 yyc_r1:
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	if (yych <= '2') {
-		if (yych <= '0') goto yy5;
-		if (yych <= '1') goto yy8;
-		goto yy6;
+		if (yych <= '0') goto yy6;
+		if (yych <= '1') goto yy9;
+		goto yy7;
 	} else {
-		if (yych <= '`') goto yy5;
-		if (yych <= 'a') goto yy10;
-		if (yych <= 'b') goto yy12;
+		if (yych <= '`') goto yy6;
+		if (yych <= 'a') goto yy11;
+		if (yych <= 'b') goto yy13;
 	}
-yy5:
 yy6:
+yy7:
 	++YYCURSOR;
 #line 5 "condition_03.cg.re"
 	{ return "2"; }
-#line 38 "<stdout>"
-yy8:
+#line 37 "<stdout>"
+yy9:
 	++YYCURSOR;
 #line 4 "condition_03.cg.re"
 	{ return "1"; }
-#line 43 "<stdout>"
-yy10:
+#line 42 "<stdout>"
+yy11:
 	++YYCURSOR;
 #line 6 "condition_03.cg.re"
 	{ return "a"; }
-#line 48 "<stdout>"
-yy12:
+#line 47 "<stdout>"
+yy13:
 	++YYCURSOR;
 #line 7 "condition_03.cg.re"
 	{ return "b"; }
-#line 53 "<stdout>"
+#line 52 "<stdout>"
 /* *********************************** */
 yyc_r2:
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	if (yych <= '2') {
-		if (yych <= '0') goto yy16;
-		if (yych <= '1') goto yy19;
-		goto yy17;
+		if (yych <= '0') goto yy17;
+		if (yych <= '1') goto yy20;
+		goto yy18;
 	} else {
-		if (yych == 'b') goto yy21;
+		if (yych == 'b') goto yy22;
 	}
-yy16:
 yy17:
+yy18:
 	++YYCURSOR;
 #line 5 "condition_03.cg.re"
 	{ return "2"; }
-#line 70 "<stdout>"
-yy19:
+#line 69 "<stdout>"
+yy20:
 	++YYCURSOR;
 #line 4 "condition_03.cg.re"
 	{ return "1"; }
-#line 75 "<stdout>"
-yy21:
+#line 74 "<stdout>"
+yy22:
 	++YYCURSOR;
 #line 7 "condition_03.cg.re"
 	{ return "b"; }
-#line 80 "<stdout>"
+#line 79 "<stdout>"
 }
 #line 9 "condition_03.cg.re"
 

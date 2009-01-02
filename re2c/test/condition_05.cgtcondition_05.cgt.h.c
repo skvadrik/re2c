@@ -65,52 +65,51 @@ char scan(Scanner *s)
 			goto *yyctable[cond];
 /* *********************************** */
 yyc_comment:
-
 			if ((s->lim - s->cur) < 2) { if(fill(s, 2) >= 0) break; }
 			yych = *s->cur;
-			if (yych != '*') goto yy4;
+			if (yych != '*') goto yy5;
 			++s->cur;
-			if ((yych = *s->cur) == '/') goto yy5;
-yy3:
+			if ((yych = *s->cur) == '/') goto yy6;
+yy4:
 #line 83 "condition_05.cgtcondition_05.cgt.h.re"
 			{
 				goto yyc_comment;
 			}
-#line 80 "<stdout>"
-yy4:
-			yych = *++s->cur;
-			goto yy3;
+#line 79 "<stdout>"
 yy5:
+			yych = *++s->cur;
+			goto yy4;
+yy6:
 			++s->cur;
 #line 79 "condition_05.cgtcondition_05.cgt.h.re"
 			{
 				continue;
 			}
-#line 90 "<stdout>"
+#line 89 "<stdout>"
 /* *********************************** */
 yyc_normal:
 			if ((s->lim - s->cur) < 2) { if(fill(s, 2) >= 0) break; }
 			yych = *s->cur;
-			if (yych != '/') goto yy11;
+			if (yych != '/') goto yy12;
 			++s->cur;
-			if ((yych = *s->cur) == '*') goto yy12;
-yy10:
+			if ((yych = *s->cur) == '*') goto yy13;
+yy11:
 #line 74 "condition_05.cgtcondition_05.cgt.h.re"
 			{
 				fputc(*s->tok, stdout);
 				continue;
 			}
-#line 104 "<stdout>"
-yy11:
-			yych = *++s->cur;
-			goto yy10;
+#line 103 "<stdout>"
 yy12:
+			yych = *++s->cur;
+			goto yy11;
+yy13:
 			++s->cur;
 #line 70 "condition_05.cgtcondition_05.cgt.h.re"
 			{
 				goto yyc_comment;
 			}
-#line 114 "<stdout>"
+#line 113 "<stdout>"
 		}
 #line 87 "condition_05.cgtcondition_05.cgt.h.re"
 

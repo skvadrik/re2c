@@ -518,7 +518,7 @@ void Initial::emit(std::ostream &o, uint ind, bool &readCh, const std::string&) 
 		o << startLabelName << ":\n";
 	}
 
-	if (vUsedLabels.count(1))
+	if (vUsedLabels.count(label+1))
 	{
 		if (state->link)
 		{
@@ -530,7 +530,7 @@ void Initial::emit(std::ostream &o, uint ind, bool &readCh, const std::string&) 
 		}
 	}
 
-	if (!cFlag && vUsedLabels.count(label))
+	if (vUsedLabels.count(label))
 	{
 		o << labelPrefix << label << ":\n";
 	}
@@ -1783,6 +1783,18 @@ void DFA::emit(std::ostream &o, uint& ind, const RegExpMap* specMap, const std::
 		bUsedYYAccept = false;
 	}
 	
+	// In -c mode, the prolog needs its own label separate from start_label.
+	// prolog_label is before the condition branch (GenCondGoto). It is
+	// equivalent to startLabelName.
+	// start_label corresponds to current condition.
+	// NOTE: prolog_label must be yy0 because of the !getstate:re2c handling
+	// in scanner.re
+	uint prolog_label = next_label;
+	if (bProlog && cFlag)
+	{
+		next_label++;
+	}
+
 	uint start_label = next_label;
 
 	(void) new Initial(head, next_label++, bSaveOnHead);
@@ -1791,7 +1803,7 @@ void DFA::emit(std::ostream &o, uint& ind, const RegExpMap* specMap, const std::
 	{
 		if (startLabelName.empty())
 		{
-			vUsedLabels.insert(start_label);
+			vUsedLabels.insert(prolog_label);
 		}
 	}
 
@@ -1867,12 +1879,12 @@ void DFA::emit(std::ostream &o, uint& ind, const RegExpMap* specMap, const std::
 	if (bProlog)
 	{
 		genCondTable(o, ind, *specMap);
-		genGetStateGoto(o, ind, start_label);
-		if (cFlag)
+		genGetStateGoto(o, ind, prolog_label);
+		if (cFlag && !DFlag)
 		{
-			if (vUsedLabels.count(start_label))
+			if (vUsedLabels.count(prolog_label))
 			{
-				o << labelPrefix << start_label << ":\n";
+				o << labelPrefix << prolog_label << ":\n";
 			}
 			if (!startLabelName.empty())
 			{
@@ -1904,11 +1916,11 @@ void DFA::emit(std::ostream &o, uint& ind, const RegExpMap* specMap, const std::
 		BitMap::gen(o, ind, lbChar, ubChar <= 256 ? ubChar : 256);
 	}
 
-	// TODO: Shouldn't labels 0 and 1 be variable?
-	if (vUsedLabels.count(1))
+	// The start_label is not always the first to be emitted, so we may have to jump. c.f. Initial::emit()
+	if (vUsedLabels.count(start_label+1))
 	{
-		vUsedLabels.insert(0);
-		o << indent(ind) << "goto " << labelPrefix << "0;\n";
+		vUsedLabels.insert(start_label);
+		o << indent(ind) << "goto " << labelPrefix << start_label << ";\n";
 	}
 
 	// Generate code
