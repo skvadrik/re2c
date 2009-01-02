@@ -87,7 +87,7 @@ echo:
 					}
 					else
 					{
-						fatal("found 'reules:re2c' block without -r flag");
+						fatal("found 'rules:re2c' block without -r flag");
 					}
 					if (bUsedYYMaxFill && bSinglePass)
 					{
