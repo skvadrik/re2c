@@ -725,7 +725,7 @@ void Rule::emit(std::ostream &o, uint ind, bool &, const std::string& condName) 
 {
 	if (DFlag)
 	{
-		o << state->label << " [label=\"" << sourceFileInfo.fname << ":" << rule->code->line << "\"];\n";
+		o << state->label << " [label=\"" << sourceFileInfo.fname << ":" << rule->code->line << "\"]\n";
 		return;
 	}
 

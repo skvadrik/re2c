@@ -16,11 +16,11 @@ state1 -> 2
 6 -> 7 [label="o"]
 6 -> 3 [label=default]
 7 -> 8
-8 [label="dot_conditions.Dc.re:8"];
+8 [label="dot_conditions.Dc.re:8"]
 9 -> 10 [label="c"]
 9 -> 3 [label=default]
 10 -> 11
-11 [label="dot_conditions.Dc.re:6"];
+11 [label="dot_conditions.Dc.re:6"]
 /* *********************************** */
 state2 -> 13
 13 -> 15 [label="a"]
@@ -30,5 +30,5 @@ state2 -> 13
 16 -> 17 [label="c"]
 16 -> 14 [label=default]
 17 -> 18
-18 [label="dot_conditions.Dc.re:7"];
+18 [label="dot_conditions.Dc.re:7"]
 }
