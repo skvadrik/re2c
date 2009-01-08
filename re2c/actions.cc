@@ -37,10 +37,12 @@ Symbol *Symbol::find(const SubStr &str)
 	return (*it).second;
 }
 
-void showIns(std::ostream &o, const Ins &i, const Ins &base)
+const Ins* showIns(std::ostream &o, const Ins &i, const Ins &base)
 {
 	o.width(3);
 	o << &i - &base << ": ";
+
+	const Ins *ret = &(&i)[1];
 
 	switch (i.i.tag)
 	{
@@ -49,8 +51,8 @@ void showIns(std::ostream &o, const Ins &i, const Ins &base)
 		{
 			o << "match ";
 
-			for (const Ins *j = &(&i)[1]; j < (Ins*) i.i.link; ++j)
-				prtCh(o, j->c.value);
+			for (; ret < (Ins*) i.i.link; ++ret)
+				prtCh(o, ret->c.value);
 
 			break;
 		}
@@ -73,6 +75,7 @@ void showIns(std::ostream &o, const Ins &i, const Ins &base)
 	}
 
 	o << "\n";
+	return ret;
 }
 
 uint RegExp::fixedLength()
@@ -1047,6 +1050,12 @@ DFA* genCode(RegExp *re)
 	eoi->i.link = eoi;
 
 	optimize(ins);
+
+	/*
+	for (const Ins *inst = &ins[0]; inst < &ins[re->size]; ) {
+		inst = showIns(std::cout, *inst, ins[0]);
+	}
+	*/
 
 	for (j = 0; j < re->size;)
 	{
