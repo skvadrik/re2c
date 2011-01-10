@@ -258,6 +258,9 @@ scan:
 					goto code;
 				}
 
+        "//"            {
+				goto nextLine;
+			}
 	"/*"		{
 					depth = 1;
 					goto comment;
@@ -559,6 +562,22 @@ comment:
 					}
 					goto comment;
 				}
+*/
+
+nextLine:
+/*!re2c                                  /* resync emacs */
+   "\n"     { if(cursor == eof) {
+                  RETURN(0);
+               }
+               tok = pos = cursor;
+               cline++;
+               goto scan;
+            }
+   any      {  if(cursor == eof) {
+                  RETURN(0);
+               }
+               goto nextLine;
+            }
 */
 
 config:
