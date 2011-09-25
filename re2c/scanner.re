@@ -64,7 +64,8 @@ Scanner::ParseMode Scanner::echo()
 	tok = cursor;
 echo:
 /*!re2c
-	"/*!re2c"	{
+   beginRE     =  "%{" | "/*!re2c";
+   beginRE     {
 					if (rFlag)
 					{
 						fatal("found standard 're2c' block while using -r flag");
@@ -266,7 +267,8 @@ scan:
 					goto comment;
 				}
 
-	"*/"		{
+   endRE    =  "%}" | "*/";
+   endRE    {
 					tok = cursor;
 					RETURN(0);
 				}
