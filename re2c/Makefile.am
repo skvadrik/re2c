@@ -49,7 +49,6 @@ zip: $(bin_PROGRAMS) $(EXTRA_ZIP)
 	if test -f re2c-$(PACKAGE_VERSION)-src.zip; then rm -f re2c-$(PACKAGE_VERSION)-src.zip; fi
 	zip -q -o -9 -r re2c-$(PACKAGE_VERSION)-src.zip $(re2c_SOURCES) $(EXTRA_ZIP)
 	zipinfo -1      re2c-$(PACKAGE_VERSION)-src.zip | grep .git | xargs zip -d re2c-$(PACKAGE_VERSION)-src.zip >/dev/null
-	zipinfo -1      re2c-$(PACKAGE_VERSION)-src.zip | grep .gitignore | xargs zip -d re2c-$(PACKAGE_VERSION)-src.zip >/dev/null
 	if test -f re2c-$(PACKAGE_VERSION)-bin.zip; then rm -f re2c-$(PACKAGE_VERSION)-bin.zip; fi
 	if test -f $(WINBUILDDIR)/re2c.exe; then \
 	zip -q -o -9 -j re2c-$(PACKAGE_VERSION)-bin.zip $(win_BINARIES); \
