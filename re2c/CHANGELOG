@@ -1,13 +1,17 @@
-Version 0.13.6 (2009-??-??)
+Version 0.13.6 (2013-07-04)
 ---------------------------
+- Fixed #2535084 uint problem with Sun C 5.8
+- #3308400: allow Yacc-style %{code brackets}%
+- #2506253: allow C++ // comments
 - Fixed inplace configuration in -e mode.
 - Applied #2482572 Typos in error messages.
 - Applied #2482561 Error in manual section on -r mode.
 - Fixed #2478216 Wrong start_label in -c mode.
 - Fixed #2186718 Unescaped backslash in file name of #line directive.
 - Fixed #2102138 Duplicate case labels on EBCDIC.
-- Fixed #2088583 Compile problemon AIX.
+- Fixed #2088583 Compile problem on AIX.
 - Fixed #2038610 Ebcdic problem.
+- improve dot support: make char intervals (e.g. [A-Z]) instead of one edge per char
 
 Version 0.13.5 (2008-05-25)
 ---------------------------
