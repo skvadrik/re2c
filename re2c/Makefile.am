@@ -27,10 +27,10 @@ EXTRA_DIST   = $(EXTRA_SRC) makerpm.in re2c.spec.in re2c.spec README.in config_w
 EXTRA_ZIP    = $(EXTRA_SRC) config_w32.h *.sln *.vcproj re2c.rules
 
 dist-hook: vtest re2c.spec
-	rm -rf `find $(distdir)/doc -name .svn`
-	rm -rf `find $(distdir)/examples -name .svn`
-	rm -rf `find $(distdir)/test -name .svn -o -name .cvsignore`
-	rm -rf `find $(distdir)/lessons -name .svn -o -name .cvsignore`
+	rm -rf `find $(distdir)/doc -name .git`
+	rm -rf `find $(distdir)/examples -name .git`
+	rm -rf `find $(distdir)/test -name .git -o -name .gitignore`
+	rm -rf `find $(distdir)/lessons -name .git -o -name .gitignore`
 
 rpm-files:	$(bin_PROGRAMS) $(EXTRA_DIST)
 
@@ -48,8 +48,8 @@ src-rpm: dist
 zip: $(bin_PROGRAMS) $(EXTRA_ZIP)
 	if test -f re2c-$(PACKAGE_VERSION)-src.zip; then rm -f re2c-$(PACKAGE_VERSION)-src.zip; fi
 	zip -q -o -9 -r re2c-$(PACKAGE_VERSION)-src.zip $(re2c_SOURCES) $(EXTRA_ZIP)
-	zipinfo -1      re2c-$(PACKAGE_VERSION)-src.zip | grep .svn | xargs zip -d re2c-$(PACKAGE_VERSION)-src.zip >/dev/null
-	zipinfo -1      re2c-$(PACKAGE_VERSION)-src.zip | grep .cvsignore | xargs zip -d re2c-$(PACKAGE_VERSION)-src.zip >/dev/null
+	zipinfo -1      re2c-$(PACKAGE_VERSION)-src.zip | grep .git | xargs zip -d re2c-$(PACKAGE_VERSION)-src.zip >/dev/null
+	zipinfo -1      re2c-$(PACKAGE_VERSION)-src.zip | grep .gitignore | xargs zip -d re2c-$(PACKAGE_VERSION)-src.zip >/dev/null
 	if test -f re2c-$(PACKAGE_VERSION)-bin.zip; then rm -f re2c-$(PACKAGE_VERSION)-bin.zip; fi
 	if test -f $(WINBUILDDIR)/re2c.exe; then \
 	zip -q -o -9 -j re2c-$(PACKAGE_VERSION)-bin.zip $(win_BINARIES); \
