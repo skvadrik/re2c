@@ -1018,7 +1018,7 @@ CharSet::~CharSet()
 	delete[] ptn;
 }
 
-DFA* genCode(RegExp *re)
+smart_ptr<DFA> genCode(RegExp *re)
 {
 	CharSet cs;
 	uint j;
@@ -1071,7 +1071,7 @@ DFA* genCode(RegExp *re)
 		}
 	}
 
-	return new DFA(ins, re->size, 0, nRealChars, rep);
+	return make_smart_ptr(new DFA(ins, re->size, 0, nRealChars, rep));
 }
 
 } // end namespace re2c

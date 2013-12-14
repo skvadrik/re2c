@@ -11,6 +11,7 @@
 #include "token.h"
 #include "ins.h"
 #include "globals.h"
+#include "smart_ptr.h"
 
 namespace re2c
 {
@@ -501,7 +502,7 @@ typedef std::map<std::string, LineCode> SetupMap;
 
 class DFA;
 
-extern DFA* genCode(RegExp*);
+extern smart_ptr<DFA> genCode(RegExp*);
 extern void genGetStateGoto(std::ostream&, uint&, uint);
 extern void genCondTable(std::ostream&, uint, const RegExpMap&);
 extern void genCondGoto(std::ostream&, uint, const RegExpMap&);

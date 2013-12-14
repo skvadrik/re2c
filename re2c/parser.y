@@ -16,6 +16,7 @@
 #include "parser.h"
 #include "basics.h"
 #include "dfa.h"
+#include "smart_ptr.h"
 
 #define YYMALLOC malloc
 #define YYFREE free
@@ -467,7 +468,7 @@ namespace re2c
 
 void parse(Scanner& i, std::ostream& o, std::ostream* h)
 {
-	std::map<std::string, DFA*>  dfa_map;
+	std::map<std::string, smart_ptr<DFA>>  dfa_map;
 	ScannerState rules_state;
 
 	in = &i;

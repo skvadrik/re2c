@@ -75,7 +75,7 @@ typedef union YYSTYPE
 {
 
 /* Line 2068 of yacc.c  */
-#line 132 "parser.y"
+#line 133 "parser.y"
 
 	re2c::Symbol	*symbol;
 	re2c::RegExp	*regexp;
