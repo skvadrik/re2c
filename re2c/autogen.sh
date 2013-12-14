@@ -1,5 +1,5 @@
 #!/bin/sh
-./cvsclean.sh
+git clean -fXd
 aclocal
 autoheader
 automake -a -c --foreign
