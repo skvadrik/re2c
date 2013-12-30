@@ -759,7 +759,7 @@ Range * Scanner::getRange(SubStr &s) const
 		
 		for(c = lb; c <= ub; c++)
 		{
-			if (!(xlb <= xlat(c) && xlat(c) <= ub))
+			if (!(xlb <= xlat(c) && xlat(c) <= xub))
 			{
 				/* range doesn't work */
 				Range * r = new Range(xlb, xlb + 1);
