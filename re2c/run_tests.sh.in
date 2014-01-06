@@ -20,7 +20,8 @@ if test ! -x "${re2c}"; then
   echo "Cannot find re2c executable (${re2c})."
 fi
 if test -n "${valgrind}"; then
-  valgrind="${valgrind} -q "
+  valgrind_options="-q --track-origins=yes --num-callers=50 --leak-check=full --show-reachable=yes --malloc-fill=0xa1 --free-fill=0xa1 "
+  valgrind="${valgrind} ${valgrind_options} "
   echo "Using valgrind"
 fi
 re2c="${valgrind}${re2c}"
