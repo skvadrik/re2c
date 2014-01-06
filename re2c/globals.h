@@ -32,6 +32,7 @@ extern bool sFlag;
 extern bool tFlag;
 extern bool uFlag;
 extern bool wFlag;
+extern bool zFlag;
 
 extern bool bNoGenerationDate;
 

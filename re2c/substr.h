@@ -4,6 +4,7 @@
 
 #include <iostream>
 #include <string>
+#include <string.h>
 #include "basics.h"
 
 namespace re2c

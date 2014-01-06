@@ -36,6 +36,7 @@ bool sFlag = false;
 bool tFlag = false;
 bool uFlag = false;
 bool wFlag = false;
+bool zFlag = false;
 
 bool bNoGenerationDate = false;
 
@@ -125,6 +126,7 @@ static const mbo_opt_struct OPTIONS[] =
 	mbo_opt_struct('v', 0, "version"),
 	mbo_opt_struct('V', 0, "vernum"),
 	mbo_opt_struct('w', 0, "wide-chars"),
+	mbo_opt_struct('z', 0, "utf-8"),
 	mbo_opt_struct('1', 0, "single-pass"),
 	mbo_opt_struct(10,  0, "no-generation-date"),
 	mbo_opt_struct(11,  0, "case-insensitive"),
@@ -182,6 +184,9 @@ static void usage()
 	"\n"
 	"-w     --wide-chars     Create a parser that supports wide chars (UCS-2). This\n"
 	"                        implies -s and cannot be used together with -e switch.\n"
+	"\n"
+	"-z     --utf-8          Create a parser that supports UTF-8. This can't be used\n"
+	"                        together with -e, -w or -u switch.\n"
 	"\n"
 	"-1     --single-pass    Force single pass generation, this cannot be combined\n"
 	"                        with -f and disables YYMAXFILL generation prior to last\n"
@@ -320,6 +325,11 @@ int main(int argc, char *argv[])
 			nRealChars = 0x110000; /* 17 times w-Flag */
 			sFlag = true;
 			uFlag = true;
+			break;
+
+			case 'z':
+			nRealChars = 0x110000; /* 17 times w-Flag */
+			zFlag = true;
 			break;
 	  
 			default:

@@ -4,6 +4,7 @@ bin_PROGRAMS = re2c
 win_BINARIES = $(WINBUILDDIR)/re2c.exe
 re2c_SOURCES = code.cc dfa.cc main.cc parser.cc actions.cc scanner.re substr.cc\
 	translate.cc scanner.cc mbo_getopt.cc \
+	utf8.cc utf8_range.cc \
 	basics.h dfa.h globals.h ins.h parser.h re.h scanner.h \
 	substr.h token.h mbo_getopt.h code.h stream_lc.h code_names.h
 BUILT_SOURCES = parser.cc scanner.cc

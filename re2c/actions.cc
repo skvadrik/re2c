@@ -8,6 +8,7 @@
 #include "globals.h"
 #include "parser.h"
 #include "dfa.h"
+#include "utf8_range.h"
 
 namespace re2c
 {
@@ -83,6 +84,13 @@ uint RegExp::fixedLength()
 	return ~0u;
 }
 
+uint compile_goto(Ins *ins, Ins *i)
+{
+	i->i.tag = GOTO;
+	i->i.link = ins;
+	return 1;
+}
+
 const char *NullOp::type = "NullOp";
 
 void NullOp::calcSize(Char*)
@@ -95,7 +103,12 @@ uint NullOp::fixedLength()
 	return 0;
 }
 
-void NullOp::compile(Char*, Ins*)
+uint NullOp::compile(Char*, Ins*)
+{
+	return 0;
+}
+
+void NullOp::uncompile()
 {
 	;
 }
@@ -263,25 +276,42 @@ uint MatchOp::fixedLength()
 	return 1;
 }
 
-void MatchOp::compile(Char *rep, Ins *i)
+uint MatchOp::compile(Char *rep, Ins *i)
 {
-	i->i.tag = CHAR;
-	i->i.link = &i[size];
-	Ins *j = &i[1];
-	uint bump = size;
-
-	for (Range *r = match; r; r = r->next)
+	if (ins_cache)
+		return compile_goto(ins_cache, i);
+	else
 	{
-		for (uint c = r->lb; c < r->ub; ++c)
+		ins_cache = i;
+
+		i->i.tag = CHAR;
+		i->i.link = &i[size];
+		Ins *j = &i[1];
+		uint bump = size;
+
+		for (Range *r = match; r; r = r->next)
 		{
-			if (rep[c] == c)
+			for (uint c = r->lb; c < r->ub; ++c)
 			{
-				j->c.value = c;
-				j->c.bump = --bump;
-				j++;
+				if (rep[c] == c)
+				{
+					j->c.value = c;
+					j->c.bump = --bump;
+					j++;
+				}
 			}
 		}
+
+		if (must_recompile)
+			uncompile();
+
+		return size;
 	}
+}
+
+void MatchOp::uncompile()
+{
+	ins_cache = NULL;
 }
 
 void MatchOp::split(CharSet &s)
@@ -351,6 +381,17 @@ RegExp *doAlt(RegExp *e1, RegExp *e2)
 	return new AltOp(e1, e2);
 }
 
+RegExp *doCat(RegExp *e1, RegExp *e2)
+{
+	if (!e1)
+		return e2;
+
+	if (!e2)
+		return e1;
+
+	return new CatOp(e1, e2);
+}
+
 RegExp *mkAlt(RegExp *e1, RegExp *e2)
 {
 	AltOp *a;
@@ -399,15 +440,37 @@ uint AltOp::fixedLength()
 	return l1;
 }
 
-void AltOp::compile(Char *rep, Ins *i)
+uint AltOp::compile(Char *rep, Ins *i)
 {
-	i->i.tag = FORK;
-	Ins *j = &i[exp1->size + 1];
-	i->i.link = &j[1];
-	exp1->compile(rep, &i[1]);
-	j->i.tag = GOTO;
-	j->i.link = &j[exp2->size + 1];
-	exp2->compile(rep, &j[1]);
+	if (ins_cache)
+		return compile_goto(ins_cache, i);
+	else
+	{
+		ins_cache = i;
+
+		i->i.tag = FORK;
+		const uint sz1 = exp1->compile(rep, &i[1]);
+		Ins * const j = &i[sz1 + 1];
+		i->i.link = &j[1];
+		j->i.tag = GOTO;
+		const uint sz2 = exp2->compile(rep, &j[1]);
+		j->i.link = &j[sz2 + 1];
+
+		if (must_recompile)
+			uncompile();
+
+		return sz1 + sz2 + 2;
+	}
+}
+
+void AltOp::uncompile()
+{
+	if (ins_cache)
+	{
+		exp1->uncompile();
+		exp2->uncompile();
+		ins_cache = NULL;
+	}
 }
 
 void AltOp::split(CharSet &s)
@@ -436,10 +499,32 @@ uint CatOp::fixedLength()
 	return ~0u;
 }
 
-void CatOp::compile(Char *rep, Ins *i)
+uint CatOp::compile(Char *rep, Ins *i)
 {
-	exp1->compile(rep, &i[0]);
-	exp2->compile(rep, &i[exp1->size]);
+	if (ins_cache)
+		return compile_goto(ins_cache, i);
+	else
+	{
+		ins_cache = i;
+
+		const uint sz1 = exp1->compile(rep, &i[0]);
+		const uint sz2 = exp2->compile(rep, &i[sz1]);
+
+		if (must_recompile)
+			uncompile();
+
+		return sz1 + sz2;
+	}
+}
+
+void CatOp::uncompile()
+{
+	if (ins_cache)
+	{
+		exp1->uncompile();
+		exp2->uncompile();
+		ins_cache = NULL;
+	}
 }
 
 void CatOp::split(CharSet &s)
@@ -456,12 +541,34 @@ void CloseOp::calcSize(Char *rep)
 	size = exp->size + 1;
 }
 
-void CloseOp::compile(Char *rep, Ins *i)
+uint CloseOp::compile(Char *rep, Ins *i)
 {
-	exp->compile(rep, &i[0]);
-	i += exp->size;
-	i->i.tag = FORK;
-	i->i.link = i - exp->size;
+	if (ins_cache)
+		return compile_goto(ins_cache, i);
+	else
+	{
+		ins_cache = i;
+
+		i += exp->compile(rep, &i[0]);
+		i->i.tag = FORK;
+		i->i.link = ins_cache;
+		++i;
+
+		const uint sz = i - ins_cache;
+		if (must_recompile)
+			uncompile();
+
+		return sz;
+	}
+}
+
+void CloseOp::uncompile()
+{
+	if (ins_cache)
+	{
+		exp->uncompile();
+		ins_cache = NULL;
+	}
 }
 
 void CloseOp::split(CharSet &s)
@@ -485,32 +592,48 @@ void CloseVOp::calcSize(Char *rep)
 	}
 }
 
-void CloseVOp::compile(Char *rep, Ins *i)
+uint CloseVOp::compile(Char *rep, Ins *i)
 {
-	Ins *jumppoint;
-	int st;
-	jumppoint = i + ((1 + exp->size) * (max - min));
-
-	for (st = min; st < max; st++)
+	if (ins_cache)
+		return compile_goto(ins_cache, i);
+	else
 	{
-		i->i.tag = FORK;
-		i->i.link = jumppoint;
-		i++;
-		exp->compile(rep, &i[0]);
-		i += exp->size;
-	}
+		ins_cache = i;
 
-	for (st = 0; st < min; st++)
-	{
-		exp->compile(rep, &i[0]);
-		i += exp->size;
-
-		if (max < 0 && st == 0)
+		for (int st = min; st < max; st++)
 		{
+			const uint sz = exp->compile(rep, &i[1]);
 			i->i.tag = FORK;
-			i->i.link = i - exp->size;
-			i++;
+			i->i.link = ins_cache + (1 + sz) * (max - min);
+			i += sz + 1;
 		}
+
+		for (int st = 0; st < min; st++)
+		{
+			const uint sz = exp->compile(rep, &i[0]);
+			i += sz;
+			if (max < 0 && st == 0)
+			{
+				i->i.tag = FORK;
+				i->i.link = i - sz;
+				i++;
+			}
+		}
+
+		const uint sz = i - ins_cache;
+		if (must_recompile)
+			uncompile();
+
+		return sz;
+	}
+}
+
+void CloseVOp::uncompile()
+{
+	if (ins_cache)
+	{
+		exp->uncompile();
+		ins_cache = NULL;
 	}
 }
 
@@ -590,10 +713,10 @@ uint Scanner::unescape(SubStr &s) const
 				if (s.str[1] == '0')
 				{
 					l++;
-					if (s.str[2] == '0' || (s.str[2] == '1' && uFlag))
+					if (s.str[2] == '0' || (s.str[2] == '1' && (uFlag || zFlag)))
 					{
 						l++;
-						if (uFlag) {
+						if (uFlag || zFlag) {
 							const char *u3 = strchr(hex, tolower(s.str[2]));
 							const char *u4 = strchr(hex, tolower(s.str[3]));
 							if (u3 && u4)
@@ -781,6 +904,22 @@ RegExp * Scanner::matchChar(uint c) const
 	return new MatchOp(new Range(xc, xc + 1));
 }
 
+RegExp * Scanner::matchSymbol(uint c) const
+{
+	RegExp *re = NULL;
+	if (zFlag)
+	{
+		uchar bytes[4];
+		const int bytes_count = utf8::rune_to_bytes(bytes, c);
+		re = matchChar(bytes[0]);
+		for (int i = 1; i < bytes_count; ++i)
+			re = new CatOp (re, matchChar(bytes[i]));
+	}
+	else
+		re = matchChar(c);
+	return re;
+}
+
 RegExp * Scanner::strToRE(SubStr s) const
 {
 	s.len -= 2;
@@ -789,10 +928,10 @@ RegExp * Scanner::strToRE(SubStr s) const
 	if (s.len == 0)
 		return new NullOp;
 
-	RegExp *re = matchChar(unescape(s));
+	RegExp *re = matchSymbol(unescape(s));
 
 	while (s.len > 0)
-		re = new CatOp(re, matchChar(unescape(s)));
+		re = new CatOp(re, matchSymbol(unescape(s)));
 
 	return re;
 }
@@ -811,13 +950,13 @@ RegExp * Scanner::strToCaseInsensitiveRE(SubStr s) const
 
 	if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z'))
 	{
-		reL = matchChar(tolower(c));
-		reU = matchChar(toupper(c));
+		reL = matchSymbol(tolower(c));
+		reU = matchSymbol(toupper(c));
 		re = mkAlt(reL, reU);
 	}
 	else
 	{
-		re = matchChar(c);
+		re = matchSymbol(c);
 	}
 
 	while (s.len > 0)
@@ -826,17 +965,26 @@ RegExp * Scanner::strToCaseInsensitiveRE(SubStr s) const
 
 		if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z'))
 		{
-			reL = matchChar(tolower(c));
-			reU = matchChar(toupper(c));
+			reL = matchSymbol(tolower(c));
+			reU = matchSymbol(toupper(c));
 			re = new CatOp(re, mkAlt(reL, reU));
 		}
 		else
 		{
-			re = new CatOp(re, matchChar(c));
+			re = new CatOp(re, matchSymbol(c));
 		}
 	}
 
 	return re;
+}
+
+Range * Scanner::mkRange(SubStr &s) const
+{
+	Range *r = getRange(s);
+	while (s.len > 0)
+		r = doUnion(r, getRange(s));
+
+	return r;
 }
 
 RegExp * Scanner::ranToRE(SubStr s) const
@@ -847,62 +995,50 @@ RegExp * Scanner::ranToRE(SubStr s) const
 	if (s.len == 0)
 		return new NullOp;
 
-	Range *r = getRange(s);
-
-	while (s.len > 0)
-		r = doUnion(r, getRange(s));
-
-	return new MatchOp(r);
+	Range *r = mkRange(s);
+	return zFlag
+		? UTF8Range(r)
+		: new MatchOp(r);
 }
 
-RegExp * Scanner::getAnyRE() const
+Range * Scanner::getAnyRange() const
 {
 	if (eFlag)
 	{
-		return ranToRE(SubStr("[\\000-\\377]"));
+		SubStr s("\\x00-\\xFF");
+		return getRange(s);
 	}
 	else
-	{
-		return new MatchOp(new Range(0, nRealChars));
-	}
+		return new Range(0, nRealChars);
 }
 
 RegExp * Scanner::invToRE(SubStr s) const
 {
-	s.len--;
-	s.str++;
-	
-	RegExp * any = getAnyRE();
+	s.len -= 3;
+	s.str += 2;
 
-	if (s.len <= 2)
-	{
-		return any;
-	}
+	Range * any = getAnyRange();
 
-	RegExp * ran = ranToRE(s);
-	RegExp * inv = mkDiff(any, ran);
-	
-	delete ran;
-	delete any;
-	
-	return inv;
+	Range * r = s.len <= 2
+		? any
+		: doDiff(any, mkRange (s));
+
+	return zFlag
+		? UTF8Range(r)
+		: new MatchOp(r);
 }
 
 RegExp * Scanner::mkDot() const
 {
-	RegExp * any = getAnyRE();
-	RegExp * ran = matchChar('\n');
-	RegExp * inv = mkDiff(any, ran);
-	
-	delete ran;
-	delete any;
-	
-	return inv;
+	Range * any = getAnyRange();
+	Range * ran = new Range('\n', '\n' + 1);
+	Range * inv = doDiff(any, ran);
+	return new MatchOp(inv);
 }
 
 const char *RuleOp::type = "RuleOp";
 
-RuleOp::RuleOp(RegExp *e, RegExp *c, Token *t, uint a)
+RuleOp::RuleOp(RegExp *e, RegExp *c, Token *t, uint a, bool b)
 	: exp(e)
 	, ctx(c)
 	, ins(NULL)
@@ -910,13 +1046,13 @@ RuleOp::RuleOp(RegExp *e, RegExp *c, Token *t, uint a)
 	, code(t)
 	, line(0)
 {
-	;
+	must_recompile = b;
 }
 
 RuleOp* RuleOp::copy(uint a) const
 {
 	Token *token = new Token(*code);
-	return new RuleOp(exp, ctx, token, a);
+	return new RuleOp(exp, ctx, token, a, must_recompile);
 }
 
 void RuleOp::calcSize(Char *rep)
@@ -926,21 +1062,42 @@ void RuleOp::calcSize(Char *rep)
 	size = exp->size + (ctx->size ? ctx->size + 2 : 1);
 }
 
-void RuleOp::compile(Char *rep, Ins *i)
+uint RuleOp::compile(Char *rep, Ins *i)
 {
-	ins = i;
-	exp->compile(rep, &i[0]);
-	i += exp->size;
-	if (ctx->size)
+	if (ins_cache)
+		return compile_goto(ins_cache, i);
+	else
 	{
-		i->i.tag = CTXT;
-		i->i.link = &i[1];
-		i++;
-		ctx->compile(rep, &i[0]);
-		i += ctx->size;
+		ins_cache = i;
+
+		i += exp->compile(rep, &i[0]);
+		if (ctx->size)
+		{
+			i->i.tag = CTXT;
+			i->i.link = &i[1];
+			++i;
+			i += ctx->compile(rep, &i[0]);
+		}
+		i->i.tag = TERM;
+		i->i.link = this;
+		++i;
+
+		const uint sz = i - ins_cache;
+		if (must_recompile)
+			uncompile();
+
+		return sz;
 	}
-	i->i.tag = TERM;
-	i->i.link = this;
+}
+
+void RuleOp::uncompile()
+{
+	if (ins_cache)
+	{
+		exp->uncompile();
+		ctx->uncompile();
+		ins_cache = NULL;
+	}
 }
 
 void RuleOp::split(CharSet &s)
@@ -1044,20 +1201,20 @@ smart_ptr<DFA> genCode(RegExp *re)
 	re->calcSize(rep);
 	Ins *ins = new Ins[re->size + 1];
 	memset(ins, 0, (re->size + 1)*sizeof(Ins));
-	re->compile(rep, ins);
-	Ins *eoi = &ins[re->size];
+	const uint size = re->compile(rep, ins);
+	Ins *eoi = &ins[size];
 	eoi->i.tag = GOTO;
 	eoi->i.link = eoi;
 
 	optimize(ins);
 
 	/*
-	for (const Ins *inst = &ins[0]; inst < &ins[re->size]; ) {
+	for (const Ins *inst = &ins[0]; inst < &ins[size]; ) {
 		inst = showIns(std::cout, *inst, ins[0]);
 	}
 	*/
 
-	for (j = 0; j < re->size;)
+	for (j = 0; j < size;)
 	{
 		unmark(&ins[j]);
 
@@ -1071,7 +1228,7 @@ smart_ptr<DFA> genCode(RegExp *re)
 		}
 	}
 
-	return make_smart_ptr(new DFA(ins, re->size, 0, nRealChars, rep));
+	return make_smart_ptr(new DFA(ins, size, 0, nRealChars, rep));
 }
 
 } // end namespace re2c

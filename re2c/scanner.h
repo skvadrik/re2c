@@ -74,13 +74,15 @@ public:
 	uint unescape(SubStr &s) const;
 	std::string& unescape(SubStr& str_in, std::string& str_out) const;
 
+	Range * mkRange(SubStr &s) const;
 	Range * getRange(SubStr &s) const;
+	RegExp * matchSymbol(uint c) const;
 	RegExp * matchChar(uint c) const;
 	RegExp * strToName(SubStr s) const;
 	RegExp * strToRE(SubStr s) const;
 	RegExp * strToCaseInsensitiveRE(SubStr s) const;
 	RegExp * ranToRE(SubStr s) const;
-	RegExp * getAnyRE() const;
+	Range * getAnyRange() const;
 	RegExp * invToRE(SubStr s) const;
 	RegExp * mkDot() const;
 };
@@ -124,7 +126,7 @@ inline SubStr Scanner::token(uint start, uint len) const
 
 inline uint Scanner::xlat(uint c) const
 {
-	return re2c::wFlag ? c : re2c::xlat[c & 0xFF];
+	return (wFlag || zFlag) ? c : re2c::xlat[c & 0xFF];
 }
 
 } // end namespace re2c

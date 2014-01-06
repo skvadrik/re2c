@@ -81,11 +81,12 @@ void context_none(CondList *clist)
 void context_rule(CondList *clist, RegExp *expr, RegExp *look, Str *newcond, Token *code)
 {
 	context_check(clist);
+	const bool must_recompile = clist->size() > 1;
 	for(CondList::const_iterator it = clist->begin(); it != clist->end(); ++it)
 	{
 		//Str *condcpy = newcond ? new Str(*newcond) : newcond;
 		Token *token = new Token(code, sourceFileInfo, newcond);//condcpy);
-		RuleOp *rule = new RuleOp(expr, look, token, accept++);
+		RuleOp *rule = new RuleOp(expr, look, token, accept++, must_recompile);
 
 		RegExpMap::iterator itRE = specMap.find(*it);
 
@@ -175,6 +176,7 @@ decl:
 			{
 				in->fatal("sym already defined");
 			}
+			$3->must_recompile = true;
 			$1->re = $3;
 		}
 	|	FID expr
@@ -183,6 +185,7 @@ decl:
 			{
 				in->fatal("sym already defined");
 			}
+			$2->must_recompile = true;
 			$1->re = $2;
 		}
 	|	ID '=' expr '/'
@@ -213,7 +216,7 @@ rule:
 			{
 				in->fatal("condition or '<*>' required when using -c switch");
 			}
-			$$ = new RuleOp($1, $2, $3, accept++);
+			$$ = new RuleOp($1, $2, $3, accept++, false);
 			spec = spec? mkAlt(spec, $$) : $$;
 		}
 	|	'<' cond '>' expr look newcond CODE
@@ -242,7 +245,7 @@ rule:
 			Token *token = new Token($7, $7->source, $7->line, $6);
 			delete $7;
 			delete $6;
-			specStar.push_back(new RuleOp($4, $5, token, accept++));
+			specStar.push_back(new RuleOp($4, $5, token, accept++, true));
 		}
 	|	'<' STAR '>' expr look ':' newcond
 		{
@@ -250,7 +253,7 @@ rule:
 			context_check(NULL);
 			Token *token = new Token(NULL, sourceFileInfo, $7);
 			delete $7;
-			specStar.push_back(new RuleOp($4, $5, token, accept++));
+			specStar.push_back(new RuleOp($4, $5, token, accept++, true));
 		}
 	|	'<' STAR '>' look newcond CODE
 		{
@@ -273,7 +276,7 @@ rule:
 			Token *token = new Token($3, $3->source, $3->line, $2);
 			delete $2;
 			delete $3;
-			$$ = specNone = new RuleOp(new NullOp(), new NullOp(), token, accept++);
+			$$ = specNone = new RuleOp(new NullOp(), new NullOp(), token, accept++, false);
 		}
 	|	NOCOND ':' newcond
 		{
@@ -285,7 +288,7 @@ rule:
 			}
 			Token *token = new Token(NULL, sourceFileInfo, $3);
 			delete $3;
-			$$ = specNone = new RuleOp(new NullOp(), new NullOp(), token, accept++);
+			$$ = specNone = new RuleOp(new NullOp(), new NullOp(), token, accept++, false);
 		}
 	|	SETUP STAR '>' CODE
 		{

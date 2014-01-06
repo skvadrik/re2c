@@ -129,11 +129,35 @@ class RegExp
 
 public:
 	uint	size;
-	
+
+	/*
+	 * There're several different cases when the same regexp
+	 * can be used multiple times:
+	 * 	1) named definitions, e.g. digit = [0-9];
+	 * 	2) counted repetition, e.g. "a"{3}, "a"{3,}, "a"{3,5}
+	 * 	3) multiple DFA's sharing the same regexp , e.g. <c1, c2> "abc" { }
+	 * 	3) common suffixes, e.g. suffix [\x80-\xBF] in UTF-8 ranges
+	 * In cases 1-3, regexp must be recompiled each time it's reused.
+	 * In case 4, regexp should be compiled only once, and instructions
+	 * should be shared in order to reduce space.
+	 *
+	 * Note: if regexp must always be recompiled, it doesn't imply that
+	 * parts of this regexp must always be recompiled. It only forces
+	 * the compilation function to traverse the regexp after compilation
+	 * and reset compilation cache for each sub-regexp. E.g., for a regexp
+	 * [^]{3} in UTF-8 mode, each of sub-regexps [^] will have common suffix
+	 * [\x80-\xBF] factored out, but they won't share instructions.
+	 */
+	Ins*	ins_cache; /* if non-NULL, points to compiled instructions */
+	bool	must_recompile;
+
 	static free_list<RegExp*> vFreeList;
 
 public:
-	RegExp() : size(0)
+	RegExp()
+		: size(0)
+		, ins_cache(NULL)
+		, must_recompile(false)
 	{
 		vFreeList.insert(this);
 	}
@@ -152,7 +176,8 @@ public:
 	virtual void split(CharSet&) = 0;
 	virtual void calcSize(Char*) = 0;
 	virtual uint fixedLength();
-	virtual void compile(Char*, Ins*) = 0;
+	virtual uint compile(Char*, Ins*) = 0;
+	virtual void uncompile() = 0;
 	virtual void display(std::ostream&) const = 0;
 	friend std::ostream& operator<<(std::ostream&, const RegExp&);
 	friend std::ostream& operator<<(std::ostream&, const RegExp*);
@@ -184,7 +209,8 @@ public:
 	void split(CharSet&);
 	void calcSize(Char*);
 	uint fixedLength();
-	void compile(Char*, Ins*);
+	uint compile(Char*, Ins*);
+	void uncompile();
 	void display(std::ostream &o) const
 	{
 		o << "_";
@@ -211,7 +237,8 @@ public:
 	void split(CharSet&);
 	void calcSize(Char*);
 	uint fixedLength();
-	void compile(Char*, Ins*);
+	uint compile(Char*, Ins*);
+	void uncompile();
 	void display(std::ostream&) const;
 
 #ifdef PEDANTIC
@@ -246,7 +273,7 @@ public:
 	uint     line;
 
 public:
-	RuleOp(RegExp*, RegExp*, Token*, uint);
+	RuleOp(RegExp*, RegExp*, Token*, uint, bool must_recompile);
 
 	~RuleOp()
 	{
@@ -260,7 +287,8 @@ public:
 
 	void split(CharSet&);
 	void calcSize(Char*);
-	void compile(Char*, Ins*);
+	uint compile(Char*, Ins*);
+	void uncompile();
 	void display(std::ostream &o) const
 	{
 		o << exp << "/" << ctx << ";";
@@ -305,6 +333,7 @@ public:
 	const RuleOp& op;
 };
 
+RegExp *doAlt(RegExp*, RegExp*);
 RegExp *mkAlt(RegExp*, RegExp*);
 
 class AltOp: public RegExp
@@ -331,7 +360,8 @@ public:
 	void split(CharSet&);
 	void calcSize(Char*);
 	uint fixedLength();
-	void compile(Char*, Ins*);
+	uint compile(Char*, Ins*);
+	void uncompile();
 	void display(std::ostream &o) const
 	{
 		o << exp1 << "|" << exp2;
@@ -354,6 +384,9 @@ private:
 	}
 #endif
 };
+
+RegExp *doCat(RegExp*, RegExp*);
+RegExp *mkCat(RegExp*, RegExp*);
 
 class CatOp: public RegExp
 {
@@ -379,7 +412,8 @@ public:
 	void split(CharSet&);
 	void calcSize(Char*);
 	uint fixedLength();
-	void compile(Char*, Ins*);
+	uint compile(Char*, Ins*);
+	void uncompile();
 	void display(std::ostream &o) const
 	{
 		o << exp1 << exp2;
@@ -423,7 +457,8 @@ public:
 
 	void split(CharSet&);
 	void calcSize(Char*);
-	void compile(Char*, Ins*);
+	uint compile(Char*, Ins*);
+	void uncompile();
 	void display(std::ostream &o) const
 	{
 		o << exp << "+";
@@ -461,6 +496,7 @@ public:
 		, min(lb)
 		, max(ub)
 	{
+		exp->must_recompile = true;
 	}
 
 	const char *typeOf()
@@ -470,7 +506,8 @@ public:
 
 	void split(CharSet&);
 	void calcSize(Char*);
-	void compile(Char*, Ins*);
+	uint compile(Char*, Ins*);
+	void uncompile();
 	void display(std::ostream &o) const
 	{
 		o << exp << "+";
