@@ -2296,9 +2296,7 @@ void parse(Scanner& i, std::ostream& o, std::ostream* h)
 	o << " */\n";
 	o << sourceFileInfo;
 	
-	bool uFlagOld = uFlag;
-	bool wFlagOld = wFlag;
-	uint nRealCharsOld = nRealChars;
+	Enc encodingOld = encoding;
 	
 	while ((parseMode = i.echo()) != Scanner::Stop)
 	{
@@ -2334,20 +2332,7 @@ void parse(Scanner& i, std::ostream& o, std::ostream* h)
 		in->set_in_parse(false);
 		if (rFlag && parseMode == Scanner::Reuse)
 		{
-			uint nRealCharsLast = nRealChars;
-			if (uFlag)
-			{
-				nRealChars = 0x110000; // 17 times w-Flag
-			}
-			else if (wFlag)
-			{
-				nRealChars = (1<<16); // 0x10000
-			}
-			else
-			{
-				nRealChars = (1<<8); // 0x100
-			}
-			if (foundRules || nRealCharsLast != nRealChars)
+			if (foundRules || encoding != encodingOld)
 			{
 				// Re-parse rules
 				parseMode = Scanner::Parse;
@@ -2368,9 +2353,7 @@ void parse(Scanner& i, std::ostream& o, std::ostream* h)
 				yyparse();
 				in->set_in_parse(false);
 			}
-			uFlagOld = uFlag;
-			wFlagOld = wFlag;
-			nRealCharsOld = nRealChars;
+			encodingOld = encoding;
 		}
 		if (cFlag)
 		{
@@ -2461,9 +2444,7 @@ void parse(Scanner& i, std::ostream& o, std::ostream* h)
 		}
 		o << sourceFileInfo;
 		/* restore original char handling mode*/
-		uFlag = uFlagOld;
-		wFlag = wFlagOld;
-		nRealChars = nRealCharsOld;
+		encoding = encodingOld;
 	}
 
 	if (cFlag)

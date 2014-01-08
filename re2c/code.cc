@@ -917,9 +917,9 @@ static bool genCases(std::ostream &o, uint ind, uint lb, Span *s, bool &newLine,
 					o << indent(ind) << "case ";
 					prtChOrHex(o, lb);
 					o << ":";
-					if (dFlag && eFlag && lb < 256u && isprint(talx[lb]))
+					if (dFlag && encoding.isEBCDIC() && lb < 256u && isprint(encoding.talx(lb)))
 					{
-						o << " /* " << std::string(1, talx[lb]) << " */";
+						o << " /* " << std::string(1, encoding.talx(lb)) << " */";
 					}
 				}
 				newLine = false;
@@ -1155,7 +1155,7 @@ void Go::genCpGoto(std::ostream &o, uint ind, const State *from, const State *ne
 	}
 
 	readCh = false;
-	if (wFlag)
+	if (encoding.szChar() > 1)
 	{
 		o << indent(ind) << "if (" << sYych <<" & ~0xFF) {\n";
 		genBase(o, ind+1, from, next, readCh, 1);
@@ -1199,7 +1199,7 @@ void Go::genCpGoto(std::ostream &o, uint ind, const State *from, const State *ne
 
 void Go::genGoto(std::ostream &o, uint ind, const State *from, const State *next, bool &readCh)
 {
-	if ((gFlag || wFlag) && wSpans == ~0u)
+	if ((gFlag || (encoding.szChar() > 1)) && wSpans == ~0u)
 	{
 		uint nBitmaps = 0;
 		std::set<uint> vTargets;
@@ -1212,7 +1212,7 @@ void Go::genGoto(std::ostream &o, uint ind, const State *from, const State *next
 			{
 				wSpans++;
 			}
-			if (span[i].ub < 0x100 || !wFlag)
+			if (span[i].ub < 0x100 || (encoding.szChar() <= 1))
 			{
 				lSpans++;
 
@@ -1272,7 +1272,7 @@ void Go::genGoto(std::ostream &o, uint ind, const State *from, const State *next
 						sYych = mapCodeName["yych"];
 					}
 					readCh = false;
-					if (wFlag)
+					if (encoding.szChar() > 1)
 					{
 						o << indent(ind) << "if (" << sYych << " & ~0xFF) {\n";
 						sYych = mapCodeName["yych"];
@@ -2260,7 +2260,10 @@ void Scanner::config(const Str& cfg, int num)
 		{
 			fatalf("cannot use configuration name '%s' without -r flag", cfg.to_string().c_str());
 		}
-		uFlag = num != 0;
+		if (num != 0)
+			encoding.setUTF32();
+		else
+			encoding.unsetUTF32();
 	}
 	else if (cfg.to_string() == "flags:w")
 	{
@@ -2268,7 +2271,21 @@ void Scanner::config(const Str& cfg, int num)
 		{
 			fatalf("cannot use configuration name '%s' without -r flag", cfg.to_string().c_str());
 		}
-		wFlag = num != 0;
+		if (num != 0)
+			encoding.setUTF16();
+		else
+			encoding.unsetUTF16();
+	}
+	else if (cfg.to_string() == "flags:z")
+	{
+		if (!rFlag)
+		{
+			fatalf("cannot use configuration name '%s' without -r flag", cfg.to_string().c_str());
+		}
+		if (num != 0)
+			encoding.setUTF8();
+		else
+			encoding.unsetUTF8();
 	}
 	else
 	{

@@ -13,6 +13,7 @@
 #include "globals.h"
 #include "parser.h"
 #include "dfa.h"
+#include "enc.h"
 #include "mbo_getopt.h"
 
 namespace re2c
@@ -26,7 +27,6 @@ bool bFlag = false;
 bool cFlag = false;
 bool dFlag = false;
 bool DFlag = false;
-bool eFlag = false;
 bool fFlag = false;
 bool FFlag = false;
 bool gFlag = false;
@@ -34,9 +34,6 @@ bool iFlag = false;
 bool rFlag = false;
 bool sFlag = false;
 bool tFlag = false;
-bool uFlag = false;
-bool wFlag = false;
-bool zFlag = false;
 
 bool bNoGenerationDate = false;
 
@@ -89,7 +86,7 @@ bool bCaseInsensitive = false;
 bool bCaseInverted = false;
 bool bTypesDone = false;
 
-uint nRealChars = 256;
+Enc encoding;
 
 uint next_fill_index = 0;
 uint last_fill_index = 0;
@@ -236,9 +233,7 @@ int main(int argc, char *argv[])
 			break;
 
 			case 'e':
-			xlat = asc2ebc;
-			talx = ebc2asc;
-			eFlag = true;
+			encoding.setEBCDIC();
 			break;
 
 			case 'd':
@@ -316,20 +311,17 @@ int main(int argc, char *argv[])
 			}
 			
 			case 'w':
-			nRealChars = (1<<16); /* 0x10000 */
 			sFlag = true;
-			wFlag = true;
+			encoding.setUTF16();
 			break;
 
 			case 'u':
-			nRealChars = 0x110000; /* 17 times w-Flag */
 			sFlag = true;
-			uFlag = true;
+			encoding.setUTF32();
 			break;
 
 			case 'z':
-			nRealChars = 0x110000; /* 17 times w-Flag */
-			zFlag = true;
+			encoding.setUTF8();
 			break;
 	  
 			default:
@@ -362,19 +354,15 @@ int main(int argc, char *argv[])
 		return 2;
 	}
 
-	if (rFlag && eFlag)
+	if (rFlag && encoding.isEBCDIC())
 	{
 		std::cerr << "re2c: error: Cannot combine -e with -r switch\n";
 		return 2;
 	}
-	if (wFlag && eFlag)
+
+	if (encoding.isBad())
 	{
-		std::cerr << "re2c: error: Cannot combine -e with -w or -u switch\n";
-		return 2;
-	}
-	if (wFlag && uFlag)
-	{
-		std::cerr << "re2c: error: Cannot combine -u with -w switch\n";
+		std::cerr << "re2c: error: Cannot combine -z with -w or -u or -e switch\n";
 		return 2;
 	}
 
@@ -382,11 +370,6 @@ int main(int argc, char *argv[])
 	{
 		std::cerr << "re2c: error: Cannot combine -D with -b, -d  or -s switches\n";
 		return 2;
-	}
-
-	if (uFlag)
-	{
-		wFlag = true;
 	}
 
 	if (argc == opt_ind + 1)

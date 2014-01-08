@@ -69,7 +69,6 @@ public:
 	SubStr token(uint start, uint len) const;
 	Str raw_token(std::string enclosure) const;
 	virtual uint get_line() const;	
-	uint xlat(uint c) const;
 
 	uint unescape(SubStr &s) const;
 	std::string& unescape(SubStr& str_in, std::string& str_out) const;
@@ -82,7 +81,6 @@ public:
 	RegExp * strToRE(SubStr s) const;
 	RegExp * strToCaseInsensitiveRE(SubStr s) const;
 	RegExp * ranToRE(SubStr s) const;
-	Range * getAnyRange() const;
 	RegExp * invToRE(SubStr s) const;
 	RegExp * mkDot() const;
 };
@@ -122,11 +120,6 @@ inline SubStr Scanner::token(uint start, uint len) const
 {
 	check_token_length(tok + start, len);
 	return SubStr(tok + start, len);
-}
-
-inline uint Scanner::xlat(uint c) const
-{
-	return (wFlag || zFlag) ? c : re2c::xlat[c & 0xFF];
 }
 
 } // end namespace re2c

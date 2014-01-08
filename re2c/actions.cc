@@ -713,10 +713,10 @@ uint Scanner::unescape(SubStr &s) const
 				if (s.str[1] == '0')
 				{
 					l++;
-					if (s.str[2] == '0' || (s.str[2] == '1' && (uFlag || zFlag)))
+					if (s.str[2] == '0' || (s.str[2] == '1' && (encoding.szSymbol() == 4)))
 					{
 						l++;
-						if (uFlag || zFlag) {
+						if (encoding.szSymbol() == 4) {
 							const char *u3 = strchr(hex, tolower(s.str[2]));
 							const char *u4 = strchr(hex, tolower(s.str[3]));
 							if (u3 && u4)
@@ -780,7 +780,7 @@ uint Scanner::unescape(SubStr &s) const
 				       + (uint)((p4 - hex))
 				       + ucb;
 	
-				if (v >= nRealChars)
+				if (v >= encoding.nSymbols())
 				{
 					fatal(s.ofs(),
 						c == 'X'
@@ -858,7 +858,7 @@ std::string& Scanner::unescape(SubStr& str_in, std::string& str_out) const
 
 Range * Scanner::getRange(SubStr &s) const
 {
-	uint lb = unescape(s), ub, xlb, xub, c;
+	uint lb = unescape(s), ub, xlb, xub;
 
 	if (s.len < 2 || *s.str != '-')
 	{
@@ -869,45 +869,43 @@ Range * Scanner::getRange(SubStr &s) const
 		s.len--;
 		s.str++;
 		ub = unescape(s);
-
 		if (ub < lb)
 		{
 			uint tmp = lb;
 			lb = ub;
 			ub = tmp;
 		}
-		
-		xlb = xlat(lb);
-		xub = xlat(ub);
-		
-		for(c = lb; c <= ub; c++)
-		{
-			if (!(xlb <= xlat(c) && xlat(c) <= xub))
-			{
-				/* range doesn't work */
-				Range * r = new Range(xlb, xlb + 1);
-				for (c = lb + 1; c <= ub; c++)
-				{
-					r = doUnion(r, new Range(xlat(c), xlat(c) + 1));
-				}
-				return r;
-			}
-		}
 	}
 
-	return new Range(xlat(lb), xlat(ub) + 1);
+	xlb = encoding.xlat(lb);
+	xub = encoding.xlat(ub);
+
+	if (encoding.isEBCDIC())
+	{
+		Range * r = new Range(xlb, xlb + 1);
+		for (uint c = lb + 1; c <= ub; ++c)
+		{
+			uint xc = encoding.xlat(c);
+			r = doUnion(r, new Range(xc, xc + 1));
+		}
+		return r;
+	}
+	else
+	{
+		return new Range(xlb, xub + 1);
+	}
 }
 
 RegExp * Scanner::matchChar(uint c) const
 {
-	uint xc = xlat(c);
+	uint xc = encoding.xlat(c);
 	return new MatchOp(new Range(xc, xc + 1));
 }
 
 RegExp * Scanner::matchSymbol(uint c) const
 {
 	RegExp *re = NULL;
-	if (zFlag)
+	if (encoding.isUTF8())
 	{
 		uchar bytes[4];
 		const int bytes_count = utf8::rune_to_bytes(bytes, c);
@@ -996,20 +994,9 @@ RegExp * Scanner::ranToRE(SubStr s) const
 		return new NullOp;
 
 	Range *r = mkRange(s);
-	return zFlag
+	return encoding.isUTF8()
 		? UTF8Range(r)
 		: new MatchOp(r);
-}
-
-Range * Scanner::getAnyRange() const
-{
-	if (eFlag)
-	{
-		SubStr s("\\x00-\\xFF");
-		return getRange(s);
-	}
-	else
-		return new Range(0, nRealChars);
 }
 
 RegExp * Scanner::invToRE(SubStr s) const
@@ -1017,20 +1004,20 @@ RegExp * Scanner::invToRE(SubStr s) const
 	s.len -= 3;
 	s.str += 2;
 
-	Range * any = getAnyRange();
+	Range * any = new Range(0, encoding.nSymbols());
 
 	Range * r = s.len <= 2
 		? any
 		: doDiff(any, mkRange (s));
 
-	return zFlag
+	return encoding.isUTF8()
 		? UTF8Range(r)
 		: new MatchOp(r);
 }
 
 RegExp * Scanner::mkDot() const
 {
-	Range * any = getAnyRange();
+	Range * any = new Range(0, encoding.nSymbols());
 	Range * ran = new Range('\n', '\n' + 1);
 	Range * inv = doDiff(any, ran);
 	return new MatchOp(inv);
@@ -1153,19 +1140,19 @@ CharSet::CharSet()
 	: fix(0)
 	, freeHead(0)
 	, freeTail(0)
-	, rep(new CharPtr[nRealChars])
-	, ptn(new CharPtn[nRealChars])
+	, rep(new CharPtr[encoding.nChars()])
+	, ptn(new CharPtn[encoding.nChars()])
 {
-	for (uint j = 0; j < nRealChars; ++j)
+	for (uint j = 0; j < encoding.nChars(); ++j)
 	{
 		rep[j] = &ptn[0];
-		ptn[j].nxt = &ptn[j + 1]; /* wrong for j=nRealChars but will be corrected below */
+		ptn[j].nxt = &ptn[j + 1]; /* wrong for j=encoding.nChars() but will be corrected below */
 		ptn[j].card = 0;
 	}
 
 	freeHead = &ptn[1];
-	*(freeTail = &ptn[nRealChars - 1].nxt) = NULL;
-	ptn[0].card = nRealChars;
+	*(freeTail = &ptn[encoding.nChars() - 1].nxt) = NULL;
+	ptn[0].card = encoding.nChars();
 	ptn[0].nxt = NULL;
 }
 	
@@ -1182,15 +1169,15 @@ smart_ptr<DFA> genCode(RegExp *re)
 
 	re->split(cs);
 	/*
-	    for(uint k = 0; k < nChars;){
-		for(j = k; ++k < nRealChars && cs.rep[k] == cs.rep[j];);
+	    for(uint k = 0; k < encoding.nChars();){
+		for(j = k; ++k < encoding.nChars() && cs.rep[k] == cs.rep[j];);
 		printSpan(cerr, j, k);
 		cerr << "\t" << cs.rep[j] - &cs.ptn[0] << endl;
 	    }
 	*/
-	Char *rep = new Char[nRealChars];
+	Char *rep = new Char[encoding.nChars()];
 
-	for (j = 0; j < nRealChars; ++j)
+	for (j = 0; j < encoding.nChars(); ++j)
 	{
 		if (!cs.rep[j]->nxt)
 			cs.rep[j]->nxt = &cs.ptn[j];
@@ -1228,7 +1215,7 @@ smart_ptr<DFA> genCode(RegExp *re)
 		}
 	}
 
-	return make_smart_ptr(new DFA(ins, size, 0, nRealChars, rep));
+	return make_smart_ptr(new DFA(ins, size, 0, encoding.nChars(), rep));
 }
 
 } // end namespace re2c

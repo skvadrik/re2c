@@ -8,6 +8,7 @@
 #include <string>
 #include "stream_lc.h"
 #include "code_names.h"
+#include "enc.h"
 
 namespace re2c
 {
@@ -22,7 +23,6 @@ extern bool bFlag;
 extern bool cFlag;
 extern bool dFlag;
 extern bool DFlag;
-extern bool eFlag;
 extern bool fFlag;
 extern bool FFlag;
 extern bool gFlag;
@@ -30,9 +30,6 @@ extern bool iFlag;
 extern bool rFlag;
 extern bool sFlag;
 extern bool tFlag;
-extern bool uFlag;
-extern bool wFlag;
-extern bool zFlag;
 
 extern bool bNoGenerationDate;
 
@@ -89,16 +86,13 @@ extern const uint asc2asc[256];
 extern const uint asc2ebc[256];
 extern const uint ebc2asc[256];
 
-extern const uint *xlat;
-extern const uint *talx;
-
 extern uint next_fill_index;
 extern uint last_fill_index;
 extern std::set<uint> vUsedLabels;
 extern CodeNames mapCodeName;
 extern std::string typesInline;
 
-extern uint nRealChars;
+extern Enc encoding;
 
 extern char octCh(uint c);
 extern char hexCh(uint c);

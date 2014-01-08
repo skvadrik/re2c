@@ -10,13 +10,7 @@ namespace re2c
 
 void prtChOrHex(std::ostream& o, uint c)
 {
-	if (eFlag)
-	{
-		if (DFlag) o << '"';
-		prtHex(o, c);
-		if (DFlag) o << '"';
-	}
-	else if ((c < 256u) && (isprint(c) || isspace(c)))
+	if (!encoding.isEBCDIC() && (c < 256u) && (isprint(c) || isspace(c)))
 	{
 		o << (DFlag ? '"' : '\'');
 		prtCh(o, c);
@@ -34,7 +28,7 @@ void prtHex(std::ostream& o, uint c)
 {
 	int oc = (int)(c);
 
-	if (re2c::uFlag)
+	if (encoding.szChar() == 4)
 	{
 		o << "0x"
 		  << hexCh(oc >> 28)
@@ -46,7 +40,7 @@ void prtHex(std::ostream& o, uint c)
 		  << hexCh(oc >>  4)
 		  << hexCh(oc);
 	}
-	else if (re2c::wFlag)
+	else if (encoding.szChar() == 2)
 	{
 		o << "0x"
 		  << hexCh(oc >> 12)
@@ -64,7 +58,7 @@ void prtHex(std::ostream& o, uint c)
 
 void prtCh(std::ostream& o, uint c)
 {
-	if (eFlag)
+	if (encoding.isEBCDIC())
 	{
 		prtHex(o, c);
 		return;
@@ -120,7 +114,7 @@ void prtCh(std::ostream& o, uint c)
 		{
 			o << (char) oc;
 		}
-		else if (re2c::uFlag)
+		else if (encoding.szChar() == 4)
 		{
 			o << "0x"
 			  << hexCh(oc >> 20)
@@ -130,7 +124,7 @@ void prtCh(std::ostream& o, uint c)
 			  << hexCh(oc >>  4)
 			  << hexCh(oc);
 		}
-		else if (re2c::wFlag)
+		else if (encoding.szChar() == 2)
 		{
 			o << "0x"
 			  << hexCh(oc >> 12)
