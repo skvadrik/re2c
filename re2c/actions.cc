@@ -1020,7 +1020,10 @@ RegExp * Scanner::mkDot() const
 	Range * any = new Range(0, encoding.nSymbols());
 	Range * ran = new Range('\n', '\n' + 1);
 	Range * inv = doDiff(any, ran);
-	return new MatchOp(inv);
+
+	return encoding.isUTF8()
+		? UTF8Range(inv)
+		: new MatchOp(inv);
 }
 
 const char *RuleOp::type = "RuleOp";
