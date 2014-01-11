@@ -1006,7 +1006,7 @@ RegExp * Scanner::invToRE(SubStr s) const
 
 	Range * any = new Range(0, encoding.nSymbols());
 
-	Range * r = s.len <= 2
+	Range * r = s.len == 0
 		? any
 		: doDiff(any, mkRange (s));
 
@@ -1018,7 +1018,8 @@ RegExp * Scanner::invToRE(SubStr s) const
 RegExp * Scanner::mkDot() const
 {
 	Range * any = new Range(0, encoding.nSymbols());
-	Range * ran = new Range('\n', '\n' + 1);
+	const uint c = encoding.xlat('\n');
+	Range * ran = new Range(c, c + 1);
 	Range * inv = doDiff(any, ran);
 
 	return encoding.isUTF8()
