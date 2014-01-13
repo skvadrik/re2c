@@ -168,7 +168,7 @@ void context_rule(CondList *clist, RegExp *expr, RegExp *look, Str *newcond, Tok
 		{
 			size_t nIndex = specMap.size() + 1; // 0 is reserved for "0"-spec
 			assert( nIndex < 1u << 31);
-			specMap[*it] = std::make_pair(unsigned( nIndex), rule);
+			specMap[*it] = std::make_pair(int(nIndex), rule);
 		}
 		
 	}
