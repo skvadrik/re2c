@@ -49,8 +49,8 @@ void scan(unsigned int* in)
 {
 /*!use:re2c
 
-re2c:flags:w = 0;
 re2c:flags:u = 1;
+re2c:flags:w = 1;
 
 re2c:define:YYCTYPE  = 'unsigned int';
 re2c:define:YYFILL   = 'fill3';

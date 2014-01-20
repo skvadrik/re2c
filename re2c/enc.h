@@ -8,12 +8,6 @@ namespace re2c {
 class Enc
 {
 	// Supported encodings.
-	//
-	// UTF32_16 mode is necessary for inplace configurations like:
-	//	re2c:flags:u = 1;
-	//	re2c:flags:w = 1;
-	// which are for some strange reason considered valid.
-	// (see test 're2c/test/repeat-07.gir.re' for example)
 	enum type_t
 		{ ASCII    = 0x00000000u
 		, EBCDIC   = 0x00000001u
@@ -101,8 +95,7 @@ inline uint Enc::nSymbols() const
 		case ASCII:	return ASCII_SYMBOLS;
 		case EBCDIC:	return EBCDIC_SYMBOLS;
 		case UTF16:	return UTF16_SYMBOLS;
-		case UTF32:
-		case UTF32_16:	return UTF32_SYMBOLS;
+		case UTF32:	return UTF32_SYMBOLS;
 		case UTF8:	return UTF8_SYMBOLS;
 		default:	return BAD;
 	}
@@ -115,8 +108,7 @@ inline uint Enc::nChars() const
 		case ASCII:	return ASCII_CHARS;
 		case EBCDIC:	return EBCDIC_CHARS;
 		case UTF16:	return UTF16_CHARS;
-		case UTF32:
-		case UTF32_16:	return UTF32_CHARS;
+		case UTF32:	return UTF32_CHARS;
 		case UTF8:	return UTF8_CHARS;
 		default:	return BAD;
 	}
@@ -130,7 +122,6 @@ inline uint Enc::szSymbol() const
 		case EBCDIC:	return 1;
 		case UTF16:	return 2;
 		case UTF32:
-		case UTF32_16:
 		case UTF8:	return 4;
 		default:	return BAD;
 	}
@@ -144,14 +135,12 @@ inline uint Enc::szChar() const
 		case EBCDIC:
 		case UTF8:	return 1;
 		case UTF16:	return 2;
-		case UTF32:
-		case UTF32_16:	return 4;
+		case UTF32:	return 4;
 		default:	return BAD;
 	}
 }
 
-// This test returns 'true' for all valid
-// encoding types except UTF32_16
+// This test returns 'true' for all valid encoding types
 inline bool Enc::isBad() const
 {
 	// test if 'type' is a power of 2
@@ -169,7 +158,6 @@ inline uint Enc::xlat(uint c) const
 		case EBCDIC:	return asc2ebc[c & 0xFF];
 		case UTF16:
 		case UTF32:
-		case UTF32_16:
 		case UTF8:	return c;
 		default:	return BAD;
 	}
@@ -183,7 +171,6 @@ inline uint Enc::talx(uint c) const
 		case EBCDIC:	return ebc2asc[c & 0xFF];
 		case UTF16:
 		case UTF32:
-		case UTF32_16:
 		case UTF8:	return c;
 		default:	return BAD;
 	}

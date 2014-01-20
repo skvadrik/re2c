@@ -362,7 +362,7 @@ int main(int argc, char *argv[])
 
 	if (encoding.isBad())
 	{
-		std::cerr << "re2c: error: Cannot combine -8 with -w or -u or -e switch\n";
+		std::cerr << "re2c: error: Only one of switches -8, -w, -u and -e must be set\n";
 		return 2;
 	}
 

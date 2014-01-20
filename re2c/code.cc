@@ -2264,6 +2264,8 @@ void Scanner::config(const Str& cfg, int num)
 			encoding.setUTF32();
 		else
 			encoding.unsetUTF32();
+		if (encoding.isBad())
+			fatal("Cannot set '-u' switch: please reset '-e', '-w' and '-8' switches at first.\n");
 	}
 	else if (cfg.to_string() == "flags:w")
 	{
@@ -2275,6 +2277,8 @@ void Scanner::config(const Str& cfg, int num)
 			encoding.setUTF16();
 		else
 			encoding.unsetUTF16();
+		if (encoding.isBad())
+			fatal("Cannot set '-w' switch: please reset '-e', '-u' and '-8' switches at first.\n");
 	}
 	else if (cfg.to_string() == "flags:8")
 	{
@@ -2286,6 +2290,8 @@ void Scanner::config(const Str& cfg, int num)
 			encoding.setUTF8();
 		else
 			encoding.unsetUTF8();
+		if (encoding.isBad())
+			fatal("Cannot set '-8' switch: please reset '-e', '-w' and '-u' switches at first.\n");
 	}
 	else
 	{
