@@ -177,7 +177,7 @@ public:
 	virtual void calcSize(Char*) = 0;
 	virtual uint fixedLength();
 	virtual uint compile(Char*, Ins*) = 0;
-	virtual void uncompile() = 0;
+	virtual void decompile() = 0;
 	virtual void display(std::ostream&) const = 0;
 	friend std::ostream& operator<<(std::ostream&, const RegExp&);
 	friend std::ostream& operator<<(std::ostream&, const RegExp*);
@@ -210,7 +210,7 @@ public:
 	void calcSize(Char*);
 	uint fixedLength();
 	uint compile(Char*, Ins*);
-	void uncompile();
+	void decompile();
 	void display(std::ostream &o) const
 	{
 		o << "_";
@@ -238,7 +238,7 @@ public:
 	void calcSize(Char*);
 	uint fixedLength();
 	uint compile(Char*, Ins*);
-	void uncompile();
+	void decompile();
 	void display(std::ostream&) const;
 
 #ifdef PEDANTIC
@@ -288,7 +288,7 @@ public:
 	void split(CharSet&);
 	void calcSize(Char*);
 	uint compile(Char*, Ins*);
-	void uncompile();
+	void decompile();
 	void display(std::ostream &o) const
 	{
 		o << exp << "/" << ctx << ";";
@@ -361,7 +361,7 @@ public:
 	void calcSize(Char*);
 	uint fixedLength();
 	uint compile(Char*, Ins*);
-	void uncompile();
+	void decompile();
 	void display(std::ostream &o) const
 	{
 		o << exp1 << "|" << exp2;
@@ -413,7 +413,7 @@ public:
 	void calcSize(Char*);
 	uint fixedLength();
 	uint compile(Char*, Ins*);
-	void uncompile();
+	void decompile();
 	void display(std::ostream &o) const
 	{
 		o << exp1 << exp2;
@@ -458,7 +458,7 @@ public:
 	void split(CharSet&);
 	void calcSize(Char*);
 	uint compile(Char*, Ins*);
-	void uncompile();
+	void decompile();
 	void display(std::ostream &o) const
 	{
 		o << exp << "+";
@@ -507,7 +507,7 @@ public:
 	void split(CharSet&);
 	void calcSize(Char*);
 	uint compile(Char*, Ins*);
-	void uncompile();
+	void decompile();
 	void display(std::ostream &o) const
 	{
 		o << exp << "+";

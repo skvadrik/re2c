@@ -108,7 +108,7 @@ uint NullOp::compile(Char*, Ins*)
 	return 0;
 }
 
-void NullOp::uncompile()
+void NullOp::decompile()
 {
 	;
 }
@@ -303,13 +303,13 @@ uint MatchOp::compile(Char *rep, Ins *i)
 		}
 
 		if (must_recompile)
-			uncompile();
+			decompile();
 
 		return size;
 	}
 }
 
-void MatchOp::uncompile()
+void MatchOp::decompile()
 {
 	ins_cache = NULL;
 }
@@ -457,18 +457,18 @@ uint AltOp::compile(Char *rep, Ins *i)
 		j->i.link = &j[sz2 + 1];
 
 		if (must_recompile)
-			uncompile();
+			decompile();
 
 		return sz1 + sz2 + 2;
 	}
 }
 
-void AltOp::uncompile()
+void AltOp::decompile()
 {
 	if (ins_cache)
 	{
-		exp1->uncompile();
-		exp2->uncompile();
+		exp1->decompile();
+		exp2->decompile();
 		ins_cache = NULL;
 	}
 }
@@ -511,18 +511,18 @@ uint CatOp::compile(Char *rep, Ins *i)
 		const uint sz2 = exp2->compile(rep, &i[sz1]);
 
 		if (must_recompile)
-			uncompile();
+			decompile();
 
 		return sz1 + sz2;
 	}
 }
 
-void CatOp::uncompile()
+void CatOp::decompile()
 {
 	if (ins_cache)
 	{
-		exp1->uncompile();
-		exp2->uncompile();
+		exp1->decompile();
+		exp2->decompile();
 		ins_cache = NULL;
 	}
 }
@@ -556,17 +556,17 @@ uint CloseOp::compile(Char *rep, Ins *i)
 
 		const uint sz = i - ins_cache;
 		if (must_recompile)
-			uncompile();
+			decompile();
 
 		return sz;
 	}
 }
 
-void CloseOp::uncompile()
+void CloseOp::decompile()
 {
 	if (ins_cache)
 	{
-		exp->uncompile();
+		exp->decompile();
 		ins_cache = NULL;
 	}
 }
@@ -622,17 +622,17 @@ uint CloseVOp::compile(Char *rep, Ins *i)
 
 		const uint sz = i - ins_cache;
 		if (must_recompile)
-			uncompile();
+			decompile();
 
 		return sz;
 	}
 }
 
-void CloseVOp::uncompile()
+void CloseVOp::decompile()
 {
 	if (ins_cache)
 	{
-		exp->uncompile();
+		exp->decompile();
 		ins_cache = NULL;
 	}
 }
@@ -1075,18 +1075,18 @@ uint RuleOp::compile(Char *rep, Ins *i)
 
 		const uint sz = i - ins_cache;
 		if (must_recompile)
-			uncompile();
+			decompile();
 
 		return sz;
 	}
 }
 
-void RuleOp::uncompile()
+void RuleOp::decompile()
 {
 	if (ins_cache)
 	{
-		exp->uncompile();
-		ctx->uncompile();
+		exp->decompile();
+		ctx->decompile();
 		ins_cache = NULL;
 	}
 }
