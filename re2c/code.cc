@@ -132,42 +132,32 @@ void Go::compact()
 	nSpans = i + 1;
 }
 
+/*
+ * Find all spans, that map to the given state. For each of them,
+ * find upper adjacent span, that maps to another state (if such
+ * span exists, otherwize try lower one).
+ * If input contains single span that maps to the given state,
+ * then output contains 0 spans.
+ */
 void Go::unmap(Go *base, const State *x)
 {
-	Span *s = span, *b = base->span, *e = &b[base->nSpans];
-	uint lb = 0;
-	s->ub = 0;
-	s->to = NULL;
-
-	for (; b != e; ++b)
+	nSpans = 0;
+	for (uint i = 0; i < base->nSpans; ++i)
 	{
-		if (b->to == x)
+		if (base->span[i].to != x)
 		{
-			if ((s->ub - lb) > 1)
+			if (nSpans > 0 && span[nSpans - 1].to == base->span[i].to)
+				span[nSpans - 1].ub = base->span[i].ub;
+			else
 			{
-				s->ub = b->ub;
+				span[nSpans].to = base->span[i].to;
+				span[nSpans].ub = base->span[i].ub;
+				++nSpans;
 			}
-		}
-		else
-		{
-			if (b->to != s->to)
-			{
-				if (s->ub)
-				{
-					lb = s->ub;
-					++s;
-				}
-
-				s->to = b->to;
-			}
-
-			s->ub = b->ub;
 		}
 	}
-
-	s->ub = e[ -1].ub;
-	++s;
-	nSpans = s - span;
+	if (nSpans > 0)
+		span[nSpans - 1].ub = base->span[base->nSpans - 1].ub;
 }
 
 static void doGen(const Go *g, const State *s, uint *bm, uint f, uint m)

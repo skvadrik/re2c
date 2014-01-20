@@ -140,7 +140,7 @@ yy18:
 	if (yybm[0+yych] & 128) {
 		goto yy17;
 	}
-	if (yych <= '#') goto yy6;
+	if (yych <= '\n') goto yy6;
 	goto yy15;
 yy19:
 	yych = *++YYCURSOR;

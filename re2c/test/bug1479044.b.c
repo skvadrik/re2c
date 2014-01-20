@@ -292,7 +292,7 @@ yy33:
 	if (yybm[256+yych] & 128) {
 		goto yy32;
 	}
-	if (yych <= 'l') goto yy19;
+	if (yych <= '\n') goto yy19;
 	goto yy35;
 yy34:
 	yych = *++YYCURSOR;
@@ -329,7 +329,7 @@ yy35:
 	if (yybm[256+yych] & 128) {
 		goto yy32;
 	}
-	if (yych <= 'l') goto yy19;
+	if (yych <= '\n') goto yy19;
 yy40:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
@@ -350,7 +350,7 @@ yy42:
 	if (yybm[0+yych] & 2) {
 		goto yy42;
 	}
-	if (yych <= '-') goto yy19;
+	if (yych <= '\n') goto yy19;
 	if (yych >= '/') goto yy40;
 yy44:
 	++YYCURSOR;
@@ -404,7 +404,7 @@ yy48:
 	if (yybm[0+yych] & 2) {
 		goto yy42;
 	}
-	if (yych <= '-') goto yy19;
+	if (yych <= '\n') goto yy19;
 	if (yych <= '.') goto yy44;
 	goto yy40;
 yy49:
@@ -539,7 +539,7 @@ yy55:
 	if (yybm[0+yych] & 2) {
 		goto yy42;
 	}
-	if (yych <= '-') goto yy19;
+	if (yych <= '\n') goto yy19;
 	if (yych >= '/') goto yy40;
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
@@ -594,7 +594,7 @@ yy61:
 	if (yybm[0+yych] & 2) {
 		goto yy42;
 	}
-	if (yych <= '-') goto yy63;
+	if (yych <= '\n') goto yy63;
 	if (yych <= '.') goto yy44;
 	goto yy40;
 yy63:
@@ -628,7 +628,7 @@ yy71:
 	if (yybm[0+yych] & 8) {
 		goto yy71;
 	}
-	if (yych <= ',') goto yy19;
+	if (yych <= '\n') goto yy19;
 yy73:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
@@ -687,7 +687,7 @@ yy82:
 	if (yybm[0+yych] & 32) {
 		goto yy81;
 	}
-	if (yych <= ',') goto yy19;
+	if (yych <= '\n') goto yy19;
 	if (yych >= '.') goto yy85;
 yy83:
 	++YYCURSOR;
@@ -818,7 +818,7 @@ yy92:
 	if (yybm[0+yych] & 32) {
 		goto yy81;
 	}
-	if (yych <= ',') goto yy19;
+	if (yych <= '\n') goto yy19;
 	if (yych <= '-') goto yy83;
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
@@ -879,7 +879,7 @@ yy92:
 	if (yybm[0+yych] & 32) {
 		goto yy81;
 	}
-	if (yych <= ',') goto yy19;
+	if (yych <= '\n') goto yy19;
 	if (yych <= '-') goto yy83;
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
@@ -930,7 +930,7 @@ yy92:
 	if (yybm[0+yych] & 32) {
 		goto yy81;
 	}
-	if (yych <= ',') goto yy107;
+	if (yych <= '\n') goto yy107;
 	if (yych <= '-') goto yy83;
 	goto yy85;
 yy107:
@@ -964,7 +964,8 @@ yy116:
 	if (yybm[0+yych] & 64) {
 		goto yy115;
 	}
-	if (yych != '.') goto yy19;
+	if (yych <= ',') goto yy19;
+	if (yych >= '/') goto yy19;
 	yych = *++YYCURSOR;
 	if (yych == '\n') goto yy19;
 yy118:
@@ -974,7 +975,7 @@ yy118:
 	if (yybm[0+yych] & 128) {
 		goto yy118;
 	}
-	if (yych <= '-') goto yy19;
+	if (yych <= '\n') goto yy19;
 yy120:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
@@ -1043,7 +1044,7 @@ yy122:
 	if (yybm[0+yych] & 128) {
 		goto yy118;
 	}
-	if (yych <= '-') goto yy19;
+	if (yych <= '\n') goto yy19;
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
@@ -1086,13 +1087,13 @@ yy122:
 	if (yybm[0+yych] & 128) {
 		goto yy118;
 	}
-	if (yych >= '.') goto yy120;
+	if (yych >= '\v') goto yy120;
 yy132:
 #line 17 "bug1479044.b.re"
 	{
 		return "dsl";
 	}
-#line 1096 "<stdout>"
+#line 1097 "<stdout>"
 yy133:
 	yych = *++YYCURSOR;
 	if (yych != 's') goto yy19;

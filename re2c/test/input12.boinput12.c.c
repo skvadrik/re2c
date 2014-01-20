@@ -52,13 +52,14 @@ yy3:
 	if (yybm[0+yych] & 128) {
 		goto yy3;
 	}
-	if (yych != 'b') goto yy2;
+	if (yych <= '`') goto yy2;
+	if (yych >= 'c') goto yy2;
 	yych = *++YYCURSOR;
 	if (yych != 'b') goto yy2;
 	++YYCURSOR;
 #line 3 "input12.boinput12.c.re"
 	{ return 1; }
-#line 62 "input12.c"
+#line 63 "input12.c"
 }
 #line 5 "input12.boinput12.c.re"
 
