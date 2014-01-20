@@ -2276,7 +2276,7 @@ void Scanner::config(const Str& cfg, int num)
 		else
 			encoding.unsetUTF16();
 	}
-	else if (cfg.to_string() == "flags:z")
+	else if (cfg.to_string() == "flags:8")
 	{
 		if (!rFlag)
 		{
