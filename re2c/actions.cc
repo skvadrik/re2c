@@ -302,7 +302,7 @@ uint MatchOp::compile(Char *rep, Ins *i)
 			}
 		}
 
-		if (must_recompile)
+		if (ins_access == PRIVATE)
 			decompile();
 
 		return size;
@@ -456,7 +456,7 @@ uint AltOp::compile(Char *rep, Ins *i)
 		const uint sz2 = exp2->compile(rep, &j[1]);
 		j->i.link = &j[sz2 + 1];
 
-		if (must_recompile)
+		if (ins_access == PRIVATE)
 			decompile();
 
 		return sz1 + sz2 + 2;
@@ -510,7 +510,7 @@ uint CatOp::compile(Char *rep, Ins *i)
 		const uint sz1 = exp1->compile(rep, &i[0]);
 		const uint sz2 = exp2->compile(rep, &i[sz1]);
 
-		if (must_recompile)
+		if (ins_access == PRIVATE)
 			decompile();
 
 		return sz1 + sz2;
@@ -555,7 +555,7 @@ uint CloseOp::compile(Char *rep, Ins *i)
 		++i;
 
 		const uint sz = i - ins_cache;
-		if (must_recompile)
+		if (ins_access == PRIVATE)
 			decompile();
 
 		return sz;
@@ -621,7 +621,7 @@ uint CloseVOp::compile(Char *rep, Ins *i)
 		}
 
 		const uint sz = i - ins_cache;
-		if (must_recompile)
+		if (ins_access == PRIVATE)
 			decompile();
 
 		return sz;
@@ -1042,7 +1042,7 @@ RegExp * Scanner::mkDefault() const
 
 const char *RuleOp::type = "RuleOp";
 
-RuleOp::RuleOp(RegExp *e, RegExp *c, Token *t, uint a, bool b)
+RuleOp::RuleOp(RegExp *e, RegExp *c, Token *t, uint a, InsAccess access)
 	: exp(e)
 	, ctx(c)
 	, ins(NULL)
@@ -1050,13 +1050,13 @@ RuleOp::RuleOp(RegExp *e, RegExp *c, Token *t, uint a, bool b)
 	, code(t)
 	, line(0)
 {
-	must_recompile = b;
+	ins_access = access;
 }
 
 RuleOp* RuleOp::copy(uint a) const
 {
 	Token *token = new Token(*code);
-	return new RuleOp(exp, ctx, token, a, must_recompile);
+	return new RuleOp(exp, ctx, token, a, ins_access);
 }
 
 void RuleOp::calcSize(Char *rep)
@@ -1087,7 +1087,7 @@ uint RuleOp::compile(Char *rep, Ins *i)
 		++i;
 
 		const uint sz = i - ins_cache;
-		if (must_recompile)
+		if (ins_access == PRIVATE)
 			decompile();
 
 		return sz;

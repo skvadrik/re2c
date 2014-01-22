@@ -149,7 +149,10 @@ public:
 	 * [\x80-\xBF] factored out, but they won't share instructions.
 	 */
 	Ins*	ins_cache; /* if non-NULL, points to compiled instructions */
-	bool	must_recompile;
+	enum InsAccess
+		{ SHARED
+		, PRIVATE
+		} ins_access;
 
 	static free_list<RegExp*> vFreeList;
 
@@ -157,7 +160,7 @@ public:
 	RegExp()
 		: size(0)
 		, ins_cache(NULL)
-		, must_recompile(false)
+		, ins_access(SHARED)
 	{
 		vFreeList.insert(this);
 	}
@@ -273,7 +276,7 @@ public:
 	uint     line;
 
 public:
-	RuleOp(RegExp*, RegExp*, Token*, uint, bool must_recompile);
+	RuleOp(RegExp*, RegExp*, Token*, uint, InsAccess);
 
 	~RuleOp()
 	{
@@ -496,7 +499,7 @@ public:
 		, min(lb)
 		, max(ub)
 	{
-		exp->must_recompile = true;
+		exp->ins_access = PRIVATE;
 	}
 
 	const char *typeOf()

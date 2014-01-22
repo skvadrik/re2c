@@ -83,12 +83,14 @@ void context_none(CondList *clist)
 void context_rule(CondList *clist, RegExp *expr, RegExp *look, Str *newcond, Token *code)
 {
 	context_check(clist);
-	const bool must_recompile = clist->size() > 1;
+	const RegExp::InsAccess ins_access = clist->size() > 1
+		? RegExp::PRIVATE
+		: RegExp::SHARED;
 	for(CondList::const_iterator it = clist->begin(); it != clist->end(); ++it)
 	{
 		//Str *condcpy = newcond ? new Str(*newcond) : newcond;
 		Token *token = new Token(code, sourceFileInfo, newcond);//condcpy);
-		RuleOp *rule = new RuleOp(expr, look, token, accept++, must_recompile);
+		RuleOp *rule = new RuleOp(expr, look, token, accept++, ins_access);
 
 		RegExpMap::iterator itRE = specMap.find(*it);
 
@@ -197,7 +199,7 @@ decl:
 			{
 				in->fatal("sym already defined");
 			}
-			$3->must_recompile = true;
+			$3->ins_access = RegExp::PRIVATE;
 			$1->re = $3;
 		}
 	|	FID expr
@@ -206,7 +208,7 @@ decl:
 			{
 				in->fatal("sym already defined");
 			}
-			$2->must_recompile = true;
+			$2->ins_access = RegExp::PRIVATE;
 			$1->re = $2;
 		}
 	|	ID '=' expr '/'
@@ -237,7 +239,7 @@ rule:
 			{
 				in->fatal("condition or '<*>' required when using -c switch");
 			}
-			$$ = new RuleOp($1, $2, $3, accept++, false);
+			$$ = new RuleOp($1, $2, $3, accept++, RegExp::SHARED);
 			spec = spec? mkAlt(spec, $$) : $$;
 		}
 	|	STAR CODE /* default rule */
@@ -279,7 +281,7 @@ rule:
 			Token *token = new Token($7, $7->source, $7->line, $6);
 			delete $7;
 			delete $6;
-			specStar.push_back(new RuleOp($4, $5, token, accept++, true));
+			specStar.push_back(new RuleOp($4, $5, token, accept++, RegExp::PRIVATE));
 		}
 	|	'<' STAR '>' expr look ':' newcond
 		{
@@ -287,7 +289,7 @@ rule:
 			context_check(NULL);
 			Token *token = new Token(NULL, sourceFileInfo, $7);
 			delete $7;
-			specStar.push_back(new RuleOp($4, $5, token, accept++, true));
+			specStar.push_back(new RuleOp($4, $5, token, accept++, RegExp::PRIVATE));
 		}
 	|	'<' STAR '>' look newcond CODE
 		{
@@ -316,7 +318,7 @@ rule:
 			Token *token = new Token($3, $3->source, $3->line, $2);
 			delete $2;
 			delete $3;
-			$$ = specNone = new RuleOp(new NullOp(), new NullOp(), token, accept++, false);
+			$$ = specNone = new RuleOp(new NullOp(), new NullOp(), token, accept++, RegExp::SHARED);
 		}
 	|	NOCOND ':' newcond
 		{
@@ -328,7 +330,7 @@ rule:
 			}
 			Token *token = new Token(NULL, sourceFileInfo, $3);
 			delete $3;
-			$$ = specNone = new RuleOp(new NullOp(), new NullOp(), token, accept++, false);
+			$$ = specNone = new RuleOp(new NullOp(), new NullOp(), token, accept++, RegExp::SHARED);
 		}
 	|	SETUP STAR '>' CODE
 		{
@@ -653,7 +655,7 @@ void parse(Scanner& i, std::ostream& o, std::ostream* h)
 					itRuleDefault = ruleDefaultMap.find(it->first);
 					if (itRuleDefault != ruleDefaultMap.end())
 					{
-						RuleOp * def = new RuleOp(in->mkDefault(), new NullOp(), itRuleDefault->second, accept++, false);
+						RuleOp * def = new RuleOp(in->mkDefault(), new NullOp(), itRuleDefault->second, accept++, RegExp::SHARED);
 						it->second.second = it->second.second ? mkAlt(def, it->second.second) : def;
 					}
 					else
@@ -661,7 +663,7 @@ void parse(Scanner& i, std::ostream& o, std::ostream* h)
 						itRuleDefault = ruleDefaultMap.find("*");
 						if (itRuleDefault != ruleDefaultMap.end())
 						{
-							RuleOp * def = new RuleOp(in->mkDefault(), new NullOp(), itRuleDefault->second, accept++, false);
+							RuleOp * def = new RuleOp(in->mkDefault(), new NullOp(), itRuleDefault->second, accept++, RegExp::SHARED);
 							it->second.second = it->second.second ? mkAlt(def, it->second.second) : def;
 						}
 					}
@@ -682,7 +684,7 @@ void parse(Scanner& i, std::ostream& o, std::ostream* h)
 		{
 			if (ruleDefault != NULL && parseMode != Scanner::Reuse)
 			{
-				RuleOp * def = new RuleOp(in->mkDefault(), new NullOp(), ruleDefault, accept++, false);
+				RuleOp * def = new RuleOp(in->mkDefault(), new NullOp(), ruleDefault, accept++, RegExp::SHARED);
 				spec = spec ? mkAlt(def, spec) : def;
 			}
 			if (spec || !dfa_map.empty())
