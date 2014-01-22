@@ -36,6 +36,8 @@ static RuleOpList       specStar;
 static Scanner          *in = NULL;
 static Scanner::ParseMode  parseMode;
 static SetupMap            ruleSetupMap;
+static Token               *ruleDefault = NULL;
+static DefaultMap          ruleDefaultMap;
 static bool                foundRules;
 
 /* Bison version 1.875 emits a definition that is not working
@@ -125,6 +127,25 @@ void setup_rule(CondList *clist, Token *code)
 	}
 	delete clist;
 	delete code;
+}
+
+void default_rule(CondList *clist, Token *code)
+{
+	assert(clist);
+	assert(code);
+	context_check(clist);
+	if (bFirstPass)
+	{
+		for(CondList::const_iterator it = clist->begin(); it != clist->end(); ++it)
+		{
+			if (ruleDefaultMap.find(*it) != ruleDefaultMap.end())
+			{
+				in->fatalf_at(code->line, "code to default rule '%s' is already defined", it->c_str());
+			}
+			ruleDefaultMap[*it] = code;
+		}
+	}
+	delete clist;
 }
 
 %}
@@ -219,6 +240,15 @@ rule:
 			$$ = new RuleOp($1, $2, $3, accept++, false);
 			spec = spec? mkAlt(spec, $$) : $$;
 		}
+	|	STAR CODE /* default rule */
+		{
+			if (cFlag)
+				in->fatal("condition or '<*>' required when using -c switch");
+			if (ruleDefault != NULL)
+				in->fatal("code to default rule is already defined");
+			else
+				ruleDefault = $2;
+		}
 	|	'<' cond '>' expr look newcond CODE
 		{
 			context_rule($2, $4, $5, $6, $7);
@@ -238,6 +268,10 @@ rule:
 			assert($6);
 			context_none($2);
 			delete $6;
+		}
+	|	'<' cond '>' STAR CODE /* default rule for conditions */
+		{
+			default_rule($2, $5);
 		}
 	|	'<' STAR '>' expr look newcond CODE
 		{
@@ -265,6 +299,12 @@ rule:
 			assert($6);
 			context_none(NULL);
 			delete $6;
+		}
+	|	'<' STAR '>' STAR CODE /* default rule for all conditions */
+		{
+			CondList *clist = new CondList();
+			clist->insert("*");
+			default_rule(clist, $5);
 		}
 	|	NOCOND newcond CODE
 		{
@@ -517,6 +557,7 @@ void parse(Scanner& i, std::ostream& o, std::ostream* h)
 		}
 		accept = 0;
 		spec = NULL;
+		ruleDefault = NULL;
 		in->set_in_parse(true);
 		yyparse();
 		in->set_in_parse(false);
@@ -532,6 +573,7 @@ void parse(Scanner& i, std::ostream& o, std::ostream* h)
 				parse_cleanup();
 				spec = NULL;
 				accept = 0;
+				ruleDefault = NULL;
 				in->set_in_parse(true);
 				yyparse();
 				in->set_in_parse(false);
@@ -549,6 +591,7 @@ void parse(Scanner& i, std::ostream& o, std::ostream* h)
 		{
 			RegExpMap::iterator it;
 			SetupMap::const_iterator itRuleSetup;
+			DefaultMap::const_iterator itRuleDefault;
 
 			if (parseMode != Scanner::Reuse)
 			{
@@ -607,6 +650,21 @@ void parse(Scanner& i, std::ostream& o, std::ostream* h)
 							yySetupRule = "";
 						}
 					}
+					itRuleDefault = ruleDefaultMap.find(it->first);
+					if (itRuleDefault != ruleDefaultMap.end())
+					{
+						RuleOp * def = new RuleOp(in->mkDefault(), new NullOp(), itRuleDefault->second, accept++, false);
+						it->second.second = it->second.second ? mkAlt(def, it->second.second) : def;
+					}
+					else
+					{
+						itRuleDefault = ruleDefaultMap.find("*");
+						if (itRuleDefault != ruleDefaultMap.end())
+						{
+							RuleOp * def = new RuleOp(in->mkDefault(), new NullOp(), itRuleDefault->second, accept++, false);
+							it->second.second = it->second.second ? mkAlt(def, it->second.second) : def;
+						}
+					}
 					dfa_map[it->first] = genCode(it->second.second);
 					dfa_map[it->first]->prepare();
 				}
@@ -620,16 +678,24 @@ void parse(Scanner& i, std::ostream& o, std::ostream* h)
 				genTypes(typesInline, 0, specMap);
 			}
 		}
-		else if (spec || !dfa_map.empty())
+		else
 		{
-			if (parseMode != Scanner::Reuse)
+			if (ruleDefault != NULL && parseMode != Scanner::Reuse)
 			{
-				dfa_map[""] = genCode(spec);
-				dfa_map[""]->prepare();
+				RuleOp * def = new RuleOp(in->mkDefault(), new NullOp(), ruleDefault, accept++, false);
+				spec = spec ? mkAlt(def, spec) : def;
 			}
-			if (parseMode != Scanner::Rules && dfa_map.find("") != dfa_map.end())
+			if (spec || !dfa_map.empty())
 			{
-				dfa_map[""]->emit(o, topIndent, NULL, "", 0, bPrologBrace);
+				if (parseMode != Scanner::Reuse)
+				{
+					dfa_map[""] = genCode(spec);
+					dfa_map[""]->prepare();
+				}
+				if (parseMode != Scanner::Rules && dfa_map.find("") != dfa_map.end())
+				{
+					dfa_map[""]->emit(o, topIndent, NULL, "", 0, bPrologBrace);
+				}
 			}
 		}
 		o << sourceFileInfo;

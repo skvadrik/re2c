@@ -83,6 +83,7 @@ public:
 	RegExp * ranToRE(SubStr s) const;
 	RegExp * invToRE(SubStr s) const;
 	RegExp * mkDot() const;
+	RegExp * mkDefault() const;
 };
 
 inline size_t Scanner::get_pos() const

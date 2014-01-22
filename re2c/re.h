@@ -536,6 +536,7 @@ typedef std::vector<std::string>        RegExpIndices;
 typedef std::list<RuleOp*>              RuleOpList;
 typedef std::pair<uint, std::string>    LineCode;
 typedef std::map<std::string, LineCode> SetupMap;
+typedef std::map<std::string, Token*>   DefaultMap;
 
 class DFA;
 

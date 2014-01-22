@@ -27,7 +27,7 @@
 import           Codec.Binary.UTF8.String            (encodeString)
 import           Data.Bits                           (shiftR, (.&.))
 import           Data.Char                           (ord, isAlpha)
-import qualified Data.CharSet                  as CS (fromCharSet, toAscList, complement, union, empty)
+import qualified Data.CharSet                  as CS (fromCharSet, toAscList, union, empty)
 import           Data.CharSet                  as CS (CharSet)
 import           Data.CharSet.Unicode.Category       (Category(..), categories)
 import           Data.CharSet.Unicode.Block          (Block(..), blocks)
@@ -123,14 +123,14 @@ prettify = map (\ c -> if isAlpha c then c else '_')
 gen_test_category :: Category -> IO ()
 gen_test_category (Category _ name cs _) =
     let catname    = prettify name
-        file       = "utf8_group_" ++ catname ++ ".z.re"
+        file       = "utf8_group_" ++ catname ++ ".8.re"
         range      = CS.toAscList cs
-        outer      = head $ CS.toAscList $ CS.complement cs
-        bs         = concatMap show_char $ encodeString $ range ++ [outer]
+        bs         = (concatMap show_char $ encodeString range) ++ "\\xFF"
         content    = unlines
             [ "#include <stdio.h>"
             , "bool scan(const char * start, const char * const limit)"
             , "{"
+            , "\t__attribute__((unused)) const char * YYMARKER; // silence compiler warnings when YYMARKER is not used"
             , "#\tdefine YYCTYPE unsigned char"
             , "#\tdefine YYCURSOR start"
             , catname ++ ":"
@@ -138,7 +138,7 @@ gen_test_category (Category _ name cs _) =
             , "\t\tre2c:yyfill:enable = 0;"
             , "\t\t" ++ show_category catname cs
             , "\t\t" ++ catname ++ " { goto " ++ catname ++ "; }"
-            , "\t\t[^] { return YYCURSOR == limit; }"
+            , "\t\t* { return YYCURSOR == limit; }"
             , "\t*/"
             , "}"
             , "static const char buffer_" ++ catname ++ " [] = \"" ++ bs ++ "\";"
@@ -165,6 +165,7 @@ gen_test_blocks =
             , "};"
             , "Block scan(const char * start, const char * const limit, Block blk)"
             , "{"
+            , "\tconst char * YYMARKER;"
             , "#\tdefine YYCTYPE unsigned char"
             , "#\tdefine YYCURSOR start"
             , "\tswitch (blk)"
@@ -181,7 +182,7 @@ gen_test_blocks =
                     , "\t/*!re2c"
                     , "\t\tre2c:yyfill:enable = 0;"
                     , "\t\t" ++ s ++ " { goto " ++ s ++ "; }"
-                    , "\t\t[^] { if (YYCURSOR == limit) return " ++ s ++ "; else return Error; }"
+                    , "\t\t* { if (YYCURSOR == limit) return " ++ s ++ "; else return Error; }"
                     , "\t*/"
                     ]
                 ) blocknames'
@@ -189,8 +190,7 @@ gen_test_blocks =
             , unlines $ map
                 (\ (s, cs) ->
                     let range = CS.toAscList cs
-                        outer = head $ CS.toAscList $ CS.complement cs
-                        bs    = concatMap show_char $ encodeString $ range ++ [outer]
+                        bs    = (concatMap show_char $ encodeString range) ++ "\\xFF"
                     in  "static const char buffer_" ++ s ++ " [] = \"" ++ bs ++ "\";"
                 ) $ zip blocknames' charsets'
             , "int main()"
@@ -203,7 +203,7 @@ gen_test_blocks =
                 ) blocknames'
             , "}"
             ]
-    in  writeFile "utf8_blocks.z.re" content
+    in  writeFile "utf8_blocks.8.re" content
 
 
 main :: IO ()

@@ -1027,6 +1027,19 @@ RegExp * Scanner::mkDot() const
 		: new MatchOp(inv);
 }
 
+/*
+ * Create a byte range that includes all possible input characters.
+ * This may include characters, which do not map to any valid symbol
+ * in current encoding. For encodings, which directly map symbols to
+ * input characters (ASCII, EBCDIC, UTF-16, UTF-32), it equals [^].
+ * For other encodings (UTF-8), [^] and this range are different.
+ */
+RegExp * Scanner::mkDefault() const
+{
+	Range * def = new Range(0, encoding.nChars());
+	return new MatchOp(def);
+}
+
 const char *RuleOp::type = "RuleOp";
 
 RuleOp::RuleOp(RegExp *e, RegExp *c, Token *t, uint a, bool b)
