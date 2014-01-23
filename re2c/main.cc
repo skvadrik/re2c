@@ -133,7 +133,7 @@ static const mbo_opt_struct OPTIONS[] =
 
 static void usage()
 {
-	std::cerr << "usage: re2c [-bcdDefFghirsuvVw1] [-o of] [-t th] file\n"
+	std::cerr << "usage: re2c [-bcdDefFghirsuvVw18] [-o of] [-t th] file\n"
 	"\n"
 	"-? -h  --help           Display this info.\n"
 	"\n"
