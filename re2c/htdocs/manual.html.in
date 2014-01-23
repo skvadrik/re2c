@@ -15,7 +15,7 @@ Updated: @PACKAGE_DATE@<br />
 <p>re2c - convert regular expressions to C/C++</p>
 <a name="lbAC" id="lbAC">&nbsp;</a>
 <h2>SYNOPSIS</h2>
-<p><b>re2c</b> [<b>-bdefFghisuvVw1</b>] [<b>-o output</b>] [<b>-c</b> [<b>-t header</b>]] file</p>
+<p><b>re2c</b> [<b>-bdefFghisuvVw18</b>] [<b>-o output</b>] [<b>-c</b> [<b>-t header</b>]] file</p>
 <a name="lbAD" id="lbAD">&nbsp;</a>
 <h2>DESCRIPTION</h2>
 <p><b>re2c</b> is a preprocessor that generates C-based recognizers from
@@ -105,7 +105,9 @@ YYDEBUG(int state, char current)</i>. The first parameter receives the state or
 "dot -Tpng input.dot > output.png". Please note that scanners with many states
 may crash dot.<br /><br /></dd>
 <dt><b>-e</b></dt>
-<dd>Cross-compile from an ASCII platform to an EBCDIC one.<br /><br /></dd>
+<dd>Generate a parser that supports EBCDIC. The generated code can deal with any 
+character up to 0xFF. In this mode re2c assumes that input character size is 
+1 byte. This switch is incompatible with <b>-w</b>, <b>-u</b> and <b>-8</b>.<br /><br /></dd>
 <dt><b>-f</b></dt>
 <dd>Generate a scanner with support for storable state. For details see below
 at <b>SCANNER WITH STORABLE STATES</b>.<br /><br /></dd>
@@ -144,20 +146,26 @@ generate better code.<br /><br /></dd>
 <dd>Create a header file that contains types for the (f)lex-like condition support.
 This can only be activated when <b>-c</b> is in use.<br /><br /></dd>
 <dt><b>-u</b></dt>
-<dd>Generate a parser that supports Unicode chars (UTF-32). This means the 
-generated code can deal with any valid Unicode character up to 0x10FFFF. When
-UTF-8 or UTF-16 needs to be supported you need to convert the incoming stream
-to UTF-32 upon input yourself.<br /><br /></dd>
+<dd>Generate a parser that supports UTF-32. The generated code can deal with any 
+valid Unicode character up to 0x10FFFF. In this mode re2c assumes that input 
+character size is 4 bytes. This switch is incompatible with <b>-e</b>, <b>-w</b> and <b>-8</b>.
+This implies <b>-s</b>.<br /><br /></dd>
 <dt><b>-v</b></dt>
 <dd>Show version information.<br /><br /></dd>
 <dt><b>-V</b></dt>
 <dd>Show the version as a number XXYYZZ.<br /><br /></dd>
 <dt><b>-w</b></dt>
-<dd>Create a parser that supports wide chars (UCS-2). This implies <b>-s</b>
-and cannot be used together with <b>-e</b> switch.<br /><br /></dd>
+<dd>Generate a parser that supports UCS-2. The generated code can deal with any 
+valid Unicode character up to 0xFFFF. In this mode re2c assumes that input 
+character size is 2 bytes. This switch is incompatible with <b>-e</b>, <b>-u</b> and <b>-8</b>.
+This implies <b>-s</b>.<br /><br /></dd>
 <dt><b>-1</b></dt>
 <dd>Force single pass generation, this cannot be combined with -f and disables 
 YYMAXFILL generation prior to last re2c block.<br /><br /></dd>
+<dt><b>-8</b></dt>
+<dd>Generate a parser that supports UTF-8. The generated code can deal with any 
+valid Unicode character up to 0x10FFFF. In this mode re2c assumes that input 
+character size is 1 byte. This switch is incompatible with <b>-e</b>, <b>-w</b> and <b>-u</b>.<br /><br /></dd>
 <dt><b>--no-generation-date</b></dt>
 <dd>Suppress date output in the generated output so that it only shows the re2c
 version.<br /><br /></dd>
@@ -327,6 +335,30 @@ When <b>re2c</b> generates the code for a rule whose state does not have a
 setup rule and a star'd setup rule is present, than that code will be used
 as setup code.
 </p>
+<a name="lbAH2" id="lbAH2">&nbsp;</a>
+<h2>ENCODINGS</h2>
+<p>
+<b>re2c</b> supports the following encodings: ASCII, EBCDIC (<b>-e</b>), UCS-2 (<b>-w</b>), 
+UTF-32 (<b>-u</b>) and UTF-8 (<b>-8</b>). ASCII is default. You can either pass cmd 
+flag or use inplace configuration.
+</p>
+<p>
+ASCII, EBCDIC, UCS-2 and UTF-32 are fixed-length encodings. This means, that 
+all code units (symbols) are encoded in byte sequences of the same length: 
+1 byte in ASCII and EBCDIC, 2 bytes in UCS-2, 4 bytes in UTF-32. This length 
+must be equal to the size of <b>YYCTYPE</b>. <b>re2c</b> assumes that one input character 
+maps to one encoding symbol.
+</p>
+<p>
+UTF-8 is a variable-length encoding: different Unicode symbols are encoded 
+in byte sequences of 1, 2, 3 or 4 bytes. In UTF-8 mode, <b>re2c</b> assumes that 
+size of <b>YYCTYPE</b> is 1 byte. It translates multibyte symbols to sequences of 
+1-byte characters. E.g., 2-byte symbol "\xFF" in UTF-8 is equal to 2-symbol 
+string "\xC3\xBF" in ASCII. Some bytes never occur in valid UTF-8 stream, e.g. 
+byte 0xFF. If the generated scanner must check for invalid input symbols, the 
+only way to do so is to use default rule <b>*</b>. Note, that full range rule 
+<b>[^]</b> means quite different thing in UTF-8, excluding 0xFF byte.
+</p>
 <a name="lbAI" id="lbAI">&nbsp;</a>
 <h2>SCANNER SPECIFICATIONS</h2>
 <p>Each scanner specification consists of a set of <i>rules</i>, <i>named
@@ -337,11 +369,34 @@ matched. You can either
 start the code with an opening curly brace or the sequence '<b>:=</b>'. When
 the code with a curly brace then <b>re2c</b> counts the brace depth and stops looking
 for code automatically. Otherwise curly braces are not allowed and <b>re2c</b> stops
-looking for code at the first line that does not begin with whitespace.</p>
+looking for code at the first line that does not begin with whitespace. If two
+or more rules overlap, the first rule is preferred.</p>
 <dl compact="compact">
 <dd><i>regular-expression</i> { <i>C/C++ code</i> }</dd>
 <dd><i>regular-expression</i> := <i>C/C++ code</i></dd>
 </dl>
+<p>
+There is one special rule: default rule <b>*</b>.
+</p>
+<dl compact="compact">
+<dd><b>*</b> { <i>C/C++ code</i> }</dd>
+<dd><b>*</b> := <i>C/C++ code</i></dd>
+</dl>
+<p>
+The former "default" rule <b>[^]</b> differs from <b>*</b>:
+</p>
+<dl compact="compact">
+<dd>- <b>*</b> can occur anywhere a normal rule can occur, but regardless to its place, 
+<b>*</b> has the lowest priority.
+<dd>- <b>[^]</b> matches all valid symbols in current encoding, while <b>*</b> matches 
+any input character, either valid or invalid.
+<dd>- <b>[^]</b> can consume multiple input characters, while <b>*</b> always consumes 
+one input character.
+</dl>
+<p>
+In fact, when variable-length encoding is used, <b>*</b> is the only possible way 
+to match invalid input character.
+</p>
 <p>
 If <b>-c</b> is active then each regular expression is preceeded by a list of 
 comma separated condition names. Besides normal naming rules there are two 
@@ -360,11 +415,15 @@ jumps) you can doso by using &lt;! pseudo-rules.
 <dl compact="compact">
 <dd>&lt;<i>condition-list</i>&gt; <i>regular-expression</i> { <i>C/C++ code</i> }</dd>
 <dd>&lt;<i>condition-list</i>&gt; <i>regular-expression</i> := <i>C/C++ code</i></dd>
+<dd>&lt;<i>condition-list</i>&gt; <b>*</b> { <i>C/C++ code</i> }</dd>
+<dd>&lt;<i>condition-list</i>&gt; <b>*</b> := <i>C/C++ code</i></dd>
 <dd>&lt;<i>condition-list</i>&gt; <i>regular-expression</i> =&gt; <i>condition</i> { <i>C/C++ code</i> }</dd>
 <dd>&lt;<i>condition-list</i>&gt; <i>regular-expression</i> =&gt; <i>condition</i> := <i>C/C++ code</i></dd>
 <dd>&lt;<i>condition-list</i>&gt; <i>regular-expression</i> :=&gt; <i>condition</i></dd>
 <dd>&lt;<i>*</i>&gt; <i>regular-expression</i> { <i>C/C++ code</i> }</dd>
 <dd>&lt;<i>*</i>&gt; <i>regular-expression</i> := <i>C/C++ code</i></dd>
+<dd>&lt;<i>*</i>&gt; <b>*</b> { <i>C/C++ code</i> }</dd>
+<dd>&lt;<i>*</i>&gt; <b>*</b> := <i>C/C++ code</i></dd>
 <dd>&lt;<i>*</i>&gt; <i>regular-expression</i> =&gt; <i>condition</i> { <i>C/C++ code</i> }</dd>
 <dd>&lt;<i>*</i>&gt; <i>regular-expression</i> =&gt; <i>condition</i> := <i>C/C++ code</i></dd>
 <dd>&lt;<i>*</i>&gt; <i>regular-expression</i> :=&gt; <i>condition</i></dd>
@@ -457,8 +516,7 @@ followed by either a lowercased <b>u</b> and its four hexadecimal digits or an
 uppercased <b>U</b> and its eight hexadecimal digits. However only in \fB-u\fP 
 mode the generated code can deal with any valid Unicode character up to 
 0x10FFFF.</p>
-<p>Since characters greater <b>\X00FF</b> are not allowed in non unicode mode,
-the only portable "<b>any</b>" rules are <b>(.|"\n")</b> and <b>[^]</b>.</p>
+<p>The only portable "<b>any</b>" rule is the default rule <b>*</b>.</p>
 <p>The regular expressions listed above are grouped according to precedence,
 from highest precedence at the top to lowest at the bottom. Those grouped
 together have equal precedence.</p>
@@ -633,10 +691,8 @@ lessons to get you started with re2c. All examples in the lessons subdirectory
 can be compiled and actually work.</p>
 <a name="lbAM" id="lbAM">&nbsp;</a>
 <h2>FEATURES</h2>
-<p><b>re2c</b> does not provide a default action: the generated code assumes
-that the input will consist of a sequence of tokens. Typically this can be
-dealt with by adding a rule such as the one for unexpected characters in the
-example above.</p>
+<p><b>re2c</b> provides default action: <b>*</b>. When the default rule matches, 
+exactly one input character is consumed.</p>
 <p>The user must arrange for a sentinel token to appear at the end of input
 (and provide a rule for matching it): <b>re2c</b> does not provide an
 &lt;&lt;EOF&gt;&gt; expression. If the source is from a null-byte terminated
@@ -649,10 +705,17 @@ else then e detection of end of data/file.</p>
 <a name="lbAN" id="lbAN">&nbsp;</a>
 <h2>BUGS</h2>
 <p>Difference only works for character sets.</p>
+<p>The generated DFA is not minimal.</p>
+<p>Features, that are naturally orthogonal (such as reusable rules, conditions, 
+setup rules and default rules), cannot always be combined. E.g., one cannot set 
+setup/default rule for condition in scanner with reusable rules.</p>
+<p><b>re2c</b> does too much unnecessary work: e.g., if /*!use:re2c ... */ block has 
+additional rules, these rules are parsed 4 times, while they should be parsed 
+only once.</p>
 <p>The <b>re2c</b> internal algorithms need documentation.</p>
 <a name="lbAO" id="lbAO">&nbsp;</a>
 <h2>SEE ALSO</h2>
-<p>flex(1), lex(1). More information on <b>re2c</b> can be found here:
+<p>flex(1), lex(1), quex(<b><a href="http://quex.sourceforge.net/">http://quex.sourceforge.net/</a></b>). More information on <b>re2c</b> can be found here:
 <b><a href=
 "http://re2c.org/">http://re2c.org/</a></b></p>
 <a name="lbAP" id="lbAP">&nbsp;</a>
