@@ -9,12 +9,11 @@ class Enc
 {
 	// Supported encodings.
 	enum type_t
-		{ ASCII    = 0x00000000u
-		, EBCDIC   = 0x00000001u
-		, UTF16    = 0x00000002u
-		, UTF32    = 0x00000004u
-		, UTF32_16 = UTF32 | UTF16 // backward compatibility
-		, UTF8     = 0x00000008u
+		{ ASCII  = 0x00000000u
+		, EBCDIC = 0x00000001u
+		, UTF16  = 0x00000002u
+		, UTF32  = 0x00000004u
+		, UTF8   = 0x00000008u
 		};
 
 	// For re2c, encoding has two properties:
