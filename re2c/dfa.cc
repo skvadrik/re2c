@@ -28,7 +28,7 @@ void prtHex(std::ostream& o, uint c)
 {
 	int oc = (int)(c);
 
-	if (encoding.szChar() == 4)
+	if (encoding.szCodeUnit() == 4)
 	{
 		o << "0x"
 		  << hexCh(oc >> 28)
@@ -40,7 +40,7 @@ void prtHex(std::ostream& o, uint c)
 		  << hexCh(oc >>  4)
 		  << hexCh(oc);
 	}
-	else if (encoding.szChar() == 2)
+	else if (encoding.szCodeUnit() == 2)
 	{
 		o << "0x"
 		  << hexCh(oc >> 12)
@@ -114,7 +114,7 @@ void prtCh(std::ostream& o, uint c)
 		{
 			o << (char) oc;
 		}
-		else if (encoding.szChar() == 4)
+		else if (encoding.szCodeUnit() == 4)
 		{
 			o << "0x"
 			  << hexCh(oc >> 20)
@@ -124,7 +124,7 @@ void prtCh(std::ostream& o, uint c)
 			  << hexCh(oc >>  4)
 			  << hexCh(oc);
 		}
-		else if (encoding.szChar() == 2)
+		else if (encoding.szCodeUnit() == 2)
 		{
 			o << "0x"
 			  << hexCh(oc >> 12)

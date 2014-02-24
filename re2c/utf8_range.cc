@@ -3,50 +3,25 @@
 
 namespace re2c {
 
-free_list<UTF8RangeSuffix::node*> UTF8RangeSuffix::vFreeList;
-
-RegExp * UTF8RangeSuffix::toRegExp()
-{
-	emit(root, NULL);
-	return regexp;
-}
-
-/*
- * Build regexp from suffix tree.
- */
-void UTF8RangeSuffix::emit(node * p, RegExp * re)
-{
-	if (p == NULL)
-		regexp = doAlt(regexp, re);
-	else
-	{
-		for (; p != NULL; p = p->next)
-		{
-			RegExp * re1 = doCat(new MatchOp(new Range(p->l, p->h + 1)), re);
-			emit(p->child, re1);
-		}
-	}
-}
-
 /*
  * Now that we have catenation of byte ranges [l1-h1]...[lN-hN],
  * we want to add it to existing range, merging suffixes on the fly.
  */
-void UTF8RangeSuffix::addContinuous(utf8::rune l, utf8::rune h, uint n)
+void UTF8addContinuous(RangeSuffix * & root, utf8::rune l, utf8::rune h, uint n)
 {
-	uchar cl[utf8::MAX_BYTES];
-	uchar ch[utf8::MAX_BYTES];
+	uchar cl[utf8::MAX_RUNE_LENGTH];
+	uchar ch[utf8::MAX_RUNE_LENGTH];
 	utf8::rune_to_bytes(cl, l);
 	utf8::rune_to_bytes(ch, h);
 
-	node ** p = &root;
+	RangeSuffix ** p = &root;
 	for (int i = n - 1; i >= 0; --i)
 	{
 		for (;;)
 		{
 			if (*p == NULL)
 			{
-				*p = new node(cl[i], ch[i]);
+				*p = new RangeSuffix(cl[i], ch[i]);
 				p = &(*p)->child;
 				break;
 			}
@@ -70,7 +45,7 @@ void UTF8RangeSuffix::addContinuous(utf8::rune l, utf8::rune h, uint n)
  * of byte ranges [L_1 - H_1], ..., [L_n - H_n].
  *
  * This is only possible if for all i > 1:
- * if L_i /= H_i, then L_(i-1) == 0x80 and H_(i-1) == 0xbf.
+ * if L_i /= H_i, then L_(i+1) == 0x80 and H_(i+1) == 0xbf.
  * This condition ensures that:
  * 	1) all possible UTF-8 sequences between L and H are allowed
  * 	2) no byte ranges [b1 - b2] appear, such that b1 > b2
@@ -87,7 +62,7 @@ void UTF8RangeSuffix::addContinuous(utf8::rune l, utf8::rune h, uint n)
  * and represents original range as alternation of continuous
  * sub-ranges.
  */
-void UTF8RangeSuffix::splitByContinuity(utf8::rune l, utf8::rune h, uint n)
+void UTF8splitByContinuity(RangeSuffix * & root, utf8::rune l, utf8::rune h, uint n)
 {
 	for (uint i = 1; i < n; ++i)
 	{
@@ -96,19 +71,19 @@ void UTF8RangeSuffix::splitByContinuity(utf8::rune l, utf8::rune h, uint n)
 		{
 			if ((l & m) != 0)
 			{
-				splitByContinuity(l, l | m, n);
-				splitByContinuity((l | m) + 1, h, n);
+				UTF8splitByContinuity(root, l, l | m, n);
+				UTF8splitByContinuity(root, (l | m) + 1, h, n);
 				return;
 			}
 			if ((h & m) != m)
 			{
-				splitByContinuity(l, (h & ~m) - 1, n);
-				splitByContinuity(h & ~m, h, n);
+				UTF8splitByContinuity(root, l, (h & ~m) - 1, n);
+				UTF8splitByContinuity(root, h & ~m, h, n);
 				return;
 			}
 		}
 	}
-	addContinuous(l, h, n);
+	UTF8addContinuous(root, l, h, n);
 }
 
 /*
@@ -120,33 +95,16 @@ void UTF8RangeSuffix::splitByContinuity(utf8::rune l, utf8::rune h, uint n)
  * [0x800 - 0xFFFF]     (3-byte UTF-8 sequences)
  * [0x10000 - 0x10FFFF] (4-byte UTF-8 sequences)
  */
-void UTF8RangeSuffix::splitByRuneLength(utf8::rune l, utf8::rune h)
+void UTF8splitByRuneLength(RangeSuffix * & root, utf8::rune l, utf8::rune h)
 {
 	const uint nh = utf8::rune_length(h);
 	for (uint nl = utf8::rune_length(l); nl < nh; ++nl)
 	{
 		utf8::rune r = utf8::max_rune(nl);
-		splitByContinuity(l, r, nl);
+		UTF8splitByContinuity(root, l, r, nl);
 		l = r + 1;
 	}
-	splitByContinuity(l, h, nh);
-}
-
-/*
- * Split Unicode character class {[l1, h1), ..., [lN, hN)} into
- * ranges [l1, h1-1], ..., [lN, hN-1] and return alternation of
- * them. We store partially built range in suffix tree, which
- * allows to eliminate common suffixes while building.
- *
- * Assumes that incoming range is not empty.
- */
-RegExp * UTF8Range(const Range * r)
-{
-	UTF8RangeSuffix t;
-	t.splitByRuneLength(r->lb, r->ub - 1);
-	while ((r = r->next) != NULL)
-		t.splitByRuneLength(r->lb, r->ub - 1);
-	return t.toRegExp();
+	UTF8splitByContinuity(root, l, h, nh);
 }
 
 } // namespace re2c

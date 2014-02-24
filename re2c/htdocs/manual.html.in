@@ -15,7 +15,7 @@ Updated: @PACKAGE_DATE@<br />
 <p>re2c - convert regular expressions to C/C++</p>
 <a name="lbAC" id="lbAC">&nbsp;</a>
 <h2>SYNOPSIS</h2>
-<p><b>re2c</b> [<b>-bdefFghisuvVw18</b>] [<b>-o output</b>] [<b>-c</b> [<b>-t header</b>]] file</p>
+<p><b>re2c</b> [<b>-bdefFghisuvVwx18</b>] [<b>-o output</b>] [<b>-c</b> [<b>-t header</b>]] file</p>
 <a name="lbAD" id="lbAD">&nbsp;</a>
 <h2>DESCRIPTION</h2>
 <p><b>re2c</b> is a preprocessor that generates C-based recognizers from
@@ -107,7 +107,7 @@ may crash dot.<br /><br /></dd>
 <dt><b>-e</b></dt>
 <dd>Generate a parser that supports EBCDIC. The generated code can deal with any 
 character up to 0xFF. In this mode re2c assumes that input character size is 
-1 byte. This switch is incompatible with <b>-w</b>, <b>-u</b> and <b>-8</b>.<br /><br /></dd>
+1 byte. This switch is incompatible with <b>-w</b>, <b>-x</b>, <b>-u</b> and <b>-8</b>.<br /><br /></dd>
 <dt><b>-f</b></dt>
 <dd>Generate a scanner with support for storable state. For details see below
 at <b>SCANNER WITH STORABLE STATES</b>.<br /><br /></dd>
@@ -148,7 +148,7 @@ This can only be activated when <b>-c</b> is in use.<br /><br /></dd>
 <dt><b>-u</b></dt>
 <dd>Generate a parser that supports UTF-32. The generated code can deal with any 
 valid Unicode character up to 0x10FFFF. In this mode re2c assumes that input 
-character size is 4 bytes. This switch is incompatible with <b>-e</b>, <b>-w</b> and <b>-8</b>.
+character size is 4 bytes. This switch is incompatible with <b>-e</b>, <b>-w</b>, <b>-x</b> and <b>-8</b>.
 This implies <b>-s</b>.<br /><br /></dd>
 <dt><b>-v</b></dt>
 <dd>Show version information.<br /><br /></dd>
@@ -157,7 +157,12 @@ This implies <b>-s</b>.<br /><br /></dd>
 <dt><b>-w</b></dt>
 <dd>Generate a parser that supports UCS-2. The generated code can deal with any 
 valid Unicode character up to 0xFFFF. In this mode re2c assumes that input 
-character size is 2 bytes. This switch is incompatible with <b>-e</b>, <b>-u</b> and <b>-8</b>.
+character size is 2 bytes. This switch is incompatible with <b>-e</b>, <b>-x</b>, <b>-u</b> and <b>-8</b>.
+This implies <b>-s</b>.<br /><br /></dd>
+<dt><b>-x</b></dt>
+<dd>Generate a parser that supports UF16-2. The generated code can deal with any 
+valid Unicode character up to 0x10FFFF. In this mode re2c assumes that input 
+character size is 2 bytes. This switch is incompatible with <b>-e</b>, <b>-w</b>, <b>-u</b> and <b>-8</b>.
 This implies <b>-s</b>.<br /><br /></dd>
 <dt><b>-1</b></dt>
 <dd>Force single pass generation, this cannot be combined with -f and disables 
@@ -165,7 +170,7 @@ YYMAXFILL generation prior to last re2c block.<br /><br /></dd>
 <dt><b>-8</b></dt>
 <dd>Generate a parser that supports UTF-8. The generated code can deal with any 
 valid Unicode character up to 0x10FFFF. In this mode re2c assumes that input 
-character size is 1 byte. This switch is incompatible with <b>-e</b>, <b>-w</b> and <b>-u</b>.<br /><br /></dd>
+character size is 1 byte. This switch is incompatible with <b>-e</b>, <b>-w</b>, <b>-x</b> and <b>-u</b>.<br /><br /></dd>
 <dt><b>--no-generation-date</b></dt>
 <dd>Suppress date output in the generated output so that it only shows the re2c
 version.<br /><br /></dd>
@@ -339,25 +344,66 @@ as setup code.
 <h2>ENCODINGS</h2>
 <p>
 <b>re2c</b> supports the following encodings: ASCII, EBCDIC (<b>-e</b>), UCS-2 (<b>-w</b>), 
-UTF-32 (<b>-u</b>) and UTF-8 (<b>-8</b>). ASCII is default. You can either pass cmd 
-flag or use inplace configuration.
+UTF-16 (<b>-x</b>), UTF-32 (<b>-u</b>) and UTF-8 (<b>-8</b>). ASCII is default. You can 
+either pass cmd flag or use inplace configuration.
 </p>
 <p>
-ASCII, EBCDIC, UCS-2 and UTF-32 are fixed-length encodings. This means, that 
-all code units (symbols) are encoded in byte sequences of the same length: 
-1 byte in ASCII and EBCDIC, 2 bytes in UCS-2, 4 bytes in UTF-32. This length 
-must be equal to the size of <b>YYCTYPE</b>. <b>re2c</b> assumes that one input character 
-maps to one encoding symbol.
+The following concepts should be clarified when talking about encoding. <b>Code point</b> 
+is an abstract number, which represents single encoding symbol. <b>Code unit</b> is the 
+smallest unit of memory, which is used in the encoded text (it corresponds to one 
+character in the input stream). One or more code units can be needed to represent 
+a single code point, depending on the encoding. In <b>fixed-length</b> encoding, each 
+code point is represented with equal number of code units. In <b>variable-length</b> 
+encoding, different code points can be represented with different number of code units.
 </p>
 <p>
-UTF-8 is a variable-length encoding: different Unicode symbols are encoded 
-in byte sequences of 1, 2, 3 or 4 bytes. In UTF-8 mode, <b>re2c</b> assumes that 
-size of <b>YYCTYPE</b> is 1 byte. It translates multibyte symbols to sequences of 
-1-byte characters. E.g., 2-byte symbol "\xFF" in UTF-8 is equal to 2-symbol 
-string "\xC3\xBF" in ASCII. Some bytes never occur in valid UTF-8 stream, e.g. 
-byte 0xFF. If the generated scanner must check for invalid input symbols, the 
-only way to do so is to use default rule <b>*</b>. Note, that full range rule 
-<b>[^]</b> means quite different thing in UTF-8, excluding 0xFF byte.
+<b>ASCII</b>
+is a fixed-length encoding. Its code space includes 0x100 code points, from 0 
+to 0xFF (note that this is <b>re2c</b>-specific understanding of ASCII). One code point 
+is represented with exactly one 1-byte code unit, which has the same value as the 
+code point. Size of YYCTYPE must be 1 byte.
+</p>
+<p>
+<b>EBCDIC</b>
+is a fixed-length encoding. Its code space includes 0x100 code points, from 0 
+to 0xFF. One code point is represented with exactly one 1-byte code unit, which has 
+the same value as the code point. Size of YYCTYPE must be 1 byte.
+</p>
+<p>
+<b>UCS-2</b>
+is a fixed-length encoding. Its code space includes 0x10000 code points, from 0 
+to 0xFFFF. One code point is represented with exactly one 2-byte code unit, which has 
+the same value as the code point. Size of YYCTYPE must be 2 bytes.
+</p>
+<p>
+<b>UTF-16</b>
+is a variable-length encoding. Its code space includes all Unicode code points, 
+from 0 to 0xD7FF and from 0xE000 to 0x10FFFF. One code point is represented with one or 
+two 2-byte code units. Size of YYCTYPE must be 2 bytes.
+</p>
+<p>
+<b>UTF-32</b>
+is a fixed-length encoding. Its code space includes all Unicode code points, 
+from 0 to 0xD7FF and from 0xE000 to 0x10FFFF. One code point is represented with exactly 
+one 4-byte code unit. Size of YYCTYPE must be 4 bytes.
+</p>
+<p>
+<b>UTF-8</b>
+is a variable-length encoding. Its code space includes all 
+Unicode code points, from 0 to 0xD7FF and from 0xE000 to 0x10FFFF. One code point 
+is represented with sequence of one, two, three or four 1-byte code units. Size of 
+YYCTYPE must be 1 bytes.
+</p>
+<p>
+In Unicode, values from range 0xD800 to 0xDFFF (surrogates) are not valid Unicode 
+code points, any encoded sequence of code units, that would map to Unicode code points 
+in the range 0xD800-0xDFFF, is ill-formed.
+</p>
+<p>
+For some encodings, there are code units, that never occur in valid encoded stream 
+(e.g. 0xFF byte in UTF-8). If the generated scanner must check for such input symbols, 
+the only way to do so is to use default rule <b>*</b>. Note, that full range rule <b>[^]</b> 
+means "all valid code points", while default rule <b>*</b> means "all possible code units".
 </p>
 <a name="lbAI" id="lbAI">&nbsp;</a>
 <h2>SCANNER SPECIFICATIONS</h2>

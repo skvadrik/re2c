@@ -123,6 +123,7 @@ static const mbo_opt_struct OPTIONS[] =
 	mbo_opt_struct('v', 0, "version"),
 	mbo_opt_struct('V', 0, "vernum"),
 	mbo_opt_struct('w', 0, "wide-chars"),
+	mbo_opt_struct('x', 0, "utf-16"),
 	mbo_opt_struct('8', 0, "utf-8"),
 	mbo_opt_struct('1', 0, "single-pass"),
 	mbo_opt_struct(10,  0, "no-generation-date"),
@@ -133,7 +134,7 @@ static const mbo_opt_struct OPTIONS[] =
 
 static void usage()
 {
-	std::cerr << "usage: re2c [-bcdDefFghirsuvVw18] [-o of] [-t th] file\n"
+	std::cerr << "usage: re2c [-bcdDefFghirsuvVwx18] [-o of] [-t th] file\n"
 	"\n"
 	"-? -h  --help           Display this info.\n"
 	"\n"
@@ -150,8 +151,10 @@ static void usage()
 	"\n"
 	"-D     --emit-dot       Emit a Graphviz dot view of the DFA graph\n"
 	"\n"
-	"-e     --ecb            Cross-compile from an ASCII platform to an EBCDIC one.\n"
-	"                        This cannot be combined with -w, -u or -r.\n"
+	"-e     --ecb            Generate a parser that supports EBCDIC. The generated code\n"
+	"                        can deal with any character up to 0xFF. In this mode re2c\n"
+	"                        assumes that input character size is 1 byte. This switch is\n"
+	"                        incompatible with -w, -u, -x, -8 and -r\n"
 	"\n"
 	"-f     --storable-state Generate a scanner that supports storable states.\n"
 	"\n"
@@ -172,18 +175,29 @@ static void usage()
 	"\n"
 	"-t th  --type-header=th Generate a type header file (th) with type definitions.\n"
 	"\n"
-	"-u     --unicode        Implies -w but supports the full Unicode character set.\n"
-	"                        This cannot be used together with -e switch.\n"
+	"-u     --unicode        Generate a parser that supports UTF-32. The generated code\n"
+	"                        can deal with any valid Unicode character up to 0x10FFFF.\n"
+	"                        In this mode re2c assumes that input character size is 4 bytes.\n"
+	"                        This switch is incompatible with -e, -w, -x and -8. It implies -s.\n"
 	"\n"
 	"-v     --version        Show version information.\n"
 	"\n"
 	"-V     --vernum         Show version as one number.\n"
 	"\n"
-	"-w     --wide-chars     Create a parser that supports wide chars (UCS-2). This\n"
-	"                        implies -s and cannot be used together with -e switch.\n"
+	"-w     --wide-chars     Generate a parser that supports UCS-2. The generated code can\n"
+	"                        deal with any valid Unicode character up to 0xFFFF. In this mode\n"
+	"                        re2c assumes that input character size is 2 bytes. This switch is\n"
+	"                        incompatible with -e, -x, -u and -8. It implies -s."
 	"\n"
-	"-8     --utf-8          Create a parser that supports UTF-8. This can't be used\n"
-	"                        together with -e, -w or -u switch.\n"
+	"-x     --utf-16         Generate a parser that supports UTF-16. The generated code can\n"
+	"                        deal with any valid Unicode character up to 0x10FFFF. In this mode\n"
+	"                        re2c assumes that input character size is 2 bytes. This switch is\n"
+	"                        incompatible with -e, -w, -u and -8. It implies -s."
+	"\n"
+	"-8     --utf-8          Generate a parser that supports UTF-8. The generated code can\n"
+	"                        deal with any valid Unicode character up to 0x10FFFF. In this mode\n"
+	"                        re2c assumes that input character size is 1 byte. This switch is\n"
+	"                        incompatible with -e, -w, -x and -u."
 	"\n"
 	"-1     --single-pass    Force single pass generation, this cannot be combined\n"
 	"                        with -f and disables YYMAXFILL generation prior to last\n"
@@ -312,6 +326,11 @@ int main(int argc, char *argv[])
 			
 			case 'w':
 			sFlag = true;
+			encoding.setUCS2();
+			break;
+
+			case 'x':
+			sFlag = true;
 			encoding.setUTF16();
 			break;
 
@@ -362,7 +381,7 @@ int main(int argc, char *argv[])
 
 	if (encoding.isBad())
 	{
-		std::cerr << "re2c: error: Only one of switches -8, -w, -u and -e must be set\n";
+		std::cerr << "re2c: error: Only one of switches -e, -w, -x, -u and -8 must be set\n";
 		return 2;
 	}
 

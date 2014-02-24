@@ -8,10 +8,9 @@ namespace re2c {
 class utf8
 {
 public:
-	/* Code-point values in Unicode 4.0 are 21 bits wide. */
 	typedef uint rune;
 
-	enum	{ MAX_BYTES = 4 /* maximum bytes per rune */
+	enum	{ MAX_RUNE_LENGTH = 4 /* maximum characters per rune */
 
 		, ERROR = 0xFFFD /* decoding error */
 

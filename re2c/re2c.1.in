@@ -11,7 +11,7 @@
 \*(re \- convert \*(rxs to C/C++
 
 .SH SYNOPSIS
-\*(re [\fB-bdDefFghisuvVw18\fP] [\fB-o output\fP] [\fB-c\fP [\fB-t header\fP]] \fBfile\fP
+\*(re [\fB-bdDefFghisuvVwx18\fP] [\fB-o output\fP] [\fB-c\fP [\fB-t header\fP]] \fBfile\fP
 
 .SH DESCRIPTION
 \*(re is a preprocessor that generates C-based recognizers from regular
@@ -117,7 +117,7 @@ may crash dot.
 \fB-e\fP
 Generate a parser that supports EBCDIC. The generated code can deal with any 
 character up to 0xFF. In this mode \*(re assumes that input character size is 
-1 byte. This switch is incompatible with \fB-w\fP, \fB-u\fP and \fB-8\fP.
+1 byte. This switch is incompatible with \fB-w\fP, \fB-x\fP, \fB-u\fP and \fB-8\fP.
 .TP
 \fB-f\fP
 Generate a scanner with support for storable state.
@@ -167,8 +167,8 @@ This can only be activated when \fB-c\fP is in use.
 \fB-u\fP
 Generate a parser that supports UTF-32. The generated code can deal with any 
 valid Unicode character up to 0x10FFFF. In this mode \*(re assumes that input 
-character size is 4 bytes. This switch is incompatible with \fB-e\fP, \fB-w\fP and \fB-8\fP.
-This implies \fB-s\fP.
+character size is 4 bytes. This switch is incompatible with \fB-e\fP, \fB-w\fP, \fB-x\fP 
+and \fB-8\fP. This implies \fB-s\fP.
 .TP
 \fB-v\fP
 Show version information.
@@ -179,8 +179,14 @@ Show the version as a number XXYYZZ.
 \fB-w\fP
 Generate a parser that supports UCS-2. The generated code can deal with any 
 valid Unicode character up to 0xFFFF. In this mode \*(re assumes that input 
-character size is 2 bytes. This switch is incompatible with \fB-e\fP, \fB-u\fP and \fB-8\fP.
-This implies \fB-s\fP.
+character size is 2 bytes. This switch is incompatible with \fB-e\fP, \fB-x\fP, \fB-u\fP 
+and \fB-8\fP. This implies \fB-s\fP.
+.TP
+\fB-x\fP
+Generate a parser that supports UTF-16. The generated code can deal with any 
+valid Unicode character up to 0x10FFFF. In this mode \*(re assumes that input 
+character size is 2 bytes. This switch is incompatible with \fB-e\fP, \fB-w\fP, \fB-u\fP 
+and \fB-8\fP. This implies \fB-s\fP.
 .TP
 \fB-1\fP
 Force single pass generation, this cannot be combined with -f and disables 
@@ -189,7 +195,8 @@ YYMAXFILL generation prior to last \*(re block.
 \fB-8\fP
 Generate a parser that supports UTF-8. The generated code can deal with any 
 valid Unicode character up to 0x10FFFF. In this mode \*(re assumes that input 
-character size is 1 byte. This switch is incompatible with \fB-e\fP, \fB-w\fP and \fB-u\fP.
+character size is 1 byte. This switch is incompatible with \fB-e\fP, \fB-w\fP, \fB-x\fP 
+and \fB-u\fP.
 .TP
 \fB--no-generation-date\fP
 Suppress date output in the generated output so that it only shows the re2c
@@ -384,23 +391,57 @@ as setup code.
 
 .SH "ENCODINGS"
 \*(re supports the following encodings: ASCII, EBCDIC (\fB-e\fP), UCS-2 (\fB-w\fP), 
-UTF-32 (\fB-u\fP) and UTF-8 (\fB-8\fP). ASCII is default. You can either pass cmd 
-flag or use inplace configuration.
+UTF-16 (\fB-x\fP), UTF-32 (\fB-u\fP) and UTF-8 (\fB-8\fP). ASCII is default. You can 
+either pass cmd flag or use inplace configuration.
 .LP
-ASCII, EBCDIC, UCS-2 and UTF-32 are fixed-length encodings. This means, that 
-all code units (symbols) are encoded in byte sequences of the same length: 
-1 byte in ASCII and EBCDIC, 2 bytes in UCS-2, 4 bytes in UTF-32. This length 
-must be equal to the size of YYCTYPE. \*(re assumes that one input character 
-maps to one encoding symbol.
+The following concepts should be clarified when talking about encoding. \fBCode point\fP 
+is an abstract number, which represents single encoding symbol. \fBCode unit\fP is the 
+smallest unit of memory, which is used in the encoded text (it corresponds to one 
+character in the input stream). One or more code units can be needed to represent 
+a single code point, depending on the encoding. In \fBfixed-length\fP encoding, each 
+code point is represented with equal number of code units. In \fBvariable-length\fP 
+encoding, different code points can be represented with different number of code units.
+.TP
+\fC\fBASCII\fP
+is a fixed-length encoding. Its code space includes 0x100 code points, from 0 
+to 0xFF (note that this is \*(re-specific understanding of ASCII). One code point 
+is represented with exactly one 1-byte code unit, which has the same value as the 
+code point. Size of YYCTYPE must be 1 byte.
+.TP
+\fC\fBEBCDIC\fP
+is a fixed-length encoding. Its code space includes 0x100 code points, from 0 
+to 0xFF. One code point is represented with exactly one 1-byte code unit, which has 
+the same value as the code point. Size of YYCTYPE must be 1 byte.
+.TP
+\fC\fBUCS-2\fP
+is a fixed-length encoding. Its code space includes 0x10000 code points, from 0 
+to 0xFFFF. One code point is represented with exactly one 2-byte code unit, which has 
+the same value as the code point. Size of YYCTYPE must be 2 bytes.
+.TP
+\fC\fBUTF-16\fP
+is a variable-length encoding. Its code space includes all Unicode code points, 
+from 0 to 0xD7FF and from 0xE000 to 0x10FFFF. One code point is represented with one or 
+two 2-byte code units. Size of YYCTYPE must be 2 bytes.
+.TP
+\fC\fBUTF-32\fP
+is a fixed-length encoding. Its code space includes all Unicode code points, 
+from 0 to 0xD7FF and from 0xE000 to 0x10FFFF. One code point is represented with exactly 
+one 4-byte code unit. Size of YYCTYPE must be 4 bytes.
+.TP
+\fC\fBUTF-8\fP
+is a variable-length encoding. Its code space includes all 
+Unicode code points, from 0 to 0xD7FF and from 0xE000 to 0x10FFFF. One code point 
+is represented with sequence of one, two, three or four 1-byte code units. Size of 
+YYCTYPE must be 1 bytes.
 .LP
-UTF-8 is a variable-length encoding: different Unicode symbols are encoded 
-in byte sequences of 1, 2, 3 or 4 bytes. In UTF-8 mode, \*(re assumes that 
-size of YYCTYPE is 1 byte. It translates multibyte symbols to sequences of 
-1-byte characters. E.g., 2-byte symbol "\\xFF" in UTF-8 is equal to 2-symbol 
-string "\\xC3\\xBF" in ASCII. Some bytes never occur in valid UTF-8 stream, e.g. 
-byte 0xFF. If the generated scanner must check for invalid input symbols, the 
-only way to do so is to use default rule \fB*\fP. Note, that full range rule 
-\fB[^]\fP means quite different thing in UTF-8, excluding 0xFF byte.
+In Unicode, values from range 0xD800 to 0xDFFF (surrogates) are not valid Unicode 
+code points, any encoded sequence of code units, that would map to Unicode code points 
+in the range 0xD800-0xDFFF, is ill-formed.
+.LP
+For some encodings, there are code units, that never occur in valid encoded stream 
+(e.g. 0xFF byte in UTF-8). If the generated scanner must check for such input symbols, 
+the only way to do so is to use default rule \fB*\fP. Note, that full range rule \fB[^]\fP 
+means "all valid code points", while default rule \fB*\fP means "all possible code units".
 
 .SH "SCANNER SPECIFICATIONS"
 Each scanner specification consists of a set of \fIrules\fP, \fInamed

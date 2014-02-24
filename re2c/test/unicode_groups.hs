@@ -2,7 +2,7 @@
  - Compile: ghc -O2 -W -Wall unicode_groups.hs
  -
  - This program is a test generator for re2c's
- - support of UTF-8 encoding. It generates two
+ - support of Unicode encodings. It generates two
  - kinds of tests:
  - 1) Multiple tests for Unicode categories
  -     (like uppercase letters, space modifiers,
@@ -14,7 +14,7 @@
  -     generate common scanner for them.
  -
  - All tests have the same structure: re2c
- - block for Unicode range is tested on UTF-8
+ - block for Unicode range is tested on
  - encoded bytestring, which contains all
  - Unicode runes from this range and ends
  - with another Unicode rune.
@@ -24,15 +24,17 @@
  - stdout in form "test 'XXX' failed".
  -}
 
-import           Codec.Binary.UTF8.String            (encodeString)
 import           Data.Bits                           (shiftR, (.&.))
+import qualified Data.ByteString.Char8         as BS (ByteString, unpack)
 import           Data.Char                           (ord, isAlpha)
-import qualified Data.CharSet                  as CS (fromCharSet, toAscList, union, empty)
+import qualified Data.CharSet                  as CS (fromCharSet, toAscList, union, empty, complement)
 import           Data.CharSet                  as CS (CharSet)
 import           Data.CharSet.Unicode.Category       (Category(..), categories)
 import           Data.CharSet.Unicode.Block          (Block(..), blocks)
 import qualified Data.IntSet                   as IS (foldl')
 import qualified Data.List                     as L  (foldl')
+import qualified Data.Text                     as T  (Text, pack)
+import qualified Data.Text.Encoding            as TE (encodeUtf16LE, encodeUtf8)
 import           Text.Printf                         (printf)
 
 
@@ -120,35 +122,52 @@ prettify :: String -> String
 prettify = map (\ c -> if isAlpha c then c else '_')
 
 
+outer :: CharSet -> Char
+outer cs = head $ CS.toAscList $ CS.complement cs
+
+
+encode :: (T.Text -> BS.ByteString) -> CharSet -> String
+encode f cs =
+    ( concatMap show_char
+    . BS.unpack
+    . f
+    . T.pack
+    ) (CS.toAscList cs ++ [outer cs])
+
+
 gen_test_category :: Category -> IO ()
 gen_test_category (Category _ name cs _) =
-    let catname    = prettify name
-        file       = "utf8_group_" ++ catname ++ ".8.re"
-        range      = CS.toAscList cs
-        bs         = (concatMap show_char $ encodeString range) ++ "\\xFF"
-        content    = unlines
+    let catname = prettify name
+        file8   = "unicode_group_" ++ catname ++ ".8.re"
+        file16  = "unicode_group_" ++ catname ++ ".x.re"
+        bs8     = encode TE.encodeUtf8 cs
+        bs16    = encode TE.encodeUtf16LE cs
+        content ctype s = unlines
             [ "#include <stdio.h>"
-            , "bool scan(const char * start, const char * const limit)"
+            , "#define YYCTYPE " ++ ctype
+            , "bool scan(const YYCTYPE * start, const YYCTYPE * const limit)"
             , "{"
-            , "\t__attribute__((unused)) const char * YYMARKER; // silence compiler warnings when YYMARKER is not used"
-            , "#\tdefine YYCTYPE unsigned char"
+            , "\t__attribute__((unused)) const YYCTYPE * YYMARKER; // silence compiler warnings when YYMARKER is not used"
             , "#\tdefine YYCURSOR start"
             , catname ++ ":"
             , "\t/*!re2c"
             , "\t\tre2c:yyfill:enable = 0;"
             , "\t\t" ++ show_category catname cs
             , "\t\t" ++ catname ++ " { goto " ++ catname ++ "; }"
-            , "\t\t* { return YYCURSOR == limit; }"
+            , "\t\t[^] { return YYCURSOR == limit; }"
             , "\t*/"
             , "}"
-            , "static const char buffer_" ++ catname ++ " [] = \"" ++ bs ++ "\";"
+            , "static const char buffer_" ++ catname ++ " [] = \"" ++ s ++ "\";"
             , "int main ()"
             , "{"
-            , "\tif (!scan (buffer_" ++ catname ++ ", buffer_" ++ catname ++ " + sizeof (buffer_" ++ catname ++ ") - 1))"
+            , let arg1 = "reinterpret_cast<const YYCTYPE *> (buffer_" ++ catname ++ ")"
+                  arg2 = "reinterpret_cast<const YYCTYPE *> (buffer_" ++ catname ++ " + sizeof (buffer_" ++ catname ++ ") - 1)"
+              in  "\tif (!scan (" ++ arg1 ++ ", " ++ arg2 ++ "))"
             , "\t\tprintf(\"test '" ++ catname ++ "' failed\\n\");"
             , "}"
             ]
-    in  writeFile file content
+    in  writeFile file8 (content "unsigned char" bs8) >>
+        writeFile file16 (content "unsigned short" bs16)
 
 
 gen_test_blocks :: IO ()
@@ -156,17 +175,17 @@ gen_test_blocks =
     let (blocknames, charsets) = unzip $ map (\ (Block name cs) -> (prettify name, cs)) blocks
         blocknames'            = blocknames ++ ["All"]
         charsets'              = charsets ++ [L.foldl' CS.union CS.empty charsets]
-        content                = unlines
+        content ctype encf     = unlines
             [ "#include <stdio.h>"
+            , "#define YYCTYPE " ++ ctype
             , "enum Block"
             , "{"
             , unlines $ map (\ s -> "\t" ++ s ++ ",") blocknames'
             , "\tError"
             , "};"
-            , "Block scan(const char * start, const char * const limit, Block blk)"
+            , "Block scan(const YYCTYPE * start, const YYCTYPE * const limit, Block blk)"
             , "{"
-            , "\tconst char * YYMARKER;"
-            , "#\tdefine YYCTYPE unsigned char"
+            , "\t__attribute__((unused)) const YYCTYPE * YYMARKER; // silence compiler warnings when YYMARKER is not used"
             , "#\tdefine YYCURSOR start"
             , "\tswitch (blk)"
             , "\t{"
@@ -182,28 +201,28 @@ gen_test_blocks =
                     , "\t/*!re2c"
                     , "\t\tre2c:yyfill:enable = 0;"
                     , "\t\t" ++ s ++ " { goto " ++ s ++ "; }"
-                    , "\t\t* { if (YYCURSOR == limit) return " ++ s ++ "; else return Error; }"
+                    , "\t\t[^] { if (YYCURSOR == limit) return " ++ s ++ "; else return Error; }"
                     , "\t*/"
                     ]
                 ) blocknames'
             , "}"
             , unlines $ map
-                (\ (s, cs) ->
-                    let range = CS.toAscList cs
-                        bs    = (concatMap show_char $ encodeString range) ++ "\\xFF"
-                    in  "static const char buffer_" ++ s ++ " [] = \"" ++ bs ++ "\";"
+                (\ (s, cs) -> "static const char buffer_" ++ s ++ " [] = \"" ++ encode encf cs ++ "\";"
                 ) $ zip blocknames' charsets'
             , "int main()"
             , "{"
             , unlines $ map
                 (\ s -> unlines
-                    [ "\tif (scan (buffer_" ++ s ++ ", buffer_" ++ s ++ " + sizeof(buffer_" ++ s ++ ") - 1, " ++ s ++ ") != "++ s ++ ")"
+                    [ let arg1 = "reinterpret_cast<const YYCTYPE *> (buffer_" ++ s ++ ")"
+                          arg2 = "reinterpret_cast<const YYCTYPE *> (buffer_" ++ s ++ " + sizeof(buffer_" ++ s ++ ") - 1)"
+                      in  "\tif (scan (" ++ arg1 ++ ", " ++ arg2 ++ ", " ++ s ++ ") != "++ s ++ ")"
                     , "\t\tprintf (\"test '" ++ s ++ "' failed\\n\");"
                     ]
                 ) blocknames'
             , "}"
             ]
-    in  writeFile "utf8_blocks.8.re" content
+    in  writeFile "unicode_blocks.8.re" (content "unsigned char" TE.encodeUtf8) >>
+        writeFile "unicode_blocks.x.re" (content "unsigned short" TE.encodeUtf16LE)
 
 
 main :: IO ()

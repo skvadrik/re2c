@@ -2,18 +2,7 @@
 
 namespace re2c {
 
-const uint Enc::ASCII_SYMBOLS  = 0x100;
-const uint Enc::ASCII_CHARS    = 0x100;
-const uint Enc::EBCDIC_SYMBOLS = 0x100;
-const uint Enc::EBCDIC_CHARS   = 0x100;
-const uint Enc::UTF16_SYMBOLS  = 0x10000;
-const uint Enc::UTF16_CHARS    = 0x10000;
-const uint Enc::UTF32_SYMBOLS  = 0x110000;
-const uint Enc::UTF32_CHARS    = 0x110000;
-const uint Enc::UTF8_SYMBOLS   = 0x110000;
-const uint Enc::UTF8_CHARS     = 0x100;
-
-const uint Enc::BAD = 0;
+const uint Enc::ERROR = ~0u;
 
 const uint Enc::asc2ebc[256] =
     { /* Based on ISO 8859/1 and Code Page 37 */

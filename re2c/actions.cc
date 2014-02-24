@@ -8,7 +8,8 @@
 #include "globals.h"
 #include "parser.h"
 #include "dfa.h"
-#include "utf8_range.h"
+#include "utf8_regexp.h"
+#include "utf16_regexp.h"
 
 namespace re2c
 {
@@ -706,17 +707,17 @@ uint Scanner::unescape(SubStr &s) const
 			}
 
 			uint l = 0;
-						
 			if (s.str[0] == '0')
 			{
 				l++;
 				if (s.str[1] == '0')
 				{
 					l++;
-					if (s.str[2] == '0' || (s.str[2] == '1' && (encoding.szSymbol() == 4)))
+					if (s.str[2] == '0' || (s.str[2] == '1' && encoding.szCodePoint() == 4))
 					{
 						l++;
-						if (encoding.szSymbol() == 4) {
+						if (encoding.szCodePoint() == 4)
+						{
 							const char *u3 = strchr(hex, tolower(s.str[2]));
 							const char *u4 = strchr(hex, tolower(s.str[3]));
 							if (u3 && u4)
@@ -780,7 +781,7 @@ uint Scanner::unescape(SubStr &s) const
 				       + (uint)((p4 - hex))
 				       + ucb;
 	
-				if (v >= encoding.nSymbols())
+				if (v >= encoding.nCodePoints())
 				{
 					fatal(s.ofs(),
 						c == 'X'
@@ -904,18 +905,12 @@ RegExp * Scanner::matchChar(uint c) const
 
 RegExp * Scanner::matchSymbol(uint c) const
 {
-	RegExp *re = NULL;
-	if (encoding.isUTF8())
-	{
-		uchar bytes[4];
-		const int bytes_count = utf8::rune_to_bytes(bytes, c);
-		re = matchChar(bytes[0]);
-		for (int i = 1; i < bytes_count; ++i)
-			re = new CatOp (re, matchChar(bytes[i]));
-	}
+	if (encoding.isUTF16())
+		return UTF16Symbol(c);
+	else if (encoding.isUTF8())
+		return UTF8Symbol(c);
 	else
-		re = matchChar(c);
-	return re;
+		return matchChar(c);
 }
 
 RegExp * Scanner::strToRE(SubStr s) const
@@ -985,6 +980,16 @@ Range * Scanner::mkRange(SubStr &s) const
 	return r;
 }
 
+RegExp * Scanner::matchSymbolRange(Range * r) const
+{
+	if (encoding.isUTF16())
+		return UTF16Range(r);
+	else if (encoding.isUTF8())
+		return UTF8Range(r);
+	else
+		return new MatchOp(r);
+}
+
 RegExp * Scanner::ranToRE(SubStr s) const
 {
 	s.len -= 2;
@@ -993,10 +998,7 @@ RegExp * Scanner::ranToRE(SubStr s) const
 	if (s.len == 0)
 		return new NullOp;
 
-	Range *r = mkRange(s);
-	return encoding.isUTF8()
-		? UTF8Range(r)
-		: new MatchOp(r);
+	return matchSymbolRange(mkRange(s));
 }
 
 RegExp * Scanner::invToRE(SubStr s) const
@@ -1004,39 +1006,35 @@ RegExp * Scanner::invToRE(SubStr s) const
 	s.len -= 3;
 	s.str += 2;
 
-	Range * any = new Range(0, encoding.nSymbols());
+	Range * any = new Range(0, encoding.nCodePoints());
 
 	Range * r = s.len == 0
 		? any
 		: doDiff(any, mkRange (s));
 
-	return encoding.isUTF8()
-		? UTF8Range(r)
-		: new MatchOp(r);
+	return matchSymbolRange(r);
 }
 
 RegExp * Scanner::mkDot() const
 {
-	Range * any = new Range(0, encoding.nSymbols());
+	Range * any = new Range(0, encoding.nCodePoints());
 	const uint c = encoding.xlat('\n');
 	Range * ran = new Range(c, c + 1);
 	Range * inv = doDiff(any, ran);
 
-	return encoding.isUTF8()
-		? UTF8Range(inv)
-		: new MatchOp(inv);
+	return matchSymbolRange(inv);
 }
 
 /*
  * Create a byte range that includes all possible input characters.
  * This may include characters, which do not map to any valid symbol
  * in current encoding. For encodings, which directly map symbols to
- * input characters (ASCII, EBCDIC, UTF-16, UTF-32), it equals [^].
- * For other encodings (UTF-8), [^] and this range are different.
+ * input characters (ASCII, EBCDIC, UTF-32), it equals [^]. For other
+ * encodings (UTF-16, UTF-8), [^] and this range are different.
  */
 RegExp * Scanner::mkDefault() const
 {
-	Range * def = new Range(0, encoding.nChars());
+	Range * def = new Range(0, encoding.nCodeUnits());
 	return new MatchOp(def);
 }
 
@@ -1157,19 +1155,19 @@ CharSet::CharSet()
 	: fix(0)
 	, freeHead(0)
 	, freeTail(0)
-	, rep(new CharPtr[encoding.nChars()])
-	, ptn(new CharPtn[encoding.nChars()])
+	, rep(new CharPtr[encoding.nCodeUnits()])
+	, ptn(new CharPtn[encoding.nCodeUnits()])
 {
-	for (uint j = 0; j < encoding.nChars(); ++j)
+	for (uint j = 0; j < encoding.nCodeUnits(); ++j)
 	{
 		rep[j] = &ptn[0];
-		ptn[j].nxt = &ptn[j + 1]; /* wrong for j=encoding.nChars() but will be corrected below */
+		ptn[j].nxt = &ptn[j + 1]; /* wrong for j=encoding.nCodeUnits() - 1 but will be corrected below */
 		ptn[j].card = 0;
 	}
 
 	freeHead = &ptn[1];
-	*(freeTail = &ptn[encoding.nChars() - 1].nxt) = NULL;
-	ptn[0].card = encoding.nChars();
+	*(freeTail = &ptn[encoding.nCodeUnits() - 1].nxt) = NULL;
+	ptn[0].card = encoding.nCodeUnits();
 	ptn[0].nxt = NULL;
 }
 	
@@ -1182,24 +1180,24 @@ CharSet::~CharSet()
 smart_ptr<DFA> genCode(RegExp *re)
 {
 	CharSet cs;
-	uint j;
-
 	re->split(cs);
-	/*
-	    for(uint k = 0; k < encoding.nChars();){
-		for(j = k; ++k < encoding.nChars() && cs.rep[k] == cs.rep[j];);
-		printSpan(cerr, j, k);
-		cerr << "\t" << cs.rep[j] - &cs.ptn[0] << endl;
-	    }
-	*/
-	Char *rep = new Char[encoding.nChars()];
+	
+	/*for(uint k = 0; k < encoding.nCodeUnits();)
+	{
+		uint j;
+		for(j = k; ++k < encoding.nCodeUnits() && cs.rep[k] == cs.rep[j];);
+		printSpan(std::cerr, j, k);
+		std::cerr << "\t" << cs.rep[j] - &cs.ptn[0] << std::endl;
+	}*/
+	
+	Char *rep = new Char[encoding.nCodeUnits()];
 
-	for (j = 0; j < encoding.nChars(); ++j)
+	for (uint j = 0; j < encoding.nCodeUnits(); ++j)
 	{
 		if (!cs.rep[j]->nxt)
 			cs.rep[j]->nxt = &cs.ptn[j];
 
-		rep[j] = (Char) (cs.rep[j]->nxt - &cs.ptn[0]);
+		rep[j] = cs.rep[j]->nxt - &cs.ptn[0];
 	}
 
 	re->calcSize(rep);
@@ -1218,7 +1216,7 @@ smart_ptr<DFA> genCode(RegExp *re)
 	}
 	*/
 
-	for (j = 0; j < size;)
+	for (uint j = 0; j < size;)
 	{
 		unmark(&ins[j]);
 
@@ -1232,7 +1230,7 @@ smart_ptr<DFA> genCode(RegExp *re)
 		}
 	}
 
-	return make_smart_ptr(new DFA(ins, size, 0, encoding.nChars(), rep));
+	return make_smart_ptr(new DFA(ins, size, 0, encoding.nCodeUnits(), rep));
 }
 
 } // end namespace re2c

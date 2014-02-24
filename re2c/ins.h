@@ -7,7 +7,7 @@
 namespace re2c
 {
 
-typedef unsigned short Char;
+typedef uint Char;
 
 const uint CHAR = 0;
 const uint GOTO = 1;
@@ -28,8 +28,8 @@ union Ins {
 
 	struct
 	{
-		ushort	value;
-		ushort	bump;
+		uint	value;
+		uint	bump;
 		void	*link;
 	}
 

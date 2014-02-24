@@ -1145,7 +1145,7 @@ void Go::genCpGoto(std::ostream &o, uint ind, const State *from, const State *ne
 	}
 
 	readCh = false;
-	if (encoding.szChar() > 1)
+	if (encoding.szCodeUnit() > 1)
 	{
 		o << indent(ind) << "if (" << sYych <<" & ~0xFF) {\n";
 		genBase(o, ind+1, from, next, readCh, 1);
@@ -1189,7 +1189,7 @@ void Go::genCpGoto(std::ostream &o, uint ind, const State *from, const State *ne
 
 void Go::genGoto(std::ostream &o, uint ind, const State *from, const State *next, bool &readCh)
 {
-	if ((gFlag || (encoding.szChar() > 1)) && wSpans == ~0u)
+	if ((gFlag || (encoding.szCodeUnit() > 1)) && wSpans == ~0u)
 	{
 		uint nBitmaps = 0;
 		std::set<uint> vTargets;
@@ -1202,7 +1202,7 @@ void Go::genGoto(std::ostream &o, uint ind, const State *from, const State *next
 			{
 				wSpans++;
 			}
-			if (span[i].ub < 0x100 || (encoding.szChar() <= 1))
+			if (span[i].ub < 0x100 || (encoding.szCodeUnit() <= 1))
 			{
 				lSpans++;
 
@@ -1262,7 +1262,7 @@ void Go::genGoto(std::ostream &o, uint ind, const State *from, const State *next
 						sYych = mapCodeName["yych"];
 					}
 					readCh = false;
-					if (encoding.szChar() > 1)
+					if (encoding.szCodeUnit() > 1)
 					{
 						o << indent(ind) << "if (" << sYych << " & ~0xFF) {\n";
 						sYych = mapCodeName["yych"];
@@ -2255,9 +2255,22 @@ void Scanner::config(const Str& cfg, int num)
 		else
 			encoding.unsetUTF32();
 		if (encoding.isBad())
-			fatal("Cannot set '-u' switch: please reset '-e', '-w' and '-8' switches at first.\n");
+			fatal("Cannot set '-u' switch: please reset '-e', '-w', '-x' and '-8' switches at first.\n");
 	}
 	else if (cfg.to_string() == "flags:w")
+	{
+		if (!rFlag)
+		{
+			fatalf("cannot use configuration name '%s' without -r flag", cfg.to_string().c_str());
+		}
+		if (num != 0)
+			encoding.setUCS2();
+		else
+			encoding.unsetUCS2();
+		if (encoding.isBad())
+			fatal("Cannot set '-w' switch: please reset '-e', '-x', '-u' and '-8' switches at first.\n");
+	}
+	else if (cfg.to_string() == "flags:x")
 	{
 		if (!rFlag)
 		{
@@ -2268,7 +2281,7 @@ void Scanner::config(const Str& cfg, int num)
 		else
 			encoding.unsetUTF16();
 		if (encoding.isBad())
-			fatal("Cannot set '-w' switch: please reset '-e', '-u' and '-8' switches at first.\n");
+			fatal("Cannot set '-w' switch: please reset '-e', '-x', '-u' and '-8' switches at first.\n");
 	}
 	else if (cfg.to_string() == "flags:8")
 	{
@@ -2281,7 +2294,7 @@ void Scanner::config(const Str& cfg, int num)
 		else
 			encoding.unsetUTF8();
 		if (encoding.isBad())
-			fatal("Cannot set '-8' switch: please reset '-e', '-w' and '-u' switches at first.\n");
+			fatal("Cannot set '-8' switch: please reset '-e', '-w', '-x' and '-u' switches at first.\n");
 	}
 	else
 	{
