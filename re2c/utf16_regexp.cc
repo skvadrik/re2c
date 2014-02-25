@@ -12,7 +12,7 @@ RegExp * UTF16Symbol(utf16::rune r)
 	{
 		const ushort ld = utf16::lead_surr(r);
 		const ushort tr = utf16::trail_surr(r);
-		return new CatOp(new MatchOp(new Range(ld, ld)), new MatchOp(new Range(tr, tr)));
+		return new CatOp(new MatchOp(new Range(ld, ld + 1)), new MatchOp(new Range(tr, tr + 1)));
 	}
 }
 
