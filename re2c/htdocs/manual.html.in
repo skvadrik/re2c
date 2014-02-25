@@ -133,7 +133,8 @@ Specify the output file.<br /><br /></dd>
 '<b>/*!rules:re2c</b>'. In this mode no '<b>/*!re2c</b>' block and exactly one
 '<b>/*!rules:re2c</b>' must be present. The rules are being saved and used by
 every '<b>/*!use:re2c</b>' block that follows. These blocks can contain
-inplace configurations, especially '<b>re2c:flags:w</b>' and '<b>re2c:flags:u</b>'.
+inplace configurations, especially '<b>re2c:flags:e</b>', '<b>re2c:flags:w</b>', 
+'<b>re2c:flags:x</b>', '<b>re2c:flags:u</b>' and '<b>re2c:flags:8</b>'.
 That way it is possible to create the same scanner multiple times for different
 character types, different input mechanisms or different output mechanisms.
 The '<b>/*!use:re2c</b>' blocks can also contain additional rules that will be

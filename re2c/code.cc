@@ -2244,12 +2244,17 @@ void Scanner::config(const Str& cfg, int num)
 	{
 		bUseYYSetStateNaked = num != 0;
 	}
+	else if (cfg.to_string() == "flags:e")
+	{
+		if (num != 0)
+			encoding.setEBCDIC();
+		else
+			encoding.unsetEBCDIC();
+		if (encoding.isBad())
+			fatal("Cannot set '-e' switch: please reset '-w', '-x', '-u' and '-8' switches at first.\n");
+	}
 	else if (cfg.to_string() == "flags:u")
 	{
-		if (!rFlag)
-		{
-			fatalf("cannot use configuration name '%s' without -r flag", cfg.to_string().c_str());
-		}
 		if (num != 0)
 			encoding.setUTF32();
 		else
@@ -2259,10 +2264,6 @@ void Scanner::config(const Str& cfg, int num)
 	}
 	else if (cfg.to_string() == "flags:w")
 	{
-		if (!rFlag)
-		{
-			fatalf("cannot use configuration name '%s' without -r flag", cfg.to_string().c_str());
-		}
 		if (num != 0)
 			encoding.setUCS2();
 		else
@@ -2272,10 +2273,6 @@ void Scanner::config(const Str& cfg, int num)
 	}
 	else if (cfg.to_string() == "flags:x")
 	{
-		if (!rFlag)
-		{
-			fatalf("cannot use configuration name '%s' without -r flag", cfg.to_string().c_str());
-		}
 		if (num != 0)
 			encoding.setUTF16();
 		else
@@ -2285,10 +2282,6 @@ void Scanner::config(const Str& cfg, int num)
 	}
 	else if (cfg.to_string() == "flags:8")
 	{
-		if (!rFlag)
-		{
-			fatalf("cannot use configuration name '%s' without -r flag", cfg.to_string().c_str());
-		}
 		if (num != 0)
 			encoding.setUTF8();
 		else

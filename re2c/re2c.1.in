@@ -150,7 +150,8 @@ Allows reuse of scanner definitions with '\fB/*!use:re2c\fP' after
 '\fB/*!rules:re2c\fP'. In this mode no '\fB/*!re2c\fP' block and exactly one
 '\fB/*!rules:re2c\fP' must be present. The rules are being saved and used by
 every '\fB/*!use:re2c\fP' block that follows. These blocks can contain
-inplace configurations, especially '\fBre2c:flags:w\fP' and '\fBre2c:flags:u\fP'.
+inplace configurations, especially '\fBre2c:flags:e\fP', '\fBre2c:flags:w\fP', 
+'\fBre2c:flags:x\fP', '\fBre2c:flags:u\fP' and '\fBre2c:flags:8\fP'.
 That way it is possible to create the same scanner multiple times for different
 character types, different input mechanisms or different output mechanisms.
 The '\fB/*!use:re2c\fP' blocks can also contain additional rules that will be

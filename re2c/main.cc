@@ -154,7 +154,7 @@ static void usage()
 	"-e     --ecb            Generate a parser that supports EBCDIC. The generated code\n"
 	"                        can deal with any character up to 0xFF. In this mode re2c\n"
 	"                        assumes that input character size is 1 byte. This switch is\n"
-	"                        incompatible with -w, -u, -x, -8 and -r\n"
+	"                        incompatible with -w, -u, -x and -8\n"
 	"\n"
 	"-f     --storable-state Generate a scanner that supports storable states.\n"
 	"\n"
@@ -168,7 +168,6 @@ static void usage()
 	"-o of  --output=of      Specify the output file (of) instead of stdout\n"
 	"\n"
 	"-r     --reusable       Allow reuse of scanner definitions.\n"
-	"                        This cannot be used together with -e switch.\n"
 	"\n"
 	"-s     --nested-ifs     Generate nested ifs for some switches. Many compilers\n"
 	"                        need this assist to generate better code.\n"
@@ -370,12 +369,6 @@ int main(int argc, char *argv[])
 	if (!cFlag && headerFileName)
 	{
 		std::cerr << "re2c: error: Can only output a header file when using -c switch\n";
-		return 2;
-	}
-
-	if (rFlag && encoding.isEBCDIC())
-	{
-		std::cerr << "re2c: error: Cannot combine -e with -r switch\n";
 		return 2;
 	}
 
