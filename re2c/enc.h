@@ -30,21 +30,22 @@ namespace re2c {
 
 class Enc
 {
+public:
 	// Supported encodings.
 	enum type_t
-		{ ASCII  = 0x00000000u
-		, EBCDIC = 0x00000001u
-		, UCS2   = 0x00000002u
-		, UTF16  = 0x00000004u
-		, UTF32  = 0x00000008u
-		, UTF8   = 0x00000010u
+		{ ASCII
+		, EBCDIC
+		, UCS2
+		, UTF16
+		, UTF32
+		, UTF8
 		};
 
-	static const uint ERROR;
 	static const uint asc2ebc[256];
 	static const uint ebc2asc[256];
 
-	uint type;
+private:
+	type_t type;
 
 public:
 	Enc()
@@ -58,25 +59,9 @@ public:
 	inline uint szCodePoint() const;
 	inline uint szCodeUnit() const;
 
-	inline void setEBCDIC()	{ type |= EBCDIC; }
-	inline void setUCS2()	{ type |= UCS2; }
-	inline void setUTF16()	{ type |= UTF16; }
-	inline void setUTF32()	{ type |= UTF32; }
-	inline void setUTF8()	{ type |= UTF8; }
-
-	inline void unsetEBCDIC()	{ type &= ~EBCDIC; }
-	inline void unsetUCS2()		{ type &= ~UCS2; }
-	inline void unsetUTF16()	{ type &= ~UTF16; }
-	inline void unsetUTF32()	{ type &= ~UTF32; }
-	inline void unsetUTF8()		{ type &= ~UTF8; }
-
-	inline bool isEBCDIC() const	{ return type & EBCDIC; }
-	inline bool isUCS2() const	{ return type & UCS2; }
-	inline bool isUTF16() const	{ return type & UTF16; }
-	inline bool isUTF32() const	{ return type & UTF32; }
-	inline bool isUTF8() const	{ return type & UTF8; }
-
-	inline bool isBad() const;
+	inline bool set(type_t t);
+	inline void unset(type_t);
+	inline bool is(type_t) const;
 
 	inline uint xlat(uint c) const;
 	inline uint talx(uint c) const;
@@ -92,8 +77,8 @@ inline uint Enc::nCodePoints() const
 		case UTF16:
 		case UTF32:
 		case UTF8:	return 0x110000;
-		default:	return ERROR;
 	}
+	return ~0; // to silence gcc warning
 }
 
 inline uint Enc::nCodeUnits() const
@@ -106,8 +91,8 @@ inline uint Enc::nCodeUnits() const
 		case UCS2:
 		case UTF16:	return 0x10000;
 		case UTF32:	return 0x110000;
-		default:	return ERROR;
 	}
+	return ~0; // to silence gcc warning
 }
 
 // returns *maximal* code point size for encoding
@@ -121,8 +106,8 @@ inline uint Enc::szCodePoint() const
 		case UTF16:
 		case UTF32:
 		case UTF8:	return 4;
-		default:	return ERROR;
 	}
+	return ~0; // to silence gcc warning
 }
 
 inline uint Enc::szCodeUnit() const
@@ -135,18 +120,32 @@ inline uint Enc::szCodeUnit() const
 		case UCS2:
 		case UTF16:	return 2;
 		case UTF32:	return 4;
-		default:	return ERROR;
+	}
+	return ~0; // to silence gcc warning
+}
+
+inline bool Enc::set(type_t t)
+{
+	if (type == t)
+		return true;
+	else if (type != ASCII)
+		return false;
+	else
+	{
+		type = t;
+		return true;
 	}
 }
 
-// This test returns 'true' for all valid encoding types
-inline bool Enc::isBad() const
+inline void Enc::unset(type_t t)
 {
-	// test if 'type' is a power of 2
-	// notice: ASCII mask is 0 => it's ok if either
-	// 1) only ASCII is set
-	// 2) both ASCII and some other encoding is set
-	return (type & (type - 1)) != 0;
+	if (type == t)
+		type = ASCII;
+}
+
+inline bool Enc::is(type_t t) const
+{
+	return type == t;
 }
 
 inline uint Enc::xlat(uint c) const
@@ -159,8 +158,8 @@ inline uint Enc::xlat(uint c) const
 		case UTF16:
 		case UTF32:
 		case UTF8:	return c;
-		default:	return ERROR;
 	}
+	return ~0; // to silence gcc warning
 }
 
 inline uint Enc::talx(uint c) const
@@ -173,8 +172,8 @@ inline uint Enc::talx(uint c) const
 		case UTF16:
 		case UTF32:
 		case UTF8:	return c;
-		default:	return ERROR;
 	}
+	return ~0; // to silence gcc warning
 }
 
 } // namespace re2c

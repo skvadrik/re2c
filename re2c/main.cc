@@ -246,7 +246,11 @@ int main(int argc, char *argv[])
 			break;
 
 			case 'e':
-			encoding.setEBCDIC();
+			if (!encoding.set(Enc::EBCDIC))
+			{
+				std::cerr << "re2c: error: Only one of switches -e, -w, -x, -u and -8 must be set\n";
+				return 2;
+			}
 			break;
 
 			case 'd':
@@ -322,26 +326,42 @@ int main(int argc, char *argv[])
 				cout << vernum << endl;
 				return 2;
 			}
-			
+
 			case 'w':
 			sFlag = true;
-			encoding.setUCS2();
+			if (!encoding.set(Enc::UCS2))
+			{
+				std::cerr << "re2c: error: Only one of switches -e, -w, -x, -u and -8 must be set\n";
+				return 2;
+			}
 			break;
 
 			case 'x':
 			sFlag = true;
-			encoding.setUTF16();
+			if (!encoding.set(Enc::UTF16))
+			{
+				std::cerr << "re2c: error: Only one of switches -e, -w, -x, -u and -8 must be set\n";
+				return 2;
+			}
 			break;
 
 			case 'u':
 			sFlag = true;
-			encoding.setUTF32();
+			if (!encoding.set(Enc::UTF32))
+			{
+				std::cerr << "re2c: error: Only one of switches -e, -w, -x, -u and -8 must be set\n";
+				return 2;
+			}
 			break;
 
 			case '8':
-			encoding.setUTF8();
+			if (!encoding.set(Enc::UTF8))
+			{
+				std::cerr << "re2c: error: Only one of switches -e, -w, -x, -u and -8 must be set\n";
+				return 2;
+			}
 			break;
-	  
+
 			default:
 			case 'h':
 			case '?':
@@ -369,12 +389,6 @@ int main(int argc, char *argv[])
 	if (!cFlag && headerFileName)
 	{
 		std::cerr << "re2c: error: Can only output a header file when using -c switch\n";
-		return 2;
-	}
-
-	if (encoding.isBad())
-	{
-		std::cerr << "re2c: error: Only one of switches -e, -w, -x, -u and -8 must be set\n";
 		return 2;
 	}
 

@@ -908,7 +908,7 @@ static bool genCases(std::ostream &o, uint ind, uint lb, Span *s, bool &newLine,
 					o << indent(ind) << "case ";
 					prtChOrHex(o, lb);
 					o << ":";
-					if (dFlag && encoding.isEBCDIC() && lb < 256u && isprint(encoding.talx(lb)))
+					if (dFlag && encoding.is(Enc::EBCDIC) && lb < 256u && isprint(encoding.talx(lb)))
 					{
 						o << " /* " << std::string(1, encoding.talx(lb)) << " */";
 					}
@@ -2248,47 +2248,52 @@ void Scanner::config(const Str& cfg, int num)
 	else if (cfg.to_string() == "flags:e")
 	{
 		if (num != 0)
-			encoding.setEBCDIC();
+		{
+			if (!encoding.set(Enc::EBCDIC))
+				fatal("Cannot set '-e' switch: please reset '-w', '-x', '-u' and '-8' switches at first.\n");
+		}
 		else
-			encoding.unsetEBCDIC();
-		if (encoding.isBad())
-			fatal("Cannot set '-e' switch: please reset '-w', '-x', '-u' and '-8' switches at first.\n");
+			encoding.unset(Enc::EBCDIC);
 	}
 	else if (cfg.to_string() == "flags:u")
 	{
 		if (num != 0)
-			encoding.setUTF32();
+		{
+			if (!encoding.set(Enc::UTF32))
+				fatal("Cannot set '-u' switch: please reset '-e', '-w', '-x' and '-8' switches at first.\n");
+		}
 		else
-			encoding.unsetUTF32();
-		if (encoding.isBad())
-			fatal("Cannot set '-u' switch: please reset '-e', '-w', '-x' and '-8' switches at first.\n");
+			encoding.unset(Enc::UTF32);
 	}
 	else if (cfg.to_string() == "flags:w")
 	{
 		if (num != 0)
-			encoding.setUCS2();
+		{
+			if (!encoding.set(Enc::UCS2))
+				fatal("Cannot set '-w' switch: please reset '-e', '-x', '-u' and '-8' switches at first.\n");
+		}
 		else
-			encoding.unsetUCS2();
-		if (encoding.isBad())
-			fatal("Cannot set '-w' switch: please reset '-e', '-x', '-u' and '-8' switches at first.\n");
+			encoding.unset(Enc::UCS2);
 	}
 	else if (cfg.to_string() == "flags:x")
 	{
 		if (num != 0)
-			encoding.setUTF16();
+		{
+			if (!encoding.set(Enc::UTF16))
+				fatal("Cannot set '-x' switch: please reset '-e', '-x', '-u' and '-8' switches at first.\n");
+		}
 		else
-			encoding.unsetUTF16();
-		if (encoding.isBad())
-			fatal("Cannot set '-w' switch: please reset '-e', '-x', '-u' and '-8' switches at first.\n");
+			encoding.unset(Enc::UTF16);
 	}
 	else if (cfg.to_string() == "flags:8")
 	{
 		if (num != 0)
-			encoding.setUTF8();
+		{
+			if (!encoding.set(Enc::UTF8))
+				fatal("Cannot set '-8' switch: please reset '-e', '-w', '-x' and '-u' switches at first.\n");
+		}
 		else
-			encoding.unsetUTF8();
-		if (encoding.isBad())
-			fatal("Cannot set '-8' switch: please reset '-e', '-w', '-x' and '-u' switches at first.\n");
+			encoding.unset(Enc::UTF8);
 	}
 	else
 	{

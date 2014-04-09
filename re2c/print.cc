@@ -8,7 +8,7 @@ namespace re2c
 
 void prtChOrHex(std::ostream& o, uint c)
 {
-	if (!encoding.isEBCDIC() && (c < 256u) && (isprint(c) || isspace(c)))
+	if (!encoding.is(Enc::EBCDIC) && (c < 256u) && (isprint(c) || isspace(c)))
 	{
 		o << (DFlag ? '"' : '\'');
 		prtCh(o, c);
@@ -56,7 +56,7 @@ void prtHex(std::ostream& o, uint c)
 
 void prtCh(std::ostream& o, uint c)
 {
-	if (encoding.isEBCDIC())
+	if (encoding.is(Enc::EBCDIC))
 	{
 		prtHex(o, c);
 		return;

@@ -757,7 +757,7 @@ Range * Scanner::getRange(SubStr &s) const
 	xlb = encoding.xlat(lb);
 	xub = encoding.xlat(ub);
 
-	if (encoding.isEBCDIC())
+	if (encoding.is(Enc::EBCDIC))
 	{
 		Range * r = new Range(xlb, xlb + 1);
 		for (uint c = lb + 1; c <= ub; ++c)
@@ -781,9 +781,9 @@ RegExp * Scanner::matchChar(uint c) const
 
 RegExp * Scanner::matchSymbol(uint c) const
 {
-	if (encoding.isUTF16())
+	if (encoding.is(Enc::UTF16))
 		return UTF16Symbol(c);
-	else if (encoding.isUTF8())
+	else if (encoding.is(Enc::UTF8))
 		return UTF8Symbol(c);
 	else
 		return matchChar(c);
@@ -858,9 +858,9 @@ Range * Scanner::mkRange(SubStr &s) const
 
 RegExp * Scanner::matchSymbolRange(Range * r) const
 {
-	if (encoding.isUTF16())
+	if (encoding.is(Enc::UTF16))
 		return UTF16Range(r);
-	else if (encoding.isUTF8())
+	else if (encoding.is(Enc::UTF8))
 		return UTF8Range(r);
 	else
 		return new MatchOp(r);
