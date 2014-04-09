@@ -77,7 +77,6 @@ public:
 	Range * getRange(SubStr &s) const;
 	RegExp * matchSymbol(uint c) const;
 	RegExp * matchSymbolRange(Range * r) const;
-	RegExp * matchChar(uint c) const;
 	RegExp * strToName(SubStr s) const;
 	RegExp * strToRE(SubStr s) const;
 	RegExp * strToCaseInsensitiveRE(SubStr s) const;

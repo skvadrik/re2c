@@ -2,6 +2,7 @@
 #define _enc_h
 
 #include "basics.h"
+#include "range.h"
 
 namespace re2c {
 
@@ -41,10 +42,13 @@ public:
 		, UTF8
 		};
 
+private:
 	static const uint asc2ebc[256];
 	static const uint ebc2asc[256];
+	static const uint SURR_MIN;
+	static const uint SURR_MAX;
+	static const uint UNICODE_ERROR;
 
-private:
 	type_t type;
 
 public:
@@ -63,8 +67,10 @@ public:
 	inline void unset(type_t);
 	inline bool is(type_t) const;
 
-	inline uint xlat(uint c) const;
-	inline uint talx(uint c) const;
+	bool encode(uint & c) const;
+	uint decode(uint c) const;
+	Range * encodeRange(uint l, uint h) const;
+	Range * fullRange() const;
 };
 
 inline uint Enc::nCodePoints() const
@@ -146,34 +152,6 @@ inline void Enc::unset(type_t t)
 inline bool Enc::is(type_t t) const
 {
 	return type == t;
-}
-
-inline uint Enc::xlat(uint c) const
-{
-	switch (type)
-	{
-		case ASCII:	return c & 0xFF;
-		case EBCDIC:	return asc2ebc[c & 0xFF];
-		case UCS2:
-		case UTF16:
-		case UTF32:
-		case UTF8:	return c;
-	}
-	return ~0; // to silence gcc warning
-}
-
-inline uint Enc::talx(uint c) const
-{
-	switch (type)
-	{
-		case ASCII:	return c & 0xFF;
-		case EBCDIC:	return ebc2asc[c & 0xFF];
-		case UCS2:
-		case UTF16:
-		case UTF32:
-		case UTF8:	return c;
-	}
-	return ~0; // to silence gcc warning
 }
 
 } // namespace re2c

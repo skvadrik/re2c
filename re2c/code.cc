@@ -908,9 +908,11 @@ static bool genCases(std::ostream &o, uint ind, uint lb, Span *s, bool &newLine,
 					o << indent(ind) << "case ";
 					prtChOrHex(o, lb);
 					o << ":";
-					if (dFlag && encoding.is(Enc::EBCDIC) && lb < 256u && isprint(encoding.talx(lb)))
+					if (dFlag && encoding.is(Enc::EBCDIC))
 					{
-						o << " /* " << std::string(1, encoding.talx(lb)) << " */";
+						const uint c = encoding.decode(lb);
+						if (isprint(c))
+							o << " /* " << std::string(1, c) << " */";
 					}
 				}
 				newLine = false;

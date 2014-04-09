@@ -2,6 +2,10 @@
 
 namespace re2c {
 
+const uint Enc::SURR_MIN = 0xD800;
+const uint Enc::SURR_MAX = 0xDFFF;
+const uint Enc::UNICODE_ERROR = 0xFFFD;
+
 const uint Enc::asc2ebc[256] =
     { /* Based on ISO 8859/1 and Code Page 37 */
         0x00, 0x01, 0x02, 0x03, 0x37, 0x2d, 0x2e, 0x2f, 0x16, 0x05, 0x25, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f,
@@ -41,5 +45,93 @@ const uint Enc::ebc2asc[256] =
         0x5c, 0xf7, 0x53, 0x54, 0x55, 0x56, 0x57, 0x58, 0x59, 0x5a, 0xb2, 0xd4, 0xd6, 0xd2, 0xd3, 0xd5,
         0x30, 0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37, 0x38, 0x39, 0xb3, 0xdb, 0xdc, 0xd9, 0xda, 0x9f
     };
+
+bool Enc::encode(uint & c) const
+{
+	switch (type)
+	{
+		case ASCII:
+			c &= 0xFF;
+			return true;
+		case EBCDIC:
+			c = asc2ebc[c & 0xFF];
+			return true;
+		case UCS2:
+		case UTF16:
+		case UTF32:
+		case UTF8:
+			return true;
+	}
+	return false; // to silence gcc warning
+}
+
+uint Enc::decode(uint c) const
+{
+	switch (type)
+	{
+		case EBCDIC:
+			c = ebc2asc[c & 0xFF];
+			break;
+		case ASCII:
+		case UCS2:
+		case UTF16:
+		case UTF32:
+		case UTF8:
+			break;
+	}
+	return c;
+}
+
+Range * Enc::encodeRange(uint l, uint h) const
+{
+	Range * r = NULL;
+	switch (type)
+	{
+		case ASCII:
+			l &= 0xFF;
+			h &= 0xFF;
+			r = new Range(l, h + 1);
+			break;
+		case EBCDIC:
+		{
+			const uint el = asc2ebc[l & 0xFF];
+			r = new Range(el, el + 1);
+			for (uint c = l + 1; c <= h; ++c)
+			{
+				const uint ec = asc2ebc[c & 0xFF];
+				r = doUnion(r, new Range(ec, ec + 1));
+			}
+			break;
+		}
+		case UCS2:
+		case UTF16:
+		case UTF32:
+		case UTF8:
+			r = new Range(l, h + 1);
+			break;
+	}
+	return r;
+}
+
+Range * Enc::fullRange() const
+{
+	Range * r = NULL;
+	switch (type)
+	{
+		case ASCII:
+		case EBCDIC:
+			r = new Range(0, 0x100);
+			break;
+		case UCS2:
+			r = new Range(0, 0x10000);
+			break;
+		case UTF16:
+		case UTF32:
+		case UTF8:
+			r = new Range(0, 0x110000);
+			break;
+	}
+	return r;
+}
 
 } // namespace re2c

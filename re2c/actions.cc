@@ -735,7 +735,7 @@ std::string& Scanner::unescape(SubStr& str_in, std::string& str_out) const
 
 Range * Scanner::getRange(SubStr &s) const
 {
-	uint lb = unescape(s), ub, xlb, xub;
+	uint lb = unescape(s), ub;
 
 	if (s.len < 2 || *s.str != '-')
 	{
@@ -754,39 +754,23 @@ Range * Scanner::getRange(SubStr &s) const
 		}
 	}
 
-	xlb = encoding.xlat(lb);
-	xub = encoding.xlat(ub);
-
-	if (encoding.is(Enc::EBCDIC))
-	{
-		Range * r = new Range(xlb, xlb + 1);
-		for (uint c = lb + 1; c <= ub; ++c)
-		{
-			uint xc = encoding.xlat(c);
-			r = doUnion(r, new Range(xc, xc + 1));
-		}
-		return r;
-	}
-	else
-	{
-		return new Range(xlb, xub + 1);
-	}
-}
-
-RegExp * Scanner::matchChar(uint c) const
-{
-	uint xc = encoding.xlat(c);
-	return new MatchOp(new Range(xc, xc + 1));
+	Range * r = encoding.encodeRange(lb, ub);
+	if (r == NULL)
+		fatalf("Bad code point range: '0x%X - 0x%X'", lb, ub);
+	return r;
 }
 
 RegExp * Scanner::matchSymbol(uint c) const
 {
+	if (!encoding.encode(c))
+		fatalf("Bad code point: '0x%X'", c);
+
 	if (encoding.is(Enc::UTF16))
 		return UTF16Symbol(c);
 	else if (encoding.is(Enc::UTF8))
 		return UTF8Symbol(c);
 	else
-		return matchChar(c);
+		return new MatchOp(new Range(c, c + 1));
 }
 
 RegExp * Scanner::strToRE(SubStr s) const
@@ -882,21 +866,23 @@ RegExp * Scanner::invToRE(SubStr s) const
 	s.len -= 3;
 	s.str += 2;
 
-	Range * any = new Range(0, encoding.nCodePoints());
+	Range * full = encoding.fullRange();
 
 	Range * r = s.len == 0
-		? any
-		: doDiff(any, mkRange (s));
+		? full
+		: doDiff(full, mkRange (s));
 
 	return matchSymbolRange(r);
 }
 
 RegExp * Scanner::mkDot() const
 {
-	Range * any = new Range(0, encoding.nCodePoints());
-	const uint c = encoding.xlat('\n');
+	Range * full = encoding.fullRange();
+	uint c = '\n';
+	if (!encoding.encode(c))
+		fatalf("Bad code point: '0x%X'", c);
 	Range * ran = new Range(c, c + 1);
-	Range * inv = doDiff(any, ran);
+	Range * inv = doDiff(full, ran);
 
 	return matchSymbolRange(inv);
 }
