@@ -13,6 +13,7 @@ man_MANS     = re2c.1
 
 #CXXFLAGS     = -O2 -Wall -Wno-unused -Wno-parentheses -Wno-deprecated
 #CXXFLAGS     = -ggdb -fno-inline -O2 -Wall -Wextra -pedantic -Wconversion -Wpointer-arith -Wwrite-strings -Wredundant-decls -Werror -Wunused-function -DPEDANTIC
+CXXFLAGS     = -W -Wall -Wextra -pedantic -Wredundant-decls -DPEDANTIC -O2 -g
 YFLAGS       = -d
 
 RE2C         = re2c$(EXEEXT)
