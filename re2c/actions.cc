@@ -8,6 +8,7 @@
 #include "globals.h"
 #include "parser.h"
 #include "dfa.h"
+#include "print.h"
 #include "utf8_regexp.h"
 #include "utf16_regexp.h"
 

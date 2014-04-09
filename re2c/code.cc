@@ -11,6 +11,7 @@
 #include "globals.h"
 #include "dfa.h"
 #include "parser.h"
+#include "print.h"
 #include "code.h"
 
 namespace re2c

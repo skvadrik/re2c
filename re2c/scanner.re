@@ -8,6 +8,7 @@
 #include "y.tab.h"
 #include "globals.h"
 #include "dfa.h"
+#include "print.h"
 
 extern YYSTYPE yylval;
 
