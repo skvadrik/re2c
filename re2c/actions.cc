@@ -893,6 +893,9 @@ RegExp * Scanner::mkDot() const
  * in current encoding. For encodings, which directly map symbols to
  * input characters (ASCII, EBCDIC, UTF-32), it equals [^]. For other
  * encodings (UTF-16, UTF-8), [^] and this range are different.
+ *
+ * Also note that default range doesn't respect encoding policy
+ * (the way invalid code points are treated).
  */
 RegExp * Scanner::mkDefault() const
 {

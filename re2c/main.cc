@@ -129,6 +129,7 @@ static const mbo_opt_struct OPTIONS[] =
 	mbo_opt_struct(10,  0, "no-generation-date"),
 	mbo_opt_struct(11,  0, "case-insensitive"),
 	mbo_opt_struct(12,  0, "case-inverted"),
+	mbo_opt_struct(13,  1, "encoding-policy"),
 	mbo_opt_struct('-', 0, NULL) /* end of args */
 };
 
@@ -211,6 +212,9 @@ static void usage()
 	"--case-inverted         Invert the meaning of single and double quoted strings.\n"
 	"                        With this switch single quotes are case sensitive and\n"
 	"                        double quotes are case insensitive.\n"
+	"\n"
+	"--encoding-policy ep    Specify what re2c should do when given bad code unit.\n"
+	"                        ep can be one of the following: fail, substitute, ignore.\n"
 	;
 }
 
@@ -326,7 +330,7 @@ int main(int argc, char *argv[])
 				cout << vernum << endl;
 				return 2;
 			}
-
+			
 			case 'w':
 			sFlag = true;
 			if (!encoding.set(Enc::UCS2))
@@ -361,7 +365,7 @@ int main(int argc, char *argv[])
 				return 2;
 			}
 			break;
-
+	  
 			default:
 			case 'h':
 			case '?':
@@ -378,6 +382,20 @@ int main(int argc, char *argv[])
 
 			case 12:
 			bCaseInverted = true;
+			break;
+
+			case 13:
+			if (strcmp(opt_arg, "fail") == 0)
+				encoding.setPolicy(Enc::POLICY_FAIL);
+			else if (strcmp(opt_arg, "substitute") == 0)
+				encoding.setPolicy(Enc::POLICY_SUBSTITUTE);
+			else if (strcmp(opt_arg, "ignore") == 0)
+				encoding.setPolicy(Enc::POLICY_IGNORE);
+			else
+			{
+				std::cerr << "re2c: error: Invalid encoding policy: \"" << opt_arg << "\"\n";
+				return 1;
+			}
 			break;
 		}
 	}

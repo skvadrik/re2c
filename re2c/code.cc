@@ -910,7 +910,7 @@ static bool genCases(std::ostream &o, uint ind, uint lb, Span *s, bool &newLine,
 					o << ":";
 					if (dFlag && encoding.is(Enc::EBCDIC))
 					{
-						const uint c = encoding.decode(lb);
+						const uint c = encoding.decodeUnsafe(lb);
 						if (isprint(c))
 							o << " /* " << std::string(1, c) << " */";
 					}

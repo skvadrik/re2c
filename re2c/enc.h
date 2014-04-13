@@ -42,6 +42,13 @@ public:
 		, UTF8
 		};
 
+	// What to do with invalid code points
+	enum policy_t
+		{ POLICY_FAIL
+		, POLICY_SUBSTITUTE
+		, POLICY_IGNORE
+		};
+
 private:
 	static const uint asc2ebc[256];
 	static const uint ebc2asc[256];
@@ -50,10 +57,12 @@ private:
 	static const uint UNICODE_ERROR;
 
 	type_t type;
+	policy_t policy;
 
 public:
 	Enc()
 		: type (ASCII)
+		, policy (POLICY_IGNORE)
 	{ }
 
 	bool operator != (const Enc & e) const { return type != e.type; }
@@ -67,8 +76,10 @@ public:
 	inline void unset(type_t);
 	inline bool is(type_t) const;
 
+	inline void setPolicy(policy_t t);
+
 	bool encode(uint & c) const;
-	uint decode(uint c) const;
+	uint decodeUnsafe(uint c) const;
 	Range * encodeRange(uint l, uint h) const;
 	Range * fullRange() const;
 };
@@ -152,6 +163,11 @@ inline void Enc::unset(type_t t)
 inline bool Enc::is(type_t t) const
 {
 	return type == t;
+}
+
+inline void Enc::setPolicy(policy_t t)
+{
+	policy = t;
 }
 
 } // namespace re2c

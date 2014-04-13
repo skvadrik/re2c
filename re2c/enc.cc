@@ -46,6 +46,18 @@ const uint Enc::ebc2asc[256] =
         0x30, 0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37, 0x38, 0x39, 0xb3, 0xdb, 0xdc, 0xd9, 0xda, 0x9f
     };
 
+/*
+ * Returns code point representation for current
+ * encoding with regard to current policy.
+ *
+ * Since code point is exacly specified by user,
+ * it is assumed that user considers it to be valid.
+ * We must check it.
+ *
+ * Returns false if this code point is forbidden
+ * by current policy, otherwise returns true.
+ * Overwrites code point.
+ */
 bool Enc::encode(uint & c) const
 {
 	switch (type)
@@ -60,12 +72,30 @@ bool Enc::encode(uint & c) const
 		case UTF16:
 		case UTF32:
 		case UTF8:
-			return true;
+			if (c < SURR_MIN || c > SURR_MAX)
+				return true;
+			else
+			{
+				switch (policy)
+				{
+					case POLICY_FAIL:
+						return false;
+					case POLICY_SUBSTITUTE:
+						c = UNICODE_ERROR;
+						return true;
+					case POLICY_IGNORE:
+						return true;
+				}
+			}
 	}
 	return false; // to silence gcc warning
 }
 
-uint Enc::decode(uint c) const
+/*
+ * Returns original representation of code point.
+ * Assumes code point is valid (hence 'unsafe').
+ */
+uint Enc::decodeUnsafe(uint c) const
 {
 	switch (type)
 	{
@@ -82,6 +112,18 @@ uint Enc::decode(uint c) const
 	return c;
 }
 
+/*
+ * Returns [l - h] range representation for current
+ * encoding with regard to current policy.
+ *
+ * Since range borders are exacly specified by user,
+ * it is assumed that user considers that all code
+ * points from this range are valid. re2c must check it.
+ *
+ * Returns NULL if range contains code points forbidden
+ * by current policy, otherwise returns pointer to newly
+ * constructed Range.
+ */
 Range * Enc::encodeRange(uint l, uint h) const
 {
 	Range * r = NULL;
@@ -108,28 +150,47 @@ Range * Enc::encodeRange(uint l, uint h) const
 		case UTF32:
 		case UTF8:
 			r = new Range(l, h + 1);
+			if (l <= SURR_MAX && h >= SURR_MIN)
+			{
+				switch (policy)
+				{
+					case POLICY_FAIL:
+						r = NULL;
+						break;
+					case POLICY_SUBSTITUTE:
+					{
+						Range * surrs = new Range(SURR_MIN, SURR_MAX + 1);
+						Range * error = new Range(UNICODE_ERROR, UNICODE_ERROR + 1);
+						r = doDiff(r, surrs);
+						r = doUnion(r, error);
+						break;
+					}
+					case POLICY_IGNORE:
+						break;
+				}
+			}
 			break;
 	}
 	return r;
 }
 
+/*
+ * Returns [0 - CPOINT_MAX] (full range) representation
+ * for current encoding with regard to current policy.
+ *
+ * Since range is defined declaratively, re2c does
+ * all the necessary corrections 'for free'.
+ *
+ * Always succeeds, returns pointer to newly constructed
+ * Range.
+ */
 Range * Enc::fullRange() const
 {
-	Range * r = NULL;
-	switch (type)
+	Range * r = new Range(0, nCodePoints());
+	if (policy != POLICY_IGNORE)
 	{
-		case ASCII:
-		case EBCDIC:
-			r = new Range(0, 0x100);
-			break;
-		case UCS2:
-			r = new Range(0, 0x10000);
-			break;
-		case UTF16:
-		case UTF32:
-		case UTF8:
-			r = new Range(0, 0x110000);
-			break;
+		Range * surrs = new Range(SURR_MIN, SURR_MAX + 1);
+		r = doDiff(r, surrs);
 	}
 	return r;
 }
