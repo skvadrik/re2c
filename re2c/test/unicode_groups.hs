@@ -34,7 +34,7 @@ import           Data.CharSet.Unicode.Block          (Block(..), blocks)
 import qualified Data.IntSet                   as IS (foldl')
 import qualified Data.List                     as L  (foldl')
 import qualified Data.Text                     as T  (Text, pack)
-import qualified Data.Text.Encoding            as TE (encodeUtf16LE, encodeUtf8)
+import qualified Data.Text.Encoding            as TE (encodeUtf16LE, encodeUtf32LE, encodeUtf8)
 import           Text.Printf                         (printf)
 
 
@@ -98,24 +98,12 @@ group_charset cs =
     ) cs
 
 
-show_charset :: String -> CharSet -> String
-show_charset name cs =
-    let ranges = group_charset cs
-    in  concat
-            [ "\t\t"
-            , name
-            , " = ["
-            , concatMap show_range ranges
-            , "];"
-            ]
-
-
-show_category :: String -> CharSet -> String
-show_category cat cs = show_charset cat cs
+show_charset :: CharSet -> String
+show_charset cs = concatMap show_range $ group_charset cs
 
 
 show_block :: (String, CharSet) -> String
-show_block (bl, cs) = show_charset bl cs
+show_block (bl, cs) = bl ++ " = [" ++ show_charset cs ++ "];"
 
 
 prettify :: String -> String
@@ -138,10 +126,20 @@ encode f cs =
 gen_test_category :: Category -> IO ()
 gen_test_category (Category _ name cs _) =
     let catname = prettify name
-        file8   = "unicode_group_" ++ catname ++ ".8.re"
-        file16  = "unicode_group_" ++ catname ++ ".x.re"
-        bs8     = encode TE.encodeUtf8 cs
-        bs16    = encode TE.encodeUtf16LE cs
+        buffer = "buffer_" ++ catname
+        file8_ignore     = "unicode_group_" ++ catname ++ ".8--encoding-policy(ignore).re"
+        file8_substitute = "unicode_group_" ++ catname ++ ".8--encoding-policy(substitute).re"
+        file8_fail       = "unicode_group_" ++ catname ++ ".8--encoding-policy(fail).re"
+        file16_ignore     = "unicode_group_" ++ catname ++ ".x--encoding-policy(ignore).re"
+        file16_substitute = "unicode_group_" ++ catname ++ ".x--encoding-policy(substitute).re"
+        file16_fail       = "unicode_group_" ++ catname ++ ".x--encoding-policy(fail).re"
+        file32_ignore     = "unicode_group_" ++ catname ++ ".u--encoding-policy(ignore).re"
+        file32_substitute = "unicode_group_" ++ catname ++ ".u--encoding-policy(substitute).re"
+        file32_fail       = "unicode_group_" ++ catname ++ ".u--encoding-policy(fail).re"
+        bs8  = encode TE.encodeUtf8 cs
+        bs16 = encode TE.encodeUtf16LE cs
+        bs32 = encode TE.encodeUtf32LE cs
+        charset = show_charset cs
         content ctype s = unlines
             [ "#include <stdio.h>"
             , "#define YYCTYPE " ++ ctype
@@ -152,30 +150,52 @@ gen_test_category (Category _ name cs _) =
             , catname ++ ":"
             , "\t/*!re2c"
             , "\t\tre2c:yyfill:enable = 0;"
-            , "\t\t" ++ show_category catname cs
+            , "\t\t" ++ catname ++ " = [" ++ charset ++ "];"
             , "\t\t" ++ catname ++ " { goto " ++ catname ++ "; }"
             , "\t\t[^] { return YYCURSOR == limit; }"
             , "\t*/"
             , "}"
-            , "static const char buffer_" ++ catname ++ " [] = \"" ++ s ++ "\";"
+            , "static const char " ++ buffer ++ " [] = \"" ++ s ++ "\";"
             , "int main ()"
             , "{"
-            , let arg1 = "reinterpret_cast<const YYCTYPE *> (buffer_" ++ catname ++ ")"
-                  arg2 = "reinterpret_cast<const YYCTYPE *> (buffer_" ++ catname ++ " + sizeof (buffer_" ++ catname ++ ") - 1)"
+            , let arg1 = "reinterpret_cast<const YYCTYPE *> (" ++ buffer ++ ")"
+                  arg2 = "reinterpret_cast<const YYCTYPE *> (" ++ buffer ++ " + sizeof (" ++ buffer ++ ") - 1)"
               in  "\tif (!scan (" ++ arg1 ++ ", " ++ arg2 ++ "))"
             , "\t\tprintf(\"test '" ++ catname ++ "' failed\\n\");"
             , "}"
             ]
-    in  writeFile file8 (content "unsigned char" bs8) >>
-        writeFile file16 (content "unsigned short" bs16)
+        content8 = content "unsigned char" bs8
+        content16 = content "unsigned short" bs16
+        content32 = content "unsigned int" bs32
+
+    in  writeFile file8_ignore     content8 >>
+        writeFile file8_substitute content8 >>
+        writeFile file8_fail       content8 >>
+
+        writeFile file16_ignore     content16 >>
+        writeFile file16_substitute content16 >>
+        writeFile file16_fail       content16 >>
+
+        writeFile file32_ignore     content32 >>
+        writeFile file32_substitute content32 >>
+        writeFile file32_fail       content32
 
 
 gen_test_blocks :: IO ()
 gen_test_blocks =
     let (blocknames, charsets) = unzip $ map (\ (Block name cs) -> (prettify name, cs)) blocks
-        blocknames'            = blocknames ++ ["All"]
-        charsets'              = charsets ++ [L.foldl' CS.union CS.empty charsets]
-        content ctype encf     = unlines
+        blocknames' = blocknames ++ ["All"]
+        charsets' = charsets ++ [L.foldl' CS.union CS.empty charsets]
+        file8_ignore      = "unicode_blocks.8--encoding-policy(ignore).re"
+        file8_substitute  = "unicode_blocks.8--encoding-policy(substitute).re"
+        file8_fail        = "unicode_blocks.8--encoding-policy(fail).re"
+        file16_ignore     = "unicode_blocks.x--encoding-policy(ignore).re"
+        file16_substitute = "unicode_blocks.x--encoding-policy(substitute).re"
+        file16_fail       = "unicode_blocks.x--encoding-policy(fail).re"
+        file32_ignore     = "unicode_blocks.u--encoding-policy(ignore).re"
+        file32_substitute = "unicode_blocks.u--encoding-policy(substitute).re"
+        file32_fail       = "unicode_blocks.u--encoding-policy(fail).re"
+        content ctype encf = unlines
             [ "#include <stdio.h>"
             , "#define YYCTYPE " ++ ctype
             , "enum Block"
@@ -221,8 +241,21 @@ gen_test_blocks =
                 ) blocknames'
             , "}"
             ]
-    in  writeFile "unicode_blocks.8.re" (content "unsigned char" TE.encodeUtf8) >>
-        writeFile "unicode_blocks.x.re" (content "unsigned short" TE.encodeUtf16LE)
+        content8 = content "unsigned char" TE.encodeUtf8
+        content16 = content "unsigned short" TE.encodeUtf16LE
+        content32 = content "unsigned int" TE.encodeUtf32LE
+
+    in  writeFile file8_ignore     content8 >>
+        writeFile file8_substitute content8 >>
+        writeFile file8_fail       content8 >>
+
+        writeFile file16_ignore     content16 >>
+        writeFile file16_substitute content16 >>
+        writeFile file16_fail       content16 >>
+
+        writeFile file32_ignore     content32 >>
+        writeFile file32_substitute content32 >>
+        writeFile file32_fail       content32
 
 
 main :: IO ()

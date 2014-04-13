@@ -39,7 +39,7 @@ tests="$@"
 fi;
 for x in $tests; do
 	tstcnt=$(($tstcnt+1))
-	switches=`basename $x|sed -e 's/^[^.]*\.\(.*\)\.re$/-\1/g' -e 's/^[^-].*//g' -e 's/\([^ ]\)--/\1 --/g'`
+	switches=`basename $x|sed -e 's/^[^.]*\.\(.*\)\.re$/-\1/g' -e 's/^[^-].*//g' -e 's/\([^ ]\)--/\1 --/g' -e 's/(\([^)]\+\))/ \1/g'`
 	genname=`printf "%s" "$switches"|sed -e 's,--.*$,,g' -e 's,^.[^o]*$,,g' -e 's,^[^ot]*t.*o.*$,,g' -e 's,^-[^o]*o\(.*\),@builddir@/test/\1,g'`
 	headers=`printf "%s" "$switches"|sed -e 's,--.*$,,g' -e 's,^.[^t]*$,,g' -e 's,^[^ot]*o.*t.*$,,g' -e 's,^-[^t]*t\(.*\),@builddir@/test/\1,g'`
 	switches=`printf "%s" "$switches"|sed -e 's,^-\([^ot-]*[ot]\)\(.*\)$,-\1@builddir@/test/\2,g'`
