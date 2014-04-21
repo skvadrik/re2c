@@ -1,4 +1,5 @@
 #include <stdio.h>
+
 #define YYCTYPE unsigned int
 bool scan(const YYCTYPE * start, const YYCTYPE * const limit)
 {
@@ -9,12 +10,25 @@ Pe:
 		re2c:yyfill:enable = 0;
 		Pe = [\x29-\x29\x5d-\x5d\x7d-\x7d\u0f3b-\u0f3b\u0f3d-\u0f3d\u169c-\u169c\u2046-\u2046\u207e-\u207e\u208e-\u208e\u232a-\u232a\u2769-\u2769\u276b-\u276b\u276d-\u276d\u276f-\u276f\u2771-\u2771\u2773-\u2773\u2775-\u2775\u27c6-\u27c6\u27e7-\u27e7\u27e9-\u27e9\u27eb-\u27eb\u27ed-\u27ed\u27ef-\u27ef\u2984-\u2984\u2986-\u2986\u2988-\u2988\u298a-\u298a\u298c-\u298c\u298e-\u298e\u2990-\u2990\u2992-\u2992\u2994-\u2994\u2996-\u2996\u2998-\u2998\u29d9-\u29d9\u29db-\u29db\u29fd-\u29fd\u2e23-\u2e23\u2e25-\u2e25\u2e27-\u2e27\u2e29-\u2e29\u3009-\u3009\u300b-\u300b\u300d-\u300d\u300f-\u300f\u3011-\u3011\u3015-\u3015\u3017-\u3017\u3019-\u3019\u301b-\u301b\u301e-\u301f\ufd3f-\ufd3f\ufe18-\ufe18\ufe36-\ufe36\ufe38-\ufe38\ufe3a-\ufe3a\ufe3c-\ufe3c\ufe3e-\ufe3e\ufe40-\ufe40\ufe42-\ufe42\ufe44-\ufe44\ufe48-\ufe48\ufe5a-\ufe5a\ufe5c-\ufe5c\ufe5e-\ufe5e\uff09-\uff09\uff3d-\uff3d\uff5d-\uff5d\uff60-\uff60\uff63-\uff63];
 		Pe { goto Pe; }
-		[^] { return YYCURSOR == limit; }
+		* { return YYCURSOR == limit; }
 	*/
 }
-static const char buffer_Pe [] = "\x29\x00\x00\x00\x5D\x00\x00\x00\x7D\x00\x00\x00\x3B\x0F\x00\x00\x3D\x0F\x00\x00\x9C\x16\x00\x00\x46\x20\x00\x00\x7E\x20\x00\x00\x8E\x20\x00\x00\x2A\x23\x00\x00\x69\x27\x00\x00\x6B\x27\x00\x00\x6D\x27\x00\x00\x6F\x27\x00\x00\x71\x27\x00\x00\x73\x27\x00\x00\x75\x27\x00\x00\xC6\x27\x00\x00\xE7\x27\x00\x00\xE9\x27\x00\x00\xEB\x27\x00\x00\xED\x27\x00\x00\xEF\x27\x00\x00\x84\x29\x00\x00\x86\x29\x00\x00\x88\x29\x00\x00\x8A\x29\x00\x00\x8C\x29\x00\x00\x8E\x29\x00\x00\x90\x29\x00\x00\x92\x29\x00\x00\x94\x29\x00\x00\x96\x29\x00\x00\x98\x29\x00\x00\xD9\x29\x00\x00\xDB\x29\x00\x00\xFD\x29\x00\x00\x23\x2E\x00\x00\x25\x2E\x00\x00\x27\x2E\x00\x00\x29\x2E\x00\x00\x09\x30\x00\x00\x0B\x30\x00\x00\x0D\x30\x00\x00\x0F\x30\x00\x00\x11\x30\x00\x00\x15\x30\x00\x00\x17\x30\x00\x00\x19\x30\x00\x00\x1B\x30\x00\x00\x1E\x30\x00\x00\x1F\x30\x00\x00\x3F\xFD\x00\x00\x18\xFE\x00\x00\x36\xFE\x00\x00\x38\xFE\x00\x00\x3A\xFE\x00\x00\x3C\xFE\x00\x00\x3E\xFE\x00\x00\x40\xFE\x00\x00\x42\xFE\x00\x00\x44\xFE\x00\x00\x48\xFE\x00\x00\x5A\xFE\x00\x00\x5C\xFE\x00\x00\x5E\xFE\x00\x00\x09\xFF\x00\x00\x3D\xFF\x00\x00\x5D\xFF\x00\x00\x60\xFF\x00\x00\x63\xFF\x00\x00\x00\x00\x00\x00";
+static const unsigned int chars_Pe [] = {0x29,0x29,  0x5d,0x5d,  0x7d,0x7d,  0xf3b,0xf3b,  0xf3d,0xf3d,  0x169c,0x169c,  0x2046,0x2046,  0x207e,0x207e,  0x208e,0x208e,  0x232a,0x232a,  0x2769,0x2769,  0x276b,0x276b,  0x276d,0x276d,  0x276f,0x276f,  0x2771,0x2771,  0x2773,0x2773,  0x2775,0x2775,  0x27c6,0x27c6,  0x27e7,0x27e7,  0x27e9,0x27e9,  0x27eb,0x27eb,  0x27ed,0x27ed,  0x27ef,0x27ef,  0x2984,0x2984,  0x2986,0x2986,  0x2988,0x2988,  0x298a,0x298a,  0x298c,0x298c,  0x298e,0x298e,  0x2990,0x2990,  0x2992,0x2992,  0x2994,0x2994,  0x2996,0x2996,  0x2998,0x2998,  0x29d9,0x29d9,  0x29db,0x29db,  0x29fd,0x29fd,  0x2e23,0x2e23,  0x2e25,0x2e25,  0x2e27,0x2e27,  0x2e29,0x2e29,  0x3009,0x3009,  0x300b,0x300b,  0x300d,0x300d,  0x300f,0x300f,  0x3011,0x3011,  0x3015,0x3015,  0x3017,0x3017,  0x3019,0x3019,  0x301b,0x301b,  0x301e,0x301f,  0xfd3f,0xfd3f,  0xfe18,0xfe18,  0xfe36,0xfe36,  0xfe38,0xfe38,  0xfe3a,0xfe3a,  0xfe3c,0xfe3c,  0xfe3e,0xfe3e,  0xfe40,0xfe40,  0xfe42,0xfe42,  0xfe44,0xfe44,  0xfe48,0xfe48,  0xfe5a,0xfe5a,  0xfe5c,0xfe5c,  0xfe5e,0xfe5e,  0xff09,0xff09,  0xff3d,0xff3d,  0xff5d,0xff5d,  0xff60,0xff60,  0xff63,0xff63,  0x0,0x0};
+static unsigned int encode_utf32 (const unsigned int * ranges, unsigned int ranges_count, unsigned int * s)
+{
+	unsigned int * const s_start = s;
+	for (unsigned int i = 0; i < ranges_count; i += 2)
+		for (unsigned int j = ranges[i]; j <= ranges[i + 1]; ++j)
+			*s++ = j;
+	return s - s_start;
+}
+
 int main ()
 {
-	if (!scan (reinterpret_cast<const YYCTYPE *> (buffer_Pe), reinterpret_cast<const YYCTYPE *> (buffer_Pe + sizeof (buffer_Pe) - 1)))
+	YYCTYPE * buffer_Pe = new YYCTYPE [72];
+	unsigned int buffer_len = encode_utf32 (chars_Pe, sizeof (chars_Pe) / sizeof (unsigned int), buffer_Pe);
+	if (!scan (reinterpret_cast<const YYCTYPE *> (buffer_Pe), reinterpret_cast<const YYCTYPE *> (buffer_Pe + buffer_len)))
 		printf("test 'Pe' failed\n");
+	delete [] buffer_Pe;
+	return 0;
 }

@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include "utf16.h"
 #define YYCTYPE unsigned short
 bool scan(const YYCTYPE * start, const YYCTYPE * const limit)
 {
@@ -9,12 +10,33 @@ Lm:
 		re2c:yyfill:enable = 0;
 		Lm = [\u02b0-\u02c1\u02c6-\u02d1\u02e0-\u02e4\u02ec-\u02ec\u02ee-\u02ee\u0374-\u0374\u037a-\u037a\u0559-\u0559\u0640-\u0640\u06e5-\u06e6\u07f4-\u07f5\u07fa-\u07fa\u081a-\u081a\u0824-\u0824\u0828-\u0828\u0971-\u0971\u0e46-\u0e46\u0ec6-\u0ec6\u10fc-\u10fc\u17d7-\u17d7\u1843-\u1843\u1aa7-\u1aa7\u1c78-\u1c7d\u1d2c-\u1d61\u1d78-\u1d78\u1d9b-\u1dbf\u2071-\u2071\u207f-\u207f\u2090-\u209c\u2c7d-\u2c7d\u2d6f-\u2d6f\u2e2f-\u2e2f\u3005-\u3005\u3031-\u3035\u303b-\u303b\u309d-\u309e\u30fc-\u30fe\ua015-\ua015\ua4f8-\ua4fd\ua60c-\ua60c\ua67f-\ua67f\ua717-\ua71f\ua770-\ua770\ua788-\ua788\ua9cf-\ua9cf\uaa70-\uaa70\uaadd-\uaadd\uff70-\uff70\uff9e-\uff9f];
 		Lm { goto Lm; }
-		[^] { return YYCURSOR == limit; }
+		* { return YYCURSOR == limit; }
 	*/
 }
-static const char buffer_Lm [] = "\xB0\x02\xB1\x02\xB2\x02\xB3\x02\xB4\x02\xB5\x02\xB6\x02\xB7\x02\xB8\x02\xB9\x02\xBA\x02\xBB\x02\xBC\x02\xBD\x02\xBE\x02\xBF\x02\xC0\x02\xC1\x02\xC6\x02\xC7\x02\xC8\x02\xC9\x02\xCA\x02\xCB\x02\xCC\x02\xCD\x02\xCE\x02\xCF\x02\xD0\x02\xD1\x02\xE0\x02\xE1\x02\xE2\x02\xE3\x02\xE4\x02\xEC\x02\xEE\x02\x74\x03\x7A\x03\x59\x05\x40\x06\xE5\x06\xE6\x06\xF4\x07\xF5\x07\xFA\x07\x1A\x08\x24\x08\x28\x08\x71\x09\x46\x0E\xC6\x0E\xFC\x10\xD7\x17\x43\x18\xA7\x1A\x78\x1C\x79\x1C\x7A\x1C\x7B\x1C\x7C\x1C\x7D\x1C\x2C\x1D\x2D\x1D\x2E\x1D\x2F\x1D\x30\x1D\x31\x1D\x32\x1D\x33\x1D\x34\x1D\x35\x1D\x36\x1D\x37\x1D\x38\x1D\x39\x1D\x3A\x1D\x3B\x1D\x3C\x1D\x3D\x1D\x3E\x1D\x3F\x1D\x40\x1D\x41\x1D\x42\x1D\x43\x1D\x44\x1D\x45\x1D\x46\x1D\x47\x1D\x48\x1D\x49\x1D\x4A\x1D\x4B\x1D\x4C\x1D\x4D\x1D\x4E\x1D\x4F\x1D\x50\x1D\x51\x1D\x52\x1D\x53\x1D\x54\x1D\x55\x1D\x56\x1D\x57\x1D\x58\x1D\x59\x1D\x5A\x1D\x5B\x1D\x5C\x1D\x5D\x1D\x5E\x1D\x5F\x1D\x60\x1D\x61\x1D\x78\x1D\x9B\x1D\x9C\x1D\x9D\x1D\x9E\x1D\x9F\x1D\xA0\x1D\xA1\x1D\xA2\x1D\xA3\x1D\xA4\x1D\xA5\x1D\xA6\x1D\xA7\x1D\xA8\x1D\xA9\x1D\xAA\x1D\xAB\x1D\xAC\x1D\xAD\x1D\xAE\x1D\xAF\x1D\xB0\x1D\xB1\x1D\xB2\x1D\xB3\x1D\xB4\x1D\xB5\x1D\xB6\x1D\xB7\x1D\xB8\x1D\xB9\x1D\xBA\x1D\xBB\x1D\xBC\x1D\xBD\x1D\xBE\x1D\xBF\x1D\x71\x20\x7F\x20\x90\x20\x91\x20\x92\x20\x93\x20\x94\x20\x95\x20\x96\x20\x97\x20\x98\x20\x99\x20\x9A\x20\x9B\x20\x9C\x20\x7D\x2C\x6F\x2D\x2F\x2E\x05\x30\x31\x30\x32\x30\x33\x30\x34\x30\x35\x30\x3B\x30\x9D\x30\x9E\x30\xFC\x30\xFD\x30\xFE\x30\x15\xA0\xF8\xA4\xF9\xA4\xFA\xA4\xFB\xA4\xFC\xA4\xFD\xA4\x0C\xA6\x7F\xA6\x17\xA7\x18\xA7\x19\xA7\x1A\xA7\x1B\xA7\x1C\xA7\x1D\xA7\x1E\xA7\x1F\xA7\x70\xA7\x88\xA7\xCF\xA9\x70\xAA\xDD\xAA\x70\xFF\x9E\xFF\x9F\xFF\x00\x00";
+static const unsigned int chars_Lm [] = {0x2b0,0x2c1,  0x2c6,0x2d1,  0x2e0,0x2e4,  0x2ec,0x2ec,  0x2ee,0x2ee,  0x374,0x374,  0x37a,0x37a,  0x559,0x559,  0x640,0x640,  0x6e5,0x6e6,  0x7f4,0x7f5,  0x7fa,0x7fa,  0x81a,0x81a,  0x824,0x824,  0x828,0x828,  0x971,0x971,  0xe46,0xe46,  0xec6,0xec6,  0x10fc,0x10fc,  0x17d7,0x17d7,  0x1843,0x1843,  0x1aa7,0x1aa7,  0x1c78,0x1c7d,  0x1d2c,0x1d61,  0x1d78,0x1d78,  0x1d9b,0x1dbf,  0x2071,0x2071,  0x207f,0x207f,  0x2090,0x209c,  0x2c7d,0x2c7d,  0x2d6f,0x2d6f,  0x2e2f,0x2e2f,  0x3005,0x3005,  0x3031,0x3035,  0x303b,0x303b,  0x309d,0x309e,  0x30fc,0x30fe,  0xa015,0xa015,  0xa4f8,0xa4fd,  0xa60c,0xa60c,  0xa67f,0xa67f,  0xa717,0xa71f,  0xa770,0xa770,  0xa788,0xa788,  0xa9cf,0xa9cf,  0xaa70,0xaa70,  0xaadd,0xaadd,  0xff70,0xff70,  0xff9e,0xff9f,  0x0,0x0};
+static unsigned int encode_utf16 (const unsigned int * ranges, unsigned int ranges_count, unsigned short * s)
+{
+	unsigned short * const s_start = s;
+	for (unsigned int i = 0; i < ranges_count; i += 2)
+		for (unsigned int j = ranges[i]; j <= ranges[i + 1]; ++j)
+		{
+			if (j <= re2c::utf16::MAX_1WORD_RUNE)
+				*s++ = j;
+			else
+			{
+				*s++ = re2c::utf16::lead_surr(j);
+				*s++ = re2c::utf16::trail_surr(j);
+			}
+		}
+	return s - s_start;
+}
+
 int main ()
 {
-	if (!scan (reinterpret_cast<const YYCTYPE *> (buffer_Lm), reinterpret_cast<const YYCTYPE *> (buffer_Lm + sizeof (buffer_Lm) - 1)))
+	YYCTYPE * buffer_Lm = new YYCTYPE [422];
+	unsigned int buffer_len = encode_utf16 (chars_Lm, sizeof (chars_Lm) / sizeof (unsigned int), buffer_Lm);
+	if (!scan (reinterpret_cast<const YYCTYPE *> (buffer_Lm), reinterpret_cast<const YYCTYPE *> (buffer_Lm + buffer_len)))
 		printf("test 'Lm' failed\n");
+	delete [] buffer_Lm;
+	return 0;
 }

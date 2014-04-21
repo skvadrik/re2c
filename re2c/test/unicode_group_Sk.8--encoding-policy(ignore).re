@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include "utf8.h"
 #define YYCTYPE unsigned char
 bool scan(const YYCTYPE * start, const YYCTYPE * const limit)
 {
@@ -9,12 +10,26 @@ Sk:
 		re2c:yyfill:enable = 0;
 		Sk = [\x5e-\x5e\x60-\x60\xa8-\xa8\xaf-\xaf\xb4-\xb4\xb8-\xb8\u02c2-\u02c5\u02d2-\u02df\u02e5-\u02eb\u02ed-\u02ed\u02ef-\u02ff\u0375-\u0375\u0384-\u0385\u1fbd-\u1fbd\u1fbf-\u1fc1\u1fcd-\u1fcf\u1fdd-\u1fdf\u1fed-\u1fef\u1ffd-\u1ffe\u309b-\u309c\ua700-\ua716\ua720-\ua721\ua789-\ua78a\ufbb2-\ufbc1\uff3e-\uff3e\uff40-\uff40\uffe3-\uffe3];
 		Sk { goto Sk; }
-		[^] { return YYCURSOR == limit; }
+		* { return YYCURSOR == limit; }
 	*/
 }
-static const char buffer_Sk [] = "\x5E\x60\xC2\xA8\xC2\xAF\xC2\xB4\xC2\xB8\xCB\x82\xCB\x83\xCB\x84\xCB\x85\xCB\x92\xCB\x93\xCB\x94\xCB\x95\xCB\x96\xCB\x97\xCB\x98\xCB\x99\xCB\x9A\xCB\x9B\xCB\x9C\xCB\x9D\xCB\x9E\xCB\x9F\xCB\xA5\xCB\xA6\xCB\xA7\xCB\xA8\xCB\xA9\xCB\xAA\xCB\xAB\xCB\xAD\xCB\xAF\xCB\xB0\xCB\xB1\xCB\xB2\xCB\xB3\xCB\xB4\xCB\xB5\xCB\xB6\xCB\xB7\xCB\xB8\xCB\xB9\xCB\xBA\xCB\xBB\xCB\xBC\xCB\xBD\xCB\xBE\xCB\xBF\xCD\xB5\xCE\x84\xCE\x85\xE1\xBE\xBD\xE1\xBE\xBF\xE1\xBF\x80\xE1\xBF\x81\xE1\xBF\x8D\xE1\xBF\x8E\xE1\xBF\x8F\xE1\xBF\x9D\xE1\xBF\x9E\xE1\xBF\x9F\xE1\xBF\xAD\xE1\xBF\xAE\xE1\xBF\xAF\xE1\xBF\xBD\xE1\xBF\xBE\xE3\x82\x9B\xE3\x82\x9C\xEA\x9C\x80\xEA\x9C\x81\xEA\x9C\x82\xEA\x9C\x83\xEA\x9C\x84\xEA\x9C\x85\xEA\x9C\x86\xEA\x9C\x87\xEA\x9C\x88\xEA\x9C\x89\xEA\x9C\x8A\xEA\x9C\x8B\xEA\x9C\x8C\xEA\x9C\x8D\xEA\x9C\x8E\xEA\x9C\x8F\xEA\x9C\x90\xEA\x9C\x91\xEA\x9C\x92\xEA\x9C\x93\xEA\x9C\x94\xEA\x9C\x95\xEA\x9C\x96\xEA\x9C\xA0\xEA\x9C\xA1\xEA\x9E\x89\xEA\x9E\x8A\xEF\xAE\xB2\xEF\xAE\xB3\xEF\xAE\xB4\xEF\xAE\xB5\xEF\xAE\xB6\xEF\xAE\xB7\xEF\xAE\xB8\xEF\xAE\xB9\xEF\xAE\xBA\xEF\xAE\xBB\xEF\xAE\xBC\xEF\xAE\xBD\xEF\xAE\xBE\xEF\xAE\xBF\xEF\xAF\x80\xEF\xAF\x81\xEF\xBC\xBE\xEF\xBD\x80\xEF\xBF\xA3\x00";
+static const unsigned int chars_Sk [] = {0x5e,0x5e,  0x60,0x60,  0xa8,0xa8,  0xaf,0xaf,  0xb4,0xb4,  0xb8,0xb8,  0x2c2,0x2c5,  0x2d2,0x2df,  0x2e5,0x2eb,  0x2ed,0x2ed,  0x2ef,0x2ff,  0x375,0x375,  0x384,0x385,  0x1fbd,0x1fbd,  0x1fbf,0x1fc1,  0x1fcd,0x1fcf,  0x1fdd,0x1fdf,  0x1fed,0x1fef,  0x1ffd,0x1ffe,  0x309b,0x309c,  0xa700,0xa716,  0xa720,0xa721,  0xa789,0xa78a,  0xfbb2,0xfbc1,  0xff3e,0xff3e,  0xff40,0xff40,  0xffe3,0xffe3,  0x0,0x0};
+static unsigned int encode_utf8 (const unsigned int * ranges, unsigned int ranges_count, unsigned char * s)
+{
+	unsigned char * const s_start = s;
+	for (unsigned int i = 0; i < ranges_count - 2; i += 2)
+		for (unsigned int j = ranges[i]; j <= ranges[i + 1]; ++j)
+			s += re2c::utf8::rune_to_bytes (s, j);
+	re2c::utf8::rune_to_bytes (s, ranges[ranges_count - 1]);
+	return s - s_start + 1;
+}
+
 int main ()
 {
-	if (!scan (reinterpret_cast<const YYCTYPE *> (buffer_Sk), reinterpret_cast<const YYCTYPE *> (buffer_Sk + sizeof (buffer_Sk) - 1)))
+	YYCTYPE * buffer_Sk = new YYCTYPE [464];
+	unsigned int buffer_len = encode_utf8 (chars_Sk, sizeof (chars_Sk) / sizeof (unsigned int), buffer_Sk);
+	if (!scan (reinterpret_cast<const YYCTYPE *> (buffer_Sk), reinterpret_cast<const YYCTYPE *> (buffer_Sk + buffer_len)))
 		printf("test 'Sk' failed\n");
+	delete [] buffer_Sk;
+	return 0;
 }

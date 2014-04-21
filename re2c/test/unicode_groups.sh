@@ -1,6 +1,8 @@
 #!/bin/bash
 
-for fre in unicode_{group_*,blocks}.{8,x,u}--encoding-policy\({ignore,substitute,fail}\).re
+re2c_srcdir=".."
+
+for fre in unicode_{blocks,group_*}.{8,x,u}--encoding-policy\({ignore,substitute,fail}\).re
 do
     echo $fre
     fc=${fre/.re/.c}
@@ -19,7 +21,7 @@ do
     fi
 
     # compile C source
-    g++ -W -Wall -Wextra $fc -o $fe
+    g++ -I $re2c_srcdir -W -Wall -Wextra $fc $re2c_srcdir/utf8.cc $re2c_srcdir/utf16.cc -o $fe
 
     # execute (runs silently if OK, otherwize report an error)
     ./$fe

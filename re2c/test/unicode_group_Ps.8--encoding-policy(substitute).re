@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include "utf8.h"
 #define YYCTYPE unsigned char
 bool scan(const YYCTYPE * start, const YYCTYPE * const limit)
 {
@@ -9,12 +10,26 @@ Ps:
 		re2c:yyfill:enable = 0;
 		Ps = [\x28-\x28\x5b-\x5b\x7b-\x7b\u0f3a-\u0f3a\u0f3c-\u0f3c\u169b-\u169b\u201a-\u201a\u201e-\u201e\u2045-\u2045\u207d-\u207d\u208d-\u208d\u2329-\u2329\u2768-\u2768\u276a-\u276a\u276c-\u276c\u276e-\u276e\u2770-\u2770\u2772-\u2772\u2774-\u2774\u27c5-\u27c5\u27e6-\u27e6\u27e8-\u27e8\u27ea-\u27ea\u27ec-\u27ec\u27ee-\u27ee\u2983-\u2983\u2985-\u2985\u2987-\u2987\u2989-\u2989\u298b-\u298b\u298d-\u298d\u298f-\u298f\u2991-\u2991\u2993-\u2993\u2995-\u2995\u2997-\u2997\u29d8-\u29d8\u29da-\u29da\u29fc-\u29fc\u2e22-\u2e22\u2e24-\u2e24\u2e26-\u2e26\u2e28-\u2e28\u3008-\u3008\u300a-\u300a\u300c-\u300c\u300e-\u300e\u3010-\u3010\u3014-\u3014\u3016-\u3016\u3018-\u3018\u301a-\u301a\u301d-\u301d\ufd3e-\ufd3e\ufe17-\ufe17\ufe35-\ufe35\ufe37-\ufe37\ufe39-\ufe39\ufe3b-\ufe3b\ufe3d-\ufe3d\ufe3f-\ufe3f\ufe41-\ufe41\ufe43-\ufe43\ufe47-\ufe47\ufe59-\ufe59\ufe5b-\ufe5b\ufe5d-\ufe5d\uff08-\uff08\uff3b-\uff3b\uff5b-\uff5b\uff5f-\uff5f\uff62-\uff62];
 		Ps { goto Ps; }
-		[^] { return YYCURSOR == limit; }
+		* { return YYCURSOR == limit; }
 	*/
 }
-static const char buffer_Ps [] = "\x28\x5B\x7B\xE0\xBC\xBA\xE0\xBC\xBC\xE1\x9A\x9B\xE2\x80\x9A\xE2\x80\x9E\xE2\x81\x85\xE2\x81\xBD\xE2\x82\x8D\xE2\x8C\xA9\xE2\x9D\xA8\xE2\x9D\xAA\xE2\x9D\xAC\xE2\x9D\xAE\xE2\x9D\xB0\xE2\x9D\xB2\xE2\x9D\xB4\xE2\x9F\x85\xE2\x9F\xA6\xE2\x9F\xA8\xE2\x9F\xAA\xE2\x9F\xAC\xE2\x9F\xAE\xE2\xA6\x83\xE2\xA6\x85\xE2\xA6\x87\xE2\xA6\x89\xE2\xA6\x8B\xE2\xA6\x8D\xE2\xA6\x8F\xE2\xA6\x91\xE2\xA6\x93\xE2\xA6\x95\xE2\xA6\x97\xE2\xA7\x98\xE2\xA7\x9A\xE2\xA7\xBC\xE2\xB8\xA2\xE2\xB8\xA4\xE2\xB8\xA6\xE2\xB8\xA8\xE3\x80\x88\xE3\x80\x8A\xE3\x80\x8C\xE3\x80\x8E\xE3\x80\x90\xE3\x80\x94\xE3\x80\x96\xE3\x80\x98\xE3\x80\x9A\xE3\x80\x9D\xEF\xB4\xBE\xEF\xB8\x97\xEF\xB8\xB5\xEF\xB8\xB7\xEF\xB8\xB9\xEF\xB8\xBB\xEF\xB8\xBD\xEF\xB8\xBF\xEF\xB9\x81\xEF\xB9\x83\xEF\xB9\x87\xEF\xB9\x99\xEF\xB9\x9B\xEF\xB9\x9D\xEF\xBC\x88\xEF\xBC\xBB\xEF\xBD\x9B\xEF\xBD\x9F\xEF\xBD\xA2\x00";
+static const unsigned int chars_Ps [] = {0x28,0x28,  0x5b,0x5b,  0x7b,0x7b,  0xf3a,0xf3a,  0xf3c,0xf3c,  0x169b,0x169b,  0x201a,0x201a,  0x201e,0x201e,  0x2045,0x2045,  0x207d,0x207d,  0x208d,0x208d,  0x2329,0x2329,  0x2768,0x2768,  0x276a,0x276a,  0x276c,0x276c,  0x276e,0x276e,  0x2770,0x2770,  0x2772,0x2772,  0x2774,0x2774,  0x27c5,0x27c5,  0x27e6,0x27e6,  0x27e8,0x27e8,  0x27ea,0x27ea,  0x27ec,0x27ec,  0x27ee,0x27ee,  0x2983,0x2983,  0x2985,0x2985,  0x2987,0x2987,  0x2989,0x2989,  0x298b,0x298b,  0x298d,0x298d,  0x298f,0x298f,  0x2991,0x2991,  0x2993,0x2993,  0x2995,0x2995,  0x2997,0x2997,  0x29d8,0x29d8,  0x29da,0x29da,  0x29fc,0x29fc,  0x2e22,0x2e22,  0x2e24,0x2e24,  0x2e26,0x2e26,  0x2e28,0x2e28,  0x3008,0x3008,  0x300a,0x300a,  0x300c,0x300c,  0x300e,0x300e,  0x3010,0x3010,  0x3014,0x3014,  0x3016,0x3016,  0x3018,0x3018,  0x301a,0x301a,  0x301d,0x301d,  0xfd3e,0xfd3e,  0xfe17,0xfe17,  0xfe35,0xfe35,  0xfe37,0xfe37,  0xfe39,0xfe39,  0xfe3b,0xfe3b,  0xfe3d,0xfe3d,  0xfe3f,0xfe3f,  0xfe41,0xfe41,  0xfe43,0xfe43,  0xfe47,0xfe47,  0xfe59,0xfe59,  0xfe5b,0xfe5b,  0xfe5d,0xfe5d,  0xff08,0xff08,  0xff3b,0xff3b,  0xff5b,0xff5b,  0xff5f,0xff5f,  0xff62,0xff62,  0x0,0x0};
+static unsigned int encode_utf8 (const unsigned int * ranges, unsigned int ranges_count, unsigned char * s)
+{
+	unsigned char * const s_start = s;
+	for (unsigned int i = 0; i < ranges_count - 2; i += 2)
+		for (unsigned int j = ranges[i]; j <= ranges[i + 1]; ++j)
+			s += re2c::utf8::rune_to_bytes (s, j);
+	re2c::utf8::rune_to_bytes (s, ranges[ranges_count - 1]);
+	return s - s_start + 1;
+}
+
 int main ()
 {
-	if (!scan (reinterpret_cast<const YYCTYPE *> (buffer_Ps), reinterpret_cast<const YYCTYPE *> (buffer_Ps + sizeof (buffer_Ps) - 1)))
+	YYCTYPE * buffer_Ps = new YYCTYPE [292];
+	unsigned int buffer_len = encode_utf8 (chars_Ps, sizeof (chars_Ps) / sizeof (unsigned int), buffer_Ps);
+	if (!scan (reinterpret_cast<const YYCTYPE *> (buffer_Ps), reinterpret_cast<const YYCTYPE *> (buffer_Ps + buffer_len)))
 		printf("test 'Ps' failed\n");
+	delete [] buffer_Ps;
+	return 0;
 }

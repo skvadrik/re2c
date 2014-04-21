@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include "utf16.h"
 #define YYCTYPE unsigned short
 bool scan(const YYCTYPE * start, const YYCTYPE * const limit)
 {
@@ -9,12 +10,33 @@ Sk:
 		re2c:yyfill:enable = 0;
 		Sk = [\x5e-\x5e\x60-\x60\xa8-\xa8\xaf-\xaf\xb4-\xb4\xb8-\xb8\u02c2-\u02c5\u02d2-\u02df\u02e5-\u02eb\u02ed-\u02ed\u02ef-\u02ff\u0375-\u0375\u0384-\u0385\u1fbd-\u1fbd\u1fbf-\u1fc1\u1fcd-\u1fcf\u1fdd-\u1fdf\u1fed-\u1fef\u1ffd-\u1ffe\u309b-\u309c\ua700-\ua716\ua720-\ua721\ua789-\ua78a\ufbb2-\ufbc1\uff3e-\uff3e\uff40-\uff40\uffe3-\uffe3];
 		Sk { goto Sk; }
-		[^] { return YYCURSOR == limit; }
+		* { return YYCURSOR == limit; }
 	*/
 }
-static const char buffer_Sk [] = "\x5E\x00\x60\x00\xA8\x00\xAF\x00\xB4\x00\xB8\x00\xC2\x02\xC3\x02\xC4\x02\xC5\x02\xD2\x02\xD3\x02\xD4\x02\xD5\x02\xD6\x02\xD7\x02\xD8\x02\xD9\x02\xDA\x02\xDB\x02\xDC\x02\xDD\x02\xDE\x02\xDF\x02\xE5\x02\xE6\x02\xE7\x02\xE8\x02\xE9\x02\xEA\x02\xEB\x02\xED\x02\xEF\x02\xF0\x02\xF1\x02\xF2\x02\xF3\x02\xF4\x02\xF5\x02\xF6\x02\xF7\x02\xF8\x02\xF9\x02\xFA\x02\xFB\x02\xFC\x02\xFD\x02\xFE\x02\xFF\x02\x75\x03\x84\x03\x85\x03\xBD\x1F\xBF\x1F\xC0\x1F\xC1\x1F\xCD\x1F\xCE\x1F\xCF\x1F\xDD\x1F\xDE\x1F\xDF\x1F\xED\x1F\xEE\x1F\xEF\x1F\xFD\x1F\xFE\x1F\x9B\x30\x9C\x30\x00\xA7\x01\xA7\x02\xA7\x03\xA7\x04\xA7\x05\xA7\x06\xA7\x07\xA7\x08\xA7\x09\xA7\x0A\xA7\x0B\xA7\x0C\xA7\x0D\xA7\x0E\xA7\x0F\xA7\x10\xA7\x11\xA7\x12\xA7\x13\xA7\x14\xA7\x15\xA7\x16\xA7\x20\xA7\x21\xA7\x89\xA7\x8A\xA7\xB2\xFB\xB3\xFB\xB4\xFB\xB5\xFB\xB6\xFB\xB7\xFB\xB8\xFB\xB9\xFB\xBA\xFB\xBB\xFB\xBC\xFB\xBD\xFB\xBE\xFB\xBF\xFB\xC0\xFB\xC1\xFB\x3E\xFF\x40\xFF\xE3\xFF\x00\x00";
+static const unsigned int chars_Sk [] = {0x5e,0x5e,  0x60,0x60,  0xa8,0xa8,  0xaf,0xaf,  0xb4,0xb4,  0xb8,0xb8,  0x2c2,0x2c5,  0x2d2,0x2df,  0x2e5,0x2eb,  0x2ed,0x2ed,  0x2ef,0x2ff,  0x375,0x375,  0x384,0x385,  0x1fbd,0x1fbd,  0x1fbf,0x1fc1,  0x1fcd,0x1fcf,  0x1fdd,0x1fdf,  0x1fed,0x1fef,  0x1ffd,0x1ffe,  0x309b,0x309c,  0xa700,0xa716,  0xa720,0xa721,  0xa789,0xa78a,  0xfbb2,0xfbc1,  0xff3e,0xff3e,  0xff40,0xff40,  0xffe3,0xffe3,  0x0,0x0};
+static unsigned int encode_utf16 (const unsigned int * ranges, unsigned int ranges_count, unsigned short * s)
+{
+	unsigned short * const s_start = s;
+	for (unsigned int i = 0; i < ranges_count; i += 2)
+		for (unsigned int j = ranges[i]; j <= ranges[i + 1]; ++j)
+		{
+			if (j <= re2c::utf16::MAX_1WORD_RUNE)
+				*s++ = j;
+			else
+			{
+				*s++ = re2c::utf16::lead_surr(j);
+				*s++ = re2c::utf16::trail_surr(j);
+			}
+		}
+	return s - s_start;
+}
+
 int main ()
 {
-	if (!scan (reinterpret_cast<const YYCTYPE *> (buffer_Sk), reinterpret_cast<const YYCTYPE *> (buffer_Sk + sizeof (buffer_Sk) - 1)))
+	YYCTYPE * buffer_Sk = new YYCTYPE [232];
+	unsigned int buffer_len = encode_utf16 (chars_Sk, sizeof (chars_Sk) / sizeof (unsigned int), buffer_Sk);
+	if (!scan (reinterpret_cast<const YYCTYPE *> (buffer_Sk), reinterpret_cast<const YYCTYPE *> (buffer_Sk + buffer_len)))
 		printf("test 'Sk' failed\n");
+	delete [] buffer_Sk;
+	return 0;
 }

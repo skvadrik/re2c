@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include "utf16.h"
 #define YYCTYPE unsigned short
 bool scan(const YYCTYPE * start, const YYCTYPE * const limit)
 {
@@ -9,12 +10,33 @@ Lt:
 		re2c:yyfill:enable = 0;
 		Lt = [\u01c5-\u01c5\u01c8-\u01c8\u01cb-\u01cb\u01f2-\u01f2\u1f88-\u1f8f\u1f98-\u1f9f\u1fa8-\u1faf\u1fbc-\u1fbc\u1fcc-\u1fcc\u1ffc-\u1ffc];
 		Lt { goto Lt; }
-		[^] { return YYCURSOR == limit; }
+		* { return YYCURSOR == limit; }
 	*/
 }
-static const char buffer_Lt [] = "\xC5\x01\xC8\x01\xCB\x01\xF2\x01\x88\x1F\x89\x1F\x8A\x1F\x8B\x1F\x8C\x1F\x8D\x1F\x8E\x1F\x8F\x1F\x98\x1F\x99\x1F\x9A\x1F\x9B\x1F\x9C\x1F\x9D\x1F\x9E\x1F\x9F\x1F\xA8\x1F\xA9\x1F\xAA\x1F\xAB\x1F\xAC\x1F\xAD\x1F\xAE\x1F\xAF\x1F\xBC\x1F\xCC\x1F\xFC\x1F\x00\x00";
+static const unsigned int chars_Lt [] = {0x1c5,0x1c5,  0x1c8,0x1c8,  0x1cb,0x1cb,  0x1f2,0x1f2,  0x1f88,0x1f8f,  0x1f98,0x1f9f,  0x1fa8,0x1faf,  0x1fbc,0x1fbc,  0x1fcc,0x1fcc,  0x1ffc,0x1ffc,  0x0,0x0};
+static unsigned int encode_utf16 (const unsigned int * ranges, unsigned int ranges_count, unsigned short * s)
+{
+	unsigned short * const s_start = s;
+	for (unsigned int i = 0; i < ranges_count; i += 2)
+		for (unsigned int j = ranges[i]; j <= ranges[i + 1]; ++j)
+		{
+			if (j <= re2c::utf16::MAX_1WORD_RUNE)
+				*s++ = j;
+			else
+			{
+				*s++ = re2c::utf16::lead_surr(j);
+				*s++ = re2c::utf16::trail_surr(j);
+			}
+		}
+	return s - s_start;
+}
+
 int main ()
 {
-	if (!scan (reinterpret_cast<const YYCTYPE *> (buffer_Lt), reinterpret_cast<const YYCTYPE *> (buffer_Lt + sizeof (buffer_Lt) - 1)))
+	YYCTYPE * buffer_Lt = new YYCTYPE [64];
+	unsigned int buffer_len = encode_utf16 (chars_Lt, sizeof (chars_Lt) / sizeof (unsigned int), buffer_Lt);
+	if (!scan (reinterpret_cast<const YYCTYPE *> (buffer_Lt), reinterpret_cast<const YYCTYPE *> (buffer_Lt + buffer_len)))
 		printf("test 'Lt' failed\n");
+	delete [] buffer_Lt;
+	return 0;
 }

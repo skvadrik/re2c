@@ -1,4 +1,5 @@
 #include <stdio.h>
+
 #define YYCTYPE unsigned int
 bool scan(const YYCTYPE * start, const YYCTYPE * const limit)
 {
@@ -9,12 +10,25 @@ Sc:
 		re2c:yyfill:enable = 0;
 		Sc = [\x24-\x24\xa2-\xa5\u060b-\u060b\u09f2-\u09f3\u09fb-\u09fb\u0af1-\u0af1\u0bf9-\u0bf9\u0e3f-\u0e3f\u17db-\u17db\u20a0-\u20b9\ua838-\ua838\ufdfc-\ufdfc\ufe69-\ufe69\uff04-\uff04\uffe0-\uffe1\uffe5-\uffe6];
 		Sc { goto Sc; }
-		[^] { return YYCURSOR == limit; }
+		* { return YYCURSOR == limit; }
 	*/
 }
-static const char buffer_Sc [] = "\x24\x00\x00\x00\xA2\x00\x00\x00\xA3\x00\x00\x00\xA4\x00\x00\x00\xA5\x00\x00\x00\x0B\x06\x00\x00\xF2\x09\x00\x00\xF3\x09\x00\x00\xFB\x09\x00\x00\xF1\x0A\x00\x00\xF9\x0B\x00\x00\x3F\x0E\x00\x00\xDB\x17\x00\x00\xA0\x20\x00\x00\xA1\x20\x00\x00\xA2\x20\x00\x00\xA3\x20\x00\x00\xA4\x20\x00\x00\xA5\x20\x00\x00\xA6\x20\x00\x00\xA7\x20\x00\x00\xA8\x20\x00\x00\xA9\x20\x00\x00\xAA\x20\x00\x00\xAB\x20\x00\x00\xAC\x20\x00\x00\xAD\x20\x00\x00\xAE\x20\x00\x00\xAF\x20\x00\x00\xB0\x20\x00\x00\xB1\x20\x00\x00\xB2\x20\x00\x00\xB3\x20\x00\x00\xB4\x20\x00\x00\xB5\x20\x00\x00\xB6\x20\x00\x00\xB7\x20\x00\x00\xB8\x20\x00\x00\xB9\x20\x00\x00\x38\xA8\x00\x00\xFC\xFD\x00\x00\x69\xFE\x00\x00\x04\xFF\x00\x00\xE0\xFF\x00\x00\xE1\xFF\x00\x00\xE5\xFF\x00\x00\xE6\xFF\x00\x00\x00\x00\x00\x00";
+static const unsigned int chars_Sc [] = {0x24,0x24,  0xa2,0xa5,  0x60b,0x60b,  0x9f2,0x9f3,  0x9fb,0x9fb,  0xaf1,0xaf1,  0xbf9,0xbf9,  0xe3f,0xe3f,  0x17db,0x17db,  0x20a0,0x20b9,  0xa838,0xa838,  0xfdfc,0xfdfc,  0xfe69,0xfe69,  0xff04,0xff04,  0xffe0,0xffe1,  0xffe5,0xffe6,  0x0,0x0};
+static unsigned int encode_utf32 (const unsigned int * ranges, unsigned int ranges_count, unsigned int * s)
+{
+	unsigned int * const s_start = s;
+	for (unsigned int i = 0; i < ranges_count; i += 2)
+		for (unsigned int j = ranges[i]; j <= ranges[i + 1]; ++j)
+			*s++ = j;
+	return s - s_start;
+}
+
 int main ()
 {
-	if (!scan (reinterpret_cast<const YYCTYPE *> (buffer_Sc), reinterpret_cast<const YYCTYPE *> (buffer_Sc + sizeof (buffer_Sc) - 1)))
+	YYCTYPE * buffer_Sc = new YYCTYPE [48];
+	unsigned int buffer_len = encode_utf32 (chars_Sc, sizeof (chars_Sc) / sizeof (unsigned int), buffer_Sc);
+	if (!scan (reinterpret_cast<const YYCTYPE *> (buffer_Sc), reinterpret_cast<const YYCTYPE *> (buffer_Sc + buffer_len)))
 		printf("test 'Sc' failed\n");
+	delete [] buffer_Sc;
+	return 0;
 }

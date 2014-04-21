@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include "utf8.h"
 #define YYCTYPE unsigned char
 bool scan(const YYCTYPE * start, const YYCTYPE * const limit)
 {
@@ -9,12 +10,26 @@ Lt:
 		re2c:yyfill:enable = 0;
 		Lt = [\u01c5-\u01c5\u01c8-\u01c8\u01cb-\u01cb\u01f2-\u01f2\u1f88-\u1f8f\u1f98-\u1f9f\u1fa8-\u1faf\u1fbc-\u1fbc\u1fcc-\u1fcc\u1ffc-\u1ffc];
 		Lt { goto Lt; }
-		[^] { return YYCURSOR == limit; }
+		* { return YYCURSOR == limit; }
 	*/
 }
-static const char buffer_Lt [] = "\xC7\x85\xC7\x88\xC7\x8B\xC7\xB2\xE1\xBE\x88\xE1\xBE\x89\xE1\xBE\x8A\xE1\xBE\x8B\xE1\xBE\x8C\xE1\xBE\x8D\xE1\xBE\x8E\xE1\xBE\x8F\xE1\xBE\x98\xE1\xBE\x99\xE1\xBE\x9A\xE1\xBE\x9B\xE1\xBE\x9C\xE1\xBE\x9D\xE1\xBE\x9E\xE1\xBE\x9F\xE1\xBE\xA8\xE1\xBE\xA9\xE1\xBE\xAA\xE1\xBE\xAB\xE1\xBE\xAC\xE1\xBE\xAD\xE1\xBE\xAE\xE1\xBE\xAF\xE1\xBE\xBC\xE1\xBF\x8C\xE1\xBF\xBC\x00";
+static const unsigned int chars_Lt [] = {0x1c5,0x1c5,  0x1c8,0x1c8,  0x1cb,0x1cb,  0x1f2,0x1f2,  0x1f88,0x1f8f,  0x1f98,0x1f9f,  0x1fa8,0x1faf,  0x1fbc,0x1fbc,  0x1fcc,0x1fcc,  0x1ffc,0x1ffc,  0x0,0x0};
+static unsigned int encode_utf8 (const unsigned int * ranges, unsigned int ranges_count, unsigned char * s)
+{
+	unsigned char * const s_start = s;
+	for (unsigned int i = 0; i < ranges_count - 2; i += 2)
+		for (unsigned int j = ranges[i]; j <= ranges[i + 1]; ++j)
+			s += re2c::utf8::rune_to_bytes (s, j);
+	re2c::utf8::rune_to_bytes (s, ranges[ranges_count - 1]);
+	return s - s_start + 1;
+}
+
 int main ()
 {
-	if (!scan (reinterpret_cast<const YYCTYPE *> (buffer_Lt), reinterpret_cast<const YYCTYPE *> (buffer_Lt + sizeof (buffer_Lt) - 1)))
+	YYCTYPE * buffer_Lt = new YYCTYPE [128];
+	unsigned int buffer_len = encode_utf8 (chars_Lt, sizeof (chars_Lt) / sizeof (unsigned int), buffer_Lt);
+	if (!scan (reinterpret_cast<const YYCTYPE *> (buffer_Lt), reinterpret_cast<const YYCTYPE *> (buffer_Lt + buffer_len)))
 		printf("test 'Lt' failed\n");
+	delete [] buffer_Lt;
+	return 0;
 }
