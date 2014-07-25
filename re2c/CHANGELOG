@@ -1,5 +1,9 @@
-Version 0.13.7 (20??-??-??)
+Version 0.13.7 (2014-07-25)
 ---------------------------
+- Added UTF-8 support
+- Added UTF-16 support
+- Added default rule
+- Added option to control ill-formed Unicode
 
 Version 0.13.6 (2013-07-04)
 ---------------------------

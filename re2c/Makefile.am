@@ -9,8 +9,6 @@ re2c_SOURCES = code.cc dfa.cc main.cc parser.cc actions.cc scanner.re substr.cc 
 	substr.h token.h mbo_getopt.h code.h stream_lc.h code_names.h
 BUILT_SOURCES = parser.cc scanner.cc
 
-man_MANS     = re2c.1
-
 #CXXFLAGS     = -O2 -Wall -Wno-unused -Wno-parentheses -Wno-deprecated
 #CXXFLAGS     = -ggdb -fno-inline -O2 -Wall -Wextra -pedantic -Wconversion -Wpointer-arith -Wwrite-strings -Wredundant-decls -Werror -Wunused-function -DPEDANTIC
 CXXFLAGS     = -W -Wall -Wextra -pedantic -Wredundant-decls -DPEDANTIC -O2 -g
@@ -23,18 +21,18 @@ CLEANFILES   = parser.cc y.tab.c y.tab.h scanner.cc re2c.1 .version htdocs/manua
 
 DISTCLEANFILES = makerpm re2c.spec README scanner.cc re2c$(EXEEXT)
 
-EXTRA_SRC    = $(man_MANS) README parser.y scanner.re y.tab.h CHANGELOG \
+EXTRA_SRC    = README parser.y scanner.re y.tab.h CHANGELOG \
                doc examples test bootstrap/*.cc bootstrap/*.h lessons
-EXTRA_DIST   = $(EXTRA_SRC) makerpm.in re2c.spec.in re2c.spec README.in config_w32.h.in htdocs/manual.html.in
+EXTRA_DIST   = $(EXTRA_SRC) makerpm.in re2c.spec.in re2c.spec README.in config_w32.h.in
 EXTRA_ZIP    = $(EXTRA_SRC) config_w32.h *.sln *.vcproj re2c.rules
 
-dist-hook: vtest re2c.spec
+dist-hook: re2c.spec
 	rm -rf `find $(distdir)/doc -name .git`
 	rm -rf `find $(distdir)/examples -name .git`
 	rm -rf `find $(distdir)/test -name .git -o -name .gitignore`
 	rm -rf `find $(distdir)/lessons -name .git -o -name .gitignore`
 
-rpm-files:	$(bin_PROGRAMS) $(EXTRA_DIST)
+rpm-files: $(bin_PROGRAMS) $(EXTRA_DIST)
 
 rpm: dist
 	cp -f re2c-$(PACKAGE_VERSION).tar.gz `rpm --eval "%{_sourcedir}"`
@@ -83,10 +81,19 @@ scanner.cc: $(top_srcdir)/scanner.re
 
 TESTS = run_tests.sh
 
-test: all $(TESTS)
+tests: all $(TESTS)
 	test -x $(TESTS) || chmod +x $(TESTS)
 	./$(TESTS)
 
-vtest: all $(TESTS)
+vtests: all $(TESTS)
 	test -x $(TESTS) || chmod +x $(TESTS)
 	./$(TESTS) --valgrind
+
+DOCS_IN  = re2c.ad
+DOCS = re2c.1 htdocs/manual.html
+DOCS_GEN = ./re2c_docs.sh
+
+docs: $(DOCS)
+
+$(DOCS): $(DOCS_GEN) $(DOCS_IN)
+	$(DOCS_GEN)

@@ -1,5 +1,6 @@
 re2c
 re2c.1
+re2c.ad
 .deps
 autoscan.log
 autom4te.cache

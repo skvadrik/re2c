@@ -1,59 +1,14 @@
-1. For a BRANCH first create a new version directory
-   and apply fixes in the new directory if not yet done:
-   > svn cp tags/RELEASE_<old> tags/RELEASE_<new>
+1. Upload new and delete old documentation
 
-2. Edit dates in the following files:
+2. Test windows build using cygwin
+
+3. Edit the following files:
    - CHANGELOG
    - htdocs/index.html
 
-3. For a BRANCH edit version in:
-   - configure.in
+4. Run script release.sh:
+    ./release.sh <version>
 
-4. Keep CHANGELOG, htdocs/index.html in synch
+5. Write NEWS file
 
-5. Commit preparation phase:
-   > svn ci -m "- Prepare new release <new>"
-
-6. For HEAD:
-   > svn mkdir tags/RELEASE_<new>
-   > svn cp trunk/re2c tags/RELEASE_<new>
-
-7. For HEAD edit version in:
-   - tags/RELEASE_<new>/re2c/configure.in   (del ".dev")
-   - trunk/re2c/configure.in                (inc ver, add ".dev")
-
-8. Compile and update version files:
-   > ./configure && make clean && make && ./re2c -v
-
-9. Check version in config_w32.h
-
-10. Build windows versions
-
-11. Test windows build using cygwin
-
-12. Make release (also tests the new *nix release):
-    > make release
-
-13. Add release packages to subversion
-    > svn add re2c-<new>*
-
-13. Upload release files and add releases
-
-14. Write NEWS file
-
-15. Add release notes on freshmeat
-
-16. Upload new and delete old documentation
-
-17. Login to "re2c.sourceforge.net" and update web site
-
-18. Add new version lines in these files:
-    - CHANGELOG
-    - htdocs/index.html
-
-19. Update to new version in HEAD
-    > make clean && make && ./re2c -v
-
-20. Commit releases and changes in HEAD
-    > svn ci -m "- Add new release <new>" tags/RELEASE_<new>
-    > scn ci -m "- This is <new+1> now" trunk/re2c
+6. Add release notes on freshmeat
