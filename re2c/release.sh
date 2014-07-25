@@ -23,6 +23,7 @@ make zip dist docs
 
 # commit release
 git commit -a -m "Release $version."
+git push
 
 # upload files on sourceforge
 src=release

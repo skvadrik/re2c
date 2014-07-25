@@ -12,3 +12,5 @@
 5. Write NEWS file
 
 6. Add release notes on freshmeat
+
+7. Don't forget to set version to .dev
