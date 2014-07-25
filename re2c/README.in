@@ -80,6 +80,9 @@ This, and all other re2c compiler settings, are fully configurable from within
 the Visual Studio IDE. Just right-click on the .re file in Visual Studio, go
 to the properties dialog, and pick your options.
 
+To build documentation you'll need 'asciidoc':
+    make docs
+
 re2c is a great tool for writing fast and flexible lexers. It has
 served many people well for many years. re2c is on the order of 2-3 
 times faster than a flex based scanner, and its input model is much 
