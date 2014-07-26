@@ -21,6 +21,18 @@ make clean
 make tests -j5
 make zip dist docs
 
+# dist-check
+tmpdir=` date +"%Y%m%d%H%M%S%N"`
+mkdir $tmpdir
+cp re2c-$version.tar.gz $tmpdir
+cd $tmpdir
+gunzip re2c-$version.tar.gz
+tar -x -f re2c-$version.tar
+cd re2c-$version
+./configure && make -j5 && make tests
+cd ../..
+rm -r $tmpdir
+
 # commit release
 git commit -a -m "Release $version."
 git push
