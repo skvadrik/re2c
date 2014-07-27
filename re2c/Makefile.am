@@ -13,7 +13,8 @@ BUILT_SOURCES = parser.cc scanner.cc
 
 #CXXFLAGS     = -O2 -Wall -Wno-unused -Wno-parentheses -Wno-deprecated
 #CXXFLAGS     = -ggdb -fno-inline -O2 -Wall -Wextra -pedantic -Wconversion -Wpointer-arith -Wwrite-strings -Wredundant-decls -Werror -Wunused-function -DPEDANTIC
-CXXFLAGS     = -W -Wall -Wextra -pedantic -Wredundant-decls -DPEDANTIC -O2 -g
+#CXXFLAGS     += -O2
+CXXFLAGS     += -W -Wall -Wextra -pedantic -Wredundant-decls -DPEDANTIC
 YFLAGS       = -d
 
 RE2C         = re2c$(EXEEXT)
@@ -23,7 +24,9 @@ CLEANFILES   = parser.cc y.tab.c y.tab.h scanner.cc re2c.1 .version htdocs/manua
 
 DISTCLEANFILES = makerpm re2c.spec README scanner.cc re2c$(EXEEXT)
 
-EXTRA_SRC    = README parser.y scanner.re y.tab.h CHANGELOG NO_WARRANTY \
+man_MANS = re2c.1
+
+EXTRA_SRC    = $(man_MANS) README parser.y scanner.re y.tab.h CHANGELOG NO_WARRANTY \
                doc examples test bootstrap/*.cc bootstrap/*.h lessons
 EXTRA_DIST   = $(EXTRA_SRC) makerpm.in re2c.spec.in re2c.spec README.in config_w32.h.in
 EXTRA_ZIP    = $(EXTRA_SRC) config_w32.h *.sln *.vcproj re2c.rules
