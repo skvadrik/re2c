@@ -1,4 +1,6 @@
-#!/bin/sh -e
+#!/bin/bash
+
+set -e
 
 if [ $# -ne 1 ]
 then
@@ -11,15 +13,16 @@ version="$1"
 # edit version in configure.in
 lcontext="AC_INIT\(re2c, "
 rcontext=", re2c-general@lists\.sourceforge\.net\)"
-old="[0-9]+(\.[0-9]+)*"
+old="[0-9]+(\.[0-9]+)*(\.dev)?"
 new=$version
 sed -i -E "s/$lcontext$old$rcontext/$lcontext$new$rcontext/" configure.in
 
 ./autogen.sh
 ./configure
 make clean
-make tests -j5
-make zip dist docs
+make -j5
+make tests
+make zip dist
 
 # dist-check
 tmpdir=` date +"%Y%m%d%H%M%S%N"`
@@ -29,7 +32,9 @@ cd $tmpdir
 gunzip re2c-$version.tar.gz
 tar -x -f re2c-$version.tar
 cd re2c-$version
-./configure && make -j5 && make tests
+./configure
+make -j5
+make tests
 cd ../..
 rm -r $tmpdir
 

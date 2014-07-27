@@ -4,4 +4,5 @@
 a2x -f manpage re2c.ad
 
 # generate htdocs/manual.html from re2c.ad
+mkdir -p htdocs
 asciidoc -o htdocs/manual.html re2c.ad

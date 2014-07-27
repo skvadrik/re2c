@@ -1,5 +1,6 @@
-Version 0.13.8 (20??-??-??)
+Version 0.13.7.2 (2014-07-27)
 -----------------------------
+- Included man page into dist, respect users CXXFLAGS.
 
 Version 0.13.7.1 (2014-07-26)
 -----------------------------
