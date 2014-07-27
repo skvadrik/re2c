@@ -11,7 +11,7 @@ version="$1"
 # edit version in configure.in
 lcontext="AC_INIT\(re2c, "
 rcontext=", re2c-general@lists\.sourceforge\.net\)"
-old="[0-9]+\.[0-9]+\.[0-9]+"
+old="[0-9]+(\.[0-9]+)*"
 new=$version
 sed -i -E "s/$lcontext$old$rcontext/$lcontext$new$rcontext/" configure.in
 
