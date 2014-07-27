@@ -26,8 +26,9 @@ DISTCLEANFILES = makerpm re2c.spec README scanner.cc re2c$(EXEEXT)
 
 man_MANS = re2c.1
 
-EXTRA_SRC    = $(man_MANS) README parser.y scanner.re y.tab.h CHANGELOG NO_WARRANTY \
-               doc examples test bootstrap/*.cc bootstrap/*.h lessons
+EXTRA_SRC    = README parser.y scanner.re y.tab.h CHANGELOG NO_WARRANTY \
+               doc examples test bootstrap/*.cc bootstrap/*.h lessons \
+               $(man_MANS) $(DOCS_IN) $(DOCS_GEN)
 EXTRA_DIST   = $(EXTRA_SRC) makerpm.in re2c.spec.in re2c.spec README.in config_w32.h.in
 EXTRA_ZIP    = $(EXTRA_SRC) config_w32.h *.sln *.vcproj re2c.rules
 
