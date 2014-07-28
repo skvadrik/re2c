@@ -20,15 +20,22 @@ YFLAGS       = -d
 RE2C         = re2c$(EXEEXT)
 RE2CFLAGS    = -bi
 
-CLEANFILES   = parser.cc y.tab.c y.tab.h scanner.cc re2c.1 .version htdocs/manual.html
+CLEANFILES = parser.cc y.tab.c y.tab.h scanner.cc .version
+if HAVE_ASCIIDOC
+    CLEANFILES += htdocs/manual.html
+endif HAVE_ASCIIDOC
+if HAVE_A2X
+    CLEANFILES += re2c.1
+endif HAVE_A2X
 
 DISTCLEANFILES = makerpm re2c.spec README scanner.cc re2c$(EXEEXT)
 
 man_MANS = re2c.1
+DOCS = $(man_MANS) htdocs/manual.html
 
 EXTRA_SRC    = README parser.y scanner.re y.tab.h CHANGELOG NO_WARRANTY \
                doc examples test bootstrap/*.cc bootstrap/*.h lessons \
-               $(man_MANS) $(DOCS_IN) $(DOCS_GEN)
+               $(DOCS)
 EXTRA_DIST   = $(EXTRA_SRC) makerpm.in re2c.spec.in re2c.spec README.in config_w32.h.in
 EXTRA_ZIP    = $(EXTRA_SRC) config_w32.h *.sln *.vcproj re2c.rules
 
@@ -95,11 +102,12 @@ vtests: all $(TESTS)
 	test -x $(TESTS) || chmod +x $(TESTS)
 	./$(TESTS) --valgrind
 
-DOCS_IN  = re2c.ad
-DOCS = re2c.1 htdocs/manual.html
-DOCS_GEN = ./re2c_docs.sh
-
 docs: $(DOCS)
-
-$(DOCS): $(DOCS_GEN) $(DOCS_IN)
-	$(DOCS_GEN)
+$(DOCS): re2c.ad
+	@if test $(A2X) = "yes"; then \
+		a2x -f manpage re2c.ad; \
+	fi
+	@if test $(ASCIIDOC) = "yes"; then \
+		mkdir -p htdocs; \
+		asciidoc -o htdocs/manual.html re2c.ad; \
+	fi

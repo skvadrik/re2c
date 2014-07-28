@@ -16,6 +16,10 @@ AC_PROG_YACC
 AC_PROG_CXX
 AC_PROG_CC
 AC_PROG_INSTALL
+AC_CHECK_PROG(ASCIIDOC, asciidoc, yes, no)
+AM_CONDITIONAL(HAVE_ASCIIDOC, [test "$ASCIIDOC" = yes])
+AC_CHECK_PROG(A2X, a2x, yes, no)
+AM_CONDITIONAL(HAVE_A2X, [test "$A2X" == yes])
 
 if test "$GCC" = "yes"; then
   AC_MSG_CHECKING([Testing GCC version])
