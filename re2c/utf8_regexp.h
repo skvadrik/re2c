@@ -5,7 +5,7 @@
 
 namespace re2c {
 
-struct RegExp; // forward
+class RegExp; // forward
 
 RegExp * UTF8Symbol(utf8::rune r);
 RegExp * UTF8Range(const Range * r);

@@ -8,7 +8,7 @@
 
 namespace re2c {
 
-struct RegExp; // forward
+class RegExp; // forward
 
 class RangeSuffix
 {
