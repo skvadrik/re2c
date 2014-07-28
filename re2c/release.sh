@@ -47,6 +47,7 @@ git push --tags
 src=release
 src_tarballs=$src/frs/project/re2c/re2c/$version
 src_docs=$src/project-web/re2c/htdocs
+rm -r $src
 mkdir -p $src_tarballs
 mkdir -p $src_docs
 cp re2c-$version-src.zip re2c-$version.tar.gz $src_tarballs
