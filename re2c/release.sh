@@ -18,9 +18,10 @@ new=$version
 sed -i -E "s/$lcontext$old$rcontext/$lcontext$new$rcontext/" configure.ac
 
 ./autogen.sh
-./configure
+./configure --enable-docs
 make clean
 make -j5
+make docs
 make tests
 make zip dist
 
