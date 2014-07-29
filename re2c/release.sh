@@ -15,7 +15,7 @@ lcontext="AC_INIT\(re2c, "
 rcontext=", re2c-general@lists\.sourceforge\.net\)"
 old="[0-9]+(\.[0-9]+)*(\.dev)?"
 new=$version
-sed -i -E "s/$lcontext$old$rcontext/$lcontext$new$rcontext/" configure.in
+sed -i -E "s/$lcontext$old$rcontext/$lcontext$new$rcontext/" configure.ac
 
 ./autogen.sh
 ./configure
