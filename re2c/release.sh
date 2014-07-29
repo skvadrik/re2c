@@ -42,6 +42,7 @@ rm -r $tmpdir
 # commit release
 git commit -a -m "Release $version."
 git tag $version
+git push
 git push --tags
 
 # upload files on sourceforge
