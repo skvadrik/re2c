@@ -26,7 +26,6 @@ using namespace re2c;
 extern "C"
 {
 int yylex();
-int yyparse();
 void yyerror(const char*);
 }
 

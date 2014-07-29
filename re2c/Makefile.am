@@ -15,7 +15,7 @@ BUILT_SOURCES = parser.cc scanner.cc
 #CXXFLAGS     = -ggdb -fno-inline -O2 -Wall -Wextra -pedantic -Wconversion -Wpointer-arith -Wwrite-strings -Wredundant-decls -Werror -Wunused-function -DPEDANTIC
 #CXXFLAGS     += -O2
 CXXFLAGS     += -W -Wall -Wextra -pedantic -Wredundant-decls -DPEDANTIC
-YFLAGS       = -d
+YFLAGS       = -y -d --no-lines
 
 RE2C         = re2c$(EXEEXT)
 RE2CFLAGS    = -bi
@@ -70,15 +70,14 @@ zip: $(bin_PROGRAMS) $(EXTRA_ZIP)
 release: dist zip src-rpm
 
 parser.cc: $(top_srcdir)/parser.y
-	$(YACC) $(YFLAGS) $(top_srcdir)/parser.y || exit
-	cat y.tab.c | sed -e 's/"y\.tab\.c"/"parser.cc"/g' -e 's/"\.\/parser\.y"/"parser.y"/g' > $(top_srcdir)/parser.cc
-	rm -f y.tab.c
-	mv -f y.tab.h y.tab.c
-	cat y.tab.c | sed -e 's/"\.\/parser\.y"/"parser.y"/g' > y.tab.h
-	rm -f y.tab.c
-	if cmp -s $(top_srcdir)/parser.cc $(top_srcdir)/bootstrap/parser.cc; then :; else cp -f $(top_srcdir)/parser.cc $(top_srcdir)/bootstrap/parser.cc; fi
-	if cmp -s y.tab.h $(top_srcdir)/y.tab.h; then :; else mv -f y.tab.h $(top_srcdir)/y.tab.h; fi
-	if cmp -s $(top_srcdir)/y.tab.h $(top_srcdir)/bootstrap/y.tab.h; then :; else cp -f $(top_srcdir)/y.tab.h $(top_srcdir)/bootstrap/y.tab.h; fi
+	@if test $(BISON) = "yes"; then \
+		bison $(YFLAGS) --output=$(top_srcdir)/parser.cc --defines=$(top_srcdir)/y.tab.h $(top_srcdir)/parser.y && \
+		cp -f $(top_srcdir)/parser.cc $(top_srcdir)/bootstrap/parser.cc; \
+		cp -f $(top_srcdir)/y.tab.h $(top_srcdir)/bootstrap/y.tab.h; \
+	else \
+		cp -f $(top_srcdir)/bootstrap/parser.cc $(top_srcdir)/parser.cc; \
+		cp -f $(top_srcdir)/bootstrap/y.tab.h $(top_srcdir)/y.tab.h; \
+	fi
 
 scanner.cc: $(top_srcdir)/scanner.re
 	@if test -x ./re2c$(EXEEXT); then \
