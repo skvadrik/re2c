@@ -16,10 +16,17 @@ AC_CHECK_PROG(BISON, bison, yes, no)
 AC_PROG_CXX
 AC_PROG_CC
 AC_PROG_INSTALL
-AC_CHECK_PROG(ASCIIDOC, asciidoc, yes, no)
-AM_CONDITIONAL(HAVE_ASCIIDOC, [test "$ASCIIDOC" = yes])
-AC_CHECK_PROG(A2X, a2x, yes, no)
-AM_CONDITIONAL(HAVE_A2X, [test "$A2X" == yes])
+
+dnl --enable-docs
+AC_ARG_ENABLE([docs], [AS_HELP_STRING([--enable-docs], [regenerate man page and online documentation])])
+AM_CONDITIONAL([REBUILD_DOCS], [test "x$enable_docs" = "xyes"])
+AM_COND_IF([REBUILD_DOCS], [
+  AC_CHECK_PROG(ASCIIDOC, asciidoc, yes, no)
+  AC_CHECK_PROG(A2X, a2x, yes, no)
+  AS_IF([test "x$ASCIIDOC" = "xno" -o "x$A2X" = "xno"], [
+      AC_MSG_ERROR([need asciidoc and a2x for --enable-docs])
+  ])
+])
 
 if test "$GCC" = "yes"; then
   AC_MSG_CHECKING([Testing GCC version])

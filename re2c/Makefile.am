@@ -21,12 +21,6 @@ RE2C         = re2c$(EXEEXT)
 RE2CFLAGS    = -bi
 
 CLEANFILES = parser.cc y.tab.c y.tab.h scanner.cc .version
-if HAVE_ASCIIDOC
-    CLEANFILES += htdocs/manual.html
-endif HAVE_ASCIIDOC
-if HAVE_A2X
-    CLEANFILES += re2c.1
-endif HAVE_A2X
 
 DISTCLEANFILES = makerpm re2c.spec README scanner.cc re2c$(EXEEXT)
 
@@ -101,12 +95,14 @@ vtests: all $(TESTS)
 	test -x $(TESTS) || chmod +x $(TESTS)
 	./$(TESTS) --valgrind
 
+if REBUILD_DOCS
 docs: $(DOCS)
 $(DOCS): re2c.ad
-	@if test $(A2X) = "yes"; then \
-		a2x -f manpage re2c.ad; \
-	fi
-	@if test $(ASCIIDOC) = "yes"; then \
-		mkdir -p htdocs; \
-		asciidoc -o htdocs/manual.html re2c.ad; \
-	fi
+	a2x -f manpage re2c.ad
+	mkdir -p htdocs
+	asciidoc -o htdocs/manual.html re2c.ad
+else
+docs:
+	@echo "Reconfigure to rebuild docs: ./configure --enable-docs"
+	@exit 1
+endif
