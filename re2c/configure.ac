@@ -1,5 +1,5 @@
 AC_PREREQ([2.57])
-AC_INIT(re2c, 0.13.7.4.dev, re2c-general@lists.sourceforge.net)
+AC_INIT(re2c, 0.13.7.4, re2c-general@lists.sourceforge.net)
 AM_INIT_AUTOMAKE(re2c, $PACKAGE_VERSION)
 AC_CONFIG_SRCDIR(actions.cc)
 AM_CONFIG_HEADER(config.h)
