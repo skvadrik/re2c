@@ -59,7 +59,7 @@ public:
 	 * 	1) named definitions, e.g. digit = [0-9];
 	 * 	2) counted repetition, e.g. "a"{3}, "a"{3,}, "a"{3,5}
 	 * 	3) multiple DFA's sharing the same regexp , e.g. <c1, c2> "abc" { }
-	 * 	3) common suffixes, e.g. suffix [\x80-\xBF] in UTF-8 ranges
+	 * 	4) common suffixes, e.g. suffix [\x80-\xBF] in UTF-8 ranges
 	 * In cases 1-3, regexp must be recompiled each time it's reused.
 	 * In case 4, regexp should be compiled only once, and instructions
 	 * should be shared in order to reduce space.
