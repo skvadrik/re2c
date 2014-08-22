@@ -93,12 +93,6 @@ public:
 		vFreeList.erase(this);
 	}
 
-	virtual const char *typeOf() = 0;
-	RegExp *isA(const char *t)
-	{
-		return typeOf() == t ? this : NULL;
-	}
-
 	virtual void split(CharSet&) = 0;
 	virtual void calcSize(Char*) = 0;
 	virtual uint fixedLength();
@@ -124,14 +118,6 @@ class NullOp: public RegExp
 {
 
 public:
-	static const char *type;
-
-public:
-	const char *typeOf()
-	{
-		return type;
-	}
-
 	void split(CharSet&);
 	void calcSize(Char*);
 	uint fixedLength();
@@ -147,17 +133,11 @@ class MatchOp: public RegExp
 {
 
 public:
-	static const char *type;
 	Range	*match;
 
 public:
 	MatchOp(Range *m) : match(m)
 	{
-	}
-
-	const char *typeOf()
-	{
-		return type;
 	}
 
 	void split(CharSet&);
@@ -185,9 +165,6 @@ private:
 
 class RuleOp: public RegExp
 {
-public:
-	static const char *type;
-
 private:
 	RegExp   *exp;
 
@@ -204,11 +181,6 @@ public:
 	~RuleOp()
 	{
 		delete code;
-	}
-
-	const char *typeOf()
-	{
-		return type;
 	}
 
 	void split(CharSet&);
@@ -269,18 +241,10 @@ private:
 	RegExp	*exp1, *exp2;
 
 public:
-	static const char *type;
-
-public:
 	AltOp(RegExp *e1, RegExp *e2)
 		: exp1(e1)
 		, exp2(e2)
 	{
-	}
-
-	const char *typeOf()
-	{
-		return type;
 	}
 
 	void split(CharSet&);
@@ -321,18 +285,10 @@ private:
 	RegExp	*exp1, *exp2;
 
 public:
-	static const char *type;
-
-public:
 	CatOp(RegExp *e1, RegExp *e2)
 		: exp1(e1)
 		, exp2(e2)
 	{
-	}
-
-	const char *typeOf()
-	{
-		return type;
 	}
 
 	void split(CharSet&);
@@ -368,17 +324,9 @@ private:
 	RegExp	*exp;
 
 public:
-	static const char *type;
-
-public:
 	CloseOp(RegExp *e)
 		: exp(e)
 	{
-	}
-
-	const char *typeOf()
-	{
-		return type;
 	}
 
 	void split(CharSet&);
@@ -414,20 +362,12 @@ private:
 	int	max;
 
 public:
-	static const char *type;
-
-public:
 	CloseVOp(RegExp *e, int lb, int ub)
 		: exp(e)
 		, min(lb)
 		, max(ub)
 	{
 		exp->ins_access = PRIVATE;
-	}
-
-	const char *typeOf()
-	{
-		return type;
 	}
 
 	void split(CharSet&);

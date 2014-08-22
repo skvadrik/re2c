@@ -93,8 +93,6 @@ uint compile_goto(Ins *ins, Ins *i)
 	return 1;
 }
 
-const char *NullOp::type = "NullOp";
-
 void NullOp::calcSize(Char*)
 {
 	size = 0;
@@ -130,8 +128,6 @@ MatchOp *merge(MatchOp *m1, MatchOp *m2)
 
 	return new MatchOp(doUnion(m1->match, m2->match));
 }
-
-const char *MatchOp::type = "MatchOp";
 
 void MatchOp::display(std::ostream &o) const
 {
@@ -234,12 +230,9 @@ void MatchOp::split(CharSet &s)
 
 RegExp * mkDiff(RegExp *e1, RegExp *e2)
 {
-	MatchOp *m1, *m2;
-
-	if (!(m1 = (MatchOp*) e1->isA(MatchOp::type)))
-		return NULL;
-
-	if (!(m2 = (MatchOp*) e2->isA(MatchOp::type)))
+	MatchOp * m1 = dynamic_cast<MatchOp*>(e1);
+	MatchOp * m2 = dynamic_cast<MatchOp*>(e2);
+	if (m1 == NULL || m2 == NULL)
 		return NULL;
 
 	Range *r = doDiff(m1->match, m2->match);
@@ -274,30 +267,40 @@ RegExp *mkAlt(RegExp *e1, RegExp *e2)
 	AltOp *a;
 	MatchOp *m1, *m2;
 
-	if ((a = (AltOp*) e1->isA(AltOp::type)))
+	a = dynamic_cast<AltOp*>(e1);
+	if (a != NULL)
 	{
-		if ((m1 = (MatchOp*) a->exp1->isA(MatchOp::type)))
+		m1 = dynamic_cast<MatchOp*>(a->exp1);
+		if (m1 != NULL)
+		{
 			e1 = a->exp2;
+		}
 	}
-	else if ((m1 = (MatchOp*) e1->isA(MatchOp::type)))
+	else
 	{
-		e1 = NULL;
+		m1 = dynamic_cast<MatchOp*>(e1);
+		if (m1 != NULL)
+			e1 = NULL;
 	}
 
-	if ((a = (AltOp*) e2->isA(AltOp::type)))
+	a = dynamic_cast<AltOp*>(e2);
+	if (a != NULL)
 	{
-		if ((m2 = (MatchOp*) a->exp1->isA(MatchOp::type)))
+		m2 = dynamic_cast<MatchOp*>(a->exp1);
+		if (m2 != NULL)
+		{
 			e2 = a->exp2;
+		}
 	}
-	else if ((m2 = (MatchOp*) e2->isA(MatchOp::type)))
+	else
 	{
-		e2 = NULL;
+		m2 = dynamic_cast<MatchOp*>(e2);
+		if (m2 != NULL)
+			e2 = NULL;
 	}
 
 	return doAlt(merge(m1, m2), doAlt(e1, e2));
 }
-
-const char *AltOp::type = "AltOp";
 
 void AltOp::calcSize(Char *rep)
 {
@@ -356,8 +359,6 @@ void AltOp::split(CharSet &s)
 	exp2->split(s);
 }
 
-const char *CatOp::type = "CatOp";
-
 void CatOp::calcSize(Char *rep)
 {
 	exp1->calcSize(rep);
@@ -410,8 +411,6 @@ void CatOp::split(CharSet &s)
 	exp2->split(s);
 }
 
-const char *CloseOp::type = "CloseOp";
-
 void CloseOp::calcSize(Char *rep)
 {
 	exp->calcSize(rep);
@@ -452,8 +451,6 @@ void CloseOp::split(CharSet &s)
 {
 	exp->split(s);
 }
-
-const char *CloseVOp::type = "CloseVOp";
 
 void CloseVOp::calcSize(Char *rep)
 {
@@ -902,8 +899,6 @@ RegExp * Scanner::mkDefault() const
 	Range * def = new Range(0, encoding.nCodeUnits());
 	return new MatchOp(def);
 }
-
-const char *RuleOp::type = "RuleOp";
 
 RuleOp::RuleOp(RegExp *e, RegExp *c, Token *t, uint a, InsAccess access)
 	: exp(e)
