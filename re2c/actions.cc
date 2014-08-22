@@ -126,7 +126,12 @@ MatchOp *merge(MatchOp *m1, MatchOp *m2)
 	if (!m2)
 		return m1;
 
-	return new MatchOp(doUnion(m1->match, m2->match));
+	MatchOp* m = new MatchOp(doUnion(m1->match, m2->match));
+	if (m1->ins_access == RegExp::PRIVATE
+		|| m2->ins_access == RegExp::PRIVATE)
+		m->ins_access = RegExp::PRIVATE;
+
+	return m;
 }
 
 void MatchOp::display(std::ostream &o) const
@@ -273,6 +278,8 @@ RegExp *mkAlt(RegExp *e1, RegExp *e2)
 		m1 = dynamic_cast<MatchOp*>(a->exp1);
 		if (m1 != NULL)
 		{
+			m1->ins_access = e1->ins_access;
+			a->exp2->ins_access = e1->ins_access;
 			e1 = a->exp2;
 		}
 	}
@@ -289,6 +296,8 @@ RegExp *mkAlt(RegExp *e1, RegExp *e2)
 		m2 = dynamic_cast<MatchOp*>(a->exp1);
 		if (m2 != NULL)
 		{
+			m2->ins_access = e2->ins_access;
+			a->exp2->ins_access = e2->ins_access;
 			e2 = a->exp2;
 		}
 	}
