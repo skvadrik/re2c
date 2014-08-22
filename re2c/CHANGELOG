@@ -1,3 +1,7 @@
+Version 0.13.7.5 (2014-08-22)
+-----------------------------
+- Fixed Gentoo bug: https://bugs.gentoo.org/show_bug.cgi?id=518904 (PHP lexer)
+
 Version 0.13.7.4 (2014-07-29)
 -----------------------------
 - Enabled 'make docs' only if configured with '--enable-docs'
