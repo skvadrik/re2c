@@ -75,35 +75,35 @@ void prtCh(std::ostream& o, uint c)
 		break;
 
 		case '\n':
-		o << "\\n";
+		o << (DFlag ? "\\\\n" : "\\n");
 		break;
 
 		case '\t':
-		o << "\\t";
+		o << (DFlag ? "\\\\t" : "\\t");
 		break;
 
 		case '\v':
-		o << "\\v";
+		o << (DFlag ? "\\\\v" : "\\v");
 		break;
 
 		case '\b':
-		o << "\\b";
+		o << (DFlag ? "\\\\b" : "\\b");
 		break;
 
 		case '\r':
-		o << "\\r";
+		o << (DFlag ? "\\\\r" : "\\r");
 		break;
 
 		case '\f':
-		o << "\\f";
+		o << (DFlag ? "\\\\f" : "\\f");
 		break;
 
 		case '\a':
-		o << "\\a";
+		o << (DFlag ? "\\\\a" :"\\a");
 		break;
 
 		case '\\':
-		o << "\\\\";
+		o << (DFlag ? "\\\\\\\\" : "\\\\");
 		break;
 
 		default:
