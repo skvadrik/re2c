@@ -102,7 +102,8 @@ $(DOCS): re2c.ad
 	mkdir -p htdocs
 	asciidoc -o htdocs/manual.html re2c.ad
 else
-docs:
+docs: $(DOCS)
+$(DOCS): $(top_srcdir)/bootstrap/re2c.1
 	@echo "Reconfigure to rebuild docs: ./configure --enable-docs"
-	@exit 1
+	cp $(top_srcdir)/bootstrap/re2c.1 $(top_srcdir)/re2c.1
 endif
