@@ -7,29 +7,20 @@
 #include <iostream>
 #include <sstream>
 #include <time.h>
-#include "substr.h"
+#include "code.h"
 #include "globals.h"
 #include "dfa.h"
+#include "indent.h"
+#include "input.h"
 #include "parser.h"
 #include "print.h"
-#include "code.h"
+#include "substr.h"
 
 namespace re2c
 {
 
 // there must be at least one span in list;  all spans must cover
 // same range
-
-static std::string indent(uint ind)
-{
-	std::string str;
-
-	while (!DFlag && ind-- > 0)
-	{
-		str += indString;
-	}
-	return str;
-}
 
 template<typename _Ty>
 std::string replaceParam(std::string str, const std::string& param, const _Ty& value)
@@ -362,7 +353,7 @@ static void genGoTo(std::ostream &o, uint ind, const State *from, const State *t
 
 	if (readCh && from->label + 1 != to->label)
 	{
-		o << indent(ind) << mapCodeName["yych"] << " = " << yychConversion << "*" << mapCodeName["YYCURSOR"] << ";\n";
+		o << stmt_peek (ind);
 		readCh = false;
 	}
 
@@ -375,7 +366,7 @@ static void genIf(std::ostream &o, uint ind, const char *cmp, uint v, bool &read
 	o << indent(ind) << "if (";
 	if (readCh)
 	{
-		o << "(" << mapCodeName["yych"] << " = " << yychConversion << "*" << mapCodeName["YYCURSOR"] << ")";
+		o << "(" << expr_peek_save () << ")";
 		readCh = false;
 	}
 	else
@@ -417,7 +408,7 @@ static void need(std::ostream &o, uint ind, uint n, bool & readCh, bool bSetMark
 		{
 			if (bUseYYFillCheck)
 			{
-				o << "if (" << mapCodeName["YYLIMIT"] << " <= " << mapCodeName["YYCURSOR"] << ") ";
+				o << "if (" << expr_has_one () << ") ";
 			}
 			genYYFill(o, ind, n);
 		}
@@ -425,7 +416,7 @@ static void need(std::ostream &o, uint ind, uint n, bool & readCh, bool bSetMark
 		{
 			if (bUseYYFillCheck)
 			{
-				o << "if ((" << mapCodeName["YYLIMIT"] << " - " << mapCodeName["YYCURSOR"] << ") < " << n << ") ";
+				o << "if (" << expr_has (n) << ") ";
 			}
 			genYYFill(o, ind, n);
 		}
@@ -440,11 +431,11 @@ static void need(std::ostream &o, uint ind, uint n, bool & readCh, bool bSetMark
 	{
 		if (bSetMarker)
 		{
-			o << indent(ind) << mapCodeName["yych"] << " = " << yychConversion << "*(" << mapCodeName["YYMARKER"] << " = " << mapCodeName["YYCURSOR"] << ");\n";
+			o << stmt_backup_peek (ind);
 		}
 		else
 		{
-			o << indent(ind) << mapCodeName["yych"] << " = " << yychConversion << "*" << mapCodeName["YYCURSOR"] << ";\n";
+			o << stmt_peek (ind);
 		}
 		readCh = false;
 	}
@@ -459,17 +450,17 @@ void Match::emit(std::ostream &o, uint ind, bool &readCh, const std::string&) co
 
 	if (state->link)
 	{
-		o << indent(ind) << "++" << mapCodeName["YYCURSOR"] << ";\n";
+		o << stmt_skip (ind);
 	}
 	else if (!readAhead())
 	{
 		/* do not read next char if match */
-		o << indent(ind) << "++" << mapCodeName["YYCURSOR"] << ";\n";
+		o << stmt_skip (ind);
 		readCh = true;
 	}
 	else
 	{
-		o << indent(ind) << mapCodeName["yych"] << " = " << yychConversion << "*++" << mapCodeName["YYCURSOR"] << ";\n";
+		o << stmt_skip_peek (ind);
 		readCh = false;
 	}
 
@@ -483,7 +474,7 @@ void Enter::emit(std::ostream &o, uint ind, bool &readCh, const std::string&) co
 {
 	if (state->link)
 	{
-		o << indent(ind) << "++" << mapCodeName["YYCURSOR"] << ";\n";
+		o << stmt_skip (ind);
 		if (vUsedLabels.count(label))
 		{
 			o << labelPrefix << label << ":\n";
@@ -493,7 +484,7 @@ void Enter::emit(std::ostream &o, uint ind, bool &readCh, const std::string&) co
 	else
 	{
 		/* we shouldn't need 'rule-following' protection here */
-		o << indent(ind) << mapCodeName["yych"] << " = " << yychConversion << "*++" << mapCodeName["YYCURSOR"] << ";\n";
+		o << stmt_skip_peek (ind);
 		if (vUsedLabels.count(label))
 		{
 			o << labelPrefix << label << ":\n";
@@ -513,11 +504,11 @@ void Initial::emit(std::ostream &o, uint ind, bool &readCh, const std::string&) 
 	{
 		if (state->link)
 		{
-			o << indent(ind) << "++" << mapCodeName["YYCURSOR"] << ";\n";
+			o << stmt_skip (ind);
 		}
 		else
 		{
-			o << indent(ind) << mapCodeName["yych"] << " = " << yychConversion << "*++" << mapCodeName["YYCURSOR"] << ";\n";
+			o << stmt_skip_peek (ind);
 		}
 	}
 
@@ -532,7 +523,7 @@ void Initial::emit(std::ostream &o, uint ind, bool &readCh, const std::string&) 
 
 	if (dFlag)
 	{
-		o << indent(ind) << mapCodeName["YYDEBUG"] << "(" << label << ", *" << mapCodeName["YYCURSOR"] << ");\n";
+		o << indent(ind) << mapCodeName["YYDEBUG"] << "(" << label << ", " << expr_peek () << ");\n";
 	}
 
 	if (state->link)
@@ -543,7 +534,7 @@ void Initial::emit(std::ostream &o, uint ind, bool &readCh, const std::string&) 
 	{
 		if (setMarker && bUsedYYMarker)
 		{
-			o << indent(ind) << mapCodeName["YYMARKER"] << " = " << mapCodeName["YYCURSOR"] << ";\n";
+			o << stmt_backup (ind);
 		}
 		readCh = false;
 	}
@@ -565,7 +556,7 @@ void Save::emit(std::ostream &o, uint ind, bool &readCh, const std::string&) con
 	{
 		if (bUsedYYMarker)
 		{
-			o << indent(ind) << mapCodeName["YYMARKER"] << " = ++" << mapCodeName["YYCURSOR"] << ";\n";
+			o << stmt_skip_backup (ind);
 		}
 		need(o, ind, state->depth, readCh, false);
 	}
@@ -573,11 +564,11 @@ void Save::emit(std::ostream &o, uint ind, bool &readCh, const std::string&) con
 	{
 		if (bUsedYYMarker)
 		{
-			o << indent(ind) << mapCodeName["yych"] << " = " << yychConversion << "*(" << mapCodeName["YYMARKER"] << " = ++" << mapCodeName["YYCURSOR"] << ");\n";
+			o << stmt_skip_backup_peek (ind);
 		}
 		else
 		{
-			o << indent(ind) << mapCodeName["yych"] << " = " << yychConversion << "*++" << mapCodeName["YYCURSOR"] << ";\n";
+			o << stmt_skip_peek (ind);
 		}
 		readCh = false;
 	}
@@ -636,12 +627,12 @@ void Accept::emit(std::ostream &o, uint ind, bool &readCh, const std::string&) c
 		bUsedYYMarker = true;
 		if (!DFlag)
 		{
-			o << indent(ind) << mapCodeName["YYCURSOR"] << " = " << mapCodeName["YYMARKER"] << ";\n";
+			o << stmt_restore (ind);
 		}
 
 		if (readCh) // shouldn't be necessary, but might become at some point
 		{
-			o << indent(ind) << mapCodeName["yych"] << " = " << yychConversion << "*" << mapCodeName["YYCURSOR"] << ";\n";
+			o << stmt_peek (ind);
 			readCh = false;
 		}
 
@@ -724,7 +715,7 @@ void Rule::emit(std::ostream &o, uint ind, bool &, const std::string& condName) 
 
 	if (back != 0u)
 	{
-		o << indent(ind) << mapCodeName["YYCURSOR"] << " = " << mapCodeName["YYCTXMARKER"] << ";\n";
+		o << stmt_restorectx (ind);
 	}
 
 	if (rule->code->newcond.length() && condName != rule->code->newcond)
@@ -972,7 +963,7 @@ void Go::genSwitch(std::ostream &o, uint ind, const State *from, const State *ne
 
 			if (readCh)
 			{
-				o << indent(ind) << "switch ((" << mapCodeName["yych"] << " = " << yychConversion << "*" << mapCodeName["YYCURSOR"] << ")) {\n";
+				o << indent(ind) << "switch ((" << expr_peek_save () << ")) {\n";
 				readCh = false;
 			}
 			else
@@ -1140,7 +1131,7 @@ void Go::genCpGoto(std::ostream &o, uint ind, const State *from, const State *ne
 	
 	if (readCh)
 	{
-		sYych = "(" + mapCodeName["yych"] + " = " + yychConversion + "*" + mapCodeName["YYCURSOR"] + ")";
+		sYych = "(" + expr_peek_save () + ")";
 	}
 	else
 	{
@@ -1258,7 +1249,7 @@ void Go::genGoto(std::ostream &o, uint ind, const State *from, const State *next
 					go.unmap(this, to);
 					if (readCh)
 					{
-						sYych = "(" + mapCodeName["yych"] + " = " + yychConversion + "*" + mapCodeName["YYCURSOR"] + ")";
+						sYych = "(" + expr_peek_save () + ")";
 					}
 					else
 					{
@@ -1308,11 +1299,11 @@ void State::emit(std::ostream &o, uint ind, bool &readCh, const std::string& con
 	}
 	if (dFlag && !action->isInitial())
 	{
-		o << indent(ind) << mapCodeName["YYDEBUG"] << "(" << label << ", *" << mapCodeName["YYCURSOR"] << ");\n";
+		o << indent(ind) << mapCodeName["YYDEBUG"] << "(" << label << ", " << expr_peek () << ");\n";
 	}
 	if (isPreCtxt)
 	{
-		o << indent(ind) << mapCodeName["YYCTXMARKER"] << " = " << mapCodeName["YYCURSOR"] << " + 1;\n";
+		o << stmt_backupctx (ind);
 	}
 	action->emit(o, ind, readCh, condName);
 }
@@ -2317,6 +2308,8 @@ void Scanner::config(const Str& cfg, const Str& val)
 		mapVariableKeys.insert("variable:yyctable");
 		mapVariableKeys.insert("variable:yystable");
 		mapVariableKeys.insert("variable:yytarget");
+		mapDefineKeys.insert("define:YYBACKUP");
+		mapDefineKeys.insert("define:YYBACKUPCTX");
 		mapDefineKeys.insert("define:YYCONDTYPE");
 		mapDefineKeys.insert("define:YYCTXMARKER");
 		mapDefineKeys.insert("define:YYCTYPE");
@@ -2325,10 +2318,15 @@ void Scanner::config(const Str& cfg, const Str& val)
 		mapDefineKeys.insert("define:YYFILL");
 		mapDefineKeys.insert("define:YYGETCONDITION");
 		mapDefineKeys.insert("define:YYGETSTATE");
+		mapDefineKeys.insert("define:YYHAS");
 		mapDefineKeys.insert("define:YYLIMIT");
 		mapDefineKeys.insert("define:YYMARKER");
+		mapDefineKeys.insert("define:YYPEEK");
+		mapDefineKeys.insert("define:YYRESTORE");
+		mapDefineKeys.insert("define:YYRESTORECTX");
 		mapDefineKeys.insert("define:YYSETCONDITION");
 		mapDefineKeys.insert("define:YYSETSTATE");
+		mapDefineKeys.insert("define:YYSKIP");
 		mapLabelKeys.insert("label:yyFillLabel");
 		mapLabelKeys.insert("label:yyNext");
 	}

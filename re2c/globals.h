@@ -9,6 +9,7 @@
 #include "stream_lc.h"
 #include "code_names.h"
 #include "enc.h"
+#include "input.h"
 
 namespace re2c
 {
@@ -93,6 +94,7 @@ extern CodeNames mapCodeName;
 extern std::string typesInline;
 
 extern Enc encoding;
+extern input_t input;
 
 extern char octCh(uint c);
 extern char hexCh(uint c);

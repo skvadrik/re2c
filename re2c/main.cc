@@ -87,6 +87,7 @@ bool bCaseInverted = false;
 bool bTypesDone = false;
 
 Enc encoding;
+input_t input = INPUT_DEFAULT;
 
 uint next_fill_index = 0;
 uint last_fill_index = 0;
@@ -130,6 +131,7 @@ static const mbo_opt_struct OPTIONS[] =
 	mbo_opt_struct(11,  0, "case-insensitive"),
 	mbo_opt_struct(12,  0, "case-inverted"),
 	mbo_opt_struct(13,  1, "encoding-policy"),
+	mbo_opt_struct(14,  1, "input"),
 	mbo_opt_struct('-', 0, NULL) /* end of args */
 };
 
@@ -215,6 +217,9 @@ static void usage()
 	"\n"
 	"--encoding-policy ep    Specify what re2c should do when given bad code unit.\n"
 	"                        ep can be one of the following: fail, substitute, ignore.\n"
+	"\n"
+	"--input i               Specify re2c input model.\n"
+	"                        i can be one of the following: default, istream, custom.\n"
 	;
 }
 
@@ -394,6 +399,20 @@ int main(int argc, char *argv[])
 			else
 			{
 				std::cerr << "re2c: error: Invalid encoding policy: \"" << opt_arg << "\"\n";
+				return 1;
+			}
+			break;
+
+			case 14:
+			if (strcmp(opt_arg, "default") == 0)
+				input = INPUT_DEFAULT;
+			else if (strcmp(opt_arg, "istream") == 0)
+				input = INPUT_ISTREAM;
+			else if (strcmp(opt_arg, "custom") == 0)
+				input = INPUT_CUSTOM;
+			else
+			{
+				std::cerr << "re2c: error: Invalid input model: \"" << opt_arg << "\"\n";
 				return 1;
 			}
 			break;
