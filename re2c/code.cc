@@ -11,7 +11,7 @@
 #include "globals.h"
 #include "dfa.h"
 #include "indent.h"
-#include "input.h"
+#include "input_api.h"
 #include "parser.h"
 #include "print.h"
 #include "substr.h"
@@ -353,7 +353,7 @@ static void genGoTo(std::ostream &o, uint ind, const State *from, const State *t
 
 	if (readCh && from->label + 1 != to->label)
 	{
-		o << stmt_peek (ind);
+		o << input_api.stmt_peek (ind);
 		readCh = false;
 	}
 
@@ -366,7 +366,7 @@ static void genIf(std::ostream &o, uint ind, const char *cmp, uint v, bool &read
 	o << indent(ind) << "if (";
 	if (readCh)
 	{
-		o << "(" << expr_peek_save () << ")";
+		o << "(" << input_api.expr_peek_save () << ")";
 		readCh = false;
 	}
 	else
@@ -408,7 +408,7 @@ static void need(std::ostream &o, uint ind, uint n, bool & readCh, bool bSetMark
 		{
 			if (bUseYYFillCheck)
 			{
-				o << "if (" << expr_has_one () << ") ";
+				o << "if (" << input_api.expr_has_one () << ") ";
 			}
 			genYYFill(o, ind, n);
 		}
@@ -416,7 +416,7 @@ static void need(std::ostream &o, uint ind, uint n, bool & readCh, bool bSetMark
 		{
 			if (bUseYYFillCheck)
 			{
-				o << "if (" << expr_has (n) << ") ";
+				o << "if (" << input_api.expr_has (n) << ") ";
 			}
 			genYYFill(o, ind, n);
 		}
@@ -431,11 +431,11 @@ static void need(std::ostream &o, uint ind, uint n, bool & readCh, bool bSetMark
 	{
 		if (bSetMarker)
 		{
-			o << stmt_backup_peek (ind);
+			o << input_api.stmt_backup_peek (ind);
 		}
 		else
 		{
-			o << stmt_peek (ind);
+			o << input_api.stmt_peek (ind);
 		}
 		readCh = false;
 	}
@@ -450,17 +450,17 @@ void Match::emit(std::ostream &o, uint ind, bool &readCh, const std::string&) co
 
 	if (state->link)
 	{
-		o << stmt_skip (ind);
+		o << input_api.stmt_skip (ind);
 	}
 	else if (!readAhead())
 	{
 		/* do not read next char if match */
-		o << stmt_skip (ind);
+		o << input_api.stmt_skip (ind);
 		readCh = true;
 	}
 	else
 	{
-		o << stmt_skip_peek (ind);
+		o << input_api.stmt_skip_peek (ind);
 		readCh = false;
 	}
 
@@ -474,7 +474,7 @@ void Enter::emit(std::ostream &o, uint ind, bool &readCh, const std::string&) co
 {
 	if (state->link)
 	{
-		o << stmt_skip (ind);
+		o << input_api.stmt_skip (ind);
 		if (vUsedLabels.count(label))
 		{
 			o << labelPrefix << label << ":\n";
@@ -484,7 +484,7 @@ void Enter::emit(std::ostream &o, uint ind, bool &readCh, const std::string&) co
 	else
 	{
 		/* we shouldn't need 'rule-following' protection here */
-		o << stmt_skip_peek (ind);
+		o << input_api.stmt_skip_peek (ind);
 		if (vUsedLabels.count(label))
 		{
 			o << labelPrefix << label << ":\n";
@@ -504,11 +504,11 @@ void Initial::emit(std::ostream &o, uint ind, bool &readCh, const std::string&) 
 	{
 		if (state->link)
 		{
-			o << stmt_skip (ind);
+			o << input_api.stmt_skip (ind);
 		}
 		else
 		{
-			o << stmt_skip_peek (ind);
+			o << input_api.stmt_skip_peek (ind);
 		}
 	}
 
@@ -523,7 +523,7 @@ void Initial::emit(std::ostream &o, uint ind, bool &readCh, const std::string&) 
 
 	if (dFlag)
 	{
-		o << indent(ind) << mapCodeName["YYDEBUG"] << "(" << label << ", " << expr_peek () << ");\n";
+		o << indent(ind) << mapCodeName["YYDEBUG"] << "(" << label << ", " << input_api.expr_peek () << ");\n";
 	}
 
 	if (state->link)
@@ -534,7 +534,7 @@ void Initial::emit(std::ostream &o, uint ind, bool &readCh, const std::string&) 
 	{
 		if (setMarker && bUsedYYMarker)
 		{
-			o << stmt_backup (ind);
+			o << input_api.stmt_backup (ind);
 		}
 		readCh = false;
 	}
@@ -556,7 +556,7 @@ void Save::emit(std::ostream &o, uint ind, bool &readCh, const std::string&) con
 	{
 		if (bUsedYYMarker)
 		{
-			o << stmt_skip_backup (ind);
+			o << input_api.stmt_skip_backup (ind);
 		}
 		need(o, ind, state->depth, readCh, false);
 	}
@@ -564,11 +564,11 @@ void Save::emit(std::ostream &o, uint ind, bool &readCh, const std::string&) con
 	{
 		if (bUsedYYMarker)
 		{
-			o << stmt_skip_backup_peek (ind);
+			o << input_api.stmt_skip_backup_peek (ind);
 		}
 		else
 		{
-			o << stmt_skip_peek (ind);
+			o << input_api.stmt_skip_peek (ind);
 		}
 		readCh = false;
 	}
@@ -627,12 +627,12 @@ void Accept::emit(std::ostream &o, uint ind, bool &readCh, const std::string&) c
 		bUsedYYMarker = true;
 		if (!DFlag)
 		{
-			o << stmt_restore (ind);
+			o << input_api.stmt_restore (ind);
 		}
 
 		if (readCh) // shouldn't be necessary, but might become at some point
 		{
-			o << stmt_peek (ind);
+			o << input_api.stmt_peek (ind);
 			readCh = false;
 		}
 
@@ -715,7 +715,7 @@ void Rule::emit(std::ostream &o, uint ind, bool &, const std::string& condName) 
 
 	if (back != 0u)
 	{
-		o << stmt_restorectx (ind);
+		o << input_api.stmt_restorectx (ind);
 	}
 
 	if (rule->code->newcond.length() && condName != rule->code->newcond)
@@ -963,7 +963,7 @@ void Go::genSwitch(std::ostream &o, uint ind, const State *from, const State *ne
 
 			if (readCh)
 			{
-				o << indent(ind) << "switch ((" << expr_peek_save () << ")) {\n";
+				o << indent(ind) << "switch ((" << input_api.expr_peek_save () << ")) {\n";
 				readCh = false;
 			}
 			else
@@ -1131,7 +1131,7 @@ void Go::genCpGoto(std::ostream &o, uint ind, const State *from, const State *ne
 	
 	if (readCh)
 	{
-		sYych = "(" + expr_peek_save () + ")";
+		sYych = "(" + input_api.expr_peek_save () + ")";
 	}
 	else
 	{
@@ -1249,7 +1249,7 @@ void Go::genGoto(std::ostream &o, uint ind, const State *from, const State *next
 					go.unmap(this, to);
 					if (readCh)
 					{
-						sYych = "(" + expr_peek_save () + ")";
+						sYych = "(" + input_api.expr_peek_save () + ")";
 					}
 					else
 					{
@@ -1299,11 +1299,11 @@ void State::emit(std::ostream &o, uint ind, bool &readCh, const std::string& con
 	}
 	if (dFlag && !action->isInitial())
 	{
-		o << indent(ind) << mapCodeName["YYDEBUG"] << "(" << label << ", " << expr_peek () << ");\n";
+		o << indent(ind) << mapCodeName["YYDEBUG"] << "(" << label << ", " << input_api.expr_peek () << ");\n";
 	}
 	if (isPreCtxt)
 	{
-		o << stmt_backupctx (ind);
+		o << input_api.stmt_backupctx (ind);
 	}
 	action->emit(o, ind, readCh, condName);
 }

@@ -13,7 +13,6 @@
 #include "globals.h"
 #include "parser.h"
 #include "dfa.h"
-#include "enc.h"
 #include "mbo_getopt.h"
 
 namespace re2c
@@ -87,7 +86,7 @@ bool bCaseInverted = false;
 bool bTypesDone = false;
 
 Enc encoding;
-input_t input = INPUT_DEFAULT;
+InputAPI input_api;
 
 uint next_fill_index = 0;
 uint last_fill_index = 0;
@@ -218,7 +217,7 @@ static void usage()
 	"--encoding-policy ep    Specify what re2c should do when given bad code unit.\n"
 	"                        ep can be one of the following: fail, substitute, ignore.\n"
 	"\n"
-	"--input i               Specify re2c input model.\n"
+	"--input i               Specify re2c input API.\n"
 	"                        i can be one of the following: default, istream, custom.\n"
 	;
 }
@@ -405,14 +404,14 @@ int main(int argc, char *argv[])
 
 			case 14:
 			if (strcmp(opt_arg, "default") == 0)
-				input = INPUT_DEFAULT;
+				input_api.set (InputAPI::DEFAULT);
 			else if (strcmp(opt_arg, "istream") == 0)
-				input = INPUT_ISTREAM;
+				input_api.set (InputAPI::ISTREAM);
 			else if (strcmp(opt_arg, "custom") == 0)
-				input = INPUT_CUSTOM;
+				input_api.set (InputAPI::CUSTOM);
 			else
 			{
-				std::cerr << "re2c: error: Invalid input model: \"" << opt_arg << "\"\n";
+				std::cerr << "re2c: error: Invalid input API: \"" << opt_arg << "\"\n";
 				return 1;
 			}
 			break;
