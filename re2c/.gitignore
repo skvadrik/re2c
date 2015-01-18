@@ -7,7 +7,7 @@ re2c.spec
 autom4te.cache
 configure
 install-sh
-README
+/README
 aclocal.m4
 Makefile
 Makefile.in
