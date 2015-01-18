@@ -14,7 +14,6 @@ class InputAPI
 public:
 	enum type_t
 		{ DEFAULT
-		, ISTREAM
 		, CUSTOM
 		};
 

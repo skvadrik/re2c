@@ -17,9 +17,12 @@ std::string InputAPI::expr_peek ()
 	std::string s;
 	switch (type)
 	{
-		case DEFAULT:	s = "*" + mapCodeName["YYCURSOR"]; break;
-		case ISTREAM:	s = mapCodeName["YYCURSOR"] + ".peek ()"; break;
-		case CUSTOM:	s = mapCodeName["YYPEEK"] + " ()"; break;
+		case DEFAULT:
+			s = "*" + mapCodeName["YYCURSOR"];
+			break;
+		case CUSTOM:
+			s = mapCodeName["YYPEEK"] + " ()";
+			break;
 	}
 	return s;
 }
@@ -39,9 +42,12 @@ std::string InputAPI::stmt_skip (uint ind)
 	std::string s;
 	switch (type)
 	{
-		case DEFAULT:	s = "++" + mapCodeName["YYCURSOR"]; break;
-		case ISTREAM:	s = mapCodeName["YYCURSOR"] + ".ignore ()"; break;
-		case CUSTOM:	s = mapCodeName["YYSKIP"] + " ()"; break;
+		case DEFAULT:
+			s = "++" + mapCodeName["YYCURSOR"];
+			break;
+		case CUSTOM:
+			s = mapCodeName["YYSKIP"] + " ()";
+			break;
 	}
 	return indent (ind) + s + ";\n";
 }
@@ -51,9 +57,12 @@ std::string InputAPI::stmt_backup (uint ind)
 	std::string s;
 	switch (type)
 	{
-		case DEFAULT:	s = mapCodeName["YYMARKER"] + " = " + mapCodeName["YYCURSOR"]; break;
-		case ISTREAM:	s = mapCodeName["YYMARKER"] + " = " + mapCodeName["YYCURSOR"] + ".tellg ()"; break;
-		case CUSTOM:	s = mapCodeName["YYBACKUP"] + " ()"; break;
+		case DEFAULT:
+			s = mapCodeName["YYMARKER"] + " = " + mapCodeName["YYCURSOR"];
+			break;
+		case CUSTOM:
+			s = mapCodeName["YYBACKUP"] + " ()";
+			break;
 	}
 	return indent (ind) + s + ";\n";
 }
@@ -67,8 +76,9 @@ std::string InputAPI::stmt_backupctx (uint ind)
 			// backward compatibility: '+1' here instead of '++YYCURSOR;' in stmt_restorectx
 			s = mapCodeName["YYCTXMARKER"] + " = " + mapCodeName["YYCURSOR"] + " + 1";
 			break;
-		case ISTREAM:	s = mapCodeName["YYCTXMARKER"] + " = " + mapCodeName["YYCURSOR"] + ".tellg ()"; break;
-		case CUSTOM:	s = mapCodeName["YYBACKUPCTX"] + " ()"; break;
+		case CUSTOM:
+			s = mapCodeName["YYBACKUPCTX"] + " ()";
+			break;
 	}
 	return indent (ind) + s + ";\n";
 }
@@ -78,9 +88,12 @@ std::string InputAPI::stmt_restore (uint ind)
 	std::string s;
 	switch (type)
 	{
-		case DEFAULT:	s = mapCodeName["YYCURSOR"] + " = " + mapCodeName["YYMARKER"]; break;
-		case ISTREAM:	s = mapCodeName["YYCURSOR"] + ".seekg (" + mapCodeName["YYMARKER"] + ")"; break;
-		case CUSTOM:	s = mapCodeName["YYRESTORE"] + " ()"; break;
+		case DEFAULT:
+			s = mapCodeName["YYCURSOR"] + " = " + mapCodeName["YYMARKER"];
+			break;
+		case CUSTOM:
+			s = mapCodeName["YYRESTORE"] + " ()";
+			break;
 	}
 	return indent (ind) + s + ";\n";
 }
@@ -92,12 +105,13 @@ std::string InputAPI::stmt_restorectx (uint ind)
 	{
 		case DEFAULT:
 			// backward compatibility: 'no ++YYCURSOR;' here; instead '+1' in stmt_backupctx
-			s = mapCodeName["YYCURSOR"] + " = " + mapCodeName["YYCTXMARKER"]; 
-			return indent (ind) + s + ";\n";
-		case ISTREAM:	s = mapCodeName["YYCURSOR"] + ".seekg (" + mapCodeName["YYCTXMARKER"] + ")"; break;
-		case CUSTOM:	s = mapCodeName["YYRESTORECTX"] + " ()"; break;
+			s = indent (ind) + mapCodeName["YYCURSOR"] + " = " + mapCodeName["YYCTXMARKER"] + ";\n";
+			break;
+		case CUSTOM:
+			s = indent (ind) + mapCodeName["YYRESTORECTX"] + " ();\n" + stmt_skip (ind);
+			break;
 	}
-	return indent (ind) + s + ";\n" + stmt_skip (ind);
+	return s;
 }
 
 std::string InputAPI::stmt_skip_peek (uint ind)
@@ -140,9 +154,12 @@ std::string InputAPI::expr_has (uint n)
 	std::ostringstream s;
 	switch (type)
 	{
-		case DEFAULT:	s << "(" << mapCodeName["YYLIMIT"] << " - " << mapCodeName["YYCURSOR"] << ") < " << n; break;
-		case ISTREAM:	s << "(" << mapCodeName["YYLIMIT"] << " - " << mapCodeName["YYCURSOR"] << ".tellg ()) < " << n; break;
-		case CUSTOM:	s << mapCodeName["YYHAS"] << " (" << n << ")"; break;
+		case DEFAULT:
+			s << "(" << mapCodeName["YYLIMIT"] << " - " << mapCodeName["YYCURSOR"] << ") < " << n;
+			break;
+		case CUSTOM:
+			s << mapCodeName["YYHAS"] << " (" << n << ")";
+			break;
 	}
 	return s.str ();
 }

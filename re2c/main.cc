@@ -218,7 +218,7 @@ static void usage()
 	"                        ep can be one of the following: fail, substitute, ignore.\n"
 	"\n"
 	"--input i               Specify re2c input API.\n"
-	"                        i can be one of the following: default, istream, custom.\n"
+	"                        i can be one of the following: default, custom.\n"
 	;
 }
 
@@ -405,8 +405,6 @@ int main(int argc, char *argv[])
 			case 14:
 			if (strcmp(opt_arg, "default") == 0)
 				input_api.set (InputAPI::DEFAULT);
-			else if (strcmp(opt_arg, "istream") == 0)
-				input_api.set (InputAPI::ISTREAM);
 			else if (strcmp(opt_arg, "custom") == 0)
 				input_api.set (InputAPI::CUSTOM);
 			else
