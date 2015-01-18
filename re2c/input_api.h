@@ -34,8 +34,8 @@ public:
 	std::string stmt_skip_backup (uint ind);
 	std::string stmt_backup_peek (uint ind);
 	std::string stmt_skip_backup_peek (uint ind);
-	std::string expr_has_one ();
-	std::string expr_has (uint n);
+	std::string expr_eoi_one ();
+	std::string expr_eoi (uint n);
 };
 
 } // end namespace re2c

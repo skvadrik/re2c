@@ -142,14 +142,14 @@ std::string InputAPI::stmt_skip_backup_peek (uint ind)
 		: stmt_skip (ind) + stmt_backup (ind) + stmt_peek (ind);
 }
 
-std::string InputAPI::expr_has_one ()
+std::string InputAPI::expr_eoi_one ()
 {
 	return type == DEFAULT
 		? mapCodeName["YYLIMIT"] + " <= " + mapCodeName["YYCURSOR"]
-		: expr_has (1);
+		: expr_eoi (1);
 }
 
-std::string InputAPI::expr_has (uint n)
+std::string InputAPI::expr_eoi (uint n)
 {
 	std::ostringstream s;
 	switch (type)
@@ -158,7 +158,7 @@ std::string InputAPI::expr_has (uint n)
 			s << "(" << mapCodeName["YYLIMIT"] << " - " << mapCodeName["YYCURSOR"] << ") < " << n;
 			break;
 		case CUSTOM:
-			s << mapCodeName["YYHAS"] << " (" << n << ")";
+			s << mapCodeName["YYEOI"] << " (" << n << ")";
 			break;
 	}
 	return s.str ();

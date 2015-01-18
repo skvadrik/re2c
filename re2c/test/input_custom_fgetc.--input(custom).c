@@ -20,14 +20,14 @@ bool lex (FILE * f, const long limit)
 #   define YYBACKUPCTX()  ctxmarker = ftell (f)
 #   define YYRESTORE()    fseek (f, marker, SEEK_SET)
 #   define YYRESTORECTX() fseek (f, ctxmarker, SEEK_SET)
-#   define YYHAS(n)       limit - ftell (f) < n
+#   define YYEOI(n)       limit - ftell (f) < n
 #   define YYFILL(n)      {}
     
 #line 27 "<stdout>"
 {
 	YYCTYPE yych;
 
-	if (YYHAS (13)) YYFILL(13);
+	if (YYEOI (13)) YYFILL(13);
 	yych = YYPEEK ();
 	switch (yych) {
 	case 'i':	goto yy4;
@@ -139,7 +139,7 @@ yy16:
 	}
 yy17:
 	YYSKIP ();
-	if (YYHAS (1)) YYFILL(1);
+	if (YYEOI (1)) YYFILL(1);
 	yych = YYPEEK ();
 	switch (yych) {
 	case '0':

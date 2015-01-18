@@ -13,14 +13,14 @@ bool lex (std::istringstream & is, const std::streampos limit)
 #   define YYBACKUPCTX()  ctxmarker = is.tellg ()
 #   define YYRESTORE()    is.seekg (marker)
 #   define YYRESTORECTX() is.seekg (ctxmarker)
-#   define YYHAS(n)       limit - is.tellg () < n
+#   define YYEOI(n)       limit - is.tellg () < n
 #   define YYFILL(n)      {}
     
 #line 20 "<stdout>"
 {
 	YYCTYPE yych;
 
-	if (YYHAS (13)) YYFILL(13);
+	if (YYEOI (13)) YYFILL(13);
 	yych = YYPEEK ();
 	switch (yych) {
 	case 'i':	goto yy4;
@@ -132,7 +132,7 @@ yy16:
 	}
 yy17:
 	YYSKIP ();
-	if (YYHAS (1)) YYFILL(1);
+	if (YYEOI (1)) YYFILL(1);
 	yych = YYPEEK ();
 	switch (yych) {
 	case '0':

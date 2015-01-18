@@ -18,7 +18,7 @@ bool lex (FILE * f, const long limit)
 #   define YYBACKUPCTX()  ctxmarker = ftell (f)
 #   define YYRESTORE()    fseek (f, marker, SEEK_SET)
 #   define YYRESTORECTX() fseek (f, ctxmarker, SEEK_SET)
-#   define YYHAS(n)       limit - ftell (f) < n
+#   define YYEOI(n)       limit - ftell (f) < n
 #   define YYFILL(n)      {}
     /*!re2c
         "int buffer " / "[" [0-9]+ "]" { return true; }
