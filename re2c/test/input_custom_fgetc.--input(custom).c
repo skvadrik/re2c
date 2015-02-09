@@ -13,117 +13,117 @@ bool lex (FILE * f, const long limit)
 {
     long marker;
     long ctxmarker;
-#   define YYCTYPE        char
-#   define YYPEEK()       peek (f)
-#   define YYSKIP()       fgetc (f)
-#   define YYBACKUP()     marker = ftell (f)
-#   define YYBACKUPCTX()  ctxmarker = ftell (f)
-#   define YYRESTORE()    fseek (f, marker, SEEK_SET)
-#   define YYRESTORECTX() fseek (f, ctxmarker, SEEK_SET)
-#   define YYEOI(n)       limit - ftell (f) < n
-#   define YYFILL(n)      {}
+#   define YYCTYPE            char
+#   define RE2C_PEEK()        peek (f)
+#   define RE2C_SKIP()        fgetc (f)
+#   define RE2C_BACKUP()      marker = ftell (f)
+#   define RE2C_BACKUP_CTX()  ctxmarker = ftell (f)
+#   define RE2C_RESTORE()     fseek (f, marker, SEEK_SET)
+#   define RE2C_RESTORE_CTX() fseek (f, ctxmarker, SEEK_SET)
+#   define RE2C_LESS_THAN(n)  limit - ftell (f) < n
+#   define YYFILL(n)          {}
     
 #line 27 "<stdout>"
 {
 	YYCTYPE yych;
 
-	if (YYEOI (13)) YYFILL(13);
-	yych = YYPEEK ();
+	if (RE2C_LESS_THAN (13)) YYFILL(13);
+	yych = RE2C_PEEK ();
 	switch (yych) {
 	case 'i':	goto yy4;
 	default:	goto yy2;
 	}
 yy2:
-	YYSKIP ();
+	RE2C_SKIP ();
 yy3:
 #line 25 "input_custom_fgetc.--input(custom).re"
 	{ return false; }
 #line 42 "<stdout>"
 yy4:
-	YYSKIP ();
-	YYBACKUP ();
-	yych = YYPEEK ();
+	RE2C_SKIP ();
+	RE2C_BACKUP ();
+	yych = RE2C_PEEK ();
 	switch (yych) {
 	case 'n':	goto yy5;
 	default:	goto yy3;
 	}
 yy5:
-	YYSKIP ();
-	yych = YYPEEK ();
+	RE2C_SKIP ();
+	yych = RE2C_PEEK ();
 	switch (yych) {
 	case 't':	goto yy7;
 	default:	goto yy6;
 	}
 yy6:
-	YYRESTORE ();
+	RE2C_RESTORE ();
 	goto yy3;
 yy7:
-	YYSKIP ();
-	yych = YYPEEK ();
+	RE2C_SKIP ();
+	yych = RE2C_PEEK ();
 	switch (yych) {
 	case ' ':	goto yy8;
 	default:	goto yy6;
 	}
 yy8:
-	YYSKIP ();
-	yych = YYPEEK ();
+	RE2C_SKIP ();
+	yych = RE2C_PEEK ();
 	switch (yych) {
 	case 'b':	goto yy9;
 	default:	goto yy6;
 	}
 yy9:
-	YYSKIP ();
-	yych = YYPEEK ();
+	RE2C_SKIP ();
+	yych = RE2C_PEEK ();
 	switch (yych) {
 	case 'u':	goto yy10;
 	default:	goto yy6;
 	}
 yy10:
-	YYSKIP ();
-	yych = YYPEEK ();
+	RE2C_SKIP ();
+	yych = RE2C_PEEK ();
 	switch (yych) {
 	case 'f':	goto yy11;
 	default:	goto yy6;
 	}
 yy11:
-	YYSKIP ();
-	yych = YYPEEK ();
+	RE2C_SKIP ();
+	yych = RE2C_PEEK ();
 	switch (yych) {
 	case 'f':	goto yy12;
 	default:	goto yy6;
 	}
 yy12:
-	YYSKIP ();
-	yych = YYPEEK ();
+	RE2C_SKIP ();
+	yych = RE2C_PEEK ();
 	switch (yych) {
 	case 'e':	goto yy13;
 	default:	goto yy6;
 	}
 yy13:
-	YYSKIP ();
-	yych = YYPEEK ();
+	RE2C_SKIP ();
+	yych = RE2C_PEEK ();
 	switch (yych) {
 	case 'r':	goto yy14;
 	default:	goto yy6;
 	}
 yy14:
-	YYSKIP ();
-	yych = YYPEEK ();
+	RE2C_SKIP ();
+	yych = RE2C_PEEK ();
 	switch (yych) {
 	case ' ':	goto yy15;
 	default:	goto yy6;
 	}
 yy15:
-	YYBACKUPCTX ();
-	YYSKIP ();
-	yych = YYPEEK ();
+	RE2C_BACKUP_CTX ();
+	RE2C_SKIP ();
+	yych = RE2C_PEEK ();
 	switch (yych) {
 	case '[':	goto yy16;
 	default:	goto yy6;
 	}
 yy16:
-	YYSKIP ();
-	yych = YYPEEK ();
+	RE2C_SKIP ();
+	yych = RE2C_PEEK ();
 	switch (yych) {
 	case '0':
 	case '1':
@@ -138,9 +138,9 @@ yy16:
 	default:	goto yy6;
 	}
 yy17:
-	YYSKIP ();
-	if (YYEOI (1)) YYFILL(1);
-	yych = YYPEEK ();
+	RE2C_SKIP ();
+	if (RE2C_LESS_THAN (1)) YYFILL(1);
+	yych = RE2C_PEEK ();
 	switch (yych) {
 	case '0':
 	case '1':
@@ -156,9 +156,9 @@ yy17:
 	default:	goto yy6;
 	}
 yy19:
-	YYSKIP ();
-	YYRESTORECTX ();
-	YYSKIP ();
+	RE2C_SKIP ();
+	RE2C_RESTORE_CTX ();
+	RE2C_SKIP ();
 #line 24 "input_custom_fgetc.--input(custom).re"
 	{ return true; }
 #line 165 "<stdout>"

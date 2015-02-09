@@ -408,7 +408,7 @@ static void need(std::ostream &o, uint ind, uint n, bool & readCh, bool bSetMark
 		{
 			if (bUseYYFillCheck)
 			{
-				o << "if (" << input_api.expr_eoi_one () << ") ";
+				o << "if (" << input_api.expr_less_than_one () << ") ";
 			}
 			genYYFill(o, ind, n);
 		}
@@ -416,7 +416,7 @@ static void need(std::ostream &o, uint ind, uint n, bool & readCh, bool bSetMark
 		{
 			if (bUseYYFillCheck)
 			{
-				o << "if (" << input_api.expr_eoi (n) << ") ";
+				o << "if (" << input_api.expr_less_than (n) << ") ";
 			}
 			genYYFill(o, ind, n);
 		}
@@ -715,7 +715,7 @@ void Rule::emit(std::ostream &o, uint ind, bool &, const std::string& condName) 
 
 	if (back != 0u)
 	{
-		o << input_api.stmt_restorectx (ind);
+		o << input_api.stmt_restore_ctx (ind);
 	}
 
 	if (rule->code->newcond.length() && condName != rule->code->newcond)
@@ -1303,7 +1303,7 @@ void State::emit(std::ostream &o, uint ind, bool &readCh, const std::string& con
 	}
 	if (isPreCtxt)
 	{
-		o << input_api.stmt_backupctx (ind);
+		o << input_api.stmt_backup_ctx (ind);
 	}
 	action->emit(o, ind, readCh, condName);
 }
@@ -2308,8 +2308,13 @@ void Scanner::config(const Str& cfg, const Str& val)
 		mapVariableKeys.insert("variable:yyctable");
 		mapVariableKeys.insert("variable:yystable");
 		mapVariableKeys.insert("variable:yytarget");
-		mapDefineKeys.insert("define:YYBACKUP");
-		mapDefineKeys.insert("define:YYBACKUPCTX");
+		mapDefineKeys.insert("define:RE2C_BACKUP");
+		mapDefineKeys.insert("define:RE2C_BACKUP_CTX");
+		mapDefineKeys.insert("define:RE2C_LESS_THAN");
+		mapDefineKeys.insert("define:RE2C_PEEK");
+		mapDefineKeys.insert("define:RE2C_RESTORE");
+		mapDefineKeys.insert("define:RE2C_RESTORE_CTX");
+		mapDefineKeys.insert("define:RE2C_SKIP");
 		mapDefineKeys.insert("define:YYCONDTYPE");
 		mapDefineKeys.insert("define:YYCTXMARKER");
 		mapDefineKeys.insert("define:YYCTYPE");
@@ -2318,15 +2323,10 @@ void Scanner::config(const Str& cfg, const Str& val)
 		mapDefineKeys.insert("define:YYFILL");
 		mapDefineKeys.insert("define:YYGETCONDITION");
 		mapDefineKeys.insert("define:YYGETSTATE");
-		mapDefineKeys.insert("define:YYEOI");
 		mapDefineKeys.insert("define:YYLIMIT");
 		mapDefineKeys.insert("define:YYMARKER");
-		mapDefineKeys.insert("define:YYPEEK");
-		mapDefineKeys.insert("define:YYRESTORE");
-		mapDefineKeys.insert("define:YYRESTORECTX");
 		mapDefineKeys.insert("define:YYSETCONDITION");
 		mapDefineKeys.insert("define:YYSETSTATE");
-		mapDefineKeys.insert("define:YYSKIP");
 		mapLabelKeys.insert("label:yyFillLabel");
 		mapLabelKeys.insert("label:yyNext");
 	}

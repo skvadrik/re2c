@@ -4,117 +4,117 @@ bool lex (const char * cursor, const char * const limit)
 {
     const char * marker;
     const char * ctxmarker;
-#   define YYCTYPE        char
-#   define YYPEEK()       *cursor
-#   define YYSKIP()       ++cursor
-#   define YYBACKUP()     marker = cursor
-#   define YYBACKUPCTX()  ctxmarker = cursor
-#   define YYRESTORE()    cursor = marker
-#   define YYRESTORECTX() cursor = ctxmarker
-#   define YYEOI(n)       limit - cursor < n
-#   define YYFILL(n)      {}
+#   define YYCTYPE            char
+#   define RE2C_PEEK()        *cursor
+#   define RE2C_SKIP()        ++cursor
+#   define RE2C_BACKUP()      marker = cursor
+#   define RE2C_BACKUP_CTX()  ctxmarker = cursor
+#   define RE2C_RESTORE()     cursor = marker
+#   define RE2C_RESTORE_CTX() cursor = ctxmarker
+#   define RE2C_LESS_THAN(n)  limit - cursor < n
+#   define YYFILL(n)          {}
     
 #line 18 "<stdout>"
 {
 	YYCTYPE yych;
 
-	if (YYEOI (13)) YYFILL(13);
-	yych = YYPEEK ();
+	if (RE2C_LESS_THAN (13)) YYFILL(13);
+	yych = RE2C_PEEK ();
 	switch (yych) {
 	case 'i':	goto yy4;
 	default:	goto yy2;
 	}
 yy2:
-	YYSKIP ();
+	RE2C_SKIP ();
 yy3:
 #line 16 "input_custom_default.--input(custom).re"
 	{ return false; }
 #line 33 "<stdout>"
 yy4:
-	YYSKIP ();
-	YYBACKUP ();
-	yych = YYPEEK ();
+	RE2C_SKIP ();
+	RE2C_BACKUP ();
+	yych = RE2C_PEEK ();
 	switch (yych) {
 	case 'n':	goto yy5;
 	default:	goto yy3;
 	}
 yy5:
-	YYSKIP ();
-	yych = YYPEEK ();
+	RE2C_SKIP ();
+	yych = RE2C_PEEK ();
 	switch (yych) {
 	case 't':	goto yy7;
 	default:	goto yy6;
 	}
 yy6:
-	YYRESTORE ();
+	RE2C_RESTORE ();
 	goto yy3;
 yy7:
-	YYSKIP ();
-	yych = YYPEEK ();
+	RE2C_SKIP ();
+	yych = RE2C_PEEK ();
 	switch (yych) {
 	case ' ':	goto yy8;
 	default:	goto yy6;
 	}
 yy8:
-	YYSKIP ();
-	yych = YYPEEK ();
+	RE2C_SKIP ();
+	yych = RE2C_PEEK ();
 	switch (yych) {
 	case 'b':	goto yy9;
 	default:	goto yy6;
 	}
 yy9:
-	YYSKIP ();
-	yych = YYPEEK ();
+	RE2C_SKIP ();
+	yych = RE2C_PEEK ();
 	switch (yych) {
 	case 'u':	goto yy10;
 	default:	goto yy6;
 	}
 yy10:
-	YYSKIP ();
-	yych = YYPEEK ();
+	RE2C_SKIP ();
+	yych = RE2C_PEEK ();
 	switch (yych) {
 	case 'f':	goto yy11;
 	default:	goto yy6;
 	}
 yy11:
-	YYSKIP ();
-	yych = YYPEEK ();
+	RE2C_SKIP ();
+	yych = RE2C_PEEK ();
 	switch (yych) {
 	case 'f':	goto yy12;
 	default:	goto yy6;
 	}
 yy12:
-	YYSKIP ();
-	yych = YYPEEK ();
+	RE2C_SKIP ();
+	yych = RE2C_PEEK ();
 	switch (yych) {
 	case 'e':	goto yy13;
 	default:	goto yy6;
 	}
 yy13:
-	YYSKIP ();
-	yych = YYPEEK ();
+	RE2C_SKIP ();
+	yych = RE2C_PEEK ();
 	switch (yych) {
 	case 'r':	goto yy14;
 	default:	goto yy6;
 	}
 yy14:
-	YYSKIP ();
-	yych = YYPEEK ();
+	RE2C_SKIP ();
+	yych = RE2C_PEEK ();
 	switch (yych) {
 	case ' ':	goto yy15;
 	default:	goto yy6;
 	}
 yy15:
-	YYBACKUPCTX ();
-	YYSKIP ();
-	yych = YYPEEK ();
+	RE2C_BACKUP_CTX ();
+	RE2C_SKIP ();
+	yych = RE2C_PEEK ();
 	switch (yych) {
 	case '[':	goto yy16;
 	default:	goto yy6;
 	}
 yy16:
-	YYSKIP ();
-	yych = YYPEEK ();
+	RE2C_SKIP ();
+	yych = RE2C_PEEK ();
 	switch (yych) {
 	case '0':
 	case '1':
@@ -129,9 +129,9 @@ yy16:
 	default:	goto yy6;
 	}
 yy17:
-	YYSKIP ();
-	if (YYEOI (1)) YYFILL(1);
-	yych = YYPEEK ();
+	RE2C_SKIP ();
+	if (RE2C_LESS_THAN (1)) YYFILL(1);
+	yych = RE2C_PEEK ();
 	switch (yych) {
 	case '0':
 	case '1':
@@ -147,9 +147,9 @@ yy17:
 	default:	goto yy6;
 	}
 yy19:
-	YYSKIP ();
-	YYRESTORECTX ();
-	YYSKIP ();
+	RE2C_SKIP ();
+	RE2C_RESTORE_CTX ();
+	RE2C_SKIP ();
 #line 15 "input_custom_default.--input(custom).re"
 	{ return true; }
 #line 156 "<stdout>"

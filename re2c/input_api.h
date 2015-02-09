@@ -27,15 +27,15 @@ public:
 	std::string stmt_peek (uint ind);
 	std::string stmt_skip (uint ind);
 	std::string stmt_backup (uint ind);
-	std::string stmt_backupctx (uint ind);
+	std::string stmt_backup_ctx (uint ind);
 	std::string stmt_restore (uint ind);
-	std::string stmt_restorectx (uint ind);
+	std::string stmt_restore_ctx (uint ind);
 	std::string stmt_skip_peek (uint ind);
 	std::string stmt_skip_backup (uint ind);
 	std::string stmt_backup_peek (uint ind);
 	std::string stmt_skip_backup_peek (uint ind);
-	std::string expr_eoi_one ();
-	std::string expr_eoi (uint n);
+	std::string expr_less_than_one ();
+	std::string expr_less_than (uint n);
 };
 
 } // end namespace re2c

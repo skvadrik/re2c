@@ -493,10 +493,10 @@ static void unicode_cp_to_utf8(uint32_t uni_cp, uint8_t* utf8char/*[6]*/, size_t
 static void parsectx_next_token(mjson_parser_t* context)
 {
 #define YYCTYPE        uint8_t
-#define YYPEEK()       (c>=e?0:*c)
-#define YYSKIP()       ++c
-#define YYBACKUP()     m = c
-#define YYRESTORE()    c = m
+#define RE2C_PEEK()    (c>=e?0:*c)
+#define RE2C_SKIP()    ++c
+#define RE2C_BACKUP()  m = c
+#define RE2C_RESTORE() c = m
 
     uint8_t* c = context->next;
     uint8_t* e = context->end;
