@@ -852,6 +852,24 @@ Note, that full range rule *$$[^]$$* won't catch invalid code units when variabl
 (*$$[^]$$* means ``all valid code points'', while default rule *$$*$$* means ``all possible code units'':
 see *Note* about default rule in *SYNTAX* section).
 
+GENERIC INPUT API
+-----------------
+*re2c* usually operates on input using pointer-like primitives *YYCURSOR*, *YYMARKER*, *YYCTXMARKER* and *YYLIMIT*.
+
+Generic input API (enabled with *--input custom* switch) allows to customize input operations.
+In this mode, *re2c* will express all operations on input in terms of the following primitives:
+
+. *YYPEEK ()* --- get current input character
+. *YYSKIP ()* --- advance to the next character
+. *YYBACKUP ()* --- backup current input position
+. *YYBACKUPCTX ()* --- backup current input position for trailing context
+. *YYRESTORE ()* --- restore current input position
+. *YYRESTORECTX ()* --- restore current input position for trailing context
+. *YYLESSTHAN (n)* --- check if less than *n* input characters are left
+
+This article (http://skvadrik.github.io/aleph_null/posts/re2c/2015-01-13-input_model.html)
+has more details, and you can find some usage examples:
+http://skvadrik.github.io/aleph_null/posts/re2c/2015-01-15-input_model_custom.html .
 
 UNDERSTANDING RE2C
 ------------------
@@ -887,7 +905,7 @@ AUTHORS
 . Marcus Boerger helly@users.sourceforge.net
 . Hartmut Kaiser hkaiser@users.sourceforge.net
 . Emmanuel Mogenet mgix@mgix.com (added storable state)
-. Ulya Trofimovich skvadrik@gmail.com (added UTF-8 and UTF-16 support)
+. Ulya Trofimovich skvadrik@gmail.com
 
 
 VERSION INFORMATION
