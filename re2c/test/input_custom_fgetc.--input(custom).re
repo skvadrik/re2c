@@ -11,15 +11,15 @@ bool lex (FILE * f, const long limit)
 {
     long marker;
     long ctxmarker;
-#   define YYCTYPE            char
-#   define RE2C_PEEK()        peek (f)
-#   define RE2C_SKIP()        fgetc (f)
-#   define RE2C_BACKUP()      marker = ftell (f)
-#   define RE2C_BACKUP_CTX()  ctxmarker = ftell (f)
-#   define RE2C_RESTORE()     fseek (f, marker, SEEK_SET)
-#   define RE2C_RESTORE_CTX() fseek (f, ctxmarker, SEEK_SET)
-#   define RE2C_LESS_THAN(n)  limit - ftell (f) < n
-#   define YYFILL(n)          {}
+#   define YYCTYPE        char
+#   define YYPEEK()       peek (f)
+#   define YYSKIP()       fgetc (f)
+#   define YYBACKUP()     marker = ftell (f)
+#   define YYBACKUPCTX()  ctxmarker = ftell (f)
+#   define YYRESTORE()    fseek (f, marker, SEEK_SET)
+#   define YYRESTORECTX() fseek (f, ctxmarker, SEEK_SET)
+#   define YYEOI(n)       limit - ftell (f) < n
+#   define YYFILL(n)      {}
     /*!re2c
         "int buffer " / "[" [0-9]+ "]" { return true; }
         *                              { return false; }

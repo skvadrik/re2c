@@ -21,7 +21,7 @@ std::string InputAPI::expr_peek ()
 			s = "*" + mapCodeName["YYCURSOR"];
 			break;
 		case CUSTOM:
-			s = mapCodeName["RE2C_PEEK"] + " ()";
+			s = mapCodeName["YYPEEK"] + " ()";
 			break;
 	}
 	return s;
@@ -46,7 +46,7 @@ std::string InputAPI::stmt_skip (uint ind)
 			s = "++" + mapCodeName["YYCURSOR"];
 			break;
 		case CUSTOM:
-			s = mapCodeName["RE2C_SKIP"] + " ()";
+			s = mapCodeName["YYSKIP"] + " ()";
 			break;
 	}
 	return indent (ind) + s + ";\n";
@@ -61,23 +61,23 @@ std::string InputAPI::stmt_backup (uint ind)
 			s = mapCodeName["YYMARKER"] + " = " + mapCodeName["YYCURSOR"];
 			break;
 		case CUSTOM:
-			s = mapCodeName["RE2C_BACKUP"] + " ()";
+			s = mapCodeName["YYBACKUP"] + " ()";
 			break;
 	}
 	return indent (ind) + s + ";\n";
 }
 
-std::string InputAPI::stmt_backup_ctx (uint ind)
+std::string InputAPI::stmt_backupctx (uint ind)
 {
 	std::string s;
 	switch (type)
 	{
 		case DEFAULT:
-			// backward compatibility: '+1' here instead of '++YYCURSOR;' in stmt_restore_ctx
+			// backward compatibility: '+1' here instead of '++YYCURSOR;' in stmt_restorectx
 			s = mapCodeName["YYCTXMARKER"] + " = " + mapCodeName["YYCURSOR"] + " + 1";
 			break;
 		case CUSTOM:
-			s = mapCodeName["RE2C_BACKUP_CTX"] + " ()";
+			s = mapCodeName["YYBACKUPCTX"] + " ()";
 			break;
 	}
 	return indent (ind) + s + ";\n";
@@ -92,23 +92,23 @@ std::string InputAPI::stmt_restore (uint ind)
 			s = mapCodeName["YYCURSOR"] + " = " + mapCodeName["YYMARKER"];
 			break;
 		case CUSTOM:
-			s = mapCodeName["RE2C_RESTORE"] + " ()";
+			s = mapCodeName["YYRESTORE"] + " ()";
 			break;
 	}
 	return indent (ind) + s + ";\n";
 }
 
-std::string InputAPI::stmt_restore_ctx (uint ind)
+std::string InputAPI::stmt_restorectx (uint ind)
 {
 	std::string s;
 	switch (type)
 	{
 		case DEFAULT:
-			// backward compatibility: 'no ++YYCURSOR;' here; instead '+1' in stmt_backup_ctx
+			// backward compatibility: 'no ++YYCURSOR;' here; instead '+1' in stmt_backupctx
 			s = indent (ind) + mapCodeName["YYCURSOR"] + " = " + mapCodeName["YYCTXMARKER"] + ";\n";
 			break;
 		case CUSTOM:
-			s = indent (ind) + mapCodeName["RE2C_RESTORE_CTX"] + " ();\n" + stmt_skip (ind);
+			s = indent (ind) + mapCodeName["YYRESTORECTX"] + " ();\n" + stmt_skip (ind);
 			break;
 	}
 	return s;
@@ -142,14 +142,14 @@ std::string InputAPI::stmt_skip_backup_peek (uint ind)
 		: stmt_skip (ind) + stmt_backup (ind) + stmt_peek (ind);
 }
 
-std::string InputAPI::expr_less_than_one ()
+std::string InputAPI::expr_eoi_one ()
 {
 	return type == DEFAULT
 		? mapCodeName["YYLIMIT"] + " <= " + mapCodeName["YYCURSOR"]
-		: expr_less_than (1);
+		: expr_eoi (1);
 }
 
-std::string InputAPI::expr_less_than (uint n)
+std::string InputAPI::expr_eoi (uint n)
 {
 	std::ostringstream s;
 	switch (type)
@@ -158,7 +158,7 @@ std::string InputAPI::expr_less_than (uint n)
 			s << "(" << mapCodeName["YYLIMIT"] << " - " << mapCodeName["YYCURSOR"] << ") < " << n;
 			break;
 		case CUSTOM:
-			s << mapCodeName["RE2C_LESS_THAN"] << " (" << n << ")";
+			s << mapCodeName["YYEOI"] << " (" << n << ")";
 			break;
 	}
 	return s.str ();

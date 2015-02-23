@@ -4,15 +4,15 @@ bool lex (std::istringstream & is, const std::streampos limit)
 {
     std::streampos marker;
     std::streampos ctxmarker;
-#   define YYCTYPE            char
-#   define RE2C_PEEK()        is.peek ()
-#   define RE2C_SKIP()        is.ignore ()
-#   define RE2C_BACKUP()      marker = is.tellg ()
-#   define RE2C_BACKUP_CTX()  ctxmarker = is.tellg ()
-#   define RE2C_RESTORE()     is.seekg (marker)
-#   define RE2C_RESTORE_CTX() is.seekg (ctxmarker)
-#   define RE2C_LESS_THAN(n)  limit - is.tellg () < n
-#   define YYFILL(n)          {}
+#   define YYCTYPE        char
+#   define YYPEEK()       is.peek ()
+#   define YYSKIP()       is.ignore ()
+#   define YYBACKUP()     marker = is.tellg ()
+#   define YYBACKUPCTX()  ctxmarker = is.tellg ()
+#   define YYRESTORE()    is.seekg (marker)
+#   define YYRESTORECTX() is.seekg (ctxmarker)
+#   define YYEOI(n)       limit - is.tellg () < n
+#   define YYFILL(n)      {}
     /*!re2c
         "int buffer " / "[" [0-9]+ "]" { return true; }
         *                              { return false; }

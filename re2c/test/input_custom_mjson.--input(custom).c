@@ -468,10 +468,10 @@ static void unicode_cp_to_utf8(uint32_t uni_cp, uint8_t* utf8char/*[6]*/, size_t
 static void parsectx_next_token(mjson_parser_t* context)
 {
 #define YYCTYPE        uint8_t
-#define RE2C_PEEK()    (c>=e?0:*c)
-#define RE2C_SKIP()    ++c
-#define RE2C_BACKUP()  m = c
-#define RE2C_RESTORE() c = m
+#define YYPEEK()       (c>=e?0:*c)
+#define YYSKIP()       ++c
+#define YYBACKUP()     m = c
+#define YYRESTORE()    c = m
 
     uint8_t* c = context->next;
     uint8_t* e = context->end;
@@ -492,7 +492,7 @@ static void parsectx_next_token(mjson_parser_t* context)
             YYCTYPE yych;
             unsigned int yyaccept = 0;
 
-            yych = RE2C_PEEK ();
+            yych = YYPEEK ();
             switch (yych) {
             case 0x00:    goto yy31;
             case '\t':
@@ -577,8 +577,8 @@ static void parsectx_next_token(mjson_parser_t* context)
             default:    goto yy33;
             }
 yy2:
-            RE2C_SKIP ();
-            yych = RE2C_PEEK ();
+            YYSKIP ();
+            yych = YYPEEK ();
             goto yy126;
 yy3:
 #line 515 "input_custom_mjson.--input(custom).re"
@@ -588,9 +588,9 @@ yy3:
 #line 589 "<stdout>"
 yy4:
             yyaccept = 0;
-            RE2C_SKIP ();
-            RE2C_BACKUP ();
-            yych = RE2C_PEEK ();
+            YYSKIP ();
+            YYBACKUP ();
+            yych = YYPEEK ();
             switch (yych) {
             case '*':    goto yy108;
             case '/':    goto yy110;
@@ -604,7 +604,7 @@ yy5:
             }
 #line 606 "<stdout>"
 yy6:
-            RE2C_SKIP ();
+            YYSKIP ();
 #line 527 "input_custom_mjson.--input(custom).re"
             {
                 token = TOK_LEFT_CURLY_BRACKET;
@@ -612,7 +612,7 @@ yy6:
             }
 #line 614 "<stdout>"
 yy8:
-            RE2C_SKIP ();
+            YYSKIP ();
 #line 532 "input_custom_mjson.--input(custom).re"
             {
                 token = TOK_RIGHT_CURLY_BRACKET;
@@ -620,7 +620,7 @@ yy8:
             }
 #line 622 "<stdout>"
 yy10:
-            RE2C_SKIP ();
+            YYSKIP ();
 #line 537 "input_custom_mjson.--input(custom).re"
             {
                 token = TOK_LEFT_BRACKET;
@@ -628,7 +628,7 @@ yy10:
             }
 #line 630 "<stdout>"
 yy12:
-            RE2C_SKIP ();
+            YYSKIP ();
 #line 542 "input_custom_mjson.--input(custom).re"
             {
                 token = TOK_RIGHT_BRACKET;
@@ -636,7 +636,7 @@ yy12:
             }
 #line 638 "<stdout>"
 yy14:
-            RE2C_SKIP ();
+            YYSKIP ();
 #line 547 "input_custom_mjson.--input(custom).re"
             {
                 token = TOK_COLON;
@@ -644,7 +644,7 @@ yy14:
             }
 #line 646 "<stdout>"
 yy16:
-            RE2C_SKIP ();
+            YYSKIP ();
 #line 552 "input_custom_mjson.--input(custom).re"
             {
                 token = TOK_EQUAL;
@@ -652,7 +652,7 @@ yy16:
             }
 #line 654 "<stdout>"
 yy18:
-            RE2C_SKIP ();
+            YYSKIP ();
 #line 557 "input_custom_mjson.--input(custom).re"
             {
                 token = TOK_COMMA;
@@ -660,8 +660,8 @@ yy18:
             }
 #line 662 "<stdout>"
 yy20:
-            RE2C_SKIP ();
-            switch ((yych = RE2C_PEEK ())) {
+            YYSKIP ();
+            switch ((yych = YYPEEK ())) {
             case '.':
             case '0':
             case '1':
@@ -737,9 +737,9 @@ yy21:
 #line 738 "<stdout>"
 yy22:
             yyaccept = 0;
-            RE2C_SKIP ();
-            RE2C_BACKUP ();
-            yych = RE2C_PEEK ();
+            YYSKIP ();
+            YYBACKUP ();
+            yych = YYPEEK ();
             switch (yych) {
             case '.':    goto yy95;
             case '0':    goto yy92;
@@ -755,12 +755,12 @@ yy22:
             default:    goto yy5;
             }
 yy23:
-            RE2C_SKIP ();
-            yych = RE2C_PEEK ();
+            YYSKIP ();
+            yych = YYPEEK ();
             goto yy71;
 yy24:
-            RE2C_SKIP ();
-            yych = RE2C_PEEK ();
+            YYSKIP ();
+            yych = YYPEEK ();
             switch (yych) {
             case '0':
             case '1':
@@ -775,8 +775,8 @@ yy24:
             default:    goto yy5;
             }
 yy25:
-            RE2C_SKIP ();
-            switch ((yych = RE2C_PEEK ())) {
+            YYSKIP ();
+            switch ((yych = YYPEEK ())) {
             case 'r':    goto yy59;
             default:    goto yy49;
             }
@@ -788,32 +788,32 @@ yy26:
             }
 #line 790 "<stdout>"
 yy27:
-            RE2C_SKIP ();
-            yych = RE2C_PEEK ();
+            YYSKIP ();
+            yych = YYPEEK ();
             switch (yych) {
             case 'a':    goto yy54;
             default:    goto yy49;
             }
 yy28:
-            RE2C_SKIP ();
-            yych = RE2C_PEEK ();
+            YYSKIP ();
+            yych = YYPEEK ();
             switch (yych) {
             case 'u':    goto yy50;
             default:    goto yy49;
             }
 yy29:
-            RE2C_SKIP ();
-            yych = RE2C_PEEK ();
+            YYSKIP ();
+            yych = YYPEEK ();
             goto yy49;
 yy30:
             yyaccept = 0;
-            RE2C_SKIP ();
-            RE2C_BACKUP ();
-            yych = RE2C_PEEK ();
+            YYSKIP ();
+            YYBACKUP ();
+            yych = YYPEEK ();
             if (yych <= 0x00) goto yy5;
             goto yy35;
 yy31:
-            RE2C_SKIP ();
+            YYSKIP ();
 #line 612 "input_custom_mjson.--input(custom).re"
             { 
                 context->token = TOK_NONE;
@@ -821,12 +821,12 @@ yy31:
             }
 #line 823 "<stdout>"
 yy33:
-            RE2C_SKIP ();
-            yych = RE2C_PEEK ();
+            YYSKIP ();
+            yych = YYPEEK ();
             goto yy5;
 yy34:
-            RE2C_SKIP ();
-            yych = RE2C_PEEK ();
+            YYSKIP ();
+            yych = YYPEEK ();
 yy35:
             switch (yych) {
             case 0x00:    goto yy36;
@@ -835,7 +835,7 @@ yy35:
             default:    goto yy34;
             }
 yy36:
-            RE2C_RESTORE ();
+            YYRESTORE ();
             switch (yyaccept) {
             case 0: 	goto yy5;
             case 1: 	goto yy65;
@@ -844,8 +844,8 @@ yy36:
             default:	goto yy120;
             }
 yy37:
-            RE2C_SKIP ();
-            yych = RE2C_PEEK ();
+            YYSKIP ();
+            yych = YYPEEK ();
             switch (yych) {
             case '"':
             case '/':
@@ -859,7 +859,7 @@ yy37:
             default:    goto yy36;
             }
 yy38:
-            RE2C_SKIP ();
+            YYSKIP ();
 #line 602 "input_custom_mjson.--input(custom).re"
             {
                 token = TOK_NOESC_STRING;
@@ -867,8 +867,8 @@ yy38:
             }
 #line 869 "<stdout>"
 yy40:
-            RE2C_SKIP ();
-            yych = RE2C_PEEK ();
+            YYSKIP ();
+            yych = YYPEEK ();
             switch (yych) {
             case '0':
             case '1':
@@ -895,8 +895,8 @@ yy40:
             default:    goto yy36;
             }
 yy41:
-            RE2C_SKIP ();
-            yych = RE2C_PEEK ();
+            YYSKIP ();
+            yych = YYPEEK ();
             switch (yych) {
             case 0x00:    goto yy36;
             case '"':    goto yy43;
@@ -904,7 +904,7 @@ yy41:
             default:    goto yy41;
             }
 yy43:
-            RE2C_SKIP ();
+            YYSKIP ();
 #line 607 "input_custom_mjson.--input(custom).re"
             {
                 token = TOK_STRING;
@@ -912,8 +912,8 @@ yy43:
             }
 #line 914 "<stdout>"
 yy45:
-            RE2C_SKIP ();
-            yych = RE2C_PEEK ();
+            YYSKIP ();
+            yych = YYPEEK ();
             switch (yych) {
             case '0':
             case '1':
@@ -940,8 +940,8 @@ yy45:
             default:    goto yy36;
             }
 yy46:
-            RE2C_SKIP ();
-            yych = RE2C_PEEK ();
+            YYSKIP ();
+            yych = YYPEEK ();
             switch (yych) {
             case '0':
             case '1':
@@ -968,8 +968,8 @@ yy46:
             default:    goto yy36;
             }
 yy47:
-            RE2C_SKIP ();
-            yych = RE2C_PEEK ();
+            YYSKIP ();
+            yych = YYPEEK ();
             switch (yych) {
             case '0':
             case '1':
@@ -996,8 +996,8 @@ yy47:
             default:    goto yy36;
             }
 yy48:
-            RE2C_SKIP ();
-            yych = RE2C_PEEK ();
+            YYSKIP ();
+            yych = YYPEEK ();
 yy49:
             switch (yych) {
             case '0':
@@ -1066,22 +1066,22 @@ yy49:
             default:    goto yy26;
             }
 yy50:
-            RE2C_SKIP ();
-            yych = RE2C_PEEK ();
+            YYSKIP ();
+            yych = YYPEEK ();
             switch (yych) {
             case 'l':    goto yy51;
             default:    goto yy49;
             }
 yy51:
-            RE2C_SKIP ();
-            yych = RE2C_PEEK ();
+            YYSKIP ();
+            yych = YYPEEK ();
             switch (yych) {
             case 'l':    goto yy52;
             default:    goto yy49;
             }
 yy52:
-            RE2C_SKIP ();
-            switch ((yych = RE2C_PEEK ())) {
+            YYSKIP ();
+            switch ((yych = YYPEEK ())) {
             case '0':
             case '1':
             case '2':
@@ -1155,29 +1155,29 @@ yy53:
             }
 #line 1157 "<stdout>"
 yy54:
-            RE2C_SKIP ();
-            yych = RE2C_PEEK ();
+            YYSKIP ();
+            yych = YYPEEK ();
             switch (yych) {
             case 'l':    goto yy55;
             default:    goto yy49;
             }
 yy55:
-            RE2C_SKIP ();
-            yych = RE2C_PEEK ();
+            YYSKIP ();
+            yych = YYPEEK ();
             switch (yych) {
             case 's':    goto yy56;
             default:    goto yy49;
             }
 yy56:
-            RE2C_SKIP ();
-            yych = RE2C_PEEK ();
+            YYSKIP ();
+            yych = YYPEEK ();
             switch (yych) {
             case 'e':    goto yy57;
             default:    goto yy49;
             }
 yy57:
-            RE2C_SKIP ();
-            switch ((yych = RE2C_PEEK ())) {
+            YYSKIP ();
+            switch ((yych = YYPEEK ())) {
             case '0':
             case '1':
             case '2':
@@ -1251,22 +1251,22 @@ yy58:
             }
 #line 1253 "<stdout>"
 yy59:
-            RE2C_SKIP ();
-            yych = RE2C_PEEK ();
+            YYSKIP ();
+            yych = YYPEEK ();
             switch (yych) {
             case 'u':    goto yy60;
             default:    goto yy49;
             }
 yy60:
-            RE2C_SKIP ();
-            yych = RE2C_PEEK ();
+            YYSKIP ();
+            yych = YYPEEK ();
             switch (yych) {
             case 'e':    goto yy61;
             default:    goto yy49;
             }
 yy61:
-            RE2C_SKIP ();
-            switch ((yych = RE2C_PEEK ())) {
+            YYSKIP ();
+            switch ((yych = YYPEEK ())) {
             case '0':
             case '1':
             case '2':
@@ -1341,9 +1341,9 @@ yy62:
 #line 1342 "<stdout>"
 yy63:
             yyaccept = 1;
-            RE2C_SKIP ();
-            RE2C_BACKUP ();
-            yych = RE2C_PEEK ();
+            YYSKIP ();
+            YYBACKUP ();
+            yych = YYPEEK ();
             switch (yych) {
             case '0':
             case '1':
@@ -1367,8 +1367,8 @@ yy65:
             }
 #line 1369 "<stdout>"
 yy66:
-            RE2C_SKIP ();
-            yych = RE2C_PEEK ();
+            YYSKIP ();
+            yych = YYPEEK ();
             switch (yych) {
             case '+':
             case '-':    goto yy67;
@@ -1385,8 +1385,8 @@ yy66:
             default:    goto yy36;
             }
 yy67:
-            RE2C_SKIP ();
-            yych = RE2C_PEEK ();
+            YYSKIP ();
+            yych = YYPEEK ();
             switch (yych) {
             case '0':
             case '1':
@@ -1401,8 +1401,8 @@ yy67:
             default:    goto yy36;
             }
 yy68:
-            RE2C_SKIP ();
-            yych = RE2C_PEEK ();
+            YYSKIP ();
+            yych = YYPEEK ();
             switch (yych) {
             case '0':
             case '1':
@@ -1417,8 +1417,8 @@ yy68:
             default:    goto yy65;
             }
 yy70:
-            RE2C_SKIP ();
-            yych = RE2C_PEEK ();
+            YYSKIP ();
+            yych = YYPEEK ();
 yy71:
             switch (yych) {
             case '.':    goto yy76;
@@ -1488,8 +1488,8 @@ yy71:
             default:    goto yy21;
             }
 yy72:
-            RE2C_SKIP ();
-            yych = RE2C_PEEK ();
+            YYSKIP ();
+            yych = YYPEEK ();
             switch (yych) {
             case '0':
             case '1':
@@ -1565,9 +1565,9 @@ yy74:
 #line 1566 "<stdout>"
 yy75:
             yyaccept = 2;
-            RE2C_SKIP ();
-            RE2C_BACKUP ();
-            yych = RE2C_PEEK ();
+            YYSKIP ();
+            YYBACKUP ();
+            yych = YYPEEK ();
             switch (yych) {
             case '+':
             case '-':    goto yy87;
@@ -1638,9 +1638,9 @@ yy75:
             }
 yy76:
             yyaccept = 1;
-            RE2C_SKIP ();
-            RE2C_BACKUP ();
-            yych = RE2C_PEEK ();
+            YYSKIP ();
+            YYBACKUP ();
+            yych = YYPEEK ();
             switch (yych) {
             case 'E':
             case 'e':    goto yy79;
@@ -1648,9 +1648,9 @@ yy76:
             }
 yy77:
             yyaccept = 1;
-            RE2C_SKIP ();
-            RE2C_BACKUP ();
-            yych = RE2C_PEEK ();
+            YYSKIP ();
+            YYBACKUP ();
+            yych = YYPEEK ();
 yy78:
             switch (yych) {
             case '0':
@@ -1668,8 +1668,8 @@ yy78:
             default:    goto yy65;
             }
 yy79:
-            RE2C_SKIP ();
-            yych = RE2C_PEEK ();
+            YYSKIP ();
+            yych = YYPEEK ();
             switch (yych) {
             case '+':
             case '-':    goto yy80;
@@ -1686,8 +1686,8 @@ yy79:
             default:    goto yy36;
             }
 yy80:
-            RE2C_SKIP ();
-            yych = RE2C_PEEK ();
+            YYSKIP ();
+            yych = YYPEEK ();
             switch (yych) {
             case '0':
             case '1':
@@ -1702,8 +1702,8 @@ yy80:
             default:    goto yy36;
             }
 yy81:
-            RE2C_SKIP ();
-            yych = RE2C_PEEK ();
+            YYSKIP ();
+            yych = YYPEEK ();
             switch (yych) {
             case '0':
             case '1':
@@ -1718,8 +1718,8 @@ yy81:
             default:    goto yy65;
             }
 yy83:
-            RE2C_SKIP ();
-            yych = RE2C_PEEK ();
+            YYSKIP ();
+            yych = YYPEEK ();
             switch (yych) {
             case '+':
             case '-':    goto yy84;
@@ -1736,8 +1736,8 @@ yy83:
             default:    goto yy36;
             }
 yy84:
-            RE2C_SKIP ();
-            yych = RE2C_PEEK ();
+            YYSKIP ();
+            yych = YYPEEK ();
             switch (yych) {
             case '0':
             case '1':
@@ -1752,8 +1752,8 @@ yy84:
             default:    goto yy36;
             }
 yy85:
-            RE2C_SKIP ();
-            yych = RE2C_PEEK ();
+            YYSKIP ();
+            yych = YYPEEK ();
             switch (yych) {
             case '0':
             case '1':
@@ -1768,8 +1768,8 @@ yy85:
             default:    goto yy65;
             }
 yy87:
-            RE2C_SKIP ();
-            yych = RE2C_PEEK ();
+            YYSKIP ();
+            yych = YYPEEK ();
             switch (yych) {
             case '0':
             case '1':
@@ -1784,8 +1784,8 @@ yy87:
             default:    goto yy36;
             }
 yy88:
-            RE2C_SKIP ();
-            yych = RE2C_PEEK ();
+            YYSKIP ();
+            yych = YYPEEK ();
             switch (yych) {
             case '0':
             case '1':
@@ -1853,8 +1853,8 @@ yy88:
             default:    goto yy65;
             }
 yy90:
-            RE2C_SKIP ();
-            yych = RE2C_PEEK ();
+            YYSKIP ();
+            yych = YYPEEK ();
             switch (yych) {
             case '0':
             case '1':
@@ -1870,9 +1870,9 @@ yy90:
             }
 yy92:
             yyaccept = 3;
-            RE2C_SKIP ();
-            RE2C_BACKUP ();
-            yych = RE2C_PEEK ();
+            YYSKIP ();
+            YYBACKUP ();
+            yych = YYPEEK ();
             switch (yych) {
             case '.':    goto yy76;
             case '0':
@@ -1891,9 +1891,9 @@ yy92:
             }
 yy93:
             yyaccept = 3;
-            RE2C_SKIP ();
-            RE2C_BACKUP ();
-            yych = RE2C_PEEK ();
+            YYSKIP ();
+            YYBACKUP ();
+            yych = YYPEEK ();
             switch (yych) {
             case '.':    goto yy76;
             case '0':
@@ -1911,8 +1911,8 @@ yy93:
             default:    goto yy21;
             }
 yy95:
-            RE2C_SKIP ();
-            yych = RE2C_PEEK ();
+            YYSKIP ();
+            yych = YYPEEK ();
             switch (yych) {
             case '0':
             case '1':
@@ -1927,8 +1927,8 @@ yy95:
             default:    goto yy36;
             }
 yy96:
-            RE2C_SKIP ();
-            yych = RE2C_PEEK ();
+            YYSKIP ();
+            yych = YYPEEK ();
             switch (yych) {
             case '+':
             case '-':    goto yy87;
@@ -1945,8 +1945,8 @@ yy96:
             default:    goto yy36;
             }
 yy97:
-            RE2C_SKIP ();
-            yych = RE2C_PEEK ();
+            YYSKIP ();
+            yych = YYPEEK ();
             switch (yych) {
             case '.':    goto yy76;
             case '0':
@@ -1964,8 +1964,8 @@ yy97:
             default:    goto yy36;
             }
 yy99:
-            RE2C_SKIP ();
-            yych = RE2C_PEEK ();
+            YYSKIP ();
+            yych = YYPEEK ();
 yy100:
             switch (yych) {
             case '.':    goto yy76;
@@ -2042,8 +2042,8 @@ yy101:
             }
 #line 2044 "<stdout>"
 yy102:
-            RE2C_SKIP ();
-            yych = RE2C_PEEK ();
+            YYSKIP ();
+            yych = YYPEEK ();
             switch (yych) {
             case '.':    goto yy76;
             case '0':
@@ -2112,8 +2112,8 @@ yy102:
             default:    goto yy74;
             }
 yy104:
-            RE2C_SKIP ();
-            yych = RE2C_PEEK ();
+            YYSKIP ();
+            yych = YYPEEK ();
             switch (yych) {
             case '0':
             case '1':
@@ -2181,8 +2181,8 @@ yy104:
             default:    goto yy74;
             }
 yy105:
-            RE2C_SKIP ();
-            yych = RE2C_PEEK ();
+            YYSKIP ();
+            yych = YYPEEK ();
 yy106:
             switch (yych) {
             case '0':
@@ -2258,39 +2258,39 @@ yy107:
             }
 #line 2260 "<stdout>"
 yy108:
-            RE2C_SKIP ();
-            yych = RE2C_PEEK ();
+            YYSKIP ();
+            yych = YYPEEK ();
             switch (yych) {
             case 0x00:    goto yy36;
             case '*':    goto yy114;
             default:    goto yy108;
             }
 yy110:
-            RE2C_SKIP ();
-            yych = RE2C_PEEK ();
+            YYSKIP ();
+            yych = YYPEEK ();
             switch (yych) {
             case 0x00:    goto yy36;
             case '\n':    goto yy112;
             default:    goto yy110;
             }
 yy112:
-            RE2C_SKIP ();
+            YYSKIP ();
 #line 519 "input_custom_mjson.--input(custom).re"
             {
                 continue; 
             }
 #line 2283 "<stdout>"
 yy114:
-            RE2C_SKIP ();
-            yych = RE2C_PEEK ();
+            YYSKIP ();
+            yych = YYPEEK ();
             switch (yych) {
             case '*':    goto yy117;
             case '/':    goto yy119;
             default:    goto yy116;
             }
 yy115:
-            RE2C_SKIP ();
-            yych = RE2C_PEEK ();
+            YYSKIP ();
+            yych = YYPEEK ();
 yy116:
             switch (yych) {
             case 0x00:    goto yy36;
@@ -2298,8 +2298,8 @@ yy116:
             default:    goto yy115;
             }
 yy117:
-            RE2C_SKIP ();
-            yych = RE2C_PEEK ();
+            YYSKIP ();
+            yych = YYPEEK ();
             switch (yych) {
             case 0x00:    goto yy36;
             case '*':    goto yy117;
@@ -2307,7 +2307,7 @@ yy117:
             default:    goto yy115;
             }
 yy119:
-            RE2C_SKIP ();
+            YYSKIP ();
 yy120:
 #line 523 "input_custom_mjson.--input(custom).re"
             {
@@ -2316,17 +2316,17 @@ yy120:
 #line 2317 "<stdout>"
 yy121:
             yyaccept = 4;
-            RE2C_SKIP ();
-            RE2C_BACKUP ();
-            yych = RE2C_PEEK ();
+            YYSKIP ();
+            YYBACKUP ();
+            yych = YYPEEK ();
             switch (yych) {
             case 0x00:    goto yy120;
             case '*':    goto yy122;
             default:    goto yy115;
             }
 yy122:
-            RE2C_SKIP ();
-            yych = RE2C_PEEK ();
+            YYSKIP ();
+            yych = YYPEEK ();
             switch (yych) {
             case 0x00:    goto yy36;
             case '*':    goto yy123;
@@ -2334,8 +2334,8 @@ yy122:
             default:    goto yy115;
             }
 yy123:
-            RE2C_SKIP ();
-            yych = RE2C_PEEK ();
+            YYSKIP ();
+            yych = YYPEEK ();
             switch (yych) {
             case 0x00:    goto yy36;
             case '*':    goto yy123;
@@ -2343,8 +2343,8 @@ yy123:
             default:    goto yy115;
             }
 yy125:
-            RE2C_SKIP ();
-            yych = RE2C_PEEK ();
+            YYSKIP ();
+            yych = YYPEEK ();
 yy126:
             switch (yych) {
             case '\t':
@@ -2477,7 +2477,7 @@ static int parse_string(mjson_parser_t *context, uint32_t id)
 #line 2478 "<stdout>"
         {
             YYCTYPE yych;
-            yych = RE2C_PEEK ();
+            yych = YYPEEK ();
             switch (yych) {
             case 0x00:    goto yy135;
             case '"':    goto yy133;
@@ -2485,8 +2485,8 @@ static int parse_string(mjson_parser_t *context, uint32_t id)
             default:    goto yy129;
             }
 yy129:
-            RE2C_SKIP ();
-            yych = RE2C_PEEK ();
+            YYSKIP ();
+            yych = YYPEEK ();
             goto yy146;
 yy130:
 #line 745 "input_custom_mjson.--input(custom).re"
@@ -2501,9 +2501,9 @@ yy130:
             }
 #line 2503 "<stdout>"
 yy131:
-            RE2C_SKIP ();
-            RE2C_BACKUP ();
-            yych = RE2C_PEEK ();
+            YYSKIP ();
+            YYBACKUP ();
+            yych = YYPEEK ();
             switch (yych) {
             case '"':
             case '/':
@@ -2523,7 +2523,7 @@ yy132:
             }
 #line 2525 "<stdout>"
 yy133:
-            RE2C_SKIP ();
+            YYSKIP ();
 #line 801 "input_custom_mjson.--input(custom).re"
             {
                 bdata->val_u32 = context->bjson - (uint8_t*)(bdata + 1);
@@ -2535,12 +2535,12 @@ yy133:
             }
 #line 2537 "<stdout>"
 yy135:
-            RE2C_SKIP ();
-            yych = RE2C_PEEK ();
+            YYSKIP ();
+            yych = YYPEEK ();
             goto yy132;
 yy136:
-            RE2C_SKIP ();
-            yych = RE2C_PEEK ();
+            YYSKIP ();
+            yych = YYPEEK ();
             switch (yych) {
             case '0':
             case '1':
@@ -2567,10 +2567,10 @@ yy136:
             default:    goto yy137;
             }
 yy137:
-            RE2C_RESTORE ();
+            YYRESTORE ();
             goto yy132;
 yy138:
-            RE2C_SKIP ();
+            YYSKIP ();
 #line 756 "input_custom_mjson.--input(custom).re"
             {
                 char decoded = s[1];
@@ -2604,8 +2604,8 @@ yy138:
             }
 #line 2606 "<stdout>"
 yy140:
-            RE2C_SKIP ();
-            yych = RE2C_PEEK ();
+            YYSKIP ();
+            yych = YYPEEK ();
             switch (yych) {
             case '0':
             case '1':
@@ -2632,8 +2632,8 @@ yy140:
             default:    goto yy137;
             }
 yy141:
-            RE2C_SKIP ();
-            yych = RE2C_PEEK ();
+            YYSKIP ();
+            yych = YYPEEK ();
             switch (yych) {
             case '0':
             case '1':
@@ -2660,8 +2660,8 @@ yy141:
             default:    goto yy137;
             }
 yy142:
-            RE2C_SKIP ();
-            yych = RE2C_PEEK ();
+            YYSKIP ();
+            yych = YYPEEK ();
             switch (yych) {
             case '0':
             case '1':
@@ -2688,7 +2688,7 @@ yy142:
             default:    goto yy137;
             }
 yy143:
-            RE2C_SKIP ();
+            YYSKIP ();
 #line 787 "input_custom_mjson.--input(custom).re"
             {
                 str_dst = (uint8_t*)parsectx_reserve_output(context, 6);
@@ -2705,8 +2705,8 @@ yy143:
             }
 #line 2707 "<stdout>"
 yy145:
-            RE2C_SKIP ();
-            yych = RE2C_PEEK ();
+            YYSKIP ();
+            yych = YYPEEK ();
 yy146:
             switch (yych) {
             case 0x00:
