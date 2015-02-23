@@ -28,7 +28,7 @@ man_MANS = re2c.1
 DOCS = $(man_MANS) htdocs/manual.html
 
 EXTRA_SRC    = README parser.y scanner.re y.tab.h CHANGELOG NO_WARRANTY \
-               doc examples test bootstrap/*.cc bootstrap/*.h lessons \
+               doc examples test bootstrap/*.cc bootstrap/*.h bootstrap/re2c.1 lessons \
                $(DOCS)
 EXTRA_DIST   = $(EXTRA_SRC) makerpm.in re2c.spec.in re2c.spec README.in config_w32.h.in
 EXTRA_ZIP    = $(EXTRA_SRC) config_w32.h re2c.rules
