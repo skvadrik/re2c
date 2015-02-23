@@ -13,7 +13,7 @@ These are three examples of "--input custom" usage:
 
 Note that these examples are very simple and don't need
 to implement YYFILL; the only reason they don't use
-"re2c:yyfill:enable = 0;" is to keep YYEOI and YYLIMIT
+"re2c:yyfill:enable = 0;" is to keep YYLESSTHAN and YYLIMIT
 (for the sake of example).
 
 In real-life programs one will need to care for correct

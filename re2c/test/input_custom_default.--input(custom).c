@@ -11,14 +11,14 @@ bool lex (const char * cursor, const char * const limit)
 #   define YYBACKUPCTX()  ctxmarker = cursor
 #   define YYRESTORE()    cursor = marker
 #   define YYRESTORECTX() cursor = ctxmarker
-#   define YYEOI(n)       limit - cursor < n
+#   define YYLESSTHAN(n)  limit - cursor < n
 #   define YYFILL(n)      {}
     
 #line 18 "<stdout>"
 {
 	YYCTYPE yych;
 
-	if (YYEOI (13)) YYFILL(13);
+	if (YYLESSTHAN (13)) YYFILL(13);
 	yych = YYPEEK ();
 	switch (yych) {
 	case 'i':	goto yy4;
@@ -130,7 +130,7 @@ yy16:
 	}
 yy17:
 	YYSKIP ();
-	if (YYEOI (1)) YYFILL(1);
+	if (YYLESSTHAN (1)) YYFILL(1);
 	yych = YYPEEK ();
 	switch (yych) {
 	case '0':

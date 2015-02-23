@@ -408,7 +408,7 @@ static void need(std::ostream &o, uint ind, uint n, bool & readCh, bool bSetMark
 		{
 			if (bUseYYFillCheck)
 			{
-				o << "if (" << input_api.expr_eoi_one () << ") ";
+				o << "if (" << input_api.expr_lessthan_one () << ") ";
 			}
 			genYYFill(o, ind, n);
 		}
@@ -416,7 +416,7 @@ static void need(std::ostream &o, uint ind, uint n, bool & readCh, bool bSetMark
 		{
 			if (bUseYYFillCheck)
 			{
-				o << "if (" << input_api.expr_eoi (n) << ") ";
+				o << "if (" << input_api.expr_lessthan (n) << ") ";
 			}
 			genYYFill(o, ind, n);
 		}
@@ -2318,7 +2318,7 @@ void Scanner::config(const Str& cfg, const Str& val)
 		mapDefineKeys.insert("define:YYFILL");
 		mapDefineKeys.insert("define:YYGETCONDITION");
 		mapDefineKeys.insert("define:YYGETSTATE");
-		mapDefineKeys.insert("define:YYEOI");
+		mapDefineKeys.insert("define:YYLESSTHAN");
 		mapDefineKeys.insert("define:YYLIMIT");
 		mapDefineKeys.insert("define:YYMARKER");
 		mapDefineKeys.insert("define:YYPEEK");

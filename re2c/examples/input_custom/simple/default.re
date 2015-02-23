@@ -9,7 +9,7 @@ bool lex (const char * cursor, const char * const limit)
 #   define YYBACKUPCTX()  ctxmarker = cursor
 #   define YYRESTORE()    cursor = marker
 #   define YYRESTORECTX() cursor = ctxmarker
-#   define YYEOI(n)       limit - cursor < n
+#   define YYLESSTHAN(n)  limit - cursor < n
 #   define YYFILL(n)      {}
     /*!re2c
         "int buffer " / "[" [0-9]+ "]" { return true; }

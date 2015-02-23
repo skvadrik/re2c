@@ -11,7 +11,7 @@ bool lex (std::istringstream & is, const std::streampos limit)
 #   define YYBACKUPCTX()  ctxmarker = is.tellg ()
 #   define YYRESTORE()    is.seekg (marker)
 #   define YYRESTORECTX() is.seekg (ctxmarker)
-#   define YYEOI(n)       limit - is.tellg () < n
+#   define YYLESSTHAN(n)  limit - is.tellg () < n
 #   define YYFILL(n)      {}
     /*!re2c
         "int buffer " / "[" [0-9]+ "]" { return true; }
