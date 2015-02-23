@@ -2,12 +2,12 @@
 .\"     Title: re2c
 .\"    Author: [see the "AUTHORS" section]
 .\" Generator: DocBook XSL Stylesheets v1.78.0 <http://docbook.sf.net/>
-.\"      Date: 09/26/2014
+.\"      Date: 02/23/2015
 .\"    Manual: \ \&
 .\"    Source: \ \&
 .\"  Language: English
 .\"
-.TH "RE2C" "1" "09/26/2014" "\ \&" "\ \&"
+.TH "RE2C" "1" "02/23/2015" "\ \&" "\ \&"
 .\" -----------------------------------------------------------------
 .\" * Define some portability stuff
 .\" -----------------------------------------------------------------
@@ -1256,6 +1256,106 @@ must be 1 bytes\&.
 In Unicode, values from range 0xD800 to 0xDFFF (surrogates) are not valid Unicode code points, any encoded sequence of code units, that would map to Unicode code points in the range 0xD800\-0xDFFF, is ill\-formed\&. The user can control how \fBre2c\fR treats such ill\-formed sequences with \fB\-\-encoding\-policy\fR \fIpolicy\fR flag (see \fBOPTIONS\fR section for full explanation)\&.
 .sp
 For some encodings, there are code units, that never occur in valid encoded stream (e\&.g\&. 0xFF byte in UTF\-8)\&. If the generated scanner must check for invalid input, the only true way to do so is to use default rule \fB*\fR\&. Note, that full range rule \fB[^]\fR won\(cqt catch invalid code units when variable\-length encoding is used (\fB[^]\fR means \(lqall valid code points\(rq, while default rule \fB*\fR means \(lqall possible code units\(rq: see \fBNote\fR about default rule in \fBSYNTAX\fR section)\&.
+.SH "GENERIC INPUT API"
+.sp
+\fBre2c\fR usually operates on input using pointer\-like primitives \fBYYCURSOR\fR, \fBYYMARKER\fR, \fBYYCTXMARKER\fR and \fBYYLIMIT\fR\&.
+.sp
+Generic input API (enabled with \fB\-\-input custom\fR switch) allows to customize input operations\&. In this mode, \fBre2c\fR will express all operations on input in terms of the following primitives:
+.sp
+.RS 4
+.ie n \{\
+\h'-04' 1.\h'+01'\c
+.\}
+.el \{\
+.sp -1
+.IP "  1." 4.2
+.\}
+
+\fBYYPEEK ()\fR
+\-\-\- get current input character
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04' 2.\h'+01'\c
+.\}
+.el \{\
+.sp -1
+.IP "  2." 4.2
+.\}
+
+\fBYYSKIP ()\fR
+\-\-\- advance to the next character
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04' 3.\h'+01'\c
+.\}
+.el \{\
+.sp -1
+.IP "  3." 4.2
+.\}
+
+\fBYYBACKUP ()\fR
+\-\-\- backup current input position
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04' 4.\h'+01'\c
+.\}
+.el \{\
+.sp -1
+.IP "  4." 4.2
+.\}
+
+\fBYYBACKUPCTX ()\fR
+\-\-\- backup current input position for trailing context
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04' 5.\h'+01'\c
+.\}
+.el \{\
+.sp -1
+.IP "  5." 4.2
+.\}
+
+\fBYYRESTORE ()\fR
+\-\-\- restore current input position
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04' 6.\h'+01'\c
+.\}
+.el \{\
+.sp -1
+.IP "  6." 4.2
+.\}
+
+\fBYYRESTORECTX ()\fR
+\-\-\- restore current input position for trailing context
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04' 7.\h'+01'\c
+.\}
+.el \{\
+.sp -1
+.IP "  7." 4.2
+.\}
+
+\fBYYLESSTHAN (n)\fR
+\-\-\- check if less than
+\fBn\fR
+input characters are left
+.RE
+.sp
+This article (http://skvadrik\&.github\&.io/aleph_null/posts/re2c/2015\-01\-13\-input_model\&.html) has more details, and you can find some usage examples: http://skvadrik\&.github\&.io/aleph_null/posts/re2c/2015\-01\-15\-input_model_custom\&.html \&.
 .SH "UNDERSTANDING RE2C"
 .sp
 The subdirectory lessons of the \fBre2c\fR distribution contains a few step by step lessons to get you started with \fBre2c\fR\&. All examples in the lessons subdirectory can be compiled and actually work\&.
@@ -1411,8 +1511,7 @@ mgix@mgix\&.com
 .\}
 Ulya Trofimovich
 skvadrik@gmail\&.com
-(added UTF\-8 and UTF\-16 support)
 .RE
 .SH "VERSION INFORMATION"
 .sp
-This manpage describes \fBre2c\fR, version 0\&.13\&.8\&.dev, package date 26 Sep 2014\&.
+This manpage describes \fBre2c\fR, version 0\&.14, package date 23 Feb 2015\&.

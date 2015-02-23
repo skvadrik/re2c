@@ -101,6 +101,7 @@ $(DOCS): re2c.ad
 	a2x -f manpage re2c.ad
 	mkdir -p htdocs
 	asciidoc -o htdocs/manual.html re2c.ad
+	cp re2c.1 $(top_srcdir)/bootstrap/re2c.1
 else
 docs: $(DOCS)
 $(DOCS): $(top_srcdir)/bootstrap/re2c.1
