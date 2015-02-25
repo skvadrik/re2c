@@ -2,9 +2,9 @@
 #ifndef _parser_h
 #define _parser_h
 
-#include "scanner.h"
+#include "output.h"
 #include "re.h"
-#include <iosfwd>
+#include "scanner.h"
 
 namespace re2c
 {
@@ -53,7 +53,7 @@ private:
 #endif
 };
 
-extern void parse(Scanner&, std::ostream&, std::ostream*);
+extern void parse(Scanner &, Output &);
 extern void parse_cleanup();
 
 } // end namespace re2c

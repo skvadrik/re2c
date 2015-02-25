@@ -3,11 +3,11 @@
 bin_PROGRAMS = re2c
 win_BINARIES = $(WINBUILDDIR)/re2c.exe
 re2c_SOURCES = code.cc dfa.cc main.cc parser.cc actions.cc scanner.re substr.cc range.cc \
-	translate.cc scanner.cc mbo_getopt.cc print.cc input_api.cc \
+	translate.cc scanner.cc mbo_getopt.cc print.cc input_api.cc output.cc \
 	enc.cc utf8.cc utf8_range.cc utf8_regexp.cc utf16.cc utf16_range.cc utf16_regexp.cc range_suffix.cc \
 	basics.h code.h code_names.h dfa.h enc.h indent.h input_api.h free_list.h globals.h ins.h \
 	mbo_getopt.h parser.h print.h range.h range_suffix.h re.h \
-	scanner.h smart_ptr.h substr.h stream_lc.h token.h \
+	scanner.h smart_ptr.h substr.h stream_lc.h token.h output.h \
 	utf16.h utf16_range.h utf16_regexp.h utf8.h utf8_range.h utf8_regexp.h
 BUILT_SOURCES = parser.cc scanner.cc
 
@@ -101,7 +101,6 @@ $(DOCS): re2c.ad
 	a2x -f manpage re2c.ad
 	mkdir -p htdocs
 	asciidoc -o htdocs/manual.html re2c.ad
-	cp re2c.1 $(top_srcdir)/bootstrap/re2c.1
 else
 docs: $(DOCS)
 $(DOCS): $(top_srcdir)/bootstrap/re2c.1

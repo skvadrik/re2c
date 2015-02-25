@@ -8,12 +8,14 @@
 #include <list>
 #include <vector>
 #include <string>
-#include "token.h"
-#include "ins.h"
+
 #include "free_list.h"
 #include "globals.h"
+#include "ins.h"
+#include "output.h"
 #include "range.h"
 #include "smart_ptr.h"
+#include "token.h"
 
 namespace re2c
 {
@@ -407,11 +409,17 @@ typedef std::map<std::string, Token*>   DefaultMap;
 class DFA;
 
 extern smart_ptr<DFA> genCode(RegExp*);
-extern void genGetStateGoto(std::ostream&, uint&, uint);
-extern void genCondTable(std::ostream&, uint, const RegExpMap&);
-extern void genCondGoto(std::ostream&, uint, const RegExpMap&);
-extern void genTypes(std::string&, uint, const RegExpMap&);
-extern void genHeader(std::ostream&, uint, const RegExpMap&);
+extern void genCondTable(OutputFile &, uint, const RegExpMap&);
+extern void genCondGoto(OutputFile &, uint, const RegExpMap&);
+extern void genTypes(Output &, const RegExpMap&);
+
+extern void output_state_goto (OutputFragment &, uint);
+extern void output_types (OutputFragment &, const std::vector<std::string> &);
+extern void output_version_time (OutputFile &);
+extern void output_yyaccept_init (OutputFragment &, bool);
+extern void output_yyaccept_selector (OutputFragment &, bool);
+extern void output_yymaxfill (OutputFragment &, uint);
+extern void output_line_info (OutputFragment &, uint, const char *);
 
 extern RegExp *mkDiff(RegExp*, RegExp*);
 extern RegExp *mkAlt(RegExp*, RegExp*);

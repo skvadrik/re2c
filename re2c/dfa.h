@@ -23,7 +23,7 @@ public:
 	Action(State*);
 	virtual ~Action();
 
-	virtual void emit(std::ostream&, uint, bool&, const std::string&) const = 0;
+	virtual void emit(Output &, uint, bool&, const std::string&) const = 0;
 	virtual bool isRule() const;
 	virtual bool isMatch() const;
 	virtual bool isInitial() const;
@@ -47,7 +47,7 @@ class Match: public Action
 {
 public:
 	Match(State*);
-	void emit(std::ostream&, uint, bool&, const std::string&) const;
+	void emit(Output &, uint, bool&, const std::string&) const;
 	bool isMatch() const;
 };
 
@@ -58,7 +58,7 @@ public:
 
 public:
 	Enter(State*, uint);
-	void emit(std::ostream&, uint, bool&, const std::string&) const;
+	void emit(Output &, uint, bool&, const std::string&) const;
 };
 
 class Initial: public Enter
@@ -68,7 +68,7 @@ public:
 
 public:
 	Initial(State*, uint, bool);
-	void emit(std::ostream&, uint, bool&, const std::string&) const;
+	void emit(Output &, uint, bool&, const std::string&) const;
 	bool isInitial() const;
 };
 
@@ -80,7 +80,7 @@ public:
 
 public:
 	Save(State*, uint);
-	void emit(std::ostream&, uint, bool&, const std::string&) const;
+	void emit(Output &, uint, bool&, const std::string&) const;
 	bool isMatch() const;
 };
 
@@ -89,7 +89,7 @@ class Move: public Action
 
 public:
 	Move(State*);
-	void emit(std::ostream&, uint, bool&, const std::string&) const;
+	void emit(Output &, uint, bool&, const std::string&) const;
 };
 
 class Accept: public Action
@@ -105,8 +105,8 @@ public:
 
 public:
 	Accept(State*, uint, uint*, State**);
-	void emit(std::ostream&, uint, bool&, const std::string&) const;
-	void emitBinary(std::ostream &o, uint ind, uint l, uint r, bool &readCh) const;
+	void emit(Output &, uint, bool&, const std::string&) const;
+	void emitBinary(OutputFile & o, uint ind, uint l, uint r, bool &readCh) const;
 	void genRuleMap();
 
 #ifdef PEDANTIC
@@ -134,7 +134,7 @@ public:
 
 public:
 	Rule(State*, RuleOp*);
-	void emit(std::ostream&, uint, bool&, const std::string&) const;
+	void emit(Output &, uint, bool&, const std::string&) const;
 	bool isRule() const;
 
 #ifdef PEDANTIC
@@ -185,12 +185,12 @@ public:
 	Span	*span;
 
 public:
-	void genGoto(  std::ostream&, uint ind, const State *from, const State *next, bool &readCh);
-	void genBase(  std::ostream&, uint ind, const State *from, const State *next, bool &readCh, uint mask) const;
-	void genLinear(std::ostream&, uint ind, const State *from, const State *next, bool &readCh, uint mask) const;
-	void genBinary(std::ostream&, uint ind, const State *from, const State *next, bool &readCh, uint mask) const;
-	void genSwitch(std::ostream&, uint ind, const State *from, const State *next, bool &readCh, uint mask) const;
-	void genCpGoto(std::ostream&, uint ind, const State *from, const State *next, bool &readCh) const;
+	void genGoto(OutputFile &, uint ind, const State *from, const State *next, bool &readCh);
+	void genBase(OutputFile &, uint ind, const State *from, const State *next, bool &readCh, uint mask) const;
+	void genLinear(OutputFile &, uint ind, const State *from, const State *next, bool &readCh, uint mask) const;
+	void genBinary(OutputFile &, uint ind, const State *from, const State *next, bool &readCh, uint mask) const;
+	void genSwitch(OutputFile &, uint ind, const State *from, const State *next, bool &readCh, uint mask) const;
+	void genCpGoto(OutputFile &, uint ind, const State *from, const State *next, bool &readCh) const;
 	void compact();
 	void unmap(Go*, const State*);
 };
@@ -215,7 +215,7 @@ public:
 public:
 	State();
 	~State();
-	void emit(std::ostream&, uint, bool&, const std::string&) const;
+	void emit(Output &, uint, bool&, const std::string&) const;
 	friend std::ostream& operator<<(std::ostream&, const State&);
 	friend std::ostream& operator<<(std::ostream&, const State*);
 
@@ -268,8 +268,8 @@ public:
 
 	void findSCCs();
 	void findBaseState();
-	void prepare();
-	void emit(std::ostream&, uint&, const RegExpMap*, const std::string&, bool, bool&);
+	void prepare(uint &);
+	void emit(Output &, uint&, const RegExpMap*, const std::string&, bool, bool&);
 
 	friend std::ostream& operator<<(std::ostream&, const DFA&);
 	friend std::ostream& operator<<(std::ostream&, const DFA*);

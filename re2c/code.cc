@@ -2,11 +2,12 @@
 #include <stdarg.h>
 #include <stdlib.h>
 #include <string.h>
+#include <ctime>
 #include <ctype.h>
 #include <iomanip>
 #include <iostream>
 #include <sstream>
-#include <time.h>
+
 #include "code.h"
 #include "globals.h"
 #include "dfa.h"
@@ -39,7 +40,7 @@ std::string replaceParam(std::string str, const std::string& param, const _Ty& v
 	return str;
 }
 
-static void genYYFill(std::ostream &o, uint, uint need)
+static void genYYFill(OutputFile & o, uint, uint need)
 {
 	if (bUseYYFillParam)
 	{
@@ -85,7 +86,7 @@ static std::string genGetCondition()
 	}
 }
 
-static void genSetCondition(std::ostream& o, uint ind, const std::string& newcond)
+static void genSetCondition(OutputFile & o, uint ind, const std::string& newcond)
 {
 	if (bUseYYSetConditionParam)
 	{
@@ -165,22 +166,6 @@ static void doGen(const Go *g, const State *s, uint *bm, uint f, uint m)
 			{
 				bm[lb-f] |= m;
 			}
-		}
-
-		lb = b->ub;
-	}
-}
-
-static void prt(std::ostream& o, const Go *g, const State *s)
-{
-	Span *b = g->span, *e = &b[g->nSpans];
-	uint lb = 0;
-
-	for (; b < e; ++b)
-	{
-		if (b->to == s)
-		{
-			printSpan(o, lb, b->ub);
 		}
 
 		lb = b->ub;
@@ -269,9 +254,9 @@ const BitMap *BitMap::find(const State *x)
 	return NULL;
 }
 
-void BitMap::gen(std::ostream &o, uint ind, uint lb, uint ub)
+void BitMap::gen(OutputFile & o, uint ind, uint lb, uint ub)
 {
-	if (first && bLastPass && bUsedYYBitmap)
+	if (first && bUsedYYBitmap)
 	{
 		o << indent(ind) << "static const unsigned char " << mapCodeName["yybm"] << "[] = {";
 
@@ -311,39 +296,23 @@ void BitMap::gen(std::ostream &o, uint ind, uint lb, uint ub)
 
 				if (yybmHexTable)
 				{
-					prtHex(o, bm[j]);
+					prtHex(o.fragment (), bm[j]);
 				}
 				else
 				{
-					o << std::setw(3) << (uint)bm[j];
+					o << Setw (3) << (uint)bm[j];
 				}
 				o  << ", ";
 			}
 		}
 
 		o << "\n" << indent(ind) << "};\n";
-		/* stats(); */
 		
 		delete[] bm;
 	}
 }
 
-void BitMap::stats()
-{
-	uint n = 0;
-
-	for (const BitMap *b = first; b; b = b->next)
-	{
-		prt(std::cerr, b->go, b->on);
-		std::cerr << std::endl;
-		++n;
-	}
-
-	std::cerr << n << " bitmaps\n";
-	first = NULL;
-}
-
-static void genGoTo(std::ostream &o, uint ind, const State *from, const State *to, bool & readCh)
+static void genGoTo(OutputFile & o, uint ind, const State *from, const State *to, bool & readCh)
 {
 	if (DFlag)
 	{
@@ -361,7 +330,7 @@ static void genGoTo(std::ostream &o, uint ind, const State *from, const State *t
 	vUsedLabels.insert(to->label);
 }
 
-static void genIf(std::ostream &o, uint ind, const char *cmp, uint v, bool &readCh)
+static void genIf(OutputFile & o, uint ind, const char *cmp, uint v, bool &readCh)
 {
 	o << indent(ind) << "if (";
 	if (readCh)
@@ -375,11 +344,11 @@ static void genIf(std::ostream &o, uint ind, const char *cmp, uint v, bool &read
 	}
 
 	o << " " << cmp << " ";
-	prtChOrHex(o, v);
+	prtChOrHex(o.fragment (), v);
 	o << ") ";
 }
 
-static void need(std::ostream &o, uint ind, uint n, bool & readCh, bool bSetMarker)
+static void need(OutputFile & o, uint ind, uint n, bool & readCh, bool bSetMarker)
 {
 	if (DFlag)
 	{
@@ -441,8 +410,10 @@ static void need(std::ostream &o, uint ind, uint n, bool & readCh, bool bSetMark
 	}
 }
 
-void Match::emit(std::ostream &o, uint ind, bool &readCh, const std::string&) const
+void Match::emit(Output & output, uint ind, bool &readCh, const std::string&) const
 {
+	OutputFile & o = output.source;
+
 	if (DFlag)
 	{
 		return;
@@ -470,8 +441,10 @@ void Match::emit(std::ostream &o, uint ind, bool &readCh, const std::string&) co
 	}
 }
 
-void Enter::emit(std::ostream &o, uint ind, bool &readCh, const std::string&) const
+void Enter::emit(Output & output, uint ind, bool &readCh, const std::string&) const
 {
+	OutputFile & o = output.source;
+
 	if (state->link)
 	{
 		o << input_api.stmt_skip (ind);
@@ -493,8 +466,10 @@ void Enter::emit(std::ostream &o, uint ind, bool &readCh, const std::string&) co
 	}
 }
 
-void Initial::emit(std::ostream &o, uint ind, bool &readCh, const std::string&) const
+void Initial::emit(Output & output, uint ind, bool &readCh, const std::string&) const
 {
+	OutputFile & o = output.source;
+
 	if (!cFlag && !startLabelName.empty())
 	{
 		o << startLabelName << ":\n";
@@ -523,7 +498,7 @@ void Initial::emit(std::ostream &o, uint ind, bool &readCh, const std::string&) 
 
 	if (dFlag)
 	{
-		o << indent(ind) << mapCodeName["YYDEBUG"] << "(" << label << ", " << input_api.expr_peek () << ");\n";
+		o << indent(ind) << mapCodeName["YYDEBUG"] << "(" << label << ", *" << mapCodeName["YYCURSOR"] << ");" << "\n";
 	}
 
 	if (state->link)
@@ -540,17 +515,16 @@ void Initial::emit(std::ostream &o, uint ind, bool &readCh, const std::string&) 
 	}
 }
 
-void Save::emit(std::ostream &o, uint ind, bool &readCh, const std::string&) const
+void Save::emit(Output & output, uint ind, bool &readCh, const std::string&) const
 {
+	OutputFile & o = output.source;
+
 	if (DFlag)
 	{
 		return;
 	}
 
-	if (bUsedYYAccept)
-	{
-		o << indent(ind) << mapCodeName["yyaccept"] << " = " << selector << ";\n";
-	}
+	o.insert_yyaccept_selector (ind, selector);
 
 	if (state->link)
 	{
@@ -579,7 +553,7 @@ Move::Move(State *s) : Action(s)
 	;
 }
 
-void Move::emit(std::ostream &, uint, bool &, const std::string&) const
+void Move::emit(Output &, uint, bool &, const std::string&) const
 {
 	;
 }
@@ -601,13 +575,12 @@ void Accept::genRuleMap()
 	}
 }
 
-void Accept::emitBinary(std::ostream &o, uint ind, uint l, uint r, bool &readCh) const
+void Accept::emitBinary(OutputFile & o, uint ind, uint l, uint r, bool &readCh) const
 {
 	if (l < r)
 	{
 		uint m = (l + r) >> 1;
 
-		assert(bUsedYYAccept);
 		o << indent(ind) << "if (" << mapCodeName["yyaccept"] << (r == l+1 ? " == " : " <= ") << m << ") {\n";
 		emitBinary(o, ++ind, l, m, readCh);
 		o << indent(--ind) << "} else {\n";
@@ -620,8 +593,10 @@ void Accept::emitBinary(std::ostream &o, uint ind, uint l, uint r, bool &readCh)
 	}
 }
 
-void Accept::emit(std::ostream &o, uint ind, bool &readCh, const std::string&) const
+void Accept::emit(Output & output, uint ind, bool &readCh, const std::string &) const
 {
+	OutputFile & o = output.source;
+
 	if (mapRules.size() > 0)
 	{
 		bUsedYYMarker = true;
@@ -638,7 +613,7 @@ void Accept::emit(std::ostream &o, uint ind, bool &readCh, const std::string&) c
 
 		if (mapRules.size() > 1)
 		{
-			bUsedYYAccept = true;
+			o.set_used_yyaccept ();
 
 			if (gFlag && mapRules.size() >= cGotoThreshold)
 			{
@@ -703,8 +678,10 @@ Rule::Rule(State *s, RuleOp *r) : Action(s), rule(r)
 	;
 }
 
-void Rule::emit(std::ostream &o, uint ind, bool &, const std::string& condName) const
+void Rule::emit(Output & output, uint ind, bool &, const std::string& condName) const
 {
+	OutputFile & o = output.source;
+
 	if (DFlag)
 	{
 		o << state->label << " [label=\"" << sourceFileInfo.fname << ":" << rule->code->line << "\"]\n";
@@ -741,10 +718,10 @@ void Rule::emit(std::ostream &o, uint ind, bool &, const std::string& condName) 
 		o << rule->code->text;
 	}
 	o << "\n";
-	o << outputFileInfo;
+	o.insert_line_info ();
 }
 
-static void doLinear(std::ostream &o, uint ind, Span *s, uint n, const State *from, const State *next, bool &readCh, uint mask)
+static void doLinear(OutputFile & o, uint ind, Span *s, uint n, const State *from, const State *next, bool &readCh, uint mask)
 {
 	for (;;)
 	{
@@ -819,12 +796,12 @@ static void doLinear(std::ostream &o, uint ind, Span *s, uint n, const State *fr
 	}
 }
 
-void Go::genLinear(std::ostream &o, uint ind, const State *from, const State *next, bool &readCh, uint mask) const
+void Go::genLinear(OutputFile & o, uint ind, const State *from, const State *next, bool &readCh, uint mask) const
 {
 	doLinear(o, ind, span, nSpans, from, next, readCh, mask);
 }
 
-static void printDotCharInterval(std::ostream &o, uint lastPrintableChar, uint chr, const State *from, const State *to, bool multipleIntervals)
+static void printDotCharInterval(OutputFile & o, uint lastPrintableChar, uint chr, const State *from, const State *to, bool multipleIntervals)
 {
 	o << from->label << " -> " << to->label;
 	o << " [label=";
@@ -843,23 +820,23 @@ static void printDotCharInterval(std::ostream &o, uint lastPrintableChar, uint c
 				o << "]\n";
 				o << from->label << " -> " << to->label;
 				o << " [label=";
-				prtChOrHex(o, ++chr);
+				prtChOrHex(o.fragment (), ++chr);
 			}
 		}
 		else
 		{
-			prtChOrHex(o, chr);
+			prtChOrHex(o.fragment (), chr);
 		}
 	}
 	else
 	{
-		prtChOrHex(o, chr);
+		prtChOrHex(o.fragment (), chr);
 	}
 
 	o << "]";
 }
 
-static bool genCases(std::ostream &o, uint ind, uint lb, Span *s, bool &newLine, uint mask, const State *from, const State *to)
+static bool genCases(OutputFile & o, uint ind, uint lb, Span *s, bool &newLine, uint mask, const State *from, const State *to)
 {
 	bool used = false;
 	uint lastPrintableChar = 0;
@@ -897,7 +874,7 @@ static bool genCases(std::ostream &o, uint ind, uint lb, Span *s, bool &newLine,
 				else
 				{
 					o << indent(ind) << "case ";
-					prtChOrHex(o, lb);
+					prtChOrHex(o.fragment (), lb);
 					o << ":";
 					if (dFlag && encoding.is(Enc::EBCDIC))
 					{
@@ -931,7 +908,7 @@ static bool genCases(std::ostream &o, uint ind, uint lb, Span *s, bool &newLine,
 	return used;
 }
 
-void Go::genSwitch(std::ostream &o, uint ind, const State *from, const State *next, bool &readCh, uint mask) const
+void Go::genSwitch(OutputFile & o, uint ind, const State *from, const State *next, bool &readCh, uint mask) const
 {
 	bool newLine = true;
 
@@ -1031,7 +1008,7 @@ void Go::genSwitch(std::ostream &o, uint ind, const State *from, const State *ne
 	}
 }
 
-static void doBinary(std::ostream &o, uint ind, Span *s, uint n, const State *from, const State *next, bool &readCh, uint mask)
+static void doBinary(OutputFile & o, uint ind, Span *s, uint n, const State *from, const State *next, bool &readCh, uint mask)
 {
 	if (n <= 4)
 	{
@@ -1050,7 +1027,7 @@ static void doBinary(std::ostream &o, uint ind, Span *s, uint n, const State *fr
 	}
 }
 
-void Go::genBinary(std::ostream &o, uint ind, const State *from, const State *next, bool &readCh, uint mask) const
+void Go::genBinary(OutputFile & o, uint ind, const State *from, const State *next, bool &readCh, uint mask) const
 {
 	if (mask)
 	{
@@ -1074,7 +1051,7 @@ void Go::genBinary(std::ostream &o, uint ind, const State *from, const State *ne
 	}
 }
 
-void Go::genBase(std::ostream &o, uint ind, const State *from, const State *next, bool &readCh, uint mask) const
+void Go::genBase(OutputFile & o, uint ind, const State *from, const State *next, bool &readCh, uint mask) const
 {
 	if ((mask ? wSpans : nSpans) == 0)
 	{
@@ -1125,7 +1102,7 @@ void Go::genBase(std::ostream &o, uint ind, const State *from, const State *next
 	}
 }
 
-void Go::genCpGoto(std::ostream &o, uint ind, const State *from, const State *next, bool &readCh) const
+void Go::genCpGoto(OutputFile & o, uint ind, const State *from, const State *next, bool &readCh) const
 {
 	std::string sYych;
 	
@@ -1181,7 +1158,7 @@ void Go::genCpGoto(std::ostream &o, uint ind, const State *from, const State *ne
 	o << indent(--ind) << "}\n";
 }
 
-void Go::genGoto(std::ostream &o, uint ind, const State *from, const State *next, bool &readCh)
+void Go::genGoto(OutputFile & o, uint ind, const State *from, const State *next, bool &readCh)
 {
 	if ((gFlag || (encoding.szCodeUnit() > 1)) && wSpans == ~0u)
 	{
@@ -1271,7 +1248,7 @@ void Go::genGoto(std::ostream &o, uint ind, const State *from, const State *next
 					o << "if (" << mapCodeName["yybm"] << "[" << b->i << "+" << sYych << "] & ";
 					if (yybmHexTable)
 					{
-						prtHex(o, b->m);
+						prtHex(o.fragment (), b->m);
 					}
 					else
 					{
@@ -1291,8 +1268,10 @@ void Go::genGoto(std::ostream &o, uint ind, const State *from, const State *next
 	genBase(o, ind, from, next, readCh, 0);
 }
 
-void State::emit(std::ostream &o, uint ind, bool &readCh, const std::string& condName) const
+void State::emit(Output & output, uint ind, bool &readCh, const std::string& condName) const
 {
+	OutputFile & o = output.source;
+
 	if (vUsedLabels.count(label))
 	{
 		o << labelPrefix << label << ":\n";
@@ -1305,7 +1284,7 @@ void State::emit(std::ostream &o, uint ind, bool &readCh, const std::string& con
 	{
 		o << input_api.stmt_backupctx (ind);
 	}
-	action->emit(o, ind, readCh, condName);
+	action->emit(output, ind, readCh, condName);
 }
 
 static uint merge(Span *x0, State *fg, State *bg)
@@ -1619,7 +1598,7 @@ void DFA::findBaseState()
 	delete [] span;
 }
 
-void DFA::prepare()
+void DFA::prepare(uint & max_fill)
 {
 	State *s;
 	uint i;
@@ -1634,9 +1613,9 @@ void DFA::prepare()
 	for (s = head; s; s = s->next)
 	{
 		s->depth = maxDist(s);
-		if (maxFill < s->depth)
+		if (max_fill < s->depth)
 		{
-			maxFill = s->depth;
+			max_fill = s->depth;
 		}
 		if (s->rule && s->rule->accept >= nRules)
 		{
@@ -1758,15 +1737,11 @@ void DFA::prepare()
 }
 
 
-void DFA::emit(std::ostream &o, uint& ind, const RegExpMap* specMap, const std::string& condName, bool isLastCond, bool& bPrologBrace)
+void DFA::emit(Output & output, uint& ind, const RegExpMap* specMap, const std::string& condName, bool isLastCond, bool& bPrologBrace)
 {
+	OutputFile & o = output.source;
 	bool bProlog = (!cFlag || !bWroteCondCheck);
 
-	if (!cFlag)
-	{
-		bUsedYYAccept = false;
-	}
-	
 	// In -c mode, the prolog needs its own label separate from start_label.
 	// prolog_label is before the condition branch (GenCondGoto). It is
 	// equivalent to startLabelName.
@@ -1801,13 +1776,13 @@ void DFA::emit(std::ostream &o, uint& ind, const RegExpMap* specMap, const std::
 	// Save 'next_fill_index' and compute information about code generation
 	// while writing to null device.
 	uint save_fill_index = next_fill_index;
-	null_stream  null_dev;
+	Output null_dev (NULL, NULL);
 
 	for (s = head; s; s = s->next)
 	{
 		bool readCh = false;
 		s->emit(null_dev, ind, readCh, condName);
-		s->go.genGoto(null_dev, ind, s, s->next, readCh);
+		s->go.genGoto(null_dev.source, ind, s, s->next, readCh);
 	}
 	if (last_fill_index < next_fill_index)
 	{
@@ -1818,14 +1793,15 @@ void DFA::emit(std::ostream &o, uint& ind, const RegExpMap* specMap, const std::
 	// Generate prolog
 	if (bProlog)
 	{
-		o << "\n" << outputFileInfo;
+		o << "\n";
+		o.insert_line_info ();
 
 		if (DFlag)
 		{
 			bPrologBrace = true;
 			o << "digraph re2c {\n";
 		}
-		else if ((!fFlag && bUsedYYAccept)
+		else if ((!fFlag && o.get_used_yyaccept ())
 		||  (!fFlag && bEmitYYCh)
 		||  (bFlag && !cFlag && BitMap::first)
 		||  (cFlag && !bWroteCondCheck && gFlag && !specMap->empty())
@@ -1846,10 +1822,7 @@ void DFA::emit(std::ostream &o, uint& ind, const RegExpMap* specMap, const std::
 			{
 				o << indent(ind) << mapCodeName["YYCTYPE"] << " " << mapCodeName["yych"] << ";\n";
 			}
-			if (bUsedYYAccept)
-			{
-				o << indent(ind) << "unsigned int " << mapCodeName["yyaccept"] << " = 0;\n";
-			}
+			o.insert_yyaccept_init (ind);
 		}
 		else
 		{
@@ -1863,7 +1836,7 @@ void DFA::emit(std::ostream &o, uint& ind, const RegExpMap* specMap, const std::
 	if (bProlog)
 	{
 		genCondTable(o, ind, *specMap);
-		genGetStateGoto(o, ind, prolog_label);
+		o.insert_state_goto (ind, prolog_label);
 		if (cFlag && !DFlag)
 		{
 			if (vUsedLabels.count(prolog_label))
@@ -1911,7 +1884,7 @@ void DFA::emit(std::ostream &o, uint& ind, const RegExpMap* specMap, const std::
 	for (s = head; s; s = s->next)
 	{
 		bool readCh = false;
-		s->emit(o, ind, readCh, condName);
+		s->emit(output, ind, readCh, condName);
 		s->go.genGoto(o, ind, s, s->next, readCh);
 	}
 
@@ -1935,7 +1908,7 @@ void DFA::emit(std::ostream &o, uint& ind, const RegExpMap* specMap, const std::
 	bUseStartLabel = false;
 }
 
-static void genGetStateGotoSub(std::ostream &o, uint ind, uint start_label, int cMin, int cMax)
+static void output_state_goto_sub (OutputFragment & o, uint ind, uint start_label, int cMin, int cMax)
 {
 	if (cMin == cMax)
 	{
@@ -1953,86 +1926,83 @@ static void genGetStateGotoSub(std::ostream &o, uint ind, uint start_label, int 
 		int cMid = cMin + ((cMax - cMin + 1) / 2);
 
 		o << indent(ind) << "if (" << genGetState() << " < " << cMid << ") {\n";
-		genGetStateGotoSub(o, ind + 1, start_label, cMin, cMid - 1);
+		output_state_goto_sub (o, ind + 1, start_label, cMin, cMid - 1);
 		o << indent(ind) << "} else {\n";
-		genGetStateGotoSub(o, ind + 1, start_label, cMid, cMax);
+		output_state_goto_sub (o, ind + 1, start_label, cMid, cMax);
 		o << indent(ind) << "}\n";
 	}
 }
 
-void genGetStateGoto(std::ostream &o, uint& ind, uint start_label)
+void output_state_goto (OutputFragment & o, uint start_label)
 {
-	if (fFlag && !bWroteGetState)
+	uint ind = o.indent;
+	if (gFlag)
 	{
-		vUsedLabels.insert(start_label);
-		if (gFlag)
+		o << indent(ind++) << "static void *" << mapCodeName["yystable"] << "[" << "] = {\n";
+
+		for (size_t i=0; i<last_fill_index; ++i)
 		{
-			o << indent(ind++) << "static void *" << mapCodeName["yystable"] << "[" << "] = {\n";
-
-			for (size_t i=0; i<last_fill_index; ++i)
-			{
-				o << indent(ind) << "&&" << mapCodeName["yyFillLabel"] << i << ",\n";
-			}
-
-			o << indent(--ind) << "};\n";
-			o << "\n";
-
-			o << indent(ind) << "if (" << genGetState();
-			if (bUseStateAbort)
-			{
-				o << " == -1) {\n";
-			}
-			else
-			{
-				o << " < 0) {\n";
-			}
-			o << indent(++ind) << "goto " << labelPrefix << start_label << ";\n";
-			if (bUseStateAbort)
-			{
-				o << indent(--ind) << "} else if (" << genGetState() << " < -1) {\n";
-				o << indent(++ind) << "abort();\n";
-			}
-			o << indent(--ind) << "}\n";
-
-			o << indent(ind) << "goto *" << mapCodeName["yystable"] << "[" << genGetState() << "];\n";
+			o << indent(ind) << "&&" << mapCodeName["yyFillLabel"] << i << ",\n";
 		}
-		else if (bFlag)
+
+		o << indent(--ind) << "};\n";
+		o << "\n";
+
+		o << indent(ind) << "if (" << genGetState();
+		if (bUseStateAbort)
 		{
-			genGetStateGotoSub(o, ind, start_label, -1, last_fill_index-1);
-			if (bUseStateAbort)
-			{
-				o << indent(ind) << "abort();\n";
-			}
+			o << " == -1) {\n";
 		}
 		else
 		{
-			o << indent(ind) << "switch (" << genGetState() << ") {\n";
-			if (bUseStateAbort)
-			{
-				o << indent(ind) << "default: abort();\n";
-				o << indent(ind) << "case -1: goto " << labelPrefix << start_label << ";\n";
-			}
-			else
-			{
-				o << indent(ind) << "default: goto " << labelPrefix << start_label << ";\n";
-			}
-	
-			for (size_t i=0; i<last_fill_index; ++i)
-			{
-				o << indent(ind) << "case " << i << ": goto " << mapCodeName["yyFillLabel"] << i << ";\n";
-			}
-	
-			o << indent(ind) << "}\n";
+			o << " < 0) {\n";
 		}
-		if (bUseStateNext)
+		o << indent(++ind) << "goto " << labelPrefix << start_label << ";\n";
+		if (bUseStateAbort)
 		{
-			o << mapCodeName["yyNext"] << ":\n";
+			o << indent(--ind) << "} else if (" << genGetState() << " < -1) {\n";
+			o << indent(++ind) << "abort();\n";
 		}
-		bWroteGetState = true;
+		o << indent(--ind) << "}\n";
+
+		o << indent(ind) << "goto *" << mapCodeName["yystable"] << "[" << genGetState() << "];\n";
+
+	}
+	else if (bFlag)
+	{
+		output_state_goto_sub (o, ind, start_label, -1, last_fill_index-1);
+		if (bUseStateAbort)
+		{
+			o << indent(ind) << "abort();\n";
+		}
+	}
+	else
+	{
+		o << indent(ind) << "switch (" << genGetState() << ") {\n";
+		if (bUseStateAbort)
+		{
+			o << indent(ind) << "default: abort();\n";
+			o << indent(ind) << "case -1: goto " << labelPrefix << start_label << ";\n";
+		}
+		else
+		{
+			o << indent(ind) << "default: goto " << labelPrefix << start_label << ";\n";
+		}
+
+		for (size_t i=0; i<last_fill_index; ++i)
+		{
+			o << indent(ind) << "case " << i << ": goto " << mapCodeName["yyFillLabel"] << i << ";\n";
+		}
+
+		o << indent(ind) << "}\n";
+	}
+	if (bUseStateNext)
+	{
+		o << mapCodeName["yyNext"] << ":\n";
 	}
 }
 
-void genCondTable(std::ostream &o, uint ind, const RegExpMap& specMap)
+void genCondTable(OutputFile & o, uint ind, const RegExpMap& specMap)
 {
 	if (cFlag && !bWroteCondCheck && gFlag && specMap.size())
 	{
@@ -2053,7 +2023,7 @@ void genCondTable(std::ostream &o, uint ind, const RegExpMap& specMap)
 	}
 }
 
-static void genCondGotoSub(std::ostream &o, uint ind, RegExpIndices& vCondList, uint cMin, uint cMax)
+static void genCondGotoSub(OutputFile & o, uint ind, RegExpIndices& vCondList, uint cMin, uint cMax)
 {
 	if (cMin == cMax)
 	{
@@ -2071,7 +2041,7 @@ static void genCondGotoSub(std::ostream &o, uint ind, RegExpIndices& vCondList, 
 	}
 }
 
-void genCondGoto(std::ostream &o, uint ind, const RegExpMap& specMap)
+void genCondGoto(OutputFile & o, uint ind, const RegExpMap& specMap)
 {
 	if (cFlag && !bWroteCondCheck && specMap.size())
 	{
@@ -2113,47 +2083,70 @@ void genCondGoto(std::ostream &o, uint ind, const RegExpMap& specMap)
 	}
 }
 
-void genTypes(std::string& o, uint ind, const RegExpMap& specMap)
+void genTypes(Output & output, const RegExpMap& specMap)
 {
-	o.clear();
-
-	o += indent(ind++) + "enum " + mapCodeName["YYCONDTYPE"] + " {\n";
-
-	RegExpIndices  vCondList(specMap.size());
-
+	output.types.resize (specMap.size());
 	for(RegExpMap::const_iterator itSpecMap = specMap.begin(); itSpecMap != specMap.end(); ++itSpecMap)
 	{
 		// If an entry is < 0 then we did the 0/empty correction twice.
 		assert(itSpecMap->second.first >= 0);
-		vCondList[itSpecMap->second.first] = itSpecMap->first;
+		output.types[itSpecMap->second.first] = itSpecMap->first;
 	}
-
-	for(RegExpIndices::const_iterator itCondType = vCondList.begin(); itCondType != vCondList.end(); ++itCondType)
-	{
-		o += indent(ind) + condEnumPrefix + *itCondType + ",\n";
-	}
-
-	o += indent(--ind) + "};\n";
 }
 
-void genHeader(std::ostream &o, uint ind, const RegExpMap& specMap)
+void output_yyaccept_init (OutputFragment & o, bool used_yyaccept)
+{
+	if (used_yyaccept)
+	{
+		o << indent (o.indent) << "unsigned int " << mapCodeName["yyaccept"] << " = 0;\n";
+	}
+}
+
+void output_yyaccept_selector (OutputFragment & o, bool used_yyaccept)
+{
+	if (used_yyaccept)
+	{
+		o << indent (o.indent) << mapCodeName["yyaccept"] << " = " << o.info.yyaccept_selector << ";\n";
+	}
+}
+
+void output_yymaxfill (OutputFragment & o, uint max_fill)
+{
+	o << "#define YYMAXFILL " << max_fill << "\n";
+}
+
+void output_line_info (OutputFragment & o, uint line_number, const char * filename)
+{
+	if (!iFlag)
+	{
+		o << "#line " << line_number << " \"" << filename << "\"\n";
+	}
+}
+
+void output_types (OutputFragment & o, const std::vector<std::string> & types)
+{
+	uint ind = o.indent;
+	o << indent (ind++) << "enum " << mapCodeName["YYCONDTYPE"] << " {\n";
+	for (unsigned int i = 0; i < types.size (); ++i)
+	{
+		o << indent (ind) << condEnumPrefix << types[i] << ",\n";
+	}
+	o << indent (--ind) << "};\n";
+}
+
+void output_version_time (OutputFile & o)
 {
 	o << "/* Generated by re2c " PACKAGE_VERSION;
 	if (!bNoGenerationDate)
 	{
 		o << " on ";
-		time_t now = time(&now);
-		o.write(ctime(&now), 24);
+		time_t now = time (NULL);
+		o.write (ctime (&now), 24);
 	}
-	o << " */\n";
-	o << headerFileInfo;
-	o << "\n";
-	// now the type(s)
-	genTypes(typesInline, ind, specMap);
-	o << typesInline;
+	o << "*/" << "\n";
 }
 
-std::ostream& operator << (std::ostream& o, const file_info& li)
+OutputFragment & operator << (OutputFragment & o, const file_info& li)
 {
 	if (li.ln && !iFlag)
 	{
@@ -2397,32 +2390,26 @@ void Scanner::config(const Str& cfg, const Str& val)
 		bUseYYSetStateParam = false;
 	}
 	else if (mapVariableKeys.find(cfg.to_string()) != mapVariableKeys.end())
-    {
-    	if ((bFirstPass || rFlag) && !mapCodeName.insert(
-    			std::make_pair(cfg.to_string().substr(sizeof("variable:") - 1), strVal)
-    			).second)
-    	{
+	{
+		if (!mapCodeName.insert(std::make_pair(cfg.to_string().substr(sizeof("variable:") - 1), strVal)).second)
+		{
 			fatalf("variable '%s' already being used and cannot be changed", cfg.to_string().c_str());
-    	}
-    }
+		}
+	}
 	else if (mapDefineKeys.find(cfg.to_string()) != mapDefineKeys.end())
-    {
-    	if ((bFirstPass || rFlag) && !mapCodeName.insert(
-    			std::make_pair(cfg.to_string().substr(sizeof("define:") - 1), strVal)
-    			).second)
-    	{
- 			fatalf("define '%s' already being used and cannot be changed", cfg.to_string().c_str());
- 		}
-    }
+	{
+		if (!mapCodeName.insert(std::make_pair(cfg.to_string().substr(sizeof("define:") - 1), strVal)).second)
+		{
+			fatalf("define '%s' already being used and cannot be changed", cfg.to_string().c_str());
+		}
+	}
 	else if (mapLabelKeys.find(cfg.to_string()) != mapLabelKeys.end())
-    {
-    	if ((bFirstPass || rFlag) && !mapCodeName.insert(
-    			std::make_pair(cfg.to_string().substr(sizeof("label:") - 1), strVal)
-    			).second)
-    	{
+	{
+		if (!mapCodeName.insert(std::make_pair(cfg.to_string().substr(sizeof("label:") - 1), strVal)).second)
+		{
 			fatalf("label '%s' already being used and cannot be changed", cfg.to_string().c_str());
-    	}
-    }
+		}
+	}
 	else
 	{
 		std::string msg = "unrecognized configuration name '";
@@ -2440,7 +2427,7 @@ ScannerState::ScannerState()
 {
 }
 
-Scanner::Scanner(std::istream& i, std::ostream& o)
+Scanner::Scanner(std::istream& i, OutputFile & o)
 	: ScannerState(), in(i), out(o)
 {
 }
@@ -2510,7 +2497,6 @@ void Scanner::set_in_parse(bool new_in_parse)
 
 void Scanner::fatal_at(uint line, uint ofs, const char *msg) const
 {
-	out.flush();
 	std::cerr << "re2c: error: "
 		<< "line " << line << ", column " << (tchar + ofs + 1) << ": "
 		<< msg << std::endl;

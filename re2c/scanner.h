@@ -4,9 +4,11 @@
 
 #include <iosfwd>
 #include <string>
-#include "token.h"
-#include "re.h"
+
 #include "globals.h"
+#include "output.h"
+#include "re.h"
+#include "token.h"
 
 namespace re2c
 {
@@ -26,7 +28,7 @@ class Scanner:
 {
 private:
 	std::istream&	in;
-	std::ostream&   out;
+	OutputFile & out;
 
 private:
 	char *fill(char*, uint);
@@ -35,7 +37,7 @@ private:
 	void set_sourceline(char *& cursor);
 
 public:
-	Scanner(std::istream&, std::ostream&);
+	Scanner(std::istream&, OutputFile &);
 	~Scanner();
 
 	enum ParseMode {

@@ -13,14 +13,13 @@
 #include "globals.h"
 #include "parser.h"
 #include "dfa.h"
+#include "enc.h"
 #include "mbo_getopt.h"
 
 namespace re2c
 {
 
 file_info sourceFileInfo;
-file_info outputFileInfo;
-file_info headerFileInfo;
 
 bool bFlag = false;
 bool cFlag = false;
@@ -35,16 +34,8 @@ bool sFlag = false;
 bool tFlag = false;
 
 bool bNoGenerationDate = false;
-
-bool bSinglePass = false;
-bool bFirstPass  = true;
-bool bLastPass   = false;
 bool bUsedYYBitmap  = false;
-
-bool bUsedYYAccept  = false;
-bool bUsedYYMaxFill = false;
 bool bUsedYYMarker  = true;
-
 bool bEmitYYCh       = true;
 bool bUseStartLabel  = false;
 bool bUseStateNext   = false;
@@ -71,7 +62,6 @@ std::string yyFillLength("@@");
 std::string yySetConditionParam("@@");
 std::string yySetStateParam("@@");
 std::string yySetupRule("");
-uint maxFill = 1;
 uint next_label = 0;
 uint cGotoThreshold = 9;
 
@@ -83,7 +73,6 @@ bool bWroteGetState = false;
 bool bWroteCondCheck = false;
 bool bCaseInsensitive = false;
 bool bCaseInverted = false;
-bool bTypesDone = false;
 
 Enc encoding;
 InputAPI input_api;
@@ -92,7 +81,6 @@ uint next_fill_index = 0;
 uint last_fill_index = 0;
 std::set<uint> vUsedLabels;
 CodeNames mapCodeName;
-std::string typesInline;
 
 free_list<RegExp*> RegExp::vFreeList;
 free_list<Range*>  Range::vFreeList;
@@ -125,7 +113,7 @@ static const mbo_opt_struct OPTIONS[] =
 	mbo_opt_struct('w', 0, "wide-chars"),
 	mbo_opt_struct('x', 0, "utf-16"),
 	mbo_opt_struct('8', 0, "utf-8"),
-	mbo_opt_struct('1', 0, "single-pass"),
+	mbo_opt_struct('1', 0, "deprecated, single-pass"),
 	mbo_opt_struct(10,  0, "no-generation-date"),
 	mbo_opt_struct(11,  0, "case-insensitive"),
 	mbo_opt_struct(12,  0, "case-inverted"),
@@ -200,7 +188,8 @@ static void usage()
 	"                        re2c assumes that input character size is 1 byte. This switch is\n"
 	"                        incompatible with -e, -w, -x and -u."
 	"\n"
-	"-1     --single-pass    Force single pass generation, this cannot be combined\n"
+	"-1     --single-pass    Deprecated.\n"
+        "                        Force single pass generation, this cannot be combined\n"
 	"                        with -f and disables YYMAXFILL generation prior to last\n"
 	"                        re2c block.\n"
 	"\n"
@@ -306,7 +295,6 @@ int main(int argc, char *argv[])
 			break;
 			
 			case '1':
-			bSinglePass = true;
 			break;
 
 			case 'v':
@@ -416,10 +404,6 @@ int main(int argc, char *argv[])
 		}
 	}
 
-	if ((bFlag || fFlag) && bSinglePass) {
-		std::cerr << "re2c: error: Cannot combine -1 and -b or -f switch\n";
-		return 1;
-	}
 	if (!cFlag && headerFileName)
 	{
 		std::cerr << "re2c: error: Can only output a header file when using -c switch\n";
@@ -462,58 +446,29 @@ int main(int argc, char *argv[])
 		return 1;
 	}
 
-	// set up the output stream
-	re2c::ofstream_lc output;
-	re2c::ofstream_lc header;
-
-	if (outputFileName == 0 || (sourceFileName[0] == '-' && sourceFileName[1] == '\0'))
+	// set up the output streams
+	if (outputFileName == NULL || (sourceFileName[0] == '-' && sourceFileName[1] == '\0'))
 	{
 		outputFileName = "<stdout>";
-		output.open(stdout);
 	}
-	else if (!output.open(outputFileName).is_open())
+	re2c::Output output (outputFileName, headerFileName);
+	if (output.source.status == OutputFile::FAIL_OPEN)
 	{
 		cerr << "re2c: error: cannot open " << outputFileName << "\n";
 		return 1;
 	}
-	if (headerFileName)
+	if (output.header.status == OutputFile::FAIL_OPEN)
 	{
-		if (!header.open(headerFileName).is_open())
-		{
-			cerr << "re2c: error: cannot open " << headerFileName << "\n";
-			return 1;
-		}
-		headerFileInfo = file_info(headerFileName, &header);
-	}
-	Scanner scanner(source, output);
-	sourceFileInfo = file_info(sourceFileName, &scanner);
-	outputFileInfo = file_info(outputFileName, &output);
-
-	if (!bSinglePass)
-	{
-		bUsedYYMarker = false;
-
-		re2c::ifstream_lc null_source;
-		
-		if (!null_source.open(sourceFileName).is_open())
-		{
-			cerr << "re2c: error: cannot re-open " << sourceFileName << "\n";
-			return 1;
-		}
-
-		null_stream  null_dev;
-		Scanner null_scanner(null_source, null_dev);
-		parse(null_scanner, null_dev, NULL);
-		next_label = 0;
-		next_fill_index = 0;
-		bWroteGetState = false;
-		bWroteCondCheck = false;
-		bUsedYYMaxFill = false;
-		bFirstPass = false;
-		sourceFileInfo.set_fname(sourceFileName);
+		cerr << "re2c: error: cannot open " << headerFileName << "\n";
+		return 1;
 	}
 
-	bLastPass = true;
-	parse(scanner, output, header.is_open() ? &header : NULL);
+	Scanner scanner (source, output.source);
+	sourceFileInfo = file_info (sourceFileName, &scanner);
+	parse (scanner, output);
+
+	// output generated code
+	output.emit ();
+
 	return 0;
 }

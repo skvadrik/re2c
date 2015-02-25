@@ -17,8 +17,6 @@ namespace re2c
 enum BUFFERSIZE { BSIZE = 8192};
 
 extern file_info sourceFileInfo;
-extern file_info outputFileInfo;
-extern file_info headerFileInfo;
 
 extern bool bFlag;
 extern bool cFlag;
@@ -33,13 +31,6 @@ extern bool sFlag;
 extern bool tFlag;
 
 extern bool bNoGenerationDate;
-
-extern bool bSinglePass;
-extern bool bFirstPass;
-extern bool bLastPass;
-
-extern bool bUsedYYAccept;
-extern bool bUsedYYMaxFill;
 extern bool bUsedYYMarker;
 extern bool bUsedYYBitmap;
 
@@ -57,7 +48,6 @@ extern std::string yyFillLength;
 extern std::string yySetConditionParam;
 extern std::string yySetStateParam;
 extern std::string yySetupRule;
-extern uint maxFill;
 extern uint next_label;
 extern uint cGotoThreshold;
 
@@ -81,7 +71,6 @@ extern bool bWroteGetState;
 extern bool bWroteCondCheck;
 extern bool bCaseInsensitive;
 extern bool bCaseInverted;
-extern bool bTypesDone;
 
 extern const uint asc2asc[256];
 extern const uint asc2ebc[256];
@@ -91,7 +80,6 @@ extern uint next_fill_index;
 extern uint last_fill_index;
 extern std::set<uint> vUsedLabels;
 extern CodeNames mapCodeName;
-extern std::string typesInline;
 
 extern Enc encoding;
 extern InputAPI input_api;

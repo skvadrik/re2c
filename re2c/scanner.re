@@ -1,4 +1,3 @@
-/* $Id$ */
 #include <stdlib.h>
 #include <string.h>
 #include <iostream>
@@ -70,10 +69,6 @@ echo:
 					{
 						fatal("found standard 're2c' block while using -r flag");
 					}
-					if (bUsedYYMaxFill && bSinglePass)
-					{
-						fatal("found scanner block after YYMAXFILL declaration");
-					}
 					if (!DFlag)
 					{
 						out.write((const char*)(tok), (const char*)(&cursor[-7]) - (const char*)(tok));
@@ -90,10 +85,6 @@ echo:
 					{
 						fatal("found 'rules:re2c' block without -r flag");
 					}
-					if (bUsedYYMaxFill && bSinglePass)
-					{
-						fatal("found scanner block after YYMAXFILL declaration");
-					}
 					tok = cursor;
 					RETURN(Rules);
 				}
@@ -103,10 +94,6 @@ echo:
 						fatal("found 'use:re2c' block without -r flag");
 					}
 					reuse();
-					if (bUsedYYMaxFill && bSinglePass)
-					{
-						fatal("found scanner block after YYMAXFILL declaration");
-					}
 					if (!DFlag)
 					{
 						out.write((const char*)(tok), (const char*)(&cursor[-11]) - (const char*)(tok));
@@ -115,22 +102,17 @@ echo:
 					RETURN(Reuse);
 				}
 	"/*!max:re2c" {
-					if (bUsedYYMaxFill)
-					{
-						fatal("cannot generate YYMAXFILL twice");
-					}
 					if (!DFlag)
 					{
-						out << "#define YYMAXFILL " << maxFill << std::endl;
+						out.insert_yymaxfill ();
 					}
 					tok = pos = cursor;
 					ignore_eoc = true;
-					bUsedYYMaxFill = true;
 					goto echo;
 				}
 	"/*!getstate:re2c" {
 					tok = pos = cursor;
-					genGetStateGoto(out, topIndent, 0);
+					out.insert_state_goto (topIndent, 0);
 					ignore_eoc = true;
 					goto echo;
 				}
@@ -140,17 +122,13 @@ echo:
 					goto echo;
 				}
 	"/*!types:re2c" {
-					if (bSinglePass)
-					{
-						fatal("cannot generate types inline in single pass mode");
-					}
 					tok = pos = cursor;
 					ignore_eoc = true;
-					if (bLastPass && !DFlag)
+					if (!DFlag)
 					{
-						out << outputFileInfo;
+						out.insert_line_info ();
 						out << "\n";
-						out << typesInline;
+						out.insert_types ();
 						out << "\n";
 						out << sourceFileInfo;
 					}
