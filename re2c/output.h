@@ -26,8 +26,6 @@ struct OutputFragment : public std::ostringstream
 {
 	enum type_t
 		{ CODE
-//		, COND_GOTO
-		, COND_TABLE
 //		, CONFIG
 		, LINE_INFO
 		, STATE_GOTO
