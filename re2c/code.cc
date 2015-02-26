@@ -700,14 +700,12 @@ void Rule::emit(Output & output, uint ind, bool &, const std::string& condName) 
 		genSetCondition(o, ind, rule->code->newcond);
 	}
 
-	RuleLine rl(*rule);
-
 	if (!yySetupRule.empty() && !rule->code->autogen)
 	{
 		o << indent(ind) << yySetupRule << "\n";
 	}
 
-	o << file_info(rule->code->source, &rl);
+	output_line_info (o.fragment (), rule->code->line, rule->code->source.c_str ());
 	o << indent(ind);
 	if (rule->code->autogen)
 	{

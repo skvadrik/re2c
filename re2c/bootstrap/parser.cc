@@ -2233,7 +2233,7 @@ void parse(Scanner& i, Output & o)
 	in = &i;
 
 	output_version_time (o.source);
-	o.source << sourceFileInfo;
+	output_line_info (o.source.fragment (), sourceFileInfo.ln->get_line (), sourceFileInfo.fname.c_str ());
 	output_version_time (o.header);
 
 	Enc encodingOld = encoding;
@@ -2413,7 +2413,7 @@ void parse(Scanner& i, Output & o)
 				}
 			}
 		}
-		o.source << sourceFileInfo;
+		output_line_info (o.source.fragment (), sourceFileInfo.ln->get_line (), sourceFileInfo.fname.c_str ());
 		/* restore original char handling mode*/
 		encoding = encodingOld;
 	}

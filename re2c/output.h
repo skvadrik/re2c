@@ -10,7 +10,6 @@
 namespace re2c
 {
 
-struct file_info;
 struct Str;
 
 struct Setw
@@ -54,8 +53,6 @@ struct OutputFragment : public std::ostringstream
 	uint count_lines ();
 };
 
-OutputFragment & operator << (OutputFragment & f, const file_info & info);
-
 struct OutputBlock
 {
 	std::vector<OutputFragment *> fragments;
@@ -90,7 +87,6 @@ struct OutputFile
 	friend OutputFile & operator << (OutputFile & o, uint n);
 	friend OutputFile & operator << (OutputFile & o, const std::string & s);
 	friend OutputFile & operator << (OutputFile & o, const char * s);
-	friend OutputFile & operator << (OutputFile & o, const file_info & i);
 	friend OutputFile & operator << (OutputFile & o, const Str & s);
 	friend OutputFile & operator << (OutputFile & o, const Setw & s);
 

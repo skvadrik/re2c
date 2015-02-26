@@ -7,15 +7,6 @@
 namespace re2c
 {
 
-OutputFragment & operator << (OutputFragment & o, const file_info & i)
-{
-	if (i.ln && !iFlag)
-	{
-		o << "#line " << i.ln->get_line () << " \"" << i.fname << "\"\n";
-	}
-	return o;
-}
-
 uint OutputFragment::count_lines ()
 {
 	uint lines = 0;
@@ -108,12 +99,6 @@ OutputFile & operator << (OutputFile & u, const std::string & s)
 OutputFile & operator << (OutputFile & u, const char * s)
 {
 	u.fragment () << s;
-	return u;
-}
-
-OutputFile & operator << (OutputFile & u, const file_info & i)
-{
-	u.fragment () << i;
 	return u;
 }
 
