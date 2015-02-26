@@ -89,7 +89,7 @@ void context_rule(CondList *clist, RegExp *expr, RegExp *look, Str *newcond, Tok
 	for(CondList::const_iterator it = clist->begin(); it != clist->end(); ++it)
 	{
 		//Str *condcpy = newcond ? new Str(*newcond) : newcond;
-		Token *token = new Token(code, sourceFileInfo, newcond);//condcpy);
+		Token *token = new Token(code, sourceFileInfo.fname, sourceFileInfo.ln->get_line (), newcond);//condcpy);
 		RuleOp *rule = new RuleOp(expr, look, token, accept++, ins_access);
 
 		RegExpMap::iterator itRE = specMap.find(*it);
@@ -281,7 +281,7 @@ rule:
 		{
 			assert($7);
 			context_check(NULL);
-			Token *token = new Token(NULL, sourceFileInfo, $7);
+			Token *token = new Token(NULL, sourceFileInfo.fname, sourceFileInfo.ln->get_line (), $7);
 			delete $7;
 			specStar.push_back(new RuleOp($4, $5, token, accept++, RegExp::PRIVATE));
 		}
@@ -322,7 +322,7 @@ rule:
 			{
 				in->fatal("code to handle illegal condition already defined");
 			}
-			Token *token = new Token(NULL, sourceFileInfo, $3);
+			Token *token = new Token(NULL, sourceFileInfo.fname, sourceFileInfo.ln->get_line (), $3);
 			delete $3;
 			$$ = specNone = new RuleOp(new NullOp(), new NullOp(), token, accept++, RegExp::SHARED);
 		}
