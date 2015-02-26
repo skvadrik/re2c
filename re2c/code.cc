@@ -2146,15 +2146,6 @@ void output_version_time (OutputFile & o)
 	o << "*/" << "\n";
 }
 
-OutputFragment & operator << (OutputFragment & o, const file_info& li)
-{
-	if (li.ln && !iFlag)
-	{
-		o << "#line " << li.ln->get_line() << " \"" << li.fname << "\"\n";
-	}
-	return o;
-}
-
 void Scanner::config(const Str& cfg, int num)
 {
 	if (cfg.to_string() == "indent:top")
