@@ -2418,10 +2418,11 @@ ScannerState::ScannerState()
 {
 }
 
-Scanner::Scanner(std::istream& i, OutputFile & o)
-	: ScannerState(), in(i), out(o)
-{
-}
+Scanner::Scanner (FILE * i, OutputFile & o)
+	: ScannerState ()
+	, in (i)
+	, out (o)
+{}
 
 char *Scanner::fill(char *cursor, uint need)
 {
@@ -2470,8 +2471,8 @@ char *Scanner::fill(char *cursor, uint need)
 			bot = buf;
 		}
 		/* Append to buffer. */
-		in.read(lim, need);
-		if ((cnt = in.gcount()) != need)
+		cnt = fread (lim, 1, need, in);
+		if (cnt != need)
 		{
 			eof = &lim[cnt];
 			*eof++ = '\0';

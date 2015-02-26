@@ -2,7 +2,6 @@
 #ifndef _scanner_h
 #define	_scanner_h
 
-#include <iosfwd>
 #include <string>
 
 #include "globals.h"
@@ -27,7 +26,7 @@ class Scanner:
 	public line_number, private ScannerState
 {
 private:
-	std::istream&	in;
+	FILE * in;
 	OutputFile & out;
 
 private:
@@ -37,7 +36,7 @@ private:
 	void set_sourceline(char *& cursor);
 
 public:
-	Scanner(std::istream&, OutputFile &);
+	Scanner(FILE *, OutputFile &);
 	~Scanner();
 
 	enum ParseMode {

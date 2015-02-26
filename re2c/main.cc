@@ -428,8 +428,7 @@ int main(int argc, char *argv[])
 	}
 
 	// set up the source stream
-	re2c::ifstream_lc source;
-
+	FILE * source = NULL;
 	if (sourceFileName[0] == '-' && sourceFileName[1] == '\0')
 	{
 		if (fFlag)
@@ -438,9 +437,13 @@ int main(int argc, char *argv[])
 			return 1;
 		}
 		sourceFileName = "<stdin>";
-		source.open(stdin);
+		source = stdin;
 	}
-	else if (!source.open(sourceFileName).is_open())
+	else
+	{
+		source = fopen (sourceFileName, "rb");
+	}
+	if (source == NULL)
 	{
 		cerr << "re2c: error: cannot open " << sourceFileName << "\n";
 		return 1;
@@ -470,5 +473,6 @@ int main(int argc, char *argv[])
 	// output generated code
 	output.emit ();
 
+	fclose (source);
 	return 0;
 }
