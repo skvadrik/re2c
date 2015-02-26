@@ -15,52 +15,6 @@
 namespace re2c
 {
 
-template<class _E, class _Tr = std::char_traits<_E> >
-class basic_null_streambuf
-	: public std::basic_streambuf<_E, _Tr>
-{
-public:
-	basic_null_streambuf()
-		: std::basic_streambuf<_E, _Tr>()
-	{
-	}	
-};
-
-typedef basic_null_streambuf<char> null_streambuf;
-
-template<class _E, class _Tr = std::char_traits<_E> >
-class basic_null_stream
-	: public std::basic_ostream<_E, _Tr>
-{
-public:
-	basic_null_stream()
-		: std::basic_ostream<_E, _Tr>(null_buf = new basic_null_streambuf<_E, _Tr>())
-	{
-	}
-	
-	virtual ~basic_null_stream()
-	{
-		delete null_buf;
-	}
-
-	basic_null_stream& put(_E)
-	{
-		// nothing to do
-		return *this;
-	}
-	
-	basic_null_stream& write(const _E *, std::streamsize)
-	{
-		// nothing to do
-		return *this;
-	}
-
-protected:
-	basic_null_streambuf<_E, _Tr> * null_buf;
-};
-
-typedef basic_null_stream<char> null_stream;
-
 class line_number
 {
 public:
@@ -364,14 +318,6 @@ protected:
 };
 
 template<class _E, class _Tr = std::char_traits<_E> >
-class basic_ofstream_lc
-	: public basic_fstream_lc<_E, std::basic_ostream<_E, _Tr>, std::ios_base::out, _Tr>
-{
-};
-
-typedef basic_ofstream_lc<char> ofstream_lc;
-
-template<class _E, class _Tr = std::char_traits<_E> >
 class basic_ifstream_lc
 	: public basic_fstream_lc<_E, std::basic_istream<_E, _Tr>, std::ios_base::in, _Tr>
 {
@@ -430,8 +376,6 @@ public:
 	const std::string  fname;
 	const line_number* ln;
 };
-
-std::ostream& operator << (std::ostream& o, const file_info& li);
 
 } // end namespace re2c
 
