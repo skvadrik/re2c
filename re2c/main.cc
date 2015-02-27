@@ -330,7 +330,7 @@ int main(int argc, char *argv[])
 				{
 					vernum.insert(4, "0");
 				}
-				vernum.resize(6);
+				vernum.resize(6, '0');
 				cout << vernum << endl;
 				return 2;
 			}
