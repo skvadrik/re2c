@@ -74,6 +74,7 @@
 #include "config.h"
 #endif
 
+#include <assert.h>
 #include <time.h>
 #include <string.h>
 #include <stdlib.h>
@@ -157,7 +158,7 @@ void context_rule(CondList *clist, RegExp *expr, RegExp *look, Str *newcond, Tok
 	for(CondList::const_iterator it = clist->begin(); it != clist->end(); ++it)
 	{
 		//Str *condcpy = newcond ? new Str(*newcond) : newcond;
-		Token *token = new Token(code, sourceFileInfo.fname, sourceFileInfo.ln->get_line (), newcond);//condcpy);
+		Token *token = new Token(code, in->get_fname (), in->get_cline (), newcond);//condcpy);
 		RuleOp *rule = new RuleOp(expr, look, token, accept++, ins_access);
 
 		RegExpMap::iterator itRE = specMap.find(*it);
@@ -605,12 +606,12 @@ static const yytype_int8 yyrhs[] =
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint16 yyrline[] =
 {
-       0,   180,   180,   182,   186,   190,   199,   208,   212,   216,
-     222,   230,   239,   248,   252,   257,   262,   268,   272,   280,
-     288,   293,   299,   305,   317,   329,   335,   343,   346,   353,
-     358,   367,   370,   378,   381,   388,   392,   399,   403,   414,
-     418,   425,   429,   444,   451,   455,   459,   463,   470,   478,
-     482,   486
+       0,   181,   181,   183,   187,   191,   200,   209,   213,   217,
+     223,   231,   240,   249,   253,   258,   263,   269,   273,   281,
+     289,   294,   300,   306,   318,   330,   336,   344,   347,   354,
+     359,   368,   371,   379,   382,   389,   393,   400,   404,   415,
+     419,   426,   430,   445,   452,   456,   460,   464,   471,   479,
+     483,   487
 };
 #endif
 
@@ -1723,7 +1724,7 @@ yyreduce:
     {
 			assert((yyvsp[(7) - (7)].str));
 			context_check(NULL);
-			Token *token = new Token(NULL, sourceFileInfo.fname, sourceFileInfo.ln->get_line (), (yyvsp[(7) - (7)].str));
+			Token *token = new Token(NULL, in->get_fname (), in->get_cline (), (yyvsp[(7) - (7)].str));
 			delete (yyvsp[(7) - (7)].str);
 			specStar.push_back(new RuleOp((yyvsp[(4) - (7)].regexp), (yyvsp[(5) - (7)].regexp), token, accept++, RegExp::PRIVATE));
 		}
@@ -1779,7 +1780,7 @@ yyreduce:
 			{
 				in->fatal("code to handle illegal condition already defined");
 			}
-			Token *token = new Token(NULL, sourceFileInfo.fname, sourceFileInfo.ln->get_line (), (yyvsp[(3) - (3)].str));
+			Token *token = new Token(NULL, in->get_fname (), in->get_cline (), (yyvsp[(3) - (3)].str));
 			delete (yyvsp[(3) - (3)].str);
 			(yyval.regexp) = specNone = new RuleOp(new NullOp(), new NullOp(), token, accept++, RegExp::SHARED);
 		}
@@ -2233,7 +2234,7 @@ void parse(Scanner& i, Output & o)
 	in = &i;
 
 	output_version_time (o.source);
-	output_line_info (o.source.fragment (), sourceFileInfo.ln->get_line (), sourceFileInfo.fname.c_str ());
+	output_line_info (o.source.fragment (), in->get_cline (), in->get_fname ().c_str ());
 	output_version_time (o.header);
 
 	Enc encodingOld = encoding;
@@ -2413,7 +2414,7 @@ void parse(Scanner& i, Output & o)
 				}
 			}
 		}
-		output_line_info (o.source.fragment (), sourceFileInfo.ln->get_line (), sourceFileInfo.fname.c_str ());
+		output_line_info (o.source.fragment (), in->get_cline (), in->get_fname ().c_str ());
 		/* restore original char handling mode*/
 		encoding = encodingOld;
 	}

@@ -1,5 +1,7 @@
 /* $Id$ */
+#include <assert.h>
 #include <stdarg.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <ctime>
@@ -684,7 +686,7 @@ void Rule::emit(Output & output, uint ind, bool &, const std::string& condName) 
 
 	if (DFlag)
 	{
-		o << state->label << " [label=\"" << sourceFileInfo.fname << ":" << rule->code->line << "\"]\n";
+		o << state->label << " [label=\"" << rule->code->source << ":" << rule->code->line << "\"]\n";
 		return;
 	}
 
@@ -2416,7 +2418,7 @@ ScannerState::ScannerState()
 {
 }
 
-Scanner::Scanner (FILE * i, OutputFile & o)
+Scanner::Scanner (Input & i, OutputFile & o)
 	: ScannerState ()
 	, in (i)
 	, out (o)
@@ -2469,7 +2471,7 @@ char *Scanner::fill(char *cursor, uint need)
 			bot = buf;
 		}
 		/* Append to buffer. */
-		cnt = fread (lim, 1, need, in);
+		cnt = fread (lim, 1, need, in.file);
 		if (cnt != need)
 		{
 			eof = &lim[cnt];

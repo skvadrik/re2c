@@ -130,7 +130,7 @@ echo:
 						out << "\n";
 						out.insert_types ();
 						out << "\n";
-						output_line_info (out.fragment (), sourceFileInfo.ln->get_line (), sourceFileInfo.fname.c_str ());
+						output_line_info (out.fragment (), cline, get_fname ().c_str ());
 					}
 					goto echo;
 				}
@@ -140,7 +140,7 @@ echo:
 					{
 						if (ignore_cnt)
 						{
-							output_line_info (out.fragment (), sourceFileInfo.ln->get_line (), sourceFileInfo.fname.c_str ());
+							output_line_info (out.fragment (), cline, get_fname ().c_str ());
 						}
 						ignore_eoc = false;
 						ignore_cnt = 0;
@@ -158,7 +158,7 @@ echo:
 						if (ignore_cnt)
 						{
 							out << "\n";
-							output_line_info (out.fragment (), sourceFileInfo.ln->get_line (), sourceFileInfo.fname.c_str ());
+							output_line_info (out.fragment (), cline, get_fname ().c_str ());
 						}
 						ignore_eoc = false;
 						ignore_cnt = 0;
@@ -437,7 +437,7 @@ code:
 					else if (--depth == 0)
 					{
 						cur = cursor;
-						yylval.token = new Token(token(), sourceFileInfo.fname, tline);
+						yylval.token = new Token(token(), get_fname (), tline);
 						return CODE;
 					}
 					goto code;
@@ -479,7 +479,7 @@ code:
 						{
 							--cur;
 						}
-						yylval.token = new Token(token(), sourceFileInfo.fname, tline);
+						yylval.token = new Token(token(), get_fname (), tline);
 						return CODE;
 					}
 					else if (cursor == eof)
@@ -596,6 +596,20 @@ value:
 */
 }
 
+static void escape (std::string & dest, const std::string & src)
+{
+	dest = src;
+	size_t l = dest.length();
+	for (size_t p = 0; p < l; ++p)
+	{
+		if (dest[p] == '\\')
+		{
+			dest.insert(++p, "\\");
+			++l;
+		}
+	}
+}
+
 void Scanner::set_sourceline(char *& cursor) 
 {
 sourceline:
@@ -608,7 +622,7 @@ sourceline:
 				}
 	dstring		{
 					cur = cursor;
-					sourceFileInfo.set_fname(token(1, cur - tok - 2).to_string());
+					escape (in.file_name, token(1, cur - tok - 2).to_string());
 			  		goto sourceline; 
 				}
 	"\n"			{

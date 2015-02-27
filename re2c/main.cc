@@ -19,8 +19,6 @@
 namespace re2c
 {
 
-file_info sourceFileInfo;
-
 bool bFlag = false;
 bool cFlag = false;
 bool dFlag = false;
@@ -219,7 +217,7 @@ int main(int argc, char *argv[])
 {
 	int c;
 	const char *sourceFileName = 0;
-	const char *outputFileName = 0;
+	const char *outputFileName = "<stdout>";
 	const char *headerFileName = 0;
 
 	if (argc == 1)
@@ -419,6 +417,16 @@ int main(int argc, char *argv[])
 	if (argc == opt_ind + 1)
 	{
 		sourceFileName = argv[opt_ind];
+		if (strcmp (sourceFileName, "-") == 0)
+		{
+			if (fFlag)
+			{
+				std::cerr << "re2c: error: multiple /*!re2c stdin is not acceptable when -f is specified\n";
+				return 1;
+			}
+			sourceFileName = "<stdin>";
+			outputFileName = "<stdout>";
+		}
 	}
 	else
 	{
@@ -428,32 +436,14 @@ int main(int argc, char *argv[])
 	}
 
 	// set up the source stream
-	FILE * source = NULL;
-	if (sourceFileName[0] == '-' && sourceFileName[1] == '\0')
-	{
-		if (fFlag)
-		{
-			std::cerr << "re2c: error: multiple /*!re2c stdin is not acceptable when -f is specified\n";
-			return 1;
-		}
-		sourceFileName = "<stdin>";
-		source = stdin;
-	}
-	else
-	{
-		source = fopen (sourceFileName, "rb");
-	}
-	if (source == NULL)
+	re2c::Input input (sourceFileName);
+	if (input.status == Input::FAIL_OPEN)
 	{
 		cerr << "re2c: error: cannot open " << sourceFileName << "\n";
 		return 1;
 	}
 
 	// set up the output streams
-	if (outputFileName == NULL || (sourceFileName[0] == '-' && sourceFileName[1] == '\0'))
-	{
-		outputFileName = "<stdout>";
-	}
 	re2c::Output output (outputFileName, headerFileName);
 	if (output.source.status == OutputFile::FAIL_OPEN)
 	{
@@ -466,13 +456,11 @@ int main(int argc, char *argv[])
 		return 1;
 	}
 
-	Scanner scanner (source, output.source);
-	sourceFileInfo = file_info (sourceFileName, &scanner);
+	Scanner scanner (input, output.source);
 	parse (scanner, output);
 
 	// output generated code
 	output.emit ();
 
-	fclose (source);
 	return 0;
 }

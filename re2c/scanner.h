@@ -5,6 +5,7 @@
 #include <string>
 
 #include "globals.h"
+#include "input.h"
 #include "output.h"
 #include "re.h"
 #include "token.h"
@@ -22,11 +23,10 @@ struct ScannerState
 	bool    in_parse;
 };
 
-class Scanner:
-	public line_number, private ScannerState
+class Scanner: private ScannerState
 {
 private:
-	FILE * in;
+	Input & in;
 	OutputFile & out;
 
 private:
@@ -36,7 +36,7 @@ private:
 	void set_sourceline(char *& cursor);
 
 public:
-	Scanner(FILE *, OutputFile &);
+	Scanner(Input &, OutputFile &);
 	~Scanner();
 
 	enum ParseMode {
@@ -55,6 +55,7 @@ public:
 	void restore_state(const ScannerState&);
 
 	uint get_cline() const;
+	const std::string & get_fname () const;
 	void set_in_parse(bool new_in_parse);
 	void fatal_at(uint line, uint ofs, const char *msg) const;
 	void fatalf_at(uint line, const char*, ...) const;
@@ -69,7 +70,6 @@ public:
 	SubStr token() const;
 	SubStr token(uint start, uint len) const;
 	Str raw_token(std::string enclosure) const;
-	virtual uint get_line() const;	
 
 	uint unescape(SubStr &s) const;
 	std::string& unescape(SubStr& str_in, std::string& str_out) const;
@@ -92,9 +92,9 @@ inline size_t Scanner::get_pos() const
 	return cur - bot;
 }
 
-inline uint Scanner::get_line() const
+inline const std::string & Scanner::get_fname () const
 {
-	return cline;
+	return in.file_name;
 }
 
 inline uint Scanner::get_cline() const
