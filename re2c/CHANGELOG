@@ -1,3 +1,7 @@
+Version 0.14.1 (2015-02-27)
+-----------------------------
+- fixed #55 re2c-0.14: re2c -V outputs null byte
+
 Version 0.14 (2015-02-23)
 -----------------------------
 - Added generic input API 21 (#21 Support to configure how re2c code interfaced with the symbol buffer?)
