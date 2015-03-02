@@ -38,28 +38,25 @@ OutputBlock::~OutputBlock ()
 }
 
 OutputFile::OutputFile (const char * fn)
-	: status (NO_FILE)
-	, filename (fn)
+	: file_name (fn)
 	, file (NULL)
 	, blocks ()
 	, prolog_label (0)
 {
-	if (filename != NULL)
-	{
-		if (strcmp (filename, "<stdout>") == 0)
-		{
-			file = stdout;
-			status = OK;
-		}
-		else
-		{
-			file = fopen (filename, "wb");
-			status = file == NULL
-				? FAIL_OPEN
-				: OK;
-		}
-	}
 	new_block ();
+}
+
+bool OutputFile::open ()
+{
+	if (strcmp (file_name, "<stdout>") == 0)
+	{
+		file = stdout;
+	}
+	else
+	{
+		file = fopen (file_name, "wb");
+	}
+	return file != NULL;
 }
 
 OutputFile::~OutputFile ()
@@ -198,13 +195,13 @@ void OutputFile::emit
 					case OutputFragment::CODE:
 						break;
 					case OutputFragment::LINE_INFO:
-						output_line_info (f, line_count + 1, filename);
+						output_line_info (f, line_count + 1, file_name);
 						break;
 					case OutputFragment::STATE_GOTO:
 						output_state_goto (f, prolog_label);
 						break;
 					case OutputFragment::TYPES:
-						output_types (f, types);
+						output_types (f, f.indent, types);
 						break;
 					case OutputFragment::YYACCEPT_INIT:
 						output_yyaccept_init (f, b.used_yyaccept);
@@ -224,10 +221,47 @@ void OutputFile::emit
 	}
 }
 
-void Output::emit ()
+HeaderFile::HeaderFile (const char * fn)
+	: stream ()
+	, file_name (fn)
+	, file (NULL)
+{}
+
+bool HeaderFile::open ()
+{
+	file = fopen (file_name, "wb");
+	return file != NULL;
+}
+
+void HeaderFile::emit (const std::vector<std::string> & types)
+{
+	output_version_time (stream);
+	output_line_info (stream, 3, file_name);
+	stream << "\n";
+	output_types (stream, 0, types);
+}
+
+HeaderFile::~HeaderFile ()
+{
+	if (file != NULL)
+	{
+		std::string content = stream.str ();
+		fwrite (content.c_str (), 1, content.size (), file);
+		fclose (file);
+	}
+}
+
+Output::Output (const char * source_name, const char * header_name)
+	: source (source_name)
+	, header (header_name)
+	, types ()
+	, max_fill (1)
+{}
+
+Output::~Output ()
 {
 	source.emit (types, max_fill);
-	header.emit (types, max_fill);
+	header.emit (types);
 }
 
 } // namespace re2c

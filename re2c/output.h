@@ -64,14 +64,9 @@ struct OutputBlock
 
 struct OutputFile
 {
-	enum status_t
-		{ NO_FILE
-		, OK
-		, FAIL_OPEN
-		} status;
-
-	OutputFile (const char * filename);
+	OutputFile (const char * fn);
 	~OutputFile ();
+	bool open ();
 	OutputFragment & fragment ();
 	void write (const char * s, std::streamsize n);
 	void insert_line_info ();
@@ -91,7 +86,7 @@ struct OutputFile
 	friend OutputFile & operator << (OutputFile & o, const Setw & s);
 
 private:
-	const char * filename;
+	const char * file_name;
 	FILE * file;
 	std::vector<OutputBlock *> blocks;
 	uint prolog_label;
@@ -99,21 +94,28 @@ private:
 	void insert_code ();
 };
 
+struct HeaderFile
+{
+	HeaderFile (const char * fn);
+	~HeaderFile ();
+	bool open ();
+	void emit (const std::vector<std::string> & types);
+
+private:
+	std::ostringstream stream;
+	const char * file_name;
+	FILE * file;
+};
+
 struct Output
 {
 	OutputFile source;
-	OutputFile header;
+	HeaderFile header;
 	std::vector<std::string> types;
 	uint max_fill;
 
-	Output (const char * source_name, const char * header_name)
-		: source (source_name)
-		, header (header_name)
-		, types ()
-		, max_fill (1)
-	{}
-
-	void emit ();
+	Output (const char * source_name, const char * header_name);
+	~Output ();
 };
 
 } // namespace re2c

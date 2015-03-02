@@ -8,15 +8,12 @@ namespace re2c {
 
 struct Input
 {
-	enum status_t
-		{ OK
-		, FAIL_OPEN
-		} status;
 	FILE * file;
 	std::string file_name;
 
 	Input (const char * fn);
 	~Input ();
+	bool open ();
 };
 
 } // namespace re2c

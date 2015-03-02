@@ -3,9 +3,11 @@
 namespace re2c {
 
 Input::Input (const char * fn)
-	: status (OK)
-	, file (NULL)
+	: file (NULL)
 	, file_name (fn)
+{}
+
+bool Input::open ()
 {
 	if (file_name == "<stdin>")
 	{
@@ -14,11 +16,8 @@ Input::Input (const char * fn)
 	else
 	{
 		file = fopen (file_name.c_str (), "rb");
-		if (file == NULL)
-		{
-			status = FAIL_OPEN;
-		}
 	}
+	return file != NULL;
 }
 
 Input::~Input ()

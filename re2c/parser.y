@@ -513,9 +513,8 @@ void parse(Scanner& i, Output & o)
 
 	in = &i;
 
-	output_version_time (o.source);
+	output_version_time (o.source.fragment ());
 	output_line_info (o.source.fragment (), in->get_cline (), in->get_fname ().c_str ());
-	output_version_time (o.header);
 
 	Enc encodingOld = encoding;
 	
@@ -667,12 +666,6 @@ void parse(Scanner& i, Output & o)
 			}
 
 			genTypes (o, specMap);
-			if (o.header.status != OutputFile::NO_FILE)
-			{
-				o.header.insert_line_info ();
-				o.header << "\n";
-				o.header.insert_types ();
-			}
 		}
 		else
 		{

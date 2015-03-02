@@ -437,7 +437,7 @@ int main(int argc, char *argv[])
 
 	// set up the source stream
 	re2c::Input input (sourceFileName);
-	if (input.status == Input::FAIL_OPEN)
+	if (!input.open ())
 	{
 		cerr << "re2c: error: cannot open " << sourceFileName << "\n";
 		return 1;
@@ -445,12 +445,12 @@ int main(int argc, char *argv[])
 
 	// set up the output streams
 	re2c::Output output (outputFileName, headerFileName);
-	if (output.source.status == OutputFile::FAIL_OPEN)
+	if (!output.source.open ())
 	{
 		cerr << "re2c: error: cannot open " << outputFileName << "\n";
 		return 1;
 	}
-	if (output.header.status == OutputFile::FAIL_OPEN)
+	if (tFlag && !output.header.open ())
 	{
 		cerr << "re2c: error: cannot open " << headerFileName << "\n";
 		return 1;
@@ -458,9 +458,6 @@ int main(int argc, char *argv[])
 
 	Scanner scanner (input, output.source);
 	parse (scanner, output);
-
-	// output generated code
-	output.emit ();
 
 	return 0;
 }
