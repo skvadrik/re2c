@@ -298,11 +298,11 @@ void BitMap::gen(OutputFile & o, uint ind, uint lb, uint ub)
 
 				if (yybmHexTable)
 				{
-					prtHex(o.fragment (), bm[j]);
+					o.write_hex (bm[j]);
 				}
 				else
 				{
-					o << Setw (3) << (uint)bm[j];
+					o.write_uint_width (bm[j], 3);
 				}
 				o  << ", ";
 			}
@@ -346,7 +346,7 @@ static void genIf(OutputFile & o, uint ind, const char *cmp, uint v, bool &readC
 	}
 
 	o << " " << cmp << " ";
-	prtChOrHex(o.fragment (), v);
+	o.write_char_hex (v);
 	o << ") ";
 }
 
@@ -707,7 +707,7 @@ void Rule::emit(Output & output, uint ind, bool &, const std::string& condName) 
 		o << indent(ind) << yySetupRule << "\n";
 	}
 
-	output_line_info (o.fragment (), rule->code->line, rule->code->source.c_str ());
+	o.write_line_info (rule->code->line, rule->code->source.c_str ());
 	o << indent(ind);
 	if (rule->code->autogen)
 	{
@@ -820,17 +820,17 @@ static void printDotCharInterval(OutputFile & o, uint lastPrintableChar, uint ch
 				o << "]\n";
 				o << from->label << " -> " << to->label;
 				o << " [label=";
-				prtChOrHex(o.fragment (), ++chr);
+				o.write_char_hex (++chr);
 			}
 		}
 		else
 		{
-			prtChOrHex(o.fragment (), chr);
+			o.write_char_hex (chr);
 		}
 	}
 	else
 	{
-		prtChOrHex(o.fragment (), chr);
+		o.write_char_hex (chr);
 	}
 
 	o << "]";
@@ -874,7 +874,7 @@ static bool genCases(OutputFile & o, uint ind, uint lb, Span *s, bool &newLine, 
 				else
 				{
 					o << indent(ind) << "case ";
-					prtChOrHex(o.fragment (), lb);
+					o.write_char_hex (lb);
 					o << ":";
 					if (dFlag && encoding.is(Enc::EBCDIC))
 					{
@@ -1248,7 +1248,7 @@ void Go::genGoto(OutputFile & o, uint ind, const State *from, const State *next,
 					o << "if (" << mapCodeName["yybm"] << "[" << b->i << "+" << sYych << "] & ";
 					if (yybmHexTable)
 					{
-						prtHex(o.fragment (), b->m);
+						o.write_hex (b->m);
 					}
 					else
 					{
@@ -1908,7 +1908,7 @@ void DFA::emit(Output & output, uint& ind, const RegExpMap* specMap, const std::
 	bUseStartLabel = false;
 }
 
-static void output_state_goto_sub (OutputFragment & o, uint ind, uint start_label, int cMin, int cMax)
+static void output_state_goto_sub (std::ostream & o, uint ind, uint start_label, int cMin, int cMax)
 {
 	if (cMin == cMax)
 	{
@@ -1933,9 +1933,8 @@ static void output_state_goto_sub (OutputFragment & o, uint ind, uint start_labe
 	}
 }
 
-void output_state_goto (OutputFragment & o, uint start_label)
+void output_state_goto (std::ostream & o, uint ind, uint start_label)
 {
-	uint ind = o.indent;
 	if (gFlag)
 	{
 		o << indent(ind++) << "static void *" << mapCodeName["yystable"] << "[" << "] = {\n";
@@ -2094,23 +2093,23 @@ void genTypes(Output & output, const RegExpMap& specMap)
 	}
 }
 
-void output_yyaccept_init (OutputFragment & o, bool used_yyaccept)
+void output_yyaccept_init (std::ostream & o, uint ind, bool used_yyaccept)
 {
 	if (used_yyaccept)
 	{
-		o << indent (o.indent) << "unsigned int " << mapCodeName["yyaccept"] << " = 0;\n";
+		o << indent (ind) << "unsigned int " << mapCodeName["yyaccept"] << " = 0;\n";
 	}
 }
 
-void output_yyaccept_selector (OutputFragment & o, bool used_yyaccept)
+void output_yyaccept_selector (std::ostream & o, uint ind, bool used_yyaccept, uint yyaccept_selector)
 {
 	if (used_yyaccept)
 	{
-		o << indent (o.indent) << mapCodeName["yyaccept"] << " = " << o.info.yyaccept_selector << ";\n";
+		o << indent (ind) << mapCodeName["yyaccept"] << " = " << yyaccept_selector << ";\n";
 	}
 }
 
-void output_yymaxfill (OutputFragment & o, uint max_fill)
+void output_yymaxfill (std::ostream & o, uint max_fill)
 {
 	o << "#define YYMAXFILL " << max_fill << "\n";
 }

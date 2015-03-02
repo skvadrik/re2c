@@ -130,7 +130,7 @@ echo:
 						out << "\n";
 						out.insert_types ();
 						out << "\n";
-						output_line_info (out.fragment (), cline, get_fname ().c_str ());
+						out.write_line_info (cline, get_fname ().c_str ());
 					}
 					goto echo;
 				}
@@ -140,7 +140,7 @@ echo:
 					{
 						if (ignore_cnt)
 						{
-							output_line_info (out.fragment (), cline, get_fname ().c_str ());
+							out.write_line_info (cline, get_fname ().c_str ());
 						}
 						ignore_eoc = false;
 						ignore_cnt = 0;
@@ -158,7 +158,7 @@ echo:
 						if (ignore_cnt)
 						{
 							out << "\n";
-							output_line_info (out.fragment (), cline, get_fname ().c_str ());
+							out.write_line_info (cline, get_fname ().c_str ());
 						}
 						ignore_eoc = false;
 						ignore_cnt = 0;

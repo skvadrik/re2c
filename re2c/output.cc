@@ -2,15 +2,23 @@
 #include <stdio.h>
 
 #include "output.h"
+#include "print.h"
 #include "re.h"
 
 namespace re2c
 {
 
+OutputFragment::OutputFragment (type_t t, uint i)
+	: type (t)
+	, stream ()
+	, info ()
+	, indent (i)
+{}
+
 uint OutputFragment::count_lines ()
 {
 	uint lines = 0;
-	const std::string content = str ();
+	const std::string content = stream.str ();
 	const char * p = content.c_str ();
 	for (uint i = 0; i < content.size (); ++i)
 	{
@@ -71,43 +79,62 @@ OutputFile::~OutputFile ()
 	}
 }
 
-OutputFragment & OutputFile::fragment ()
+std::ostream & OutputFile::stream ()
 {
-	return * blocks.back ()->fragments.back ();
+	return blocks.back ()->fragments.back ()->stream;
 }
 
 void OutputFile::write (const char * s, std::streamsize n)
 {
-	fragment ().write (s, n);
+	stream ().write (s, n);
+}
+
+void OutputFile::write_hex (uint n)
+{
+	prtHex (stream (), n);
+}
+
+void OutputFile::write_char_hex (uint n)
+{
+	prtChOrHex (stream (), n);
+}
+
+void OutputFile::write_uint_width (uint n, uint w)
+{
+	stream () << std::setw (w) << n;
+}
+
+void OutputFile::write_line_info (uint l, const char * fn)
+{
+	output_line_info (stream (), l, fn);
+}
+
+void OutputFile::write_version_time ()
+{
+	output_version_time (stream ());
 }
 
 OutputFile & operator << (OutputFile & u, uint n)
 {
-	u.fragment () << n;
+	u.stream () << n;
 	return u;
 }
 
 OutputFile & operator << (OutputFile & u, const std::string & s)
 {
-	u.fragment () << s;
+	u.stream () << s;
 	return u;
 }
 
 OutputFile & operator << (OutputFile & u, const char * s)
 {
-	u.fragment () << s;
+	u.stream () << s;
 	return u;
 }
 
 OutputFile & operator << (OutputFile & u, const Str & s)
 {
-	u.fragment () << s;
-	return u;
-}
-
-OutputFile & operator << (OutputFile & u, const Setw & s)
-{
-	u.fragment () << std::setw (s.width);
+	u.stream () << s;
 	return u;
 }
 
@@ -195,25 +222,25 @@ void OutputFile::emit
 					case OutputFragment::CODE:
 						break;
 					case OutputFragment::LINE_INFO:
-						output_line_info (f, line_count + 1, file_name);
+						output_line_info (f.stream, line_count + 1, file_name);
 						break;
 					case OutputFragment::STATE_GOTO:
-						output_state_goto (f, prolog_label);
+						output_state_goto (f.stream, f.indent, prolog_label);
 						break;
 					case OutputFragment::TYPES:
-						output_types (f, f.indent, types);
+						output_types (f.stream, f.indent, types);
 						break;
 					case OutputFragment::YYACCEPT_INIT:
-						output_yyaccept_init (f, b.used_yyaccept);
+						output_yyaccept_init (f.stream, f.indent, b.used_yyaccept);
 						break;
 					case OutputFragment::YYACCEPT_SELECTOR:
-						output_yyaccept_selector (f, b.used_yyaccept);
+						output_yyaccept_selector (f.stream, f.indent, b.used_yyaccept, f.info.yyaccept_selector);
 						break;
 					case OutputFragment::YYMAXFILL:
-						output_yymaxfill (f, max_fill);
+						output_yymaxfill (f.stream, max_fill);
 						break;
 				}
-				std::string content = f.str ();
+				std::string content = f.stream.str ();
 				fwrite (content.c_str (), 1, content.size (), file);
 				line_count += f.count_lines ();
 			}

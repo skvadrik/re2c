@@ -12,16 +12,7 @@ namespace re2c
 
 struct Str;
 
-struct Setw
-{
-	uint width;
-
-	Setw (uint n)
-		: width (n)
-	{}
-};
-
-struct OutputFragment : public std::ostringstream
+struct OutputFragment
 {
 	enum type_t
 		{ CODE
@@ -40,16 +31,11 @@ struct OutputFragment : public std::ostringstream
 	};
 
 	type_t type;
+	std::ostringstream stream;
 	info_t info;
 	uint indent;
 
-	OutputFragment (type_t t, uint i)
-		: std::ostringstream ()
-		, type (t)
-		, info ()
-		, indent (i)
-	{}
-
+	OutputFragment (type_t t, uint i);
 	uint count_lines ();
 };
 
@@ -66,24 +52,33 @@ struct OutputFile
 {
 	OutputFile (const char * fn);
 	~OutputFile ();
+
 	bool open ();
-	OutputFragment & fragment ();
+
+	void new_block ();
+
 	void write (const char * s, std::streamsize n);
+	void write_hex (uint n);
+	void write_char_hex (uint n);
+	void write_uint_width (uint n, uint w);
+	void write_line_info (uint l, const char * fn);
+	void write_version_time ();
+	friend OutputFile & operator << (OutputFile & o, uint n);
+	friend OutputFile & operator << (OutputFile & o, const std::string & s);
+	friend OutputFile & operator << (OutputFile & o, const char * s);
+	friend OutputFile & operator << (OutputFile & o, const Str & s);
+
 	void insert_line_info ();
 	void insert_state_goto (uint ind, uint start_label);
 	void insert_types ();
 	void insert_yyaccept_init (uint ind);
 	void insert_yyaccept_selector (uint ind, uint selector);
 	void insert_yymaxfill ();
-	void new_block ();
+
 	void set_used_yyaccept ();
 	bool get_used_yyaccept () const;
+
 	void emit (const std::vector<std::string> & types, uint max_fill);
-	friend OutputFile & operator << (OutputFile & o, uint n);
-	friend OutputFile & operator << (OutputFile & o, const std::string & s);
-	friend OutputFile & operator << (OutputFile & o, const char * s);
-	friend OutputFile & operator << (OutputFile & o, const Str & s);
-	friend OutputFile & operator << (OutputFile & o, const Setw & s);
 
 private:
 	const char * file_name;
@@ -91,6 +86,7 @@ private:
 	std::vector<OutputBlock *> blocks;
 	uint prolog_label;
 
+	std::ostream & stream ();
 	void insert_code ();
 };
 

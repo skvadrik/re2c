@@ -513,8 +513,8 @@ void parse(Scanner& i, Output & o)
 
 	in = &i;
 
-	output_version_time (o.source.fragment ());
-	output_line_info (o.source.fragment (), in->get_cline (), in->get_fname ().c_str ());
+	o.source.write_version_time ();
+	o.source.write_line_info (in->get_cline (), in->get_fname ().c_str ());
 
 	Enc encodingOld = encoding;
 	
@@ -687,7 +687,7 @@ void parse(Scanner& i, Output & o)
 				}
 			}
 		}
-		output_line_info (o.source.fragment (), in->get_cline (), in->get_fname ().c_str ());
+		o.source.write_line_info (in->get_cline (), in->get_fname ().c_str ());
 		/* restore original char handling mode*/
 		encoding = encodingOld;
 	}
