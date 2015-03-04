@@ -1019,22 +1019,19 @@ void Go::genSwitch(OutputFile & o, uint ind, const State *from, const State *nex
 			}
 		}
 
-		if (!DFlag)
+		if (dFlag)
 		{
-			if (dFlag)
-			{
-				o << indent(ind) << mapCodeName["YYDEBUG"] << "(-1, " << mapCodeName["yych"] << ");\n";
-			}
+			o << indent(ind) << mapCodeName["YYDEBUG"] << "(-1, " << mapCodeName["yych"] << ");\n";
+		}
 
-			if (readCh)
-			{
-				o << indent(ind) << "switch ((" << input_api.expr_peek_save () << ")) {\n";
-				readCh = false;
-			}
-			else
-			{
-				o << indent(ind) << "switch (" << mapCodeName["yych"] << ") {\n";
-			}
+		if (readCh)
+		{
+			o << indent(ind) << "switch ((" << input_api.expr_peek_save () << ")) {\n";
+			readCh = false;
+		}
+		else
+		{
+			o << indent(ind) << "switch (" << mapCodeName["yych"] << ") {\n";
 		}
 
 		while (t != &sP[0])
@@ -1066,7 +1063,7 @@ void Go::genSwitch(OutputFile & o, uint ind, const State *from, const State *nex
 				}
 			}
 
-			if (used && !DFlag)
+			if (used)
 			{
 				genGoTo(o, newLine ? ind+1 : 1, from, to, readCh);
 				newLine = true;
@@ -1074,23 +1071,9 @@ void Go::genSwitch(OutputFile & o, uint ind, const State *from, const State *nex
 			t = r;
 		}
 
-		if (DFlag)
-		{
-			if (!newLine)
-			{
-				o << "\n";
-				newLine = true;
-			}
-
-			o << from->label << " -> " << def->label;
-			o << " [label=default]\n" ;
-		}
-		else
-		{
-			o << indent(ind) << "default:";
-			genGoTo(o, 1, from, def, readCh);
-			o << indent(ind) << "}\n";
-		}
+		o << indent(ind) << "default:";
+		genGoTo(o, 1, from, def, readCh);
+		o << indent(ind) << "}\n";
 
 		delete [] sP;
 	}
