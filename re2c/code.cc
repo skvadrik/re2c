@@ -834,7 +834,7 @@ static void printDotCharInterval(OutputFile & o, uint lastPrintableChar, uint ch
 	o << "]";
 }
 
-static bool genCasesD(OutputFile & o, uint lb, Span *s, bool &newLine, uint mask, const State *from, const State *to)
+static bool genCasesD(OutputFile & o, uint lb, Span *s, bool &newLine, const State *from, const State *to)
 {
 	bool used = false;
 	uint lastPrintableChar = 0;
@@ -848,27 +848,24 @@ static bool genCasesD(OutputFile & o, uint lb, Span *s, bool &newLine, uint mask
 	{
 		for (;;)
 		{
-			if (!mask || lb > 0x00FF)
+			if ((lb >= 'A' && lb <= 'Z') || (lb >= 'a' && lb <= 'z') || (lb >= '0' && lb <= '9'))
 			{
-				if ((lb >= 'A' && lb <= 'Z') || (lb >= 'a' && lb <= 'z') || (lb >= '0' && lb <= '9'))
+				if (lastPrintableChar == 0)
 				{
-					if (lastPrintableChar == 0)
-					{
-						lastPrintableChar = lb;
-					}
-
-					if (++lb == s->ub)
-					{
-						break;
-					}
-					continue;
+					lastPrintableChar = lb;
 				}
 
-				printDotCharInterval(o, lastPrintableChar, lb, from, to, true);
-				lastPrintableChar = 0;
-				newLine = false;
-				used = true;
+				if (++lb == s->ub)
+				{
+					break;
+				}
+				continue;
 			}
+
+			printDotCharInterval(o, lastPrintableChar, lb, from, to, true);
+			lastPrintableChar = 0;
+			newLine = false;
+			used = true;
 
 			if (++lb == s->ub)
 			{
@@ -932,13 +929,13 @@ static bool genCases(OutputFile & o, uint ind, uint lb, Span *s, bool &newLine, 
 	return used;
 }
 
-void Go::genSwitchD (OutputFile & o, uint ind, const State *from, const State *next, bool &readCh, uint mask) const
+void Go::genSwitchD (OutputFile & o, uint ind, const State *from, const State *next, bool &readCh) const
 {
 	bool newLine = true;
 
-	if ((mask ? wSpans : nSpans) <= 2)
+	if (nSpans <= 2)
 	{
-		genLinear(o, ind, from, next, readCh, mask);
+		genLinear(o, ind, from, next, readCh, 0);
 	}
 	else
 	{
@@ -955,24 +952,6 @@ void Go::genSwitchD (OutputFile & o, uint ind, const State *from, const State *n
 			}
 		}
 
-		if (!DFlag)
-		{
-			if (dFlag)
-			{
-				o << indent(ind) << mapCodeName["YYDEBUG"] << "(-1, " << mapCodeName["yych"] << ");\n";
-			}
-
-			if (readCh)
-			{
-				o << indent(ind) << "switch ((" << input_api.expr_peek_save () << ")) {\n";
-				readCh = false;
-			}
-			else
-			{
-				o << indent(ind) << "switch (" << mapCodeName["yych"] << ") {\n";
-			}
-		}
-
 		while (t != &sP[0])
 		{
 			bool used = false;
@@ -983,50 +962,35 @@ void Go::genSwitchD (OutputFile & o, uint ind, const State *from, const State *n
 
 			if (*s == &span[0])
 			{
-				used |= genCasesD(o, 0, *s, newLine, mask, from, to);
+				used |= genCasesD(o, 0, *s, newLine, from, to);
 			}
 			else
 			{
-				used |= genCasesD(o, (*s)[ -1].ub, *s, newLine, mask, from, to);
+				used |= genCasesD(o, (*s)[ -1].ub, *s, newLine, from, to);
 			}
 
 			while (++s < t)
 			{
 				if ((*s)->to == to)
 				{
-					used |= genCasesD(o, (*s)[ -1].ub, *s, newLine, mask, from, to);
+					used |= genCasesD(o, (*s)[ -1].ub, *s, newLine, from, to);
 				}
 				else
 				{
 					*(r++) = *s;
 				}
 			}
-
-			if (used && !DFlag)
-			{
-				genGoTo(o, newLine ? ind+1 : 1, from, to, readCh);
-				newLine = true;
-			}
 			t = r;
 		}
 
-		if (DFlag)
+		if (!newLine)
 		{
-			if (!newLine)
-			{
-				o << "\n";
-				newLine = true;
-			}
+			o << "\n";
+			newLine = true;
+		}
 
-			o << from->label << " -> " << def->label;
-			o << " [label=default]\n" ;
-		}
-		else
-		{
-			o << indent(ind) << "default:";
-			genGoTo(o, 1, from, def, readCh);
-			o << indent(ind) << "}\n";
-		}
+		o << from->label << " -> " << def->label;
+		o << " [label=default]\n" ;
 
 		delete [] sP;
 	}
@@ -1289,7 +1253,7 @@ void Go::genGoto(OutputFile & o, uint ind, const State *from, const State *next,
 	{
 		if (nSpans != 0)
 		{
-			genSwitchD (o, ind, from, next, readCh, 0);
+			genSwitchD (o, ind, from, next, readCh);
 		}
 		return;
 	}
