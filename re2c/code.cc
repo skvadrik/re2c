@@ -929,13 +929,17 @@ static bool genCases(OutputFile & o, uint ind, uint lb, Span *s, bool &newLine, 
 	return used;
 }
 
-void Go::genSwitchD (OutputFile & o, uint ind, const State *from, const State *next, bool &readCh) const
+void Go::genSwitchD (OutputFile & o, const State *from) const
 {
 	bool newLine = true;
 
-	if (nSpans <= 2)
+	if (nSpans == 0)
 	{
-		genLinear(o, ind, from, next, readCh, 0);
+		return;
+	}
+	else if (nSpans == 1)
+	{
+		o << from->label << " -> " << span[0].to->label << "\n";
 	}
 	else
 	{
@@ -1234,10 +1238,7 @@ void Go::genGoto(OutputFile & o, uint ind, const State *from, const State *next,
 {
 	if (DFlag)
 	{
-		if (nSpans != 0)
-		{
-			genSwitchD (o, ind, from, next, readCh);
-		}
+		genSwitchD (o, from);
 		return;
 	}
 

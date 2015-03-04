@@ -189,7 +189,7 @@ public:
 	void genBase(OutputFile &, uint ind, const State *from, const State *next, bool &readCh, uint mask) const;
 	void genLinear(OutputFile &, uint ind, const State *from, const State *next, bool &readCh, uint mask) const;
 	void genBinary(OutputFile &, uint ind, const State *from, const State *next, bool &readCh, uint mask) const;
-	void genSwitchD(OutputFile &, uint ind, const State *from, const State *next, bool &readCh) const;
+	void genSwitchD(OutputFile &, const State *from) const;
 	void genSwitch(OutputFile &, uint ind, const State *from, const State *next, bool &readCh, uint mask) const;
 	void genCpGoto(OutputFile &, uint ind, const State *from, const State *next, bool &readCh) const;
 	void compact();
