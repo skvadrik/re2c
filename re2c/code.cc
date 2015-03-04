@@ -736,10 +736,6 @@ static void doLinear(OutputFile & o, uint ind, Span *s, uint n, const State *fro
 					genIf(o, ind, "!=", s[0].ub, readCh);
 					genGoTo(o, 0, from, bg, readCh);
 				}
-				if (DFlag)
-				{
-					genGoTo(o, ind, from, next, readCh);
-				}
 				return ;
 			}
 			else
@@ -770,10 +766,6 @@ static void doLinear(OutputFile & o, uint ind, Span *s, uint n, const State *fro
 				genIf(o, ind, ">=", s[0].ub, readCh);
 				genGoTo(o, 0, from, s[1].to, readCh);
 			}
-			if (DFlag)
-			{
-				genGoTo(o, ind, from, next, readCh);
-			}
 			return ;
 		}
 		else
@@ -786,11 +778,6 @@ static void doLinear(OutputFile & o, uint ind, Span *s, uint n, const State *fro
 			n -= 1;
 			s += 1;
 		}
-	}
-
-	if (DFlag)
-	{
-		genGoTo(o, ind, from, next, readCh);
 	}
 }
 
