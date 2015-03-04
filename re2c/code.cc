@@ -821,9 +821,8 @@ static void printDotCharInterval(OutputFile & o, uint lastPrintableChar, uint ch
 	o << "]";
 }
 
-static bool genCasesD(OutputFile & o, uint lb, Span *s, bool &newLine, const State *from, const State *to)
+static void genCasesD(OutputFile & o, uint lb, Span *s, bool &newLine, const State *from, const State *to)
 {
-	bool used = false;
 	uint lastPrintableChar = 0;
 
 	if (!newLine)
@@ -852,7 +851,6 @@ static bool genCasesD(OutputFile & o, uint lb, Span *s, bool &newLine, const Sta
 			printDotCharInterval(o, lastPrintableChar, lb, from, to, true);
 			lastPrintableChar = 0;
 			newLine = false;
-			used = true;
 
 			if (++lb == s->ub)
 			{
@@ -871,8 +869,6 @@ static bool genCasesD(OutputFile & o, uint lb, Span *s, bool &newLine, const Sta
 		o << "\n";
 		newLine = true;
 	}
-
-	return used;
 }
 
 static bool genCases(OutputFile & o, uint ind, uint lb, Span *s, bool &newLine, uint mask)
@@ -945,26 +941,24 @@ void Go::genSwitchD (OutputFile & o, const State *from) const
 
 		while (t != &sP[0])
 		{
-			bool used = false;
-
 			r = s = &sP[0];
 
 			const State *to = (*s)->to;
 
 			if (*s == &span[0])
 			{
-				used |= genCasesD(o, 0, *s, newLine, from, to);
+				genCasesD(o, 0, *s, newLine, from, to);
 			}
 			else
 			{
-				used |= genCasesD(o, (*s)[ -1].ub, *s, newLine, from, to);
+				genCasesD(o, (*s)[ -1].ub, *s, newLine, from, to);
 			}
 
 			while (++s < t)
 			{
 				if ((*s)->to == to)
 				{
-					used |= genCasesD(o, (*s)[ -1].ub, *s, newLine, from, to);
+					genCasesD(o, (*s)[ -1].ub, *s, newLine, from, to);
 				}
 				else
 				{
