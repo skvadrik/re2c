@@ -834,7 +834,7 @@ static void printDotCharInterval(OutputFile & o, uint lastPrintableChar, uint ch
 	o << "]";
 }
 
-static bool genCases(OutputFile & o, uint ind, uint lb, Span *s, bool &newLine, uint mask, const State *from, const State *to)
+static bool genCasesD(OutputFile & o, uint lb, Span *s, bool &newLine, uint mask, const State *from, const State *to)
 {
 	bool used = false;
 	uint lastPrintableChar = 0;
@@ -850,37 +850,22 @@ static bool genCases(OutputFile & o, uint ind, uint lb, Span *s, bool &newLine, 
 		{
 			if (!mask || lb > 0x00FF)
 			{
-				if (DFlag)
+				if ((lb >= 'A' && lb <= 'Z') || (lb >= 'a' && lb <= 'z') || (lb >= '0' && lb <= '9'))
 				{
-					if ((lb >= 'A' && lb <= 'Z') || (lb >= 'a' && lb <= 'z') || (lb >= '0' && lb <= '9'))
+					if (lastPrintableChar == 0)
 					{
-						if (lastPrintableChar == 0)
-						{
-							lastPrintableChar = lb;
-						}
-
-						if (++lb == s->ub)
-						{
-							break;
-						}
-						continue;
+						lastPrintableChar = lb;
 					}
 
-					printDotCharInterval(o, lastPrintableChar, lb, from, to, true);
-					lastPrintableChar = 0;
-				}
-				else
-				{
-					o << indent(ind) << "case ";
-					o.write_char_hex (lb);
-					o << ":";
-					if (dFlag && encoding.is(Enc::EBCDIC))
+					if (++lb == s->ub)
 					{
-						const uint c = encoding.decodeUnsafe(lb);
-						if (isprint(c))
-							o << " /* " << std::string(1, c) << " */";
+						break;
 					}
+					continue;
 				}
+
+				printDotCharInterval(o, lastPrintableChar, lb, from, to, true);
+				lastPrintableChar = 0;
 				newLine = false;
 				used = true;
 			}
@@ -904,6 +889,147 @@ static bool genCases(OutputFile & o, uint ind, uint lb, Span *s, bool &newLine, 
 	}
 
 	return used;
+}
+
+static bool genCases(OutputFile & o, uint ind, uint lb, Span *s, bool &newLine, uint mask)
+{
+	bool used = false;
+
+	if (!newLine)
+	{
+		o << "\n";
+	}
+	newLine = true;
+	if (lb < s->ub)
+	{
+		for (;;)
+		{
+			if (!mask || lb > 0x00FF)
+			{
+				o << indent(ind) << "case ";
+				o.write_char_hex (lb);
+				o << ":";
+				if (dFlag && encoding.is(Enc::EBCDIC))
+				{
+					const uint c = encoding.decodeUnsafe(lb);
+					if (isprint(c))
+						o << " /* " << std::string(1, c) << " */";
+				}
+				newLine = false;
+				used = true;
+			}
+
+			if (++lb == s->ub)
+			{
+				break;
+			}
+
+			o << "\n";
+			newLine = true;
+		}
+	}
+
+	return used;
+}
+
+void Go::genSwitchD (OutputFile & o, uint ind, const State *from, const State *next, bool &readCh, uint mask) const
+{
+	bool newLine = true;
+
+	if ((mask ? wSpans : nSpans) <= 2)
+	{
+		genLinear(o, ind, from, next, readCh, mask);
+	}
+	else
+	{
+		State *def = span[nSpans - 1].to;
+		Span **sP = new Span * [nSpans - 1], **r, **s, **t;
+
+		t = &sP[0];
+
+		for (uint i = 0; i < nSpans; ++i)
+		{
+			if (span[i].to != def)
+			{
+				*(t++) = &span[i];
+			}
+		}
+
+		if (!DFlag)
+		{
+			if (dFlag)
+			{
+				o << indent(ind) << mapCodeName["YYDEBUG"] << "(-1, " << mapCodeName["yych"] << ");\n";
+			}
+
+			if (readCh)
+			{
+				o << indent(ind) << "switch ((" << input_api.expr_peek_save () << ")) {\n";
+				readCh = false;
+			}
+			else
+			{
+				o << indent(ind) << "switch (" << mapCodeName["yych"] << ") {\n";
+			}
+		}
+
+		while (t != &sP[0])
+		{
+			bool used = false;
+
+			r = s = &sP[0];
+
+			const State *to = (*s)->to;
+
+			if (*s == &span[0])
+			{
+				used |= genCasesD(o, 0, *s, newLine, mask, from, to);
+			}
+			else
+			{
+				used |= genCasesD(o, (*s)[ -1].ub, *s, newLine, mask, from, to);
+			}
+
+			while (++s < t)
+			{
+				if ((*s)->to == to)
+				{
+					used |= genCasesD(o, (*s)[ -1].ub, *s, newLine, mask, from, to);
+				}
+				else
+				{
+					*(r++) = *s;
+				}
+			}
+
+			if (used && !DFlag)
+			{
+				genGoTo(o, newLine ? ind+1 : 1, from, to, readCh);
+				newLine = true;
+			}
+			t = r;
+		}
+
+		if (DFlag)
+		{
+			if (!newLine)
+			{
+				o << "\n";
+				newLine = true;
+			}
+
+			o << from->label << " -> " << def->label;
+			o << " [label=default]\n" ;
+		}
+		else
+		{
+			o << indent(ind) << "default:";
+			genGoTo(o, 1, from, def, readCh);
+			o << indent(ind) << "}\n";
+		}
+
+		delete [] sP;
+	}
 }
 
 void Go::genSwitch(OutputFile & o, uint ind, const State *from, const State *next, bool &readCh, uint mask) const
@@ -957,18 +1083,18 @@ void Go::genSwitch(OutputFile & o, uint ind, const State *from, const State *nex
 
 			if (*s == &span[0])
 			{
-				used |= genCases(o, ind, 0, *s, newLine, mask, from, to);
+				used |= genCases(o, ind, 0, *s, newLine, mask);
 			}
 			else
 			{
-				used |= genCases(o, ind, (*s)[ -1].ub, *s, newLine, mask, from, to);
+				used |= genCases(o, ind, (*s)[ -1].ub, *s, newLine, mask);
 			}
 
 			while (++s < t)
 			{
 				if ((*s)->to == to)
 				{
-					used |= genCases(o, ind, (*s)[ -1].ub, *s, newLine, mask, from, to);
+					used |= genCases(o, ind, (*s)[ -1].ub, *s, newLine, mask);
 				}
 				else
 				{
@@ -1067,6 +1193,7 @@ void Go::genBase(OutputFile & o, uint ind, const State *from, const State *next,
 		Span *bot = &span[0], *top = &span[nSpans - 1];
 		uint util;
 
+		// decide if IFs insted of SWITCHes is a good idea
 		if (bot[0].to == top[0].to)
 		{
 			util = (top[ -1].ub - bot[0].ub) / (nSpans - 2);
@@ -1158,6 +1285,15 @@ void Go::genCpGoto(OutputFile & o, uint ind, const State *from, const State *nex
 
 void Go::genGoto(OutputFile & o, uint ind, const State *from, const State *next, bool &readCh)
 {
+	if (DFlag)
+	{
+		if (nSpans != 0)
+		{
+			genSwitchD (o, ind, from, next, readCh, 0);
+		}
+		return;
+	}
+
 	if ((gFlag || (encoding.szCodeUnit() > 1)) && wSpans == ~0u)
 	{
 		uint nBitmaps = 0;
@@ -1770,6 +1906,23 @@ void DFA::emit(Output & output, uint& ind, const RegExpMap* specMap, const std::
 	{
 		s->label = next_label++;
 	}
+
+/*
+	for (State * s = head; s; s = s->next)
+	{
+std::cerr << ">>" << s->label << "\n";
+			for (uint i = 0; i < s->go.nSpans; ++i)
+			{
+//				if (s->go.span[i].to && s->go.span[i].to != s->next)
+				if (s->go.span[i].to && !(s->go.span[i].to == s->next && (s->go.nSpans == 1 || sFlag)))
+				{
+std::cerr << "\t" << s->go.span[i].to->label << " " << s->next->label << std::endl;
+					s->go.span[i].to->used_label = true;
+					o.add_label (s->go.span[i].to->label);
+				}
+			}
+	}
+*/
 
 	// Save 'next_fill_index' and compute information about code generation
 	// while writing to null device.
