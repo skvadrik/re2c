@@ -10,6 +10,7 @@
 #include <iostream>
 #include <sstream>
 
+#include "cases.h"
 #include "code.h"
 #include "globals.h"
 #include "dfa.h"
@@ -871,41 +872,32 @@ static void genCasesD(OutputFile & o, uint lb, Span *s, bool &newLine, const Sta
 	}
 }
 
-static bool genCases(OutputFile & o, uint ind, uint lb, Span *s, bool &newLine, uint mask)
+static bool genCases (OutputFile & o, uint ind, const std::vector<std::pair<uint, uint> > & ranges, uint mask)
 {
 	bool used = false;
 
-	if (!newLine)
+	for (uint i = 0; i < ranges.size (); ++i)
 	{
-		o << "\n";
-	}
-	newLine = true;
-	if (lb < s->ub)
-	{
-		for (;;)
+		for (uint b = ranges[i].first; b < ranges[i].second; ++b)
 		{
-			if (!mask || lb > 0x00FF)
+			if (!mask || b > 0x00FF) // FIXME: delete this condition, check somewhere in unmap
 			{
 				o << indent(ind) << "case ";
-				o.write_char_hex (lb);
+				o.write_char_hex (b);
 				o << ":";
 				if (dFlag && encoding.is(Enc::EBCDIC))
 				{
-					const uint c = encoding.decodeUnsafe(lb);
+					const uint c = encoding.decodeUnsafe(b);
 					if (isprint(c))
 						o << " /* " << std::string(1, c) << " */";
 				}
-				newLine = false;
 				used = true;
 			}
-
-			if (++lb == s->ub)
+			bool last_case = i == ranges.size () - 1 && b == ranges[i].second - 1;
+			if (!last_case)
 			{
-				break;
+				o << "\n";
 			}
-
-			o << "\n";
-			newLine = true;
 		}
 	}
 
@@ -983,26 +975,13 @@ void Go::genSwitchD (OutputFile & o, const State *from) const
 
 void Go::genSwitch(OutputFile & o, uint ind, const State *from, const State *next, bool &readCh, uint mask) const
 {
-	bool newLine = true;
-
 	if ((mask ? wSpans : nSpans) <= 2)
 	{
 		genLinear(o, ind, from, next, readCh, mask);
 	}
 	else
 	{
-		State *def = span[nSpans - 1].to;
-		Span **sP = new Span * [nSpans - 1], **r, **s, **t;
-
-		t = &sP[0];
-
-		for (uint i = 0; i < nSpans; ++i)
-		{
-			if (span[i].to != def)
-			{
-				*(t++) = &span[i];
-			}
-		}
+		Cases cases (span, nSpans);
 
 		if (dFlag)
 		{
@@ -1019,48 +998,15 @@ void Go::genSwitch(OutputFile & o, uint ind, const State *from, const State *nex
 			o << indent(ind) << "switch (" << mapCodeName["yych"] << ") {\n";
 		}
 
-		while (t != &sP[0])
+		for (uint i = 0; i < cases.size (); ++i)
 		{
-			bool used = false;
-
-			r = s = &sP[0];
-
-			const State *to = (*s)->to;
-
-			if (*s == &span[0])
-			{
-				used |= genCases(o, ind, 0, *s, newLine, mask);
-			}
-			else
-			{
-				used |= genCases(o, ind, (*s)[ -1].ub, *s, newLine, mask);
-			}
-
-			while (++s < t)
-			{
-				if ((*s)->to == to)
-				{
-					used |= genCases(o, ind, (*s)[ -1].ub, *s, newLine, mask);
-				}
-				else
-				{
-					*(r++) = *s;
-				}
-			}
-
-			if (used)
-			{
-				genGoTo(o, newLine ? ind+1 : 1, from, to, readCh);
-				newLine = true;
-			}
-			t = r;
+			genCases (o, ind, cases[i].ranges, mask);
+			genGoTo(o, 1, from, cases[i].to, readCh);
 		}
 
 		o << indent(ind) << "default:";
-		genGoTo(o, 1, from, def, readCh);
+		genGoTo(o, 1, from, cases.default_case (), readCh);
 		o << indent(ind) << "}\n";
-
-		delete [] sP;
 	}
 }
 
