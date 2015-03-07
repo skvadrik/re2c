@@ -99,6 +99,11 @@ void OutputFile::write_char_hex (uint n)
 	prtChOrHex (stream (), n);
 }
 
+void OutputFile::write_range (uint l, uint u)
+{
+	printSpan (stream (), l, u);
+}
+
 void OutputFile::write_uint_width (uint n, uint w)
 {
 	stream () << std::setw (w) << n;

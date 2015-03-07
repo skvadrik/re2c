@@ -3,17 +3,17 @@
 digraph re2c {
 
 
-1 -> 19 [label="0x07"]
-1 -> 13 [label="0x08"]
-1 -> 9 [label="\\t"]
-1 -> 7 [label="\\n"]
-1 -> 11 [label="\\v"]
-1 -> 17 [label="\\f"]
-1 -> 15 [label="\\r"]
-1 -> 5 [label="\""]
-1 -> 3 [label="'"]
-1 -> 21 [label="\\\\"]
-1 -> 2 [label=default]
+1 -> 2 [label="[0x00-0x06][0x0E-!][#-&][(-[][0x5D-0xFF]"]
+1 -> 19 [label="[0x07]"]
+1 -> 13 [label="[0x08]"]
+1 -> 9 [label="[0x09]"]
+1 -> 7 [label="[0x0A]"]
+1 -> 11 [label="[0x0B]"]
+1 -> 17 [label="[0x0C]"]
+1 -> 15 [label="[0x0D]"]
+1 -> 5 [label="[\"]"]
+1 -> 3 [label="[']"]
+1 -> 21 [label="[\\]"]
 3 -> 4
 4 [label="bug47_dot_escapes.D.re:3"]
 5 -> 6

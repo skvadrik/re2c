@@ -787,95 +787,8 @@ void Go::genLinear(OutputFile & o, uint ind, const State *from, const State *nex
 	doLinear(o, ind, span, nSpans, from, next, readCh, mask);
 }
 
-static void printDotCharInterval(OutputFile & o, uint lastPrintableChar, uint chr, const State *from, const State *to, bool multipleIntervals)
+static void genCases (OutputFile & o, uint ind, const std::vector<std::pair<uint, uint> > & ranges, uint mask)
 {
-	o << from->label << " -> " << to->label;
-	o << " [label=";
-
-	if (lastPrintableChar != 0)
-	{
-		--chr; // we are already one char past the end
-
-		// make an interval (e.g. [A-Z])
-		if (lastPrintableChar != chr)
-		{
-			o << "\"[" << (char)lastPrintableChar << "-" << (char)chr << "]\"";
-
-			if (multipleIntervals)
-			{
-				o << "]\n";
-				o << from->label << " -> " << to->label;
-				o << " [label=";
-				o.write_char_hex (++chr);
-			}
-		}
-		else
-		{
-			o.write_char_hex (chr);
-		}
-	}
-	else
-	{
-		o.write_char_hex (chr);
-	}
-
-	o << "]";
-}
-
-static void genCasesD(OutputFile & o, uint lb, Span *s, bool &newLine, const State *from, const State *to)
-{
-	uint lastPrintableChar = 0;
-
-	if (!newLine)
-	{
-		o << "\n";
-	}
-	newLine = true;
-	if (lb < s->ub)
-	{
-		for (;;)
-		{
-			if ((lb >= 'A' && lb <= 'Z') || (lb >= 'a' && lb <= 'z') || (lb >= '0' && lb <= '9'))
-			{
-				if (lastPrintableChar == 0)
-				{
-					lastPrintableChar = lb;
-				}
-
-				if (++lb == s->ub)
-				{
-					break;
-				}
-				continue;
-			}
-
-			printDotCharInterval(o, lastPrintableChar, lb, from, to, true);
-			lastPrintableChar = 0;
-			newLine = false;
-
-			if (++lb == s->ub)
-			{
-				break;
-			}
-
-			o << "\n";
-			newLine = true;
-		}
-	}
-
-	if (lastPrintableChar != 0)
-	{
-		printDotCharInterval(o, lastPrintableChar, lb, from, to, false);
-
-		o << "\n";
-		newLine = true;
-	}
-}
-
-static bool genCases (OutputFile & o, uint ind, const std::vector<std::pair<uint, uint> > & ranges, uint mask)
-{
-	bool used = false;
-
 	for (uint i = 0; i < ranges.size (); ++i)
 	{
 		for (uint b = ranges[i].first; b < ranges[i].second; ++b)
@@ -891,7 +804,6 @@ static bool genCases (OutputFile & o, uint ind, const std::vector<std::pair<uint
 					if (isprint(c))
 						o << " /* " << std::string(1, c) << " */";
 				}
-				used = true;
 			}
 			bool last_case = i == ranges.size () - 1 && b == ranges[i].second - 1;
 			if (!last_case)
@@ -900,76 +812,26 @@ static bool genCases (OutputFile & o, uint ind, const std::vector<std::pair<uint
 			}
 		}
 	}
-
-	return used;
 }
 
 void Go::genSwitchD (OutputFile & o, const State *from) const
 {
-	bool newLine = true;
-
-	if (nSpans == 0)
-	{
-		return;
-	}
-	else if (nSpans == 1)
+	if (nSpans == 1)
 	{
 		o << from->label << " -> " << span[0].to->label << "\n";
 	}
-	else
+	else if (nSpans > 1)
 	{
-		State *def = span[nSpans - 1].to;
-		Span **sP = new Span * [nSpans - 1], **r, **s, **t;
-
-		t = &sP[0];
-
-		for (uint i = 0; i < nSpans; ++i)
+		Cases cases (span, nSpans);
+		for (uint i = 0; i < cases.size (); ++i)
 		{
-			if (span[i].to != def)
+			o << from->label << " -> " << cases[i].to->label << " [label=\"";
+			for (uint j = 0; j < cases[i].ranges.size (); ++j)
 			{
-				*(t++) = &span[i];
+				o.write_range (cases[i].ranges[j].first, cases[i].ranges[j].second);
 			}
+			o << "\"]\n";
 		}
-
-		while (t != &sP[0])
-		{
-			r = s = &sP[0];
-
-			const State *to = (*s)->to;
-
-			if (*s == &span[0])
-			{
-				genCasesD(o, 0, *s, newLine, from, to);
-			}
-			else
-			{
-				genCasesD(o, (*s)[ -1].ub, *s, newLine, from, to);
-			}
-
-			while (++s < t)
-			{
-				if ((*s)->to == to)
-				{
-					genCasesD(o, (*s)[ -1].ub, *s, newLine, from, to);
-				}
-				else
-				{
-					*(r++) = *s;
-				}
-			}
-			t = r;
-		}
-
-		if (!newLine)
-		{
-			o << "\n";
-			newLine = true;
-		}
-
-		o << from->label << " -> " << def->label;
-		o << " [label=default]\n" ;
-
-		delete [] sP;
 	}
 }
 
@@ -1000,12 +862,15 @@ void Go::genSwitch(OutputFile & o, uint ind, const State *from, const State *nex
 
 		for (uint i = 0; i < cases.size (); ++i)
 		{
-			genCases (o, ind, cases[i].ranges, mask);
-			genGoTo(o, 1, from, cases[i].to, readCh);
+			if (cases[i].to != cases.default_state ())
+			{
+				genCases (o, ind, cases[i].ranges, mask);
+				genGoTo(o, 1, from, cases[i].to, readCh);
+			}
 		}
 
 		o << indent(ind) << "default:";
-		genGoTo(o, 1, from, cases.default_case (), readCh);
+		genGoTo(o, 1, from, cases.default_state (), readCh);
 		o << indent(ind) << "}\n";
 	}
 }

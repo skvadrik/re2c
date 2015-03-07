@@ -60,6 +60,7 @@ struct OutputFile
 	void write (const char * s, std::streamsize n);
 	void write_hex (uint n);
 	void write_char_hex (uint n);
+	void write_range (uint u, uint l);
 	void write_uint_width (uint n, uint w);
 	void write_line_info (uint l, const char * fn);
 	void write_version_time ();

@@ -4,15 +4,12 @@ namespace re2c {
 
 Cases::Cases (const Span * span, uint span_size)
 	: def (span[span_size - 1].to)
-	, cases (new Case[span_size - 1])
+	, cases (new Case[span_size])
 	, cases_size (0)
 {
-	for (uint i = 0, lb = 0; i < span_size - 1; ++ i)
+	for (uint i = 0, lb = 0; i < span_size; ++ i)
 	{
-		if (span[i].to != def)
-		{
-			add (lb, span[i].ub, span[i].to);
-		}
+		add (lb, span[i].ub, span[i].to);
 		lb = span[i].ub;
 	}
 }
@@ -37,7 +34,7 @@ uint Cases::size () const
 	return cases_size;
 }
 
-State * Cases::default_case () const
+State * Cases::default_state () const
 {
 	return def;
 }

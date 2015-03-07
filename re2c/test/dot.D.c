@@ -3,22 +3,22 @@
 digraph re2c {
 
 
-1 -> 2 [label="a"]
-1 -> 4 [label="e"]
-1 -> 5 [label=default]
-2 -> 10 [label="b"]
-2 -> 3 [label=default]
+1 -> 5 [label="[0x00-`][b-d][f-0xFF]"]
+1 -> 2 [label="[a]"]
+1 -> 4 [label="[e]"]
+2 -> 3 [label="[0x00-a][c-0xFF]"]
+2 -> 10 [label="[b]"]
 3 [label="dot.D.re:8"]
-4 -> 6 [label="f"]
-4 -> 3 [label=default]
+4 -> 3 [label="[0x00-e][g-0xFF]"]
+4 -> 6 [label="[f]"]
 5 -> 3
-6 -> 8 [label="g"]
-6 -> 7 [label=default]
+6 -> 7 [label="[0x00-f][h-0xFF]"]
+6 -> 8 [label="[g]"]
 7 -> 3
 8 -> 9
 9 [label="dot.D.re:7"]
-10 -> 11 [label="c"]
-10 -> 7 [label=default]
+10 -> 7 [label="[0x00-b][d-0xFF]"]
+10 -> 11 [label="[c]"]
 11 -> 12
 12 [label="dot.D.re:6"]
 }

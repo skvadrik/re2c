@@ -10,15 +10,13 @@ void prtChOrHex(std::ostream& o, uint c)
 {
 	if (!encoding.is(Enc::EBCDIC) && (c < 256u) && (isprint(c) || isspace(c)))
 	{
-		o << (DFlag ? '"' : '\'');
+		o << '\'';
 		prtCh(o, c);
-		o << (DFlag ? '"' : '\'');
+		o << '\'';
 	}
 	else
 	{
-		if (DFlag) o << '"';
 		prtHex(o, c);
-		if (DFlag) o << '"';
 	}
 }
 
@@ -103,7 +101,7 @@ void prtCh(std::ostream& o, uint c)
 		break;
 
 		case '\\':
-		o << (DFlag ? "\\\\\\\\" : "\\\\");
+		o << "\\\\"; // both .dot and C/C++ code expect "\\"
 		break;
 
 		default:
@@ -137,6 +135,18 @@ void prtCh(std::ostream& o, uint c)
 	}
 }
 
+void prtChOrHexForSpan(std::ostream& o, uint c)
+{
+	if (!encoding.is(Enc::EBCDIC) && (c < 256u) && isprint(c) && (c != ']'))
+	{
+		prtCh(o, c);
+	}
+	else
+	{
+		prtHex(o, c);
+	}
+}
+
 void printSpan(std::ostream& o, uint lb, uint ub)
 {
 	if (lb > ub)
@@ -148,13 +158,13 @@ void printSpan(std::ostream& o, uint lb, uint ub)
 
 	if ((ub - lb) == 1)
 	{
-		prtCh(o, lb);
+		prtChOrHexForSpan(o, lb);
 	}
 	else
 	{
-		prtCh(o, lb);
+		prtChOrHexForSpan(o, lb);
 		o << "-";
-		prtCh(o, ub - 1);
+		prtChOrHexForSpan(o, ub - 1);
 	}
 
 	o << "]";

@@ -25,7 +25,7 @@ public:
 	Cases (const Span * s, uint n);
 	~Cases ();
 	uint size () const;
-	State * default_case () const;
+	State * default_state () const;
 	const Case & operator [] (uint i) const;
 };
 
