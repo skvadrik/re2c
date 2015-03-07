@@ -1034,7 +1034,7 @@ void Go::genGoto(OutputFile & o, uint ind, const State *from, const State *next,
 		return;
 	}
 
-	if ((gFlag || (encoding.szCodeUnit() > 1)) && wSpans == ~0u)
+	if (gFlag || (encoding.szCodeUnit() > 1))
 	{
 		uint nBitmaps = 0;
 		std::set<uint> vTargets;
