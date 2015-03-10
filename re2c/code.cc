@@ -1035,10 +1035,10 @@ void Go::genGoto(OutputFile & o, uint ind, const State *from, const State *next,
 	}
 */
 	uint dSpans = 0;
+	std::set<uint> vTargets;
+	uint nBitmaps = 0;
 	if (gFlag || (encoding.szCodeUnit() > 1))
 	{
-		uint nBitmaps = 0;
-		std::set<uint> vTargets;
 		wSpans = 0;
 		for (uint i = 0; i < nSpans; ++i)
 		{
@@ -1071,10 +1071,10 @@ void Go::genGoto(OutputFile & o, uint ind, const State *from, const State *next,
 				}
 			}
 		}
-		lTargets = vTargets.size() >> nBitmaps;
 	}
 
-	if (gFlag && (lTargets >= cGotoThreshold || dSpans >= cGotoThreshold))
+	const uint lTargets = vTargets.size() >> nBitmaps;
+	if (gFlag && (std::max (lTargets, dSpans) >= cGotoThreshold))
 	{
 		genCpGoto(o, ind, from, next, readCh);
 		return;

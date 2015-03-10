@@ -169,7 +169,6 @@ public:
 	Go()
 		: nSpans(0)
 		, wSpans(~0u)
-		, lTargets(~0u)
 		, span(NULL)
 	{
 	}
@@ -177,7 +176,6 @@ public:
 public:
 	uint	nSpans; // number of spans
 	uint    wSpans; // number of spans in wide mode
-	uint    lTargets;
 	Span	*span;
 
 public:
