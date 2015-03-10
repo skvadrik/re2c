@@ -169,7 +169,6 @@ public:
 	Go()
 		: nSpans(0)
 		, wSpans(~0u)
-		, dSpans(~0u)
 		, lTargets(~0u)
 		, span(NULL)
 	{
@@ -178,7 +177,6 @@ public:
 public:
 	uint	nSpans; // number of spans
 	uint    wSpans; // number of spans in wide mode
-	uint    dSpans; // number of decision spans (decide between g and b mode)
 	uint    lTargets;
 	Span	*span;
 

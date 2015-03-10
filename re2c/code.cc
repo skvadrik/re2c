@@ -1034,12 +1034,12 @@ void Go::genGoto(OutputFile & o, uint ind, const State *from, const State *next,
 		}
 	}
 */
+	uint dSpans = 0;
 	if (gFlag || (encoding.szCodeUnit() > 1))
 	{
 		uint nBitmaps = 0;
 		std::set<uint> vTargets;
 		wSpans = 0;
-		dSpans = 0;
 		for (uint i = 0; i < nSpans; ++i)
 		{
 			if (span[i].ub > 0xFF)
