@@ -108,26 +108,7 @@ static std::string space(uint this_label)
 
 	return std::string(std::max(1, nl - tl + 1), ' ');
 }
-/*
-void Go::compact()
-{
-	// arrange so that adjacent spans have different targets
-	uint i = 0;
 
-	for (uint j = 1; j < nSpans; ++j)
-	{
-		if (span[j].to != span[i].to)
-		{
-			++i;
-			span[i].to = span[j].to;
-		}
-
-		span[i].ub = span[j].ub;
-	}
-
-	nSpans = i + 1;
-}
-*/
 /*
  * Find all spans, that map to the given state. For each of them,
  * find upper adjacent span, that maps to another state (if such

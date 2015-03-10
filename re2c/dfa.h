@@ -193,7 +193,6 @@ public:
 	void genSwitch(OutputFile &, uint ind, const State *from, const State *next, bool &readCh, uint mask) const;
 	void genCpGoto(OutputFile &, uint ind, const State *from, const State *next, bool &readCh) const;
 	std::string genGotoProlog(OutputFile & o, uint ind, const State *from, const State *next, bool &readCh) const;
-	void compact();
 	void unmap(Go*, const State*);
 };
 
