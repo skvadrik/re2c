@@ -714,7 +714,7 @@ static void doLinear(OutputFile & o, uint ind, Span *s, uint n, const State *fro
 		{
 			if (s[1].to == next && n == 3)
 			{
-				if (!mask || (s[0].ub > 0x00FF))
+				if (!mask || (s[0].ub > 0x0100))
 				{
 					genIf(o, ind, "!=", s[0].ub, readCh);
 					genGoTo(o, 0, from, bg, readCh);
@@ -723,7 +723,7 @@ static void doLinear(OutputFile & o, uint ind, Span *s, uint n, const State *fro
 			}
 			else
 			{
-				if (!mask || (s[0].ub > 0x00FF))
+				if (!mask || (s[0].ub > 0x0100))
 				{
 					genIf(o, ind, "==", s[0].ub, readCh);
 					genGoTo(o, 0, from, s[1].to, readCh);
@@ -744,7 +744,7 @@ static void doLinear(OutputFile & o, uint ind, Span *s, uint n, const State *fro
 		}
 		else if (n == 2 && bg == next)
 		{
-			if (!mask || (s[0].ub > 0x00FF))
+			if (!mask || (s[0].ub > 0x0100))
 			{
 				genIf(o, ind, ">=", s[0].ub, readCh);
 				genGoTo(o, 0, from, s[1].to, readCh);
@@ -753,7 +753,7 @@ static void doLinear(OutputFile & o, uint ind, Span *s, uint n, const State *fro
 		}
 		else
 		{
-			if (!mask || ((s[0].ub - 1) > 0x00FF))
+			if (!mask || ((s[0].ub - 1) > 0x0100))
 			{
 				genIf(o, ind, "<=", s[0].ub - 1, readCh);
 				genGoTo(o, 0, from, bg, readCh);
@@ -775,7 +775,7 @@ static void genCases (OutputFile & o, uint ind, const std::vector<std::pair<uint
 	{
 		for (uint b = ranges[i].first; b < ranges[i].second; ++b)
 		{
-			if (!mask || b > 0x00FF) // FIXME: delete this condition, check somewhere in unmap
+			if (!mask || b > 0x0100) // FIXME: delete this condition, check somewhere in unmap
 			{
 				o << indent(ind) << "case ";
 				o.write_char_hex (b);
@@ -884,7 +884,7 @@ void Go::genBinary(OutputFile & o, uint ind, const State *from, const State *nex
 		
 		for (uint i = 0, j = 0; i < nSpans; i++)
 		{
-			if (span[i].ub > 0xFF)
+			if (span[i].ub > 0x100)
 			{
 				sc[j++] = span[i];
 			}
@@ -959,7 +959,7 @@ std::string Go::genGotoProlog(OutputFile & o, uint ind, const State *from, const
 		: mapCodeName["yych"];
 	readCh = false;
 
-	if (encoding.szCodeUnit() > 1)
+	if (encoding.szCodeUnit() > 1) // wSpans > 0
 	{
 		o << indent(ind) << "if (" << sYych <<" & ~0xFF) {\n";
 		genBase(o, ind + 1, from, next, readCh, 1);
@@ -1020,36 +1020,33 @@ void Go::genGoto(OutputFile & o, uint ind, const State *from, const State *next,
 
 	uint dSpans = 0;
 	uint nBitmaps = 0;
-	if (gFlag || (encoding.szCodeUnit() > 1))
+	wSpans = 0;
+	for (uint i = 0; i < nSpans; ++i)
 	{
-		wSpans = 0;
-		for (uint i = 0; i < nSpans; ++i)
+		if (span[i].ub > 0x100)
 		{
-			if (span[i].ub > 0xFF)
+			wSpans++;
+		}
+		else
+		{
+			State *to = span[i].to;
+
+			if (to && to->isBase)
 			{
-				wSpans++;
-			}
-			if (span[i].ub < 0x100 || (encoding.szCodeUnit() <= 1))
-			{
-				State *to = span[i].to;
-	
-				if (to && to->isBase)
+				const BitMap *b = BitMap::find(to);
+
+				if (b && matches(b->go, b->on, this, to))
 				{
-					const BitMap *b = BitMap::find(to);
-	
-					if (b && matches(b->go, b->on, this, to))
-					{
-						nBitmaps++;
-					}
-					else
-					{
-						dSpans++;
-					}
+					nBitmaps++;
 				}
 				else
 				{
 					dSpans++;
 				}
+			}
+			else
+			{
+				dSpans++;
 			}
 		}
 	}
