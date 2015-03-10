@@ -108,7 +108,7 @@ static std::string space(uint this_label)
 
 	return std::string(std::max(1, nl - tl + 1), ' ');
 }
-
+/*
 void Go::compact()
 {
 	// arrange so that adjacent spans have different targets
@@ -127,7 +127,7 @@ void Go::compact()
 
 	nSpans = i + 1;
 }
-
+*/
 /*
  * Find all spans, that map to the given state. For each of them,
  * find upper adjacent span, that maps to another state (if such
@@ -175,6 +175,7 @@ static void doGen(const Go *g, const State *s, uint *bm, uint f, uint m)
 	}
 }
 
+// All spans in g1 that lead to s1 are pairwise equal to that in g2 leading to s2
 static bool matches(const Go *g1, const State *s1, const Go *g2, const State *s2)
 {
 	Span *b1 = g1->span, *e1 = &b1[g1->nSpans];
@@ -970,31 +971,33 @@ void Go::genBase(OutputFile & o, uint ind, const State *from, const State *next,
 	}
 }
 
-void Go::genCpGoto(OutputFile & o, uint ind, const State *from, const State *next, bool &readCh) const
+std::string Go::genGotoProlog(OutputFile & o, uint ind, const State *from, const State *next, bool &readCh) const
 {
-	std::string sYych;
-	
-	if (readCh)
-	{
-		sYych = "(" + input_api.expr_peek_save () + ")";
-	}
-	else
-	{
-		sYych = mapCodeName["yych"];
-	}
-
+	std::string sYych = readCh
+		? "(" + input_api.expr_peek_save () + ")"
+		: mapCodeName["yych"];
 	readCh = false;
+
 	if (encoding.szCodeUnit() > 1)
 	{
 		o << indent(ind) << "if (" << sYych <<" & ~0xFF) {\n";
-		genBase(o, ind+1, from, next, readCh, 1);
-		o << indent(ind++) << "} else {\n";
+		genBase(o, ind + 1, from, next, readCh, 1);
+		o << indent(ind) << "} else ";
 		sYych = mapCodeName["yych"];
 	}
 	else
 	{
-		o << indent(ind++) << "{\n";
+		o << indent(ind);
 	}
+
+	return sYych;
+}
+
+void Go::genCpGoto(OutputFile & o, uint ind, const State *from, const State *next, bool &readCh) const
+{
+	const std::string sYych = genGotoProlog(o, ind, from, next, readCh);
+	o << "{\n";
+	++ind;
 	o << indent(ind++) << "static void *" << mapCodeName["yytarget"] << "[256] = {\n";
 	o << indent(ind);
 
@@ -1043,10 +1046,13 @@ void Go::genGoto(OutputFile & o, uint ind, const State *from, const State *next,
 		dSpans = 0;
 		for (uint i = 0; i < nSpans; ++i)
 		{
+//			if (span[i].ub > 0x100)
 			if (span[i].ub > 0xFF)
 			{
+//assert (span[i].ub == 0x100 || encoding.szCodeUnit() > 1);
 				wSpans++;
 			}
+//			if (span[i].ub <= 0x100 || (encoding.szCodeUnit() <= 1))
 			if (span[i].ub < 0x100 || (encoding.szCodeUnit() <= 1))
 			{
 				lSpans++;
@@ -1098,26 +1104,7 @@ void Go::genGoto(OutputFile & o, uint ind, const State *from, const State *next,
 					Go go;
 					go.span = new Span[nSpans];
 					go.unmap(this, to);
-					if (readCh)
-					{
-						sYych = "(" + input_api.expr_peek_save () + ")";
-					}
-					else
-					{
-						sYych = mapCodeName["yych"];
-					}
-					readCh = false;
-					if (encoding.szCodeUnit() > 1)
-					{
-						o << indent(ind) << "if (" << sYych << " & ~0xFF) {\n";
-						sYych = mapCodeName["yych"];
-						genBase(o, ind+1, from, next, readCh, 1);
-						o << indent(ind) << "} else ";
-					}
-					else
-					{
-						o << indent(ind);
-					}
+					const std::string sYych = genGotoProlog(o, ind, from, next, readCh);
 					bUsedYYBitmap = true;
 					o << "if (" << mapCodeName["yybm"] << "[" << b->i << "+" << sYych << "] & ";
 					if (yybmHexTable)
