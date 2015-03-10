@@ -983,7 +983,7 @@ void Go::genCpGoto(OutputFile & o, uint ind, const State *from, const State *nex
 	o << indent(ind);
 
 	uint ch = 0;
-	for (uint i = 0; i < lSpans; ++i)
+	for (uint i = 0; i < nSpans; ++i)
 	{
 		vUsedLabels.insert(span[i].to->label);
 		for(; ch < span[i].ub; ++ch)
@@ -992,7 +992,7 @@ void Go::genCpGoto(OutputFile & o, uint ind, const State *from, const State *nex
 			if (ch == 255)
 			{
 				o << "\n";
-				i = lSpans;
+				i = nSpans;
 				break;
 			}
 			else if (ch % 8 == 7)
@@ -1017,27 +1017,37 @@ void Go::genGoto(OutputFile & o, uint ind, const State *from, const State *next,
 		genSwitchD (o, from);
 		return;
 	}
-
+/*
+	for (uint i = 0; i < nSpans; ++i)
+	{
+		if (span[i].ub > 0xFF)
+		{
+			wSpans++;
+		}
+	}
+	Span * wspan = new Span[wSpans];
+	for (uint i = 0, j = 0; i < nSpans; i++)
+	{
+		if (span[i].ub > 0xFF)
+		{
+			wspan[j++] = span[i];
+		}
+	}
+*/
 	if (gFlag || (encoding.szCodeUnit() > 1))
 	{
 		uint nBitmaps = 0;
 		std::set<uint> vTargets;
 		wSpans = 0;
-		lSpans = 1;
 		dSpans = 0;
 		for (uint i = 0; i < nSpans; ++i)
 		{
-//			if (span[i].ub > 0x100)
 			if (span[i].ub > 0xFF)
 			{
-//assert (span[i].ub == 0x100 || encoding.szCodeUnit() > 1);
 				wSpans++;
 			}
-//			if (span[i].ub <= 0x100 || (encoding.szCodeUnit() <= 1))
 			if (span[i].ub < 0x100 || (encoding.szCodeUnit() <= 1))
 			{
-				lSpans++;
-
 				State *to = span[i].to;
 	
 				if (to && to->isBase)
