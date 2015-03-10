@@ -1017,25 +1017,8 @@ void Go::genGoto(OutputFile & o, uint ind, const State *from, const State *next,
 		genSwitchD (o, from);
 		return;
 	}
-/*
-	for (uint i = 0; i < nSpans; ++i)
-	{
-		if (span[i].ub > 0xFF)
-		{
-			wSpans++;
-		}
-	}
-	Span * wspan = new Span[wSpans];
-	for (uint i = 0, j = 0; i < nSpans; i++)
-	{
-		if (span[i].ub > 0xFF)
-		{
-			wspan[j++] = span[i];
-		}
-	}
-*/
+
 	uint dSpans = 0;
-	std::set<uint> vTargets;
 	uint nBitmaps = 0;
 	if (gFlag || (encoding.szCodeUnit() > 1))
 	{
@@ -1061,20 +1044,17 @@ void Go::genGoto(OutputFile & o, uint ind, const State *from, const State *next,
 					else
 					{
 						dSpans++;
-						vTargets.insert(to->label);
 					}
 				}
 				else
 				{
 					dSpans++;
-					vTargets.insert(to->label);
 				}
 			}
 		}
 	}
 
-	const uint lTargets = vTargets.size() >> nBitmaps;
-	if (gFlag && (std::max (lTargets, dSpans) >= cGotoThreshold))
+	if (gFlag && (dSpans >= cGotoThreshold))
 	{
 		genCpGoto(o, ind, from, next, readCh);
 		return;
