@@ -13,6 +13,7 @@
 #include "cases.h"
 #include "code.h"
 #include "globals.h"
+#include "go.h"
 #include "dfa.h"
 #include "indent.h"
 #include "input_api.h"
@@ -153,46 +154,6 @@ static void doGen(const Go *g, const State *s, uint *bm, uint f, uint m)
 		}
 
 		lb = b->ub;
-	}
-}
-
-// All spans in g1 that lead to s1 are pairwise equal to that in g2 leading to s2
-static bool matches(const Go *g1, const State *s1, const Go *g2, const State *s2)
-{
-	Span *b1 = g1->span, *e1 = &b1[g1->nSpans];
-	uint lb1 = 0;
-	Span *b2 = g2->span, *e2 = &b2[g2->nSpans];
-	uint lb2 = 0;
-
-	for (;;)
-	{
-		for (; b1 < e1 && b1->to != s1; ++b1)
-		{
-			lb1 = b1->ub;
-		}
-
-		for (; b2 < e2 && b2->to != s2; ++b2)
-		{
-			lb2 = b2->ub;
-		}
-
-		if (b1 == e1)
-		{
-			return b2 == e2;
-		}
-
-		if (b2 == e2)
-		{
-			return false;
-		}
-
-		if (lb1 != lb2 || b1->ub != b2->ub)
-		{
-			return false;
-		}
-
-		++b1;
-		++b2;
 	}
 }
 
@@ -974,34 +935,7 @@ static void genGoto (OutputFile & o, uint ind, const Go & go, const State *from,
 		return;
 	}
 
-	uint dSpans = 0;
-	uint nBitmaps = 0;
-	for (uint i = 0; i < go.nSpans; ++i)
-	{
-		State *to = go.span[i].to;
-
-		if (to && to->isBase)
-		{
-			const BitMap *b = BitMap::find(to);
-
-			if (b && matches(b->go, b->on, &go, to))
-			{
-				go.bitmaps[i] = b;
-				nBitmaps++;
-			}
-			else
-			{
-				go.bitmaps[i] = NULL;
-				dSpans++;
-			}
-		}
-		else
-		{
-			go.bitmaps[i] = NULL;
-			dSpans++;
-		}
-	}
-
+	const uint dSpans = go.nSpans - go.hSpans - go.nBitmaps;
 	if (gFlag && (dSpans >= cGotoThreshold))
 	{
 		genCpGoto(o, ind, from, next, readCh, go.span, go.nSpans, go.hspan, go.hSpans);

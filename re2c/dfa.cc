@@ -9,17 +9,6 @@
 namespace re2c
 {
 
-uint Span::show(std::ostream &o, uint lb) const
-{
-	if (to)
-	{
-		printSpan(o, lb, ub);
-		o << " " << to->label << "; ";
-	}
-
-	return ub;
-}
-
 std::ostream& operator<<(std::ostream &o, const State &s)
 {
 	o << "state " << s.label;

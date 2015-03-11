@@ -3,10 +3,12 @@
 #define _code_h
 
 #include "re.h"
-#include "dfa.h"
 
 namespace re2c
 {
+
+struct Go;
+class State;
 
 class BitMap
 {

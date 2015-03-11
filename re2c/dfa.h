@@ -4,6 +4,8 @@
 
 #include <iosfwd>
 #include <map>
+
+#include "go.h"
 #include "re.h"
 
 namespace re2c
@@ -150,55 +152,6 @@ private:
 		return *this;
 	}
 #endif
-};
-
-class Span
-{
-
-public:
-	uint	ub;
-	State	*to;
-
-public:
-	uint show(std::ostream&, uint) const;
-};
-
-class BitMap;
-
-struct Go
-{
-	uint nSpans; // number of spans
-	uint hSpans; // number of spans with upper bound > 0x100
-	Span * span;
-	Span * hspan;
-	const BitMap ** bitmaps;
-
-	Go ()
-		: nSpans (0)
-		, hSpans (0)
-		, span (NULL)
-		, hspan (NULL)
-		, bitmaps (NULL)
-	{}
-
-	~Go ()
-	{
-		delete [] bitmaps;
-	}
-
-	void init ()
-	{
-		for (uint i = 0; i < nSpans; ++i)
-		{
-			if (span[i].ub > 0x100)
-			{
-				hspan = &span[i];
-				hSpans = nSpans - i;
-				break;
-			}
-		}
-		bitmaps = new const BitMap * [nSpans];
-	}
 };
 
 class State
