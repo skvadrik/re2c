@@ -168,15 +168,17 @@ class Go
 public:
 	Go()
 		: nSpans(0)
-		, wSpans(~0u)
+		, hSpans(0)
 		, span(NULL)
+		, hspan(NULL)
 	{
 	}
 
 public:
 	uint	nSpans; // number of spans
-	uint    wSpans; // number of spans in wide mode
+	uint	hSpans; // number of spans with upper bound > 0x100
 	Span	*span;
+	Span	*hspan;
 
 public:
 	void genGoto(OutputFile &, uint ind, const State *from, const State *next, bool &readCh);

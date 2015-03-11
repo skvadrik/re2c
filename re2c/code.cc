@@ -819,7 +819,7 @@ void Go::genSwitchD (OutputFile & o, const State *from) const
 
 void Go::genSwitch(OutputFile & o, uint ind, const State *from, const State *next, bool &readCh, uint mask) const
 {
-	if ((mask ? wSpans : nSpans) <= 2)
+	if ((mask ? hSpans : nSpans) <= 2)
 	{
 		genLinear(o, ind, from, next, readCh, mask);
 	}
@@ -880,19 +880,7 @@ void Go::genBinary(OutputFile & o, uint ind, const State *from, const State *nex
 {
 	if (mask)
 	{
-		Span * sc = new Span[wSpans];
-		
-		for (uint i = 0, j = 0; i < nSpans; i++)
-		{
-			if (span[i].ub > 0x100)
-			{
-				sc[j++] = span[i];
-			}
-		}
-
-		doBinary(o, ind, sc, wSpans, from, next, readCh, mask);
-
-		delete[] sc;
+		doBinary(o, ind, hspan, hSpans, from, next, readCh, mask);
 	}
 	else
 	{
@@ -902,7 +890,7 @@ void Go::genBinary(OutputFile & o, uint ind, const State *from, const State *nex
 
 void Go::genBase(OutputFile & o, uint ind, const State *from, const State *next, bool &readCh, uint mask) const
 {
-	if ((mask ? wSpans : nSpans) == 0)
+	if ((mask ? hSpans : nSpans) == 0)
 	{
 		return ;
 	}
@@ -913,7 +901,7 @@ void Go::genBase(OutputFile & o, uint ind, const State *from, const State *next,
 		return ;
 	}
 
-	if ((mask ? wSpans : nSpans) > 8)
+	if ((mask ? hSpans : nSpans) > 8)
 	{
 		Span *bot = &span[0], *top = &span[nSpans - 1];
 		uint util;
@@ -942,7 +930,7 @@ void Go::genBase(OutputFile & o, uint ind, const State *from, const State *next,
 		}
 	}
 
-	if ((mask ? wSpans : nSpans) > 5)
+	if ((mask ? hSpans : nSpans) > 5)
 	{
 		genBinary(o, ind, from, next, readCh, mask);
 	}
@@ -959,7 +947,7 @@ std::string Go::genGotoProlog(OutputFile & o, uint ind, const State *from, const
 		: mapCodeName["yych"];
 	readCh = false;
 
-	if (encoding.szCodeUnit() > 1) // wSpans > 0
+	if (encoding.szCodeUnit() > 1) // hSpans > 0
 	{
 		o << indent(ind) << "if (" << sYych <<" & ~0xFF) {\n";
 		genBase(o, ind + 1, from, next, readCh, 1);
@@ -1018,36 +1006,38 @@ void Go::genGoto(OutputFile & o, uint ind, const State *from, const State *next,
 		return;
 	}
 
-	uint dSpans = 0;
-	uint nBitmaps = 0;
-	wSpans = 0;
 	for (uint i = 0; i < nSpans; ++i)
 	{
 		if (span[i].ub > 0x100)
 		{
-			wSpans++;
+			hspan = &span[i];
+			hSpans = nSpans - i;
+			break;
 		}
-		else
+	}
+
+	uint dSpans = 0;
+	uint nBitmaps = 0;
+	for (uint i = 0; i < nSpans - hSpans; ++i)
+	{
+		State *to = span[i].to;
+
+		if (to && to->isBase)
 		{
-			State *to = span[i].to;
+			const BitMap *b = BitMap::find(to);
 
-			if (to && to->isBase)
+			if (b && matches(b->go, b->on, this, to))
 			{
-				const BitMap *b = BitMap::find(to);
-
-				if (b && matches(b->go, b->on, this, to))
-				{
-					nBitmaps++;
-				}
-				else
-				{
-					dSpans++;
-				}
+				nBitmaps++;
 			}
 			else
 			{
 				dSpans++;
 			}
+		}
+		else
+		{
+			dSpans++;
 		}
 	}
 
