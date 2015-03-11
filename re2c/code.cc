@@ -876,7 +876,7 @@ static std::string genGotoProlog (OutputFile & o, uint ind, const State *from, c
 		: mapCodeName["yych"];
 	readCh = false;
 
-	if (encoding.szCodeUnit() > 1) // hSpans > 0
+	if (nsp > 0)
 	{
 		o << indent(ind) << "if (" << sYych <<" & ~0xFF) {\n";
 		genBase(o, ind + 1, from, next, readCh, sp, nsp);
