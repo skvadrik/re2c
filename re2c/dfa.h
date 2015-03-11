@@ -163,19 +163,28 @@ public:
 	uint show(std::ostream&, uint) const;
 };
 
+class BitMap;
+
 struct Go
 {
 	uint nSpans; // number of spans
 	uint hSpans; // number of spans with upper bound > 0x100
 	Span * span;
 	Span * hspan;
+	const BitMap ** bitmaps;
 
 	Go ()
 		: nSpans (0)
 		, hSpans (0)
 		, span (NULL)
 		, hspan (NULL)
+		, bitmaps (NULL)
 	{}
+
+	~Go ()
+	{
+		delete [] bitmaps;
+	}
 
 	void init ()
 	{
@@ -188,6 +197,7 @@ struct Go
 				break;
 			}
 		}
+		bitmaps = new const BitMap * [nSpans];
 	}
 };
 

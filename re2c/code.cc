@@ -976,7 +976,7 @@ static void genGoto (OutputFile & o, uint ind, const Go & go, const State *from,
 
 	uint dSpans = 0;
 	uint nBitmaps = 0;
-	for (uint i = 0; i < go.nSpans - go.hSpans; ++i)
+	for (uint i = 0; i < go.nSpans; ++i)
 	{
 		State *to = go.span[i].to;
 
@@ -986,15 +986,18 @@ static void genGoto (OutputFile & o, uint ind, const Go & go, const State *from,
 
 			if (b && matches(b->go, b->on, &go, to))
 			{
+				go.bitmaps[i] = b;
 				nBitmaps++;
 			}
 			else
 			{
+				go.bitmaps[i] = NULL;
 				dSpans++;
 			}
 		}
 		else
 		{
+			go.bitmaps[i] = NULL;
 			dSpans++;
 		}
 	}
@@ -1008,34 +1011,28 @@ static void genGoto (OutputFile & o, uint ind, const Go & go, const State *from,
 	{
 		for (uint i = 0; i < go.nSpans; ++i)
 		{
-			State *to = go.span[i].to;
-
-			if (to && to->isBase)
+			if (const BitMap * b = go.bitmaps[i])
 			{
-				const BitMap *b = BitMap::find(to);
-				if (b && matches(b->go, b->on, &go, to))
+				Go go1;
+				go1.span = new Span[go.nSpans];
+				unmap (go1, go, go.span[i].to);
+				const std::string sYych = genGotoProlog(o, ind, from, next, readCh, go.hspan, go.hSpans);
+				bUsedYYBitmap = true;
+				o << "if (" << mapCodeName["yybm"] << "[" << b->i << "+" << sYych << "] & ";
+				if (yybmHexTable)
 				{
-					Go go1;
-					go1.span = new Span[go.nSpans];
-					unmap (go1, go, to);
-					const std::string sYych = genGotoProlog(o, ind, from, next, readCh, go.hspan, go.hSpans);
-					bUsedYYBitmap = true;
-					o << "if (" << mapCodeName["yybm"] << "[" << b->i << "+" << sYych << "] & ";
-					if (yybmHexTable)
-					{
-						o.write_hex (b->m);
-					}
-					else
-					{
-						o << (uint) b->m;
-					}
-					o << ") {\n";
-					genGoTo(o, ind+1, from, to, readCh);
-					o << indent(ind) << "}\n";
-					genBase(o, ind, from, next, readCh, go1.span, go1.nSpans);
-					delete [] go1.span;
-					return ;
+					o.write_hex (b->m);
 				}
+				else
+				{
+					o << (uint) b->m;
+				}
+				o << ") {\n";
+				genGoTo(o, ind+1, from, go.span[i].to, readCh);
+				o << indent(ind) << "}\n";
+				genBase(o, ind, from, next, readCh, go1.span, go1.nSpans);
+				delete [] go1.span;
+				return ;
 			}
 		}
 	}
