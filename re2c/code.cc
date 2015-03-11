@@ -752,11 +752,6 @@ static void doLinear(OutputFile & o, uint ind, Span * s, uint n, const State *fr
 	}
 }
 
-void Go::genLinear(OutputFile & o, uint ind, const State *from, const State *next, bool &readCh, Span * sp, uint nsp) const
-{
-	doLinear(o, ind, sp, nsp, from, next, readCh);
-}
-
 static void genCases (OutputFile & o, uint ind, const std::vector<std::pair<uint, uint> > & ranges)
 {
 	for (uint i = 0; i < ranges.size (); ++i)
@@ -806,7 +801,7 @@ void Go::genSwitch(OutputFile & o, uint ind, const State *from, const State *nex
 {
 	if (nSpans <= 2)
 	{
-		genLinear(o, ind, from, next, readCh, sp, nsp);
+		doLinear(o, ind, sp, nsp, from, next, readCh);
 	}
 	else
 	{
@@ -861,11 +856,6 @@ static void doBinary(OutputFile & o, uint ind, Span * s, uint n, const State *fr
 	}
 }
 
-void Go::genBinary(OutputFile & o, uint ind, const State *from, const State *next, bool &readCh, Span * sp, uint nsp) const
-{
-	doBinary(o, ind, sp, nsp, from, next, readCh);
-}
-
 void Go::genBase(OutputFile & o, uint ind, const State *from, const State *next, bool &readCh, Span * sp, uint nsp) const
 {
 	if (nsp == 0)
@@ -910,11 +900,11 @@ void Go::genBase(OutputFile & o, uint ind, const State *from, const State *next,
 
 	if (nsp > 5)
 	{
-		genBinary(o, ind, from, next, readCh, sp, nsp);
+		doBinary(o, ind, sp, nsp, from, next, readCh);
 	}
 	else
 	{
-		genLinear(o, ind, from, next, readCh, sp, nsp);
+		doLinear(o, ind, sp, nsp, from, next, readCh);
 	}
 }
 

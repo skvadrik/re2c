@@ -183,8 +183,6 @@ public:
 public:
 	void genGoto(OutputFile &, uint ind, const State *from, const State *next, bool &readCh);
 	void genBase(OutputFile &, uint ind, const State *from, const State *next, bool &readCh, Span * sp, uint nsp) const;
-	void genLinear(OutputFile &, uint ind, const State *from, const State *next, bool &readCh, Span * sp, uint nsp) const;
-	void genBinary(OutputFile &, uint ind, const State *from, const State *next, bool &readCh, Span * sp, uint nsp) const;
 	void genSwitchD(OutputFile &, const State *from) const;
 	void genSwitch(OutputFile &, uint ind, const State *from, const State *next, bool &readCh, Span * sp, uint nsp) const;
 	void genCpGoto(OutputFile &, uint ind, const State *from, const State *next, bool &readCh) const;
