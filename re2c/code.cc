@@ -704,7 +704,7 @@ void Rule::emit(Output & output, uint ind, bool &, const std::string& condName) 
 	o.insert_line_info ();
 }
 
-static void doLinear(OutputFile & o, uint ind, Span *s, uint n, const State *from, const State *next, bool &readCh, uint mask)
+static void doLinear(OutputFile & o, uint ind, Span * s, uint n, const State *from, const State *next, bool &readCh)
 {
 	for (;;)
 	{
@@ -714,20 +714,14 @@ static void doLinear(OutputFile & o, uint ind, Span *s, uint n, const State *fro
 		{
 			if (s[1].to == next && n == 3)
 			{
-				if (!mask || (s[0].ub > 0x0100))
-				{
-					genIf(o, ind, "!=", s[0].ub, readCh);
-					genGoTo(o, 0, from, bg, readCh);
-				}
+				genIf(o, ind, "!=", s[0].ub, readCh);
+				genGoTo(o, 0, from, bg, readCh);
 				return ;
 			}
 			else
 			{
-				if (!mask || (s[0].ub > 0x0100))
-				{
-					genIf(o, ind, "==", s[0].ub, readCh);
-					genGoTo(o, 0, from, s[1].to, readCh);
-				}
+				genIf(o, ind, "==", s[0].ub, readCh);
+				genGoTo(o, 0, from, s[1].to, readCh);
 			}
 
 			n -= 2;
@@ -744,48 +738,39 @@ static void doLinear(OutputFile & o, uint ind, Span *s, uint n, const State *fro
 		}
 		else if (n == 2 && bg == next)
 		{
-			if (!mask || (s[0].ub > 0x0100))
-			{
-				genIf(o, ind, ">=", s[0].ub, readCh);
-				genGoTo(o, 0, from, s[1].to, readCh);
-			}
+			genIf(o, ind, ">=", s[0].ub, readCh);
+			genGoTo(o, 0, from, s[1].to, readCh);
 			return ;
 		}
 		else
 		{
-			if (!mask || ((s[0].ub - 1) > 0x0100))
-			{
-				genIf(o, ind, "<=", s[0].ub - 1, readCh);
-				genGoTo(o, 0, from, bg, readCh);
-			}
+			genIf(o, ind, "<=", s[0].ub - 1, readCh);
+			genGoTo(o, 0, from, bg, readCh);
 			n -= 1;
 			s += 1;
 		}
 	}
 }
 
-void Go::genLinear(OutputFile & o, uint ind, const State *from, const State *next, bool &readCh, uint mask) const
+void Go::genLinear(OutputFile & o, uint ind, const State *from, const State *next, bool &readCh, Span * sp, uint nsp) const
 {
-	doLinear(o, ind, span, nSpans, from, next, readCh, mask);
+	doLinear(o, ind, sp, nsp, from, next, readCh);
 }
 
-static void genCases (OutputFile & o, uint ind, const std::vector<std::pair<uint, uint> > & ranges, uint mask)
+static void genCases (OutputFile & o, uint ind, const std::vector<std::pair<uint, uint> > & ranges)
 {
 	for (uint i = 0; i < ranges.size (); ++i)
 	{
 		for (uint b = ranges[i].first; b < ranges[i].second; ++b)
 		{
-			if (!mask || b > 0x0100) // FIXME: delete this condition, check somewhere in unmap
+			o << indent(ind) << "case ";
+			o.write_char_hex (b);
+			o << ":";
+			if (dFlag && encoding.is(Enc::EBCDIC))
 			{
-				o << indent(ind) << "case ";
-				o.write_char_hex (b);
-				o << ":";
-				if (dFlag && encoding.is(Enc::EBCDIC))
-				{
-					const uint c = encoding.decodeUnsafe(b);
-					if (isprint(c))
-						o << " /* " << std::string(1, c) << " */";
-				}
+				const uint c = encoding.decodeUnsafe(b);
+				if (isprint(c))
+					o << " /* " << std::string(1, c) << " */";
 			}
 			bool last_case = i == ranges.size () - 1 && b == ranges[i].second - 1;
 			if (!last_case)
@@ -817,15 +802,15 @@ void Go::genSwitchD (OutputFile & o, const State *from) const
 	}
 }
 
-void Go::genSwitch(OutputFile & o, uint ind, const State *from, const State *next, bool &readCh, uint mask) const
+void Go::genSwitch(OutputFile & o, uint ind, const State *from, const State *next, bool &readCh, Span * sp, uint nsp) const
 {
-	if ((mask ? hSpans : nSpans) <= 2)
+	if (nSpans <= 2)
 	{
-		genLinear(o, ind, from, next, readCh, mask);
+		genLinear(o, ind, from, next, readCh, sp, nsp);
 	}
 	else
 	{
-		Cases cases (span, nSpans);
+		Cases cases (sp, nsp);
 
 		if (dFlag)
 		{
@@ -846,7 +831,7 @@ void Go::genSwitch(OutputFile & o, uint ind, const State *from, const State *nex
 		{
 			if (cases[i].to != cases.default_state ())
 			{
-				genCases (o, ind, cases[i].ranges, mask);
+				genCases (o, ind, cases[i].ranges);
 				genGoTo(o, 1, from, cases[i].to, readCh);
 			}
 		}
@@ -857,11 +842,11 @@ void Go::genSwitch(OutputFile & o, uint ind, const State *from, const State *nex
 	}
 }
 
-static void doBinary(OutputFile & o, uint ind, Span *s, uint n, const State *from, const State *next, bool &readCh, uint mask)
+static void doBinary(OutputFile & o, uint ind, Span * s, uint n, const State *from, const State *next, bool &readCh)
 {
 	if (n <= 4)
 	{
-		doLinear(o, ind, s, n, from, next, readCh, mask);
+		doLinear(o, ind, s, n, from, next, readCh);
 	}
 	else
 	{
@@ -869,74 +854,67 @@ static void doBinary(OutputFile & o, uint ind, Span *s, uint n, const State *fro
 
 		genIf(o, ind, "<=", s[h - 1].ub - 1, readCh);
 		o << "{\n";
-		doBinary(o, ind+1, &s[0], h, from, next, readCh, mask);
+		doBinary(o, ind+1, &s[0], h, from, next, readCh);
 		o << indent(ind) << "} else {\n";
-		doBinary(o, ind+1, &s[h], n - h, from, next, readCh, mask);
+		doBinary(o, ind+1, &s[h], n - h, from, next, readCh);
 		o << indent(ind) << "}\n";
 	}
 }
 
-void Go::genBinary(OutputFile & o, uint ind, const State *from, const State *next, bool &readCh, uint mask) const
+void Go::genBinary(OutputFile & o, uint ind, const State *from, const State *next, bool &readCh, Span * sp, uint nsp) const
 {
-	if (mask)
-	{
-		doBinary(o, ind, hspan, hSpans, from, next, readCh, mask);
-	}
-	else
-	{
-		doBinary(o, ind, span, nSpans, from, next, readCh, mask);
-	}
+	doBinary(o, ind, sp, nsp, from, next, readCh);
 }
 
-void Go::genBase(OutputFile & o, uint ind, const State *from, const State *next, bool &readCh, uint mask) const
+void Go::genBase(OutputFile & o, uint ind, const State *from, const State *next, bool &readCh, Span * sp, uint nsp) const
 {
-	if ((mask ? hSpans : nSpans) == 0)
+	if (nsp == 0)
 	{
 		return ;
 	}
 
 	if (!sFlag)
 	{
-		genSwitch(o, ind, from, next, readCh, mask);
+		genSwitch(o, ind, from, next, readCh, sp, nsp);
 		return ;
 	}
 
-	if ((mask ? hSpans : nSpans) > 8)
+	if (nsp > 8)
 	{
-		Span *bot = &span[0], *top = &span[nSpans - 1];
+		Span *bot = &sp[0], *top = &sp[nsp - 1];
 		uint util;
 
 		// decide if IFs insted of SWITCHes is a good idea
 		if (bot[0].to == top[0].to)
 		{
-			util = (top[ -1].ub - bot[0].ub) / (nSpans - 2);
+			util = (top[ -1].ub - bot[0].ub) / (nsp - 2);
 		}
 		else
 		{
 			if (bot[0].ub > (top[0].ub - top[ -1].ub))
 			{
-				util = (top[0].ub - bot[0].ub) / (nSpans - 1);
+				util = (top[0].ub - bot[0].ub) / (nsp - 1);
 			}
 			else
 			{
-				util = top[ -1].ub / (nSpans - 1);
+				util = top[ -1].ub / (nsp - 1);
 			}
 		}
 
 		if (util <= 2)
 		{
-			genSwitch(o, ind, from, next, readCh, mask);
+			genSwitch(o, ind, from, next, readCh, sp, nsp);
 			return ;
 		}
 	}
 
-	if ((mask ? hSpans : nSpans) > 5)
+	if (nsp > 5)
 	{
-		genBinary(o, ind, from, next, readCh, mask);
+		genBinary(o, ind, from, next, readCh, sp, nsp);
 	}
 	else
 	{
-		genLinear(o, ind, from, next, readCh, mask);
+		genLinear(o, ind, from, next, readCh, sp, nsp);
 	}
 }
 
@@ -950,7 +928,7 @@ std::string Go::genGotoProlog(OutputFile & o, uint ind, const State *from, const
 	if (encoding.szCodeUnit() > 1) // hSpans > 0
 	{
 		o << indent(ind) << "if (" << sYych <<" & ~0xFF) {\n";
-		genBase(o, ind + 1, from, next, readCh, 1);
+		genBase(o, ind + 1, from, next, readCh, hspan, hSpans);
 		o << indent(ind) << "} else ";
 		sYych = mapCodeName["yych"];
 	}
@@ -1074,7 +1052,7 @@ void Go::genGoto(OutputFile & o, uint ind, const State *from, const State *next,
 					o << ") {\n";
 					genGoTo(o, ind+1, from, to, readCh);
 					o << indent(ind) << "}\n";
-					go.genBase(o, ind, from, next, readCh, 0);
+					go.genBase(o, ind, from, next, readCh, go.span, go.nSpans);
 					delete [] go.span;
 					return ;
 				}
@@ -1082,7 +1060,7 @@ void Go::genGoto(OutputFile & o, uint ind, const State *from, const State *next,
 		}
 	}
 
-	genBase(o, ind, from, next, readCh, 0);
+	genBase(o, ind, from, next, readCh, span, nSpans);
 }
 
 void State::emit(Output & output, uint ind, bool &readCh, const std::string& condName) const
