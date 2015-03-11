@@ -691,7 +691,7 @@ static void doLinear(OutputFile & o, uint ind, Span * s, uint n, const State *fr
 
 		if (n == 1)
 		{
-			if (s[0].to->label != from->label + 1 || DFlag)
+			if (s[0].to->label != from->label + 1)
 			{
 				genGoTo(o, ind, from, s[0].to, readCh);
 			}
