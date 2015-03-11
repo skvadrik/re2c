@@ -116,25 +116,25 @@ static std::string space(uint this_label)
  * If input contains single span that maps to the given state,
  * then output contains 0 spans.
  */
-void Go::unmap(Go *base, const State *x)
+static void unmap (Go & go, const Go & base, const State * x)
 {
-	nSpans = 0;
-	for (uint i = 0; i < base->nSpans; ++i)
+	go.nSpans = 0;
+	for (uint i = 0; i < base.nSpans; ++i)
 	{
-		if (base->span[i].to != x)
+		if (base.span[i].to != x)
 		{
-			if (nSpans > 0 && span[nSpans - 1].to == base->span[i].to)
-				span[nSpans - 1].ub = base->span[i].ub;
+			if (go.nSpans > 0 && go.span[go.nSpans - 1].to == base.span[i].to)
+				go.span[go.nSpans - 1].ub = base.span[i].ub;
 			else
 			{
-				span[nSpans].to = base->span[i].to;
-				span[nSpans].ub = base->span[i].ub;
-				++nSpans;
+				go.span[go.nSpans].to = base.span[i].to;
+				go.span[go.nSpans].ub = base.span[i].ub;
+				++go.nSpans;
 			}
 		}
 	}
-	if (nSpans > 0)
-		span[nSpans - 1].ub = base->span[base->nSpans - 1].ub;
+	if (go.nSpans > 0)
+		go.span[go.nSpans - 1].ub = base.span[base.nSpans - 1].ub;
 }
 
 static void doGen(const Go *g, const State *s, uint *bm, uint f, uint m)
@@ -776,15 +776,15 @@ static void genCases (OutputFile & o, uint ind, const std::vector<std::pair<uint
 	}
 }
 
-void Go::genSwitchD (OutputFile & o, const State *from) const
+static void genSwitchD (OutputFile & o, const State *from, Span * sp, uint nsp)
 {
-	if (nSpans == 1)
+	if (nsp == 1)
 	{
-		o << from->label << " -> " << span[0].to->label << "\n";
+		o << from->label << " -> " << sp[0].to->label << "\n";
 	}
-	else if (nSpans > 1)
+	else if (nsp > 1)
 	{
-		Cases cases (span, nSpans);
+		Cases cases (sp, nsp);
 		for (uint i = 0; i < cases.size (); ++i)
 		{
 			o << from->label << " -> " << cases[i].to->label << " [label=\"";
@@ -797,9 +797,9 @@ void Go::genSwitchD (OutputFile & o, const State *from) const
 	}
 }
 
-void Go::genSwitch(OutputFile & o, uint ind, const State *from, const State *next, bool &readCh, Span * sp, uint nsp) const
+static void genSwitch(OutputFile & o, uint ind, const State *from, const State *next, bool &readCh, Span * sp, uint nsp)
 {
-	if (nSpans <= 2)
+	if (nsp <= 2)
 	{
 		doLinear(o, ind, sp, nsp, from, next, readCh);
 	}
@@ -856,7 +856,7 @@ static void doBinary(OutputFile & o, uint ind, Span * s, uint n, const State *fr
 	}
 }
 
-void Go::genBase(OutputFile & o, uint ind, const State *from, const State *next, bool &readCh, Span * sp, uint nsp) const
+static void genBase(OutputFile & o, uint ind, const State *from, const State *next, bool &readCh, Span * sp, uint nsp)
 {
 	if (nsp == 0)
 	{
@@ -908,7 +908,7 @@ void Go::genBase(OutputFile & o, uint ind, const State *from, const State *next,
 	}
 }
 
-std::string Go::genGotoProlog(OutputFile & o, uint ind, const State *from, const State *next, bool &readCh) const
+static std::string genGotoProlog (OutputFile & o, uint ind, const State *from, const State *next, bool &readCh, Span * sp, uint nsp)
 {
 	std::string sYych = readCh
 		? "(" + input_api.expr_peek_save () + ")"
@@ -918,7 +918,7 @@ std::string Go::genGotoProlog(OutputFile & o, uint ind, const State *from, const
 	if (encoding.szCodeUnit() > 1) // hSpans > 0
 	{
 		o << indent(ind) << "if (" << sYych <<" & ~0xFF) {\n";
-		genBase(o, ind + 1, from, next, readCh, hspan, hSpans);
+		genBase(o, ind + 1, from, next, readCh, sp, nsp);
 		o << indent(ind) << "} else ";
 		sYych = mapCodeName["yych"];
 	}
@@ -930,25 +930,25 @@ std::string Go::genGotoProlog(OutputFile & o, uint ind, const State *from, const
 	return sYych;
 }
 
-void Go::genCpGoto(OutputFile & o, uint ind, const State *from, const State *next, bool &readCh) const
+static void genCpGoto (OutputFile & o, uint ind, const State *from, const State *next, bool &readCh, Span * sp, uint nsp, Span * hsp, uint nhsp)
 {
-	const std::string sYych = genGotoProlog(o, ind, from, next, readCh);
+	const std::string sYych = genGotoProlog(o, ind, from, next, readCh, hsp, nhsp);
 	o << "{\n";
 	++ind;
 	o << indent(ind++) << "static void *" << mapCodeName["yytarget"] << "[256] = {\n";
 	o << indent(ind);
 
 	uint ch = 0;
-	for (uint i = 0; i < nSpans; ++i)
+	for (uint i = 0; i < nsp; ++i)
 	{
-		vUsedLabels.insert(span[i].to->label);
-		for(; ch < span[i].ub; ++ch)
+		vUsedLabels.insert(sp[i].to->label);
+		for(; ch < sp[i].ub; ++ch)
 		{
-			o << "&&" << labelPrefix << span[i].to->label;
+			o << "&&" << labelPrefix << sp[i].to->label;
 			if (ch == 255)
 			{
 				o << "\n";
-				i = nSpans;
+				i = nsp;
 				break;
 			}
 			else if (ch % 8 == 7)
@@ -957,7 +957,7 @@ void Go::genCpGoto(OutputFile & o, uint ind, const State *from, const State *nex
 			}
 			else
 			{
-				o << "," << space(span[i].to->label);
+				o << "," << space(sp[i].to->label);
 			}
 		}
 	}
@@ -966,35 +966,25 @@ void Go::genCpGoto(OutputFile & o, uint ind, const State *from, const State *nex
 	o << indent(--ind) << "}\n";
 }
 
-void Go::genGoto(OutputFile & o, uint ind, const State *from, const State *next, bool &readCh)
+static void genGoto (OutputFile & o, uint ind, const Go & go, const State *from, const State *next, bool &readCh)
 {
 	if (DFlag)
 	{
-		genSwitchD (o, from);
+		genSwitchD (o, from, go.span, go.nSpans);
 		return;
-	}
-
-	for (uint i = 0; i < nSpans; ++i)
-	{
-		if (span[i].ub > 0x100)
-		{
-			hspan = &span[i];
-			hSpans = nSpans - i;
-			break;
-		}
 	}
 
 	uint dSpans = 0;
 	uint nBitmaps = 0;
-	for (uint i = 0; i < nSpans - hSpans; ++i)
+	for (uint i = 0; i < go.nSpans - go.hSpans; ++i)
 	{
-		State *to = span[i].to;
+		State *to = go.span[i].to;
 
 		if (to && to->isBase)
 		{
 			const BitMap *b = BitMap::find(to);
 
-			if (b && matches(b->go, b->on, this, to))
+			if (b && matches(b->go, b->on, &go, to))
 			{
 				nBitmaps++;
 			}
@@ -1011,24 +1001,24 @@ void Go::genGoto(OutputFile & o, uint ind, const State *from, const State *next,
 
 	if (gFlag && (dSpans >= cGotoThreshold))
 	{
-		genCpGoto(o, ind, from, next, readCh);
+		genCpGoto(o, ind, from, next, readCh, go.span, go.nSpans, go.hspan, go.hSpans);
 		return;
 	}
 	else if (bFlag)
 	{
-		for (uint i = 0; i < nSpans; ++i)
+		for (uint i = 0; i < go.nSpans; ++i)
 		{
-			State *to = span[i].to;
+			State *to = go.span[i].to;
 
 			if (to && to->isBase)
 			{
 				const BitMap *b = BitMap::find(to);
-				if (b && matches(b->go, b->on, this, to))
+				if (b && matches(b->go, b->on, &go, to))
 				{
-					Go go;
-					go.span = new Span[nSpans];
-					go.unmap(this, to);
-					const std::string sYych = genGotoProlog(o, ind, from, next, readCh);
+					Go go1;
+					go1.span = new Span[go.nSpans];
+					unmap (go1, go, to);
+					const std::string sYych = genGotoProlog(o, ind, from, next, readCh, go.hspan, go.hSpans);
 					bUsedYYBitmap = true;
 					o << "if (" << mapCodeName["yybm"] << "[" << b->i << "+" << sYych << "] & ";
 					if (yybmHexTable)
@@ -1042,15 +1032,15 @@ void Go::genGoto(OutputFile & o, uint ind, const State *from, const State *next,
 					o << ") {\n";
 					genGoTo(o, ind+1, from, to, readCh);
 					o << indent(ind) << "}\n";
-					go.genBase(o, ind, from, next, readCh, go.span, go.nSpans);
-					delete [] go.span;
+					genBase(o, ind, from, next, readCh, go1.span, go1.nSpans);
+					delete [] go1.span;
 					return ;
 				}
 			}
 		}
 	}
 
-	genBase(o, ind, from, next, readCh, span, nSpans);
+	genBase(o, ind, from, next, readCh, go.span, go.nSpans);
 }
 
 void State::emit(Output & output, uint ind, bool &readCh, const std::string& condName) const
@@ -1517,6 +1507,11 @@ void DFA::prepare(uint & max_fill)
 	// find ``base'' state, if possible
 	findBaseState();
 
+	for (s = head; s; s = s->next)
+	{
+		s->go.init ();
+	}
+
 	delete head->action;
 	head->action = NULL;
 }
@@ -1584,7 +1579,7 @@ std::cerr << "\t" << s->go.span[i].to->label << " " << s->next->label << std::en
 	{
 		bool readCh = false;
 		s->emit(null_dev, ind, readCh, condName);
-		s->go.genGoto(null_dev.source, ind, s, s->next, readCh);
+		genGoto(null_dev.source, ind, s->go, s, s->next, readCh);
 	}
 	if (last_fill_index < next_fill_index)
 	{
@@ -1687,7 +1682,7 @@ std::cerr << "\t" << s->go.span[i].to->label << " " << s->next->label << std::en
 	{
 		bool readCh = false;
 		s->emit(output, ind, readCh, condName);
-		s->go.genGoto(o, ind, s, s->next, readCh);
+		genGoto(o, ind, s->go, s, s->next, readCh);
 	}
 
 	if (cFlag && bFlag && BitMap::first)

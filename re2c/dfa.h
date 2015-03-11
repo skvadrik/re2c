@@ -163,31 +163,32 @@ public:
 	uint show(std::ostream&, uint) const;
 };
 
-class Go
+struct Go
 {
-public:
-	Go()
-		: nSpans(0)
-		, hSpans(0)
-		, span(NULL)
-		, hspan(NULL)
+	uint nSpans; // number of spans
+	uint hSpans; // number of spans with upper bound > 0x100
+	Span * span;
+	Span * hspan;
+
+	Go ()
+		: nSpans (0)
+		, hSpans (0)
+		, span (NULL)
+		, hspan (NULL)
+	{}
+
+	void init ()
 	{
+		for (uint i = 0; i < nSpans; ++i)
+		{
+			if (span[i].ub > 0x100)
+			{
+				hspan = &span[i];
+				hSpans = nSpans - i;
+				break;
+			}
+		}
 	}
-
-public:
-	uint	nSpans; // number of spans
-	uint	hSpans; // number of spans with upper bound > 0x100
-	Span	*span;
-	Span	*hspan;
-
-public:
-	void genGoto(OutputFile &, uint ind, const State *from, const State *next, bool &readCh);
-	void genBase(OutputFile &, uint ind, const State *from, const State *next, bool &readCh, Span * sp, uint nsp) const;
-	void genSwitchD(OutputFile &, const State *from) const;
-	void genSwitch(OutputFile &, uint ind, const State *from, const State *next, bool &readCh, Span * sp, uint nsp) const;
-	void genCpGoto(OutputFile &, uint ind, const State *from, const State *next, bool &readCh) const;
-	std::string genGotoProlog(OutputFile & o, uint ind, const State *from, const State *next, bool &readCh) const;
-	void unmap(Go*, const State*);
 };
 
 class State
