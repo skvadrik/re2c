@@ -821,45 +821,13 @@ static void genBase(OutputFile & o, uint ind, const State *from, const State *ne
 {
 	if (nsp == 0)
 	{
-		return ;
+		return;
 	}
-
-	if (!sFlag)
+	else if (!sFlag || (nsp > 8 && (sp[nsp - 2].ub - sp[0].ub <= 3 * (nsp - 2))))
 	{
 		genSwitch(o, ind, from, next, readCh, sp, nsp);
-		return ;
 	}
-
-	if (nsp > 8)
-	{
-		Span *bot = &sp[0], *top = &sp[nsp - 1];
-		uint util;
-
-		// decide if IFs insted of SWITCHes is a good idea
-		if (bot[0].to == top[0].to)
-		{
-			util = (top[ -1].ub - bot[0].ub) / (nsp - 2);
-		}
-		else
-		{
-			if (bot[0].ub > (top[0].ub - top[ -1].ub))
-			{
-				util = (top[0].ub - bot[0].ub) / (nsp - 1);
-			}
-			else
-			{
-				util = top[ -1].ub / (nsp - 1);
-			}
-		}
-
-		if (util <= 2)
-		{
-			genSwitch(o, ind, from, next, readCh, sp, nsp);
-			return ;
-		}
-	}
-
-	if (nsp > 5)
+	else if (nsp > 5)
 	{
 		doBinary(o, ind, sp, nsp, from, next, readCh);
 	}
