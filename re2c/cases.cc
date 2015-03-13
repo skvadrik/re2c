@@ -3,7 +3,7 @@
 namespace re2c {
 
 Cases::Cases (const Span * span, uint span_size)
-	: def (span[span_size - 1].to)
+	: def (span_size == 0 ? NULL : span[span_size - 1].to)
 	, cases (new Case[span_size])
 	, cases_size (0)
 {
