@@ -766,13 +766,6 @@ static void genSwitch(OutputFile & o, uint ind, const State *from, const State *
 	}
 	else
 	{
-		Cases cases (sp, nsp);
-
-		if (dFlag)
-		{
-			o << indent(ind) << mapCodeName["YYDEBUG"] << "(-1, " << mapCodeName["yych"] << ");\n";
-		}
-
 		if (readCh)
 		{
 			o << indent(ind) << "switch ((" << input_api.expr_peek_save () << ")) {\n";
@@ -783,6 +776,7 @@ static void genSwitch(OutputFile & o, uint ind, const State *from, const State *
 			o << indent(ind) << "switch (" << mapCodeName["yych"] << ") {\n";
 		}
 
+		Cases cases (sp, nsp);
 		for (uint i = 0; i < cases.size (); ++i)
 		{
 			if (cases[i].to != cases.default_state ())
