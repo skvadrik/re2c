@@ -758,6 +758,19 @@ static void genSwitchD (OutputFile & o, const State *from, Span * sp, uint nsp)
 	}
 }
 
+static std::string output_yych (bool & readCh)
+{
+	if (readCh)
+	{
+		readCh = false;
+		return "(" + input_api.expr_peek_save () + ")";
+	}
+	else
+	{
+		return mapCodeName["yych"];
+	}
+}
+
 static void genSwitch(OutputFile & o, uint ind, const State *from, const State *next, bool &readCh, Span * sp, uint nsp)
 {
 	if (nsp <= 2)
@@ -766,15 +779,7 @@ static void genSwitch(OutputFile & o, uint ind, const State *from, const State *
 	}
 	else
 	{
-		if (readCh)
-		{
-			o << indent(ind) << "switch ((" << input_api.expr_peek_save () << ")) {\n";
-			readCh = false;
-		}
-		else
-		{
-			o << indent(ind) << "switch (" << mapCodeName["yych"] << ") {\n";
-		}
+		o << indent(ind) << "switch (" << output_yych (readCh) << ") {\n";
 
 		Cases cases (sp, nsp);
 		for (uint i = 0; i < cases.size (); ++i)
@@ -833,10 +838,7 @@ static void genBase(OutputFile & o, uint ind, const State *from, const State *ne
 
 static std::string genGotoProlog (OutputFile & o, uint ind, const State *from, const State *next, bool &readCh, Span * sp, uint nsp)
 {
-	std::string sYych = readCh
-		? "(" + input_api.expr_peek_save () + ")"
-		: mapCodeName["yych"];
-	readCh = false;
+	std::string sYych = output_yych (readCh);
 
 	if (nsp > 0)
 	{
