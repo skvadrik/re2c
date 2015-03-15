@@ -24,7 +24,6 @@ int scan(char *s, int l)
 			YYDEBUG(0, *YYCURSOR);
 			if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
 			yych = *YYCURSOR;
-			YYDEBUG(-1, yych);
 			switch (yych) {
 			case 0x00:	goto yy10;
 			case 0x4E: /* + */	goto yy6;
@@ -44,7 +43,6 @@ int scan(char *s, int l)
 yy2:
 			YYDEBUG(2, *YYCURSOR);
 			++YYCURSOR;
-			YYDEBUG(-1, yych);
 			switch ((yych = *YYCURSOR)) {
 			case 0xF0: /* 0 */
 			case 0xF1: /* 1 */
@@ -96,7 +94,6 @@ yy14:
 			yych = *YYCURSOR;
 yy15:
 			YYDEBUG(15, *YYCURSOR);
-			YYDEBUG(-1, yych);
 			switch (yych) {
 			case 0xF0: /* 0 */
 			case 0xF1: /* 1 */
@@ -116,7 +113,6 @@ yy16:
 			if (YYLIMIT <= YYCURSOR) YYFILL(1);
 			yych = *YYCURSOR;
 			YYDEBUG(17, *YYCURSOR);
-			YYDEBUG(-1, yych);
 			switch (yych) {
 			case 0xF0: /* 0 */
 			case 0xF1: /* 1 */
