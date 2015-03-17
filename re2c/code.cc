@@ -10,7 +10,6 @@
 #include <iostream>
 #include <sstream>
 
-#include "cases.h"
 #include "code.h"
 #include "globals.h"
 #include "go.h"
@@ -102,42 +101,6 @@ static void genSetCondition(OutputFile & o, uint ind, const std::string& newcond
 	}
 }
 
-static std::string space(uint this_label)
-{
-	int nl = next_label > 999999 ? 6 : next_label > 99999 ? 5 : next_label > 9999 ? 4 : next_label > 999 ? 3 : next_label > 99 ? 2 : next_label > 9 ? 1 : 0;
-	int tl = this_label > 999999 ? 6 : this_label > 99999 ? 5 : this_label > 9999 ? 4 : this_label > 999 ? 3 : this_label > 99 ? 2 : this_label > 9 ? 1 : 0;
-
-	return std::string(std::max(1, nl - tl + 1), ' ');
-}
-
-/*
- * Find all spans, that map to the given state. For each of them,
- * find upper adjacent span, that maps to another state (if such
- * span exists, otherwize try lower one).
- * If input contains single span that maps to the given state,
- * then output contains 0 spans.
- */
-static void unmap (Go & go, const Go & base, const State * x)
-{
-	go.nSpans = 0;
-	for (uint i = 0; i < base.nSpans; ++i)
-	{
-		if (base.span[i].to != x)
-		{
-			if (go.nSpans > 0 && go.span[go.nSpans - 1].to == base.span[i].to)
-				go.span[go.nSpans - 1].ub = base.span[i].ub;
-			else
-			{
-				go.span[go.nSpans].to = base.span[i].to;
-				go.span[go.nSpans].ub = base.span[i].ub;
-				++go.nSpans;
-			}
-		}
-	}
-	if (go.nSpans > 0)
-		go.span[go.nSpans - 1].ub = base.span[base.nSpans - 1].ub;
-}
-
 static void doGen(const Go *g, const State *s, uint *bm, uint f, uint m)
 {
 	Span *b = g->span, *e = &b[g->nSpans];
@@ -178,7 +141,7 @@ const BitMap *BitMap::find(const Go *g, const State *x)
 {
 	for (const BitMap *b = first; b; b = b->next)
 	{
-		if (matches(b->go, b->on, g, x))
+		if (matches(b->go->span, b->go->nSpans, b->on, g->span, g->nSpans, x))
 		{
 			return b;
 		}
@@ -274,24 +237,6 @@ static void genGoTo(OutputFile & o, uint ind, const State *from, const State *to
 
 	o << indent(ind) << "goto " << labelPrefix << to->label << ";\n";
 	vUsedLabels.insert(to->label);
-}
-
-static void genIf(OutputFile & o, uint ind, const char *cmp, uint v, bool &readCh)
-{
-	o << indent(ind) << "if (";
-	if (readCh)
-	{
-		o << "(" << input_api.expr_peek_save () << ")";
-		readCh = false;
-	}
-	else
-	{
-		o << mapCodeName["yych"];
-	}
-
-	o << " " << cmp << " ";
-	o.write_char_hex (v);
-	o << ") ";
 }
 
 static void need(OutputFile & o, uint ind, uint n, bool & readCh, bool bSetMarker)
@@ -663,279 +608,6 @@ void Rule::emit(Output & output, uint ind, bool &, const std::string& condName) 
 	}
 	o << "\n";
 	o.insert_line_info ();
-}
-
-static void doLinear(OutputFile & o, uint ind, Span * s, uint n, const State *from, const State *next, bool &readCh)
-{
-	for (;;)
-	{
-		State *bg = s[0].to;
-
-		while (n >= 3 && s[2].to == bg && (s[1].ub - s[0].ub) == 1)
-		{
-			if (s[1].to == next && n == 3)
-			{
-				genIf(o, ind, "!=", s[0].ub, readCh);
-				genGoTo(o, 0, from, bg, readCh);
-				return ;
-			}
-			else
-			{
-				genIf(o, ind, "==", s[0].ub, readCh);
-				genGoTo(o, 0, from, s[1].to, readCh);
-			}
-
-			n -= 2;
-			s += 2;
-		}
-
-		if (n == 1)
-		{
-			if (s[0].to->label != from->label + 1)
-			{
-				genGoTo(o, ind, from, s[0].to, readCh);
-			}
-			return ;
-		}
-		else if (n == 2 && bg == next)
-		{
-			genIf(o, ind, ">=", s[0].ub, readCh);
-			genGoTo(o, 0, from, s[1].to, readCh);
-			return ;
-		}
-		else
-		{
-			genIf(o, ind, "<=", s[0].ub - 1, readCh);
-			genGoTo(o, 0, from, bg, readCh);
-			n -= 1;
-			s += 1;
-		}
-	}
-}
-
-static void genCases (OutputFile & o, uint ind, const std::vector<std::pair<uint, uint> > & ranges)
-{
-	for (uint i = 0; i < ranges.size (); ++i)
-	{
-		for (uint b = ranges[i].first; b < ranges[i].second; ++b)
-		{
-			o << indent(ind) << "case ";
-			o.write_char_hex (b);
-			o << ":";
-			if (dFlag && encoding.is(Enc::EBCDIC))
-			{
-				const uint c = encoding.decodeUnsafe(b);
-				if (isprint(c))
-					o << " /* " << std::string(1, c) << " */";
-			}
-			bool last_case = i == ranges.size () - 1 && b == ranges[i].second - 1;
-			if (!last_case)
-			{
-				o << "\n";
-			}
-		}
-	}
-}
-
-static void genSwitchD (OutputFile & o, const State *from, Span * sp, uint nsp)
-{
-	if (nsp == 1)
-	{
-		o << from->label << " -> " << sp[0].to->label << "\n";
-	}
-	else if (nsp > 1)
-	{
-		Cases cases (sp, nsp);
-		for (uint i = 0; i < cases.size (); ++i)
-		{
-			o << from->label << " -> " << cases[i].to->label << " [label=\"";
-			for (uint j = 0; j < cases[i].ranges.size (); ++j)
-			{
-				o.write_range (cases[i].ranges[j].first, cases[i].ranges[j].second);
-			}
-			o << "\"]\n";
-		}
-	}
-}
-
-static std::string output_yych (bool & readCh)
-{
-	if (readCh)
-	{
-		readCh = false;
-		return "(" + input_api.expr_peek_save () + ")";
-	}
-	else
-	{
-		return mapCodeName["yych"];
-	}
-}
-
-static void genSwitch(OutputFile & o, uint ind, const State *from, const State *next, bool &readCh, Span * sp, uint nsp)
-{
-	if (nsp <= 2)
-	{
-		doLinear(o, ind, sp, nsp, from, next, readCh);
-	}
-	else
-	{
-		o << indent(ind) << "switch (" << output_yych (readCh) << ") {\n";
-
-		Cases cases (sp, nsp);
-		for (uint i = 0; i < cases.size (); ++i)
-		{
-			if (cases[i].to != cases.default_state ())
-			{
-				genCases (o, ind, cases[i].ranges);
-				genGoTo(o, 1, from, cases[i].to, readCh);
-			}
-		}
-
-		o << indent(ind) << "default:";
-		genGoTo(o, 1, from, cases.default_state (), readCh);
-		o << indent(ind) << "}\n";
-	}
-}
-
-static void doBinary(OutputFile & o, uint ind, Span * s, uint n, const State *from, const State *next, bool &readCh)
-{
-	if (n <= 4)
-	{
-		doLinear(o, ind, s, n, from, next, readCh);
-	}
-	else
-	{
-		uint h = n / 2;
-
-		genIf(o, ind, "<=", s[h - 1].ub - 1, readCh);
-		o << "{\n";
-		doBinary(o, ind+1, &s[0], h, from, next, readCh);
-		o << indent(ind) << "} else {\n";
-		doBinary(o, ind+1, &s[h], n - h, from, next, readCh);
-		o << indent(ind) << "}\n";
-	}
-}
-
-static void genBase(OutputFile & o, uint ind, const State *from, const State *next, bool &readCh, Span * sp, uint nsp)
-{
-	if (nsp == 0)
-	{
-		return;
-	}
-	else if (!sFlag || (nsp > 8 && (sp[nsp - 2].ub - sp[0].ub <= 3 * (nsp - 2))))
-	{
-		genSwitch(o, ind, from, next, readCh, sp, nsp);
-	}
-	else if (nsp > 5)
-	{
-		doBinary(o, ind, sp, nsp, from, next, readCh);
-	}
-	else
-	{
-		doLinear(o, ind, sp, nsp, from, next, readCh);
-	}
-}
-
-static std::string genGotoProlog (OutputFile & o, uint ind, const State *from, const State *next, bool &readCh, Span * sp, uint nsp)
-{
-	std::string sYych = output_yych (readCh);
-
-	if (nsp > 0)
-	{
-		o << indent(ind) << "if (" << sYych <<" & ~0xFF) {\n";
-		genBase(o, ind + 1, from, next, readCh, sp, nsp);
-		o << indent(ind) << "} else ";
-		sYych = mapCodeName["yych"];
-	}
-	else
-	{
-		o << indent(ind);
-	}
-
-	return sYych;
-}
-
-static void genCpGoto (OutputFile & o, uint ind, const State *from, const State *next, bool &readCh, Span * sp, uint nsp, Span * hsp, uint nhsp)
-{
-	const std::string sYych = genGotoProlog(o, ind, from, next, readCh, hsp, nhsp);
-	o << "{\n";
-	++ind;
-	o << indent(ind++) << "static void *" << mapCodeName["yytarget"] << "[256] = {\n";
-	o << indent(ind);
-
-	uint ch = 0;
-	for (uint i = 0; i < nsp; ++i)
-	{
-		vUsedLabels.insert(sp[i].to->label);
-		for(; ch < sp[i].ub; ++ch)
-		{
-			o << "&&" << labelPrefix << sp[i].to->label;
-			if (ch == 255)
-			{
-				o << "\n";
-				i = nsp;
-				break;
-			}
-			else if (ch % 8 == 7)
-			{
-				o << ",\n" << indent(ind);
-			}
-			else
-			{
-				o << "," << space(sp[i].to->label);
-			}
-		}
-	}
-	o << indent(--ind) << "};\n";
-	o << indent(ind) << "goto *" << mapCodeName["yytarget"] << "[" << sYych << "];\n";
-	o << indent(--ind) << "}\n";
-}
-
-static void genGoto (OutputFile & o, uint ind, const Go & go, const State *from, const State *next, bool &readCh)
-{
-	if (DFlag)
-	{
-		genSwitchD (o, from, go.span, go.nSpans);
-		return;
-	}
-
-	const uint dSpans = go.nSpans - go.hSpans - go.nBitmaps;
-	if (gFlag && (dSpans >= cGotoThreshold))
-	{
-		genCpGoto(o, ind, from, next, readCh, go.span, go.nSpans, go.hspan, go.hSpans);
-		return;
-	}
-	else if (bFlag)
-	{
-		for (uint i = 0; i < go.nSpans; ++i)
-		{
-			if (const BitMap * b = go.bitmaps[i])
-			{
-				Go go1;
-				go1.span = new Span[go.nSpans];
-				unmap (go1, go, go.span[i].to);
-				const std::string sYych = genGotoProlog(o, ind, from, next, readCh, go.hspan, go.hSpans);
-				bUsedYYBitmap = true;
-				o << "if (" << mapCodeName["yybm"] << "[" << b->i << "+" << sYych << "] & ";
-				if (yybmHexTable)
-				{
-					o.write_hex (b->m);
-				}
-				else
-				{
-					o << (uint) b->m;
-				}
-				o << ") {\n";
-				genGoTo(o, ind+1, from, go.span[i].to, readCh);
-				o << indent(ind) << "}\n";
-				genBase(o, ind, from, next, readCh, go1.span, go1.nSpans);
-				delete [] go1.span;
-				return ;
-			}
-		}
-	}
-
-	genBase(o, ind, from, next, readCh, go.span, go.nSpans);
 }
 
 void State::emit(Output & output, uint ind, bool &readCh, const std::string& condName) const
@@ -1402,11 +1074,6 @@ void DFA::prepare(uint & max_fill)
 	// find ``base'' state, if possible
 	findBaseState();
 
-	for (s = head; s; s = s->next)
-	{
-		s->go.init ();
-	}
-
 	delete head->action;
 	head->action = NULL;
 }
@@ -1448,6 +1115,11 @@ void DFA::emit(Output & output, uint& ind, const RegExpMap* specMap, const std::
 		s->label = next_label++;
 	}
 
+	for (s = head; s; s = s->next)
+	{
+		s->go.init (s, s->next);
+	}
+
 /*
 	for (State * s = head; s; s = s->next)
 	{
@@ -1474,7 +1146,7 @@ std::cerr << "\t" << s->go.span[i].to->label << " " << s->next->label << std::en
 	{
 		bool readCh = false;
 		s->emit(null_dev, ind, readCh, condName);
-		genGoto(null_dev.source, ind, s->go, s, s->next, readCh);
+		s->go.emit(null_dev.source, ind, readCh);
 	}
 	if (last_fill_index < next_fill_index)
 	{
@@ -1577,7 +1249,7 @@ std::cerr << "\t" << s->go.span[i].to->label << " " << s->next->label << std::en
 	{
 		bool readCh = false;
 		s->emit(output, ind, readCh, condName);
-		genGoto(o, ind, s->go, s, s->next, readCh);
+		s->go.emit(o, ind, readCh);
 	}
 
 	if (cFlag && bFlag && BitMap::first)
