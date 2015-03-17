@@ -148,10 +148,10 @@ Cond::Cond (const std::string & cmp, uint val)
 	, value (val)
 {}
 
-Binary::Binary (const Span * s, uint n, const State * from, const State * next)
+Binary::Binary (const Span * s, uint n, const State * next)
 	: cond (new Cond ("<=", s[n / 2 - 1].ub - 1))
-	, thn (new If (n / 2 > 4 ? If::BINARY : If::LINEAR, &s[0], n / 2, from, next))
-	, els (new If (n - n / 2 > 4 ? If::BINARY : If::LINEAR, &s[n / 2], n - n / 2, from, next))
+	, thn (new If (n / 2 > 4 ? If::BINARY : If::LINEAR, &s[0], n / 2, next))
+	, els (new If (n - n / 2 > 4 ? If::BINARY : If::LINEAR, &s[n / 2], n - n / 2, next))
 {}
 
 void Binary::emit (OutputFile & o, uint ind, bool & readCh)
@@ -164,7 +164,7 @@ void Binary::emit (OutputFile & o, uint ind, bool & readCh)
 	o << indent (ind) << "}\n";
 }
 
-Linear::Linear (const Span * s, uint n, const State * from, const State * next)
+Linear::Linear (const Span * s, uint n, const State * next)
 	: branches ()
 {
 	for (;;)
@@ -186,8 +186,7 @@ Linear::Linear (const Span * s, uint n, const State * from, const State * next)
 		}
 		if (n == 1)
 		{
-			if (s[0].to->label != from->label + 1)
-//			if (s[0].to->next && s[0].to->label != s[0].to->next->label + 1)
+			if (next == NULL || s[0].to->label != next->label)
 			{
 				branches.push_back (std::make_pair (static_cast<const Cond *> (NULL), s[0].to));
 			}
@@ -223,17 +222,17 @@ void Linear::emit (OutputFile & o, uint ind, bool & readCh)
 	}
 }
 
-If::If (type_t t, const Span * sp, uint nsp, const State * from, const State * next)
+If::If (type_t t, const Span * sp, uint nsp, const State * next)
 	: type (t)
 	, info ()
 {
 	switch (type)
 	{
 		case BINARY:
-			info.binary = new Binary (sp, nsp, from, next);
+			info.binary = new Binary (sp, nsp, next);
 			break;
 		case LINEAR:
-			info.linear = new Linear (sp, nsp, from, next);
+			info.linear = new Linear (sp, nsp, next);
 			break;
 	}
 }
@@ -251,7 +250,7 @@ void If::emit (OutputFile & o, uint ind, bool & readCh)
 	}
 }
 
-SwitchIf::SwitchIf (const Span * sp, uint nsp, const State * from, const State * next)
+SwitchIf::SwitchIf (const Span * sp, uint nsp, const State * next)
 	: type (IF)
 	, info ()
 {
@@ -262,11 +261,11 @@ SwitchIf::SwitchIf (const Span * sp, uint nsp, const State * from, const State *
 	}
 	else if (nsp > 5)
 	{
-		info.ifs = new If (If::BINARY, sp, nsp, from, next);
+		info.ifs = new If (If::BINARY, sp, nsp, next);
 	}
 	else
 	{
-		info.ifs = new If (If::LINEAR, sp, nsp, from, next);
+		info.ifs = new If (If::LINEAR, sp, nsp, next);
 	}
 }
 
@@ -283,17 +282,17 @@ void SwitchIf::emit (OutputFile & o, uint ind, bool & readCh)
 	}
 }
 
-Bitmap::Bitmap (const Span * span, uint nSpans, const Span * hspan, uint hSpans, const BitMap * bm, const State * bm_state, const State * from, const State * next)
+Bitmap::Bitmap (const Span * span, uint nSpans, const Span * hspan, uint hSpans, const BitMap * bm, const State * bm_state, const State * next)
 	: bitmap (bm)
 	, bitmap_state (bm_state)
-	, hgo (hSpans == 0 ? NULL : new SwitchIf (hspan, hSpans, from, next))
+	, hgo (hSpans == 0 ? NULL : new SwitchIf (hspan, hSpans, next))
 	, lgo (NULL)
 {
 	Span * bspan = new Span [nSpans];
 	uint bSpans = unmap (bspan, span, nSpans, bm_state);
 	lgo = bSpans == 0
 		? NULL
-		:  new SwitchIf (bspan, bSpans, from, next);
+		:  new SwitchIf (bspan, bSpans, next);
 	delete bspan;
 }
 
@@ -355,8 +354,8 @@ void CpgotoTable::emit (OutputFile & o, uint ind)
 	o << indent (--ind) << "};\n";
 }
 
-Cpgoto::Cpgoto (const Span * span, uint nSpans, const Span * hspan, uint hSpans, const State * from, const State * next)
-	: hgo (hSpans == 0 ? NULL : new SwitchIf (hspan, hSpans, from, next))
+Cpgoto::Cpgoto (const Span * span, uint nSpans, const Span * hspan, uint hSpans, const State * next)
+	: hgo (hSpans == 0 ? NULL : new SwitchIf (hspan, hSpans, next))
 	, table (new CpgotoTable (span, nSpans))
 {}
 
@@ -402,7 +401,7 @@ Go::Go ()
 	, info ()
 {}
 
-void Go::init (const State * from, const State * next)
+void Go::init (const State * from)
 {
 	if (nSpans == 0)
 	{
@@ -452,18 +451,18 @@ void Go::init (const State * from, const State * next)
 	else if (gFlag && (dSpans >= cGotoThreshold))
 	{
 		type = CPGOTO;
-		info.cpgoto = new Cpgoto (span, nSpans, hspan, hSpans, from, next);
+		info.cpgoto = new Cpgoto (span, nSpans, hspan, hSpans, from->next);
 	}
 	else if (bFlag && (nBitmaps > 0))
 	{
 		type = BITMAP;
-		info.bitmap = new Bitmap (span, nSpans, hspan, hSpans, bitmap, bitmap_state, from, next);
+		info.bitmap = new Bitmap (span, nSpans, hspan, hSpans, bitmap, bitmap_state, from->next);
 		bUsedYYBitmap = true;
 	}
 	else
 	{
 		type = SWITCH_IF;
-		info.switchif = new SwitchIf (span, nSpans, from, next);
+		info.switchif = new SwitchIf (span, nSpans, from->next);
 	}
 }
 

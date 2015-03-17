@@ -1117,7 +1117,7 @@ void DFA::emit(Output & output, uint& ind, const RegExpMap* specMap, const std::
 
 	for (s = head; s; s = s->next)
 	{
-		s->go.init (s, s->next);
+		s->go.init (s);
 	}
 
 /*

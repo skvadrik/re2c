@@ -51,14 +51,14 @@ struct Binary
 	Cond * cond;
 	If * thn;
 	If * els;
-	Binary (const Span * s, uint n, const State * from, const State * next);
+	Binary (const Span * s, uint n, const State * next);
 	void emit (OutputFile & o, uint ind, bool & readCh);
 };
 
 struct Linear
 {
 	std::vector<std::pair<const Cond *, const State *> > branches;
-	Linear (const Span * s, uint n, const State * from, const State * next);
+	Linear (const Span * s, uint n, const State * next);
 	void emit (OutputFile & o, uint ind, bool & readCh);
 };
 
@@ -74,7 +74,7 @@ struct If
 		Binary * binary;
 		Linear * linear;
 	} info;
-	If (type_t t, const Span * sp, uint nsp, const State * from, const State * next);
+	If (type_t t, const Span * sp, uint nsp, const State * next);
 	void emit (OutputFile & o, uint ind, bool & readCh);
 };
 
@@ -90,7 +90,7 @@ struct SwitchIf
 		Cases * cases;
 		If * ifs;
 	} info;
-	SwitchIf (const Span * sp, uint nsp, const State * from, const State * next);
+	SwitchIf (const Span * sp, uint nsp, const State * next);
 	void emit (OutputFile & o, uint ind, bool & readCh);
 };
 
@@ -100,7 +100,7 @@ struct Bitmap
 	const State * bitmap_state;
 	SwitchIf * hgo;
 	SwitchIf * lgo;
-	Bitmap (const Span * span, uint nSpans, const Span * hspan, uint hSpans, const BitMap * bm, const State * bm_state, const State * from, const State * next);
+	Bitmap (const Span * span, uint nSpans, const Span * hspan, uint hSpans, const BitMap * bm, const State * bm_state, const State * next);
 	void emit (OutputFile & o, uint ind, bool & readCh);
 };
 
@@ -115,7 +115,7 @@ struct Cpgoto
 {
 	SwitchIf * hgo;
 	CpgotoTable * table;
-	Cpgoto (const Span * span, uint nSpans, const Span * hspan, uint hSpans, const State * from, const State * next);
+	Cpgoto (const Span * span, uint nSpans, const Span * hspan, uint hSpans, const State * next);
 	void emit (OutputFile & o, uint ind, bool & readCh);
 };
 
@@ -148,7 +148,7 @@ struct Go
 	} info;
 
 	Go ();
-	void init (const State * from, const State * next);
+	void init (const State * from);
 	void emit (OutputFile & o, uint ind, bool & readCh);
 };
 
