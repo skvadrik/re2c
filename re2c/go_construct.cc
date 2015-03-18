@@ -137,14 +137,16 @@ Bitmap::Bitmap (const Span * span, uint nSpans, const Span * hspan, uint hSpans,
 	delete bspan;
 }
 
+const uint CpgotoTable::TABLE_SIZE = 0x100;
+
 CpgotoTable::CpgotoTable (const Span * span, uint nSpans)
-	: table (new uint [0x100])
+	: table (new uint [TABLE_SIZE])
 {
 	uint c = 0;
 	for (uint i = 0; i < nSpans; ++i)
 	{
 		vUsedLabels.insert(span[i].to->label);
-		for(; c < span[i].ub && c < 0x100; ++c)
+		for(; c < span[i].ub && c < TABLE_SIZE; ++c)
 		{
 			table[c] = span[i].to->label;
 		}

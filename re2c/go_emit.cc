@@ -188,10 +188,10 @@ void CpgotoTable::emit (OutputFile & o, uint ind)
 {
 	o << indent (ind) << "static void *" << mapCodeName["yytarget"] << "[256] = {\n";
 	o << indent (++ind);
-	for (uint i = 0; i <= 0xFF; ++i)
+	for (uint i = 0; i < TABLE_SIZE; ++i)
 	{
 		o << "&&" << labelPrefix << table[i];
-		if (i == 0xFF)
+		if (i == TABLE_SIZE - 1)
 		{
 			o << "\n";
 		}

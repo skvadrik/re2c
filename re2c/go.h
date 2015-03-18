@@ -106,6 +106,7 @@ struct Bitmap
 
 struct CpgotoTable
 {
+	static const uint TABLE_SIZE;
 	uint * table;
 	CpgotoTable (const Span * span, uint nSpans);
 	void emit (OutputFile & o, uint ind);
