@@ -154,6 +154,11 @@ struct Go
 
 bool matches(const Span * b1, uint n1, const State * s1, const Span * b2, uint n2, const State * s2);
 uint unmap (Span * new_span, const Span * old_span, uint old_nspans, const State * x);
+std::string space (uint this_label);
+std::string output_yych (bool & readCh);
+void output_if (OutputFile & o, uint ind, bool & readCh, const std::string & compare, uint value);
+void output_goto (OutputFile & o, uint ind, bool & readCh, uint to);
+std::string output_hgo (OutputFile & o, uint ind, bool & readCh, SwitchIf * hgo);
 
 } // namespace re2c
 
