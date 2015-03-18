@@ -36,6 +36,7 @@ struct Cases
 	Cases (const Span * s, uint n);
 	~Cases ();
 	void emit (OutputFile & o, uint ind, bool & readCh);
+	void used_labels ();
 };
 
 struct Cond
@@ -52,14 +53,18 @@ struct Binary
 	If * thn;
 	If * els;
 	Binary (const Span * s, uint n, const State * next);
+	~Binary ();
 	void emit (OutputFile & o, uint ind, bool & readCh);
+	void used_labels ();
 };
 
 struct Linear
 {
 	std::vector<std::pair<const Cond *, const State *> > branches;
 	Linear (const Span * s, uint n, const State * next);
+	~Linear ();
 	void emit (OutputFile & o, uint ind, bool & readCh);
+	void used_labels ();
 };
 
 struct If
@@ -75,7 +80,9 @@ struct If
 		Linear * linear;
 	} info;
 	If (type_t t, const Span * sp, uint nsp, const State * next);
+	~If ();
 	void emit (OutputFile & o, uint ind, bool & readCh);
+	void used_labels ();
 };
 
 struct SwitchIf
@@ -91,7 +98,9 @@ struct SwitchIf
 		If * ifs;
 	} info;
 	SwitchIf (const Span * sp, uint nsp, const State * next);
+	~SwitchIf ();
 	void emit (OutputFile & o, uint ind, bool & readCh);
+	void used_labels ();
 };
 
 struct Bitmap
@@ -101,7 +110,9 @@ struct Bitmap
 	SwitchIf * hgo;
 	SwitchIf * lgo;
 	Bitmap (const Span * span, uint nSpans, const Span * hspan, uint hSpans, const BitMap * bm, const State * bm_state, const State * next);
+	~Bitmap ();
 	void emit (OutputFile & o, uint ind, bool & readCh);
+	void used_labels ();
 };
 
 struct CpgotoTable
@@ -109,7 +120,9 @@ struct CpgotoTable
 	static const uint TABLE_SIZE;
 	uint * table;
 	CpgotoTable (const Span * span, uint nSpans);
+	~CpgotoTable ();
 	void emit (OutputFile & o, uint ind);
+	void used_labels ();
 };
 
 struct Cpgoto
@@ -117,7 +130,9 @@ struct Cpgoto
 	SwitchIf * hgo;
 	CpgotoTable * table;
 	Cpgoto (const Span * span, uint nSpans, const Span * hspan, uint hSpans, const State * next);
+	~Cpgoto ();
 	void emit (OutputFile & o, uint ind, bool & readCh);
+	void used_labels ();
 };
 
 struct Dot
@@ -125,6 +140,7 @@ struct Dot
 	const State * from;
 	Cases * cases;
 	Dot (const Span * sp, uint nsp, const State * from);
+	~Dot ();
 	void emit (OutputFile & o);
 };
 
@@ -134,7 +150,8 @@ struct Go
 	Span * span;
 	enum
 	{
-		NONE,
+		NOT_INITIALIZED,
+		EMPTY,
 		SWITCH_IF,
 		BITMAP,
 		CPGOTO,
@@ -149,8 +166,10 @@ struct Go
 	} info;
 
 	Go ();
+	~Go ();
 	void init (const State * from);
 	void emit (OutputFile & o, uint ind, bool & readCh);
+	void used_labels ();
 };
 
 bool matches(const Span * b1, uint n1, const State * s1, const Span * b2, uint n2, const State * s2);

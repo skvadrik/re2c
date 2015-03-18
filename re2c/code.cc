@@ -1117,25 +1117,17 @@ void DFA::emit(Output & output, uint& ind, const RegExpMap* specMap, const std::
 
 	for (s = head; s; s = s->next)
 	{
-		s->go.init (s);
+		// This awkward check is necessary in '-r' mode,
+		// when the same DFA is used multiple times.
+		// If this for-loop was moved to 'prepare', check
+		// could be avoided, but in 'prepare' labels are
+		// not renamed properly yet.
+		if (s->go.type == Go::NOT_INITIALIZED)
+		{
+			s->go.init (s);
+		}
+		s->go.used_labels ();
 	}
-
-/*
-	for (State * s = head; s; s = s->next)
-	{
-std::cerr << ">>" << s->label << "\n";
-			for (uint i = 0; i < s->go.nSpans; ++i)
-			{
-//				if (s->go.span[i].to && s->go.span[i].to != s->next)
-				if (s->go.span[i].to && !(s->go.span[i].to == s->next && (s->go.nSpans == 1 || sFlag)))
-				{
-std::cerr << "\t" << s->go.span[i].to->label << " " << s->next->label << std::endl;
-					s->go.span[i].to->used_label = true;
-					o.add_label (s->go.span[i].to->label);
-				}
-			}
-	}
-*/
 
 	// Save 'next_fill_index' and compute information about code generation
 	// while writing to null device.

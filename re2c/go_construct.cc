@@ -16,11 +16,6 @@ Cases::Cases (const Span * span, uint span_size)
 	}
 }
 
-Cases::~Cases ()
-{
-	delete [] cases;
-}
-
 void Cases::add (uint lb, uint ub, State * to)
 {
 	for (uint i = 0; i < cases_size; ++i)
@@ -134,7 +129,7 @@ Bitmap::Bitmap (const Span * span, uint nSpans, const Span * hspan, uint hSpans,
 	lgo = bSpans == 0
 		? NULL
 		:  new SwitchIf (bspan, bSpans, next);
-	delete bspan;
+	delete [] bspan;
 }
 
 const uint CpgotoTable::TABLE_SIZE = 0x100;
@@ -145,7 +140,6 @@ CpgotoTable::CpgotoTable (const Span * span, uint nSpans)
 	uint c = 0;
 	for (uint i = 0; i < nSpans; ++i)
 	{
-		vUsedLabels.insert(span[i].to->label);
 		for(; c < span[i].ub && c < TABLE_SIZE; ++c)
 		{
 			table[c] = span[i].to->label;
@@ -166,7 +160,7 @@ Dot::Dot (const Span * sp, uint nsp, const State * s)
 Go::Go ()
 	: nSpans (0)
 	, span (NULL)
-	, type (NONE)
+	, type (NOT_INITIALIZED)
 	, info ()
 {}
 
@@ -174,6 +168,7 @@ void Go::init (const State * from)
 {
 	if (nSpans == 0)
 	{
+		type = EMPTY;
 		return;
 	}
 

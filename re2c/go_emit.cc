@@ -41,7 +41,6 @@ void output_goto (OutputFile & o, uint ind, bool & readCh, uint to)
 		readCh = false;
 	}
 	o << indent (ind) << "goto " << labelPrefix << to << ";\n";
-	vUsedLabels.insert(to);
 }
 
 std::string output_hgo (OutputFile & o, uint ind, bool & readCh, SwitchIf * hgo)
@@ -241,7 +240,8 @@ void Go::emit (OutputFile & o, uint ind, bool & readCh)
 {
 	switch (type)
 	{
-		case NONE:
+		case NOT_INITIALIZED:
+		case EMPTY:
 			break;
 		case SWITCH_IF:
 			info.switchif->emit (o, ind, readCh);
