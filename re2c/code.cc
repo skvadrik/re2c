@@ -1076,6 +1076,11 @@ void DFA::prepare(uint & max_fill)
 
 	delete head->action;
 	head->action = NULL;
+
+	for (s = head; s; s = s->next)
+	{
+		s->go.init (s);
+	}
 }
 
 
@@ -1117,15 +1122,6 @@ void DFA::emit(Output & output, uint& ind, const RegExpMap* specMap, const std::
 
 	for (s = head; s; s = s->next)
 	{
-		// This awkward check is necessary in '-r' mode,
-		// when the same DFA is used multiple times.
-		// If this for-loop was moved to 'prepare', check
-		// could be avoided, but in 'prepare' labels are
-		// not renamed properly yet.
-		if (s->go.type == Go::NOT_INITIALIZED)
-		{
-			s->go.init (s);
-		}
 		s->go.used_labels ();
 	}
 

@@ -118,7 +118,7 @@ struct Bitmap
 struct CpgotoTable
 {
 	static const uint TABLE_SIZE;
-	uint * table;
+	const State ** table;
 	CpgotoTable (const Span * span, uint nSpans);
 	~CpgotoTable ();
 	void emit (OutputFile & o, uint ind);
@@ -150,7 +150,6 @@ struct Go
 	Span * span;
 	enum
 	{
-		NOT_INITIALIZED,
 		EMPTY,
 		SWITCH_IF,
 		BITMAP,

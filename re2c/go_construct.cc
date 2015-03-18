@@ -135,14 +135,14 @@ Bitmap::Bitmap (const Span * span, uint nSpans, const Span * hspan, uint hSpans,
 const uint CpgotoTable::TABLE_SIZE = 0x100;
 
 CpgotoTable::CpgotoTable (const Span * span, uint nSpans)
-	: table (new uint [TABLE_SIZE])
+	: table (new const State * [TABLE_SIZE])
 {
 	uint c = 0;
 	for (uint i = 0; i < nSpans; ++i)
 	{
 		for(; c < span[i].ub && c < TABLE_SIZE; ++c)
 		{
-			table[c] = span[i].to->label;
+			table[c] = span[i].to;
 		}
 	}
 }
@@ -160,7 +160,7 @@ Dot::Dot (const Span * sp, uint nsp, const State * s)
 Go::Go ()
 	: nSpans (0)
 	, span (NULL)
-	, type (NOT_INITIALIZED)
+	, type (EMPTY)
 	, info ()
 {}
 
@@ -168,7 +168,6 @@ void Go::init (const State * from)
 {
 	if (nSpans == 0)
 	{
-		type = EMPTY;
 		return;
 	}
 

@@ -76,7 +76,6 @@ Go::~Go ()
 {
 	switch (type)
 	{
-		case NOT_INITIALIZED:
 		case EMPTY:
 			break;
 		case SWITCH_IF:

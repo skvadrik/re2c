@@ -189,7 +189,7 @@ void CpgotoTable::emit (OutputFile & o, uint ind)
 	o << indent (++ind);
 	for (uint i = 0; i < TABLE_SIZE; ++i)
 	{
-		o << "&&" << labelPrefix << table[i];
+		o << "&&" << labelPrefix << table[i]->label;
 		if (i == TABLE_SIZE - 1)
 		{
 			o << "\n";
@@ -200,7 +200,7 @@ void CpgotoTable::emit (OutputFile & o, uint ind)
 		}
 		else
 		{
-			o << "," << space (table[i]);
+			o << "," << space (table[i]->label);
 		}
 	}
 	o << indent (--ind) << "};\n";
@@ -240,7 +240,6 @@ void Go::emit (OutputFile & o, uint ind, bool & readCh)
 {
 	switch (type)
 	{
-		case NOT_INITIALIZED:
 		case EMPTY:
 			break;
 		case SWITCH_IF:

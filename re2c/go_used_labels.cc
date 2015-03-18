@@ -69,7 +69,7 @@ void CpgotoTable::used_labels ()
 {
 	for (uint i = 0; i < TABLE_SIZE; ++i)
 	{
-		vUsedLabels.insert (table[i]);
+		vUsedLabels.insert (table[i]->label);
 	}
 }
 
@@ -86,7 +86,6 @@ void Go::used_labels ()
 {
 	switch (type)
 	{
-		case NOT_INITIALIZED:
 		case EMPTY:
 		case DOT:
 			break;
