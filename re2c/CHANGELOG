@@ -1,3 +1,7 @@
+Version 0.14.2 (2015-03-25)
+-----------------------------
+- fixed #57 Wrong result only if another rule is present
+
 Version 0.14.1 (2015-02-27)
 -----------------------------
 - fixed #55 re2c-0.14: re2c -V outputs null byte
