@@ -44,7 +44,6 @@ struct Cond
 	std::string compare;
 	uint value;
 	Cond (const std::string & cmp, uint val);
-	void emit (OutputFile & o, uint ind, bool & readCh);
 };
 
 struct Binary
