@@ -37,10 +37,16 @@ Cond::Cond (const std::string & cmp, uint val)
 {}
 
 Binary::Binary (const Span * s, uint n, const State * next)
-	: cond (new Cond ("<=", s[n / 2 - 1].ub - 1))
-	, thn (new If (n / 2 > 4 ? If::BINARY : If::LINEAR, &s[0], n / 2, next))
-	, els (new If (n - n / 2 > 4 ? If::BINARY : If::LINEAR, &s[n / 2], n - n / 2, next))
-{}
+	: cond (NULL)
+	, thn (NULL)
+	, els (NULL)
+{
+	const uint l = n / 2;
+	const uint h = n - l;
+	cond = new Cond ("<=", s[l - 1].ub - 1);
+	thn = new If (l > 4 ? If::BINARY : If::LINEAR, &s[0], l, next);
+	els = new If (h > 4 ? If::BINARY : If::LINEAR, &s[l], h, next);
+}
 
 Linear::Linear (const Span * s, uint n, const State * next)
 	: branches ()
