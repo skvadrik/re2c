@@ -581,7 +581,7 @@ void Rule::emit(Output & output, uint ind, bool &, const std::string& condName) 
 
 	uint back = rule->ctx->fixedLength();
 
-	if (back != 0u)
+	if (back != 0u && !DFlag)
 	{
 		o << input_api.stmt_restorectx (ind);
 	}
@@ -622,7 +622,7 @@ void State::emit(Output & output, uint ind, bool &readCh, const std::string& con
 	{
 		o << indent(ind) << mapCodeName["YYDEBUG"] << "(" << label << ", " << input_api.expr_peek () << ");\n";
 	}
-	if (isPreCtxt)
+	if (isPreCtxt && !DFlag)
 	{
 		o << input_api.stmt_backupctx (ind);
 	}
