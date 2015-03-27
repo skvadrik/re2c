@@ -69,7 +69,7 @@ echo:
 					{
 						fatal("found standard 're2c' block while using -r flag");
 					}
-					if (!DFlag)
+					if (!(DFlag || flag_skeleton))
 					{
 						out.write((const char*)(tok), (const char*)(&cursor[-7]) - (const char*)(tok));
 					}
@@ -94,7 +94,7 @@ echo:
 						fatal("found 'use:re2c' block without -r flag");
 					}
 					reuse();
-					if (!DFlag)
+					if (!(DFlag || flag_skeleton))
 					{
 						out.write((const char*)(tok), (const char*)(&cursor[-11]) - (const char*)(tok));
 					}
@@ -102,7 +102,7 @@ echo:
 					RETURN(Reuse);
 				}
 	"/*!max:re2c" {
-					if (!DFlag)
+					if (!(DFlag || flag_skeleton))
 					{
 						out.insert_yymaxfill ();
 					}
@@ -124,7 +124,7 @@ echo:
 	"/*!types:re2c" {
 					tok = pos = cursor;
 					ignore_eoc = true;
-					if (!DFlag)
+					if (!(DFlag || flag_skeleton))
 					{
 						out.insert_line_info ();
 						out << "\n";
@@ -145,7 +145,7 @@ echo:
 						ignore_eoc = false;
 						ignore_cnt = 0;
 					}
-					else if (!DFlag)
+					else if (!(DFlag || flag_skeleton))
 					{
 						out.write((const char*)(tok), (const char*)(cursor) - (const char*)(tok));
 					}
@@ -163,7 +163,7 @@ echo:
 						ignore_eoc = false;
 						ignore_cnt = 0;
 					}
-					else if (!DFlag)
+					else if (!(DFlag || flag_skeleton))
 					{
 						out.write((const char*)(tok), (const char*)(cursor) - (const char*)(tok));
 					}
@@ -179,7 +179,7 @@ echo:
 					{
 						ignore_cnt++;
 					}
-					else if (!DFlag)
+					else if (!(DFlag || flag_skeleton))
 					{
 						out.write((const char*)(tok), (const char*)(cursor) - (const char*)(tok));
 					}
@@ -188,7 +188,7 @@ echo:
 					goto echo;
 				}
 	zero		{
-					if (!ignore_eoc && !DFlag)
+					if (!(ignore_eoc || DFlag || flag_skeleton))
 					{
 						out.write((const char*)(tok), (const char*)(cursor) - (const char*)(tok) - 1);
 						// -1 so we don't write out the \0

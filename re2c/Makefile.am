@@ -2,7 +2,8 @@
 
 bin_PROGRAMS = re2c
 win_BINARIES = $(WINBUILDDIR)/re2c.exe
-re2c_SOURCES = code.cc dfa.cc go_construct.cc go_destruct.cc go_emit.cc go_used_labels.cc main.cc parser.cc actions.cc scanner.re substr.cc range.cc \
+re2c_SOURCES = code.cc code_names.cc dfa.cc go_construct.cc go_destruct.cc go_emit.cc go_used_labels.cc \
+	main.cc parser.cc actions.cc scanner.re substr.cc range.cc \
 	translate.cc scanner.cc mbo_getopt.cc print.cc input.cc input_api.cc output.cc \
 	enc.cc utf8.cc utf8_range.cc utf8_regexp.cc utf16.cc utf16_range.cc utf16_regexp.cc range_suffix.cc \
 	basics.h code.h code_names.h dfa.h go.h enc.h indent.h input.h input_api.h free_list.h globals.h ins.h \

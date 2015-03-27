@@ -26,6 +26,7 @@ extern bool iFlag;
 extern bool rFlag;
 extern bool sFlag;
 extern bool tFlag;
+extern bool flag_skeleton;
 
 extern bool bNoGenerationDate;
 extern bool bUsedYYMarker;

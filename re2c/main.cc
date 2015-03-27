@@ -30,6 +30,7 @@ bool iFlag = false;
 bool rFlag = false;
 bool sFlag = false;
 bool tFlag = false;
+bool flag_skeleton = false;
 
 bool bNoGenerationDate = false;
 bool bUsedYYBitmap  = false;
@@ -117,6 +118,7 @@ static const mbo_opt_struct OPTIONS[] =
 	mbo_opt_struct(12,  0, "case-inverted"),
 	mbo_opt_struct(13,  1, "encoding-policy"),
 	mbo_opt_struct(14,  1, "input"),
+	mbo_opt_struct(15,  0, "skeleton"),
 	mbo_opt_struct('-', 0, NULL) /* end of args */
 };
 
@@ -206,6 +208,10 @@ static void usage()
 	"\n"
 	"--input i               Specify re2c input API.\n"
 	"                        i can be one of the following: default, custom.\n"
+	"\n"
+	"--skeleton              Instead of embedding re2c-generated code into C/C++ source,\n"
+	"                        generate a self-contained program for the same DFA.\n"
+	"                        Most useful for correctness and performance testing.\n"
 	;
 }
 
@@ -399,6 +405,10 @@ int main(int argc, char *argv[])
 				return 1;
 			}
 			break;
+
+			case 15:
+			flag_skeleton = true;
+			break;
 		}
 	}
 
@@ -408,9 +418,9 @@ int main(int argc, char *argv[])
 		return 2;
 	}
 
-	if (DFlag && (bFlag || dFlag || sFlag))
+	if (DFlag && (bFlag || dFlag || sFlag || flag_skeleton))
 	{
-		std::cerr << "re2c: error: Cannot combine -D with -b, -d  or -s switches\n";
+		std::cerr << "re2c: error: Cannot combine -D with -b, -d, -s or --skeleton switches\n";
 		return 2;
 	}
 
