@@ -54,8 +54,7 @@ then
 fi
 re2c="${valgrind}${re2c}"
 
-run_pack ()
-{
+run_pack() {
 	local log="$1"
 	shift 1
 
@@ -118,21 +117,31 @@ run_pack ()
 	echo $errcnt > $log
 }
 
+cleanup() {
+	rm -f ${logs[@]}
+	kill ${wait_pids[@]}
+	wait ${wait_pids[@]}
+	printf "\nEh...\n"
+	exit 1
+}
+
 logs=()
+wait_pids=()
+trap cleanup INT
 for ((i = 0; i < ${#packs[@]}; i++))
 do
 	logs[$i]=`date +%y%m%d%H%M%S`_$i
 	run_pack ${logs[i]} ${packs[i]} &
-	wait_pids="$wait_pids %$((i + 1))"
+	wait_pids+=( $! )
 done
-wait $wait_pids
+wait ${wait_pids[@]}
 
 errors=0
 for ((i = 0; i < ${#logs[@]}; i++))
 do
 	error=`cat ${logs[i]}`
 	errors=$((errors + error))
-	rm ${logs[i]}
+	rm -f ${logs[i]}
 done
 
 
