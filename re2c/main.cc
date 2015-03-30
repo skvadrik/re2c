@@ -408,6 +408,7 @@ int main(int argc, char *argv[])
 
 			case 15:
 			flag_skeleton = true;
+			input_api.set (InputAPI::CUSTOM);
 			break;
 		}
 	}

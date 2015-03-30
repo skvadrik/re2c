@@ -598,7 +598,11 @@ void Rule::emit(Output & output, uint ind, bool &, const std::string& condName) 
 
 	o.write_line_info (rule->code->line, rule->code->source.c_str ());
 	o << indent(ind);
-	if (rule->code->autogen)
+	if (flag_skeleton)
+	{
+		o << "{ continue; }";
+	}
+	else if (rule->code->autogen)
 	{
 		o << replaceParam(condGoto, condGotoParam, condPrefix + rule->code->newcond);
 	}
@@ -1083,10 +1087,60 @@ void DFA::prepare(uint & max_fill)
 	}
 }
 
+static void output_skeleton_prolog (OutputFile & o, uint ind)
+{
+	std::string yyctype;
+	switch (encoding.szCodeUnit ())
+	{
+		case 1:
+			yyctype = " unsigned char";
+			break;
+		case 2:
+			yyctype = " unsigned short";
+			break;
+		case 4:
+			yyctype = " unsigned int";
+			break;
+	}
+
+	o << "int main () {\n";
+
+	o << "#define " << mapCodeName["YYCTYPE"] << yyctype << "\n";
+	o << "#define " << mapCodeName["YYPEEK"] << "() *cursor\n";
+	o << "#define " << mapCodeName["YYSKIP"] << "() ++cursor\n";
+	o << "#define " << mapCodeName["YYBACKUP"] << "() marker = cursor\n";
+	o << "#define " << mapCodeName["YYBACKUPCTX"] << "() ctxmarker = cursor\n";
+	o << "#define " << mapCodeName["YYRESTORE"] << "() cursor = marker\n";
+	o << "#define " << mapCodeName["YYRESTORECTX"] << "() cursor = ctxmarker\n";
+	o << "#define " << mapCodeName["YYLESSTHAN"] << "(n) cursor < limit\n";
+	o << "#define " << mapCodeName["YYFILL"] << "(n) { break; }\n";
+	o << indent (ind) << "const unsigned int data_size = 0xFF;\n";
+	o << indent (ind) << "YYCTYPE * data = new YYCTYPE [data_size];\n";
+	o << indent (ind) << "const YYCTYPE * cursor = data;\n";
+	o << indent (ind) << "const YYCTYPE * marker = data;\n";
+	o << indent (ind) << "const YYCTYPE * ctxmarker = data;\n";
+	o << indent (ind) << "const YYCTYPE * const limit = &data[data_size - 1];\n";
+	o << indent (ind) << "for (;;)\n";
+	o << indent (ind) << "{\n";
+}
+
+static void output_skeleton_epilog (OutputFile & o, uint ind)
+{
+	o << indent (ind) << "}\n";
+	o << indent (ind) << "delete [] data;\n";
+
+	o << "return 0; }\n";
+}
 
 void DFA::emit(Output & output, uint& ind, const RegExpMap* specMap, const std::string& condName, bool isLastCond, bool& bPrologBrace)
 {
 	OutputFile & o = output.source;
+
+	if (flag_skeleton)
+	{
+		output_skeleton_prolog (o, ind);
+	}
+
 	bool bProlog = (!cFlag || !bWroteCondCheck);
 
 	// In -c mode, the prolog needs its own label separate from start_label.
@@ -1258,6 +1312,11 @@ void DFA::emit(Output & output, uint& ind, const RegExpMap* specMap, const std::
 	}
 
 	bUseStartLabel = false;
+
+	if (flag_skeleton)
+	{
+		output_skeleton_epilog (o, ind);
+	}
 }
 
 static void output_state_goto_sub (std::ostream & o, uint ind, uint start_label, int cMin, int cMax)
