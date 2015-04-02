@@ -14,7 +14,7 @@ BUILT_SOURCES = parser.cc scanner.cc
 
 #CXXFLAGS     = -O2 -Wall -Wno-unused -Wno-parentheses -Wno-deprecated
 #CXXFLAGS     = -ggdb -fno-inline -O2 -Wall -Wextra -pedantic -Wconversion -Wpointer-arith -Wwrite-strings -Wredundant-decls -Werror -Wunused-function -DPEDANTIC
-#CXXFLAGS     += -O2
+CXXFLAGS     += -O2
 CXXFLAGS     += -W -Wall -Wextra -pedantic -Wredundant-decls -DPEDANTIC
 YFLAGS       = -y -d --no-lines
 
