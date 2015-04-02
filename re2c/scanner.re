@@ -102,7 +102,7 @@ echo:
 					RETURN(Reuse);
 				}
 	"/*!max:re2c" {
-					if (!(DFlag || flag_skeleton))
+					if (!DFlag)
 					{
 						out.insert_yymaxfill ();
 					}
@@ -124,7 +124,7 @@ echo:
 	"/*!types:re2c" {
 					tok = pos = cursor;
 					ignore_eoc = true;
-					if (!(DFlag || flag_skeleton))
+					if (!DFlag)
 					{
 						out.insert_line_info ();
 						out << "\n";
