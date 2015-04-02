@@ -196,7 +196,7 @@ void Go::init (const State * from)
 	const State * bitmap_state = NULL;
 	for (uint i = 0; i < nSpans; ++i)
 	{
-		if (span[i].to && span[i].to->isBase)
+		if (span[i].to->isBase)
 		{
 			const BitMap *b = BitMap::find (span[i].to);
 			if (b && matches(b->go->span, b->go->nSpans, b->on, span, nSpans, span[i].to))
