@@ -600,7 +600,7 @@ void Rule::emit(Output & output, uint ind, bool &, const std::string& condName) 
 	o << indent(ind);
 	if (flag_skeleton)
 	{
-		o << "{ continue; }";
+		o << "{ printf (\"%u\\n\", cursor - data); continue; }";
 	}
 	else if (rule->code->autogen)
 	{
@@ -1040,6 +1040,7 @@ void DFA::prepare(uint & max_fill)
 				}
 
 				s->go.span[i].to = ow;
+				s->go.span[i].is_default = true;
 			}
 		}
 	}
@@ -1087,8 +1088,10 @@ void DFA::prepare(uint & max_fill)
 	}
 }
 
-static void output_skeleton_prolog (OutputFile & o, uint ind)
+void DFA::output_skeleton_prolog (Output & output, uint ind)
 {
+	OutputFile & o = output.source;
+
 	std::string yyctype;
 	switch (encoding.szCodeUnit ())
 	{
@@ -1103,6 +1106,7 @@ static void output_skeleton_prolog (OutputFile & o, uint ind)
 			break;
 	}
 
+	o << "#include <stdio.h>\n";
 	o << "int main () {\n";
 
 	o << "#define " << mapCodeName["YYCTYPE"] << yyctype << "\n";
@@ -1112,10 +1116,9 @@ static void output_skeleton_prolog (OutputFile & o, uint ind)
 	o << "#define " << mapCodeName["YYBACKUPCTX"] << "() ctxmarker = cursor\n";
 	o << "#define " << mapCodeName["YYRESTORE"] << "() cursor = marker\n";
 	o << "#define " << mapCodeName["YYRESTORECTX"] << "() cursor = ctxmarker\n";
-	o << "#define " << mapCodeName["YYLESSTHAN"] << "(n) cursor < limit\n";
+	o << "#define " << mapCodeName["YYLESSTHAN"] << "(n) (limit - cursor) < n\n";
 	o << "#define " << mapCodeName["YYFILL"] << "(n) { break; }\n";
-	o << indent (ind) << "const unsigned int data_size = 0xFF;\n";
-	o << indent (ind) << "YYCTYPE * data = new YYCTYPE [data_size];\n";
+	generate (output, ind);
 	o << indent (ind) << "const YYCTYPE * cursor = data;\n";
 	o << indent (ind) << "const YYCTYPE * marker = data;\n";
 	o << indent (ind) << "const YYCTYPE * ctxmarker = data;\n";
@@ -1124,12 +1127,80 @@ static void output_skeleton_prolog (OutputFile & o, uint ind)
 	o << indent (ind) << "{\n";
 }
 
-static void output_skeleton_epilog (OutputFile & o, uint ind)
+void DFA::output_skeleton_epilog (OutputFile & o, uint ind)
 {
 	o << indent (ind) << "}\n";
-	o << indent (ind) << "delete [] data;\n";
 
 	o << "return 0; }\n";
+}
+
+static void generate_data (State * s, bool def, const std::vector<std::vector<uint> > & xs, std::vector<std::pair<std::vector<uint>, bool> > & ys)
+{
+	if (s->go.nSpans <= 1)
+	{
+		for (uint i = 0; i < xs.size (); ++i)
+		{
+			ys.push_back (std::make_pair (std::vector<uint> (xs[i]), def));
+		}
+	}
+	else if (s->generated)
+	{
+		return;
+	}
+	else
+	{
+		s->generated = true;
+		for (uint i = 0; i < s->go.nSpans; ++i)
+		{
+			std::vector<std::vector<uint> > zs;
+			for (uint j = 0; j < xs.size (); ++j)
+			{
+				std::vector<uint> z (xs[j]);
+				z.push_back (s->go.span[i].ub - 1);
+				zs.push_back (z);
+			}
+			generate_data (s->go.span[i].to, s->go.span[i].is_default, zs, ys);
+		}
+	}
+}
+
+void DFA::generate (Output & output, uint ind)
+{
+	OutputFile & o = output.source;
+
+	std::vector<std::vector<uint> > xs;
+	std::vector<std::pair<std::vector<uint>, bool> > ys;
+	std::vector<uint> x;
+	xs.push_back (x);
+	generate_data (head, false, xs, ys);
+	ys.push_back (std::make_pair (std::vector<uint> (output.max_fill), false)); // pad with YYMAXFILL zeroes
+
+	o << indent (ind) << "// These strings correspond to paths in DFA.\n";
+	o << indent (ind) << "YYCTYPE data [] =\n";
+	o << indent (ind) << "{\n";
+	for (uint i = 0; i < ys.size (); ++i)
+	{
+		o << indent (ind + 1);
+		for (uint j = 0 ; j < ys[i].first.size (); ++j)
+		{
+			o << ys[i].first[j] << ",";
+		}
+		o << "\n";
+	}
+	o << indent (ind) << "};\n";
+	o << indent (ind) << "const unsigned int data_size = sizeof (data) / sizeof (YYCTYPE);\n";
+
+	uint pos = 0;
+	const uint pos_num = ys.size () - 1; // skip padding
+	o << indent (ind) << "unsigned int positions [] =\n";
+	o << indent (ind) << "{\n";
+	for (uint i = 0; i < pos_num; ++i)
+	{
+		pos += ys[i].first.size ();
+		o << indent (ind + 1) << pos << "," << ys[i].second << ",\n";
+	}
+	o << indent (ind) << "};\n";
+	o << indent (ind) << "const unsigned int positions_size = " << pos_num * 2 << ";\n";
 }
 
 void DFA::emit(Output & output, uint& ind, const RegExpMap* specMap, const std::string& condName, bool isLastCond, bool& bPrologBrace)
@@ -1138,7 +1209,7 @@ void DFA::emit(Output & output, uint& ind, const RegExpMap* specMap, const std::
 
 	if (flag_skeleton)
 	{
-		output_skeleton_prolog (o, ind);
+		output_skeleton_prolog (output, ind);
 	}
 
 	bool bProlog = (!cFlag || !bWroteCondCheck);

@@ -16,7 +16,14 @@ struct If; // forward
 struct Span
 {
 	uint ub;
+	bool is_default;
 	State * to;
+
+	inline Span ()
+		: ub (0)
+		, is_default (false)
+		, to (NULL)
+	{}
 	uint show (std::ostream&, uint) const;
 };
 
