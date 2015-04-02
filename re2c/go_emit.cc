@@ -62,11 +62,17 @@ std::string output_hgo (OutputFile & o, uint ind, bool & readCh, SwitchIf * hgo)
 
 uint Span::show (std::ostream & o, uint lb) const
 {
+	printSpan(o, lb, ub);
+	o << " ";
 	if (to)
 	{
-		printSpan(o, lb, ub);
-		o << " " << to->label << "; ";
+		o << to->label;
 	}
+	else
+	{
+		o << "(nil)";
+	}
+	o << "; ";
 	return ub;
 }
 
