@@ -439,18 +439,7 @@ void Save::emit(Output & output, uint ind, bool &readCh, const std::string&) con
 	}
 }
 
-Move::Move(State *s) : Action(s)
-{
-	;
-}
-
 void Move::emit(Output &, uint, bool &, const std::string&) const
-{
-	;
-}
-
-Accept::Accept(State *x, uint n, uint *s, State **r)
-		: Action(x), nRules(n), saves(s), rules(r)
 {
 	;
 }
@@ -562,11 +551,6 @@ void Accept::emit(Output & output, uint ind, bool &readCh, const std::string &) 
 			genGoTo(o, ind, state, mapRules.find(0)->second, readCh);
 		}
 	}
-}
-
-Rule::Rule(State *s, RuleOp *r) : Action(s), rule(r)
-{
-	;
 }
 
 void Rule::emit(Output & output, uint ind, bool &, const std::string& condName) const
@@ -1136,31 +1120,49 @@ void DFA::output_skeleton_epilog (OutputFile & o, uint ind)
 
 static void generate_data (State * s, bool def, const std::vector<std::vector<uint> > & xs, std::vector<std::pair<std::vector<uint>, bool> > & ys)
 {
-	if (s->go.nSpans <= 1)
+	switch (s->action->type)
 	{
-		for (uint i = 0; i < xs.size (); ++i)
-		{
-			ys.push_back (std::make_pair (std::vector<uint> (xs[i]), def));
-		}
-	}
-	else if (s->generated)
-	{
-		return;
-	}
-	else
-	{
-		s->generated = true;
-		for (uint i = 0; i < s->go.nSpans; ++i)
-		{
-			std::vector<std::vector<uint> > zs;
-			for (uint j = 0; j < xs.size (); ++j)
+		case Action::NONE:
+			assert (false);
+			break;
+		case Action::RULE:
+		case Action::ACCEPT:
+			for (uint i = 0; i < xs.size (); ++i)
 			{
-				std::vector<uint> z (xs[j]);
-				z.push_back (s->go.span[i].ub - 1);
-				zs.push_back (z);
+				ys.push_back (std::make_pair (std::vector<uint> (xs[i]), def));
+				if (!def)
+				{
+					ys.back ().first.pop_back ();
+				}
 			}
-			generate_data (s->go.span[i].to, s->go.span[i].is_default, zs, ys);
-		}
+			break;
+		case Action::MOVE:
+			if (!s->generated)
+			{
+				s->generated = true;
+				generate_data (s->go.span[0].to, s->go.span[0].is_default, xs, ys);
+			}
+			break;
+		case Action::MATCH:
+		case Action::ENTER:
+		case Action::INITIAL:
+		case Action::SAVE:
+			if (!s->generated)
+			{
+				s->generated = true;
+				for (uint i = 0; i < s->go.nSpans; ++i)
+				{
+					std::vector<std::vector<uint> > zs;
+					for (uint j = 0; j < xs.size (); ++j)
+					{
+						std::vector<uint> z (xs[j]);
+						z.push_back (s->go.span[i].ub - 1);
+						zs.push_back (z);
+					}
+					generate_data (s->go.span[i].to, s->go.span[i].is_default, zs, ys);
+				}
+			}
+			break;
 	}
 }
 
@@ -1206,11 +1208,6 @@ void DFA::generate (Output & output, uint ind)
 void DFA::emit(Output & output, uint& ind, const RegExpMap* specMap, const std::string& condName, bool isLastCond, bool& bPrologBrace)
 {
 	OutputFile & o = output.source;
-
-	if (flag_skeleton)
-	{
-		output_skeleton_prolog (output, ind);
-	}
 
 	bool bProlog = (!cFlag || !bWroteCondCheck);
 
@@ -1267,6 +1264,10 @@ void DFA::emit(Output & output, uint& ind, const RegExpMap* specMap, const std::
 	}
 	next_fill_index = save_fill_index;
 
+	if (flag_skeleton)
+	{
+		output_skeleton_prolog (output, ind);
+	}
 	// Generate prolog
 	if (bProlog)
 	{
@@ -1374,6 +1375,10 @@ void DFA::emit(Output & output, uint& ind, const RegExpMap* specMap, const std::
 	{
 		o << indent(--ind) << "}\n";
 	}
+	if (flag_skeleton)
+	{
+		output_skeleton_epilog (o, ind);
+	}
 
 	// Cleanup
 	if (BitMap::first)
@@ -1383,11 +1388,6 @@ void DFA::emit(Output & output, uint& ind, const RegExpMap* specMap, const std::
 	}
 
 	bUseStartLabel = false;
-
-	if (flag_skeleton)
-	{
-		output_skeleton_epilog (o, ind);
-	}
 }
 
 static void output_state_goto_sub (std::ostream & o, uint ind, uint start_label, int cMin, int cMax)

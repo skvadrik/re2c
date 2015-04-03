@@ -20,6 +20,17 @@ class Action
 
 public:
 	State	*state;
+	enum type_t
+	{
+		NONE,
+		MATCH,
+		ENTER,
+		INITIAL,
+		SAVE,
+		MOVE,
+		ACCEPT,
+		RULE
+	} type;
 
 public:
 	Action(State*);
@@ -35,11 +46,13 @@ public:
 protected:
 	Action(const Action& oth)
 		: state(oth.state)
+		, type(oth.type)
 	{
 	}
 	Action& operator = (const Action& oth)
 	{
 		state = oth.state;
+		type = oth.type;
 		return *this;
 	}
 #endif
@@ -256,7 +269,7 @@ public:
 #endif
 };
 
-inline Action::Action(State *s) : state(s)
+inline Action::Action(State *s) : state(s), type(NONE)
 {
 	delete s->action;
 	s->action = this;
@@ -287,7 +300,9 @@ inline bool Action::readAhead() const
 }
 
 inline Match::Match(State *s) : Action(s)
-{ }
+{
+	type = MATCH;
+}
 
 inline bool Match::isMatch() const
 {
@@ -295,10 +310,14 @@ inline bool Match::isMatch() const
 }
 
 inline Enter::Enter(State *s, uint l) : Action(s), label(l)
-{ }
+{
+	type = ENTER;
+}
 
 inline Initial::Initial(State *s, uint l, bool b) : Enter(s, l), setMarker(b)
-{ }
+{
+	type = INITIAL;
+}
 
 inline bool Initial::isInitial() const
 {
@@ -306,11 +325,29 @@ inline bool Initial::isInitial() const
 }
 
 inline Save::Save(State *s, uint i) : Match(s), selector(i)
-{ }
+{
+	type = SAVE;
+}
 
 inline bool Save::isMatch() const
 {
 	return false;
+}
+
+inline Move::Move(State *s) : Action(s)
+{
+	type = MOVE;
+}
+
+inline Accept::Accept(State *x, uint n, uint *s, State **r)
+		: Action(x), nRules(n), saves(s), rules(r)
+{
+	type = ACCEPT;
+}
+
+inline Rule::Rule(State *s, RuleOp *r) : Action(s), rule(r)
+{
+	type = RULE;
 }
 
 inline bool Rule::isRule() const
