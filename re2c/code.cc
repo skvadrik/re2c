@@ -922,7 +922,7 @@ void DFA::findBaseState()
 			{
 				State *to = s->go.span[i].to;
 
-				if (to && to->isBase)
+				if (to->isBase)
 				{
 					to = to->go.span[0].to;
 					uint nSpans = merge(span, s, to);
