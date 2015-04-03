@@ -606,7 +606,7 @@ void State::emit(Output & output, uint ind, bool &readCh, const std::string& con
 	{
 		o << labelPrefix << label << ":\n";
 	}
-	if (dFlag && !action->isInitial())
+	if (dFlag && (action->type != Action::INITIAL))
 	{
 		o << indent(ind) << mapCodeName["YYDEBUG"] << "(" << label << ", " << input_api.expr_peek () << ");\n";
 	}

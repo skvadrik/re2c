@@ -37,9 +37,6 @@ public:
 	virtual ~Action();
 
 	virtual void emit(Output &, uint, bool&, const std::string&) const = 0;
-	virtual bool isRule() const;
-	virtual bool isMatch() const;
-	virtual bool isInitial() const;
 	virtual bool readAhead() const;
 
 #ifdef PEDANTIC
@@ -63,7 +60,6 @@ class Match: public Action
 public:
 	Match(State*);
 	void emit(Output &, uint, bool&, const std::string&) const;
-	bool isMatch() const;
 };
 
 class Enter: public Action
@@ -84,7 +80,6 @@ public:
 public:
 	Initial(State*, uint, bool);
 	void emit(Output &, uint, bool&, const std::string&) const;
-	bool isInitial() const;
 };
 
 class Save: public Match
@@ -96,7 +91,6 @@ public:
 public:
 	Save(State*, uint);
 	void emit(Output &, uint, bool&, const std::string&) const;
-	bool isMatch() const;
 };
 
 class Move: public Action
@@ -150,7 +144,6 @@ public:
 public:
 	Rule(State*, RuleOp*);
 	void emit(Output &, uint, bool&, const std::string&) const;
-	bool isRule() const;
 
 #ifdef PEDANTIC
 private:
@@ -279,34 +272,14 @@ inline Action::~Action()
 {
 }
 
-inline bool Action::isRule() const
-{
-	return false;
-}
-
-inline bool Action::isMatch() const
-{
-	return false;
-}
-
-inline bool Action::isInitial() const
-{
-	return false;
-}
-
 inline bool Action::readAhead() const
 {
-	return !isMatch() || (state && state->next && state->next->action && !state->next->action->isRule());
+	return (type != MATCH) || (state && state->next && state->next->action && (state->next->action->type != RULE));
 }
 
 inline Match::Match(State *s) : Action(s)
 {
 	type = MATCH;
-}
-
-inline bool Match::isMatch() const
-{
-	return true;
 }
 
 inline Enter::Enter(State *s, uint l) : Action(s), label(l)
@@ -319,19 +292,9 @@ inline Initial::Initial(State *s, uint l, bool b) : Enter(s, l), setMarker(b)
 	type = INITIAL;
 }
 
-inline bool Initial::isInitial() const
-{
-	return true;
-}
-
 inline Save::Save(State *s, uint i) : Match(s), selector(i)
 {
 	type = SAVE;
-}
-
-inline bool Save::isMatch() const
-{
-	return false;
 }
 
 inline Move::Move(State *s) : Action(s)
@@ -348,11 +311,6 @@ inline Accept::Accept(State *x, uint n, uint *s, State **r)
 inline Rule::Rule(State *s, RuleOp *r) : Action(s), rule(r)
 {
 	type = RULE;
-}
-
-inline bool Rule::isRule() const
-{
-	return true;
 }
 
 inline std::ostream& operator<<(std::ostream &o, const State *s)
