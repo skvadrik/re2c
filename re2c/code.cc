@@ -332,31 +332,6 @@ void Match::emit(Output & output, uint ind, bool &readCh, const std::string&) co
 	}
 }
 
-void Enter::emit(Output & output, uint ind, bool &readCh, const std::string&) const
-{
-	OutputFile & o = output.source;
-
-	if (state->link)
-	{
-		o << input_api.stmt_skip (ind);
-		if (vUsedLabels.count(label))
-		{
-			o << labelPrefix << label << ":\n";
-		}
-		need(o, ind, state->depth, readCh, false);
-	}
-	else
-	{
-		/* we shouldn't need 'rule-following' protection here */
-		o << input_api.stmt_skip_peek (ind);
-		if (vUsedLabels.count(label))
-		{
-			o << labelPrefix << label << ":\n";
-		}
-		readCh = false;
-	}
-}
-
 void Initial::emit(Output & output, uint ind, bool &readCh, const std::string&) const
 {
 	OutputFile & o = output.source;
@@ -1137,7 +1112,6 @@ static void generate_data (State * s, bool def, const std::vector<std::vector<ui
 			}
 			break;
 		case Action::MATCH:
-		case Action::ENTER:
 		case Action::INITIAL:
 		case Action::SAVE:
 		case Action::MOVE:

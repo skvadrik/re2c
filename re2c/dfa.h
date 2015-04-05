@@ -24,7 +24,6 @@ public:
 	{
 		NONE,
 		MATCH,
-		ENTER,
 		INITIAL,
 		SAVE,
 		MOVE,
@@ -62,19 +61,10 @@ public:
 	void emit(Output &, uint, bool&, const std::string&) const;
 };
 
-class Enter: public Action
+class Initial: public Action
 {
 public:
 	uint	label;
-
-public:
-	Enter(State*, uint);
-	void emit(Output &, uint, bool&, const std::string&) const;
-};
-
-class Initial: public Enter
-{
-public:
 	bool setMarker;
 
 public:
@@ -282,12 +272,7 @@ inline Match::Match(State *s) : Action(s)
 	type = MATCH;
 }
 
-inline Enter::Enter(State *s, uint l) : Action(s), label(l)
-{
-	type = ENTER;
-}
-
-inline Initial::Initial(State *s, uint l, bool b) : Enter(s, l), setMarker(b)
+inline Initial::Initial(State *s, uint l, bool b) : Action(s), label(l), setMarker(b)
 {
 	type = INITIAL;
 }
