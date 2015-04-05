@@ -1136,17 +1136,11 @@ static void generate_data (State * s, bool def, const std::vector<std::vector<ui
 				}
 			}
 			break;
-		case Action::MOVE:
-			if (!s->generated)
-			{
-				s->generated = true;
-				generate_data (s->go.span[0].to, s->go.span[0].is_default, xs, ys);
-			}
-			break;
 		case Action::MATCH:
 		case Action::ENTER:
 		case Action::INITIAL:
 		case Action::SAVE:
+		case Action::MOVE:
 			if (!s->generated)
 			{
 				s->generated = true;
@@ -1156,11 +1150,15 @@ static void generate_data (State * s, bool def, const std::vector<std::vector<ui
 					for (uint j = 0; j < xs.size (); ++j)
 					{
 						std::vector<uint> z (xs[j]);
-						z.push_back (s->go.span[i].ub - 1);
+						if (s->go.span[i].to->action->type != Action::MOVE)
+						{
+							z.push_back (s->go.span[i].ub - 1);
+						}
 						zs.push_back (z);
 					}
 					generate_data (s->go.span[i].to, s->go.span[i].is_default, zs, ys);
 				}
+				s->generated = false;
 			}
 			break;
 	}
