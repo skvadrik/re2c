@@ -1088,10 +1088,9 @@ static void generate_data (OutputFile & o, uint ind, State * s, const std::vecto
 					z.push_back (s->go.span[i].ub - 1);
 					zs.push_back (std::make_pair (z, l));
 				}
-
-				b = s->go.span[i].ub;
 			}
 			generate_data (o, ind, s->go.span[i].to, zs, ys);
+			b = s->go.span[i].ub;
 		}
 		s->generated = false;
 	}
