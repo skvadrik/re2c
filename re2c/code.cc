@@ -559,7 +559,7 @@ void Rule::emit(Output & output, uint ind, bool &, const std::string& condName) 
 	o << indent(ind);
 	if (flag_skeleton)
 	{
-		o << "{ printf (\"%u\\n\", cursor - data); continue; }";
+		o << "{ if (cursor == &data[positions[2 * i]]) { cursor = &data[positions[2 * i + 1]]; continue; } else { printf (\"error\\n\"); return 1; } }";
 	}
 	else if (rule->code->autogen)
 	{
@@ -1157,17 +1157,17 @@ void DFA::output_skeleton_prolog (OutputFile & o, uint ind)
 	o << indent (ind) << "{\n";
 	for (uint i = 0; i < ys.size (); i += 2)
 	{
+		o << indent (ind + 1) << pos + ys[i + 1] << "," << pos + ys[i] << ",\n";
 		pos += ys[i];
-		o << indent (ind + 1) << pos << "," << ys[i + 1] << ",\n";
 	}
 	o << indent (ind) << "};\n";
-	o << indent (ind) << "const unsigned int positions_size = " << ys.size () << ";\n";
+	o << indent (ind) << "const unsigned int positions_number = " << ys.size () / 2 << ";\n";
 
 	o << indent (ind) << "const YYCTYPE * cursor = data;\n";
 	o << indent (ind) << "const YYCTYPE * marker = data;\n";
 	o << indent (ind) << "const YYCTYPE * ctxmarker = data;\n";
 	o << indent (ind) << "const YYCTYPE * const limit = &data[data_size - 1];\n";
-	o << indent (ind) << "for (;;)\n";
+	o << indent (ind) << "for (unsigned int i = 0; i < positions_number; ++i)\n";
 	o << indent (ind) << "{\n";
 }
 
