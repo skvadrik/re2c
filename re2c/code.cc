@@ -559,7 +559,10 @@ void Rule::emit(Output & output, uint ind, bool &, const std::string& condName) 
 	o << indent(ind);
 	if (flag_skeleton)
 	{
-		o << "{ if (cursor == &data[positions[2 * i]]) { cursor = &data[positions[2 * i + 1]]; continue; } else { printf (\"error\\n\"); return 1; } }";
+		o << "{ if (cursor == &data[result[i].endpos] && result[i].rule == " << rule->accept << ") ";
+		o << "{ cursor = &data[result[i].startpos]; continue; }";
+		o << " else ";
+		o << "{ printf (\"error\\n\"); return 1; } }";
 	}
 	else if (rule->code->autogen)
 	{
@@ -1046,7 +1049,31 @@ void DFA::prepare(uint & max_fill)
 	}
 }
 
-static void generate_data (OutputFile & o, uint ind, State * s, const std::vector<std::pair<std::vector<uint>, uint> > & xs, std::vector<uint> & ys)
+struct Prefix
+{
+	std::vector<uint> chars;
+	uint length;
+	uint rule;
+	Prefix (const std::vector<uint> & cs, uint l, uint r)
+		: chars (cs)
+		, length (l)
+		, rule (r)
+	{}
+};
+
+struct Result
+{
+	uint processed;
+	uint consumed;
+	uint rule;
+	Result (uint p, uint c, uint r)
+		: processed (p)
+		, consumed (c)
+		, rule (r)
+	{}
+};
+
+static void generate_data (OutputFile & o, uint ind, State * s, const std::vector<Prefix> & xs, std::vector<Result> & ys)
 {
 	const bool is_default = s == NULL;
 	const bool is_final = !is_default && s->go.nSpans == 1 && s->go.span[0].to == NULL;
@@ -1055,14 +1082,20 @@ static void generate_data (OutputFile & o, uint ind, State * s, const std::vecto
 		for (uint i = 0; i < xs.size (); ++i)
 		{
 			o << indent (ind);
-			for (uint j = 0 ; j < xs[i].first.size (); ++j)
+			for (uint j = 0 ; j < xs[i].chars.size (); ++j)
 			{
-				o.write_char_hex (xs[i].first[j]);
+				o.write_char_hex (xs[i].chars[j]);
 				o << ",";
 			}
 			o << "\n";
-			ys.push_back (xs[i].first.size ());
-			ys.push_back (is_final ? xs[i].first.size () : xs[i].second);
+			const uint processed = xs[i].chars.size ();
+			const uint consumed = is_final
+				? xs[i].chars.size ()
+				: xs[i].length;
+			const uint rule = is_final
+				? s->rule->accept
+				: xs[i].rule;
+			ys.push_back (Result (processed, consumed, rule));
 		}
 	}
 	else if (!s->generated)
@@ -1071,22 +1104,25 @@ static void generate_data (OutputFile & o, uint ind, State * s, const std::vecto
 		uint b = 0;
 		for (uint i = 0; i < s->go.nSpans; ++i)
 		{
-			std::vector<std::pair<std::vector<uint>, uint> > zs;
+			std::vector<Prefix> zs;
 			for (uint j = 0; j < xs.size (); ++j)
 			{
 				const uint l = s->rule == NULL
-					? xs[j].second
-					: xs[j].first.size ();
+					? xs[j].length
+					: xs[j].chars.size ();
+				const uint r = s->rule == NULL
+					? xs[j].rule
+					: s->rule->accept;
 
-				std::vector<uint> z (xs[j].first);
+				std::vector<uint> z (xs[j].chars);
 				z.push_back (b);
-				zs.push_back (std::make_pair (z, l));
+				zs.push_back (Prefix (z, l, r));
 
 				if (b != s->go.span[i].ub - 1)
 				{
 					z.pop_back ();
 					z.push_back (s->go.span[i].ub - 1);
-					zs.push_back (std::make_pair (z, l));
+					zs.push_back (Prefix (z, l, r));
 				}
 			}
 			generate_data (o, ind, s->go.span[i].to, zs, ys);
@@ -1129,18 +1165,20 @@ void DFA::output_skeleton_prolog (OutputFile & o, uint ind)
 	o << indent (ind) << "YYCTYPE data [] =\n";
 	o << indent (ind) << "{\n";
 
-	std::vector<std::pair<std::vector<uint>, uint> > xs;
-	std::vector<uint> ys;
+	std::vector<Prefix> xs;
+	std::vector<Result> ys;
 	std::vector<uint> x;
-	xs.push_back (std::make_pair (x, 0));
+	xs.push_back (Prefix (x, 0, ~0));
 	generate_data (o, ind + 1, head, xs, ys);
 
+	const uint count = ys.size ();
+
 	uint max_len = 0;
-	for (uint i = 1; i < ys.size (); i += 2)
+	for (uint i = 0; i < count; ++i)
 	{
-		if (max_len < ys[i])
+		if (max_len < ys[i].consumed)
 		{
-			max_len = ys[i];
+			max_len = ys[i].consumed;
 		}
 	}
 	o << indent (ind + 1);
@@ -1152,22 +1190,29 @@ void DFA::output_skeleton_prolog (OutputFile & o, uint ind)
 	o << indent (ind) << "};\n";
 	o << indent (ind) << "const unsigned int data_size = sizeof (data) / sizeof (YYCTYPE);\n";
 
+	o << indent (ind) << "const unsigned int count = " << count << ";\n";
+
 	uint pos = 0;
-	o << indent (ind) << "unsigned int positions [] =\n";
+	o << indent (ind) << "struct Result {\n";
+	o << indent (ind + 1) << "unsigned int endpos;\n";
+	o << indent (ind + 1) << "unsigned int startpos;\n";
+	o << indent (ind + 1) << "unsigned int rule;\n";
+	o << indent (ind + 1) << "Result (unsigned int e, unsigned int s, unsigned int r) : endpos (e), startpos (s), rule (r) {}\n";
+	o << indent (ind) << "};\n";
+	o << indent (ind) << "Result result [] =\n";
 	o << indent (ind) << "{\n";
-	for (uint i = 0; i < ys.size (); i += 2)
+	for (uint i = 0; i < count; ++i)
 	{
-		o << indent (ind + 1) << pos + ys[i + 1] << "," << pos + ys[i] << ",\n";
-		pos += ys[i];
+		o << indent (ind + 1) << "Result (" << pos + ys[i].consumed << "," << pos + ys[i].processed << "," << ys[i].rule << "),\n";
+		pos += ys[i].processed;
 	}
 	o << indent (ind) << "};\n";
-	o << indent (ind) << "const unsigned int positions_number = " << ys.size () / 2 << ";\n";
 
 	o << indent (ind) << "const YYCTYPE * cursor = data;\n";
 	o << indent (ind) << "const YYCTYPE * marker = data;\n";
 	o << indent (ind) << "const YYCTYPE * ctxmarker = data;\n";
 	o << indent (ind) << "const YYCTYPE * const limit = &data[data_size - 1];\n";
-	o << indent (ind) << "for (unsigned int i = 0; i < positions_number; ++i)\n";
+	o << indent (ind) << "for (unsigned int i = 0; i < count; ++i)\n";
 	o << indent (ind) << "{\n";
 }
 
