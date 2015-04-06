@@ -226,8 +226,7 @@ public:
 	void findSCCs();
 	void findBaseState();
 	void prepare(uint &);
-	void generate (Output & o, uint ind);
-	void output_skeleton_prolog (Output & o, uint ind);
+	void output_skeleton_prolog (OutputFile & o, uint ind);
 	void output_skeleton_epilog (OutputFile & o, uint ind);
 	void emit(Output &, uint&, const RegExpMap*, const std::string&, bool, bool&);
 

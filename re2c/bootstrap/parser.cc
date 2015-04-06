@@ -2376,14 +2376,7 @@ void parse(Scanner& i, Output & o)
 							it->second.second = it->second.second ? mkAlt(def, it->second.second) : def;
 						}
 					}
-					dfa_map[it->first] = genCode(it->second.second);
-
-					if (flag_skeleton)
-					{
-						dfa_map[it->first]->output_skeleton_prolog (o, topIndent);
-					}
-
-					dfa_map[it->first]->prepare(o.max_fill);
+					dfa_map[it->first] = genCode(it->second.second, o, topIndent);
 				}
 				if (parseMode != Scanner::Rules && dfa_map.find(it->first) != dfa_map.end())
 				{
@@ -2404,14 +2397,7 @@ void parse(Scanner& i, Output & o)
 			{
 				if (parseMode != Scanner::Reuse)
 				{
-					dfa_map[""] = genCode(spec);
-
-					if (flag_skeleton)
-					{
-						dfa_map[""]->output_skeleton_prolog (o, topIndent);
-					}
-
-					dfa_map[""]->prepare(o.max_fill);
+					dfa_map[""] = genCode(spec, o, topIndent);
 				}
 				if (parseMode != Scanner::Rules && dfa_map.find("") != dfa_map.end())
 				{

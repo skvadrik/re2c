@@ -391,7 +391,7 @@ typedef std::map<std::string, Token*>   DefaultMap;
 
 class DFA;
 
-extern smart_ptr<DFA> genCode(RegExp*);
+extern smart_ptr<DFA> genCode(RegExp*, Output & output, uint ind);
 extern void genCondTable(OutputFile &, uint, const RegExpMap&);
 extern void genCondGoto(OutputFile &, uint, const RegExpMap&);
 extern void genTypes(Output &, const RegExpMap&);

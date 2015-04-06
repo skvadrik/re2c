@@ -1046,10 +1046,48 @@ void DFA::prepare(uint & max_fill)
 	}
 }
 
-void DFA::output_skeleton_prolog (Output & output, uint ind)
+static void generate_data (OutputFile & o, uint ind, State * s, const std::vector<std::pair<std::vector<uint>, uint> > & xs, std::vector<uint> & ys)
 {
-	OutputFile & o = output.source;
+	const bool is_default = s == NULL;
+	const bool is_final = !is_default && s->go.nSpans == 1 && s->go.span[0].to == NULL;
+	if (is_final || is_default)
+	{
+		for (uint i = 0; i < xs.size (); ++i)
+		{
+			o << indent (ind);
+			for (uint j = 0 ; j < xs[i].first.size (); ++j)
+			{
+				o.write_char_hex (xs[i].first[j]);
+				o << ",";
+			}
+			o << "\n";
+			ys.push_back (xs[i].first.size ());
+			ys.push_back (is_final ? xs[i].first.size () : xs[i].second);
+		}
+	}
+	else if (!s->generated)
+	{
+		s->generated = true;
+		for (uint i = 0; i < s->go.nSpans; ++i)
+		{
+			std::vector<std::pair<std::vector<uint>, uint> > zs;
+			for (uint j = 0; j < xs.size (); ++j)
+			{
+				std::vector<uint> z (xs[j].first);
+				z.push_back (s->go.span[i].ub - 1);
+				const uint l = s->rule == NULL
+					? xs[j].second
+					: xs[j].first.size ();
+				zs.push_back (std::make_pair (z, l));
+			}
+			generate_data (o, ind, s->go.span[i].to, zs, ys);
+		}
+		s->generated = false;
+	}
+}
 
+void DFA::output_skeleton_prolog (OutputFile & o, uint ind)
+{
 	std::string yyctype;
 	switch (encoding.szCodeUnit ())
 	{
@@ -1076,86 +1114,24 @@ void DFA::output_skeleton_prolog (Output & output, uint ind)
 	o << "#define " << mapCodeName["YYRESTORECTX"] << "() cursor = ctxmarker\n";
 	o << "#define " << mapCodeName["YYLESSTHAN"] << "(n) (limit - cursor) < n\n";
 	o << "#define " << mapCodeName["YYFILL"] << "(n) { break; }\n";
-	generate (output, ind);
-	o << indent (ind) << "const YYCTYPE * cursor = data;\n";
-	o << indent (ind) << "const YYCTYPE * marker = data;\n";
-	o << indent (ind) << "const YYCTYPE * ctxmarker = data;\n";
-	o << indent (ind) << "const YYCTYPE * const limit = &data[data_size - 1];\n";
-	o << indent (ind) << "for (;;)\n";
-	o << indent (ind) << "{\n";
-}
-
-void DFA::output_skeleton_epilog (OutputFile & o, uint ind)
-{
-	o << indent (ind) << "}\n";
-
-	o << "return 0; }\n";
-}
-
-static void generate_data (State * s, const std::vector<std::pair<std::vector<uint>, uint> > & xs, std::vector<std::pair<std::vector<uint>, uint> > & ys)
-{
-	if (s == NULL)
-	{
-		for (uint i = 0; i < xs.size (); ++i)
-		{
-			ys.push_back (std::make_pair (std::vector<uint> (xs[i].first), xs[i].second));
-		}
-	}
-	else if (s->go.nSpans == 1 && s->go.span[0].to == NULL)
-	{
-		for (uint i = 0; i < xs.size (); ++i)
-		{
-			ys.push_back (std::make_pair (std::vector<uint> (xs[i].first), xs[i].first.size ()));
-		}
-	}
-	else if (!s->generated)
-	{
-		s->generated = true;
-		for (uint i = 0; i < s->go.nSpans; ++i)
-		{
-			std::vector<std::pair<std::vector<uint>, uint> > zs;
-			for (uint j = 0; j < xs.size (); ++j)
-			{
-				std::vector<uint> z (xs[j].first);
-				z.push_back (s->go.span[i].ub - 1);
-				const uint l = s->rule == NULL
-					? xs[j].second
-					: xs[j].first.size ();
-				zs.push_back (std::make_pair (z, l));
-			}
-			generate_data (s->go.span[i].to, zs, ys);
-		}
-		s->generated = false;
-	}
-}
-
-void DFA::generate (Output & output, uint ind)
-{
-	OutputFile & o = output.source;
-
-	std::vector<std::pair<std::vector<uint>, uint> > xs;
-	std::vector<std::pair<std::vector<uint>, uint> > ys;
-	std::vector<uint> x;
-	xs.push_back (std::make_pair (x, 0));
-	generate_data (head, xs, ys);
 
 	o << indent (ind) << "// These strings correspond to paths in DFA.\n";
 	o << indent (ind) << "YYCTYPE data [] =\n";
 	o << indent (ind) << "{\n";
+
+	std::vector<std::pair<std::vector<uint>, uint> > xs;
+	std::vector<uint> ys;
+	std::vector<uint> x;
+	xs.push_back (std::make_pair (x, 0));
+	generate_data (o, ind + 1, head, xs, ys);
+
 	uint max_len = 0;
-	for (uint i = 0; i < ys.size (); ++i)
+	for (uint i = 1; i < ys.size (); i += 2)
 	{
-		if (max_len < ys[i].second)
+		if (max_len < ys[i])
 		{
-			max_len = ys[i].second;
+			max_len = ys[i];
 		}
-		o << indent (ind + 1);
-		for (uint j = 0 ; j < ys[i].first.size (); ++j)
-		{
-			o.write_char_hex (ys[i].first[j]);
-			o << ",";
-		}
-		o << "\n";
 	}
 	o << indent (ind + 1);
 	for (uint j = 0 ; j < max_len; ++j) // pad with YMAXFILL zeroes
@@ -1169,13 +1145,27 @@ void DFA::generate (Output & output, uint ind)
 	uint pos = 0;
 	o << indent (ind) << "unsigned int positions [] =\n";
 	o << indent (ind) << "{\n";
-	for (uint i = 0; i < ys.size (); ++i)
+	for (uint i = 0; i < ys.size (); i += 2)
 	{
-		pos += ys[i].first.size ();
-		o << indent (ind + 1) << pos << "," << ys[i].second << ",\n";
+		pos += ys[i];
+		o << indent (ind + 1) << pos << "," << ys[i + 1] << ",\n";
 	}
 	o << indent (ind) << "};\n";
-	o << indent (ind) << "const unsigned int positions_size = " << ys.size () * 2 << ";\n";
+	o << indent (ind) << "const unsigned int positions_size = " << ys.size () << ";\n";
+
+	o << indent (ind) << "const YYCTYPE * cursor = data;\n";
+	o << indent (ind) << "const YYCTYPE * marker = data;\n";
+	o << indent (ind) << "const YYCTYPE * ctxmarker = data;\n";
+	o << indent (ind) << "const YYCTYPE * const limit = &data[data_size - 1];\n";
+	o << indent (ind) << "for (;;)\n";
+	o << indent (ind) << "{\n";
+}
+
+void DFA::output_skeleton_epilog (OutputFile & o, uint ind)
+{
+	o << indent (ind) << "}\n";
+
+	o << "return 0; }\n";
 }
 
 void DFA::emit(Output & output, uint& ind, const RegExpMap* specMap, const std::string& condName, bool isLastCond, bool& bPrologBrace)

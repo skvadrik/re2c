@@ -1046,7 +1046,7 @@ CharSet::~CharSet()
 	delete[] ptn;
 }
 
-smart_ptr<DFA> genCode(RegExp *re)
+smart_ptr<DFA> genCode(RegExp *re, Output & output, uint ind)
 {
 	CharSet cs;
 	re->split(cs);
@@ -1099,7 +1099,14 @@ smart_ptr<DFA> genCode(RegExp *re)
 		}
 	}
 
-	return make_smart_ptr(new DFA(ins, size, 0, encoding.nCodeUnits(), rep));
+	smart_ptr<DFA> dfa = make_smart_ptr(new DFA(ins, size, 0, encoding.nCodeUnits(), rep));
+	if (flag_skeleton)
+	{
+		dfa->output_skeleton_prolog (output.source, ind);
+	}
+	dfa->prepare (output.max_fill);
+
+	return dfa;
 }
 
 } // end namespace re2c
