@@ -999,7 +999,6 @@ void DFA::prepare(uint & max_fill)
 				}
 
 				s->go.span[i].to = ow;
-				s->go.span[i].is_default = true;
 			}
 		}
 	}
@@ -1093,48 +1092,30 @@ void DFA::output_skeleton_epilog (OutputFile & o, uint ind)
 	o << "return 0; }\n";
 }
 
-static void generate_data (State * s, bool def, const std::vector<std::vector<uint> > & xs, std::vector<std::pair<std::vector<uint>, bool> > & ys)
+static void generate_data (State * s, const std::vector<std::vector<uint> > & xs, std::vector<std::pair<std::vector<uint>, bool> > & ys)
 {
-	switch (s->action->type)
+	if (s == NULL || (s->go.nSpans == 1 && s->go.span[0].to == NULL))
 	{
-		case Action::NONE:
-			assert (false);
-			break;
-		case Action::RULE:
-		case Action::ACCEPT:
-			for (uint i = 0; i < xs.size (); ++i)
+		for (uint i = 0; i < xs.size (); ++i)
+		{
+			ys.push_back (std::make_pair (std::vector<uint> (xs[i]), false));
+		}
+	}
+	else if (!s->generated)
+	{
+		s->generated = true;
+		for (uint i = 0; i < s->go.nSpans; ++i)
+		{
+			std::vector<std::vector<uint> > zs;
+			for (uint j = 0; j < xs.size (); ++j)
 			{
-				ys.push_back (std::make_pair (std::vector<uint> (xs[i]), def));
-				if (!def)
-				{
-					ys.back ().first.pop_back ();
-				}
+				std::vector<uint> z (xs[j]);
+				z.push_back (s->go.span[i].ub - 1);
+				zs.push_back (z);
 			}
-			break;
-		case Action::MATCH:
-		case Action::INITIAL:
-		case Action::SAVE:
-		case Action::MOVE:
-			if (!s->generated)
-			{
-				s->generated = true;
-				for (uint i = 0; i < s->go.nSpans; ++i)
-				{
-					std::vector<std::vector<uint> > zs;
-					for (uint j = 0; j < xs.size (); ++j)
-					{
-						std::vector<uint> z (xs[j]);
-						if (s->go.span[i].to->action->type != Action::MOVE)
-						{
-							z.push_back (s->go.span[i].ub - 1);
-						}
-						zs.push_back (z);
-					}
-					generate_data (s->go.span[i].to, s->go.span[i].is_default, zs, ys);
-				}
-				s->generated = false;
-			}
-			break;
+			generate_data (s->go.span[i].to, zs, ys);
+		}
+		s->generated = false;
 	}
 }
 
@@ -1146,7 +1127,7 @@ void DFA::generate (Output & output, uint ind)
 	std::vector<std::pair<std::vector<uint>, bool> > ys;
 	std::vector<uint> x;
 	xs.push_back (x);
-	generate_data (head, false, xs, ys);
+	generate_data (head, xs, ys);
 	ys.push_back (std::make_pair (std::vector<uint> (output.max_fill), false)); // pad with YYMAXFILL zeroes
 
 	o << indent (ind) << "// These strings correspond to paths in DFA.\n";
@@ -1236,10 +1217,6 @@ void DFA::emit(Output & output, uint& ind, const RegExpMap* specMap, const std::
 	}
 	next_fill_index = save_fill_index;
 
-	if (flag_skeleton)
-	{
-		output_skeleton_prolog (output, ind);
-	}
 	// Generate prolog
 	if (bProlog)
 	{
