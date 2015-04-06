@@ -1068,17 +1068,28 @@ static void generate_data (OutputFile & o, uint ind, State * s, const std::vecto
 	else if (!s->generated)
 	{
 		s->generated = true;
+		uint b = 0;
 		for (uint i = 0; i < s->go.nSpans; ++i)
 		{
 			std::vector<std::pair<std::vector<uint>, uint> > zs;
 			for (uint j = 0; j < xs.size (); ++j)
 			{
-				std::vector<uint> z (xs[j].first);
-				z.push_back (s->go.span[i].ub - 1);
 				const uint l = s->rule == NULL
 					? xs[j].second
 					: xs[j].first.size ();
+
+				std::vector<uint> z (xs[j].first);
+				z.push_back (b);
 				zs.push_back (std::make_pair (z, l));
+
+				if (b != s->go.span[i].ub - 1)
+				{
+					z.pop_back ();
+					z.push_back (s->go.span[i].ub - 1);
+					zs.push_back (std::make_pair (z, l));
+				}
+
+				b = s->go.span[i].ub;
 			}
 			generate_data (o, ind, s->go.span[i].to, zs, ys);
 		}
