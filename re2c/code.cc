@@ -1092,13 +1092,20 @@ void DFA::output_skeleton_epilog (OutputFile & o, uint ind)
 	o << "return 0; }\n";
 }
 
-static void generate_data (State * s, const std::vector<std::vector<uint> > & xs, std::vector<std::pair<std::vector<uint>, bool> > & ys)
+static void generate_data (State * s, const std::vector<std::pair<std::vector<uint>, uint> > & xs, std::vector<std::pair<std::vector<uint>, uint> > & ys)
 {
-	if (s == NULL || (s->go.nSpans == 1 && s->go.span[0].to == NULL))
+	if (s == NULL)
 	{
 		for (uint i = 0; i < xs.size (); ++i)
 		{
-			ys.push_back (std::make_pair (std::vector<uint> (xs[i]), false));
+			ys.push_back (std::make_pair (std::vector<uint> (xs[i].first), xs[i].second));
+		}
+	}
+	else if (s->go.nSpans == 1 && s->go.span[0].to == NULL)
+	{
+		for (uint i = 0; i < xs.size (); ++i)
+		{
+			ys.push_back (std::make_pair (std::vector<uint> (xs[i].first), xs[i].first.size ()));
 		}
 	}
 	else if (!s->generated)
@@ -1106,12 +1113,15 @@ static void generate_data (State * s, const std::vector<std::vector<uint> > & xs
 		s->generated = true;
 		for (uint i = 0; i < s->go.nSpans; ++i)
 		{
-			std::vector<std::vector<uint> > zs;
+			std::vector<std::pair<std::vector<uint>, uint> > zs;
 			for (uint j = 0; j < xs.size (); ++j)
 			{
-				std::vector<uint> z (xs[j]);
+				std::vector<uint> z (xs[j].first);
 				z.push_back (s->go.span[i].ub - 1);
-				zs.push_back (z);
+				const uint l = s->rule == NULL
+					? xs[j].second
+					: xs[j].first.size ();
+				zs.push_back (std::make_pair (z, l));
 			}
 			generate_data (s->go.span[i].to, zs, ys);
 		}
@@ -1123,39 +1133,49 @@ void DFA::generate (Output & output, uint ind)
 {
 	OutputFile & o = output.source;
 
-	std::vector<std::vector<uint> > xs;
-	std::vector<std::pair<std::vector<uint>, bool> > ys;
+	std::vector<std::pair<std::vector<uint>, uint> > xs;
+	std::vector<std::pair<std::vector<uint>, uint> > ys;
 	std::vector<uint> x;
-	xs.push_back (x);
+	xs.push_back (std::make_pair (x, 0));
 	generate_data (head, xs, ys);
-	ys.push_back (std::make_pair (std::vector<uint> (output.max_fill), false)); // pad with YYMAXFILL zeroes
 
 	o << indent (ind) << "// These strings correspond to paths in DFA.\n";
 	o << indent (ind) << "YYCTYPE data [] =\n";
 	o << indent (ind) << "{\n";
+	uint max_len = 0;
 	for (uint i = 0; i < ys.size (); ++i)
 	{
+		if (max_len < ys[i].second)
+		{
+			max_len = ys[i].second;
+		}
 		o << indent (ind + 1);
 		for (uint j = 0 ; j < ys[i].first.size (); ++j)
 		{
-			o << ys[i].first[j] << ",";
+			o.write_char_hex (ys[i].first[j]);
+			o << ",";
 		}
 		o << "\n";
 	}
+	o << indent (ind + 1);
+	for (uint j = 0 ; j < max_len; ++j) // pad with YMAXFILL zeroes
+	{
+		o << "0,";
+	}
+	o << "\n";
 	o << indent (ind) << "};\n";
 	o << indent (ind) << "const unsigned int data_size = sizeof (data) / sizeof (YYCTYPE);\n";
 
 	uint pos = 0;
-	const uint pos_num = ys.size () - 1; // skip padding
 	o << indent (ind) << "unsigned int positions [] =\n";
 	o << indent (ind) << "{\n";
-	for (uint i = 0; i < pos_num; ++i)
+	for (uint i = 0; i < ys.size (); ++i)
 	{
 		pos += ys[i].first.size ();
 		o << indent (ind + 1) << pos << "," << ys[i].second << ",\n";
 	}
 	o << indent (ind) << "};\n";
-	o << indent (ind) << "const unsigned int positions_size = " << pos_num * 2 << ";\n";
+	o << indent (ind) << "const unsigned int positions_size = " << ys.size () * 2 << ";\n";
 }
 
 void DFA::emit(Output & output, uint& ind, const RegExpMap* specMap, const std::string& condName, bool isLastCond, bool& bPrologBrace)
