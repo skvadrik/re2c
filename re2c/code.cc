@@ -1073,7 +1073,7 @@ struct Result
 	{}
 };
 
-static void generate_data (OutputFile & o, uint ind, State * s, const std::vector<Prefix> & xs, std::vector<Result> & ys)
+static void generate_data (DataFile & o, uint ind, State * s, const std::vector<Prefix> & xs, std::vector<Result> & ys)
 {
 	const bool is_default = s == NULL;
 	const bool is_final = !is_default && s->go.nSpans == 1 && s->go.span[0].to == NULL;
@@ -1081,13 +1081,13 @@ static void generate_data (OutputFile & o, uint ind, State * s, const std::vecto
 	{
 		for (uint i = 0; i < xs.size (); ++i)
 		{
-			o << indent (ind);
+			o.file << indent (ind);
 			for (uint j = 0 ; j < xs[i].chars.size (); ++j)
 			{
-				o.write_char_hex (xs[i].chars[j]);
-				o << ",";
+				prtChOrHex (o.file, xs[i].chars[j]);
+				o.file << ",";
 			}
-			o << "\n";
+			o.file << "\n";
 			const uint processed = xs[i].chars.size ();
 			const uint consumed = is_final
 				? xs[i].chars.size ()
@@ -1132,8 +1132,10 @@ static void generate_data (OutputFile & o, uint ind, State * s, const std::vecto
 	}
 }
 
-void DFA::output_skeleton_prolog (OutputFile & o, uint ind)
+void DFA::output_skeleton_data (DataFile & o)
 {
+	uint ind = 0;
+
 	std::string yyctype;
 	switch (encoding.szCodeUnit ())
 	{
@@ -1148,22 +1150,19 @@ void DFA::output_skeleton_prolog (OutputFile & o, uint ind)
 			break;
 	}
 
-	o << "#include <stdio.h>\n";
-	o << "int main () {\n";
+	o.file << "#define " << mapCodeName["YYCTYPE"] << yyctype << "\n";
+	o.file << "#define " << mapCodeName["YYPEEK"] << "() *cursor\n";
+	o.file << "#define " << mapCodeName["YYSKIP"] << "() ++cursor\n";
+	o.file << "#define " << mapCodeName["YYBACKUP"] << "() marker = cursor\n";
+	o.file << "#define " << mapCodeName["YYBACKUPCTX"] << "() ctxmarker = cursor\n";
+	o.file << "#define " << mapCodeName["YYRESTORE"] << "() cursor = marker\n";
+	o.file << "#define " << mapCodeName["YYRESTORECTX"] << "() cursor = ctxmarker\n";
+	o.file << "#define " << mapCodeName["YYLESSTHAN"] << "(n) (limit - cursor) < n\n";
+	o.file << "#define " << mapCodeName["YYFILL"] << "(n) { break; }\n";
 
-	o << "#define " << mapCodeName["YYCTYPE"] << yyctype << "\n";
-	o << "#define " << mapCodeName["YYPEEK"] << "() *cursor\n";
-	o << "#define " << mapCodeName["YYSKIP"] << "() ++cursor\n";
-	o << "#define " << mapCodeName["YYBACKUP"] << "() marker = cursor\n";
-	o << "#define " << mapCodeName["YYBACKUPCTX"] << "() ctxmarker = cursor\n";
-	o << "#define " << mapCodeName["YYRESTORE"] << "() cursor = marker\n";
-	o << "#define " << mapCodeName["YYRESTORECTX"] << "() cursor = ctxmarker\n";
-	o << "#define " << mapCodeName["YYLESSTHAN"] << "(n) (limit - cursor) < n\n";
-	o << "#define " << mapCodeName["YYFILL"] << "(n) { break; }\n";
-
-	o << indent (ind) << "// These strings correspond to paths in DFA.\n";
-	o << indent (ind) << "YYCTYPE data [] =\n";
-	o << indent (ind) << "{\n";
+	o.file << indent (ind) << "// These strings correspond to paths in DFA.\n";
+	o.file << indent (ind) << "YYCTYPE data [] =\n";
+	o.file << indent (ind) << "{\n";
 
 	std::vector<Prefix> xs;
 	std::vector<Result> ys;
@@ -1181,46 +1180,54 @@ void DFA::output_skeleton_prolog (OutputFile & o, uint ind)
 			max_len = ys[i].consumed;
 		}
 	}
-	o << indent (ind + 1);
+	o.file << indent (ind + 1);
 	for (uint j = 0 ; j < max_len; ++j) // pad with YMAXFILL zeroes
 	{
-		o << "0,";
+		o.file << "0,";
 	}
-	o << "\n";
-	o << indent (ind) << "};\n";
-	o << indent (ind) << "const unsigned int data_size = sizeof (data) / sizeof (YYCTYPE);\n";
+	o.file << "\n";
+	o.file << indent (ind) << "};\n";
+	o.file << indent (ind) << "const unsigned int data_size = sizeof (data) / sizeof (YYCTYPE);\n";
 
-	o << indent (ind) << "const unsigned int count = " << count << ";\n";
+	o.file << indent (ind) << "const unsigned int count = " << count << ";\n";
 
 	uint pos = 0;
-	o << indent (ind) << "struct Result {\n";
-	o << indent (ind + 1) << "unsigned int endpos;\n";
-	o << indent (ind + 1) << "unsigned int startpos;\n";
-	o << indent (ind + 1) << "unsigned int rule;\n";
-	o << indent (ind + 1) << "Result (unsigned int e, unsigned int s, unsigned int r) : endpos (e), startpos (s), rule (r) {}\n";
-	o << indent (ind) << "};\n";
-	o << indent (ind) << "Result result [] =\n";
-	o << indent (ind) << "{\n";
+	o.file << indent (ind) << "struct Result {\n";
+	o.file << indent (ind + 1) << "unsigned int endpos;\n";
+	o.file << indent (ind + 1) << "unsigned int startpos;\n";
+	o.file << indent (ind + 1) << "unsigned int rule;\n";
+	o.file << indent (ind + 1) << "Result (unsigned int e, unsigned int s, unsigned int r) : endpos (e), startpos (s), rule (r) {}\n";
+	o.file << indent (ind) << "};\n";
+	o.file << indent (ind) << "Result result [] =\n";
+	o.file << indent (ind) << "{\n";
 	for (uint i = 0; i < count; ++i)
 	{
-		o << indent (ind + 1) << "Result (" << pos + ys[i].consumed << "," << pos + ys[i].processed << "," << ys[i].rule << "),\n";
+		o.file << indent (ind + 1) << "Result (" << pos + ys[i].consumed << "," << pos + ys[i].processed << "," << ys[i].rule << "),\n";
 		pos += ys[i].processed;
 	}
-	o << indent (ind) << "};\n";
+	o.file << indent (ind) << "};\n";
 
-	o << indent (ind) << "const YYCTYPE * cursor = data;\n";
-	o << indent (ind) << "const YYCTYPE * marker = data;\n";
-	o << indent (ind) << "const YYCTYPE * ctxmarker = data;\n";
-	o << indent (ind) << "const YYCTYPE * const limit = &data[data_size - 1];\n";
-	o << indent (ind) << "for (unsigned int i = 0; i < count; ++i)\n";
+	o.file << indent (ind) << "const YYCTYPE * cursor = data;\n";
+	o.file << indent (ind) << "const YYCTYPE * marker = data;\n";
+	o.file << indent (ind) << "const YYCTYPE * ctxmarker = data;\n";
+	o.file << indent (ind) << "const YYCTYPE * const limit = &data[data_size - 1];\n";
+}
+
+void DFA::output_skeleton_prolog (OutputFile & o, uint ind, const char * data_name)
+{
+	o << indent (ind) << "#include <stdio.h>\n";
+	o << indent (ind) << "#include \"" << data_name << "\"\n";
+	o << indent (ind) << "int main ()\n";
 	o << indent (ind) << "{\n";
+	o << indent (ind + 1) << "for (unsigned int i = 0; i < count; ++i)\n";
+	o << indent (ind + 1) << "{\n";
 }
 
 void DFA::output_skeleton_epilog (OutputFile & o, uint ind)
 {
+	o << indent (ind + 1) << "}\n";
+	o << indent (ind + 1) << "return 0;\n";
 	o << indent (ind) << "}\n";
-
-	o << "return 0; }\n";
 }
 
 void DFA::emit(Output & output, uint& ind, const RegExpMap* specMap, const std::string& condName, bool isLastCond, bool& bPrologBrace)

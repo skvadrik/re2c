@@ -1,6 +1,7 @@
 #ifndef _output_h
 #define _output_h
 
+#include <fstream>
 #include <sstream>
 #include <string>
 #include <vector>
@@ -104,10 +105,21 @@ private:
 	FILE * file;
 };
 
+struct DataFile
+{
+	DataFile (const char * fn);
+	~DataFile ();
+	bool open ();
+
+	std::string file_name;
+	std::ofstream file;
+};
+
 struct Output
 {
 	OutputFile source;
 	HeaderFile header;
+	DataFile data;
 	std::vector<std::string> types;
 	uint max_fill;
 

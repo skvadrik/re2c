@@ -466,6 +466,11 @@ int main(int argc, char *argv[])
 		cerr << "re2c: error: cannot open " << headerFileName << "\n";
 		return 1;
 	}
+	if (flag_skeleton && !output.data.open ())
+	{
+		cerr << "re2c: error: cannot open " << output.data.file_name << "\n";
+		return 1;
+	}
 
 	Scanner scanner (input, output.source);
 	parse (scanner, output);
