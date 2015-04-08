@@ -39,9 +39,7 @@ Skeleton::~Skeleton ()
 
 unsigned long count_data (SkeletonState * s, unsigned long count)
 {
-	const bool is_default = s == NULL;
-	const bool is_final = !is_default && s->go.size () == 1 && s->go.begin ()->first == NULL;
-	if (is_final || is_default)
+	if (is_final (s) || is_default (s))
 	{
 		return count;
 	}
@@ -74,9 +72,7 @@ unsigned long Skeleton::count ()
 
 void generate_data (DataFile & o, uint ind, SkeletonState * s, const std::vector<Prefix> & xs, std::vector<Result> & ys)
 {
-	const bool is_default = s == NULL;
-	const bool is_final = !is_default && s->go.size () == 1 && s->go.begin ()->first == NULL;
-	if (is_final || is_default)
+	if (is_final (s) || is_default (s))
 	{
 		for (uint i = 0; i < xs.size (); ++i)
 		{
@@ -88,10 +84,10 @@ void generate_data (DataFile & o, uint ind, SkeletonState * s, const std::vector
 			}
 			o.file << "\n";
 			const uint processed = xs[i].chars.size ();
-			const uint consumed = is_final
+			const uint consumed = is_final (s)
 				? xs[i].chars.size ()
 				: xs[i].length;
-			const uint rule = is_final
+			const uint rule = is_final (s)
 				? s->rule
 				: xs[i].rule;
 			ys.push_back (Result (processed, consumed, rule));

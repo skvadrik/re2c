@@ -18,6 +18,18 @@ struct SkeletonState
 	bool visited;
 };
 
+inline bool is_default (SkeletonState * s)
+{
+	return s == NULL;
+}
+
+inline bool is_final (SkeletonState * s)
+{
+	return s != NULL
+		&& s->go.size () == 1
+		&& s->go.begin ()->first == NULL;
+}
+
 struct Prefix
 {
 	std::vector<uint> chars;
