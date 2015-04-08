@@ -9,6 +9,7 @@
 #include "parser.h"
 #include "dfa.h"
 #include "print.h"
+#include "skeleton.h"
 #include "utf8_regexp.h"
 #include "utf16_regexp.h"
 
@@ -1102,8 +1103,9 @@ smart_ptr<DFA> genCode(RegExp *re, Output & output, uint ind)
 	smart_ptr<DFA> dfa = make_smart_ptr(new DFA(ins, size, 0, encoding.nCodeUnits(), rep));
 	if (flag_skeleton)
 	{
-		dfa->output_skeleton_data (output.data);
-		dfa->output_skeleton_prolog (output.source, ind, output.data.file_name.c_str ());
+		Skeleton skeleton (*dfa);
+		skeleton.emit_data (output.data);
+		skeleton_emit_prolog (output.source, ind, output.data.file_name.c_str ());
 	}
 	dfa->prepare (output.max_fill);
 

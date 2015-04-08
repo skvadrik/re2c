@@ -164,7 +164,6 @@ public:
 
 	bool    isPreCtxt;
 	bool    isBase;
-	bool    generated;
 	Go      go;
 	Action  *action;
 
@@ -186,7 +185,6 @@ private:
 		, kCount(oth.kCount)
 		, kernel(oth.kernel)
 		, isBase(oth.isBase)
-		, generated(oth.generated)
 		, go(oth.go)
 		, action(oth.action)
 	{
@@ -226,9 +224,6 @@ public:
 	void findSCCs();
 	void findBaseState();
 	void prepare(uint &);
-	void output_skeleton_data (DataFile & o);
-	void output_skeleton_prolog (OutputFile & o, uint ind, const char * data_name);
-	void output_skeleton_epilog (OutputFile & o, uint ind);
 	void emit(Output &, uint&, const RegExpMap*, const std::string&, bool, bool&);
 
 	friend std::ostream& operator<<(std::ostream&, const DFA&);

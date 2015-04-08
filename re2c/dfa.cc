@@ -50,7 +50,6 @@ State::State()
 	, kernel(NULL)
 	, isPreCtxt(false)
 	, isBase(false)
-	, generated(false)
 	, go()
 	, action(NULL)
 {

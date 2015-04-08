@@ -18,6 +18,7 @@
 #include "input_api.h"
 #include "parser.h"
 #include "print.h"
+#include "skeleton.h"
 #include "substr.h"
 
 namespace re2c
@@ -1049,187 +1050,6 @@ void DFA::prepare(uint & max_fill)
 	}
 }
 
-struct Prefix
-{
-	std::vector<uint> chars;
-	uint length;
-	uint rule;
-	Prefix (const std::vector<uint> & cs, uint l, uint r)
-		: chars (cs)
-		, length (l)
-		, rule (r)
-	{}
-};
-
-struct Result
-{
-	uint processed;
-	uint consumed;
-	uint rule;
-	Result (uint p, uint c, uint r)
-		: processed (p)
-		, consumed (c)
-		, rule (r)
-	{}
-};
-
-static void generate_data (DataFile & o, uint ind, State * s, const std::vector<Prefix> & xs, std::vector<Result> & ys)
-{
-	const bool is_default = s == NULL;
-	const bool is_final = !is_default && s->go.nSpans == 1 && s->go.span[0].to == NULL;
-	if (is_final || is_default)
-	{
-		for (uint i = 0; i < xs.size (); ++i)
-		{
-			o.file << indent (ind);
-			for (uint j = 0 ; j < xs[i].chars.size (); ++j)
-			{
-				prtChOrHex (o.file, xs[i].chars[j]);
-				o.file << ",";
-			}
-			o.file << "\n";
-			const uint processed = xs[i].chars.size ();
-			const uint consumed = is_final
-				? xs[i].chars.size ()
-				: xs[i].length;
-			const uint rule = is_final
-				? s->rule->accept
-				: xs[i].rule;
-			ys.push_back (Result (processed, consumed, rule));
-		}
-	}
-	else if (!s->generated)
-	{
-		s->generated = true;
-		uint b = 0;
-		for (uint i = 0; i < s->go.nSpans; ++i)
-		{
-			std::vector<Prefix> zs;
-			for (uint j = 0; j < xs.size (); ++j)
-			{
-				const uint l = s->rule == NULL
-					? xs[j].length
-					: xs[j].chars.size ();
-				const uint r = s->rule == NULL
-					? xs[j].rule
-					: s->rule->accept;
-
-				std::vector<uint> z (xs[j].chars);
-				z.push_back (b);
-				zs.push_back (Prefix (z, l, r));
-
-				if (b != s->go.span[i].ub - 1)
-				{
-					z.pop_back ();
-					z.push_back (s->go.span[i].ub - 1);
-					zs.push_back (Prefix (z, l, r));
-				}
-			}
-			generate_data (o, ind, s->go.span[i].to, zs, ys);
-			b = s->go.span[i].ub;
-		}
-		s->generated = false;
-	}
-}
-
-void DFA::output_skeleton_data (DataFile & o)
-{
-	uint ind = 0;
-
-	std::string yyctype;
-	switch (encoding.szCodeUnit ())
-	{
-		case 1:
-			yyctype = " unsigned char";
-			break;
-		case 2:
-			yyctype = " unsigned short";
-			break;
-		case 4:
-			yyctype = " unsigned int";
-			break;
-	}
-
-	o.file << "#define " << mapCodeName["YYCTYPE"] << yyctype << "\n";
-	o.file << "#define " << mapCodeName["YYPEEK"] << "() *cursor\n";
-	o.file << "#define " << mapCodeName["YYSKIP"] << "() ++cursor\n";
-	o.file << "#define " << mapCodeName["YYBACKUP"] << "() marker = cursor\n";
-	o.file << "#define " << mapCodeName["YYBACKUPCTX"] << "() ctxmarker = cursor\n";
-	o.file << "#define " << mapCodeName["YYRESTORE"] << "() cursor = marker\n";
-	o.file << "#define " << mapCodeName["YYRESTORECTX"] << "() cursor = ctxmarker\n";
-	o.file << "#define " << mapCodeName["YYLESSTHAN"] << "(n) (limit - cursor) < n\n";
-	o.file << "#define " << mapCodeName["YYFILL"] << "(n) { break; }\n";
-
-	o.file << indent (ind) << "// These strings correspond to paths in DFA.\n";
-	o.file << indent (ind) << "YYCTYPE data [] =\n";
-	o.file << indent (ind) << "{\n";
-
-	std::vector<Prefix> xs;
-	std::vector<Result> ys;
-	std::vector<uint> x;
-	xs.push_back (Prefix (x, 0, ~0));
-	generate_data (o, ind + 1, head, xs, ys);
-
-	const uint count = ys.size ();
-
-	uint max_len = 0;
-	for (uint i = 0; i < count; ++i)
-	{
-		if (max_len < ys[i].consumed)
-		{
-			max_len = ys[i].consumed;
-		}
-	}
-	o.file << indent (ind + 1);
-	for (uint j = 0 ; j < max_len; ++j) // pad with YMAXFILL zeroes
-	{
-		o.file << "0,";
-	}
-	o.file << "\n";
-	o.file << indent (ind) << "};\n";
-	o.file << indent (ind) << "const unsigned int data_size = sizeof (data) / sizeof (YYCTYPE);\n";
-
-	o.file << indent (ind) << "const unsigned int count = " << count << ";\n";
-
-	uint pos = 0;
-	o.file << indent (ind) << "struct Result {\n";
-	o.file << indent (ind + 1) << "unsigned int endpos;\n";
-	o.file << indent (ind + 1) << "unsigned int startpos;\n";
-	o.file << indent (ind + 1) << "unsigned int rule;\n";
-	o.file << indent (ind + 1) << "Result (unsigned int e, unsigned int s, unsigned int r) : endpos (e), startpos (s), rule (r) {}\n";
-	o.file << indent (ind) << "};\n";
-	o.file << indent (ind) << "Result result [] =\n";
-	o.file << indent (ind) << "{\n";
-	for (uint i = 0; i < count; ++i)
-	{
-		o.file << indent (ind + 1) << "Result (" << pos + ys[i].consumed << "," << pos + ys[i].processed << "," << ys[i].rule << "),\n";
-		pos += ys[i].processed;
-	}
-	o.file << indent (ind) << "};\n";
-
-	o.file << indent (ind) << "const YYCTYPE * cursor = data;\n";
-	o.file << indent (ind) << "const YYCTYPE * marker = data;\n";
-	o.file << indent (ind) << "const YYCTYPE * ctxmarker = data;\n";
-	o.file << indent (ind) << "const YYCTYPE * const limit = &data[data_size - 1];\n";
-}
-
-void DFA::output_skeleton_prolog (OutputFile & o, uint ind, const char * data_name)
-{
-	o << indent (ind) << "#include <stdio.h>\n";
-	o << indent (ind) << "#include \"" << data_name << "\"\n";
-	o << indent (ind) << "int main ()\n";
-	o << indent (ind) << "{\n";
-	o << indent (ind + 1) << "for (unsigned int i = 0; i < count; ++i)\n";
-	o << indent (ind + 1) << "{\n";
-}
-
-void DFA::output_skeleton_epilog (OutputFile & o, uint ind)
-{
-	o << indent (ind + 1) << "}\n";
-	o << indent (ind + 1) << "return 0;\n";
-	o << indent (ind) << "}\n";
-}
-
 void DFA::emit(Output & output, uint& ind, const RegExpMap* specMap, const std::string& condName, bool isLastCond, bool& bPrologBrace)
 {
 	OutputFile & o = output.source;
@@ -1398,7 +1218,7 @@ void DFA::emit(Output & output, uint& ind, const RegExpMap* specMap, const std::
 	}
 	if (flag_skeleton)
 	{
-		output_skeleton_epilog (o, ind);
+		skeleton_emit_epilog (o, ind);
 	}
 
 	// Cleanup
