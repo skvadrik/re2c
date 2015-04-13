@@ -23,7 +23,7 @@ make clean
 make -j5
 make docs
 make tests
-make zip dist
+make dist
 
 # dist-check
 tmpdir=` date +"%Y%m%d%H%M%S%N"`
@@ -52,6 +52,6 @@ src_docs=$src/project-web/re2c/htdocs
 rm -rf $src
 mkdir -p $src_tarballs
 mkdir -p $src_docs
-cp re2c-$version-src.zip re2c-$version.tar.gz $src_tarballs
+cp re2c-$version.tar.gz $src_tarballs
 cp htdocs/index.html htdocs/manual.html $src_docs
 rsync -rK $src/ skvadrik@web.sourceforge.net:/home

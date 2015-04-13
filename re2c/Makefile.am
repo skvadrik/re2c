@@ -1,7 +1,6 @@
 # $Id$
 
 bin_PROGRAMS = re2c
-win_BINARIES = $(WINBUILDDIR)/re2c.exe
 re2c_SOURCES = code.cc dfa.cc main.cc parser.cc actions.cc scanner.re substr.cc range.cc \
 	translate.cc scanner.cc mbo_getopt.cc print.cc input_api.cc \
 	enc.cc utf8.cc utf8_range.cc utf8_regexp.cc utf16.cc utf16_range.cc utf16_regexp.cc range_suffix.cc \
@@ -31,7 +30,6 @@ EXTRA_SRC    = README parser.y scanner.re y.tab.h CHANGELOG NO_WARRANTY \
                doc examples test bootstrap/*.cc bootstrap/*.h bootstrap/re2c.1 lessons \
                $(DOCS)
 EXTRA_DIST   = $(EXTRA_SRC) makerpm.in re2c.spec.in re2c.spec README.in config_w32.h.in
-EXTRA_ZIP    = $(EXTRA_SRC) config_w32.h re2c.rules
 
 dist-hook: re2c.spec
 	rm -rf `find $(distdir)/doc -name .git`
@@ -52,16 +50,7 @@ src-rpm: dist
 	rpmbuild -bs re2c.spec
 	cp -f `rpm --eval "%{_srcrpmdir}"`/re2c-$(PACKAGE_VERSION)-$(PACKAGE_RELEASE).src.rpm .
 
-zip: $(bin_PROGRAMS) $(EXTRA_ZIP)
-	if test -f re2c-$(PACKAGE_VERSION)-src.zip; then rm -f re2c-$(PACKAGE_VERSION)-src.zip; fi
-	zip -q -o -9 -r re2c-$(PACKAGE_VERSION)-src.zip $(re2c_SOURCES) $(EXTRA_ZIP)
-	zipinfo -1      re2c-$(PACKAGE_VERSION)-src.zip | grep .git | xargs zip -d re2c-$(PACKAGE_VERSION)-src.zip >/dev/null
-	if test -f re2c-$(PACKAGE_VERSION)-bin.zip; then rm -f re2c-$(PACKAGE_VERSION)-bin.zip; fi
-	if test -f $(WINBUILDDIR)/re2c.exe; then \
-	zip -q -o -9 -j re2c-$(PACKAGE_VERSION)-bin.zip $(win_BINARIES); \
-	fi;
-
-release: dist zip src-rpm
+release: dist src-rpm
 
 parser.cc: $(top_srcdir)/parser.y
 	@if test $(BISON) = "yes"; then \
