@@ -135,6 +135,10 @@ void generate_data (DataFile & o, uint ind, SkeletonState * s, std::vector<Prefi
 {
 	if (is_final (s) || is_default (s))
 	{
+		if (is_final (s))
+		{
+			s->path = new Prefix (std::vector<uint> (), 0, s->rule);
+		}
 		for (uint i = 0; i < xs.size (); ++i)
 		{
 			o.file << indent (ind);
@@ -152,10 +156,6 @@ void generate_data (DataFile & o, uint ind, SkeletonState * s, std::vector<Prefi
 				? s->rule
 				: xs[i].rule;
 			ys.push_back (Result (processed, consumed, rule));
-			if (is_final (s))
-			{
-				s->path = new Prefix (std::vector<uint> (), 0, s->rule);
-			}
 		}
 	}
 	else if (s->visited < 2)
@@ -164,19 +164,16 @@ void generate_data (DataFile & o, uint ind, SkeletonState * s, std::vector<Prefi
 		const bool is_accepting = s->rule != ~0u;
 		if (s->path != NULL)
 		{
+			const bool is_accepting_path = s->path->rule != ~0u;
 			std::vector<Prefix> zs (xs);
 			for (uint i = 0; i < zs.size (); ++i)
 			{
-				zs[i].length = s->path->rule != ~0u
+				zs[i].length = is_accepting_path
 					? zs[i].chars.size () + s->path->length
-					: is_accepting
-						? zs[i].chars.size ()
-						: zs[i].length;
-				zs[i].rule = s->path->rule != ~0u
+					: zs[i].length;
+				zs[i].rule = is_accepting_path
 					? s->path->rule
-					: is_accepting
-						? s->rule
-						: zs[i].rule;
+					: zs[i].rule;
 				for (int j = s->path->chars.size () - 1; j >= 0; --j)
 				{
 					zs[i].chars.push_back (s->path->chars[j]);
