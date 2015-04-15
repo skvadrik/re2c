@@ -216,20 +216,18 @@ void generate_data (DataFile & o, uint ind, SkeletonState * s, std::vector<Prefi
 				{
 					if (i->first == NULL)
 					{
-						const uint r = is_accepting ? s->rule : ~0u;
-						s->path = new Prefix (std::vector<uint> (), 0, r);
+						s->path = new Prefix (std::vector<uint> (), 0, s->rule);
 						s->path->chars.push_back (i->second[0]);
 					}
 					else if (i->first->path != NULL)
 					{
-						const uint l = i->first->path->rule != ~0u
+						const bool is_accepting_path = i->first->path->rule != ~0u;
+						const uint l = is_accepting_path
 							? i->first->path->length + 1
 							: 0;
-						const uint r = i->first->path->rule != ~0u
+						const uint r = is_accepting_path
 							? i->first->path->rule
-							: is_accepting
-								? s->rule
-								: ~0u;
+							: s->rule;
 						s->path = new Prefix (i->first->path->chars, l, r);
 						s->path->chars.push_back (i->second[0]);
 					}
