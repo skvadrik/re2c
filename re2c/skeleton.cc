@@ -22,13 +22,18 @@ Skeleton::Skeleton (const DFA & dfa)
 		uint lb = 0;
 		for (uint j = 0; j < s->go.nSpans; ++j)
 		{
-			states[i].go[m[s->go.span[j].to]].push_back (std::make_pair (lb, s->go.span[j].ub - 1));
+			states[i].go[m[s->go.span[j].to]].push_back (lb);
+			if (lb != s->go.span[j].ub - 1)
+			{
+				states[i].go[m[s->go.span[j].to]].push_back (s->go.span[j].ub - 1);
+			}
 			lb = s->go.span[j].ub;
 		}
 		states[i].rule = s->rule
 			? s->rule->accept
 			: ~0u;
-		states[i].visited = false;
+		states[i].visited = 0;
+		states[i].path = NULL;
 	}
 }
 
@@ -43,20 +48,15 @@ unsigned long count_data (SkeletonState * s, unsigned long count)
 	{
 		return count;
 	}
-	else if (!s->visited)
+	else if (s->visited < 2)
 	{
-		s->visited = true;
+		s->visited++;
 		unsigned long result = 0;
 		for (SkeletonState::go_t::iterator i = s->go.begin (); i != s->go.end (); ++i)
 		{
-			uint c = 0;
-			for (uint j = 0; j < i->second.size (); ++j)
-			{
-				c += 1 + (i->second[j].first != i->second[j].second);
-			}
-			result += count_data (i->first, c * count);
+			result += count_data (i->first, i->second.size () * count);
 		}
-		s->visited = false;
+		s->visited--;
 		return result;
 	}
 	else
@@ -70,6 +70,7 @@ unsigned long Skeleton::count ()
 	return count_data (states, 1);
 }
 
+/*
 void generate_data (DataFile & o, uint ind, SkeletonState * s, const std::vector<Prefix> & xs, std::vector<Result> & ys)
 {
 	if (is_final (s) || is_default (s))
@@ -128,10 +129,124 @@ void generate_data (DataFile & o, uint ind, SkeletonState * s, const std::vector
 		s->visited = false;
 	}
 }
+*/
+
+void generate_data (DataFile & o, uint ind, SkeletonState * s, std::vector<Prefix> & xs, std::vector<Result> & ys)
+{
+	if (is_final (s) || is_default (s))
+	{
+		for (uint i = 0; i < xs.size (); ++i)
+		{
+			o.file << indent (ind);
+			for (uint j = 0 ; j < xs[i].chars.size (); ++j)
+			{
+				prtChOrHex (o.file, xs[i].chars[j]);
+				o.file << ",";
+			}
+			o.file << "\n";
+			const uint processed = xs[i].chars.size ();
+			const uint consumed = is_final (s)
+				? xs[i].chars.size ()
+				: xs[i].length;
+			const uint rule = is_final (s)
+				? s->rule
+				: xs[i].rule;
+			ys.push_back (Result (processed, consumed, rule));
+			if (is_final (s))
+			{
+				s->path = new Prefix (std::vector<uint> (), 0, s->rule);
+			}
+		}
+	}
+	else if (s->visited < 2)
+	{
+		s->visited++;
+		const bool is_accepting = s->rule != ~0u;
+		if (s->path != NULL)
+		{
+			std::vector<Prefix> zs (xs);
+			for (uint i = 0; i < zs.size (); ++i)
+			{
+				zs[i].length = s->path->rule != ~0u
+					? zs[i].chars.size () + s->path->length
+					: is_accepting
+						? zs[i].chars.size ()
+						: zs[i].length;
+				zs[i].rule = s->path->rule != ~0u
+					? s->path->rule
+					: is_accepting
+						? s->rule
+						: zs[i].rule;
+				for (int j = s->path->chars.size () - 1; j >= 0; --j)
+				{
+					zs[i].chars.push_back (s->path->chars[j]);
+				}
+			}
+			generate_data (o, ind, NULL, zs, ys);
+		}
+		else
+		{
+			uint out_arrows = 0;
+			for (SkeletonState::go_t::iterator i = s->go.begin (); i != s->go.end (); ++i)
+			{
+				out_arrows += i->second.size ();
+			}
+
+			const uint xs_size = xs.size ();
+			for (uint i = 0; xs.size () < out_arrows; ++i)
+			{
+				xs.push_back (xs[i]);
+			}
+
+			for (; out_arrows < xs.size (); ++out_arrows)
+			{
+				s->go.begin ()->second.push_back (s->go.begin ()->second.back ());
+			}
+
+			uint k = 0;
+			for (SkeletonState::go_t::iterator i = s->go.begin (); i != s->go.end (); ++i)
+			{
+				std::vector<Prefix> zs;
+				for (uint j = 0; j < i->second.size (); ++j)
+				{
+					zs.push_back (xs[k++]);
+					zs[j].length = is_accepting ? zs[j].chars.size () : zs[j].length;
+					zs[j].rule = is_accepting ? s->rule : zs[j].rule;
+					zs[j].chars.push_back (i->second[j]);
+				}
+				generate_data (o, ind, i->first, zs, ys);
+				if (s->path == NULL)
+				{
+					if (i->first == NULL)
+					{
+						const uint r = is_accepting ? s->rule : ~0u;
+						s->path = new Prefix (std::vector<uint> (), 0, r);
+						s->path->chars.push_back (i->second[0]);
+					}
+					else if (i->first->path != NULL)
+					{
+						const uint l = i->first->path->rule != ~0u
+							? i->first->path->length + 1
+							: 0;
+						const uint r = i->first->path->rule != ~0u
+							? i->first->path->rule
+							: is_accepting
+								? s->rule
+								: ~0u;
+						s->path = new Prefix (i->first->path->chars, l, r);
+						s->path->chars.push_back (i->second[0]);
+					}
+				}
+			}
+			xs.resize (xs_size, xs[0]);
+		}
+		s->visited--;
+	}
+}
 
 void Skeleton::emit_data (DataFile & o)
 {
-fprintf (stderr, "%lx\n%lx\n", 0xFFFFffffFFFFffff, count ());
+//fprintf (stderr, "%lx\n%lx\n", 0xFFFFffffFFFFffff, count ());
 	uint ind = 0;
 
 	std::string yyctype;

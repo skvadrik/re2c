@@ -563,7 +563,9 @@ void Rule::emit(Output & output, uint ind, bool &, const std::string& condName) 
 		o << "{ if (cursor == &data[result[i].endpos] && result[i].rule == " << rule->accept << ") ";
 		o << "{ cursor = &data[result[i].startpos]; continue; }";
 		o << " else ";
-		o << "{ printf (\"error\\n\"); return 1; } }";
+		o << "{ printf (\"error: %lu/%u, %u/%u, '%s'\\n\", cursor - data, result[i].endpos, result[i].rule, "
+			<< rule->accept
+			<< ", &data[result[i].startpos]); return 1; } }";
 	}
 	else if (rule->code->autogen)
 	{

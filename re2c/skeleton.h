@@ -10,26 +10,6 @@
 namespace re2c
 {
 
-struct SkeletonState
-{
-	typedef std::map<SkeletonState *, std::vector<std::pair<uint, uint> > > go_t;
-	go_t go;
-	uint rule;
-	bool visited;
-};
-
-inline bool is_default (SkeletonState * s)
-{
-	return s == NULL;
-}
-
-inline bool is_final (SkeletonState * s)
-{
-	return s != NULL
-		&& s->go.size () == 1
-		&& s->go.begin ()->first == NULL;
-}
-
 struct Prefix
 {
 	std::vector<uint> chars;
@@ -54,6 +34,27 @@ struct Result
 	{}
 };
 
+struct SkeletonState
+{
+	typedef std::map<SkeletonState *, std::vector<uint> > go_t;
+	go_t go;
+	uint rule;
+	uchar visited;
+	Prefix * path;
+};
+
+inline bool is_default (SkeletonState * s)
+{
+	return s == NULL;
+}
+
+inline bool is_final (SkeletonState * s)
+{
+	return s != NULL
+		&& s->go.size () == 1
+		&& s->go.begin ()->first == NULL;
+}
+
 struct Skeleton
 {
 	SkeletonState * states;
@@ -64,7 +65,7 @@ struct Skeleton
 };
 
 unsigned long count_data (SkeletonState * s, unsigned long count);
-void generate_data (DataFile & o, uint ind, SkeletonState * s, const std::vector<Prefix> & xs, std::vector<Result> & ys);
+void generate_data (DataFile & o, uint ind, SkeletonState * s, std::vector<Prefix> & xs, std::vector<Result> & ys);
 void skeleton_emit_prolog (OutputFile & o, uint ind, const char * data_name);
 void skeleton_emit_epilog (OutputFile & o, uint ind);
 
