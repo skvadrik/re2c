@@ -6,34 +6,40 @@ namespace re2c
 {
 
 Skeleton::Skeleton (const DFA & dfa)
-	: states (new SkeletonState [dfa.nStates])
+	: states (new SkeletonState [dfa.nStates + 1])
 {
+	uint i;
+
 	std::map<State *, SkeletonState *> m;
-	m[NULL] = NULL;
-	uint i = 0;
-	for (State * s = dfa.head; s; s = s->next)
+	m[NULL] = &states[dfa.nStates]; // default state
+	i = 0;
+	for (State * s = dfa.head; s; s = s->next, ++i)
 	{
-		m[s] = &states[i++];
+		m[s] = &(states[i]);
 	}
 
 	i = 0;
 	for (State * s = dfa.head; s; s = s->next, ++i)
 	{
-		uint lb = 0;
-		for (uint j = 0; j < s->go.nSpans; ++j)
+		const bool is_final = s->go.nSpans == 1 && s->go.span[0].to == NULL;
+		if (!is_final)
 		{
-			states[i].go[m[s->go.span[j].to]].push_back (lb);
-			if (lb != s->go.span[j].ub - 1)
+			uint lb = 0;
+			for (uint j = 0; j < s->go.nSpans; ++j)
 			{
-				states[i].go[m[s->go.span[j].to]].push_back (s->go.span[j].ub - 1);
+				SkeletonState * p = m[(s->go.span[j].to)];
+				states[i].go[p].push_back (lb);
+				if (lb != s->go.span[j].ub - 1)
+				{
+					states[i].go[p].push_back (s->go.span[j].ub - 1);
+				}
+				lb = s->go.span[j].ub;
 			}
-			lb = s->go.span[j].ub;
 		}
-		states[i].rule = s->rule
-			? s->rule->accept
-			: ~0u;
-		states[i].visited = 0;
-		states[i].path = NULL;
+		if (s->rule != NULL)
+		{
+			states[i].rule = s->rule->accept;
+		}
 	}
 }
 
@@ -44,7 +50,7 @@ Skeleton::~Skeleton ()
 
 unsigned long count_data (SkeletonState * s, unsigned long count)
 {
-	if (is_final (s) || is_default (s))
+	if (s->is_end ())
 	{
 		return count;
 	}
@@ -133,12 +139,9 @@ void generate_data (DataFile & o, uint ind, SkeletonState * s, const std::vector
 
 void generate_data (DataFile & o, uint ind, SkeletonState * s, std::vector<Prefix> & xs, std::vector<Result> & ys)
 {
-	if (is_final (s) || is_default (s))
+	if (s->is_end ())
 	{
-		if (is_final (s))
-		{
-			s->path = new Prefix (std::vector<uint> (), 0, s->rule);
-		}
+		s->path = new Prefix (std::vector<uint> (), 0, s->rule);
 		for (uint i = 0; i < xs.size (); ++i)
 		{
 			o.file << indent (ind);
@@ -149,10 +152,10 @@ void generate_data (DataFile & o, uint ind, SkeletonState * s, std::vector<Prefi
 			}
 			o.file << "\n";
 			const uint processed = xs[i].chars.size ();
-			const uint consumed = is_final (s)
+			const uint consumed = s->rule != ~0u
 				? xs[i].chars.size ()
 				: xs[i].length;
-			const uint rule = is_final (s)
+			const uint rule = s->rule != ~0u
 				? s->rule
 				: xs[i].rule;
 			ys.push_back (Result (processed, consumed, rule));
@@ -179,7 +182,8 @@ void generate_data (DataFile & o, uint ind, SkeletonState * s, std::vector<Prefi
 					zs[i].chars.push_back (s->path->chars[j]);
 				}
 			}
-			generate_data (o, ind, NULL, zs, ys);
+			SkeletonState null;
+			generate_data (o, ind, &null, zs, ys);
 		}
 		else
 		{
@@ -212,25 +216,17 @@ void generate_data (DataFile & o, uint ind, SkeletonState * s, std::vector<Prefi
 					zs[j].chars.push_back (i->second[j]);
 				}
 				generate_data (o, ind, i->first, zs, ys);
-				if (s->path == NULL)
+				if (s->path == NULL && i->first->path != NULL)
 				{
-					if (i->first == NULL)
-					{
-						s->path = new Prefix (std::vector<uint> (), 0, s->rule);
-						s->path->chars.push_back (i->second[0]);
-					}
-					else if (i->first->path != NULL)
-					{
-						const bool is_accepting_path = i->first->path->rule != ~0u;
-						const uint l = is_accepting_path
-							? i->first->path->length + 1
-							: 0;
-						const uint r = is_accepting_path
-							? i->first->path->rule
-							: s->rule;
-						s->path = new Prefix (i->first->path->chars, l, r);
-						s->path->chars.push_back (i->second[0]);
-					}
+					const bool is_accepting_path = i->first->path->rule != ~0u;
+					const uint l = is_accepting_path
+						? i->first->path->length + 1
+						: 0;
+					const uint r = is_accepting_path
+						? i->first->path->rule
+						: s->rule;
+					s->path = new Prefix (i->first->path->chars, l, r);
+					s->path->chars.push_back (i->second[0]);
 				}
 			}
 			xs.resize (xs_size, xs[0]);
@@ -241,7 +237,7 @@ void generate_data (DataFile & o, uint ind, SkeletonState * s, std::vector<Prefi
 
 void Skeleton::emit_data (DataFile & o)
 {
-//fprintf (stderr, "%lx\n%lx\n", 0xFFFFffffFFFFffff, count ());
+	fprintf (stderr, "%lx\n%lx\n", 0xFFFFffffFFFFffff, count ());
 	uint ind = 0;
 
 	std::string yyctype;
@@ -283,9 +279,9 @@ void Skeleton::emit_data (DataFile & o)
 	uint max_len = 0;
 	for (uint i = 0; i < count; ++i)
 	{
-		if (max_len < ys[i].consumed)
+		if (max_len < ys[i].processed)
 		{
-			max_len = ys[i].consumed;
+			max_len = ys[i].processed;
 		}
 	}
 	o.file << indent (ind + 1);

@@ -41,19 +41,17 @@ struct SkeletonState
 	uint rule;
 	uchar visited;
 	Prefix * path;
+	inline SkeletonState ()
+		: go ()
+		, rule (~0u)
+		, visited (0)
+		, path (NULL)
+	{}
+	inline bool is_end ()
+	{
+		return go.size () == 0;
+	}
 };
-
-inline bool is_default (SkeletonState * s)
-{
-	return s == NULL;
-}
-
-inline bool is_final (SkeletonState * s)
-{
-	return s != NULL
-		&& s->go.size () == 1
-		&& s->go.begin ()->first == NULL;
-}
 
 struct Skeleton
 {
