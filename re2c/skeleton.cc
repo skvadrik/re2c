@@ -137,6 +137,28 @@ void generate_data (DataFile & o, uint ind, SkeletonState * s, const std::vector
 }
 */
 
+void update (Prefix & p, SkeletonState * s)
+{
+	if (s->rule != ~0u)
+	{
+		p.length = p.chars.size ();
+		p.rule = s->rule;
+	}
+}
+
+void append (Prefix & p1, const Prefix * p2)
+{
+	if (p2->rule != ~0u)
+	{
+		p1.length = p1.chars.size () + p2->length;
+		p1.rule = p2->rule;
+	}
+	for (uint i = 0; i < p2->chars.size (); ++i)
+	{
+		p1.chars.push_back (p2->chars[i]);
+	}
+}
+
 void generate_data (DataFile & o, uint ind, SkeletonState * s, std::vector<Prefix> & xs, std::vector<Result> & ys)
 {
 	if (s->is_end ())
@@ -151,36 +173,20 @@ void generate_data (DataFile & o, uint ind, SkeletonState * s, std::vector<Prefi
 				o.file << ",";
 			}
 			o.file << "\n";
-			const uint processed = xs[i].chars.size ();
-			const uint consumed = s->rule != ~0u
-				? xs[i].chars.size ()
-				: xs[i].length;
-			const uint rule = s->rule != ~0u
-				? s->rule
-				: xs[i].rule;
-			ys.push_back (Result (processed, consumed, rule));
+			update (xs[i], s);
+			ys.push_back (Result (xs[i]));
 		}
 	}
 	else if (s->visited < 2)
 	{
 		s->visited++;
-		const bool is_accepting = s->rule != ~0u;
+
 		if (s->path != NULL)
 		{
-			const bool is_accepting_path = s->path->rule != ~0u;
 			std::vector<Prefix> zs (xs);
 			for (uint i = 0; i < zs.size (); ++i)
 			{
-				zs[i].length = is_accepting_path
-					? zs[i].chars.size () + s->path->length
-					: zs[i].length;
-				zs[i].rule = is_accepting_path
-					? s->path->rule
-					: zs[i].rule;
-				for (int j = s->path->chars.size () - 1; j >= 0; --j)
-				{
-					zs[i].chars.push_back (s->path->chars[j]);
-				}
+				append (zs[i], s->path);
 			}
 			SkeletonState null;
 			generate_data (o, ind, &null, zs, ys);
@@ -211,26 +217,20 @@ void generate_data (DataFile & o, uint ind, SkeletonState * s, std::vector<Prefi
 				for (uint j = 0; j < i->second.size (); ++j)
 				{
 					zs.push_back (xs[k++]);
-					zs[j].length = is_accepting ? zs[j].chars.size () : zs[j].length;
-					zs[j].rule = is_accepting ? s->rule : zs[j].rule;
+					update (zs[j], s);
 					zs[j].chars.push_back (i->second[j]);
 				}
 				generate_data (o, ind, i->first, zs, ys);
 				if (s->path == NULL && i->first->path != NULL)
 				{
-					const bool is_accepting_path = i->first->path->rule != ~0u;
-					const uint l = is_accepting_path
-						? i->first->path->length + 1
-						: 0;
-					const uint r = is_accepting_path
-						? i->first->path->rule
-						: s->rule;
-					s->path = new Prefix (i->first->path->chars, l, r);
+					s->path = new Prefix (std::vector<uint> (), 0, s->rule);
 					s->path->chars.push_back (i->second[0]);
+					append (* s->path, i->first->path);
 				}
 			}
 			xs.resize (xs_size, xs[0]);
 		}
+
 		s->visited--;
 	}
 }

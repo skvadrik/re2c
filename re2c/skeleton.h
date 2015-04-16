@@ -27,10 +27,10 @@ struct Result
 	uint processed;
 	uint consumed;
 	uint rule;
-	Result (uint p, uint c, uint r)
-		: processed (p)
-		, consumed (c)
-		, rule (r)
+	explicit Result (const Prefix & p)
+		: processed (p.chars.size ())
+		, consumed (p.length)
+		, rule (p.rule)
 	{}
 };
 
@@ -66,6 +66,8 @@ unsigned long count_data (SkeletonState * s, unsigned long count);
 void generate_data (DataFile & o, uint ind, SkeletonState * s, std::vector<Prefix> & xs, std::vector<Result> & ys);
 void skeleton_emit_prolog (OutputFile & o, uint ind, const char * data_name);
 void skeleton_emit_epilog (OutputFile & o, uint ind);
+void update (Prefix & p, SkeletonState * s);
+void append (Prefix & p1, const Prefix * p2);
 
 } // namespace re2c
 
