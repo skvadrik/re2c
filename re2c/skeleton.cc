@@ -78,7 +78,7 @@ unsigned long Skeleton::count ()
 }
 
 /*
-void generate_data (DataFile & o, uint ind, SkeletonState * s, const std::vector<Prefix> & xs, std::vector<Result> & ys)
+void generate_data (DataFile & o, uint ind, SkeletonState * s, const std::vector<Path> & xs, std::vector<Result> & ys)
 {
 	if (is_final (s) || is_default (s))
 	{
@@ -106,7 +106,7 @@ void generate_data (DataFile & o, uint ind, SkeletonState * s, const std::vector
 		s->visited = true;
 		for (SkeletonState::go_t::iterator i = s->go.begin (); i != s->go.end (); ++i)
 		{
-			std::vector<Prefix> zs;
+			std::vector<Path> zs;
 			for (uint j = 0; j < xs.size (); ++j)
 			{
 				const bool is_accepting = s->rule != ~0u;
@@ -121,12 +121,12 @@ void generate_data (DataFile & o, uint ind, SkeletonState * s, const std::vector
 				for (uint k = 0; k < i->second.size (); ++k)
 				{
 					z.push_back (i->second[k].first);
-					zs.push_back (Prefix (z, l, r));
+					zs.push_back (Path (z, l, r));
 					if (i->second[k].first != i->second[k].second)
 					{
 						z.pop_back ();
 						z.push_back (i->second[k].second);
-						zs.push_back (Prefix (z, l, r));
+						zs.push_back (Path (z, l, r));
 					}
 					z.pop_back ();
 				}
@@ -138,7 +138,7 @@ void generate_data (DataFile & o, uint ind, SkeletonState * s, const std::vector
 }
 */
 
-void update (Prefix & p, SkeletonState * s)
+void update (Path & p, SkeletonState * s)
 {
 	if (s->rule != ~0u)
 	{
@@ -147,7 +147,7 @@ void update (Prefix & p, SkeletonState * s)
 	}
 }
 
-void append (Prefix & p1, const Prefix & p2)
+void append (Path & p1, const Path & p2)
 {
 	if (p2.rule != ~0u)
 	{
@@ -171,7 +171,7 @@ void dump_paths (DataFile & o, uint ind, const std::vector<uint> & path)
 	o.file << "\n";
 }
 
-void generate (DataFile & o, uint ind, SkeletonState * s, std::vector<Prefix> & prefixes, std::vector<Result> & results)
+void generate (DataFile & o, uint ind, SkeletonState * s, std::vector<Path> & prefixes, std::vector<Result> & results)
 {
 	if (s == NULL)
 	{
@@ -187,7 +187,7 @@ void generate (DataFile & o, uint ind, SkeletonState * s, std::vector<Prefix> & 
 
 		if (s->path != NULL)
 		{
-			std::vector<Prefix> zs (prefixes);
+			std::vector<Path> zs (prefixes);
 			for (uint i = 0; i < zs.size (); ++i)
 			{
 				append (zs[i], * s->path);
@@ -216,7 +216,7 @@ void generate (DataFile & o, uint ind, SkeletonState * s, std::vector<Prefix> & 
 			uint k = 0;
 			for (SkeletonState::go_t::iterator i = s->go.begin (); i != s->go.end (); ++i)
 			{
-				std::vector<Prefix> zs;
+				std::vector<Path> zs;
 				for (uint j = 0; j < i->second.size (); ++j)
 				{
 					zs.push_back (prefixes[k++]);
@@ -226,7 +226,7 @@ void generate (DataFile & o, uint ind, SkeletonState * s, std::vector<Prefix> & 
 				generate (o, ind, i->first, zs, results);
 				if (s->path == NULL && i->first->path != NULL)
 				{
-					s->path = new Prefix (std::vector<uint> (1, i->second[0]), 0, s->rule);
+					s->path = new Path (std::vector<uint> (1, i->second[0]), 0, s->rule);
 					append (* s->path, * i->first->path);
 				}
 			}
@@ -245,11 +245,11 @@ void Skeleton::generate_data (DataFile & o, uint ind, std::vector<Result> & resu
 	{
 		if (states[i].is_end ())
 		{
-			states[i].path = new Prefix (std::vector<uint> (), 0, states[i].rule);
+			states[i].path = new Path (std::vector<uint> (), 0, states[i].rule);
 		}
 	}
-	std::vector<Prefix> prefixes;
-	prefixes.push_back (Prefix (std::vector<uint> (), 0, ~0));
+	std::vector<Path> prefixes;
+	prefixes.push_back (Path (std::vector<uint> (), 0, ~0));
 
 	generate (o, ind, states, prefixes, results);
 

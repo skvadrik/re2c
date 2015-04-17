@@ -10,12 +10,12 @@
 namespace re2c
 {
 
-struct Prefix
+struct Path
 {
 	std::vector<uint> chars;
 	uint length;
 	uint rule;
-	inline Prefix (const std::vector<uint> & cs, uint l, uint r)
+	inline Path (const std::vector<uint> & cs, uint l, uint r)
 		: chars (cs)
 		, length (l)
 		, rule (r)
@@ -27,7 +27,7 @@ struct Result
 	uint processed;
 	uint consumed;
 	uint rule;
-	inline explicit Result (const Prefix & p)
+	inline explicit Result (const Path & p)
 		: processed (p.chars.size ())
 		, consumed (p.length)
 		, rule (p.rule)
@@ -40,7 +40,7 @@ struct SkeletonState
 	go_t go;
 	uint rule;
 	uchar visited;
-	Prefix * path;
+	Path * path;
 	inline SkeletonState ()
 		: go ()
 		, rule (~0u)
@@ -67,10 +67,10 @@ struct Skeleton
 unsigned long count_data (SkeletonState * s, unsigned long count);
 void skeleton_emit_prolog (OutputFile & o, uint ind, const char * data_name);
 void skeleton_emit_epilog (OutputFile & o, uint ind);
-void update (Prefix & p, SkeletonState * s);
-void append (Prefix & p1, const Prefix * p2);
+void update (Path & p, SkeletonState * s);
+void append (Path & p1, const Path * p2);
 void dump_paths (DataFile & o, uint ind, const std::vector<uint> & path);
-void generate (DataFile & o, uint ind, SkeletonState * s, std::vector<Prefix> & prefixes, std::vector<Result> & results);
+void generate (DataFile & o, uint ind, SkeletonState * s, std::vector<Path> & prefixes, std::vector<Result> & results);
 
 } // namespace re2c
 
