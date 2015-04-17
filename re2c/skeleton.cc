@@ -171,7 +171,7 @@ void dump_paths (DataFile & o, uint ind, const std::vector<uint> & path)
 	o.file << "\n";
 }
 
-void generate (DataFile & o, uint ind, SkeletonState * s, std::vector<Path> & prefixes, std::vector<Result> & results)
+void generate (DataFile & o, uint ind, SkeletonState * s, const std::vector<Path> & prefixes, std::vector<Result> & results)
 {
 	if (s == NULL)
 	{
@@ -202,24 +202,19 @@ void generate (DataFile & o, uint ind, SkeletonState * s, std::vector<Path> & pr
 				out_arrows += i->second.size ();
 			}
 
-			const uint prefixes_size = prefixes.size ();
-			for (uint i = 0; prefixes.size () < out_arrows; ++i)
-			{
-				prefixes.push_back (prefixes[i]);
-			}
-
 			for (; out_arrows < prefixes.size (); ++out_arrows)
 			{
 				s->go.begin ()->second.push_back (s->go.begin ()->second.back ());
 			}
 
 			uint k = 0;
+			const uint prefixes_size = prefixes.size ();
 			for (SkeletonState::go_t::iterator i = s->go.begin (); i != s->go.end (); ++i)
 			{
 				std::vector<Path> zs;
-				for (uint j = 0; j < i->second.size (); ++j)
+				for (uint j = 0; j < i->second.size (); ++j, ++k)
 				{
-					zs.push_back (prefixes[k++]);
+					zs.push_back (prefixes[k % prefixes_size]);
 					update (zs[j], s);
 					zs[j].chars.push_back (i->second[j]);
 				}
@@ -230,7 +225,6 @@ void generate (DataFile & o, uint ind, SkeletonState * s, std::vector<Path> & pr
 					append (* s->path, * i->first->path);
 				}
 			}
-			prefixes.resize (prefixes_size, prefixes[0]);
 		}
 
 		s->visited--;
@@ -262,7 +256,7 @@ void Skeleton::generate_data (DataFile & o, uint ind, std::vector<Result> & resu
 
 void Skeleton::emit_data (DataFile & o)
 {
-	fprintf (stderr, "%lx\n%lx\n", 0xFFFFffffFFFFffff, count ());
+//	fprintf (stderr, "%lx\n%lx\n", 0xFFFFffffFFFFffff, count ());
 	uint ind = 0;
 
 	std::string yyctype;

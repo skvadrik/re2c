@@ -70,7 +70,7 @@ void skeleton_emit_epilog (OutputFile & o, uint ind);
 void update (Path & p, SkeletonState * s);
 void append (Path & p1, const Path * p2);
 void dump_paths (DataFile & o, uint ind, const std::vector<uint> & path);
-void generate (DataFile & o, uint ind, SkeletonState * s, std::vector<Path> & prefixes, std::vector<Result> & results);
+void generate (DataFile & o, uint ind, SkeletonState * s, const std::vector<Path> & prefixes, std::vector<Result> & results);
 
 } // namespace re2c
 
