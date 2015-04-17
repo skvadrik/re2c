@@ -15,7 +15,7 @@ struct Prefix
 	std::vector<uint> chars;
 	uint length;
 	uint rule;
-	Prefix (const std::vector<uint> & cs, uint l, uint r)
+	inline Prefix (const std::vector<uint> & cs, uint l, uint r)
 		: chars (cs)
 		, length (l)
 		, rule (r)
@@ -27,7 +27,7 @@ struct Result
 	uint processed;
 	uint consumed;
 	uint rule;
-	explicit Result (const Prefix & p)
+	inline explicit Result (const Prefix & p)
 		: processed (p.chars.size ())
 		, consumed (p.length)
 		, rule (p.rule)
@@ -55,19 +55,22 @@ struct SkeletonState
 
 struct Skeleton
 {
+	const uint states_count;
 	SkeletonState * states;
 	Skeleton (const DFA & dfa);
 	~Skeleton ();
 	unsigned long count ();
+	void generate_data (DataFile & o, uint ind, std::vector<Result> & results);
 	void emit_data (DataFile & o);
 };
 
 unsigned long count_data (SkeletonState * s, unsigned long count);
-void generate_data (DataFile & o, uint ind, SkeletonState * s, std::vector<Prefix> & xs, std::vector<Result> & ys);
 void skeleton_emit_prolog (OutputFile & o, uint ind, const char * data_name);
 void skeleton_emit_epilog (OutputFile & o, uint ind);
 void update (Prefix & p, SkeletonState * s);
 void append (Prefix & p1, const Prefix * p2);
+void dump_paths (DataFile & o, uint ind, const std::vector<uint> & path);
+void generate (DataFile & o, uint ind, SkeletonState * s, std::vector<Prefix> & prefixes, std::vector<Result> & results);
 
 } // namespace re2c
 

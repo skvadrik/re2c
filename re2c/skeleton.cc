@@ -6,12 +6,13 @@ namespace re2c
 {
 
 Skeleton::Skeleton (const DFA & dfa)
-	: states (new SkeletonState [dfa.nStates + 1])
+	: states_count (dfa.nStates + 1)
+	, states (new SkeletonState [states_count])
 {
 	uint i;
 
 	std::map<State *, SkeletonState *> m;
-	m[NULL] = &states[dfa.nStates]; // default state
+	m[NULL] = &states[states_count - 1]; // default state
 	i = 0;
 	for (State * s = dfa.head; s; s = s->next, ++i)
 	{
@@ -146,35 +147,38 @@ void update (Prefix & p, SkeletonState * s)
 	}
 }
 
-void append (Prefix & p1, const Prefix * p2)
+void append (Prefix & p1, const Prefix & p2)
 {
-	if (p2->rule != ~0u)
+	if (p2.rule != ~0u)
 	{
-		p1.length = p1.chars.size () + p2->length;
-		p1.rule = p2->rule;
+		p1.length = p1.chars.size () + p2.length;
+		p1.rule = p2.rule;
 	}
-	for (uint i = 0; i < p2->chars.size (); ++i)
+	for (uint i = 0; i < p2.chars.size (); ++i)
 	{
-		p1.chars.push_back (p2->chars[i]);
+		p1.chars.push_back (p2.chars[i]);
 	}
 }
 
-void generate_data (DataFile & o, uint ind, SkeletonState * s, std::vector<Prefix> & xs, std::vector<Result> & ys)
+void dump_paths (DataFile & o, uint ind, const std::vector<uint> & path)
 {
-	if (s->is_end ())
+	o.file << indent (ind);
+	for (uint i = 0 ; i < path.size (); ++i)
 	{
-		s->path = new Prefix (std::vector<uint> (), 0, s->rule);
-		for (uint i = 0; i < xs.size (); ++i)
+		prtChOrHex (o.file, path[i]);
+		o.file << ",";
+	}
+	o.file << "\n";
+}
+
+void generate (DataFile & o, uint ind, SkeletonState * s, std::vector<Prefix> & prefixes, std::vector<Result> & results)
+{
+	if (s == NULL)
+	{
+		for (uint i = 0; i < prefixes.size (); ++i)
 		{
-			o.file << indent (ind);
-			for (uint j = 0 ; j < xs[i].chars.size (); ++j)
-			{
-				prtChOrHex (o.file, xs[i].chars[j]);
-				o.file << ",";
-			}
-			o.file << "\n";
-			update (xs[i], s);
-			ys.push_back (Result (xs[i]));
+			results.push_back (Result (prefixes[i]));
+			dump_paths (o, ind, prefixes[i].chars);
 		}
 	}
 	else if (s->visited < 2)
@@ -183,13 +187,12 @@ void generate_data (DataFile & o, uint ind, SkeletonState * s, std::vector<Prefi
 
 		if (s->path != NULL)
 		{
-			std::vector<Prefix> zs (xs);
+			std::vector<Prefix> zs (prefixes);
 			for (uint i = 0; i < zs.size (); ++i)
 			{
-				append (zs[i], s->path);
+				append (zs[i], * s->path);
 			}
-			SkeletonState null;
-			generate_data (o, ind, &null, zs, ys);
+			generate (o, ind, NULL, zs, results);
 		}
 		else
 		{
@@ -199,13 +202,13 @@ void generate_data (DataFile & o, uint ind, SkeletonState * s, std::vector<Prefi
 				out_arrows += i->second.size ();
 			}
 
-			const uint xs_size = xs.size ();
-			for (uint i = 0; xs.size () < out_arrows; ++i)
+			const uint prefixes_size = prefixes.size ();
+			for (uint i = 0; prefixes.size () < out_arrows; ++i)
 			{
-				xs.push_back (xs[i]);
+				prefixes.push_back (prefixes[i]);
 			}
 
-			for (; out_arrows < xs.size (); ++out_arrows)
+			for (; out_arrows < prefixes.size (); ++out_arrows)
 			{
 				s->go.begin ()->second.push_back (s->go.begin ()->second.back ());
 			}
@@ -216,22 +219,44 @@ void generate_data (DataFile & o, uint ind, SkeletonState * s, std::vector<Prefi
 				std::vector<Prefix> zs;
 				for (uint j = 0; j < i->second.size (); ++j)
 				{
-					zs.push_back (xs[k++]);
+					zs.push_back (prefixes[k++]);
 					update (zs[j], s);
 					zs[j].chars.push_back (i->second[j]);
 				}
-				generate_data (o, ind, i->first, zs, ys);
+				generate (o, ind, i->first, zs, results);
 				if (s->path == NULL && i->first->path != NULL)
 				{
-					s->path = new Prefix (std::vector<uint> (), 0, s->rule);
-					s->path->chars.push_back (i->second[0]);
-					append (* s->path, i->first->path);
+					s->path = new Prefix (std::vector<uint> (1, i->second[0]), 0, s->rule);
+					append (* s->path, * i->first->path);
 				}
 			}
-			xs.resize (xs_size, xs[0]);
+			prefixes.resize (prefixes_size, prefixes[0]);
 		}
 
 		s->visited--;
+	}
+}
+
+void Skeleton::generate_data (DataFile & o, uint ind, std::vector<Result> & results)
+{
+	// set paths for final states and default state
+	// (those with zero outgoing arrows)
+	for (uint i = 0; i < states_count; ++i)
+	{
+		if (states[i].is_end ())
+		{
+			states[i].path = new Prefix (std::vector<uint> (), 0, states[i].rule);
+		}
+	}
+	std::vector<Prefix> prefixes;
+	prefixes.push_back (Prefix (std::vector<uint> (), 0, ~0));
+
+	generate (o, ind, states, prefixes, results);
+
+	// cleanup: delete all paths
+	for (uint i = 0; i < states_count; ++i)
+	{
+		delete states[i].path;
 	}
 }
 
@@ -268,11 +293,8 @@ void Skeleton::emit_data (DataFile & o)
 	o.file << indent (ind) << "YYCTYPE data [] =\n";
 	o.file << indent (ind) << "{\n";
 
-	std::vector<Prefix> xs;
 	std::vector<Result> ys;
-	std::vector<uint> x;
-	xs.push_back (Prefix (x, 0, ~0));
-	generate_data (o, ind + 1, states, xs, ys);
+	generate_data (o, ind + 1, ys);
 
 	const uint count = ys.size ();
 
