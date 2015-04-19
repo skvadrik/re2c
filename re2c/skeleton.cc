@@ -138,28 +138,6 @@ void generate_data (DataFile & o, uint ind, SkeletonState * s, const std::vector
 }
 */
 
-void update (Path & p, const SkeletonState * s)
-{
-	if (s->rule != ~0u)
-	{
-		p.length = p.chars.size ();
-		p.rule = s->rule;
-	}
-}
-
-void append (Path & p1, const Path & p2)
-{
-	if (p2.rule != ~0u)
-	{
-		p1.length = p1.chars.size () + p2.length;
-		p1.rule = p2.rule;
-	}
-	for (uint i = 0; i < p2.chars.size (); ++i)
-	{
-		p1.chars.push_back (p2.chars[i]);
-	}
-}
-
 void generate (SkeletonState * s, const std::vector<Path> & prefixes, std::vector<Path> & results)
 {
 	if (s == NULL)
@@ -178,7 +156,7 @@ void generate (SkeletonState * s, const std::vector<Path> & prefixes, std::vecto
 			std::vector<Path> zs (prefixes);
 			for (uint i = 0; i < zs.size (); ++i)
 			{
-				append (zs[i], * s->path);
+				zs[i].append (s->path);
 			}
 			generate (NULL, zs, results);
 		}
@@ -196,14 +174,13 @@ void generate (SkeletonState * s, const std::vector<Path> & prefixes, std::vecto
 				for (uint j = 0; j < i->second.size (); ++j, ++in)
 				{
 					zs.push_back (prefixes[in % in_arrows]);
-					update (zs[j], s);
-					zs[j].chars.push_back (i->second[j]);
+					zs[j].extend (s->rule, i->second[j]);
 				}
 				generate (i->first, zs, results);
 				if (s->path == NULL && i->first->path != NULL)
 				{
 					s->path = new Path (std::vector<uint> (1, i->second[0]), 0, s->rule);
-					append (* s->path, * i->first->path);
+					s->path->append (i->first->path);
 				}
 			}
 		}

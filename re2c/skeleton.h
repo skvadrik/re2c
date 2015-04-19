@@ -20,6 +20,27 @@ struct Path
 		, length (l)
 		, rule (r)
 	{}
+	inline void extend (uint r, uint c)
+	{
+		if (r != ~0u)
+		{
+			length = chars.size ();
+			rule = r;
+		}
+		chars.push_back (c);
+	}
+	inline void append (const Path * p)
+	{
+		if (p->rule != ~0u)
+		{
+			length = chars.size () + p->length;
+			rule = p->rule;
+		}
+		for (uint i = 0; i < p->chars.size (); ++i)
+		{
+			chars.push_back (p->chars[i]);
+		}
+	}
 };
 
 struct SkeletonState
@@ -63,8 +84,6 @@ struct Skeleton
 unsigned long count_data (SkeletonState * s, unsigned long count);
 void skeleton_emit_prolog (OutputFile & o, uint ind, const char * data_name);
 void skeleton_emit_epilog (OutputFile & o, uint ind);
-void update (Path & p, const SkeletonState * s);
-void append (Path & p1, const Path * p2);
 void generate (SkeletonState * s, const std::vector<Path> & prefixes, std::vector<Path> & results);
 
 } // namespace re2c
