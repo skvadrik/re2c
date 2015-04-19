@@ -22,18 +22,6 @@ struct Path
 	{}
 };
 
-struct Result
-{
-	uint processed;
-	uint consumed;
-	uint rule;
-	inline explicit Result (const Path & p)
-		: processed (p.chars.size ())
-		, consumed (p.length)
-		, rule (p.rule)
-	{}
-};
-
 struct SkeletonState
 {
 	typedef std::map<SkeletonState *, std::vector<uint> > go_t;
@@ -68,17 +56,16 @@ struct Skeleton
 	Skeleton (const DFA & dfa);
 	~Skeleton ();
 	unsigned long count ();
-	void generate_data (DataFile & o, uint ind, std::vector<Result> & results);
+	void generate_data (std::vector<Path> & results);
 	void emit_data (DataFile & o);
 };
 
 unsigned long count_data (SkeletonState * s, unsigned long count);
 void skeleton_emit_prolog (OutputFile & o, uint ind, const char * data_name);
 void skeleton_emit_epilog (OutputFile & o, uint ind);
-void update (Path & p, SkeletonState * s);
+void update (Path & p, const SkeletonState * s);
 void append (Path & p1, const Path * p2);
-void dump_paths (DataFile & o, uint ind, const std::vector<uint> & path);
-void generate (DataFile & o, uint ind, SkeletonState * s, const std::vector<Path> & prefixes, std::vector<Result> & results);
+void generate (SkeletonState * s, const std::vector<Path> & prefixes, std::vector<Path> & results);
 
 } // namespace re2c
 

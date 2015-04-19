@@ -138,7 +138,7 @@ void generate_data (DataFile & o, uint ind, SkeletonState * s, const std::vector
 }
 */
 
-void update (Path & p, SkeletonState * s)
+void update (Path & p, const SkeletonState * s)
 {
 	if (s->rule != ~0u)
 	{
@@ -160,25 +160,13 @@ void append (Path & p1, const Path & p2)
 	}
 }
 
-void dump_paths (DataFile & o, uint ind, const std::vector<uint> & path)
-{
-	o.file << indent (ind);
-	for (uint i = 0 ; i < path.size (); ++i)
-	{
-		prtChOrHex (o.file, path[i]);
-		o.file << ",";
-	}
-	o.file << "\n";
-}
-
-void generate (DataFile & o, uint ind, SkeletonState * s, const std::vector<Path> & prefixes, std::vector<Result> & results)
+void generate (SkeletonState * s, const std::vector<Path> & prefixes, std::vector<Path> & results)
 {
 	if (s == NULL)
 	{
 		for (uint i = 0; i < prefixes.size (); ++i)
 		{
-			results.push_back (Result (prefixes[i]));
-			dump_paths (o, ind, prefixes[i].chars);
+			results.push_back (prefixes[i]);
 		}
 	}
 	else if (s->visited < 2)
@@ -192,7 +180,7 @@ void generate (DataFile & o, uint ind, SkeletonState * s, const std::vector<Path
 			{
 				append (zs[i], * s->path);
 			}
-			generate (o, ind, NULL, zs, results);
+			generate (NULL, zs, results);
 		}
 		else
 		{
@@ -211,7 +199,7 @@ void generate (DataFile & o, uint ind, SkeletonState * s, const std::vector<Path
 					update (zs[j], s);
 					zs[j].chars.push_back (i->second[j]);
 				}
-				generate (o, ind, i->first, zs, results);
+				generate (i->first, zs, results);
 				if (s->path == NULL && i->first->path != NULL)
 				{
 					s->path = new Path (std::vector<uint> (1, i->second[0]), 0, s->rule);
@@ -224,7 +212,7 @@ void generate (DataFile & o, uint ind, SkeletonState * s, const std::vector<Path
 	}
 }
 
-void Skeleton::generate_data (DataFile & o, uint ind, std::vector<Result> & results)
+void Skeleton::generate_data (std::vector<Path> & results)
 {
 	// set paths for final states and default state
 	// (those with zero outgoing arrows)
@@ -238,7 +226,7 @@ void Skeleton::generate_data (DataFile & o, uint ind, std::vector<Result> & resu
 	std::vector<Path> prefixes;
 	prefixes.push_back (Path (std::vector<uint> (), 0, ~0));
 
-	generate (o, ind, states, prefixes, results);
+	generate (states, prefixes, results);
 
 	// cleanup: delete all paths
 	for (uint i = 0; i < states_count; ++i)
@@ -280,18 +268,28 @@ void Skeleton::emit_data (DataFile & o)
 	o.file << indent (ind) << "YYCTYPE data [] =\n";
 	o.file << indent (ind) << "{\n";
 
-	std::vector<Result> ys;
-	generate_data (o, ind + 1, ys);
+	std::vector<Path> ys;
+	generate_data (ys);
 
 	const uint count = ys.size ();
 
 	uint max_len = 0;
 	for (uint i = 0; i < count; ++i)
 	{
-		if (max_len < ys[i].processed)
+		if (max_len < ys[i].chars.size ())
 		{
-			max_len = ys[i].processed;
+			max_len = ys[i].chars.size ();
 		}
+	}
+	for (uint i = 0; i < count; ++i)
+	{
+		o.file << indent (ind + 1);
+		for (uint j = 0 ; j < ys[i].chars.size (); ++j)
+		{
+			prtChOrHex (o.file, ys[i].chars[j]);
+			o.file << ",";
+		}
+		o.file << "\n";
 	}
 	o.file << indent (ind + 1);
 	for (uint j = 0 ; j < max_len; ++j) // pad with YMAXFILL zeroes
@@ -315,8 +313,8 @@ void Skeleton::emit_data (DataFile & o)
 	o.file << indent (ind) << "{\n";
 	for (uint i = 0; i < count; ++i)
 	{
-		o.file << indent (ind + 1) << "Result (" << pos + ys[i].consumed << "," << pos + ys[i].processed << "," << ys[i].rule << "),\n";
-		pos += ys[i].processed;
+		o.file << indent (ind + 1) << "Result (" << pos + ys[i].length << "," << pos + ys[i].chars.size () << "," << ys[i].rule << "),\n";
+		pos += ys[i].chars.size ();
 	}
 	o.file << indent (ind) << "};\n";
 
