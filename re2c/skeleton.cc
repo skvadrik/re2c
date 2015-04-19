@@ -196,25 +196,18 @@ void generate (DataFile & o, uint ind, SkeletonState * s, const std::vector<Path
 		}
 		else
 		{
-			uint out_arrows = 0;
-			for (SkeletonState::go_t::iterator i = s->go.begin (); i != s->go.end (); ++i)
-			{
-				out_arrows += i->second.size ();
-			}
-
-			for (; out_arrows < prefixes.size (); ++out_arrows)
-			{
-				s->go.begin ()->second.push_back (s->go.begin ()->second.back ());
-			}
-
-			uint k = 0;
-			const uint prefixes_size = prefixes.size ();
-			for (SkeletonState::go_t::iterator i = s->go.begin (); i != s->go.end (); ++i)
+			const uint in_arrows = prefixes.size ();
+			const uint out_states = s->go.size ();
+			SkeletonState::go_t::iterator i = s->go.begin ();
+			for	( uint in = 0, out = 0
+				; in < in_arrows || out < out_states
+				; ++out, s->wrap (++i)
+				)
 			{
 				std::vector<Path> zs;
-				for (uint j = 0; j < i->second.size (); ++j, ++k)
+				for (uint j = 0; j < i->second.size (); ++j, ++in)
 				{
-					zs.push_back (prefixes[k % prefixes_size]);
+					zs.push_back (prefixes[in % in_arrows]);
 					update (zs[j], s);
 					zs[j].chars.push_back (i->second[j]);
 				}

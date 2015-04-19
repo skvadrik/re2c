@@ -41,6 +41,7 @@ struct SkeletonState
 	uint rule;
 	uchar visited;
 	Path * path;
+
 	inline SkeletonState ()
 		: go ()
 		, rule (~0u)
@@ -50,6 +51,13 @@ struct SkeletonState
 	inline bool is_end ()
 	{
 		return go.size () == 0;
+	}
+	inline void wrap (go_t::iterator & i)
+	{
+		if (i == go.end ())
+		{
+			i = go.begin ();
+		}
 	}
 };
 
