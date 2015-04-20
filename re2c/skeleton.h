@@ -72,11 +72,13 @@ struct SkeletonState
 
 struct Skeleton
 {
+	static const uint MAX_PATHS;
 	const uint states_count;
 	SkeletonState * states;
+
 	Skeleton (const DFA & dfa);
 	~Skeleton ();
-	unsigned long count ();
+	bool count (SkeletonState * s, uint n, uint & result);
 	void generate_data (std::vector<Path> & results);
 	void emit_data (DataFile & o);
 };

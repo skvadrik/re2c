@@ -5,6 +5,8 @@
 namespace re2c
 {
 
+const uint Skeleton::MAX_PATHS = 1024 * 1024; // 1Mb
+
 Skeleton::Skeleton (const DFA & dfa)
 	: states_count (dfa.nStates + 1)
 	, states (new SkeletonState [states_count])
@@ -49,32 +51,34 @@ Skeleton::~Skeleton ()
 	delete [] states;
 }
 
-unsigned long count_data (SkeletonState * s, unsigned long count)
+bool Skeleton::count (SkeletonState * s, uint n, uint & result)
 {
 	if (s->is_end ())
 	{
-		return count;
+		const bool overflow = MAX_PATHS - n < result;
+		if (!overflow)
+		{
+			result += n;
+		}
+		return overflow;
 	}
 	else if (s->visited < 2)
 	{
 		s->visited++;
-		unsigned long result = 0;
 		for (SkeletonState::go_t::iterator i = s->go.begin (); i != s->go.end (); ++i)
 		{
-			result += count_data (i->first, i->second.size () * count);
+			if (count (i->first, i->second.size () * n, result))
+			{
+				return true;
+			}
 		}
 		s->visited--;
-		return result;
+		return false;
 	}
 	else
 	{
-		return 0;
+		return false;
 	}
-}
-
-unsigned long Skeleton::count ()
-{
-	return count_data (states, 1);
 }
 
 /*
@@ -214,7 +218,8 @@ void Skeleton::generate_data (std::vector<Path> & results)
 
 void Skeleton::emit_data (DataFile & o)
 {
-//	fprintf (stderr, "%lx\n%lx\n", 0xFFFFffffFFFFffff, count ());
+	uint result = 0;
+	fprintf (stderr, "%d\n", count (states, 1, result));
 	uint ind = 0;
 
 	std::string yyctype;
