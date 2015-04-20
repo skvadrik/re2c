@@ -51,29 +51,27 @@ Skeleton::~Skeleton ()
 	delete [] states;
 }
 
-bool Skeleton::count (SkeletonState * s, uint n, uint & result)
+bool Skeleton::estimate_path_count (SkeletonState * s, uint prefixes, uint & result)
 {
 	if (s->is_end ())
 	{
-		const bool overflow = MAX_PATHS - n < result;
+		const bool overflow = MAX_PATHS - prefixes < result;
 		if (!overflow)
 		{
-			result += n;
+			result += prefixes;
 		}
 		return overflow;
 	}
 	else if (s->visited < 2)
 	{
 		s->visited++;
-		for (SkeletonState::go_t::iterator i = s->go.begin (); i != s->go.end (); ++i)
+		bool overflow = false;
+		for (SkeletonState::go_t::iterator i = s->go.begin (); !overflow && i != s->go.end (); ++i)
 		{
-			if (count (i->first, i->second.size () * n, result))
-			{
-				return true;
-			}
+			overflow = overflow || estimate_path_count (i->first, i->second.size () * prefixes, result);
 		}
 		s->visited--;
-		return false;
+		return overflow;
 	}
 	else
 	{
@@ -193,7 +191,7 @@ void generate (SkeletonState * s, const std::vector<Path> & prefixes, std::vecto
 	}
 }
 
-void Skeleton::generate_data (std::vector<Path> & results)
+void Skeleton::generate_paths (std::vector<Path> & results)
 {
 	// set paths for final states and default state
 	// (those with zero outgoing arrows)
@@ -219,7 +217,7 @@ void Skeleton::generate_data (std::vector<Path> & results)
 void Skeleton::emit_data (DataFile & o)
 {
 	uint result = 0;
-	fprintf (stderr, "%d\n", count (states, 1, result));
+	fprintf (stderr, "%d\n", estimate_path_count (states, 1, result));
 	uint ind = 0;
 
 	std::string yyctype;
@@ -251,7 +249,7 @@ void Skeleton::emit_data (DataFile & o)
 	o.file << indent (ind) << "{\n";
 
 	std::vector<Path> ys;
-	generate_data (ys);
+	generate_paths (ys);
 
 	const uint count = ys.size ();
 

@@ -78,12 +78,11 @@ struct Skeleton
 
 	Skeleton (const DFA & dfa);
 	~Skeleton ();
-	bool count (SkeletonState * s, uint n, uint & result);
-	void generate_data (std::vector<Path> & results);
+	bool estimate_path_count (SkeletonState * s, uint prefixes, uint & result);
+	void generate_paths (std::vector<Path> & results);
 	void emit_data (DataFile & o);
 };
 
-unsigned long count_data (SkeletonState * s, unsigned long count);
 void skeleton_emit_prolog (OutputFile & o, uint ind, const char * data_name);
 void skeleton_emit_epilog (OutputFile & o, uint ind);
 void generate (SkeletonState * s, const std::vector<Path> & prefixes, std::vector<Path> & results);
