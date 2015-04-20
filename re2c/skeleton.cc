@@ -5,7 +5,7 @@
 namespace re2c
 {
 
-const uint32_t Skeleton::PATHS_OVERFLOW = 1024 * 1024; // 1Mb
+const uint32_t Skeleton::MAX_PATHS = 1024 * 1024; // 1Mb
 
 Skeleton::Skeleton (const DFA & dfa)
 	: states_count (dfa.nStates + 1)
@@ -60,23 +60,21 @@ uint32_t Skeleton::estimate_paths_count (SkeletonState * s, uint32_t count)
 	else if (s->visited < 2)
 	{
 		++s->visited;
-		uint32_t result = 0;
+		uint64_t result = 0;
 		for (SkeletonState::go_t::iterator i = s->go.begin (); i != s->go.end (); ++i)
 		{
-			const uint32_t arrows = i->second.size ();
-			const uint32_t max_paths = PATHS_OVERFLOW - 1;
-			if (max_paths / arrows < count)
+			const uint64_t new_count = i->second.size () * count;
+			if (new_count >= MAX_PATHS)
 			{
-				result = PATHS_OVERFLOW;
+				result = MAX_PATHS;
 				break;
 			}
-			const uint32_t n = estimate_paths_count (i->first, arrows * count);
-			if (max_paths - result < n)
+			result += estimate_paths_count (i->first, new_count);
+			if (result >= MAX_PATHS)
 			{
-				result = PATHS_OVERFLOW;
+				result = MAX_PATHS;
 				break;
 			}
-			result += n;
 		}
 		--s->visited;
 		return result;
@@ -171,7 +169,7 @@ void Skeleton::generate_paths (std::vector<Path> & results)
 	std::vector<Path> prefixes;
 	prefixes.push_back (Path (std::vector<uint32_t> (), 0, ~0));
 
-	if (estimate_paths_count (states, 1) == PATHS_OVERFLOW)
+	if (estimate_paths_count (states, 1) == MAX_PATHS)
 	{
 		// set paths for final states and default state
 		// (those with zero outgoing arrows)

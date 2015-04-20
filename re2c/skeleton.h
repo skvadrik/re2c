@@ -76,7 +76,7 @@ struct SkeletonState
 
 struct Skeleton
 {
-	static const uint32_t PATHS_OVERFLOW;
+	static const uint32_t MAX_PATHS;
 	const uint32_t states_count;
 	SkeletonState * states;
 
