@@ -72,20 +72,20 @@ struct SkeletonState
 
 struct Skeleton
 {
-	static const uint MAX_PATHS;
+	static const uint PATHS_OVERFLOW;
 	const uint states_count;
 	SkeletonState * states;
 
 	Skeleton (const DFA & dfa);
 	~Skeleton ();
-	bool estimate_path_count (SkeletonState * s, uint prefixes, uint & result);
+	uint estimate_path_count (SkeletonState * s, uint count);
 	void generate_paths (std::vector<Path> & results);
 	void emit_data (DataFile & o);
 };
 
 void skeleton_emit_prolog (OutputFile & o, uint ind, const char * data_name);
 void skeleton_emit_epilog (OutputFile & o, uint ind);
-void generate (SkeletonState * s, const std::vector<Path> & prefixes, std::vector<Path> & results);
+void generate_cover (SkeletonState * s, const std::vector<Path> & prefixes, std::vector<Path> & results);
 
 } // namespace re2c
 

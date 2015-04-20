@@ -5,7 +5,7 @@
 namespace re2c
 {
 
-const uint Skeleton::MAX_PATHS = 1024 * 1024; // 1Mb
+const uint Skeleton::PATHS_OVERFLOW = 1024 * 1024; // 1Mb
 
 Skeleton::Skeleton (const DFA & dfa)
 	: states_count (dfa.nStates + 1)
@@ -51,31 +51,39 @@ Skeleton::~Skeleton ()
 	delete [] states;
 }
 
-bool Skeleton::estimate_path_count (SkeletonState * s, uint prefixes, uint & result)
+uint Skeleton::estimate_path_count (SkeletonState * s, uint count)
 {
 	if (s->is_end ())
 	{
-		const bool overflow = MAX_PATHS - prefixes < result;
-		if (!overflow)
-		{
-			result += prefixes;
-		}
-		return overflow;
+		return count;
 	}
 	else if (s->visited < 2)
 	{
-		s->visited++;
-		bool overflow = false;
-		for (SkeletonState::go_t::iterator i = s->go.begin (); !overflow && i != s->go.end (); ++i)
+		++s->visited;
+		uint result = 0;
+		for (SkeletonState::go_t::iterator i = s->go.begin (); i != s->go.end (); ++i)
 		{
-			overflow = overflow || estimate_path_count (i->first, i->second.size () * prefixes, result);
+			const uint arrows = i->second.size ();
+			const uint max_paths = PATHS_OVERFLOW - 1;
+			if (max_paths / arrows < count)
+			{
+				result = PATHS_OVERFLOW;
+				break;
+			}
+			const uint n = estimate_path_count (i->first, arrows * count);
+			if (max_paths - result < n)
+			{
+				result = PATHS_OVERFLOW;
+				break;
+			}
+			result += n;
 		}
-		s->visited--;
-		return overflow;
+		--s->visited;
+		return result;
 	}
 	else
 	{
-		return false;
+		return 0;
 	}
 }
 
@@ -140,7 +148,7 @@ void generate_data (DataFile & o, uint ind, SkeletonState * s, const std::vector
 }
 */
 
-void generate (SkeletonState * s, const std::vector<Path> & prefixes, std::vector<Path> & results)
+void generate_cover (SkeletonState * s, const std::vector<Path> & prefixes, std::vector<Path> & results)
 {
 	if (s == NULL)
 	{
@@ -151,8 +159,7 @@ void generate (SkeletonState * s, const std::vector<Path> & prefixes, std::vecto
 	}
 	else if (s->visited < 2)
 	{
-		s->visited++;
-
+		++s->visited;
 		if (s->path != NULL)
 		{
 			std::vector<Path> zs (prefixes);
@@ -160,7 +167,7 @@ void generate (SkeletonState * s, const std::vector<Path> & prefixes, std::vecto
 			{
 				zs[i].append (s->path);
 			}
-			generate (NULL, zs, results);
+			generate_cover (NULL, zs, results);
 		}
 		else
 		{
@@ -178,7 +185,7 @@ void generate (SkeletonState * s, const std::vector<Path> & prefixes, std::vecto
 					zs.push_back (prefixes[in % in_arrows]);
 					zs[j].extend (s->rule, i->second[j]);
 				}
-				generate (i->first, zs, results);
+				generate_cover (i->first, zs, results);
 				if (s->path == NULL && i->first->path != NULL)
 				{
 					s->path = new Path (std::vector<uint> (1, i->second[0]), 0, s->rule);
@@ -186,8 +193,7 @@ void generate (SkeletonState * s, const std::vector<Path> & prefixes, std::vecto
 				}
 			}
 		}
-
-		s->visited--;
+		--s->visited;
 	}
 }
 
@@ -205,7 +211,7 @@ void Skeleton::generate_paths (std::vector<Path> & results)
 	std::vector<Path> prefixes;
 	prefixes.push_back (Path (std::vector<uint> (), 0, ~0));
 
-	generate (states, prefixes, results);
+	generate_cover (states, prefixes, results);
 
 	// cleanup: delete all paths
 	for (uint i = 0; i < states_count; ++i)
@@ -216,8 +222,6 @@ void Skeleton::generate_paths (std::vector<Path> & results)
 
 void Skeleton::emit_data (DataFile & o)
 {
-	uint result = 0;
-	fprintf (stderr, "%d\n", estimate_path_count (states, 1, result));
 	uint ind = 0;
 
 	std::string yyctype;
