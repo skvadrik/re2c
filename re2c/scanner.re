@@ -207,7 +207,7 @@ echo:
 int Scanner::scan()
 {
 	char *cursor = cur;
-	uint depth;
+	uint32_t depth;
 
 scan:
 	tchar = cursor - pos;

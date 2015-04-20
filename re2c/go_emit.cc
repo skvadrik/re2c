@@ -6,7 +6,7 @@
 namespace re2c
 {
 
-std::string space(uint this_label)
+std::string space(uint32_t this_label)
 {
 	int nl = next_label > 999999 ? 6 : next_label > 99999 ? 5 : next_label > 9999 ? 4 : next_label > 999 ? 3 : next_label > 99 ? 2 : next_label > 9 ? 1 : 0;
 	int tl = this_label > 999999 ? 6 : this_label > 99999 ? 5 : this_label > 9999 ? 4 : this_label > 999 ? 3 : this_label > 99 ? 2 : this_label > 9 ? 1 : 0;
@@ -26,14 +26,14 @@ std::string output_yych (bool & readCh)
 	}
 }
 
-void output_if (OutputFile & o, uint ind, bool & readCh, const std::string & compare, uint value)
+void output_if (OutputFile & o, uint32_t ind, bool & readCh, const std::string & compare, uint32_t value)
 {
 	o << indent(ind) << "if (" << output_yych (readCh) << " " << compare << " ";
 	o.write_char_hex (value);
 	o << ") ";
 }
 
-void output_goto (OutputFile & o, uint ind, bool & readCh, uint to)
+void output_goto (OutputFile & o, uint32_t ind, bool & readCh, uint32_t to)
 {
 	if (readCh)
 	{
@@ -43,7 +43,7 @@ void output_goto (OutputFile & o, uint ind, bool & readCh, uint to)
 	o << indent (ind) << "goto " << labelPrefix << to << ";\n";
 }
 
-std::string output_hgo (OutputFile & o, uint ind, bool & readCh, SwitchIf * hgo)
+std::string output_hgo (OutputFile & o, uint32_t ind, bool & readCh, SwitchIf * hgo)
 {
 	std::string yych = output_yych (readCh);
 	if (hgo != NULL)
@@ -60,7 +60,7 @@ std::string output_hgo (OutputFile & o, uint ind, bool & readCh, SwitchIf * hgo)
 	return yych;
 }
 
-uint Span::show (std::ostream & o, uint lb) const
+uint32_t Span::show (std::ostream & o, uint32_t lb) const
 {
 	printSpan(o, lb, ub);
 	o << " ";
@@ -76,18 +76,18 @@ uint Span::show (std::ostream & o, uint lb) const
 	return ub;
 }
 
-void Case::emit (OutputFile & o, uint ind)
+void Case::emit (OutputFile & o, uint32_t ind)
 {
-	for (uint i = 0; i < ranges.size (); ++i)
+	for (uint32_t i = 0; i < ranges.size (); ++i)
 	{
-		for (uint b = ranges[i].first; b < ranges[i].second; ++b)
+		for (uint32_t b = ranges[i].first; b < ranges[i].second; ++b)
 		{
 			o << indent (ind) << "case ";
 			o.write_char_hex (b);
 			o << ":";
 			if (dFlag && encoding.is (Enc::EBCDIC))
 			{
-				const uint c = encoding.decodeUnsafe (b);
+				const uint32_t c = encoding.decodeUnsafe (b);
 				if (isprint (c))
 					o << " /* " << std::string (1, c) << " */";
 			}
@@ -100,10 +100,10 @@ void Case::emit (OutputFile & o, uint ind)
 	}
 }
 
-void Cases::emit (OutputFile & o, uint ind, bool & readCh)
+void Cases::emit (OutputFile & o, uint32_t ind, bool & readCh)
 {
 	o << indent(ind) << "switch (" << output_yych (readCh) << ") {\n";
-	for (uint i = 0; i < cases_size; ++i)
+	for (uint32_t i = 0; i < cases_size; ++i)
 	{
 		if (cases[i].to != def)
 		{
@@ -116,7 +116,7 @@ void Cases::emit (OutputFile & o, uint ind, bool & readCh)
 	o << indent (ind) << "}\n";
 }
 
-void Binary::emit (OutputFile & o, uint ind, bool & readCh)
+void Binary::emit (OutputFile & o, uint32_t ind, bool & readCh)
 {
 	output_if (o, ind, readCh, cond->compare, cond->value);
 	o << "{\n";
@@ -126,9 +126,9 @@ void Binary::emit (OutputFile & o, uint ind, bool & readCh)
 	o << indent (ind) << "}\n";
 }
 
-void Linear::emit (OutputFile & o, uint ind, bool & readCh)
+void Linear::emit (OutputFile & o, uint32_t ind, bool & readCh)
 {
-	for (uint i = 0; i < branches.size (); ++i)
+	for (uint32_t i = 0; i < branches.size (); ++i)
 	{
 		if (branches[i].first != NULL)
 		{
@@ -142,7 +142,7 @@ void Linear::emit (OutputFile & o, uint ind, bool & readCh)
 	}
 }
 
-void If::emit (OutputFile & o, uint ind, bool & readCh)
+void If::emit (OutputFile & o, uint32_t ind, bool & readCh)
 {
 	switch (type)
 	{
@@ -155,7 +155,7 @@ void If::emit (OutputFile & o, uint ind, bool & readCh)
 	}
 }
 
-void SwitchIf::emit (OutputFile & o, uint ind, bool & readCh)
+void SwitchIf::emit (OutputFile & o, uint32_t ind, bool & readCh)
 {
 	switch (type)
 	{
@@ -168,7 +168,7 @@ void SwitchIf::emit (OutputFile & o, uint ind, bool & readCh)
 	}
 }
 
-void Bitmap::emit (OutputFile & o, uint ind, bool & readCh)
+void Bitmap::emit (OutputFile & o, uint32_t ind, bool & readCh)
 {
 	std::string yych = output_hgo (o, ind, readCh, hgo);
 	o << "if (" << mapCodeName["yybm"] << "[" << bitmap->i << "+" << yych << "] & ";
@@ -178,7 +178,7 @@ void Bitmap::emit (OutputFile & o, uint ind, bool & readCh)
 	}
 	else
 	{
-		o << (uint) bitmap->m;
+		o << (uint32_t) bitmap->m;
 	}
 	o << ") {\n";
 	output_goto (o, ind + 1, readCh, bitmap_state->label);
@@ -189,11 +189,11 @@ void Bitmap::emit (OutputFile & o, uint ind, bool & readCh)
 	}
 }
 
-void CpgotoTable::emit (OutputFile & o, uint ind)
+void CpgotoTable::emit (OutputFile & o, uint32_t ind)
 {
 	o << indent (ind) << "static void *" << mapCodeName["yytarget"] << "[256] = {\n";
 	o << indent (++ind);
-	for (uint i = 0; i < TABLE_SIZE; ++i)
+	for (uint32_t i = 0; i < TABLE_SIZE; ++i)
 	{
 		o << "&&" << labelPrefix << table[i]->label;
 		if (i == TABLE_SIZE - 1)
@@ -212,7 +212,7 @@ void CpgotoTable::emit (OutputFile & o, uint ind)
 	o << indent (--ind) << "};\n";
 }
 
-void Cpgoto::emit (OutputFile & o, uint ind, bool & readCh)
+void Cpgoto::emit (OutputFile & o, uint32_t ind, bool & readCh)
 {
 	std::string yych = output_hgo (o, ind, readCh, hgo);
 	o << "{\n";
@@ -223,17 +223,17 @@ void Cpgoto::emit (OutputFile & o, uint ind, bool & readCh)
 
 void Dot::emit (OutputFile & o)
 {
-	const uint n = cases->cases_size;
+	const uint32_t n = cases->cases_size;
 	if (n == 1)
 	{
 		o << from->label << " -> " << cases->cases[0].to->label << "\n";
 	}
 	else
 	{
-		for (uint i = 0; i < n; ++i)
+		for (uint32_t i = 0; i < n; ++i)
 		{
 			o << from->label << " -> " << cases->cases[i].to->label << " [label=\"";
-			for (uint j = 0; j < cases->cases[i].ranges.size (); ++j)
+			for (uint32_t j = 0; j < cases->cases[i].ranges.size (); ++j)
 			{
 				o.write_range (cases->cases[i].ranges[j].first, cases->cases[i].ranges[j].second);
 			}
@@ -242,7 +242,7 @@ void Dot::emit (OutputFile & o)
 	}
 }
 
-void Go::emit (OutputFile & o, uint ind, bool & readCh)
+void Go::emit (OutputFile & o, uint32_t ind, bool & readCh)
 {
 	switch (type)
 	{

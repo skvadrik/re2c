@@ -18,13 +18,13 @@ public:
 	const Go        *go;
 	const State     *on;
 	const BitMap    *next;
-	uint            i;
-	uint            m;
+	uint32_t        i;
+	uint32_t        m;
 
 public:
 	static const BitMap *find(const Go*, const State*);
 	static const BitMap *find(const State*);
-	static void gen(OutputFile &, uint ind, uint, uint);
+	static void gen(OutputFile &, uint32_t ind, uint32_t, uint32_t);
 	BitMap(const Go*, const State*);
 	~BitMap();
 

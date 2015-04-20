@@ -3,7 +3,7 @@
 
 #include <iostream>
 
-#include "basics.h"
+#include "c99_stdint.h"
 #include "free_list.h"
 
 namespace re2c
@@ -13,13 +13,13 @@ class Range
 {
 
 public:
-	Range	*next;
-	uint	lb, ub;		// [lb,ub)
+	Range		*next;
+	uint32_t	lb, ub;	// [lb,ub)
 
 	static free_list<Range*> vFreeList;
 
 public:
-	Range(uint l, uint u) : next(NULL), lb(l), ub(u)
+	Range(uint32_t l, uint32_t u) : next(NULL), lb(l), ub(u)
 	{
 		vFreeList.insert(this);
 	}

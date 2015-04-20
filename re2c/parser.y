@@ -15,7 +15,7 @@
 
 #include "globals.h"
 #include "parser.h"
-#include "basics.h"
+#include "c99_stdint.h"
 #include "dfa.h"
 #include "smart_ptr.h"
 
@@ -30,7 +30,7 @@ int yylex();
 void yyerror(const char*);
 }
 
-static re2c::uint       accept;
+static uint32_t         accept;
 static re2c::RegExpMap  specMap;
 static RegExp           *spec = NULL, *specNone = NULL;
 static RuleOpList       specStar;
@@ -702,7 +702,7 @@ void parse(Scanner& i, Output & o)
 		}
 		if (specMap.size() < ruleSetupMap.size())
 		{
-			uint line = in->get_cline();
+			uint32_t line = in->get_cline();
 			itRuleSetup = ruleSetupMap.find("*");
 			if (itRuleSetup != ruleSetupMap.end())
 			{

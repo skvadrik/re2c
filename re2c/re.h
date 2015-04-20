@@ -31,7 +31,7 @@ ExtOp;
 
 struct CharPtn
 {
-	uint	card;
+	uint32_t	card;
 	CharPtn	*fix;
 	CharPtn	*nxt;
 };
@@ -53,7 +53,7 @@ class RegExp
 {
 
 public:
-	uint	size;
+	uint32_t	size;
 
 	/*
 	 * There're several different cases when the same regexp
@@ -97,8 +97,8 @@ public:
 
 	virtual void split(CharSet&) = 0;
 	virtual void calcSize(Char*) = 0;
-	virtual uint fixedLength();
-	virtual uint compile(Char*, Ins*) = 0;
+	virtual uint32_t fixedLength();
+	virtual uint32_t compile(Char*, Ins*) = 0;
 	virtual void decompile() = 0;
 	virtual void display(std::ostream&) const = 0;
 	friend std::ostream& operator<<(std::ostream&, const RegExp&);
@@ -122,8 +122,8 @@ class NullOp: public RegExp
 public:
 	void split(CharSet&);
 	void calcSize(Char*);
-	uint fixedLength();
-	uint compile(Char*, Ins*);
+	uint32_t fixedLength();
+	uint32_t compile(Char*, Ins*);
 	void decompile();
 	void display(std::ostream &o) const
 	{
@@ -144,8 +144,8 @@ public:
 
 	void split(CharSet&);
 	void calcSize(Char*);
-	uint fixedLength();
-	uint compile(Char*, Ins*);
+	uint32_t fixedLength();
+	uint32_t compile(Char*, Ins*);
 	void decompile();
 	void display(std::ostream&) const;
 
@@ -173,12 +173,12 @@ private:
 public:
 	RegExp   *ctx;
 	Ins      *ins;
-	uint     accept;
+	uint32_t accept;
 	Token    *code;
-	uint     line;
+	uint32_t line;
 
 public:
-	RuleOp(RegExp*, RegExp*, Token*, uint, InsAccess);
+	RuleOp(RegExp*, RegExp*, Token*, uint32_t, InsAccess);
 
 	~RuleOp()
 	{
@@ -187,13 +187,13 @@ public:
 
 	void split(CharSet&);
 	void calcSize(Char*);
-	uint compile(Char*, Ins*);
+	uint32_t compile(Char*, Ins*);
 	void decompile();
 	void display(std::ostream &o) const
 	{
 		o << exp << "/" << ctx << ";";
 	}
-	RuleOp* copy(uint) const;
+	RuleOp* copy(uint32_t) const;
 
 #ifdef PEDANTIC
 private:
@@ -234,8 +234,8 @@ public:
 
 	void split(CharSet&);
 	void calcSize(Char*);
-	uint fixedLength();
-	uint compile(Char*, Ins*);
+	uint32_t fixedLength();
+	uint32_t compile(Char*, Ins*);
 	void decompile();
 	void display(std::ostream &o) const
 	{
@@ -278,8 +278,8 @@ public:
 
 	void split(CharSet&);
 	void calcSize(Char*);
-	uint fixedLength();
-	uint compile(Char*, Ins*);
+	uint32_t fixedLength();
+	uint32_t compile(Char*, Ins*);
 	void decompile();
 	void display(std::ostream &o) const
 	{
@@ -316,7 +316,7 @@ public:
 
 	void split(CharSet&);
 	void calcSize(Char*);
-	uint compile(Char*, Ins*);
+	uint32_t compile(Char*, Ins*);
 	void decompile();
 	void display(std::ostream &o) const
 	{
@@ -357,7 +357,7 @@ public:
 
 	void split(CharSet&);
 	void calcSize(Char*);
-	uint compile(Char*, Ins*);
+	uint32_t compile(Char*, Ins*);
 	void decompile();
 	void display(std::ostream &o) const
 	{
@@ -385,24 +385,24 @@ typedef std::pair<int, RegExp*>         NRegExp;
 typedef std::map<std::string, NRegExp>  RegExpMap;
 typedef std::vector<std::string>        RegExpIndices;
 typedef std::list<RuleOp*>              RuleOpList;
-typedef std::pair<uint, std::string>    LineCode;
+typedef std::pair<uint32_t, std::string>    LineCode;
 typedef std::map<std::string, LineCode> SetupMap;
 typedef std::map<std::string, Token*>   DefaultMap;
 
 class DFA;
 
-extern smart_ptr<DFA> genCode(RegExp*, Output & output, uint ind);
-extern void genCondTable(OutputFile &, uint, const RegExpMap&);
-extern void genCondGoto(OutputFile &, uint, const RegExpMap&);
+extern smart_ptr<DFA> genCode(RegExp*, Output & output, uint32_t ind);
+extern void genCondTable(OutputFile &, uint32_t, const RegExpMap&);
+extern void genCondGoto(OutputFile &, uint32_t, const RegExpMap&);
 extern void genTypes(Output &, const RegExpMap&);
 
-extern void output_state_goto (std::ostream &, uint, uint);
-extern void output_types (std::ostream &, uint, const std::vector<std::string> &);
+extern void output_state_goto (std::ostream &, uint32_t, uint32_t);
+extern void output_types (std::ostream &, uint32_t, const std::vector<std::string> &);
 extern void output_version_time (std::ostream &);
-extern void output_yyaccept_init (std::ostream &, uint, bool);
-extern void output_yyaccept_selector (std::ostream &, uint, bool, uint);
-extern void output_yymaxfill (std::ostream &, uint);
-extern void output_line_info (std::ostream &, uint, const char *);
+extern void output_yyaccept_init (std::ostream &, uint32_t, bool);
+extern void output_yyaccept_selector (std::ostream &, uint32_t, bool, uint32_t);
+extern void output_yymaxfill (std::ostream &, uint32_t);
+extern void output_line_info (std::ostream &, uint32_t, const char *);
 
 extern RegExp *mkDiff(RegExp*, RegExp*);
 extern RegExp *mkAlt(RegExp*, RegExp*);

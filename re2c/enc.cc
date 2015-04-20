@@ -2,11 +2,11 @@
 
 namespace re2c {
 
-const uint Enc::SURR_MIN = 0xD800;
-const uint Enc::SURR_MAX = 0xDFFF;
-const uint Enc::UNICODE_ERROR = 0xFFFD;
+const uint32_t Enc::SURR_MIN = 0xD800;
+const uint32_t Enc::SURR_MAX = 0xDFFF;
+const uint32_t Enc::UNICODE_ERROR = 0xFFFD;
 
-const uint Enc::asc2ebc[256] =
+const uint32_t Enc::asc2ebc[256] =
     { /* Based on ISO 8859/1 and Code Page 37 */
         0x00, 0x01, 0x02, 0x03, 0x37, 0x2d, 0x2e, 0x2f, 0x16, 0x05, 0x25, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f,
         0x10, 0x11, 0x12, 0x13, 0x3c, 0x3d, 0x32, 0x26, 0x18, 0x19, 0x3f, 0x27, 0x1c, 0x1d, 0x1e, 0x1f,
@@ -26,7 +26,7 @@ const uint Enc::asc2ebc[256] =
         0x8c, 0x49, 0xcd, 0xce, 0xcb, 0xcf, 0xcc, 0xe1, 0x70, 0xdd, 0xde, 0xdb, 0xdc, 0x8d, 0xae, 0xdf
     };
 
-const uint Enc::ebc2asc[256] =
+const uint32_t Enc::ebc2asc[256] =
     { /* Based on ISO 8859/1 and Code Page 37 */
         0x00, 0x01, 0x02, 0x03, 0x9c, 0x09, 0x86, 0x7f, 0x97, 0x8d, 0x8e, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f,
         0x10, 0x11, 0x12, 0x13, 0x9d, 0x85, 0x08, 0x87, 0x18, 0x19, 0x92, 0x8f, 0x1c, 0x1d, 0x1e, 0x1f,
@@ -58,7 +58,7 @@ const uint Enc::ebc2asc[256] =
  * by current policy, otherwise returns true.
  * Overwrites code point.
  */
-bool Enc::encode(uint & c) const
+bool Enc::encode(uint32_t & c) const
 {
 	switch (type)
 	{
@@ -95,7 +95,7 @@ bool Enc::encode(uint & c) const
  * Returns original representation of code point.
  * Assumes code point is valid (hence 'unsafe').
  */
-uint Enc::decodeUnsafe(uint c) const
+uint32_t Enc::decodeUnsafe(uint32_t c) const
 {
 	switch (type)
 	{
@@ -124,7 +124,7 @@ uint Enc::decodeUnsafe(uint c) const
  * by current policy, otherwise returns pointer to newly
  * constructed Range.
  */
-Range * Enc::encodeRange(uint l, uint h) const
+Range * Enc::encodeRange(uint32_t l, uint32_t h) const
 {
 	Range * r = NULL;
 	switch (type)
@@ -136,11 +136,11 @@ Range * Enc::encodeRange(uint l, uint h) const
 			break;
 		case EBCDIC:
 		{
-			const uint el = asc2ebc[l & 0xFF];
+			const uint32_t el = asc2ebc[l & 0xFF];
 			r = new Range(el, el + 1);
-			for (uint c = l + 1; c <= h; ++c)
+			for (uint32_t c = l + 1; c <= h; ++c)
 			{
-				const uint ec = asc2ebc[c & 0xFF];
+				const uint32_t ec = asc2ebc[c & 0xFF];
 				r = doUnion(r, new Range(ec, ec + 1));
 			}
 			break;

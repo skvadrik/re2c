@@ -44,7 +44,7 @@ std::string replaceParam(std::string str, const std::string& param, const _Ty& v
 	return str;
 }
 
-static void genYYFill(OutputFile & o, uint, uint need)
+static void genYYFill(OutputFile & o, uint32_t, uint32_t need)
 {
 	if (bUseYYFillParam)
 	{
@@ -90,7 +90,7 @@ static std::string genGetCondition()
 	}
 }
 
-static void genSetCondition(OutputFile & o, uint ind, const std::string& newcond)
+static void genSetCondition(OutputFile & o, uint32_t ind, const std::string& newcond)
 {
 	if (bUseYYSetConditionParam)
 	{
@@ -102,10 +102,10 @@ static void genSetCondition(OutputFile & o, uint ind, const std::string& newcond
 	}
 }
 
-static void doGen(const Go *g, const State *s, uint *bm, uint f, uint m)
+static void doGen(const Go *g, const State *s, uint32_t *bm, uint32_t f, uint32_t m)
 {
 	Span *b = g->span, *e = &b[g->nSpans];
-	uint lb = 0;
+	uint32_t lb = 0;
 
 	for (; b < e; ++b)
 	{
@@ -164,13 +164,13 @@ const BitMap *BitMap::find(const State *x)
 	return NULL;
 }
 
-void BitMap::gen(OutputFile & o, uint ind, uint lb, uint ub)
+void BitMap::gen(OutputFile & o, uint32_t ind, uint32_t lb, uint32_t ub)
 {
 	if (first && bUsedYYBitmap)
 	{
 		o << indent(ind) << "static const unsigned char " << mapCodeName["yybm"] << "[] = {";
 
-		uint c = 1, n = ub - lb;
+		uint32_t c = 1, n = ub - lb;
 		const BitMap *cb = first;
 
 		while((cb = cb->next) != NULL) {
@@ -178,13 +178,13 @@ void BitMap::gen(OutputFile & o, uint ind, uint lb, uint ub)
 		}
 		BitMap *b = first;
 
-		uint *bm = new uint[n];
+		uint32_t *bm = new uint32_t[n];
 		
-		for (uint i = 0, t = 1; b; i += n, t += 8)
+		for (uint32_t i = 0, t = 1; b; i += n, t += 8)
 		{
-			memset(bm, 0, n * sizeof(uint));
+			memset(bm, 0, n * sizeof(uint32_t));
 
-			for (uint m = 0x80; b && m; m >>= 1)
+			for (uint32_t m = 0x80; b && m; m >>= 1)
 			{
 				b->i = i;
 				b->m = m;
@@ -197,7 +197,7 @@ void BitMap::gen(OutputFile & o, uint ind, uint lb, uint ub)
 				o << "\n" << indent(ind+1) << "/* table " << t << " .. " << std::min(c, t+7) << ": " << i << " */";
 			}
 
-			for (uint j = 0; j < n; ++j)
+			for (uint32_t j = 0; j < n; ++j)
 			{
 				if (j % 8 == 0)
 				{
@@ -210,7 +210,7 @@ void BitMap::gen(OutputFile & o, uint ind, uint lb, uint ub)
 				}
 				else
 				{
-					o.write_uint_width (bm[j], 3);
+					o.write_uint32_t_width (bm[j], 3);
 				}
 				o  << ", ";
 			}
@@ -222,7 +222,7 @@ void BitMap::gen(OutputFile & o, uint ind, uint lb, uint ub)
 	}
 }
 
-static void genGoTo(OutputFile & o, uint ind, const State *from, const State *to, bool & readCh)
+static void genGoTo(OutputFile & o, uint32_t ind, const State *from, const State *to, bool & readCh)
 {
 	if (DFlag)
 	{
@@ -240,14 +240,14 @@ static void genGoTo(OutputFile & o, uint ind, const State *from, const State *to
 	vUsedLabels.insert(to->label);
 }
 
-static void need(OutputFile & o, uint ind, uint n, bool & readCh, bool bSetMarker)
+static void need(OutputFile & o, uint32_t ind, uint32_t n, bool & readCh, bool bSetMarker)
 {
 	if (DFlag)
 	{
 		return;
 	}
 
-	uint fillIndex = next_fill_index;
+	uint32_t fillIndex = next_fill_index;
 
 	if (fFlag)
 	{
@@ -302,7 +302,7 @@ static void need(OutputFile & o, uint ind, uint n, bool & readCh, bool bSetMarke
 	}
 }
 
-void Match::emit(Output & output, uint ind, bool &readCh, const std::string&) const
+void Match::emit(Output & output, uint32_t ind, bool &readCh, const std::string&) const
 {
 	OutputFile & o = output.source;
 
@@ -333,7 +333,7 @@ void Match::emit(Output & output, uint ind, bool &readCh, const std::string&) co
 	}
 }
 
-void Initial::emit(Output & output, uint ind, bool &readCh, const std::string&) const
+void Initial::emit(Output & output, uint32_t ind, bool &readCh, const std::string&) const
 {
 	OutputFile & o = output.source;
 
@@ -382,7 +382,7 @@ void Initial::emit(Output & output, uint ind, bool &readCh, const std::string&) 
 	}
 }
 
-void Save::emit(Output & output, uint ind, bool &readCh, const std::string&) const
+void Save::emit(Output & output, uint32_t ind, bool &readCh, const std::string&) const
 {
 	OutputFile & o = output.source;
 
@@ -415,14 +415,14 @@ void Save::emit(Output & output, uint ind, bool &readCh, const std::string&) con
 	}
 }
 
-void Move::emit(Output &, uint, bool &, const std::string&) const
+void Move::emit(Output &, uint32_t, bool &, const std::string&) const
 {
 	;
 }
 
 void Accept::genRuleMap()
 {
-	for (uint i = 0; i < nRules; ++i)
+	for (uint32_t i = 0; i < nRules; ++i)
 	{
 		if (saves[i] != ~0u)
 		{
@@ -431,11 +431,11 @@ void Accept::genRuleMap()
 	}
 }
 
-void Accept::emitBinary(OutputFile & o, uint ind, uint l, uint r, bool &readCh) const
+void Accept::emitBinary(OutputFile & o, uint32_t ind, uint32_t l, uint32_t r, bool &readCh) const
 {
 	if (l < r)
 	{
-		uint m = (l + r) >> 1;
+		uint32_t m = (l + r) >> 1;
 
 		o << indent(ind) << "if (" << mapCodeName["yyaccept"] << (r == l+1 ? " == " : " <= ") << m << ") {\n";
 		emitBinary(o, ++ind, l, m, readCh);
@@ -449,7 +449,7 @@ void Accept::emitBinary(OutputFile & o, uint ind, uint l, uint r, bool &readCh) 
 	}
 }
 
-void Accept::emit(Output & output, uint ind, bool &readCh, const std::string &) const
+void Accept::emit(Output & output, uint32_t ind, bool &readCh, const std::string &) const
 {
 	OutputFile & o = output.source;
 
@@ -529,7 +529,7 @@ void Accept::emit(Output & output, uint ind, bool &readCh, const std::string &) 
 	}
 }
 
-void Rule::emit(Output & output, uint ind, bool &, const std::string& condName) const
+void Rule::emit(Output & output, uint32_t ind, bool &, const std::string& condName) const
 {
 	OutputFile & o = output.source;
 
@@ -539,7 +539,7 @@ void Rule::emit(Output & output, uint ind, bool &, const std::string& condName) 
 		return;
 	}
 
-	uint back = rule->ctx->fixedLength();
+	uint32_t back = rule->ctx->fixedLength();
 
 	if (back != 0u && !DFlag)
 	{
@@ -579,7 +579,7 @@ void Rule::emit(Output & output, uint ind, bool &, const std::string& condName) 
 	o.insert_line_info ();
 }
 
-void State::emit(Output & output, uint ind, bool &readCh, const std::string& condName) const
+void State::emit(Output & output, uint32_t ind, bool &readCh, const std::string& condName) const
 {
 	OutputFile & o = output.source;
 
@@ -598,10 +598,10 @@ void State::emit(Output & output, uint ind, bool &readCh, const std::string& con
 	action->emit(output, ind, readCh, condName);
 }
 
-static uint merge(Span *x0, State *fg, State *bg)
+static uint32_t merge(Span *x0, State *fg, State *bg)
 {
 	Span *x = x0, *f = fg->go.span, *b = bg->go.span;
-	uint nf = fg->go.nSpans, nb = bg->go.nSpans;
+	uint32_t nf = fg->go.nSpans, nb = bg->go.nSpans;
 	State *prev = NULL, *to;
 	// NB: we assume both spans are for same range
 
@@ -673,7 +673,7 @@ static uint merge(Span *x0, State *fg, State *bg)
 	}
 }
 
-static const uint cInfinity = ~0u;
+static const uint32_t cInfinity = ~0u;
 
 class SCC
 {
@@ -682,7 +682,7 @@ public:
 	State	**top, **stk;
 
 public:
-	SCC(uint);
+	SCC(uint32_t);
 	~SCC();
 	void traverse(State*);
 
@@ -701,7 +701,7 @@ private:
 #endif
 };
 
-SCC::SCC(uint size)
+SCC::SCC(uint32_t size)
 	: top(new State * [size])
 	, stk(top)
 {
@@ -715,10 +715,10 @@ SCC::~SCC()
 void SCC::traverse(State *x)
 {
 	*top = x;
-	uint k = ++top - stk;
+	uint32_t k = ++top - stk;
 	x->depth = k;
 
-	for (uint i = 0; i < x->go.nSpans; ++i)
+	for (uint32_t i = 0; i < x->go.nSpans; ++i)
 	{
 		State *y = x->go.span[i].to;
 
@@ -761,7 +761,7 @@ static bool state_is_in_non_trivial_SCC(const State* s)
 	// Note: (s->go.spans[i].to == s) is allowed, corresponds to s
 	// looping back to itself.
 	//
-	for (uint i = 0; i < s->go.nSpans; ++i)
+	for (uint32_t i = 0; i < s->go.nSpans; ++i)
 	{
 		const State* t = s->go.span[i].to;
 	
@@ -774,22 +774,22 @@ static bool state_is_in_non_trivial_SCC(const State* s)
 	return false;
 }
 
-static uint maxDist(State *s)
+static uint32_t maxDist(State *s)
 {
 	if (s->depth != cInfinity)
 	{
 		// Already calculated, just return result.
     	return s->depth;
 	}
-	uint mm = 0;
+	uint32_t mm = 0;
 
-	for (uint i = 0; i < s->go.nSpans; ++i)
+	for (uint32_t i = 0; i < s->go.nSpans; ++i)
 	{
 		State *t = s->go.span[i].to;
 
 		if (t)
 		{
-			uint m = 1;
+			uint32_t m = 1;
 
 			if (!t->link) // marked as non-key state
 			{
@@ -883,14 +883,14 @@ void DFA::findBaseState()
 	{
 		if (!s->link)
 		{
-			for (uint i = 0; i < s->go.nSpans; ++i)
+			for (uint32_t i = 0; i < s->go.nSpans; ++i)
 			{
 				State *to = s->go.span[i].to;
 
 				if (to->isBase)
 				{
 					to = to->go.span[0].to;
-					uint nSpans = merge(span, s, to);
+					uint32_t nSpans = merge(span, s, to);
 
 					if (nSpans < s->go.nSpans)
 					{
@@ -909,17 +909,17 @@ void DFA::findBaseState()
 	delete [] span;
 }
 
-void DFA::prepare(uint & max_fill)
+void DFA::prepare(uint32_t & max_fill)
 {
 	State *s;
-	uint i;
+	uint32_t i;
 
 	bUsedYYBitmap = false;
 
 	findSCCs();
 	head->link = head;
 
-	uint nRules = 0;
+	uint32_t nRules = 0;
 
 	for (s = head; s; s = s->next)
 	{
@@ -934,8 +934,8 @@ void DFA::prepare(uint & max_fill)
 		}
 	}
 
-	uint nSaves = 0;
-	saves = new uint[nRules];
+	uint32_t nSaves = 0;
+	saves = new uint32_t[nRules];
 	memset(saves, ~0, (nRules)*sizeof(*saves));
 
 	// mark backtracking points
@@ -1052,7 +1052,7 @@ void DFA::prepare(uint & max_fill)
 	}
 }
 
-void DFA::emit(Output & output, uint& ind, const RegExpMap* specMap, const std::string& condName, bool isLastCond, bool& bPrologBrace)
+void DFA::emit(Output & output, uint32_t& ind, const RegExpMap* specMap, const std::string& condName, bool isLastCond, bool& bPrologBrace)
 {
 	OutputFile & o = output.source;
 
@@ -1064,13 +1064,13 @@ void DFA::emit(Output & output, uint& ind, const RegExpMap* specMap, const std::
 	// start_label corresponds to current condition.
 	// NOTE: prolog_label must be yy0 because of the !getstate:re2c handling
 	// in scanner.re
-	uint prolog_label = next_label;
+	uint32_t prolog_label = next_label;
 	if (bProlog && cFlag)
 	{
 		next_label++;
 	}
 
-	uint start_label = next_label;
+	uint32_t start_label = next_label;
 
 	(void) new Initial(head, next_label++, bSaveOnHead);
 
@@ -1096,7 +1096,7 @@ void DFA::emit(Output & output, uint& ind, const RegExpMap* specMap, const std::
 
 	// Save 'next_fill_index' and compute information about code generation
 	// while writing to null device.
-	uint save_fill_index = next_fill_index;
+	uint32_t save_fill_index = next_fill_index;
 	Output null_dev (NULL, NULL);
 
 	for (s = head; s; s = s->next)
@@ -1233,7 +1233,7 @@ void DFA::emit(Output & output, uint& ind, const RegExpMap* specMap, const std::
 	bUseStartLabel = false;
 }
 
-static void output_state_goto_sub (std::ostream & o, uint ind, uint start_label, int cMin, int cMax)
+static void output_state_goto_sub (std::ostream & o, uint32_t ind, uint32_t start_label, int cMin, int cMax)
 {
 	if (cMin == cMax)
 	{
@@ -1258,7 +1258,7 @@ static void output_state_goto_sub (std::ostream & o, uint ind, uint start_label,
 	}
 }
 
-void output_state_goto (std::ostream & o, uint ind, uint start_label)
+void output_state_goto (std::ostream & o, uint32_t ind, uint32_t start_label)
 {
 	if (gFlag)
 	{
@@ -1326,7 +1326,7 @@ void output_state_goto (std::ostream & o, uint ind, uint start_label)
 	}
 }
 
-void genCondTable(OutputFile & o, uint ind, const RegExpMap& specMap)
+void genCondTable(OutputFile & o, uint32_t ind, const RegExpMap& specMap)
 {
 	if (cFlag && !bWroteCondCheck && gFlag && specMap.size())
 	{
@@ -1347,7 +1347,7 @@ void genCondTable(OutputFile & o, uint ind, const RegExpMap& specMap)
 	}
 }
 
-static void genCondGotoSub(OutputFile & o, uint ind, RegExpIndices& vCondList, uint cMin, uint cMax)
+static void genCondGotoSub(OutputFile & o, uint32_t ind, RegExpIndices& vCondList, uint32_t cMin, uint32_t cMax)
 {
 	if (cMin == cMax)
 	{
@@ -1355,7 +1355,7 @@ static void genCondGotoSub(OutputFile & o, uint ind, RegExpIndices& vCondList, u
 	}
 	else
 	{
-		uint cMid = cMin + ((cMax - cMin + 1) / 2);
+		uint32_t cMid = cMin + ((cMax - cMin + 1) / 2);
 
 		o << indent(ind) << "if (" << genGetCondition() << " < " << cMid << ") {\n";
 		genCondGotoSub(o, ind + 1, vCondList, cMin, cMid - 1);
@@ -1365,7 +1365,7 @@ static void genCondGotoSub(OutputFile & o, uint ind, RegExpIndices& vCondList, u
 	}
 }
 
-void genCondGoto(OutputFile & o, uint ind, const RegExpMap& specMap)
+void genCondGoto(OutputFile & o, uint32_t ind, const RegExpMap& specMap)
 {
 	if (cFlag && !bWroteCondCheck && specMap.size())
 	{
@@ -1418,7 +1418,7 @@ void genTypes(Output & output, const RegExpMap& specMap)
 	}
 }
 
-void output_yyaccept_init (std::ostream & o, uint ind, bool used_yyaccept)
+void output_yyaccept_init (std::ostream & o, uint32_t ind, bool used_yyaccept)
 {
 	if (used_yyaccept)
 	{
@@ -1426,7 +1426,7 @@ void output_yyaccept_init (std::ostream & o, uint ind, bool used_yyaccept)
 	}
 }
 
-void output_yyaccept_selector (std::ostream & o, uint ind, bool used_yyaccept, uint yyaccept_selector)
+void output_yyaccept_selector (std::ostream & o, uint32_t ind, bool used_yyaccept, uint32_t yyaccept_selector)
 {
 	if (used_yyaccept)
 	{
@@ -1434,12 +1434,12 @@ void output_yyaccept_selector (std::ostream & o, uint ind, bool used_yyaccept, u
 	}
 }
 
-void output_yymaxfill (std::ostream & o, uint max_fill)
+void output_yymaxfill (std::ostream & o, uint32_t max_fill)
 {
 	o << "#define YYMAXFILL " << max_fill << "\n";
 }
 
-void output_line_info (std::ostream & o, uint line_number, const char * file_name)
+void output_line_info (std::ostream & o, uint32_t line_number, const char * file_name)
 {
 	if (!iFlag)
 	{
@@ -1447,7 +1447,7 @@ void output_line_info (std::ostream & o, uint line_number, const char * file_nam
 	}
 }
 
-void output_types (std::ostream & o, uint ind, const std::vector<std::string> & types)
+void output_types (std::ostream & o, uint32_t ind, const std::vector<std::string> & types)
 {
 	o << indent (ind++) << "enum " << mapCodeName["YYCONDTYPE"] << " {\n";
 	for (unsigned int i = 0; i < types.size (); ++i)
@@ -1747,11 +1747,11 @@ Scanner::Scanner (Input & i, OutputFile & o)
 	, out (o)
 {}
 
-char *Scanner::fill(char *cursor, uint need)
+char *Scanner::fill(char *cursor, uint32_t need)
 {
 	if(!eof)
 	{
-		uint cnt;
+		uint32_t cnt;
 		/* Do not get rid of anything when rFlag is active. Otherwise
 		 * get rid of everything that was already handedout. */
 		if (!rFlag)
@@ -1774,7 +1774,7 @@ char *Scanner::fill(char *cursor, uint need)
 		{
 			need = BSIZE;
 		}
-		if (static_cast<uint>(top - lim) < need)
+		if (static_cast<uint32_t>(top - lim) < need)
 		{
 			char *buf = new char[(lim - bot) + need];
 			if (!buf)
@@ -1810,7 +1810,7 @@ void Scanner::set_in_parse(bool new_in_parse)
 	in_parse = new_in_parse;
 }
 
-void Scanner::fatal_at(uint line, uint ofs, const char *msg) const
+void Scanner::fatal_at(uint32_t line, uint32_t ofs, const char *msg) const
 {
 	std::cerr << "re2c: error: "
 		<< "line " << line << ", column " << (tchar + ofs + 1) << ": "
@@ -1818,12 +1818,12 @@ void Scanner::fatal_at(uint line, uint ofs, const char *msg) const
 	exit(1);
 }
 
-void Scanner::fatal(uint ofs, const char *msg) const
+void Scanner::fatal(uint32_t ofs, const char *msg) const
 {
 	fatal_at(in_parse ? tline : cline, ofs, msg);
 }
 
-void Scanner::fatalf_at(uint line, const char* fmt, ...) const
+void Scanner::fatalf_at(uint32_t line, const char* fmt, ...) const
 {
 	char szBuf[4096];
 
@@ -1861,7 +1861,7 @@ Scanner::~Scanner()
 	}
 }
 
-void Scanner::check_token_length(char *pos, uint len) const
+void Scanner::check_token_length(char *pos, uint32_t len) const
 {
 	if (pos < bot || pos + len > top)
 	{

@@ -3,7 +3,7 @@
 
 #include <stddef.h> // NULL
 
-#include "basics.h"
+#include "c99_stdint.h"
 #include "free_list.h"
 
 namespace re2c {
@@ -15,12 +15,12 @@ class RangeSuffix
 	static free_list<RangeSuffix *> freeList;
 
 public:
-	uint l;
-	uint h;
+	uint32_t l;
+	uint32_t h;
 	RangeSuffix * next;
 	RangeSuffix * child;
 
-	RangeSuffix (uint lo, uint hi)
+	RangeSuffix (uint32_t lo, uint32_t hi)
 		: l     (lo)
 		, h     (hi)
 		, next  (NULL)

@@ -6,7 +6,7 @@ re2c_SOURCES = code.cc code_names.cc dfa.cc go_construct.cc go_destruct.cc go_em
 	main.cc parser.cc actions.cc scanner.re substr.cc range.cc \
 	translate.cc scanner.cc skeleton.cc mbo_getopt.cc print.cc input.cc input_api.cc output.cc \
 	enc.cc utf8.cc utf8_range.cc utf8_regexp.cc utf16.cc utf16_range.cc utf16_regexp.cc range_suffix.cc \
-	basics.h code.h code_names.h dfa.h go.h enc.h indent.h input.h input_api.h free_list.h globals.h ins.h \
+	code.h code_names.h dfa.h go.h enc.h indent.h input.h input_api.h free_list.h globals.h ins.h \
 	mbo_getopt.h parser.h print.h range.h range_suffix.h re.h \
 	scanner.h skeleton.h smart_ptr.h substr.h token.h output.h \
 	utf16.h utf16_range.h utf16_regexp.h utf8.h utf8_range.h utf8_regexp.h

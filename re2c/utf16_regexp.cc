@@ -10,8 +10,8 @@ RegExp * UTF16Symbol(utf16::rune r)
 		return new MatchOp(new Range(r, r + 1));
 	else
 	{
-		const ushort ld = utf16::lead_surr(r);
-		const ushort tr = utf16::trail_surr(r);
+		const uint16_t ld = utf16::lead_surr(r);
+		const uint16_t tr = utf16::trail_surr(r);
 		return new CatOp(new MatchOp(new Range(ld, ld + 1)), new MatchOp(new Range(tr, tr + 1)));
 	}
 }

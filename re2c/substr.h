@@ -5,7 +5,14 @@
 #include <iostream>
 #include <string>
 #include <string.h>
-#include "basics.h"
+
+#include "c99_stdint.h"
+
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#elif defined(_WIN32)
+#include "config_w32.h"
+#endif
 
 namespace re2c
 {
@@ -15,18 +22,18 @@ class SubStr
 public:
 	const char * str;
 	const char * const org;
-	uint         len;
+	uint32_t len;
 
 public:
 	friend bool operator==(const SubStr &, const SubStr &);
-	SubStr(const uchar*, uint);
-	SubStr(const char*, uint);
+	SubStr(const uint8_t *, uint32_t);
+	SubStr(const char*, uint32_t);
 	explicit SubStr(const char*);
 	SubStr(const SubStr&);
 	virtual ~SubStr();
 	void out(std::ostream&) const;
 	std::string to_string() const;
-	uint ofs() const;
+	uint32_t ofs() const;
 
 #ifdef PEDANTIC
 protected:
@@ -54,11 +61,11 @@ inline std::ostream& operator<<(std::ostream& o, const SubStr* s)
 	return o << *s;
 }
 
-inline SubStr::SubStr(const uchar *s, uint l)
+inline SubStr::SubStr(const uint8_t *s, uint32_t l)
 		: str((char*)s), org((char*)s), len(l)
 { }
 
-inline SubStr::SubStr(const char *s, uint l)
+inline SubStr::SubStr(const char *s, uint32_t l)
 		: str(s), org(s), len(l)
 { }
 
@@ -78,7 +85,7 @@ inline std::string SubStr::to_string() const
 	return str && len ? std::string(str, len) : std::string();
 }
 
-inline uint SubStr::ofs() const
+inline uint32_t SubStr::ofs() const
 {
 	return str - org;
 }

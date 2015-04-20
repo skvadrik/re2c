@@ -1,14 +1,14 @@
 #ifndef _re2c_utf8_h
 #define _re2c_utf8_h
 
-#include "basics.h"
+#include "c99_stdint.h"
 
 namespace re2c {
 
 class utf8
 {
 public:
-	typedef uint rune;
+	typedef uint32_t rune;
 
 	enum	{ MAX_RUNE_LENGTH = 4 /* maximum characters per rune */
 
@@ -32,13 +32,13 @@ public:
 		};
 
 	/* UTF-8 bytestring for given Unicode rune */
-	static uint rune_to_bytes(uchar * s, rune r);
+	static uint32_t rune_to_bytes(uint8_t * s, rune r);
 
 	/* length of UTF-8 bytestring for given Unicode rune */
-	static uint rune_length(rune r);
+	static uint32_t rune_length(rune r);
 
 	/* maximal Unicode rune with given length of UTF-8 bytestring */
-	static rune max_rune(uint i);
+	static rune max_rune(uint32_t i);
 };
 
 }  // namespace re2c

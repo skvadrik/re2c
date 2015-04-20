@@ -6,7 +6,7 @@ namespace re2c
 
 void Cases::used_labels ()
 {
-	for (uint i = 0; i < cases_size; ++i)
+	for (uint32_t i = 0; i < cases_size; ++i)
 	{
 		vUsedLabels.insert (cases[i].to->label);
 	}
@@ -20,7 +20,7 @@ void Binary::used_labels ()
 
 void Linear::used_labels ()
 {
-	for (uint i = 0; i < branches.size (); ++i)
+	for (uint32_t i = 0; i < branches.size (); ++i)
 	{
 		vUsedLabels.insert (branches[i].second->label);
 	}
@@ -67,7 +67,7 @@ void Bitmap::used_labels ()
 
 void CpgotoTable::used_labels ()
 {
-	for (uint i = 0; i < TABLE_SIZE; ++i)
+	for (uint32_t i = 0; i < TABLE_SIZE; ++i)
 	{
 		vUsedLabels.insert (table[i]->label);
 	}

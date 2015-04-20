@@ -35,7 +35,7 @@ public:
 	Action(State*);
 	virtual ~Action();
 
-	virtual void emit(Output &, uint, bool&, const std::string&) const = 0;
+	virtual void emit(Output &, uint32_t, bool&, const std::string&) const = 0;
 	virtual bool readAhead() const;
 
 #ifdef PEDANTIC
@@ -58,29 +58,29 @@ class Match: public Action
 {
 public:
 	Match(State*);
-	void emit(Output &, uint, bool&, const std::string&) const;
+	void emit(Output &, uint32_t, bool&, const std::string&) const;
 };
 
 class Initial: public Action
 {
 public:
-	uint	label;
+	uint32_t	label;
 	bool setMarker;
 
 public:
-	Initial(State*, uint, bool);
-	void emit(Output &, uint, bool&, const std::string&) const;
+	Initial(State*, uint32_t, bool);
+	void emit(Output &, uint32_t, bool&, const std::string&) const;
 };
 
 class Save: public Match
 {
 
 public:
-	uint	selector;
+	uint32_t	selector;
 
 public:
-	Save(State*, uint);
-	void emit(Output &, uint, bool&, const std::string&) const;
+	Save(State*, uint32_t);
+	void emit(Output &, uint32_t, bool&, const std::string&) const;
 };
 
 class Move: public Action
@@ -88,24 +88,24 @@ class Move: public Action
 
 public:
 	Move(State*);
-	void emit(Output &, uint, bool&, const std::string&) const;
+	void emit(Output &, uint32_t, bool&, const std::string&) const;
 };
 
 class Accept: public Action
 {
 
 public:
-	typedef std::map<uint, State*> RuleMap;
+	typedef std::map<uint32_t, State*> RuleMap;
 
-	uint	nRules;
-	uint	*saves;
+	uint32_t	nRules;
+	uint32_t	*saves;
 	State	**rules;
 	RuleMap mapRules;
 
 public:
-	Accept(State*, uint, uint*, State**);
-	void emit(Output &, uint, bool&, const std::string&) const;
-	void emitBinary(OutputFile & o, uint ind, uint l, uint r, bool &readCh) const;
+	Accept(State*, uint32_t, uint32_t*, State**);
+	void emit(Output &, uint32_t, bool&, const std::string&) const;
+	void emitBinary(OutputFile & o, uint32_t ind, uint32_t l, uint32_t r, bool &readCh) const;
 	void genRuleMap();
 
 #ifdef PEDANTIC
@@ -133,7 +133,7 @@ public:
 
 public:
 	Rule(State*, RuleOp*);
-	void emit(Output &, uint, bool&, const std::string&) const;
+	void emit(Output &, uint32_t, bool&, const std::string&) const;
 
 #ifdef PEDANTIC
 private:
@@ -154,12 +154,12 @@ class State
 {
 
 public:
-	uint	label;
+	uint32_t	label;
 	RuleOp	*rule;
 	State	*next;
 	State	*link;
-	uint	depth;		// for finding SCCs
-	uint	kCount;
+	uint32_t	depth;		// for finding SCCs
+	uint32_t	kCount;
 	Ins 	**kernel;
 
 	bool    isPreCtxt;
@@ -170,7 +170,7 @@ public:
 public:
 	State();
 	~State();
-	void emit(Output &, uint, bool&, const std::string&) const;
+	void emit(Output &, uint32_t, bool&, const std::string&) const;
 	friend std::ostream& operator<<(std::ostream&, const State&);
 	friend std::ostream& operator<<(std::ostream&, const State*);
 
@@ -201,9 +201,9 @@ class DFA
 {
 
 public:
-	uint	lbChar;
-	uint	ubChar;
-	uint	nStates;
+	uint32_t	lbChar;
+	uint32_t	ubChar;
+	uint32_t	nStates;
 	State	*head, **tail;
 	State	*toDo;
 	const Ins     *free_ins;
@@ -211,20 +211,20 @@ public:
 
 protected:
 	bool    bSaveOnHead;
-	uint    *saves;
+	uint32_t    *saves;
 	State   **rules;
 
 public:
-	DFA(Ins*, uint, uint, uint, const Char*);
+	DFA(Ins*, uint32_t, uint32_t, uint32_t, const Char*);
 	~DFA();
 	void addState(State**, State*);
-	State *findState(Ins**, uint);
+	State *findState(Ins**, uint32_t);
 	void split(State*);
 
 	void findSCCs();
 	void findBaseState();
-	void prepare(uint &);
-	void emit(Output &, uint&, const RegExpMap*, const std::string&, bool, bool&);
+	void prepare(uint32_t &);
+	void emit(Output &, uint32_t&, const RegExpMap*, const std::string&, bool, bool&);
 
 	friend std::ostream& operator<<(std::ostream&, const DFA&);
 	friend std::ostream& operator<<(std::ostream&, const DFA*);
@@ -267,12 +267,12 @@ inline Match::Match(State *s) : Action(s)
 	type = MATCH;
 }
 
-inline Initial::Initial(State *s, uint l, bool b) : Action(s), label(l), setMarker(b)
+inline Initial::Initial(State *s, uint32_t l, bool b) : Action(s), label(l), setMarker(b)
 {
 	type = INITIAL;
 }
 
-inline Save::Save(State *s, uint i) : Match(s), selector(i)
+inline Save::Save(State *s, uint32_t i) : Match(s), selector(i)
 {
 	type = SAVE;
 }
@@ -282,7 +282,7 @@ inline Move::Move(State *s) : Action(s)
 	type = MOVE;
 }
 
-inline Accept::Accept(State *x, uint n, uint *s, State **r)
+inline Accept::Accept(State *x, uint32_t n, uint32_t *s, State **r)
 		: Action(x), nRules(n), saves(s), rules(r)
 {
 	type = ACCEPT;

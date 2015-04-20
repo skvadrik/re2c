@@ -18,7 +18,7 @@ Binary::~Binary ()
 
 Linear::~Linear ()
 {
-	for (uint i = 0; i < branches.size (); ++i)
+	for (uint32_t i = 0; i < branches.size (); ++i)
 	{
 		delete branches[i].first;
 	}

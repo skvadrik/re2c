@@ -82,12 +82,12 @@ const Ins* showIns(std::ostream &o, const Ins &i, const Ins &base)
 	return ret;
 }
 
-uint RegExp::fixedLength()
+uint32_t RegExp::fixedLength()
 {
 	return ~0u;
 }
 
-uint compile_goto(Ins *ins, Ins *i)
+uint32_t compile_goto(Ins *ins, Ins *i)
 {
 	i->i.tag = GOTO;
 	i->i.link = ins;
@@ -99,12 +99,12 @@ void NullOp::calcSize(Char*)
 	size = 0;
 }
 
-uint NullOp::fixedLength()
+uint32_t NullOp::fixedLength()
 {
 	return 0;
 }
 
-uint NullOp::compile(Char*, Ins*)
+uint32_t NullOp::compile(Char*, Ins*)
 {
 	return 0;
 }
@@ -145,17 +145,17 @@ void MatchOp::calcSize(Char *rep)
 	size = 1;
 
 	for (Range *r = match; r; r = r->next)
-		for (uint c = r->lb; c < r->ub; ++c)
+		for (uint32_t c = r->lb; c < r->ub; ++c)
 			if (rep[c] == c)
 				++size;
 }
 
-uint MatchOp::fixedLength()
+uint32_t MatchOp::fixedLength()
 {
 	return 1;
 }
 
-uint MatchOp::compile(Char *rep, Ins *i)
+uint32_t MatchOp::compile(Char *rep, Ins *i)
 {
 	if (ins_cache)
 		return compile_goto(ins_cache, i);
@@ -166,11 +166,11 @@ uint MatchOp::compile(Char *rep, Ins *i)
 		i->i.tag = CHAR;
 		i->i.link = &i[size];
 		Ins *j = &i[1];
-		uint bump = size;
+		uint32_t bump = size;
 
 		for (Range *r = match; r; r = r->next)
 		{
-			for (uint c = r->lb; c < r->ub; ++c)
+			for (uint32_t c = r->lb; c < r->ub; ++c)
 			{
 				if (rep[c] == c)
 				{
@@ -197,7 +197,7 @@ void MatchOp::split(CharSet &s)
 {
 	for (Range *r = match; r; r = r->next)
 	{
-		for (uint c = r->lb; c < r->ub; ++c)
+		for (uint32_t c = r->lb; c < r->ub; ++c)
 		{
 			CharPtn *x = s.rep[c], *a = x->nxt;
 
@@ -319,10 +319,10 @@ void AltOp::calcSize(Char *rep)
 	size = exp1->size + exp2->size + 2;
 }
 
-uint AltOp::fixedLength()
+uint32_t AltOp::fixedLength()
 {
-	uint l1 = exp1->fixedLength();
-	uint l2 = exp1->fixedLength();
+	uint32_t l1 = exp1->fixedLength();
+	uint32_t l2 = exp1->fixedLength();
 
 	if (l1 != l2 || l1 == ~0u)
 		return ~0u;
@@ -330,7 +330,7 @@ uint AltOp::fixedLength()
 	return l1;
 }
 
-uint AltOp::compile(Char *rep, Ins *i)
+uint32_t AltOp::compile(Char *rep, Ins *i)
 {
 	if (ins_cache)
 		return compile_goto(ins_cache, i);
@@ -339,11 +339,11 @@ uint AltOp::compile(Char *rep, Ins *i)
 		ins_cache = i;
 
 		i->i.tag = FORK;
-		const uint sz1 = exp1->compile(rep, &i[1]);
+		const uint32_t sz1 = exp1->compile(rep, &i[1]);
 		Ins * const j = &i[sz1 + 1];
 		i->i.link = &j[1];
 		j->i.tag = GOTO;
-		const uint sz2 = exp2->compile(rep, &j[1]);
+		const uint32_t sz2 = exp2->compile(rep, &j[1]);
 		j->i.link = &j[sz2 + 1];
 
 		if (ins_access == PRIVATE)
@@ -376,9 +376,9 @@ void CatOp::calcSize(Char *rep)
 	size = exp1->size + exp2->size;
 }
 
-uint CatOp::fixedLength()
+uint32_t CatOp::fixedLength()
 {
-	uint l1, l2;
+	uint32_t l1, l2;
 
 	if ((l1 = exp1->fixedLength()) != ~0u )
 		if ((l2 = exp2->fixedLength()) != ~0u)
@@ -387,7 +387,7 @@ uint CatOp::fixedLength()
 	return ~0u;
 }
 
-uint CatOp::compile(Char *rep, Ins *i)
+uint32_t CatOp::compile(Char *rep, Ins *i)
 {
 	if (ins_cache)
 		return compile_goto(ins_cache, i);
@@ -395,8 +395,8 @@ uint CatOp::compile(Char *rep, Ins *i)
 	{
 		ins_cache = i;
 
-		const uint sz1 = exp1->compile(rep, &i[0]);
-		const uint sz2 = exp2->compile(rep, &i[sz1]);
+		const uint32_t sz1 = exp1->compile(rep, &i[0]);
+		const uint32_t sz2 = exp2->compile(rep, &i[sz1]);
 
 		if (ins_access == PRIVATE)
 			decompile();
@@ -427,7 +427,7 @@ void CloseOp::calcSize(Char *rep)
 	size = exp->size + 1;
 }
 
-uint CloseOp::compile(Char *rep, Ins *i)
+uint32_t CloseOp::compile(Char *rep, Ins *i)
 {
 	if (ins_cache)
 		return compile_goto(ins_cache, i);
@@ -440,7 +440,7 @@ uint CloseOp::compile(Char *rep, Ins *i)
 		i->i.link = ins_cache;
 		++i;
 
-		const uint sz = i - ins_cache;
+		const uint32_t sz = i - ins_cache;
 		if (ins_access == PRIVATE)
 			decompile();
 
@@ -476,7 +476,7 @@ void CloseVOp::calcSize(Char *rep)
 	}
 }
 
-uint CloseVOp::compile(Char *rep, Ins *i)
+uint32_t CloseVOp::compile(Char *rep, Ins *i)
 {
 	if (ins_cache)
 		return compile_goto(ins_cache, i);
@@ -486,7 +486,7 @@ uint CloseVOp::compile(Char *rep, Ins *i)
 
 		for (int st = min; st < max; st++)
 		{
-			const uint sz = exp->compile(rep, &i[1]);
+			const uint32_t sz = exp->compile(rep, &i[1]);
 			i->i.tag = FORK;
 			i->i.link = ins_cache + (1 + sz) * (max - min);
 			i += sz + 1;
@@ -494,7 +494,7 @@ uint CloseVOp::compile(Char *rep, Ins *i)
 
 		for (int st = 0; st < min; st++)
 		{
-			const uint sz = exp->compile(rep, &i[0]);
+			const uint32_t sz = exp->compile(rep, &i[0]);
 			i += sz;
 			if (max < 0 && st == 0)
 			{
@@ -504,7 +504,7 @@ uint CloseVOp::compile(Char *rep, Ins *i)
 			}
 		}
 
-		const uint sz = i - ins_cache;
+		const uint32_t sz = i - ins_cache;
 		if (ins_access == PRIVATE)
 			decompile();
 
@@ -528,13 +528,13 @@ void CloseVOp::split(CharSet &s)
 
 RegExp *expr(Scanner &);
 
-uint Scanner::unescape(SubStr &s) const
+uint32_t Scanner::unescape(SubStr &s) const
 {
 	static const char * hex = "0123456789abcdef";
 	static const char * oct = "01234567";
 
 	s.len--;
-	uint c, ucb = 0;
+	uint32_t c, ucb = 0;
 
 	if ((c = *s.str++) != '\\' || s.len == 0)
 	{
@@ -574,8 +574,8 @@ uint Scanner::unescape(SubStr &s) const
 				s.len -= 2;
 				s.str += 2;
 				
-				uint v = (uint)((p1 - hex) << 4) 
-				       + (uint)((p2 - hex));
+				uint32_t v = (uint32_t)((p1 - hex) << 4) 
+				       + (uint32_t)((p2 - hex));
 	
 				return v;
 			}
@@ -589,7 +589,7 @@ uint Scanner::unescape(SubStr &s) const
 				return ~0u;
 			}
 
-			uint l = 0;
+			uint32_t l = 0;
 			if (s.str[0] == '0')
 			{
 				l++;
@@ -605,8 +605,8 @@ uint Scanner::unescape(SubStr &s) const
 							const char *u4 = strchr(hex, tolower(s.str[3]));
 							if (u3 && u4)
 							{
-								ucb = (uint)((u3 - hex) << 20)
-							        + (uint)((u4 - hex) << 16);
+								ucb = (uint32_t)((u3 - hex) << 20)
+							        + (uint32_t)((u4 - hex) << 16);
 								l++;
 							}
 						}
@@ -658,10 +658,10 @@ uint Scanner::unescape(SubStr &s) const
 				s.len -= 4;
 				s.str += 4;
 				
-				uint v = (uint)((p1 - hex) << 12) 
-				       + (uint)((p2 - hex) <<  8)
-				       + (uint)((p3 - hex) <<  4)
-				       + (uint)((p4 - hex))
+				uint32_t v = (uint32_t)((p1 - hex) << 12) 
+				       + (uint32_t)((p2 - hex) <<  8)
+				       + (uint32_t)((p3 - hex) <<  4)
+				       + (uint32_t)((p4 - hex))
 				       + ucb;
 	
 				if (v >= encoding.nCodePoints())
@@ -710,7 +710,7 @@ uint Scanner::unescape(SubStr &s) const
 				s.len -= 2;
 				s.str += 2;
 				
-				uint v = (uint)((p0 - oct) << 6) + (uint)((p1 - oct) << 3) + (uint)(p2 - oct);
+				uint32_t v = (uint32_t)((p0 - oct) << 6) + (uint32_t)((p1 - oct) << 3) + (uint32_t)(p2 - oct);
 	
 				return v;
 			}
@@ -727,7 +727,7 @@ std::string& Scanner::unescape(SubStr& str_in, std::string& str_out) const
 
 	while(str_in.len)
 	{
-		uint c = unescape(str_in);
+		uint32_t c = unescape(str_in);
 
 		if (c > 0xFF)
 		{
@@ -742,7 +742,7 @@ std::string& Scanner::unescape(SubStr& str_in, std::string& str_out) const
 
 Range * Scanner::getRange(SubStr &s) const
 {
-	uint lb = unescape(s), ub;
+	uint32_t lb = unescape(s), ub;
 
 	if (s.len < 2 || *s.str != '-')
 	{
@@ -755,7 +755,7 @@ Range * Scanner::getRange(SubStr &s) const
 		ub = unescape(s);
 		if (ub < lb)
 		{
-			uint tmp = lb;
+			uint32_t tmp = lb;
 			lb = ub;
 			ub = tmp;
 		}
@@ -767,7 +767,7 @@ Range * Scanner::getRange(SubStr &s) const
 	return r;
 }
 
-RegExp * Scanner::matchSymbol(uint c) const
+RegExp * Scanner::matchSymbol(uint32_t c) const
 {
 	if (!encoding.encode(c))
 		fatalf("Bad code point: '0x%X'", c);
@@ -804,7 +804,7 @@ RegExp * Scanner::strToCaseInsensitiveRE(SubStr s) const
 	if (s.len == 0)
 		return new NullOp;
 
-	uint c = unescape(s);
+	uint32_t c = unescape(s);
 
 	RegExp *re, *reL, *reU;
 
@@ -821,7 +821,7 @@ RegExp * Scanner::strToCaseInsensitiveRE(SubStr s) const
 
 	while (s.len > 0)
 	{
-		uint c = unescape(s);
+		uint32_t c = unescape(s);
 
 		if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z'))
 		{
@@ -885,7 +885,7 @@ RegExp * Scanner::invToRE(SubStr s) const
 RegExp * Scanner::mkDot() const
 {
 	Range * full = encoding.fullRange();
-	uint c = '\n';
+	uint32_t c = '\n';
 	if (!encoding.encode(c))
 		fatalf("Bad code point: '0x%X'", c);
 	Range * ran = new Range(c, c + 1);
@@ -910,7 +910,7 @@ RegExp * Scanner::mkDefault() const
 	return new MatchOp(def);
 }
 
-RuleOp::RuleOp(RegExp *e, RegExp *c, Token *t, uint a, InsAccess access)
+RuleOp::RuleOp(RegExp *e, RegExp *c, Token *t, uint32_t a, InsAccess access)
 	: exp(e)
 	, ctx(c)
 	, ins(NULL)
@@ -921,7 +921,7 @@ RuleOp::RuleOp(RegExp *e, RegExp *c, Token *t, uint a, InsAccess access)
 	ins_access = access;
 }
 
-RuleOp* RuleOp::copy(uint a) const
+RuleOp* RuleOp::copy(uint32_t a) const
 {
 	Token *token = new Token(*code);
 	return new RuleOp(exp, ctx, token, a, ins_access);
@@ -934,7 +934,7 @@ void RuleOp::calcSize(Char *rep)
 	size = exp->size + (ctx->size ? ctx->size + 2 : 1);
 }
 
-uint RuleOp::compile(Char *rep, Ins *i)
+uint32_t RuleOp::compile(Char *rep, Ins *i)
 {
 	if (ins_cache)
 		return compile_goto(ins_cache, i);
@@ -954,7 +954,7 @@ uint RuleOp::compile(Char *rep, Ins *i)
 		i->i.link = this;
 		++i;
 
-		const uint sz = i - ins_cache;
+		const uint32_t sz = i - ins_cache;
 		if (ins_access == PRIVATE)
 			decompile();
 
@@ -1028,7 +1028,7 @@ CharSet::CharSet()
 	, rep(new CharPtr[encoding.nCodeUnits()])
 	, ptn(new CharPtn[encoding.nCodeUnits()])
 {
-	for (uint j = 0; j < encoding.nCodeUnits(); ++j)
+	for (uint32_t j = 0; j < encoding.nCodeUnits(); ++j)
 	{
 		rep[j] = &ptn[0];
 		ptn[j].nxt = &ptn[j + 1]; /* wrong for j=encoding.nCodeUnits() - 1 but will be corrected below */
@@ -1047,14 +1047,14 @@ CharSet::~CharSet()
 	delete[] ptn;
 }
 
-smart_ptr<DFA> genCode(RegExp *re, Output & output, uint ind)
+smart_ptr<DFA> genCode(RegExp *re, Output & output, uint32_t ind)
 {
 	CharSet cs;
 	re->split(cs);
 	
-	/*for(uint k = 0; k < encoding.nCodeUnits();)
+	/*for(uint32_t k = 0; k < encoding.nCodeUnits();)
 	{
-		uint j;
+		uint32_t j;
 		for(j = k; ++k < encoding.nCodeUnits() && cs.rep[k] == cs.rep[j];);
 		printSpan(std::cerr, j, k);
 		std::cerr << "\t" << cs.rep[j] - &cs.ptn[0] << std::endl;
@@ -1062,7 +1062,7 @@ smart_ptr<DFA> genCode(RegExp *re, Output & output, uint ind)
 	
 	Char *rep = new Char[encoding.nCodeUnits()];
 
-	for (uint j = 0; j < encoding.nCodeUnits(); ++j)
+	for (uint32_t j = 0; j < encoding.nCodeUnits(); ++j)
 	{
 		if (!cs.rep[j]->nxt)
 			cs.rep[j]->nxt = &cs.ptn[j];
@@ -1073,7 +1073,7 @@ smart_ptr<DFA> genCode(RegExp *re, Output & output, uint ind)
 	re->calcSize(rep);
 	Ins *ins = new Ins[re->size + 1];
 	memset(ins, 0, (re->size + 1)*sizeof(Ins));
-	const uint size = re->compile(rep, ins);
+	const uint32_t size = re->compile(rep, ins);
 	Ins *eoi = &ins[size];
 	eoi->i.tag = GOTO;
 	eoi->i.link = eoi;
@@ -1086,7 +1086,7 @@ smart_ptr<DFA> genCode(RegExp *re, Output & output, uint ind)
 	}
 	*/
 
-	for (uint j = 0; j < size;)
+	for (uint32_t j = 0; j < size;)
 	{
 		unmark(&ins[j]);
 

@@ -57,7 +57,7 @@ Range *doUnion(Range *r1, Range *r2)
 
 				if (!(r1 = r1->next))
 				{
-					uint ub = 0;
+					uint32_t ub = 0;
 
 					for (; r2 && r2->lb <= s->ub; r2 = r2->next)
 						ub = r2->ub;
@@ -80,7 +80,7 @@ Range *doUnion(Range *r1, Range *r2)
 
 				if (!(r2 = r2->next))
 				{
-					uint ub = 0;
+					uint32_t ub = 0;
 
 					for (; r1 && r1->lb <= s->ub; r1 = r1->next)
 						ub = r1->ub;
@@ -106,7 +106,7 @@ Range *doDiff(Range *r1, Range *r2)
 
 	for (; r1; r1 = r1->next)
 	{
-		uint lb = r1->lb;
+		uint32_t lb = r1->lb;
 
 		for (; r2 && r2->ub <= r1->lb; r2 = r2->next)
 

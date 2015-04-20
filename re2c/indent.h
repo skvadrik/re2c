@@ -7,7 +7,7 @@
 namespace re2c
 {
 
-inline std::string indent (uint ind)
+inline std::string indent (uint32_t ind)
 {
 	std::string str;
 

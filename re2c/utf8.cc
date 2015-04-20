@@ -2,7 +2,7 @@
 
 namespace re2c {
 
-uint utf8::rune_to_bytes(uchar *str, rune c)
+uint32_t utf8::rune_to_bytes(uint8_t *str, rune c)
 {
 	/*
 	 * one byte sequence
@@ -57,7 +57,7 @@ uint utf8::rune_to_bytes(uchar *str, rune c)
 	return 4;
 }
 
-uint utf8::rune_length(rune r)
+uint32_t utf8::rune_length(rune r)
 {
 	if (r <= MAX_2BYTE_RUNE)
 		return r <= MAX_1BYTE_RUNE ? 1 : 2;
@@ -65,7 +65,7 @@ uint utf8::rune_length(rune r)
 		return r <= MAX_3BYTE_RUNE ? 3 : 4;
 }
 
-utf8::rune utf8::max_rune(uint i)
+utf8::rune utf8::max_rune(uint32_t i)
 {
 	switch (i)
 	{

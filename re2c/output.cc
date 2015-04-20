@@ -8,19 +8,19 @@
 namespace re2c
 {
 
-OutputFragment::OutputFragment (type_t t, uint i)
+OutputFragment::OutputFragment (type_t t, uint32_t i)
 	: type (t)
 	, stream ()
 	, info ()
 	, indent (i)
 {}
 
-uint OutputFragment::count_lines ()
+uint32_t OutputFragment::count_lines ()
 {
-	uint lines = 0;
+	uint32_t lines = 0;
 	const std::string content = stream.str ();
 	const char * p = content.c_str ();
-	for (uint i = 0; i < content.size (); ++i)
+	for (uint32_t i = 0; i < content.size (); ++i)
 	{
 		if (p[i] == '\n')
 		{
@@ -89,27 +89,27 @@ void OutputFile::write (const char * s, std::streamsize n)
 	stream ().write (s, n);
 }
 
-void OutputFile::write_hex (uint n)
+void OutputFile::write_hex (uint32_t n)
 {
 	prtHex (stream (), n);
 }
 
-void OutputFile::write_char_hex (uint n)
+void OutputFile::write_char_hex (uint32_t n)
 {
 	prtChOrHex (stream (), n);
 }
 
-void OutputFile::write_range (uint l, uint u)
+void OutputFile::write_range (uint32_t l, uint32_t u)
 {
 	printSpan (stream (), l, u);
 }
 
-void OutputFile::write_uint_width (uint n, uint w)
+void OutputFile::write_uint32_t_width (uint32_t n, uint32_t w)
 {
 	stream () << std::setw (w) << n;
 }
 
-void OutputFile::write_line_info (uint l, const char * fn)
+void OutputFile::write_line_info (uint32_t l, const char * fn)
 {
 	output_line_info (stream (), l, fn);
 }
@@ -119,7 +119,7 @@ void OutputFile::write_version_time ()
 	output_version_time (stream ());
 }
 
-OutputFile & operator << (OutputFile & u, uint n)
+OutputFile & operator << (OutputFile & u, uint32_t n)
 {
 	u.stream () << n;
 	return u;
@@ -154,7 +154,7 @@ void OutputFile::insert_line_info ()
 	insert_code ();
 }
 
-void OutputFile::insert_state_goto (uint ind, uint start_label)
+void OutputFile::insert_state_goto (uint32_t ind, uint32_t start_label)
 {
 	if (fFlag && !bWroteGetState)
 	{
@@ -172,13 +172,13 @@ void OutputFile::insert_types ()
 	insert_code ();
 }
 
-void OutputFile::insert_yyaccept_init (uint ind)
+void OutputFile::insert_yyaccept_init (uint32_t ind)
 {
 	blocks.back ()->fragments.push_back (new OutputFragment (OutputFragment::YYACCEPT_INIT, ind));
 	insert_code ();
 }
 
-void OutputFile::insert_yyaccept_selector (uint ind, uint selector)
+void OutputFile::insert_yyaccept_selector (uint32_t ind, uint32_t selector)
 {
 	OutputFragment * p = new OutputFragment (OutputFragment::YYACCEPT_SELECTOR, ind);
 	p->info.yyaccept_selector = selector;
@@ -210,7 +210,7 @@ void OutputFile::new_block ()
 
 void OutputFile::emit
 	( const std::vector<std::string> & types
-	, uint max_fill
+	, uint32_t max_fill
 	)
 {
 	if (file != NULL)

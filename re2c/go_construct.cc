@@ -4,21 +4,21 @@
 namespace re2c
 {
 
-Cases::Cases (const Span * span, uint span_size)
+Cases::Cases (const Span * span, uint32_t span_size)
 	: def (span_size == 0 ? NULL : span[span_size - 1].to)
 	, cases (new Case[span_size])
 	, cases_size (0)
 {
-	for (uint i = 0, lb = 0; i < span_size; ++ i)
+	for (uint32_t i = 0, lb = 0; i < span_size; ++ i)
 	{
 		add (lb, span[i].ub, span[i].to);
 		lb = span[i].ub;
 	}
 }
 
-void Cases::add (uint lb, uint ub, State * to)
+void Cases::add (uint32_t lb, uint32_t ub, State * to)
 {
-	for (uint i = 0; i < cases_size; ++i)
+	for (uint32_t i = 0; i < cases_size; ++i)
 	{
 		if (cases[i].to == to)
 		{
@@ -31,24 +31,24 @@ void Cases::add (uint lb, uint ub, State * to)
 	++cases_size;
 }
 
-Cond::Cond (const std::string & cmp, uint val)
+Cond::Cond (const std::string & cmp, uint32_t val)
 	: compare (cmp)
 	, value (val)
 {}
 
-Binary::Binary (const Span * s, uint n, const State * next)
+Binary::Binary (const Span * s, uint32_t n, const State * next)
 	: cond (NULL)
 	, thn (NULL)
 	, els (NULL)
 {
-	const uint l = n / 2;
-	const uint h = n - l;
+	const uint32_t l = n / 2;
+	const uint32_t h = n - l;
 	cond = new Cond ("<=", s[l - 1].ub - 1);
 	thn = new If (l > 4 ? If::BINARY : If::LINEAR, &s[0], l, next);
 	els = new If (h > 4 ? If::BINARY : If::LINEAR, &s[l], h, next);
 }
 
-Linear::Linear (const Span * s, uint n, const State * next)
+Linear::Linear (const Span * s, uint32_t n, const State * next)
 	: branches ()
 {
 	for (;;)
@@ -90,7 +90,7 @@ Linear::Linear (const Span * s, uint n, const State * next)
 	}
 }
 
-If::If (type_t t, const Span * sp, uint nsp, const State * next)
+If::If (type_t t, const Span * sp, uint32_t nsp, const State * next)
 	: type (t)
 	, info ()
 {
@@ -105,7 +105,7 @@ If::If (type_t t, const Span * sp, uint nsp, const State * next)
 	}
 }
 
-SwitchIf::SwitchIf (const Span * sp, uint nsp, const State * next)
+SwitchIf::SwitchIf (const Span * sp, uint32_t nsp, const State * next)
 	: type (IF)
 	, info ()
 {
@@ -124,27 +124,27 @@ SwitchIf::SwitchIf (const Span * sp, uint nsp, const State * next)
 	}
 }
 
-Bitmap::Bitmap (const Span * span, uint nSpans, const Span * hspan, uint hSpans, const BitMap * bm, const State * bm_state, const State * next)
+Bitmap::Bitmap (const Span * span, uint32_t nSpans, const Span * hspan, uint32_t hSpans, const BitMap * bm, const State * bm_state, const State * next)
 	: bitmap (bm)
 	, bitmap_state (bm_state)
 	, hgo (hSpans == 0 ? NULL : new SwitchIf (hspan, hSpans, next))
 	, lgo (NULL)
 {
 	Span * bspan = new Span [nSpans];
-	uint bSpans = unmap (bspan, span, nSpans, bm_state);
+	uint32_t bSpans = unmap (bspan, span, nSpans, bm_state);
 	lgo = bSpans == 0
 		? NULL
 		:  new SwitchIf (bspan, bSpans, next);
 	delete [] bspan;
 }
 
-const uint CpgotoTable::TABLE_SIZE = 0x100;
+const uint32_t CpgotoTable::TABLE_SIZE = 0x100;
 
-CpgotoTable::CpgotoTable (const Span * span, uint nSpans)
+CpgotoTable::CpgotoTable (const Span * span, uint32_t nSpans)
 	: table (new const State * [TABLE_SIZE])
 {
-	uint c = 0;
-	for (uint i = 0; i < nSpans; ++i)
+	uint32_t c = 0;
+	for (uint32_t i = 0; i < nSpans; ++i)
 	{
 		for(; c < span[i].ub && c < TABLE_SIZE; ++c)
 		{
@@ -153,12 +153,12 @@ CpgotoTable::CpgotoTable (const Span * span, uint nSpans)
 	}
 }
 
-Cpgoto::Cpgoto (const Span * span, uint nSpans, const Span * hspan, uint hSpans, const State * next)
+Cpgoto::Cpgoto (const Span * span, uint32_t nSpans, const Span * hspan, uint32_t hSpans, const State * next)
 	: hgo (hSpans == 0 ? NULL : new SwitchIf (hspan, hSpans, next))
 	, table (new CpgotoTable (span, nSpans))
 {}
 
-Dot::Dot (const Span * sp, uint nsp, const State * s)
+Dot::Dot (const Span * sp, uint32_t nsp, const State * s)
 	: from (s)
 	, cases (new Cases (sp, nsp))
 {}
@@ -178,9 +178,9 @@ void Go::init (const State * from)
 	}
 
 	// initialize high (wide) spans
-	uint hSpans = 0;
+	uint32_t hSpans = 0;
 	const Span * hspan = NULL;
-	for (uint i = 0; i < nSpans; ++i)
+	for (uint32_t i = 0; i < nSpans; ++i)
 	{
 		if (span[i].ub > 0x100)
 		{
@@ -191,10 +191,10 @@ void Go::init (const State * from)
 	}
 
 	// initialize bitmaps
-	uint nBitmaps = 0;
+	uint32_t nBitmaps = 0;
 	const BitMap * bitmap = NULL;
 	const State * bitmap_state = NULL;
-	for (uint i = 0; i < nSpans; ++i)
+	for (uint32_t i = 0; i < nSpans; ++i)
 	{
 		if (span[i].to->isBase)
 		{
@@ -211,7 +211,7 @@ void Go::init (const State * from)
 		}
 	}
 
-	const uint dSpans = nSpans - hSpans - nBitmaps;
+	const uint32_t dSpans = nSpans - hSpans - nBitmaps;
 	if (DFlag)
 	{
 		type = DOT;
@@ -236,12 +236,12 @@ void Go::init (const State * from)
 }
 
 // All spans in b1 that lead to s1 are pairwise equal to that in b2 leading to s2
-bool matches(const Span * b1, uint n1, const State * s1, const Span * b2, uint n2, const State * s2)
+bool matches(const Span * b1, uint32_t n1, const State * s1, const Span * b2, uint32_t n2, const State * s2)
 {
 	const Span * e1 = &b1[n1];
-	uint lb1 = 0;
+	uint32_t lb1 = 0;
 	const Span * e2 = &b2[n2];
-	uint lb2 = 0;
+	uint32_t lb2 = 0;
 
 	for (;;)
 	{
@@ -277,10 +277,10 @@ bool matches(const Span * b1, uint n1, const State * s1, const Span * b2, uint n
  * If input contains single span that maps to the given state,
  * then output contains 0 spans.
  */
-uint unmap (Span * new_span, const Span * old_span, uint old_nspans, const State * x)
+uint32_t unmap (Span * new_span, const Span * old_span, uint32_t old_nspans, const State * x)
 {
-	uint new_nspans = 0;
-	for (uint i = 0; i < old_nspans; ++i)
+	uint32_t new_nspans = 0;
+	for (uint32_t i = 0; i < old_nspans; ++i)
 	{
 		if (old_span[i].to != x)
 		{

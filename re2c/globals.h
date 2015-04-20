@@ -2,10 +2,11 @@
 #ifndef	_globals_h
 #define	_globals_h
 
-#include "basics.h"
 #include <set>
 #include <algorithm>
 #include <string>
+
+#include "c99_stdint.h"
 #include "code_names.h"
 #include "enc.h"
 #include "input_api.h"
@@ -46,11 +47,11 @@ extern std::string yyFillLength;
 extern std::string yySetConditionParam;
 extern std::string yySetStateParam;
 extern std::string yySetupRule;
-extern uint next_label;
-extern uint cGotoThreshold;
+extern uint32_t next_label;
+extern uint32_t cGotoThreshold;
 
 /* configurations */
-extern uint topIndent;
+extern uint32_t topIndent;
 extern std::string indString;
 extern bool yybmHexTable;
 extern bool bEmitYYCh;
@@ -70,20 +71,20 @@ extern bool bWroteCondCheck;
 extern bool bCaseInsensitive;
 extern bool bCaseInverted;
 
-extern const uint asc2asc[256];
-extern const uint asc2ebc[256];
-extern const uint ebc2asc[256];
+extern const uint32_t asc2asc[256];
+extern const uint32_t asc2ebc[256];
+extern const uint32_t ebc2asc[256];
 
-extern uint next_fill_index;
-extern uint last_fill_index;
-extern std::set<uint> vUsedLabels;
+extern uint32_t next_fill_index;
+extern uint32_t last_fill_index;
+extern std::set<uint32_t> vUsedLabels;
 extern CodeNames mapCodeName;
 
 extern Enc encoding;
 extern InputAPI input_api;
 
-extern char octCh(uint c);
-extern char hexCh(uint c);
+extern char octCh(uint32_t c);
+extern char hexCh(uint32_t c);
 
 } // end namespace re2c
 

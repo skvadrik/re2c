@@ -1,7 +1,7 @@
 #ifndef _enc_h
 #define _enc_h
 
-#include "basics.h"
+#include "c99_stdint.h"
 #include "range.h"
 
 namespace re2c {
@@ -50,11 +50,11 @@ public:
 		};
 
 private:
-	static const uint asc2ebc[256];
-	static const uint ebc2asc[256];
-	static const uint SURR_MIN;
-	static const uint SURR_MAX;
-	static const uint UNICODE_ERROR;
+	static const uint32_t asc2ebc[256];
+	static const uint32_t ebc2asc[256];
+	static const uint32_t SURR_MIN;
+	static const uint32_t SURR_MAX;
+	static const uint32_t UNICODE_ERROR;
 
 	type_t type;
 	policy_t policy;
@@ -67,10 +67,10 @@ public:
 
 	bool operator != (const Enc & e) const { return type != e.type; }
 
-	inline uint nCodePoints() const;
-	inline uint nCodeUnits() const;
-	inline uint szCodePoint() const;
-	inline uint szCodeUnit() const;
+	inline uint32_t nCodePoints() const;
+	inline uint32_t nCodeUnits() const;
+	inline uint32_t szCodePoint() const;
+	inline uint32_t szCodeUnit() const;
 
 	inline bool set(type_t t);
 	inline void unset(type_t);
@@ -78,13 +78,13 @@ public:
 
 	inline void setPolicy(policy_t t);
 
-	bool encode(uint & c) const;
-	uint decodeUnsafe(uint c) const;
-	Range * encodeRange(uint l, uint h) const;
+	bool encode(uint32_t & c) const;
+	uint32_t decodeUnsafe(uint32_t c) const;
+	Range * encodeRange(uint32_t l, uint32_t h) const;
 	Range * fullRange() const;
 };
 
-inline uint Enc::nCodePoints() const
+inline uint32_t Enc::nCodePoints() const
 {
 	switch (type)
 	{
@@ -98,7 +98,7 @@ inline uint Enc::nCodePoints() const
 	return ~0; // to silence gcc warning
 }
 
-inline uint Enc::nCodeUnits() const
+inline uint32_t Enc::nCodeUnits() const
 {
 	switch (type)
 	{
@@ -113,7 +113,7 @@ inline uint Enc::nCodeUnits() const
 }
 
 // returns *maximal* code point size for encoding
-inline uint Enc::szCodePoint() const
+inline uint32_t Enc::szCodePoint() const
 {
 	switch (type)
 	{
@@ -127,7 +127,7 @@ inline uint Enc::szCodePoint() const
 	return ~0; // to silence gcc warning
 }
 
-inline uint Enc::szCodeUnit() const
+inline uint32_t Enc::szCodeUnit() const
 {
 	switch (type)
 	{

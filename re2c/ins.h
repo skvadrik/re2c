@@ -2,25 +2,25 @@
 #ifndef _ins_h
 #define _ins_h
 
-#include "basics.h"
+#include "c99_stdint.h"
 
 namespace re2c
 {
 
-typedef uint Char;
+typedef uint32_t Char;
 
-const uint CHAR = 0;
-const uint GOTO = 1;
-const uint FORK = 2;
-const uint TERM = 3;
-const uint CTXT = 4;
+const uint32_t CHAR = 0;
+const uint32_t GOTO = 1;
+const uint32_t FORK = 2;
+const uint32_t TERM = 3;
+const uint32_t CTXT = 4;
 
 union Ins {
 
 	struct
 	{
-		byte	tag;
-		byte	marked;
+		uint8_t	tag;
+		uint8_t	marked;
 		void	*link;
 	}
 
@@ -28,9 +28,9 @@ union Ins {
 
 	struct
 	{
-		uint	value;
-		uint	bump;
-		void	*link;
+		uint32_t	value;
+		uint32_t	bump;
+		void		*link;
 	}
 
 	c;

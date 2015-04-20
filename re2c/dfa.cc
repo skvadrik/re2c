@@ -20,9 +20,9 @@ std::ostream& operator<<(std::ostream &o, const State &s)
 
 	o << "\n";
 
-	uint lb = 0;
+	uint32_t lb = 0;
 
-	for (uint i = 0; i < s.go.nSpans; ++i)
+	for (uint32_t i = 0; i < s.go.nSpans; ++i)
 	{
 		lb = s.go.span[i].show(o, lb);
 	}
@@ -91,7 +91,7 @@ struct GoTo
 	void	*to;
 };
 
-DFA::DFA(Ins *ins, uint ni, uint lb, uint ub, const Char *rep)
+DFA::DFA(Ins *ins, uint32_t ni, uint32_t lb, uint32_t ub, const Char *rep)
 	: lbChar(lb)
 	, ubChar(ub)
 	, nStates(0)
@@ -102,7 +102,7 @@ DFA::DFA(Ins *ins, uint ni, uint lb, uint ub, const Char *rep)
 	, free_rep(rep)
 {
 	Ins **work = new Ins * [ni + 1];
-	uint nc = ub - lb;
+	uint32_t nc = ub - lb;
 	GoTo *goTo = new GoTo[nc];
 	Span *span = new Span[nc];
 	memset((char*) goTo, 0, nc*sizeof(GoTo));
@@ -114,8 +114,8 @@ DFA::DFA(Ins *ins, uint ni, uint lb, uint ub, const Char *rep)
 		toDo = s->link;
 
 		Ins **cP, **iP, *i;
-		uint nGoTos = 0;
-		uint j;
+		uint32_t nGoTos = 0;
+		uint32_t j;
 
 		s->rule = NULL;
 
@@ -209,7 +209,7 @@ void DFA::addState(State **a, State *s)
 		tail = &s->next;
 }
 
-State *DFA::findState(Ins **kernel, uint kCount)
+State *DFA::findState(Ins **kernel, uint32_t kCount)
 {
 	Ins **cP, **iP, *i;
 	State *s;

@@ -4,7 +4,7 @@
 #include <map>
 #include <string>
 
-#include "basics.h"
+#include "c99_stdint.h"
 
 namespace re2c
 {
@@ -24,18 +24,18 @@ public:
 	void set (type_t t);
 	std::string expr_peek ();
 	std::string expr_peek_save ();
-	std::string stmt_peek (uint ind);
-	std::string stmt_skip (uint ind);
-	std::string stmt_backup (uint ind);
-	std::string stmt_backupctx (uint ind);
-	std::string stmt_restore (uint ind);
-	std::string stmt_restorectx (uint ind);
-	std::string stmt_skip_peek (uint ind);
-	std::string stmt_skip_backup (uint ind);
-	std::string stmt_backup_peek (uint ind);
-	std::string stmt_skip_backup_peek (uint ind);
+	std::string stmt_peek (uint32_t ind);
+	std::string stmt_skip (uint32_t ind);
+	std::string stmt_backup (uint32_t ind);
+	std::string stmt_backupctx (uint32_t ind);
+	std::string stmt_restore (uint32_t ind);
+	std::string stmt_restorectx (uint32_t ind);
+	std::string stmt_skip_peek (uint32_t ind);
+	std::string stmt_skip_backup (uint32_t ind);
+	std::string stmt_backup_peek (uint32_t ind);
+	std::string stmt_skip_backup_peek (uint32_t ind);
 	std::string expr_lessthan_one ();
-	std::string expr_lessthan (uint n);
+	std::string expr_lessthan (uint32_t n);
 };
 
 } // end namespace re2c

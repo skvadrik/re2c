@@ -19,7 +19,7 @@ struct ScannerState
 
 	char	*tok, *ptr, *cur, *pos, *ctx;  // positioning
 	char    *bot, *lim, *top, *eof;        // buffer
-	uint	tchar, tline, cline, iscfg, buf_size;
+	uint32_t	tchar, tline, cline, iscfg, buf_size;
 	bool    in_parse;
 };
 
@@ -30,7 +30,7 @@ private:
 	OutputFile & out;
 
 private:
-	char *fill(char*, uint);
+	char *fill(char*, uint32_t);
 	Scanner(const Scanner&); //unimplemented
 	Scanner& operator=(const Scanner&); //unimplemented
 	void set_sourceline(char *& cursor);
@@ -54,29 +54,29 @@ public:
 	void save_state(ScannerState&) const;
 	void restore_state(const ScannerState&);
 
-	uint get_cline() const;
+	uint32_t get_cline() const;
 	const std::string & get_fname () const;
 	void set_in_parse(bool new_in_parse);
-	void fatal_at(uint line, uint ofs, const char *msg) const;
-	void fatalf_at(uint line, const char*, ...) const;
+	void fatal_at(uint32_t line, uint32_t ofs, const char *msg) const;
+	void fatalf_at(uint32_t line, const char*, ...) const;
 	void fatalf(const char*, ...) const;
 	void fatal(const char*) const;
-	void fatal(uint, const char*) const;
+	void fatal(uint32_t, const char*) const;
 
 	void config(const Str&, int);
 	void config(const Str&, const Str&);
 
-	void check_token_length(char *pos, uint len) const;
+	void check_token_length(char *pos, uint32_t len) const;
 	SubStr token() const;
-	SubStr token(uint start, uint len) const;
+	SubStr token(uint32_t start, uint32_t len) const;
 	Str raw_token(std::string enclosure) const;
 
-	uint unescape(SubStr &s) const;
+	uint32_t unescape(SubStr &s) const;
 	std::string& unescape(SubStr& str_in, std::string& str_out) const;
 
 	Range * mkRange(SubStr &s) const;
 	Range * getRange(SubStr &s) const;
-	RegExp * matchSymbol(uint c) const;
+	RegExp * matchSymbol(uint32_t c) const;
 	RegExp * matchSymbolRange(Range * r) const;
 	RegExp * strToName(SubStr s) const;
 	RegExp * strToRE(SubStr s) const;
@@ -97,7 +97,7 @@ inline const std::string & Scanner::get_fname () const
 	return in.file_name;
 }
 
-inline uint Scanner::get_cline() const
+inline uint32_t Scanner::get_cline() const
 {
 	return cline;
 }
@@ -118,7 +118,7 @@ inline SubStr Scanner::token() const
 	return SubStr(tok, cur - tok);
 }
 
-inline SubStr Scanner::token(uint start, uint len) const
+inline SubStr Scanner::token(uint32_t start, uint32_t len) const
 {
 	check_token_length(tok + start, len);
 	return SubStr(tok + start, len);

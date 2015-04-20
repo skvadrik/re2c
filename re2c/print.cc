@@ -6,7 +6,7 @@
 namespace re2c
 {
 
-void prtChOrHex(std::ostream& o, uint c)
+void prtChOrHex(std::ostream& o, uint32_t c)
 {
 	if (!encoding.is(Enc::EBCDIC) && (c < 256u) && (isprint(c) || isspace(c)))
 	{
@@ -20,7 +20,7 @@ void prtChOrHex(std::ostream& o, uint c)
 	}
 }
 
-void prtHex(std::ostream& o, uint c)
+void prtHex(std::ostream& o, uint32_t c)
 {
 	int oc = (int)(c);
 
@@ -52,7 +52,7 @@ void prtHex(std::ostream& o, uint c)
 	}
 }
 
-void prtCh(std::ostream& o, uint c)
+void prtCh(std::ostream& o, uint32_t c)
 {
 	if (encoding.is(Enc::EBCDIC))
 	{
@@ -135,7 +135,7 @@ void prtCh(std::ostream& o, uint c)
 	}
 }
 
-void prtChOrHexForSpan(std::ostream& o, uint c)
+void prtChOrHexForSpan(std::ostream& o, uint32_t c)
 {
 	if (!encoding.is(Enc::EBCDIC) && (c < 256u) && isprint(c) && (c != ']'))
 	{
@@ -147,7 +147,7 @@ void prtChOrHexForSpan(std::ostream& o, uint c)
 	}
 }
 
-void printSpan(std::ostream& o, uint lb, uint ub)
+void printSpan(std::ostream& o, uint32_t lb, uint32_t ub)
 {
 	if (lb > ub)
 	{

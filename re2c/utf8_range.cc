@@ -7,10 +7,10 @@ namespace re2c {
  * Now that we have catenation of byte ranges [l1-h1]...[lN-hN],
  * we want to add it to existing range, merging suffixes on the fly.
  */
-void UTF8addContinuous(RangeSuffix * & root, utf8::rune l, utf8::rune h, uint n)
+void UTF8addContinuous(RangeSuffix * & root, utf8::rune l, utf8::rune h, uint32_t n)
 {
-	uchar cl[utf8::MAX_RUNE_LENGTH];
-	uchar ch[utf8::MAX_RUNE_LENGTH];
+	uint8_t cl[utf8::MAX_RUNE_LENGTH];
+	uint8_t ch[utf8::MAX_RUNE_LENGTH];
 	utf8::rune_to_bytes(cl, l);
 	utf8::rune_to_bytes(ch, h);
 
@@ -62,11 +62,11 @@ void UTF8addContinuous(RangeSuffix * & root, utf8::rune l, utf8::rune h, uint n)
  * and represents original range as alternation of continuous
  * sub-ranges.
  */
-void UTF8splitByContinuity(RangeSuffix * & root, utf8::rune l, utf8::rune h, uint n)
+void UTF8splitByContinuity(RangeSuffix * & root, utf8::rune l, utf8::rune h, uint32_t n)
 {
-	for (uint i = 1; i < n; ++i)
+	for (uint32_t i = 1; i < n; ++i)
 	{
-		uint m = (1 << (6 * i)) - 1; // last i bytes of a UTF-8 sequence
+		uint32_t m = (1 << (6 * i)) - 1; // last i bytes of a UTF-8 sequence
 		if ((l & ~m) != (h & ~m))
 		{
 			if ((l & m) != 0)
@@ -97,8 +97,8 @@ void UTF8splitByContinuity(RangeSuffix * & root, utf8::rune l, utf8::rune h, uin
  */
 void UTF8splitByRuneLength(RangeSuffix * & root, utf8::rune l, utf8::rune h)
 {
-	const uint nh = utf8::rune_length(h);
-	for (uint nl = utf8::rune_length(l); nl < nh; ++nl)
+	const uint32_t nh = utf8::rune_length(h);
+	for (uint32_t nl = utf8::rune_length(l); nl < nh; ++nl)
 	{
 		utf8::rune r = utf8::max_rune(nl);
 		UTF8splitByContinuity(root, l, r, nl);

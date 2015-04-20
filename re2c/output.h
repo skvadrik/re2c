@@ -6,7 +6,7 @@
 #include <string>
 #include <vector>
 
-#include "basics.h"
+#include "c99_stdint.h"
 
 namespace re2c
 {
@@ -28,16 +28,16 @@ struct OutputFragment
 
 	union info_t
 	{
-		uint yyaccept_selector;
+		uint32_t yyaccept_selector;
 	};
 
 	type_t type;
 	std::ostringstream stream;
 	info_t info;
-	uint indent;
+	uint32_t indent;
 
-	OutputFragment (type_t t, uint i);
-	uint count_lines ();
+	OutputFragment (type_t t, uint32_t i);
+	uint32_t count_lines ();
 };
 
 struct OutputBlock
@@ -59,34 +59,34 @@ struct OutputFile
 	void new_block ();
 
 	void write (const char * s, std::streamsize n);
-	void write_hex (uint n);
-	void write_char_hex (uint n);
-	void write_range (uint u, uint l);
-	void write_uint_width (uint n, uint w);
-	void write_line_info (uint l, const char * fn);
+	void write_hex (uint32_t n);
+	void write_char_hex (uint32_t n);
+	void write_range (uint32_t u, uint32_t l);
+	void write_uint32_t_width (uint32_t n, uint32_t w);
+	void write_line_info (uint32_t l, const char * fn);
 	void write_version_time ();
-	friend OutputFile & operator << (OutputFile & o, uint n);
+	friend OutputFile & operator << (OutputFile & o, uint32_t n);
 	friend OutputFile & operator << (OutputFile & o, const std::string & s);
 	friend OutputFile & operator << (OutputFile & o, const char * s);
 	friend OutputFile & operator << (OutputFile & o, const Str & s);
 
 	void insert_line_info ();
-	void insert_state_goto (uint ind, uint start_label);
+	void insert_state_goto (uint32_t ind, uint32_t start_label);
 	void insert_types ();
-	void insert_yyaccept_init (uint ind);
-	void insert_yyaccept_selector (uint ind, uint selector);
+	void insert_yyaccept_init (uint32_t ind);
+	void insert_yyaccept_selector (uint32_t ind, uint32_t selector);
 	void insert_yymaxfill ();
 
 	void set_used_yyaccept ();
 	bool get_used_yyaccept () const;
 
-	void emit (const std::vector<std::string> & types, uint max_fill);
+	void emit (const std::vector<std::string> & types, uint32_t max_fill);
 
 private:
 	const char * file_name;
 	FILE * file;
 	std::vector<OutputBlock *> blocks;
-	uint prolog_label;
+	uint32_t prolog_label;
 
 	std::ostream & stream ();
 	void insert_code ();
@@ -121,7 +121,7 @@ struct Output
 	HeaderFile header;
 	DataFile data;
 	std::vector<std::string> types;
-	uint max_fill;
+	uint32_t max_fill;
 
 	Output (const char * source_name, const char * header_name);
 	~Output ();

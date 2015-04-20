@@ -61,10 +61,10 @@ std::string yyFillLength("@@");
 std::string yySetConditionParam("@@");
 std::string yySetStateParam("@@");
 std::string yySetupRule("");
-uint next_label = 0;
-uint cGotoThreshold = 9;
+uint32_t next_label = 0;
+uint32_t cGotoThreshold = 9;
 
-uint topIndent = 0;
+uint32_t topIndent = 0;
 std::string indString("\t");
 bool yybmHexTable = false;
 bool bUseStateAbort = false;
@@ -76,9 +76,9 @@ bool bCaseInverted = false;
 Enc encoding;
 InputAPI input_api;
 
-uint next_fill_index = 0;
-uint last_fill_index = 0;
-std::set<uint> vUsedLabels;
+uint32_t next_fill_index = 0;
+uint32_t last_fill_index = 0;
+std::set<uint32_t> vUsedLabels;
 CodeNames mapCodeName;
 
 free_list<RegExp*> RegExp::vFreeList;
