@@ -20,13 +20,17 @@ struct Path
 		, length (l)
 		, rule (r)
 	{}
-	inline void extend (uint r, uint c)
+	inline void update (uint r)
 	{
 		if (r != ~0u)
 		{
 			length = chars.size ();
 			rule = r;
 		}
+	}
+	inline void extend (uint r, uint c)
+	{
+		update (r);
 		chars.push_back (c);
 	}
 	inline void append (const Path * p)
@@ -78,14 +82,15 @@ struct Skeleton
 
 	Skeleton (const DFA & dfa);
 	~Skeleton ();
-	uint estimate_path_count (SkeletonState * s, uint count);
+	uint estimate_paths_count (SkeletonState * s, uint count);
 	void generate_paths (std::vector<Path> & results);
 	void emit_data (DataFile & o);
 };
 
 void skeleton_emit_prolog (OutputFile & o, uint ind, const char * data_name);
 void skeleton_emit_epilog (OutputFile & o, uint ind);
-void generate_cover (SkeletonState * s, const std::vector<Path> & prefixes, std::vector<Path> & results);
+void generate_paths_all (SkeletonState * s, const std::vector<Path> & prefixes, std::vector<Path> & results);
+void generate_paths_cover (SkeletonState * s, const std::vector<Path> & prefixes, std::vector<Path> & results);
 
 } // namespace re2c
 

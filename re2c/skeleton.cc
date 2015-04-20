@@ -51,7 +51,7 @@ Skeleton::~Skeleton ()
 	delete [] states;
 }
 
-uint Skeleton::estimate_path_count (SkeletonState * s, uint count)
+uint Skeleton::estimate_paths_count (SkeletonState * s, uint count)
 {
 	if (s->is_end ())
 	{
@@ -70,7 +70,7 @@ uint Skeleton::estimate_path_count (SkeletonState * s, uint count)
 				result = PATHS_OVERFLOW;
 				break;
 			}
-			const uint n = estimate_path_count (i->first, arrows * count);
+			const uint n = estimate_paths_count (i->first, arrows * count);
 			if (max_paths - result < n)
 			{
 				result = PATHS_OVERFLOW;
@@ -87,68 +87,37 @@ uint Skeleton::estimate_path_count (SkeletonState * s, uint count)
 	}
 }
 
-/*
-void generate_data (DataFile & o, uint ind, SkeletonState * s, const std::vector<Path> & xs, std::vector<Result> & ys)
+void generate_paths_all (SkeletonState * s, const std::vector<Path> & prefixes, std::vector<Path> & results)
 {
-	if (is_final (s) || is_default (s))
+	if (s->is_end ())
 	{
-		for (uint i = 0; i < xs.size (); ++i)
+		for (uint i = 0; i < prefixes.size (); ++i)
 		{
-			o.file << indent (ind);
-			for (uint j = 0 ; j < xs[i].chars.size (); ++j)
-			{
-				prtChOrHex (o.file, xs[i].chars[j]);
-				o.file << ",";
-			}
-			o.file << "\n";
-			const uint processed = xs[i].chars.size ();
-			const uint consumed = is_final (s)
-				? xs[i].chars.size ()
-				: xs[i].length;
-			const uint rule = is_final (s)
-				? s->rule
-				: xs[i].rule;
-			ys.push_back (Result (processed, consumed, rule));
+			results.push_back (prefixes[i]);
+			results.back ().update (s->rule);
 		}
 	}
-	else if (!s->visited)
+	else if (s->visited < 2)
 	{
-		s->visited = true;
+		++s->visited;
 		for (SkeletonState::go_t::iterator i = s->go.begin (); i != s->go.end (); ++i)
 		{
 			std::vector<Path> zs;
-			for (uint j = 0; j < xs.size (); ++j)
+			for (uint j = 0; j < prefixes.size (); ++j)
 			{
-				const bool is_accepting = s->rule != ~0u;
-				const uint l = is_accepting
-					? xs[j].chars.size ()
-					: xs[j].length;
-				const uint r = is_accepting
-					? s->rule
-					: xs[j].rule;
-
-				std::vector<uint> z (xs[j].chars);
 				for (uint k = 0; k < i->second.size (); ++k)
 				{
-					z.push_back (i->second[k].first);
-					zs.push_back (Path (z, l, r));
-					if (i->second[k].first != i->second[k].second)
-					{
-						z.pop_back ();
-						z.push_back (i->second[k].second);
-						zs.push_back (Path (z, l, r));
-					}
-					z.pop_back ();
+					zs.push_back (prefixes[j]);
+					zs.back ().extend (s->rule, i->second[k]);
 				}
 			}
-			generate_data (o, ind, i->first, zs, ys);
+			generate_paths_all (i->first, zs, results);
 		}
-		s->visited = false;
+		--s->visited;
 	}
 }
-*/
 
-void generate_cover (SkeletonState * s, const std::vector<Path> & prefixes, std::vector<Path> & results)
+void generate_paths_cover (SkeletonState * s, const std::vector<Path> & prefixes, std::vector<Path> & results)
 {
 	if (s == NULL)
 	{
@@ -167,7 +136,7 @@ void generate_cover (SkeletonState * s, const std::vector<Path> & prefixes, std:
 			{
 				zs[i].append (s->path);
 			}
-			generate_cover (NULL, zs, results);
+			generate_paths_cover (NULL, zs, results);
 		}
 		else
 		{
@@ -185,7 +154,7 @@ void generate_cover (SkeletonState * s, const std::vector<Path> & prefixes, std:
 					zs.push_back (prefixes[in % in_arrows]);
 					zs[j].extend (s->rule, i->second[j]);
 				}
-				generate_cover (i->first, zs, results);
+				generate_paths_cover (i->first, zs, results);
 				if (s->path == NULL && i->first->path != NULL)
 				{
 					s->path = new Path (std::vector<uint> (1, i->second[0]), 0, s->rule);
@@ -199,24 +168,30 @@ void generate_cover (SkeletonState * s, const std::vector<Path> & prefixes, std:
 
 void Skeleton::generate_paths (std::vector<Path> & results)
 {
-	// set paths for final states and default state
-	// (those with zero outgoing arrows)
-	for (uint i = 0; i < states_count; ++i)
-	{
-		if (states[i].is_end ())
-		{
-			states[i].path = new Path (std::vector<uint> (), 0, states[i].rule);
-		}
-	}
 	std::vector<Path> prefixes;
 	prefixes.push_back (Path (std::vector<uint> (), 0, ~0));
 
-	generate_cover (states, prefixes, results);
-
-	// cleanup: delete all paths
-	for (uint i = 0; i < states_count; ++i)
+	if (estimate_paths_count (states, 1) == PATHS_OVERFLOW)
 	{
-		delete states[i].path;
+		// set paths for final states and default state
+		// (those with zero outgoing arrows)
+		for (uint i = 0; i < states_count; ++i)
+		{
+			if (states[i].is_end ())
+			{
+				states[i].path = new Path (std::vector<uint> (), 0, states[i].rule);
+			}
+		}
+		generate_paths_cover (states, prefixes, results);
+		// cleanup: delete all paths
+		for (uint i = 0; i < states_count; ++i)
+		{
+			delete states[i].path;
+		}
+	}
+	else
+	{
+		generate_paths_all (states, prefixes, results);
 	}
 }
 
