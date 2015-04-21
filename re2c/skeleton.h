@@ -47,9 +47,24 @@ struct Path
 	}
 };
 
+template <typename counter_t>
+struct local_increment_t
+{
+	counter_t & counter;
+	inline explicit local_increment_t (counter_t & c)
+		: counter (++c)
+	{}
+	inline ~local_increment_t ()
+	{
+		--counter;
+	}
+};
+
 struct SkeletonState
 {
 	typedef std::map<SkeletonState *, std::vector<uint32_t> > go_t;
+	typedef local_increment_t<uint8_t> visit;
+
 	go_t go;
 	uint32_t rule;
 	uint8_t visited;

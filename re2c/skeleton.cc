@@ -59,24 +59,21 @@ uint32_t Skeleton::estimate_paths_count (SkeletonState * s, uint32_t count)
 	}
 	else if (s->visited < 2)
 	{
-		++s->visited;
+		SkeletonState::visit _ (s->visited);
 		uint64_t result = 0;
 		for (SkeletonState::go_t::iterator i = s->go.begin (); i != s->go.end (); ++i)
 		{
 			const uint64_t new_count = i->second.size () * count;
 			if (new_count >= MAX_PATHS)
 			{
-				result = MAX_PATHS;
-				break;
+				return MAX_PATHS;
 			}
 			result += estimate_paths_count (i->first, new_count);
 			if (result >= MAX_PATHS)
 			{
-				result = MAX_PATHS;
-				break;
+				return MAX_PATHS;
 			}
 		}
-		--s->visited;
 		return result;
 	}
 	else
@@ -97,7 +94,7 @@ void generate_paths_all (SkeletonState * s, const std::vector<Path> & prefixes, 
 	}
 	else if (s->visited < 2)
 	{
-		++s->visited;
+		SkeletonState::visit _ (s->visited);
 		for (SkeletonState::go_t::iterator i = s->go.begin (); i != s->go.end (); ++i)
 		{
 			std::vector<Path> zs;
@@ -111,7 +108,6 @@ void generate_paths_all (SkeletonState * s, const std::vector<Path> & prefixes, 
 			}
 			generate_paths_all (i->first, zs, results);
 		}
-		--s->visited;
 	}
 }
 
@@ -126,7 +122,7 @@ void generate_paths_cover (SkeletonState * s, const std::vector<Path> & prefixes
 	}
 	else if (s->visited < 2)
 	{
-		++s->visited;
+		SkeletonState::visit _ (s->visited);
 		if (s->path != NULL)
 		{
 			std::vector<Path> zs (prefixes);
@@ -160,7 +156,6 @@ void generate_paths_cover (SkeletonState * s, const std::vector<Path> & prefixes
 				}
 			}
 		}
-		--s->visited;
 	}
 }
 
