@@ -7,6 +7,44 @@ namespace re2c
 
 const uint32_t SkeletonState::INVALID_PATH_LEN = 0xFFFFffff;
 
+void SkeletonState::init (const State * s, const std::map<const State *, SkeletonState *> & m)
+{
+	const bool is_final = s == NULL
+		|| (s->go.nSpans == 1 && s->go.span[0].to == NULL);
+	const bool is_accepting = s != NULL
+		&& s->rule != NULL;
+
+	if (is_accepting)
+	{
+		rule = s->rule->accept;
+	}
+
+	if (is_final)
+	{
+		path = new Path (std::vector<uint32_t> (), 0, rule);
+		path_len = 0;
+	}
+	else
+	{
+		uint32_t lb = 0;
+		for (uint32_t j = 0; j < s->go.nSpans; ++j)
+		{
+			SkeletonState * p = m.find (s->go.span[j].to)->second;
+			go[p].push_back (lb);
+			if (lb != s->go.span[j].ub - 1)
+			{
+				go[p].push_back (s->go.span[j].ub - 1);
+			}
+			lb = s->go.span[j].ub;
+		}
+	}
+}
+
+SkeletonState::~SkeletonState ()
+{
+	delete path;
+}
+
 const uint32_t Skeleton::MAX_SIZE = 1024 * 1024 * 1024; // 1Gb
 
 Skeleton::Skeleton (const DFA & dfa)
@@ -15,7 +53,7 @@ Skeleton::Skeleton (const DFA & dfa)
 {
 	uint32_t i;
 
-	std::map<State *, SkeletonState *> m;
+	std::map<const State *, SkeletonState *> m;
 	m[NULL] = &states[states_count - 1]; // default state
 	i = 0;
 	for (State * s = dfa.head; s; s = s->next, ++i)
@@ -26,26 +64,9 @@ Skeleton::Skeleton (const DFA & dfa)
 	i = 0;
 	for (State * s = dfa.head; s; s = s->next, ++i)
 	{
-		const bool is_final = s->go.nSpans == 1 && s->go.span[0].to == NULL;
-		if (!is_final)
-		{
-			uint32_t lb = 0;
-			for (uint32_t j = 0; j < s->go.nSpans; ++j)
-			{
-				SkeletonState * p = m[(s->go.span[j].to)];
-				states[i].go[p].push_back (lb);
-				if (lb != s->go.span[j].ub - 1)
-				{
-					states[i].go[p].push_back (s->go.span[j].ub - 1);
-				}
-				lb = s->go.span[j].ub;
-			}
-		}
-		if (s->rule != NULL)
-		{
-			states[i].rule = s->rule->accept;
-		}
+		states[i].init (s, m);
 	}
+	states[states_count - 1].init (NULL, m);
 }
 
 Skeleton::~Skeleton ()
@@ -86,39 +107,31 @@ uint32_t Skeleton::estimate_size_all (SkeletonState * s, uint32_t count, uint32_
 
 uint32_t Skeleton::estimate_size_cover (SkeletonState * s, uint32_t count, uint32_t len)
 {
-	if (s->is_end ())
+	if (s->path_len != SkeletonState::INVALID_PATH_LEN)
 	{
-		s->path_len = 0;
-		return count * len;
+		return count * (len + s->path_len);
 	}
 	else if (s->visited < 2)
 	{
 		SkeletonState::visit _ (s->visited);
-		if (s->path_len != SkeletonState::INVALID_PATH_LEN)
+		uint64_t result = 0;
+		uint32_t c = 0;
+		for (SkeletonState::wrap_iter i (s->go); !i.end () || c < count; ++i)
 		{
-			return count * (len + s->path_len);
-		}
-		else
-		{
-			uint64_t result = 0;
-			uint32_t c = 0;
-			for (SkeletonState::wrap_iter i (s->go); !i.end () || c < count; ++i)
+			const uint32_t arrows = i->second.size ();
+			c += arrows;
+			const uint32_t n = estimate_size_cover (i->first, arrows, len + 1);
+			if (n != 0 && s->path_len == SkeletonState::INVALID_PATH_LEN)
 			{
-				const uint32_t arrows = i->second.size ();
-				c += arrows;
-				const uint32_t n = estimate_size_cover (i->first, arrows, len + 1);
-				if (n != 0 && s->path_len == SkeletonState::INVALID_PATH_LEN)
-				{
-					s->path_len = i->first->path_len + 1;
-				}
-				result += n;
-				if (result > MAX_SIZE)
-				{
-					return MAX_SIZE;
-				}
+				s->path_len = i->first->path_len + 1;
 			}
-			return result;
+			result += n;
+			if (result > MAX_SIZE)
+			{
+				return MAX_SIZE;
+			}
 		}
+		return result;
 	}
 	else
 	{
@@ -157,43 +170,32 @@ void generate_paths_all (SkeletonState * s, const std::vector<Path> & prefixes, 
 
 void generate_paths_cover (SkeletonState * s, const std::vector<Path> & prefixes, std::vector<Path> & results)
 {
-	if (s == NULL)
+	if (s->path != NULL)
 	{
 		for (uint32_t i = 0; i < prefixes.size (); ++i)
 		{
 			results.push_back (prefixes[i]);
+			results.back ().append (s->path);
 		}
 	}
 	else if (s->visited < 2)
 	{
 		SkeletonState::visit _ (s->visited);
-		if (s->path != NULL)
+		const uint32_t in_arrows = prefixes.size ();
+		uint32_t in = 0;
+		for (SkeletonState::wrap_iter i (s->go); !i.end () || in < in_arrows; ++i)
 		{
-			std::vector<Path> zs (prefixes);
-			for (uint32_t i = 0; i < zs.size (); ++i)
+			std::vector<Path> zs;
+			for (uint32_t j = 0; j < i->second.size (); ++j, ++in)
 			{
-				zs[i].append (s->path);
+				zs.push_back (prefixes[in % in_arrows]);
+				zs[j].extend (s->rule, i->second[j]);
 			}
-			generate_paths_cover (NULL, zs, results);
-		}
-		else
-		{
-			const uint32_t in_arrows = prefixes.size ();
-			uint32_t in = 0;
-			for (SkeletonState::wrap_iter i (s->go); !i.end () || in < in_arrows; ++i)
+			generate_paths_cover (i->first, zs, results);
+			if (s->path == NULL && i->first->path != NULL)
 			{
-				std::vector<Path> zs;
-				for (uint32_t j = 0; j < i->second.size (); ++j, ++in)
-				{
-					zs.push_back (prefixes[in % in_arrows]);
-					zs[j].extend (s->rule, i->second[j]);
-				}
-				generate_paths_cover (i->first, zs, results);
-				if (s->path == NULL && i->first->path != NULL)
-				{
-					s->path = new Path (std::vector<uint32_t> (1, i->second[0]), 0, s->rule);
-					s->path->append (i->first->path);
-				}
+				s->path = new Path (std::vector<uint32_t> (1, i->second[0]), 0, s->rule);
+				s->path->append (i->first->path);
 			}
 		}
 	}
@@ -210,22 +212,7 @@ void Skeleton::generate_paths (std::vector<Path> & results)
 		{
 			fprintf (stderr, "re2c: generating too much data\n");
 		}
-
-		// set paths for final states and default state
-		// (those with zero outgoing arrows)
-		for (uint32_t i = 0; i < states_count; ++i)
-		{
-			if (states[i].is_end ())
-			{
-				states[i].path = new Path (std::vector<uint32_t> (), 0, states[i].rule);
-			}
-		}
 		generate_paths_cover (states, prefixes, results);
-		// cleanup: delete all paths
-		for (uint32_t i = 0; i < states_count; ++i)
-		{
-			delete states[i].path;
-		}
 	}
 	else
 	{

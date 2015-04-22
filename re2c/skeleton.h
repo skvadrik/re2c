@@ -119,6 +119,8 @@ struct SkeletonState
 		, path_len (INVALID_PATH_LEN)
 		, path (NULL)
 	{}
+	~SkeletonState ();
+	void init (const State * s, const std::map<const State *, SkeletonState *> & m);
 	inline bool is_end ()
 	{
 		return go.size () == 0;
