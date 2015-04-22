@@ -60,44 +60,81 @@ struct local_increment_t
 	}
 };
 
+template <typename container_t>
+class wrap_iter_t
+{
+	container_t & cont;
+	typename container_t::iterator iter;
+	bool wrapped;
+
+public:
+	wrap_iter_t (container_t & c)
+		: cont (c)
+		, iter (cont.begin ())
+		, wrapped (false)
+	{}
+	bool end () const
+	{
+		return wrapped;
+	}
+	void operator ++ ()
+	{
+		if (++iter == cont.end ())
+		{
+			iter = cont.begin ();
+			wrapped = true;
+		}
+	}
+	typename container_t::value_type * operator -> ()
+	{
+		return iter.operator -> ();
+	}
+};
+
 struct SkeletonState
 {
 	typedef std::map<SkeletonState *, std::vector<uint32_t> > go_t;
 	typedef local_increment_t<uint8_t> visit;
+	typedef wrap_iter_t<go_t> wrap_iter;
 
+	// outgoing arrows
 	go_t go;
-	uint32_t rule;
+
+	// how many times this state has been visited
+	// (controls looping when traversing DFA)
 	uint8_t visited;
+
+	// rule number (if any)
+	uint32_t rule;
+
+	// stuff for constructing path cover (for large DFAs)
+	static const uint32_t INVALID_PATH_LEN;
+	uint32_t path_len;
 	Path * path;
 
 	inline SkeletonState ()
 		: go ()
-		, rule (~0u)
 		, visited (0)
+		, rule (~0u)
+		, path_len (INVALID_PATH_LEN)
 		, path (NULL)
 	{}
 	inline bool is_end ()
 	{
 		return go.size () == 0;
 	}
-	inline void wrap (go_t::iterator & i)
-	{
-		if (i == go.end ())
-		{
-			i = go.begin ();
-		}
-	}
 };
 
 struct Skeleton
 {
-	static const uint32_t MAX_PATHS;
+	static const uint32_t MAX_SIZE;
 	const uint32_t states_count;
 	SkeletonState * states;
 
 	Skeleton (const DFA & dfa);
 	~Skeleton ();
-	uint32_t estimate_paths_count (SkeletonState * s, uint32_t count);
+	uint32_t estimate_size_all (SkeletonState * s, uint32_t count, uint32_t len);
+	uint32_t estimate_size_cover (SkeletonState * s, uint32_t count, uint32_t len);
 	void generate_paths (std::vector<Path> & results);
 	void emit_data (DataFile & o);
 };

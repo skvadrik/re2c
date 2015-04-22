@@ -5,7 +5,9 @@
 namespace re2c
 {
 
-const uint32_t Skeleton::MAX_PATHS = 1024 * 1024; // 1Mb
+const uint32_t SkeletonState::INVALID_PATH_LEN = 0xFFFFffff;
+
+const uint32_t Skeleton::MAX_SIZE = 1024 * 1024 * 1024; // 1Gb
 
 Skeleton::Skeleton (const DFA & dfa)
 	: states_count (dfa.nStates + 1)
@@ -51,11 +53,11 @@ Skeleton::~Skeleton ()
 	delete [] states;
 }
 
-uint32_t Skeleton::estimate_paths_count (SkeletonState * s, uint32_t count)
+uint32_t Skeleton::estimate_size_all (SkeletonState * s, uint32_t count, uint32_t len)
 {
 	if (s->is_end ())
 	{
-		return count;
+		return count * len;
 	}
 	else if (s->visited < 2)
 	{
@@ -64,17 +66,57 @@ uint32_t Skeleton::estimate_paths_count (SkeletonState * s, uint32_t count)
 		for (SkeletonState::go_t::iterator i = s->go.begin (); i != s->go.end (); ++i)
 		{
 			const uint64_t new_count = i->second.size () * count;
-			if (new_count >= MAX_PATHS)
+			if (new_count >= MAX_SIZE)
 			{
-				return MAX_PATHS;
+				return MAX_SIZE;
 			}
-			result += estimate_paths_count (i->first, new_count);
-			if (result >= MAX_PATHS)
+			result += estimate_size_all (i->first, new_count, len + 1);
+			if (result >= MAX_SIZE)
 			{
-				return MAX_PATHS;
+				return MAX_SIZE;
 			}
 		}
 		return result;
+	}
+	else
+	{
+		return 0;
+	}
+}
+
+uint32_t Skeleton::estimate_size_cover (SkeletonState * s, uint32_t count, uint32_t len)
+{
+	if (s->is_end ())
+	{
+		s->path_len = 0;
+		return count * len;
+	}
+	else if (s->visited < 2)
+	{
+		SkeletonState::visit _ (s->visited);
+		if (s->path_len != SkeletonState::INVALID_PATH_LEN)
+		{
+			return count * (len + s->path_len);
+		}
+		else
+		{
+			uint64_t result = 0;
+			uint32_t c = 0;
+			for (SkeletonState::wrap_iter i (s->go); !i.end () || c < count; ++i)
+			{
+				const uint32_t arrows = i->second.size ();
+				c += arrows;
+				const uint32_t n = estimate_size_cover (i->first, arrows, len + 1);
+				if (n != 0 && s->path_len == SkeletonState::INVALID_PATH_LEN)
+				{
+					s->path_len = i->first->path_len + 1;
+				}
+				result += n;
+			}
+			return result >= MAX_SIZE
+				? MAX_SIZE
+				: result;
+		}
 	}
 	else
 	{
@@ -135,12 +177,8 @@ void generate_paths_cover (SkeletonState * s, const std::vector<Path> & prefixes
 		else
 		{
 			const uint32_t in_arrows = prefixes.size ();
-			const uint32_t out_states = s->go.size ();
-			SkeletonState::go_t::iterator i = s->go.begin ();
-			for	( uint32_t in = 0, out = 0
-				; in < in_arrows || out < out_states
-				; ++out, s->wrap (++i)
-				)
+			uint32_t in = 0;
+			for (SkeletonState::wrap_iter i (s->go); !i.end () || in < in_arrows; ++i)
 			{
 				std::vector<Path> zs;
 				for (uint32_t j = 0; j < i->second.size (); ++j, ++in)
@@ -164,8 +202,13 @@ void Skeleton::generate_paths (std::vector<Path> & results)
 	std::vector<Path> prefixes;
 	prefixes.push_back (Path (std::vector<uint32_t> (), 0, ~0));
 
-	if (estimate_paths_count (states, 1) == MAX_PATHS)
+	if (estimate_size_all (states, 1, 0) == MAX_SIZE)
 	{
+		if (estimate_size_cover (states, 1, 0) == MAX_SIZE)
+		{
+			fprintf (stderr, "re2c: generating too much data\n");
+		}
+
 		// set paths for final states and default state
 		// (those with zero outgoing arrows)
 		for (uint32_t i = 0; i < states_count; ++i)
