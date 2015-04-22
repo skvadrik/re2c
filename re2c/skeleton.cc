@@ -112,10 +112,12 @@ uint32_t Skeleton::estimate_size_cover (SkeletonState * s, uint32_t count, uint3
 					s->path_len = i->first->path_len + 1;
 				}
 				result += n;
+				if (result > MAX_SIZE)
+				{
+					return MAX_SIZE;
+				}
 			}
-			return result >= MAX_SIZE
-				? MAX_SIZE
-				: result;
+			return result;
 		}
 	}
 	else
