@@ -10,41 +10,23 @@
 namespace re2c
 {
 
+namespace skeleton
+{
+
+const uint32_t NO_RULE = 0xFFFFffff;
+
 struct Path
 {
-	std::vector<uint32_t> chars;
+	typedef std::vector<uint32_t> chars_t;
+
+	chars_t chars;
 	uint32_t length;
 	uint32_t rule;
-	inline Path (const std::vector<uint32_t> & cs, uint32_t l, uint32_t r)
-		: chars (cs)
-		, length (l)
-		, rule (r)
-	{}
-	inline void update (uint32_t r)
-	{
-		if (r != ~0u)
-		{
-			length = chars.size ();
-			rule = r;
-		}
-	}
-	inline void extend (uint32_t r, uint32_t c)
-	{
-		update (r);
-		chars.push_back (c);
-	}
-	inline void append (const Path * p)
-	{
-		if (p->rule != ~0u)
-		{
-			length = chars.size () + p->length;
-			rule = p->rule;
-		}
-		for (uint32_t i = 0; i < p->chars.size (); ++i)
-		{
-			chars.push_back (p->chars[i]);
-		}
-	}
+
+	Path (const chars_t & cs, uint32_t l, uint32_t r);
+	void update (uint32_t r);
+	void extend (uint32_t r, uint32_t c);
+	void append (const Path * p);
 };
 
 template <typename counter_t>
@@ -91,60 +73,54 @@ public:
 	}
 };
 
-struct SkeletonState
+struct Node
 {
-	typedef std::map<SkeletonState *, std::vector<uint32_t> > go_t;
-	typedef local_increment_t<uint8_t> visit;
-	typedef wrap_iter_t<go_t> wrap_iter;
+	typedef std::map<const State *, Node *> s2n_map;
+	typedef std::map<Node *, std::vector<uint32_t> > arcs_t;
+	typedef local_increment_t<uint8_t> local_inc;
+	typedef wrap_iter_t<arcs_t> wrap_iter;
 
-	// outgoing arrows
-	go_t go;
+	// outgoing arcs
+	arcs_t arcs;
 
-	// how many times this state has been visited
-	// (controls looping when traversing DFA)
-	uint8_t visited;
+	// how many times this node has been visited
+	// (controls looping in graph traversals)
+	uint8_t loop;
 
-	// rule number (if any)
+	// rule number for corresponding DFA state (if any)
 	uint32_t rule;
 
-	// stuff for constructing path cover (for large DFAs)
-	static const uint32_t INVALID_PATH_LEN;
+	// stuff for constructing path cover (for large graphs)
+	static const uint32_t UNKNOWN_LEN;
 	uint32_t path_len;
 	Path * path;
 
-	inline SkeletonState ()
-		: go ()
-		, visited (0)
-		, rule (~0u)
-		, path_len (INVALID_PATH_LEN)
-		, path (NULL)
-	{}
-	~SkeletonState ();
-	void init (const State * s, const std::map<const State *, SkeletonState *> & m);
-	inline bool is_end ()
-	{
-		return go.size () == 0;
-	}
+	inline Node () {} // only to allow array allocation with 'new'
+	Node (const State * s, const s2n_map & s2n);
+	~Node ();
+	bool end () const;
+	uint32_t estimate_size_all (uint32_t inarcs, uint32_t len);
+	uint32_t estimate_size_cover (uint32_t inarcs, uint32_t len);
+	void generate_paths_all (const std::vector<Path> & prefixes, std::vector<Path> & results);
+	void generate_paths_cover (const std::vector<Path> & prefixes, std::vector<Path> & results);
 };
 
 struct Skeleton
 {
-	static const uint32_t MAX_SIZE;
-	const uint32_t states_count;
-	SkeletonState * states;
+	static const uint32_t DATA_LIMIT;
+
+	Node * nodes;
 
 	Skeleton (const DFA & dfa);
 	~Skeleton ();
-	uint32_t estimate_size_all (SkeletonState * s, uint32_t count, uint32_t len);
-	uint32_t estimate_size_cover (SkeletonState * s, uint32_t count, uint32_t len);
 	void generate_paths (std::vector<Path> & results);
 	void emit_data (DataFile & o);
 };
 
-void skeleton_emit_prolog (OutputFile & o, uint32_t ind, const char * data_name);
-void skeleton_emit_epilog (OutputFile & o, uint32_t ind);
-void generate_paths_all (SkeletonState * s, const std::vector<Path> & prefixes, std::vector<Path> & results);
-void generate_paths_cover (SkeletonState * s, const std::vector<Path> & prefixes, std::vector<Path> & results);
+void emit_prolog (OutputFile & o, uint32_t ind, const char * data_name);
+void emit_epilog (OutputFile & o, uint32_t ind);
+
+} // namespace skeleton
 
 } // namespace re2c
 

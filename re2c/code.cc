@@ -1220,7 +1220,7 @@ void DFA::emit(Output & output, uint32_t& ind, const RegExpMap* specMap, const s
 	}
 	if (flag_skeleton)
 	{
-		skeleton_emit_epilog (o, ind);
+		skeleton::emit_epilog (o, ind);
 	}
 
 	// Cleanup
