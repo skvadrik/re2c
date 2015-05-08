@@ -1,6 +1,8 @@
 #!/bin/sh
+
 git clean -fXd
-aclocal
-autoheader
-automake -a -c --foreign
-autoconf
+
+aclocal -W all
+autoheader -W all
+automake -W all -a -c --foreign
+autoconf -W all

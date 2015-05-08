@@ -1,0 +1,2296 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+    "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=UTF-8" />
+<meta name="generator" content="AsciiDoc 8.6.9" />
+<title>RE2C (1)</title>
+<style type="text/css">
+/* Shared CSS for AsciiDoc xhtml11 and html5 backends */
+
+/* Default font. */
+body {
+  font-family: Georgia,serif;
+}
+
+/* Title font. */
+h1, h2, h3, h4, h5, h6,
+div.title, caption.title,
+thead, p.table.header,
+#toctitle,
+#author, #revnumber, #revdate, #revremark,
+#footer {
+  font-family: Arial,Helvetica,sans-serif;
+}
+
+body {
+  margin: 1em 5% 1em 5%;
+}
+
+a {
+  color: blue;
+  text-decoration: underline;
+}
+a:visited {
+  color: fuchsia;
+}
+
+em {
+  font-style: italic;
+  color: navy;
+}
+
+strong {
+  font-weight: bold;
+  color: #083194;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: #527bbd;
+  margin-top: 1.2em;
+  margin-bottom: 0.5em;
+  line-height: 1.3;
+}
+
+h1, h2, h3 {
+  border-bottom: 2px solid silver;
+}
+h2 {
+  padding-top: 0.5em;
+}
+h3 {
+  float: left;
+}
+h3 + * {
+  clear: left;
+}
+h5 {
+  font-size: 1.0em;
+}
+
+div.sectionbody {
+  margin-left: 0;
+}
+
+hr {
+  border: 1px solid silver;
+}
+
+p {
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+}
+
+ul, ol, li > p {
+  margin-top: 0;
+}
+ul > li     { color: #aaa; }
+ul > li > * { color: black; }
+
+.monospaced, code, pre {
+  font-family: "Courier New", Courier, monospace;
+  font-size: inherit;
+  color: navy;
+  padding: 0;
+  margin: 0;
+}
+pre {
+  white-space: pre-wrap;
+}
+
+#author {
+  color: #527bbd;
+  font-weight: bold;
+  font-size: 1.1em;
+}
+#email {
+}
+#revnumber, #revdate, #revremark {
+}
+
+#footer {
+  font-size: small;
+  border-top: 2px solid silver;
+  padding-top: 0.5em;
+  margin-top: 4.0em;
+}
+#footer-text {
+  float: left;
+  padding-bottom: 0.5em;
+}
+#footer-badges {
+  float: right;
+  padding-bottom: 0.5em;
+}
+
+#preamble {
+  margin-top: 1.5em;
+  margin-bottom: 1.5em;
+}
+div.imageblock, div.exampleblock, div.verseblock,
+div.quoteblock, div.literalblock, div.listingblock, div.sidebarblock,
+div.admonitionblock {
+  margin-top: 1.0em;
+  margin-bottom: 1.5em;
+}
+div.admonitionblock {
+  margin-top: 2.0em;
+  margin-bottom: 2.0em;
+  margin-right: 10%;
+  color: #606060;
+}
+
+div.content { /* Block element content. */
+  padding: 0;
+}
+
+/* Block element titles. */
+div.title, caption.title {
+  color: #527bbd;
+  font-weight: bold;
+  text-align: left;
+  margin-top: 1.0em;
+  margin-bottom: 0.5em;
+}
+div.title + * {
+  margin-top: 0;
+}
+
+td div.title:first-child {
+  margin-top: 0.0em;
+}
+div.content div.title:first-child {
+  margin-top: 0.0em;
+}
+div.content + div.title {
+  margin-top: 0.0em;
+}
+
+div.sidebarblock > div.content {
+  background: #ffffee;
+  border: 1px solid #dddddd;
+  border-left: 4px solid #f0f0f0;
+  padding: 0.5em;
+}
+
+div.listingblock > div.content {
+  border: 1px solid #dddddd;
+  border-left: 5px solid #f0f0f0;
+  background: #f8f8f8;
+  padding: 0.5em;
+}
+
+div.quoteblock, div.verseblock {
+  padding-left: 1.0em;
+  margin-left: 1.0em;
+  margin-right: 10%;
+  border-left: 5px solid #f0f0f0;
+  color: #888;
+}
+
+div.quoteblock > div.attribution {
+  padding-top: 0.5em;
+  text-align: right;
+}
+
+div.verseblock > pre.content {
+  font-family: inherit;
+  font-size: inherit;
+}
+div.verseblock > div.attribution {
+  padding-top: 0.75em;
+  text-align: left;
+}
+/* DEPRECATED: Pre version 8.2.7 verse style literal block. */
+div.verseblock + div.attribution {
+  text-align: left;
+}
+
+div.admonitionblock .icon {
+  vertical-align: top;
+  font-size: 1.1em;
+  font-weight: bold;
+  text-decoration: underline;
+  color: #527bbd;
+  padding-right: 0.5em;
+}
+div.admonitionblock td.content {
+  padding-left: 0.5em;
+  border-left: 3px solid #dddddd;
+}
+
+div.exampleblock > div.content {
+  border-left: 3px solid #dddddd;
+  padding-left: 0.5em;
+}
+
+div.imageblock div.content { padding-left: 0; }
+span.image img { border-style: none; vertical-align: text-bottom; }
+a.image:visited { color: white; }
+
+dl {
+  margin-top: 0.8em;
+  margin-bottom: 0.8em;
+}
+dt {
+  margin-top: 0.5em;
+  margin-bottom: 0;
+  font-style: normal;
+  color: navy;
+}
+dd > *:first-child {
+  margin-top: 0.1em;
+}
+
+ul, ol {
+    list-style-position: outside;
+}
+ol.arabic {
+  list-style-type: decimal;
+}
+ol.loweralpha {
+  list-style-type: lower-alpha;
+}
+ol.upperalpha {
+  list-style-type: upper-alpha;
+}
+ol.lowerroman {
+  list-style-type: lower-roman;
+}
+ol.upperroman {
+  list-style-type: upper-roman;
+}
+
+div.compact ul, div.compact ol,
+div.compact p, div.compact p,
+div.compact div, div.compact div {
+  margin-top: 0.1em;
+  margin-bottom: 0.1em;
+}
+
+tfoot {
+  font-weight: bold;
+}
+td > div.verse {
+  white-space: pre;
+}
+
+div.hdlist {
+  margin-top: 0.8em;
+  margin-bottom: 0.8em;
+}
+div.hdlist tr {
+  padding-bottom: 15px;
+}
+dt.hdlist1.strong, td.hdlist1.strong {
+  font-weight: bold;
+}
+td.hdlist1 {
+  vertical-align: top;
+  font-style: normal;
+  padding-right: 0.8em;
+  color: navy;
+}
+td.hdlist2 {
+  vertical-align: top;
+}
+div.hdlist.compact tr {
+  margin: 0;
+  padding-bottom: 0;
+}
+
+.comment {
+  background: yellow;
+}
+
+.footnote, .footnoteref {
+  font-size: 0.8em;
+}
+
+span.footnote, span.footnoteref {
+  vertical-align: super;
+}
+
+#footnotes {
+  margin: 20px 0 20px 0;
+  padding: 7px 0 0 0;
+}
+
+#footnotes div.footnote {
+  margin: 0 0 5px 0;
+}
+
+#footnotes hr {
+  border: none;
+  border-top: 1px solid silver;
+  height: 1px;
+  text-align: left;
+  margin-left: 0;
+  width: 20%;
+  min-width: 100px;
+}
+
+div.colist td {
+  padding-right: 0.5em;
+  padding-bottom: 0.3em;
+  vertical-align: top;
+}
+div.colist td img {
+  margin-top: 0.3em;
+}
+
+@media print {
+  #footer-badges { display: none; }
+}
+
+#toc {
+  margin-bottom: 2.5em;
+}
+
+#toctitle {
+  color: #527bbd;
+  font-size: 1.1em;
+  font-weight: bold;
+  margin-top: 1.0em;
+  margin-bottom: 0.1em;
+}
+
+div.toclevel0, div.toclevel1, div.toclevel2, div.toclevel3, div.toclevel4 {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+div.toclevel2 {
+  margin-left: 2em;
+  font-size: 0.9em;
+}
+div.toclevel3 {
+  margin-left: 4em;
+  font-size: 0.9em;
+}
+div.toclevel4 {
+  margin-left: 6em;
+  font-size: 0.9em;
+}
+
+span.aqua { color: aqua; }
+span.black { color: black; }
+span.blue { color: blue; }
+span.fuchsia { color: fuchsia; }
+span.gray { color: gray; }
+span.green { color: green; }
+span.lime { color: lime; }
+span.maroon { color: maroon; }
+span.navy { color: navy; }
+span.olive { color: olive; }
+span.purple { color: purple; }
+span.red { color: red; }
+span.silver { color: silver; }
+span.teal { color: teal; }
+span.white { color: white; }
+span.yellow { color: yellow; }
+
+span.aqua-background { background: aqua; }
+span.black-background { background: black; }
+span.blue-background { background: blue; }
+span.fuchsia-background { background: fuchsia; }
+span.gray-background { background: gray; }
+span.green-background { background: green; }
+span.lime-background { background: lime; }
+span.maroon-background { background: maroon; }
+span.navy-background { background: navy; }
+span.olive-background { background: olive; }
+span.purple-background { background: purple; }
+span.red-background { background: red; }
+span.silver-background { background: silver; }
+span.teal-background { background: teal; }
+span.white-background { background: white; }
+span.yellow-background { background: yellow; }
+
+span.big { font-size: 2em; }
+span.small { font-size: 0.6em; }
+
+span.underline { text-decoration: underline; }
+span.overline { text-decoration: overline; }
+span.line-through { text-decoration: line-through; }
+
+div.unbreakable { page-break-inside: avoid; }
+
+
+/*
+ * xhtml11 specific
+ *
+ * */
+
+div.tableblock {
+  margin-top: 1.0em;
+  margin-bottom: 1.5em;
+}
+div.tableblock > table {
+  border: 3px solid #527bbd;
+}
+thead, p.table.header {
+  font-weight: bold;
+  color: #527bbd;
+}
+p.table {
+  margin-top: 0;
+}
+/* Because the table frame attribute is overriden by CSS in most browsers. */
+div.tableblock > table[frame="void"] {
+  border-style: none;
+}
+div.tableblock > table[frame="hsides"] {
+  border-left-style: none;
+  border-right-style: none;
+}
+div.tableblock > table[frame="vsides"] {
+  border-top-style: none;
+  border-bottom-style: none;
+}
+
+
+/*
+ * html5 specific
+ *
+ * */
+
+table.tableblock {
+  margin-top: 1.0em;
+  margin-bottom: 1.5em;
+}
+thead, p.tableblock.header {
+  font-weight: bold;
+  color: #527bbd;
+}
+p.tableblock {
+  margin-top: 0;
+}
+table.tableblock {
+  border-width: 3px;
+  border-spacing: 0px;
+  border-style: solid;
+  border-color: #527bbd;
+  border-collapse: collapse;
+}
+th.tableblock, td.tableblock {
+  border-width: 1px;
+  padding: 4px;
+  border-style: solid;
+  border-color: #527bbd;
+}
+
+table.tableblock.frame-topbot {
+  border-left-style: hidden;
+  border-right-style: hidden;
+}
+table.tableblock.frame-sides {
+  border-top-style: hidden;
+  border-bottom-style: hidden;
+}
+table.tableblock.frame-none {
+  border-style: hidden;
+}
+
+th.tableblock.halign-left, td.tableblock.halign-left {
+  text-align: left;
+}
+th.tableblock.halign-center, td.tableblock.halign-center {
+  text-align: center;
+}
+th.tableblock.halign-right, td.tableblock.halign-right {
+  text-align: right;
+}
+
+th.tableblock.valign-top, td.tableblock.valign-top {
+  vertical-align: top;
+}
+th.tableblock.valign-middle, td.tableblock.valign-middle {
+  vertical-align: middle;
+}
+th.tableblock.valign-bottom, td.tableblock.valign-bottom {
+  vertical-align: bottom;
+}
+
+
+/*
+ * manpage specific
+ *
+ * */
+
+body.manpage h1 {
+  padding-top: 0.5em;
+  padding-bottom: 0.5em;
+  border-top: 2px solid silver;
+  border-bottom: 2px solid silver;
+}
+body.manpage h2 {
+  border-style: none;
+}
+body.manpage div.sectionbody {
+  margin-left: 3em;
+}
+
+@media print {
+  body.manpage div#toc { display: none; }
+}
+
+
+</style>
+<script type="text/javascript">
+/*<![CDATA[*/
+var asciidoc = {  // Namespace.
+
+/////////////////////////////////////////////////////////////////////
+// Table Of Contents generator
+/////////////////////////////////////////////////////////////////////
+
+/* Author: Mihai Bazon, September 2002
+ * http://students.infoiasi.ro/~mishoo
+ *
+ * Table Of Content generator
+ * Version: 0.4
+ *
+ * Feel free to use this script under the terms of the GNU General Public
+ * License, as long as you do not remove or alter this notice.
+ */
+
+ /* modified by Troy D. Hanson, September 2006. License: GPL */
+ /* modified by Stuart Rackham, 2006, 2009. License: GPL */
+
+// toclevels = 1..4.
+toc: function (toclevels) {
+
+  function getText(el) {
+    var text = "";
+    for (var i = el.firstChild; i != null; i = i.nextSibling) {
+      if (i.nodeType == 3 /* Node.TEXT_NODE */) // IE doesn't speak constants.
+        text += i.data;
+      else if (i.firstChild != null)
+        text += getText(i);
+    }
+    return text;
+  }
+
+  function TocEntry(el, text, toclevel) {
+    this.element = el;
+    this.text = text;
+    this.toclevel = toclevel;
+  }
+
+  function tocEntries(el, toclevels) {
+    var result = new Array;
+    var re = new RegExp('[hH]([1-'+(toclevels+1)+'])');
+    // Function that scans the DOM tree for header elements (the DOM2
+    // nodeIterator API would be a better technique but not supported by all
+    // browsers).
+    var iterate = function (el) {
+      for (var i = el.firstChild; i != null; i = i.nextSibling) {
+        if (i.nodeType == 1 /* Node.ELEMENT_NODE */) {
+          var mo = re.exec(i.tagName);
+          if (mo && (i.getAttribute("class") || i.getAttribute("className")) != "float") {
+            result[result.length] = new TocEntry(i, getText(i), mo[1]-1);
+          }
+          iterate(i);
+        }
+      }
+    }
+    iterate(el);
+    return result;
+  }
+
+  var toc = document.getElementById("toc");
+  if (!toc) {
+    return;
+  }
+
+  // Delete existing TOC entries in case we're reloading the TOC.
+  var tocEntriesToRemove = [];
+  var i;
+  for (i = 0; i < toc.childNodes.length; i++) {
+    var entry = toc.childNodes[i];
+    if (entry.nodeName.toLowerCase() == 'div'
+     && entry.getAttribute("class")
+     && entry.getAttribute("class").match(/^toclevel/))
+      tocEntriesToRemove.push(entry);
+  }
+  for (i = 0; i < tocEntriesToRemove.length; i++) {
+    toc.removeChild(tocEntriesToRemove[i]);
+  }
+
+  // Rebuild TOC entries.
+  var entries = tocEntries(document.getElementById("content"), toclevels);
+  for (var i = 0; i < entries.length; ++i) {
+    var entry = entries[i];
+    if (entry.element.id == "")
+      entry.element.id = "_toc_" + i;
+    var a = document.createElement("a");
+    a.href = "#" + entry.element.id;
+    a.appendChild(document.createTextNode(entry.text));
+    var div = document.createElement("div");
+    div.appendChild(a);
+    div.className = "toclevel" + entry.toclevel;
+    toc.appendChild(div);
+  }
+  if (entries.length == 0)
+    toc.parentNode.removeChild(toc);
+},
+
+
+/////////////////////////////////////////////////////////////////////
+// Footnotes generator
+/////////////////////////////////////////////////////////////////////
+
+/* Based on footnote generation code from:
+ * http://www.brandspankingnew.net/archive/2005/07/format_footnote.html
+ */
+
+footnotes: function () {
+  // Delete existing footnote entries in case we're reloading the footnodes.
+  var i;
+  var noteholder = document.getElementById("footnotes");
+  if (!noteholder) {
+    return;
+  }
+  var entriesToRemove = [];
+  for (i = 0; i < noteholder.childNodes.length; i++) {
+    var entry = noteholder.childNodes[i];
+    if (entry.nodeName.toLowerCase() == 'div' && entry.getAttribute("class") == "footnote")
+      entriesToRemove.push(entry);
+  }
+  for (i = 0; i < entriesToRemove.length; i++) {
+    noteholder.removeChild(entriesToRemove[i]);
+  }
+
+  // Rebuild footnote entries.
+  var cont = document.getElementById("content");
+  var spans = cont.getElementsByTagName("span");
+  var refs = {};
+  var n = 0;
+  for (i=0; i<spans.length; i++) {
+    if (spans[i].className == "footnote") {
+      n++;
+      var note = spans[i].getAttribute("data-note");
+      if (!note) {
+        // Use [\s\S] in place of . so multi-line matches work.
+        // Because JavaScript has no s (dotall) regex flag.
+        note = spans[i].innerHTML.match(/\s*\[([\s\S]*)]\s*/)[1];
+        spans[i].innerHTML =
+          "[<a id='_footnoteref_" + n + "' href='#_footnote_" + n +
+          "' title='View footnote' class='footnote'>" + n + "</a>]";
+        spans[i].setAttribute("data-note", note);
+      }
+      noteholder.innerHTML +=
+        "<div class='footnote' id='_footnote_" + n + "'>" +
+        "<a href='#_footnoteref_" + n + "' title='Return to text'>" +
+        n + "</a>. " + note + "</div>";
+      var id =spans[i].getAttribute("id");
+      if (id != null) refs["#"+id] = n;
+    }
+  }
+  if (n == 0)
+    noteholder.parentNode.removeChild(noteholder);
+  else {
+    // Process footnoterefs.
+    for (i=0; i<spans.length; i++) {
+      if (spans[i].className == "footnoteref") {
+        var href = spans[i].getElementsByTagName("a")[0].getAttribute("href");
+        href = href.match(/#.*/)[0];  // Because IE return full URL.
+        n = refs[href];
+        spans[i].innerHTML =
+          "[<a href='#_footnote_" + n +
+          "' title='View footnote' class='footnote'>" + n + "</a>]";
+      }
+    }
+  }
+},
+
+install: function(toclevels) {
+  var timerId;
+
+  function reinstall() {
+    asciidoc.footnotes();
+    if (toclevels) {
+      asciidoc.toc(toclevels);
+    }
+  }
+
+  function reinstallAndRemoveTimer() {
+    clearInterval(timerId);
+    reinstall();
+  }
+
+  timerId = setInterval(reinstall, 500);
+  if (document.addEventListener)
+    document.addEventListener("DOMContentLoaded", reinstallAndRemoveTimer, false);
+  else
+    window.onload = reinstallAndRemoveTimer;
+}
+
+}
+asciidoc.install();
+/*]]>*/
+</script>
+</head>
+<body class="manpage">
+<div id="header">
+<h1>
+RE2C (1) Manual Page
+</h1>
+<h2>NAME</h2>
+<div class="sectionbody">
+<p>re2c -
+   convert regular expressions to C/C++
+</p>
+</div>
+</div>
+<div id="content">
+<div class="sect1">
+<h2 id="_synopsis">SYNOPSIS</h2>
+<div class="sectionbody">
+<div class="paragraph"><p><strong>re2c</strong> [<em>OPTIONS</em>] <em>FILE</em></p></div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_description">DESCRIPTION</h2>
+<div class="sectionbody">
+<div class="paragraph"><p><strong>re2c</strong> is a lexer generator for C/C++.
+It finds regular expression specifications inside of C/C++ comments and replaces them with a hard-coded DFA.
+The user must supply some interface code in order to control and customize the generated DFA.</p></div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_example">EXAMPLE</h2>
+<div class="sectionbody">
+<div class="paragraph"><p>Given the following code:</p></div>
+<div class="listingblock">
+<div class="content"><!-- Generator: GNU source-highlight 3.1.7
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><span style="color: #009900">unsigned</span> <span style="color: #009900">int</span> <span style="font-weight: bold"><span style="color: #000000">stou</span></span> <span style="color: #990000">(</span><span style="font-weight: bold"><span style="color: #0000FF">const</span></span> <span style="color: #009900">char</span> <span style="color: #990000">*</span> s<span style="color: #990000">)</span>
+<span style="color: #FF0000">{</span>
+<span style="font-weight: bold"><span style="color: #000080">#   define</span></span> YYCTYPE <span style="color: #009900">char</span>
+    <span style="font-weight: bold"><span style="color: #0000FF">const</span></span> YYCTYPE <span style="color: #990000">*</span> YYCURSOR <span style="color: #990000">=</span> s<span style="color: #990000">;</span>
+    <span style="color: #009900">unsigned</span> <span style="color: #009900">int</span> result <span style="color: #990000">=</span> <span style="color: #993399">0</span><span style="color: #990000">;</span>
+
+    <span style="font-weight: bold"><span style="color: #0000FF">for</span></span> <span style="color: #990000">(;;)</span>
+    <span style="color: #FF0000">{</span>
+        <span style="font-style: italic"><span style="color: #9A1900">/*!re2c</span></span>
+<span style="font-style: italic"><span style="color: #9A1900">            re2c:yyfill:enable = 0;</span></span>
+
+<span style="font-style: italic"><span style="color: #9A1900">            "\x00" { return result; }</span></span>
+<span style="font-style: italic"><span style="color: #9A1900">            [0-9]  { result = result * 10 + c; continue; }</span></span>
+<span style="font-style: italic"><span style="color: #9A1900">        */</span></span>
+    <span style="color: #FF0000">}</span>
+<span style="color: #FF0000">}</span></tt></pre></div></div>
+<div class="paragraph"><p><code>re2c -is</code> will generate:</p></div>
+<div class="listingblock">
+<div class="content"><!-- Generator: GNU source-highlight 3.1.7
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><span style="font-style: italic"><span style="color: #9A1900">/* Generated by re2c 0.13.7.dev on Mon Jul 14 13:37:46 2014 */</span></span>
+<span style="color: #009900">unsigned</span> <span style="color: #009900">int</span> <span style="font-weight: bold"><span style="color: #000000">stou</span></span> <span style="color: #990000">(</span><span style="font-weight: bold"><span style="color: #0000FF">const</span></span> <span style="color: #009900">char</span> <span style="color: #990000">*</span> s<span style="color: #990000">)</span>
+<span style="color: #FF0000">{</span>
+<span style="font-weight: bold"><span style="color: #000080">#   define</span></span> YYCTYPE <span style="color: #009900">char</span>
+    <span style="font-weight: bold"><span style="color: #0000FF">const</span></span> YYCTYPE <span style="color: #990000">*</span> YYCURSOR <span style="color: #990000">=</span> s<span style="color: #990000">;</span>
+    <span style="color: #009900">unsigned</span> <span style="color: #009900">int</span> result <span style="color: #990000">=</span> <span style="color: #993399">0</span><span style="color: #990000">;</span>
+
+    <span style="font-weight: bold"><span style="color: #0000FF">for</span></span> <span style="color: #990000">(;;)</span>
+    <span style="color: #FF0000">{</span>
+
+<span style="color: #FF0000">{</span>
+        <span style="color: #008080">YYCTYPE</span> yych<span style="color: #990000">;</span>
+
+        yych <span style="color: #990000">=</span> <span style="color: #990000">*</span>YYCURSOR<span style="color: #990000">;</span>
+        <span style="font-weight: bold"><span style="color: #0000FF">if</span></span> <span style="color: #990000">(</span>yych <span style="color: #990000">&lt;=</span> <span style="color: #993399">0x00</span><span style="color: #990000">)</span> <span style="font-weight: bold"><span style="color: #0000FF">goto</span></span> yy3<span style="color: #990000">;</span>
+        <span style="font-weight: bold"><span style="color: #0000FF">if</span></span> <span style="color: #990000">(</span>yych <span style="color: #990000">&lt;=</span> <span style="color: #FF0000">'/'</span><span style="color: #990000">)</span> <span style="font-weight: bold"><span style="color: #0000FF">goto</span></span> yy2<span style="color: #990000">;</span>
+        <span style="font-weight: bold"><span style="color: #0000FF">if</span></span> <span style="color: #990000">(</span>yych <span style="color: #990000">&lt;=</span> <span style="color: #FF0000">'9'</span><span style="color: #990000">)</span> <span style="font-weight: bold"><span style="color: #0000FF">goto</span></span> yy5<span style="color: #990000">;</span>
+<span style="font-weight: bold"><span style="color: #008080">yy2:</span></span>
+<span style="font-weight: bold"><span style="color: #008080">yy3:</span></span>
+        <span style="color: #990000">++</span>YYCURSOR<span style="color: #990000">;</span>
+        <span style="color: #FF0000">{</span> <span style="font-weight: bold"><span style="color: #0000FF">return</span></span> result<span style="color: #990000">;</span> <span style="color: #FF0000">}</span>
+<span style="font-weight: bold"><span style="color: #008080">yy5:</span></span>
+        <span style="color: #990000">++</span>YYCURSOR<span style="color: #990000">;</span>
+        <span style="color: #FF0000">{</span> result <span style="color: #990000">=</span> result <span style="color: #990000">*</span> <span style="color: #993399">10</span> <span style="color: #990000">+</span> c<span style="color: #990000">;</span> <span style="font-weight: bold"><span style="color: #0000FF">continue</span></span><span style="color: #990000">;</span> <span style="color: #FF0000">}</span>
+<span style="color: #FF0000">}</span>
+
+    <span style="color: #FF0000">}</span>
+<span style="color: #FF0000">}</span></tt></pre></div></div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_options">OPTIONS</h2>
+<div class="sectionbody">
+<div class="dlist"><dl>
+<dt class="hdlist1">
+<strong>-?</strong>, <strong>-h</strong>
+</dt>
+<dd>
+<p>
+    Invoke a short help.
+</p>
+</dd>
+<dt class="hdlist1">
+<strong>-b</strong>
+</dt>
+<dd>
+<p>
+    Implies <strong>-s</strong>.  Use bit vectors as well in the attempt to coax better
+    code out of the compiler.  Most useful for specifications with more than a
+    few keywords (e.g. for most programming languages).
+</p>
+</dd>
+<dt class="hdlist1">
+<strong>-c</strong>
+</dt>
+<dd>
+<p>
+    Used to support (f)lex-like condition support.
+</p>
+</dd>
+<dt class="hdlist1">
+<strong>-d</strong>
+</dt>
+<dd>
+<p>
+    Creates a parser that dumps information about the current position and in
+    which state the parser is while parsing the input. This is useful to debug
+    parser issues and states. If you use this switch you need to define a macro
+    <strong>YYDEBUG</strong> that is called like a function with two parameters:
+    <strong>void YYDEBUG (int state, char current)</strong>. The first parameter receives the
+    state or -1 and the second parameter receives the input at the current cursor.
+</p>
+</dd>
+<dt class="hdlist1">
+<strong>-D</strong>
+</dt>
+<dd>
+<p>
+    Emit Graphviz dot data. It can then be processed with e.g.
+    <code>dot -Tpng input.dot &gt; output.png</code>. Please note that scanners with many states
+    may crash dot.
+</p>
+</dd>
+<dt class="hdlist1">
+<strong>-e</strong>
+</dt>
+<dd>
+<p>
+    Generate a parser that supports EBCDIC. The generated code can deal with any
+    character up to 0xFF. In this mode <strong>re2c</strong> assumes that input character size is
+    1 byte. This switch is incompatible with <strong>-w</strong>, <strong>-x</strong>, <strong>-u</strong> and <strong>-8</strong>.
+</p>
+</dd>
+<dt class="hdlist1">
+<strong>-f</strong>
+</dt>
+<dd>
+<p>
+    Generate a scanner with support for storable state.
+    For details see below at <strong>SCANNER WITH STORABLE STATES</strong>.
+</p>
+</dd>
+<dt class="hdlist1">
+<strong>-F</strong>
+</dt>
+<dd>
+<p>
+    Partial support for flex syntax. When this flag is active then named
+    definitions must be surrounded by curly braces and can be defined without an
+    equal sign and the terminating semi colon. Instead names are treated as direct
+    double quoted strings.
+</p>
+</dd>
+<dt class="hdlist1">
+<strong>-g</strong>
+</dt>
+<dd>
+<p>
+    Generate a scanner that utilizes GCC&#8217;s computed goto feature. That is <strong>re2c</strong>
+    generates jump tables whenever a decision is of a certain complexity (e.g. a
+    lot of if conditions are otherwise necessary). This is only useable with GCC
+    and produces output that cannot be compiled with any other compiler. Note that
+    this implies <strong>-b</strong> and that the complexity threshold can be configured using the
+    inplace configuration <strong>cgoto:threshold</strong>.
+</p>
+</dd>
+<dt class="hdlist1">
+<strong>-i</strong>
+</dt>
+<dd>
+<p>
+    Do not output <strong>#line</strong> information. This is usefull when you want use a CMS tool
+    with the <strong>re2c</strong> output which you might want if you do not require your users to
+    have <strong>re2c</strong> themselves when building from your source.
+</p>
+</dd>
+<dt class="hdlist1">
+<strong>-o OUTPUT</strong>
+</dt>
+<dd>
+<p>
+    Specify the output file.
+</p>
+</dd>
+<dt class="hdlist1">
+<strong>-r</strong>
+</dt>
+<dd>
+<p>
+    Allows reuse of scanner definitions with <strong>/*!use:re2c</strong> after
+    <strong>/*!rules:re2c</strong>. In this mode no <strong>/*!re2c</strong> block and exactly one
+    <strong>/*!rules:re2c</strong> must be present. The rules are being saved and used by
+    every <strong>/*!use:re2c</strong> block that follows. These blocks can contain
+    inplace configurations, especially <strong>re2c:flags:e</strong>, <strong>re2c:flags:w</strong>,
+    <strong>re2c:flags:x</strong>, <strong>re2c:flags:u</strong> and <strong>re2c:flags:8</strong>.
+    That way it is possible to create the same scanner multiple times for different
+    character types, different input mechanisms or different output mechanisms.
+    The <strong>/*!use:re2c</strong> blocks can also contain additional rules that will be
+    appended to the set of rules in <strong>/*!rules:re2c</strong>.
+</p>
+</dd>
+<dt class="hdlist1">
+<strong>-s</strong>
+</dt>
+<dd>
+<p>
+    Generate nested ifs for some switches.  Many compilers need this
+    assist to generate better code.
+</p>
+</dd>
+<dt class="hdlist1">
+<strong>-t</strong>
+</dt>
+<dd>
+<p>
+    Create a header file that contains types for the (f)lex-like condition support.
+    This can only be activated when <strong>-c</strong> is in use.
+</p>
+</dd>
+<dt class="hdlist1">
+<strong>-u</strong>
+</dt>
+<dd>
+<p>
+    Generate a parser that supports UTF-32. The generated code can deal with any
+    valid Unicode character up to 0x10FFFF. In this mode <strong>re2c</strong> assumes that input
+    character size is 4 bytes. This switch is incompatible with <strong>-e</strong>, <strong>-w</strong>, <strong>-x</strong>
+    and <strong>-8</strong>. This implies <strong>-s</strong>.
+</p>
+</dd>
+<dt class="hdlist1">
+<strong>-v</strong>
+</dt>
+<dd>
+<p>
+    Show version information.
+</p>
+</dd>
+<dt class="hdlist1">
+<strong>-V</strong>
+</dt>
+<dd>
+<p>
+    Show the version as a number XXYYZZ.
+</p>
+</dd>
+<dt class="hdlist1">
+<strong>-w</strong>
+</dt>
+<dd>
+<p>
+    Generate a parser that supports UCS-2. The generated code can deal with any
+    valid Unicode character up to 0xFFFF. In this mode <strong>re2c</strong> assumes that input
+    character size is 2 bytes. This switch is incompatible with <strong>-e</strong>, <strong>-x</strong>, <strong>-u</strong>
+    and <strong>-8</strong>. This implies <strong>-s</strong>.
+</p>
+</dd>
+<dt class="hdlist1">
+<strong>-x</strong>
+</dt>
+<dd>
+<p>
+    Generate a parser that supports UTF-16. The generated code can deal with any
+    valid Unicode character up to 0x10FFFF. In this mode <strong>re2c</strong> assumes that input
+    character size is 2 bytes. This switch is incompatible with <strong>-e</strong>, <strong>-w</strong>, <strong>-u</strong>
+    and <strong>-8</strong>. This implies <strong>-s</strong>.
+</p>
+</dd>
+<dt class="hdlist1">
+<strong>-1</strong>
+</dt>
+<dd>
+<p>
+    Force single pass generation, this cannot be combined with -f and disables
+    <strong>YYMAXFILL</strong> generation prior to last <strong>re2c</strong> block.
+</p>
+</dd>
+<dt class="hdlist1">
+<strong>-8</strong>
+</dt>
+<dd>
+<p>
+    Generate a parser that supports UTF-8. The generated code can deal with any
+    valid Unicode character up to 0x10FFFF. In this mode <strong>re2c</strong> assumes that input
+    character size is 1 byte. This switch is incompatible with <strong>-e</strong>, <strong>-w</strong>, <strong>-x</strong>
+    and <strong>-u</strong>.
+</p>
+</dd>
+<dt class="hdlist1">
+<strong>--case-insensitive</strong>
+</dt>
+<dd>
+<p>
+    All strings are case insensitive, so all "-expressions are treated
+    in the same way '-expressions are.
+</p>
+</dd>
+<dt class="hdlist1">
+<strong>--case-inverted</strong>
+</dt>
+<dd>
+<p>
+    Invert the meaning of single and double quoted strings.
+    With this switch single quotes are case sensitive and
+    double quotes are case insensitive.
+</p>
+</dd>
+<dt class="hdlist1">
+<strong>--no-generation-date</strong>
+</dt>
+<dd>
+<p>
+    Suppress date output in the generated output so that it only shows the re2c
+    version.
+</p>
+</dd>
+<dt class="hdlist1">
+<strong>--encoding-policy POLICY</strong>
+</dt>
+<dd>
+<p>
+    Specify how <strong>re2c</strong> must treat Unicode surrogates. <strong>POLICY</strong> can be one of the following:
+    <strong>fail</strong> (abort with error when surrogate encountered),
+    <strong>substitute</strong> (silently substitute surrogate with error code point 0xFFFD),
+    <strong>ignore</strong> (treat surrogates as normal code points).
+    By default <strong>re2c</strong> ignores surrogates (for backward compatibility).
+    Unicode standard says that standalone surrogates are invalid code points,
+    but different libraries and programs treat them differently.
+</p>
+</dd>
+</dl></div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_interface_code">INTERFACE CODE</h2>
+<div class="sectionbody">
+<div class="paragraph"><p>The user must supply interface code either in the form of C/C++ code
+(macros, functions, variables, etc.) or in the form of <em>inplace configurations</em>.
+Which symbols must be defined and which are optional depends on a particular use case.</p></div>
+<div class="dlist"><dl>
+<dt class="hdlist1">
+<strong>YYCONDTYPE</strong>
+</dt>
+<dd>
+<p>
+    In <strong>-c</strong> mode you can use <strong>-t</strong> to generate a file that contains the
+    enumeration used as conditions. Each of the values refers to a condition of
+    a rule set.
+</p>
+</dd>
+<dt class="hdlist1">
+<strong>YYCTXMARKER</strong>
+</dt>
+<dd>
+<p>
+    l-value of type <strong>* YYCTYPE</strong>.
+    The generated code saves trailing context backtracking information in <strong>YYCTXMARKER</strong>.
+    The user only needs to define this macro if a scanner specification uses trailing
+    context in one or more of its regular expressions.
+</p>
+</dd>
+<dt class="hdlist1">
+<strong>YYCTYPE</strong>
+</dt>
+<dd>
+<p>
+    Type used to hold an input symbol (code unit).
+    Usually <strong>char</strong> or <strong>unsigned char</strong> for ASCII, EBCDIC and UTF-8, <strong>unsigned short</strong> for UTF-16 or UCS-2 and <strong>unsigned int</strong> for UTF-32.
+</p>
+</dd>
+<dt class="hdlist1">
+<strong>YYCURSOR</strong>
+</dt>
+<dd>
+<p>
+    l-value of type <strong>* YYCTYPE</strong> that points to the current input symbol.
+    The generated code advances <strong>YYCURSOR</strong> as symbols are matched.
+    On entry, <strong>YYCURSOR</strong> is assumed to point to the first character of the
+    current token.  On exit, <strong>YYCURSOR</strong> will point to the first character of
+    the following token.
+</p>
+</dd>
+<dt class="hdlist1">
+<strong>YYDEBUG (state, current)</strong>
+</dt>
+<dd>
+<p>
+    This is only needed if the <strong>-d</strong> flag was specified. It allows to easily debug
+    the generated parser by calling a user defined function for every state. The function
+    should have the following signature: <strong>void YYDEBUG (int state, char current)</strong>.
+    The first parameter receives the state or -1 and the second parameter receives the
+    input at the current cursor.
+</p>
+</dd>
+<dt class="hdlist1">
+<strong>YYFILL (n)</strong>
+</dt>
+<dd>
+<p>
+    The generated code &#8220;calls&#8221; <strong>YYFILL (n)</strong> when the buffer needs
+    (re)filling: at least <strong>n</strong> additional characters should
+    be provided. <strong>YYFILL (n)</strong> should adjust <strong>YYCURSOR</strong>, <strong>YYLIMIT</strong>,
+    <strong>YYMARKER</strong> and <strong>YYCTXMARKER</strong> as needed.  Note that for typical
+    programming languages <strong>n</strong> will be the length of the longest keyword plus one.
+    The user can place a comment of the form <strong>/*!max:re2c*/</strong> once to insert
+    a <strong>YYMAXFILL (n)</strong> definition that is set to the maximum length value. If -1
+    switch is used then <strong>YYMAXFILL</strong> can be triggered only once after the
+    last <strong>/*!re2c ... */</strong> block.
+</p>
+</dd>
+<dt class="hdlist1">
+<strong>YYGETCONDITION ()</strong>
+</dt>
+<dd>
+<p>
+    This define is used to get the condition prior to entering the scanner code
+    when using <strong>-c</strong> switch. The value must be initialized with a value from
+    the enumeration <strong>YYCONDTYPE</strong> type.
+</p>
+</dd>
+<dt class="hdlist1">
+<strong>YYGETSTATE ()</strong>
+</dt>
+<dd>
+<p>
+    The user only needs to define this macro if the <strong>-f</strong> flag was specified.
+    In that case, the generated code &#8220;calls&#8221; <strong>YYGETSTATE ()</strong> at the very beginning
+    of the scanner in order to obtain the saved state. <strong>YYGETSTATE ()</strong> must return a signed
+    integer. The value must be either -1, indicating that the scanner is entered for the
+    first time, or a value previously saved by <strong>YYSETSTATE (s)</strong>.  In the second case, the
+    scanner will resume operations right after where the last <strong>YYFILL (n)</strong> was called.
+</p>
+</dd>
+<dt class="hdlist1">
+<strong>YYLIMIT</strong>
+</dt>
+<dd>
+<p>
+    Expression of type <strong>* YYCTYPE</strong> that marks the end of the buffer
+    (<strong>YYLIMIT[-1]</strong> is the last character in the buffer).
+    The generated code repeatedly compares <strong>YYCURSOR</strong> to <strong>YYLIMIT</strong>
+    to determine when the buffer needs (re)filling.
+</p>
+</dd>
+<dt class="hdlist1">
+<strong>YYMARKER</strong>
+</dt>
+<dd>
+<p>
+    l-value of type <strong>* YYCTYPE</strong>.
+    The generated code saves backtracking information in <strong>YYMARKER</strong>. Some easy
+    scanners might not use this.
+</p>
+</dd>
+<dt class="hdlist1">
+<strong>YYMAXFILL</strong>
+</dt>
+<dd>
+<p>
+    This will be automatically defined by <strong>/*!max:re2c*/</strong> blocks as explained above.
+</p>
+</dd>
+<dt class="hdlist1">
+<strong>YYSETCONDITION (c)</strong>
+</dt>
+<dd>
+<p>
+    This define is used to set the condition in transition rules.  This is only
+    being used when <strong>-c</strong> is active and transition rules are being used.
+</p>
+</dd>
+<dt class="hdlist1">
+<strong>YYSETSTATE (s)</strong>
+</dt>
+<dd>
+<p>
+    The user only needs to define this macro if the <strong>-f</strong> flag was specified.
+    In that case, the generated code &#8220;calls&#8221; <strong>YYSETSTATE</strong> just before calling
+    <strong>YYFILL (n)</strong>.  The parameter to <strong>YYSETSTATE</strong> is a signed integer that uniquely
+    identifies the specific instance of <strong>YYFILL (n)</strong> that is about to be called.
+    Should the user wish to save the state of the scanner and have <strong>YYFILL (n)</strong> return
+    to the caller, all he has to do is store that unique identifer in a variable.
+    Later, when the scannered is called again, it will call <strong>YYGETSTATE ()</strong> and
+    resume execution right where it left off. The generated code will contain
+    both <strong>YYSETSTATE (s)</strong> and <strong>YYGETSTATE</strong> even if <strong>YYFILL (n)</strong> is being disabled.
+</p>
+</dd>
+</dl></div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_syntax">SYNTAX</h2>
+<div class="sectionbody">
+<div class="paragraph"><p>Code for <strong>re2c</strong> consists of a set of <em>rules</em>, <em>named definitions</em> and <em>inplace configurations</em>.</p></div>
+<div class="paragraph"><p><em>rules</em> consist of a <em>regular-expressions</em> along with a block of <em>C/C++ code</em> that
+is to be executed when the associated <em>regular-expression</em> is matched. You can either
+start the code with an opening curly brace or the sequence <strong>:=</strong>. When
+the code with a curly brace then <strong>re2c</strong> counts the brace depth and stops looking
+for code automatically. Otherwise curly braces are not allowed and <strong>re2c</strong> stops
+looking for code at the first line that does not begin with whitespace. If two
+or more rules overlap, the first rule is preferred.</p></div>
+<div class="sidebarblock">
+<div class="content">
+<div class="paragraph"><p><em>regular-expression</em> { <em>C/C++ code</em> }</p></div>
+<div class="paragraph"><p><em>regular-expression</em> := <em>C/C++ code</em></p></div>
+</div></div>
+<div class="paragraph"><p>There is one special rule: default rule <strong>*</strong>:</p></div>
+<div class="sidebarblock">
+<div class="content">
+<div class="paragraph"><p>* { <em>C/C++ code</em> }</p></div>
+<div class="paragraph"><p>* := <em>C/C++ code</em></p></div>
+</div></div>
+<div class="admonitionblock">
+<table><tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+<div class="paragraph"><p><strong>[^]</strong> differs from <strong>*</strong>:
+<strong>*</strong> has the lowest priority, matches any code unit (either valid or invalid) and always consumes one character;
+<strong>[^]</strong> matches any valid code point (not code unit) and can consume multiple characters.
+In fact, when variable-length encoding is used, <strong>*</strong> is the only possible way to match invalid input character.</p></div>
+</td>
+</tr></table>
+</div>
+<div class="paragraph"><p>If <strong>-c</strong> is active then each <em>regular-expression</em> is preceeded by a list of
+comma separated condition names. Besides normal naming rules there are two
+special cases. A rule may contain the single condition name <strong>*</strong> and no contition
+name at all. In the latter case the rule cannot have a <em>regular-expression</em>. Non
+empty rules may further more specify the new condition. In that case <strong>re2c</strong> will
+generated the necessary code to change the condition automatically. Just as above
+code can be started with a curly brace of the sequence <strong>:=</strong>. Further more
+rules can use <strong>:=&gt;</strong> as a shortcut to automatically generate code that not only
+sets the new condition state but also continues execution with the new state. A
+shortcut rule should not be used in a loop where there is code between the start
+of the loop and the <strong>re2c</strong> block unless <strong>re2c:cond:goto</strong> is changed
+to <strong>continue</strong>. If code is necessary before all rule (though not simple
+jumps) you can doso by using <strong>&lt;!</strong> pseudo-rules.</p></div>
+<div class="sidebarblock">
+<div class="content">
+<div class="paragraph"><p>&lt;<em>condition-list</em>&gt; <em>regular-expression</em> { <em>C/C++ code</em> }</p></div>
+<div class="paragraph"><p>&lt;<em>condition-list</em>&gt; <em>regular-expression</em> := <em>C/C++ code</em></p></div>
+<div class="paragraph"><p>&lt;<em>condition-list</em>&gt; * { <em>C/C++ code</em> }</p></div>
+<div class="paragraph"><p>&lt;<em>condition-list</em>&gt; * := <em>C/C++ code</em></p></div>
+<div class="paragraph"><p>&lt;<em>condition-list</em>&gt; <em>regular-expression</em> =&gt; <em>condition</em> { <em>C/C++ code</em> }</p></div>
+<div class="paragraph"><p>&lt;<em>condition-list</em>&gt; <em>regular-expression</em> =&gt; <em>condition</em> := <em>C/C++ code</em></p></div>
+<div class="paragraph"><p>&lt;<em>condition-list</em>&gt; <em>regular-expression</em> :=&gt; <em>condition</em></p></div>
+<div class="paragraph"><p>&lt;*&gt; <em>regular-expression</em> { <em>C/C++ code</em> }</p></div>
+<div class="paragraph"><p>&lt;*&gt; <em>regular-expression</em> := <em>C/C++ code</em></p></div>
+<div class="paragraph"><p>&lt;*&gt; * { <em>C/C++ code</em> }</p></div>
+<div class="paragraph"><p>&lt;*&gt; * := <em>C/C++ code</em></p></div>
+<div class="paragraph"><p>&lt;*&gt; <em>regular-expression</em> =&gt; <em>condition</em> { <em>C/C++ code</em> }</p></div>
+<div class="paragraph"><p>&lt;*&gt; <em>regular-expression</em> =&gt; <em>condition</em> := <em>C/C++ code</em></p></div>
+<div class="paragraph"><p>&lt;*&gt; <em>regular-expression</em> :=&gt; <em>condition</em></p></div>
+<div class="paragraph"><p>&lt;&gt; { <em>C/C++ code</em> }</p></div>
+<div class="paragraph"><p>&lt;&gt; := <em>C/C++ code</em></p></div>
+<div class="paragraph"><p>&lt;&gt; =&gt; <em>condition</em> { <em>C/C++ code</em> }</p></div>
+<div class="paragraph"><p>&lt;&gt; =&gt; <em>condition</em> := <em>C/C++ code</em></p></div>
+<div class="paragraph"><p>&lt;&gt; :=&gt; <em>condition</em></p></div>
+<div class="paragraph"><p>&lt;!<em>condition-list</em>&gt; { <em>C/C++ code</em> }</p></div>
+<div class="paragraph"><p>&lt;!<em>condition-list</em>&gt; := <em>C/C++ code</em></p></div>
+<div class="paragraph"><p>&lt;!*&gt; { <em>C/C++ code</em> }</p></div>
+<div class="paragraph"><p>&lt;!*&gt; := <em>C/C++ code</em></p></div>
+</div></div>
+<div class="paragraph"><p><em>named definitions</em> are of the form:</p></div>
+<div class="sidebarblock">
+<div class="content">
+<div class="paragraph"><p><em>name</em> = <em>regular-expression</em>;</p></div>
+</div></div>
+<div class="paragraph"><p>If <strong>-F</strong> is active, then named definitions are also of the form:</p></div>
+<div class="sidebarblock">
+<div class="content">
+<div class="paragraph"><p><em>name</em> <em>regular-expression</em></p></div>
+</div></div>
+<div class="paragraph"><p><em>inplace configurations</em> are of the form:</p></div>
+<div class="sidebarblock">
+<div class="content">
+<div class="paragraph"><p>re2c:<em>name</em> = <em>value</em>;</p></div>
+<div class="paragraph"><p>re2c:<em>name</em> = &#8220;_value_&#8221;;</p></div>
+</div></div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_regular_expressions">REGULAR EXPRESSIONS</h2>
+<div class="sectionbody">
+<div class="dlist"><dl>
+<dt class="hdlist1">
+&#8220;foo&#8221; 
+</dt>
+<dd>
+<p>
+    literal string &#8220;foo&#8221;. ANSI-C escape sequences can be used.
+</p>
+</dd>
+<dt class="hdlist1">
+&#8216;foo&#8217; 
+</dt>
+<dd>
+<p>
+    literal string &#8220;foo&#8221; (characters [a-zA-Z] treated case-insensitive). ANSI-C escape sequences can be used.
+</p>
+</dd>
+<dt class="hdlist1">
+[xyz] 
+</dt>
+<dd>
+<p>
+    character class; in this case, <em>regular-expression</em> matches either &#8216;x&#8217;, &#8216;y&#8217;, or &#8216;z&#8217;.
+</p>
+</dd>
+<dt class="hdlist1">
+[abj-oZ] 
+</dt>
+<dd>
+<p>
+    character class with a range in it; matches &#8216;a&#8217;, &#8216;b&#8217;, any letter from &#8216;j&#8217; through &#8216;o&#8217; or &#8216;Z&#8217;.
+</p>
+</dd>
+<dt class="hdlist1">
+[^<em>class</em>] 
+</dt>
+<dd>
+<p>
+    inverted character class.
+</p>
+</dd>
+<dt class="hdlist1">
+<em>r</em> \ <em>s</em> 
+</dt>
+<dd>
+<p>
+    match any <em>r</em> which isn&#8217;t <em>s</em>. <em>r</em> and <em>s</em> must be <em>regular-expression</em>s which can be expressed as character classes.
+</p>
+</dd>
+<dt class="hdlist1">
+<em>r</em> * 
+</dt>
+<dd>
+<p>
+    zero or more <em>r</em>'s, where <em>r</em> is any <em>regular-expression</em>.
+</p>
+</dd>
+<dt class="hdlist1">
+<em>r</em> + 
+</dt>
+<dd>
+<p>
+    one or more <em>r</em>'s.
+</p>
+</dd>
+<dt class="hdlist1">
+<em>r</em> ? 
+</dt>
+<dd>
+<p>
+    zero or one <em>r</em>'s (that is, an optional <em>r</em>).
+</p>
+</dd>
+<dt class="hdlist1">
+<em>name</em> 
+</dt>
+<dd>
+<p>
+    the expansion of the <em>named definition</em>.
+</p>
+</dd>
+<dt class="hdlist1">
+( <em>r</em> ) 
+</dt>
+<dd>
+<p>
+    <em>r</em>; parentheses are used to override precedence.
+</p>
+</dd>
+<dt class="hdlist1">
+<em>r</em> <em>s</em> 
+</dt>
+<dd>
+<p>
+    <em>r</em> followed by <em>s</em> (concatenation).
+</p>
+</dd>
+<dt class="hdlist1">
+<em>r</em> | <em>s</em> 
+</dt>
+<dd>
+<p>
+    either <em>r</em> or <em>s</em> (alternative).
+</p>
+</dd>
+<dt class="hdlist1">
+<em>r</em> / <em>s</em> 
+</dt>
+<dd>
+<p>
+    <em>r</em> but only if it is followed by <em>s</em>. Note that <em>s</em> is not part of the matched text.
+    This type of <em>regular-expression</em> is called &#8220;trailing context&#8221;.
+    Trailing context can only be the end of a rule and not part of a named definition.
+</p>
+</dd>
+<dt class="hdlist1">
+<em>r</em> { <em>n</em> } 
+</dt>
+<dd>
+<p>
+    matches <em>r</em> exactly <em>n</em> times.
+</p>
+</dd>
+<dt class="hdlist1">
+<em>r</em> { <em>n</em> , } 
+</dt>
+<dd>
+<p>
+    matches <em>r</em> at least <em>n</em> times.
+</p>
+</dd>
+<dt class="hdlist1">
+<em>r</em> { <em>n</em> , <em>m</em> } 
+</dt>
+<dd>
+<p>
+    matches <em>r</em> at least <em>n</em> times, but not more than <em>m</em> times.
+</p>
+</dd>
+<dt class="hdlist1">
+. 
+</dt>
+<dd>
+<p>
+    match any character except newline.
+</p>
+</dd>
+<dt class="hdlist1">
+<em>def</em> 
+</dt>
+<dd>
+<p>
+    matches named definition as specified by <em>def</em> only if <strong>-F</strong> is off.
+    If <strong>-F</strong> is active then this behaves like it was enclosed in double quotes and matches the string &#8220;def&#8221;.
+</p>
+</dd>
+</dl></div>
+<div class="paragraph"><p>Character classes and string literals may contain octal or hexadecimal
+character definitions and the following set of escape sequences:
+<strong>\a</strong>, <strong>\b</strong>, <strong>\f</strong>, <strong>\n</strong>, <strong>\r</strong>, <strong>\t</strong>, <strong>\v</strong>, <strong>\\</strong>.
+An octal character is defined by a backslash followed by its three octal digits (e.g. <strong>\377</strong>).
+Hexadecimal characters from 0 to 0xFF are defined by backslash, a lower cased &#8216;x&#8217; and two hexadecimal digits (e.g. <strong>\x12</strong>).
+Hexadecimal characters from 0x100 to 0xFFFF are defined by backslash, a lower cased &#8216;u&#8217; (or an upper cased &#8216;X&#8217;) and four hexadecimal digits (e.g. <strong>\u1234</strong>).
+Hexadecimal characters from 0x10000 to 0xFFFFffff are defined by backslash, an upper cased &#8216;U&#8217; and eight hexadecimal digits (e.g. <strong>\U12345678</strong>).</p></div>
+<div class="paragraph"><p>The only portable &#8220;any&#8221; rule is the default rule <strong>*</strong>.</p></div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_inplace_configurations">INPLACE CONFIGURATIONS</h2>
+<div class="sectionbody">
+<div class="paragraph"><p>It is possible to configure code generation inside <strong>re2c</strong> blocks. The following lists the available configurations:</p></div>
+<div class="dlist"><dl>
+<dt class="hdlist1">
+<strong>re2c:condprefix</strong> = yyc_; 
+</dt>
+<dd>
+<p>
+Allows to specify the prefix used for condition labels. That is this text is
+prepended to any condition label in the generated output file.
+</p>
+</dd>
+<dt class="hdlist1">
+<strong>re2c:condenumprefix</strong> = yyc; 
+</dt>
+<dd>
+<p>
+Allows to specify the prefix used for condition values. That is this text is
+prepended to any condition enum value in the generated output file.
+</p>
+</dd>
+<dt class="hdlist1">
+<strong>re2c:cond:divider</strong> = &#8220;/* *********************************** */&#8221;; 
+</dt>
+<dd>
+<p>
+Allows to customize the devider for condition blocks. You can use &#8216;@@&#8217; to
+put the name of the condition or ustomize the placeholder
+using <strong>re2c:cond:divider@cond</strong>.
+</p>
+</dd>
+<dt class="hdlist1">
+<strong>re2c:cond:divider@cond</strong> = @@; 
+</dt>
+<dd>
+<p>
+Specifies the placeholder that will be replaced with the condition name
+in <strong>re2c:cond:divider</strong>.
+</p>
+</dd>
+<dt class="hdlist1">
+<strong>re2c:cond:goto</strong> = &#8220;goto @@;&#8221;; 
+</dt>
+<dd>
+<p>
+Allows to customize the condition goto statements used with <strong>:=&gt;</strong> style rules.
+You can use &#8216;@@&#8217; to put the name of the condition or ustomize the placeholder
+using <strong>re2c:cond:goto@cond</strong>. You can also change this to &#8216;continue;&#8217;,
+which would allow you to continue with the next loop cycle including any code
+between loop start and re2c block.
+</p>
+</dd>
+<dt class="hdlist1">
+<strong>re2c:cond:goto@cond</strong> = @@; 
+</dt>
+<dd>
+<p>
+Spcifies the placeholder that will be replaced with the condition label
+in <strong>re2c:cond:goto</strong>.
+</p>
+</dd>
+<dt class="hdlist1">
+<strong>re2c:indent:top</strong> = 0; 
+</dt>
+<dd>
+<p>
+Specifies the minimum number of indendation to use. Requires a numeric value
+greater than or equal zero.
+</p>
+</dd>
+<dt class="hdlist1">
+<strong>re2c:indent:string</strong> = &#8220;\t&#8221;; 
+</dt>
+<dd>
+<p>
+Specifies the string to use for indendation. Requires a string that should
+contain only whitespace unless you need this for external tools. The easiest
+way to specify spaces is to enclude them in single or double quotes. If you do
+not want any indendation at all you can simply set this to &#8220;&#8221;.
+</p>
+</dd>
+<dt class="hdlist1">
+<strong>re2c:yych:conversion</strong> = 0; 
+</dt>
+<dd>
+<p>
+When this setting is non zero, then <strong>re2c</strong> automatically generates conversion
+code whenever yych gets read. In this case the type must be defined using
+<strong>re2c:define:YYCTYPE</strong>.
+</p>
+</dd>
+<dt class="hdlist1">
+<strong>re2c:yych:emit</strong> = 1; 
+</dt>
+<dd>
+<p>
+Generation of <strong>yych</strong> can be suppressed by setting this to 0.
+</p>
+</dd>
+<dt class="hdlist1">
+<strong>re2c:yybm:hex</strong> = 0; 
+</dt>
+<dd>
+<p>
+If set to zero then a decimal table is being used else a hexadecimal table
+will be generated.
+</p>
+</dd>
+<dt class="hdlist1">
+<strong>re2c:yyfill:enable</strong> = 1; 
+</dt>
+<dd>
+<p>
+Set this to zero to suppress generation of <strong>YYFILL (n)</strong>. When using this be sure
+to verify that the generated scanner does not read behind input. Allowing
+this behavior might introduce sever security issues to you programs.
+</p>
+</dd>
+<dt class="hdlist1">
+<strong>re2c:yyfill:check</strong> = 1; 
+</dt>
+<dd>
+<p>
+This can be set 0 to suppress output of the pre condition using <strong>YYCURSOR</strong> and
+<strong>YYLIMIT</strong> which becomes usefull when <strong>YYLIMIT + max (YYFILL)</strong> is always accessible.
+</p>
+</dd>
+<dt class="hdlist1">
+<strong>re2c:yyfill:parameter</strong> = 1; 
+</dt>
+<dd>
+<p>
+Allows to suppress parameter passing to <strong>YYFILL</strong> calls. If set to zero
+then no parameter is passed to <strong>YYFILL</strong>. However <strong>define:YYFILL@LEN</strong>
+allows to specify a replacement string for the actual length value. If set to
+a non zero value then <strong>YYFILL</strong> usage will be followed by the number of
+requested characters in braces unless <strong>re2c:define:YYFILL:naked</strong> is set.
+Also look at <strong>re2c:define:YYFILL:naked</strong> and <strong>re2c:define:YYFILL@LEN</strong>.
+</p>
+</dd>
+<dt class="hdlist1">
+<strong>re2c:startlabel</strong> = 0; 
+</dt>
+<dd>
+<p>
+If set to a non zero integer then the start label of the next scanner blocks
+will be generated even if not used by the scanner itself. Otherwise the normal
+<strong>yy0</strong> like start label is only being generated if needed. If set to a text
+value then a label with that text will be generated regardless of whether the
+normal start label is being used or not. This setting is being reset to <strong>0</strong>
+after a start label has been generated.
+</p>
+</dd>
+<dt class="hdlist1">
+<strong>re2c:labelprefix</strong> = yy; 
+</dt>
+<dd>
+<p>
+Allows to change the prefix of numbered labels. The default is <strong>yy</strong> and
+can be set any string that is a valid label.
+</p>
+</dd>
+<dt class="hdlist1">
+<strong>re2c:state:abort</strong> = 0; 
+</dt>
+<dd>
+<p>
+When not zero and switch <strong>-f</strong> is active then the <strong>YYGETSTATE</strong> block will
+contain a default case that aborts and a -1 case is used for initialization.
+</p>
+</dd>
+<dt class="hdlist1">
+<strong>re2c:state:nextlabel</strong> = 0; 
+</dt>
+<dd>
+<p>
+Used when <strong>-f</strong> is active to control whether the <strong>YYGETSTATE</strong> block is
+followed by a <strong>yyNext:</strong> label line. Instead of using <strong>yyNext</strong> you can
+usually also use configuration <strong>startlabel</strong> to force a specific start label
+or default to <strong>yy0</strong> as start label. Instead of using a dedicated label it
+is often better to separate the <strong>YYGETSTATE</strong> code from the actual scanner code by
+placing a <strong>/*!getstate:re2c*/</strong> comment.
+</p>
+</dd>
+<dt class="hdlist1">
+<strong>re2c:cgoto:threshold</strong> = 9; 
+</dt>
+<dd>
+<p>
+When <strong>-g</strong> is active this value specifies the complexity threshold that triggers
+generation of jump tables rather than using nested if&#8217;s and decision bitfields.
+The threshold is compared against a calculated estimation of if-s needed where
+every used bitmap divides the threshold by 2.
+</p>
+</dd>
+<dt class="hdlist1">
+<strong>re2c:yych:conversion</strong> = 0; 
+</dt>
+<dd>
+<p>
+When the input uses signed characters and <strong>-s</strong> or <strong>-b</strong> switches are
+in effect re2c allows to automatically convert to the unsigned character type
+that is then necessary for its internal single character. When this setting
+is zero or an empty string the conversion is disabled. Using a non zero number
+the conversion is taken from <strong>YYCTYPE</strong>. If that is given by an inplace
+configuration that value is being used. Otherwise it will be <strong>(YYCTYPE)</strong>
+and changes to that configuration are  no longer possible. When this setting is
+a string the braces must be specified. Now assuming your input is a <strong>char *</strong>
+buffer and you are using above mentioned switches you can set <strong>YYCTYPE</strong> to
+<strong>unsigned char</strong> and this setting to either <strong>1</strong> or <strong>(unsigned char)</strong>.
+</p>
+</dd>
+<dt class="hdlist1">
+<strong>re2c:define:YYCONDTYPE</strong> = <strong>YYCONDTYPE</strong>; 
+</dt>
+<dd>
+<p>
+Enumeration used for condition support with <strong>-c</strong> mode.
+</p>
+</dd>
+<dt class="hdlist1">
+<strong>re2c:define:YYCTXMARKER</strong> = <strong>YYCTXMARKER</strong>; 
+</dt>
+<dd>
+<p>
+Allows to overwrite the define <strong>YYCTXMARKER</strong> and thus avoiding it by setting the
+value to the actual code needed.
+</p>
+</dd>
+<dt class="hdlist1">
+<strong>re2c:define:YYCTYPE</strong> = <strong>YYCTYPE</strong>; 
+</dt>
+<dd>
+<p>
+Allows to overwrite the define <strong>YYCTYPE</strong> and thus avoiding it by setting the
+value to the actual code needed.
+</p>
+</dd>
+<dt class="hdlist1">
+<strong>re2c:define:YYCURSOR</strong> = <strong>YYCURSOR</strong>; 
+</dt>
+<dd>
+<p>
+Allows to overwrite the define <strong>YYCURSOR</strong> and thus avoiding it by setting the
+value to the actual code needed.
+</p>
+</dd>
+<dt class="hdlist1">
+<strong>re2c:define:YYDEBUG</strong> = <strong>YYDEBUG</strong>; 
+</dt>
+<dd>
+<p>
+Allows to overwrite the define <strong>YYDEBUG</strong> and thus avoiding it by setting the
+value to the actual code needed.
+</p>
+</dd>
+<dt class="hdlist1">
+<strong>re2c:define:YYFILL</strong> = <strong>YYFILL</strong>; 
+</dt>
+<dd>
+<p>
+Allows to overwrite the define <strong>YYFILL</strong> and thus avoiding it by setting the
+value to the actual code needed.
+</p>
+</dd>
+<dt class="hdlist1">
+<strong>re2c:define:YYFILL:naked</strong> = <strong>0</strong>; 
+</dt>
+<dd>
+<p>
+When set to 1 neither braces, parameter nor semicolon gets emitted.
+</p>
+</dd>
+<dt class="hdlist1">
+<strong>re2c:define:YYFILL@len</strong> = @@; 
+</dt>
+<dd>
+<p>
+When using <strong>re2c:define:YYFILL</strong> and <strong>re2c:yyfill:parameter</strong> is 0 then
+any occurence of this text inside <strong>YYFILL</strong> will be replaced with the actual
+length value.
+</p>
+</dd>
+<dt class="hdlist1">
+<strong>re2c:define:YYGETCONDITION</strong> = <strong>YYGETCONDITION</strong>; 
+</dt>
+<dd>
+<p>
+Allows to overwrite the define <strong>YYGETCONDITION</strong>.
+</p>
+</dd>
+<dt class="hdlist1">
+<strong>re2c:define:YYGETCONDITION:naked</strong> = <strong>0</strong>; 
+</dt>
+<dd>
+<p>
+When set to 1 neither braces, parameter nor semicolon gets emitted.
+</p>
+</dd>
+<dt class="hdlist1">
+<strong>re2c:define:YYGETSTATE</strong> = <strong>YYGETSTATE</strong>; 
+</dt>
+<dd>
+<p>
+Allows to overwrite the define <strong>YYGETSTATE</strong> and thus avoiding it by setting the
+value to the actual code needed.
+</p>
+</dd>
+<dt class="hdlist1">
+<strong>re2c:define:YYGETSTATE:naked</strong> = <strong>0</strong>; 
+</dt>
+<dd>
+<p>
+When set to 1 neither braces, parameter nor semicolon gets emitted.
+</p>
+</dd>
+<dt class="hdlist1">
+<strong>re2c:define:YYLIMIT</strong> = <strong>YYLIMIT</strong>; 
+</dt>
+<dd>
+<p>
+Allows to overwrite the define <strong>YYLIMIT</strong> and thus avoiding it by setting the
+value to the actual code needed.
+</p>
+</dd>
+<dt class="hdlist1">
+<strong>re2c:define:YYMARKER</strong> = <strong>YYMARKER</strong>; 
+</dt>
+<dd>
+<p>
+Allows to overwrite the define <strong>YYMARKER</strong> and thus avoiding it by setting the
+value to the actual code needed.
+</p>
+</dd>
+<dt class="hdlist1">
+<strong>re2c:define:YYSETCONDITION</strong> = <strong>YYSETCONDITION</strong>; 
+</dt>
+<dd>
+<p>
+Allows to overwrite the define <strong>YYSETCONDITION</strong>.
+</p>
+</dd>
+<dt class="hdlist1">
+<strong>re2c:define:YYSETCONDITION@cond</strong> = @@; 
+</dt>
+<dd>
+<p>
+When using <strong>re2c:define:YYSETCONDITION</strong> then any occurence of this text
+inside <strong>YYSETCONDITION</strong> will be replaced with the actual new condition value.
+</p>
+</dd>
+<dt class="hdlist1">
+<strong>re2c:define:YYSETSTATE</strong> = <strong>YYSETSTATE</strong>; 
+</dt>
+<dd>
+<p>
+Allows to overwrite the define <strong>YYSETSTATE</strong> and thus avoiding it by setting the
+value to the actual code needed.
+</p>
+</dd>
+<dt class="hdlist1">
+<strong>re2c:define:YYSETSTATE:naked</strong> = <strong>0</strong>; 
+</dt>
+<dd>
+<p>
+When set to 1 neither braces, parameter nor semicolon gets emitted.
+</p>
+</dd>
+<dt class="hdlist1">
+<strong>re2c:define:YYSETSTATE@state</strong> = @@; 
+</dt>
+<dd>
+<p>
+When using <strong>re2c:define:YYSETSTATE</strong> then any occurence of this text
+inside <strong>YYSETSTATE</strong> will be replaced with the actual new state value.
+</p>
+</dd>
+<dt class="hdlist1">
+<strong>re2c:label:yyFillLabel</strong> = <strong>yyFillLabel</strong>; 
+</dt>
+<dd>
+<p>
+Allows to overwrite the name of the label <strong>yyFillLabel</strong>.
+</p>
+</dd>
+<dt class="hdlist1">
+<strong>re2c:label:yyNext</strong> = <strong>yyNext</strong>; 
+</dt>
+<dd>
+<p>
+Allows to overwrite the name of the label <strong>yyNext</strong>.
+</p>
+</dd>
+<dt class="hdlist1">
+<strong>re2c:variable:yyaccept</strong> = <strong>yyaccept</strong>; 
+</dt>
+<dd>
+<p>
+Allows to overwrite the name of the variable <strong>yyaccept</strong>.
+</p>
+</dd>
+<dt class="hdlist1">
+<strong>re2c:variable:yybm</strong> = <strong>yybm</strong>; 
+</dt>
+<dd>
+<p>
+Allows to overwrite the name of the variable <strong>yybm</strong>.
+</p>
+</dd>
+<dt class="hdlist1">
+<strong>re2c:variable:yych</strong> = <strong>yych</strong>; 
+</dt>
+<dd>
+<p>
+Allows to overwrite the name of the variable <strong>yych</strong>.
+</p>
+</dd>
+<dt class="hdlist1">
+<strong>re2c:variable:yyctable</strong> = <strong>yyctable</strong>; 
+</dt>
+<dd>
+<p>
+When both <strong>-c</strong> and <strong>-g</strong> are active then <strong>re2c</strong> uses this variable to
+generate a static jump table for <strong>YYGETCONDITION</strong>.
+</p>
+</dd>
+<dt class="hdlist1">
+<strong>re2c:variable:yystable</strong> = <strong>yystable</strong>; 
+</dt>
+<dd>
+<p>
+When both <strong>-f</strong> and <strong>-g</strong> are active then <strong>re2c</strong> uses this variable to
+generate a static jump table for <strong>YYGETSTATE</strong>.
+</p>
+</dd>
+<dt class="hdlist1">
+<strong>re2c:variable:yytarget</strong> = <strong>yytarget</strong>; 
+</dt>
+<dd>
+<p>
+Allows to overwrite the name of the variable <strong>yytarget</strong>.
+</p>
+</dd>
+</dl></div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_scanner_with_storable_states">SCANNER WITH STORABLE STATES</h2>
+<div class="sectionbody">
+<div class="paragraph"><p>When the <strong>-f</strong> flag is specified, <strong>re2c</strong> generates a scanner that
+can store its current state, return to the caller, and later resume
+operations exactly where it left off.</p></div>
+<div class="paragraph"><p>The default operation of <strong>re2c</strong> is a &#8220;pull&#8221; model, where the scanner asks
+for extra input whenever it needs it. However, this mode of operation
+assumes that the scanner is the &#8220;owner&#8221; the parsing loop, and that may
+not always be convenient.</p></div>
+<div class="paragraph"><p>Typically, if there is a preprocessor ahead of the scanner in the stream,
+or for that matter any other procedural source of data, the scanner cannot
+&#8220;ask&#8221; for more data unless both scanner and source live in a separate threads.</p></div>
+<div class="paragraph"><p>The <strong>-f</strong> flag is useful for just this situation: it lets users design
+scanners that work in a &#8220;push&#8221; model, i.e. where data is fed to the scanner
+chunk by chunk. When the scanner runs out of data to consume, it just stores
+its state, and return to the caller. When more input data is fed to the scanner,
+it resumes operations exactly where it left off.</p></div>
+<div class="paragraph"><p>When using the <strong>-f</strong> option <strong>re2c</strong> does not accept stdin because it has to do the
+full generation process twice which means it has to read the input twice. That
+means <strong>re2c</strong> would fail in case it cannot open the input twice or reading the
+input for the first time influences the second read attempt.</p></div>
+<div class="paragraph"><p>Changes needed compared to the &#8220;pull&#8221; model:</p></div>
+<div class="olist arabic"><ol class="arabic">
+<li>
+<p>
+User has to supply macros <strong>YYSETSTATE ()</strong> and <strong>YYGETSTATE (state)</strong>.
+</p>
+</li>
+<li>
+<p>
+The <strong>-f</strong> option inhibits declaration of <strong>yych</strong> and
+<strong>yyaccept</strong>. So the user has to declare these. Also the user has
+to save and restore these. In the example <strong>examples/push.re</strong> these
+are declared as fields of the (C\++) class of which the scanner is a
+method, so they do not need to be saved/restored explicitly. For C
+they could e.g. be made macros that select fields from a structure
+passed in as parameter. Alternatively, they could be declared as local
+variables, saved with <strong>YYFILL (n)</strong> when it decides to return and restored
+at entry to the function. Also, it could be more efficient to save the
+state from <strong>YYFILL (n)</strong> because <strong>YYSETSTATE (state)</strong> is called
+unconditionally. <strong>YYFILL (n)</strong> however does not get <strong>state</strong> as
+parameter, so we would have to store state in a local variable by
+<strong>YYSETSTATE (state)</strong>.
+</p>
+</li>
+<li>
+<p>
+Modify <strong>YYFILL (n)</strong> to return (from the function calling it) if more input is needed.
+</p>
+</li>
+<li>
+<p>
+Modify caller to recognise &#8220;more input is needed&#8221; and respond appropriately.
+</p>
+</li>
+<li>
+<p>
+The generated code will contain a switch block that is used to restores
+the last state by jumping behind the corrspoding <strong>YYFILL (n)</strong> call. This code is
+automatically generated in the epilog of the first <strong>/*!re2c */</strong> block.
+It is possible to trigger generation of the <strong>YYGETSTATE ()</strong> block earlier by
+placing a <strong>/*!getstate:re2c*/</strong> comment. This is especially useful when
+the scanner code should be wrapped inside a loop.
+</p>
+</li>
+</ol></div>
+<div class="paragraph"><p>Please see <strong>examples/push.re</strong> for push-model scanner. The generated code can be
+tweaked using inplace configurations <strong>state:abort</strong> and <strong>state:nextlabel</strong>.</p></div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_scanner_with_condition_support">SCANNER WITH CONDITION SUPPORT</h2>
+<div class="sectionbody">
+<div class="paragraph"><p>You can preceed regular expressions with a list of condition names when using the <strong>-c</strong>
+switch. In this case <strong>re2c</strong> generates scanner blocks for each conditon. Where each of the
+generated blocks has its own precondition. The precondition is given by the
+interface define <strong>YYGETCONDITON()</strong> and must be of type <strong>YYCONDTYPE</strong>.</p></div>
+<div class="paragraph"><p>There are two special rule types. First, the rules of the condition <strong>*</strong> are
+merged to all  conditions. And second the empty condition list allows to
+provide a code block that does not have a scanner part. Meaning it does not
+allow any regular expression. The condition value referring to this special
+block is always the one with the enumeration value 0. This way the code of this
+special rule can be used to initialize a scanner. It is in no way necessary to
+have these rules: but sometimes it is helpful to have a dedicated uninitialized
+condition state.</p></div>
+<div class="paragraph"><p>Non empty rules allow to specify the new condition, which makes them
+transition rules. Besides generating calls for the define <strong>YYSETCONDTITION</strong>
+no other special code is generated.</p></div>
+<div class="paragraph"><p>There is another kind of special rules that allow to prepend code to any code
+block of all rules of a certain set of conditions or to all code blocks to all
+rules. This can be helpful when some operation is common among rules. For
+instance this can be used to store the length of the scanned string. These
+special setup rules start with an exclamation mark followed by either a list
+of conditions <strong>&lt;! condition, ... &gt;</strong> or a star <strong>&lt;!*&gt;</strong>.
+When <strong>re2c</strong> generates the code for a rule whose state does not have a
+setup rule and a star&#8217;d setup rule is present, than that code will be used
+as setup code.</p></div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_encodings">ENCODINGS</h2>
+<div class="sectionbody">
+<div class="paragraph"><p><strong>re2c</strong> supports the following encodings: ASCII (default), EBCDIC (<strong>-e</strong>), UCS-2 (<strong>-w</strong>),
+UTF-16 (<strong>-x</strong>), UTF-32 (<strong>-u</strong>) and UTF-8 (<strong>-8</strong>). ASCII is default. You can
+either pass cmd flag or use <em>inplace configuration</em> in the form <strong>re2c:flags</strong>.</p></div>
+<div class="paragraph"><p>The following concepts should be clarified when talking about encoding. <em>Code point</em>
+is an abstract number, which represents single encoding symbol. <em>Code unit</em> is the
+smallest unit of memory, which is used in the encoded text (it corresponds to one
+character in the input stream). One or more code units can be needed to represent
+a single code point, depending on the encoding. In <em>fixed-length</em> encoding, each
+code point is represented with equal number of code units. In <em>variable-length</em>
+encoding, different code points can be represented with different number of code units.</p></div>
+<div class="dlist"><dl>
+<dt class="hdlist1">
+<strong>ASCII</strong> 
+</dt>
+<dd>
+<p>
+is a fixed-length encoding. Its code space includes 0x100 code points, from 0
+to 0xFF (note that this is <strong>re2c</strong>-specific understanding of ASCII). One code point
+is represented with exactly one 1-byte code unit, which has the same value as the
+code point. Size of <strong>YYCTYPE</strong> must be 1 byte.
+</p>
+</dd>
+<dt class="hdlist1">
+<strong>EBCDIC</strong> 
+</dt>
+<dd>
+<p>
+is a fixed-length encoding. Its code space includes 0x100 code points, from 0
+to 0xFF. One code point is represented with exactly one 1-byte code unit, which has
+the same value as the code point. Size of <strong>YYCTYPE</strong> must be 1 byte.
+</p>
+</dd>
+<dt class="hdlist1">
+<strong>UCS-2</strong> 
+</dt>
+<dd>
+<p>
+is a fixed-length encoding. Its code space includes 0x10000 code points, from 0
+to 0xFFFF. One code point is represented with exactly one 2-byte code unit, which has
+the same value as the code point. Size of <strong>YYCTYPE</strong> must be 2 bytes.
+</p>
+</dd>
+<dt class="hdlist1">
+<strong>UTF-16</strong> 
+</dt>
+<dd>
+<p>
+is a variable-length encoding. Its code space includes all Unicode code points,
+from 0 to 0xD7FF and from 0xE000 to 0x10FFFF. One code point is represented with one or
+two 2-byte code units. Size of <strong>YYCTYPE</strong> must be 2 bytes.
+</p>
+</dd>
+<dt class="hdlist1">
+<strong>UTF-32</strong> 
+</dt>
+<dd>
+<p>
+is a fixed-length encoding. Its code space includes all Unicode code points,
+from 0 to 0xD7FF and from 0xE000 to 0x10FFFF. One code point is represented with exactly
+one 4-byte code unit. Size of <strong>YYCTYPE</strong> must be 4 bytes.
+</p>
+</dd>
+<dt class="hdlist1">
+<strong>UTF-8</strong> 
+</dt>
+<dd>
+<p>
+is a variable-length encoding. Its code space includes all
+Unicode code points, from 0 to 0xD7FF and from 0xE000 to 0x10FFFF. One code point
+is represented with sequence of one, two, three or four 1-byte code units. Size of
+<strong>YYCTYPE</strong> must be 1 bytes.
+</p>
+</dd>
+</dl></div>
+<div class="paragraph"><p>In Unicode, values from range 0xD800 to 0xDFFF (surrogates) are not valid Unicode
+code points, any encoded sequence of code units, that would map to Unicode code points
+in the range 0xD800-0xDFFF, is ill-formed.
+The user can control how <strong>re2c</strong> treats such ill-formed sequences with <strong>--encoding-policy</strong> <em>policy</em>
+flag (see <strong>OPTIONS</strong> section for full explanation).</p></div>
+<div class="paragraph"><p>For some encodings, there are code units, that never occur in valid encoded stream
+(e.g. 0xFF byte in UTF-8). If the generated scanner must check for invalid input,
+the only true way to do so is to use default rule <strong>*</strong>.
+Note, that full range rule <strong>[^]</strong> won&#8217;t catch invalid code units when variable-length encoding is used
+(<strong>[^]</strong> means &#8220;all valid code points&#8221;, while default rule <strong>*</strong> means &#8220;all possible code units&#8221;:
+see <strong>Note</strong> about default rule in <strong>SYNTAX</strong> section).</p></div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_generic_input_api">GENERIC INPUT API</h2>
+<div class="sectionbody">
+<div class="paragraph"><p><strong>re2c</strong> usually operates on input using pointer-like primitives <strong>YYCURSOR</strong>, <strong>YYMARKER</strong>, <strong>YYCTXMARKER</strong> and <strong>YYLIMIT</strong>.</p></div>
+<div class="paragraph"><p>Generic input API (enabled with <strong>--input custom</strong> switch) allows to customize input operations.
+In this mode, <strong>re2c</strong> will express all operations on input in terms of the following primitives:</p></div>
+<div class="olist arabic"><ol class="arabic">
+<li>
+<p>
+<strong>YYPEEK ()</strong> --- get current input character
+</p>
+</li>
+<li>
+<p>
+<strong>YYSKIP ()</strong> --- advance to the next character
+</p>
+</li>
+<li>
+<p>
+<strong>YYBACKUP ()</strong> --- backup current input position
+</p>
+</li>
+<li>
+<p>
+<strong>YYBACKUPCTX ()</strong> --- backup current input position for trailing context
+</p>
+</li>
+<li>
+<p>
+<strong>YYRESTORE ()</strong> --- restore current input position
+</p>
+</li>
+<li>
+<p>
+<strong>YYRESTORECTX ()</strong> --- restore current input position for trailing context
+</p>
+</li>
+<li>
+<p>
+<strong>YYLESSTHAN (n)</strong> --- check if less than <strong>n</strong> input characters are left
+</p>
+</li>
+</ol></div>
+<div class="paragraph"><p>This article (<a href="http://skvadrik.github.io/aleph_null/posts/re2c/2015-01-13-input_model.html">http://skvadrik.github.io/aleph_null/posts/re2c/2015-01-13-input_model.html</a>)
+has more details, and you can find some usage examples:
+<a href="http://skvadrik.github.io/aleph_null/posts/re2c/2015-01-15-input_model_custom.html">http://skvadrik.github.io/aleph_null/posts/re2c/2015-01-15-input_model_custom.html</a> .</p></div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_understanding_re2c">UNDERSTANDING RE2C</h2>
+<div class="sectionbody">
+<div class="paragraph"><p>The subdirectory examples of the <strong>re2c</strong> distribution contains a few step by step
+examples to get you started with <strong>re2c</strong>. All examples in the lessons subdirectory
+can be compiled and actually work.</p></div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_bugs">BUGS</h2>
+<div class="sectionbody">
+<div class="olist arabic"><ol class="arabic">
+<li>
+<p>
+Difference only works for character sets, and not in UTF-8 mode.
+</p>
+</li>
+<li>
+<p>
+The generated DFA is not minimal.
+</p>
+</li>
+<li>
+<p>
+Features, that are naturally orthogonal (such as reusable rules, conditions,
+setup rules and default rules), cannot always be combined. E.g., one cannot set
+setup/default rule for condition in scanner with reusable rules.
+</p>
+</li>
+<li>
+<p>
+<strong>re2c</strong> does too much unnecessary work: e.g., if <strong>/*!use:re2c ... */</strong> block has
+additional rules, these rules are parsed 4 times, while they should be parsed only once.
+</p>
+</li>
+<li>
+<p>
+The <strong>re2c</strong> internal algorithms need documentation.
+</p>
+</li>
+</ol></div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_see_also">SEE ALSO</h2>
+<div class="sectionbody">
+<div class="paragraph"><p>flex(1), lex(1), quex (<a href="http://quex.sourceforge.net">http://quex.sourceforge.net</a>)</p></div>
+<div class="paragraph"><p>More information on <strong>re2c</strong> can be found here: <a href="http://re2c.org/">http://re2c.org/</a>.</p></div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_authors">AUTHORS</h2>
+<div class="sectionbody">
+<div class="olist arabic"><ol class="arabic">
+<li>
+<p>
+Peter Bumbulis <a href="mailto:peter@csg.uwaterloo.ca">peter@csg.uwaterloo.ca</a>
+</p>
+</li>
+<li>
+<p>
+Brian Young <a href="mailto:bayoung@acm.org">bayoung@acm.org</a>
+</p>
+</li>
+<li>
+<p>
+Dan Nuffer <a href="mailto:nuffer@users.sourceforge.net">nuffer@users.sourceforge.net</a>
+</p>
+</li>
+<li>
+<p>
+Marcus Boerger <a href="mailto:helly@users.sourceforge.net">helly@users.sourceforge.net</a>
+</p>
+</li>
+<li>
+<p>
+Hartmut Kaiser <a href="mailto:hkaiser@users.sourceforge.net">hkaiser@users.sourceforge.net</a>
+</p>
+</li>
+<li>
+<p>
+Emmanuel Mogenet <a href="mailto:mgix@mgix.com">mgix@mgix.com</a> (added storable state)
+</p>
+</li>
+<li>
+<p>
+Ulya Trofimovich <a href="mailto:skvadrik@gmail.com">skvadrik@gmail.com</a>
+</p>
+</li>
+</ol></div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_version_information">VERSION INFORMATION</h2>
+<div class="sectionbody">
+<div class="paragraph"><p>This manpage describes <strong>re2c</strong>, version 0.14.1.dev, package date 08 May 2015.</p></div>
+</div>
+</div>
+</div>
+<div id="footnotes"><hr /></div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2015-05-08 22:17:12 BST
+</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,575 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>re2c Home</title>
+  </head>
+  <body>
+    <h1>re2c</h1>
+
+    <p>
+    <b>re2c</b> is a tool for writing very fast and very flexible scanners. Unlike
+    any other such tool, <b>re2c</b> focuses on generating high efficient code for 
+    regular expression matching. As a result this allows a much broader range of 
+    use than any traditional lexer offers. And last but not least <b>re2c</b> 
+    generates warning free code that is equal to hand-written code in terms of 
+    size, speed and quality.
+    </p>
+
+    <p>
+    The above made the <a href="http://php.net">PHP</a> team to use <b>re2c</b> in
+    various places.
+    </p>
+
+    <p>
+    Marcus B&ouml;rger (helly@users.sourceforge.net)
+    </p>
+
+    <p>
+    I very much welcome anyone who would like to contribute to the project, either
+    as a developer with source code access or by simply sending patches, bug reports, or
+    suggestions for improvement.
+    </p>
+
+    <p>
+    Dan Nuffer (nuffer@users.sourceforge.net)
+    </p>
+
+    <p>
+    Please use the <a href="http://sourceforge.net/projects/re2c">sourceforge</a>
+    to download re2c, report bugs, subscribe to the mailing list, etc.
+    </p>
+
+    <p>
+    You can view the online manual <a href="manual.html">here</a>.
+    </p>
+
+    <h2>Other re2c links:</h2>
+    <ul>
+      <li>Paper on re2c.
+      <a href="http://citeseer.ist.psu.edu/bumbulis94rec.html">http://citeseer.ist.psu.edu/bumbulis94rec.html</a>
+      </li>
+
+      <li>Many systems provide re2c packages: you can find some of them
+      <a href="http://pkgs.org/download/re2c">here</a>, but the list is not exhaustive.
+      </li>
+
+      <li>Source code and tarballs are available <a href="http://sourceforge.net/projects/re2c">on sourceforge</a>.</li>
+
+      <li><a href="http://www.tortall.net/projects/yasm/browser/trunk/yasm/tools/re2c">yasm</a>
+      is a tool which uses re2c, they created a C version and did some good fixes which were incorporated.
+      </li>
+    </ul>
+    <hr />
+    <h1>Changelog</h1>
+    <h2>2015-02-23: 0.14</h2>
+    <ul>
+      <li>Added generic input API 21 (#21 Support to configure how re2c code interfaced with the symbol buffer?)</li>
+      <li>fixed #46 re2c generates an infinite loop, depends on existence of previous parser</li>
+      <li>fixed #47 Dot output label escaped characters</li>
+    </ul>
+    <h2>2014-08-22: 0.13.7.5</h2>
+    <ul>
+      <li>Fixed Gentoo bug: https://bugs.gentoo.org/show_bug.cgi?id=518904 (PHP lexer)</li>
+    </ul>
+    <h2>2014-07-29: 0.13.7.4</h2>
+    <ul>
+      <li>Enabled 'make docs' only if configured with '--enable-docs'</li>
+      <li>Disallowed to use yacc/byacc instead of bison to build parser</li>
+      <li>Removed non-portable sed feature in script that runs tests</li>
+    </ul>
+    <h2>2014-07-27: 0.13.7.3</h2>
+    <ul>
+      <li>Fixed CXX warning</li>
+      <li>Got rid of asciidoc build-time dependency</li>
+    </ul>
+    <h2>2014-07-27: 0.13.7.2</h2>
+    <ul>
+      <li>Included man page into dist, respect users CXXFLAGS.</li>
+    </ul>
+    <h2>2014-07-26: 0.13.7.1</h2>
+    <ul>
+      <li>Added missing files to tarball</li>
+    </ul>
+    <h2>2014-07-25: 0.13.7</h2>
+    <ul>
+      <li>Added UTF-8 support</li>
+      <li>Added UTF-16 support</li>
+      <li>Added default rule</li>
+      <li>Added option to control ill-formed Unicode</li>
+    </ul>
+    <h2>2013-07-04: 0.13.6</h2>
+    <ul>
+      <li>Fixed #2535084 uint problem with Sun C 5.8</li>
+      <li>#3308400: allow Yacc-style %{code brackets}%</li>
+      <li>#2506253: allow C++ // comments</li>
+      <li>Fixed inplace configuration in -e mode.</li>
+      <li>Applied #2482572 Typos in error messages.</li>
+      <li>Applied #2482561 Error in manual section on -r mode.</li>
+      <li>Fixed #2478216 Wrong start_label in -c mode.</li>
+      <li>Fixed #2186718 Unescaped backslash in file name of #line directive.</li>
+      <li>Fixed #2102138 Duplicate case labels on EBCDIC.</li>
+      <li>Fixed #2088583 Compile problem on AIX.</li>
+      <li>Fixed #2038610 Ebcdic problem.</li>
+      <li>improve dot support: make char intervals (e.g. [A-Z]) instead of one edge per char</li>
+    </ul>
+    <h2>2008-05-25: 0.13.5</h2>
+    <ul>
+      <li>Fixed #1952896 Segfault in re2c::Scanner::scan.</li>
+      <li>Fixed #1952842 Regression.</li>
+    </ul>
+    <h2>2008-04-05: 0.13.4</h2>
+    <ul>
+      <li>Added transparent handling of #line directives in input files.</li>
+      <li>Added re2c:yyfill:check inplace configuration.</li>
+      <li>Added re2c:define:YYSETSTATE:naked inplace configuration.</li>
+      <li>Added re2c:flags:w and re2c:flags:u inplace configurations.</li>
+      <li>Added the ability to add rules in 'use:re2c' blocks.</li>
+      <li>Changed -r flag to accept only 'rules:re2c' and 'use:re2c' blocks.</li>
+    </ul>
+    <h2>2008-03-14: 0.13.3</h2>
+    <ul>
+      <li>Added -r flag to allow reuse of scanner definitions.</li>
+      <li>Added -F flag to support flex syntax in rules.</li>
+      <li>Fixed SEGV in scanner that occurs with very large blocks.</li>
+      <li>Fixed issue with unused yybm.</li>
+      <li>Partial support for flex syntax.</li>
+      <li>Changed to allow /* comments with -c switch.</li>
+      <li>Added flag -D/--emit-dot.</li>
+    </ul>
+    <h2>2008-02-14: 0.13.2</h2>
+    <ul>
+      <li>Added flag --case-inverted.</li>
+      <li>Added flag --case-insensitive.</li>
+      <li>Added support for '&lt;!...&gt;' to enable rule setup.</li>
+      <li>Added support for '=&gt;' style rules.</li>
+      <li>Added support for ':=' style rules.</li>
+      <li>Added support for ':=&gt;' style rules.</li>
+      <li>Added re2c:cond:divider and re2c:con:goto inplace configuration.</li>
+      <li>Fixed code generation to emit space after 'if'.</li>
+    </ul>
+    <h2>2007-08-24: 0.13.1</h2>
+    <ul>
+      <li>Added custom build rules for Visual Studio 2005 (re2c.rules). (William Swanson)</li>
+      <li>Fixed issue with some compilers.</li>
+      <li>Fixed #1776177 Build on AIX.</li>
+      <li>Fixed #1743180 fwrite with 0 length crashes on OS X.</li>
+    </ul>
+    <h2>2007-06-24: 0.13.0</h2>
+    <ul>
+      <li>Added -c and -t to generate scanners with (f)lex-like condition support.</li>
+      <li>Fixed issue with short form of switches and parameter if not first switch.</li>
+      <li>Fixed #1708378 segfault in actions.cc.</li>
+    </ul>
+    <h2>2007-08-24: 0.12.3</h2>
+    <ul>
+      <li>Fixed issue with some compilers.</li>
+      <li>Fixed #1776177 Build on AIX.</li>
+      <li>Fixed #1743180 fwrite with 0 length crashes on OS X.</li>
+    </ul>
+    <h2>2007-06-26: 0.12.2</h2>
+    <ul>
+      <li>Fixed #1743180 fwrite with 0 length crashes on OS X.</li>
+    </ul>
+    <h2>2007-05-23: 0.12.1</h2>
+    <ul>
+      <li>Fixed #1711240 problem with '"' and 7F on EBCDIC plattforms.</li>
+    </ul>
+    <h2>2007-05-01: 0.12.0</h2>
+    <ul>
+      <li>Re-release of 0.11.3 as new stable branch.</li>
+      <li>Fixed issue with short form of switches and parameter if not first switch.</li>
+      <li>Fixed #1708378 segfault in actions.cc.</li>
+    </ul>
+    <h2>re2c 0.12.0 has been tested with the following compilers:</h2>
+    <ul>
+      <li>gcc version 4.1.2 (Gentoo 4.1.2)</li>
+      <li>gcc version 4.1.2 20070302 (prerelease) (4.1.2-1mdv2007.1)</li>
+      <li>gcc version 4.1.2 20061115 (prerelease) (Debian 4.1.1-21)</li>
+      <li>gcc version 4.1.1 20070105 (Red Hat 4.1.1-51)</li>
+      <li>gcc version 4.1.0 (SUSE Linux 10)</li>
+      <li>gcc version 4.0.3 (4.0.3-0.20060215.2mdk for Mandriva Linux release 2006.1)</li>
+      <li>gcc version 4.0.2 20050901 (prerelease) (SUSE Linux) (32 + 64 bit)</li>
+      <li>MacPPC, gcc version 4.0.1 (Apple Computer, Inc. build 5367)</li>
+      <li>MacIntel, gcc version 4.0.1 (Apple Computer, Inc. build 5250)</li>
+      <li>gcc version 3.4.4 [FreeBSD] 20050518 (32 + 64 bit)</li>
+      <li>gcc version 3.4.4 (cygming special) (gdc 0.12, using dmd 0.125)</li>
+      <li>gcc version 3.4.2 [FreeBSD]</li>
+      <li>gcc version 3.3.5 20050117 (prerelease) (SUSE Linux)</li>
+      <li>gcc version 3.3.3 (PPC, 32 + 64 bit)</li>
+      <li>Microsoft (R) C/C++ Optimizing Compiler Version 14.00.50727.762 for x64 (64 bit)</li>
+      <li>Microsoft (R) 32-bit C/C++ Optimizing Compiler Version 14.00.50727.42 for 80x86 (Microsoft Visual C++ 2005)</li>
+      <li>Microsoft (R) 32-bit C/C++ Optimizing Compiler Version 13.10.3077 for 80x86 (Mictosoft Visual C++ 2003)</li>
+      <li>Microsoft (R) 32-bit C/C++ Optimizing Compiler Version 13.00.9466 for 80x86 (Microsoft Visual C++ 2002)</li>
+      <li>Intel(R) C++ Compiler for 32-bit applications, Version 9.1 Build 20070322Z Package ID: W_CC_C_9.1.037</li>
+      <li>Intel(R) C++ Compiler for Intel(R) EM64T-based applications, Version 9.1 (64 bit)</li>
+      <li>icpcbin (ICC) 9.1 20070215</li>
+      <li>CC: Sun C++ 5.8 2005/10/13 (CXXFLAGS='-library=stlport4')</li>
+      <li>MIPSpro Compilers: Version 7.4.4m (32 + 64 bit)</li>
+      <li>aCC: HP C/aC++ B3910B A.06.15 [Mar 28 2007] (HP-UX IA64)</li>
+    </ul>
+    <h2>2007-04-01: 0.11.3</h2>
+    <ul>
+      <li>Added support for underscores in named definitions.</li>
+      <li>Added new option --no-generation-date.</li>
+      <li>Fixed issue with long form of switches.</li>
+    </ul>
+    <h2>2007-03-01: 0.11.2</h2>
+    <ul>
+      <li>Added inplace configuration 're2c:yyfill:parameter'.</li>
+      <li>Added inplace configuration 're2c:yych:conversion'.</li>
+      <li>Fixed -u switch code generation.</li>
+      <li>Added ability to avoid defines and overwrite generated variable names.</li>
+    </ul>
+    <h2>2007-02-20: 0.11.1</h2>
+    <ul>
+      <li>Applied #1647875 Add const to yybm vector.</li>
+    </ul>
+    <h2>2007-01-01: 0.11.0</h2>
+    <ul>
+      <li>Added -u switch to support unicode.</li>
+    </ul>
+    <h2>2007-04-01: 0.10.8</h2>
+    <ul>
+      <li>Fixed issue with long form of switches.</li>
+    </ul>
+    <h2>2007-02-20: 0.10.7</h2>
+    <ul>
+      <li>Applied #1647875 Add const to yybm vector.</li>
+    </ul>
+    <h2>2006-08-05: 0.10.6</h2>
+    <ul>
+      <li>Fixed #1529351 Segv bug on unterminated code blocks.</li>
+      <li>Fixed #1528269 Invalid code generation.</li>
+    </ul>
+    <h2>2006-06-11: 0.10.5</h2>
+    <ul>
+      <li>Fixed long form of -1 switch to --single-pass as noted in man page and help.</li>
+      <li>Added MSVC 2003 project files and renamed old 2002 ones.</li>
+    </ul>
+    <h2>2006-06-01: 0.10.4</h2>
+    <ul>
+      <li>Fix whitespace in generated code.</li>
+    </ul>
+    <h2>2006-05-14: 0.10.3</h2>
+    <ul>
+      <li>Fixed issue with -wb and -ws.</li>
+      <li>Added -g switch to support gcc's computed goto's.</li>
+      <li>Changed to use nested if's instead of "switch(yyaccept)" in -s mode.</li>
+    </ul>
+    <h2>2006-05-01: 0.10.2</h2>
+    <ul>
+      <li>Changed to generate YYMARKER only when needed or in single pass mode.</li>
+      <li>Added -1 switch to force single pass generation and make two pass the default.</li>
+      <li>Fixed -i switch.</li>
+      <li>Added configuration 'yyfill:enable' to allow suppression of YYFILL() blocks.</li>
+      <li>Added tutorial like lessons to re2c.</li>
+      <li>Added /*!ignore:re2c */ to support documenting of re2c source.</li>
+      <li>Fixed issue with multiline re2c comments (/*!max:re2c ... */ and alike).</li>
+      <li>Fixed generation of YYDEBUG() when using -d switch.</li>
+      <li>Added /*!getstate:re2c */ which triggers generation of the YYGETSTATE() block.</li>
+      <li>Added configuration 'state:abort'.</li>
+      <li>Changed to not generate yyNext unless configuration 'state:nextlabel' is used.</li>
+      <li>Changed to not generate yyaccept code unless needed.</li>
+      <li>Changed to use if- instead of switch-expression when yyaccpt has only one case.</li>
+      <li>Added docu, examples and tests to .src.zip package (0.10.1 zip was repackaged).</li>
+      <li>Fixed #1479044 incorrect code generated when using -b.</li>
+      <li>Fixed #1472770 re2c creates an infinite loop.</li>
+      <li>Fixed #1454253 Piece of code saving a backtracking point not generated.</li>
+      <li>Fixed #1463639 Missing forward declaration.</li>
+      <li>Implemented #1187127 savable state support for multiple re2c blocks.</li>
+    </ul>
+    <h2>re2c 0.10.2 has been tested with the following compilers:</h2>
+    <ul>
+      <li>gcc (GCC) 4.1.0 (Gentoo 4.1.0)</li>
+      <li>gcc version 4.0.3 (4.0.3-0.20060215.2mdk for Mandriva Linux release 2006.1)</li>
+      <li>gcc version 4.0.2 20050901 (prerelease) (SUSE Linux)</li>
+      <li>gcc (GCC) 3.4.5 (Gentoo 3.4.5, ssp-3.4.5-1.0, pie-8.7.9)</li>
+      <li>gcc version 3.4.4 [FreeBSD] 20050518</li>
+      <li>gcc version 3.4.4 (cygming special) (gdc 0.12, using dmd 0.125)</li>
+      <li>gcc version 3.4.2 20041017 (Red Hat 3.4.2-6.fc3)</li>
+      <li>gcc-Version 3.3.5 (Debian 1:3.3.5-13)</li>
+      <li>gcc-Version 3.3.0 (mips-sgi-irix6.5/3.3.0/specs)</li>
+      <li>MIPSpro Compilers: Version 7.4.4m</li>
+      <li>Microsoft (R) 32-bit C/C++ Optimizing Compiler Version 14.00.50727.42 for 80x86 (Microsoft Visual C++ 2005)</li>
+      <li>Microsoft (R) 32-bit C/C++ Optimizing Compiler Version 13.10.3077 for 80x86 (Mictosoft Visual C++ 2003)</li>
+      <li>Microsoft (R) 32-bit C/C++ Optimizing Compiler Version 13.00.9466 for 80x86 (Microsoft Visual C++ 2002)</li>
+      <li>Intel(R) C++ Compiler for Intel(R) EM64T-based applications, Version 9.0 Build 20050430 Package ID: l_cc_p_9.0.021</li>
+      <li>CC: Sun C++ 5.8 2005/10/13 (CXXFLAGS='-library=stlport4')</li>
+    </ul>
+    <ul>
+      <li>bison 2.1, 1.875d, 1.875b, 1.875
+    </ul>
+    <h2>2006-02-28: 0.10.1</h2>
+    <ul>
+      <li>Added support for Solaris and native SUN compiler.</li>
+      <li>Applied #1438160 expose YYCTXMARKER.</li>
+    </ul>
+    <h2>re2c 0.10.1 has been tested with the following compilers:</h2>
+    <ul>
+      <li>gcc version 4.0.3 (4.0.3-0.20060215.2mdk for Mandriva Linux release 2006.1)</li>
+      <li>gcc version 4.0.2 (4.0.2-1mdk for Mandriva Linux release 2006.1)</li>
+      <li>gcc version 4.0.2 20050901 (prerelease) (SUSE Linux)</li>
+      <li>gcc version 3.4.4 (cygming special) (gdc 0.12, using dmd 0.125)</li>
+      <li>gcc-Version 3.3.5 (Debian 1:3.3.5-13)</li>
+      <li>gcc-Version 3.3.0 (mips-sgi-irix6.5/3.3.0/specs)</li>
+      <li>MIPSpro Compilers: Version 7.4.4m</li>
+      <li>Microsoft (R) 32-bit C/C++ Optimizing Compiler Version 14.00.50727.42 for 80x86 (Microsoft Visual C 2005)</li>
+      <li>Microsoft (R) 32-bit C/C++ Optimizing Compiler Version 13.00.9466 for 80x86 (Microsoft Visual C 2002)</li>
+      <li>Intel(R) C++ Compiler for 32-bit applications, Version 9.0 Build 20051130Z Package ID: W_CC_C_9.0.028</li>
+      <li>CC: Sun C++ 5.8 2005/10/13 (CXXFLAGS='-compat5 -library=stlport4')</li>
+    </ul>
+    <ul>
+      <li>bison 2.1, 1.875d, 1.875b, 1.875
+    </ul>
+    <h2>2006-02-18: 0.10.0</h2>
+    <ul>
+      <li>Added make target zip to create windows source packages as zip files.</li>
+      <li>Added re2c:startlabel configuration.</li>
+      <li>Fixed code generation to not generate unreachable code for initial state.</li>
+      <li>Added support for c/c++ compatible \u and \U unicode notation.</li>
+      <li>Added ability to control indendation.</li>
+      <li>Made scanner error out in case an ambiguous /* is found.</li>
+      <li>Fixed indendation of generated code.</li>
+      <li>Added support for DOS line endings.</li>
+      <li>Added experimental unicode support.</li>
+      <li>Added config_w32.h to build out of the box on windows (using msvc 2002+).</li>
+      <li>Added Microsoft Visual C .NET 2005 build files.</li>
+      <li>Applied #1411087 variable length trailing context.</li>
+      <li>Applied #1408326 do not generate goto next state.</li>
+      <li>Applied #1408282 CharSet initialization fix.</li>
+      <li>Applied #1408278 readsome with MSVC.</li>
+      <li>Applied #1307467 Unicode patch for 0.9.7.</li>
+    </ul>
+    <h2>2005-12-28: 0.9.12</h2>
+    <ul>
+      <li>Fixed bug #1390174 re2c cannot accept {0,}.</li>
+    </ul>
+    <h2>2005-12-18: 0.9.11</h2>
+    <ul>
+      <li>Fixed #1313083 -e (EBCDIC cross compile) broken.</li>
+      <li>Fixed #1297658 underestimation of n in YYFILL(n).</li>
+      <li>Applied #1339483 Avoid rebuilds of re2c when running subtargets.</li>
+      <li>Implemented #1335305 symbol table reimplementation, just slightly modifed.</li>
+    </ul>
+    <h2>2005-09-04: 0.9.10</h2>
+    <ul>
+      <li>Add -i switch to avoid generating #line information.</li>
+      <li>Fixed bug #1251653 re2c generate some invalid #line on WIN32.</li>
+    </ul>
+    <h2>2005-07-21: 0.9.9</h2>
+    <ul>
+      <li>Implemented #1232777 negated char classes '[^...]' and the dot operator '.'.</li>
+      <li>Added hexadecimal character definitions.</li>
+      <li>Added consistency check for octal character definitions.</li>
+    </ul>
+    <h2>2005-06-26: 0.9.8</h2>
+    <ul>
+      <li>Fixed code generation for -b switch. </li>
+      <li>Added Microsoft Visual C .NET build files.</li>
+    </ul>
+    <h2>2005-04-30: 0.9.7</h2>
+    <ul>
+      <li>Applied #1181535 storable state patch.</li>
+      <li>Added -d flag which outputs a debugable parser.</li>
+      <li>Fixed generation of '#line' directives (according to ISO-C99).</li>
+      <li>Fixed bug #1187785 Re2c fails to generate valid code.</li>
+      <li>Fixed bug #1187452 unused variable `yyaccept'.</li>
+    </ul>
+    <h2>2005-04-14: 0.9.6</h2>
+    <ul>
+      <li>Fix build with gcc &gt;= 3.4.</li>
+    </ul>
+    <h2>2005-04-08: 0.9.5</h2>
+    <ul>
+      <li>Added /*!max:re2c */ which emits a '#define YYMAXFILL &lt;max&gt;\n' line
+      This allows to define buffers of the minimum required length. Occurence must
+      follow '/*re2c */ and cannot preceed it.</li>
+      <li>Changed re2c to two pass generation to output warning free code.</li>
+      <li>Fixed bug #1163046 re2c hangs when processing valid re-file.</li>
+      <li>Fixed bug #1022799 re2c scanner has buffering bug.</li>
+    </ul>
+    <h2>2005-03-12: 0.9.4</h2>
+    <ul>
+      <li>Added --vernum support.</li>
+      <li>Fixed bug #1054496 incorrect code generated with -b option.</li>
+      <li>Fixed bug #1012748 re2c does not emit last line if '\n' missing.</li>
+      <li>Fixed bug #999104 --output=output option does not work as documented.</li>
+      <li>Fixed bug #999103 Invalid options prefixed with two dashes cause program
+      crash.</li>
+    </ul>
+    <h2>2004-05-26: 0.9.3</h2>
+    <ul>
+      <li>Fixes one small possible bug in the generated output. ych instead of yych
+      is output in certain circumstances.</li>
+    </ul>
+    <h2>2004-05-26: 0.9.2</h2>
+    <ul>
+      <li>Added -o option to specify the output file which also will set the #line
+      directives to something useful.</li>
+      <li>Print version to cout instead cerr.</li>
+      <li>Added -h and -- style options.</li>
+      <li>Moved development to <a href=
+        "http://sourceforge.net/projects/re2c">http://sourceforge.net/projects/re2c</a></li>
+      <li>Fixed bug #960144 minor cosmetic problem.</li>
+      <li>Fixed bug #953181 cannot compile with.</li>
+      <li>Fixed bug #939277 Windows support.</li>
+      <li>Fixed bug #914462 automake build patch</li>
+      <li>Fixed bug #891940 braced quantifiers: {\d+(,|,\d+)?} style.</li>
+      <li>Fixed bug #869298 Add case insensitive string literals.</li>
+      <li>Fixed bug #869297 Input buffer overrun.</li>
+    </ul>
+    <h2>2003-12-13: 0.9.1</h2>
+    <ul>
+      <li>Removed rcs comments in source files.</li>
+    </ul>
+    <h2>2003-12-09: re2c adopted</h2>
+    <hr />
+    <h2>Version 0.9.1 README</h2>
+    <br />
+    Originally written by Peter Bumbulis (peter@csg.uwaterloo.ca)<br />
+    Currently maintained by Brian Young (bayoung@acm.org)<br />
+    <br />
+    The re2c distribution can be found at:<br />
+    <br />
+    http://www.tildeslash.org/re2c/index.html<br />
+    <br />
+    The source distribution is available from:<br />
+    <br />
+    http://www.tildeslash.org/re2c/re2c-0.9.1.tar.gz<br />
+    <br />
+    This distribution is a cleaned up version of the 0.5 release<br />
+    maintained by me (Brian Young). Several bugs were fixed as well<br />
+    as code cleanup for warning free compilation. It has been developed<br />
+    and tested with egcs 1.0.2 and gcc 2.7.2.3 on Linux x86. Peter<br />
+    Bumbulis' original release can be found at:<br />
+    <br />
+    ftp://csg.uwaterloo.ca/pub/peter/re2c.0.5.tar.gz<br />
+    <br />
+    re2c is a great tool for writing fast and flexible lexers. It has<br />
+    served many people well for many years and it deserves to be<br />
+    maintained more actively. re2c is on the order of 2-3 times faster<br />
+    than a flex based scanner, and its input model is much more<br />
+    flexible.<br />
+    <br />
+    Patches and requests for features will be entertained. Areas of<br />
+    particular interest to me are porting (a Solaris and an NT<br />
+    version will be forthcoming) and wide character support. Note<br />
+    that the code is already quite portable and should be buildable<br />
+    on any platform with minor makefile changes.<br />
+    <hr />
+    <h2>Version 0.5 <b>Peter's</b> original ANNOUNCE and README</h2>
+    re2c is a tool for generating C-based recognizers from regular<br />
+    expressions. re2c-based scanners are efficient: for programming<br />
+    languages, given similar specifications, an re2c-based scanner is<br />
+    typically almost twice as fast as a flex-based scanner with little or no<br />
+    increase in size (possibly a decrease on cisc architectures). Indeed,<br />
+    re2c-based scanners are quite competitive with hand-crafted ones.<br />
+    <br />
+    Unlike flex, re2c does not generate complete scanners: the user must<br />
+    supply some interface code. While this code is not bulky (about 50-100<br />
+    lines for a flex-like scanner; see the man page and examples in the<br />
+    distribution) careful coding is required for efficiency (and<br />
+    correctness). One advantage of this arrangement is that the generated<br />
+    code is not tied to any particular input model. For example, re2c<br />
+    generated code can be used to scan data from a null-byte terminated<br />
+    buffer as illustrated below.<br />
+    <br />
+    Given the following source<br />
+    <br />
+    #define NULL ((char*) 0)<br />
+    char *scan(char *p){<br />
+    char *q;<br />
+    #define YYCTYPE char<br />
+    #define YYCURSOR p<br />
+    #define YYLIMIT p<br />
+    #define YYMARKER q<br />
+    #define YYFILL(n)<br />
+    /*!re2c<br />
+    [0-9]+ {return YYCURSOR;}<br />
+    [\000-\377] {return NULL;}<br />
+    */<br />
+    }<br />
+    <br />
+    re2c will generate<br />
+    <br />
+    /* Generated by re2c on Sat Apr 16 11:40:58 1994 */<br />
+    #line 1 "simple.re"<br />
+    #define NULL ((char*) 0)<br />
+    char *scan(char *p){<br />
+    char *q;<br />
+    #define YYCTYPE char<br />
+    #define YYCURSOR p<br />
+    #define YYLIMIT p<br />
+    #define YYMARKER q<br />
+    #define YYFILL(n)<br />
+    {<br />
+    YYCTYPE yych;<br />
+    unsigned int yyaccept;<br />
+    goto yy0;<br />
+    yy1: ++YYCURSOR;<br />
+    yy0:<br />
+    if((YYLIMIT - YYCURSOR) &lt; 2) YYFILL(2);<br />
+    yych = *YYCURSOR;<br />
+    if(yych &lt;= '/') goto yy4;<br />
+    if(yych &gt;= ':') goto yy4;<br />
+    yy2: yych = *++YYCURSOR;<br />
+    goto yy7;<br />
+    yy3:<br />
+    #line 10<br />
+    {return YYCURSOR;}<br />
+    yy4: yych = *++YYCURSOR;<br />
+    yy5:<br />
+    #line 11<br />
+    {return NULL;}<br />
+    yy6: ++YYCURSOR;<br />
+    if(YYLIMIT == YYCURSOR) YYFILL(1);<br />
+    yych = *YYCURSOR;<br />
+    yy7: if(yych &lt;= '/') goto yy3;<br />
+    if(yych &lt;= '9') goto yy6;<br />
+    goto yy3;<br />
+    }<br />
+    #line 12<br />
+    <br />
+    }<br />
+    <br />
+    Note that most compilers will perform dead-code elimination to remove<br />
+    all YYCURSOR, YYLIMIT comparisions.<br />
+    <br />
+    re2c was developed for a particular project (constructing a fast REXX<br />
+    scanner of all things!) and so while it has some rough edges, it should<br />
+    be quite usable. More information about re2c can be found in the<br />
+    (admittedly skimpy) man page; the algorithms and heuristics used are<br />
+    described in an upcoming LOPLAS article (included in the distribution).<br />
+    Probably the best way to find out more about re2c is to try the supplied<br />
+    examples. re2c is written in C++, and is currently being developed<br />
+    under Linux using gcc 2.5.8.<br />
+    <br />
+    Peter<br />
+    <br />
+    --<br />
+    <br />
+    re2c is distributed with no warranty whatever. The code is certain to<br />
+    contain errors. Neither the author nor any contributor takes<br />
+    responsibility for any consequences of its use.<br />
+    <br />
+    re2c is in the public domain. The data structures and algorithms used<br />
+    in re2c are all either taken from documents available to the general<br />
+    public or are inventions of the author. Programs generated by re2c may<br />
+    be distributed freely. re2c itself may be distributed freely, in source<br />
+    or binary, unchanged or modified. Distributors may charge whatever fees<br />
+    they can obtain for re2c.<br />
+    <br />
+    If you do make use of re2c, or incorporate it into a larger project an<br />
+    acknowledgement somewhere (documentation, research report, etc.) would<br />
+    be appreciated.<br />
+    <br />
+    Please send bug reports and feedback (including suggestions for<br />
+    improving the distribution) to<br />
+    <br />
+    Include a small example and the banner from parser.y with bug reports.<br />
+    <br />
+    peter@csg.uwaterloo.ca<br />
+  </body>
+</html>

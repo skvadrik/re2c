@@ -53,21 +53,6 @@
      FID = 270
    };
 #endif
-/* Tokens.  */
-#define CLOSESIZE 258
-#define CLOSE 259
-#define STAR 260
-#define NOCOND 261
-#define ID 262
-#define CODE 263
-#define RANGE 264
-#define STRING 265
-#define CONFIG 266
-#define VALUE 267
-#define NUMBER 268
-#define SETUP 269
-#define FID 270
-
 
 
 
@@ -75,6 +60,8 @@
 typedef union YYSTYPE
 {
 
+/* Line 1685 of yacc.c  */
+#line 149 "../src/parser.ypp"
 
 	re2c::Symbol	*symbol;
 	re2c::RegExp	*regexp;
@@ -87,6 +74,8 @@ typedef union YYSTYPE
 
 
 
+/* Line 1685 of yacc.c  */
+#line 79 "./y.tab.h"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */

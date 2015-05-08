@@ -1,110 +1,185 @@
 # $Id$
 
+AM_CXXFLAGS = -W -Wall -Wextra -pedantic -Wredundant-decls -DPEDANTIC -O2
+AM_YFLAGS = -y -d --no-lines
+RE2CFLAGS = -bi
+
 bin_PROGRAMS = re2c
-win_BINARIES = $(WINBUILDDIR)/re2c.exe
-re2c_SOURCES = code.cc code_names.cc dfa.cc go_construct.cc go_destruct.cc go_emit.cc go_used_labels.cc \
-	main.cc parser.cc actions.cc scanner.re substr.cc range.cc \
-	translate.cc scanner.cc skeleton.cc mbo_getopt.cc print.cc input.cc input_api.cc output.cc \
-	enc.cc utf8.cc utf8_range.cc utf8_regexp.cc utf16.cc utf16_range.cc utf16_regexp.cc range_suffix.cc \
-	code.h code_names.h dfa.h go.h enc.h indent.h input.h input_api.h free_list.h globals.h ins.h \
-	mbo_getopt.h parser.h print.h range.h range_suffix.h re.h \
-	scanner.h skeleton.h smart_ptr.h substr.h token.h output.h \
-	utf16.h utf16_range.h utf16_regexp.h utf8.h utf8_range.h utf8_regexp.h
-BUILT_SOURCES = parser.cc scanner.cc
+RE2C = $(builddir)/re2c$(EXEEXT)
 
-#CXXFLAGS     = -O2 -Wall -Wno-unused -Wno-parentheses -Wno-deprecated
-#CXXFLAGS     = -ggdb -fno-inline -O2 -Wall -Wextra -pedantic -Wconversion -Wpointer-arith -Wwrite-strings -Wredundant-decls -Werror -Wunused-function -DPEDANTIC
-CXXFLAGS     += -O2
-CXXFLAGS     += -W -Wall -Wextra -pedantic -Wredundant-decls -DPEDANTIC
-YFLAGS       = -y -d --no-lines
+# scanner
+SRC_SCANNER = $(srcdir)/src/scanner.re
+AUTOGEN_SCANNER = $(builddir)/scanner.cc
+BOOTSTRAP_SCANNER = $(srcdir)/bootstrap/scanner.cc
 
-RE2C         = re2c$(EXEEXT)
-RE2CFLAGS    = -bi
+# parser
+SRC_PARSER = $(srcdir)/src/parser.ypp
+AUTOGEN_PARSER = $(builddir)/parser.cc
+AUTOGEN_PARSER_HDR = $(builddir)/y.tab.h
+BOOTSTRAP_PARSER = $(srcdir)/bootstrap/parser.cc
+BOOTSTRAP_PARSER_HDR = $(srcdir)/bootstrap/y.tab.h
 
-CLEANFILES = parser.cc y.tab.c y.tab.h scanner.cc .version
+# docs
+DOC_MAN = $(builddir)/doc/re2c.1
+DOC_HTML = $(builddir)/doc/manual.html
+SRC_DOC = $(builddir)/doc/re2c.ad
+BOOTSTRAP_DOC_MAN = $(srcdir)/bootstrap/re2c.1
+BOOTSTRAP_DOC_HTML = $(srcdir)/bootstrap/manual.html
 
-DISTCLEANFILES = makerpm re2c.spec README scanner.cc re2c$(EXEEXT)
+SRC_HDR = \
+	$(srcdir)/src/c99_stdint.h \
+	$(srcdir)/src/code.h \
+	$(srcdir)/src/code_names.h \
+	$(srcdir)/src/dfa.h \
+	$(srcdir)/src/enc.h \
+	$(srcdir)/src/globals.h \
+	$(srcdir)/src/go.h \
+	$(srcdir)/src/indent.h \
+	$(srcdir)/src/input.h \
+	$(srcdir)/src/input_api.h \
+	$(srcdir)/src/ins.h \
+	$(srcdir)/src/free_list.h \
+	$(srcdir)/src/mbo_getopt.h \
+	$(srcdir)/src/output.h \
+	$(srcdir)/src/parser.h \
+	$(srcdir)/src/print.h \
+	$(srcdir)/src/range.h \
+	$(srcdir)/src/range_suffix.h \
+	$(srcdir)/src/re.h \
+	$(srcdir)/src/scanner.h \
+	$(srcdir)/src/skeleton.h \
+	$(srcdir)/src/smart_ptr.h \
+	$(srcdir)/src/substr.h \
+	$(srcdir)/src/token.h \
+	$(srcdir)/src/utf16.h \
+	$(srcdir)/src/utf16_range.h \
+	$(srcdir)/src/utf16_regexp.h \
+	$(srcdir)/src/utf8.h \
+	$(srcdir)/src/utf8_range.h \
+	$(srcdir)/src/utf8_regexp.h
 
-man_MANS = re2c.1
-DOCS = $(man_MANS) htdocs/manual.html
+SRC = \
+	$(SRC_SCANNER) \
+	$(srcdir)/src/actions.cc \
+	$(srcdir)/src/code.cc \
+	$(srcdir)/src/code_names.cc \
+	$(srcdir)/src/dfa.cc \
+	$(srcdir)/src/enc.cc \
+	$(srcdir)/src/go_construct.cc \
+	$(srcdir)/src/go_destruct.cc \
+	$(srcdir)/src/go_emit.cc \
+	$(srcdir)/src/go_used_labels.cc \
+	$(srcdir)/src/input.cc \
+	$(srcdir)/src/input_api.cc \
+	$(srcdir)/src/main.cc \
+	$(srcdir)/src/mbo_getopt.cc \
+	$(srcdir)/src/output.cc \
+	$(srcdir)/src/print.cc \
+	$(srcdir)/src/range.cc \
+	$(srcdir)/src/range_suffix.cc \
+	$(srcdir)/src/skeleton.cc \
+	$(srcdir)/src/substr.cc \
+	$(srcdir)/src/translate.cc \
+	$(srcdir)/src/utf8.cc \
+	$(srcdir)/src/utf8_range.cc \
+	$(srcdir)/src/utf8_regexp.cc \
+	$(srcdir)/src/utf16.cc \
+	$(srcdir)/src/utf16_range.cc \
+	$(srcdir)/src/utf16_regexp.cc
+# omit SRC_PARSER here; include it in EXTRA_DIST instead
+# (automake generates standard build rules for all YACC-ish
+# sources, they will conflict with our custom build rule).
 
-EXTRA_SRC    = README parser.y scanner.re y.tab.h CHANGELOG NO_WARRANTY \
-               doc examples test bootstrap/*.cc bootstrap/*.h bootstrap/re2c.1 lessons \
-               $(DOCS)
-EXTRA_DIST   = $(EXTRA_SRC) makerpm.in re2c.spec.in re2c.spec README.in config_w32.h.in
-EXTRA_ZIP    = $(EXTRA_SRC) config_w32.h re2c.rules
+AUTOGEN = \
+	$(AUTOGEN_PARSER) \
+	$(AUTOGEN_PARSER_HDR) \
+	$(AUTOGEN_SCANNER)
 
-dist-hook: re2c.spec
-	rm -rf `find $(distdir)/doc -name .git`
-	rm -rf `find $(distdir)/examples -name .git`
-	rm -rf `find $(distdir)/test -name .git -o -name .gitignore`
-	rm -rf `find $(distdir)/lessons -name .git -o -name .gitignore`
+BOOTSTRAP = \
+	$(BOOTSTRAP_DOC_HTML) \
+	$(BOOTSTRAP_DOC_MAN) \
+	$(BOOTSTRAP_PARSER) \
+	$(BOOTSTRAP_PARSER_HDR) \
+	$(BOOTSTRAP_SCANNER)
 
-rpm-files: $(bin_PROGRAMS) $(EXTRA_DIST)
+re2c_SOURCES = \
+	$(SRC_HDR) \
+	$(SRC)
+nodist_re2c_SOURCES = $(AUTOGEN)
 
-rpm: dist
-	cp -f re2c-$(PACKAGE_VERSION).tar.gz `rpm --eval "%{_sourcedir}"`
-	cp -f re2c.spec `rpm --eval "%{_specdir}"`
-	rpmbuild -ba re2c.spec
+EXTRA_DIST = \
+	$(BOOTSTRAP) \
+	$(SRC_PARSER) \
+	$(srcdir)/CHANGELOG \
+	$(srcdir)/NO_WARRANTY \
+	$(srcdir)/README \
+	$(srcdir)/autogen.sh \
+	$(srcdir)/doc/index.html \
+	$(srcdir)/doc/loplas.ps \
+	$(srcdir)/doc/sample.bib \
+	$(srcdir)/examples \
+	$(srcdir)/test
 
-src-rpm: dist
-	cp -f re2c-$(PACKAGE_VERSION).tar.gz `rpm --eval "%{_sourcedir}"`
-	cp -f re2c.spec `rpm --eval "%{_specdir}"`
-	rpmbuild -bs re2c.spec
-	cp -f `rpm --eval "%{_srcrpmdir}"`/re2c-$(PACKAGE_VERSION)-$(PACKAGE_RELEASE).src.rpm .
+CLEANFILES = \
+	$(AUTOGEN) \
+	$(DOC_HTML) \
+	$(DOC_MAN)
 
-zip: $(bin_PROGRAMS) $(EXTRA_ZIP)
-	if test -f re2c-$(PACKAGE_VERSION)-src.zip; then rm -f re2c-$(PACKAGE_VERSION)-src.zip; fi
-	zip -q -o -9 -r re2c-$(PACKAGE_VERSION)-src.zip $(re2c_SOURCES) $(EXTRA_ZIP)
-	zipinfo -1      re2c-$(PACKAGE_VERSION)-src.zip | grep .git | xargs zip -d re2c-$(PACKAGE_VERSION)-src.zip >/dev/null
-	if test -f re2c-$(PACKAGE_VERSION)-bin.zip; then rm -f re2c-$(PACKAGE_VERSION)-bin.zip; fi
-	if test -f $(WINBUILDDIR)/re2c.exe; then \
-	zip -q -o -9 -j re2c-$(PACKAGE_VERSION)-bin.zip $(win_BINARIES); \
-	fi;
+TESTS = $(builddir)/run_tests.sh
 
-release: dist zip src-rpm
+man_MANS = $(DOC_MAN)
 
-parser.cc: $(top_srcdir)/parser.y
-	@if test $(BISON) = "yes"; then \
-		bison $(YFLAGS) --output=$(top_srcdir)/parser.cc --defines=$(top_srcdir)/y.tab.h $(top_srcdir)/parser.y && \
-		cp -f $(top_srcdir)/parser.cc $(top_srcdir)/bootstrap/parser.cc; \
-		cp -f $(top_srcdir)/y.tab.h $(top_srcdir)/bootstrap/y.tab.h; \
+$(AUTOGEN_PARSER): $(SRC_PARSER)
+	@if test $(BISON) = "yes"; \
+	then \
+		bison $(YFLAGS) --output=$(AUTOGEN_PARSER) --defines=$(AUTOGEN_PARSER_HDR) $(SRC_PARSER) && \
+		cp $(AUTOGEN_PARSER) $(BOOTSTRAP_PARSER) && \
+		cp $(AUTOGEN_PARSER_HDR) $(BOOTSTRAP_PARSER_HDR); \
 	else \
-		cp -f $(top_srcdir)/bootstrap/parser.cc $(top_srcdir)/parser.cc; \
-		cp -f $(top_srcdir)/bootstrap/y.tab.h $(top_srcdir)/y.tab.h; \
+		cp $(BOOTSTRAP_PARSER) $(AUTOGEN_PARSER) && \
+		cp $(BOOTSTRAP_PARSER_HDR) $(AUTOGEN_PARSER_HDR); \
 	fi
 
-scanner.cc: $(top_srcdir)/scanner.re
-	@if test -x ./re2c$(EXEEXT); then \
-		echo "re2c $(RE2CFLAGS) -o $@ $(top_srcdir)/scanner.re"; \
-		./re2c $(RE2CFLAGS) -o $@ $(top_srcdir)/scanner.re && cp $@ $(top_srcdir)/bootstrap/; \
+$(AUTOGEN_SCANNER): $(SRC_SCANNER)
+	@if test -x $(RE2C); \
+	then \
+		$(RE2C) $(RE2CFLAGS) -o $(AUTOGEN_SCANNER) $(SRC_SCANNER) && \
+		cp $(AUTOGEN_SCANNER) $(BOOTSTRAP_SCANNER); \
 	else \
-		echo "cp -f $(top_srcdir)/bootstrap/$@ $@"; \
-		cp -f $(top_srcdir)/bootstrap/$@ $@; \
+		cp $(BOOTSTRAP_SCANNER) $(AUTOGEN_SCANNER); \
 	fi
 
-.version:
-	echo $(PACKAGE_VERSION) > .version
+# rebuild lexer (just in case it was bootstrapped) and rebuild re2c
+.PHONY: bootstrap
+bootstrap: all
+	rm $(AUTOGEN_SCANNER)
+	$(RE2C) $(RE2CFLAGS) -o $(AUTOGEN_SCANNER) $(SRC_SCANNER)
+	cp $(AUTOGEN_SCANNER) $(BOOTSTRAP_SCANNER)
+	make all
 
-TESTS = run_tests.sh
-
+.PHONY: tests
 tests: all $(TESTS)
-	test -x $(TESTS) || chmod +x $(TESTS)
 	./$(TESTS)
-
+.PHONY: vtests
 vtests: all $(TESTS)
-	test -x $(TESTS) || chmod +x $(TESTS)
 	./$(TESTS) --valgrind
 
+.PHONY: docs
 if REBUILD_DOCS
-docs: $(DOCS)
-$(DOCS): re2c.ad
-	a2x -f manpage re2c.ad
-	mkdir -p htdocs
-	asciidoc -o htdocs/manual.html re2c.ad
+docs: $(DOC_MAN) $(DOC_HTML)
+$(DOC_MAN): $(SRC_DOC)
+	a2x -f manpage $(SRC_DOC)
+	cp $(DOC_MAN) $(BOOTSTRAP_DOC_MAN)
+$(DOC_HTML): $(SRC_DOC)
+	asciidoc -o $(DOC_HTML) $(SRC_DOC)
+	cp $(DOC_HTML) $(BOOTSTRAP_DOC_HTML)
 else
-docs: $(DOCS)
-$(DOCS): $(top_srcdir)/bootstrap/re2c.1
+docs: $(DOC_MAN) $(DOC_HTML)
 	@echo "Reconfigure to rebuild docs: ./configure --enable-docs"
-	cp $(top_srcdir)/bootstrap/re2c.1 $(top_srcdir)/re2c.1
+$(DOC_MAN): $(BOOTSTRAP_DOC_MAN)
+	cp $(BOOTSTRAP_DOC_MAN) $(DOC_MAN)
+$(DOC_HTML): $(BOOTSTRAP_DOC_HTML)
+	cp $(BOOTSTRAP_DOC_HTML) $(DOC_HTML)
 endif
+
+all-local: docs
