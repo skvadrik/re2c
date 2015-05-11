@@ -19,7 +19,6 @@
 #include "src/dfa/dfa.h"
 #include "src/globals.h"
 #include "src/parse/parser.h"
-#include "src/util/substr.h"
 
 namespace re2c
 {
