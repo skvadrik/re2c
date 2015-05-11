@@ -5,6 +5,6 @@ rm -rf $builddir
 mkdir $builddir
 
 cd $builddir
-../configure --enable-docs --enable-silent-rules && \
+../configure --enable-silent-rules && \
 make bootstrap -j5
 cd ..
