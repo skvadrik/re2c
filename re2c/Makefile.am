@@ -8,12 +8,12 @@ bin_PROGRAMS = re2c
 RE2C = $(builddir)/re2c$(EXEEXT)
 
 # scanner
-SRC_SCANNER = $(srcdir)/src/scanner.re
+SRC_SCANNER = $(srcdir)/src/parse/scanner.re
 AUTOGEN_SCANNER = $(builddir)/scanner.cc
 BOOTSTRAP_SCANNER = $(srcdir)/bootstrap/scanner.cc
 
 # parser
-SRC_PARSER = $(srcdir)/src/parser.ypp
+SRC_PARSER = $(srcdir)/src/parse/parser.ypp
 AUTOGEN_PARSER = $(builddir)/parser.cc
 AUTOGEN_PARSER_HDR = $(builddir)/y.tab.h
 BOOTSTRAP_PARSER = $(srcdir)/bootstrap/parser.cc
@@ -27,65 +27,65 @@ BOOTSTRAP_DOC_MAN = $(srcdir)/bootstrap/re2c.1
 BOOTSTRAP_DOC_HTML = $(srcdir)/bootstrap/manual.html
 
 SRC_HDR = \
-	$(srcdir)/src/c99_stdint.h \
-	$(srcdir)/src/code.h \
-	$(srcdir)/src/code_names.h \
-	$(srcdir)/src/dfa.h \
-	$(srcdir)/src/enc.h \
+	$(srcdir)/src/codegen/code.h \
+	$(srcdir)/src/codegen/code_names.h \
+	$(srcdir)/src/codegen/go.h \
+	$(srcdir)/src/codegen/indent.h \
+	$(srcdir)/src/codegen/input_api.h \
+	$(srcdir)/src/codegen/output.h \
+	$(srcdir)/src/codegen/print.h \
+	$(srcdir)/src/codegen/skeleton/skeleton.h \
+	$(srcdir)/src/dfa/encoding/enc.h \
+	$(srcdir)/src/dfa/encoding/range_suffix.h \
+	$(srcdir)/src/dfa/encoding/utf16/utf16.h \
+	$(srcdir)/src/dfa/encoding/utf16/utf16_range.h \
+	$(srcdir)/src/dfa/encoding/utf16/utf16_regexp.h \
+	$(srcdir)/src/dfa/encoding/utf8/utf8.h \
+	$(srcdir)/src/dfa/encoding/utf8/utf8_range.h \
+	$(srcdir)/src/dfa/encoding/utf8/utf8_regexp.h \
+	$(srcdir)/src/dfa/dfa.h \
+	$(srcdir)/src/dfa/ins.h \
+	$(srcdir)/src/dfa/re.h \
 	$(srcdir)/src/globals.h \
-	$(srcdir)/src/go.h \
-	$(srcdir)/src/indent.h \
-	$(srcdir)/src/input.h \
-	$(srcdir)/src/input_api.h \
-	$(srcdir)/src/ins.h \
-	$(srcdir)/src/free_list.h \
 	$(srcdir)/src/mbo_getopt.h \
-	$(srcdir)/src/output.h \
-	$(srcdir)/src/parser.h \
-	$(srcdir)/src/print.h \
-	$(srcdir)/src/range.h \
-	$(srcdir)/src/range_suffix.h \
-	$(srcdir)/src/re.h \
-	$(srcdir)/src/scanner.h \
-	$(srcdir)/src/skeleton.h \
-	$(srcdir)/src/smart_ptr.h \
-	$(srcdir)/src/substr.h \
-	$(srcdir)/src/token.h \
-	$(srcdir)/src/utf16.h \
-	$(srcdir)/src/utf16_range.h \
-	$(srcdir)/src/utf16_regexp.h \
-	$(srcdir)/src/utf8.h \
-	$(srcdir)/src/utf8_range.h \
-	$(srcdir)/src/utf8_regexp.h
+	$(srcdir)/src/parse/input.h \
+	$(srcdir)/src/parse/parser.h \
+	$(srcdir)/src/parse/scanner.h \
+	$(srcdir)/src/parse/token.h \
+	$(srcdir)/src/util/c99_stdint.h \
+	$(srcdir)/src/util/free_list.h \
+	$(srcdir)/src/util/range.h \
+	$(srcdir)/src/util/smart_ptr.h \
+	$(srcdir)/src/util/substr.h
 
 SRC = \
 	$(SRC_SCANNER) \
-	$(srcdir)/src/actions.cc \
-	$(srcdir)/src/code.cc \
-	$(srcdir)/src/code_names.cc \
-	$(srcdir)/src/dfa.cc \
-	$(srcdir)/src/enc.cc \
-	$(srcdir)/src/go_construct.cc \
-	$(srcdir)/src/go_destruct.cc \
-	$(srcdir)/src/go_emit.cc \
-	$(srcdir)/src/go_used_labels.cc \
-	$(srcdir)/src/input.cc \
-	$(srcdir)/src/input_api.cc \
+	$(srcdir)/src/codegen/code.cc \
+	$(srcdir)/src/codegen/code_names.cc \
+	$(srcdir)/src/codegen/go_construct.cc \
+	$(srcdir)/src/codegen/go_destruct.cc \
+	$(srcdir)/src/codegen/go_emit.cc \
+	$(srcdir)/src/codegen/go_used_labels.cc \
+	$(srcdir)/src/codegen/input_api.cc \
+	$(srcdir)/src/codegen/output.cc \
+	$(srcdir)/src/codegen/print.cc \
+	$(srcdir)/src/codegen/skeleton/skeleton.cc \
+	$(srcdir)/src/codegen/translate.cc \
+	$(srcdir)/src/dfa/encoding/enc.cc \
+	$(srcdir)/src/dfa/encoding/range_suffix.cc \
+	$(srcdir)/src/dfa/encoding/utf16/utf16.cc \
+	$(srcdir)/src/dfa/encoding/utf16/utf16_range.cc \
+	$(srcdir)/src/dfa/encoding/utf16/utf16_regexp.cc \
+	$(srcdir)/src/dfa/encoding/utf8/utf8.cc \
+	$(srcdir)/src/dfa/encoding/utf8/utf8_range.cc \
+	$(srcdir)/src/dfa/encoding/utf8/utf8_regexp.cc \
+	$(srcdir)/src/dfa/actions.cc \
+	$(srcdir)/src/dfa/dfa.cc \
 	$(srcdir)/src/main.cc \
 	$(srcdir)/src/mbo_getopt.cc \
-	$(srcdir)/src/output.cc \
-	$(srcdir)/src/print.cc \
-	$(srcdir)/src/range.cc \
-	$(srcdir)/src/range_suffix.cc \
-	$(srcdir)/src/skeleton.cc \
-	$(srcdir)/src/substr.cc \
-	$(srcdir)/src/translate.cc \
-	$(srcdir)/src/utf8.cc \
-	$(srcdir)/src/utf8_range.cc \
-	$(srcdir)/src/utf8_regexp.cc \
-	$(srcdir)/src/utf16.cc \
-	$(srcdir)/src/utf16_range.cc \
-	$(srcdir)/src/utf16_regexp.cc
+	$(srcdir)/src/parse/input.cc \
+	$(srcdir)/src/util/range.cc \
+	$(srcdir)/src/util/substr.cc
 # omit SRC_PARSER here; include it in EXTRA_DIST instead
 # (automake generates standard build rules for all YACC-ish
 # sources, they will conflict with our custom build rule).

@@ -2,7 +2,7 @@ AC_INIT([re2c],[0.14.1.dev],[re2c-general@lists.sourceforge.net])
 AM_INIT_AUTOMAKE([-Wall -Werror foreign])
 
 
-AC_CONFIG_SRCDIR([src/actions.cc])
+AC_CONFIG_SRCDIR([src/main.cc])
 AC_CONFIG_HEADERS([config.h])
 
 

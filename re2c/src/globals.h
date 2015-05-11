@@ -6,10 +6,10 @@
 #include <algorithm>
 #include <string>
 
-#include "src/c99_stdint.h"
-#include "src/code_names.h"
-#include "src/enc.h"
-#include "src/input_api.h"
+#include "src/codegen/code_names.h"
+#include "src/codegen/input_api.h"
+#include "src/dfa/encoding/enc.h"
+#include "src/util/c99_stdint.h"
 
 namespace re2c
 {
