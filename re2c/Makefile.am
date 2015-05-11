@@ -163,6 +163,9 @@ tests: all $(TESTS)
 .PHONY: vtests
 vtests: all $(TESTS)
 	./$(TESTS) --valgrind
+.PHONY: wtests
+wtests: all $(TESTS)
+	./$(TESTS) --wine -j1
 
 .PHONY: docs
 if REBUILD_DOCS
