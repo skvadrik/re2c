@@ -6,5 +6,5 @@ mkdir $builddir
 
 cd $builddir
 ../configure --enable-silent-rules && \
-make bootstrap -j5
+make -j5
 cd ..
