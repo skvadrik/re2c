@@ -2,7 +2,6 @@
 #include <ctype.h>
 #include <string.h>
 
-#include "src/codegen/print.h"
 #include "src/dfa/dfa.h"
 #include "src/globals.h"
 #include "src/util/substr.h"

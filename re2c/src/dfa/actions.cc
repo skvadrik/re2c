@@ -5,7 +5,6 @@
 #include <iomanip>
 #include <cctype>
 
-#include "src/codegen/print.h"
 #include "src/codegen/skeleton/skeleton.h"
 #include "src/dfa/dfa.h"
 #include "src/dfa/encoding/utf16/utf16_regexp.h"
@@ -56,7 +55,9 @@ const Ins* showIns(std::ostream &o, const Ins &i, const Ins &base)
 			o << "match ";
 
 			for (; ret < (Ins*) i.i.link; ++ret)
-				prtCh(o, ret->c.value);
+			{
+				o << "\\x" << std::hex << ret->c.value;
+			}
 
 			break;
 		}
@@ -1051,15 +1052,7 @@ smart_ptr<DFA> genCode(RegExp *re, Output & output, uint32_t ind)
 {
 	CharSet cs;
 	re->split(cs);
-	
-	/*for(uint32_t k = 0; k < encoding.nCodeUnits();)
-	{
-		uint32_t j;
-		for(j = k; ++k < encoding.nCodeUnits() && cs.rep[k] == cs.rep[j];);
-		printSpan(std::cerr, j, k);
-		std::cerr << "\t" << cs.rep[j] - &cs.ptn[0] << std::endl;
-	}*/
-	
+
 	Char *rep = new Char[encoding.nCodeUnits()];
 
 	for (uint32_t j = 0; j < encoding.nCodeUnits(); ++j)
@@ -1081,7 +1074,8 @@ smart_ptr<DFA> genCode(RegExp *re, Output & output, uint32_t ind)
 	optimize(ins);
 
 	/*
-	for (const Ins *inst = &ins[0]; inst < &ins[size]; ) {
+	for (const Ins *inst = &ins[0]; inst < &ins[size]; )
+	{
 		inst = showIns(std::cout, *inst, ins[0]);
 	}
 	*/

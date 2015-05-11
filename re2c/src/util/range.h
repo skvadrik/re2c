@@ -33,15 +33,7 @@ public:
 	{
 		vFreeList.erase(this);
 	}
-
-	friend std::ostream& operator<<(std::ostream&, const Range&);
-	friend std::ostream& operator<<(std::ostream&, const Range*);
 };
-
-inline std::ostream& operator<<(std::ostream &o, const Range *r)
-{
-	return r ? o << *r : o;
-}
 
 Range *doUnion(Range *r1, Range *r2);
 Range *doDiff(Range *r1, Range *r2);

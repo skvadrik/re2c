@@ -3,7 +3,6 @@
 #include <iostream>
 #include <sstream>
 
-#include "src/codegen/print.h"
 #include "src/dfa/dfa.h"
 #include "src/globals.h"
 #include "src/parse/parser.h"
@@ -420,10 +419,7 @@ scan:
 				}
 
 	*			{
-					std::ostringstream msg;
-					msg << "unexpected character: ";
-					prtChOrHex(msg, *tok);
-					fatal(msg.str().c_str());
+					fatalf("unexpected character: '%c'", *tok);
 					goto scan;
 				}
 */

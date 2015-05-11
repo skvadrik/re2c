@@ -1,24 +1,7 @@
-#include "src/codegen/print.h"
 #include "src/util/range.h"
 
 namespace re2c
 {
-
-std::ostream& operator<<(std::ostream &o, const Range &r)
-{
-	if ((r.ub - r.lb) == 1)
-	{
-		prtCh(o, r.lb);
-	}
-	else
-	{
-		prtCh(o, r.lb);
-		o << "-";
-		prtCh(o, r.ub - 1);
-	}
-
-	return o << r.next;
-}
 
 Range *doUnion(Range *r1, Range *r2)
 {
