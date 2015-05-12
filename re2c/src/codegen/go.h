@@ -103,14 +103,14 @@ struct SwitchIf
 	void used_labels ();
 };
 
-struct Bitmap
+struct GoBitmap
 {
 	const BitMap * bitmap;
 	const State * bitmap_state;
 	SwitchIf * hgo;
 	SwitchIf * lgo;
-	Bitmap (const Span * span, uint32_t nSpans, const Span * hspan, uint32_t hSpans, const BitMap * bm, const State * bm_state, const State * next);
-	~Bitmap ();
+	GoBitmap (const Span * span, uint32_t nSpans, const Span * hspan, uint32_t hSpans, const BitMap * bm, const State * bm_state, const State * next);
+	~GoBitmap ();
 	void emit (OutputFile & o, uint32_t ind, bool & readCh);
 	void used_labels ();
 };
@@ -159,7 +159,7 @@ struct Go
 	union
 	{
 		SwitchIf * switchif;
-		Bitmap * bitmap;
+		GoBitmap * bitmap;
 		Cpgoto * cpgoto;
 		Dot * dot;
 	} info;

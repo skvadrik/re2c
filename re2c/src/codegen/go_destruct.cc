@@ -50,7 +50,7 @@ SwitchIf::~SwitchIf ()
 	}
 }
 
-Bitmap::~Bitmap ()
+GoBitmap::~GoBitmap ()
 {
 	delete hgo;
 	delete lgo;

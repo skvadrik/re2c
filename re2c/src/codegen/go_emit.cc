@@ -169,7 +169,7 @@ void SwitchIf::emit (OutputFile & o, uint32_t ind, bool & readCh)
 	}
 }
 
-void Bitmap::emit (OutputFile & o, uint32_t ind, bool & readCh)
+void GoBitmap::emit (OutputFile & o, uint32_t ind, bool & readCh)
 {
 	std::string yych = output_hgo (o, ind, readCh, hgo);
 	o << "if (" << mapCodeName["yybm"] << "[" << bitmap->i << "+" << yych << "] & ";

@@ -125,7 +125,7 @@ SwitchIf::SwitchIf (const Span * sp, uint32_t nsp, const State * next)
 	}
 }
 
-Bitmap::Bitmap (const Span * span, uint32_t nSpans, const Span * hspan, uint32_t hSpans, const BitMap * bm, const State * bm_state, const State * next)
+GoBitmap::GoBitmap (const Span * span, uint32_t nSpans, const Span * hspan, uint32_t hSpans, const BitMap * bm, const State * bm_state, const State * next)
 	: bitmap (bm)
 	, bitmap_state (bm_state)
 	, hgo (hSpans == 0 ? NULL : new SwitchIf (hspan, hSpans, next))
@@ -226,7 +226,7 @@ void Go::init (const State * from)
 	else if (bFlag && (nBitmaps > 0))
 	{
 		type = BITMAP;
-		info.bitmap = new Bitmap (span, nSpans, hspan, hSpans, bitmap, bitmap_state, from->next);
+		info.bitmap = new GoBitmap (span, nSpans, hspan, hSpans, bitmap, bitmap_state, from->next);
 		bUsedYYBitmap = true;
 	}
 	else

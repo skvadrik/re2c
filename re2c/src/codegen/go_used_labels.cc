@@ -52,7 +52,7 @@ void SwitchIf::used_labels ()
 	}
 }
 
-void Bitmap::used_labels ()
+void GoBitmap::used_labels ()
 {
 	if (hgo != NULL)
 	{
