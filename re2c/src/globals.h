@@ -83,9 +83,6 @@ extern CodeNames mapCodeName;
 extern Enc encoding;
 extern InputAPI input_api;
 
-extern char octCh(uint32_t c);
-extern char hexCh(uint32_t c);
-
 } // end namespace re2c
 
 #endif

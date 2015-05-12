@@ -6,6 +6,17 @@
 namespace re2c
 {
 
+char octCh(uint32_t c)
+{
+	return '0' + c % 8;
+}
+
+char hexCh(uint32_t c)
+{
+	static const char * sHex = "0123456789ABCDEF";
+	return sHex[c & 0x0F];
+}
+
 void prtChOrHex(std::ostream& o, uint32_t c)
 {
 	if (!encoding.is(Enc::EBCDIC) && (c < 256u) && (isprint(c) || isspace(c)))

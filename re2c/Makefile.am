@@ -74,7 +74,6 @@ SRC = \
 	$(srcdir)/src/codegen/print.cc \
 	$(srcdir)/src/codegen/scc.cc \
 	$(srcdir)/src/codegen/skeleton/skeleton.cc \
-	$(srcdir)/src/codegen/translate.cc \
 	$(srcdir)/src/dfa/encoding/enc.cc \
 	$(srcdir)/src/dfa/encoding/range_suffix.cc \
 	$(srcdir)/src/dfa/encoding/utf16/utf16.cc \
