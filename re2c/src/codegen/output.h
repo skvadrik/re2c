@@ -127,6 +127,18 @@ struct Output
 	~Output ();
 };
 
+void output_line_info (std::ostream &, uint32_t, const char *);
+void output_state_goto (std::ostream &, uint32_t, uint32_t);
+void output_types (std::ostream &, uint32_t, const std::vector<std::string> &);
+void output_version_time (std::ostream &);
+void output_yyaccept_init (std::ostream &, uint32_t, bool);
+void output_yyaccept_selector (std::ostream &, uint32_t, bool, uint32_t);
+void output_yymaxfill (std::ostream &, uint32_t);
+
+// helpers
+void output_state_goto_sub (std::ostream & o, uint32_t ind, uint32_t start_label, int cMin, int cMax);
+std::string output_get_state ();
+
 } // namespace re2c
 
 #endif // _output_h

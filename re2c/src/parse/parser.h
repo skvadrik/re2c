@@ -56,6 +56,11 @@ private:
 extern void parse(Scanner &, Output &);
 extern void parse_cleanup();
 
+typedef std::set<std::string> CondList;
+typedef std::list<RuleOp*> RuleOpList;
+typedef std::map<std::string, std::pair<uint32_t, std::string> > SetupMap;
+typedef std::map<std::string, Token*> DefaultMap;
+
 } // end namespace re2c
 
 #endif

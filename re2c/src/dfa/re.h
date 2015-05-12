@@ -9,12 +9,10 @@
 #include <vector>
 #include <string>
 
-#include "src/codegen/output.h"
 #include "src/dfa/ins.h"
 #include "src/globals.h"
 #include "src/parse/token.h"
 #include "src/util/range.h"
-#include "src/util/smart_ptr.h"
 #include "src/util/free_list.h"
 
 namespace re2c
@@ -379,30 +377,6 @@ private:
 	}
 #endif
 };
-
-typedef std::set<std::string>           CondList;
-typedef std::pair<int, RegExp*>         NRegExp;
-typedef std::map<std::string, NRegExp>  RegExpMap;
-typedef std::vector<std::string>        RegExpIndices;
-typedef std::list<RuleOp*>              RuleOpList;
-typedef std::pair<uint32_t, std::string>    LineCode;
-typedef std::map<std::string, LineCode> SetupMap;
-typedef std::map<std::string, Token*>   DefaultMap;
-
-class DFA;
-
-extern smart_ptr<DFA> genCode(RegExp*, Output & output, uint32_t ind);
-extern void genCondTable(OutputFile &, uint32_t, const RegExpMap&);
-extern void genCondGoto(OutputFile &, uint32_t, const RegExpMap&);
-extern void genTypes(Output &, const RegExpMap&);
-
-extern void output_state_goto (std::ostream &, uint32_t, uint32_t);
-extern void output_types (std::ostream &, uint32_t, const std::vector<std::string> &);
-extern void output_version_time (std::ostream &);
-extern void output_yyaccept_init (std::ostream &, uint32_t, bool);
-extern void output_yyaccept_selector (std::ostream &, uint32_t, bool, uint32_t);
-extern void output_yymaxfill (std::ostream &, uint32_t);
-extern void output_line_info (std::ostream &, uint32_t, const char *);
 
 extern RegExp *mkDiff(RegExp*, RegExp*);
 extern RegExp *mkAlt(RegExp*, RegExp*);

@@ -29,6 +29,7 @@ BOOTSTRAP_DOC_HTML = $(srcdir)/bootstrap/manual.html
 SRC_HDR = \
 	$(srcdir)/src/codegen/bitmap.h \
 	$(srcdir)/src/codegen/code_names.h \
+	$(srcdir)/src/codegen/dfa_emit.h \
 	$(srcdir)/src/codegen/go.h \
 	$(srcdir)/src/codegen/indent.h \
 	$(srcdir)/src/codegen/input_api.h \

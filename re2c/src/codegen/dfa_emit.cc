@@ -1,6 +1,7 @@
 #include <assert.h>
 
 #include "src/codegen/bitmap.h"
+#include "src/codegen/dfa_emit.h"
 #include "src/codegen/go.h"
 #include "src/codegen/indent.h"
 #include "src/codegen/input_api.h"
@@ -10,27 +11,7 @@
 namespace re2c
 {
 
-// there must be at least one span in list;  all spans must cover
-// same range
-
-template<typename _Ty>
-std::string replaceParam(std::string str, const std::string& param, const _Ty& value)
-{
-	std::ostringstream strValue;
-
-	strValue << value;
-
-	std::string::size_type pos;
-
-	while((pos = str.find(param)) != std::string::npos)
-	{
-		str.replace(pos, param.length(), strValue.str());
-	}
-
-	return str;
-}
-
-static void genYYFill(OutputFile & o, uint32_t, uint32_t need)
+void genYYFill(OutputFile & o, uint32_t, uint32_t need)
 {
 	if (bUseYYFillParam)
 	{
@@ -52,19 +33,7 @@ static void genYYFill(OutputFile & o, uint32_t, uint32_t need)
 	}
 }
 
-static std::string genGetState()
-{
-	if (bUseYYGetStateNaked)
-	{
-		return mapCodeName["YYGETSTATE"];
-	}
-	else
-	{
-		return mapCodeName["YYGETSTATE"] + "()";
-	}
-}
-
-static std::string genGetCondition()
+std::string genGetCondition()
 {
 	if (bUseYYGetConditionNaked)
 	{
@@ -76,7 +45,7 @@ static std::string genGetCondition()
 	}
 }
 
-static void genSetCondition(OutputFile & o, uint32_t ind, const std::string& newcond)
+void genSetCondition(OutputFile & o, uint32_t ind, const std::string& newcond)
 {
 	if (bUseYYSetConditionParam)
 	{
@@ -88,7 +57,7 @@ static void genSetCondition(OutputFile & o, uint32_t ind, const std::string& new
 	}
 }
 
-static void genGoTo(OutputFile & o, uint32_t ind, const State *from, const State *to, bool & readCh)
+void genGoTo(OutputFile & o, uint32_t ind, const State *from, const State *to, bool & readCh)
 {
 	if (DFlag)
 	{
@@ -106,7 +75,7 @@ static void genGoTo(OutputFile & o, uint32_t ind, const State *from, const State
 	vUsedLabels.insert(to->label);
 }
 
-static void need(OutputFile & o, uint32_t ind, uint32_t n, bool & readCh, bool bSetMarker)
+void need(OutputFile & o, uint32_t ind, uint32_t n, bool & readCh, bool bSetMarker)
 {
 	if (DFlag)
 	{
@@ -645,99 +614,6 @@ void DFA::emit(Output & output, uint32_t& ind, const RegExpMap* specMap, const s
 	bUseStartLabel = false;
 }
 
-static void output_state_goto_sub (std::ostream & o, uint32_t ind, uint32_t start_label, int cMin, int cMax)
-{
-	if (cMin == cMax)
-	{
-		if (cMin == -1)
-		{
-			o << indent(ind) << "goto " << labelPrefix << start_label << ";\n";
-		}
-		else
-		{
-			o << indent(ind) << "goto " << mapCodeName["yyFillLabel"] << cMin << ";\n";
-		}
-	}
-	else
-	{
-		int cMid = cMin + ((cMax - cMin + 1) / 2);
-
-		o << indent(ind) << "if (" << genGetState() << " < " << cMid << ") {\n";
-		output_state_goto_sub (o, ind + 1, start_label, cMin, cMid - 1);
-		o << indent(ind) << "} else {\n";
-		output_state_goto_sub (o, ind + 1, start_label, cMid, cMax);
-		o << indent(ind) << "}\n";
-	}
-}
-
-void output_state_goto (std::ostream & o, uint32_t ind, uint32_t start_label)
-{
-	if (gFlag)
-	{
-		o << indent(ind++) << "static void *" << mapCodeName["yystable"] << "[" << "] = {\n";
-
-		for (size_t i=0; i<last_fill_index; ++i)
-		{
-			o << indent(ind) << "&&" << mapCodeName["yyFillLabel"] << i << ",\n";
-		}
-
-		o << indent(--ind) << "};\n";
-		o << "\n";
-
-		o << indent(ind) << "if (" << genGetState();
-		if (bUseStateAbort)
-		{
-			o << " == -1) {\n";
-		}
-		else
-		{
-			o << " < 0) {\n";
-		}
-		o << indent(++ind) << "goto " << labelPrefix << start_label << ";\n";
-		if (bUseStateAbort)
-		{
-			o << indent(--ind) << "} else if (" << genGetState() << " < -1) {\n";
-			o << indent(++ind) << "abort();\n";
-		}
-		o << indent(--ind) << "}\n";
-
-		o << indent(ind) << "goto *" << mapCodeName["yystable"] << "[" << genGetState() << "];\n";
-
-	}
-	else if (bFlag)
-	{
-		output_state_goto_sub (o, ind, start_label, -1, last_fill_index-1);
-		if (bUseStateAbort)
-		{
-			o << indent(ind) << "abort();\n";
-		}
-	}
-	else
-	{
-		o << indent(ind) << "switch (" << genGetState() << ") {\n";
-		if (bUseStateAbort)
-		{
-			o << indent(ind) << "default: abort();\n";
-			o << indent(ind) << "case -1: goto " << labelPrefix << start_label << ";\n";
-		}
-		else
-		{
-			o << indent(ind) << "default: goto " << labelPrefix << start_label << ";\n";
-		}
-
-		for (size_t i=0; i<last_fill_index; ++i)
-		{
-			o << indent(ind) << "case " << i << ": goto " << mapCodeName["yyFillLabel"] << i << ";\n";
-		}
-
-		o << indent(ind) << "}\n";
-	}
-	if (bUseStateNext)
-	{
-		o << mapCodeName["yyNext"] << ":\n";
-	}
-}
-
 void genCondTable(OutputFile & o, uint32_t ind, const RegExpMap& specMap)
 {
 	if (cFlag && !bWroteCondCheck && gFlag && specMap.size())
@@ -759,7 +635,7 @@ void genCondTable(OutputFile & o, uint32_t ind, const RegExpMap& specMap)
 	}
 }
 
-static void genCondGotoSub(OutputFile & o, uint32_t ind, RegExpIndices& vCondList, uint32_t cMin, uint32_t cMax)
+void genCondGotoSub(OutputFile & o, uint32_t ind, RegExpIndices& vCondList, uint32_t cMin, uint32_t cMax)
 {
 	if (cMin == cMax)
 	{
@@ -828,57 +704,6 @@ void genTypes(Output & output, const RegExpMap& specMap)
 		assert(itSpecMap->second.first >= 0);
 		output.types[itSpecMap->second.first] = itSpecMap->first;
 	}
-}
-
-void output_yyaccept_init (std::ostream & o, uint32_t ind, bool used_yyaccept)
-{
-	if (used_yyaccept)
-	{
-		o << indent (ind) << "unsigned int " << mapCodeName["yyaccept"] << " = 0;\n";
-	}
-}
-
-void output_yyaccept_selector (std::ostream & o, uint32_t ind, bool used_yyaccept, uint32_t yyaccept_selector)
-{
-	if (used_yyaccept)
-	{
-		o << indent (ind) << mapCodeName["yyaccept"] << " = " << yyaccept_selector << ";\n";
-	}
-}
-
-void output_yymaxfill (std::ostream & o, uint32_t max_fill)
-{
-	o << "#define YYMAXFILL " << max_fill << "\n";
-}
-
-void output_line_info (std::ostream & o, uint32_t line_number, const char * file_name)
-{
-	if (!iFlag)
-	{
-		o << "#line " << line_number << " \"" << file_name << "\"\n";
-	}
-}
-
-void output_types (std::ostream & o, uint32_t ind, const std::vector<std::string> & types)
-{
-	o << indent (ind++) << "enum " << mapCodeName["YYCONDTYPE"] << " {\n";
-	for (unsigned int i = 0; i < types.size (); ++i)
-	{
-		o << indent (ind) << condEnumPrefix << types[i] << ",\n";
-	}
-	o << indent (--ind) << "};\n";
-}
-
-void output_version_time (std::ostream & o)
-{
-	o << "/* Generated by re2c " PACKAGE_VERSION;
-	if (!bNoGenerationDate)
-	{
-		o << " on ";
-		time_t now = time (NULL);
-		o.write (ctime (&now), 24);
-	}
-	o << "*/" << "\n";
 }
 
 } // end namespace re2c

@@ -81,6 +81,7 @@
 
 #include "config.h"
 #include "src/dfa/dfa.h"
+#include "src/codegen/dfa_emit.h" // genTypes
 #include "src/globals.h"
 #include "src/parse/parser.h"
 #include "src/util/c99_stdint.h"
@@ -215,7 +216,7 @@ void default_rule(CondList *clist, Token *code)
 
 
 /* Line 189 of yacc.c  */
-#line 219 "./parser.cc"
+#line 220 "./parser.cc"
 
 /* Enabling traces.  */
 #ifndef YYDEBUG
@@ -265,7 +266,7 @@ typedef union YYSTYPE
 {
 
 /* Line 214 of yacc.c  */
-#line 149 "../src/parse/parser.ypp"
+#line 150 "../src/parse/parser.ypp"
 
 	re2c::Symbol	*symbol;
 	re2c::RegExp	*regexp;
@@ -279,7 +280,7 @@ typedef union YYSTYPE
 
 
 /* Line 214 of yacc.c  */
-#line 283 "./parser.cc"
+#line 284 "./parser.cc"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
@@ -291,7 +292,7 @@ typedef union YYSTYPE
 
 
 /* Line 264 of yacc.c  */
-#line 295 "./parser.cc"
+#line 296 "./parser.cc"
 
 #ifdef short
 # undef short
@@ -598,12 +599,12 @@ static const yytype_int8 yyrhs[] =
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint16 yyrline[] =
 {
-       0,   178,   178,   180,   184,   188,   197,   206,   210,   214,
-     220,   228,   237,   246,   250,   255,   260,   266,   270,   278,
-     286,   291,   297,   303,   315,   327,   333,   341,   344,   351,
-     356,   365,   368,   376,   379,   386,   390,   397,   401,   412,
-     416,   423,   427,   442,   449,   453,   457,   461,   468,   476,
-     480,   484
+       0,   179,   179,   181,   185,   189,   198,   207,   211,   215,
+     221,   229,   238,   247,   251,   256,   261,   267,   271,   279,
+     287,   292,   298,   304,   316,   328,   334,   342,   345,   352,
+     357,   366,   369,   377,   380,   387,   391,   398,   402,   413,
+     417,   424,   428,   443,   450,   454,   458,   462,   469,   477,
+     481,   485
 };
 #endif
 
@@ -1572,7 +1573,7 @@ yyreduce:
         case 2:
 
 /* Line 1464 of yacc.c  */
-#line 178 "../src/parse/parser.ypp"
+#line 179 "../src/parse/parser.ypp"
     {
 		;}
     break;
@@ -1580,7 +1581,7 @@ yyreduce:
   case 3:
 
 /* Line 1464 of yacc.c  */
-#line 181 "../src/parse/parser.ypp"
+#line 182 "../src/parse/parser.ypp"
     {
 			foundRules = true;
 		;}
@@ -1589,7 +1590,7 @@ yyreduce:
   case 5:
 
 /* Line 1464 of yacc.c  */
-#line 189 "../src/parse/parser.ypp"
+#line 190 "../src/parse/parser.ypp"
     {
 			if ((yyvsp[(1) - (4)].symbol)->re)
 			{
@@ -1603,7 +1604,7 @@ yyreduce:
   case 6:
 
 /* Line 1464 of yacc.c  */
-#line 198 "../src/parse/parser.ypp"
+#line 199 "../src/parse/parser.ypp"
     {
 			if ((yyvsp[(1) - (2)].symbol)->re)
 			{
@@ -1617,7 +1618,7 @@ yyreduce:
   case 7:
 
 /* Line 1464 of yacc.c  */
-#line 207 "../src/parse/parser.ypp"
+#line 208 "../src/parse/parser.ypp"
     {
 			in->fatal("trailing contexts are not allowed in named definitions");
 		;}
@@ -1626,7 +1627,7 @@ yyreduce:
   case 8:
 
 /* Line 1464 of yacc.c  */
-#line 211 "../src/parse/parser.ypp"
+#line 212 "../src/parse/parser.ypp"
     {
 			in->fatal("trailing contexts are not allowed in named definitions");
 		;}
@@ -1635,7 +1636,7 @@ yyreduce:
   case 9:
 
 /* Line 1464 of yacc.c  */
-#line 215 "../src/parse/parser.ypp"
+#line 216 "../src/parse/parser.ypp"
     {
 			in->config(*(yyvsp[(1) - (4)].str), *(yyvsp[(3) - (4)].str));
 			delete (yyvsp[(1) - (4)].str);
@@ -1646,7 +1647,7 @@ yyreduce:
   case 10:
 
 /* Line 1464 of yacc.c  */
-#line 221 "../src/parse/parser.ypp"
+#line 222 "../src/parse/parser.ypp"
     {
 			in->config(*(yyvsp[(1) - (4)].str), (yyvsp[(3) - (4)].number));
 			delete (yyvsp[(1) - (4)].str);
@@ -1656,7 +1657,7 @@ yyreduce:
   case 11:
 
 /* Line 1464 of yacc.c  */
-#line 229 "../src/parse/parser.ypp"
+#line 230 "../src/parse/parser.ypp"
     {
 			if (cFlag)
 			{
@@ -1670,7 +1671,7 @@ yyreduce:
   case 12:
 
 /* Line 1464 of yacc.c  */
-#line 238 "../src/parse/parser.ypp"
+#line 239 "../src/parse/parser.ypp"
     {
 			if (cFlag)
 				in->fatal("condition or '<*>' required when using -c switch");
@@ -1684,7 +1685,7 @@ yyreduce:
   case 13:
 
 /* Line 1464 of yacc.c  */
-#line 247 "../src/parse/parser.ypp"
+#line 248 "../src/parse/parser.ypp"
     {
 			context_rule((yyvsp[(2) - (7)].clist), (yyvsp[(4) - (7)].regexp), (yyvsp[(5) - (7)].regexp), (yyvsp[(6) - (7)].str), (yyvsp[(7) - (7)].token));
 		;}
@@ -1693,7 +1694,7 @@ yyreduce:
   case 14:
 
 /* Line 1464 of yacc.c  */
-#line 251 "../src/parse/parser.ypp"
+#line 252 "../src/parse/parser.ypp"
     {
 			assert((yyvsp[(7) - (7)].str));
 			context_rule((yyvsp[(2) - (7)].clist), (yyvsp[(4) - (7)].regexp), (yyvsp[(5) - (7)].regexp), (yyvsp[(7) - (7)].str), NULL);
@@ -1703,7 +1704,7 @@ yyreduce:
   case 15:
 
 /* Line 1464 of yacc.c  */
-#line 256 "../src/parse/parser.ypp"
+#line 257 "../src/parse/parser.ypp"
     {
 			context_none((yyvsp[(2) - (6)].clist));
 			delete (yyvsp[(5) - (6)].str);
@@ -1713,7 +1714,7 @@ yyreduce:
   case 16:
 
 /* Line 1464 of yacc.c  */
-#line 261 "../src/parse/parser.ypp"
+#line 262 "../src/parse/parser.ypp"
     {
 			assert((yyvsp[(6) - (6)].str));
 			context_none((yyvsp[(2) - (6)].clist));
@@ -1724,7 +1725,7 @@ yyreduce:
   case 17:
 
 /* Line 1464 of yacc.c  */
-#line 267 "../src/parse/parser.ypp"
+#line 268 "../src/parse/parser.ypp"
     {
 			default_rule((yyvsp[(2) - (5)].clist), (yyvsp[(5) - (5)].token));
 		;}
@@ -1733,7 +1734,7 @@ yyreduce:
   case 18:
 
 /* Line 1464 of yacc.c  */
-#line 271 "../src/parse/parser.ypp"
+#line 272 "../src/parse/parser.ypp"
     {
 			context_check(NULL);
 			Token *token = new Token((yyvsp[(7) - (7)].token), (yyvsp[(7) - (7)].token)->source, (yyvsp[(7) - (7)].token)->line, (yyvsp[(6) - (7)].str));
@@ -1746,7 +1747,7 @@ yyreduce:
   case 19:
 
 /* Line 1464 of yacc.c  */
-#line 279 "../src/parse/parser.ypp"
+#line 280 "../src/parse/parser.ypp"
     {
 			assert((yyvsp[(7) - (7)].str));
 			context_check(NULL);
@@ -1759,7 +1760,7 @@ yyreduce:
   case 20:
 
 /* Line 1464 of yacc.c  */
-#line 287 "../src/parse/parser.ypp"
+#line 288 "../src/parse/parser.ypp"
     {
 			context_none(NULL);
 			delete (yyvsp[(5) - (6)].str);
@@ -1769,7 +1770,7 @@ yyreduce:
   case 21:
 
 /* Line 1464 of yacc.c  */
-#line 292 "../src/parse/parser.ypp"
+#line 293 "../src/parse/parser.ypp"
     {
 			assert((yyvsp[(6) - (6)].str));
 			context_none(NULL);
@@ -1780,7 +1781,7 @@ yyreduce:
   case 22:
 
 /* Line 1464 of yacc.c  */
-#line 298 "../src/parse/parser.ypp"
+#line 299 "../src/parse/parser.ypp"
     {
 			CondList *clist = new CondList();
 			clist->insert("*");
@@ -1791,7 +1792,7 @@ yyreduce:
   case 23:
 
 /* Line 1464 of yacc.c  */
-#line 304 "../src/parse/parser.ypp"
+#line 305 "../src/parse/parser.ypp"
     {
 			context_check(NULL);
 			if (specNone)
@@ -1808,7 +1809,7 @@ yyreduce:
   case 24:
 
 /* Line 1464 of yacc.c  */
-#line 316 "../src/parse/parser.ypp"
+#line 317 "../src/parse/parser.ypp"
     {
 			assert((yyvsp[(3) - (3)].str));
 			context_check(NULL);
@@ -1825,7 +1826,7 @@ yyreduce:
   case 25:
 
 /* Line 1464 of yacc.c  */
-#line 328 "../src/parse/parser.ypp"
+#line 329 "../src/parse/parser.ypp"
     {
 			CondList *clist = new CondList();
 			clist->insert("*");
@@ -1836,7 +1837,7 @@ yyreduce:
   case 26:
 
 /* Line 1464 of yacc.c  */
-#line 334 "../src/parse/parser.ypp"
+#line 335 "../src/parse/parser.ypp"
     {
 			setup_rule((yyvsp[(2) - (4)].clist), (yyvsp[(4) - (4)].token));
 		;}
@@ -1845,7 +1846,7 @@ yyreduce:
   case 27:
 
 /* Line 1464 of yacc.c  */
-#line 341 "../src/parse/parser.ypp"
+#line 342 "../src/parse/parser.ypp"
     {
 			in->fatal("unnamed condition not supported");
 		;}
@@ -1854,7 +1855,7 @@ yyreduce:
   case 28:
 
 /* Line 1464 of yacc.c  */
-#line 345 "../src/parse/parser.ypp"
+#line 346 "../src/parse/parser.ypp"
     {
 			(yyval.clist) = (yyvsp[(1) - (1)].clist);
 		;}
@@ -1863,7 +1864,7 @@ yyreduce:
   case 29:
 
 /* Line 1464 of yacc.c  */
-#line 352 "../src/parse/parser.ypp"
+#line 353 "../src/parse/parser.ypp"
     {
 			(yyval.clist) = new CondList();
 			(yyval.clist)->insert((yyvsp[(1) - (1)].symbol)->GetName().to_string());
@@ -1873,7 +1874,7 @@ yyreduce:
   case 30:
 
 /* Line 1464 of yacc.c  */
-#line 357 "../src/parse/parser.ypp"
+#line 358 "../src/parse/parser.ypp"
     {
 			(yyvsp[(1) - (3)].clist)->insert((yyvsp[(3) - (3)].symbol)->GetName().to_string());
 			(yyval.clist) = (yyvsp[(1) - (3)].clist);
@@ -1883,7 +1884,7 @@ yyreduce:
   case 31:
 
 /* Line 1464 of yacc.c  */
-#line 365 "../src/parse/parser.ypp"
+#line 366 "../src/parse/parser.ypp"
     {
 			(yyval.str) = NULL;
 		;}
@@ -1892,7 +1893,7 @@ yyreduce:
   case 32:
 
 /* Line 1464 of yacc.c  */
-#line 369 "../src/parse/parser.ypp"
+#line 370 "../src/parse/parser.ypp"
     {
 			(yyval.str) = new Str((yyvsp[(3) - (3)].symbol)->GetName().to_string().c_str());
 		;}
@@ -1901,7 +1902,7 @@ yyreduce:
   case 33:
 
 /* Line 1464 of yacc.c  */
-#line 376 "../src/parse/parser.ypp"
+#line 377 "../src/parse/parser.ypp"
     {
 			(yyval.regexp) = new NullOp;
 		;}
@@ -1910,7 +1911,7 @@ yyreduce:
   case 34:
 
 /* Line 1464 of yacc.c  */
-#line 380 "../src/parse/parser.ypp"
+#line 381 "../src/parse/parser.ypp"
     {
 			(yyval.regexp) = (yyvsp[(2) - (2)].regexp);
 		;}
@@ -1919,7 +1920,7 @@ yyreduce:
   case 35:
 
 /* Line 1464 of yacc.c  */
-#line 387 "../src/parse/parser.ypp"
+#line 388 "../src/parse/parser.ypp"
     {
 			(yyval.regexp) = (yyvsp[(1) - (1)].regexp);
 		;}
@@ -1928,7 +1929,7 @@ yyreduce:
   case 36:
 
 /* Line 1464 of yacc.c  */
-#line 391 "../src/parse/parser.ypp"
+#line 392 "../src/parse/parser.ypp"
     {
 			(yyval.regexp) = mkAlt((yyvsp[(1) - (3)].regexp), (yyvsp[(3) - (3)].regexp));
 		;}
@@ -1937,7 +1938,7 @@ yyreduce:
   case 37:
 
 /* Line 1464 of yacc.c  */
-#line 398 "../src/parse/parser.ypp"
+#line 399 "../src/parse/parser.ypp"
     {
 			(yyval.regexp) = (yyvsp[(1) - (1)].regexp);
 		;}
@@ -1946,7 +1947,7 @@ yyreduce:
   case 38:
 
 /* Line 1464 of yacc.c  */
-#line 402 "../src/parse/parser.ypp"
+#line 403 "../src/parse/parser.ypp"
     {
 			(yyval.regexp) = mkDiff((yyvsp[(1) - (3)].regexp), (yyvsp[(3) - (3)].regexp));
 			if(!(yyval.regexp))
@@ -1959,7 +1960,7 @@ yyreduce:
   case 39:
 
 /* Line 1464 of yacc.c  */
-#line 413 "../src/parse/parser.ypp"
+#line 414 "../src/parse/parser.ypp"
     {
 			(yyval.regexp) = (yyvsp[(1) - (1)].regexp);
 		;}
@@ -1968,7 +1969,7 @@ yyreduce:
   case 40:
 
 /* Line 1464 of yacc.c  */
-#line 417 "../src/parse/parser.ypp"
+#line 418 "../src/parse/parser.ypp"
     {
 			(yyval.regexp) = new CatOp((yyvsp[(1) - (2)].regexp), (yyvsp[(2) - (2)].regexp));
 		;}
@@ -1977,7 +1978,7 @@ yyreduce:
   case 41:
 
 /* Line 1464 of yacc.c  */
-#line 424 "../src/parse/parser.ypp"
+#line 425 "../src/parse/parser.ypp"
     {
 			(yyval.regexp) = (yyvsp[(1) - (1)].regexp);
 		;}
@@ -1986,7 +1987,7 @@ yyreduce:
   case 42:
 
 /* Line 1464 of yacc.c  */
-#line 428 "../src/parse/parser.ypp"
+#line 429 "../src/parse/parser.ypp"
     {
 			switch((yyvsp[(2) - (2)].op))
 			{
@@ -2006,7 +2007,7 @@ yyreduce:
   case 43:
 
 /* Line 1464 of yacc.c  */
-#line 443 "../src/parse/parser.ypp"
+#line 444 "../src/parse/parser.ypp"
     {
 			(yyval.regexp) = new CloseVOp((yyvsp[(1) - (2)].regexp), (yyvsp[(2) - (2)].extop).minsize, (yyvsp[(2) - (2)].extop).maxsize);
 		;}
@@ -2015,7 +2016,7 @@ yyreduce:
   case 44:
 
 /* Line 1464 of yacc.c  */
-#line 450 "../src/parse/parser.ypp"
+#line 451 "../src/parse/parser.ypp"
     {
 			(yyval.op) = (yyvsp[(1) - (1)].op);
 		;}
@@ -2024,7 +2025,7 @@ yyreduce:
   case 45:
 
 /* Line 1464 of yacc.c  */
-#line 454 "../src/parse/parser.ypp"
+#line 455 "../src/parse/parser.ypp"
     {
 			(yyval.op) = (yyvsp[(1) - (1)].op);
 		;}
@@ -2033,7 +2034,7 @@ yyreduce:
   case 46:
 
 /* Line 1464 of yacc.c  */
-#line 458 "../src/parse/parser.ypp"
+#line 459 "../src/parse/parser.ypp"
     {
 			(yyval.op) = ((yyvsp[(1) - (2)].op) == (yyvsp[(2) - (2)].op)) ? (yyvsp[(1) - (2)].op) : '*';
 		;}
@@ -2042,7 +2043,7 @@ yyreduce:
   case 47:
 
 /* Line 1464 of yacc.c  */
-#line 462 "../src/parse/parser.ypp"
+#line 463 "../src/parse/parser.ypp"
     {
 			(yyval.op) = ((yyvsp[(1) - (2)].op) == (yyvsp[(2) - (2)].op)) ? (yyvsp[(1) - (2)].op) : '*';
 		;}
@@ -2051,7 +2052,7 @@ yyreduce:
   case 48:
 
 /* Line 1464 of yacc.c  */
-#line 469 "../src/parse/parser.ypp"
+#line 470 "../src/parse/parser.ypp"
     {
 			if(!(yyvsp[(1) - (1)].symbol)->re)
 			{
@@ -2064,7 +2065,7 @@ yyreduce:
   case 49:
 
 /* Line 1464 of yacc.c  */
-#line 477 "../src/parse/parser.ypp"
+#line 478 "../src/parse/parser.ypp"
     {
 			(yyval.regexp) = (yyvsp[(1) - (1)].regexp);
 		;}
@@ -2073,7 +2074,7 @@ yyreduce:
   case 50:
 
 /* Line 1464 of yacc.c  */
-#line 481 "../src/parse/parser.ypp"
+#line 482 "../src/parse/parser.ypp"
     {
 			(yyval.regexp) = (yyvsp[(1) - (1)].regexp);
 		;}
@@ -2082,7 +2083,7 @@ yyreduce:
   case 51:
 
 /* Line 1464 of yacc.c  */
-#line 485 "../src/parse/parser.ypp"
+#line 486 "../src/parse/parser.ypp"
     {
 			(yyval.regexp) = (yyvsp[(2) - (3)].regexp);
 		;}
@@ -2091,7 +2092,7 @@ yyreduce:
 
 
 /* Line 1464 of yacc.c  */
-#line 2095 "./parser.cc"
+#line 2096 "./parser.cc"
       default: break;
     }
   YY_SYMBOL_PRINT ("-> $$ =", yyr1[yyn], &yyval, &yyloc);
@@ -2303,7 +2304,7 @@ yyreturn:
 
 
 /* Line 1684 of yacc.c  */
-#line 490 "../src/parse/parser.ypp"
+#line 491 "../src/parse/parser.ypp"
 
 
 extern "C" {

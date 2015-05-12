@@ -7,6 +7,7 @@
 
 #include "src/codegen/go.h"
 #include "src/dfa/re.h"
+#include "src/util/smart_ptr.h"
 
 namespace re2c
 {
@@ -197,6 +198,8 @@ private:
 #endif
 };
 
+typedef std::map<std::string, std::pair<int, RegExp *> > RegExpMap;
+
 class DFA
 {
 
@@ -246,6 +249,8 @@ public:
 	}
 #endif
 };
+
+smart_ptr<DFA> genCode (RegExp *, Output &, uint32_t);
 
 inline Action::Action(State *s) : state(s), type(NONE)
 {
