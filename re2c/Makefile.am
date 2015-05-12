@@ -8,9 +8,9 @@ bin_PROGRAMS = re2c
 RE2C = $(builddir)/re2c$(EXEEXT)
 
 # scanner
-SRC_SCANNER = $(srcdir)/src/parse/scanner.re
-AUTOGEN_SCANNER = $(builddir)/scanner.cc
-BOOTSTRAP_SCANNER = $(srcdir)/bootstrap/scanner.cc
+SRC_SCANNER = $(srcdir)/src/parse/scanner_lex.re
+AUTOGEN_SCANNER = $(builddir)/scanner_lex.cc
+BOOTSTRAP_SCANNER = $(srcdir)/bootstrap/scanner_lex.cc
 
 # parser
 SRC_PARSER = $(srcdir)/src/parse/parser.ypp
@@ -84,6 +84,7 @@ SRC = \
 	$(srcdir)/src/main.cc \
 	$(srcdir)/src/mbo_getopt.cc \
 	$(srcdir)/src/parse/input.cc \
+	$(srcdir)/src/parse/scanner.cc \
 	$(srcdir)/src/util/range.cc \
 	$(srcdir)/src/util/substr.cc
 # omit SRC_PARSER here; include it in EXTRA_DIST instead

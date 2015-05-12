@@ -57,7 +57,7 @@ to /usr/local).
     $ make install
 Usual bootstrap procedure: re2c uses re2c to compile its lexer.
 1. build lexer (if make finds re2c binary in build directory, it will build lexer
-   from source, otherwize it will use prebuilt lexer 'bootstrap/scanner.cc')
+   from source, otherwize it will use prebuilt lexer)
 2. build re2c
 3. build lexer from source using re2c binary in build directory
 4. rebuild re2c
