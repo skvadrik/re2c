@@ -27,7 +27,7 @@ BOOTSTRAP_DOC_MAN = $(srcdir)/bootstrap/re2c.1
 BOOTSTRAP_DOC_HTML = $(srcdir)/bootstrap/manual.html
 
 SRC_HDR = \
-	$(srcdir)/src/codegen/code.h \
+	$(srcdir)/src/codegen/bitmap.h \
 	$(srcdir)/src/codegen/code_names.h \
 	$(srcdir)/src/codegen/go.h \
 	$(srcdir)/src/codegen/indent.h \
@@ -60,6 +60,7 @@ SRC_HDR = \
 
 SRC = \
 	$(SRC_SCANNER) \
+	$(srcdir)/src/codegen/bitmap.cc \
 	$(srcdir)/src/codegen/code.cc \
 	$(srcdir)/src/codegen/code_names.cc \
 	$(srcdir)/src/codegen/go_construct.cc \

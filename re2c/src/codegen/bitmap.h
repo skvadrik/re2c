@@ -1,8 +1,8 @@
-/* $Id$ */
-#ifndef _code_h
-#define _code_h
+#ifndef _bitmap_h
+#define _bitmap_h
 
-#include "src/dfa/re.h"
+#include "src/codegen/output.h"
+#include "src/util/c99_stdint.h"
 
 namespace re2c
 {
@@ -51,4 +51,4 @@ public:
 
 } // end namespace re2c
 
-#endif
+#endif // _bitmap_h

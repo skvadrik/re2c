@@ -1,3 +1,4 @@
+#include "src/codegen/bitmap.h"
 #include "src/codegen/go.h"
 #include "src/dfa/dfa.h"
 

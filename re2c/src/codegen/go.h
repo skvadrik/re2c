@@ -4,14 +4,15 @@
 #include <iostream>
 #include <vector>
 
-#include "src/codegen/code.h"
+#include "src/codegen/output.h"
 #include "src/util/c99_stdint.h"
 
 namespace re2c
 {
 
-class State; // forward
-struct If; // forward
+class BitMap;
+class State;
+struct If;
 
 struct Span
 {

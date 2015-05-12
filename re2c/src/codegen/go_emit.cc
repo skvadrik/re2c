@@ -1,3 +1,4 @@
+#include "src/codegen/bitmap.h"
 #include "src/codegen/go.h"
 #include "src/codegen/indent.h"
 #include "src/codegen/print.h"
