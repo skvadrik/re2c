@@ -34,6 +34,7 @@ SRC_HDR = \
 	$(srcdir)/src/codegen/input_api.h \
 	$(srcdir)/src/codegen/output.h \
 	$(srcdir)/src/codegen/print.h \
+	$(srcdir)/src/codegen/scc.h \
 	$(srcdir)/src/codegen/skeleton/skeleton.h \
 	$(srcdir)/src/dfa/encoding/enc.h \
 	$(srcdir)/src/dfa/encoding/range_suffix.h \
@@ -61,8 +62,9 @@ SRC_HDR = \
 SRC = \
 	$(SRC_SCANNER) \
 	$(srcdir)/src/codegen/bitmap.cc \
-	$(srcdir)/src/codegen/code.cc \
 	$(srcdir)/src/codegen/code_names.cc \
+	$(srcdir)/src/codegen/dfa_emit.cc \
+	$(srcdir)/src/codegen/dfa_prepare.cc \
 	$(srcdir)/src/codegen/go_construct.cc \
 	$(srcdir)/src/codegen/go_destruct.cc \
 	$(srcdir)/src/codegen/go_emit.cc \
@@ -70,6 +72,7 @@ SRC = \
 	$(srcdir)/src/codegen/input_api.cc \
 	$(srcdir)/src/codegen/output.cc \
 	$(srcdir)/src/codegen/print.cc \
+	$(srcdir)/src/codegen/scc.cc \
 	$(srcdir)/src/codegen/skeleton/skeleton.cc \
 	$(srcdir)/src/codegen/translate.cc \
 	$(srcdir)/src/dfa/encoding/enc.cc \
