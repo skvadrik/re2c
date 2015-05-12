@@ -1,23 +1,10 @@
-/* $Id$ */
 #include <assert.h>
-#include <stdarg.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <ctime>
-#include <ctype.h>
-#include <iomanip>
-#include <iostream>
-#include <sstream>
 
-#include "src/codegen/code.h"
 #include "src/codegen/go.h"
 #include "src/codegen/indent.h"
 #include "src/codegen/input_api.h"
-#include "src/codegen/print.h"
 #include "src/codegen/skeleton/skeleton.h"
 #include "src/dfa/dfa.h"
-#include "src/globals.h"
 
 namespace re2c
 {
