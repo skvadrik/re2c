@@ -6,6 +6,7 @@
 
 #include "src/dfa/dfa.h"
 #include "src/util/c99_stdint.h"
+#include "src/util/forbid_copy.h"
 
 namespace re2c
 {
@@ -59,13 +60,14 @@ public:
 	{
 		return wrapped;
 	}
-	void operator ++ ()
+	wrap_iter_t & operator ++ ()
 	{
 		if (++iter == cont.end ())
 		{
 			iter = cont.begin ();
 			wrapped = true;
 		}
+		return * this;
 	}
 	typename container_t::value_type * operator -> ()
 	{
@@ -95,7 +97,6 @@ struct Node
 	uint32_t path_len;
 	Path * path;
 
-	inline Node () {} // only to allow array allocation with 'new'
 	Node (const State * s, const s2n_map & s2n);
 	~Node ();
 	bool end () const;
@@ -103,6 +104,8 @@ struct Node
 	uint32_t estimate_size_cover (uint32_t inarcs, uint32_t len);
 	void generate_paths_all (const std::vector<Path> & prefixes, std::vector<Path> & results);
 	void generate_paths_cover (const std::vector<Path> & prefixes, std::vector<Path> & results);
+
+	FORBID_COPY (Node);
 };
 
 struct Skeleton
@@ -115,6 +118,8 @@ struct Skeleton
 	~Skeleton ();
 	void generate_paths (std::vector<Path> & results);
 	void emit_data (DataFile & o);
+
+	FORBID_COPY (Skeleton);
 };
 
 void emit_prolog (OutputFile & o, uint32_t ind, const char * data_name);

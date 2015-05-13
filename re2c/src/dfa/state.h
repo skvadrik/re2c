@@ -3,6 +3,7 @@
 
 #include "src/codegen/go.h"
 #include "src/dfa/re.h"
+#include "src/util/forbid_copy.h"
 
 namespace re2c
 {
@@ -30,9 +31,7 @@ public:
 	void emit (Output &, uint32_t, bool &, const std::string &) const;
 	friend std::ostream& operator << (std::ostream &, const State &);
 
-private:
-	State (const State &);
-	State & operator = (const State &);
+	FORBID_COPY (State);
 };
 
 } // namespace re2c

@@ -4,6 +4,7 @@
 #include <stddef.h> // NULL
 
 #include "src/util/c99_stdint.h"
+#include "src/util/forbid_copy.h"
 #include "src/util/free_list.h"
 
 namespace re2c {
@@ -28,6 +29,8 @@ public:
 	{
 		freeList.insert(this);
 	}
+
+	FORBID_COPY (RangeSuffix);
 };
 
 RegExp * emit(RangeSuffix * p, RegExp * re);

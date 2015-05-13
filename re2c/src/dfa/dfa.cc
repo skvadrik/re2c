@@ -1,4 +1,5 @@
 #include "src/dfa/dfa.h"
+#include "src/util/allocate.h"
 
 namespace re2c
 {
@@ -41,11 +42,15 @@ DFA::DFA(Ins *ins, uint32_t ni, uint32_t lb, uint32_t ub, const Char *rep)
 	, toDo(NULL)
 	, free_ins(ins)
 	, free_rep(rep)
+	, bSaveOnHead (false)
+	, saves (NULL)
+	, rules (NULL)
+
 {
 	Ins **work = new Ins * [ni + 1];
 	uint32_t nc = ub - lb;
 	GoTo *goTo = new GoTo[nc];
-	Span *span = new Span[nc];
+	Span *span = allocate<Span> (nc);
 	memset((char*) goTo, 0, nc*sizeof(GoTo));
 	findState(work, closure(work, &ins[0]) - work);
 
@@ -112,7 +117,7 @@ DFA::DFA(Ins *ins, uint32_t ni, uint32_t lb, uint32_t ub, const Char *rep)
 		for (j = nGoTos; j-- > 0;)
 			goTo[goTo[j].ch - lb].to = NULL;
 
-		s->go.span = new Span[s->go.nSpans];
+		s->go.span = allocate<Span> (s->go.nSpans);
 
 		memcpy((char*) s->go.span, (char*) span, s->go.nSpans*sizeof(Span));
 

@@ -9,18 +9,36 @@
 #include "src/globals.h"
 #include "src/parse/input.h"
 #include "src/parse/token.h"
+#include "src/util/forbid_copy.h"
 
 namespace re2c
 {
 
 struct ScannerState
 {
-	ScannerState();
+	// positioning
+	char * tok;
+	char * ptr;
+	char * cur;
+	char * pos;
+	char * ctx;
 
-	char	*tok, *ptr, *cur, *pos, *ctx;  // positioning
-	char    *bot, *lim, *top, *eof;        // buffer
-	uint32_t	tchar, tline, cline, iscfg, buf_size;
-	bool    in_parse;
+	// buffer
+	char * bot;
+	char * lim;
+	char * top;
+	char * eof;
+
+	uint32_t tchar;
+	uint32_t tline;
+	uint32_t cline;
+	uint32_t iscfg;
+
+	bool in_parse;
+
+	ScannerState ();
+	ScannerState (const ScannerState &);
+	ScannerState & operator = (const ScannerState &);
 };
 
 class Scanner: private ScannerState
@@ -31,8 +49,6 @@ private:
 
 private:
 	char *fill(char*, uint32_t);
-	Scanner(const Scanner&); //unimplemented
-	Scanner& operator=(const Scanner&); //unimplemented
 	void set_sourceline(char *& cursor);
 
 public:
@@ -85,6 +101,8 @@ public:
 	RegExp * invToRE(SubStr s) const;
 	RegExp * mkDot() const;
 	RegExp * mkDefault() const;
+
+	FORBID_COPY (Scanner);
 };
 
 inline size_t Scanner::get_pos() const

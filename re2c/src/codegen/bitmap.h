@@ -3,6 +3,7 @@
 
 #include "src/codegen/output.h"
 #include "src/util/c99_stdint.h"
+#include "src/util/forbid_copy.h"
 
 namespace re2c
 {
@@ -28,21 +29,7 @@ public:
 	BitMap(const Go*, const State*);
 	~BitMap();
 
-#if PEDANTIC
-	BitMap(const BitMap& oth)
-		: go(oth.go)
-		, on(oth.on)
-		, next(oth.next)
-		, i(oth.i)
-		, m(oth.m)
-	{
-	}
-	BitMap& operator = (const BitMap& oth)
-	{
-		new(this) BitMap(oth);
-		return *this;
-	}
-#endif
+	FORBID_COPY (BitMap);
 };
 
 #ifdef _MSC_VER

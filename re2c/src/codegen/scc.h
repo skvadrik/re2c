@@ -2,6 +2,7 @@
 #define __SCC__
 
 #include "src/util/c99_stdint.h"
+#include "src/util/forbid_copy.h"
 
 namespace re2c {
 
@@ -19,9 +20,7 @@ public:
 	~SCC ();
 	void traverse (State *);
 
-private:
-	SCC (const SCC &);
-	SCC & operator = (const SCC &);
+	FORBID_COPY (SCC);
 };
 
 bool state_is_in_non_trivial_SCC (const State * s);

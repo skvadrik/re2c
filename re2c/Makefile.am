@@ -1,6 +1,6 @@
 # $Id$
 
-AM_CXXFLAGS = -W -Wall -Wextra -pedantic -Wredundant-decls -DPEDANTIC -O2
+AM_CXXFLAGS = -W -Wall -Wextra -Weffc++ -pedantic -Wredundant-decls -O2
 AM_YFLAGS = -y -d --no-lines
 RE2CFLAGS = -bi
 
@@ -56,7 +56,9 @@ SRC_HDR = \
 	$(srcdir)/src/parse/parser.h \
 	$(srcdir)/src/parse/scanner.h \
 	$(srcdir)/src/parse/token.h \
+	$(srcdir)/src/util/allocate.h \
 	$(srcdir)/src/util/c99_stdint.h \
+	$(srcdir)/src/util/forbid_copy.h \
 	$(srcdir)/src/util/free_list.h \
 	$(srcdir)/src/util/range.h \
 	$(srcdir)/src/util/smart_ptr.h \

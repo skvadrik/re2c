@@ -3,6 +3,7 @@
 
 #include "src/dfa/action.h"
 #include "src/dfa/state.h"
+#include "src/util/forbid_copy.h"
 #include "src/util/smart_ptr.h"
 
 namespace re2c
@@ -41,9 +42,7 @@ public:
 
 	friend std::ostream & operator << (std::ostream &, const DFA &);
 
-private:
-	DFA (const DFA &);
-	DFA & operator = (const DFA &);
+	FORBID_COPY (DFA);
 };
 
 smart_ptr<DFA> genCode (RegExp *, Output &, uint32_t);

@@ -11,6 +11,7 @@
 #include "src/dfa/encoding/utf8/utf8_regexp.h"
 #include "src/globals.h"
 #include "src/parse/parser.h"
+#include "src/util/allocate.h"
 
 namespace re2c
 {
@@ -1026,8 +1027,8 @@ CharSet::CharSet()
 	: fix(0)
 	, freeHead(0)
 	, freeTail(0)
-	, rep(new CharPtr[encoding.nCodeUnits()])
-	, ptn(new CharPtn[encoding.nCodeUnits()])
+	, rep(allocate<CharPtr> (encoding.nCodeUnits()))
+	, ptn(allocate<CharPtn> (encoding.nCodeUnits()))
 {
 	for (uint32_t j = 0; j < encoding.nCodeUnits(); ++j)
 	{

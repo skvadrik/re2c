@@ -6,6 +6,7 @@
 
 #include "src/codegen/output.h"
 #include "src/util/c99_stdint.h"
+#include "src/util/forbid_copy.h"
 
 namespace re2c
 {
@@ -19,6 +20,8 @@ struct Span
 	uint32_t ub;
 	State * to;
 	uint32_t show (std::ostream&, uint32_t) const;
+
+	FORBID_COPY (Span);
 };
 
 struct Case
@@ -26,6 +29,13 @@ struct Case
 	std::vector<std::pair<uint32_t, uint32_t> > ranges;
 	const State * to;
 	void emit (OutputFile & o, uint32_t ind);
+
+	inline Case ()
+		: ranges ()
+		, to (NULL)
+	{}
+
+	FORBID_COPY (Case);
 };
 
 struct Cases
@@ -38,6 +48,8 @@ struct Cases
 	~Cases ();
 	void emit (OutputFile & o, uint32_t ind, bool & readCh);
 	void used_labels ();
+
+	FORBID_COPY (Cases);
 };
 
 struct Cond
@@ -56,6 +68,8 @@ struct Binary
 	~Binary ();
 	void emit (OutputFile & o, uint32_t ind, bool & readCh);
 	void used_labels ();
+
+	FORBID_COPY (Binary);
 };
 
 struct Linear
@@ -113,6 +127,8 @@ struct GoBitmap
 	~GoBitmap ();
 	void emit (OutputFile & o, uint32_t ind, bool & readCh);
 	void used_labels ();
+
+	FORBID_COPY (GoBitmap);
 };
 
 struct CpgotoTable
@@ -123,6 +139,8 @@ struct CpgotoTable
 	~CpgotoTable ();
 	void emit (OutputFile & o, uint32_t ind);
 	void used_labels ();
+
+	FORBID_COPY (CpgotoTable);
 };
 
 struct Cpgoto
@@ -133,6 +151,8 @@ struct Cpgoto
 	~Cpgoto ();
 	void emit (OutputFile & o, uint32_t ind, bool & readCh);
 	void used_labels ();
+
+	FORBID_COPY (Cpgoto);
 };
 
 struct Dot
@@ -142,6 +162,8 @@ struct Dot
 	Dot (const Span * sp, uint32_t nsp, const State * from);
 	~Dot ();
 	void emit (OutputFile & o);
+
+	FORBID_COPY (Dot);
 };
 
 struct Go
@@ -169,6 +191,21 @@ struct Go
 	void init (const State * from);
 	void emit (OutputFile & o, uint32_t ind, bool & readCh);
 	void used_labels ();
+
+	Go (const Go & g)
+		: nSpans (g.nSpans)
+		, span (g.span)
+		, type (g.type)
+		, info (g.info)
+	{}
+	Go & operator = (const Go & g)
+	{
+		nSpans = g.nSpans;
+		span = g.span;
+		type = g.type;
+		info = g.info;
+		return * this;
+	}
 };
 
 // construct helpers

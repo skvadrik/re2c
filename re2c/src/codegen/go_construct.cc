@@ -1,6 +1,7 @@
 #include "src/codegen/bitmap.h"
 #include "src/codegen/go.h"
 #include "src/dfa/dfa.h"
+#include "src/util/allocate.h"
 
 namespace re2c
 {
@@ -131,7 +132,7 @@ GoBitmap::GoBitmap (const Span * span, uint32_t nSpans, const Span * hspan, uint
 	, hgo (hSpans == 0 ? NULL : new SwitchIf (hspan, hSpans, next))
 	, lgo (NULL)
 {
-	Span * bspan = new Span [nSpans];
+	Span * bspan = allocate<Span> (nSpans);
 	uint32_t bSpans = unmap (bspan, span, nSpans, bm_state);
 	lgo = bSpans == 0
 		? NULL

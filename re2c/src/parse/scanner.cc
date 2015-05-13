@@ -268,12 +268,57 @@ void Scanner::config(const Str& cfg, const Str& val)
 	}
 }
 
-ScannerState::ScannerState()
-	: tok(NULL), ptr(NULL), cur(NULL), pos(NULL), ctx(NULL)
-	, bot(NULL), lim(NULL), top(NULL), eof(NULL)
-	, tchar(0), tline(0), cline(1), iscfg(0)
-	, in_parse(false)
+ScannerState::ScannerState ()
+	: tok (NULL)
+	, ptr (NULL)
+	, cur (NULL)
+	, pos (NULL)
+	, ctx (NULL)
+	, bot (NULL)
+	, lim (NULL)
+	, top (NULL)
+	, eof (NULL)
+	, tchar (0)
+	, tline (0)
+	, cline (1)
+	, iscfg (0)
+	, in_parse (false)
+{}
+
+ScannerState::ScannerState (const ScannerState & s)
+	: tok (s.tok)
+	, ptr (s.ptr)
+	, cur (s.cur)
+	, pos (s.pos)
+	, ctx (s.ctx)
+	, bot (s.bot)
+	, lim (s.lim)
+	, top (s.top)
+	, eof (s.eof)
+	, tchar (s.tchar)
+	, tline (s.tline)
+	, cline (s.cline)
+	, iscfg (s.iscfg)
+	, in_parse (s.in_parse)
+{}
+
+ScannerState & ScannerState::operator = (const ScannerState & s)
 {
+	tok = s.tok;
+	ptr = s.ptr;
+	cur = s.cur;
+	pos = s.pos;
+	ctx = s.ctx;
+	bot = s.bot;
+	lim = s.lim;
+	top = s.top;
+	eof = s.eof;
+	tchar = s.tchar;
+	tline = s.tline;
+	cline = s.cline;
+	iscfg = s.iscfg;
+	in_parse = s.in_parse;
+	return * this;
 }
 
 Scanner::Scanner (Input & i, OutputFile & o)

@@ -13,6 +13,7 @@
 #include "src/globals.h"
 #include "src/parse/token.h"
 #include "src/util/range.h"
+#include "src/util/forbid_copy.h"
 #include "src/util/free_list.h"
 
 namespace re2c
@@ -32,6 +33,8 @@ struct CharPtn
 	uint32_t	card;
 	CharPtn	*fix;
 	CharPtn	*nxt;
+
+	FORBID_COPY (CharPtn);
 };
 
 typedef CharPtn *CharPtr;
@@ -45,6 +48,8 @@ struct CharSet
 	CharPtn	*freeHead, **freeTail;
 	CharPtr	*rep;
 	CharPtn	*ptn;
+
+	FORBID_COPY (CharSet);
 };
 
 class RegExp
@@ -101,6 +106,8 @@ public:
 	virtual void display(std::ostream&) const = 0;
 	friend std::ostream& operator<<(std::ostream&, const RegExp&);
 	friend std::ostream& operator<<(std::ostream&, const RegExp*);
+
+	FORBID_COPY (RegExp);
 };
 
 inline std::ostream& operator<<(std::ostream &o, const RegExp &re)
@@ -147,20 +154,7 @@ public:
 	void decompile();
 	void display(std::ostream&) const;
 
-#ifdef PEDANTIC
-private:
-	MatchOp(const MatchOp& oth)
-		: RegExp(oth)
-		, match(oth.match)
-	{
-	}
-	
-	MatchOp& operator = (const MatchOp& oth)
-	{
-		new(this) MatchOp(oth);
-		return *this;
-	}
-#endif
+	FORBID_COPY (MatchOp);
 };
 
 class RuleOp: public RegExp
@@ -193,25 +187,7 @@ public:
 	}
 	RuleOp* copy(uint32_t) const;
 
-#ifdef PEDANTIC
-private:
-	RuleOp(const RuleOp& oth)
-		: RegExp(oth)
-		, exp(oth.exp)
-		, ctx(oth.ctx)
-		, ins(oth.ins)
-		, accept(oth.accept)
-		, code(oth.code)
-		, line(oth.line)
-	{
-	}
-
-	RuleOp& operator = (const RuleOp& oth)
-	{
-		new(this) RuleOp(oth);
-		return *this;
-	}
-#endif
+	FORBID_COPY (RuleOp);
 };
 
 RegExp *doAlt(RegExp*, RegExp*);
@@ -242,20 +218,7 @@ public:
 
 	friend RegExp *mkAlt(RegExp*, RegExp*);
 
-#ifdef PEDANTIC
-private:
-	AltOp(const AltOp& oth)
-		: RegExp(oth)
-		, exp1(oth.exp1)
-		, exp2(oth.exp2)
-	{
-	}
-	AltOp& operator = (const AltOp& oth)
-	{
-		new(this) AltOp(oth);
-		return *this;
-	}
-#endif
+	FORBID_COPY (AltOp);
 };
 
 RegExp *doCat(RegExp*, RegExp*);
@@ -284,20 +247,7 @@ public:
 		o << exp1 << exp2;
 	}
 
-#ifdef PEDANTIC
-private:
-	CatOp(const CatOp& oth)
-		: RegExp(oth)
-		, exp1(oth.exp1)
-		, exp2(oth.exp2)
-	{
-	}
-	CatOp& operator = (const CatOp& oth)
-	{
-		new(this) CatOp(oth);
-		return *this;
-	}
-#endif
+	FORBID_COPY (CatOp);
 };
 
 class CloseOp: public RegExp
@@ -321,19 +271,7 @@ public:
 		o << exp << "+";
 	}
 
-#ifdef PEDANTIC
-private:
-	CloseOp(const CloseOp& oth)
-		: RegExp(oth)
-		, exp(oth.exp)
-	{
-	}
-	CloseOp& operator = (const CloseOp& oth)
-	{
-		new(this) CloseOp(oth);
-		return *this;
-	}
-#endif
+	FORBID_COPY (CloseOp);
 };
 
 class CloseVOp: public RegExp
@@ -361,21 +299,8 @@ public:
 	{
 		o << exp << "+";
 	}
-#ifdef PEDANTIC
-private:
-	CloseVOp(const CloseVOp& oth)
-		: RegExp(oth)
-		, exp(oth.exp)
-		, min(oth.min)
-		, max(oth.max)
-	{
-	}
-	CloseVOp& operator = (const CloseVOp& oth)
-	{
-		new(this) CloseVOp(oth);
-		return *this;
-	}
-#endif
+
+	FORBID_COPY (CloseVOp);
 };
 
 extern RegExp *mkDiff(RegExp*, RegExp*);

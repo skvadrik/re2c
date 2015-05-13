@@ -4,6 +4,7 @@
 #include <map>
 
 #include "src/dfa/state.h"
+#include "src/util/forbid_copy.h"
 
 namespace re2c
 {
@@ -40,9 +41,7 @@ public:
 	}
 	virtual void emit (Output &, uint32_t, bool &, const std::string &) const = 0;
 
-private:
-	Action (const Action &);
-	Action & operator = (const Action &);
+	FORBID_COPY (Action);
 };
 
 class Match: public Action
@@ -112,6 +111,7 @@ public:
 		, nRules (n)
 		, saves (s)
 		, rules (r)
+		, mapRules ()
 	{
 		type = ACCEPT;
 	}
@@ -119,9 +119,7 @@ public:
 	void emitBinary (OutputFile & o, uint32_t ind, uint32_t l, uint32_t r, bool & readCh) const;
 	void genRuleMap ();
 
-private:
-	Accept (const Accept &);
-	Accept & operator = (const Accept &);
+	FORBID_COPY (Accept);
 };
 
 class Rule: public Action
@@ -137,9 +135,7 @@ public:
 	}
 	void emit (Output &, uint32_t, bool &, const std::string &) const;
 
-private:
-	Rule (const Rule &);
-	Rule & operator = (const Rule &);
+	FORBID_COPY (Rule);
 };
 
 } // namespace re2c

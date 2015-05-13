@@ -5,6 +5,7 @@
 #include "src/codegen/output.h"
 #include "src/dfa/re.h"
 #include "src/parse/scanner.h"
+#include "src/util/forbid_copy.h"
 
 namespace re2c
 {
@@ -39,18 +40,7 @@ private:
 
 	Str	name;
 
-#if PEDANTIC
-	Symbol(const Symbol& oth)
-		: re(oth.re)
-		, name(oth.name)
-	{
-	}
-	Symbol& operator = (const Symbol& oth)
-	{
-		new(this) Symbol(oth);
-		return *this;
-	}
-#endif
+	FORBID_COPY (Symbol);
 };
 
 extern void parse(Scanner &, Output &);

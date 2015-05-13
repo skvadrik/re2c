@@ -1,6 +1,7 @@
 #include "src/codegen/bitmap.h"
 #include "src/codegen/scc.h"
 #include "src/dfa/dfa.h"
+#include "src/util/allocate.h"
 
 namespace re2c {
 
@@ -36,7 +37,7 @@ void DFA::split(State *s)
 	move->go = s->go;
 	s->rule = NULL;
 	s->go.nSpans = 1;
-	s->go.span = new Span[1];
+	s->go.span = allocate<Span> (1);
 	s->go.span[0].ub = ubChar;
 	s->go.span[0].to = move;
 }
@@ -118,7 +119,7 @@ static uint32_t merge(Span *x0, State *fg, State *bg)
 
 void DFA::findBaseState()
 {
-	Span *span = new Span[ubChar - lbChar];
+	Span *span = allocate<Span> (ubChar - lbChar);
 
 	for (State *s = head; s; s = s->next)
 	{
@@ -137,7 +138,7 @@ void DFA::findBaseState()
 					{
 						delete [] s->go.span;
 						s->go.nSpans = nSpans;
-						s->go.span = new Span[nSpans];
+						s->go.span = allocate<Span> (nSpans);
 						memcpy(s->go.span, span, nSpans*sizeof(Span));
 					}
 

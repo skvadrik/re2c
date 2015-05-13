@@ -7,11 +7,12 @@
 #include <vector>
 
 #include "src/util/c99_stdint.h"
+#include "src/util/forbid_copy.h"
 
 namespace re2c
 {
 
-struct Str;
+class Str;
 
 struct OutputFragment
 {
@@ -90,6 +91,8 @@ private:
 
 	std::ostream & stream ();
 	void insert_code ();
+
+	FORBID_COPY (OutputFile);
 };
 
 struct HeaderFile
@@ -103,6 +106,8 @@ private:
 	std::ostringstream stream;
 	const char * file_name;
 	FILE * file;
+
+	FORBID_COPY (HeaderFile);
 };
 
 struct DataFile

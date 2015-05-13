@@ -1,6 +1,7 @@
 #include "src/codegen/indent.h"
 #include "src/codegen/print.h"
 #include "src/codegen/skeleton/skeleton.h"
+#include "src/util/allocate.h"
 
 namespace re2c
 {
@@ -222,7 +223,7 @@ const uint32_t Skeleton::DATA_LIMIT = 1024 * 1024 * 1024; // 1Gb
 
 Skeleton::Skeleton (const DFA & dfa)
 	// +1 for default DFA state (NULL)
-	: nodes (new Node [dfa.nStates + 1])
+	: nodes (allocate<Node> (dfa.nStates + 1))
 {
 	Node * n;
 

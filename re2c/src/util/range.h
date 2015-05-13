@@ -4,6 +4,7 @@
 #include <iostream>
 
 #include "src/util/c99_stdint.h"
+#include "src/util/forbid_copy.h"
 #include "src/util/free_list.h"
 
 namespace re2c
@@ -33,6 +34,8 @@ public:
 	{
 		vFreeList.erase(this);
 	}
+
+	FORBID_COPY (Range);
 };
 
 Range *doUnion(Range *r1, Range *r2);

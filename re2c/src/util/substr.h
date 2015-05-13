@@ -30,10 +30,8 @@ public:
 	std::string to_string() const;
 	uint32_t ofs() const;
 
-#ifdef PEDANTIC
-protected:
-	SubStr& operator = (const SubStr& oth);
-#endif
+private:
+	SubStr & operator = (const SubStr &);
 };
 
 class Str: public SubStr
@@ -84,14 +82,6 @@ inline uint32_t SubStr::ofs() const
 {
 	return str - org;
 }
-
-#ifdef PEDANTIC
-inline SubStr& SubStr::operator = (const SubStr& oth)
-{
-	new(this) SubStr(oth);
-	return *this;
-}
-#endif
 
 } // end namespace re2c
 
