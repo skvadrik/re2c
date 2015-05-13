@@ -1638,7 +1638,7 @@ yyreduce:
 /* Line 1464 of yacc.c  */
 #line 216 "../src/parse/parser.ypp"
     {
-			in->config(*(yyvsp[(1) - (4)].str), *(yyvsp[(3) - (4)].str));
+			in->config((yyvsp[(1) - (4)].str)->to_string (), *(yyvsp[(3) - (4)].str));
 			delete (yyvsp[(1) - (4)].str);
 			delete (yyvsp[(3) - (4)].str);
 		;}
@@ -1649,7 +1649,7 @@ yyreduce:
 /* Line 1464 of yacc.c  */
 #line 222 "../src/parse/parser.ypp"
     {
-			in->config(*(yyvsp[(1) - (4)].str), (yyvsp[(3) - (4)].number));
+			in->config((yyvsp[(1) - (4)].str)->to_string (), (yyvsp[(3) - (4)].number));
 			delete (yyvsp[(1) - (4)].str);
 		;}
     break;

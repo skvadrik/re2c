@@ -4,9 +4,9 @@
 
 namespace re2c {
 
-void Scanner::config(const Str& cfg, int num)
+void Scanner::config(const std::string & cfg, int num)
 {
-	if (cfg.to_string() == "indent:top")
+	if (cfg == "indent:top")
 	{
 		if (num < 0)
 		{
@@ -14,40 +14,40 @@ void Scanner::config(const Str& cfg, int num)
 		}
 		topIndent = num;
 	}
-	else if (cfg.to_string() == "yybm:hex")
+	else if (cfg == "yybm:hex")
 	{
 		yybmHexTable = num != 0;
 	}
-	else if (cfg.to_string() == "startlabel")
+	else if (cfg == "startlabel")
 	{
 		bUseStartLabel = num != 0;
 		startLabelName = "";
 	}
-	else if (cfg.to_string() == "state:abort")
+	else if (cfg == "state:abort")
 	{
 		bUseStateAbort = num != 0;
 	}
-	else if (cfg.to_string() == "state:nextlabel")
+	else if (cfg == "state:nextlabel")
 	{
 		bUseStateNext = num != 0;
 	}
-	else if (cfg.to_string() == "yyfill:enable")
+	else if (cfg == "yyfill:enable")
 	{
 		bUseYYFill = num != 0;
 	}
-	else if (cfg.to_string() == "yyfill:parameter")
+	else if (cfg == "yyfill:parameter")
 	{
 		bUseYYFillParam = num != 0;
 	}
-	else if (cfg.to_string() == "yyfill:check")
+	else if (cfg == "yyfill:check")
 	{
 		bUseYYFillCheck = num != 0;
 	}
-	else if (cfg.to_string() == "cgoto:threshold")
+	else if (cfg == "cgoto:threshold")
 	{
 		cGotoThreshold = num;
 	}
-	else if (cfg.to_string() == "yych:conversion")
+	else if (cfg == "yych:conversion")
 	{
 		if (num)
 		{
@@ -60,27 +60,27 @@ void Scanner::config(const Str& cfg, int num)
 			yychConversion  = "";
 		}
 	}
-	else if (cfg.to_string() == "yych:emit")
+	else if (cfg == "yych:emit")
 	{
 		bEmitYYCh = num != 0;
 	}
-	else if (cfg.to_string() == "define:YYFILL:naked")
+	else if (cfg == "define:YYFILL:naked")
 	{
 		bUseYYFillNaked = num != 0;
 	}
-	else if (cfg.to_string() == "define:YYGETCONDITION:naked")
+	else if (cfg == "define:YYGETCONDITION:naked")
 	{
 		bUseYYGetConditionNaked = num != 0;
 	}
-	else if (cfg.to_string() == "define:YYGETSTATE:naked")
+	else if (cfg == "define:YYGETSTATE:naked")
 	{
 		bUseYYGetStateNaked = num != 0;
 	}
-	else if (cfg.to_string() == "define:YYSETSTATE:naked")
+	else if (cfg == "define:YYSETSTATE:naked")
 	{
 		bUseYYSetStateNaked = num != 0;
 	}
-	else if (cfg.to_string() == "flags:e")
+	else if (cfg == "flags:e")
 	{
 		if (num != 0)
 		{
@@ -90,7 +90,7 @@ void Scanner::config(const Str& cfg, int num)
 		else
 			encoding.unset(Enc::EBCDIC);
 	}
-	else if (cfg.to_string() == "flags:u")
+	else if (cfg == "flags:u")
 	{
 		if (num != 0)
 		{
@@ -100,7 +100,7 @@ void Scanner::config(const Str& cfg, int num)
 		else
 			encoding.unset(Enc::UTF32);
 	}
-	else if (cfg.to_string() == "flags:w")
+	else if (cfg == "flags:w")
 	{
 		if (num != 0)
 		{
@@ -110,7 +110,7 @@ void Scanner::config(const Str& cfg, int num)
 		else
 			encoding.unset(Enc::UCS2);
 	}
-	else if (cfg.to_string() == "flags:x")
+	else if (cfg == "flags:x")
 	{
 		if (num != 0)
 		{
@@ -120,7 +120,7 @@ void Scanner::config(const Str& cfg, int num)
 		else
 			encoding.unset(Enc::UTF16);
 	}
-	else if (cfg.to_string() == "flags:8")
+	else if (cfg == "flags:8")
 	{
 		if (num != 0)
 		{
@@ -132,7 +132,7 @@ void Scanner::config(const Str& cfg, int num)
 	}
 	else
 	{
-		fatalf("unrecognized configuration name '%s' or illegal integer value", cfg.to_string().c_str());
+		fatalf("unrecognized configuration name '%s' or illegal integer value", cfg.c_str());
 	}
 }
 
@@ -140,7 +140,7 @@ static std::set<std::string> mapVariableKeys;
 static std::set<std::string> mapDefineKeys;
 static std::set<std::string> mapLabelKeys;
 
-void Scanner::config(const Str& cfg, const Str& val)
+void Scanner::config(const std::string & cfg, const Str & val)
 {
 	if (mapDefineKeys.empty())
 	{
@@ -186,83 +186,83 @@ void Scanner::config(const Str& cfg, const Str& val)
 		strVal = val.to_string();
 	}
 
-	if (cfg.to_string() == "indent:string")
+	if (cfg == "indent:string")
 	{
 		indString = strVal;
 	}
-	else if (cfg.to_string() == "startlabel")
+	else if (cfg == "startlabel")
 	{
 		startLabelName = strVal;
 		bUseStartLabel = !startLabelName.empty();
 	}
-	else if (cfg.to_string() == "labelprefix")
+	else if (cfg == "labelprefix")
 	{
 		labelPrefix = strVal;
 	}
-	else if (cfg.to_string() == "condprefix")
+	else if (cfg == "condprefix")
 	{
 		condPrefix = strVal;
 	}
-	else if (cfg.to_string() == "condenumprefix")
+	else if (cfg == "condenumprefix")
 	{
 		condEnumPrefix = strVal;
 	}
-	else if (cfg.to_string() == "cond:divider")
+	else if (cfg == "cond:divider")
 	{
 		condDivider = strVal;
 	}
-	else if (cfg.to_string() == "cond:divider@cond")
+	else if (cfg == "cond:divider@cond")
 	{
 		condDividerParam = strVal;
 	}
-	else if (cfg.to_string() == "cond:goto")
+	else if (cfg == "cond:goto")
 	{
 		condGoto = strVal;
 	}
-	else if (cfg.to_string() == "cond:goto@cond")
+	else if (cfg == "cond:goto@cond")
 	{
 		condGotoParam = strVal;
 	}
-	else if (cfg.to_string() == "define:YYFILL@len")
+	else if (cfg == "define:YYFILL@len")
 	{
 		yyFillLength = strVal;
 		bUseYYFillParam = false;
 	}
-	else if (cfg.to_string() == "define:YYSETCONDITION@cond")
+	else if (cfg == "define:YYSETCONDITION@cond")
 	{
 		yySetConditionParam = strVal;
 		bUseYYSetConditionParam = false;
 	}
-	else if (cfg.to_string() == "define:YYSETSTATE@state")
+	else if (cfg == "define:YYSETSTATE@state")
 	{
 		yySetStateParam = strVal;
 		bUseYYSetStateParam = false;
 	}
-	else if (mapVariableKeys.find(cfg.to_string()) != mapVariableKeys.end())
+	else if (mapVariableKeys.find(cfg) != mapVariableKeys.end())
 	{
-		if (!mapCodeName.insert(std::make_pair(cfg.to_string().substr(sizeof("variable:") - 1), strVal)).second)
+		if (!mapCodeName.insert(std::make_pair(cfg.substr(sizeof("variable:") - 1), strVal)).second)
 		{
-			fatalf("variable '%s' already being used and cannot be changed", cfg.to_string().c_str());
+			fatalf("variable '%s' already being used and cannot be changed", cfg.c_str());
 		}
 	}
-	else if (mapDefineKeys.find(cfg.to_string()) != mapDefineKeys.end())
+	else if (mapDefineKeys.find(cfg) != mapDefineKeys.end())
 	{
-		if (!mapCodeName.insert(std::make_pair(cfg.to_string().substr(sizeof("define:") - 1), strVal)).second)
+		if (!mapCodeName.insert(std::make_pair(cfg.substr(sizeof("define:") - 1), strVal)).second)
 		{
-			fatalf("define '%s' already being used and cannot be changed", cfg.to_string().c_str());
+			fatalf("define '%s' already being used and cannot be changed", cfg.c_str());
 		}
 	}
-	else if (mapLabelKeys.find(cfg.to_string()) != mapLabelKeys.end())
+	else if (mapLabelKeys.find(cfg) != mapLabelKeys.end())
 	{
-		if (!mapCodeName.insert(std::make_pair(cfg.to_string().substr(sizeof("label:") - 1), strVal)).second)
+		if (!mapCodeName.insert(std::make_pair(cfg.substr(sizeof("label:") - 1), strVal)).second)
 		{
-			fatalf("label '%s' already being used and cannot be changed", cfg.to_string().c_str());
+			fatalf("label '%s' already being used and cannot be changed", cfg.c_str());
 		}
 	}
 	else
 	{
 		std::string msg = "unrecognized configuration name '";
-		msg += cfg.to_string();
+		msg += cfg;
 		msg += "' or illegal string value";
 		fatal(msg.c_str());
 	}

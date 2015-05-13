@@ -214,13 +214,13 @@ decl:
 		}
 	|	CONFIG '=' VALUE ';'
 		{
-			in->config(*$1, *$3);
+			in->config($1->to_string (), *$3);
 			delete $1;
 			delete $3;
 		}
 	|	CONFIG '=' NUMBER ';'
 		{
-			in->config(*$1, $3);
+			in->config($1->to_string (), $3);
 			delete $1;
 		}
 ;
