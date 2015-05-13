@@ -6,6 +6,7 @@
 #include "src/dfa/dfa.h"
 #include "src/globals.h"
 #include "src/parse/parser.h"
+#include "src/parse/symbol.h"
 #include "src/parse/scanner.h"
 #include "y.tab.h"
 

@@ -55,6 +55,7 @@ SRC_HDR = \
 	$(srcdir)/src/parse/input.h \
 	$(srcdir)/src/parse/parser.h \
 	$(srcdir)/src/parse/scanner.h \
+	$(srcdir)/src/parse/symbol.h \
 	$(srcdir)/src/parse/token.h \
 	$(srcdir)/src/util/allocate.h \
 	$(srcdir)/src/util/c99_stdint.h \
@@ -94,6 +95,7 @@ SRC = \
 	$(srcdir)/src/mbo_getopt.cc \
 	$(srcdir)/src/parse/input.cc \
 	$(srcdir)/src/parse/scanner.cc \
+	$(srcdir)/src/parse/symbol.cc \
 	$(srcdir)/src/util/range.cc \
 	$(srcdir)/src/util/substr.cc
 # omit SRC_PARSER here; include it in EXTRA_DIST instead

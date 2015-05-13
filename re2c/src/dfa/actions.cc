@@ -10,36 +10,11 @@
 #include "src/dfa/encoding/utf16/utf16_regexp.h"
 #include "src/dfa/encoding/utf8/utf8_regexp.h"
 #include "src/globals.h"
-#include "src/parse/parser.h"
+#include "src/parse/scanner.h"
 #include "src/util/allocate.h"
 
 namespace re2c
 {
-
-void Symbol::ClearTable()
-{
-	for (SymbolTable::iterator it = symbol_table.begin(); it != symbol_table.end(); ++it)
-	{
-		delete it->second;
-	}
-	
-	symbol_table.clear();
-}
-
-Symbol::SymbolTable Symbol::symbol_table;
-
-Symbol *Symbol::find(const SubStr &str)
-{
-	const std::string ss(str.to_string());
-	SymbolTable::const_iterator it = symbol_table.find(ss);
-
-	if (it == symbol_table.end())
-	{
-		return (*symbol_table.insert(SymbolTable::value_type(ss, new Symbol(str))).first).second;
-	}
-	
-	return (*it).second;
-}
 
 const Ins* showIns(std::ostream &o, const Ins &i, const Ins &base)
 {
