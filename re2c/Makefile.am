@@ -37,6 +37,7 @@ SRC_HDR = \
 	$(srcdir)/src/codegen/print.h \
 	$(srcdir)/src/codegen/scc.h \
 	$(srcdir)/src/codegen/skeleton/skeleton.h \
+	$(srcdir)/src/dfa/action.h \
 	$(srcdir)/src/dfa/encoding/enc.h \
 	$(srcdir)/src/dfa/encoding/range_suffix.h \
 	$(srcdir)/src/dfa/encoding/utf16/utf16.h \
@@ -48,6 +49,7 @@ SRC_HDR = \
 	$(srcdir)/src/dfa/dfa.h \
 	$(srcdir)/src/dfa/ins.h \
 	$(srcdir)/src/dfa/re.h \
+	$(srcdir)/src/dfa/state.h \
 	$(srcdir)/src/globals.h \
 	$(srcdir)/src/mbo_getopt.h \
 	$(srcdir)/src/parse/input.h \
@@ -75,6 +77,7 @@ SRC = \
 	$(srcdir)/src/codegen/print.cc \
 	$(srcdir)/src/codegen/scc.cc \
 	$(srcdir)/src/codegen/skeleton/skeleton.cc \
+	$(srcdir)/src/dfa/actions.cc \
 	$(srcdir)/src/dfa/encoding/enc.cc \
 	$(srcdir)/src/dfa/encoding/range_suffix.cc \
 	$(srcdir)/src/dfa/encoding/utf16/utf16.cc \
@@ -83,8 +86,8 @@ SRC = \
 	$(srcdir)/src/dfa/encoding/utf8/utf8.cc \
 	$(srcdir)/src/dfa/encoding/utf8/utf8_range.cc \
 	$(srcdir)/src/dfa/encoding/utf8/utf8_regexp.cc \
-	$(srcdir)/src/dfa/actions.cc \
 	$(srcdir)/src/dfa/dfa.cc \
+	$(srcdir)/src/dfa/state.cc \
 	$(srcdir)/src/main.cc \
 	$(srcdir)/src/mbo_getopt.cc \
 	$(srcdir)/src/parse/input.cc \
