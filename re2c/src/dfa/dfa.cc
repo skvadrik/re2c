@@ -127,7 +127,7 @@ DFA::DFA(Ins *ins, uint32_t ni, uint32_t lb, uint32_t ub, const Char *rep)
 
 	delete [] work;
 	delete [] goTo;
-	delete [] span;
+	operator delete (span);
 }
 
 DFA::~DFA()

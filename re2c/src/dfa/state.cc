@@ -22,7 +22,7 @@ State::~State ()
 {
 	delete action;
 	delete [] kernel;
-	delete [] go.span;
+	operator delete (go.span);
 }
 
 std::ostream & operator << (std::ostream & o, const State & s)

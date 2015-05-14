@@ -137,7 +137,7 @@ GoBitmap::GoBitmap (const Span * span, uint32_t nSpans, const Span * hspan, uint
 	lgo = bSpans == 0
 		? NULL
 		:  new SwitchIf (bspan, bSpans, next);
-	delete [] bspan;
+	operator delete (bspan);
 }
 
 const uint32_t CpgotoTable::TABLE_SIZE = 0x100;

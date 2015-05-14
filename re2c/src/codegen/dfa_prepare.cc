@@ -136,7 +136,7 @@ void DFA::findBaseState()
 
 					if (nSpans < s->go.nSpans)
 					{
-						delete [] s->go.span;
+						operator delete (s->go.span);
 						s->go.nSpans = nSpans;
 						s->go.span = allocate<Span> (nSpans);
 						memcpy(s->go.span, span, nSpans*sizeof(Span));
@@ -148,7 +148,7 @@ void DFA::findBaseState()
 		}
 	}
 
-	delete [] span;
+	operator delete (span);
 }
 
 void DFA::prepare(uint32_t & max_fill)

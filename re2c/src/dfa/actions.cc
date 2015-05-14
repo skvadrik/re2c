@@ -1020,8 +1020,8 @@ CharSet::CharSet()
 	
 CharSet::~CharSet()
 {
-	delete[] rep;
-	delete[] ptn;
+	operator delete (rep);
+	operator delete (ptn);
 }
 
 smart_ptr<DFA> genCode(RegExp *re, Output & output, uint32_t ind)

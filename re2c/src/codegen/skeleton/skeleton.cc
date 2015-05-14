@@ -247,7 +247,7 @@ Skeleton::Skeleton (const DFA & dfa)
 
 Skeleton::~Skeleton ()
 {
-	delete [] nodes;
+	operator delete (nodes);
 }
 
 void Skeleton::generate_paths (std::vector<Path> & results)
