@@ -34,15 +34,6 @@ private:
 	SubStr & operator = (const SubStr &);
 };
 
-class Str: public SubStr
-{
-public:
-	explicit Str(const char*);
-	Str(const SubStr&);
-	Str();
-	virtual ~Str();
-};
-
 inline std::ostream& operator<<(std::ostream& o, const SubStr &s)
 {
 	s.out(o);

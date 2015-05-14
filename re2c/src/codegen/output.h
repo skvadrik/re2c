@@ -12,8 +12,6 @@
 namespace re2c
 {
 
-class Str;
-
 struct OutputFragment
 {
 	enum type_t
@@ -69,7 +67,6 @@ struct OutputFile
 	friend OutputFile & operator << (OutputFile & o, uint32_t n);
 	friend OutputFile & operator << (OutputFile & o, const std::string & s);
 	friend OutputFile & operator << (OutputFile & o, const char * s);
-	friend OutputFile & operator << (OutputFile & o, const Str & s);
 
 	void insert_line_info ();
 	void insert_state_goto (uint32_t ind, uint32_t start_label);

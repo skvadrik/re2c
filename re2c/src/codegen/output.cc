@@ -6,7 +6,6 @@
 #include "src/codegen/output.h"
 #include "src/codegen/print.h"
 #include "src/globals.h"
-#include "src/util/substr.h" // operator << for Str
 
 namespace re2c
 {
@@ -135,12 +134,6 @@ OutputFile & operator << (OutputFile & u, const std::string & s)
 }
 
 OutputFile & operator << (OutputFile & u, const char * s)
-{
-	u.stream () << s;
-	return u;
-}
-
-OutputFile & operator << (OutputFile & u, const Str & s)
 {
 	u.stream () << s;
 	return u;
