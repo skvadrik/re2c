@@ -88,7 +88,6 @@ void context_rule(CondList *clist, RegExp *expr, RegExp *look, const std::string
 		: RegExp::SHARED;
 	for(CondList::const_iterator it = clist->begin(); it != clist->end(); ++it)
 	{
-		//Str *condcpy = newcond ? new Str(*newcond) : newcond;
 		Token *token = new Token(code, in->get_fname (), in->get_cline (), newcond);//condcpy);
 		RuleOp *rule = new RuleOp(expr, look, token, accept++, ins_access);
 
@@ -122,7 +121,7 @@ void setup_rule(CondList *clist, Token *code)
 		{
 			in->fatalf_at(code->line, "code to setup rule '%s' is already defined", it->c_str());
 		}
-		ruleSetupMap[*it] = std::make_pair(code->line, code->text.to_string());
+		ruleSetupMap[*it] = std::make_pair(code->line, code->text);
 	}
 	delete clist;
 	delete code;

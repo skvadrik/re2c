@@ -10,6 +10,7 @@
 #include "src/parse/input.h"
 #include "src/parse/token.h"
 #include "src/util/forbid_copy.h"
+#include "src/util/substr.h"
 
 namespace re2c
 {

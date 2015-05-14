@@ -1,3 +1,5 @@
+#include <string.h>
+
 #include "src/dfa/dfa.h"
 #include "src/util/allocate.h"
 

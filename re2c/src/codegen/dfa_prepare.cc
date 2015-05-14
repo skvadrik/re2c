@@ -1,3 +1,5 @@
+#include <string.h>
+
 #include "src/codegen/bitmap.h"
 #include "src/codegen/scc.h"
 #include "src/dfa/dfa.h"
