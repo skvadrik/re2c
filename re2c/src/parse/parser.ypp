@@ -14,7 +14,6 @@
 #include "src/codegen/dfa_emit.h" // genTypes
 #include "src/globals.h"
 #include "src/parse/parser.h"
-#include "src/parse/symbol.h"
 #include "src/util/c99_stdint.h"
 #include "src/util/smart_ptr.h"
 
@@ -39,6 +38,7 @@ static SetupMap            ruleSetupMap;
 static Token               *ruleDefault = NULL;
 static DefaultMap          ruleDefaultMap;
 static bool                foundRules;
+static symbol_table_t symbol_table;
 
 /* Bison version 1.875 emits a definition that is not working
  * with several g++ version. Hence we disable it here.
@@ -80,7 +80,7 @@ void context_none(CondList *clist)
 	in->fatal("no expression specified");
 }
 
-void context_rule(CondList *clist, RegExp *expr, RegExp *look, Str *newcond, Token *code)
+void context_rule(CondList *clist, RegExp *expr, RegExp *look, const std::string * newcond, Token *code)
 {
 	context_check(clist);
 	const RegExp::InsAccess ins_access = clist->size() > 1
@@ -149,13 +149,12 @@ void default_rule(CondList *clist, Token *code)
 %start	spec
 
 %union {
-	re2c::Symbol	*symbol;
 	re2c::RegExp	*regexp;
 	re2c::Token 	*token;
 	char        	op;
 	int         	number;
 	re2c::ExtOp 	extop;
-	re2c::Str   	*str;
+	std::string	*str;
 	re2c::CondList	*clist;
 };
 
@@ -165,11 +164,10 @@ void default_rule(CondList *clist, Token *code)
 %type	<op>		CLOSE	STAR	SETUP
 %type	<op>		close
 %type	<extop>		CLOSESIZE
-%type	<symbol>	ID	FID
 %type	<token>		CODE
 %type	<regexp>	RANGE	STRING
 %type	<regexp>	rule	look	expr	diff	term	factor	primary
-%type	<str>		CONFIG	VALUE	newcond
+%type	<str>		CONFIG	VALUE	newcond	ID	FID
 %type	<clist>		cond	clist
 %type	<number>	NUMBER
 
@@ -189,21 +187,21 @@ spec:
 decl:
 		ID '=' expr ';'
 		{
-			if ($1->re)
+			if (!symbol_table.insert (std::make_pair (* $1, $3)).second)
 			{
 				in->fatal("sym already defined");
 			}
+			delete $1;
 			$3->ins_access = RegExp::PRIVATE;
-			$1->re = $3;
 		}
 	|	FID expr
 		{
-			if ($1->re)
+			if (!symbol_table.insert (std::make_pair (* $1, $2)).second)
 			{
 				in->fatal("sym already defined");
 			}
+			delete $1;
 			$2->ins_access = RegExp::PRIVATE;
-			$1->re = $2;
 		}
 	|	ID '=' expr '/'
 		{
@@ -215,13 +213,13 @@ decl:
 		}
 	|	CONFIG '=' VALUE ';'
 		{
-			in->config($1->to_string (), *$3);
+			in->config (* $1, * $3);
 			delete $1;
 			delete $3;
 		}
 	|	CONFIG '=' NUMBER ';'
 		{
-			in->config($1->to_string (), $3);
+			in->config (* $1, $3);
 			delete $1;
 		}
 ;
@@ -353,11 +351,13 @@ clist:
 		ID
 		{
 			$$ = new CondList();
-			$$->insert($1->GetName().to_string());
+			$$->insert(* $1);
+			delete $1;
 		}
 	|	clist ',' ID
 		{
-			$1->insert($3->GetName().to_string());
+			$1->insert(* $3);
+			delete $3;
 			$$ = $1;
 		}
 ;
@@ -369,7 +369,7 @@ newcond:
 		}
 	|	'=' '>' ID
 		{
-			$$ = new Str($3->GetName().to_string().c_str());
+			$$ = $3;
 		}
 ;
 
@@ -469,11 +469,13 @@ close:
 primary:
 		ID
 		{
-			if(!$1->re)
+			symbol_table_t::iterator i = symbol_table.find (* $1);
+			delete $1;
+			if (i == symbol_table.end ())
 			{
 				in->fatal("can't find symbol");
 			}
-			$$ = $1->re;
+			$$ = i->second;
 		}
 	|	RANGE
 		{
@@ -719,7 +721,7 @@ void parse_cleanup()
 {
 	RegExp::vFreeList.clear();
 	Range::vFreeList.clear();
-	Symbol::ClearTable();
+	symbol_table.clear ();
 	specMap.clear();
 	specStar.clear();
 	specNone = NULL;

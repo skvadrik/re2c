@@ -6,7 +6,6 @@
 #include "src/dfa/dfa.h"
 #include "src/globals.h"
 #include "src/parse/parser.h"
-#include "src/parse/symbol.h"
 #include "src/parse/scanner.h"
 #include "y.tab.h"
 
@@ -353,7 +352,7 @@ scan:
 						fatal("curly braces for names only allowed with -F switch");
 					}
 					cur = cursor;
-					yylval.symbol = Symbol::find(token(1, cur - tok - 2));
+					yylval.str = new std::string (tok + 1, cur - tok - 2);
 					return ID;
 				}
 
@@ -361,26 +360,26 @@ scan:
 					cur = cursor;
 					tok += 5; /* skip "re2c:" */
 					iscfg = 1;
-					yylval.str = new Str(token());
+					yylval.str = new std::string (tok, cur - tok);
 					return CONFIG;
 				}
 
 	name / (space+ [^=>,])	{
 					cur = ptr > tok ? ptr - 1 : cursor;
-					yylval.symbol = Symbol::find(token());
+					yylval.str = new std::string (tok, cur - tok);
 					return FFlag ? FID : ID;
 				}
 
 	name / (space* [=>,])	{
 					cur = ptr > tok ? ptr - 1 : cursor;
-					yylval.symbol = Symbol::find(token());
+					yylval.str = new std::string (tok, cur - tok);
 					return ID;
 				}
 
 	name / [^]	{
 					if (!FFlag) {
 						cur = cursor;
-						yylval.symbol = Symbol::find(token());
+						yylval.str = new std::string (tok, cur - tok);
 						return ID;
 					} else {
 						/* Add one char in front and one behind instead of 's or "s */
@@ -587,7 +586,7 @@ value:
 				}
 	value		{
 					cur = cursor;
-					yylval.str = new Str(token());
+					yylval.str = new std::string (tok, cur - tok);
 					iscfg = 0;
 					return VALUE;
 				}

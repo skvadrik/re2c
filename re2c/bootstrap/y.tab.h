@@ -63,19 +63,18 @@ typedef union YYSTYPE
 /* Line 1685 of yacc.c  */
 #line 151 "../src/parse/parser.ypp"
 
-	re2c::Symbol	*symbol;
 	re2c::RegExp	*regexp;
 	re2c::Token 	*token;
 	char        	op;
 	int         	number;
 	re2c::ExtOp 	extop;
-	re2c::Str   	*str;
+	std::string	*str;
 	re2c::CondList	*clist;
 
 
 
 /* Line 1685 of yacc.c  */
-#line 79 "./y.tab.h"
+#line 78 "./y.tab.h"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */

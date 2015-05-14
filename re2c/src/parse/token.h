@@ -18,7 +18,7 @@ public:
 
 public:
 	Token(const SubStr&, const std::string&, uint32_t);
-	Token(const Token*, const std::string&, uint32_t, const Str*);
+	Token(const Token*, const std::string&, uint32_t, const std::string *);
 	Token (const Token & t);
 	~Token();
 
@@ -36,9 +36,9 @@ inline Token::Token(const SubStr& t, const std::string& s, uint32_t l)
 	;
 }
 
-inline Token::Token(const Token* t, const std::string& s, uint32_t l, const Str *c)
+inline Token::Token(const Token* t, const std::string& s, uint32_t l, const std::string * c)
 	: text(t ? t->text.to_string().c_str() : "")
-	, newcond(c ? c->to_string() : "")
+	, newcond(c ? * c : "")
 	, source(t ? t->source : s)
 	, line(t ? t->line : l)
 	, autogen(t == NULL)

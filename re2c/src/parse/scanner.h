@@ -80,7 +80,7 @@ public:
 	void fatal(uint32_t, const char*) const;
 
 	void config(const std::string &, int);
-	void config(const std::string &, const Str &);
+	void config(const std::string &, const std::string &);
 
 	void check_token_length(char *pos, uint32_t len) const;
 	SubStr token() const;

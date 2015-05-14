@@ -17,6 +17,7 @@ typedef std::set<std::string> CondList;
 typedef std::list<RuleOp*> RuleOpList;
 typedef std::map<std::string, std::pair<uint32_t, std::string> > SetupMap;
 typedef std::map<std::string, Token*> DefaultMap;
+typedef std::map<std::string, RegExp *> symbol_table_t;
 
 } // namespace re2c
 

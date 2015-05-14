@@ -140,7 +140,7 @@ static std::set<std::string> mapVariableKeys;
 static std::set<std::string> mapDefineKeys;
 static std::set<std::string> mapLabelKeys;
 
-void Scanner::config(const std::string & cfg, const Str & val)
+void Scanner::config(const std::string & cfg, const std::string & val)
 {
 	if (mapDefineKeys.empty())
 	{
@@ -175,15 +175,16 @@ void Scanner::config(const std::string & cfg, const Str & val)
 
 	std::string strVal;
 
-	if (val.len >= 2 && val.str[0] == val.str[val.len-1] 
-	&& (val.str[0] == '"' || val.str[0] == '\''))
+	const uint32_t val_len = val.size ();
+	if (val_len >= 2 && val[0] == val[val_len - 1]
+		&& (val[0] == '"' || val[0] == '\''))
 	{
-		SubStr tmp(val.str + 1, val.len - 2);
-		unescape(tmp, strVal);
+		SubStr tmp (val.c_str () + 1, val_len - 2);
+		unescape (tmp, strVal);
 	}
 	else
 	{
-		strVal = val.to_string();
+		strVal = val;
 	}
 
 	if (cfg == "indent:string")
