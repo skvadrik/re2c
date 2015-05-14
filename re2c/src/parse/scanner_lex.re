@@ -256,11 +256,11 @@ scan:
 					cur = cursor;
 					if (bCaseInsensitive || bCaseInverted)
 					{
-						yylval.regexp = strToCaseInsensitiveRE(token());
+						yylval.regexp = strToCaseInsensitiveRE(token(1, cur - tok - 2));
 					}
 					else
 					{
-						yylval.regexp = strToRE(token());
+						yylval.regexp = strToRE(token(1, cur - tok - 2));
 					}
 					return STRING;
 				}
@@ -269,11 +269,11 @@ scan:
 					cur = cursor;
 					if (bCaseInverted)
 					{
-						yylval.regexp = strToRE(token());
+						yylval.regexp = strToRE(token(1, cur - tok - 2));
 					}
 					else
 					{
-						yylval.regexp = strToCaseInsensitiveRE(token());
+						yylval.regexp = strToCaseInsensitiveRE(token(1, cur - tok - 2));
 					}
 					return STRING;
 				}
@@ -386,11 +386,11 @@ scan:
 						cur = cursor;
 						if (bCaseInsensitive || bCaseInverted)
 						{
-							yylval.regexp = strToCaseInsensitiveRE(raw_token("\""));
+							yylval.regexp = strToCaseInsensitiveRE(token());
 						}
 						else
 						{
-							yylval.regexp = strToRE(raw_token("\""));
+							yylval.regexp = strToRE(token());
 						}
 						return STRING;
 					}

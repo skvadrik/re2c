@@ -450,11 +450,6 @@ void Scanner::check_token_length(char *pos, uint32_t len) const
 	}
 }
 
-Str Scanner::raw_token(std::string enclosure) const
-{
-	return Str(std::string(enclosure + token().to_string() + enclosure).c_str());
-}
-
 void Scanner::reuse()
 {
 	next_label = 0;

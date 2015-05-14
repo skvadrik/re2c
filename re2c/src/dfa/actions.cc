@@ -759,9 +759,6 @@ RegExp * Scanner::matchSymbol(uint32_t c) const
 
 RegExp * Scanner::strToRE(SubStr s) const
 {
-	s.len -= 2;
-	s.str += 1;
-
 	if (s.len == 0)
 		return new NullOp;
 
@@ -775,9 +772,6 @@ RegExp * Scanner::strToRE(SubStr s) const
 
 RegExp * Scanner::strToCaseInsensitiveRE(SubStr s) const
 {
-	s.len -= 2;
-	s.str += 1;
-
 	if (s.len == 0)
 		return new NullOp;
 

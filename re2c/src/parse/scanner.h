@@ -86,7 +86,6 @@ public:
 	void check_token_length(char *pos, uint32_t len) const;
 	SubStr token() const;
 	SubStr token(uint32_t start, uint32_t len) const;
-	Str raw_token(std::string enclosure) const;
 
 	uint32_t unescape(SubStr &s) const;
 	std::string& unescape(SubStr& str_in, std::string& str_out) const;
