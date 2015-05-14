@@ -50,7 +50,7 @@ AC_CHECK_SIZEOF([0i8],       [], [[]])
 
 
 # checks for library functions
-AC_CHECK_FUNCS([strdup strndup])
+AC_CHECK_FUNCS([strdup])
 
 
 AC_CONFIG_FILES([\

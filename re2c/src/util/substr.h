@@ -1,13 +1,8 @@
-/* $Id$ */
-#ifndef _substr_h
-#define _substr_h
+#ifndef __SUBSTR__
+#define __SUBSTR__
 
-#include <iostream>
-#include <string>
-#include <string.h>
-
-#include "config.h"
 #include "src/util/c99_stdint.h"
+#include "src/util/forbid_copy.h"
 
 namespace re2c
 {
@@ -19,71 +14,19 @@ public:
 	const char * const org;
 	uint32_t len;
 
-public:
-	friend bool operator==(const SubStr &, const SubStr &);
-	SubStr(const uint8_t *, uint32_t);
-	SubStr(const char*, uint32_t);
-	explicit SubStr(const char*);
-	SubStr(const SubStr&);
-	virtual ~SubStr();
-	void out(std::ostream&) const;
-	std::string to_string() const;
-	uint32_t ofs() const;
+	inline SubStr (const char * s, uint32_t l)
+		: str (s)
+		, org (s)
+		, len (l)
+	{}
+	inline uint32_t ofs () const
+	{
+		return str - org;
+	}
 
-private:
-	SubStr & operator = (const SubStr &);
+	FORBID_COPY (SubStr);
 };
 
-inline std::ostream& operator<<(std::ostream& o, const SubStr &s)
-{
-	s.out(o);
-	return o;
-}
+} // namespace re2c
 
-inline std::ostream& operator<<(std::ostream& o, const SubStr* s)
-{
-	return o << *s;
-}
-
-inline SubStr::SubStr(const uint8_t *s, uint32_t l)
-		: str((char*)s), org((char*)s), len(l)
-{ }
-
-inline SubStr::SubStr(const char *s, uint32_t l)
-		: str(s), org(s), len(l)
-{ }
-
-inline SubStr::SubStr(const char *s)
-		: str(s), org(s), len(strlen(s))
-{ }
-
-inline SubStr::SubStr(const SubStr &s)
-		: str(s.str), org(s.str), len(s.len)
-{ }
-
-inline SubStr::~SubStr()
-{ }
-
-inline std::string SubStr::to_string() const
-{
-	return str && len ? std::string(str, len) : std::string();
-}
-
-inline uint32_t SubStr::ofs() const
-{
-	return str - org;
-}
-
-} // end namespace re2c
-
-#ifndef HAVE_STRNDUP
-
-char *strndup(const char *str, size_t len);
-
-#endif
-
-#if defined(_MSC_VER) && !defined(vsnprintf)
-#define vsnprintf _vsnprintf
-#endif
-
-#endif
+#endif // __SUBSTR__

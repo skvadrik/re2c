@@ -254,26 +254,28 @@ scan:
 
 	dstring		{
 					cur = cursor;
+					SubStr s (tok + 1, cur - tok - 2);
 					if (bCaseInsensitive || bCaseInverted)
 					{
-						yylval.regexp = strToCaseInsensitiveRE(token(1, cur - tok - 2));
+						yylval.regexp = strToCaseInsensitiveRE (s);
 					}
 					else
 					{
-						yylval.regexp = strToRE(token(1, cur - tok - 2));
+						yylval.regexp = strToRE (s);
 					}
 					return STRING;
 				}
 
 	sstring		{
 					cur = cursor;
+					SubStr s (tok + 1, cur - tok - 2);
 					if (bCaseInverted)
 					{
-						yylval.regexp = strToRE(token(1, cur - tok - 2));
+						yylval.regexp = strToRE (s);
 					}
 					else
 					{
-						yylval.regexp = strToCaseInsensitiveRE(token(1, cur - tok - 2));
+						yylval.regexp = strToCaseInsensitiveRE (s);
 					}
 					return STRING;
 				}
@@ -287,13 +289,15 @@ scan:
 
 	istring		{
 					cur = cursor;
-					yylval.regexp = invToRE(token());
+					SubStr s (tok, cur - tok);
+					yylval.regexp = invToRE (s);
 					return RANGE;
 				}
 
 	cstring		{
 					cur = cursor;
-					yylval.regexp = ranToRE(token());
+					SubStr s (tok, cur - tok);
+					yylval.regexp = ranToRE (s);
 					return RANGE;
 				}
 
@@ -384,13 +388,14 @@ scan:
 					} else {
 						/* Add one char in front and one behind instead of 's or "s */
 						cur = cursor;
+						SubStr s (tok, cur - tok);
 						if (bCaseInsensitive || bCaseInverted)
 						{
-							yylval.regexp = strToCaseInsensitiveRE(token());
+							yylval.regexp = strToCaseInsensitiveRE (s);
 						}
 						else
 						{
-							yylval.regexp = strToRE(token());
+							yylval.regexp = strToRE (s);
 						}
 						return STRING;
 					}
@@ -580,7 +585,7 @@ value:
 /*!re2c
 	number		{
 					cur = cursor;
-					yylval.number = atoi(token().to_string().c_str());
+					yylval.number = atoi(std::string (tok, cur - tok).c_str());
 					iscfg = 0;
 					return NUMBER;
 				}
@@ -614,12 +619,12 @@ sourceline:
 /*!re2c	
 	lineno		{
 					cur = cursor;
-					cline = atoi(token().to_string().c_str());
+					cline = atoi(std::string (tok, cur - tok).c_str());
 					goto sourceline; 
 				}
 	dstring		{
 					cur = cursor;
-					escape (in.file_name, token(1, cur - tok - 2).to_string());
+					escape (in.file_name, std::string (tok + 1, cur - tok - 2));
 			  		goto sourceline; 
 				}
 	"\n"			{

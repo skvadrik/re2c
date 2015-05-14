@@ -1,6 +1,12 @@
 #include <stdarg.h>
+#include <string.h>
 
 #include "scanner.h"
+
+// used by Scanner::fatal_at and Scanner::fatalf
+#if defined(_MSC_VER) && !defined(vsnprintf)
+#    define vsnprintf _vsnprintf
+#endif
 
 namespace re2c {
 
@@ -439,14 +445,6 @@ Scanner::~Scanner()
 	if (bot)
 	{
 		delete [] bot;
-	}
-}
-
-void Scanner::check_token_length(char *pos, uint32_t len) const
-{
-	if (pos < bot || pos + len > top)
-	{
-		fatal("Token exceeds limit");
 	}
 }
 

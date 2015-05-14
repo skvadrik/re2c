@@ -94,8 +94,7 @@ SRC = \
 	$(srcdir)/src/mbo_getopt.cc \
 	$(srcdir)/src/parse/input.cc \
 	$(srcdir)/src/parse/scanner.cc \
-	$(srcdir)/src/util/range.cc \
-	$(srcdir)/src/util/substr.cc
+	$(srcdir)/src/util/range.cc
 # omit SRC_PARSER here; include it in EXTRA_DIST instead
 # (automake generates standard build rules for all YACC-ish
 # sources, they will conflict with our custom build rule).

@@ -757,7 +757,7 @@ RegExp * Scanner::matchSymbol(uint32_t c) const
 		return new MatchOp(new Range(c, c + 1));
 }
 
-RegExp * Scanner::strToRE(SubStr s) const
+RegExp * Scanner::strToRE (SubStr & s) const
 {
 	if (s.len == 0)
 		return new NullOp;
@@ -770,7 +770,7 @@ RegExp * Scanner::strToRE(SubStr s) const
 	return re;
 }
 
-RegExp * Scanner::strToCaseInsensitiveRE(SubStr s) const
+RegExp * Scanner::strToCaseInsensitiveRE (SubStr & s) const
 {
 	if (s.len == 0)
 		return new NullOp;
@@ -828,7 +828,7 @@ RegExp * Scanner::matchSymbolRange(Range * r) const
 		return new MatchOp(r);
 }
 
-RegExp * Scanner::ranToRE(SubStr s) const
+RegExp * Scanner::ranToRE (SubStr & s) const
 {
 	s.len -= 2;
 	s.str += 1;
@@ -839,7 +839,7 @@ RegExp * Scanner::ranToRE(SubStr s) const
 	return matchSymbolRange(mkRange(s));
 }
 
-RegExp * Scanner::invToRE(SubStr s) const
+RegExp * Scanner::invToRE (SubStr & s) const
 {
 	s.len -= 3;
 	s.str += 2;
