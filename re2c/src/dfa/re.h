@@ -185,7 +185,6 @@ public:
 	{
 		o << exp << "/" << ctx << ";";
 	}
-	RuleOp* copy(uint32_t) const;
 
 	FORBID_COPY (RuleOp);
 };

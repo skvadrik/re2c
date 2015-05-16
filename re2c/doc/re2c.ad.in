@@ -770,7 +770,8 @@ generated blocks has its own precondition. The precondition is given by the
 interface define *YYGETCONDITON()* and must be of type *YYCONDTYPE*.
 
 There are two special rule types. First, the rules of the condition *$$*$$* are 
-merged to all  conditions. And second the empty condition list allows to 
+merged to all conditions (note that they have lower priority than other rules
+of that condition). And second the empty condition list allows to 
 provide a code block that does not have a scanner part. Meaning it does not 
 allow any regular expression. The condition value referring to this special 
 block is always the one with the enumeration value 0. This way the code of this

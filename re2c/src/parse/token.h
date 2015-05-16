@@ -2,6 +2,7 @@
 #define __TOKEN__
 
 #include "src/util/c99_stdint.h"
+#include "src/util/forbid_copy.h"
 
 namespace re2c
 {
@@ -17,11 +18,8 @@ public:
 
 	Token (const char *, uint32_t, const std::string &, uint32_t);
 	Token (const Token *, const std::string &, uint32_t, const std::string *);
-	Token (const Token & t);
-	~Token ();
 
-private:
-	Token & operator = (const Token &);
+	FORBID_COPY (Token);
 };
 
 inline Token::Token (const char * t, uint32_t t_len, const std::string & s, uint32_t l)
@@ -46,9 +44,6 @@ inline Token::Token (const Token & t)
 	, source (t.source)
 	, line (t.line)
 	, autogen (t.autogen)
-{}
-
-inline Token::~Token ()
 {}
 
 } // namespace re2c

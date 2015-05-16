@@ -892,12 +892,6 @@ RuleOp::RuleOp(RegExp *e, RegExp *c, Token *t, uint32_t a, InsAccess access)
 	ins_access = access;
 }
 
-RuleOp* RuleOp::copy(uint32_t a) const
-{
-	Token *token = new Token(*code);
-	return new RuleOp(exp, ctx, token, a, ins_access);
-}
-
 void RuleOp::calcSize(Char *rep)
 {
 	exp->calcSize(rep);

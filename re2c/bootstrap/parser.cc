@@ -2406,12 +2406,21 @@ void parse(Scanner& i, Output & o)
 			{
 				if (!specStar.empty())
 				{
+					// <*> rules must have the lowest priority
+					// now that all rules have been parsed, we can fix it
+					for (RuleOpList::const_iterator itOp = specStar.begin(); itOp != specStar.end(); ++itOp)
+					{
+						(*itOp)->accept = accept++;
+					}
+					// merge <*> rules to all conditions
+					// note that all conditions use the same regexp for <*> rules,
+					// but compile it separately because of RegExp::PRIVATE attribute
 					for (it = specMap.begin(); it != specMap.end(); ++it)
 					{
 						assert(it->second.second);
 						for (RuleOpList::const_iterator itOp = specStar.begin(); itOp != specStar.end(); ++itOp)
 						{
-							it->second.second = mkAlt((*itOp)->copy(accept++), it->second.second);
+							it->second.second = mkAlt(*itOp, it->second.second);
 						}
 					}
 				}
