@@ -63,7 +63,6 @@ DFA::DFA(Ins *ins, uint32_t ni, uint32_t lb, uint32_t ub, const Char *rep)
 
 		Ins **cP, **iP, *i;
 		uint32_t nGoTos = 0;
-		uint32_t j;
 
 		s->rule = NULL;
 
@@ -90,7 +89,7 @@ DFA::DFA(Ins *ins, uint32_t ni, uint32_t lb, uint32_t ub, const Char *rep)
 			}
 		}
 
-		for (j = 0; j < nGoTos; ++j)
+		for (uint32_t j = 0; j < nGoTos; ++j)
 		{
 			GoTo *go = &goTo[goTo[j].ch - lb];
 			i = (Ins*) go->to;
@@ -103,7 +102,7 @@ DFA::DFA(Ins *ins, uint32_t ni, uint32_t lb, uint32_t ub, const Char *rep)
 
 		s->go.nSpans = 0;
 
-		for (j = 0; j < nc;)
+		for (uint32_t j = 0; j < nc;)
 		{
 			State *to = (State*) goTo[rep[j]].to;
 
@@ -116,7 +115,7 @@ DFA::DFA(Ins *ins, uint32_t ni, uint32_t lb, uint32_t ub, const Char *rep)
 			s->go.nSpans++;
 		}
 
-		for (j = nGoTos; j-- > 0;)
+		for (uint32_t j = nGoTos; j-- > 0;)
 			goTo[goTo[j].ch - lb].to = NULL;
 
 		s->go.span = allocate<Span> (s->go.nSpans);

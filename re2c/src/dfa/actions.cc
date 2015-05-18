@@ -792,7 +792,7 @@ RegExp * Scanner::strToCaseInsensitiveRE (SubStr & s) const
 
 	while (s.len > 0)
 	{
-		uint32_t c = unescape(s);
+		c = unescape(s);
 
 		if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z'))
 		{
