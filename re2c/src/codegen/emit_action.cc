@@ -75,6 +75,11 @@ void emit_match (OutputFile & o, uint32_t ind, bool & readCh, const State * cons
 
 void emit_initial (OutputFile & o, uint32_t ind, bool & readCh, const State * const s, const Initial & initial)
 {
+	if (DFlag)
+	{
+		return;
+	}
+
 	if (!cFlag && !startLabelName.empty())
 	{
 		o << startLabelName << ":\n";

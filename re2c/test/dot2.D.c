@@ -2,7 +2,6 @@
 
 digraph re2c {
 
-
 1 -> 2 [label="[0x00]"]
 1 -> 4 [label="[0x01-0xFF]"]
 2 -> 3
