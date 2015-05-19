@@ -2,20 +2,35 @@
 #define __ACTION__
 
 #include <map>
+#include <string>
 
-#include "src/dfa/state.h"
-#include "src/util/forbid_copy.h"
+#include "src/util/c99_stdint.h"
 
 namespace re2c
 {
 
+struct OutputFile;
+class RuleOp;
+class State;
+
+struct Initial
+{
+	uint32_t label;
+	bool setMarker;
+
+	inline Initial (uint32_t l, bool b)
+		: label (l)
+		, setMarker (b)
+	{}
+};
+
+typedef std::map<uint32_t, const State *> accept_t;
+
 class Action
 {
 public:
-	State * state;
 	enum type_t
 	{
-		NONE,
 		MATCH,
 		INITIAL,
 		SAVE,
@@ -24,118 +39,80 @@ public:
 		RULE
 	} type;
 
-	explicit inline Action (State * s)
-		: state (s)
-		, type (NONE)
+private:
+	union
 	{
-		delete s->action;
-		s->action = this;
-	}
-	virtual ~Action () {}
-	inline bool readAhead () const
-	{
-		return (type != MATCH)
-			|| (state && state->next
-				&& state->next->action
-				&& (state->next->action->type != RULE));
-	}
-	virtual void emit (Output &, uint32_t, bool &, const std::string &) const = 0;
+		Initial * initial;
+		uint32_t save;
+		accept_t * accept;
+		const RuleOp * rule;
+	} info;
 
-	FORBID_COPY (Action);
-};
-
-class Match: public Action
-{
 public:
-	explicit inline Match (State * s)
-		: Action (s)
+	inline Action ()
+		: type (MATCH)
+		, info ()
+	{}
+	~Action ()
 	{
-		type = MATCH;
+		clear ();
 	}
-	void emit (Output &, uint32_t, bool &, const std::string &) const;
-};
-
-class Initial: public Action
-{
-public:
-	uint32_t label;
-	bool setMarker;
-
-	inline Initial (State * s, uint32_t l, bool b)
-		: Action (s)
-		, label (l)
-		, setMarker (b)
+	void set_initial (uint32_t label, bool used_marker)
 	{
+		clear ();
 		type = INITIAL;
+		info.initial = new Initial (label, used_marker);
 	}
-	void emit (Output &, uint32_t, bool &, const std::string &) const;
-};
-
-class Save: public Match
-{
-public:
-	uint32_t selector;
-
-	inline Save (State * s, uint32_t i)
-		: Match (s)
-		, selector (i)
+	void set_save (uint32_t save)
 	{
+		clear ();
 		type = SAVE;
+		info.save = save;
 	}
-	void emit (Output &, uint32_t, bool &, const std::string &) const;
-};
-
-class Move: public Action
-{
-public:
-	explicit inline Move (State * s)
-		: Action (s)
+	void set_move ()
 	{
+		clear ();
 		type = MOVE;
 	}
-	void emit (Output &, uint32_t, bool &, const std::string &) const;
-};
-
-class Accept: public Action
-{
-public:
-	typedef std::map<uint32_t, State *> RuleMap;
-
-	uint32_t nRules;
-	uint32_t * saves;
-	State ** rules;
-	RuleMap mapRules;
-
-	inline Accept (State * x, uint32_t n, uint32_t * s, State ** r)
-		: Action (x)
-		, nRules (n)
-		, saves (s)
-		, rules (r)
-		, mapRules ()
+	void set_accept (uint32_t rules_count, uint32_t * saves, State * const * rules)
 	{
+		clear ();
 		type = ACCEPT;
+		info.accept = new accept_t ();
+		for (uint32_t i = 0; i < rules_count; ++i)
+		{
+			if (saves[i] != ~0u)
+			{
+				(* info.accept)[saves[i]] = rules[i];
+			}
+		}
 	}
-	void emit (Output &, uint32_t, bool &, const std::string &) const;
-	void emitBinary (OutputFile & o, uint32_t ind, uint32_t l, uint32_t r, bool & readCh) const;
-	void genRuleMap ();
-
-	FORBID_COPY (Accept);
-};
-
-class Rule: public Action
-{
-public:
-	RuleOp * rule;
-
-	inline Rule (State * s, RuleOp * r)
-		: Action(s)
-		, rule(r)
+	void set_rule (const RuleOp * const rule)
 	{
+		clear ();
 		type = RULE;
+		info.rule = rule;
 	}
-	void emit (Output &, uint32_t, bool &, const std::string &) const;
+	friend void emit_action (const Action & action, OutputFile & o, uint32_t ind, bool & readCh, const State * const s, const std::string & condName);
 
-	FORBID_COPY (Rule);
+private:
+	void clear ()
+	{
+		switch (type)
+		{
+			case INITIAL:
+				delete info.initial;
+				break;
+			case ACCEPT:
+				delete info.accept;
+				break;
+			case MATCH:
+			case SAVE:
+			case MOVE:
+			case RULE:
+				break;
+		}
+	}
 };
 
 } // namespace re2c

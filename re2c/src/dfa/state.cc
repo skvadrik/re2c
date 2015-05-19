@@ -1,4 +1,3 @@
-#include "src/dfa/action.h"
 #include "src/dfa/state.h"
 
 namespace re2c
@@ -15,12 +14,11 @@ State::State ()
 	, isPreCtxt (false)
 	, isBase (false)
 	, go ()
-	, action (NULL)
+	, action ()
 {}
 
 State::~State ()
 {
-	delete action;
 	delete [] kernel;
 	operator delete (go.span);
 }

@@ -29,7 +29,7 @@ BOOTSTRAP_DOC_HTML = $(srcdir)/bootstrap/manual.html
 SRC_HDR = \
 	$(srcdir)/src/codegen/bitmap.h \
 	$(srcdir)/src/codegen/code_names.h \
-	$(srcdir)/src/codegen/dfa_emit.h \
+	$(srcdir)/src/codegen/emit.h \
 	$(srcdir)/src/codegen/go.h \
 	$(srcdir)/src/codegen/indent.h \
 	$(srcdir)/src/codegen/input_api.h \
@@ -68,8 +68,9 @@ SRC = \
 	$(SRC_SCANNER) \
 	$(srcdir)/src/codegen/bitmap.cc \
 	$(srcdir)/src/codegen/code_names.cc \
-	$(srcdir)/src/codegen/dfa_emit.cc \
-	$(srcdir)/src/codegen/dfa_prepare.cc \
+	$(srcdir)/src/codegen/emit_action.cc \
+	$(srcdir)/src/codegen/emit_dfa.cc \
+	$(srcdir)/src/codegen/prepare_dfa.cc \
 	$(srcdir)/src/codegen/go_construct.cc \
 	$(srcdir)/src/codegen/go_destruct.cc \
 	$(srcdir)/src/codegen/go_emit.cc \

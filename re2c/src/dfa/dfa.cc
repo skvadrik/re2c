@@ -121,9 +121,6 @@ DFA::DFA(Ins *ins, uint32_t ni, uint32_t lb, uint32_t ub, const Char *rep)
 		s->go.span = allocate<Span> (s->go.nSpans);
 
 		memcpy((char*) s->go.span, (char*) span, s->go.nSpans*sizeof(Span));
-
-		(void) new Match(s);
-
 	}
 
 	delete [] work;

@@ -81,7 +81,7 @@
 
 #include "config.h"
 #include "src/dfa/dfa.h"
-#include "src/codegen/dfa_emit.h" // genTypes
+#include "src/codegen/emit.h" // genTypes
 #include "src/globals.h"
 #include "src/parse/parser.h"
 #include "src/util/c99_stdint.h"

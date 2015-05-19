@@ -2,13 +2,12 @@
 #define __STATE__
 
 #include "src/codegen/go.h"
+#include "src/dfa/action.h"
 #include "src/dfa/re.h"
 #include "src/util/forbid_copy.h"
 
 namespace re2c
 {
-
-class Action;
 
 class State
 {
@@ -24,7 +23,7 @@ public:
 	bool isPreCtxt;
 	bool isBase;
 	Go go;
-	Action * action;
+	Action action;
 
 	State ();
 	~State ();

@@ -32,8 +32,8 @@ void DFA::findSCCs()
 void DFA::split(State *s)
 {
 	State *move = new State;
-	(void) new Move(move);
 	addState(&s->next, move);
+	move->action.set_move ();
 	move->link = s->link;
 	move->rule = s->rule;
 	move->go = s->go;
@@ -193,16 +193,13 @@ void DFA::prepare(uint32_t & max_fill)
 			{
 				if (s->go.span[i].to && !s->go.span[i].to->rule)
 				{
-					delete s->action;
-					s->action = NULL;
-
 					if (saves[s->rule->accept] == ~0u)
 					{
 						saves[s->rule->accept] = nSaves++;
 					}
 
 					bSaveOnHead |= s == head;
-					(void) new Save(s, saves[s->rule->accept]); // sets s->action
+					s->action.set_save (saves[s->rule->accept]);
 				}
 			}
 		}
@@ -214,7 +211,7 @@ void DFA::prepare(uint32_t & max_fill)
 	memset(rules, 0, (nRules)*sizeof(*rules));
 
 	State *accept = NULL;
-	Accept *accfixup = NULL;
+	State *accfixup = NULL;
 
 	for (s = head; s; s = s->next)
 	{
@@ -229,7 +226,7 @@ void DFA::prepare(uint32_t & max_fill)
 			if (!rules[s->rule->accept])
 			{
 				State *n = new State;
-				(void) new Rule(n, s->rule);
+				n->action.set_rule (s->rule);
 				rules[s->rule->accept] = n;
 				addState(&s->next, n);
 			}
@@ -243,8 +240,7 @@ void DFA::prepare(uint32_t & max_fill)
 			{
 				if (!ow)
 				{
-					ow = accept = new State;
-					accfixup = new Accept(accept, nRules, saves, rules);
+					ow = accept = accfixup = new State;
 					addState(&s->next, accept);
 				}
 
@@ -255,7 +251,7 @@ void DFA::prepare(uint32_t & max_fill)
 	
 	if (accfixup)
 	{
-		accfixup->genRuleMap();
+		accfixup->action.set_accept (nRules, saves, rules);
 	}
 
 	// split ``base'' states into two parts
@@ -286,9 +282,6 @@ void DFA::prepare(uint32_t & max_fill)
 
 	// find ``base'' state, if possible
 	findBaseState();
-
-	delete head->action;
-	head->action = NULL;
 
 	for (s = head; s; s = s->next)
 	{
