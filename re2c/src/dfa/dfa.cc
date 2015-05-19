@@ -45,8 +45,7 @@ DFA::DFA(Ins *ins, uint32_t ni, uint32_t lb, uint32_t ub, const Char *rep)
 	, free_ins(ins)
 	, free_rep(rep)
 	, bSaveOnHead (false)
-	, saves (NULL)
-	, rules (NULL)
+	, accept_map ()
 
 {
 	Ins **work = new Ins * [ni + 1];
@@ -139,8 +138,6 @@ DFA::~DFA()
 	}
 	delete [] free_ins;
 	delete [] free_rep;
-	delete [] saves;
-	delete [] rules;
 }
 
 void DFA::addState(State **a, State *s)

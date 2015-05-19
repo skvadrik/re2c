@@ -43,24 +43,26 @@ void genGoTo(OutputFile & o, uint32_t ind, const State *from, const State *to, b
 	}
 
 	o << indent(ind) << "goto " << labelPrefix << to->label << ";\n";
-	vUsedLabels.insert(to->label);
 }
 
 void State::emit(Output & output, uint32_t ind, bool &readCh, const std::string& condName) const
 {
 	OutputFile & o = output.source;
 
-	if (vUsedLabels.count(label))
+	if (!DFlag)
 	{
-		o << labelPrefix << label << ":\n";
-	}
-	if (dFlag && (action.type != Action::INITIAL))
-	{
-		o << indent(ind) << mapCodeName["YYDEBUG"] << "(" << label << ", " << input_api.expr_peek () << ");\n";
-	}
-	if (isPreCtxt && !DFlag)
-	{
-		o << input_api.stmt_backupctx (ind);
+		if (vUsedLabels.count(label))
+		{
+			o << labelPrefix << label << ":\n";
+		}
+		if (dFlag && (action.type != Action::INITIAL))
+		{
+			o << indent(ind) << mapCodeName["YYDEBUG"] << "(" << label << ", " << input_api.expr_peek () << ");\n";
+		}
+		if (isPreCtxt)
+		{
+			o << input_api.stmt_backupctx (ind);
+		}
 	}
 	emit_action (action, o, ind, readCh, this, condName);
 }
@@ -105,6 +107,10 @@ void DFA::emit(Output & output, uint32_t& ind, const RegExpMap* specMap, const s
 	for (s = head; s; s = s->next)
 	{
 		s->go.used_labels ();
+	}
+	for (accept_t::const_iterator it = accept_map.begin(); it != accept_map.end(); ++it)
+	{
+		vUsedLabels.insert(it->second->label);
 	}
 
 	// Save 'next_fill_index' and compute information about code generation

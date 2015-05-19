@@ -44,7 +44,7 @@ private:
 	{
 		Initial * initial;
 		uint32_t save;
-		accept_t * accept;
+		const accept_t * accept;
 		const RuleOp * rule;
 	} info;
 
@@ -74,18 +74,11 @@ public:
 		clear ();
 		type = MOVE;
 	}
-	void set_accept (uint32_t rules_count, uint32_t * saves, State * const * rules)
+	void set_accept (const accept_t * accept)
 	{
 		clear ();
 		type = ACCEPT;
-		info.accept = new accept_t ();
-		for (uint32_t i = 0; i < rules_count; ++i)
-		{
-			if (saves[i] != ~0u)
-			{
-				(* info.accept)[saves[i]] = rules[i];
-			}
-		}
+		info.accept = accept;
 	}
 	void set_rule (const RuleOp * const rule)
 	{
@@ -103,12 +96,10 @@ private:
 			case INITIAL:
 				delete info.initial;
 				break;
-			case ACCEPT:
-				delete info.accept;
-				break;
 			case MATCH:
 			case SAVE:
 			case MOVE:
+			case ACCEPT:
 			case RULE:
 				break;
 		}

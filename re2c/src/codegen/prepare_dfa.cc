@@ -179,7 +179,7 @@ void DFA::prepare(uint32_t & max_fill)
 	}
 
 	uint32_t nSaves = 0;
-	saves = new uint32_t[nRules];
+	uint32_t * saves = new uint32_t[nRules];
 	memset(saves, ~0, (nRules)*sizeof(*saves));
 
 	// mark backtracking points
@@ -206,8 +206,7 @@ void DFA::prepare(uint32_t & max_fill)
 	}
 
 	// insert actions
-	rules = new State * [nRules];
-
+	State ** rules = new State * [nRules];
 	memset(rules, 0, (nRules)*sizeof(*rules));
 
 	State *accept = NULL;
@@ -251,8 +250,17 @@ void DFA::prepare(uint32_t & max_fill)
 	
 	if (accfixup)
 	{
-		accfixup->action.set_accept (nRules, saves, rules);
+		for (uint32_t i = 0; i < nRules; ++i)
+		{
+			if (saves[i] != ~0u)
+			{
+				accept_map[saves[i]] = rules[i];
+			}
+		}
+		accfixup->action.set_accept (&accept_map);
 	}
+	delete [] saves;
+	delete [] rules;
 
 	// split ``base'' states into two parts
 	for (s = head; s; s = s->next)

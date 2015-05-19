@@ -195,7 +195,6 @@ void emit_accept (OutputFile & o, uint32_t ind, bool & readCh, const State * con
 				for (accept_t::const_iterator it = accept.begin(); it != accept.end(); ++it)
 				{
 					o << indent(ind) << "&&" << labelPrefix << it->second->label << ",\n";
-					vUsedLabels.insert(it->second->label);
 				}
 				o << indent(--ind) << "};\n";
 				o << indent(ind) << "goto *" << mapCodeName["yytarget"] << "[" << mapCodeName["yyaccept"] << "];\n";

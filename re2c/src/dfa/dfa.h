@@ -25,8 +25,7 @@ public:
 
 protected:
 	bool bSaveOnHead;
-	uint32_t * saves;
-	State ** rules;
+	accept_t accept_map;
 
 public:
 	DFA (Ins *, uint32_t, uint32_t, uint32_t, const Char *);
