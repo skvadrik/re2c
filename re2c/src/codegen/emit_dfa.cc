@@ -45,10 +45,8 @@ void genGoTo(OutputFile & o, uint32_t ind, const State *from, const State *to, b
 	o << indent(ind) << "goto " << labelPrefix << to->label << ";\n";
 }
 
-void State::emit(Output & output, uint32_t ind, bool &readCh, const std::string& condName) const
+void State::emit(OutputFile & o, uint32_t ind, bool &readCh, const std::string& condName) const
 {
-	OutputFile & o = output.source;
-
 	if (!DFlag)
 	{
 		if (vUsedLabels.count(label))
@@ -121,7 +119,7 @@ void DFA::emit(Output & output, uint32_t& ind, const RegExpMap* specMap, const s
 	for (s = head; s; s = s->next)
 	{
 		bool readCh = false;
-		s->emit(null_dev, ind, readCh, condName);
+		s->emit(null_dev.source, ind, readCh, condName);
 		s->go.emit(null_dev.source, ind, readCh);
 	}
 	if (last_fill_index < next_fill_index)
@@ -224,7 +222,7 @@ void DFA::emit(Output & output, uint32_t& ind, const RegExpMap* specMap, const s
 	for (s = head; s; s = s->next)
 	{
 		bool readCh = false;
-		s->emit(output, ind, readCh, condName);
+		s->emit(o, ind, readCh, condName);
 		s->go.emit(o, ind, readCh);
 	}
 

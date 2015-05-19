@@ -27,7 +27,7 @@ public:
 
 	State ();
 	~State ();
-	void emit (Output &, uint32_t, bool &, const std::string &) const;
+	void emit (OutputFile &, uint32_t, bool &, const std::string &) const;
 	friend std::ostream& operator << (std::ostream &, const State &);
 
 	FORBID_COPY (State);
