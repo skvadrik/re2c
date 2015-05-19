@@ -155,9 +155,6 @@ void DFA::findBaseState()
 
 void DFA::prepare(uint32_t & max_fill)
 {
-	State *s;
-	uint32_t i;
-
 	bUsedYYBitmap = false;
 
 	findSCCs();
@@ -165,7 +162,7 @@ void DFA::prepare(uint32_t & max_fill)
 
 	uint32_t nRules = 0;
 
-	for (s = head; s; s = s->next)
+	for (State * s = head; s; s = s->next)
 	{
 		s->depth = maxDist(s);
 		if (max_fill < s->depth)
@@ -185,11 +182,11 @@ void DFA::prepare(uint32_t & max_fill)
 	// mark backtracking points
 	bSaveOnHead = false;
 
-	for (s = head; s; s = s->next)
+	for (State * s = head; s; s = s->next)
 	{
 		if (s->rule)
 		{
-			for (i = 0; i < s->go.nSpans; ++i)
+			for (uint32_t i = 0; i < s->go.nSpans; ++i)
 			{
 				if (s->go.span[i].to && !s->go.span[i].to->rule)
 				{
@@ -212,7 +209,7 @@ void DFA::prepare(uint32_t & max_fill)
 	State *accept = NULL;
 	State *accfixup = NULL;
 
-	for (s = head; s; s = s->next)
+	for (State * s = head; s; s = s->next)
 	{
 		State * ow;
 
@@ -233,7 +230,7 @@ void DFA::prepare(uint32_t & max_fill)
 			ow = rules[s->rule->accept];
 		}
 
-		for (i = 0; i < s->go.nSpans; ++i)
+		for (uint32_t i = 0; i < s->go.nSpans; ++i)
 		{
 			if (!s->go.span[i].to)
 			{
@@ -263,13 +260,13 @@ void DFA::prepare(uint32_t & max_fill)
 	delete [] rules;
 
 	// split ``base'' states into two parts
-	for (s = head; s; s = s->next)
+	for (State * s = head; s; s = s->next)
 	{
 		s->isBase = false;
 
 		if (s->link)
 		{
-			for (i = 0; i < s->go.nSpans; ++i)
+			for (uint32_t i = 0; i < s->go.nSpans; ++i)
 			{
 				if (s->go.span[i].to == s)
 				{
@@ -291,7 +288,7 @@ void DFA::prepare(uint32_t & max_fill)
 	// find ``base'' state, if possible
 	findBaseState();
 
-	for (s = head; s; s = s->next)
+	for (State * s = head; s; s = s->next)
 	{
 		s->go.init (s);
 	}
