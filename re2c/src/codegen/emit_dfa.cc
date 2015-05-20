@@ -111,23 +111,6 @@ void DFA::emit(Output & output, uint32_t& ind, const RegExpMap* specMap, const s
 		vUsedLabels.insert(it->second->label);
 	}
 
-	// Save 'next_fill_index' and compute information about code generation
-	// while writing to null device.
-	uint32_t save_fill_index = next_fill_index;
-	Output null_dev (NULL, NULL);
-
-	for (s = head; s; s = s->next)
-	{
-		bool readCh = false;
-		s->emit(null_dev.source, ind, readCh, condName);
-		s->go.emit(null_dev.source, ind, readCh);
-	}
-	if (last_fill_index < next_fill_index)
-	{
-		last_fill_index = next_fill_index;
-	}
-	next_fill_index = save_fill_index;
-
 	// Generate prolog
 	if (bProlog)
 	{

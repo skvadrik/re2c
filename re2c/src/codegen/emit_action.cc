@@ -304,11 +304,11 @@ void need (OutputFile & o, uint32_t ind, bool & readCh, uint32_t n, bool bSetMar
 		return;
 	}
 
-	uint32_t fillIndex = next_fill_index;
+	uint32_t fillIndex = last_fill_index;
 
 	if (fFlag)
 	{
-		next_fill_index++;
+		last_fill_index++;
 		if (bUseYYSetStateParam)
 		{
 			o << indent(ind) << mapCodeName["YYSETSTATE"] << "(" << fillIndex << ");\n";

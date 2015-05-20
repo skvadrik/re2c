@@ -75,7 +75,6 @@ extern const uint32_t asc2asc[256];
 extern const uint32_t asc2ebc[256];
 extern const uint32_t ebc2asc[256];
 
-extern uint32_t next_fill_index;
 extern uint32_t last_fill_index;
 extern std::set<uint32_t> vUsedLabels;
 extern CodeNames mapCodeName;

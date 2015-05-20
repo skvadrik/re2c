@@ -724,18 +724,13 @@ chunk by chunk. When the scanner runs out of data to consume, it just stores
 its state, and return to the caller. When more input data is fed to the scanner,
 it resumes operations exactly where it left off.
 
-When using the *-f* option *re2c* does not accept stdin because it has to do the 
-full generation process twice which means it has to read the input twice. That
-means *re2c* would fail in case it cannot open the input twice or reading the
-input for the first time influences the second read attempt.
-
 Changes needed compared to the ``pull'' model:
 
 . User has to supply macros *YYSETSTATE ()* and *YYGETSTATE (state)*.
 
 . The *-f* option inhibits declaration of *yych* and
 *yyaccept*. So the user has to declare these. Also the user has
-to save and restore these. In the example *examples/push.re* these
+to save and restore these. In the example *examples/push_model/push.re* these
 are declared as fields of the (C\++) class of which the scanner is a
 method, so they do not need to be saved/restored explicitly. For C
 they could e.g. be made macros that select fields from a structure
@@ -758,7 +753,7 @@ It is possible to trigger generation of the *YYGETSTATE ()* block earlier by
 placing a *$$/*!getstate:re2c*/$$* comment. This is especially useful when
 the scanner code should be wrapped inside a loop.
 
-Please see *examples/push.re* for push-model scanner. The generated code can be
+Please see *examples/push_model/push.re* for push-model scanner. The generated code can be
 tweaked using inplace configurations *$$state:abort$$* and *$$state:nextlabel$$*.
 
 

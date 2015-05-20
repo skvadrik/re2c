@@ -72,7 +72,6 @@ bool bCaseInverted = false;
 Enc encoding;
 InputAPI input_api;
 
-uint32_t next_fill_index = 0;
 uint32_t last_fill_index = 0;
 std::set<uint32_t> vUsedLabels;
 CodeNames mapCodeName;

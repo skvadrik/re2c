@@ -451,7 +451,7 @@ Scanner::~Scanner()
 void Scanner::reuse()
 {
 	next_label = 0;
-	next_fill_index = 0;
+	last_fill_index = 0;
 	bWroteGetState = false;
 	bWroteCondCheck = false;
 	mapCodeName.clear();
