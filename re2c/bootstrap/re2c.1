@@ -2,12 +2,12 @@
 .\"     Title: re2c
 .\"    Author: [see the "AUTHORS" section]
 .\" Generator: DocBook XSL Stylesheets v1.78.0 <http://docbook.sf.net/>
-.\"      Date: 05/08/2015
+.\"      Date: 05/20/2015
 .\"    Manual: \ \&
 .\"    Source: \ \&
 .\"  Language: English
 .\"
-.TH "RE2C" "1" "05/08/2015" "\ \&" "\ \&"
+.TH "RE2C" "1" "05/20/2015" "\ \&" "\ \&"
 .\" -----------------------------------------------------------------
 .\" * Define some portability stuff
 .\" -----------------------------------------------------------------
@@ -1104,8 +1104,6 @@ Typically, if there is a preprocessor ahead of the scanner in the stream, or for
 .sp
 The \fB\-f\fR flag is useful for just this situation: it lets users design scanners that work in a \(lqpush\(rq model, i\&.e\&. where data is fed to the scanner chunk by chunk\&. When the scanner runs out of data to consume, it just stores its state, and return to the caller\&. When more input data is fed to the scanner, it resumes operations exactly where it left off\&.
 .sp
-When using the \fB\-f\fR option \fBre2c\fR does not accept stdin because it has to do the full generation process twice which means it has to read the input twice\&. That means \fBre2c\fR would fail in case it cannot open the input twice or reading the input for the first time influences the second read attempt\&.
-.sp
 Changes needed compared to the \(lqpull\(rq model:
 .sp
 .RS 4
@@ -1136,7 +1134,7 @@ option inhibits declaration of
 \fByych\fR
 and
 \fByyaccept\fR\&. So the user has to declare these\&. Also the user has to save and restore these\&. In the example
-\fBexamples/push\&.re\fR
+\fBexamples/push_model/push\&.re\fR
 these are declared as fields of the (C\e++) class of which the scanner is a method, so they do not need to be saved/restored explicitly\&. For C they could e\&.g\&. be made macros that select fields from a structure passed in as parameter\&. Alternatively, they could be declared as local variables, saved with
 \fBYYFILL (n)\fR
 when it decides to return and restored at entry to the function\&. Also, it could be more efficient to save the state from
@@ -1194,12 +1192,12 @@ block earlier by placing a
 comment\&. This is especially useful when the scanner code should be wrapped inside a loop\&.
 .RE
 .sp
-Please see \fBexamples/push\&.re\fR for push\-model scanner\&. The generated code can be tweaked using inplace configurations \fBstate:abort\fR and \fBstate:nextlabel\fR\&.
+Please see \fBexamples/push_model/push\&.re\fR for push\-model scanner\&. The generated code can be tweaked using inplace configurations \fBstate:abort\fR and \fBstate:nextlabel\fR\&.
 .SH "SCANNER WITH CONDITION SUPPORT"
 .sp
 You can preceed regular expressions with a list of condition names when using the \fB\-c\fR switch\&. In this case \fBre2c\fR generates scanner blocks for each conditon\&. Where each of the generated blocks has its own precondition\&. The precondition is given by the interface define \fBYYGETCONDITON()\fR and must be of type \fBYYCONDTYPE\fR\&.
 .sp
-There are two special rule types\&. First, the rules of the condition \fB*\fR are merged to all conditions\&. And second the empty condition list allows to provide a code block that does not have a scanner part\&. Meaning it does not allow any regular expression\&. The condition value referring to this special block is always the one with the enumeration value 0\&. This way the code of this special rule can be used to initialize a scanner\&. It is in no way necessary to have these rules: but sometimes it is helpful to have a dedicated uninitialized condition state\&.
+There are two special rule types\&. First, the rules of the condition \fB*\fR are merged to all conditions (note that they have lower priority than other rules of that condition)\&. And second the empty condition list allows to provide a code block that does not have a scanner part\&. Meaning it does not allow any regular expression\&. The condition value referring to this special block is always the one with the enumeration value 0\&. This way the code of this special rule can be used to initialize a scanner\&. It is in no way necessary to have these rules: but sometimes it is helpful to have a dedicated uninitialized condition state\&.
 .sp
 Non empty rules allow to specify the new condition, which makes them transition rules\&. Besides generating calls for the define \fBYYSETCONDTITION\fR no other special code is generated\&.
 .sp
@@ -1514,4 +1512,4 @@ skvadrik@gmail\&.com
 .RE
 .SH "VERSION INFORMATION"
 .sp
-This manpage describes \fBre2c\fR, version 0\&.14\&.1\&.dev, package date 08 May 2015\&.
+This manpage describes \fBre2c\fR, version 0\&.14\&.1\&.dev, package date 20 May 2015\&.

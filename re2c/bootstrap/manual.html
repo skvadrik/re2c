@@ -1967,10 +1967,6 @@ scanners that work in a &#8220;push&#8221; model, i.e. where data is fed to the 
 chunk by chunk. When the scanner runs out of data to consume, it just stores
 its state, and return to the caller. When more input data is fed to the scanner,
 it resumes operations exactly where it left off.</p></div>
-<div class="paragraph"><p>When using the <strong>-f</strong> option <strong>re2c</strong> does not accept stdin because it has to do the
-full generation process twice which means it has to read the input twice. That
-means <strong>re2c</strong> would fail in case it cannot open the input twice or reading the
-input for the first time influences the second read attempt.</p></div>
 <div class="paragraph"><p>Changes needed compared to the &#8220;pull&#8221; model:</p></div>
 <div class="olist arabic"><ol class="arabic">
 <li>
@@ -1982,7 +1978,7 @@ User has to supply macros <strong>YYSETSTATE ()</strong> and <strong>YYGETSTATE 
 <p>
 The <strong>-f</strong> option inhibits declaration of <strong>yych</strong> and
 <strong>yyaccept</strong>. So the user has to declare these. Also the user has
-to save and restore these. In the example <strong>examples/push.re</strong> these
+to save and restore these. In the example <strong>examples/push_model/push.re</strong> these
 are declared as fields of the (C\++) class of which the scanner is a
 method, so they do not need to be saved/restored explicitly. For C
 they could e.g. be made macros that select fields from a structure
@@ -2016,7 +2012,7 @@ the scanner code should be wrapped inside a loop.
 </p>
 </li>
 </ol></div>
-<div class="paragraph"><p>Please see <strong>examples/push.re</strong> for push-model scanner. The generated code can be
+<div class="paragraph"><p>Please see <strong>examples/push_model/push.re</strong> for push-model scanner. The generated code can be
 tweaked using inplace configurations <strong>state:abort</strong> and <strong>state:nextlabel</strong>.</p></div>
 </div>
 </div>
@@ -2028,7 +2024,8 @@ switch. In this case <strong>re2c</strong> generates scanner blocks for each con
 generated blocks has its own precondition. The precondition is given by the
 interface define <strong>YYGETCONDITON()</strong> and must be of type <strong>YYCONDTYPE</strong>.</p></div>
 <div class="paragraph"><p>There are two special rule types. First, the rules of the condition <strong>*</strong> are
-merged to all  conditions. And second the empty condition list allows to
+merged to all conditions (note that they have lower priority than other rules
+of that condition). And second the empty condition list allows to
 provide a code block that does not have a scanner part. Meaning it does not
 allow any regular expression. The condition value referring to this special
 block is always the one with the enumeration value 0. This way the code of this
@@ -2282,14 +2279,14 @@ Ulya Trofimovich <a href="mailto:skvadrik@gmail.com">skvadrik@gmail.com</a>
 <div class="sect1">
 <h2 id="_version_information">VERSION INFORMATION</h2>
 <div class="sectionbody">
-<div class="paragraph"><p>This manpage describes <strong>re2c</strong>, version 0.14.1.dev, package date 08 May 2015.</p></div>
+<div class="paragraph"><p>This manpage describes <strong>re2c</strong>, version 0.14.1.dev, package date 20 May 2015.</p></div>
 </div>
 </div>
 </div>
 <div id="footnotes"><hr /></div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2015-05-08 22:17:12 BST
+Last updated 2015-05-20 10:44:30 BST
 </div>
 </div>
 </body>
