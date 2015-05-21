@@ -142,7 +142,7 @@ DFA::~DFA()
 
 void DFA::addState(State **a, State *s)
 {
-	s->label = nStates++;
+	++nStates;
 	s->next = *a;
 	*a = s;
 

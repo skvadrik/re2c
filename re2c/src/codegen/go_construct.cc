@@ -72,7 +72,7 @@ Linear::Linear (const Span * s, uint32_t n, const State * next)
 		}
 		if (n == 1)
 		{
-			if (next == NULL || s[0].to->label != next->label)
+			if (next == NULL || s[0].to != next)
 			{
 				branches.push_back (std::make_pair (static_cast<const Cond *> (NULL), s[0].to));
 			}
