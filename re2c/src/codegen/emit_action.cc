@@ -85,7 +85,7 @@ void emit_initial (OutputFile & o, uint32_t ind, bool & readCh, const State * co
 		o << startLabelName << ":\n";
 	}
 
-	if (vUsedLabels.count(initial.label+1))
+	if (vUsedLabels.count(s->label))
 	{
 		if (s->link)
 		{
