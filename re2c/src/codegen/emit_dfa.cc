@@ -83,9 +83,9 @@ void DFA::emit(Output & output, uint32_t& ind, const RegExpMap* specMap, const s
 		next_label++;
 	}
 
-	uint32_t start_label = next_label;
+	uint32_t start_label = next_label++;
 
-	head->action.set_initial (next_label++, bSaveOnHead);
+	head->action.set_initial (start_label, bSaveOnHead);
 
 	if (bUseStartLabel)
 	{
