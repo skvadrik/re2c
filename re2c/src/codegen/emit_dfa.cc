@@ -36,7 +36,7 @@ void genGoTo(OutputFile & o, uint32_t ind, const State *from, const State *to, b
 		return;
 	}
 
-	if (readCh && from->label + 1 != to->label)
+	if (readCh && from->next != to)
 	{
 		o << input_api.stmt_peek (ind);
 		readCh = false;
