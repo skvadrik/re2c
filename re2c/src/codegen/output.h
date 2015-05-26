@@ -69,7 +69,7 @@ struct OutputFile
 	friend OutputFile & operator << (OutputFile & o, const char * s);
 
 	void insert_line_info ();
-	void insert_state_goto (uint32_t ind, uint32_t start_label);
+	void insert_state_goto (uint32_t ind);
 	void insert_types ();
 	void insert_yyaccept_init (uint32_t ind);
 	void insert_yyaccept_selector (uint32_t ind, uint32_t selector);
@@ -84,7 +84,6 @@ private:
 	const char * file_name;
 	FILE * file;
 	std::vector<OutputBlock *> blocks;
-	uint32_t prolog_label;
 
 	std::ostream & stream ();
 	void insert_code ();

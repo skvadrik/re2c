@@ -102,6 +102,10 @@ void DFA::emit(Output & output, uint32_t& ind, const RegExpMap* specMap, const s
 		s->label = next_label++;
 	}
 
+	if (fFlag)
+	{
+		vUsedLabels.insert(0);
+	}
 	for (s = head; s; s = s->next)
 	{
 		s->go.used_labels ();
@@ -157,7 +161,7 @@ void DFA::emit(Output & output, uint32_t& ind, const RegExpMap* specMap, const s
 	if (bProlog)
 	{
 		genCondTable(o, ind, *specMap);
-		o.insert_state_goto (ind, prolog_label);
+		o.insert_state_goto (ind);
 		if (cFlag && !DFlag)
 		{
 			if (vUsedLabels.count(prolog_label))

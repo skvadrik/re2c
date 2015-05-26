@@ -328,7 +328,7 @@ yy50:
 	++YYCURSOR;
 	{
 					tok = pos = cursor;
-					out.insert_state_goto (topIndent, 0);
+					out.insert_state_goto (topIndent);
 					ignore_eoc = true;
 					goto echo;
 				}

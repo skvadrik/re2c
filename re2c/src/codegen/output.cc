@@ -51,7 +51,6 @@ OutputFile::OutputFile (const char * fn)
 	: file_name (fn)
 	, file (NULL)
 	, blocks ()
-	, prolog_label (0)
 {
 	new_block ();
 }
@@ -150,12 +149,10 @@ void OutputFile::insert_line_info ()
 	insert_code ();
 }
 
-void OutputFile::insert_state_goto (uint32_t ind, uint32_t start_label)
+void OutputFile::insert_state_goto (uint32_t ind)
 {
 	if (fFlag && !bWroteGetState)
 	{
-		prolog_label = start_label;
-		vUsedLabels.insert (start_label);
 		blocks.back ()->fragments.push_back (new OutputFragment (OutputFragment::STATE_GOTO, ind));
 		insert_code ();
 		bWroteGetState = true;
@@ -226,7 +223,7 @@ void OutputFile::emit
 						output_line_info (f.stream, line_count + 1, file_name);
 						break;
 					case OutputFragment::STATE_GOTO:
-						output_state_goto (f.stream, f.indent, prolog_label);
+						output_state_goto (f.stream, f.indent, 0);
 						break;
 					case OutputFragment::TYPES:
 						output_types (f.stream, f.indent, types);
