@@ -168,10 +168,10 @@ void DFA::emit(Output & output, uint32_t& ind, const RegExpMap* specMap, const s
 			{
 				o << labelPrefix << prolog_label << ":\n";
 			}
-			if (!startLabelName.empty())
-			{
-				o << startLabelName << ":\n";
-			}
+		}
+		if (!startLabelName.empty())
+		{
+			o << startLabelName << ":\n";
 		}
 		genCondGoto(o, ind, *specMap);
 	}

@@ -80,11 +80,6 @@ void emit_initial (OutputFile & o, uint32_t ind, bool & readCh, const State * co
 		return;
 	}
 
-	if (!cFlag && !startLabelName.empty())
-	{
-		o << startLabelName << ":\n";
-	}
-
 	if (vUsedLabels.count(s->label))
 	{
 		if (s->link)
