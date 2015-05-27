@@ -65,7 +65,7 @@ void emit_state (OutputFile & o, uint32_t ind, const State * s, bool used_label)
 	}
 }
 
-void DFA::count_used_labels (std::set<uint32_t> & used, uint32_t prolog, uint32_t start, bool force_start) const
+void DFA::count_used_labels (std::set<uint32_t> & used, uint32_t start, uint32_t initial, bool force_start) const
 {
 	// In '-f' mode, default state is always state 0
 	if (fFlag)
@@ -74,7 +74,7 @@ void DFA::count_used_labels (std::set<uint32_t> & used, uint32_t prolog, uint32_
 	}
 	if (force_start)
 	{
-		used.insert (prolog);
+		used.insert (start);
 	}
 	for (State * s = head; s; s = s->next)
 	{
@@ -87,7 +87,7 @@ void DFA::count_used_labels (std::set<uint32_t> & used, uint32_t prolog, uint32_
 	// must go last: it needs the set of used labels
 	if (used.count (head->label))
 	{
-		used.insert (start);
+		used.insert (initial);
 	}
 }
 
@@ -97,21 +97,20 @@ void DFA::emit(Output & output, uint32_t& ind, const RegExpMap* specMap, const s
 
 	bool bProlog = (!cFlag || !bWroteCondCheck);
 
-	// In -c mode, the prolog needs its own label separate from start_label.
-	// prolog_label is before the condition branch (GenCondGoto). It is
-	// equivalent to startLabelName.
-	// start_label corresponds to current condition.
-	// NOTE: prolog_label must be yy0 because of the !getstate:re2c handling
-	// in scanner.re
-	uint32_t prolog_label = next_label;
+	// start_label points to the beginning of current re2c block
+	// (prior to condition dispatch in '-c' mode)
+	// it can forced by configuration 're2c:startlabel = <integer>;'
+	uint32_t start_label = next_label;
 	if (bProlog && cFlag)
 	{
 		next_label++;
 	}
 
-	uint32_t start_label = next_label++;
+	// initial_label points to the beginning of DFA
+	// in '-c' mode this is NOT equal to start_label
+	uint32_t initial_label = next_label++;
 
-	head->action.set_initial (start_label, bSaveOnHead);
+	head->action.set_initial (initial_label, bSaveOnHead);
 
 
 	State *s;
@@ -122,7 +121,7 @@ void DFA::emit(Output & output, uint32_t& ind, const RegExpMap* specMap, const s
 	}
 
 	std::set<uint32_t> used_labels;
-	count_used_labels (used_labels, prolog_label, start_label, o.get_force_start_label ());
+	count_used_labels (used_labels, start_label, initial_label, o.get_force_start_label ());
 
 	// Generate prolog
 	if (bProlog)
@@ -173,9 +172,9 @@ void DFA::emit(Output & output, uint32_t& ind, const RegExpMap* specMap, const s
 		o.insert_state_goto (ind);
 		if (cFlag && !DFlag)
 		{
-			if (used_labels.count(prolog_label))
+			if (used_labels.count(start_label))
 			{
-				o << labelPrefix << prolog_label << ":\n";
+				o << labelPrefix << start_label << ":\n";
 			}
 		}
 		o.write_user_start_label ();
@@ -204,10 +203,12 @@ void DFA::emit(Output & output, uint32_t& ind, const RegExpMap* specMap, const s
 		BitMap::gen(o, ind, lbChar, ubChar <= 256 ? ubChar : 256);
 	}
 
-	// The start_label is not always the first to be emitted, so we may have to jump. c.f. Initial::emit()
+	// If DFA has transitions to initial state, then initial state
+	// has a piece of code that advances input position. Wee must
+	// skip it when entering DFA.
 	if (used_labels.count(head->label))
 	{
-		o << indent(ind) << "goto " << labelPrefix << start_label << ";\n";
+		o << indent(ind) << "goto " << labelPrefix << initial_label << ";\n";
 	}
 
 	// Generate code
