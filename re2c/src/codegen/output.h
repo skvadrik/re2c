@@ -43,6 +43,8 @@ struct OutputBlock
 {
 	std::vector<OutputFragment *> fragments;
 	bool used_yyaccept;
+	bool force_start_label;
+	std::string user_start_label;
 
 	OutputBlock ();
 	~OutputBlock ();
@@ -64,6 +66,7 @@ struct OutputFile
 	void write_uint32_t_width (uint32_t n, uint32_t w);
 	void write_line_info (uint32_t l, const char * fn);
 	void write_version_time ();
+	void write_user_start_label ();
 	friend OutputFile & operator << (OutputFile & o, uint32_t n);
 	friend OutputFile & operator << (OutputFile & o, const std::string & s);
 	friend OutputFile & operator << (OutputFile & o, const char * s);
@@ -77,6 +80,9 @@ struct OutputFile
 
 	void set_used_yyaccept ();
 	bool get_used_yyaccept () const;
+	void set_force_start_label (bool force);
+	void set_user_start_label (const std::string & label);
+	bool get_force_start_label () const;
 
 	void emit (const std::vector<std::string> & types, uint32_t max_fill);
 

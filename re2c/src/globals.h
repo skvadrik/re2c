@@ -33,8 +33,6 @@ extern bool bNoGenerationDate;
 extern bool bUsedYYMarker;
 extern bool bUsedYYBitmap;
 
-extern bool bUseStartLabel;
-extern std::string startLabelName;
 extern std::string labelPrefix;
 extern std::string condPrefix;
 extern std::string condEnumPrefix;

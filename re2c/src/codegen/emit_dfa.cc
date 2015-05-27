@@ -87,13 +87,6 @@ void DFA::emit(Output & output, uint32_t& ind, const RegExpMap* specMap, const s
 
 	head->action.set_initial (start_label, bSaveOnHead);
 
-	if (bUseStartLabel)
-	{
-		if (startLabelName.empty())
-		{
-			vUsedLabels.insert(prolog_label);
-		}
-	}
 
 	State *s;
 
@@ -105,6 +98,10 @@ void DFA::emit(Output & output, uint32_t& ind, const RegExpMap* specMap, const s
 	if (fFlag)
 	{
 		vUsedLabels.insert(0);
+	}
+	if (o.get_force_start_label ())
+	{
+		vUsedLabels.insert(prolog_label);
 	}
 	for (s = head; s; s = s->next)
 	{
@@ -169,10 +166,7 @@ void DFA::emit(Output & output, uint32_t& ind, const RegExpMap* specMap, const s
 				o << labelPrefix << prolog_label << ":\n";
 			}
 		}
-		if (!startLabelName.empty())
-		{
-			o << startLabelName << ":\n";
-		}
+		o.write_user_start_label ();
 		genCondGoto(o, ind, *specMap);
 	}
 
@@ -233,8 +227,6 @@ void DFA::emit(Output & output, uint32_t& ind, const RegExpMap* specMap, const s
 		delete BitMap::first;
 		BitMap::first = NULL;
 	}
-
-	bUseStartLabel = false;
 }
 
 void genCondTable(OutputFile & o, uint32_t ind, const RegExpMap& specMap)

@@ -35,6 +35,8 @@ uint32_t OutputFragment::count_lines ()
 OutputBlock::OutputBlock ()
 	: fragments ()
 	, used_yyaccept (false)
+	, force_start_label (false)
+	, user_start_label ()
 {
 	fragments.push_back (new OutputFragment (OutputFragment::CODE, 0));
 }
@@ -120,6 +122,15 @@ void OutputFile::write_version_time ()
 	output_version_time (stream ());
 }
 
+void OutputFile::write_user_start_label ()
+{
+	const std::string label = blocks.back ()->user_start_label;
+	if (!label.empty ())
+	{
+		* this << label << ":\n";
+	}
+}
+
 OutputFile & operator << (OutputFile & u, uint32_t n)
 {
 	u.stream () << n;
@@ -193,6 +204,21 @@ void OutputFile::set_used_yyaccept ()
 bool OutputFile::get_used_yyaccept () const
 {
 	return blocks.back ()->used_yyaccept;
+}
+
+void OutputFile::set_force_start_label (bool force)
+{
+	blocks.back ()->force_start_label = force;
+}
+
+void OutputFile::set_user_start_label (const std::string & label)
+{
+	blocks.back ()->user_start_label = label;
+}
+
+bool OutputFile::get_force_start_label () const
+{
+	return blocks.back ()->force_start_label;
 }
 
 void OutputFile::new_block ()

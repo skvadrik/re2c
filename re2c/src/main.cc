@@ -32,7 +32,6 @@ bool bNoGenerationDate = false;
 bool bUsedYYBitmap  = false;
 bool bUsedYYMarker  = true;
 bool bEmitYYCh       = true;
-bool bUseStartLabel  = false;
 bool bUseStateNext   = false;
 bool bUseYYFill      = true;
 bool bUseYYFillParam = true;
@@ -44,7 +43,6 @@ bool bUseYYSetStateParam = true;
 bool bUseYYSetStateNaked = false;
 bool bUseYYGetStateNaked = false;
 
-std::string startLabelName;
 std::string labelPrefix("yy");
 std::string condPrefix("yyc_");
 std::string condEnumPrefix("yyc");

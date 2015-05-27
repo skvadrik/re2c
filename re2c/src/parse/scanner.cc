@@ -26,8 +26,7 @@ void Scanner::config(const std::string & cfg, int num)
 	}
 	else if (cfg == "startlabel")
 	{
-		bUseStartLabel = num != 0;
-		startLabelName = "";
+		out.set_force_start_label (num != 0);
 	}
 	else if (cfg == "state:abort")
 	{
@@ -199,8 +198,7 @@ void Scanner::config(const std::string & cfg, const std::string & val)
 	}
 	else if (cfg == "startlabel")
 	{
-		startLabelName = strVal;
-		bUseStartLabel = !startLabelName.empty();
+		out.set_user_start_label (strVal);
 	}
 	else if (cfg == "labelprefix")
 	{
