@@ -90,7 +90,6 @@ SRC = \
 	$(srcdir)/src/dfa/encoding/utf8/utf8_range.cc \
 	$(srcdir)/src/dfa/encoding/utf8/utf8_regexp.cc \
 	$(srcdir)/src/dfa/dfa.cc \
-	$(srcdir)/src/dfa/state.cc \
 	$(srcdir)/src/main.cc \
 	$(srcdir)/src/mbo_getopt.cc \
 	$(srcdir)/src/parse/input.cc \

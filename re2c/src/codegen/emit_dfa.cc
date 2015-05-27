@@ -15,6 +15,7 @@ static std::string genGetCondition ();
 static void genCondGotoSub (OutputFile & o, uint32_t ind, RegExpIndices & vCondList, uint32_t cMin, uint32_t cMax);
 static void genCondTable   (OutputFile & o, uint32_t ind, const RegExpMap & specMap);
 static void genCondGoto    (OutputFile & o, uint32_t ind, const RegExpMap & specMap);
+static void emit_state     (OutputFile & o, uint32_t ind, const State * s);
 
 std::string genGetCondition()
 {
@@ -45,24 +46,23 @@ void genGoTo(OutputFile & o, uint32_t ind, const State *from, const State *to, b
 	o << indent(ind) << "goto " << labelPrefix << to->label << ";\n";
 }
 
-void State::emit(OutputFile & o, uint32_t ind, bool &readCh, const std::string& condName) const
+void emit_state (OutputFile & o, uint32_t ind, const State * s)
 {
 	if (!DFlag)
 	{
-		if (vUsedLabels.count(label))
+		if (vUsedLabels.count(s->label))
 		{
-			o << labelPrefix << label << ":\n";
+			o << labelPrefix << s->label << ":\n";
 		}
-		if (dFlag && (action.type != Action::INITIAL))
+		if (dFlag && (s->action.type != Action::INITIAL))
 		{
-			o << indent(ind) << mapCodeName["YYDEBUG"] << "(" << label << ", " << input_api.expr_peek () << ");\n";
+			o << indent(ind) << mapCodeName["YYDEBUG"] << "(" << s->label << ", " << input_api.expr_peek () << ");\n";
 		}
-		if (isPreCtxt)
+		if (s->isPreCtxt)
 		{
 			o << input_api.stmt_backupctx (ind);
 		}
 	}
-	emit_action (action, o, ind, readCh, this, condName);
 }
 
 void DFA::emit(Output & output, uint32_t& ind, const RegExpMap* specMap, const std::string& condName, bool isLastCond, bool& bPrologBrace)
@@ -206,7 +206,8 @@ void DFA::emit(Output & output, uint32_t& ind, const RegExpMap* specMap, const s
 	for (s = head; s; s = s->next)
 	{
 		bool readCh = false;
-		s->emit(o, ind, readCh, condName);
+		emit_state (o, ind, s);
+		emit_action (s->action, o, ind, readCh, s, condName);
 		s->go.emit(o, ind, readCh);
 	}
 
