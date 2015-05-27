@@ -2,8 +2,6 @@
 #ifndef	_globals_h
 #define	_globals_h
 
-#include <set>
-#include <algorithm>
 #include <string>
 
 #include "src/codegen/code_names.h"
@@ -74,7 +72,6 @@ extern const uint32_t asc2ebc[256];
 extern const uint32_t ebc2asc[256];
 
 extern uint32_t last_fill_index;
-extern std::set<uint32_t> vUsedLabels;
 extern CodeNames mapCodeName;
 
 extern Enc encoding;

@@ -9,7 +9,15 @@ namespace re2c {
 class DFA;
 typedef std::vector<std::string> RegExpIndices;
 
-void emit_action (const Action & action, OutputFile & o, uint32_t ind, bool & readCh, const State * const s, const std::string & condName);
+void emit_action
+	( const Action & action
+	, OutputFile & o
+	, uint32_t ind
+	, bool & readCh
+	, const State * const s
+	, const std::string & condName
+	, const std::set<uint32_t> & used_labels
+	);
 
 // helpers
 void genGoTo (OutputFile & o, uint32_t ind, const State * from, const State * to, bool & readCh);

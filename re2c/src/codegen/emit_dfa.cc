@@ -15,7 +15,7 @@ static std::string genGetCondition ();
 static void genCondGotoSub (OutputFile & o, uint32_t ind, RegExpIndices & vCondList, uint32_t cMin, uint32_t cMax);
 static void genCondTable   (OutputFile & o, uint32_t ind, const RegExpMap & specMap);
 static void genCondGoto    (OutputFile & o, uint32_t ind, const RegExpMap & specMap);
-static void emit_state     (OutputFile & o, uint32_t ind, const State * s);
+static void emit_state     (OutputFile & o, uint32_t ind, const State * s, bool used_label);
 
 std::string genGetCondition()
 {
@@ -46,11 +46,11 @@ void genGoTo(OutputFile & o, uint32_t ind, const State *from, const State *to, b
 	o << indent(ind) << "goto " << labelPrefix << to->label << ";\n";
 }
 
-void emit_state (OutputFile & o, uint32_t ind, const State * s)
+void emit_state (OutputFile & o, uint32_t ind, const State * s, bool used_label)
 {
 	if (!DFlag)
 	{
-		if (vUsedLabels.count(s->label))
+		if (used_label)
 		{
 			o << labelPrefix << s->label << ":\n";
 		}
@@ -62,6 +62,32 @@ void emit_state (OutputFile & o, uint32_t ind, const State * s)
 		{
 			o << input_api.stmt_backupctx (ind);
 		}
+	}
+}
+
+void DFA::count_used_labels (std::set<uint32_t> & used, uint32_t prolog, uint32_t start, bool force_start) const
+{
+	// In '-f' mode, default state is always state 0
+	if (fFlag)
+	{
+		used.insert (0);
+	}
+	if (force_start)
+	{
+		used.insert (prolog);
+	}
+	for (State * s = head; s; s = s->next)
+	{
+		s->go.used_labels (used);
+	}
+	for (accept_t::const_iterator i = accept_map.begin (); i != accept_map.end (); ++i)
+	{
+		used.insert (i->second->label);
+	}
+	// must go last: it needs the set of used labels
+	if (used.count (head->label))
+	{
+		used.insert (start);
 	}
 }
 
@@ -95,26 +121,8 @@ void DFA::emit(Output & output, uint32_t& ind, const RegExpMap* specMap, const s
 		s->label = next_label++;
 	}
 
-	if (fFlag)
-	{
-		vUsedLabels.insert(0);
-	}
-	if (o.get_force_start_label ())
-	{
-		vUsedLabels.insert(prolog_label);
-	}
-	for (s = head; s; s = s->next)
-	{
-		s->go.used_labels ();
-	}
-	for (accept_t::const_iterator it = accept_map.begin(); it != accept_map.end(); ++it)
-	{
-		vUsedLabels.insert(it->second->label);
-	}
-	if (vUsedLabels.count(head->label))
-	{
-		vUsedLabels.insert(start_label);
-	}
+	std::set<uint32_t> used_labels;
+	count_used_labels (used_labels, prolog_label, start_label, o.get_force_start_label ());
 
 	// Generate prolog
 	if (bProlog)
@@ -165,7 +173,7 @@ void DFA::emit(Output & output, uint32_t& ind, const RegExpMap* specMap, const s
 		o.insert_state_goto (ind);
 		if (cFlag && !DFlag)
 		{
-			if (vUsedLabels.count(prolog_label))
+			if (used_labels.count(prolog_label))
 			{
 				o << labelPrefix << prolog_label << ":\n";
 			}
@@ -197,7 +205,7 @@ void DFA::emit(Output & output, uint32_t& ind, const RegExpMap* specMap, const s
 	}
 
 	// The start_label is not always the first to be emitted, so we may have to jump. c.f. Initial::emit()
-	if (vUsedLabels.count(head->label))
+	if (used_labels.count(head->label))
 	{
 		o << indent(ind) << "goto " << labelPrefix << start_label << ";\n";
 	}
@@ -206,8 +214,8 @@ void DFA::emit(Output & output, uint32_t& ind, const RegExpMap* specMap, const s
 	for (s = head; s; s = s->next)
 	{
 		bool readCh = false;
-		emit_state (o, ind, s);
-		emit_action (s->action, o, ind, readCh, s, condName);
+		emit_state (o, ind, s, used_labels.count (s->label));
+		emit_action (s->action, o, ind, readCh, s, condName, used_labels);
 		s->go.emit(o, ind, readCh);
 	}
 

@@ -9,7 +9,7 @@ namespace re2c
 
 static void need               (OutputFile & o, uint32_t ind, bool & readCh, uint32_t n, bool bSetMarker);
 static void emit_match         (OutputFile & o, uint32_t ind, bool & readCh, const State * const s);
-static void emit_initial       (OutputFile & o, uint32_t ind, bool & readCh, const State * const s, const Initial & init);
+static void emit_initial       (OutputFile & o, uint32_t ind, bool & readCh, const State * const s, const Initial & init, const std::set<uint32_t> & used_labels);
 static void emit_save          (OutputFile & o, uint32_t ind, bool & readCh, const State * const s, uint32_t save);
 static void emit_accept_binary (OutputFile & o, uint32_t ind, bool & readCh, const State * const s, const accept_t & accept, uint32_t l, uint32_t r);
 static void emit_accept        (OutputFile & o, uint32_t ind, bool & readCh, const State * const s, const accept_t & accept);
@@ -17,7 +17,15 @@ static void emit_rule          (OutputFile & o, uint32_t ind, const State * cons
 static void genYYFill          (OutputFile & o, uint32_t need);
 static void genSetCondition    (OutputFile & o, uint32_t ind, const std::string & newcond);
 
-void emit_action (const Action & action, OutputFile & o, uint32_t ind, bool & readCh, const State * const s, const std::string & condName)
+void emit_action
+	( const Action & action
+	, OutputFile & o
+	, uint32_t ind
+	, bool & readCh
+	, const State * const s
+	, const std::string & condName
+	, const std::set<uint32_t> & used_labels
+	)
 {
 	switch (action.type)
 	{
@@ -25,7 +33,7 @@ void emit_action (const Action & action, OutputFile & o, uint32_t ind, bool & re
 			emit_match (o, ind, readCh, s);
 			break;
 		case Action::INITIAL:
-			emit_initial (o, ind, readCh, s, * action.info.initial);
+			emit_initial (o, ind, readCh, s, * action.info.initial, used_labels);
 			break;
 		case Action::SAVE:
 			emit_save (o, ind, readCh, s, action.info.save);
@@ -73,14 +81,14 @@ void emit_match (OutputFile & o, uint32_t ind, bool & readCh, const State * cons
 	}
 }
 
-void emit_initial (OutputFile & o, uint32_t ind, bool & readCh, const State * const s, const Initial & initial)
+void emit_initial (OutputFile & o, uint32_t ind, bool & readCh, const State * const s, const Initial & initial, const std::set<uint32_t> & used_labels)
 {
 	if (DFlag)
 	{
 		return;
 	}
 
-	if (vUsedLabels.count(s->label))
+	if (used_labels.count(s->label))
 	{
 		if (s->link)
 		{
@@ -92,7 +100,7 @@ void emit_initial (OutputFile & o, uint32_t ind, bool & readCh, const State * co
 		}
 	}
 
-	if (vUsedLabels.count(initial.label))
+	if (used_labels.count(initial.label))
 	{
 		o << labelPrefix << initial.label << ":\n";
 	}

@@ -2,6 +2,7 @@
 #define _go_h
 
 #include <iostream>
+#include <set>
 #include <vector>
 
 #include "src/codegen/output.h"
@@ -47,7 +48,7 @@ struct Cases
 	Cases (const Span * s, uint32_t n);
 	~Cases ();
 	void emit (OutputFile & o, uint32_t ind, bool & readCh);
-	void used_labels ();
+	void used_labels (std::set<uint32_t> & used);
 
 	FORBID_COPY (Cases);
 };
@@ -67,7 +68,7 @@ struct Binary
 	Binary (const Span * s, uint32_t n, const State * next);
 	~Binary ();
 	void emit (OutputFile & o, uint32_t ind, bool & readCh);
-	void used_labels ();
+	void used_labels (std::set<uint32_t> & used);
 
 	FORBID_COPY (Binary);
 };
@@ -78,7 +79,7 @@ struct Linear
 	Linear (const Span * s, uint32_t n, const State * next);
 	~Linear ();
 	void emit (OutputFile & o, uint32_t ind, bool & readCh);
-	void used_labels ();
+	void used_labels (std::set<uint32_t> & used);
 };
 
 struct If
@@ -96,7 +97,7 @@ struct If
 	If (type_t t, const Span * sp, uint32_t nsp, const State * next);
 	~If ();
 	void emit (OutputFile & o, uint32_t ind, bool & readCh);
-	void used_labels ();
+	void used_labels (std::set<uint32_t> & used);
 };
 
 struct SwitchIf
@@ -114,7 +115,7 @@ struct SwitchIf
 	SwitchIf (const Span * sp, uint32_t nsp, const State * next);
 	~SwitchIf ();
 	void emit (OutputFile & o, uint32_t ind, bool & readCh);
-	void used_labels ();
+	void used_labels (std::set<uint32_t> & used);
 };
 
 struct GoBitmap
@@ -126,7 +127,7 @@ struct GoBitmap
 	GoBitmap (const Span * span, uint32_t nSpans, const Span * hspan, uint32_t hSpans, const BitMap * bm, const State * bm_state, const State * next);
 	~GoBitmap ();
 	void emit (OutputFile & o, uint32_t ind, bool & readCh);
-	void used_labels ();
+	void used_labels (std::set<uint32_t> & used);
 
 	FORBID_COPY (GoBitmap);
 };
@@ -138,7 +139,7 @@ struct CpgotoTable
 	CpgotoTable (const Span * span, uint32_t nSpans);
 	~CpgotoTable ();
 	void emit (OutputFile & o, uint32_t ind);
-	void used_labels ();
+	void used_labels (std::set<uint32_t> & used);
 
 	FORBID_COPY (CpgotoTable);
 };
@@ -150,7 +151,7 @@ struct Cpgoto
 	Cpgoto (const Span * span, uint32_t nSpans, const Span * hspan, uint32_t hSpans, const State * next);
 	~Cpgoto ();
 	void emit (OutputFile & o, uint32_t ind, bool & readCh);
-	void used_labels ();
+	void used_labels (std::set<uint32_t> & used);
 
 	FORBID_COPY (Cpgoto);
 };
@@ -190,7 +191,7 @@ struct Go
 	~Go ();
 	void init (const State * from);
 	void emit (OutputFile & o, uint32_t ind, bool & readCh);
-	void used_labels ();
+	void used_labels (std::set<uint32_t> & used);
 
 	Go (const Go & g)
 		: nSpans (g.nSpans)

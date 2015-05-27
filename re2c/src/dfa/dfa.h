@@ -37,6 +37,7 @@ public:
 	void findSCCs ();
 	void findBaseState ();
 	void prepare (uint32_t &);
+	void count_used_labels (std::set<uint32_t> & used, uint32_t prolog, uint32_t start, bool force_start) const;
 	void emit (Output &, uint32_t &, const RegExpMap *, const std::string &, bool, bool &);
 
 	friend std::ostream & operator << (std::ostream &, const DFA &);

@@ -4,85 +4,85 @@
 namespace re2c
 {
 
-void Cases::used_labels ()
+void Cases::used_labels (std::set<uint32_t> & used)
 {
 	for (uint32_t i = 0; i < cases_size; ++i)
 	{
-		vUsedLabels.insert (cases[i].to->label);
+		used.insert (cases[i].to->label);
 	}
 }
 
-void Binary::used_labels ()
+void Binary::used_labels (std::set<uint32_t> & used)
 {
-	thn->used_labels ();
-	els->used_labels ();
+	thn->used_labels (used);
+	els->used_labels (used);
 }
 
-void Linear::used_labels ()
+void Linear::used_labels (std::set<uint32_t> & used)
 {
 	for (uint32_t i = 0; i < branches.size (); ++i)
 	{
-		vUsedLabels.insert (branches[i].second->label);
+		used.insert (branches[i].second->label);
 	}
 }
 
-void If::used_labels ()
+void If::used_labels (std::set<uint32_t> & used)
 {
 	switch (type)
 	{
 		case BINARY:
-			info.binary->used_labels ();
+			info.binary->used_labels (used);
 			break;
 		case LINEAR:
-			info.linear->used_labels ();
+			info.linear->used_labels (used);
 			break;
 	}
 }
 
-void SwitchIf::used_labels ()
+void SwitchIf::used_labels (std::set<uint32_t> & used)
 {
 	switch (type)
 	{
 		case SWITCH:
-			info.cases->used_labels ();
+			info.cases->used_labels (used);
 			break;
 		case IF:
-			info.ifs->used_labels ();
+			info.ifs->used_labels (used);
 			break;
 	}
 }
 
-void GoBitmap::used_labels ()
+void GoBitmap::used_labels (std::set<uint32_t> & used)
 {
 	if (hgo != NULL)
 	{
-		hgo->used_labels ();
+		hgo->used_labels (used);
 	}
-	vUsedLabels.insert (bitmap_state->label);
+	used.insert (bitmap_state->label);
 	if (lgo != NULL)
 	{
-		lgo->used_labels ();
+		lgo->used_labels (used);
 	}
 }
 
-void CpgotoTable::used_labels ()
+void CpgotoTable::used_labels (std::set<uint32_t> & used)
 {
 	for (uint32_t i = 0; i < TABLE_SIZE; ++i)
 	{
-		vUsedLabels.insert (table[i]->label);
+		used.insert (table[i]->label);
 	}
 }
 
-void Cpgoto::used_labels ()
+void Cpgoto::used_labels (std::set<uint32_t> & used)
 {
 	if (hgo != NULL)
 	{
-		hgo->used_labels ();
+		hgo->used_labels (used);
 	}
-	table->used_labels ();
+	table->used_labels (used);
 }
 
-void Go::used_labels ()
+void Go::used_labels (std::set<uint32_t> & used)
 {
 	switch (type)
 	{
@@ -90,13 +90,13 @@ void Go::used_labels ()
 		case DOT:
 			break;
 		case SWITCH_IF:
-			info.switchif->used_labels ();
+			info.switchif->used_labels (used);
 			break;
 		case BITMAP:
-			info.bitmap->used_labels ();
+			info.bitmap->used_labels (used);
 			break;
 		case CPGOTO:
-			info.cpgoto->used_labels ();
+			info.cpgoto->used_labels (used);
 			break;
 	}
 }

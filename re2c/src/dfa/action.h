@@ -2,7 +2,6 @@
 #define __ACTION__
 
 #include <map>
-#include <string>
 
 #include "src/util/c99_stdint.h"
 
@@ -38,8 +37,6 @@ public:
 		ACCEPT,
 		RULE
 	} type;
-
-private:
 	union
 	{
 		Initial * initial;
@@ -86,7 +83,6 @@ public:
 		type = RULE;
 		info.rule = rule;
 	}
-	friend void emit_action (const Action & action, OutputFile & o, uint32_t ind, bool & readCh, const State * const s, const std::string & condName);
 
 private:
 	void clear ()
