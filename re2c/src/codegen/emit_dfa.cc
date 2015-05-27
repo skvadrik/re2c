@@ -111,6 +111,10 @@ void DFA::emit(Output & output, uint32_t& ind, const RegExpMap* specMap, const s
 	{
 		vUsedLabels.insert(it->second->label);
 	}
+	if (vUsedLabels.count(head->label))
+	{
+		vUsedLabels.insert(start_label);
+	}
 
 	// Generate prolog
 	if (bProlog)
@@ -195,7 +199,6 @@ void DFA::emit(Output & output, uint32_t& ind, const RegExpMap* specMap, const s
 	// The start_label is not always the first to be emitted, so we may have to jump. c.f. Initial::emit()
 	if (vUsedLabels.count(head->label))
 	{
-		vUsedLabels.insert(start_label);
 		o << indent(ind) << "goto " << labelPrefix << start_label << ";\n";
 	}
 
