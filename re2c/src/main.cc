@@ -55,7 +55,6 @@ std::string yyFillLength("@@");
 std::string yySetConditionParam("@@");
 std::string yySetStateParam("@@");
 std::string yySetupRule("");
-uint32_t next_label = 0;
 uint32_t cGotoThreshold = 9;
 
 uint32_t topIndent = 0;

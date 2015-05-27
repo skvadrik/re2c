@@ -53,6 +53,7 @@ OutputFile::OutputFile (const char * fn)
 	: file_name (fn)
 	, file (NULL)
 	, blocks ()
+	, label ()
 {
 	new_block ();
 }

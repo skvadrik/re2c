@@ -70,7 +70,7 @@ void DFA::count_used_labels (std::set<uint32_t> & used, uint32_t start, uint32_t
 	// In '-f' mode, default state is always state 0
 	if (fFlag)
 	{
-		used.insert (0);
+		used.insert (Label::FIRST_LABEL);
 	}
 	if (force_start)
 	{
@@ -100,28 +100,20 @@ void DFA::emit(Output & output, uint32_t& ind, const RegExpMap* specMap, const s
 	// start_label points to the beginning of current re2c block
 	// (prior to condition dispatch in '-c' mode)
 	// it can forced by configuration 're2c:startlabel = <integer>;'
-	uint32_t start_label = next_label;
-	if (bProlog && cFlag)
-	{
-		next_label++;
-	}
-
+	uint32_t start_label = o.label.new_label ();
 	// initial_label points to the beginning of DFA
 	// in '-c' mode this is NOT equal to start_label
-	uint32_t initial_label = next_label++;
-
-	head->action.set_initial (initial_label, bSaveOnHead);
-
-
-	State *s;
-
-	for (s = head; s; s = s->next)
+	uint32_t initial_label = bProlog && cFlag
+		? o.label.new_label ()
+		: start_label;
+	for (State * s = head; s; s = s->next)
 	{
-		s->label = next_label++;
+		s->label = o.label.new_label ();
 	}
-
 	std::set<uint32_t> used_labels;
 	count_used_labels (used_labels, start_label, initial_label, o.get_force_start_label ());
+
+	head->action.set_initial (initial_label, bSaveOnHead);
 
 	// Generate prolog
 	if (bProlog)
@@ -212,7 +204,7 @@ void DFA::emit(Output & output, uint32_t& ind, const RegExpMap* specMap, const s
 	}
 
 	// Generate code
-	for (s = head; s; s = s->next)
+	for (State * s = head; s; s = s->next)
 	{
 		bool readCh = false;
 		emit_state (o, ind, s, used_labels.count (s->label));

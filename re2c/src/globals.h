@@ -43,7 +43,6 @@ extern std::string yyFillLength;
 extern std::string yySetConditionParam;
 extern std::string yySetStateParam;
 extern std::string yySetupRule;
-extern uint32_t next_label;
 extern uint32_t cGotoThreshold;
 
 /* configurations */

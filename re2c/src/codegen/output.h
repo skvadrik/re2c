@@ -6,6 +6,7 @@
 #include <string>
 #include <vector>
 
+#include "src/codegen/label.h"
 #include "src/util/c99_stdint.h"
 #include "src/util/forbid_copy.h"
 
@@ -52,6 +53,19 @@ struct OutputBlock
 
 struct OutputFile
 {
+private:
+	const char * file_name;
+	FILE * file;
+	std::vector<OutputBlock *> blocks;
+
+public:
+	Label label;
+
+private:
+	std::ostream & stream ();
+	void insert_code ();
+
+public:
 	OutputFile (const char * fn);
 	~OutputFile ();
 
@@ -85,14 +99,6 @@ struct OutputFile
 	bool get_force_start_label () const;
 
 	void emit (const std::vector<std::string> & types, uint32_t max_fill);
-
-private:
-	const char * file_name;
-	FILE * file;
-	std::vector<OutputBlock *> blocks;
-
-	std::ostream & stream ();
-	void insert_code ();
 
 	FORBID_COPY (OutputFile);
 };

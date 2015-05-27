@@ -128,4 +128,39 @@ void BitMap::gen(OutputFile & o, uint32_t ind, uint32_t lb, uint32_t ub)
 	}
 }
 
+// All spans in b1 that lead to s1 are pairwise equal to that in b2 leading to s2
+bool matches(const Span * b1, uint32_t n1, const State * s1, const Span * b2, uint32_t n2, const State * s2)
+{
+	const Span * e1 = &b1[n1];
+	uint32_t lb1 = 0;
+	const Span * e2 = &b2[n2];
+	uint32_t lb2 = 0;
+
+	for (;;)
+	{
+		for (; b1 < e1 && b1->to != s1; ++b1)
+		{
+			lb1 = b1->ub;
+		}
+		for (; b2 < e2 && b2->to != s2; ++b2)
+		{
+			lb2 = b2->ub;
+		}
+		if (b1 == e1)
+		{
+			return b2 == e2;
+		}
+		if (b2 == e2)
+		{
+			return false;
+		}
+		if (lb1 != lb2 || b1->ub != b2->ub)
+		{
+			return false;
+		}
+		++b1;
+		++b2;
+	}
+}
+
 } // end namespace re2c

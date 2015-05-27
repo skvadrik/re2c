@@ -141,6 +141,9 @@ struct CpgotoTable
 	void emit (OutputFile & o, uint32_t ind);
 	void used_labels (std::set<uint32_t> & used);
 
+private:
+	uint32_t max_label ();
+
 	FORBID_COPY (CpgotoTable);
 };
 
@@ -208,17 +211,6 @@ struct Go
 		return * this;
 	}
 };
-
-// construct helpers
-bool matches(const Span * b1, uint32_t n1, const State * s1, const Span * b2, uint32_t n2, const State * s2);
-uint32_t unmap (Span * new_span, const Span * old_span, uint32_t old_nspans, const State * x);
-
-// emit helpers
-std::string space (uint32_t this_label);
-std::string output_yych (bool & readCh);
-void output_if (OutputFile & o, uint32_t ind, bool & readCh, const std::string & compare, uint32_t value);
-void output_goto (OutputFile & o, uint32_t ind, bool & readCh, uint32_t to);
-std::string output_hgo (OutputFile & o, uint32_t ind, bool & readCh, SwitchIf * hgo);
 
 } // namespace re2c
 

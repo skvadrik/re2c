@@ -9,6 +9,7 @@ namespace re2c
 {
 
 struct Go;
+struct Span;
 class State;
 
 class BitMap
@@ -31,6 +32,8 @@ public:
 
 	FORBID_COPY (BitMap);
 };
+
+bool matches(const Span * b1, uint32_t n1, const State * s1, const Span * b2, uint32_t n2, const State * s2);
 
 #ifdef _MSC_VER
 # pragma warning(disable: 4355) /* 'this' : used in base member initializer list */

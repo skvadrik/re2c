@@ -33,6 +33,7 @@ SRC_HDR = \
 	$(srcdir)/src/codegen/go.h \
 	$(srcdir)/src/codegen/indent.h \
 	$(srcdir)/src/codegen/input_api.h \
+	$(srcdir)/src/codegen/label.h \
 	$(srcdir)/src/codegen/output.h \
 	$(srcdir)/src/codegen/print.h \
 	$(srcdir)/src/codegen/scc.h \
@@ -70,6 +71,7 @@ SRC = \
 	$(srcdir)/src/codegen/code_names.cc \
 	$(srcdir)/src/codegen/emit_action.cc \
 	$(srcdir)/src/codegen/emit_dfa.cc \
+	$(srcdir)/src/codegen/label.cc \
 	$(srcdir)/src/codegen/prepare_dfa.cc \
 	$(srcdir)/src/codegen/go_construct.cc \
 	$(srcdir)/src/codegen/go_destruct.cc \
