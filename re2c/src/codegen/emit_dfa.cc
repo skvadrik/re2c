@@ -191,7 +191,7 @@ void DFA::emit(Output & output, uint32_t& ind, const RegExpMap* specMap, const s
 
 		if (DFlag)
 		{
-			o << condName << " -> " << (start_label+1) << "\n";
+			o << condName << " -> " << head->label << "\n";
 		}
 		else
 		{
