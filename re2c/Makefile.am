@@ -64,7 +64,8 @@ SRC_HDR = \
 	$(srcdir)/src/util/local_increment.h \
 	$(srcdir)/src/util/range.h \
 	$(srcdir)/src/util/smart_ptr.h \
-	$(srcdir)/src/util/substr.h
+	$(srcdir)/src/util/substr.h \
+	$(srcdir)/src/util/wrap_iterator.h
 
 SRC = \
 	$(SRC_SCANNER) \

@@ -8,6 +8,7 @@
 #include "src/util/c99_stdint.h"
 #include "src/util/forbid_copy.h"
 #include "src/util/local_increment.h"
+#include "src/util/wrap_iterator.h"
 
 namespace re2c
 {
@@ -31,44 +32,12 @@ struct Path
 	void append (const Path * p);
 };
 
-template <typename container_t>
-class wrap_iter_t
-{
-	container_t & cont;
-	typename container_t::iterator iter;
-	bool wrapped;
-
-public:
-	wrap_iter_t (container_t & c)
-		: cont (c)
-		, iter (cont.begin ())
-		, wrapped (false)
-	{}
-	bool end () const
-	{
-		return wrapped;
-	}
-	wrap_iter_t & operator ++ ()
-	{
-		if (++iter == cont.end ())
-		{
-			iter = cont.begin ();
-			wrapped = true;
-		}
-		return * this;
-	}
-	typename container_t::value_type * operator -> ()
-	{
-		return iter.operator -> ();
-	}
-};
-
 struct Node
 {
 	typedef std::map<const State *, Node *> s2n_map;
 	typedef std::map<Node *, std::vector<uint32_t> > arcs_t;
 	typedef local_increment_t<uint8_t> local_inc;
-	typedef wrap_iter_t<arcs_t> wrap_iter;
+	typedef wrap_iterator_t<arcs_t> wrap_iter;
 
 	// outgoing arcs
 	arcs_t arcs;
