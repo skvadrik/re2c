@@ -4,7 +4,6 @@
 #line 5 "<stdout>"
 {
 	YYCTYPE yych;
-
 	if ((YYLIMIT - YYCURSOR) < 6) YYFILL(6);
 	yych = *YYCURSOR;
 	switch (yych) {
@@ -55,7 +54,7 @@ yy2:
 yy3:
 #line 3 "sample.re"
 	{return ID;}
-#line 59 "<stdout>"
+#line 58 "<stdout>"
 yy4:
 	yych = *++YYCURSOR;
 	goto yy18;
@@ -68,7 +67,7 @@ yy5:
 yy6:
 #line 4 "sample.re"
 	{return DEC;}
-#line 72 "<stdout>"
+#line 71 "<stdout>"
 yy7:
 	yych = *++YYCURSOR;
 	goto yy11;
@@ -76,7 +75,7 @@ yy8:
 	++YYCURSOR;
 #line 6 "sample.re"
 	{return ERR;}
-#line 80 "<stdout>"
+#line 79 "<stdout>"
 yy10:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
@@ -145,7 +144,7 @@ yy14:
 yy16:
 #line 5 "sample.re"
 	{return HEX;}
-#line 149 "<stdout>"
+#line 148 "<stdout>"
 yy17:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
@@ -232,7 +231,7 @@ yy22:
 yy23:
 #line 2 "sample.re"
 	{return PRINT;}
-#line 236 "<stdout>"
+#line 235 "<stdout>"
 }
 #line 7 "sample.re"
 

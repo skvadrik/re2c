@@ -287,7 +287,6 @@ std:
 		  0,   0,   0,   0,   0,   0,   0,   0, 
 		  0,   0,   0,   0,   0,   0,   0,   0, 
 	};
-
 	if ((YYLIMIT - YYCURSOR) < 20) YYFILL(20);
 	yych = *YYCURSOR;
 	{

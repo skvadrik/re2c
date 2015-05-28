@@ -120,7 +120,6 @@ static int scan(Scanner *s)
 		224, 224, 224, 224, 224, 224, 224, 224, 
 		224, 224, 224, 224, 224, 224, 224, 224, 
 	};
-
 	if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
 	yych = *YYCURSOR;
 	{

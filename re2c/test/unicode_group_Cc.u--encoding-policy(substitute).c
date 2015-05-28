@@ -12,7 +12,6 @@ Cc:
 #line 13 "<stdout>"
 {
 	YYCTYPE yych;
-
 	yych = *YYCURSOR;
 	if (yych <= 0x0000001F) goto yy2;
 	if (yych <= '~') goto yy4;
@@ -21,12 +20,12 @@ yy2:
 	++YYCURSOR;
 #line 12 "unicode_group_Cc.u--encoding-policy(substitute).re"
 	{ goto Cc; }
-#line 25 "<stdout>"
+#line 24 "<stdout>"
 yy4:
 	++YYCURSOR;
 #line 13 "unicode_group_Cc.u--encoding-policy(substitute).re"
 	{ return YYCURSOR == limit; }
-#line 30 "<stdout>"
+#line 29 "<stdout>"
 }
 #line 14 "unicode_group_Cc.u--encoding-policy(substitute).re"
 

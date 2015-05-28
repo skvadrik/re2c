@@ -12,7 +12,6 @@ Mc:
 #line 13 "<stdout>"
 {
 	YYCTYPE yych;
-
 	yych = *YYCURSOR;
 	if (yych <= 0x1084) {
 		if (yych <= 0x0BD7) {
@@ -338,13 +337,13 @@ yy2:
 yy3:
 #line 13 "unicode_group_Mc.x--encoding-policy(ignore).re"
 	{ return YYCURSOR == limit; }
-#line 342 "<stdout>"
+#line 341 "<stdout>"
 yy4:
 	++YYCURSOR;
 yy5:
 #line 12 "unicode_group_Mc.x--encoding-policy(ignore).re"
 	{ goto Mc; }
-#line 348 "<stdout>"
+#line 347 "<stdout>"
 yy6:
 	yych = *++YYCURSOR;
 	if (yych <= 0xDC81) {

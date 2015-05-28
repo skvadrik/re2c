@@ -38,7 +38,6 @@
 		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
 		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
 	};
-
 	if ((YYLIMIT - YYCURSOR) < 6) YYFILL(6);
 	yych = *YYCURSOR;
 	if (yych <= '@') {
@@ -68,7 +67,7 @@ yy2:
 yy3:
 #line 12 "input11.b.re"
 	{ return 1; }
-#line 72 "<stdout>"
+#line 71 "<stdout>"
 yy4:
 	yych = *++YYCURSOR;
 	goto yy14;
@@ -77,7 +76,7 @@ yy5:
 yy6:
 #line 13 "input11.b.re"
 	{ return 2; }
-#line 81 "<stdout>"
+#line 80 "<stdout>"
 yy7:
 	++YYCURSOR;
 	if ((yych = *YYCURSOR) <= '0') goto yy8;
@@ -85,7 +84,7 @@ yy7:
 yy8:
 #line 15 "input11.b.re"
 	{ return -1; }
-#line 89 "<stdout>"
+#line 88 "<stdout>"
 yy9:
 	yych = *++YYCURSOR;
 	goto yy12;
@@ -137,7 +136,7 @@ yy20:
 	}
 #line 11 "input11.b.re"
 	{ return 0; }
-#line 141 "<stdout>"
+#line 140 "<stdout>"
 }
 #line 17 "input11.b.re"
 

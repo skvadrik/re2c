@@ -6,7 +6,6 @@ const char* scan(unsigned char* in)
 #line 7 "<stdout>"
 {
 	YYCTYPE yych;
-
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	switch (yych) {
@@ -24,35 +23,35 @@ yy3:
 	{
 		return "a";
 	}
-#line 28 "<stdout>"
+#line 27 "<stdout>"
 yy5:
 	++YYCURSOR;
 #line 2 "b"
 	{
 		return "b";
 	}
-#line 35 "<stdout>"
+#line 34 "<stdout>"
 yy7:
 	++YYCURSOR;
 #line 5 "b"
 	{
 		return "c";
 	}
-#line 42 "<stdout>"
+#line 41 "<stdout>"
 yy9:
 	++YYCURSOR;
 #line 2 "d"
 	{
 		return "d";
 	}
-#line 49 "<stdout>"
+#line 48 "<stdout>"
 yy11:
 	++YYCURSOR;
 #line 6 "d"
 	{
 		return ".";
 	}
-#line 56 "<stdout>"
+#line 55 "<stdout>"
 }
 #line 1 "e"
 

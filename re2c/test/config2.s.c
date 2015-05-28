@@ -14,7 +14,6 @@ char *scan0(char *p)
 #line 15 "<stdout>"
 {
    YYCTYPE yych;
-
    if (YYLIMIT <= YYCURSOR) YYFILL(1);
    yych = *YYCURSOR;
    if (yych <= 'b') {
@@ -28,27 +27,27 @@ char *scan0(char *p)
    ++YYCURSOR;
 #line 13 "config2.s.re"
    { return YYCURSOR; }
-#line 32 "<stdout>"
+#line 31 "<stdout>"
 yy4:
    ++YYCURSOR;
 #line 14 "config2.s.re"
    { return YYCURSOR; }
-#line 37 "<stdout>"
+#line 36 "<stdout>"
 yy6:
    ++YYCURSOR;
 #line 15 "config2.s.re"
    { return YYCURSOR; }
-#line 42 "<stdout>"
+#line 41 "<stdout>"
 yy8:
    ++YYCURSOR;
 #line 16 "config2.s.re"
    { return YYCURSOR; }
-#line 47 "<stdout>"
+#line 46 "<stdout>"
 yy10:
    ++YYCURSOR;
 #line 17 "config2.s.re"
    { return NULL; }
-#line 52 "<stdout>"
+#line 51 "<stdout>"
 }
 #line 18 "config2.s.re"
 
@@ -58,7 +57,7 @@ char *scan1(char *p)
 {
 	char *q;
 
-#line 62 "<stdout>"
+#line 61 "<stdout>"
 {
 	YYCTYPE yych;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
@@ -74,27 +73,27 @@ char *scan1(char *p)
 	++YYCURSOR;
 #line 26 "config2.s.re"
 	{ return YYCURSOR; }
-#line 78 "<stdout>"
+#line 77 "<stdout>"
 yy16:
 	++YYCURSOR;
 #line 27 "config2.s.re"
 	{ return YYCURSOR; }
-#line 83 "<stdout>"
+#line 82 "<stdout>"
 yy18:
 	++YYCURSOR;
 #line 28 "config2.s.re"
 	{ return YYCURSOR; }
-#line 88 "<stdout>"
+#line 87 "<stdout>"
 yy20:
 	++YYCURSOR;
 #line 29 "config2.s.re"
 	{ return YYCURSOR; }
-#line 93 "<stdout>"
+#line 92 "<stdout>"
 yy22:
 	++YYCURSOR;
 #line 30 "config2.s.re"
 	{ return NULL; }
-#line 98 "<stdout>"
+#line 97 "<stdout>"
 }
 #line 31 "config2.s.re"
 
@@ -104,7 +103,7 @@ char *scan(char *p)
 {
 	char *q;
 
-#line 108 "<stdout>"
+#line 107 "<stdout>"
 {
 YYCTYPE yych;
 if (YYLIMIT <= YYCURSOR) YYFILL(1);
@@ -120,27 +119,27 @@ goto yy34;
 ++YYCURSOR;
 #line 39 "config2.s.re"
 { return YYCURSOR; }
-#line 124 "<stdout>"
+#line 123 "<stdout>"
 yy28:
 ++YYCURSOR;
 #line 40 "config2.s.re"
 { return YYCURSOR; }
-#line 129 "<stdout>"
+#line 128 "<stdout>"
 yy30:
 ++YYCURSOR;
 #line 41 "config2.s.re"
 { return YYCURSOR; }
-#line 134 "<stdout>"
+#line 133 "<stdout>"
 yy32:
 ++YYCURSOR;
 #line 42 "config2.s.re"
 { return YYCURSOR; }
-#line 139 "<stdout>"
+#line 138 "<stdout>"
 yy34:
 ++YYCURSOR;
 #line 43 "config2.s.re"
 { return NULL; }
-#line 144 "<stdout>"
+#line 143 "<stdout>"
 }
 #line 44 "config2.s.re"
 

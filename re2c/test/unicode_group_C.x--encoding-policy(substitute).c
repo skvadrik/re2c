@@ -12,7 +12,6 @@ C:
 #line 13 "<stdout>"
 {
 	YYCTYPE yych;
-
 	yych = *YYCURSOR;
 	if (yych <= 0x1315) {
 		if (yych <= 0x0BC8) {
@@ -1256,13 +1255,13 @@ yy2:
 yy3:
 #line 12 "unicode_group_C.x--encoding-policy(substitute).re"
 	{ goto C; }
-#line 1260 "<stdout>"
+#line 1259 "<stdout>"
 yy4:
 	++YYCURSOR;
 yy5:
 #line 13 "unicode_group_C.x--encoding-policy(substitute).re"
 	{ return YYCURSOR == limit; }
-#line 1266 "<stdout>"
+#line 1265 "<stdout>"
 yy6:
 	yych = *++YYCURSOR;
 	if (yych <= 0xDD8F) {

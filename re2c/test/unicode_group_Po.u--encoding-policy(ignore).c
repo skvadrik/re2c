@@ -12,7 +12,6 @@ Po:
 #line 13 "<stdout>"
 {
 	YYCTYPE yych;
-
 	yych = *YYCURSOR;
 	if (yych <= 0x00002053) {
 		if (yych <= 0x00000DF4) {
@@ -373,12 +372,12 @@ yy2:
 	++YYCURSOR;
 #line 13 "unicode_group_Po.u--encoding-policy(ignore).re"
 	{ return YYCURSOR == limit; }
-#line 377 "<stdout>"
+#line 376 "<stdout>"
 yy4:
 	++YYCURSOR;
 #line 12 "unicode_group_Po.u--encoding-policy(ignore).re"
 	{ goto Po; }
-#line 382 "<stdout>"
+#line 381 "<stdout>"
 }
 #line 14 "unicode_group_Po.u--encoding-policy(ignore).re"
 

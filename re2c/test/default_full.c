@@ -4,13 +4,12 @@
 #line 5 "<stdout>"
 {
 	YYCTYPE yych;
-
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	++YYCURSOR;
 #line 3 "default_full.re"
 	{ return FULL; }
-#line 14 "<stdout>"
+#line 13 "<stdout>"
 }
 #line 4 "default_full.re"
 

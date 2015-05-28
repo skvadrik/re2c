@@ -23,7 +23,6 @@ cont:
 #line 24 "<stdout>"
 {
 	YYCTYPE yych;
-
 	if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
 	yych = *YYCURSOR;
 	switch (yych) {
@@ -292,7 +291,7 @@ yy2:
 yy3:
 #line 23 "bug1187785.re"
 	{ goto cont; }
-#line 296 "<stdout>"
+#line 295 "<stdout>"
 yy4:
 	yych = *++YYCURSOR;
 	goto yy3;
@@ -565,7 +564,7 @@ yy8:
 	++YYCURSOR;
 #line 22 "bug1187785.re"
 	{ RET(1); }
-#line 569 "<stdout>"
+#line 568 "<stdout>"
 }
 #line 24 "bug1187785.re"
 

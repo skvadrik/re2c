@@ -35,7 +35,6 @@ int scan(char *s, int l)
 #line 36 "<stdout>"
 		{
 			YYCTYPE yych;
-
 			if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
 			yych = *YYCURSOR;
 			switch (yych) {
@@ -72,7 +71,7 @@ yy2:
 yy3:
 #line 57 "calc_004.re"
 			{ t = tokendup(t, p); printf("Num: %s\n", t); free(t); continue; }
-#line 76 "<stdout>"
+#line 75 "<stdout>"
 yy4:
 			yych = *++YYCURSOR;
 			goto yy14;
@@ -80,22 +79,22 @@ yy5:
 			++YYCURSOR;
 #line 58 "calc_004.re"
 			{ printf("+\n");	continue; }
-#line 84 "<stdout>"
+#line 83 "<stdout>"
 yy7:
 			++YYCURSOR;
 #line 59 "calc_004.re"
 			{ printf("+\n");	continue; }
-#line 89 "<stdout>"
+#line 88 "<stdout>"
 yy9:
 			++YYCURSOR;
 #line 60 "calc_004.re"
 			{ printf("EOF\n");	return 0; }
-#line 94 "<stdout>"
+#line 93 "<stdout>"
 yy11:
 			++YYCURSOR;
 #line 61 "calc_004.re"
 			{ printf("ERR\n");	return 1; }
-#line 99 "<stdout>"
+#line 98 "<stdout>"
 yy13:
 			++YYCURSOR;
 			if (YYLIMIT <= YYCURSOR) YYFILL(1);
@@ -134,7 +133,7 @@ yy15:
 yy17:
 #line 56 "calc_004.re"
 			{ t = tokendup(t, p); printf("Oct: %s\n", t); free(t); continue; }
-#line 138 "<stdout>"
+#line 137 "<stdout>"
 		}
 #line 62 "calc_004.re"
 

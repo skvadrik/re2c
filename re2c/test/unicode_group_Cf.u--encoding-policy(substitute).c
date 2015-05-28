@@ -12,7 +12,6 @@ Cf:
 #line 13 "<stdout>"
 {
 	YYCTYPE yych;
-
 	yych = *YYCURSOR;
 	if (yych <= 0x0000205F) {
 		if (yych <= 0x0000070E) {
@@ -60,12 +59,12 @@ yy2:
 	++YYCURSOR;
 #line 13 "unicode_group_Cf.u--encoding-policy(substitute).re"
 	{ return YYCURSOR == limit; }
-#line 64 "<stdout>"
+#line 63 "<stdout>"
 yy4:
 	++YYCURSOR;
 #line 12 "unicode_group_Cf.u--encoding-policy(substitute).re"
 	{ goto Cf; }
-#line 69 "<stdout>"
+#line 68 "<stdout>"
 }
 #line 14 "unicode_group_Cf.u--encoding-policy(substitute).re"
 

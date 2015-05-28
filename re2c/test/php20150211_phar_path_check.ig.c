@@ -45,7 +45,6 @@ loop:
 {
 	YYCTYPE yych;
 	unsigned int yyaccept = 0;
-
 	if ((YYLIMIT - YYCURSOR) < 4) YYFILL(4);
 	yych = *YYCURSOR;
 	{

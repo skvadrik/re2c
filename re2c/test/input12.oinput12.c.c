@@ -4,7 +4,6 @@
 #line 5 "input12.c"
 {
 	YYCTYPE yych;
-
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	switch (yych) {
@@ -31,7 +30,7 @@ yy6:
 	++YYCURSOR;
 #line 3 "input12.oinput12.c.re"
 	{ return 1; }
-#line 35 "input12.c"
+#line 34 "input12.c"
 }
 #line 5 "input12.oinput12.c.re"
 

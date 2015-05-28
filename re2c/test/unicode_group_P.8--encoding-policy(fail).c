@@ -12,7 +12,6 @@ P:
 #line 13 "<stdout>"
 {
 	YYCTYPE yych;
-
 	yych = *YYCURSOR;
 	switch (yych) {
 	case '!':
@@ -63,13 +62,13 @@ yy2:
 yy3:
 #line 13 "unicode_group_P.8--encoding-policy(fail).re"
 	{ return YYCURSOR == limit; }
-#line 67 "<stdout>"
+#line 66 "<stdout>"
 yy4:
 	++YYCURSOR;
 yy5:
 #line 12 "unicode_group_P.8--encoding-policy(fail).re"
 	{ goto P; }
-#line 73 "<stdout>"
+#line 72 "<stdout>"
 yy6:
 	yych = *++YYCURSOR;
 	switch (yych) {

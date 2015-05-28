@@ -12,7 +12,6 @@ Zs:
 #line 13 "<stdout>"
 {
 	YYCTYPE yych;
-
 	yych = *YYCURSOR;
 	switch (yych) {
 	case ' ':	goto yy4;
@@ -27,13 +26,13 @@ yy2:
 yy3:
 #line 13 "unicode_group_Zs.8--encoding-policy(ignore).re"
 	{ return YYCURSOR == limit; }
-#line 31 "<stdout>"
+#line 30 "<stdout>"
 yy4:
 	++YYCURSOR;
 yy5:
 #line 12 "unicode_group_Zs.8--encoding-policy(ignore).re"
 	{ goto Zs; }
-#line 37 "<stdout>"
+#line 36 "<stdout>"
 yy6:
 	yych = *++YYCURSOR;
 	switch (yych) {

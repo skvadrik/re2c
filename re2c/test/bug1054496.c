@@ -23,7 +23,6 @@ cont:
 #line 24 "<stdout>"
 {
 	YYCTYPE yych;
-
 	if ((YYLIMIT - YYCURSOR) < 3) YYFILL(3);
 	yych = *YYCURSOR;
 	switch (yych) {
@@ -91,12 +90,12 @@ yy2:
 yy3:
 #line 25 "bug1054496.re"
 	{ goto cont; }
-#line 95 "<stdout>"
+#line 94 "<stdout>"
 yy4:
 	++YYCURSOR;
 #line 24 "bug1054496.re"
 	{ RET(TAG_EOI); }
-#line 100 "<stdout>"
+#line 99 "<stdout>"
 yy6:
 	yych = *++YYCURSOR;
 	goto yy3;
@@ -160,7 +159,7 @@ yy7:
 yy8:
 #line 22 "bug1054496.re"
 	{ RET(TAG_A); }
-#line 164 "<stdout>"
+#line 163 "<stdout>"
 yy9:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
@@ -223,7 +222,7 @@ yy9:
 yy11:
 #line 23 "bug1054496.re"
 	{ RET(TAG_TAG); }
-#line 227 "<stdout>"
+#line 226 "<stdout>"
 }
 #line 26 "bug1054496.re"
 

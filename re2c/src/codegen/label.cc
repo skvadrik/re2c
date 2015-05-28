@@ -17,11 +17,6 @@ bool operator < (const label_t & l1, const label_t & l2)
 	return l1.value < l2.value;
 }
 
-bool operator == (const label_t & l1, const label_t & l2)
-{
-	return l1.value == l2.value;
-}
-
 uint32_t width (label_t l)
 {
 	uint32_t digits = 0;

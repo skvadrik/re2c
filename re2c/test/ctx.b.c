@@ -83,7 +83,6 @@ std:
 		  0,   0,   0,   0,   0,   0,   0,   0, 
 		  0,   0,   0,   0,   0,   0,   0,   0, 
 	};
-
 	if ((YYLIMIT - YYCURSOR) < 3) YYFILL(3);
 	yych = *YYCURSOR;
 	if (yych <= ' ') {
@@ -114,7 +113,7 @@ yy3:
 	{
 		return UNEXPECTED;
 	}
-#line 118 "<stdout>"
+#line 117 "<stdout>"
 yy4:
 	++YYCURSOR;
 	yych = *YYCURSOR;
@@ -122,7 +121,7 @@ yy4:
 yy5:
 #line 50 "ctx.b.re"
 	{ return NUMBER;  }
-#line 126 "<stdout>"
+#line 125 "<stdout>"
 yy6:
 	++YYCURSOR;
 yy7:
@@ -133,7 +132,7 @@ yy7:
 		cursor = s.cur;
 		goto std;
 	}
-#line 137 "<stdout>"
+#line 136 "<stdout>"
 yy8:
 	yych = *++YYCURSOR;
 	goto yy7;
@@ -159,7 +158,7 @@ yy14:
 	YYCURSOR = YYCTXMARKER;
 #line 49 "ctx.b.re"
 	{ return KEYWORD; }
-#line 163 "<stdout>"
+#line 162 "<stdout>"
 yy15:
 	++YYCURSOR;
 	if ((yych = *YYCURSOR) <= '/') goto yy16;
@@ -168,7 +167,7 @@ yy16:
 	YYCURSOR = YYCTXMARKER;
 #line 48 "ctx.b.re"
 	{ return KEYWORD; }
-#line 172 "<stdout>"
+#line 171 "<stdout>"
 }
 #line 63 "ctx.b.re"
 

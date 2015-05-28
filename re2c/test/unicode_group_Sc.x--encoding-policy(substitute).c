@@ -12,7 +12,6 @@ Sc:
 #line 13 "<stdout>"
 {
 	YYCTYPE yych;
-
 	yych = *YYCURSOR;
 	if (yych <= 0x0E3F) {
 		if (yych <= 0x09F3) {
@@ -59,12 +58,12 @@ yy2:
 	++YYCURSOR;
 #line 13 "unicode_group_Sc.x--encoding-policy(substitute).re"
 	{ return YYCURSOR == limit; }
-#line 63 "<stdout>"
+#line 62 "<stdout>"
 yy4:
 	++YYCURSOR;
 #line 12 "unicode_group_Sc.x--encoding-policy(substitute).re"
 	{ goto Sc; }
-#line 68 "<stdout>"
+#line 67 "<stdout>"
 }
 #line 14 "unicode_group_Sc.x--encoding-policy(substitute).re"
 

@@ -12,7 +12,6 @@ Pi:
 #line 13 "<stdout>"
 {
 	YYCTYPE yych;
-
 	yych = *YYCURSOR;
 	if (yych <= 0x2E01) {
 		if (yych <= 0x201A) {
@@ -48,12 +47,12 @@ Pi:
 	++YYCURSOR;
 #line 13 "unicode_group_Pi.x--encoding-policy(ignore).re"
 	{ return YYCURSOR == limit; }
-#line 52 "<stdout>"
+#line 51 "<stdout>"
 yy4:
 	++YYCURSOR;
 #line 12 "unicode_group_Pi.x--encoding-policy(ignore).re"
 	{ goto Pi; }
-#line 57 "<stdout>"
+#line 56 "<stdout>"
 }
 #line 14 "unicode_group_Pi.x--encoding-policy(ignore).re"
 

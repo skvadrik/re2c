@@ -12,7 +12,6 @@ Me:
 #line 13 "<stdout>"
 {
 	YYCTYPE yych;
-
 	yych = *YYCURSOR;
 	switch (yych) {
 	case 0xD2:	goto yy4;
@@ -25,7 +24,7 @@ yy2:
 yy3:
 #line 13 "unicode_group_Me.8--encoding-policy(fail).re"
 	{ return YYCURSOR == limit; }
-#line 29 "<stdout>"
+#line 28 "<stdout>"
 yy4:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -60,7 +59,7 @@ yy9:
 	++YYCURSOR;
 #line 12 "unicode_group_Me.8--encoding-policy(fail).re"
 	{ goto Me; }
-#line 64 "<stdout>"
+#line 63 "<stdout>"
 yy11:
 	++YYCURSOR;
 	switch ((yych = *YYCURSOR)) {

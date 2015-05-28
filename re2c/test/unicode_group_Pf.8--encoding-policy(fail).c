@@ -12,7 +12,6 @@ Pf:
 #line 13 "<stdout>"
 {
 	YYCTYPE yych;
-
 	yych = *YYCURSOR;
 	switch (yych) {
 	case 0xC2:	goto yy4;
@@ -24,7 +23,7 @@ yy2:
 yy3:
 #line 13 "unicode_group_Pf.8--encoding-policy(fail).re"
 	{ return YYCURSOR == limit; }
-#line 28 "<stdout>"
+#line 27 "<stdout>"
 yy4:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -64,7 +63,7 @@ yy9:
 	++YYCURSOR;
 #line 12 "unicode_group_Pf.8--encoding-policy(fail).re"
 	{ goto Pf; }
-#line 68 "<stdout>"
+#line 67 "<stdout>"
 }
 #line 14 "unicode_group_Pf.8--encoding-policy(fail).re"
 

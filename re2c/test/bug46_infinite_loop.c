@@ -13,17 +13,16 @@ int main(int argc, char** argv)
 #line 14 "<stdout>"
 {
 	unsigned char yych;
-
 #line 13 "bug46_infinite_loop.re"
 	{ }
-#line 20 "<stdout>"
+#line 19 "<stdout>"
 }
 #line 14 "bug46_infinite_loop.re"
 
 
 /* BUG BEGINS HERE */
 
-#line 27 "<stdout>"
+#line 26 "<stdout>"
 {
 	unsigned char yych;
 	goto yy3;
@@ -41,7 +40,7 @@ yy3:
 yy6:
 #line 18 "bug46_infinite_loop.re"
 	{ printf("exit 0\n"); return 0; }
-#line 45 "<stdout>"
+#line 44 "<stdout>"
 yy7:
 	++YYCURSOR;
 	yych = *YYCURSOR;

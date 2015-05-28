@@ -4,7 +4,6 @@
 #line 5 "<stdout>"
 {
 	YYCTYPE yych;
-
 	if ((YYLIMIT - YYCURSOR) < 4) YYFILL(4);
 	yych = *YYCURSOR;
 	switch (yych) {
@@ -175,7 +174,7 @@ yy6:
 	++YYCURSOR;
 #line 2 "utf8-range_0x100000_0x10ffff.8.re"
 	{ return 0; }
-#line 179 "<stdout>"
+#line 178 "<stdout>"
 }
 #line 3 "utf8-range_0x100000_0x10ffff.8.re"
 

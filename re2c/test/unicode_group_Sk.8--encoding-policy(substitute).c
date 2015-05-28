@@ -12,7 +12,6 @@ Sk:
 #line 13 "<stdout>"
 {
 	YYCTYPE yych;
-
 	yych = *YYCURSOR;
 	switch (yych) {
 	case '^':
@@ -32,13 +31,13 @@ yy2:
 yy3:
 #line 13 "unicode_group_Sk.8--encoding-policy(substitute).re"
 	{ return YYCURSOR == limit; }
-#line 36 "<stdout>"
+#line 35 "<stdout>"
 yy4:
 	++YYCURSOR;
 yy5:
 #line 12 "unicode_group_Sk.8--encoding-policy(substitute).re"
 	{ goto Sk; }
-#line 42 "<stdout>"
+#line 41 "<stdout>"
 yy6:
 	yych = *++YYCURSOR;
 	switch (yych) {

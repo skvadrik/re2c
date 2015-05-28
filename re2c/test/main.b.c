@@ -88,7 +88,6 @@ int ScanFullSpeed(char *pzStrToScan, size_t lenStrToScan)
 				  0,   0,   0,   0,   0,   0,   0,   0, 
 				  0,   0,   0,   0,   0,   0,   0,   0, 
 			};
-
 			if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
 			yych = *YYCURSOR;
 			if (yych <= ',') {
@@ -110,7 +109,7 @@ int ScanFullSpeed(char *pzStrToScan, size_t lenStrToScan)
 yy3:
 #line 93 "main.b.re"
 			{ continue; }
-#line 114 "<stdout>"
+#line 113 "<stdout>"
 yy4:
 			++YYCURSOR;
 			if (yybm[0+(yych = *YYCURSOR)] & 128) {
@@ -119,22 +118,22 @@ yy4:
 yy5:
 #line 98 "main.b.re"
 			{ return 1; }
-#line 123 "<stdout>"
+#line 122 "<stdout>"
 yy6:
 			++YYCURSOR;
 #line 95 "main.b.re"
 			{ continue; }
-#line 128 "<stdout>"
+#line 127 "<stdout>"
 yy8:
 			++YYCURSOR;
 #line 96 "main.b.re"
 			{ continue; }
-#line 133 "<stdout>"
+#line 132 "<stdout>"
 yy10:
 			++YYCURSOR;
 #line 97 "main.b.re"
 			{ return 0; }
-#line 138 "<stdout>"
+#line 137 "<stdout>"
 yy12:
 			yych = *++YYCURSOR;
 			goto yy5;
@@ -147,7 +146,7 @@ yy13:
 			}
 #line 94 "main.b.re"
 			{ continue; }
-#line 151 "<stdout>"
+#line 150 "<stdout>"
 yy16:
 			++YYCURSOR;
 			if (YYLIMIT <= YYCURSOR) YYFILL(1);
@@ -178,7 +177,7 @@ int scan(char *pzStrToScan, size_t lenStrToScan)
 	for(;;)
 	{
 
-#line 182 "<stdout>"
+#line 181 "<stdout>"
 		{
 			YYCTYPE yych;
 			static const unsigned char yybm[] = {
@@ -236,7 +235,7 @@ int scan(char *pzStrToScan, size_t lenStrToScan)
 yy21:
 #line 120 "main.b.re"
 			{ printf("Num\n"); strcat(gTestBuf, "Num "); continue; }
-#line 240 "<stdout>"
+#line 239 "<stdout>"
 yy22:
 			++YYCURSOR;
 			if (yybm[0+(yych = *YYCURSOR)] & 128) {
@@ -245,22 +244,22 @@ yy22:
 yy23:
 #line 125 "main.b.re"
 			{ printf("ERR\n"); strcat(gTestBuf, "ERR "); return 1; }
-#line 249 "<stdout>"
+#line 248 "<stdout>"
 yy24:
 			++YYCURSOR;
 #line 122 "main.b.re"
 			{ printf("+\n");   strcat(gTestBuf, "+ ");   continue; }
-#line 254 "<stdout>"
+#line 253 "<stdout>"
 yy26:
 			++YYCURSOR;
 #line 123 "main.b.re"
 			{ printf("-\n");   strcat(gTestBuf, "- ");   continue; }
-#line 259 "<stdout>"
+#line 258 "<stdout>"
 yy28:
 			++YYCURSOR;
 #line 124 "main.b.re"
 			{ printf("EOF\n");                           return 0; }
-#line 264 "<stdout>"
+#line 263 "<stdout>"
 yy30:
 			yych = *++YYCURSOR;
 			goto yy23;
@@ -273,7 +272,7 @@ yy31:
 			}
 #line 121 "main.b.re"
 			{ printf("Oct\n"); strcat(gTestBuf, "Oct "); continue; }
-#line 277 "<stdout>"
+#line 276 "<stdout>"
 yy34:
 			++YYCURSOR;
 			if (YYLIMIT <= YYCURSOR) YYFILL(1);

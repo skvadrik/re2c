@@ -12,7 +12,6 @@ Lu:
 #line 13 "<stdout>"
 {
 	YYCTYPE yych;
-
 	yych = *YYCURSOR;
 	switch (yych) {
 	case 'A':
@@ -69,13 +68,13 @@ yy2:
 yy3:
 #line 13 "unicode_group_Lu.8--encoding-policy(ignore).re"
 	{ return YYCURSOR == limit; }
-#line 73 "<stdout>"
+#line 72 "<stdout>"
 yy4:
 	++YYCURSOR;
 yy5:
 #line 12 "unicode_group_Lu.8--encoding-policy(ignore).re"
 	{ goto Lu; }
-#line 79 "<stdout>"
+#line 78 "<stdout>"
 yy6:
 	yych = *++YYCURSOR;
 	switch (yych) {

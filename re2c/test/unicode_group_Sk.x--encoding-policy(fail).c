@@ -12,7 +12,6 @@ Sk:
 #line 13 "<stdout>"
 {
 	YYCTYPE yych;
-
 	yych = *YYCURSOR;
 	if (yych <= 0x1FBC) {
 		if (yych <= 0x02C1) {
@@ -95,12 +94,12 @@ yy2:
 	++YYCURSOR;
 #line 13 "unicode_group_Sk.x--encoding-policy(fail).re"
 	{ return YYCURSOR == limit; }
-#line 99 "<stdout>"
+#line 98 "<stdout>"
 yy4:
 	++YYCURSOR;
 #line 12 "unicode_group_Sk.x--encoding-policy(fail).re"
 	{ goto Sk; }
-#line 104 "<stdout>"
+#line 103 "<stdout>"
 }
 #line 14 "unicode_group_Sk.x--encoding-policy(fail).re"
 

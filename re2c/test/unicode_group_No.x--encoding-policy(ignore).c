@@ -12,7 +12,6 @@ No:
 #line 13 "<stdout>"
 {
 	YYCTYPE yych;
-
 	yych = *YYCURSOR;
 	if (yych <= 0x215F) {
 		if (yych <= 0x0D75) {
@@ -112,13 +111,13 @@ yy2:
 yy3:
 #line 13 "unicode_group_No.x--encoding-policy(ignore).re"
 	{ return YYCURSOR == limit; }
-#line 116 "<stdout>"
+#line 115 "<stdout>"
 yy4:
 	++YYCURSOR;
 yy5:
 #line 12 "unicode_group_No.x--encoding-policy(ignore).re"
 	{ goto No; }
-#line 122 "<stdout>"
+#line 121 "<stdout>"
 yy6:
 	yych = *++YYCURSOR;
 	if (yych <= 0xDD78) {

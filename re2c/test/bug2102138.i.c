@@ -7,7 +7,6 @@ int scan(const unsigned char *cr)
 
 {
 	unsigned char ch;
-
 	ch = *cr;
 	switch (ch) {
 	case 0x00:	goto yy2;

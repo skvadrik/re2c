@@ -12,18 +12,17 @@ Zl:
 #line 13 "<stdout>"
 {
 	YYCTYPE yych;
-
 	yych = *YYCURSOR;
 	if (yych == 0x2028) goto yy4;
 	++YYCURSOR;
 #line 13 "unicode_group_Zl.x--encoding-policy(fail).re"
 	{ return YYCURSOR == limit; }
-#line 22 "<stdout>"
+#line 21 "<stdout>"
 yy4:
 	++YYCURSOR;
 #line 12 "unicode_group_Zl.x--encoding-policy(fail).re"
 	{ goto Zl; }
-#line 27 "<stdout>"
+#line 26 "<stdout>"
 }
 #line 14 "unicode_group_Zl.x--encoding-policy(fail).re"
 

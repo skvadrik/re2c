@@ -6,7 +6,6 @@ unsigned char scan(const unsigned char *s)
 
 {
 	unsigned char ch;
-
 	ch = *cr;
 	switch (ch) {
 	case 0x81:	goto yy3;

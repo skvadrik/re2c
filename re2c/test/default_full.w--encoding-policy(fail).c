@@ -4,7 +4,6 @@
 #line 5 "<stdout>"
 {
 	YYCTYPE yych;
-
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	if (yych <= 0xD7FF) goto yy2;
@@ -13,12 +12,12 @@ yy2:
 	++YYCURSOR;
 #line 3 "default_full.w--encoding-policy(fail).re"
 	{ return FULL; }
-#line 17 "<stdout>"
+#line 16 "<stdout>"
 yy4:
 	++YYCURSOR;
 #line 2 "default_full.w--encoding-policy(fail).re"
 	{ return DEFAULT; }
-#line 22 "<stdout>"
+#line 21 "<stdout>"
 }
 #line 4 "default_full.w--encoding-policy(fail).re"
 

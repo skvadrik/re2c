@@ -26,7 +26,6 @@ bool lex (FILE * f, const long limit)
 #line 27 "<stdout>"
 {
 	YYCTYPE yych;
-
 	if (YYLESSTHAN (13)) YYFILL(13);
 	yych = YYPEEK ();
 	switch (yych) {
@@ -38,7 +37,7 @@ yy2:
 yy3:
 #line 25 "input_custom_fgetc.--input(custom).re"
 	{ return false; }
-#line 42 "<stdout>"
+#line 41 "<stdout>"
 yy4:
 	YYSKIP ();
 	YYBACKUP ();
@@ -161,7 +160,7 @@ yy19:
 	YYSKIP ();
 #line 24 "input_custom_fgetc.--input(custom).re"
 	{ return true; }
-#line 165 "<stdout>"
+#line 164 "<stdout>"
 }
 #line 26 "input_custom_fgetc.--input(custom).re"
 

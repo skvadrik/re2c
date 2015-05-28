@@ -3,7 +3,6 @@ EBCDIC:
 
 {
 	YYCTYPE yych;
-
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	if (yych == 0x81) goto yy4;

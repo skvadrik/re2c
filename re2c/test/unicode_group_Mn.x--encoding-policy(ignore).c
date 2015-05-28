@@ -12,7 +12,6 @@ Mn:
 #line 13 "<stdout>"
 {
 	YYCTYPE yych;
-
 	yych = *YYCURSOR;
 	if (yych <= 0x103C) {
 		if (yych <= 0x0ACC) {
@@ -624,13 +623,13 @@ yy2:
 yy3:
 #line 13 "unicode_group_Mn.x--encoding-policy(ignore).re"
 	{ return YYCURSOR == limit; }
-#line 628 "<stdout>"
+#line 627 "<stdout>"
 yy4:
 	++YYCURSOR;
 yy5:
 #line 12 "unicode_group_Mn.x--encoding-policy(ignore).re"
 	{ goto Mn; }
-#line 634 "<stdout>"
+#line 633 "<stdout>"
 yy6:
 	yych = *++YYCURSOR;
 	if (yych == 0xDDFD) goto yy11;

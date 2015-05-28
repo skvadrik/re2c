@@ -12,7 +12,6 @@ Z:
 #line 13 "<stdout>"
 {
 	YYCTYPE yych;
-
 	yych = *YYCURSOR;
 	if (yych <= 0x1FFF) {
 		if (yych <= 0x00A0) {
@@ -44,12 +43,12 @@ Z:
 	++YYCURSOR;
 #line 13 "unicode_group_Z.x--encoding-policy(ignore).re"
 	{ return YYCURSOR == limit; }
-#line 48 "<stdout>"
+#line 47 "<stdout>"
 yy4:
 	++YYCURSOR;
 #line 12 "unicode_group_Z.x--encoding-policy(ignore).re"
 	{ goto Z; }
-#line 53 "<stdout>"
+#line 52 "<stdout>"
 }
 #line 14 "unicode_group_Z.x--encoding-policy(ignore).re"
 

@@ -12,7 +12,6 @@ Co:
 #line 13 "<stdout>"
 {
 	YYCTYPE yych;
-
 	yych = *YYCURSOR;
 	if (yych <= 0x000EFFFF) {
 		if (yych <= 0x0000DFFF) goto yy2;
@@ -26,12 +25,12 @@ yy2:
 	++YYCURSOR;
 #line 13 "unicode_group_Co.u--encoding-policy(ignore).re"
 	{ return YYCURSOR == limit; }
-#line 30 "<stdout>"
+#line 29 "<stdout>"
 yy4:
 	++YYCURSOR;
 #line 12 "unicode_group_Co.u--encoding-policy(ignore).re"
 	{ goto Co; }
-#line 35 "<stdout>"
+#line 34 "<stdout>"
 }
 #line 14 "unicode_group_Co.u--encoding-policy(ignore).re"
 

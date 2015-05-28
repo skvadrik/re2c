@@ -4,7 +4,6 @@
 #line 5 "<stdout>"
 {
 	YYCTYPE yych;
-
 	if ((YYLIMIT - YYCURSOR) < 6) YYFILL(6);
 	yych = *YYCURSOR;
 	if (yych <= '@') {
@@ -34,7 +33,7 @@ yy2:
 yy3:
 #line 10 "input11.s.re"
 	{ return 1; }
-#line 38 "<stdout>"
+#line 37 "<stdout>"
 yy4:
 	yych = *++YYCURSOR;
 	goto yy14;
@@ -43,7 +42,7 @@ yy5:
 yy6:
 #line 11 "input11.s.re"
 	{ return 2; }
-#line 47 "<stdout>"
+#line 46 "<stdout>"
 yy7:
 	++YYCURSOR;
 	if ((yych = *YYCURSOR) <= '0') goto yy8;
@@ -51,7 +50,7 @@ yy7:
 yy8:
 #line 13 "input11.s.re"
 	{ return -1; }
-#line 55 "<stdout>"
+#line 54 "<stdout>"
 yy9:
 	yych = *++YYCURSOR;
 	goto yy12;
@@ -118,7 +117,7 @@ yy20:
 yy22:
 #line 9 "input11.s.re"
 	{ return 0; }
-#line 122 "<stdout>"
+#line 121 "<stdout>"
 }
 #line 15 "input11.s.re"
 

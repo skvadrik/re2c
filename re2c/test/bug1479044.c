@@ -18,7 +18,6 @@ start:
 {
 	YYCTYPE yych;
 	unsigned int yyaccept = 0;
-
 	if ((YYLIMIT - YYCURSOR) < 11) YYFILL(11);
 	yych = *YYCURSOR;
 	switch (yych) {
@@ -58,7 +57,7 @@ yy3:
 	{
 		goto start;
 	}
-#line 62 "<stdout>"
+#line 61 "<stdout>"
 yy4:
 	yyaccept = 0;
 	yych = *(YYMARKER = ++YYCURSOR);
@@ -159,7 +158,7 @@ yy16:
 	{
 		return NULL;
 	}
-#line 163 "<stdout>"
+#line 162 "<stdout>"
 yy18:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -576,7 +575,7 @@ yy63:
 	{
 		return "edu";
 	}
-#line 580 "<stdout>"
+#line 579 "<stdout>"
 yy64:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -983,7 +982,7 @@ yy107:
 	{
 		return "resnet";
 	}
-#line 987 "<stdout>"
+#line 986 "<stdout>"
 yy108:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -1187,7 +1186,7 @@ yy132:
 	{
 		return "dsl";
 	}
-#line 1191 "<stdout>"
+#line 1190 "<stdout>"
 yy133:
 	yych = *++YYCURSOR;
 	switch (yych) {

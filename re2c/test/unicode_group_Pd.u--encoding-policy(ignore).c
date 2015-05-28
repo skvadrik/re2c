@@ -12,7 +12,6 @@ Pd:
 #line 13 "<stdout>"
 {
 	YYCTYPE yych;
-
 	yych = *YYCURSOR;
 	if (yych <= 0x00002E19) {
 		if (yych <= 0x000013FF) {
@@ -53,12 +52,12 @@ Pd:
 	++YYCURSOR;
 #line 13 "unicode_group_Pd.u--encoding-policy(ignore).re"
 	{ return YYCURSOR == limit; }
-#line 57 "<stdout>"
+#line 56 "<stdout>"
 yy4:
 	++YYCURSOR;
 #line 12 "unicode_group_Pd.u--encoding-policy(ignore).re"
 	{ goto Pd; }
-#line 62 "<stdout>"
+#line 61 "<stdout>"
 }
 #line 14 "unicode_group_Pd.u--encoding-policy(ignore).re"
 

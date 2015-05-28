@@ -556,7 +556,6 @@ PHPAPI int php_var_unserialize_ex(UNSERIALIZE_PARAMETER)
 		  0,   0,   0,   0,   0,   0,   0,   0, 
 		  0,   0,   0,   0,   0,   0,   0,   0, 
 	};
-
 	if ((YYLIMIT - YYCURSOR) < 7) YYFILL(7);
 	yych = *YYCURSOR;
 	{

@@ -12,7 +12,6 @@ Pd:
 #line 13 "<stdout>"
 {
 	YYCTYPE yych;
-
 	yych = *YYCURSOR;
 	switch (yych) {
 	case '-':	goto yy4;
@@ -28,13 +27,13 @@ yy2:
 yy3:
 #line 13 "unicode_group_Pd.8--encoding-policy(substitute).re"
 	{ return YYCURSOR == limit; }
-#line 32 "<stdout>"
+#line 31 "<stdout>"
 yy4:
 	++YYCURSOR;
 yy5:
 #line 12 "unicode_group_Pd.8--encoding-policy(substitute).re"
 	{ goto Pd; }
-#line 38 "<stdout>"
+#line 37 "<stdout>"
 yy6:
 	yych = *++YYCURSOR;
 	switch (yych) {

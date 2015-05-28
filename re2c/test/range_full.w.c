@@ -4,13 +4,12 @@
 #line 5 "<stdout>"
 {
 	YYCTYPE yych;
-
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	++YYCURSOR;
 #line 2 "range_full.w.re"
 	{return 0;}
-#line 14 "<stdout>"
+#line 13 "<stdout>"
 }
 #line 3 "range_full.w.re"
 

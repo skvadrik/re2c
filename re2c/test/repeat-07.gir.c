@@ -6,7 +6,6 @@ void scan(unsigned char* in)
 
 	{
 		unsigned char yych;
-
 		if (limit1 <= cursor1) fill1(1);
 		yych = *cursor1;
 		{
@@ -74,7 +73,6 @@ void scan(unsigned short* in)
 
 	{
 		unsigned short yych;
-
 		if (limit2 <= cursor2) fill2(1);
 		yych = *cursor2;
 		if (yych & ~0xFF) {
@@ -144,7 +142,6 @@ void scan(unsigned int* in)
 
 	{
 		unsigned int yych;
-
 		if (limit3 <= cursor3) fill3(1);
 		yych = *cursor3;
 		if (yych & ~0xFF) {

@@ -4,7 +4,6 @@
 #line 5 "<stdout>"
 {
 	YYCTYPE yych;
-
 	if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
 	yych = *YYCURSOR;
 	if (yych == '\n') goto yy2;
@@ -17,7 +16,7 @@ yy3:
 yy4:
 #line 2 "range_neg_lf.x.re"
 	{return 0;}
-#line 21 "<stdout>"
+#line 20 "<stdout>"
 yy5:
 	++YYCURSOR;
 	if ((yych = *YYCURSOR) <= 0xDBFF) goto yy4;

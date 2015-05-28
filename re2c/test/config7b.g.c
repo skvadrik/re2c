@@ -4,7 +4,6 @@
 #line 5 "<stdout>"
 {
 	YYCTYPE yych;
-
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	{
@@ -48,12 +47,12 @@ yy2:
 	++YYCURSOR;
 #line 10 "config7b.g.re"
 	{ return 1; }
-#line 52 "<stdout>"
+#line 51 "<stdout>"
 yy4:
 	++YYCURSOR;
 #line 12 "config7b.g.re"
 	{ return -1; }
-#line 57 "<stdout>"
+#line 56 "<stdout>"
 }
 #line 14 "config7b.g.re"
 

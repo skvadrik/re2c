@@ -12,7 +12,6 @@ char *q;
 #line 13 "<stdout>"
 {
 	YYCTYPE yych;
-
 	if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
 	yych = *YYCURSOR;
 	switch (yych) {
@@ -32,7 +31,7 @@ yy2:
 	++YYCURSOR;
 #line 11 "simple_default.re"
 	{return NULL;}
-#line 36 "<stdout>"
+#line 35 "<stdout>"
 yy4:
 	++YYCURSOR;
 	yych = *YYCURSOR;
@@ -40,7 +39,7 @@ yy4:
 yy5:
 #line 10 "simple_default.re"
 	{return YYCURSOR;}
-#line 44 "<stdout>"
+#line 43 "<stdout>"
 yy6:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);

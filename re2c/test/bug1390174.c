@@ -18,7 +18,6 @@ const char *q;
 #line 19 "<stdout>"
 {
 	YYCTYPE yych;
-
 	if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
 	yych = *YYCURSOR;
 	switch (yych) {
@@ -38,13 +37,13 @@ yy2:
 yy3:
 #line 19 "bug1390174.re"
 	{RET(0);}
-#line 42 "<stdout>"
+#line 41 "<stdout>"
 yy4:
 	++YYCURSOR;
 yy5:
 #line 18 "bug1390174.re"
 	{RET(1);}
-#line 48 "<stdout>"
+#line 47 "<stdout>"
 yy6:
 	yych = *++YYCURSOR;
 	goto yy3;

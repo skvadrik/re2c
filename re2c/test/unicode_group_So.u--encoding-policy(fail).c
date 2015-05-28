@@ -12,7 +12,6 @@ So:
 #line 13 "<stdout>"
 {
 	YYCTYPE yych;
-
 	yych = *YYCURSOR;
 	if (yych <= 0x00002FD5) {
 		if (yych <= 0x00002125) {
@@ -581,12 +580,12 @@ yy2:
 	++YYCURSOR;
 #line 13 "unicode_group_So.u--encoding-policy(fail).re"
 	{ return YYCURSOR == limit; }
-#line 585 "<stdout>"
+#line 584 "<stdout>"
 yy4:
 	++YYCURSOR;
 #line 12 "unicode_group_So.u--encoding-policy(fail).re"
 	{ goto So; }
-#line 590 "<stdout>"
+#line 589 "<stdout>"
 }
 #line 14 "unicode_group_So.u--encoding-policy(fail).re"
 

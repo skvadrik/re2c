@@ -12,7 +12,6 @@ Zs:
 #line 13 "<stdout>"
 {
 	YYCTYPE yych;
-
 	yych = *YYCURSOR;
 	if (yych <= 0x180E) {
 		if (yych <= 0x00A0) {
@@ -39,12 +38,12 @@ yy2:
 	++YYCURSOR;
 #line 13 "unicode_group_Zs.x--encoding-policy(substitute).re"
 	{ return YYCURSOR == limit; }
-#line 43 "<stdout>"
+#line 42 "<stdout>"
 yy4:
 	++YYCURSOR;
 #line 12 "unicode_group_Zs.x--encoding-policy(substitute).re"
 	{ goto Zs; }
-#line 48 "<stdout>"
+#line 47 "<stdout>"
 }
 #line 14 "unicode_group_Zs.x--encoding-policy(substitute).re"
 

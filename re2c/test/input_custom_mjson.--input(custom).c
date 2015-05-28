@@ -491,7 +491,6 @@ static void parsectx_next_token(mjson_parser_t* context)
         {
             YYCTYPE yych;
             unsigned int yyaccept = 0;
-
             yych = YYPEEK ();
             switch (yych) {
             case 0x00:    goto yy31;
@@ -585,7 +584,7 @@ yy3:
             {
                 continue; 
             }
-#line 589 "<stdout>"
+#line 588 "<stdout>"
 yy4:
             yyaccept = 0;
             YYSKIP ();
@@ -602,7 +601,7 @@ yy5:
                 context->token = TOK_INVALID;
                 return;
             }
-#line 606 "<stdout>"
+#line 605 "<stdout>"
 yy6:
             YYSKIP ();
 #line 527 "input_custom_mjson.--input(custom).re"
@@ -610,7 +609,7 @@ yy6:
                 token = TOK_LEFT_CURLY_BRACKET;
                 goto done;
             }
-#line 614 "<stdout>"
+#line 613 "<stdout>"
 yy8:
             YYSKIP ();
 #line 532 "input_custom_mjson.--input(custom).re"
@@ -618,7 +617,7 @@ yy8:
                 token = TOK_RIGHT_CURLY_BRACKET;
                 goto done;
             }
-#line 622 "<stdout>"
+#line 621 "<stdout>"
 yy10:
             YYSKIP ();
 #line 537 "input_custom_mjson.--input(custom).re"
@@ -626,7 +625,7 @@ yy10:
                 token = TOK_LEFT_BRACKET;
                 goto done;
             }
-#line 630 "<stdout>"
+#line 629 "<stdout>"
 yy12:
             YYSKIP ();
 #line 542 "input_custom_mjson.--input(custom).re"
@@ -634,7 +633,7 @@ yy12:
                 token = TOK_RIGHT_BRACKET;
                 goto done;
             }
-#line 638 "<stdout>"
+#line 637 "<stdout>"
 yy14:
             YYSKIP ();
 #line 547 "input_custom_mjson.--input(custom).re"
@@ -642,7 +641,7 @@ yy14:
                 token = TOK_COLON;
                 goto done;
             }
-#line 646 "<stdout>"
+#line 645 "<stdout>"
 yy16:
             YYSKIP ();
 #line 552 "input_custom_mjson.--input(custom).re"
@@ -650,7 +649,7 @@ yy16:
                 token = TOK_EQUAL;
                 goto done;
             }
-#line 654 "<stdout>"
+#line 653 "<stdout>"
 yy18:
             YYSKIP ();
 #line 557 "input_custom_mjson.--input(custom).re"
@@ -658,7 +657,7 @@ yy18:
                 token = TOK_COMMA;
                 goto done;
             }
-#line 662 "<stdout>"
+#line 661 "<stdout>"
 yy20:
             YYSKIP ();
             switch ((yych = YYPEEK ())) {
@@ -734,7 +733,7 @@ yy21:
                 token = TOK_DEC_NUMBER;
                 goto done;
             }
-#line 738 "<stdout>"
+#line 737 "<stdout>"
 yy22:
             yyaccept = 0;
             YYSKIP ();
@@ -786,7 +785,7 @@ yy26:
                 token = TOK_IDENTIFIER;
                 goto done;
             }
-#line 790 "<stdout>"
+#line 789 "<stdout>"
 yy27:
             YYSKIP ();
             yych = YYPEEK ();
@@ -819,7 +818,7 @@ yy31:
                 context->token = TOK_NONE;
                 return;
             }
-#line 823 "<stdout>"
+#line 822 "<stdout>"
 yy33:
             YYSKIP ();
             yych = YYPEEK ();
@@ -865,7 +864,7 @@ yy38:
                 token = TOK_NOESC_STRING;
                 goto done;
             }
-#line 869 "<stdout>"
+#line 868 "<stdout>"
 yy40:
             YYSKIP ();
             yych = YYPEEK ();
@@ -910,7 +909,7 @@ yy43:
                 token = TOK_STRING;
                 goto done;
             }
-#line 914 "<stdout>"
+#line 913 "<stdout>"
 yy45:
             YYSKIP ();
             yych = YYPEEK ();
@@ -1153,7 +1152,7 @@ yy53:
                 token = TOK_NULL;
                 goto done;
             }
-#line 1157 "<stdout>"
+#line 1156 "<stdout>"
 yy54:
             YYSKIP ();
             yych = YYPEEK ();
@@ -1249,7 +1248,7 @@ yy58:
                 token = TOK_FALSE;
                 goto done;
             }
-#line 1253 "<stdout>"
+#line 1252 "<stdout>"
 yy59:
             YYSKIP ();
             yych = YYPEEK ();
@@ -1338,7 +1337,7 @@ yy62:
                 token = TOK_TRUE;
                 goto done;
             }
-#line 1342 "<stdout>"
+#line 1341 "<stdout>"
 yy63:
             yyaccept = 1;
             YYSKIP ();
@@ -1365,7 +1364,7 @@ yy65:
                 token = TOK_FLOAT_NUMBER;
                 goto done;
             }
-#line 1369 "<stdout>"
+#line 1368 "<stdout>"
 yy66:
             YYSKIP ();
             yych = YYPEEK ();
@@ -1562,7 +1561,7 @@ yy74:
                 context->token = TOK_INVALID;
                 return;
             }
-#line 1566 "<stdout>"
+#line 1565 "<stdout>"
 yy75:
             yyaccept = 2;
             YYSKIP ();
@@ -2040,7 +2039,7 @@ yy101:
                 token = TOK_OCT_NUMBER;
                 goto done;
             }
-#line 2044 "<stdout>"
+#line 2043 "<stdout>"
 yy102:
             YYSKIP ();
             yych = YYPEEK ();
@@ -2256,7 +2255,7 @@ yy107:
                 token = TOK_HEX_NUMBER;
                 goto done;
             }
-#line 2260 "<stdout>"
+#line 2259 "<stdout>"
 yy108:
             YYSKIP ();
             yych = YYPEEK ();
@@ -2279,7 +2278,7 @@ yy112:
             {
                 continue; 
             }
-#line 2283 "<stdout>"
+#line 2282 "<stdout>"
 yy114:
             YYSKIP ();
             yych = YYPEEK ();
@@ -2313,7 +2312,7 @@ yy120:
             {
                 continue; 
             }
-#line 2317 "<stdout>"
+#line 2316 "<stdout>"
 yy121:
             yyaccept = 4;
             YYSKIP ();
@@ -2474,7 +2473,7 @@ static int parse_string(mjson_parser_t *context, uint32_t id)
         s = c;
 
 
-#line 2478 "<stdout>"
+#line 2477 "<stdout>"
         {
             YYCTYPE yych;
             yych = YYPEEK ();
@@ -2499,7 +2498,7 @@ yy130:
 
                 continue;
             }
-#line 2503 "<stdout>"
+#line 2502 "<stdout>"
 yy131:
             YYSKIP ();
             YYBACKUP ();
@@ -2521,7 +2520,7 @@ yy132:
             { 
                 assert(!"reachable");
             }
-#line 2525 "<stdout>"
+#line 2524 "<stdout>"
 yy133:
             YYSKIP ();
 #line 801 "input_custom_mjson.--input(custom).re"
@@ -2533,7 +2532,7 @@ yy133:
 
                 return 1;
             }
-#line 2537 "<stdout>"
+#line 2536 "<stdout>"
 yy135:
             YYSKIP ();
             yych = YYPEEK ();
@@ -2602,7 +2601,7 @@ yy138:
                 
                 continue;
             }
-#line 2606 "<stdout>"
+#line 2605 "<stdout>"
 yy140:
             YYSKIP ();
             yych = YYPEEK ();
@@ -2703,7 +2702,7 @@ yy143:
 
                 continue;
             }
-#line 2707 "<stdout>"
+#line 2706 "<stdout>"
 yy145:
             YYSKIP ();
             yych = YYPEEK ();

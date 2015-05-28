@@ -12,7 +12,6 @@ Nd:
 #line 13 "<stdout>"
 {
 	YYCTYPE yych;
-
 	yych = *YYCURSOR;
 	if (yych <= 0x17E9) {
 		if (yych <= 0x0BE5) {
@@ -151,13 +150,13 @@ yy2:
 yy3:
 #line 13 "unicode_group_Nd.x--encoding-policy(substitute).re"
 	{ return YYCURSOR == limit; }
-#line 155 "<stdout>"
+#line 154 "<stdout>"
 yy4:
 	++YYCURSOR;
 yy5:
 #line 12 "unicode_group_Nd.x--encoding-policy(substitute).re"
 	{ goto Nd; }
-#line 161 "<stdout>"
+#line 160 "<stdout>"
 yy6:
 	yych = *++YYCURSOR;
 	if (yych <= 0xDC9F) goto yy3;

@@ -19,7 +19,6 @@ bool lex (std::istringstream & is, const std::streampos limit)
 #line 20 "<stdout>"
 {
 	YYCTYPE yych;
-
 	if (YYLESSTHAN (13)) YYFILL(13);
 	yych = YYPEEK ();
 	switch (yych) {
@@ -31,7 +30,7 @@ yy2:
 yy3:
 #line 18 "input_custom_istringstream.--input(custom).re"
 	{ return false; }
-#line 35 "<stdout>"
+#line 34 "<stdout>"
 yy4:
 	YYSKIP ();
 	YYBACKUP ();
@@ -154,7 +153,7 @@ yy19:
 	YYSKIP ();
 #line 17 "input_custom_istringstream.--input(custom).re"
 	{ return true; }
-#line 158 "<stdout>"
+#line 157 "<stdout>"
 }
 #line 19 "input_custom_istringstream.--input(custom).re"
 

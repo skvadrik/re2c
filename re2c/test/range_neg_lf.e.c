@@ -4,7 +4,6 @@
 #line 5 "<stdout>"
 {
 	YYCTYPE yych;
-
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	switch (yych) {
@@ -16,7 +15,7 @@ yy3:
 	++YYCURSOR;
 #line 2 "range_neg_lf.e.re"
 	{return 0;}
-#line 20 "<stdout>"
+#line 19 "<stdout>"
 }
 #line 3 "range_neg_lf.e.re"
 

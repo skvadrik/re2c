@@ -4,7 +4,6 @@
 #line 5 "<stdout>"
 {
 	YYCTYPE yych;
-
 	if ((YYLIMIT - YYCURSOR) < 4) YYFILL(4);
 	yych = *YYCURSOR;
 	switch (yych) {
@@ -194,13 +193,13 @@ yy2:
 yy3:
 #line 3 "default_full.8--encoding-policy(fail).re"
 	{ return FULL; }
-#line 198 "<stdout>"
+#line 197 "<stdout>"
 yy4:
 	++YYCURSOR;
 yy5:
 #line 2 "default_full.8--encoding-policy(fail).re"
 	{ return DEFAULT; }
-#line 204 "<stdout>"
+#line 203 "<stdout>"
 yy6:
 	yych = *++YYCURSOR;
 	switch (yych) {

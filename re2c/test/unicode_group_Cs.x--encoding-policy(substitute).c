@@ -12,18 +12,17 @@ Cs:
 #line 13 "<stdout>"
 {
 	YYCTYPE yych;
-
 	yych = *YYCURSOR;
 	if (yych == 0xFFFD) goto yy4;
 	++YYCURSOR;
 #line 13 "unicode_group_Cs.x--encoding-policy(substitute).re"
 	{ return YYCURSOR == limit; }
-#line 22 "<stdout>"
+#line 21 "<stdout>"
 yy4:
 	++YYCURSOR;
 #line 12 "unicode_group_Cs.x--encoding-policy(substitute).re"
 	{ goto Cs; }
-#line 27 "<stdout>"
+#line 26 "<stdout>"
 }
 #line 14 "unicode_group_Cs.x--encoding-policy(substitute).re"
 

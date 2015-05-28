@@ -22,7 +22,6 @@ size_t scan(const char *s, int l, char *r)
 #line 23 "<stdout>"
 {
 	YYCTYPE yych;
-
 	if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
 	yych = *(YYMARKER = YYCURSOR);
 	switch (yych) {
@@ -37,7 +36,7 @@ yy2:
 		*r++ = '\0';
 		return p - s;
 	}
-#line 41 "<stdout>"
+#line 40 "<stdout>"
 yy3:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -117,7 +116,7 @@ yy5:
 		*r++ = '\0';
 		return p - s;
 	}
-#line 121 "<stdout>"
+#line 120 "<stdout>"
 yy7:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
@@ -202,7 +201,7 @@ yy11:
 		*r++ = '2';
 		continue;
 	}
-#line 206 "<stdout>"
+#line 205 "<stdout>"
 yy12:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
@@ -278,7 +277,7 @@ yy14:
 		*r++ = '1';
 		continue;
 	}
-#line 282 "<stdout>"
+#line 281 "<stdout>"
 }
 #line 45 "bug1454253.re"
 

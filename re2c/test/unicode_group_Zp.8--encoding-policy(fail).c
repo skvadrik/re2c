@@ -12,7 +12,6 @@ Zp:
 #line 13 "<stdout>"
 {
 	YYCTYPE yych;
-
 	yych = *YYCURSOR;
 	switch (yych) {
 	case 0xE2:	goto yy4;
@@ -23,7 +22,7 @@ yy2:
 yy3:
 #line 13 "unicode_group_Zp.8--encoding-policy(fail).re"
 	{ return YYCURSOR == limit; }
-#line 27 "<stdout>"
+#line 26 "<stdout>"
 yy4:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -43,7 +42,7 @@ yy7:
 	++YYCURSOR;
 #line 12 "unicode_group_Zp.8--encoding-policy(fail).re"
 	{ goto Zp; }
-#line 47 "<stdout>"
+#line 46 "<stdout>"
 }
 #line 14 "unicode_group_Zp.8--encoding-policy(fail).re"
 

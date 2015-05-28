@@ -12,7 +12,6 @@ N:
 #line 13 "<stdout>"
 {
 	YYCTYPE yych;
-
 	yych = *YYCURSOR;
 	switch (yych) {
 	case '0':
@@ -43,13 +42,13 @@ yy2:
 yy3:
 #line 13 "unicode_group_N.8--encoding-policy(substitute).re"
 	{ return YYCURSOR == limit; }
-#line 47 "<stdout>"
+#line 46 "<stdout>"
 yy4:
 	++YYCURSOR;
 yy5:
 #line 12 "unicode_group_N.8--encoding-policy(substitute).re"
 	{ goto N; }
-#line 53 "<stdout>"
+#line 52 "<stdout>"
 yy6:
 	yych = *++YYCURSOR;
 	switch (yych) {

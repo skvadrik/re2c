@@ -6,7 +6,6 @@ char *scan(char *p)
 #line 7 "<stdout>"
 	{
 		unsigned char yych;
-
 		yych = (unsigned char)*p;
 		switch (yych) {
 		case '0':
@@ -28,12 +27,12 @@ yy2:
 yy3:
 #line 9 "bug1682718.re"
 		{return p;}
-#line 32 "<stdout>"
+#line 31 "<stdout>"
 yy4:
 		++p;
 #line 10 "bug1682718.re"
 		{return (char*)0;}
-#line 37 "<stdout>"
+#line 36 "<stdout>"
 yy6:
 		++p;
 		yych = (unsigned char)*p;

@@ -79,7 +79,6 @@ std:
 		  0,   0,   0,   0,   0,   0,   0,   0, 
 		  0,   0,   0,   0,   0,   0,   0,   0, 
 	};
-
 	if ((s.lim - s.cur) < 3) fill(3);
 	curr = (unsigned char)*s.cur;
 	if (curr <= ' ') {
@@ -110,7 +109,7 @@ xx3:
 	{
 		return UNEXPECTED;
 	}
-#line 114 "<stdout>"
+#line 113 "<stdout>"
 xx4:
 	++s.cur;
 	curr = (unsigned char)*s.cur;
@@ -118,7 +117,7 @@ xx4:
 xx5:
 #line 58 "config9.b.re"
 	{ return NUMBER;  }
-#line 122 "<stdout>"
+#line 121 "<stdout>"
 xx6:
 	++s.cur;
 xx7:
@@ -129,7 +128,7 @@ xx7:
 		cursor = s.cur;
 		goto std;
 	}
-#line 133 "<stdout>"
+#line 132 "<stdout>"
 xx8:
 	curr = (unsigned char)*++s.cur;
 	goto xx7;
@@ -155,7 +154,7 @@ xx14:
 	s.cur = s.ctx;
 #line 57 "config9.b.re"
 	{ return KEYWORD; }
-#line 159 "<stdout>"
+#line 158 "<stdout>"
 xx15:
 	++s.cur;
 	if ((curr = (unsigned char)*s.cur) <= '/') goto xx16;
@@ -164,7 +163,7 @@ xx16:
 	s.cur = s.ctx;
 #line 56 "config9.b.re"
 	{ return KEYWORD; }
-#line 168 "<stdout>"
+#line 167 "<stdout>"
 }
 #line 71 "config9.b.re"
 

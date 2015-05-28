@@ -12,7 +12,6 @@ Cn:
 #line 13 "<stdout>"
 {
 	YYCTYPE yych;
-
 	yych = *YYCURSOR;
 	if (yych <= 0x135A) {
 		if (yych <= 0x0BCF) {
@@ -1241,13 +1240,13 @@ yy2:
 yy3:
 #line 13 "unicode_group_Cn.x--encoding-policy(substitute).re"
 	{ return YYCURSOR == limit; }
-#line 1245 "<stdout>"
+#line 1244 "<stdout>"
 yy4:
 	++YYCURSOR;
 yy5:
 #line 12 "unicode_group_Cn.x--encoding-policy(substitute).re"
 	{ goto Cn; }
-#line 1251 "<stdout>"
+#line 1250 "<stdout>"
 yy6:
 	yych = *++YYCURSOR;
 	if (yych <= 0xDD8F) {

@@ -4,7 +4,6 @@
 #line 5 "<stdout>"
 {
 	YYCTYPE yych;
-
 	if ((YYLIMIT - YYCURSOR) < 4) YYFILL(4);
 	yych = *YYCURSOR;
 	switch (yych) {
@@ -194,7 +193,7 @@ yy3:
 	++YYCURSOR;
 #line 2 "utf8-full_range-2.8.re"
 	{ return 0; }
-#line 198 "<stdout>"
+#line 197 "<stdout>"
 yy5:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -655,7 +654,7 @@ yy13:
 	++YYCURSOR;
 #line 8 "utf8-full_range-2.8.re"
 	{ return 6; }
-#line 659 "<stdout>"
+#line 658 "<stdout>"
 yy15:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -798,7 +797,7 @@ yy17:
 	++YYCURSOR;
 #line 7 "utf8-full_range-2.8.re"
 	{ return 5; }
-#line 802 "<stdout>"
+#line 801 "<stdout>"
 yy19:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -941,7 +940,7 @@ yy21:
 	++YYCURSOR;
 #line 6 "utf8-full_range-2.8.re"
 	{ return 4; }
-#line 945 "<stdout>"
+#line 944 "<stdout>"
 yy23:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -1015,7 +1014,7 @@ yy24:
 	++YYCURSOR;
 #line 5 "utf8-full_range-2.8.re"
 	{ return 3; }
-#line 1019 "<stdout>"
+#line 1018 "<stdout>"
 yy26:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -1089,12 +1088,12 @@ yy27:
 	++YYCURSOR;
 #line 4 "utf8-full_range-2.8.re"
 	{ return 2; }
-#line 1093 "<stdout>"
+#line 1092 "<stdout>"
 yy29:
 	++YYCURSOR;
 #line 3 "utf8-full_range-2.8.re"
 	{ return 1; }
-#line 1098 "<stdout>"
+#line 1097 "<stdout>"
 }
 #line 9 "utf8-full_range-2.8.re"
 

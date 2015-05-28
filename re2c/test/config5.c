@@ -7,7 +7,6 @@
 #line 8 "<stdout>"
 {
 	YYCTYPE yych;
-
 	if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
 	yych = *YYCURSOR;
 	switch (yych) {
@@ -23,7 +22,7 @@ yy2:
 yy3:
 #line 11 "config5.re"
 	{ return 0; }
-#line 27 "<stdout>"
+#line 26 "<stdout>"
 yy4:
 	yych = *++YYCURSOR;
 	goto yy3;
@@ -55,7 +54,7 @@ yy10:
 	++YYCURSOR;
 #line 10 "config5.re"
 	{ return 1; }
-#line 59 "<stdout>"
+#line 58 "<stdout>"
 }
 #line 13 "config5.re"
 

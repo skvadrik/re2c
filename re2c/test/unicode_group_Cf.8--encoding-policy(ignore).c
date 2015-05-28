@@ -12,7 +12,6 @@ Cf:
 #line 13 "<stdout>"
 {
 	YYCTYPE yych;
-
 	yych = *YYCURSOR;
 	switch (yych) {
 	case 0xC2:	goto yy4;
@@ -31,7 +30,7 @@ yy2:
 yy3:
 #line 13 "unicode_group_Cf.8--encoding-policy(ignore).re"
 	{ return YYCURSOR == limit; }
-#line 35 "<stdout>"
+#line 34 "<stdout>"
 yy4:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -213,7 +212,7 @@ yy17:
 	++YYCURSOR;
 #line 12 "unicode_group_Cf.8--encoding-policy(ignore).re"
 	{ goto Cf; }
-#line 217 "<stdout>"
+#line 216 "<stdout>"
 yy19:
 	yych = *++YYCURSOR;
 	switch (yych) {

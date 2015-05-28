@@ -4,7 +4,6 @@
 #line 5 "<stdout>"
 {
 	YYCTYPE yych;
-
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	if (yych != '\n') goto yy3;
@@ -12,7 +11,7 @@ yy3:
 	++YYCURSOR;
 #line 2 "range_dot.w.re"
 	{return 0;}
-#line 16 "<stdout>"
+#line 15 "<stdout>"
 }
 #line 3 "range_dot.w.re"
 

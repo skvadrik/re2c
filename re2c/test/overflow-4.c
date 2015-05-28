@@ -4,7 +4,6 @@
 #line 5 "<stdout>"
 {
 	YYCTYPE yych;
-
 	if ((YYLIMIT - YYCURSOR) < 3) YYFILL(3);
 	yych = *YYCURSOR;
 	switch (yych) {
@@ -28,6 +27,6 @@ yy5:
 	++YYCURSOR;
 #line 4 "overflow-4.re"
 	{ return "bla"; }
-#line 32 "<stdout>"
+#line 31 "<stdout>"
 }
 #line 6 "overflow-4.re"

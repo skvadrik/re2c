@@ -12,7 +12,6 @@ Mn:
 #line 13 "<stdout>"
 {
 	YYCTYPE yych;
-
 	yych = *YYCURSOR;
 	if (yych <= 0x0000108C) {
 		if (yych <= 0x00000B3B) {
@@ -640,12 +639,12 @@ yy2:
 	++YYCURSOR;
 #line 13 "unicode_group_Mn.u--encoding-policy(substitute).re"
 	{ return YYCURSOR == limit; }
-#line 644 "<stdout>"
+#line 643 "<stdout>"
 yy4:
 	++YYCURSOR;
 #line 12 "unicode_group_Mn.u--encoding-policy(substitute).re"
 	{ goto Mn; }
-#line 649 "<stdout>"
+#line 648 "<stdout>"
 }
 #line 14 "unicode_group_Mn.u--encoding-policy(substitute).re"
 

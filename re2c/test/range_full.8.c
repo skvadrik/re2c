@@ -4,7 +4,6 @@
 #line 5 "<stdout>"
 {
 	YYCTYPE yych;
-
 	if ((YYLIMIT - YYCURSOR) < 4) YYFILL(4);
 	yych = *YYCURSOR;
 	switch (yych) {
@@ -194,7 +193,7 @@ yy3:
 	++YYCURSOR;
 #line 2 "range_full.8.re"
 	{return 0;}
-#line 198 "<stdout>"
+#line 197 "<stdout>"
 yy5:
 	yych = *++YYCURSOR;
 	switch (yych) {

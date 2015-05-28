@@ -2,7 +2,6 @@
 
 {
 	YYCTYPE yych;
-
 	if ((YYLIMIT - YYCURSOR) < 6) YYFILL(6);
 	yych = *YYCURSOR;
 	switch (yych) {

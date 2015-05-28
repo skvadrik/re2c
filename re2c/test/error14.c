@@ -4,7 +4,6 @@
 #line 5 "<stdout>"
 {
 	YYCTYPE yych;
-
 	if ((YYLIMIT - YYCURSOR) < 3) YYFILL(3);
 	yych = *YYCURSOR;
 	switch (yych) {
@@ -20,7 +19,7 @@ yy2:
 yy3:
 #line 4 "error14.re"
 	{ return 0; }
-#line 24 "<stdout>"
+#line 23 "<stdout>"
 yy4:
 	yych = *++YYCURSOR;
 	goto yy3;
@@ -38,12 +37,12 @@ yy7:
 	++YYCURSOR;
 #line 2 "error14.re"
 	{ return 1; }
-#line 42 "<stdout>"
+#line 41 "<stdout>"
 yy9:
 	++YYCURSOR;
 #line 3 "error14.re"
 	{ return 2; }
-#line 47 "<stdout>"
+#line 46 "<stdout>"
 }
 #line 5 "error14.re"
 

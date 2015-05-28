@@ -98,7 +98,6 @@ int scan(char *p)
 				  0,   0,   0,   0,   0,   0,   0,   0, 
 				  0,   0,   0,   0,   0,   0,   0,   0, 
 			};
-
 			curr = (unsigned char)*p;
 			if (curr <= '*') {
 				if (curr <= '\t') {
@@ -125,7 +124,7 @@ int scan(char *p)
 scan3:
 #line 103 "calc_008.b.re"
 			{ continue; }
-#line 129 "<stdout>"
+#line 128 "<stdout>"
 scan4:
 			++p;
 			if ((curr = (unsigned char)*p) <= '/') goto scan5;
@@ -133,7 +132,7 @@ scan4:
 scan5:
 #line 105 "calc_008.b.re"
 			{ res = push_num(t, p, 10); continue; }
-#line 137 "<stdout>"
+#line 136 "<stdout>"
 scan6:
 			curr = (unsigned char)*++p;
 			goto scan16;
@@ -141,22 +140,22 @@ scan7:
 			++p;
 #line 106 "calc_008.b.re"
 			{ res = stack_add();		continue; }
-#line 145 "<stdout>"
+#line 144 "<stdout>"
 scan9:
 			++p;
 #line 107 "calc_008.b.re"
 			{ res = stack_sub();		continue; }
-#line 150 "<stdout>"
+#line 149 "<stdout>"
 scan11:
 			++p;
 #line 108 "calc_008.b.re"
 			{ res = depth == 1 ? 0 : 2;	break; }
-#line 155 "<stdout>"
+#line 154 "<stdout>"
 scan13:
 			++p;
 #line 109 "calc_008.b.re"
 			{ res = 1; 					continue; }
-#line 160 "<stdout>"
+#line 159 "<stdout>"
 scan15:
 			++p;
 			curr = (unsigned char)*p;
@@ -173,7 +172,7 @@ scan17:
 scan19:
 #line 104 "calc_008.b.re"
 			{ res = push_num(t, p, 8);	continue; }
-#line 177 "<stdout>"
+#line 176 "<stdout>"
 scan20:
 			++p;
 			curr = (unsigned char)*p;

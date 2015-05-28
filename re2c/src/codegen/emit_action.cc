@@ -104,10 +104,6 @@ void emit_initial (OutputFile & o, uint32_t ind, bool & readCh, const State * co
 	{
 		o << labelPrefix << initial.label << ":\n";
 	}
-	else if (initial.label == label_counter_t::FIRST)
-	{
-		o << "\n";
-	}
 
 	if (dFlag)
 	{

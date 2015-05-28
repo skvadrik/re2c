@@ -12,7 +12,6 @@ Cn:
 #line 13 "<stdout>"
 {
 	YYCTYPE yych;
-
 	yych = *YYCURSOR;
 	if (yych <= 0x00001FDB) {
 		if (yych <= 0x00000CE5) {
@@ -1427,12 +1426,12 @@ yy2:
 	++YYCURSOR;
 #line 13 "unicode_group_Cn.u--encoding-policy(substitute).re"
 	{ return YYCURSOR == limit; }
-#line 1431 "<stdout>"
+#line 1430 "<stdout>"
 yy4:
 	++YYCURSOR;
 #line 12 "unicode_group_Cn.u--encoding-policy(substitute).re"
 	{ goto Cn; }
-#line 1436 "<stdout>"
+#line 1435 "<stdout>"
 }
 #line 14 "unicode_group_Cn.u--encoding-policy(substitute).re"
 

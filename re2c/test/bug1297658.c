@@ -60,7 +60,6 @@ std:
 #line 61 "<stdout>"
 {
 	YYCTYPE yych;
-
 	if ((YYLIMIT - YYCURSOR) < 4) YYFILL(4);
 	yych = *YYCURSOR;
 	switch (yych) {
@@ -81,7 +80,7 @@ yy3:
 	{
 		RET(UNEXPECTED);
 	}
-#line 85 "<stdout>"
+#line 84 "<stdout>"
 yy4:
 	++YYCURSOR;
 	switch ((yych = *YYCURSOR)) {
@@ -94,7 +93,7 @@ yy5:
 	{
 		RET(FCON);
 	}
-#line 98 "<stdout>"
+#line 97 "<stdout>"
 yy6:
 	++YYCURSOR;
 #line 66 "bug1297658.re"
@@ -103,7 +102,7 @@ yy6:
 		if(1||s.cur == s.eof) RET(EOI);
 		goto std;
 	}
-#line 107 "<stdout>"
+#line 106 "<stdout>"
 yy8:
 	yych = *++YYCURSOR;
 	goto yy3;

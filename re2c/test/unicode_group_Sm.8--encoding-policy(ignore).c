@@ -12,7 +12,6 @@ Sm:
 #line 13 "<stdout>"
 {
 	YYCTYPE yych;
-
 	yych = *YYCURSOR;
 	switch (yych) {
 	case '+':
@@ -35,13 +34,13 @@ yy2:
 yy3:
 #line 13 "unicode_group_Sm.8--encoding-policy(ignore).re"
 	{ return YYCURSOR == limit; }
-#line 39 "<stdout>"
+#line 38 "<stdout>"
 yy4:
 	++YYCURSOR;
 yy5:
 #line 12 "unicode_group_Sm.8--encoding-policy(ignore).re"
 	{ goto Sm; }
-#line 45 "<stdout>"
+#line 44 "<stdout>"
 yy6:
 	yych = *++YYCURSOR;
 	switch (yych) {

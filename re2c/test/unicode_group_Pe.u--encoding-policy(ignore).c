@@ -12,7 +12,6 @@ Pe:
 #line 13 "<stdout>"
 {
 	YYCTYPE yych;
-
 	yych = *YYCURSOR;
 	if (yych <= 0x000029D9) {
 		if (yych <= 0x000027C5) {
@@ -216,12 +215,12 @@ yy2:
 	++YYCURSOR;
 #line 13 "unicode_group_Pe.u--encoding-policy(ignore).re"
 	{ return YYCURSOR == limit; }
-#line 220 "<stdout>"
+#line 219 "<stdout>"
 yy4:
 	++YYCURSOR;
 #line 12 "unicode_group_Pe.u--encoding-policy(ignore).re"
 	{ goto Pe; }
-#line 225 "<stdout>"
+#line 224 "<stdout>"
 }
 #line 14 "unicode_group_Pe.u--encoding-policy(ignore).re"
 

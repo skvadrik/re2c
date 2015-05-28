@@ -89,7 +89,6 @@ int scan(FILE *fp)
 #line 90 "<stdout>"
 		{
 			YYCTYPE yych;
-
 			if ((YYLIMIT - YYCURSOR) < 4) YYFILL(4);
 			yych = *YYCURSOR;
 			if (yych <= '\f') {
@@ -105,7 +104,7 @@ int scan(FILE *fp)
 yy3:
 #line 130 "strip_003.b.re"
 			{ fputc(*s.tok, stdout); continue; }
-#line 109 "<stdout>"
+#line 108 "<stdout>"
 yy4:
 			yych = *(YYMARKER = ++YYCURSOR);
 			if (yych == '\n') goto yy11;
@@ -129,7 +128,7 @@ yy9:
 			YYCURSOR = YYCTXMARKER;
 #line 128 "strip_003.b.re"
 			{ echo(&s); nlcomment = 1; continue; }
-#line 133 "<stdout>"
+#line 132 "<stdout>"
 yy11:
 			YYCTXMARKER = YYCURSOR + 1;
 			yych = *++YYCURSOR;
@@ -139,19 +138,19 @@ yy12:
 			++YYCURSOR;
 #line 129 "strip_003.b.re"
 			{ goto comment; }
-#line 143 "<stdout>"
+#line 142 "<stdout>"
 yy14:
 			++YYCURSOR;
 #line 127 "strip_003.b.re"
 			{ goto cppcomment; }
-#line 148 "<stdout>"
+#line 147 "<stdout>"
 		}
 #line 131 "strip_003.b.re"
 
 comment:
 		s.tok = s.cur;
 
-#line 155 "<stdout>"
+#line 154 "<stdout>"
 		{
 			YYCTYPE yych;
 			if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
@@ -162,7 +161,7 @@ comment:
 yy19:
 #line 136 "strip_003.b.re"
 			{ goto comment; }
-#line 166 "<stdout>"
+#line 165 "<stdout>"
 yy20:
 			yych = *++YYCURSOR;
 			goto yy19;
@@ -170,14 +169,14 @@ yy21:
 			++YYCURSOR;
 #line 135 "strip_003.b.re"
 			{ goto commentws; }
-#line 174 "<stdout>"
+#line 173 "<stdout>"
 		}
 #line 137 "strip_003.b.re"
 
 commentws:
 		s.tok = s.cur;
 
-#line 181 "<stdout>"
+#line 180 "<stdout>"
 		{
 			YYCTYPE yych;
 			if ((YYLIMIT - YYCURSOR) < 4) YYFILL(4);
@@ -204,7 +203,7 @@ commentws:
 yy26:
 #line 150 "strip_003.b.re"
 			{ goto commentws; }
-#line 208 "<stdout>"
+#line 207 "<stdout>"
 yy27:
 			yych = *(YYMARKER = ++YYCURSOR);
 			if (yych == '/') goto yy35;
@@ -218,14 +217,14 @@ yy28:
 					nlcomment = 0;
 					continue;
 				}
-#line 222 "<stdout>"
+#line 221 "<stdout>"
 yy29:
 			++YYCURSOR;
 			if ((yych = *YYCURSOR) == '*') goto yy33;
 yy30:
 #line 151 "strip_003.b.re"
 			{ echo(&s); nlcomment = 0; continue; }
-#line 229 "<stdout>"
+#line 228 "<stdout>"
 yy31:
 			yych = *++YYCURSOR;
 			goto yy26;
@@ -236,7 +235,7 @@ yy33:
 			++YYCURSOR;
 #line 141 "strip_003.b.re"
 			{ goto comment; }
-#line 240 "<stdout>"
+#line 239 "<stdout>"
 yy35:
 			yych = *++YYCURSOR;
 			if (yych == '*') goto yy33;
@@ -252,7 +251,7 @@ yy37:
 cppcomment:
 		s.tok = s.cur;
 
-#line 256 "<stdout>"
+#line 255 "<stdout>"
 		{
 			YYCTYPE yych;
 			if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
@@ -264,13 +263,13 @@ cppcomment:
 yy41:
 #line 157 "strip_003.b.re"
 			{ goto cppcomment; }
-#line 268 "<stdout>"
+#line 267 "<stdout>"
 yy42:
 			++YYCURSOR;
 yy43:
 #line 156 "strip_003.b.re"
 			{ echo(&s); continue; }
-#line 274 "<stdout>"
+#line 273 "<stdout>"
 yy44:
 			yych = *++YYCURSOR;
 			goto yy41;

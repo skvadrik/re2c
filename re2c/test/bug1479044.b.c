@@ -86,7 +86,6 @@ start:
 		128, 128, 128, 128, 128, 128, 128, 128, 
 		128, 128, 128, 128, 128, 128, 128, 128, 
 	};
-
 	if ((YYLIMIT - YYCURSOR) < 11) YYFILL(11);
 	yych = *YYCURSOR;
 	if (yych <= 'f') {
@@ -136,7 +135,7 @@ yy3:
 	{
 		goto start;
 	}
-#line 140 "<stdout>"
+#line 139 "<stdout>"
 yy4:
 	yyaccept = 0;
 	yych = *(YYMARKER = ++YYCURSOR);
@@ -216,7 +215,7 @@ yy16:
 	{
 		return NULL;
 	}
-#line 220 "<stdout>"
+#line 219 "<stdout>"
 yy18:
 	yych = *++YYCURSOR;
 	if (yych <= '/') goto yy19;
@@ -602,7 +601,7 @@ yy63:
 	{
 		return "edu";
 	}
-#line 606 "<stdout>"
+#line 605 "<stdout>"
 yy64:
 	yych = *++YYCURSOR;
 	if (yych != 't') goto yy33;
@@ -938,7 +937,7 @@ yy107:
 	{
 		return "resnet";
 	}
-#line 942 "<stdout>"
+#line 941 "<stdout>"
 yy108:
 	yych = *++YYCURSOR;
 	if (yych != 't') goto yy19;
@@ -1093,7 +1092,7 @@ yy132:
 	{
 		return "dsl";
 	}
-#line 1097 "<stdout>"
+#line 1096 "<stdout>"
 yy133:
 	yych = *++YYCURSOR;
 	if (yych != 's') goto yy19;

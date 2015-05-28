@@ -15,7 +15,6 @@ unsigned char *q;
 {
 	YYCTYPE yych;
 	unsigned int yyaccept = 0;
-
 	if ((YYLIMIT - YYCURSOR) < 60) YYFILL(60);
 	yych = *YYCURSOR;
 	if (yych <= '.') {

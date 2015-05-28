@@ -12,7 +12,6 @@ Pc:
 #line 13 "<stdout>"
 {
 	YYCTYPE yych;
-
 	yych = *YYCURSOR;
 	if (yych <= 0x2054) {
 		if (yych <= 0x203E) {
@@ -34,12 +33,12 @@ yy2:
 	++YYCURSOR;
 #line 13 "unicode_group_Pc.x--encoding-policy(fail).re"
 	{ return YYCURSOR == limit; }
-#line 38 "<stdout>"
+#line 37 "<stdout>"
 yy4:
 	++YYCURSOR;
 #line 12 "unicode_group_Pc.x--encoding-policy(fail).re"
 	{ goto Pc; }
-#line 43 "<stdout>"
+#line 42 "<stdout>"
 }
 #line 14 "unicode_group_Pc.x--encoding-policy(fail).re"
 

@@ -17,7 +17,6 @@ int scan(char *s)
 #line 18 "<stdout>"
 		{
 			YYCTYPE yych;
-
 			yych = *YYCURSOR;
 			switch (yych) {
 			case 0x00:	goto yy10;
@@ -53,7 +52,7 @@ yy2:
 yy3:
 #line 20 "config6.re"
 			{ printf("Num\n");	continue; }
-#line 57 "<stdout>"
+#line 56 "<stdout>"
 yy4:
 			++YYCURSOR;
 			yych = *YYCURSOR;
@@ -61,27 +60,27 @@ yy4:
 yy5:
 #line 19 "config6.re"
 			{ printf("Num\n");	continue; }
-#line 65 "<stdout>"
+#line 64 "<stdout>"
 yy6:
 			++YYCURSOR;
 #line 21 "config6.re"
 			{ printf("+\n");	continue; }
-#line 70 "<stdout>"
+#line 69 "<stdout>"
 yy8:
 			++YYCURSOR;
 #line 22 "config6.re"
 			{ printf("-\n");	continue; }
-#line 75 "<stdout>"
+#line 74 "<stdout>"
 yy10:
 			++YYCURSOR;
 #line 23 "config6.re"
 			{ printf("EOF\n");	return 0; }
-#line 80 "<stdout>"
+#line 79 "<stdout>"
 yy12:
 			++YYCURSOR;
 #line 24 "config6.re"
 			{ printf("ERR\n");	return 1; }
-#line 85 "<stdout>"
+#line 84 "<stdout>"
 yy14:
 			++YYCURSOR;
 			yych = *YYCURSOR;
@@ -118,7 +117,7 @@ yy16:
 yy18:
 #line 18 "config6.re"
 			{ printf("Oct\n");	continue; }
-#line 122 "<stdout>"
+#line 121 "<stdout>"
 		}
 #line 25 "config6.re"
 

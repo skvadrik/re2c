@@ -12,7 +12,6 @@ Sm:
 #line 13 "<stdout>"
 {
 	YYCTYPE yych;
-
 	yych = *YYCURSOR;
 	if (yych <= 0x000025B7) {
 		if (yych <= 0x0000214A) {
@@ -201,12 +200,12 @@ yy2:
 	++YYCURSOR;
 #line 13 "unicode_group_Sm.u--encoding-policy(ignore).re"
 	{ return YYCURSOR == limit; }
-#line 205 "<stdout>"
+#line 204 "<stdout>"
 yy4:
 	++YYCURSOR;
 #line 12 "unicode_group_Sm.u--encoding-policy(ignore).re"
 	{ goto Sm; }
-#line 210 "<stdout>"
+#line 209 "<stdout>"
 }
 #line 14 "unicode_group_Sm.u--encoding-policy(ignore).re"
 

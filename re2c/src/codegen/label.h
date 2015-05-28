@@ -16,7 +16,6 @@ class label_t
 	friend class label_counter_t;
 	friend std::ostream & operator << (std::ostream & o, label_t l);
 	friend bool operator < (const label_t & l1, const label_t & l2);
-	friend bool operator == (const label_t & l1, const label_t & l2);
 	friend uint32_t width (label_t l);
 };
 

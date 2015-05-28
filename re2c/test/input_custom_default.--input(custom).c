@@ -17,7 +17,6 @@ bool lex (const char * cursor, const char * const limit)
 #line 18 "<stdout>"
 {
 	YYCTYPE yych;
-
 	if (YYLESSTHAN (13)) YYFILL(13);
 	yych = YYPEEK ();
 	switch (yych) {
@@ -29,7 +28,7 @@ yy2:
 yy3:
 #line 16 "input_custom_default.--input(custom).re"
 	{ return false; }
-#line 33 "<stdout>"
+#line 32 "<stdout>"
 yy4:
 	YYSKIP ();
 	YYBACKUP ();
@@ -152,7 +151,7 @@ yy19:
 	YYSKIP ();
 #line 15 "input_custom_default.--input(custom).re"
 	{ return true; }
-#line 156 "<stdout>"
+#line 155 "<stdout>"
 }
 #line 17 "input_custom_default.--input(custom).re"
 

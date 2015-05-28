@@ -19,7 +19,6 @@ next:
 #line 20 "<stdout>"
 {
 	YYCTYPE yych;
-
 	if ((YYLIMIT - YYCURSOR) < 45) YYFILL(45);
 	yych = *YYCURSOR;
 	switch (yych) {
@@ -37,7 +36,7 @@ yy2:
 yy3:
 #line 23 "bug1163046.re"
 	{ goto next; }
-#line 41 "<stdout>"
+#line 40 "<stdout>"
 yy4:
 	yych = *++YYCURSOR;
 	goto yy3;
@@ -45,7 +44,7 @@ yy5:
 	++YYCURSOR;
 #line 25 "bug1163046.re"
 	{ return false; }
-#line 49 "<stdout>"
+#line 48 "<stdout>"
 yy7:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -346,7 +345,7 @@ yy51:
 		if (token == start || *(token - 1) == '\n')
 		return true; else goto next;
 	}
-#line 350 "<stdout>"
+#line 349 "<stdout>"
 }
 #line 26 "bug1163046.re"
 

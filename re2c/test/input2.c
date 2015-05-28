@@ -4,7 +4,6 @@
 #line 5 "<stdout>"
 {
 	YYCTYPE yych;
-
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	switch (yych) {
@@ -31,7 +30,7 @@ yy6:
 	++YYCURSOR;
 #line 3 "input2.re"
 	{ return 1; }
-#line 35 "<stdout>"
+#line 34 "<stdout>"
 }
 #line 5 "input2.re"
 

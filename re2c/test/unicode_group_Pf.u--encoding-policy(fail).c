@@ -12,7 +12,6 @@ Pf:
 #line 13 "<stdout>"
 {
 	YYCTYPE yych;
-
 	yych = *YYCURSOR;
 	if (yych <= 0x00002E03) {
 		if (yych <= 0x0000201C) {
@@ -48,12 +47,12 @@ Pf:
 	++YYCURSOR;
 #line 13 "unicode_group_Pf.u--encoding-policy(fail).re"
 	{ return YYCURSOR == limit; }
-#line 52 "<stdout>"
+#line 51 "<stdout>"
 yy4:
 	++YYCURSOR;
 #line 12 "unicode_group_Pf.u--encoding-policy(fail).re"
 	{ goto Pf; }
-#line 57 "<stdout>"
+#line 56 "<stdout>"
 }
 #line 14 "unicode_group_Pf.u--encoding-policy(fail).re"
 

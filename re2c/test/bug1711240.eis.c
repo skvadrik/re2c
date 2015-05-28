@@ -4,7 +4,6 @@ char scan(const unsigned char *s)
 
 {
 	YYCTYPE yych;
-
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	if (yych <= 0x60) {

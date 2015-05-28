@@ -12,7 +12,6 @@ Pe:
 #line 13 "<stdout>"
 {
 	YYCTYPE yych;
-
 	yych = *YYCURSOR;
 	switch (yych) {
 	case ')':
@@ -30,13 +29,13 @@ yy2:
 yy3:
 #line 13 "unicode_group_Pe.8--encoding-policy(substitute).re"
 	{ return YYCURSOR == limit; }
-#line 34 "<stdout>"
+#line 33 "<stdout>"
 yy4:
 	++YYCURSOR;
 yy5:
 #line 12 "unicode_group_Pe.8--encoding-policy(substitute).re"
 	{ goto Pe; }
-#line 40 "<stdout>"
+#line 39 "<stdout>"
 yy6:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {

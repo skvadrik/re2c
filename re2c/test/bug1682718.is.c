@@ -4,7 +4,6 @@ char *scan(char *p)
 
 	{
 		unsigned char yych;
-
 		yych = (unsigned char)*p;
 		if (yych <= '/') goto yy4;
 		if (yych >= ':') goto yy4;

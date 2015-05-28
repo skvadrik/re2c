@@ -95,7 +95,6 @@ echo:
 #line 96 "<stdout>"
 {
 	YYCTYPE yych;
-
 	if ((YYLIMIT - YYCURSOR) < 11) YYFILL(11);
 	yych = *YYCURSOR;
 	if (yych <= ')') {
@@ -113,7 +112,7 @@ yy3:
 	{
 					goto echo;
 				}
-#line 117 "<stdout>"
+#line 116 "<stdout>"
 yy4:
 	yych = *++YYCURSOR;
 	if (yych == '/') goto yy10;
@@ -126,7 +125,7 @@ yy5:
 					tok = pos = cursor; cline++;
 				  	goto echo;
 				}
-#line 130 "<stdout>"
+#line 129 "<stdout>"
 yy7:
 	++YYCURSOR;
 #line 135 "scanner.s.re"
@@ -136,7 +135,7 @@ yy7:
 						RETURN(0);
 					}
 				}
-#line 140 "<stdout>"
+#line 139 "<stdout>"
 yy9:
 	yych = *++YYCURSOR;
 	goto yy3;
@@ -152,7 +151,7 @@ yy10:
 					tok = pos = cursor;
 					goto echo;
 				}
-#line 156 "<stdout>"
+#line 155 "<stdout>"
 yy12:
 	yych = *++YYCURSOR;
 	if (yych == '!') goto yy14;
@@ -182,7 +181,7 @@ yy16:
 					tok = cursor;
 					RETURN(1);
 				}
-#line 186 "<stdout>"
+#line 185 "<stdout>"
 yy21:
 	yych = *++YYCURSOR;
 	if (yych != 'x') goto yy13;
@@ -204,7 +203,7 @@ yy21:
 					ignore_eoc = true;
 					goto echo;
 				}
-#line 208 "<stdout>"
+#line 207 "<stdout>"
 }
 #line 144 "scanner.s.re"
 
@@ -229,7 +228,7 @@ scan:
    		goto value;
     }
 
-#line 233 "<stdout>"
+#line 232 "<stdout>"
 {
 	YYCTYPE yych;
 	unsigned int yyaccept = 0;
@@ -307,14 +306,14 @@ yy32:
 	{ depth = 1;
 				  goto code;
 				}
-#line 311 "<stdout>"
+#line 310 "<stdout>"
 yy33:
 	++YYCURSOR;
 	if ((yych = *YYCURSOR) == '*') goto yy92;
 yy34:
 #line 196 "scanner.s.re"
 	{ RETURN(*tok); }
-#line 318 "<stdout>"
+#line 317 "<stdout>"
 yy35:
 	++YYCURSOR;
 	if ((yych = *YYCURSOR) == '/') goto yy90;
@@ -322,7 +321,7 @@ yy36:
 #line 198 "scanner.s.re"
 	{ yylval.op = *tok;
 				  RETURN(CLOSE); }
-#line 326 "<stdout>"
+#line 325 "<stdout>"
 yy37:
 	yyaccept = 1;
 	yych = *(YYMARKER = ++YYCURSOR);
@@ -330,7 +329,7 @@ yy37:
 yy38:
 #line 183 "scanner.s.re"
 	{ fatal("unterminated string constant (missing \")"); }
-#line 334 "<stdout>"
+#line 333 "<stdout>"
 yy39:
 	yyaccept = 2;
 	yych = *(YYMARKER = ++YYCURSOR);
@@ -338,7 +337,7 @@ yy39:
 yy40:
 #line 184 "scanner.s.re"
 	{ fatal("unterminated string constant (missing ')"); }
-#line 342 "<stdout>"
+#line 341 "<stdout>"
 yy41:
 	yyaccept = 3;
 	yych = *(YYMARKER = ++YYCURSOR);
@@ -348,7 +347,7 @@ yy41:
 yy42:
 #line 194 "scanner.s.re"
 	{ fatal("unterminated range (missing ])"); }
-#line 352 "<stdout>"
+#line 351 "<stdout>"
 yy43:
 	yych = *++YYCURSOR;
 	goto yy34;
@@ -364,7 +363,7 @@ yy46:
 	{ cur = cursor;
 				  yylval.symbol = Symbol::find(token());
 				  return ID; }
-#line 368 "<stdout>"
+#line 367 "<stdout>"
 yy47:
 	yych = *++YYCURSOR;
 	goto yy61;
@@ -375,7 +374,7 @@ yy48:
 				  yylval.regexp = mkDot();
 				  return RANGE;
 				}
-#line 379 "<stdout>"
+#line 378 "<stdout>"
 yy50:
 	++YYCURSOR;
 	yych = *YYCURSOR;
@@ -383,7 +382,7 @@ yy50:
 yy51:
 #line 234 "scanner.s.re"
 	{ goto scan; }
-#line 387 "<stdout>"
+#line 386 "<stdout>"
 yy52:
 	++YYCURSOR;
 yy53:
@@ -392,7 +391,7 @@ yy53:
 				  pos = cursor; cline++;
 				  goto scan;
 	    			}
-#line 396 "<stdout>"
+#line 395 "<stdout>"
 yy54:
 	++YYCURSOR;
 	if ((yych = *YYCURSOR) == '\n') goto yy57;
@@ -404,7 +403,7 @@ yy55:
 				  fatal(msg.str().c_str());
 				  goto scan;
 				}
-#line 408 "<stdout>"
+#line 407 "<stdout>"
 yy56:
 	yych = *++YYCURSOR;
 	goto yy55;
@@ -505,7 +504,7 @@ yy69:
 				  yylval.str = new Str(token());
 				  return CONFIG;
 				}
-#line 509 "<stdout>"
+#line 508 "<stdout>"
 yy70:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
@@ -543,7 +542,7 @@ yy75:
 	{ cur = cursor;
 				  yylval.regexp = ranToRE(token());
 				  return RANGE; }
-#line 547 "<stdout>"
+#line 546 "<stdout>"
 yy77:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
@@ -556,7 +555,7 @@ yy78:
 	{ cur = cursor;
 				  yylval.regexp = invToRE(token());
 				  return RANGE; }
-#line 560 "<stdout>"
+#line 559 "<stdout>"
 yy80:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
@@ -580,7 +579,7 @@ yy83:
 	{ cur = cursor;
 				  yylval.regexp = strToCaseInsensitiveRE(token());
 				  return STRING; }
-#line 584 "<stdout>"
+#line 583 "<stdout>"
 yy85:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
@@ -604,19 +603,19 @@ yy88:
 	{ cur = cursor;
 				  yylval.regexp = strToRE(token());
 				  return STRING; }
-#line 608 "<stdout>"
+#line 607 "<stdout>"
 yy90:
 	++YYCURSOR;
 #line 172 "scanner.s.re"
 	{ tok = cursor;
 				  RETURN(0); }
-#line 614 "<stdout>"
+#line 613 "<stdout>"
 yy92:
 	++YYCURSOR;
 #line 169 "scanner.s.re"
 	{ depth = 1;
 				  goto comment; }
-#line 620 "<stdout>"
+#line 619 "<stdout>"
 yy94:
 	yych = *++YYCURSOR;
 	if (yych == ',') goto yy108;
@@ -639,14 +638,14 @@ yy97:
 yy98:
 #line 216 "scanner.s.re"
 	{ fatal("illegal closure form, use '{n}', '{n,}', '{n,m}' where n and m are numbers"); }
-#line 643 "<stdout>"
+#line 642 "<stdout>"
 yy99:
 	++YYCURSOR;
 #line 204 "scanner.s.re"
 	{ yylval.extop.minsize = atoi((char *)tok+1);
 				  yylval.extop.maxsize = atoi((char *)tok+1);
 				  RETURN(CLOSESIZE); }
-#line 650 "<stdout>"
+#line 649 "<stdout>"
 yy101:
 	yyaccept = 6;
 	yych = *(YYMARKER = ++YYCURSOR);
@@ -658,7 +657,7 @@ yy101:
 	{ yylval.extop.minsize = atoi((char *)tok+1);
 				  yylval.extop.maxsize = -1;
 				  RETURN(CLOSESIZE); }
-#line 662 "<stdout>"
+#line 661 "<stdout>"
 yy104:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
@@ -671,7 +670,7 @@ yy104:
 	{ yylval.extop.minsize = atoi((char *)tok+1);
 				  yylval.extop.maxsize = MAX(yylval.extop.minsize,atoi(strchr((char *)tok, ',')+1));
 				  RETURN(CLOSESIZE); }
-#line 675 "<stdout>"
+#line 674 "<stdout>"
 yy108:
 	yyaccept = 6;
 	yych = *(YYMARKER = ++YYCURSOR);
@@ -682,14 +681,14 @@ yy108:
 #line 201 "scanner.s.re"
 	{ yylval.op = '*';
 				  RETURN(CLOSE); }
-#line 686 "<stdout>"
+#line 685 "<stdout>"
 }
 #line 247 "scanner.s.re"
 
 
 code:
 
-#line 693 "<stdout>"
+#line 692 "<stdout>"
 {
 	YYCTYPE yych;
 	if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
@@ -719,13 +718,13 @@ code:
 					return CODE;
 				  }
 				  goto code; }
-#line 723 "<stdout>"
+#line 722 "<stdout>"
 yy115:
 	++YYCURSOR;
 #line 257 "scanner.s.re"
 	{ ++depth;
 				  goto code; }
-#line 729 "<stdout>"
+#line 728 "<stdout>"
 yy117:
 	++YYCURSOR;
 #line 259 "scanner.s.re"
@@ -733,13 +732,13 @@ yy117:
 				  pos = cursor; cline++;
 				  goto code;
 				}
-#line 737 "<stdout>"
+#line 736 "<stdout>"
 yy119:
 	++YYCURSOR;
 yy120:
 #line 263 "scanner.s.re"
 	{ goto code; }
-#line 743 "<stdout>"
+#line 742 "<stdout>"
 yy121:
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych == '\n') goto yy120;
@@ -792,7 +791,7 @@ yy128:
 
 comment:
 
-#line 796 "<stdout>"
+#line 795 "<stdout>"
 {
 	YYCTYPE yych;
 	if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
@@ -812,7 +811,7 @@ yy133:
 #line 279 "scanner.s.re"
 	{ if(cursor == eof) RETURN(0);
 				  goto comment; }
-#line 816 "<stdout>"
+#line 815 "<stdout>"
 yy134:
 	yych = *++YYCURSOR;
 	if (yych == '*') goto yy138;
@@ -824,7 +823,7 @@ yy135:
 				  tok = pos = cursor; cline++;
 				  goto comment;
 				}
-#line 828 "<stdout>"
+#line 827 "<stdout>"
 yy137:
 	yych = *++YYCURSOR;
 	goto yy133;
@@ -834,7 +833,7 @@ yy138:
 	{ ++depth;
 				  fatal("ambiguous /* found");
 				  goto comment; }
-#line 838 "<stdout>"
+#line 837 "<stdout>"
 yy140:
 	++YYCURSOR;
 #line 268 "scanner.s.re"
@@ -842,14 +841,14 @@ yy140:
 					goto scan;
 				    else
 					goto comment; }
-#line 846 "<stdout>"
+#line 845 "<stdout>"
 }
 #line 281 "scanner.s.re"
 
 
 config:
 
-#line 853 "<stdout>"
+#line 852 "<stdout>"
 {
 	YYCTYPE yych;
 	if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
@@ -868,7 +867,7 @@ yy144:
 yy145:
 #line 285 "scanner.s.re"
 	{ goto config; }
-#line 872 "<stdout>"
+#line 871 "<stdout>"
 yy146:
 	++YYCURSOR;
 	yych = *YYCURSOR;
@@ -879,12 +878,12 @@ yy147:
 				  cur = cursor;
 				  RETURN('='); 
 				}
-#line 883 "<stdout>"
+#line 882 "<stdout>"
 yy148:
 	++YYCURSOR;
 #line 290 "scanner.s.re"
 	{ fatal("missing '='"); }
-#line 888 "<stdout>"
+#line 887 "<stdout>"
 yy150:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
@@ -907,7 +906,7 @@ yy153:
 
 value:
 
-#line 911 "<stdout>"
+#line 910 "<stdout>"
 {
 	YYCTYPE yych;
 	if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
@@ -946,7 +945,7 @@ yy156:
 				  iscfg = 0;
 				  return VALUE;
 				}
-#line 950 "<stdout>"
+#line 949 "<stdout>"
 yy157:
 	++YYCURSOR;
 	if ((yych = *YYCURSOR) <= '\r') {
@@ -967,7 +966,7 @@ yy158:
 				  iscfg = 0;
 				  return NUMBER;
 				}
-#line 971 "<stdout>"
+#line 970 "<stdout>"
 yy159:
 	yych = *++YYCURSOR;
 	if (yych <= '0') goto yy163;

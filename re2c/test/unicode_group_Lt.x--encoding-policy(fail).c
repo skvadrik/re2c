@@ -12,7 +12,6 @@ Lt:
 #line 13 "<stdout>"
 {
 	YYCTYPE yych;
-
 	yych = *YYCURSOR;
 	if (yych <= 0x1F8F) {
 		if (yych <= 0x01CA) {
@@ -50,12 +49,12 @@ yy2:
 	++YYCURSOR;
 #line 13 "unicode_group_Lt.x--encoding-policy(fail).re"
 	{ return YYCURSOR == limit; }
-#line 54 "<stdout>"
+#line 53 "<stdout>"
 yy4:
 	++YYCURSOR;
 #line 12 "unicode_group_Lt.x--encoding-policy(fail).re"
 	{ goto Lt; }
-#line 59 "<stdout>"
+#line 58 "<stdout>"
 }
 #line 14 "unicode_group_Lt.x--encoding-policy(fail).re"
 

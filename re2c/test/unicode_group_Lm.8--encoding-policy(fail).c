@@ -12,7 +12,6 @@ Lm:
 #line 13 "<stdout>"
 {
 	YYCTYPE yych;
-
 	yych = *YYCURSOR;
 	switch (yych) {
 	case 0xCA:	goto yy4;
@@ -35,7 +34,7 @@ yy2:
 yy3:
 #line 13 "unicode_group_Lm.8--encoding-policy(fail).re"
 	{ return YYCURSOR == limit; }
-#line 39 "<stdout>"
+#line 38 "<stdout>"
 yy4:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -199,7 +198,7 @@ yy20:
 	++YYCURSOR;
 #line 12 "unicode_group_Lm.8--encoding-policy(fail).re"
 	{ goto Lm; }
-#line 203 "<stdout>"
+#line 202 "<stdout>"
 yy22:
 	yych = *++YYCURSOR;
 	switch (yych) {

@@ -853,7 +853,6 @@ std:
 		  0,   0,   0,   0,   0,   0,   0,   0, 
 		  0,   0,   0,   0,   0,   0,   0,   0, 
 	};
-
 	if ((YYLIMIT - YYCURSOR) < 31) YYFILL(31);
 	yych = *YYCURSOR;
 	{

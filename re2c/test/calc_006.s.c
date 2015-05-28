@@ -68,7 +68,6 @@ int scan(char *s)
 #line 69 "<stdout>"
 		{
 			YYCTYPE yych;
-
 			yych = *YYCURSOR;
 			if (yych <= '*') {
 				if (yych <= '\t') {
@@ -95,7 +94,7 @@ int scan(char *s)
 yy3:
 #line 107 "calc_006.s.re"
 			{ continue; }
-#line 99 "<stdout>"
+#line 98 "<stdout>"
 yy4:
 			++YYCURSOR;
 			if ((yych = *YYCURSOR) <= '/') goto yy5;
@@ -103,7 +102,7 @@ yy4:
 yy5:
 #line 109 "calc_006.s.re"
 			{ res = push_num(t, p, 10); continue; }
-#line 107 "<stdout>"
+#line 106 "<stdout>"
 yy6:
 			yych = *++YYCURSOR;
 			goto yy16;
@@ -111,22 +110,22 @@ yy7:
 			++YYCURSOR;
 #line 110 "calc_006.s.re"
 			{ res = stack_add();		continue; }
-#line 115 "<stdout>"
+#line 114 "<stdout>"
 yy9:
 			++YYCURSOR;
 #line 111 "calc_006.s.re"
 			{ res = stack_sub();		continue; }
-#line 120 "<stdout>"
+#line 119 "<stdout>"
 yy11:
 			++YYCURSOR;
 #line 112 "calc_006.s.re"
 			{ res = depth == 1 ? 0 : 2;	break; }
-#line 125 "<stdout>"
+#line 124 "<stdout>"
 yy13:
 			++YYCURSOR;
 #line 113 "calc_006.s.re"
 			{ res = 1; 					continue; }
-#line 130 "<stdout>"
+#line 129 "<stdout>"
 yy15:
 			++YYCURSOR;
 			yych = *YYCURSOR;
@@ -142,7 +141,7 @@ yy17:
 yy19:
 #line 108 "calc_006.s.re"
 			{ res = push_num(t, p, 8);	continue; }
-#line 146 "<stdout>"
+#line 145 "<stdout>"
 yy20:
 			++YYCURSOR;
 			yych = *YYCURSOR;

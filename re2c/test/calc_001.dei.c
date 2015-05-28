@@ -20,7 +20,6 @@ int scan(char *s, int l)
 
 		{
 			YYCTYPE yych;
-
 			YYDEBUG(0, *YYCURSOR);
 			if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
 			yych = *YYCURSOR;
