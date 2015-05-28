@@ -37,6 +37,7 @@ SRC_HDR = \
 	$(srcdir)/src/codegen/output.h \
 	$(srcdir)/src/codegen/print.h \
 	$(srcdir)/src/codegen/scc.h \
+	$(srcdir)/src/codegen/skeleton/path.h \
 	$(srcdir)/src/codegen/skeleton/skeleton.h \
 	$(srcdir)/src/dfa/action.h \
 	$(srcdir)/src/dfa/encoding/enc.h \
@@ -83,6 +84,7 @@ SRC = \
 	$(srcdir)/src/codegen/output.cc \
 	$(srcdir)/src/codegen/print.cc \
 	$(srcdir)/src/codegen/scc.cc \
+	$(srcdir)/src/codegen/skeleton/path.cc \
 	$(srcdir)/src/codegen/skeleton/skeleton.cc \
 	$(srcdir)/src/dfa/actions.cc \
 	$(srcdir)/src/dfa/encoding/enc.cc \
