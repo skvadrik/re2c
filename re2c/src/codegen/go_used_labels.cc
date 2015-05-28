@@ -4,7 +4,7 @@
 namespace re2c
 {
 
-void Cases::used_labels (std::set<uint32_t> & used)
+void Cases::used_labels (std::set<label_t> & used)
 {
 	for (uint32_t i = 0; i < cases_size; ++i)
 	{
@@ -12,13 +12,13 @@ void Cases::used_labels (std::set<uint32_t> & used)
 	}
 }
 
-void Binary::used_labels (std::set<uint32_t> & used)
+void Binary::used_labels (std::set<label_t> & used)
 {
 	thn->used_labels (used);
 	els->used_labels (used);
 }
 
-void Linear::used_labels (std::set<uint32_t> & used)
+void Linear::used_labels (std::set<label_t> & used)
 {
 	for (uint32_t i = 0; i < branches.size (); ++i)
 	{
@@ -26,7 +26,7 @@ void Linear::used_labels (std::set<uint32_t> & used)
 	}
 }
 
-void If::used_labels (std::set<uint32_t> & used)
+void If::used_labels (std::set<label_t> & used)
 {
 	switch (type)
 	{
@@ -39,7 +39,7 @@ void If::used_labels (std::set<uint32_t> & used)
 	}
 }
 
-void SwitchIf::used_labels (std::set<uint32_t> & used)
+void SwitchIf::used_labels (std::set<label_t> & used)
 {
 	switch (type)
 	{
@@ -52,7 +52,7 @@ void SwitchIf::used_labels (std::set<uint32_t> & used)
 	}
 }
 
-void GoBitmap::used_labels (std::set<uint32_t> & used)
+void GoBitmap::used_labels (std::set<label_t> & used)
 {
 	if (hgo != NULL)
 	{
@@ -65,7 +65,7 @@ void GoBitmap::used_labels (std::set<uint32_t> & used)
 	}
 }
 
-void CpgotoTable::used_labels (std::set<uint32_t> & used)
+void CpgotoTable::used_labels (std::set<label_t> & used)
 {
 	for (uint32_t i = 0; i < TABLE_SIZE; ++i)
 	{
@@ -73,7 +73,7 @@ void CpgotoTable::used_labels (std::set<uint32_t> & used)
 	}
 }
 
-void Cpgoto::used_labels (std::set<uint32_t> & used)
+void Cpgoto::used_labels (std::set<label_t> & used)
 {
 	if (hgo != NULL)
 	{
@@ -82,7 +82,7 @@ void Cpgoto::used_labels (std::set<uint32_t> & used)
 	table->used_labels (used);
 }
 
-void Go::used_labels (std::set<uint32_t> & used)
+void Go::used_labels (std::set<label_t> & used)
 {
 	switch (type)
 	{

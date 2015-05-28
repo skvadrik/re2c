@@ -449,7 +449,7 @@ Scanner::~Scanner()
 
 void Scanner::reuse()
 {
-	out.label.reset ();
+	out.label_counter.reset ();
 	last_fill_index = 0;
 	bWroteGetState = false;
 	bWroteCondCheck = false;

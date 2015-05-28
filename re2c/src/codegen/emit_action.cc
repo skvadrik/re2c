@@ -9,7 +9,7 @@ namespace re2c
 
 static void need               (OutputFile & o, uint32_t ind, bool & readCh, uint32_t n, bool bSetMarker);
 static void emit_match         (OutputFile & o, uint32_t ind, bool & readCh, const State * const s);
-static void emit_initial       (OutputFile & o, uint32_t ind, bool & readCh, const State * const s, const Initial & init, const std::set<uint32_t> & used_labels);
+static void emit_initial       (OutputFile & o, uint32_t ind, bool & readCh, const State * const s, const Initial & init, const std::set<label_t> & used_labels);
 static void emit_save          (OutputFile & o, uint32_t ind, bool & readCh, const State * const s, uint32_t save);
 static void emit_accept_binary (OutputFile & o, uint32_t ind, bool & readCh, const State * const s, const accept_t & accept, uint32_t l, uint32_t r);
 static void emit_accept        (OutputFile & o, uint32_t ind, bool & readCh, const State * const s, const accept_t & accept);
@@ -24,7 +24,7 @@ void emit_action
 	, bool & readCh
 	, const State * const s
 	, const std::string & condName
-	, const std::set<uint32_t> & used_labels
+	, const std::set<label_t> & used_labels
 	)
 {
 	switch (action.type)
@@ -81,7 +81,7 @@ void emit_match (OutputFile & o, uint32_t ind, bool & readCh, const State * cons
 	}
 }
 
-void emit_initial (OutputFile & o, uint32_t ind, bool & readCh, const State * const s, const Initial & initial, const std::set<uint32_t> & used_labels)
+void emit_initial (OutputFile & o, uint32_t ind, bool & readCh, const State * const s, const Initial & initial, const std::set<label_t> & used_labels)
 {
 	if (DFlag)
 	{
@@ -104,7 +104,7 @@ void emit_initial (OutputFile & o, uint32_t ind, bool & readCh, const State * co
 	{
 		o << labelPrefix << initial.label << ":\n";
 	}
-	else if (!initial.label)
+	else if (initial.label == label_counter_t::FIRST)
 	{
 		o << "\n";
 	}

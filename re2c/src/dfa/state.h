@@ -12,7 +12,7 @@ namespace re2c
 class State
 {
 public:
-	uint32_t label;
+	label_t label;
 	RuleOp * rule;
 	State * next;
 	State * link;
@@ -26,7 +26,7 @@ public:
 	Action action;
 
 	State ()
-		: label (0)
+		: label (label_counter_t::FIRST)
 		, rule (NULL)
 		, next (0)
 		, link (NULL)

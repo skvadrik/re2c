@@ -7,18 +7,10 @@
 namespace re2c
 {
 
-static uint32_t digits (uint32_t n);
 static void output_if (OutputFile & o, uint32_t ind, bool & readCh, const std::string & compare, uint32_t value);
-static void output_goto (OutputFile & o, uint32_t ind, bool & readCh, uint32_t to);
+static void output_goto (OutputFile & o, uint32_t ind, bool & readCh, label_t to);
 static std::string output_yych (bool & readCh);
 static std::string output_hgo (OutputFile & o, uint32_t ind, bool & readCh, SwitchIf * hgo);
-
-uint32_t digits (uint32_t n)
-{
-	uint32_t digits = 0;
-	while (n /= 10) ++digits;
-	return digits;
-}
 
 std::string output_yych (bool & readCh)
 {
@@ -40,7 +32,7 @@ void output_if (OutputFile & o, uint32_t ind, bool & readCh, const std::string &
 	o << ") ";
 }
 
-void output_goto (OutputFile & o, uint32_t ind, bool & readCh, uint32_t to)
+void output_goto (OutputFile & o, uint32_t ind, bool & readCh, label_t to)
 {
 	if (readCh)
 	{
@@ -196,12 +188,12 @@ void GoBitmap::emit (OutputFile & o, uint32_t ind, bool & readCh)
 	}
 }
 
-uint32_t CpgotoTable::max_label ()
+label_t CpgotoTable::max_label () const
 {
-	uint32_t max = 0;
+	label_t max = label_counter_t::FIRST;
 	for (uint32_t i = 0; i < TABLE_SIZE; ++i)
 	{
-		if (table[i]->label > max)
+		if (max < table[i]->label)
 		{
 			max = table[i]->label;
 		};
@@ -213,7 +205,7 @@ void CpgotoTable::emit (OutputFile & o, uint32_t ind)
 {
 	o << indent (ind) << "static void *" << mapCodeName["yytarget"] << "[256] = {\n";
 	o << indent (++ind);
-	const uint32_t max_digits = digits (max_label ());
+	const uint32_t max_digits = width (max_label ());
 	for (uint32_t i = 0; i < TABLE_SIZE; ++i)
 	{
 		o << "&&" << labelPrefix << table[i]->label;
@@ -227,7 +219,7 @@ void CpgotoTable::emit (OutputFile & o, uint32_t ind)
 		}
 		else
 		{
-			const uint32_t padding = max_digits - digits (table[i]->label) + 1;
+			const uint32_t padding = max_digits - width (table[i]->label) + 1;
 			o << "," << std::string (padding, ' ');
 		}
 	}

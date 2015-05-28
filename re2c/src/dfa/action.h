@@ -3,6 +3,7 @@
 
 #include <map>
 
+#include "src/codegen/label.h"
 #include "src/util/c99_stdint.h"
 
 namespace re2c
@@ -14,10 +15,10 @@ class State;
 
 struct Initial
 {
-	uint32_t label;
+	label_t label;
 	bool setMarker;
 
-	inline Initial (uint32_t l, bool b)
+	inline Initial (label_t l, bool b)
 		: label (l)
 		, setMarker (b)
 	{}
@@ -54,7 +55,7 @@ public:
 	{
 		clear ();
 	}
-	void set_initial (uint32_t label, bool used_marker)
+	void set_initial (label_t label, bool used_marker)
 	{
 		clear ();
 		type = INITIAL;

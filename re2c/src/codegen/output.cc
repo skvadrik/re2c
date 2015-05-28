@@ -53,7 +53,7 @@ OutputFile::OutputFile (const char * fn)
 	: file_name (fn)
 	, file (NULL)
 	, blocks ()
-	, label ()
+	, label_counter ()
 {
 	new_block ();
 }
@@ -147,6 +147,12 @@ OutputFile & operator << (OutputFile & u, const std::string & s)
 OutputFile & operator << (OutputFile & u, const char * s)
 {
 	u.stream () << s;
+	return u;
+}
+
+OutputFile & operator << (OutputFile & u, label_t l)
+{
+	u.stream () << l;
 	return u;
 }
 

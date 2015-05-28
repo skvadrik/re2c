@@ -59,7 +59,7 @@ private:
 	std::vector<OutputBlock *> blocks;
 
 public:
-	Label label;
+	label_counter_t label_counter;
 
 private:
 	std::ostream & stream ();
@@ -84,6 +84,7 @@ public:
 	friend OutputFile & operator << (OutputFile & o, uint32_t n);
 	friend OutputFile & operator << (OutputFile & o, const std::string & s);
 	friend OutputFile & operator << (OutputFile & o, const char * s);
+	friend OutputFile & operator << (OutputFile & o, label_t l);
 
 	void insert_line_info ();
 	void insert_state_goto (uint32_t ind);
