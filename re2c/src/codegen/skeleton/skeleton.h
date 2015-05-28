@@ -7,6 +7,7 @@
 #include "src/dfa/dfa.h"
 #include "src/util/c99_stdint.h"
 #include "src/util/forbid_copy.h"
+#include "src/util/local_increment.h"
 
 namespace re2c
 {
@@ -28,19 +29,6 @@ struct Path
 	void update (uint32_t r);
 	void extend (uint32_t r, uint32_t c);
 	void append (const Path * p);
-};
-
-template <typename counter_t>
-struct local_increment_t
-{
-	counter_t & counter;
-	inline explicit local_increment_t (counter_t & c)
-		: counter (++c)
-	{}
-	inline ~local_increment_t ()
-	{
-		--counter;
-	}
 };
 
 template <typename container_t>

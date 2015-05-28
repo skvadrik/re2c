@@ -61,6 +61,7 @@ SRC_HDR = \
 	$(srcdir)/src/util/c99_stdint.h \
 	$(srcdir)/src/util/forbid_copy.h \
 	$(srcdir)/src/util/free_list.h \
+	$(srcdir)/src/util/local_increment.h \
 	$(srcdir)/src/util/range.h \
 	$(srcdir)/src/util/smart_ptr.h \
 	$(srcdir)/src/util/substr.h
