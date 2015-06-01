@@ -5,6 +5,6 @@ rm -rf $builddir
 mkdir $builddir
 
 cd $builddir
-../configure --enable-silent-rules && \
+../configure && \
 make -j5
 cd ..
