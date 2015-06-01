@@ -2,8 +2,9 @@ autom4te.cache/
 Makefile.in
 aclocal.m4
 configure
-install-sh
+compile
 config.h.in
 depcomp
+install-sh
 missing
 test-driver
