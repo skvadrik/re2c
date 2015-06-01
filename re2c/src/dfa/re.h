@@ -1,4 +1,3 @@
-/* $Id$ */
 #ifndef _re_h
 #define _re_h
 

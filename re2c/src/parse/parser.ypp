@@ -1,7 +1,5 @@
 %{
 
-/* $Id$ */
-
 #include <assert.h>
 #include <time.h>
 #include <string.h>

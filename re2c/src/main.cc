@@ -1,5 +1,3 @@
-/* $Id$ */
-
 #include <fstream>
 #include <iostream>
 #include <stdlib.h>

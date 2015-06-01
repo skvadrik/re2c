@@ -1,5 +1,3 @@
-# $Id$
-
 AM_CXXFLAGS = -W -Wall -Wextra -Weffc++ -pedantic -Wredundant-decls -O2
 AM_YFLAGS = -y -d --no-lines
 RE2CFLAGS = -bi

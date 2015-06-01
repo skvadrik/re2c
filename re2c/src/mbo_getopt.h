@@ -2,8 +2,6 @@
  Author: Marcus Boerger <helly@users.sourceforge.net>
 */
 
-/* $Id$ */
-
 /* Define structure for one recognized option (both single char and long name).
  * If short_open is '-' this is the last option.
  */

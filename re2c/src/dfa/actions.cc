@@ -1,4 +1,3 @@
-/* $Id$ */
 #include <time.h>
 #include <string.h>
 #include <iostream>

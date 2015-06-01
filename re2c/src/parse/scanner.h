@@ -1,4 +1,3 @@
-/* $Id$ */
 #ifndef _scanner_h
 #define	_scanner_h
 

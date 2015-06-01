@@ -2,8 +2,6 @@
  Author: Marcus Boerger <helly@users.sourceforge.net>
 */
 
-/* $Id$ */
-
 #include <stdio.h>
 #include <string.h>
 #include <assert.h>
