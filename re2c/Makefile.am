@@ -1,6 +1,6 @@
 # flags
-AM_CXXFLAGS = -W -Wall -Wextra -Weffc++ -pedantic -Wredundant-decls -O2
-AM_YFLAGS = -y -d --no-lines
+# do *not* add CXXFLAGS here, add them in configure.ac
+BISONFLAGS = -y -d --no-lines
 RE2CFLAGS = -bi
 
 # binary
@@ -149,7 +149,7 @@ TESTS = run_tests.sh
 $(AUTOGEN_PARSER): $(CUSTOM_PARSER)
 	@if test $(BISON) = "yes"; \
 	then \
-		bison $(YFLAGS) --output=$@ --defines=$(AUTOGEN_PARSER_HDR) $< && \
+		bison $(BISONFLAGS) --output=$@ --defines=$(AUTOGEN_PARSER_HDR) $< && \
 		if cmp -s $@ $(top_srcdir)/$(BOOTSTRAP_PARSER); \
 		then \
 			cp $@ $(top_srcdir)/$(BOOTSTRAP_PARSER) && \

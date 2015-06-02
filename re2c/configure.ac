@@ -32,6 +32,33 @@ AC_PROG_CXX
 AC_PROG_INSTALL
 
 
+# checks for C++ compiler flags
+AC_DEFUN([TRY_CXXFLAG], [
+    AC_MSG_CHECKING([C++ compiler flag $1])
+    AS_VAR_SET([CXXFLAGS_BACKUP], ["$CXXFLAGS"])
+    AS_VAR_SET([CXXFLAGS], ["$CXXFLAGS $1"])
+    AC_LANG_PUSH([C++])
+    AC_COMPILE_IFELSE(
+        [AC_LANG_PROGRAM()],
+        [AS_VAR_SET([TRY_CXXFLAG_RESULT], [yes])],
+        [
+            AS_VAR_SET([TRY_CXXFLAG_RESULT], [no])
+            AS_VAR_SET([CXXFLAGS], ["$CXXFLAGS_BACKUP"])
+        ]
+    )
+    AC_LANG_POP([C++])
+    AC_MSG_RESULT([$TRY_CXXFLAG_RESULT])
+])
+TRY_CXXFLAG([-W])
+TRY_CXXFLAG([-Wall])
+TRY_CXXFLAG([-Wextra])
+TRY_CXXFLAG([-Weffc++])
+TRY_CXXFLAG([-pedantic])
+TRY_CXXFLAG([-Wredundant-decls])
+TRY_CXXFLAG([-O2])
+TRY_CXXFLAG([-Weverything])
+
+
 # needed by src/c99_stdint.h
 # avoid AC_INCLUDES_DEFAULT
 AC_CHECK_HEADERS([stdint.h], [], [], [[]])
