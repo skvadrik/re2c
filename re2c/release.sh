@@ -24,39 +24,22 @@ mkdir $builddir
 cd $builddir
 
     ../configure --enable-docs && \
-    make bootstrap -j5 && \
-    make tests && \
-    make dist
+    make bootstrap -j5
+    make distcheck -j5
 
-    # dist-check
-    tmpdir=` date +"%Y%m%d%H%M%S%N"`
-    mkdir $tmpdir
-    cp re2c-$version.tar.gz $tmpdir
-    cd $tmpdir
-        gunzip re2c-$version.tar.gz
-        tar -x -f re2c-$version.tar
-        cd re2c-$version
-            ./configure && \
-            make bootstrap -j5 && \
-            make tests
-
-            # upload files on sourceforge
-            src=release
-            src_tarballs=$src/frs/project/re2c/re2c/$version
-            src_docs=$src/project-web/re2c/htdocs
-            mkdir -p $src_tarballs
-            mkdir -p $src_docs
-            cp ../../re2c-$version.tar.gz $src_tarballs
-            cp doc/index.html doc/manual.html $src_docs
-            rsync -rK $src/ skvadrik@web.sourceforge.net:/home
-        cd ..
-    cd ..
-    rm -r $tmpdir
+    # upload files on sourceforge
+    src=release
+    src_tarballs=$src/frs/project/re2c/re2c/$version
+    src_docs=$src/project-web/re2c/htdocs
+    mkdir -p $src_tarballs $src_docs
+    cp re2c-$version.tar.gz $src_tarballs
+    cp ../doc/index.html doc/manual.html $src_docs
+    rsync -rK $src/ skvadrik@web.sourceforge.net:/home
 
 cd .. # $builddir
 
 # commit release
 git commit -a -m "Release $version."
 git tag $version
-git push
-git push --tags
+git push --follow-tags
+git push --follow-tags github master

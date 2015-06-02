@@ -150,8 +150,11 @@ $(AUTOGEN_PARSER): $(CUSTOM_PARSER)
 	@if test $(BISON) = "yes"; \
 	then \
 		bison $(YFLAGS) --output=$@ --defines=$(AUTOGEN_PARSER_HDR) $< && \
-		cp $@ $(top_srcdir)/$(BOOTSTRAP_PARSER) && \
-		cp $(AUTOGEN_PARSER_HDR) $(top_srcdir)/$(BOOTSTRAP_PARSER_HDR); \
+		if cmp -s $@ $(top_srcdir)/$(BOOTSTRAP_PARSER); \
+		then \
+			cp $@ $(top_srcdir)/$(BOOTSTRAP_PARSER) && \
+			cp $(AUTOGEN_PARSER_HDR) $(top_srcdir)/$(BOOTSTRAP_PARSER_HDR); \
+		fi; \
 	else \
 		cp $(top_srcdir)/$(BOOTSTRAP_PARSER) $@ && \
 		cp $(top_srcdir)/$(BOOTSTRAP_PARSER_HDR) $(AUTOGEN_PARSER_HDR); \
