@@ -27,7 +27,7 @@ AM_COND_IF([REBUILD_DOCS], [
 
 
 # checks for programs
-AC_CHECK_PROG(BISON, bison, yes, no)
+AC_PATH_PROG(BISON, bison, no)
 AC_PROG_CXX
 AC_PROG_INSTALL
 
