@@ -33,6 +33,9 @@ AC_PROG_INSTALL
 
 
 # checks for C++ compiler flags
+AC_SUBST(CXXFLAGSDEFAULT, [])
+# TRY_CXXFLAG (flag)
+# appends 'flag' to CXXFLAGSDEFAULT iff C++ compiler knows this flag
 AC_DEFUN([TRY_CXXFLAG], [
     AC_MSG_CHECKING([C++ compiler flag $1])
     AS_VAR_SET([CXXFLAGS_BACKUP], ["$CXXFLAGS"])
@@ -40,13 +43,14 @@ AC_DEFUN([TRY_CXXFLAG], [
     AC_LANG_PUSH([C++])
     AC_COMPILE_IFELSE(
         [AC_LANG_PROGRAM()],
-        [AS_VAR_SET([TRY_CXXFLAG_RESULT], [yes])],
         [
-            AS_VAR_SET([TRY_CXXFLAG_RESULT], [no])
-            AS_VAR_SET([CXXFLAGS], ["$CXXFLAGS_BACKUP"])
-        ]
+            AS_VAR_SET([TRY_CXXFLAG_RESULT], [yes])
+            AS_VAR_SET([CXXFLAGSDEFAULT], ["$CXXFLAGSDEFAULT $1"])
+        ],
+        [AS_VAR_SET([TRY_CXXFLAG_RESULT], [no])]
     )
     AC_LANG_POP([C++])
+    AS_VAR_SET([CXXFLAGS], ["$CXXFLAGS_BACKUP"])
     AC_MSG_RESULT([$TRY_CXXFLAG_RESULT])
 ])
 TRY_CXXFLAG([-W])

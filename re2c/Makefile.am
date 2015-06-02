@@ -1,5 +1,6 @@
 # flags
 # do *not* add CXXFLAGS here, add them in configure.ac
+AM_CXXFLAGS = $(CXXFLAGSDEFAULT)
 BISONFLAGS = -y -d --no-lines
 RE2CFLAGS = -bi
 
