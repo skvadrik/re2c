@@ -1,5 +1,5 @@
 AC_INIT([re2c],[0.14.1.dev],[re2c-general@lists.sourceforge.net])
-AM_INIT_AUTOMAKE([-Wall -Werror foreign])
+AM_INIT_AUTOMAKE([foreign subdir-objects])
 AM_SILENT_RULES([yes])
 
 

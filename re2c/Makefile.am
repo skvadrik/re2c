@@ -1,113 +1,106 @@
+# flags
 AM_CXXFLAGS = -W -Wall -Wextra -Weffc++ -pedantic -Wredundant-decls -O2
 AM_YFLAGS = -y -d --no-lines
 RE2CFLAGS = -bi
 
+# binary
 bin_PROGRAMS = re2c
-RE2C = $(builddir)/re2c$(EXEEXT)
+RE2C = re2c$(EXEEXT)
 
-# scanner
-SRC_SCANNER = $(srcdir)/src/parse/scanner_lex.re
-AUTOGEN_SCANNER = $(builddir)/scanner_lex.cc
-BOOTSTRAP_SCANNER = $(srcdir)/bootstrap/scanner_lex.cc
-
-# parser
-SRC_PARSER = $(srcdir)/src/parse/parser.ypp
-AUTOGEN_PARSER = $(builddir)/parser.cc
-AUTOGEN_PARSER_HDR = $(builddir)/y.tab.h
-BOOTSTRAP_PARSER = $(srcdir)/bootstrap/parser.cc
-BOOTSTRAP_PARSER_HDR = $(srcdir)/bootstrap/y.tab.h
-
-# docs
-DOC_MAN = $(builddir)/doc/re2c.1
-DOC_HTML = $(builddir)/doc/manual.html
-SRC_DOC = $(builddir)/doc/re2c.ad
-BOOTSTRAP_DOC_MAN = $(srcdir)/bootstrap/re2c.1
-BOOTSTRAP_DOC_HTML = $(srcdir)/bootstrap/manual.html
-
+# sources
 SRC_HDR = \
-	$(srcdir)/src/codegen/bitmap.h \
-	$(srcdir)/src/codegen/code_names.h \
-	$(srcdir)/src/codegen/emit.h \
-	$(srcdir)/src/codegen/go.h \
-	$(srcdir)/src/codegen/indent.h \
-	$(srcdir)/src/codegen/input_api.h \
-	$(srcdir)/src/codegen/label.h \
-	$(srcdir)/src/codegen/output.h \
-	$(srcdir)/src/codegen/print.h \
-	$(srcdir)/src/codegen/scc.h \
-	$(srcdir)/src/codegen/skeleton/path.h \
-	$(srcdir)/src/codegen/skeleton/skeleton.h \
-	$(srcdir)/src/dfa/action.h \
-	$(srcdir)/src/dfa/encoding/enc.h \
-	$(srcdir)/src/dfa/encoding/range_suffix.h \
-	$(srcdir)/src/dfa/encoding/utf16/utf16.h \
-	$(srcdir)/src/dfa/encoding/utf16/utf16_range.h \
-	$(srcdir)/src/dfa/encoding/utf16/utf16_regexp.h \
-	$(srcdir)/src/dfa/encoding/utf8/utf8.h \
-	$(srcdir)/src/dfa/encoding/utf8/utf8_range.h \
-	$(srcdir)/src/dfa/encoding/utf8/utf8_regexp.h \
-	$(srcdir)/src/dfa/dfa.h \
-	$(srcdir)/src/dfa/ins.h \
-	$(srcdir)/src/dfa/re.h \
-	$(srcdir)/src/dfa/state.h \
-	$(srcdir)/src/globals.h \
-	$(srcdir)/src/mbo_getopt.h \
-	$(srcdir)/src/parse/input.h \
-	$(srcdir)/src/parse/parser.h \
-	$(srcdir)/src/parse/scanner.h \
-	$(srcdir)/src/parse/token.h \
-	$(srcdir)/src/util/allocate.h \
-	$(srcdir)/src/util/c99_stdint.h \
-	$(srcdir)/src/util/forbid_copy.h \
-	$(srcdir)/src/util/free_list.h \
-	$(srcdir)/src/util/local_increment.h \
-	$(srcdir)/src/util/range.h \
-	$(srcdir)/src/util/smart_ptr.h \
-	$(srcdir)/src/util/substr.h \
-	$(srcdir)/src/util/wrap_iterator.h
-
+	src/codegen/bitmap.h \
+	src/codegen/code_names.h \
+	src/codegen/emit.h \
+	src/codegen/go.h \
+	src/codegen/indent.h \
+	src/codegen/input_api.h \
+	src/codegen/label.h \
+	src/codegen/output.h \
+	src/codegen/print.h \
+	src/codegen/scc.h \
+	src/codegen/skeleton/path.h \
+	src/codegen/skeleton/skeleton.h \
+	src/dfa/action.h \
+	src/dfa/encoding/enc.h \
+	src/dfa/encoding/range_suffix.h \
+	src/dfa/encoding/utf16/utf16.h \
+	src/dfa/encoding/utf16/utf16_range.h \
+	src/dfa/encoding/utf16/utf16_regexp.h \
+	src/dfa/encoding/utf8/utf8.h \
+	src/dfa/encoding/utf8/utf8_range.h \
+	src/dfa/encoding/utf8/utf8_regexp.h \
+	src/dfa/dfa.h \
+	src/dfa/ins.h \
+	src/dfa/re.h \
+	src/dfa/state.h \
+	src/globals.h \
+	src/mbo_getopt.h \
+	src/parse/input.h \
+	src/parse/parser.h \
+	src/parse/scanner.h \
+	src/parse/token.h \
+	src/util/allocate.h \
+	src/util/c99_stdint.h \
+	src/util/forbid_copy.h \
+	src/util/free_list.h \
+	src/util/local_increment.h \
+	src/util/range.h \
+	src/util/smart_ptr.h \
+	src/util/substr.h \
+	src/util/wrap_iterator.h
 SRC = \
-	$(SRC_SCANNER) \
-	$(srcdir)/src/codegen/bitmap.cc \
-	$(srcdir)/src/codegen/code_names.cc \
-	$(srcdir)/src/codegen/emit_action.cc \
-	$(srcdir)/src/codegen/emit_dfa.cc \
-	$(srcdir)/src/codegen/label.cc \
-	$(srcdir)/src/codegen/prepare_dfa.cc \
-	$(srcdir)/src/codegen/go_construct.cc \
-	$(srcdir)/src/codegen/go_destruct.cc \
-	$(srcdir)/src/codegen/go_emit.cc \
-	$(srcdir)/src/codegen/go_used_labels.cc \
-	$(srcdir)/src/codegen/input_api.cc \
-	$(srcdir)/src/codegen/output.cc \
-	$(srcdir)/src/codegen/print.cc \
-	$(srcdir)/src/codegen/scc.cc \
-	$(srcdir)/src/codegen/skeleton/path.cc \
-	$(srcdir)/src/codegen/skeleton/skeleton.cc \
-	$(srcdir)/src/dfa/actions.cc \
-	$(srcdir)/src/dfa/encoding/enc.cc \
-	$(srcdir)/src/dfa/encoding/range_suffix.cc \
-	$(srcdir)/src/dfa/encoding/utf16/utf16.cc \
-	$(srcdir)/src/dfa/encoding/utf16/utf16_range.cc \
-	$(srcdir)/src/dfa/encoding/utf16/utf16_regexp.cc \
-	$(srcdir)/src/dfa/encoding/utf8/utf8.cc \
-	$(srcdir)/src/dfa/encoding/utf8/utf8_range.cc \
-	$(srcdir)/src/dfa/encoding/utf8/utf8_regexp.cc \
-	$(srcdir)/src/dfa/dfa.cc \
-	$(srcdir)/src/main.cc \
-	$(srcdir)/src/mbo_getopt.cc \
-	$(srcdir)/src/parse/input.cc \
-	$(srcdir)/src/parse/scanner.cc \
-	$(srcdir)/src/util/range.cc
-# omit SRC_PARSER here; include it in EXTRA_DIST instead
-# (automake generates standard build rules for all YACC-ish
-# sources, they will conflict with our custom build rule).
+	src/codegen/bitmap.cc \
+	src/codegen/code_names.cc \
+	src/codegen/emit_action.cc \
+	src/codegen/emit_dfa.cc \
+	src/codegen/label.cc \
+	src/codegen/prepare_dfa.cc \
+	src/codegen/go_construct.cc \
+	src/codegen/go_destruct.cc \
+	src/codegen/go_emit.cc \
+	src/codegen/go_used_labels.cc \
+	src/codegen/input_api.cc \
+	src/codegen/output.cc \
+	src/codegen/print.cc \
+	src/codegen/scc.cc \
+	src/codegen/skeleton/path.cc \
+	src/codegen/skeleton/skeleton.cc \
+	src/dfa/actions.cc \
+	src/dfa/encoding/enc.cc \
+	src/dfa/encoding/range_suffix.cc \
+	src/dfa/encoding/utf16/utf16.cc \
+	src/dfa/encoding/utf16/utf16_range.cc \
+	src/dfa/encoding/utf16/utf16_regexp.cc \
+	src/dfa/encoding/utf8/utf8.cc \
+	src/dfa/encoding/utf8/utf8_range.cc \
+	src/dfa/encoding/utf8/utf8_regexp.cc \
+	src/dfa/dfa.cc \
+	src/main.cc \
+	src/mbo_getopt.cc \
+	src/parse/input.cc \
+	src/parse/scanner.cc \
+	src/util/range.cc
+re2c_SOURCES = \
+	$(SRC_HDR) \
+	$(SRC)
 
+# autogenerated sources
+AUTOGEN_SCANNER = scanner_lex.cc
+AUTOGEN_PARSER = parser.cc
+AUTOGEN_PARSER_HDR = y.tab.h
 AUTOGEN = \
 	$(AUTOGEN_PARSER) \
 	$(AUTOGEN_PARSER_HDR) \
 	$(AUTOGEN_SCANNER)
+nodist_re2c_SOURCES = $(AUTOGEN)
 
+# bootstrap sources
+BOOTSTRAP_SCANNER = bootstrap/scanner_lex.cc
+BOOTSTRAP_PARSER = bootstrap/parser.cc
+BOOTSTRAP_PARSER_HDR = bootstrap/y.tab.h
+BOOTSTRAP_DOC_MAN = bootstrap/re2c.1
+BOOTSTRAP_DOC_HTML = bootstrap/manual.html
 BOOTSTRAP = \
 	$(BOOTSTRAP_DOC_HTML) \
 	$(BOOTSTRAP_DOC_MAN) \
@@ -115,59 +108,70 @@ BOOTSTRAP = \
 	$(BOOTSTRAP_PARSER_HDR) \
 	$(BOOTSTRAP_SCANNER)
 
-re2c_SOURCES = \
-	$(SRC_HDR) \
-	$(SRC)
-nodist_re2c_SOURCES = $(AUTOGEN)
+# custom sources
+CUSTOM_SCANNER = src/parse/scanner_lex.re
+CUSTOM_PARSER = src/parse/parser.ypp
+CUSTOM = \
+	$(CUSTOM_SCANNER) \
+	$(CUSTOM_PARSER)
+
+# docs
+SRC_DOC = doc/re2c.ad
+DOC_MAN = doc/re2c.1
+DOC_HTML = doc/manual.html
+DOC = \
+	$(DOC_HTML) \
+	$(DOC_MAN)
+man_MANS = $(DOC_MAN)
 
 EXTRA_DIST = \
 	$(BOOTSTRAP) \
-	$(SRC_PARSER) \
-	$(srcdir)/CHANGELOG \
-	$(srcdir)/NO_WARRANTY \
-	$(srcdir)/README \
-	$(srcdir)/autogen.sh \
-	$(srcdir)/doc/index.html \
-	$(srcdir)/doc/loplas.ps \
-	$(srcdir)/doc/sample.bib \
-	$(srcdir)/examples \
-	$(srcdir)/test
+	$(CUSTOM) \
+	CHANGELOG \
+	NO_WARRANTY \
+	README \
+	autogen.sh \
+	doc/index.html \
+	doc/loplas.ps \
+	doc/sample.bib \
+	examples \
+	test
 
 CLEANFILES = \
 	$(AUTOGEN) \
-	$(DOC_HTML) \
-	$(DOC_MAN)
+	$(DOC)
 
-TESTS = $(builddir)/run_tests.sh
+TESTS = run_tests.sh
 
-man_MANS = $(DOC_MAN)
-
-$(AUTOGEN_PARSER): $(SRC_PARSER)
+# rule has side effects:
+# - autogenerated header in build directory
+# - bootstrap files in source directory, must manually prepend $(top_srcdir)
+$(AUTOGEN_PARSER): $(CUSTOM_PARSER)
 	@if test $(BISON) = "yes"; \
 	then \
-		bison $(YFLAGS) --output=$(AUTOGEN_PARSER) --defines=$(AUTOGEN_PARSER_HDR) $(SRC_PARSER) && \
-		cp $(AUTOGEN_PARSER) $(BOOTSTRAP_PARSER) && \
-		cp $(AUTOGEN_PARSER_HDR) $(BOOTSTRAP_PARSER_HDR); \
+		bison $(YFLAGS) --output=$@ --defines=$(AUTOGEN_PARSER_HDR) $< && \
+		cp $@ $(top_srcdir)/$(BOOTSTRAP_PARSER) && \
+		cp $(AUTOGEN_PARSER_HDR) $(top_srcdir)/$(BOOTSTRAP_PARSER_HDR); \
 	else \
-		cp $(BOOTSTRAP_PARSER) $(AUTOGEN_PARSER) && \
-		cp $(BOOTSTRAP_PARSER_HDR) $(AUTOGEN_PARSER_HDR); \
+		cp $(top_srcdir)/$(BOOTSTRAP_PARSER) $@ && \
+		cp $(top_srcdir)/$(BOOTSTRAP_PARSER_HDR) $(AUTOGEN_PARSER_HDR); \
 	fi
 
-$(AUTOGEN_SCANNER): $(SRC_SCANNER)
+# rule has side effects:
+# - bootstrap file in source directory, must manually prepend $(top_srcdir)
+$(AUTOGEN_SCANNER): $(CUSTOM_SCANNER)
 	@if test -x $(RE2C); \
 	then \
-		$(RE2C) $(RE2CFLAGS) -o $(AUTOGEN_SCANNER) $(SRC_SCANNER) && \
-		cp $(AUTOGEN_SCANNER) $(BOOTSTRAP_SCANNER); \
+		$(RE2C) $(RE2CFLAGS) -o $@ $< && \
+		cp $@ $(top_srcdir)/$(BOOTSTRAP_SCANNER); \
 	else \
-		cp $(BOOTSTRAP_SCANNER) $(AUTOGEN_SCANNER); \
+		cp $(top_srcdir)/$(BOOTSTRAP_SCANNER) $@; \
 	fi
 
 # rebuild lexer (just in case it was bootstrapped) and rebuild re2c
 .PHONY: bootstrap
 bootstrap: all
 	rm $(AUTOGEN_SCANNER)
-	$(RE2C) $(RE2CFLAGS) -o $(AUTOGEN_SCANNER) $(SRC_SCANNER)
-	cp $(AUTOGEN_SCANNER) $(BOOTSTRAP_SCANNER)
 	make all
 
 .PHONY: tests
@@ -183,19 +187,23 @@ wtests: all $(TESTS)
 .PHONY: docs
 if REBUILD_DOCS
 docs: $(DOC_MAN) $(DOC_HTML)
+# rule has side effects:
+# - bootstrap file in source directory, must manually prepend $(top_srcdir)
 $(DOC_MAN): $(SRC_DOC)
-	a2x -f manpage $(SRC_DOC)
-	cp $(DOC_MAN) $(BOOTSTRAP_DOC_MAN)
+	a2x -f manpage $<
+	cp $@ $(top_srcdir)/$(BOOTSTRAP_DOC_MAN)
+# rule has side effects:
+# - bootstrap file in source directory, must manually prepend $(top_srcdir)
 $(DOC_HTML): $(SRC_DOC)
-	asciidoc -o $(DOC_HTML) $(SRC_DOC)
-	cp $(DOC_HTML) $(BOOTSTRAP_DOC_HTML)
+	asciidoc -o $@ $<
+	cp $@ $(top_srcdir)/$(BOOTSTRAP_DOC_HTML)
 else
 docs: $(DOC_MAN) $(DOC_HTML)
 	@echo "Reconfigure to rebuild docs: ./configure --enable-docs"
 $(DOC_MAN): $(BOOTSTRAP_DOC_MAN)
-	cp $(BOOTSTRAP_DOC_MAN) $(DOC_MAN)
+	cp $< $@
 $(DOC_HTML): $(BOOTSTRAP_DOC_HTML)
-	cp $(BOOTSTRAP_DOC_HTML) $(DOC_HTML)
+	cp $< $@
 endif
 
 all-local: docs
