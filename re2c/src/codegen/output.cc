@@ -1,6 +1,7 @@
 #include <iomanip>
 #include <stdio.h>
 #include <string.h>
+#include <time.h>
 
 #include "src/codegen/indent.h"
 #include "src/codegen/output.h"
