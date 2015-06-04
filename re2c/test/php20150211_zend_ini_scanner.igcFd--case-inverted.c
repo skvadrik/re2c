@@ -490,7 +490,6 @@ yy4:
 }
 yy5:
 		YYDEBUG(5, *YYCURSOR);
-		yyaccept = 0;
 		yych = *(YYMARKER = ++YYCURSOR);
 		goto yy64;
 yy6:
@@ -517,7 +516,6 @@ yy9:
 		goto yy8;
 yy10:
 		YYDEBUG(10, *YYCURSOR);
-		yyaccept = 1;
 		yych = *(YYMARKER = ++YYCURSOR);
 		{
 			static void *yytarget[256] = {
@@ -570,7 +568,6 @@ yy13:
 		goto yy26;
 yy14:
 		YYDEBUG(14, *YYCURSOR);
-		yyaccept = 2;
 		yych = *(YYMARKER = ++YYCURSOR);
 		goto yy59;
 		YYDEBUG(15, *YYCURSOR);
@@ -1080,7 +1077,6 @@ yy62:
 		goto yy61;
 yy63:
 		YYDEBUG(63, *YYCURSOR);
-		yyaccept = 0;
 		YYMARKER = ++YYCURSOR;
 		YYFILL(2);
 		yych = *YYCURSOR;
@@ -1125,7 +1121,6 @@ yy64:
 		}
 yy65:
 		YYDEBUG(65, *YYCURSOR);
-		yyaccept = 1;
 		YYMARKER = ++YYCURSOR;
 		YYFILL(2);
 		yych = *YYCURSOR;
@@ -2078,7 +2073,6 @@ end_raw_value_chars:
 }
 yy137:
 		YYDEBUG(137, *YYCURSOR);
-		yyaccept = 0;
 		yych = *(YYMARKER = ++YYCURSOR);
 		{
 			static void *yytarget[256] = {
@@ -2135,7 +2129,6 @@ yy140:
 		goto yy139;
 yy141:
 		YYDEBUG(141, *YYCURSOR);
-		yyaccept = 1;
 		yych = *(YYMARKER = ++YYCURSOR);
 		goto yy143;
 yy142:
@@ -2171,7 +2164,6 @@ yy147:
 		goto yy139;
 yy148:
 		YYDEBUG(148, *YYCURSOR);
-		yyaccept = 2;
 		YYMARKER = ++YYCURSOR;
 		YYFILL(2);
 		yych = *YYCURSOR;

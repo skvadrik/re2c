@@ -1064,7 +1064,7 @@ smart_ptr<DFA> genCode(RegExp *re, Output & output, uint32_t ind)
 		skeleton.emit_data (output.data);
 		skeleton::emit_prolog (output.source, ind, output.data.file_name.c_str ());
 	}
-	dfa->prepare (output.max_fill);
+	dfa->prepare (output.source, output.max_fill);
 
 	return dfa;
 }

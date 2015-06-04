@@ -204,11 +204,12 @@ void DFA::emit(Output & output, uint32_t& ind, const RegExpMap* specMap, const s
 	}
 
 	// Generate code
+	const bool save_yyaccept = accept_map.size () > 1;
 	for (State * s = head; s; s = s->next)
 	{
 		bool readCh = false;
 		emit_state (o, ind, s, used_labels.count (s->label));
-		emit_action (s->action, o, ind, readCh, s, condName, used_labels);
+		emit_action (s->action, o, ind, readCh, s, condName, used_labels, save_yyaccept);
 		s->go.emit(o, ind, readCh);
 	}
 

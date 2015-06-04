@@ -17,6 +17,7 @@ void emit_action
 	, const State * const s
 	, const std::string & condName
 	, const std::set<label_t> & used_labels
+	, bool save_yyaccept
 	);
 
 // helpers

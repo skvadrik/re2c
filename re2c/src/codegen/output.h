@@ -22,18 +22,11 @@ struct OutputFragment
 		, STATE_GOTO
 		, TYPES
 		, YYACCEPT_INIT
-		, YYACCEPT_SELECTOR
 		, YYMAXFILL
 		};
 
-	union info_t
-	{
-		uint32_t yyaccept_selector;
-	};
-
 	type_t type;
 	std::ostringstream stream;
-	info_t info;
 	uint32_t indent;
 
 	OutputFragment (type_t t, uint32_t i);
@@ -90,7 +83,6 @@ public:
 	void insert_state_goto (uint32_t ind);
 	void insert_types ();
 	void insert_yyaccept_init (uint32_t ind);
-	void insert_yyaccept_selector (uint32_t ind, uint32_t selector);
 	void insert_yymaxfill ();
 
 	void set_used_yyaccept ();
@@ -146,7 +138,6 @@ void output_state_goto (std::ostream &, uint32_t, uint32_t);
 void output_types (std::ostream &, uint32_t, const std::vector<std::string> &);
 void output_version_time (std::ostream &);
 void output_yyaccept_init (std::ostream &, uint32_t, bool);
-void output_yyaccept_selector (std::ostream &, uint32_t, bool, uint32_t);
 void output_yymaxfill (std::ostream &, uint32_t);
 
 // helpers

@@ -1648,7 +1648,6 @@ yy62:
 }
 yy64:
 		YYDEBUG(64, *YYCURSOR);
-		yyaccept = 0;
 		YYMARKER = ++YYCURSOR;
 		YYFILL(3);
 		yych = *YYCURSOR;
@@ -1891,7 +1890,6 @@ yy84:
 }
 yy86:
 		YYDEBUG(86, *YYCURSOR);
-		yyaccept = 0;
 		YYMARKER = ++YYCURSOR;
 		YYFILL(3);
 		yych = *YYCURSOR;
@@ -2165,7 +2163,6 @@ yy108:
 }
 yy110:
 		YYDEBUG(110, *YYCURSOR);
-		yyaccept = 0;
 		YYMARKER = ++YYCURSOR;
 		YYFILL(3);
 		yych = *YYCURSOR;
@@ -6707,7 +6704,6 @@ yyc_ST_LOOKING_FOR_VARNAME:
 		}
 yy819:
 		YYDEBUG(819, *YYCURSOR);
-		yyaccept = 0;
 		yych = *(YYMARKER = ++YYCURSOR);
 		{
 			static void *yytarget[256] = {
@@ -6934,7 +6930,6 @@ yyc_ST_VAR_OFFSET:
 		}
 yy833:
 		YYDEBUG(833, *YYCURSOR);
-		yyaccept = 0;
 		yych = *(YYMARKER = ++YYCURSOR);
 		if (yych <= 'a') {
 			if (yych <= '/') goto yy834;

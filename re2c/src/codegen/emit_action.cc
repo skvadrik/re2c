@@ -10,7 +10,7 @@ namespace re2c
 static void need               (OutputFile & o, uint32_t ind, bool & readCh, uint32_t n, bool bSetMarker);
 static void emit_match         (OutputFile & o, uint32_t ind, bool & readCh, const State * const s);
 static void emit_initial       (OutputFile & o, uint32_t ind, bool & readCh, const State * const s, const Initial & init, const std::set<label_t> & used_labels);
-static void emit_save          (OutputFile & o, uint32_t ind, bool & readCh, const State * const s, uint32_t save);
+static void emit_save          (OutputFile & o, uint32_t ind, bool & readCh, const State * const s, uint32_t save, bool save_yyaccept);
 static void emit_accept_binary (OutputFile & o, uint32_t ind, bool & readCh, const State * const s, const accept_t & accept, uint32_t l, uint32_t r);
 static void emit_accept        (OutputFile & o, uint32_t ind, bool & readCh, const State * const s, const accept_t & accept);
 static void emit_rule          (OutputFile & o, uint32_t ind, const State * const s, const RuleOp * const rule, const std::string & condName);
@@ -25,6 +25,7 @@ void emit_action
 	, const State * const s
 	, const std::string & condName
 	, const std::set<label_t> & used_labels
+	, bool save_yyaccept
 	)
 {
 	switch (action.type)
@@ -36,7 +37,7 @@ void emit_action
 			emit_initial (o, ind, readCh, s, * action.info.initial, used_labels);
 			break;
 		case Action::SAVE:
-			emit_save (o, ind, readCh, s, action.info.save);
+			emit_save (o, ind, readCh, s, action.info.save, save_yyaccept);
 			break;
 		case Action::MOVE:
 			break;
@@ -124,14 +125,17 @@ void emit_initial (OutputFile & o, uint32_t ind, bool & readCh, const State * co
 	}
 }
 
-void emit_save (OutputFile & o, uint32_t ind, bool & readCh, const State * const s, uint32_t save)
+void emit_save (OutputFile & o, uint32_t ind, bool & readCh, const State * const s, uint32_t save, bool save_yyaccept)
 {
 	if (DFlag)
 	{
 		return;
 	}
 
-	o.insert_yyaccept_selector (ind, save);
+	if (save_yyaccept)
+	{
+		o << indent (ind) << mapCodeName["yyaccept"] << " = " << save << ";\n";
+	}
 
 	if (s->link)
 	{
@@ -190,8 +194,6 @@ void emit_accept (OutputFile & o, uint32_t ind, bool & readCh, const State * con
 
 		if (accept.size() > 1)
 		{
-			o.set_used_yyaccept ();
-
 			if (gFlag && accept.size() >= cGotoThreshold)
 			{
 				o << indent(ind++) << "{\n";

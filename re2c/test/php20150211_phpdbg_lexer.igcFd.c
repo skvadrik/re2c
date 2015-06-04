@@ -174,21 +174,18 @@ yy8:
 		goto yy4;
 yy9:
 		YYDEBUG(9, *YYCURSOR);
-		yyaccept = 0;
 		yych = *(YYMARKER = ++YYCURSOR);
 		if (yych == 'V') goto yy24;
 		if (yych == 'v') goto yy24;
 		goto yy4;
 yy10:
 		YYDEBUG(10, *YYCURSOR);
-		yyaccept = 0;
 		yych = *(YYMARKER = ++YYCURSOR);
 		if (yych == 'H') goto yy20;
 		if (yych == 'h') goto yy20;
 		goto yy4;
 yy11:
 		YYDEBUG(11, *YYCURSOR);
-		yyaccept = 0;
 		yych = *(YYMARKER = ++YYCURSOR);
 		if (yybm[0+yych] & 64) {
 			goto yy17;
@@ -198,7 +195,6 @@ yy11:
 		goto yy4;
 yy12:
 		YYDEBUG(12, *YYCURSOR);
-		yyaccept = 0;
 		yych = *(YYMARKER = ++YYCURSOR);
 		if (yych == 'U') goto yy14;
 		if (yych == 'u') goto yy14;
@@ -1367,7 +1363,6 @@ yy131:
 		goto yy127;
 yy132:
 		YYDEBUG(132, *YYCURSOR);
-		yyaccept = 0;
 		yych = *(YYMARKER = ++YYCURSOR);
 		if (yych == 'r') goto yy134;
 		goto yy127;

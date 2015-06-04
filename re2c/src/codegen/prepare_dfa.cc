@@ -153,7 +153,7 @@ void DFA::findBaseState()
 	operator delete (span);
 }
 
-void DFA::prepare(uint32_t & max_fill)
+void DFA::prepare(OutputFile & o, uint32_t & max_fill)
 {
 	bUsedYYBitmap = false;
 
@@ -253,6 +253,10 @@ void DFA::prepare(uint32_t & max_fill)
 			{
 				accept_map[saves[i]] = rules[i];
 			}
+		}
+		if (accept_map.size () > 1)
+		{
+			o.set_used_yyaccept ();
 		}
 		accfixup->action.set_accept (&accept_map);
 	}

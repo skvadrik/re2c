@@ -14,7 +14,6 @@ namespace re2c
 OutputFragment::OutputFragment (type_t t, uint32_t i)
 	: type (t)
 	, stream ()
-	, info ()
 	, indent (i)
 {}
 
@@ -190,14 +189,6 @@ void OutputFile::insert_yyaccept_init (uint32_t ind)
 	insert_code ();
 }
 
-void OutputFile::insert_yyaccept_selector (uint32_t ind, uint32_t selector)
-{
-	OutputFragment * p = new OutputFragment (OutputFragment::YYACCEPT_SELECTOR, ind);
-	p->info.yyaccept_selector = selector;
-	blocks.back ()->fragments.push_back (p);
-	insert_code ();
-}
-
 void OutputFile::insert_yymaxfill ()
 {
 	blocks.back ()->fragments.push_back (new OutputFragment (OutputFragment::YYMAXFILL, 0));
@@ -264,9 +255,6 @@ void OutputFile::emit
 						break;
 					case OutputFragment::YYACCEPT_INIT:
 						output_yyaccept_init (f.stream, f.indent, b.used_yyaccept);
-						break;
-					case OutputFragment::YYACCEPT_SELECTOR:
-						output_yyaccept_selector (f.stream, f.indent, b.used_yyaccept, f.info.yyaccept_selector);
 						break;
 					case OutputFragment::YYMAXFILL:
 						output_yymaxfill (f.stream, max_fill);
@@ -443,14 +431,6 @@ void output_yyaccept_init (std::ostream & o, uint32_t ind, bool used_yyaccept)
 	if (used_yyaccept)
 	{
 		o << indent (ind) << "unsigned int " << mapCodeName["yyaccept"] << " = 0;\n";
-	}
-}
-
-void output_yyaccept_selector (std::ostream & o, uint32_t ind, bool used_yyaccept, uint32_t yyaccept_selector)
-{
-	if (used_yyaccept)
-	{
-		o << indent (ind) << mapCodeName["yyaccept"] << " = " << yyaccept_selector << ";\n";
 	}
 }
 
