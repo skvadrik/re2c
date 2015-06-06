@@ -113,11 +113,11 @@ void emit_initial (OutputFile & o, uint32_t ind, bool & readCh, const State * co
 
 	if (s->link)
 	{
-		need(o, ind, readCh, s->depth, initial.setMarker && bUsedYYMarker);
+		need(o, ind, readCh, s->depth, initial.setMarker);
 	}
 	else
 	{
-		if (initial.setMarker && bUsedYYMarker)
+		if (initial.setMarker)
 		{
 			o << input_api.stmt_backup (ind);
 		}
@@ -139,22 +139,12 @@ void emit_save (OutputFile & o, uint32_t ind, bool & readCh, const State * const
 
 	if (s->link)
 	{
-		if (bUsedYYMarker)
-		{
-			o << input_api.stmt_skip_backup (ind);
-		}
+		o << input_api.stmt_skip_backup (ind);
 		need(o, ind, readCh, s->depth, false);
 	}
 	else
 	{
-		if (bUsedYYMarker)
-		{
-			o << input_api.stmt_skip_backup_peek (ind);
-		}
-		else
-		{
-			o << input_api.stmt_skip_peek (ind);
-		}
+		o << input_api.stmt_skip_backup_peek (ind);
 		readCh = false;
 	}
 }
@@ -180,7 +170,6 @@ void emit_accept (OutputFile & o, uint32_t ind, bool & readCh, const State * con
 {
 	if (accept.size() > 0)
 	{
-		bUsedYYMarker = true;
 		if (!DFlag)
 		{
 			o << input_api.stmt_restore (ind);

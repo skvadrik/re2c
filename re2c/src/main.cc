@@ -28,7 +28,6 @@ bool flag_skeleton = false;
 
 bool bNoGenerationDate = false;
 bool bUsedYYBitmap  = false;
-bool bUsedYYMarker  = true;
 bool bEmitYYCh       = true;
 bool bUseStateNext   = false;
 bool bUseYYFill      = true;

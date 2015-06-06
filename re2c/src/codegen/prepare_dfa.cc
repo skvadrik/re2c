@@ -180,8 +180,7 @@ void DFA::prepare(OutputFile & o, uint32_t & max_fill)
 	memset(saves, ~0, (nRules)*sizeof(*saves));
 
 	// mark backtracking points
-	bSaveOnHead = false;
-
+	std::vector<State *> backup_states;
 	for (State * s = head; s; s = s->next)
 	{
 		if (s->rule)
@@ -194,9 +193,7 @@ void DFA::prepare(OutputFile & o, uint32_t & max_fill)
 					{
 						saves[s->rule->accept] = nSaves++;
 					}
-
-					bSaveOnHead |= s == head;
-					s->action.set_save (saves[s->rule->accept]);
+					backup_states.push_back (s);
 				}
 			}
 		}
@@ -247,6 +244,14 @@ void DFA::prepare(OutputFile & o, uint32_t & max_fill)
 	
 	if (accfixup)
 	{
+		// insert backup actions
+		for (std::vector<State *>::iterator i = backup_states.begin (); i != backup_states.end (); ++i)
+		{
+			(*i)->action.set_save (saves[(*i)->rule->accept]);
+		}
+		// backup action for initial state must be saved explicitly
+		// because it will be overwritten by initial action
+		bSaveOnHead = !backup_states.empty () && backup_states.front () == head;
 		for (uint32_t i = 0; i < nRules; ++i)
 		{
 			if (saves[i] != ~0u)
