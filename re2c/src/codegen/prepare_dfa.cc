@@ -203,16 +203,14 @@ void DFA::prepare(OutputFile & o, uint32_t & max_fill)
 	State ** rules = new State * [nRules];
 	memset(rules, 0, (nRules)*sizeof(*rules));
 
-	State *accept = NULL;
 	State *accfixup = NULL;
-
 	for (State * s = head; s; s = s->next)
 	{
 		State * ow;
 
 		if (!s->rule)
 		{
-			ow = accept;
+			ow = accfixup;
 		}
 		else
 		{
@@ -233,8 +231,8 @@ void DFA::prepare(OutputFile & o, uint32_t & max_fill)
 			{
 				if (!ow)
 				{
-					ow = accept = accfixup = new State;
-					addState(&s->next, accept);
+					ow = accfixup = new State;
+					addState(&s->next, accfixup);
 				}
 
 				s->go.span[i].to = ow;
