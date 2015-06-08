@@ -160,8 +160,6 @@ void DFA::prepare(OutputFile & o, uint32_t & max_fill)
 	findSCCs();
 	head->link = head;
 
-	uint32_t nRules = 0;
-
 	for (State * s = head; s; s = s->next)
 	{
 		s->depth = maxDist(s);
@@ -169,20 +167,15 @@ void DFA::prepare(OutputFile & o, uint32_t & max_fill)
 		{
 			max_fill = s->depth;
 		}
-		if (s->rule && s->rule->accept >= nRules)
-		{
-			nRules = s->rule->accept + 1;
-		}
 	}
 
 	// create rule states
-	State ** rules = new State * [nRules];
-	memset(rules, 0, (nRules)*sizeof(*rules));
+	std::map<uint32_t, State *> rules;
 	for (State * s = head; s; s = s->next)
 	{
 		if (s->rule)
 		{
-			if (!rules[s->rule->accept])
+			if (rules.find (s->rule->accept) == rules.end ())
 			{
 				State *n = new State;
 				n->action.set_rule (s->rule);
@@ -220,9 +213,6 @@ void DFA::prepare(OutputFile & o, uint32_t & max_fill)
 	// find backup states and create accept state (if needed)
 	if (default_state)
 	{
-		uint32_t nSaves = 0;
-		uint32_t * saves = new uint32_t[nRules];
-		memset(saves, ~0, (nRules)*sizeof(*saves));
 		for (State * s = head; s; s = s->next)
 		{
 			if (s->rule)
@@ -231,24 +221,18 @@ void DFA::prepare(OutputFile & o, uint32_t & max_fill)
 				{
 					if (!s->go.span[i].to->rule && s->go.span[i].to->action.type != Action::RULE)
 					{
-						if (saves[s->rule->accept] == ~0u)
-						{
-							saves[s->rule->accept] = nSaves++;
-							accepts.push_back (rules[s->rule->accept]);
-						}
-						s->action.set_save (saves[s->rule->accept]);
+						const uint32_t accept = accepts.find_or_add (rules[s->rule->accept]);
+						s->action.set_save (accept);
 					}
 				}
 			}
 		}
-		delete [] saves;
 		if (accepts.size () > 1)
 		{
 			o.set_used_yyaccept ();
 		}
 		default_state->action.set_accept (&accepts);
 	}
-	delete [] rules;
 
 	// split ``base'' states into two parts
 	for (State * s = head; s; s = s->next)

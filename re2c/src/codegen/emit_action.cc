@@ -217,14 +217,14 @@ void emit_accept (OutputFile & o, uint32_t ind, bool & readCh, const State * con
 					genGoTo(o, 0, s, accepts[i], readCh);
 				}
 				o << indent(ind) << "default:\t";
-				genGoTo(o, 0, s, accepts.back (), readCh);
+				genGoTo(o, 0, s, accepts[accepts_size - 1], readCh);
 				o << indent(ind) << "}\n";
 			}
 		}
 		else
 		{
 			// no need to write if statement here since there is only case 0.
-			genGoTo(o, ind, s, accepts.front (), readCh);
+			genGoTo(o, ind, s, accepts[0], readCh);
 		}
 	}
 }

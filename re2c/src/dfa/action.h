@@ -5,6 +5,7 @@
 
 #include "src/codegen/label.h"
 #include "src/util/c99_stdint.h"
+#include "src/util/uniq_vector.h"
 
 namespace re2c
 {
@@ -24,7 +25,7 @@ struct Initial
 	{}
 };
 
-typedef std::vector<const State *> accept_t;
+typedef uniq_vector_t<const State *> accept_t;
 
 class Action
 {

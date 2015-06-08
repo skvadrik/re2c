@@ -49,6 +49,7 @@ SRC_HDR = \
 	src/util/range.h \
 	src/util/smart_ptr.h \
 	src/util/substr.h \
+	src/util/uniq_vector.h \
 	src/util/wrap_iterator.h
 SRC = \
 	src/codegen/bitmap.cc \

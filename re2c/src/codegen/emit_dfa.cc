@@ -80,9 +80,9 @@ void DFA::count_used_labels (std::set<label_t> & used, label_t start, label_t in
 	{
 		s->go.used_labels (used);
 	}
-	for (accept_t::const_iterator i = accepts.begin (); i != accepts.end (); ++i)
+	for (uint32_t i = 0; i < accepts.size (); ++i)
 	{
-		used.insert ((*i)->label);
+		used.insert (accepts[i]->label);
 	}
 	// must go last: it needs the set of used labels
 	if (used.count (head->label))
