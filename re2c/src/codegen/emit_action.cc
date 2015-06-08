@@ -42,7 +42,7 @@ void emit_action
 		case Action::MOVE:
 			break;
 		case Action::ACCEPT:
-			emit_accept (o, ind, readCh, s, * action.info.accept);
+			emit_accept (o, ind, readCh, s, * action.info.accepts);
 			break;
 		case Action::RULE:
 			emit_rule (o, ind, s, action.info.rule, condName);
@@ -149,26 +149,27 @@ void emit_save (OutputFile & o, uint32_t ind, bool & readCh, const State * const
 	}
 }
 
-void emit_accept_binary (OutputFile & o, uint32_t ind, bool & readCh, const State * const s, const accept_t & accept, uint32_t l, uint32_t r)
+void emit_accept_binary (OutputFile & o, uint32_t ind, bool & readCh, const State * const s, const accept_t & accepts, uint32_t l, uint32_t r)
 {
 	if (l < r)
 	{
 		const uint32_t m = (l + r) >> 1;
 		o << indent(ind) << "if (" << mapCodeName["yyaccept"] << (r == l+1 ? " == " : " <= ") << m << ") {\n";
-		emit_accept_binary (o, ++ind, readCh, s, accept, l, m);
+		emit_accept_binary (o, ++ind, readCh, s, accepts, l, m);
 		o << indent(--ind) << "} else {\n";
-		emit_accept_binary (o, ++ind, readCh, s, accept, m + 1, r);
+		emit_accept_binary (o, ++ind, readCh, s, accepts, m + 1, r);
 		o << indent(--ind) << "}\n";
 	}
 	else
 	{
-		genGoTo(o, ind, s, accept.find(l)->second, readCh);
+		genGoTo(o, ind, s, accepts[l], readCh);
 	}
 }
 
-void emit_accept (OutputFile & o, uint32_t ind, bool & readCh, const State * const s, const accept_t & accept)
+void emit_accept (OutputFile & o, uint32_t ind, bool & readCh, const State * const s, const accept_t & accepts)
 {
-	if (accept.size() > 0)
+	const uint32_t accepts_size = accepts.size ();
+	if (accepts_size > 0)
 	{
 		if (!DFlag)
 		{
@@ -181,61 +182,49 @@ void emit_accept (OutputFile & o, uint32_t ind, bool & readCh, const State * con
 			readCh = false;
 		}
 
-		if (accept.size() > 1)
+		if (accepts_size > 1)
 		{
-			if (gFlag && accept.size() >= cGotoThreshold)
+			if (gFlag && accepts_size >= cGotoThreshold)
 			{
 				o << indent(ind++) << "{\n";
-				o << indent(ind++) << "static void *" << mapCodeName["yytarget"] << "[" << accept.size() << "] = {\n";
-				for (accept_t::const_iterator it = accept.begin(); it != accept.end(); ++it)
+				o << indent(ind++) << "static void *" << mapCodeName["yytarget"] << "[" << accepts_size << "] = {\n";
+				for (uint32_t i = 0; i < accepts_size; ++i)
 				{
-					o << indent(ind) << "&&" << labelPrefix << it->second->label << ",\n";
+					o << indent(ind) << "&&" << labelPrefix << accepts[i]->label << ",\n";
 				}
 				o << indent(--ind) << "};\n";
 				o << indent(ind) << "goto *" << mapCodeName["yytarget"] << "[" << mapCodeName["yyaccept"] << "];\n";
 				o << indent(--ind) << "}\n";
 			}
-			else if (sFlag || (accept.size() == 2 && !DFlag))
+			else if (sFlag || (accepts_size == 2 && !DFlag))
 			{
-				emit_accept_binary (o, ind, readCh, s, accept, 0, accept.size() - 1);
+				emit_accept_binary (o, ind, readCh, s, accepts, 0, accepts_size - 1);
 			}
 			else if (DFlag)
 			{
-				for (accept_t::const_iterator it = accept.begin(); it != accept.end(); ++it)
+				for (uint32_t i = 0; i < accepts_size; ++i)
 				{
-					o << s->label << " -> " << it->second->label;
-					o << " [label=\"yyaccept=" << it->first << "\"]\n";
+					o << s->label << " -> " << accepts[i]->label;
+					o << " [label=\"yyaccept=" << i << "\"]\n";
 				}
 			}
 			else
 			{
 				o << indent(ind) << "switch (" << mapCodeName["yyaccept"] << ") {\n";
-
-				accept_t::const_iterator it = accept.begin(), end = accept.end();
-		
-				while (it != end)
+				for (uint32_t i = 0; i < accepts_size - 1; ++i)
 				{
-					accept_t::const_iterator tmp = it;
-
-					if (++it == end)
-					{
-						o << indent(ind) << "default:\t";
-					}
-					else
-					{
-						o << indent(ind) << "case " << tmp->first << ": \t";
-					}
-
-					genGoTo(o, 0, s, tmp->second, readCh);
+					o << indent(ind) << "case " << i << ": \t";
+					genGoTo(o, 0, s, accepts[i], readCh);
 				}
-			
+				o << indent(ind) << "default:\t";
+				genGoTo(o, 0, s, accepts.back (), readCh);
 				o << indent(ind) << "}\n";
 			}
 		}
 		else
 		{
 			// no need to write if statement here since there is only case 0.
-			genGoTo(o, ind, s, accept.find(0)->second, readCh);
+			genGoTo(o, ind, s, accepts.front (), readCh);
 		}
 	}
 }

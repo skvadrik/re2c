@@ -234,7 +234,7 @@ void DFA::prepare(OutputFile & o, uint32_t & max_fill)
 						if (saves[s->rule->accept] == ~0u)
 						{
 							saves[s->rule->accept] = nSaves++;
-							accept_map[saves[s->rule->accept]] = rules[s->rule->accept];
+							accepts.push_back (rules[s->rule->accept]);
 						}
 						s->action.set_save (saves[s->rule->accept]);
 					}
@@ -242,11 +242,11 @@ void DFA::prepare(OutputFile & o, uint32_t & max_fill)
 			}
 		}
 		delete [] saves;
-		if (accept_map.size () > 1)
+		if (accepts.size () > 1)
 		{
 			o.set_used_yyaccept ();
 		}
-		default_state->action.set_accept (&accept_map);
+		default_state->action.set_accept (&accepts);
 	}
 	delete [] rules;
 

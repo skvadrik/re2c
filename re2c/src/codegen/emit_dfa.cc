@@ -80,9 +80,9 @@ void DFA::count_used_labels (std::set<label_t> & used, label_t start, label_t in
 	{
 		s->go.used_labels (used);
 	}
-	for (accept_t::const_iterator i = accept_map.begin (); i != accept_map.end (); ++i)
+	for (accept_t::const_iterator i = accepts.begin (); i != accepts.end (); ++i)
 	{
-		used.insert (i->second->label);
+		used.insert ((*i)->label);
 	}
 	// must go last: it needs the set of used labels
 	if (used.count (head->label))
@@ -204,7 +204,7 @@ void DFA::emit(Output & output, uint32_t& ind, const RegExpMap* specMap, const s
 	}
 
 	// Generate code
-	const bool save_yyaccept = accept_map.size () > 1;
+	const bool save_yyaccept = accepts.size () > 1;
 	for (State * s = head; s; s = s->next)
 	{
 		bool readCh = false;

@@ -44,7 +44,7 @@ DFA::DFA(Ins *ins, uint32_t ni, uint32_t lb, uint32_t ub, const Char *rep)
 	, toDo(NULL)
 	, free_ins(ins)
 	, free_rep(rep)
-	, accept_map ()
+	, accepts ()
 
 {
 	Ins **work = new Ins * [ni + 1];

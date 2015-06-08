@@ -24,7 +24,7 @@ public:
 	const Char * free_rep;
 
 protected:
-	accept_t accept_map;
+	accept_t accepts;
 
 public:
 	DFA (Ins *, uint32_t, uint32_t, uint32_t, const Char *);

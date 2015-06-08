@@ -1,7 +1,7 @@
 #ifndef __ACTION__
 #define __ACTION__
 
-#include <map>
+#include <vector>
 
 #include "src/codegen/label.h"
 #include "src/util/c99_stdint.h"
@@ -24,7 +24,7 @@ struct Initial
 	{}
 };
 
-typedef std::map<uint32_t, const State *> accept_t;
+typedef std::vector<const State *> accept_t;
 
 class Action
 {
@@ -42,7 +42,7 @@ public:
 	{
 		Initial * initial;
 		uint32_t save;
-		const accept_t * accept;
+		const accept_t * accepts;
 		const RuleOp * rule;
 	} info;
 
@@ -72,11 +72,11 @@ public:
 		clear ();
 		type = MOVE;
 	}
-	void set_accept (const accept_t * accept)
+	void set_accept (const accept_t * accepts)
 	{
 		clear ();
 		type = ACCEPT;
-		info.accept = accept;
+		info.accepts = accepts;
 	}
 	void set_rule (const RuleOp * const rule)
 	{
