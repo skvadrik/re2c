@@ -175,30 +175,6 @@ void DFA::prepare(OutputFile & o, uint32_t & max_fill)
 		}
 	}
 
-	uint32_t nSaves = 0;
-	uint32_t * saves = new uint32_t[nRules];
-	memset(saves, ~0, (nRules)*sizeof(*saves));
-
-	// mark backtracking points
-	std::vector<State *> backup_states;
-	for (State * s = head; s; s = s->next)
-	{
-		if (s->rule)
-		{
-			for (uint32_t i = 0; i < s->go.nSpans; ++i)
-			{
-				if (s->go.span[i].to && !s->go.span[i].to->rule)
-				{
-					if (saves[s->rule->accept] == ~0u)
-					{
-						saves[s->rule->accept] = nSaves++;
-					}
-					backup_states.push_back (s);
-				}
-			}
-		}
-	}
-
 	// insert actions
 	State ** rules = new State * [nRules];
 	memset(rules, 0, (nRules)*sizeof(*rules));
@@ -242,14 +218,28 @@ void DFA::prepare(OutputFile & o, uint32_t & max_fill)
 	
 	if (accfixup)
 	{
-		// insert backup actions
-		for (std::vector<State *>::iterator i = backup_states.begin (); i != backup_states.end (); ++i)
+		uint32_t nSaves = 0;
+		uint32_t * saves = new uint32_t[nRules];
+		memset(saves, ~0, (nRules)*sizeof(*saves));
+		// mark backtracking points
+		for (State * s = head; s; s = s->next)
 		{
-			(*i)->action.set_save (saves[(*i)->rule->accept]);
+			if (s->rule)
+			{
+				for (uint32_t i = 0; i < s->go.nSpans; ++i)
+				{
+					if (!s->go.span[i].to->rule && s->go.span[i].to->action.type != Action::RULE)
+					{
+						if (saves[s->rule->accept] == ~0u)
+						{
+							saves[s->rule->accept] = nSaves++;
+						}
+						s->action.set_save (saves[s->rule->accept]);
+						bSaveOnHead |= s == head;
+					}
+				}
+			}
 		}
-		// backup action for initial state must be saved explicitly
-		// because it will be overwritten by initial action
-		bSaveOnHead = !backup_states.empty () && backup_states.front () == head;
 		for (uint32_t i = 0; i < nRules; ++i)
 		{
 			if (saves[i] != ~0u)
@@ -257,13 +247,13 @@ void DFA::prepare(OutputFile & o, uint32_t & max_fill)
 				accept_map[saves[i]] = rules[i];
 			}
 		}
+		delete [] saves;
 		if (accept_map.size () > 1)
 		{
 			o.set_used_yyaccept ();
 		}
 		accfixup->action.set_accept (&accept_map);
 	}
-	delete [] saves;
 	delete [] rules;
 
 	// split ``base'' states into two parts
