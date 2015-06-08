@@ -175,20 +175,12 @@ void DFA::prepare(OutputFile & o, uint32_t & max_fill)
 		}
 	}
 
-	// insert actions
+	// create rule states
 	State ** rules = new State * [nRules];
 	memset(rules, 0, (nRules)*sizeof(*rules));
-
-	State *accfixup = NULL;
 	for (State * s = head; s; s = s->next)
 	{
-		State * ow;
-
-		if (!s->rule)
-		{
-			ow = accfixup;
-		}
-		else
+		if (s->rule)
 		{
 			if (!rules[s->rule->accept])
 			{
@@ -197,31 +189,40 @@ void DFA::prepare(OutputFile & o, uint32_t & max_fill)
 				rules[s->rule->accept] = n;
 				addState(&s->next, n);
 			}
-
-			ow = rules[s->rule->accept];
+			for (uint32_t i = 0; i < s->go.nSpans; ++i)
+			{
+				if (!s->go.span[i].to)
+				{
+					s->go.span[i].to = rules[s->rule->accept];
+				}
+			}
 		}
+	}
 
+	// create default state (if needed)
+	State * default_state = NULL;
+	for (State * s = head; s; s = s->next)
+	{
 		for (uint32_t i = 0; i < s->go.nSpans; ++i)
 		{
 			if (!s->go.span[i].to)
 			{
-				if (!ow)
+				if (!default_state)
 				{
-					ow = accfixup = new State;
-					addState(&s->next, accfixup);
+					default_state = new State;
+					addState(&s->next, default_state);
 				}
-
-				s->go.span[i].to = ow;
+				s->go.span[i].to = default_state;
 			}
 		}
 	}
-	
-	if (accfixup)
+
+	// find backup states and create accept state (if needed)
+	if (default_state)
 	{
 		uint32_t nSaves = 0;
 		uint32_t * saves = new uint32_t[nRules];
 		memset(saves, ~0, (nRules)*sizeof(*saves));
-		// mark backtracking points
 		for (State * s = head; s; s = s->next)
 		{
 			if (s->rule)
@@ -233,18 +234,11 @@ void DFA::prepare(OutputFile & o, uint32_t & max_fill)
 						if (saves[s->rule->accept] == ~0u)
 						{
 							saves[s->rule->accept] = nSaves++;
+							accept_map[saves[s->rule->accept]] = rules[s->rule->accept];
 						}
 						s->action.set_save (saves[s->rule->accept]);
-						bSaveOnHead |= s == head;
 					}
 				}
-			}
-		}
-		for (uint32_t i = 0; i < nRules; ++i)
-		{
-			if (saves[i] != ~0u)
-			{
-				accept_map[saves[i]] = rules[i];
 			}
 		}
 		delete [] saves;
@@ -252,7 +246,7 @@ void DFA::prepare(OutputFile & o, uint32_t & max_fill)
 		{
 			o.set_used_yyaccept ();
 		}
-		accfixup->action.set_accept (&accept_map);
+		default_state->action.set_accept (&accept_map);
 	}
 	delete [] rules;
 

@@ -113,7 +113,7 @@ void DFA::emit(Output & output, uint32_t& ind, const RegExpMap* specMap, const s
 	std::set<label_t> used_labels;
 	count_used_labels (used_labels, start_label, initial_label, o.get_force_start_label ());
 
-	head->action.set_initial (initial_label, bSaveOnHead);
+	head->action.set_initial (initial_label, head->action.type == Action::SAVE);
 
 	// Generate prolog
 	if (bProlog)

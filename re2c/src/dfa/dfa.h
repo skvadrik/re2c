@@ -24,7 +24,6 @@ public:
 	const Char * free_rep;
 
 protected:
-	bool bSaveOnHead;
 	accept_t accept_map;
 
 public:
