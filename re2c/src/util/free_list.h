@@ -1,5 +1,5 @@
-#ifndef _free_list_h
-#define _free_list_h
+#ifndef _RE2C_UTIL_FREE_LIST_
+#define _RE2C_UTIL_FREE_LIST_
 
 #include <set>
 
@@ -53,4 +53,4 @@ protected:
 
 } // end namespace re2c
 
-#endif // _free_list_h
+#endif // _RE2C_UTIL_FREE_LIST_

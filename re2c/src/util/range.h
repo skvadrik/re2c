@@ -1,5 +1,5 @@
-#ifndef _range_h
-#define _range_h
+#ifndef _RE2C_UTIL_RANGE_
+#define _RE2C_UTIL_RANGE_
 
 #include <iostream>
 
@@ -43,4 +43,4 @@ Range *doDiff(Range *r1, Range *r2);
 
 } // end namespace re2c
 
-#endif
+#endif // _RE2C_UTIL_RANGE_

@@ -1,5 +1,5 @@
-#ifndef _re2c_utf8_h
-#define _re2c_utf8_h
+#ifndef _RE2C_DFA_ENCODING_UTF8_UTF8_
+#define _RE2C_DFA_ENCODING_UTF8_UTF8_
 
 #include "src/util/c99_stdint.h"
 
@@ -43,4 +43,4 @@ public:
 
 }  // namespace re2c
 
-#endif // _re2c_utf8_h
+#endif // _RE2C_DFA_ENCODING_UTF8_UTF8_

@@ -1,5 +1,5 @@
-#ifndef __RE2C_UTIL_COUNTER__
-#define __RE2C_UTIL_COUNTER__
+#ifndef _RE2C_UTIL_COUNTER_
+#define _RE2C_UTIL_COUNTER_
 
 namespace re2c {
 
@@ -26,4 +26,4 @@ public:
 
 } // namespace re2c
 
-#endif // __RE2C_UTIL_COUNTER__
+#endif // _RE2C_UTIL_COUNTER_

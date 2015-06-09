@@ -1,5 +1,5 @@
-#ifndef _print_h
-#define _print_h
+#ifndef _RE2C_CODEGEN_PRINT_
+#define _RE2C_CODEGEN_PRINT_
 
 #include <iosfwd>
 
@@ -17,4 +17,4 @@ void printSpan(std::ostream&, uint32_t, uint32_t);
 
 } // end namespace re2c
 
-#endif
+#endif // _RE2C_CODEGEN_PRINT_

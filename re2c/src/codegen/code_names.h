@@ -1,6 +1,5 @@
-/* $Id: token.h 547 2006-05-25 13:40:35Z helly $ */
-#ifndef _code_names_h
-#define	_code_names_h
+#ifndef _RE2C_CODEGEN_CODE_NAMES_
+#define _RE2C_CODEGEN_CODE_NAMES_
 
 #include <string>
 #include <map>
@@ -16,4 +15,4 @@ public:
 
 } // end namespace re2c
 
-#endif
+#endif // _RE2C_CODEGEN_CODE_NAMES_

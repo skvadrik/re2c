@@ -1,5 +1,5 @@
-#ifndef __PARSER__
-#define __PARSER__
+#ifndef _RE2C_PARSE_PARSER_
+#define _RE2C_PARSE_PARSER_
 
 #include <string>
 
@@ -21,4 +21,4 @@ typedef std::map<std::string, RegExp *> symbol_table_t;
 
 } // namespace re2c
 
-#endif // __PARSER__
+#endif // _RE2C_PARSE_PARSER_

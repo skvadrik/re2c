@@ -1,5 +1,5 @@
-#ifndef _utf16_regexp_h
-#define _utf16_regexp_h
+#ifndef _RE2C_DFA_ENCODING_UTF16_REGEXP_
+#define _RE2C_DFA_ENCODING_UTF16_REGEXP_
 
 #include "src/dfa/encoding/utf16/utf16.h"
 #include "src/util/range.h"
@@ -13,4 +13,4 @@ RegExp * UTF16Range(const Range * r);
 
 } // namespace re2c
 
-#endif // _utf16_regexp_h
+#endif // _RE2C_DFA_ENCODING_UTF16_REGEXP_

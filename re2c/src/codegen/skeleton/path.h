@@ -1,5 +1,5 @@
-#ifndef __PATH__
-#define __PATH__
+#ifndef _RE2C_CODEGEN_SKELETON_PATH_
+#define _RE2C_CODEGEN_SKELETON_PATH_
 
 #include <vector>
 
@@ -30,4 +30,4 @@ struct Path
 
 } // namespace re2c
 
-#endif // __PATH__
+#endif // _RE2C_CODEGEN_SKELETON_PATH_

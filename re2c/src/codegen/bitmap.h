@@ -1,5 +1,5 @@
-#ifndef _bitmap_h
-#define _bitmap_h
+#ifndef _RE2C_CODEGEN_BITMAP_
+#define _RE2C_CODEGEN_BITMAP_
 
 #include "src/codegen/output.h"
 #include "src/util/c99_stdint.h"
@@ -41,4 +41,4 @@ bool matches(const Span * b1, uint32_t n1, const State * s1, const Span * b2, ui
 
 } // end namespace re2c
 
-#endif // _bitmap_h
+#endif // _RE2C_CODEGEN_BITMAP_

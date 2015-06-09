@@ -1,5 +1,5 @@
-#ifndef _scanner_h
-#define	_scanner_h
+#ifndef _RE2C_PARSE_SCANNER_
+#define _RE2C_PARSE_SCANNER_
 
 #include <string>
 
@@ -126,4 +126,4 @@ inline void Scanner::fatal(const char *msg) const
 
 } // end namespace re2c
 
-#endif
+#endif // _RE2C_PARSE_SCANNER_

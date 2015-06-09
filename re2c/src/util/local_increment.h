@@ -1,5 +1,5 @@
-#ifndef __LOCAL_INCREMENT__
-#define __LOCAL_INCREMENT__
+#ifndef _RE2C_UTIL_LOCAL_INCREMENT_
+#define _RE2C_UTIL_LOCAL_INCREMENT_
 
 namespace re2c
 {
@@ -19,4 +19,4 @@ struct local_increment_t
 
 } // namespace re2c
 
-#endif // __LOCAL_INCREMENT__
+#endif // _RE2C_UTIL_LOCAL_INCREMENT_

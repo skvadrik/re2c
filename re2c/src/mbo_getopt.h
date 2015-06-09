@@ -6,8 +6,8 @@
  * If short_open is '-' this is the last option.
  */
 
-#ifndef RE2C_MBO_GETOPT_H_INCLUDE_GUARD_
-#define RE2C_MBO_GETOPT_H_INCLUDE_GUARD_
+#ifndef _RE2C_MBO_GETOPT_
+#define _RE2C_MBO_GETOPT_
 
 namespace re2c
 {
@@ -28,5 +28,5 @@ int mbo_getopt(int argc, char* const *argv, const mbo_opt_struct *opts, char **o
 
 } // end namespace re2c
 
-#endif
+#endif // _RE2C_MBO_GETOPT_
 

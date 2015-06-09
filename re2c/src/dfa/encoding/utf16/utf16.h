@@ -1,5 +1,5 @@
-#ifndef _re2c_utf16_h
-#define _re2c_utf16_h
+#ifndef _RE2C_DFA_ENCODING_UTF16_UTF16_
+#define _RE2C_DFA_ENCODING_UTF16_UTF16_
 
 #include "src/util/c99_stdint.h"
 
@@ -34,4 +34,4 @@ inline uint16_t utf16::trail_surr(rune r)
 
 }  // namespace re2c
 
-#endif // _re2c_utf16_h
+#endif // _RE2C_DFA_ENCODING_UTF16_UTF16_

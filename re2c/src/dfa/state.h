@@ -1,5 +1,5 @@
-#ifndef __STATE__
-#define __STATE__
+#ifndef _RE2C_DFA_STATE_
+#define _RE2C_DFA_STATE_
 
 #include "src/codegen/go.h"
 #include "src/dfa/action.h"
@@ -49,4 +49,4 @@ public:
 
 } // namespace re2c
 
-#endif // __STATE__
+#endif // _RE2C_DFA_STATE_

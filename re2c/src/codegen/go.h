@@ -1,5 +1,5 @@
-#ifndef _go_h
-#define _go_h
+#ifndef _RE2C_CODEGEN_GO_
+#define _RE2C_CODEGEN_GO_
 
 #include <iostream>
 #include <set>
@@ -214,4 +214,4 @@ struct Go
 
 } // namespace re2c
 
-#endif // _go_h
+#endif // _RE2C_CODEGEN_GO_

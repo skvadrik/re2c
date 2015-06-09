@@ -1,5 +1,5 @@
-#ifndef _output_h
-#define _output_h
+#ifndef _RE2C_CODEGEN_OUTPUT_
+#define _RE2C_CODEGEN_OUTPUT_
 
 #include <fstream>
 #include <sstream>
@@ -148,4 +148,4 @@ std::string output_get_state ();
 
 } // namespace re2c
 
-#endif // _output_h
+#endif // _RE2C_CODEGEN_OUTPUT_

@@ -1,5 +1,5 @@
-#ifndef _re_h
-#define _re_h
+#ifndef _RE2C_DFA_RE_
+#define _RE2C_DFA_RE_
 
 #include <iostream>
 #include <set>
@@ -307,4 +307,4 @@ extern RegExp *mkAlt(RegExp*, RegExp*);
 
 } // end namespace re2c
 
-#endif
+#endif // _RE2C_DFA_RE_

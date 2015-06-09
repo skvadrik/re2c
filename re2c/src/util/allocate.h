@@ -1,5 +1,5 @@
-#ifndef __ALLOCATE__
-#define __ALLOCATE__
+#ifndef _RE2C_UTIL_ALLOCATE_
+#define _RE2C_UTIL_ALLOCATE_
 
 namespace re2c {
 
@@ -14,4 +14,4 @@ template <typename T> T * allocate (size_t n)
 
 } // namespace re2c
 
-#endif // __ALLOCATE__
+#endif // _RE2C_UTIL_ALLOCATE_

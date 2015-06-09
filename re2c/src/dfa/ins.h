@@ -1,5 +1,5 @@
-#ifndef _ins_h
-#define _ins_h
+#ifndef _RE2C_DFA_INS_
+#define _RE2C_DFA_INS_
 
 #include "src/util/c99_stdint.h"
 
@@ -52,4 +52,4 @@ inline void unmark(Ins *i)
 
 } // end namespace re2c
 
-#endif
+#endif // _RE2C_DFA_INS_

@@ -1,5 +1,5 @@
-#ifndef _range_suffix_h
-#define _range_suffix_h
+#ifndef _RE2C_DFA_ENCODING_RANGE_SUFFIX_
+#define _RE2C_DFA_ENCODING_RANGE_SUFFIX_
 
 #include <stddef.h> // NULL
 
@@ -37,4 +37,4 @@ RegExp * emit(RangeSuffix * p, RegExp * re);
 
 } // namespace re2c
 
-#endif // _range_suffix_h
+#endif // _RE2C_DFA_ENCODING_RANGE_SUFFIX_

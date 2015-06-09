@@ -1,5 +1,5 @@
-#ifndef __SKELETON__
-#define __SKELETON__
+#ifndef _RE2C_CODEGEN_SKELETON_SKELETON_
+#define _RE2C_CODEGEN_SKELETON_SKELETON_
 
 #include <map>
 
@@ -70,4 +70,4 @@ void emit_epilog (OutputFile & o, uint32_t ind);
 
 } // namespace re2c
 
-#endif // __SKELETON__
+#endif // _RE2C_CODEGEN_SKELETON_SKELETON_

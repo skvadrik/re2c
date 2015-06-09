@@ -1,5 +1,5 @@
-#ifndef __FORBID_COPY__
-#define __FORBID_COPY__
+#ifndef _RE2C_UTIL_FORBID_COPY_
+#define _RE2C_UTIL_FORBID_COPY_
 
 // must be used at the end of class definition
 // (since this macro changes scope to private)
@@ -8,4 +8,4 @@
 		type (const type &); \
 		type & operator = (const type &)
 
-#endif // __FORBID_COPY__
+#endif // _RE2C_UTIL_FORBID_COPY_

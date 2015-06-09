@@ -1,5 +1,5 @@
-#ifndef _input_h
-#define _input_h
+#ifndef _RE2C_PARSE_INPUT_
+#define _RE2C_PARSE_INPUT_
 
 #include <stdio.h>
 #include <string>
@@ -22,4 +22,4 @@ struct Input
 
 } // namespace re2c
 
-#endif // _input_h
+#endif // _RE2C_PARSE_INPUT_

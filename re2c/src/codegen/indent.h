@@ -1,5 +1,5 @@
-#ifndef _indent_h
-#define _indent_h
+#ifndef _RE2C_CODEGEN_INDENT_
+#define _RE2C_CODEGEN_INDENT_
 
 #include <string>
 
@@ -21,4 +21,4 @@ inline std::string indent (uint32_t ind)
 
 } // end namespace re2c
 
-#endif // _indent_h
+#endif // _RE2C_CODEGEN_INDENT_

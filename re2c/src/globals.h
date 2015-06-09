@@ -1,5 +1,5 @@
-#ifndef	_globals_h
-#define	_globals_h
+#ifndef _RE2C_GLOBALS_
+#define _RE2C_GLOBALS_
 
 #include <string>
 
@@ -76,4 +76,4 @@ extern InputAPI input_api;
 
 } // end namespace re2c
 
-#endif
+#endif // _RE2C_GLOBALS_

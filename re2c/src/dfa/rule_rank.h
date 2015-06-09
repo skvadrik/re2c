@@ -1,5 +1,5 @@
-#ifndef __RULE_RANK__
-#define __RULE_RANK__
+#ifndef _RE2C_DFA_RULE_RANK_
+#define _RE2C_DFA_RULE_RANK_
 
 #include <iosfwd>
 
@@ -36,4 +36,4 @@ public:
 
 } // namespace re2c
 
-#endif // __RULE_RANK__
+#endif // _RE2C_DFA_RULE_RANK_

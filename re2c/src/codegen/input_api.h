@@ -1,5 +1,5 @@
-#ifndef _input_api_h
-#define _input_api_h
+#ifndef _RE2C_CODEGEN_INPUT_API_
+#define _RE2C_CODEGEN_INPUT_API_
 
 #include <map>
 #include <string>
@@ -40,4 +40,4 @@ public:
 
 } // end namespace re2c
 
-#endif // _input_api_h
+#endif // _RE2C_CODEGEN_INPUT_API_

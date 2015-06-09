@@ -1,5 +1,5 @@
-#ifndef __ACTION__
-#define __ACTION__
+#ifndef _RE2C_DFA_ACTION_
+#define _RE2C_DFA_ACTION_
 
 #include <vector>
 
@@ -106,4 +106,4 @@ private:
 
 } // namespace re2c
 
-#endif // __ACTION__
+#endif // _RE2C_DFA_ACTION_

@@ -1,5 +1,5 @@
-#ifndef __C99_STDINT__
-#define __C99_STDINT__
+#ifndef _RE2C_UTIL_C99_STDINT_
+#define _RE2C_UTIL_C99_STDINT_
 
 #include "config.h"
 
@@ -256,4 +256,4 @@ typedef uint64_t uintmax_t;
 
 #endif // HAVE_STDINT_H
 
-#endif // __C99_STDINT__
+#endif // _RE2C_UTIL_C99_STDINT_

@@ -1,5 +1,5 @@
-#ifndef __DFA__
-#define __DFA__
+#ifndef _RE2C_DFA_DFA_
+#define _RE2C_DFA_DFA_
 
 #include "src/dfa/action.h"
 #include "src/dfa/state.h"
@@ -48,4 +48,4 @@ smart_ptr<DFA> genCode (RegExp *, Output &, uint32_t);
 
 } // namespace re2c
 
-#endif // __DFA__
+#endif // _RE2C_DFA_DFA_

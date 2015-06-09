@@ -1,5 +1,5 @@
-#ifndef __LABEL__
-#define __LABEL__
+#ifndef _RE2C_CODEGEN_LABEL_
+#define _RE2C_CODEGEN_LABEL_
 
 #include <iosfwd>
 
@@ -35,4 +35,4 @@ public:
 
 } // namespace re2c
 
-#endif // __LABEL__
+#endif // _RE2C_CODEGEN_LABEL_

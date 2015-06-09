@@ -1,5 +1,5 @@
-#ifndef SMART_PTR_HPP_INCLUDE_GUARD
-#define SMART_PTR_HPP_INCLUDE_GUARD
+#ifndef _RE2C_UTIL_SMART_PTR_
+#define _RE2C_UTIL_SMART_PTR_
 
 namespace re2c 
 {
@@ -66,4 +66,4 @@ namespace re2c
 	}
 }
 
-#endif
+#endif // _RE2C_UTIL_SMART_PTR_

@@ -1,5 +1,5 @@
-#ifndef __TOKEN__
-#define __TOKEN__
+#ifndef _RE2C_PARSE_TOKEN_
+#define _RE2C_PARSE_TOKEN_
 
 #include "src/util/c99_stdint.h"
 #include "src/util/forbid_copy.h"
@@ -48,4 +48,4 @@ inline Token::Token (const Token & t)
 
 } // namespace re2c
 
-#endif // __TOKEN__
+#endif // _RE2C_PARSE_TOKEN_

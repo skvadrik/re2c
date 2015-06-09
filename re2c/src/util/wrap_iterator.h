@@ -1,5 +1,5 @@
-#ifndef __WRAP_ITERATOR__
-#define __WRAP_ITERATOR__
+#ifndef _RE2C_UTIL_WRAP_ITERATOR_
+#define _RE2C_UTIL_WRAP_ITERATOR_
 
 namespace re2c
 {
@@ -38,4 +38,4 @@ public:
 
 } // namespace re2c
 
-#endif // __WRAP_ITERATOR__
+#endif // _RE2C_UTIL_WRAP_ITERATOR_

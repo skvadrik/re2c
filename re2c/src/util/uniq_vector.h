@@ -1,5 +1,5 @@
-#ifndef __UNIQ_VECTOR__
-#define __UNIQ_VECTOR__
+#ifndef _RE2C_UTIL_UNIQ_VECTOR_
+#define _RE2C_UTIL_UNIQ_VECTOR_
 
 #include <vector>
 
@@ -45,4 +45,4 @@ public:
 
 } // namespace re2c
 
-#endif // __UNIQ_VECTOR__
+#endif // _RE2C_UTIL_UNIQ_VECTOR_

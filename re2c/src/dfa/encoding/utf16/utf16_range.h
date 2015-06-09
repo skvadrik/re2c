@@ -1,5 +1,5 @@
-#ifndef _utf16_range_h
-#define _utf16_range_h
+#ifndef _RE2C_DFA_ENCODING_UTF16_RANGE_
+#define _RE2C_DFA_ENCODING_UTF16_RANGE_
 
 #include "src/dfa/encoding/range_suffix.h"
 #include "src/dfa/encoding/utf16/utf16.h"
@@ -13,4 +13,4 @@ void UTF16splitByRuneLength(RangeSuffix * & root, utf16::rune l, utf16::rune h);
 
 } // namespace re2c
 
-#endif // _utf16_range_h
+#endif // _RE2C_DFA_ENCODING_UTF16_RANGE_

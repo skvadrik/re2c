@@ -1,5 +1,5 @@
-#ifndef _enc_h
-#define _enc_h
+#ifndef _RE2C_DFA_ENCODING_ENC_
+#define _RE2C_DFA_ENCODING_ENC_
 
 #include "src/util/c99_stdint.h"
 #include "src/util/range.h"
@@ -172,4 +172,4 @@ inline void Enc::setPolicy(policy_t t)
 
 } // namespace re2c
 
-#endif // _enc_h
+#endif // _RE2C_DFA_ENCODING_ENC_

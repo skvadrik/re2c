@@ -1,5 +1,5 @@
-#ifndef __EMIT__
-#define __EMIT__
+#ifndef _RE2C_CODEGEN_EMIT_
+#define _RE2C_CODEGEN_EMIT_
 
 #include "src/codegen/output.h"
 #include "src/dfa/dfa.h"
@@ -38,4 +38,4 @@ template<typename _Ty> std::string replaceParam (std::string str, const std::str
 
 } // namespace re2c
 
-#endif // __EMIT__
+#endif // _RE2C_CODEGEN_EMIT_

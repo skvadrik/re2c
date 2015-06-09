@@ -1,5 +1,5 @@
-#ifndef _utf8_regexp_h
-#define _utf8_regexp_h
+#ifndef _RE2C_DFA_ENCODING_UTF8_REGEXP_
+#define _RE2C_DFA_ENCODING_UTF8_REGEXP_
 
 #include "src/dfa/encoding/utf8/utf8.h"
 #include "src/util/range.h"
@@ -13,4 +13,4 @@ RegExp * UTF8Range(const Range * r);
 
 } // namespace re2c
 
-#endif // _utf8_regexp_h
+#endif // _RE2C_DFA_ENCODING_UTF8_REGEXP_

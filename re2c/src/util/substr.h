@@ -1,5 +1,5 @@
-#ifndef __SUBSTR__
-#define __SUBSTR__
+#ifndef _RE2C_UTIL_SUBSTR_
+#define _RE2C_UTIL_SUBSTR_
 
 #include "src/util/c99_stdint.h"
 #include "src/util/forbid_copy.h"
@@ -29,4 +29,4 @@ public:
 
 } // namespace re2c
 
-#endif // __SUBSTR__
+#endif // _RE2C_UTIL_SUBSTR_
