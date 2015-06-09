@@ -14,14 +14,14 @@ const uint32_t Node::UNKNOWN_LEN = 0xFFFFffff;
 Node::Node (const State * s, const s2n_map & s2n)
 	: arcs ()
 	, loop (0)
-	, rule (NO_RULE)
+	, rule (rule_rank_t::none ())
 	, path_len (UNKNOWN_LEN)
 	, path (NULL)
 {
 	const bool is_accepting = s && s->rule;
 	if (is_accepting)
 	{
-		rule = s->rule->accept;
+		rule = s->rule->rank;
 	}
 
 	const bool is_final = !s || (s->go.nSpans == 1 && !s->go.span[0].to);
@@ -219,7 +219,7 @@ Skeleton::~Skeleton ()
 void Skeleton::generate_paths (std::vector<Path> & results)
 {
 	std::vector<Path> prefixes;
-	prefixes.push_back (Path (Path::chars_t (), 0, NO_RULE));
+	prefixes.push_back (Path (Path::chars_t (), 0, rule_rank_t::none ()));
 
 	if (nodes->estimate_size_all (1, 0) == DATA_LIMIT)
 	{

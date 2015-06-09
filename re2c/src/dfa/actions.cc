@@ -50,7 +50,7 @@ const Ins* showIns(std::ostream &o, const Ins &i, const Ins &base)
 		break;
 
 		case TERM:
-		o << "term " << ((RuleOp*) i.i.link)->accept;
+		o << "term " << ((RuleOp*) i.i.link)->rank;
 		break;
 	}
 
@@ -880,11 +880,11 @@ RegExp * Scanner::mkDefault() const
 	return new MatchOp(def);
 }
 
-RuleOp::RuleOp(RegExp *e, RegExp *c, Token *t, uint32_t a, InsAccess access)
+RuleOp::RuleOp(RegExp *e, RegExp *c, Token *t, rule_rank_t r, InsAccess access)
 	: exp(e)
 	, ctx(c)
 	, ins(NULL)
-	, accept(a)
+	, rank(r)
 	, code(t)
 	, line(0)
 {

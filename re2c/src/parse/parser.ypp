@@ -26,7 +26,7 @@ int yylex();
 void yyerror(const char*);
 }
 
-static uint32_t         accept;
+static counter_t<rule_rank_t> rank_counter;
 static re2c::RegExpMap  specMap;
 static RegExp           *spec = NULL, *specNone = NULL;
 static RuleOpList       specStar;
@@ -87,7 +87,7 @@ void context_rule(CondList *clist, RegExp *expr, RegExp *look, const std::string
 	for(CondList::const_iterator it = clist->begin(); it != clist->end(); ++it)
 	{
 		Token *token = new Token(code, in->get_fname (), in->get_cline (), newcond);//condcpy);
-		RuleOp *rule = new RuleOp(expr, look, token, accept++, ins_access);
+		RuleOp *rule = new RuleOp(expr, look, token, rank_counter.next (), ins_access);
 
 		RegExpMap::iterator itRE = specMap.find(*it);
 
@@ -228,7 +228,7 @@ rule:
 			{
 				in->fatal("condition or '<*>' required when using -c switch");
 			}
-			$$ = new RuleOp($1, $2, $3, accept++, RegExp::SHARED);
+			$$ = new RuleOp($1, $2, $3, rank_counter.next (), RegExp::SHARED);
 			spec = spec? mkAlt(spec, $$) : $$;
 		}
 	|	STAR CODE /* default rule */
@@ -270,7 +270,7 @@ rule:
 			Token *token = new Token($7, $7->source, $7->line, $6);
 			delete $7;
 			delete $6;
-			specStar.push_back(new RuleOp($4, $5, token, accept++, RegExp::PRIVATE));
+			specStar.push_back(new RuleOp($4, $5, token, rank_counter.next (), RegExp::PRIVATE));
 		}
 	|	'<' STAR '>' expr look ':' newcond
 		{
@@ -278,7 +278,7 @@ rule:
 			context_check(NULL);
 			Token *token = new Token(NULL, in->get_fname (), in->get_cline (), $7);
 			delete $7;
-			specStar.push_back(new RuleOp($4, $5, token, accept++, RegExp::PRIVATE));
+			specStar.push_back(new RuleOp($4, $5, token, rank_counter.next (), RegExp::PRIVATE));
 		}
 	|	'<' STAR '>' look newcond CODE
 		{
@@ -307,7 +307,7 @@ rule:
 			Token *token = new Token($3, $3->source, $3->line, $2);
 			delete $2;
 			delete $3;
-			$$ = specNone = new RuleOp(new NullOp(), new NullOp(), token, accept++, RegExp::SHARED);
+			$$ = specNone = new RuleOp(new NullOp(), new NullOp(), token, rank_counter.next (), RegExp::SHARED);
 		}
 	|	NOCOND ':' newcond
 		{
@@ -319,7 +319,7 @@ rule:
 			}
 			Token *token = new Token(NULL, in->get_fname (), in->get_cline (), $3);
 			delete $3;
-			$$ = specNone = new RuleOp(new NullOp(), new NullOp(), token, accept++, RegExp::SHARED);
+			$$ = specNone = new RuleOp(new NullOp(), new NullOp(), token, rank_counter.next (), RegExp::SHARED);
 		}
 	|	SETUP STAR '>' CODE
 		{
@@ -544,7 +544,7 @@ void parse(Scanner& i, Output & o)
 		{
 			dfa_map.clear();
 		}
-		accept = 0;
+		rank_counter.reset ();
 		spec = NULL;
 		ruleDefault = NULL;
 		in->set_in_parse(true);
@@ -561,7 +561,7 @@ void parse(Scanner& i, Output & o)
 				dfa_map.clear();
 				parse_cleanup();
 				spec = NULL;
-				accept = 0;
+				rank_counter.reset ();
 				ruleDefault = NULL;
 				in->set_in_parse(true);
 				yyparse();
@@ -590,7 +590,7 @@ void parse(Scanner& i, Output & o)
 					// now that all rules have been parsed, we can fix it
 					for (RuleOpList::const_iterator itOp = specStar.begin(); itOp != specStar.end(); ++itOp)
 					{
-						(*itOp)->accept = accept++;
+						(*itOp)->rank = rank_counter.next ();
 					}
 					// merge <*> rules to all conditions
 					// note that all conditions use the same regexp for <*> rules,
@@ -651,7 +651,7 @@ void parse(Scanner& i, Output & o)
 					itRuleDefault = ruleDefaultMap.find(it->first);
 					if (itRuleDefault != ruleDefaultMap.end())
 					{
-						RuleOp * def = new RuleOp(in->mkDefault(), new NullOp(), itRuleDefault->second, accept++, RegExp::SHARED);
+						RuleOp * def = new RuleOp(in->mkDefault(), new NullOp(), itRuleDefault->second, rank_counter.next (), RegExp::SHARED);
 						it->second.second = it->second.second ? mkAlt(def, it->second.second) : def;
 					}
 					else
@@ -659,7 +659,7 @@ void parse(Scanner& i, Output & o)
 						itRuleDefault = ruleDefaultMap.find("*");
 						if (itRuleDefault != ruleDefaultMap.end())
 						{
-							RuleOp * def = new RuleOp(in->mkDefault(), new NullOp(), itRuleDefault->second, accept++, RegExp::SHARED);
+							RuleOp * def = new RuleOp(in->mkDefault(), new NullOp(), itRuleDefault->second, rank_counter.next (), RegExp::SHARED);
 							it->second.second = it->second.second ? mkAlt(def, it->second.second) : def;
 						}
 					}
@@ -677,7 +677,7 @@ void parse(Scanner& i, Output & o)
 		{
 			if (ruleDefault != NULL && parseMode != Scanner::Reuse)
 			{
-				RuleOp * def = new RuleOp(in->mkDefault(), new NullOp(), ruleDefault, accept++, RegExp::SHARED);
+				RuleOp * def = new RuleOp(in->mkDefault(), new NullOp(), ruleDefault, rank_counter.next (), RegExp::SHARED);
 				spec = spec ? mkAlt(def, spec) : def;
 			}
 			if (spec || !dfa_map.empty())

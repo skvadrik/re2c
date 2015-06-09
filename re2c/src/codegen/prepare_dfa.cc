@@ -170,23 +170,23 @@ void DFA::prepare(OutputFile & o, uint32_t & max_fill)
 	}
 
 	// create rule states
-	std::map<uint32_t, State *> rules;
+	std::map<rule_rank_t, State *> rules;
 	for (State * s = head; s; s = s->next)
 	{
 		if (s->rule)
 		{
-			if (rules.find (s->rule->accept) == rules.end ())
+			if (rules.find (s->rule->rank) == rules.end ())
 			{
 				State *n = new State;
 				n->action.set_rule (s->rule);
-				rules[s->rule->accept] = n;
+				rules[s->rule->rank] = n;
 				addState(&s->next, n);
 			}
 			for (uint32_t i = 0; i < s->go.nSpans; ++i)
 			{
 				if (!s->go.span[i].to)
 				{
-					s->go.span[i].to = rules[s->rule->accept];
+					s->go.span[i].to = rules[s->rule->rank];
 				}
 			}
 		}
@@ -221,7 +221,7 @@ void DFA::prepare(OutputFile & o, uint32_t & max_fill)
 				{
 					if (!s->go.span[i].to->rule && s->go.span[i].to->action.type != Action::RULE)
 					{
-						const uint32_t accept = accepts.find_or_add (rules[s->rule->accept]);
+						const uint32_t accept = accepts.find_or_add (rules[s->rule->rank]);
 						s->action.set_save (accept);
 					}
 				}

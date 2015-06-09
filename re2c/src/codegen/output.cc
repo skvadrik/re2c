@@ -156,6 +156,12 @@ OutputFile & operator << (OutputFile & u, label_t l)
 	return u;
 }
 
+OutputFile & operator << (OutputFile & u, rule_rank_t r)
+{
+	u.stream () << r;
+	return u;
+}
+
 void OutputFile::insert_code ()
 {
 	blocks.back ()->fragments.push_back (new OutputFragment (OutputFragment::CODE, 0));

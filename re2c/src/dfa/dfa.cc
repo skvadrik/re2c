@@ -78,7 +78,7 @@ DFA::DFA(Ins *ins, uint32_t ni, uint32_t lb, uint32_t ub, const Char *rep)
 			}
 			else if (i->i.tag == TERM)
 			{
-				if (!s->rule || ((RuleOp*) i->i.link)->accept < s->rule->accept)
+				if (!s->rule || ((RuleOp*) i->i.link)->rank < s->rule->rank)
 					s->rule = (RuleOp*) i->i.link;
 			}
 			else if (i->i.tag == CTXT)

@@ -31,7 +31,7 @@ struct Node
 	uint8_t loop;
 
 	// rule number for corresponding DFA state (if any)
-	uint32_t rule;
+	rule_rank_t rule;
 
 	// stuff for constructing path cover (for large graphs)
 	static const uint32_t UNKNOWN_LEN;

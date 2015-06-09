@@ -9,6 +9,7 @@
 #include <string>
 
 #include "src/dfa/ins.h"
+#include "src/dfa/rule_rank.h"
 #include "src/globals.h"
 #include "src/parse/token.h"
 #include "src/util/range.h"
@@ -164,12 +165,12 @@ private:
 public:
 	RegExp   *ctx;
 	Ins      *ins;
-	uint32_t accept;
+	rule_rank_t rank;
 	Token    *code;
 	uint32_t line;
 
 public:
-	RuleOp(RegExp*, RegExp*, Token*, uint32_t, InsAccess);
+	RuleOp(RegExp*, RegExp*, Token*, rule_rank_t, InsAccess);
 
 	~RuleOp()
 	{

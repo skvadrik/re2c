@@ -190,7 +190,7 @@ void GoBitmap::emit (OutputFile & o, uint32_t ind, bool & readCh)
 
 label_t CpgotoTable::max_label () const
 {
-	label_t max = label_counter_t::FIRST;
+	label_t max = label_t::first ();
 	for (uint32_t i = 0; i < TABLE_SIZE; ++i)
 	{
 		if (max < table[i]->label)
@@ -205,7 +205,7 @@ void CpgotoTable::emit (OutputFile & o, uint32_t ind)
 {
 	o << indent (ind) << "static void *" << mapCodeName["yytarget"] << "[256] = {\n";
 	o << indent (++ind);
-	const uint32_t max_digits = width (max_label ());
+	const uint32_t max_digits = max_label ().width ();
 	for (uint32_t i = 0; i < TABLE_SIZE; ++i)
 	{
 		o << "&&" << labelPrefix << table[i]->label;
@@ -219,7 +219,7 @@ void CpgotoTable::emit (OutputFile & o, uint32_t ind)
 		}
 		else
 		{
-			const uint32_t padding = max_digits - width (table[i]->label) + 1;
+			const uint32_t padding = max_digits - table[i]->label.width () + 1;
 			o << "," << std::string (padding, ' ');
 		}
 	}

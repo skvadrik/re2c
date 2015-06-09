@@ -7,6 +7,7 @@
 #include <vector>
 
 #include "src/codegen/label.h"
+#include "src/dfa/rule_rank.h"
 #include "src/util/c99_stdint.h"
 #include "src/util/forbid_copy.h"
 
@@ -52,7 +53,7 @@ private:
 	std::vector<OutputBlock *> blocks;
 
 public:
-	label_counter_t label_counter;
+	counter_t<label_t> label_counter;
 
 private:
 	std::ostream & stream ();
@@ -78,6 +79,7 @@ public:
 	friend OutputFile & operator << (OutputFile & o, const std::string & s);
 	friend OutputFile & operator << (OutputFile & o, const char * s);
 	friend OutputFile & operator << (OutputFile & o, label_t l);
+	friend OutputFile & operator << (OutputFile & o, rule_rank_t l);
 
 	void insert_line_info ();
 	void insert_state_goto (uint32_t ind);

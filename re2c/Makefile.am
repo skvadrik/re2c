@@ -34,6 +34,7 @@ SRC_HDR = \
 	src/dfa/dfa.h \
 	src/dfa/ins.h \
 	src/dfa/re.h \
+	src/dfa/rule_rank.h \
 	src/dfa/state.h \
 	src/globals.h \
 	src/mbo_getopt.h \
@@ -43,6 +44,7 @@ SRC_HDR = \
 	src/parse/token.h \
 	src/util/allocate.h \
 	src/util/c99_stdint.h \
+	src/util/counter.h \
 	src/util/forbid_copy.h \
 	src/util/free_list.h \
 	src/util/local_increment.h \
@@ -78,6 +80,7 @@ SRC = \
 	src/dfa/encoding/utf8/utf8_range.cc \
 	src/dfa/encoding/utf8/utf8_regexp.cc \
 	src/dfa/dfa.cc \
+	src/dfa/rule_rank.cc \
 	src/main.cc \
 	src/mbo_getopt.cc \
 	src/parse/input.cc \

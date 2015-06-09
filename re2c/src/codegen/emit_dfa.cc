@@ -70,7 +70,7 @@ void DFA::count_used_labels (std::set<label_t> & used, label_t start, label_t in
 	// In '-f' mode, default state is always state 0
 	if (fFlag)
 	{
-		used.insert (label_counter_t::FIRST);
+		used.insert (label_t::first ());
 	}
 	if (force_start)
 	{

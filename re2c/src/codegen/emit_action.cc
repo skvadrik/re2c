@@ -257,11 +257,11 @@ void emit_rule (OutputFile & o, uint32_t ind, const State * const s, const RuleO
 	o << indent(ind);
 	if (flag_skeleton)
 	{
-		o << "{ if (cursor == &data[result[i].endpos] && result[i].rule == " << rule->accept << ") ";
+		o << "{ if (cursor == &data[result[i].endpos] && result[i].rule == " << rule->rank << ") ";
 		o << "{ cursor = &data[result[i].startpos]; continue; }";
 		o << " else ";
 		o << "{ printf (\"error: %lu/%u, %u/%u, '%s'\\n\", cursor - data, result[i].endpos, result[i].rule, "
-			<< rule->accept
+			<< rule->rank
 			<< ", &data[result[i].startpos]); return 1; } }";
 	}
 	else if (rule->code->autogen)

@@ -26,7 +26,7 @@ public:
 	Action action;
 
 	State ()
-		: label (label_counter_t::FIRST)
+		: label (label_t::first ())
 		, rule (NULL)
 		, next (0)
 		, link (NULL)
