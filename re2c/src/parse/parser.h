@@ -1,10 +1,12 @@
 #ifndef _RE2C_PARSE_PARSER_
 #define _RE2C_PARSE_PARSER_
 
+#include <list>
 #include <string>
 
 #include "src/codegen/output.h"
-#include "src/dfa/re.h"
+#include "src/ir/regexp/regexp.h"
+#include "src/ir/regexp/regexp_rule.h"
 #include "src/parse/scanner.h"
 
 namespace re2c

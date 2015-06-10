@@ -5,7 +5,7 @@
 
 #include "src/codegen/code_names.h"
 #include "src/codegen/input_api.h"
-#include "src/dfa/encoding/enc.h"
+#include "src/ir/regexp/encoding/enc.h"
 #include "src/util/c99_stdint.h"
 
 namespace re2c

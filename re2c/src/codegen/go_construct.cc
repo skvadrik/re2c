@@ -1,6 +1,6 @@
 #include "src/codegen/bitmap.h"
 #include "src/codegen/go.h"
-#include "src/dfa/dfa.h"
+#include "src/ir/dfa/dfa.h"
 #include "src/util/allocate.h"
 
 namespace re2c

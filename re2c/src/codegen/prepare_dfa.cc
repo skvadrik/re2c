@@ -2,7 +2,8 @@
 
 #include "src/codegen/bitmap.h"
 #include "src/codegen/scc.h"
-#include "src/dfa/dfa.h"
+#include "src/ir/dfa/dfa.h"
+#include "src/ir/regexp/regexp_rule.h"
 #include "src/util/allocate.h"
 
 namespace re2c {

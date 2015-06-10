@@ -4,8 +4,6 @@
 #include <string.h>
 
 #include "config.h"
-#include "src/dfa/dfa.h"
-#include "src/dfa/encoding/enc.h"
 #include "src/globals.h"
 #include "src/mbo_getopt.h"
 #include "src/parse/parser.h"

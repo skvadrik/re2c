@@ -1,8 +1,8 @@
 #include "src/codegen/emit.h"
 #include "src/codegen/indent.h"
 #include "src/codegen/input_api.h"
-#include "src/codegen/skeleton/skeleton.h"
-#include "src/dfa/action.h"
+#include "src/ir/dfa/action.h"
+#include "src/ir/regexp/regexp_rule.h"
 
 namespace re2c
 {

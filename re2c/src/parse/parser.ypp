@@ -8,9 +8,14 @@
 #include <set>
 
 #include "config.h"
-#include "src/dfa/dfa.h"
+#include "src/ir/bytecode/bytecode.h"
+#include "src/ir/regexp/regexp_cat.h"
+#include "src/ir/regexp/regexp_close.h"
+#include "src/ir/regexp/regexp_closev.h"
+#include "src/ir/regexp/regexp_null.h"
 #include "src/codegen/emit.h" // genTypes
 #include "src/globals.h"
+#include "src/parse/extop.h"
 #include "src/parse/parser.h"
 #include "src/util/c99_stdint.h"
 #include "src/util/smart_ptr.h"

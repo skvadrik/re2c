@@ -3,8 +3,9 @@
 #include <iostream>
 #include <sstream>
 
-#include "src/dfa/dfa.h"
+#include "src/ir/dfa/dfa.h"
 #include "src/globals.h"
+#include "src/parse/extop.h"
 #include "src/parse/parser.h"
 #include "src/parse/scanner.h"
 #include "y.tab.h"

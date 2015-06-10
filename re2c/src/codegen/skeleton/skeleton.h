@@ -4,7 +4,7 @@
 #include <map>
 
 #include "src/codegen/skeleton/path.h"
-#include "src/dfa/dfa.h"
+#include "src/ir/dfa/dfa.h"
 #include "src/util/c99_stdint.h"
 #include "src/util/forbid_copy.h"
 #include "src/util/local_increment.h"

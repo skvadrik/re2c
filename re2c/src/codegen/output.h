@@ -7,7 +7,7 @@
 #include <vector>
 
 #include "src/codegen/label.h"
-#include "src/dfa/rule_rank.h"
+#include "src/ir/rule_rank.h"
 #include "src/util/c99_stdint.h"
 #include "src/util/forbid_copy.h"
 

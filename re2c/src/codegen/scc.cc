@@ -1,5 +1,5 @@
 #include "src/codegen/scc.h"
-#include "src/dfa/dfa.h"
+#include "src/ir/dfa/dfa.h"
 
 namespace re2c {
 

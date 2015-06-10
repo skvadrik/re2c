@@ -6,7 +6,6 @@
 #include "src/codegen/indent.h"
 #include "src/codegen/input_api.h"
 #include "src/codegen/skeleton/skeleton.h"
-#include "src/dfa/dfa.h"
 
 namespace re2c
 {

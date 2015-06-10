@@ -3,7 +3,7 @@
 
 #include <vector>
 
-#include "src/dfa/rule_rank.h"
+#include "src/ir/rule_rank.h"
 #include "src/util/c99_stdint.h"
 
 namespace re2c

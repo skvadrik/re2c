@@ -2,11 +2,10 @@
 #define _RE2C_CODEGEN_EMIT_
 
 #include "src/codegen/output.h"
-#include "src/dfa/dfa.h"
+#include "src/ir/dfa/dfa.h"
 
 namespace re2c {
 
-class DFA;
 typedef std::vector<std::string> RegExpIndices;
 
 void emit_action

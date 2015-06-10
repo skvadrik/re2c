@@ -4,7 +4,7 @@
 #include <string>
 
 #include "src/codegen/output.h"
-#include "src/dfa/re.h"
+#include "src/ir/regexp/regexp.h"
 #include "src/globals.h"
 #include "src/parse/input.h"
 #include "src/parse/token.h"

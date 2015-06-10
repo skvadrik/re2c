@@ -22,22 +22,32 @@ SRC_HDR = \
 	src/codegen/scc.h \
 	src/codegen/skeleton/path.h \
 	src/codegen/skeleton/skeleton.h \
-	src/dfa/action.h \
-	src/dfa/encoding/enc.h \
-	src/dfa/encoding/range_suffix.h \
-	src/dfa/encoding/utf16/utf16.h \
-	src/dfa/encoding/utf16/utf16_range.h \
-	src/dfa/encoding/utf16/utf16_regexp.h \
-	src/dfa/encoding/utf8/utf8.h \
-	src/dfa/encoding/utf8/utf8_range.h \
-	src/dfa/encoding/utf8/utf8_regexp.h \
-	src/dfa/dfa.h \
-	src/dfa/ins.h \
-	src/dfa/re.h \
-	src/dfa/rule_rank.h \
-	src/dfa/state.h \
+	src/ir/bytecode/charset.h \
+	src/ir/bytecode/bytecode.h \
+	src/ir/bytecode/ins.h \
+	src/ir/dfa/state.h \
+	src/ir/dfa/dfa.h \
+	src/ir/dfa/action.h \
+	src/ir/regexp/regexp_alt.h \
+	src/ir/regexp/regexp_match.h \
+	src/ir/regexp/encoding/enc.h \
+	src/ir/regexp/encoding/range_suffix.h \
+	src/ir/regexp/encoding/utf8/utf8.h \
+	src/ir/regexp/encoding/utf8/utf8_regexp.h \
+	src/ir/regexp/encoding/utf8/utf8_range.h \
+	src/ir/regexp/encoding/utf16/utf16_range.h \
+	src/ir/regexp/encoding/utf16/utf16_regexp.h \
+	src/ir/regexp/encoding/utf16/utf16.h \
+	src/ir/regexp/regexp_rule.h \
+	src/ir/regexp/regexp_cat.h \
+	src/ir/regexp/regexp_closev.h \
+	src/ir/regexp/regexp_null.h \
+	src/ir/regexp/regexp.h \
+	src/ir/regexp/regexp_close.h \
+	src/ir/rule_rank.h \
 	src/globals.h \
 	src/mbo_getopt.h \
+	src/parse/extop.h \
 	src/parse/input.h \
 	src/parse/parser.h \
 	src/parse/scanner.h \
@@ -70,21 +80,30 @@ SRC = \
 	src/codegen/scc.cc \
 	src/codegen/skeleton/path.cc \
 	src/codegen/skeleton/skeleton.cc \
-	src/dfa/actions.cc \
-	src/dfa/encoding/enc.cc \
-	src/dfa/encoding/range_suffix.cc \
-	src/dfa/encoding/utf16/utf16.cc \
-	src/dfa/encoding/utf16/utf16_range.cc \
-	src/dfa/encoding/utf16/utf16_regexp.cc \
-	src/dfa/encoding/utf8/utf8.cc \
-	src/dfa/encoding/utf8/utf8_range.cc \
-	src/dfa/encoding/utf8/utf8_regexp.cc \
-	src/dfa/dfa.cc \
-	src/dfa/rule_rank.cc \
+	src/ir/bytecode/bytecode.cc \
+	src/ir/bytecode/ins.cc \
+	src/ir/bytecode/charset.cc \
+	src/ir/bytecode/split.cc \
+	src/ir/bytecode/compile.cc \
+	src/ir/bytecode/calc_size.cc \
+	src/ir/dfa/dfa.cc \
+	src/ir/regexp/display.cc \
+	src/ir/regexp/encoding/enc.cc \
+	src/ir/regexp/encoding/range_suffix.cc \
+	src/ir/regexp/encoding/utf8/utf8_regexp.cc \
+	src/ir/regexp/encoding/utf8/utf8_range.cc \
+	src/ir/regexp/encoding/utf8/utf8.cc \
+	src/ir/regexp/encoding/utf16/utf16_regexp.cc \
+	src/ir/regexp/encoding/utf16/utf16.cc \
+	src/ir/regexp/encoding/utf16/utf16_range.cc \
+	src/ir/regexp/fixed_length.cc \
+	src/ir/regexp/regexp.cc \
+	src/ir/rule_rank.cc \
 	src/main.cc \
 	src/mbo_getopt.cc \
 	src/parse/input.cc \
 	src/parse/scanner.cc \
+	src/parse/unescape.cc \
 	src/util/range.cc
 re2c_SOURCES = \
 	$(SRC_HDR) \

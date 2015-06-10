@@ -1,6 +1,7 @@
 #include "src/codegen/indent.h"
 #include "src/codegen/print.h"
 #include "src/codegen/skeleton/skeleton.h"
+#include "src/ir/regexp/regexp_rule.h"
 #include "src/util/allocate.h"
 
 namespace re2c
