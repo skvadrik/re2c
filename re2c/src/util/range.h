@@ -25,11 +25,6 @@ public:
 		vFreeList.insert(this);
 	}
 
-	Range(Range &r) : next(NULL), lb(r.lb), ub(r.ub)
-	{
-		vFreeList.insert(this);
-	}
-
 	~Range()
 	{
 		vFreeList.erase(this);

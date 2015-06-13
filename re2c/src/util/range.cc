@@ -18,11 +18,11 @@ Range *doUnion(Range *r1, Range *r2)
 
 		if (r1->lb <= r2->lb)
 		{
-			s = new Range(*r1);
+			s = new Range(r1->lb, r1->ub);
 		}
 		else
 		{
-			s = new Range(*r2);
+			s = new Range(r2->lb, r2->ub);
 		}
 
 		*rP = s;
