@@ -141,7 +141,7 @@ Range * Enc::encodeRange(uint32_t l, uint32_t h) const
 			for (uint32_t c = l + 1; c <= h; ++c)
 			{
 				const uint32_t ec = asc2ebc[c & 0xFF];
-				r = doUnion(r, new Range(ec, ec + 1));
+				r = range_union (r, new Range(ec, ec + 1));
 			}
 			break;
 		}
@@ -161,8 +161,8 @@ Range * Enc::encodeRange(uint32_t l, uint32_t h) const
 					{
 						Range * surrs = new Range(SURR_MIN, SURR_MAX + 1);
 						Range * error = new Range(UNICODE_ERROR, UNICODE_ERROR + 1);
-						r = doDiff(r, surrs);
-						r = doUnion(r, error);
+						r = range_diff (r, surrs);
+						r = range_union (r, error);
 						break;
 					}
 					case POLICY_IGNORE:
@@ -190,7 +190,7 @@ Range * Enc::fullRange() const
 	if (policy != POLICY_IGNORE)
 	{
 		Range * surrs = new Range(SURR_MIN, SURR_MAX + 1);
-		r = doDiff(r, surrs);
+		r = range_diff (r, surrs);
 	}
 	return r;
 }

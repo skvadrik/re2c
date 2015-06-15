@@ -84,7 +84,7 @@ MatchOp * merge (MatchOp * m1, MatchOp * m2)
 	{
 		return m1;
 	}
-	MatchOp * m = new MatchOp (doUnion (m1->match, m2->match));
+	MatchOp * m = new MatchOp (range_union (m1->match, m2->match));
 	if (m1->ins_access == RegExp::PRIVATE
 		|| m2->ins_access == RegExp::PRIVATE)
 	{
@@ -114,7 +114,7 @@ RegExp * mkDiff (RegExp * e1, RegExp * e2)
 	{
 		return NULL;
 	}
-	Range * r = doDiff (m1->match, m2->match);
+	Range * r = range_diff (m1->match, m2->match);
 	return r
 		? (RegExp *) new MatchOp(r)
 		: (RegExp *) new NullOp;
@@ -216,7 +216,7 @@ Range * Scanner::mkRange(SubStr &s) const
 {
 	Range *r = getRange(s);
 	while (s.len > 0)
-		r = doUnion(r, getRange(s));
+		r = range_union (r, getRange(s));
 
 	return r;
 }
@@ -251,7 +251,7 @@ RegExp * Scanner::invToRE (SubStr & s) const
 
 	Range * r = s.len == 0
 		? full
-		: doDiff(full, mkRange (s));
+		: range_diff (full, mkRange (s));
 
 	return matchSymbolRange(r);
 }
@@ -263,7 +263,7 @@ RegExp * Scanner::mkDot() const
 	if (!encoding.encode(c))
 		fatalf("Bad code point: '0x%X'", c);
 	Range * ran = new Range(c, c + 1);
-	Range * inv = doDiff(full, ran);
+	Range * inv = range_diff (full, ran);
 
 	return matchSymbolRange(inv);
 }

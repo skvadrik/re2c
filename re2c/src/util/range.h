@@ -1,7 +1,7 @@
 #ifndef _RE2C_UTIL_RANGE_
 #define _RE2C_UTIL_RANGE_
 
-#include <iostream>
+#include <stddef.h> // NULL
 
 #include "src/util/c99_stdint.h"
 #include "src/util/forbid_copy.h"
@@ -10,31 +10,32 @@
 namespace re2c
 {
 
-class Range
+struct Range
 {
-
-public:
-	Range		*next;
-	uint32_t	lb, ub;	// [lb,ub)
-
 	static free_list<Range*> vFreeList;
 
-public:
-	Range(uint32_t l, uint32_t u) : next(NULL), lb(l), ub(u)
-	{
-		vFreeList.insert(this);
-	}
+	Range * next;
+	// [lb,ub)
+	uint32_t lb;
+	uint32_t ub;
 
-	~Range()
+	Range (uint32_t l, uint32_t u)
+		: next (NULL)
+		, lb (l)
+		, ub (u)
 	{
-		vFreeList.erase(this);
+		vFreeList.insert (this);
+	}
+	~Range ()
+	{
+		vFreeList.erase (this);
 	}
 
 	FORBID_COPY (Range);
 };
 
-Range *doUnion(Range *r1, Range *r2);
-Range *doDiff(Range *r1, Range *r2);
+Range * range_union (Range * r1, Range * r2);
+Range * range_diff (Range * r1, Range * r2);
 
 } // end namespace re2c
 

@@ -3,117 +3,69 @@
 namespace re2c
 {
 
-Range *doUnion(Range *r1, Range *r2)
+Range * range_union (Range * r1, Range * r2)
 {
-	if (r1 == NULL)
-		return r2;
-	if (r2 == NULL)
-		return r1;
-
-	Range *r, **rP = &r;
-
+	Range * r = NULL;
+	Range ** p = &r;
 	for (;;)
 	{
-		Range *s;
-
-		if (r1->lb <= r2->lb)
+		if (!r1)
 		{
-			s = new Range(r1->lb, r1->ub);
+			* p = r2;
+			break;
 		}
-		else
+		if (!r2)
 		{
-			s = new Range(r2->lb, r2->ub);
+			* p = r1;
+			break;
 		}
-
-		*rP = s;
-		rP = &s->next;
-
-		for (;;)
+		if (r2->lb < r1->lb) // swap
 		{
-			if (r1->lb <= r2->lb)
+			Range * r1_old = r1;
+			r1 = r2;
+			r2 = r1_old;
+		}
+		uint32_t ub = r1->ub;
+		if (r2->lb < r1->ub)
+		{
+			for (; r2 && r2->lb < r1->ub; r2 = r2->next)
 			{
-				if (r1->lb > s->ub)
-					break;
-
-				if (r1->ub > s->ub)
-					s->ub = r1->ub;
-
-				if (!(r1 = r1->next))
+				if (r1->ub < r2->ub)
 				{
-					uint32_t ub = 0;
-
-					for (; r2 && r2->lb <= s->ub; r2 = r2->next)
-						ub = r2->ub;
-
-					if (ub > s->ub)
-						s->ub = ub;
-
-					*rP = r2;
-
-					return r;
-				}
-			}
-			else
-			{
-				if (r2->lb > s->ub)
-					break;
-
-				if (r2->ub > s->ub)
-					s->ub = r2->ub;
-
-				if (!(r2 = r2->next))
-				{
-					uint32_t ub = 0;
-
-					for (; r1 && r1->lb <= s->ub; r1 = r1->next)
-						ub = r1->ub;
-
-					if (ub > s->ub)
-						s->ub = ub;
-
-					*rP = r1;
-
-					return r;
+					ub = r2->ub;
 				}
 			}
 		}
+		* p = new Range (r1->lb, ub);
+		p = &(* p)->next;
+		r1 = r1->next;
 	}
-
-	*rP = NULL;
 	return r;
 }
 
-Range *doDiff(Range *r1, Range *r2)
+Range * range_diff (Range * r1, Range * r2)
 {
-	Range *r, *s, **rP = &r;
-
+	Range * r = NULL;
+	Range ** p = &r;
 	for (; r1; r1 = r1->next)
 	{
+		for (; r2 && r2->ub <= r1->lb; r2 = r2->next);
 		uint32_t lb = r1->lb;
-
-		for (; r2 && r2->ub <= r1->lb; r2 = r2->next)
-
-			;
 		for (; r2 && r2->lb < r1->ub; r2 = r2->next)
 		{
 			if (lb < r2->lb)
 			{
-				*rP = s = new Range(lb, r2->lb);
-				rP = &s->next;
+				* p = new Range(lb, r2->lb);
+				p = &(* p)->next;
 			}
-
-			if ((lb = r2->ub) >= r1->ub)
-				goto noMore;
+			lb = r2->ub;
 		}
-
-		*rP = s = new Range(lb, r1->ub);
-		rP = &s->next;
-
-noMore:
-		;
+		if (lb < r1->ub)
+		{
+			* p = new Range(lb, r1->ub);
+			p = &(* p)->next;
+		}
 	}
-
-	*rP = NULL;
 	return r;
 }
 
