@@ -32,9 +32,9 @@ void CloseVOp::split (CharSet & s)
 
 void MatchOp::split (CharSet & s)
 {
-	for (Range *r = match; r; r = r->next)
+	for (Range *r = match; r; r = r->next ())
 	{
-		for (uint32_t c = r->lb; c < r->ub; ++c)
+		for (uint32_t c = r->lower (); c < r->upper (); ++c)
 		{
 			CharPtn * x = s.rep[c];
 			CharPtn * a = x->nxt;

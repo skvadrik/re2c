@@ -28,7 +28,7 @@ Range * range_union (Range * r1, Range * r2)
 		uint32_t ub = r1->ub;
 		if (r2->lb < r1->ub)
 		{
-			for (; r2 && r2->lb < r1->ub; r2 = r2->next)
+			for (; r2 && r2->lb < r1->ub; r2 = r2->nx)
 			{
 				if (r1->ub < r2->ub)
 				{
@@ -37,8 +37,8 @@ Range * range_union (Range * r1, Range * r2)
 			}
 		}
 		* p = new Range (r1->lb, ub);
-		p = &(* p)->next;
-		r1 = r1->next;
+		p = &(* p)->nx;
+		r1 = r1->nx;
 	}
 	return r;
 }
@@ -47,23 +47,23 @@ Range * range_diff (Range * r1, Range * r2)
 {
 	Range * r = NULL;
 	Range ** p = &r;
-	for (; r1; r1 = r1->next)
+	for (; r1; r1 = r1->nx)
 	{
-		for (; r2 && r2->ub <= r1->lb; r2 = r2->next);
+		for (; r2 && r2->ub <= r1->lb; r2 = r2->nx);
 		uint32_t lb = r1->lb;
-		for (; r2 && r2->lb < r1->ub; r2 = r2->next)
+		for (; r2 && r2->lb < r1->ub; r2 = r2->nx)
 		{
 			if (lb < r2->lb)
 			{
 				* p = new Range(lb, r2->lb);
-				p = &(* p)->next;
+				p = &(* p)->nx;
 			}
 			lb = r2->ub;
 		}
 		if (lb < r1->ub)
 		{
 			* p = new Range(lb, r1->ub);
-			p = &(* p)->next;
+			p = &(* p)->nx;
 		}
 	}
 	return r;

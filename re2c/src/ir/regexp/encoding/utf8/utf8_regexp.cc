@@ -25,8 +25,8 @@ RegExp * UTF8Symbol(utf8::rune r)
 RegExp * UTF8Range(const Range * r)
 {
 	RangeSuffix * root = NULL;
-	for (; r != NULL; r = r->next)
-		UTF8splitByRuneLength(root, r->lb, r->ub - 1);
+	for (; r != NULL; r = r->next ())
+		UTF8splitByRuneLength(root, r->lower (), r->upper () - 1);
 	return emit(root, NULL);
 }
 

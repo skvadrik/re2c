@@ -176,9 +176,9 @@ uint32_t MatchOp::compile (Char * rep, Ins * i)
 		i->i.link = &i[size];
 		Ins *j = &i[1];
 		uint32_t bump = size;
-		for (Range *r = match; r; r = r->next)
+		for (Range *r = match; r; r = r->next ())
 		{
-			for (uint32_t c = r->lb; c < r->ub; ++c)
+			for (uint32_t c = r->lower (); c < r->upper (); ++c)
 			{
 				if (rep[c] == c)
 				{
