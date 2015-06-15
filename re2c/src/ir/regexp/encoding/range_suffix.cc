@@ -4,7 +4,16 @@
 
 namespace re2c {
 
+static RegExp * emit (RangeSuffix * p, RegExp * re);
+
 free_list<RangeSuffix *> RangeSuffix::freeList;
+
+RegExp * to_regexp (RangeSuffix * p)
+{
+	return p
+		? emit (p, NULL)
+		: new MatchOp (NULL);
+}
 
 /*
  * Build regexp from suffix tree.

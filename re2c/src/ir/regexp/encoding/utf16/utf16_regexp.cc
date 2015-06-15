@@ -29,7 +29,7 @@ RegExp * UTF16Range(const Range * r)
 	RangeSuffix * root = NULL;
 	for (; r != NULL; r = r->next ())
 		UTF16splitByRuneLength(root, r->lower (), r->upper () - 1);
-	return emit(root, NULL);
+	return to_regexp (root);
 }
 
 } // namespace re2c

@@ -33,7 +33,7 @@ public:
 	FORBID_COPY (RangeSuffix);
 };
 
-RegExp * emit(RangeSuffix * p, RegExp * re);
+RegExp * to_regexp (RangeSuffix * p);
 
 } // namespace re2c
 
