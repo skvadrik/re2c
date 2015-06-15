@@ -1,6 +1,7 @@
 #ifndef _RE2C_UTIL_RANGE_
 #define _RE2C_UTIL_RANGE_
 
+#include <assert.h>
 #include <stddef.h> // NULL
 
 #include "src/util/c99_stdint.h"
@@ -27,6 +28,7 @@ public:
 		, lb (l)
 		, ub (u)
 	{
+		assert (lb < ub);
 		vFreeList.insert (this);
 	}
 	~Range ()
