@@ -69,7 +69,6 @@ public:
 RegExp * doAlt (RegExp * e1, RegExp * e2);
 RegExp * mkAlt (RegExp * e1, RegExp * e2);
 RegExp * doCat (RegExp * e1, RegExp * e2);
-RegExp * mkDiff (RegExp * e1, RegExp * e2);
 
 } // end namespace re2c
 

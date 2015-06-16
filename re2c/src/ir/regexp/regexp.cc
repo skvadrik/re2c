@@ -106,20 +106,6 @@ RegExp * doCat (RegExp * e1, RegExp * e2)
 	return new CatOp (e1, e2);
 }
 
-RegExp * mkDiff (RegExp * e1, RegExp * e2)
-{
-	MatchOp * m1 = dynamic_cast<MatchOp *> (e1);
-	MatchOp * m2 = dynamic_cast<MatchOp *> (e2);
-	if (m1 == NULL || m2 == NULL)
-	{
-		return NULL;
-	}
-	Range * r = range_diff (m1->match, m2->match);
-	return r
-		? (RegExp *) new MatchOp(r)
-		: (RegExp *) new NullOp;
-}
-
 Range * Scanner::getRange(SubStr &s) const
 {
 	uint32_t lb = unescape(s), ub;
@@ -223,6 +209,11 @@ Range * Scanner::mkRange(SubStr &s) const
 
 RegExp * Scanner::matchSymbolRange(Range * r) const
 {
+	if (!r)
+	{
+		return new NullOp;
+	}
+
 	if (encoding.is(Enc::UTF16))
 		return UTF16Range(r);
 	else if (encoding.is(Enc::UTF8))
@@ -236,10 +227,11 @@ RegExp * Scanner::ranToRE (SubStr & s) const
 	s.len -= 2;
 	s.str += 1;
 
-	if (s.len == 0)
-		return new NullOp;
+	Range * r = s.len == 0
+		? NULL
+		: mkRange(s);
 
-	return matchSymbolRange(mkRange(s));
+	return matchSymbolRange (r);
 }
 
 RegExp * Scanner::invToRE (SubStr & s) const
@@ -254,6 +246,19 @@ RegExp * Scanner::invToRE (SubStr & s) const
 		: range_diff (full, mkRange (s));
 
 	return matchSymbolRange(r);
+}
+
+RegExp * Scanner::mkDiff (RegExp * e1, RegExp * e2) const
+{
+	MatchOp * m1 = dynamic_cast<MatchOp *> (e1);
+	MatchOp * m2 = dynamic_cast<MatchOp *> (e2);
+	if (m1 == NULL || m2 == NULL)
+	{
+		fatal("can only difference char sets");
+	}
+	Range * r = range_diff (m1->match, m2->match);
+
+	return matchSymbolRange (r);
 }
 
 RegExp * Scanner::mkDot() const

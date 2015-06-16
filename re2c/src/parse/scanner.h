@@ -93,6 +93,7 @@ public:
 	RegExp * strToCaseInsensitiveRE (SubStr & s) const;
 	RegExp * ranToRE (SubStr & s) const;
 	RegExp * invToRE (SubStr & s) const;
+	RegExp * mkDiff (RegExp * e1, RegExp * e2) const;
 	RegExp * mkDot () const;
 	RegExp * mkDefault () const;
 

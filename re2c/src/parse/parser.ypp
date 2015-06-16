@@ -404,11 +404,7 @@ diff:
 		}
 	|	diff '\\' term
 		{
-			$$ = mkDiff($1, $3);
-			if(!$$)
-			{
-				in->fatal("can only difference char sets");
-			}
+			$$ = in->mkDiff($1, $3);
 		}
 ;
 
