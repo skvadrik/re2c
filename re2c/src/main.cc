@@ -64,6 +64,8 @@ bool bCaseInverted = false;
 Enc encoding;
 InputAPI input_api;
 
+empty_class_policy_t empty_class_policy = EMPTY_CLASS_MATCH_EMPTY;
+
 uint32_t last_fill_index = 0;
 CodeNames mapCodeName;
 
@@ -105,6 +107,7 @@ static const mbo_opt_struct OPTIONS[] =
 	mbo_opt_struct(13,  1, "encoding-policy"),
 	mbo_opt_struct(14,  1, "input"),
 	mbo_opt_struct(15,  0, "skeleton"),
+	mbo_opt_struct(16,  1, "empty-class"),
 	mbo_opt_struct('-', 0, NULL) /* end of args */
 };
 
@@ -198,6 +201,12 @@ static void usage()
 	"--skeleton              Instead of embedding re2c-generated code into C/C++ source,\n"
 	"                        generate a self-contained program for the same DFA.\n"
 	"                        Most useful for correctness and performance testing.\n"
+	"\n"
+	"--empty-class policy    What to do if user inputs empty character class. policy can be\n"
+	"                        one of the following: 'match-empty' (match empty input, default),\n"
+	"                        'match-none' (fail to match on any input), 'error' (compilation\n"
+	"                        error). Note that there are various ways to construct empty class,\n"
+	"                        e.g: [], [^\\x00-\\xFF], [\\x00-\\xFF]\\[\\x00-\\xFF].\n"
 	;
 }
 
@@ -395,6 +404,20 @@ int main(int argc, char *argv[])
 			case 15:
 			flag_skeleton = true;
 			input_api.set (InputAPI::CUSTOM);
+			break;
+
+			case 16:
+			if (strcmp(opt_arg, "match-empty") == 0)
+				empty_class_policy = EMPTY_CLASS_MATCH_EMPTY;
+			else if (strcmp(opt_arg, "match-none") == 0)
+				empty_class_policy = EMPTY_CLASS_MATCH_NONE;
+			else if (strcmp(opt_arg, "error") == 0)
+				empty_class_policy = EMPTY_CLASS_ERROR;
+			else
+			{
+				std::cerr << "re2c: error: Invalid empty class policy: \"" << opt_arg << "\"\n";
+				return 1;
+			}
 			break;
 		}
 	}

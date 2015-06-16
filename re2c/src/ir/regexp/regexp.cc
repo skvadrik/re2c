@@ -211,7 +211,16 @@ RegExp * Scanner::matchSymbolRange(Range * r) const
 {
 	if (!r)
 	{
-		return new NullOp;
+		switch (empty_class_policy)
+		{
+			case EMPTY_CLASS_MATCH_EMPTY:
+				return new NullOp;
+			case EMPTY_CLASS_MATCH_NONE:
+				break;
+			case EMPTY_CLASS_ERROR:
+				fatal ("empty character class");
+				break;
+		}
 	}
 
 	if (encoding.is(Enc::UTF16))
