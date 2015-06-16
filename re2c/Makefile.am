@@ -28,8 +28,6 @@ SRC_HDR = \
 	src/ir/dfa/state.h \
 	src/ir/dfa/dfa.h \
 	src/ir/dfa/action.h \
-	src/ir/regexp/regexp_alt.h \
-	src/ir/regexp/regexp_match.h \
 	src/ir/regexp/encoding/enc.h \
 	src/ir/regexp/encoding/range_suffix.h \
 	src/ir/regexp/encoding/utf8/utf8.h \
@@ -38,6 +36,9 @@ SRC_HDR = \
 	src/ir/regexp/encoding/utf16/utf16_range.h \
 	src/ir/regexp/encoding/utf16/utf16_regexp.h \
 	src/ir/regexp/encoding/utf16/utf16.h \
+	src/ir/regexp/empty_class_policy.h \
+	src/ir/regexp/regexp_alt.h \
+	src/ir/regexp/regexp_match.h \
 	src/ir/regexp/regexp_rule.h \
 	src/ir/regexp/regexp_cat.h \
 	src/ir/regexp/regexp_closev.h \
