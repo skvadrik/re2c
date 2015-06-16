@@ -177,11 +177,6 @@ static void usage()
 	"                        re2c assumes that input character size is 1 byte. This switch is\n"
 	"                        incompatible with -e, -w, -x and -u."
 	"\n"
-	"-1     --single-pass    Deprecated.\n"
-        "                        Force single pass generation, this cannot be combined\n"
-	"                        with -f and disables YYMAXFILL generation prior to last\n"
-	"                        re2c block.\n"
-	"\n"
 	"--no-generation-date    Suppress date output in the generated output so that it\n"
 	"                        only shows the re2c version.\n"
 	"\n"
@@ -207,6 +202,8 @@ static void usage()
 	"                        'match-none' (fail to match on any input), 'error' (compilation\n"
 	"                        error). Note that there are various ways to construct empty class,\n"
 	"                        e.g: [], [^\\x00-\\xFF], [\\x00-\\xFF]\\[\\x00-\\xFF].\n"
+	"\n"
+	"-1     --single-pass    Deprecated and does nothing (single pass is by default now).\n"
 	;
 }
 

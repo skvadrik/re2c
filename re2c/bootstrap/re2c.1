@@ -2,12 +2,12 @@
 .\"     Title: re2c
 .\"    Author: [see the "AUTHORS" section]
 .\" Generator: DocBook XSL Stylesheets v1.78.0 <http://docbook.sf.net/>
-.\"      Date: 05/20/2015
+.\"      Date: 06/16/2015
 .\"    Manual: \ \&
 .\"    Source: \ \&
 .\"  Language: English
 .\"
-.TH "RE2C" "1" "05/20/2015" "\ \&" "\ \&"
+.TH "RE2C" "1" "06/16/2015" "\ \&" "\ \&"
 .\" -----------------------------------------------------------------
 .\" * Define some portability stuff
 .\" -----------------------------------------------------------------
@@ -104,23 +104,23 @@ yy5:
 .\}
 .SH "OPTIONS"
 .PP
-\fB\-?\fR, \fB\-h\fR
+\fB\-?\fR \fB\-h\fR \fB\-\-help\fR
 .RS 4
 Invoke a short help\&.
 .RE
 .PP
-\fB\-b\fR
+\fB\-b\fR \fB\-\-bit\-vectors\fR
 .RS 4
 Implies
 \fB\-s\fR\&. Use bit vectors as well in the attempt to coax better code out of the compiler\&. Most useful for specifications with more than a few keywords (e\&.g\&. for most programming languages)\&.
 .RE
 .PP
-\fB\-c\fR
+\fB\-c\fR \fB\-\-conditions\fR
 .RS 4
 Used to support (f)lex\-like condition support\&.
 .RE
 .PP
-\fB\-d\fR
+\fB\-d\fR \fB\-\-debug\-output\fR
 .RS 4
 Creates a parser that dumps information about the current position and in which state the parser is while parsing the input\&. This is useful to debug parser issues and states\&. If you use this switch you need to define a macro
 \fBYYDEBUG\fR
@@ -128,13 +128,13 @@ that is called like a function with two parameters:
 \fBvoid YYDEBUG (int state, char current)\fR\&. The first parameter receives the state or \-1 and the second parameter receives the input at the current cursor\&.
 .RE
 .PP
-\fB\-D\fR
+\fB\-D\fR \fB\-\-emit\-dot\fR
 .RS 4
 Emit Graphviz dot data\&. It can then be processed with e\&.g\&.
 dot \-Tpng input\&.dot > output\&.png\&. Please note that scanners with many states may crash dot\&.
 .RE
 .PP
-\fB\-e\fR
+\fB\-e\fR \fB\-\-ecb\fR
 .RS 4
 Generate a parser that supports EBCDIC\&. The generated code can deal with any character up to 0xFF\&. In this mode
 \fBre2c\fR
@@ -146,18 +146,18 @@ and
 \fB\-8\fR\&.
 .RE
 .PP
-\fB\-f\fR
+\fB\-f\fR \fB\-\-storable\-state\fR
 .RS 4
 Generate a scanner with support for storable state\&. For details see below at
 \fBSCANNER WITH STORABLE STATES\fR\&.
 .RE
 .PP
-\fB\-F\fR
+\fB\-F\fR \fB\-\-flex\-syntax\fR
 .RS 4
 Partial support for flex syntax\&. When this flag is active then named definitions must be surrounded by curly braces and can be defined without an equal sign and the terminating semi colon\&. Instead names are treated as direct double quoted strings\&.
 .RE
 .PP
-\fB\-g\fR
+\fB\-g\fR \fB\-\-computed\-gotos\fR
 .RS 4
 Generate a scanner that utilizes GCC\(cqs computed goto feature\&. That is
 \fBre2c\fR
@@ -167,7 +167,7 @@ and that the complexity threshold can be configured using the inplace configurat
 \fBcgoto:threshold\fR\&.
 .RE
 .PP
-\fB\-i\fR
+\fB\-i\fR \fB\-\-no\-debug\-info\fR
 .RS 4
 Do not output
 \fB#line\fR
@@ -178,12 +178,14 @@ output which you might want if you do not require your users to have
 themselves when building from your source\&.
 .RE
 .PP
-\fB\-o OUTPUT\fR
+\fB\-o OUTPUT\fR \fB\-\-output=OUTPUT\fR
 .RS 4
-Specify the output file\&.
+Specify the
+\fBOUTPUT\fR
+file\&.
 .RE
 .PP
-\fB\-r\fR
+\fB\-r\fR \fB\-\-reusable\fR
 .RS 4
 Allows reuse of scanner definitions with
 \fB/*!use:re2c\fR
@@ -206,19 +208,21 @@ blocks can also contain additional rules that will be appended to the set of rul
 \fB/*!rules:re2c\fR\&.
 .RE
 .PP
-\fB\-s\fR
+\fB\-s\fR \fB\-\-nested\-ifs\fR
 .RS 4
 Generate nested ifs for some switches\&. Many compilers need this assist to generate better code\&.
 .RE
 .PP
-\fB\-t\fR
+\fB\-t HEADER\fR \fB\-\-type\-header=HEADER\fR
 .RS 4
-Create a header file that contains types for the (f)lex\-like condition support\&. This can only be activated when
+Create a
+\fBHEADER\fR
+file that contains types for the (f)lex\-like condition support\&. This can only be activated when
 \fB\-c\fR
 is in use\&.
 .RE
 .PP
-\fB\-u\fR
+\fB\-u\fR \fB\-\-unicode\fR
 .RS 4
 Generate a parser that supports UTF\-32\&. The generated code can deal with any valid Unicode character up to 0x10FFFF\&. In this mode
 \fBre2c\fR
@@ -231,17 +235,17 @@ and
 \fB\-s\fR\&.
 .RE
 .PP
-\fB\-v\fR
+\fB\-v\fR \fB\-\-version\fR
 .RS 4
 Show version information\&.
 .RE
 .PP
-\fB\-V\fR
+\fB\-V\fR \fB\-\-vernum\fR
 .RS 4
 Show the version as a number XXYYZZ\&.
 .RE
 .PP
-\fB\-w\fR
+\fB\-w\fR \fB\-\-wide\-chars\fR
 .RS 4
 Generate a parser that supports UCS\-2\&. The generated code can deal with any valid Unicode character up to 0xFFFF\&. In this mode
 \fBre2c\fR
@@ -254,7 +258,7 @@ and
 \fB\-s\fR\&.
 .RE
 .PP
-\fB\-x\fR
+\fB\-x\fR \fB\-\-utf\-16\fR
 .RS 4
 Generate a parser that supports UTF\-16\&. The generated code can deal with any valid Unicode character up to 0x10FFFF\&. In this mode
 \fBre2c\fR
@@ -267,16 +271,7 @@ and
 \fB\-s\fR\&.
 .RE
 .PP
-\fB\-1\fR
-.RS 4
-Force single pass generation, this cannot be combined with \-f and disables
-\fBYYMAXFILL\fR
-generation prior to last
-\fBre2c\fR
-block\&.
-.RE
-.PP
-\fB\-8\fR
+\fB\-8\fR \fB\-\-utf\-8\fR
 .RS 4
 Generate a parser that supports UTF\-8\&. The generated code can deal with any valid Unicode character up to 0x10FFFF\&. In this mode
 \fBre2c\fR
@@ -318,6 +313,38 @@ can be one of the following:
 (treat surrogates as normal code points)\&. By default
 \fBre2c\fR
 ignores surrogates (for backward compatibility)\&. Unicode standard says that standalone surrogates are invalid code points, but different libraries and programs treat them differently\&.
+.RE
+.PP
+\fB\-\-input INPUT\fR
+.RS 4
+Specify re2c input API\&.
+\fBINPUT\fR
+can be one of the following:
+\fBdefault\fR,
+\fBcustom\fR\&.
+.RE
+.PP
+\fB\-\-skeleton\fR
+.RS 4
+Instead of embedding re2c\-generated code into C/C++ source, generate a self\-contained program for the same DFA\&. Most useful for correctness and performance testing\&.
+.RE
+.PP
+\fB\-\-empty\-class POLICY\fR
+.RS 4
+What to do if user inputs empty character class\&.
+\fBPOLICY\fR
+can be one of the following:
+\fBmatch\-empty\fR
+(match empty input: pretty illogical, but this is the default for backwards compatibility reason),
+\fBmatch\-none\fR
+(fail to match on any input),
+\fBerror\fR
+(compilation error)\&. Note that there are various ways to construct empty class, e\&.g: [], [^\ex00\-\exFF], [\ex00\-\exFF]\e[\ex00\-\exFF]\&.
+.RE
+.PP
+\fB\-1\fR \fB\-\-single\-pass\fR
+.RS 4
+Deprecated and does nothing (single pass is by default now)\&.
 .RE
 .SH "INTERFACE CODE"
 .sp
@@ -1512,4 +1539,4 @@ skvadrik@gmail\&.com
 .RE
 .SH "VERSION INFORMATION"
 .sp
-This manpage describes \fBre2c\fR, version 0\&.14\&.1\&.dev, package date 20 May 2015\&.
+This manpage describes \fBre2c\fR, version 0\&.14\&.1\&.dev, package date 16 Jun 2015\&.

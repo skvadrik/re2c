@@ -824,7 +824,7 @@ http://www.gnu.org/software/src-highlite -->
 <div class="sectionbody">
 <div class="dlist"><dl>
 <dt class="hdlist1">
-<strong>-?</strong>, <strong>-h</strong>
+<strong>-?</strong> <strong>-h</strong> <strong>--help</strong>
 </dt>
 <dd>
 <p>
@@ -832,7 +832,7 @@ http://www.gnu.org/software/src-highlite -->
 </p>
 </dd>
 <dt class="hdlist1">
-<strong>-b</strong>
+<strong>-b</strong> <strong>--bit-vectors</strong>
 </dt>
 <dd>
 <p>
@@ -842,7 +842,7 @@ http://www.gnu.org/software/src-highlite -->
 </p>
 </dd>
 <dt class="hdlist1">
-<strong>-c</strong>
+<strong>-c</strong> <strong>--conditions</strong>
 </dt>
 <dd>
 <p>
@@ -850,7 +850,7 @@ http://www.gnu.org/software/src-highlite -->
 </p>
 </dd>
 <dt class="hdlist1">
-<strong>-d</strong>
+<strong>-d</strong> <strong>--debug-output</strong>
 </dt>
 <dd>
 <p>
@@ -863,7 +863,7 @@ http://www.gnu.org/software/src-highlite -->
 </p>
 </dd>
 <dt class="hdlist1">
-<strong>-D</strong>
+<strong>-D</strong> <strong>--emit-dot</strong>
 </dt>
 <dd>
 <p>
@@ -873,7 +873,7 @@ http://www.gnu.org/software/src-highlite -->
 </p>
 </dd>
 <dt class="hdlist1">
-<strong>-e</strong>
+<strong>-e</strong> <strong>--ecb</strong>
 </dt>
 <dd>
 <p>
@@ -883,7 +883,7 @@ http://www.gnu.org/software/src-highlite -->
 </p>
 </dd>
 <dt class="hdlist1">
-<strong>-f</strong>
+<strong>-f</strong> <strong>--storable-state</strong>
 </dt>
 <dd>
 <p>
@@ -892,7 +892,7 @@ http://www.gnu.org/software/src-highlite -->
 </p>
 </dd>
 <dt class="hdlist1">
-<strong>-F</strong>
+<strong>-F</strong> <strong>--flex-syntax</strong>
 </dt>
 <dd>
 <p>
@@ -903,7 +903,7 @@ http://www.gnu.org/software/src-highlite -->
 </p>
 </dd>
 <dt class="hdlist1">
-<strong>-g</strong>
+<strong>-g</strong> <strong>--computed-gotos</strong>
 </dt>
 <dd>
 <p>
@@ -916,7 +916,7 @@ http://www.gnu.org/software/src-highlite -->
 </p>
 </dd>
 <dt class="hdlist1">
-<strong>-i</strong>
+<strong>-i</strong> <strong>--no-debug-info</strong>
 </dt>
 <dd>
 <p>
@@ -926,15 +926,15 @@ http://www.gnu.org/software/src-highlite -->
 </p>
 </dd>
 <dt class="hdlist1">
-<strong>-o OUTPUT</strong>
+<strong>-o OUTPUT</strong> <strong>--output=OUTPUT</strong>
 </dt>
 <dd>
 <p>
-    Specify the output file.
+    Specify the <strong>OUTPUT</strong> file.
 </p>
 </dd>
 <dt class="hdlist1">
-<strong>-r</strong>
+<strong>-r</strong> <strong>--reusable</strong>
 </dt>
 <dd>
 <p>
@@ -951,7 +951,7 @@ http://www.gnu.org/software/src-highlite -->
 </p>
 </dd>
 <dt class="hdlist1">
-<strong>-s</strong>
+<strong>-s</strong> <strong>--nested-ifs</strong>
 </dt>
 <dd>
 <p>
@@ -960,16 +960,16 @@ http://www.gnu.org/software/src-highlite -->
 </p>
 </dd>
 <dt class="hdlist1">
-<strong>-t</strong>
+<strong>-t HEADER</strong> <strong>--type-header=HEADER</strong>
 </dt>
 <dd>
 <p>
-    Create a header file that contains types for the (f)lex-like condition support.
+    Create a <strong>HEADER</strong> file that contains types for the (f)lex-like condition support.
     This can only be activated when <strong>-c</strong> is in use.
 </p>
 </dd>
 <dt class="hdlist1">
-<strong>-u</strong>
+<strong>-u</strong> <strong>--unicode</strong>
 </dt>
 <dd>
 <p>
@@ -980,7 +980,7 @@ http://www.gnu.org/software/src-highlite -->
 </p>
 </dd>
 <dt class="hdlist1">
-<strong>-v</strong>
+<strong>-v</strong> <strong>--version</strong>
 </dt>
 <dd>
 <p>
@@ -988,7 +988,7 @@ http://www.gnu.org/software/src-highlite -->
 </p>
 </dd>
 <dt class="hdlist1">
-<strong>-V</strong>
+<strong>-V</strong> <strong>--vernum</strong>
 </dt>
 <dd>
 <p>
@@ -996,7 +996,7 @@ http://www.gnu.org/software/src-highlite -->
 </p>
 </dd>
 <dt class="hdlist1">
-<strong>-w</strong>
+<strong>-w</strong> <strong>--wide-chars</strong>
 </dt>
 <dd>
 <p>
@@ -1007,7 +1007,7 @@ http://www.gnu.org/software/src-highlite -->
 </p>
 </dd>
 <dt class="hdlist1">
-<strong>-x</strong>
+<strong>-x</strong> <strong>--utf-16</strong>
 </dt>
 <dd>
 <p>
@@ -1018,16 +1018,7 @@ http://www.gnu.org/software/src-highlite -->
 </p>
 </dd>
 <dt class="hdlist1">
-<strong>-1</strong>
-</dt>
-<dd>
-<p>
-    Force single pass generation, this cannot be combined with -f and disables
-    <strong>YYMAXFILL</strong> generation prior to last <strong>re2c</strong> block.
-</p>
-</dd>
-<dt class="hdlist1">
-<strong>-8</strong>
+<strong>-8</strong> <strong>--utf-8</strong>
 </dt>
 <dd>
 <p>
@@ -1077,6 +1068,45 @@ http://www.gnu.org/software/src-highlite -->
     By default <strong>re2c</strong> ignores surrogates (for backward compatibility).
     Unicode standard says that standalone surrogates are invalid code points,
     but different libraries and programs treat them differently.
+</p>
+</dd>
+<dt class="hdlist1">
+<strong>--input INPUT</strong>
+</dt>
+<dd>
+<p>
+    Specify re2c input API. <strong>INPUT</strong> can be one of the following: <strong>default</strong>, <strong>custom</strong>.
+</p>
+</dd>
+<dt class="hdlist1">
+<strong>--skeleton</strong>
+</dt>
+<dd>
+<p>
+    Instead of embedding re2c-generated code into C/C++ source,
+    generate a self-contained program for the same DFA.
+    Most useful for correctness and performance testing.
+</p>
+</dd>
+<dt class="hdlist1">
+<strong>--empty-class POLICY</strong>
+</dt>
+<dd>
+<p>
+    What to do if user inputs empty character class. <strong>POLICY</strong> can be
+    one of the following: <strong>match-empty</strong> (match empty input: pretty illogical,
+    but this is the default for backwards compatibility reason),
+    <strong>match-none</strong> (fail to match on any input), <strong>error</strong> (compilation
+    error). Note that there are various ways to construct empty class,
+    e.g: [], [^\x00-\xFF], [\x00-\xFF]\[\x00-\xFF].
+</p>
+</dd>
+<dt class="hdlist1">
+<strong>-1</strong> <strong>--single-pass</strong>
+</dt>
+<dd>
+<p>
+    Deprecated and does nothing (single pass is by default now).
 </p>
 </dd>
 </dl></div>
@@ -2279,14 +2309,14 @@ Ulya Trofimovich <a href="mailto:skvadrik@gmail.com">skvadrik@gmail.com</a>
 <div class="sect1">
 <h2 id="_version_information">VERSION INFORMATION</h2>
 <div class="sectionbody">
-<div class="paragraph"><p>This manpage describes <strong>re2c</strong>, version 0.14.1.dev, package date 20 May 2015.</p></div>
+<div class="paragraph"><p>This manpage describes <strong>re2c</strong>, version 0.14.1.dev, package date 16 Jun 2015.</p></div>
 </div>
 </div>
 </div>
 <div id="footnotes"><hr /></div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2015-05-20 10:44:30 BST
+Last updated 2015-06-16 15:43:09 BST
 </div>
 </div>
 </body>
