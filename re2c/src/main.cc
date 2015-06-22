@@ -70,7 +70,6 @@ uint32_t last_fill_index = 0;
 CodeNames mapCodeName;
 
 free_list<RegExp*> RegExp::vFreeList;
-free_list<Range*>  Range::vFreeList;
 
 using namespace std;
 

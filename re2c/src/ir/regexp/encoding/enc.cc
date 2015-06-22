@@ -132,16 +132,16 @@ Range * Enc::encodeRange(uint32_t l, uint32_t h) const
 		case ASCII:
 			l &= 0xFF;
 			h &= 0xFF;
-			r = new Range(l, h + 1);
+			r = Range::ran (l, h + 1);
 			break;
 		case EBCDIC:
 		{
 			const uint32_t el = asc2ebc[l & 0xFF];
-			r = new Range(el, el + 1);
+			r = Range::sym (el);
 			for (uint32_t c = l + 1; c <= h; ++c)
 			{
 				const uint32_t ec = asc2ebc[c & 0xFF];
-				r = range_union (r, new Range(ec, ec + 1));
+				r = Range::add (r, Range::sym (ec));
 			}
 			break;
 		}
@@ -149,7 +149,7 @@ Range * Enc::encodeRange(uint32_t l, uint32_t h) const
 		case UTF16:
 		case UTF32:
 		case UTF8:
-			r = new Range(l, h + 1);
+			r = Range::ran (l, h + 1);
 			if (l <= SURR_MAX && h >= SURR_MIN)
 			{
 				switch (policy)
@@ -159,10 +159,10 @@ Range * Enc::encodeRange(uint32_t l, uint32_t h) const
 						break;
 					case POLICY_SUBSTITUTE:
 					{
-						Range * surrs = new Range(SURR_MIN, SURR_MAX + 1);
-						Range * error = new Range(UNICODE_ERROR, UNICODE_ERROR + 1);
-						r = range_diff (r, surrs);
-						r = range_union (r, error);
+						Range * surrs = Range::ran (SURR_MIN, SURR_MAX + 1);
+						Range * error = Range::sym (UNICODE_ERROR);
+						r = Range::sub (r, surrs);
+						r = Range::add (r, error);
 						break;
 					}
 					case POLICY_IGNORE:
@@ -186,11 +186,11 @@ Range * Enc::encodeRange(uint32_t l, uint32_t h) const
  */
 Range * Enc::fullRange() const
 {
-	Range * r = new Range(0, nCodePoints());
+	Range * r = Range::ran (0, nCodePoints());
 	if (policy != POLICY_IGNORE)
 	{
-		Range * surrs = new Range(SURR_MIN, SURR_MAX + 1);
-		r = range_diff (r, surrs);
+		Range * surrs = Range::ran (SURR_MIN, SURR_MAX + 1);
+		r = Range::sub (r, surrs);
 	}
 	return r;
 }

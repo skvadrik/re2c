@@ -23,13 +23,13 @@ private:
 	uint32_t ub;
 
 public:
-	Range (uint32_t l, uint32_t u)
-		: nx (NULL)
-		, lb (l)
-		, ub (u)
+	static Range * sym (uint32_t c)
 	{
-		assert (lb < ub);
-		vFreeList.insert (this);
+		return new Range (NULL, c, c + 1);
+	}
+	static Range * ran (uint32_t l, uint32_t u)
+	{
+		return new Range (NULL, l, u);
 	}
 	~Range ()
 	{
@@ -38,12 +38,24 @@ public:
 	Range * next () const { return nx; }
 	uint32_t lower () const { return lb; }
 	uint32_t upper () const { return ub; }
-	friend Range * range_union (Range * r1, Range * r2);
-	friend Range * range_diff (Range * r1, Range * r2);
+	static Range * add (const Range * r1, const Range * r2);
+	static Range * sub (const Range * r1, const Range * r2);
+
+private:
+	Range (Range * n, uint32_t l, uint32_t u)
+		: nx (n)
+		, lb (l)
+		, ub (u)
+	{
+		assert (lb < ub);
+		vFreeList.insert (this);
+	}
+	static void append_overlapping (Range * & head, Range * & tail, const Range * r);
+	static void append (Range ** & ptail, uint32_t l, uint32_t u);
 
 	FORBID_COPY (Range);
 };
 
-} // end namespace re2c
+} // namespace re2c
 
 #endif // _RE2C_UTIL_RANGE_

@@ -9,12 +9,12 @@ namespace re2c {
 RegExp * UTF16Symbol(utf16::rune r)
 {
 	if (r <= utf16::MAX_1WORD_RUNE)
-		return new MatchOp(new Range(r, r + 1));
+		return new MatchOp(Range::sym (r));
 	else
 	{
 		const uint16_t ld = utf16::lead_surr(r);
 		const uint16_t tr = utf16::trail_surr(r);
-		return new CatOp(new MatchOp(new Range(ld, ld + 1)), new MatchOp(new Range(tr, tr + 1)));
+		return new CatOp(new MatchOp(Range::sym (ld)), new MatchOp(Range::sym (tr)));
 	}
 }
 

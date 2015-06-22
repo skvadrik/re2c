@@ -3,70 +3,95 @@
 namespace re2c
 {
 
-Range * range_union (Range * r1, Range * r2)
+free_list<Range*> Range::vFreeList;
+
+void Range::append_overlapping (Range * & head, Range * & tail, const Range * r)
 {
-	Range * r = NULL;
-	Range ** p = &r;
-	for (;;)
+	if (!head)
 	{
-		if (!r1)
-		{
-			* p = r2;
-			break;
-		}
-		if (!r2)
-		{
-			* p = r1;
-			break;
-		}
-		if (r2->lb < r1->lb) // swap
-		{
-			Range * r1_old = r1;
-			r1 = r2;
-			r2 = r1_old;
-		}
-		uint32_t ub = r1->ub;
-		if (r2->lb < r1->ub)
-		{
-			for (; r2 && r2->lb < r1->ub; r2 = r2->nx)
-			{
-				if (r1->ub < r2->ub)
-				{
-					ub = r2->ub;
-				}
-			}
-		}
-		* p = new Range (r1->lb, ub);
-		p = &(* p)->nx;
-		r1 = r1->nx;
+		head = Range::ran (r->lb, r->ub);
+		tail = head;
 	}
-	return r;
+	else if (tail->ub < r->lb)
+	{
+		tail->nx = Range::ran (r->lb, r->ub);
+		tail = tail->nx;
+	}
+	else if (tail->ub < r->ub)
+	{
+		tail->ub = r->ub;
+	}
 }
 
-Range * range_diff (Range * r1, Range * r2)
+Range * Range::add (const Range * r1, const Range * r2)
 {
-	Range * r = NULL;
-	Range ** p = &r;
+	Range * head = NULL;
+	Range * tail = NULL;
+	for (; r1 && r2;)
+	{
+		if (r1->lb < r2->lb)
+		{
+			append_overlapping (head, tail, r1);
+			r1 = r1->nx;
+		}
+		else
+		{
+			append_overlapping (head, tail, r2);
+			r2 = r2->nx;
+		}
+	}
 	for (; r1; r1 = r1->nx)
 	{
-		for (; r2 && r2->ub <= r1->lb; r2 = r2->nx);
-		uint32_t lb = r1->lb;
-		for (; r2 && r2->lb < r1->ub; r2 = r2->nx)
-		{
-			if (lb < r2->lb)
-			{
-				* p = new Range(lb, r2->lb);
-				p = &(* p)->nx;
-			}
-			lb = r2->ub;
-		}
-		if (lb < r1->ub)
-		{
-			* p = new Range(lb, r1->ub);
-			p = &(* p)->nx;
-		}
+		append_overlapping (head, tail, r1);
 	}
-	return r;
+	for (; r2; r2 = r2->nx)
+	{
+		append_overlapping (head, tail, r2);
+	}
+	return head;
 }
 
-} // end namespace re2c
+void Range::append (Range ** & ptail, uint32_t l, uint32_t u)
+{
+	Range * & tail = * ptail;
+	tail = Range::ran (l, u);
+	ptail = &tail->nx;
+}
+
+Range * Range::sub (const Range * r1, const Range * r2)
+{
+	Range * head = NULL;
+	Range ** ptail = &head;
+	while (r1)
+	{
+		if (!r2 || r2->lb >= r1->ub)
+		{
+			append (ptail, r1->lb, r1->ub);
+			r1 = r1->nx;
+		}
+		else if (r2->ub <= r1->lb)
+		{
+			r2 = r2->nx;
+		}
+		else
+		{
+			if (r1->lb < r2->lb)
+			{
+				append (ptail, r1->lb, r2->lb);
+			}
+			while (r2 && r2->ub < r1->ub)
+			{
+				const uint32_t lb = r2->ub;
+				r2 = r2->nx;
+				const uint32_t ub = r2 && r2->lb < r1->ub
+					? r2->lb
+					: r1->ub;
+				append (ptail, lb, ub);
+			}
+			r1 = r1->nx;
+		}
+	}
+	return head;
+}
+
+} // namespace re2c

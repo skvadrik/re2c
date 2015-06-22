@@ -84,7 +84,7 @@ MatchOp * merge (MatchOp * m1, MatchOp * m2)
 	{
 		return m1;
 	}
-	MatchOp * m = new MatchOp (range_union (m1->match, m2->match));
+	MatchOp * m = new MatchOp (Range::add (m1->match, m2->match));
 	if (m1->ins_access == RegExp::PRIVATE
 		|| m2->ins_access == RegExp::PRIVATE)
 	{
@@ -143,7 +143,7 @@ RegExp * Scanner::matchSymbol(uint32_t c) const
 	else if (encoding.is(Enc::UTF8))
 		return UTF8Symbol(c);
 	else
-		return new MatchOp(new Range(c, c + 1));
+		return new MatchOp (Range::sym (c));
 }
 
 RegExp * Scanner::strToRE (SubStr & s) const
@@ -202,7 +202,7 @@ Range * Scanner::mkRange(SubStr &s) const
 {
 	Range *r = getRange(s);
 	while (s.len > 0)
-		r = range_union (r, getRange(s));
+		r = Range::add (r, getRange(s));
 
 	return r;
 }
@@ -252,7 +252,7 @@ RegExp * Scanner::invToRE (SubStr & s) const
 
 	Range * r = s.len == 0
 		? full
-		: range_diff (full, mkRange (s));
+		: Range::sub (full, mkRange (s));
 
 	return matchSymbolRange(r);
 }
@@ -265,7 +265,7 @@ RegExp * Scanner::mkDiff (RegExp * e1, RegExp * e2) const
 	{
 		fatal("can only difference char sets");
 	}
-	Range * r = range_diff (m1->match, m2->match);
+	Range * r = Range::sub (m1->match, m2->match);
 
 	return matchSymbolRange (r);
 }
@@ -276,8 +276,8 @@ RegExp * Scanner::mkDot() const
 	uint32_t c = '\n';
 	if (!encoding.encode(c))
 		fatalf("Bad code point: '0x%X'", c);
-	Range * ran = new Range(c, c + 1);
-	Range * inv = range_diff (full, ran);
+	Range * ran = Range::sym (c);
+	Range * inv = Range::sub (full, ran);
 
 	return matchSymbolRange(inv);
 }
@@ -294,7 +294,7 @@ RegExp * Scanner::mkDot() const
  */
 RegExp * Scanner::mkDefault() const
 {
-	Range * def = new Range(0, encoding.nCodeUnits());
+	Range * def = Range::ran (0, encoding.nCodeUnits());
 	return new MatchOp(def);
 }
 

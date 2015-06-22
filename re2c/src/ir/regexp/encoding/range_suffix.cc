@@ -27,7 +27,7 @@ RegExp * emit(RangeSuffix * p, RegExp * re)
 		RegExp * regexp = NULL;
 		for (; p != NULL; p = p->next)
 		{
-			RegExp * re1 = doCat(new MatchOp(new Range(p->l, p->h + 1)), re);
+			RegExp * re1 = doCat(new MatchOp(Range::ran (p->l, p->h + 1)), re);
 			regexp = doAlt(regexp, emit(p->child, re1));
 		}
 		return regexp;

@@ -10,9 +10,9 @@ RegExp * UTF8Symbol(utf8::rune r)
 {
 	uint8_t chars[utf8::MAX_RUNE_LENGTH];
 	const int chars_count = utf8::rune_to_bytes(chars, r);
-	RegExp * re = new MatchOp(new Range(chars[0], chars[0] + 1));
+	RegExp * re = new MatchOp(Range::sym (chars[0]));
 	for (int i = 1; i < chars_count; ++i)
-		re = new CatOp(re, new MatchOp(new Range(chars[i], chars[i] + 1)));
+		re = new CatOp(re, new MatchOp(Range::sym (chars[i])));
 	return re;
 }
 
