@@ -4,6 +4,7 @@
 #include <assert.h>
 #include <stddef.h> // NULL
 
+#include "src/test/range/test.h"
 #include "src/util/c99_stdint.h"
 #include "src/util/forbid_copy.h"
 #include "src/util/free_list.h"
@@ -52,6 +53,9 @@ private:
 	}
 	static void append_overlapping (Range * & head, Range * & tail, const Range * r);
 	static void append (Range ** & ptail, uint32_t l, uint32_t u);
+
+	// test addition and subtraction
+	template <uint8_t> friend Range * re2c_test::range (uint32_t n);
 
 	FORBID_COPY (Range);
 };
