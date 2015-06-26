@@ -20,7 +20,6 @@ struct Span
 {
 	uint32_t ub;
 	State * to;
-	uint32_t show (std::ostream&, uint32_t) const;
 
 	FORBID_COPY (Span);
 };

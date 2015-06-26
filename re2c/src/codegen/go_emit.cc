@@ -59,22 +59,6 @@ std::string output_hgo (OutputFile & o, uint32_t ind, bool & readCh, SwitchIf * 
 	return yych;
 }
 
-uint32_t Span::show (std::ostream & o, uint32_t lb) const
-{
-	printSpan(o, lb, ub);
-	o << " ";
-	if (to)
-	{
-		o << to->label;
-	}
-	else
-	{
-		o << "(nil)";
-	}
-	o << "; ";
-	return ub;
-}
-
 void Case::emit (OutputFile & o, uint32_t ind)
 {
 	for (uint32_t i = 0; i < ranges.size (); ++i)
