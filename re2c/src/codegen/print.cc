@@ -160,13 +160,7 @@ void prtChOrHexForSpan(std::ostream& o, uint32_t c)
 
 void printSpan(std::ostream& o, uint32_t lb, uint32_t ub)
 {
-	if (lb > ub)
-	{
-		o << "*";
-	}
-
 	o << "[";
-
 	if ((ub - lb) == 1)
 	{
 		prtChOrHexForSpan(o, lb);
@@ -177,7 +171,6 @@ void printSpan(std::ostream& o, uint32_t lb, uint32_t ub)
 		o << "-";
 		prtChOrHexForSpan(o, ub - 1);
 	}
-
 	o << "]";
 }
 
