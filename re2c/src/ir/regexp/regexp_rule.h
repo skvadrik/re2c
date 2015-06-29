@@ -17,7 +17,6 @@ public:
 	Ins * ins;
 	rule_rank_t rank;
 	Token * code;
-	uint32_t line;
 
 	inline RuleOp (RegExp * e, RegExp * c, Token * t, rule_rank_t r, InsAccess access)
 		: exp (e)
@@ -25,7 +24,6 @@ public:
 		, ins (NULL)
 		, rank (r)
 		, code (t)
-		, line (0)
 	{
 		ins_access = access;
 	}
