@@ -19,15 +19,21 @@ sed -i -E "s/$lcontext$old$rcontext/$lcontext$new$rcontext/" configure.ac
 
 ./autogen.sh
 builddir=.build
-rm -rf $builddir
-mkdir $builddir
+
+# try to be portable on various MAKEs
+for make_prog in make bmake
+do
+    rm -rf $builddir
+    mkdir $builddir
+    cd $builddir
+        ../configure --enable-docs && \
+        $make_prog bootstrap -j5
+        $make_prog distcheck -j5
+    cd .. # $builddir
+done
+
+# upload files on sourceforge
 cd $builddir
-
-    ../configure --enable-docs && \
-    make bootstrap -j5
-    make distcheck -j5
-
-    # upload files on sourceforge
     src=release
     src_tarballs=$src/frs/project/re2c/re2c/$version
     src_docs=$src/project-web/re2c/htdocs
@@ -35,7 +41,6 @@ cd $builddir
     cp re2c-$version.tar.gz $src_tarballs
     cp ../doc/index.html doc/manual.html $src_docs
     rsync -rK $src/ skvadrik@web.sourceforge.net:/home
-
 cd .. # $builddir
 
 # commit release
