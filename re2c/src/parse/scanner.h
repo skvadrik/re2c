@@ -8,6 +8,7 @@
 #include "src/globals.h"
 #include "src/parse/input.h"
 #include "src/parse/token.h"
+#include "src/util/attribute.h"
 #include "src/util/forbid_copy.h"
 #include "src/util/substr.h"
 
@@ -74,8 +75,8 @@ public:
 	const std::string & get_fname () const;
 	void set_in_parse(bool new_in_parse);
 	void fatal_at(uint32_t line, uint32_t ofs, const char *msg) const;
-	void fatalf_at(uint32_t line, const char*, ...) const;
-	void fatalf(const char*, ...) const;
+	void fatalf_at(uint32_t line, const char*, ...) const RE2C_GXX_ATTRIBUTE ((format (printf, 3, 4)));
+	void fatalf(const char*, ...) const RE2C_GXX_ATTRIBUTE ((format (printf, 2, 3)));
 	void fatal(const char*) const;
 	void fatal(uint32_t, const char*) const;
 

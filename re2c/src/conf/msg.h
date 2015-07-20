@@ -1,9 +1,11 @@
 #ifndef _RE2C_CONF_MSG_
 #define _RE2C_CONF_MSG_
 
+#include "src/util/attribute.h"
+
 namespace re2c {
 
-void error (const char * fmt, ...);
+void error (const char * fmt, ...) RE2C_GXX_ATTRIBUTE ((format (printf, 1, 2)));
 void error_encoding ();
 void usage ();
 void vernum ();
