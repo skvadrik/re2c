@@ -207,7 +207,7 @@ $(AUTOGEN_PARSER): $(CUSTOM_PARSER)
 .PHONY: bootstrap
 bootstrap: all
 	rm $(AUTOGEN_SCANNER) $(AUTOGEN_PARSEOPT)
-	make all
+	$(MAKE) all
 
 .PHONY: docs
 if REBUILD_DOCS
