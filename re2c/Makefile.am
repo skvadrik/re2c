@@ -55,6 +55,7 @@ SRC_HDR = \
 	src/parse/scanner.h \
 	src/parse/token.h \
 	src/util/allocate.h \
+	src/util/attribute.h \
 	src/util/c99_stdint.h \
 	src/util/counter.h \
 	src/util/forbid_copy.h \
