@@ -166,7 +166,6 @@ EXTRA_DIST = \
 	NO_WARRANTY \
 	README \
 	autogen.sh \
-	doc/index.html \
 	doc/loplas.ps \
 	doc/sample.bib \
 	examples \
