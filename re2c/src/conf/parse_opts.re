@@ -38,7 +38,20 @@ opt:
 		return EXIT_FAIL;
 	}
 
-	"--" end { goto end; }
+	"--" end
+	{
+		// all remaining arguments are non-options
+		// so they must be input files
+		// re2c expects exactly one input file
+		if (const char * f = *++argv)
+		{
+			if (!opts.source (f) || *++argv)
+			{
+				return EXIT_FAIL;
+			}
+		}
+		goto end;
+	}
 
 	"-"      end { if (!opts.source ("<stdin>")) return EXIT_FAIL; goto opt; }
 	filename end { if (!opts.source (*argv))     return EXIT_FAIL; goto opt; }
