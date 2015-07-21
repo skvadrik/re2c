@@ -1,16 +1,15 @@
-1. Upload new and delete old documentation
+1. Test windows build using mingw:
+    $ re2c/autogen.sh
+    $ re2c/build_mingw.sh
+    $ cd re2c/.build_mingw
+    $ make wtests
+    $ cd ../..
 
-2. Test windows build using cygwin
+2. Edit the following files:
+    CHANGELOG
+    on branch 'gh-pages': index.html
 
-3. Edit the following files:
-   - CHANGELOG
-   - htdocs/index.html
+3. Run release script:
+    $ re2c/release.sh <version>
 
-4. Run script release.sh:
-    ./release.sh <version>
-
-5. Write NEWS file
-
-6. Add release notes on freshmeat
-
-7. Don't forget to set version to .dev
+4. Update version to .dev
