@@ -19,7 +19,7 @@ struct Opt
 
 	Opt ()
 		: source_file (NULL)
-		, output_file ("<stdout>")
+		, output_file (NULL)
 		, header_file (NULL)
 	{}
 
@@ -37,12 +37,12 @@ struct Opt
 	void case_insensitive ();
 	void case_inverted ();
 	void skeleton ();
-	void source (const char * s);
-	void output (const char * s);
-	void type_header (const char * s);
 	void encoding_policy (Enc::policy_t);
 	void input (InputAPI::type_t);
 	void empty_class (empty_class_policy_t);
+	bool source (const char * s);
+	bool output (const char * s);
+	bool type_header (const char * s);
 	bool ecb ();
 	bool unicode ();
 	bool wide_chars ();

@@ -1,3 +1,4 @@
+#include "src/conf/msg.h"
 #include "src/conf/opt.h"
 
 namespace re2c
@@ -129,22 +130,6 @@ void Opt::skeleton ()
 	flag_skeleton = true;
 }
 
-void Opt::source (const char * s)
-{
-	source_file = s;
-}
-
-void Opt::output (const char * s)
-{
-	output_file = s;
-}
-
-void Opt::type_header (const char * s)
-{
-	tFlag = true;
-	header_file = s;
-}
-
 void Opt::encoding_policy (Enc::policy_t p)
 {
 	encoding.setPolicy (p);
@@ -158,6 +143,49 @@ void Opt::input (InputAPI::type_t i)
 void Opt::empty_class (empty_class_policy_t p)
 {
 	empty_class_policy = p;
+}
+
+bool Opt::source (const char * s)
+{
+	if (source_file)
+	{
+		error ("multiple source files: %s, %s\n", source_file, s);
+		return false;
+	}
+	else
+	{
+		source_file = s;
+		return true;
+	}
+}
+
+bool Opt::output (const char * s)
+{
+	if (output_file)
+	{
+		error ("multiple output files: %s, %s\n", output_file, s);
+		return false;
+	}
+	else
+	{
+		output_file = s;
+		return true;
+	}
+}
+
+bool Opt::type_header (const char * s)
+{
+	if (header_file)
+	{
+		error ("multiple header files: %s, %s\n", header_file, s);
+		return false;
+	}
+	else
+	{
+		tFlag = true;
+		header_file = s;
+		return true;
+	}
 }
 
 bool Opt::ecb ()

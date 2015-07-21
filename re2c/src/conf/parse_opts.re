@@ -40,8 +40,8 @@ opt:
 
 	"--" end { goto end; }
 
-	"-"      end { opts.source ("<stdin>"); goto opt; }
-	filename end { opts.source (*argv);     goto opt; }
+	"-"      end { if (!opts.source ("<stdin>")) return EXIT_FAIL; goto opt; }
+	filename end { if (!opts.source (*argv))     return EXIT_FAIL; goto opt; }
 
 	"-"  { goto opt_short; }
 	"--" { goto opt_long; }
@@ -109,8 +109,8 @@ opt_long:
 	"wide-chars"         end { if (!opts.wide_chars ()) { error_encoding (); return EXIT_FAIL; } goto opt; }
 	"utf-16"             end { if (!opts.utf_16 ())     { error_encoding (); return EXIT_FAIL; } goto opt; }
 	"utf-8"              end { if (!opts.utf_8 ())      { error_encoding (); return EXIT_FAIL; } goto opt; }
-	"output"             end { goto opt_output; }
-	"type-header"        end { goto opt_header; }
+	"output"             end { YYCURSOR = *++argv; goto opt_output; }
+	"type-header"        end { YYCURSOR = *++argv; goto opt_header; }
 	"encoding-policy"    end { goto opt_encoding_policy; }
 	"input"              end { goto opt_input; }
 	"empty-class"        end { goto opt_empty_class; }
@@ -124,7 +124,7 @@ opt_output:
 		error ("bad argument to option -o, --output: %s\n", *argv);
 		return EXIT_FAIL;
 	}
-	filename end { opts.output (*argv); goto opt; }
+	filename end { if (!opts.output (*argv)) return EXIT_FAIL; goto opt; }
 */
 
 opt_header:
@@ -134,7 +134,7 @@ opt_header:
 		error ("bad argument to option -t, --type-header: %s\n", *argv);
 		return EXIT_FAIL;
 	}
-	filename end { opts.type_header (*argv); goto opt; }
+	filename end { if (!opts.type_header (*argv)) return EXIT_FAIL; goto opt; }
 */
 
 opt_encoding_policy:
@@ -176,6 +176,11 @@ opt_empty_class:
 */
 
 end:
+	if (!opts.source_file)
+	{
+		error ("no source file\n");
+		return EXIT_FAIL;
+	}
 	if (!cFlag && opts.header_file)
 	{
 		error ("can only output a header file when using -c switch\n");

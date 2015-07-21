@@ -60,8 +60,9 @@ OutputFile::OutputFile (const char * fn)
 
 bool OutputFile::open ()
 {
-	if (strcmp (file_name, "<stdout>") == 0)
+	if (file_name == NULL)
 	{
+		file_name = "<stdout>";
 		file = stdout;
 	}
 	else
