@@ -7,6 +7,7 @@ then
     echo "usage: ./release.sh <version>"
     exit 1
 fi
+version="$1"
 
 branch=`git rev-parse --abbrev-ref HEAD`
 if [ $branch != "master" ]
@@ -14,8 +15,6 @@ then
     echo "must be on branch 'master'"
     exit 1
 fi
-
-version="$1"
 
 # edit version in re2c/configure.in
 lcontext="AC_INIT\(\[re2c\],\["
@@ -26,7 +25,7 @@ sed -i -E "s/$lcontext$old$rcontext/$lcontext$new$rcontext/" re2c/configure.ac
 
 # distcheck
 builddir=.build
-cd re2c && ./distcheck $builddir && cd ..
+cd re2c && ./distcheck.sh $builddir && cd ..
 
 # commit release
 git commit -a -m "Release $version."
@@ -39,7 +38,6 @@ done
 # upload site
 git checkout gh-pages
     cp -f re2c/$builddir/doc/manual.html manual.html
-    git add index.html manual.html
     git commit -a -m "Updated site."
     for r in `git remote`
     do
