@@ -336,8 +336,11 @@ Output::Output (const char * source_name, const char * header_name)
 
 Output::~Output ()
 {
-	source.emit (types, max_fill);
-	header.emit (types);
+	if (!warn.error ())
+	{
+		source.emit (types, max_fill);
+		header.emit (types);
+	}
 }
 
 void output_state_goto_sub (std::ostream & o, uint32_t ind, uint32_t start_label, int cMin, int cMax)

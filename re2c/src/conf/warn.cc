@@ -22,7 +22,7 @@ const char * Warn::names [TYPES] =
 
 Warn::Warn ()
 	: mask ()
-	, error (false)
+	, error_accuml (false)
 {
 	for (uint32_t i = 0; i < TYPES; ++i)
 	{
@@ -30,9 +30,9 @@ Warn::Warn ()
 	}
 }
 
-uint32_t Warn::error_code () const
+bool Warn::error () const
 {
-	return error;
+	return error_accuml;
 }
 
 void Warn::set (type_t t, option_t o)
@@ -68,7 +68,7 @@ void Warn::empty_class (uint32_t line)
 	{
 		if (mask[EMPTY_CHARACTER_CLASS] & ERROR)
 		{
-			error = true;
+			error_accuml = true;
 		}
 		warning (names[EMPTY_CHARACTER_CLASS], "empty character class at line %u", line);
 	}
@@ -80,7 +80,7 @@ void Warn::empty_rule (uint32_t line)
 	{
 		if (mask[EMPTY_RULE] & ERROR)
 		{
-			error = true;
+			error_accuml = true;
 		}
 		warning (names[EMPTY_RULE], "empty rule at line %u", line);
 	}
@@ -92,7 +92,7 @@ void Warn::naked_default (const std::vector<std::pair<uint32_t, uint32_t> > & st
 	{
 		if (mask[NAKED_DEFAULT] & ERROR)
 		{
-			error = true;
+			error_accuml = true;
 		}
 		std::ostringstream s;
 		for (uint32_t i = 0; i < stray_cunits.size (); ++i)

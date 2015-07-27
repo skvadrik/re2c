@@ -36,11 +36,11 @@ private:
 	static const uint8_t ERROR;
 	static const char * names [TYPES];
 	uint8_t mask[TYPES];
-	bool error;
+	bool error_accuml;
 
 public:
 	Warn ();
-	uint32_t error_code () const;
+	bool error () const;
 	void set (type_t t, option_t o);
 	void set_all (option_t o);
 	void empty_class (uint32_t line);
