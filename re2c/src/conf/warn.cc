@@ -74,15 +74,15 @@ void Warn::empty_class (uint32_t line)
 	}
 }
 
-void Warn::empty_rule (uint32_t line)
+void Warn::match_empty_string (uint32_t line)
 {
-	if (mask[EMPTY_RULE] & WARNING)
+	if (mask[MATCH_EMPTY_STRING] & WARNING)
 	{
-		if (mask[EMPTY_RULE] & ERROR)
+		if (mask[MATCH_EMPTY_STRING] & ERROR)
 		{
 			error_accuml = true;
 		}
-		warning (names[EMPTY_RULE], "empty rule at line %u", line);
+		warning (names[MATCH_EMPTY_STRING], "rule matches empty string at line %u", line);
 	}
 }
 

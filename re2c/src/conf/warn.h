@@ -9,7 +9,7 @@ namespace re2c {
 
 #define RE2C_WARNING_TYPES \
 	W (EMPTY_CHARACTER_CLASS, "empty-character-class"), \
-	W (EMPTY_RULE,            "empty-rule"), \
+	W (MATCH_EMPTY_STRING,    "match-empty-string"), \
 	W (NAKED_DEFAULT,         "naked-default"),
 
 class Warn
@@ -44,7 +44,7 @@ public:
 	void set (type_t t, option_t o);
 	void set_all (option_t o);
 	void empty_class (uint32_t line);
-	void empty_rule (uint32_t line);
+	void match_empty_string (uint32_t line);
 	void naked_default (const std::vector<std::pair<uint32_t, uint32_t> > & stray_cunits);
 };
 

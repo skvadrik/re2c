@@ -254,10 +254,10 @@ void DFA::prepare(OutputFile & o, uint32_t & max_fill)
 		warn.naked_default (stray_cunits);
 	}
 
-	// warn about not shadowed empty rule
+	// warn about not shadowed rule that matches empty string
 	if (empty_rule && !stray_cunits.empty ())
 	{
-		warn.empty_rule (head->rule->code->line);
+		warn.match_empty_string (head->rule->code->line);
 	}
 
 	// split ``base'' states into two parts

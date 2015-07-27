@@ -76,7 +76,7 @@ opt_warn:
 		return EXIT_FAIL;
 	}
 	"empty-character-class" end { warn.set (Warn::EMPTY_CHARACTER_CLASS, option); goto opt; }
-	"empty-rule"            end { warn.set (Warn::EMPTY_RULE,            option); goto opt; }
+	"match-empty-string"    end { warn.set (Warn::MATCH_EMPTY_STRING,    option); goto opt; }
 	"naked-default"         end { warn.set (Warn::NAKED_DEFAULT,         option); goto opt; }
 */
 
