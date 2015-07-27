@@ -72,6 +72,7 @@ public:
 	void restore_state(const ScannerState&);
 
 	uint32_t get_cline() const;
+	uint32_t get_line() const;
 	const std::string & get_fname () const;
 	void set_in_parse(bool new_in_parse);
 	void fatal_at(uint32_t line, uint32_t ofs, const char *msg) const;
@@ -114,6 +115,11 @@ inline const std::string & Scanner::get_fname () const
 inline uint32_t Scanner::get_cline() const
 {
 	return cline;
+}
+
+inline uint32_t Scanner::get_line() const
+{
+	return in_parse ? tline : cline;
 }
 
 inline void Scanner::save_state(ScannerState& state) const

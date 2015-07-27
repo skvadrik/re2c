@@ -214,8 +214,10 @@ RegExp * Scanner::matchSymbolRange(Range * r) const
 		switch (empty_class_policy)
 		{
 			case EMPTY_CLASS_MATCH_EMPTY:
+				warn.empty_class (get_line ());
 				return new NullOp;
 			case EMPTY_CLASS_MATCH_NONE:
+				warn.empty_class (get_line ());
 				break;
 			case EMPTY_CLASS_ERROR:
 				fatal ("empty character class");

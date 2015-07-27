@@ -57,5 +57,5 @@ int main(int argc, char *argv[])
 	Scanner scanner (input, output.source);
 	parse (scanner, output);
 
-	return 0;
+	return warn.error_code ();
 }

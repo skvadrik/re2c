@@ -235,6 +235,31 @@ void DFA::prepare(OutputFile & o, uint32_t & max_fill)
 		default_state->action.set_accept (&accepts);
 	}
 
+	const bool empty_rule = head->rule;
+
+	std::vector<std::pair<uint32_t, uint32_t> > stray_cunits;
+	uint32_t lb = 0;
+	for (uint32_t i = 0; i < head->go.nSpans; ++i)
+	{
+		if (!head->go.span[i].to->rule)
+		{
+			stray_cunits.push_back (std::make_pair (lb, head->go.span[i].ub));
+		}
+		lb = head->go.span[i].ub;
+	}
+
+	// warn if default case is not handled
+	if (default_state && !stray_cunits.empty () && !empty_rule)
+	{
+		warn.naked_default (stray_cunits);
+	}
+
+	// warn about not shadowed empty rule
+	if (empty_rule && !stray_cunits.empty ())
+	{
+		warn.empty_rule (head->rule->code->line);
+	}
+
 	// split ``base'' states into two parts
 	for (State * s = head; s; s = s->next)
 	{

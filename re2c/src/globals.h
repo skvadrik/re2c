@@ -5,6 +5,7 @@
 
 #include "src/codegen/code_names.h"
 #include "src/codegen/input_api.h"
+#include "src/conf/warn.h"
 #include "src/ir/regexp/encoding/enc.h"
 #include "src/ir/regexp/empty_class_policy.h"
 #include "src/util/c99_stdint.h"
@@ -76,6 +77,8 @@ extern Enc encoding;
 extern InputAPI input_api;
 
 extern empty_class_policy_t empty_class_policy;
+
+extern Warn warn;
 
 } // end namespace re2c
 

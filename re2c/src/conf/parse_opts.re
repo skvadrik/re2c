@@ -17,6 +17,7 @@ parse_opts_t parse_opts (int argc, char ** argv, Opt & opts)
 #define YYCTYPE char
 	YYCTYPE * YYCURSOR;
 	YYCTYPE * YYMARKER;
+	Warn::option_t option;
 
 /*!re2c
 	re2c:yyfill:enable = 0;
@@ -34,7 +35,7 @@ opt:
 /*!re2c
 	*
 	{
-		error ("bad option: %s\n", *argv);
+		error ("bad option: %s", *argv);
 		return EXIT_FAIL;
 	}
 
@@ -58,13 +59,32 @@ opt:
 
 	"-"  { goto opt_short; }
 	"--" { goto opt_long; }
+
+	"-W"      end { warn.set_all (Warn::W);      goto opt; }
+	"-Werror" end { warn.set_all (Warn::WERROR); goto opt; }
+	"-W"          { option = Warn::W;        goto opt_warn; }
+	"-Wno-"       { option = Warn::WNO;      goto opt_warn; }
+	"-Werror-"    { option = Warn::WERROR;   goto opt_warn; }
+	"-Wno-error-" { option = Warn::WNOERROR; goto opt_warn; }
+*/
+
+opt_warn:
+/*!re2c
+	*
+	{
+		error ("bad warning: %s", *argv);
+		return EXIT_FAIL;
+	}
+	"empty-character-class" end { warn.set (Warn::EMPTY_CHARACTER_CLASS, option); goto opt; }
+	"empty-rule"            end { warn.set (Warn::EMPTY_RULE,            option); goto opt; }
+	"naked-default"         end { warn.set (Warn::NAKED_DEFAULT,         option); goto opt; }
 */
 
 opt_short:
 /*!re2c
 	*
 	{
-		error ("bad short option: %s\n", *argv);
+		error ("bad short option: %s", *argv);
 		return EXIT_FAIL;
 	}
 	end { goto opt; }
@@ -97,7 +117,7 @@ opt_long:
 /*!re2c
 	*
 	{
-		error ("bad long option: %s\n", *argv);
+		error ("bad long option: %s", *argv);
 		return EXIT_FAIL;
 	}
 	"help"               end { usage ();   return EXIT_OK; }
@@ -134,7 +154,7 @@ opt_output:
 /*!re2c
 	*
 	{
-		error ("bad argument to option -o, --output: %s\n", *argv);
+		error ("bad argument to option -o, --output: %s", *argv);
 		return EXIT_FAIL;
 	}
 	filename end { if (!opts.output (*argv)) return EXIT_FAIL; goto opt; }
@@ -144,7 +164,7 @@ opt_header:
 /*!re2c
 	*
 	{
-		error ("bad argument to option -t, --type-header: %s\n", *argv);
+		error ("bad argument to option -t, --type-header: %s", *argv);
 		return EXIT_FAIL;
 	}
 	filename end { if (!opts.type_header (*argv)) return EXIT_FAIL; goto opt; }
@@ -155,7 +175,7 @@ opt_encoding_policy:
 /*!re2c
 	*
 	{
-		error ("bad argument to option --encoding-policy (expected: ignore | substitute | fail): %s\n", *argv);
+		error ("bad argument to option --encoding-policy (expected: ignore | substitute | fail): %s", *argv);
 		return EXIT_FAIL;
 	}
 	"ignore"     end { opts.encoding_policy (Enc::POLICY_IGNORE);     goto opt; }
@@ -168,7 +188,7 @@ opt_input:
 /*!re2c
 	*
 	{
-		error ("bad argument to option --input (expected: default | custom): %s\n", *argv);
+		error ("bad argument to option --input (expected: default | custom): %s", *argv);
 		return EXIT_FAIL;
 	}
 	"default" end { opts.input (InputAPI::DEFAULT); goto opt; }
@@ -180,7 +200,7 @@ opt_empty_class:
 /*!re2c
 	*
 	{
-		error ("bad argument to option --empty-class (expected: match-empty | match-none | error): %s\n", *argv);
+		error ("bad argument to option --empty-class (expected: match-empty | match-none | error): %s", *argv);
 		return EXIT_FAIL;
 	}
 	"match-empty" end { opts.empty_class (EMPTY_CLASS_MATCH_EMPTY); goto opt; }
@@ -191,17 +211,17 @@ opt_empty_class:
 end:
 	if (!opts.source_file)
 	{
-		error ("no source file\n");
+		error ("no source file");
 		return EXIT_FAIL;
 	}
 	if (!cFlag && opts.header_file)
 	{
-		error ("can only output a header file when using -c switch\n");
+		error ("can only output a header file when using -c switch");
 		return EXIT_FAIL;
 	}
 	if (DFlag && (bFlag || dFlag || sFlag || flag_skeleton))
 	{
-		error ("cannot combine -D with -b, -d, -s or --skeleton switches\n");
+		error ("cannot combine -D with -b, -d, -s or --skeleton switches");
 		return EXIT_FAIL;
 	}
 

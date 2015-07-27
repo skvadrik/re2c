@@ -15,11 +15,25 @@ void error (const char * fmt, ...)
 	va_start (args, fmt);
 	vfprintf (stderr, fmt, args);
 	va_end (args);
+
+	fprintf (stderr, "\n");
 }
 
 void error_encoding ()
 {
-	error ("only one of switches -e, -w, -x, -u and -8 must be set\n");
+	error ("only one of switches -e, -w, -x, -u and -8 must be set");
+}
+
+void warning (const char * type, const char * fmt, ...)
+{
+	fprintf (stderr, "re2c: warning: ");
+
+	va_list args;
+	va_start (args, fmt);
+	vfprintf (stderr, fmt, args);
+	va_end (args);
+
+	fprintf (stderr, " [-W%s]\n", type);
 }
 
 void usage ()

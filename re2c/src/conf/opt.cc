@@ -149,7 +149,7 @@ bool Opt::source (const char * s)
 {
 	if (source_file)
 	{
-		error ("multiple source files: %s, %s\n", source_file, s);
+		error ("multiple source files: %s, %s", source_file, s);
 		return false;
 	}
 	else
@@ -163,7 +163,7 @@ bool Opt::output (const char * s)
 {
 	if (output_file)
 	{
-		error ("multiple output files: %s, %s\n", output_file, s);
+		error ("multiple output files: %s, %s", output_file, s);
 		return false;
 	}
 	else
@@ -177,7 +177,7 @@ bool Opt::type_header (const char * s)
 {
 	if (header_file)
 	{
-		error ("multiple header files: %s, %s\n", header_file, s);
+		error ("multiple header files: %s, %s", header_file, s);
 		return false;
 	}
 	else
