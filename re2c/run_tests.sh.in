@@ -97,6 +97,9 @@ run_pack() {
 		local typname=$test_blddir/`basename ${x%.re}.h.temp`
 		local typdiff=$test_blddir/`basename ${x%.re}.h.diff`
 
+		# enable warnings globally
+		local switches="$switches -W"
+
 		local cmd="${valgrind} ${wine} ${re2c} $switches $x"
 		if test -n "${wine}"
 		then
