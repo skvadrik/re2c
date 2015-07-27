@@ -577,6 +577,7 @@ void parse(Scanner& i, Output & o)
 			}
 			encodingOld = encoding;
 		}
+		o.source.set_block_line (in->get_cline ());
 		if (cFlag)
 		{
 			RegExpMap::iterator it;

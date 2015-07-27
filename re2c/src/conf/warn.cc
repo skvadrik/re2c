@@ -70,7 +70,7 @@ void Warn::empty_class (uint32_t line)
 		{
 			error_accuml = true;
 		}
-		warning (names[EMPTY_CHARACTER_CLASS], "empty character class at line %u", line);
+		warning (names[EMPTY_CHARACTER_CLASS], line, "empty character class");
 	}
 }
 
@@ -82,11 +82,11 @@ void Warn::match_empty_string (uint32_t line)
 		{
 			error_accuml = true;
 		}
-		warning (names[MATCH_EMPTY_STRING], "rule matches empty string at line %u", line);
+		warning (names[MATCH_EMPTY_STRING], line, "rule matches empty string");
 	}
 }
 
-void Warn::naked_default (const std::vector<std::pair<uint32_t, uint32_t> > & stray_cunits)
+void Warn::naked_default (uint32_t line, const std::vector<std::pair<uint32_t, uint32_t> > & stray_cunits)
 {
 	if (mask[NAKED_DEFAULT] & WARNING)
 	{
@@ -99,7 +99,7 @@ void Warn::naked_default (const std::vector<std::pair<uint32_t, uint32_t> > & st
 		{
 			printSpan (s, stray_cunits[i].first, stray_cunits[i].second);
 		}
-		warning (names[NAKED_DEFAULT], "naked default case (stray code units: %s), better add default rule *", s.str ().c_str ());
+		warning (names[NAKED_DEFAULT], line, "naked default case (stray code units: %s), better add default rule *", s.str ().c_str ());
 	}
 }
 

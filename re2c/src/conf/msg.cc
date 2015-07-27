@@ -24,9 +24,9 @@ void error_encoding ()
 	error ("only one of switches -e, -w, -x, -u and -8 must be set");
 }
 
-void warning (const char * type, const char * fmt, ...)
+void warning (const char * type, uint32_t line, const char * fmt, ...)
 {
-	fprintf (stderr, "re2c: warning: ");
+	fprintf (stderr, "re2c: warning: line %u: ", line);
 
 	va_list args;
 	va_start (args, fmt);

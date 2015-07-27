@@ -40,6 +40,7 @@ struct OutputBlock
 	bool used_yyaccept;
 	bool force_start_label;
 	std::string user_start_label;
+	uint32_t line;
 
 	OutputBlock ();
 	~OutputBlock ();
@@ -92,6 +93,8 @@ public:
 	void set_force_start_label (bool force);
 	void set_user_start_label (const std::string & label);
 	bool get_force_start_label () const;
+	void set_block_line (uint32_t l);
+	uint32_t get_block_line () const;
 
 	void emit (const std::vector<std::string> & types, uint32_t max_fill);
 

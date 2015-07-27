@@ -37,6 +37,7 @@ OutputBlock::OutputBlock ()
 	, used_yyaccept (false)
 	, force_start_label (false)
 	, user_start_label ()
+	, line (0)
 {
 	fragments.push_back (new OutputFragment (OutputFragment::CODE, 0));
 }
@@ -225,6 +226,16 @@ void OutputFile::set_user_start_label (const std::string & label)
 bool OutputFile::get_force_start_label () const
 {
 	return blocks.back ()->force_start_label;
+}
+
+void OutputFile::set_block_line (uint32_t l)
+{
+	blocks.back ()->line = l;
+}
+
+uint32_t OutputFile::get_block_line () const
+{
+	return blocks.back ()->line;
 }
 
 void OutputFile::new_block ()

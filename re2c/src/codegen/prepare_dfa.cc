@@ -251,7 +251,7 @@ void DFA::prepare(OutputFile & o, uint32_t & max_fill)
 	// warn if default case is not handled
 	if (default_state && !stray_cunits.empty () && !empty_rule)
 	{
-		warn.naked_default (stray_cunits);
+		warn.naked_default (o.get_block_line (), stray_cunits);
 	}
 
 	// warn about not shadowed rule that matches empty string
