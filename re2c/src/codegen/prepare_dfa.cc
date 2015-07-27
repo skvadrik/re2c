@@ -154,7 +154,7 @@ void DFA::findBaseState()
 	operator delete (span);
 }
 
-void DFA::prepare(OutputFile & o, uint32_t & max_fill)
+void DFA::prepare(OutputFile & o, uint32_t & max_fill, const std::string & cond)
 {
 	bUsedYYBitmap = false;
 
@@ -251,7 +251,7 @@ void DFA::prepare(OutputFile & o, uint32_t & max_fill)
 	// warn if default case is not handled
 	if (default_state && !stray_cunits.empty () && !empty_rule)
 	{
-		warn.naked_default (o.get_block_line (), stray_cunits);
+		warn.naked_default (o.get_block_line (), stray_cunits, cond);
 	}
 
 	// warn about not shadowed rule that matches empty string

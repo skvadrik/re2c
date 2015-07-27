@@ -86,7 +86,7 @@ void Warn::match_empty_string (uint32_t line)
 	}
 }
 
-void Warn::naked_default (uint32_t line, const std::vector<std::pair<uint32_t, uint32_t> > & stray_cunits)
+void Warn::naked_default (uint32_t line, const std::vector<std::pair<uint32_t, uint32_t> > & stray_cunits, const std::string & cond)
 {
 	if (mask[NAKED_DEFAULT] & WARNING)
 	{
@@ -94,12 +94,22 @@ void Warn::naked_default (uint32_t line, const std::vector<std::pair<uint32_t, u
 		{
 			error_accuml = true;
 		}
-		std::ostringstream s;
+		std::ostringstream cunits;
 		for (uint32_t i = 0; i < stray_cunits.size (); ++i)
 		{
-			printSpan (s, stray_cunits[i].first, stray_cunits[i].second);
+			printSpan (cunits, stray_cunits[i].first, stray_cunits[i].second);
 		}
-		warning (names[NAKED_DEFAULT], line, "naked default case (stray code units: %s), better add default rule *", s.str ().c_str ());
+		const char * cond_prefix = cond == ""
+			? ""
+			: " in condition ";
+		warning
+			( names[NAKED_DEFAULT]
+			, line
+			, "naked default case%s%s (stray code units: %s), better add default rule *"
+			, cond_prefix
+			, cond.c_str ()
+			, cunits.str ().c_str ()
+			);
 	}
 }
 

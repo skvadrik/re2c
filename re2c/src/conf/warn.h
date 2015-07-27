@@ -45,7 +45,7 @@ public:
 	void set_all (option_t o);
 	void empty_class (uint32_t line);
 	void match_empty_string (uint32_t line);
-	void naked_default (uint32_t line, const std::vector<std::pair<uint32_t, uint32_t> > & stray_cunits);
+	void naked_default (uint32_t line, const std::vector<std::pair<uint32_t, uint32_t> > & stray_cunits, const std::string & cond);
 };
 
 } // namespace re2c

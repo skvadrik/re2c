@@ -665,7 +665,7 @@ void parse(Scanner& i, Output & o)
 							it->second.second = it->second.second ? mkAlt(def, it->second.second) : def;
 						}
 					}
-					dfa_map[it->first] = genCode(it->second.second, o, topIndent);
+					dfa_map[it->first] = genCode(it->second.second, o, topIndent, it->first);
 				}
 				if (parseMode != Scanner::Rules && dfa_map.find(it->first) != dfa_map.end())
 				{
@@ -686,7 +686,7 @@ void parse(Scanner& i, Output & o)
 			{
 				if (parseMode != Scanner::Reuse)
 				{
-					dfa_map[""] = genCode(spec, o, topIndent);
+					dfa_map[""] = genCode(spec, o, topIndent, "");
 				}
 				if (parseMode != Scanner::Rules && dfa_map.find("") != dfa_map.end())
 				{
