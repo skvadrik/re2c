@@ -66,11 +66,9 @@ void Warn::empty_class (uint32_t line)
 {
 	if (mask[EMPTY_CHARACTER_CLASS] & WARNING)
 	{
-		if (mask[EMPTY_CHARACTER_CLASS] & ERROR)
-		{
-			error_accuml = true;
-		}
-		warning (names[EMPTY_CHARACTER_CLASS], line, "empty character class");
+		const bool e = mask[EMPTY_CHARACTER_CLASS] & ERROR;
+		error_accuml |= e;
+		warning (names[EMPTY_CHARACTER_CLASS], line, e, "empty character class");
 	}
 }
 
@@ -78,11 +76,9 @@ void Warn::match_empty_string (uint32_t line)
 {
 	if (mask[MATCH_EMPTY_STRING] & WARNING)
 	{
-		if (mask[MATCH_EMPTY_STRING] & ERROR)
-		{
-			error_accuml = true;
-		}
-		warning (names[MATCH_EMPTY_STRING], line, "rule matches empty string");
+		const bool e = mask[MATCH_EMPTY_STRING] & ERROR;
+		error_accuml |= e;
+		warning (names[MATCH_EMPTY_STRING], line, e, "rule matches empty string");
 	}
 }
 
@@ -90,10 +86,8 @@ void Warn::naked_default (uint32_t line, const std::vector<std::pair<uint32_t, u
 {
 	if (mask[NAKED_DEFAULT] & WARNING)
 	{
-		if (mask[NAKED_DEFAULT] & ERROR)
-		{
-			error_accuml = true;
-		}
+		const bool e = mask[NAKED_DEFAULT] & ERROR;
+		error_accuml |= e;
 		std::ostringstream cunits;
 		for (uint32_t i = 0; i < stray_cunits.size (); ++i)
 		{
@@ -105,6 +99,7 @@ void Warn::naked_default (uint32_t line, const std::vector<std::pair<uint32_t, u
 		warning
 			( names[NAKED_DEFAULT]
 			, line
+			, e
 			, "naked default case%s%s (stray code units: %s), better add default rule *"
 			, cond_prefix
 			, cond.c_str ()
