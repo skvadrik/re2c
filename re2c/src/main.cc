@@ -32,7 +32,7 @@ int main(int argc, char *argv[])
 	re2c::Input input (opts.source_file);
 	if (!input.open ())
 	{
-		error ("cannot open source file: %s\n", opts.source_file);
+		error ("cannot open source file: %s", opts.source_file);
 		return 1;
 	}
 
@@ -40,17 +40,17 @@ int main(int argc, char *argv[])
 	re2c::Output output (opts.output_file, opts.header_file);
 	if (!output.source.open ())
 	{
-		error ("cannot open output file: %s\n", opts.output_file);
+		error ("cannot open output file: %s", opts.output_file);
 		return 1;
 	}
 	if (tFlag && !output.header.open ())
 	{
-		error ("cannot open header file: %s\n", opts.header_file);
+		error ("cannot open header file: %s", opts.header_file);
 		return 1;
 	}
 	if (flag_skeleton && !output.data.open ())
 	{
-		error ("cannot open data file: %s\n", output.data.file_name.c_str ());
+		error ("cannot open data file: %s", output.data.file_name.c_str ());
 		return 1;
 	}
 
