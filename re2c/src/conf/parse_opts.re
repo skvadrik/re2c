@@ -44,9 +44,9 @@ opt:
 		// all remaining arguments are non-options
 		// so they must be input files
 		// re2c expects exactly one input file
-		if (const char * f = *++argv)
+		for (const char * f = *++argv; f; f = *++argv)
 		{
-			if (!opts.source (f) || *++argv)
+			if (!opts.source (f))
 			{
 				return EXIT_FAIL;
 			}
