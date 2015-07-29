@@ -128,6 +128,7 @@ void Opt::case_inverted ()
 void Opt::skeleton ()
 {
 	flag_skeleton = true;
+	input_api.set (InputAPI::CUSTOM);
 }
 
 void Opt::encoding_policy (Enc::policy_t p)
