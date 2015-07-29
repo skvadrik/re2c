@@ -24,6 +24,11 @@ void error_encoding ()
 	error ("only one of switches -e, -w, -x, -u and -8 must be set");
 }
 
+void error_arg (const char * option)
+{
+	error ("expected argument to option %s", option);
+}
+
 void warning (const char * type, uint32_t line, bool error, const char * fmt, ...)
 {
 	static const char * msg = error ? "error" : "warning";

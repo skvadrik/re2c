@@ -8,6 +8,7 @@ namespace re2c {
 
 void error (const char * fmt, ...) RE2C_GXX_ATTRIBUTE ((format (printf, 1, 2)));
 void error_encoding ();
+void error_arg (const char * option);
 void warning (const char * type, uint32_t line, bool error, const char * fmt, ...) RE2C_GXX_ATTRIBUTE ((format (printf, 4, 5)));
 void usage ();
 void vernum ();

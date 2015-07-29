@@ -57,7 +57,7 @@ enum parse_opts_t
 	EXIT_FAIL
 };
 
-parse_opts_t parse_opts (int argc, char ** argv, Opt & opts);
+parse_opts_t parse_opts (char ** argv, Opt & opts);
 
 } // namespace re2c
 

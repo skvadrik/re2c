@@ -6,14 +6,14 @@
 namespace re2c
 {
 
-parse_opts_t parse_opts (int argc, char ** argv, Opt & opts)
+static inline bool next (char * & arg, char ** & argv)
 {
-	if (argc == 1)
-	{
-		usage ();
-		return EXIT_FAIL;
-	}
+	arg = *++argv;
+	return arg != NULL;
+}
 
+parse_opts_t parse_opts (char ** argv, Opt & opts)
+{
 #define YYCTYPE char
 	YYCTYPE * YYCURSOR;
 	YYCTYPE * YYMARKER;
@@ -27,8 +27,7 @@ parse_opts_t parse_opts (int argc, char ** argv, Opt & opts)
 */
 
 opt:
-	YYCURSOR = *++argv;
-	if (YYCURSOR == NULL)
+	if (!next (YYCURSOR, argv))
 	{
 		goto end;
 	}
@@ -44,7 +43,7 @@ opt:
 		// all remaining arguments are non-options
 		// so they must be input files
 		// re2c expects exactly one input file
-		for (const char * f = *++argv; f; f = *++argv)
+		for (char * f; next (f, argv);)
 		{
 			if (!opts.source (f))
 			{
@@ -106,10 +105,10 @@ opt_short:
 	"w" { if (!opts.wide_chars ()) { error_encoding (); return EXIT_FAIL; } goto opt_short; }
 	"x" { if (!opts.utf_16 ())     { error_encoding (); return EXIT_FAIL; } goto opt_short; }
 	"8" { if (!opts.utf_8 ())      { error_encoding (); return EXIT_FAIL; } goto opt_short; }
-	"o" end { YYCURSOR = *++argv; goto opt_output; }
-	"o"     { *argv = YYCURSOR;   goto opt_output; }
-	"t" end { YYCURSOR = *++argv; goto opt_header; }
-	"t"     { *argv = YYCURSOR;   goto opt_header; }
+	"o" end { if (!next (YYCURSOR, argv)) { error_arg ("-o, --output"); return EXIT_FAIL; } goto opt_output; }
+	"o"     { *argv = YYCURSOR;                                                             goto opt_output; }
+	"t" end { if (!next (YYCURSOR, argv)) { error_arg ("-t, --type-header"); return EXIT_FAIL; } goto opt_header; }
+	"t"     { *argv = YYCURSOR;                                                                  goto opt_header; }
 	"1" { goto opt_short; } // deprecated
 */
 
@@ -142,8 +141,8 @@ opt_long:
 	"wide-chars"         end { if (!opts.wide_chars ()) { error_encoding (); return EXIT_FAIL; } goto opt; }
 	"utf-16"             end { if (!opts.utf_16 ())     { error_encoding (); return EXIT_FAIL; } goto opt; }
 	"utf-8"              end { if (!opts.utf_8 ())      { error_encoding (); return EXIT_FAIL; } goto opt; }
-	"output"             end { YYCURSOR = *++argv; goto opt_output; }
-	"type-header"        end { YYCURSOR = *++argv; goto opt_header; }
+	"output"             end { if (!next (YYCURSOR, argv)) { error_arg ("-o, --output"); return EXIT_FAIL; } goto opt_output; }
+	"type-header"        end { if (!next (YYCURSOR, argv)) { error_arg ("-t, --type-header"); return EXIT_FAIL; } goto opt_header; }
 	"encoding-policy"    end { goto opt_encoding_policy; }
 	"input"              end { goto opt_input; }
 	"empty-class"        end { goto opt_empty_class; }
@@ -171,7 +170,11 @@ opt_header:
 */
 
 opt_encoding_policy:
-	YYCURSOR = *++argv;
+	if (!next (YYCURSOR, argv))
+	{
+		error_arg ("--encoding-policy");
+		return EXIT_FAIL;
+	}
 /*!re2c
 	*
 	{
@@ -184,7 +187,11 @@ opt_encoding_policy:
 */
 
 opt_input:
-	YYCURSOR = *++argv;
+	if (!next (YYCURSOR, argv))
+	{
+		error_arg ("--input");
+		return EXIT_FAIL;
+	}
 /*!re2c
 	*
 	{
@@ -196,7 +203,11 @@ opt_input:
 */
 
 opt_empty_class:
-	YYCURSOR = *++argv;
+	if (!next (YYCURSOR, argv))
+	{
+		error_arg ("--empty-class");
+		return EXIT_FAIL;
+	}
 /*!re2c
 	*
 	{

@@ -18,10 +18,10 @@ free_list<RegExp*> RegExp::vFreeList;
 
 using namespace re2c;
 
-int main(int argc, char *argv[])
+int main(int, char *argv[])
 {
 	Opt opts;
-	switch (parse_opts (argc, argv, opts))
+	switch (parse_opts (argv, opts))
 	{
 		case OK:        break;
 		case EXIT_OK:   return 0;
