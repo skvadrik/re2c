@@ -288,8 +288,8 @@ ScannerState::ScannerState ()
 	, tchar (0)
 	, tline (0)
 	, cline (1)
-	, iscfg (0)
 	, in_parse (false)
+	, lexer_state (LEX_NORMAL)
 {}
 
 ScannerState::ScannerState (const ScannerState & s)
@@ -305,26 +305,13 @@ ScannerState::ScannerState (const ScannerState & s)
 	, tchar (s.tchar)
 	, tline (s.tline)
 	, cline (s.cline)
-	, iscfg (s.iscfg)
 	, in_parse (s.in_parse)
+	, lexer_state (s.lexer_state)
 {}
 
 ScannerState & ScannerState::operator = (const ScannerState & s)
 {
-	tok = s.tok;
-	ptr = s.ptr;
-	cur = s.cur;
-	pos = s.pos;
-	ctx = s.ctx;
-	bot = s.bot;
-	lim = s.lim;
-	top = s.top;
-	eof = s.eof;
-	tchar = s.tchar;
-	tline = s.tline;
-	cline = s.cline;
-	iscfg = s.iscfg;
-	in_parse = s.in_parse;
+	new (this) ScannerState (s);
 	return * this;
 }
 

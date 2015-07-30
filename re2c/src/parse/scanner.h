@@ -17,6 +17,14 @@ namespace re2c
 
 struct ScannerState
 {
+	enum lexer_state_t
+	{
+		LEX_NORMAL,
+		LEX_CONFIG,
+		LEX_CONFIG_VALUE,
+		LEX_FLEX_NAME
+	};
+
 	// positioning
 	char * tok;
 	char * ptr;
@@ -33,9 +41,9 @@ struct ScannerState
 	uint32_t tchar;
 	uint32_t tline;
 	uint32_t cline;
-	uint32_t iscfg;
 
 	bool in_parse;
+	lexer_state_t lexer_state;
 
 	ScannerState ();
 	ScannerState (const ScannerState &);

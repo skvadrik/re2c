@@ -214,14 +214,15 @@ scan:
 	tchar = cursor - pos;
 	tline = cline;
 	tok = cursor;
-	if (iscfg == 1)
+	switch (lexer_state)
 	{
-		goto config;
+		case LEX_NORMAL:       goto start;
+		case LEX_CONFIG:       goto config;
+		case LEX_CONFIG_VALUE: goto value;
+		case LEX_FLEX_NAME:    goto flex_name;
 	}
-	else if (iscfg == 2)
-	{
-		goto value;
-	}
+
+start:
 /*!re2c
 	"{"			{
 					depth = 1;
@@ -364,7 +365,7 @@ scan:
 	config		{
 					cur = cursor;
 					tok += 5; /* skip "re2c:" */
-					iscfg = 1;
+					lexer_state = LEX_CONFIG;
 					yylval.str = new std::string (tok, cur - tok);
 					return CONFIG;
 				}
@@ -372,7 +373,15 @@ scan:
 	name / (space+ [^=>,])	{
 					cur = ptr > tok ? ptr - 1 : cursor;
 					yylval.str = new std::string (tok, cur - tok);
-					return FFlag ? FID : ID;
+					if (FFlag)
+					{
+						lexer_state = LEX_FLEX_NAME;
+						return FID;
+					}
+					else
+					{
+						return ID;
+					}
 				}
 
 	name / (space* [=>,])	{
@@ -428,6 +437,21 @@ scan:
 					fatalf("unexpected character: '%c'", *tok);
 					goto scan;
 				}
+*/
+
+flex_name:
+/*!re2c
+	eol
+	{
+		YYCURSOR = tok;
+		lexer_state = LEX_NORMAL;
+		return FID_END;
+	}
+	*
+	{
+		YYCURSOR = tok;
+		goto start;
+	}
 */
 
 code:
@@ -573,7 +597,7 @@ config:
 					goto config;
 				}
 	"=" space*	{
-					iscfg = 2;
+					lexer_state = LEX_CONFIG_VALUE;
 					cur = cursor;
 					RETURN('=');
 				}
@@ -587,13 +611,13 @@ value:
 	number		{
 					cur = cursor;
 					yylval.number = atoi(std::string (tok, cur - tok).c_str());
-					iscfg = 0;
+					lexer_state = LEX_NORMAL;
 					return NUMBER;
 				}
 	value		{
 					cur = cursor;
 					yylval.str = new std::string (tok, cur - tok);
-					iscfg = 0;
+					lexer_state = LEX_NORMAL;
 					return VALUE;
 				}
 */

@@ -161,9 +161,9 @@ void default_rule(CondList *clist, Token *code)
 };
 
 %token		CLOSESIZE	CLOSE	STAR	NOCOND	ID	CODE	RANGE	STRING
-%token		CONFIG		VALUE	NUMBER	SETUP	FID
+%token		CONFIG		VALUE	NUMBER	SETUP	FID	FID_END
 
-%type	<op>		CLOSE	STAR	SETUP
+%type	<op>		CLOSE	STAR	SETUP	FID_END
 %type	<op>		close
 %type	<extop>		CLOSESIZE
 %type	<token>		CODE
@@ -196,10 +196,7 @@ decl:
 			delete $1;
 			$3->ins_access = RegExp::PRIVATE;
 		}
-	// all the conflicts are caused by the following production
-	// flex-style named definitions
-	// see https://github.com/skvadrik/re2c/issues/115
-	|	FID expr
+	|	FID expr FID_END
 		{
 			if (!symbol_table.insert (std::make_pair (* $1, $2)).second)
 			{
