@@ -243,9 +243,9 @@ void emit_rule (OutputFile & o, uint32_t ind, const State * const s, const RuleO
 		o << input_api.stmt_restorectx (ind);
 	}
 
-	if (rule->code->newcond.length() && condName != rule->code->newcond)
+	if (rule->newcond.length() && condName != rule->newcond)
 	{
-		genSetCondition(o, ind, rule->code->newcond);
+		genSetCondition(o, ind, rule->newcond);
 	}
 
 	if (!yySetupRule.empty() && !rule->code->autogen)
@@ -266,7 +266,7 @@ void emit_rule (OutputFile & o, uint32_t ind, const State * const s, const RuleO
 	}
 	else if (rule->code->autogen)
 	{
-		o << replaceParam(condGoto, condGotoParam, condPrefix + rule->code->newcond);
+		o << replaceParam(condGoto, condGotoParam, condPrefix + rule->newcond);
 	}
 	else
 	{
