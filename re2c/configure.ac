@@ -83,10 +83,6 @@ AC_CHECK_SIZEOF([0ll],       [], [[]])
 AC_CHECK_SIZEOF([0i8],       [], [[]])
 
 
-# checks for library functions
-AC_CHECK_FUNCS([strdup])
-
-
 AC_CONFIG_FILES([\
     Makefile \
     doc/re2c.ad \
