@@ -105,9 +105,9 @@ void setup_rule(CondList *clist, Token *code)
 	{
 		if (ruleSetupMap.find(*it) != ruleSetupMap.end())
 		{
-			in->fatalf_at(code->line, "code to setup rule '%s' is already defined", it->c_str());
+			in->fatalf_at(code->loc.line, "code to setup rule '%s' is already defined", it->c_str());
 		}
-		ruleSetupMap[*it] = std::make_pair(code->line, code->text);
+		ruleSetupMap[*it] = std::make_pair(code->loc.line, code->text);
 	}
 	delete clist;
 	delete code;
@@ -122,7 +122,7 @@ void default_rule(CondList *clist, Token *code)
 	{
 		if (ruleDefaultMap.find(*it) != ruleDefaultMap.end())
 		{
-			in->fatalf_at(code->line, "code to default rule '%s' is already defined", it->c_str());
+			in->fatalf_at(code->loc.line, "code to default rule '%s' is already defined", it->c_str());
 		}
 		ruleDefaultMap[*it] = code;
 	}
@@ -255,7 +255,7 @@ rule:
 	|	'<' STAR '>' expr look newcond CODE
 		{
 			context_check(NULL);
-			Token *token = new Token($7, $7->source, $7->line);
+			Token *token = new Token($7, $7->loc.filename, $7->loc.line);
 			delete $7;
 			specStar.push_back(new RuleOp($4, $5, token, rank_counter.next (), RegExp::PRIVATE, $6));
 			delete $6;
@@ -292,7 +292,7 @@ rule:
 			{
 				in->fatal("code to handle illegal condition already defined");
 			}
-			Token *token = new Token($3, $3->source, $3->line);
+			Token *token = new Token($3, $3->loc.filename, $3->loc.line);
 			delete $3;
 			$$ = specNone = new RuleOp(new NullOp(), new NullOp(), token, rank_counter.next (), RegExp::SHARED, $2);
 			delete $2;

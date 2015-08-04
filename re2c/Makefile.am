@@ -52,6 +52,7 @@ SRC_HDR = \
 	src/globals.h \
 	src/parse/extop.h \
 	src/parse/input.h \
+	src/parse/loc.h \
 	src/parse/parser.h \
 	src/parse/scanner.h \
 	src/parse/token.h \

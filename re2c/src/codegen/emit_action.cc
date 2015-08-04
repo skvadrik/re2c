@@ -233,7 +233,7 @@ void emit_rule (OutputFile & o, uint32_t ind, const State * const s, const RuleO
 {
 	if (DFlag)
 	{
-		o << s->label << " [label=\"" << rule->code->source << ":" << rule->code->line << "\"]\n";
+		o << s->label << " [label=\"" << rule->code->loc.filename << ":" << rule->code->loc.line << "\"]\n";
 		return;
 	}
 
@@ -253,7 +253,7 @@ void emit_rule (OutputFile & o, uint32_t ind, const State * const s, const RuleO
 		o << indent(ind) << yySetupRule << "\n";
 	}
 
-	o.write_line_info (rule->code->line, rule->code->source.c_str ());
+	o.write_line_info (rule->code->loc.line, rule->code->loc.filename.c_str ());
 	o << indent(ind);
 	if (flag_skeleton)
 	{
