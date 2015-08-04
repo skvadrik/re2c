@@ -11,11 +11,10 @@ namespace re2c {
 
 class RegExp; // forward
 
-class RangeSuffix
+struct RangeSuffix
 {
 	static free_list<RangeSuffix *> freeList;
 
-public:
 	uint32_t l;
 	uint32_t h;
 	RangeSuffix * next;

@@ -9,6 +9,7 @@
 
 #include "config.h"
 #include "src/ir/bytecode/bytecode.h"
+#include "src/ir/regexp/encoding/range_suffix.h"
 #include "src/ir/regexp/regexp_cat.h"
 #include "src/ir/regexp/regexp_close.h"
 #include "src/ir/regexp/regexp_closev.h"
@@ -712,6 +713,7 @@ void parse_cleanup()
 {
 	RegExp::vFreeList.clear();
 	Range::vFreeList.clear();
+	RangeSuffix::freeList.clear();
 	symbol_table.clear ();
 	specMap.clear();
 	specStar.clear();

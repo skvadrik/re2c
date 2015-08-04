@@ -12,7 +12,6 @@ bool bWroteGetState = false;
 bool bWroteCondCheck = false;
 uint32_t last_fill_index = 0;
 CodeNames mapCodeName;
-free_list<RegExp*> RegExp::vFreeList;
 
 } // end namespace re2c
 

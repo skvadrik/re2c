@@ -13,6 +13,8 @@ namespace re2c
 
 static MatchOp * merge (MatchOp * m1, MatchOp * m2);
 
+free_list<RegExp*> RegExp::vFreeList;
+
 RegExp * doAlt (RegExp * e1, RegExp * e2)
 {
 	if (!e1)
