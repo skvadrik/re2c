@@ -233,7 +233,7 @@ void emit_rule (OutputFile & o, uint32_t ind, const State * const s, const RuleO
 {
 	if (DFlag)
 	{
-		o << s->label << " [label=\"" << rule->code->loc.filename << ":" << rule->code->loc.line << "\"]\n";
+		o << s->label << " [label=\"" << rule->code.loc.filename << ":" << rule->code.loc.line << "\"]\n";
 		return;
 	}
 
@@ -243,37 +243,39 @@ void emit_rule (OutputFile & o, uint32_t ind, const State * const s, const RuleO
 		o << input_api.stmt_restorectx (ind);
 	}
 
-	if (rule->newcond.length() && condName != rule->newcond)
-	{
-		genSetCondition(o, ind, rule->newcond);
-	}
-
-	if (!yySetupRule.empty() && !rule->code->autogen)
-	{
-		o << indent(ind) << yySetupRule << "\n";
-	}
-
-	o.write_line_info (rule->code->loc.line, rule->code->loc.filename.c_str ());
-	o << indent(ind);
 	if (flag_skeleton)
 	{
-		o << "{ if (cursor == &data[result[i].endpos] && result[i].rule == " << rule->rank << ") ";
-		o << "{ cursor = &data[result[i].startpos]; continue; }";
-		o << " else ";
-		o << "{ printf (\"error: %lu/%u, %u/%u, '%s'\\n\", cursor - data, result[i].endpos, result[i].rule, "
+		o << indent (ind)
+			<< "{ if (cursor == &data[result[i].endpos] && result[i].rule == " << rule->rank << ") "
+			<< "{ cursor = &data[result[i].startpos]; continue; }"
+			<< " else "
+			<< "{ printf (\"error: %lu/%u, %u/%u, '%s'\\n\", cursor - data, result[i].endpos, result[i].rule, "
 			<< rule->rank
-			<< ", &data[result[i].startpos]); return 1; } }";
-	}
-	else if (rule->code->autogen)
-	{
-		o << replaceParam(condGoto, condGotoParam, condPrefix + rule->newcond);
+			<< ", &data[result[i].startpos]); return 1; } }\n";
 	}
 	else
 	{
-		o << rule->code->text;
+		if (rule->newcond.length() && condName != rule->newcond)
+		{
+			genSetCondition(o, ind, rule->newcond);
+		}
+
+		const bool autogen = rule->code.text.empty ();
+		if (autogen)
+		{
+			o << indent (ind) << replaceParam(condGoto, condGotoParam, condPrefix + rule->newcond) << "\n";
+		}
+		else
+		{
+			if (!yySetupRule.empty ())
+			{
+				o << indent(ind) << yySetupRule << "\n";
+			}
+			o.write_line_info (rule->code.loc.line, rule->code.loc.filename.c_str ());
+			o << indent (ind) << rule->code.text << "\n";
+			o.insert_line_info ();
+		}
 	}
-	o << "\n";
-	o.insert_line_info ();
 }
 
 void need (OutputFile & o, uint32_t ind, bool & readCh, uint32_t n, bool bSetMarker)

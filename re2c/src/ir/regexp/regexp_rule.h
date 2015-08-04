@@ -5,7 +5,7 @@
 
 #include "src/ir/regexp/regexp.h"
 #include "src/ir/rule_rank.h"
-#include "src/parse/token.h"
+#include "src/parse/code.h"
 
 namespace re2c
 {
@@ -18,10 +18,10 @@ public:
 	RegExp * ctx;
 	Ins * ins;
 	rule_rank_t rank;
-	Token * code;
+	const Code & code;
 	const std::string newcond;
 
-	inline RuleOp (RegExp * e, RegExp * c, Token * t, rule_rank_t r, InsAccess access, const std::string * n)
+	inline RuleOp (RegExp * e, RegExp * c, const Code & t, rule_rank_t r, InsAccess access, const std::string * n)
 		: exp (e)
 		, ctx (c)
 		, ins (NULL)
@@ -30,10 +30,6 @@ public:
 		, newcond (n ? *n : "")
 	{
 		ins_access = access;
-	}
-	inline ~RuleOp ()
-	{
-		delete code;
 	}
 	void display (std::ostream & o) const;
 	void split (CharSet &);

@@ -464,7 +464,7 @@ code:
 					else if (--depth == 0)
 					{
 						cur = cursor;
-						yylval.token = new Token(tok, cur - tok, get_fname (), tline);
+						yylval.code = new Code (tok, cur - tok, get_fname (), tline);
 						return CODE;
 					}
 					goto code;
@@ -506,7 +506,7 @@ code:
 						{
 							--cur;
 						}
-						yylval.token = new Token(tok, cur - tok, get_fname (), tline);
+						yylval.code = new Code (tok, cur - tok, get_fname (), tline);
 						return CODE;
 					}
 					else if (cursor == eof)

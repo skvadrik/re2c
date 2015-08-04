@@ -257,7 +257,7 @@ void DFA::prepare(OutputFile & o, uint32_t & max_fill, const std::string & cond)
 	// warn about not shadowed rule that matches empty string
 	if (empty_rule && !stray_cunits.empty ())
 	{
-		warn.match_empty_string (head->rule->code->loc.line);
+		warn.match_empty_string (head->rule->code.loc.line);
 	}
 
 	// split ``base'' states into two parts

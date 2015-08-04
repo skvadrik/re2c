@@ -50,12 +50,12 @@ SRC_HDR = \
 	src/ir/regexp/regexp_close.h \
 	src/ir/rule_rank.h \
 	src/globals.h \
+	src/parse/code.h \
 	src/parse/extop.h \
 	src/parse/input.h \
 	src/parse/loc.h \
 	src/parse/parser.h \
 	src/parse/scanner.h \
-	src/parse/token.h \
 	src/util/allocate.h \
 	src/util/attribute.h \
 	src/util/c99_stdint.h \
@@ -109,6 +109,7 @@ SRC = \
 	src/ir/regexp/regexp.cc \
 	src/ir/rule_rank.cc \
 	src/main.cc \
+	src/parse/code.cc \
 	src/parse/input.cc \
 	src/parse/scanner.cc \
 	src/parse/unescape.cc \
