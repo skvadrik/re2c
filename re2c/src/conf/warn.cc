@@ -46,7 +46,8 @@ void Warn::set (type_t t, option_t o)
 			mask[t] &= ~WARNING;
 			break;
 		case WERROR:
-			mask[t] |= ERROR;
+			// unlike -Werror, -Werror-<warning> implies -W<warning>
+			mask[t] |= (WARNING | ERROR);
 			break;
 		case WNOERROR:
 			mask[t] &= ~ERROR;
@@ -54,11 +55,21 @@ void Warn::set (type_t t, option_t o)
 	}
 }
 
-void Warn::set_all (option_t o)
+void Warn::set_all ()
 {
 	for (uint32_t i = 0; i < TYPES; ++i)
 	{
-		set (static_cast<type_t> (i), o);
+		mask[i] |= WARNING;
+	}
+}
+
+// -Werror doesn't set any warnings: it only guarantees that if a warning
+// has been set by now or will be set later then it will result into error.
+void Warn::set_all_error ()
+{
+	for (uint32_t i = 0; i < TYPES; ++i)
+	{
+		mask[i] |= ERROR;
 	}
 }
 

@@ -59,8 +59,8 @@ opt:
 	"-"  { goto opt_short; }
 	"--" { goto opt_long; }
 
-	"-W"      end { warn.set_all (Warn::W);      goto opt; }
-	"-Werror" end { warn.set_all (Warn::WERROR); goto opt; }
+	"-W"      end { warn.set_all ();       goto opt; }
+	"-Werror" end { warn.set_all_error (); goto opt; }
 	"-W"          { option = Warn::W;        goto opt_warn; }
 	"-Wno-"       { option = Warn::WNO;      goto opt_warn; }
 	"-Werror-"    { option = Warn::WERROR;   goto opt_warn; }
