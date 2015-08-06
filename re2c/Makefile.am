@@ -2,7 +2,7 @@
 # do *not* add CXXFLAGS here, add them in configure.ac
 AM_CXXFLAGS = $(CXXFLAGSDEFAULT)
 BISONFLAGS = -y -d --no-lines
-RE2CFLAGS = -bi
+RE2CFLAGS = -b
 
 # binary
 bin_PROGRAMS = re2c
