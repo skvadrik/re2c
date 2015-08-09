@@ -9,8 +9,8 @@ namespace re2c {
  */
 void UTF8addContinuous(RangeSuffix * & root, utf8::rune l, utf8::rune h, uint32_t n)
 {
-	uint8_t cl[utf8::MAX_RUNE_LENGTH];
-	uint8_t ch[utf8::MAX_RUNE_LENGTH];
+	uint32_t cl[utf8::MAX_RUNE_LENGTH];
+	uint32_t ch[utf8::MAX_RUNE_LENGTH];
 	utf8::rune_to_bytes(cl, l);
 	utf8::rune_to_bytes(ch, h);
 

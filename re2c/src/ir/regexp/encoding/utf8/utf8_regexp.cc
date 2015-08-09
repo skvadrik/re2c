@@ -8,7 +8,7 @@ namespace re2c {
 
 RegExp * UTF8Symbol(utf8::rune r)
 {
-	uint8_t chars[utf8::MAX_RUNE_LENGTH];
+	uint32_t chars[utf8::MAX_RUNE_LENGTH];
 	const int chars_count = utf8::rune_to_bytes(chars, r);
 	RegExp * re = new MatchOp(Range::sym (chars[0]));
 	for (int i = 1; i < chars_count; ++i)

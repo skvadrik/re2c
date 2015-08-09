@@ -10,34 +10,36 @@ class utf8
 public:
 	typedef uint32_t rune;
 
-	enum	{ MAX_RUNE_LENGTH = 4 /* maximum characters per rune */
+	// maximum characters per rune
+	// enum instead of static const member because of [-Wvla]
+	enum { MAX_RUNE_LENGTH = 4u };
 
-		, ERROR = 0xFFFD /* decoding error */
+	// decoding error
+	static const uint32_t ERROR;
 
-		/* maximal runes for each rune length */
-		, MAX_1BYTE_RUNE = 0x7F
-		, MAX_2BYTE_RUNE = 0x7FF
-		, MAX_3BYTE_RUNE = 0xFFFF
-		, MAX_4BYTE_RUNE = 0x10FFFF
-		, MAX_RUNE       = MAX_4BYTE_RUNE
+	// maximal runes for each rune length
+	static const rune MAX_1BYTE_RUNE;
+	static const rune MAX_2BYTE_RUNE;
+	static const rune MAX_3BYTE_RUNE;
+	static const rune MAX_4BYTE_RUNE;
+	static const rune MAX_RUNE;
 
-		, PREFIX_1BYTE = 0    /* 0000 0000 */
-		, INFIX        = 0x80 /* 1000 0000 */
-		, PREFIX_2BYTE = 0xC0 /* 1100 0000 */
-		, PREFIX_3BYTE = 0xE0 /* 1110 0000 */
-		, PREFIX_4BYTE = 0xF0 /* 1111 0000 */
+	static const uint32_t PREFIX_1BYTE;
+	static const uint32_t INFIX;
+	static const uint32_t PREFIX_2BYTE;
+	static const uint32_t PREFIX_3BYTE;
+	static const uint32_t PREFIX_4BYTE;
 
-		, SHIFT = 6
-		, MASK = 0x3F /* 0011 1111 */
-		};
+	static const uint32_t SHIFT;
+	static const uint32_t MASK;
 
-	/* UTF-8 bytestring for given Unicode rune */
-	static uint32_t rune_to_bytes(uint8_t * s, rune r);
+	// UTF-8 bytestring for given Unicode rune
+	static uint32_t rune_to_bytes(uint32_t * s, rune r);
 
-	/* length of UTF-8 bytestring for given Unicode rune */
+	// length of UTF-8 bytestring for given Unicode rune
 	static uint32_t rune_length(rune r);
 
-	/* maximal Unicode rune with given length of UTF-8 bytestring */
+	// maximal Unicode rune with given length of UTF-8 bytestring
 	static rune max_rune(uint32_t i);
 };
 

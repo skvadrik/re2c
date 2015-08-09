@@ -6,7 +6,7 @@ namespace re2c {
 /*
  * Add word range [w1-w2].
  */
-void UTF16addContinuous1(RangeSuffix * & root, uint16_t l, uint16_t h)
+void UTF16addContinuous1(RangeSuffix * & root, uint32_t l, uint32_t h)
 {
 	RangeSuffix ** p = &root;
 	for (;;)
@@ -29,7 +29,7 @@ void UTF16addContinuous1(RangeSuffix * & root, uint16_t l, uint16_t h)
  * Now that we have catenation of word ranges [l1-h1],[l2-h2],
  * we want to add it to existing range, merging suffixes on the fly.
  */
-void UTF16addContinuous2(RangeSuffix * & root, uint16_t l_ld, uint16_t h_ld, uint16_t l_tr, uint16_t h_tr)
+void UTF16addContinuous2(RangeSuffix * & root, uint32_t l_ld, uint32_t h_ld, uint32_t l_tr, uint32_t h_tr)
 {
 	RangeSuffix ** p = &root;
 	for (;;)
@@ -90,7 +90,7 @@ void UTF16addContinuous2(RangeSuffix * & root, uint16_t l_ld, uint16_t h_ld, uin
  * and represents original range as alternation of continuous
  * sub-ranges.
  */
-void UTF16splitByContinuity(RangeSuffix * & root, uint16_t l_ld, uint16_t h_ld, uint16_t l_tr, uint16_t h_tr)
+void UTF16splitByContinuity(RangeSuffix * & root, uint32_t l_ld, uint32_t h_ld, uint32_t l_tr, uint32_t h_tr)
 {
 	if (l_ld != h_ld)
 	{
@@ -120,21 +120,25 @@ void UTF16splitByContinuity(RangeSuffix * & root, uint16_t l_ld, uint16_t h_ld, 
 void UTF16splitByRuneLength(RangeSuffix * & root, utf16::rune l, utf16::rune h)
 {
 	if (l <= utf16::MAX_1WORD_RUNE)
+	{
 		if (h <= utf16::MAX_1WORD_RUNE)
+		{
 			UTF16addContinuous1(root, l, h);
+		}
 		else
 		{
 			UTF16addContinuous1(root, l, utf16::MAX_1WORD_RUNE);
-			const uint16_t h_ld = utf16::lead_surr(h);
-			const uint16_t h_tr = utf16::trail_surr(h);
+			const uint32_t h_ld = utf16::lead_surr(h);
+			const uint32_t h_tr = utf16::trail_surr(h);
 			UTF16splitByContinuity(root, utf16::MIN_LEAD_SURR, h_ld, utf16::MIN_TRAIL_SURR, h_tr);
 		}
+	}
 	else
 	{
-			const uint16_t l_ld = utf16::lead_surr(l);
-			const uint16_t l_tr = utf16::trail_surr(l);
-			const uint16_t h_ld = utf16::lead_surr(h);
-			const uint16_t h_tr = utf16::trail_surr(h);
+			const uint32_t l_ld = utf16::lead_surr(l);
+			const uint32_t l_tr = utf16::trail_surr(l);
+			const uint32_t h_ld = utf16::lead_surr(h);
+			const uint32_t h_tr = utf16::trail_surr(h);
 			UTF16splitByContinuity(root, l_ld, h_ld, l_tr, h_tr);
 	}
 }
