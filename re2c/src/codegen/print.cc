@@ -6,11 +6,6 @@
 namespace re2c
 {
 
-char octCh(uint32_t c)
-{
-	return '0' + c % 8;
-}
-
 char hexCh(uint32_t c)
 {
 	static const char * sHex = "0123456789ABCDEF";
@@ -65,15 +60,7 @@ void prtHex(std::ostream& o, uint32_t c)
 
 void prtCh(std::ostream& o, uint32_t c)
 {
-	if (encoding.is(Enc::EBCDIC))
-	{
-		prtHex(o, c);
-		return;
-	}
-
-	int oc = (int)(c);
-
-	switch (oc)
+	switch (c)
 	{
 		case '\'':
 		o << (DFlag ? "'" : "\\'");
@@ -116,33 +103,8 @@ void prtCh(std::ostream& o, uint32_t c)
 		break;
 
 		default:
-
-		if ((oc < 256) && isprint(oc))
-		{
-			o << (char) oc;
-		}
-		else if (encoding.szCodeUnit() == 4)
-		{
-			o << "0x"
-			  << hexCh(oc >> 20)
-			  << hexCh(oc >> 16)
-			  << hexCh(oc >> 12)
-			  << hexCh(oc >>  8)
-			  << hexCh(oc >>  4)
-			  << hexCh(oc);
-		}
-		else if (encoding.szCodeUnit() == 2)
-		{
-			o << "0x"
-			  << hexCh(oc >> 12)
-			  << hexCh(oc >>  8)
-			  << hexCh(oc >>  4)
-			  << hexCh(oc);
-		}
-		else
-		{
-			o << '\\' << octCh(oc / 64) << octCh(oc / 8) << octCh(oc);
-		}
+		o << static_cast<char> (c);
+		break;
 	}
 }
 
