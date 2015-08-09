@@ -67,6 +67,7 @@ SRC_HDR = \
 	src/util/smart_ptr.h \
 	src/util/static_assert.h \
 	src/util/substr.h \
+	src/util/u32lim.h \
 	src/util/uniq_vector.h \
 	src/util/wrap_iterator.h
 SRC = \

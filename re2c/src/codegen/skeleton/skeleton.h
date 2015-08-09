@@ -8,6 +8,7 @@
 #include "src/util/c99_stdint.h"
 #include "src/util/forbid_copy.h"
 #include "src/util/local_increment.h"
+#include "src/util/u32lim.h"
 #include "src/util/wrap_iterator.h"
 
 namespace re2c
@@ -15,6 +16,9 @@ namespace re2c
 
 namespace skeleton
 {
+
+static const uint32_t ARC_LIMIT = 1024 * 1024 * 1024; // ~1Gb
+typedef u32lim_t<ARC_LIMIT> arccount_t;
 
 struct Node
 {
@@ -34,15 +38,15 @@ struct Node
 	rule_rank_t rule;
 
 	// stuff for constructing path cover (for large graphs)
-	static const uint32_t UNKNOWN_LEN;
-	uint32_t path_len;
+	bool path_len_init;
+	arccount_t path_len;
 	Path * path;
 
 	Node (const State * s, const s2n_map & s2n);
 	~Node ();
 	bool end () const;
-	uint32_t estimate_size_all (uint32_t inarcs, uint32_t len);
-	uint32_t estimate_size_cover (uint32_t inarcs, uint32_t len);
+	arccount_t estimate_size_all (arccount_t inarcs, arccount_t len);
+	arccount_t estimate_size_cover (arccount_t inarcs, arccount_t len);
 	void generate_paths_all (const std::vector<Path> & prefixes, std::vector<Path> & results);
 	void generate_paths_cover (const std::vector<Path> & prefixes, std::vector<Path> & results);
 
@@ -51,8 +55,6 @@ struct Node
 
 struct Skeleton
 {
-	static const uint32_t DATA_LIMIT;
-
 	Node * nodes;
 
 	Skeleton (const DFA & dfa);

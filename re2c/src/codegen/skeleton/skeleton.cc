@@ -10,13 +10,12 @@ namespace re2c
 namespace skeleton
 {
 
-const uint32_t Node::UNKNOWN_LEN = 0xFFFFffff;
-
 Node::Node (const State * s, const s2n_map & s2n)
 	: arcs ()
 	, loop (0)
 	, rule (rule_rank_t::none ())
-	, path_len (UNKNOWN_LEN)
+	, path_len_init (false)
+	, path_len (0u)
 	, path (NULL)
 {
 	const bool is_accepting = s && s->rule;
@@ -28,7 +27,7 @@ Node::Node (const State * s, const s2n_map & s2n)
 	const bool is_final = !s || (s->go.nSpans == 1 && !s->go.span[0].to);
 	if (is_final)
 	{
-		path_len = 0;
+		path_len_init = true;
 		path = new Path (Path::chars_t (), 0, rule);
 	}
 	else
@@ -58,76 +57,83 @@ bool Node::end () const
 	return arcs.size () == 0;
 }
 
-uint32_t Node::estimate_size_all (uint32_t inarcs, uint32_t len)
+arccount_t Node::estimate_size_all (arccount_t wid, arccount_t len)
 {
 	if (end ())
 	{
-		return inarcs * len;
+		return wid * len;
 	}
 	else if (loop < 2)
 	{
 		local_inc _ (loop);
-		uint64_t result = 0;
+		arccount_t size (0u);
 		for (arcs_t::iterator i = arcs.begin (); i != arcs.end (); ++i)
 		{
-			const uint64_t outarcs = i->second.size () * inarcs;
-			if (outarcs >= Skeleton::DATA_LIMIT)
+			const arccount_t new_wid = wid * arccount_t (i->second.size ());
+			const arccount_t new_len = len + arccount_t (1u);
+			if (new_wid.overflow () || new_len.overflow ())
 			{
-				return Skeleton::DATA_LIMIT;
+				return arccount_t::limit ();
 			}
-			result += i->first->estimate_size_all (outarcs, len + 1);
-			if (result >= Skeleton::DATA_LIMIT)
+			size = size + i->first->estimate_size_all (new_wid, new_len);
+			if (size.overflow ())
 			{
-				return Skeleton::DATA_LIMIT;
+				return arccount_t::limit ();
 			}
 		}
-		return result;
+		return size;
 	}
 	else
 	{
-		return 0;
+		return arccount_t (0u);
 	}
 }
 
-uint32_t Node::estimate_size_cover (uint32_t inarcs, uint32_t len)
+arccount_t Node::estimate_size_cover (arccount_t wid, arccount_t len)
 {
-	if (path_len != UNKNOWN_LEN)
+	if (path_len_init)
 	{
-		return inarcs * (len + path_len);
+		return wid * (len + path_len);
 	}
 	else if (loop < 2)
 	{
 		local_inc _ (loop);
-		uint64_t result = 0;
-		uint32_t in = 0;
-		for (wrap_iter i (arcs); !i.end () || in < inarcs; ++i)
+		arccount_t size (0u);
+		arccount_t w (0u);
+		for (wrap_iter i (arcs); !i.end () || w < wid; ++i)
 		{
-			const uint32_t outarcs = i->second.size ();
-			in += outarcs;
-			const uint32_t size = i->first->estimate_size_cover (outarcs, len + 1);
-			if (size != 0 && path_len == UNKNOWN_LEN)
+			const arccount_t new_wid = arccount_t (i->second.size ());
+			const arccount_t new_len = len + arccount_t (1u);
+			if (new_wid.overflow () || new_len.overflow ())
 			{
-				path_len = i->first->path_len + 1;
+				return arccount_t::limit ();
 			}
-			result += size;
-			if (result > Skeleton::DATA_LIMIT)
+			size = size + i->first->estimate_size_cover (new_wid, new_len);
+			if (size.overflow ())
 			{
-				return Skeleton::DATA_LIMIT;
+				return arccount_t::limit ();
 			}
+			if (!path_len_init && i->first->path_len_init)
+			{
+				path_len_init = true;
+				path_len = i->first->path_len + arccount_t (1u);
+			}
+			w = w + new_wid;
 		}
-		return result;
+		return size;
 	}
 	else
 	{
-		return 0;
+		return arccount_t (0u);
 	}
 }
 
 void Node::generate_paths_all (const std::vector<Path> & prefixes, std::vector<Path> & results)
 {
+	const size_t wid = prefixes.size ();
 	if (end ())
 	{
-		for (uint32_t i = 0; i < prefixes.size (); ++i)
+		for (size_t i = 0; i < wid; ++i)
 		{
 			results.push_back (prefixes[i]);
 			results.back ().update (rule);
@@ -136,13 +142,13 @@ void Node::generate_paths_all (const std::vector<Path> & prefixes, std::vector<P
 	else if (loop < 2)
 	{
 		local_inc _ (loop);
-		const uint32_t inarcs = prefixes.size ();
 		for (arcs_t::iterator i = arcs.begin (); i != arcs.end (); ++i)
 		{
 			std::vector<Path> zs;
-			for (uint32_t j = 0; j < inarcs; ++j)
+			for (size_t j = 0; j < wid; ++j)
 			{
-				for (uint32_t k = 0; k < i->second.size (); ++k)
+				const size_t new_wid = i->second.size ();
+				for (size_t k = 0; k < new_wid; ++k)
 				{
 					zs.push_back (prefixes[j]);
 					zs.back ().extend (rule, i->second[k]);
@@ -155,9 +161,10 @@ void Node::generate_paths_all (const std::vector<Path> & prefixes, std::vector<P
 
 void Node::generate_paths_cover (const std::vector<Path> & prefixes, std::vector<Path> & results)
 {
+	const size_t wid = prefixes.size ();
 	if (path != NULL)
 	{
-		for (uint32_t i = 0; i < prefixes.size (); ++i)
+		for (size_t i = 0; i < wid; ++i)
 		{
 			results.push_back (prefixes[i]);
 			results.back ().append (path);
@@ -166,14 +173,14 @@ void Node::generate_paths_cover (const std::vector<Path> & prefixes, std::vector
 	else if (loop < 2)
 	{
 		local_inc _ (loop);
-		const uint32_t inarcs = prefixes.size ();
-		uint32_t in = 0;
-		for (wrap_iter i (arcs); !i.end () || in < inarcs; ++i)
+		size_t w = 0;
+		for (wrap_iter i (arcs); !i.end () || w < wid; ++i)
 		{
 			std::vector<Path> zs;
-			for (uint32_t j = 0; j < i->second.size (); ++j, ++in)
+			const size_t new_wid = i->second.size ();
+			for (size_t j = 0; j < new_wid; ++j, ++w)
 			{
-				zs.push_back (prefixes[in % inarcs]);
+				zs.push_back (prefixes[w % wid]);
 				zs[j].extend (rule, i->second[j]);
 			}
 			i->first->generate_paths_cover (zs, results);
@@ -185,8 +192,6 @@ void Node::generate_paths_cover (const std::vector<Path> & prefixes, std::vector
 		}
 	}
 }
-
-const uint32_t Skeleton::DATA_LIMIT = 1024 * 1024 * 1024; // 1Gb
 
 Skeleton::Skeleton (const DFA & dfa)
 	// +1 for default DFA state (NULL)
@@ -222,9 +227,9 @@ void Skeleton::generate_paths (std::vector<Path> & results)
 	std::vector<Path> prefixes;
 	prefixes.push_back (Path (Path::chars_t (), 0, rule_rank_t::none ()));
 
-	if (nodes->estimate_size_all (1, 0) == DATA_LIMIT)
+	if (nodes->estimate_size_all (arccount_t (1u), arccount_t (0u)).overflow ())
 	{
-		if (nodes->estimate_size_cover (1, 0) == DATA_LIMIT)
+		if (nodes->estimate_size_cover (arccount_t (1u), arccount_t (0u)).overflow ())
 		{
 			fprintf (stderr, "re2c: generating too much data\n");
 		}
@@ -271,20 +276,21 @@ void Skeleton::emit_data (DataFile & o)
 	std::vector<Path> ys;
 	generate_paths (ys);
 
-	const uint32_t count = ys.size ();
+	const size_t count = ys.size ();
 
-	uint32_t max_len = 0;
-	for (uint32_t i = 0; i < count; ++i)
+	size_t max_len = 0;
+	for (size_t i = 0; i < count; ++i)
 	{
 		if (max_len < ys[i].chars.size ())
 		{
 			max_len = ys[i].chars.size ();
 		}
 	}
-	for (uint32_t i = 0; i < count; ++i)
+	for (size_t i = 0; i < count; ++i)
 	{
 		o.file << indent (ind + 1);
-		for (uint32_t j = 0 ; j < ys[i].chars.size (); ++j)
+		const size_t len = ys[i].chars.size ();
+		for (size_t j = 0 ; j < len; ++j)
 		{
 			prtChOrHex (o.file, ys[i].chars[j]);
 			o.file << ",";
@@ -292,7 +298,7 @@ void Skeleton::emit_data (DataFile & o)
 		o.file << "\n";
 	}
 	o.file << indent (ind + 1);
-	for (uint32_t j = 0 ; j < max_len; ++j) // pad with YMAXFILL zeroes
+	for (size_t j = 0 ; j < max_len; ++j) // pad with YMAXFILL zeroes
 	{
 		o.file << "0,";
 	}
@@ -302,7 +308,7 @@ void Skeleton::emit_data (DataFile & o)
 
 	o.file << indent (ind) << "const unsigned int count = " << count << ";\n";
 
-	uint32_t pos = 0;
+	size_t pos = 0;
 	o.file << indent (ind) << "struct Result {\n";
 	o.file << indent (ind + 1) << "unsigned int endpos;\n";
 	o.file << indent (ind + 1) << "unsigned int startpos;\n";
@@ -311,10 +317,11 @@ void Skeleton::emit_data (DataFile & o)
 	o.file << indent (ind) << "};\n";
 	o.file << indent (ind) << "Result result [] =\n";
 	o.file << indent (ind) << "{\n";
-	for (uint32_t i = 0; i < count; ++i)
+	for (size_t i = 0; i < count; ++i)
 	{
-		o.file << indent (ind + 1) << "Result (" << pos + ys[i].length << "," << pos + ys[i].chars.size () << "," << ys[i].rule << "),\n";
-		pos += ys[i].chars.size ();
+		const size_t new_pos = pos + ys[i].chars.size ();
+		o.file << indent (ind + 1) << "Result (" << pos + ys[i].length << "," << new_pos << "," << ys[i].rule << "),\n";
+		pos = new_pos;
 	}
 	o.file << indent (ind) << "};\n";
 
