@@ -182,7 +182,7 @@ void Scanner::config(const std::string & cfg, const std::string & val)
 
 	std::string strVal;
 
-	const uint32_t val_len = val.size ();
+	const size_t val_len = val.size ();
 	if (val_len >= 2 && val[0] == val[val_len - 1]
 		&& (val[0] == '"' || val[0] == '\''))
 	{
@@ -325,7 +325,7 @@ char *Scanner::fill(char *cursor, uint32_t need)
 {
 	if(!eof)
 	{
-		uint32_t cnt;
+		ptrdiff_t cnt;
 		/* Do not get rid of anything when rFlag is active. Otherwise
 		 * get rid of everything that was already handedout. */
 		if (!rFlag)
@@ -384,7 +384,7 @@ void Scanner::set_in_parse(bool new_in_parse)
 	in_parse = new_in_parse;
 }
 
-void Scanner::fatal_at(uint32_t line, uint32_t ofs, const char *msg) const
+void Scanner::fatal_at(uint32_t line, ptrdiff_t ofs, const char *msg) const
 {
 	std::cerr << "re2c: error: "
 		<< "line " << line << ", column " << (tchar + ofs + 1) << ": "
@@ -392,7 +392,7 @@ void Scanner::fatal_at(uint32_t line, uint32_t ofs, const char *msg) const
 	exit(1);
 }
 
-void Scanner::fatal(uint32_t ofs, const char *msg) const
+void Scanner::fatal(ptrdiff_t ofs, const char *msg) const
 {
 	fatal_at(in_parse ? tline : cline, ofs, msg);
 }
@@ -446,7 +446,7 @@ void Scanner::reuse()
 
 void Scanner::restore_state(const ScannerState& state)
 {
-	int diff = bot - state.bot;
+	ptrdiff_t diff = bot - state.bot;
 	char *old_bot = bot;
 	char *old_lim = lim;
 	char *old_top = top;

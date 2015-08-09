@@ -38,7 +38,7 @@ struct ScannerState
 	char * top;
 	char * eof;
 
-	uint32_t tchar;
+	ptrdiff_t tchar;
 	uint32_t tline;
 	uint32_t cline;
 
@@ -83,11 +83,11 @@ public:
 	uint32_t get_line() const;
 	const std::string & get_fname () const;
 	void set_in_parse(bool new_in_parse);
-	void fatal_at(uint32_t line, uint32_t ofs, const char *msg) const;
+	void fatal_at(uint32_t line, ptrdiff_t ofs, const char *msg) const;
 	void fatalf_at(uint32_t line, const char*, ...) const RE2C_GXX_ATTRIBUTE ((format (printf, 3, 4)));
 	void fatalf(const char*, ...) const RE2C_GXX_ATTRIBUTE ((format (printf, 2, 3)));
 	void fatal(const char*) const;
-	void fatal(uint32_t, const char*) const;
+	void fatal(ptrdiff_t, const char*) const;
 
 	void config(const std::string &, int);
 	void config(const std::string &, const std::string &);
