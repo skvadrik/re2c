@@ -17,10 +17,10 @@ struct Path
 	typedef std::vector<uint32_t> chars_t;
 
 	chars_t chars;
-	uint32_t length;
+	size_t length;
 	rule_rank_t rule;
 
-	Path (const chars_t & cs, uint32_t l, rule_rank_t r);
+	Path (const chars_t & cs, size_t l, rule_rank_t r);
 	void update (rule_rank_t r);
 	void extend (rule_rank_t r, uint32_t c);
 	void append (const Path * p);

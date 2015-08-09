@@ -6,7 +6,7 @@ namespace re2c
 namespace skeleton
 {
 
-Path::Path (const chars_t & cs, uint32_t l, rule_rank_t r)
+Path::Path (const chars_t & cs, size_t l, rule_rank_t r)
 	: chars (cs)
 	, length (l)
 	, rule (r)
@@ -34,7 +34,8 @@ void Path::append (const Path * p)
 		length = chars.size () + p->length;
 		rule = p->rule;
 	}
-	for (uint32_t i = 0; i < p->chars.size (); ++i)
+	const size_t sz = p->chars.size ();
+	for (size_t i = 0; i < sz; ++i)
 	{
 		chars.push_back (p->chars[i]);
 	}
