@@ -61,6 +61,7 @@ TRY_CXXFLAG([-pedantic])
 TRY_CXXFLAG([-Wformat=2])
 TRY_CXXFLAG([-Wredundant-decls])
 TRY_CXXFLAG([-Wsuggest-attribute=format])
+TRY_CXXFLAG([-Wconversion])
 TRY_CXXFLAG([-O2])
 TRY_CXXFLAG([-Weverything])
 
