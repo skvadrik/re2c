@@ -31,11 +31,11 @@ public:
 	};
 
 private:
-	static const uint8_t SILENT;
-	static const uint8_t WARNING;
-	static const uint8_t ERROR;
+	static const uint32_t SILENT;
+	static const uint32_t WARNING;
+	static const uint32_t ERROR;
 	static const char * names [TYPES];
-	uint8_t mask[TYPES];
+	uint32_t mask[TYPES];
 	bool error_accuml;
 
 public:
