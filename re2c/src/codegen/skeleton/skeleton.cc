@@ -57,6 +57,21 @@ bool Node::end () const
 	return arcs.size () == 0;
 }
 
+/*
+ * note [estimating total size of paths in skeleton]
+ *
+ * With --skeleton switch we need to generate lots of data: strings that
+ * correspond to various paths in DFA and match given regular expression.
+ * For small graphs we can afford to generate all paths, for large graphs
+ * we can only generate path cover. Anyway we need to be able to estimate
+ * the amount of data to be generated (measured in skeleton arcs). Since
+ * it can easily exceed 32 bits (and 64 as well), calculations must stop
+ * as soon as certain limit is reached.
+ *
+ * To avoid any possible overflows all values are wrapped in a special
+ * truncated unsigned 32-bit integer type that checks for overflow on
+ * each binary operation or conversion from another type.
+ */
 arccount_t Node::estimate_size_all (arccount_t wid, arccount_t len)
 {
 	if (end ())
@@ -89,6 +104,7 @@ arccount_t Node::estimate_size_all (arccount_t wid, arccount_t len)
 	}
 }
 
+// see note [estimating total size of paths in skeleton]
 arccount_t Node::estimate_size_cover (arccount_t wid, arccount_t len)
 {
 	if (path_len_init)
