@@ -29,7 +29,7 @@ public:
 	DFA (Ins *, uint32_t, uint32_t, uint32_t, const Char *);
 	~DFA ();
 	void addState (State **, State *);
-	State * findState (Ins **, uint32_t);
+	State * findState (Ins **, ptrdiff_t);
 	void split (State *);
 
 	void findSCCs ();

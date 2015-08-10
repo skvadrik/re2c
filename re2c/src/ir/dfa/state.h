@@ -17,7 +17,7 @@ public:
 	State * next;
 	State * link;
 	uint32_t depth; // for finding SCCs
-	uint32_t kCount;
+	ptrdiff_t kCount;
 	Ins ** kernel;
 
 	bool isPreCtxt;

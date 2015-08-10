@@ -150,7 +150,7 @@ void DFA::addState(State **a, State *s)
 		tail = &s->next;
 }
 
-State *DFA::findState(Ins **kernel, uint32_t kCount)
+State *DFA::findState(Ins **kernel, ptrdiff_t kCount)
 {
 	Ins **cP, **iP, *i;
 	State *s;
