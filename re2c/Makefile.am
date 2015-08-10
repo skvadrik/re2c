@@ -1,7 +1,6 @@
 # flags
 # do *not* add CXXFLAGS here, add them in configure.ac
 AM_CXXFLAGS = $(CXXFLAGSDEFAULT)
-BISONFLAGS = -y -d --no-lines
 RE2CFLAGS = -b
 
 # binary
@@ -183,7 +182,7 @@ CLEANFILES = \
 $(AUTOGEN_PARSER): $(CUSTOM_PARSER)
 	@if test $(BISON) != "no"; \
 	then \
-		$(BISON) $(BISONFLAGS) --output=$@ --defines=$(AUTOGEN_PARSER_HDR) $(top_srcdir)/$(CUSTOM_PARSER) && \
+		$(BISON) --output=$@ --defines=$(AUTOGEN_PARSER_HDR) $(top_srcdir)/$(CUSTOM_PARSER) && \
 		if cmp -s $@ $(top_srcdir)/$(BOOTSTRAP_PARSER); \
 		then \
 			cp $@ $(top_srcdir)/$(BOOTSTRAP_PARSER) && \
