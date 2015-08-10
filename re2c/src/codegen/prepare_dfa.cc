@@ -76,7 +76,7 @@ static uint32_t merge(Span *x0, State *fg, State *bg)
 
 			if (nf == 0 && nb == 0)
 			{
-				return x - x0;
+				return static_cast<uint32_t> (x - x0);
 			}
 		}
 
