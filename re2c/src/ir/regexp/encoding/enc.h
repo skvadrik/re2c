@@ -93,9 +93,9 @@ inline uint32_t Enc::nCodePoints() const
 		case UCS2:	return 0x10000;
 		case UTF16:
 		case UTF32:
-		case UTF8:	return 0x110000;
+		case UTF8:
+		default:	return 0x110000;
 	}
-	return ~0; // to silence gcc warning
 }
 
 inline uint32_t Enc::nCodeUnits() const
@@ -107,9 +107,9 @@ inline uint32_t Enc::nCodeUnits() const
 		case UTF8:	return 0x100;
 		case UCS2:
 		case UTF16:	return 0x10000;
-		case UTF32:	return 0x110000;
+		case UTF32:
+		default:	return 0x110000;
 	}
-	return ~0; // to silence gcc warning
 }
 
 // returns *maximal* code point size for encoding
@@ -122,9 +122,9 @@ inline uint32_t Enc::szCodePoint() const
 		case UCS2:	return 2;
 		case UTF16:
 		case UTF32:
-		case UTF8:	return 4;
+		case UTF8:
+		default:	return 4;
 	}
-	return ~0; // to silence gcc warning
 }
 
 inline uint32_t Enc::szCodeUnit() const
@@ -136,9 +136,9 @@ inline uint32_t Enc::szCodeUnit() const
 		case UTF8:	return 1;
 		case UCS2:
 		case UTF16:	return 2;
-		case UTF32:	return 4;
+		case UTF32:
+		default:	return 4;
 	}
-	return ~0; // to silence gcc warning
 }
 
 inline bool Enc::set(type_t t)
