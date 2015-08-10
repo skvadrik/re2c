@@ -222,7 +222,7 @@ void DFA::prepare(OutputFile & o, uint32_t & max_fill, const std::string & cond)
 				{
 					if (!s->go.span[i].to->rule && s->go.span[i].to->action.type != Action::RULE)
 					{
-						const uint32_t accept = accepts.find_or_add (rules[s->rule->rank]);
+						const uint32_t accept = static_cast<uint32_t> (accepts.find_or_add (rules[s->rule->rank]));
 						s->action.set_save (accept);
 					}
 				}

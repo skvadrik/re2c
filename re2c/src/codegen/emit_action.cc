@@ -168,7 +168,7 @@ void emit_accept_binary (OutputFile & o, uint32_t ind, bool & readCh, const Stat
 
 void emit_accept (OutputFile & o, uint32_t ind, bool & readCh, const State * const s, const accept_t & accepts)
 {
-	const uint32_t accepts_size = accepts.size ();
+	const uint32_t accepts_size = static_cast<uint32_t> (accepts.size ());
 	if (accepts_size > 0)
 	{
 		if (!DFlag)

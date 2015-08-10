@@ -3,14 +3,12 @@
 
 #include <vector>
 
-#include "src/util/c99_stdint.h"
-
 namespace re2c
 {
 
 // wrapper over std::vector
 // O(n) lookup
-// O(n^2) insertion
+// O(n) insertion
 template <typename value_t>
 class uniq_vector_t
 {
@@ -20,18 +18,18 @@ public:
 	uniq_vector_t ()
 		: elems ()
 	{}
-	uint32_t size () const
+	size_t size () const
 	{
 		return elems.size ();
 	}
-	const value_t & operator [] (uint32_t i) const
+	const value_t & operator [] (size_t i) const
 	{
 		return elems[i];
 	}
-	uint32_t find_or_add (const value_t & v)
+	size_t find_or_add (const value_t & v)
 	{
-		const uint32_t size = elems.size ();
-		for (uint32_t i = 0; i < size; ++i)
+		const size_t size = elems.size ();
+		for (size_t i = 0; i < size; ++i)
 		{
 			if (elems[i] == v)
 			{
