@@ -134,6 +134,12 @@ void OutputFile::write_user_start_label ()
 	}
 }
 
+OutputFile & operator << (OutputFile & u, char c)
+{
+	u.stream () << c;
+	return u;
+}
+
 OutputFile & operator << (OutputFile & u, uint32_t n)
 {
 	u.stream () << n;

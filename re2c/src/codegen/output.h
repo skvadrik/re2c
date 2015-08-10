@@ -76,6 +76,7 @@ public:
 	void write_line_info (uint32_t l, const char * fn);
 	void write_version_time ();
 	void write_user_start_label ();
+	friend OutputFile & operator << (OutputFile & o, char c);
 	friend OutputFile & operator << (OutputFile & o, uint32_t n);
 	friend OutputFile & operator << (OutputFile & o, const std::string & s);
 	friend OutputFile & operator << (OutputFile & o, const char * s);

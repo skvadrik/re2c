@@ -72,7 +72,7 @@ void Case::emit (OutputFile & o, uint32_t ind)
 			{
 				const uint32_t c = encoding.decodeUnsafe (b);
 				if (isprint (c))
-					o << " /* " << std::string (1, c) << " */";
+					o << " /* " << static_cast<char> (c) << " */";
 			}
 			bool last_case = i == ranges.size () - 1 && b == ranges[i].second - 1;
 			if (!last_case)
