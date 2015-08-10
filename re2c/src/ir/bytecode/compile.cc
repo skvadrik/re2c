@@ -95,7 +95,7 @@ uint32_t CloseOp::compile (Char * rep, Ins * i)
 		i->i.link = ins_cache;
 		++i;
 
-		const uint32_t sz = i - ins_cache;
+		const uint32_t sz = static_cast<uint32_t> (i - ins_cache);
 		if (ins_access == PRIVATE)
 		{
 			decompile ();
@@ -142,7 +142,7 @@ uint32_t CloseVOp::compile (Char * rep, Ins * i)
 				i++;
 			}
 		}
-		const uint32_t sz = i - ins_cache;
+		const uint32_t sz = static_cast<uint32_t> (i - ins_cache);
 
 		if (ins_access == PRIVATE)
 		{
@@ -231,7 +231,7 @@ uint32_t RuleOp::compile (Char * rep, Ins * i)
 		i->i.tag = TERM;
 		i->i.link = this;
 		++i;
-		const uint32_t sz = i - ins_cache;
+		const uint32_t sz = static_cast<uint32_t> (i - ins_cache);
 
 		if (ins_access == PRIVATE)
 		{
