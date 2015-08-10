@@ -16,7 +16,7 @@ SCC::~SCC ()
 void SCC::traverse (State * x)
 {
 	*top = x;
-	uint32_t k = ++top - stk;
+	const uint32_t k = static_cast<uint32_t> (++top - stk);
 	x->depth = k;
 
 	for (uint32_t i = 0; i < x->go.nSpans; ++i)
