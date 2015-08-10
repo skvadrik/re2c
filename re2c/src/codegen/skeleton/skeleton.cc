@@ -129,12 +129,15 @@ arccount_t Node::estimate_size_cover (arccount_t wid, arccount_t len)
 			{
 				return arccount_t::limit ();
 			}
-			if (!path_len_init && i->first->path_len_init)
+			if (i->first->path_len_init)
 			{
-				path_len_init = true;
-				path_len = i->first->path_len + arccount_t (1u);
+				w = w + new_wid;
+				if (!path_len_init)
+				{
+					path_len_init = true;
+					path_len = i->first->path_len + arccount_t (1u);
+				}
 			}
-			w = w + new_wid;
 		}
 		return size;
 	}
@@ -194,16 +197,20 @@ void Node::generate_paths_cover (const std::vector<Path> & prefixes, std::vector
 		{
 			std::vector<Path> zs;
 			const size_t new_wid = i->second.size ();
-			for (size_t j = 0; j < new_wid; ++j, ++w)
+			for (size_t j = 0; j < new_wid; ++j)
 			{
-				zs.push_back (prefixes[w % wid]);
+				zs.push_back (prefixes[(w + j) % wid]);
 				zs[j].extend (rule, i->second[j]);
 			}
 			i->first->generate_paths_cover (zs, results);
-			if (path == NULL && i->first->path != NULL)
+			if (i->first->path != NULL)
 			{
-				path = new Path (Path::chars_t (1, i->second[0]), 0, rule);
-				path->append (i->first->path);
+				w += new_wid;
+				if (path == NULL)
+				{
+					path = new Path (Path::chars_t (1, i->second[0]), 0, rule);
+					path->append (i->first->path);
+				}
 			}
 		}
 	}
