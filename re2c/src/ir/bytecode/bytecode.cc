@@ -46,7 +46,7 @@ smart_ptr<DFA> genCode (RegExp *re, Output & output, uint32_t ind, const std::st
 
 		if (ins[j].i.tag == CHAR)
 		{
-			j = (Ins*) ins[j].i.link - ins;
+			j = static_cast<uint32_t> ((Ins*) ins[j].i.link - ins);
 		}
 		else
 		{
