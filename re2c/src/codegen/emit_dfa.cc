@@ -128,7 +128,7 @@ void DFA::emit(Output & output, uint32_t& ind, const RegExpMap* specMap, const s
 		else if ((!fFlag && o.get_used_yyaccept ())
 		||  (!fFlag && bEmitYYCh)
 		||  (bFlag && !cFlag && BitMap::first)
-		||  (cFlag && !bWroteCondCheck && gFlag && !specMap->empty())
+		||  (cFlag && !bWroteCondCheck && gFlag && specMap)
 		||  (fFlag && !bWroteGetState && gFlag)
 		)
 		{
@@ -159,7 +159,10 @@ void DFA::emit(Output & output, uint32_t& ind, const RegExpMap* specMap, const s
 	}
 	if (bProlog)
 	{
-		genCondTable(o, ind, *specMap);
+		if (cFlag && !bWroteCondCheck && gFlag && specMap)
+		{
+			genCondTable(o, ind, *specMap);
+		}
 		o.insert_state_goto (ind);
 		if (cFlag && !DFlag)
 		{
@@ -169,7 +172,10 @@ void DFA::emit(Output & output, uint32_t& ind, const RegExpMap* specMap, const s
 			}
 		}
 		o.write_user_start_label ();
-		genCondGoto(o, ind, *specMap);
+		if (cFlag && !bWroteCondCheck && specMap)
+		{
+			genCondGoto(o, ind, *specMap);
+		}
 	}
 
 	if (cFlag && !condName.empty())
@@ -236,23 +242,21 @@ void DFA::emit(Output & output, uint32_t& ind, const RegExpMap* specMap, const s
 
 void genCondTable(OutputFile & o, uint32_t ind, const RegExpMap& specMap)
 {
-	if (cFlag && !bWroteCondCheck && gFlag && specMap.size())
+	const uint32_t specMap_size = static_cast<uint32_t> (specMap.size ());
+	RegExpIndices  vCondList(specMap_size);
+
+	for(RegExpMap::const_iterator itSpec = specMap.begin(); itSpec != specMap.end(); ++itSpec)
 	{
-		RegExpIndices  vCondList(specMap.size());
-
-		for(RegExpMap::const_iterator itSpec = specMap.begin(); itSpec != specMap.end(); ++itSpec)
-		{
-			vCondList[itSpec->second.first] = itSpec->first;
-		}
-
-		o << indent(ind++) << "static void *" << mapCodeName["yyctable"] << "[" << specMap.size() << "] = {\n";
-
-		for(RegExpIndices::const_iterator it = vCondList.begin(); it != vCondList.end(); ++it)
-		{
-			o << indent(ind) << "&&" << condPrefix << *it << ",\n";
-		}
-		o << indent(--ind) << "};\n";
+		vCondList[itSpec->second.first] = itSpec->first;
 	}
+
+	o << indent(ind++) << "static void *" << mapCodeName["yyctable"] << "[" << specMap_size << "] = {\n";
+
+	for(RegExpIndices::const_iterator it = vCondList.begin(); it != vCondList.end(); ++it)
+	{
+		o << indent(ind) << "&&" << condPrefix << *it << ",\n";
+	}
+	o << indent(--ind) << "};\n";
 }
 
 void genCondGotoSub(OutputFile & o, uint32_t ind, RegExpIndices& vCondList, uint32_t cMin, uint32_t cMax)
@@ -275,44 +279,41 @@ void genCondGotoSub(OutputFile & o, uint32_t ind, RegExpIndices& vCondList, uint
 
 void genCondGoto(OutputFile & o, uint32_t ind, const RegExpMap& specMap)
 {
-	if (cFlag && !bWroteCondCheck && specMap.size())
+	if (gFlag)
 	{
-		if (gFlag)
+		o << indent(ind) << "goto *" << mapCodeName["yyctable"] << "[" << genGetCondition() << "];\n";
+	}
+	else
+	{
+		if (sFlag)
 		{
-			o << indent(ind) << "goto *" << mapCodeName["yyctable"] << "[" << genGetCondition() << "];\n";
+			RegExpIndices  vCondList(specMap.size());
+		
+			for(RegExpMap::const_iterator it = specMap.begin(); it != specMap.end(); ++it)
+			{
+				vCondList[it->second.first] = it->first;
+			}
+			genCondGotoSub(o, ind, vCondList, 0, static_cast<uint32_t> (vCondList.size()) - 1);
+		}
+		else if (DFlag)
+		{
+			for(RegExpMap::const_iterator it = specMap.begin(); it != specMap.end(); ++it)
+			{
+				o << "0 -> " << it->first << " [label=\"state=" << it->first << "\"]\n";
+			}
 		}
 		else
 		{
-			if (sFlag)
+			o << indent(ind) << "switch (" << genGetCondition() << ") {\n";
+
+			for(RegExpMap::const_iterator it = specMap.begin(); it != specMap.end(); ++it)
 			{
-				RegExpIndices  vCondList(specMap.size());
-			
-				for(RegExpMap::const_iterator it = specMap.begin(); it != specMap.end(); ++it)
-				{
-					vCondList[it->second.first] = it->first;
-				}
-				genCondGotoSub(o, ind, vCondList, 0, vCondList.size() - 1);
+				o << indent(ind) << "case " << condEnumPrefix << it->first << ": goto " << condPrefix << it->first << ";\n";
 			}
-			else if (DFlag)
-			{
-				for(RegExpMap::const_iterator it = specMap.begin(); it != specMap.end(); ++it)
-				{
-					o << "0 -> " << it->first << " [label=\"state=" << it->first << "\"]\n";
-				}
-			}
-			else
-			{
-				o << indent(ind) << "switch (" << genGetCondition() << ") {\n";
-	
-				for(RegExpMap::const_iterator it = specMap.begin(); it != specMap.end(); ++it)
-				{
-					o << indent(ind) << "case " << condEnumPrefix << it->first << ": goto " << condPrefix << it->first << ";\n";
-				}
-				o << indent(ind) << "}\n";
-			}
+			o << indent(ind) << "}\n";
 		}
-		bWroteCondCheck = true;
 	}
+	bWroteCondCheck = true;
 }
 
 void genTypes(Output & output, const RegExpMap& specMap)
