@@ -20,7 +20,7 @@ smart_ptr<DFA> genCode (RegExp *re, Output & output, uint32_t ind, const std::st
 		if (!cs.rep[j]->nxt)
 			cs.rep[j]->nxt = &cs.ptn[j];
 
-		rep[j] = cs.rep[j]->nxt - &cs.ptn[0];
+		rep[j] = static_cast<Char> (cs.rep[j]->nxt - &cs.ptn[0]);
 	}
 
 	re->calcSize(rep);
