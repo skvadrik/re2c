@@ -30,6 +30,7 @@ SRC_HDR = \
 	src/ir/dfa/state.h \
 	src/ir/dfa/dfa.h \
 	src/ir/dfa/action.h \
+	src/ir/regexp/encoding/case.h \
 	src/ir/regexp/encoding/enc.h \
 	src/ir/regexp/encoding/range_suffix.h \
 	src/ir/regexp/encoding/utf8/utf8.h \

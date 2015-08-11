@@ -1,3 +1,4 @@
+#include "src/ir/regexp/encoding/case.h"
 #include "src/ir/regexp/encoding/utf16/utf16_regexp.h"
 #include "src/ir/regexp/encoding/utf8/utf8_regexp.h"
 #include "src/ir/regexp/regexp.h"
@@ -163,41 +164,22 @@ RegExp * Scanner::strToRE (SubStr & s) const
 
 RegExp * Scanner::strToCaseInsensitiveRE (SubStr & s) const
 {
-	if (s.len == 0)
-		return new NullOp;
-
-	uint32_t c = unescape(s);
-
-	RegExp *re, *reL, *reU;
-
-	if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z'))
-	{
-		reL = matchSymbol(tolower(c));
-		reU = matchSymbol(toupper(c));
-		re = mkAlt(reL, reU);
-	}
-	else
-	{
-		re = matchSymbol(c);
-	}
-
+	RegExp * r = NULL;
 	while (s.len > 0)
 	{
-		c = unescape(s);
-
-		if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z'))
+		const uint32_t c = unescape (s);
+		if (is_alpha (c))
 		{
-			reL = matchSymbol(tolower(c));
-			reU = matchSymbol(toupper(c));
-			re = new CatOp(re, mkAlt(reL, reU));
+			RegExp * rl = matchSymbol (to_lower_unsafe (c));
+			RegExp * ru = matchSymbol (to_upper_unsafe (c));
+			r = doCat (r, mkAlt (rl, ru));
 		}
 		else
 		{
-			re = new CatOp(re, matchSymbol(c));
+			r = doCat (r, matchSymbol (c));
 		}
 	}
-
-	return re;
+	return r ? r : new NullOp;
 }
 
 Range * Scanner::mkRange(SubStr &s) const
