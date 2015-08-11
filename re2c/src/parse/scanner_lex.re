@@ -28,6 +28,13 @@ extern YYSTYPE yylval;
 namespace re2c
 {
 
+// source code is in ASCII: pointers have type 'char *'
+// but re2c makes an implicit assumption that YYCTYPE is unsigned
+// when it generates comparisons
+/*!re2c
+	re2c:yych:conversion = 1;
+*/
+
 /*!re2c
 zero    = "\000";
 dot     = .;
