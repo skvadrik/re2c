@@ -71,7 +71,7 @@ void Case::emit (OutputFile & o, uint32_t ind)
 			if (dFlag && encoding.is (Enc::EBCDIC))
 			{
 				const uint32_t c = encoding.decodeUnsafe (b);
-				if (isprint (c))
+				if (is_print (c))
 					o << " /* " << static_cast<char> (c) << " */";
 			}
 			bool last_case = i == ranges.size () - 1 && b == ranges[i].second - 1;

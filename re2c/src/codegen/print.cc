@@ -6,6 +6,27 @@
 namespace re2c
 {
 
+bool is_print (uint32_t c)
+{
+	return c >= 0x20 && c < 0x7F;
+}
+
+bool is_space (uint32_t c)
+{
+	switch (c)
+	{
+		case '\t':
+		case '\f':
+		case '\v':
+		case '\n':
+		case '\r':
+		case ' ':
+			return true;
+		default:
+			return false;
+	}
+}
+
 char hexCh(uint32_t c)
 {
 	static const char * sHex = "0123456789ABCDEF";
@@ -14,7 +35,8 @@ char hexCh(uint32_t c)
 
 void prtChOrHex(std::ostream& o, uint32_t c)
 {
-	if (!encoding.is(Enc::EBCDIC) && (c < 256u) && (isprint(c) || isspace(c)))
+	if (!encoding.is (Enc::EBCDIC)
+		&& (is_print (c) || is_space (c)))
 	{
 		o << '\'';
 		prtCh(o, c);
@@ -28,34 +50,22 @@ void prtChOrHex(std::ostream& o, uint32_t c)
 
 void prtHex(std::ostream& o, uint32_t c)
 {
-	int oc = (int)(c);
-
-	if (encoding.szCodeUnit() == 4)
+	o << "0x";
+	const uint32_t cunit_size = encoding.szCodeUnit ();
+	if (cunit_size >= 4)
 	{
-		o << "0x"
-		  << hexCh(oc >> 28)
-		  << hexCh(oc >> 24)
-		  << hexCh(oc >> 20)
-		  << hexCh(oc >> 16)
-		  << hexCh(oc >> 12)
-		  << hexCh(oc >>  8)
-		  << hexCh(oc >>  4)
-		  << hexCh(oc);
+		o << hexCh (c >> 28u)
+			<< hexCh (c >> 24u)
+			<< hexCh (c >> 20u)
+			<< hexCh (c >> 16u);
 	}
-	else if (encoding.szCodeUnit() == 2)
+	if (cunit_size >= 2)
 	{
-		o << "0x"
-		  << hexCh(oc >> 12)
-		  << hexCh(oc >>  8)
-		  << hexCh(oc >>  4)
-		  << hexCh(oc);
+		o << hexCh (c >> 12u)
+			<< hexCh (c >> 8u);
 	}
-	else
-	{
-		o << "0x"
-		  << hexCh(oc >>  4) 
-		  << hexCh(oc);
-	}
+	o << hexCh (c >> 4u)
+		<< hexCh (c);
 }
 
 void prtCh(std::ostream& o, uint32_t c)
@@ -110,7 +120,9 @@ void prtCh(std::ostream& o, uint32_t c)
 
 void prtChOrHexForSpan(std::ostream& o, uint32_t c)
 {
-	if (!encoding.is(Enc::EBCDIC) && (c < 256u) && isprint(c) && (c != ']'))
+	if (!encoding.is(Enc::EBCDIC)
+		&& is_print (c)
+		&& (c != ']'))
 	{
 		prtCh(o, c);
 	}
