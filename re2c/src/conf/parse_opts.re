@@ -14,13 +14,14 @@ static inline bool next (char * & arg, char ** & argv)
 
 parse_opts_t parse_opts (char ** argv, Opt & opts)
 {
-#define YYCTYPE char
-	YYCTYPE * YYCURSOR;
-	YYCTYPE * YYMARKER;
+#define YYCTYPE unsigned char
+	char * YYCURSOR;
+	char * YYMARKER;
 	Warn::option_t option;
 
 /*!re2c
 	re2c:yyfill:enable = 0;
+	re2c:yych:conversion = 1;
 
 	end = "\x00";
 	filename = [^\x00-] [^\x00]*;
