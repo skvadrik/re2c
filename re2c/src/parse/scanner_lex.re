@@ -23,8 +23,6 @@ extern YYSTYPE yylval;
 #define	YYCTXMARKER ctx
 #define	YYFILL(n)	{ fill (n); }
 
-#define	RETURN(i)	{ return i; }
-
 namespace re2c
 {
 
@@ -81,7 +79,7 @@ echo:
 						out.write((const char*)(tok), (const char*)(&cur[-7]) - (const char*)(tok));
 					}
 					tok = cur;
-					RETURN(Parse);
+					return Parse;
 				}
 	"/*!rules:re2c"	{
 					if (rFlag)
@@ -93,7 +91,7 @@ echo:
 						fatal("found 'rules:re2c' block without -r flag");
 					}
 					tok = cur;
-					RETURN(Rules);
+					return Rules;
 				}
 	"/*!use:re2c"	{
 					if (!rFlag)
@@ -106,7 +104,7 @@ echo:
 						out.write((const char*)(tok), (const char*)(&cur[-11]) - (const char*)(tok));
 					}
 					tok = cur;
-					RETURN(Reuse);
+					return Reuse;
 				}
 	"/*!max:re2c" {
 					if (!DFlag)
@@ -202,7 +200,7 @@ echo:
 					}
 					if(cur == eof)
 					{
-						RETURN(Stop);
+						return Stop;
 					}
 				}
 	*			{
@@ -235,7 +233,7 @@ start:
 				}
 
 	":" / "=>"	{
-					RETURN(*tok);
+					return *tok;
 				}
 
 	":="		{
@@ -255,7 +253,7 @@ start:
    endRE    =  "%}" | "*/";
    endRE    {
 					tok = cur;
-					RETURN(0);
+					return 0;
 				}
 
 	dstring		{
@@ -308,45 +306,45 @@ start:
 				}
 
 	"<>" / (space* ("{" | "=>" | ":=")) {
-					RETURN(NOCOND);
+					return NOCOND;
 				}
 	"<!"		{
-					RETURN(SETUP);
+					return SETUP;
 				}
 	[<>,()|=;/\\]	{
-					RETURN(*tok);
+					return *tok;
 				}
 
 	"*"			{
 					yylval.op = *tok;
-					RETURN(STAR);
+					return STAR;
 				}
 	[+?]		{
 					yylval.op = *tok;
-					RETURN(CLOSE);
+					return CLOSE;
 				}
 
 	"{0,}"		{
 					yylval.op = '*';
-					RETURN(CLOSE);
+					return CLOSE;
 				}
 
 	"{" [0-9]+ "}"	{
 					yylval.extop.minsize = atoi((char *)tok+1);
 					yylval.extop.maxsize = atoi((char *)tok+1);
-					RETURN(CLOSESIZE);
+					return CLOSESIZE;
 				}
 
 	"{" [0-9]+ "," [0-9]+ "}"	{
 					yylval.extop.minsize = atoi((char *)tok+1);
 					yylval.extop.maxsize = MAX(yylval.extop.minsize,atoi(strchr((char *)tok, ',')+1));
-					RETURN(CLOSESIZE);
+					return CLOSESIZE;
 				}
 
 	"{" [0-9]+ ",}"		{
 					yylval.extop.minsize = atoi((char *)tok+1);
 					yylval.extop.maxsize = -1;
-					RETURN(CLOSESIZE);
+					return CLOSESIZE;
 				}
 
 	"{" [0-9]* ","		{
@@ -420,7 +418,7 @@ start:
 				}
 
 	eol			{
-					if (cur == eof) RETURN(0);
+					if (cur == eof) return 0;
 					pos = cur;
 					cline++;
 					goto scan;
@@ -515,7 +513,7 @@ code:
 						{
 							fatal("missing '}'");
 						}
-						RETURN(0);
+						return 0;
 					}
 					goto code;
 				}
@@ -551,7 +549,7 @@ comment:
 	"\n"		{
 					if (cur == eof)
 					{
-						RETURN(0);
+						return 0;
 					}
 					tok = pos = cur;
 					cline++;
@@ -560,7 +558,7 @@ comment:
 	*			{
 					if (cur == eof)
 					{
-						RETURN(0);
+						return 0;
 					}
 					goto comment;
 				}
@@ -569,14 +567,14 @@ comment:
 nextLine:
 /*!re2c                                  /* resync emacs */
    "\n"     { if(cur == eof) {
-                  RETURN(0);
+                  return 0;
                }
                tok = pos = cur;
                cline++;
                goto scan;
             }
    *        {  if(cur == eof) {
-                  RETURN(0);
+                  return 0;
                }
                goto nextLine;
             }
@@ -589,7 +587,7 @@ config:
 				}
 	"=" space*	{
 					lexer_state = LEX_CONFIG_VALUE;
-					RETURN('=');
+					return '=';
 				}
 	*			{
 					fatal("missing '='");
