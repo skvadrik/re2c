@@ -321,7 +321,7 @@ Scanner::Scanner (Input & i, OutputFile & o)
 	, out (o)
 {}
 
-char *Scanner::fill(char *cursor, uint32_t need)
+void Scanner::fill (uint32_t need)
 {
 	if(!eof)
 	{
@@ -340,7 +340,6 @@ char *Scanner::fill(char *cursor, uint32_t need)
 				pos -= cnt;
 				lim -= cnt;
 				ctx -= cnt;
-				cursor -= cnt;
 			}
 		}
 		/* In crease buffer size. */
@@ -363,7 +362,6 @@ char *Scanner::fill(char *cursor, uint32_t need)
 			lim = &buf[lim - bot];
 			top = &lim[need];
 			ctx = &buf[ctx - bot];
-			cursor = &buf[cursor - bot];
 			delete [] bot;
 			bot = buf;
 		}
@@ -376,7 +374,6 @@ char *Scanner::fill(char *cursor, uint32_t need)
 		}
 		lim += cnt;
 	}
-	return cursor;
 }
 
 void Scanner::set_in_parse(bool new_in_parse)

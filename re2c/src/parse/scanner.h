@@ -57,8 +57,8 @@ private:
 	OutputFile & out;
 
 private:
-	char *fill(char*, uint32_t);
-	void set_sourceline(char *& cursor);
+	void fill (uint32_t);
+	void set_sourceline ();
 
 public:
 	Scanner(Input &, OutputFile &);

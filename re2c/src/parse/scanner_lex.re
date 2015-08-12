@@ -17,13 +17,13 @@ extern YYSTYPE yylval;
 #endif
 
 #define	YYCTYPE		unsigned char
-#define	YYCURSOR	cursor
+#define	YYCURSOR	cur
 #define	YYLIMIT		lim
 #define	YYMARKER	ptr
 #define	YYCTXMARKER ctx
-#define	YYFILL(n)	{cursor = fill(cursor, n);}
+#define	YYFILL(n)	{ fill (n); }
 
-#define	RETURN(i)	{cur = cursor; return i;}
+#define	RETURN(i)	{ return i; }
 
 namespace re2c
 {
@@ -59,16 +59,15 @@ lineinf = lineno (space+ dstring)? eol;
 
 Scanner::ParseMode Scanner::echo()
 {
-	char *cursor = cur;
 	bool ignore_eoc = false;
 	int  ignore_cnt = 0;
 
-	if (eof && cursor == eof) // Catch EOF
+	if (eof && cur == eof) // Catch EOF
 	{
 		return Stop;
 	}
 
-	tok = cursor;
+	tok = cur;
 echo:
 /*!re2c
    beginRE     =  "%{" | "/*!re2c";
@@ -79,9 +78,9 @@ echo:
 					}
 					if (!(DFlag || flag_skeleton))
 					{
-						out.write((const char*)(tok), (const char*)(&cursor[-7]) - (const char*)(tok));
+						out.write((const char*)(tok), (const char*)(&cur[-7]) - (const char*)(tok));
 					}
-					tok = cursor;
+					tok = cur;
 					RETURN(Parse);
 				}
 	"/*!rules:re2c"	{
@@ -93,7 +92,7 @@ echo:
 					{
 						fatal("found 'rules:re2c' block without -r flag");
 					}
-					tok = cursor;
+					tok = cur;
 					RETURN(Rules);
 				}
 	"/*!use:re2c"	{
@@ -104,9 +103,9 @@ echo:
 					reuse();
 					if (!(DFlag || flag_skeleton))
 					{
-						out.write((const char*)(tok), (const char*)(&cursor[-11]) - (const char*)(tok));
+						out.write((const char*)(tok), (const char*)(&cur[-11]) - (const char*)(tok));
 					}
-					tok = cursor;
+					tok = cur;
 					RETURN(Reuse);
 				}
 	"/*!max:re2c" {
@@ -114,23 +113,23 @@ echo:
 					{
 						out.insert_yymaxfill ();
 					}
-					tok = pos = cursor;
+					tok = pos = cur;
 					ignore_eoc = true;
 					goto echo;
 				}
 	"/*!getstate:re2c" {
-					tok = pos = cursor;
+					tok = pos = cur;
 					out.insert_state_goto (topIndent);
 					ignore_eoc = true;
 					goto echo;
 				}
 	"/*!ignore:re2c" {
-					tok = pos = cursor;
+					tok = pos = cur;
 					ignore_eoc = true;
 					goto echo;
 				}
 	"/*!types:re2c" {
-					tok = pos = cursor;
+					tok = pos = cur;
 					ignore_eoc = true;
 					if (!DFlag)
 					{
@@ -155,9 +154,9 @@ echo:
 					}
 					else if (!(DFlag || flag_skeleton))
 					{
-						out.write((const char*)(tok), (const char*)(cursor) - (const char*)(tok));
+						out.write((const char*)(tok), (const char*)(cur) - (const char*)(tok));
 					}
-					tok = pos = cursor;
+					tok = pos = cur;
 					goto echo;
 				}
 	"*" "/"		{
@@ -173,13 +172,13 @@ echo:
 					}
 					else if (!(DFlag || flag_skeleton))
 					{
-						out.write((const char*)(tok), (const char*)(cursor) - (const char*)(tok));
+						out.write((const char*)(tok), (const char*)(cur) - (const char*)(tok));
 					}
-					tok = pos = cursor;
+					tok = pos = cur;
 					goto echo;
 				}
 	"\n" space* "#" space* "line" space+ / lineinf {
-					set_sourceline(cursor);
+					set_sourceline ();
 					goto echo;
 				}
 	"\n"		{
@@ -189,19 +188,19 @@ echo:
 					}
 					else if (!(DFlag || flag_skeleton))
 					{
-						out.write((const char*)(tok), (const char*)(cursor) - (const char*)(tok));
+						out.write((const char*)(tok), (const char*)(cur) - (const char*)(tok));
 					}
-					tok = pos = cursor;
+					tok = pos = cur;
 					cline++;
 					goto echo;
 				}
 	zero		{
 					if (!(ignore_eoc || DFlag || flag_skeleton))
 					{
-						out.write((const char*)(tok), (const char*)(cursor) - (const char*)(tok) - 1);
+						out.write((const char*)(tok), (const char*)(cur) - (const char*)(tok) - 1);
 						// -1 so we don't write out the \0
 					}
-					if(cursor == eof)
+					if(cur == eof)
 					{
 						RETURN(Stop);
 					}
@@ -214,13 +213,12 @@ echo:
 
 int Scanner::scan()
 {
-	char *cursor = cur;
 	uint32_t depth;
 
 scan:
-	tchar = cursor - pos;
+	tchar = cur - pos;
 	tline = cline;
-	tok = cursor;
+	tok = cur;
 	switch (lexer_state)
 	{
 		case LEX_NORMAL:       goto start;
@@ -241,7 +239,6 @@ start:
 				}
 
 	":="		{
-					cur = cursor;
 					tok += 2; /* skip ":=" */
 					depth = 0;
 					goto code;
@@ -257,12 +254,11 @@ start:
 
    endRE    =  "%}" | "*/";
    endRE    {
-					tok = cursor;
+					tok = cur;
 					RETURN(0);
 				}
 
 	dstring		{
-					cur = cursor;
 					SubStr s (tok + 1, cur - tok - 2);
 					if (bCaseInsensitive || bCaseInverted)
 					{
@@ -276,7 +272,6 @@ start:
 				}
 
 	sstring		{
-					cur = cursor;
 					SubStr s (tok + 1, cur - tok - 2);
 					if (bCaseInverted)
 					{
@@ -297,14 +292,12 @@ start:
 				}
 
 	istring		{
-					cur = cursor;
 					SubStr s (tok, cur - tok);
 					yylval.regexp = invToRE (s);
 					return RANGE;
 				}
 
 	cstring		{
-					cur = cursor;
 					SubStr s (tok, cur - tok);
 					yylval.regexp = ranToRE (s);
 					return RANGE;
@@ -364,13 +357,11 @@ start:
 					if (!FFlag) {
 						fatal("curly braces for names only allowed with -F switch");
 					}
-					cur = cursor;
 					yylval.str = new std::string (tok + 1, cur - tok - 2);
 					return ID;
 				}
 
 	config		{
-					cur = cursor;
 					tok += 5; /* skip "re2c:" */
 					lexer_state = LEX_CONFIG;
 					yylval.str = new std::string (tok, cur - tok);
@@ -378,7 +369,6 @@ start:
 				}
 
 	name / (space+ [^=>,])	{
-					cur = ptr > tok ? ptr - 1 : cursor;
 					yylval.str = new std::string (tok, cur - tok);
 					if (FFlag)
 					{
@@ -392,19 +382,16 @@ start:
 				}
 
 	name / (space* [=>,])	{
-					cur = ptr > tok ? ptr - 1 : cursor;
 					yylval.str = new std::string (tok, cur - tok);
 					return ID;
 				}
 
 	name / [^]	{
 					if (!FFlag) {
-						cur = cursor;
 						yylval.str = new std::string (tok, cur - tok);
 						return ID;
 					} else {
 						/* Add one char in front and one behind instead of 's or "s */
-						cur = cursor;
 						SubStr s (tok, cur - tok);
 						if (bCaseInsensitive || bCaseInverted)
 						{
@@ -419,7 +406,6 @@ start:
 				}
 
 	"."			{
-					cur = cursor;
 					yylval.regexp = mkDot();
 					return RANGE;
 				}
@@ -429,13 +415,13 @@ start:
 				}
 
 	eol space* "#" space* "line" space+ / lineinf {
-					set_sourceline(cursor);
+					set_sourceline ();
 					goto scan;
 				}
 
 	eol			{
-					if (cursor == eof) RETURN(0);
-					pos = cursor;
+					if (cur == eof) RETURN(0);
+					pos = cur;
 					cline++;
 					goto scan;
 				}
@@ -470,7 +456,6 @@ code:
 					}
 					else if (--depth == 0)
 					{
-						cur = cursor;
 						yylval.code = new Code (tok, cur - tok, get_fname (), tline);
 						return CODE;
 					}
@@ -488,7 +473,7 @@ code:
 					goto code;
 				}
 	"\n" space* "#" space* "line" space+ / lineinf {
-					set_sourceline(cursor);
+					set_sourceline ();
 					goto code;
 				}
 	"\n" /  ws	{
@@ -496,18 +481,17 @@ code:
 					{
 						goto code;
 					}
-					else if (cursor == eof)
+					else if (cur == eof)
 					{
 						fatal("missing '}'");
 					}
-					pos = cursor;
+					pos = cur;
 					cline++;
 					goto code;
 				}
 	"\n"		{
 					if (depth == 0)
 					{
-						cur = cursor;
 						tok += strspn(tok, " \t\r\n");
 						while (cur > tok && strchr(" \t\r\n", cur[-1]))
 						{
@@ -516,16 +500,16 @@ code:
 						yylval.code = new Code (tok, cur - tok, get_fname (), tline);
 						return CODE;
 					}
-					else if (cursor == eof)
+					else if (cur == eof)
 					{
 						fatal("missing '}'");
 					}
-					pos = cursor;
+					pos = cur;
 					cline++;
 					goto code;
 				}
 	zero		{
-					if (cursor == eof)
+					if (cur == eof)
 					{
 						if (depth)
 						{
@@ -561,20 +545,20 @@ comment:
 					goto comment;
 				}
 	"\n" space* "#" space* "line" space+ / lineinf {
-					set_sourceline(cursor);
+					set_sourceline ();
 					goto comment;
 				}
 	"\n"		{
-					if (cursor == eof)
+					if (cur == eof)
 					{
 						RETURN(0);
 					}
-					tok = pos = cursor;
+					tok = pos = cur;
 					cline++;
 					goto comment;
 				}
 	*			{
-					if (cursor == eof)
+					if (cur == eof)
 					{
 						RETURN(0);
 					}
@@ -584,14 +568,14 @@ comment:
 
 nextLine:
 /*!re2c                                  /* resync emacs */
-   "\n"     { if(cursor == eof) {
+   "\n"     { if(cur == eof) {
                   RETURN(0);
                }
-               tok = pos = cursor;
+               tok = pos = cur;
                cline++;
                goto scan;
             }
-   *        {  if(cursor == eof) {
+   *        {  if(cur == eof) {
                   RETURN(0);
                }
                goto nextLine;
@@ -605,7 +589,6 @@ config:
 				}
 	"=" space*	{
 					lexer_state = LEX_CONFIG_VALUE;
-					cur = cursor;
 					RETURN('=');
 				}
 	*			{
@@ -616,13 +599,11 @@ config:
 value:
 /*!re2c
 	number		{
-					cur = cursor;
 					yylval.number = atoi(std::string (tok, cur - tok).c_str());
 					lexer_state = LEX_NORMAL;
 					return NUMBER;
 				}
 	value		{
-					cur = cursor;
 					yylval.str = new std::string (tok, cur - tok);
 					lexer_state = LEX_NORMAL;
 					return VALUE;
@@ -644,31 +625,29 @@ static void escape (std::string & dest, const std::string & src)
 	}
 }
 
-void Scanner::set_sourceline(char *& cursor) 
+void Scanner::set_sourceline ()
 {
 sourceline:
-	tok = cursor;
+	tok = cur;
 /*!re2c	
 	lineno		{
-					cur = cursor;
 					cline = atoi(std::string (tok, cur - tok).c_str());
 					goto sourceline; 
 				}
 	dstring		{
-					cur = cursor;
 					escape (in.file_name, std::string (tok + 1, cur - tok - 2));
 			  		goto sourceline; 
 				}
 	"\n"			{
-  					if (cursor == eof)
+  					if (cur == eof)
   					{
-						--cursor; 
+						--cur; 
 					}
 			  		else
 			  		{
-			  			pos = cursor; 
+			  			pos = cur; 
 			  		}
-			  		tok = cursor;
+			  		tok = cur;
 			  		return; 
 				}
 	*			{
