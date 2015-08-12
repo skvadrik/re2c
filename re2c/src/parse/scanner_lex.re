@@ -76,7 +76,10 @@ echo:
 					}
 					if (!(DFlag || flag_skeleton))
 					{
-						out.write((const char*)(tok), (const char*)(&cur[-7]) - (const char*)(tok));
+						const size_t lexeme_len = cur[-1] == '{'
+							? sizeof ("%{") - 1
+							: sizeof ("/*!re2c") - 1;
+						out.write(tok, cur - tok - lexeme_len);
 					}
 					tok = cur;
 					return Parse;
@@ -101,7 +104,8 @@ echo:
 					reuse();
 					if (!(DFlag || flag_skeleton))
 					{
-						out.write((const char*)(tok), (const char*)(&cur[-11]) - (const char*)(tok));
+						const size_t lexeme_len = sizeof ("/*!use:re2c") - 1;
+						out.write(tok, cur - tok - lexeme_len);
 					}
 					tok = cur;
 					return Reuse;
@@ -152,7 +156,7 @@ echo:
 					}
 					else if (!(DFlag || flag_skeleton))
 					{
-						out.write((const char*)(tok), (const char*)(cur) - (const char*)(tok));
+						out.write(tok, cur - tok);
 					}
 					tok = pos = cur;
 					goto echo;
@@ -170,7 +174,7 @@ echo:
 					}
 					else if (!(DFlag || flag_skeleton))
 					{
-						out.write((const char*)(tok), (const char*)(cur) - (const char*)(tok));
+						out.write(tok, cur - tok);
 					}
 					tok = pos = cur;
 					goto echo;
@@ -186,7 +190,7 @@ echo:
 					}
 					else if (!(DFlag || flag_skeleton))
 					{
-						out.write((const char*)(tok), (const char*)(cur) - (const char*)(tok));
+						out.write(tok, cur - tok);
 					}
 					tok = pos = cur;
 					cline++;
@@ -195,7 +199,7 @@ echo:
 	zero		{
 					if (!(ignore_eoc || DFlag || flag_skeleton))
 					{
-						out.write((const char*)(tok), (const char*)(cur) - (const char*)(tok) - 1);
+						out.write(tok, cur - tok - 1);
 						// -1 so we don't write out the \0
 					}
 					if(cur == eof)
