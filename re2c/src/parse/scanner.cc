@@ -325,21 +325,20 @@ void Scanner::fill (uint32_t need)
 {
 	if(!eof)
 	{
-		ptrdiff_t cnt;
 		/* Do not get rid of anything when rFlag is active. Otherwise
 		 * get rid of everything that was already handedout. */
 		if (!rFlag)
 		{
-			cnt = tok - bot;
-			if (cnt)
+			const ptrdiff_t diff = tok - bot;
+			if (diff > 0)
 			{
 				memmove(bot, tok, top - tok);
-				tok  = bot;
-				ptr -= cnt;
-				cur -= cnt;
-				pos -= cnt;
-				lim -= cnt;
-				ctx -= cnt;
+				tok -= diff;
+				ptr -= diff;
+				cur -= diff;
+				pos -= diff;
+				lim -= diff;
+				ctx -= diff;
 			}
 		}
 		/* In crease buffer size. */
@@ -347,7 +346,7 @@ void Scanner::fill (uint32_t need)
 		{
 			need = BSIZE;
 		}
-		if (static_cast<uint32_t>(top - lim) < need)
+		if (top - lim < need)
 		{
 			char *buf = new char[(lim - bot) + need];
 			if (!buf)
@@ -366,13 +365,13 @@ void Scanner::fill (uint32_t need)
 			bot = buf;
 		}
 		/* Append to buffer. */
-		cnt = fread (lim, 1, need, in.file);
-		if (cnt != need)
+		const size_t have = fread (lim, 1, need, in.file);
+		if (have != need)
 		{
-			eof = &lim[cnt];
+			eof = &lim[have];
 			*eof++ = '\0';
 		}
-		lim += cnt;
+		lim += have;
 	}
 }
 
