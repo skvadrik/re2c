@@ -332,7 +332,8 @@ void Scanner::fill (uint32_t need)
 			const ptrdiff_t diff = tok - bot;
 			if (diff > 0)
 			{
-				memmove(bot, tok, top - tok);
+				const size_t move = static_cast<size_t> (top - tok);
+				memmove (bot, tok, move);
 				tok -= diff;
 				ptr -= diff;
 				cur -= diff;
@@ -348,12 +349,13 @@ void Scanner::fill (uint32_t need)
 		}
 		if (top - lim < need)
 		{
-			char *buf = new char[(lim - bot) + need];
+			const size_t copy = static_cast<size_t> (lim - bot);
+			char * buf = new char[copy + need];
 			if (!buf)
 			{
 				fatal("Out of memory");
 			}
-			memcpy(buf, bot, lim - bot);
+			memcpy (buf, bot, copy);
 			tok = &buf[tok - bot];
 			ptr = &buf[ptr - bot];
 			cur = &buf[cur - bot];
