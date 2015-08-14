@@ -13,8 +13,6 @@
 namespace re2c
 {
 
-enum BUFFERSIZE { BSIZE = 8192};
-
 extern bool bFlag;
 extern bool cFlag;
 extern bool dFlag;

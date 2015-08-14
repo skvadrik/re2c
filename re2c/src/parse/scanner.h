@@ -52,7 +52,8 @@ struct ScannerState
 
 class Scanner: private ScannerState
 {
-private:
+	static const uint32_t BSIZE;
+
 	Input & in;
 	OutputFile & out;
 

@@ -12,6 +12,8 @@
 
 namespace re2c {
 
+const uint32_t Scanner::BSIZE = 8192;
+
 void Scanner::config(const std::string & cfg, int num)
 {
 	if (cfg == "indent:top")
