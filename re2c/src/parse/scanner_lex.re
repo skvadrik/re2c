@@ -79,7 +79,7 @@ echo:
 						const size_t lexeme_len = cur[-1] == '{'
 							? sizeof ("%{") - 1
 							: sizeof ("/*!re2c") - 1;
-						out.write(tok, cur - tok - lexeme_len);
+						out.write(tok, tok_len () - lexeme_len);
 					}
 					tok = cur;
 					return Parse;
@@ -105,7 +105,7 @@ echo:
 					if (!(DFlag || flag_skeleton))
 					{
 						const size_t lexeme_len = sizeof ("/*!use:re2c") - 1;
-						out.write(tok, cur - tok - lexeme_len);
+						out.write(tok, tok_len () - lexeme_len);
 					}
 					tok = cur;
 					return Reuse;
@@ -156,7 +156,7 @@ echo:
 					}
 					else if (!(DFlag || flag_skeleton))
 					{
-						out.write(tok, cur - tok);
+						out.write(tok, tok_len ());
 					}
 					tok = pos = cur;
 					goto echo;
@@ -174,7 +174,7 @@ echo:
 					}
 					else if (!(DFlag || flag_skeleton))
 					{
-						out.write(tok, cur - tok);
+						out.write(tok, tok_len ());
 					}
 					tok = pos = cur;
 					goto echo;
@@ -190,7 +190,7 @@ echo:
 					}
 					else if (!(DFlag || flag_skeleton))
 					{
-						out.write(tok, cur - tok);
+						out.write(tok, tok_len ());
 					}
 					tok = pos = cur;
 					cline++;
@@ -199,7 +199,7 @@ echo:
 	zero		{
 					if (!(ignore_eoc || DFlag || flag_skeleton))
 					{
-						out.write(tok, cur - tok - 1);
+						out.write(tok, tok_len () - 1);
 						// -1 so we don't write out the \0
 					}
 					if(cur == eof)
@@ -261,7 +261,7 @@ start:
 				}
 
 	dstring		{
-					SubStr s (tok + 1, cur - tok - 2);
+					SubStr s (tok + 1, tok_len () - 2); // -2 to omit quotes
 					if (bCaseInsensitive || bCaseInverted)
 					{
 						yylval.regexp = strToCaseInsensitiveRE (s);
@@ -274,7 +274,7 @@ start:
 				}
 
 	sstring		{
-					SubStr s (tok + 1, cur - tok - 2);
+					SubStr s (tok + 1, tok_len () - 2); // -2 to omit quotes
 					if (bCaseInverted)
 					{
 						yylval.regexp = strToRE (s);
@@ -294,13 +294,13 @@ start:
 				}
 
 	istring		{
-					SubStr s (tok, cur - tok);
+					SubStr s (tok, tok_len ());
 					yylval.regexp = invToRE (s);
 					return RANGE;
 				}
 
 	cstring		{
-					SubStr s (tok, cur - tok);
+					SubStr s (tok, tok_len ());
 					yylval.regexp = ranToRE (s);
 					return RANGE;
 				}
@@ -359,19 +359,19 @@ start:
 					if (!FFlag) {
 						fatal("curly braces for names only allowed with -F switch");
 					}
-					yylval.str = new std::string (tok + 1, cur - tok - 2);
+					yylval.str = new std::string (tok + 1, tok_len () - 2); // -2 to omit braces
 					return ID;
 				}
 
 	config		{
 					tok += 5; /* skip "re2c:" */
 					lexer_state = LEX_CONFIG;
-					yylval.str = new std::string (tok, cur - tok);
+					yylval.str = new std::string (tok, tok_len ());
 					return CONFIG;
 				}
 
 	name / (space+ [^=>,])	{
-					yylval.str = new std::string (tok, cur - tok);
+					yylval.str = new std::string (tok, tok_len ());
 					if (FFlag)
 					{
 						lexer_state = LEX_FLEX_NAME;
@@ -384,17 +384,17 @@ start:
 				}
 
 	name / (space* [=>,])	{
-					yylval.str = new std::string (tok, cur - tok);
+					yylval.str = new std::string (tok, tok_len ());
 					return ID;
 				}
 
 	name / [^]	{
 					if (!FFlag) {
-						yylval.str = new std::string (tok, cur - tok);
+						yylval.str = new std::string (tok, tok_len ());
 						return ID;
 					} else {
 						/* Add one char in front and one behind instead of 's or "s */
-						SubStr s (tok, cur - tok);
+						SubStr s (tok, tok_len ());
 						if (bCaseInsensitive || bCaseInverted)
 						{
 							yylval.regexp = strToCaseInsensitiveRE (s);
@@ -458,7 +458,7 @@ code:
 					}
 					else if (--depth == 0)
 					{
-						yylval.code = new Code (tok, cur - tok, get_fname (), tline);
+						yylval.code = new Code (tok, tok_len (), get_fname (), tline);
 						return CODE;
 					}
 					goto code;
@@ -499,7 +499,7 @@ code:
 						{
 							--cur;
 						}
-						yylval.code = new Code (tok, cur - tok, get_fname (), tline);
+						yylval.code = new Code (tok, tok_len (), get_fname (), tline);
 						return CODE;
 					}
 					else if (cur == eof)
@@ -601,12 +601,12 @@ config:
 value:
 /*!re2c
 	number		{
-					yylval.number = atoi(std::string (tok, cur - tok).c_str());
+					yylval.number = atoi(std::string (tok, tok_len ()).c_str());
 					lexer_state = LEX_NORMAL;
 					return NUMBER;
 				}
 	value		{
-					yylval.str = new std::string (tok, cur - tok);
+					yylval.str = new std::string (tok, tok_len ());
 					lexer_state = LEX_NORMAL;
 					return VALUE;
 				}
@@ -633,11 +633,11 @@ sourceline:
 	tok = cur;
 /*!re2c	
 	lineno		{
-					cline = atoi(std::string (tok, cur - tok).c_str());
+					cline = atoi(std::string (tok, tok_len ()).c_str());
 					goto sourceline; 
 				}
 	dstring		{
-					escape (in.file_name, std::string (tok + 1, cur - tok - 2));
+					escape (in.file_name, std::string (tok + 1, tok_len () - 2)); // -2 to omit quotes
 			  		goto sourceline; 
 				}
 	"\n"			{

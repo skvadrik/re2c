@@ -68,7 +68,7 @@ public:
 
 	void new_block ();
 
-	void write (const char * s, std::streamsize n);
+	void write (const char * s, size_t n);
 	void write_hex (uint32_t n);
 	void write_char_hex (uint32_t n);
 	void write_range (uint32_t u, uint32_t l);

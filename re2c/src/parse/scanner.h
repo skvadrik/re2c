@@ -59,6 +59,7 @@ private:
 private:
 	void fill (uint32_t);
 	void set_sourceline ();
+	size_t tok_len () const;
 
 public:
 	Scanner(Input &, OutputFile &);
@@ -110,9 +111,16 @@ public:
 	FORBID_COPY (Scanner);
 };
 
+inline size_t Scanner::tok_len () const
+{
+	// lexing and fill procedures must maintain: token pointer <= cursor pointer
+	return static_cast<size_t> (cur - tok);
+}
+
 inline size_t Scanner::get_pos() const
 {
-	return cur - bot;
+	// lexing and fill procedures must maintain: buffer bottom <= cursor pointer
+	return static_cast<size_t> (cur - bot);
 }
 
 inline const std::string & Scanner::get_fname () const

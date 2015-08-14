@@ -90,9 +90,9 @@ std::ostream & OutputFile::stream ()
 	return blocks.back ()->fragments.back ()->stream;
 }
 
-void OutputFile::write (const char * s, std::streamsize n)
+void OutputFile::write (const char * s, size_t n)
 {
-	stream ().write (s, n);
+	stream ().write (s, static_cast<std::streamsize> (n));
 }
 
 void OutputFile::write_hex (uint32_t n)
