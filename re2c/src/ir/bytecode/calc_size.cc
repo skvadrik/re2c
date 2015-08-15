@@ -1,7 +1,6 @@
 #include "src/ir/regexp/regexp_alt.h"
 #include "src/ir/regexp/regexp_cat.h"
 #include "src/ir/regexp/regexp_close.h"
-#include "src/ir/regexp/regexp_closev.h"
 #include "src/ir/regexp/regexp_match.h"
 #include "src/ir/regexp/regexp_null.h"
 #include "src/ir/regexp/regexp_rule.h"
@@ -27,19 +26,6 @@ void CloseOp::calcSize (Char * rep)
 {
 	exp->calcSize (rep);
 	size = exp->size + 1;
-}
-
-void CloseVOp::calcSize (Char * rep)
-{
-	exp->calcSize (rep);
-	if (max >= 0)
-	{
-		size = (exp->size * min) + ((1 + exp->size) * (max - min));
-	}
-	else
-	{
-		size = (exp->size * min) + 1;
-	}
 }
 
 void MatchOp::calcSize (Char * rep)

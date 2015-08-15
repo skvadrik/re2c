@@ -1,7 +1,6 @@
 #include "src/ir/regexp/regexp_alt.h"
 #include "src/ir/regexp/regexp_cat.h"
 #include "src/ir/regexp/regexp_close.h"
-#include "src/ir/regexp/regexp_closev.h"
 #include "src/ir/regexp/regexp_match.h"
 #include "src/ir/regexp/regexp_null.h"
 #include "src/ir/regexp/regexp_rule.h"
@@ -21,11 +20,6 @@ void CatOp::split (CharSet & s)
 }
 
 void CloseOp::split (CharSet & s)
-{
-	exp->split (s);
-}
-
-void CloseVOp::split (CharSet & s)
 {
 	exp->split (s);
 }

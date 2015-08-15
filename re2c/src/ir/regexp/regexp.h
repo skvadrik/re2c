@@ -69,6 +69,9 @@ public:
 RegExp * doAlt (RegExp * e1, RegExp * e2);
 RegExp * mkAlt (RegExp * e1, RegExp * e2);
 RegExp * doCat (RegExp * e1, RegExp * e2);
+RegExp * repeat (RegExp * e, uint32_t n);
+RegExp * repeat_from_to (RegExp * e, uint32_t n, uint32_t m);
+RegExp * repeat_from (RegExp * e, uint32_t n);
 
 } // end namespace re2c
 

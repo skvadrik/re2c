@@ -4,6 +4,7 @@
 #include "src/ir/regexp/regexp.h"
 #include "src/ir/regexp/regexp_alt.h"
 #include "src/ir/regexp/regexp_cat.h"
+#include "src/ir/regexp/regexp_close.h"
 #include "src/ir/regexp/regexp_match.h"
 #include "src/ir/regexp/regexp_null.h"
 #include "src/parse/scanner.h"
@@ -282,6 +283,46 @@ RegExp * Scanner::mkDefault() const
 {
 	Range * def = Range::ran (0, encoding.nCodeUnits());
 	return new MatchOp(def);
+}
+
+/*
+ * note [counted repetition expansion]
+ *
+ * r{0} ;;= <empty regexp>
+ * r{n} ::= r{n-1} r
+ * r{n,m} ::= r{n} (r{0} | ... | r{m-n})
+ * r{n,} ::= r{n} r*
+ */
+
+// see note [counted repetition expansion]
+RegExp * repeat (RegExp * e, uint32_t n)
+{
+	RegExp * r = NULL;
+	for (uint32_t i = 0; i < n; ++i)
+	{
+		r = doCat (r, e);
+	}
+	return r;
+}
+
+// see note [counted repetition expansion]
+RegExp * repeat_from_to (RegExp * e, uint32_t n, uint32_t m)
+{
+	RegExp * r1 = repeat (e, n);
+	RegExp * r2 = NULL;
+	for (uint32_t i = n; i < m; ++i)
+	{
+		r2 = mkAlt (new NullOp, doCat (e, r2));
+	}
+	return doCat (r1, r2);
+}
+
+// see note [counted repetition expansion]
+RegExp * repeat_from (RegExp * e, uint32_t n)
+{
+	RegExp * r1 = repeat (e, n);
+	RegExp * r2 = mkAlt (new NullOp, new CloseOp (e));
+	return doCat (r1, r2);
 }
 
 } // namespace re2c

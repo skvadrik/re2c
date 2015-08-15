@@ -12,7 +12,6 @@
 #include "src/ir/regexp/encoding/range_suffix.h"
 #include "src/ir/regexp/regexp_cat.h"
 #include "src/ir/regexp/regexp_close.h"
-#include "src/ir/regexp/regexp_closev.h"
 #include "src/ir/regexp/regexp_null.h"
 #include "src/codegen/emit.h" // genTypes
 #include "src/globals.h"
@@ -420,7 +419,20 @@ factor:
 		}
 	|	primary CLOSESIZE
 		{
-			$$ = new CloseVOp($1, $2.minsize, $2.maxsize);
+			$1->ins_access = RegExp::PRIVATE;
+			if ($2.maxsize < 0)
+			{
+				$$ = repeat_from ($1, $2.minsize);
+			}
+			else if ($2.minsize == $2.maxsize)
+			{
+				$$ = repeat ($1, $2.minsize);
+			}
+			else
+			{
+				$$ = repeat_from_to ($1, $2.minsize, $2.maxsize);
+			}
+			$$ = $$ ? $$ : new NullOp;
 		}
 ;
 

@@ -44,7 +44,6 @@ SRC_HDR = \
 	src/ir/regexp/regexp_match.h \
 	src/ir/regexp/regexp_rule.h \
 	src/ir/regexp/regexp_cat.h \
-	src/ir/regexp/regexp_closev.h \
 	src/ir/regexp/regexp_null.h \
 	src/ir/regexp/regexp.h \
 	src/ir/regexp/regexp_close.h \

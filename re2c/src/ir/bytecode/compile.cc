@@ -1,7 +1,6 @@
 #include "src/ir/regexp/regexp_alt.h"
 #include "src/ir/regexp/regexp_cat.h"
 #include "src/ir/regexp/regexp_close.h"
-#include "src/ir/regexp/regexp_closev.h"
 #include "src/ir/regexp/regexp_match.h"
 #include "src/ir/regexp/regexp_null.h"
 #include "src/ir/regexp/regexp_rule.h"
@@ -106,54 +105,6 @@ uint32_t CloseOp::compile (Char * rep, Ins * i)
 }
 
 void CloseOp::decompile ()
-{
-	if (ins_cache)
-	{
-		exp->decompile ();
-		ins_cache = NULL;
-	}
-}
-
-uint32_t CloseVOp::compile (Char * rep, Ins * i)
-{
-	if (ins_cache)
-	{
-		return compile_goto (ins_cache, i);
-	}
-	else
-	{
-		ins_cache = i;
-
-		for (int st = min; st < max; st++)
-		{
-			const uint32_t sz = exp->compile (rep, &i[1]);
-			i->i.tag = FORK;
-			i->i.link = ins_cache + (1 + sz) * (max - min);
-			i += sz + 1;
-		}
-		for (int st = 0; st < min; st++)
-		{
-			const uint32_t sz = exp->compile (rep, &i[0]);
-			i += sz;
-			if (max < 0 && st == 0)
-			{
-				i->i.tag = FORK;
-				i->i.link = i - sz;
-				i++;
-			}
-		}
-		const uint32_t sz = static_cast<uint32_t> (i - ins_cache);
-
-		if (ins_access == PRIVATE)
-		{
-			decompile ();
-		}
-
-		return sz;
-	}
-}
-
-void CloseVOp::decompile ()
 {
 	if (ins_cache)
 	{
