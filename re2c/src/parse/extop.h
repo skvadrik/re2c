@@ -8,7 +8,6 @@ namespace re2c
 
 struct ExtOp
 {
-	char op;
 	int32_t minsize;
 	int32_t maxsize;
 };
