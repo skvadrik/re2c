@@ -21,35 +21,35 @@ const char *q;
 	if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
 	yych = *YYCURSOR;
 	switch (yych) {
-	case '\n':	goto yy4;
+	case '\n':	goto yy2;
 	case 'A':
-	case 'a':	goto yy2;
+	case 'a':	goto yy4;
 	default:	goto yy6;
 	}
 yy2:
+	++YYCURSOR;
+yy3:
+#line 18 "bug1390174.re"
+	{RET(1);}
+#line 35 "<stdout>"
+yy4:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
 	case '\n':	goto yy7;
 	case 'A':
 	case 'a':	goto yy8;
-	default:	goto yy3;
+	default:	goto yy5;
 	}
-yy3:
+yy5:
 #line 19 "bug1390174.re"
 	{RET(0);}
-#line 41 "<stdout>"
-yy4:
-	++YYCURSOR;
-yy5:
-#line 18 "bug1390174.re"
-	{RET(1);}
 #line 47 "<stdout>"
 yy6:
 	yych = *++YYCURSOR;
-	goto yy3;
+	goto yy5;
 yy7:
 	yych = *++YYCURSOR;
-	goto yy5;
+	goto yy3;
 yy8:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
@@ -62,7 +62,7 @@ yy8:
 	}
 yy10:
 	YYCURSOR = YYMARKER;
-	goto yy3;
+	goto yy5;
 }
 #line 20 "bug1390174.re"
 

@@ -325,11 +325,6 @@ start:
 					return CLOSE;
 				}
 
-	"{0,}"		{
-					yylval.op = '*';
-					return CLOSE;
-				}
-
 	"{" [0-9]+ "}"	{
 					if (!s_to_u32_unsafe (tok + 1, cur - 1, yylval.extop.min))
 					{
