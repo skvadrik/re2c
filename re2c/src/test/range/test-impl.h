@@ -7,9 +7,9 @@
 
 namespace re2c_test {
 
-static inline bool bit_set (uint32_t n, uint8_t bit)
+static inline bool bit_set (uint32_t n, uint32_t bit)
 {
-	return n & (1 << bit);
+	return n & (1u << bit);
 }
 
 template <uint8_t BITS>
