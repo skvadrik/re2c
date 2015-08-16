@@ -3,6 +3,10 @@
 
 #include "config.h"
 
+// these defines enable some parts of <stdint.h>
+#define __STDC_LIMIT_MACROS // C99-7.18.2.1 Limits of exact-width integer types
+#define __STDC_CONSTANT_MACROS // C99-7.18.4.1 Macros for minimum-width integer constants
+
 #if HAVE_STDINT_H
 #    include <stdint.h>
 #else // HAVE_STDINT_H
@@ -22,9 +26,8 @@
 // (we consider even insane possibilities for simplicity).
 // The size of each type is defined by autoconf in the form
 // of a macro SIZEOF_<TYPE> (set to 0 for nonexistent types).
-// If we don't find a type with the required width, we typedef
-// the corresponding exact-width C99 type to a nonexistent
-// type name so that further compilation will fail.
+// If we don't find a type with the required width, we don't
+// define the corresponding exact-width C99 type at all.
 //
 // We define other types and constants based on exact-width
 // types and C99 standard.
@@ -34,87 +37,91 @@
 // We use SIZEOF_0<SUFFIX> to find suitable 64-bit integer
 // constant suffix.
 
-typedef
-#if SIZEOF_CHAR == 1
-    char
-#elif SIZEOF_SHORT == 1
-    short
-#elif SIZEOF_INT == 1
-    int
-#elif SIZEOF_LONG == 1
-    long
-#elif SIZEOF_LONG_LONG == 1
-    long long
-#elif SIZEOF___INT64 == 1
-    __int64
-#else
-    nonexistent_byte1_type
-#endif
-byte1_type;
-
-typedef
-#if SIZEOF_CHAR == 2
-    char
-#elif SIZEOF_SHORT == 2
-    short
-#elif SIZEOF_INT == 2
-    int
-#elif SIZEOF_LONG == 2
-    long
-#elif SIZEOF_LONG_LONG == 2
-    long long
-#elif SIZEOF___INT64 == 2
-    __int64
-#else
-    nonexistent_byte2_type
-#endif
-byte2_type;
-
-typedef
-#if SIZEOF_CHAR == 4
-    char
-#elif SIZEOF_SHORT == 4
-    short
-#elif SIZEOF_INT == 4
-    int
-#elif SIZEOF_LONG == 4
-    long
-#elif SIZEOF_LONG_LONG == 4
-    long long
-#elif SIZEOF___INT64 == 4
-    __int64
-#else
-    nonexistent_byte4_type
-#endif
-byte4_type;
-
-typedef
-#if SIZEOF_CHAR == 8
-    char
-#elif SIZEOF_SHORT == 8
-    short
-#elif SIZEOF_INT == 8
-    int
-#elif SIZEOF_LONG == 8
-    long
-#elif SIZEOF_LONG_LONG == 8
-    long long
-#elif SIZEOF___INT64 == 8
-    __int64
-#else
-    nonexistent_byte8_type
-#endif
-byte8_type;
-
 // C99-7.18.1.1 Exact-width integer types
-typedef          byte1_type int8_t;
-typedef          byte2_type int16_t;
-typedef          byte4_type int32_t;
-typedef          byte8_type int64_t;
-typedef unsigned byte1_type uint8_t;
-typedef unsigned byte2_type uint16_t;
-typedef unsigned byte4_type uint32_t;
-typedef unsigned byte8_type uint64_t;
+
+// int8_t, uint8_t
+#if SIZEOF_CHAR == 1
+    typedef   signed char int8_t;
+    typedef unsigned char uint8_t;
+#elif SIZEOF_SHORT == 1
+    typedef   signed short int8_t;
+    typedef unsigned short uint8_t;
+#elif SIZEOF_INT == 1
+    typedef   signed int int8_t;
+    typedef unsigned int uint8_t;
+#elif SIZEOF_LONG == 1
+    typedef   signed long int8_t;
+    typedef unsigned long uint8_t;
+#elif SIZEOF_LONG_LONG == 1
+    typedef   signed long long int8_t;
+    typedef unsigned long long uint8_t;
+#elif SIZEOF___INT64 == 1
+    typedef   signed __int64 int8_t;
+    typedef unsigned __int64 uint8_t;
+#endif
+
+// int16_t, uint16_t
+#if SIZEOF_CHAR == 2
+    typedef   signed char int16_t;
+    typedef unsigned char uint16_t;
+#elif SIZEOF_SHORT == 2
+    typedef   signed short int16_t;
+    typedef unsigned short uint16_t;
+#elif SIZEOF_INT == 2
+    typedef   signed int int16_t;
+    typedef unsigned int uint16_t;
+#elif SIZEOF_LONG == 2
+    typedef   signed long int16_t;
+    typedef unsigned long uint16_t;
+#elif SIZEOF_LONG_LONG == 2
+    typedef   signed long long int16_t;
+    typedef unsigned long long uint16_t;
+#elif SIZEOF___INT64 == 2
+    typedef   signed __int64 int16_t;
+    typedef unsigned __int64 uint16_t;
+#endif
+
+// int32_t, uint32_t
+#if SIZEOF_CHAR == 4
+    typedef   signed char int32_t;
+    typedef unsigned char uint32_t;
+#elif SIZEOF_SHORT == 4
+    typedef   signed short int32_t;
+    typedef unsigned short uint32_t;
+#elif SIZEOF_INT == 4
+    typedef   signed int int32_t;
+    typedef unsigned int uint32_t;
+#elif SIZEOF_LONG == 4
+    typedef   signed long int32_t;
+    typedef unsigned long uint32_t;
+#elif SIZEOF_LONG_LONG == 4
+    typedef   signed long long int32_t;
+    typedef unsigned long long uint32_t;
+#elif SIZEOF___INT64 == 4
+    typedef   signed __int64 int32_t;
+    typedef unsigned __int64 uint32_t;
+#endif
+
+// int64_t, uint64_t
+#if SIZEOF_CHAR == 8
+    typedef   signed char int64_t;
+    typedef unsigned char uint64_t;
+#elif SIZEOF_SHORT == 8
+    typedef   signed short int64_t;
+    typedef unsigned short uint64_t;
+#elif SIZEOF_INT == 8
+    typedef   signed int int64_t;
+    typedef unsigned int uint64_t;
+#elif SIZEOF_LONG == 8
+    typedef   signed long int64_t;
+    typedef unsigned long uint64_t;
+#elif SIZEOF_LONG_LONG == 8
+    typedef   signed long long int64_t;
+    typedef unsigned long long uint64_t;
+#elif SIZEOF___INT64 == 8
+    typedef   signed __int64 int64_t;
+    typedef unsigned __int64 uint64_t;
+#endif
 
 // C99-7.18.1.2 Minimum-width integer types
 typedef int8_t   int_least8_t;
