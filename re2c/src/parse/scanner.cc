@@ -349,7 +349,7 @@ void Scanner::fill (uint32_t need)
 		{
 			need = BSIZE;
 		}
-		if (top - lim < need)
+		if (static_cast<uint32_t> (top - lim) < need)
 		{
 			const size_t copy = static_cast<size_t> (lim - bot);
 			char * buf = new char[copy + need];
