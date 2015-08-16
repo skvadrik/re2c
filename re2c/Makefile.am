@@ -63,6 +63,7 @@ SRC_HDR = \
 	src/util/free_list.h \
 	src/util/local_increment.h \
 	src/util/range.h \
+	src/util/s_to_n32_unsafe.h \
 	src/util/smart_ptr.h \
 	src/util/static_assert.h \
 	src/util/substr.h \
@@ -113,6 +114,7 @@ SRC = \
 	src/parse/input.cc \
 	src/parse/scanner.cc \
 	src/parse/unescape.cc \
+	src/util/s_to_n32_unsafe.cc \
 	src/util/range.cc
 re2c_SOURCES = \
 	$(SRC_HDR) \
@@ -250,6 +252,13 @@ testrange_SOURCES = \
 	src/util/range.h \
 	src/util/static_assert.h
 
-check_PROGRAMS = $(TST_RANGE)
+TST_S_TO_N32_UNSAFE = testston32unsafe
+testston32unsafe_SOURCES = \
+	src/test/s_to_n32_unsafe/test.cc \
+	src/util/s_to_n32_unsafe.cc
+
+check_PROGRAMS = \
+	$(TST_RANGE) \
+	$(TST_S_TO_N32_UNSAFE)
 
 TESTS = $(TST_SUITE) $(check_PROGRAMS)

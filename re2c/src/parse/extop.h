@@ -8,8 +8,8 @@ namespace re2c
 
 struct ExtOp
 {
-	int32_t minsize;
-	int32_t maxsize;
+	uint32_t min;
+	uint32_t max;
 };
 
 } // end namespace re2c

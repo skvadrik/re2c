@@ -420,17 +420,17 @@ factor:
 	|	primary CLOSESIZE
 		{
 			$1->ins_access = RegExp::PRIVATE;
-			if ($2.maxsize < 0)
+			if ($2.max == UINT32_MAX)
 			{
-				$$ = repeat_from ($1, $2.minsize);
+				$$ = repeat_from ($1, $2.min);
 			}
-			else if ($2.minsize == $2.maxsize)
+			else if ($2.min == $2.max)
 			{
-				$$ = repeat ($1, $2.minsize);
+				$$ = repeat ($1, $2.min);
 			}
 			else
 			{
-				$$ = repeat_from_to ($1, $2.minsize, $2.maxsize);
+				$$ = repeat_from_to ($1, $2.min, $2.max);
 			}
 			$$ = $$ ? $$ : new NullOp;
 		}

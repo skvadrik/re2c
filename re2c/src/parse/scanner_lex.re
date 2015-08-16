@@ -9,12 +9,9 @@
 #include "src/parse/parser.h"
 #include "src/parse/scanner.h"
 #include "y.tab.h"
+#include "src/util/s_to_n32_unsafe.h"
 
 extern YYSTYPE yylval;
-
-#ifndef MAX
-#define MAX(a,b) (((a)>(b))?(a):(b))
-#endif
 
 #define	YYCTYPE		unsigned char
 #define	YYCURSOR	cur
@@ -334,20 +331,33 @@ start:
 				}
 
 	"{" [0-9]+ "}"	{
-					yylval.extop.minsize = atoi((char *)tok+1);
-					yylval.extop.maxsize = atoi((char *)tok+1);
+					if (!s_to_u32_unsafe (tok + 1, cur - 1, yylval.extop.min))
+					{
+						fatal ("repetition count overflow");
+					}
+					yylval.extop.max = yylval.extop.min;
 					return CLOSESIZE;
 				}
 
 	"{" [0-9]+ "," [0-9]+ "}"	{
-					yylval.extop.minsize = atoi((char *)tok+1);
-					yylval.extop.maxsize = MAX(yylval.extop.minsize,atoi(strchr((char *)tok, ',')+1));
+					const char * p = strchr (tok, ',');
+					if (!s_to_u32_unsafe (tok + 1, p, yylval.extop.min))
+					{
+						fatal ("repetition lower bound overflow");
+					}
+					if (!s_to_u32_unsafe (p + 1, cur - 1, yylval.extop.max))
+					{
+						fatal ("repetition upper bound overflow");
+					}
 					return CLOSESIZE;
 				}
 
 	"{" [0-9]+ ",}"		{
-					yylval.extop.minsize = atoi((char *)tok+1);
-					yylval.extop.maxsize = -1;
+					if (!s_to_u32_unsafe (tok + 1, cur - 2, yylval.extop.min))
+					{
+						fatal ("repetition lower bound overflow");
+					}
+					yylval.extop.max = UINT32_MAX;
 					return CLOSESIZE;
 				}
 
@@ -601,7 +611,10 @@ config:
 value:
 /*!re2c
 	number		{
-					yylval.number = atoi(std::string (tok, tok_len ()).c_str());
+					if (!s_to_i32_unsafe (tok, cur, yylval.number))
+					{
+						fatal ("configuration value overflow");
+					}
 					lexer_state = LEX_NORMAL;
 					return NUMBER;
 				}
@@ -633,7 +646,10 @@ sourceline:
 	tok = cur;
 /*!re2c	
 	lineno		{
-					cline = atoi(std::string (tok, tok_len ()).c_str());
+					if (!s_to_u32_unsafe (tok, cur, cline))
+					{
+						fatal ("line number overflow");
+					}
 					goto sourceline; 
 				}
 	dstring		{
