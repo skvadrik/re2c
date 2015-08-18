@@ -119,4 +119,14 @@ void Warn::naked_default (uint32_t line, const std::vector<std::pair<uint32_t, u
 	}
 }
 
+void Warn::swapped_range (uint32_t line, uint32_t l, uint32_t u)
+{
+	if (mask[SWAPPED_RANGE] & WARNING)
+	{
+		const bool e = mask[SWAPPED_RANGE] & ERROR;
+		error_accuml |= e;
+		warning (names[SWAPPED_RANGE], line, e, "range lower bound (0x%X) is greater than upper bound (0x%X), swapping", l, u);
+	}
+}
+
 } // namespace re2c

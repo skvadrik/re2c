@@ -78,6 +78,7 @@ opt_warn:
 	"empty-character-class" end { warn.set (Warn::EMPTY_CHARACTER_CLASS, option); goto opt; }
 	"match-empty-string"    end { warn.set (Warn::MATCH_EMPTY_STRING,    option); goto opt; }
 	"naked-default"         end { warn.set (Warn::NAKED_DEFAULT,         option); goto opt; }
+	"swapped-range"         end { warn.set (Warn::SWAPPED_RANGE,         option); goto opt; }
 */
 
 opt_short:

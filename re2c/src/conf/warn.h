@@ -10,7 +10,8 @@ namespace re2c {
 #define RE2C_WARNING_TYPES \
 	W (EMPTY_CHARACTER_CLASS, "empty-character-class"), \
 	W (MATCH_EMPTY_STRING,    "match-empty-string"), \
-	W (NAKED_DEFAULT,         "naked-default"),
+	W (NAKED_DEFAULT,         "naked-default"), \
+	W (SWAPPED_RANGE,         "swapped-range"),
 
 class Warn
 {
@@ -47,6 +48,7 @@ public:
 	void empty_class (uint32_t line);
 	void match_empty_string (uint32_t line);
 	void naked_default (uint32_t line, const std::vector<std::pair<uint32_t, uint32_t> > & stray_cunits, const std::string & cond);
+	void swapped_range (uint32_t line, uint32_t l, uint32_t u);
 };
 
 } // namespace re2c

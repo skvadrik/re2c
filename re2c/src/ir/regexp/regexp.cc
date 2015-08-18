@@ -188,13 +188,16 @@ RegExp * Scanner::cpoint_class (const std::vector<uint32_t> & cs, bool neg) cons
 	const size_t count = cs.size ();
 	for (size_t i = 0; i < count; ++i)
 	{
-		const uint32_t l = cs[i];
-		const uint32_t u = count - i >= 3 && cs[i + 1] == '-'
+		uint32_t l = cs[i];
+		uint32_t u = count - i >= 3 && cs[i + 1] == '-'
 			? cs[i += 2]
 			: l;
-		Range * s = l > u
-			? encoding.encodeRange (u, l)
-			: encoding.encodeRange (l, u);
+		if (l > u)
+		{
+			warn.swapped_range (get_line (), l, u);
+			std::swap (l, u);
+		}
+		Range * s = encoding.encodeRange (l, u);
 		if (!s)
 		{
 			fatalf ("Bad code point range: '0x%X - 0x%X'", l, u);
