@@ -8,6 +8,7 @@
 #include "src/parse/extop.h"
 #include "src/parse/parser.h"
 #include "src/parse/scanner.h"
+#include "src/parse/unescape.h"
 #include "y.tab.h"
 #include "src/util/s_to_n32_unsafe.h"
 
@@ -32,12 +33,8 @@ namespace re2c
 
 /*!re2c
 zero    = "\000";
-dot     = .;
-esc     = dot \ [\\];
-istring = "[" "^" ((esc \ [\]]) | "\\" dot)* "]" ;
-cstring = "["     ((esc \ [\]]) | "\\" dot)* "]" ;
-dstring = "\""    ((esc \ ["] ) | "\\" dot)* "\"";
-sstring = "'"     ((esc \ ['] ) | "\\" dot)* "'" ;
+dstring = "\"" ((. \ [\\"] ) | "\\" .)* "\"";
+sstring = "'"  ((. \ [\\'] ) | "\\" .)* "'" ;
 letter  = [a-zA-Z];
 digit   = [0-9];
 lineno  = [1-9] digit*;
@@ -214,6 +211,8 @@ int Scanner::scan()
 {
 	uint32_t depth;
 
+	bool negated_class = false;
+	std::vector<uint32_t> cpoints;
 scan:
 	tchar = cur - pos;
 	tline = cline;
@@ -290,21 +289,8 @@ start:
 					fatal("unterminated string constant (missing ')");
 				}
 
-	istring		{
-					SubStr s (tok, tok_len ());
-					yylval.regexp = invToRE (s);
-					return RANGE;
-				}
-
-	cstring		{
-					SubStr s (tok, tok_len ());
-					yylval.regexp = ranToRE (s);
-					return RANGE;
-				}
-
-	"["			{
-					fatal("unterminated range (missing ])");
-				}
+	"["  {                       goto cpoint_class; }
+	"[^" { negated_class = true; goto cpoint_class; }
 
 	"<>" / (space* ("{" | "=>" | ":=")) {
 					return NOCOND;
@@ -451,6 +437,34 @@ flex_name:
 	{
 		YYCURSOR = tok;
 		goto start;
+	}
+*/
+
+cpoint_class:
+	tok = cur;
+/*!re2c
+	printable = [\x20-\x7E];
+	escapable = [abfnrtv\\];
+	esc = "\\";
+	hex_digit = [0-9a-fA-F];
+	hex = "x" hex_digit{2} | [uX] hex_digit{4} | "U" hex_digit{8};
+	oct = [0-3] [0-7]{2}; // max 1-byte octal value is '\377'
+
+	*          { fatal ((tok - pos) - tchar, "syntax error in character range"); }
+	esc [xXuU] { fatal ((tok - pos) - tchar, "syntax error in hexadecimal escape sequence"); }
+	esc [0-7]  { fatal ((tok - pos) - tchar, "syntax error in octal escape sequence"); }
+	esc        { fatal ((tok - pos) - tchar, "syntax error in escape sequence"); }
+
+	esc hex                 { cpoints.push_back (unesc_hex (tok, cur));           goto cpoint_class; }
+	esc oct                 { cpoints.push_back (unesc_oct (tok, cur));           goto cpoint_class; }
+	esc escapable           { cpoints.push_back (unesc_escapable (tok));          goto cpoint_class; }
+	esc "]"                 { cpoints.push_back (']');                            goto cpoint_class; }
+	printable \ (esc | "]") { cpoints.push_back (static_cast<uint32_t> (tok[0])); goto cpoint_class; }
+	esc printable           { cpoints.push_back (static_cast<uint32_t> (tok[1])); goto cpoint_class; } // for backwards compatibility
+	"]"
+	{
+		yylval.regexp = cpoint_class (cpoints, negated_class);
+		return RANGE;
 	}
 */
 

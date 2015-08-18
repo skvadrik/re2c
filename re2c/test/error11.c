@@ -1,1 +1,1 @@
-re2c: error: line 2, column 9: Illegal unicode character, non hexadecimal digit found
+re2c: error: line 2, column 2: syntax error in hexadecimal escape sequence

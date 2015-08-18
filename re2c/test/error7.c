@@ -1,1 +1,1 @@
-re2c: error: line 2, column 3: Illegal octal character code, first digit must be 0 thru 3
+re2c: error: line 2, column 2: syntax error in octal escape sequence

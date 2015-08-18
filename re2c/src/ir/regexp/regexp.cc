@@ -110,33 +110,6 @@ RegExp * doCat (RegExp * e1, RegExp * e2)
 	return new CatOp (e1, e2);
 }
 
-Range * Scanner::getRange(SubStr &s) const
-{
-	uint32_t lb = unescape(s), ub;
-
-	if (s.len < 2 || *s.str != '-')
-	{
-		ub = lb;
-	}
-	else
-	{
-		s.len--;
-		s.str++;
-		ub = unescape(s);
-		if (ub < lb)
-		{
-			uint32_t tmp = lb;
-			lb = ub;
-			ub = tmp;
-		}
-	}
-
-	Range * r = encoding.encodeRange(lb, ub);
-	if (r == NULL)
-		fatalf("Bad code point range: '0x%X - 0x%X'", lb, ub);
-	return r;
-}
-
 RegExp * Scanner::matchSymbol(uint32_t c) const
 {
 	if (!encoding.encode(c))
@@ -183,15 +156,6 @@ RegExp * Scanner::strToCaseInsensitiveRE (SubStr & s) const
 	return r ? r : new NullOp;
 }
 
-Range * Scanner::mkRange(SubStr &s) const
-{
-	Range *r = getRange(s);
-	while (s.len > 0)
-		r = Range::add (r, getRange(s));
-
-	return r;
-}
-
 RegExp * Scanner::matchSymbolRange(Range * r) const
 {
 	if (!r)
@@ -218,30 +182,30 @@ RegExp * Scanner::matchSymbolRange(Range * r) const
 		return new MatchOp(r);
 }
 
-RegExp * Scanner::ranToRE (SubStr & s) const
+RegExp * Scanner::cpoint_class (const std::vector<uint32_t> & cs, bool neg) const
 {
-	s.len -= 2;
-	s.str += 1;
-
-	Range * r = s.len == 0
-		? NULL
-		: mkRange(s);
-
+	Range * r = NULL;
+	const size_t count = cs.size ();
+	for (size_t i = 0; i < count; ++i)
+	{
+		const uint32_t l = cs[i];
+		const uint32_t u = count - i >= 3 && cs[i + 1] == '-'
+			? cs[i += 2]
+			: l;
+		Range * s = l > u
+			? encoding.encodeRange (u, l)
+			: encoding.encodeRange (l, u);
+		if (!s)
+		{
+			fatalf ("Bad code point range: '0x%X - 0x%X'", l, u);
+		}
+		r = Range::add (r, s);
+	}
+	if (neg)
+	{
+		r = Range::sub (encoding.fullRange (), r);
+	}
 	return matchSymbolRange (r);
-}
-
-RegExp * Scanner::invToRE (SubStr & s) const
-{
-	s.len -= 3;
-	s.str += 2;
-
-	Range * full = encoding.fullRange();
-
-	Range * r = s.len == 0
-		? full
-		: Range::sub (full, mkRange (s));
-
-	return matchSymbolRange(r);
 }
 
 RegExp * Scanner::mkDiff (RegExp * e1, RegExp * e2) const

@@ -97,17 +97,14 @@ public:
 	uint32_t unescape(SubStr &s) const;
 	std::string& unescape(SubStr& str_in, std::string& str_out) const;
 
-	Range * mkRange (SubStr & s) const;
-	Range * getRange (SubStr & s) const;
 	RegExp * matchSymbol (uint32_t c) const;
 	RegExp * matchSymbolRange (Range * r) const;
 	RegExp * strToRE (SubStr & s) const;
 	RegExp * strToCaseInsensitiveRE (SubStr & s) const;
-	RegExp * ranToRE (SubStr & s) const;
-	RegExp * invToRE (SubStr & s) const;
 	RegExp * mkDiff (RegExp * e1, RegExp * e2) const;
 	RegExp * mkDot () const;
 	RegExp * mkDefault () const;
+	RegExp * cpoint_class (const std::vector<uint32_t> & cs, bool neg) const;
 
 	FORBID_COPY (Scanner);
 };

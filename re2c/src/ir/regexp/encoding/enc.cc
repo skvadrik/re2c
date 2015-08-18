@@ -130,8 +130,10 @@ Range * Enc::encodeRange(uint32_t l, uint32_t h) const
 	switch (type)
 	{
 		case ASCII:
-			l &= 0xFF;
-			h &= 0xFF;
+			if (l > 0xFF || h > 0xFF)
+			{
+				return NULL;
+			}
 			r = Range::ran (l, h + 1);
 			break;
 		case EBCDIC:

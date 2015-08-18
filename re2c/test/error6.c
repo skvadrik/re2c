@@ -1,1 +1,1 @@
-re2c: error: line 2, column 7: Illegal hexadecimal character code, four hexadecimal digits are required
+re2c: error: line 2, column 2: syntax error in hexadecimal escape sequence
