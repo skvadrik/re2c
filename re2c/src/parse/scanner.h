@@ -76,8 +76,7 @@ public:
 	ParseMode echo();
 	int scan();
 	void reuse();
-	
-	size_t get_pos() const;
+
 	void save_state(ScannerState&) const;
 	void restore_state(const ScannerState&);
 
@@ -113,12 +112,6 @@ inline size_t Scanner::tok_len () const
 {
 	// lexing and fill procedures must maintain: token pointer <= cursor pointer
 	return static_cast<size_t> (cur - tok);
-}
-
-inline size_t Scanner::get_pos() const
-{
-	// lexing and fill procedures must maintain: buffer bottom <= cursor pointer
-	return static_cast<size_t> (cur - bot);
 }
 
 inline const std::string & Scanner::get_fname () const
