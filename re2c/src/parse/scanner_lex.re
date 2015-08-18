@@ -460,7 +460,13 @@ cpoint_class:
 	esc escapable           { cpoints.push_back (unesc_escapable (tok));          goto cpoint_class; }
 	esc "]"                 { cpoints.push_back (']');                            goto cpoint_class; }
 	printable \ (esc | "]") { cpoints.push_back (static_cast<uint32_t> (tok[0])); goto cpoint_class; }
-	esc printable           { cpoints.push_back (static_cast<uint32_t> (tok[1])); goto cpoint_class; } // for backwards compatibility
+	esc printable
+	{
+		const char c = tok[1];
+		warn.useless_escape (tline, tok - pos, c);
+		cpoints.push_back (static_cast<uint32_t> (c));
+		goto cpoint_class;
+	}
 	"]"
 	{
 		yylval.regexp = cpoint_class (cpoints, negated_class);

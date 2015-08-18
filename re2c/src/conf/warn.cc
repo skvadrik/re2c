@@ -129,4 +129,14 @@ void Warn::swapped_range (uint32_t line, uint32_t l, uint32_t u)
 	}
 }
 
+void Warn::useless_escape (uint32_t line, uint32_t col, char c)
+{
+	if (mask[USELESS_ESCAPE] & WARNING)
+	{
+		const bool e = mask[USELESS_ESCAPE] & ERROR;
+		error_accuml |= e;
+		warning (names[USELESS_ESCAPE], line, e, "column %u: escape has no effect: '\\%c'", col, c);
+	}
+}
+
 } // namespace re2c

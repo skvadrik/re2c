@@ -79,6 +79,7 @@ opt_warn:
 	"match-empty-string"    end { warn.set (Warn::MATCH_EMPTY_STRING,    option); goto opt; }
 	"naked-default"         end { warn.set (Warn::NAKED_DEFAULT,         option); goto opt; }
 	"swapped-range"         end { warn.set (Warn::SWAPPED_RANGE,         option); goto opt; }
+	"useless-escape"        end { warn.set (Warn::USELESS_ESCAPE,        option); goto opt; }
 */
 
 opt_short:
