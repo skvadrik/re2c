@@ -98,8 +98,6 @@ public:
 
 	RegExp * matchSymbol (uint32_t c) const;
 	RegExp * matchSymbolRange (Range * r) const;
-	RegExp * strToRE (SubStr & s) const;
-	RegExp * strToCaseInsensitiveRE (SubStr & s) const;
 	RegExp * mkDiff (RegExp * e1, RegExp * e2) const;
 	RegExp * mkDot () const;
 	RegExp * mkDefault () const;

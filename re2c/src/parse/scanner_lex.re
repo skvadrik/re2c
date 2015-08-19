@@ -359,16 +359,11 @@ start:
 						yylval.str = new std::string (tok, tok_len ());
 						return ID;
 					} else {
-						/* Add one char in front and one behind instead of 's or "s */
-						SubStr s (tok, tok_len ());
-						if (bCaseInsensitive || bCaseInverted)
+						for (char * p = tok; p < cur; ++p)
 						{
-							yylval.regexp = strToCaseInsensitiveRE (s);
+							cpoints.push_back (static_cast<uint32_t> (*p));
 						}
-						else
-						{
-							yylval.regexp = strToRE (s);
-						}
+						yylval.regexp = cpoint_string (cpoints, bCaseInsensitive || bCaseInverted);
 						return STRING;
 					}
 				}

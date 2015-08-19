@@ -123,39 +123,6 @@ RegExp * Scanner::matchSymbol(uint32_t c) const
 		return new MatchOp (Range::sym (c));
 }
 
-RegExp * Scanner::strToRE (SubStr & s) const
-{
-	if (s.len == 0)
-		return new NullOp;
-
-	RegExp *re = matchSymbol(unescape(s));
-
-	while (s.len > 0)
-		re = new CatOp(re, matchSymbol(unescape(s)));
-
-	return re;
-}
-
-RegExp * Scanner::strToCaseInsensitiveRE (SubStr & s) const
-{
-	RegExp * r = NULL;
-	while (s.len > 0)
-	{
-		const uint32_t c = unescape (s);
-		if (is_alpha (c))
-		{
-			RegExp * rl = matchSymbol (to_lower_unsafe (c));
-			RegExp * ru = matchSymbol (to_upper_unsafe (c));
-			r = doCat (r, mkAlt (rl, ru));
-		}
-		else
-		{
-			r = doCat (r, matchSymbol (c));
-		}
-	}
-	return r ? r : new NullOp;
-}
-
 RegExp * Scanner::matchSymbolRange(Range * r) const
 {
 	if (!r)
