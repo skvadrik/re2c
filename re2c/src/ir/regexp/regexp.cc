@@ -182,6 +182,27 @@ RegExp * Scanner::matchSymbolRange(Range * r) const
 		return new MatchOp(r);
 }
 
+RegExp * Scanner::cpoint_string (const std::vector<uint32_t> & cs, bool case_insensitive) const
+{
+	RegExp * r = NULL;
+	const size_t count = cs.size ();
+	for (size_t i = 0; i < count; ++i)
+	{
+		const uint32_t c = cs[i];
+		if (case_insensitive && is_alpha (c))
+		{
+			RegExp * rl = matchSymbol (to_lower_unsafe (c));
+			RegExp * ru = matchSymbol (to_upper_unsafe (c));
+			r = doCat (r, mkAlt (rl, ru));
+		}
+		else
+		{
+			r = doCat (r, matchSymbol (c));
+		}
+	}
+	return r ? r : new NullOp;
+}
+
 RegExp * Scanner::cpoint_class (const std::vector<uint32_t> & cs, bool neg) const
 {
 	Range * r = NULL;

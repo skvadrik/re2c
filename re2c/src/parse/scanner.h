@@ -103,6 +103,7 @@ public:
 	RegExp * mkDiff (RegExp * e1, RegExp * e2) const;
 	RegExp * mkDot () const;
 	RegExp * mkDefault () const;
+	RegExp * cpoint_string (const std::vector<uint32_t> & cs, bool case_sensitive) const;
 	RegExp * cpoint_class (const std::vector<uint32_t> & cs, bool neg) const;
 
 	FORBID_COPY (Scanner);

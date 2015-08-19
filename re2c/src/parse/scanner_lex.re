@@ -47,6 +47,12 @@ eol     = ("\r\n" | "\n");
 config  = "re2c" cname+ ("@" name)?;
 value   = [^\r\n; \t]* | dstring | sstring;
 lineinf = lineno (space+ dstring)? eol;
+
+	escapable = [abfnrtv\\];
+	esc = "\\";
+	hex_digit = [0-9a-fA-F];
+	hex = "x" hex_digit{2} | [uX] hex_digit{4} | "U" hex_digit{8};
+	oct = [0-3] [0-7]{2}; // max 1-byte octal value is '\377'
 */
 
 Scanner::ParseMode Scanner::echo()
@@ -211,6 +217,7 @@ int Scanner::scan()
 {
 	uint32_t depth;
 
+	char quote;
 	bool negated_class = false;
 	std::vector<uint32_t> cpoints;
 scan:
@@ -256,41 +263,9 @@ start:
 					return 0;
 				}
 
-	dstring		{
-					SubStr s (tok + 1, tok_len () - 2); // -2 to omit quotes
-					if (bCaseInsensitive || bCaseInverted)
-					{
-						yylval.regexp = strToCaseInsensitiveRE (s);
-					}
-					else
-					{
-						yylval.regexp = strToRE (s);
-					}
-					return STRING;
-				}
-
-	sstring		{
-					SubStr s (tok + 1, tok_len () - 2); // -2 to omit quotes
-					if (bCaseInverted)
-					{
-						yylval.regexp = strToRE (s);
-					}
-					else
-					{
-						yylval.regexp = strToCaseInsensitiveRE (s);
-					}
-					return STRING;
-				}
-
-	"\""		{
-					fatal("unterminated string constant (missing \")");
-				}
-	"'"			{
-					fatal("unterminated string constant (missing ')");
-				}
-
-	"["  {                       goto cpoint_class; }
-	"[^" { negated_class = true; goto cpoint_class; }
+	['"] { quote = tok[0];                    goto cpoints; }
+	"["  { quote = ']';                       goto cpoints; }
+	"[^" { quote = ']'; negated_class = true; goto cpoints; }
 
 	"<>" / (space* ("{" | "=>" | ":=")) {
 					return NOCOND;
@@ -440,37 +415,49 @@ flex_name:
 	}
 */
 
-cpoint_class:
+cpoints:
 	tok = cur;
 /*!re2c
-	printable = [\x20-\x7E];
-	escapable = [abfnrtv\\];
-	esc = "\\";
-	hex_digit = [0-9a-fA-F];
-	hex = "x" hex_digit{2} | [uX] hex_digit{4} | "U" hex_digit{8};
-	oct = [0-3] [0-7]{2}; // max 1-byte octal value is '\377'
-
-	*          { fatal ((tok - pos) - tchar, "syntax error in character range"); }
 	esc [xXuU] { fatal ((tok - pos) - tchar, "syntax error in hexadecimal escape sequence"); }
 	esc [0-7]  { fatal ((tok - pos) - tchar, "syntax error in octal escape sequence"); }
 	esc        { fatal ((tok - pos) - tchar, "syntax error in escape sequence"); }
 
-	esc hex                 { cpoints.push_back (unesc_hex (tok, cur));           goto cpoint_class; }
-	esc oct                 { cpoints.push_back (unesc_oct (tok, cur));           goto cpoint_class; }
-	esc escapable           { cpoints.push_back (unesc_escapable (tok));          goto cpoint_class; }
-	esc "]"                 { cpoints.push_back (']');                            goto cpoint_class; }
-	printable \ (esc | "]") { cpoints.push_back (static_cast<uint32_t> (tok[0])); goto cpoint_class; }
-	esc printable
+	esc hex       { cpoints.push_back (unesc_hex (tok, cur));  goto cpoints; }
+	esc oct       { cpoints.push_back (unesc_oct (tok, cur));  goto cpoints; }
+	esc escapable { cpoints.push_back (unesc_escapable (tok)); goto cpoints; }
+	esc [^]
 	{
 		const char c = tok[1];
-		warn.useless_escape (tline, tok - pos, c);
+		if (c != quote)
+		{
+			warn.useless_escape (tline, tok - pos, c);
+		}
 		cpoints.push_back (static_cast<uint32_t> (c));
-		goto cpoint_class;
+		goto cpoints;
 	}
-	"]"
+	[^] \ esc
 	{
-		yylval.regexp = cpoint_class (cpoints, negated_class);
-		return RANGE;
+		const char c = tok[0];
+		if (c == quote)
+		{
+			switch (quote)
+			{
+				case ']':
+					yylval.regexp = cpoint_class (cpoints, negated_class);
+					return RANGE;
+				case '\'':
+					yylval.regexp = cpoint_string (cpoints, bCaseInsensitive || !bCaseInverted);
+					return STRING;
+				case '"':
+					yylval.regexp = cpoint_string (cpoints, bCaseInsensitive || bCaseInverted);
+					return STRING;
+			}
+		}
+		else
+		{
+			cpoints.push_back (static_cast<uint32_t> (c));
+			goto cpoints;
+		}
 	}
 */
 
