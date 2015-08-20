@@ -361,7 +361,7 @@ start:
 					} else {
 						for (char * p = tok; p < cur; ++p)
 						{
-							cpoints.push_back (static_cast<uint32_t> (*p));
+							cpoints.push_back (static_cast<uint8_t> (*p));
 						}
 						yylval.regexp = cpoint_string (cpoints, bCaseInsensitive || bCaseInverted);
 						return STRING;

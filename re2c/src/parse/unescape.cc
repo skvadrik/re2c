@@ -72,7 +72,7 @@ uint32_t unesc_oct (const char * s, const char * s_end)
 	for (++s; s != s_end; ++s)
 	{
 		n <<= 3;
-		n += static_cast<uint32_t> (*s - '0');
+		n += static_cast<uint8_t> (*s - '0');
 	}
 	return n;
 }
