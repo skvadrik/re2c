@@ -37,7 +37,7 @@ static inline uint32_t hex_digit (const char c)
 }
 
 // expected string format: "\" [abfnrtv\\]
-uint32_t unesc_escapable (char * s)
+uint32_t unesc_simple (char * s)
 {
 	switch (s[1])
 	{

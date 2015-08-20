@@ -48,11 +48,11 @@ config  = "re2c" cname+ ("@" name)?;
 value   = [^\r\n; \t]* | dstring | sstring;
 lineinf = lineno (space+ dstring)? eol;
 
-	escapable = [abfnrtv\\];
 	esc = "\\";
 	hex_digit = [0-9a-fA-F];
-	hex = "x" hex_digit{2} | [uX] hex_digit{4} | "U" hex_digit{8};
-	oct = [0-3] [0-7]{2}; // max 1-byte octal value is '\377'
+	esc_hex = esc ("x" hex_digit{2} | [uX] hex_digit{4} | "U" hex_digit{8});
+	esc_oct = esc [0-3] [0-7]{2}; // max 1-byte octal value is '\377'
+	esc_simple = esc [abfnrtv\\];
 */
 
 Scanner::ParseMode Scanner::echo()
@@ -413,14 +413,15 @@ flex_name:
 cpoints:
 	tok = cur;
 /*!re2c
+	*          { fatal ((tok - pos) - tchar, "syntax error"); }
 	esc [xXuU] { fatal ((tok - pos) - tchar, "syntax error in hexadecimal escape sequence"); }
 	esc [0-7]  { fatal ((tok - pos) - tchar, "syntax error in octal escape sequence"); }
 	esc        { fatal ((tok - pos) - tchar, "syntax error in escape sequence"); }
 
-	esc hex       { cpoints.push_back (unesc_hex (tok, cur));  goto cpoints; }
-	esc oct       { cpoints.push_back (unesc_oct (tok, cur));  goto cpoints; }
-	esc escapable { cpoints.push_back (unesc_escapable (tok)); goto cpoints; }
-	esc [^]
+	esc_hex    { cpoints.push_back (unesc_hex (tok, cur)); goto cpoints; }
+	esc_oct    { cpoints.push_back (unesc_oct (tok, cur)); goto cpoints; }
+	esc_simple { cpoints.push_back (unesc_simple (tok));   goto cpoints; }
+	esc .
 	{
 		const char c = tok[1];
 		if (c != quote)
@@ -430,7 +431,7 @@ cpoints:
 		cpoints.push_back (static_cast<uint8_t> (c));
 		goto cpoints;
 	}
-	[^] \ esc
+	. \ esc
 	{
 		const char c = tok[0];
 		if (c == quote)
