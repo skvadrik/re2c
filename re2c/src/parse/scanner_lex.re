@@ -427,7 +427,7 @@ cpoints:
 		{
 			warn.useless_escape (tline, tok - pos, c);
 		}
-		cpoints.push_back (static_cast<uint32_t> (c));
+		cpoints.push_back (static_cast<uint8_t> (c));
 		goto cpoints;
 	}
 	[^] \ esc
@@ -450,7 +450,7 @@ cpoints:
 		}
 		else
 		{
-			cpoints.push_back (static_cast<uint32_t> (c));
+			cpoints.push_back (static_cast<uint8_t> (c));
 			goto cpoints;
 		}
 	}

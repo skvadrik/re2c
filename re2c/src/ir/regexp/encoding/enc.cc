@@ -54,19 +54,23 @@ const uint32_t Enc::ebc2asc[256] =
  * it is assumed that user considers it to be valid.
  * We must check it.
  *
- * Returns false if this code point is forbidden
- * by current policy, otherwise returns true.
- * Overwrites code point.
+ * Returns false if this code point exceeds maximum
+ * or is forbidden by current policy, otherwise
+ * returns true. Overwrites code point.
  */
 bool Enc::encode(uint32_t & c) const
 {
+	if (c >= nCodePoints ())
+	{
+		return false;
+	}
+
 	switch (type)
 	{
 		case ASCII:
-			c &= 0xFF;
 			return true;
 		case EBCDIC:
-			c = asc2ebc[c & 0xFF];
+			c = asc2ebc[c];
 			return true;
 		case UCS2:
 		case UTF16:
@@ -120,29 +124,30 @@ uint32_t Enc::decodeUnsafe(uint32_t c) const
  * it is assumed that user considers that all code
  * points from this range are valid. re2c must check it.
  *
- * Returns NULL if range contains code points forbidden
- * by current policy, otherwise returns pointer to newly
- * constructed Range.
+ * Returns NULL if range contains code points that
+ * exceed maximum or are forbidden by current policy,
+ * otherwise returns pointer to newly constructed range.
  */
 Range * Enc::encodeRange(uint32_t l, uint32_t h) const
 {
+	if (l >= nCodePoints () || h >= nCodePoints ())
+	{
+		return NULL;
+	}
+
 	Range * r = NULL;
 	switch (type)
 	{
 		case ASCII:
-			if (l > 0xFF || h > 0xFF)
-			{
-				return NULL;
-			}
 			r = Range::ran (l, h + 1);
 			break;
 		case EBCDIC:
 		{
-			const uint32_t el = asc2ebc[l & 0xFF];
+			const uint32_t el = asc2ebc[l];
 			r = Range::sym (el);
 			for (uint32_t c = l + 1; c <= h; ++c)
 			{
-				const uint32_t ec = asc2ebc[c & 0xFF];
+				const uint32_t ec = asc2ebc[c];
 				r = Range::add (r, Range::sym (ec));
 			}
 			break;
@@ -177,14 +182,14 @@ Range * Enc::encodeRange(uint32_t l, uint32_t h) const
 }
 
 /*
- * Returns [0 - CPOINT_MAX] (full range) representation
- * for current encoding with regard to current policy.
+ * Returns full range representation for current encoding
+ * with regard to current policy.
  *
  * Since range is defined declaratively, re2c does
  * all the necessary corrections 'for free'.
  *
  * Always succeeds, returns pointer to newly constructed
- * Range.
+ * range.
  */
 Range * Enc::fullRange() const
 {

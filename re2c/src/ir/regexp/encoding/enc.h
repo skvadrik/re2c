@@ -6,28 +6,33 @@
 
 namespace re2c {
 
-// Each encoding defines two concepts:
-//
-// 1) Code point -- abstract number, which represents single encoding symbol.
-//	E.g., Unicode defines 0x10FFFF code points, so each Unicode encoding
-//	must be capable of representing 0x10FFFF code points.
-//
-// 2) Code unit -- the smallest unit of memory, which is used in the encoded
-//	text. One or more code units can be needed to represent a single code
-//	point, depending on the encoding. For each encoding, all code points
-//	either are represented with equal number of code units (fixed-length
-//	encodings), or with variable number of code units (variable-length
-//	encodings).
-//
-// encoding | code point number | code point size       | code unit number | code unit size
-// ---------|-------------------|-----------------------|------------------|----------------
-// ASCII    | 0xFF              | fixed,        1 byte  | 0xFF             | 1 byte
-// EBCDIC   | 0xFF              | fixed,        1 byte  | 0xFF             | 1 byte
-// UCS2     | 0xFFFF            | fixed,        2 bytes | 0xFFFF           | 2 bytes
-// UTF16    | 0x10FFFF          | variable, 2 - 4 bytes | 0xFFFF           | 2 bytes
-// UTF32    | 0x10FFFF          | fixed,        4 bytes | 0x10FFFF         | 4 bytes
-// UTF8     | 0x10FFFF          | variable, 1 - 4 bytes | 0xFF             | 1 byte
-// -----------------------------------------------------------------------------------------
+/*
+ * note [encodings]
+ *
+ * Each encoding defines two concepts:
+ *
+ * 1) Code point -- abstract number, which represents single encoding symbol.
+ *    E.g., Unicode defines code points in the range [0 - 0x10FFFF] , so each
+ *    Unicode encoding must be capable of representing 0x110000 code points.
+ *
+ * 2) Code unit -- the smallest unit of memory, which is used in the encoded
+ *    text. One or more code units can be needed to represent a single code
+ *    point, depending on the encoding. For each encoding, all code points
+ *    either are represented with equal number of code units (fixed-length
+ *    encodings), or with variable number of code units (variable-length
+ *    encodings).
+ *
+ * +----------+------------------+-----------------------+-----------------+----------------+
+ * | encoding | code point range | code point size       | code unit range | code unit size |
+ * +----------+------------------+-----------------------+-----------------+----------------+
+ * | ASCII    | 0 - 0xFF         | fixed,        1 byte  | 0 - 0xFF        | 1 byte         |
+ * | EBCDIC   | 0 - 0xFF         | fixed,        1 byte  | 0 - 0xFF        | 1 byte         |
+ * | UCS2     | 0 - 0xFFFF       | fixed,        2 bytes | 0 - 0xFFFF      | 2 bytes        |
+ * | UTF16    | 0 - 0x10FFFF     | variable, 2 - 4 bytes | 0 - 0xFFFF      | 2 bytes        |
+ * | UTF32    | 0 - 0x10FFFF     | fixed,        4 bytes | 0 - 0x10FFFF    | 4 bytes        |
+ * | UTF8     | 0 - 0x10FFFF     | variable, 1 - 4 bytes | 0 - 0xFF        | 1 byte         |
+ * +----------+------------------+-----------------------+-----------------+----------------+
+ */
 
 class Enc
 {
