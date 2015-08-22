@@ -115,12 +115,12 @@ RegExp * Scanner::matchSymbol(uint32_t c) const
 	if (!encoding.encode(c))
 		fatalf("Bad code point: '0x%X'", c);
 
-	if (encoding.is(Enc::UTF16))
-		return UTF16Symbol(c);
-	else if (encoding.is(Enc::UTF8))
-		return UTF8Symbol(c);
-	else
-		return new MatchOp (Range::sym (c));
+	switch (encoding.type ())
+	{
+		case Enc::UTF16: return UTF16Symbol(c);
+		case Enc::UTF8:  return UTF8Symbol(c);
+		default:         return new MatchOp (Range::sym (c));
+	}
 }
 
 RegExp * Scanner::matchSymbolRange(Range * r) const
@@ -141,12 +141,12 @@ RegExp * Scanner::matchSymbolRange(Range * r) const
 		}
 	}
 
-	if (encoding.is(Enc::UTF16))
-		return UTF16Range(r);
-	else if (encoding.is(Enc::UTF8))
-		return UTF8Range(r);
-	else
-		return new MatchOp(r);
+	switch (encoding.type ())
+	{
+		case Enc::UTF16: return UTF16Range(r);
+		case Enc::UTF8:  return UTF8Range(r);
+		default:         return new MatchOp(r);
+	}
 }
 
 RegExp * Scanner::cpoint_string (const std::vector<uint32_t> & cs, bool case_insensitive) const

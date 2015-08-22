@@ -65,7 +65,7 @@ bool Enc::encode(uint32_t & c) const
 		return false;
 	}
 
-	switch (type)
+	switch (type_)
 	{
 		case ASCII:
 			return true;
@@ -80,7 +80,7 @@ bool Enc::encode(uint32_t & c) const
 				return true;
 			else
 			{
-				switch (policy)
+				switch (policy_)
 				{
 					case POLICY_FAIL:
 						return false;
@@ -101,7 +101,7 @@ bool Enc::encode(uint32_t & c) const
  */
 uint32_t Enc::decodeUnsafe(uint32_t c) const
 {
-	switch (type)
+	switch (type_)
 	{
 		case EBCDIC:
 			c = ebc2asc[c & 0xFF];
@@ -136,7 +136,7 @@ Range * Enc::encodeRange(uint32_t l, uint32_t h) const
 	}
 
 	Range * r = NULL;
-	switch (type)
+	switch (type_)
 	{
 		case ASCII:
 			r = Range::ran (l, h + 1);
@@ -159,7 +159,7 @@ Range * Enc::encodeRange(uint32_t l, uint32_t h) const
 			r = Range::ran (l, h + 1);
 			if (l <= SURR_MAX && h >= SURR_MIN)
 			{
-				switch (policy)
+				switch (policy_)
 				{
 					case POLICY_FAIL:
 						r = NULL;
@@ -194,7 +194,7 @@ Range * Enc::encodeRange(uint32_t l, uint32_t h) const
 Range * Enc::fullRange() const
 {
 	Range * r = Range::ran (0, nCodePoints());
-	if (policy != POLICY_IGNORE)
+	if (policy_ != POLICY_IGNORE)
 	{
 		Range * surrs = Range::ran (SURR_MIN, SURR_MAX + 1);
 		r = Range::sub (r, surrs);

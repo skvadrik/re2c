@@ -40,12 +40,9 @@ digit   = [0-9];
 lineno  = [1-9] digit*;
 number  = "0" | ("-"? [1-9] digit*);
 name    = (letter|digit|"_")+;
-cname   = ":" name;
 space   = [ \t];
 ws      = (space | [\r\n]);
 eol     = ("\r\n" | "\n");
-config  = "re2c" cname+ ("@" name)?;
-value   = [^\r\n; \t]* | dstring | sstring;
 lineinf = lineno (space+ dstring)? eol;
 
 	esc = "\\";
@@ -226,10 +223,9 @@ scan:
 	tok = cur;
 	switch (lexer_state)
 	{
-		case LEX_NORMAL:       goto start;
-		case LEX_CONFIG:       goto config;
-		case LEX_CONFIG_VALUE: goto value;
-		case LEX_FLEX_NAME:    goto flex_name;
+		case LEX_NORMAL:    goto start;
+		case LEX_CONF:      goto conf_eq;
+		case LEX_FLEX_NAME: goto flex_name;
 	}
 
 start:
@@ -329,12 +325,7 @@ start:
 					return ID;
 				}
 
-	config		{
-					tok += 5; /* skip "re2c:" */
-					lexer_state = LEX_CONFIG;
-					yylval.str = new std::string (tok, tok_len ());
-					return CONFIG;
-				}
+	"re2c:" { goto conf; }
 
 	name / (space+ [^=>,])	{
 					yylval.str = new std::string (tok, tok_len ());
@@ -592,35 +583,133 @@ nextLine:
             }
 */
 
-config:
+conf:
+	tok = cur;
+	lexer_state = LEX_CONF;
 /*!re2c
-	space+		{
-					goto config;
-				}
-	"=" space*	{
-					lexer_state = LEX_CONFIG_VALUE;
-					return '=';
-				}
-	*			{
-					fatal("missing '='");
-				}
+	* { fatal ((tok - pos) - tchar, "unrecognized configuration"); }
+
+	"define:"
+		( "YYBACKUP"
+		| "YYBACKUPCTX"
+		| "YYCONDTYPE"
+		| "YYCTXMARKER"
+		| "YYCTYPE"
+		| "YYCURSOR"
+		| "YYDEBUG"
+		| "YYFILL"
+		| "YYGETCONDITION"
+		| "YYGETSTATE"
+		| "YYLESSTHAN"
+		| "YYLIMIT"
+		| "YYMARKER"
+		| "YYPEEK"
+		| "YYRESTORE"
+		| "YYRESTORECTX"
+		| "YYSETCONDITION"
+		| "YYSETSTATE"
+		| "YYSKIP"
+		)
+	{
+		tok += sizeof "define:" - 1;
+		yylval.str = new std::string (tok, tok_len ());
+		return CONF;
+	}
+
+	"label:"
+		( "yyFillLabel"
+		| "yyNext"
+		)
+	{
+		tok += sizeof "label:" - 1;
+		yylval.str = new std::string (tok, tok_len ());
+		return CONF;
+	}
+
+	"variable:"
+		( "yyaccept"
+		| "yybm"
+		| "yych"
+		| "yyctable"
+		| "yystable"
+		| "yytarget"
+		)
+	{
+		tok += sizeof "variable:" - 1;
+		yylval.str = new std::string (tok, tok_len ());
+		return CONF;
+	}
+
+	"condprefix"                  { return CONF_CONDPREFIX; }
+	"condenumprefix"              { return CONF_CONDENUMPREFIX; }
+	"cond:divider"                { return CONF_COND_DIVIDER; }
+	"cond:divider@cond"           { return CONF_COND_DIVIDER_COND; }
+	"cond:goto"                   { return CONF_COND_GOTO; }
+	"cond:goto@cond"              { return CONF_COND_GOTO_COND; }
+	"cgoto:threshold"             { return CONF_CGOTO_THRESHOLD; }
+	"define:YYFILL:naked"         { return CONF_DEFINE_YYFILL_NAKED; }
+	"define:YYFILL@len"           { return CONF_DEFINE_YYFILL_LEN; }
+	"define:YYGETCONDITION:naked" { return CONF_DEFINE_YYGETCONDITION_NAKED; }
+	"define:YYGETSTATE:naked"     { return CONF_DEFINE_YYGETSTATE_NAKED; }
+	"define:YYSETCONDITION@cond"  { return CONF_DEFINE_YYSETCONDITION_COND; }
+	"define:YYSETSTATE:naked"     { return CONF_DEFINE_YYSETSTATE_NAKED; }
+	"define:YYSETSTATE@state"     { return CONF_DEFINE_YYSETSTATE_STATE; }
+	"flags:" [ewxu8]
+	{
+		switch (YYCURSOR[-1])
+		{
+			case 'e': yylval.enc = Enc::EBCDIC; break;
+			case 'w': yylval.enc = Enc::UCS2;   break;
+			case 'x': yylval.enc = Enc::UTF16;  break;
+			case 'u': yylval.enc = Enc::UTF32;  break;
+			case '8': yylval.enc = Enc::UTF8;   break;
+		}
+		return CONF_FLAGS;
+	}
+	"indent:string"               { return CONF_INDENT_STRING; }
+	"indent:top"                  { return CONF_INDENT_TOP; }
+	"labelprefix"                 { return CONF_LABELPREFIX; }
+	"startlabel"                  { return CONF_STARTLABEL; }
+	"state:abort"                 { return CONF_STATE_ABORT; }
+	"state:nextlabel"             { return CONF_STATE_NEXTLABEL; }
+	"yybm:hex"                    { return CONF_YYBM_HEX; }
+	"yych:conversion"             { return CONF_YYCH_CONVERSION; }
+	"yych:emit"                   { return CONF_YYCH_EMIT; }
+	"yyfill:check"                { return CONF_YYFILL_CHECK; }
+	"yyfill:enable"               { return CONF_YYFILL_ENABLE; }
+	"yyfill:parameter"            { return CONF_YYFILL_PARAMETER; }
 */
 
-value:
+conf_eq:
 /*!re2c
-	number		{
-					if (!s_to_i32_unsafe (tok, cur, yylval.number))
-					{
-						fatal ("configuration value overflow");
-					}
-					lexer_state = LEX_NORMAL;
-					return NUMBER;
-				}
-	value		{
-					yylval.str = new std::string (tok, tok_len ());
-					lexer_state = LEX_NORMAL;
-					return VALUE;
-				}
+	* { fatal ("missing '=' in configuration"); }
+	space* "=" space* { goto conf_val; }
+*/
+
+conf_val:
+	tok = cur;
+	lexer_state = LEX_NORMAL;
+/*!re2c
+	number
+	{
+		if (!s_to_i32_unsafe (tok, cur, yylval.num))
+		{
+			fatal ("configuration value overflow");
+		}
+		return NUM;
+	}
+	dstring | sstring
+	{
+		yylval.str = new std::string ();
+		SubStr s (tok + 1, tok_len () - 2); // skip quotes
+		unescape (s, *(yylval.str));
+		return STR;
+	}
+	[^\r\n; \t]*
+	{
+		yylval.str = new std::string (tok, tok_len ());
+		return STR;
+	}
 */
 }
 

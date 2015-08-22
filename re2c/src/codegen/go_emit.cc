@@ -68,7 +68,7 @@ void Case::emit (OutputFile & o, uint32_t ind)
 			o << indent (ind) << "case ";
 			o.write_char_hex (b);
 			o << ":";
-			if (dFlag && encoding.is (Enc::EBCDIC))
+			if (dFlag && encoding.type () == Enc::EBCDIC)
 			{
 				const uint32_t c = encoding.decodeUnsafe (b);
 				if (is_print (c))

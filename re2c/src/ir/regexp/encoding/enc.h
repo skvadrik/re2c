@@ -61,16 +61,18 @@ private:
 	static const uint32_t SURR_MAX;
 	static const uint32_t UNICODE_ERROR;
 
-	type_t type;
-	policy_t policy;
+	type_t type_;
+	policy_t policy_;
 
 public:
 	Enc()
-		: type (ASCII)
-		, policy (POLICY_IGNORE)
+		: type_ (ASCII)
+		, policy_ (POLICY_IGNORE)
 	{ }
 
-	bool operator != (const Enc & e) const { return type != e.type; }
+	static const char * name (type_t t);
+
+	bool operator != (const Enc & e) const { return type_ != e.type_; }
 
 	inline uint32_t nCodePoints() const;
 	inline uint32_t nCodeUnits() const;
@@ -79,7 +81,7 @@ public:
 
 	inline bool set(type_t t);
 	inline void unset(type_t);
-	inline bool is(type_t) const;
+	inline type_t type () const;
 
 	inline void setPolicy(policy_t t);
 
@@ -89,9 +91,23 @@ public:
 	Range * fullRange() const;
 };
 
+inline const char * Enc::name (type_t t)
+{
+	switch (t)
+	{
+		case ASCII:  return "ASCII";
+		case EBCDIC: return "EBCDIC";
+		case UTF8:   return "UTF8";
+		case UCS2:   return "USC2";
+		case UTF16:  return "UTF16";
+		case UTF32:  return "UTF32";
+		default:     return "<bad encoding>";
+	}
+}
+
 inline uint32_t Enc::nCodePoints() const
 {
-	switch (type)
+	switch (type_)
 	{
 		case ASCII:
 		case EBCDIC:	return 0x100;
@@ -105,7 +121,7 @@ inline uint32_t Enc::nCodePoints() const
 
 inline uint32_t Enc::nCodeUnits() const
 {
-	switch (type)
+	switch (type_)
 	{
 		case ASCII:
 		case EBCDIC:
@@ -120,7 +136,7 @@ inline uint32_t Enc::nCodeUnits() const
 // returns *maximal* code point size for encoding
 inline uint32_t Enc::szCodePoint() const
 {
-	switch (type)
+	switch (type_)
 	{
 		case ASCII:
 		case EBCDIC:	return 1;
@@ -134,7 +150,7 @@ inline uint32_t Enc::szCodePoint() const
 
 inline uint32_t Enc::szCodeUnit() const
 {
-	switch (type)
+	switch (type_)
 	{
 		case ASCII:
 		case EBCDIC:
@@ -148,31 +164,31 @@ inline uint32_t Enc::szCodeUnit() const
 
 inline bool Enc::set(type_t t)
 {
-	if (type == t)
+	if (type_ == t)
 		return true;
-	else if (type != ASCII)
+	else if (type_ != ASCII)
 		return false;
 	else
 	{
-		type = t;
+		type_ = t;
 		return true;
 	}
 }
 
 inline void Enc::unset(type_t t)
 {
-	if (type == t)
-		type = ASCII;
+	if (type_ == t)
+		type_ = ASCII;
 }
 
-inline bool Enc::is(type_t t) const
+inline Enc::type_t Enc::type () const
 {
-	return type == t;
+	return type_;
 }
 
 inline void Enc::setPolicy(policy_t t)
 {
-	policy = t;
+	policy_ = t;
 }
 
 } // namespace re2c

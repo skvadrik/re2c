@@ -35,7 +35,7 @@ char hexCh(uint32_t c)
 
 void prtChOrHex(std::ostream& o, uint32_t c)
 {
-	if (!encoding.is (Enc::EBCDIC)
+	if (encoding.type () != Enc::EBCDIC
 		&& (is_print (c) || is_space (c)))
 	{
 		o << '\'';
@@ -120,7 +120,7 @@ void prtCh(std::ostream& o, uint32_t c)
 
 void prtChOrHexForSpan(std::ostream& o, uint32_t c)
 {
-	if (!encoding.is(Enc::EBCDIC)
+	if (encoding.type () != Enc::EBCDIC
 		&& is_print (c)
 		&& (c != ']'))
 	{

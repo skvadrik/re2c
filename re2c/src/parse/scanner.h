@@ -20,8 +20,7 @@ struct ScannerState
 	enum lexer_state_t
 	{
 		LEX_NORMAL,
-		LEX_CONFIG,
-		LEX_CONFIG_VALUE,
+		LEX_CONF,
 		LEX_FLEX_NAME
 	};
 
@@ -55,6 +54,7 @@ class Scanner: private ScannerState
 	static const uint32_t BSIZE;
 
 	Input & in;
+public:
 	OutputFile & out;
 
 private:
@@ -89,9 +89,6 @@ public:
 	void fatalf(const char*, ...) const RE2C_GXX_ATTRIBUTE ((format (printf, 2, 3)));
 	void fatal(const char*) const;
 	void fatal(ptrdiff_t, const char*) const;
-
-	void config(const std::string &, int);
-	void config(const std::string &, const std::string &);
 
 	uint32_t unescape(SubStr &s) const;
 	std::string& unescape(SubStr& str_in, std::string& str_out) const;
