@@ -10,7 +10,6 @@
 #include "src/parse/input.h"
 #include "src/util/attribute.h"
 #include "src/util/forbid_copy.h"
-#include "src/util/substr.h"
 
 namespace re2c
 {
@@ -60,6 +59,7 @@ public:
 private:
 	void fill (uint32_t);
 	void set_sourceline ();
+	void lex_cpoints (char quote, std::vector<uint32_t> & cs);
 	size_t tok_len () const;
 
 public:
@@ -90,9 +90,6 @@ public:
 	void fatal(const char*) const;
 	void fatal(ptrdiff_t, const char*) const;
 
-	uint32_t unescape(SubStr &s) const;
-	std::string& unescape(SubStr& str_in, std::string& str_out) const;
-
 	RegExp * matchSymbol (uint32_t c) const;
 	RegExp * matchSymbolRange (Range * r) const;
 	RegExp * mkDiff (RegExp * e1, RegExp * e2) const;
@@ -100,6 +97,7 @@ public:
 	RegExp * mkDefault () const;
 	RegExp * cpoint_string (const std::vector<uint32_t> & cs, bool case_sensitive) const;
 	RegExp * cpoint_class (const std::vector<uint32_t> & cs, bool neg) const;
+	std::string * cpoint_conf (const std::vector<uint32_t> & cs) const;
 
 	FORBID_COPY (Scanner);
 };

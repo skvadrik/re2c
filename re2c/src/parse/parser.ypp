@@ -206,21 +206,19 @@ void default_rule(CondList *clist, const Code * code)
 %token FID_END
 %token NOCOND
 %token NUM
-%token RANGE
+%token REGEXP
 %token SETUP
 %token STAR
-%token STR
 %token STRING
 
-%type <op>     CLOSE STAR SETUP close
-%type <extop>  CLOSESIZE
-%type <code>   CODE
-%type <regexp> RANGE STRING
-%type <regexp> rule look expr diff term factor primary
-%type <str>    ID FID STR CONF newcond
-%type <clist>  cond clist
-%type <num>    NUM
-%type <enc>    CONF_FLAGS
+%type <op>      CLOSE STAR SETUP close
+%type <extop>   CLOSESIZE
+%type <code>    CODE
+%type <regexp>  REGEXP rule look expr diff term factor primary
+%type <str>     ID FID CONF STRING newcond
+%type <clist>   cond clist
+%type <num>     NUM
+%type <enc>     CONF_FLAGS
 
 %%
 
@@ -262,37 +260,44 @@ decl:
 		{
 			in->fatal("trailing contexts are not allowed in named definitions");
 		}
-	| CONF STR ';'
+	| CONF STRING ';'
 	{
 		if (!mapCodeName.insert (std::make_pair (*$1, *$2)).second)
 		{
 			in->fatalf ("configuration '%s' is already set and cannot be changed", $1->c_str ());
 		}
 		delete $1;
+		delete $2;
 	}
-	| CONF_CONDPREFIX STR ';'
+	| CONF_CONDPREFIX STRING ';'
 	{
 		condPrefix = *$2;
+		delete $2;
 	}
-	| CONF_CONDENUMPREFIX STR ';'
+	| CONF_CONDENUMPREFIX STRING ';'
 	{
 		condEnumPrefix = *$2;
+		delete $2;
 	}
-	| CONF_COND_DIVIDER STR ';'
+	| CONF_COND_DIVIDER STRING ';'
 	{
 		condDivider = *$2;
+		delete $2;
 	}
-	| CONF_COND_DIVIDER_COND STR ';'
+	| CONF_COND_DIVIDER_COND STRING ';'
 	{
 		condDividerParam = *$2;
+		delete $2;
 	}
-	| CONF_COND_GOTO STR ';'
+	| CONF_COND_GOTO STRING ';'
 	{
 		condGoto = *$2;
+		delete $2;
 	}
-	| CONF_COND_GOTO_COND STR ';'
+	| CONF_COND_GOTO_COND STRING ';'
 	{
 		condGotoParam = *$2;
+		delete $2;
 	}
 	| CONF_CGOTO_THRESHOLD NUM ';'
 	{
@@ -302,10 +307,11 @@ decl:
 	{
 		bUseYYFillNaked = $2 != 0;
 	}
-	| CONF_DEFINE_YYFILL_LEN STR ';'
+	| CONF_DEFINE_YYFILL_LEN STRING ';'
 	{
 		yyFillLength = *$2;
 		bUseYYFillParam = false;
+		delete $2;
 	}
 	| CONF_DEFINE_YYGETCONDITION_NAKED NUM ';'
 	{
@@ -315,19 +321,21 @@ decl:
 	{
 		bUseYYGetStateNaked = $2 != 0;
 	}
-	| CONF_DEFINE_YYSETCONDITION_COND STR ';'
+	| CONF_DEFINE_YYSETCONDITION_COND STRING ';'
 	{
 		yySetConditionParam = *$2;
 		bUseYYSetConditionParam = false;
+		delete $2;
 	}
 	| CONF_DEFINE_YYSETSTATE_NAKED NUM ';'
 	{
 		bUseYYSetStateNaked = $2 != 0;
 	}
-	| CONF_DEFINE_YYSETSTATE_STATE STR ';'
+	| CONF_DEFINE_YYSETSTATE_STATE STRING ';'
 	{
 		yySetStateParam = *$2;
 		bUseYYSetStateParam = false;
+		delete $2;
 	}
 	| CONF_FLAGS NUM ';'
 	{
@@ -342,9 +350,10 @@ decl:
 				, Enc::name (encoding.type ()));
 		}
 	}
-	| CONF_INDENT_STRING STR ';'
+	| CONF_INDENT_STRING STRING ';'
 	{
 		indString = *$2;
+		delete $2;
 	}
 	| CONF_INDENT_TOP NUM ';'
 	{
@@ -354,17 +363,19 @@ decl:
 		}
 		topIndent = $2;
 	}
-	| CONF_LABELPREFIX STR ';'
+	| CONF_LABELPREFIX STRING ';'
 	{
 		labelPrefix = *$2;
+		delete $2;
 	}
 	| CONF_STARTLABEL NUM ';'
 	{
 		in->out.set_force_start_label ($2 != 0);
 	}
-	| CONF_STARTLABEL STR ';'
+	| CONF_STARTLABEL STRING ';'
 	{
 		in->out.set_user_start_label (*$2);
+		delete $2;
 	}
 	| CONF_STATE_ABORT NUM ';'
 	{
@@ -661,11 +672,7 @@ primary:
 			}
 			$$ = i->second;
 		}
-	|	RANGE
-		{
-			$$ = $1;
-		}
-	|	STRING
+	|	REGEXP
 		{
 			$$ = $1;
 		}

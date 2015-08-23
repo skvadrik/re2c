@@ -50,6 +50,9 @@ lineinf = lineno (space+ dstring)? eol;
 	esc_hex = esc ("x" hex_digit{2} | [uX] hex_digit{4} | "U" hex_digit{8});
 	esc_oct = esc [0-3] [0-7]{2}; // max 1-byte octal value is '\377'
 	esc_simple = esc [abfnrtv\\];
+
+	naked_char = . \ (space | [;]);
+	naked      = "" | (naked_char \ ['"]) naked_char*;
 */
 
 Scanner::ParseMode Scanner::echo()
@@ -214,9 +217,6 @@ int Scanner::scan()
 {
 	uint32_t depth;
 
-	char quote;
-	bool negated_class = false;
-	std::vector<uint32_t> cpoints;
 scan:
 	tchar = cur - pos;
 	tline = cline;
@@ -259,9 +259,34 @@ start:
 					return 0;
 				}
 
-	['"] { quote = tok[0];                    goto cpoints; }
-	"["  { quote = ']';                       goto cpoints; }
-	"[^" { quote = ']'; negated_class = true; goto cpoints; }
+	"'"
+	{
+		std::vector<uint32_t> cpoints;
+		lex_cpoints ('\'', cpoints);
+		yylval.regexp = cpoint_string (cpoints, bCaseInsensitive || !bCaseInverted);
+		return REGEXP;
+	}
+	"\""
+	{
+		std::vector<uint32_t> cpoints;
+		lex_cpoints ('"', cpoints);
+		yylval.regexp = cpoint_string (cpoints, bCaseInsensitive || bCaseInverted);
+		return REGEXP;
+	}
+	"["
+	{
+		std::vector<uint32_t> cpoints;
+		lex_cpoints (']', cpoints);
+		yylval.regexp = cpoint_class (cpoints, false);
+		return REGEXP;
+	}
+	"[^"
+	{
+		std::vector<uint32_t> cpoints;
+		lex_cpoints (']', cpoints);
+		yylval.regexp = cpoint_class (cpoints, true);
+		return REGEXP;
+	}
 
 	"<>" / (space* ("{" | "=>" | ":=")) {
 					return NOCOND;
@@ -350,18 +375,19 @@ start:
 						yylval.str = new std::string (tok, tok_len ());
 						return ID;
 					} else {
+						std::vector<uint32_t> cpoints;
 						for (char * p = tok; p < cur; ++p)
 						{
 							cpoints.push_back (static_cast<uint8_t> (*p));
 						}
 						yylval.regexp = cpoint_string (cpoints, bCaseInsensitive || bCaseInverted);
-						return STRING;
+						return REGEXP;
 					}
 				}
 
 	"."			{
 					yylval.regexp = mkDot();
-					return RANGE;
+					return REGEXP;
 				}
 
 	space+		{
@@ -398,53 +424,6 @@ flex_name:
 	{
 		YYCURSOR = tok;
 		goto start;
-	}
-*/
-
-cpoints:
-	tok = cur;
-/*!re2c
-	*          { fatal ((tok - pos) - tchar, "syntax error"); }
-	esc [xXuU] { fatal ((tok - pos) - tchar, "syntax error in hexadecimal escape sequence"); }
-	esc [0-7]  { fatal ((tok - pos) - tchar, "syntax error in octal escape sequence"); }
-	esc        { fatal ((tok - pos) - tchar, "syntax error in escape sequence"); }
-
-	esc_hex    { cpoints.push_back (unesc_hex (tok, cur)); goto cpoints; }
-	esc_oct    { cpoints.push_back (unesc_oct (tok, cur)); goto cpoints; }
-	esc_simple { cpoints.push_back (unesc_simple (tok));   goto cpoints; }
-	esc .
-	{
-		const char c = tok[1];
-		if (c != quote)
-		{
-			warn.useless_escape (tline, tok - pos, c);
-		}
-		cpoints.push_back (static_cast<uint8_t> (c));
-		goto cpoints;
-	}
-	. \ esc
-	{
-		const char c = tok[0];
-		if (c == quote)
-		{
-			switch (quote)
-			{
-				case ']':
-					yylval.regexp = cpoint_class (cpoints, negated_class);
-					return RANGE;
-				case '\'':
-					yylval.regexp = cpoint_string (cpoints, bCaseInsensitive || !bCaseInverted);
-					return STRING;
-				case '"':
-					yylval.regexp = cpoint_string (cpoints, bCaseInsensitive || bCaseInverted);
-					return STRING;
-			}
-		}
-		else
-		{
-			cpoints.push_back (static_cast<uint8_t> (c));
-			goto cpoints;
-		}
 	}
 */
 
@@ -698,17 +677,17 @@ conf_val:
 		}
 		return NUM;
 	}
-	dstring | sstring
+	['"]
 	{
-		yylval.str = new std::string ();
-		SubStr s (tok + 1, tok_len () - 2); // skip quotes
-		unescape (s, *(yylval.str));
-		return STR;
+		std::vector<uint32_t> cpoints;
+		lex_cpoints (tok[0], cpoints);
+		yylval.str = cpoint_conf (cpoints);
+		return STRING;
 	}
-	[^\r\n; \t]*
+	naked
 	{
 		yylval.str = new std::string (tok, tok_len ());
-		return STR;
+		return STRING;
 	}
 */
 }
@@ -724,6 +703,47 @@ static void escape (std::string & dest, const std::string & src)
 			dest.insert(++p, "\\");
 			++l;
 		}
+	}
+}
+
+void Scanner::lex_cpoints (char quote, std::vector<uint32_t> & cs)
+{
+	for (;;)
+	{
+		tok = cur;
+	/*!re2c
+		*          { fatal ((tok - pos) - tchar, "syntax error"); }
+		esc [xXuU] { fatal ((tok - pos) - tchar, "syntax error in hexadecimal escape sequence"); }
+		esc [0-7]  { fatal ((tok - pos) - tchar, "syntax error in octal escape sequence"); }
+		esc        { fatal ((tok - pos) - tchar, "syntax error in escape sequence"); }
+
+		esc_hex    { cs.push_back (unesc_hex (tok, cur)); continue; }
+		esc_oct    { cs.push_back (unesc_oct (tok, cur)); continue; }
+		esc_simple { cs.push_back (unesc_simple (tok));   continue; }
+		esc .
+		{
+			const char c = tok[1];
+			if (c != quote)
+			{
+				warn.useless_escape (tline, tok - pos, c);
+			}
+			cs.push_back (static_cast<uint8_t> (c));
+			continue;
+		}
+		. \ esc
+		{
+			const char c = tok[0];
+			if (c == quote)
+			{
+				return;
+			}
+			else
+			{
+				cs.push_back (static_cast<uint8_t> (c));
+				continue;
+			}
+		}
+	*/
 	}
 }
 

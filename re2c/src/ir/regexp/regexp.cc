@@ -199,6 +199,25 @@ RegExp * Scanner::cpoint_class (const std::vector<uint32_t> & cs, bool neg) cons
 	return matchSymbolRange (r);
 }
 
+std::string * Scanner::cpoint_conf (const std::vector<uint32_t> & cs) const
+{
+	const size_t n = cs.size ();
+	std::string * s = new std::string;
+	for (size_t i = 0; i < n; ++i)
+	{
+		const uint32_t c = cs[i];
+		if (c > 0xFF)
+		{
+			fatalf ("multibyte character in configuration string: 0x%X", c);
+		}
+		else
+		{
+			*s += static_cast<char> (c);
+		}
+	}
+	return s;
+}
+
 RegExp * Scanner::mkDiff (RegExp * e1, RegExp * e2) const
 {
 	MatchOp * m1 = dynamic_cast<MatchOp *> (e1);
