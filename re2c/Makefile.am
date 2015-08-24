@@ -182,18 +182,24 @@ CLEANFILES = \
 	$(DOC)
 
 $(AUTOGEN_PARSER): $(CUSTOM_PARSER)
-	@if test $(BISON) != "no"; \
+	@if test $(BISON) == "no"; \
 	then \
-		$(BISON) --output=$@ --defines=$(AUTOGEN_PARSER_HDR) $(top_srcdir)/$(CUSTOM_PARSER) && \
-		if cmp -s $@ $(top_srcdir)/$(BOOTSTRAP_PARSER); \
-		then \
-			cp $@ $(top_srcdir)/$(BOOTSTRAP_PARSER) && \
-			cp $(top_builddir)/$(AUTOGEN_PARSER_HDR) $(top_srcdir)/$(BOOTSTRAP_PARSER_HDR); \
-		fi; \
-	else \
 		cp $(top_srcdir)/$(BOOTSTRAP_PARSER) $@ && \
-		cp $(top_srcdir)/$(BOOTSTRAP_PARSER_HDR) $(top_builddir)/$(AUTOGEN_PARSER_HDR); \
+		cp $(top_srcdir)/$(BOOTSTRAP_PARSER_HDR) $(AUTOGEN_PARSER_HDR); \
+	else \
+		$(BISON) \
+			--output=$@ \
+			--defines=$(AUTOGEN_PARSER_HDR) \
+			$(top_srcdir)/$(CUSTOM_PARSER); \
 	fi
+
+$(BOOTSTRAP_PARSER): $(CUSTOM_PARSER)
+	@test $(BISON) == "no" || \
+	$(BISON) \
+		--output=$(top_srcdir)/$@ \
+		--defines=$(top_srcdir)/$(BOOTSTRAP_PARSER_HDR) \
+		--no-lines \
+		$(top_srcdir)/$(CUSTOM_PARSER);
 
 .re.cc:
 	@if test -x $(RE2C); \
@@ -229,7 +235,7 @@ $(DOC_HTML): $(BOOTSTRAP_DOC_HTML)
 	cp $(top_srcdir)/$(BOOTSTRAP_DOC_HTML) $@
 endif
 
-all-local: docs
+all-local: docs $(BOOTSTRAP_PARSER)
 
 # tests
 TST_SUITE = run_tests.sh
