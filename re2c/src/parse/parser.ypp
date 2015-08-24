@@ -136,7 +136,7 @@ void default_rule(CondList *clist, const Code * code)
 	re2c::RegExp * regexp;
 	const re2c::Code * code;
 	char op;
-	int num;
+	int32_t num;
 	re2c::ExtOp extop;
 	std::string * str;
 	re2c::CondList * clist;
@@ -301,7 +301,11 @@ decl:
 	}
 	| CONF_CGOTO_THRESHOLD NUM ';'
 	{
-		cGotoThreshold = $2;
+		if ($2 < 0)
+		{
+			in->fatal ("configuration 'cgoto:threshold' must be nonnegative");
+		}
+		cGotoThreshold = static_cast<uint32_t> ($2);
 	}
 	| CONF_DEFINE_YYFILL_NAKED NUM ';'
 	{
@@ -359,9 +363,9 @@ decl:
 	{
 		if ($2 < 0)
 		{
-			in->fatal ("configuration 'indent:top' must be a positive integer");
+			in->fatal ("configuration 'indent:top' must be nonnegative");
 		}
-		topIndent = $2;
+		topIndent = static_cast<uint32_t> ($2);
 	}
 	| CONF_LABELPREFIX STRING ';'
 	{
