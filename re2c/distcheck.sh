@@ -7,10 +7,9 @@ then
     echo "usage: ./distcheck.sh <builddir>"
     exit 1
 fi
-builddir=$1
-srcdir=`pwd`
+builddir="$1"
 
-$srcdir/autogen.sh
+./autogen.sh
 
 # try to be portable on various MAKEs
 for make_prog in make bmake
@@ -18,8 +17,8 @@ do
     rm -rf $builddir
     mkdir $builddir
     cd $builddir
-        $srcdir/configure --enable-docs && \
+        ../configure --enable-docs && \
         $make_prog bootstrap -j5
         $make_prog distcheck -j5
-    cd $srcdir
+    cd ..
 done
