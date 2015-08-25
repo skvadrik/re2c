@@ -360,93 +360,23 @@ Output::~Output ()
 	}
 }
 
-void output_state_goto_sub (std::ostream & o, uint32_t ind, uint32_t start_label, int cMin, int cMax)
-{
-	if (cMin == cMax)
-	{
-		if (cMin == -1)
-		{
-			o << indent(ind) << "goto " << labelPrefix << start_label << ";\n";
-		}
-		else
-		{
-			o << indent(ind) << "goto " << mapCodeName["yyFillLabel"] << cMin << ";\n";
-		}
-	}
-	else
-	{
-		int cMid = cMin + ((cMax - cMin + 1) / 2);
-
-		o << indent(ind) << "if (" << output_get_state() << " < " << cMid << ") {\n";
-		output_state_goto_sub (o, ind + 1, start_label, cMin, cMid - 1);
-		o << indent(ind) << "} else {\n";
-		output_state_goto_sub (o, ind + 1, start_label, cMid, cMax);
-		o << indent(ind) << "}\n";
-	}
-}
-
 void output_state_goto (std::ostream & o, uint32_t ind, uint32_t start_label)
 {
-	if (gFlag)
+	o << indent(ind) << "switch (" << output_get_state() << ") {\n";
+	if (bUseStateAbort)
 	{
-		o << indent(ind++) << "static void *" << mapCodeName["yystable"] << "[" << "] = {\n";
-
-		for (size_t i=0; i<last_fill_index; ++i)
-		{
-			o << indent(ind) << "&&" << mapCodeName["yyFillLabel"] << i << ",\n";
-		}
-
-		o << indent(--ind) << "};\n";
-		o << "\n";
-
-		o << indent(ind) << "if (" << output_get_state();
-		if (bUseStateAbort)
-		{
-			o << " == -1) {\n";
-		}
-		else
-		{
-			o << " < 0) {\n";
-		}
-		o << indent(++ind) << "goto " << labelPrefix << start_label << ";\n";
-		if (bUseStateAbort)
-		{
-			o << indent(--ind) << "} else if (" << output_get_state() << " < -1) {\n";
-			o << indent(++ind) << "abort();\n";
-		}
-		o << indent(--ind) << "}\n";
-
-		o << indent(ind) << "goto *" << mapCodeName["yystable"] << "[" << output_get_state() << "];\n";
-
-	}
-	else if (bFlag)
-	{
-		output_state_goto_sub (o, ind, start_label, -1, last_fill_index-1);
-		if (bUseStateAbort)
-		{
-			o << indent(ind) << "abort();\n";
-		}
+		o << indent(ind) << "default: abort();\n";
+		o << indent(ind) << "case -1: goto " << labelPrefix << start_label << ";\n";
 	}
 	else
 	{
-		o << indent(ind) << "switch (" << output_get_state() << ") {\n";
-		if (bUseStateAbort)
-		{
-			o << indent(ind) << "default: abort();\n";
-			o << indent(ind) << "case -1: goto " << labelPrefix << start_label << ";\n";
-		}
-		else
-		{
-			o << indent(ind) << "default: goto " << labelPrefix << start_label << ";\n";
-		}
-
-		for (size_t i=0; i<last_fill_index; ++i)
-		{
-			o << indent(ind) << "case " << i << ": goto " << mapCodeName["yyFillLabel"] << i << ";\n";
-		}
-
-		o << indent(ind) << "}\n";
+		o << indent(ind) << "default: goto " << labelPrefix << start_label << ";\n";
 	}
+	for (uint32_t i = 0; i < last_fill_index; ++i)
+	{
+		o << indent(ind) << "case " << i << ": goto " << mapCodeName["yyFillLabel"] << i << ";\n";
+	}
+	o << indent(ind) << "}\n";
 	if (bUseStateNext)
 	{
 		o << mapCodeName["yyNext"] << ":\n";

@@ -147,7 +147,6 @@ void output_yyaccept_init (std::ostream &, uint32_t, bool);
 void output_yymaxfill (std::ostream &, uint32_t);
 
 // helpers
-void output_state_goto_sub (std::ostream & o, uint32_t ind, uint32_t start_label, int cMin, int cMax);
 std::string output_get_state ();
 
 } // namespace re2c
