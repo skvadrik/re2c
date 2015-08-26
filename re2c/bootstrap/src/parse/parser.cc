@@ -82,7 +82,6 @@
 #include "src/ir/regexp/regexp_cat.h"
 #include "src/ir/regexp/regexp_close.h"
 #include "src/ir/regexp/regexp_null.h"
-#include "src/codegen/emit.h" // genTypes
 #include "src/globals.h"
 #include "src/parse/code.h"
 #include "src/parse/extop.h"
@@ -102,6 +101,7 @@ void yyerror(const char*);
 }
 
 static counter_t<rule_rank_t> rank_counter;
+static std::vector<std::string> condnames;
 static re2c::RegExpMap  specMap;
 static RegExp           *spec = NULL, *specNone = NULL;
 static RuleOpList       specStar;
@@ -150,13 +150,12 @@ void context_rule(CondList *clist, RegExp *expr, RegExp *look, const std::string
 
 		if (itRE != specMap.end())
 		{
-			itRE->second.second = mkAlt(itRE->second.second, rule);
+			itRE->second = mkAlt(itRE->second, rule);
 		}
 		else
 		{
-			size_t nIndex = specMap.size() + 1; // 0 is reserved for "0"-spec
-			assert( nIndex < 1u << 31);
-			specMap[*it] = std::make_pair(int(nIndex), rule);
+			specMap[*it] = rule;
+			condnames.push_back (*it);
 		}
 		
 	}
@@ -646,14 +645,14 @@ static const yytype_int8 yyrhs[] =
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint16 yyrline[] =
 {
-       0,   227,   227,   229,   233,   237,   246,   255,   259,   263,
-     272,   277,   282,   287,   292,   297,   302,   310,   314,   320,
-     324,   328,   334,   338,   344,   357,   362,   370,   375,   379,
-     384,   388,   392,   396,   402,   406,   410,   414,   421,   430,
-     439,   443,   449,   454,   460,   464,   470,   478,   483,   489,
-     495,   505,   517,   523,   531,   534,   541,   547,   557,   560,
-     568,   571,   578,   582,   589,   593,   600,   604,   611,   615,
-     630,   650,   654,   658,   662,   669,   679,   683
+       0,   226,   226,   228,   232,   236,   245,   254,   258,   262,
+     271,   276,   281,   286,   291,   296,   301,   309,   313,   319,
+     323,   327,   333,   337,   343,   356,   361,   369,   374,   378,
+     383,   387,   391,   395,   401,   405,   409,   413,   420,   429,
+     438,   442,   448,   453,   459,   463,   469,   477,   482,   488,
+     494,   504,   516,   522,   530,   533,   540,   546,   556,   559,
+     567,   570,   577,   581,   588,   592,   599,   603,   610,   614,
+     629,   649,   653,   657,   661,   668,   678,   682
 };
 #endif
 
@@ -2661,37 +2660,28 @@ void parse(Scanner& i, Output & o)
 					// but compile it separately because of RegExp::PRIVATE attribute
 					for (it = specMap.begin(); it != specMap.end(); ++it)
 					{
-						assert(it->second.second);
+						assert(it->second);
 						for (RuleOpList::const_iterator itOp = specStar.begin(); itOp != specStar.end(); ++itOp)
 						{
-							it->second.second = mkAlt(*itOp, it->second.second);
+							it->second = mkAlt(*itOp, it->second);
 						}
 					}
 				}
 	
 				if (specNone)
 				{
-					// After merging star rules merge none code to specmap
-					// this simplifies some stuff.
+					specMap["0"] = specNone;
 					// Note that "0" inserts first, which is important.
-					specMap["0"] = std::make_pair(0, specNone);
+					condnames.insert (condnames.begin (), "0");
 				}
-				else
-				{
-					// We reserved 0 for specNone but it is not present,
-					// so we can decrease all specs.
-					for (it = specMap.begin(); it != specMap.end(); ++it)
-					{
-						it->second.first--;
-					}
-				}
+				o.types = condnames;
 			}
 
 			size_t nCount = specMap.size();
 
 			for (it = specMap.begin(); it != specMap.end(); ++it)
 			{
-				assert(it->second.second);
+				assert(it->second);
 
 				if (parseMode != Scanner::Reuse)
 				{
@@ -2716,7 +2706,7 @@ void parse(Scanner& i, Output & o)
 					if (itRuleDefault != ruleDefaultMap.end())
 					{
 						RuleOp * def = new RuleOp(in->mkDefault(), new NullOp(), *(itRuleDefault->second), rank_counter.next (), RegExp::SHARED, NULL);
-						it->second.second = it->second.second ? mkAlt(def, it->second.second) : def;
+						it->second = it->second ? mkAlt(def, it->second) : def;
 					}
 					else
 					{
@@ -2724,18 +2714,16 @@ void parse(Scanner& i, Output & o)
 						if (itRuleDefault != ruleDefaultMap.end())
 						{
 							RuleOp * def = new RuleOp(in->mkDefault(), new NullOp(), *(itRuleDefault->second), rank_counter.next (), RegExp::SHARED, NULL);
-							it->second.second = it->second.second ? mkAlt(def, it->second.second) : def;
+							it->second = it->second ? mkAlt(def, it->second) : def;
 						}
 					}
-					dfa_map[it->first] = genCode(it->second.second, o, topIndent, it->first);
+					dfa_map[it->first] = genCode(it->second, o, topIndent, it->first);
 				}
 				if (parseMode != Scanner::Rules && dfa_map.find(it->first) != dfa_map.end())
 				{
-					dfa_map[it->first]->emit(o, topIndent, &specMap, it->first, !--nCount, bPrologBrace);
+					dfa_map[it->first]->emit(o, topIndent, it->first, !--nCount, bPrologBrace);
 				}
 			}
-
-			genTypes (o, specMap);
 		}
 		else
 		{
@@ -2752,7 +2740,7 @@ void parse(Scanner& i, Output & o)
 				}
 				if (parseMode != Scanner::Rules && dfa_map.find("") != dfa_map.end())
 				{
-					dfa_map[""]->emit(o, topIndent, NULL, "", 0, bPrologBrace);
+					dfa_map[""]->emit(o, topIndent, "", 0, bPrologBrace);
 				}
 			}
 		}
@@ -2794,6 +2782,7 @@ void parse_cleanup()
 	RangeSuffix::freeList.clear();
 	Code::freelist.clear();
 	symbol_table.clear ();
+	condnames.clear ();
 	specMap.clear();
 	specStar.clear();
 	specNone = NULL;

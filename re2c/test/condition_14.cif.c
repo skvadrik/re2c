@@ -92,8 +92,8 @@ void scan(Scanner *s)
 
 yy0:
 		switch (s->cond) {
-		case EStateComment: goto yyc_Comment;
 		case EStateNormal: goto yyc_Normal;
+		case EStateComment: goto yyc_Comment;
 		case EStateSkiptoeol: goto yyc_Skiptoeol;
 		case EStateString: goto yyc_String;
 		}

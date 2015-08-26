@@ -9,13 +9,13 @@ re2c: warning: line 12: column 11: escape has no effect: '\[' [-Wuseless-escape]
 	unsigned int yyaccept = 0;
 	switch (YYGETCONDITION()) {
 	case yycINITIAL: goto yyc_INITIAL;
-	case yycST_DOUBLE_QUOTES: goto yyc_ST_DOUBLE_QUOTES;
 	case yycST_OFFSET: goto yyc_ST_OFFSET;
-	case yycST_RAW: goto yyc_ST_RAW;
-	case yycST_SECTION_RAW: goto yyc_ST_SECTION_RAW;
 	case yycST_SECTION_VALUE: goto yyc_ST_SECTION_VALUE;
 	case yycST_VALUE: goto yyc_ST_VALUE;
+	case yycST_SECTION_RAW: goto yyc_ST_SECTION_RAW;
+	case yycST_DOUBLE_QUOTES: goto yyc_ST_DOUBLE_QUOTES;
 	case yycST_VARNAME: goto yyc_ST_VARNAME;
+	case yycST_RAW: goto yyc_ST_RAW;
 	}
 /* *********************************** */
 yyc_INITIAL:

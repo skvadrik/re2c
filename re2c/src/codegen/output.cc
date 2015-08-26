@@ -146,6 +146,12 @@ OutputFile & operator << (OutputFile & u, uint32_t n)
 	return u;
 }
 
+OutputFile & operator << (OutputFile & u, uint64_t n)
+{
+	u.stream () << n;
+	return u;
+}
+
 OutputFile & operator << (OutputFile & u, const std::string & s)
 {
 	u.stream () << s;

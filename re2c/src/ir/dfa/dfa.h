@@ -8,8 +8,6 @@
 namespace re2c
 {
 
-typedef std::map<std::string, std::pair<int, RegExp *> > RegExpMap;
-
 class DFA
 {
 public:
@@ -36,7 +34,7 @@ public:
 	void findBaseState ();
 	void prepare (OutputFile & o, uint32_t &, const std::string & cond);
 	void count_used_labels (std::set<label_t> & used, label_t prolog, label_t start, bool force_start) const;
-	void emit (Output &, uint32_t &, const RegExpMap *, const std::string &, bool, bool &);
+	void emit (Output &, uint32_t &, const std::string &, bool, bool &);
 
 	friend std::ostream & operator << (std::ostream &, const DFA &);
 

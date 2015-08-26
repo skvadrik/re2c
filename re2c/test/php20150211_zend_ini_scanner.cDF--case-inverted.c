@@ -7,13 +7,13 @@ re2c: warning: line 392: column 11: escape has no effect: '\[' [-Wuseless-escape
 digraph re2c {
 
 0 -> INITIAL [label="state=INITIAL"]
-0 -> ST_DOUBLE_QUOTES [label="state=ST_DOUBLE_QUOTES"]
 0 -> ST_OFFSET [label="state=ST_OFFSET"]
-0 -> ST_RAW [label="state=ST_RAW"]
-0 -> ST_SECTION_RAW [label="state=ST_SECTION_RAW"]
 0 -> ST_SECTION_VALUE [label="state=ST_SECTION_VALUE"]
 0 -> ST_VALUE [label="state=ST_VALUE"]
+0 -> ST_SECTION_RAW [label="state=ST_SECTION_RAW"]
+0 -> ST_DOUBLE_QUOTES [label="state=ST_DOUBLE_QUOTES"]
 0 -> ST_VARNAME [label="state=ST_VARNAME"]
+0 -> ST_RAW [label="state=ST_RAW"]
 /* *********************************** */
 INITIAL -> 2
 2 -> 3 [label="[0x00-0x08][0x0B-0x0C][0x0E-0x1F][#][0-9][A-E][G-M][P-S][U-X][Z][\\][_-e][g-m][p-s][u-x][z][0x7F-0xFF]"]

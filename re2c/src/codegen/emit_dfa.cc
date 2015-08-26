@@ -11,9 +11,9 @@ namespace re2c
 {
 
 static std::string genGetCondition ();
-static void genCondGotoSub (OutputFile & o, uint32_t ind, RegExpIndices & vCondList, uint32_t cMin, uint32_t cMax);
-static void genCondTable   (OutputFile & o, uint32_t ind, const RegExpMap & specMap);
-static void genCondGoto    (OutputFile & o, uint32_t ind, const RegExpMap & specMap);
+static void genCondGotoSub (OutputFile & o, uint32_t ind, const std::vector<std::string> & condnames, uint32_t cMin, uint32_t cMax);
+static void genCondTable   (OutputFile & o, uint32_t ind, const std::vector<std::string> & condnames);
+static void genCondGoto    (OutputFile & o, uint32_t ind, const std::vector<std::string> & condnames);
 static void emit_state     (OutputFile & o, uint32_t ind, const State * s, bool used_label);
 
 std::string genGetCondition()
@@ -90,7 +90,7 @@ void DFA::count_used_labels (std::set<label_t> & used, label_t start, label_t in
 	}
 }
 
-void DFA::emit(Output & output, uint32_t& ind, const RegExpMap* specMap, const std::string& condName, bool isLastCond, bool& bPrologBrace)
+void DFA::emit(Output & output, uint32_t& ind, const std::string& condName, bool isLastCond, bool& bPrologBrace)
 {
 	OutputFile & o = output.source;
 
@@ -128,7 +128,7 @@ void DFA::emit(Output & output, uint32_t& ind, const RegExpMap* specMap, const s
 		else if ((!fFlag && o.get_used_yyaccept ())
 		||  (!fFlag && bEmitYYCh)
 		||  (bFlag && !cFlag && BitMap::first)
-		||  (cFlag && !bWroteCondCheck && gFlag && specMap)
+		||  (cFlag && !bWroteCondCheck && gFlag)
 		||  (fFlag && !bWroteGetState && gFlag)
 		)
 		{
@@ -159,9 +159,9 @@ void DFA::emit(Output & output, uint32_t& ind, const RegExpMap* specMap, const s
 	}
 	if (bProlog)
 	{
-		if (cFlag && !bWroteCondCheck && gFlag && specMap)
+		if (cFlag && !bWroteCondCheck && gFlag)
 		{
-			genCondTable(o, ind, *specMap);
+			genCondTable(o, ind, output.types);
 		}
 		o.insert_state_goto (ind);
 		if (cFlag && !DFlag)
@@ -172,9 +172,9 @@ void DFA::emit(Output & output, uint32_t& ind, const RegExpMap* specMap, const s
 			}
 		}
 		o.write_user_start_label ();
-		if (cFlag && !bWroteCondCheck && specMap)
+		if (cFlag && !bWroteCondCheck)
 		{
-			genCondGoto(o, ind, *specMap);
+			genCondGoto(o, ind, output.types);
 		}
 	}
 
@@ -240,44 +240,36 @@ void DFA::emit(Output & output, uint32_t& ind, const RegExpMap* specMap, const s
 	}
 }
 
-void genCondTable(OutputFile & o, uint32_t ind, const RegExpMap& specMap)
+void genCondTable(OutputFile & o, uint32_t ind, const std::vector<std::string> & condnames)
 {
-	const uint32_t specMap_size = static_cast<uint32_t> (specMap.size ());
-	RegExpIndices  vCondList(specMap_size);
-
-	for(RegExpMap::const_iterator itSpec = specMap.begin(); itSpec != specMap.end(); ++itSpec)
+	const size_t conds = condnames.size ();
+	o << indent(ind++) << "static void *" << mapCodeName["yyctable"] << "[" << conds << "] = {\n";
+	for (size_t i = 0; i < conds; ++i)
 	{
-		vCondList[itSpec->second.first] = itSpec->first;
-	}
-
-	o << indent(ind++) << "static void *" << mapCodeName["yyctable"] << "[" << specMap_size << "] = {\n";
-
-	for(RegExpIndices::const_iterator it = vCondList.begin(); it != vCondList.end(); ++it)
-	{
-		o << indent(ind) << "&&" << condPrefix << *it << ",\n";
+		o << indent(ind) << "&&" << condPrefix << condnames[i] << ",\n";
 	}
 	o << indent(--ind) << "};\n";
 }
 
-void genCondGotoSub(OutputFile & o, uint32_t ind, RegExpIndices& vCondList, uint32_t cMin, uint32_t cMax)
+void genCondGotoSub(OutputFile & o, uint32_t ind, const std::vector<std::string> & condnames, uint32_t cMin, uint32_t cMax)
 {
 	if (cMin == cMax)
 	{
-		o << indent(ind) << "goto " << condPrefix << vCondList[cMin] << ";\n";
+		o << indent(ind) << "goto " << condPrefix << condnames[cMin] << ";\n";
 	}
 	else
 	{
 		uint32_t cMid = cMin + ((cMax - cMin + 1) / 2);
 
 		o << indent(ind) << "if (" << genGetCondition() << " < " << cMid << ") {\n";
-		genCondGotoSub(o, ind + 1, vCondList, cMin, cMid - 1);
+		genCondGotoSub(o, ind + 1, condnames, cMin, cMid - 1);
 		o << indent(ind) << "} else {\n";
-		genCondGotoSub(o, ind + 1, vCondList, cMid, cMax);
+		genCondGotoSub(o, ind + 1, condnames, cMid, cMax);
 		o << indent(ind) << "}\n";
 	}
 }
 
-void genCondGoto(OutputFile & o, uint32_t ind, const RegExpMap& specMap)
+void genCondGoto(OutputFile & o, uint32_t ind, const std::vector<std::string> & condnames)
 {
 	if (gFlag)
 	{
@@ -285,46 +277,31 @@ void genCondGoto(OutputFile & o, uint32_t ind, const RegExpMap& specMap)
 	}
 	else
 	{
+		const size_t conds = condnames.size ();
 		if (sFlag)
 		{
-			RegExpIndices  vCondList(specMap.size());
-		
-			for(RegExpMap::const_iterator it = specMap.begin(); it != specMap.end(); ++it)
-			{
-				vCondList[it->second.first] = it->first;
-			}
-			genCondGotoSub(o, ind, vCondList, 0, static_cast<uint32_t> (vCondList.size()) - 1);
+			genCondGotoSub(o, ind, condnames, 0, static_cast<uint32_t> (conds) - 1);
 		}
 		else if (DFlag)
 		{
-			for(RegExpMap::const_iterator it = specMap.begin(); it != specMap.end(); ++it)
+			for (size_t i = 0; i < conds; ++i)
 			{
-				o << "0 -> " << it->first << " [label=\"state=" << it->first << "\"]\n";
+				const std::string cond = condnames[i];
+				o << "0 -> " << cond << " [label=\"state=" << cond << "\"]\n";
 			}
 		}
 		else
 		{
 			o << indent(ind) << "switch (" << genGetCondition() << ") {\n";
-
-			for(RegExpMap::const_iterator it = specMap.begin(); it != specMap.end(); ++it)
+			for (size_t i = 0; i < conds; ++i)
 			{
-				o << indent(ind) << "case " << condEnumPrefix << it->first << ": goto " << condPrefix << it->first << ";\n";
+				const std::string & cond = condnames[i];
+				o << indent(ind) << "case " << condEnumPrefix << cond << ": goto " << condPrefix << cond << ";\n";
 			}
 			o << indent(ind) << "}\n";
 		}
 	}
 	bWroteCondCheck = true;
-}
-
-void genTypes(Output & output, const RegExpMap& specMap)
-{
-	output.types.resize (specMap.size());
-	for(RegExpMap::const_iterator itSpecMap = specMap.begin(); itSpecMap != specMap.end(); ++itSpecMap)
-	{
-		// If an entry is < 0 then we did the 0/empty correction twice.
-		assert(itSpecMap->second.first >= 0);
-		output.types[itSpecMap->second.first] = itSpecMap->first;
-	}
 }
 
 } // end namespace re2c

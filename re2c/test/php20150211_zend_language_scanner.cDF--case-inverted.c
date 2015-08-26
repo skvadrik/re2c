@@ -5,16 +5,16 @@ re2c: warning: line 1480: column 19: escape has no effect: '\*' [-Wuseless-escap
 
 digraph re2c {
 
-0 -> INITIAL [label="state=INITIAL"]
-0 -> ST_BACKQUOTE [label="state=ST_BACKQUOTE"]
-0 -> ST_DOUBLE_QUOTES [label="state=ST_DOUBLE_QUOTES"]
-0 -> ST_END_HEREDOC [label="state=ST_END_HEREDOC"]
-0 -> ST_HEREDOC [label="state=ST_HEREDOC"]
 0 -> ST_IN_SCRIPTING [label="state=ST_IN_SCRIPTING"]
 0 -> ST_LOOKING_FOR_PROPERTY [label="state=ST_LOOKING_FOR_PROPERTY"]
+0 -> ST_BACKQUOTE [label="state=ST_BACKQUOTE"]
+0 -> ST_DOUBLE_QUOTES [label="state=ST_DOUBLE_QUOTES"]
+0 -> ST_HEREDOC [label="state=ST_HEREDOC"]
 0 -> ST_LOOKING_FOR_VARNAME [label="state=ST_LOOKING_FOR_VARNAME"]
-0 -> ST_NOWDOC [label="state=ST_NOWDOC"]
 0 -> ST_VAR_OFFSET [label="state=ST_VAR_OFFSET"]
+0 -> INITIAL [label="state=INITIAL"]
+0 -> ST_END_HEREDOC [label="state=ST_END_HEREDOC"]
+0 -> ST_NOWDOC [label="state=ST_NOWDOC"]
 /* *********************************** */
 INITIAL -> 2
 2 -> 5 [label="[0x00-;][=-0xFF]"]

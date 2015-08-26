@@ -21,7 +21,6 @@ void emit_action
 
 // helpers
 void genGoTo (OutputFile & o, uint32_t ind, const State * from, const State * to, bool & readCh);
-void genTypes (Output &, const RegExpMap &);
 
 template<typename _Ty> std::string replaceParam (std::string str, const std::string & param, const _Ty & value)
 {
