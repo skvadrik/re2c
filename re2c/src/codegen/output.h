@@ -22,6 +22,7 @@ struct OutputFragment
 		, LINE_INFO
 		, STATE_GOTO
 		, TYPES
+		, WARN_CONDITION_ORDER
 		, YYACCEPT_INIT
 		, YYMAXFILL
 		};
@@ -88,6 +89,7 @@ public:
 	void insert_line_info ();
 	void insert_state_goto (uint32_t ind);
 	void insert_types ();
+	void insert_warn_condition_order ();
 	void insert_yyaccept_init (uint32_t ind);
 	void insert_yymaxfill ();
 

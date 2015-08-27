@@ -205,6 +205,12 @@ void OutputFile::insert_types ()
 	insert_code ();
 }
 
+void OutputFile::insert_warn_condition_order ()
+{
+	blocks.back ()->fragments.push_back (new OutputFragment (OutputFragment::WARN_CONDITION_ORDER, 0));
+	insert_code ();
+}
+
 void OutputFile::insert_yyaccept_init (uint32_t ind)
 {
 	blocks.back ()->fragments.push_back (new OutputFragment (OutputFragment::YYACCEPT_INIT, ind));
@@ -284,6 +290,12 @@ void OutputFile::emit
 						break;
 					case OutputFragment::TYPES:
 						output_types (f.stream, f.indent, types);
+						break;
+					case OutputFragment::WARN_CONDITION_ORDER:
+						if (warn_condition_order) // see note [condition order]
+						{
+							warn.condition_order (b.line);
+						}
 						break;
 					case OutputFragment::YYACCEPT_INIT:
 						output_yyaccept_init (f.stream, f.indent, b.used_yyaccept);

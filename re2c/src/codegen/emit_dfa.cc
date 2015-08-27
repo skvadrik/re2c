@@ -326,10 +326,7 @@ void genCondGoto(OutputFile & o, uint32_t ind, const std::vector<std::string> & 
 		}
 		o << indent(ind) << "}\n";
 	}
-	if (o.warn_condition_order)  // see note [condition order]
-	{
-		warn.condition_order (o.get_block_line ());
-	}
+	o.insert_warn_condition_order ();
 	bWroteCondCheck = true;
 }
 
