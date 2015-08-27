@@ -55,6 +55,7 @@ OutputFile::OutputFile (const char * fn)
 	, file (NULL)
 	, blocks ()
 	, label_counter ()
+	, warn_condition_order (!tFlag) // see note [condition order]
 {
 	new_block ();
 }
@@ -199,6 +200,7 @@ void OutputFile::insert_state_goto (uint32_t ind)
 
 void OutputFile::insert_types ()
 {
+	warn_condition_order = false; // see note [condition order]
 	blocks.back ()->fragments.push_back (new OutputFragment (OutputFragment::TYPES, 0));
 	insert_code ();
 }

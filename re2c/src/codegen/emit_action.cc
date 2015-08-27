@@ -364,6 +364,7 @@ void genYYFill(OutputFile & o, uint32_t need)
 
 void genSetCondition(OutputFile & o, uint32_t ind, const std::string& newcond)
 {
+	o.warn_condition_order = false; // see note [condition order]
 	if (bUseYYSetConditionParam)
 	{
 		o << indent(ind) << mapCodeName["YYSETCONDITION"] << "(" << condEnumPrefix << newcond << ");\n";

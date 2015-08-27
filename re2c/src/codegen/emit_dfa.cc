@@ -269,37 +269,66 @@ void genCondGotoSub(OutputFile & o, uint32_t ind, const std::vector<std::string>
 	}
 }
 
+/*
+ * note [condition order]
+ *
+ * In theory re2c makes no guarantee about the order of conditions in
+ * the generated lexer. Users should define condition type 'YYCONDTYPE'
+ * and use values of this type with 'YYGETCONDITION' and 'YYSETCONDITION'.
+ * This way code is independent of internal re2c condition numbering.
+ *
+ * However, it is possible to manually hardcode condition numbers and make
+ * re2c generate condition dispatch without explicit use of condition names
+ * (nested 'if' statements with '-b' or computed 'goto' table with '-g').
+ * This code is syntactically valid (compiles), but unsafe:
+ *     - change of re2c options may break compilation
+ *     - change of internal re2c condition numbering may break runtime
+ *
+ * re2c has to preserve the existing numbering scheme.
+ *
+ * re2c warns about implicit assumptions about condition order, unless:
+ *     - condition type is defined with 'types:re2c' or '-t, --type-header'
+ *     - condition names are explicitly used in dispatch or YYSETCONDITION
+ *     - dispatch shrinks to single unconditional jump
+ */
 void genCondGoto(OutputFile & o, uint32_t ind, const std::vector<std::string> & condnames)
 {
-	if (gFlag)
+	const size_t conds = condnames.size ();
+	if (DFlag)
+	{
+		o.warn_condition_order = false; // see note [condition order]
+		for (size_t i = 0; i < conds; ++i)
+		{
+			const std::string cond = condnames[i];
+			o << "0 -> " << cond << " [label=\"state=" << cond << "\"]\n";
+		}
+	}
+	else if (gFlag)
 	{
 		o << indent(ind) << "goto *" << mapCodeName["yyctable"] << "[" << genGetCondition() << "];\n";
 	}
+	else if (sFlag)
+	{
+		if (conds == 1)
+		{
+			o.warn_condition_order = false; // see note [condition order]
+		}
+		genCondGotoSub(o, ind, condnames, 0, static_cast<uint32_t> (conds) - 1);
+	}
 	else
 	{
-		const size_t conds = condnames.size ();
-		if (sFlag)
+		o.warn_condition_order = false; // see note [condition order]
+		o << indent(ind) << "switch (" << genGetCondition() << ") {\n";
+		for (size_t i = 0; i < conds; ++i)
 		{
-			genCondGotoSub(o, ind, condnames, 0, static_cast<uint32_t> (conds) - 1);
+			const std::string & cond = condnames[i];
+			o << indent(ind) << "case " << condEnumPrefix << cond << ": goto " << condPrefix << cond << ";\n";
 		}
-		else if (DFlag)
-		{
-			for (size_t i = 0; i < conds; ++i)
-			{
-				const std::string cond = condnames[i];
-				o << "0 -> " << cond << " [label=\"state=" << cond << "\"]\n";
-			}
-		}
-		else
-		{
-			o << indent(ind) << "switch (" << genGetCondition() << ") {\n";
-			for (size_t i = 0; i < conds; ++i)
-			{
-				const std::string & cond = condnames[i];
-				o << indent(ind) << "case " << condEnumPrefix << cond << ": goto " << condPrefix << cond << ";\n";
-			}
-			o << indent(ind) << "}\n";
-		}
+		o << indent(ind) << "}\n";
+	}
+	if (o.warn_condition_order)  // see note [condition order]
+	{
+		warn.condition_order (o.get_block_line ());
 	}
 	bWroteCondCheck = true;
 }

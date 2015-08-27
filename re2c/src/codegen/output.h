@@ -55,6 +55,7 @@ private:
 
 public:
 	counter_t<label_t> label_counter;
+	bool warn_condition_order;
 
 private:
 	std::ostream & stream ();

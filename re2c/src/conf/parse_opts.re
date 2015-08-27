@@ -75,6 +75,7 @@ opt_warn:
 		error ("bad warning: %s", *argv);
 		return EXIT_FAIL;
 	}
+	"condition-order"       end { warn.set (Warn::CONDITION_ORDER,       option); goto opt; }
 	"empty-character-class" end { warn.set (Warn::EMPTY_CHARACTER_CLASS, option); goto opt; }
 	"match-empty-string"    end { warn.set (Warn::MATCH_EMPTY_STRING,    option); goto opt; }
 	"naked-default"         end { warn.set (Warn::NAKED_DEFAULT,         option); goto opt; }

@@ -8,6 +8,7 @@
 namespace re2c {
 
 #define RE2C_WARNING_TYPES \
+	W (CONDITION_ORDER,       "condition-order"), \
 	W (EMPTY_CHARACTER_CLASS, "empty-character-class"), \
 	W (MATCH_EMPTY_STRING,    "match-empty-string"), \
 	W (NAKED_DEFAULT,         "naked-default"), \
@@ -46,6 +47,7 @@ public:
 	void set (type_t t, option_t o);
 	void set_all ();
 	void set_all_error ();
+	void condition_order (uint32_t line);
 	void empty_class (uint32_t line);
 	void match_empty_string (uint32_t line);
 	void naked_default (uint32_t line, const std::vector<std::pair<uint32_t, uint32_t> > & stray_cunits, const std::string & cond);
