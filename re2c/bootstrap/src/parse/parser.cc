@@ -136,7 +136,14 @@ void context_none(CondList *clist)
 	in->fatal("no expression specified");
 }
 
-void context_rule(CondList *clist, RegExp *expr, RegExp *look, const std::string * newcond, const Code & code)
+void context_rule
+	( CondList * clist
+	, const Loc & loc
+	, RegExp * expr
+	, RegExp * look
+	, const Code * code
+	, const std::string * newcond
+	)
 {
 	context_check(clist);
 	const RegExp::InsAccess ins_access = clist->size() > 1
@@ -144,7 +151,15 @@ void context_rule(CondList *clist, RegExp *expr, RegExp *look, const std::string
 		: RegExp::SHARED;
 	for(CondList::const_iterator it = clist->begin(); it != clist->end(); ++it)
 	{
-		RuleOp *rule = new RuleOp(expr, look, code, rank_counter.next (), ins_access, newcond);
+		RuleOp * rule = new RuleOp
+			( loc
+			, expr
+			, look
+			, rank_counter.next ()
+			, ins_access
+			, code
+			, newcond
+			);
 
 		RegExpMap::iterator itRE = specMap.find(*it);
 
@@ -645,14 +660,14 @@ static const yytype_int8 yyrhs[] =
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint16 yyrline[] =
 {
-       0,   226,   226,   228,   232,   236,   245,   254,   258,   262,
-     271,   276,   281,   286,   291,   296,   301,   309,   313,   319,
-     323,   327,   333,   337,   343,   356,   361,   369,   374,   378,
-     383,   387,   391,   395,   401,   405,   409,   413,   420,   429,
-     438,   442,   448,   453,   459,   463,   469,   477,   482,   488,
-     494,   504,   516,   522,   530,   533,   540,   546,   556,   559,
-     567,   570,   577,   581,   588,   592,   599,   603,   610,   614,
-     629,   649,   653,   657,   661,   668,   678,   682
+       0,   241,   241,   243,   247,   251,   260,   269,   273,   277,
+     286,   291,   296,   301,   306,   311,   316,   324,   328,   334,
+     338,   342,   348,   352,   358,   371,   376,   384,   389,   393,
+     398,   402,   406,   410,   416,   420,   424,   428,   435,   452,
+     461,   465,   471,   476,   482,   486,   501,   518,   523,   529,
+     535,   553,   573,   579,   587,   590,   597,   603,   613,   616,
+     624,   627,   634,   638,   645,   649,   656,   660,   667,   671,
+     686,   706,   710,   714,   718,   725,   735,   739
 };
 #endif
 
@@ -1989,7 +2004,15 @@ yyreduce:
 			{
 				in->fatal("condition or '<*>' required when using -c switch");
 			}
-			(yyval.regexp) = new RuleOp((yyvsp[(1) - (3)].regexp), (yyvsp[(2) - (3)].regexp), *(yyvsp[(3) - (3)].code), rank_counter.next (), RegExp::SHARED, NULL);
+			(yyval.regexp) = new RuleOp
+				( (yyvsp[(3) - (3)].code)->loc
+				, (yyvsp[(1) - (3)].regexp)
+				, (yyvsp[(2) - (3)].regexp)
+				, rank_counter.next ()
+				, RegExp::SHARED
+				, (yyvsp[(3) - (3)].code)
+				, NULL
+				);
 			spec = spec? mkAlt(spec, (yyval.regexp)) : (yyval.regexp);
 		;}
     break;
@@ -2009,7 +2032,7 @@ yyreduce:
   case 40:
 
     {
-			context_rule((yyvsp[(2) - (7)].clist), (yyvsp[(4) - (7)].regexp), (yyvsp[(5) - (7)].regexp), (yyvsp[(6) - (7)].str), *(yyvsp[(7) - (7)].code));
+			context_rule ((yyvsp[(2) - (7)].clist), (yyvsp[(7) - (7)].code)->loc, (yyvsp[(4) - (7)].regexp), (yyvsp[(5) - (7)].regexp), (yyvsp[(7) - (7)].code), (yyvsp[(6) - (7)].str));
 		;}
     break;
 
@@ -2017,8 +2040,8 @@ yyreduce:
 
     {
 			assert((yyvsp[(7) - (7)].str));
-			const Code * code = new Code (in->get_fname (), in->get_cline ());
-			context_rule((yyvsp[(2) - (7)].clist), (yyvsp[(4) - (7)].regexp), (yyvsp[(5) - (7)].regexp), (yyvsp[(7) - (7)].str), *code);
+			Loc loc (in->get_fname (), in->get_cline ());
+			context_rule ((yyvsp[(2) - (7)].clist), loc, (yyvsp[(4) - (7)].regexp), (yyvsp[(5) - (7)].regexp), NULL, (yyvsp[(7) - (7)].str));
 		;}
     break;
 
@@ -2050,7 +2073,16 @@ yyreduce:
 
     {
 			context_check(NULL);
-			specStar.push_back(new RuleOp((yyvsp[(4) - (7)].regexp), (yyvsp[(5) - (7)].regexp), *(yyvsp[(7) - (7)].code), rank_counter.next (), RegExp::PRIVATE, (yyvsp[(6) - (7)].str)));
+			RuleOp * rule = new RuleOp
+				( (yyvsp[(7) - (7)].code)->loc
+				, (yyvsp[(4) - (7)].regexp)
+				, (yyvsp[(5) - (7)].regexp)
+				, rank_counter.next ()
+				, RegExp::PRIVATE
+				, (yyvsp[(7) - (7)].code)
+				, (yyvsp[(6) - (7)].str)
+				);
+			specStar.push_back (rule);
 			delete (yyvsp[(6) - (7)].str);
 		;}
     break;
@@ -2060,8 +2092,17 @@ yyreduce:
     {
 			assert((yyvsp[(7) - (7)].str));
 			context_check(NULL);
-			const Code * code = new Code (in->get_fname (), in->get_cline ());
-			specStar.push_back(new RuleOp((yyvsp[(4) - (7)].regexp), (yyvsp[(5) - (7)].regexp), *code, rank_counter.next (), RegExp::PRIVATE, (yyvsp[(7) - (7)].str)));
+			Loc loc (in->get_fname (), in->get_cline ());
+			RuleOp * rule = new RuleOp
+				( loc
+				, (yyvsp[(4) - (7)].regexp)
+				, (yyvsp[(5) - (7)].regexp)
+				, rank_counter.next ()
+				, RegExp::PRIVATE
+				, NULL
+				, (yyvsp[(7) - (7)].str)
+				);
+			specStar.push_back (rule);
 			delete (yyvsp[(7) - (7)].str);
 		;}
     break;
@@ -2100,7 +2141,15 @@ yyreduce:
 			{
 				in->fatal("code to handle illegal condition already defined");
 			}
-			(yyval.regexp) = specNone = new RuleOp(new NullOp(), new NullOp(), *(yyvsp[(3) - (3)].code), rank_counter.next (), RegExp::SHARED, (yyvsp[(2) - (3)].str));
+			(yyval.regexp) = specNone = new RuleOp
+				( (yyvsp[(3) - (3)].code)->loc
+				, new NullOp
+				, new NullOp
+				, rank_counter.next ()
+				, RegExp::SHARED
+				, (yyvsp[(3) - (3)].code)
+				, (yyvsp[(2) - (3)].str)
+				);
 			delete (yyvsp[(2) - (3)].str);
 		;}
     break;
@@ -2114,8 +2163,16 @@ yyreduce:
 			{
 				in->fatal("code to handle illegal condition already defined");
 			}
-			const Code * code = new Code (in->get_fname (), in->get_cline ());
-			(yyval.regexp) = specNone = new RuleOp(new NullOp(), new NullOp(), *code, rank_counter.next (), RegExp::SHARED, (yyvsp[(3) - (3)].str));
+			Loc loc (in->get_fname (), in->get_cline ());
+			(yyval.regexp) = specNone = new RuleOp
+				( loc
+				, new NullOp
+				, new NullOp
+				, rank_counter.next ()
+				, RegExp::SHARED
+				, NULL
+				, (yyvsp[(3) - (3)].str)
+				);
 			delete (yyvsp[(3) - (3)].str);
 		;}
     break;
@@ -2643,7 +2700,6 @@ void parse(Scanner& i, Output & o)
 		{
 			RegExpMap::iterator it;
 			SetupMap::const_iterator itRuleSetup;
-			DefaultMap::const_iterator itRuleDefault;
 
 			if (parseMode != Scanner::Reuse)
 			{
@@ -2702,21 +2758,26 @@ void parse(Scanner& i, Output & o)
 							yySetupRule = "";
 						}
 					}
-					itRuleDefault = ruleDefaultMap.find(it->first);
-					if (itRuleDefault != ruleDefaultMap.end())
+
+					DefaultMap::const_iterator def = ruleDefaultMap.find (it->first);
+					if (def == ruleDefaultMap.end ())
 					{
-						RuleOp * def = new RuleOp(in->mkDefault(), new NullOp(), *(itRuleDefault->second), rank_counter.next (), RegExp::SHARED, NULL);
-						it->second = it->second ? mkAlt(def, it->second) : def;
+						def = ruleDefaultMap.find ("*");
 					}
-					else
+					if (def != ruleDefaultMap.end ())
 					{
-						itRuleDefault = ruleDefaultMap.find("*");
-						if (itRuleDefault != ruleDefaultMap.end())
-						{
-							RuleOp * def = new RuleOp(in->mkDefault(), new NullOp(), *(itRuleDefault->second), rank_counter.next (), RegExp::SHARED, NULL);
-							it->second = it->second ? mkAlt(def, it->second) : def;
-						}
+						RuleOp * def_rule = new RuleOp
+							( def->second->loc
+							, in->mkDefault ()
+							, new NullOp
+							, rank_counter.next ()
+							, RegExp::SHARED
+							, def->second
+							, NULL
+							);
+						it->second = it->second ? mkAlt (def_rule, it->second) : def_rule;
 					}
+
 					dfa_map[it->first] = genCode(it->second, o, topIndent, it->first);
 				}
 				if (parseMode != Scanner::Rules && dfa_map.find(it->first) != dfa_map.end())
@@ -2729,7 +2790,15 @@ void parse(Scanner& i, Output & o)
 		{
 			if (ruleDefault != NULL && parseMode != Scanner::Reuse)
 			{
-				RuleOp * def = new RuleOp(in->mkDefault(), new NullOp(), *ruleDefault, rank_counter.next (), RegExp::SHARED, NULL);
+				RuleOp * def = new RuleOp
+					( ruleDefault->loc
+					, in->mkDefault ()
+					, new NullOp
+					, rank_counter.next ()
+					, RegExp::SHARED
+					, ruleDefault
+					, NULL
+					);
 				spec = spec ? mkAlt(def, spec) : def;
 			}
 			if (spec || !dfa_map.empty())

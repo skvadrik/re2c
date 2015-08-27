@@ -21,12 +21,6 @@ struct Code
 	{
 		freelist.insert (this);
 	}
-	inline Code (const std::string & f, uint32_t l)
-		: loc (f, l)
-		, text ()
-	{
-		freelist.insert (this);
-	}
 };
 
 } // namespace re2c

@@ -233,7 +233,12 @@ void emit_rule (OutputFile & o, uint32_t ind, const State * const s, const RuleO
 {
 	if (DFlag)
 	{
-		o << s->label << " [label=\"" << rule->code.loc.filename << ":" << rule->code.loc.line << "\"]\n";
+		o << s->label;
+		if (rule->code)
+		{
+			o << " [label=\"" << rule->code->loc.filename << ":" << rule->code->loc.line << "\"]";
+		}
+		o << "\n";
 		return;
 	}
 
@@ -255,25 +260,24 @@ void emit_rule (OutputFile & o, uint32_t ind, const State * const s, const RuleO
 	}
 	else
 	{
-		if (rule->newcond.length() && condName != rule->newcond)
+		if (!rule->newcond.empty () && condName != rule->newcond)
 		{
 			genSetCondition(o, ind, rule->newcond);
 		}
 
-		const bool autogen = rule->code.text.empty ();
-		if (autogen)
-		{
-			o << indent (ind) << replaceParam(condGoto, condGotoParam, condPrefix + rule->newcond) << "\n";
-		}
-		else
+		if (rule->code)
 		{
 			if (!yySetupRule.empty ())
 			{
 				o << indent(ind) << yySetupRule << "\n";
 			}
-			o.write_line_info (rule->code.loc.line, rule->code.loc.filename.c_str ());
-			o << indent (ind) << rule->code.text << "\n";
+			o.write_line_info (rule->code->loc.line, rule->code->loc.filename.c_str ());
+			o << indent (ind) << rule->code->text << "\n";
 			o.insert_line_info ();
+		}
+		else if (!rule->newcond.empty ())
+		{
+			o << indent (ind) << replaceParam(condGoto, condGotoParam, condPrefix + rule->newcond) << "\n";
 		}
 	}
 }

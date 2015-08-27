@@ -12,22 +12,35 @@ namespace re2c
 
 class RuleOp: public RegExp
 {
+public:
+	const Loc loc;
+
+private:
 	RegExp * exp;
 
 public:
 	RegExp * ctx;
 	Ins * ins;
 	rule_rank_t rank;
-	const Code & code;
+	const Code * code;
 	const std::string newcond;
 
-	inline RuleOp (RegExp * e, RegExp * c, const Code & t, rule_rank_t r, InsAccess access, const std::string * n)
-		: exp (e)
-		, ctx (c)
+	inline RuleOp
+		( const Loc & l
+		, RegExp * r1
+		, RegExp * r2
+		, rule_rank_t r
+		, InsAccess access
+		, const Code * c
+		, const std::string * cond
+		)
+		: loc (l)
+		, exp (r1)
+		, ctx (r2)
 		, ins (NULL)
 		, rank (r)
-		, code (t)
-		, newcond (n ? *n : "")
+		, code (c)
+		, newcond (cond ? *cond : "")
 	{
 		ins_access = access;
 	}

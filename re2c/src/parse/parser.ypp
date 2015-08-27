@@ -68,7 +68,14 @@ void context_none(CondList *clist)
 	in->fatal("no expression specified");
 }
 
-void context_rule(CondList *clist, RegExp *expr, RegExp *look, const std::string * newcond, const Code & code)
+void context_rule
+	( CondList * clist
+	, const Loc & loc
+	, RegExp * expr
+	, RegExp * look
+	, const Code * code
+	, const std::string * newcond
+	)
 {
 	context_check(clist);
 	const RegExp::InsAccess ins_access = clist->size() > 1
@@ -76,7 +83,15 @@ void context_rule(CondList *clist, RegExp *expr, RegExp *look, const std::string
 		: RegExp::SHARED;
 	for(CondList::const_iterator it = clist->begin(); it != clist->end(); ++it)
 	{
-		RuleOp *rule = new RuleOp(expr, look, code, rank_counter.next (), ins_access, newcond);
+		RuleOp * rule = new RuleOp
+			( loc
+			, expr
+			, look
+			, rank_counter.next ()
+			, ins_access
+			, code
+			, newcond
+			);
 
 		RegExpMap::iterator itRE = specMap.find(*it);
 
@@ -423,7 +438,15 @@ rule:
 			{
 				in->fatal("condition or '<*>' required when using -c switch");
 			}
-			$$ = new RuleOp($1, $2, *$3, rank_counter.next (), RegExp::SHARED, NULL);
+			$$ = new RuleOp
+				( $3->loc
+				, $1
+				, $2
+				, rank_counter.next ()
+				, RegExp::SHARED
+				, $3
+				, NULL
+				);
 			spec = spec? mkAlt(spec, $$) : $$;
 		}
 	|	STAR CODE /* default rule */
@@ -437,13 +460,13 @@ rule:
 		}
 	|	'<' cond '>' expr look newcond CODE
 		{
-			context_rule($2, $4, $5, $6, *$7);
+			context_rule ($2, $7->loc, $4, $5, $7, $6);
 		}
 	|	'<' cond '>' expr look ':' newcond
 		{
 			assert($7);
-			const Code * code = new Code (in->get_fname (), in->get_cline ());
-			context_rule($2, $4, $5, $7, *code);
+			Loc loc (in->get_fname (), in->get_cline ());
+			context_rule ($2, loc, $4, $5, NULL, $7);
 		}
 	|	'<' cond '>' look newcond CODE
 		{
@@ -463,15 +486,33 @@ rule:
 	|	'<' STAR '>' expr look newcond CODE
 		{
 			context_check(NULL);
-			specStar.push_back(new RuleOp($4, $5, *$7, rank_counter.next (), RegExp::PRIVATE, $6));
+			RuleOp * rule = new RuleOp
+				( $7->loc
+				, $4
+				, $5
+				, rank_counter.next ()
+				, RegExp::PRIVATE
+				, $7
+				, $6
+				);
+			specStar.push_back (rule);
 			delete $6;
 		}
 	|	'<' STAR '>' expr look ':' newcond
 		{
 			assert($7);
 			context_check(NULL);
-			const Code * code = new Code (in->get_fname (), in->get_cline ());
-			specStar.push_back(new RuleOp($4, $5, *code, rank_counter.next (), RegExp::PRIVATE, $7));
+			Loc loc (in->get_fname (), in->get_cline ());
+			RuleOp * rule = new RuleOp
+				( loc
+				, $4
+				, $5
+				, rank_counter.next ()
+				, RegExp::PRIVATE
+				, NULL
+				, $7
+				);
+			specStar.push_back (rule);
 			delete $7;
 		}
 	|	'<' STAR '>' look newcond CODE
@@ -498,7 +539,15 @@ rule:
 			{
 				in->fatal("code to handle illegal condition already defined");
 			}
-			$$ = specNone = new RuleOp(new NullOp(), new NullOp(), *$3, rank_counter.next (), RegExp::SHARED, $2);
+			$$ = specNone = new RuleOp
+				( $3->loc
+				, new NullOp
+				, new NullOp
+				, rank_counter.next ()
+				, RegExp::SHARED
+				, $3
+				, $2
+				);
 			delete $2;
 		}
 	|	NOCOND ':' newcond
@@ -509,8 +558,16 @@ rule:
 			{
 				in->fatal("code to handle illegal condition already defined");
 			}
-			const Code * code = new Code (in->get_fname (), in->get_cline ());
-			$$ = specNone = new RuleOp(new NullOp(), new NullOp(), *code, rank_counter.next (), RegExp::SHARED, $3);
+			Loc loc (in->get_fname (), in->get_cline ());
+			$$ = specNone = new RuleOp
+				( loc
+				, new NullOp
+				, new NullOp
+				, rank_counter.next ()
+				, RegExp::SHARED
+				, NULL
+				, $3
+				);
 			delete $3;
 		}
 	|	SETUP STAR '>' CODE
@@ -778,7 +835,6 @@ void parse(Scanner& i, Output & o)
 		{
 			RegExpMap::iterator it;
 			SetupMap::const_iterator itRuleSetup;
-			DefaultMap::const_iterator itRuleDefault;
 
 			if (parseMode != Scanner::Reuse)
 			{
@@ -837,21 +893,26 @@ void parse(Scanner& i, Output & o)
 							yySetupRule = "";
 						}
 					}
-					itRuleDefault = ruleDefaultMap.find(it->first);
-					if (itRuleDefault != ruleDefaultMap.end())
+
+					DefaultMap::const_iterator def = ruleDefaultMap.find (it->first);
+					if (def == ruleDefaultMap.end ())
 					{
-						RuleOp * def = new RuleOp(in->mkDefault(), new NullOp(), *(itRuleDefault->second), rank_counter.next (), RegExp::SHARED, NULL);
-						it->second = it->second ? mkAlt(def, it->second) : def;
+						def = ruleDefaultMap.find ("*");
 					}
-					else
+					if (def != ruleDefaultMap.end ())
 					{
-						itRuleDefault = ruleDefaultMap.find("*");
-						if (itRuleDefault != ruleDefaultMap.end())
-						{
-							RuleOp * def = new RuleOp(in->mkDefault(), new NullOp(), *(itRuleDefault->second), rank_counter.next (), RegExp::SHARED, NULL);
-							it->second = it->second ? mkAlt(def, it->second) : def;
-						}
+						RuleOp * def_rule = new RuleOp
+							( def->second->loc
+							, in->mkDefault ()
+							, new NullOp
+							, rank_counter.next ()
+							, RegExp::SHARED
+							, def->second
+							, NULL
+							);
+						it->second = it->second ? mkAlt (def_rule, it->second) : def_rule;
 					}
+
 					dfa_map[it->first] = genCode(it->second, o, topIndent, it->first);
 				}
 				if (parseMode != Scanner::Rules && dfa_map.find(it->first) != dfa_map.end())
@@ -864,7 +925,15 @@ void parse(Scanner& i, Output & o)
 		{
 			if (ruleDefault != NULL && parseMode != Scanner::Reuse)
 			{
-				RuleOp * def = new RuleOp(in->mkDefault(), new NullOp(), *ruleDefault, rank_counter.next (), RegExp::SHARED, NULL);
+				RuleOp * def = new RuleOp
+					( ruleDefault->loc
+					, in->mkDefault ()
+					, new NullOp
+					, rank_counter.next ()
+					, RegExp::SHARED
+					, ruleDefault
+					, NULL
+					);
 				spec = spec ? mkAlt(def, spec) : def;
 			}
 			if (spec || !dfa_map.empty())
