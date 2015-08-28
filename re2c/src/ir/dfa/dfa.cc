@@ -176,18 +176,16 @@ State *DFA::findState(Ins **kernel, ptrdiff_t kCount)
 	{
 		if (s->kCount == kCount)
 		{
-			for (Ins ** iP = s->kernel, * i; (i = *iP); ++iP)
+			bool marked = true;
+			for (Ins ** iP = s->kernel, * i; marked && (i = *iP); ++iP)
 			{
-				if (!isMarked(i))
-				{
-					goto nextState;
-				}
+				marked = isMarked (i);
 			}
-			goto unmarkAll;
+			if (marked)
+			{
+				goto unmarkAll;
+			}
 		}
-
-nextState:
-		;
 	}
 
 	s = new State;
