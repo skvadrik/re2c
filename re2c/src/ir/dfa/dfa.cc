@@ -183,20 +183,22 @@ State *DFA::findState(Ins **kernel, ptrdiff_t kCount)
 			}
 			if (marked)
 			{
-				goto unmarkAll;
+				break;
 			}
 		}
 	}
 
-	s = new State;
-	addState(tail, s);
-	s->kCount = kCount;
-	s->kernel = new Ins * [kCount + 1];
-	memcpy(s->kernel, kernel, (kCount + 1)*sizeof(Ins*));
-	s->link = toDo;
-	toDo = s;
+	if (!s)
+	{
+		s = new State;
+		addState(tail, s);
+		s->kCount = kCount;
+		s->kernel = new Ins * [kCount + 1];
+		memcpy(s->kernel, kernel, (kCount + 1)*sizeof(Ins*));
+		s->link = toDo;
+		toDo = s;
+	}
 
-unmarkAll:
 	for (Ins ** iP = kernel, * i; (i = *iP); ++iP)
 	{
 		unmark(i);
