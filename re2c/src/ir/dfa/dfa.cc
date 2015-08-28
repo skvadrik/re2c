@@ -53,7 +53,7 @@ DFA::DFA(Ins *ins, uint32_t ni, uint32_t lb, uint32_t ub, const Char *rep)
 	GoTo *goTo = new GoTo[nc];
 	Span *span = allocate<Span> (nc);
 	memset((char*) goTo, 0, nc*sizeof(GoTo));
-	findState(work, closure(work, &ins[0]) - work);
+	findState(work, closure(work, &ins[0]));
 
 	while (toDo)
 	{
@@ -96,7 +96,7 @@ DFA::DFA(Ins *ins, uint32_t ni, uint32_t lb, uint32_t ub, const Char *rep)
 			for (cP = work; i; i = (Ins*) i->c.link)
 				cP = closure(cP, i + i->c.bump);
 
-			go->to = findState(work, cP - work);
+			go->to = findState(work, cP);
 		}
 
 		s->go.nSpans = 0;
@@ -150,14 +150,13 @@ void DFA::addState(State **a, State *s)
 		tail = &s->next;
 }
 
-State *DFA::findState(Ins **kernel, ptrdiff_t kCount)
+State *DFA::findState(Ins **kernel, Ins ** kernel_end)
 {
-	kernel[kCount] = NULL;
-
 	Ins ** cP = kernel;
 
-	for (Ins ** iP = kernel, * i; (i = *iP); ++iP)
+	for (Ins ** iP = kernel; iP < kernel_end; ++iP)
 	{
+		Ins * i = *iP;
 		if (i->i.tag == CHAR || i->i.tag == TERM || i->i.tag == CTXT)
 		{
 			*cP++ = i;
@@ -168,7 +167,7 @@ State *DFA::findState(Ins **kernel, ptrdiff_t kCount)
 		}
 	}
 
-	kCount = cP - kernel;
+	const ptrdiff_t kCount = cP - kernel;
 	kernel[kCount] = NULL;
 
 	State * s;
