@@ -74,7 +74,7 @@ public:
 	void write_hex (uint32_t n);
 	void write_char_hex (uint32_t n);
 	void write_range (uint32_t u, uint32_t l);
-	void write_uint32_t_width (uint32_t n, uint32_t w);
+	void write_uint32_t_width (uint32_t n, int w);
 	void write_line_info (uint32_t l, const char * fn);
 	void write_version_time ();
 	void write_user_start_label ();

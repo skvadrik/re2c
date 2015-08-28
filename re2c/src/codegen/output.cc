@@ -111,9 +111,10 @@ void OutputFile::write_range (uint32_t l, uint32_t u)
 	printSpan (stream (), l, u);
 }
 
-void OutputFile::write_uint32_t_width (uint32_t n, uint32_t w)
+void OutputFile::write_uint32_t_width (uint32_t n, int w)
 {
-	stream () << std::setw (w) << n;
+	stream () << std::setw (w);
+	stream () << n;
 }
 
 void OutputFile::write_line_info (uint32_t l, const char * fn)
