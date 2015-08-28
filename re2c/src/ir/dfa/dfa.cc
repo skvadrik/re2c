@@ -64,8 +64,9 @@ DFA::DFA(Ins *ins, uint32_t ni, uint32_t lb, uint32_t ub, const Char *rep)
 
 		s->rule = NULL;
 
-		for (Ins ** iP = s->kernel, * i; (i = *iP); ++iP)
+		for (uint32_t k = 0; k < s->kCount; ++k)
 		{
+			Ins * i = s->kernel[k];
 			if (i->i.tag == CHAR)
 			{
 				for (Ins *j = i + 1; j < (Ins*) i->i.link; ++j)
@@ -152,23 +153,19 @@ void DFA::addState(State **a, State *s)
 
 State *DFA::findState(Ins **kernel, Ins ** kernel_end)
 {
-	Ins ** cP = kernel;
-
-	for (Ins ** iP = kernel; iP < kernel_end; ++iP)
+	uint32_t kCount = 0;
+	for (Ins ** i = kernel; i < kernel_end; ++i)
 	{
-		Ins * i = *iP;
-		if (i->i.tag == CHAR || i->i.tag == TERM || i->i.tag == CTXT)
+		Ins * ins = *i;
+		if (ins->i.tag == CHAR || ins->i.tag == TERM || ins->i.tag == CTXT)
 		{
-			*cP++ = i;
+			kernel[kCount++] = ins;
 		}
 		else
 		{
-			unmark(i);
+			unmark (ins);
 		}
 	}
-
-	const ptrdiff_t kCount = cP - kernel;
-	kernel[kCount] = NULL;
 
 	State * s;
 	for (s = head; s; s = s->next)
@@ -176,9 +173,9 @@ State *DFA::findState(Ins **kernel, Ins ** kernel_end)
 		if (s->kCount == kCount)
 		{
 			bool marked = true;
-			for (Ins ** iP = s->kernel, * i; marked && (i = *iP); ++iP)
+			for (uint32_t i = 0; marked && i < s->kCount; ++i)
 			{
-				marked = isMarked (i);
+				marked = isMarked (s->kernel[i]);
 			}
 			if (marked)
 			{
@@ -192,15 +189,15 @@ State *DFA::findState(Ins **kernel, Ins ** kernel_end)
 		s = new State;
 		addState(tail, s);
 		s->kCount = kCount;
-		s->kernel = new Ins * [kCount + 1];
-		memcpy(s->kernel, kernel, (kCount + 1)*sizeof(Ins*));
+		s->kernel = new Ins * [kCount];
+		memcpy(s->kernel, kernel, kCount * sizeof (Ins *));
 		s->link = toDo;
 		toDo = s;
 	}
 
-	for (Ins ** iP = kernel, * i; (i = *iP); ++iP)
+	for (uint32_t i = 0; i < kCount; ++i)
 	{
-		unmark(i);
+		unmark (kernel[i]);
 	}
 
 	return s;
