@@ -60,12 +60,11 @@ DFA::DFA(Ins *ins, uint32_t ni, uint32_t lb, uint32_t ub, const Char *rep)
 		State *s = toDo;
 		toDo = s->link;
 
-		Ins **cP, **iP, *i;
 		uint32_t nGoTos = 0;
 
 		s->rule = NULL;
 
-		for (iP = s->kernel; (i = *iP); ++iP)
+		for (Ins ** iP = s->kernel, * i; (i = *iP); ++iP)
 		{
 			if (i->i.tag == CHAR)
 			{
@@ -91,9 +90,10 @@ DFA::DFA(Ins *ins, uint32_t ni, uint32_t lb, uint32_t ub, const Char *rep)
 		for (uint32_t j = 0; j < nGoTos; ++j)
 		{
 			GoTo *go = &goTo[goTo[j].ch - lb];
-			i = (Ins*) go->to;
+			Ins * i = (Ins*) go->to;
 
-			for (cP = work; i; i = (Ins*) i->c.link)
+			Ins ** cP = work;
+			for (; i; i = (Ins*) i->c.link)
 				cP = closure(cP, i + i->c.bump);
 
 			go->to = findState(work, cP);
