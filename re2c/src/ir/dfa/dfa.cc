@@ -152,14 +152,11 @@ void DFA::addState(State **a, State *s)
 
 State *DFA::findState(Ins **kernel, ptrdiff_t kCount)
 {
-	Ins **cP, **iP, *i;
-	State *s;
-
 	kernel[kCount] = NULL;
 
-	cP = kernel;
+	Ins ** cP = kernel;
 
-	for (iP = kernel; (i = *iP); ++iP)
+	for (Ins ** iP = kernel, * i; (i = *iP); ++iP)
 	{
 		if (i->i.tag == CHAR || i->i.tag == TERM || i->i.tag == CTXT)
 		{
@@ -174,14 +171,18 @@ State *DFA::findState(Ins **kernel, ptrdiff_t kCount)
 	kCount = cP - kernel;
 	kernel[kCount] = NULL;
 
+	State * s;
 	for (s = head; s; s = s->next)
 	{
 		if (s->kCount == kCount)
 		{
-			for (iP = s->kernel; (i = *iP); ++iP)
+			for (Ins ** iP = s->kernel, * i; (i = *iP); ++iP)
+			{
 				if (!isMarked(i))
+				{
 					goto nextState;
-
+				}
+			}
 			goto unmarkAll;
 		}
 
@@ -198,9 +199,10 @@ nextState:
 	toDo = s;
 
 unmarkAll:
-
-	for (iP = kernel; (i = *iP); ++iP)
+	for (Ins ** iP = kernel, * i; (i = *iP); ++iP)
+	{
 		unmark(i);
+	}
 
 	return s;
 }
