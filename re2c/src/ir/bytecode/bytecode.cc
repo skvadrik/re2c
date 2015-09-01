@@ -55,13 +55,17 @@ smart_ptr<DFA> genCode (RegExp *re, Output & output, uint32_t ind, const std::st
 	}
 
 	smart_ptr<DFA> dfa = make_smart_ptr(new DFA(ins, size, 0, encoding.nCodeUnits(), rep));
+
+	Skeleton skeleton (*dfa);
+	skeleton.warn_undefined_control_flow (output.source.get_block_line (), cond);
+
 	if (flag_skeleton)
 	{
-		skeleton::Skeleton skeleton (*dfa);
 		skeleton.emit_data (output.data);
-		skeleton::emit_prolog (output.source, ind, output.data.file_name.c_str ());
+		emit_prolog (output.source, ind, output.data.file_name.c_str ());
 	}
-	dfa->prepare (output.source, output.max_fill, cond);
+
+	dfa->prepare (output.source, output.max_fill);
 
 	return dfa;
 }

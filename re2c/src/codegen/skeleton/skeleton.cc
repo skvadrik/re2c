@@ -7,11 +7,9 @@
 namespace re2c
 {
 
-namespace skeleton
-{
-
 Node::Node (const State * s, const s2n_map & s2n)
 	: arcs ()
+	, arcsets ()
 	, loop (0)
 	, rule (rule_rank_t::none ())
 	, path_len_init (false)
@@ -37,11 +35,13 @@ Node::Node (const State * s, const s2n_map & s2n)
 		{
 			const Span & span = s->go.span[i];
 			Node * n = s2n.find (span.to)->second;
+			const uint32_t ub = span.ub - 1;
 			arcs[n].push_back (lb);
-			if (lb != span.ub - 1)
+			if (lb != ub)
 			{
-				arcs[n].push_back (span.ub - 1);
+				arcs[n].push_back (ub);
 			}
+			arcsets[n].push_back (std::make_pair (lb, ub));
 			lb = span.ub;
 		}
 	}
@@ -370,7 +370,5 @@ void emit_epilog (OutputFile & o, uint32_t ind)
 	o << indent (ind + 1) << "return 0;\n";
 	o << indent (ind) << "}\n";
 }
-
-} // namespace skeleton
 
 } // namespace re2c

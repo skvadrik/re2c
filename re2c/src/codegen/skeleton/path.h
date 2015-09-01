@@ -9,9 +9,6 @@
 namespace re2c
 {
 
-namespace skeleton
-{
-
 struct Path
 {
 	typedef std::vector<uint32_t> chars_t;
@@ -25,8 +22,6 @@ struct Path
 	void extend (rule_rank_t r, uint32_t c);
 	void append (const Path * p);
 };
-
-} // namespace skeleton
 
 } // namespace re2c
 

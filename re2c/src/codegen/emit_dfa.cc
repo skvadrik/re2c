@@ -229,7 +229,7 @@ void DFA::emit(Output & output, uint32_t& ind, const std::string& condName, bool
 	}
 	if (flag_skeleton)
 	{
-		skeleton::emit_epilog (o, ind);
+		emit_epilog (o, ind);
 	}
 
 	// Cleanup

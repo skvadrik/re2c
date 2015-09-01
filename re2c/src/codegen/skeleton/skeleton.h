@@ -3,6 +3,7 @@
 
 #include <map>
 
+#include "src/codegen/skeleton/multipath.h"
 #include "src/codegen/skeleton/path.h"
 #include "src/ir/dfa/dfa.h"
 #include "src/util/c99_stdint.h"
@@ -14,9 +15,6 @@
 namespace re2c
 {
 
-namespace skeleton
-{
-
 static const uint32_t ARC_LIMIT = 1024 * 1024 * 1024; // ~1Gb
 typedef u32lim_t<ARC_LIMIT> arccount_t;
 
@@ -24,11 +22,13 @@ struct Node
 {
 	typedef std::map<const State *, Node *> s2n_map;
 	typedef std::map<Node *, std::vector<uint32_t> > arcs_t;
+	typedef std::map<Node *, multipath_t::arc_t> arcsets_t;
 	typedef local_increment_t<uint8_t> local_inc;
 	typedef wrap_iterator_t<arcs_t> wrap_iter;
 
 	// outgoing arcs
 	arcs_t arcs;
+	arcsets_t arcsets;
 
 	// how many times this node has been visited
 	// (controls looping in graph traversals)
@@ -49,6 +49,7 @@ struct Node
 	arccount_t estimate_size_cover (arccount_t inarcs, arccount_t len);
 	void generate_paths_all (const std::vector<Path> & prefixes, std::vector<Path> & results);
 	void generate_paths_cover (const std::vector<Path> & prefixes, std::vector<Path> & results);
+	arccount_t generate_paths_default (const multipath_t & prefix, std::vector<multipath_t> & paths);
 
 	FORBID_COPY (Node);
 };
@@ -60,6 +61,7 @@ struct Skeleton
 	Skeleton (const DFA & dfa);
 	~Skeleton ();
 	void generate_paths (std::vector<Path> & results);
+	void warn_undefined_control_flow (uint32_t line, const std::string & cond);
 	void emit_data (DataFile & o);
 
 	FORBID_COPY (Skeleton);
@@ -67,8 +69,6 @@ struct Skeleton
 
 void emit_prolog (OutputFile & o, uint32_t ind, const char * data_name);
 void emit_epilog (OutputFile & o, uint32_t ind);
-
-} // namespace skeleton
 
 } // namespace re2c
 

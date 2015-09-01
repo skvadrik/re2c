@@ -32,7 +32,7 @@ public:
 
 	void findSCCs ();
 	void findBaseState ();
-	void prepare (OutputFile & o, uint32_t &, const std::string & cond);
+	void prepare (OutputFile & o, uint32_t &);
 	void count_used_labels (std::set<label_t> & used, label_t prolog, label_t start, bool force_start) const;
 	void emit (Output &, uint32_t &, const std::string &, bool, bool &);
 

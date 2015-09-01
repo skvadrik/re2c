@@ -3,9 +3,6 @@
 namespace re2c
 {
 
-namespace skeleton
-{
-
 Path::Path (const chars_t & cs, size_t l, rule_rank_t r)
 	: chars (cs)
 	, length (l)
@@ -40,7 +37,5 @@ void Path::append (const Path * p)
 		chars.push_back (p->chars[i]);
 	}
 }
-
-} // namespace skeleton
 
 } // namespace re2c

@@ -1,5 +1,6 @@
-#include <iostream>
-#include <sstream>
+#include <algorithm>
+#include <stdio.h>
+#include <string>
 
 #include "src/codegen/print.h"
 #include "src/conf/msg.h"
@@ -73,6 +74,15 @@ void Warn::set_all_error ()
 	}
 }
 
+void Warn::fail (type_t t, uint32_t line, const char * s)
+{
+	if (mask[t] & WARNING)
+	{
+		// -Werror has no effect
+		warning (names[t], line, false, "%s", s);
+	}
+}
+
 void Warn::condition_order (uint32_t line)
 {
 	if (mask[CONDITION_ORDER] & WARNING)
@@ -106,32 +116,6 @@ void Warn::match_empty_string (uint32_t line)
 	}
 }
 
-void Warn::naked_default (uint32_t line, const std::vector<std::pair<uint32_t, uint32_t> > & stray_cunits, const std::string & cond)
-{
-	if (mask[NAKED_DEFAULT] & WARNING)
-	{
-		const bool e = mask[NAKED_DEFAULT] & ERROR;
-		error_accuml |= e;
-		std::ostringstream cunits;
-		for (uint32_t i = 0; i < stray_cunits.size (); ++i)
-		{
-			printSpan (cunits, stray_cunits[i].first, stray_cunits[i].second);
-		}
-		const char * cond_prefix = cond == ""
-			? ""
-			: " in condition ";
-		warning
-			( names[NAKED_DEFAULT]
-			, line
-			, e
-			, "naked default case%s%s (stray code units: %s), better add default rule *"
-			, cond_prefix
-			, cond.c_str ()
-			, cunits.str ().c_str ()
-			);
-	}
-}
-
 void Warn::swapped_range (uint32_t line, uint32_t l, uint32_t u)
 {
 	if (mask[SWAPPED_RANGE] & WARNING)
@@ -139,6 +123,56 @@ void Warn::swapped_range (uint32_t line, uint32_t l, uint32_t u)
 		const bool e = mask[SWAPPED_RANGE] & ERROR;
 		error_accuml |= e;
 		warning (names[SWAPPED_RANGE], line, e, "range lower bound (0x%X) is greater than upper bound (0x%X), swapping", l, u);
+	}
+}
+
+void Warn::undefined_control_flow (uint32_t line, const std::string & cond, std::vector<multipath_t> & paths, bool overflow)
+{
+	if (mask[UNDEFINED_CONTROL_FLOW] & WARNING)
+	{
+		const bool e = mask[UNDEFINED_CONTROL_FLOW] & ERROR;
+		error_accuml |= e;
+
+		// limit the number of patterns reported
+		static const size_t MAX = 8;
+		const size_t all = paths.size ();
+		const size_t some = std::min (MAX, all);
+		const size_t rest = all - some;
+
+		// report shorter patterns first
+		std::vector<multipath_t>::iterator middle = paths.begin ();
+		std::advance (middle, some);
+		std::partial_sort (paths.begin (), middle, paths.end (), multipath_t::compare);
+
+		warning_start (line, e);
+		fprintf (stderr, "control flow ");
+		if (!cond.empty ())
+		{
+			fprintf (stderr, "in condition '%s' ", cond.c_str ());
+		}
+		fprintf (stderr, "is undefined for strings that match ");
+		if (some == 1)
+		{
+			paths[0].fprint (stderr);
+		}
+		else
+		{
+			for (size_t i = 0; i < some; ++i)
+			{
+				fprintf (stderr, "\n\t");
+				paths[i].fprint (stderr);
+			}
+			fprintf (stderr, "\n");
+		}
+		if (rest > 0)
+		{
+			const char * at_least = overflow
+				? "at least "
+				: "";
+			fprintf (stderr, " ... and %s%lu more", at_least, rest);
+		}
+		fprintf (stderr, ", use default rule '*'");
+		warning_end (names[UNDEFINED_CONTROL_FLOW], e);
 	}
 }
 

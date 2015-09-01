@@ -29,18 +29,28 @@ void error_arg (const char * option)
 	error ("expected argument to option %s", option);
 }
 
-void warning (const char * type, uint32_t line, bool error, const char * fmt, ...)
+void warning_start (uint32_t line, bool error)
 {
 	static const char * msg = error ? "error" : "warning";
 	fprintf (stderr, "re2c: %s: line %u: ", msg, line);
+}
+
+void warning_end (const char * type, bool error)
+{
+	const char * prefix = error ? "error-" : "";
+	fprintf (stderr, " [-W%s%s]\n", prefix, type);
+}
+
+void warning (const char * type, uint32_t line, bool error, const char * fmt, ...)
+{
+	warning_start (line, error);
 
 	va_list args;
 	va_start (args, fmt);
 	vfprintf (stderr, fmt, args);
 	va_end (args);
 
-	const char * prefix = error ? "error-" : "";
-	fprintf (stderr, " [-W%s%s]\n", prefix, type);
+	warning_end (type, error);
 }
 
 void usage ()
