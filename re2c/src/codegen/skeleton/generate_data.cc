@@ -33,11 +33,11 @@ arccount_t Node::estimate_size_all (arccount_t wid, arccount_t len)
 	{
 		local_inc _ (loop);
 		arccount_t size (0u);
+		const arccount_t new_len = len + arccount_t (1u);
 		for (arcs_t::iterator i = arcs.begin (); i != arcs.end (); ++i)
 		{
 			const arccount_t new_wid = wid * arccount_t (i->second.size ());
-			const arccount_t new_len = len + arccount_t (1u);
-			if (new_wid.overflow () || new_len.overflow ())
+			if (new_wid.overflow ())
 			{
 				return arccount_t::limit ();
 			}
@@ -67,14 +67,10 @@ arccount_t Node::estimate_size_cover (arccount_t wid, arccount_t len)
 		local_inc _ (loop);
 		arccount_t size (0u);
 		arccount_t w (0u);
+		const arccount_t new_len = len + arccount_t (1u);
 		for (wrap_iter i (arcs); !i.end () || w < wid; ++i)
 		{
 			const arccount_t new_wid = arccount_t (i->second.size ());
-			const arccount_t new_len = len + arccount_t (1u);
-			if (new_wid.overflow () || new_len.overflow ())
-			{
-				return arccount_t::limit ();
-			}
 			size = size + i->first->estimate_size_cover (new_wid, new_len);
 			if (size.overflow ())
 			{
