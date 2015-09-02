@@ -26,7 +26,8 @@ Node::Node (const State * s, const s2n_map & s2n)
 	if (is_final)
 	{
 		path_len_init = true;
-		path = new Path (Path::chars_t (), 0, rule);
+		path = new path_t;
+		path->update (rule);
 	}
 	else
 	{
@@ -147,7 +148,7 @@ arccount_t Node::estimate_size_cover (arccount_t wid, arccount_t len)
 	}
 }
 
-void Node::generate_paths_all (const std::vector<Path> & prefixes, std::vector<Path> & results)
+void Node::generate_paths_all (const std::vector<path_t> & prefixes, std::vector<path_t> & results)
 {
 	const size_t wid = prefixes.size ();
 	if (end ())
@@ -163,7 +164,7 @@ void Node::generate_paths_all (const std::vector<Path> & prefixes, std::vector<P
 		local_inc _ (loop);
 		for (arcs_t::iterator i = arcs.begin (); i != arcs.end (); ++i)
 		{
-			std::vector<Path> zs;
+			std::vector<path_t> zs;
 			for (size_t j = 0; j < wid; ++j)
 			{
 				const size_t new_wid = i->second.size ();
@@ -178,7 +179,7 @@ void Node::generate_paths_all (const std::vector<Path> & prefixes, std::vector<P
 	}
 }
 
-void Node::generate_paths_cover (const std::vector<Path> & prefixes, std::vector<Path> & results)
+void Node::generate_paths_cover (const std::vector<path_t> & prefixes, std::vector<path_t> & results)
 {
 	const size_t wid = prefixes.size ();
 	if (path != NULL)
@@ -195,7 +196,7 @@ void Node::generate_paths_cover (const std::vector<Path> & prefixes, std::vector
 		size_t w = 0;
 		for (wrap_iter i (arcs); !i.end () || w < wid; ++i)
 		{
-			std::vector<Path> zs;
+			std::vector<path_t> zs;
 			const size_t new_wid = i->second.size ();
 			for (size_t j = 0; j < new_wid; ++j)
 			{
@@ -208,7 +209,8 @@ void Node::generate_paths_cover (const std::vector<Path> & prefixes, std::vector
 				w += new_wid;
 				if (path == NULL)
 				{
-					path = new Path (Path::chars_t (1, i->second[0]), 0, rule);
+					path = new path_t;
+					path->extend (rule, i->second[0]);
 					path->append (i->first->path);
 				}
 			}
@@ -245,10 +247,10 @@ Skeleton::~Skeleton ()
 	operator delete (nodes);
 }
 
-void Skeleton::generate_paths (std::vector<Path> & results)
+void Skeleton::generate_paths (std::vector<path_t> & results)
 {
-	std::vector<Path> prefixes;
-	prefixes.push_back (Path (Path::chars_t (), 0, rule_rank_t::none ()));
+	std::vector<path_t> prefixes;
+	prefixes.push_back (path_t ());
 
 	if (nodes->estimate_size_all (arccount_t (1u), arccount_t (0u)).overflow ())
 	{
@@ -296,7 +298,7 @@ void Skeleton::emit_data (DataFile & o)
 	o.file << indent (ind) << "YYCTYPE data [] =\n";
 	o.file << indent (ind) << "{\n";
 
-	std::vector<Path> ys;
+	std::vector<path_t> ys;
 	generate_paths (ys);
 
 	const size_t count = ys.size ();
@@ -304,18 +306,19 @@ void Skeleton::emit_data (DataFile & o)
 	size_t max_len = 0;
 	for (size_t i = 0; i < count; ++i)
 	{
-		if (max_len < ys[i].chars.size ())
+		const size_t len = ys[i].len ();
+		if (max_len < len)
 		{
-			max_len = ys[i].chars.size ();
+			max_len = len;
 		}
 	}
 	for (size_t i = 0; i < count; ++i)
 	{
 		o.file << indent (ind + 1);
-		const size_t len = ys[i].chars.size ();
+		const size_t len = ys[i].len ();
 		for (size_t j = 0 ; j < len; ++j)
 		{
-			prtChOrHex (o.file, ys[i].chars[j]);
+			prtChOrHex (o.file, ys[i][j]);
 			o.file << ",";
 		}
 		o.file << "\n";
@@ -342,8 +345,8 @@ void Skeleton::emit_data (DataFile & o)
 	o.file << indent (ind) << "{\n";
 	for (size_t i = 0; i < count; ++i)
 	{
-		const size_t new_pos = pos + ys[i].chars.size ();
-		o.file << indent (ind + 1) << "Result (" << pos + ys[i].length << "," << new_pos << "," << ys[i].rule << "),\n";
+		const size_t new_pos = pos + ys[i].len ();
+		o.file << indent (ind + 1) << "Result (" << pos + ys[i].len_matching () << "," << new_pos << "," << ys[i].match () << "),\n";
 		pos = new_pos;
 	}
 	o.file << indent (ind) << "};\n";

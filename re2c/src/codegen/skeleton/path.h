@@ -9,18 +9,21 @@
 namespace re2c
 {
 
-struct Path
+class path_t
 {
-	typedef std::vector<uint32_t> chars_t;
-
-	chars_t chars;
-	size_t length;
+	std::vector<uint32_t> arcs;
 	rule_rank_t rule;
+	size_t rule_pos;
 
-	Path (const chars_t & cs, size_t l, rule_rank_t r);
+public:
+	path_t ();
+	size_t len () const;
+	size_t len_matching () const;
+	rule_rank_t match () const;
+	uint32_t operator [] (size_t i) const;
 	void update (rule_rank_t r);
 	void extend (rule_rank_t r, uint32_t c);
-	void append (const Path * p);
+	void append (const path_t * p);
 };
 
 } // namespace re2c

@@ -40,15 +40,15 @@ struct Node
 	// stuff for constructing path cover (for large graphs)
 	bool path_len_init;
 	arccount_t path_len;
-	Path * path;
+	path_t * path;
 
 	Node (const State * s, const s2n_map & s2n);
 	~Node ();
 	bool end () const;
 	arccount_t estimate_size_all (arccount_t inarcs, arccount_t len);
 	arccount_t estimate_size_cover (arccount_t inarcs, arccount_t len);
-	void generate_paths_all (const std::vector<Path> & prefixes, std::vector<Path> & results);
-	void generate_paths_cover (const std::vector<Path> & prefixes, std::vector<Path> & results);
+	void generate_paths_all (const std::vector<path_t> & prefixes, std::vector<path_t> & results);
+	void generate_paths_cover (const std::vector<path_t> & prefixes, std::vector<path_t> & results);
 	arccount_t generate_paths_default (const multipath_t & prefix, std::vector<multipath_t> & paths);
 
 	FORBID_COPY (Node);
@@ -60,7 +60,7 @@ struct Skeleton
 
 	Skeleton (const DFA & dfa);
 	~Skeleton ();
-	void generate_paths (std::vector<Path> & results);
+	void generate_paths (std::vector<path_t> & results);
 	void warn_undefined_control_flow (uint32_t line, const std::string & cond);
 	void emit_data (DataFile & o);
 
