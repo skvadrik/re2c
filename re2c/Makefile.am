@@ -87,6 +87,8 @@ SRC = \
 	src/codegen/print.cc \
 	src/codegen/scc.cc \
 	src/codegen/skeleton/control_flow.cc \
+	src/codegen/skeleton/generate_code.cc \
+	src/codegen/skeleton/generate_data.cc \
 	src/codegen/skeleton/multipath.cc \
 	src/codegen/skeleton/path.cc \
 	src/codegen/skeleton/skeleton.cc \
