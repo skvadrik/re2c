@@ -49,8 +49,10 @@ struct OutputBlock
 
 struct OutputFile
 {
-private:
+public:
 	const char * file_name;
+
+private:
 	FILE * file;
 	std::vector<OutputBlock *> blocks;
 
@@ -121,21 +123,10 @@ private:
 	FORBID_COPY (HeaderFile);
 };
 
-struct DataFile
-{
-	DataFile (const char * fn);
-	~DataFile ();
-	bool open ();
-
-	std::string file_name;
-	std::ofstream file;
-};
-
 struct Output
 {
 	OutputFile source;
 	HeaderFile header;
-	DataFile data;
 	std::vector<std::string> types;
 	uint32_t max_fill;
 

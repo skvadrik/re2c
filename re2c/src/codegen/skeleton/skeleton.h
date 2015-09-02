@@ -62,12 +62,12 @@ struct Skeleton
 	~Skeleton ();
 	void generate_paths (std::vector<path_t> & results);
 	void warn_undefined_control_flow (uint32_t line, const std::string & cond);
-	void emit_data (DataFile & o);
+	void emit_data (const char * fname);
 
 	FORBID_COPY (Skeleton);
 };
 
-void emit_prolog (OutputFile & o, uint32_t ind, const char * data_name);
+void emit_prolog (OutputFile & o, uint32_t ind);
 void emit_epilog (OutputFile & o, uint32_t ind);
 
 } // namespace re2c

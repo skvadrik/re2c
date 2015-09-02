@@ -343,31 +343,9 @@ HeaderFile::~HeaderFile ()
 	}
 }
 
-DataFile::DataFile (const char * fn)
-	: file_name (fn == NULL ? "" : fn)
-	, file ()
-{
-	file_name += ".data";
-}
-
-bool DataFile::open ()
-{
-	file.open (file_name.c_str (), std::ofstream::out | std::ofstream::binary);
-	return file.is_open ();
-}
-
-DataFile::~DataFile ()
-{
-	if (file.is_open ())
-	{
-		file.close ();
-	}
-}
-
 Output::Output (const char * source_name, const char * header_name)
 	: source (source_name)
 	, header (header_name)
-	, data (source_name)
 	, types ()
 	, max_fill (1)
 {}

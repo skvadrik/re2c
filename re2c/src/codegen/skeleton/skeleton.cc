@@ -1,6 +1,9 @@
+#include <stdlib.h> // exit
+
 #include "src/codegen/indent.h"
 #include "src/codegen/print.h"
 #include "src/codegen/skeleton/skeleton.h"
+#include "src/conf/msg.h"
 #include "src/ir/regexp/regexp_rule.h"
 #include "src/util/allocate.h"
 
@@ -266,8 +269,17 @@ void Skeleton::generate_paths (std::vector<path_t> & results)
 	}
 }
 
-void Skeleton::emit_data (DataFile & o)
+void Skeleton::emit_data (const char * fname)
 {
+	const std::string dfname = std::string (fname) + ".data";
+	std::ofstream f;
+	f.open (dfname.c_str (), std::ofstream::out | std::ofstream::binary);
+	if (!f.is_open ())
+	{
+		error ("cannot open data file: %s", dfname.c_str ());
+		exit (1);
+	}
+
 	uint32_t ind = 0;
 
 	std::string yyctype;
@@ -284,19 +296,19 @@ void Skeleton::emit_data (DataFile & o)
 			break;
 	}
 
-	o.file << "#define " << mapCodeName["YYCTYPE"] << yyctype << "\n";
-	o.file << "#define " << mapCodeName["YYPEEK"] << "() *cursor\n";
-	o.file << "#define " << mapCodeName["YYSKIP"] << "() ++cursor\n";
-	o.file << "#define " << mapCodeName["YYBACKUP"] << "() marker = cursor\n";
-	o.file << "#define " << mapCodeName["YYBACKUPCTX"] << "() ctxmarker = cursor\n";
-	o.file << "#define " << mapCodeName["YYRESTORE"] << "() cursor = marker\n";
-	o.file << "#define " << mapCodeName["YYRESTORECTX"] << "() cursor = ctxmarker\n";
-	o.file << "#define " << mapCodeName["YYLESSTHAN"] << "(n) (limit - cursor) < n\n";
-	o.file << "#define " << mapCodeName["YYFILL"] << "(n) { break; }\n";
+	f << "#define " << mapCodeName["YYCTYPE"] << yyctype << "\n";
+	f << "#define " << mapCodeName["YYPEEK"] << "() *cursor\n";
+	f << "#define " << mapCodeName["YYSKIP"] << "() ++cursor\n";
+	f << "#define " << mapCodeName["YYBACKUP"] << "() marker = cursor\n";
+	f << "#define " << mapCodeName["YYBACKUPCTX"] << "() ctxmarker = cursor\n";
+	f << "#define " << mapCodeName["YYRESTORE"] << "() cursor = marker\n";
+	f << "#define " << mapCodeName["YYRESTORECTX"] << "() cursor = ctxmarker\n";
+	f << "#define " << mapCodeName["YYLESSTHAN"] << "(n) (limit - cursor) < n\n";
+	f << "#define " << mapCodeName["YYFILL"] << "(n) { break; }\n";
 
-	o.file << indent (ind) << "// These strings correspond to paths in DFA.\n";
-	o.file << indent (ind) << "YYCTYPE data [] =\n";
-	o.file << indent (ind) << "{\n";
+	f << indent (ind) << "// These strings correspond to paths in DFA.\n";
+	f << indent (ind) << "YYCTYPE data [] =\n";
+	f << indent (ind) << "{\n";
 
 	std::vector<path_t> ys;
 	generate_paths (ys);
@@ -314,53 +326,55 @@ void Skeleton::emit_data (DataFile & o)
 	}
 	for (size_t i = 0; i < count; ++i)
 	{
-		o.file << indent (ind + 1);
+		f << indent (ind + 1);
 		const size_t len = ys[i].len ();
 		for (size_t j = 0 ; j < len; ++j)
 		{
-			prtChOrHex (o.file, ys[i][j]);
-			o.file << ",";
+			prtChOrHex (f, ys[i][j]);
+			f << ",";
 		}
-		o.file << "\n";
+		f << "\n";
 	}
-	o.file << indent (ind + 1);
+	f << indent (ind + 1);
 	for (size_t j = 0 ; j < max_len; ++j) // pad with YMAXFILL zeroes
 	{
-		o.file << "0,";
+		f << "0,";
 	}
-	o.file << "\n";
-	o.file << indent (ind) << "};\n";
-	o.file << indent (ind) << "const unsigned int data_size = sizeof (data) / sizeof (YYCTYPE);\n";
+	f << "\n";
+	f << indent (ind) << "};\n";
+	f << indent (ind) << "const unsigned int data_size = sizeof (data) / sizeof (YYCTYPE);\n";
 
-	o.file << indent (ind) << "const unsigned int count = " << count << ";\n";
+	f << indent (ind) << "const unsigned int count = " << count << ";\n";
 
 	size_t pos = 0;
-	o.file << indent (ind) << "struct Result {\n";
-	o.file << indent (ind + 1) << "unsigned int endpos;\n";
-	o.file << indent (ind + 1) << "unsigned int startpos;\n";
-	o.file << indent (ind + 1) << "unsigned int rule;\n";
-	o.file << indent (ind + 1) << "Result (unsigned int e, unsigned int s, unsigned int r) : endpos (e), startpos (s), rule (r) {}\n";
-	o.file << indent (ind) << "};\n";
-	o.file << indent (ind) << "Result result [] =\n";
-	o.file << indent (ind) << "{\n";
+	f << indent (ind) << "struct Result {\n";
+	f << indent (ind + 1) << "unsigned int endpos;\n";
+	f << indent (ind + 1) << "unsigned int startpos;\n";
+	f << indent (ind + 1) << "unsigned int rule;\n";
+	f << indent (ind + 1) << "Result (unsigned int e, unsigned int s, unsigned int r) : endpos (e), startpos (s), rule (r) {}\n";
+	f << indent (ind) << "};\n";
+	f << indent (ind) << "Result result [] =\n";
+	f << indent (ind) << "{\n";
 	for (size_t i = 0; i < count; ++i)
 	{
 		const size_t new_pos = pos + ys[i].len ();
-		o.file << indent (ind + 1) << "Result (" << pos + ys[i].len_matching () << "," << new_pos << "," << ys[i].match () << "),\n";
+		f << indent (ind + 1) << "Result (" << pos + ys[i].len_matching () << "," << new_pos << "," << ys[i].match () << "),\n";
 		pos = new_pos;
 	}
-	o.file << indent (ind) << "};\n";
+	f << indent (ind) << "};\n";
 
-	o.file << indent (ind) << "const YYCTYPE * cursor = data;\n";
-	o.file << indent (ind) << "const YYCTYPE * marker = data;\n";
-	o.file << indent (ind) << "const YYCTYPE * ctxmarker = data;\n";
-	o.file << indent (ind) << "const YYCTYPE * const limit = &data[data_size - 1];\n";
+	f << indent (ind) << "const YYCTYPE * cursor = data;\n";
+	f << indent (ind) << "const YYCTYPE * marker = data;\n";
+	f << indent (ind) << "const YYCTYPE * ctxmarker = data;\n";
+	f << indent (ind) << "const YYCTYPE * const limit = &data[data_size - 1];\n";
+
+	f.close ();
 }
 
-void emit_prolog (OutputFile & o, uint32_t ind, const char * data_name)
+void emit_prolog (OutputFile & o, uint32_t ind)
 {
 	o << indent (ind) << "#include <stdio.h>\n";
-	o << indent (ind) << "#include \"" << data_name << "\"\n";
+	o << indent (ind) << "#include \"" << o.file_name << ".data" << "\"\n";
 	o << indent (ind) << "int main ()\n";
 	o << indent (ind) << "{\n";
 	o << indent (ind + 1) << "for (unsigned int i = 0; i < count; ++i)\n";

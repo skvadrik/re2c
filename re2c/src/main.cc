@@ -47,11 +47,6 @@ int main(int, char *argv[])
 		error ("cannot open header file: %s", opts.header_file);
 		return 1;
 	}
-	if (flag_skeleton && !output.data.open ())
-	{
-		error ("cannot open data file: %s", output.data.file_name.c_str ());
-		return 1;
-	}
 
 	Scanner scanner (input, output.source);
 	parse (scanner, output);
