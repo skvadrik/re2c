@@ -279,21 +279,18 @@ void Skeleton::emit_keys (const char * fname, const std::vector<path_t> & paths)
 		exit (1);
 	}
 
-	size_t pos = 0;
 	keys << "struct Result {\n";
-	keys << indent (1) << "unsigned int endpos;\n";
-	keys << indent (1) << "unsigned int startpos;\n";
-	keys << indent (1) << "unsigned int rule;\n";
-	keys << indent (1) << "Result (unsigned int e, unsigned int s, unsigned int r) : endpos (e), startpos (s), rule (r) {}\n";
+	keys << indent (1) << "size_t len;\n";
+	keys << indent (1) << "size_t len_matching;\n";
+	keys << indent (1) << "unsigned int match;\n";
+	keys << indent (1) << "Result (size_t n, size_t m, unsigned int r) : len (n), len_matching (m), match (r) {}\n";
 	keys << "};\n";
 	keys << "Result result [] =\n";
 	keys << "{\n";
 	const size_t count = paths.size ();
 	for (size_t i = 0; i < count; ++i)
 	{
-		const size_t new_pos = pos + paths[i].len ();
-		keys << indent (1) << "Result (" << pos + paths[i].len_matching () << "," << new_pos << "," << paths[i].match () << "),\n";
-		pos = new_pos;
+		keys << indent (1) << "Result (" << paths[i].len () << "," << paths[i].len_matching () << "," << paths[i].match () << "),\n";
 	}
 	keys << "};\n";
 

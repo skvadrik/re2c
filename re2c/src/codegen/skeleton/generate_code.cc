@@ -13,6 +13,7 @@ void emit_prolog (OutputFile & o, uint32_t ind)
 	o << indent (ind) << "{\n";
 	o << indent (ind + 1) << "for (unsigned int i = 0; i < count; ++i)\n";
 	o << indent (ind + 1) << "{\n";
+	o << indent (ind + 2) << "const YYCTYPE * token = cursor;\n";
 }
 
 void emit_epilog (OutputFile & o, uint32_t ind)

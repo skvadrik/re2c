@@ -251,12 +251,12 @@ void emit_rule (OutputFile & o, uint32_t ind, const State * const s, const RuleO
 	if (flag_skeleton)
 	{
 		o << indent (ind)
-			<< "{ if (cursor == &data[result[i].endpos] && result[i].rule == " << rule->rank << ") "
-			<< "{ cursor = &data[result[i].startpos]; continue; }"
+			<< "{ if (cursor == token + result[i].len_matching && result[i].match == " << rule->rank << ") "
+			<< "{ cursor = token + result[i].len; continue; }"
 			<< " else "
-			<< "{ printf (\"error: %lu/%u, %u/%u, '%s'\\n\", cursor - data, result[i].endpos, result[i].rule, "
+			<< "{ printf (\"error: %ld/%lu, %u/%u, '%s'\\n\", cursor - token, result[i].len_matching, result[i].match, "
 			<< rule->rank
-			<< ", &data[result[i].startpos]); return 1; } }\n";
+			<< ", token); return 1; } }\n";
 	}
 	else
 	{
