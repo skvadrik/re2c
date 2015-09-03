@@ -181,16 +181,23 @@ void Skeleton::generate_paths (uint32_t line, const std::string & cond, std::vec
 
 void Skeleton::emit_data (uint32_t line, const std::string & cond, const char * fname)
 {
-	const std::string dfname = std::string (fname) + ".data";
-	std::ofstream f;
-	f.open (dfname.c_str (), std::ofstream::out | std::ofstream::binary);
-	if (!f.is_open ())
+	std::vector<path_t> paths;
+	generate_paths (line, cond, paths);
+
+	emit_input (fname, paths);
+	emit_keys (fname, paths);
+}
+
+void Skeleton::emit_input (const char * fname, const std::vector<path_t> & paths)
+{
+	const std::string input_name = std::string (fname) + ".input";
+	std::ofstream input;
+	input.open (input_name.c_str (), std::ofstream::out | std::ofstream::binary);
+	if (!input.is_open ())
 	{
-		error ("cannot open data file: %s", dfname.c_str ());
+		error ("cannot open file: %s", input_name.c_str ());
 		exit (1);
 	}
-
-	uint32_t ind = 0;
 
 	std::string yyctype;
 	switch (encoding.szCodeUnit ())
@@ -206,29 +213,26 @@ void Skeleton::emit_data (uint32_t line, const std::string & cond, const char * 
 			break;
 	}
 
-	f << "#define " << mapCodeName["YYCTYPE"] << yyctype << "\n";
-	f << "#define " << mapCodeName["YYPEEK"] << "() *cursor\n";
-	f << "#define " << mapCodeName["YYSKIP"] << "() ++cursor\n";
-	f << "#define " << mapCodeName["YYBACKUP"] << "() marker = cursor\n";
-	f << "#define " << mapCodeName["YYBACKUPCTX"] << "() ctxmarker = cursor\n";
-	f << "#define " << mapCodeName["YYRESTORE"] << "() cursor = marker\n";
-	f << "#define " << mapCodeName["YYRESTORECTX"] << "() cursor = ctxmarker\n";
-	f << "#define " << mapCodeName["YYLESSTHAN"] << "(n) (limit - cursor) < n\n";
-	f << "#define " << mapCodeName["YYFILL"] << "(n) { break; }\n";
+	input << "#define " << mapCodeName["YYCTYPE"] << yyctype << "\n";
+	input << "#define " << mapCodeName["YYPEEK"] << "() *cursor\n";
+	input << "#define " << mapCodeName["YYSKIP"] << "() ++cursor\n";
+	input << "#define " << mapCodeName["YYBACKUP"] << "() marker = cursor\n";
+	input << "#define " << mapCodeName["YYBACKUPCTX"] << "() ctxmarker = cursor\n";
+	input << "#define " << mapCodeName["YYRESTORE"] << "() cursor = marker\n";
+	input << "#define " << mapCodeName["YYRESTORECTX"] << "() cursor = ctxmarker\n";
+	input << "#define " << mapCodeName["YYLESSTHAN"] << "(n) (limit - cursor) < n\n";
+	input << "#define " << mapCodeName["YYFILL"] << "(n) { break; }\n";
 
-	f << indent (ind) << "// These strings correspond to paths in DFA.\n";
-	f << indent (ind) << "YYCTYPE data [] =\n";
-	f << indent (ind) << "{\n";
+	input << "// These strings correspond to paths in DFA.\n";
+	input << "YYCTYPE data [] =\n";
+	input << "{\n";
 
-	std::vector<path_t> ys;
-	generate_paths (line, cond, ys);
-
-	const size_t count = ys.size ();
+	const size_t count = paths.size ();
 
 	size_t max_len = 0;
 	for (size_t i = 0; i < count; ++i)
 	{
-		const size_t len = ys[i].len ();
+		const size_t len = paths[i].len ();
 		if (max_len < len)
 		{
 			max_len = len;
@@ -236,49 +240,64 @@ void Skeleton::emit_data (uint32_t line, const std::string & cond, const char * 
 	}
 	for (size_t i = 0; i < count; ++i)
 	{
-		f << indent (ind + 1);
-		const size_t len = ys[i].len ();
+		input << indent (1);
+		const size_t len = paths[i].len ();
 		for (size_t j = 0 ; j < len; ++j)
 		{
-			prtChOrHex (f, ys[i][j]);
-			f << ",";
+			prtChOrHex (input, paths[i][j]);
+			input << ",";
 		}
-		f << "\n";
+		input << "\n";
 	}
-	f << indent (ind + 1);
+	input << indent (1);
 	for (size_t j = 0 ; j < max_len; ++j) // pad with YMAXFILL zeroes
 	{
-		f << "0,";
+		input << "0,";
 	}
-	f << "\n";
-	f << indent (ind) << "};\n";
-	f << indent (ind) << "const unsigned int data_size = sizeof (data) / sizeof (YYCTYPE);\n";
+	input << "\n";
+	input << "};\n";
+	input << "const unsigned int data_size = sizeof (data) / sizeof (YYCTYPE);\n";
 
-	f << indent (ind) << "const unsigned int count = " << count << ";\n";
+	input << "const unsigned int count = " << count << ";\n";
+
+	input << "const YYCTYPE * cursor = data;\n";
+	input << "const YYCTYPE * marker = data;\n";
+	input << "const YYCTYPE * ctxmarker = data;\n";
+	input << "const YYCTYPE * const limit = &data[data_size - 1];\n";
+
+	input.close ();
+}
+
+void Skeleton::emit_keys (const char * fname, const std::vector<path_t> & paths)
+{
+	const std::string keys_name = std::string (fname) + ".keys";
+	std::ofstream keys;
+	keys.open (keys_name.c_str (), std::ofstream::out | std::ofstream::binary);
+	if (!keys.is_open ())
+	{
+		error ("cannot open keys file: %s", keys_name.c_str ());
+		exit (1);
+	}
 
 	size_t pos = 0;
-	f << indent (ind) << "struct Result {\n";
-	f << indent (ind + 1) << "unsigned int endpos;\n";
-	f << indent (ind + 1) << "unsigned int startpos;\n";
-	f << indent (ind + 1) << "unsigned int rule;\n";
-	f << indent (ind + 1) << "Result (unsigned int e, unsigned int s, unsigned int r) : endpos (e), startpos (s), rule (r) {}\n";
-	f << indent (ind) << "};\n";
-	f << indent (ind) << "Result result [] =\n";
-	f << indent (ind) << "{\n";
+	keys << "struct Result {\n";
+	keys << indent (1) << "unsigned int endpos;\n";
+	keys << indent (1) << "unsigned int startpos;\n";
+	keys << indent (1) << "unsigned int rule;\n";
+	keys << indent (1) << "Result (unsigned int e, unsigned int s, unsigned int r) : endpos (e), startpos (s), rule (r) {}\n";
+	keys << "};\n";
+	keys << "Result result [] =\n";
+	keys << "{\n";
+	const size_t count = paths.size ();
 	for (size_t i = 0; i < count; ++i)
 	{
-		const size_t new_pos = pos + ys[i].len ();
-		f << indent (ind + 1) << "Result (" << pos + ys[i].len_matching () << "," << new_pos << "," << ys[i].match () << "),\n";
+		const size_t new_pos = pos + paths[i].len ();
+		keys << indent (1) << "Result (" << pos + paths[i].len_matching () << "," << new_pos << "," << paths[i].match () << "),\n";
 		pos = new_pos;
 	}
-	f << indent (ind) << "};\n";
+	keys << "};\n";
 
-	f << indent (ind) << "const YYCTYPE * cursor = data;\n";
-	f << indent (ind) << "const YYCTYPE * marker = data;\n";
-	f << indent (ind) << "const YYCTYPE * ctxmarker = data;\n";
-	f << indent (ind) << "const YYCTYPE * const limit = &data[data_size - 1];\n";
-
-	f.close ();
+	keys.close ();
 }
 
 } // namespace re2c

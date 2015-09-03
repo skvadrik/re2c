@@ -57,9 +57,13 @@ struct Skeleton
 
 	Skeleton (const DFA & dfa);
 	~Skeleton ();
-	void generate_paths (uint32_t line, const std::string & cond, std::vector<path_t> & results);
 	void warn_undefined_control_flow (uint32_t line, const std::string & cond);
 	void emit_data (uint32_t line, const std::string & cond, const char * fname);
+
+private:
+	void generate_paths (uint32_t line, const std::string & cond, std::vector<path_t> & results);
+	void emit_input (const char * fname, const std::vector<path_t> & paths);
+	void emit_keys (const char * fname, const std::vector<path_t> & paths);
 
 	FORBID_COPY (Skeleton);
 };
