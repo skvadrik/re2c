@@ -10,8 +10,6 @@ Node::Node (const State * s, const s2n_map & s2n)
 	, arcsets ()
 	, loop (0)
 	, rule (rule_rank_t::none ())
-	, path_len_init (false)
-	, path_len (0u)
 	, path (NULL)
 {
 	const bool is_accepting = s && s->rule;
@@ -23,7 +21,6 @@ Node::Node (const State * s, const s2n_map & s2n)
 	const bool is_final = !s || (s->go.nSpans == 1 && !s->go.span[0].to);
 	if (is_final)
 	{
-		path_len_init = true;
 		path = new path_t;
 		path->update (rule);
 	}

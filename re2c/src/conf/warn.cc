@@ -145,12 +145,7 @@ void Warn::undefined_control_flow (uint32_t line, const std::string & cond, std:
 		std::partial_sort (paths.begin (), middle, paths.end (), multipath_t::compare);
 
 		warning_start (line, e);
-		fprintf (stderr, "control flow ");
-		if (!cond.empty ())
-		{
-			fprintf (stderr, "in condition '%s' ", cond.c_str ());
-		}
-		fprintf (stderr, "is undefined for strings that match ");
+		fprintf (stderr, "control flow %sis undefined for strings that match ", incond (cond).c_str ());
 		if (some == 1)
 		{
 			paths[0].fprint (stderr);

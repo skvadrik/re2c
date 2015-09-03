@@ -37,8 +37,12 @@ void warning_start (uint32_t line, bool error)
 
 void warning_end (const char * type, bool error)
 {
-	const char * prefix = error ? "error-" : "";
-	fprintf (stderr, " [-W%s%s]\n", prefix, type);
+	if (type != NULL)
+	{
+		const char * prefix = error ? "error-" : "";
+		fprintf (stderr, " [-W%s%s]", prefix, type);
+	}
+	fprintf (stderr, "\n");
 }
 
 void warning (const char * type, uint32_t line, bool error, const char * fmt, ...)
@@ -175,6 +179,18 @@ void vernum ()
 void version ()
 {
 	printf ("re2c %s\n", PACKAGE_VERSION);
+}
+
+std::string incond (const std::string & cond)
+{
+	std::string s;
+	if (!cond.empty ())
+	{
+		s += "in condition '";
+		s += cond;
+		s += "' ";
+	}
+	return s;
 }
 
 } // namespace re2c
