@@ -8,7 +8,7 @@ namespace re2c {
 
 static void optimize (Ins * i);
 
-smart_ptr<DFA> genCode (RegExp *re, Output & output, uint32_t ind, const std::string & cond)
+smart_ptr<DFA> genCode (RegExp *re, Output & output, const std::string & cond)
 {
 	CharSet cs;
 	re->split(cs);
@@ -64,7 +64,6 @@ smart_ptr<DFA> genCode (RegExp *re, Output & output, uint32_t ind, const std::st
 	if (flag_skeleton)
 	{
 		skeleton.emit_data (o.get_block_line (), cond, o.file_name);
-		emit_prolog (o, ind);
 	}
 
 	dfa->prepare (o, output.max_fill);

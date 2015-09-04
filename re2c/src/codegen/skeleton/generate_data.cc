@@ -8,6 +8,9 @@
 namespace re2c
 {
 
+static void write_string (std::ofstream & f, const path_t & path);
+static void write_key (std::ofstream & f, const path_t & path);
+
 /*
  * note [estimating total size of paths in skeleton]
  *
@@ -77,15 +80,17 @@ arccount_t Node::estimate_size_all (arccount_t wid, arccount_t len)
 	}
 }
 
-void Node::generate_paths_all (const std::vector<path_t> & prefixes, std::vector<path_t> & results)
+void Node::generate_paths_all (const std::vector<path_t> & prefixes, std::ofstream & input, std::ofstream & keys)
 {
 	const size_t wid = prefixes.size ();
 	if (end ())
 	{
 		for (size_t i = 0; i < wid; ++i)
 		{
-			results.push_back (prefixes[i]);
-			results.back ().update (rule);
+			path_t p = prefixes[i];
+			p.update (rule);
+			write_string (input, p);
+			write_key (keys, p);
 		}
 	}
 	else if (loop < 2)
@@ -103,13 +108,13 @@ void Node::generate_paths_all (const std::vector<path_t> & prefixes, std::vector
 					zs.back ().extend (rule, i->second[k]);
 				}
 			}
-			i->first->generate_paths_all (zs, results);
+			i->first->generate_paths_all (zs, input, keys);
 		}
 	}
 }
 
 // see note [estimating total size of paths in skeleton]
-arccount_t Node::generate_paths_cover (const std::vector<path_t> & prefixes, std::vector<path_t> & results)
+arccount_t Node::generate_paths_cover (const std::vector<path_t> & prefixes, std::ofstream & input, std::ofstream & keys)
 {
 	arccount_t size (0u);
 	const size_t wid = prefixes.size ();
@@ -117,8 +122,10 @@ arccount_t Node::generate_paths_cover (const std::vector<path_t> & prefixes, std
 	{
 		for (size_t i = 0; i < wid; ++i)
 		{
-			results.push_back (prefixes[i]);
-			results.back ().append (path);
+			path_t p = prefixes[i];
+			p.append (path);
+			write_string (input, p);
+			write_key (keys, p);
 		}
 		const arccount_t len (prefixes[0].len () + path->len ());
 		size = arccount_t (wid) * len;
@@ -136,7 +143,7 @@ arccount_t Node::generate_paths_cover (const std::vector<path_t> & prefixes, std
 				zs.push_back (prefixes[(w + j) % wid]);
 				zs[j].extend (rule, i->second[j]);
 			}
-			size = size + i->first->generate_paths_cover (zs, results);
+			size = size + i->first->generate_paths_cover (zs, input, keys);
 			if (size.overflow ())
 			{
 				return arccount_t::limit ();
@@ -156,13 +163,15 @@ arccount_t Node::generate_paths_cover (const std::vector<path_t> & prefixes, std
 	return size;
 }
 
-void Skeleton::generate_paths (uint32_t line, const std::string & cond, std::vector<path_t> & results)
+uint32_t Skeleton::generate_paths (uint32_t line, const std::string & cond, std::ofstream & input, std::ofstream & keys)
 {
 	std::vector<path_t> prefixes;
 	prefixes.push_back (path_t ());
-	if (nodes->estimate_size_all (arccount_t (1u), arccount_t (0u)).overflow ())
+	arccount_t size = nodes->estimate_size_all (arccount_t (1u), arccount_t (0u));
+	if (size.overflow ())
 	{
-		if (nodes->generate_paths_cover (prefixes, results).overflow ())
+		size = nodes->generate_paths_cover (prefixes, input, keys);
+		if (size.overflow ())
 		{
 			warning
 				( NULL
@@ -175,20 +184,12 @@ void Skeleton::generate_paths (uint32_t line, const std::string & cond, std::vec
 	}
 	else
 	{
-		nodes->generate_paths_all (prefixes, results);
+		nodes->generate_paths_all (prefixes, input, keys);
 	}
+	return size.uint32 ();
 }
 
 void Skeleton::emit_data (uint32_t line, const std::string & cond, const char * fname)
-{
-	std::vector<path_t> paths;
-	generate_paths (line, cond, paths);
-
-	emit_input (fname, paths);
-	emit_keys (fname, paths);
-}
-
-void Skeleton::emit_input (const char * fname, const std::vector<path_t> & paths)
 {
 	const std::string input_name = std::string (fname) + ".input";
 	std::ofstream input;
@@ -198,78 +199,23 @@ void Skeleton::emit_input (const char * fname, const std::vector<path_t> & paths
 		error ("cannot open file: %s", input_name.c_str ());
 		exit (1);
 	}
-
 	std::string yyctype;
 	switch (encoding.szCodeUnit ())
 	{
 		case 1:
-			yyctype = " unsigned char";
+			yyctype = "unsigned char";
 			break;
 		case 2:
-			yyctype = " unsigned short";
+			yyctype = "unsigned short";
 			break;
 		case 4:
-			yyctype = " unsigned int";
+			yyctype = "unsigned int";
 			break;
 	}
-
-	input << "#define " << mapCodeName["YYCTYPE"] << yyctype << "\n";
-	input << "#define " << mapCodeName["YYPEEK"] << "() *cursor\n";
-	input << "#define " << mapCodeName["YYSKIP"] << "() ++cursor\n";
-	input << "#define " << mapCodeName["YYBACKUP"] << "() marker = cursor\n";
-	input << "#define " << mapCodeName["YYBACKUPCTX"] << "() ctxmarker = cursor\n";
-	input << "#define " << mapCodeName["YYRESTORE"] << "() cursor = marker\n";
-	input << "#define " << mapCodeName["YYRESTORECTX"] << "() cursor = ctxmarker\n";
-	input << "#define " << mapCodeName["YYLESSTHAN"] << "(n) (limit - cursor) < n\n";
-	input << "#define " << mapCodeName["YYFILL"] << "(n) { break; }\n";
-
 	input << "// These strings correspond to paths in DFA.\n";
-	input << "YYCTYPE data [] =\n";
+	input << yyctype << " data [] =\n";
 	input << "{\n";
 
-	const size_t count = paths.size ();
-
-	size_t max_len = 0;
-	for (size_t i = 0; i < count; ++i)
-	{
-		const size_t len = paths[i].len ();
-		if (max_len < len)
-		{
-			max_len = len;
-		}
-	}
-	for (size_t i = 0; i < count; ++i)
-	{
-		input << indent (1);
-		const size_t len = paths[i].len ();
-		for (size_t j = 0 ; j < len; ++j)
-		{
-			prtChOrHex (input, paths[i][j]);
-			input << ",";
-		}
-		input << "\n";
-	}
-	input << indent (1);
-	for (size_t j = 0 ; j < max_len; ++j) // pad with YMAXFILL zeroes
-	{
-		input << "0,";
-	}
-	input << "\n";
-	input << "};\n";
-	input << "const unsigned int data_size = sizeof (data) / sizeof (YYCTYPE);\n";
-
-	input << "const unsigned int count = " << count << ";\n";
-
-	input << "const YYCTYPE * cursor = data;\n";
-	input << "const YYCTYPE * marker = data;\n";
-	input << "const YYCTYPE * ctxmarker = data;\n";
-	input << "const YYCTYPE * const limit = &data[data_size - 1];\n";
-
-	input.close ();
-}
-
-void Skeleton::emit_keys (const char * fname, const std::vector<path_t> & paths)
-{
 	const std::string keys_name = std::string (fname) + ".keys";
 	std::ofstream keys;
 	keys.open (keys_name.c_str (), std::ofstream::out | std::ofstream::binary);
@@ -278,7 +224,6 @@ void Skeleton::emit_keys (const char * fname, const std::vector<path_t> & paths)
 		error ("cannot open keys file: %s", keys_name.c_str ());
 		exit (1);
 	}
-
 	keys << "struct Result {\n";
 	keys << indent (1) << "size_t len;\n";
 	keys << indent (1) << "size_t len_matching;\n";
@@ -287,14 +232,41 @@ void Skeleton::emit_keys (const char * fname, const std::vector<path_t> & paths)
 	keys << "};\n";
 	keys << "Result result [] =\n";
 	keys << "{\n";
-	const size_t count = paths.size ();
-	for (size_t i = 0; i < count; ++i)
-	{
-		keys << indent (1) << "Result (" << paths[i].len () << "," << paths[i].len_matching () << "," << paths[i].match () << "),\n";
-	}
-	keys << "};\n";
 
+	const uint32_t size = generate_paths (line, cond, input, keys);
+
+	input << indent (1);
+	// pad with 0x100 zeroes
+	// should have been YYMAXLEN zeroes, but we don't know YYMAXFILL yet
+	// temporary hack
+	for (uint32_t i = 0; i < 0x100; ++i)
+	{
+		input << "0,";
+	}
+	input << "\n";
+	input << "};\n";
+	input << "const unsigned int data_size = " << size << ";\n";
+	input.close ();
+
+	keys << "};\n";
 	keys.close ();
+}
+
+void write_string (std::ofstream & f, const path_t & path)
+{
+	f << indent (1);
+	const size_t len = path.len ();
+	for (size_t i = 0 ; i < len; ++i)
+	{
+		prtChOrHex (f, path[i]);
+		f << ",";
+	}
+	f << "\n";
+}
+
+void write_key (std::ofstream & f, const path_t & path)
+{
+	f << indent (1) << "Result (" << path.len () << "," << path.len_matching () << "," << path.match () << "),\n";
 }
 
 } // namespace re2c

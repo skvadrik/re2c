@@ -115,6 +115,10 @@ void DFA::emit(Output & output, uint32_t& ind, const std::string& condName, bool
 	head->action.set_initial (initial_label, head->action.type == Action::SAVE);
 
 	// Generate prolog
+	if (flag_skeleton)
+	{
+		emit_prolog (o, ind, output.max_fill);
+	}
 	if (bProlog)
 	{
 		o << "\n";

@@ -44,8 +44,8 @@ struct Node
 	~Node ();
 	bool end () const;
 	arccount_t estimate_size_all (arccount_t inarcs, arccount_t len);
-	void generate_paths_all (const std::vector<path_t> & prefixes, std::vector<path_t> & results);
-	arccount_t generate_paths_cover (const std::vector<path_t> & prefixes, std::vector<path_t> & results);
+	void generate_paths_all (const std::vector<path_t> & prefixes, std::ofstream & input, std::ofstream & keys);
+	arccount_t generate_paths_cover (const std::vector<path_t> & prefixes, std::ofstream & input, std::ofstream & keys);
 	arccount_t generate_paths_default (const multipath_t & prefix, std::vector<multipath_t> & paths);
 
 	FORBID_COPY (Node);
@@ -61,14 +61,12 @@ struct Skeleton
 	void emit_data (uint32_t line, const std::string & cond, const char * fname);
 
 private:
-	void generate_paths (uint32_t line, const std::string & cond, std::vector<path_t> & results);
-	void emit_input (const char * fname, const std::vector<path_t> & paths);
-	void emit_keys (const char * fname, const std::vector<path_t> & paths);
+	uint32_t generate_paths (uint32_t line, const std::string & cond, std::ofstream & input, std::ofstream & keys);
 
 	FORBID_COPY (Skeleton);
 };
 
-void emit_prolog (OutputFile & o, uint32_t ind);
+void emit_prolog (OutputFile & o, uint32_t ind, uint32_t maxfill);
 void emit_epilog (OutputFile & o, uint32_t ind);
 
 } // namespace re2c
