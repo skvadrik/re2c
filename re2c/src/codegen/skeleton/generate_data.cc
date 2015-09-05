@@ -8,7 +8,7 @@
 namespace re2c
 {
 
-static void write_string (std::ofstream & f, const path_t & path);
+static void write_string (FILE * f, const path_t & path);
 static void write_key (std::ofstream & f, const path_t & path);
 
 /*
@@ -80,7 +80,7 @@ arccount_t Node::estimate_size_all (arccount_t wid, arccount_t len)
 	}
 }
 
-void Node::generate_paths_all (const std::vector<path_t> & prefixes, std::ofstream & input, std::ofstream & keys)
+void Node::generate_paths_all (const std::vector<path_t> & prefixes, FILE * input, std::ofstream & keys)
 {
 	const size_t wid = prefixes.size ();
 	if (end ())
@@ -114,7 +114,7 @@ void Node::generate_paths_all (const std::vector<path_t> & prefixes, std::ofstre
 }
 
 // see note [estimating total size of paths in skeleton]
-arccount_t Node::generate_paths_cover (const std::vector<path_t> & prefixes, std::ofstream & input, std::ofstream & keys)
+arccount_t Node::generate_paths_cover (const std::vector<path_t> & prefixes, FILE * input, std::ofstream & keys)
 {
 	arccount_t size (0u);
 	const size_t wid = prefixes.size ();
@@ -163,15 +163,13 @@ arccount_t Node::generate_paths_cover (const std::vector<path_t> & prefixes, std
 	return size;
 }
 
-uint32_t Skeleton::generate_paths (uint32_t line, const std::string & cond, std::ofstream & input, std::ofstream & keys)
+void Skeleton::generate_paths (uint32_t line, const std::string & cond, FILE * input, std::ofstream & keys)
 {
 	std::vector<path_t> prefixes;
 	prefixes.push_back (path_t ());
-	arccount_t size = nodes->estimate_size_all (arccount_t (1u), arccount_t (0u));
-	if (size.overflow ())
+	if (nodes->estimate_size_all (arccount_t (1u), arccount_t (0u)).overflow ())
 	{
-		size = nodes->generate_paths_cover (prefixes, input, keys);
-		if (size.overflow ())
+		if (nodes->generate_paths_cover (prefixes, input, keys).overflow ())
 		{
 			warning
 				( NULL
@@ -186,35 +184,17 @@ uint32_t Skeleton::generate_paths (uint32_t line, const std::string & cond, std:
 	{
 		nodes->generate_paths_all (prefixes, input, keys);
 	}
-	return size.uint32 ();
 }
 
 void Skeleton::emit_data (uint32_t line, const std::string & cond, const char * fname)
 {
 	const std::string input_name = std::string (fname) + ".input";
-	std::ofstream input;
-	input.open (input_name.c_str (), std::ofstream::out | std::ofstream::binary);
-	if (!input.is_open ())
+	FILE * input = fopen (input_name.c_str (), "wb");
+	if (!input)
 	{
 		error ("cannot open file: %s", input_name.c_str ());
 		exit (1);
 	}
-	std::string yyctype;
-	switch (encoding.szCodeUnit ())
-	{
-		case 1:
-			yyctype = "unsigned char";
-			break;
-		case 2:
-			yyctype = "unsigned short";
-			break;
-		case 4:
-			yyctype = "unsigned int";
-			break;
-	}
-	input << "// These strings correspond to paths in DFA.\n";
-	input << yyctype << " data [] =\n";
-	input << "{\n";
 
 	const std::string keys_name = std::string (fname) + ".keys";
 	std::ofstream keys;
@@ -233,35 +213,35 @@ void Skeleton::emit_data (uint32_t line, const std::string & cond, const char * 
 	keys << "Result result [] =\n";
 	keys << "{\n";
 
-	const uint32_t size = generate_paths (line, cond, input, keys);
+	generate_paths (line, cond, input, keys);
 
-	input << indent (1);
-	// pad with 0x100 zeroes
-	// should have been YYMAXLEN zeroes, but we don't know YYMAXFILL yet
-	// temporary hack
-	for (uint32_t i = 0; i < 0x100; ++i)
-	{
-		input << "0,";
-	}
-	input << "\n";
-	input << "};\n";
-	input << "const unsigned int data_size = " << size << ";\n";
-	input.close ();
+	fclose (input);
 
 	keys << "};\n";
 	keys.close ();
 }
 
-void write_string (std::ofstream & f, const path_t & path)
+template <typename type_t>
+static void write_cunits (FILE * f, const path_t & path)
 {
-	f << indent (1);
 	const size_t len = path.len ();
+	type_t * cunits = new type_t [len];
 	for (size_t i = 0 ; i < len; ++i)
 	{
-		prtChOrHex (f, path[i]);
-		f << ",";
+		cunits[i] = static_cast<type_t> (path[i]);
 	}
-	f << "\n";
+	fwrite (cunits, sizeof (type_t), len, f);
+	delete [] cunits;
+}
+
+void write_string (FILE * f, const path_t & path)
+{
+	switch (encoding.szCodeUnit ())
+	{
+		case 4: write_cunits<uint32_t> (f, path); break;
+		case 2: write_cunits<uint16_t> (f, path); break;
+		case 1: write_cunits<uint8_t>  (f, path); break;
+	}
 }
 
 void write_key (std::ofstream & f, const path_t & path)

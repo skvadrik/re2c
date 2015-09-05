@@ -254,9 +254,9 @@ void emit_rule (OutputFile & o, uint32_t ind, const State * const s, const RuleO
 			<< "{ if (cursor == token + result[i].len_matching && result[i].match == " << rule->rank << ") "
 			<< "{ cursor = token + result[i].len; continue; }"
 			<< " else "
-			<< "{ printf (\"error: %ld/%lu, %u/%u, '%s'\\n\", cursor - token, result[i].len_matching, result[i].match, "
+			<< "{ printf (\"error at %u: %ld/%lu, %u/%u\\n\", i, cursor - token, result[i].len_matching, result[i].match, "
 			<< rule->rank
-			<< ", token); return 1; } }\n";
+			<< "); return 1; } }\n";
 	}
 	else
 	{
