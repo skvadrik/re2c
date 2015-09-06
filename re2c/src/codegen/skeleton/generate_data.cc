@@ -113,7 +113,55 @@ void Node::generate_paths_all (const std::vector<path_t> & prefixes, FILE * inpu
 	}
 }
 
-// see note [estimating total size of paths in skeleton]
+/*
+ * note [generating skeleton path cover]
+ *
+ * The algorithm tries to generate full path cover. It stops if the size
+ * of the already generated partial path cover exceeds limit (see note
+ * [estimating total size of paths in skeleton]).
+ *
+ * The algorithm walks graph nodes in deep-first order and assigns suffix
+ * to each node (a path from this node to end node). Suffix for current node
+ * is a concatenation of arc to child node and suffix of that child node.
+ * End nodes are assigned empty suffix.
+ *
+ * The algorithm carries a set of prefixes leading to current node.
+ * If current node has already been assigned suffix, the algorithm appends
+ * suffix to each prefix and adds the newly constructed paths to path cover.
+ * Otherwise it recurses to child nodes (updating prefixes on the go).
+ *
+ * The algorithm avoids eternal loops by maintaining loop counter for each
+ * node. Loop counter is incremented on recursive enter and decremented on
+ * recursive return. If loop counter is greater than 1, current branch is
+ * abandoned and recursion returns immediately.
+ *
+ * Algorithm:
+ * 1. Assign empty suffix to all end nodes.
+ * 2. Start with the root node and a set of prefixes consisting of a single
+ *    empty prefix:
+ *     2.1. If current node's suffix is set, append it to each prefix and
+ *          add the constructed paths to path cover.
+ *     2.2. Else if current node's loop counter is greater than 1, return.
+ *     2.3. Else assume that all prefixes and outgoing multiarcs are
+ *          unmarked and repeat:
+ *         2.3.1. Take the next unmarked multiarc and mark it.
+ *         2.3.2. Build new prefix set: choose one prefix per each arc in
+ *                multiarc (unmarked first, duplicates as needed) and
+ *                extend each prefix with corresponding arc.
+ *         2.3.3. Go to step 2.1. with child node (corresponding to chosen
+ *                multiarc) and the new prefix set.
+ *         2.3.4. If any new paths have been added to path cover:
+ *             2.3.4.1. Mark the chosen prefixes in the old prefix set.
+ *             2.3.4.2. If suffix is not set, let it be the concatenation
+ *                      of any arc in multiarc and child node's suffix.
+ *         2.3.5. Return if either:
+ *             2.3.5.1. All outgoing multiarcs and all prefixes are marked.
+ *             2.3.5.2. All outgoing multiarcs are marked, but none of the
+ *                      prefixes is marked (it means that all possible
+ *                      paths are stuck in loops and current recursion
+ *                      branch must be abandoned).
+ *
+ */
 arccount_t Node::generate_paths_cover (const std::vector<path_t> & prefixes, FILE * input, std::ofstream & keys)
 {
 	arccount_t size (0u);
@@ -134,7 +182,7 @@ arccount_t Node::generate_paths_cover (const std::vector<path_t> & prefixes, FIL
 	{
 		local_inc _ (loop);
 		size_t w = 0;
-		for (wrap_iter i (arcs); !i.end () || w < wid; ++i)
+		for (wrap_iter i (arcs); !i.end () || (w < wid && w != 0); ++i)
 		{
 			std::vector<path_t> zs;
 			const size_t new_wid = i->second.size ();
