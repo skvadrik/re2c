@@ -44,7 +44,7 @@ struct Node
 	arccount_t sizeof_permutate (arccount_t inarcs, arccount_t len);
 	void permutate (const multipath_t & prefix, FILE * input, std::ofstream & keys);
 	arccount_t cover (const multipath_t & prefix, FILE * input, std::ofstream & keys);
-	arccount_t generate_paths_default (const way_t & prefix, std::vector<way_t> & ways);
+	arccount_t naked_ways (const way_t & prefix, std::vector<way_t> & ways);
 
 	FORBID_COPY (Node);
 };

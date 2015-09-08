@@ -4,9 +4,9 @@ namespace re2c
 {
 
 // see note [estimating total size of paths in skeleton]
-// neither do we need all default paths, nor default path cover:
-// just one path per each default final state, the shorter the better
-arccount_t Node::generate_paths_default (const way_t & prefix, std::vector<way_t> & ways)
+// We don't need all patterns that cause undefined behaviour.
+// We only need some examples, the shorter the better.
+arccount_t Node::naked_ways (const way_t & prefix, std::vector<way_t> & ways)
 {
 	if (!rule.is_none ())
 	{
@@ -25,7 +25,7 @@ arccount_t Node::generate_paths_default (const way_t & prefix, std::vector<way_t
 		{
 			way_t w = prefix;
 			w.push_back (&i->second);
-			size = size + i->first->generate_paths_default (w, ways);
+			size = size + i->first->naked_ways (w, ways);
 			if (size.overflow ())
 			{
 				return arccount_t::limit ();
@@ -43,7 +43,7 @@ void Skeleton::warn_undefined_control_flow (uint32_t line, const std::string & c
 {
 	way_t prefix;
 	std::vector<way_t> ways;
-	const bool overflow = nodes->generate_paths_default (prefix, ways).overflow ();
+	const bool overflow = nodes->naked_ways (prefix, ways).overflow ();
 	if (!ways.empty ())
 	{
 		warn.undefined_control_flow (line, cond, ways, overflow);
