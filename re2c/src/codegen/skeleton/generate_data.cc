@@ -101,9 +101,7 @@ void Node::permutate (const multipath_t & prefix, FILE * input, std::ofstream & 
 {
 	if (end ())
 	{
-		multipath_t new_prefix = prefix;
-		new_prefix.update (rule);
-		permutate_one (input, keys, new_prefix);
+		permutate_one (input, keys, prefix);
 	}
 	else if (loop < 2)
 	{
@@ -111,7 +109,7 @@ void Node::permutate (const multipath_t & prefix, FILE * input, std::ofstream & 
 		for (arcs_t::iterator i = arcs.begin (); i != arcs.end (); ++i)
 		{
 			multipath_t new_prefix = prefix;
-			new_prefix.extend (rule, &i->second);
+			new_prefix.extend (i->first->rule, &i->second);
 			i->first->permutate (new_prefix, input, keys);
 		}
 	}
@@ -155,7 +153,7 @@ arccount_t Node::cover (const multipath_t & prefix, FILE * input, std::ofstream 
 		for (arcs_t::iterator i = arcs.begin (); i != arcs.end (); ++i)
 		{
 			multipath_t new_prefix = prefix;
-			new_prefix.extend (rule, &i->second);
+			new_prefix.extend (i->first->rule, &i->second);
 			size = size + i->first->cover (new_prefix, input, keys);
 			if (size.overflow ())
 			{
@@ -163,9 +161,8 @@ arccount_t Node::cover (const multipath_t & prefix, FILE * input, std::ofstream 
 			}
 			if (i->first->suffix != NULL && suffix == NULL)
 			{
-				suffix = new path_t;
-				suffix->extend (rule, i->second[0]);
-				suffix->append (i->first->suffix);
+				suffix = new path_t (rule);
+				suffix->append (i->second[0], i->first->suffix);
 			}
 		}
 	}
@@ -174,7 +171,7 @@ arccount_t Node::cover (const multipath_t & prefix, FILE * input, std::ofstream 
 
 void Skeleton::generate_paths (uint32_t line, const std::string & cond, FILE * input, std::ofstream & keys)
 {
-	multipath_t prefix;
+	multipath_t prefix (nodes->rule);
 	if (nodes->sizeof_permutate (arccount_t (1u), arccount_t (0u)).overflow ())
 	{
 		if (nodes->cover (prefix, input, keys).overflow ())

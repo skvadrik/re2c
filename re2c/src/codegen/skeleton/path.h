@@ -17,9 +17,9 @@ class generic_path_t
 	size_t rule_pos;
 
 public:
-	generic_path_t ()
+	explicit generic_path_t (rule_rank_t r)
 		: arcs ()
-		, rule (rule_rank_t::none ())
+		, rule (r)
 		, rule_pos (0)
 	{}
 	size_t len () const
@@ -38,31 +38,24 @@ public:
 	{
 		return arcs[i];
 	}
-	void update (rule_rank_t r)
+	void extend (rule_rank_t r, const arc_t & a)
 	{
+		arcs.push_back (a);
 		if (!r.is_none ())
 		{
 			rule = r;
 			rule_pos = arcs.size ();
 		}
 	}
-	void extend (rule_rank_t r, arc_t a)
+	void append (const arc_t & a, const generic_path_t<arc_t> * p)
 	{
-		update (r);
 		arcs.push_back (a);
-	}
-	void append (const generic_path_t<arc_t> * p)
-	{
 		if (!p->rule.is_none ())
 		{
 			rule = p->rule;
 			rule_pos = arcs.size () + p->rule_pos;
 		}
-		const size_t sz = p->arcs.size ();
-		for (size_t i = 0; i < sz; ++i)
-		{
-			arcs.push_back (p->arcs[i]);
-		}
+		arcs.insert (arcs.end (), p->arcs.begin (), p->arcs.end ());
 	}
 };
 

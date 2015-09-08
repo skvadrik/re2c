@@ -21,8 +21,7 @@ Node::Node (const State * s, const s2n_map & s2n)
 	const bool is_final = !s || (s->go.nSpans == 1 && !s->go.span[0].to);
 	if (is_final)
 	{
-		suffix = new path_t;
-		suffix->update (rule);
+		suffix = new path_t (rule);
 	}
 	else
 	{
