@@ -8,8 +8,8 @@
 namespace re2c
 {
 
-static void write_string (FILE * f, const path_t & path);
-static void write_key (std::ofstream & f, const path_t & path);
+static void permutate_one (FILE * input, std::ofstream & keys, const multipath_t & path);
+static arccount_t cover_one (FILE * input, std::ofstream & keys, const multipath_t & prefix, const path_t & suffix);
 
 /*
  * note [estimating total size of paths in skeleton]
@@ -48,7 +48,7 @@ static void write_key (std::ofstream & f, const path_t & path);
  *     throw an exception.
  *
  */
-arccount_t Node::estimate_size_all (arccount_t wid, arccount_t len)
+arccount_t Node::sizeof_permutate (arccount_t wid, arccount_t len)
 {
 	if (end ())
 	{
@@ -66,7 +66,7 @@ arccount_t Node::estimate_size_all (arccount_t wid, arccount_t len)
 			{
 				return arccount_t::limit ();
 			}
-			size = size + i->first->estimate_size_all (new_wid, new_len);
+			size = size + i->first->sizeof_permutate (new_wid, new_len);
 			if (size.overflow ())
 			{
 				return arccount_t::limit ();
@@ -80,35 +80,39 @@ arccount_t Node::estimate_size_all (arccount_t wid, arccount_t len)
 	}
 }
 
-void Node::generate_paths_all (const std::vector<path_t> & prefixes, FILE * input, std::ofstream & keys)
+/*
+ * note [generating skeleton path permutations]
+ *
+ * The algorithm generates all path permutations. It relies on the fact
+ * that the size of permutations has been estimated earlier and overflow
+ * is impossible (see note [estimating total size of paths in skeleton]).
+ *
+ * The algorithm walks graph nodes in deep-first order and calculates
+ * prefix (multipath to current node). When the algorithm reaches end node
+ * it generates all permutations for the constructed prefix.
+ *
+ * The algorithm avoids eternal loops by maintaining loop counter for each
+ * node. Loop counter is incremented on recursive enter and decremented on
+ * recursive return. If loop counter is greater than 1, current branch is
+ * abandoned and recursion returns immediately.
+ *
+ */
+void Node::permutate (const multipath_t & prefix, FILE * input, std::ofstream & keys)
 {
-	const size_t wid = prefixes.size ();
 	if (end ())
 	{
-		for (size_t i = 0; i < wid; ++i)
-		{
-			path_t p = prefixes[i];
-			p.update (rule);
-			write_string (input, p);
-			write_key (keys, p);
-		}
+		multipath_t new_prefix = prefix;
+		new_prefix.update (rule);
+		permutate_one (input, keys, new_prefix);
 	}
 	else if (loop < 2)
 	{
 		local_inc _ (loop);
 		for (arcs_t::iterator i = arcs.begin (); i != arcs.end (); ++i)
 		{
-			std::vector<path_t> zs;
-			for (size_t j = 0; j < wid; ++j)
-			{
-				const size_t new_wid = i->second.size ();
-				for (size_t k = 0; k < new_wid; ++k)
-				{
-					zs.push_back (prefixes[j]);
-					zs.back ().extend (rule, i->second[k]);
-				}
-			}
-			i->first->generate_paths_all (zs, input, keys);
+			multipath_t new_prefix = prefix;
+			new_prefix.extend (rule, &i->second);
+			i->first->permutate (new_prefix, input, keys);
 		}
 	}
 }
@@ -121,90 +125,47 @@ void Node::generate_paths_all (const std::vector<path_t> & prefixes, FILE * inpu
  * [estimating total size of paths in skeleton]).
  *
  * The algorithm walks graph nodes in deep-first order and assigns suffix
- * to each node (a path from this node to end node). Suffix for current node
- * is a concatenation of arc to child node and suffix of that child node.
- * End nodes are assigned empty suffix.
+ * to each node (a path from this node to end node). In order to calculate
+ * suffix for a given node the algorithm must know suffix for any child
+ * node (end nodes are assigned empty suffix at start). Suffix is only
+ * calculated once for each node and then reused as much times as the node
+ * is visited. This is what reduces search space.
  *
- * The algorithm carries a set of prefixes leading to current node.
- * If current node has already been assigned suffix, the algorithm appends
- * suffix to each prefix and adds the newly constructed paths to path cover.
- * Otherwise it recurses to child nodes (updating prefixes on the go).
+ * The algorithm calculates prefix (multipath to current node). If current
+ * node has already been assigned suffix, the algorithm immediately
+ * calculates path cover from prefix and suffix. Otherwise it recurses to
+ * child nodes (updating prefix on the go).
  *
  * The algorithm avoids eternal loops by maintaining loop counter for each
  * node. Loop counter is incremented on recursive enter and decremented on
  * recursive return. If loop counter is greater than 1, current branch is
  * abandoned and recursion returns immediately.
  *
- * Algorithm:
- * 1. Assign empty suffix to all end nodes.
- * 2. Start with the root node and a set of prefixes consisting of a single
- *    empty prefix:
- *     2.1. If current node's suffix is set, append it to each prefix and
- *          add the constructed paths to path cover.
- *     2.2. Else if current node's loop counter is greater than 1, return.
- *     2.3. Else assume that all prefixes and outgoing multiarcs are
- *          unmarked and repeat:
- *         2.3.1. Take the next unmarked multiarc and mark it.
- *         2.3.2. Build new prefix set: choose one prefix per each arc in
- *                multiarc (unmarked first, duplicates as needed) and
- *                extend each prefix with corresponding arc.
- *         2.3.3. Go to step 2.1. with child node (corresponding to chosen
- *                multiarc) and the new prefix set.
- *         2.3.4. If any new paths have been added to path cover:
- *             2.3.4.1. Mark the chosen prefixes in the old prefix set.
- *             2.3.4.2. If suffix is not set, let it be the concatenation
- *                      of any arc in multiarc and child node's suffix.
- *         2.3.5. Return if either:
- *             2.3.5.1. All outgoing multiarcs and all prefixes are marked.
- *             2.3.5.2. All outgoing multiarcs are marked, but none of the
- *                      prefixes is marked (it means that all possible
- *                      paths are stuck in loops and current recursion
- *                      branch must be abandoned).
- *
  */
-arccount_t Node::generate_paths_cover (const std::vector<path_t> & prefixes, FILE * input, std::ofstream & keys)
+arccount_t Node::cover (const multipath_t & prefix, FILE * input, std::ofstream & keys)
 {
 	arccount_t size (0u);
-	const size_t wid = prefixes.size ();
-	if (path != NULL)
+	if (suffix != NULL)
 	{
-		for (size_t i = 0; i < wid; ++i)
-		{
-			path_t p = prefixes[i];
-			p.append (path);
-			write_string (input, p);
-			write_key (keys, p);
-		}
-		const arccount_t len (prefixes[0].len () + path->len ());
-		size = arccount_t (wid) * len;
+		size = cover_one (input, keys, prefix, *suffix);
 	}
 	else if (loop < 2)
 	{
 		local_inc _ (loop);
-		size_t w = 0;
-		for (wrap_iter i (arcs); !i.end () || (w < wid && w != 0); ++i)
+		for (arcs_t::iterator i = arcs.begin (); i != arcs.end (); ++i)
 		{
-			std::vector<path_t> zs;
-			const size_t new_wid = i->second.size ();
-			for (size_t j = 0; j < new_wid; ++j)
-			{
-				zs.push_back (prefixes[(w + j) % wid]);
-				zs[j].extend (rule, i->second[j]);
-			}
-			size = size + i->first->generate_paths_cover (zs, input, keys);
+			multipath_t new_prefix = prefix;
+			new_prefix.extend (rule, &i->second);
+			size = size + i->first->cover (new_prefix, input, keys);
 			if (size.overflow ())
 			{
 				return arccount_t::limit ();
 			}
-			if (i->first->path != NULL)
+			if (i->first->suffix != NULL && suffix == NULL)
 			{
-				w += new_wid;
-				if (path == NULL)
-				{
-					path = new path_t;
-					path->extend (rule, i->second[0]);
-					path->append (i->first->path);
-				}
+				suffix = new path_t;
+				suffix->extend (rule, i->second[0]);
+				suffix->append (i->first->suffix);
 			}
 		}
 	}
@@ -213,11 +174,10 @@ arccount_t Node::generate_paths_cover (const std::vector<path_t> & prefixes, FIL
 
 void Skeleton::generate_paths (uint32_t line, const std::string & cond, FILE * input, std::ofstream & keys)
 {
-	std::vector<path_t> prefixes;
-	prefixes.push_back (path_t ());
-	if (nodes->estimate_size_all (arccount_t (1u), arccount_t (0u)).overflow ())
+	multipath_t prefix;
+	if (nodes->sizeof_permutate (arccount_t (1u), arccount_t (0u)).overflow ())
 	{
-		if (nodes->generate_paths_cover (prefixes, input, keys).overflow ())
+		if (nodes->cover (prefix, input, keys).overflow ())
 		{
 			warning
 				( NULL
@@ -230,7 +190,7 @@ void Skeleton::generate_paths (uint32_t line, const std::string & cond, FILE * i
 	}
 	else
 	{
-		nodes->generate_paths_all (prefixes, input, keys);
+		nodes->permutate (prefix, input, keys);
 	}
 }
 
@@ -269,32 +229,120 @@ void Skeleton::emit_data (uint32_t line, const std::string & cond, const char * 
 	keys.close ();
 }
 
-template <typename type_t>
-static void write_cunits (FILE * f, const path_t & path)
+static void keygen (std::ofstream & f, size_t count, size_t len, size_t len_match, rule_rank_t match)
 {
-	const size_t len = path.len ();
-	type_t * cunits = new type_t [len];
-	for (size_t i = 0 ; i < len; ++i)
+	for (size_t i = 0; i < count; ++i)
 	{
-		cunits[i] = static_cast<type_t> (path[i]);
+		f << indent (1) << "Result (" << len << "," << len_match << "," << match << "),\n";
 	}
-	fwrite (cunits, sizeof (type_t), len, f);
-	delete [] cunits;
 }
 
-void write_string (FILE * f, const path_t & path)
+template <typename type_t>
+static void generic_permutate_one (FILE * input, std::ofstream & keys, const multipath_t & path)
+{
+	const size_t len = path.len ();
+
+	size_t count = 1;
+	for (size_t i = 0; i < len; ++i)
+	{
+		count *= path[i]->size ();
+	}
+
+	// input
+	const size_t buffer_size = len * count;
+	type_t * buffer = new type_t [buffer_size];
+	for (size_t i = 0, period = count; i < len; ++i)
+	{
+		const multiarc_t & arc = *path[i];
+		const size_t width = arc.size ();
+		period /= width;
+		for (size_t j = 0; j < count; ++j)
+		{
+			const size_t k = (j / period) % width;
+			buffer[j * len + i] = static_cast<type_t> (arc[k]);
+		}
+	}
+	fwrite (buffer, sizeof (type_t), buffer_size, input);
+	delete [] buffer;
+
+	// keys
+	keygen (keys, count, len, path.len_matching (), path.match ());
+}
+
+static void permutate_one (FILE * input, std::ofstream & keys, const multipath_t & path)
 {
 	switch (encoding.szCodeUnit ())
 	{
-		case 4: write_cunits<uint32_t> (f, path); break;
-		case 2: write_cunits<uint16_t> (f, path); break;
-		case 1: write_cunits<uint8_t>  (f, path); break;
+		case 4: generic_permutate_one<uint32_t> (input, keys, path); break;
+		case 2: generic_permutate_one<uint16_t> (input, keys, path); break;
+		case 1: generic_permutate_one<uint8_t>  (input, keys, path); break;
 	}
 }
 
-void write_key (std::ofstream & f, const path_t & path)
+template <typename type_t>
+static arccount_t generic_cover_one (FILE * input, std::ofstream & keys, const multipath_t & prefix, const path_t & suffix)
 {
-	f << indent (1) << "Result (" << path.len () << "," << path.len_matching () << "," << path.match () << "),\n";
+	const size_t prefix_len = prefix.len ();
+	const size_t suffix_len = suffix.len ();
+	const size_t len = prefix_len + suffix_len;
+
+	size_t count = 1; // width of suffix is one arc
+	for (size_t i = 0; i < prefix_len; ++i)
+	{
+		count = std::max (count, prefix[i]->size ());
+	}
+
+	const arccount_t size = arccount_t (len) * arccount_t (count);
+	if (!size.overflow ())
+	{
+		// input
+		const size_t buffer_size = size.uint32 ();
+		type_t * buffer = new type_t [buffer_size];
+		for (size_t i = 0; i < prefix_len; ++i)
+		{
+			const std::vector<uint32_t> & arc = *prefix[i];
+			const size_t width = arc.size ();
+			for (size_t j = 0; j < count; ++j)
+			{
+				const size_t k = j % width;
+				buffer[j * len + i] = static_cast<type_t> (arc[k]);
+			}
+		}
+		for (size_t i = 0; i < suffix_len; ++i)
+		{
+			const type_t c = static_cast<type_t> (suffix[i]);
+			const size_t k = prefix_len + i;
+			for (size_t j = 0; j < count; ++j)
+			{
+				buffer[j * len + k] = c;
+			}
+		}
+		fwrite (buffer, sizeof (type_t), buffer_size, input);
+		delete [] buffer;
+
+		// keys
+		const bool none = suffix.match ().is_none ();
+		const size_t len_match = none
+			? prefix.len_matching ()
+			: prefix_len + suffix.len_matching ();
+		const rule_rank_t match = none
+			? prefix.match ()
+			: suffix.match ();
+		keygen (keys, count, len, len_match, match);
+	}
+
+	return size;
+}
+
+static arccount_t cover_one (FILE * input, std::ofstream & keys, const multipath_t & prefix, const path_t & suffix)
+{
+	switch (encoding.szCodeUnit ())
+	{
+		case 4: return generic_cover_one<uint32_t> (input, keys, prefix, suffix);
+		case 2: return generic_cover_one<uint16_t> (input, keys, prefix, suffix);
+		case 1: return generic_cover_one<uint8_t>  (input, keys, prefix, suffix);
+		default: return arccount_t (0u);
+	}
 }
 
 } // namespace re2c

@@ -10,7 +10,6 @@
 #include "src/util/forbid_copy.h"
 #include "src/util/local_increment.h"
 #include "src/util/u32lim.h"
-#include "src/util/wrap_iterator.h"
 
 namespace re2c
 {
@@ -24,7 +23,6 @@ struct Node
 	typedef std::map<Node *, multiarc_t> arcs_t;
 	typedef std::map<Node *, way_arc_t> arcsets_t;
 	typedef local_increment_t<uint8_t> local_inc;
-	typedef wrap_iterator_t<arcs_t> wrap_iter;
 
 	// outgoing arcs
 	arcs_t arcs;
@@ -37,15 +35,15 @@ struct Node
 	// rule number for corresponding DFA state (if any)
 	rule_rank_t rule;
 
-	// stuff for constructing path cover (for large graphs)
-	path_t * path;
+	// path to end node (for constructing path cover)
+	path_t * suffix;
 
 	Node (const State * s, const s2n_map & s2n);
 	~Node ();
 	bool end () const;
-	arccount_t estimate_size_all (arccount_t inarcs, arccount_t len);
-	void generate_paths_all (const std::vector<path_t> & prefixes, FILE * input, std::ofstream & keys);
-	arccount_t generate_paths_cover (const std::vector<path_t> & prefixes, FILE * input, std::ofstream & keys);
+	arccount_t sizeof_permutate (arccount_t inarcs, arccount_t len);
+	void permutate (const multipath_t & prefix, FILE * input, std::ofstream & keys);
+	arccount_t cover (const multipath_t & prefix, FILE * input, std::ofstream & keys);
 	arccount_t generate_paths_default (const way_t & prefix, std::vector<way_t> & ways);
 
 	FORBID_COPY (Node);
