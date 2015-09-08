@@ -19,8 +19,8 @@ SRC_HDR = \
 	src/codegen/output.h \
 	src/codegen/print.h \
 	src/codegen/scc.h \
-	src/codegen/skeleton/multipath.h \
 	src/codegen/skeleton/path.h \
+	src/codegen/skeleton/way.h \
 	src/codegen/skeleton/skeleton.h \
 	src/conf/msg.h \
 	src/conf/opt.h \
@@ -89,9 +89,8 @@ SRC = \
 	src/codegen/skeleton/control_flow.cc \
 	src/codegen/skeleton/generate_code.cc \
 	src/codegen/skeleton/generate_data.cc \
-	src/codegen/skeleton/multipath.cc \
-	src/codegen/skeleton/path.cc \
 	src/codegen/skeleton/skeleton.cc \
+	src/codegen/skeleton/way.cc \
 	src/conf/msg.cc \
 	src/conf/opt.cc \
 	src/conf/warn.cc \

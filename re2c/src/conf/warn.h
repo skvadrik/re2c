@@ -3,7 +3,7 @@
 
 #include <vector>
 
-#include "src/codegen/skeleton/multipath.h"
+#include "src/codegen/skeleton/way.h"
 #include "src/util/c99_stdint.h"
 
 namespace re2c {
@@ -54,7 +54,7 @@ public:
 	void empty_class (uint32_t line);
 	void match_empty_string (uint32_t line);
 	void swapped_range (uint32_t line, uint32_t l, uint32_t u);
-	void undefined_control_flow (uint32_t line, const std::string & cond, std::vector<multipath_t> & paths, bool overflow);
+	void undefined_control_flow (uint32_t line, const std::string & cond, std::vector<way_t> & ways, bool overflow);
 	void useless_escape (uint32_t line, uint32_t col, char c);
 };
 

@@ -3,8 +3,8 @@
 
 #include <map>
 
-#include "src/codegen/skeleton/multipath.h"
 #include "src/codegen/skeleton/path.h"
+#include "src/codegen/skeleton/way.h"
 #include "src/ir/dfa/dfa.h"
 #include "src/util/c99_stdint.h"
 #include "src/util/forbid_copy.h"
@@ -21,8 +21,8 @@ typedef u32lim_t<ARC_LIMIT> arccount_t;
 struct Node
 {
 	typedef std::map<const State *, Node *> s2n_map;
-	typedef std::map<Node *, std::vector<uint32_t> > arcs_t;
-	typedef std::map<Node *, multipath_t::arc_t> arcsets_t;
+	typedef std::map<Node *, multiarc_t> arcs_t;
+	typedef std::map<Node *, way_arc_t> arcsets_t;
 	typedef local_increment_t<uint8_t> local_inc;
 	typedef wrap_iterator_t<arcs_t> wrap_iter;
 
@@ -46,7 +46,7 @@ struct Node
 	arccount_t estimate_size_all (arccount_t inarcs, arccount_t len);
 	void generate_paths_all (const std::vector<path_t> & prefixes, FILE * input, std::ofstream & keys);
 	arccount_t generate_paths_cover (const std::vector<path_t> & prefixes, FILE * input, std::ofstream & keys);
-	arccount_t generate_paths_default (const multipath_t & prefix, std::vector<multipath_t> & paths);
+	arccount_t generate_paths_default (const way_t & prefix, std::vector<way_t> & ways);
 
 	FORBID_COPY (Node);
 };

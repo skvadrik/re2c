@@ -6,7 +6,7 @@ namespace re2c
 // see note [estimating total size of paths in skeleton]
 // neither do we need all default paths, nor default path cover:
 // just one path per each default final state, the shorter the better
-arccount_t Node::generate_paths_default (const multipath_t & prefix, std::vector<multipath_t> & paths)
+arccount_t Node::generate_paths_default (const way_t & prefix, std::vector<way_t> & ways)
 {
 	if (!rule.is_none ())
 	{
@@ -14,8 +14,8 @@ arccount_t Node::generate_paths_default (const multipath_t & prefix, std::vector
 	}
 	else if (end ())
 	{
-		paths.push_back (prefix);
-		return arccount_t (prefix.len ());
+		ways.push_back (prefix);
+		return arccount_t (prefix.size ());
 	}
 	else if (loop < 2)
 	{
@@ -23,9 +23,9 @@ arccount_t Node::generate_paths_default (const multipath_t & prefix, std::vector
 		arccount_t size (0u);
 		for (arcsets_t::iterator i = arcsets.begin (); i != arcsets.end (); ++i)
 		{
-			multipath_t p = prefix;
-			p.extend (&i->second);
-			size = size + i->first->generate_paths_default (p, paths);
+			way_t w = prefix;
+			w.push_back (&i->second);
+			size = size + i->first->generate_paths_default (w, ways);
 			if (size.overflow ())
 			{
 				return arccount_t::limit ();
@@ -41,12 +41,12 @@ arccount_t Node::generate_paths_default (const multipath_t & prefix, std::vector
 
 void Skeleton::warn_undefined_control_flow (uint32_t line, const std::string & cond)
 {
-	multipath_t prefix;
-	std::vector<multipath_t> paths;
-	const bool overflow = nodes->generate_paths_default (prefix, paths).overflow ();
-	if (!paths.empty ())
+	way_t prefix;
+	std::vector<way_t> ways;
+	const bool overflow = nodes->generate_paths_default (prefix, ways).overflow ();
+	if (!ways.empty ())
 	{
-		warn.undefined_control_flow (line, cond, paths, overflow);
+		warn.undefined_control_flow (line, cond, ways, overflow);
 	}
 	else if (overflow)
 	{

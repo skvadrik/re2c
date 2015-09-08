@@ -126,7 +126,7 @@ void Warn::swapped_range (uint32_t line, uint32_t l, uint32_t u)
 	}
 }
 
-void Warn::undefined_control_flow (uint32_t line, const std::string & cond, std::vector<multipath_t> & paths, bool overflow)
+void Warn::undefined_control_flow (uint32_t line, const std::string & cond, std::vector<way_t> & ways, bool overflow)
 {
 	if (mask[UNDEFINED_CONTROL_FLOW] & WARNING)
 	{
@@ -135,27 +135,27 @@ void Warn::undefined_control_flow (uint32_t line, const std::string & cond, std:
 
 		// limit the number of patterns reported
 		static const size_t MAX = 8;
-		const size_t all = paths.size ();
+		const size_t all = ways.size ();
 		const size_t some = std::min (MAX, all);
 		const size_t rest = all - some;
 
 		// report shorter patterns first
-		std::vector<multipath_t>::iterator middle = paths.begin ();
+		std::vector<way_t>::iterator middle = ways.begin ();
 		std::advance (middle, some);
-		std::partial_sort (paths.begin (), middle, paths.end (), multipath_t::compare);
+		std::partial_sort (ways.begin (), middle, ways.end (), cmp_ways);
 
 		warning_start (line, e);
 		fprintf (stderr, "control flow %sis undefined for strings that match ", incond (cond).c_str ());
 		if (some == 1)
 		{
-			paths[0].fprint (stderr);
+			fprint_way (stderr, ways[0]);
 		}
 		else
 		{
 			for (size_t i = 0; i < some; ++i)
 			{
 				fprintf (stderr, "\n\t");
-				paths[i].fprint (stderr);
+				fprint_way (stderr, ways[i]);
 			}
 			fprintf (stderr, "\n");
 		}
