@@ -147,6 +147,10 @@ arccount_t Node::cover (const multipath_t & prefix, FILE * input, std::ofstream 
 	{
 		size = cover_one (input, keys, prefix, *suffix);
 	}
+	else if (end ())
+	{
+		suffix = new path_t (rule);
+	}
 	else if (loop < 2)
 	{
 		local_inc _ (loop);

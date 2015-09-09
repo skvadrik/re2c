@@ -19,11 +19,7 @@ Node::Node (const State * s, const s2n_map & s2n)
 	}
 
 	const bool is_final = !s || (s->go.nSpans == 1 && !s->go.span[0].to);
-	if (is_final)
-	{
-		suffix = new path_t (rule);
-	}
-	else
+	if (!is_final)
 	{
 		uint32_t lb = 0;
 		for (uint32_t i = 0; i < s->go.nSpans; ++i)
