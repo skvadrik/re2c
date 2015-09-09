@@ -115,9 +115,11 @@ void DFA::emit(Output & output, uint32_t& ind, const std::string& condName, bool
 	head->action.set_initial (initial_label, head->action.type == Action::SAVE);
 
 	// Generate prolog
+	skeleton->warn_undefined_control_flow (o.get_block_line (), condName);
 	if (flag_skeleton)
 	{
-		emit_prolog (o, ind, output.max_fill);
+		skeleton->emit_data (o.get_block_line (), condName, o.file_name);
+		Skeleton::emit_prolog (o, ind, output.max_fill);
 	}
 	if (bProlog)
 	{
@@ -233,7 +235,7 @@ void DFA::emit(Output & output, uint32_t& ind, const std::string& condName, bool
 	}
 	if (flag_skeleton)
 	{
-		emit_epilog (o, ind);
+		Skeleton::emit_epilog (o, ind);
 	}
 
 	// Cleanup

@@ -8,8 +8,13 @@
 namespace re2c
 {
 
+struct Skeleton;
+
 class DFA
 {
+	accept_t accepts;
+	Skeleton * skeleton;
+
 public:
 	uint32_t lbChar;
 	uint32_t ubChar;
@@ -19,9 +24,6 @@ public:
 	State * toDo;
 	const Ins * free_ins;
 	const Char * free_rep;
-
-protected:
-	accept_t accepts;
 
 public:
 	DFA (Ins *, uint32_t, uint32_t, uint32_t, const Char *);

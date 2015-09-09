@@ -4,7 +4,7 @@
 namespace re2c
 {
 
-void emit_prolog (OutputFile & o, uint32_t ind, uint32_t maxfill)
+void Skeleton::emit_prolog (OutputFile & o, uint32_t ind, uint32_t maxfill)
 {
 	std::string yyctype;
 	switch (encoding.szCodeUnit ())
@@ -60,7 +60,7 @@ void emit_prolog (OutputFile & o, uint32_t ind, uint32_t maxfill)
 	o << indent (ind + 2) << "const YYCTYPE * token = cursor;\n";
 }
 
-void emit_epilog (OutputFile & o, uint32_t ind)
+void Skeleton::emit_epilog (OutputFile & o, uint32_t ind)
 {
 	o << indent (ind + 1) << "}\n";
 	o << "#undef " << mapCodeName["YYCTYPE"]      << "\n";

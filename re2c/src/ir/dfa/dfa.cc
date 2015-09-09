@@ -1,5 +1,6 @@
 #include <string.h>
 
+#include "src/codegen/skeleton/skeleton.h"
 #include "src/ir/dfa/dfa.h"
 #include "src/ir/regexp/regexp_rule.h"
 #include "src/util/allocate.h"
@@ -37,7 +38,9 @@ struct GoTo
 };
 
 DFA::DFA(Ins *ins, uint32_t ni, uint32_t lb, uint32_t ub, const Char *rep)
-	: lbChar(lb)
+	: accepts ()
+	, skeleton (NULL)
+	, lbChar(lb)
 	, ubChar(ub)
 	, nStates(0)
 	, head(NULL)
@@ -45,8 +48,6 @@ DFA::DFA(Ins *ins, uint32_t ni, uint32_t lb, uint32_t ub, const Char *rep)
 	, toDo(NULL)
 	, free_ins(ins)
 	, free_rep(rep)
-	, accepts ()
-
 {
 	Ins **work = new Ins * [ni + 1];
 	uint32_t nc = ub - lb;
@@ -126,6 +127,10 @@ DFA::DFA(Ins *ins, uint32_t ni, uint32_t lb, uint32_t ub, const Char *rep)
 	delete [] work;
 	delete [] goTo;
 	operator delete (span);
+
+	// skeleton must be constructed after DFA construction
+	// but prior to any other DFA transformations
+	skeleton = new Skeleton (*this);
 }
 
 DFA::~DFA()
@@ -139,6 +144,8 @@ DFA::~DFA()
 	}
 	delete [] free_ins;
 	delete [] free_rep;
+
+	delete skeleton;
 }
 
 void DFA::addState(State **a, State *s)
