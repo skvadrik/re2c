@@ -1,16 +1,18 @@
 #include "src/codegen/skeleton/skeleton.h"
 #include "src/ir/regexp/regexp_rule.h"
-#include "src/util/allocate.h"
 
 namespace re2c
 {
 
-Node::Node (const State * s, const s2n_map & s2n)
+Node::Node ()
 	: arcs ()
 	, arcsets ()
 	, loop (0)
 	, rule (rule_rank_t::none ())
 	, suffix (NULL)
+{}
+
+void Node::init (const State * s, const s2n_map & s2n)
 {
 	const bool is_accepting = s && s->rule;
 	if (is_accepting)
@@ -50,7 +52,7 @@ bool Node::end () const
 
 Skeleton::Skeleton (const DFA & dfa)
 	// +1 for default DFA state (NULL)
-	: nodes (allocate<Node> (dfa.nStates + 1))
+	: nodes (new Node [dfa.nStates + 1])
 {
 	Node * n;
 
@@ -67,14 +69,14 @@ Skeleton::Skeleton (const DFA & dfa)
 	n = nodes;
 	for (State * s = dfa.head; s; s = s->next, ++n)
 	{
-		new (n) Node (s, s2n);
+		n->init (s, s2n);
 	}
-	new (n) Node (NULL, s2n);
+	n->init (NULL, s2n);
 }
 
 Skeleton::~Skeleton ()
 {
-	operator delete (nodes);
+	delete [] nodes;
 }
 
 } // namespace re2c

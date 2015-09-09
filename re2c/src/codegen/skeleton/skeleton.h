@@ -38,7 +38,8 @@ struct Node
 	// path to end node (for constructing path cover)
 	path_t * suffix;
 
-	Node (const State * s, const s2n_map & s2n);
+	Node ();
+	void init (const State * s, const s2n_map & s2n);
 	~Node ();
 	bool end () const;
 	arccount_t sizeof_permutate (arccount_t inarcs, arccount_t len);
