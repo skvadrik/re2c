@@ -39,7 +39,7 @@ arccount_t Node::naked_ways (const way_t & prefix, std::vector<way_t> & ways)
 	}
 }
 
-void Skeleton::warn_undefined_control_flow (uint32_t line, const std::string & cond)
+void Skeleton::warn_undefined_control_flow ()
 {
 	way_t prefix;
 	std::vector<way_t> ways;

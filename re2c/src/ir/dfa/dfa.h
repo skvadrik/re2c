@@ -16,6 +16,9 @@ class DFA
 	Skeleton * skeleton;
 
 public:
+	const std::string cond;
+	const uint32_t line;
+
 	uint32_t lbChar;
 	uint32_t ubChar;
 	uint32_t nStates;
@@ -26,7 +29,15 @@ public:
 	const Char * free_rep;
 
 public:
-	DFA (Ins *, uint32_t, uint32_t, uint32_t, const Char *);
+	DFA
+		( const std::string &
+		, uint32_t
+		, Ins *
+		, uint32_t
+		, uint32_t
+		, uint32_t
+		, const Char *
+		);
 	~DFA ();
 	void addState (State **, State *);
 	State * findState (Ins **, Ins **);
@@ -36,7 +47,7 @@ public:
 	void findBaseState ();
 	void prepare (OutputFile & o, uint32_t &);
 	void count_used_labels (std::set<label_t> & used, label_t prolog, label_t start, bool force_start) const;
-	void emit (Output &, uint32_t &, const std::string &, bool, bool &);
+	void emit (Output &, uint32_t &, bool, bool &);
 
 	friend std::ostream & operator << (std::ostream &, const DFA &);
 

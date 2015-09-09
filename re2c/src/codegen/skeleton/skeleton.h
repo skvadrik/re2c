@@ -35,6 +35,11 @@ struct Node
 	// rule number for corresponding DFA state (if any)
 	rule_rank_t rule;
 
+	// maximal distance to end node (assuming one iteration per loop)
+	static const uint32_t DIST_ERROR;
+	static const uint32_t DIST_MAX;
+	uint32_t dist;
+
 	// path to end node (for constructing path cover)
 	path_t * suffix;
 
@@ -42,6 +47,7 @@ struct Node
 	void init (const State * s, const s2n_map & s2n);
 	~Node ();
 	bool end () const;
+	void calc_dist ();
 	arccount_t sizeof_permutate (arccount_t inarcs, arccount_t len);
 	void permutate (const multipath_t & prefix, FILE * input, std::ofstream & keys);
 	arccount_t cover (const multipath_t & prefix, FILE * input, std::ofstream & keys);
@@ -52,17 +58,22 @@ struct Node
 
 struct Skeleton
 {
+	const std::string cond;
+	const uint32_t line;
+
 	Node * nodes;
+	uint32_t maxlen;
 
 	Skeleton (const DFA & dfa);
 	~Skeleton ();
-	void warn_undefined_control_flow (uint32_t line, const std::string & cond);
-	void emit_data (uint32_t line, const std::string & cond, const char * fname);
+	void warn_undefined_control_flow ();
+	void emit_data (const char * fname);
 	static void emit_prolog (OutputFile & o, uint32_t ind, uint32_t maxfill);
 	static void emit_epilog (OutputFile & o, uint32_t ind);
 
 private:
-	void generate_paths (uint32_t line, const std::string & cond, FILE * input, std::ofstream & keys);
+	void calc_maxlen ();
+	void generate_paths (FILE * input, std::ofstream & keys);
 
 	FORBID_COPY (Skeleton);
 };

@@ -8,7 +8,7 @@ namespace re2c {
 
 static void optimize (Ins * i);
 
-smart_ptr<DFA> genCode (RegExp *re, Output & output)
+smart_ptr<DFA> genCode (RegExp *re, Output & output, const std::string & cond)
 {
 	CharSet cs;
 	re->split(cs);
@@ -54,7 +54,15 @@ smart_ptr<DFA> genCode (RegExp *re, Output & output)
 		}
 	}
 
-	smart_ptr<DFA> dfa = make_smart_ptr(new DFA(ins, size, 0, encoding.nCodeUnits(), rep));
+	smart_ptr<DFA> dfa = make_smart_ptr (new DFA
+		( cond
+		, output.source.get_block_line ()
+		, ins
+		, size
+		, 0
+		, encoding.nCodeUnits()
+		, rep
+		));
 
 	dfa->prepare (output.source, output.max_fill);
 

@@ -88,6 +88,7 @@ SRC = \
 	src/codegen/skeleton/control_flow.cc \
 	src/codegen/skeleton/generate_code.cc \
 	src/codegen/skeleton/generate_data.cc \
+	src/codegen/skeleton/maxlen.cc \
 	src/codegen/skeleton/skeleton.cc \
 	src/codegen/skeleton/way.cc \
 	src/conf/msg.cc \

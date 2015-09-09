@@ -37,9 +37,19 @@ struct GoTo
 	void	*to;
 };
 
-DFA::DFA(Ins *ins, uint32_t ni, uint32_t lb, uint32_t ub, const Char *rep)
+DFA::DFA
+	( const std::string & c
+	, uint32_t l
+	, Ins * ins
+	, uint32_t ni
+	, uint32_t lb
+	, uint32_t ub
+	, const Char * rep
+	)
 	: accepts ()
 	, skeleton (NULL)
+	, cond (c)
+	, line (l)
 	, lbChar(lb)
 	, ubChar(ub)
 	, nStates(0)

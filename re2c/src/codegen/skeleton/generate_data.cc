@@ -35,17 +35,16 @@ static arccount_t cover_one (FILE * input, std::ofstream & keys, const multipath
  *
  * Two things contribute to size calculation: path length and the number
  * of outgoing arcs in each node. Some considerations on why these values
- * will probably not overflow before they are converted to truncated type:
+ * will not overflow before they are converted to truncated type:
  *
  *   - Maximal number of outgoing arcs in each node cannot exceed 32 bits:
  *     it is bounded by the number of code units in current encoding, and
  *     re2c doesn't support any encoding with more than 2^32 code units.
  *     Conversion is safe.
  *
- *   - Path length is unlikely to exceed maximal value of 'size_t'. It is
- *     possible, but in that case re2c will crash anyway: path is stored
- *     in 'std::vector' and if path length exceeds 'size_t', STL will
- *     throw an exception.
+ *   - Maximal path length cannot exceed 32 bits: we estimate it right
+ *     after skeleton construction and check for overflow. If path length
+ *     does overflow, an error is reported and re2c aborts.
  *
  */
 arccount_t Node::sizeof_permutate (arccount_t wid, arccount_t len)
@@ -173,7 +172,7 @@ arccount_t Node::cover (const multipath_t & prefix, FILE * input, std::ofstream 
 	return size;
 }
 
-void Skeleton::generate_paths (uint32_t line, const std::string & cond, FILE * input, std::ofstream & keys)
+void Skeleton::generate_paths (FILE * input, std::ofstream & keys)
 {
 	multipath_t prefix (nodes->rule);
 	if (nodes->sizeof_permutate (arccount_t (1u), arccount_t (0u)).overflow ())
@@ -195,7 +194,7 @@ void Skeleton::generate_paths (uint32_t line, const std::string & cond, FILE * i
 	}
 }
 
-void Skeleton::emit_data (uint32_t line, const std::string & cond, const char * fname)
+void Skeleton::emit_data (const char * fname)
 {
 	const std::string input_name = std::string (fname) + ".input";
 	FILE * input = fopen (input_name.c_str (), "wb");
@@ -222,7 +221,7 @@ void Skeleton::emit_data (uint32_t line, const std::string & cond, const char * 
 	keys << "Result result [] =\n";
 	keys << "{\n";
 
-	generate_paths (line, cond, input, keys);
+	generate_paths (input, keys);
 
 	fclose (input);
 

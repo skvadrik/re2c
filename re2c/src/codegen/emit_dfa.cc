@@ -90,7 +90,7 @@ void DFA::count_used_labels (std::set<label_t> & used, label_t start, label_t in
 	}
 }
 
-void DFA::emit(Output & output, uint32_t& ind, const std::string& condName, bool isLastCond, bool& bPrologBrace)
+void DFA::emit(Output & output, uint32_t& ind, bool isLastCond, bool& bPrologBrace)
 {
 	OutputFile & o = output.source;
 
@@ -115,10 +115,10 @@ void DFA::emit(Output & output, uint32_t& ind, const std::string& condName, bool
 	head->action.set_initial (initial_label, head->action.type == Action::SAVE);
 
 	// Generate prolog
-	skeleton->warn_undefined_control_flow (o.get_block_line (), condName);
+	skeleton->warn_undefined_control_flow ();
 	if (flag_skeleton)
 	{
-		skeleton->emit_data (o.get_block_line (), condName, o.file_name);
+		skeleton->emit_data (o.file_name);
 		Skeleton::emit_prolog (o, ind, output.max_fill);
 	}
 	if (bProlog)
@@ -184,20 +184,20 @@ void DFA::emit(Output & output, uint32_t& ind, const std::string& condName, bool
 		}
 	}
 
-	if (cFlag && !condName.empty())
+	if (cFlag && !cond.empty())
 	{
 		if (condDivider.length())
 		{
-			o << replaceParam(condDivider, condDividerParam, condName) << "\n";
+			o << replaceParam(condDivider, condDividerParam, cond) << "\n";
 		}
 
 		if (DFlag)
 		{
-			o << condName << " -> " << head->label << "\n";
+			o << cond << " -> " << head->label << "\n";
 		}
 		else
 		{
-			o << condPrefix << condName << ":\n";
+			o << condPrefix << cond << ":\n";
 		}
 	}
 	if (cFlag && bFlag && BitMap::first)
@@ -220,7 +220,7 @@ void DFA::emit(Output & output, uint32_t& ind, const std::string& condName, bool
 	{
 		bool readCh = false;
 		emit_state (o, ind, s, used_labels.count (s->label));
-		emit_action (s->action, o, ind, readCh, s, condName, used_labels, save_yyaccept);
+		emit_action (s->action, o, ind, readCh, s, cond, used_labels, save_yyaccept);
 		s->go.emit(o, ind, readCh);
 	}
 

@@ -9,6 +9,7 @@ Node::Node ()
 	, arcsets ()
 	, loop (0)
 	, rule (rule_rank_t::none ())
+	, dist (DIST_ERROR)
 	, suffix (NULL)
 {}
 
@@ -52,7 +53,10 @@ bool Node::end () const
 
 Skeleton::Skeleton (const DFA & dfa)
 	// +1 for default DFA state (NULL)
-	: nodes (new Node [dfa.nStates + 1])
+	: cond (dfa.cond)
+	, line (dfa.line)
+	, nodes (new Node [dfa.nStates + 1])
+	, maxlen (Node::DIST_MAX)
 {
 	Node * n;
 
@@ -72,6 +76,8 @@ Skeleton::Skeleton (const DFA & dfa)
 		n->init (s, s2n);
 	}
 	n->init (NULL, s2n);
+
+	calc_maxlen ();
 }
 
 Skeleton::~Skeleton ()
