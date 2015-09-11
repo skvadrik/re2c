@@ -1,6 +1,7 @@
 #include "src/codegen/emit.h"
 #include "src/codegen/indent.h"
 #include "src/codegen/input_api.h"
+#include "src/codegen/skeleton/skeleton.h"
 #include "src/ir/dfa/action.h"
 #include "src/ir/regexp/regexp_rule.h"
 
@@ -250,13 +251,7 @@ void emit_rule (OutputFile & o, uint32_t ind, const State * const s, const RuleO
 
 	if (flag_skeleton)
 	{
-		o << indent (ind)
-			<< "{ if (cursor == token + result[i].len_matching && result[i].match == " << rule->rank << ") "
-			<< "{ cursor = token + result[i].len; continue; }"
-			<< " else "
-			<< "{ printf (\"error at %u: %ld/%lu, %u/%u\\n\", i, cursor - token, result[i].len_matching, result[i].match, "
-			<< rule->rank
-			<< "); return 1; } }\n";
+		Skeleton::emit_action (o, ind, rule->rank);
 	}
 	else
 	{

@@ -30,6 +30,7 @@ public:
 	bool is_none () const;
 	bool operator < (const rule_rank_t & r) const;
 	friend std::ostream & operator << (std::ostream & o, rule_rank_t r);
+	uint32_t uint32 () const;
 
 	friend class counter_t<rule_rank_t>;
 };

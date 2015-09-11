@@ -39,4 +39,9 @@ std::ostream & operator << (std::ostream & o, rule_rank_t r)
 	return o;
 }
 
+uint32_t rule_rank_t::uint32 () const
+{
+	return value;
+}
+
 } // namespace re2c

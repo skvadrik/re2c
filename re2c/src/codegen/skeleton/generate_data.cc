@@ -8,8 +8,8 @@
 namespace re2c
 {
 
-static void permutate_one (FILE * input, std::ofstream & keys, const multipath_t & path);
-static arccount_t cover_one (FILE * input, std::ofstream & keys, const multipath_t & prefix, const path_t & suffix);
+static void permutate_one (FILE * input, FILE * keys, const multipath_t & path);
+static arccount_t cover_one (FILE * input, FILE * keys, const multipath_t & prefix, const path_t & suffix);
 
 /*
  * note [estimating total size of paths in skeleton]
@@ -96,7 +96,7 @@ arccount_t Node::sizeof_permutate (arccount_t wid, arccount_t len)
  * abandoned and recursion returns immediately.
  *
  */
-void Node::permutate (const multipath_t & prefix, FILE * input, std::ofstream & keys)
+void Node::permutate (const multipath_t & prefix, FILE * input, FILE * keys)
 {
 	if (end ())
 	{
@@ -139,7 +139,7 @@ void Node::permutate (const multipath_t & prefix, FILE * input, std::ofstream & 
  * abandoned and recursion returns immediately.
  *
  */
-arccount_t Node::cover (const multipath_t & prefix, FILE * input, std::ofstream & keys)
+arccount_t Node::cover (const multipath_t & prefix, FILE * input, FILE * keys)
 {
 	arccount_t size (0u);
 	if (suffix != NULL)
@@ -172,7 +172,7 @@ arccount_t Node::cover (const multipath_t & prefix, FILE * input, std::ofstream 
 	return size;
 }
 
-void Skeleton::generate_paths (FILE * input, std::ofstream & keys)
+void Skeleton::generate_paths (FILE * input, FILE * keys)
 {
 	multipath_t prefix (nodes->rule);
 	if (nodes->sizeof_permutate (arccount_t (1u), arccount_t (0u)).overflow ())
@@ -203,42 +203,38 @@ void Skeleton::emit_data (const char * fname)
 		error ("cannot open file: %s", input_name.c_str ());
 		exit (1);
 	}
-
 	const std::string keys_name = std::string (fname) + ".keys";
-	std::ofstream keys;
-	keys.open (keys_name.c_str (), std::ofstream::out | std::ofstream::binary);
-	if (!keys.is_open ())
+	FILE * keys = fopen (keys_name.c_str (), "wb");
+	if (!keys)
 	{
-		error ("cannot open keys file: %s", keys_name.c_str ());
+		error ("cannot open file: %s", keys_name.c_str ());
 		exit (1);
 	}
-	keys << "struct Result {\n";
-	keys << indent (1) << "size_t len;\n";
-	keys << indent (1) << "size_t len_matching;\n";
-	keys << indent (1) << "unsigned int match;\n";
-	keys << indent (1) << "Result (size_t n, size_t m, unsigned int r) : len (n), len_matching (m), match (r) {}\n";
-	keys << "};\n";
-	keys << "Result result [] =\n";
-	keys << "{\n";
 
 	generate_paths (input, keys);
 
 	fclose (input);
-
-	keys << "};\n";
-	keys.close ();
+	fclose (keys);
 }
 
-static void keygen (std::ofstream & f, size_t count, size_t len, size_t len_match, rule_rank_t match)
+static void keygen (FILE * f, size_t count, size_t len, size_t len_match, rule_rank_t match)
 {
-	for (size_t i = 0; i < count; ++i)
+	assert (sizeof (uint32_t) == sizeof (unsigned int));
+
+	const size_t keys_size = 3 * count;
+	uint32_t * keys = new uint32_t [keys_size];
+	for (uint32_t i = 0; i < keys_size;)
 	{
-		f << indent (1) << "Result (" << len << "," << len_match << "," << match << "),\n";
+		keys[i++] = static_cast<uint32_t> (len);
+		keys[i++] = static_cast<uint32_t> (len_match);
+		keys[i++] = match.uint32 ();
 	}
+	fwrite (keys, sizeof (uint32_t), keys_size, f);
+	delete [] keys;
 }
 
 template <typename type_t>
-static void generic_permutate_one (FILE * input, std::ofstream & keys, const multipath_t & path)
+static void generic_permutate_one (FILE * input, FILE * keys, const multipath_t & path)
 {
 	const size_t len = path.len ();
 
@@ -269,7 +265,7 @@ static void generic_permutate_one (FILE * input, std::ofstream & keys, const mul
 	keygen (keys, count, len, path.len_matching (), path.match ());
 }
 
-static void permutate_one (FILE * input, std::ofstream & keys, const multipath_t & path)
+static void permutate_one (FILE * input, FILE * keys, const multipath_t & path)
 {
 	switch (encoding.szCodeUnit ())
 	{
@@ -280,7 +276,7 @@ static void permutate_one (FILE * input, std::ofstream & keys, const multipath_t
 }
 
 template <typename type_t>
-static arccount_t generic_cover_one (FILE * input, std::ofstream & keys, const multipath_t & prefix, const path_t & suffix)
+static arccount_t generic_cover_one (FILE * input, FILE * keys, const multipath_t & prefix, const path_t & suffix)
 {
 	const size_t prefix_len = prefix.len ();
 	const size_t suffix_len = suffix.len ();
@@ -334,7 +330,7 @@ static arccount_t generic_cover_one (FILE * input, std::ofstream & keys, const m
 	return size;
 }
 
-static arccount_t cover_one (FILE * input, std::ofstream & keys, const multipath_t & prefix, const path_t & suffix)
+static arccount_t cover_one (FILE * input, FILE * keys, const multipath_t & prefix, const path_t & suffix)
 {
 	switch (encoding.szCodeUnit ())
 	{

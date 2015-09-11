@@ -119,7 +119,7 @@ void DFA::emit(Output & output, uint32_t& ind, bool isLastCond, bool& bPrologBra
 	if (flag_skeleton)
 	{
 		skeleton->emit_data (o.file_name);
-		Skeleton::emit_prolog (o, ind, output.max_fill);
+		Skeleton::emit_prolog (o, output.max_fill);
 	}
 	if (bProlog)
 	{
@@ -235,7 +235,7 @@ void DFA::emit(Output & output, uint32_t& ind, bool isLastCond, bool& bPrologBra
 	}
 	if (flag_skeleton)
 	{
-		Skeleton::emit_epilog (o, ind);
+		Skeleton::emit_epilog (o);
 	}
 
 	// Cleanup
