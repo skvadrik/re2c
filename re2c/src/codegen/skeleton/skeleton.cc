@@ -60,7 +60,7 @@ Skeleton::Skeleton (const DFA & dfa)
 	, line (dfa.line)
 	, nodes_count (dfa.nStates + 1) // +1 for default state
 	, nodes (new Node [nodes_count])
-	, sizeof_key (0)
+	, sizeof_key (4)
 {
 	Node * n;
 
@@ -103,17 +103,13 @@ Skeleton::Skeleton (const DFA & dfa)
 
 	// initialize size of key
 	const uint32_t max = std::max (maxlen, maxrule);
-	if (max <= UINT8_MAX)
+	if (max < UINT8_MAX)
 	{
 		sizeof_key = 1;
 	}
-	else if (max <= UINT16_MAX)
+	else if (max < UINT16_MAX)
 	{
 		sizeof_key = 2;
-	}
-	else
-	{
-		sizeof_key = 4;
 	}
 }
 

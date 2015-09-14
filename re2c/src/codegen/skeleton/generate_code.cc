@@ -28,6 +28,12 @@ static void exact_uint (OutputFile & o, size_t width)
 
 void Skeleton::emit_prolog (OutputFile & o, uint32_t maxfill) const
 {
+	const uint32_t default_rule = sizeof_key == 1
+		? UINT8_MAX
+		: sizeof_key == 2
+			? UINT16_MAX
+			: UINT32_MAX;
+
 	o << "\n" << "#include <stdio.h>";
 	o << "\n" << "#include <stdlib.h> // malloc, free";
 	o << "\n" << "#include <string.h> // memset";
@@ -68,6 +74,15 @@ void Skeleton::emit_prolog (OutputFile & o, uint32_t maxfill) const
 	o << "\n" << indString << "const long len_act = *cursor - token;";
 	o << "\n" << indString << "const long len_exp = (long) match_length (keys, i);";
 	o << "\n" << indString << "const YYKEYTYPE rule_exp = rule (keys, i);";
+	o << "\n" << indString << "if (rule_exp == " << default_rule << ")";
+	o << "\n" << indString << "{";
+	o << "\n" << indString << indString << "fprintf";
+	o << "\n" << indString << indString << indString << "( stderr";
+	o << "\n" << indString << indString << indString << ", \"warning: control flow is undefined for input\"";
+	o << "\n" << indString << indString << indString << indString << "\" at position %ld, rerun re2c with '-W'\\n\"";
+	o << "\n" << indString << indString << indString << ", pos";
+	o << "\n" << indString << indString << indString << ");";
+	o << "\n" << indString << "}";
 	o << "\n" << indString << "if (len_act == len_exp && rule_act == rule_exp)";
 	o << "\n" << indString << "{";
 	o << "\n" << indString << indString << "*cursor = token + length (keys, i);";
@@ -77,7 +92,7 @@ void Skeleton::emit_prolog (OutputFile & o, uint32_t maxfill) const
 	o << "\n" << indString << "{";
 	o << "\n" << indString << indString << "fprintf";
 	o << "\n" << indString << indString << indString << "( stderr";
-	o << "\n" << indString << indString << indString << ", \"error at position %ld (iteration %u):\\n\"";
+	o << "\n" << indString << indString << indString << ", \"error: at position %ld (iteration %u):\\n\"";
 	o << "\n" << indString << indString << indString << indString << "\"\\texpected: match length %ld, rule %u\\n\"";
 	o << "\n" << indString << indString << indString << indString << "\"\\tactual:   match length %ld, rule %u\\n\"";
 	o << "\n" << indString << indString << indString << ", pos";
