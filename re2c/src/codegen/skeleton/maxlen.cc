@@ -27,7 +27,14 @@ void Node::calc_dist ()
 			i->first->calc_dist ();
 			if (i->first->dist != DIST_ERROR)
 			{
-				dist = std::max (dist, i->first->dist);
+				if (dist == DIST_ERROR)
+				{
+					dist = i->first->dist;
+				}
+				else
+				{
+					dist = std::max (dist, i->first->dist);
+				}
 			}
 		}
 		dist = std::min (dist + 1, DIST_MAX);
