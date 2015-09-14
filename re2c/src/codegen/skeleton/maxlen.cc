@@ -1,7 +1,4 @@
-#include <stdlib.h> // exit
-
 #include "src/codegen/skeleton/skeleton.h"
-#include "src/conf/msg.h"
 
 namespace re2c
 {
@@ -34,17 +31,6 @@ void Node::calc_dist ()
 			}
 		}
 		dist = std::min (dist + 1, DIST_MAX);
-	}
-}
-
-void Skeleton::calc_maxlen ()
-{
-	nodes->calc_dist ();
-	maxlen = nodes->dist;
-	if (maxlen == Node::DIST_MAX)
-	{
-		error ("DFA path %sis too long", incond (cond).c_str ());
-		exit (1);
 	}
 }
 

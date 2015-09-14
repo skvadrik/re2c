@@ -1,4 +1,7 @@
+#include <stdlib.h> // exit
+
 #include "src/codegen/skeleton/skeleton.h"
+#include "src/conf/msg.h"
 #include "src/ir/regexp/regexp_rule.h"
 
 namespace re2c
@@ -55,8 +58,9 @@ Skeleton::Skeleton (const DFA & dfa)
 	// +1 for default DFA state (NULL)
 	: cond (dfa.cond)
 	, line (dfa.line)
-	, nodes (new Node [dfa.nStates + 1])
-	, maxlen (Node::DIST_MAX)
+	, nodes_count (dfa.nStates + 1) // +1 for default state
+	, nodes (new Node [nodes_count])
+	, sizeof_key (0)
 {
 	Node * n;
 
@@ -77,7 +81,40 @@ Skeleton::Skeleton (const DFA & dfa)
 	}
 	n->init (NULL, s2n);
 
-	calc_maxlen ();
+	// calculate maximal path length, check overflow
+	nodes->calc_dist ();
+	const uint32_t maxlen = nodes->dist;
+	if (maxlen == Node::DIST_MAX)
+	{
+		error ("DFA path %sis too long", incond (cond).c_str ());
+		exit (1);
+	}
+
+	// calculate maximal rule rank
+	uint32_t maxrule = 0;
+	for (uint32_t i = 0; i < nodes_count; ++i)
+	{
+		const rule_rank_t r = nodes[i].rule;
+		if (!r.is_none ())
+		{
+			maxrule = std::max (maxrule, r.uint32 ());
+		}
+	}
+
+	// initialize size of key
+	const uint32_t max = std::max (maxlen, maxrule);
+	if (max <= UINT8_MAX)
+	{
+		sizeof_key = 1;
+	}
+	else if (max <= UINT16_MAX)
+	{
+		sizeof_key = 2;
+	}
+	else
+	{
+		sizeof_key = 4;
+	}
 }
 
 Skeleton::~Skeleton ()

@@ -4,28 +4,43 @@
 namespace re2c
 {
 
-void Skeleton::emit_prolog (OutputFile & o, uint32_t maxfill)
+static void exact_uint (OutputFile & o, size_t width)
 {
-	std::string yyctype;
-	switch (encoding.szCodeUnit ())
+	switch (width)
 	{
-		case 1:
-			yyctype = "unsigned char";
+		case sizeof (char):
+			o << "unsigned char";
 			break;
-		case 2:
-			yyctype = "unsigned short";
+		case sizeof (short):
+			o << "unsigned short";
 			break;
-		case 4:
-			yyctype = "unsigned int";
+		case sizeof (int):
+			o << "unsigned int";
+			break;
+		case sizeof (long):
+			o << "unsigned long";
+			break;
+		default:
+			o << "uint" << width * 8 << "_t";
 			break;
 	}
+}
 
+void Skeleton::emit_prolog (OutputFile & o, uint32_t maxfill) const
+{
 	o << "\n" << "#include <stdio.h>";
 	o << "\n" << "#include <stdlib.h> // malloc, free";
 	o << "\n" << "#include <string.h> // memset";
 	o << "\n";
-	o << "\n" << "typedef " << yyctype << " YYCTYPE;";
-	o << "\n" << "typedef unsigned int YYKEYTYPE;";
+
+	o << "\n" << "typedef ";
+	exact_uint (o, encoding.szCodeUnit ());
+	o << " YYCTYPE;";
+
+	o << "\n" << "typedef ";
+	exact_uint (o, sizeof_key);
+	o << " YYKEYTYPE;";
+
 	o << "\n";
 	o << "\n" << "#define YYPEEK() *cursor";
 	o << "\n" << "#define YYSKIP() ++cursor";
@@ -60,10 +75,18 @@ void Skeleton::emit_prolog (OutputFile & o, uint32_t maxfill)
 	o << "\n" << indString << "}";
 	o << "\n" << indString << "else";
 	o << "\n" << indString << "{";
-	o << "\n" << indString << indString << "const char * fmt = \"error at position %ld (iteration %u):\\n\"";
-	o << "\n" << indString << indString << indString << "\"\\texpected: match length %ld, rule %u\\n\"";
-	o << "\n" << indString << indString << indString << "\"\\tactual:   match length %ld, rule %u\\n\";";
-	o << "\n" << indString << indString << "fprintf (stderr, fmt, pos, i, len_exp, rule_exp, len_act, rule_act);";
+	o << "\n" << indString << indString << "fprintf";
+	o << "\n" << indString << indString << indString << "( stderr";
+	o << "\n" << indString << indString << indString << ", \"error at position %ld (iteration %u):\\n\"";
+	o << "\n" << indString << indString << indString << indString << "\"\\texpected: match length %ld, rule %u\\n\"";
+	o << "\n" << indString << indString << indString << indString << "\"\\tactual:   match length %ld, rule %u\\n\"";
+	o << "\n" << indString << indString << indString << ", pos";
+	o << "\n" << indString << indString << indString << ", i";
+	o << "\n" << indString << indString << indString << ", len_exp";
+	o << "\n" << indString << indString << indString << ", rule_exp";
+	o << "\n" << indString << indString << indString << ", len_act";
+	o << "\n" << indString << indString << indString << ", rule_act";
+	o << "\n" << indString << indString << indString << ");";
 	o << "\n" << indString << indString << "return 1;";
 	o << "\n" << indString << "}";
 	o << "\n" << "}";

@@ -49,8 +49,10 @@ struct Node
 	bool end () const;
 	void calc_dist ();
 	arccount_t sizeof_permutate (arccount_t inarcs, arccount_t len);
-	void permutate (const multipath_t & prefix, FILE * input, FILE * keys);
-	arccount_t cover (const multipath_t & prefix, FILE * input, FILE * keys);
+	template <typename cunit_t, typename key_t>
+		void permutate (const multipath_t & prefix, FILE * input, FILE * keys);
+	template <typename cunit_t, typename key_t>
+		arccount_t cover (const multipath_t & prefix, FILE * input, FILE * keys);
 	arccount_t naked_ways (const way_t & prefix, std::vector<way_t> & ways);
 
 	FORBID_COPY (Node);
@@ -61,19 +63,23 @@ struct Skeleton
 	const std::string cond;
 	const uint32_t line;
 
+	const uint32_t nodes_count;
 	Node * nodes;
-	uint32_t maxlen;
+	size_t sizeof_key;
 
 	Skeleton (const DFA & dfa);
 	~Skeleton ();
 	void warn_undefined_control_flow ();
 	void emit_data (const char * fname);
-	static void emit_prolog (OutputFile & o, uint32_t maxfill);
+	void emit_prolog (OutputFile & o, uint32_t maxfill) const;
 	static void emit_epilog (OutputFile & o);
 	static void emit_action (OutputFile & o, uint32_t ind, rule_rank_t rank);
 
 private:
-	void calc_maxlen ();
+	template <typename cunit_t, typename key_t>
+		void generate_paths_cunit_key (FILE * input, FILE * keys);
+	template <typename cunit_t>
+		void generate_paths_cunit (FILE * input, FILE * keys);
 	void generate_paths (FILE * input, FILE * keys);
 
 	FORBID_COPY (Skeleton);

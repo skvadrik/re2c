@@ -8,8 +8,10 @@
 namespace re2c
 {
 
-static void permutate_one (FILE * input, FILE * keys, const multipath_t & path);
-static arccount_t cover_one (FILE * input, FILE * keys, const multipath_t & prefix, const path_t & suffix);
+template <typename cunit_t, typename key_t>
+	static void permutate_one (FILE * input, FILE * keys, const multipath_t & path);
+template <typename cunit_t, typename key_t>
+	static arccount_t cover_one (FILE * input, FILE * keys, const multipath_t & prefix, const path_t & suffix);
 
 /*
  * note [estimating total size of paths in skeleton]
@@ -96,11 +98,12 @@ arccount_t Node::sizeof_permutate (arccount_t wid, arccount_t len)
  * abandoned and recursion returns immediately.
  *
  */
-void Node::permutate (const multipath_t & prefix, FILE * input, FILE * keys)
+template <typename cunit_t, typename key_t>
+	void Node::permutate (const multipath_t & prefix, FILE * input, FILE * keys)
 {
 	if (end ())
 	{
-		permutate_one (input, keys, prefix);
+		permutate_one<cunit_t, key_t> (input, keys, prefix);
 	}
 	else if (loop < 2)
 	{
@@ -109,7 +112,7 @@ void Node::permutate (const multipath_t & prefix, FILE * input, FILE * keys)
 		{
 			multipath_t new_prefix = prefix;
 			new_prefix.extend (i->first->rule, &i->second);
-			i->first->permutate (new_prefix, input, keys);
+			i->first->permutate<cunit_t, key_t> (new_prefix, input, keys);
 		}
 	}
 }
@@ -139,12 +142,13 @@ void Node::permutate (const multipath_t & prefix, FILE * input, FILE * keys)
  * abandoned and recursion returns immediately.
  *
  */
-arccount_t Node::cover (const multipath_t & prefix, FILE * input, FILE * keys)
+template <typename cunit_t, typename key_t>
+	arccount_t Node::cover (const multipath_t & prefix, FILE * input, FILE * keys)
 {
 	arccount_t size (0u);
 	if (suffix != NULL)
 	{
-		size = cover_one (input, keys, prefix, *suffix);
+		size = cover_one<cunit_t, key_t> (input, keys, prefix, *suffix);
 	}
 	else if (end ())
 	{
@@ -157,7 +161,7 @@ arccount_t Node::cover (const multipath_t & prefix, FILE * input, FILE * keys)
 		{
 			multipath_t new_prefix = prefix;
 			new_prefix.extend (i->first->rule, &i->second);
-			size = size + i->first->cover (new_prefix, input, keys);
+			size = size + i->first->cover<cunit_t, key_t> (new_prefix, input, keys);
 			if (size.overflow ())
 			{
 				return arccount_t::limit ();
@@ -172,12 +176,13 @@ arccount_t Node::cover (const multipath_t & prefix, FILE * input, FILE * keys)
 	return size;
 }
 
-void Skeleton::generate_paths (FILE * input, FILE * keys)
+template <typename cunit_t, typename key_t>
+	void Skeleton::generate_paths_cunit_key (FILE * input, FILE * keys)
 {
 	multipath_t prefix (nodes->rule);
 	if (nodes->sizeof_permutate (arccount_t (1u), arccount_t (0u)).overflow ())
 	{
-		if (nodes->cover (prefix, input, keys).overflow ())
+		if (nodes->cover<cunit_t, key_t> (prefix, input, keys).overflow ())
 		{
 			warning
 				( NULL
@@ -190,7 +195,28 @@ void Skeleton::generate_paths (FILE * input, FILE * keys)
 	}
 	else
 	{
-		nodes->permutate (prefix, input, keys);
+		nodes->permutate<cunit_t, key_t> (prefix, input, keys);
+	}
+}
+
+template <typename cunit_t>
+	void Skeleton::generate_paths_cunit (FILE * input, FILE * keys)
+{
+	switch (sizeof_key)
+	{
+		case 4: generate_paths_cunit_key<cunit_t, uint32_t> (input, keys); break;
+		case 2: generate_paths_cunit_key<cunit_t, uint16_t> (input, keys); break;
+		case 1: generate_paths_cunit_key<cunit_t, uint8_t> (input, keys);  break;
+	}
+}
+
+void Skeleton::generate_paths (FILE * input, FILE * keys)
+{
+	switch (encoding.szCodeUnit ())
+	{
+		case 4: generate_paths_cunit<uint32_t> (input, keys); break;
+		case 2: generate_paths_cunit<uint16_t> (input, keys); break;
+		case 1: generate_paths_cunit<uint8_t>  (input, keys); break;
 	}
 }
 
@@ -217,24 +243,23 @@ void Skeleton::emit_data (const char * fname)
 	fclose (keys);
 }
 
-static void keygen (FILE * f, size_t count, size_t len, size_t len_match, rule_rank_t match)
+template <typename key_t>
+	static void keygen (FILE * f, size_t count, size_t len, size_t len_match, rule_rank_t match)
 {
-	assert (sizeof (uint32_t) == sizeof (unsigned int));
-
 	const size_t keys_size = 3 * count;
-	uint32_t * keys = new uint32_t [keys_size];
+	key_t * keys = new key_t [keys_size];
 	for (uint32_t i = 0; i < keys_size;)
 	{
-		keys[i++] = static_cast<uint32_t> (len);
-		keys[i++] = static_cast<uint32_t> (len_match);
-		keys[i++] = match.uint32 ();
+		keys[i++] = static_cast<key_t> (len);
+		keys[i++] = static_cast<key_t> (len_match);
+		keys[i++] = static_cast<key_t> (match.uint32 ());
 	}
-	fwrite (keys, sizeof (uint32_t), keys_size, f);
+	fwrite (keys, sizeof (key_t), keys_size, f);
 	delete [] keys;
 }
 
-template <typename type_t>
-static void generic_permutate_one (FILE * input, FILE * keys, const multipath_t & path)
+template <typename cunit_t, typename key_t>
+	static void permutate_one (FILE * input, FILE * keys, const multipath_t & path)
 {
 	const size_t len = path.len ();
 
@@ -246,7 +271,7 @@ static void generic_permutate_one (FILE * input, FILE * keys, const multipath_t 
 
 	// input
 	const size_t buffer_size = len * count;
-	type_t * buffer = new type_t [buffer_size];
+	cunit_t * buffer = new cunit_t [buffer_size];
 	for (size_t i = 0, period = count; i < len; ++i)
 	{
 		const multiarc_t & arc = *path[i];
@@ -255,28 +280,18 @@ static void generic_permutate_one (FILE * input, FILE * keys, const multipath_t 
 		for (size_t j = 0; j < count; ++j)
 		{
 			const size_t k = (j / period) % width;
-			buffer[j * len + i] = static_cast<type_t> (arc[k]);
+			buffer[j * len + i] = static_cast<cunit_t> (arc[k]);
 		}
 	}
-	fwrite (buffer, sizeof (type_t), buffer_size, input);
+	fwrite (buffer, sizeof (cunit_t), buffer_size, input);
 	delete [] buffer;
 
 	// keys
-	keygen (keys, count, len, path.len_matching (), path.match ());
+	keygen<key_t> (keys, count, len, path.len_matching (), path.match ());
 }
 
-static void permutate_one (FILE * input, FILE * keys, const multipath_t & path)
-{
-	switch (encoding.szCodeUnit ())
-	{
-		case 4: generic_permutate_one<uint32_t> (input, keys, path); break;
-		case 2: generic_permutate_one<uint16_t> (input, keys, path); break;
-		case 1: generic_permutate_one<uint8_t>  (input, keys, path); break;
-	}
-}
-
-template <typename type_t>
-static arccount_t generic_cover_one (FILE * input, FILE * keys, const multipath_t & prefix, const path_t & suffix)
+template <typename cunit_t, typename key_t>
+	static arccount_t cover_one (FILE * input, FILE * keys, const multipath_t & prefix, const path_t & suffix)
 {
 	const size_t prefix_len = prefix.len ();
 	const size_t suffix_len = suffix.len ();
@@ -293,7 +308,7 @@ static arccount_t generic_cover_one (FILE * input, FILE * keys, const multipath_
 	{
 		// input
 		const size_t buffer_size = size.uint32 ();
-		type_t * buffer = new type_t [buffer_size];
+		cunit_t * buffer = new cunit_t [buffer_size];
 		for (size_t i = 0; i < prefix_len; ++i)
 		{
 			const std::vector<uint32_t> & arc = *prefix[i];
@@ -301,19 +316,19 @@ static arccount_t generic_cover_one (FILE * input, FILE * keys, const multipath_
 			for (size_t j = 0; j < count; ++j)
 			{
 				const size_t k = j % width;
-				buffer[j * len + i] = static_cast<type_t> (arc[k]);
+				buffer[j * len + i] = static_cast<cunit_t> (arc[k]);
 			}
 		}
 		for (size_t i = 0; i < suffix_len; ++i)
 		{
-			const type_t c = static_cast<type_t> (suffix[i]);
+			const cunit_t c = static_cast<cunit_t> (suffix[i]);
 			const size_t k = prefix_len + i;
 			for (size_t j = 0; j < count; ++j)
 			{
 				buffer[j * len + k] = c;
 			}
 		}
-		fwrite (buffer, sizeof (type_t), buffer_size, input);
+		fwrite (buffer, sizeof (cunit_t), buffer_size, input);
 		delete [] buffer;
 
 		// keys
@@ -324,21 +339,10 @@ static arccount_t generic_cover_one (FILE * input, FILE * keys, const multipath_
 		const rule_rank_t match = none
 			? prefix.match ()
 			: suffix.match ();
-		keygen (keys, count, len, len_match, match);
+		keygen<key_t> (keys, count, len, len_match, match);
 	}
 
 	return size;
-}
-
-static arccount_t cover_one (FILE * input, FILE * keys, const multipath_t & prefix, const path_t & suffix)
-{
-	switch (encoding.szCodeUnit ())
-	{
-		case 4: return generic_cover_one<uint32_t> (input, keys, prefix, suffix);
-		case 2: return generic_cover_one<uint16_t> (input, keys, prefix, suffix);
-		case 1: return generic_cover_one<uint8_t>  (input, keys, prefix, suffix);
-		default: return arccount_t (0u);
-	}
 }
 
 } // namespace re2c
