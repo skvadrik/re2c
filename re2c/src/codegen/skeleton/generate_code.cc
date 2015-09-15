@@ -106,9 +106,10 @@ void Skeleton::emit_prolog (OutputFile & o, uint32_t maxfill) const
 	o << "\n";
 	o << "\n" << "static inline size_t filesize (FILE * f)";
 	o << "\n" << "{";
+	o << "\n" << indString << "const long pos = ftell (f);";
 	o << "\n" << indString << "fseek (f, 0, SEEK_END);";
-	o << "\n" << indString << "const long size = ftell (f) ;";
-	o << "\n" << indString << "fseek (f, 0, SEEK_SET);";
+	o << "\n" << indString << "const long size = ftell (f);";
+	o << "\n" << indString << "fseek (f, pos, SEEK_SET);";
 	o << "\n" << indString << "return (size_t) size;";
 	o << "\n" << "}";
 	o << "\n";
