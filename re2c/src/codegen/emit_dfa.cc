@@ -294,8 +294,9 @@ void genCondGotoSub(OutputFile & o, uint32_t ind, const std::vector<std::string>
  *
  * re2c warns about implicit assumptions about condition order, unless:
  *     - condition type is defined with 'types:re2c' or '-t, --type-header'
- *     - condition names are explicitly used in dispatch or YYSETCONDITION
- *     - dispatch shrinks to single unconditional jump
+ *     - dispatch is independent of condition order: either it uses
+ *       explicit condition names or there's only one condition and
+ *       dispatch shrinks to unconditional jump
  */
 void genCondGoto(OutputFile & o, uint32_t ind, const std::vector<std::string> & condnames)
 {
