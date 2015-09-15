@@ -6,23 +6,25 @@ namespace re2c
 
 static void exact_uint (OutputFile & o, size_t width)
 {
-	switch (width)
+	if (width == sizeof (char))
 	{
-		case sizeof (char):
-			o << "unsigned char";
-			break;
-		case sizeof (short):
-			o << "unsigned short";
-			break;
-		case sizeof (int):
-			o << "unsigned int";
-			break;
-		case sizeof (long):
-			o << "unsigned long";
-			break;
-		default:
-			o << "uint" << width * 8 << "_t";
-			break;
+		o << "unsigned char";
+	}
+	else if (width == sizeof (short))
+	{
+		o << "unsigned short";
+	}
+	else if (width == sizeof (int))
+	{
+		o << "unsigned int";
+	}
+	else if (width == sizeof (long))
+	{
+		o << "unsigned long";
+	}
+	else
+	{
+		o << "uint" << width * 8 << "_t";
 	}
 }
 
