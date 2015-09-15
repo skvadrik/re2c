@@ -118,4 +118,19 @@ Skeleton::~Skeleton ()
 	delete [] nodes;
 }
 
+template <> uint32_t Skeleton::maxkey<uint32_t> () { return UINT32_MAX; }
+template <> uint16_t Skeleton::maxkey<uint16_t> () { return UINT16_MAX; }
+template <> uint8_t  Skeleton::maxkey<uint8_t>  () { return UINT8_MAX;  }
+
+uint32_t Skeleton::maxkey () const
+{
+	switch (sizeof_key)
+	{
+		default: // shouldn't happen
+		case 4: return maxkey<uint32_t> ();
+		case 2: return maxkey<uint16_t> ();
+		case 1: return maxkey<uint8_t>  ();
+	}
+}
+
 } // namespace re2c

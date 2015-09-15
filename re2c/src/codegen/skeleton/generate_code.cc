@@ -28,11 +28,7 @@ static void exact_uint (OutputFile & o, size_t width)
 
 void Skeleton::emit_prolog (OutputFile & o, uint32_t maxfill) const
 {
-	const uint32_t default_rule = sizeof_key == 1
-		? UINT8_MAX
-		: sizeof_key == 2
-			? UINT16_MAX
-			: UINT32_MAX;
+	const uint32_t default_rule = maxkey ();
 
 	o << "\n" << "#include <stdio.h>";
 	o << "\n" << "#include <stdlib.h> // malloc, free";

@@ -75,6 +75,10 @@ struct Skeleton
 	static void emit_epilog (OutputFile & o);
 	static void emit_action (OutputFile & o, uint32_t ind, rule_rank_t rank);
 
+	template <typename key_t>
+		static key_t maxkey ();
+	uint32_t maxkey () const;
+
 private:
 	template <typename cunit_t, typename key_t>
 		void generate_paths_cunit_key (FILE * input, FILE * keys);
