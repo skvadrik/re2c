@@ -64,6 +64,7 @@ smart_ptr<DFA> genCode (RegExp *re, Output & output, const std::string & cond)
 		, rep
 		));
 
+	output.names.push_back (dfa->name);
 	dfa->prepare (output.source, output.max_fill);
 
 	return dfa;

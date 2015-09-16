@@ -15,6 +15,7 @@ void emit_action
 	, bool & readCh
 	, const State * const s
 	, const std::string & condName
+	, const std::string & name
 	, const std::set<label_t> & used_labels
 	, bool save_yyaccept
 	);

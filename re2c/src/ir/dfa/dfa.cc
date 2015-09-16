@@ -48,6 +48,7 @@ DFA::DFA
 	)
 	: accepts ()
 	, skeleton (NULL)
+	, name (c)
 	, cond (c)
 	, line (l)
 	, lbChar(lb)
@@ -59,6 +60,13 @@ DFA::DFA
 	, free_ins(ins)
 	, free_rep(rep)
 {
+	if (name.empty ())
+	{
+		std::ostringstream s;
+		s << "line" << line;
+		name = s.str ();
+	}
+
 	Ins **work = new Ins * [ni + 1];
 	uint32_t nc = ub - lb;
 	GoTo *goTo = new GoTo[nc];

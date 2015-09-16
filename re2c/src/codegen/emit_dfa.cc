@@ -90,6 +90,18 @@ void DFA::count_used_labels (std::set<label_t> & used, label_t start, label_t in
 	}
 }
 
+void DFA::emit_body (OutputFile & o, uint32_t& ind, const std::set<label_t> & used_labels) const
+{
+	const bool save_yyaccept = accepts.size () > 1;
+	for (State * s = head; s; s = s->next)
+	{
+		bool readCh = false;
+		emit_state (o, ind, s, used_labels.count (s->label));
+		emit_action (s->action, o, ind, readCh, s, cond, name, used_labels, save_yyaccept);
+		s->go.emit(o, ind, readCh);
+	}
+}
+
 void DFA::emit(Output & output, uint32_t& ind, bool isLastCond, bool& bPrologBrace)
 {
 	OutputFile & o = output.source;
@@ -114,128 +126,117 @@ void DFA::emit(Output & output, uint32_t& ind, bool isLastCond, bool& bPrologBra
 
 	head->action.set_initial (initial_label, head->action.type == Action::SAVE);
 
-	// Generate prolog
 	skeleton->warn_undefined_control_flow ();
+
 	if (flag_skeleton)
 	{
 		skeleton->emit_data (o.file_name);
-		skeleton->emit_prolog (o, output.max_fill);
+		skeleton->emit_start (o, output.max_fill);
+		uint32_t i = 2;
+		emit_body (o, i, used_labels);
+		skeleton->emit_end (o);
 	}
-	if (bProlog)
+	else
 	{
-		o << "\n";
-		o.insert_line_info ();
-
-		if (DFlag)
-		{
-			bPrologBrace = true;
-			o << "digraph re2c {\n";
-		}
-		else if ((!fFlag && o.get_used_yyaccept ())
-		||  (!fFlag && bEmitYYCh)
-		||  (bFlag && !cFlag && BitMap::first)
-		||  (cFlag && !bWroteCondCheck && gFlag)
-		||  (fFlag && !bWroteGetState && gFlag)
-		)
-		{
-			bPrologBrace = true;
-			o << indent(ind++) << "{\n";
-		}
-		else if (ind == 0)
-		{
-			ind = 1;
-		}
-
-		if (!fFlag && !DFlag)
-		{
-			if (bEmitYYCh)
-			{
-				o << indent(ind) << mapCodeName["YYCTYPE"] << " " << mapCodeName["yych"] << ";\n";
-			}
-			o.insert_yyaccept_init (ind);
-		}
-		else
+		// Generate prolog
+		if (bProlog)
 		{
 			o << "\n";
-		}
-	}
-	if (bFlag && !cFlag && BitMap::first)
-	{
-		BitMap::gen(o, ind, lbChar, ubChar <= 256 ? ubChar : 256);
-	}
-	if (bProlog)
-	{
-		if (cFlag && !bWroteCondCheck && gFlag)
-		{
-			genCondTable(o, ind, output.types);
-		}
-		o.insert_state_goto (ind);
-		if (cFlag && !DFlag)
-		{
-			if (used_labels.count(start_label))
+			o.insert_line_info ();
+			if (DFlag)
 			{
-				o << labelPrefix << start_label << ":\n";
+				bPrologBrace = true;
+				o << "digraph re2c {\n";
+			}
+			else if ((!fFlag && o.get_used_yyaccept ())
+			||  (!fFlag && bEmitYYCh)
+			||  (bFlag && !cFlag && BitMap::first)
+			||  (cFlag && !bWroteCondCheck && gFlag)
+			||  (fFlag && !bWroteGetState && gFlag)
+			)
+			{
+				bPrologBrace = true;
+				o << indent(ind++) << "{\n";
+			}
+			else if (ind == 0)
+			{
+				ind = 1;
+			}
+			if (!fFlag && !DFlag)
+			{
+				if (bEmitYYCh)
+				{
+					o << indent(ind) << mapCodeName["YYCTYPE"] << " " << mapCodeName["yych"] << ";\n";
+				}
+				o.insert_yyaccept_init (ind);
+			}
+			else
+			{
+				o << "\n";
 			}
 		}
-		o.write_user_start_label ();
-		if (cFlag && !bWroteCondCheck)
+		if (bFlag && !cFlag && BitMap::first)
 		{
-			genCondGoto(o, ind, output.types);
+			BitMap::gen(o, ind, lbChar, ubChar <= 256 ? ubChar : 256);
 		}
-	}
-
-	if (cFlag && !cond.empty())
-	{
-		if (condDivider.length())
+		if (bProlog)
 		{
-			o << replaceParam(condDivider, condDividerParam, cond) << "\n";
+			if (cFlag && !bWroteCondCheck && gFlag)
+			{
+				genCondTable(o, ind, output.types);
+			}
+			o.insert_state_goto (ind);
+			if (cFlag && !DFlag)
+			{
+				if (used_labels.count(start_label))
+				{
+					o << labelPrefix << start_label << ":\n";
+				}
+			}
+			o.write_user_start_label ();
+			if (cFlag && !bWroteCondCheck)
+			{
+				genCondGoto(o, ind, output.types);
+			}
 		}
-
-		if (DFlag)
+		if (cFlag && !cond.empty())
 		{
-			o << cond << " -> " << head->label << "\n";
+			if (condDivider.length())
+			{
+				o << replaceParam(condDivider, condDividerParam, cond) << "\n";
+			}
+			if (DFlag)
+			{
+				o << cond << " -> " << head->label << "\n";
+			}
+			else
+			{
+				o << condPrefix << cond << ":\n";
+			}
 		}
-		else
+		if (cFlag && bFlag && BitMap::first)
 		{
-			o << condPrefix << cond << ":\n";
+			o << indent(ind++) << "{\n";
+			BitMap::gen(o, ind, lbChar, ubChar <= 256 ? ubChar : 256);
 		}
-	}
-	if (cFlag && bFlag && BitMap::first)
-	{
-		o << indent(ind++) << "{\n";
-		BitMap::gen(o, ind, lbChar, ubChar <= 256 ? ubChar : 256);
-	}
-
-	// If DFA has transitions to initial state, then initial state
-	// has a piece of code that advances input position. Wee must
-	// skip it when entering DFA.
-	if (used_labels.count(head->label))
-	{
-		o << indent(ind) << "goto " << labelPrefix << initial_label << ";\n";
-	}
-
-	// Generate code
-	const bool save_yyaccept = accepts.size () > 1;
-	for (State * s = head; s; s = s->next)
-	{
-		bool readCh = false;
-		emit_state (o, ind, s, used_labels.count (s->label));
-		emit_action (s->action, o, ind, readCh, s, cond, used_labels, save_yyaccept);
-		s->go.emit(o, ind, readCh);
-	}
-
-	if (cFlag && bFlag && BitMap::first)
-	{
-		o << indent(--ind) << "}\n";
-	}
-	// Generate epilog
-	if ((!cFlag || isLastCond) && bPrologBrace)
-	{
-		o << indent(--ind) << "}\n";
-	}
-	if (flag_skeleton)
-	{
-		Skeleton::emit_epilog (o);
+		// If DFA has transitions to initial state, then initial state
+		// has a piece of code that advances input position. Wee must
+		// skip it when entering DFA.
+		if (used_labels.count(head->label))
+		{
+			o << indent(ind) << "goto " << labelPrefix << initial_label << ";\n";
+		}
+		// Generate code
+		emit_body (o, ind, used_labels);
+		if (cFlag && bFlag && BitMap::first)
+		{
+			o << indent(--ind) << "}\n";
+		}
+		// Generate epilog
+		if ((!cFlag || isLastCond) && bPrologBrace)
+		{
+			o << indent(--ind) << "}\n";
+		}
 	}
 
 	// Cleanup

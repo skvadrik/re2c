@@ -8,6 +8,7 @@
 #include <set>
 
 #include "config.h"
+#include "src/codegen/skeleton/skeleton.h"
 #include "src/ir/bytecode/bytecode.h"
 #include "src/ir/regexp/encoding/enc.h"
 #include "src/ir/regexp/encoding/range_suffix.h"
@@ -767,6 +768,10 @@ void parse(Scanner& i, Output & o)
 
 	o.source.write_version_time ();
 	o.source.write_line_info (in->get_cline (), in->get_fname ().c_str ());
+	if (flag_skeleton)
+	{
+		Skeleton::emit_prolog (o.source);
+	}
 
 	Enc encodingOld = encoding;
 	
@@ -973,6 +978,11 @@ void parse(Scanner& i, Output & o)
 			}
 			in->fatalf_at(line, "setup for all rules with '*' not possible when all rules are setup explicitly");
 		}
+	}
+
+	if (flag_skeleton)
+	{
+		Skeleton::emit_epilog (o.source, o.names);
 	}
 
 	parse_cleanup();

@@ -60,7 +60,8 @@ struct Node
 
 struct Skeleton
 {
-	const std::string cond;
+	const std::string & name;
+	const std::string & cond;
 	const uint32_t line;
 
 	const uint32_t nodes_count;
@@ -71,9 +72,11 @@ struct Skeleton
 	~Skeleton ();
 	void warn_undefined_control_flow ();
 	void emit_data (const char * fname);
-	void emit_prolog (OutputFile & o, uint32_t maxfill) const;
-	static void emit_epilog (OutputFile & o);
-	static void emit_action (OutputFile & o, uint32_t ind, rule_rank_t rank);
+	static void emit_prolog (OutputFile & o);
+	void emit_start (OutputFile & o, uint32_t maxfill) const;
+	void emit_end (OutputFile & o) const;
+	static void emit_epilog (OutputFile & o, const std::vector<std::string> & names);
+	static void emit_action (OutputFile & o, uint32_t ind, rule_rank_t rank, const std::string & name);
 
 	template <typename key_t>
 		static key_t maxkey ();

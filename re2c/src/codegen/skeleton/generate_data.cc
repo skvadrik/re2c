@@ -222,14 +222,14 @@ void Skeleton::generate_paths (FILE * input, FILE * keys)
 
 void Skeleton::emit_data (const char * fname)
 {
-	const std::string input_name = std::string (fname) + ".input";
+	const std::string input_name = std::string (fname) + "." + name + ".input";
 	FILE * input = fopen (input_name.c_str (), "wb");
 	if (!input)
 	{
 		error ("cannot open file: %s", input_name.c_str ());
 		exit (1);
 	}
-	const std::string keys_name = std::string (fname) + ".keys";
+	const std::string keys_name = std::string (fname) + "." + name + ".keys";
 	FILE * keys = fopen (keys_name.c_str (), "wb");
 	if (!keys)
 	{

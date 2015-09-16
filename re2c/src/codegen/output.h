@@ -127,6 +127,7 @@ struct Output
 {
 	OutputFile source;
 	HeaderFile header;
+	std::vector<std::string> names;
 	std::vector<std::string> types;
 	uint32_t max_fill;
 

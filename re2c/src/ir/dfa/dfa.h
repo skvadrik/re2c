@@ -16,6 +16,7 @@ class DFA
 	Skeleton * skeleton;
 
 public:
+	std::string name;
 	const std::string cond;
 	const uint32_t line;
 
@@ -47,6 +48,7 @@ public:
 	void findBaseState ();
 	void prepare (OutputFile & o, uint32_t &);
 	void count_used_labels (std::set<label_t> & used, label_t prolog, label_t start, bool force_start) const;
+	void emit_body (OutputFile &, uint32_t &, const std::set<label_t> & used_labels) const;
 	void emit (Output &, uint32_t &, bool, bool &);
 
 	friend std::ostream & operator << (std::ostream &, const DFA &);

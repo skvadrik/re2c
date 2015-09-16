@@ -14,7 +14,7 @@ static void emit_initial       (OutputFile & o, uint32_t ind, bool & readCh, con
 static void emit_save          (OutputFile & o, uint32_t ind, bool & readCh, const State * const s, uint32_t save, bool save_yyaccept);
 static void emit_accept_binary (OutputFile & o, uint32_t ind, bool & readCh, const State * const s, const accept_t & accept, uint32_t l, uint32_t r);
 static void emit_accept        (OutputFile & o, uint32_t ind, bool & readCh, const State * const s, const accept_t & accept);
-static void emit_rule          (OutputFile & o, uint32_t ind, const State * const s, const RuleOp * const rule, const std::string & condName);
+static void emit_rule          (OutputFile & o, uint32_t ind, const State * const s, const RuleOp * const rule, const std::string & condName, const std::string & name);
 static void genYYFill          (OutputFile & o, uint32_t need);
 static void genSetCondition    (OutputFile & o, uint32_t ind, const std::string & newcond);
 
@@ -25,6 +25,7 @@ void emit_action
 	, bool & readCh
 	, const State * const s
 	, const std::string & condName
+	, const std::string & name
 	, const std::set<label_t> & used_labels
 	, bool save_yyaccept
 	)
@@ -46,7 +47,7 @@ void emit_action
 			emit_accept (o, ind, readCh, s, * action.info.accepts);
 			break;
 		case Action::RULE:
-			emit_rule (o, ind, s, action.info.rule, condName);
+			emit_rule (o, ind, s, action.info.rule, condName, name);
 			break;
 	}
 }
@@ -230,7 +231,7 @@ void emit_accept (OutputFile & o, uint32_t ind, bool & readCh, const State * con
 	}
 }
 
-void emit_rule (OutputFile & o, uint32_t ind, const State * const s, const RuleOp * const rule, const std::string & condName)
+void emit_rule (OutputFile & o, uint32_t ind, const State * const s, const RuleOp * const rule, const std::string & condName, const std::string & name)
 {
 	if (DFlag)
 	{
@@ -251,7 +252,7 @@ void emit_rule (OutputFile & o, uint32_t ind, const State * const s, const RuleO
 
 	if (flag_skeleton)
 	{
-		Skeleton::emit_action (o, ind, rule->rank);
+		Skeleton::emit_action (o, ind, rule->rank, name);
 	}
 	else
 	{

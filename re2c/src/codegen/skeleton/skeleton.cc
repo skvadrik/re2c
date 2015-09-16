@@ -56,7 +56,8 @@ bool Node::end () const
 
 Skeleton::Skeleton (const DFA & dfa)
 	// +1 for default DFA state (NULL)
-	: cond (dfa.cond)
+	: name (dfa.name)
+	, cond (dfa.cond)
 	, line (dfa.line)
 	, nodes_count (dfa.nStates + 1) // +1 for default state
 	, nodes (new Node [nodes_count])
