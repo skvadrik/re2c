@@ -73,7 +73,7 @@ struct Skeleton
 	void warn_undefined_control_flow ();
 	void emit_data (const char * fname);
 	static void emit_prolog (OutputFile & o);
-	void emit_start (OutputFile & o, uint32_t maxfill) const;
+	void emit_start (OutputFile & o, uint32_t maxfill, bool yyaccept) const;
 	void emit_end (OutputFile & o) const;
 	static void emit_epilog (OutputFile & o, const std::vector<std::string> & names);
 	static void emit_action (OutputFile & o, uint32_t ind, rule_rank_t rank, const std::string & name);

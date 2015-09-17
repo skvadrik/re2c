@@ -86,7 +86,7 @@ void Skeleton::emit_prolog (OutputFile & o)
 	o << "\n";
 }
 
-void Skeleton::emit_start (OutputFile & o, uint32_t maxfill) const
+void Skeleton::emit_start (OutputFile & o, uint32_t maxfill, bool yyaccept) const
 {
 	const uint32_t default_rule = maxkey ();
 
@@ -198,8 +198,10 @@ void Skeleton::emit_start (OutputFile & o, uint32_t maxfill) const
 	o << "\n" << indString << "{";
 	o << "\n" << indString << indString << "const YYCTYPE * token = cursor;";
 	o << "\n" << indString << indString << "YYCTYPE yych;";
-	o.insert_yyaccept_init (2);
-	o << "\n";
+	if (yyaccept)
+	{
+		o << "\n" << indString << indString << "unsigned int yyaccept = 0;";
+	}
 	if (bFlag && BitMap::first)
 	{
 		BitMap::gen (o, 2, 0, std::min (0xFFu, encoding.nCodeUnits ()));
