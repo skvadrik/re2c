@@ -47,7 +47,6 @@ public:
 		);
 	~DFA ();
 	void emit (Output &, uint32_t &, bool, bool &);
-	friend std::ostream & operator << (std::ostream &, const DFA &);
 
 private:
 	void addState (State **, State *);
