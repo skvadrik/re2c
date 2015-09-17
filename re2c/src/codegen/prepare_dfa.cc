@@ -154,21 +154,12 @@ void DFA::findBaseState()
 	operator delete (span);
 }
 
-void DFA::prepare(OutputFile & o, uint32_t & max_fill)
+void DFA::prepare ()
 {
 	bUsedYYBitmap = false;
 
 	findSCCs();
 	head->link = head;
-
-	for (State * s = head; s; s = s->next)
-	{
-		s->depth = maxDist(s);
-		if (max_fill < s->depth)
-		{
-			max_fill = s->depth;
-		}
-	}
 
 	// create rule states
 	std::map<rule_rank_t, State *> rules;
@@ -228,10 +219,6 @@ void DFA::prepare(OutputFile & o, uint32_t & max_fill)
 				}
 			}
 		}
-		if (accepts.size () > 1)
-		{
-			o.set_used_yyaccept ();
-		}
 		default_state->action.set_accept (&accepts);
 	}
 
@@ -287,6 +274,35 @@ void DFA::prepare(OutputFile & o, uint32_t & max_fill)
 	{
 		s->go.init (s);
 	}
+}
+
+void DFA::calc_stats ()
+{
+	// calculate 'YYMAXFILL'
+	max_fill = 0;
+	for (State * s = head; s; s = s->next)
+	{
+		s->depth = maxDist(s);
+		if (max_fill < s->depth)
+		{
+			max_fill = s->depth;
+		}
+	}
+
+	// determine if 'YYMARKER' or 'YYBACKUP'/'YYRESTORE' pair is used
+	need_backup = accepts.size () > 0;
+
+	// determine if 'YYCTXMARKER' or 'YYBACKUPCTX'/'YYRESTORECTX' pair is used
+	for (State * s = head; s; s = s->next)
+	{
+		if (s->isPreCtxt)
+		{
+			need_backupctx = true;
+		}
+	}
+
+	// determine if 'yyaccept' variable is used
+	need_accept = accepts.size () > 1;
 }
 
 } // namespace re2c

@@ -131,10 +131,10 @@ void DFA::emit(Output & output, uint32_t& ind, bool isLastCond, bool& bPrologBra
 	if (flag_skeleton)
 	{
 		skeleton->emit_data (o.file_name);
-		skeleton->emit_start (o, output.max_fill, accepts.size () > 1);
+		skeleton->emit_start (o, max_fill, need_backup, need_backupctx, need_accept);
 		uint32_t i = 2;
 		emit_body (o, i, used_labels);
-		skeleton->emit_end (o);
+		skeleton->emit_end (o, need_backup, need_backupctx);
 	}
 	else
 	{

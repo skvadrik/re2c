@@ -64,8 +64,13 @@ smart_ptr<DFA> genCode (RegExp *re, Output & output, const std::string & cond)
 		, rep
 		));
 
+	// accumulate global statistics from this particular DFA
 	output.names.push_back (dfa->name);
-	dfa->prepare (output.source, output.max_fill);
+	output.max_fill = std::max (output.max_fill, dfa->max_fill);
+	if (dfa->need_accept)
+	{
+		output.source.set_used_yyaccept ();
+	}
 
 	return dfa;
 }

@@ -86,7 +86,13 @@ void Skeleton::emit_prolog (OutputFile & o)
 	o << "\n";
 }
 
-void Skeleton::emit_start (OutputFile & o, uint32_t maxfill, bool yyaccept) const
+void Skeleton::emit_start
+	( OutputFile & o
+	, uint32_t maxfill
+	, bool backup
+	, bool backupctx
+	, bool accept
+	) const
 {
 	const uint32_t default_rule = maxkey ();
 
@@ -96,10 +102,16 @@ void Skeleton::emit_start (OutputFile & o, uint32_t maxfill, bool yyaccept) cons
 	exact_uint (o, sizeof_key);
 	o << "\n" << "#define YYPEEK() *cursor";
 	o << "\n" << "#define YYSKIP() ++cursor";
-	o << "\n" << "#define YYBACKUP() marker = cursor";
-	o << "\n" << "#define YYBACKUPCTX() ctxmarker = cursor";
-	o << "\n" << "#define YYRESTORE() cursor = marker";
-	o << "\n" << "#define YYRESTORECTX() cursor = ctxmarker";
+	if (backup)
+	{
+		o << "\n" << "#define YYBACKUP() marker = cursor";
+		o << "\n" << "#define YYRESTORE() cursor = marker";
+	}
+	if (backupctx)
+	{
+		o << "\n" << "#define YYBACKUPCTX() ctxmarker = cursor";
+		o << "\n" << "#define YYRESTORECTX() cursor = ctxmarker";
+	}
 	o << "\n" << "#define YYLESSTHAN(n) (limit - cursor) < n";
 	o << "\n" << "#define YYFILL(n) { break; }";
 	o << "\n";
@@ -158,8 +170,6 @@ void Skeleton::emit_start (OutputFile & o, uint32_t maxfill, bool yyaccept) cons
 	o << "\n" << indString << "YYCTYPE * input = NULL;";
 	o << "\n" << indString << "YYKEYTYPE * keys = NULL;";
 	o << "\n" << indString << "const YYCTYPE * cursor = NULL;";
-	o << "\n" << indString << "const YYCTYPE * marker = NULL;";
-	o << "\n" << indString << "const YYCTYPE * ctxmarker = NULL;";
 	o << "\n" << indString << "const YYCTYPE * limit = NULL;";
 	o << "\n" << indString << "const YYCTYPE * eof = NULL;";
 	o << "\n" << indString << "unsigned int i = 0;";
@@ -189,16 +199,22 @@ void Skeleton::emit_start (OutputFile & o, uint32_t maxfill, bool yyaccept) cons
 	o << "\n" << indString << "}";
 	o << "\n";
 	o << "\n" << indString << "cursor = input;";
-	o << "\n" << indString << "marker = input;";
-	o << "\n" << indString << "ctxmarker = input;";
 	o << "\n" << indString << "limit = input + input_len + padding;";
 	o << "\n" << indString << "eof = input + input_len;";
 	o << "\n";
 	o << "\n" << indString << "for (i = 0; status == 0 && cursor < eof && i < keys_count; ++i)";
 	o << "\n" << indString << "{";
+	if (backup)
+	{
+		o << "\n" << indString << indString << "const YYCTYPE * marker = NULL;";
+	}
+	if (backupctx)
+	{
+		o << "\n" << indString << indString << "const YYCTYPE * ctxmarker = NULL;";
+	}
 	o << "\n" << indString << indString << "const YYCTYPE * token = cursor;";
 	o << "\n" << indString << indString << "YYCTYPE yych;";
-	if (yyaccept)
+	if (accept)
 	{
 		o << "\n" << indString << indString << "unsigned int yyaccept = 0;";
 	}
@@ -209,7 +225,11 @@ void Skeleton::emit_start (OutputFile & o, uint32_t maxfill, bool yyaccept) cons
 	o << "\n";
 }
 
-void Skeleton::emit_end (OutputFile & o) const
+void Skeleton::emit_end
+	( OutputFile & o
+	, bool backup
+	, bool backupctx
+	) const
 {
 	o << "\n" << indString << "}";
 	o << "\n" << indString << "if (status == 0)";
@@ -237,10 +257,16 @@ void Skeleton::emit_end (OutputFile & o) const
 	o << "\n" << "#undef YYKEYTYPE";
 	o << "\n" << "#undef YYPEEK";
 	o << "\n" << "#undef YYSKIP";
-	o << "\n" << "#undef YYBACKUP";
-	o << "\n" << "#undef YYBACKUPCTX";
-	o << "\n" << "#undef YYRESTORE";
-	o << "\n" << "#undef YYRESTORECTX";
+	if (backup)
+	{
+		o << "\n" << "#undef YYBACKUP";
+		o << "\n" << "#undef YYRESTORE";
+	}
+	if (backupctx)
+	{
+		o << "\n" << "#undef YYBACKUPCTX";
+		o << "\n" << "#undef YYRESTORECTX";
+	}
 	o << "\n" << "#undef YYLESSTHAN";
 	o << "\n" << "#undef YYFILL";
 	o << "\n";

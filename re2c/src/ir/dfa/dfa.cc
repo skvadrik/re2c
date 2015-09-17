@@ -59,6 +59,12 @@ DFA::DFA
 	, toDo(NULL)
 	, free_ins(ins)
 	, free_rep(rep)
+
+	// statistics
+	, max_fill (0)
+	, need_backup (false)
+	, need_backupctx (false)
+	, need_accept (false)
 {
 	if (name.empty ())
 	{
@@ -149,6 +155,12 @@ DFA::DFA
 	// skeleton must be constructed after DFA construction
 	// but prior to any other DFA transformations
 	skeleton = new Skeleton (*this);
+
+	// skeleton is constructed, do further DFA transformations
+	prepare ();
+
+	// finally gather overall DFA statistics
+	calc_stats ();
 }
 
 DFA::~DFA()

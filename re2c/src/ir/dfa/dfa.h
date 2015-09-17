@@ -29,6 +29,12 @@ public:
 	const Ins * free_ins;
 	const Char * free_rep;
 
+	// statistics
+	uint32_t max_fill;
+	bool need_backup;
+	bool need_backupctx;
+	bool need_accept;
+
 public:
 	DFA
 		( const std::string &
@@ -40,18 +46,19 @@ public:
 		, const Char *
 		);
 	~DFA ();
+	void emit (Output &, uint32_t &, bool, bool &);
+	friend std::ostream & operator << (std::ostream &, const DFA &);
+
+private:
 	void addState (State **, State *);
 	State * findState (Ins **, Ins **);
 	void split (State *);
-
 	void findSCCs ();
 	void findBaseState ();
-	void prepare (OutputFile & o, uint32_t &);
+	void calc_stats ();
+	void prepare ();
 	void count_used_labels (std::set<label_t> & used, label_t prolog, label_t start, bool force_start) const;
 	void emit_body (OutputFile &, uint32_t &, const std::set<label_t> & used_labels) const;
-	void emit (Output &, uint32_t &, bool, bool &);
-
-	friend std::ostream & operator << (std::ostream &, const DFA &);
 
 	FORBID_COPY (DFA);
 };
