@@ -277,7 +277,7 @@ decl:
 		}
 	| CONF STRING ';'
 	{
-		if (!mapCodeName.insert (std::make_pair (*$1, *$2)).second)
+		if (!opts.mapCodeName.insert (std::make_pair (*$1, *$2)).second)
 		{
 			in->fatalf ("configuration '%s' is already set and cannot be changed", $1->c_str ());
 		}
@@ -412,7 +412,7 @@ decl:
 	{
 		opts.yychConversion = $2 == 0
 			? ""
-			: "(" + mapCodeName["YYCTYPE"] + ")";
+			: "(" + opts.mapCodeName["YYCTYPE"] + ")";
 	}
 	| CONF_YYCH_EMIT NUM ';'
 	{

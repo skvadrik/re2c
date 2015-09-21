@@ -74,7 +74,7 @@ void BitMap::gen(OutputFile & o, uint32_t ind, uint32_t lb, uint32_t ub)
 {
 	if (first && bUsedYYBitmap)
 	{
-		o << indent(ind) << "static const unsigned char " << mapCodeName["yybm"] << "[] = {";
+		o << indent(ind) << "static const unsigned char " << opts.mapCodeName["yybm"] << "[] = {";
 
 		uint32_t c = 1, n = ub - lb;
 		const BitMap *cb = first;

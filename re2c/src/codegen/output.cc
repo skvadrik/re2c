@@ -374,12 +374,12 @@ void output_state_goto (std::ostream & o, uint32_t ind, uint32_t start_label)
 	}
 	for (uint32_t i = 0; i < last_fill_index; ++i)
 	{
-		o << indent(ind) << "case " << i << ": goto " << mapCodeName["yyFillLabel"] << i << ";\n";
+		o << indent(ind) << "case " << i << ": goto " << opts.mapCodeName["yyFillLabel"] << i << ";\n";
 	}
 	o << indent(ind) << "}\n";
 	if (opts.bUseStateNext)
 	{
-		o << mapCodeName["yyNext"] << ":\n";
+		o << opts.mapCodeName["yyNext"] << ":\n";
 	}
 }
 
@@ -387,7 +387,7 @@ void output_yyaccept_init (std::ostream & o, uint32_t ind, bool used_yyaccept)
 {
 	if (used_yyaccept)
 	{
-		o << indent (ind) << "unsigned int " << mapCodeName["yyaccept"] << " = 0;\n";
+		o << indent (ind) << "unsigned int " << opts.mapCodeName["yyaccept"] << " = 0;\n";
 	}
 }
 
@@ -406,7 +406,7 @@ void output_line_info (std::ostream & o, uint32_t line_number, const char * file
 
 void output_types (std::ostream & o, uint32_t ind, const std::vector<std::string> & types)
 {
-	o << indent (ind++) << "enum " << mapCodeName["YYCONDTYPE"] << " {\n";
+	o << indent (ind++) << "enum " << opts.mapCodeName["YYCONDTYPE"] << " {\n";
 	for (unsigned int i = 0; i < types.size (); ++i)
 	{
 		o << indent (ind) << opts.condEnumPrefix << types[i] << ",\n";
@@ -430,11 +430,11 @@ std::string output_get_state ()
 {
 	if (opts.bUseYYGetStateNaked)
 	{
-		return mapCodeName["YYGETSTATE"];
+		return opts.mapCodeName["YYGETSTATE"];
 	}
 	else
 	{
-		return mapCodeName["YYGETSTATE"] + "()";
+		return opts.mapCodeName["YYGETSTATE"] + "()";
 	}
 }
 

@@ -87,7 +87,7 @@ echo:
 	"/*!rules:re2c"	{
 					if (opts.rFlag)
 					{
-						mapCodeName.clear();
+						opts.mapCodeName.clear();
 					}
 					else
 					{

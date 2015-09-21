@@ -110,7 +110,7 @@ void emit_initial (OutputFile & o, uint32_t ind, bool & readCh, const State * co
 
 	if (opts.dFlag)
 	{
-		o << indent(ind) << mapCodeName["YYDEBUG"] << "(" << initial.label << ", *" << mapCodeName["YYCURSOR"] << ");" << "\n";
+		o << indent(ind) << opts.mapCodeName["YYDEBUG"] << "(" << initial.label << ", *" << opts.mapCodeName["YYCURSOR"] << ");" << "\n";
 	}
 
 	if (s->link)
@@ -136,7 +136,7 @@ void emit_save (OutputFile & o, uint32_t ind, bool & readCh, const State * const
 
 	if (save_yyaccept)
 	{
-		o << indent (ind) << mapCodeName["yyaccept"] << " = " << save << ";\n";
+		o << indent (ind) << opts.mapCodeName["yyaccept"] << " = " << save << ";\n";
 	}
 
 	if (s->link)
@@ -156,7 +156,7 @@ void emit_accept_binary (OutputFile & o, uint32_t ind, bool & readCh, const Stat
 	if (l < r)
 	{
 		const uint32_t m = (l + r) >> 1;
-		o << indent(ind) << "if (" << mapCodeName["yyaccept"] << (r == l+1 ? " == " : " <= ") << m << ") {\n";
+		o << indent(ind) << "if (" << opts.mapCodeName["yyaccept"] << (r == l+1 ? " == " : " <= ") << m << ") {\n";
 		emit_accept_binary (o, ++ind, readCh, s, accepts, l, m);
 		o << indent(--ind) << "} else {\n";
 		emit_accept_binary (o, ++ind, readCh, s, accepts, m + 1, r);
@@ -189,13 +189,13 @@ void emit_accept (OutputFile & o, uint32_t ind, bool & readCh, const State * con
 			if (opts.gFlag && accepts_size >= opts.cGotoThreshold)
 			{
 				o << indent(ind++) << "{\n";
-				o << indent(ind++) << "static void *" << mapCodeName["yytarget"] << "[" << accepts_size << "] = {\n";
+				o << indent(ind++) << "static void *" << opts.mapCodeName["yytarget"] << "[" << accepts_size << "] = {\n";
 				for (uint32_t i = 0; i < accepts_size; ++i)
 				{
 					o << indent(ind) << "&&" << opts.labelPrefix << accepts[i]->label << ",\n";
 				}
 				o << indent(--ind) << "};\n";
-				o << indent(ind) << "goto *" << mapCodeName["yytarget"] << "[" << mapCodeName["yyaccept"] << "];\n";
+				o << indent(ind) << "goto *" << opts.mapCodeName["yytarget"] << "[" << opts.mapCodeName["yyaccept"] << "];\n";
 				o << indent(--ind) << "}\n";
 			}
 			else if (opts.sFlag || (accepts_size == 2 && !opts.DFlag))
@@ -212,7 +212,7 @@ void emit_accept (OutputFile & o, uint32_t ind, bool & readCh, const State * con
 			}
 			else
 			{
-				o << indent(ind) << "switch (" << mapCodeName["yyaccept"] << ") {\n";
+				o << indent(ind) << "switch (" << opts.mapCodeName["yyaccept"] << ") {\n";
 				for (uint32_t i = 0; i < accepts_size - 1; ++i)
 				{
 					o << indent(ind) << "case " << i << ": \t";
@@ -292,11 +292,11 @@ void need (OutputFile & o, uint32_t ind, bool & readCh, uint32_t n, bool bSetMar
 		last_fill_index++;
 		if (opts.bUseYYSetStateParam)
 		{
-			o << indent(ind) << mapCodeName["YYSETSTATE"] << "(" << fillIndex << ");\n";
+			o << indent(ind) << opts.mapCodeName["YYSETSTATE"] << "(" << fillIndex << ");\n";
 		}
 		else
 		{
-			o << indent(ind) << replaceParam(mapCodeName["YYSETSTATE"], opts.yySetStateParam, fillIndex) << "\n";
+			o << indent(ind) << replaceParam(opts.mapCodeName["YYSETSTATE"], opts.yySetStateParam, fillIndex) << "\n";
 		}
 	}
 
@@ -323,7 +323,7 @@ void need (OutputFile & o, uint32_t ind, bool & readCh, uint32_t n, bool bSetMar
 
 	if (opts.fFlag)
 	{
-		o << mapCodeName["yyFillLabel"] << fillIndex << ":\n";
+		o << opts.mapCodeName["yyFillLabel"] << fillIndex << ":\n";
 	}
 
 	if (n > 0)
@@ -344,7 +344,7 @@ void genYYFill(OutputFile & o, uint32_t need)
 {
 	if (opts.bUseYYFillParam)
 	{
-		o << mapCodeName["YYFILL"];
+		o << opts.mapCodeName["YYFILL"];
 		if (!opts.bUseYYFillNaked)
 		{
 			o << "(" << need << ");";
@@ -353,7 +353,7 @@ void genYYFill(OutputFile & o, uint32_t need)
 	}
 	else
 	{
-		o << replaceParam(mapCodeName["YYFILL"], opts.yyFillLength, need);
+		o << replaceParam(opts.mapCodeName["YYFILL"], opts.yyFillLength, need);
 		if (!opts.bUseYYFillNaked)
 		{
 			o << ";";
@@ -366,11 +366,11 @@ void genSetCondition(OutputFile & o, uint32_t ind, const std::string& newcond)
 {
 	if (opts.bUseYYSetConditionParam)
 	{
-		o << indent(ind) << mapCodeName["YYSETCONDITION"] << "(" << opts.condEnumPrefix << newcond << ");\n";
+		o << indent(ind) << opts.mapCodeName["YYSETCONDITION"] << "(" << opts.condEnumPrefix << newcond << ");\n";
 	}
 	else
 	{
-		o << indent(ind) << replaceParam(mapCodeName["YYSETCONDITION"], opts.yySetConditionParam, opts.condEnumPrefix + newcond) << "\n";
+		o << indent(ind) << replaceParam(opts.mapCodeName["YYSETCONDITION"], opts.yySetConditionParam, opts.condEnumPrefix + newcond) << "\n";
 	}
 }
 

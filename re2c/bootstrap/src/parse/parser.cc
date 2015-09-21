@@ -1759,7 +1759,7 @@ yyreduce:
   case 9:
 
     {
-		if (!mapCodeName.insert (std::make_pair (*(yyvsp[(1) - (3)].str), *(yyvsp[(2) - (3)].str))).second)
+		if (!opts.mapCodeName.insert (std::make_pair (*(yyvsp[(1) - (3)].str), *(yyvsp[(2) - (3)].str))).second)
 		{
 			in->fatalf ("configuration '%s' is already set and cannot be changed", (yyvsp[(1) - (3)].str)->c_str ());
 		}
@@ -1966,7 +1966,7 @@ yyreduce:
     {
 		opts.yychConversion = (yyvsp[(2) - (3)].num) == 0
 			? ""
-			: "(" + mapCodeName["YYCTYPE"] + ")";
+			: "(" + opts.mapCodeName["YYCTYPE"] + ")";
 	;}
     break;
 

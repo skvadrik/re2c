@@ -3,6 +3,7 @@
 
 #include <string>
 
+#include "src/codegen/code_names.h"
 #include "src/codegen/input_api.h"
 #include "src/ir/regexp/encoding/enc.h"
 #include "src/ir/regexp/empty_class_policy.h"
@@ -59,6 +60,7 @@ struct Opt
 	std::string yySetConditionParam;
 	std::string yySetStateParam;
 	std::string yySetupRule;
+	CodeNames mapCodeName;
 	Enc encoding;
 	InputAPI input_api;
 	empty_class_policy_t empty_class_policy;
@@ -110,6 +112,7 @@ struct Opt
 		, yySetConditionParam ("@@")
 		, yySetStateParam ("@@")
 		, yySetupRule ("")
+		, mapCodeName ()
 		, encoding ()
 		, input_api ()
 		, empty_class_policy (EMPTY_CLASS_MATCH_EMPTY)

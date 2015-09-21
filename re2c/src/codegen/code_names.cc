@@ -1,5 +1,4 @@
 #include "src/codegen/code_names.h"
-#include "src/globals.h"
 
 namespace re2c
 {

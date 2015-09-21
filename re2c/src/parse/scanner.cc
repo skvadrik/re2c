@@ -178,7 +178,7 @@ void Scanner::reuse()
 	last_fill_index = 0;
 	bWroteGetState = false;
 	bWroteCondCheck = false;
-	mapCodeName.clear();
+	opts.mapCodeName.clear();
 }
 
 void Scanner::restore_state(const ScannerState& state)

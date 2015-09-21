@@ -20,11 +20,11 @@ std::string genGetCondition()
 {
 	if (opts.bUseYYGetConditionNaked)
 	{
-		return mapCodeName["YYGETCONDITION"];
+		return opts.mapCodeName["YYGETCONDITION"];
 	}
 	else
 	{
-		return mapCodeName["YYGETCONDITION"] + "()";
+		return opts.mapCodeName["YYGETCONDITION"] + "()";
 	}
 }
 
@@ -55,7 +55,7 @@ void emit_state (OutputFile & o, uint32_t ind, const State * s, bool used_label)
 		}
 		if (opts.dFlag && (s->action.type != Action::INITIAL))
 		{
-			o << indent(ind) << mapCodeName["YYDEBUG"] << "(" << s->label << ", " << opts.input_api.expr_peek () << ");\n";
+			o << indent(ind) << opts.mapCodeName["YYDEBUG"] << "(" << s->label << ", " << opts.input_api.expr_peek () << ");\n";
 		}
 		if (s->isPreCtxt)
 		{
@@ -166,7 +166,7 @@ void DFA::emit(Output & output, uint32_t& ind, bool isLastCond, bool& bPrologBra
 			{
 				if (opts.bEmitYYCh)
 				{
-					o << indent(ind) << mapCodeName["YYCTYPE"] << " " << mapCodeName["yych"] << ";\n";
+					o << indent(ind) << opts.mapCodeName["YYCTYPE"] << " " << opts.mapCodeName["yych"] << ";\n";
 				}
 				o.insert_yyaccept_init (ind);
 			}
@@ -250,7 +250,7 @@ void DFA::emit(Output & output, uint32_t& ind, bool isLastCond, bool& bPrologBra
 void genCondTable(OutputFile & o, uint32_t ind, const std::vector<std::string> & condnames)
 {
 	const size_t conds = condnames.size ();
-	o << indent(ind++) << "static void *" << mapCodeName["yyctable"] << "[" << conds << "] = {\n";
+	o << indent(ind++) << "static void *" << opts.mapCodeName["yyctable"] << "[" << conds << "] = {\n";
 	for (size_t i = 0; i < conds; ++i)
 	{
 		o << indent(ind) << "&&" << opts.condPrefix << condnames[i] << ",\n";
@@ -313,7 +313,7 @@ void genCondGoto(OutputFile & o, uint32_t ind, const std::vector<std::string> & 
 	}
 	else if (opts.gFlag)
 	{
-		o << indent(ind) << "goto *" << mapCodeName["yyctable"] << "[" << genGetCondition() << "];\n";
+		o << indent(ind) << "goto *" << opts.mapCodeName["yyctable"] << "[" << genGetCondition() << "];\n";
 	}
 	else if (opts.sFlag)
 	{
