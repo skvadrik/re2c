@@ -2,6 +2,7 @@
 
 #include "src/conf/msg.h"
 #include "src/conf/opt.h"
+#include "src/globals.h"
 
 namespace re2c
 {
@@ -229,12 +230,12 @@ end:
 		error ("no source file");
 		return EXIT_FAIL;
 	}
-	if (!cFlag && opts.header_file)
+	if (!opts.cFlag && opts.header_file)
 	{
 		error ("can only output a header file when using -c switch");
 		return EXIT_FAIL;
 	}
-	if (DFlag && (bFlag || dFlag || sFlag || flag_skeleton))
+	if (opts.DFlag && (opts.bFlag || opts.dFlag || opts.sFlag || opts.flag_skeleton))
 	{
 		error ("cannot combine -D with -b, -d, -s or --skeleton switches");
 		return EXIT_FAIL;

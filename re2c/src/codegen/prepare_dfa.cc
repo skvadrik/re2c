@@ -255,7 +255,7 @@ void DFA::prepare ()
 					s->isBase = true;
 					split(s);
 
-					if (bFlag)
+					if (opts.bFlag)
 					{
 						BitMap::find(&s->next->go, s);
 					}

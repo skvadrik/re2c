@@ -8,14 +8,14 @@ namespace re2c {
 
 static void optimize (Ins * i);
 
-smart_ptr<DFA> genCode (RegExp *re, Output & output, const std::string & cond)
+smart_ptr<DFA> genCode (RegExp *re, Output & output, const std::string & cond, uint32_t cunits)
 {
-	CharSet cs;
+	CharSet cs (cunits);
 	re->split(cs);
 
-	Char *rep = new Char[encoding.nCodeUnits()];
+	Char *rep = new Char[cunits];
 
-	for (uint32_t j = 0; j < encoding.nCodeUnits(); ++j)
+	for (uint32_t j = 0; j < cunits; ++j)
 	{
 		if (!cs.rep[j]->nxt)
 			cs.rep[j]->nxt = &cs.ptn[j];
@@ -60,7 +60,7 @@ smart_ptr<DFA> genCode (RegExp *re, Output & output, const std::string & cond)
 		, ins
 		, size
 		, 0
-		, encoding.nCodeUnits()
+		, cunits
 		, rep
 		));
 

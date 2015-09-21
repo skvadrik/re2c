@@ -55,7 +55,7 @@ static symbol_table_t symbol_table;
 
 void context_check(CondList *clist)
 {
-	if (!cFlag)
+	if (!opts.cFlag)
 	{
 		delete clist;
 		in->fatal("conditions are only allowed when using -c switch");
@@ -286,32 +286,32 @@ decl:
 	}
 	| CONF_CONDPREFIX STRING ';'
 	{
-		condPrefix = *$2;
+		opts.condPrefix = *$2;
 		delete $2;
 	}
 	| CONF_CONDENUMPREFIX STRING ';'
 	{
-		condEnumPrefix = *$2;
+		opts.condEnumPrefix = *$2;
 		delete $2;
 	}
 	| CONF_COND_DIVIDER STRING ';'
 	{
-		condDivider = *$2;
+		opts.condDivider = *$2;
 		delete $2;
 	}
 	| CONF_COND_DIVIDER_COND STRING ';'
 	{
-		condDividerParam = *$2;
+		opts.condDividerParam = *$2;
 		delete $2;
 	}
 	| CONF_COND_GOTO STRING ';'
 	{
-		condGoto = *$2;
+		opts.condGoto = *$2;
 		delete $2;
 	}
 	| CONF_COND_GOTO_COND STRING ';'
 	{
-		condGotoParam = *$2;
+		opts.condGotoParam = *$2;
 		delete $2;
 	}
 	| CONF_CGOTO_THRESHOLD NUM ';'
@@ -320,58 +320,58 @@ decl:
 		{
 			in->fatal ("configuration 'cgoto:threshold' must be nonnegative");
 		}
-		cGotoThreshold = static_cast<uint32_t> ($2);
+		opts.cGotoThreshold = static_cast<uint32_t> ($2);
 	}
 	| CONF_DEFINE_YYFILL_NAKED NUM ';'
 	{
-		bUseYYFillNaked = $2 != 0;
+		opts.bUseYYFillNaked = $2 != 0;
 	}
 	| CONF_DEFINE_YYFILL_LEN STRING ';'
 	{
-		yyFillLength = *$2;
-		bUseYYFillParam = false;
+		opts.yyFillLength = *$2;
+		opts.bUseYYFillParam = false;
 		delete $2;
 	}
 	| CONF_DEFINE_YYGETCONDITION_NAKED NUM ';'
 	{
-		bUseYYGetConditionNaked = $2 != 0;
+		opts.bUseYYGetConditionNaked = $2 != 0;
 	}
 	| CONF_DEFINE_YYGETSTATE_NAKED NUM ';'
 	{
-		bUseYYGetStateNaked = $2 != 0;
+		opts.bUseYYGetStateNaked = $2 != 0;
 	}
 	| CONF_DEFINE_YYSETCONDITION_COND STRING ';'
 	{
-		yySetConditionParam = *$2;
-		bUseYYSetConditionParam = false;
+		opts.yySetConditionParam = *$2;
+		opts.bUseYYSetConditionParam = false;
 		delete $2;
 	}
 	| CONF_DEFINE_YYSETSTATE_NAKED NUM ';'
 	{
-		bUseYYSetStateNaked = $2 != 0;
+		opts.bUseYYSetStateNaked = $2 != 0;
 	}
 	| CONF_DEFINE_YYSETSTATE_STATE STRING ';'
 	{
-		yySetStateParam = *$2;
-		bUseYYSetStateParam = false;
+		opts.yySetStateParam = *$2;
+		opts.bUseYYSetStateParam = false;
 		delete $2;
 	}
 	| CONF_FLAGS NUM ';'
 	{
 		if ($2 == 0)
 		{
-			encoding.unset ($1);
+			opts.encoding.unset ($1);
 		}
-		else if (!encoding.set ($1))
+		else if (!opts.encoding.set ($1))
 		{
 			in->fatalf ("Cannot set %s encoding: please reset %s encoding first"
 				, Enc::name ($1)
-				, Enc::name (encoding.type ()));
+				, Enc::name (opts.encoding.type ()));
 		}
 	}
 	| CONF_INDENT_STRING STRING ';'
 	{
-		indString = *$2;
+		opts.indString = *$2;
 		delete $2;
 	}
 	| CONF_INDENT_TOP NUM ';'
@@ -380,11 +380,11 @@ decl:
 		{
 			in->fatal ("configuration 'indent:top' must be nonnegative");
 		}
-		topIndent = static_cast<uint32_t> ($2);
+		opts.topIndent = static_cast<uint32_t> ($2);
 	}
 	| CONF_LABELPREFIX STRING ';'
 	{
-		labelPrefix = *$2;
+		opts.labelPrefix = *$2;
 		delete $2;
 	}
 	| CONF_STARTLABEL NUM ';'
@@ -398,44 +398,44 @@ decl:
 	}
 	| CONF_STATE_ABORT NUM ';'
 	{
-		bUseStateAbort = $2 != 0;
+		opts.bUseStateAbort = $2 != 0;
 	}
 	| CONF_STATE_NEXTLABEL NUM ';'
 	{
-		bUseStateNext = $2 != 0;
+		opts.bUseStateNext = $2 != 0;
 	}
 	| CONF_YYBM_HEX NUM ';'
 	{
-		yybmHexTable = $2 != 0;
+		opts.yybmHexTable = $2 != 0;
 	}
 	| CONF_YYCH_CONVERSION NUM ';'
 	{
-		yychConversion = $2 == 0
+		opts.yychConversion = $2 == 0
 			? ""
 			: "(" + mapCodeName["YYCTYPE"] + ")";
 	}
 	| CONF_YYCH_EMIT NUM ';'
 	{
-		bEmitYYCh = $2 != 0;
+		opts.bEmitYYCh = $2 != 0;
 	}
 	| CONF_YYFILL_CHECK NUM ';'
 	{
-		bUseYYFillCheck = $2 != 0;
+		opts.bUseYYFillCheck = $2 != 0;
 	}
 	| CONF_YYFILL_ENABLE NUM ';'
 	{
-		bUseYYFill = $2 != 0;
+		opts.bUseYYFill = $2 != 0;
 	}
 	| CONF_YYFILL_PARAMETER NUM ';'
 	{
-		bUseYYFillParam = $2 != 0;
+		opts.bUseYYFillParam = $2 != 0;
 	}
 ;
 
 rule:
 		expr look CODE
 		{
-			if (cFlag)
+			if (opts.cFlag)
 			{
 				in->fatal("condition or '<*>' required when using -c switch");
 			}
@@ -452,7 +452,7 @@ rule:
 		}
 	|	STAR CODE /* default rule */
 		{
-			if (cFlag)
+			if (opts.cFlag)
 				in->fatal("condition or '<*>' required when using -c switch");
 			if (ruleDefault != NULL)
 				in->fatal("code to default rule is already defined");
@@ -768,12 +768,12 @@ void parse(Scanner& i, Output & o)
 
 	o.source.write_version_time ();
 	o.source.write_line_info (in->get_cline (), in->get_fname ().c_str ());
-	if (flag_skeleton)
+	if (opts.flag_skeleton)
 	{
 		Skeleton::emit_prolog (o.source);
 	}
 
-	Enc encodingOld = encoding;
+	Enc encodingOld = opts.encoding;
 	
 	while ((parseMode = i.echo()) != Scanner::Stop)
 	{
@@ -784,7 +784,7 @@ void parse(Scanner& i, Output & o)
 		i.save_state(curr_state);
 		foundRules = false;
 
-		if (rFlag && parseMode == Scanner::Rules && dfa_map.size())
+		if (opts.rFlag && parseMode == Scanner::Rules && dfa_map.size())
 		{
 			in->fatal("cannot have a second 'rules:re2c' block");
 		}
@@ -809,9 +809,9 @@ void parse(Scanner& i, Output & o)
 		in->set_in_parse(true);
 		yyparse();
 		in->set_in_parse(false);
-		if (rFlag && parseMode == Scanner::Reuse)
+		if (opts.rFlag && parseMode == Scanner::Reuse)
 		{
-			if (foundRules || encoding != encodingOld)
+			if (foundRules || opts.encoding != encodingOld)
 			{
 				// Re-parse rules
 				parseMode = Scanner::Parse;
@@ -833,10 +833,10 @@ void parse(Scanner& i, Output & o)
 				yyparse();
 				in->set_in_parse(false);
 			}
-			encodingOld = encoding;
+			encodingOld = opts.encoding;
 		}
 		o.source.set_block_line (in->get_cline ());
-		if (cFlag)
+		if (opts.cFlag)
 		{
 			RegExpMap::iterator it;
 			SetupMap::const_iterator itRuleSetup;
@@ -884,18 +884,18 @@ void parse(Scanner& i, Output & o)
 					itRuleSetup = ruleSetupMap.find(it->first);				
 					if (itRuleSetup != ruleSetupMap.end())
 					{
-						yySetupRule = itRuleSetup->second.second;
+						opts.yySetupRule = itRuleSetup->second.second;
 					}
 					else
 					{
 						itRuleSetup = ruleSetupMap.find("*");
 						if (itRuleSetup != ruleSetupMap.end())
 						{
-							yySetupRule = itRuleSetup->second.second;
+							opts.yySetupRule = itRuleSetup->second.second;
 						}
 						else
 						{
-							yySetupRule = "";
+							opts.yySetupRule = "";
 						}
 					}
 
@@ -918,11 +918,11 @@ void parse(Scanner& i, Output & o)
 						it->second = it->second ? mkAlt (def_rule, it->second) : def_rule;
 					}
 
-					dfa_map[it->first] = genCode(it->second, o, it->first);
+					dfa_map[it->first] = genCode(it->second, o, it->first, opts.encoding.nCodeUnits ());
 				}
 				if (parseMode != Scanner::Rules && dfa_map.find(it->first) != dfa_map.end())
 				{
-					dfa_map[it->first]->emit(o, topIndent, !--nCount, bPrologBrace);
+					dfa_map[it->first]->emit(o, opts.topIndent, !--nCount, bPrologBrace);
 				}
 			}
 		}
@@ -945,20 +945,20 @@ void parse(Scanner& i, Output & o)
 			{
 				if (parseMode != Scanner::Reuse)
 				{
-					dfa_map[""] = genCode(spec, o, "");
+					dfa_map[""] = genCode(spec, o, "", opts.encoding.nCodeUnits ());
 				}
 				if (parseMode != Scanner::Rules && dfa_map.find("") != dfa_map.end())
 				{
-					dfa_map[""]->emit(o, topIndent, 0, bPrologBrace);
+					dfa_map[""]->emit(o, opts.topIndent, 0, bPrologBrace);
 				}
 			}
 		}
 		o.source.write_line_info (in->get_cline (), in->get_fname ().c_str ());
 		/* restore original char handling mode*/
-		encoding = encodingOld;
+		opts.encoding = encodingOld;
 	}
 
-	if (cFlag)
+	if (opts.cFlag)
 	{
 		SetupMap::const_iterator itRuleSetup;
 		for (itRuleSetup = ruleSetupMap.begin(); itRuleSetup != ruleSetupMap.end(); ++itRuleSetup)
@@ -980,7 +980,7 @@ void parse(Scanner& i, Output & o)
 		}
 	}
 
-	if (flag_skeleton)
+	if (opts.flag_skeleton)
 	{
 		Skeleton::emit_epilog (o.source, o.names);
 	}

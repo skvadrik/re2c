@@ -54,7 +54,7 @@ void emit_action
 
 void emit_match (OutputFile & o, uint32_t ind, bool & readCh, const State * const s)
 {
-	if (DFlag)
+	if (opts.DFlag)
 	{
 		return;
 	}
@@ -64,17 +64,17 @@ void emit_match (OutputFile & o, uint32_t ind, bool & readCh, const State * cons
 		&& s->next->action.type != Action::RULE;
 	if (s->link)
 	{
-		o << input_api.stmt_skip (ind);
+		o << opts.input_api.stmt_skip (ind);
 	}
 	else if (!read_ahead)
 	{
 		/* do not read next char if match */
-		o << input_api.stmt_skip (ind);
+		o << opts.input_api.stmt_skip (ind);
 		readCh = true;
 	}
 	else
 	{
-		o << input_api.stmt_skip_peek (ind);
+		o << opts.input_api.stmt_skip_peek (ind);
 		readCh = false;
 	}
 
@@ -86,7 +86,7 @@ void emit_match (OutputFile & o, uint32_t ind, bool & readCh, const State * cons
 
 void emit_initial (OutputFile & o, uint32_t ind, bool & readCh, const State * const s, const Initial & initial, const std::set<label_t> & used_labels)
 {
-	if (DFlag)
+	if (opts.DFlag)
 	{
 		return;
 	}
@@ -95,20 +95,20 @@ void emit_initial (OutputFile & o, uint32_t ind, bool & readCh, const State * co
 	{
 		if (s->link)
 		{
-			o << input_api.stmt_skip (ind);
+			o << opts.input_api.stmt_skip (ind);
 		}
 		else
 		{
-			o << input_api.stmt_skip_peek (ind);
+			o << opts.input_api.stmt_skip_peek (ind);
 		}
 	}
 
 	if (used_labels.count(initial.label))
 	{
-		o << labelPrefix << initial.label << ":\n";
+		o << opts.labelPrefix << initial.label << ":\n";
 	}
 
-	if (dFlag)
+	if (opts.dFlag)
 	{
 		o << indent(ind) << mapCodeName["YYDEBUG"] << "(" << initial.label << ", *" << mapCodeName["YYCURSOR"] << ");" << "\n";
 	}
@@ -121,7 +121,7 @@ void emit_initial (OutputFile & o, uint32_t ind, bool & readCh, const State * co
 	{
 		if (initial.setMarker)
 		{
-			o << input_api.stmt_backup (ind);
+			o << opts.input_api.stmt_backup (ind);
 		}
 		readCh = false;
 	}
@@ -129,7 +129,7 @@ void emit_initial (OutputFile & o, uint32_t ind, bool & readCh, const State * co
 
 void emit_save (OutputFile & o, uint32_t ind, bool & readCh, const State * const s, uint32_t save, bool save_yyaccept)
 {
-	if (DFlag)
+	if (opts.DFlag)
 	{
 		return;
 	}
@@ -141,12 +141,12 @@ void emit_save (OutputFile & o, uint32_t ind, bool & readCh, const State * const
 
 	if (s->link)
 	{
-		o << input_api.stmt_skip_backup (ind);
+		o << opts.input_api.stmt_skip_backup (ind);
 		need(o, ind, readCh, s->depth, false);
 	}
 	else
 	{
-		o << input_api.stmt_skip_backup_peek (ind);
+		o << opts.input_api.stmt_skip_backup_peek (ind);
 		readCh = false;
 	}
 }
@@ -173,36 +173,36 @@ void emit_accept (OutputFile & o, uint32_t ind, bool & readCh, const State * con
 	const uint32_t accepts_size = static_cast<uint32_t> (accepts.size ());
 	if (accepts_size > 0)
 	{
-		if (!DFlag)
+		if (!opts.DFlag)
 		{
-			o << input_api.stmt_restore (ind);
+			o << opts.input_api.stmt_restore (ind);
 		}
 
 		if (readCh) // shouldn't be necessary, but might become at some point
 		{
-			o << input_api.stmt_peek (ind);
+			o << opts.input_api.stmt_peek (ind);
 			readCh = false;
 		}
 
 		if (accepts_size > 1)
 		{
-			if (gFlag && accepts_size >= cGotoThreshold)
+			if (opts.gFlag && accepts_size >= opts.cGotoThreshold)
 			{
 				o << indent(ind++) << "{\n";
 				o << indent(ind++) << "static void *" << mapCodeName["yytarget"] << "[" << accepts_size << "] = {\n";
 				for (uint32_t i = 0; i < accepts_size; ++i)
 				{
-					o << indent(ind) << "&&" << labelPrefix << accepts[i]->label << ",\n";
+					o << indent(ind) << "&&" << opts.labelPrefix << accepts[i]->label << ",\n";
 				}
 				o << indent(--ind) << "};\n";
 				o << indent(ind) << "goto *" << mapCodeName["yytarget"] << "[" << mapCodeName["yyaccept"] << "];\n";
 				o << indent(--ind) << "}\n";
 			}
-			else if (sFlag || (accepts_size == 2 && !DFlag))
+			else if (opts.sFlag || (accepts_size == 2 && !opts.DFlag))
 			{
 				emit_accept_binary (o, ind, readCh, s, accepts, 0, accepts_size - 1);
 			}
-			else if (DFlag)
+			else if (opts.DFlag)
 			{
 				for (uint32_t i = 0; i < accepts_size; ++i)
 				{
@@ -233,7 +233,7 @@ void emit_accept (OutputFile & o, uint32_t ind, bool & readCh, const State * con
 
 void emit_rule (OutputFile & o, uint32_t ind, const State * const s, const RuleOp * const rule, const std::string & condName, const std::string & name)
 {
-	if (DFlag)
+	if (opts.DFlag)
 	{
 		o << s->label;
 		if (rule->code)
@@ -245,12 +245,12 @@ void emit_rule (OutputFile & o, uint32_t ind, const State * const s, const RuleO
 	}
 
 	uint32_t back = rule->ctx->fixedLength();
-	if (back != 0u && !DFlag)
+	if (back != 0u && !opts.DFlag)
 	{
-		o << input_api.stmt_restorectx (ind);
+		o << opts.input_api.stmt_restorectx (ind);
 	}
 
-	if (flag_skeleton)
+	if (opts.flag_skeleton)
 	{
 		Skeleton::emit_action (o, ind, rule->rank, name);
 	}
@@ -263,9 +263,9 @@ void emit_rule (OutputFile & o, uint32_t ind, const State * const s, const RuleO
 
 		if (rule->code)
 		{
-			if (!yySetupRule.empty ())
+			if (!opts.yySetupRule.empty ())
 			{
-				o << indent(ind) << yySetupRule << "\n";
+				o << indent(ind) << opts.yySetupRule << "\n";
 			}
 			o.write_line_info (rule->code->loc.line, rule->code->loc.filename.c_str ());
 			o << indent (ind) << rule->code->text << "\n";
@@ -273,55 +273,55 @@ void emit_rule (OutputFile & o, uint32_t ind, const State * const s, const RuleO
 		}
 		else if (!rule->newcond.empty ())
 		{
-			o << indent (ind) << replaceParam(condGoto, condGotoParam, condPrefix + rule->newcond) << "\n";
+			o << indent (ind) << replaceParam(opts.condGoto, opts.condGotoParam, opts.condPrefix + rule->newcond) << "\n";
 		}
 	}
 }
 
 void need (OutputFile & o, uint32_t ind, bool & readCh, uint32_t n, bool bSetMarker)
 {
-	if (DFlag)
+	if (opts.DFlag)
 	{
 		return;
 	}
 
 	uint32_t fillIndex = last_fill_index;
 
-	if (fFlag)
+	if (opts.fFlag)
 	{
 		last_fill_index++;
-		if (bUseYYSetStateParam)
+		if (opts.bUseYYSetStateParam)
 		{
 			o << indent(ind) << mapCodeName["YYSETSTATE"] << "(" << fillIndex << ");\n";
 		}
 		else
 		{
-			o << indent(ind) << replaceParam(mapCodeName["YYSETSTATE"], yySetStateParam, fillIndex) << "\n";
+			o << indent(ind) << replaceParam(mapCodeName["YYSETSTATE"], opts.yySetStateParam, fillIndex) << "\n";
 		}
 	}
 
-	if (bUseYYFill && n > 0)
+	if (opts.bUseYYFill && n > 0)
 	{
 		o << indent(ind);
 		if (n == 1)
 		{
-			if (bUseYYFillCheck)
+			if (opts.bUseYYFillCheck)
 			{
-				o << "if (" << input_api.expr_lessthan_one () << ") ";
+				o << "if (" << opts.input_api.expr_lessthan_one () << ") ";
 			}
 			genYYFill(o, n);
 		}
 		else
 		{
-			if (bUseYYFillCheck)
+			if (opts.bUseYYFillCheck)
 			{
-				o << "if (" << input_api.expr_lessthan (n) << ") ";
+				o << "if (" << opts.input_api.expr_lessthan (n) << ") ";
 			}
 			genYYFill(o, n);
 		}
 	}
 
-	if (fFlag)
+	if (opts.fFlag)
 	{
 		o << mapCodeName["yyFillLabel"] << fillIndex << ":\n";
 	}
@@ -330,11 +330,11 @@ void need (OutputFile & o, uint32_t ind, bool & readCh, uint32_t n, bool bSetMar
 	{
 		if (bSetMarker)
 		{
-			o << input_api.stmt_backup_peek (ind);
+			o << opts.input_api.stmt_backup_peek (ind);
 		}
 		else
 		{
-			o << input_api.stmt_peek (ind);
+			o << opts.input_api.stmt_peek (ind);
 		}
 		readCh = false;
 	}
@@ -342,10 +342,10 @@ void need (OutputFile & o, uint32_t ind, bool & readCh, uint32_t n, bool bSetMar
 
 void genYYFill(OutputFile & o, uint32_t need)
 {
-	if (bUseYYFillParam)
+	if (opts.bUseYYFillParam)
 	{
 		o << mapCodeName["YYFILL"];
-		if (!bUseYYFillNaked)
+		if (!opts.bUseYYFillNaked)
 		{
 			o << "(" << need << ");";
 		}
@@ -353,8 +353,8 @@ void genYYFill(OutputFile & o, uint32_t need)
 	}
 	else
 	{
-		o << replaceParam(mapCodeName["YYFILL"], yyFillLength, need);
-		if (!bUseYYFillNaked)
+		o << replaceParam(mapCodeName["YYFILL"], opts.yyFillLength, need);
+		if (!opts.bUseYYFillNaked)
 		{
 			o << ";";
 		}
@@ -364,13 +364,13 @@ void genYYFill(OutputFile & o, uint32_t need)
 
 void genSetCondition(OutputFile & o, uint32_t ind, const std::string& newcond)
 {
-	if (bUseYYSetConditionParam)
+	if (opts.bUseYYSetConditionParam)
 	{
-		o << indent(ind) << mapCodeName["YYSETCONDITION"] << "(" << condEnumPrefix << newcond << ");\n";
+		o << indent(ind) << mapCodeName["YYSETCONDITION"] << "(" << opts.condEnumPrefix << newcond << ");\n";
 	}
 	else
 	{
-		o << indent(ind) << replaceParam(mapCodeName["YYSETCONDITION"], yySetConditionParam, condEnumPrefix + newcond) << "\n";
+		o << indent(ind) << replaceParam(mapCodeName["YYSETCONDITION"], opts.yySetConditionParam, opts.condEnumPrefix + newcond) << "\n";
 	}
 }
 

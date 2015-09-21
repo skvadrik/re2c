@@ -8,7 +8,7 @@ std::string& CodeNames::operator [] (const char * what)
 {
 	CodeNames::iterator it = find(std::string(what));
 	
-	if (it == end() || flag_skeleton)
+	if (it == end())
 	{
 		return insert(std::make_pair(std::string(what), std::string(what))).first->second;
 	}

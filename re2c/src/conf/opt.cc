@@ -4,57 +4,7 @@
 namespace re2c
 {
 
-bool bFlag = false;
-bool cFlag = false;
-bool dFlag = false;
-bool DFlag = false;
-bool fFlag = false;
-bool FFlag = false;
-bool gFlag = false;
-bool iFlag = false;
-bool rFlag = false;
-bool sFlag = false;
-bool tFlag = false;
-bool flag_skeleton = false;
-
-bool bNoGenerationDate = false;
-bool bEmitYYCh = true;
-bool bUseStateNext = false;
-bool bUseYYFill = true;
-bool bUseYYFillParam = true;
-bool bUseYYFillCheck = true;
-bool bUseYYFillNaked = false;
-bool bUseYYSetConditionParam = true;
-bool bUseYYGetConditionNaked = false;
-bool bUseYYSetStateParam = true;
-bool bUseYYSetStateNaked = false;
-bool bUseYYGetStateNaked = false;
-
-std::string labelPrefix("yy");
-std::string condPrefix("yyc_");
-std::string condEnumPrefix("yyc");
-std::string condDivider("/* *********************************** */");
-std::string condDividerParam("@@");
-std::string condGoto("goto @@;");
-std::string condGotoParam("@@");
-std::string yychConversion("");
-std::string yyFillLength("@@");
-std::string yySetConditionParam("@@");
-std::string yySetStateParam("@@");
-std::string yySetupRule("");
-uint32_t cGotoThreshold = 9;
-
-uint32_t topIndent = 0;
-std::string indString("\t");
-bool yybmHexTable = false;
-bool bUseStateAbort = false;
-bool bCaseInsensitive = false;
-bool bCaseInverted = false;
-
-Enc encoding;
-InputAPI input_api;
-
-empty_class_policy_t empty_class_policy = EMPTY_CLASS_MATCH_EMPTY;
+Opt opts;
 
 void Opt::bit_vectors ()
 {

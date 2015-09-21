@@ -1,6 +1,8 @@
 #ifndef _RE2C_UTIL_ALLOCATE_
 #define _RE2C_UTIL_ALLOCATE_
 
+#include <stddef.h> // size_t
+
 namespace re2c {
 
 // useful fof allocation of arrays of POD objects

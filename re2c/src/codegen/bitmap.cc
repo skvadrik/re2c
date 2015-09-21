@@ -110,7 +110,7 @@ void BitMap::gen(OutputFile & o, uint32_t ind, uint32_t lb, uint32_t ub)
 					o << "\n" << indent(ind+1);
 				}
 
-				if (yybmHexTable)
+				if (opts.yybmHexTable)
 				{
 					o.write_hex (bm[j]);
 				}

@@ -76,6 +76,7 @@
 #include <set>
 
 #include "config.h"
+#include "src/codegen/skeleton/skeleton.h"
 #include "src/ir/bytecode/bytecode.h"
 #include "src/ir/regexp/encoding/enc.h"
 #include "src/ir/regexp/encoding/range_suffix.h"
@@ -122,7 +123,7 @@ static symbol_table_t symbol_table;
 
 void context_check(CondList *clist)
 {
-	if (!cFlag)
+	if (!opts.cFlag)
 	{
 		delete clist;
 		in->fatal("conditions are only allowed when using -c switch");
@@ -660,14 +661,14 @@ static const yytype_int8 yyrhs[] =
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint16 yyrline[] =
 {
-       0,   241,   241,   243,   247,   251,   260,   269,   273,   277,
-     286,   291,   296,   301,   306,   311,   316,   324,   328,   334,
-     338,   342,   348,   352,   358,   371,   376,   384,   389,   393,
-     398,   402,   406,   410,   416,   420,   424,   428,   435,   452,
-     461,   465,   471,   476,   482,   486,   501,   518,   523,   529,
-     535,   553,   573,   579,   587,   590,   597,   603,   613,   616,
-     624,   627,   634,   638,   645,   649,   656,   660,   667,   671,
-     686,   706,   710,   714,   718,   725,   735,   739
+       0,   242,   242,   244,   248,   252,   261,   270,   274,   278,
+     287,   292,   297,   302,   307,   312,   317,   325,   329,   335,
+     339,   343,   349,   353,   359,   372,   377,   385,   390,   394,
+     399,   403,   407,   411,   417,   421,   425,   429,   436,   453,
+     462,   466,   472,   477,   483,   487,   502,   519,   524,   530,
+     536,   554,   574,   580,   588,   591,   598,   604,   614,   617,
+     625,   628,   635,   639,   646,   650,   657,   661,   668,   672,
+     687,   707,   711,   715,   719,   726,   736,   740
 };
 #endif
 
@@ -1770,7 +1771,7 @@ yyreduce:
   case 10:
 
     {
-		condPrefix = *(yyvsp[(2) - (3)].str);
+		opts.condPrefix = *(yyvsp[(2) - (3)].str);
 		delete (yyvsp[(2) - (3)].str);
 	;}
     break;
@@ -1778,7 +1779,7 @@ yyreduce:
   case 11:
 
     {
-		condEnumPrefix = *(yyvsp[(2) - (3)].str);
+		opts.condEnumPrefix = *(yyvsp[(2) - (3)].str);
 		delete (yyvsp[(2) - (3)].str);
 	;}
     break;
@@ -1786,7 +1787,7 @@ yyreduce:
   case 12:
 
     {
-		condDivider = *(yyvsp[(2) - (3)].str);
+		opts.condDivider = *(yyvsp[(2) - (3)].str);
 		delete (yyvsp[(2) - (3)].str);
 	;}
     break;
@@ -1794,7 +1795,7 @@ yyreduce:
   case 13:
 
     {
-		condDividerParam = *(yyvsp[(2) - (3)].str);
+		opts.condDividerParam = *(yyvsp[(2) - (3)].str);
 		delete (yyvsp[(2) - (3)].str);
 	;}
     break;
@@ -1802,7 +1803,7 @@ yyreduce:
   case 14:
 
     {
-		condGoto = *(yyvsp[(2) - (3)].str);
+		opts.condGoto = *(yyvsp[(2) - (3)].str);
 		delete (yyvsp[(2) - (3)].str);
 	;}
     break;
@@ -1810,7 +1811,7 @@ yyreduce:
   case 15:
 
     {
-		condGotoParam = *(yyvsp[(2) - (3)].str);
+		opts.condGotoParam = *(yyvsp[(2) - (3)].str);
 		delete (yyvsp[(2) - (3)].str);
 	;}
     break;
@@ -1822,22 +1823,22 @@ yyreduce:
 		{
 			in->fatal ("configuration 'cgoto:threshold' must be nonnegative");
 		}
-		cGotoThreshold = static_cast<uint32_t> ((yyvsp[(2) - (3)].num));
+		opts.cGotoThreshold = static_cast<uint32_t> ((yyvsp[(2) - (3)].num));
 	;}
     break;
 
   case 17:
 
     {
-		bUseYYFillNaked = (yyvsp[(2) - (3)].num) != 0;
+		opts.bUseYYFillNaked = (yyvsp[(2) - (3)].num) != 0;
 	;}
     break;
 
   case 18:
 
     {
-		yyFillLength = *(yyvsp[(2) - (3)].str);
-		bUseYYFillParam = false;
+		opts.yyFillLength = *(yyvsp[(2) - (3)].str);
+		opts.bUseYYFillParam = false;
 		delete (yyvsp[(2) - (3)].str);
 	;}
     break;
@@ -1845,22 +1846,22 @@ yyreduce:
   case 19:
 
     {
-		bUseYYGetConditionNaked = (yyvsp[(2) - (3)].num) != 0;
+		opts.bUseYYGetConditionNaked = (yyvsp[(2) - (3)].num) != 0;
 	;}
     break;
 
   case 20:
 
     {
-		bUseYYGetStateNaked = (yyvsp[(2) - (3)].num) != 0;
+		opts.bUseYYGetStateNaked = (yyvsp[(2) - (3)].num) != 0;
 	;}
     break;
 
   case 21:
 
     {
-		yySetConditionParam = *(yyvsp[(2) - (3)].str);
-		bUseYYSetConditionParam = false;
+		opts.yySetConditionParam = *(yyvsp[(2) - (3)].str);
+		opts.bUseYYSetConditionParam = false;
 		delete (yyvsp[(2) - (3)].str);
 	;}
     break;
@@ -1868,15 +1869,15 @@ yyreduce:
   case 22:
 
     {
-		bUseYYSetStateNaked = (yyvsp[(2) - (3)].num) != 0;
+		opts.bUseYYSetStateNaked = (yyvsp[(2) - (3)].num) != 0;
 	;}
     break;
 
   case 23:
 
     {
-		yySetStateParam = *(yyvsp[(2) - (3)].str);
-		bUseYYSetStateParam = false;
+		opts.yySetStateParam = *(yyvsp[(2) - (3)].str);
+		opts.bUseYYSetStateParam = false;
 		delete (yyvsp[(2) - (3)].str);
 	;}
     break;
@@ -1886,13 +1887,13 @@ yyreduce:
     {
 		if ((yyvsp[(2) - (3)].num) == 0)
 		{
-			encoding.unset ((yyvsp[(1) - (3)].enc));
+			opts.encoding.unset ((yyvsp[(1) - (3)].enc));
 		}
-		else if (!encoding.set ((yyvsp[(1) - (3)].enc)))
+		else if (!opts.encoding.set ((yyvsp[(1) - (3)].enc)))
 		{
 			in->fatalf ("Cannot set %s encoding: please reset %s encoding first"
 				, Enc::name ((yyvsp[(1) - (3)].enc))
-				, Enc::name (encoding.type ()));
+				, Enc::name (opts.encoding.type ()));
 		}
 	;}
     break;
@@ -1900,7 +1901,7 @@ yyreduce:
   case 25:
 
     {
-		indString = *(yyvsp[(2) - (3)].str);
+		opts.indString = *(yyvsp[(2) - (3)].str);
 		delete (yyvsp[(2) - (3)].str);
 	;}
     break;
@@ -1912,14 +1913,14 @@ yyreduce:
 		{
 			in->fatal ("configuration 'indent:top' must be nonnegative");
 		}
-		topIndent = static_cast<uint32_t> ((yyvsp[(2) - (3)].num));
+		opts.topIndent = static_cast<uint32_t> ((yyvsp[(2) - (3)].num));
 	;}
     break;
 
   case 27:
 
     {
-		labelPrefix = *(yyvsp[(2) - (3)].str);
+		opts.labelPrefix = *(yyvsp[(2) - (3)].str);
 		delete (yyvsp[(2) - (3)].str);
 	;}
     break;
@@ -1942,28 +1943,28 @@ yyreduce:
   case 30:
 
     {
-		bUseStateAbort = (yyvsp[(2) - (3)].num) != 0;
+		opts.bUseStateAbort = (yyvsp[(2) - (3)].num) != 0;
 	;}
     break;
 
   case 31:
 
     {
-		bUseStateNext = (yyvsp[(2) - (3)].num) != 0;
+		opts.bUseStateNext = (yyvsp[(2) - (3)].num) != 0;
 	;}
     break;
 
   case 32:
 
     {
-		yybmHexTable = (yyvsp[(2) - (3)].num) != 0;
+		opts.yybmHexTable = (yyvsp[(2) - (3)].num) != 0;
 	;}
     break;
 
   case 33:
 
     {
-		yychConversion = (yyvsp[(2) - (3)].num) == 0
+		opts.yychConversion = (yyvsp[(2) - (3)].num) == 0
 			? ""
 			: "(" + mapCodeName["YYCTYPE"] + ")";
 	;}
@@ -1972,35 +1973,35 @@ yyreduce:
   case 34:
 
     {
-		bEmitYYCh = (yyvsp[(2) - (3)].num) != 0;
+		opts.bEmitYYCh = (yyvsp[(2) - (3)].num) != 0;
 	;}
     break;
 
   case 35:
 
     {
-		bUseYYFillCheck = (yyvsp[(2) - (3)].num) != 0;
+		opts.bUseYYFillCheck = (yyvsp[(2) - (3)].num) != 0;
 	;}
     break;
 
   case 36:
 
     {
-		bUseYYFill = (yyvsp[(2) - (3)].num) != 0;
+		opts.bUseYYFill = (yyvsp[(2) - (3)].num) != 0;
 	;}
     break;
 
   case 37:
 
     {
-		bUseYYFillParam = (yyvsp[(2) - (3)].num) != 0;
+		opts.bUseYYFillParam = (yyvsp[(2) - (3)].num) != 0;
 	;}
     break;
 
   case 38:
 
     {
-			if (cFlag)
+			if (opts.cFlag)
 			{
 				in->fatal("condition or '<*>' required when using -c switch");
 			}
@@ -2020,7 +2021,7 @@ yyreduce:
   case 39:
 
     {
-			if (cFlag)
+			if (opts.cFlag)
 				in->fatal("condition or '<*>' required when using -c switch");
 			if (ruleDefault != NULL)
 				in->fatal("code to default rule is already defined");
@@ -2632,8 +2633,12 @@ void parse(Scanner& i, Output & o)
 
 	o.source.write_version_time ();
 	o.source.write_line_info (in->get_cline (), in->get_fname ().c_str ());
+	if (opts.flag_skeleton)
+	{
+		Skeleton::emit_prolog (o.source);
+	}
 
-	Enc encodingOld = encoding;
+	Enc encodingOld = opts.encoding;
 	
 	while ((parseMode = i.echo()) != Scanner::Stop)
 	{
@@ -2644,7 +2649,7 @@ void parse(Scanner& i, Output & o)
 		i.save_state(curr_state);
 		foundRules = false;
 
-		if (rFlag && parseMode == Scanner::Rules && dfa_map.size())
+		if (opts.rFlag && parseMode == Scanner::Rules && dfa_map.size())
 		{
 			in->fatal("cannot have a second 'rules:re2c' block");
 		}
@@ -2669,9 +2674,9 @@ void parse(Scanner& i, Output & o)
 		in->set_in_parse(true);
 		yyparse();
 		in->set_in_parse(false);
-		if (rFlag && parseMode == Scanner::Reuse)
+		if (opts.rFlag && parseMode == Scanner::Reuse)
 		{
-			if (foundRules || encoding != encodingOld)
+			if (foundRules || opts.encoding != encodingOld)
 			{
 				// Re-parse rules
 				parseMode = Scanner::Parse;
@@ -2693,10 +2698,10 @@ void parse(Scanner& i, Output & o)
 				yyparse();
 				in->set_in_parse(false);
 			}
-			encodingOld = encoding;
+			encodingOld = opts.encoding;
 		}
 		o.source.set_block_line (in->get_cline ());
-		if (cFlag)
+		if (opts.cFlag)
 		{
 			RegExpMap::iterator it;
 			SetupMap::const_iterator itRuleSetup;
@@ -2744,18 +2749,18 @@ void parse(Scanner& i, Output & o)
 					itRuleSetup = ruleSetupMap.find(it->first);				
 					if (itRuleSetup != ruleSetupMap.end())
 					{
-						yySetupRule = itRuleSetup->second.second;
+						opts.yySetupRule = itRuleSetup->second.second;
 					}
 					else
 					{
 						itRuleSetup = ruleSetupMap.find("*");
 						if (itRuleSetup != ruleSetupMap.end())
 						{
-							yySetupRule = itRuleSetup->second.second;
+							opts.yySetupRule = itRuleSetup->second.second;
 						}
 						else
 						{
-							yySetupRule = "";
+							opts.yySetupRule = "";
 						}
 					}
 
@@ -2778,11 +2783,11 @@ void parse(Scanner& i, Output & o)
 						it->second = it->second ? mkAlt (def_rule, it->second) : def_rule;
 					}
 
-					dfa_map[it->first] = genCode(it->second, o, it->first);
+					dfa_map[it->first] = genCode(it->second, o, it->first, opts.encoding.nCodeUnits ());
 				}
 				if (parseMode != Scanner::Rules && dfa_map.find(it->first) != dfa_map.end())
 				{
-					dfa_map[it->first]->emit(o, topIndent, !--nCount, bPrologBrace);
+					dfa_map[it->first]->emit(o, opts.topIndent, !--nCount, bPrologBrace);
 				}
 			}
 		}
@@ -2805,20 +2810,20 @@ void parse(Scanner& i, Output & o)
 			{
 				if (parseMode != Scanner::Reuse)
 				{
-					dfa_map[""] = genCode(spec, o, "");
+					dfa_map[""] = genCode(spec, o, "", opts.encoding.nCodeUnits ());
 				}
 				if (parseMode != Scanner::Rules && dfa_map.find("") != dfa_map.end())
 				{
-					dfa_map[""]->emit(o, topIndent, 0, bPrologBrace);
+					dfa_map[""]->emit(o, opts.topIndent, 0, bPrologBrace);
 				}
 			}
 		}
 		o.source.write_line_info (in->get_cline (), in->get_fname ().c_str ());
 		/* restore original char handling mode*/
-		encoding = encodingOld;
+		opts.encoding = encodingOld;
 	}
 
-	if (cFlag)
+	if (opts.cFlag)
 	{
 		SetupMap::const_iterator itRuleSetup;
 		for (itRuleSetup = ruleSetupMap.begin(); itRuleSetup != ruleSetupMap.end(); ++itRuleSetup)
@@ -2838,6 +2843,11 @@ void parse(Scanner& i, Output & o)
 			}
 			in->fatalf_at(line, "setup for all rules with '*' not possible when all rules are setup explicitly");
 		}
+	}
+
+	if (opts.flag_skeleton)
+	{
+		Skeleton::emit_epilog (o.source, o.names);
 	}
 
 	parse_cleanup();

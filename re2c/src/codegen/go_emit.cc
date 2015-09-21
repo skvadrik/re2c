@@ -17,7 +17,7 @@ std::string output_yych (bool & readCh)
 	if (readCh)
 	{
 		readCh = false;
-		return "(" + input_api.expr_peek_save () + ")";
+		return "(" + opts.input_api.expr_peek_save () + ")";
 	}
 	else
 	{
@@ -36,10 +36,10 @@ void output_goto (OutputFile & o, uint32_t ind, bool & readCh, label_t to)
 {
 	if (readCh)
 	{
-		o << input_api.stmt_peek (ind);
+		o << opts.input_api.stmt_peek (ind);
 		readCh = false;
 	}
-	o << indent (ind) << "goto " << labelPrefix << to << ";\n";
+	o << indent (ind) << "goto " << opts.labelPrefix << to << ";\n";
 }
 
 std::string output_hgo (OutputFile & o, uint32_t ind, bool & readCh, SwitchIf * hgo)
@@ -68,9 +68,9 @@ void Case::emit (OutputFile & o, uint32_t ind)
 			o << indent (ind) << "case ";
 			o.write_char_hex (b);
 			o << ":";
-			if (dFlag && encoding.type () == Enc::EBCDIC)
+			if (opts.dFlag && opts.encoding.type () == Enc::EBCDIC)
 			{
-				const uint32_t c = encoding.decodeUnsafe (b);
+				const uint32_t c = opts.encoding.decodeUnsafe (b);
 				if (is_print (c))
 					o << " /* " << static_cast<char> (c) << " */";
 			}
@@ -155,7 +155,7 @@ void GoBitmap::emit (OutputFile & o, uint32_t ind, bool & readCh)
 {
 	std::string yych = output_hgo (o, ind, readCh, hgo);
 	o << "if (" << mapCodeName["yybm"] << "[" << bitmap->i << "+" << yych << "] & ";
-	if (yybmHexTable)
+	if (opts.yybmHexTable)
 	{
 		o.write_hex (bitmap->m);
 	}
@@ -192,7 +192,7 @@ void CpgotoTable::emit (OutputFile & o, uint32_t ind)
 	const uint32_t max_digits = max_label ().width ();
 	for (uint32_t i = 0; i < TABLE_SIZE; ++i)
 	{
-		o << "&&" << labelPrefix << table[i]->label;
+		o << "&&" << opts.labelPrefix << table[i]->label;
 		if (i == TABLE_SIZE - 1)
 		{
 			o << "\n";

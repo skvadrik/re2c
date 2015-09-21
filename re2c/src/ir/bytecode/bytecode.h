@@ -9,7 +9,7 @@
 namespace re2c
 {
 
-smart_ptr<DFA> genCode (RegExp * re, Output & output, const std::string & cond);
+smart_ptr<DFA> genCode (RegExp * re, Output & output, const std::string & cond, uint32_t cunits);
 
 } // namespace re2c
 

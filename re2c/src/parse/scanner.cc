@@ -66,7 +66,7 @@ void Scanner::fill (uint32_t need)
 	{
 		/* Do not get rid of anything when rFlag is active. Otherwise
 		 * get rid of everything that was already handedout. */
-		if (!rFlag)
+		if (!opts.rFlag)
 		{
 			const ptrdiff_t diff = tok - bot;
 			if (diff > 0)

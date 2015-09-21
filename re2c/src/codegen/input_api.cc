@@ -29,7 +29,7 @@ std::string InputAPI::expr_peek ()
 
 std::string InputAPI::expr_peek_save ()
 {
-	return mapCodeName["yych"] + " = " + yychConversion + expr_peek ();
+	return mapCodeName["yych"] + " = " + opts.yychConversion + expr_peek ();
 }
 
 std::string InputAPI::stmt_peek (uint32_t ind)
@@ -117,7 +117,7 @@ std::string InputAPI::stmt_restorectx (uint32_t ind)
 std::string InputAPI::stmt_skip_peek (uint32_t ind)
 {
 	return type == DEFAULT
-		? indent (ind) + mapCodeName["yych"] + " = " + yychConversion + "*++" + mapCodeName["YYCURSOR"] + ";\n"
+		? indent (ind) + mapCodeName["yych"] + " = " + opts.yychConversion + "*++" + mapCodeName["YYCURSOR"] + ";\n"
 		: stmt_skip (ind) + stmt_peek (ind);
 }
 
@@ -131,14 +131,14 @@ std::string InputAPI::stmt_skip_backup (uint32_t ind)
 std::string InputAPI::stmt_backup_peek (uint32_t ind)
 {
 	return type == DEFAULT
-		? indent (ind) + mapCodeName["yych"] + " = " + yychConversion + "*(" + mapCodeName["YYMARKER"] + " = " + mapCodeName["YYCURSOR"] + ");\n"
+		? indent (ind) + mapCodeName["yych"] + " = " + opts.yychConversion + "*(" + mapCodeName["YYMARKER"] + " = " + mapCodeName["YYCURSOR"] + ");\n"
 		: stmt_backup (ind) + stmt_peek (ind);
 }
 
 std::string InputAPI::stmt_skip_backup_peek (uint32_t ind)
 {
 	return type == DEFAULT
-		? indent (ind) + mapCodeName["yych"] + " = " + yychConversion + "*(" + mapCodeName["YYMARKER"] + " = ++" + mapCodeName["YYCURSOR"] + ");\n"
+		? indent (ind) + mapCodeName["yych"] + " = " + opts.yychConversion + "*(" + mapCodeName["YYMARKER"] + " = ++" + mapCodeName["YYCURSOR"] + ");\n"
 		: stmt_skip (ind) + stmt_backup (ind) + stmt_peek (ind);
 }
 

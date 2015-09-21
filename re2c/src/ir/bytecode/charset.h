@@ -26,7 +26,7 @@ struct CharSet
 	CharPtr * rep;
 	CharPtn * ptn;
 
-	CharSet ();
+	CharSet (uint32_t cunits);
 	~CharSet ();
 
 	FORBID_COPY (CharSet);

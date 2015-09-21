@@ -19,7 +19,6 @@ using namespace re2c;
 
 int main(int, char *argv[])
 {
-	Opt opts;
 	switch (parse_opts (argv, opts))
 	{
 		case OK:        break;
@@ -42,7 +41,7 @@ int main(int, char *argv[])
 		error ("cannot open output file: %s", opts.output_file);
 		return 1;
 	}
-	if (tFlag && !output.header.open ())
+	if (opts.tFlag && !output.header.open ())
 	{
 		error ("cannot open header file: %s", opts.header_file);
 		return 1;
