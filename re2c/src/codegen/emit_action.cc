@@ -263,9 +263,9 @@ void emit_rule (OutputFile & o, uint32_t ind, const State * const s, const RuleO
 
 		if (rule->code)
 		{
-			if (!opts.yySetupRule.empty ())
+			if (!yySetupRule.empty ())
 			{
-				o << indent(ind) << opts.yySetupRule << "\n";
+				o << indent(ind) << yySetupRule << "\n";
 			}
 			o.write_line_info (rule->code->loc.line, rule->code->loc.filename.c_str ());
 			o << indent (ind) << rule->code->text << "\n";

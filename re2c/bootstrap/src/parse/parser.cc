@@ -2749,18 +2749,18 @@ void parse(Scanner& i, Output & o)
 					itRuleSetup = ruleSetupMap.find(it->first);				
 					if (itRuleSetup != ruleSetupMap.end())
 					{
-						opts.yySetupRule = itRuleSetup->second.second;
+						yySetupRule = itRuleSetup->second.second;
 					}
 					else
 					{
 						itRuleSetup = ruleSetupMap.find("*");
 						if (itRuleSetup != ruleSetupMap.end())
 						{
-							opts.yySetupRule = itRuleSetup->second.second;
+							yySetupRule = itRuleSetup->second.second;
 						}
 						else
 						{
-							opts.yySetupRule = "";
+							yySetupRule = "";
 						}
 					}
 

@@ -11,12 +11,8 @@
 namespace re2c
 {
 
-struct Opt
+struct opt_t
 {
-	const char * source_file;
-	const char * output_file;
-	const char * header_file;
-
 	bool bFlag;
 	bool cFlag;
 	bool dFlag;
@@ -28,6 +24,7 @@ struct Opt
 	bool rFlag;
 	bool sFlag;
 	bool tFlag;
+	const char * header_file;
 	bool flag_skeleton;
 	bool bNoGenerationDate;
 	bool bEmitYYCh;
@@ -59,64 +56,35 @@ struct Opt
 	std::string yyFillLength;
 	std::string yySetConditionParam;
 	std::string yySetStateParam;
-	std::string yySetupRule;
 	CodeNames mapCodeName;
 	Enc encoding;
 	InputAPI input_api;
 	empty_class_policy_t empty_class_policy;
 
+	opt_t ();
+	opt_t (const opt_t & opt);
+	opt_t & operator = (const opt_t & opt);
+};
+
+struct Opt : public opt_t
+{
+	const char * source_file;
+	const char * output_file;
+
+private:
+	const opt_t baseopt;
+	opt_t useropt;
+
+public:
 	Opt ()
-		: source_file (NULL)
+		: opt_t ()
+		, source_file (NULL)
 		, output_file (NULL)
-		, header_file (NULL)
-		, bFlag (false)
-		, cFlag (false)
-		, dFlag (false)
-		, DFlag (false)
-		, fFlag (false)
-		, FFlag (false)
-		, gFlag (false)
-		, iFlag (false)
-		, rFlag (false)
-		, sFlag (false)
-		, tFlag (false)
-		, flag_skeleton (false)
-		, bNoGenerationDate (false)
-		, bEmitYYCh (true)
-		, bUseStateNext (false)
-		, bUseYYFill (true)
-		, bUseYYFillParam (true)
-		, bUseYYFillCheck (true)
-		, bUseYYFillNaked (false)
-		, bUseYYSetConditionParam (true)
-		, bUseYYGetConditionNaked (false)
-		, bUseYYSetStateParam (true)
-		, bUseYYSetStateNaked (false)
-		, bUseYYGetStateNaked (false)
-		, yybmHexTable (false)
-		, bUseStateAbort (false)
-		, bCaseInsensitive (false)
-		, bCaseInverted (false)
-		, cGotoThreshold (9)
-		, topIndent (0)
-		, indString ("\t")
-		, labelPrefix ("yy")
-		, condPrefix ("yyc_")
-		, condEnumPrefix ("yyc")
-		, condDivider ("/* *********************************** */")
-		, condDividerParam ("@@")
-		, condGoto ("goto @@;")
-		, condGotoParam ("@@")
-		, yychConversion ("")
-		, yyFillLength ("@@")
-		, yySetConditionParam ("@@")
-		, yySetStateParam ("@@")
-		, yySetupRule ("")
-		, mapCodeName ()
-		, encoding ()
-		, input_api ()
-		, empty_class_policy (EMPTY_CLASS_MATCH_EMPTY)
+		, baseopt ()
+		, useropt ()
 	{}
+
+	bool apply ();
 
 	void bit_vectors ();
 	void start_conditions ();

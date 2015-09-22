@@ -225,19 +225,14 @@ opt_empty_class:
 */
 
 end:
+	if (!opts.apply ())
+	{
+		return EXIT_FAIL;
+	}
+
 	if (!opts.source_file)
 	{
 		error ("no source file");
-		return EXIT_FAIL;
-	}
-	if (!opts.cFlag && opts.header_file)
-	{
-		error ("can only output a header file when using -c switch");
-		return EXIT_FAIL;
-	}
-	if (opts.DFlag && (opts.bFlag || opts.dFlag || opts.sFlag || opts.flag_skeleton))
-	{
-		error ("cannot combine -D with -b, -d, -s or --skeleton switches");
 		return EXIT_FAIL;
 	}
 

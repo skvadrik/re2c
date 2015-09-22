@@ -18,9 +18,10 @@ public:
 		};
 
 private:
-	type_t type;
+	type_t type_;
 
 public:
+	type_t type () const;
 	void set (type_t t);
 	std::string expr_peek ();
 	std::string expr_peek_save ();
