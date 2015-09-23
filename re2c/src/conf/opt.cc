@@ -272,92 +272,118 @@ void opt_t::fix ()
 	}
 }
 
-const opt_t Opt::baseopt;
+realopt_t::realopt_t (useropt_t & opt)
+	: real ()
+	, user (opt)
+{}
 
-void Opt::sync ()
+const opt_t * realopt_t::operator -> ()
 {
-	realopt = useropt;
-	realopt.fix ();
+	sync ();
+	return &real;
 }
+
+void realopt_t::sync ()
+{
+	if (user.diverge)
+	{
+		real = user.opt;
+		real.fix ();
+		user.diverge = false;
+	}
+}
+
+useropt_t::useropt_t ()
+	: opt ()
+	, diverge (false)
+{}
+
+opt_t * useropt_t::operator -> ()
+{
+	diverge = true;
+	return &opt;
+}
+
+const opt_t Opt::baseopt;
 
 void Opt::set_target (opt_t::target_t tgt)
 {
-	useropt.target = tgt;
+	useropt->target = tgt;
 }
 
 void Opt::bit_vectors ()
 {
-	useropt.bFlag = true;
+	useropt->bFlag = true;
 }
 
 void Opt::start_conditions ()
 {
-	useropt.cFlag = true;
+	useropt->cFlag = true;
 }
 
 void Opt::debug_output ()
 {
-	useropt.dFlag = true;
+	useropt->dFlag = true;
 }
 
 void Opt::storable_state ()
 {
-	useropt.fFlag = true;
+	useropt->fFlag = true;
 }
 
 void Opt::flex_syntax ()
 {
-	useropt.FFlag = true;
+	useropt->FFlag = true;
 }
 
 void Opt::computed_gotos ()
 {
-	useropt.gFlag = true;
+	useropt->gFlag = true;
 }
 
 void Opt::no_debug_info ()
 {
-	useropt.iFlag = true;
+	useropt->iFlag = true;
 }
 
 void Opt::reusable ()
 {
-	useropt.rFlag = true;
+	useropt->rFlag = true;
 }
 
 void Opt::nested_ifs ()
 {
-	useropt.sFlag = true;
+	useropt->sFlag = true;
 }
 
 void Opt::no_generation_date ()
 {
-	useropt.bNoGenerationDate = true;
+	useropt->bNoGenerationDate = true;
 }
 
 void Opt::case_insensitive ()
 {
-	useropt.bCaseInsensitive = true;
+	useropt->bCaseInsensitive = true;
 }
 
 void Opt::case_inverted ()
 {
-	useropt.bCaseInverted = true;
+	useropt->bCaseInverted = true;
 }
 
 void Opt::encoding_policy (Enc::policy_t p)
 {
-	useropt.encoding.setPolicy (p);
+	useropt->encoding.setPolicy (p);
 }
 
 void Opt::input (InputAPI::type_t i)
 {
-	useropt.input_api.set (i);
+	useropt->input_api.set (i);
 }
 
 void Opt::empty_class (empty_class_policy_t p)
 {
-	useropt.empty_class_policy = p;
+	useropt->empty_class_policy = p;
 }
 
 bool Opt::source (const char * s)
@@ -390,233 +416,203 @@ bool Opt::output (const char * s)
 
 bool Opt::type_header (const char * s)
 {
-	if (useropt.header_file)
+	if (useropt->header_file)
 	{
-		error ("multiple header files: %s, %s", useropt.header_file, s);
+		error ("multiple header files: %s, %s", useropt->header_file, s);
 		return false;
 	}
 	else
 	{
-		useropt.tFlag = true;
-		useropt.header_file = s;
+		useropt->tFlag = true;
+		useropt->header_file = s;
 		return true;
 	}
 }
 
 bool Opt::ecb ()
 {
-	return useropt.encoding.set (Enc::EBCDIC);
+	return useropt->encoding.set (Enc::EBCDIC);
 }
 
 bool Opt::unicode ()
 {
-	return useropt.encoding.set(Enc::UTF32);
+	return useropt->encoding.set(Enc::UTF32);
 }
 
 bool Opt::wide_chars ()
 {
-	return useropt.encoding.set(Enc::UCS2);
+	return useropt->encoding.set(Enc::UCS2);
 }
 
 bool Opt::utf_16 ()
 {
-	return useropt.encoding.set(Enc::UTF16);
+	return useropt->encoding.set(Enc::UTF16);
 }
 
 bool Opt::utf_8 ()
 {
-	return useropt.encoding.set(Enc::UTF8);
+	return useropt->encoding.set(Enc::UTF8);
 }
 
 bool Opt::sync_mapCodeName (const std::string & key, const std::string & val)
 {
-	if (!useropt.mapCodeName.insert (std::make_pair (key, val)).second)
+	if (!useropt->mapCodeName.insert (std::make_pair (key, val)).second)
 	{
 		return false;
 	}
-	sync ();
 	return true;
 }
 
 void Opt::sync_condPrefix (const std::string & s)
 {
-	useropt.condPrefix = s;
-	sync ();
+	useropt->condPrefix = s;
 }
 
 void Opt::sync_condEnumPrefix (const std::string & s)
 {
-	useropt.condEnumPrefix = s;
-	sync ();
+	useropt->condEnumPrefix = s;
 }
 
 void Opt::sync_condDivider (const std::string & s)
 {
-	useropt.condDivider = s;
-	sync ();
+	useropt->condDivider = s;
 }
 
 void Opt::sync_condDividerParam (const std::string & s)
 {
-	useropt.condDividerParam = s;
-	sync ();
+	useropt->condDividerParam = s;
 }
 
 void Opt::sync_condGoto (const std::string & s)
 {
-	useropt.condGoto = s;
-	sync ();
+	useropt->condGoto = s;
 }
 
 void Opt::sync_condGotoParam (const std::string & s)
 {
-	useropt.condGotoParam = s;
-	sync ();
+	useropt->condGotoParam = s;
 }
 
 void Opt::sync_cGotoThreshold (uint32_t n)
 {
-	useropt.cGotoThreshold = n;
-	sync ();
+	useropt->cGotoThreshold = n;
 }
 
 void Opt::sync_bUseYYFillNaked (bool b)
 {
-	useropt.bUseYYFillNaked = b;
-	sync ();
+	useropt->bUseYYFillNaked = b;
 }
 
 void Opt::sync_yyFillLength (const std::string & s)
 {
-	useropt.yyFillLength = s;
-	useropt.bUseYYFillParam = false;
-	sync ();
+	useropt->yyFillLength = s;
+	useropt->bUseYYFillParam = false;
 }
 
 void Opt::sync_bUseYYGetConditionNaked (bool b)
 {
-	useropt.bUseYYGetConditionNaked = b;
-	sync ();
+	useropt->bUseYYGetConditionNaked = b;
 }
 
 void Opt::sync_bUseYYGetStateNaked (bool b)
 {
-	useropt.bUseYYGetStateNaked = b;
-	sync ();
+	useropt->bUseYYGetStateNaked = b;
 }
 
 void Opt::sync_yySetConditionParam (const std::string & s)
 {
-	useropt.yySetConditionParam = s;
-	useropt.bUseYYSetConditionParam = false;
-	sync ();
+	useropt->yySetConditionParam = s;
+	useropt->bUseYYSetConditionParam = false;
 }
 
 void Opt::sync_bUseYYSetStateNaked (bool b)
 {
-	useropt.bUseYYSetStateNaked = b;
-	sync ();
+	useropt->bUseYYSetStateNaked = b;
 }
 
 void Opt::sync_yySetStateParam (const std::string & s)
 {
-	useropt.yySetStateParam = s;
-	useropt.bUseYYSetStateParam = false;
-	sync ();
+	useropt->yySetStateParam = s;
+	useropt->bUseYYSetStateParam = false;
 }
 
 bool Opt::sync_encoding (Enc::type_t t)
 {
-	if (!useropt.encoding.set (t))
+	if (!useropt->encoding.set (t))
 	{
 		return false;
 	}
-	sync ();
 	return true;
 }
 
 void Opt::sync_encoding_unset (Enc::type_t t)
 {
-	useropt.encoding.unset (t);
-	sync ();
+	useropt->encoding.unset (t);
 }
 
 void Opt::sync_indString (const std::string & s)
 {
-	useropt.indString = s;
-	sync ();
+	useropt->indString = s;
 }
 
 void Opt::sync_topIndent (uint32_t n)
 {
-	useropt.topIndent = n;
-	sync ();
+	useropt->topIndent = n;
 }
 
 void Opt::sync_labelPrefix (const std::string & s)
 {
-	useropt.labelPrefix = s;
-	sync ();
+	useropt->labelPrefix = s;
 }
 
 void Opt::sync_bUseStateAbort (bool b)
 {
-	useropt.bUseStateAbort = b;
-	sync ();
+	useropt->bUseStateAbort = b;
 }
 
 void Opt::sync_bUseStateNext (bool b)
 {
-	useropt.bUseStateNext = b;
-	sync ();
+	useropt->bUseStateNext = b;
 }
 
 void Opt::sync_yybmHexTable (bool b)
 {
-	useropt.yybmHexTable = b;
-	sync ();
+	useropt->yybmHexTable = b;
 }
 
 void Opt::sync_yychConversion (bool b)
 {
-	useropt.yychConversion = b;
-	sync ();
+	useropt->yychConversion = b;
 }
 
 void Opt::sync_bEmitYYCh (bool b)
 {
-	useropt.bEmitYYCh = b;
-	sync ();
+	useropt->bEmitYYCh = b;
 }
 
 void Opt::sync_bUseYYFillCheck (bool b)
 {
-	useropt.bUseYYFillCheck = b;
-	sync ();
+	useropt->bUseYYFillCheck = b;
 }
 
 void Opt::sync_bUseYYFill (bool b)
 {
-	useropt.bUseYYFill = b;
-	sync ();
+	useropt->bUseYYFill = b;
 }
 
 void Opt::sync_bUseYYFillParam (bool b)
 {
-	useropt.bUseYYFillParam = b;
-	sync ();
+	useropt->bUseYYFillParam = b;
 }
 
 void Opt::sync_reset_encoding (const Enc & enc)
 {
-	useropt.encoding = enc;
-	sync ();
+	useropt->encoding = enc;
 }
 
 void Opt::sync_reset_mapCodeName ()
 {
-	useropt.mapCodeName.clear ();
-	sync ();
+	useropt->mapCodeName.clear ();
 }
 
 } // namespace re2c

@@ -71,6 +71,27 @@ struct opt_t
 	void fix ();
 };
 
+class useropt_t;
+class realopt_t
+{
+	opt_t real;
+	useropt_t & user;
+public:
+	realopt_t (useropt_t & opt);
+	const opt_t * operator -> ();
+	void sync ();
+};
+
+class useropt_t
+{
+	opt_t opt;
+	bool diverge;
+public:
+	useropt_t ();
+	opt_t * operator -> ();
+	friend void realopt_t::sync ();
+};
+
 struct Opt
 {
 	static const opt_t baseopt;
@@ -79,19 +100,22 @@ struct Opt
 	const char * output_file;
 
 private:
-	opt_t useropt;
-	opt_t realopt;
+	useropt_t useropt;
+	realopt_t realopt;
 
 public:
 	Opt ()
 		: source_file (NULL)
 		, output_file (NULL)
 		, useropt ()
-		, realopt ()
+		, realopt (useropt)
 	{}
 
-	void sync ();
-
+	// Inplace configurations are applied immediately when parsed.
+	// This is very bad: first, re2c behaviour is changed in the middle
+	// of the block; second, config is resynced too often (every
+	// attempt to read config that has been updated results in
+	// automatic resync). It is much better to set all options at once.
 	void set_target (opt_t::target_t tgt);
 	void bit_vectors ();
 	void start_conditions ();
@@ -116,10 +140,6 @@ public:
 	bool wide_chars ();
 	bool utf_16 ();
 	bool utf_8 ();
-
-	// Inplace configurations are applied immediately when parsed.
-	// This is very bad: first, re2c behaviour is changed in the middle
-	// of the block; second, we have to re-sync config every time.
 	bool sync_mapCodeName (const std::string & key, const std::string & val);
 	bool sync_encoding (Enc::type_t t);
 	void sync_encoding_unset (Enc::type_t t);
@@ -153,57 +173,57 @@ public:
 	void sync_reset_encoding (const Enc & enc);
 	void sync_reset_mapCodeName ();
 
-	opt_t::target_t target ()                  const { return realopt.target; }
-	bool bFlag ()                              const { return realopt.bFlag; }
-	bool cFlag ()                              const { return realopt.cFlag; }
-	bool dFlag ()                              const { return realopt.dFlag; }
-	bool fFlag ()                              const { return realopt.fFlag; }
-	bool FFlag ()                              const { return realopt.FFlag; }
-	bool gFlag ()                              const { return realopt.gFlag; }
-	bool iFlag ()                              const { return realopt.iFlag; }
-	bool rFlag ()                              const { return realopt.rFlag; }
-	bool sFlag ()                              const { return realopt.sFlag; }
-	bool tFlag ()                              const { return realopt.tFlag; }
-	const char * header_file ()                const { return realopt.header_file; }
-	bool bNoGenerationDate ()                  const { return realopt.bNoGenerationDate; }
-	bool bEmitYYCh ()                          const { return realopt.bEmitYYCh; }
-	std::string yychConversion () const
+	opt_t::target_t target ()                  { return realopt->target; }
+	bool bFlag ()                              { return realopt->bFlag; }
+	bool cFlag ()                              { return realopt->cFlag; }
+	bool dFlag ()                              { return realopt->dFlag; }
+	bool fFlag ()                              { return realopt->fFlag; }
+	bool FFlag ()                              { return realopt->FFlag; }
+	bool gFlag ()                              { return realopt->gFlag; }
+	bool iFlag ()                              { return realopt->iFlag; }
+	bool rFlag ()                              { return realopt->rFlag; }
+	bool sFlag ()                              { return realopt->sFlag; }
+	bool tFlag ()                              { return realopt->tFlag; }
+	const char * header_file ()                { return realopt->header_file; }
+	bool bNoGenerationDate ()                  { return realopt->bNoGenerationDate; }
+	bool bEmitYYCh ()                          { return realopt->bEmitYYCh; }
+	std::string yychConversion ()
 	{
-		return realopt.yychConversion
-			? "(" + realopt.mapCodeName["YYCTYPE"] + ")"
+		return realopt->yychConversion
+			? "(" + realopt->mapCodeName["YYCTYPE"] + ")"
 			: "";
 	}
-	bool bUseStateNext ()                      const { return realopt.bUseStateNext; }
-	bool bUseYYFill ()                         const { return realopt.bUseYYFill; }
-	bool bUseYYFillParam ()                    const { return realopt.bUseYYFillParam; }
-	bool bUseYYFillCheck ()                    const { return realopt.bUseYYFillCheck; }
-	bool bUseYYFillNaked ()                    const { return realopt.bUseYYFillNaked; }
-	bool bUseYYSetConditionParam ()            const { return realopt.bUseYYSetConditionParam; }
-	bool bUseYYGetConditionNaked ()            const { return realopt.bUseYYGetConditionNaked; }
-	bool bUseYYSetStateParam ()                const { return realopt.bUseYYSetStateParam; }
-	bool bUseYYSetStateNaked ()                const { return realopt.bUseYYSetStateNaked; }
-	bool bUseYYGetStateNaked ()                const { return realopt.bUseYYGetStateNaked; }
-	bool yybmHexTable ()                       const { return realopt.yybmHexTable; }
-	bool bUseStateAbort ()                     const { return realopt.bUseStateAbort; }
-	bool bCaseInsensitive ()                   const { return realopt.bCaseInsensitive; }
-	bool bCaseInverted ()                      const { return realopt.bCaseInverted; }
-	uint32_t cGotoThreshold ()                 const { return realopt.cGotoThreshold; }
-	uint32_t topIndent ()                      const { return realopt.topIndent; }
-	const std::string & indString ()           const { return realopt.indString; }
-	const std::string & labelPrefix ()         const { return realopt.labelPrefix; }
-	const std::string & condPrefix ()          const { return realopt.condPrefix; }
-	const std::string & condEnumPrefix ()      const { return realopt.condEnumPrefix; }
-	const std::string & condDivider ()         const { return realopt.condDivider; }
-	const std::string & condDividerParam ()    const { return realopt.condDividerParam; }
-	const std::string & condGoto ()            const { return realopt.condGoto; }
-	const std::string & condGotoParam ()       const { return realopt.condGotoParam; }
-	const std::string & yyFillLength ()        const { return realopt.yyFillLength; }
-	const std::string & yySetConditionParam () const { return realopt.yySetConditionParam; }
-	const std::string & yySetStateParam ()     const { return realopt.yySetStateParam; }
-	const CodeNames & mapCodeName ()           const { return realopt.mapCodeName; }
-	const Enc & encoding ()                    const { return realopt.encoding; }
-	const InputAPI & input_api ()              const { return realopt.input_api; }
-	empty_class_policy_t empty_class_policy () const { return realopt.empty_class_policy; }
+	bool bUseStateNext ()                      { return realopt->bUseStateNext; }
+	bool bUseYYFill ()                         { return realopt->bUseYYFill; }
+	bool bUseYYFillParam ()                    { return realopt->bUseYYFillParam; }
+	bool bUseYYFillCheck ()                    { return realopt->bUseYYFillCheck; }
+	bool bUseYYFillNaked ()                    { return realopt->bUseYYFillNaked; }
+	bool bUseYYSetConditionParam ()            { return realopt->bUseYYSetConditionParam; }
+	bool bUseYYGetConditionNaked ()            { return realopt->bUseYYGetConditionNaked; }
+	bool bUseYYSetStateParam ()                { return realopt->bUseYYSetStateParam; }
+	bool bUseYYSetStateNaked ()                { return realopt->bUseYYSetStateNaked; }
+	bool bUseYYGetStateNaked ()                { return realopt->bUseYYGetStateNaked; }
+	bool yybmHexTable ()                       { return realopt->yybmHexTable; }
+	bool bUseStateAbort ()                     { return realopt->bUseStateAbort; }
+	bool bCaseInsensitive ()                   { return realopt->bCaseInsensitive; }
+	bool bCaseInverted ()                      { return realopt->bCaseInverted; }
+	uint32_t cGotoThreshold ()                 { return realopt->cGotoThreshold; }
+	uint32_t topIndent ()                      { return realopt->topIndent; }
+	const std::string & indString ()           { return realopt->indString; }
+	const std::string & labelPrefix ()         { return realopt->labelPrefix; }
+	const std::string & condPrefix ()          { return realopt->condPrefix; }
+	const std::string & condEnumPrefix ()      { return realopt->condEnumPrefix; }
+	const std::string & condDivider ()         { return realopt->condDivider; }
+	const std::string & condDividerParam ()    { return realopt->condDividerParam; }
+	const std::string & condGoto ()            { return realopt->condGoto; }
+	const std::string & condGotoParam ()       { return realopt->condGotoParam; }
+	const std::string & yyFillLength ()        { return realopt->yyFillLength; }
+	const std::string & yySetConditionParam () { return realopt->yySetConditionParam; }
+	const std::string & yySetStateParam ()     { return realopt->yySetStateParam; }
+	const CodeNames & mapCodeName ()           { return realopt->mapCodeName; }
+	const Enc & encoding ()                    { return realopt->encoding; }
+	const InputAPI & input_api ()              { return realopt->input_api; }
+	empty_class_policy_t empty_class_policy () { return realopt->empty_class_policy; }
 
 	FORBID_COPY (Opt);
 };

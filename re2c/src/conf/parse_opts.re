@@ -226,8 +226,6 @@ opt_empty_class:
 */
 
 end:
-	opts.sync ();
-
 	if (!opts.source_file)
 	{
 		error ("no source file");
