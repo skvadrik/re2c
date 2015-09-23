@@ -10,7 +10,7 @@ namespace re2c
 class CodeNames: public std::map<std::string, std::string>
 {
 public:
-	std::string& operator [] (const char * what);
+	std::string operator [] (const char * what) const;
 };
 
 } // end namespace re2c

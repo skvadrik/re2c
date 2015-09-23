@@ -3,18 +3,12 @@
 namespace re2c
 {
 
-std::string& CodeNames::operator [] (const char * what)
+std::string CodeNames::operator [] (const char * what) const
 {
-	CodeNames::iterator it = find(std::string(what));
-	
-	if (it == end())
-	{
-		return insert(std::make_pair(std::string(what), std::string(what))).first->second;
-	}
-	else
-	{
-		return it->second;
-	}
+	CodeNames::const_iterator it = find (what);
+	return it == end ()
+		? what
+		: it->second;
 }
 
 } // end namespace re2c

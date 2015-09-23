@@ -225,10 +225,11 @@ opt_empty_class:
 */
 
 end:
-	if (!opts.apply ())
+	if (!opts.check ())
 	{
 		return EXIT_FAIL;
 	}
+	opts.sync ();
 
 	if (!opts.source_file)
 	{

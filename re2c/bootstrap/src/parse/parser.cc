@@ -123,7 +123,7 @@ static symbol_table_t symbol_table;
 
 void context_check(CondList *clist)
 {
-	if (!opts.cFlag)
+	if (!opts.cFlag ())
 	{
 		delete clist;
 		in->fatal("conditions are only allowed when using -c switch");
@@ -662,13 +662,13 @@ static const yytype_int8 yyrhs[] =
 static const yytype_uint16 yyrline[] =
 {
        0,   242,   242,   244,   248,   252,   261,   270,   274,   278,
-     287,   292,   297,   302,   307,   312,   317,   325,   329,   335,
-     339,   343,   349,   353,   359,   372,   377,   385,   390,   394,
-     399,   403,   407,   411,   417,   421,   425,   429,   436,   453,
-     462,   466,   472,   477,   483,   487,   502,   519,   524,   530,
-     536,   554,   574,   580,   588,   591,   598,   604,   614,   617,
-     625,   628,   635,   639,   646,   650,   657,   661,   668,   672,
-     687,   707,   711,   715,   719,   726,   736,   740
+     287,   292,   297,   302,   307,   312,   317,   325,   329,   334,
+     338,   342,   347,   351,   356,   369,   374,   382,   387,   391,
+     396,   400,   404,   408,   412,   416,   420,   424,   431,   448,
+     457,   461,   467,   472,   478,   482,   497,   514,   519,   525,
+     531,   549,   569,   575,   583,   586,   593,   599,   609,   612,
+     620,   623,   630,   634,   641,   645,   652,   656,   663,   667,
+     682,   702,   706,   710,   714,   721,   731,   735
 };
 #endif
 
@@ -1759,7 +1759,7 @@ yyreduce:
   case 9:
 
     {
-		if (!opts.mapCodeName.insert (std::make_pair (*(yyvsp[(1) - (3)].str), *(yyvsp[(2) - (3)].str))).second)
+		if (!opts.sync_mapCodeName (*(yyvsp[(1) - (3)].str), *(yyvsp[(2) - (3)].str)))
 		{
 			in->fatalf ("configuration '%s' is already set and cannot be changed", (yyvsp[(1) - (3)].str)->c_str ());
 		}
@@ -1771,7 +1771,7 @@ yyreduce:
   case 10:
 
     {
-		opts.condPrefix = *(yyvsp[(2) - (3)].str);
+		opts.sync_condPrefix (*(yyvsp[(2) - (3)].str));
 		delete (yyvsp[(2) - (3)].str);
 	;}
     break;
@@ -1779,7 +1779,7 @@ yyreduce:
   case 11:
 
     {
-		opts.condEnumPrefix = *(yyvsp[(2) - (3)].str);
+		opts.sync_condEnumPrefix (*(yyvsp[(2) - (3)].str));
 		delete (yyvsp[(2) - (3)].str);
 	;}
     break;
@@ -1787,7 +1787,7 @@ yyreduce:
   case 12:
 
     {
-		opts.condDivider = *(yyvsp[(2) - (3)].str);
+		opts.sync_condDivider (*(yyvsp[(2) - (3)].str));
 		delete (yyvsp[(2) - (3)].str);
 	;}
     break;
@@ -1795,7 +1795,7 @@ yyreduce:
   case 13:
 
     {
-		opts.condDividerParam = *(yyvsp[(2) - (3)].str);
+		opts.sync_condDividerParam (*(yyvsp[(2) - (3)].str));
 		delete (yyvsp[(2) - (3)].str);
 	;}
     break;
@@ -1803,7 +1803,7 @@ yyreduce:
   case 14:
 
     {
-		opts.condGoto = *(yyvsp[(2) - (3)].str);
+		opts.sync_condGoto (*(yyvsp[(2) - (3)].str));
 		delete (yyvsp[(2) - (3)].str);
 	;}
     break;
@@ -1811,7 +1811,7 @@ yyreduce:
   case 15:
 
     {
-		opts.condGotoParam = *(yyvsp[(2) - (3)].str);
+		opts.sync_condGotoParam (*(yyvsp[(2) - (3)].str));
 		delete (yyvsp[(2) - (3)].str);
 	;}
     break;
@@ -1823,22 +1823,21 @@ yyreduce:
 		{
 			in->fatal ("configuration 'cgoto:threshold' must be nonnegative");
 		}
-		opts.cGotoThreshold = static_cast<uint32_t> ((yyvsp[(2) - (3)].num));
+		opts.sync_cGotoThreshold (static_cast<uint32_t> ((yyvsp[(2) - (3)].num)));
 	;}
     break;
 
   case 17:
 
     {
-		opts.bUseYYFillNaked = (yyvsp[(2) - (3)].num) != 0;
+		opts.sync_bUseYYFillNaked ((yyvsp[(2) - (3)].num) != 0);
 	;}
     break;
 
   case 18:
 
     {
-		opts.yyFillLength = *(yyvsp[(2) - (3)].str);
-		opts.bUseYYFillParam = false;
+		opts.sync_yyFillLength (*(yyvsp[(2) - (3)].str));
 		delete (yyvsp[(2) - (3)].str);
 	;}
     break;
@@ -1846,22 +1845,21 @@ yyreduce:
   case 19:
 
     {
-		opts.bUseYYGetConditionNaked = (yyvsp[(2) - (3)].num) != 0;
+		opts.sync_bUseYYGetConditionNaked ((yyvsp[(2) - (3)].num) != 0);
 	;}
     break;
 
   case 20:
 
     {
-		opts.bUseYYGetStateNaked = (yyvsp[(2) - (3)].num) != 0;
+		opts.sync_bUseYYGetStateNaked ((yyvsp[(2) - (3)].num) != 0);
 	;}
     break;
 
   case 21:
 
     {
-		opts.yySetConditionParam = *(yyvsp[(2) - (3)].str);
-		opts.bUseYYSetConditionParam = false;
+		opts.sync_yySetConditionParam (*(yyvsp[(2) - (3)].str));
 		delete (yyvsp[(2) - (3)].str);
 	;}
     break;
@@ -1869,15 +1867,14 @@ yyreduce:
   case 22:
 
     {
-		opts.bUseYYSetStateNaked = (yyvsp[(2) - (3)].num) != 0;
+		opts.sync_bUseYYSetStateNaked ((yyvsp[(2) - (3)].num) != 0);
 	;}
     break;
 
   case 23:
 
     {
-		opts.yySetStateParam = *(yyvsp[(2) - (3)].str);
-		opts.bUseYYSetStateParam = false;
+		opts.sync_yySetStateParam (*(yyvsp[(2) - (3)].str));
 		delete (yyvsp[(2) - (3)].str);
 	;}
     break;
@@ -1887,13 +1884,13 @@ yyreduce:
     {
 		if ((yyvsp[(2) - (3)].num) == 0)
 		{
-			opts.encoding.unset ((yyvsp[(1) - (3)].enc));
+			opts.sync_encoding_unset ((yyvsp[(1) - (3)].enc));
 		}
-		else if (!opts.encoding.set ((yyvsp[(1) - (3)].enc)))
+		else if (!opts.sync_encoding ((yyvsp[(1) - (3)].enc)))
 		{
 			in->fatalf ("Cannot set %s encoding: please reset %s encoding first"
 				, Enc::name ((yyvsp[(1) - (3)].enc))
-				, Enc::name (opts.encoding.type ()));
+				, Enc::name (opts.encoding ().type ()));
 		}
 	;}
     break;
@@ -1901,7 +1898,7 @@ yyreduce:
   case 25:
 
     {
-		opts.indString = *(yyvsp[(2) - (3)].str);
+		opts.sync_indString (*(yyvsp[(2) - (3)].str));
 		delete (yyvsp[(2) - (3)].str);
 	;}
     break;
@@ -1913,14 +1910,14 @@ yyreduce:
 		{
 			in->fatal ("configuration 'indent:top' must be nonnegative");
 		}
-		opts.topIndent = static_cast<uint32_t> ((yyvsp[(2) - (3)].num));
+		opts.sync_topIndent (static_cast<uint32_t> ((yyvsp[(2) - (3)].num)));
 	;}
     break;
 
   case 27:
 
     {
-		opts.labelPrefix = *(yyvsp[(2) - (3)].str);
+		opts.sync_labelPrefix (*(yyvsp[(2) - (3)].str));
 		delete (yyvsp[(2) - (3)].str);
 	;}
     break;
@@ -1943,65 +1940,63 @@ yyreduce:
   case 30:
 
     {
-		opts.bUseStateAbort = (yyvsp[(2) - (3)].num) != 0;
+		opts.sync_bUseStateAbort ((yyvsp[(2) - (3)].num) != 0);
 	;}
     break;
 
   case 31:
 
     {
-		opts.bUseStateNext = (yyvsp[(2) - (3)].num) != 0;
+		opts.sync_bUseStateNext ((yyvsp[(2) - (3)].num) != 0);
 	;}
     break;
 
   case 32:
 
     {
-		opts.yybmHexTable = (yyvsp[(2) - (3)].num) != 0;
+		opts.sync_yybmHexTable ((yyvsp[(2) - (3)].num) != 0);
 	;}
     break;
 
   case 33:
 
     {
-		opts.yychConversion = (yyvsp[(2) - (3)].num) == 0
-			? ""
-			: "(" + opts.mapCodeName["YYCTYPE"] + ")";
+		opts.sync_yychConversion ((yyvsp[(2) - (3)].num) != 0);
 	;}
     break;
 
   case 34:
 
     {
-		opts.bEmitYYCh = (yyvsp[(2) - (3)].num) != 0;
+		opts.sync_bEmitYYCh ((yyvsp[(2) - (3)].num) != 0);
 	;}
     break;
 
   case 35:
 
     {
-		opts.bUseYYFillCheck = (yyvsp[(2) - (3)].num) != 0;
+		opts.sync_bUseYYFillCheck ((yyvsp[(2) - (3)].num) != 0);
 	;}
     break;
 
   case 36:
 
     {
-		opts.bUseYYFill = (yyvsp[(2) - (3)].num) != 0;
+		opts.sync_bUseYYFill ((yyvsp[(2) - (3)].num) != 0);
 	;}
     break;
 
   case 37:
 
     {
-		opts.bUseYYFillParam = (yyvsp[(2) - (3)].num) != 0;
+		opts.sync_bUseYYFillParam ((yyvsp[(2) - (3)].num) != 0);
 	;}
     break;
 
   case 38:
 
     {
-			if (opts.cFlag)
+			if (opts.cFlag ())
 			{
 				in->fatal("condition or '<*>' required when using -c switch");
 			}
@@ -2021,7 +2016,7 @@ yyreduce:
   case 39:
 
     {
-			if (opts.cFlag)
+			if (opts.cFlag ())
 				in->fatal("condition or '<*>' required when using -c switch");
 			if (ruleDefault != NULL)
 				in->fatal("code to default rule is already defined");
@@ -2633,12 +2628,12 @@ void parse(Scanner& i, Output & o)
 
 	o.source.write_version_time ();
 	o.source.write_line_info (in->get_cline (), in->get_fname ().c_str ());
-	if (opts.flag_skeleton)
+	if (opts.flag_skeleton ())
 	{
 		Skeleton::emit_prolog (o.source);
 	}
 
-	Enc encodingOld = opts.encoding;
+	Enc encodingOld = opts.encoding ();
 	
 	while ((parseMode = i.echo()) != Scanner::Stop)
 	{
@@ -2649,7 +2644,7 @@ void parse(Scanner& i, Output & o)
 		i.save_state(curr_state);
 		foundRules = false;
 
-		if (opts.rFlag && parseMode == Scanner::Rules && dfa_map.size())
+		if (opts.rFlag () && parseMode == Scanner::Rules && dfa_map.size())
 		{
 			in->fatal("cannot have a second 'rules:re2c' block");
 		}
@@ -2674,9 +2669,9 @@ void parse(Scanner& i, Output & o)
 		in->set_in_parse(true);
 		yyparse();
 		in->set_in_parse(false);
-		if (opts.rFlag && parseMode == Scanner::Reuse)
+		if (opts.rFlag () && parseMode == Scanner::Reuse)
 		{
-			if (foundRules || opts.encoding != encodingOld)
+			if (foundRules || opts.encoding () != encodingOld)
 			{
 				// Re-parse rules
 				parseMode = Scanner::Parse;
@@ -2698,10 +2693,11 @@ void parse(Scanner& i, Output & o)
 				yyparse();
 				in->set_in_parse(false);
 			}
-			encodingOld = opts.encoding;
+			encodingOld = opts.encoding ();
 		}
 		o.source.set_block_line (in->get_cline ());
-		if (opts.cFlag)
+		uint32_t ind = opts.topIndent ();
+		if (opts.cFlag ())
 		{
 			RegExpMap::iterator it;
 			SetupMap::const_iterator itRuleSetup;
@@ -2783,11 +2779,11 @@ void parse(Scanner& i, Output & o)
 						it->second = it->second ? mkAlt (def_rule, it->second) : def_rule;
 					}
 
-					dfa_map[it->first] = genCode(it->second, o, it->first, opts.encoding.nCodeUnits ());
+					dfa_map[it->first] = genCode(it->second, o, it->first, opts.encoding ().nCodeUnits ());
 				}
 				if (parseMode != Scanner::Rules && dfa_map.find(it->first) != dfa_map.end())
 				{
-					dfa_map[it->first]->emit(o, opts.topIndent, !--nCount, bPrologBrace);
+					dfa_map[it->first]->emit(o, ind, !--nCount, bPrologBrace);
 				}
 			}
 		}
@@ -2810,20 +2806,20 @@ void parse(Scanner& i, Output & o)
 			{
 				if (parseMode != Scanner::Reuse)
 				{
-					dfa_map[""] = genCode(spec, o, "", opts.encoding.nCodeUnits ());
+					dfa_map[""] = genCode(spec, o, "", opts.encoding ().nCodeUnits ());
 				}
 				if (parseMode != Scanner::Rules && dfa_map.find("") != dfa_map.end())
 				{
-					dfa_map[""]->emit(o, opts.topIndent, 0, bPrologBrace);
+					dfa_map[""]->emit(o, ind, 0, bPrologBrace);
 				}
 			}
 		}
 		o.source.write_line_info (in->get_cline (), in->get_fname ().c_str ());
 		/* restore original char handling mode*/
-		opts.encoding = encodingOld;
+		opts.sync_reset_encoding (encodingOld);
 	}
 
-	if (opts.cFlag)
+	if (opts.cFlag ())
 	{
 		SetupMap::const_iterator itRuleSetup;
 		for (itRuleSetup = ruleSetupMap.begin(); itRuleSetup != ruleSetupMap.end(); ++itRuleSetup)
@@ -2845,7 +2841,7 @@ void parse(Scanner& i, Output & o)
 		}
 	}
 
-	if (opts.flag_skeleton)
+	if (opts.flag_skeleton ())
 	{
 		Skeleton::emit_epilog (o.source, o.names);
 	}

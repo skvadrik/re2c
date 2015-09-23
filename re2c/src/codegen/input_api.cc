@@ -17,153 +17,153 @@ void InputAPI::set (type_t t)
 	type_ = t;
 }
 
-std::string InputAPI::expr_peek ()
+std::string InputAPI::expr_peek () const
 {
 	std::string s;
 	switch (type_)
 	{
 		case DEFAULT:
-			s = "*" + opts.mapCodeName["YYCURSOR"];
+			s = "*" + opts.mapCodeName ()["YYCURSOR"];
 			break;
 		case CUSTOM:
-			s = opts.mapCodeName["YYPEEK"] + " ()";
+			s = opts.mapCodeName ()["YYPEEK"] + " ()";
 			break;
 	}
 	return s;
 }
 
-std::string InputAPI::expr_peek_save ()
+std::string InputAPI::expr_peek_save () const
 {
-	return opts.mapCodeName["yych"] + " = " + opts.yychConversion + expr_peek ();
+	return opts.mapCodeName ()["yych"] + " = " + opts.yychConversion () + expr_peek ();
 }
 
-std::string InputAPI::stmt_peek (uint32_t ind)
+std::string InputAPI::stmt_peek (uint32_t ind) const
 {
 	return indent (ind) + expr_peek_save () + ";\n";
 }
 
-std::string InputAPI::stmt_skip (uint32_t ind)
+std::string InputAPI::stmt_skip (uint32_t ind) const
 {
 	std::string s;
 	switch (type_)
 	{
 		case DEFAULT:
-			s = "++" + opts.mapCodeName["YYCURSOR"];
+			s = "++" + opts.mapCodeName ()["YYCURSOR"];
 			break;
 		case CUSTOM:
-			s = opts.mapCodeName["YYSKIP"] + " ()";
+			s = opts.mapCodeName ()["YYSKIP"] + " ()";
 			break;
 	}
 	return indent (ind) + s + ";\n";
 }
 
-std::string InputAPI::stmt_backup (uint32_t ind)
+std::string InputAPI::stmt_backup (uint32_t ind) const
 {
 	std::string s;
 	switch (type_)
 	{
 		case DEFAULT:
-			s = opts.mapCodeName["YYMARKER"] + " = " + opts.mapCodeName["YYCURSOR"];
+			s = opts.mapCodeName ()["YYMARKER"] + " = " + opts.mapCodeName ()["YYCURSOR"];
 			break;
 		case CUSTOM:
-			s = opts.mapCodeName["YYBACKUP"] + " ()";
+			s = opts.mapCodeName ()["YYBACKUP"] + " ()";
 			break;
 	}
 	return indent (ind) + s + ";\n";
 }
 
-std::string InputAPI::stmt_backupctx (uint32_t ind)
+std::string InputAPI::stmt_backupctx (uint32_t ind) const
 {
 	std::string s;
 	switch (type_)
 	{
 		case DEFAULT:
 			// backward compatibility: '+1' here instead of '++YYCURSOR;' in stmt_restorectx
-			s = opts.mapCodeName["YYCTXMARKER"] + " = " + opts.mapCodeName["YYCURSOR"] + " + 1";
+			s = opts.mapCodeName ()["YYCTXMARKER"] + " = " + opts.mapCodeName ()["YYCURSOR"] + " + 1";
 			break;
 		case CUSTOM:
-			s = opts.mapCodeName["YYBACKUPCTX"] + " ()";
+			s = opts.mapCodeName ()["YYBACKUPCTX"] + " ()";
 			break;
 	}
 	return indent (ind) + s + ";\n";
 }
 
-std::string InputAPI::stmt_restore (uint32_t ind)
+std::string InputAPI::stmt_restore (uint32_t ind) const
 {
 	std::string s;
 	switch (type_)
 	{
 		case DEFAULT:
-			s = opts.mapCodeName["YYCURSOR"] + " = " + opts.mapCodeName["YYMARKER"];
+			s = opts.mapCodeName ()["YYCURSOR"] + " = " + opts.mapCodeName ()["YYMARKER"];
 			break;
 		case CUSTOM:
-			s = opts.mapCodeName["YYRESTORE"] + " ()";
+			s = opts.mapCodeName ()["YYRESTORE"] + " ()";
 			break;
 	}
 	return indent (ind) + s + ";\n";
 }
 
-std::string InputAPI::stmt_restorectx (uint32_t ind)
+std::string InputAPI::stmt_restorectx (uint32_t ind) const
 {
 	std::string s;
 	switch (type_)
 	{
 		case DEFAULT:
 			// backward compatibility: 'no ++YYCURSOR;' here; instead '+1' in stmt_backupctx
-			s = indent (ind) + opts.mapCodeName["YYCURSOR"] + " = " + opts.mapCodeName["YYCTXMARKER"] + ";\n";
+			s = indent (ind) + opts.mapCodeName ()["YYCURSOR"] + " = " + opts.mapCodeName ()["YYCTXMARKER"] + ";\n";
 			break;
 		case CUSTOM:
-			s = indent (ind) + opts.mapCodeName["YYRESTORECTX"] + " ();\n" + stmt_skip (ind);
+			s = indent (ind) + opts.mapCodeName ()["YYRESTORECTX"] + " ();\n" + stmt_skip (ind);
 			break;
 	}
 	return s;
 }
 
-std::string InputAPI::stmt_skip_peek (uint32_t ind)
+std::string InputAPI::stmt_skip_peek (uint32_t ind) const
 {
 	return type_ == DEFAULT
-		? indent (ind) + opts.mapCodeName["yych"] + " = " + opts.yychConversion + "*++" + opts.mapCodeName["YYCURSOR"] + ";\n"
+		? indent (ind) + opts.mapCodeName ()["yych"] + " = " + opts.yychConversion () + "*++" + opts.mapCodeName ()["YYCURSOR"] + ";\n"
 		: stmt_skip (ind) + stmt_peek (ind);
 }
 
-std::string InputAPI::stmt_skip_backup (uint32_t ind)
+std::string InputAPI::stmt_skip_backup (uint32_t ind) const
 {
 	return type_ == DEFAULT
-		? indent (ind) + opts.mapCodeName["YYMARKER"] + " = ++" + opts.mapCodeName["YYCURSOR"] + ";\n"
+		? indent (ind) + opts.mapCodeName ()["YYMARKER"] + " = ++" + opts.mapCodeName ()["YYCURSOR"] + ";\n"
 		: stmt_skip (ind) + stmt_backup (ind);
 }
 
-std::string InputAPI::stmt_backup_peek (uint32_t ind)
+std::string InputAPI::stmt_backup_peek (uint32_t ind) const
 {
 	return type_ == DEFAULT
-		? indent (ind) + opts.mapCodeName["yych"] + " = " + opts.yychConversion + "*(" + opts.mapCodeName["YYMARKER"] + " = " + opts.mapCodeName["YYCURSOR"] + ");\n"
+		? indent (ind) + opts.mapCodeName ()["yych"] + " = " + opts.yychConversion () + "*(" + opts.mapCodeName ()["YYMARKER"] + " = " + opts.mapCodeName ()["YYCURSOR"] + ");\n"
 		: stmt_backup (ind) + stmt_peek (ind);
 }
 
-std::string InputAPI::stmt_skip_backup_peek (uint32_t ind)
+std::string InputAPI::stmt_skip_backup_peek (uint32_t ind) const
 {
 	return type_ == DEFAULT
-		? indent (ind) + opts.mapCodeName["yych"] + " = " + opts.yychConversion + "*(" + opts.mapCodeName["YYMARKER"] + " = ++" + opts.mapCodeName["YYCURSOR"] + ");\n"
+		? indent (ind) + opts.mapCodeName ()["yych"] + " = " + opts.yychConversion () + "*(" + opts.mapCodeName ()["YYMARKER"] + " = ++" + opts.mapCodeName ()["YYCURSOR"] + ");\n"
 		: stmt_skip (ind) + stmt_backup (ind) + stmt_peek (ind);
 }
 
-std::string InputAPI::expr_lessthan_one ()
+std::string InputAPI::expr_lessthan_one () const
 {
 	return type_ == DEFAULT
-		? opts.mapCodeName["YYLIMIT"] + " <= " + opts.mapCodeName["YYCURSOR"]
+		? opts.mapCodeName ()["YYLIMIT"] + " <= " + opts.mapCodeName ()["YYCURSOR"]
 		: expr_lessthan (1);
 }
 
-std::string InputAPI::expr_lessthan (uint32_t n)
+std::string InputAPI::expr_lessthan (uint32_t n) const
 {
 	std::ostringstream s;
 	switch (type_)
 	{
 		case DEFAULT:
-			s << "(" << opts.mapCodeName["YYLIMIT"] << " - " << opts.mapCodeName["YYCURSOR"] << ") < " << n;
+			s << "(" << opts.mapCodeName ()["YYLIMIT"] << " - " << opts.mapCodeName ()["YYCURSOR"] << ") < " << n;
 			break;
 		case CUSTOM:
-			s << opts.mapCodeName["YYLESSTHAN"] << " (" << n << ")";
+			s << opts.mapCodeName ()["YYLESSTHAN"] << " (" << n << ")";
 			break;
 	}
 	return s.str ();

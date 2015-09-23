@@ -35,7 +35,7 @@ char hexCh(uint32_t c)
 
 void prtChOrHex(std::ostream& o, uint32_t c)
 {
-	if (opts.encoding.type () != Enc::EBCDIC
+	if (opts.encoding ().type () != Enc::EBCDIC
 		&& (is_print (c) || is_space (c)))
 	{
 		o << '\'';
@@ -51,7 +51,7 @@ void prtChOrHex(std::ostream& o, uint32_t c)
 void prtHex(std::ostream& o, uint32_t c)
 {
 	o << "0x";
-	const uint32_t cunit_size = opts.encoding.szCodeUnit ();
+	const uint32_t cunit_size = opts.encoding ().szCodeUnit ();
 	if (cunit_size >= 4)
 	{
 		o << hexCh (c >> 28u)
@@ -73,39 +73,39 @@ void prtCh(std::ostream& o, uint32_t c)
 	switch (c)
 	{
 		case '\'':
-		o << (opts.DFlag ? "'" : "\\'");
+		o << (opts.DFlag () ? "'" : "\\'");
 		break;
 
 		case '"':
-		o << (opts.DFlag ? "\\\"" : "\"");
+		o << (opts.DFlag () ? "\\\"" : "\"");
 		break;
 
 		case '\n':
-		o << (opts.DFlag ? "\\\\n" : "\\n");
+		o << (opts.DFlag () ? "\\\\n" : "\\n");
 		break;
 
 		case '\t':
-		o << (opts.DFlag ? "\\\\t" : "\\t");
+		o << (opts.DFlag () ? "\\\\t" : "\\t");
 		break;
 
 		case '\v':
-		o << (opts.DFlag ? "\\\\v" : "\\v");
+		o << (opts.DFlag () ? "\\\\v" : "\\v");
 		break;
 
 		case '\b':
-		o << (opts.DFlag ? "\\\\b" : "\\b");
+		o << (opts.DFlag () ? "\\\\b" : "\\b");
 		break;
 
 		case '\r':
-		o << (opts.DFlag ? "\\\\r" : "\\r");
+		o << (opts.DFlag () ? "\\\\r" : "\\r");
 		break;
 
 		case '\f':
-		o << (opts.DFlag ? "\\\\f" : "\\f");
+		o << (opts.DFlag () ? "\\\\f" : "\\f");
 		break;
 
 		case '\a':
-		o << (opts.DFlag ? "\\\\a" :"\\a");
+		o << (opts.DFlag () ? "\\\\a" :"\\a");
 		break;
 
 		case '\\':
@@ -120,7 +120,7 @@ void prtCh(std::ostream& o, uint32_t c)
 
 void prtChOrHexForSpan(std::ostream& o, uint32_t c)
 {
-	if (opts.encoding.type () != Enc::EBCDIC
+	if (opts.encoding ().type () != Enc::EBCDIC
 		&& is_print (c)
 		&& (c != ']'))
 	{

@@ -32,7 +32,7 @@ static void exact_uint (OutputFile & o, size_t width)
 
 void Skeleton::emit_prolog (OutputFile & o)
 {
-	const std::string & ind = opts.indString;
+	const std::string & ind = opts.indString ();
 
 	o << "\n" << "#include <stdio.h>";
 	o << "\n" << "#include <stdlib.h> /* malloc, free */";
@@ -96,11 +96,11 @@ void Skeleton::emit_start
 	, bool accept
 	) const
 {
-	const std::string & ind = opts.indString;
+	const std::string & ind = opts.indString ();
 	const uint32_t default_rule = maxkey ();
 
 	o << "\n" << "#define YYCTYPE ";
-	exact_uint (o, opts.encoding.szCodeUnit ());
+	exact_uint (o, opts.encoding ().szCodeUnit ());
 	o << "\n" << "#define YYKEYTYPE ";
 	exact_uint (o, sizeof_key);
 	o << "\n" << "#define YYPEEK() *cursor";
@@ -221,9 +221,9 @@ void Skeleton::emit_start
 	{
 		o << "\n" << ind << ind << "unsigned int yyaccept = 0;";
 	}
-	if (opts.bFlag && BitMap::first)
+	if (opts.bFlag () && BitMap::first)
 	{
-		BitMap::gen (o, 2, 0, std::min (0xFFu, opts.encoding.nCodeUnits ()));
+		BitMap::gen (o, 2, 0, std::min (0xFFu, opts.encoding ().nCodeUnits ()));
 	}
 	o << "\n";
 }
@@ -234,7 +234,7 @@ void Skeleton::emit_end
 	, bool backupctx
 	) const
 {
-	const std::string & ind = opts.indString;
+	const std::string & ind = opts.indString ();
 
 	o << "\n" << ind << "}";
 	o << "\n" << ind << "if (status == 0)";
@@ -285,10 +285,10 @@ void Skeleton::emit_epilog (OutputFile & o, const std::vector<std::string> & nam
 	const size_t names_count = names.size ();
 	for (size_t i = 0; i < names_count; ++i)
 	{
-		o << "\n" << opts.indString << "if (lex_" << names[i] << " () != 0) return 1;";
+		o << "\n" << opts.indString () << "if (lex_" << names[i] << " () != 0) return 1;";
 	}
 
-	o << "\n" << opts.indString << "return 0;";
+	o << "\n" << opts.indString () << "return 0;";
 	o << "\n" << "}";
 	o << "\n";
 }

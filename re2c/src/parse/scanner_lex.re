@@ -70,11 +70,11 @@ echo:
 /*!re2c
    beginRE     =  "%{" | "/*!re2c";
    beginRE     {
-					if (opts.rFlag)
+					if (opts.rFlag ())
 					{
 						fatal("found standard 're2c' block while using -r flag");
 					}
-					if (!(opts.DFlag || opts.flag_skeleton))
+					if (!(opts.DFlag () || opts.flag_skeleton ()))
 					{
 						const size_t lexeme_len = cur[-1] == '{'
 							? sizeof ("%{") - 1
@@ -85,9 +85,9 @@ echo:
 					return Parse;
 				}
 	"/*!rules:re2c"	{
-					if (opts.rFlag)
+					if (opts.rFlag ())
 					{
-						opts.mapCodeName.clear();
+						opts.sync_reset_mapCodeName ();
 					}
 					else
 					{
@@ -97,12 +97,12 @@ echo:
 					return Rules;
 				}
 	"/*!use:re2c"	{
-					if (!opts.rFlag)
+					if (!opts.rFlag ())
 					{
 						fatal("found 'use:re2c' block without -r flag");
 					}
 					reuse();
-					if (!(opts.DFlag || opts.flag_skeleton))
+					if (!(opts.DFlag () || opts.flag_skeleton ()))
 					{
 						const size_t lexeme_len = sizeof ("/*!use:re2c") - 1;
 						out.write(tok, tok_len () - lexeme_len);
@@ -111,7 +111,7 @@ echo:
 					return Reuse;
 				}
 	"/*!max:re2c" {
-					if (!opts.DFlag)
+					if (!opts.DFlag ())
 					{
 						out.insert_yymaxfill ();
 					}
@@ -121,7 +121,7 @@ echo:
 				}
 	"/*!getstate:re2c" {
 					tok = pos = cur;
-					out.insert_state_goto (opts.topIndent);
+					out.insert_state_goto (opts.topIndent ());
 					ignore_eoc = true;
 					goto echo;
 				}
@@ -133,7 +133,7 @@ echo:
 	"/*!types:re2c" {
 					tok = pos = cur;
 					ignore_eoc = true;
-					if (!opts.DFlag)
+					if (!opts.DFlag ())
 					{
 						out.insert_line_info ();
 						out << "\n";
@@ -154,7 +154,7 @@ echo:
 						ignore_eoc = false;
 						ignore_cnt = 0;
 					}
-					else if (!(opts.DFlag || opts.flag_skeleton))
+					else if (!(opts.DFlag () || opts.flag_skeleton ()))
 					{
 						out.write(tok, tok_len ());
 					}
@@ -172,7 +172,7 @@ echo:
 						ignore_eoc = false;
 						ignore_cnt = 0;
 					}
-					else if (!(opts.DFlag || opts.flag_skeleton))
+					else if (!(opts.DFlag () || opts.flag_skeleton ()))
 					{
 						out.write(tok, tok_len ());
 					}
@@ -188,7 +188,7 @@ echo:
 					{
 						ignore_cnt++;
 					}
-					else if (!(opts.DFlag || opts.flag_skeleton))
+					else if (!(opts.DFlag () || opts.flag_skeleton ()))
 					{
 						out.write(tok, tok_len ());
 					}
@@ -197,7 +197,7 @@ echo:
 					goto echo;
 				}
 	zero		{
-					if (!(ignore_eoc || opts.DFlag || opts.flag_skeleton))
+					if (!(ignore_eoc || opts.DFlag () || opts.flag_skeleton ()))
 					{
 						out.write(tok, tok_len () - 1);
 						// -1 so we don't write out the \0
@@ -263,14 +263,14 @@ start:
 	{
 		std::vector<uint32_t> cpoints;
 		lex_cpoints ('\'', cpoints);
-		yylval.regexp = cpoint_string (cpoints, opts.bCaseInsensitive || !opts.bCaseInverted);
+		yylval.regexp = cpoint_string (cpoints, opts.bCaseInsensitive () || !opts.bCaseInverted ());
 		return REGEXP;
 	}
 	"\""
 	{
 		std::vector<uint32_t> cpoints;
 		lex_cpoints ('"', cpoints);
-		yylval.regexp = cpoint_string (cpoints, opts.bCaseInsensitive || opts.bCaseInverted);
+		yylval.regexp = cpoint_string (cpoints, opts.bCaseInsensitive () || opts.bCaseInverted ());
 		return REGEXP;
 	}
 	"["
@@ -343,7 +343,7 @@ start:
 				}
 
 	"{" name "}"	{
-					if (!opts.FFlag) {
+					if (!opts.FFlag ()) {
 						fatal("curly braces for names only allowed with -F switch");
 					}
 					yylval.str = new std::string (tok + 1, tok_len () - 2); // -2 to omit braces
@@ -354,7 +354,7 @@ start:
 
 	name / (space+ [^=>,])	{
 					yylval.str = new std::string (tok, tok_len ());
-					if (opts.FFlag)
+					if (opts.FFlag ())
 					{
 						lexer_state = LEX_FLEX_NAME;
 						return FID;
@@ -371,7 +371,7 @@ start:
 				}
 
 	name / [^]	{
-					if (!opts.FFlag) {
+					if (!opts.FFlag ()) {
 						yylval.str = new std::string (tok, tok_len ());
 						return ID;
 					} else {
@@ -380,7 +380,7 @@ start:
 						{
 							cpoints.push_back (static_cast<uint8_t> (*p));
 						}
-						yylval.regexp = cpoint_string (cpoints, opts.bCaseInsensitive || opts.bCaseInverted);
+						yylval.regexp = cpoint_string (cpoints, opts.bCaseInsensitive () || opts.bCaseInverted ());
 						return REGEXP;
 					}
 				}

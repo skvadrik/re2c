@@ -12,9 +12,9 @@ inline std::string indent (uint32_t ind)
 {
 	std::string str;
 
-	while (!opts.DFlag && ind-- > 0)
+	while (!opts.DFlag () && ind-- > 0)
 	{
-		str += opts.indString;
+		str += opts.indString ();
 	}
 	return str;
 }
