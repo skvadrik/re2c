@@ -216,7 +216,7 @@ void Go::init (const State * from)
 	}
 
 	const uint32_t dSpans = nSpans - hSpans - nBitmaps;
-	if (opts.DFlag ())
+	if (opts.target () == opt_t::DOT)
 	{
 		type = DOT;
 		info.dot = new Dot (span, nSpans, from);

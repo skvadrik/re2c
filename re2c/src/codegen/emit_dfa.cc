@@ -30,7 +30,7 @@ std::string genGetCondition()
 
 void genGoTo(OutputFile & o, uint32_t ind, const State *from, const State *to, bool & readCh)
 {
-	if (opts.DFlag ())
+	if (opts.target () == opt_t::DOT)
 	{
 		o << from->label << " -> " << to->label << "\n";
 		return;
@@ -47,7 +47,7 @@ void genGoTo(OutputFile & o, uint32_t ind, const State *from, const State *to, b
 
 void emit_state (OutputFile & o, uint32_t ind, const State * s, bool used_label)
 {
-	if (!opts.DFlag ())
+	if (opts.target () != opt_t::DOT)
 	{
 		if (used_label)
 		{
@@ -128,7 +128,7 @@ void DFA::emit(Output & output, uint32_t& ind, bool isLastCond, bool& bPrologBra
 
 	skeleton->warn_undefined_control_flow ();
 
-	if (opts.flag_skeleton ())
+	if (opts.target () == opt_t::SKELETON)
 	{
 		skeleton->emit_data (o.file_name);
 		skeleton->emit_start (o, max_fill, need_backup, need_backupctx, need_accept);
@@ -143,7 +143,7 @@ void DFA::emit(Output & output, uint32_t& ind, bool isLastCond, bool& bPrologBra
 		{
 			o << "\n";
 			o.insert_line_info ();
-			if (opts.DFlag ())
+			if (opts.target () == opt_t::DOT)
 			{
 				bPrologBrace = true;
 				o << "digraph re2c {\n";
@@ -162,7 +162,7 @@ void DFA::emit(Output & output, uint32_t& ind, bool isLastCond, bool& bPrologBra
 			{
 				ind = 1;
 			}
-			if (!opts.fFlag () && !opts.DFlag ())
+			if (!opts.fFlag () && opts.target () != opt_t::DOT)
 			{
 				if (opts.bEmitYYCh ())
 				{
@@ -186,7 +186,7 @@ void DFA::emit(Output & output, uint32_t& ind, bool isLastCond, bool& bPrologBra
 				genCondTable(o, ind, output.types);
 			}
 			o.insert_state_goto (ind);
-			if (opts.cFlag () && !opts.DFlag ())
+			if (opts.cFlag () && opts.target () != opt_t::DOT)
 			{
 				if (used_labels.count(start_label))
 				{
@@ -205,7 +205,7 @@ void DFA::emit(Output & output, uint32_t& ind, bool isLastCond, bool& bPrologBra
 			{
 				o << replaceParam(opts.condDivider (), opts.condDividerParam (), cond) << "\n";
 			}
-			if (opts.DFlag ())
+			if (opts.target () == opt_t::DOT)
 			{
 				o << cond << " -> " << head->label << "\n";
 			}
@@ -302,7 +302,7 @@ void genCondGotoSub(OutputFile & o, uint32_t ind, const std::vector<std::string>
 void genCondGoto(OutputFile & o, uint32_t ind, const std::vector<std::string> & condnames)
 {
 	const size_t conds = condnames.size ();
-	if (opts.DFlag ())
+	if (opts.target () == opt_t::DOT)
 	{
 		o.warn_condition_order = false; // see note [condition order]
 		for (size_t i = 0; i < conds; ++i)

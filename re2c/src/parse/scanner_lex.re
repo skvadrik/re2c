@@ -74,7 +74,7 @@ echo:
 					{
 						fatal("found standard 're2c' block while using -r flag");
 					}
-					if (!(opts.DFlag () || opts.flag_skeleton ()))
+					if (opts.target () == opt_t::CODE)
 					{
 						const size_t lexeme_len = cur[-1] == '{'
 							? sizeof ("%{") - 1
@@ -102,7 +102,7 @@ echo:
 						fatal("found 'use:re2c' block without -r flag");
 					}
 					reuse();
-					if (!(opts.DFlag () || opts.flag_skeleton ()))
+					if (opts.target () == opt_t::CODE)
 					{
 						const size_t lexeme_len = sizeof ("/*!use:re2c") - 1;
 						out.write(tok, tok_len () - lexeme_len);
@@ -111,7 +111,7 @@ echo:
 					return Reuse;
 				}
 	"/*!max:re2c" {
-					if (!opts.DFlag ())
+					if (opts.target () != opt_t::DOT)
 					{
 						out.insert_yymaxfill ();
 					}
@@ -133,7 +133,7 @@ echo:
 	"/*!types:re2c" {
 					tok = pos = cur;
 					ignore_eoc = true;
-					if (!opts.DFlag ())
+					if (opts.target () != opt_t::DOT)
 					{
 						out.insert_line_info ();
 						out << "\n";
@@ -154,7 +154,7 @@ echo:
 						ignore_eoc = false;
 						ignore_cnt = 0;
 					}
-					else if (!(opts.DFlag () || opts.flag_skeleton ()))
+					else if (opts.target () == opt_t::CODE)
 					{
 						out.write(tok, tok_len ());
 					}
@@ -172,7 +172,7 @@ echo:
 						ignore_eoc = false;
 						ignore_cnt = 0;
 					}
-					else if (!(opts.DFlag () || opts.flag_skeleton ()))
+					else if (opts.target () == opt_t::CODE)
 					{
 						out.write(tok, tok_len ());
 					}
@@ -188,7 +188,7 @@ echo:
 					{
 						ignore_cnt++;
 					}
-					else if (!(opts.DFlag () || opts.flag_skeleton ()))
+					else if (opts.target () == opt_t::CODE)
 					{
 						out.write(tok, tok_len ());
 					}
@@ -197,7 +197,7 @@ echo:
 					goto echo;
 				}
 	zero		{
-					if (!(ignore_eoc || opts.DFlag () || opts.flag_skeleton ()))
+					if (!ignore_eoc && opts.target () == opt_t::CODE)
 					{
 						out.write(tok, tok_len () - 1);
 						// -1 so we don't write out the \0

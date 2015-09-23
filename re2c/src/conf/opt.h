@@ -13,10 +13,15 @@ namespace re2c
 
 struct opt_t
 {
+	enum target_t
+	{
+		CODE,
+		DOT,
+		SKELETON
+	} target;
 	bool bFlag;
 	bool cFlag;
 	bool dFlag;
-	bool DFlag;
 	bool fFlag;
 	bool FFlag;
 	bool gFlag;
@@ -25,7 +30,6 @@ struct opt_t
 	bool sFlag;
 	bool tFlag;
 	const char * header_file;
-	bool flag_skeleton;
 	bool bNoGenerationDate;
 	bool bEmitYYCh;
 	bool yychConversion;
@@ -64,7 +68,6 @@ struct opt_t
 	opt_t ();
 	opt_t (const opt_t & opt);
 	opt_t & operator = (const opt_t & opt);
-	bool check ();
 	void fix ();
 };
 
@@ -87,13 +90,12 @@ public:
 		, realopt ()
 	{}
 
-	bool check ();
 	void sync ();
 
+	void set_target (opt_t::target_t tgt);
 	void bit_vectors ();
 	void start_conditions ();
 	void debug_output ();
-	void emit_dot ();
 	void storable_state ();
 	void flex_syntax ();
 	void computed_gotos ();
@@ -103,7 +105,6 @@ public:
 	void no_generation_date ();
 	void case_insensitive ();
 	void case_inverted ();
-	void skeleton ();
 	void encoding_policy (Enc::policy_t);
 	void input (InputAPI::type_t);
 	void empty_class (empty_class_policy_t);
@@ -152,10 +153,10 @@ public:
 	void sync_reset_encoding (const Enc & enc);
 	void sync_reset_mapCodeName ();
 
+	opt_t::target_t target ()                  const { return realopt.target; }
 	bool bFlag ()                              const { return realopt.bFlag; }
 	bool cFlag ()                              const { return realopt.cFlag; }
 	bool dFlag ()                              const { return realopt.dFlag; }
-	bool DFlag ()                              const { return realopt.DFlag; }
 	bool fFlag ()                              const { return realopt.fFlag; }
 	bool FFlag ()                              const { return realopt.FFlag; }
 	bool gFlag ()                              const { return realopt.gFlag; }
@@ -164,7 +165,6 @@ public:
 	bool sFlag ()                              const { return realopt.sFlag; }
 	bool tFlag ()                              const { return realopt.tFlag; }
 	const char * header_file ()                const { return realopt.header_file; }
-	bool flag_skeleton ()                      const { return realopt.flag_skeleton; }
 	bool bNoGenerationDate ()                  const { return realopt.bNoGenerationDate; }
 	bool bEmitYYCh ()                          const { return realopt.bEmitYYCh; }
 	std::string yychConversion () const

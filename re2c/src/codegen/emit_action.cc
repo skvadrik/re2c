@@ -54,7 +54,7 @@ void emit_action
 
 void emit_match (OutputFile & o, uint32_t ind, bool & readCh, const State * const s)
 {
-	if (opts.DFlag ())
+	if (opts.target () == opt_t::DOT)
 	{
 		return;
 	}
@@ -86,7 +86,7 @@ void emit_match (OutputFile & o, uint32_t ind, bool & readCh, const State * cons
 
 void emit_initial (OutputFile & o, uint32_t ind, bool & readCh, const State * const s, const Initial & initial, const std::set<label_t> & used_labels)
 {
-	if (opts.DFlag ())
+	if (opts.target () == opt_t::DOT)
 	{
 		return;
 	}
@@ -129,7 +129,7 @@ void emit_initial (OutputFile & o, uint32_t ind, bool & readCh, const State * co
 
 void emit_save (OutputFile & o, uint32_t ind, bool & readCh, const State * const s, uint32_t save, bool save_yyaccept)
 {
-	if (opts.DFlag ())
+	if (opts.target () == opt_t::DOT)
 	{
 		return;
 	}
@@ -173,7 +173,7 @@ void emit_accept (OutputFile & o, uint32_t ind, bool & readCh, const State * con
 	const uint32_t accepts_size = static_cast<uint32_t> (accepts.size ());
 	if (accepts_size > 0)
 	{
-		if (!opts.DFlag ())
+		if (opts.target () != opt_t::DOT)
 		{
 			o << opts.input_api ().stmt_restore (ind);
 		}
@@ -198,11 +198,11 @@ void emit_accept (OutputFile & o, uint32_t ind, bool & readCh, const State * con
 				o << indent(ind) << "goto *" << opts.mapCodeName ()["yytarget"] << "[" << opts.mapCodeName ()["yyaccept"] << "];\n";
 				o << indent(--ind) << "}\n";
 			}
-			else if (opts.sFlag () || (accepts_size == 2 && !opts.DFlag ()))
+			else if (opts.sFlag () || (accepts_size == 2 && opts.target () != opt_t::DOT))
 			{
 				emit_accept_binary (o, ind, readCh, s, accepts, 0, accepts_size - 1);
 			}
-			else if (opts.DFlag ())
+			else if (opts.target () == opt_t::DOT)
 			{
 				for (uint32_t i = 0; i < accepts_size; ++i)
 				{
@@ -233,7 +233,7 @@ void emit_accept (OutputFile & o, uint32_t ind, bool & readCh, const State * con
 
 void emit_rule (OutputFile & o, uint32_t ind, const State * const s, const RuleOp * const rule, const std::string & condName, const std::string & name)
 {
-	if (opts.DFlag ())
+	if (opts.target () == opt_t::DOT)
 	{
 		o << s->label;
 		if (rule->code)
@@ -245,12 +245,12 @@ void emit_rule (OutputFile & o, uint32_t ind, const State * const s, const RuleO
 	}
 
 	uint32_t back = rule->ctx->fixedLength();
-	if (back != 0u && !opts.DFlag ())
+	if (back != 0u && opts.target () != opt_t::DOT)
 	{
 		o << opts.input_api ().stmt_restorectx (ind);
 	}
 
-	if (opts.flag_skeleton ())
+	if (opts.target () == opt_t::SKELETON)
 	{
 		Skeleton::emit_action (o, ind, rule->rank, name);
 	}
@@ -280,7 +280,7 @@ void emit_rule (OutputFile & o, uint32_t ind, const State * const s, const RuleO
 
 void need (OutputFile & o, uint32_t ind, bool & readCh, uint32_t n, bool bSetMarker)
 {
-	if (opts.DFlag ())
+	if (opts.target () == opt_t::DOT)
 	{
 		return;
 	}

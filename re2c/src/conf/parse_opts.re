@@ -95,16 +95,17 @@ opt_short:
 	[?h] { usage ();   return EXIT_OK; }
 	"v"  { version (); return EXIT_OK; }
 	"V"  { vernum ();  return EXIT_OK; }
-	"b" { opts.bit_vectors ();      goto opt_short; }
-	"c" { opts.start_conditions (); goto opt_short; }
-	"d" { opts.debug_output ();     goto opt_short; }
-	"D" { opts.emit_dot ();         goto opt_short; }
-	"f" { opts.storable_state ();   goto opt_short; }
-	"F" { opts.flex_syntax ();      goto opt_short; }
-	"g" { opts.computed_gotos ();   goto opt_short; }
-	"i" { opts.no_debug_info ();    goto opt_short; }
-	"r" { opts.reusable ();         goto opt_short; }
-	"s" { opts.nested_ifs ();       goto opt_short; }
+	"b" { opts.bit_vectors ();               goto opt_short; }
+	"c" { opts.start_conditions ();          goto opt_short; }
+	"d" { opts.debug_output ();              goto opt_short; }
+	"D" { opts.set_target (opt_t::DOT);      goto opt_short; }
+	"f" { opts.storable_state ();            goto opt_short; }
+	"F" { opts.flex_syntax ();               goto opt_short; }
+	"g" { opts.computed_gotos ();            goto opt_short; }
+	"i" { opts.no_debug_info ();             goto opt_short; }
+	"r" { opts.reusable ();                  goto opt_short; }
+	"s" { opts.nested_ifs ();                goto opt_short; }
+	"S" { opts.set_target (opt_t::SKELETON); goto opt_short; }
 	"e" { if (!opts.ecb ())        { error_encoding (); return EXIT_FAIL; } goto opt_short; }
 	"u" { if (!opts.unicode ())    { error_encoding (); return EXIT_FAIL; } goto opt_short; }
 	"w" { if (!opts.wide_chars ()) { error_encoding (); return EXIT_FAIL; } goto opt_short; }
@@ -127,20 +128,20 @@ opt_long:
 	"help"               end { usage ();   return EXIT_OK; }
 	"version"            end { version (); return EXIT_OK; }
 	"vernum"             end { vernum ();  return EXIT_OK; }
-	"bit-vectors"        end { opts.bit_vectors ();        goto opt; }
-	"start-conditions"   end { opts.start_conditions ();   goto opt; }
-	"debug-output"       end { opts.debug_output ();       goto opt; }
-	"emit-dot"           end { opts.emit_dot ();           goto opt; }
-	"storable-state"     end { opts.storable_state ();     goto opt; }
-	"flex-syntax"        end { opts.flex_syntax ();        goto opt; }
-	"computed-gotos"     end { opts.computed_gotos ();     goto opt; }
-	"no-debug-info"      end { opts.no_debug_info ();      goto opt; }
-	"reusable"           end { opts.reusable ();           goto opt; }
-	"nested-ifs"         end { opts.nested_ifs ();         goto opt; }
-	"no-generation-date" end { opts.no_generation_date (); goto opt; }
-	"case-insensitive"   end { opts.case_insensitive ();   goto opt; }
-	"case-inverted"      end { opts.case_inverted ();      goto opt; }
-	"skeleton"           end { opts.skeleton ();           goto opt; }
+	"bit-vectors"        end { opts.bit_vectors ();               goto opt; }
+	"start-conditions"   end { opts.start_conditions ();          goto opt; }
+	"debug-output"       end { opts.debug_output ();              goto opt; }
+	"emit-dot"           end { opts.set_target (opt_t::DOT);      goto opt; }
+	"storable-state"     end { opts.storable_state ();            goto opt; }
+	"flex-syntax"        end { opts.flex_syntax ();               goto opt; }
+	"computed-gotos"     end { opts.computed_gotos ();            goto opt; }
+	"no-debug-info"      end { opts.no_debug_info ();             goto opt; }
+	"reusable"           end { opts.reusable ();                  goto opt; }
+	"nested-ifs"         end { opts.nested_ifs ();                goto opt; }
+	"no-generation-date" end { opts.no_generation_date ();        goto opt; }
+	"case-insensitive"   end { opts.case_insensitive ();          goto opt; }
+	"case-inverted"      end { opts.case_inverted ();             goto opt; }
+	"skeleton"           end { opts.set_target (opt_t::SKELETON); goto opt; }
 	"ecb"                end { if (!opts.ecb ())        { error_encoding (); return EXIT_FAIL; } goto opt; }
 	"unicode"            end { if (!opts.unicode ())    { error_encoding (); return EXIT_FAIL; } goto opt; }
 	"wide-chars"         end { if (!opts.wide_chars ()) { error_encoding (); return EXIT_FAIL; } goto opt; }
@@ -225,10 +226,6 @@ opt_empty_class:
 */
 
 end:
-	if (!opts.check ())
-	{
-		return EXIT_FAIL;
-	}
 	opts.sync ();
 
 	if (!opts.source_file)

@@ -7,10 +7,10 @@ namespace re2c
 Opt opts;
 
 opt_t::opt_t ()
-	: bFlag (false)
+	: target (CODE)
+	, bFlag (false)
 	, cFlag (false)
 	, dFlag (false)
-	, DFlag (false)
 	, fFlag (false)
 	, FFlag (false)
 	, gFlag (false)
@@ -19,7 +19,6 @@ opt_t::opt_t ()
 	, sFlag (false)
 	, tFlag (false)
 	, header_file (NULL)
-	, flag_skeleton (false)
 	, bNoGenerationDate (false)
 	, bEmitYYCh (true)
 	, yychConversion (false)
@@ -57,10 +56,10 @@ opt_t::opt_t ()
 {}
 
 opt_t::opt_t (const opt_t & opt)
-	: bFlag (opt.bFlag)
+	: target (opt.target)
+	, bFlag (opt.bFlag)
 	, cFlag (opt.cFlag)
 	, dFlag (opt.dFlag)
-	, DFlag (opt.DFlag)
 	, fFlag (opt.fFlag)
 	, FFlag (opt.FFlag)
 	, gFlag (opt.gFlag)
@@ -69,7 +68,6 @@ opt_t::opt_t (const opt_t & opt)
 	, sFlag (opt.sFlag)
 	, tFlag (opt.tFlag)
 	, header_file (opt.header_file)
-	, flag_skeleton (opt.flag_skeleton)
 	, bNoGenerationDate (opt.bNoGenerationDate)
 	, bEmitYYCh (opt.bEmitYYCh)
 	, yychConversion (opt.yychConversion)
@@ -112,100 +110,68 @@ opt_t & opt_t::operator = (const opt_t & opt)
 	return *this;
 }
 
-bool opt_t::check ()
-{
-	// check groups of mutually exclusive options
-	if (DFlag && flag_skeleton)
-	{
-		error ("incompatible options: '-D, --emit-dot' and '--skeleton'");
-		return false;
-	}
-	return true;
-}
-
 void opt_t::fix ()
 {
-	// some options don't make sense in current configuration
-	// reset them to default
-	if (DFlag)
+	// some options either make no sense or must have fixed value
+	// with current target: reset them to default
+	switch (target)
 	{
-		bFlag = Opt::baseopt.bFlag;
-		dFlag = Opt::baseopt.dFlag;
-		fFlag = Opt::baseopt.fFlag;
-		gFlag = Opt::baseopt.gFlag;
-		iFlag = Opt::baseopt.iFlag;
-		sFlag = Opt::baseopt.sFlag;
-		tFlag = Opt::baseopt.tFlag;
-		header_file = Opt::baseopt.header_file;
-		bEmitYYCh = Opt::baseopt.bEmitYYCh;
-		bUseStateNext = Opt::baseopt.bUseStateNext;
-		bUseYYFill = Opt::baseopt.bUseYYFill;
-		bUseYYFillParam = Opt::baseopt.bUseYYFillParam;
-		bUseYYFillCheck = Opt::baseopt.bUseYYFillCheck;
-		bUseYYFillNaked = Opt::baseopt.bUseYYFillNaked;
-		bUseYYSetConditionParam = Opt::baseopt.bUseYYSetConditionParam;
-		bUseYYGetConditionNaked = Opt::baseopt.bUseYYGetConditionNaked;
-		bUseYYSetStateParam = Opt::baseopt.bUseYYSetStateParam;
-		bUseYYSetStateNaked = Opt::baseopt.bUseYYSetStateNaked;
-		bUseYYGetStateNaked = Opt::baseopt.bUseYYGetStateNaked;
-		yybmHexTable = Opt::baseopt.yybmHexTable;
-		bUseStateAbort = Opt::baseopt.bUseStateAbort;
-		cGotoThreshold = Opt::baseopt.cGotoThreshold;
-		topIndent = Opt::baseopt.topIndent;
-		indString = Opt::baseopt.indString;
-		labelPrefix = Opt::baseopt.labelPrefix;
-		condPrefix = Opt::baseopt.condPrefix;
-		condEnumPrefix = Opt::baseopt.condEnumPrefix;
-		condDivider = Opt::baseopt.condDivider;
-		condDividerParam = Opt::baseopt.condDividerParam;
-		condGoto = Opt::baseopt.condGoto;
-		condGotoParam = Opt::baseopt.condGotoParam;
-		yychConversion = Opt::baseopt.yychConversion;
-		yyFillLength = Opt::baseopt.yyFillLength;
-		yySetConditionParam = Opt::baseopt.yySetConditionParam;
-		yySetStateParam = Opt::baseopt.yySetStateParam;
-		mapCodeName = Opt::baseopt.mapCodeName;
-		input_api = Opt::baseopt.input_api;
+		case DOT:
+			// default code generation options
+			bFlag = Opt::baseopt.bFlag;
+			gFlag = Opt::baseopt.gFlag;
+			cGotoThreshold = Opt::baseopt.cGotoThreshold;
+			sFlag = Opt::baseopt.sFlag;
+			// default environment-insensitive formatting
+			yybmHexTable = Opt::baseopt.yybmHexTable;
+			// fallthrough
+		case SKELETON:
+			// default line information
+			iFlag = Opt::baseopt.iFlag;
+			// default environment-sensitive formatting
+			topIndent = Opt::baseopt.topIndent;
+			indString = Opt::baseopt.indString;
+			condDivider = Opt::baseopt.condDivider;
+			condDividerParam = Opt::baseopt.condDividerParam;
+			// default environment bindings
+			input_api = Opt::baseopt.input_api;
+			mapCodeName = Opt::baseopt.mapCodeName;
+			dFlag = Opt::baseopt.dFlag;
+			fFlag = Opt::baseopt.fFlag;
+			tFlag = Opt::baseopt.tFlag;
+			header_file = Opt::baseopt.header_file;
+			bEmitYYCh = Opt::baseopt.bEmitYYCh;
+			bUseStateNext = Opt::baseopt.bUseStateNext;
+			bUseYYFill = Opt::baseopt.bUseYYFill;
+			bUseYYFillParam = Opt::baseopt.bUseYYFillParam;
+			bUseYYFillCheck = Opt::baseopt.bUseYYFillCheck;
+			bUseYYFillNaked = Opt::baseopt.bUseYYFillNaked;
+			bUseYYSetConditionParam = Opt::baseopt.bUseYYSetConditionParam;
+			bUseYYGetConditionNaked = Opt::baseopt.bUseYYGetConditionNaked;
+			bUseYYSetStateParam = Opt::baseopt.bUseYYSetStateParam;
+			bUseYYSetStateNaked = Opt::baseopt.bUseYYSetStateNaked;
+			bUseYYGetStateNaked = Opt::baseopt.bUseYYGetStateNaked;
+			bUseStateAbort = Opt::baseopt.bUseStateAbort;
+			labelPrefix = Opt::baseopt.labelPrefix;
+			condPrefix = Opt::baseopt.condPrefix;
+			condEnumPrefix = Opt::baseopt.condEnumPrefix;
+			condGoto = Opt::baseopt.condGoto;
+			condGotoParam = Opt::baseopt.condGotoParam;
+			yychConversion = Opt::baseopt.yychConversion;
+			yyFillLength = Opt::baseopt.yyFillLength;
+			yySetConditionParam = Opt::baseopt.yySetConditionParam;
+			yySetStateParam = Opt::baseopt.yySetStateParam;
+			break;
+		default:
+			break;
 	}
-	if (flag_skeleton)
-	{
-		dFlag = Opt::baseopt.dFlag;
-		fFlag = Opt::baseopt.fFlag;
-		iFlag = Opt::baseopt.iFlag;
-		tFlag = Opt::baseopt.tFlag;
-		header_file = Opt::baseopt.header_file;
-		bEmitYYCh = Opt::baseopt.bEmitYYCh;
-		bUseStateNext = Opt::baseopt.bUseStateNext;
-		bUseYYFill = Opt::baseopt.bUseYYFill;
-		bUseYYFillParam = Opt::baseopt.bUseYYFillParam;
-		bUseYYFillCheck = Opt::baseopt.bUseYYFillCheck;
-		bUseYYFillNaked = Opt::baseopt.bUseYYFillNaked;
-		bUseYYSetConditionParam = Opt::baseopt.bUseYYSetConditionParam;
-		bUseYYGetConditionNaked = Opt::baseopt.bUseYYGetConditionNaked;
-		bUseYYSetStateParam = Opt::baseopt.bUseYYSetStateParam;
-		bUseYYSetStateNaked = Opt::baseopt.bUseYYSetStateNaked;
-		bUseYYGetStateNaked = Opt::baseopt.bUseYYGetStateNaked;
-		bUseStateAbort = Opt::baseopt.bUseStateAbort;
-		topIndent = Opt::baseopt.topIndent;
-		indString = Opt::baseopt.indString;
-		labelPrefix = Opt::baseopt.labelPrefix;
-		condPrefix = Opt::baseopt.condPrefix;
-		condEnumPrefix = Opt::baseopt.condEnumPrefix;
-		condDivider = Opt::baseopt.condDivider;
-		condDividerParam = Opt::baseopt.condDividerParam;
-		condGoto = Opt::baseopt.condGoto;
-		condGotoParam = Opt::baseopt.condGotoParam;
-		yychConversion = Opt::baseopt.yychConversion;
-		yyFillLength = Opt::baseopt.yyFillLength;
-		yySetConditionParam = Opt::baseopt.yySetConditionParam;
-		yySetStateParam = Opt::baseopt.yySetStateParam;
-		mapCodeName = Opt::baseopt.mapCodeName;
-		input_api = Opt::baseopt.input_api;
-	}
+
 	if (bCaseInsensitive)
 	{
 		bCaseInverted = Opt::baseopt.bCaseInverted;
 	}
+
+	// respect hierarchy
 	if (!cFlag)
 	{
 		tFlag = Opt::baseopt.tFlag;
@@ -271,28 +237,29 @@ void opt_t::fix ()
 	}
 
 	// force individual options
-	if (DFlag)
+	switch (target)
 	{
-		iFlag = true;
+		case DOT:
+			iFlag = true;
+			break;
+		case SKELETON:
+			iFlag = true;
+			input_api.set (InputAPI::CUSTOM);
+			indString = "    ";
+			topIndent = 2;
+			break;
+		default:
+			break;
 	}
-	if (flag_skeleton)
+	switch (encoding.type ())
 	{
-		iFlag = true;
-		input_api.set (InputAPI::CUSTOM);
-		indString = "    ";
-		topIndent = 2;
-	}
-	if (encoding.type () == Enc::UCS2)
-	{
-		sFlag = true;
-	}
-	if (encoding.type () == Enc::UTF16)
-	{
-		sFlag = true;
-	}
-	if (encoding.type () == Enc::UTF32)
-	{
-		sFlag = true;
+		case Enc::UCS2:
+		case Enc::UTF16:
+		case Enc::UTF32:
+			sFlag = true;
+			break;
+		default:
+			break;
 	}
 	if (bFlag)
 	{
@@ -307,21 +274,20 @@ void opt_t::fix ()
 
 const opt_t Opt::baseopt;
 
-bool Opt::check ()
-{
-	return useropt.check ();
-}
-
 void Opt::sync ()
 {
 	realopt = useropt;
 	realopt.fix ();
 }
 
+void Opt::set_target (opt_t::target_t tgt)
+{
+	useropt.target = tgt;
+}
+
 void Opt::bit_vectors ()
 {
 	useropt.bFlag = true;
-	useropt.sFlag = true;
 }
 
 void Opt::start_conditions ()
@@ -332,12 +298,6 @@ void Opt::start_conditions ()
 void Opt::debug_output ()
 {
 	useropt.dFlag = true;
-}
-
-void Opt::emit_dot ()
-{
-	useropt.DFlag = true;
-	useropt.iFlag = true;
 }
 
 void Opt::storable_state ()
@@ -353,8 +313,6 @@ void Opt::flex_syntax ()
 void Opt::computed_gotos ()
 {
 	useropt.gFlag = true;
-	useropt.bFlag = true;
-	useropt.sFlag = true;
 }
 
 void Opt::no_debug_info ()
@@ -385,13 +343,6 @@ void Opt::case_insensitive ()
 void Opt::case_inverted ()
 {
 	useropt.bCaseInverted = true;
-}
-
-void Opt::skeleton ()
-{
-	useropt.flag_skeleton = true;
-	useropt.iFlag = true;
-	useropt.input_api.set (InputAPI::CUSTOM);
 }
 
 void Opt::encoding_policy (Enc::policy_t p)
@@ -459,19 +410,16 @@ bool Opt::ecb ()
 
 bool Opt::unicode ()
 {
-	useropt.sFlag = true;
 	return useropt.encoding.set(Enc::UTF32);
 }
 
 bool Opt::wide_chars ()
 {
-	useropt.sFlag = true;
 	return useropt.encoding.set(Enc::UCS2);
 }
 
 bool Opt::utf_16 ()
 {
-	useropt.sFlag = true;
 	return useropt.encoding.set(Enc::UTF16);
 }
 

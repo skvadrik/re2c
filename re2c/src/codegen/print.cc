@@ -70,42 +70,44 @@ void prtHex(std::ostream& o, uint32_t c)
 
 void prtCh(std::ostream& o, uint32_t c)
 {
+	const bool dot = opts.target () == opt_t::DOT;
+
 	switch (c)
 	{
 		case '\'':
-		o << (opts.DFlag () ? "'" : "\\'");
+		o << (dot ? "'" : "\\'");
 		break;
 
 		case '"':
-		o << (opts.DFlag () ? "\\\"" : "\"");
+		o << (dot ? "\\\"" : "\"");
 		break;
 
 		case '\n':
-		o << (opts.DFlag () ? "\\\\n" : "\\n");
+		o << (dot ? "\\\\n" : "\\n");
 		break;
 
 		case '\t':
-		o << (opts.DFlag () ? "\\\\t" : "\\t");
+		o << (dot ? "\\\\t" : "\\t");
 		break;
 
 		case '\v':
-		o << (opts.DFlag () ? "\\\\v" : "\\v");
+		o << (dot ? "\\\\v" : "\\v");
 		break;
 
 		case '\b':
-		o << (opts.DFlag () ? "\\\\b" : "\\b");
+		o << (dot ? "\\\\b" : "\\b");
 		break;
 
 		case '\r':
-		o << (opts.DFlag () ? "\\\\r" : "\\r");
+		o << (dot ? "\\\\r" : "\\r");
 		break;
 
 		case '\f':
-		o << (opts.DFlag () ? "\\\\f" : "\\f");
+		o << (dot ? "\\\\f" : "\\f");
 		break;
 
 		case '\a':
-		o << (opts.DFlag () ? "\\\\a" :"\\a");
+		o << (dot ? "\\\\a" :"\\a");
 		break;
 
 		case '\\':
