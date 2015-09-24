@@ -17,11 +17,10 @@ opt_t::opt_t ()
 	, tFlag (false)
 	, header_file (NULL)
 	, yycondtype ("YYCONDTYPE")
-	, yysetcondition ("YYSETCONDITION")
+	, yysetcondition ("YYSETCONDITION(@@);")
 	, yygetcondition ("YYGETCONDITION")
 	, yyctable ("yyctable")
 	, yySetConditionParam ("@@")
-	, bUseYYSetConditionParam (true)
 	, bUseYYGetConditionNaked (false)
 	, condPrefix ("yyc_")
 	, condEnumPrefix ("yyc")
@@ -30,13 +29,12 @@ opt_t::opt_t ()
 	, condGoto ("goto @@;")
 	, condGotoParam ("@@")
 	, fFlag (false)
-	, yysetstate ("YYSETSTATE")
+	, yysetstate ("YYSETSTATE(@@);")
 	, yygetstate ("YYGETSTATE")
 	, yyfilllabel ("yyFillLabel")
 	, yynext ("yyNext")
 	, yyaccept ("yyaccept")
 	, yySetStateParam ("@@")
-	, bUseYYSetStateParam (true)
 	, bUseYYSetStateNaked (false)
 	, bUseYYGetStateNaked (false)
 	, bUseStateAbort (false)
@@ -95,7 +93,6 @@ opt_t::opt_t (const opt_t & opt)
 	, yygetcondition (opt.yygetcondition)
 	, yyctable (opt.yyctable)
 	, yySetConditionParam (opt.yySetConditionParam)
-	, bUseYYSetConditionParam (opt.bUseYYSetConditionParam)
 	, bUseYYGetConditionNaked (opt.bUseYYGetConditionNaked)
 	, condPrefix (opt.condPrefix)
 	, condEnumPrefix (opt.condEnumPrefix)
@@ -110,7 +107,6 @@ opt_t::opt_t (const opt_t & opt)
 	, yynext (opt.yynext)
 	, yyaccept (opt.yyaccept)
 	, yySetStateParam (opt.yySetStateParam)
-	, bUseYYSetStateParam (opt.bUseYYSetStateParam)
 	, bUseYYSetStateNaked (opt.bUseYYSetStateNaked)
 	, bUseYYGetStateNaked (opt.bUseYYGetStateNaked)
 	, bUseStateAbort (opt.bUseStateAbort)
@@ -191,7 +187,6 @@ void opt_t::fix ()
 			yygetcondition = Opt::baseopt.yygetcondition;
 			yyctable = Opt::baseopt.yyctable;
 			yySetConditionParam = Opt::baseopt.yySetConditionParam;
-			bUseYYSetConditionParam = Opt::baseopt.bUseYYSetConditionParam;
 			bUseYYGetConditionNaked = Opt::baseopt.bUseYYGetConditionNaked;
 			condPrefix = Opt::baseopt.condPrefix;
 			condEnumPrefix = Opt::baseopt.condEnumPrefix;
@@ -204,7 +199,6 @@ void opt_t::fix ()
 			yynext = Opt::baseopt.yynext;
 			yyaccept = Opt::baseopt.yyaccept;
 			yySetStateParam = Opt::baseopt.yySetStateParam;
-			bUseYYSetStateParam = Opt::baseopt.bUseYYSetStateParam;
 			bUseYYSetStateNaked = Opt::baseopt.bUseYYSetStateNaked;
 			bUseYYGetStateNaked = Opt::baseopt.bUseYYGetStateNaked;
 			bUseStateAbort = Opt::baseopt.bUseStateAbort;
@@ -256,7 +250,6 @@ void opt_t::fix ()
 		yygetcondition = Opt::baseopt.yygetcondition;
 		yyctable = Opt::baseopt.yyctable;
 		yySetConditionParam = Opt::baseopt.yySetConditionParam;
-		bUseYYSetConditionParam = Opt::baseopt.bUseYYSetConditionParam;
 		bUseYYGetConditionNaked = Opt::baseopt.bUseYYGetConditionNaked;
 		condPrefix = Opt::baseopt.condPrefix;
 		condEnumPrefix = Opt::baseopt.condEnumPrefix;
@@ -273,7 +266,6 @@ void opt_t::fix ()
 		yynext = Opt::baseopt.yynext;
 		yyaccept = Opt::baseopt.yyaccept;
 		yySetStateParam = Opt::baseopt.yySetStateParam;
-		bUseYYSetStateParam = Opt::baseopt.bUseYYSetStateParam;
 		bUseYYSetStateNaked = Opt::baseopt.bUseYYSetStateNaked;
 		bUseYYGetStateNaked = Opt::baseopt.bUseYYGetStateNaked;
 		bUseStateAbort = Opt::baseopt.bUseStateAbort;

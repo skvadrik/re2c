@@ -290,14 +290,7 @@ void need (OutputFile & o, uint32_t ind, bool & readCh, uint32_t n, bool bSetMar
 	if (opts->fFlag)
 	{
 		last_fill_index++;
-		if (opts->bUseYYSetStateParam)
-		{
-			o << indent(ind) << opts->yysetstate << "(" << fillIndex << ");\n";
-		}
-		else
-		{
-			o << indent(ind) << replaceParam(opts->yysetstate, opts->yySetStateParam, fillIndex) << "\n";
-		}
+		o << indent(ind) << replaceParam(opts->yysetstate, opts->yySetStateParam, fillIndex) << "\n";
 	}
 
 	if (opts->bUseYYFill && n > 0)
@@ -364,14 +357,7 @@ void genYYFill(OutputFile & o, uint32_t need)
 
 void genSetCondition(OutputFile & o, uint32_t ind, const std::string& newcond)
 {
-	if (opts->bUseYYSetConditionParam)
-	{
-		o << indent(ind) << opts->yysetcondition << "(" << opts->condEnumPrefix << newcond << ");\n";
-	}
-	else
-	{
-		o << indent(ind) << replaceParam(opts->yysetcondition, opts->yySetConditionParam, opts->condEnumPrefix + newcond) << "\n";
-	}
+	o << indent(ind) << replaceParam(opts->yysetcondition, opts->yySetConditionParam, opts->condEnumPrefix + newcond) << "\n";
 }
 
 } // namespace re2c

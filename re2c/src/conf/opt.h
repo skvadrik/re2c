@@ -38,7 +38,6 @@ struct opt_t
 	std::string yygetcondition;
 	std::string yyctable;
 	std::string yySetConditionParam;
-	bool bUseYYSetConditionParam;
 	bool bUseYYGetConditionNaked;
 	std::string condPrefix;
 	std::string condEnumPrefix;
@@ -55,7 +54,6 @@ struct opt_t
 	std::string yynext;
 	std::string yyaccept;
 	std::string yySetStateParam;
-	bool bUseYYSetStateParam;
 	bool bUseYYSetStateNaked;
 	bool bUseYYGetStateNaked;
 	bool bUseStateAbort;
@@ -192,11 +190,7 @@ public:
 	void set_yysetcondition (const std::string & s)      { useropt->yysetcondition = s; }
 	void set_yygetcondition (const std::string & s)      { useropt->yygetcondition = s; }
 	void set_yyctable (const std::string & s)            { useropt->yyctable = s; }
-	void set_yySetConditionParam (const std::string & s)
-	{
-		useropt->yySetConditionParam = s;
-		useropt->bUseYYSetConditionParam = false;
-	}
+	void set_yySetConditionParam (const std::string & s) { useropt->yySetConditionParam = s; }
 	void set_bUseYYGetConditionNaked (bool b)            { useropt->bUseYYGetConditionNaked = b; }
 	void set_condPrefix (const std::string & s)          { useropt->condPrefix = s; }
 	void set_condEnumPrefix (const std::string & s)      { useropt->condEnumPrefix = s; }
@@ -210,11 +204,7 @@ public:
 	void set_yyfilllabel (const std::string & s)         { useropt->yyfilllabel = s; }
 	void set_yynext (const std::string & s)              { useropt->yynext = s; }
 	void set_yyaccept (const std::string & s)            { useropt->yyaccept = s; }
-	void set_yySetStateParam (const std::string & s)
-	{
-		useropt->yySetStateParam = s;
-		useropt->bUseYYSetStateParam = false;
-	}
+	void set_yySetStateParam (const std::string & s)     { useropt->yySetStateParam = s; }
 	void set_bUseYYSetStateNaked (bool b)                { useropt->bUseYYSetStateNaked = b; }
 	void set_bUseYYGetStateNaked (bool b)                { useropt->bUseYYGetStateNaked = b; }
 	void set_bUseStateAbort (bool b)                     { useropt->bUseStateAbort = b; }
