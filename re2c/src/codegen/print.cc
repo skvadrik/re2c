@@ -35,7 +35,7 @@ char hexCh(uint32_t c)
 
 void prtChOrHex(std::ostream& o, uint32_t c)
 {
-	if (opts.encoding ().type () != Enc::EBCDIC
+	if (opts->encoding.type () != Enc::EBCDIC
 		&& (is_print (c) || is_space (c)))
 	{
 		o << '\'';
@@ -51,7 +51,7 @@ void prtChOrHex(std::ostream& o, uint32_t c)
 void prtHex(std::ostream& o, uint32_t c)
 {
 	o << "0x";
-	const uint32_t cunit_size = opts.encoding ().szCodeUnit ();
+	const uint32_t cunit_size = opts->encoding.szCodeUnit ();
 	if (cunit_size >= 4)
 	{
 		o << hexCh (c >> 28u)
@@ -70,7 +70,7 @@ void prtHex(std::ostream& o, uint32_t c)
 
 void prtCh(std::ostream& o, uint32_t c)
 {
-	const bool dot = opts.target () == opt_t::DOT;
+	const bool dot = opts->target == opt_t::DOT;
 
 	switch (c)
 	{
@@ -122,7 +122,7 @@ void prtCh(std::ostream& o, uint32_t c)
 
 void prtChOrHexForSpan(std::ostream& o, uint32_t c)
 {
-	if (opts.encoding ().type () != Enc::EBCDIC
+	if (opts->encoding.type () != Enc::EBCDIC
 		&& is_print (c)
 		&& (c != ']'))
 	{

@@ -113,7 +113,7 @@ SwitchIf::SwitchIf (const Span * sp, uint32_t nsp, const State * next)
 	: type (IF)
 	, info ()
 {
-	if ((!opts.sFlag () && nsp > 2) || (nsp > 8 && (sp[nsp - 2].ub - sp[0].ub <= 3 * (nsp - 2))))
+	if ((!opts->sFlag && nsp > 2) || (nsp > 8 && (sp[nsp - 2].ub - sp[0].ub <= 3 * (nsp - 2))))
 	{
 		type = SWITCH;
 		info.cases = new Cases (sp, nsp);
@@ -216,17 +216,17 @@ void Go::init (const State * from)
 	}
 
 	const uint32_t dSpans = nSpans - hSpans - nBitmaps;
-	if (opts.target () == opt_t::DOT)
+	if (opts->target == opt_t::DOT)
 	{
 		type = DOT;
 		info.dot = new Dot (span, nSpans, from);
 	}
-	else if (opts.gFlag () && (dSpans >= opts.cGotoThreshold ()))
+	else if (opts->gFlag && (dSpans >= opts->cGotoThreshold))
 	{
 		type = CPGOTO;
 		info.cpgoto = new Cpgoto (span, nSpans, hspan, hSpans, from->next);
 	}
-	else if (opts.bFlag () && (nBitmaps > 0))
+	else if (opts->bFlag && (nBitmaps > 0))
 	{
 		type = BITMAP;
 		info.bitmap = new GoBitmap (span, nSpans, hspan, hSpans, bitmap, bitmap_state, from->next);

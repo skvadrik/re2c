@@ -17,11 +17,11 @@ std::string output_yych (bool & readCh)
 	if (readCh)
 	{
 		readCh = false;
-		return "(" + opts.input_api ().expr_peek_save () + ")";
+		return "(" + opts->input_api.expr_peek_save () + ")";
 	}
 	else
 	{
-		return opts.mapCodeName ()["yych"];
+		return opts->yych;
 	}
 }
 
@@ -36,10 +36,10 @@ void output_goto (OutputFile & o, uint32_t ind, bool & readCh, label_t to)
 {
 	if (readCh)
 	{
-		o << opts.input_api ().stmt_peek (ind);
+		o << opts->input_api.stmt_peek (ind);
 		readCh = false;
 	}
-	o << indent (ind) << "goto " << opts.labelPrefix () << to << ";\n";
+	o << indent (ind) << "goto " << opts->labelPrefix << to << ";\n";
 }
 
 std::string output_hgo (OutputFile & o, uint32_t ind, bool & readCh, SwitchIf * hgo)
@@ -50,7 +50,7 @@ std::string output_hgo (OutputFile & o, uint32_t ind, bool & readCh, SwitchIf * 
 		o << indent (ind) << "if (" << yych <<" & ~0xFF) {\n";
 		hgo->emit (o, ind + 1, readCh);
 		o << indent (ind) << "} else ";
-		yych = opts.mapCodeName ()["yych"];
+		yych = opts->yych;
 	}
 	else
 	{
@@ -68,9 +68,9 @@ void Case::emit (OutputFile & o, uint32_t ind)
 			o << indent (ind) << "case ";
 			o.write_char_hex (b);
 			o << ":";
-			if (opts.dFlag () && opts.encoding ().type () == Enc::EBCDIC)
+			if (opts->dFlag && opts->encoding.type () == Enc::EBCDIC)
 			{
-				const uint32_t c = opts.encoding ().decodeUnsafe (b);
+				const uint32_t c = opts->encoding.decodeUnsafe (b);
 				if (is_print (c))
 					o << " /* " << static_cast<char> (c) << " */";
 			}
@@ -154,8 +154,8 @@ void SwitchIf::emit (OutputFile & o, uint32_t ind, bool & readCh)
 void GoBitmap::emit (OutputFile & o, uint32_t ind, bool & readCh)
 {
 	std::string yych = output_hgo (o, ind, readCh, hgo);
-	o << "if (" << opts.mapCodeName ()["yybm"] << "[" << bitmap->i << "+" << yych << "] & ";
-	if (opts.yybmHexTable ())
+	o << "if (" << opts->yybm << "[" << bitmap->i << "+" << yych << "] & ";
+	if (opts->yybmHexTable)
 	{
 		o.write_hex (bitmap->m);
 	}
@@ -187,12 +187,12 @@ label_t CpgotoTable::max_label () const
 
 void CpgotoTable::emit (OutputFile & o, uint32_t ind)
 {
-	o << indent (ind) << "static void *" << opts.mapCodeName ()["yytarget"] << "[256] = {\n";
+	o << indent (ind) << "static void *" << opts->yytarget << "[256] = {\n";
 	o << indent (++ind);
 	const uint32_t max_digits = max_label ().width ();
 	for (uint32_t i = 0; i < TABLE_SIZE; ++i)
 	{
-		o << "&&" << opts.labelPrefix () << table[i]->label;
+		o << "&&" << opts->labelPrefix << table[i]->label;
 		if (i == TABLE_SIZE - 1)
 		{
 			o << "\n";
@@ -215,7 +215,7 @@ void Cpgoto::emit (OutputFile & o, uint32_t ind, bool & readCh)
 	std::string yych = output_hgo (o, ind, readCh, hgo);
 	o << "{\n";
 	table->emit (o, ++ind);
-	o << indent(ind) << "goto *" << opts.mapCodeName ()["yytarget"] << "[" << yych << "];\n";
+	o << indent(ind) << "goto *" << opts->yytarget << "[" << yych << "];\n";
 	o << indent(--ind) << "}\n";
 }
 

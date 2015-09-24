@@ -95,22 +95,22 @@ opt_short:
 	[?h] { usage ();   return EXIT_OK; }
 	"v"  { version (); return EXIT_OK; }
 	"V"  { vernum ();  return EXIT_OK; }
-	"b" { opts.bit_vectors ();               goto opt_short; }
-	"c" { opts.start_conditions ();          goto opt_short; }
-	"d" { opts.debug_output ();              goto opt_short; }
+	"b" { opts.set_bFlag (true);             goto opt_short; }
+	"c" { opts.set_cFlag (true);             goto opt_short; }
+	"d" { opts.set_dFlag (true);             goto opt_short; }
 	"D" { opts.set_target (opt_t::DOT);      goto opt_short; }
-	"f" { opts.storable_state ();            goto opt_short; }
-	"F" { opts.flex_syntax ();               goto opt_short; }
-	"g" { opts.computed_gotos ();            goto opt_short; }
-	"i" { opts.no_debug_info ();             goto opt_short; }
-	"r" { opts.reusable ();                  goto opt_short; }
-	"s" { opts.nested_ifs ();                goto opt_short; }
+	"f" { opts.set_fFlag (true);             goto opt_short; }
+	"F" { opts.set_FFlag (true);             goto opt_short; }
+	"g" { opts.set_gFlag (true);             goto opt_short; }
+	"i" { opts.set_iFlag (true);             goto opt_short; }
+	"r" { opts.set_rFlag (true);             goto opt_short; }
+	"s" { opts.set_sFlag (true);             goto opt_short; }
 	"S" { opts.set_target (opt_t::SKELETON); goto opt_short; }
-	"e" { if (!opts.ecb ())        { error_encoding (); return EXIT_FAIL; } goto opt_short; }
-	"u" { if (!opts.unicode ())    { error_encoding (); return EXIT_FAIL; } goto opt_short; }
-	"w" { if (!opts.wide_chars ()) { error_encoding (); return EXIT_FAIL; } goto opt_short; }
-	"x" { if (!opts.utf_16 ())     { error_encoding (); return EXIT_FAIL; } goto opt_short; }
-	"8" { if (!opts.utf_8 ())      { error_encoding (); return EXIT_FAIL; } goto opt_short; }
+	"e" { if (!opts.set_encoding (Enc::EBCDIC)) { error_encoding (); return EXIT_FAIL; } goto opt_short; }
+	"u" { if (!opts.set_encoding (Enc::UTF32))  { error_encoding (); return EXIT_FAIL; } goto opt_short; }
+	"w" { if (!opts.set_encoding (Enc::UCS2))   { error_encoding (); return EXIT_FAIL; } goto opt_short; }
+	"x" { if (!opts.set_encoding (Enc::UTF16))  { error_encoding (); return EXIT_FAIL; } goto opt_short; }
+	"8" { if (!opts.set_encoding (Enc::UTF8))   { error_encoding (); return EXIT_FAIL; } goto opt_short; }
 	"o" end { if (!next (YYCURSOR, argv)) { error_arg ("-o, --output"); return EXIT_FAIL; } goto opt_output; }
 	"o"     { *argv = YYCURSOR;                                                             goto opt_output; }
 	"t" end { if (!next (YYCURSOR, argv)) { error_arg ("-t, --type-header"); return EXIT_FAIL; } goto opt_header; }
@@ -128,25 +128,25 @@ opt_long:
 	"help"               end { usage ();   return EXIT_OK; }
 	"version"            end { version (); return EXIT_OK; }
 	"vernum"             end { vernum ();  return EXIT_OK; }
-	"bit-vectors"        end { opts.bit_vectors ();               goto opt; }
-	"start-conditions"   end { opts.start_conditions ();          goto opt; }
-	"debug-output"       end { opts.debug_output ();              goto opt; }
+	"bit-vectors"        end { opts.set_bFlag (true);             goto opt; }
+	"start-conditions"   end { opts.set_cFlag (true);             goto opt; }
+	"debug-output"       end { opts.set_dFlag (true);             goto opt; }
 	"emit-dot"           end { opts.set_target (opt_t::DOT);      goto opt; }
-	"storable-state"     end { opts.storable_state ();            goto opt; }
-	"flex-syntax"        end { opts.flex_syntax ();               goto opt; }
-	"computed-gotos"     end { opts.computed_gotos ();            goto opt; }
-	"no-debug-info"      end { opts.no_debug_info ();             goto opt; }
-	"reusable"           end { opts.reusable ();                  goto opt; }
-	"nested-ifs"         end { opts.nested_ifs ();                goto opt; }
-	"no-generation-date" end { opts.no_generation_date ();        goto opt; }
-	"case-insensitive"   end { opts.case_insensitive ();          goto opt; }
-	"case-inverted"      end { opts.case_inverted ();             goto opt; }
+	"storable-state"     end { opts.set_fFlag (true);             goto opt; }
+	"flex-syntax"        end { opts.set_FFlag (true);             goto opt; }
+	"computed-gotos"     end { opts.set_gFlag (true);             goto opt; }
+	"no-debug-info"      end { opts.set_iFlag (true);             goto opt; }
+	"reusable"           end { opts.set_rFlag (true);             goto opt; }
+	"nested-ifs"         end { opts.set_sFlag (true);             goto opt; }
+	"no-generation-date" end { opts.set_bNoGenerationDate (true); goto opt; }
+	"case-insensitive"   end { opts.set_bCaseInsensitive (true);  goto opt; }
+	"case-inverted"      end { opts.set_bCaseInverted (true);     goto opt; }
 	"skeleton"           end { opts.set_target (opt_t::SKELETON); goto opt; }
-	"ecb"                end { if (!opts.ecb ())        { error_encoding (); return EXIT_FAIL; } goto opt; }
-	"unicode"            end { if (!opts.unicode ())    { error_encoding (); return EXIT_FAIL; } goto opt; }
-	"wide-chars"         end { if (!opts.wide_chars ()) { error_encoding (); return EXIT_FAIL; } goto opt; }
-	"utf-16"             end { if (!opts.utf_16 ())     { error_encoding (); return EXIT_FAIL; } goto opt; }
-	"utf-8"              end { if (!opts.utf_8 ())      { error_encoding (); return EXIT_FAIL; } goto opt; }
+	"ecb"                end { if (!opts.set_encoding (Enc::EBCDIC)) { error_encoding (); return EXIT_FAIL; } goto opt; }
+	"unicode"            end { if (!opts.set_encoding (Enc::UTF32))  { error_encoding (); return EXIT_FAIL; } goto opt; }
+	"wide-chars"         end { if (!opts.set_encoding (Enc::UCS2))   { error_encoding (); return EXIT_FAIL; } goto opt; }
+	"utf-16"             end { if (!opts.set_encoding (Enc::UTF16))  { error_encoding (); return EXIT_FAIL; } goto opt; }
+	"utf-8"              end { if (!opts.set_encoding (Enc::UTF8))   { error_encoding (); return EXIT_FAIL; } goto opt; }
 	"output"             end { if (!next (YYCURSOR, argv)) { error_arg ("-o, --output"); return EXIT_FAIL; } goto opt_output; }
 	"type-header"        end { if (!next (YYCURSOR, argv)) { error_arg ("-t, --type-header"); return EXIT_FAIL; } goto opt_header; }
 	"encoding-policy"    end { goto opt_encoding_policy; }
@@ -172,7 +172,7 @@ opt_header:
 		error ("bad argument to option -t, --type-header: %s", *argv);
 		return EXIT_FAIL;
 	}
-	filename end { if (!opts.type_header (*argv)) return EXIT_FAIL; goto opt; }
+	filename end { opts.set_header_file (*argv); goto opt; }
 */
 
 opt_encoding_policy:
@@ -187,9 +187,9 @@ opt_encoding_policy:
 		error ("bad argument to option --encoding-policy (expected: ignore | substitute | fail): %s", *argv);
 		return EXIT_FAIL;
 	}
-	"ignore"     end { opts.encoding_policy (Enc::POLICY_IGNORE);     goto opt; }
-	"substitute" end { opts.encoding_policy (Enc::POLICY_SUBSTITUTE); goto opt; }
-	"fail"       end { opts.encoding_policy (Enc::POLICY_FAIL);       goto opt; }
+	"ignore"     end { opts.set_encoding_policy (Enc::POLICY_IGNORE);     goto opt; }
+	"substitute" end { opts.set_encoding_policy (Enc::POLICY_SUBSTITUTE); goto opt; }
+	"fail"       end { opts.set_encoding_policy (Enc::POLICY_FAIL);       goto opt; }
 */
 
 opt_input:
@@ -204,8 +204,8 @@ opt_input:
 		error ("bad argument to option --input (expected: default | custom): %s", *argv);
 		return EXIT_FAIL;
 	}
-	"default" end { opts.input (InputAPI::DEFAULT); goto opt; }
-	"custom"  end { opts.input (InputAPI::CUSTOM);  goto opt; }
+	"default" end { opts.set_input_api (InputAPI::DEFAULT); goto opt; }
+	"custom"  end { opts.set_input_api (InputAPI::CUSTOM);  goto opt; }
 */
 
 opt_empty_class:
@@ -220,9 +220,9 @@ opt_empty_class:
 		error ("bad argument to option --empty-class (expected: match-empty | match-none | error): %s", *argv);
 		return EXIT_FAIL;
 	}
-	"match-empty" end { opts.empty_class (EMPTY_CLASS_MATCH_EMPTY); goto opt; }
-	"match-none"  end { opts.empty_class (EMPTY_CLASS_MATCH_NONE);  goto opt; }
-	"error"       end { opts.empty_class (EMPTY_CLASS_ERROR);       goto opt; }
+	"match-empty" end { opts.set_empty_class_policy (EMPTY_CLASS_MATCH_EMPTY); goto opt; }
+	"match-none"  end { opts.set_empty_class_policy (EMPTY_CLASS_MATCH_NONE);  goto opt; }
+	"error"       end { opts.set_empty_class_policy (EMPTY_CLASS_ERROR);       goto opt; }
 */
 
 end:

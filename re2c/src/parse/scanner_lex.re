@@ -70,11 +70,11 @@ echo:
 /*!re2c
    beginRE     =  "%{" | "/*!re2c";
    beginRE     {
-					if (opts.rFlag ())
+					if (opts->rFlag)
 					{
 						fatal("found standard 're2c' block while using -r flag");
 					}
-					if (opts.target () == opt_t::CODE)
+					if (opts->target == opt_t::CODE)
 					{
 						const size_t lexeme_len = cur[-1] == '{'
 							? sizeof ("%{") - 1
@@ -85,9 +85,9 @@ echo:
 					return Parse;
 				}
 	"/*!rules:re2c"	{
-					if (opts.rFlag ())
+					if (opts->rFlag)
 					{
-						opts.sync_reset_mapCodeName ();
+						opts.reset_mapCodeName ();
 					}
 					else
 					{
@@ -97,12 +97,12 @@ echo:
 					return Rules;
 				}
 	"/*!use:re2c"	{
-					if (!opts.rFlag ())
+					if (!opts->rFlag)
 					{
 						fatal("found 'use:re2c' block without -r flag");
 					}
 					reuse();
-					if (opts.target () == opt_t::CODE)
+					if (opts->target == opt_t::CODE)
 					{
 						const size_t lexeme_len = sizeof ("/*!use:re2c") - 1;
 						out.write(tok, tok_len () - lexeme_len);
@@ -111,7 +111,7 @@ echo:
 					return Reuse;
 				}
 	"/*!max:re2c" {
-					if (opts.target () != opt_t::DOT)
+					if (opts->target != opt_t::DOT)
 					{
 						out.insert_yymaxfill ();
 					}
@@ -121,7 +121,7 @@ echo:
 				}
 	"/*!getstate:re2c" {
 					tok = pos = cur;
-					out.insert_state_goto (opts.topIndent ());
+					out.insert_state_goto (opts->topIndent);
 					ignore_eoc = true;
 					goto echo;
 				}
@@ -133,7 +133,7 @@ echo:
 	"/*!types:re2c" {
 					tok = pos = cur;
 					ignore_eoc = true;
-					if (opts.target () != opt_t::DOT)
+					if (opts->target != opt_t::DOT)
 					{
 						out.insert_line_info ();
 						out << "\n";
@@ -154,7 +154,7 @@ echo:
 						ignore_eoc = false;
 						ignore_cnt = 0;
 					}
-					else if (opts.target () == opt_t::CODE)
+					else if (opts->target == opt_t::CODE)
 					{
 						out.write(tok, tok_len ());
 					}
@@ -172,7 +172,7 @@ echo:
 						ignore_eoc = false;
 						ignore_cnt = 0;
 					}
-					else if (opts.target () == opt_t::CODE)
+					else if (opts->target == opt_t::CODE)
 					{
 						out.write(tok, tok_len ());
 					}
@@ -188,7 +188,7 @@ echo:
 					{
 						ignore_cnt++;
 					}
-					else if (opts.target () == opt_t::CODE)
+					else if (opts->target == opt_t::CODE)
 					{
 						out.write(tok, tok_len ());
 					}
@@ -197,7 +197,7 @@ echo:
 					goto echo;
 				}
 	zero		{
-					if (!ignore_eoc && opts.target () == opt_t::CODE)
+					if (!ignore_eoc && opts->target == opt_t::CODE)
 					{
 						out.write(tok, tok_len () - 1);
 						// -1 so we don't write out the \0
@@ -263,14 +263,14 @@ start:
 	{
 		std::vector<uint32_t> cpoints;
 		lex_cpoints ('\'', cpoints);
-		yylval.regexp = cpoint_string (cpoints, opts.bCaseInsensitive () || !opts.bCaseInverted ());
+		yylval.regexp = cpoint_string (cpoints, opts->bCaseInsensitive || !opts->bCaseInverted);
 		return REGEXP;
 	}
 	"\""
 	{
 		std::vector<uint32_t> cpoints;
 		lex_cpoints ('"', cpoints);
-		yylval.regexp = cpoint_string (cpoints, opts.bCaseInsensitive () || opts.bCaseInverted ());
+		yylval.regexp = cpoint_string (cpoints, opts->bCaseInsensitive || opts->bCaseInverted);
 		return REGEXP;
 	}
 	"["
@@ -343,7 +343,7 @@ start:
 				}
 
 	"{" name "}"	{
-					if (!opts.FFlag ()) {
+					if (!opts->FFlag) {
 						fatal("curly braces for names only allowed with -F switch");
 					}
 					yylval.str = new std::string (tok + 1, tok_len () - 2); // -2 to omit braces
@@ -354,7 +354,7 @@ start:
 
 	name / (space+ [^=>,])	{
 					yylval.str = new std::string (tok, tok_len ());
-					if (opts.FFlag ())
+					if (opts->FFlag)
 					{
 						lexer_state = LEX_FLEX_NAME;
 						return FID;
@@ -371,7 +371,7 @@ start:
 				}
 
 	name / [^]	{
-					if (!opts.FFlag ()) {
+					if (!opts->FFlag) {
 						yylval.str = new std::string (tok, tok_len ());
 						return ID;
 					} else {
@@ -380,7 +380,7 @@ start:
 						{
 							cpoints.push_back (static_cast<uint8_t> (*p));
 						}
-						yylval.regexp = cpoint_string (cpoints, opts.bCaseInsensitive () || opts.bCaseInverted ());
+						yylval.regexp = cpoint_string (cpoints, opts->bCaseInsensitive || opts->bCaseInverted);
 						return REGEXP;
 					}
 				}
@@ -568,57 +568,6 @@ conf:
 /*!re2c
 	* { fatal ((tok - pos) - tchar, "unrecognized configuration"); }
 
-	"define:"
-		( "YYBACKUP"
-		| "YYBACKUPCTX"
-		| "YYCONDTYPE"
-		| "YYCTXMARKER"
-		| "YYCTYPE"
-		| "YYCURSOR"
-		| "YYDEBUG"
-		| "YYFILL"
-		| "YYGETCONDITION"
-		| "YYGETSTATE"
-		| "YYLESSTHAN"
-		| "YYLIMIT"
-		| "YYMARKER"
-		| "YYPEEK"
-		| "YYRESTORE"
-		| "YYRESTORECTX"
-		| "YYSETCONDITION"
-		| "YYSETSTATE"
-		| "YYSKIP"
-		)
-	{
-		tok += sizeof "define:" - 1;
-		yylval.str = new std::string (tok, tok_len ());
-		return CONF;
-	}
-
-	"label:"
-		( "yyFillLabel"
-		| "yyNext"
-		)
-	{
-		tok += sizeof "label:" - 1;
-		yylval.str = new std::string (tok, tok_len ());
-		return CONF;
-	}
-
-	"variable:"
-		( "yyaccept"
-		| "yybm"
-		| "yych"
-		| "yyctable"
-		| "yystable"
-		| "yytarget"
-		)
-	{
-		tok += sizeof "variable:" - 1;
-		yylval.str = new std::string (tok, tok_len ());
-		return CONF;
-	}
-
 	"condprefix"                  { return CONF_CONDPREFIX; }
 	"condenumprefix"              { return CONF_CONDENUMPREFIX; }
 	"cond:divider"                { return CONF_COND_DIVIDER; }
@@ -626,13 +575,32 @@ conf:
 	"cond:goto"                   { return CONF_COND_GOTO; }
 	"cond:goto@cond"              { return CONF_COND_GOTO_COND; }
 	"cgoto:threshold"             { return CONF_CGOTO_THRESHOLD; }
+	"define:YYBACKUP"             { return CONF_DEFINE_YYBACKUP; }
+	"define:YYBACKUPCTX"          { return CONF_DEFINE_YYBACKUPCTX; }
+	"define:YYCONDTYPE"           { return CONF_DEFINE_YYCONDTYPE; }
+	"define:YYCTXMARKER"          { return CONF_DEFINE_YYCTXMARKER; }
+	"define:YYCTYPE"              { return CONF_DEFINE_YYCTYPE; }
+	"define:YYCURSOR"             { return CONF_DEFINE_YYCURSOR; }
+	"define:YYDEBUG"              { return CONF_DEFINE_YYDEBUG; }
+	"define:YYFILL"               { return CONF_DEFINE_YYFILL; }
 	"define:YYFILL:naked"         { return CONF_DEFINE_YYFILL_NAKED; }
 	"define:YYFILL@len"           { return CONF_DEFINE_YYFILL_LEN; }
+	"define:YYGETCONDITION"       { return CONF_DEFINE_YYGETCONDITION; }
 	"define:YYGETCONDITION:naked" { return CONF_DEFINE_YYGETCONDITION_NAKED; }
+	"define:YYGETSTATE"           { return CONF_DEFINE_YYGETSTATE; }
 	"define:YYGETSTATE:naked"     { return CONF_DEFINE_YYGETSTATE_NAKED; }
+	"define:YYLESSTHAN"           { return CONF_DEFINE_YYLESSTHAN; }
+	"define:YYLIMIT"              { return CONF_DEFINE_YYLIMIT; }
+	"define:YYMARKER"             { return CONF_DEFINE_YYMARKER; }
+	"define:YYPEEK"               { return CONF_DEFINE_YYPEEK; }
+	"define:YYRESTORE"            { return CONF_DEFINE_YYRESTORE; }
+	"define:YYRESTORECTX"         { return CONF_DEFINE_YYRESTORECTX; }
+	"define:YYSETCONDITION"       { return CONF_DEFINE_YYSETCONDITION; }
 	"define:YYSETCONDITION@cond"  { return CONF_DEFINE_YYSETCONDITION_COND; }
+	"define:YYSETSTATE"           { return CONF_DEFINE_YYSETSTATE; }
 	"define:YYSETSTATE:naked"     { return CONF_DEFINE_YYSETSTATE_NAKED; }
 	"define:YYSETSTATE@state"     { return CONF_DEFINE_YYSETSTATE_STATE; }
+	"define:YYSKIP"               { return CONF_DEFINE_YYSKIP; }
 	"flags:" [ewxu8]
 	{
 		switch (YYCURSOR[-1])
@@ -647,10 +615,18 @@ conf:
 	}
 	"indent:string"               { return CONF_INDENT_STRING; }
 	"indent:top"                  { return CONF_INDENT_TOP; }
+	"label:yyFillLabel"           { return CONF_LABEL_YYFILLLABEL; }
+	"label:yyNext"                { return CONF_LABEL_YYNEXT; }
 	"labelprefix"                 { return CONF_LABELPREFIX; }
 	"startlabel"                  { return CONF_STARTLABEL; }
 	"state:abort"                 { return CONF_STATE_ABORT; }
 	"state:nextlabel"             { return CONF_STATE_NEXTLABEL; }
+	"variable:yyaccept"           { return CONF_VARIABLE_YYACCEPT; }
+	"variable:yybm"               { return CONF_VARIABLE_YYBM; }
+	"variable:yych"               { return CONF_VARIABLE_YYCH; }
+	"variable:yyctable"           { return CONF_VARIABLE_YYCTABLE; }
+	"variable:yystable"           { return CONF_VARIABLE_YYSTABLE; }
+	"variable:yytarget"           { return CONF_VARIABLE_YYTARGET; }
 	"yybm:hex"                    { return CONF_YYBM_HEX; }
 	"yych:conversion"             { return CONF_YYCH_CONVERSION; }
 	"yych:emit"                   { return CONF_YYCH_EMIT; }

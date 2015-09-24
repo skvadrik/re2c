@@ -3,7 +3,6 @@
 
 #include <string>
 
-#include "src/codegen/code_names.h"
 #include "src/codegen/input_api.h"
 #include "src/ir/regexp/encoding/enc.h"
 #include "src/ir/regexp/empty_class_policy.h"
@@ -13,57 +12,111 @@ namespace re2c
 
 struct opt_t
 {
+	// target
 	enum target_t
 	{
 		CODE,
 		DOT,
 		SKELETON
 	} target;
-	bool bFlag;
-	bool cFlag;
-	bool dFlag;
-	bool fFlag;
-	bool FFlag;
-	bool gFlag;
-	bool iFlag;
-	bool rFlag;
-	bool sFlag;
-	bool tFlag;
-	const char * header_file;
+
+	// fingerprint
 	bool bNoGenerationDate;
-	bool bEmitYYCh;
-	bool yychConversion;
-	bool bUseStateNext;
-	bool bUseYYFill;
-	bool bUseYYFillParam;
-	bool bUseYYFillCheck;
-	bool bUseYYFillNaked;
-	bool bUseYYSetConditionParam;
-	bool bUseYYGetConditionNaked;
-	bool bUseYYSetStateParam;
-	bool bUseYYSetStateNaked;
-	bool bUseYYGetStateNaked;
-	bool yybmHexTable;
-	bool bUseStateAbort;
+
+	// regular expressions
+	Enc encoding;
 	bool bCaseInsensitive;
 	bool bCaseInverted;
-	uint32_t cGotoThreshold;
-	uint32_t topIndent;
-	std::string indString;
-	std::string labelPrefix;
+	empty_class_policy_t empty_class_policy;
+
+	// conditions
+	bool cFlag;
+	bool tFlag;
+	const char * header_file;
+	std::string yycondtype;
+	std::string yysetcondition;
+	std::string yygetcondition;
+	std::string yyctable;
+	std::string yySetConditionParam;
+	bool bUseYYSetConditionParam;
+	bool bUseYYGetConditionNaked;
 	std::string condPrefix;
 	std::string condEnumPrefix;
 	std::string condDivider;
 	std::string condDividerParam;
 	std::string condGoto;
 	std::string condGotoParam;
-	std::string yyFillLength;
-	std::string yySetConditionParam;
+
+	// states
+	bool fFlag;
+	std::string yysetstate;
+	std::string yygetstate;
+	std::string yyfilllabel;
+	std::string yynext;
+	std::string yyaccept;
 	std::string yySetStateParam;
-	CodeNames mapCodeName;
-	Enc encoding;
+	bool bUseYYSetStateParam;
+	bool bUseYYSetStateNaked;
+	bool bUseYYGetStateNaked;
+	bool bUseStateAbort;
+	bool bUseStateNext;
+
+	// reuse
+	bool rFlag;
+
+	// partial flex syntax support
+	bool FFlag;
+
+	// code generation
+	bool sFlag;
+	bool bFlag;
+	std::string yybm;
+	bool yybmHexTable;
+	bool gFlag;
+	std::string yytarget;
+	uint32_t cGotoThreshold;
+
+	// formatting
+	uint32_t topIndent;
+	std::string indString;
+
+	// input API
 	InputAPI input_api;
-	empty_class_policy_t empty_class_policy;
+	std::string yycursor;
+	std::string yymarker;
+	std::string yyctxmarker;
+	std::string yylimit;
+	std::string yypeek;
+	std::string yyskip;
+	std::string yybackup;
+	std::string yybackupctx;
+	std::string yyrestore;
+	std::string yyrestorectx;
+	std::string yylessthan;
+
+	// #line directives
+	bool iFlag;
+
+	// debug
+	bool dFlag;
+	std::string yydebug;
+
+	// yych
+	std::string yyctype;
+	std::string yych;
+	bool bEmitYYCh;
+	bool yychConversion;
+
+	// YYFILL
+	std::string yyfill;
+	bool bUseYYFill;
+	bool bUseYYFillParam;
+	bool bUseYYFillCheck;
+	bool bUseYYFillNaked;
+	std::string yyFillLength;
+
+	// labels
+	std::string labelPrefix;
 
 	opt_t ();
 	opt_t (const opt_t & opt);
@@ -111,119 +164,114 @@ public:
 		, realopt (useropt)
 	{}
 
+	// read-only access, forces options syncronization
+	const opt_t * operator -> ()
+	{
+		return realopt.operator -> ();
+	}
+
+	bool source (const char * s);
+	bool output (const char * s);
+
 	// Inplace configurations are applied immediately when parsed.
 	// This is very bad: first, re2c behaviour is changed in the middle
 	// of the block; second, config is resynced too often (every
 	// attempt to read config that has been updated results in
 	// automatic resync). It is much better to set all options at once.
-	void set_target (opt_t::target_t tgt);
-	void bit_vectors ();
-	void start_conditions ();
-	void debug_output ();
-	void storable_state ();
-	void flex_syntax ();
-	void computed_gotos ();
-	void no_debug_info ();
-	void reusable ();
-	void nested_ifs ();
-	void no_generation_date ();
-	void case_insensitive ();
-	void case_inverted ();
-	void encoding_policy (Enc::policy_t);
-	void input (InputAPI::type_t);
-	void empty_class (empty_class_policy_t);
-	bool source (const char * s);
-	bool output (const char * s);
-	bool type_header (const char * s);
-	bool ecb ();
-	bool unicode ();
-	bool wide_chars ();
-	bool utf_16 ();
-	bool utf_8 ();
-	bool sync_mapCodeName (const std::string & key, const std::string & val);
-	bool sync_encoding (Enc::type_t t);
-	void sync_encoding_unset (Enc::type_t t);
-	void sync_condPrefix (const std::string & s);
-	void sync_condEnumPrefix (const std::string & s);
-	void sync_condDivider (const std::string & s);
-	void sync_condDividerParam (const std::string & s);
-	void sync_condGoto (const std::string & s);
-	void sync_condGotoParam (const std::string & s);
-	void sync_cGotoThreshold (uint32_t n);
-	void sync_bUseYYFillNaked (bool b);
-	void sync_yyFillLength (const std::string & s);
-	void sync_bUseYYGetConditionNaked (bool b);
-	void sync_bUseYYGetStateNaked (bool b);
-	void sync_yySetConditionParam (const std::string & s);
-	void sync_bUseYYSetStateNaked (bool b);
-	void sync_yySetStateParam (const std::string & s);
-	void sync_indString (const std::string & s);
-	void sync_topIndent (uint32_t n);
-	void sync_labelPrefix (const std::string & s);
-	void sync_bUseStateAbort (bool b);
-	void sync_bUseStateNext (bool b);
-	void sync_yybmHexTable (bool b);
-	void sync_yychConversion (bool b);
-	void sync_bEmitYYCh (bool b);
-	void sync_bUseYYFillCheck (bool b);
-	void sync_bUseYYFill (bool b);
-	void sync_bUseYYFillParam (bool b);
-	// bad temporary hacks
-	// should be fixed by proper scoping in config (parts).
-	void sync_reset_encoding (const Enc & enc);
-	void sync_reset_mapCodeName ();
+	void set_target (opt_t::target_t tgt)                { useropt->target = tgt; }
+	void set_bNoGenerationDate (bool b)                  { useropt->bNoGenerationDate = b; }
+	bool set_encoding (Enc::type_t t)                    { return useropt->encoding.set (t); }
+	void unset_encoding (Enc::type_t t)                  { useropt->encoding.unset (t); }
+	void set_encoding_policy (Enc::policy_t p)           { useropt->encoding.setPolicy (p); }
+	void set_bCaseInsensitive (bool b)                   { useropt->bCaseInsensitive = b; }
+	void set_bCaseInverted (bool b)                      { useropt->bCaseInverted = b; }
+	void set_empty_class_policy (empty_class_policy_t p) { useropt->empty_class_policy = p; }
+	void set_cFlag (bool b)                              { useropt->cFlag = b; }
+	void set_header_file (const char * f)                { useropt->header_file = f; }
+	void set_yycondtype (const std::string & s)          { useropt->yycondtype = s; }
+	void set_yysetcondition (const std::string & s)      { useropt->yysetcondition = s; }
+	void set_yygetcondition (const std::string & s)      { useropt->yygetcondition = s; }
+	void set_yyctable (const std::string & s)            { useropt->yyctable = s; }
+	void set_yySetConditionParam (const std::string & s)
+	{
+		useropt->yySetConditionParam = s;
+		useropt->bUseYYSetConditionParam = false;
+	}
+	void set_bUseYYGetConditionNaked (bool b)            { useropt->bUseYYGetConditionNaked = b; }
+	void set_condPrefix (const std::string & s)          { useropt->condPrefix = s; }
+	void set_condEnumPrefix (const std::string & s)      { useropt->condEnumPrefix = s; }
+	void set_condDivider (const std::string & s)         { useropt->condDivider = s; }
+	void set_condDividerParam (const std::string & s)    { useropt->condDividerParam = s; }
+	void set_condGoto (const std::string & s)            { useropt->condGoto = s; }
+	void set_condGotoParam (const std::string & s)       { useropt->condGotoParam = s; }
+	void set_fFlag (bool b)                              { useropt->fFlag = b; }
+	void set_yysetstate (const std::string & s)          { useropt->yysetstate = s; }
+	void set_yygetstate (const std::string & s)          { useropt->yygetstate = s; }
+	void set_yyfilllabel (const std::string & s)         { useropt->yyfilllabel = s; }
+	void set_yynext (const std::string & s)              { useropt->yynext = s; }
+	void set_yyaccept (const std::string & s)            { useropt->yyaccept = s; }
+	void set_yySetStateParam (const std::string & s)
+	{
+		useropt->yySetStateParam = s;
+		useropt->bUseYYSetStateParam = false;
+	}
+	void set_bUseYYSetStateNaked (bool b)                { useropt->bUseYYSetStateNaked = b; }
+	void set_bUseYYGetStateNaked (bool b)                { useropt->bUseYYGetStateNaked = b; }
+	void set_bUseStateAbort (bool b)                     { useropt->bUseStateAbort = b; }
+	void set_bUseStateNext (bool b)                      { useropt->bUseStateNext = b; }
+	void set_rFlag (bool b)                              { useropt->rFlag = b; }
+	void set_FFlag (bool b)                              { useropt->FFlag = b; }
+	void set_sFlag (bool b)                              { useropt->sFlag = b; }
+	void set_bFlag (bool b)                              { useropt->bFlag = b; }
+	void set_yybm (const std::string & s)                { useropt->yybm = s; }
+	void set_yybmHexTable (bool b)                       { useropt->yybmHexTable = b; }
+	void set_gFlag (bool b)                              { useropt->gFlag = b; }
+	void set_yytarget (const std::string & s)            { useropt->yytarget = s; }
+	void set_cGotoThreshold (uint32_t n)                 { useropt->cGotoThreshold = n; }
+	void set_topIndent (uint32_t n)                      { useropt->topIndent = n; }
+	void set_indString (const std::string & s)           { useropt->indString = s; }
+	void set_input_api (InputAPI::type_t t)              { useropt->input_api.set (t); }
+	void set_yycursor (const std::string & s)            { useropt->yycursor = s; }
+	void set_yymarker (const std::string & s)            { useropt->yymarker = s; }
+	void set_yyctxmarker (const std::string & s)         { useropt->yyctxmarker = s; }
+	void set_yylimit (const std::string & s)             { useropt->yylimit = s; }
+	void set_yypeek (const std::string & s)              { useropt->yypeek = s; }
+	void set_yyskip (const std::string & s)              { useropt->yyskip = s; }
+	void set_yybackup (const std::string & s)            { useropt->yybackup = s; }
+	void set_yybackupctx (const std::string & s)         { useropt->yybackupctx = s; }
+	void set_yyrestore (const std::string & s)           { useropt->yyrestore = s; }
+	void set_yyrestorectx (const std::string & s)        { useropt->yyrestorectx = s; }
+	void set_yylessthan (const std::string & s)          { useropt->yylessthan = s; }
+	void set_iFlag (bool b)                              { useropt->iFlag = b; }
+	void set_dFlag (bool b)                              { useropt->dFlag = b; }
+	void set_yydebug (const std::string & s)             { useropt->yydebug = s; }
+	void set_yyctype (const std::string & s)             { useropt->yyctype = s; }
+	void set_yych (const std::string & s)                { useropt->yych = s; }
+	void set_bEmitYYCh (bool b)                          { useropt->bEmitYYCh = b; }
+	void set_yychConversion (bool b)                     { useropt->yychConversion = b; }
+	void set_yyfill (const std::string & s)              { useropt->yyfill = s; }
+	void set_bUseYYFill (bool b)                         { useropt->bUseYYFill = b; }
+	void set_bUseYYFillParam (bool b)                    { useropt->bUseYYFillParam = b; }
+	void set_bUseYYFillCheck (bool b)                    { useropt->bUseYYFillCheck = b; }
+	void set_bUseYYFillNaked (bool b)                    { useropt->bUseYYFillNaked = b; }
+	void set_yyFillLength (const std::string & s)
+	{
+		useropt->yyFillLength = s;
+		useropt->bUseYYFillParam = false;
+	}
+	void set_labelPrefix (const std::string & s)         { useropt->labelPrefix = s; }
 
-	opt_t::target_t target ()                  { return realopt->target; }
-	bool bFlag ()                              { return realopt->bFlag; }
-	bool cFlag ()                              { return realopt->cFlag; }
-	bool dFlag ()                              { return realopt->dFlag; }
-	bool fFlag ()                              { return realopt->fFlag; }
-	bool FFlag ()                              { return realopt->FFlag; }
-	bool gFlag ()                              { return realopt->gFlag; }
-	bool iFlag ()                              { return realopt->iFlag; }
-	bool rFlag ()                              { return realopt->rFlag; }
-	bool sFlag ()                              { return realopt->sFlag; }
-	bool tFlag ()                              { return realopt->tFlag; }
-	const char * header_file ()                { return realopt->header_file; }
-	bool bNoGenerationDate ()                  { return realopt->bNoGenerationDate; }
-	bool bEmitYYCh ()                          { return realopt->bEmitYYCh; }
+	// helpers
 	std::string yychConversion ()
 	{
 		return realopt->yychConversion
-			? "(" + realopt->mapCodeName["YYCTYPE"] + ")"
+			? "(" + realopt->yyctype + ")"
 			: "";
 	}
-	bool bUseStateNext ()                      { return realopt->bUseStateNext; }
-	bool bUseYYFill ()                         { return realopt->bUseYYFill; }
-	bool bUseYYFillParam ()                    { return realopt->bUseYYFillParam; }
-	bool bUseYYFillCheck ()                    { return realopt->bUseYYFillCheck; }
-	bool bUseYYFillNaked ()                    { return realopt->bUseYYFillNaked; }
-	bool bUseYYSetConditionParam ()            { return realopt->bUseYYSetConditionParam; }
-	bool bUseYYGetConditionNaked ()            { return realopt->bUseYYGetConditionNaked; }
-	bool bUseYYSetStateParam ()                { return realopt->bUseYYSetStateParam; }
-	bool bUseYYSetStateNaked ()                { return realopt->bUseYYSetStateNaked; }
-	bool bUseYYGetStateNaked ()                { return realopt->bUseYYGetStateNaked; }
-	bool yybmHexTable ()                       { return realopt->yybmHexTable; }
-	bool bUseStateAbort ()                     { return realopt->bUseStateAbort; }
-	bool bCaseInsensitive ()                   { return realopt->bCaseInsensitive; }
-	bool bCaseInverted ()                      { return realopt->bCaseInverted; }
-	uint32_t cGotoThreshold ()                 { return realopt->cGotoThreshold; }
-	uint32_t topIndent ()                      { return realopt->topIndent; }
-	const std::string & indString ()           { return realopt->indString; }
-	const std::string & labelPrefix ()         { return realopt->labelPrefix; }
-	const std::string & condPrefix ()          { return realopt->condPrefix; }
-	const std::string & condEnumPrefix ()      { return realopt->condEnumPrefix; }
-	const std::string & condDivider ()         { return realopt->condDivider; }
-	const std::string & condDividerParam ()    { return realopt->condDividerParam; }
-	const std::string & condGoto ()            { return realopt->condGoto; }
-	const std::string & condGotoParam ()       { return realopt->condGotoParam; }
-	const std::string & yyFillLength ()        { return realopt->yyFillLength; }
-	const std::string & yySetConditionParam () { return realopt->yySetConditionParam; }
-	const std::string & yySetStateParam ()     { return realopt->yySetStateParam; }
-	const CodeNames & mapCodeName ()           { return realopt->mapCodeName; }
-	const Enc & encoding ()                    { return realopt->encoding; }
-	const InputAPI & input_api ()              { return realopt->input_api; }
-	empty_class_policy_t empty_class_policy () { return realopt->empty_class_policy; }
+
+	// bad temporary hacks, should be fixed by proper scoping of config (parts).
+	void reset_encoding (const Enc & enc);
+	void reset_mapCodeName ();
 
 	FORBID_COPY (Opt);
 };

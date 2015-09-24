@@ -35,15 +35,15 @@ int main(int, char *argv[])
 	}
 
 	// set up the output streams
-	re2c::Output output (opts.output_file, opts.header_file ());
+	re2c::Output output (opts.output_file, opts->header_file);
 	if (!output.source.open ())
 	{
 		error ("cannot open output file: %s", opts.output_file);
 		return 1;
 	}
-	if (opts.tFlag () && !output.header.open ())
+	if (opts->tFlag && !output.header.open ())
 	{
-		error ("cannot open header file: %s", opts.header_file ());
+		error ("cannot open header file: %s", opts->header_file);
 		return 1;
 	}
 

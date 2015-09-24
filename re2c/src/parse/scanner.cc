@@ -66,7 +66,7 @@ void Scanner::fill (uint32_t need)
 	{
 		/* Do not get rid of anything when rFlag is active. Otherwise
 		 * get rid of everything that was already handedout. */
-		if (!opts.rFlag ())
+		if (!opts->rFlag)
 		{
 			const ptrdiff_t diff = tok - bot;
 			if (diff > 0)
@@ -178,7 +178,7 @@ void Scanner::reuse()
 	last_fill_index = 0;
 	bWroteGetState = false;
 	bWroteCondCheck = false;
-	opts.sync_reset_mapCodeName ();
+	opts.reset_mapCodeName ();
 }
 
 void Scanner::restore_state(const ScannerState& state)

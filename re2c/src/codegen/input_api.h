@@ -21,6 +21,7 @@ private:
 	type_t type_;
 
 public:
+	InputAPI ();
 	type_t type () const;
 	void set (type_t t);
 	std::string expr_peek () const;

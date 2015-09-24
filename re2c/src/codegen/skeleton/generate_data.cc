@@ -212,7 +212,7 @@ template <typename cunit_t>
 
 void Skeleton::generate_paths (FILE * input, FILE * keys)
 {
-	switch (opts.encoding ().szCodeUnit ())
+	switch (opts->encoding.szCodeUnit ())
 	{
 		case 4: generate_paths_cunit<uint32_t> (input, keys); break;
 		case 2: generate_paths_cunit<uint16_t> (input, keys); break;

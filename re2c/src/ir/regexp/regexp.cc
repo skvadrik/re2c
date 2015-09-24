@@ -112,10 +112,10 @@ RegExp * doCat (RegExp * e1, RegExp * e2)
 
 RegExp * Scanner::matchSymbol(uint32_t c) const
 {
-	if (!opts.encoding ().encode(c))
+	if (!opts->encoding.encode(c))
 		fatalf("Bad code point: '0x%X'", c);
 
-	switch (opts.encoding ().type ())
+	switch (opts->encoding.type ())
 	{
 		case Enc::UTF16: return UTF16Symbol(c);
 		case Enc::UTF8:  return UTF8Symbol(c);
@@ -127,7 +127,7 @@ RegExp * Scanner::matchSymbolRange(Range * r) const
 {
 	if (!r)
 	{
-		switch (opts.empty_class_policy ())
+		switch (opts->empty_class_policy)
 		{
 			case EMPTY_CLASS_MATCH_EMPTY:
 				warn.empty_class (get_line ());
@@ -141,7 +141,7 @@ RegExp * Scanner::matchSymbolRange(Range * r) const
 		}
 	}
 
-	switch (opts.encoding ().type ())
+	switch (opts->encoding.type ())
 	{
 		case Enc::UTF16: return UTF16Range(r);
 		case Enc::UTF8:  return UTF8Range(r);
@@ -185,7 +185,7 @@ RegExp * Scanner::cpoint_class (const std::vector<uint32_t> & cs, bool neg) cons
 			warn.swapped_range (get_line (), l, u);
 			std::swap (l, u);
 		}
-		Range * s = opts.encoding ().encodeRange (l, u);
+		Range * s = opts->encoding.encodeRange (l, u);
 		if (!s)
 		{
 			fatalf ("Bad code point range: '0x%X - 0x%X'", l, u);
@@ -194,7 +194,7 @@ RegExp * Scanner::cpoint_class (const std::vector<uint32_t> & cs, bool neg) cons
 	}
 	if (neg)
 	{
-		r = Range::sub (opts.encoding ().fullRange (), r);
+		r = Range::sub (opts->encoding.fullRange (), r);
 	}
 	return matchSymbolRange (r);
 }
@@ -233,9 +233,9 @@ RegExp * Scanner::mkDiff (RegExp * e1, RegExp * e2) const
 
 RegExp * Scanner::mkDot() const
 {
-	Range * full = opts.encoding ().fullRange();
+	Range * full = opts->encoding.fullRange();
 	uint32_t c = '\n';
-	if (!opts.encoding ().encode(c))
+	if (!opts->encoding.encode(c))
 		fatalf("Bad code point: '0x%X'", c);
 	Range * ran = Range::sym (c);
 	Range * inv = Range::sub (full, ran);
@@ -255,7 +255,7 @@ RegExp * Scanner::mkDot() const
  */
 RegExp * Scanner::mkDefault() const
 {
-	Range * def = Range::ran (0, opts.encoding ().nCodeUnits());
+	Range * def = Range::ran (0, opts->encoding.nCodeUnits());
 	return new MatchOp(def);
 }
 

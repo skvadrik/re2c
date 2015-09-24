@@ -10,7 +10,6 @@ RE2C = re2c$(EXEEXT)
 # sources
 SRC_HDR = \
 	src/codegen/bitmap.h \
-	src/codegen/code_names.h \
 	src/codegen/emit.h \
 	src/codegen/go.h \
 	src/codegen/indent.h \
@@ -72,7 +71,6 @@ SRC_HDR = \
 	src/util/uniq_vector.h
 SRC = \
 	src/codegen/bitmap.cc \
-	src/codegen/code_names.cc \
 	src/codegen/emit_action.cc \
 	src/codegen/emit_dfa.cc \
 	src/codegen/label.cc \

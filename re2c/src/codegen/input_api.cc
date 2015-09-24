@@ -7,6 +7,10 @@
 namespace re2c
 {
 
+InputAPI::InputAPI ()
+	: type_ (DEFAULT)
+{}
+
 InputAPI::type_t InputAPI::type () const
 {
 	return type_;
@@ -23,10 +27,10 @@ std::string InputAPI::expr_peek () const
 	switch (type_)
 	{
 		case DEFAULT:
-			s = "*" + opts.mapCodeName ()["YYCURSOR"];
+			s = "*" + opts->yycursor;
 			break;
 		case CUSTOM:
-			s = opts.mapCodeName ()["YYPEEK"] + " ()";
+			s = opts->yypeek + " ()";
 			break;
 	}
 	return s;
@@ -34,7 +38,7 @@ std::string InputAPI::expr_peek () const
 
 std::string InputAPI::expr_peek_save () const
 {
-	return opts.mapCodeName ()["yych"] + " = " + opts.yychConversion () + expr_peek ();
+	return opts->yych + " = " + opts.yychConversion () + expr_peek ();
 }
 
 std::string InputAPI::stmt_peek (uint32_t ind) const
@@ -48,10 +52,10 @@ std::string InputAPI::stmt_skip (uint32_t ind) const
 	switch (type_)
 	{
 		case DEFAULT:
-			s = "++" + opts.mapCodeName ()["YYCURSOR"];
+			s = "++" + opts->yycursor;
 			break;
 		case CUSTOM:
-			s = opts.mapCodeName ()["YYSKIP"] + " ()";
+			s = opts->yyskip + " ()";
 			break;
 	}
 	return indent (ind) + s + ";\n";
@@ -63,10 +67,10 @@ std::string InputAPI::stmt_backup (uint32_t ind) const
 	switch (type_)
 	{
 		case DEFAULT:
-			s = opts.mapCodeName ()["YYMARKER"] + " = " + opts.mapCodeName ()["YYCURSOR"];
+			s = opts->yymarker + " = " + opts->yycursor;
 			break;
 		case CUSTOM:
-			s = opts.mapCodeName ()["YYBACKUP"] + " ()";
+			s = opts->yybackup + " ()";
 			break;
 	}
 	return indent (ind) + s + ";\n";
@@ -79,10 +83,10 @@ std::string InputAPI::stmt_backupctx (uint32_t ind) const
 	{
 		case DEFAULT:
 			// backward compatibility: '+1' here instead of '++YYCURSOR;' in stmt_restorectx
-			s = opts.mapCodeName ()["YYCTXMARKER"] + " = " + opts.mapCodeName ()["YYCURSOR"] + " + 1";
+			s = opts->yyctxmarker + " = " + opts->yycursor + " + 1";
 			break;
 		case CUSTOM:
-			s = opts.mapCodeName ()["YYBACKUPCTX"] + " ()";
+			s = opts->yybackupctx + " ()";
 			break;
 	}
 	return indent (ind) + s + ";\n";
@@ -94,10 +98,10 @@ std::string InputAPI::stmt_restore (uint32_t ind) const
 	switch (type_)
 	{
 		case DEFAULT:
-			s = opts.mapCodeName ()["YYCURSOR"] + " = " + opts.mapCodeName ()["YYMARKER"];
+			s = opts->yycursor + " = " + opts->yymarker;
 			break;
 		case CUSTOM:
-			s = opts.mapCodeName ()["YYRESTORE"] + " ()";
+			s = opts->yyrestore + " ()";
 			break;
 	}
 	return indent (ind) + s + ";\n";
@@ -110,10 +114,10 @@ std::string InputAPI::stmt_restorectx (uint32_t ind) const
 	{
 		case DEFAULT:
 			// backward compatibility: 'no ++YYCURSOR;' here; instead '+1' in stmt_backupctx
-			s = indent (ind) + opts.mapCodeName ()["YYCURSOR"] + " = " + opts.mapCodeName ()["YYCTXMARKER"] + ";\n";
+			s = indent (ind) + opts->yycursor + " = " + opts->yyctxmarker + ";\n";
 			break;
 		case CUSTOM:
-			s = indent (ind) + opts.mapCodeName ()["YYRESTORECTX"] + " ();\n" + stmt_skip (ind);
+			s = indent (ind) + opts->yyrestorectx + " ();\n" + stmt_skip (ind);
 			break;
 	}
 	return s;
@@ -122,35 +126,35 @@ std::string InputAPI::stmt_restorectx (uint32_t ind) const
 std::string InputAPI::stmt_skip_peek (uint32_t ind) const
 {
 	return type_ == DEFAULT
-		? indent (ind) + opts.mapCodeName ()["yych"] + " = " + opts.yychConversion () + "*++" + opts.mapCodeName ()["YYCURSOR"] + ";\n"
+		? indent (ind) + opts->yych + " = " + opts.yychConversion () + "*++" + opts->yycursor + ";\n"
 		: stmt_skip (ind) + stmt_peek (ind);
 }
 
 std::string InputAPI::stmt_skip_backup (uint32_t ind) const
 {
 	return type_ == DEFAULT
-		? indent (ind) + opts.mapCodeName ()["YYMARKER"] + " = ++" + opts.mapCodeName ()["YYCURSOR"] + ";\n"
+		? indent (ind) + opts->yymarker + " = ++" + opts->yycursor + ";\n"
 		: stmt_skip (ind) + stmt_backup (ind);
 }
 
 std::string InputAPI::stmt_backup_peek (uint32_t ind) const
 {
 	return type_ == DEFAULT
-		? indent (ind) + opts.mapCodeName ()["yych"] + " = " + opts.yychConversion () + "*(" + opts.mapCodeName ()["YYMARKER"] + " = " + opts.mapCodeName ()["YYCURSOR"] + ");\n"
+		? indent (ind) + opts->yych + " = " + opts.yychConversion () + "*(" + opts->yymarker + " = " + opts->yycursor + ");\n"
 		: stmt_backup (ind) + stmt_peek (ind);
 }
 
 std::string InputAPI::stmt_skip_backup_peek (uint32_t ind) const
 {
 	return type_ == DEFAULT
-		? indent (ind) + opts.mapCodeName ()["yych"] + " = " + opts.yychConversion () + "*(" + opts.mapCodeName ()["YYMARKER"] + " = ++" + opts.mapCodeName ()["YYCURSOR"] + ");\n"
+		? indent (ind) + opts->yych + " = " + opts.yychConversion () + "*(" + opts->yymarker + " = ++" + opts->yycursor + ");\n"
 		: stmt_skip (ind) + stmt_backup (ind) + stmt_peek (ind);
 }
 
 std::string InputAPI::expr_lessthan_one () const
 {
 	return type_ == DEFAULT
-		? opts.mapCodeName ()["YYLIMIT"] + " <= " + opts.mapCodeName ()["YYCURSOR"]
+		? opts->yylimit + " <= " + opts->yycursor
 		: expr_lessthan (1);
 }
 
@@ -160,10 +164,10 @@ std::string InputAPI::expr_lessthan (uint32_t n) const
 	switch (type_)
 	{
 		case DEFAULT:
-			s << "(" << opts.mapCodeName ()["YYLIMIT"] << " - " << opts.mapCodeName ()["YYCURSOR"] << ") < " << n;
+			s << "(" << opts->yylimit << " - " << opts->yycursor << ") < " << n;
 			break;
 		case CUSTOM:
-			s << opts.mapCodeName ()["YYLESSTHAN"] << " (" << n << ")";
+			s << opts->yylessthan << " (" << n << ")";
 			break;
 	}
 	return s.str ();

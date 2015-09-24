@@ -8,100 +8,150 @@ Opt opts;
 
 opt_t::opt_t ()
 	: target (CODE)
-	, bFlag (false)
-	, cFlag (false)
-	, dFlag (false)
-	, fFlag (false)
-	, FFlag (false)
-	, gFlag (false)
-	, iFlag (false)
-	, rFlag (false)
-	, sFlag (false)
-	, tFlag (false)
-	, header_file (NULL)
 	, bNoGenerationDate (false)
-	, bEmitYYCh (true)
-	, yychConversion (false)
-	, bUseStateNext (false)
-	, bUseYYFill (true)
-	, bUseYYFillParam (true)
-	, bUseYYFillCheck (true)
-	, bUseYYFillNaked (false)
-	, bUseYYSetConditionParam (true)
-	, bUseYYGetConditionNaked (false)
-	, bUseYYSetStateParam (true)
-	, bUseYYSetStateNaked (false)
-	, bUseYYGetStateNaked (false)
-	, yybmHexTable (false)
-	, bUseStateAbort (false)
+	, encoding ()
 	, bCaseInsensitive (false)
 	, bCaseInverted (false)
-	, cGotoThreshold (9)
-	, topIndent (0)
-	, indString ("\t")
-	, labelPrefix ("yy")
+	, empty_class_policy (EMPTY_CLASS_MATCH_EMPTY)
+	, cFlag (false)
+	, tFlag (false)
+	, header_file (NULL)
+	, yycondtype ("YYCONDTYPE")
+	, yysetcondition ("YYSETCONDITION")
+	, yygetcondition ("YYGETCONDITION")
+	, yyctable ("yyctable")
+	, yySetConditionParam ("@@")
+	, bUseYYSetConditionParam (true)
+	, bUseYYGetConditionNaked (false)
 	, condPrefix ("yyc_")
 	, condEnumPrefix ("yyc")
 	, condDivider ("/* *********************************** */")
 	, condDividerParam ("@@")
 	, condGoto ("goto @@;")
 	, condGotoParam ("@@")
-	, yyFillLength ("@@")
-	, yySetConditionParam ("@@")
+	, fFlag (false)
+	, yysetstate ("YYSETSTATE")
+	, yygetstate ("YYGETSTATE")
+	, yyfilllabel ("yyFillLabel")
+	, yynext ("yyNext")
+	, yyaccept ("yyaccept")
 	, yySetStateParam ("@@")
-	, mapCodeName ()
-	, encoding ()
+	, bUseYYSetStateParam (true)
+	, bUseYYSetStateNaked (false)
+	, bUseYYGetStateNaked (false)
+	, bUseStateAbort (false)
+	, bUseStateNext (false)
+	, rFlag (false)
+	, FFlag (false)
+	, sFlag (false)
+	, bFlag (false)
+	, yybm ("yybm")
+	, yybmHexTable (false)
+	, gFlag (false)
+	, yytarget ("yytarget")
+	, cGotoThreshold (9)
+	, topIndent (0)
+	, indString ("\t")
 	, input_api ()
-	, empty_class_policy (EMPTY_CLASS_MATCH_EMPTY)
+	, yycursor ("YYCURSOR")
+	, yymarker ("YYMARKER")
+	, yyctxmarker ("YYCTXMARKER")
+	, yylimit ("YYLIMIT")
+	, yypeek ("YYPEEK")
+	, yyskip ("YYSKIP")
+	, yybackup ("YYBACKUP")
+	, yybackupctx ("YYBACKUPCTX")
+	, yyrestore ("YYRESTORE")
+	, yyrestorectx ("YYRESTORECTX")
+	, yylessthan ("YYLESSTHAN")
+	, iFlag (false)
+	, dFlag (false)
+	, yydebug ("YYDEBUG")
+	, yyctype ("YYCTYPE")
+	, yych ("yych")
+	, bEmitYYCh (true)
+	, yychConversion (false)
+	, yyfill ("YYFILL")
+	, bUseYYFill (true)
+	, bUseYYFillParam (true)
+	, bUseYYFillCheck (true)
+	, bUseYYFillNaked (false)
+	, yyFillLength ("@@")
+	, labelPrefix ("yy")
 {}
 
 opt_t::opt_t (const opt_t & opt)
 	: target (opt.target)
-	, bFlag (opt.bFlag)
-	, cFlag (opt.cFlag)
-	, dFlag (opt.dFlag)
-	, fFlag (opt.fFlag)
-	, FFlag (opt.FFlag)
-	, gFlag (opt.gFlag)
-	, iFlag (opt.iFlag)
-	, rFlag (opt.rFlag)
-	, sFlag (opt.sFlag)
-	, tFlag (opt.tFlag)
-	, header_file (opt.header_file)
 	, bNoGenerationDate (opt.bNoGenerationDate)
-	, bEmitYYCh (opt.bEmitYYCh)
-	, yychConversion (opt.yychConversion)
-	, bUseStateNext (opt.bUseStateNext)
-	, bUseYYFill (opt.bUseYYFill)
-	, bUseYYFillParam (opt.bUseYYFillParam)
-	, bUseYYFillCheck (opt.bUseYYFillCheck)
-	, bUseYYFillNaked (opt.bUseYYFillNaked)
-	, bUseYYSetConditionParam (opt.bUseYYSetConditionParam)
-	, bUseYYGetConditionNaked (opt.bUseYYGetConditionNaked)
-	, bUseYYSetStateParam (opt.bUseYYSetStateParam)
-	, bUseYYSetStateNaked (opt.bUseYYSetStateNaked)
-	, bUseYYGetStateNaked (opt.bUseYYGetStateNaked)
-	, yybmHexTable (opt.yybmHexTable)
-	, bUseStateAbort (opt.bUseStateAbort)
+	, encoding (opt.encoding)
 	, bCaseInsensitive (opt.bCaseInsensitive)
 	, bCaseInverted (opt.bCaseInverted)
-	, cGotoThreshold (opt.cGotoThreshold)
-	, topIndent (opt.topIndent)
-	, indString (opt.indString)
-	, labelPrefix (opt.labelPrefix)
+	, empty_class_policy (opt.empty_class_policy)
+	, cFlag (opt.cFlag)
+	, tFlag (opt.tFlag)
+	, header_file (opt.header_file)
+	, yycondtype (opt.yycondtype)
+	, yysetcondition (opt.yysetcondition)
+	, yygetcondition (opt.yygetcondition)
+	, yyctable (opt.yyctable)
+	, yySetConditionParam (opt.yySetConditionParam)
+	, bUseYYSetConditionParam (opt.bUseYYSetConditionParam)
+	, bUseYYGetConditionNaked (opt.bUseYYGetConditionNaked)
 	, condPrefix (opt.condPrefix)
 	, condEnumPrefix (opt.condEnumPrefix)
 	, condDivider (opt.condDivider)
 	, condDividerParam (opt.condDividerParam)
 	, condGoto (opt.condGoto)
 	, condGotoParam (opt.condGotoParam)
-	, yyFillLength (opt.yyFillLength)
-	, yySetConditionParam (opt.yySetConditionParam)
+	, fFlag (opt.fFlag)
+	, yysetstate (opt.yysetstate)
+	, yygetstate (opt.yygetstate)
+	, yyfilllabel (opt.yyfilllabel)
+	, yynext (opt.yynext)
+	, yyaccept (opt.yyaccept)
 	, yySetStateParam (opt.yySetStateParam)
-	, mapCodeName (opt.mapCodeName)
-	, encoding (opt.encoding)
+	, bUseYYSetStateParam (opt.bUseYYSetStateParam)
+	, bUseYYSetStateNaked (opt.bUseYYSetStateNaked)
+	, bUseYYGetStateNaked (opt.bUseYYGetStateNaked)
+	, bUseStateAbort (opt.bUseStateAbort)
+	, bUseStateNext (opt.bUseStateNext)
+	, rFlag (opt.rFlag)
+	, FFlag (opt.FFlag)
+	, sFlag (opt.sFlag)
+	, bFlag (opt.bFlag)
+	, yybm (opt.yybm)
+	, yybmHexTable (opt.yybmHexTable)
+	, gFlag (opt.gFlag)
+	, yytarget (opt.yytarget)
+	, cGotoThreshold (opt.cGotoThreshold)
+	, topIndent (opt.topIndent)
+	, indString (opt.indString)
 	, input_api (opt.input_api)
-	, empty_class_policy (opt.empty_class_policy)
+	, yycursor (opt.yycursor)
+	, yymarker (opt.yymarker)
+	, yyctxmarker (opt.yyctxmarker)
+	, yylimit (opt.yylimit)
+	, yypeek (opt.yypeek)
+	, yyskip (opt.yyskip)
+	, yybackup (opt.yybackup)
+	, yybackupctx (opt.yybackupctx)
+	, yyrestore (opt.yyrestore)
+	, yyrestorectx (opt.yyrestorectx)
+	, yylessthan (opt.yylessthan)
+	, iFlag (opt.iFlag)
+	, dFlag (opt.dFlag)
+	, yydebug (opt.yydebug)
+	, yyctype (opt.yyctype)
+	, yych (opt.yych)
+	, bEmitYYCh (opt.bEmitYYCh)
+	, yychConversion (opt.yychConversion)
+	, yyfill (opt.yyfill)
+	, bUseYYFill (opt.bUseYYFill)
+	, bUseYYFillParam (opt.bUseYYFillParam)
+	, bUseYYFillCheck (opt.bUseYYFillCheck)
+	, bUseYYFillNaked (opt.bUseYYFillNaked)
+	, yyFillLength (opt.yyFillLength)
+	, labelPrefix (opt.labelPrefix)
 {}
 
 opt_t & opt_t::operator = (const opt_t & opt)
@@ -118,10 +168,10 @@ void opt_t::fix ()
 	{
 		case DOT:
 			// default code generation options
+			sFlag = Opt::baseopt.sFlag;
 			bFlag = Opt::baseopt.bFlag;
 			gFlag = Opt::baseopt.gFlag;
 			cGotoThreshold = Opt::baseopt.cGotoThreshold;
-			sFlag = Opt::baseopt.sFlag;
 			// default environment-insensitive formatting
 			yybmHexTable = Opt::baseopt.yybmHexTable;
 			// fallthrough
@@ -134,33 +184,58 @@ void opt_t::fix ()
 			condDivider = Opt::baseopt.condDivider;
 			condDividerParam = Opt::baseopt.condDividerParam;
 			// default environment bindings
-			input_api = Opt::baseopt.input_api;
-			mapCodeName = Opt::baseopt.mapCodeName;
-			dFlag = Opt::baseopt.dFlag;
-			fFlag = Opt::baseopt.fFlag;
 			tFlag = Opt::baseopt.tFlag;
 			header_file = Opt::baseopt.header_file;
-			bEmitYYCh = Opt::baseopt.bEmitYYCh;
-			bUseStateNext = Opt::baseopt.bUseStateNext;
-			bUseYYFill = Opt::baseopt.bUseYYFill;
-			bUseYYFillParam = Opt::baseopt.bUseYYFillParam;
-			bUseYYFillCheck = Opt::baseopt.bUseYYFillCheck;
-			bUseYYFillNaked = Opt::baseopt.bUseYYFillNaked;
+			yycondtype = Opt::baseopt.yycondtype;
+			yysetcondition = Opt::baseopt.yysetcondition;
+			yygetcondition = Opt::baseopt.yygetcondition;
+			yyctable = Opt::baseopt.yyctable;
+			yySetConditionParam = Opt::baseopt.yySetConditionParam;
 			bUseYYSetConditionParam = Opt::baseopt.bUseYYSetConditionParam;
 			bUseYYGetConditionNaked = Opt::baseopt.bUseYYGetConditionNaked;
-			bUseYYSetStateParam = Opt::baseopt.bUseYYSetStateParam;
-			bUseYYSetStateNaked = Opt::baseopt.bUseYYSetStateNaked;
-			bUseYYGetStateNaked = Opt::baseopt.bUseYYGetStateNaked;
-			bUseStateAbort = Opt::baseopt.bUseStateAbort;
-			labelPrefix = Opt::baseopt.labelPrefix;
 			condPrefix = Opt::baseopt.condPrefix;
 			condEnumPrefix = Opt::baseopt.condEnumPrefix;
 			condGoto = Opt::baseopt.condGoto;
 			condGotoParam = Opt::baseopt.condGotoParam;
-			yychConversion = Opt::baseopt.yychConversion;
-			yyFillLength = Opt::baseopt.yyFillLength;
-			yySetConditionParam = Opt::baseopt.yySetConditionParam;
+			fFlag = Opt::baseopt.fFlag;
+			yysetstate = Opt::baseopt.yysetstate;
+			yygetstate = Opt::baseopt.yygetstate;
+			yyfilllabel = Opt::baseopt.yyfilllabel;
+			yynext = Opt::baseopt.yynext;
+			yyaccept = Opt::baseopt.yyaccept;
 			yySetStateParam = Opt::baseopt.yySetStateParam;
+			bUseYYSetStateParam = Opt::baseopt.bUseYYSetStateParam;
+			bUseYYSetStateNaked = Opt::baseopt.bUseYYSetStateNaked;
+			bUseYYGetStateNaked = Opt::baseopt.bUseYYGetStateNaked;
+			bUseStateAbort = Opt::baseopt.bUseStateAbort;
+			bUseStateNext = Opt::baseopt.bUseStateNext;
+			yybm = Opt::baseopt.yybm;
+			yytarget = Opt::baseopt.yytarget;
+			input_api = Opt::baseopt.input_api;
+			yycursor = Opt::baseopt.yycursor;
+			yymarker = Opt::baseopt.yymarker;
+			yyctxmarker = Opt::baseopt.yyctxmarker;
+			yylimit = Opt::baseopt.yylimit;
+			yypeek = Opt::baseopt.yypeek;
+			yyskip = Opt::baseopt.yyskip;
+			yybackup = Opt::baseopt.yybackup;
+			yybackupctx = Opt::baseopt.yybackupctx;
+			yyrestore = Opt::baseopt.yyrestore;
+			yyrestorectx = Opt::baseopt.yyrestorectx;
+			yylessthan = Opt::baseopt.yylessthan;
+			dFlag = Opt::baseopt.dFlag;
+			yydebug = Opt::baseopt.yydebug;
+			yyctype = Opt::baseopt.yyctype;
+			yych = Opt::baseopt.yych;
+			bEmitYYCh = Opt::baseopt.bEmitYYCh;
+			yychConversion = Opt::baseopt.yychConversion;
+			yyfill = Opt::baseopt.yyfill;
+			bUseYYFill = Opt::baseopt.bUseYYFill;
+			bUseYYFillParam = Opt::baseopt.bUseYYFillParam;
+			bUseYYFillCheck = Opt::baseopt.bUseYYFillCheck;
+			bUseYYFillNaked = Opt::baseopt.bUseYYFillNaked;
+			yyFillLength = Opt::baseopt.yyFillLength;
+			labelPrefix = Opt::baseopt.labelPrefix;
 			break;
 		default:
 			break;
@@ -176,6 +251,11 @@ void opt_t::fix ()
 	{
 		tFlag = Opt::baseopt.tFlag;
 		header_file = Opt::baseopt.header_file;
+		yycondtype = Opt::baseopt.yycondtype;
+		yysetcondition = Opt::baseopt.yysetcondition;
+		yygetcondition = Opt::baseopt.yygetcondition;
+		yyctable = Opt::baseopt.yyctable;
+		yySetConditionParam = Opt::baseopt.yySetConditionParam;
 		bUseYYSetConditionParam = Opt::baseopt.bUseYYSetConditionParam;
 		bUseYYGetConditionNaked = Opt::baseopt.bUseYYGetConditionNaked;
 		condPrefix = Opt::baseopt.condPrefix;
@@ -184,56 +264,51 @@ void opt_t::fix ()
 		condDividerParam = Opt::baseopt.condDividerParam;
 		condGoto = Opt::baseopt.condGoto;
 		condGotoParam = Opt::baseopt.condGotoParam;
-		yySetConditionParam = Opt::baseopt.yySetConditionParam;
-		mapCodeName.erase ("YYCONDTYPE");
-		mapCodeName.erase ("YYGETCONDITION");
-		mapCodeName.erase ("YYSETCONDITION");
-		mapCodeName.erase ("yyctable");
 	}
 	if (!fFlag)
 	{
-		bUseStateNext = Opt::baseopt.bUseStateNext;
+		yysetstate = Opt::baseopt.yysetstate;
+		yygetstate = Opt::baseopt.yygetstate;
+		yyfilllabel = Opt::baseopt.yyfilllabel;
+		yynext = Opt::baseopt.yynext;
+		yyaccept = Opt::baseopt.yyaccept;
+		yySetStateParam = Opt::baseopt.yySetStateParam;
 		bUseYYSetStateParam = Opt::baseopt.bUseYYSetStateParam;
 		bUseYYSetStateNaked = Opt::baseopt.bUseYYSetStateNaked;
 		bUseYYGetStateNaked = Opt::baseopt.bUseYYGetStateNaked;
 		bUseStateAbort = Opt::baseopt.bUseStateAbort;
-		yySetStateParam = Opt::baseopt.yySetStateParam;
-		mapCodeName.erase ("YYGETSTATE");
-		mapCodeName.erase ("YYSETSTATE");
-		mapCodeName.erase ("yyaccept");
-		mapCodeName.erase ("yyFillLabel");
-		mapCodeName.erase ("yyNext");
+		bUseStateNext = Opt::baseopt.bUseStateNext;
 	}
 	if (!bFlag)
 	{
 		yybmHexTable = Opt::baseopt.yybmHexTable;
-		mapCodeName.erase ("yybm");
+		yybm = Opt::baseopt.yybm;
 	}
 	if (!gFlag)
 	{
 		cGotoThreshold = Opt::baseopt.cGotoThreshold;
-		mapCodeName.erase ("yytarget");
+		yytarget = Opt::baseopt.yytarget;
 	}
 	if (input_api.type () != InputAPI::DEFAULT)
 	{
-		mapCodeName.erase ("YYCURSOR");
-		mapCodeName.erase ("YYMARKER");
-		mapCodeName.erase ("YYCTXMARKER");
-		mapCodeName.erase ("YYLIMIT");
+		yycursor = Opt::baseopt.yycursor;
+		yymarker = Opt::baseopt.yymarker;
+		yyctxmarker = Opt::baseopt.yyctxmarker;
+		yylimit = Opt::baseopt.yylimit;
 	}
 	if (input_api.type () != InputAPI::CUSTOM)
 	{
-		mapCodeName.erase ("YYPEEK");
-		mapCodeName.erase ("YYSKIP");
-		mapCodeName.erase ("YYBACKUP");
-		mapCodeName.erase ("YYBACKUPCTX");
-		mapCodeName.erase ("YYRESTORE");
-		mapCodeName.erase ("YYRESTORECTX");
-		mapCodeName.erase ("YYLESSTHAN");
+		yypeek = Opt::baseopt.yypeek;
+		yyskip = Opt::baseopt.yyskip;
+		yybackup = Opt::baseopt.yybackup;
+		yybackupctx = Opt::baseopt.yybackupctx;
+		yyrestore = Opt::baseopt.yyrestore;
+		yyrestorectx = Opt::baseopt.yyrestorectx;
+		yylessthan = Opt::baseopt.yylessthan;
 	}
 	if (!dFlag)
 	{
-		mapCodeName.erase ("YYDEBUG");
+		yydebug = Opt::baseopt.yydebug;
 	}
 
 	// force individual options
@@ -269,6 +344,10 @@ void opt_t::fix ()
 	{
 		bFlag = true;
 		sFlag = true;
+	}
+	if (header_file != NULL)
+	{
+		tFlag = true;
 	}
 }
 
@@ -306,86 +385,6 @@ opt_t * useropt_t::operator -> ()
 
 const opt_t Opt::baseopt;
 
-void Opt::set_target (opt_t::target_t tgt)
-{
-	useropt->target = tgt;
-}
-
-void Opt::bit_vectors ()
-{
-	useropt->bFlag = true;
-}
-
-void Opt::start_conditions ()
-{
-	useropt->cFlag = true;
-}
-
-void Opt::debug_output ()
-{
-	useropt->dFlag = true;
-}
-
-void Opt::storable_state ()
-{
-	useropt->fFlag = true;
-}
-
-void Opt::flex_syntax ()
-{
-	useropt->FFlag = true;
-}
-
-void Opt::computed_gotos ()
-{
-	useropt->gFlag = true;
-}
-
-void Opt::no_debug_info ()
-{
-	useropt->iFlag = true;
-}
-
-void Opt::reusable ()
-{
-	useropt->rFlag = true;
-}
-
-void Opt::nested_ifs ()
-{
-	useropt->sFlag = true;
-}
-
-void Opt::no_generation_date ()
-{
-	useropt->bNoGenerationDate = true;
-}
-
-void Opt::case_insensitive ()
-{
-	useropt->bCaseInsensitive = true;
-}
-
-void Opt::case_inverted ()
-{
-	useropt->bCaseInverted = true;
-}
-
-void Opt::encoding_policy (Enc::policy_t p)
-{
-	useropt->encoding.setPolicy (p);
-}
-
-void Opt::input (InputAPI::type_t i)
-{
-	useropt->input_api.set (i);
-}
-
-void Opt::empty_class (empty_class_policy_t p)
-{
-	useropt->empty_class_policy = p;
-}
-
 bool Opt::source (const char * s)
 {
 	if (source_file)
@@ -414,205 +413,41 @@ bool Opt::output (const char * s)
 	}
 }
 
-bool Opt::type_header (const char * s)
-{
-	if (useropt->header_file)
-	{
-		error ("multiple header files: %s, %s", useropt->header_file, s);
-		return false;
-	}
-	else
-	{
-		useropt->tFlag = true;
-		useropt->header_file = s;
-		return true;
-	}
-}
-
-bool Opt::ecb ()
-{
-	return useropt->encoding.set (Enc::EBCDIC);
-}
-
-bool Opt::unicode ()
-{
-	return useropt->encoding.set(Enc::UTF32);
-}
-
-bool Opt::wide_chars ()
-{
-	return useropt->encoding.set(Enc::UCS2);
-}
-
-bool Opt::utf_16 ()
-{
-	return useropt->encoding.set(Enc::UTF16);
-}
-
-bool Opt::utf_8 ()
-{
-	return useropt->encoding.set(Enc::UTF8);
-}
-
-bool Opt::sync_mapCodeName (const std::string & key, const std::string & val)
-{
-	if (!useropt->mapCodeName.insert (std::make_pair (key, val)).second)
-	{
-		return false;
-	}
-	return true;
-}
-
-void Opt::sync_condPrefix (const std::string & s)
-{
-	useropt->condPrefix = s;
-}
-
-void Opt::sync_condEnumPrefix (const std::string & s)
-{
-	useropt->condEnumPrefix = s;
-}
-
-void Opt::sync_condDivider (const std::string & s)
-{
-	useropt->condDivider = s;
-}
-
-void Opt::sync_condDividerParam (const std::string & s)
-{
-	useropt->condDividerParam = s;
-}
-
-void Opt::sync_condGoto (const std::string & s)
-{
-	useropt->condGoto = s;
-}
-
-void Opt::sync_condGotoParam (const std::string & s)
-{
-	useropt->condGotoParam = s;
-}
-
-void Opt::sync_cGotoThreshold (uint32_t n)
-{
-	useropt->cGotoThreshold = n;
-}
-
-void Opt::sync_bUseYYFillNaked (bool b)
-{
-	useropt->bUseYYFillNaked = b;
-}
-
-void Opt::sync_yyFillLength (const std::string & s)
-{
-	useropt->yyFillLength = s;
-	useropt->bUseYYFillParam = false;
-}
-
-void Opt::sync_bUseYYGetConditionNaked (bool b)
-{
-	useropt->bUseYYGetConditionNaked = b;
-}
-
-void Opt::sync_bUseYYGetStateNaked (bool b)
-{
-	useropt->bUseYYGetStateNaked = b;
-}
-
-void Opt::sync_yySetConditionParam (const std::string & s)
-{
-	useropt->yySetConditionParam = s;
-	useropt->bUseYYSetConditionParam = false;
-}
-
-void Opt::sync_bUseYYSetStateNaked (bool b)
-{
-	useropt->bUseYYSetStateNaked = b;
-}
-
-void Opt::sync_yySetStateParam (const std::string & s)
-{
-	useropt->yySetStateParam = s;
-	useropt->bUseYYSetStateParam = false;
-}
-
-bool Opt::sync_encoding (Enc::type_t t)
-{
-	if (!useropt->encoding.set (t))
-	{
-		return false;
-	}
-	return true;
-}
-
-void Opt::sync_encoding_unset (Enc::type_t t)
-{
-	useropt->encoding.unset (t);
-}
-
-void Opt::sync_indString (const std::string & s)
-{
-	useropt->indString = s;
-}
-
-void Opt::sync_topIndent (uint32_t n)
-{
-	useropt->topIndent = n;
-}
-
-void Opt::sync_labelPrefix (const std::string & s)
-{
-	useropt->labelPrefix = s;
-}
-
-void Opt::sync_bUseStateAbort (bool b)
-{
-	useropt->bUseStateAbort = b;
-}
-
-void Opt::sync_bUseStateNext (bool b)
-{
-	useropt->bUseStateNext = b;
-}
-
-void Opt::sync_yybmHexTable (bool b)
-{
-	useropt->yybmHexTable = b;
-}
-
-void Opt::sync_yychConversion (bool b)
-{
-	useropt->yychConversion = b;
-}
-
-void Opt::sync_bEmitYYCh (bool b)
-{
-	useropt->bEmitYYCh = b;
-}
-
-void Opt::sync_bUseYYFillCheck (bool b)
-{
-	useropt->bUseYYFillCheck = b;
-}
-
-void Opt::sync_bUseYYFill (bool b)
-{
-	useropt->bUseYYFill = b;
-}
-
-void Opt::sync_bUseYYFillParam (bool b)
-{
-	useropt->bUseYYFillParam = b;
-}
-
-void Opt::sync_reset_encoding (const Enc & enc)
+void Opt::reset_encoding (const Enc & enc)
 {
 	useropt->encoding = enc;
 }
 
-void Opt::sync_reset_mapCodeName ()
+void Opt::reset_mapCodeName ()
 {
-	useropt->mapCodeName.clear ();
+	// historically arranged set of names
+	// no actual reason why these particular options should be reset
+	useropt->yybackup = Opt::baseopt.yybackup;
+	useropt->yybackupctx = Opt::baseopt.yybackupctx;
+	useropt->yycondtype = Opt::baseopt.yycondtype;
+	useropt->yyctxmarker = Opt::baseopt.yyctxmarker;
+	useropt->yyctype = Opt::baseopt.yyctype;
+	useropt->yycursor = Opt::baseopt.yycursor;
+	useropt->yydebug = Opt::baseopt.yydebug;
+	useropt->yyfill = Opt::baseopt.yyfill;
+	useropt->yygetcondition = Opt::baseopt.yygetcondition;
+	useropt->yygetstate = Opt::baseopt.yygetstate;
+	useropt->yylessthan = Opt::baseopt.yylessthan;
+	useropt->yylimit = Opt::baseopt.yylimit;
+	useropt->yymarker = Opt::baseopt.yymarker;
+	useropt->yypeek = Opt::baseopt.yypeek;
+	useropt->yyrestore = Opt::baseopt.yyrestore;
+	useropt->yyrestorectx = Opt::baseopt.yyrestorectx;
+	useropt->yysetcondition = Opt::baseopt.yysetcondition;
+	useropt->yysetstate = Opt::baseopt.yysetstate;
+	useropt->yyskip = Opt::baseopt.yyskip;
+	useropt->yyfilllabel = Opt::baseopt.yyfilllabel;
+	useropt->yynext = Opt::baseopt.yynext;
+	useropt->yyaccept = Opt::baseopt.yyaccept;
+	useropt->yybm = Opt::baseopt.yybm;
+	useropt->yych = Opt::baseopt.yych;
+	useropt->yyctable = Opt::baseopt.yyctable;
+	useropt->yytarget = Opt::baseopt.yytarget;
 }
 
 } // namespace re2c
