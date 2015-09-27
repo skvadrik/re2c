@@ -366,7 +366,7 @@ void realopt_t::sync ()
 
 useropt_t::useropt_t ()
 	: opt ()
-	, diverge (false)
+	, diverge (true)
 {}
 
 opt_t * useropt_t::operator -> ()
