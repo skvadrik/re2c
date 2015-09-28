@@ -34,11 +34,12 @@ struct opt_t
 	bool tFlag;
 	const char * header_file;
 	std::string yycondtype;
-	std::string yysetcondition;
-	std::string yygetcondition;
+	std::string cond_get;
+	bool cond_get_naked;
+	std::string cond_set;
+	std::string cond_set_arg;
+	bool cond_set_naked;
 	std::string yyctable;
-	std::string yySetConditionParam;
-	bool bUseYYGetConditionNaked;
 	std::string condPrefix;
 	std::string condEnumPrefix;
 	std::string condDivider;
@@ -48,14 +49,14 @@ struct opt_t
 
 	// states
 	bool fFlag;
-	std::string yysetstate;
-	std::string yygetstate;
+	std::string state_get;
+	bool state_get_naked;
+	std::string state_set;
+	std::string state_set_arg;
+	bool state_set_naked;
 	std::string yyfilllabel;
 	std::string yynext;
 	std::string yyaccept;
-	std::string yySetStateParam;
-	bool bUseYYSetStateNaked;
-	bool bUseYYGetStateNaked;
 	bool bUseStateAbort;
 	bool bUseStateNext;
 
@@ -106,12 +107,12 @@ struct opt_t
 	bool yychConversion;
 
 	// YYFILL
-	std::string yyfill;
-	bool bUseYYFill;
-	bool bUseYYFillParam;
-	bool bUseYYFillCheck;
-	bool bUseYYFillNaked;
-	std::string yyFillLength;
+	std::string fill;
+	bool fill_use;
+	bool fill_check;
+	std::string fill_arg;
+	bool fill_arg_use;
+	bool fill_naked;
 
 	// labels
 	std::string labelPrefix;
@@ -187,11 +188,12 @@ public:
 	void set_cFlag (bool b)                              { useropt->cFlag = b; }
 	void set_header_file (const char * f)                { useropt->header_file = f; }
 	void set_yycondtype (const std::string & s)          { useropt->yycondtype = s; }
-	void set_yysetcondition (const std::string & s)      { useropt->yysetcondition = s; }
-	void set_yygetcondition (const std::string & s)      { useropt->yygetcondition = s; }
+	void set_cond_get (const std::string & s)            { useropt->cond_get = s; }
+	void set_cond_get_naked (bool b)                     { useropt->cond_get_naked = b; }
+	void set_cond_set (const std::string & s)            { useropt->cond_set = s; }
+	void set_cond_set_arg (const std::string & s)        { useropt->cond_set_arg = s; }
+	void set_cond_set_naked (bool b)                     { useropt->cond_set_naked = b; }
 	void set_yyctable (const std::string & s)            { useropt->yyctable = s; }
-	void set_yySetConditionParam (const std::string & s) { useropt->yySetConditionParam = s; }
-	void set_bUseYYGetConditionNaked (bool b)            { useropt->bUseYYGetConditionNaked = b; }
 	void set_condPrefix (const std::string & s)          { useropt->condPrefix = s; }
 	void set_condEnumPrefix (const std::string & s)      { useropt->condEnumPrefix = s; }
 	void set_condDivider (const std::string & s)         { useropt->condDivider = s; }
@@ -199,14 +201,14 @@ public:
 	void set_condGoto (const std::string & s)            { useropt->condGoto = s; }
 	void set_condGotoParam (const std::string & s)       { useropt->condGotoParam = s; }
 	void set_fFlag (bool b)                              { useropt->fFlag = b; }
-	void set_yysetstate (const std::string & s)          { useropt->yysetstate = s; }
-	void set_yygetstate (const std::string & s)          { useropt->yygetstate = s; }
+	void set_state_get (const std::string & s)           { useropt->state_get = s; }
+	void set_state_get_naked (bool b)                    { useropt->state_get_naked = b; }
+	void set_state_set (const std::string & s)           { useropt->state_set = s; }
+	void set_state_set_arg (const std::string & s)       { useropt->state_set_arg = s; }
+	void set_state_set_naked (bool b)                    { useropt->state_set_naked = b; }
 	void set_yyfilllabel (const std::string & s)         { useropt->yyfilllabel = s; }
 	void set_yynext (const std::string & s)              { useropt->yynext = s; }
 	void set_yyaccept (const std::string & s)            { useropt->yyaccept = s; }
-	void set_yySetStateParam (const std::string & s)     { useropt->yySetStateParam = s; }
-	void set_bUseYYSetStateNaked (bool b)                { useropt->bUseYYSetStateNaked = b; }
-	void set_bUseYYGetStateNaked (bool b)                { useropt->bUseYYGetStateNaked = b; }
 	void set_bUseStateAbort (bool b)                     { useropt->bUseStateAbort = b; }
 	void set_bUseStateNext (bool b)                      { useropt->bUseStateNext = b; }
 	void set_rFlag (bool b)                              { useropt->rFlag = b; }
@@ -239,16 +241,12 @@ public:
 	void set_yych (const std::string & s)                { useropt->yych = s; }
 	void set_bEmitYYCh (bool b)                          { useropt->bEmitYYCh = b; }
 	void set_yychConversion (bool b)                     { useropt->yychConversion = b; }
-	void set_yyfill (const std::string & s)              { useropt->yyfill = s; }
-	void set_bUseYYFill (bool b)                         { useropt->bUseYYFill = b; }
-	void set_bUseYYFillParam (bool b)                    { useropt->bUseYYFillParam = b; }
-	void set_bUseYYFillCheck (bool b)                    { useropt->bUseYYFillCheck = b; }
-	void set_bUseYYFillNaked (bool b)                    { useropt->bUseYYFillNaked = b; }
-	void set_yyFillLength (const std::string & s)
-	{
-		useropt->yyFillLength = s;
-		useropt->bUseYYFillParam = false;
-	}
+	void set_fill (const std::string & s)                { useropt->fill = s; }
+	void set_fill_use (bool b)                           { useropt->fill_use = b; }
+	void set_fill_check (bool b)                         { useropt->fill_check = b; }
+	void set_fill_arg (const std::string & s)            { useropt->fill_arg = s; }
+	void set_fill_arg_use (bool b)                       { useropt->fill_arg_use = b; }
+	void set_fill_naked (bool b)                         { useropt->fill_naked = b; }
 	void set_labelPrefix (const std::string & s)         { useropt->labelPrefix = s; }
 
 	// helpers

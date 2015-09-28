@@ -190,6 +190,7 @@ void default_rule(CondList *clist, const Code * code)
 %token CONF_DEFINE_YYRESTORECTX
 %token CONF_DEFINE_YYSETCONDITION
 %token CONF_DEFINE_YYSETCONDITION_COND
+%token CONF_DEFINE_YYSETCONDITION_NAKED
 %token CONF_DEFINE_YYSETSTATE
 %token CONF_DEFINE_YYSETSTATE_NAKED
 %token CONF_DEFINE_YYSETSTATE_STATE
@@ -349,17 +350,17 @@ decl:
 	}
 	| CONF_DEFINE_YYFILL STRING ';'
 	{
-		opts.set_yyfill (*$2);
+		opts.set_fill (*$2);
 		delete $2;
 	}
 	| CONF_DEFINE_YYGETCONDITION STRING ';'
 	{
-		opts.set_yygetcondition (*$2);
+		opts.set_cond_get (*$2);
 		delete $2;
 	}
 	| CONF_DEFINE_YYGETSTATE STRING ';'
 	{
-		opts.set_yygetstate (*$2);
+		opts.set_state_get (*$2);
 		delete $2;
 	}
 	| CONF_DEFINE_YYLESSTHAN STRING ';'
@@ -394,12 +395,16 @@ decl:
 	}
 	| CONF_DEFINE_YYSETCONDITION STRING ';'
 	{
-		opts.set_yysetcondition (*$2);
+		opts.set_cond_set (*$2);
 		delete $2;
+	}
+	| CONF_DEFINE_YYSETCONDITION_NAKED NUM ';'
+	{
+		opts.set_cond_set_naked ($2 != 0);
 	}
 	| CONF_DEFINE_YYSETSTATE STRING ';'
 	{
-		opts.set_yysetstate (*$2);
+		opts.set_state_set (*$2);
 		delete $2;
 	}
 	| CONF_DEFINE_YYSKIP STRING ';'
@@ -409,33 +414,33 @@ decl:
 	}
 	| CONF_DEFINE_YYFILL_NAKED NUM ';'
 	{
-		opts.set_bUseYYFillNaked ($2 != 0);
+		opts.set_fill_naked ($2 != 0);
 	}
 	| CONF_DEFINE_YYFILL_LEN STRING ';'
 	{
-		opts.set_yyFillLength (*$2);
+		opts.set_fill_arg (*$2);
 		delete $2;
 	}
 	| CONF_DEFINE_YYGETCONDITION_NAKED NUM ';'
 	{
-		opts.set_bUseYYGetConditionNaked ($2 != 0);
+		opts.set_cond_get_naked ($2 != 0);
 	}
 	| CONF_DEFINE_YYGETSTATE_NAKED NUM ';'
 	{
-		opts.set_bUseYYGetStateNaked ($2 != 0);
+		opts.set_state_get_naked ($2 != 0);
 	}
 	| CONF_DEFINE_YYSETCONDITION_COND STRING ';'
 	{
-		opts.set_yySetConditionParam (*$2);
+		opts.set_cond_set_arg (*$2);
 		delete $2;
 	}
 	| CONF_DEFINE_YYSETSTATE_NAKED NUM ';'
 	{
-		opts.set_bUseYYSetStateNaked ($2 != 0);
+		opts.set_state_set_naked ($2 != 0);
 	}
 	| CONF_DEFINE_YYSETSTATE_STATE STRING ';'
 	{
-		opts.set_yySetStateParam (*$2);
+		opts.set_state_set_arg (*$2);
 		delete $2;
 	}
 	| CONF_FLAGS NUM ';'
@@ -540,15 +545,15 @@ decl:
 	}
 	| CONF_YYFILL_CHECK NUM ';'
 	{
-		opts.set_bUseYYFillCheck ($2 != 0);
+		opts.set_fill_check ($2 != 0);
 	}
 	| CONF_YYFILL_ENABLE NUM ';'
 	{
-		opts.set_bUseYYFill ($2 != 0);
+		opts.set_fill_use ($2 != 0);
 	}
 	| CONF_YYFILL_PARAMETER NUM ';'
 	{
-		opts.set_bUseYYFillParam ($2 != 0);
+		opts.set_fill_arg_use ($2 != 0);
 	}
 ;
 

@@ -106,7 +106,7 @@ yy0:
 		}
 /* *********************************** */
 yyc_Comment:
-		s->state = 0;
+		s->state = 0;(0);
 		if ((s->lim - s->cur) < 2) if (fill(s, 2) == ~0) break;
 yyFillLabel0:
 		s->yych = *s->cur;
@@ -120,11 +120,11 @@ yy5:
 		goto yy4;
 yy6:
 		++s->cur;
-		s->cond = EStateNormal;
+		s->cond = EStateNormal;(EStateNormal);
 		continue;
 /* *********************************** */
 yyc_Normal:
-		s->state = 1;
+		s->state = 1;(1);
 		if ((s->lim - s->cur) < 4) if (fill(s, 4) == ~0) break;
 yyFillLabel1:
 		s->yych = *s->cur;
@@ -158,7 +158,7 @@ yy13:
 		goto yy11;
 yy14:
 		++s->cur;
-		s->cond = EStateString;
+		s->cond = EStateString;(EStateString);
 		fprintf(stderr, "Normal\n");
 		fputc(s->cur[-1], stdout);
 		continue;
@@ -183,11 +183,11 @@ yy21:
 		continue;
 yy23:
 		++s->cur;
-		s->cond = EStateSkiptoeol;
+		s->cond = EStateSkiptoeol;(EStateSkiptoeol);
 		continue;
 yy25:
 		++s->cur;
-		s->cond = EStateComment;
+		s->cond = EStateComment;(EStateComment);
 		continue;
 yy27:
 		s->yych = *++s->cur;
@@ -250,7 +250,7 @@ yy44:
 		continue;
 /* *********************************** */
 yyc_Skiptoeol:
-		s->state = 2;
+		s->state = 2;(2);
 		if ((s->lim - s->cur) < 5) if (fill(s, 5) == ~0) break;
 yyFillLabel2:
 		s->yych = *s->cur;
@@ -281,7 +281,7 @@ yy51:
 		goto yy49;
 yy52:
 		++s->cur;
-		s->cond = EStateNormal;
+		s->cond = EStateNormal;(EStateNormal);
 		fprintf(stderr, "Comment\n");
 		fputc('\n', stdout);
 		continue;
@@ -290,7 +290,7 @@ yy54:
 		goto yy49;
 yy55:
 		++s->cur;
-		s->cond = EStateNormal;
+		s->cond = EStateNormal;(EStateNormal);
 		fprintf(stderr, "Comment\n");
 		fputc('\r', stdout);
 		fputc('\n', stdout);
@@ -317,7 +317,7 @@ yy64:
 		continue;
 /* *********************************** */
 yyc_String:
-		s->state = 3;
+		s->state = 3;(3);
 		if ((s->lim - s->cur) < 2) if (fill(s, 2) == ~0) break;
 yyFillLabel3:
 		s->yych = *s->cur;
@@ -331,7 +331,7 @@ yy69:
 		continue;
 yy70:
 		++s->cur;
-		s->cond = EStateNormal;
+		s->cond = EStateNormal;(EStateNormal);
 		fprintf(stderr, "Normal\n");
 		fputc(s->cur[-1], stdout);
 		continue;

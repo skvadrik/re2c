@@ -17,11 +17,12 @@ opt_t::opt_t ()
 	, tFlag (false)
 	, header_file (NULL)
 	, yycondtype ("YYCONDTYPE")
-	, yysetcondition ("YYSETCONDITION(@@);")
-	, yygetcondition ("YYGETCONDITION")
+	, cond_get ("YYGETCONDITION")
+	, cond_get_naked (false)
+	, cond_set ("YYSETCONDITION")
+	, cond_set_arg ("@@")
+	, cond_set_naked (false)
 	, yyctable ("yyctable")
-	, yySetConditionParam ("@@")
-	, bUseYYGetConditionNaked (false)
 	, condPrefix ("yyc_")
 	, condEnumPrefix ("yyc")
 	, condDivider ("/* *********************************** */")
@@ -29,14 +30,14 @@ opt_t::opt_t ()
 	, condGoto ("goto @@;")
 	, condGotoParam ("@@")
 	, fFlag (false)
-	, yysetstate ("YYSETSTATE(@@);")
-	, yygetstate ("YYGETSTATE")
+	, state_get ("YYGETSTATE")
+	, state_get_naked (false)
+	, state_set ("YYSETSTATE")
+	, state_set_arg ("@@")
+	, state_set_naked (false)
 	, yyfilllabel ("yyFillLabel")
 	, yynext ("yyNext")
 	, yyaccept ("yyaccept")
-	, yySetStateParam ("@@")
-	, bUseYYSetStateNaked (false)
-	, bUseYYGetStateNaked (false)
 	, bUseStateAbort (false)
 	, bUseStateNext (false)
 	, rFlag (false)
@@ -69,12 +70,12 @@ opt_t::opt_t ()
 	, yych ("yych")
 	, bEmitYYCh (true)
 	, yychConversion (false)
-	, yyfill ("YYFILL")
-	, bUseYYFill (true)
-	, bUseYYFillParam (true)
-	, bUseYYFillCheck (true)
-	, bUseYYFillNaked (false)
-	, yyFillLength ("@@")
+	, fill ("YYFILL")
+	, fill_use (true)
+	, fill_check (true)
+	, fill_arg ("@@")
+	, fill_arg_use (true)
+	, fill_naked (false)
 	, labelPrefix ("yy")
 {}
 
@@ -89,11 +90,12 @@ opt_t::opt_t (const opt_t & opt)
 	, tFlag (opt.tFlag)
 	, header_file (opt.header_file)
 	, yycondtype (opt.yycondtype)
-	, yysetcondition (opt.yysetcondition)
-	, yygetcondition (opt.yygetcondition)
+	, cond_get (opt.cond_get)
+	, cond_get_naked (opt.cond_get_naked)
+	, cond_set (opt.cond_set)
+	, cond_set_arg (opt.cond_set_arg)
+	, cond_set_naked (opt.cond_set_naked)
 	, yyctable (opt.yyctable)
-	, yySetConditionParam (opt.yySetConditionParam)
-	, bUseYYGetConditionNaked (opt.bUseYYGetConditionNaked)
 	, condPrefix (opt.condPrefix)
 	, condEnumPrefix (opt.condEnumPrefix)
 	, condDivider (opt.condDivider)
@@ -101,14 +103,14 @@ opt_t::opt_t (const opt_t & opt)
 	, condGoto (opt.condGoto)
 	, condGotoParam (opt.condGotoParam)
 	, fFlag (opt.fFlag)
-	, yysetstate (opt.yysetstate)
-	, yygetstate (opt.yygetstate)
+	, state_get (opt.state_get)
+	, state_get_naked (opt.state_get_naked)
+	, state_set (opt.state_set)
+	, state_set_arg (opt.state_set_arg)
+	, state_set_naked (opt.state_set_naked)
 	, yyfilllabel (opt.yyfilllabel)
 	, yynext (opt.yynext)
 	, yyaccept (opt.yyaccept)
-	, yySetStateParam (opt.yySetStateParam)
-	, bUseYYSetStateNaked (opt.bUseYYSetStateNaked)
-	, bUseYYGetStateNaked (opt.bUseYYGetStateNaked)
 	, bUseStateAbort (opt.bUseStateAbort)
 	, bUseStateNext (opt.bUseStateNext)
 	, rFlag (opt.rFlag)
@@ -141,12 +143,12 @@ opt_t::opt_t (const opt_t & opt)
 	, yych (opt.yych)
 	, bEmitYYCh (opt.bEmitYYCh)
 	, yychConversion (opt.yychConversion)
-	, yyfill (opt.yyfill)
-	, bUseYYFill (opt.bUseYYFill)
-	, bUseYYFillParam (opt.bUseYYFillParam)
-	, bUseYYFillCheck (opt.bUseYYFillCheck)
-	, bUseYYFillNaked (opt.bUseYYFillNaked)
-	, yyFillLength (opt.yyFillLength)
+	, fill (opt.fill)
+	, fill_use (opt.fill_use)
+	, fill_check (opt.fill_check)
+	, fill_arg (opt.fill_arg)
+	, fill_arg_use (opt.fill_arg_use)
+	, fill_naked (opt.fill_naked)
 	, labelPrefix (opt.labelPrefix)
 {}
 
@@ -183,24 +185,25 @@ void opt_t::fix ()
 			tFlag = Opt::baseopt.tFlag;
 			header_file = Opt::baseopt.header_file;
 			yycondtype = Opt::baseopt.yycondtype;
-			yysetcondition = Opt::baseopt.yysetcondition;
-			yygetcondition = Opt::baseopt.yygetcondition;
+			cond_get = Opt::baseopt.cond_get;
+			cond_get_naked = Opt::baseopt.cond_get_naked;
+			cond_set = Opt::baseopt.cond_set;
+			cond_set_arg = Opt::baseopt.cond_set_arg;
+			cond_set_naked = Opt::baseopt.cond_set_naked;
 			yyctable = Opt::baseopt.yyctable;
-			yySetConditionParam = Opt::baseopt.yySetConditionParam;
-			bUseYYGetConditionNaked = Opt::baseopt.bUseYYGetConditionNaked;
 			condPrefix = Opt::baseopt.condPrefix;
 			condEnumPrefix = Opt::baseopt.condEnumPrefix;
 			condGoto = Opt::baseopt.condGoto;
 			condGotoParam = Opt::baseopt.condGotoParam;
 			fFlag = Opt::baseopt.fFlag;
-			yysetstate = Opt::baseopt.yysetstate;
-			yygetstate = Opt::baseopt.yygetstate;
+			state_get = Opt::baseopt.state_get;
+			state_get_naked = Opt::baseopt.state_get_naked;
+			state_set = Opt::baseopt.state_set;
+			state_set_arg = Opt::baseopt.state_set_arg;
+			state_set_naked = Opt::baseopt.state_set_naked;
 			yyfilllabel = Opt::baseopt.yyfilllabel;
 			yynext = Opt::baseopt.yynext;
 			yyaccept = Opt::baseopt.yyaccept;
-			yySetStateParam = Opt::baseopt.yySetStateParam;
-			bUseYYSetStateNaked = Opt::baseopt.bUseYYSetStateNaked;
-			bUseYYGetStateNaked = Opt::baseopt.bUseYYGetStateNaked;
 			bUseStateAbort = Opt::baseopt.bUseStateAbort;
 			bUseStateNext = Opt::baseopt.bUseStateNext;
 			yybm = Opt::baseopt.yybm;
@@ -223,12 +226,12 @@ void opt_t::fix ()
 			yych = Opt::baseopt.yych;
 			bEmitYYCh = Opt::baseopt.bEmitYYCh;
 			yychConversion = Opt::baseopt.yychConversion;
-			yyfill = Opt::baseopt.yyfill;
-			bUseYYFill = Opt::baseopt.bUseYYFill;
-			bUseYYFillParam = Opt::baseopt.bUseYYFillParam;
-			bUseYYFillCheck = Opt::baseopt.bUseYYFillCheck;
-			bUseYYFillNaked = Opt::baseopt.bUseYYFillNaked;
-			yyFillLength = Opt::baseopt.yyFillLength;
+			fill = Opt::baseopt.fill;
+			fill_use = Opt::baseopt.fill_use;
+			fill_check = Opt::baseopt.fill_check;
+			fill_arg = Opt::baseopt.fill_arg;
+			fill_arg_use = Opt::baseopt.fill_arg_use;
+			fill_naked = Opt::baseopt.fill_naked;
 			labelPrefix = Opt::baseopt.labelPrefix;
 			break;
 		default:
@@ -246,11 +249,12 @@ void opt_t::fix ()
 		tFlag = Opt::baseopt.tFlag;
 		header_file = Opt::baseopt.header_file;
 		yycondtype = Opt::baseopt.yycondtype;
-		yysetcondition = Opt::baseopt.yysetcondition;
-		yygetcondition = Opt::baseopt.yygetcondition;
+		cond_get = Opt::baseopt.cond_get;
+		cond_get_naked = Opt::baseopt.cond_get_naked;
+		cond_set = Opt::baseopt.cond_set;
+		cond_set_arg = Opt::baseopt.cond_set_arg;
+		cond_set_naked = Opt::baseopt.cond_set_naked;
 		yyctable = Opt::baseopt.yyctable;
-		yySetConditionParam = Opt::baseopt.yySetConditionParam;
-		bUseYYGetConditionNaked = Opt::baseopt.bUseYYGetConditionNaked;
 		condPrefix = Opt::baseopt.condPrefix;
 		condEnumPrefix = Opt::baseopt.condEnumPrefix;
 		condDivider = Opt::baseopt.condDivider;
@@ -260,14 +264,14 @@ void opt_t::fix ()
 	}
 	if (!fFlag)
 	{
-		yysetstate = Opt::baseopt.yysetstate;
-		yygetstate = Opt::baseopt.yygetstate;
+		state_get = Opt::baseopt.state_get;
+		state_get_naked = Opt::baseopt.state_get_naked;
+		state_set = Opt::baseopt.state_set;
+		state_set_arg = Opt::baseopt.state_set_arg;
+		state_set_naked = Opt::baseopt.state_set_naked;
 		yyfilllabel = Opt::baseopt.yyfilllabel;
 		yynext = Opt::baseopt.yynext;
 		yyaccept = Opt::baseopt.yyaccept;
-		yySetStateParam = Opt::baseopt.yySetStateParam;
-		bUseYYSetStateNaked = Opt::baseopt.bUseYYSetStateNaked;
-		bUseYYGetStateNaked = Opt::baseopt.bUseYYGetStateNaked;
 		bUseStateAbort = Opt::baseopt.bUseStateAbort;
 		bUseStateNext = Opt::baseopt.bUseStateNext;
 	}
@@ -301,6 +305,14 @@ void opt_t::fix ()
 	if (!dFlag)
 	{
 		yydebug = Opt::baseopt.yydebug;
+	}
+	if (!fill_use)
+	{
+		fill = Opt::baseopt.fill;
+		fill_check = Opt::baseopt.fill_check;
+		fill_arg = Opt::baseopt.fill_arg;
+		fill_arg_use = Opt::baseopt.fill_arg_use;
+		fill_naked = Opt::baseopt.fill_naked;
 	}
 
 	// force individual options
@@ -414,6 +426,11 @@ void Opt::reset_mapCodeName ()
 {
 	// historically arranged set of names
 	// no actual reason why these particular options should be reset
+	useropt->cond_get = Opt::baseopt.cond_get;
+	useropt->cond_set = Opt::baseopt.cond_set;
+	useropt->fill = Opt::baseopt.fill;
+	useropt->state_get = Opt::baseopt.state_get;
+	useropt->state_set = Opt::baseopt.state_set;
 	useropt->yybackup = Opt::baseopt.yybackup;
 	useropt->yybackupctx = Opt::baseopt.yybackupctx;
 	useropt->yycondtype = Opt::baseopt.yycondtype;
@@ -421,17 +438,12 @@ void Opt::reset_mapCodeName ()
 	useropt->yyctype = Opt::baseopt.yyctype;
 	useropt->yycursor = Opt::baseopt.yycursor;
 	useropt->yydebug = Opt::baseopt.yydebug;
-	useropt->yyfill = Opt::baseopt.yyfill;
-	useropt->yygetcondition = Opt::baseopt.yygetcondition;
-	useropt->yygetstate = Opt::baseopt.yygetstate;
 	useropt->yylessthan = Opt::baseopt.yylessthan;
 	useropt->yylimit = Opt::baseopt.yylimit;
 	useropt->yymarker = Opt::baseopt.yymarker;
 	useropt->yypeek = Opt::baseopt.yypeek;
 	useropt->yyrestore = Opt::baseopt.yyrestore;
 	useropt->yyrestorectx = Opt::baseopt.yyrestorectx;
-	useropt->yysetcondition = Opt::baseopt.yysetcondition;
-	useropt->yysetstate = Opt::baseopt.yysetstate;
 	useropt->yyskip = Opt::baseopt.yyskip;
 	useropt->yyfilllabel = Opt::baseopt.yyfilllabel;
 	useropt->yynext = Opt::baseopt.yynext;

@@ -18,14 +18,9 @@ static void emit_state     (OutputFile & o, uint32_t ind, const State * s, bool 
 
 std::string genGetCondition()
 {
-	if (opts->bUseYYGetConditionNaked)
-	{
-		return opts->yygetcondition;
-	}
-	else
-	{
-		return opts->yygetcondition + "()";
-	}
+	return opts->cond_get_naked
+		? opts->cond_get
+		: opts->cond_get + "()";
 }
 
 void genGoTo(OutputFile & o, uint32_t ind, const State *from, const State *to, bool & readCh)

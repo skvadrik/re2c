@@ -17,6 +17,7 @@ static void emit_accept        (OutputFile & o, uint32_t ind, bool & readCh, con
 static void emit_rule          (OutputFile & o, uint32_t ind, const State * const s, const RuleOp * const rule, const std::string & condName, const std::string & name);
 static void genYYFill          (OutputFile & o, uint32_t need);
 static void genSetCondition    (OutputFile & o, uint32_t ind, const std::string & newcond);
+static void genSetState        (OutputFile & o, uint32_t ind, uint32_t fillIndex);
 
 void emit_action
 	( const Action & action
@@ -290,15 +291,15 @@ void need (OutputFile & o, uint32_t ind, bool & readCh, uint32_t n, bool bSetMar
 	if (opts->fFlag)
 	{
 		last_fill_index++;
-		o << indent(ind) << replaceParam(opts->yysetstate, opts->yySetStateParam, fillIndex) << "\n";
+		genSetState (o, ind, fillIndex);
 	}
 
-	if (opts->bUseYYFill && n > 0)
+	if (opts->fill_use && n > 0)
 	{
 		o << indent(ind);
 		if (n == 1)
 		{
-			if (opts->bUseYYFillCheck)
+			if (opts->fill_check)
 			{
 				o << "if (" << opts->input_api.expr_lessthan_one () << ") ";
 			}
@@ -306,7 +307,7 @@ void need (OutputFile & o, uint32_t ind, bool & readCh, uint32_t n, bool bSetMar
 		}
 		else
 		{
-			if (opts->bUseYYFillCheck)
+			if (opts->fill_check)
 			{
 				o << "if (" << opts->input_api.expr_lessthan (n) << ") ";
 			}
@@ -333,31 +334,38 @@ void need (OutputFile & o, uint32_t ind, bool & readCh, uint32_t n, bool bSetMar
 	}
 }
 
-void genYYFill(OutputFile & o, uint32_t need)
+void genYYFill (OutputFile & o, uint32_t need)
 {
-	if (opts->bUseYYFillParam)
+	o << replaceParam (opts->fill, opts->fill_arg, need);
+	if (!opts->fill_naked)
 	{
-		o << opts->yyfill;
-		if (!opts->bUseYYFillNaked)
+		if (opts->fill_arg_use)
 		{
-			o << "(" << need << ");";
+			o << "(" << need << ")";
 		}
-		o << "\n";
+		o << ";";
 	}
-	else
-	{
-		o << replaceParam(opts->yyfill, opts->yyFillLength, need);
-		if (!opts->bUseYYFillNaked)
-		{
-			o << ";";
-		}
-		o << "\n";
-	}
+	o << "\n";
 }
 
 void genSetCondition(OutputFile & o, uint32_t ind, const std::string& newcond)
 {
-	o << indent(ind) << replaceParam(opts->yysetcondition, opts->yySetConditionParam, opts->condEnumPrefix + newcond) << "\n";
+	o << indent(ind) << replaceParam (opts->cond_set, opts->cond_set_arg, opts->condEnumPrefix + newcond);
+	if (!opts->cond_set_naked)
+	{
+		o << "(" << opts->condEnumPrefix << newcond << ");";
+	}
+	o << "\n";
+}
+
+void genSetState(OutputFile & o, uint32_t ind, uint32_t fillIndex)
+{
+	o << indent(ind) << replaceParam (opts->state_set, opts->state_set_arg, fillIndex);
+	if (!opts->state_set_naked)
+	{
+		o << "(" << fillIndex << ");";
+	}
+	o << "\n";
 }
 
 } // namespace re2c

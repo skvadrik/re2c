@@ -428,14 +428,9 @@ void output_version_time (std::ostream & o)
 
 std::string output_get_state ()
 {
-	if (opts->bUseYYGetStateNaked)
-	{
-		return opts->yygetstate;
-	}
-	else
-	{
-		return opts->yygetstate + "()";
-	}
+	return opts->state_get_naked
+		? opts->state_get
+		: opts->state_get + "()";
 }
 
 } // namespace re2c

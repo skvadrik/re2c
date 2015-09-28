@@ -597,6 +597,7 @@ conf:
 	"define:YYRESTORECTX"         { return CONF_DEFINE_YYRESTORECTX; }
 	"define:YYSETCONDITION"       { return CONF_DEFINE_YYSETCONDITION; }
 	"define:YYSETCONDITION@cond"  { return CONF_DEFINE_YYSETCONDITION_COND; }
+	"define:YYSETCONDITION:naked" { return CONF_DEFINE_YYSETCONDITION_NAKED; }
 	"define:YYSETSTATE"           { return CONF_DEFINE_YYSETSTATE; }
 	"define:YYSETSTATE:naked"     { return CONF_DEFINE_YYSETSTATE_NAKED; }
 	"define:YYSETSTATE@state"     { return CONF_DEFINE_YYSETSTATE_STATE; }
