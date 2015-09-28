@@ -11,7 +11,7 @@ namespace re2c
 template <typename cunit_t, typename key_t>
 	static void permutate_one (FILE * input, FILE * keys, const multipath_t & path);
 template <typename cunit_t, typename key_t>
-	static arccount_t cover_one (FILE * input, FILE * keys, const multipath_t & prefix, const path_t & suffix);
+	static Node::covers_t cover_one (FILE * input, FILE * keys, const multipath_t & prefix, const path_t & suffix);
 
 /*
  * note [estimating total size of paths in skeleton]
@@ -49,7 +49,7 @@ template <typename cunit_t, typename key_t>
  *     does overflow, an error is reported and re2c aborts.
  *
  */
-arccount_t Node::sizeof_permutate (arccount_t wid, arccount_t len)
+Node::permuts_t Node::sizeof_permutate (permuts_t wid, permuts_t len)
 {
 	if (end ())
 	{
@@ -58,26 +58,26 @@ arccount_t Node::sizeof_permutate (arccount_t wid, arccount_t len)
 	else if (loop < 2)
 	{
 		local_inc _ (loop);
-		arccount_t size (0u);
-		const arccount_t new_len = len + arccount_t (1u);
+		permuts_t size (0u);
+		const permuts_t new_len = len + permuts_t (1u);
 		for (arcs_t::iterator i = arcs.begin (); i != arcs.end (); ++i)
 		{
-			const arccount_t new_wid = wid * arccount_t (i->second.size ());
+			const permuts_t new_wid = wid * permuts_t (i->second.size ());
 			if (new_wid.overflow ())
 			{
-				return arccount_t::limit ();
+				return permuts_t::limit ();
 			}
 			size = size + i->first->sizeof_permutate (new_wid, new_len);
 			if (size.overflow ())
 			{
-				return arccount_t::limit ();
+				return permuts_t::limit ();
 			}
 		}
 		return size;
 	}
 	else
 	{
-		return arccount_t (0u);
+		return permuts_t (0u);
 	}
 }
 
@@ -143,9 +143,9 @@ template <typename cunit_t, typename key_t>
  *
  */
 template <typename cunit_t, typename key_t>
-	arccount_t Node::cover (const multipath_t & prefix, FILE * input, FILE * keys)
+	Node::covers_t Node::cover (const multipath_t & prefix, FILE * input, FILE * keys)
 {
-	arccount_t size (0u);
+	covers_t size (0u);
 	if (suffix != NULL)
 	{
 		size = cover_one<cunit_t, key_t> (input, keys, prefix, *suffix);
@@ -164,7 +164,7 @@ template <typename cunit_t, typename key_t>
 			size = size + i->first->cover<cunit_t, key_t> (new_prefix, input, keys);
 			if (size.overflow ())
 			{
-				return arccount_t::limit ();
+				return covers_t::limit ();
 			}
 			if (i->first->suffix != NULL && suffix == NULL)
 			{
@@ -180,7 +180,7 @@ template <typename cunit_t, typename key_t>
 	void Skeleton::generate_paths_cunit_key (FILE * input, FILE * keys)
 {
 	multipath_t prefix (nodes->rule);
-	if (nodes->sizeof_permutate (arccount_t (1u), arccount_t (0u)).overflow ())
+	if (nodes->sizeof_permutate (Node::permuts_t (1u), Node::permuts_t (0u)).overflow ())
 	{
 		if (nodes->cover<cunit_t, key_t> (prefix, input, keys).overflow ())
 		{
@@ -295,7 +295,7 @@ template <typename cunit_t, typename key_t>
 }
 
 template <typename cunit_t, typename key_t>
-	static arccount_t cover_one (FILE * input, FILE * keys, const multipath_t & prefix, const path_t & suffix)
+	static Node::covers_t cover_one (FILE * input, FILE * keys, const multipath_t & prefix, const path_t & suffix)
 {
 	const size_t prefix_len = prefix.len ();
 	const size_t suffix_len = suffix.len ();
@@ -307,7 +307,7 @@ template <typename cunit_t, typename key_t>
 		count = std::max (count, prefix[i]->size ());
 	}
 
-	const arccount_t size = arccount_t (len) * arccount_t (count);
+	const Node::covers_t size = Node::covers_t (len) * Node::covers_t (count);
 	if (!size.overflow ())
 	{
 		// input

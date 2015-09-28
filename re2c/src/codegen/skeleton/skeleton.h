@@ -14,11 +14,24 @@
 namespace re2c
 {
 
-static const uint32_t ARC_LIMIT = 1024 * 1024 * 1024; // ~1Gb
-typedef u32lim_t<ARC_LIMIT> arccount_t;
-
 struct Node
 {
+	// Types for counting arcs in path permutations and path cover.
+	// Paths are dumped to file as soon as generated and don't eat
+	// heap space. Path permutations grow exponentially and are likely
+	// to exceed limit, so their limit should be low. Path cover grows
+	// linearly and is unlikely to exceed limit, so its limit may be
+	// high.
+	typedef u32lim_t<1024 * 1024 * 32> permuts_t; // ~32Mb
+	typedef u32lim_t<1024 * 1024 * 1024> covers_t; // ~1Gb
+
+	// Type for counting arcs in paths that cause undefined behaviour.
+	// These paths are stored on heap, so the limit should be low.
+	// Most real-world cases have only a few paths. We don't need all
+	// paths anyway, just some examples. But we want short examples.
+	// Some synthetized tests can't find short paths with lower limit.
+	typedef u32lim_t<1024 * 1024 * 64> nakeds_t; // ~64Mb
+
 	typedef std::map<const State *, Node *> s2n_map;
 	typedef std::map<Node *, multiarc_t> arcs_t;
 	typedef std::map<Node *, way_arc_t> arcsets_t;
@@ -48,12 +61,12 @@ struct Node
 	~Node ();
 	bool end () const;
 	void calc_dist ();
-	arccount_t sizeof_permutate (arccount_t inarcs, arccount_t len);
+	permuts_t sizeof_permutate (permuts_t inarcs, permuts_t len);
 	template <typename cunit_t, typename key_t>
 		void permutate (const multipath_t & prefix, FILE * input, FILE * keys);
 	template <typename cunit_t, typename key_t>
-		arccount_t cover (const multipath_t & prefix, FILE * input, FILE * keys);
-	arccount_t naked_ways (const way_t & prefix, std::vector<way_t> & ways);
+		covers_t cover (const multipath_t & prefix, FILE * input, FILE * keys);
+	nakeds_t naked_ways (const way_t & prefix, std::vector<way_t> & ways);
 
 	FORBID_COPY (Node);
 };

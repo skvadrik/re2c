@@ -6,21 +6,21 @@ namespace re2c
 // see note [estimating total size of paths in skeleton]
 // We don't need all patterns that cause undefined behaviour.
 // We only need some examples, the shorter the better.
-arccount_t Node::naked_ways (const way_t & prefix, std::vector<way_t> & ways)
+Node::nakeds_t Node::naked_ways (const way_t & prefix, std::vector<way_t> & ways)
 {
 	if (!rule.is_none ())
 	{
-		return arccount_t (0u);
+		return nakeds_t (0u);
 	}
 	else if (end ())
 	{
 		ways.push_back (prefix);
-		return arccount_t (prefix.size ());
+		return nakeds_t (prefix.size ());
 	}
 	else if (loop < 2)
 	{
 		local_inc _ (loop);
-		arccount_t size (0u);
+		nakeds_t size (0u);
 		for (arcsets_t::iterator i = arcsets.begin (); i != arcsets.end (); ++i)
 		{
 			way_t w = prefix;
@@ -28,14 +28,14 @@ arccount_t Node::naked_ways (const way_t & prefix, std::vector<way_t> & ways)
 			size = size + i->first->naked_ways (w, ways);
 			if (size.overflow ())
 			{
-				return arccount_t::limit ();
+				return nakeds_t::limit ();
 			}
 		}
 		return size;
 	}
 	else
 	{
-		return arccount_t (0u);
+		return nakeds_t (0u);
 	}
 }
 
