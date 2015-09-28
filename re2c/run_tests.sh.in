@@ -46,10 +46,14 @@ do
 done
 echo "Running in ${threads} thread(s)"
 
-test_srcdir="@top_srcdir@/test"
+test_srcdir=""
+if [ ${#tests[@]} -eq 0 ]
+then
+    test_srcdir="@top_srcdir@/test"
+    tests=(`find $test_srcdir -name '*.re' | sort`)
+fi
 test_blddir="test_"`date +%y%m%d%H%M%S`
 rm -rf $test_blddir && mkdir $test_blddir
-[ ${#tests[@]} -ne 0 ] || tests=(`find $test_srcdir -name '*.re' | sort`)
 
 tests_per_thread=$((${#tests[@]} / threads + 1))
 packs=()
@@ -98,11 +102,20 @@ run_pack() {
 		local genname=` printf "%s" "$switches" | sed -e 's,--.*$,,g' -e 's,^.[^o]*$,,g' -e 's,^[^ot]*t.*o.*$,,g' -e 's,^-[^o]*o\(.*\),'"$test_blddir"'/\1,g'`
 		local headers=` printf "%s" "$switches" | sed -e 's,--.*$,,g' -e 's,^.[^t]*$,,g' -e 's,^[^ot]*o.*t.*$,,g' -e 's,^-[^t]*t\(.*\),'"$test_blddir"'/\1,g'`
 		local switches=`printf "%s" "$switches" | sed -e 's,^-\([^ot-]*[ot]\)\(.*\)$,-\1'"$test_blddir"'/\2,g'`
+
 		# don't use the -o flag, since it makes it harder to diff.
-		local outname=$test_blddir/`basename ${x%.re}.c.temp`
-		local outdiff=$test_blddir/`basename ${x%.re}.c.diff`
-		local typname=$test_blddir/`basename ${x%.re}.h.temp`
-		local typdiff=$test_blddir/`basename ${x%.re}.h.diff`
+		# preserve directory structure unless given explicit args
+		if [ -z "$test_srcdir" ]
+		then
+			local outx=$test_blddir/`basename $x`
+		else
+			local outx=${test_blddir}${x:${#test_srcdir}}
+			mkdir -p `dirname $outx`
+		fi
+		local outname=${outx%.re}.c.temp
+		local outdiff=${outx%.re}.c.diff
+		local typname=${outx%.re}.h.temp
+		local typdiff=${outx%.re}.h.diff
 
 		# enable warnings globally
 		local switches="$switches -W"
@@ -130,7 +143,7 @@ run_pack() {
 		then
 			echo "FAIL missing ${x%.re}.c"
 			local errcnt=$(($errcnt + 1))
-			cp -f $x $test_blddir
+			cp -f $x $outx
 		else
 			local r=`$diff_prog ${x%.re}.c $outname > $outdiff; echo $?`
 			if [[ $r == 0 ]]
@@ -140,7 +153,8 @@ run_pack() {
 			else
 				echo "FAIL $x: $switches"
 				local errcnt=$(($errcnt + 1))
-				cp -f $x ${x%.re}.c $test_blddir
+				cp -f $x $outx
+				cp -f ${x%.re}.c ${outx%.re}.c
 			fi
 		fi
 
@@ -152,7 +166,7 @@ run_pack() {
 			then
 				echo "FAIL missing ${x%.re}.h"
 				local errcnt=$(($errcnt + 1))
-				cp -f $x $test_blddir
+				cp -f $x $outx
 			elif $diff_prog ${x%.re}.h $typname > $typdiff
 			then
 				echo "OK $x: $switches"
@@ -160,7 +174,8 @@ run_pack() {
 			else
 				echo "FAIL $x: $switches"
 				local errcnt=$(($errcnt + 1))
-				cp -f $x ${x%.re}.h $test_blddir
+				cp -f $x $outx
+				cp -f ${x%.re}.h ${outx%.re}.h
 			fi
 		fi
 		test -f $outdiff -a ! -s $outdiff && rm -f $outdiff
@@ -196,10 +211,19 @@ do
 	rm -f ${logs[i]}
 done
 
+# remove empty directories
+for d in `find $test_blddir -depth -type d`
+do
+	entries=`ls -A "$d"`
+	if [ -z "$entries" ]
+	then
+		rmdir "$d"
+	fi
+done
+
 if [ $errors -eq 0 ]
 then
 	echo "All ${#tests[@]} tests passed successfully."
-	rm -r $test_blddir
 	exit 0
 else
 	echo "Error: $errors out ${#tests[@]} tests failed."
