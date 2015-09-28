@@ -1786,16 +1786,44 @@ This can be set 0 to suppress output of the pre condition using <strong>YYCURSOR
 </p>
 </dd>
 <dt class="hdlist1">
+<strong>re2c:define:YYFILL</strong> = &#8220;YYFILL&#8221;; 
+</dt>
+<dd>
+<p>
+Substitution for <strong>YYFILL</strong>.
+Note that by default <strong>re2c</strong> generates argument in braces and semicolon after <strong>YYFILL</strong>.
+If you need to make <strong>YYFILL</strong> an arbitrary statement rather than a call,
+set <strong>re2c:define:YYFILL:naked</strong> to non-zero and use <strong>re2c:define:YYFILL@len</strong> to denote
+formal parameter inside of <strong>YYFILL</strong> body.
+</p>
+</dd>
+<dt class="hdlist1">
+<strong>re2c:define:YYFILL@len</strong> = &#8220;@@&#8221;; 
+</dt>
+<dd>
+<p>
+Any occurence of this text inside of <strong>YYFILL</strong> will be replaced with the actual argument.
+</p>
+</dd>
+<dt class="hdlist1">
 <strong>re2c:yyfill:parameter</strong> = 1; 
 </dt>
 <dd>
 <p>
-Allows to suppress parameter passing to <strong>YYFILL</strong> calls. If set to zero
-then no parameter is passed to <strong>YYFILL</strong>. However <strong>define:YYFILL@LEN</strong>
-allows to specify a replacement string for the actual length value. If set to
-a non zero value then <strong>YYFILL</strong> usage will be followed by the number of
-requested characters in braces unless <strong>re2c:define:YYFILL:naked</strong> is set.
-Also look at <strong>re2c:define:YYFILL:naked</strong> and <strong>re2c:define:YYFILL@LEN</strong>.
+Controls argument in braces after <strong>YYFILL</strong>.
+If zero, agrument is omitted.
+If non-zero, argument is generated unless <strong>re2c:define:YYFILL:naked</strong> is set to non-zero.
+</p>
+</dd>
+<dt class="hdlist1">
+<strong>re2c:define:YYFILL:naked</strong> = 0; 
+</dt>
+<dd>
+<p>
+Controls argument in braces and semicolon after <strong>YYFILL</strong>.
+If zero, both agrument and semicolon are omitted.
+If non-zero, argument is generated unless <strong>re2c:yyfill:parameter</strong> is set to zero
+and semicolon is generated unconditionally.
 </p>
 </dd>
 <dt class="hdlist1">
@@ -1915,63 +1943,103 @@ value to the actual code needed.
 </p>
 </dd>
 <dt class="hdlist1">
-<strong>re2c:define:YYFILL</strong> = <strong>YYFILL</strong>; 
+<strong>re2c:define:YYGETCONDITION</strong> = &#8220;YYGETCONDITION&#8221;; 
 </dt>
 <dd>
 <p>
-Allows to overwrite the define <strong>YYFILL</strong> and thus avoiding it by setting the
-value to the actual code needed.
+Substitution for <strong>YYGETCONDITION</strong>.
+Note that by default <strong>re2c</strong> generates braces after <strong>YYGETCONDITION</strong>.
+Set <strong>re2c:define:YYGETCONDITION:naked</strong> to non-zero to omit braces.
 </p>
 </dd>
 <dt class="hdlist1">
-<strong>re2c:define:YYFILL:naked</strong> = <strong>0</strong>; 
+<strong>re2c:define:YYGETCONDITION:naked</strong> = 0; 
 </dt>
 <dd>
 <p>
-When set to 1 neither braces, parameter nor semicolon gets emitted.
+Controls braces after <strong>YYGETCONDITION</strong>.
+If zero, braces are omitted.
+If non-zero, braces are generated.
 </p>
 </dd>
 <dt class="hdlist1">
-<strong>re2c:define:YYFILL@len</strong> = @@; 
+<strong>re2c:define:YYSETCONDITION</strong> = &#8220;YYSETCONDITION&#8221;; 
 </dt>
 <dd>
 <p>
-When using <strong>re2c:define:YYFILL</strong> and <strong>re2c:yyfill:parameter</strong> is 0 then
-any occurence of this text inside <strong>YYFILL</strong> will be replaced with the actual
-length value.
+Substitution for <strong>YYSETCONDITION</strong>.
+Note that by default <strong>re2c</strong> generates argument in braces and semicolon after <strong>YYSETCONDITION</strong>.
+If you need to make <strong>YYSETCONDITION</strong> an arbitrary statement rather than a call,
+set <strong>re2c:define:YYSETCONDITION:naked</strong> to non-zero and use <strong>re2c:define:YYSETCONDITION@cond</strong> to denote
+formal parameter inside of <strong>YYSETCONDITION</strong> body.
 </p>
 </dd>
 <dt class="hdlist1">
-<strong>re2c:define:YYGETCONDITION</strong> = <strong>YYGETCONDITION</strong>; 
+<strong>re2c:define:YYSETCONDITION@cond</strong> = &#8220;@@&#8221;; 
 </dt>
 <dd>
 <p>
-Allows to overwrite the define <strong>YYGETCONDITION</strong>.
+Any occurence of this text inside of <strong>YYSETCONDITION</strong> will be replaced with the actual argument.
 </p>
 </dd>
 <dt class="hdlist1">
-<strong>re2c:define:YYGETCONDITION:naked</strong> = <strong>0</strong>; 
+<strong>re2c:define:YYSETCONDITION:naked</strong> = 0; 
 </dt>
 <dd>
 <p>
-When set to 1 neither braces, parameter nor semicolon gets emitted.
+Controls argument in braces and semicolon after <strong>YYSETCONDITION</strong>.
+If zero, both agrument and semicolon are omitted.
+If non-zero, both argument and semicolon are generated.
 </p>
 </dd>
 <dt class="hdlist1">
-<strong>re2c:define:YYGETSTATE</strong> = <strong>YYGETSTATE</strong>; 
+<strong>re2c:define:YYGETSTATE</strong> = &#8220;YYGETSTATE&#8221;; 
 </dt>
 <dd>
 <p>
-Allows to overwrite the define <strong>YYGETSTATE</strong> and thus avoiding it by setting the
-value to the actual code needed.
+Substitution for <strong>YYGETSTATE</strong>.
+Note that by default <strong>re2c</strong> generates braces after <strong>YYGETSTATE</strong>.
+Set <strong>re2c:define:YYGETSTATE:naked</strong> to non-zero to omit braces.
 </p>
 </dd>
 <dt class="hdlist1">
-<strong>re2c:define:YYGETSTATE:naked</strong> = <strong>0</strong>; 
+<strong>re2c:define:YYGETSTATE:naked</strong> = 0; 
 </dt>
 <dd>
 <p>
-When set to 1 neither braces, parameter nor semicolon gets emitted.
+Controls braces after <strong>YYGETSTATE</strong>.
+If zero, braces are omitted.
+If non-zero, braces are generated.
+</p>
+</dd>
+<dt class="hdlist1">
+<strong>re2c:define:YYSETSTATE</strong> = &#8220;YYSETSTATE&#8221;; 
+</dt>
+<dd>
+<p>
+Substitution for <strong>YYSETSTATE</strong>.
+Note that by default <strong>re2c</strong> generates argument in braces and semicolon after <strong>YYSETSTATE</strong>.
+If you need to make <strong>YYSETSTATE</strong> an arbitrary statement rather than a call,
+set <strong>re2c:define:YYSETSTATE:naked</strong> to non-zero and use <strong>re2c:define:YYSETSTATE@cond</strong> to denote
+formal parameter inside of <strong>YYSETSTATE</strong> body.
+</p>
+</dd>
+<dt class="hdlist1">
+<strong>re2c:define:YYSETSTATE@state</strong> = &#8220;@@&#8221;; 
+</dt>
+<dd>
+<p>
+Any occurence of this text inside of <strong>YYSETSTATE</strong> will be replaced with the actual argument.
+</p>
+</dd>
+<dt class="hdlist1">
+<strong>re2c:define:YYSETSTATE:naked</strong> = <strong>0</strong>; 
+</dt>
+<dd>
+<p>
+Controls argument in braces and semicolon after <strong>YYSETSTATE</strong>.
+If zero, both agrument and semicolon are omitted.
+If non-zero, both argument and semicolon are generated.
 </p>
 </dd>
 <dt class="hdlist1">
@@ -1990,49 +2058,6 @@ value to the actual code needed.
 <p>
 Allows to overwrite the define <strong>YYMARKER</strong> and thus avoiding it by setting the
 value to the actual code needed.
-</p>
-</dd>
-<dt class="hdlist1">
-<strong>re2c:define:YYSETCONDITION</strong> = <strong>YYSETCONDITION</strong>; 
-</dt>
-<dd>
-<p>
-Allows to overwrite the define <strong>YYSETCONDITION</strong>.
-</p>
-</dd>
-<dt class="hdlist1">
-<strong>re2c:define:YYSETCONDITION@cond</strong> = @@; 
-</dt>
-<dd>
-<p>
-When using <strong>re2c:define:YYSETCONDITION</strong> then any occurence of this text
-inside <strong>YYSETCONDITION</strong> will be replaced with the actual new condition value.
-</p>
-</dd>
-<dt class="hdlist1">
-<strong>re2c:define:YYSETSTATE</strong> = <strong>YYSETSTATE</strong>; 
-</dt>
-<dd>
-<p>
-Allows to overwrite the define <strong>YYSETSTATE</strong> and thus avoiding it by setting the
-value to the actual code needed.
-</p>
-</dd>
-<dt class="hdlist1">
-<strong>re2c:define:YYSETSTATE:naked</strong> = <strong>0</strong>; 
-</dt>
-<dd>
-<p>
-When set to 1 neither braces, parameter nor semicolon gets emitted.
-</p>
-</dd>
-<dt class="hdlist1">
-<strong>re2c:define:YYSETSTATE@state</strong> = @@; 
-</dt>
-<dd>
-<p>
-When using <strong>re2c:define:YYSETSTATE</strong> then any occurence of this text
-inside <strong>YYSETSTATE</strong> will be replaced with the actual new state value.
 </p>
 </dd>
 <dt class="hdlist1">
@@ -2434,14 +2459,14 @@ Ulya Trofimovich <a href="mailto:skvadrik@gmail.com">skvadrik@gmail.com</a>
 <div class="sect1">
 <h2 id="_version_information">VERSION INFORMATION</h2>
 <div class="sectionbody">
-<div class="paragraph"><p>This manpage describes <strong>re2c</strong>, version 0.14.1.dev, package date 17 Sep 2015.</p></div>
+<div class="paragraph"><p>This manpage describes <strong>re2c</strong>, version 0.14.1.dev, package date 28 Sep 2015.</p></div>
 </div>
 </div>
 </div>
 <div id="footnotes"><hr /></div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2015-09-17 15:12:42 BST
+Last updated 2015-09-28 15:25:09 BST
 </div>
 </div>
 </body>

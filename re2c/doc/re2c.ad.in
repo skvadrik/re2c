@@ -632,13 +632,26 @@ this behavior might introduce sever security issues to you programs.
 This can be set 0 to suppress output of the pre condition using *YYCURSOR* and
 *YYLIMIT* which becomes usefull when *$$YYLIMIT + max (YYFILL)$$* is always accessible.
 
+*re2c:define:YYFILL* = ``YYFILL''; ::
+Substitution for *YYFILL*.
+Note that by default *re2c* generates argument in braces and semicolon after *YYFILL*.
+If you need to make *YYFILL* an arbitrary statement rather than a call, 
+set *re2c:define:YYFILL:naked* to non-zero and use *re2c:define:YYFILL@len* to denote
+formal parameter inside of *YYFILL* body.
+
+*re2c:define:YYFILL@len* = ``@@''; ::
+Any occurence of this text inside of *YYFILL* will be replaced with the actual argument.
+
 *re2c:yyfill:parameter* = 1; ::
-Allows to suppress parameter passing to *YYFILL* calls. If set to zero 
-then no parameter is passed to *YYFILL*. However *define:YYFILL@LEN*
-allows to specify a replacement string for the actual length value. If set to
-a non zero value then *YYFILL* usage will be followed by the number of 
-requested characters in braces unless *re2c:define:YYFILL:naked* is set. 
-Also look at *re2c:define:YYFILL:naked* and *re2c:define:YYFILL@LEN*.
+Controls argument in braces after *YYFILL*.
+If zero, agrument is omitted.
+If non-zero, argument is generated unless *re2c:define:YYFILL:naked* is set to non-zero.
+
+*re2c:define:YYFILL:naked* = 0; ::
+Controls argument in braces and semicolon after *YYFILL*.
+If zero, both agrument and semicolon are omitted.
+If non-zero, argument is generated unless *re2c:yyfill:parameter* is set to zero
+and semicolon is generated unconditionally.
 
 *re2c:startlabel* = 0; ::
 If set to a non zero integer then the start label of the next scanner blocks 
@@ -701,30 +714,55 @@ value to the actual code needed.
 Allows to overwrite the define *YYDEBUG* and thus avoiding it by setting the
 value to the actual code needed.
 
-*re2c:define:YYFILL* = *YYFILL*; ::
-Allows to overwrite the define *YYFILL* and thus avoiding it by setting the
-value to the actual code needed.
+*re2c:define:YYGETCONDITION* = ``YYGETCONDITION''; ::
+Substitution for *YYGETCONDITION*.
+Note that by default *re2c* generates braces after *YYGETCONDITION*.
+Set *re2c:define:YYGETCONDITION:naked* to non-zero to omit braces.
 
-*re2c:define:YYFILL:naked* = *0*; ::
-When set to 1 neither braces, parameter nor semicolon gets emitted.
+*re2c:define:YYGETCONDITION:naked* = 0; ::
+Controls braces after *YYGETCONDITION*.
+If zero, braces are omitted.
+If non-zero, braces are generated.
 
-*re2c:define:YYFILL@len* = @@; ::
-When using *re2c:define:YYFILL* and *re2c:yyfill:parameter* is 0 then
-any occurence of this text inside *YYFILL* will be replaced with the actual
-length value.
+*re2c:define:YYSETCONDITION* = ``YYSETCONDITION''; ::
+Substitution for *YYSETCONDITION*.
+Note that by default *re2c* generates argument in braces and semicolon after *YYSETCONDITION*.
+If you need to make *YYSETCONDITION* an arbitrary statement rather than a call, 
+set *re2c:define:YYSETCONDITION:naked* to non-zero and use *re2c:define:YYSETCONDITION@cond* to denote
+formal parameter inside of *YYSETCONDITION* body.
 
-*re2c:define:YYGETCONDITION* = *YYGETCONDITION*; ::
-Allows to overwrite the define *YYGETCONDITION*.
+*re2c:define:YYSETCONDITION@cond* = ``@@''; ::
+Any occurence of this text inside of *YYSETCONDITION* will be replaced with the actual argument.
 
-*re2c:define:YYGETCONDITION:naked* = *0*; ::
-When set to 1 neither braces, parameter nor semicolon gets emitted.
+*re2c:define:YYSETCONDITION:naked* = 0; ::
+Controls argument in braces and semicolon after *YYSETCONDITION*.
+If zero, both agrument and semicolon are omitted.
+If non-zero, both argument and semicolon are generated.
 
-*re2c:define:YYGETSTATE* = *YYGETSTATE*; ::
-Allows to overwrite the define *YYGETSTATE* and thus avoiding it by setting the
-value to the actual code needed.
+*re2c:define:YYGETSTATE* = ``YYGETSTATE''; ::
+Substitution for *YYGETSTATE*.
+Note that by default *re2c* generates braces after *YYGETSTATE*.
+Set *re2c:define:YYGETSTATE:naked* to non-zero to omit braces.
 
-*re2c:define:YYGETSTATE:naked* = *0*; ::
-When set to 1 neither braces, parameter nor semicolon gets emitted.
+*re2c:define:YYGETSTATE:naked* = 0; ::
+Controls braces after *YYGETSTATE*.
+If zero, braces are omitted.
+If non-zero, braces are generated.
+
+*re2c:define:YYSETSTATE* = ``YYSETSTATE''; ::
+Substitution for *YYSETSTATE*.
+Note that by default *re2c* generates argument in braces and semicolon after *YYSETSTATE*.
+If you need to make *YYSETSTATE* an arbitrary statement rather than a call, 
+set *re2c:define:YYSETSTATE:naked* to non-zero and use *re2c:define:YYSETSTATE@cond* to denote
+formal parameter inside of *YYSETSTATE* body.
+
+*re2c:define:YYSETSTATE@state* = ``@@''; ::
+Any occurence of this text inside of *YYSETSTATE* will be replaced with the actual argument.
+
+*re2c:define:YYSETSTATE:naked* = *0*; ::
+Controls argument in braces and semicolon after *YYSETSTATE*.
+If zero, both agrument and semicolon are omitted.
+If non-zero, both argument and semicolon are generated.
 
 *re2c:define:YYLIMIT* = *YYLIMIT*; ::
 Allows to overwrite the define *YYLIMIT* and thus avoiding it by setting the
@@ -733,24 +771,6 @@ value to the actual code needed.
 *re2c:define:YYMARKER* = *YYMARKER*; ::
 Allows to overwrite the define *YYMARKER* and thus avoiding it by setting the
 value to the actual code needed.
-
-*re2c:define:YYSETCONDITION* = *YYSETCONDITION*; ::
-Allows to overwrite the define *YYSETCONDITION*.
-
-*re2c:define:YYSETCONDITION@cond* = @@; ::
-When using *re2c:define:YYSETCONDITION* then any occurence of this text 
-inside *YYSETCONDITION* will be replaced with the actual new condition value.
-
-*re2c:define:YYSETSTATE* = *YYSETSTATE*; ::
-Allows to overwrite the define *YYSETSTATE* and thus avoiding it by setting the
-value to the actual code needed.
-
-*re2c:define:YYSETSTATE:naked* = *0*; ::
-When set to 1 neither braces, parameter nor semicolon gets emitted.
-
-*re2c:define:YYSETSTATE@state* = @@; ::
-When using *re2c:define:YYSETSTATE* then any occurence of this text 
-inside *YYSETSTATE* will be replaced with the actual new state value.
 
 *re2c:label:yyFillLabel* = *yyFillLabel*; ::
 Allows to overwrite the name of the label *yyFillLabel*.

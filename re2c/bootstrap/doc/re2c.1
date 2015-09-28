@@ -2,12 +2,12 @@
 .\"     Title: re2c
 .\"    Author: [see the "AUTHORS" section]
 .\" Generator: DocBook XSL Stylesheets v1.78.0 <http://docbook.sf.net/>
-.\"      Date: 09/17/2015
+.\"      Date: 09/28/2015
 .\"    Manual: \ \&
 .\"    Source: \ \&
 .\"  Language: English
 .\"
-.TH "RE2C" "1" "09/17/2015" "\ \&" "\ \&"
+.TH "RE2C" "1" "09/28/2015" "\ \&" "\ \&"
 .\" -----------------------------------------------------------------
 .\" * Define some portability stuff
 .\" -----------------------------------------------------------------
@@ -914,21 +914,44 @@ which becomes usefull when
 is always accessible\&.
 .RE
 .PP
+\fBre2c:define:YYFILL\fR = \(lqYYFILL\(rq;
+.RS 4
+Substitution for
+\fBYYFILL\fR\&. Note that by default
+\fBre2c\fR
+generates argument in braces and semicolon after
+\fBYYFILL\fR\&. If you need to make
+\fBYYFILL\fR
+an arbitrary statement rather than a call, set
+\fBre2c:define:YYFILL:naked\fR
+to non\-zero and use
+\fBre2c:define:YYFILL@len\fR
+to denote formal parameter inside of
+\fBYYFILL\fR
+body\&.
+.RE
+.PP
+\fBre2c:define:YYFILL@len\fR = \(lq@@\(rq;
+.RS 4
+Any occurence of this text inside of
+\fBYYFILL\fR
+will be replaced with the actual argument\&.
+.RE
+.PP
 \fBre2c:yyfill:parameter\fR = 1;
 .RS 4
-Allows to suppress parameter passing to
-\fBYYFILL\fR
-calls\&. If set to zero then no parameter is passed to
-\fBYYFILL\fR\&. However
-\fBdefine:YYFILL@LEN\fR
-allows to specify a replacement string for the actual length value\&. If set to a non zero value then
-\fBYYFILL\fR
-usage will be followed by the number of requested characters in braces unless
+Controls argument in braces after
+\fBYYFILL\fR\&. If zero, agrument is omitted\&. If non\-zero, argument is generated unless
 \fBre2c:define:YYFILL:naked\fR
-is set\&. Also look at
-\fBre2c:define:YYFILL:naked\fR
-and
-\fBre2c:define:YYFILL@LEN\fR\&.
+is set to non\-zero\&.
+.RE
+.PP
+\fBre2c:define:YYFILL:naked\fR = 0;
+.RS 4
+Controls argument in braces and semicolon after
+\fBYYFILL\fR\&. If zero, both agrument and semicolon are omitted\&. If non\-zero, argument is generated unless
+\fBre2c:yyfill:parameter\fR
+is set to zero and semicolon is generated unconditionally\&.
 .RE
 .PP
 \fBre2c:startlabel\fR = 0;
@@ -1040,50 +1063,98 @@ Allows to overwrite the define
 and thus avoiding it by setting the value to the actual code needed\&.
 .RE
 .PP
-\fBre2c:define:YYFILL\fR = \fBYYFILL\fR;
+\fBre2c:define:YYGETCONDITION\fR = \(lqYYGETCONDITION\(rq;
 .RS 4
-Allows to overwrite the define
-\fBYYFILL\fR
-and thus avoiding it by setting the value to the actual code needed\&.
+Substitution for
+\fBYYGETCONDITION\fR\&. Note that by default
+\fBre2c\fR
+generates braces after
+\fBYYGETCONDITION\fR\&. Set
+\fBre2c:define:YYGETCONDITION:naked\fR
+to non\-zero to omit braces\&.
 .RE
 .PP
-\fBre2c:define:YYFILL:naked\fR = \fB0\fR;
+\fBre2c:define:YYGETCONDITION:naked\fR = 0;
 .RS 4
-When set to 1 neither braces, parameter nor semicolon gets emitted\&.
+Controls braces after
+\fBYYGETCONDITION\fR\&. If zero, braces are omitted\&. If non\-zero, braces are generated\&.
 .RE
 .PP
-\fBre2c:define:YYFILL@len\fR = @@;
+\fBre2c:define:YYSETCONDITION\fR = \(lqYYSETCONDITION\(rq;
 .RS 4
-When using
-\fBre2c:define:YYFILL\fR
-and
-\fBre2c:yyfill:parameter\fR
-is 0 then any occurence of this text inside
-\fBYYFILL\fR
-will be replaced with the actual length value\&.
+Substitution for
+\fBYYSETCONDITION\fR\&. Note that by default
+\fBre2c\fR
+generates argument in braces and semicolon after
+\fBYYSETCONDITION\fR\&. If you need to make
+\fBYYSETCONDITION\fR
+an arbitrary statement rather than a call, set
+\fBre2c:define:YYSETCONDITION:naked\fR
+to non\-zero and use
+\fBre2c:define:YYSETCONDITION@cond\fR
+to denote formal parameter inside of
+\fBYYSETCONDITION\fR
+body\&.
 .RE
 .PP
-\fBre2c:define:YYGETCONDITION\fR = \fBYYGETCONDITION\fR;
+\fBre2c:define:YYSETCONDITION@cond\fR = \(lq@@\(rq;
 .RS 4
-Allows to overwrite the define
-\fBYYGETCONDITION\fR\&.
+Any occurence of this text inside of
+\fBYYSETCONDITION\fR
+will be replaced with the actual argument\&.
 .RE
 .PP
-\fBre2c:define:YYGETCONDITION:naked\fR = \fB0\fR;
+\fBre2c:define:YYSETCONDITION:naked\fR = 0;
 .RS 4
-When set to 1 neither braces, parameter nor semicolon gets emitted\&.
+Controls argument in braces and semicolon after
+\fBYYSETCONDITION\fR\&. If zero, both agrument and semicolon are omitted\&. If non\-zero, both argument and semicolon are generated\&.
 .RE
 .PP
-\fBre2c:define:YYGETSTATE\fR = \fBYYGETSTATE\fR;
+\fBre2c:define:YYGETSTATE\fR = \(lqYYGETSTATE\(rq;
 .RS 4
-Allows to overwrite the define
-\fBYYGETSTATE\fR
-and thus avoiding it by setting the value to the actual code needed\&.
+Substitution for
+\fBYYGETSTATE\fR\&. Note that by default
+\fBre2c\fR
+generates braces after
+\fBYYGETSTATE\fR\&. Set
+\fBre2c:define:YYGETSTATE:naked\fR
+to non\-zero to omit braces\&.
 .RE
 .PP
-\fBre2c:define:YYGETSTATE:naked\fR = \fB0\fR;
+\fBre2c:define:YYGETSTATE:naked\fR = 0;
 .RS 4
-When set to 1 neither braces, parameter nor semicolon gets emitted\&.
+Controls braces after
+\fBYYGETSTATE\fR\&. If zero, braces are omitted\&. If non\-zero, braces are generated\&.
+.RE
+.PP
+\fBre2c:define:YYSETSTATE\fR = \(lqYYSETSTATE\(rq;
+.RS 4
+Substitution for
+\fBYYSETSTATE\fR\&. Note that by default
+\fBre2c\fR
+generates argument in braces and semicolon after
+\fBYYSETSTATE\fR\&. If you need to make
+\fBYYSETSTATE\fR
+an arbitrary statement rather than a call, set
+\fBre2c:define:YYSETSTATE:naked\fR
+to non\-zero and use
+\fBre2c:define:YYSETSTATE@cond\fR
+to denote formal parameter inside of
+\fBYYSETSTATE\fR
+body\&.
+.RE
+.PP
+\fBre2c:define:YYSETSTATE@state\fR = \(lq@@\(rq;
+.RS 4
+Any occurence of this text inside of
+\fBYYSETSTATE\fR
+will be replaced with the actual argument\&.
+.RE
+.PP
+\fBre2c:define:YYSETSTATE:naked\fR = \fB0\fR;
+.RS 4
+Controls argument in braces and semicolon after
+\fBYYSETSTATE\fR\&. If zero, both agrument and semicolon are omitted\&. If non\-zero, both argument and semicolon are generated\&.
 .RE
 .PP
 \fBre2c:define:YYLIMIT\fR = \fBYYLIMIT\fR;
@@ -1098,42 +1169,6 @@ and thus avoiding it by setting the value to the actual code needed\&.
 Allows to overwrite the define
 \fBYYMARKER\fR
 and thus avoiding it by setting the value to the actual code needed\&.
-.RE
-.PP
-\fBre2c:define:YYSETCONDITION\fR = \fBYYSETCONDITION\fR;
-.RS 4
-Allows to overwrite the define
-\fBYYSETCONDITION\fR\&.
-.RE
-.PP
-\fBre2c:define:YYSETCONDITION@cond\fR = @@;
-.RS 4
-When using
-\fBre2c:define:YYSETCONDITION\fR
-then any occurence of this text inside
-\fBYYSETCONDITION\fR
-will be replaced with the actual new condition value\&.
-.RE
-.PP
-\fBre2c:define:YYSETSTATE\fR = \fBYYSETSTATE\fR;
-.RS 4
-Allows to overwrite the define
-\fBYYSETSTATE\fR
-and thus avoiding it by setting the value to the actual code needed\&.
-.RE
-.PP
-\fBre2c:define:YYSETSTATE:naked\fR = \fB0\fR;
-.RS 4
-When set to 1 neither braces, parameter nor semicolon gets emitted\&.
-.RE
-.PP
-\fBre2c:define:YYSETSTATE@state\fR = @@;
-.RS 4
-When using
-\fBre2c:define:YYSETSTATE\fR
-then any occurence of this text inside
-\fBYYSETSTATE\fR
-will be replaced with the actual new state value\&.
 .RE
 .PP
 \fBre2c:label:yyFillLabel\fR = \fByyFillLabel\fR;
@@ -1613,4 +1648,4 @@ skvadrik@gmail\&.com
 .RE
 .SH "VERSION INFORMATION"
 .sp
-This manpage describes \fBre2c\fR, version 0\&.14\&.1\&.dev, package date 17 Sep 2015\&.
+This manpage describes \fBre2c\fR, version 0\&.14\&.1\&.dev, package date 28 Sep 2015\&.
