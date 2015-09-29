@@ -205,7 +205,7 @@ void Skeleton::emit_start
 	o << "\n" << ind << "limit = input + input_len + padding;";
 	o << "\n" << ind << "eof = input + input_len;";
 	o << "\n";
-	o << "\n" << ind << "for (i = 0; status == 0 && cursor < eof && i < keys_count; ++i)";
+	o << "\n" << ind << "for (i = 0; status == 0 && i < keys_count; ++i)";
 	o << "\n" << ind << "{";
 	if (backup)
 	{
