@@ -98,7 +98,7 @@ struct Skeleton
 		, bool backup
 		, bool backupctx
 		) const;
-	static void emit_epilog (OutputFile & o, const std::vector<std::string> & names);
+	static void emit_epilog (OutputFile & o, const std::set<std::string> & names);
 	static void emit_action (OutputFile & o, uint32_t ind, rule_rank_t rank, const std::string & name);
 
 	template <typename key_t>

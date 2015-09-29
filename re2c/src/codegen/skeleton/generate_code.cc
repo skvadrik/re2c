@@ -277,15 +277,14 @@ void Skeleton::emit_end
 	o << "\n";
 }
 
-void Skeleton::emit_epilog (OutputFile & o, const std::vector<std::string> & names)
+void Skeleton::emit_epilog (OutputFile & o, const std::set<std::string> & names)
 {
 	o << "\n" << "int main ()";
 	o << "\n" << "{";
 
-	const size_t names_count = names.size ();
-	for (size_t i = 0; i < names_count; ++i)
+	for (std::set<std::string>::const_iterator i = names.begin (); i != names.end (); ++i)
 	{
-		o << "\n" << opts->indString << "if (lex_" << names[i] << " () != 0) return 1;";
+		o << "\n" << opts->indString << "if (lex_" << *i << " () != 0) return 1;";
 	}
 
 	o << "\n" << opts->indString << "return 0;";

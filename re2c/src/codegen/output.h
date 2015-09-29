@@ -2,6 +2,7 @@
 #define _RE2C_CODEGEN_OUTPUT_
 
 #include <fstream>
+#include <set>
 #include <sstream>
 #include <string>
 #include <vector>
@@ -127,8 +128,8 @@ struct Output
 {
 	OutputFile source;
 	HeaderFile header;
-	std::vector<std::string> names;
 	std::vector<std::string> types;
+	std::set<std::string> skeletons;
 	uint32_t max_fill;
 
 	Output (const char * source_name, const char * header_name);

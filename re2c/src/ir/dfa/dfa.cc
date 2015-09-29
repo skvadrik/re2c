@@ -48,7 +48,7 @@ DFA::DFA
 	)
 	: accepts ()
 	, skeleton (NULL)
-	, name (c)
+	, name ()
 	, cond (c)
 	, line (l)
 	, lbChar(lb)
@@ -66,11 +66,13 @@ DFA::DFA
 	, need_backupctx (false)
 	, need_accept (false)
 {
-	if (name.empty ())
+	std::ostringstream s;
+	s << "line" << line;
+	name = s.str ();
+	if (!cond.empty ())
 	{
-		std::ostringstream s;
-		s << "line" << line;
-		name = s.str ();
+		name += "_";
+		name += cond;
 	}
 
 	Ins **work = new Ins * [ni + 1];

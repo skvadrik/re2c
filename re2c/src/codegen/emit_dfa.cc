@@ -125,11 +125,14 @@ void DFA::emit(Output & output, uint32_t& ind, bool isLastCond, bool& bPrologBra
 
 	if (opts->target == opt_t::SKELETON)
 	{
-		skeleton->emit_data (o.file_name);
-		skeleton->emit_start (o, max_fill, need_backup, need_backupctx, need_accept);
-		uint32_t i = 2;
-		emit_body (o, i, used_labels);
-		skeleton->emit_end (o, need_backup, need_backupctx);
+		if (output.skeletons.insert (name).second)
+		{
+			skeleton->emit_data (o.file_name);
+			skeleton->emit_start (o, max_fill, need_backup, need_backupctx, need_accept);
+			uint32_t i = 2;
+			emit_body (o, i, used_labels);
+			skeleton->emit_end (o, need_backup, need_backupctx);
+		}
 	}
 	else
 	{

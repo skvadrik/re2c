@@ -3131,7 +3131,7 @@ void parse(Scanner& i, Output & o)
 
 	if (opts->target == opt_t::SKELETON)
 	{
-		Skeleton::emit_epilog (o.source, o.names);
+		Skeleton::emit_epilog (o.source, o.skeletons);
 	}
 
 	parse_cleanup();

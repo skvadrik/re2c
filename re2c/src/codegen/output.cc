@@ -346,8 +346,8 @@ HeaderFile::~HeaderFile ()
 Output::Output (const char * source_name, const char * header_name)
 	: source (source_name)
 	, header (header_name)
-	, names ()
 	, types ()
+	, skeletons ()
 	, max_fill (1)
 {}
 
