@@ -173,6 +173,7 @@ void Skeleton::emit_start
 	o << "\n" << ind << "YYKEYTYPE * keys = NULL;";
 	o << "\n" << ind << "const YYCTYPE * cursor = NULL;";
 	o << "\n" << ind << "const YYCTYPE * limit = NULL;";
+	o << "\n" << ind << "const YYCTYPE * token = NULL;";
 	o << "\n" << ind << "const YYCTYPE * eof = NULL;";
 	o << "\n" << ind << "unsigned int i = 0;";
 	o << "\n";
@@ -206,6 +207,7 @@ void Skeleton::emit_start
 	o << "\n";
 	o << "\n" << ind << "for (i = 0; status == 0 && i < keys_count; ++i)";
 	o << "\n" << ind << "{";
+	o << "\n" << ind << ind << "token = cursor;";
 	if (backup)
 	{
 		o << "\n" << ind << ind << "const YYCTYPE * marker = NULL;";
@@ -214,7 +216,6 @@ void Skeleton::emit_start
 	{
 		o << "\n" << ind << ind << "const YYCTYPE * ctxmarker = NULL;";
 	}
-	o << "\n" << ind << ind << "const YYCTYPE * token = cursor;";
 	o << "\n" << ind << ind << "YYCTYPE yych;";
 	if (accept)
 	{
@@ -242,12 +243,13 @@ void Skeleton::emit_end
 	o << "\n" << ind << ind << "if (cursor != eof)";
 	o << "\n" << ind << ind << "{";
 	o << "\n" << ind << ind << ind << "status = 1;";
-	o << "\n" << ind << ind << ind << "fprintf (stderr, \"error: lex_" << name << ": unused input strings left\\n\");";
+	o << "\n" << ind << ind << ind << "const long pos = token - input;";
+	o << "\n" << ind << ind << ind << "fprintf (stderr, \"error: lex_" << name << ": unused input strings left at position %ld\\n\", pos);";
 	o << "\n" << ind << ind << "}";
 	o << "\n" << ind << ind << "if (i != keys_count)";
 	o << "\n" << ind << ind << "{";
 	o << "\n" << ind << ind << ind << "status = 1;";
-	o << "\n" << ind << ind << ind << "fprintf (stderr, \"error: lex_" << name << ": unused keys left\\n\");";
+	o << "\n" << ind << ind << ind << "fprintf (stderr, \"error: lex_" << name << ": unused keys left after %u iterations\\n\", i);";
 	o << "\n" << ind << ind << "}";
 	o << "\n" << ind << "}";
 	o << "\n";
