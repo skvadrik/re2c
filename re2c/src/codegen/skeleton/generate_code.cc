@@ -223,7 +223,7 @@ void Skeleton::emit_start
 	o << "\n";
 	if (opts->bFlag && BitMap::first)
 	{
-		BitMap::gen (o, 2, 0, std::min (0xFFu, opts->encoding.nCodeUnits ()));
+		BitMap::gen (o, 2, 0, std::min (0x100u, opts->encoding.nCodeUnits ()));
 	}
 	o << "\n";
 }
