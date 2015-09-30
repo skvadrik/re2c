@@ -220,6 +220,7 @@ void Skeleton::emit_start
 	{
 		o << "\n" << ind << ind << "unsigned int yyaccept = 0;";
 	}
+	o << "\n";
 	if (opts->bFlag && BitMap::first)
 	{
 		BitMap::gen (o, 2, 0, std::min (0xFFu, opts->encoding.nCodeUnits ()));
