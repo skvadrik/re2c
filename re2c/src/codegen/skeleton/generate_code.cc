@@ -1,7 +1,6 @@
 #include "src/codegen/bitmap.h"
 #include "src/codegen/indent.h"
 #include "src/codegen/skeleton/skeleton.h"
-#include "src/conf/msg.h"
 
 namespace re2c
 {
@@ -135,7 +134,7 @@ void Skeleton::emit_start
 	o << "\n" << ind << "{";
 	o << "\n" << ind << ind << "fprintf";
 	o << "\n" << ind << ind << ind << "( stderr";
-	o << "\n" << ind << ind << ind << ", \"warning: " << incond (cond) << "control flow is undefined for input\"";
+	o << "\n" << ind << ind << ind << ", \"warning: lex_" << name << ": control flow is undefined for input\"";
 	o << "\n" << ind << ind << ind << ind << "\" at position %ld, rerun re2c with '-W'\\n\"";
 	o << "\n" << ind << ind << ind << ", pos";
 	o << "\n" << ind << ind << ind << ");";
@@ -150,7 +149,7 @@ void Skeleton::emit_start
 	o << "\n" << ind << "{";
 	o << "\n" << ind << ind << "fprintf";
 	o << "\n" << ind << ind << ind << "( stderr";
-	o << "\n" << ind << ind << ind << ", \"error: " << incond (cond) << "at position %ld (iteration %u):\\n\"";
+	o << "\n" << ind << ind << ind << ", \"error: lex_" << name << ": at position %ld (iteration %u):\\n\"";
 	o << "\n" << ind << ind << ind << ind << "\"\\texpected: match length %ld, rule %u\\n\"";
 	o << "\n" << ind << ind << ind << ind << "\"\\tactual:   match length %ld, rule %u\\n\"";
 	o << "\n" << ind << ind << ind << ", pos";
@@ -242,12 +241,12 @@ void Skeleton::emit_end
 	o << "\n" << ind << ind << "if (cursor != eof)";
 	o << "\n" << ind << ind << "{";
 	o << "\n" << ind << ind << ind << "status = 1;";
-	o << "\n" << ind << ind << ind << "fprintf (stderr, \"error: " << incond (cond) << "unused input strings left\\n\");";
+	o << "\n" << ind << ind << ind << "fprintf (stderr, \"error: lex_" << name << ": unused input strings left\\n\");";
 	o << "\n" << ind << ind << "}";
 	o << "\n" << ind << ind << "if (i != keys_count)";
 	o << "\n" << ind << ind << "{";
 	o << "\n" << ind << ind << ind << "status = 1;";
-	o << "\n" << ind << ind << ind << "fprintf (stderr, \"error: " << incond (cond) << "unused keys left\\n\");";
+	o << "\n" << ind << ind << ind << "fprintf (stderr, \"error: lex_" << name << ": unused keys left\\n\");";
 	o << "\n" << ind << ind << "}";
 	o << "\n" << ind << "}";
 	o << "\n";
