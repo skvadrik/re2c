@@ -57,7 +57,7 @@ private:
 	void calc_stats ();
 	void prepare ();
 	void count_used_labels (std::set<label_t> & used, label_t prolog, label_t start, bool force_start) const;
-	void emit_body (OutputFile &, uint32_t &, const std::set<label_t> & used_labels) const;
+	void emit_body (OutputFile &, uint32_t &, const std::set<label_t> & used_labels, label_t initial) const;
 
 	FORBID_COPY (DFA);
 };

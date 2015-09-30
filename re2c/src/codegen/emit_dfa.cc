@@ -85,8 +85,16 @@ void DFA::count_used_labels (std::set<label_t> & used, label_t start, label_t in
 	}
 }
 
-void DFA::emit_body (OutputFile & o, uint32_t& ind, const std::set<label_t> & used_labels) const
+void DFA::emit_body (OutputFile & o, uint32_t& ind, const std::set<label_t> & used_labels, label_t initial) const
 {
+	// If DFA has transitions to initial state, then initial state
+	// has a piece of code that advances input position. Wee must
+	// skip it when entering DFA.
+	if (used_labels.count(head->label))
+	{
+		o << indent(ind) << "goto " << opts->labelPrefix << initial << ";\n";
+	}
+
 	const bool save_yyaccept = accepts.size () > 1;
 	for (State * s = head; s; s = s->next)
 	{
@@ -130,7 +138,7 @@ void DFA::emit(Output & output, uint32_t& ind, bool isLastCond, bool& bPrologBra
 			skeleton->emit_data (o.file_name);
 			skeleton->emit_start (o, max_fill, need_backup, need_backupctx, need_accept);
 			uint32_t i = 2;
-			emit_body (o, i, used_labels);
+			emit_body (o, i, used_labels, initial_label);
 			skeleton->emit_end (o, need_backup, need_backupctx);
 		}
 	}
@@ -217,15 +225,8 @@ void DFA::emit(Output & output, uint32_t& ind, bool isLastCond, bool& bPrologBra
 			o << indent(ind++) << "{\n";
 			BitMap::gen(o, ind, lbChar, ubChar <= 256 ? ubChar : 256);
 		}
-		// If DFA has transitions to initial state, then initial state
-		// has a piece of code that advances input position. Wee must
-		// skip it when entering DFA.
-		if (used_labels.count(head->label))
-		{
-			o << indent(ind) << "goto " << opts->labelPrefix << initial_label << ";\n";
-		}
 		// Generate code
-		emit_body (o, ind, used_labels);
+		emit_body (o, ind, used_labels, initial_label);
 		if (opts->cFlag && opts->bFlag && BitMap::first)
 		{
 			o << indent(--ind) << "}\n";
