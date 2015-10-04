@@ -173,18 +173,18 @@ yy3:
 	{RETURN(9);}
 #line 175 "<stdout>"
 yy4:
-	YYCTXMARKER = YYCURSOR + 1;
 	yyaccept = 0;
 	yych = *(YYMARKER = ++YYCURSOR);
+	YYCTXMARKER = YYCURSOR;
 	goto yy292;
 yy5:
 #line 70 "modula.re"
 	{RETURN(1);}
 #line 184 "<stdout>"
 yy6:
-	YYCTXMARKER = YYCURSOR + 1;
 	yyaccept = 0;
 	yych = *(YYMARKER = ++YYCURSOR);
+	YYCTXMARKER = YYCURSOR;
 	goto yy278;
 yy7:
 	yyaccept = 1;
@@ -4061,11 +4061,11 @@ yy276:
 	{RETURN(5);}
 #line 4063 "<stdout>"
 yy277:
-	YYCTXMARKER = YYCURSOR + 1;
 	yyaccept = 0;
 	YYMARKER = ++YYCURSOR;
 	if ((YYLIMIT - YYCURSOR) < 4) YYFILL(4);
 	yych = *YYCURSOR;
+	YYCTXMARKER = YYCURSOR;
 yy278:
 	switch (yych) {
 	case '.':	goto yy275;
@@ -4193,11 +4193,11 @@ yy289:
 	default:	goto yy276;
 	}
 yy291:
-	YYCTXMARKER = YYCURSOR + 1;
 	yyaccept = 0;
 	YYMARKER = ++YYCURSOR;
 	if ((YYLIMIT - YYCURSOR) < 4) YYFILL(4);
 	yych = *YYCURSOR;
+	YYCTXMARKER = YYCURSOR;
 yy292:
 	switch (yych) {
 	case '.':	goto yy275;

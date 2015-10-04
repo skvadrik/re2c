@@ -110,8 +110,8 @@ yy4:
 			if (yych == '\n') goto yy11;
 			goto yy3;
 yy5:
-			YYCTXMARKER = YYCURSOR + 1;
 			yych = *(YYMARKER = ++YYCURSOR);
+			YYCTXMARKER = YYCURSOR;
 			if (yych == '/') goto yy7;
 			goto yy3;
 yy6:
@@ -130,8 +130,8 @@ yy9:
 			{ echo(&s); nlcomment = 1; continue; }
 #line 132 "<stdout>"
 yy11:
-			YYCTXMARKER = YYCURSOR + 1;
 			yych = *++YYCURSOR;
+			YYCTXMARKER = YYCURSOR;
 			if (yych == '/') goto yy7;
 			goto yy8;
 yy12:

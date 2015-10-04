@@ -70,8 +70,8 @@ std:
 	default:	goto yy9;
 	}
 yy2:
-	YYCTXMARKER = YYCURSOR + 1;
 	++YYCURSOR;
+	YYCTXMARKER = YYCURSOR;
 	switch ((yych = *YYCURSOR)) {
 	case '0':
 	case '2':

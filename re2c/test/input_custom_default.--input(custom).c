@@ -104,9 +104,9 @@ yy14:
 	default:	goto yy6;
 	}
 yy15:
-	YYBACKUPCTX ();
 	YYSKIP ();
 	yych = YYPEEK ();
+	YYBACKUPCTX ();
 	switch (yych) {
 	case '[':	goto yy16;
 	default:	goto yy6;
@@ -148,10 +148,9 @@ yy17:
 yy19:
 	YYSKIP ();
 	YYRESTORECTX ();
-	YYSKIP ();
 #line 15 "input_custom_default.--input(custom).re"
 	{ return true; }
-#line 155 "<stdout>"
+#line 154 "<stdout>"
 }
 #line 17 "input_custom_default.--input(custom).re"
 

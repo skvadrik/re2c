@@ -570,8 +570,8 @@ yy70:
 	{ RETURN(SU_LITERAL); }
 #line 567 "<stdout>"
 yy71:
-	YYCTXMARKER = YYCURSOR + 1;
 	yych = *++YYCURSOR;
+	YYCTXMARKER = YYCURSOR;
 	switch (yych) {
 	case '!':
 	case '.':
@@ -642,8 +642,8 @@ yy71:
 	default:	goto yy75;
 	}
 yy72:
-	YYCTXMARKER = YYCURSOR + 1;
 	yych = *++YYCURSOR;
+	YYCTXMARKER = YYCURSOR;
 	switch (yych) {
 	case '!':
 	case '.':

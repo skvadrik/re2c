@@ -566,8 +566,8 @@ yy70:
 	{ RETURN(SU_LITERAL); }
 #line 567 "<stdout>"
 yy71:
-	YYCTXMARKER = YYCURSOR + 1;
 	yych = *++YYCURSOR;
+	YYCTXMARKER = YYCURSOR;
 	switch (yych) {
 	case '!':
 	case '.':
@@ -638,8 +638,8 @@ yy71:
 	default:	goto yy75;
 	}
 yy72:
-	YYCTXMARKER = YYCURSOR + 1;
 	yych = *++YYCURSOR;
+	YYCTXMARKER = YYCURSOR;
 	switch (yych) {
 	case '!':
 	case '.':
@@ -6857,9 +6857,9 @@ strip:
 #line 6857 "<stdout>"
 {
 	YYCTYPE yych;
-	YYCTXMARKER = YYCURSOR + 1;
 	if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
 	yych = *YYCURSOR;
+	YYCTXMARKER = YYCURSOR;
 	switch (yych) {
 	case '\t':
 	case ' ':	goto yy433;

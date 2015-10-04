@@ -485,10 +485,10 @@ yy91:
 	if (yych <= '9') goto yy12;
 	goto yy98;
 yy97:
-	YYCTXMARKER = YYCURSOR + 1;
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
+	YYCTXMARKER = YYCURSOR;
 yy98:
 	if (yych <= 0x1F) {
 		if (yych == '\t') goto yy97;
@@ -778,8 +778,8 @@ yy132:
 	if (yych == '/') goto yy211;
 	goto yy125;
 yy133:
-	YYCTXMARKER = YYCURSOR + 1;
 	yych = *++YYCURSOR;
+	YYCTXMARKER = YYCURSOR;
 	if (yych == '=') goto yy205;
 	goto yy113;
 yy134:
@@ -789,8 +789,8 @@ yy134:
 	if (yych == '>') goto yy198;
 	goto yy125;
 yy135:
-	YYCTXMARKER = YYCURSOR + 1;
 	yych = *++YYCURSOR;
+	YYCTXMARKER = YYCURSOR;
 	goto yy164;
 yy136:
 	yyaccept = 4;
@@ -803,8 +803,8 @@ yy137:
 					fatal("unterminated range (missing ])");
 				}
 yy138:
-	YYCTXMARKER = YYCURSOR + 1;
 	yych = *++YYCURSOR;
+	YYCTXMARKER = YYCURSOR;
 	if (yych == 'e') goto yy166;
 	goto yy164;
 yy139:
@@ -945,10 +945,10 @@ yy161:
 					return ID;
 				}
 yy163:
-	YYCTXMARKER = YYCURSOR + 1;
 	++YYCURSOR;
 	if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
 	yych = *YYCURSOR;
+	YYCTXMARKER = YYCURSOR;
 yy164:
 	if (yych <= '9') {
 		if (yych <= ' ') {
@@ -999,8 +999,8 @@ yy165:
 					}
 				}
 yy166:
-	YYCTXMARKER = YYCURSOR + 1;
 	yych = *++YYCURSOR;
+	YYCTXMARKER = YYCURSOR;
 	if (yych == '2') goto yy176;
 	goto yy164;
 yy167:
@@ -1041,11 +1041,11 @@ yy175:
 	yych = *++YYCURSOR;
 	goto yy170;
 yy176:
-	YYCTXMARKER = YYCURSOR + 1;
 	yych = *++YYCURSOR;
+	YYCTXMARKER = YYCURSOR;
 	if (yych != 'c') goto yy164;
-	YYCTXMARKER = YYCURSOR + 1;
 	yych = *++YYCURSOR;
+	YYCTXMARKER = YYCURSOR;
 	if (yych != ':') goto yy164;
 	yych = *++YYCURSOR;
 	if (yych <= '^') {
@@ -1182,8 +1182,8 @@ yy196:
 					RETURN(SETUP);
 				}
 yy198:
-	YYCTXMARKER = YYCURSOR + 1;
 	yych = *++YYCURSOR;
+	YYCTXMARKER = YYCURSOR;
 	goto yy200;
 yy199:
 	++YYCURSOR;
@@ -1354,10 +1354,10 @@ yy228:
 	if (yych <= '9') goto yy143;
 	goto yy235;
 yy234:
-	YYCTXMARKER = YYCURSOR + 1;
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
+	YYCTXMARKER = YYCURSOR;
 yy235:
 	if (yych <= 0x1F) {
 		if (yych == '\t') goto yy234;
@@ -1523,9 +1523,9 @@ yy254:
 					goto code;
 				}
 yy255:
-	YYCTXMARKER = YYCURSOR + 1;
 	yyaccept = 0;
 	yych = *(YYMARKER = ++YYCURSOR);
+	YYCTXMARKER = YYCURSOR;
 	if (yych <= '\r') {
 		if (yych <= '\t') {
 			if (yych >= '\t') goto yy272;
@@ -1693,10 +1693,10 @@ yy275:
 	if (yych <= '9') goto yy265;
 	goto yy282;
 yy281:
-	YYCTXMARKER = YYCURSOR + 1;
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
+	YYCTXMARKER = YYCURSOR;
 yy282:
 	if (yych <= 0x1F) {
 		if (yych == '\t') goto yy281;
@@ -1910,10 +1910,10 @@ yy311:
 	if (yych <= '9') goto yy310;
 	goto yy318;
 yy317:
-	YYCTXMARKER = YYCURSOR + 1;
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
+	YYCTXMARKER = YYCURSOR;
 yy318:
 	if (yych <= 0x1F) {
 		if (yych == '\t') goto yy317;

@@ -103,8 +103,8 @@ std:
 			if (yych >= 'c') goto yy9;
 		}
 	}
-	YYCTXMARKER = YYCURSOR + 1;
 	++YYCURSOR;
+	YYCTXMARKER = YYCURSOR;
 	if ((yych = *YYCURSOR) <= '/') goto yy3;
 	if (yych == '1') goto yy15;
 	if (yych <= '9') goto yy12;

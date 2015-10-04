@@ -52,10 +52,6 @@ void emit_state (OutputFile & o, uint32_t ind, const State * s, bool used_label)
 		{
 			o << indent(ind) << opts->yydebug << "(" << s->label << ", " << opts->input_api.expr_peek () << ");\n";
 		}
-		if (s->isPreCtxt)
-		{
-			o << opts->input_api.stmt_backupctx (ind);
-		}
 	}
 }
 

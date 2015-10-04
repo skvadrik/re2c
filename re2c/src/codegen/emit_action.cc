@@ -51,6 +51,10 @@ void emit_action
 			emit_rule (o, ind, s, action.info.rule, condName, name);
 			break;
 	}
+	if (s->isPreCtxt && opts->target != opt_t::DOT)
+	{
+		o << opts->input_api.stmt_backupctx (ind);
+	}
 }
 
 void emit_match (OutputFile & o, uint32_t ind, bool & readCh, const State * const s)

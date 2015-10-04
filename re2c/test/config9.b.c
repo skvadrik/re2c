@@ -99,8 +99,8 @@ std:
 			if (curr >= 'c') goto xx9;
 		}
 	}
-	s.ctx = s.cur + 1;
 	++s.cur;
+	s.ctx = s.cur;
 	if ((curr = (unsigned char)*s.cur) <= '/') goto xx3;
 	if (curr == '1') goto xx15;
 	if (curr <= '9') goto xx12;

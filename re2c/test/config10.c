@@ -66,8 +66,8 @@ std:
 	default:	goto xx9;
 	}
 xx2:
-	s.ctx = s.cur + 1;
 	++s.cur;
+	s.ctx = s.cur;
 	switch ((curr = *s.cur)) {
 	case '0':
 	case '2':

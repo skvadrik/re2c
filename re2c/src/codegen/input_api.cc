@@ -82,8 +82,7 @@ std::string InputAPI::stmt_backupctx (uint32_t ind) const
 	switch (type_)
 	{
 		case DEFAULT:
-			// backward compatibility: '+1' here instead of '++YYCURSOR;' in stmt_restorectx
-			s = opts->yyctxmarker + " = " + opts->yycursor + " + 1";
+			s = opts->yyctxmarker + " = " + opts->yycursor;
 			break;
 		case CUSTOM:
 			s = opts->yybackupctx + " ()";
@@ -113,11 +112,10 @@ std::string InputAPI::stmt_restorectx (uint32_t ind) const
 	switch (type_)
 	{
 		case DEFAULT:
-			// backward compatibility: 'no ++YYCURSOR;' here; instead '+1' in stmt_backupctx
 			s = indent (ind) + opts->yycursor + " = " + opts->yyctxmarker + ";\n";
 			break;
 		case CUSTOM:
-			s = indent (ind) + opts->yyrestorectx + " ();\n" + stmt_skip (ind);
+			s = indent (ind) + opts->yyrestorectx + " ();\n";
 			break;
 	}
 	return s;
