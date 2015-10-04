@@ -336,14 +336,7 @@ template <typename cunit_t, typename key_t>
 		delete [] buffer;
 
 		// keys
-		const bool none = suffix.match ().is_none ();
-		const size_t len_match = none
-			? prefix.len_matching ()
-			: prefix_len + suffix.len_matching ();
-		const rule_rank_t match = none
-			? prefix.match ()
-			: suffix.match ();
-		keygen<key_t> (keys, count, len, len_match, match);
+		keygen<key_t> (keys, count, len, len_matching (prefix, suffix), match (prefix, suffix));
 	}
 
 	return size;

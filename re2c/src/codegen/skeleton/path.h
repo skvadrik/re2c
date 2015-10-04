@@ -57,7 +57,28 @@ public:
 		}
 		arcs.insert (arcs.end (), p->arcs.begin (), p->arcs.end ());
 	}
+
+	template <typename arc1_t, typename arc2_t>
+		friend size_t len_matching (const generic_path_t<arc1_t> & prefix, const generic_path_t<arc2_t> & suffix);
+	template <typename arc1_t, typename arc2_t>
+		friend rule_rank_t match (const generic_path_t<arc1_t> & prefix, const generic_path_t<arc2_t> & suffix);
 };
+
+template <typename arc1_t, typename arc2_t>
+	size_t len_matching (const generic_path_t<arc1_t> & prefix, const generic_path_t<arc2_t> & suffix)
+{
+	return suffix.rule.is_none ()
+		? prefix.rule_pos
+		: prefix.arcs.size () + suffix.rule_pos;
+}
+
+template <typename arc1_t, typename arc2_t>
+	rule_rank_t match (const generic_path_t<arc1_t> & prefix, const generic_path_t<arc2_t> & suffix)
+{
+	return suffix.match ().is_none ()
+		? prefix.match ()
+		: suffix.match ();
+}
 
 typedef generic_path_t<uint32_t> path_t;
 
