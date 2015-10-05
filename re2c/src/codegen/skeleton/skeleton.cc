@@ -12,6 +12,8 @@ Node::Node ()
 	, arcsets ()
 	, loop (0)
 	, rule (rule_rank_t::none ())
+	, restorectx (false)
+	, ctx (false)
 	, dist (DIST_ERROR)
 	, suffix (NULL)
 {}
@@ -22,7 +24,10 @@ void Node::init (const State * s, const s2n_map & s2n)
 	if (is_accepting)
 	{
 		rule = s->rule->rank;
+		restorectx = s->rule->ctx->fixedLength () != 0;
 	}
+
+	ctx = s && s->isPreCtxt;
 
 	const bool is_final = !s || (s->go.nSpans == 1 && !s->go.span[0].to);
 	if (!is_final)

@@ -111,7 +111,7 @@ template <typename cunit_t, typename key_t>
 		for (arcs_t::iterator i = arcs.begin (); i != arcs.end (); ++i)
 		{
 			multipath_t new_prefix = prefix;
-			new_prefix.extend (i->first->rule, &i->second);
+			new_prefix.extend (i->first->rule, i->first->restorectx, i->first->ctx, &i->second);
 			i->first->permutate<cunit_t, key_t> (new_prefix, input, keys);
 		}
 	}
@@ -152,7 +152,7 @@ template <typename cunit_t, typename key_t>
 	}
 	else if (end ())
 	{
-		suffix = new path_t (rule);
+		suffix = new path_t (rule, restorectx, ctx);
 	}
 	else if (loop < 2)
 	{
@@ -160,7 +160,7 @@ template <typename cunit_t, typename key_t>
 		for (arcs_t::iterator i = arcs.begin (); i != arcs.end (); ++i)
 		{
 			multipath_t new_prefix = prefix;
-			new_prefix.extend (i->first->rule, &i->second);
+			new_prefix.extend (i->first->rule, i->first->restorectx, i->first->ctx, &i->second);
 			size = size + i->first->cover<cunit_t, key_t> (new_prefix, input, keys);
 			if (size.overflow ())
 			{
@@ -168,7 +168,7 @@ template <typename cunit_t, typename key_t>
 			}
 			if (i->first->suffix != NULL && suffix == NULL)
 			{
-				suffix = new path_t (rule);
+				suffix = new path_t (rule, restorectx, ctx);
 				suffix->append (i->second[0], i->first->suffix);
 			}
 		}
@@ -179,7 +179,7 @@ template <typename cunit_t, typename key_t>
 template <typename cunit_t, typename key_t>
 	void Skeleton::generate_paths_cunit_key (FILE * input, FILE * keys)
 {
-	multipath_t prefix (nodes->rule);
+	multipath_t prefix (nodes->rule, nodes->restorectx, nodes->ctx);
 	if (nodes->sizeof_permutate (Node::permuts_t (1u), Node::permuts_t (0u)).overflow ())
 	{
 		if (nodes->cover<cunit_t, key_t> (prefix, input, keys).overflow ())

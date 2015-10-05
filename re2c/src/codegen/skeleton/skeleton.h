@@ -47,6 +47,11 @@ struct Node
 
 	// rule number for corresponding DFA state (if any)
 	rule_rank_t rule;
+	// whether this rule must rollback input position to the beginnig of trailing context
+	bool restorectx;
+
+	// start of trailing context
+	bool ctx;
 
 	// maximal distance to end node (assuming one iteration per loop)
 	static const uint32_t DIST_ERROR;
