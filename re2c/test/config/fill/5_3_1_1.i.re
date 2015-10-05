@@ -7,4 +7,6 @@
     re2c:define:YYFILL@len = need;
 
     "a" { code }
+    * { def }
+
 */

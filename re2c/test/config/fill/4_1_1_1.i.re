@@ -5,4 +5,6 @@
     re2c:define:YYFILL = "fill (@@);";
 
     "a" { code }
+    * { def }
+
 */

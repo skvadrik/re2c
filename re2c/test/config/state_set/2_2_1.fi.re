@@ -7,4 +7,6 @@
     re2c:define:YYSETSTATE@state = @@;
 
     "a" { code }
+    * { def }
+
 */

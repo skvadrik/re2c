@@ -5,4 +5,6 @@
     re2c:define:YYSETSTATE:naked = 1;
 
     "a" { code }
+    * { def }
+
 */

@@ -5,4 +5,6 @@
     re2c:yyfill:parameter = 0;
 
     "a" { code }
+    * { def }
+
 */

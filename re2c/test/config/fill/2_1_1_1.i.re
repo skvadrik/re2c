@@ -5,4 +5,6 @@
     re2c:define:YYFILL = "YYFILL";
 
     "a" { code }
+    * { def }
+
 */

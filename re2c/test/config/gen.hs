@@ -30,6 +30,7 @@ confs_cond_set =
         body = unlines
             [ "    <c1> \"a\" => c2 { code1 }"
             , "    <c2> \"b\" => c1 { code2 }"
+            , "    <*> * { def }"
             ]
         ext = ".ci"
     in  ("cond_set", confs, body, ext)
@@ -58,7 +59,10 @@ confs_state_set =
             , x2 <- zip [1 .. length state_set_arg]   state_set_arg
             , x3 <- zip [1 .. length state_set_naked] state_set_naked
             ]
-        body = "    \"a\" { code }"
+        body = unlines
+            [ "    \"a\" { code }"
+            , "    * { def }"
+            ]
         ext = ".fi"
     in  ("state_set", confs, body, ext)
 
@@ -93,7 +97,10 @@ confs_fill =
             , x3 <- zip [1 .. length fill_arg_use] fill_arg_use
             , x4 <- zip [1 .. length fill_naked]   fill_naked
             ]
-        body = "    \"a\" { code }"
+        body = unlines
+            [ "    \"a\" { code }"
+            , "    * { def }"
+            ]
         ext = ".i"
     in  ("fill", confs, body, ext)
 

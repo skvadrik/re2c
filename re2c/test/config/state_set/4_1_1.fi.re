@@ -5,4 +5,6 @@
     re2c:define:YYSETSTATE = "setstate_ÿ;";
 
     "a" { code }
+    * { def }
+
 */

@@ -9,4 +9,6 @@
     re2c:yyfill:parameter = 1;
 
     "a" { code }
+    * { def }
+
 */
