@@ -10,112 +10,107 @@
 namespace re2c
 {
 
+#define RE2C_OPTS \
+	/* target */ \
+	OPT1 (opt_t::target_t, target, CODE) \
+	/* fingerprint */ \
+	OPT (bool, bNoGenerationDate, false) \
+	/* regular expressions */ \
+	OPT (Enc, encoding, Enc ()) \
+	OPT (bool, bCaseInsensitive, false) \
+	OPT (bool, bCaseInverted, false) \
+	OPT (empty_class_policy_t, empty_class_policy, EMPTY_CLASS_MATCH_EMPTY) \
+	/* conditions */ \
+	OPT (bool, cFlag, false) \
+	OPT (bool, tFlag, false) \
+	OPT (const char *,  header_file, NULL) \
+	OPT (std::string, yycondtype, "YYCONDTYPE") \
+	OPT (std::string, cond_get, "YYGETCONDITION") \
+	OPT (bool, cond_get_naked, false) \
+	OPT (std::string, cond_set, "YYSETCONDITION" ) \
+	OPT (std::string, cond_set_arg, "@@" ) \
+	OPT (bool, cond_set_naked, false ) \
+	OPT (std::string, yyctable, "yyctable") \
+	OPT (std::string, condPrefix, "yyc_") \
+	OPT (std::string, condEnumPrefix, "yyc") \
+	OPT (std::string, condDivider, "/* *********************************** */") \
+	OPT (std::string, condDividerParam, "@@") \
+	OPT (std::string, condGoto, "goto @@;") \
+	OPT (std::string, condGotoParam, "@@") \
+	/* states */ \
+	OPT (bool, fFlag, false) \
+	OPT (std::string, state_get, "YYGETSTATE") \
+	OPT (bool, state_get_naked, false) \
+	OPT (std::string, state_set, "YYSETSTATE") \
+	OPT (std::string, state_set_arg, "@@") \
+	OPT (bool, state_set_naked, false) \
+	OPT (std::string, yyfilllabel, "yyFillLabel") \
+	OPT (std::string, yynext, "yyNext") \
+	OPT (std::string, yyaccept, "yyaccept") \
+	OPT (bool, bUseStateAbort, false) \
+	OPT (bool, bUseStateNext, false) \
+	/* reuse */ \
+	OPT (bool, rFlag, false) \
+	/* partial flex syntax support */ \
+	OPT (bool, FFlag, false) \
+	/* code generation */ \
+	OPT (bool, sFlag, false) \
+	OPT (bool, bFlag, false) \
+	OPT (std::string, yybm, "yybm") \
+	OPT (bool, yybmHexTable, false) \
+	OPT (bool, gFlag, false) \
+	OPT (std::string, yytarget, "yytarget") \
+	OPT (uint32_t, cGotoThreshold, 9) \
+	/* formatting */ \
+	OPT (uint32_t, topIndent, 0) \
+	OPT (std::string, indString, "\t") \
+	/* input API */ \
+	OPT (InputAPI, input_api, InputAPI ()) \
+	OPT (std::string, yycursor, "YYCURSOR") \
+	OPT (std::string, yymarker, "YYMARKER") \
+	OPT (std::string, yyctxmarker, "YYCTXMARKER") \
+	OPT (std::string, yylimit, "YYLIMIT") \
+	OPT (std::string, yypeek, "YYPEEK") \
+	OPT (std::string, yyskip, "YYSKIP") \
+	OPT (std::string, yybackup, "YYBACKUP") \
+	OPT (std::string, yybackupctx, "YYBACKUPCTX") \
+	OPT (std::string, yyrestore, "YYRESTORE") \
+	OPT (std::string, yyrestorectx, "YYRESTORECTX") \
+	OPT (std::string, yylessthan, "YYLESSTHAN") \
+	/* #line directives */ \
+	OPT (bool, iFlag, false) \
+	/* debug */ \
+	OPT (bool, dFlag, false) \
+	OPT (std::string, yydebug, "YYDEBUG") \
+	/* yych */ \
+	OPT (std::string, yyctype, "YYCTYPE") \
+	OPT (std::string, yych, "yych") \
+	OPT (bool, bEmitYYCh, true) \
+	OPT (bool, yychConversion, false) \
+	/* YYFILL */ \
+	OPT (std::string, fill, "YYFILL") \
+	OPT (bool, fill_use, true) \
+	OPT (bool, fill_check, true) \
+	OPT (std::string, fill_arg, "@@") \
+	OPT (bool, fill_arg_use, true) \
+	OPT (bool, fill_naked, false) \
+	/* labels */ \
+	OPT (std::string, labelPrefix, "yy")
+
 struct opt_t
 {
-	// target
 	enum target_t
 	{
 		CODE,
 		DOT,
 		SKELETON
-	} target;
+	};
 
-	// fingerprint
-	bool bNoGenerationDate;
-
-	// regular expressions
-	Enc encoding;
-	bool bCaseInsensitive;
-	bool bCaseInverted;
-	empty_class_policy_t empty_class_policy;
-
-	// conditions
-	bool cFlag;
-	bool tFlag;
-	const char * header_file;
-	std::string yycondtype;
-	std::string cond_get;
-	bool cond_get_naked;
-	std::string cond_set;
-	std::string cond_set_arg;
-	bool cond_set_naked;
-	std::string yyctable;
-	std::string condPrefix;
-	std::string condEnumPrefix;
-	std::string condDivider;
-	std::string condDividerParam;
-	std::string condGoto;
-	std::string condGotoParam;
-
-	// states
-	bool fFlag;
-	std::string state_get;
-	bool state_get_naked;
-	std::string state_set;
-	std::string state_set_arg;
-	bool state_set_naked;
-	std::string yyfilllabel;
-	std::string yynext;
-	std::string yyaccept;
-	bool bUseStateAbort;
-	bool bUseStateNext;
-
-	// reuse
-	bool rFlag;
-
-	// partial flex syntax support
-	bool FFlag;
-
-	// code generation
-	bool sFlag;
-	bool bFlag;
-	std::string yybm;
-	bool yybmHexTable;
-	bool gFlag;
-	std::string yytarget;
-	uint32_t cGotoThreshold;
-
-	// formatting
-	uint32_t topIndent;
-	std::string indString;
-
-	// input API
-	InputAPI input_api;
-	std::string yycursor;
-	std::string yymarker;
-	std::string yyctxmarker;
-	std::string yylimit;
-	std::string yypeek;
-	std::string yyskip;
-	std::string yybackup;
-	std::string yybackupctx;
-	std::string yyrestore;
-	std::string yyrestorectx;
-	std::string yylessthan;
-
-	// #line directives
-	bool iFlag;
-
-	// debug
-	bool dFlag;
-	std::string yydebug;
-
-	// yych
-	std::string yyctype;
-	std::string yych;
-	bool bEmitYYCh;
-	bool yychConversion;
-
-	// YYFILL
-	std::string fill;
-	bool fill_use;
-	bool fill_check;
-	std::string fill_arg;
-	bool fill_arg_use;
-	bool fill_naked;
-
-	// labels
-	std::string labelPrefix;
+#define OPT1 OPT
+#define OPT(type, name, value) type name;
+	RE2C_OPTS
+#undef OPT1
+#undef OPT
 
 	opt_t ();
 	opt_t (const opt_t & opt);
@@ -177,77 +172,15 @@ public:
 	// of the block; second, config is resynced too often (every
 	// attempt to read config that has been updated results in
 	// automatic resync). It is much better to set all options at once.
-	void set_target (opt_t::target_t tgt)                { useropt->target = tgt; }
-	void set_bNoGenerationDate (bool b)                  { useropt->bNoGenerationDate = b; }
 	bool set_encoding (Enc::type_t t)                    { return useropt->encoding.set (t); }
 	void unset_encoding (Enc::type_t t)                  { useropt->encoding.unset (t); }
 	void set_encoding_policy (Enc::policy_t p)           { useropt->encoding.setPolicy (p); }
-	void set_bCaseInsensitive (bool b)                   { useropt->bCaseInsensitive = b; }
-	void set_bCaseInverted (bool b)                      { useropt->bCaseInverted = b; }
-	void set_empty_class_policy (empty_class_policy_t p) { useropt->empty_class_policy = p; }
-	void set_cFlag (bool b)                              { useropt->cFlag = b; }
-	void set_header_file (const char * f)                { useropt->header_file = f; }
-	void set_yycondtype (const std::string & s)          { useropt->yycondtype = s; }
-	void set_cond_get (const std::string & s)            { useropt->cond_get = s; }
-	void set_cond_get_naked (bool b)                     { useropt->cond_get_naked = b; }
-	void set_cond_set (const std::string & s)            { useropt->cond_set = s; }
-	void set_cond_set_arg (const std::string & s)        { useropt->cond_set_arg = s; }
-	void set_cond_set_naked (bool b)                     { useropt->cond_set_naked = b; }
-	void set_yyctable (const std::string & s)            { useropt->yyctable = s; }
-	void set_condPrefix (const std::string & s)          { useropt->condPrefix = s; }
-	void set_condEnumPrefix (const std::string & s)      { useropt->condEnumPrefix = s; }
-	void set_condDivider (const std::string & s)         { useropt->condDivider = s; }
-	void set_condDividerParam (const std::string & s)    { useropt->condDividerParam = s; }
-	void set_condGoto (const std::string & s)            { useropt->condGoto = s; }
-	void set_condGotoParam (const std::string & s)       { useropt->condGotoParam = s; }
-	void set_fFlag (bool b)                              { useropt->fFlag = b; }
-	void set_state_get (const std::string & s)           { useropt->state_get = s; }
-	void set_state_get_naked (bool b)                    { useropt->state_get_naked = b; }
-	void set_state_set (const std::string & s)           { useropt->state_set = s; }
-	void set_state_set_arg (const std::string & s)       { useropt->state_set_arg = s; }
-	void set_state_set_naked (bool b)                    { useropt->state_set_naked = b; }
-	void set_yyfilllabel (const std::string & s)         { useropt->yyfilllabel = s; }
-	void set_yynext (const std::string & s)              { useropt->yynext = s; }
-	void set_yyaccept (const std::string & s)            { useropt->yyaccept = s; }
-	void set_bUseStateAbort (bool b)                     { useropt->bUseStateAbort = b; }
-	void set_bUseStateNext (bool b)                      { useropt->bUseStateNext = b; }
-	void set_rFlag (bool b)                              { useropt->rFlag = b; }
-	void set_FFlag (bool b)                              { useropt->FFlag = b; }
-	void set_sFlag (bool b)                              { useropt->sFlag = b; }
-	void set_bFlag (bool b)                              { useropt->bFlag = b; }
-	void set_yybm (const std::string & s)                { useropt->yybm = s; }
-	void set_yybmHexTable (bool b)                       { useropt->yybmHexTable = b; }
-	void set_gFlag (bool b)                              { useropt->gFlag = b; }
-	void set_yytarget (const std::string & s)            { useropt->yytarget = s; }
-	void set_cGotoThreshold (uint32_t n)                 { useropt->cGotoThreshold = n; }
-	void set_topIndent (uint32_t n)                      { useropt->topIndent = n; }
-	void set_indString (const std::string & s)           { useropt->indString = s; }
 	void set_input_api (InputAPI::type_t t)              { useropt->input_api.set (t); }
-	void set_yycursor (const std::string & s)            { useropt->yycursor = s; }
-	void set_yymarker (const std::string & s)            { useropt->yymarker = s; }
-	void set_yyctxmarker (const std::string & s)         { useropt->yyctxmarker = s; }
-	void set_yylimit (const std::string & s)             { useropt->yylimit = s; }
-	void set_yypeek (const std::string & s)              { useropt->yypeek = s; }
-	void set_yyskip (const std::string & s)              { useropt->yyskip = s; }
-	void set_yybackup (const std::string & s)            { useropt->yybackup = s; }
-	void set_yybackupctx (const std::string & s)         { useropt->yybackupctx = s; }
-	void set_yyrestore (const std::string & s)           { useropt->yyrestore = s; }
-	void set_yyrestorectx (const std::string & s)        { useropt->yyrestorectx = s; }
-	void set_yylessthan (const std::string & s)          { useropt->yylessthan = s; }
-	void set_iFlag (bool b)                              { useropt->iFlag = b; }
-	void set_dFlag (bool b)                              { useropt->dFlag = b; }
-	void set_yydebug (const std::string & s)             { useropt->yydebug = s; }
-	void set_yyctype (const std::string & s)             { useropt->yyctype = s; }
-	void set_yych (const std::string & s)                { useropt->yych = s; }
-	void set_bEmitYYCh (bool b)                          { useropt->bEmitYYCh = b; }
-	void set_yychConversion (bool b)                     { useropt->yychConversion = b; }
-	void set_fill (const std::string & s)                { useropt->fill = s; }
-	void set_fill_use (bool b)                           { useropt->fill_use = b; }
-	void set_fill_check (bool b)                         { useropt->fill_check = b; }
-	void set_fill_arg (const std::string & s)            { useropt->fill_arg = s; }
-	void set_fill_arg_use (bool b)                       { useropt->fill_arg_use = b; }
-	void set_fill_naked (bool b)                         { useropt->fill_naked = b; }
-	void set_labelPrefix (const std::string & s)         { useropt->labelPrefix = s; }
+#define OPT1 OPT
+#define OPT(type, name, value) void set_##name (type arg) { useropt->name = arg; }
+	RE2C_OPTS
+#undef OPT1
+#undef OPT
 
 	// helpers
 	std::string yychConversion ()

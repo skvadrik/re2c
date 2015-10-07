@@ -50,6 +50,7 @@ ScannerState::ScannerState (const ScannerState & s)
 
 ScannerState & ScannerState::operator = (const ScannerState & s)
 {
+	this->~ScannerState ();
 	new (this) ScannerState (s);
 	return * this;
 }
