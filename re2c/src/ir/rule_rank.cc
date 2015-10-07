@@ -1,3 +1,4 @@
+#include <assert.h>
 #include <ostream>
 
 #include "src/ir/rule_rank.h"
@@ -5,7 +6,8 @@
 namespace re2c
 {
 
-const uint32_t rule_rank_t::NONE = 0xFFFFffff;
+const uint32_t rule_rank_t::NONE = UINT32_MAX;
+const uint32_t rule_rank_t::DEF = rule_rank_t::NONE - 1;
 
 rule_rank_t::rule_rank_t ()
 	: value (0)
@@ -13,6 +15,7 @@ rule_rank_t::rule_rank_t ()
 
 void rule_rank_t::inc ()
 {
+	assert (value < DEF - 1);
 	++value;
 }
 
@@ -23,9 +26,21 @@ rule_rank_t rule_rank_t::none ()
 	return r;
 }
 
+rule_rank_t rule_rank_t::def ()
+{
+	rule_rank_t r;
+	r.value = DEF;
+	return r;
+}
+
 bool rule_rank_t::is_none () const
 {
 	return value == NONE;
+}
+
+bool rule_rank_t::is_def () const
+{
+	return value == DEF;
 }
 
 bool rule_rank_t::operator < (const rule_rank_t & r) const

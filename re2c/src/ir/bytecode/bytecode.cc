@@ -8,8 +8,10 @@ namespace re2c {
 
 static void optimize (Ins * i);
 
-smart_ptr<DFA> genCode (RegExp *re, Output & output, const std::string & cond, uint32_t cunits)
+smart_ptr<DFA> genCode (Spec & spec, Output & output, const std::string & cond, uint32_t cunits)
 {
+	RegExp * re = spec.re;
+
 	CharSet cs (cunits);
 	re->split(cs);
 

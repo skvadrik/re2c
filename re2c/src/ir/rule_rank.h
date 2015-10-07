@@ -10,8 +10,8 @@ namespace re2c
 {
 
 // rule rank public API:
-//     - get rule rank corresponding to nonexistent rule
-//     - check if rank corresponds to nonexistent rule
+//     - get rule rank corresponding to nonexistent/default rule
+//     - check if rank corresponds to nonexistent/default rule
 //     - compare ranks
 //     - output rank to std::ostream
 //
@@ -21,13 +21,16 @@ namespace re2c
 class rule_rank_t
 {
 	static const uint32_t NONE;
+	static const uint32_t DEF;
 	uint32_t value;
 	rule_rank_t ();
 	void inc ();
 
 public:
 	static rule_rank_t none ();
+	static rule_rank_t def ();
 	bool is_none () const;
+	bool is_def () const;
 	bool operator < (const rule_rank_t & r) const;
 	friend std::ostream & operator << (std::ostream & o, rule_rank_t r);
 	uint32_t uint32 () const;

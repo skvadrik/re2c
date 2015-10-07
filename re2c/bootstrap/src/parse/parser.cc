@@ -104,13 +104,13 @@ void yyerror(const char*);
 static counter_t<rule_rank_t> rank_counter;
 static std::vector<std::string> condnames;
 static re2c::RegExpMap  specMap;
-static RegExp           *spec = NULL, *specNone = NULL;
+static Spec spec;
+static RegExp *specNone = NULL;
 static RuleOpList       specStar;
+static RuleOp * star_default = NULL;
 static Scanner          *in = NULL;
 static Scanner::ParseMode  parseMode;
 static SetupMap            ruleSetupMap;
-static const Code * ruleDefault = NULL;
-static DefaultMap          ruleDefaultMap;
 static bool                foundRules;
 static symbol_table_t symbol_table;
 
@@ -152,6 +152,11 @@ void context_rule
 		: RegExp::SHARED;
 	for(CondList::const_iterator it = clist->begin(); it != clist->end(); ++it)
 	{
+		if (specMap.find(*it) == specMap.end())
+		{
+			condnames.push_back (*it);
+		}
+
 		RuleOp * rule = new RuleOp
 			( loc
 			, expr
@@ -161,19 +166,7 @@ void context_rule
 			, code
 			, newcond
 			);
-
-		RegExpMap::iterator itRE = specMap.find(*it);
-
-		if (itRE != specMap.end())
-		{
-			itRE->second = mkAlt(itRE->second, rule);
-		}
-		else
-		{
-			specMap[*it] = rule;
-			condnames.push_back (*it);
-		}
-		
+		specMap[*it].add (rule);
 	}
 	delete clist;
 	delete newcond;
@@ -202,11 +195,19 @@ void default_rule(CondList *clist, const Code * code)
 	context_check(clist);
 	for(CondList::const_iterator it = clist->begin(); it != clist->end(); ++it)
 	{
-		if (ruleDefaultMap.find(*it) != ruleDefaultMap.end())
+		RuleOp * def = new RuleOp
+			( code->loc
+			, in->mkDefault ()
+			, new NullOp
+			, rule_rank_t::def ()
+			, RegExp::SHARED
+			, code
+			, NULL
+			);
+		if (!specMap[*it].add_def (def))
 		{
 			in->fatalf_at(code->loc.line, "code to default rule '%s' is already defined", it->c_str());
 		}
-		ruleDefaultMap[*it] = code;
 	}
 	delete clist;
 }
@@ -674,17 +675,17 @@ static const yytype_int8 yyrhs[] =
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint16 yyrline[] =
 {
-       0,   242,   242,   244,   248,   252,   261,   270,   274,   278,
-     283,   288,   293,   298,   303,   308,   316,   321,   326,   331,
-     336,   341,   346,   351,   356,   361,   366,   371,   376,   381,
-     386,   391,   396,   401,   405,   410,   415,   419,   424,   428,
-     432,   437,   441,   446,   459,   464,   472,   477,   482,   487,
-     491,   496,   500,   504,   509,   514,   519,   524,   529,   534,
-     538,   542,   546,   550,   554,   561,   578,   587,   591,   597,
-     602,   608,   612,   627,   644,   649,   655,   661,   679,   699,
-     705,   713,   716,   723,   729,   739,   742,   750,   753,   760,
-     764,   771,   775,   782,   786,   793,   797,   812,   832,   836,
-     840,   844,   851,   861,   865
+       0,   243,   243,   245,   249,   253,   262,   271,   275,   279,
+     284,   289,   294,   299,   304,   309,   317,   322,   327,   332,
+     337,   342,   347,   352,   357,   362,   367,   372,   377,   382,
+     387,   392,   397,   402,   406,   411,   416,   420,   425,   429,
+     433,   438,   442,   447,   460,   465,   473,   478,   483,   488,
+     492,   497,   501,   505,   510,   515,   520,   525,   530,   535,
+     539,   543,   547,   551,   555,   562,   579,   597,   601,   607,
+     612,   618,   622,   637,   654,   659,   665,   681,   699,   719,
+     725,   733,   736,   743,   749,   759,   762,   770,   773,   780,
+     784,   791,   795,   802,   806,   813,   817,   832,   852,   856,
+     860,   864,   871,   881,   885
 };
 #endif
 
@@ -2297,7 +2298,7 @@ yyreduce:
 				, (yyvsp[(3) - (3)].code)
 				, NULL
 				);
-			spec = spec? mkAlt(spec, (yyval.regexp)) : (yyval.regexp);
+			spec.add ((yyval.regexp));
 		;}
     break;
 
@@ -2306,10 +2307,19 @@ yyreduce:
     {
 			if (opts->cFlag)
 				in->fatal("condition or '<*>' required when using -c switch");
-			if (ruleDefault != NULL)
+			RuleOp * def = new RuleOp
+				( (yyvsp[(2) - (2)].code)->loc
+				, in->mkDefault ()
+				, new NullOp
+				, rule_rank_t::def ()
+				, RegExp::SHARED
+				, (yyvsp[(2) - (2)].code)
+				, NULL
+				);
+			if (!spec.add_def (def))
+			{
 				in->fatal("code to default rule is already defined");
-			else
-				ruleDefault = (yyvsp[(2) - (2)].code);
+			}
 		;}
     break;
 
@@ -2411,9 +2421,19 @@ yyreduce:
   case 76:
 
     {
-			CondList *clist = new CondList();
-			clist->insert("*");
-			default_rule(clist, (yyvsp[(5) - (5)].code));
+			if (star_default)
+			{
+				in->fatal ("code to default rule '*' is already defined");
+			}
+			star_default = new RuleOp
+				( (yyvsp[(5) - (5)].code)->loc
+				, in->mkDefault ()
+				, new NullOp
+				, rule_rank_t::def ()
+				, RegExp::PRIVATE
+				, (yyvsp[(5) - (5)].code)
+				, NULL
+				);
 		;}
     break;
 
@@ -2952,8 +2972,7 @@ void parse(Scanner& i, Output & o)
 			dfa_map.clear();
 		}
 		rank_counter.reset ();
-		spec = NULL;
-		ruleDefault = NULL;
+		spec.clear ();
 		in->set_in_parse(true);
 		yyparse();
 		in->set_in_parse(false);
@@ -2967,9 +2986,8 @@ void parse(Scanner& i, Output & o)
 				i.reuse();
 				dfa_map.clear();
 				parse_cleanup();
-				spec = NULL;
+				spec.clear ();
 				rank_counter.reset ();
-				ruleDefault = NULL;
 				in->set_in_parse(true);
 				yyparse();
 				in->set_in_parse(false);
@@ -2992,30 +3010,30 @@ void parse(Scanner& i, Output & o)
 
 			if (parseMode != Scanner::Reuse)
 			{
-				if (!specStar.empty())
+				// <*> rules must have the lowest priority
+				// now that all rules have been parsed, we can fix it
+				for (RuleOpList::const_iterator itOp = specStar.begin(); itOp != specStar.end(); ++itOp)
 				{
-					// <*> rules must have the lowest priority
-					// now that all rules have been parsed, we can fix it
+					(*itOp)->rank = rank_counter.next ();
+				}
+				// merge <*> rules to all conditions
+				// note that all conditions use the same regexp for <*> rules,
+				// but compile it separately because of RegExp::PRIVATE attribute
+				for (it = specMap.begin(); it != specMap.end(); ++it)
+				{
 					for (RuleOpList::const_iterator itOp = specStar.begin(); itOp != specStar.end(); ++itOp)
 					{
-						(*itOp)->rank = rank_counter.next ();
+						it->second.addl (*itOp);
 					}
-					// merge <*> rules to all conditions
-					// note that all conditions use the same regexp for <*> rules,
-					// but compile it separately because of RegExp::PRIVATE attribute
-					for (it = specMap.begin(); it != specMap.end(); ++it)
+					if (star_default)
 					{
-						assert(it->second);
-						for (RuleOpList::const_iterator itOp = specStar.begin(); itOp != specStar.end(); ++itOp)
-						{
-							it->second = mkAlt(*itOp, it->second);
-						}
+						it->second.addl (star_default);
 					}
 				}
-	
+
 				if (specNone)
 				{
-					specMap["0"] = specNone;
+					specMap["0"].add (specNone);
 					// Note that "0" inserts first, which is important.
 					condnames.insert (condnames.begin (), "0");
 				}
@@ -3026,8 +3044,6 @@ void parse(Scanner& i, Output & o)
 
 			for (it = specMap.begin(); it != specMap.end(); ++it)
 			{
-				assert(it->second);
-
 				if (parseMode != Scanner::Reuse)
 				{
 					itRuleSetup = ruleSetupMap.find(it->first);				
@@ -3048,25 +3064,6 @@ void parse(Scanner& i, Output & o)
 						}
 					}
 
-					DefaultMap::const_iterator def = ruleDefaultMap.find (it->first);
-					if (def == ruleDefaultMap.end ())
-					{
-						def = ruleDefaultMap.find ("*");
-					}
-					if (def != ruleDefaultMap.end ())
-					{
-						RuleOp * def_rule = new RuleOp
-							( def->second->loc
-							, in->mkDefault ()
-							, new NullOp
-							, rank_counter.next ()
-							, RegExp::SHARED
-							, def->second
-							, NULL
-							);
-						it->second = it->second ? mkAlt (def_rule, it->second) : def_rule;
-					}
-
 					dfa_map[it->first] = genCode(it->second, o, it->first, opts->encoding.nCodeUnits ());
 				}
 				if (parseMode != Scanner::Rules && dfa_map.find(it->first) != dfa_map.end())
@@ -3077,20 +3074,7 @@ void parse(Scanner& i, Output & o)
 		}
 		else
 		{
-			if (ruleDefault != NULL && parseMode != Scanner::Reuse)
-			{
-				RuleOp * def = new RuleOp
-					( ruleDefault->loc
-					, in->mkDefault ()
-					, new NullOp
-					, rank_counter.next ()
-					, RegExp::SHARED
-					, ruleDefault
-					, NULL
-					);
-				spec = spec ? mkAlt(def, spec) : def;
-			}
-			if (spec || !dfa_map.empty())
+			if (spec.re || !dfa_map.empty())
 			{
 				if (parseMode != Scanner::Reuse)
 				{
@@ -3148,6 +3132,7 @@ void parse_cleanup()
 	condnames.clear ();
 	specMap.clear();
 	specStar.clear();
+	star_default = NULL;
 	specNone = NULL;
 }
 
