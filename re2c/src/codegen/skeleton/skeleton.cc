@@ -15,6 +15,7 @@ Node::Node ()
 	, restorectx (false)
 	, ctx (false)
 	, dist (DIST_ERROR)
+	, reachable ()
 	, suffix (NULL)
 {}
 
@@ -59,7 +60,7 @@ bool Node::end () const
 	return arcs.size () == 0;
 }
 
-Skeleton::Skeleton (const DFA & dfa)
+Skeleton::Skeleton (const DFA & dfa, const rules_t & rs)
 	// +1 for default DFA state (NULL)
 	: name (dfa.name)
 	, cond (dfa.cond)
@@ -67,6 +68,7 @@ Skeleton::Skeleton (const DFA & dfa)
 	, nodes_count (dfa.nStates + 1) // +1 for default state
 	, nodes (new Node [nodes_count])
 	, sizeof_key (4)
+	, rules (rs)
 {
 	Node * n;
 

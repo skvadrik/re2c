@@ -54,6 +54,7 @@ SRC_HDR = \
 	src/parse/input.h \
 	src/parse/loc.h \
 	src/parse/parser.h \
+	src/parse/rules.h \
 	src/parse/scanner.h \
 	src/parse/spec.h \
 	src/parse/unescape.h \
@@ -89,6 +90,7 @@ SRC = \
 	src/codegen/skeleton/generate_data.cc \
 	src/codegen/skeleton/maxlen.cc \
 	src/codegen/skeleton/skeleton.cc \
+	src/codegen/skeleton/unreachable.cc \
 	src/codegen/skeleton/way.cc \
 	src/conf/msg.cc \
 	src/conf/opt.cc \

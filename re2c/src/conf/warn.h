@@ -4,6 +4,7 @@
 #include <vector>
 
 #include "src/codegen/skeleton/way.h"
+#include "src/parse/rules.h"
 #include "src/util/c99_stdint.h"
 
 namespace re2c {
@@ -14,6 +15,7 @@ namespace re2c {
 	W (MATCH_EMPTY_STRING,     "match-empty-string"), \
 	W (SWAPPED_RANGE,          "swapped-range"), \
 	W (UNDEFINED_CONTROL_FLOW, "undefined-control-flow"), \
+	W (UNREACHABLE_RULES,      "unreachable-rules"), \
 	W (USELESS_ESCAPE,         "useless-escape"),
 
 class Warn
@@ -55,6 +57,7 @@ public:
 	void match_empty_string (uint32_t line);
 	void swapped_range (uint32_t line, uint32_t l, uint32_t u);
 	void undefined_control_flow (uint32_t line, const std::string & cond, std::vector<way_t> & ways, bool overflow);
+	void unreachable_rule (const std::string & cond, const rule_info_t & rule, const rules_t & rules);
 	void useless_escape (uint32_t line, uint32_t col, char c);
 };
 

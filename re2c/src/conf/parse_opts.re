@@ -81,6 +81,7 @@ opt_warn:
 	"match-empty-string"     end { warn.set (Warn::MATCH_EMPTY_STRING,     option); goto opt; }
 	"swapped-range"          end { warn.set (Warn::SWAPPED_RANGE,          option); goto opt; }
 	"undefined-control-flow" end { warn.set (Warn::UNDEFINED_CONTROL_FLOW, option); goto opt; }
+	"unreachable-rules"      end { warn.set (Warn::UNREACHABLE_RULES,      option); goto opt; }
 	"useless-escape"         end { warn.set (Warn::USELESS_ESCAPE,         option); goto opt; }
 */
 

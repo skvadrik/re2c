@@ -171,6 +171,32 @@ void Warn::undefined_control_flow (uint32_t line, const std::string & cond, std:
 	}
 }
 
+void Warn::unreachable_rule (const std::string & cond, const rule_info_t & rule, const rules_t & rules)
+{
+	if (mask[UNREACHABLE_RULES] & WARNING)
+	{
+		const bool e = mask[UNREACHABLE_RULES] & ERROR;
+		error_accuml |= e;
+		warning_start (rule.line, e);
+		fprintf (stderr, "unreachable rule %s", incond (cond).c_str ());
+		const size_t shadows = rule.shadow.size ();
+		if (shadows > 0)
+		{
+			const char * pl = shadows > 1
+				? "s"
+				: "";
+			std::set<rule_rank_t>::const_iterator i = rule.shadow.begin ();
+			fprintf (stderr, "(shadowed by rule%s at line%s %u", pl, pl, rules.find (*i)->second.line);
+			for (++i; i != rule.shadow.end (); ++i)
+			{
+				fprintf (stderr, ", %u", rules.find (*i)->second.line);
+			}
+			fprintf (stderr, ")");
+		}
+		warning_end (names[UNREACHABLE_RULES], e);
+	}
+}
+
 void Warn::useless_escape (uint32_t line, uint32_t col, char c)
 {
 	if (mask[USELESS_ESCAPE] & WARNING)

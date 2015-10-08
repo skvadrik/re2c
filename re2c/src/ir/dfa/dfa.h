@@ -44,6 +44,7 @@ public:
 		, uint32_t
 		, uint32_t
 		, const Char *
+		, rules_t
 		);
 	~DFA ();
 	void emit (Output &, uint32_t &, bool, bool &);

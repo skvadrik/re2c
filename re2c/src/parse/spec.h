@@ -1,7 +1,8 @@
 #ifndef _RE2C_PARSE_SPEC_
 #define _RE2C_PARSE_SPEC_
 
-#include "src/ir/regexp/regexp.h"
+#include "src/ir/regexp/regexp_rule.h"
+#include "src/parse/rules.h"
 
 namespace re2c
 {
@@ -9,37 +10,48 @@ namespace re2c
 struct Spec
 {
 	RegExp * re;
-	bool def;
+	rules_t rules;
 
 	Spec ()
 		: re (NULL)
-		, def (false)
+		, rules ()
 	{}
-	bool add_def (RegExp * r)
+	Spec (const Spec & spec)
+		: re (spec.re)
+		, rules (spec.rules)
+	{}
+	Spec & operator = (const Spec & spec)
 	{
-		if (def)
+		re = spec.re;
+		rules = spec.rules;
+		return *this;
+	}
+	bool add_def (RuleOp * r)
+	{
+		if (rules.find (rule_rank_t::def ()) != rules.end ())
 		{
 			return false;
 		}
 		else
 		{
-			def = true;
 			addl (r);
 			return true;
 		}
 	}
-	void add (RegExp * r)
+	void add (RuleOp * r)
 	{
+		rules[r->rank].line = r->loc.line;
 		re = mkAlt (re, r);
 	}
-	void addl (RegExp * r)
+	void addl (RuleOp * r)
 	{
+		rules[r->rank].line = r->loc.line;
 		re = mkAlt (r, re);
 	}
 	void clear ()
 	{
 		re = NULL;
-		def = false;
+		rules.clear ();
 	}
 };
 

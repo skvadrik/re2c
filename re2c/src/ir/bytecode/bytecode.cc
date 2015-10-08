@@ -64,6 +64,7 @@ smart_ptr<DFA> genCode (Spec & spec, Output & output, const std::string & cond, 
 		, 0
 		, cunits
 		, rep
+		, spec.rules
 		));
 
 	// accumulate global statistics from this particular DFA

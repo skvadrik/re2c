@@ -103,9 +103,9 @@ void yyerror(const char*);
 
 static counter_t<rule_rank_t> rank_counter;
 static std::vector<std::string> condnames;
-static re2c::RegExpMap  specMap;
+static re2c::SpecMap  specMap;
 static Spec spec;
-static RegExp *specNone = NULL;
+static RuleOp *specNone = NULL;
 static RuleOpList       specStar;
 static RuleOp * star_default = NULL;
 static Scanner          *in = NULL;
@@ -2289,7 +2289,7 @@ yyreduce:
 			{
 				in->fatal("condition or '<*>' required when using -c switch");
 			}
-			(yyval.regexp) = new RuleOp
+			RuleOp * rule = new RuleOp
 				( (yyvsp[(3) - (3)].code)->loc
 				, (yyvsp[(1) - (3)].regexp)
 				, (yyvsp[(2) - (3)].regexp)
@@ -2298,7 +2298,7 @@ yyreduce:
 				, (yyvsp[(3) - (3)].code)
 				, NULL
 				);
-			spec.add ((yyval.regexp));
+			spec.add (rule);
 		;}
     break;
 
@@ -3005,7 +3005,7 @@ void parse(Scanner& i, Output & o)
 		uint32_t ind = opts->topIndent;
 		if (opts->cFlag)
 		{
-			RegExpMap::iterator it;
+			SpecMap::iterator it;
 			SetupMap::const_iterator itRuleSetup;
 
 			if (parseMode != Scanner::Reuse)

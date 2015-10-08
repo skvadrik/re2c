@@ -45,6 +45,7 @@ DFA::DFA
 	, uint32_t lb
 	, uint32_t ub
 	, const Char * rep
+	, rules_t rules
 	)
 	: accepts ()
 	, skeleton (NULL)
@@ -106,8 +107,25 @@ DFA::DFA
 			}
 			else if (i->i.tag == TERM)
 			{
-				if (!s->rule || ((RuleOp*) i->i.link)->rank < s->rule->rank)
-					s->rule = (RuleOp*) i->i.link;
+				RuleOp * rule = static_cast<RuleOp *> (i->i.link);
+				if (!s->rule)
+				{
+					s->rule = rule;
+				}
+				else
+				{
+					const rule_rank_t r1 = s->rule->rank;
+					const rule_rank_t r2 = rule->rank;
+					if (r2 < r1)
+					{
+						rules[r1].shadow.insert (r2);
+						s->rule = rule;
+					}
+					else if (r1 < r2)
+					{
+						rules[r2].shadow.insert (r1);
+					}
+				}
 			}
 			else if (i->i.tag == CTXT)
 			{
@@ -156,7 +174,7 @@ DFA::DFA
 
 	// skeleton must be constructed after DFA construction
 	// but prior to any other DFA transformations
-	skeleton = new Skeleton (*this);
+	skeleton = new Skeleton (*this, rules);
 
 	// skeleton is constructed, do further DFA transformations
 	prepare ();

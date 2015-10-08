@@ -58,6 +58,9 @@ struct Node
 	static const uint32_t DIST_MAX;
 	uint32_t dist;
 
+	// rules reachable from this node (including absent rule)
+	std::set<rule_rank_t> reachable;
+
 	// path to end node (for constructing path cover)
 	path_t * suffix;
 
@@ -66,6 +69,7 @@ struct Node
 	~Node ();
 	bool end () const;
 	void calc_dist ();
+	void calc_reachable ();
 	permuts_t sizeof_permutate (permuts_t inarcs, permuts_t len);
 	template <typename cunit_t, typename key_t>
 		void permutate (const multipath_t & prefix, FILE * input, FILE * keys);
@@ -85,10 +89,12 @@ struct Skeleton
 	const uint32_t nodes_count;
 	Node * nodes;
 	size_t sizeof_key;
+	rules_t rules;
 
-	Skeleton (const DFA & dfa);
+	Skeleton (const DFA & dfa, const rules_t & rs);
 	~Skeleton ();
 	void warn_undefined_control_flow ();
+	void warn_unreachable_rules ();
 	void emit_data (const char * fname);
 	static void emit_prolog (OutputFile & o);
 	void emit_start

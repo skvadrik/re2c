@@ -48,6 +48,11 @@ bool rule_rank_t::operator < (const rule_rank_t & r) const
 	return value < r.value;
 }
 
+bool rule_rank_t::operator == (const rule_rank_t & r) const
+{
+	return value == r.value;
+}
+
 std::ostream & operator << (std::ostream & o, rule_rank_t r)
 {
 	o << r.value;
