@@ -127,6 +127,7 @@ void DFA::emit(Output & output, uint32_t& ind, bool isLastCond, bool& bPrologBra
 
 	skeleton->warn_undefined_control_flow ();
 	skeleton->warn_unreachable_rules ();
+	skeleton->warn_match_empty ();
 
 	if (opts->target == opt_t::SKELETON)
 	{

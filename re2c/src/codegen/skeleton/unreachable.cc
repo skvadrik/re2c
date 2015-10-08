@@ -29,11 +29,11 @@ void Skeleton::warn_unreachable_rules ()
 	nodes->calc_reachable ();
 	for (uint32_t i = 0; i < nodes_count; ++i)
 	{
-		const rule_rank_t r1 = nodes[i].rule;
-		const std::set<rule_rank_t> & rs = nodes[i].reachable;
-		for (std::set<rule_rank_t>::const_iterator j = rs.begin (); j != rs.end (); ++j)
+		const rule_rank_t r1 = nodes[i].rule.rank;
+		const std::set<rule_t> & rs = nodes[i].reachable;
+		for (std::set<rule_t>::const_iterator j = rs.begin (); j != rs.end (); ++j)
 		{
-			const rule_rank_t r2 = *j;
+			const rule_rank_t r2 = j->rank;
 			if (r1 == r2 || r2.is_none ())
 			{
 				rules[r1].reachable = true;

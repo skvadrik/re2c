@@ -11,8 +11,7 @@ Node::Node ()
 	: arcs ()
 	, arcsets ()
 	, loop (0)
-	, rule (rule_rank_t::none ())
-	, restorectx (false)
+	, rule (rule_rank_t::none (), false)
 	, ctx (false)
 	, dist (DIST_ERROR)
 	, reachable ()
@@ -24,8 +23,8 @@ void Node::init (const State * s, const s2n_map & s2n)
 	const bool is_accepting = s && s->rule;
 	if (is_accepting)
 	{
-		rule = s->rule->rank;
-		restorectx = s->rule->ctx->fixedLength () != 0;
+		rule.rank = s->rule->rank;
+		rule.restorectx = s->rule->ctx->fixedLength () != 0;
 	}
 
 	ctx = s && s->isPreCtxt;
@@ -102,7 +101,7 @@ Skeleton::Skeleton (const DFA & dfa, const rules_t & rs)
 	uint32_t maxrule = 0;
 	for (uint32_t i = 0; i < nodes_count; ++i)
 	{
-		const rule_rank_t r = nodes[i].rule;
+		const rule_rank_t r = nodes[i].rule.rank;
 		if (!r.is_none ())
 		{
 			maxrule = std::max (maxrule, r.uint32 ());

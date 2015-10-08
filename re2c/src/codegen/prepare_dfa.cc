@@ -222,25 +222,6 @@ void DFA::prepare ()
 		default_state->action.set_accept (&accepts);
 	}
 
-	const bool empty_rule = head->rule;
-
-	std::vector<std::pair<uint32_t, uint32_t> > stray_cunits;
-	uint32_t lb = 0;
-	for (uint32_t i = 0; i < head->go.nSpans; ++i)
-	{
-		if (!head->go.span[i].to->rule)
-		{
-			stray_cunits.push_back (std::make_pair (lb, head->go.span[i].ub));
-		}
-		lb = head->go.span[i].ub;
-	}
-
-	// warn about not shadowed rule that matches empty string
-	if (empty_rule && !stray_cunits.empty ())
-	{
-		warn.match_empty_string (head->rule->loc.line);
-	}
-
 	// split ``base'' states into two parts
 	for (State * s = head; s; s = s->next)
 	{

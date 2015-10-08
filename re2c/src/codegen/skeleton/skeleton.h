@@ -45,10 +45,8 @@ struct Node
 	// (controls looping in graph traversals)
 	uint8_t loop;
 
-	// rule number for corresponding DFA state (if any)
-	rule_rank_t rule;
-	// whether this rule must rollback input position to the beginnig of trailing context
-	bool restorectx;
+	// rule for corresponding DFA state (if any)
+	rule_t rule;
 
 	// start of trailing context
 	bool ctx;
@@ -59,7 +57,7 @@ struct Node
 	uint32_t dist;
 
 	// rules reachable from this node (including absent rule)
-	std::set<rule_rank_t> reachable;
+	std::set<rule_t> reachable;
 
 	// path to end node (for constructing path cover)
 	path_t * suffix;
@@ -95,6 +93,7 @@ struct Skeleton
 	~Skeleton ();
 	void warn_undefined_control_flow ();
 	void warn_unreachable_rules ();
+	void warn_match_empty ();
 	void emit_data (const char * fname);
 	static void emit_prolog (OutputFile & o);
 	void emit_start

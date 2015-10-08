@@ -1,3 +1,4 @@
+re2c: warning: line 253: rule matches empty string [-Wmatch-empty-string]
 re2c: warning: line 288: empty character class [-Wempty-character-class]
 re2c: warning: line 290: control flow is undefined for strings that match 
 	'[\x0-\x8\xA-\xC\xE-\x1F\x21-\x2E\x30-\xFF]'

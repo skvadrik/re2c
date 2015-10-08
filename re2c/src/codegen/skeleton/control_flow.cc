@@ -8,7 +8,7 @@ namespace re2c
 // We only need some examples, the shorter the better.
 Node::nakeds_t Node::naked_ways (const way_t & prefix, std::vector<way_t> & ways)
 {
-	if (!rule.is_none ())
+	if (!rule.rank.is_none ())
 	{
 		return nakeds_t (0u);
 	}
