@@ -19,7 +19,6 @@ struct ScannerState
 	enum lexer_state_t
 	{
 		LEX_NORMAL,
-		LEX_CONF,
 		LEX_FLEX_NAME
 	};
 
@@ -60,6 +59,9 @@ private:
 	void fill (uint32_t);
 	void set_sourceline ();
 	void lex_cpoints (char quote, std::vector<uint32_t> & cs);
+	int32_t lex_conf_number ();
+	std::string lex_conf_string ();
+	std::string cpoint_conf (const std::vector<uint32_t> & cs) const;
 	size_t tok_len () const;
 
 public:
@@ -97,7 +99,6 @@ public:
 	RegExp * mkDefault () const;
 	RegExp * cpoint_string (const std::vector<uint32_t> & cs, bool case_sensitive) const;
 	RegExp * cpoint_class (const std::vector<uint32_t> & cs, bool neg) const;
-	std::string * cpoint_conf (const std::vector<uint32_t> & cs) const;
 
 	FORBID_COPY (Scanner);
 };

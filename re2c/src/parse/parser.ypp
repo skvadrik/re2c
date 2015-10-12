@@ -152,89 +152,29 @@ void default_rule(CondList *clist, const Code * code)
 	re2c::RegExp * regexp;
 	const re2c::Code * code;
 	char op;
-	int32_t num;
 	re2c::ExtOp extop;
 	std::string * str;
 	re2c::CondList * clist;
-	re2c::Enc::type_t enc;
 };
 
 %token CLOSE
 %token CLOSESIZE
 %token CODE
-%token CONF_CONDPREFIX
-%token CONF_CONDENUMPREFIX
-%token CONF_COND_DIVIDER
-%token CONF_COND_DIVIDER_COND
-%token CONF_COND_GOTO
-%token CONF_COND_GOTO_COND
-%token CONF_CGOTO_THRESHOLD
-%token CONF_DEFINE_YYBACKUP
-%token CONF_DEFINE_YYBACKUPCTX
-%token CONF_DEFINE_YYCONDTYPE
-%token CONF_DEFINE_YYCTXMARKER
-%token CONF_DEFINE_YYCTYPE
-%token CONF_DEFINE_YYCURSOR
-%token CONF_DEFINE_YYDEBUG
-%token CONF_DEFINE_YYFILL
-%token CONF_DEFINE_YYFILL_NAKED
-%token CONF_DEFINE_YYFILL_LEN
-%token CONF_DEFINE_YYGETCONDITION
-%token CONF_DEFINE_YYGETCONDITION_NAKED
-%token CONF_DEFINE_YYGETSTATE
-%token CONF_DEFINE_YYGETSTATE_NAKED
-%token CONF_DEFINE_YYLESSTHAN
-%token CONF_DEFINE_YYLIMIT
-%token CONF_DEFINE_YYMARKER
-%token CONF_DEFINE_YYPEEK
-%token CONF_DEFINE_YYRESTORE
-%token CONF_DEFINE_YYRESTORECTX
-%token CONF_DEFINE_YYSETCONDITION
-%token CONF_DEFINE_YYSETCONDITION_COND
-%token CONF_DEFINE_YYSETCONDITION_NAKED
-%token CONF_DEFINE_YYSETSTATE
-%token CONF_DEFINE_YYSETSTATE_NAKED
-%token CONF_DEFINE_YYSETSTATE_STATE
-%token CONF_DEFINE_YYSKIP
-%token CONF_FLAGS
-%token CONF_INDENT_STRING
-%token CONF_INDENT_TOP
-%token CONF_LABEL_YYFILLLABEL
-%token CONF_LABEL_YYNEXT
-%token CONF_LABELPREFIX
-%token CONF_STARTLABEL
-%token CONF_STATE_ABORT
-%token CONF_STATE_NEXTLABEL
-%token CONF_VARIABLE_YYACCEPT
-%token CONF_VARIABLE_YYBM
-%token CONF_VARIABLE_YYCH
-%token CONF_VARIABLE_YYCTABLE
-%token CONF_VARIABLE_YYSTABLE
-%token CONF_VARIABLE_YYTARGET
-%token CONF_YYBM_HEX
-%token CONF_YYCH_CONVERSION
-%token CONF_YYCH_EMIT
-%token CONF_YYFILL_CHECK
-%token CONF_YYFILL_ENABLE
-%token CONF_YYFILL_PARAMETER
+%token CONF
 %token ID
 %token FID
 %token FID_END
 %token NOCOND
-%token NUM
 %token REGEXP
 %token SETUP
 %token STAR
-%token STRING
 
 %type <op>      CLOSE STAR SETUP close
 %type <extop>   CLOSESIZE
 %type <code>    CODE
 %type <regexp>  REGEXP rule look expr diff term factor primary
-%type <str>     ID FID STRING newcond
+%type <str>     ID FID newcond
 %type <clist>   cond clist
-%type <num>     NUM
-%type <enc>     CONF_FLAGS
 
 %%
 
@@ -276,286 +216,7 @@ decl:
 		{
 			in->fatal("trailing contexts are not allowed in named definitions");
 		}
-	| CONF_CONDPREFIX STRING ';'
-	{
-		opts.set_condPrefix (*$2);
-		delete $2;
-	}
-	| CONF_CONDENUMPREFIX STRING ';'
-	{
-		opts.set_condEnumPrefix (*$2);
-		delete $2;
-	}
-	| CONF_COND_DIVIDER STRING ';'
-	{
-		opts.set_condDivider (*$2);
-		delete $2;
-	}
-	| CONF_COND_DIVIDER_COND STRING ';'
-	{
-		opts.set_condDividerParam (*$2);
-		delete $2;
-	}
-	| CONF_COND_GOTO STRING ';'
-	{
-		opts.set_condGoto (*$2);
-		delete $2;
-	}
-	| CONF_COND_GOTO_COND STRING ';'
-	{
-		opts.set_condGotoParam (*$2);
-		delete $2;
-	}
-	| CONF_CGOTO_THRESHOLD NUM ';'
-	{
-		if ($2 < 0)
-		{
-			in->fatal ("configuration 'cgoto:threshold' must be nonnegative");
-		}
-		opts.set_cGotoThreshold (static_cast<uint32_t> ($2));
-	}
-	| CONF_DEFINE_YYBACKUP STRING ';'
-	{
-		opts.set_yybackup (*$2);
-		delete $2;
-	}
-	| CONF_DEFINE_YYBACKUPCTX STRING ';'
-	{
-		opts.set_yybackupctx (*$2);
-		delete $2;
-	}
-	| CONF_DEFINE_YYCONDTYPE STRING ';'
-	{
-		opts.set_yycondtype (*$2);
-		delete $2;
-	}
-	| CONF_DEFINE_YYCTXMARKER STRING ';'
-	{
-		opts.set_yyctxmarker (*$2);
-		delete $2;
-	}
-	| CONF_DEFINE_YYCTYPE STRING ';'
-	{
-		opts.set_yyctype (*$2);
-		delete $2;
-	}
-	| CONF_DEFINE_YYCURSOR STRING ';'
-	{
-		opts.set_yycursor (*$2);
-		delete $2;
-	}
-	| CONF_DEFINE_YYDEBUG STRING ';'
-	{
-		opts.set_yydebug (*$2);
-		delete $2;
-	}
-	| CONF_DEFINE_YYFILL STRING ';'
-	{
-		opts.set_fill (*$2);
-		delete $2;
-	}
-	| CONF_DEFINE_YYGETCONDITION STRING ';'
-	{
-		opts.set_cond_get (*$2);
-		delete $2;
-	}
-	| CONF_DEFINE_YYGETSTATE STRING ';'
-	{
-		opts.set_state_get (*$2);
-		delete $2;
-	}
-	| CONF_DEFINE_YYLESSTHAN STRING ';'
-	{
-		opts.set_yylessthan (*$2);
-		delete $2;
-	}
-	| CONF_DEFINE_YYLIMIT STRING ';'
-	{
-		opts.set_yylimit (*$2);
-		delete $2;
-	}
-	| CONF_DEFINE_YYMARKER STRING ';'
-	{
-		opts.set_yymarker (*$2);
-		delete $2;
-	}
-	| CONF_DEFINE_YYPEEK STRING ';'
-	{
-		opts.set_yypeek (*$2);
-		delete $2;
-	}
-	| CONF_DEFINE_YYRESTORE STRING ';'
-	{
-		opts.set_yyrestore (*$2);
-		delete $2;
-	}
-	| CONF_DEFINE_YYRESTORECTX STRING ';'
-	{
-		opts.set_yyrestorectx (*$2);
-		delete $2;
-	}
-	| CONF_DEFINE_YYSETCONDITION STRING ';'
-	{
-		opts.set_cond_set (*$2);
-		delete $2;
-	}
-	| CONF_DEFINE_YYSETCONDITION_NAKED NUM ';'
-	{
-		opts.set_cond_set_naked ($2 != 0);
-	}
-	| CONF_DEFINE_YYSETSTATE STRING ';'
-	{
-		opts.set_state_set (*$2);
-		delete $2;
-	}
-	| CONF_DEFINE_YYSKIP STRING ';'
-	{
-		opts.set_yyskip (*$2);
-		delete $2;
-	}
-	| CONF_DEFINE_YYFILL_NAKED NUM ';'
-	{
-		opts.set_fill_naked ($2 != 0);
-	}
-	| CONF_DEFINE_YYFILL_LEN STRING ';'
-	{
-		opts.set_fill_arg (*$2);
-		delete $2;
-	}
-	| CONF_DEFINE_YYGETCONDITION_NAKED NUM ';'
-	{
-		opts.set_cond_get_naked ($2 != 0);
-	}
-	| CONF_DEFINE_YYGETSTATE_NAKED NUM ';'
-	{
-		opts.set_state_get_naked ($2 != 0);
-	}
-	| CONF_DEFINE_YYSETCONDITION_COND STRING ';'
-	{
-		opts.set_cond_set_arg (*$2);
-		delete $2;
-	}
-	| CONF_DEFINE_YYSETSTATE_NAKED NUM ';'
-	{
-		opts.set_state_set_naked ($2 != 0);
-	}
-	| CONF_DEFINE_YYSETSTATE_STATE STRING ';'
-	{
-		opts.set_state_set_arg (*$2);
-		delete $2;
-	}
-	| CONF_FLAGS NUM ';'
-	{
-		if ($2 == 0)
-		{
-			opts.unset_encoding ($1);
-		}
-		else if (!opts.set_encoding ($1))
-		{
-			in->fatalf ("Cannot set %s encoding: please reset %s encoding first"
-				, Enc::name ($1)
-				, Enc::name (opts->encoding.type ()));
-		}
-	}
-	| CONF_INDENT_STRING STRING ';'
-	{
-		opts.set_indString (*$2);
-		delete $2;
-	}
-	| CONF_INDENT_TOP NUM ';'
-	{
-		if ($2 < 0)
-		{
-			in->fatal ("configuration 'indent:top' must be nonnegative");
-		}
-		opts.set_topIndent (static_cast<uint32_t> ($2));
-	}
-	| CONF_LABEL_YYFILLLABEL STRING ';'
-	{
-		opts.set_yyfilllabel (*$2);
-		delete $2;
-	}
-	| CONF_LABEL_YYNEXT STRING ';'
-	{
-		opts.set_yynext (*$2);
-		delete $2;
-	}
-	| CONF_LABELPREFIX STRING ';'
-	{
-		opts.set_labelPrefix (*$2);
-		delete $2;
-	}
-	| CONF_STARTLABEL NUM ';'
-	{
-		in->out.set_force_start_label ($2 != 0);
-	}
-	| CONF_STARTLABEL STRING ';'
-	{
-		in->out.set_user_start_label (*$2);
-		delete $2;
-	}
-	| CONF_STATE_ABORT NUM ';'
-	{
-		opts.set_bUseStateAbort ($2 != 0);
-	}
-	| CONF_STATE_NEXTLABEL NUM ';'
-	{
-		opts.set_bUseStateNext ($2 != 0);
-	}
-	| CONF_VARIABLE_YYACCEPT STRING ';'
-	{
-		opts.set_yyaccept (*$2);
-		delete $2;
-	}
-	| CONF_VARIABLE_YYBM STRING ';'
-	{
-		opts.set_yybm (*$2);
-		delete $2;
-	}
-	| CONF_VARIABLE_YYCH STRING ';'
-	{
-		opts.set_yych (*$2);
-		delete $2;
-	}
-	| CONF_VARIABLE_YYCTABLE STRING ';'
-	{
-		opts.set_yyctable (*$2);
-		delete $2;
-	}
-	| CONF_VARIABLE_YYSTABLE STRING ';'
-	{
-		// deprecated
-		delete $2;
-	}
-	| CONF_VARIABLE_YYTARGET STRING ';'
-	{
-		opts.set_yytarget (*$2);
-		delete $2;
-	}
-	| CONF_YYBM_HEX NUM ';'
-	{
-		opts.set_yybmHexTable ($2 != 0);
-	}
-	| CONF_YYCH_CONVERSION NUM ';'
-	{
-		opts.set_yychConversion ($2 != 0);
-	}
-	| CONF_YYCH_EMIT NUM ';'
-	{
-		opts.set_bEmitYYCh ($2 != 0);
-	}
-	| CONF_YYFILL_CHECK NUM ';'
-	{
-		opts.set_fill_check ($2 != 0);
-	}
-	| CONF_YYFILL_ENABLE NUM ';'
-	{
-		opts.set_fill_use ($2 != 0);
-	}
-	| CONF_YYFILL_PARAMETER NUM ';'
-	{
-		opts.set_fill_arg_use ($2 != 0);
-	}
+	|	CONF {}
 ;
 
 rule:

@@ -53,6 +53,8 @@ lineinf = lineno (space+ dstring)? eol;
 
 	naked_char = . \ (space | [;]);
 	naked      = "" | (naked_char \ ['"]) naked_char*;
+
+	conf_assign = space* "=" space*;
 */
 
 Scanner::ParseMode Scanner::echo()
@@ -224,7 +226,6 @@ scan:
 	switch (lexer_state)
 	{
 		case LEX_NORMAL:    goto start;
-		case LEX_CONF:      goto conf_eq;
 		case LEX_FLEX_NAME: goto flex_name;
 	}
 
@@ -564,109 +565,188 @@ nextLine:
 
 conf:
 	tok = cur;
-	lexer_state = LEX_CONF;
 /*!re2c
 	* { fatal ((tok - pos) - tchar, "unrecognized configuration"); }
 
-	"condprefix"                  { return CONF_CONDPREFIX; }
-	"condenumprefix"              { return CONF_CONDENUMPREFIX; }
-	"cond:divider"                { return CONF_COND_DIVIDER; }
-	"cond:divider@cond"           { return CONF_COND_DIVIDER_COND; }
-	"cond:goto"                   { return CONF_COND_GOTO; }
-	"cond:goto@cond"              { return CONF_COND_GOTO_COND; }
-	"cgoto:threshold"             { return CONF_CGOTO_THRESHOLD; }
-	"define:YYBACKUP"             { return CONF_DEFINE_YYBACKUP; }
-	"define:YYBACKUPCTX"          { return CONF_DEFINE_YYBACKUPCTX; }
-	"define:YYCONDTYPE"           { return CONF_DEFINE_YYCONDTYPE; }
-	"define:YYCTXMARKER"          { return CONF_DEFINE_YYCTXMARKER; }
-	"define:YYCTYPE"              { return CONF_DEFINE_YYCTYPE; }
-	"define:YYCURSOR"             { return CONF_DEFINE_YYCURSOR; }
-	"define:YYDEBUG"              { return CONF_DEFINE_YYDEBUG; }
-	"define:YYFILL"               { return CONF_DEFINE_YYFILL; }
-	"define:YYFILL:naked"         { return CONF_DEFINE_YYFILL_NAKED; }
-	"define:YYFILL@len"           { return CONF_DEFINE_YYFILL_LEN; }
-	"define:YYGETCONDITION"       { return CONF_DEFINE_YYGETCONDITION; }
-	"define:YYGETCONDITION:naked" { return CONF_DEFINE_YYGETCONDITION_NAKED; }
-	"define:YYGETSTATE"           { return CONF_DEFINE_YYGETSTATE; }
-	"define:YYGETSTATE:naked"     { return CONF_DEFINE_YYGETSTATE_NAKED; }
-	"define:YYLESSTHAN"           { return CONF_DEFINE_YYLESSTHAN; }
-	"define:YYLIMIT"              { return CONF_DEFINE_YYLIMIT; }
-	"define:YYMARKER"             { return CONF_DEFINE_YYMARKER; }
-	"define:YYPEEK"               { return CONF_DEFINE_YYPEEK; }
-	"define:YYRESTORE"            { return CONF_DEFINE_YYRESTORE; }
-	"define:YYRESTORECTX"         { return CONF_DEFINE_YYRESTORECTX; }
-	"define:YYSETCONDITION"       { return CONF_DEFINE_YYSETCONDITION; }
-	"define:YYSETCONDITION@cond"  { return CONF_DEFINE_YYSETCONDITION_COND; }
-	"define:YYSETCONDITION:naked" { return CONF_DEFINE_YYSETCONDITION_NAKED; }
-	"define:YYSETSTATE"           { return CONF_DEFINE_YYSETSTATE; }
-	"define:YYSETSTATE:naked"     { return CONF_DEFINE_YYSETSTATE_NAKED; }
-	"define:YYSETSTATE@state"     { return CONF_DEFINE_YYSETSTATE_STATE; }
-	"define:YYSKIP"               { return CONF_DEFINE_YYSKIP; }
+	"condprefix"                  { opts.set_condPrefix       (lex_conf_string ()); return CONF; }
+	"condenumprefix"              { opts.set_condEnumPrefix   (lex_conf_string ()); return CONF; }
+	"cond:divider"                { opts.set_condDivider      (lex_conf_string ()); return CONF; }
+	"cond:divider@cond"           { opts.set_condDividerParam (lex_conf_string ()); return CONF; }
+	"cond:goto"                   { opts.set_condGoto         (lex_conf_string ()); return CONF; }
+	"cond:goto@cond"              { opts.set_condGotoParam    (lex_conf_string ()); return CONF; }
+	"cgoto:threshold"
+	{
+		const int32_t n = lex_conf_number ();
+		if (n < 0)
+		{
+			fatal ("configuration 'cgoto:threshold' must be nonnegative");
+		}
+		opts.set_cGotoThreshold (static_cast<uint32_t> (n));
+		return CONF;
+	}
+	"define:YYBACKUP"             { opts.set_yybackup         (lex_conf_string ()); return CONF; }
+	"define:YYBACKUPCTX"          { opts.set_yybackupctx      (lex_conf_string ()); return CONF; }
+	"define:YYCONDTYPE"           { opts.set_yycondtype       (lex_conf_string ()); return CONF; }
+	"define:YYCTXMARKER"          { opts.set_yyctxmarker      (lex_conf_string ()); return CONF; }
+	"define:YYCTYPE"              { opts.set_yyctype          (lex_conf_string ()); return CONF; }
+	"define:YYCURSOR"             { opts.set_yycursor         (lex_conf_string ()); return CONF; }
+	"define:YYDEBUG"              { opts.set_yydebug          (lex_conf_string ()); return CONF; }
+	"define:YYFILL"               { opts.set_fill             (lex_conf_string ()); return CONF; }
+	"define:YYFILL:naked"         { opts.set_fill_naked       (lex_conf_number () != 0); return CONF; }
+	"define:YYFILL@len"           { opts.set_fill_arg         (lex_conf_string ()); return CONF; }
+	"define:YYGETCONDITION"       { opts.set_cond_get         (lex_conf_string ()); return CONF; }
+	"define:YYGETCONDITION:naked" { opts.set_cond_get_naked   (lex_conf_number () != 0); return CONF; }
+	"define:YYGETSTATE"           { opts.set_state_get        (lex_conf_string ()); return CONF; }
+	"define:YYGETSTATE:naked"     { opts.set_state_get_naked  (lex_conf_number () != 0); return CONF; }
+	"define:YYLESSTHAN"           { opts.set_yylessthan       (lex_conf_string ()); return CONF; }
+	"define:YYLIMIT"              { opts.set_yylimit          (lex_conf_string ()); return CONF; }
+	"define:YYMARKER"             { opts.set_yymarker         (lex_conf_string ()); return CONF; }
+	"define:YYPEEK"               { opts.set_yypeek           (lex_conf_string ()); return CONF; }
+	"define:YYRESTORE"            { opts.set_yyrestore        (lex_conf_string ()); return CONF; }
+	"define:YYRESTORECTX"         { opts.set_yyrestorectx     (lex_conf_string ()); return CONF; }
+	"define:YYSETCONDITION"       { opts.set_cond_set         (lex_conf_string ()); return CONF; }
+	"define:YYSETCONDITION@cond"  { opts.set_cond_set_arg     (lex_conf_string ()); return CONF; }
+	"define:YYSETCONDITION:naked" { opts.set_cond_set_naked   (lex_conf_number () != 0); return CONF; }
+	"define:YYSETSTATE"           { opts.set_state_set        (lex_conf_string ()); return CONF; }
+	"define:YYSETSTATE:naked"     { opts.set_state_set_naked  (lex_conf_number () != 0); return CONF; }
+	"define:YYSETSTATE@state"     { opts.set_state_set_arg    (lex_conf_string ()); return CONF; }
+	"define:YYSKIP"               { opts.set_yyskip           (lex_conf_string ()); return CONF; }
 	"flags:" [ewxu8]
 	{
+		Enc::type_t enc = Enc::ASCII;
 		switch (YYCURSOR[-1])
 		{
-			case 'e': yylval.enc = Enc::EBCDIC; break;
-			case 'w': yylval.enc = Enc::UCS2;   break;
-			case 'x': yylval.enc = Enc::UTF16;  break;
-			case 'u': yylval.enc = Enc::UTF32;  break;
-			case '8': yylval.enc = Enc::UTF8;   break;
+			case 'e': enc = Enc::EBCDIC; break;
+			case 'w': enc = Enc::UCS2;   break;
+			case 'x': enc = Enc::UTF16;  break;
+			case 'u': enc = Enc::UTF32;  break;
+			case '8': enc = Enc::UTF8;   break;
 		}
-		return CONF_FLAGS;
+		const int32_t n = lex_conf_number ();
+		if (n == 0)
+		{
+			opts.unset_encoding (enc);
+		}
+		else if (!opts.set_encoding (enc))
+		{
+			fatalf ("Cannot set %s encoding: please reset %s encoding first"
+				, Enc::name (enc)
+				, Enc::name (opts->encoding.type ()));
+		}
+		return CONF;
 	}
-	"indent:string"               { return CONF_INDENT_STRING; }
-	"indent:top"                  { return CONF_INDENT_TOP; }
-	"label:yyFillLabel"           { return CONF_LABEL_YYFILLLABEL; }
-	"label:yyNext"                { return CONF_LABEL_YYNEXT; }
-	"labelprefix"                 { return CONF_LABELPREFIX; }
-	"startlabel"                  { return CONF_STARTLABEL; }
-	"state:abort"                 { return CONF_STATE_ABORT; }
-	"state:nextlabel"             { return CONF_STATE_NEXTLABEL; }
-	"variable:yyaccept"           { return CONF_VARIABLE_YYACCEPT; }
-	"variable:yybm"               { return CONF_VARIABLE_YYBM; }
-	"variable:yych"               { return CONF_VARIABLE_YYCH; }
-	"variable:yyctable"           { return CONF_VARIABLE_YYCTABLE; }
-	"variable:yystable"           { return CONF_VARIABLE_YYSTABLE; }
-	"variable:yytarget"           { return CONF_VARIABLE_YYTARGET; }
-	"yybm:hex"                    { return CONF_YYBM_HEX; }
-	"yych:conversion"             { return CONF_YYCH_CONVERSION; }
-	"yych:emit"                   { return CONF_YYCH_EMIT; }
-	"yyfill:check"                { return CONF_YYFILL_CHECK; }
-	"yyfill:enable"               { return CONF_YYFILL_ENABLE; }
-	"yyfill:parameter"            { return CONF_YYFILL_PARAMETER; }
-*/
+	"indent:string"               { opts.set_indString        (lex_conf_string ()); return CONF; }
+	"indent:top"
+	{
+		const int32_t n = lex_conf_number ();
+		if (n < 0)
+		{
+			fatal ("configuration 'indent:top' must be nonnegative");
+		}
+		opts.set_topIndent (static_cast<uint32_t> (n));
+		return CONF;
+	}
+	"label:yyFillLabel"           { opts.set_yyfilllabel      (lex_conf_string ()); return CONF; }
+	"label:yyNext"                { opts.set_yynext           (lex_conf_string ()); return CONF; }
+	"labelprefix"                 { opts.set_labelPrefix      (lex_conf_string ()); return CONF; }
+	"state:abort"                 { opts.set_bUseStateAbort   (lex_conf_number () != 0); return CONF; }
+	"state:nextlabel"             { opts.set_bUseStateNext    (lex_conf_number () != 0); return CONF; }
+	"variable:yyaccept"           { opts.set_yyaccept         (lex_conf_string ()); return CONF; }
+	"variable:yybm"               { opts.set_yybm             (lex_conf_string ()); return CONF; }
+	"variable:yych"               { opts.set_yych             (lex_conf_string ()); return CONF; }
+	"variable:yyctable"           { opts.set_yyctable         (lex_conf_string ()); return CONF; }
+	"variable:yystable"           { lex_conf_string (); return CONF; } // deprecated
+	"variable:yytarget"           { opts.set_yytarget         (lex_conf_string ()); return CONF; }
+	"yybm:hex"                    { opts.set_yybmHexTable     (lex_conf_number () != 0); return CONF; }
+	"yych:conversion"             { opts.set_yychConversion   (lex_conf_number () != 0); return CONF; }
+	"yych:emit"                   { opts.set_bEmitYYCh        (lex_conf_number () != 0); return CONF; }
+	"yyfill:check"                { opts.set_fill_check       (lex_conf_number () != 0); return CONF; }
+	"yyfill:enable"               { opts.set_fill_use         (lex_conf_number () != 0); return CONF; }
+	"yyfill:parameter"            { opts.set_fill_arg_use     (lex_conf_number () != 0); return CONF; }
 
-conf_eq:
+	// try to lex number first, otherwize it would be lexed as a naked string
+	"startlabel" / conf_assign number { out.set_force_start_label (lex_conf_number () != 0); return CONF; }
+	"startlabel"                      { out.set_user_start_label (lex_conf_string ()); return CONF; }
+*/
+}
+
+int32_t Scanner::lex_conf_number ()
+{
+	int32_t num = 0;
 /*!re2c
 	* { fatal ("missing '=' in configuration"); }
-	space* "=" space* { goto conf_val; }
+	conf_assign { goto conf_val; }
 */
-
 conf_val:
 	tok = cur;
-	lexer_state = LEX_NORMAL;
 /*!re2c
 	number
 	{
-		if (!s_to_i32_unsafe (tok, cur, yylval.num))
+		if (!s_to_i32_unsafe (tok, cur, num))
 		{
 			fatal ("configuration value overflow");
 		}
-		return NUM;
+		goto conf_semicolon;
 	}
+*/
+conf_semicolon:
+/*!re2c
+	* { fatal ("missing ending ';' in configuration"); }
+	space* ";" { goto end; }
+*/
+end:
+	return num;
+}
+
+std::string Scanner::lex_conf_string ()
+{
+/*!re2c
+	* { fatal ("missing '=' in configuration"); }
+	conf_assign { goto conf_val; }
+*/
+conf_val:
+	std::string s;
+	tok = cur;
+/*!re2c
 	['"]
 	{
 		std::vector<uint32_t> cpoints;
 		lex_cpoints (tok[0], cpoints);
-		yylval.str = cpoint_conf (cpoints);
-		return STRING;
+		s = cpoint_conf (cpoints);
+		goto conf_semicolon;
 	}
 	naked
 	{
-		yylval.str = new std::string (tok, tok_len ());
-		return STRING;
+		s = std::string (tok, tok_len ());
+		goto conf_semicolon;
 	}
 */
+conf_semicolon:
+/*!re2c
+	* { fatal ("missing ending ';' in configuration"); }
+	space* ";" { goto end; }
+*/
+end:
+	return s;
+}
+
+std::string Scanner::cpoint_conf (const std::vector<uint32_t> & cs) const
+{
+	const size_t n = cs.size ();
+	std::string s;
+	for (size_t i = 0; i < n; ++i)
+	{
+		const uint32_t c = cs[i];
+		if (c > 0xFF)
+		{
+			fatalf ("multibyte character in configuration string: 0x%X", c);
+		}
+		else
+		{
+			s += static_cast<char> (c);
+		}
+	}
+	return s;
 }
 
 static void escape (std::string & dest, const std::string & src)
