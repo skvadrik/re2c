@@ -38,7 +38,6 @@ sstring = "'"  ((. \ [\\'] ) | "\\" .)* "'" ;
 letter  = [a-zA-Z];
 digit   = [0-9];
 lineno  = [1-9] digit*;
-number  = "0" | ("-"? [1-9] digit*);
 name    = (letter|digit|"_")+;
 space   = [ \t];
 ws      = (space | [\r\n]);
@@ -50,11 +49,6 @@ lineinf = lineno (space+ dstring)? eol;
 	esc_hex = esc ("x" hex_digit{2} | [uX] hex_digit{4} | "U" hex_digit{8});
 	esc_oct = esc [0-3] [0-7]{2}; // max 1-byte octal value is '\377'
 	esc_simple = esc [abfnrtv\\];
-
-	naked_char = . \ (space | [;]);
-	naked      = "" | (naked_char \ ['"]) naked_char*;
-
-	conf_assign = space* "=" space*;
 */
 
 Scanner::ParseMode Scanner::echo()
@@ -351,7 +345,7 @@ start:
 					return ID;
 				}
 
-	"re2c:" { goto conf; }
+	"re2c:" { lex_conf (); return CONF; }
 
 	name / (space+ [^=>,])	{
 					yylval.str = new std::string (tok, tok_len ());
@@ -562,189 +556,6 @@ nextLine:
                goto nextLine;
             }
 */
-
-conf:
-	tok = cur;
-/*!re2c
-	* { fatal ((tok - pos) - tchar, "unrecognized configuration"); }
-
-	"condprefix"                  { opts.set_condPrefix       (lex_conf_string ()); return CONF; }
-	"condenumprefix"              { opts.set_condEnumPrefix   (lex_conf_string ()); return CONF; }
-	"cond:divider"                { opts.set_condDivider      (lex_conf_string ()); return CONF; }
-	"cond:divider@cond"           { opts.set_condDividerParam (lex_conf_string ()); return CONF; }
-	"cond:goto"                   { opts.set_condGoto         (lex_conf_string ()); return CONF; }
-	"cond:goto@cond"              { opts.set_condGotoParam    (lex_conf_string ()); return CONF; }
-	"cgoto:threshold"
-	{
-		const int32_t n = lex_conf_number ();
-		if (n < 0)
-		{
-			fatal ("configuration 'cgoto:threshold' must be nonnegative");
-		}
-		opts.set_cGotoThreshold (static_cast<uint32_t> (n));
-		return CONF;
-	}
-	"define:YYBACKUP"             { opts.set_yybackup         (lex_conf_string ()); return CONF; }
-	"define:YYBACKUPCTX"          { opts.set_yybackupctx      (lex_conf_string ()); return CONF; }
-	"define:YYCONDTYPE"           { opts.set_yycondtype       (lex_conf_string ()); return CONF; }
-	"define:YYCTXMARKER"          { opts.set_yyctxmarker      (lex_conf_string ()); return CONF; }
-	"define:YYCTYPE"              { opts.set_yyctype          (lex_conf_string ()); return CONF; }
-	"define:YYCURSOR"             { opts.set_yycursor         (lex_conf_string ()); return CONF; }
-	"define:YYDEBUG"              { opts.set_yydebug          (lex_conf_string ()); return CONF; }
-	"define:YYFILL"               { opts.set_fill             (lex_conf_string ()); return CONF; }
-	"define:YYFILL:naked"         { opts.set_fill_naked       (lex_conf_number () != 0); return CONF; }
-	"define:YYFILL@len"           { opts.set_fill_arg         (lex_conf_string ()); return CONF; }
-	"define:YYGETCONDITION"       { opts.set_cond_get         (lex_conf_string ()); return CONF; }
-	"define:YYGETCONDITION:naked" { opts.set_cond_get_naked   (lex_conf_number () != 0); return CONF; }
-	"define:YYGETSTATE"           { opts.set_state_get        (lex_conf_string ()); return CONF; }
-	"define:YYGETSTATE:naked"     { opts.set_state_get_naked  (lex_conf_number () != 0); return CONF; }
-	"define:YYLESSTHAN"           { opts.set_yylessthan       (lex_conf_string ()); return CONF; }
-	"define:YYLIMIT"              { opts.set_yylimit          (lex_conf_string ()); return CONF; }
-	"define:YYMARKER"             { opts.set_yymarker         (lex_conf_string ()); return CONF; }
-	"define:YYPEEK"               { opts.set_yypeek           (lex_conf_string ()); return CONF; }
-	"define:YYRESTORE"            { opts.set_yyrestore        (lex_conf_string ()); return CONF; }
-	"define:YYRESTORECTX"         { opts.set_yyrestorectx     (lex_conf_string ()); return CONF; }
-	"define:YYSETCONDITION"       { opts.set_cond_set         (lex_conf_string ()); return CONF; }
-	"define:YYSETCONDITION@cond"  { opts.set_cond_set_arg     (lex_conf_string ()); return CONF; }
-	"define:YYSETCONDITION:naked" { opts.set_cond_set_naked   (lex_conf_number () != 0); return CONF; }
-	"define:YYSETSTATE"           { opts.set_state_set        (lex_conf_string ()); return CONF; }
-	"define:YYSETSTATE:naked"     { opts.set_state_set_naked  (lex_conf_number () != 0); return CONF; }
-	"define:YYSETSTATE@state"     { opts.set_state_set_arg    (lex_conf_string ()); return CONF; }
-	"define:YYSKIP"               { opts.set_yyskip           (lex_conf_string ()); return CONF; }
-	"flags:" [ewxu8]
-	{
-		Enc::type_t enc = Enc::ASCII;
-		switch (YYCURSOR[-1])
-		{
-			case 'e': enc = Enc::EBCDIC; break;
-			case 'w': enc = Enc::UCS2;   break;
-			case 'x': enc = Enc::UTF16;  break;
-			case 'u': enc = Enc::UTF32;  break;
-			case '8': enc = Enc::UTF8;   break;
-		}
-		const int32_t n = lex_conf_number ();
-		if (n == 0)
-		{
-			opts.unset_encoding (enc);
-		}
-		else if (!opts.set_encoding (enc))
-		{
-			fatalf ("Cannot set %s encoding: please reset %s encoding first"
-				, Enc::name (enc)
-				, Enc::name (opts->encoding.type ()));
-		}
-		return CONF;
-	}
-	"indent:string"               { opts.set_indString        (lex_conf_string ()); return CONF; }
-	"indent:top"
-	{
-		const int32_t n = lex_conf_number ();
-		if (n < 0)
-		{
-			fatal ("configuration 'indent:top' must be nonnegative");
-		}
-		opts.set_topIndent (static_cast<uint32_t> (n));
-		return CONF;
-	}
-	"label:yyFillLabel"           { opts.set_yyfilllabel      (lex_conf_string ()); return CONF; }
-	"label:yyNext"                { opts.set_yynext           (lex_conf_string ()); return CONF; }
-	"labelprefix"                 { opts.set_labelPrefix      (lex_conf_string ()); return CONF; }
-	"state:abort"                 { opts.set_bUseStateAbort   (lex_conf_number () != 0); return CONF; }
-	"state:nextlabel"             { opts.set_bUseStateNext    (lex_conf_number () != 0); return CONF; }
-	"variable:yyaccept"           { opts.set_yyaccept         (lex_conf_string ()); return CONF; }
-	"variable:yybm"               { opts.set_yybm             (lex_conf_string ()); return CONF; }
-	"variable:yych"               { opts.set_yych             (lex_conf_string ()); return CONF; }
-	"variable:yyctable"           { opts.set_yyctable         (lex_conf_string ()); return CONF; }
-	"variable:yystable"           { lex_conf_string (); return CONF; } // deprecated
-	"variable:yytarget"           { opts.set_yytarget         (lex_conf_string ()); return CONF; }
-	"yybm:hex"                    { opts.set_yybmHexTable     (lex_conf_number () != 0); return CONF; }
-	"yych:conversion"             { opts.set_yychConversion   (lex_conf_number () != 0); return CONF; }
-	"yych:emit"                   { opts.set_bEmitYYCh        (lex_conf_number () != 0); return CONF; }
-	"yyfill:check"                { opts.set_fill_check       (lex_conf_number () != 0); return CONF; }
-	"yyfill:enable"               { opts.set_fill_use         (lex_conf_number () != 0); return CONF; }
-	"yyfill:parameter"            { opts.set_fill_arg_use     (lex_conf_number () != 0); return CONF; }
-
-	// try to lex number first, otherwize it would be lexed as a naked string
-	"startlabel" / conf_assign number { out.set_force_start_label (lex_conf_number () != 0); return CONF; }
-	"startlabel"                      { out.set_user_start_label (lex_conf_string ()); return CONF; }
-*/
-}
-
-void Scanner::lex_conf_assign ()
-{
-/*!re2c
-	*           { fatal ("missing '=' in configuration"); }
-	conf_assign { return; }
-*/
-}
-
-void Scanner::lex_conf_semicolon ()
-{
-/*!re2c
-	*          { fatal ("missing ending ';' in configuration"); }
-	space* ";" { return; }
-*/
-}
-
-int32_t Scanner::lex_conf_number ()
-{
-	lex_conf_assign ();
-	tok = cur;
-/*!re2c
-	number
-	{
-		int32_t n = 0;
-		if (!s_to_i32_unsafe (tok, cur, n))
-		{
-			fatal ("configuration value overflow");
-		}
-		lex_conf_semicolon ();
-		return n;
-	}
-*/
-}
-
-std::string Scanner::lex_conf_string ()
-{
-	lex_conf_assign ();
-	std::string s;
-	tok = cur;
-/*!re2c
-	['"]
-	{
-		std::vector<uint32_t> cpoints;
-		lex_cpoints (tok[0], cpoints);
-		s = cpoint_conf (cpoints);
-		goto end;
-	}
-	naked
-	{
-		s = std::string (tok, tok_len ());
-		goto end;
-	}
-*/
-end:
-	lex_conf_semicolon ();
-	return s;
-}
-
-std::string Scanner::cpoint_conf (const std::vector<uint32_t> & cs) const
-{
-	const size_t n = cs.size ();
-	std::string s;
-	for (size_t i = 0; i < n; ++i)
-	{
-		const uint32_t c = cs[i];
-		if (c > 0xFF)
-		{
-			fatalf ("multibyte character in configuration string: 0x%X", c);
-		}
-		else
-		{
-			s += static_cast<char> (c);
-		}
-	}
-	return s;
 }
 
 static void escape (std::string & dest, const std::string & src)

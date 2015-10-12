@@ -59,11 +59,14 @@ private:
 	void fill (uint32_t);
 	void set_sourceline ();
 	void lex_cpoints (char quote, std::vector<uint32_t> & cs);
+
+	void lex_conf ();
 	void lex_conf_assign ();
 	void lex_conf_semicolon ();
 	int32_t lex_conf_number ();
 	std::string lex_conf_string ();
 	std::string cpoint_conf (const std::vector<uint32_t> & cs) const;
+
 	size_t tok_len () const;
 
 public:
