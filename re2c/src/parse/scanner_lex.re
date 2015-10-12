@@ -670,41 +670,43 @@ conf:
 */
 }
 
+void Scanner::lex_conf_assign ()
+{
+/*!re2c
+	*           { fatal ("missing '=' in configuration"); }
+	conf_assign { return; }
+*/
+}
+
+void Scanner::lex_conf_semicolon ()
+{
+/*!re2c
+	*          { fatal ("missing ending ';' in configuration"); }
+	space* ";" { return; }
+*/
+}
+
 int32_t Scanner::lex_conf_number ()
 {
-	int32_t num = 0;
-/*!re2c
-	* { fatal ("missing '=' in configuration"); }
-	conf_assign { goto conf_val; }
-*/
-conf_val:
+	lex_conf_assign ();
 	tok = cur;
 /*!re2c
 	number
 	{
-		if (!s_to_i32_unsafe (tok, cur, num))
+		int32_t n = 0;
+		if (!s_to_i32_unsafe (tok, cur, n))
 		{
 			fatal ("configuration value overflow");
 		}
-		goto conf_semicolon;
+		lex_conf_semicolon ();
+		return n;
 	}
 */
-conf_semicolon:
-/*!re2c
-	* { fatal ("missing ending ';' in configuration"); }
-	space* ";" { goto end; }
-*/
-end:
-	return num;
 }
 
 std::string Scanner::lex_conf_string ()
 {
-/*!re2c
-	* { fatal ("missing '=' in configuration"); }
-	conf_assign { goto conf_val; }
-*/
-conf_val:
+	lex_conf_assign ();
 	std::string s;
 	tok = cur;
 /*!re2c
@@ -713,20 +715,16 @@ conf_val:
 		std::vector<uint32_t> cpoints;
 		lex_cpoints (tok[0], cpoints);
 		s = cpoint_conf (cpoints);
-		goto conf_semicolon;
+		goto end;
 	}
 	naked
 	{
 		s = std::string (tok, tok_len ());
-		goto conf_semicolon;
+		goto end;
 	}
 */
-conf_semicolon:
-/*!re2c
-	* { fatal ("missing ending ';' in configuration"); }
-	space* ";" { goto end; }
-*/
 end:
+	lex_conf_semicolon ();
 	return s;
 }
 
