@@ -21,7 +21,8 @@ detect_cpu_count () {
 }
 
 valgrind=""
-skeleton=""
+skeleton=0
+keep_tmp_files=0
 wine=""
 re2c="./re2c"
 threads=`detect_cpu_count; echo $CPUS`
@@ -30,7 +31,8 @@ for arg in $*
 do
 	case $arg in
 		"--valgrind" ) valgrind=`which valgrind` ;;
-		"--skeleton" ) skeleton="--skeleton" ;;
+		"--skeleton" ) skeleton=1 ;;
+		"--keep-tmp-files" ) keep_tmp_files=1 ;;
 		"--wine" )
 			wine=`which wine`
 			re2c="${re2c}.exe"
@@ -124,7 +126,7 @@ run_pack() {
 
 		local cmd="${valgrind} ${wine} ${re2c} $switches $x"
 
-		if [ x$skeleton == x"--skeleton" ]
+		if [ $skeleton -eq 1 ]
 		then
 			local outc="${outx%.re}.c"
 			cmd="${cmd} --skeleton -Werror-undefined-control-flow -o $outc"
@@ -137,7 +139,7 @@ run_pack() {
 			[ -z $status ] && status="OK"
 			if [ $status = "OK" -o $status = "FAIL_RE2C" ]
 			then
-				rm -f "$outc"{,.line*.{input,keys},.stderr,.out}
+				[ $keep_tmp_files -eq 0 ] && rm -f "$outc"{,.line*.{input,keys},.stderr,.out}
 			else
 				cp -f $x $outx
 				local errcnt=$(($errcnt + 1))
