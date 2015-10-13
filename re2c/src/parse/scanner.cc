@@ -167,10 +167,7 @@ void Scanner::fatalf(const char *fmt, ...) const
 
 Scanner::~Scanner()
 {
-	if (bot)
-	{
-		delete [] bot;
-	}
+	delete [] bot;
 }
 
 void Scanner::reuse()
