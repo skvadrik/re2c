@@ -739,7 +739,7 @@ std:
 
 
 
-#line 743 "<stdout>"
+#line 743 "parse_date.s.c"
 {
 	YYCTYPE yych;
 	unsigned int yyaccept = 0;
@@ -849,7 +849,7 @@ yy3:
 		TIMELIB_DEINIT;
 		return TIMELIB_TIMEZONE;
 	}
-#line 853 "<stdout>"
+#line 853 "parse_date.s.c"
 yy4:
 	yych = *++YYCURSOR;
 	if (yych <= 'E') {
@@ -1107,7 +1107,7 @@ yy12:
 		s->errors++;
 		goto std;
 	}
-#line 1111 "<stdout>"
+#line 1111 "parse_date.s.c"
 yy13:
 	yyaccept = 0;
 	yych = *(YYMARKER = ++YYCURSOR);
@@ -2097,7 +2097,7 @@ yy46:
 	{
 		goto std;
 	}
-#line 2101 "<stdout>"
+#line 2101 "parse_date.s.c"
 yy47:
 	yych = *++YYCURSOR;
 	goto yy46;
@@ -2108,7 +2108,7 @@ yy48:
 		s->pos = cursor; s->line++;
 		goto std;
 	}
-#line 2112 "<stdout>"
+#line 2112 "parse_date.s.c"
 yy50:
 	yych = *++YYCURSOR;
 	goto yy12;
@@ -2401,7 +2401,7 @@ yy69:
 		TIMELIB_DEINIT;
 		return TIMELIB_RELATIVE;
 	}
-#line 2405 "<stdout>"
+#line 2405 "parse_date.s.c"
 yy70:
 	yych = *++YYCURSOR;
 	if (yych == 'D') goto yy71;
@@ -3237,7 +3237,7 @@ yy172:
 		TIMELIB_DEINIT;
 		return TIMELIB_RELATIVE;
 	}
-#line 3241 "<stdout>"
+#line 3241 "parse_date.s.c"
 yy173:
 	yych = *++YYCURSOR;
 	if (yych == 'D') goto yy174;
@@ -4737,7 +4737,7 @@ yy341:
 		TIMELIB_DEINIT;
 		return TIMELIB_WEEKDAY;
 	}
-#line 4741 "<stdout>"
+#line 4741 "parse_date.s.c"
 yy342:
 	yyaccept = 1;
 	yych = *(YYMARKER = ++YYCURSOR);
@@ -4976,7 +4976,7 @@ yy363:
 		TIMELIB_DEINIT;
 		return TIMELIB_DATE_TEXT;
 	}
-#line 4980 "<stdout>"
+#line 4980 "parse_date.s.c"
 yy364:
 	yych = *++YYCURSOR;
 	if (yych <= 'm') {
@@ -5211,7 +5211,7 @@ yy385:
 		TIMELIB_DEINIT;
 		return TIMELIB_SHORTDATE_WITH_TIME;
 	}
-#line 5215 "<stdout>"
+#line 5215 "parse_date.s.c"
 yy386:
 	yyaccept = 7;
 	yych = *(YYMARKER = ++YYCURSOR);
@@ -5505,7 +5505,7 @@ yy420:
 		TIMELIB_DEINIT;
 		return TIMELIB_DATE_NO_DAY;
 	}
-#line 5509 "<stdout>"
+#line 5509 "parse_date.s.c"
 yy421:
 	yyaccept = 6;
 	yych = *(YYMARKER = ++YYCURSOR);
@@ -5855,7 +5855,7 @@ yy446:
 		TIMELIB_DEINIT;
 		return TIMELIB_PG_TEXT;
 	}
-#line 5859 "<stdout>"
+#line 5859 "parse_date.s.c"
 yy447:
 	yych = *++YYCURSOR;
 	if (yych <= '/') goto yy446;
@@ -7144,7 +7144,7 @@ yy526:
 		TIMELIB_DEINIT;
 		return TIMELIB_AGO;
 	}
-#line 7148 "<stdout>"
+#line 7148 "parse_date.s.c"
 yy527:
 	yyaccept = 1;
 	yych = *(YYMARKER = ++YYCURSOR);
@@ -9030,7 +9030,7 @@ yy620:
 		TIMELIB_DEINIT;
 		return TIMELIB_DATE_TEXT;
 	}
-#line 9034 "<stdout>"
+#line 9034 "parse_date.s.c"
 yy621:
 	yyaccept = 10;
 	yych = *(YYMARKER = ++YYCURSOR);
@@ -9141,7 +9141,7 @@ yy631:
 		TIMELIB_DEINIT;
 		return TIMELIB_TIME12;
 	}
-#line 9145 "<stdout>"
+#line 9145 "parse_date.s.c"
 yy632:
 	yych = *++YYCURSOR;
 	goto yy631;
@@ -9178,7 +9178,7 @@ yy634:
 		TIMELIB_DEINIT;
 		return TIMELIB_TIME24_WITH_ZONE;
 	}
-#line 9182 "<stdout>"
+#line 9182 "parse_date.s.c"
 yy635:
 	yyaccept = 11;
 	yych = *(YYMARKER = ++YYCURSOR);
@@ -9380,7 +9380,7 @@ yy660:
 		TIMELIB_DEINIT;
 		return TIMELIB_DATE_FULL;
 	}
-#line 9384 "<stdout>"
+#line 9384 "parse_date.s.c"
 yy661:
 	yych = *++YYCURSOR;
 	if (yych == 'M') goto yy662;
@@ -9905,7 +9905,7 @@ yy729:
 		TIMELIB_DEINIT;
 		return TIMELIB_DATE_FULL_POINTED;
 	}
-#line 9909 "<stdout>"
+#line 9909 "parse_date.s.c"
 yy730:
 	yych = *++YYCURSOR;
 	if (yych <= '/') goto yy729;
@@ -10433,7 +10433,7 @@ yy775:
 		TIMELIB_DEINIT;
 		return TIMELIB_ISO_DATE;
 	}
-#line 10437 "<stdout>"
+#line 10437 "parse_date.s.c"
 yy776:
 	yyaccept = 12;
 	yych = *(YYMARKER = ++YYCURSOR);
@@ -10515,7 +10515,7 @@ yy784:
 		TIMELIB_DEINIT;
 		return TIMELIB_AMERICAN;
 	}
-#line 10519 "<stdout>"
+#line 10519 "parse_date.s.c"
 yy785:
 	yyaccept = 13;
 	yych = *(YYMARKER = ++YYCURSOR);
@@ -10718,7 +10718,7 @@ yy817:
 		TIMELIB_DEINIT;
 		return TIMELIB_CLF;
 	}
-#line 10722 "<stdout>"
+#line 10722 "parse_date.s.c"
 yy818:
 	yych = *++YYCURSOR;
 	if (yych <= '5') {
@@ -11051,7 +11051,7 @@ yy867:
 		TIMELIB_DEINIT;
 		return TIMELIB_PG_TEXT;
 	}
-#line 11055 "<stdout>"
+#line 11055 "parse_date.s.c"
 yy869:
 	yych = *++YYCURSOR;
 	if (yych == 'V') goto yy862;
@@ -11195,7 +11195,7 @@ yy880:
 		TIMELIB_DEINIT;
 		return TIMELIB_CLF;
 	}
-#line 11199 "<stdout>"
+#line 11199 "parse_date.s.c"
 yy881:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -11354,7 +11354,7 @@ yy889:
 		TIMELIB_DEINIT;
 		return TIMELIB_DATE_NO_DAY;
 	}
-#line 11358 "<stdout>"
+#line 11358 "parse_date.s.c"
 yy890:
 	yych = *++YYCURSOR;
 	if (yych == 'I') goto yy1021;
@@ -11564,7 +11564,7 @@ yy910:
 		TIMELIB_DEINIT;
 		return TIMELIB_ISO_WEEK;
 	}
-#line 11568 "<stdout>"
+#line 11568 "parse_date.s.c"
 yy911:
 	++YYCURSOR;
 #line 1200 "parse_date.s.re"
@@ -11585,7 +11585,7 @@ yy911:
 		TIMELIB_DEINIT;
 		return TIMELIB_ISO_WEEK;
 	}
-#line 11589 "<stdout>"
+#line 11589 "parse_date.s.c"
 yy913:
 	yych = *++YYCURSOR;
 	if (yych <= '/') goto yy57;
@@ -11643,7 +11643,7 @@ yy916:
 		TIMELIB_DEINIT;
 		return TIMELIB_PG_YEARDAY;
 	}
-#line 11647 "<stdout>"
+#line 11647 "parse_date.s.c"
 yy917:
 	yych = *++YYCURSOR;
 	if (yych <= '/') goto yy57;
@@ -11748,7 +11748,7 @@ yy937:
 		TIMELIB_DEINIT;
 		return TIMELIB_XMLRPC_SOAP;
 	}
-#line 11752 "<stdout>"
+#line 11752 "parse_date.s.c"
 yy938:
 	yych = *++YYCURSOR;
 	if (yych <= '2') {
@@ -11903,7 +11903,7 @@ yy943:
 		TIMELIB_DEINIT;
 		return TIMELIB_DATE_NOCOLON;
 	}
-#line 11907 "<stdout>"
+#line 11907 "parse_date.s.c"
 yy944:
 	yych = *++YYCURSOR;
 	if (yych <= 'H') {
@@ -12464,7 +12464,7 @@ yy1043:
 		TIMELIB_DEINIT;
 		return TIMELIB_ISO_DATE;
 	}
-#line 12468 "<stdout>"
+#line 12468 "parse_date.s.c"
 yy1044:
 	yyaccept = 18;
 	yych = *(YYMARKER = ++YYCURSOR);
@@ -13447,7 +13447,7 @@ yy1146:
 		TIMELIB_DEINIT;
 		return TIMELIB_GNU_NOCOLON;
 	}
-#line 13451 "<stdout>"
+#line 13451 "parse_date.s.c"
 yy1147:
 	yych = *++YYCURSOR;
 	if (yych <= '/') goto yy57;
@@ -13534,7 +13534,7 @@ yy1154:
 		TIMELIB_DEINIT;
 		return TIMELIB_ISO_NOCOLON;
 	}
-#line 13538 "<stdout>"
+#line 13538 "parse_date.s.c"
 yy1155:
 	yyaccept = 21;
 	yych = *(YYMARKER = ++YYCURSOR);
@@ -13923,7 +13923,7 @@ yy1179:
 		TIMELIB_DEINIT;
 		return TIMELIB_RELATIVE;
 	}
-#line 13927 "<stdout>"
+#line 13927 "parse_date.s.c"
 yy1180:
 	yych = *++YYCURSOR;
 	if (yych <= 'N') {
@@ -14188,7 +14188,7 @@ yy1200:
 		TIMELIB_DEINIT;
 		return TIMELIB_RELATIVE;
 	}
-#line 14192 "<stdout>"
+#line 14192 "parse_date.s.c"
 yy1201:
 	yych = *++YYCURSOR;
 	if (yych <= 'X') {
@@ -14210,7 +14210,7 @@ yy1203:
 		TIMELIB_DEINIT;
 		return TIMELIB_RELATIVE;
 	}
-#line 14214 "<stdout>"
+#line 14214 "parse_date.s.c"
 yy1204:
 	yych = *++YYCURSOR;
 	if (yych <= 'R') {
@@ -15510,7 +15510,7 @@ yy1279:
 		TIMELIB_DEINIT;
 		return TIMELIB_RELATIVE;
 	}
-#line 15514 "<stdout>"
+#line 15514 "parse_date.s.c"
 yy1280:
 	yych = *++YYCURSOR;
 	if (yych <= 'N') {
@@ -15599,7 +15599,7 @@ yy1287:
 		TIMELIB_DEINIT;
 		return TIMELIB_RELATIVE;
 	}
-#line 15603 "<stdout>"
+#line 15603 "parse_date.s.c"
 yy1288:
 	yyaccept = 1;
 	yych = *(YYMARKER = ++YYCURSOR);
@@ -15995,7 +15995,7 @@ yy1310:
 		TIMELIB_DEINIT;
 		return TIMELIB_RELATIVE;
 	}
-#line 15999 "<stdout>"
+#line 15999 "parse_date.s.c"
 yy1311:
 	yyaccept = 1;
 	yych = *(YYMARKER = ++YYCURSOR);

@@ -83,7 +83,7 @@ int scan(FILE *fp)
 	{
 		s.tok = s.cur;
 
-#line 87 "<stdout>"
+#line 87 "strip_002.s.c"
 		{
 			YYCTYPE yych;
 			if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
@@ -95,7 +95,7 @@ int scan(FILE *fp)
 yy3:
 #line 121 "strip_002.s.re"
 			{ fputc(*s.tok, stdout); continue; }
-#line 99 "<stdout>"
+#line 99 "strip_002.s.c"
 yy4:
 			yych = *++YYCURSOR;
 			goto yy3;
@@ -103,19 +103,19 @@ yy5:
 			++YYCURSOR;
 #line 120 "strip_002.s.re"
 			{ goto comment; }
-#line 107 "<stdout>"
+#line 107 "strip_002.s.c"
 yy7:
 			++YYCURSOR;
 #line 119 "strip_002.s.re"
 			{ goto cppcomment; }
-#line 112 "<stdout>"
+#line 112 "strip_002.s.c"
 		}
 #line 122 "strip_002.s.re"
 
 comment:
 		s.tok = s.cur;
 
-#line 119 "<stdout>"
+#line 119 "strip_002.s.c"
 		{
 			YYCTYPE yych;
 			if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
@@ -126,7 +126,7 @@ comment:
 yy12:
 #line 127 "strip_002.s.re"
 			{ goto comment; }
-#line 130 "<stdout>"
+#line 130 "strip_002.s.c"
 yy13:
 			yych = *++YYCURSOR;
 			goto yy12;
@@ -134,14 +134,14 @@ yy14:
 			++YYCURSOR;
 #line 126 "strip_002.s.re"
 			{ goto commentws; }
-#line 138 "<stdout>"
+#line 138 "strip_002.s.c"
 		}
 #line 128 "strip_002.s.re"
 
 commentws:
 		s.tok = s.cur;
 
-#line 145 "<stdout>"
+#line 145 "strip_002.s.c"
 		{
 			YYCTYPE yych;
 			if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
@@ -162,13 +162,13 @@ yy18:
 yy19:
 #line 133 "strip_002.s.re"
 			{ goto commentws; }
-#line 166 "<stdout>"
+#line 166 "strip_002.s.c"
 yy20:
 			++YYCURSOR;
 yy21:
 #line 132 "strip_002.s.re"
 			{ echo(&s); continue; }
-#line 172 "<stdout>"
+#line 172 "strip_002.s.c"
 yy22:
 			yych = *++YYCURSOR;
 			goto yy19;
@@ -176,7 +176,7 @@ yy23:
 			++YYCURSOR;
 #line 134 "strip_002.s.re"
 			{ echo(&s); continue; }
-#line 180 "<stdout>"
+#line 180 "strip_002.s.c"
 yy25:
 			++YYCURSOR;
 			yych = *YYCURSOR;
@@ -187,7 +187,7 @@ yy25:
 cppcomment:
 		s.tok = s.cur;
 
-#line 191 "<stdout>"
+#line 191 "strip_002.s.c"
 		{
 			YYCTYPE yych;
 			if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
@@ -199,13 +199,13 @@ cppcomment:
 yy29:
 #line 140 "strip_002.s.re"
 			{ goto cppcomment; }
-#line 203 "<stdout>"
+#line 203 "strip_002.s.c"
 yy30:
 			++YYCURSOR;
 yy31:
 #line 139 "strip_002.s.re"
 			{ echo(&s); continue; }
-#line 209 "<stdout>"
+#line 209 "strip_002.s.c"
 yy32:
 			yych = *++YYCURSOR;
 			goto yy29;

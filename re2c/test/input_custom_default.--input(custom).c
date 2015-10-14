@@ -14,7 +14,7 @@ bool lex (const char * cursor, const char * const limit)
 #   define YYLESSTHAN(n)  limit - cursor < n
 #   define YYFILL(n)      {}
     
-#line 18 "<stdout>"
+#line 18 "input_custom_default.--input(custom).c"
 {
 	YYCTYPE yych;
 	if (YYLESSTHAN (13)) YYFILL(13);
@@ -28,7 +28,7 @@ yy2:
 yy3:
 #line 16 "input_custom_default.--input(custom).re"
 	{ return false; }
-#line 32 "<stdout>"
+#line 32 "input_custom_default.--input(custom).c"
 yy4:
 	YYSKIP ();
 	YYBACKUP ();
@@ -150,7 +150,7 @@ yy19:
 	YYRESTORECTX ();
 #line 15 "input_custom_default.--input(custom).re"
 	{ return true; }
-#line 154 "<stdout>"
+#line 154 "input_custom_default.--input(custom).c"
 }
 #line 17 "input_custom_default.--input(custom).re"
 

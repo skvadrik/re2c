@@ -65,7 +65,7 @@ int scan(char *s)
 	{
 		t = p;
 
-#line 69 "<stdout>"
+#line 69 "calc_007.b.c"
 		{
 			YYCTYPE yych;
 			static const unsigned char yybm[] = {
@@ -128,7 +128,7 @@ int scan(char *s)
 yy3:
 #line 80 "calc_007.b.re"
 			{ continue; }
-#line 132 "<stdout>"
+#line 132 "calc_007.b.c"
 yy4:
 			++YYCURSOR;
 			if ((yych = *YYCURSOR) <= '/') goto yy5;
@@ -136,7 +136,7 @@ yy4:
 yy5:
 #line 82 "calc_007.b.re"
 			{ res = push_num(t, p, 10); continue; }
-#line 140 "<stdout>"
+#line 140 "calc_007.b.c"
 yy6:
 			yych = *++YYCURSOR;
 			goto yy16;
@@ -144,22 +144,22 @@ yy7:
 			++YYCURSOR;
 #line 83 "calc_007.b.re"
 			{ res = stack_add();		continue; }
-#line 148 "<stdout>"
+#line 148 "calc_007.b.c"
 yy9:
 			++YYCURSOR;
 #line 84 "calc_007.b.re"
 			{ res = stack_sub();		continue; }
-#line 153 "<stdout>"
+#line 153 "calc_007.b.c"
 yy11:
 			++YYCURSOR;
 #line 85 "calc_007.b.re"
 			{ res = depth == 1 ? 0 : 2;	break; }
-#line 158 "<stdout>"
+#line 158 "calc_007.b.c"
 yy13:
 			++YYCURSOR;
 #line 86 "calc_007.b.re"
 			{ res = 1; 					continue; }
-#line 163 "<stdout>"
+#line 163 "calc_007.b.c"
 yy15:
 			++YYCURSOR;
 			yych = *YYCURSOR;
@@ -176,7 +176,7 @@ yy17:
 yy19:
 #line 81 "calc_007.b.re"
 			{ res = push_num(t, p, 8);	continue; }
-#line 180 "<stdout>"
+#line 180 "calc_007.b.c"
 yy20:
 			++YYCURSOR;
 			yych = *YYCURSOR;

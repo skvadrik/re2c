@@ -128,7 +128,7 @@ int lex_line126_Comment ()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("<stdout>.line126_Comment.input"
+        ("condition_10.Scgif.c.line126_Comment.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -140,7 +140,7 @@ int lex_line126_Comment ()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("<stdout>.line126_Comment.keys"
+        ("condition_10.Scgif.c.line126_Comment.keys"
         , 3 * sizeof (YYKEYTYPE)
         , 0
         , &keys_count
@@ -277,7 +277,7 @@ int lex_line126_Normal ()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("<stdout>.line126_Normal.input"
+        ("condition_10.Scgif.c.line126_Normal.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -289,7 +289,7 @@ int lex_line126_Normal ()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("<stdout>.line126_Normal.keys"
+        ("condition_10.Scgif.c.line126_Normal.keys"
         , 3 * sizeof (YYKEYTYPE)
         , 0
         , &keys_count
@@ -583,7 +583,7 @@ int lex_line126_Skiptoeol ()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("<stdout>.line126_Skiptoeol.input"
+        ("condition_10.Scgif.c.line126_Skiptoeol.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -595,7 +595,7 @@ int lex_line126_Skiptoeol ()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("<stdout>.line126_Skiptoeol.keys"
+        ("condition_10.Scgif.c.line126_Skiptoeol.keys"
         , 3 * sizeof (YYKEYTYPE)
         , 0
         , &keys_count
@@ -814,7 +814,7 @@ int lex_line126_String ()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("<stdout>.line126_String.input"
+        ("condition_10.Scgif.c.line126_String.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -826,7 +826,7 @@ int lex_line126_String ()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("<stdout>.line126_String.keys"
+        ("condition_10.Scgif.c.line126_String.keys"
         , 3 * sizeof (YYKEYTYPE)
         , 0
         , &keys_count

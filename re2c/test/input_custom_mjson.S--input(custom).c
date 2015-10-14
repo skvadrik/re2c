@@ -125,7 +125,7 @@ int lex_line626 ()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("<stdout>.line626.input"
+        ("input_custom_mjson.S--input(custom).c.line626.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -137,7 +137,7 @@ int lex_line626 ()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("<stdout>.line626.keys"
+        ("input_custom_mjson.S--input(custom).c.line626.keys"
         , 3 * sizeof (YYKEYTYPE)
         , 0
         , &keys_count
@@ -2065,7 +2065,7 @@ int lex_line813 ()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("<stdout>.line813.input"
+        ("input_custom_mjson.S--input(custom).c.line813.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -2077,7 +2077,7 @@ int lex_line813 ()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("<stdout>.line813.keys"
+        ("input_custom_mjson.S--input(custom).c.line813.keys"
         , 3 * sizeof (YYKEYTYPE)
         , 0
         , &keys_count

@@ -9,7 +9,7 @@ bool scan(const YYCTYPE * start, const YYCTYPE * const limit)
 #	define YYCURSOR start
 Pi:
 	
-#line 13 "<stdout>"
+#line 13 "unicode_group_Pi.8--encoding-policy(fail).c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -23,7 +23,7 @@ yy2:
 yy3:
 #line 13 "unicode_group_Pi.8--encoding-policy(fail).re"
 	{ return YYCURSOR == limit; }
-#line 27 "<stdout>"
+#line 27 "unicode_group_Pi.8--encoding-policy(fail).c"
 yy4:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -65,7 +65,7 @@ yy9:
 	++YYCURSOR;
 #line 12 "unicode_group_Pi.8--encoding-policy(fail).re"
 	{ goto Pi; }
-#line 69 "<stdout>"
+#line 69 "unicode_group_Pi.8--encoding-policy(fail).c"
 }
 #line 14 "unicode_group_Pi.8--encoding-policy(fail).re"
 

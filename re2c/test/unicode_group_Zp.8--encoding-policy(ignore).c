@@ -9,7 +9,7 @@ bool scan(const YYCTYPE * start, const YYCTYPE * const limit)
 #	define YYCURSOR start
 Zp:
 	
-#line 13 "<stdout>"
+#line 13 "unicode_group_Zp.8--encoding-policy(ignore).c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -22,7 +22,7 @@ yy2:
 yy3:
 #line 13 "unicode_group_Zp.8--encoding-policy(ignore).re"
 	{ return YYCURSOR == limit; }
-#line 26 "<stdout>"
+#line 26 "unicode_group_Zp.8--encoding-policy(ignore).c"
 yy4:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -42,7 +42,7 @@ yy7:
 	++YYCURSOR;
 #line 12 "unicode_group_Zp.8--encoding-policy(ignore).re"
 	{ goto Zp; }
-#line 46 "<stdout>"
+#line 46 "unicode_group_Zp.8--encoding-policy(ignore).c"
 }
 #line 14 "unicode_group_Zp.8--encoding-policy(ignore).re"
 

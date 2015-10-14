@@ -123,7 +123,7 @@ int lex_line108 ()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("<stdout>.line108.input"
+        ("php20150211_phar_path_check.Sig.c.line108.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -135,7 +135,7 @@ int lex_line108 ()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("<stdout>.line108.keys"
+        ("php20150211_phar_path_check.Sig.c.line108.keys"
         , 3 * sizeof (YYKEYTYPE)
         , 0
         , &keys_count

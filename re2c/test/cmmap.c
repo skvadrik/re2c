@@ -109,7 +109,7 @@ std:
 
 
 
-#line 113 "<stdout>"
+#line 113 "cmmap.c"
 {
 	YYCTYPE yych;
 	unsigned int yyaccept = 0;
@@ -222,7 +222,7 @@ yy2:
 yy3:
 #line 205 "cmmap.re"
 	{ RET('/'); }
-#line 226 "<stdout>"
+#line 226 "cmmap.c"
 yy4:
 	++YYCURSOR;
 	switch ((yych = *YYCURSOR)) {
@@ -232,7 +232,7 @@ yy4:
 yy5:
 #line 154 "cmmap.re"
 	{ RET(ID); }
-#line 236 "<stdout>"
+#line 236 "cmmap.c"
 yy6:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -345,7 +345,7 @@ yy21:
 yy22:
 #line 158 "cmmap.re"
 	{ RET(ICON); }
-#line 349 "<stdout>"
+#line 349 "cmmap.c"
 yy23:
 	yyaccept = 0;
 	yych = *(YYMARKER = ++YYCURSOR);
@@ -363,7 +363,7 @@ yy25:
 		printf("unexpected character: %c\n", *s->tok);
 		goto std;
 	    }
-#line 367 "<stdout>"
+#line 367 "cmmap.c"
 yy26:
 	yyaccept = 2;
 	yych = *(YYMARKER = ++YYCURSOR);
@@ -384,7 +384,7 @@ yy26:
 yy27:
 #line 198 "cmmap.re"
 	{ RET('.'); }
-#line 388 "<stdout>"
+#line 388 "cmmap.c"
 yy28:
 	yyaccept = 1;
 	yych = *(YYMARKER = ++YYCURSOR);
@@ -402,7 +402,7 @@ yy29:
 yy30:
 #line 208 "cmmap.re"
 	{ RET('>'); }
-#line 406 "<stdout>"
+#line 406 "cmmap.c"
 yy31:
 	++YYCURSOR;
 	switch ((yych = *YYCURSOR)) {
@@ -413,7 +413,7 @@ yy31:
 yy32:
 #line 207 "cmmap.re"
 	{ RET('<'); }
-#line 417 "<stdout>"
+#line 417 "cmmap.c"
 yy33:
 	++YYCURSOR;
 	switch ((yych = *YYCURSOR)) {
@@ -424,7 +424,7 @@ yy33:
 yy34:
 #line 203 "cmmap.re"
 	{ RET('+'); }
-#line 428 "<stdout>"
+#line 428 "cmmap.c"
 yy35:
 	++YYCURSOR;
 	switch ((yych = *YYCURSOR)) {
@@ -436,7 +436,7 @@ yy35:
 yy36:
 #line 202 "cmmap.re"
 	{ RET('-'); }
-#line 440 "<stdout>"
+#line 440 "cmmap.c"
 yy37:
 	++YYCURSOR;
 	switch ((yych = *YYCURSOR)) {
@@ -446,7 +446,7 @@ yy37:
 yy38:
 #line 204 "cmmap.re"
 	{ RET('*'); }
-#line 450 "<stdout>"
+#line 450 "cmmap.c"
 yy39:
 	++YYCURSOR;
 	switch ((yych = *YYCURSOR)) {
@@ -456,7 +456,7 @@ yy39:
 yy40:
 #line 206 "cmmap.re"
 	{ RET('%'); }
-#line 460 "<stdout>"
+#line 460 "cmmap.c"
 yy41:
 	++YYCURSOR;
 	switch ((yych = *YYCURSOR)) {
@@ -467,7 +467,7 @@ yy41:
 yy42:
 #line 199 "cmmap.re"
 	{ RET('&'); }
-#line 471 "<stdout>"
+#line 471 "cmmap.c"
 yy43:
 	++YYCURSOR;
 	switch ((yych = *YYCURSOR)) {
@@ -477,7 +477,7 @@ yy43:
 yy44:
 #line 209 "cmmap.re"
 	{ RET('^'); }
-#line 481 "<stdout>"
+#line 481 "cmmap.c"
 yy45:
 	++YYCURSOR;
 	switch ((yych = *YYCURSOR)) {
@@ -488,7 +488,7 @@ yy45:
 yy46:
 #line 210 "cmmap.re"
 	{ RET('|'); }
-#line 492 "<stdout>"
+#line 492 "cmmap.c"
 yy47:
 	++YYCURSOR;
 	switch ((yych = *YYCURSOR)) {
@@ -498,7 +498,7 @@ yy47:
 yy48:
 #line 193 "cmmap.re"
 	{ RET('='); }
-#line 502 "<stdout>"
+#line 502 "cmmap.c"
 yy49:
 	++YYCURSOR;
 	switch ((yych = *YYCURSOR)) {
@@ -508,62 +508,62 @@ yy49:
 yy50:
 #line 200 "cmmap.re"
 	{ RET('!'); }
-#line 512 "<stdout>"
+#line 512 "cmmap.c"
 yy51:
 	++YYCURSOR;
 #line 188 "cmmap.re"
 	{ RET(';'); }
-#line 517 "<stdout>"
+#line 517 "cmmap.c"
 yy53:
 	++YYCURSOR;
 #line 189 "cmmap.re"
 	{ RET('{'); }
-#line 522 "<stdout>"
+#line 522 "cmmap.c"
 yy55:
 	++YYCURSOR;
 #line 190 "cmmap.re"
 	{ RET('}'); }
-#line 527 "<stdout>"
+#line 527 "cmmap.c"
 yy57:
 	++YYCURSOR;
 #line 191 "cmmap.re"
 	{ RET(','); }
-#line 532 "<stdout>"
+#line 532 "cmmap.c"
 yy59:
 	++YYCURSOR;
 #line 192 "cmmap.re"
 	{ RET(':'); }
-#line 537 "<stdout>"
+#line 537 "cmmap.c"
 yy61:
 	++YYCURSOR;
 #line 194 "cmmap.re"
 	{ RET('('); }
-#line 542 "<stdout>"
+#line 542 "cmmap.c"
 yy63:
 	++YYCURSOR;
 #line 195 "cmmap.re"
 	{ RET(')'); }
-#line 547 "<stdout>"
+#line 547 "cmmap.c"
 yy65:
 	++YYCURSOR;
 #line 196 "cmmap.re"
 	{ RET('['); }
-#line 552 "<stdout>"
+#line 552 "cmmap.c"
 yy67:
 	++YYCURSOR;
 #line 197 "cmmap.re"
 	{ RET(']'); }
-#line 557 "<stdout>"
+#line 557 "cmmap.c"
 yy69:
 	++YYCURSOR;
 #line 201 "cmmap.re"
 	{ RET('~'); }
-#line 562 "<stdout>"
+#line 562 "cmmap.c"
 yy71:
 	++YYCURSOR;
 #line 211 "cmmap.re"
 	{ RET('?'); }
-#line 567 "<stdout>"
+#line 567 "cmmap.c"
 yy73:
 	++YYCURSOR;
 	yych = *YYCURSOR;
@@ -571,7 +571,7 @@ yy73:
 yy74:
 #line 214 "cmmap.re"
 	{ goto std; }
-#line 575 "<stdout>"
+#line 575 "cmmap.c"
 yy75:
 	++YYCURSOR;
 #line 217 "cmmap.re"
@@ -580,7 +580,7 @@ yy75:
 		s->pos = cursor; s->line++;
 		goto std;
 	    }
-#line 584 "<stdout>"
+#line 584 "cmmap.c"
 yy77:
 	yych = *++YYCURSOR;
 	goto yy25;
@@ -600,77 +600,77 @@ yy80:
 	++YYCURSOR;
 #line 187 "cmmap.re"
 	{ RET(NEQ); }
-#line 604 "<stdout>"
+#line 604 "cmmap.c"
 yy82:
 	++YYCURSOR;
 #line 186 "cmmap.re"
 	{ RET(EQL); }
-#line 609 "<stdout>"
+#line 609 "cmmap.c"
 yy84:
 	++YYCURSOR;
 #line 183 "cmmap.re"
 	{ RET(OROR); }
-#line 614 "<stdout>"
+#line 614 "cmmap.c"
 yy86:
 	++YYCURSOR;
 #line 176 "cmmap.re"
 	{ RET(OREQ); }
-#line 619 "<stdout>"
+#line 619 "cmmap.c"
 yy88:
 	++YYCURSOR;
 #line 175 "cmmap.re"
 	{ RET(XOREQ); }
-#line 624 "<stdout>"
+#line 624 "cmmap.c"
 yy90:
 	++YYCURSOR;
 #line 182 "cmmap.re"
 	{ RET(ANDAND); }
-#line 629 "<stdout>"
+#line 629 "cmmap.c"
 yy92:
 	++YYCURSOR;
 #line 174 "cmmap.re"
 	{ RET(ANDEQ); }
-#line 634 "<stdout>"
+#line 634 "cmmap.c"
 yy94:
 	++YYCURSOR;
 #line 173 "cmmap.re"
 	{ RET(MODEQ); }
-#line 639 "<stdout>"
+#line 639 "cmmap.c"
 yy96:
 	++YYCURSOR;
 #line 171 "cmmap.re"
 	{ RET(MULEQ); }
-#line 644 "<stdout>"
+#line 644 "cmmap.c"
 yy98:
 	++YYCURSOR;
 #line 181 "cmmap.re"
 	{ RET(DEREF); }
-#line 649 "<stdout>"
+#line 649 "cmmap.c"
 yy100:
 	++YYCURSOR;
 #line 180 "cmmap.re"
 	{ RET(DECR); }
-#line 654 "<stdout>"
+#line 654 "cmmap.c"
 yy102:
 	++YYCURSOR;
 #line 170 "cmmap.re"
 	{ RET(SUBEQ); }
-#line 659 "<stdout>"
+#line 659 "cmmap.c"
 yy104:
 	++YYCURSOR;
 #line 179 "cmmap.re"
 	{ RET(INCR); }
-#line 664 "<stdout>"
+#line 664 "cmmap.c"
 yy106:
 	++YYCURSOR;
 #line 169 "cmmap.re"
 	{ RET(ADDEQ); }
-#line 669 "<stdout>"
+#line 669 "cmmap.c"
 yy108:
 	++YYCURSOR;
 #line 184 "cmmap.re"
 	{ RET(LEQ); }
-#line 674 "<stdout>"
+#line 674 "cmmap.c"
 yy110:
 	++YYCURSOR;
 	switch ((yych = *YYCURSOR)) {
@@ -680,17 +680,17 @@ yy110:
 yy111:
 #line 178 "cmmap.re"
 	{ RET(LSHIFT); }
-#line 684 "<stdout>"
+#line 684 "cmmap.c"
 yy112:
 	++YYCURSOR;
 #line 168 "cmmap.re"
 	{ RET(LSHIFTEQ); }
-#line 689 "<stdout>"
+#line 689 "cmmap.c"
 yy114:
 	++YYCURSOR;
 #line 185 "cmmap.re"
 	{ RET(GEQ); }
-#line 694 "<stdout>"
+#line 694 "cmmap.c"
 yy116:
 	++YYCURSOR;
 	switch ((yych = *YYCURSOR)) {
@@ -700,12 +700,12 @@ yy116:
 yy117:
 #line 177 "cmmap.re"
 	{ RET(RSHIFT); }
-#line 704 "<stdout>"
+#line 704 "cmmap.c"
 yy118:
 	++YYCURSOR;
 #line 167 "cmmap.re"
 	{ RET(RSHIFTEQ); }
-#line 709 "<stdout>"
+#line 709 "cmmap.c"
 yy120:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
@@ -756,7 +756,7 @@ yy124:
 	++YYCURSOR;
 #line 164 "cmmap.re"
 	{ RET(SCON); }
-#line 760 "<stdout>"
+#line 760 "cmmap.c"
 yy126:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
@@ -869,7 +869,7 @@ yy132:
 yy134:
 #line 161 "cmmap.re"
 	{ RET(FCON); }
-#line 873 "<stdout>"
+#line 873 "cmmap.c"
 yy135:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -930,7 +930,7 @@ yy140:
 	++YYCURSOR;
 #line 166 "cmmap.re"
 	{ RET(ELLIPSIS); }
-#line 934 "<stdout>"
+#line 934 "cmmap.c"
 yy142:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
@@ -1548,7 +1548,7 @@ yy184:
 yy185:
 #line 152 "cmmap.re"
 	{ RET(WHILE); }
-#line 1552 "<stdout>"
+#line 1552 "cmmap.c"
 yy186:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -1663,7 +1663,7 @@ yy193:
 yy194:
 #line 151 "cmmap.re"
 	{ RET(VOLATILE); }
-#line 1667 "<stdout>"
+#line 1667 "cmmap.c"
 yy195:
 	++YYCURSOR;
 	switch ((yych = *YYCURSOR)) {
@@ -1735,7 +1735,7 @@ yy195:
 yy196:
 #line 150 "cmmap.re"
 	{ RET(VOID); }
-#line 1739 "<stdout>"
+#line 1739 "cmmap.c"
 yy197:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -1850,7 +1850,7 @@ yy204:
 yy205:
 #line 149 "cmmap.re"
 	{ RET(UNSIGNED); }
-#line 1854 "<stdout>"
+#line 1854 "cmmap.c"
 yy206:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -1928,7 +1928,7 @@ yy207:
 yy208:
 #line 148 "cmmap.re"
 	{ RET(UNION); }
-#line 1932 "<stdout>"
+#line 1932 "cmmap.c"
 yy209:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -2030,7 +2030,7 @@ yy214:
 yy215:
 #line 147 "cmmap.re"
 	{ RET(TYPEDEF); }
-#line 2034 "<stdout>"
+#line 2034 "cmmap.c"
 yy216:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -2146,7 +2146,7 @@ yy223:
 yy224:
 #line 146 "cmmap.re"
 	{ RET(SWITCH); }
-#line 2150 "<stdout>"
+#line 2150 "cmmap.c"
 yy225:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -2242,7 +2242,7 @@ yy229:
 yy230:
 #line 145 "cmmap.re"
 	{ RET(STRUCT); }
-#line 2246 "<stdout>"
+#line 2246 "cmmap.c"
 yy231:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -2326,7 +2326,7 @@ yy233:
 yy234:
 #line 144 "cmmap.re"
 	{ RET(STATIC); }
-#line 2330 "<stdout>"
+#line 2330 "cmmap.c"
 yy235:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -2422,7 +2422,7 @@ yy239:
 yy240:
 #line 143 "cmmap.re"
 	{ RET(SIZEOF); }
-#line 2426 "<stdout>"
+#line 2426 "cmmap.c"
 yy241:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -2506,7 +2506,7 @@ yy243:
 yy244:
 #line 142 "cmmap.re"
 	{ RET(SIGNED); }
-#line 2510 "<stdout>"
+#line 2510 "cmmap.c"
 yy245:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -2590,7 +2590,7 @@ yy247:
 yy248:
 #line 141 "cmmap.re"
 	{ RET(SHORT); }
-#line 2594 "<stdout>"
+#line 2594 "cmmap.c"
 yy249:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -2693,7 +2693,7 @@ yy254:
 yy255:
 #line 140 "cmmap.re"
 	{ RET(RETURN); }
-#line 2697 "<stdout>"
+#line 2697 "cmmap.c"
 yy256:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -2789,7 +2789,7 @@ yy260:
 yy261:
 #line 139 "cmmap.re"
 	{ RET(REGISTER); }
-#line 2793 "<stdout>"
+#line 2793 "cmmap.c"
 yy262:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -2873,7 +2873,7 @@ yy264:
 yy265:
 #line 138 "cmmap.re"
 	{ RET(LONG); }
-#line 2877 "<stdout>"
+#line 2877 "cmmap.c"
 yy266:
 	++YYCURSOR;
 	switch ((yych = *YYCURSOR)) {
@@ -2945,7 +2945,7 @@ yy266:
 yy267:
 #line 136 "cmmap.re"
 	{ RET(IF); }
-#line 2949 "<stdout>"
+#line 2949 "cmmap.c"
 yy268:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -3023,7 +3023,7 @@ yy269:
 yy270:
 #line 137 "cmmap.re"
 	{ RET(INT); }
-#line 3027 "<stdout>"
+#line 3027 "cmmap.c"
 yy271:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -3107,7 +3107,7 @@ yy273:
 yy274:
 #line 135 "cmmap.re"
 	{ RET(GOTO); }
-#line 3111 "<stdout>"
+#line 3111 "cmmap.c"
 yy275:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -3191,7 +3191,7 @@ yy277:
 yy278:
 #line 134 "cmmap.re"
 	{ RET(FOR); }
-#line 3195 "<stdout>"
+#line 3195 "cmmap.c"
 yy279:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -3275,7 +3275,7 @@ yy281:
 yy282:
 #line 133 "cmmap.re"
 	{ RET(FLOAT); }
-#line 3279 "<stdout>"
+#line 3279 "cmmap.c"
 yy283:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -3383,7 +3383,7 @@ yy289:
 yy290:
 #line 132 "cmmap.re"
 	{ RET(EXTERN); }
-#line 3387 "<stdout>"
+#line 3387 "cmmap.c"
 yy291:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -3461,7 +3461,7 @@ yy292:
 yy293:
 #line 131 "cmmap.re"
 	{ RET(ENUM); }
-#line 3465 "<stdout>"
+#line 3465 "cmmap.c"
 yy294:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -3539,7 +3539,7 @@ yy295:
 yy296:
 #line 130 "cmmap.re"
 	{ RET(ELSE); }
-#line 3543 "<stdout>"
+#line 3543 "cmmap.c"
 yy297:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -3617,7 +3617,7 @@ yy298:
 yy299:
 #line 128 "cmmap.re"
 	{ RET(DO); }
-#line 3621 "<stdout>"
+#line 3621 "cmmap.c"
 yy300:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -3707,7 +3707,7 @@ yy303:
 yy304:
 #line 129 "cmmap.re"
 	{ RET(DOUBLE); }
-#line 3711 "<stdout>"
+#line 3711 "cmmap.c"
 yy305:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -3803,7 +3803,7 @@ yy309:
 yy310:
 #line 127 "cmmap.re"
 	{ RET(DEFAULT); }
-#line 3807 "<stdout>"
+#line 3807 "cmmap.c"
 yy311:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -3930,7 +3930,7 @@ yy320:
 yy321:
 #line 126 "cmmap.re"
 	{ RET(CONTINUE); }
-#line 3934 "<stdout>"
+#line 3934 "cmmap.c"
 yy322:
 	++YYCURSOR;
 	switch ((yych = *YYCURSOR)) {
@@ -4002,7 +4002,7 @@ yy322:
 yy323:
 #line 125 "cmmap.re"
 	{ RET(CONST); }
-#line 4006 "<stdout>"
+#line 4006 "cmmap.c"
 yy324:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -4080,7 +4080,7 @@ yy325:
 yy326:
 #line 124 "cmmap.re"
 	{ RET(CHAR); }
-#line 4084 "<stdout>"
+#line 4084 "cmmap.c"
 yy327:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -4158,7 +4158,7 @@ yy328:
 yy329:
 #line 123 "cmmap.re"
 	{ RET(CASE); }
-#line 4162 "<stdout>"
+#line 4162 "cmmap.c"
 yy330:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -4248,7 +4248,7 @@ yy333:
 yy334:
 #line 122 "cmmap.re"
 	{ RET(BREAK); }
-#line 4252 "<stdout>"
+#line 4252 "cmmap.c"
 yy335:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -4332,24 +4332,24 @@ yy337:
 yy338:
 #line 121 "cmmap.re"
 	{ RET(AUTO); }
-#line 4336 "<stdout>"
+#line 4336 "cmmap.c"
 yy339:
 	++YYCURSOR;
 #line 172 "cmmap.re"
 	{ RET(DIVEQ); }
-#line 4341 "<stdout>"
+#line 4341 "cmmap.c"
 yy341:
 	++YYCURSOR;
 #line 119 "cmmap.re"
 	{ goto comment; }
-#line 4346 "<stdout>"
+#line 4346 "cmmap.c"
 }
 #line 228 "cmmap.re"
 
 
 comment:
 
-#line 4353 "<stdout>"
+#line 4353 "cmmap.c"
 {
 	YYCTYPE yych;
 	if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
@@ -4368,7 +4368,7 @@ yy345:
 yy346:
 #line 239 "cmmap.re"
 	{ goto comment; }
-#line 4372 "<stdout>"
+#line 4372 "cmmap.c"
 yy347:
 	++YYCURSOR;
 #line 234 "cmmap.re"
@@ -4377,7 +4377,7 @@ yy347:
 		s->tok = s->pos = cursor; s->line++;
 		goto comment;
 	    }
-#line 4381 "<stdout>"
+#line 4381 "cmmap.c"
 yy349:
 	yych = *++YYCURSOR;
 	goto yy346;
@@ -4385,7 +4385,7 @@ yy350:
 	++YYCURSOR;
 #line 232 "cmmap.re"
 	{ goto std; }
-#line 4389 "<stdout>"
+#line 4389 "cmmap.c"
 }
 #line 240 "cmmap.re"
 

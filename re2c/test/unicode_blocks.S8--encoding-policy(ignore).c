@@ -120,7 +120,7 @@ int lex_line344 ()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("<stdout>.line344.input"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line344.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -132,7 +132,7 @@ int lex_line344 ()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("<stdout>.line344.keys"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line344.keys"
         , 3 * sizeof (YYKEYTYPE)
         , 0
         , &keys_count
@@ -261,7 +261,7 @@ int lex_line351 ()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("<stdout>.line351.input"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line351.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -273,7 +273,7 @@ int lex_line351 ()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("<stdout>.line351.keys"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line351.keys"
         , 3 * sizeof (YYKEYTYPE)
         , 0
         , &keys_count
@@ -478,7 +478,7 @@ int lex_line358 ()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("<stdout>.line358.input"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line358.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -490,7 +490,7 @@ int lex_line358 ()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("<stdout>.line358.keys"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line358.keys"
         , 3 * sizeof (YYKEYTYPE)
         , 0
         , &keys_count
@@ -695,7 +695,7 @@ int lex_line365 ()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("<stdout>.line365.input"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line365.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -707,7 +707,7 @@ int lex_line365 ()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("<stdout>.line365.keys"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line365.keys"
         , 3 * sizeof (YYKEYTYPE)
         , 0
         , &keys_count
@@ -936,7 +936,7 @@ int lex_line372 ()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("<stdout>.line372.input"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line372.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -948,7 +948,7 @@ int lex_line372 ()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("<stdout>.line372.keys"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line372.keys"
         , 3 * sizeof (YYKEYTYPE)
         , 0
         , &keys_count
@@ -1191,7 +1191,7 @@ int lex_line379 ()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("<stdout>.line379.input"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line379.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -1203,7 +1203,7 @@ int lex_line379 ()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("<stdout>.line379.keys"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line379.keys"
         , 3 * sizeof (YYKEYTYPE)
         , 0
         , &keys_count
@@ -1430,7 +1430,7 @@ int lex_line386 ()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("<stdout>.line386.input"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line386.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -1442,7 +1442,7 @@ int lex_line386 ()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("<stdout>.line386.keys"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line386.keys"
         , 3 * sizeof (YYKEYTYPE)
         , 0
         , &keys_count
@@ -1701,7 +1701,7 @@ int lex_line393 ()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("<stdout>.line393.input"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line393.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -1713,7 +1713,7 @@ int lex_line393 ()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("<stdout>.line393.keys"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line393.keys"
         , 3 * sizeof (YYKEYTYPE)
         , 0
         , &keys_count
@@ -1941,7 +1941,7 @@ int lex_line400 ()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("<stdout>.line400.input"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line400.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -1953,7 +1953,7 @@ int lex_line400 ()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("<stdout>.line400.keys"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line400.keys"
         , 3 * sizeof (YYKEYTYPE)
         , 0
         , &keys_count
@@ -2160,7 +2160,7 @@ int lex_line407 ()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("<stdout>.line407.input"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line407.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -2172,7 +2172,7 @@ int lex_line407 ()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("<stdout>.line407.keys"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line407.keys"
         , 3 * sizeof (YYKEYTYPE)
         , 0
         , &keys_count
@@ -2360,7 +2360,7 @@ int lex_line414 ()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("<stdout>.line414.input"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line414.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -2372,7 +2372,7 @@ int lex_line414 ()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("<stdout>.line414.keys"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line414.keys"
         , 3 * sizeof (YYKEYTYPE)
         , 0
         , &keys_count
@@ -2622,7 +2622,7 @@ int lex_line421 ()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("<stdout>.line421.input"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line421.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -2634,7 +2634,7 @@ int lex_line421 ()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("<stdout>.line421.keys"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line421.keys"
         , 3 * sizeof (YYKEYTYPE)
         , 0
         , &keys_count
@@ -2893,7 +2893,7 @@ int lex_line428 ()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("<stdout>.line428.input"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line428.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -2905,7 +2905,7 @@ int lex_line428 ()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("<stdout>.line428.keys"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line428.keys"
         , 3 * sizeof (YYKEYTYPE)
         , 0
         , &keys_count
@@ -3112,7 +3112,7 @@ int lex_line435 ()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("<stdout>.line435.input"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line435.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -3124,7 +3124,7 @@ int lex_line435 ()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("<stdout>.line435.keys"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line435.keys"
         , 3 * sizeof (YYKEYTYPE)
         , 0
         , &keys_count
@@ -3351,7 +3351,7 @@ int lex_line442 ()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("<stdout>.line442.input"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line442.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -3363,7 +3363,7 @@ int lex_line442 ()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("<stdout>.line442.keys"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line442.keys"
         , 3 * sizeof (YYKEYTYPE)
         , 0
         , &keys_count
@@ -3569,7 +3569,7 @@ int lex_line449 ()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("<stdout>.line449.input"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line449.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -3581,7 +3581,7 @@ int lex_line449 ()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("<stdout>.line449.keys"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line449.keys"
         , 3 * sizeof (YYKEYTYPE)
         , 0
         , &keys_count
@@ -3802,7 +3802,7 @@ int lex_line456 ()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("<stdout>.line456.input"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line456.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -3814,7 +3814,7 @@ int lex_line456 ()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("<stdout>.line456.keys"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line456.keys"
         , 3 * sizeof (YYKEYTYPE)
         , 0
         , &keys_count
@@ -4035,7 +4035,7 @@ int lex_line463 ()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("<stdout>.line463.input"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line463.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -4047,7 +4047,7 @@ int lex_line463 ()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("<stdout>.line463.keys"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line463.keys"
         , 3 * sizeof (YYKEYTYPE)
         , 0
         , &keys_count
@@ -4268,7 +4268,7 @@ int lex_line470 ()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("<stdout>.line470.input"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line470.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -4280,7 +4280,7 @@ int lex_line470 ()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("<stdout>.line470.keys"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line470.keys"
         , 3 * sizeof (YYKEYTYPE)
         , 0
         , &keys_count
@@ -4501,7 +4501,7 @@ int lex_line477 ()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("<stdout>.line477.input"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line477.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -4513,7 +4513,7 @@ int lex_line477 ()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("<stdout>.line477.keys"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line477.keys"
         , 3 * sizeof (YYKEYTYPE)
         , 0
         , &keys_count
@@ -4734,7 +4734,7 @@ int lex_line484 ()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("<stdout>.line484.input"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line484.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -4746,7 +4746,7 @@ int lex_line484 ()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("<stdout>.line484.keys"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line484.keys"
         , 3 * sizeof (YYKEYTYPE)
         , 0
         , &keys_count
@@ -4967,7 +4967,7 @@ int lex_line491 ()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("<stdout>.line491.input"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line491.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -4979,7 +4979,7 @@ int lex_line491 ()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("<stdout>.line491.keys"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line491.keys"
         , 3 * sizeof (YYKEYTYPE)
         , 0
         , &keys_count
@@ -5200,7 +5200,7 @@ int lex_line498 ()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("<stdout>.line498.input"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line498.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -5212,7 +5212,7 @@ int lex_line498 ()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("<stdout>.line498.keys"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line498.keys"
         , 3 * sizeof (YYKEYTYPE)
         , 0
         , &keys_count
@@ -5433,7 +5433,7 @@ int lex_line505 ()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("<stdout>.line505.input"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line505.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -5445,7 +5445,7 @@ int lex_line505 ()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("<stdout>.line505.keys"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line505.keys"
         , 3 * sizeof (YYKEYTYPE)
         , 0
         , &keys_count
@@ -5666,7 +5666,7 @@ int lex_line512 ()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("<stdout>.line512.input"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line512.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -5678,7 +5678,7 @@ int lex_line512 ()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("<stdout>.line512.keys"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line512.keys"
         , 3 * sizeof (YYKEYTYPE)
         , 0
         , &keys_count
@@ -5899,7 +5899,7 @@ int lex_line519 ()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("<stdout>.line519.input"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line519.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -5911,7 +5911,7 @@ int lex_line519 ()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("<stdout>.line519.keys"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line519.keys"
         , 3 * sizeof (YYKEYTYPE)
         , 0
         , &keys_count
@@ -6132,7 +6132,7 @@ int lex_line526 ()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("<stdout>.line526.input"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line526.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -6144,7 +6144,7 @@ int lex_line526 ()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("<stdout>.line526.keys"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line526.keys"
         , 3 * sizeof (YYKEYTYPE)
         , 0
         , &keys_count
@@ -6365,7 +6365,7 @@ int lex_line533 ()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("<stdout>.line533.input"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line533.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -6377,7 +6377,7 @@ int lex_line533 ()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("<stdout>.line533.keys"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line533.keys"
         , 3 * sizeof (YYKEYTYPE)
         , 0
         , &keys_count
@@ -6600,7 +6600,7 @@ int lex_line540 ()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("<stdout>.line540.input"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line540.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -6612,7 +6612,7 @@ int lex_line540 ()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("<stdout>.line540.keys"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line540.keys"
         , 3 * sizeof (YYKEYTYPE)
         , 0
         , &keys_count
@@ -6872,7 +6872,7 @@ int lex_line547 ()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("<stdout>.line547.input"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line547.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -6884,7 +6884,7 @@ int lex_line547 ()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("<stdout>.line547.keys"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line547.keys"
         , 3 * sizeof (YYKEYTYPE)
         , 0
         , &keys_count
@@ -7143,7 +7143,7 @@ int lex_line554 ()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("<stdout>.line554.input"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line554.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -7155,7 +7155,7 @@ int lex_line554 ()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("<stdout>.line554.keys"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line554.keys"
         , 3 * sizeof (YYKEYTYPE)
         , 0
         , &keys_count
@@ -7378,7 +7378,7 @@ int lex_line561 ()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("<stdout>.line561.input"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line561.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -7390,7 +7390,7 @@ int lex_line561 ()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("<stdout>.line561.keys"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line561.keys"
         , 3 * sizeof (YYKEYTYPE)
         , 0
         , &keys_count
@@ -7615,7 +7615,7 @@ int lex_line568 ()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("<stdout>.line568.input"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line568.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -7627,7 +7627,7 @@ int lex_line568 ()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("<stdout>.line568.keys"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line568.keys"
         , 3 * sizeof (YYKEYTYPE)
         , 0
         , &keys_count
@@ -7886,7 +7886,7 @@ int lex_line575 ()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("<stdout>.line575.input"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line575.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -7898,7 +7898,7 @@ int lex_line575 ()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("<stdout>.line575.keys"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line575.keys"
         , 3 * sizeof (YYKEYTYPE)
         , 0
         , &keys_count
@@ -8127,7 +8127,7 @@ int lex_line582 ()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("<stdout>.line582.input"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line582.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -8139,7 +8139,7 @@ int lex_line582 ()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("<stdout>.line582.keys"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line582.keys"
         , 3 * sizeof (YYKEYTYPE)
         , 0
         , &keys_count
@@ -8327,7 +8327,7 @@ int lex_line589 ()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("<stdout>.line589.input"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line589.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -8339,7 +8339,7 @@ int lex_line589 ()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("<stdout>.line589.keys"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line589.keys"
         , 3 * sizeof (YYKEYTYPE)
         , 0
         , &keys_count
@@ -8598,7 +8598,7 @@ int lex_line596 ()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("<stdout>.line596.input"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line596.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -8610,7 +8610,7 @@ int lex_line596 ()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("<stdout>.line596.keys"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line596.keys"
         , 3 * sizeof (YYKEYTYPE)
         , 0
         , &keys_count
@@ -8798,7 +8798,7 @@ int lex_line603 ()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("<stdout>.line603.input"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line603.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -8810,7 +8810,7 @@ int lex_line603 ()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("<stdout>.line603.keys"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line603.keys"
         , 3 * sizeof (YYKEYTYPE)
         , 0
         , &keys_count
@@ -8998,7 +8998,7 @@ int lex_line610 ()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("<stdout>.line610.input"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line610.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -9010,7 +9010,7 @@ int lex_line610 ()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("<stdout>.line610.keys"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line610.keys"
         , 3 * sizeof (YYKEYTYPE)
         , 0
         , &keys_count
@@ -9198,7 +9198,7 @@ int lex_line617 ()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("<stdout>.line617.input"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line617.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -9210,7 +9210,7 @@ int lex_line617 ()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("<stdout>.line617.keys"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line617.keys"
         , 3 * sizeof (YYKEYTYPE)
         , 0
         , &keys_count
@@ -9398,7 +9398,7 @@ int lex_line624 ()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("<stdout>.line624.input"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line624.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -9410,7 +9410,7 @@ int lex_line624 ()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("<stdout>.line624.keys"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line624.keys"
         , 3 * sizeof (YYKEYTYPE)
         , 0
         , &keys_count
@@ -9631,7 +9631,7 @@ int lex_line631 ()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("<stdout>.line631.input"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line631.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -9643,7 +9643,7 @@ int lex_line631 ()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("<stdout>.line631.keys"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line631.keys"
         , 3 * sizeof (YYKEYTYPE)
         , 0
         , &keys_count
@@ -9919,7 +9919,7 @@ int lex_line638 ()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("<stdout>.line638.input"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line638.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -9931,7 +9931,7 @@ int lex_line638 ()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("<stdout>.line638.keys"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line638.keys"
         , 3 * sizeof (YYKEYTYPE)
         , 0
         , &keys_count
@@ -10174,7 +10174,7 @@ int lex_line645 ()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("<stdout>.line645.input"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line645.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -10186,7 +10186,7 @@ int lex_line645 ()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("<stdout>.line645.keys"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line645.keys"
         , 3 * sizeof (YYKEYTYPE)
         , 0
         , &keys_count
@@ -10390,7 +10390,7 @@ int lex_line652 ()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("<stdout>.line652.input"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line652.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -10402,7 +10402,7 @@ int lex_line652 ()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("<stdout>.line652.keys"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line652.keys"
         , 3 * sizeof (YYKEYTYPE)
         , 0
         , &keys_count
@@ -10590,7 +10590,7 @@ int lex_line659 ()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("<stdout>.line659.input"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line659.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -10602,7 +10602,7 @@ int lex_line659 ()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("<stdout>.line659.keys"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line659.keys"
         , 3 * sizeof (YYKEYTYPE)
         , 0
         , &keys_count
@@ -10823,7 +10823,7 @@ int lex_line666 ()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("<stdout>.line666.input"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line666.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -10835,7 +10835,7 @@ int lex_line666 ()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("<stdout>.line666.keys"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line666.keys"
         , 3 * sizeof (YYKEYTYPE)
         , 0
         , &keys_count
@@ -11058,7 +11058,7 @@ int lex_line673 ()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("<stdout>.line673.input"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line673.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -11070,7 +11070,7 @@ int lex_line673 ()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("<stdout>.line673.keys"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line673.keys"
         , 3 * sizeof (YYKEYTYPE)
         , 0
         , &keys_count
@@ -11293,7 +11293,7 @@ int lex_line680 ()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("<stdout>.line680.input"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line680.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -11305,7 +11305,7 @@ int lex_line680 ()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("<stdout>.line680.keys"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line680.keys"
         , 3 * sizeof (YYKEYTYPE)
         , 0
         , &keys_count
@@ -11580,7 +11580,7 @@ int lex_line687 ()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("<stdout>.line687.input"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line687.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -11592,7 +11592,7 @@ int lex_line687 ()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("<stdout>.line687.keys"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line687.keys"
         , 3 * sizeof (YYKEYTYPE)
         , 0
         , &keys_count
@@ -11803,7 +11803,7 @@ int lex_line694 ()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("<stdout>.line694.input"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line694.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -11815,7 +11815,7 @@ int lex_line694 ()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("<stdout>.line694.keys"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line694.keys"
         , 3 * sizeof (YYKEYTYPE)
         , 0
         , &keys_count
@@ -12026,7 +12026,7 @@ int lex_line701 ()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("<stdout>.line701.input"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line701.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -12038,7 +12038,7 @@ int lex_line701 ()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("<stdout>.line701.keys"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line701.keys"
         , 3 * sizeof (YYKEYTYPE)
         , 0
         , &keys_count
@@ -12242,7 +12242,7 @@ int lex_line708 ()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("<stdout>.line708.input"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line708.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -12254,7 +12254,7 @@ int lex_line708 ()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("<stdout>.line708.keys"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line708.keys"
         , 3 * sizeof (YYKEYTYPE)
         , 0
         , &keys_count
@@ -12497,7 +12497,7 @@ int lex_line715 ()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("<stdout>.line715.input"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line715.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -12509,7 +12509,7 @@ int lex_line715 ()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("<stdout>.line715.keys"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line715.keys"
         , 3 * sizeof (YYKEYTYPE)
         , 0
         , &keys_count
@@ -12736,7 +12736,7 @@ int lex_line722 ()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("<stdout>.line722.input"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line722.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -12748,7 +12748,7 @@ int lex_line722 ()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("<stdout>.line722.keys"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line722.keys"
         , 3 * sizeof (YYKEYTYPE)
         , 0
         , &keys_count
@@ -13023,7 +13023,7 @@ int lex_line729 ()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("<stdout>.line729.input"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line729.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -13035,7 +13035,7 @@ int lex_line729 ()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("<stdout>.line729.keys"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line729.keys"
         , 3 * sizeof (YYKEYTYPE)
         , 0
         , &keys_count
@@ -13258,7 +13258,7 @@ int lex_line736 ()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("<stdout>.line736.input"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line736.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -13270,7 +13270,7 @@ int lex_line736 ()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("<stdout>.line736.keys"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line736.keys"
         , 3 * sizeof (YYKEYTYPE)
         , 0
         , &keys_count
@@ -13493,7 +13493,7 @@ int lex_line743 ()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("<stdout>.line743.input"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line743.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -13505,7 +13505,7 @@ int lex_line743 ()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("<stdout>.line743.keys"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line743.keys"
         , 3 * sizeof (YYKEYTYPE)
         , 0
         , &keys_count
@@ -13725,7 +13725,7 @@ int lex_line750 ()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("<stdout>.line750.input"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line750.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -13737,7 +13737,7 @@ int lex_line750 ()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("<stdout>.line750.keys"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line750.keys"
         , 3 * sizeof (YYKEYTYPE)
         , 0
         , &keys_count
@@ -13925,7 +13925,7 @@ int lex_line757 ()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("<stdout>.line757.input"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line757.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -13937,7 +13937,7 @@ int lex_line757 ()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("<stdout>.line757.keys"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line757.keys"
         , 3 * sizeof (YYKEYTYPE)
         , 0
         , &keys_count
@@ -14197,7 +14197,7 @@ int lex_line764 ()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("<stdout>.line764.input"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line764.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -14209,7 +14209,7 @@ int lex_line764 ()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("<stdout>.line764.keys"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line764.keys"
         , 3 * sizeof (YYKEYTYPE)
         , 0
         , &keys_count
@@ -14430,7 +14430,7 @@ int lex_line771 ()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("<stdout>.line771.input"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line771.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -14442,7 +14442,7 @@ int lex_line771 ()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("<stdout>.line771.keys"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line771.keys"
         , 3 * sizeof (YYKEYTYPE)
         , 0
         , &keys_count
@@ -14630,7 +14630,7 @@ int lex_line778 ()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("<stdout>.line778.input"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line778.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -14642,7 +14642,7 @@ int lex_line778 ()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("<stdout>.line778.keys"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line778.keys"
         , 3 * sizeof (YYKEYTYPE)
         , 0
         , &keys_count
@@ -14901,7 +14901,7 @@ int lex_line785 ()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("<stdout>.line785.input"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line785.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -14913,7 +14913,7 @@ int lex_line785 ()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("<stdout>.line785.keys"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line785.keys"
         , 3 * sizeof (YYKEYTYPE)
         , 0
         , &keys_count
@@ -15136,7 +15136,7 @@ int lex_line792 ()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("<stdout>.line792.input"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line792.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -15148,7 +15148,7 @@ int lex_line792 ()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("<stdout>.line792.keys"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line792.keys"
         , 3 * sizeof (YYKEYTYPE)
         , 0
         , &keys_count
@@ -15370,7 +15370,7 @@ int lex_line799 ()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("<stdout>.line799.input"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line799.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -15382,7 +15382,7 @@ int lex_line799 ()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("<stdout>.line799.keys"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line799.keys"
         , 3 * sizeof (YYKEYTYPE)
         , 0
         , &keys_count
@@ -15586,7 +15586,7 @@ int lex_line806 ()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("<stdout>.line806.input"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line806.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -15598,7 +15598,7 @@ int lex_line806 ()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("<stdout>.line806.keys"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line806.keys"
         , 3 * sizeof (YYKEYTYPE)
         , 0
         , &keys_count
@@ -15770,7 +15770,7 @@ int lex_line813 ()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("<stdout>.line813.input"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line813.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -15782,7 +15782,7 @@ int lex_line813 ()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("<stdout>.line813.keys"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line813.keys"
         , 3 * sizeof (YYKEYTYPE)
         , 0
         , &keys_count
@@ -16005,7 +16005,7 @@ int lex_line820 ()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("<stdout>.line820.input"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line820.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -16017,7 +16017,7 @@ int lex_line820 ()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("<stdout>.line820.keys"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line820.keys"
         , 3 * sizeof (YYKEYTYPE)
         , 0
         , &keys_count
@@ -16238,7 +16238,7 @@ int lex_line827 ()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("<stdout>.line827.input"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line827.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -16250,7 +16250,7 @@ int lex_line827 ()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("<stdout>.line827.keys"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line827.keys"
         , 3 * sizeof (YYKEYTYPE)
         , 0
         , &keys_count
@@ -16471,7 +16471,7 @@ int lex_line834 ()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("<stdout>.line834.input"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line834.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -16483,7 +16483,7 @@ int lex_line834 ()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("<stdout>.line834.keys"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line834.keys"
         , 3 * sizeof (YYKEYTYPE)
         , 0
         , &keys_count
@@ -16706,7 +16706,7 @@ int lex_line841 ()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("<stdout>.line841.input"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line841.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -16718,7 +16718,7 @@ int lex_line841 ()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("<stdout>.line841.keys"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line841.keys"
         , 3 * sizeof (YYKEYTYPE)
         , 0
         , &keys_count
@@ -16941,7 +16941,7 @@ int lex_line848 ()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("<stdout>.line848.input"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line848.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -16953,7 +16953,7 @@ int lex_line848 ()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("<stdout>.line848.keys"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line848.keys"
         , 3 * sizeof (YYKEYTYPE)
         , 0
         , &keys_count
@@ -17174,7 +17174,7 @@ int lex_line855 ()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("<stdout>.line855.input"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line855.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -17186,7 +17186,7 @@ int lex_line855 ()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("<stdout>.line855.keys"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line855.keys"
         , 3 * sizeof (YYKEYTYPE)
         , 0
         , &keys_count
@@ -17447,7 +17447,7 @@ int lex_line862 ()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("<stdout>.line862.input"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line862.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -17459,7 +17459,7 @@ int lex_line862 ()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("<stdout>.line862.keys"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line862.keys"
         , 3 * sizeof (YYKEYTYPE)
         , 0
         , &keys_count
@@ -17631,7 +17631,7 @@ int lex_line869 ()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("<stdout>.line869.input"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line869.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -17643,7 +17643,7 @@ int lex_line869 ()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("<stdout>.line869.keys"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line869.keys"
         , 3 * sizeof (YYKEYTYPE)
         , 0
         , &keys_count
@@ -17863,7 +17863,7 @@ int lex_line876 ()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("<stdout>.line876.input"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line876.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -17875,7 +17875,7 @@ int lex_line876 ()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("<stdout>.line876.keys"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line876.keys"
         , 3 * sizeof (YYKEYTYPE)
         , 0
         , &keys_count
@@ -18134,7 +18134,7 @@ int lex_line883 ()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("<stdout>.line883.input"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line883.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -18146,7 +18146,7 @@ int lex_line883 ()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("<stdout>.line883.keys"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line883.keys"
         , 3 * sizeof (YYKEYTYPE)
         , 0
         , &keys_count
@@ -18405,7 +18405,7 @@ int lex_line890 ()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("<stdout>.line890.input"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line890.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -18417,7 +18417,7 @@ int lex_line890 ()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("<stdout>.line890.keys"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line890.keys"
         , 3 * sizeof (YYKEYTYPE)
         , 0
         , &keys_count
@@ -18621,7 +18621,7 @@ int lex_line897 ()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("<stdout>.line897.input"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line897.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -18633,7 +18633,7 @@ int lex_line897 ()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("<stdout>.line897.keys"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line897.keys"
         , 3 * sizeof (YYKEYTYPE)
         , 0
         , &keys_count
@@ -18899,7 +18899,7 @@ int lex_line904 ()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("<stdout>.line904.input"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line904.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -18911,7 +18911,7 @@ int lex_line904 ()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("<stdout>.line904.keys"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line904.keys"
         , 3 * sizeof (YYKEYTYPE)
         , 0
         , &keys_count
@@ -19083,7 +19083,7 @@ int lex_line911 ()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("<stdout>.line911.input"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line911.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -19095,7 +19095,7 @@ int lex_line911 ()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("<stdout>.line911.keys"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line911.keys"
         , 3 * sizeof (YYKEYTYPE)
         , 0
         , &keys_count
@@ -19283,7 +19283,7 @@ int lex_line918 ()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("<stdout>.line918.input"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line918.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -19295,7 +19295,7 @@ int lex_line918 ()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("<stdout>.line918.keys"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line918.keys"
         , 3 * sizeof (YYKEYTYPE)
         , 0
         , &keys_count
@@ -19467,7 +19467,7 @@ int lex_line925 ()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("<stdout>.line925.input"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line925.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -19479,7 +19479,7 @@ int lex_line925 ()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("<stdout>.line925.keys"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line925.keys"
         , 3 * sizeof (YYKEYTYPE)
         , 0
         , &keys_count
@@ -19702,7 +19702,7 @@ int lex_line932 ()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("<stdout>.line932.input"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line932.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -19714,7 +19714,7 @@ int lex_line932 ()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("<stdout>.line932.keys"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line932.keys"
         , 3 * sizeof (YYKEYTYPE)
         , 0
         , &keys_count
@@ -19937,7 +19937,7 @@ int lex_line939 ()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("<stdout>.line939.input"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line939.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -19949,7 +19949,7 @@ int lex_line939 ()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("<stdout>.line939.keys"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line939.keys"
         , 3 * sizeof (YYKEYTYPE)
         , 0
         , &keys_count
@@ -20279,7 +20279,7 @@ int lex_line946 ()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("<stdout>.line946.input"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line946.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -20291,7 +20291,7 @@ int lex_line946 ()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("<stdout>.line946.keys"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line946.keys"
         , 3 * sizeof (YYKEYTYPE)
         , 0
         , &keys_count
@@ -20511,7 +20511,7 @@ int lex_line953 ()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("<stdout>.line953.input"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line953.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -20523,7 +20523,7 @@ int lex_line953 ()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("<stdout>.line953.keys"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line953.keys"
         , 3 * sizeof (YYKEYTYPE)
         , 0
         , &keys_count
@@ -20826,7 +20826,7 @@ int lex_line960 ()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("<stdout>.line960.input"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line960.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -20838,7 +20838,7 @@ int lex_line960 ()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("<stdout>.line960.keys"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line960.keys"
         , 3 * sizeof (YYKEYTYPE)
         , 0
         , &keys_count
@@ -21098,7 +21098,7 @@ int lex_line967 ()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("<stdout>.line967.input"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line967.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -21110,7 +21110,7 @@ int lex_line967 ()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("<stdout>.line967.keys"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line967.keys"
         , 3 * sizeof (YYKEYTYPE)
         , 0
         , &keys_count
@@ -21337,7 +21337,7 @@ int lex_line974 ()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("<stdout>.line974.input"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line974.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -21349,7 +21349,7 @@ int lex_line974 ()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("<stdout>.line974.keys"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line974.keys"
         , 3 * sizeof (YYKEYTYPE)
         , 0
         , &keys_count
@@ -21750,7 +21750,7 @@ int lex_line981 ()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("<stdout>.line981.input"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line981.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -21762,7 +21762,7 @@ int lex_line981 ()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("<stdout>.line981.keys"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line981.keys"
         , 3 * sizeof (YYKEYTYPE)
         , 0
         , &keys_count
@@ -21995,7 +21995,7 @@ int lex_line988 ()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("<stdout>.line988.input"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line988.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -22007,7 +22007,7 @@ int lex_line988 ()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("<stdout>.line988.keys"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line988.keys"
         , 3 * sizeof (YYKEYTYPE)
         , 0
         , &keys_count
@@ -22228,7 +22228,7 @@ int lex_line995 ()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("<stdout>.line995.input"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line995.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -22240,7 +22240,7 @@ int lex_line995 ()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("<stdout>.line995.keys"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line995.keys"
         , 3 * sizeof (YYKEYTYPE)
         , 0
         , &keys_count
@@ -22475,7 +22475,7 @@ int lex_line1002 ()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("<stdout>.line1002.input"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line1002.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -22487,7 +22487,7 @@ int lex_line1002 ()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("<stdout>.line1002.keys"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line1002.keys"
         , 3 * sizeof (YYKEYTYPE)
         , 0
         , &keys_count
@@ -22814,7 +22814,7 @@ int lex_line1009 ()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("<stdout>.line1009.input"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line1009.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -22826,7 +22826,7 @@ int lex_line1009 ()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("<stdout>.line1009.keys"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line1009.keys"
         , 3 * sizeof (YYKEYTYPE)
         , 0
         , &keys_count
@@ -23053,7 +23053,7 @@ int lex_line1016 ()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("<stdout>.line1016.input"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line1016.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -23065,7 +23065,7 @@ int lex_line1016 ()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("<stdout>.line1016.keys"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line1016.keys"
         , 3 * sizeof (YYKEYTYPE)
         , 0
         , &keys_count
@@ -23308,7 +23308,7 @@ int lex_line1023 ()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("<stdout>.line1023.input"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line1023.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -23320,7 +23320,7 @@ int lex_line1023 ()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("<stdout>.line1023.keys"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line1023.keys"
         , 3 * sizeof (YYKEYTYPE)
         , 0
         , &keys_count
@@ -23604,7 +23604,7 @@ int lex_line1030 ()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("<stdout>.line1030.input"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line1030.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -23616,7 +23616,7 @@ int lex_line1030 ()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("<stdout>.line1030.keys"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line1030.keys"
         , 3 * sizeof (YYKEYTYPE)
         , 0
         , &keys_count
@@ -23788,7 +23788,7 @@ int lex_line1037 ()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("<stdout>.line1037.input"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line1037.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -23800,7 +23800,7 @@ int lex_line1037 ()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("<stdout>.line1037.keys"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line1037.keys"
         , 3 * sizeof (YYKEYTYPE)
         , 0
         , &keys_count
@@ -23972,7 +23972,7 @@ int lex_line1044 ()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("<stdout>.line1044.input"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line1044.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -23984,7 +23984,7 @@ int lex_line1044 ()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("<stdout>.line1044.keys"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line1044.keys"
         , 3 * sizeof (YYKEYTYPE)
         , 0
         , &keys_count
@@ -24179,7 +24179,7 @@ int lex_line1051 ()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("<stdout>.line1051.input"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line1051.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -24191,7 +24191,7 @@ int lex_line1051 ()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("<stdout>.line1051.keys"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line1051.keys"
         , 3 * sizeof (YYKEYTYPE)
         , 0
         , &keys_count
@@ -24379,7 +24379,7 @@ int lex_line1058 ()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("<stdout>.line1058.input"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line1058.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -24391,7 +24391,7 @@ int lex_line1058 ()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("<stdout>.line1058.keys"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line1058.keys"
         , 3 * sizeof (YYKEYTYPE)
         , 0
         , &keys_count
@@ -24635,7 +24635,7 @@ int lex_line1065 ()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("<stdout>.line1065.input"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line1065.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -24647,7 +24647,7 @@ int lex_line1065 ()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("<stdout>.line1065.keys"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line1065.keys"
         , 3 * sizeof (YYKEYTYPE)
         , 0
         , &keys_count
@@ -24924,7 +24924,7 @@ int lex_line1072 ()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("<stdout>.line1072.input"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line1072.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -24936,7 +24936,7 @@ int lex_line1072 ()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("<stdout>.line1072.keys"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line1072.keys"
         , 3 * sizeof (YYKEYTYPE)
         , 0
         , &keys_count
@@ -25108,7 +25108,7 @@ int lex_line1079 ()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("<stdout>.line1079.input"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line1079.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -25120,7 +25120,7 @@ int lex_line1079 ()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("<stdout>.line1079.keys"
+        ("unicode_blocks.S8--encoding-policy(ignore).c.line1079.keys"
         , 3 * sizeof (YYKEYTYPE)
         , 0
         , &keys_count

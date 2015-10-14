@@ -16,7 +16,7 @@ bool scan(const char *text)
 next:
 	YYCTYPE *token = cursor;
 
-#line 20 "<stdout>"
+#line 20 "bug1163046.c"
 {
 	YYCTYPE yych;
 	if ((YYLIMIT - YYCURSOR) < 45) YYFILL(45);
@@ -36,7 +36,7 @@ yy2:
 yy3:
 #line 23 "bug1163046.re"
 	{ goto next; }
-#line 40 "<stdout>"
+#line 40 "bug1163046.c"
 yy4:
 	yych = *++YYCURSOR;
 	goto yy3;
@@ -44,7 +44,7 @@ yy5:
 	++YYCURSOR;
 #line 25 "bug1163046.re"
 	{ return false; }
-#line 48 "<stdout>"
+#line 48 "bug1163046.c"
 yy7:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -345,7 +345,7 @@ yy51:
 		if (token == start || *(token - 1) == '\n')
 		return true; else goto next;
 	}
-#line 349 "<stdout>"
+#line 349 "bug1163046.c"
 }
 #line 26 "bug1163046.re"
 

@@ -4,7 +4,7 @@
 #line 7 "config5.re"
 // code
 
-#line 8 "<stdout>"
+#line 8 "config5.c"
 {
 	YYCTYPE yych;
 	if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
@@ -22,7 +22,7 @@ yy2:
 yy3:
 #line 11 "config5.re"
 	{ return 0; }
-#line 26 "<stdout>"
+#line 26 "config5.c"
 yy4:
 	yych = *++YYCURSOR;
 	goto yy3;
@@ -54,7 +54,7 @@ yy10:
 	++YYCURSOR;
 #line 10 "config5.re"
 	{ return 1; }
-#line 58 "<stdout>"
+#line 58 "config5.c"
 }
 #line 13 "config5.re"
 

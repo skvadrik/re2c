@@ -10,7 +10,7 @@ int main ()
 	char * YYCURSOR;
 #define YYGETCONDITION() cond
 
-#line 12 "<stdout>"
+#line 12 "condtype_forwdecl.cs.c"
 {
 	unsigned char yych;
 	if (YYGETCONDITION() < 1) {
@@ -26,7 +26,7 @@ yy4:
 	++YYCURSOR;
 #line 12 "condtype_forwdecl.cs.re"
 	{}
-#line 28 "<stdout>"
+#line 28 "condtype_forwdecl.cs.c"
 /* *********************************** */
 yyc_b:
 	yych = *YYCURSOR;
@@ -35,14 +35,14 @@ yy9:
 	++YYCURSOR;
 #line 13 "condtype_forwdecl.cs.re"
 	{}
-#line 37 "<stdout>"
+#line 37 "condtype_forwdecl.cs.c"
 }
 #line 14 "condtype_forwdecl.cs.re"
 
 	return 0;
 }
 
-#line 44 "<stdout>"
+#line 44 "condtype_forwdecl.cs.c"
 
 enum cond_t : int {
 	yyca,

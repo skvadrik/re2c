@@ -9,7 +9,7 @@ int main ()
 	char * YYCURSOR;
 #define YYGETCONDITION() cond
 
-#line 10 "<stdout>"
+#line 10 "condtype.cs.c"
 {
 	unsigned char yych;
 	if (YYGETCONDITION() < 1) {
@@ -25,7 +25,7 @@ yy4:
 	++YYCURSOR;
 #line 9 "condtype.cs.re"
 	{}
-#line 26 "<stdout>"
+#line 26 "condtype.cs.c"
 /* *********************************** */
 yyc_b:
 	yych = *YYCURSOR;
@@ -34,7 +34,7 @@ yy9:
 	++YYCURSOR;
 #line 10 "condtype.cs.re"
 	{}
-#line 35 "<stdout>"
+#line 35 "condtype.cs.c"
 }
 #line 11 "condtype.cs.re"
 

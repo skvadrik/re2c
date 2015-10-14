@@ -122,7 +122,7 @@ int lex_line26 ()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("<stdout>.line26.input"
+        ("bug1163046.S.c.line26.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -134,7 +134,7 @@ int lex_line26 ()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("<stdout>.line26.keys"
+        ("bug1163046.S.c.line26.keys"
         , 3 * sizeof (YYKEYTYPE)
         , 0
         , &keys_count

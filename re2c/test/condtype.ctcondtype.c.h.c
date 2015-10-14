@@ -8,7 +8,7 @@ int main ()
 	char * YYCURSOR;
 #define YYGETCONDITION() cond
 
-#line 10 "<stdout>"
+#line 10 "condtype.ctcondtype.c.h.c"
 {
 	unsigned char yych;
 	switch (YYGETCONDITION()) {
@@ -27,7 +27,7 @@ yy4:
 	++YYCURSOR;
 #line 9 "condtype.ctcondtype.c.h.re"
 	{}
-#line 29 "<stdout>"
+#line 29 "condtype.ctcondtype.c.h.c"
 /* *********************************** */
 yyc_b:
 	yych = *YYCURSOR;
@@ -40,7 +40,7 @@ yy9:
 	++YYCURSOR;
 #line 10 "condtype.ctcondtype.c.h.re"
 	{}
-#line 42 "<stdout>"
+#line 42 "condtype.ctcondtype.c.h.c"
 }
 #line 11 "condtype.ctcondtype.c.h.re"
 

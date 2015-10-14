@@ -20,7 +20,7 @@ size_t scan(const char *s, int l, char *r)
 	while(1)
 	{
 
-#line 23 "<stdout>"
+#line 23 "bug1454253b.s.c"
 {
 	YYCTYPE yych;
 	if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
@@ -47,7 +47,7 @@ yy4:
 		*r++ = '\0';
 		return p - s;
 	}
-#line 50 "<stdout>"
+#line 50 "bug1454253b.s.c"
 yy6:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
@@ -66,7 +66,7 @@ yy8:
 		*r++ = '2';
 		continue;
 	}
-#line 69 "<stdout>"
+#line 69 "bug1454253b.s.c"
 yy9:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
@@ -85,7 +85,7 @@ yy11:
 		*r++ = '1';
 		continue;
 	}
-#line 88 "<stdout>"
+#line 88 "bug1454253b.s.c"
 }
 #line 38 "bug1454253b.s.re"
 

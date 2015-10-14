@@ -12,19 +12,19 @@ int main(int argc, char** argv)
     #define YYFILL(n) do { } while(0)
 
 
-#line 14 "<stdout>"
+#line 14 "bug46_infinite_loop.c"
 {
 	unsigned char yych;
 #line 13 "bug46_infinite_loop.re"
 	{ }
-#line 19 "<stdout>"
+#line 19 "bug46_infinite_loop.c"
 }
 #line 14 "bug46_infinite_loop.re"
 
 
 /* BUG BEGINS HERE */
 
-#line 26 "<stdout>"
+#line 26 "bug46_infinite_loop.c"
 {
 	unsigned char yych;
 	goto yy3;
@@ -42,7 +42,7 @@ yy3:
 yy6:
 #line 18 "bug46_infinite_loop.re"
 	{ printf("exit 0\n"); return 0; }
-#line 44 "<stdout>"
+#line 44 "bug46_infinite_loop.c"
 yy7:
 	++YYCURSOR;
 	yych = *YYCURSOR;

@@ -46,7 +46,7 @@ std:
 	s.tok = cursor;
 
 
-#line 50 "<stdout>"
+#line 50 "ctx.b.c"
 {
 	YYCTYPE yych;
 	static const unsigned char yybm[] = {
@@ -113,7 +113,7 @@ yy3:
 	{
 		return UNEXPECTED;
 	}
-#line 117 "<stdout>"
+#line 117 "ctx.b.c"
 yy4:
 	++YYCURSOR;
 	yych = *YYCURSOR;
@@ -121,7 +121,7 @@ yy4:
 yy5:
 #line 50 "ctx.b.re"
 	{ return NUMBER;  }
-#line 125 "<stdout>"
+#line 125 "ctx.b.c"
 yy6:
 	++YYCURSOR;
 yy7:
@@ -132,7 +132,7 @@ yy7:
 		cursor = s.cur;
 		goto std;
 	}
-#line 136 "<stdout>"
+#line 136 "ctx.b.c"
 yy8:
 	yych = *++YYCURSOR;
 	goto yy7;
@@ -158,7 +158,7 @@ yy14:
 	YYCURSOR = YYCTXMARKER;
 #line 49 "ctx.b.re"
 	{ return KEYWORD; }
-#line 162 "<stdout>"
+#line 162 "ctx.b.c"
 yy15:
 	++YYCURSOR;
 	if ((yych = *YYCURSOR) <= '/') goto yy16;
@@ -167,7 +167,7 @@ yy16:
 	YYCURSOR = YYCTXMARKER;
 #line 48 "ctx.b.re"
 	{ return KEYWORD; }
-#line 171 "<stdout>"
+#line 171 "ctx.b.c"
 }
 #line 63 "ctx.b.re"
 

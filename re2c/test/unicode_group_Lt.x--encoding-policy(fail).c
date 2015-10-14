@@ -9,7 +9,7 @@ bool scan(const YYCTYPE * start, const YYCTYPE * const limit)
 #	define YYCURSOR start
 Lt:
 	
-#line 13 "<stdout>"
+#line 13 "unicode_group_Lt.x--encoding-policy(fail).c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -49,12 +49,12 @@ yy2:
 	++YYCURSOR;
 #line 13 "unicode_group_Lt.x--encoding-policy(fail).re"
 	{ return YYCURSOR == limit; }
-#line 53 "<stdout>"
+#line 53 "unicode_group_Lt.x--encoding-policy(fail).c"
 yy4:
 	++YYCURSOR;
 #line 12 "unicode_group_Lt.x--encoding-policy(fail).re"
 	{ goto Lt; }
-#line 58 "<stdout>"
+#line 58 "unicode_group_Lt.x--encoding-policy(fail).c"
 }
 #line 14 "unicode_group_Lt.x--encoding-policy(fail).re"
 

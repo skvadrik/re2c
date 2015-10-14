@@ -39,7 +39,7 @@ void scan(YYCTYPE *pText, size_t *pSize, int *pbChanged)
 	while(1) {
 loop:
 
-#line 43 "<stdout>"
+#line 43 "cvsignore.b.c"
 {
 	YYCTYPE yych;
 	static const unsigned char yybm[] = {
@@ -91,7 +91,7 @@ loop:
 yy3:
 #line 53 "cvsignore.b.re"
 	{ output[outsize++] = cursor[-1]; if (cursor >= limit) break; goto loop; }
-#line 95 "<stdout>"
+#line 95 "cvsignore.b.c"
 yy4:
 	yych = *++YYCURSOR;
 	goto yy3;
@@ -130,7 +130,7 @@ yy15:
 	++YYCURSOR;
 #line 48 "cvsignore.b.re"
 	{ APPEND(L"$" L"Date$"); goto loop; }
-#line 134 "<stdout>"
+#line 134 "cvsignore.b.c"
 yy17:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
@@ -152,7 +152,7 @@ yy21:
 	++YYCURSOR;
 #line 49 "cvsignore.b.re"
 	{ APPEND(L"$" L"Id$"); goto loop; }
-#line 156 "<stdout>"
+#line 156 "cvsignore.b.c"
 yy23:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
@@ -174,7 +174,7 @@ yy28:
 	++YYCURSOR;
 #line 50 "cvsignore.b.re"
 	{ APPEND(L"$" L"Log$"); goto loop; }
-#line 178 "<stdout>"
+#line 178 "cvsignore.b.c"
 yy30:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
@@ -206,7 +206,7 @@ yy40:
 	++YYCURSOR;
 #line 51 "cvsignore.b.re"
 	{ APPEND(L"$" L"Revision$"); goto loop; }
-#line 210 "<stdout>"
+#line 210 "cvsignore.b.c"
 yy42:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
@@ -234,7 +234,7 @@ yy50:
 	++YYCURSOR;
 #line 52 "cvsignore.b.re"
 	{ APPEND(L"$" L"Source$"); goto loop; }
-#line 238 "<stdout>"
+#line 238 "cvsignore.b.c"
 yy52:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);

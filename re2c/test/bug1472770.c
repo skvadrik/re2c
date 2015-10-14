@@ -19,7 +19,7 @@ int scan(char *p)
 	printf("]--------------\n");
 start:
 
-#line 23 "<stdout>"
+#line 23 "bug1472770.c"
 {
 	YYCTYPE yych;
 	goto yy0;
@@ -40,14 +40,14 @@ yy3:
 		++n;
 		goto start;
 	}
-#line 44 "<stdout>"
+#line 44 "bug1472770.c"
 yy5:
 	++YYCURSOR;
 #line 26 "bug1472770.re"
 	{
 		return n;
 	}
-#line 51 "<stdout>"
+#line 51 "bug1472770.c"
 }
 #line 29 "bug1472770.re"
 

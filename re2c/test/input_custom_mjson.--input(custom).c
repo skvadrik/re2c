@@ -490,7 +490,7 @@ static void parsectx_next_token(mjson_parser_t* context)
         s = c;
 
 
-#line 491 "<stdout>"
+#line 491 "input_custom_mjson.--input(custom).c"
         {
             YYCTYPE yych;
             unsigned int yyaccept = 0;
@@ -587,7 +587,7 @@ yy3:
             {
                 continue; 
             }
-#line 588 "<stdout>"
+#line 588 "input_custom_mjson.--input(custom).c"
 yy4:
             yyaccept = 0;
             YYSKIP ();
@@ -604,7 +604,7 @@ yy5:
                 context->token = TOK_INVALID;
                 return;
             }
-#line 605 "<stdout>"
+#line 605 "input_custom_mjson.--input(custom).c"
 yy6:
             YYSKIP ();
 #line 527 "input_custom_mjson.--input(custom).re"
@@ -612,7 +612,7 @@ yy6:
                 token = TOK_LEFT_CURLY_BRACKET;
                 goto done;
             }
-#line 613 "<stdout>"
+#line 613 "input_custom_mjson.--input(custom).c"
 yy8:
             YYSKIP ();
 #line 532 "input_custom_mjson.--input(custom).re"
@@ -620,7 +620,7 @@ yy8:
                 token = TOK_RIGHT_CURLY_BRACKET;
                 goto done;
             }
-#line 621 "<stdout>"
+#line 621 "input_custom_mjson.--input(custom).c"
 yy10:
             YYSKIP ();
 #line 537 "input_custom_mjson.--input(custom).re"
@@ -628,7 +628,7 @@ yy10:
                 token = TOK_LEFT_BRACKET;
                 goto done;
             }
-#line 629 "<stdout>"
+#line 629 "input_custom_mjson.--input(custom).c"
 yy12:
             YYSKIP ();
 #line 542 "input_custom_mjson.--input(custom).re"
@@ -636,7 +636,7 @@ yy12:
                 token = TOK_RIGHT_BRACKET;
                 goto done;
             }
-#line 637 "<stdout>"
+#line 637 "input_custom_mjson.--input(custom).c"
 yy14:
             YYSKIP ();
 #line 547 "input_custom_mjson.--input(custom).re"
@@ -644,7 +644,7 @@ yy14:
                 token = TOK_COLON;
                 goto done;
             }
-#line 645 "<stdout>"
+#line 645 "input_custom_mjson.--input(custom).c"
 yy16:
             YYSKIP ();
 #line 552 "input_custom_mjson.--input(custom).re"
@@ -652,7 +652,7 @@ yy16:
                 token = TOK_EQUAL;
                 goto done;
             }
-#line 653 "<stdout>"
+#line 653 "input_custom_mjson.--input(custom).c"
 yy18:
             YYSKIP ();
 #line 557 "input_custom_mjson.--input(custom).re"
@@ -660,7 +660,7 @@ yy18:
                 token = TOK_COMMA;
                 goto done;
             }
-#line 661 "<stdout>"
+#line 661 "input_custom_mjson.--input(custom).c"
 yy20:
             YYSKIP ();
             switch ((yych = YYPEEK ())) {
@@ -736,7 +736,7 @@ yy21:
                 token = TOK_DEC_NUMBER;
                 goto done;
             }
-#line 737 "<stdout>"
+#line 737 "input_custom_mjson.--input(custom).c"
 yy22:
             yyaccept = 0;
             YYSKIP ();
@@ -788,7 +788,7 @@ yy26:
                 token = TOK_IDENTIFIER;
                 goto done;
             }
-#line 789 "<stdout>"
+#line 789 "input_custom_mjson.--input(custom).c"
 yy27:
             YYSKIP ();
             yych = YYPEEK ();
@@ -821,7 +821,7 @@ yy31:
                 context->token = TOK_NONE;
                 return;
             }
-#line 822 "<stdout>"
+#line 822 "input_custom_mjson.--input(custom).c"
 yy33:
             YYSKIP ();
             yych = YYPEEK ();
@@ -867,7 +867,7 @@ yy38:
                 token = TOK_NOESC_STRING;
                 goto done;
             }
-#line 868 "<stdout>"
+#line 868 "input_custom_mjson.--input(custom).c"
 yy40:
             YYSKIP ();
             yych = YYPEEK ();
@@ -912,7 +912,7 @@ yy43:
                 token = TOK_STRING;
                 goto done;
             }
-#line 913 "<stdout>"
+#line 913 "input_custom_mjson.--input(custom).c"
 yy45:
             YYSKIP ();
             yych = YYPEEK ();
@@ -1155,7 +1155,7 @@ yy53:
                 token = TOK_NULL;
                 goto done;
             }
-#line 1156 "<stdout>"
+#line 1156 "input_custom_mjson.--input(custom).c"
 yy54:
             YYSKIP ();
             yych = YYPEEK ();
@@ -1251,7 +1251,7 @@ yy58:
                 token = TOK_FALSE;
                 goto done;
             }
-#line 1252 "<stdout>"
+#line 1252 "input_custom_mjson.--input(custom).c"
 yy59:
             YYSKIP ();
             yych = YYPEEK ();
@@ -1340,7 +1340,7 @@ yy62:
                 token = TOK_TRUE;
                 goto done;
             }
-#line 1341 "<stdout>"
+#line 1341 "input_custom_mjson.--input(custom).c"
 yy63:
             yyaccept = 1;
             YYSKIP ();
@@ -1367,7 +1367,7 @@ yy65:
                 token = TOK_FLOAT_NUMBER;
                 goto done;
             }
-#line 1368 "<stdout>"
+#line 1368 "input_custom_mjson.--input(custom).c"
 yy66:
             YYSKIP ();
             yych = YYPEEK ();
@@ -1564,7 +1564,7 @@ yy74:
                 context->token = TOK_INVALID;
                 return;
             }
-#line 1565 "<stdout>"
+#line 1565 "input_custom_mjson.--input(custom).c"
 yy75:
             yyaccept = 2;
             YYSKIP ();
@@ -2042,7 +2042,7 @@ yy101:
                 token = TOK_OCT_NUMBER;
                 goto done;
             }
-#line 2043 "<stdout>"
+#line 2043 "input_custom_mjson.--input(custom).c"
 yy102:
             YYSKIP ();
             yych = YYPEEK ();
@@ -2258,7 +2258,7 @@ yy107:
                 token = TOK_HEX_NUMBER;
                 goto done;
             }
-#line 2259 "<stdout>"
+#line 2259 "input_custom_mjson.--input(custom).c"
 yy108:
             YYSKIP ();
             yych = YYPEEK ();
@@ -2281,7 +2281,7 @@ yy112:
             {
                 continue; 
             }
-#line 2282 "<stdout>"
+#line 2282 "input_custom_mjson.--input(custom).c"
 yy114:
             YYSKIP ();
             yych = YYPEEK ();
@@ -2315,7 +2315,7 @@ yy120:
             {
                 continue; 
             }
-#line 2316 "<stdout>"
+#line 2316 "input_custom_mjson.--input(custom).c"
 yy121:
             yyaccept = 4;
             YYSKIP ();
@@ -2476,7 +2476,7 @@ static int parse_string(mjson_parser_t *context, uint32_t id)
         s = c;
 
 
-#line 2477 "<stdout>"
+#line 2477 "input_custom_mjson.--input(custom).c"
         {
             YYCTYPE yych;
             yych = YYPEEK ();
@@ -2501,7 +2501,7 @@ yy130:
 
                 continue;
             }
-#line 2502 "<stdout>"
+#line 2502 "input_custom_mjson.--input(custom).c"
 yy131:
             YYSKIP ();
             YYBACKUP ();
@@ -2523,7 +2523,7 @@ yy132:
             { 
                 assert(!"reachable");
             }
-#line 2524 "<stdout>"
+#line 2524 "input_custom_mjson.--input(custom).c"
 yy133:
             YYSKIP ();
 #line 801 "input_custom_mjson.--input(custom).re"
@@ -2535,7 +2535,7 @@ yy133:
 
                 return 1;
             }
-#line 2536 "<stdout>"
+#line 2536 "input_custom_mjson.--input(custom).c"
 yy135:
             YYSKIP ();
             yych = YYPEEK ();
@@ -2604,7 +2604,7 @@ yy138:
                 
                 continue;
             }
-#line 2605 "<stdout>"
+#line 2605 "input_custom_mjson.--input(custom).c"
 yy140:
             YYSKIP ();
             yych = YYPEEK ();
@@ -2705,7 +2705,7 @@ yy143:
 
                 continue;
             }
-#line 2706 "<stdout>"
+#line 2706 "input_custom_mjson.--input(custom).c"
 yy145:
             YYSKIP ();
             yych = YYPEEK ();

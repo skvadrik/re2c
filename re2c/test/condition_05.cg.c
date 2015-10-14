@@ -56,7 +56,7 @@ char scan(Scanner *s)
 	{
 		s->tok = s->cur;
 
-#line 59 "<stdout>"
+#line 59 "condition_05.cg.c"
 		{
 			unsigned char yych;
 			static void *yyctable[2] = {
@@ -76,7 +76,7 @@ yy4:
 			{
 				goto yyc_comment;
 			}
-#line 79 "<stdout>"
+#line 79 "condition_05.cg.c"
 yy5:
 			yych = *++s->cur;
 			goto yy4;
@@ -86,7 +86,7 @@ yy6:
 			{
 				continue;
 			}
-#line 89 "<stdout>"
+#line 89 "condition_05.cg.c"
 /* *********************************** */
 yyc_normal:
 			if ((s->lim - s->cur) < 2) { if(fill(s, 2) >= 0) break; }
@@ -100,7 +100,7 @@ yy11:
 				fputc(*s->tok, stdout);
 				continue;
 			}
-#line 103 "<stdout>"
+#line 103 "condition_05.cg.c"
 yy12:
 			yych = *++s->cur;
 			goto yy11;
@@ -110,7 +110,7 @@ yy13:
 			{
 				goto yyc_comment;
 			}
-#line 113 "<stdout>"
+#line 113 "condition_05.cg.c"
 		}
 #line 87 "condition_05.cg.re"
 

@@ -42,7 +42,7 @@ std:
 	s.tok = cursor;
 
 
-#line 46 "<stdout>"
+#line 46 "config10.c"
 {
 	char curr;
 	if ((s.lim - s.cur) < 3) fill();
@@ -86,7 +86,7 @@ xx3:
 	{
 		return UNEXPECTED;
 	}
-#line 90 "<stdout>"
+#line 90 "config10.c"
 xx4:
 	++s.cur;
 	curr = *s.cur;
@@ -94,7 +94,7 @@ xx4:
 xx5:
 #line 57 "config10.re"
 	{ return NUMBER;  }
-#line 98 "<stdout>"
+#line 98 "config10.c"
 xx6:
 	++s.cur;
 xx7:
@@ -105,7 +105,7 @@ xx7:
 		cursor = s.cur;
 		goto std;
 	}
-#line 109 "<stdout>"
+#line 109 "config10.c"
 xx8:
 	curr = *++s.cur;
 	goto xx7;
@@ -151,7 +151,7 @@ xx14:
 	s.cur = s.ctx;
 #line 56 "config10.re"
 	{ return KEYWORD; }
-#line 155 "<stdout>"
+#line 155 "config10.c"
 xx15:
 	++s.cur;
 	switch ((curr = *s.cur)) {
@@ -171,7 +171,7 @@ xx16:
 	s.cur = s.ctx;
 #line 55 "config10.re"
 	{ return KEYWORD; }
-#line 175 "<stdout>"
+#line 175 "config10.c"
 }
 #line 70 "config10.re"
 

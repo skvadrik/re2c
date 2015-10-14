@@ -46,7 +46,7 @@ std:
 	s.tok = cursor;
 
 
-#line 50 "<stdout>"
+#line 50 "ctx.c"
 {
 	YYCTYPE yych;
 	if ((YYLIMIT - YYCURSOR) < 3) YYFILL(3);
@@ -90,7 +90,7 @@ yy3:
 	{
 		return UNEXPECTED;
 	}
-#line 94 "<stdout>"
+#line 94 "ctx.c"
 yy4:
 	++YYCURSOR;
 	yych = *YYCURSOR;
@@ -98,7 +98,7 @@ yy4:
 yy5:
 #line 50 "ctx.re"
 	{ return NUMBER;  }
-#line 102 "<stdout>"
+#line 102 "ctx.c"
 yy6:
 	++YYCURSOR;
 yy7:
@@ -109,7 +109,7 @@ yy7:
 		cursor = s.cur;
 		goto std;
 	}
-#line 113 "<stdout>"
+#line 113 "ctx.c"
 yy8:
 	yych = *++YYCURSOR;
 	goto yy7;
@@ -155,7 +155,7 @@ yy14:
 	YYCURSOR = YYCTXMARKER;
 #line 49 "ctx.re"
 	{ return KEYWORD; }
-#line 159 "<stdout>"
+#line 159 "ctx.c"
 yy15:
 	++YYCURSOR;
 	switch ((yych = *YYCURSOR)) {
@@ -175,7 +175,7 @@ yy16:
 	YYCURSOR = YYCTXMARKER;
 #line 48 "ctx.re"
 	{ return KEYWORD; }
-#line 179 "<stdout>"
+#line 179 "ctx.c"
 }
 #line 63 "ctx.re"
 

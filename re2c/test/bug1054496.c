@@ -20,7 +20,7 @@ int scan(char *s, int l)
 #define YYFILL(n)
 cont:
 
-#line 24 "<stdout>"
+#line 24 "bug1054496.c"
 {
 	YYCTYPE yych;
 	if ((YYLIMIT - YYCURSOR) < 3) YYFILL(3);
@@ -90,12 +90,12 @@ yy2:
 yy3:
 #line 25 "bug1054496.re"
 	{ goto cont; }
-#line 94 "<stdout>"
+#line 94 "bug1054496.c"
 yy4:
 	++YYCURSOR;
 #line 24 "bug1054496.re"
 	{ RET(TAG_EOI); }
-#line 99 "<stdout>"
+#line 99 "bug1054496.c"
 yy6:
 	yych = *++YYCURSOR;
 	goto yy3;
@@ -159,7 +159,7 @@ yy7:
 yy8:
 #line 22 "bug1054496.re"
 	{ RET(TAG_A); }
-#line 163 "<stdout>"
+#line 163 "bug1054496.c"
 yy9:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
@@ -222,7 +222,7 @@ yy9:
 yy11:
 #line 23 "bug1054496.re"
 	{ RET(TAG_TAG); }
-#line 226 "<stdout>"
+#line 226 "bug1054496.c"
 }
 #line 26 "bug1054496.re"
 

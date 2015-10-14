@@ -126,7 +126,7 @@ int lex_line2358_INITIAL ()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("<stdout>.line2358_INITIAL.input"
+        ("php20150211_zend_language_scanner.SigcFd--case-inverted.c.line2358_INITIAL.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -138,7 +138,7 @@ int lex_line2358_INITIAL ()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("<stdout>.line2358_INITIAL.keys"
+        ("php20150211_zend_language_scanner.SigcFd--case-inverted.c.line2358_INITIAL.keys"
         , 3 * sizeof (YYKEYTYPE)
         , 0
         , &keys_count
@@ -323,7 +323,7 @@ int lex_line2358_ST_BACKQUOTE ()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("<stdout>.line2358_ST_BACKQUOTE.input"
+        ("php20150211_zend_language_scanner.SigcFd--case-inverted.c.line2358_ST_BACKQUOTE.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -335,7 +335,7 @@ int lex_line2358_ST_BACKQUOTE ()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("<stdout>.line2358_ST_BACKQUOTE.keys"
+        ("php20150211_zend_language_scanner.SigcFd--case-inverted.c.line2358_ST_BACKQUOTE.keys"
         , 3 * sizeof (YYKEYTYPE)
         , 0
         , &keys_count
@@ -605,7 +605,7 @@ int lex_line2358_ST_DOUBLE_QUOTES ()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("<stdout>.line2358_ST_DOUBLE_QUOTES.input"
+        ("php20150211_zend_language_scanner.SigcFd--case-inverted.c.line2358_ST_DOUBLE_QUOTES.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -617,7 +617,7 @@ int lex_line2358_ST_DOUBLE_QUOTES ()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("<stdout>.line2358_ST_DOUBLE_QUOTES.keys"
+        ("php20150211_zend_language_scanner.SigcFd--case-inverted.c.line2358_ST_DOUBLE_QUOTES.keys"
         , 3 * sizeof (YYKEYTYPE)
         , 0
         , &keys_count
@@ -887,7 +887,7 @@ int lex_line2358_ST_END_HEREDOC ()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("<stdout>.line2358_ST_END_HEREDOC.input"
+        ("php20150211_zend_language_scanner.SigcFd--case-inverted.c.line2358_ST_END_HEREDOC.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -899,7 +899,7 @@ int lex_line2358_ST_END_HEREDOC ()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("<stdout>.line2358_ST_END_HEREDOC.keys"
+        ("php20150211_zend_language_scanner.SigcFd--case-inverted.c.line2358_ST_END_HEREDOC.keys"
         , 3 * sizeof (YYKEYTYPE)
         , 0
         , &keys_count
@@ -1025,7 +1025,7 @@ int lex_line2358_ST_HEREDOC ()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("<stdout>.line2358_ST_HEREDOC.input"
+        ("php20150211_zend_language_scanner.SigcFd--case-inverted.c.line2358_ST_HEREDOC.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -1037,7 +1037,7 @@ int lex_line2358_ST_HEREDOC ()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("<stdout>.line2358_ST_HEREDOC.keys"
+        ("php20150211_zend_language_scanner.SigcFd--case-inverted.c.line2358_ST_HEREDOC.keys"
         , 3 * sizeof (YYKEYTYPE)
         , 0
         , &keys_count
@@ -1300,7 +1300,7 @@ int lex_line2358_ST_IN_SCRIPTING ()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("<stdout>.line2358_ST_IN_SCRIPTING.input"
+        ("php20150211_zend_language_scanner.SigcFd--case-inverted.c.line2358_ST_IN_SCRIPTING.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -1312,7 +1312,7 @@ int lex_line2358_ST_IN_SCRIPTING ()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("<stdout>.line2358_ST_IN_SCRIPTING.keys"
+        ("php20150211_zend_language_scanner.SigcFd--case-inverted.c.line2358_ST_IN_SCRIPTING.keys"
         , 3 * sizeof (YYKEYTYPE)
         , 0
         , &keys_count
@@ -5955,7 +5955,7 @@ int lex_line2358_ST_LOOKING_FOR_PROPERTY ()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("<stdout>.line2358_ST_LOOKING_FOR_PROPERTY.input"
+        ("php20150211_zend_language_scanner.SigcFd--case-inverted.c.line2358_ST_LOOKING_FOR_PROPERTY.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -5967,7 +5967,7 @@ int lex_line2358_ST_LOOKING_FOR_PROPERTY ()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("<stdout>.line2358_ST_LOOKING_FOR_PROPERTY.keys"
+        ("php20150211_zend_language_scanner.SigcFd--case-inverted.c.line2358_ST_LOOKING_FOR_PROPERTY.keys"
         , 3 * sizeof (YYKEYTYPE)
         , 0
         , &keys_count
@@ -6207,7 +6207,7 @@ int lex_line2358_ST_LOOKING_FOR_VARNAME ()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("<stdout>.line2358_ST_LOOKING_FOR_VARNAME.input"
+        ("php20150211_zend_language_scanner.SigcFd--case-inverted.c.line2358_ST_LOOKING_FOR_VARNAME.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -6219,7 +6219,7 @@ int lex_line2358_ST_LOOKING_FOR_VARNAME ()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("<stdout>.line2358_ST_LOOKING_FOR_VARNAME.keys"
+        ("php20150211_zend_language_scanner.SigcFd--case-inverted.c.line2358_ST_LOOKING_FOR_VARNAME.keys"
         , 3 * sizeof (YYKEYTYPE)
         , 0
         , &keys_count
@@ -6452,7 +6452,7 @@ int lex_line2358_ST_NOWDOC ()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("<stdout>.line2358_ST_NOWDOC.input"
+        ("php20150211_zend_language_scanner.SigcFd--case-inverted.c.line2358_ST_NOWDOC.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -6464,7 +6464,7 @@ int lex_line2358_ST_NOWDOC ()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("<stdout>.line2358_ST_NOWDOC.keys"
+        ("php20150211_zend_language_scanner.SigcFd--case-inverted.c.line2358_ST_NOWDOC.keys"
         , 3 * sizeof (YYKEYTYPE)
         , 0
         , &keys_count
@@ -6590,7 +6590,7 @@ int lex_line2358_ST_VAR_OFFSET ()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("<stdout>.line2358_ST_VAR_OFFSET.input"
+        ("php20150211_zend_language_scanner.SigcFd--case-inverted.c.line2358_ST_VAR_OFFSET.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -6602,7 +6602,7 @@ int lex_line2358_ST_VAR_OFFSET ()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("<stdout>.line2358_ST_VAR_OFFSET.keys"
+        ("php20150211_zend_language_scanner.SigcFd--case-inverted.c.line2358_ST_VAR_OFFSET.keys"
         , 3 * sizeof (YYKEYTYPE)
         , 0
         , &keys_count

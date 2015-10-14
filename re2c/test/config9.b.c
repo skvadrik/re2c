@@ -42,7 +42,7 @@ std:
 	s.tok = cursor;
 
 
-#line 46 "<stdout>"
+#line 46 "config9.b.c"
 {
 	unsigned char curr;
 	static const unsigned char yybm[] = {
@@ -109,7 +109,7 @@ xx3:
 	{
 		return UNEXPECTED;
 	}
-#line 113 "<stdout>"
+#line 113 "config9.b.c"
 xx4:
 	++s.cur;
 	curr = (unsigned char)*s.cur;
@@ -117,7 +117,7 @@ xx4:
 xx5:
 #line 58 "config9.b.re"
 	{ return NUMBER;  }
-#line 121 "<stdout>"
+#line 121 "config9.b.c"
 xx6:
 	++s.cur;
 xx7:
@@ -128,7 +128,7 @@ xx7:
 		cursor = s.cur;
 		goto std;
 	}
-#line 132 "<stdout>"
+#line 132 "config9.b.c"
 xx8:
 	curr = (unsigned char)*++s.cur;
 	goto xx7;
@@ -154,7 +154,7 @@ xx14:
 	s.cur = s.ctx;
 #line 57 "config9.b.re"
 	{ return KEYWORD; }
-#line 158 "<stdout>"
+#line 158 "config9.b.c"
 xx15:
 	++s.cur;
 	if ((curr = (unsigned char)*s.cur) <= '/') goto xx16;
@@ -163,7 +163,7 @@ xx16:
 	s.cur = s.ctx;
 #line 56 "config9.b.re"
 	{ return KEYWORD; }
-#line 167 "<stdout>"
+#line 167 "config9.b.c"
 }
 #line 71 "config9.b.re"
 

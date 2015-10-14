@@ -4,7 +4,7 @@ re2c: warning: line 1: control flow is undefined for strings that match '\xA', u
 const char* scan(unsigned char* in)
 {
 
-#line 7 "<stdout>"
+#line 7 "line-01.c"
 {
 	YYCTYPE yych;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
@@ -24,35 +24,35 @@ yy3:
 	{
 		return "a";
 	}
-#line 27 "<stdout>"
+#line 27 "line-01.c"
 yy5:
 	++YYCURSOR;
 #line 2 "b"
 	{
 		return "b";
 	}
-#line 34 "<stdout>"
+#line 34 "line-01.c"
 yy7:
 	++YYCURSOR;
 #line 5 "b"
 	{
 		return "c";
 	}
-#line 41 "<stdout>"
+#line 41 "line-01.c"
 yy9:
 	++YYCURSOR;
 #line 2 "d"
 	{
 		return "d";
 	}
-#line 48 "<stdout>"
+#line 48 "line-01.c"
 yy11:
 	++YYCURSOR;
 #line 6 "d"
 	{
 		return ".";
 	}
-#line 55 "<stdout>"
+#line 55 "line-01.c"
 }
 #line 1 "e"
 

@@ -3,7 +3,7 @@
 #define YYMAXFILL 3
 
 
-#line 7 "<stdout>"
+#line 7 "error13.1.c"
 {
 	YYCTYPE yych;
 	if ((YYLIMIT - YYCURSOR) < 3) YYFILL(3);
@@ -21,7 +21,7 @@ yy2:
 yy3:
 #line 6 "error13.1.re"
 	{ return 0; }
-#line 25 "<stdout>"
+#line 25 "error13.1.c"
 yy4:
 	yych = *++YYCURSOR;
 	goto yy3;
@@ -39,12 +39,12 @@ yy7:
 	++YYCURSOR;
 #line 4 "error13.1.re"
 	{ return 1; }
-#line 43 "<stdout>"
+#line 43 "error13.1.c"
 yy9:
 	++YYCURSOR;
 #line 5 "error13.1.re"
 	{ return 2; }
-#line 48 "<stdout>"
+#line 48 "error13.1.c"
 }
 #line 7 "error13.1.re"
 

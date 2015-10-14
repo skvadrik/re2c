@@ -9,7 +9,7 @@ char *q;
 #define	YYMARKER	q
 #define	YYFILL(n)
 
-#line 13 "<stdout>"
+#line 13 "simple_default.c"
 {
 	YYCTYPE yych;
 	if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
@@ -31,7 +31,7 @@ yy2:
 	++YYCURSOR;
 #line 11 "simple_default.re"
 	{return NULL;}
-#line 35 "<stdout>"
+#line 35 "simple_default.c"
 yy4:
 	++YYCURSOR;
 	yych = *YYCURSOR;
@@ -39,7 +39,7 @@ yy4:
 yy5:
 #line 10 "simple_default.re"
 	{return YYCURSOR;}
-#line 43 "<stdout>"
+#line 43 "simple_default.c"
 yy6:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);

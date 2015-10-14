@@ -25,7 +25,7 @@ int scan(char *p)
 	printf("]--------------\n");
 start:
 
-#line 29 "<stdout>"
+#line 29 "bug1472770.f.c"
 
 	switch (YYGETSTATE()) {
 	default: goto yy0;
@@ -51,14 +51,14 @@ yy3:
 		++n;
 		goto start;
 	}
-#line 55 "<stdout>"
+#line 55 "bug1472770.f.c"
 yy5:
 	++YYCURSOR;
 #line 32 "bug1472770.f.re"
 	{
 		return n;
 	}
-#line 62 "<stdout>"
+#line 62 "bug1472770.f.c"
 #line 35 "bug1472770.f.re"
 
 }

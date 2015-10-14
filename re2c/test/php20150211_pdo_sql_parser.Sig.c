@@ -123,7 +123,7 @@ int lex_line66 ()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("<stdout>.line66.input"
+        ("php20150211_pdo_sql_parser.Sig.c.line66.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -135,7 +135,7 @@ int lex_line66 ()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("<stdout>.line66.keys"
+        ("php20150211_pdo_sql_parser.Sig.c.line66.keys"
         , 3 * sizeof (YYKEYTYPE)
         , 0
         , &keys_count

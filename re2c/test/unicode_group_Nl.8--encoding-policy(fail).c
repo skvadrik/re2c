@@ -9,7 +9,7 @@ bool scan(const YYCTYPE * start, const YYCTYPE * const limit)
 #	define YYCURSOR start
 Nl:
 	
-#line 13 "<stdout>"
+#line 13 "unicode_group_Nl.8--encoding-policy(fail).c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -26,7 +26,7 @@ yy2:
 yy3:
 #line 13 "unicode_group_Nl.8--encoding-policy(fail).re"
 	{ return YYCURSOR == limit; }
-#line 30 "<stdout>"
+#line 30 "unicode_group_Nl.8--encoding-policy(fail).c"
 yy4:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -156,7 +156,7 @@ yy15:
 	++YYCURSOR;
 #line 12 "unicode_group_Nl.8--encoding-policy(fail).re"
 	{ goto Nl; }
-#line 160 "<stdout>"
+#line 160 "unicode_group_Nl.8--encoding-policy(fail).c"
 yy17:
 	yych = *++YYCURSOR;
 	switch (yych) {

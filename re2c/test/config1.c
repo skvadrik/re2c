@@ -11,7 +11,7 @@ char *scan0(char *p)
 {
 	char *q;
 
-#line 15 "<stdout>"
+#line 15 "config1.c"
 {
 	YYCTYPE yych;
 	if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
@@ -36,12 +36,12 @@ yy2:
 yy3:
 #line 13 "config1.re"
 	{ return YYCURSOR; }
-#line 40 "<stdout>"
+#line 40 "config1.c"
 yy4:
 	++YYCURSOR;
 #line 14 "config1.re"
 	{ return NULL; }
-#line 45 "<stdout>"
+#line 45 "config1.c"
 yy6:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
@@ -69,7 +69,7 @@ char *scan1(char *p)
 {
 	char *q;
 
-#line 73 "<stdout>"
+#line 73 "config1.c"
 	{
 		YYCTYPE yych;
 		if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
@@ -94,12 +94,12 @@ yy10:
 yy11:
 #line 23 "config1.re"
 		{ return YYCURSOR; }
-#line 98 "<stdout>"
+#line 98 "config1.c"
 yy12:
 		++YYCURSOR;
 #line 24 "config1.re"
 		{ return NULL; }
-#line 103 "<stdout>"
+#line 103 "config1.c"
 yy14:
 		++YYCURSOR;
 		if (YYLIMIT <= YYCURSOR) YYFILL(1);
@@ -127,7 +127,7 @@ char *scan(char *p)
 {
 	char *q;
 
-#line 131 "<stdout>"
+#line 131 "config1.c"
 	{
 		YYCTYPE yych;
 		if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
@@ -152,12 +152,12 @@ yy18:
 yy19:
 #line 32 "config1.re"
 		{ return YYCURSOR; }
-#line 156 "<stdout>"
+#line 156 "config1.c"
 yy20:
 		++YYCURSOR;
 #line 33 "config1.re"
 		{ return NULL; }
-#line 161 "<stdout>"
+#line 161 "config1.c"
 yy22:
 		++YYCURSOR;
 		if (YYLIMIT <= YYCURSOR) YYFILL(1);

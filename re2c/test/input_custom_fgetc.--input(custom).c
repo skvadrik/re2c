@@ -23,7 +23,7 @@ bool lex (FILE * f, const long limit)
 #   define YYLESSTHAN(n)  limit - ftell (f) < n
 #   define YYFILL(n)      {}
     
-#line 27 "<stdout>"
+#line 27 "input_custom_fgetc.--input(custom).c"
 {
 	YYCTYPE yych;
 	if (YYLESSTHAN (13)) YYFILL(13);
@@ -37,7 +37,7 @@ yy2:
 yy3:
 #line 25 "input_custom_fgetc.--input(custom).re"
 	{ return false; }
-#line 41 "<stdout>"
+#line 41 "input_custom_fgetc.--input(custom).c"
 yy4:
 	YYSKIP ();
 	YYBACKUP ();
@@ -159,7 +159,7 @@ yy19:
 	YYRESTORECTX ();
 #line 24 "input_custom_fgetc.--input(custom).re"
 	{ return true; }
-#line 163 "<stdout>"
+#line 163 "input_custom_fgetc.--input(custom).c"
 }
 #line 26 "input_custom_fgetc.--input(custom).re"
 

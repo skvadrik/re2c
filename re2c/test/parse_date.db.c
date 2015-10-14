@@ -759,7 +759,7 @@ std:
 
 
 
-#line 763 "<stdout>"
+#line 763 "parse_date.db.c"
 {
 	YYCTYPE yych;
 	unsigned int yyaccept = 0;
@@ -910,7 +910,7 @@ yy3:
 		TIMELIB_DEINIT;
 		return TIMELIB_TIMEZONE;
 	}
-#line 914 "<stdout>"
+#line 914 "parse_date.db.c"
 yy4:
 	YYDEBUG(4, *YYCURSOR);
 	yych = *++YYCURSOR;
@@ -1224,7 +1224,7 @@ yy12:
 		add_error(s, "Unexpected character");
 		goto std;
 	}
-#line 1228 "<stdout>"
+#line 1228 "parse_date.db.c"
 yy13:
 	YYDEBUG(13, *YYCURSOR);
 	yyaccept = 1;
@@ -2218,7 +2218,7 @@ yy46:
 	{
 		goto std;
 	}
-#line 2222 "<stdout>"
+#line 2222 "parse_date.db.c"
 yy47:
 	YYDEBUG(47, *YYCURSOR);
 	yych = *++YYCURSOR;
@@ -2232,7 +2232,7 @@ yy48:
 		s->pos = cursor; s->line++;
 		goto std;
 	}
-#line 2236 "<stdout>"
+#line 2236 "parse_date.db.c"
 yy50:
 	YYDEBUG(50, *YYCURSOR);
 	yych = *++YYCURSOR;
@@ -2606,7 +2606,7 @@ yy69:
 		TIMELIB_DEINIT;
 		return TIMELIB_RELATIVE;
 	}
-#line 2610 "<stdout>"
+#line 2610 "parse_date.db.c"
 yy70:
 	YYDEBUG(70, *YYCURSOR);
 	yych = *++YYCURSOR;
@@ -3840,7 +3840,7 @@ yy176:
 		TIMELIB_DEINIT;
 		return TIMELIB_RELATIVE;
 	}
-#line 3844 "<stdout>"
+#line 3844 "parse_date.db.c"
 yy177:
 	YYDEBUG(177, *YYCURSOR);
 	yych = *++YYCURSOR;
@@ -7097,7 +7097,7 @@ yy405:
 		TIMELIB_DEINIT;
 		return TIMELIB_WEEKDAY;
 	}
-#line 7101 "<stdout>"
+#line 7101 "parse_date.db.c"
 yy406:
 	YYDEBUG(406, *YYCURSOR);
 	yych = *++YYCURSOR;
@@ -7438,7 +7438,7 @@ yy426:
 		TIMELIB_DEINIT;
 		return TIMELIB_DATE_TEXT;
 	}
-#line 7442 "<stdout>"
+#line 7442 "parse_date.db.c"
 yy427:
 	YYDEBUG(427, *YYCURSOR);
 	yyaccept = 6;
@@ -7706,7 +7706,7 @@ yy448:
 		TIMELIB_DEINIT;
 		return TIMELIB_SHORTDATE_WITH_TIME;
 	}
-#line 7710 "<stdout>"
+#line 7710 "parse_date.db.c"
 yy449:
 	YYDEBUG(449, *YYCURSOR);
 	yyaccept = 7;
@@ -8144,7 +8144,7 @@ yy491:
 		TIMELIB_DEINIT;
 		return TIMELIB_DATE_NO_DAY;
 	}
-#line 8148 "<stdout>"
+#line 8148 "parse_date.db.c"
 yy492:
 	YYDEBUG(492, *YYCURSOR);
 	yyaccept = 6;
@@ -8533,7 +8533,7 @@ yy517:
 		TIMELIB_DEINIT;
 		return TIMELIB_PG_TEXT;
 	}
-#line 8537 "<stdout>"
+#line 8537 "parse_date.db.c"
 yy518:
 	YYDEBUG(518, *YYCURSOR);
 	yych = *++YYCURSOR;
@@ -10492,7 +10492,7 @@ yy601:
 		TIMELIB_DEINIT;
 		return TIMELIB_AGO;
 	}
-#line 10496 "<stdout>"
+#line 10496 "parse_date.db.c"
 yy602:
 	YYDEBUG(602, *YYCURSOR);
 	yyaccept = 0;
@@ -12952,7 +12952,7 @@ yy698:
 		TIMELIB_DEINIT;
 		return TIMELIB_DATE_TEXT;
 	}
-#line 12956 "<stdout>"
+#line 12956 "parse_date.db.c"
 yy699:
 	YYDEBUG(699, *YYCURSOR);
 	yyaccept = 10;
@@ -13109,7 +13109,7 @@ yy710:
 		TIMELIB_DEINIT;
 		return TIMELIB_TIME12;
 	}
-#line 13113 "<stdout>"
+#line 13113 "parse_date.db.c"
 yy712:
 	YYDEBUG(712, *YYCURSOR);
 	yyaccept = 11;
@@ -13147,7 +13147,7 @@ yy713:
 		TIMELIB_DEINIT;
 		return TIMELIB_TIME24_WITH_ZONE;
 	}
-#line 13151 "<stdout>"
+#line 13151 "parse_date.db.c"
 yy714:
 	YYDEBUG(714, *YYCURSOR);
 	yyaccept = 11;
@@ -13428,7 +13428,7 @@ yy741:
 		TIMELIB_DEINIT;
 		return TIMELIB_DATE_FULL;
 	}
-#line 13432 "<stdout>"
+#line 13432 "parse_date.db.c"
 yy742:
 	YYDEBUG(742, *YYCURSOR);
 	yych = *++YYCURSOR;
@@ -14194,7 +14194,7 @@ yy813:
 		TIMELIB_DEINIT;
 		return TIMELIB_DATE_FULL_POINTED;
 	}
-#line 14198 "<stdout>"
+#line 14198 "parse_date.db.c"
 yy814:
 	YYDEBUG(814, *YYCURSOR);
 	yych = *++YYCURSOR;
@@ -14833,7 +14833,7 @@ yy860:
 		TIMELIB_DEINIT;
 		return TIMELIB_ISO_DATE;
 	}
-#line 14837 "<stdout>"
+#line 14837 "parse_date.db.c"
 yy861:
 	YYDEBUG(861, *YYCURSOR);
 	yyaccept = 12;
@@ -14953,7 +14953,7 @@ yy870:
 		TIMELIB_DEINIT;
 		return TIMELIB_AMERICAN;
 	}
-#line 14957 "<stdout>"
+#line 14957 "parse_date.db.c"
 yy871:
 	YYDEBUG(871, *YYCURSOR);
 	yyaccept = 13;
@@ -15196,7 +15196,7 @@ yy903:
 		TIMELIB_DEINIT;
 		return TIMELIB_CLF;
 	}
-#line 15200 "<stdout>"
+#line 15200 "parse_date.db.c"
 yy904:
 	YYDEBUG(904, *YYCURSOR);
 	yych = *++YYCURSOR;
@@ -15655,7 +15655,7 @@ yy958:
 		TIMELIB_DEINIT;
 		return TIMELIB_PG_TEXT;
 	}
-#line 15659 "<stdout>"
+#line 15659 "parse_date.db.c"
 yy960:
 	YYDEBUG(960, *YYCURSOR);
 	yych = *++YYCURSOR;
@@ -15800,7 +15800,7 @@ yy971:
 		TIMELIB_DEINIT;
 		return TIMELIB_CLF;
 	}
-#line 15804 "<stdout>"
+#line 15804 "parse_date.db.c"
 yy972:
 	YYDEBUG(972, *YYCURSOR);
 	yych = *++YYCURSOR;
@@ -15913,7 +15913,7 @@ yy978:
 		TIMELIB_DEINIT;
 		return TIMELIB_DATE_NO_DAY;
 	}
-#line 15917 "<stdout>"
+#line 15917 "parse_date.db.c"
 yy979:
 	YYDEBUG(979, *YYCURSOR);
 	yych = *++YYCURSOR;
@@ -16144,7 +16144,7 @@ yy999:
 		TIMELIB_DEINIT;
 		return TIMELIB_ISO_WEEK;
 	}
-#line 16148 "<stdout>"
+#line 16148 "parse_date.db.c"
 yy1000:
 	YYDEBUG(1000, *YYCURSOR);
 	++YYCURSOR;
@@ -16167,7 +16167,7 @@ yy1000:
 		TIMELIB_DEINIT;
 		return TIMELIB_ISO_WEEK;
 	}
-#line 16171 "<stdout>"
+#line 16171 "parse_date.db.c"
 yy1002:
 	YYDEBUG(1002, *YYCURSOR);
 	yych = *++YYCURSOR;
@@ -16243,7 +16243,7 @@ yy1005:
 		TIMELIB_DEINIT;
 		return TIMELIB_PG_YEARDAY;
 	}
-#line 16247 "<stdout>"
+#line 16247 "parse_date.db.c"
 yy1006:
 	YYDEBUG(1006, *YYCURSOR);
 	yych = *++YYCURSOR;
@@ -16371,7 +16371,7 @@ yy1026:
 		TIMELIB_DEINIT;
 		return TIMELIB_XMLRPC_SOAP;
 	}
-#line 16375 "<stdout>"
+#line 16375 "parse_date.db.c"
 yy1027:
 	YYDEBUG(1027, *YYCURSOR);
 	yych = *++YYCURSOR;
@@ -16648,7 +16648,7 @@ yy1032:
 		TIMELIB_DEINIT;
 		return TIMELIB_DATE_NOCOLON;
 	}
-#line 16652 "<stdout>"
+#line 16652 "parse_date.db.c"
 yy1033:
 	YYDEBUG(1033, *YYCURSOR);
 	yych = *++YYCURSOR;
@@ -17342,7 +17342,7 @@ yy1134:
 		TIMELIB_DEINIT;
 		return TIMELIB_ISO_DATE;
 	}
-#line 17346 "<stdout>"
+#line 17346 "parse_date.db.c"
 yy1135:
 	YYDEBUG(1135, *YYCURSOR);
 	yyaccept = 18;
@@ -18424,7 +18424,7 @@ yy1238:
 		TIMELIB_DEINIT;
 		return TIMELIB_GNU_NOCOLON;
 	}
-#line 18428 "<stdout>"
+#line 18428 "parse_date.db.c"
 yy1239:
 	YYDEBUG(1239, *YYCURSOR);
 	yych = *++YYCURSOR;
@@ -18535,7 +18535,7 @@ yy1246:
 		TIMELIB_DEINIT;
 		return TIMELIB_ISO_NOCOLON;
 	}
-#line 18539 "<stdout>"
+#line 18539 "parse_date.db.c"
 yy1247:
 	YYDEBUG(1247, *YYCURSOR);
 	yyaccept = 21;
@@ -19169,7 +19169,7 @@ yy1271:
 		TIMELIB_DEINIT;
 		return TIMELIB_RELATIVE;
 	}
-#line 19173 "<stdout>"
+#line 19173 "parse_date.db.c"
 yy1272:
 	YYDEBUG(1272, *YYCURSOR);
 	yych = *++YYCURSOR;
@@ -19616,7 +19616,7 @@ yy1301:
 		TIMELIB_DEINIT;
 		return TIMELIB_RELATIVE;
 	}
-#line 19620 "<stdout>"
+#line 19620 "parse_date.db.c"
 yy1302:
 	YYDEBUG(1302, *YYCURSOR);
 	yych = *++YYCURSOR;
@@ -19660,7 +19660,7 @@ yy1304:
 		TIMELIB_DEINIT;
 		return TIMELIB_RELATIVE;
 	}
-#line 19664 "<stdout>"
+#line 19664 "parse_date.db.c"
 yy1305:
 	YYDEBUG(1305, *YYCURSOR);
 	yych = *++YYCURSOR;
@@ -21441,7 +21441,7 @@ yy1382:
 		TIMELIB_DEINIT;
 		return TIMELIB_RELATIVE;
 	}
-#line 21445 "<stdout>"
+#line 21445 "parse_date.db.c"
 yy1383:
 	YYDEBUG(1383, *YYCURSOR);
 	yych = *++YYCURSOR;
@@ -21591,7 +21591,7 @@ yy1390:
 		TIMELIB_DEINIT;
 		return TIMELIB_RELATIVE;
 	}
-#line 21595 "<stdout>"
+#line 21595 "parse_date.db.c"
 yy1391:
 	YYDEBUG(1391, *YYCURSOR);
 	yyaccept = 0;
@@ -22098,7 +22098,7 @@ yy1413:
 		TIMELIB_DEINIT;
 		return TIMELIB_RELATIVE;
 	}
-#line 22102 "<stdout>"
+#line 22102 "parse_date.db.c"
 yy1414:
 	YYDEBUG(1414, *YYCURSOR);
 	yyaccept = 0;

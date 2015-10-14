@@ -9,7 +9,7 @@ bool scan(const YYCTYPE * start, const YYCTYPE * const limit)
 #	define YYCURSOR start
 Mc:
 	
-#line 13 "<stdout>"
+#line 13 "unicode_group_Mc.u--encoding-policy(substitute).c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -340,12 +340,12 @@ yy2:
 	++YYCURSOR;
 #line 13 "unicode_group_Mc.u--encoding-policy(substitute).re"
 	{ return YYCURSOR == limit; }
-#line 344 "<stdout>"
+#line 344 "unicode_group_Mc.u--encoding-policy(substitute).c"
 yy4:
 	++YYCURSOR;
 #line 12 "unicode_group_Mc.u--encoding-policy(substitute).re"
 	{ goto Mc; }
-#line 349 "<stdout>"
+#line 349 "unicode_group_Mc.u--encoding-policy(substitute).c"
 }
 #line 14 "unicode_group_Mc.u--encoding-policy(substitute).re"
 

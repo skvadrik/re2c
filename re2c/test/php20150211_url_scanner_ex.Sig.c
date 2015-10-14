@@ -120,7 +120,7 @@ int lex_line129 ()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("<stdout>.line129.input"
+        ("php20150211_url_scanner_ex.Sig.c.line129.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -132,7 +132,7 @@ int lex_line129 ()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("<stdout>.line129.keys"
+        ("php20150211_url_scanner_ex.Sig.c.line129.keys"
         , 3 * sizeof (YYKEYTYPE)
         , 0
         , &keys_count
@@ -312,7 +312,7 @@ int lex_line315 ()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("<stdout>.line315.input"
+        ("php20150211_url_scanner_ex.Sig.c.line315.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -324,7 +324,7 @@ int lex_line315 ()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("<stdout>.line315.keys"
+        ("php20150211_url_scanner_ex.Sig.c.line315.keys"
         , 3 * sizeof (YYKEYTYPE)
         , 0
         , &keys_count
@@ -494,7 +494,7 @@ int lex_line322 ()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("<stdout>.line322.input"
+        ("php20150211_url_scanner_ex.Sig.c.line322.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -506,7 +506,7 @@ int lex_line322 ()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("<stdout>.line322.keys"
+        ("php20150211_url_scanner_ex.Sig.c.line322.keys"
         , 3 * sizeof (YYKEYTYPE)
         , 0
         , &keys_count
@@ -688,7 +688,7 @@ int lex_line334 ()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("<stdout>.line334.input"
+        ("php20150211_url_scanner_ex.Sig.c.line334.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -700,7 +700,7 @@ int lex_line334 ()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("<stdout>.line334.keys"
+        ("php20150211_url_scanner_ex.Sig.c.line334.keys"
         , 3 * sizeof (YYKEYTYPE)
         , 0
         , &keys_count
@@ -931,7 +931,7 @@ int lex_line341 ()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("<stdout>.line341.input"
+        ("php20150211_url_scanner_ex.Sig.c.line341.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -943,7 +943,7 @@ int lex_line341 ()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("<stdout>.line341.keys"
+        ("php20150211_url_scanner_ex.Sig.c.line341.keys"
         , 3 * sizeof (YYKEYTYPE)
         , 0
         , &keys_count
@@ -1124,7 +1124,7 @@ int lex_line348 ()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("<stdout>.line348.input"
+        ("php20150211_url_scanner_ex.Sig.c.line348.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -1136,7 +1136,7 @@ int lex_line348 ()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("<stdout>.line348.keys"
+        ("php20150211_url_scanner_ex.Sig.c.line348.keys"
         , 3 * sizeof (YYKEYTYPE)
         , 0
         , &keys_count
@@ -1336,7 +1336,7 @@ int lex_line358 ()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("<stdout>.line358.input"
+        ("php20150211_url_scanner_ex.Sig.c.line358.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -1348,7 +1348,7 @@ int lex_line358 ()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("<stdout>.line358.keys"
+        ("php20150211_url_scanner_ex.Sig.c.line358.keys"
         , 3 * sizeof (YYKEYTYPE)
         , 0
         , &keys_count

@@ -20,7 +20,7 @@ int scan(char *s, int l)
 #define YYFILL(n)
 cont:
 
-#line 24 "<stdout>"
+#line 24 "bug1187785.c"
 {
 	YYCTYPE yych;
 	if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
@@ -291,7 +291,7 @@ yy2:
 yy3:
 #line 23 "bug1187785.re"
 	{ goto cont; }
-#line 295 "<stdout>"
+#line 295 "bug1187785.c"
 yy4:
 	yych = *++YYCURSOR;
 	goto yy3;
@@ -564,7 +564,7 @@ yy8:
 	++YYCURSOR;
 #line 22 "bug1187785.re"
 	{ RET(1); }
-#line 568 "<stdout>"
+#line 568 "bug1187785.c"
 }
 #line 24 "bug1187785.re"
 

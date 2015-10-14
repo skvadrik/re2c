@@ -122,7 +122,7 @@ int lex_line875 ()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("<stdout>.line875.input"
+        ("php20150211_var_unserializer.Sig.c.line875.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -134,7 +134,7 @@ int lex_line875 ()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("<stdout>.line875.keys"
+        ("php20150211_var_unserializer.Sig.c.line875.keys"
         , 3 * sizeof (YYKEYTYPE)
         , 0
         , &keys_count

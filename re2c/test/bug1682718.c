@@ -3,7 +3,7 @@
 char *scan(char *p)
 {
 
-#line 7 "<stdout>"
+#line 7 "bug1682718.c"
 	{
 		unsigned char yych;
 		yych = (unsigned char)*p;
@@ -27,12 +27,12 @@ yy2:
 yy3:
 #line 9 "bug1682718.re"
 		{return p;}
-#line 31 "<stdout>"
+#line 31 "bug1682718.c"
 yy4:
 		++p;
 #line 10 "bug1682718.re"
 		{return (char*)0;}
-#line 36 "<stdout>"
+#line 36 "bug1682718.c"
 yy6:
 		++p;
 		yych = (unsigned char)*p;

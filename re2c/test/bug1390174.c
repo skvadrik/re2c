@@ -15,7 +15,7 @@ const char *q;
 #define YYMARKER        q
 #define YYFILL(n)
 
-#line 19 "<stdout>"
+#line 19 "bug1390174.c"
 {
 	YYCTYPE yych;
 	if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
@@ -31,7 +31,7 @@ yy2:
 yy3:
 #line 18 "bug1390174.re"
 	{RET(1);}
-#line 35 "<stdout>"
+#line 35 "bug1390174.c"
 yy4:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -43,7 +43,7 @@ yy4:
 yy5:
 #line 19 "bug1390174.re"
 	{RET(0);}
-#line 47 "<stdout>"
+#line 47 "bug1390174.c"
 yy6:
 	yych = *++YYCURSOR;
 	goto yy5;

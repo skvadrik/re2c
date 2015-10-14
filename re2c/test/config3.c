@@ -11,7 +11,7 @@ char *scan0(char *p)
 {
 	char *q;
 
-#line 15 "<stdout>"
+#line 15 "config3.c"
 {
 	YYCTYPE yych;
 	if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
@@ -36,12 +36,12 @@ yy2:
 yy3:
 #line 13 "config3.re"
 	{ return YYCURSOR; }
-#line 40 "<stdout>"
+#line 40 "config3.c"
 yy4:
 	++YYCURSOR;
 #line 14 "config3.re"
 	{ return NULL; }
-#line 45 "<stdout>"
+#line 45 "config3.c"
 yy6:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
@@ -69,7 +69,7 @@ char *scan1(char *p)
 {
 	char *q;
 
-#line 73 "<stdout>"
+#line 73 "config3.c"
 {
 	YYCTYPE yych;
 yy8:
@@ -95,12 +95,12 @@ yy10:
 yy11:
 #line 23 "config3.re"
 	{ return YYCURSOR; }
-#line 99 "<stdout>"
+#line 99 "config3.c"
 yy12:
 	++YYCURSOR;
 #line 24 "config3.re"
 	{ return NULL; }
-#line 104 "<stdout>"
+#line 104 "config3.c"
 yy14:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
@@ -128,7 +128,7 @@ char *scan2(char *p)
 {
 	char *q;
 
-#line 132 "<stdout>"
+#line 132 "config3.c"
 {
 	YYCTYPE yych;
 startLabel:
@@ -154,12 +154,12 @@ yy18:
 yy19:
 #line 33 "config3.re"
 	{ return YYCURSOR; }
-#line 158 "<stdout>"
+#line 158 "config3.c"
 yy20:
 	++YYCURSOR;
 #line 34 "config3.re"
 	{ return NULL; }
-#line 163 "<stdout>"
+#line 163 "config3.c"
 yy22:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
@@ -187,7 +187,7 @@ char *scan(char *p)
 {
 	char *q;
 
-#line 191 "<stdout>"
+#line 191 "config3.c"
 {
 	YYCTYPE yych;
 	if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
@@ -212,12 +212,12 @@ yy26:
 yy27:
 #line 43 "config3.re"
 	{ return YYCURSOR; }
-#line 216 "<stdout>"
+#line 216 "config3.c"
 yy28:
 	++YYCURSOR;
 #line 44 "config3.re"
 	{ return NULL; }
-#line 221 "<stdout>"
+#line 221 "config3.c"
 yy30:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);

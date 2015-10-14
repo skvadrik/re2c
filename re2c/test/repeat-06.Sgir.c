@@ -123,7 +123,7 @@ int lex_line24 ()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("<stdout>.line24.input"
+        ("repeat-06.Sgir.c.line24.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -135,7 +135,7 @@ int lex_line24 ()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("<stdout>.line24.keys"
+        ("repeat-06.Sgir.c.line24.keys"
         , 3 * sizeof (YYKEYTYPE)
         , 0
         , &keys_count
@@ -318,7 +318,7 @@ int lex_line39 ()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("<stdout>.line39.input"
+        ("repeat-06.Sgir.c.line39.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -330,7 +330,7 @@ int lex_line39 ()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("<stdout>.line39.keys"
+        ("repeat-06.Sgir.c.line39.keys"
         , 3 * sizeof (YYKEYTYPE)
         , 0
         , &keys_count
@@ -513,7 +513,7 @@ int lex_line54 ()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("<stdout>.line54.input"
+        ("repeat-06.Sgir.c.line54.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -525,7 +525,7 @@ int lex_line54 ()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("<stdout>.line54.keys"
+        ("repeat-06.Sgir.c.line54.keys"
         , 3 * sizeof (YYKEYTYPE)
         , 0
         , &keys_count

@@ -21,7 +21,7 @@ char *scan(char *p)
 	// after getstate
 
 
-#line 25 "<stdout>"
+#line 25 "config4f.f.c"
 
 yy0:
 	YYSETSTATE(0);
@@ -48,12 +48,12 @@ yy2:
 yy3:
 #line 21 "config4f.f.re"
 	{ return YYCURSOR; }
-#line 52 "<stdout>"
+#line 52 "config4f.f.c"
 yy4:
 	++YYCURSOR;
 #line 22 "config4f.f.re"
 	{ return NULL; }
-#line 57 "<stdout>"
+#line 57 "config4f.f.c"
 yy6:
 	++YYCURSOR;
 	YYSETSTATE(1);

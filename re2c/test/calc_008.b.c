@@ -61,7 +61,7 @@ int scan(char *p)
 	{
 		t = p;
 
-#line 65 "<stdout>"
+#line 65 "calc_008.b.c"
 		{
 			unsigned char curr;
 			static const unsigned char yybm[] = {
@@ -124,7 +124,7 @@ int scan(char *p)
 scan3:
 #line 103 "calc_008.b.re"
 			{ continue; }
-#line 128 "<stdout>"
+#line 128 "calc_008.b.c"
 scan4:
 			++p;
 			if ((curr = (unsigned char)*p) <= '/') goto scan5;
@@ -132,7 +132,7 @@ scan4:
 scan5:
 #line 105 "calc_008.b.re"
 			{ res = push_num(t, p, 10); continue; }
-#line 136 "<stdout>"
+#line 136 "calc_008.b.c"
 scan6:
 			curr = (unsigned char)*++p;
 			goto scan16;
@@ -140,22 +140,22 @@ scan7:
 			++p;
 #line 106 "calc_008.b.re"
 			{ res = stack_add();		continue; }
-#line 144 "<stdout>"
+#line 144 "calc_008.b.c"
 scan9:
 			++p;
 #line 107 "calc_008.b.re"
 			{ res = stack_sub();		continue; }
-#line 149 "<stdout>"
+#line 149 "calc_008.b.c"
 scan11:
 			++p;
 #line 108 "calc_008.b.re"
 			{ res = depth == 1 ? 0 : 2;	break; }
-#line 154 "<stdout>"
+#line 154 "calc_008.b.c"
 scan13:
 			++p;
 #line 109 "calc_008.b.re"
 			{ res = 1; 					continue; }
-#line 159 "<stdout>"
+#line 159 "calc_008.b.c"
 scan15:
 			++p;
 			curr = (unsigned char)*p;
@@ -172,7 +172,7 @@ scan17:
 scan19:
 #line 104 "calc_008.b.re"
 			{ res = push_num(t, p, 8);	continue; }
-#line 176 "<stdout>"
+#line 176 "calc_008.b.c"
 scan20:
 			++p;
 			curr = (unsigned char)*p;

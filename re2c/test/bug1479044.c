@@ -15,7 +15,7 @@ char *scan281(char *p)
 	char *q;
 start:
 
-#line 18 "<stdout>"
+#line 18 "bug1479044.c"
 {
 	YYCTYPE yych;
 	unsigned int yyaccept = 0;
@@ -58,7 +58,7 @@ yy3:
 	{
 		goto start;
 	}
-#line 61 "<stdout>"
+#line 61 "bug1479044.c"
 yy4:
 	yyaccept = 0;
 	yych = *(YYMARKER = ++YYCURSOR);
@@ -159,7 +159,7 @@ yy16:
 	{
 		return NULL;
 	}
-#line 162 "<stdout>"
+#line 162 "bug1479044.c"
 yy18:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -576,7 +576,7 @@ yy63:
 	{
 		return "edu";
 	}
-#line 579 "<stdout>"
+#line 579 "bug1479044.c"
 yy64:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -983,7 +983,7 @@ yy107:
 	{
 		return "resnet";
 	}
-#line 986 "<stdout>"
+#line 986 "bug1479044.c"
 yy108:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -1187,7 +1187,7 @@ yy132:
 	{
 		return "dsl";
 	}
-#line 1190 "<stdout>"
+#line 1190 "bug1479044.c"
 yy133:
 	yych = *++YYCURSOR;
 	switch (yych) {

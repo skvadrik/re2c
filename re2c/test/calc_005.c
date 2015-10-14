@@ -67,7 +67,7 @@ int scan(char *s, int l)
 	{
 		t = p;
 
-#line 71 "<stdout>"
+#line 71 "calc_005.c"
 		{
 			YYCTYPE yych;
 			if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
@@ -96,7 +96,7 @@ yy2:
 yy3:
 #line 91 "calc_005.re"
 			{ continue; }
-#line 100 "<stdout>"
+#line 100 "calc_005.c"
 yy4:
 			++YYCURSOR;
 			switch ((yych = *YYCURSOR)) {
@@ -115,7 +115,7 @@ yy4:
 yy5:
 #line 93 "calc_005.re"
 			{ res = push_num(t, p, 10); continue; }
-#line 119 "<stdout>"
+#line 119 "calc_005.c"
 yy6:
 			yych = *++YYCURSOR;
 			goto yy14;
@@ -123,17 +123,17 @@ yy7:
 			++YYCURSOR;
 #line 94 "calc_005.re"
 			{ res = stack_add();		continue; }
-#line 127 "<stdout>"
+#line 127 "calc_005.c"
 yy9:
 			++YYCURSOR;
 #line 95 "calc_005.re"
 			{ res = stack_sub();		continue; }
-#line 132 "<stdout>"
+#line 132 "calc_005.c"
 yy11:
 			++YYCURSOR;
 #line 96 "calc_005.re"
 			{ res = 1; 					continue; }
-#line 137 "<stdout>"
+#line 137 "calc_005.c"
 yy13:
 			++YYCURSOR;
 			if (YYLIMIT <= YYCURSOR) YYFILL(1);
@@ -172,7 +172,7 @@ yy15:
 yy17:
 #line 92 "calc_005.re"
 			{ res = push_num(t, p, 8);	continue; }
-#line 176 "<stdout>"
+#line 176 "calc_005.c"
 yy18:
 			++YYCURSOR;
 			if (YYLIMIT <= YYCURSOR) YYFILL(1);

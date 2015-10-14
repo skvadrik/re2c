@@ -19,7 +19,7 @@ int scan(char *p)
 	printf("]--------------\n");
 start:
 
-#line 23 "<stdout>"
+#line 23 "bug1472770.b.c"
 {
 	YYCTYPE yych;
 	static const unsigned char yybm[] = {
@@ -72,14 +72,14 @@ yy0:
 		++n;
 		goto start;
 	}
-#line 76 "<stdout>"
+#line 76 "bug1472770.b.c"
 yy5:
 	++YYCURSOR;
 #line 26 "bug1472770.b.re"
 	{
 		return n;
 	}
-#line 83 "<stdout>"
+#line 83 "bug1472770.b.c"
 }
 #line 29 "bug1472770.b.re"
 

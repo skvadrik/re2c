@@ -233,7 +233,7 @@ Block scan(const YYCTYPE * start, const YYCTYPE * const limit, Block blk)
 
 Basic_Latin:
 	
-#line 237 "<stdout>"
+#line 237 "unicode_blocks.u--encoding-policy(substitute).c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -241,19 +241,19 @@ Basic_Latin:
 	++YYCURSOR;
 #line 342 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ goto Basic_Latin; }
-#line 245 "<stdout>"
+#line 245 "unicode_blocks.u--encoding-policy(substitute).c"
 yy4:
 	++YYCURSOR;
 #line 343 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ if (YYCURSOR == limit) return Basic_Latin; else return Error; }
-#line 250 "<stdout>"
+#line 250 "unicode_blocks.u--encoding-policy(substitute).c"
 }
 #line 344 "unicode_blocks.u--encoding-policy(substitute).re"
 
 
 Latin___Supplement:
 	
-#line 257 "<stdout>"
+#line 257 "unicode_blocks.u--encoding-policy(substitute).c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -263,19 +263,19 @@ yy8:
 	++YYCURSOR;
 #line 350 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ if (YYCURSOR == limit) return Latin___Supplement; else return Error; }
-#line 267 "<stdout>"
+#line 267 "unicode_blocks.u--encoding-policy(substitute).c"
 yy10:
 	++YYCURSOR;
 #line 349 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ goto Latin___Supplement; }
-#line 272 "<stdout>"
+#line 272 "unicode_blocks.u--encoding-policy(substitute).c"
 }
 #line 351 "unicode_blocks.u--encoding-policy(substitute).re"
 
 
 Latin_Extended_A:
 	
-#line 279 "<stdout>"
+#line 279 "unicode_blocks.u--encoding-policy(substitute).c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -285,19 +285,19 @@ yy14:
 	++YYCURSOR;
 #line 357 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ if (YYCURSOR == limit) return Latin_Extended_A; else return Error; }
-#line 289 "<stdout>"
+#line 289 "unicode_blocks.u--encoding-policy(substitute).c"
 yy16:
 	++YYCURSOR;
 #line 356 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ goto Latin_Extended_A; }
-#line 294 "<stdout>"
+#line 294 "unicode_blocks.u--encoding-policy(substitute).c"
 }
 #line 358 "unicode_blocks.u--encoding-policy(substitute).re"
 
 
 Latin_Extended_B:
 	
-#line 301 "<stdout>"
+#line 301 "unicode_blocks.u--encoding-policy(substitute).c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -307,19 +307,19 @@ yy20:
 	++YYCURSOR;
 #line 364 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ if (YYCURSOR == limit) return Latin_Extended_B; else return Error; }
-#line 311 "<stdout>"
+#line 311 "unicode_blocks.u--encoding-policy(substitute).c"
 yy22:
 	++YYCURSOR;
 #line 363 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ goto Latin_Extended_B; }
-#line 316 "<stdout>"
+#line 316 "unicode_blocks.u--encoding-policy(substitute).c"
 }
 #line 365 "unicode_blocks.u--encoding-policy(substitute).re"
 
 
 IPA_Extensions:
 	
-#line 323 "<stdout>"
+#line 323 "unicode_blocks.u--encoding-policy(substitute).c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -329,19 +329,19 @@ yy26:
 	++YYCURSOR;
 #line 371 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ if (YYCURSOR == limit) return IPA_Extensions; else return Error; }
-#line 333 "<stdout>"
+#line 333 "unicode_blocks.u--encoding-policy(substitute).c"
 yy28:
 	++YYCURSOR;
 #line 370 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ goto IPA_Extensions; }
-#line 338 "<stdout>"
+#line 338 "unicode_blocks.u--encoding-policy(substitute).c"
 }
 #line 372 "unicode_blocks.u--encoding-policy(substitute).re"
 
 
 Spacing_Modifier_Letters:
 	
-#line 345 "<stdout>"
+#line 345 "unicode_blocks.u--encoding-policy(substitute).c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -351,19 +351,19 @@ yy32:
 	++YYCURSOR;
 #line 378 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ if (YYCURSOR == limit) return Spacing_Modifier_Letters; else return Error; }
-#line 355 "<stdout>"
+#line 355 "unicode_blocks.u--encoding-policy(substitute).c"
 yy34:
 	++YYCURSOR;
 #line 377 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ goto Spacing_Modifier_Letters; }
-#line 360 "<stdout>"
+#line 360 "unicode_blocks.u--encoding-policy(substitute).c"
 }
 #line 379 "unicode_blocks.u--encoding-policy(substitute).re"
 
 
 Combining_Diacritical_Marks:
 	
-#line 367 "<stdout>"
+#line 367 "unicode_blocks.u--encoding-policy(substitute).c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -373,19 +373,19 @@ yy38:
 	++YYCURSOR;
 #line 385 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ if (YYCURSOR == limit) return Combining_Diacritical_Marks; else return Error; }
-#line 377 "<stdout>"
+#line 377 "unicode_blocks.u--encoding-policy(substitute).c"
 yy40:
 	++YYCURSOR;
 #line 384 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ goto Combining_Diacritical_Marks; }
-#line 382 "<stdout>"
+#line 382 "unicode_blocks.u--encoding-policy(substitute).c"
 }
 #line 386 "unicode_blocks.u--encoding-policy(substitute).re"
 
 
 Greek_and_Coptic:
 	
-#line 389 "<stdout>"
+#line 389 "unicode_blocks.u--encoding-policy(substitute).c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -395,19 +395,19 @@ yy44:
 	++YYCURSOR;
 #line 392 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ if (YYCURSOR == limit) return Greek_and_Coptic; else return Error; }
-#line 399 "<stdout>"
+#line 399 "unicode_blocks.u--encoding-policy(substitute).c"
 yy46:
 	++YYCURSOR;
 #line 391 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ goto Greek_and_Coptic; }
-#line 404 "<stdout>"
+#line 404 "unicode_blocks.u--encoding-policy(substitute).c"
 }
 #line 393 "unicode_blocks.u--encoding-policy(substitute).re"
 
 
 Cyrillic:
 	
-#line 411 "<stdout>"
+#line 411 "unicode_blocks.u--encoding-policy(substitute).c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -417,19 +417,19 @@ yy50:
 	++YYCURSOR;
 #line 399 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ if (YYCURSOR == limit) return Cyrillic; else return Error; }
-#line 421 "<stdout>"
+#line 421 "unicode_blocks.u--encoding-policy(substitute).c"
 yy52:
 	++YYCURSOR;
 #line 398 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ goto Cyrillic; }
-#line 426 "<stdout>"
+#line 426 "unicode_blocks.u--encoding-policy(substitute).c"
 }
 #line 400 "unicode_blocks.u--encoding-policy(substitute).re"
 
 
 Cyrillic_Supplementary:
 	
-#line 433 "<stdout>"
+#line 433 "unicode_blocks.u--encoding-policy(substitute).c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -439,19 +439,19 @@ yy56:
 	++YYCURSOR;
 #line 406 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ if (YYCURSOR == limit) return Cyrillic_Supplementary; else return Error; }
-#line 443 "<stdout>"
+#line 443 "unicode_blocks.u--encoding-policy(substitute).c"
 yy58:
 	++YYCURSOR;
 #line 405 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ goto Cyrillic_Supplementary; }
-#line 448 "<stdout>"
+#line 448 "unicode_blocks.u--encoding-policy(substitute).c"
 }
 #line 407 "unicode_blocks.u--encoding-policy(substitute).re"
 
 
 Armenian:
 	
-#line 455 "<stdout>"
+#line 455 "unicode_blocks.u--encoding-policy(substitute).c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -461,19 +461,19 @@ yy62:
 	++YYCURSOR;
 #line 413 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ if (YYCURSOR == limit) return Armenian; else return Error; }
-#line 465 "<stdout>"
+#line 465 "unicode_blocks.u--encoding-policy(substitute).c"
 yy64:
 	++YYCURSOR;
 #line 412 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ goto Armenian; }
-#line 470 "<stdout>"
+#line 470 "unicode_blocks.u--encoding-policy(substitute).c"
 }
 #line 414 "unicode_blocks.u--encoding-policy(substitute).re"
 
 
 Hebrew:
 	
-#line 477 "<stdout>"
+#line 477 "unicode_blocks.u--encoding-policy(substitute).c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -483,19 +483,19 @@ yy68:
 	++YYCURSOR;
 #line 420 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ if (YYCURSOR == limit) return Hebrew; else return Error; }
-#line 487 "<stdout>"
+#line 487 "unicode_blocks.u--encoding-policy(substitute).c"
 yy70:
 	++YYCURSOR;
 #line 419 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ goto Hebrew; }
-#line 492 "<stdout>"
+#line 492 "unicode_blocks.u--encoding-policy(substitute).c"
 }
 #line 421 "unicode_blocks.u--encoding-policy(substitute).re"
 
 
 Arabic:
 	
-#line 499 "<stdout>"
+#line 499 "unicode_blocks.u--encoding-policy(substitute).c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -505,19 +505,19 @@ yy74:
 	++YYCURSOR;
 #line 427 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ if (YYCURSOR == limit) return Arabic; else return Error; }
-#line 509 "<stdout>"
+#line 509 "unicode_blocks.u--encoding-policy(substitute).c"
 yy76:
 	++YYCURSOR;
 #line 426 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ goto Arabic; }
-#line 514 "<stdout>"
+#line 514 "unicode_blocks.u--encoding-policy(substitute).c"
 }
 #line 428 "unicode_blocks.u--encoding-policy(substitute).re"
 
 
 Syriac:
 	
-#line 521 "<stdout>"
+#line 521 "unicode_blocks.u--encoding-policy(substitute).c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -527,19 +527,19 @@ yy80:
 	++YYCURSOR;
 #line 434 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ if (YYCURSOR == limit) return Syriac; else return Error; }
-#line 531 "<stdout>"
+#line 531 "unicode_blocks.u--encoding-policy(substitute).c"
 yy82:
 	++YYCURSOR;
 #line 433 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ goto Syriac; }
-#line 536 "<stdout>"
+#line 536 "unicode_blocks.u--encoding-policy(substitute).c"
 }
 #line 435 "unicode_blocks.u--encoding-policy(substitute).re"
 
 
 Thaana:
 	
-#line 543 "<stdout>"
+#line 543 "unicode_blocks.u--encoding-policy(substitute).c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -549,19 +549,19 @@ yy86:
 	++YYCURSOR;
 #line 441 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ if (YYCURSOR == limit) return Thaana; else return Error; }
-#line 553 "<stdout>"
+#line 553 "unicode_blocks.u--encoding-policy(substitute).c"
 yy88:
 	++YYCURSOR;
 #line 440 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ goto Thaana; }
-#line 558 "<stdout>"
+#line 558 "unicode_blocks.u--encoding-policy(substitute).c"
 }
 #line 442 "unicode_blocks.u--encoding-policy(substitute).re"
 
 
 Devanagari:
 	
-#line 565 "<stdout>"
+#line 565 "unicode_blocks.u--encoding-policy(substitute).c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -571,19 +571,19 @@ yy92:
 	++YYCURSOR;
 #line 448 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ if (YYCURSOR == limit) return Devanagari; else return Error; }
-#line 575 "<stdout>"
+#line 575 "unicode_blocks.u--encoding-policy(substitute).c"
 yy94:
 	++YYCURSOR;
 #line 447 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ goto Devanagari; }
-#line 580 "<stdout>"
+#line 580 "unicode_blocks.u--encoding-policy(substitute).c"
 }
 #line 449 "unicode_blocks.u--encoding-policy(substitute).re"
 
 
 Bengali:
 	
-#line 587 "<stdout>"
+#line 587 "unicode_blocks.u--encoding-policy(substitute).c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -593,19 +593,19 @@ yy98:
 	++YYCURSOR;
 #line 455 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ if (YYCURSOR == limit) return Bengali; else return Error; }
-#line 597 "<stdout>"
+#line 597 "unicode_blocks.u--encoding-policy(substitute).c"
 yy100:
 	++YYCURSOR;
 #line 454 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ goto Bengali; }
-#line 602 "<stdout>"
+#line 602 "unicode_blocks.u--encoding-policy(substitute).c"
 }
 #line 456 "unicode_blocks.u--encoding-policy(substitute).re"
 
 
 Gurmukhi:
 	
-#line 609 "<stdout>"
+#line 609 "unicode_blocks.u--encoding-policy(substitute).c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -615,19 +615,19 @@ yy104:
 	++YYCURSOR;
 #line 462 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ if (YYCURSOR == limit) return Gurmukhi; else return Error; }
-#line 619 "<stdout>"
+#line 619 "unicode_blocks.u--encoding-policy(substitute).c"
 yy106:
 	++YYCURSOR;
 #line 461 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ goto Gurmukhi; }
-#line 624 "<stdout>"
+#line 624 "unicode_blocks.u--encoding-policy(substitute).c"
 }
 #line 463 "unicode_blocks.u--encoding-policy(substitute).re"
 
 
 Gujarati:
 	
-#line 631 "<stdout>"
+#line 631 "unicode_blocks.u--encoding-policy(substitute).c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -637,19 +637,19 @@ yy110:
 	++YYCURSOR;
 #line 469 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ if (YYCURSOR == limit) return Gujarati; else return Error; }
-#line 641 "<stdout>"
+#line 641 "unicode_blocks.u--encoding-policy(substitute).c"
 yy112:
 	++YYCURSOR;
 #line 468 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ goto Gujarati; }
-#line 646 "<stdout>"
+#line 646 "unicode_blocks.u--encoding-policy(substitute).c"
 }
 #line 470 "unicode_blocks.u--encoding-policy(substitute).re"
 
 
 Oriya:
 	
-#line 653 "<stdout>"
+#line 653 "unicode_blocks.u--encoding-policy(substitute).c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -659,19 +659,19 @@ yy116:
 	++YYCURSOR;
 #line 476 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ if (YYCURSOR == limit) return Oriya; else return Error; }
-#line 663 "<stdout>"
+#line 663 "unicode_blocks.u--encoding-policy(substitute).c"
 yy118:
 	++YYCURSOR;
 #line 475 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ goto Oriya; }
-#line 668 "<stdout>"
+#line 668 "unicode_blocks.u--encoding-policy(substitute).c"
 }
 #line 477 "unicode_blocks.u--encoding-policy(substitute).re"
 
 
 Tamil:
 	
-#line 675 "<stdout>"
+#line 675 "unicode_blocks.u--encoding-policy(substitute).c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -681,19 +681,19 @@ yy122:
 	++YYCURSOR;
 #line 483 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ if (YYCURSOR == limit) return Tamil; else return Error; }
-#line 685 "<stdout>"
+#line 685 "unicode_blocks.u--encoding-policy(substitute).c"
 yy124:
 	++YYCURSOR;
 #line 482 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ goto Tamil; }
-#line 690 "<stdout>"
+#line 690 "unicode_blocks.u--encoding-policy(substitute).c"
 }
 #line 484 "unicode_blocks.u--encoding-policy(substitute).re"
 
 
 Telugu:
 	
-#line 697 "<stdout>"
+#line 697 "unicode_blocks.u--encoding-policy(substitute).c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -703,19 +703,19 @@ yy128:
 	++YYCURSOR;
 #line 490 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ if (YYCURSOR == limit) return Telugu; else return Error; }
-#line 707 "<stdout>"
+#line 707 "unicode_blocks.u--encoding-policy(substitute).c"
 yy130:
 	++YYCURSOR;
 #line 489 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ goto Telugu; }
-#line 712 "<stdout>"
+#line 712 "unicode_blocks.u--encoding-policy(substitute).c"
 }
 #line 491 "unicode_blocks.u--encoding-policy(substitute).re"
 
 
 Kannada:
 	
-#line 719 "<stdout>"
+#line 719 "unicode_blocks.u--encoding-policy(substitute).c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -725,19 +725,19 @@ yy134:
 	++YYCURSOR;
 #line 497 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ if (YYCURSOR == limit) return Kannada; else return Error; }
-#line 729 "<stdout>"
+#line 729 "unicode_blocks.u--encoding-policy(substitute).c"
 yy136:
 	++YYCURSOR;
 #line 496 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ goto Kannada; }
-#line 734 "<stdout>"
+#line 734 "unicode_blocks.u--encoding-policy(substitute).c"
 }
 #line 498 "unicode_blocks.u--encoding-policy(substitute).re"
 
 
 Malayalam:
 	
-#line 741 "<stdout>"
+#line 741 "unicode_blocks.u--encoding-policy(substitute).c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -747,19 +747,19 @@ yy140:
 	++YYCURSOR;
 #line 504 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ if (YYCURSOR == limit) return Malayalam; else return Error; }
-#line 751 "<stdout>"
+#line 751 "unicode_blocks.u--encoding-policy(substitute).c"
 yy142:
 	++YYCURSOR;
 #line 503 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ goto Malayalam; }
-#line 756 "<stdout>"
+#line 756 "unicode_blocks.u--encoding-policy(substitute).c"
 }
 #line 505 "unicode_blocks.u--encoding-policy(substitute).re"
 
 
 Sinhala:
 	
-#line 763 "<stdout>"
+#line 763 "unicode_blocks.u--encoding-policy(substitute).c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -769,19 +769,19 @@ yy146:
 	++YYCURSOR;
 #line 511 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ if (YYCURSOR == limit) return Sinhala; else return Error; }
-#line 773 "<stdout>"
+#line 773 "unicode_blocks.u--encoding-policy(substitute).c"
 yy148:
 	++YYCURSOR;
 #line 510 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ goto Sinhala; }
-#line 778 "<stdout>"
+#line 778 "unicode_blocks.u--encoding-policy(substitute).c"
 }
 #line 512 "unicode_blocks.u--encoding-policy(substitute).re"
 
 
 Thai:
 	
-#line 785 "<stdout>"
+#line 785 "unicode_blocks.u--encoding-policy(substitute).c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -791,19 +791,19 @@ yy152:
 	++YYCURSOR;
 #line 518 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ if (YYCURSOR == limit) return Thai; else return Error; }
-#line 795 "<stdout>"
+#line 795 "unicode_blocks.u--encoding-policy(substitute).c"
 yy154:
 	++YYCURSOR;
 #line 517 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ goto Thai; }
-#line 800 "<stdout>"
+#line 800 "unicode_blocks.u--encoding-policy(substitute).c"
 }
 #line 519 "unicode_blocks.u--encoding-policy(substitute).re"
 
 
 Lao:
 	
-#line 807 "<stdout>"
+#line 807 "unicode_blocks.u--encoding-policy(substitute).c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -813,19 +813,19 @@ yy158:
 	++YYCURSOR;
 #line 525 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ if (YYCURSOR == limit) return Lao; else return Error; }
-#line 817 "<stdout>"
+#line 817 "unicode_blocks.u--encoding-policy(substitute).c"
 yy160:
 	++YYCURSOR;
 #line 524 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ goto Lao; }
-#line 822 "<stdout>"
+#line 822 "unicode_blocks.u--encoding-policy(substitute).c"
 }
 #line 526 "unicode_blocks.u--encoding-policy(substitute).re"
 
 
 Tibetan:
 	
-#line 829 "<stdout>"
+#line 829 "unicode_blocks.u--encoding-policy(substitute).c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -835,19 +835,19 @@ yy164:
 	++YYCURSOR;
 #line 532 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ if (YYCURSOR == limit) return Tibetan; else return Error; }
-#line 839 "<stdout>"
+#line 839 "unicode_blocks.u--encoding-policy(substitute).c"
 yy166:
 	++YYCURSOR;
 #line 531 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ goto Tibetan; }
-#line 844 "<stdout>"
+#line 844 "unicode_blocks.u--encoding-policy(substitute).c"
 }
 #line 533 "unicode_blocks.u--encoding-policy(substitute).re"
 
 
 Myanmar:
 	
-#line 851 "<stdout>"
+#line 851 "unicode_blocks.u--encoding-policy(substitute).c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -857,19 +857,19 @@ yy170:
 	++YYCURSOR;
 #line 539 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ if (YYCURSOR == limit) return Myanmar; else return Error; }
-#line 861 "<stdout>"
+#line 861 "unicode_blocks.u--encoding-policy(substitute).c"
 yy172:
 	++YYCURSOR;
 #line 538 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ goto Myanmar; }
-#line 866 "<stdout>"
+#line 866 "unicode_blocks.u--encoding-policy(substitute).c"
 }
 #line 540 "unicode_blocks.u--encoding-policy(substitute).re"
 
 
 Georgian:
 	
-#line 873 "<stdout>"
+#line 873 "unicode_blocks.u--encoding-policy(substitute).c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -879,19 +879,19 @@ yy176:
 	++YYCURSOR;
 #line 546 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ if (YYCURSOR == limit) return Georgian; else return Error; }
-#line 883 "<stdout>"
+#line 883 "unicode_blocks.u--encoding-policy(substitute).c"
 yy178:
 	++YYCURSOR;
 #line 545 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ goto Georgian; }
-#line 888 "<stdout>"
+#line 888 "unicode_blocks.u--encoding-policy(substitute).c"
 }
 #line 547 "unicode_blocks.u--encoding-policy(substitute).re"
 
 
 Hangul_Jamo:
 	
-#line 895 "<stdout>"
+#line 895 "unicode_blocks.u--encoding-policy(substitute).c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -901,19 +901,19 @@ yy182:
 	++YYCURSOR;
 #line 553 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ if (YYCURSOR == limit) return Hangul_Jamo; else return Error; }
-#line 905 "<stdout>"
+#line 905 "unicode_blocks.u--encoding-policy(substitute).c"
 yy184:
 	++YYCURSOR;
 #line 552 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ goto Hangul_Jamo; }
-#line 910 "<stdout>"
+#line 910 "unicode_blocks.u--encoding-policy(substitute).c"
 }
 #line 554 "unicode_blocks.u--encoding-policy(substitute).re"
 
 
 Ethiopic:
 	
-#line 917 "<stdout>"
+#line 917 "unicode_blocks.u--encoding-policy(substitute).c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -923,19 +923,19 @@ yy188:
 	++YYCURSOR;
 #line 560 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ if (YYCURSOR == limit) return Ethiopic; else return Error; }
-#line 927 "<stdout>"
+#line 927 "unicode_blocks.u--encoding-policy(substitute).c"
 yy190:
 	++YYCURSOR;
 #line 559 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ goto Ethiopic; }
-#line 932 "<stdout>"
+#line 932 "unicode_blocks.u--encoding-policy(substitute).c"
 }
 #line 561 "unicode_blocks.u--encoding-policy(substitute).re"
 
 
 Cherokee:
 	
-#line 939 "<stdout>"
+#line 939 "unicode_blocks.u--encoding-policy(substitute).c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -945,19 +945,19 @@ yy194:
 	++YYCURSOR;
 #line 567 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ if (YYCURSOR == limit) return Cherokee; else return Error; }
-#line 949 "<stdout>"
+#line 949 "unicode_blocks.u--encoding-policy(substitute).c"
 yy196:
 	++YYCURSOR;
 #line 566 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ goto Cherokee; }
-#line 954 "<stdout>"
+#line 954 "unicode_blocks.u--encoding-policy(substitute).c"
 }
 #line 568 "unicode_blocks.u--encoding-policy(substitute).re"
 
 
 Unified_Canadian_Aboriginal_Syllabics:
 	
-#line 961 "<stdout>"
+#line 961 "unicode_blocks.u--encoding-policy(substitute).c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -967,19 +967,19 @@ yy200:
 	++YYCURSOR;
 #line 574 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ if (YYCURSOR == limit) return Unified_Canadian_Aboriginal_Syllabics; else return Error; }
-#line 971 "<stdout>"
+#line 971 "unicode_blocks.u--encoding-policy(substitute).c"
 yy202:
 	++YYCURSOR;
 #line 573 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ goto Unified_Canadian_Aboriginal_Syllabics; }
-#line 976 "<stdout>"
+#line 976 "unicode_blocks.u--encoding-policy(substitute).c"
 }
 #line 575 "unicode_blocks.u--encoding-policy(substitute).re"
 
 
 Ogham:
 	
-#line 983 "<stdout>"
+#line 983 "unicode_blocks.u--encoding-policy(substitute).c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -989,19 +989,19 @@ yy206:
 	++YYCURSOR;
 #line 581 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ if (YYCURSOR == limit) return Ogham; else return Error; }
-#line 993 "<stdout>"
+#line 993 "unicode_blocks.u--encoding-policy(substitute).c"
 yy208:
 	++YYCURSOR;
 #line 580 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ goto Ogham; }
-#line 998 "<stdout>"
+#line 998 "unicode_blocks.u--encoding-policy(substitute).c"
 }
 #line 582 "unicode_blocks.u--encoding-policy(substitute).re"
 
 
 Runic:
 	
-#line 1005 "<stdout>"
+#line 1005 "unicode_blocks.u--encoding-policy(substitute).c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -1011,19 +1011,19 @@ yy212:
 	++YYCURSOR;
 #line 588 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ if (YYCURSOR == limit) return Runic; else return Error; }
-#line 1015 "<stdout>"
+#line 1015 "unicode_blocks.u--encoding-policy(substitute).c"
 yy214:
 	++YYCURSOR;
 #line 587 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ goto Runic; }
-#line 1020 "<stdout>"
+#line 1020 "unicode_blocks.u--encoding-policy(substitute).c"
 }
 #line 589 "unicode_blocks.u--encoding-policy(substitute).re"
 
 
 Tagalog:
 	
-#line 1027 "<stdout>"
+#line 1027 "unicode_blocks.u--encoding-policy(substitute).c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -1033,19 +1033,19 @@ yy218:
 	++YYCURSOR;
 #line 595 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ if (YYCURSOR == limit) return Tagalog; else return Error; }
-#line 1037 "<stdout>"
+#line 1037 "unicode_blocks.u--encoding-policy(substitute).c"
 yy220:
 	++YYCURSOR;
 #line 594 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ goto Tagalog; }
-#line 1042 "<stdout>"
+#line 1042 "unicode_blocks.u--encoding-policy(substitute).c"
 }
 #line 596 "unicode_blocks.u--encoding-policy(substitute).re"
 
 
 Hanunoo:
 	
-#line 1049 "<stdout>"
+#line 1049 "unicode_blocks.u--encoding-policy(substitute).c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -1055,19 +1055,19 @@ yy224:
 	++YYCURSOR;
 #line 602 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ if (YYCURSOR == limit) return Hanunoo; else return Error; }
-#line 1059 "<stdout>"
+#line 1059 "unicode_blocks.u--encoding-policy(substitute).c"
 yy226:
 	++YYCURSOR;
 #line 601 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ goto Hanunoo; }
-#line 1064 "<stdout>"
+#line 1064 "unicode_blocks.u--encoding-policy(substitute).c"
 }
 #line 603 "unicode_blocks.u--encoding-policy(substitute).re"
 
 
 Buhid:
 	
-#line 1071 "<stdout>"
+#line 1071 "unicode_blocks.u--encoding-policy(substitute).c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -1077,19 +1077,19 @@ yy230:
 	++YYCURSOR;
 #line 609 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ if (YYCURSOR == limit) return Buhid; else return Error; }
-#line 1081 "<stdout>"
+#line 1081 "unicode_blocks.u--encoding-policy(substitute).c"
 yy232:
 	++YYCURSOR;
 #line 608 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ goto Buhid; }
-#line 1086 "<stdout>"
+#line 1086 "unicode_blocks.u--encoding-policy(substitute).c"
 }
 #line 610 "unicode_blocks.u--encoding-policy(substitute).re"
 
 
 Tagbanwa:
 	
-#line 1093 "<stdout>"
+#line 1093 "unicode_blocks.u--encoding-policy(substitute).c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -1099,19 +1099,19 @@ yy236:
 	++YYCURSOR;
 #line 616 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ if (YYCURSOR == limit) return Tagbanwa; else return Error; }
-#line 1103 "<stdout>"
+#line 1103 "unicode_blocks.u--encoding-policy(substitute).c"
 yy238:
 	++YYCURSOR;
 #line 615 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ goto Tagbanwa; }
-#line 1108 "<stdout>"
+#line 1108 "unicode_blocks.u--encoding-policy(substitute).c"
 }
 #line 617 "unicode_blocks.u--encoding-policy(substitute).re"
 
 
 Khmer:
 	
-#line 1115 "<stdout>"
+#line 1115 "unicode_blocks.u--encoding-policy(substitute).c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -1121,19 +1121,19 @@ yy242:
 	++YYCURSOR;
 #line 623 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ if (YYCURSOR == limit) return Khmer; else return Error; }
-#line 1125 "<stdout>"
+#line 1125 "unicode_blocks.u--encoding-policy(substitute).c"
 yy244:
 	++YYCURSOR;
 #line 622 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ goto Khmer; }
-#line 1130 "<stdout>"
+#line 1130 "unicode_blocks.u--encoding-policy(substitute).c"
 }
 #line 624 "unicode_blocks.u--encoding-policy(substitute).re"
 
 
 Mongolian:
 	
-#line 1137 "<stdout>"
+#line 1137 "unicode_blocks.u--encoding-policy(substitute).c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -1143,19 +1143,19 @@ yy248:
 	++YYCURSOR;
 #line 630 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ if (YYCURSOR == limit) return Mongolian; else return Error; }
-#line 1147 "<stdout>"
+#line 1147 "unicode_blocks.u--encoding-policy(substitute).c"
 yy250:
 	++YYCURSOR;
 #line 629 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ goto Mongolian; }
-#line 1152 "<stdout>"
+#line 1152 "unicode_blocks.u--encoding-policy(substitute).c"
 }
 #line 631 "unicode_blocks.u--encoding-policy(substitute).re"
 
 
 Limbu:
 	
-#line 1159 "<stdout>"
+#line 1159 "unicode_blocks.u--encoding-policy(substitute).c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -1165,19 +1165,19 @@ yy254:
 	++YYCURSOR;
 #line 637 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ if (YYCURSOR == limit) return Limbu; else return Error; }
-#line 1169 "<stdout>"
+#line 1169 "unicode_blocks.u--encoding-policy(substitute).c"
 yy256:
 	++YYCURSOR;
 #line 636 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ goto Limbu; }
-#line 1174 "<stdout>"
+#line 1174 "unicode_blocks.u--encoding-policy(substitute).c"
 }
 #line 638 "unicode_blocks.u--encoding-policy(substitute).re"
 
 
 Tai_Le:
 	
-#line 1181 "<stdout>"
+#line 1181 "unicode_blocks.u--encoding-policy(substitute).c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -1187,19 +1187,19 @@ yy260:
 	++YYCURSOR;
 #line 644 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ if (YYCURSOR == limit) return Tai_Le; else return Error; }
-#line 1191 "<stdout>"
+#line 1191 "unicode_blocks.u--encoding-policy(substitute).c"
 yy262:
 	++YYCURSOR;
 #line 643 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ goto Tai_Le; }
-#line 1196 "<stdout>"
+#line 1196 "unicode_blocks.u--encoding-policy(substitute).c"
 }
 #line 645 "unicode_blocks.u--encoding-policy(substitute).re"
 
 
 Khmer_Symbols:
 	
-#line 1203 "<stdout>"
+#line 1203 "unicode_blocks.u--encoding-policy(substitute).c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -1209,19 +1209,19 @@ yy266:
 	++YYCURSOR;
 #line 651 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ if (YYCURSOR == limit) return Khmer_Symbols; else return Error; }
-#line 1213 "<stdout>"
+#line 1213 "unicode_blocks.u--encoding-policy(substitute).c"
 yy268:
 	++YYCURSOR;
 #line 650 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ goto Khmer_Symbols; }
-#line 1218 "<stdout>"
+#line 1218 "unicode_blocks.u--encoding-policy(substitute).c"
 }
 #line 652 "unicode_blocks.u--encoding-policy(substitute).re"
 
 
 Phonetic_Extensions:
 	
-#line 1225 "<stdout>"
+#line 1225 "unicode_blocks.u--encoding-policy(substitute).c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -1231,19 +1231,19 @@ yy272:
 	++YYCURSOR;
 #line 658 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ if (YYCURSOR == limit) return Phonetic_Extensions; else return Error; }
-#line 1235 "<stdout>"
+#line 1235 "unicode_blocks.u--encoding-policy(substitute).c"
 yy274:
 	++YYCURSOR;
 #line 657 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ goto Phonetic_Extensions; }
-#line 1240 "<stdout>"
+#line 1240 "unicode_blocks.u--encoding-policy(substitute).c"
 }
 #line 659 "unicode_blocks.u--encoding-policy(substitute).re"
 
 
 Latin_Extended_Additional:
 	
-#line 1247 "<stdout>"
+#line 1247 "unicode_blocks.u--encoding-policy(substitute).c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -1253,19 +1253,19 @@ yy278:
 	++YYCURSOR;
 #line 665 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ if (YYCURSOR == limit) return Latin_Extended_Additional; else return Error; }
-#line 1257 "<stdout>"
+#line 1257 "unicode_blocks.u--encoding-policy(substitute).c"
 yy280:
 	++YYCURSOR;
 #line 664 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ goto Latin_Extended_Additional; }
-#line 1262 "<stdout>"
+#line 1262 "unicode_blocks.u--encoding-policy(substitute).c"
 }
 #line 666 "unicode_blocks.u--encoding-policy(substitute).re"
 
 
 Greek_Extended:
 	
-#line 1269 "<stdout>"
+#line 1269 "unicode_blocks.u--encoding-policy(substitute).c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -1275,19 +1275,19 @@ yy284:
 	++YYCURSOR;
 #line 672 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ if (YYCURSOR == limit) return Greek_Extended; else return Error; }
-#line 1279 "<stdout>"
+#line 1279 "unicode_blocks.u--encoding-policy(substitute).c"
 yy286:
 	++YYCURSOR;
 #line 671 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ goto Greek_Extended; }
-#line 1284 "<stdout>"
+#line 1284 "unicode_blocks.u--encoding-policy(substitute).c"
 }
 #line 673 "unicode_blocks.u--encoding-policy(substitute).re"
 
 
 General_Punctuation:
 	
-#line 1291 "<stdout>"
+#line 1291 "unicode_blocks.u--encoding-policy(substitute).c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -1297,19 +1297,19 @@ yy290:
 	++YYCURSOR;
 #line 679 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ if (YYCURSOR == limit) return General_Punctuation; else return Error; }
-#line 1301 "<stdout>"
+#line 1301 "unicode_blocks.u--encoding-policy(substitute).c"
 yy292:
 	++YYCURSOR;
 #line 678 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ goto General_Punctuation; }
-#line 1306 "<stdout>"
+#line 1306 "unicode_blocks.u--encoding-policy(substitute).c"
 }
 #line 680 "unicode_blocks.u--encoding-policy(substitute).re"
 
 
 Superscripts_and_Subscripts:
 	
-#line 1313 "<stdout>"
+#line 1313 "unicode_blocks.u--encoding-policy(substitute).c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -1319,19 +1319,19 @@ yy296:
 	++YYCURSOR;
 #line 686 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ if (YYCURSOR == limit) return Superscripts_and_Subscripts; else return Error; }
-#line 1323 "<stdout>"
+#line 1323 "unicode_blocks.u--encoding-policy(substitute).c"
 yy298:
 	++YYCURSOR;
 #line 685 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ goto Superscripts_and_Subscripts; }
-#line 1328 "<stdout>"
+#line 1328 "unicode_blocks.u--encoding-policy(substitute).c"
 }
 #line 687 "unicode_blocks.u--encoding-policy(substitute).re"
 
 
 Currency_Symbols:
 	
-#line 1335 "<stdout>"
+#line 1335 "unicode_blocks.u--encoding-policy(substitute).c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -1341,19 +1341,19 @@ yy302:
 	++YYCURSOR;
 #line 693 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ if (YYCURSOR == limit) return Currency_Symbols; else return Error; }
-#line 1345 "<stdout>"
+#line 1345 "unicode_blocks.u--encoding-policy(substitute).c"
 yy304:
 	++YYCURSOR;
 #line 692 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ goto Currency_Symbols; }
-#line 1350 "<stdout>"
+#line 1350 "unicode_blocks.u--encoding-policy(substitute).c"
 }
 #line 694 "unicode_blocks.u--encoding-policy(substitute).re"
 
 
 Combining_Diacritical_Marks_for_Symbols:
 	
-#line 1357 "<stdout>"
+#line 1357 "unicode_blocks.u--encoding-policy(substitute).c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -1363,19 +1363,19 @@ yy308:
 	++YYCURSOR;
 #line 700 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ if (YYCURSOR == limit) return Combining_Diacritical_Marks_for_Symbols; else return Error; }
-#line 1367 "<stdout>"
+#line 1367 "unicode_blocks.u--encoding-policy(substitute).c"
 yy310:
 	++YYCURSOR;
 #line 699 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ goto Combining_Diacritical_Marks_for_Symbols; }
-#line 1372 "<stdout>"
+#line 1372 "unicode_blocks.u--encoding-policy(substitute).c"
 }
 #line 701 "unicode_blocks.u--encoding-policy(substitute).re"
 
 
 Letterlike_Symbols:
 	
-#line 1379 "<stdout>"
+#line 1379 "unicode_blocks.u--encoding-policy(substitute).c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -1385,19 +1385,19 @@ yy314:
 	++YYCURSOR;
 #line 707 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ if (YYCURSOR == limit) return Letterlike_Symbols; else return Error; }
-#line 1389 "<stdout>"
+#line 1389 "unicode_blocks.u--encoding-policy(substitute).c"
 yy316:
 	++YYCURSOR;
 #line 706 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ goto Letterlike_Symbols; }
-#line 1394 "<stdout>"
+#line 1394 "unicode_blocks.u--encoding-policy(substitute).c"
 }
 #line 708 "unicode_blocks.u--encoding-policy(substitute).re"
 
 
 Number_Forms:
 	
-#line 1401 "<stdout>"
+#line 1401 "unicode_blocks.u--encoding-policy(substitute).c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -1407,19 +1407,19 @@ yy320:
 	++YYCURSOR;
 #line 714 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ if (YYCURSOR == limit) return Number_Forms; else return Error; }
-#line 1411 "<stdout>"
+#line 1411 "unicode_blocks.u--encoding-policy(substitute).c"
 yy322:
 	++YYCURSOR;
 #line 713 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ goto Number_Forms; }
-#line 1416 "<stdout>"
+#line 1416 "unicode_blocks.u--encoding-policy(substitute).c"
 }
 #line 715 "unicode_blocks.u--encoding-policy(substitute).re"
 
 
 Arrows:
 	
-#line 1423 "<stdout>"
+#line 1423 "unicode_blocks.u--encoding-policy(substitute).c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -1429,19 +1429,19 @@ yy326:
 	++YYCURSOR;
 #line 721 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ if (YYCURSOR == limit) return Arrows; else return Error; }
-#line 1433 "<stdout>"
+#line 1433 "unicode_blocks.u--encoding-policy(substitute).c"
 yy328:
 	++YYCURSOR;
 #line 720 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ goto Arrows; }
-#line 1438 "<stdout>"
+#line 1438 "unicode_blocks.u--encoding-policy(substitute).c"
 }
 #line 722 "unicode_blocks.u--encoding-policy(substitute).re"
 
 
 Mathematical_Operators:
 	
-#line 1445 "<stdout>"
+#line 1445 "unicode_blocks.u--encoding-policy(substitute).c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -1451,19 +1451,19 @@ yy332:
 	++YYCURSOR;
 #line 728 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ if (YYCURSOR == limit) return Mathematical_Operators; else return Error; }
-#line 1455 "<stdout>"
+#line 1455 "unicode_blocks.u--encoding-policy(substitute).c"
 yy334:
 	++YYCURSOR;
 #line 727 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ goto Mathematical_Operators; }
-#line 1460 "<stdout>"
+#line 1460 "unicode_blocks.u--encoding-policy(substitute).c"
 }
 #line 729 "unicode_blocks.u--encoding-policy(substitute).re"
 
 
 Miscellaneous_Technical:
 	
-#line 1467 "<stdout>"
+#line 1467 "unicode_blocks.u--encoding-policy(substitute).c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -1473,19 +1473,19 @@ yy338:
 	++YYCURSOR;
 #line 735 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ if (YYCURSOR == limit) return Miscellaneous_Technical; else return Error; }
-#line 1477 "<stdout>"
+#line 1477 "unicode_blocks.u--encoding-policy(substitute).c"
 yy340:
 	++YYCURSOR;
 #line 734 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ goto Miscellaneous_Technical; }
-#line 1482 "<stdout>"
+#line 1482 "unicode_blocks.u--encoding-policy(substitute).c"
 }
 #line 736 "unicode_blocks.u--encoding-policy(substitute).re"
 
 
 Control_Pictures:
 	
-#line 1489 "<stdout>"
+#line 1489 "unicode_blocks.u--encoding-policy(substitute).c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -1495,19 +1495,19 @@ yy344:
 	++YYCURSOR;
 #line 742 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ if (YYCURSOR == limit) return Control_Pictures; else return Error; }
-#line 1499 "<stdout>"
+#line 1499 "unicode_blocks.u--encoding-policy(substitute).c"
 yy346:
 	++YYCURSOR;
 #line 741 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ goto Control_Pictures; }
-#line 1504 "<stdout>"
+#line 1504 "unicode_blocks.u--encoding-policy(substitute).c"
 }
 #line 743 "unicode_blocks.u--encoding-policy(substitute).re"
 
 
 Optical_Character_Recognition:
 	
-#line 1511 "<stdout>"
+#line 1511 "unicode_blocks.u--encoding-policy(substitute).c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -1517,19 +1517,19 @@ yy350:
 	++YYCURSOR;
 #line 749 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ if (YYCURSOR == limit) return Optical_Character_Recognition; else return Error; }
-#line 1521 "<stdout>"
+#line 1521 "unicode_blocks.u--encoding-policy(substitute).c"
 yy352:
 	++YYCURSOR;
 #line 748 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ goto Optical_Character_Recognition; }
-#line 1526 "<stdout>"
+#line 1526 "unicode_blocks.u--encoding-policy(substitute).c"
 }
 #line 750 "unicode_blocks.u--encoding-policy(substitute).re"
 
 
 Enclosed_Alphanumerics:
 	
-#line 1533 "<stdout>"
+#line 1533 "unicode_blocks.u--encoding-policy(substitute).c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -1539,19 +1539,19 @@ yy356:
 	++YYCURSOR;
 #line 756 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ if (YYCURSOR == limit) return Enclosed_Alphanumerics; else return Error; }
-#line 1543 "<stdout>"
+#line 1543 "unicode_blocks.u--encoding-policy(substitute).c"
 yy358:
 	++YYCURSOR;
 #line 755 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ goto Enclosed_Alphanumerics; }
-#line 1548 "<stdout>"
+#line 1548 "unicode_blocks.u--encoding-policy(substitute).c"
 }
 #line 757 "unicode_blocks.u--encoding-policy(substitute).re"
 
 
 Box_Drawing:
 	
-#line 1555 "<stdout>"
+#line 1555 "unicode_blocks.u--encoding-policy(substitute).c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -1561,19 +1561,19 @@ yy362:
 	++YYCURSOR;
 #line 763 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ if (YYCURSOR == limit) return Box_Drawing; else return Error; }
-#line 1565 "<stdout>"
+#line 1565 "unicode_blocks.u--encoding-policy(substitute).c"
 yy364:
 	++YYCURSOR;
 #line 762 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ goto Box_Drawing; }
-#line 1570 "<stdout>"
+#line 1570 "unicode_blocks.u--encoding-policy(substitute).c"
 }
 #line 764 "unicode_blocks.u--encoding-policy(substitute).re"
 
 
 Block_Elements:
 	
-#line 1577 "<stdout>"
+#line 1577 "unicode_blocks.u--encoding-policy(substitute).c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -1583,19 +1583,19 @@ yy368:
 	++YYCURSOR;
 #line 770 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ if (YYCURSOR == limit) return Block_Elements; else return Error; }
-#line 1587 "<stdout>"
+#line 1587 "unicode_blocks.u--encoding-policy(substitute).c"
 yy370:
 	++YYCURSOR;
 #line 769 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ goto Block_Elements; }
-#line 1592 "<stdout>"
+#line 1592 "unicode_blocks.u--encoding-policy(substitute).c"
 }
 #line 771 "unicode_blocks.u--encoding-policy(substitute).re"
 
 
 Geometric_Shapes:
 	
-#line 1599 "<stdout>"
+#line 1599 "unicode_blocks.u--encoding-policy(substitute).c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -1605,19 +1605,19 @@ yy374:
 	++YYCURSOR;
 #line 777 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ if (YYCURSOR == limit) return Geometric_Shapes; else return Error; }
-#line 1609 "<stdout>"
+#line 1609 "unicode_blocks.u--encoding-policy(substitute).c"
 yy376:
 	++YYCURSOR;
 #line 776 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ goto Geometric_Shapes; }
-#line 1614 "<stdout>"
+#line 1614 "unicode_blocks.u--encoding-policy(substitute).c"
 }
 #line 778 "unicode_blocks.u--encoding-policy(substitute).re"
 
 
 Miscellaneous_Symbols:
 	
-#line 1621 "<stdout>"
+#line 1621 "unicode_blocks.u--encoding-policy(substitute).c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -1627,19 +1627,19 @@ yy380:
 	++YYCURSOR;
 #line 784 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ if (YYCURSOR == limit) return Miscellaneous_Symbols; else return Error; }
-#line 1631 "<stdout>"
+#line 1631 "unicode_blocks.u--encoding-policy(substitute).c"
 yy382:
 	++YYCURSOR;
 #line 783 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ goto Miscellaneous_Symbols; }
-#line 1636 "<stdout>"
+#line 1636 "unicode_blocks.u--encoding-policy(substitute).c"
 }
 #line 785 "unicode_blocks.u--encoding-policy(substitute).re"
 
 
 Dingbats:
 	
-#line 1643 "<stdout>"
+#line 1643 "unicode_blocks.u--encoding-policy(substitute).c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -1649,19 +1649,19 @@ yy386:
 	++YYCURSOR;
 #line 791 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ if (YYCURSOR == limit) return Dingbats; else return Error; }
-#line 1653 "<stdout>"
+#line 1653 "unicode_blocks.u--encoding-policy(substitute).c"
 yy388:
 	++YYCURSOR;
 #line 790 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ goto Dingbats; }
-#line 1658 "<stdout>"
+#line 1658 "unicode_blocks.u--encoding-policy(substitute).c"
 }
 #line 792 "unicode_blocks.u--encoding-policy(substitute).re"
 
 
 Miscellaneous_Mathematical_Symbols_A:
 	
-#line 1665 "<stdout>"
+#line 1665 "unicode_blocks.u--encoding-policy(substitute).c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -1671,19 +1671,19 @@ yy392:
 	++YYCURSOR;
 #line 798 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ if (YYCURSOR == limit) return Miscellaneous_Mathematical_Symbols_A; else return Error; }
-#line 1675 "<stdout>"
+#line 1675 "unicode_blocks.u--encoding-policy(substitute).c"
 yy394:
 	++YYCURSOR;
 #line 797 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ goto Miscellaneous_Mathematical_Symbols_A; }
-#line 1680 "<stdout>"
+#line 1680 "unicode_blocks.u--encoding-policy(substitute).c"
 }
 #line 799 "unicode_blocks.u--encoding-policy(substitute).re"
 
 
 Supplemental_Arrows_A:
 	
-#line 1687 "<stdout>"
+#line 1687 "unicode_blocks.u--encoding-policy(substitute).c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -1693,19 +1693,19 @@ yy398:
 	++YYCURSOR;
 #line 805 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ if (YYCURSOR == limit) return Supplemental_Arrows_A; else return Error; }
-#line 1697 "<stdout>"
+#line 1697 "unicode_blocks.u--encoding-policy(substitute).c"
 yy400:
 	++YYCURSOR;
 #line 804 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ goto Supplemental_Arrows_A; }
-#line 1702 "<stdout>"
+#line 1702 "unicode_blocks.u--encoding-policy(substitute).c"
 }
 #line 806 "unicode_blocks.u--encoding-policy(substitute).re"
 
 
 Braille_Patterns:
 	
-#line 1709 "<stdout>"
+#line 1709 "unicode_blocks.u--encoding-policy(substitute).c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -1715,19 +1715,19 @@ yy404:
 	++YYCURSOR;
 #line 812 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ if (YYCURSOR == limit) return Braille_Patterns; else return Error; }
-#line 1719 "<stdout>"
+#line 1719 "unicode_blocks.u--encoding-policy(substitute).c"
 yy406:
 	++YYCURSOR;
 #line 811 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ goto Braille_Patterns; }
-#line 1724 "<stdout>"
+#line 1724 "unicode_blocks.u--encoding-policy(substitute).c"
 }
 #line 813 "unicode_blocks.u--encoding-policy(substitute).re"
 
 
 Supplemental_Arrows_B:
 	
-#line 1731 "<stdout>"
+#line 1731 "unicode_blocks.u--encoding-policy(substitute).c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -1737,19 +1737,19 @@ yy410:
 	++YYCURSOR;
 #line 819 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ if (YYCURSOR == limit) return Supplemental_Arrows_B; else return Error; }
-#line 1741 "<stdout>"
+#line 1741 "unicode_blocks.u--encoding-policy(substitute).c"
 yy412:
 	++YYCURSOR;
 #line 818 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ goto Supplemental_Arrows_B; }
-#line 1746 "<stdout>"
+#line 1746 "unicode_blocks.u--encoding-policy(substitute).c"
 }
 #line 820 "unicode_blocks.u--encoding-policy(substitute).re"
 
 
 Miscellaneous_Mathematical_Symbols_B:
 	
-#line 1753 "<stdout>"
+#line 1753 "unicode_blocks.u--encoding-policy(substitute).c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -1759,19 +1759,19 @@ yy416:
 	++YYCURSOR;
 #line 826 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ if (YYCURSOR == limit) return Miscellaneous_Mathematical_Symbols_B; else return Error; }
-#line 1763 "<stdout>"
+#line 1763 "unicode_blocks.u--encoding-policy(substitute).c"
 yy418:
 	++YYCURSOR;
 #line 825 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ goto Miscellaneous_Mathematical_Symbols_B; }
-#line 1768 "<stdout>"
+#line 1768 "unicode_blocks.u--encoding-policy(substitute).c"
 }
 #line 827 "unicode_blocks.u--encoding-policy(substitute).re"
 
 
 Supplemental_Mathematical_Operators:
 	
-#line 1775 "<stdout>"
+#line 1775 "unicode_blocks.u--encoding-policy(substitute).c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -1781,19 +1781,19 @@ yy422:
 	++YYCURSOR;
 #line 833 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ if (YYCURSOR == limit) return Supplemental_Mathematical_Operators; else return Error; }
-#line 1785 "<stdout>"
+#line 1785 "unicode_blocks.u--encoding-policy(substitute).c"
 yy424:
 	++YYCURSOR;
 #line 832 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ goto Supplemental_Mathematical_Operators; }
-#line 1790 "<stdout>"
+#line 1790 "unicode_blocks.u--encoding-policy(substitute).c"
 }
 #line 834 "unicode_blocks.u--encoding-policy(substitute).re"
 
 
 Miscellaneous_Symbols_and_Arrows:
 	
-#line 1797 "<stdout>"
+#line 1797 "unicode_blocks.u--encoding-policy(substitute).c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -1803,19 +1803,19 @@ yy428:
 	++YYCURSOR;
 #line 840 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ if (YYCURSOR == limit) return Miscellaneous_Symbols_and_Arrows; else return Error; }
-#line 1807 "<stdout>"
+#line 1807 "unicode_blocks.u--encoding-policy(substitute).c"
 yy430:
 	++YYCURSOR;
 #line 839 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ goto Miscellaneous_Symbols_and_Arrows; }
-#line 1812 "<stdout>"
+#line 1812 "unicode_blocks.u--encoding-policy(substitute).c"
 }
 #line 841 "unicode_blocks.u--encoding-policy(substitute).re"
 
 
 CJK_Radicals_Supplement:
 	
-#line 1819 "<stdout>"
+#line 1819 "unicode_blocks.u--encoding-policy(substitute).c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -1825,19 +1825,19 @@ yy434:
 	++YYCURSOR;
 #line 847 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ if (YYCURSOR == limit) return CJK_Radicals_Supplement; else return Error; }
-#line 1829 "<stdout>"
+#line 1829 "unicode_blocks.u--encoding-policy(substitute).c"
 yy436:
 	++YYCURSOR;
 #line 846 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ goto CJK_Radicals_Supplement; }
-#line 1834 "<stdout>"
+#line 1834 "unicode_blocks.u--encoding-policy(substitute).c"
 }
 #line 848 "unicode_blocks.u--encoding-policy(substitute).re"
 
 
 Kangxi_Radicals:
 	
-#line 1841 "<stdout>"
+#line 1841 "unicode_blocks.u--encoding-policy(substitute).c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -1847,19 +1847,19 @@ yy440:
 	++YYCURSOR;
 #line 854 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ if (YYCURSOR == limit) return Kangxi_Radicals; else return Error; }
-#line 1851 "<stdout>"
+#line 1851 "unicode_blocks.u--encoding-policy(substitute).c"
 yy442:
 	++YYCURSOR;
 #line 853 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ goto Kangxi_Radicals; }
-#line 1856 "<stdout>"
+#line 1856 "unicode_blocks.u--encoding-policy(substitute).c"
 }
 #line 855 "unicode_blocks.u--encoding-policy(substitute).re"
 
 
 Ideographic_Description_Characters:
 	
-#line 1863 "<stdout>"
+#line 1863 "unicode_blocks.u--encoding-policy(substitute).c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -1869,19 +1869,19 @@ yy446:
 	++YYCURSOR;
 #line 861 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ if (YYCURSOR == limit) return Ideographic_Description_Characters; else return Error; }
-#line 1873 "<stdout>"
+#line 1873 "unicode_blocks.u--encoding-policy(substitute).c"
 yy448:
 	++YYCURSOR;
 #line 860 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ goto Ideographic_Description_Characters; }
-#line 1878 "<stdout>"
+#line 1878 "unicode_blocks.u--encoding-policy(substitute).c"
 }
 #line 862 "unicode_blocks.u--encoding-policy(substitute).re"
 
 
 CJK_Symbols_and_Punctuation:
 	
-#line 1885 "<stdout>"
+#line 1885 "unicode_blocks.u--encoding-policy(substitute).c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -1891,19 +1891,19 @@ yy452:
 	++YYCURSOR;
 #line 868 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ if (YYCURSOR == limit) return CJK_Symbols_and_Punctuation; else return Error; }
-#line 1895 "<stdout>"
+#line 1895 "unicode_blocks.u--encoding-policy(substitute).c"
 yy454:
 	++YYCURSOR;
 #line 867 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ goto CJK_Symbols_and_Punctuation; }
-#line 1900 "<stdout>"
+#line 1900 "unicode_blocks.u--encoding-policy(substitute).c"
 }
 #line 869 "unicode_blocks.u--encoding-policy(substitute).re"
 
 
 Hiragana:
 	
-#line 1907 "<stdout>"
+#line 1907 "unicode_blocks.u--encoding-policy(substitute).c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -1913,19 +1913,19 @@ yy458:
 	++YYCURSOR;
 #line 875 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ if (YYCURSOR == limit) return Hiragana; else return Error; }
-#line 1917 "<stdout>"
+#line 1917 "unicode_blocks.u--encoding-policy(substitute).c"
 yy460:
 	++YYCURSOR;
 #line 874 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ goto Hiragana; }
-#line 1922 "<stdout>"
+#line 1922 "unicode_blocks.u--encoding-policy(substitute).c"
 }
 #line 876 "unicode_blocks.u--encoding-policy(substitute).re"
 
 
 Katakana:
 	
-#line 1929 "<stdout>"
+#line 1929 "unicode_blocks.u--encoding-policy(substitute).c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -1935,19 +1935,19 @@ yy464:
 	++YYCURSOR;
 #line 882 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ if (YYCURSOR == limit) return Katakana; else return Error; }
-#line 1939 "<stdout>"
+#line 1939 "unicode_blocks.u--encoding-policy(substitute).c"
 yy466:
 	++YYCURSOR;
 #line 881 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ goto Katakana; }
-#line 1944 "<stdout>"
+#line 1944 "unicode_blocks.u--encoding-policy(substitute).c"
 }
 #line 883 "unicode_blocks.u--encoding-policy(substitute).re"
 
 
 Bopomofo:
 	
-#line 1951 "<stdout>"
+#line 1951 "unicode_blocks.u--encoding-policy(substitute).c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -1957,19 +1957,19 @@ yy470:
 	++YYCURSOR;
 #line 889 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ if (YYCURSOR == limit) return Bopomofo; else return Error; }
-#line 1961 "<stdout>"
+#line 1961 "unicode_blocks.u--encoding-policy(substitute).c"
 yy472:
 	++YYCURSOR;
 #line 888 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ goto Bopomofo; }
-#line 1966 "<stdout>"
+#line 1966 "unicode_blocks.u--encoding-policy(substitute).c"
 }
 #line 890 "unicode_blocks.u--encoding-policy(substitute).re"
 
 
 Hangul_Compatibility_Jamo:
 	
-#line 1973 "<stdout>"
+#line 1973 "unicode_blocks.u--encoding-policy(substitute).c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -1979,19 +1979,19 @@ yy476:
 	++YYCURSOR;
 #line 896 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ if (YYCURSOR == limit) return Hangul_Compatibility_Jamo; else return Error; }
-#line 1983 "<stdout>"
+#line 1983 "unicode_blocks.u--encoding-policy(substitute).c"
 yy478:
 	++YYCURSOR;
 #line 895 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ goto Hangul_Compatibility_Jamo; }
-#line 1988 "<stdout>"
+#line 1988 "unicode_blocks.u--encoding-policy(substitute).c"
 }
 #line 897 "unicode_blocks.u--encoding-policy(substitute).re"
 
 
 Kanbun:
 	
-#line 1995 "<stdout>"
+#line 1995 "unicode_blocks.u--encoding-policy(substitute).c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -2001,19 +2001,19 @@ yy482:
 	++YYCURSOR;
 #line 903 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ if (YYCURSOR == limit) return Kanbun; else return Error; }
-#line 2005 "<stdout>"
+#line 2005 "unicode_blocks.u--encoding-policy(substitute).c"
 yy484:
 	++YYCURSOR;
 #line 902 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ goto Kanbun; }
-#line 2010 "<stdout>"
+#line 2010 "unicode_blocks.u--encoding-policy(substitute).c"
 }
 #line 904 "unicode_blocks.u--encoding-policy(substitute).re"
 
 
 Bopomofo_Extended:
 	
-#line 2017 "<stdout>"
+#line 2017 "unicode_blocks.u--encoding-policy(substitute).c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -2023,19 +2023,19 @@ yy488:
 	++YYCURSOR;
 #line 910 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ if (YYCURSOR == limit) return Bopomofo_Extended; else return Error; }
-#line 2027 "<stdout>"
+#line 2027 "unicode_blocks.u--encoding-policy(substitute).c"
 yy490:
 	++YYCURSOR;
 #line 909 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ goto Bopomofo_Extended; }
-#line 2032 "<stdout>"
+#line 2032 "unicode_blocks.u--encoding-policy(substitute).c"
 }
 #line 911 "unicode_blocks.u--encoding-policy(substitute).re"
 
 
 Katakana_Phonetic_Extensions:
 	
-#line 2039 "<stdout>"
+#line 2039 "unicode_blocks.u--encoding-policy(substitute).c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -2045,19 +2045,19 @@ yy494:
 	++YYCURSOR;
 #line 917 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ if (YYCURSOR == limit) return Katakana_Phonetic_Extensions; else return Error; }
-#line 2049 "<stdout>"
+#line 2049 "unicode_blocks.u--encoding-policy(substitute).c"
 yy496:
 	++YYCURSOR;
 #line 916 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ goto Katakana_Phonetic_Extensions; }
-#line 2054 "<stdout>"
+#line 2054 "unicode_blocks.u--encoding-policy(substitute).c"
 }
 #line 918 "unicode_blocks.u--encoding-policy(substitute).re"
 
 
 Enclosed_CJK_Letters_and_Months:
 	
-#line 2061 "<stdout>"
+#line 2061 "unicode_blocks.u--encoding-policy(substitute).c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -2067,19 +2067,19 @@ yy500:
 	++YYCURSOR;
 #line 924 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ if (YYCURSOR == limit) return Enclosed_CJK_Letters_and_Months; else return Error; }
-#line 2071 "<stdout>"
+#line 2071 "unicode_blocks.u--encoding-policy(substitute).c"
 yy502:
 	++YYCURSOR;
 #line 923 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ goto Enclosed_CJK_Letters_and_Months; }
-#line 2076 "<stdout>"
+#line 2076 "unicode_blocks.u--encoding-policy(substitute).c"
 }
 #line 925 "unicode_blocks.u--encoding-policy(substitute).re"
 
 
 CJK_Compatibility:
 	
-#line 2083 "<stdout>"
+#line 2083 "unicode_blocks.u--encoding-policy(substitute).c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -2089,19 +2089,19 @@ yy506:
 	++YYCURSOR;
 #line 931 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ if (YYCURSOR == limit) return CJK_Compatibility; else return Error; }
-#line 2093 "<stdout>"
+#line 2093 "unicode_blocks.u--encoding-policy(substitute).c"
 yy508:
 	++YYCURSOR;
 #line 930 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ goto CJK_Compatibility; }
-#line 2098 "<stdout>"
+#line 2098 "unicode_blocks.u--encoding-policy(substitute).c"
 }
 #line 932 "unicode_blocks.u--encoding-policy(substitute).re"
 
 
 CJK_Unified_Ideographs_Extension_A:
 	
-#line 2105 "<stdout>"
+#line 2105 "unicode_blocks.u--encoding-policy(substitute).c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -2111,19 +2111,19 @@ yy512:
 	++YYCURSOR;
 #line 938 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ if (YYCURSOR == limit) return CJK_Unified_Ideographs_Extension_A; else return Error; }
-#line 2115 "<stdout>"
+#line 2115 "unicode_blocks.u--encoding-policy(substitute).c"
 yy514:
 	++YYCURSOR;
 #line 937 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ goto CJK_Unified_Ideographs_Extension_A; }
-#line 2120 "<stdout>"
+#line 2120 "unicode_blocks.u--encoding-policy(substitute).c"
 }
 #line 939 "unicode_blocks.u--encoding-policy(substitute).re"
 
 
 Yijing_Hexagram_Symbols:
 	
-#line 2127 "<stdout>"
+#line 2127 "unicode_blocks.u--encoding-policy(substitute).c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -2133,19 +2133,19 @@ yy518:
 	++YYCURSOR;
 #line 945 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ if (YYCURSOR == limit) return Yijing_Hexagram_Symbols; else return Error; }
-#line 2137 "<stdout>"
+#line 2137 "unicode_blocks.u--encoding-policy(substitute).c"
 yy520:
 	++YYCURSOR;
 #line 944 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ goto Yijing_Hexagram_Symbols; }
-#line 2142 "<stdout>"
+#line 2142 "unicode_blocks.u--encoding-policy(substitute).c"
 }
 #line 946 "unicode_blocks.u--encoding-policy(substitute).re"
 
 
 CJK_Unified_Ideographs:
 	
-#line 2149 "<stdout>"
+#line 2149 "unicode_blocks.u--encoding-policy(substitute).c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -2155,19 +2155,19 @@ yy524:
 	++YYCURSOR;
 #line 952 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ if (YYCURSOR == limit) return CJK_Unified_Ideographs; else return Error; }
-#line 2159 "<stdout>"
+#line 2159 "unicode_blocks.u--encoding-policy(substitute).c"
 yy526:
 	++YYCURSOR;
 #line 951 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ goto CJK_Unified_Ideographs; }
-#line 2164 "<stdout>"
+#line 2164 "unicode_blocks.u--encoding-policy(substitute).c"
 }
 #line 953 "unicode_blocks.u--encoding-policy(substitute).re"
 
 
 Yi_Syllables:
 	
-#line 2171 "<stdout>"
+#line 2171 "unicode_blocks.u--encoding-policy(substitute).c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -2177,19 +2177,19 @@ yy530:
 	++YYCURSOR;
 #line 959 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ if (YYCURSOR == limit) return Yi_Syllables; else return Error; }
-#line 2181 "<stdout>"
+#line 2181 "unicode_blocks.u--encoding-policy(substitute).c"
 yy532:
 	++YYCURSOR;
 #line 958 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ goto Yi_Syllables; }
-#line 2186 "<stdout>"
+#line 2186 "unicode_blocks.u--encoding-policy(substitute).c"
 }
 #line 960 "unicode_blocks.u--encoding-policy(substitute).re"
 
 
 Yi_Radicals:
 	
-#line 2193 "<stdout>"
+#line 2193 "unicode_blocks.u--encoding-policy(substitute).c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -2199,19 +2199,19 @@ yy536:
 	++YYCURSOR;
 #line 966 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ if (YYCURSOR == limit) return Yi_Radicals; else return Error; }
-#line 2203 "<stdout>"
+#line 2203 "unicode_blocks.u--encoding-policy(substitute).c"
 yy538:
 	++YYCURSOR;
 #line 965 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ goto Yi_Radicals; }
-#line 2208 "<stdout>"
+#line 2208 "unicode_blocks.u--encoding-policy(substitute).c"
 }
 #line 967 "unicode_blocks.u--encoding-policy(substitute).re"
 
 
 Hangul_Syllables:
 	
-#line 2215 "<stdout>"
+#line 2215 "unicode_blocks.u--encoding-policy(substitute).c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -2221,19 +2221,19 @@ yy542:
 	++YYCURSOR;
 #line 973 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ if (YYCURSOR == limit) return Hangul_Syllables; else return Error; }
-#line 2225 "<stdout>"
+#line 2225 "unicode_blocks.u--encoding-policy(substitute).c"
 yy544:
 	++YYCURSOR;
 #line 972 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ goto Hangul_Syllables; }
-#line 2230 "<stdout>"
+#line 2230 "unicode_blocks.u--encoding-policy(substitute).c"
 }
 #line 974 "unicode_blocks.u--encoding-policy(substitute).re"
 
 
 High_Surrogates:
 	
-#line 2237 "<stdout>"
+#line 2237 "unicode_blocks.u--encoding-policy(substitute).c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -2241,19 +2241,19 @@ High_Surrogates:
 	++YYCURSOR;
 #line 980 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ if (YYCURSOR == limit) return High_Surrogates; else return Error; }
-#line 2245 "<stdout>"
+#line 2245 "unicode_blocks.u--encoding-policy(substitute).c"
 yy550:
 	++YYCURSOR;
 #line 979 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ goto High_Surrogates; }
-#line 2250 "<stdout>"
+#line 2250 "unicode_blocks.u--encoding-policy(substitute).c"
 }
 #line 981 "unicode_blocks.u--encoding-policy(substitute).re"
 
 
 High_Private_Use_Surrogates:
 	
-#line 2257 "<stdout>"
+#line 2257 "unicode_blocks.u--encoding-policy(substitute).c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -2261,19 +2261,19 @@ High_Private_Use_Surrogates:
 	++YYCURSOR;
 #line 987 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ if (YYCURSOR == limit) return High_Private_Use_Surrogates; else return Error; }
-#line 2265 "<stdout>"
+#line 2265 "unicode_blocks.u--encoding-policy(substitute).c"
 yy556:
 	++YYCURSOR;
 #line 986 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ goto High_Private_Use_Surrogates; }
-#line 2270 "<stdout>"
+#line 2270 "unicode_blocks.u--encoding-policy(substitute).c"
 }
 #line 988 "unicode_blocks.u--encoding-policy(substitute).re"
 
 
 Low_Surrogates:
 	
-#line 2277 "<stdout>"
+#line 2277 "unicode_blocks.u--encoding-policy(substitute).c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -2281,19 +2281,19 @@ Low_Surrogates:
 	++YYCURSOR;
 #line 994 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ if (YYCURSOR == limit) return Low_Surrogates; else return Error; }
-#line 2285 "<stdout>"
+#line 2285 "unicode_blocks.u--encoding-policy(substitute).c"
 yy562:
 	++YYCURSOR;
 #line 993 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ goto Low_Surrogates; }
-#line 2290 "<stdout>"
+#line 2290 "unicode_blocks.u--encoding-policy(substitute).c"
 }
 #line 995 "unicode_blocks.u--encoding-policy(substitute).re"
 
 
 Private_Use_Area:
 	
-#line 2297 "<stdout>"
+#line 2297 "unicode_blocks.u--encoding-policy(substitute).c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -2303,19 +2303,19 @@ yy566:
 	++YYCURSOR;
 #line 1001 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ if (YYCURSOR == limit) return Private_Use_Area; else return Error; }
-#line 2307 "<stdout>"
+#line 2307 "unicode_blocks.u--encoding-policy(substitute).c"
 yy568:
 	++YYCURSOR;
 #line 1000 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ goto Private_Use_Area; }
-#line 2312 "<stdout>"
+#line 2312 "unicode_blocks.u--encoding-policy(substitute).c"
 }
 #line 1002 "unicode_blocks.u--encoding-policy(substitute).re"
 
 
 CJK_Compatibility_Ideographs:
 	
-#line 2319 "<stdout>"
+#line 2319 "unicode_blocks.u--encoding-policy(substitute).c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -2325,19 +2325,19 @@ yy572:
 	++YYCURSOR;
 #line 1008 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ if (YYCURSOR == limit) return CJK_Compatibility_Ideographs; else return Error; }
-#line 2329 "<stdout>"
+#line 2329 "unicode_blocks.u--encoding-policy(substitute).c"
 yy574:
 	++YYCURSOR;
 #line 1007 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ goto CJK_Compatibility_Ideographs; }
-#line 2334 "<stdout>"
+#line 2334 "unicode_blocks.u--encoding-policy(substitute).c"
 }
 #line 1009 "unicode_blocks.u--encoding-policy(substitute).re"
 
 
 Alphabetic_Presentation_Forms:
 	
-#line 2341 "<stdout>"
+#line 2341 "unicode_blocks.u--encoding-policy(substitute).c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -2347,19 +2347,19 @@ yy578:
 	++YYCURSOR;
 #line 1015 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ if (YYCURSOR == limit) return Alphabetic_Presentation_Forms; else return Error; }
-#line 2351 "<stdout>"
+#line 2351 "unicode_blocks.u--encoding-policy(substitute).c"
 yy580:
 	++YYCURSOR;
 #line 1014 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ goto Alphabetic_Presentation_Forms; }
-#line 2356 "<stdout>"
+#line 2356 "unicode_blocks.u--encoding-policy(substitute).c"
 }
 #line 1016 "unicode_blocks.u--encoding-policy(substitute).re"
 
 
 Arabic_Presentation_Forms_A:
 	
-#line 2363 "<stdout>"
+#line 2363 "unicode_blocks.u--encoding-policy(substitute).c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -2369,19 +2369,19 @@ yy584:
 	++YYCURSOR;
 #line 1022 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ if (YYCURSOR == limit) return Arabic_Presentation_Forms_A; else return Error; }
-#line 2373 "<stdout>"
+#line 2373 "unicode_blocks.u--encoding-policy(substitute).c"
 yy586:
 	++YYCURSOR;
 #line 1021 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ goto Arabic_Presentation_Forms_A; }
-#line 2378 "<stdout>"
+#line 2378 "unicode_blocks.u--encoding-policy(substitute).c"
 }
 #line 1023 "unicode_blocks.u--encoding-policy(substitute).re"
 
 
 Variation_Selectors:
 	
-#line 2385 "<stdout>"
+#line 2385 "unicode_blocks.u--encoding-policy(substitute).c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -2391,19 +2391,19 @@ yy590:
 	++YYCURSOR;
 #line 1029 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ if (YYCURSOR == limit) return Variation_Selectors; else return Error; }
-#line 2395 "<stdout>"
+#line 2395 "unicode_blocks.u--encoding-policy(substitute).c"
 yy592:
 	++YYCURSOR;
 #line 1028 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ goto Variation_Selectors; }
-#line 2400 "<stdout>"
+#line 2400 "unicode_blocks.u--encoding-policy(substitute).c"
 }
 #line 1030 "unicode_blocks.u--encoding-policy(substitute).re"
 
 
 Combining_Half_Marks:
 	
-#line 2407 "<stdout>"
+#line 2407 "unicode_blocks.u--encoding-policy(substitute).c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -2413,19 +2413,19 @@ yy596:
 	++YYCURSOR;
 #line 1036 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ if (YYCURSOR == limit) return Combining_Half_Marks; else return Error; }
-#line 2417 "<stdout>"
+#line 2417 "unicode_blocks.u--encoding-policy(substitute).c"
 yy598:
 	++YYCURSOR;
 #line 1035 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ goto Combining_Half_Marks; }
-#line 2422 "<stdout>"
+#line 2422 "unicode_blocks.u--encoding-policy(substitute).c"
 }
 #line 1037 "unicode_blocks.u--encoding-policy(substitute).re"
 
 
 CJK_Compatibility_Forms:
 	
-#line 2429 "<stdout>"
+#line 2429 "unicode_blocks.u--encoding-policy(substitute).c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -2435,19 +2435,19 @@ yy602:
 	++YYCURSOR;
 #line 1043 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ if (YYCURSOR == limit) return CJK_Compatibility_Forms; else return Error; }
-#line 2439 "<stdout>"
+#line 2439 "unicode_blocks.u--encoding-policy(substitute).c"
 yy604:
 	++YYCURSOR;
 #line 1042 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ goto CJK_Compatibility_Forms; }
-#line 2444 "<stdout>"
+#line 2444 "unicode_blocks.u--encoding-policy(substitute).c"
 }
 #line 1044 "unicode_blocks.u--encoding-policy(substitute).re"
 
 
 Small_Form_Variants:
 	
-#line 2451 "<stdout>"
+#line 2451 "unicode_blocks.u--encoding-policy(substitute).c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -2457,19 +2457,19 @@ yy608:
 	++YYCURSOR;
 #line 1050 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ if (YYCURSOR == limit) return Small_Form_Variants; else return Error; }
-#line 2461 "<stdout>"
+#line 2461 "unicode_blocks.u--encoding-policy(substitute).c"
 yy610:
 	++YYCURSOR;
 #line 1049 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ goto Small_Form_Variants; }
-#line 2466 "<stdout>"
+#line 2466 "unicode_blocks.u--encoding-policy(substitute).c"
 }
 #line 1051 "unicode_blocks.u--encoding-policy(substitute).re"
 
 
 Arabic_Presentation_Forms_B:
 	
-#line 2473 "<stdout>"
+#line 2473 "unicode_blocks.u--encoding-policy(substitute).c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -2479,19 +2479,19 @@ yy614:
 	++YYCURSOR;
 #line 1057 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ if (YYCURSOR == limit) return Arabic_Presentation_Forms_B; else return Error; }
-#line 2483 "<stdout>"
+#line 2483 "unicode_blocks.u--encoding-policy(substitute).c"
 yy616:
 	++YYCURSOR;
 #line 1056 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ goto Arabic_Presentation_Forms_B; }
-#line 2488 "<stdout>"
+#line 2488 "unicode_blocks.u--encoding-policy(substitute).c"
 }
 #line 1058 "unicode_blocks.u--encoding-policy(substitute).re"
 
 
 Halfwidth_and_Fullwidth_Forms:
 	
-#line 2495 "<stdout>"
+#line 2495 "unicode_blocks.u--encoding-policy(substitute).c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -2501,19 +2501,19 @@ yy620:
 	++YYCURSOR;
 #line 1064 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ if (YYCURSOR == limit) return Halfwidth_and_Fullwidth_Forms; else return Error; }
-#line 2505 "<stdout>"
+#line 2505 "unicode_blocks.u--encoding-policy(substitute).c"
 yy622:
 	++YYCURSOR;
 #line 1063 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ goto Halfwidth_and_Fullwidth_Forms; }
-#line 2510 "<stdout>"
+#line 2510 "unicode_blocks.u--encoding-policy(substitute).c"
 }
 #line 1065 "unicode_blocks.u--encoding-policy(substitute).re"
 
 
 Specials:
 	
-#line 2517 "<stdout>"
+#line 2517 "unicode_blocks.u--encoding-policy(substitute).c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -2523,19 +2523,19 @@ yy626:
 	++YYCURSOR;
 #line 1071 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ if (YYCURSOR == limit) return Specials; else return Error; }
-#line 2527 "<stdout>"
+#line 2527 "unicode_blocks.u--encoding-policy(substitute).c"
 yy628:
 	++YYCURSOR;
 #line 1070 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ goto Specials; }
-#line 2532 "<stdout>"
+#line 2532 "unicode_blocks.u--encoding-policy(substitute).c"
 }
 #line 1072 "unicode_blocks.u--encoding-policy(substitute).re"
 
 
 All:
 	
-#line 2539 "<stdout>"
+#line 2539 "unicode_blocks.u--encoding-policy(substitute).c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
@@ -2584,12 +2584,12 @@ yy632:
 	++YYCURSOR;
 #line 1077 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ goto All; }
-#line 2588 "<stdout>"
+#line 2588 "unicode_blocks.u--encoding-policy(substitute).c"
 yy634:
 	++YYCURSOR;
 #line 1078 "unicode_blocks.u--encoding-policy(substitute).re"
 	{ if (YYCURSOR == limit) return All; else return Error; }
-#line 2593 "<stdout>"
+#line 2593 "unicode_blocks.u--encoding-policy(substitute).c"
 }
 #line 1079 "unicode_blocks.u--encoding-policy(substitute).re"
 

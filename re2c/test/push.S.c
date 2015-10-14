@@ -121,7 +121,7 @@ int lex_line261 ()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("<stdout>.line261.input"
+        ("push.S.c.line261.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -133,7 +133,7 @@ int lex_line261 ()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("<stdout>.line261.keys"
+        ("push.S.c.line261.keys"
         , 3 * sizeof (YYKEYTYPE)
         , 0
         , &keys_count

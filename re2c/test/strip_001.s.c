@@ -76,7 +76,7 @@ int scan(FILE *fp)
 	{
 		s.tok = s.cur;
 
-#line 80 "<stdout>"
+#line 80 "strip_001.s.c"
 		{
 			YYCTYPE yych;
 			if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
@@ -88,7 +88,7 @@ int scan(FILE *fp)
 yy3:
 #line 113 "strip_001.s.re"
 			{ fputc(*s.tok, stdout); continue; }
-#line 92 "<stdout>"
+#line 92 "strip_001.s.c"
 yy4:
 			yych = *++YYCURSOR;
 			goto yy3;
@@ -96,19 +96,19 @@ yy5:
 			++YYCURSOR;
 #line 112 "strip_001.s.re"
 			{ goto comment; }
-#line 100 "<stdout>"
+#line 100 "strip_001.s.c"
 yy7:
 			++YYCURSOR;
 #line 111 "strip_001.s.re"
 			{ goto cppcomment; }
-#line 105 "<stdout>"
+#line 105 "strip_001.s.c"
 		}
 #line 114 "strip_001.s.re"
 
 comment:
 		s.tok = s.cur;
 
-#line 112 "<stdout>"
+#line 112 "strip_001.s.c"
 		{
 			YYCTYPE yych;
 			if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
@@ -119,7 +119,7 @@ comment:
 yy12:
 #line 119 "strip_001.s.re"
 			{ goto comment; }
-#line 123 "<stdout>"
+#line 123 "strip_001.s.c"
 yy13:
 			yych = *++YYCURSOR;
 			goto yy12;
@@ -127,14 +127,14 @@ yy14:
 			++YYCURSOR;
 #line 118 "strip_001.s.re"
 			{ continue; }
-#line 131 "<stdout>"
+#line 131 "strip_001.s.c"
 		}
 #line 120 "strip_001.s.re"
 
 cppcomment:
 		s.tok = s.cur;
 
-#line 138 "<stdout>"
+#line 138 "strip_001.s.c"
 		{
 			YYCTYPE yych;
 			if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
@@ -146,13 +146,13 @@ cppcomment:
 yy19:
 #line 125 "strip_001.s.re"
 			{ goto cppcomment; }
-#line 150 "<stdout>"
+#line 150 "strip_001.s.c"
 yy20:
 			++YYCURSOR;
 yy21:
 #line 124 "strip_001.s.re"
 			{ fwrite(s.tok, 1, s.cur - s.tok, stdout); continue; }
-#line 156 "<stdout>"
+#line 156 "strip_001.s.c"
 yy22:
 			yych = *++YYCURSOR;
 			goto yy19;

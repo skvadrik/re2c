@@ -126,7 +126,7 @@ int lex_line22_r1 ()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("<stdout>.line22_r1.input"
+        ("reuse_conds_default_1.Scgir.c.line22_r1.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -138,7 +138,7 @@ int lex_line22_r1 ()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("<stdout>.line22_r1.keys"
+        ("reuse_conds_default_1.Scgir.c.line22_r1.keys"
         , 3 * sizeof (YYKEYTYPE)
         , 0
         , &keys_count
@@ -320,7 +320,7 @@ int lex_line22_r2 ()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("<stdout>.line22_r2.input"
+        ("reuse_conds_default_1.Scgir.c.line22_r2.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -332,7 +332,7 @@ int lex_line22_r2 ()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("<stdout>.line22_r2.keys"
+        ("reuse_conds_default_1.Scgir.c.line22_r2.keys"
         , 3 * sizeof (YYKEYTYPE)
         , 0
         , &keys_count
@@ -474,7 +474,7 @@ int lex_line32_r1 ()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("<stdout>.line32_r1.input"
+        ("reuse_conds_default_1.Scgir.c.line32_r1.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -486,7 +486,7 @@ int lex_line32_r1 ()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("<stdout>.line32_r1.keys"
+        ("reuse_conds_default_1.Scgir.c.line32_r1.keys"
         , 3 * sizeof (YYKEYTYPE)
         , 0
         , &keys_count
@@ -668,7 +668,7 @@ int lex_line32_r2 ()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("<stdout>.line32_r2.input"
+        ("reuse_conds_default_1.Scgir.c.line32_r2.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -680,7 +680,7 @@ int lex_line32_r2 ()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("<stdout>.line32_r2.keys"
+        ("reuse_conds_default_1.Scgir.c.line32_r2.keys"
         , 3 * sizeof (YYKEYTYPE)
         , 0
         , &keys_count

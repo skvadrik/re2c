@@ -127,7 +127,7 @@ int lex_line265 ()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("<stdout>.line265.input"
+        ("rexx.S.c.line265.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -139,7 +139,7 @@ int lex_line265 ()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("<stdout>.line265.keys"
+        ("rexx.S.c.line265.keys"
         , 3 * sizeof (YYKEYTYPE)
         , 0
         , &keys_count
@@ -7200,7 +7200,7 @@ int lex_line290 ()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("<stdout>.line290.input"
+        ("rexx.S.c.line290.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -7212,7 +7212,7 @@ int lex_line290 ()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("<stdout>.line290.keys"
+        ("rexx.S.c.line290.keys"
         , 3 * sizeof (YYKEYTYPE)
         , 0
         , &keys_count
@@ -7370,7 +7370,7 @@ int lex_line318 ()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("<stdout>.line318.input"
+        ("rexx.S.c.line318.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -7382,7 +7382,7 @@ int lex_line318 ()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("<stdout>.line318.keys"
+        ("rexx.S.c.line318.keys"
         , 3 * sizeof (YYKEYTYPE)
         , 0
         , &keys_count

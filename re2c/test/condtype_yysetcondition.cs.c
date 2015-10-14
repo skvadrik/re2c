@@ -21,7 +21,7 @@ int main ()
 	for (;;)
 	{
 
-#line 24 "<stdout>"
+#line 24 "condtype_yysetcondition.cs.c"
 {
 	unsigned char yych;
 	if (YYGETCONDITION() < 1) {
@@ -36,20 +36,20 @@ yyc_a:
 	++YYCURSOR;
 #line 26 "condtype_yysetcondition.cs.re"
 	{ printf ("a\n");      continue; }
-#line 39 "<stdout>"
+#line 39 "condtype_yysetcondition.cs.c"
 yy5:
 	++YYCURSOR;
 	YYSETCONDITION(yycb);
 #line 27 "condtype_yysetcondition.cs.re"
 	{ printf ("a => b\n"); continue; }
-#line 45 "<stdout>"
+#line 45 "condtype_yysetcondition.cs.c"
 /* *********************************** */
 yyc_b:
 	yych = *YYCURSOR;
 	++YYCURSOR;
 #line 24 "condtype_yysetcondition.cs.re"
 	{ printf ("b\n"); break; }
-#line 52 "<stdout>"
+#line 52 "condtype_yysetcondition.cs.c"
 }
 #line 28 "condtype_yysetcondition.cs.re"
 

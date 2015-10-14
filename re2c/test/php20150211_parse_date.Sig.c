@@ -122,7 +122,7 @@ int lex_line1719 ()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("<stdout>.line1719.input"
+        ("php20150211_parse_date.Sig.c.line1719.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -134,7 +134,7 @@ int lex_line1719 ()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("<stdout>.line1719.keys"
+        ("php20150211_parse_date.Sig.c.line1719.keys"
         , 3 * sizeof (YYKEYTYPE)
         , 0
         , &keys_count

@@ -32,7 +32,7 @@ int ScanToken(){
 
 scan:
 
-#line 29 "<stdout>"
+#line 29 "rexx.--empty-class(match-none).c"
 {
 	YYCTYPE yych;
 	unsigned int yyaccept = 0;
@@ -131,7 +131,7 @@ scan:
 yy2:
 #line 253 "rexx.--empty-class(match-none).re"
 	{ RETURN(SU_SYMBOL_COMPOUND); }
-#line 128 "<stdout>"
+#line 128 "rexx.--empty-class(match-none).c"
 yy3:
 	++YYCURSOR;
 #line 68 "rexx.--empty-class(match-none).re"
@@ -140,7 +140,7 @@ yy3:
 		ScanCB.linePos = ScanCB.pos + (cursor - ScanCB.mrk);
 		RETURN(SU_EOL);
 	    }
-#line 137 "<stdout>"
+#line 137 "rexx.--empty-class(match-none).c"
 yy5:
 	yyaccept = 0;
 	yych = *(YYMARKER = ++YYCURSOR);
@@ -153,17 +153,17 @@ yy5:
 yy6:
 #line 116 "rexx.--empty-class(match-none).re"
 	{ RETURN(OP_OR); }
-#line 150 "<stdout>"
+#line 150 "rexx.--empty-class(match-none).c"
 yy7:
 	++YYCURSOR;
 #line 76 "rexx.--empty-class(match-none).re"
 	{ RETURN(OP_PLUS); }
-#line 155 "<stdout>"
+#line 155 "rexx.--empty-class(match-none).c"
 yy9:
 	++YYCURSOR;
 #line 78 "rexx.--empty-class(match-none).re"
 	{ RETURN(OP_MINUS); }
-#line 160 "<stdout>"
+#line 160 "rexx.--empty-class(match-none).c"
 yy11:
 	yyaccept = 1;
 	yych = *(YYMARKER = ++YYCURSOR);
@@ -176,7 +176,7 @@ yy11:
 yy12:
 #line 80 "rexx.--empty-class(match-none).re"
 	{ RETURN(OP_MULT); }
-#line 173 "<stdout>"
+#line 173 "rexx.--empty-class(match-none).c"
 yy13:
 	yyaccept = 2;
 	yych = *(YYMARKER = ++YYCURSOR);
@@ -189,12 +189,12 @@ yy13:
 yy14:
 #line 82 "rexx.--empty-class(match-none).re"
 	{ RETURN(OP_DIV); }
-#line 186 "<stdout>"
+#line 186 "rexx.--empty-class(match-none).c"
 yy15:
 	++YYCURSOR;
 #line 84 "rexx.--empty-class(match-none).re"
 	{ RETURN(OP_IDIV); }
-#line 191 "<stdout>"
+#line 191 "rexx.--empty-class(match-none).c"
 yy17:
 	yyaccept = 3;
 	yych = *(YYMARKER = ++YYCURSOR);
@@ -207,7 +207,7 @@ yy17:
 yy18:
 #line 90 "rexx.--empty-class(match-none).re"
 	{ RETURN(OP_EQUAL); }
-#line 204 "<stdout>"
+#line 204 "rexx.--empty-class(match-none).c"
 yy19:
 	yyaccept = 4;
 	yych = *(YYMARKER = ++YYCURSOR);
@@ -222,7 +222,7 @@ yy19:
 yy20:
 #line 120 "rexx.--empty-class(match-none).re"
 	{ RETURN(OP_NOT); }
-#line 219 "<stdout>"
+#line 219 "rexx.--empty-class(match-none).c"
 yy21:
 	yyaccept = 5;
 	yych = *(YYMARKER = ++YYCURSOR);
@@ -237,7 +237,7 @@ yy21:
 yy22:
 #line 96 "rexx.--empty-class(match-none).re"
 	{ RETURN(OP_LT); }
-#line 234 "<stdout>"
+#line 234 "rexx.--empty-class(match-none).c"
 yy23:
 	yyaccept = 6;
 	yych = *(YYMARKER = ++YYCURSOR);
@@ -252,7 +252,7 @@ yy23:
 yy24:
 #line 94 "rexx.--empty-class(match-none).re"
 	{ RETURN(OP_GT); }
-#line 249 "<stdout>"
+#line 249 "rexx.--empty-class(match-none).c"
 yy25:
 	yyaccept = 7;
 	yych = *(YYMARKER = ++YYCURSOR);
@@ -265,32 +265,32 @@ yy25:
 yy26:
 #line 114 "rexx.--empty-class(match-none).re"
 	{ RETURN(OP_AND); }
-#line 262 "<stdout>"
+#line 262 "rexx.--empty-class(match-none).c"
 yy27:
 	++YYCURSOR;
 #line 123 "rexx.--empty-class(match-none).re"
 	{ RETURN(SU_COLON); }
-#line 267 "<stdout>"
+#line 267 "rexx.--empty-class(match-none).c"
 yy29:
 	++YYCURSOR;
 #line 125 "rexx.--empty-class(match-none).re"
 	{ RETURN(SU_COMMA); }
-#line 272 "<stdout>"
+#line 272 "rexx.--empty-class(match-none).c"
 yy31:
 	++YYCURSOR;
 #line 127 "rexx.--empty-class(match-none).re"
 	{ RETURN(SU_POPEN); }
-#line 277 "<stdout>"
+#line 277 "rexx.--empty-class(match-none).c"
 yy33:
 	++YYCURSOR;
 #line 129 "rexx.--empty-class(match-none).re"
 	{ RETURN(SU_PCLOSE); }
-#line 282 "<stdout>"
+#line 282 "rexx.--empty-class(match-none).c"
 yy35:
 	++YYCURSOR;
 #line 131 "rexx.--empty-class(match-none).re"
 	{ RETURN(SU_EOC); }
-#line 287 "<stdout>"
+#line 287 "rexx.--empty-class(match-none).c"
 yy37:
 	++YYCURSOR;
 	switch ((yych = *YYCURSOR)) {
@@ -303,7 +303,7 @@ yy37:
 yy38:
 #line 249 "rexx.--empty-class(match-none).re"
 	{ RETURN(SU_SYMBOL); }
-#line 300 "<stdout>"
+#line 300 "rexx.--empty-class(match-none).c"
 yy39:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -491,7 +491,7 @@ yy57:
 yy58:
 #line 247 "rexx.--empty-class(match-none).re"
 	{ RETURN(SU_CONST); }
-#line 488 "<stdout>"
+#line 488 "rexx.--empty-class(match-none).c"
 yy59:
 	yych = *++YYCURSOR;
 	goto yy81;
@@ -506,7 +506,7 @@ yy60:
 yy61:
 #line 264 "rexx.--empty-class(match-none).re"
 	{ RETURN(SU_ERROR); }
-#line 503 "<stdout>"
+#line 503 "rexx.--empty-class(match-none).c"
 yy62:
 	yyaccept = 8;
 	yych = *(YYMARKER = ++YYCURSOR);
@@ -519,7 +519,7 @@ yy63:
 	++YYCURSOR;
 #line 262 "rexx.--empty-class(match-none).re"
 	{ RETURN(SU_EOF); }
-#line 516 "<stdout>"
+#line 516 "rexx.--empty-class(match-none).c"
 yy65:
 	yych = *++YYCURSOR;
 	goto yy61;
@@ -570,7 +570,7 @@ yy69:
 yy70:
 #line 255 "rexx.--empty-class(match-none).re"
 	{ RETURN(SU_LITERAL); }
-#line 567 "<stdout>"
+#line 567 "rexx.--empty-class(match-none).c"
 yy71:
 	yych = *++YYCURSOR;
 	YYCTXMARKER = YYCURSOR;
@@ -720,13 +720,13 @@ yy73:
 	YYCURSOR = YYCTXMARKER;
 #line 259 "rexx.--empty-class(match-none).re"
 	{ RETURN(SU_LITERAL_HEX); }
-#line 717 "<stdout>"
+#line 717 "rexx.--empty-class(match-none).c"
 yy75:
 	++YYCURSOR;
 	YYCURSOR = YYCTXMARKER;
 #line 257 "rexx.--empty-class(match-none).re"
 	{ RETURN(SU_LITERAL_BIN); }
-#line 723 "<stdout>"
+#line 723 "rexx.--empty-class(match-none).c"
 yy77:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
@@ -899,7 +899,7 @@ yy82:
 yy83:
 #line 251 "rexx.--empty-class(match-none).re"
 	{ RETURN(SU_SYMBOL_STEM); }
-#line 896 "<stdout>"
+#line 896 "rexx.--empty-class(match-none).c"
 yy84:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
@@ -1346,7 +1346,7 @@ yy101:
 yy102:
 #line 240 "rexx.--empty-class(match-none).re"
 	{ RETURN(RXS_VERSION); }
-#line 1343 "<stdout>"
+#line 1343 "rexx.--empty-class(match-none).c"
 yy103:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -1428,7 +1428,7 @@ yy104:
 yy105:
 #line 238 "rexx.--empty-class(match-none).re"
 	{ RETURN(RXS_VAR); }
-#line 1425 "<stdout>"
+#line 1425 "rexx.--empty-class(match-none).c"
 yy106:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -1510,7 +1510,7 @@ yy107:
 yy108:
 #line 236 "rexx.--empty-class(match-none).re"
 	{ RETURN(RXS_VALUE); }
-#line 1507 "<stdout>"
+#line 1507 "rexx.--empty-class(match-none).c"
 yy109:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -1613,7 +1613,7 @@ yy113:
 yy114:
 #line 234 "rexx.--empty-class(match-none).re"
 	{ RETURN(RXS_UPPER); }
-#line 1610 "<stdout>"
+#line 1610 "rexx.--empty-class(match-none).c"
 yy115:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -1702,7 +1702,7 @@ yy117:
 yy118:
 #line 232 "rexx.--empty-class(match-none).re"
 	{ RETURN(RXS_UNTIL); }
-#line 1699 "<stdout>"
+#line 1699 "rexx.--empty-class(match-none).c"
 yy119:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -1791,7 +1791,7 @@ yy121:
 yy122:
 #line 214 "rexx.--empty-class(match-none).re"
 	{ RETURN(RXS_HALT); }
-#line 1788 "<stdout>"
+#line 1788 "rexx.--empty-class(match-none).c"
 yy123:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -1894,7 +1894,7 @@ yy127:
 yy128:
 #line 212 "rexx.--empty-class(match-none).re"
 	{ RETURN(RXS_FUZZ); }
-#line 1891 "<stdout>"
+#line 1891 "rexx.--empty-class(match-none).c"
 yy129:
 	++YYCURSOR;
 	switch ((yych = *YYCURSOR)) {
@@ -1969,7 +1969,7 @@ yy129:
 yy130:
 #line 206 "rexx.--empty-class(match-none).re"
 	{ RETURN(RXS_FOR); }
-#line 1966 "<stdout>"
+#line 1966 "rexx.--empty-class(match-none).c"
 yy131:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -2051,7 +2051,7 @@ yy132:
 yy133:
 #line 210 "rexx.--empty-class(match-none).re"
 	{ RETURN(RXS_FORM); }
-#line 2048 "<stdout>"
+#line 2048 "rexx.--empty-class(match-none).c"
 yy134:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -2140,7 +2140,7 @@ yy136:
 yy137:
 #line 208 "rexx.--empty-class(match-none).re"
 	{ RETURN(RXS_FOREVER); }
-#line 2137 "<stdout>"
+#line 2137 "rexx.--empty-class(match-none).c"
 yy138:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -2243,7 +2243,7 @@ yy142:
 yy143:
 #line 204 "rexx.--empty-class(match-none).re"
 	{ RETURN(RXS_FAILURE); }
-#line 2240 "<stdout>"
+#line 2240 "rexx.--empty-class(match-none).c"
 yy144:
 	++YYCURSOR;
 	switch ((yych = *YYCURSOR)) {
@@ -2318,7 +2318,7 @@ yy144:
 yy145:
 #line 194 "rexx.--empty-class(match-none).re"
 	{ RETURN(RXS_BY); }
-#line 2315 "<stdout>"
+#line 2315 "rexx.--empty-class(match-none).c"
 yy146:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -2416,7 +2416,7 @@ yy149:
 yy150:
 #line 244 "rexx.--empty-class(match-none).re"
 	{ RETURN(RXS_WITH); }
-#line 2413 "<stdout>"
+#line 2413 "rexx.--empty-class(match-none).c"
 yy151:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -2512,7 +2512,7 @@ yy154:
 yy155:
 #line 242 "rexx.--empty-class(match-none).re"
 	{ RETURN(RXS_WHILE); }
-#line 2509 "<stdout>"
+#line 2509 "rexx.--empty-class(match-none).c"
 yy156:
 	++YYCURSOR;
 	switch ((yych = *YYCURSOR)) {
@@ -2587,7 +2587,7 @@ yy156:
 yy157:
 #line 188 "rexx.--empty-class(match-none).re"
 	{ RETURN(RX_WHEN); }
-#line 2584 "<stdout>"
+#line 2584 "rexx.--empty-class(match-none).c"
 yy158:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -2669,7 +2669,7 @@ yy159:
 yy160:
 #line 230 "rexx.--empty-class(match-none).re"
 	{ RETURN(RXS_TO); }
-#line 2666 "<stdout>"
+#line 2666 "rexx.--empty-class(match-none).c"
 yy161:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -2765,7 +2765,7 @@ yy164:
 yy165:
 #line 186 "rexx.--empty-class(match-none).re"
 	{ RETURN(RX_TRACE); }
-#line 2762 "<stdout>"
+#line 2762 "rexx.--empty-class(match-none).c"
 yy166:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -2847,7 +2847,7 @@ yy167:
 yy168:
 #line 184 "rexx.--empty-class(match-none).re"
 	{ RETURN(RX_THEN); }
-#line 2844 "<stdout>"
+#line 2844 "rexx.--empty-class(match-none).c"
 yy169:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -2985,7 +2985,7 @@ yy178:
 yy179:
 #line 228 "rexx.--empty-class(match-none).re"
 	{ RETURN(RXS_SYNTAX); }
-#line 2982 "<stdout>"
+#line 2982 "rexx.--empty-class(match-none).c"
 yy180:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -3081,7 +3081,7 @@ yy183:
 yy184:
 #line 226 "rexx.--empty-class(match-none).re"
 	{ RETURN(RXS_SOURCE); }
-#line 3078 "<stdout>"
+#line 3078 "rexx.--empty-class(match-none).c"
 yy185:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -3177,7 +3177,7 @@ yy188:
 yy189:
 #line 182 "rexx.--empty-class(match-none).re"
 	{ RETURN(RX_SIGNAL); }
-#line 3174 "<stdout>"
+#line 3174 "rexx.--empty-class(match-none).c"
 yy190:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -3273,7 +3273,7 @@ yy193:
 yy194:
 #line 180 "rexx.--empty-class(match-none).re"
 	{ RETURN(RX_SELECT); }
-#line 3270 "<stdout>"
+#line 3270 "rexx.--empty-class(match-none).c"
 yy195:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -3397,7 +3397,7 @@ yy202:
 yy203:
 #line 224 "rexx.--empty-class(match-none).re"
 	{ RETURN(RXS_SCIENTIFIC); }
-#line 3394 "<stdout>"
+#line 3394 "rexx.--empty-class(match-none).c"
 yy204:
 	++YYCURSOR;
 	switch ((yych = *YYCURSOR)) {
@@ -3472,7 +3472,7 @@ yy204:
 yy205:
 #line 178 "rexx.--empty-class(match-none).re"
 	{ RETURN(RX_SAY); }
-#line 3469 "<stdout>"
+#line 3469 "rexx.--empty-class(match-none).c"
 yy206:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -3575,7 +3575,7 @@ yy210:
 yy211:
 #line 176 "rexx.--empty-class(match-none).re"
 	{ RETURN(RX_RETURN); }
-#line 3572 "<stdout>"
+#line 3572 "rexx.--empty-class(match-none).c"
 yy212:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -3671,7 +3671,7 @@ yy215:
 yy216:
 #line 174 "rexx.--empty-class(match-none).re"
 	{ RETURN(RX_QUEUE); }
-#line 3668 "<stdout>"
+#line 3668 "rexx.--empty-class(match-none).c"
 yy217:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -3783,7 +3783,7 @@ yy222:
 yy223:
 #line 172 "rexx.--empty-class(match-none).re"
 	{ RETURN(RX_PUSH); }
-#line 3780 "<stdout>"
+#line 3780 "rexx.--empty-class(match-none).c"
 yy224:
 	++YYCURSOR;
 	switch ((yych = *YYCURSOR)) {
@@ -3858,7 +3858,7 @@ yy224:
 yy225:
 #line 170 "rexx.--empty-class(match-none).re"
 	{ RETURN(RX_PULL); }
-#line 3855 "<stdout>"
+#line 3855 "rexx.--empty-class(match-none).c"
 yy226:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -3975,7 +3975,7 @@ yy232:
 yy233:
 #line 168 "rexx.--empty-class(match-none).re"
 	{ RETURN(RX_PROCEDURE); }
-#line 3972 "<stdout>"
+#line 3972 "rexx.--empty-class(match-none).c"
 yy234:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -4064,7 +4064,7 @@ yy236:
 yy237:
 #line 166 "rexx.--empty-class(match-none).re"
 	{ RETURN(RX_PARSE); }
-#line 4061 "<stdout>"
+#line 4061 "rexx.--empty-class(match-none).c"
 yy238:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -4146,7 +4146,7 @@ yy239:
 yy240:
 #line 192 "rexx.--empty-class(match-none).re"
 	{ RETURN(RXS_ON); }
-#line 4143 "<stdout>"
+#line 4143 "rexx.--empty-class(match-none).c"
 yy241:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -4277,7 +4277,7 @@ yy249:
 yy250:
 #line 164 "rexx.--empty-class(match-none).re"
 	{ RETURN(RX_OTHERWISE); }
-#line 4274 "<stdout>"
+#line 4274 "rexx.--empty-class(match-none).c"
 yy251:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -4380,7 +4380,7 @@ yy255:
 yy256:
 #line 162 "rexx.--empty-class(match-none).re"
 	{ RETURN(RX_OPTIONS); }
-#line 4377 "<stdout>"
+#line 4377 "rexx.--empty-class(match-none).c"
 yy257:
 	++YYCURSOR;
 	switch ((yych = *YYCURSOR)) {
@@ -4455,7 +4455,7 @@ yy257:
 yy258:
 #line 190 "rexx.--empty-class(match-none).re"
 	{ RETURN(RXS_OFF); }
-#line 4452 "<stdout>"
+#line 4452 "rexx.--empty-class(match-none).c"
 yy259:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -4583,7 +4583,7 @@ yy266:
 yy267:
 #line 160 "rexx.--empty-class(match-none).re"
 	{ RETURN(RX_NUMERIC); }
-#line 4580 "<stdout>"
+#line 4580 "rexx.--empty-class(match-none).c"
 yy268:
 	++YYCURSOR;
 	switch ((yych = *YYCURSOR)) {
@@ -4658,7 +4658,7 @@ yy268:
 yy269:
 #line 158 "rexx.--empty-class(match-none).re"
 	{ RETURN(RX_NOP); }
-#line 4655 "<stdout>"
+#line 4655 "rexx.--empty-class(match-none).c"
 yy270:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -4768,7 +4768,7 @@ yy275:
 yy276:
 #line 222 "rexx.--empty-class(match-none).re"
 	{ RETURN(RXS_NOVALUE); }
-#line 4765 "<stdout>"
+#line 4765 "rexx.--empty-class(match-none).c"
 yy277:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -4871,7 +4871,7 @@ yy281:
 yy282:
 #line 220 "rexx.--empty-class(match-none).re"
 	{ RETURN(RXS_NOTREADY); }
-#line 4868 "<stdout>"
+#line 4868 "rexx.--empty-class(match-none).c"
 yy283:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -4953,7 +4953,7 @@ yy284:
 yy285:
 #line 218 "rexx.--empty-class(match-none).re"
 	{ RETURN(RXS_NAME); }
-#line 4950 "<stdout>"
+#line 4950 "rexx.--empty-class(match-none).c"
 yy286:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -5063,7 +5063,7 @@ yy291:
 yy292:
 #line 216 "rexx.--empty-class(match-none).re"
 	{ RETURN(RXS_LINEIN); }
-#line 5060 "<stdout>"
+#line 5060 "rexx.--empty-class(match-none).c"
 yy293:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -5152,7 +5152,7 @@ yy295:
 yy296:
 #line 156 "rexx.--empty-class(match-none).re"
 	{ RETURN(RX_LEAVE); }
-#line 5149 "<stdout>"
+#line 5149 "rexx.--empty-class(match-none).c"
 yy297:
 	++YYCURSOR;
 	switch ((yych = *YYCURSOR)) {
@@ -5227,7 +5227,7 @@ yy297:
 yy298:
 #line 150 "rexx.--empty-class(match-none).re"
 	{ RETURN(RX_IF); }
-#line 5224 "<stdout>"
+#line 5224 "rexx.--empty-class(match-none).c"
 yy299:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -5344,7 +5344,7 @@ yy305:
 yy306:
 #line 154 "rexx.--empty-class(match-none).re"
 	{ RETURN(RX_ITERATE); }
-#line 5341 "<stdout>"
+#line 5341 "rexx.--empty-class(match-none).c"
 yy307:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -5461,7 +5461,7 @@ yy313:
 yy314:
 #line 152 "rexx.--empty-class(match-none).re"
 	{ RETURN(RX_INTERPRET); }
-#line 5458 "<stdout>"
+#line 5458 "rexx.--empty-class(match-none).c"
 yy315:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -5596,7 +5596,7 @@ yy323:
 yy324:
 #line 202 "rexx.--empty-class(match-none).re"
 	{ RETURN(RXS_EXPOSE); }
-#line 5593 "<stdout>"
+#line 5593 "rexx.--empty-class(match-none).c"
 yy325:
 	++YYCURSOR;
 	switch ((yych = *YYCURSOR)) {
@@ -5671,7 +5671,7 @@ yy325:
 yy326:
 #line 148 "rexx.--empty-class(match-none).re"
 	{ RETURN(RX_EXIT); }
-#line 5668 "<stdout>"
+#line 5668 "rexx.--empty-class(match-none).c"
 yy327:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -5760,7 +5760,7 @@ yy329:
 yy330:
 #line 200 "rexx.--empty-class(match-none).re"
 	{ RETURN(RXS_ERROR); }
-#line 5757 "<stdout>"
+#line 5757 "rexx.--empty-class(match-none).c"
 yy331:
 	++YYCURSOR;
 	switch ((yych = *YYCURSOR)) {
@@ -5835,7 +5835,7 @@ yy331:
 yy332:
 #line 146 "rexx.--empty-class(match-none).re"
 	{ RETURN(RX_END); }
-#line 5832 "<stdout>"
+#line 5832 "rexx.--empty-class(match-none).c"
 yy333:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -5966,7 +5966,7 @@ yy341:
 yy342:
 #line 198 "rexx.--empty-class(match-none).re"
 	{ RETURN(RXS_ENGINEERING); }
-#line 5963 "<stdout>"
+#line 5963 "rexx.--empty-class(match-none).c"
 yy343:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -6048,7 +6048,7 @@ yy344:
 yy345:
 #line 144 "rexx.--empty-class(match-none).re"
 	{ RETURN(RX_ELSE); }
-#line 6045 "<stdout>"
+#line 6045 "rexx.--empty-class(match-none).c"
 yy346:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -6130,7 +6130,7 @@ yy347:
 yy348:
 #line 140 "rexx.--empty-class(match-none).re"
 	{ RETURN(RX_DO); }
-#line 6127 "<stdout>"
+#line 6127 "rexx.--empty-class(match-none).c"
 yy349:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -6219,7 +6219,7 @@ yy351:
 yy352:
 #line 142 "rexx.--empty-class(match-none).re"
 	{ RETURN(RX_DROP); }
-#line 6216 "<stdout>"
+#line 6216 "rexx.--empty-class(match-none).c"
 yy353:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -6315,7 +6315,7 @@ yy356:
 yy357:
 #line 196 "rexx.--empty-class(match-none).re"
 	{ RETURN(RXS_DIGITS); }
-#line 6312 "<stdout>"
+#line 6312 "rexx.--empty-class(match-none).c"
 yy358:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -6404,7 +6404,7 @@ yy360:
 yy361:
 #line 138 "rexx.--empty-class(match-none).re"
 	{ RETURN(RX_CALL); }
-#line 6401 "<stdout>"
+#line 6401 "rexx.--empty-class(match-none).c"
 yy362:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -6493,7 +6493,7 @@ yy364:
 yy365:
 #line 136 "rexx.--empty-class(match-none).re"
 	{ RETURN(RX_ARG); }
-#line 6490 "<stdout>"
+#line 6490 "rexx.--empty-class(match-none).c"
 yy366:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -6596,7 +6596,7 @@ yy370:
 yy371:
 #line 134 "rexx.--empty-class(match-none).re"
 	{ RETURN(RX_ADDRESS); }
-#line 6593 "<stdout>"
+#line 6593 "rexx.--empty-class(match-none).c"
 yy372:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
@@ -6611,7 +6611,7 @@ yy374:
 	++YYCURSOR;
 #line 118 "rexx.--empty-class(match-none).re"
 	{ RETURN(OP_XOR); }
-#line 6608 "<stdout>"
+#line 6608 "rexx.--empty-class(match-none).c"
 yy376:
 	++YYCURSOR;
 	if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
@@ -6637,19 +6637,19 @@ yy378:
 yy379:
 #line 106 "rexx.--empty-class(match-none).re"
 	{ RETURN(OP_GT_STRICT); }
-#line 6634 "<stdout>"
+#line 6634 "rexx.--empty-class(match-none).c"
 yy380:
 	++YYCURSOR;
 yy381:
 #line 98 "rexx.--empty-class(match-none).re"
 	{ RETURN(OP_GE); }
-#line 6640 "<stdout>"
+#line 6640 "rexx.--empty-class(match-none).c"
 yy382:
 	++YYCURSOR;
 yy383:
 #line 92 "rexx.--empty-class(match-none).re"
 	{ RETURN(OP_EQUAL_N); }
-#line 6646 "<stdout>"
+#line 6646 "rexx.--empty-class(match-none).c"
 yy384:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
@@ -6664,7 +6664,7 @@ yy386:
 	++YYCURSOR;
 #line 110 "rexx.--empty-class(match-none).re"
 	{ RETURN(OP_GE_STRICT); }
-#line 6661 "<stdout>"
+#line 6661 "rexx.--empty-class(match-none).c"
 yy388:
 	++YYCURSOR;
 	if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
@@ -6690,13 +6690,13 @@ yy390:
 yy391:
 #line 108 "rexx.--empty-class(match-none).re"
 	{ RETURN(OP_LT_STRICT); }
-#line 6687 "<stdout>"
+#line 6687 "rexx.--empty-class(match-none).c"
 yy392:
 	++YYCURSOR;
 yy393:
 #line 100 "rexx.--empty-class(match-none).re"
 	{ RETURN(OP_LE); }
-#line 6693 "<stdout>"
+#line 6693 "rexx.--empty-class(match-none).c"
 yy394:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
@@ -6711,7 +6711,7 @@ yy396:
 	++YYCURSOR;
 #line 112 "rexx.--empty-class(match-none).re"
 	{ RETURN(OP_LE_STRICT); }
-#line 6708 "<stdout>"
+#line 6708 "rexx.--empty-class(match-none).c"
 yy398:
 	++YYCURSOR;
 	if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
@@ -6766,7 +6766,7 @@ yy405:
 	++YYCURSOR;
 #line 104 "rexx.--empty-class(match-none).re"
 	{ RETURN(OP_EQUAL_EQ_N); }
-#line 6763 "<stdout>"
+#line 6763 "rexx.--empty-class(match-none).c"
 yy407:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
@@ -6801,7 +6801,7 @@ yy413:
 	++YYCURSOR;
 #line 102 "rexx.--empty-class(match-none).re"
 	{ RETURN(OP_EQUAL_EQ); }
-#line 6798 "<stdout>"
+#line 6798 "rexx.--empty-class(match-none).c"
 yy415:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
@@ -6816,7 +6816,7 @@ yy417:
 	++YYCURSOR;
 #line 86 "rexx.--empty-class(match-none).re"
 	{ RETURN(OP_REMAIN); }
-#line 6813 "<stdout>"
+#line 6813 "rexx.--empty-class(match-none).c"
 yy419:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
@@ -6831,7 +6831,7 @@ yy421:
 	++YYCURSOR;
 #line 88 "rexx.--empty-class(match-none).re"
 	{ RETURN(OP_POWER); }
-#line 6828 "<stdout>"
+#line 6828 "rexx.--empty-class(match-none).c"
 yy423:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
@@ -6846,7 +6846,7 @@ yy425:
 	++YYCURSOR;
 #line 74 "rexx.--empty-class(match-none).re"
 	{ RETURN(OP_CONCAT); }
-#line 6843 "<stdout>"
+#line 6843 "rexx.--empty-class(match-none).c"
 }
 #line 265 "rexx.--empty-class(match-none).re"
 
@@ -6860,7 +6860,7 @@ bool StripToken(){
 	ScanCB.eot = cursor;
 strip:
 
-#line 6857 "<stdout>"
+#line 6857 "rexx.--empty-class(match-none).c"
 {
 	YYCTYPE yych;
 	if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
@@ -6883,7 +6883,7 @@ yy431:
 	++YYCURSOR;
 #line 282 "rexx.--empty-class(match-none).re"
 	{ goto strip; }
-#line 6880 "<stdout>"
+#line 6880 "rexx.--empty-class(match-none).c"
 yy433:
 	++YYCURSOR;
 #line 284 "rexx.--empty-class(match-none).re"
@@ -6891,7 +6891,7 @@ yy433:
 		blanks = TRUE;
 		goto strip;
 	    }
-#line 6888 "<stdout>"
+#line 6888 "rexx.--empty-class(match-none).c"
 yy435:
 	++YYCURSOR;
 #line 277 "rexx.--empty-class(match-none).re"
@@ -6899,14 +6899,14 @@ yy435:
 		depth = 1;
 		goto comment;
 	    }
-#line 6896 "<stdout>"
+#line 6896 "rexx.--empty-class(match-none).c"
 }
 #line 290 "rexx.--empty-class(match-none).re"
 
 
 comment:
 
-#line 6903 "<stdout>"
+#line 6903 "rexx.--empty-class(match-none).c"
 {
 	YYCTYPE yych;
 	if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
@@ -6929,7 +6929,7 @@ yy440:
 	{
 		goto comment;
 	    }
-#line 6926 "<stdout>"
+#line 6926 "rexx.--empty-class(match-none).c"
 yy441:
 	++YYCURSOR;
 #line 302 "rexx.--empty-class(match-none).re"
@@ -6938,7 +6938,7 @@ yy441:
 		ScanCB.linePos = ScanCB.pos + (cursor - ScanCB.mrk);
 		goto comment;
 	    }
-#line 6935 "<stdout>"
+#line 6935 "rexx.--empty-class(match-none).c"
 yy443:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -6949,7 +6949,7 @@ yy444:
 	++YYCURSOR;
 #line 313 "rexx.--empty-class(match-none).re"
 	{ RETURN(blanks); }
-#line 6946 "<stdout>"
+#line 6946 "rexx.--empty-class(match-none).c"
 yy446:
 	yych = *++YYCURSOR;
 	goto yy440;
@@ -6960,7 +6960,7 @@ yy447:
 		++depth;
 		goto comment;
 	    }
-#line 6957 "<stdout>"
+#line 6957 "rexx.--empty-class(match-none).c"
 yy449:
 	++YYCURSOR;
 #line 295 "rexx.--empty-class(match-none).re"
@@ -6970,7 +6970,7 @@ yy449:
 		else
 		    goto comment;
 	    }
-#line 6967 "<stdout>"
+#line 6967 "rexx.--empty-class(match-none).c"
 }
 #line 318 "rexx.--empty-class(match-none).re"
 

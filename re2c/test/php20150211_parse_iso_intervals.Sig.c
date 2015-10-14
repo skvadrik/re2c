@@ -122,7 +122,7 @@ int lex_line393 ()
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
-        ("<stdout>.line393.input"
+        ("php20150211_parse_iso_intervals.Sig.c.line393.input"
         , sizeof (YYCTYPE)
         , padding
         , &input_len
@@ -134,7 +134,7 @@ int lex_line393 ()
     }
 
     keys = (YYKEYTYPE *) read_file
-        ("<stdout>.line393.keys"
+        ("php20150211_parse_iso_intervals.Sig.c.line393.keys"
         , 3 * sizeof (YYKEYTYPE)
         , 0
         , &keys_count

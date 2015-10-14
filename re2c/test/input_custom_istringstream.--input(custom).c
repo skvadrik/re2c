@@ -16,7 +16,7 @@ bool lex (std::istringstream & is, const std::streampos limit)
 #   define YYLESSTHAN(n)  limit - is.tellg () < n
 #   define YYFILL(n)      {}
     
-#line 20 "<stdout>"
+#line 20 "input_custom_istringstream.--input(custom).c"
 {
 	YYCTYPE yych;
 	if (YYLESSTHAN (13)) YYFILL(13);
@@ -30,7 +30,7 @@ yy2:
 yy3:
 #line 18 "input_custom_istringstream.--input(custom).re"
 	{ return false; }
-#line 34 "<stdout>"
+#line 34 "input_custom_istringstream.--input(custom).c"
 yy4:
 	YYSKIP ();
 	YYBACKUP ();
@@ -152,7 +152,7 @@ yy19:
 	YYRESTORECTX ();
 #line 17 "input_custom_istringstream.--input(custom).re"
 	{ return true; }
-#line 156 "<stdout>"
+#line 156 "input_custom_istringstream.--input(custom).c"
 }
 #line 19 "input_custom_istringstream.--input(custom).re"
 

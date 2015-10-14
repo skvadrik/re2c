@@ -11,7 +11,7 @@ char *scan(char *p)
 {
 	char *q;
 
-#line 15 "<stdout>"
+#line 15 "config4e.f.c"
 
 	switch (YYGETSTATE()) {
 	default: goto yy0;
@@ -44,12 +44,12 @@ yy2:
 yy3:
 #line 15 "config4e.f.re"
 	{ return YYCURSOR; }
-#line 48 "<stdout>"
+#line 48 "config4e.f.c"
 yy4:
 	++YYCURSOR;
 #line 16 "config4e.f.re"
 	{ return NULL; }
-#line 53 "<stdout>"
+#line 53 "config4e.f.c"
 yy6:
 	++YYCURSOR;
 	YYSETSTATE(1);

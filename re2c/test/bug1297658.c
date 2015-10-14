@@ -57,7 +57,7 @@ int scan(Scanner &s)
 std:
 
 
-#line 61 "<stdout>"
+#line 61 "bug1297658.c"
 {
 	YYCTYPE yych;
 	if ((YYLIMIT - YYCURSOR) < 4) YYFILL(4);
@@ -80,7 +80,7 @@ yy3:
 	{
 		RET(UNEXPECTED);
 	}
-#line 84 "<stdout>"
+#line 84 "bug1297658.c"
 yy4:
 	++YYCURSOR;
 	switch ((yych = *YYCURSOR)) {
@@ -93,7 +93,7 @@ yy5:
 	{
 		RET(FCON);
 	}
-#line 97 "<stdout>"
+#line 97 "bug1297658.c"
 yy6:
 	++YYCURSOR;
 #line 66 "bug1297658.re"
@@ -102,7 +102,7 @@ yy6:
 		if(1||s.cur == s.eof) RET(EOI);
 		goto std;
 	}
-#line 106 "<stdout>"
+#line 106 "bug1297658.c"
 yy8:
 	yych = *++YYCURSOR;
 	goto yy3;
