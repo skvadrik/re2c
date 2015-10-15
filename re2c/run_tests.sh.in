@@ -115,7 +115,15 @@ run_pack() {
 		fi
 		local outc="${outx%.re}.c"
 
-		local switches=`basename "$x" | sed -e 's/^[^.]*\.\(.*\)\.re$/-\1/g' -e 's/^[^-].*//g' -e 's/\([^ ]\)--/\1 --/g' -e 's/(\([^)]*\))/ \1/g' -e 's/- //g'`
+		# filename (dot short* (long arg?)*)? ext
+		# must keep to POSIX standard: no syntactic sugar like +,?, etc.
+		# if you change this regexp, try it with 'sed --posix'
+		local switches=`basename "$x" | LC_ALL=C sed \
+			-e 's/^[^.]*\.re$//g' \
+			-e 's/^[^.]*\.\(.*\)\.re$/\1/g' \
+			-e 's/^\([^-]\)/-\1/' \
+			-e 's/--\([^ (-]*\)/ --\1/g' \
+			-e 's/(\([^)]*\))/ \1/g'`
 		local switches="$switches -o $outc"
 		# enable warnings globally
 		local switches="$switches -W"
