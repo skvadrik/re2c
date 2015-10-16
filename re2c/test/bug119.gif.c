@@ -3,8 +3,7 @@
 {
 
 	switch (YYGETSTATE()) {
-	default: abort();
-	case -1: goto yy0;
+	default: goto yy0;
 	case 0: goto yyFillLabel0;
 	}
 yy0:
@@ -13,4 +12,4 @@ yyFillLabel0:
 	{}
 }
 
-re2c: warning: line 3: rule matches empty string [-Wmatch-empty-string]
+re2c: warning: line 2: rule matches empty string [-Wmatch-empty-string]
