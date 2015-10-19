@@ -22,7 +22,8 @@ Authors
 ~~~~~~~
 
 Originally written by Peter Bumbulis in 1994.
-Since then many people have contributed to re2c: Brian Young, Dan Nuffer, Marcus Börger, Hartmut Kaiser, Emmanuel Mogenet, Ulya Trofimovich.
+Since then many people have contributed to re2c: Brian Young, Dan Nuffer, Marcus Börger,
+Hartmut Kaiser, Emmanuel Mogenet, Ulya Trofimovich (`let me know <skvadrik@gmail.com>`_ if I missed someone).
 
 Licence
 ~~~~~~~
