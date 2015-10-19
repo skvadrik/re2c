@@ -1,0 +1,41 @@
+body {
+    text-align: justify;
+    margin: auto auto auto auto;
+    width: 85%;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    color: #557799;
+}
+
+h1.title {
+    font-size: 2.5em;
+    text-align: center;
+}
+
+table, tr, td, th {
+    border: none;
+    padding: 0em 0.2em 0em 0.2em;
+}
+
+pre.code {
+    color: black;
+    padding: 1em 1em 1em 1em;
+    margin: 0 0 0 0;
+
+    border: 1px solid #006699;
+    border-left: 8px solid #006699;
+
+    background-color: #f7f3e0;
+    display: block;
+    white-space: pre;
+    overflow: auto;
+}
+
+pre.code .ln { color: grey; } /* line numbers */
+pre.code .comment, code .comment { color: #0077ff; }
+pre.code .keyword, code .keyword { color: #006699; font-weight: bold; }
+pre.code .literal.string, code .literal.string { color: #105000 }
+pre.code .name.builtin, code .name.builtin { color: #352B84 }
+pre.code .deleted, code .deleted { background-color: #DEB0A1}
+pre.code .inserted, code .inserted { background-color: #A3D289}
