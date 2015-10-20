@@ -29,8 +29,8 @@ pre.code {
     padding: 1em 1em 1em 1em;
     margin: 0 0 0 0;
 
-    border: 1px solid #006699;
-    border-left: 8px solid #006699;
+    border: 1px solid #557799;
+    border-left: 8px solid #557799;
 
     background-color: #f7f3e0;
     display: block;
@@ -40,7 +40,7 @@ pre.code {
 
 pre.code .ln { color: grey; } /* line numbers */
 pre.code .comment, code .comment { color: #0077ff; }
-pre.code .keyword, code .keyword { color: #006699; font-weight: bold; }
+pre.code .keyword, code .keyword { color: #aa3300; font-weight: bold; }
 pre.code .literal.string, code .literal.string { color: #105000 }
 pre.code .name.builtin, code .name.builtin { color: #352B84 }
 pre.code .deleted, code .deleted { background-color: #DEB0A1}
