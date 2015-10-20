@@ -75,7 +75,7 @@ BSD
 
 * `Apple Mac OS X <http://macappstore.org/re2c/>`_
 * `FreeBSD <http://www.freebsd.org/cgi/ports.cgi?query=re2c>`_
-* `NetBSD <http://pkgsrc.se/devel/re2c>`_
+* `NetBSD <ftp://ftp.netbsd.org/pub/pkgsrc/current/pkgsrc/devel/re2c/README.html>`_
 * `OpenBSD <http://www.openbsd.org/4.5_packages/sh/re2c-0.13.5.tgz-long.html>`_
 
 .. _Build:
