@@ -9,7 +9,7 @@ and flexible (easy to embed into existing environment).
 
 --------------------------------------------------------------------------------
 
-`Download <download.html>`_
+`Install <install.html>`_
 ---------------------------
 `Manual <manual.html>`_
 -----------------------
@@ -21,3 +21,4 @@ and flexible (easy to embed into existing environment).
 Please send feedback to `re2c-devel <re2c-devel@lists.sourceforge.net>`_ and
 `re2c-general <re2c-general@lists.sourceforge.net>`_ mailing lists
 or `report a bug <https://github.com/skvadrik/re2c/issues>`_.
+Contributors welcome!

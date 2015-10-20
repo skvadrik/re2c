@@ -1,6 +1,9 @@
 body {
     text-align: justify;
-    margin: auto auto auto auto;
+    margin-top: 1%;
+    margin-right: auto;
+    margin-bottom: 1%;
+    margin-left: auto;
     width: 85%;
 }
 

@@ -50,7 +50,7 @@ Since then many people have contributed to re2c:
 * Dan Nuffer       nuffer@users.sourceforge.net
 * Marcus Boerger   helly@users.sourceforge.net
 * Hartmut Kaiser   hkaiser@users.sourceforge.net
-* Emmanuel Mogenet mgix@mgix.com (added storable state)
+* Emmanuel Mogenet mgix@mgix.com
 * Ulya Trofimovich skvadrik@gmail.com
 
 Let me know if I missed someone!
