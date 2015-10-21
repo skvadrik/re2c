@@ -41,7 +41,7 @@ pre.code {
 pre.code .ln { color: grey; } /* line numbers */
 pre.code .comment, code .comment { color: #0077ff; }
 pre.code .keyword, code .keyword { color: #aa3300; font-weight: bold; }
-pre.code .literal.string, code .literal.string { color: #105000 }
+pre.code .literal.string, code .literal.string { color: #ff5500; }
 pre.code .name.builtin, code .name.builtin { color: #352B84 }
 pre.code .deleted, code .deleted { background-color: #DEB0A1}
 pre.code .inserted, code .inserted { background-color: #A3D289}
