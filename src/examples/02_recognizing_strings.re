@@ -8,11 +8,11 @@ struct input_t {
     char *str;
 
     input_t(const char *s)
-        : len(strlen(s))
+        : len(strlen(s) + 1)
         , str(new char[len + YYMAXFILL])
     {
         memcpy(str, s, len);
-        memset(str + len, 0, YYMAXFILL);
+        memset(str + len, 'a', YYMAXFILL);
     }
     ~input_t()
     {
@@ -31,7 +31,7 @@ static const char *lex(const input_t & input)
         re2c:define:YYFILL:naked = 1;
 
         end = "\x00";
-        str = "\"" ([^"] | "\\\"")* "\"";
+        str = "\"" ([^"\\] | "\\" ["\\])* "\"";
 
         *       { return "err"; }
         str end { return "str"; }
