@@ -8,7 +8,9 @@ and tries to match each argument against one of the four patterns:
 binary, octal, decimal and hexadecimal integer literals.
 The numbers are not *parsed* (their numeric value is not retrieved), they are merely *recognized*.
 
-.. include:: examples/01_recognizing_integer_literals.re
+`[01_recognizing_integers.re] <examples/01_recognizing_integers.re>`_
+
+.. include:: examples/01_recognizing_integers.re
     :code: cpp
     :number-lines:
 
@@ -38,7 +40,7 @@ Generate, compile and run:
 
 .. code-block:: bash
 
-    $ re2c -o example.cc example.re
+    $ re2c -o example.cc 01_recognizing_integers.re
     $ g++ -o example example.cc
     $ ./example 0 -12 +345 12345678901234567890 0xAbcDEf 0x00 007 0B0 0b110101010 0x 0b a ? ""
     dec: 0
@@ -97,6 +99,8 @@ Common hack is to pad input with a few fake characters that **do not form a vali
 The length of padding depends on the maximal argument to ``YYFILL``
 (this value is called ``YYMAXFILL`` and can be generated using ``/*!max:re2c*/`` directive).
 
+`[02_recognizing_strings.re] <examples/02_recognizing_strings.re>`_
+
 .. include:: examples/02_recognizing_strings.re
     :code: cpp
     :number-lines:
@@ -118,7 +122,7 @@ Generate, compile and run:
 
 .. code-block:: bash
 
-    $ re2c -o example.cc example.re
+    $ re2c -o example.cc 02_recognizing_strings.re
     $ g++ -o example example.cc
     $ ./example \"a\ momentary\" \"\" \"lap\"se\" \"of \"rea\\\"son\" ""
     str: "a momentary"
@@ -203,6 +207,8 @@ It can be used as boundary in ``YYFILL``.
 Our example program will lex a file with strings (probably separated by whitespaces)
 and count the total number of strings:
 
+`[03_arbitrary_large_input.re] <examples/03_arbitrary_large_input.re>`_
+
 .. include:: examples/03_arbitrary_large_input.re
     :code: cpp
     :number-lines:
@@ -234,7 +240,7 @@ Generate, compile and run:
 
 .. code-block:: bash
 
-    $ re2c -o example.cc example.re
+    $ re2c -o example.cc 03_arbitrary_large_input.re
     $ g++ -o example example.cc
     $ cat > input.txt
     "a""momentary"
