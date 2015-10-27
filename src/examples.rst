@@ -63,14 +63,17 @@ Generate, compile and run:
 Recognizing strings: the need for YYMAXFILL
 -------------------------------------------
 
-This example is about recognizing strings.
-Strings may contain *any* characters in the range ``[0 - 0xFF]`` except quotes ``"`` and escape ``\`` (they must be escaped).
+This example is about recognizing simple strings without escapes
+(strings with escapes are lexed in `Parsing strings: multiple re2c blocks`_ example).
+
+Our strings are single-quoted and may contain any characters in the range ``[0 - 0xFF]``, except sinle quotes ``'``.
 It means that (unlike the previous example, `Recognizing integers: the sentinel method`_)
 we cannot use ``NULL`` or any other character as a sentinel:
-strings like ``"aha\0ha"\0`` are perfectly valid, but ``"aha\0`` is also possible and shouldn't crash lexer.
+input strings like ``'aha\0ha'\0`` are perfectly valid,
+but incorrect input like ``'aha\0`` is also possible and shouldn't crash lexer.
 
-By default re2c-generated lexers contain explicit checks for the end of input
-(these checks can be suppressed with ``re2c:yyfill:enable = 0;`` configuration).
+By default re2c generates explicit checks for the end of input,
+so we must simply omit ``re2c:yyfill:enable = 0;`` configuration.
 A naive approach is to check on each character (before advancing input position), but it's very slow.
 Instead, re2c inserts checks only at certain points in the generated program.
 Each check ensures that there is enough input to proceed until the next checkpoint.
@@ -124,12 +127,13 @@ Generate, compile and run:
 
     $ re2c -o example.cc 02_recognizing_strings.re
     $ g++ -o example example.cc
-    $ ./example \"a\ momentary\" \"\" \"lap\"se\" \"of \"rea\\\"son\" ""
-    str: "a momentary"
-    str: ""
-    err: "lap"se"
-    err: "of
-    str: "rea\"son"
+    $ ./example "'a momentary'" "''" "'lap'se'" "'of" "'" "'rea''son'" ""
+    str: 'a momentary'
+    str: ''
+    err: 'lap'se'
+    err: 'of
+    err: '
+    err: 'rea''son'
     err: 
 
 .. _Arbitrary large input and YYFILL:
@@ -250,4 +254,47 @@ Generate, compile and run:
      ""
     $ ./example input.txt
     glorious 7 strings!
+
+.. _Parsing strings: multiple re2c blocks:
+
+Parsing strings: multiple re2c blocks
+-------------------------------------
+
+This example is based on `Recognizing strings: the need for YYMAXFILL`_ example,
+only now we will fully parse double-quoted C-like strings
+rather than simply recognize single-quoted Shell strings.
+
+Our strings can contain:
+
+* any unescaped ASCII character except double quote ``"``, escape ``\`` and newline
+* simple escapes: ``\’``, ``\"``, ``\?``, ``\\``, ``\a``, ``\b``, ``\f``, ``\n``, ``\r``, ``\t``, ``\v``
+* octal escapes: ``\`` followed by one or more characters in range ``[0 - 7]``
+* hexadecimal escapes: ``\`` followed by one or more characters in range ``[0 - 9]``, ``[a - f]`` or ``[A - F]``
+
+Octal and hexadecimal escapes are greedy: escape covers as many characters as possible (without causing a lexical error).
+
+`[04_parsing_strings.re] <examples/04_parsing_strings.re>`_
+
+.. include:: examples/04_parsing_strings.re
+    :code: cpp
+    :number-lines:
+
+Notes:
+
+* Configurations and definitions (lines 30 - 38) are not scoped to a single re2c block -- they are global.
+  Each block may override configurations, but this affects global scope.
+* Blocks don't have to be in the same function: they can be in separate functions or elsewhere
+  as long as the exposed interface fits into lexical scope.
+* Overflows in octal and hexadecimal escapes are not handled.
+
+Generate, compile and run:
+
+.. code-block:: bash
+
+    $ re2c -o example.cc 04_parsing_strings.re
+    $ g++ -o example example.cc
+    $ ./example '"\23005 re2c, flex \x438 quex\n\t  \x27f7\n\t\x431\x440\x430\x442\x44c\x44f \x43d\x430\x432\x435\x43a! \x2605"'
+    "★ re2c, flex и quex
+              ⟷
+            братья навек! ★"
 

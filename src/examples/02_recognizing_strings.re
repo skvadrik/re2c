@@ -31,7 +31,7 @@ static const char *lex(const input_t & input)
         re2c:define:YYFILL:naked = 1;
 
         end = "\x00";
-        str = "\"" ([^"\\] | "\\" ["\\])* "\"";
+        str = "'" [^']* "'";
 
         *       { return "err"; }
         str end { return "str"; }
