@@ -42,11 +42,9 @@ Generate, compile and run:
 
     $ re2c -o example.cc 01_recognizing_integers.re
     $ g++ -o example example.cc
-    $ ./example 0 -12 +345 12345678901234567890 0xAbcDEf 0x00 007 0B0 0b110101010 0x 0b a ? ""
-    dec: 0
-    dec: -12
-    dec: +345
-    dec: 12345678901234567890
+    $ ./example 0 12345678901234567890 0xAbcDEf 0x00 007 0B0 0b110101010 0x 0b ? ""
+    oct: 0
+    dec: 1234567890
     hex: 0xAbcDEf
     hex: 0x00
     oct: 007
@@ -54,7 +52,6 @@ Generate, compile and run:
     bin: 0b110101010
     err: 0x
     err: 0b
-    err: a
     err: ?
     err: 
 
@@ -63,11 +60,9 @@ Generate, compile and run:
 Recognizing strings: the need for YYMAXFILL
 -------------------------------------------
 
-This example is about recognizing simple strings without escapes
-(strings with escapes are lexed in `Parsing strings: multiple re2c blocks`_ example).
-
-Our strings are single-quoted and may contain any characters in the range ``[0 - 0xFF]``, except sinle quotes ``'``.
-It means that (unlike the previous example, `Recognizing integers: the sentinel method`_)
+This example is about recognizing strings.
+Our strings are very simple: they are single-quoted and may contain any character in range ``[0 - 0xFF]``, except sinle quotes ``'``.
+Yet this time (unlike the previous example, `Recognizing integers: the sentinel method`_)
 we cannot use ``NULL`` or any other character as a sentinel:
 input strings like ``'aha\0ha'\0`` are perfectly valid,
 but incorrect input like ``'aha\0`` is also possible and shouldn't crash lexer.
@@ -255,46 +250,95 @@ Generate, compile and run:
     $ ./example input.txt
     glorious 7 strings!
 
-.. _Parsing strings: multiple re2c blocks:
+.. _Parsing integers (multiple re2c blocks):
 
-Parsing strings: multiple re2c blocks
--------------------------------------
+Parsing integers (multiple re2c blocks)
+---------------------------------------
 
-This example is based on `Recognizing strings: the need for YYMAXFILL`_ example,
-only now we will fully parse double-quoted C-like strings
-rather than simply recognize single-quoted Shell strings.
+This example is based on `Recognizing integers: the sentinel method`_ example,
+only now integer literals are parsed rather than simply recognized.
+The aim of this example is to show how to use multiple re2c blocks,
+not how to parse integers (overflows are not handled). ``:)``
 
-Our strings can contain:
+`[04_parsing_integers_blocks.re] <examples/04_parsing_integers_blocks.re>`_
 
-* any unescaped ASCII character except double quote ``"``, escape ``\`` and newline
-* simple escapes: ``\’``, ``\"``, ``\?``, ``\\``, ``\a``, ``\b``, ``\f``, ``\n``, ``\r``, ``\t``, ``\v``
-* octal escapes: ``\`` followed by one or more characters in range ``[0 - 7]``
-* hexadecimal escapes: ``\`` followed by one or more characters in range ``[0 - 9]``, ``[a - f]`` or ``[A - F]``
-
-Octal and hexadecimal escapes are greedy: escape covers as many characters as possible (without causing a lexical error).
-
-`[04_parsing_strings.re] <examples/04_parsing_strings.re>`_
-
-.. include:: examples/04_parsing_strings.re
+.. include:: examples/04_parsing_integers_blocks.re
     :code: cpp
     :number-lines:
 
 Notes:
 
-* Configurations and definitions (lines 30 - 38) are not scoped to a single re2c block -- they are global.
+* Configurations and definitions (lines 9 - 15) are not scoped to a single re2c block --- they are global.
   Each block may override configurations, but this affects global scope.
 * Blocks don't have to be in the same function: they can be in separate functions or elsewhere
   as long as the exposed interface fits into lexical scope.
-* Overflows in octal and hexadecimal escapes are not handled.
 
 Generate, compile and run:
 
 .. code-block:: bash
 
-    $ re2c -o example.cc 04_parsing_strings.re
+    $ re2c -o example.cc 04_parsing_integers_blocks.re
     $ g++ -o example example.cc
-    $ ./example '"\23005 re2c, flex \x438 quex\n\t  \x27f7\n\t\x431\x440\x430\x442\x44c\x44f \x43d\x430\x432\x435\x43a! \x2605"'
-    "★ re2c, flex и quex
-              ⟷
-            братья навек! ★"
+    $ ./example "" 0 0b11100001 012345 67890 0xffE 0x 0b
+    error :[
+    0
+    225
+    5349
+    67890
+    4094
+    error :[
+    error :[
+
+
+.. _Parsing integers (conditions):
+
+Parsing integers (conditions)
+-----------------------------
+
+This example does exactly the same as `Parsing integers (multiple re2c blocks)`_ example,
+but in a slightly different manner: it uses re2c conditions instead of blocks.
+Conditions allow to encode multiple interconnected lexers within a single re2c block.
+
+`[05_parsing_integers_conditions.re] <examples/05_parsing_integers_conditions.re>`_
+
+.. include:: examples/05_parsing_integers_conditions.re
+    :code: cpp
+    :number-lines:
+
+Notes:
+
+* Conditions are enabled with ``-c`` option.
+* Conditions are only syntactic sugar, they can be translated into multiple blocks.
+* Each condition is a standalone lexer (DFA).
+* Conditions are interconnected: transitions are allowed between final states of one DFA
+  and start state of another DFA (but no transitions between inner states of different DFAs).
+* Each condition has a unique identifier: ``/*!types:re2c*/`` directive (line 3)
+  tells re2c to generate enumeration of them (names are prefixed with ``yyc`` by default).
+  These identifiers are used in the initial dispatch on conditions:
+  lexer uses ``YYGETCONDITION`` to get current condition (line 16)
+  and ``YYSETCONDITION`` to set it (line 18).
+* Each condition has a unique label (prefixed with ``yyc_`` by default).
+  Actions can use these labels to jump between conditions.
+  Alternatively the whole block may be enclosed in a loop:
+  then lexer will go through the initial dispatch on each iteration (but this might be slow).
+* Star rule ``<*>`` (line 21) is merged to all conditions (low priority).
+* Rule with multiple conditions (line 28) is merged to each listed condition (normal priority).
+* ``:=>`` (lines 23, 24, 25, 26) implies immediate transition
+  (bypassing initial dispatch).
+
+Generate, compile and run:
+
+.. code-block:: bash
+
+    $ re2c -c -o example.cc 05_parsing_integers_conditions.re
+    $ g++ -o example example.cc
+    $ ./example "" 0 0b11100001 012345 67890 0xffE 0x 0b
+    error :[
+    0
+    225
+    5349
+    67890
+    4094
+    error :[
+    error :[
 

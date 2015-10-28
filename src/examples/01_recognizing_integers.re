@@ -9,10 +9,10 @@ static const char *lex(const char *input)
         re2c:yyfill:enable = 0;
 
         end = "\x00";
-        bin = "0" [bB] [01]+;
-        oct = "0" [0-7]+;
-        dec = [+-]? ("0" | [1-9][0-9]*);
-        hex = "0" [xX] [0-9a-fA-F]+;
+        bin = '0b' [01]+;
+        oct = "0" [0-7]*;
+        dec = [1-9][0-9];
+        hex = '0x' [0-9a-fA-F]+;
 
         *       { return "err"; }
         bin end { return "bin"; }
