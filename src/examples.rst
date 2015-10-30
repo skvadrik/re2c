@@ -109,7 +109,9 @@ Notes:
 * Input string is padded with ``YYMAXFILL`` characters ``'a'`` (line 15).
   Sequence of ``'a'`` does not form a valid lexeme suffix (but padding like ``"\0`` would cause false match on incorrect input like ``"aha``).
 * ``YYLIMIT`` points to the end of padding (line 26).
-* ``YYFILL`` simply stops: there's nothing more to lex (line 30).
+* ``YYFILL`` returns an error (line 30): if the input was correct, lexer should have stopped
+  at the beginning of padding.
+* Lexer should consume *all* input characters (line 37).
 * We have to use ``re2c:define:YYFILL:naked = 1;`` (line 31)
   in order to suppress passing parameter to ``YYFILL``.
   (It was an unfortunate idea to make ``YYFILL`` a call expression by default:
@@ -312,6 +314,7 @@ Notes:
 * Each condition is a standalone lexer (DFA).
 * Conditions are interconnected: transitions are allowed between final states of one DFA
   and start state of another DFA (but no transitions between inner states of different DFAs).
+  The generated code starts with dispatch on conditions.
 * Each condition has a unique identifier: ``/*!types:re2c*/`` directive (line 3)
   tells re2c to generate enumeration of them (names are prefixed with ``yyc`` by default).
   These identifiers are used in the initial dispatch on conditions:
@@ -341,4 +344,78 @@ Generate, compile and run:
     4094
     error :[
     error :[
+
+
+.. Braille patterns (encodings):
+
+Braille patterns (encodings)
+----------------------------
+
+This example is about encoding support in re2c.
+It's a simple decoder from Grade-1 (uncontracted) Unicode English Braille to plain English.
+The input may be encoded in UTF-8, UTF-16, UTF-32 or UCS-2:
+all of these encodings are capable of representing Braille patterns (code points ``[0x2800 - 0x28ff]``).
+We use ``-r`` option to reuse the same block of re2c rules with different encodings.
+
+So. We have a file `[06_braille.utf8.txt] <examples/06_braille.utf8.txt.html>`_ (encoded in UTF-8) with a message:
+
+.. include:: examples/06_braille.utf8.txt
+
+Let's translate it into UTF-16, UTF-32 or UCS-2:
+
+.. code-block:: bash
+
+    $ iconv -f utf8 -t utf16le 06_braille.utf8.txt > 06_braille.utf16.txt
+    $ iconv -f utf8 -t utf32le 06_braille.utf8.txt > 06_braille.utf32.txt
+    $ iconv -f utf8 -t ucs2 06_braille.utf8.txt > 06_braille.ucs2.txt
+
+Uncontracted Braille is simple (compared to Grade-2 Braille).
+Patterns (mostly) map directly to symbols: alphabet letters, digits and punctuators.
+There is a couple of patterns that don't map to symbols:
+start of numeric mode (⠼), end of numeric mode (⠰), capital letter (⠠) (and some other, which are not covered by this example).
+Ambiguous punctuation patterns are also excluded.
+Grade-2 Braille allows contractions; they obey complex rules (like those of a natural language)
+and are much harder to implement.
+
+`[06_braille.re] <examples/06_braille.re>`_
+
+.. include:: examples/06_braille.re
+    :code: cpp
+    :number-lines:
+
+Notes:
+
+* Reuse mode allows two types of blocks: a single ``/*!rules:re2c ... */`` block (lines 49 - 129)
+  and multiple ``/*!use:re2c ... */`` blocks (lines 140 - 148, 157 - 167 and 176 - 186).
+  All blocks can have their own configurations, definitions and rules.
+* Conditions are used to emulate transitions between numeric and normal modes (lines 76 and 104).
+* Each encoding has an appropriate code unit type (``YYCTYPE``).
+
+Generate, compile and run:
+
+.. code-block:: bash
+
+    $ re2c -cr8 -o example.cc 06_braille.re
+    $ g++ -o example example.cc
+    $ ./example
+    utf8:
+    All human beings are born free and equal in dignity and rights. 
+    They are endowed with reason and conscience and should act towards 
+    one another in a spirit of brotherhood.
+    
+    utf16:
+    All human beings are born free and equal in dignity and rights. 
+    They are endowed with reason and conscience and should act towards 
+    one another in a spirit of brotherhood.
+    
+    utf32:
+    All human beings are born free and equal in dignity and rights. 
+    They are endowed with reason and conscience and should act towards 
+    one another in a spirit of brotherhood.
+    
+    ucs2:
+    All human beings are born free and equal in dignity and rights. 
+    They are endowed with reason and conscience and should act towards 
+    one another in a spirit of brotherhood.
+
 

@@ -34,7 +34,7 @@ static const char *lex(const input_t & input)
         str = "'" [^']* "'";
 
         *       { return "err"; }
-        str end { return "str"; }
+        str end { return YYLIMIT - YYCURSOR == YYMAXFILL ? "str" : "err"; }
     */
 }
 
