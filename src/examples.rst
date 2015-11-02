@@ -352,16 +352,18 @@ Braille patterns (encodings)
 ----------------------------
 
 This example is about encoding support in re2c.
-It's a simple decoder from Grade-1 (uncontracted) Unicode English Braille to plain English.
+It's a partial decoder from Grade-1 (uncontracted) Unicode English Braille to plain English.
 The input may be encoded in UTF-8, UTF-16, UTF-32 or UCS-2:
 all of these encodings are capable of representing Braille patterns (code points ``[0x2800 - 0x28ff]``).
 We use ``-r`` option to reuse the same block of re2c rules with different encodings.
 
-So. We have a file `[06_braille.utf8.txt] <examples/06_braille.utf8.txt.html>`_ (encoded in UTF-8) with a message:
+So. The hardest part is to get some input.
+Here is a message out of the void:
 
 .. include:: examples/06_braille.utf8.txt
 
-Let's translate it into UTF-16, UTF-32 or UCS-2:
+It appears to be UTF-8 encoded `[06_braille.utf8.txt] <examples/06_braille.utf8.txt.html>`_.
+Now translate it into UTF-16, UTF-32 or UCS-2:
 
 .. code-block:: bash
 
@@ -369,11 +371,12 @@ Let's translate it into UTF-16, UTF-32 or UCS-2:
     $ iconv -f utf8 -t utf32le 06_braille.utf8.txt > 06_braille.utf32.txt
     $ iconv -f utf8 -t ucs2 06_braille.utf8.txt > 06_braille.ucs2.txt
 
-Uncontracted Braille is simple (compared to Grade-2 Braille).
-Patterns (mostly) map directly to symbols: alphabet letters, digits and punctuators.
-There is a couple of patterns that don't map to symbols:
-start of numeric mode (⠼), end of numeric mode (⠰), capital letter (⠠) (and some other, which are not covered by this example).
-Ambiguous punctuation patterns are also excluded.
+And the input is ready.
+
+Grade-1 Braille is quite simple (compared to Grade-2 Braille).
+Patterns map directly to symbols (letters, digits and punctuators) except for a couple of special patterns:
+numeric mode indicator (⠼), letter mode indicator (⠰), capital letter (⠠)
+and some other, which we omit for simplicity (as well as a few ambiguous punctuation patterns).
 Grade-2 Braille allows contractions; they obey complex rules (like those of a natural language)
 and are much harder to implement.
 
@@ -385,11 +388,13 @@ and are much harder to implement.
 
 Notes:
 
-* Reuse mode allows two types of blocks: a single ``/*!rules:re2c ... */`` block (lines 49 - 129)
-  and multiple ``/*!use:re2c ... */`` blocks (lines 140 - 148, 157 - 167 and 176 - 186).
+* Reuse mode is enabled with ``-r`` option.
+* In reuse mode re2c expects a single ``/*!rules:re2c ... */`` block (line 49)
+  followed by multiple ``/*!use:re2c ... */`` blocks (lines 140, 157 and 176).
   All blocks can have their own configurations, definitions and rules.
-* Conditions are used to emulate transitions between numeric and normal modes (lines 76 and 104).
-* Each encoding has an appropriate code unit type (``YYCTYPE``).
+* Encoding can be enabled either with command-line option or with configuration.
+* Each encoding needs an appropriate code unit type (``YYCTYPE``).
+* We use conditions to switch between numeric and normal modes (lines 76 and 104).
 
 Generate, compile and run:
 
@@ -417,5 +422,52 @@ Generate, compile and run:
     All human beings are born free and equal in dignity and rights. 
     They are endowed with reason and conscience and should act towards 
     one another in a spirit of brotherhood.
+
+
+.. C++98 lexer:
+
+C++98 lexer
+-----------
+
+`[07_c++98.re] <examples/07_c++98.re>`_
+
+.. include:: examples/07_c++98.re
+    :code: cpp
+    :number-lines:
+
+Generate, compile and run:
+
+.. code-block:: bash
+
+    $ re2c -o example.cc 07_c++98.re
+    $ g++ -o example example.cc
+    $ ./example 07_c++98.re | fold
+     STATIC CONST size_t SIZE = 64 * 1024; STRUCT input_t { UNSIGNED CHAR buf[SIZE +
+     YYMAXFILL]; UNSIGNED CHAR *lim; UNSIGNED CHAR *cur; UNSIGNED CHAR *mar; UNSIGNE
+    D CHAR *tok; BOOL eof; FILE *CONST file; input_t(FILE *f) : buf() , lim(buf + SI
+    ZE) , cur(lim) , mar(lim) , tok(lim) , eof(false) , file(f) {} BOOL fill(size_t 
+    need) { IF (eof) { RETURN false; } CONST size_t free = tok - buf; IF (free < nee
+    d) { RETURN false; } memmove(buf, tok, lim - tok); lim -= free; cur -= free; mar
+     -= free; tok -= free; lim += fread(lim, 1, free, file); IF (lim < buf + SIZE) {
+     eof = true; memset(lim, 0, YYMAXFILL); lim += YYMAXFILL; } RETURN true; } }; TE
+    MPLATE<INT base> STATIC BOOL adddgt(UNSIGNED LONG &u, UNSIGNED LONG d) { IF (u >
+     (ULONG_MAX - d) / base) { RETURN false; } u = u * base + d; RETURN true; } STAT
+    IC BOOL lex_int_sfx(CONST UNSIGNED CHAR *s, UNSIGNED LONG u) { } STATIC BOOL lex
+    _oct(CONST UNSIGNED CHAR *s, BOOL sfx, UNSIGNED LONG &u) { FOR (u = 0, ++s;;) { 
+    } } STATIC BOOL lex_dec(CONST UNSIGNED CHAR *s, BOOL sfx, UNSIGNED LONG &u) { FO
+    R (u = 0;;) { } } STATIC BOOL lex_hex(CONST UNSIGNED CHAR *s, BOOL sfx, UNSIGNED
+     LONG &u) { FOR (u = 0, s += 2;;) { } } STATIC BOOL lex_str(input_t &in, UNSIGNE
+    D CHAR q) { printf("\x25\x63", q); FOR (UNSIGNED LONG u = q;; printf("\x5c\x78\x
+    25\x6c\x78", u)) { in.tok = in.cur; } printf("\x25\x63", q); RETURN true; } STAT
+    IC BOOL lex_flt(CONST UNSIGNED CHAR *s) { DOUBLE d = 0; DOUBLE x = 1; INT e = 0;
+     mant_int: mant_frac: exp_sign: exp: sfx: end: printf("\x25\x67", d); RETURN tru
+    e; } STATIC BOOL lex(input_t &in) { UNSIGNED LONG u; FOR (;;) { in.tok = in.cur;
+     } } INT main(INT argc, CHAR **argv) { IF (argc != 2) { printf ("\x75\x73\x61\x6
+    7\x65\x3a\x20\x2e\x2f\x65\x78\x61\x6d\x70\x6c\x65\x20\x3c\x66\x69\x6c\x65\x6e\x6
+    1\x6d\x65\x3e\xa"); RETURN 1; } FILE *file = fopen(argv[1], "\x72\x62"); IF (!fi
+    le) { printf("\x65\x72\x72\x6f\x72\x3a\x20\x63\x61\x6e\x6e\x6f\x74\x20\x6f\x70\x
+    65\x6e\x20\x66\x69\x6c\x65\x3a\x20\x25\x73\xa", argv[1]); RETURN 1; } input_t in
+    (file); IF (!lex(in)) { printf("\x2e\x2e\x2e\x20\x65\x72\x72\x6f\x72\xa"); } ELS
+    E { printf("\xa"); } fclose(file); RETURN 0; }
 
 
