@@ -1,10 +1,21 @@
+#include <limits.h>
 #include <stdio.h>
 
-static int lex(const char *s)
+template<int base>
+static bool adddgt(unsigned long &u, unsigned int d)
+{
+    if (u > (ULONG_MAX - d) / base) {
+        return false;
+    }
+    u = u * base + d;
+    return true;
+}
+
+static bool lex(const char *s, unsigned long &u)
 {
     const char *YYMARKER;
     const char *YYCTXMARKER;
-    int n = 0;
+    u = 0;
 
     /*!re2c
         re2c:yyfill:enable = 0;
@@ -15,7 +26,7 @@ static int lex(const char *s)
     */
 
     /*!re2c
-        *                  { return -1; }
+        *                  { return false; }
         '0b' / [01]        { goto bin; }
         "0"                { goto oct; }
         "" / [1-9]         { goto dec; }
@@ -24,43 +35,43 @@ static int lex(const char *s)
 
 bin:
     /*!re2c
-        *     { return -1; }
-        end   { return n; }
-        [01]  { n = (n << 1) + (s[-1] - '0'); goto bin; }
+        *     { return false; }
+        end   { return true; }
+        [01]  { if (!adddgt<2>(u, s[-1] - '0')) return false; goto bin; }
     */
 
 oct:
     /*!re2c
-        *     { return -1; }
-        end   { return n; }
-        [0-7] { n = (n << 3) + (s[-1] - '0'); goto oct; }
+        *     { return false; }
+        end   { return true; }
+        [0-7] { if (!adddgt<8>(u, s[-1] - '0')) return false; goto oct; }
     */
 
 dec:
     /*!re2c
-        *     { return -1; }
-        end   { return n; }
-        [0-9] { n = (n * 10) + (s[-1] - '0'); goto dec; }
+        *     { return false; }
+        end   { return true; }
+        [0-9] { if (!adddgt<10>(u, s[-1] - '0')) return false; goto dec; }
     */
 
 hex:
     /*!re2c
-        *     { return -1; }
-        end   { return n; }
-        [0-9] { n = (n << 4) + (s[-1] - '0');      goto hex; }
-        [a-f] { n = (n << 4) + (s[-1] - 'a' + 10); goto hex; }
-        [A-F] { n = (n << 4) + (s[-1] - 'A' + 10); goto hex; }
+        *     { return false; }
+        end   { return true; }
+        [0-9] { if (!adddgt<16>(u, s[-1] - '0'))      return false; goto hex; }
+        [a-f] { if (!adddgt<16>(u, s[-1] - 'a' + 10)) return false; goto hex; }
+        [A-F] { if (!adddgt<16>(u, s[-1] - 'A' + 10)) return false; goto hex; }
     */
 }
 
 int main(int argc, char **argv)
 {
     for (int i = 1; i < argc; ++i) {
-        const int n = lex(argv[i]);
-        if (n < 0) {
-            printf("error :[\n");
+        unsigned long u;
+        if (lex(argv[i], u)) {
+            printf("%lu\n", u);
         } else {
-            printf("%d\n", n);
+            printf("error\n");
         }
     }
     return 0;

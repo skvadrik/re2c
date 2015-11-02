@@ -259,8 +259,9 @@ Parsing integers (multiple re2c blocks)
 
 This example is based on `Recognizing integers: the sentinel method`_ example,
 only now integer literals are parsed rather than simply recognized.
-The aim of this example is to show how to use multiple re2c blocks,
-not how to parse integers (overflows are not handled). ``:)``
+Parsing integers is simple: one can easily do it by hand.
+However, re2c-generated code *does* look like a simple handwritten parser:
+a couple of dereferences and conditional jumps. No overhead. ``:)``
 
 `[04_parsing_integers_blocks.re] <examples/04_parsing_integers_blocks.re>`_
 
@@ -270,7 +271,7 @@ not how to parse integers (overflows are not handled). ``:)``
 
 Notes:
 
-* Configurations and definitions (lines 9 - 15) are not scoped to a single re2c block --- they are global.
+* Configurations and definitions (lines 20 - 26) are not scoped to a single re2c block --- they are global.
   Each block may override configurations, but this affects global scope.
 * Blocks don't have to be in the same function: they can be in separate functions or elsewhere
   as long as the exposed interface fits into lexical scope.
@@ -281,15 +282,17 @@ Generate, compile and run:
 
     $ re2c -o example.cc 04_parsing_integers_blocks.re
     $ g++ -o example example.cc
-    $ ./example "" 0 0b11100001 012345 67890 0xffE 0x 0b
-    error :[
+    $ ./example 0 12345678901234567890 0xFFFFffffFFFFffff 0x1FFFFffffFFFFffff 0xAbcDEf 0x00 007 0B0 0b110101010 ""
     0
-    225
-    5349
-    67890
-    4094
-    error :[
-    error :[
+    12345678901234567890
+    18446744073709551615
+    error
+    11259375
+    0
+    7
+    0
+    426
+    error
 
 
 .. _Parsing integers (conditions):
@@ -310,24 +313,28 @@ Conditions allow to encode multiple interconnected lexers within a single re2c b
 Notes:
 
 * Conditions are enabled with ``-c`` option.
+
 * Conditions are only syntactic sugar, they can be translated into multiple blocks.
+
 * Each condition is a standalone lexer (DFA).
-* Conditions are interconnected: transitions are allowed between final states of one DFA
-  and start state of another DFA (but no transitions between inner states of different DFAs).
-  The generated code starts with dispatch on conditions.
-* Each condition has a unique identifier: ``/*!types:re2c*/`` directive (line 3)
-  tells re2c to generate enumeration of them (names are prefixed with ``yyc`` by default).
-  These identifiers are used in the initial dispatch on conditions:
-  lexer uses ``YYGETCONDITION`` to get current condition (line 16)
-  and ``YYSETCONDITION`` to set it (line 18).
+
+* Each condition has a unique identifier: ``/*!types:re2c*/`` tells re2c to generate
+  enumeration of all identifiers (names are prefixed with ``yyc`` by default).
+  Lexer uses ``YYGETCONDITION`` to get the identifier of current condition
+  and ``YYSETCONDITION`` to set it.
+
 * Each condition has a unique label (prefixed with ``yyc_`` by default).
-  Actions can use these labels to jump between conditions.
-  Alternatively the whole block may be enclosed in a loop:
-  then lexer will go through the initial dispatch on each iteration (but this might be slow).
-* Star rule ``<*>`` (line 21) is merged to all conditions (low priority).
-* Rule with multiple conditions (line 28) is merged to each listed condition (normal priority).
-* ``:=>`` (lines 23, 24, 25, 26) implies immediate transition
-  (bypassing initial dispatch).
+
+* Conditions are connected: transitions are allowed between final states of one condition
+  and start state of another condition (but not between inner states of different conditions).
+  The generated code starts with dispatch.
+  Actions can either jump to the initial dispatch or jump directly to any condition.
+
+* Rule ``<*>`` is merged to all conditions (low priority).
+
+* Rules with multiple conditions are merged to each listed condition (normal priority).
+
+* ``:=>`` jumps directly to the next condition (bypassing the initial dispatch).
 
 Generate, compile and run:
 
@@ -335,15 +342,17 @@ Generate, compile and run:
 
     $ re2c -c -o example.cc 05_parsing_integers_conditions.re
     $ g++ -o example example.cc
-    $ ./example "" 0 0b11100001 012345 67890 0xffE 0x 0b
-    error :[
+    $ ./example 0 12345678901234567890 0xFFFFffffFFFFffff 0x1FFFFffffFFFFffff 0xAbcDEf 0x00 007 0B0 0b110101010 ""
     0
-    225
-    5349
-    67890
-    4094
-    error :[
-    error :[
+    12345678901234567890
+    18446744073709551615
+    error
+    11259375
+    0
+    7
+    0
+    426
+    error
 
 
 .. Braille patterns (encodings):
@@ -363,7 +372,7 @@ Here is a message out of the void:
 .. include:: examples/06_braille.utf8.txt
 
 It appears to be UTF-8 encoded `[06_braille.utf8.txt] <examples/06_braille.utf8.txt.html>`_.
-Now translate it into UTF-16, UTF-32 or UCS-2:
+Convert it into UTF-16, UTF-32 or UCS-2:
 
 .. code-block:: bash
 

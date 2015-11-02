@@ -1,14 +1,24 @@
+#include <limits.h>
 #include <stdio.h>
+
+template<int base>
+static bool adddgt(unsigned long &u, unsigned int d)
+{
+    if (u > (ULONG_MAX - d) / base) {
+        return false;
+    }
+    u = u * base + d;
+    return true;
+}
 
 /*!types:re2c*/
 
-static int lex(const char *s)
+static bool lex(const char *s, unsigned long &u)
 {
     const char *YYMARKER;
     const char *YYCTXMARKER;
-    int n = 0;
     int c = yycinit;
-
+    u = 0;
     /*!re2c
         re2c:yyfill:enable = 0;
         re2c:define:YYCTYPE = char;
@@ -18,31 +28,31 @@ static int lex(const char *s)
         re2c:define:YYSETCONDITION = "c = @@;";
         re2c:define:YYSETCONDITION:naked = 1;
 
-        <*> * { return -1; }
+        <*> * { return false; }
 
         <init> '0b' / [01]        :=> bin
         <init> "0"                :=> oct
         <init> "" / [1-9]         :=> dec
         <init> '0x' / [0-9a-fA-F] :=> hex
 
-        <bin, oct, dec, hex> "\x00" { return n; }
-        <bin> [01]  { n = (n << 1) + (s[-1] - '0'); goto yyc_bin; }
-        <oct> [0-7] { n = (n << 3) + (s[-1] - '0'); goto yyc_oct; }
-        <dec> [0-9] { n = (n * 10) + (s[-1] - '0'); goto yyc_dec; }
-        <hex> [0-9] { n = (n << 4) + (s[-1] - '0');      goto yyc_hex; }
-        <hex> [a-f] { n = (n << 4) + (s[-1] - 'a' + 10); goto yyc_hex; }
-        <hex> [A-F] { n = (n << 4) + (s[-1] - 'A' + 10); goto yyc_hex; }
+        <bin, oct, dec, hex> "\x00" { return true; }
+        <bin> [01]  { if (!adddgt<2>(u, s[-1] - '0')) return false; goto yyc_bin; }
+        <oct> [0-7] { if (!adddgt<8>(u, s[-1] - '0')) return false; goto yyc_oct; }
+        <dec> [0-9] { if (!adddgt<10>(u, s[-1] - '0')) return false; goto yyc_dec; }
+        <hex> [0-9] { if (!adddgt<16>(u, s[-1] - '0'))      return false; goto yyc_hex; }
+        <hex> [a-f] { if (!adddgt<16>(u, s[-1] - 'a' + 10)) return false; goto yyc_hex; }
+        <hex> [A-F] { if (!adddgt<16>(u, s[-1] - 'A' + 10)) return false; goto yyc_hex; }
     */
 }
 
 int main(int argc, char **argv)
 {
     for (int i = 1; i < argc; ++i) {
-        const int n = lex(argv[i]);
-        if (n < 0) {
-            printf("error :[\n");
+        unsigned long u;
+        if (lex(argv[i], u)) {
+            printf("%lu\n", u);
         } else {
-            printf("%d\n", n);
+            printf("error\n");
         }
     }
     return 0;
