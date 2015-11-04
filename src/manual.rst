@@ -1,45 +1,11 @@
-
-`[home] <index.html>`_
-
---------------------------------------------------------------------------------
-
-* `About`_
-    - `Authors`_
-    - `License`_
-    - `Version`_
-* `Run`_
-    - `Synopsis`_
-    - `Options`_
-    - `Warnings`_
-* `Syntax`_
-    - `Rules`_
-    - `Definitions`_
-    - `Configurations`_
-    - `Regular expressions`_
-    - `Interface`_
-* `Features`_
-    - `Conditions`_
-    - `State`_
-    - `Reuse`_
-    - `Encodings`_
-    - `Generic interface`_
-* `Examples`_
-    - `Recognizing integers: the sentinel method`_
-    - `Recognizing strings: the need for YYMAXFILL`_
-    - `Arbitrary large input and YYFILL`_
-    - `Parsing integers (multiple re2c blocks)`_
-    - `Parsing integers (conditions)`_
-    - `Braille patterns (encodings)`_
-    - `C++98 lexer`_
-* `Changelog`_
-
-.. _About:
+.. header:: `[home] <index.html>`_
+.. footer:: `[home] <index.html>`_
+.. contents:: ★
+    :backlinks: none
+    :depth: 2
 
 About
 =====
---------------------------------------------------------------------------------
-
-.. _Authors:
 
 Authors
 -------
@@ -61,8 +27,6 @@ Since then many people have contributed to re2c:
 
 Let me know if I missed someone!
 
-.. _License:
-
 License
 -------
 
@@ -78,51 +42,34 @@ they can obtain for re2c. If you do make use of re2c, or incorporate it into a l
 acknowledgement somewhere (documentation, research report, etc.) would
 be appreciated.
 
-.. _Version:
-
 Version
 -------
 
 This page describes ``re2c`` version 0.14.1.dev, package date 15 Oct 2015.
 
-.. _Run:
-
 Run
 ===
---------------------------------------------------------------------------------
-
-.. _Synopsis:
 
 Synopsis
 --------
 
 ``re2c [OPTIONS] FILE [OPTIONS]``
 
-
-.. _Options:
-
 Options
 -------
 
 .. include:: options/options_list.rst
-
-.. _Warnings:
 
 Warnings
 --------
 
 .. include:: options/warnings_list.rst
 
-.. _Syntax:
-
 Syntax
 ======
---------------------------------------------------------------------------------
 
 Code for ``re2c`` consists of a set of `rules`_, `definitions`_ and
 `configurations`_.
-
-.. _Rules:
 
 Rules
 -----
@@ -225,8 +172,6 @@ can doso by using ``<!>`` pseudo-rules.
 
     ``<!> := C/C++ code``
 
-.. _Definitions:
-
 Definitions
 -----------
 
@@ -237,8 +182,6 @@ Named definitions are of the form:
 If ``-F`` is active, then named definitions are also of the form:
 
     ``name { regular-expression }``
-
-.. _Configurations:
 
 Configurations
 --------------
@@ -493,8 +436,6 @@ Configurations
 ``re2c:variable:yytarget = "yytarget";``
     Allows to overwrite the name of the variable ``yytarget``.
 
-.. _Regular expressions:
-
 Regular expressions
 -------------------
 
@@ -570,8 +511,6 @@ Hexadecimal characters from 0x10000 to 0xFFFFffff are defined by backslash, an u
 and eight hexadecimal digits (e.g. ``\U12345678``).
 
 The only portable "any" rule is the default rule ``*``.
-
-.. _Interface:
 
 Interface
 ---------
@@ -668,13 +607,8 @@ depends on a particular use case.
     generated code will contain both ``YYSETSTATE (s)`` and ``YYGETSTATE`` even
     if ``YYFILL (n)`` is being disabled.
 
-.. _Features:
-
 Features
 ========
---------------------------------------------------------------------------------
-
-.. _Conditions:
 
 Conditions
 ----------
@@ -709,8 +643,6 @@ followed by either a list of conditions ``<! condition, ... >`` or a star
 ``<!*>``. When ``re2c`` generates the code for a rule whose state does not have a
 setup rule and a star'd setup rule is present, than that code will be
 used as setup code.
-
-.. _State:
 
 State
 -----
@@ -766,8 +698,6 @@ Please see ``examples/push_model/push.re`` for "push" model scanner. The
 generated code can be tweaked using inplace configurations ``state:abort``
 and ``state:nextlabel``.
 
-.. _Reuse:
-
 Reuse
 -----
 
@@ -781,8 +711,6 @@ That way it is possible to create the same scanner multiple times for
 different character types, different input mechanisms or different output mechanisms.
 The ``/*!use:re2c */`` blocks can also contain additional rules that will be appended
 to the set of rules in ``/*!rules:re2c */``.
-
-.. _Encodings:
 
 Encodings
 ---------
@@ -844,8 +772,6 @@ check for invalid input, the only true way to do so is to use default
 rule ``*``. Note, that full range rule ``[^]`` won't catch invalid code units when variable-length encoding is used
 (``[^]`` means "all valid code points", while default rule ``*`` means "all possible code units").
 
-.. _Generic interface:
-
 Generic interface
 -----------------
 
@@ -876,23 +802,19 @@ This `article <http://skvadrik.github.io/aleph_null/posts/re2c/2015-01-13-input_
 has more details, and you can find some usage examples
 `here <http://skvadrik.github.io/aleph_null/posts/re2c/2015-01-15-input_model_custom.html>`_.
 
-.. _Examples:
-
 Examples
 ========
 
---------------------------------------------------------------------------------
-
-All examples are written in C++-98.
-`Do let me know <skvadik@gmail.com>`_ if you notice any obvious lies and errors.
-You can find more examples in subdirectory ``examples`` of the ``re2c`` distribution.
-
-.. include:: examples.rst
-
-.. _Changelog:
+.. include:: example_intro.rst
+.. include:: example_01.rst
+.. include:: example_02.rst
+.. include:: example_03.rst
+.. include:: example_04.rst
+.. include:: example_05.rst
+.. include:: example_06.rst
+.. include:: example_07.rst
 
 Changelog
 =========
---------------------------------------------------------------------------------
 
 .. include:: changelog.rst

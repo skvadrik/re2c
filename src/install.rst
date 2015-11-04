@@ -1,26 +1,11 @@
-
-`[home] <index.html>`_
-
---------------------------------------------------------------------------------
-
-* `Download`_
-    - `Tarballs`_
-    - `Sources`_
-    - `Distributions`_
-* `Build`_
-    - `Simple`_
-    - `Bootstrap`_
-    - `Out-of-source`_
-    - `Windows`_
-* `Test`_
-
-.. _Download:
+.. header:: `[home] <index.html>`_
+.. footer:: `[home] <index.html>`_
+.. contents:: ★
+    :backlinks: none
+    :depth: 2
 
 Download
 ========
---------------------------------------------------------------------------------
-
-.. _Tarballs:
 
 Tarballs
 --------
@@ -29,8 +14,6 @@ Tarballs
 * `re2c-0.13.7.5.tar.gz <https://github.com/skvadrik/re2c/releases/download/0.13.7.5/re2c-0.13.7.5.tar.gz>`_
 * `re2c-0.13.6.tar.gz <https://github.com/skvadrik/re2c/releases/download/0.13.6/re2c-0.13.6.tar.gz>`_
 * `re2c-0.13.5.tar.gz <http://sourceforge.net/projects/re2c/files/re2c/0.13.5/re2c-0.13.5.tar.gz/download>`_
-
-.. _Sources:
 
 Sources
 -------
@@ -47,8 +30,6 @@ There's also a mirror on `sourceforge <https://sourceforge.net/p/re2c/code-git/c
 .. code-block:: bash
 
     $ git clone ssh://git.code.sf.net/p/re2c/code-git re2c
-
-.. _Distributions:
 
 Distributions
 -------------
@@ -79,11 +60,8 @@ BSD
 * `NetBSD <ftp://ftp.netbsd.org/pub/pkgsrc/current/pkgsrc/devel/re2c/README.html>`_
 * `OpenBSD <http://www.openbsd.org/4.5_packages/sh/re2c-0.13.5.tgz-long.html>`_
 
-.. _Build:
-
 Build
 =====
---------------------------------------------------------------------------------
 
 You only need C++98 compier to build re2c from tarball.
 If you have bison, re2c will use it (otherwise it will use precompiled files).
@@ -105,8 +83,6 @@ This will install re2c (binary and manpage) to ``prefix`` (``/usr/local`` by def
     $ make
     $ make install
 
-.. _Bootstrap:
-
 Bootstrap
 ---------
 
@@ -117,8 +93,6 @@ However, one can fully bootstrap re2c:
 .. code-block:: bash
 
     $ make bootstrap
-
-.. _Out-of-source:
 
 Out-of-source
 -------------
@@ -131,8 +105,6 @@ re2c supports out-of-source builds:
     $ ../configure [--prefix=<prefix>]
     $ make
     $ make install
-
-.. _Windows:
 
 Windows
 -------
@@ -149,11 +121,8 @@ or build re2c with `mingw <http://mingw.org/>`_:
 
 (mingw builds are supported and tested regularly).
 
-.. _Test:
-
 Test
 ====
---------------------------------------------------------------------------------
 
 re2c has a main test suite and a couple of small tests. Run them all:
 

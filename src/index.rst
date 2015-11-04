@@ -4,17 +4,18 @@ re2c
 ====
 
 re2c is a lexer generator for C/C++.
-The generated code is fast (direct-coded DFA, at least as good as handwritten)
+The generated code is fast (direct-coded DFA, as good as handwritten)
 and flexible (easy to embed into existing environment).
 
 --------------------------------------------------------------------------------
 
-`Install <install.html>`_
----------------------------
-`Manual <manual.html>`_
------------------------
-`News <news.html>`_
--------------------
+★ `Install <install.html>`_
+
+★ `Manual <manual.html>`_
+
+★ `Examples <examples.html>`_
+
+★ `News <news.html>`_
 
 --------------------------------------------------------------------------------
 

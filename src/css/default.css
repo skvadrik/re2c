@@ -10,9 +10,13 @@ body {
 h1, h2, h3, h4, h5, h6 {
     color: #557799;
 }
+h1 {
+    border-bottom: groove black;
+}
 h1.title {
     font-size: 2.5em;
     text-align: center;
+    border: none;
 }
 
 a {
