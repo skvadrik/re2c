@@ -24,6 +24,13 @@
     - `Encodings`_
     - `Generic interface`_
 * `Examples`_
+    - `Recognizing integers: the sentinel method`_
+    - `Recognizing strings: the need for YYMAXFILL`_
+    - `Arbitrary large input and YYFILL`_
+    - `Parsing integers (multiple re2c blocks)`_
+    - `Parsing integers (conditions)`_
+    - `Braille patterns (encodings)`_
+    - `C++98 lexer`_
 * `Changelog`_
 
 .. _About:

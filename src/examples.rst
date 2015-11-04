@@ -475,7 +475,7 @@ It confirms to the C++98 standard (except for a couple of hacks to simulate prep
 All nontrivial lexemes (integers, floating-point constants, strings and character literals)
 are parsed (not only recognized): numeric literals are converted to numbers, strings are unescaped.
 Some additional checks described in standard (e.g. overflows in integer literals) are also done.
-In fact, C++ is easy an easy language to lex: unlike many other languages, lexer can proceed without feedback from parser.
+In fact, C++ is an easy language to lex: unlike many other languages, lexer can proceed without feedback from parser.
 
 `[07_c++98.re] <examples/07_c++98.re>`_
 
