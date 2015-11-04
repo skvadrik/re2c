@@ -470,11 +470,37 @@ Generate, compile and run:
 C++98 lexer
 -----------
 
+This is an example of a big real-world re2c program: C++98 lexer.
+It confirms to the C++98 standard (except for a couple of hacks to simulate preprocessor).
+All nontrivial lexemes (integers, floating-point constants, strings and character literals)
+are parsed (not only recognized): numeric literals are converted to numbers, strings are unescaped.
+Some additional checks described in standard (e.g. overflows in integer literals) are also done.
+In fact, C++ is easy an easy language to lex: unlike many other languages, lexer can proceed without feedback from parser.
+
 `[07_c++98.re] <examples/07_c++98.re>`_
 
 .. include:: examples/07_c++98.re
     :code: cpp
     :number-lines:
+
+Notes:
+
+* The main lexer is used to lex all trivial lexemes (macros, whitespaces, boolean literals, keywords, operators and punctuators, identifiers),
+  recognize numeric literals (which are further parsed by a bunch of auxilary lexers),
+  and recognize the start of string and character literals (which are further recognized and parsed by an auxilary lexer).
+  Numeric literals are thus lexed twice: this approach may be deemed inefficient,
+  but it takes much more effort to validate and parse them at once.
+  Besides, a real-world lexer would rather recognize ill-formed lexemes (e.g. overflowed integer literals),
+  report them and resume lexing.
+
+* The main lexer and string lexer both use ``re2c:yyfill:enable = 1;``, other lexers use ``re2c:yyfill:enable = 0;``.
+  This is very important: both main lexer and string lexer advance input position to new (yet unseen) input characters,
+  so they must check for the end of input and call ``YYFILL``. In conrast, other lexers only parse lexemes that
+  have been already recognized by the main lexer: these lexemes are guaranteed to be within buffer bounds
+  (they are guarded by ``in.tok`` on the left and ``in.lim`` on the right).
+
+* The hardest part is (unsurprisingly) floating-point literals.
+  They are just as hard to lex as to use. ``:)``
 
 Generate, compile and run:
 
