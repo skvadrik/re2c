@@ -8,6 +8,7 @@
     - `Sources`_
     - `Distributions`_
 * `Build`_
+    - `Simple`_
     - `Bootstrap`_
     - `Out-of-source`_
     - `Windows`_
@@ -84,13 +85,19 @@ Build
 =====
 --------------------------------------------------------------------------------
 
-If you are building re2c from sources, you'll first need to generate autotools files:
+You only need C++98 compier to build re2c from tarball.
+If you have bison, re2c will use it (otherwise it will use precompiled files).
+
+If you are building re2c from source, you will also need autotools:
 
 .. code-block:: bash
 
     $ ./autogen.sh
 
-Simply configure, build and install re2c (binary and manpage) to ``prefix`` (``/usr/local`` by default):
+Simple
+------
+
+This will install re2c (binary and manpage) to ``prefix`` (``/usr/local`` by default):
 
 .. code-block:: bash
 
