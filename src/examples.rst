@@ -3,7 +3,13 @@
 Recognizing integers: the sentinel method
 -----------------------------------------
 
-This program simply loops over its commad-line arguments
+This example is very simple, yet practical.
+We assume that the input is small (fits in one continuous piece of memory).
+We also assume that some characters never occur in well-formed input (but may occur in ill-formed input).
+This is often the case in simple real-world tasks like parsing program options,
+converting strings to numbers, determining binary file type based on magic in the first few bytes,
+efficiently switching on a string and many others.
+Our example program simply loops over its commad-line arguments
 and tries to match each argument against one of the four patterns:
 binary, octal, decimal and hexadecimal integer literals.
 The numbers are not *parsed* (their numeric value is not retrieved), they are merely *recognized*.
@@ -16,18 +22,20 @@ The numbers are not *parsed* (their numeric value is not retrieved), they are me
 
 A couple of things should be noted:
 
-* Default case (when none of the patterns matched) is handled properly (line 17).
+* Default case (when none of the rules matched) is handled properly with ``*`` rule (line 16).
+  **Never forget to handle default case, otherwise control flow in lexer will be undefined for some input strings.**
+  Use [-Wundefined-control-flow] re2c warning: it will warn you about unhandled default case and
+  show input patterns that are not covered by the rules.
 
-* Check for the end of input is disabled (line 9).
-  In this case we can use ``NULL`` character as a sentinel:
-  all arguments are ``NULL``-terminated and none of the rules matches ``NULL`` in the middle.
+* We use the *sentinel* method to stop at the end of input (``re2c:yyfill:enable = 0;`` at line 8).
+  Sentinel is a special character that can never occur in well-formed input.
+  It is appended to the end of input and serves as a stop signal for the lexer.
+  In out case sentinel is ``NULL``: all arguments are ``NULL``-terminated and none of the rules matches ``NULL`` in the middle.
   Lexer will inevitably stop when it sees ``NULL``.
-  It's a common practice to use ``re2c:yyfill:enable = 0;``
-  in cases when input character set is restricted and one special
-  character can be chosen to indicate the end of input.
-  **But do make sure that the sentinel character is not allowed in the middle of a rule!**
+  Note that we make no assumptions about the input, it may contain any characters.
+  **But do make sure that the sentinel character is not allowed in the middle of a rule.**
 
-* ``YYMARKER`` (line 6) is needed because rules overlap:
+* ``YYMARKER`` (line 5) is needed because rules overlap:
   it backups input position of the longest successful match.
   Say, we have overlapping rules ``"a"`` and ``"abc"`` and input string ``"abd"``:
   by the time ``"a"`` matches there's still a chance to match ``"abc"``,
@@ -44,7 +52,7 @@ Generate, compile and run:
     $ g++ -o example example.cc
     $ ./example 0 12345678901234567890 0xAbcDEf 0x00 007 0B0 0b110101010 0x 0b ? ""
     oct: 0
-    dec: 1234567890
+    dec: 12345678901234567890
     hex: 0xAbcDEf
     hex: 0x00
     oct: 007
@@ -55,30 +63,31 @@ Generate, compile and run:
     err: ?
     err: 
 
+
 .. _Recognizing strings: the need for YYMAXFILL:
 
 Recognizing strings: the need for YYMAXFILL
 -------------------------------------------
 
 This example is about recognizing strings.
-Our strings are very simple: they are single-quoted and may contain any character in range ``[0 - 0xFF]``, except sinle quotes ``'``.
-Yet this time (unlike the previous example, `Recognizing integers: the sentinel method`_)
-we cannot use ``NULL`` or any other character as a sentinel:
-input strings like ``'aha\0ha'\0`` are perfectly valid,
-but incorrect input like ``'aha\0`` is also possible and shouldn't crash lexer.
+Strings (in generic sense) are different from other kinds of lexemes: they can contain *arbitrary* characters.
+It makes them a way more difficult to lex: unlike the previous example (`Recognizing integers: the sentinel method`_),
+we cannot use sentinel character to stop at the end of input.
+Suppose, for example, that our strings may be single or double-quoted
+and may contain any character in range ``[0 - 0xFF]`` except quotes of the appropriate type.
+This time we cannot use ``NULL`` as a sentinel: input strings like ``"aha\0ha"`` are perfectly valid,
+but ill-formed strings like ``"aha\0`` are also possible and shouldn't crash lexer.
+Any other character cannot be used for the same reason
+(including quotes: each type of strings can contain quotes of the opposite type).
 
-By default re2c generates explicit checks for the end of input,
-so we must simply omit ``re2c:yyfill:enable = 0;`` configuration.
-A naive approach is to check on each character (before advancing input position), but it's very slow.
+By default re2c-generated lexers use the following approach to check for the end of input:
+they assume that ``YYLIMIT`` is a pointer to the end of input and check by simply comparing ``YYCURSOR`` and ``YYLIMIT``.
+The obvious way is to check on each input character (before advancing to the next character), but it's very slow.
 Instead, re2c inserts checks only at certain points in the generated program.
-Each check ensures that there is enough input to proceed until the next checkpoint.
-If the check fails, lexer calls ``YYFILL``:
+Each check ensures that there is enough input to proceed until the next check.
+If the check fails, lexer calls ``YYFILL(n)``, which can either supply at least ``n`` characters or stop:
 
     ``if ((YYLIMIT - YYCURSOR) < n) YYFILL(n);``
-
-``YYLIMIT`` must point at the end of input (so that ``YYLIMIT[-1]`` is the last input character).
-``YYFILL(n)`` can either supply at least ``n`` more input characters or stop
-(see example `Arbitrary large input and YYFILL`_ for details about ``YYFILL`` implementation).
 
 For those interested in the internal re2c algorithm used to determine checkpoints,
 here is a quote from the original paper
@@ -106,13 +115,20 @@ The length of padding depends on the maximal argument to ``YYFILL``
 Notes:
 
 * ``/*!max:re2c*/`` (line 4) tells re2c to generate ``#define YYMAXFILL n``.
+
 * Input string is padded with ``YYMAXFILL`` characters ``'a'`` (line 15).
-  Sequence of ``'a'`` does not form a valid lexeme suffix (but padding like ``"\0`` would cause false match on incorrect input like ``"aha``).
-* ``YYLIMIT`` points to the end of padding (line 26).
-* ``YYFILL`` returns an error (line 30): if the input was correct, lexer should have stopped
+  Sequence of ``'a'`` does not form a valid lexeme or lexeme suffix
+  (but padding with quotes would cause false match on ill-formed input like ``"aha``).
+
+* ``YYLIMIT`` points at the end of padding (line 26).
+
+* ``YYFILL`` returns an error (line 29): if the input was correct, lexer should have stopped
   at the beginning of padding.
-* Lexer should consume *all* input characters (line 37).
-* We have to use ``re2c:define:YYFILL:naked = 1;`` (line 31)
+
+* If the rule matched (line 36), we ensure that lexer consumed *all* input characters
+  and stopped exactly at the beginning of padding.
+
+* We have to use ``re2c:define:YYFILL:naked = 1;`` (line 30)
   in order to suppress passing parameter to ``YYFILL``.
   (It was an unfortunate idea to make ``YYFILL`` a call expression by default:
   ``YYFILL`` has to stop the lexer eventually, that's why it has to be a macro and not a function.
@@ -124,6 +140,14 @@ Generate, compile and run:
 
     $ re2c -o example.cc 02_recognizing_strings.re
     $ g++ -o example example.cc
+    $ ./example '"a momentary"' '""' '"lap"se"' '"of' '"' '"rea""son"' ''
+    str: "a momentary"
+    str: ""
+    err: "lap"se"
+    err: "of
+    err: "
+    err: "rea""son"
+    err: 
     $ ./example "'a momentary'" "''" "'lap'se'" "'of" "'" "'rea''son'" ""
     str: 'a momentary'
     str: ''
@@ -133,23 +157,26 @@ Generate, compile and run:
     err: 'rea''son'
     err: 
 
+
 .. _Arbitrary large input and YYFILL:
 
 Arbitrary large input and YYFILL
 --------------------------------
 
-Suppose that for some reason the whole input cannot be mapped in memory:
-either it is very big or its size cannot be determined in advance.
-The usual thing to do in such case is to allocate a buffer
-and process input in chunks that fit into buffer.
-For that we will need ``YYFILL``.
+In this example we make the following assumptions:
 
-See the previous example (`Recognizing strings: the need for YYMAXFILL`_)
+1. Input cannot be mapped in memory at once (it is very large, its size cannot be determined in advance, etc.).
+
+The usual thing to do in such case is to allocate a buffer and lex input in chunks that fit into buffer.
+re2c allows us to refill buffer using ``YYFILL``: see example `Recognizing strings: the need for YYMAXFILL`_
 for details about program points and conditions that trigger ``YYFILL`` invocation.
+Currently re2c provides no way to combine ``YYFILL`` with the sentinel method:
+we have to enable ``YYLIMIT``-based checks for the end of input and pad input with ``YYMAXFILL`` fake characters.
+This may be changed in later versions of re2c.
+
 The idea of ``YYFILL`` is fairly simple: lexer is stuck upon the fact that
 ``(YYLIMIT - YYCURSOR) < n`` and ``YYFILL`` must either invert this condition or stop lexing.
 Disaster will happen if ``YYFILL`` fails to provide at least ``n`` characters, yet resumes lexing.
-
 Technically ``YYFILL`` must somehow "extend" input for at least ``n`` characters:
 after ``YYFILL`` all input pointers must point to exact same characters,
 except ``YYLIMIT``: it must be advanced at least ``n`` positions.
@@ -196,17 +223,16 @@ Which part of input can be discarded?
 The answer is, all input up to the leftmost meaningful pointer.
 Intuitively it seems that it must be ``YYMARKER``: it backups input position of the latest match,
 so it's always less than or equal to ``YYCURSOR``.
-However, ``YYMARKER`` usage depends on the input:
+However, ``YYMARKER`` is not always used and even when it is, its usage depends on the input:
 not all control flow paths in lexer ever initialize it.
 Thus for some inputs ``YYMARKER`` is meaningless
 and should be used with care.
-
 In practice input rarely consists of one giant lexeme: it is usually a sequence of small lexemes.
 In that case lexer runs in a loop and it is convenient to have a special "lexeme start" pointer.
 It can be used as boundary in ``YYFILL``.
 
-Our example program will lex a file with strings (probably separated by whitespaces)
-and count the total number of strings:
+Our example program reads ``stdin`` in chunks of 16 bytes (in real word buffer size is usually ~4Kb)
+and tries to lex numbers separated by newlines.
 
 `[03_arbitrary_large_input.re] <examples/03_arbitrary_large_input.re>`_
 
@@ -216,26 +242,23 @@ and count the total number of strings:
 
 Notes:
 
-* ``YYMAXFILL`` bytes at the end of buffer are reserved for padding (line 9).
+* ``YYMAXFILL`` bytes at the end of buffer are reserved for padding.
   This memory is unused most of the time, but ``YYMAXFILL`` is usually negligably small compared to buffer size.
 
-* There is only one successsful way out (line 71):
-  lexer must recognize a standalone end of input lexeme ``'a'`` right at the beginning of padding.
-  Unlike the sentinel method, ``'a'`` in the middle of a rule is not recognized as end of input.
-  Standalone ``'a'`` in input (not in padding) is a lexing error.
-  ``YYFILL`` failure is also a lexing error: if the input was correct,
-  lexer should have stopped at the beginning of padding.
+* There is only one successsful way out (line 60): lexer must recognize a standalone
+  "end of input" lexeme (``NULL``) exactly at the beginning of padding.
+  ``YYFILL`` failure is an error: if the input was correct, lexer should have already stopped.
 
 * ``YYFILL`` may fail for two reasons:
-  either there is no more input (line 30),
-  or lexeme is too big: it occupies the whole buffer and nothing can be discarded (line 35).
-  We treat both cases as error, but a real-world program might handle them differently
-  (e.g. resize buffer in the second case).
+  either there is no more input (line 23),
+  or lexeme is too long: it occupies the whole buffer and nothing can be discarded (line 27).
+  We treat both cases in the same way (as error), but a real-world program might handle them differently
+  (resize buffer, cut long lexeme in two, etc.).
 
-* ``@@`` in ``YYFILL`` definition (line 63) is a formal parameter: re2c substitutes it with the actual argument to ``YYFILL``.
+* ``@@`` in ``YYFILL`` definition (line 52) is a formal parameter: re2c substitutes it with the actual argument to ``YYFILL``.
 
-* There is a special ``tok`` pointer: it points at the beginning of lexeme (line 57)
-  and serves as a boundary in ``YYFILL`` (line 33).
+* There is a special ``tok`` pointer: it points at the beginning of lexeme (line 47)
+  and serves as a boundary in ``YYFILL``.
 
 Generate, compile and run:
 
@@ -243,14 +266,23 @@ Generate, compile and run:
 
     $ re2c -o example.cc 03_arbitrary_large_input.re
     $ g++ -o example example.cc
-    $ cat > input.txt
-    "a""momentary"
-     "lap\"se"      "o\\f"
-    
-        "rea""son"
-     ""
-    $ ./example input.txt
-    glorious 7 strings!
+    $ ./example
+    0
+    11
+    222
+    3333
+    44444
+    555555
+    6666666
+    77777777
+    888888888
+    9999999999
+    glorious 10 numbers!
+    $ seq 123456789 | ./example
+    glorious 123456789 numbers!
+    $ seq 123456789 | wc -l
+    123456789
+
 
 .. _Parsing integers (multiple re2c blocks):
 
@@ -398,12 +430,12 @@ and are much harder to implement.
 Notes:
 
 * Reuse mode is enabled with ``-r`` option.
-* In reuse mode re2c expects a single ``/*!rules:re2c ... */`` block (line 49)
-  followed by multiple ``/*!use:re2c ... */`` blocks (lines 140, 157 and 176).
+* In reuse mode re2c expects a single ``/*!rules:re2c ... */`` block
+  followed by multiple ``/*!use:re2c ... */`` blocks.
   All blocks can have their own configurations, definitions and rules.
 * Encoding can be enabled either with command-line option or with configuration.
 * Each encoding needs an appropriate code unit type (``YYCTYPE``).
-* We use conditions to switch between numeric and normal modes (lines 76 and 104).
+* We use conditions to switch between numeric and normal modes.
 
 Generate, compile and run:
 

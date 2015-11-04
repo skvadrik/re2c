@@ -8,7 +8,7 @@ struct input_t {
     char *str;
 
     input_t(const char *s)
-        : len(strlen(s) + 1)
+        : len(strlen(s))
         , str(new char[len + YYMAXFILL])
     {
         memcpy(str, s, len);
@@ -20,21 +20,20 @@ struct input_t {
     }
 };
 
-static const char *lex(const input_t & input)
+static bool lex(const input_t & input)
 {
     const char *YYCURSOR = input.str;
     const char *const YYLIMIT = input.str + input.len + YYMAXFILL;
-    const char *YYMARKER;
     /*!re2c
         re2c:define:YYCTYPE = char;
-        re2c:define:YYFILL = "return \"err\";";
+        re2c:define:YYFILL = "return false;";
         re2c:define:YYFILL:naked = 1;
 
-        end = "\x00";
-        str = "'" [^']* "'";
+        sstr = "'"  [^']* "'";
+        dstr = "\"" [^"]* "\"";
 
-        *       { return "err"; }
-        str end { return YYLIMIT - YYCURSOR == YYMAXFILL ? "str" : "err"; }
+        *             { return false; }
+        (sstr | dstr) { return YYLIMIT - YYCURSOR == YYMAXFILL; }
     */
 }
 
@@ -42,7 +41,7 @@ int main(int argc, char **argv)
 {
     for (int i = 1; i < argc; ++i) {
         input_t arg(argv[i]);
-        printf("%s: %s\n", lex(arg), arg.str);
+        printf("%s: %s\n", lex(arg) ? "str" : "err", argv[i]);
     }
     return 0;
 }

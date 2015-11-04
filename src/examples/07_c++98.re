@@ -30,12 +30,10 @@ struct input_t {
         if (eof) {
             return false;
         }
-
         const size_t free = tok - buf;
         if (free < need) {
             return false;
         }
-
         memmove(buf, tok, lim - tok);
         lim -= free;
         cur -= free;

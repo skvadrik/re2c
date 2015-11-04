@@ -1,8 +1,7 @@
 #include <stdio.h>
 
-static const char *lex(const char *input)
+static const char *lex(const char *YYCURSOR)
 {
-    const char *YYCURSOR = input;
     const char *YYMARKER;
     /*!re2c
         re2c:define:YYCTYPE = char;
@@ -11,7 +10,7 @@ static const char *lex(const char *input)
         end = "\x00";
         bin = '0b' [01]+;
         oct = "0" [0-7]*;
-        dec = [1-9][0-9];
+        dec = [1-9][0-9]*;
         hex = '0x' [0-9a-fA-F]+;
 
         *       { return "err"; }

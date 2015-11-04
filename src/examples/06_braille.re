@@ -1,24 +1,19 @@
 #include <ctype.h>
 #include <stdio.h>
-#include <string.h>
-
-/*!max:re2c*/
 
 template<typename char_t>
 struct input_t {
     size_t len;
     char_t *str;
 
-    input_t(FILE *f)
-        : len(0)
-        , str(new char_t[len + YYMAXFILL])
+    input_t(FILE *f) : len(0), str(NULL)
     {
         fseek(f, 0, SEEK_END);
         len = ftell(f) / sizeof(char_t);
         fseek(f, 0, SEEK_SET);
-        str = new char_t[len + YYMAXFILL];
+        str = new char_t[len + 1];
         fread(str, sizeof(char_t), len, f);
-        memset(str + len, 0, YYMAXFILL);
+        str[len] = 0;
     }
     ~input_t()
     {
@@ -47,6 +42,7 @@ struct out_t {
 };
 
 /*!rules:re2c
+    re2c:yyfill:enable = 0;
 
     // letters
     l = "\u2830";
@@ -71,7 +67,7 @@ struct out_t {
     fcp = "\u2820"; fsp = "\u2800" | "\x20"; fnl = "\n" | "\n\r";
 
     <*> *      { out.err(); return; }
-    <*> "\x00" { if (YYLIMIT - YYCURSOR != YYMAXFILL - 1) out.err(); return; }
+    <*> "\x00" { if (YYCURSOR != in.str + in.len + 1) out.err(); return; }
 
     <*> l :=> l
     <l> la { out.prt('a'); goto yyc_l; }
@@ -130,17 +126,14 @@ struct out_t {
 
 /*!types:re2c*/
 
-static void lex_utf8(const iutf8_t & input)
+static void lex_utf8(const iutf8_t & in)
 {
-    const unsigned char *YYCURSOR = input.str;
-    const unsigned char *const YYLIMIT = input.str + input.len + YYMAXFILL;
+    const unsigned char *YYCURSOR = in.str;
     const unsigned char *YYMARKER;
     int c = yycl;
     out_t out;
     /*!use:re2c
         re2c:define:YYCTYPE = "unsigned char";
-        re2c:define:YYFILL = "{ out.err(); return; }";
-        re2c:define:YYFILL:naked = 1;
         re2c:define:YYGETCONDITION = "c";
         re2c:define:YYGETCONDITION:naked = 1;
         re2c:define:YYSETCONDITION = "c = @@;";
@@ -148,16 +141,13 @@ static void lex_utf8(const iutf8_t & input)
     */
 }
 
-static void lex_utf16(const iutf16_t & input)
+static void lex_utf16(const iutf16_t & in)
 {
-    const unsigned short *YYCURSOR = input.str;
-    const unsigned short *const YYLIMIT = input.str + input.len + YYMAXFILL;
+    const unsigned short *YYCURSOR = in.str;
     int c = yycl;
     out_t out;
     /*!use:re2c
         re2c:define:YYCTYPE = "unsigned int";
-        re2c:define:YYFILL = "{ out.err(); return; }";
-        re2c:define:YYFILL:naked = 1;
         re2c:define:YYGETCONDITION = "c";
         re2c:define:YYGETCONDITION:naked = 1;
         re2c:define:YYSETCONDITION = "c = @@;";
@@ -167,16 +157,13 @@ static void lex_utf16(const iutf16_t & input)
     */
 }
 
-static void lex_utf32(const iutf32_t & input)
+static void lex_utf32(const iutf32_t & in)
 {
-    const unsigned int *YYCURSOR = input.str;
-    const unsigned int *const YYLIMIT = input.str + input.len + YYMAXFILL;
+    const unsigned int *YYCURSOR = in.str;
     int c = yycl;
     out_t out;
     /*!use:re2c
         re2c:define:YYCTYPE = "unsigned int";
-        re2c:define:YYFILL = "{ out.err(); return; }";
-        re2c:define:YYFILL:naked = 1;
         re2c:define:YYGETCONDITION = "c";
         re2c:define:YYGETCONDITION:naked = 1;
         re2c:define:YYSETCONDITION = "c = @@;";
@@ -186,16 +173,13 @@ static void lex_utf32(const iutf32_t & input)
     */
 }
 
-static void lex_ucs2(const iucs2_t & input)
+static void lex_ucs2(const iucs2_t & in)
 {
-    const unsigned short *YYCURSOR = input.str;
-    const unsigned short *const YYLIMIT = input.str + input.len + YYMAXFILL;
+    const unsigned short *YYCURSOR = in.str;
     int c = yycl;
     out_t out;
     /*!use:re2c
         re2c:define:YYCTYPE = "unsigned int";
-        re2c:define:YYFILL = "{ out.err(); return; }";
-        re2c:define:YYFILL:naked = 1;
         re2c:define:YYGETCONDITION = "c";
         re2c:define:YYGETCONDITION:naked = 1;
         re2c:define:YYSETCONDITION = "c = @@;";
@@ -212,32 +196,32 @@ int main()
     f = fopen("06_braille.utf8.txt", "rb");
     if (f) {
         printf("utf8:\n");
-        iutf8_t input(f);
-        lex_utf8(input);
+        iutf8_t in(f);
+        lex_utf8(in);
         fclose(f);
     }
 
     f = fopen("06_braille.utf16.txt", "rb");
     if (f) {
         printf("utf16:\n");
-        iutf16_t input(f);
-        lex_utf16(input);
+        iutf16_t in(f);
+        lex_utf16(in);
         fclose(f);
     }
 
     f = fopen("06_braille.utf32.txt", "rb");
     if (f) {
         printf("utf32:\n");
-        iutf32_t input(f);
-        lex_utf32(input);
+        iutf32_t in(f);
+        lex_utf32(in);
         fclose(f);
     }
 
     f = fopen("06_braille.ucs2.txt", "rb");
     if (f) {
         printf("ucs2:\n");
-        iucs2_t input(f);
-        lex_ucs2(input);
+        iucs2_t in(f);
+        lex_ucs2(in);
         fclose(f);
     }
 
