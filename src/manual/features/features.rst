@@ -158,8 +158,7 @@ In Unicode, values from range 0xD800 to 0xDFFF (surrogates) are not
 valid Unicode code points, any encoded sequence of code units, that
 would map to Unicode code points in the range 0xD800-0xDFFF, is
 ill-formed. The user can control how ``re2c`` treats such ill-formed
-sequences with ``--encoding-policy <policy>`` flag (see `Options`_
-for full explanation).
+sequences with ``--encoding-policy <policy>`` flag.
 
 For some encodings, there are code units, that never occur in valid
 encoded stream (e.g. 0xFF byte in UTF-8). If the generated scanner must

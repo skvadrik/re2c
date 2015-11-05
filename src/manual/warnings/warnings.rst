@@ -3,6 +3,16 @@ Warnings
 ========
 
 .. include:: ../home.rst
-.. include:: ../../contents.rst
 
-.. include:: wundefined_control_flow.rst
+★
+
+* `[-Wundefined-control-flow] <wundefined_control_flow.html>`_
+* `[-Wunreachable-rules]      <wunreachable_rules.html>`_
+* `[-Wcondition-order]        <wcondition_order.html>`_
+* `[-Wuseless-escape]         <wuseless_escape.html>`_
+* `[-Wswapped-range]          <wswapped_range.html>`_
+* `[-Wempty-character-class]  <wempty_character_class.html>`_
+* `[-Wmatch-empty-string]     <wmatch_empty_string.html>`_
+
+.. include:: warnings_general.rst
+

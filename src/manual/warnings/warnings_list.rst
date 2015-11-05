@@ -1,23 +1,3 @@
-``-W``
-    Turn on all warnings.
-
-``-Werror``
-    Turn warnings into errors. Note that this option along
-    doesn't turn on any warnings, it only affects those warnings that have
-    been turned on so far or will be turned on later.
-
-``-W<warning>``
-    Turn on individual ``warning``.
-
-``-Wno-<warning>``
-    Turn off individual ``warning``.
-
-``-Werror-<warning>``
-    Turn on individual ``warning`` and treat it as error (this implies ``-W<warning>``).
-
-``-Wno-error-<warning>``
-    Don't treat this particular ``warning`` as error. This doesn't turn off
-    the warning itself.
 
 ``-Wcondition-order``
     Warn if the generated program makes implicit
@@ -49,6 +29,9 @@
     most dangerous and common mistake. It can be easily fixed by adding
     default rule ``*`` (this rule has the lowest priority, matches any code unit and consumes
     exactly one code unit).
+
+``-Wunreachable-rules``
+    Warn about rules that are shadowed by other rules and will never match.
 
 ``-Wuseless-escape``
     Warn if a symbol is escaped when it shouldn't be.

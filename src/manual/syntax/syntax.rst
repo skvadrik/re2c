@@ -36,7 +36,7 @@ Note that default rule ``*`` differs from ``[^]``: default rule has the lowest p
 matches any code unit (either valid or invalid) and always consumes one character;
 while ``[^]`` matches any valid code point (not code unit) and can consume multiple
 code units. In fact, when variable-length encoding is used, ``*``
-is the only possible way to match invalid input character (see `Encodings`_ for details).
+is the only possible way to match invalid input character.
 
 If ``-c`` is active then each regular expression is preceeded by a list
 of comma separated condition names. Besides normal naming rules there

@@ -6,7 +6,7 @@ Manual
 
 ★
 
-* `Options   <options/options_list.html>`_
+* `Options   <options/options.html>`_
 * `Warnings  <warnings/warnings.html>`_
 * `Syntax    <syntax/syntax.html>`_
 * `Features  <features/features.html>`_
