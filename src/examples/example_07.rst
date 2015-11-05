@@ -1,6 +1,8 @@
 C++98 lexer
 -----------
 
+.. include:: home.rst
+
 This is an example of a big real-world re2c program: C++98 lexer.
 It confirms to the C++98 standard (except for a couple of hacks to simulate preprocessor).
 All nontrivial lexemes (integers, floating-point constants, strings and character literals)
@@ -8,9 +10,9 @@ are parsed (not only recognized): numeric literals are converted to numbers, str
 Some additional checks described in standard (e.g. overflows in integer literals) are also done.
 In fact, C++ is an easy language to lex: unlike many other languages, lexer can proceed without feedback from parser.
 
-`[07_c++98.re] <examples/07_c++98.re>`_
+`[07_c++98.re] <07_c++98.re>`_
 
-.. include:: examples/07_c++98.re
+.. include:: 07_c++98.re
     :code: cpp
     :number-lines:
 

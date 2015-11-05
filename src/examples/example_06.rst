@@ -1,6 +1,8 @@
 Braille patterns (encodings)
 ----------------------------
 
+.. include:: home.rst
+
 This example is about encoding support in re2c.
 It's a partial decoder from Grade-1 (uncontracted) Unicode English Braille to plain English.
 The input may be encoded in UTF-8, UTF-16, UTF-32 or UCS-2:
@@ -10,9 +12,9 @@ We use ``-r`` option to reuse the same block of re2c rules with different encodi
 So. The hardest part is to get some input.
 Here is a message out of the void:
 
-.. include:: examples/06_braille.utf8.txt
+.. include:: 06_braille.utf8.txt
 
-It appears to be UTF-8 encoded `[06_braille.utf8.txt] <examples/06_braille.utf8.txt.html>`_.
+It appears to be UTF-8 encoded `[06_braille.utf8.txt] <06_braille.utf8.txt.html>`_.
 Convert it into UTF-16, UTF-32 or UCS-2:
 
 .. code-block:: bash
@@ -30,9 +32,9 @@ and some other, which we omit for simplicity (as well as a few ambiguous punctua
 Grade-2 Braille allows contractions; they obey complex rules (like those of a natural language)
 and are much harder to implement.
 
-`[06_braille.re] <examples/06_braille.re>`_
+`[06_braille.re] <06_braille.re>`_
 
-.. include:: examples/06_braille.re
+.. include:: 06_braille.re
     :code: cpp
     :number-lines:
 

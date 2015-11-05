@@ -1,3 +1,9 @@
+=========
+Changelog
+=========
+
+.. include:: home.rst
+
 * 2015-02-23: 0.14
     - Added generic input API (#21 "Support to configure how re2c code interfaced with the symbol buffer?")
     - fixed #46 "re2c generates an infinite loop, depends on existence of previous parser"

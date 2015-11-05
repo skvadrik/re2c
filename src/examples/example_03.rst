@@ -1,6 +1,8 @@
 Arbitrary large input and YYFILL
 --------------------------------
 
+.. include:: home.rst
+
 In this example we suppose that input cannot be mapped in memory at once:
 either it's too large or its size cannot be determined in advance.
 The usual thing to do in such case is to allocate a buffer and lex input in chunks that fit into buffer.
@@ -70,9 +72,9 @@ It can be used as boundary in ``YYFILL``.
 Our example program reads ``stdin`` in chunks of 16 bytes (in real word buffer size is usually ~4Kb)
 and tries to lex numbers separated by newlines.
 
-`[03_arbitrary_large_input.re] <examples/03_arbitrary_large_input.re>`_
+`[03_arbitrary_large_input.re] <03_arbitrary_large_input.re>`_
 
-.. include:: examples/03_arbitrary_large_input.re
+.. include:: 03_arbitrary_large_input.re
     :code: cpp
     :number-lines:
 

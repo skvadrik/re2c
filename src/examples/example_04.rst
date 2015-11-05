@@ -1,15 +1,17 @@
 Parsing integers (multiple re2c blocks)
 ---------------------------------------
 
+.. include:: home.rst
+
 This example is based on `Recognizing integers: the sentinel method <example_01.html>`_ example,
 only now integer literals are parsed rather than simply recognized.
 Parsing integers is simple: one can easily do it by hand.
 However, re2c-generated code *does* look like a simple handwritten parser:
 a couple of dereferences and conditional jumps. No overhead. ``:)``
 
-`[04_parsing_integers_blocks.re] <examples/04_parsing_integers_blocks.re>`_
+`[04_parsing_integers_blocks.re] <04_parsing_integers_blocks.re>`_
 
-.. include:: examples/04_parsing_integers_blocks.re
+.. include:: 04_parsing_integers_blocks.re
     :code: cpp
     :number-lines:
 

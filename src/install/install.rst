@@ -1,8 +1,9 @@
-.. header:: `[home] <index.html>`_
-.. footer:: `[home] <index.html>`_
-.. contents:: ★
-    :backlinks: none
-    :depth: 2
+=======
+Install
+=======
+
+.. include:: ../home.rst
+.. include:: ../contents.rst
 
 Download
 ========

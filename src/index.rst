@@ -1,4 +1,3 @@
-
 ====
 re2c
 ====
@@ -9,13 +8,15 @@ and flexible (easy to embed into existing environment).
 
 --------------------------------------------------------------------------------
 
-★ `Install <install.html>`_
+★ `About    <about/about.html>`_
 
-★ `Manual <manual.html>`_
+★ `Install  <install/install.html>`_
 
-★ `Examples <examples.html>`_
+★ `Manual   <manual/manual.html>`_
 
-★ `News <news.html>`_
+★ `Examples <examples/examples.html>`_
+
+★ `News     <news/news.html>`_
 
 --------------------------------------------------------------------------------
 

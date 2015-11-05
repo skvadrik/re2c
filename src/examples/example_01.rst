@@ -1,6 +1,8 @@
 Recognizing integers: the sentinel method
 -----------------------------------------
 
+.. include:: home.rst
+
 This example is very simple, yet practical.
 We assume that the input is small (fits in one continuous piece of memory).
 We also assume that some characters never occur in well-formed input (but may occur in ill-formed input).
@@ -12,9 +14,9 @@ and tries to match each argument against one of the four patterns:
 binary, octal, decimal and hexadecimal integer literals.
 The numbers are not *parsed* (their numeric value is not retrieved), they are merely *recognized*.
 
-`[01_recognizing_integers.re] <examples/01_recognizing_integers.re>`_
+`[01_recognizing_integers.re] <01_recognizing_integers.re>`_
 
-.. include:: examples/01_recognizing_integers.re
+.. include:: 01_recognizing_integers.re
     :code: cpp
     :number-lines:
 
