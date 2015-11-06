@@ -17,7 +17,7 @@ a couple of dereferences and conditional jumps. No overhead. ``:)``
 
 Notes:
 
-* Configurations and definitions (lines 20 - 26) are not scoped to a single re2c block --- they are global.
+* Configurations and definitions (lines 20 - 26) are not scoped to a single re2c block — they are global.
   Each block may override configurations, but this affects global scope.
 * Blocks don't have to be in the same function: they can be in separate functions or elsewhere
   as long as the exposed interface fits into lexical scope.
