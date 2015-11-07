@@ -7,7 +7,7 @@ Warnings
 ★
 
 * `[-Wundefined-control-flow] <undefined_control_flow/wundefined_control_flow.html>`_
-* `[-Wunreachable-rules]      <wunreachable_rules.html>`_
+* `[-Wunreachable-rules]      <unreachable_rules/wunreachable_rules.html>`_
 * `[-Wcondition-order]        <wcondition_order.html>`_
 * `[-Wuseless-escape]         <wuseless_escape.html>`_
 * `[-Wswapped-range]          <wswapped_range.html>`_

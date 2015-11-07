@@ -10,8 +10,7 @@ Even it you are absolutely sure that default case is impossible, do handle it.
 No additional checks and transitions.
 It simply binds code to default label.
 
-I found ``[-Wundefined-control-flow]`` warnings in many real-world programs
-(including some of the PHP lexers and re2c own lexer).
+I found ``[-Wundefined-control-flow]`` warnings in many real-world programs (including re2c own lexer).
 Mostly these are minor issues like forgetting to handle newlines or zeroes in already preprocessed input,
 but it's curious how they creeped into the code.
 I bet they were just forgotten and not omitted for a good reason. ``:)``

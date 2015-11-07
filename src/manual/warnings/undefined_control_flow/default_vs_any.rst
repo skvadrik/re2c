@@ -5,6 +5,7 @@ When the the world was young and re2c didn't have default rule ``*`` (that is, b
 everyone used ``[^]`` as default rule:
 
 .. code-block:: cpp
+    :number-lines:
 
     /*!re2c
         // ... normal rules ...
@@ -30,7 +31,7 @@ However, with UTF-8 encoding ```re2c -i8 -Wundefined-control-flow``` says:
 
 .. code-block::
 
-    re2c: warning: line 3: control flow is undefined for strings that match 
+    re2c: warning: line 4: control flow is undefined for strings that match 
             '[\x80-\xC1\xF5-\xFF]'
             '\xF0 [\x0-\x8F\xC0-\xFF]'
             '[\xE1-\xEF] [\x0-\x7F\xC0-\xFF]'
@@ -49,7 +50,7 @@ If we tell re2c to exclude surrogates, ```re2c -ix --encoding-policy fail -Wunde
 
 .. code-block::
 
-    re2c: warning: line 3: control flow is undefined for strings that match 
+    re2c: warning: line 4: control flow is undefined for strings that match 
             '[\xDC00-\xDFFF]'
             '[\xD800-\xDBFF] [\x0-\xDBFF\xE000-\xFFFF]'
     , use default rule '*' [-Wundefined-control-flow]

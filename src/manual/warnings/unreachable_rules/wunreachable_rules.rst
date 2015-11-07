@@ -1,11 +1,11 @@
-[-Wundefined-control-flow]
+[-Wunreachable-rules]
 --------------------------
 
 .. include:: ../home.rst
 .. include:: ../../../contents.rst
 
 .. include:: simple_example.rst
-.. include:: default_vs_any.rst
+.. include:: infinite_rules.rst
 .. include:: how_it_works.rst
 .. include:: real_world.rst
 
