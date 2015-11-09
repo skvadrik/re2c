@@ -58,7 +58,8 @@ public:
 private:
 	void fill (uint32_t);
 	void set_sourceline ();
-	void lex_cpoints (char quote, std::vector<uint32_t> & cs);
+	void lex_str (char quote, std::vector<uint32_t> & cs);
+	RegExp *lex_cls (bool neg);
 
 	void lex_conf ();
 	void lex_conf_assign ();
@@ -103,7 +104,6 @@ public:
 	RegExp * mkDot () const;
 	RegExp * mkDefault () const;
 	RegExp * cpoint_string (const std::vector<uint32_t> & cs, bool case_sensitive) const;
-	RegExp * cpoint_class (const std::vector<uint32_t> & cs, bool neg) const;
 
 	FORBID_COPY (Scanner);
 };

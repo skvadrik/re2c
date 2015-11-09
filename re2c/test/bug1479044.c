@@ -1476,4 +1476,3 @@ int main(int argc, char **argv)
 	}
 	return 0;
 }
-re2c: warning: line 16: column 156: escape has no effect: '\-' [-Wuseless-escape]

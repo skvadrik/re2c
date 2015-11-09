@@ -36,23 +36,6 @@ static inline uint32_t hex_digit (const char c)
 	}
 }
 
-// expected string format: "\" [abfnrtv\\]
-uint32_t unesc_simple (char * s)
-{
-	switch (s[1])
-	{
-		case 'a': return '\a';
-		case 'b': return '\b';
-		case 'f': return '\f';
-		case 'n': return '\n';
-		case 'r': return '\r';
-		case 't': return '\t';
-		case 'v': return '\v';
-		case '\\': return '\\';
-		default:  return ~0u; // unexpected
-	}
-}
-
 // expected string format: "\" [xXuU] [0-9a-zA-Z]*
 uint32_t unesc_hex (const char * s, const char * s_end)
 {

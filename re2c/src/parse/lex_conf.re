@@ -191,7 +191,7 @@ std::string Scanner::lex_conf_string ()
 	['"]
 	{
 		std::vector<uint32_t> cpoints;
-		lex_cpoints (tok[0], cpoints);
+		lex_str (tok[0], cpoints);
 		s = cpoint_conf (cpoints);
 		goto end;
 	}

@@ -170,35 +170,6 @@ RegExp * Scanner::cpoint_string (const std::vector<uint32_t> & cs, bool case_ins
 	return r ? r : new NullOp;
 }
 
-RegExp * Scanner::cpoint_class (const std::vector<uint32_t> & cs, bool neg) const
-{
-	Range * r = NULL;
-	const size_t count = cs.size ();
-	for (size_t i = 0; i < count; ++i)
-	{
-		uint32_t l = cs[i];
-		uint32_t u = count - i >= 3 && cs[i + 1] == '-'
-			? cs[i += 2]
-			: l;
-		if (l > u)
-		{
-			warn.swapped_range (get_line (), l, u);
-			std::swap (l, u);
-		}
-		Range * s = opts->encoding.encodeRange (l, u);
-		if (!s)
-		{
-			fatalf ("Bad code point range: '0x%X - 0x%X'", l, u);
-		}
-		r = Range::add (r, s);
-	}
-	if (neg)
-	{
-		r = Range::sub (opts->encoding.fullRange (), r);
-	}
-	return matchSymbolRange (r);
-}
-
 RegExp * Scanner::mkDiff (RegExp * e1, RegExp * e2) const
 {
 	MatchOp * m1 = dynamic_cast<MatchOp *> (e1);
