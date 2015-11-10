@@ -188,40 +188,27 @@ std::string Scanner::lex_conf_string ()
 	std::string s;
 	tok = cur;
 /*!re2c
-	['"]
-	{
-		std::vector<uint32_t> cpoints;
-		lex_str (tok[0], cpoints);
-		s = cpoint_conf (cpoints);
-		goto end;
+	['"] {
+		const char quote = tok[0];
+		for (bool end;;) {
+			const uint32_t c = lex_str_chr(quote, end);
+			if (end) {
+				goto end;
+			}
+			if (c > 0xFF) {
+				fatalf ("multibyte character in configuration string: 0x%X", c);
+			} else {
+				s += static_cast<char>(c);
+			}
+		}
 	}
-	naked
-	{
-		s = std::string (tok, tok_len ());
+	naked {
+		s = std::string(tok, tok_len());
 		goto end;
 	}
 */
 end:
 	lex_conf_semicolon ();
-	return s;
-}
-
-std::string Scanner::cpoint_conf (const std::vector<uint32_t> & cs) const
-{
-	const size_t n = cs.size ();
-	std::string s;
-	for (size_t i = 0; i < n; ++i)
-	{
-		const uint32_t c = cs[i];
-		if (c > 0xFF)
-		{
-			fatalf ("multibyte character in configuration string: 0x%X", c);
-		}
-		else
-		{
-			s += static_cast<char> (c);
-		}
-	}
 	return s;
 }
 

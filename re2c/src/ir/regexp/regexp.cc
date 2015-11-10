@@ -110,20 +110,30 @@ RegExp * doCat (RegExp * e1, RegExp * e2)
 	return new CatOp (e1, e2);
 }
 
-RegExp * Scanner::matchSymbol(uint32_t c) const
+RegExp *Scanner::schr(uint32_t c) const
 {
-	if (!opts->encoding.encode(c))
+	if (!opts->encoding.encode(c)) {
 		fatalf("Bad code point: '0x%X'", c);
-
-	switch (opts->encoding.type ())
-	{
+	}
+	switch (opts->encoding.type ()) {
 		case Enc::UTF16: return UTF16Symbol(c);
 		case Enc::UTF8:  return UTF8Symbol(c);
-		default:         return new MatchOp (Range::sym (c));
+		default:         return new MatchOp(Range::sym(c));
 	}
 }
 
-RegExp * Scanner::matchSymbolRange(Range * r) const
+RegExp *Scanner::ichr(uint32_t c) const
+{
+	if (is_alpha(c)) {
+		RegExp *l = schr(to_lower_unsafe(c));
+		RegExp *u = schr(to_upper_unsafe(c));
+		return mkAlt(l, u);
+	} else {
+		return schr(c);
+	}
+}
+
+RegExp *Scanner::cls(Range *r) const
 {
 	if (!r)
 	{
@@ -149,27 +159,6 @@ RegExp * Scanner::matchSymbolRange(Range * r) const
 	}
 }
 
-RegExp * Scanner::cpoint_string (const std::vector<uint32_t> & cs, bool case_insensitive) const
-{
-	RegExp * r = NULL;
-	const size_t count = cs.size ();
-	for (size_t i = 0; i < count; ++i)
-	{
-		const uint32_t c = cs[i];
-		if (case_insensitive && is_alpha (c))
-		{
-			RegExp * rl = matchSymbol (to_lower_unsafe (c));
-			RegExp * ru = matchSymbol (to_upper_unsafe (c));
-			r = doCat (r, mkAlt (rl, ru));
-		}
-		else
-		{
-			r = doCat (r, matchSymbol (c));
-		}
-	}
-	return r ? r : new NullOp;
-}
-
 RegExp * Scanner::mkDiff (RegExp * e1, RegExp * e2) const
 {
 	MatchOp * m1 = dynamic_cast<MatchOp *> (e1);
@@ -180,7 +169,7 @@ RegExp * Scanner::mkDiff (RegExp * e1, RegExp * e2) const
 	}
 	Range * r = Range::sub (m1->match, m2->match);
 
-	return matchSymbolRange (r);
+	return cls(r);
 }
 
 RegExp * Scanner::mkDot() const
@@ -192,7 +181,7 @@ RegExp * Scanner::mkDot() const
 	Range * ran = Range::sym (c);
 	Range * inv = Range::sub (full, ran);
 
-	return matchSymbolRange(inv);
+	return cls(inv);
 }
 
 /*

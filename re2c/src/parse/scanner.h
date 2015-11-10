@@ -58,15 +58,19 @@ public:
 private:
 	void fill (uint32_t);
 	void set_sourceline ();
-	void lex_str (char quote, std::vector<uint32_t> & cs);
-	RegExp *lex_cls (bool neg);
+	uint32_t lex_cls_chr();
+	uint32_t lex_str_chr(char quote, bool &end);
+	RegExp *lex_cls(bool neg);
+	RegExp *lex_str(char quote, bool casing);
+	RegExp *schr(uint32_t c) const;
+	RegExp *ichr(uint32_t c) const;
+	RegExp *cls(Range *r) const;
 
 	void lex_conf ();
 	void lex_conf_assign ();
 	void lex_conf_semicolon ();
 	int32_t lex_conf_number ();
 	std::string lex_conf_string ();
-	std::string cpoint_conf (const std::vector<uint32_t> & cs) const;
 
 	size_t tok_len () const;
 
@@ -98,12 +102,9 @@ public:
 	void fatal(const char*) const;
 	void fatal(ptrdiff_t, const char*) const;
 
-	RegExp * matchSymbol (uint32_t c) const;
-	RegExp * matchSymbolRange (Range * r) const;
 	RegExp * mkDiff (RegExp * e1, RegExp * e2) const;
 	RegExp * mkDot () const;
 	RegExp * mkDefault () const;
-	RegExp * cpoint_string (const std::vector<uint32_t> & cs, bool case_sensitive) const;
 
 	FORBID_COPY (Scanner);
 };

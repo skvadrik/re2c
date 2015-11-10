@@ -4,6 +4,7 @@
 #include <sstream>
 
 #include "src/ir/dfa/dfa.h"
+#include "src/ir/regexp/regexp_null.h"
 #include "src/globals.h"
 #include "src/parse/extop.h"
 #include "src/parse/parser.h"
@@ -254,21 +255,8 @@ start:
 					return 0;
 				}
 
-	"'"
-	{
-		std::vector<uint32_t> cpoints;
-		lex_str ('\'', cpoints);
-		yylval.regexp = cpoint_string (cpoints, opts->bCaseInsensitive || !opts->bCaseInverted);
-		return REGEXP;
-	}
-	"\""
-	{
-		std::vector<uint32_t> cpoints;
-		lex_str ('"', cpoints);
-		yylval.regexp = cpoint_string (cpoints, opts->bCaseInsensitive || opts->bCaseInverted);
-		return REGEXP;
-	}
-
+	"'"  { yylval.regexp = lex_str('\'', opts->bCaseInsensitive || !opts->bCaseInverted); return REGEXP; }
+	"\"" { yylval.regexp = lex_str('"',  opts->bCaseInsensitive ||  opts->bCaseInverted); return REGEXP; }
 	"["  { yylval.regexp = lex_cls(false); return REGEXP; }
 	"[^" { yylval.regexp = lex_cls(true);  return REGEXP; }
 
@@ -356,15 +344,16 @@ start:
 
 	name / [^]	{
 					if (!opts->FFlag) {
-						yylval.str = new std::string (tok, tok_len ());
+						yylval.str = new std::string (tok, tok_len());
 						return ID;
 					} else {
-						std::vector<uint32_t> cpoints;
-						for (char * p = tok; p < cur; ++p)
-						{
-							cpoints.push_back (static_cast<uint8_t> (*p));
+						RegExp *r = NULL;
+						const bool casing = opts->bCaseInsensitive || opts->bCaseInverted;
+						for (char *s = tok; s < cur; ++s) {
+							const uint32_t c = static_cast<uint8_t>(*s);
+							r = doCat(r, casing ? ichr(c) : schr(c));
 						}
-						yylval.regexp = cpoint_string (cpoints, opts->bCaseInsensitive || opts->bCaseInverted);
+						yylval.regexp = r ? r : new NullOp;
 						return REGEXP;
 					}
 				}
@@ -561,89 +550,112 @@ static void escape (std::string & dest, const std::string & src)
 	}
 }
 
-void Scanner::lex_str (char quote, std::vector<uint32_t> & cs)
+RegExp *Scanner::lex_cls(bool neg)
 {
-	for (;;)
-	{
-		tok = cur;
+	Range *r = NULL, *s;
+	uint32_t u, l;
+fst:
 	/*!re2c
-		*          { fatal ((tok - pos) - tchar, "syntax error"); }
-		esc [xXuU] { fatal ((tok - pos) - tchar, "syntax error in hexadecimal escape sequence"); }
-		esc [0-7]  { fatal ((tok - pos) - tchar, "syntax error in octal escape sequence"); }
-		esc        { fatal ((tok - pos) - tchar, "syntax error in escape sequence"); }
-
-		["']       { if (quote == tok[0]) return; cs.push_back(static_cast<uint8_t>(tok[0])); continue; }
-		esc_hex    { cs.push_back(unesc_hex(tok, cur)); continue; }
-		esc_oct    { cs.push_back(unesc_oct(tok, cur)); continue; }
-		esc "a"    { cs.push_back(static_cast<uint8_t>('\a')); continue; }
-		esc "b"    { cs.push_back(static_cast<uint8_t>('\b')); continue; }
-		esc "f"    { cs.push_back(static_cast<uint8_t>('\f')); continue; }
-		esc "n"    { cs.push_back(static_cast<uint8_t>('\n')); continue; }
-		esc "r"    { cs.push_back(static_cast<uint8_t>('\r')); continue; }
-		esc "t"    { cs.push_back(static_cast<uint8_t>('\t')); continue; }
-		esc "v"    { cs.push_back(static_cast<uint8_t>('\v')); continue; }
-		esc "\\"   { cs.push_back(static_cast<uint8_t>('\\')); continue; }
-		esc .      { cs.push_back(static_cast<uint8_t>(tok[1])); if (quote != tok[1]) warn.useless_escape(tline, tok - pos, tok[1]); continue; }
-		. \ esc    { cs.push_back(static_cast<uint8_t>(tok[0])); continue; }
+		"]" { goto end; }
+		""  { l = lex_cls_chr(); goto snd; }
 	*/
+snd:
+	/*!re2c
+		""          { u = l; goto add; }
+		"-" / [^\]] {
+			u = lex_cls_chr();
+			if (l > u) {
+				warn.swapped_range(get_line(), l, u);
+				std::swap(l, u);
+			}
+			goto add;
+		}
+	*/
+add:
+	if (!(s = opts->encoding.encodeRange(l, u))) {
+		fatalf ("Bad code point range: '0x%X - 0x%X'", l, u);
 	}
+	r = Range::add(r, s);
+	goto fst;
+end:
+	if (neg) {
+		r = Range::sub(opts->encoding.fullRange(), r);
+	}
+	return cls(r);
 }
 
-RegExp * Scanner::lex_cls (bool neg)
+uint32_t Scanner::lex_cls_chr()
 {
-	std::vector<uint32_t> cs;
-	std::set<size_t> esc;
-	for (;;)
-	{
-		tok = cur;
+	tok = cur;
 	/*!re2c
 		*          { fatal ((tok - pos) - tchar, "syntax error"); }
 		esc [xXuU] { fatal ((tok - pos) - tchar, "syntax error in hexadecimal escape sequence"); }
 		esc [0-7]  { fatal ((tok - pos) - tchar, "syntax error in octal escape sequence"); }
 		esc        { fatal ((tok - pos) - tchar, "syntax error in escape sequence"); }
 
-		"]"        { break; }
-		esc_oct    { cs.push_back(unesc_oct(tok, cur)); continue; }
-		esc_hex    { cs.push_back(unesc_hex(tok, cur)); continue; }
-		esc "a"    { cs.push_back(static_cast<uint8_t>('\a')); continue; }
-		esc "b"    { cs.push_back(static_cast<uint8_t>('\b')); continue; }
-		esc "f"    { cs.push_back(static_cast<uint8_t>('\f')); continue; }
-		esc "n"    { cs.push_back(static_cast<uint8_t>('\n')); continue; }
-		esc "r"    { cs.push_back(static_cast<uint8_t>('\r')); continue; }
-		esc "t"    { cs.push_back(static_cast<uint8_t>('\t')); continue; }
-		esc "v"    { cs.push_back(static_cast<uint8_t>('\v')); continue; }
-		esc "\\"   { cs.push_back(static_cast<uint8_t>('\\')); continue; }
-		esc "]"    { cs.push_back(static_cast<uint8_t>(']'));  continue; }
-		esc "-"    { cs.push_back(static_cast<uint8_t>('-')); esc.insert(cs.size() - 1); continue; }
-		esc .      { cs.push_back(static_cast<uint8_t>(tok[1])); warn.useless_escape(tline, tok - pos, tok[1]); continue; }
-		. \ esc    { cs.push_back(static_cast<uint8_t>(tok[0])); continue; }
+		. \ esc    { return static_cast<uint8_t>(tok[0]); }
+		esc_hex    { return unesc_hex(tok, cur); }
+		esc_oct    { return unesc_oct(tok, cur); }
+		esc "a"    { return static_cast<uint8_t>('\a'); }
+		esc "b"    { return static_cast<uint8_t>('\b'); }
+		esc "f"    { return static_cast<uint8_t>('\f'); }
+		esc "n"    { return static_cast<uint8_t>('\n'); }
+		esc "r"    { return static_cast<uint8_t>('\r'); }
+		esc "t"    { return static_cast<uint8_t>('\t'); }
+		esc "v"    { return static_cast<uint8_t>('\v'); }
+		esc "\\"   { return static_cast<uint8_t>('\\'); }
+		esc "-"    { return static_cast<uint8_t>('-'); }
+		esc "]"    { return static_cast<uint8_t>(']'); }
+		esc .      {
+			warn.useless_escape(tline, tok - pos, tok[1]);
+			return static_cast<uint8_t>(tok[1]);
+		}
 	*/
-	}
-	Range * r = NULL;
-	const size_t count = cs.size ();
-	for (size_t i = 0; i < count; ++i)
-	{
-		uint32_t l = cs[i];
-		uint32_t u = count - i >= 3 && (cs[i + 1] == '-' && esc.find(i + 1) == esc.end())
-			? cs[i += 2]
-			: l;
-		if (l > u)
-		{
-			warn.swapped_range (get_line (), l, u);
-			std::swap (l, u);
+}
+
+uint32_t Scanner::lex_str_chr(char quote, bool &end)
+{
+	end = false;
+	tok = cur;
+	/*!re2c
+		*          { fatal ((tok - pos) - tchar, "syntax error"); }
+		esc [xXuU] { fatal ((tok - pos) - tchar, "syntax error in hexadecimal escape sequence"); }
+		esc [0-7]  { fatal ((tok - pos) - tchar, "syntax error in octal escape sequence"); }
+		esc        { fatal ((tok - pos) - tchar, "syntax error in escape sequence"); }
+
+		. \ esc    {
+			end = tok[0] == quote;
+			return static_cast<uint8_t>(tok[0]);
 		}
-		Range * s = opts->encoding.encodeRange (l, u);
-		if (!s)
-		{
-			fatalf ("Bad code point range: '0x%X - 0x%X'", l, u);
+		esc_hex    { return unesc_hex(tok, cur); }
+		esc_oct    { return unesc_oct(tok, cur); }
+		esc "a"    { return static_cast<uint8_t>('\a'); }
+		esc "b"    { return static_cast<uint8_t>('\b'); }
+		esc "f"    { return static_cast<uint8_t>('\f'); }
+		esc "n"    { return static_cast<uint8_t>('\n'); }
+		esc "r"    { return static_cast<uint8_t>('\r'); }
+		esc "t"    { return static_cast<uint8_t>('\t'); }
+		esc "v"    { return static_cast<uint8_t>('\v'); }
+		esc "\\"   { return static_cast<uint8_t>('\\'); }
+		esc .      {
+			if (tok[1] != quote) {
+				warn.useless_escape(tline, tok - pos, tok[1]);
+			}
+			return static_cast<uint8_t>(tok[1]);
 		}
-		r = Range::add (r, s);
+	*/
+}
+
+RegExp *Scanner::lex_str(char quote, bool casing)
+{
+	RegExp *r = NULL;
+	for (bool end;;) {
+		const uint32_t c = lex_str_chr(quote, end);
+		if (end) {
+			return r ? r : new NullOp;
+		}
+		r = doCat(r, casing ? ichr(c) : schr(c));
 	}
-	if (neg)
-	{
-		r = Range::sub (opts->encoding.fullRange (), r);
-	}
-	return matchSymbolRange (r);
 }
 
 void Scanner::set_sourceline ()
