@@ -26,6 +26,12 @@ Notes:
   Besides, a real-world lexer would rather recognize ill-formed lexemes (e.g. overflowed integer literals),
   report them and resume lexing.
 
+* We don't use re2c in cases when hand-written parser looks simpler: when parsing octal and decimal literals
+  (though re2c-based parser would do exactly the same, without the slightest overhead).
+  However, hexadecimal literals still require some lexing, which looks better with re2c.
+  Again, it's only a matter of taste: re2c-based implementation adds no overhead.
+  Look at the generated code to make sure.
+
 * The main lexer and string lexer both use ``re2c:yyfill:enable = 1;``, other lexers use ``re2c:yyfill:enable = 0;``.
   This is very important: both main lexer and string lexer advance input position to new (yet unseen) input characters,
   so they must check for the end of input and call ``YYFILL``. In conrast, other lexers only parse lexemes that
@@ -53,22 +59,23 @@ Generate, compile and run:
     MPLATE<INT base> STATIC BOOL adddgt(UNSIGNED LONG &u, UNSIGNED LONG d) { IF (u >
      (ULONG_MAX - d) / base) { RETURN false; } u = u * base + d; RETURN true; } STAT
     IC BOOL lex_oct(CONST UNSIGNED CHAR *s, CONST UNSIGNED CHAR *e, UNSIGNED LONG &u
-    ) { FOR (u = 0, ++s; s < e;) { } RETURN true; } STATIC BOOL lex_dec(CONST UNSIGN
-    ED CHAR *s, CONST UNSIGNED CHAR *e, UNSIGNED LONG &u) { FOR (u = 0; s < e;) { } 
-    RETURN true; } STATIC BOOL lex_hex(CONST UNSIGNED CHAR *s, CONST UNSIGNED CHAR *
-    e, UNSIGNED LONG &u) { FOR (u = 0, s += 2; s < e;) { } RETURN true; } STATIC BOO
-    L lex_str(input_t &in, UNSIGNED CHAR q) { printf("\x25\x63", q); FOR (UNSIGNED L
-    ONG u = q;; printf("\x5c\x78\x25\x6c\x78", u)) { in.tok = in.cur; } printf("\x25
-    \x63", q); RETURN true; } STATIC BOOL lex_flt(CONST UNSIGNED CHAR *s) { DOUBLE d
-     = 0; DOUBLE x = 1; INT e = 0; mant_int: mant_frac: exp_sign: exp: sfx: end: pri
-    ntf("\x25\x67", d); RETURN true; } STATIC BOOL lex(input_t &in) { UNSIGNED LONG 
-    u; FOR (;;) { in.tok = in.cur; sfx: } } INT main(INT argc, CHAR **argv) { IF (ar
-    gc != 2) { printf ("\x75\x73\x61\x67\x65\x3a\x20\x2e\x2f\x65\x78\x61\x6d\x70\x6c
-    \x65\x20\x3c\x66\x69\x6c\x65\x6e\x61\x6d\x65\x3e\xa"); RETURN 1; } FILE *file = 
-    fopen(argv[1], "\x72\x62"); IF (!file) { printf("\x65\x72\x72\x6f\x72\x3a\x20\x6
-    3\x61\x6e\x6e\x6f\x74\x20\x6f\x70\x65\x6e\x20\x66\x69\x6c\x65\x3a\x20\x25\x73\xa
-    ", argv[1]); RETURN 1; } input_t in(file); IF (!lex(in)) { printf("\x2e\x2e\x2e\
-    x20\x65\x72\x72\x6f\x72\xa"); } ELSE { printf("\xa"); } fclose(file); RETURN 0; 
-    } 
+    ) { FOR (u = 0, ++s; s < e; ++s) { IF (!adddgt<8>(u, *s - 48)) { RETURN false; }
+     } RETURN true; } STATIC BOOL lex_dec(CONST UNSIGNED CHAR *s, CONST UNSIGNED CHA
+    R *e, UNSIGNED LONG &u) { FOR (u = 0; s < e; ++s) { IF (!adddgt<10>(u, *s - 48))
+     { RETURN false; } } RETURN true; } STATIC BOOL lex_hex(CONST UNSIGNED CHAR *s, 
+    CONST UNSIGNED CHAR *e, UNSIGNED LONG &u) { FOR (u = 0, s += 2; s < e;) { } RETU
+    RN true; } STATIC BOOL lex_str(input_t &in, UNSIGNED CHAR q) { printf("\x25\x63"
+    , q); FOR (UNSIGNED LONG u = q;; printf("\x5c\x78\x25\x6c\x78", u)) { in.tok = i
+    n.cur; } printf("\x25\x63", q); RETURN true; } STATIC BOOL lex_flt(CONST UNSIGNE
+    D CHAR *s) { DOUBLE d = 0; DOUBLE x = 1; INT e = 0; mant_int: mant_frac: exp_sig
+    n: exp: sfx: end: printf("\x25\x67", d); RETURN true; } STATIC BOOL lex(input_t 
+    &in) { UNSIGNED LONG u; FOR (;;) { in.tok = in.cur; sfx: } } INT main(INT argc, 
+    CHAR **argv) { IF (argc != 2) { printf ("\x75\x73\x61\x67\x65\x3a\x20\x2e\x2f\x6
+    5\x78\x61\x6d\x70\x6c\x65\x20\x3c\x66\x69\x6c\x65\x6e\x61\x6d\x65\x3e\xa"); RETU
+    RN 1; } FILE *file = fopen(argv[1], "\x72\x62"); IF (!file) { printf("\x65\x72\x
+    72\x6f\x72\x3a\x20\x63\x61\x6e\x6e\x6f\x74\x20\x6f\x70\x65\x6e\x20\x66\x69\x6c\x
+    65\x3a\x20\x25\x73\xa", argv[1]); RETURN 1; } input_t in(file); IF (!lex(in)) { 
+    printf("\x2e\x2e\x2e\x20\x65\x72\x72\x6f\x72\xa"); } ELSE { printf("\xa"); } fcl
+    ose(file); RETURN 0; }
 
 

@@ -63,26 +63,20 @@ static bool adddgt(unsigned long &u, unsigned long d)
 
 static bool lex_oct(const unsigned char *s, const unsigned char *e, unsigned long &u)
 {
-    for (u = 0, ++s; s < e;) {
-    /*!re2c
-        re2c:yyfill:enable = 0;
-        re2c:define:YYCURSOR = s;
-        [0-7] { if (!adddgt<8>(u, s[-1] - 0x30u)) return false; continue; }
-        *     { return false; }
-    */
+    for (u = 0, ++s; s < e; ++s) {
+        if (!adddgt<8>(u, *s - 0x30u)) {
+            return false;
+        }
     }
     return true;
 }
 
 static bool lex_dec(const unsigned char *s, const unsigned char *e, unsigned long &u)
 {
-    for (u = 0; s < e;) {
-    /*!re2c
-        re2c:yyfill:enable = 0;
-        re2c:define:YYCURSOR = s;
-        [0-9] { if (!adddgt<10>(u, s[-1] - 0x30u)) return false; continue; }
-        *     { return false; }
-    */
+    for (u = 0; s < e; ++s) {
+        if (!adddgt<10>(u, *s - 0x30u)) {
+            return false;
+        }
     }
     return true;
 }
@@ -93,10 +87,9 @@ static bool lex_hex(const unsigned char *s, const unsigned char *e, unsigned lon
     /*!re2c
         re2c:yyfill:enable = 0;
         re2c:define:YYCURSOR = s;
-        [0-9] { if (!adddgt<16>(u, s[-1] - 0x30u))      return false; continue; }
+        *     { if (!adddgt<16>(u, s[-1] - 0x30u))      return false; continue; }
         [a-f] { if (!adddgt<16>(u, s[-1] - 0x61u + 10)) return false; continue; }
         [A-F] { if (!adddgt<16>(u, s[-1] - 0x41u + 10)) return false; continue; }
-        *     { return false; }
     */
     }
     return true;
