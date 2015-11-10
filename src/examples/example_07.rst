@@ -52,22 +52,23 @@ Generate, compile and run:
      eof = true; memset(lim, 0, YYMAXFILL); lim += YYMAXFILL; } RETURN true; } }; TE
     MPLATE<INT base> STATIC BOOL adddgt(UNSIGNED LONG &u, UNSIGNED LONG d) { IF (u >
      (ULONG_MAX - d) / base) { RETURN false; } u = u * base + d; RETURN true; } STAT
-    IC BOOL lex_int_sfx(CONST UNSIGNED CHAR *s, UNSIGNED LONG u) { } STATIC BOOL lex
-    _oct(CONST UNSIGNED CHAR *s, BOOL sfx, UNSIGNED LONG &u) { FOR (u = 0, ++s;;) { 
-    } } STATIC BOOL lex_dec(CONST UNSIGNED CHAR *s, BOOL sfx, UNSIGNED LONG &u) { FO
-    R (u = 0;;) { } } STATIC BOOL lex_hex(CONST UNSIGNED CHAR *s, BOOL sfx, UNSIGNED
-     LONG &u) { FOR (u = 0, s += 2;;) { } } STATIC BOOL lex_str(input_t &in, UNSIGNE
-    D CHAR q) { printf("\x25\x63", q); FOR (UNSIGNED LONG u = q;; printf("\x5c\x78\x
-    25\x6c\x78", u)) { in.tok = in.cur; } printf("\x25\x63", q); RETURN true; } STAT
-    IC BOOL lex_flt(CONST UNSIGNED CHAR *s) { DOUBLE d = 0; DOUBLE x = 1; INT e = 0;
-     mant_int: mant_frac: exp_sign: exp: sfx: end: printf("\x25\x67", d); RETURN tru
-    e; } STATIC BOOL lex(input_t &in) { UNSIGNED LONG u; FOR (;;) { in.tok = in.cur;
-     } } INT main(INT argc, CHAR **argv) { IF (argc != 2) { printf ("\x75\x73\x61\x6
-    7\x65\x3a\x20\x2e\x2f\x65\x78\x61\x6d\x70\x6c\x65\x20\x3c\x66\x69\x6c\x65\x6e\x6
-    1\x6d\x65\x3e\xa"); RETURN 1; } FILE *file = fopen(argv[1], "\x72\x62"); IF (!fi
-    le) { printf("\x65\x72\x72\x6f\x72\x3a\x20\x63\x61\x6e\x6e\x6f\x74\x20\x6f\x70\x
-    65\x6e\x20\x66\x69\x6c\x65\x3a\x20\x25\x73\xa", argv[1]); RETURN 1; } input_t in
-    (file); IF (!lex(in)) { printf("\x2e\x2e\x2e\x20\x65\x72\x72\x6f\x72\xa"); } ELS
-    E { printf("\xa"); } fclose(file); RETURN 0; }
+    IC BOOL lex_oct(CONST UNSIGNED CHAR *s, CONST UNSIGNED CHAR *e, UNSIGNED LONG &u
+    ) { FOR (u = 0, ++s; s < e;) { } RETURN true; } STATIC BOOL lex_dec(CONST UNSIGN
+    ED CHAR *s, CONST UNSIGNED CHAR *e, UNSIGNED LONG &u) { FOR (u = 0; s < e;) { } 
+    RETURN true; } STATIC BOOL lex_hex(CONST UNSIGNED CHAR *s, CONST UNSIGNED CHAR *
+    e, UNSIGNED LONG &u) { FOR (u = 0, s += 2; s < e;) { } RETURN true; } STATIC BOO
+    L lex_str(input_t &in, UNSIGNED CHAR q) { printf("\x25\x63", q); FOR (UNSIGNED L
+    ONG u = q;; printf("\x5c\x78\x25\x6c\x78", u)) { in.tok = in.cur; } printf("\x25
+    \x63", q); RETURN true; } STATIC BOOL lex_flt(CONST UNSIGNED CHAR *s) { DOUBLE d
+     = 0; DOUBLE x = 1; INT e = 0; mant_int: mant_frac: exp_sign: exp: sfx: end: pri
+    ntf("\x25\x67", d); RETURN true; } STATIC BOOL lex(input_t &in) { UNSIGNED LONG 
+    u; FOR (;;) { in.tok = in.cur; sfx: } } INT main(INT argc, CHAR **argv) { IF (ar
+    gc != 2) { printf ("\x75\x73\x61\x67\x65\x3a\x20\x2e\x2f\x65\x78\x61\x6d\x70\x6c
+    \x65\x20\x3c\x66\x69\x6c\x65\x6e\x61\x6d\x65\x3e\xa"); RETURN 1; } FILE *file = 
+    fopen(argv[1], "\x72\x62"); IF (!file) { printf("\x65\x72\x72\x6f\x72\x3a\x20\x6
+    3\x61\x6e\x6e\x6f\x74\x20\x6f\x70\x65\x6e\x20\x66\x69\x6c\x65\x3a\x20\x25\x73\xa
+    ", argv[1]); RETURN 1; } input_t in(file); IF (!lex(in)) { printf("\x2e\x2e\x2e\
+    x20\x65\x72\x72\x6f\x72\xa"); } ELSE { printf("\xa"); } fclose(file); RETURN 0; 
+    } 
 
 

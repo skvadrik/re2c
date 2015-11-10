@@ -61,54 +61,45 @@ static bool adddgt(unsigned long &u, unsigned long d)
     return true;
 }
 
-static bool lex_int_sfx(const unsigned char *s, unsigned long u)
+static bool lex_oct(const unsigned char *s, const unsigned char *e, unsigned long &u)
 {
+    for (u = 0, ++s; s < e;) {
     /*!re2c
         re2c:yyfill:enable = 0;
         re2c:define:YYCURSOR = s;
-        *           { return u < INT_MAX; }
-        'u'         { return u < UINT_MAX; }
-        'l'         { return u < LONG_MAX; }
-        'ul' | 'lu' { return true; }
-    */
-}
-
-static bool lex_oct(const unsigned char *s, bool sfx, unsigned long &u)
-{
-    for (u = 0, ++s;;) {
-    /*!re2c
-        re2c:yyfill:enable = 0;
-        re2c:define:YYCURSOR = s;
-        [0-7] { if (adddgt<8>(u, s[-1] - 0x30u)) continue; return false; }
-        ""    { return !sfx || lex_int_sfx(s, u); }
+        [0-7] { if (!adddgt<8>(u, s[-1] - 0x30u)) return false; continue; }
+        *     { return false; }
     */
     }
+    return true;
 }
 
-static bool lex_dec(const unsigned char *s, bool sfx, unsigned long &u)
+static bool lex_dec(const unsigned char *s, const unsigned char *e, unsigned long &u)
 {
-    for (u = 0;;) {
+    for (u = 0; s < e;) {
     /*!re2c
         re2c:yyfill:enable = 0;
         re2c:define:YYCURSOR = s;
-        [0-9] { if (adddgt<10>(u, s[-1] - 0x30u)) continue; return false; }
-        ""    { return !sfx || lex_int_sfx(s, u); }
+        [0-9] { if (!adddgt<10>(u, s[-1] - 0x30u)) return false; continue; }
+        *     { return false; }
     */
     }
+    return true;
 }
 
-static bool lex_hex(const unsigned char *s, bool sfx, unsigned long &u)
+static bool lex_hex(const unsigned char *s, const unsigned char *e, unsigned long &u)
 {
-    for (u = 0, s += 2;;) {
+    for (u = 0, s += 2; s < e;) {
     /*!re2c
         re2c:yyfill:enable = 0;
         re2c:define:YYCURSOR = s;
-        [0-9] { if (adddgt<16>(u, s[-1] - 0x30u))      continue; return false; }
-        [a-f] { if (adddgt<16>(u, s[-1] - 0x61u + 10)) continue; return false; }
-        [A-F] { if (adddgt<16>(u, s[-1] - 0x41u + 10)) continue; return false; }
-        ""    { return !sfx || lex_int_sfx(s, u); }
+        [0-9] { if (!adddgt<16>(u, s[-1] - 0x30u))      return false; continue; }
+        [a-f] { if (!adddgt<16>(u, s[-1] - 0x61u + 10)) return false; continue; }
+        [A-F] { if (!adddgt<16>(u, s[-1] - 0x41u + 10)) return false; continue; }
+        *     { return false; }
     */
     }
+    return true;
 }
 
 static bool lex_str(input_t &in, unsigned char q)
@@ -136,10 +127,10 @@ static bool lex_str(input_t &in, unsigned char q)
             "\\'"                { u = '\''; continue; }
             "\\\""               { u = '"';  continue; }
             "\\?"                { u = '?';  continue; }
-            "\\" [0-7]{1,3}      { lex_oct(in.tok, false, u); continue; }
-            "\\u" [0-9a-fA-F]{4} { lex_hex(in.tok, false, u); continue; }
-            "\\U" [0-9a-fA-F]{8} { lex_hex(in.tok, false, u); continue; }
-            "\\x" [0-9a-fA-F]+   { if (!lex_hex(in.tok, false, u)) return false; continue; }
+            "\\" [0-7]{1,3}      { lex_oct(in.tok, in.cur, u); continue; }
+            "\\u" [0-9a-fA-F]{4} { lex_hex(in.tok, in.cur, u); continue; }
+            "\\U" [0-9a-fA-F]{8} { lex_hex(in.tok, in.cur, u); continue; }
+            "\\x" [0-9a-fA-F]+   { if (!lex_hex(in.tok, in.cur, u)) return false; continue; }
         */
     }
     printf("%c", q);
@@ -220,13 +211,12 @@ static bool lex(input_t &in)
             "L"? "''" { return false; }
 
             // integer literals
-            int_sfx = 'u' | 'l' | 'ul' | 'lu';
-            oct = "0" [0-7]*        int_sfx?;
-            dec = [1-9][0-9]*       int_sfx?;
-            hex = '0x' [0-9a-fA-F]+ int_sfx?;
-            oct { if (!lex_oct(in.tok, true, u)) return false; printf("%lu", u); continue; }
-            dec { if (!lex_dec(in.tok, true, u)) return false; printf("%lu", u); continue; }
-            hex { if (!lex_hex(in.tok, true, u)) return false; printf("%lu", u); continue; }
+            oct = "0" [0-7]*;
+            dec = [1-9][0-9]*;
+            hex = '0x' [0-9a-fA-F]+;
+            oct { if (!lex_oct(in.tok, in.cur, u)) return false; goto sfx; }
+            dec { if (!lex_dec(in.tok, in.cur, u)) return false; goto sfx; }
+            hex { if (!lex_hex(in.tok, in.cur, u)) return false; goto sfx; }
 
             // floating literals
             frc = [0-9]* "." [0-9]+ | [0-9]+ ".";
@@ -355,6 +345,13 @@ static bool lex(input_t &in)
             // identifiers
             id = [a-zA-Z_][a-zA-Z_0-9]*;
             id { printf("%.*s", in.cur - in.tok, in.tok); continue; }
+        */
+sfx:
+        /*!re2c
+            ""          { if (u > INT_MAX)  return false; printf("%d",  static_cast<int>(u));      continue; }
+            'u'         { if (u > UINT_MAX) return false; printf("%u",  static_cast<unsigned>(u)); continue; }
+            'l'         { if (u > LONG_MAX) return false; printf("%ld", static_cast<long>(u));     continue; }
+            'ul' | 'lu' { printf("%lu", u); continue; }
         */
     }
 }
