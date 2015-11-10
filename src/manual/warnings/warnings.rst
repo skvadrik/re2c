@@ -10,7 +10,7 @@ Warnings
 * `[-Wunreachable-rules]      <unreachable_rules/wunreachable_rules.html>`_
 * `[-Wcondition-order]        <condition_order/wcondition_order.html>`_
 * `[-Wuseless-escape]         <useless_escape/wuseless_escape.html>`_
-* `[-Wswapped-range]          <wswapped_range.html>`_
+* `[-Wswapped-range]          <swapped_range/wswapped_range.html>`_
 * `[-Wempty-character-class]  <wempty_character_class.html>`_
 * `[-Wmatch-empty-string]     <wmatch_empty_string.html>`_
 
