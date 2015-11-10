@@ -24,7 +24,7 @@ A couple of things should be noted:
 
 * Default case (when none of the rules matched) is handled properly with ``*`` rule (line 16).
   **Never forget to handle default case, otherwise control flow in lexer will be undefined for some input strings.**
-  Use `[-Wundefined-control-flow] <../manual/warnings/wundefined_control_flow.html>`_ re2c warning:
+  Use `[-Wundefined-control-flow] <../manual/warnings/undefined_control_flow/wundefined_control_flow.html>`_ re2c warning:
   it will warn you about unhandled default case and show input patterns that are not covered by the rules.
 
 * We use the *sentinel* method to stop at the end of input (``re2c:yyfill:enable = 0;`` at line 8).
