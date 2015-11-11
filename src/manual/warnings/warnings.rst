@@ -11,7 +11,7 @@ Warnings
 * `[-Wcondition-order]        <condition_order/wcondition_order.html>`_
 * `[-Wuseless-escape]         <useless_escape/wuseless_escape.html>`_
 * `[-Wswapped-range]          <swapped_range/wswapped_range.html>`_
-* `[-Wempty-character-class]  <wempty_character_class.html>`_
+* `[-Wempty-character-class]  <empty_character_class/wempty_character_class.html>`_
 * `[-Wmatch-empty-string]     <wmatch_empty_string.html>`_
 
 .. include:: warnings_general.rst
