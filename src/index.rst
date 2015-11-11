@@ -23,4 +23,8 @@ and flexible (easy to embed into existing environment).
 Please send feedback to `re2c-devel <re2c-devel@lists.sourceforge.net>`_ and
 `re2c-general <re2c-general@lists.sourceforge.net>`_ mailing lists
 or `report a bug <https://github.com/skvadrik/re2c/issues>`_.
+Consider adding your lexer to re2c test suite: real-world tests are the best.
+Feel free to strip out all non-re2c code if you must keep it secret.
+In thanks re2c will never break your code. ``:)``
 Contributors welcome!
+
