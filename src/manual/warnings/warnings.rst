@@ -12,7 +12,7 @@ Warnings
 * `[-Wuseless-escape]         <useless_escape/wuseless_escape.html>`_
 * `[-Wswapped-range]          <swapped_range/wswapped_range.html>`_
 * `[-Wempty-character-class]  <empty_character_class/wempty_character_class.html>`_
-* `[-Wmatch-empty-string]     <wmatch_empty_string.html>`_
+* `[-Wmatch-empty-string]     <match_empty_string/wmatch_empty_string.html>`_
 
 .. include:: warnings_general.rst
 
