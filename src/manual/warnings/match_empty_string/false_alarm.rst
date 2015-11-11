@@ -1,5 +1,5 @@
-False alarms
-~~~~~~~~~~~~
+False alarm
+~~~~~~~~~~~
 
 In many cases matching empty string makes perfect sense:
 

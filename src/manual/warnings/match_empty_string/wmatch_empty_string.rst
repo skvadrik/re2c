@@ -5,6 +5,6 @@
 .. include:: ../../../contents.rst
 
 .. include:: simple_example.rst
-.. include:: false_alarms.rst
+.. include:: false_alarm.rst
 .. include:: real_world.rst
 
