@@ -1,0 +1,7 @@
+Skeleton
+--------
+
+.. include:: ../home.rst
+
+
+

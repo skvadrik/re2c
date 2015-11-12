@@ -55,3 +55,9 @@ pre.code .literal.number, code .literal.number { color: #ff5500; font-weight: bo
 pre.code .name.builtin, code .name.builtin { color: #352B84 }
 pre.code .deleted, code .deleted { background-color: #DEB0A1}
 pre.code .inserted, code .inserted { background-color: #A3D289}
+
+img {
+    display: block;
+    border: 1px dotted #557799;
+    margin: auto;
+}

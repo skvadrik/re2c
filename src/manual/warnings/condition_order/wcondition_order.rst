@@ -1,5 +1,5 @@
 [-Wcondition-order]
---------------------------
+-------------------
 
 .. include:: ../home.rst
 .. include:: ../../../contents.rst
