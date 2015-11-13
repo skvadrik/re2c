@@ -93,15 +93,18 @@ OBJ_RST = $(SRC_RST:%.rst=%.html)
 all: $(OBJ_RST)
 	@ for f in $(SRC_OTH); do { mkdir -p "`dirname $$f`"; cp "$(VPATH)/$$f" "$$f"; } done
 
-$(OBJ_RST): $(SRC_CSS)
+-include $(SRC_RST:%.rst=%.d)
 
 .rst.html:
 	@ mkdir -p "`dirname $@`"
-	@ rst2html.py --stylesheet="$(VPATH)/$(SRC_CSS)" $< $@
+	@ rst2html.py --stylesheet="$(VPATH)/$(SRC_CSS)" --record-dependencies="$*.dd" $< $@
+	@ echo $@: `cat $*.dd` > $*.d && rm $*.dd
 	@ echo $@
 
 clean:
 	rm $(OBJ_RST)
 
 .SUFFIXES: .rst .html
+
+.POSIX:
 
