@@ -28,8 +28,8 @@ Here is the picture:
 Note that re2c performs additional transformations on the DFA:
 inserts ``YYFILL`` `checkpoints <../../../examples/example_02.html>`_,
 binds actions, applies basic code deduplication.
-During the transforamtions it splits certain states and adds lambda transitions.
-These transitions correspond to the unlabeled edges on the picture.
+During the transformations it splits certain states and adds lambda transitions.
+Lambda transitions correspond to the unlabeled edges on the picture.
 
 A real-world example (JSON lexer, all non-re2c code stripped out):
 
