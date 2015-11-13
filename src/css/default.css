@@ -23,6 +23,9 @@ h1.title {
 a {
     color: #557799;
 }
+a:focus {
+    outline: none;
+}
 
 table, tr, td, th {
     border: none;
@@ -60,4 +63,10 @@ img {
     display: block;
     border: 1px dotted #557799;
     margin: auto;
+}
+
+img.feed {
+    display: inline;
+    border: none;
+    vertical-align: middle;
 }

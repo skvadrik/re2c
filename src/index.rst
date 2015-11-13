@@ -16,7 +16,12 @@ and flexible (easy to embed into existing environment).
 
 ★ `Examples <examples/examples.html>`_
 
-★ `News     <news/news.html>`_
+★ `News <news/news.html>`_ |feed|
+
+.. |feed| image:: feed.png
+    :target: news/news.html
+    :class:  feed
+    :width:  25px
 
 --------------------------------------------------------------------------------
 
@@ -27,4 +32,5 @@ Consider adding your lexer to re2c test suite: real-world tests are the best.
 Feel free to strip out all non-re2c code if you must keep it secret.
 In thanks re2c will never break your code. ``:)``
 Contributors welcome!
+
 
