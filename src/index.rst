@@ -18,8 +18,8 @@ and flexible (easy to embed into existing environment).
 
 ★ `News <news/news.html>`_ |feed|
 
-.. |feed| image:: feed.png
-    :target: news/news.html
+.. |feed| image:: feed/feed.png
+    :target: feed/atom.xml
     :class:  feed
     :width:  25px
 

@@ -78,7 +78,8 @@ SRC_OTH = \
     src/examples/06_braille.utf16.txt \
     src/examples/03_arbitrary_large_input.re \
     src/examples/02_recognizing_strings.re \
-    src/feed.png \
+    src/feed/feed.png \
+    src/feed/atom.xml \
     src/manual/warnings/condition_order/wcondition_order.re \
     src/manual/warnings/match_empty_string/wmatch_empty_string.re \
     src/manual/features/dot/php_json_dot.png \
