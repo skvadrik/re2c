@@ -63,6 +63,10 @@ SRC_RST = \
     src/install/install.rst \
     src/index.rst
 
+SRC_CSS = src/css/default.css
+
+SRC_TPL = src/template.html
+
 SRC_OTH = \
     src/examples/06_braille.utf8.txt \
     src/examples/05_parsing_integers_conditions.re \
@@ -90,14 +94,17 @@ SRC_OTH = \
 OBJ_RST = $(SRC_RST:%.rst=%.html)
 
 all: $(OBJ_RST)
-	@ for f in $(SRC_OTH); do { mkdir -p "`dirname $$f`"; cp "$(VPATH)/$$f" "$$f"; } done
+	@ for f in $(SRC_OTH) $(SRC_CSS); do { mkdir -p "`dirname $$f`"; cp "$(VPATH)/$$f" "$$f"; } done
 
 -include $(SRC_RST:%.rst=%.d)
 
+# Option '--stylesheet' to 'rst2html' is used only to override dependency
+# from default stylesheet; the real stylesheet is linked in template file.
+# We have to manually insert dependency from template file.
 .rst.html:
 	@ mkdir -p "`dirname $@`"
-	@ rst2html.py --stylesheet="$(VPATH)/src/css/default.css" --template="$(VPATH)/src/template.html" --record-dependencies="$*.dd" $< $@
-	@ echo $@: `cat $*.dd` > $*.d && rm $*.dd
+	@ rst2html.py --stylesheet="$(VPATH)/$(SRC_CSS)" --template="$(VPATH)/$(SRC_TPL)" --record-dependencies="$*.dd" $< $@
+	@ echo $@: "$(VPATH)/$(SRC_TPL)" `cat $*.dd` > $*.d && rm $*.dd
 	@ echo $@
 
 clean:
