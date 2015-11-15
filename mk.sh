@@ -5,3 +5,6 @@ objdir="obj" \
     && make -f ../Makefile -j5 \
     && cd ..
 
+runhaskell launch.hs
+
+

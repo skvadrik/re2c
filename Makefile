@@ -63,9 +63,6 @@ SRC_RST = \
     src/install/install.rst \
     src/index.rst
 
-SRC_CSS = \
-    src/css/default.css
-
 SRC_OTH = \
     src/examples/06_braille.utf8.txt \
     src/examples/05_parsing_integers_conditions.re \
@@ -78,6 +75,7 @@ SRC_OTH = \
     src/examples/06_braille.utf16.txt \
     src/examples/03_arbitrary_large_input.re \
     src/examples/02_recognizing_strings.re \
+    src/favicon.ico \
     src/feed/feed.png \
     src/feed/atom.xml \
     src/manual/warnings/condition_order/wcondition_order.re \
@@ -98,7 +96,7 @@ all: $(OBJ_RST)
 
 .rst.html:
 	@ mkdir -p "`dirname $@`"
-	@ rst2html.py --stylesheet="$(VPATH)/$(SRC_CSS)" --record-dependencies="$*.dd" $< $@
+	@ rst2html.py --stylesheet="$(VPATH)/src/css/default.css" --template="$(VPATH)/src/template.html" --record-dependencies="$*.dd" $< $@
 	@ echo $@: `cat $*.dd` > $*.d && rm $*.dd
 	@ echo $@
 
