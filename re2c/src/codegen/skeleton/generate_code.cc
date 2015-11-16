@@ -96,7 +96,7 @@ void Skeleton::emit_start
 	) const
 {
 	const std::string & ind = opts->indString;
-	const uint32_t default_rule = maxkey ();
+	const uint32_t default_rule = rule2key (rule_rank_t::none ());
 
 	o << "\n" << "#define YYCTYPE ";
 	exact_uint (o, opts->encoding.szCodeUnit ());
@@ -294,9 +294,9 @@ void Skeleton::emit_epilog (OutputFile & o, const std::set<std::string> & names)
 	o << "\n";
 }
 
-void Skeleton::emit_action (OutputFile & o, uint32_t ind, rule_rank_t rank, const std::string & name)
+void Skeleton::emit_action (OutputFile & o, uint32_t ind, rule_rank_t rank) const
 {
-	o << indent (ind) << "status = action_" << name << " (i, keys, input, token, &cursor, " << rank << ");\n";
+	o << indent (ind) << "status = action_" << name << " (i, keys, input, token, &cursor, " << rule2key (rank) << ");\n";
 	o << indent (ind) << "continue;\n";
 }
 

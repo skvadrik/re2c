@@ -109,11 +109,12 @@ struct Skeleton
 		, bool backupctx
 		) const;
 	static void emit_epilog (OutputFile & o, const std::set<std::string> & names);
-	static void emit_action (OutputFile & o, uint32_t ind, rule_rank_t rank, const std::string & name);
+	void emit_action (OutputFile & o, uint32_t ind, rule_rank_t rank) const;
 
-	template <typename key_t>
-		static key_t maxkey ();
-	uint32_t maxkey () const;
+	template <typename key_t> static key_t none ();
+	template <typename key_t> static key_t def ();
+	template <typename key_t> static key_t rule2key (rule_rank_t r);
+	uint32_t rule2key (rule_rank_t r) const;
 
 private:
 	template <typename cunit_t, typename key_t>
@@ -124,6 +125,17 @@ private:
 
 	FORBID_COPY (Skeleton);
 };
+
+template<typename key_t> key_t Skeleton::rule2key (rule_rank_t r)
+{
+	if (r.is_none()) {
+		return none<key_t>();
+	} else if (r.is_def()) {
+		return def<key_t>();
+	} else {
+		return static_cast<key_t>(r.uint32());
+	}
+}
 
 } // namespace re2c
 

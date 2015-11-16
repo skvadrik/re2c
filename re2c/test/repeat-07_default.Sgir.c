@@ -53,7 +53,7 @@ error:
 }
 
 #define YYCTYPE unsigned char
-#define YYKEYTYPE unsigned int
+#define YYKEYTYPE unsigned char
 #define YYPEEK() *cursor
 #define YYSKIP() ++cursor
 #define YYLESSTHAN(n) (limit - cursor) < n
@@ -72,7 +72,7 @@ static int action_line28
     const long len_act = *cursor - token;
     const long len_exp = (long) keys [3 * i + 1];
     const YYKEYTYPE rule_exp = keys [3 * i + 2];
-    if (rule_exp == 4294967295)
+    if (rule_exp == 255)
     {
         fprintf
             ( stderr
@@ -197,7 +197,7 @@ yy2:
         continue;
 yy4:
         YYSKIP ();
-        status = action_line28 (i, keys, input, token, &cursor, 4294967294);
+        status = action_line28 (i, keys, input, token, &cursor, 254);
         continue;
 yy6:
         YYSKIP ();
@@ -251,7 +251,7 @@ end:
 #undef YYFILL
 
 #define YYCTYPE unsigned short
-#define YYKEYTYPE unsigned int
+#define YYKEYTYPE unsigned char
 #define YYPEEK() *cursor
 #define YYSKIP() ++cursor
 #define YYLESSTHAN(n) (limit - cursor) < n
@@ -270,7 +270,7 @@ static int action_line46
     const long len_act = *cursor - token;
     const long len_exp = (long) keys [3 * i + 1];
     const YYKEYTYPE rule_exp = keys [3 * i + 2];
-    if (rule_exp == 4294967295)
+    if (rule_exp == 255)
     {
         fprintf
             ( stderr
@@ -396,7 +396,7 @@ yy2:
         continue;
 yy4:
         YYSKIP ();
-        status = action_line46 (i, keys, input, token, &cursor, 4294967294);
+        status = action_line46 (i, keys, input, token, &cursor, 254);
         continue;
 yy6:
         YYSKIP ();
@@ -450,7 +450,7 @@ end:
 #undef YYFILL
 
 #define YYCTYPE unsigned int
-#define YYKEYTYPE unsigned int
+#define YYKEYTYPE unsigned char
 #define YYPEEK() *cursor
 #define YYSKIP() ++cursor
 #define YYLESSTHAN(n) (limit - cursor) < n
@@ -469,7 +469,7 @@ static int action_line64
     const long len_act = *cursor - token;
     const long len_exp = (long) keys [3 * i + 1];
     const YYKEYTYPE rule_exp = keys [3 * i + 2];
-    if (rule_exp == 4294967295)
+    if (rule_exp == 255)
     {
         fprintf
             ( stderr
@@ -595,7 +595,7 @@ yy2:
         continue;
 yy4:
         YYSKIP ();
-        status = action_line64 (i, keys, input, token, &cursor, 4294967294);
+        status = action_line64 (i, keys, input, token, &cursor, 254);
         continue;
 yy6:
         YYSKIP ();
@@ -656,6 +656,6 @@ int main ()
     return 0;
 }
  	02`eÿ
-1abcd                                                                              þÿÿÿ                                                	  1 3 ` e ÿÿ
- 2 a b c d                                                                               þÿÿÿ                                                  	      2   4   `   e   ÿÿ 
-   3   a   b   c   d                                                                                 þÿÿÿ                                              
+1abcdþ   	  1 3 ` e ÿÿ
+ 2 a b c d þ     	      2   4   `   e   ÿÿ 
+   3   a   b   c   d   þ 

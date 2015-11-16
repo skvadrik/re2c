@@ -97,24 +97,26 @@ Skeleton::Skeleton (const DFA & dfa, const rules_t & rs)
 		exit (1);
 	}
 
-	// calculate maximal rule rank
+	// calculate maximal rule rank (disregarding default and none rules)
 	uint32_t maxrule = 0;
 	for (uint32_t i = 0; i < nodes_count; ++i)
 	{
 		const rule_rank_t r = nodes[i].rule.rank;
-		if (!r.is_none ())
+		if (!r.is_none () && !r.is_def ())
 		{
 			maxrule = std::max (maxrule, r.uint32 ());
 		}
 	}
+	// two upper values reserved for default and none rules)
+	maxrule += 2;
 
 	// initialize size of key
 	const uint32_t max = std::max (maxlen, maxrule);
-	if (max < UINT8_MAX)
+	if (max <= UINT8_MAX)
 	{
 		sizeof_key = 1;
 	}
-	else if (max < UINT16_MAX)
+	else if (max <= UINT16_MAX)
 	{
 		sizeof_key = 2;
 	}
@@ -125,18 +127,22 @@ Skeleton::~Skeleton ()
 	delete [] nodes;
 }
 
-template <> uint32_t Skeleton::maxkey<uint32_t> () { return UINT32_MAX; }
-template <> uint16_t Skeleton::maxkey<uint16_t> () { return UINT16_MAX; }
-template <> uint8_t  Skeleton::maxkey<uint8_t>  () { return UINT8_MAX;  }
+template <> uint32_t Skeleton::none<uint32_t> () { return UINT32_MAX; }
+template <> uint16_t Skeleton::none<uint16_t> () { return UINT16_MAX; }
+template <> uint8_t  Skeleton::none<uint8_t>  () { return UINT8_MAX;  }
 
-uint32_t Skeleton::maxkey () const
+template <> uint32_t Skeleton::def<uint32_t> () { return UINT32_MAX - 1; }
+template <> uint16_t Skeleton::def<uint16_t> () { return UINT16_MAX - 1; }
+template <> uint8_t  Skeleton::def<uint8_t>  () { return UINT8_MAX  - 1; }
+
+uint32_t Skeleton::rule2key (rule_rank_t r) const
 {
 	switch (sizeof_key)
 	{
 		default: // shouldn't happen
-		case 4: return maxkey<uint32_t> ();
-		case 2: return maxkey<uint16_t> ();
-		case 1: return maxkey<uint8_t>  ();
+		case 4: return rule2key<uint32_t> (r);
+		case 2: return rule2key<uint16_t> (r);
+		case 1: return rule2key<uint8_t>  (r);
 	}
 }
 

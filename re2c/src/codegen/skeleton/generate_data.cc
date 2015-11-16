@@ -246,9 +246,7 @@ void Skeleton::emit_data (const char * fname)
 template <typename key_t>
 	static void keygen (FILE * f, size_t count, size_t len, size_t len_match, rule_rank_t match)
 {
-	const key_t m = match.is_none ()
-		? Skeleton::maxkey<key_t> ()
-		: static_cast<key_t> (match.uint32 ());
+	const key_t m = Skeleton::rule2key<key_t> (match);
 
 	const size_t keys_size = 3 * count;
 	key_t * keys = new key_t [keys_size];

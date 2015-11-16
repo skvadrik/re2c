@@ -53,7 +53,7 @@ error:
 }
 
 #define YYCTYPE unsigned char
-#define YYKEYTYPE unsigned int
+#define YYKEYTYPE unsigned char
 #define YYPEEK() *cursor
 #define YYSKIP() ++cursor
 #define YYLESSTHAN(n) (limit - cursor) < n
@@ -72,7 +72,7 @@ static int action_line15_r1
     const long len_act = *cursor - token;
     const long len_exp = (long) keys [3 * i + 1];
     const YYKEYTYPE rule_exp = keys [3 * i + 2];
-    if (rule_exp == 4294967295)
+    if (rule_exp == 255)
     {
         fprintf
             ( stderr
@@ -213,7 +213,7 @@ yy11:
         continue;
 yy13:
         YYSKIP ();
-        status = action_line15_r1 (i, keys, input, token, &cursor, 4294967294);
+        status = action_line15_r1 (i, keys, input, token, &cursor, 254);
         continue;
 
     }
@@ -590,7 +590,7 @@ end:
 #undef YYFILL
 
 #define YYCTYPE unsigned char
-#define YYKEYTYPE unsigned int
+#define YYKEYTYPE unsigned char
 #define YYPEEK() *cursor
 #define YYSKIP() ++cursor
 #define YYLESSTHAN(n) (limit - cursor) < n
@@ -609,7 +609,7 @@ static int action_line20_r2
     const long len_act = *cursor - token;
     const long len_exp = (long) keys [3 * i + 1];
     const YYKEYTYPE rule_exp = keys [3 * i + 2];
-    if (rule_exp == 4294967295)
+    if (rule_exp == 255)
     {
         fprintf
             ( stderr
@@ -710,7 +710,7 @@ yy21:
         continue;
 yy23:
         YYSKIP ();
-        status = action_line20_r2 (i, keys, input, token, &cursor, 4294967294);
+        status = action_line20_r2 (i, keys, input, token, &cursor, 254);
         continue;
 
     }
@@ -752,8 +752,8 @@ int main ()
     return 0;
 }
  	02`dÿ1abc
-                                                                                                                  þÿÿÿ 	`bdÿac
+þ 	`bdÿac
  ÿ 	13`dÿ2abc
  ÿ 	`bdÿac
-                                                                                       þÿÿÿre2c: warning: line 15: control flow in condition 'r2' is undefined for strings that match '\xA', use default rule '*' [-Wundefined-control-flow]
+þre2c: warning: line 15: control flow in condition 'r2' is undefined for strings that match '\xA', use default rule '*' [-Wundefined-control-flow]
 re2c: warning: line 20: control flow in condition 'r1' is undefined for strings that match '\xA', use default rule '*' [-Wundefined-control-flow]
