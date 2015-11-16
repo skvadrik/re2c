@@ -3,51 +3,47 @@
 #include <stdio.h>
 #include <stdlib.h> /* malloc, free */
 
-static void * read_file
-    ( const char * fname
+static void *read_file
+    ( const char *fname
     , size_t unit
     , size_t padding
-    , size_t * pfsize
+    , size_t *pfsize
     )
 {
-    void * buffer = NULL;
+    void *buffer = NULL;
     size_t fsize = 0;
 
     /* open file */
-    FILE * f = fopen (fname, "rb");
-    if (f == NULL)
-    {
+    FILE *f = fopen(fname, "rb");
+    if(f == NULL) {
         goto error;
     }
 
     /* get file size */
-    fseek (f, 0, SEEK_END);
-    fsize = (size_t) ftell (f) / unit;
-    fseek (f, 0, SEEK_SET);
+    fseek(f, 0, SEEK_END);
+    fsize = (size_t) ftell(f) / unit;
+    fseek(f, 0, SEEK_SET);
 
     /* allocate memory for file and padding */
-    buffer = malloc (unit * (fsize + padding));
-    if (buffer == NULL)
-    {
+    buffer = malloc(unit * (fsize + padding));
+    if (buffer == NULL) {
         goto error;
     }
 
     /* read the whole file in memory */
-    if (fread (buffer, unit, fsize, f) != fsize)
-    {
+    if (fread(buffer, unit, fsize, f) != fsize) {
         goto error;
     }
 
-    fclose (f);
+    fclose(f);
     *pfsize = fsize;
     return buffer;
 
 error:
-    fprintf (stderr, "error: cannot read file '%s'\n", fname);
-    free (buffer);
-    if (f != NULL)
-    {
-        fclose (f);
+    fprintf(stderr, "error: cannot read file '%s'\n", fname);
+    free(buffer);
+    if (f != NULL) {
+        fclose(f);
     }
     return NULL;
 }
@@ -61,10 +57,10 @@ error:
 
 static int action_line129
     ( unsigned int i
-    , const YYKEYTYPE * keys
-    , const YYCTYPE * start
-    , const YYCTYPE * token
-    , const YYCTYPE ** cursor
+    , const YYKEYTYPE *keys
+    , const YYCTYPE *start
+    , const YYCTYPE *token
+    , const YYCTYPE **cursor
     , YYKEYTYPE rule_act
     )
 {
@@ -72,8 +68,7 @@ static int action_line129
     const long len_act = *cursor - token;
     const long len_exp = (long) keys [3 * i + 1];
     const YYKEYTYPE rule_exp = keys [3 * i + 2];
-    if (rule_exp == 255)
-    {
+    if (rule_exp == 255) {
         fprintf
             ( stderr
             , "warning: lex_line129: control flow is undefined for input"
@@ -81,14 +76,11 @@ static int action_line129
             , pos
             );
     }
-    if (len_act == len_exp && rule_act == rule_exp)
-    {
+    if (len_act == len_exp && rule_act == rule_exp) {
         const YYKEYTYPE offset = keys[3 * i];
         *cursor = token + offset;
         return 0;
-    }
-    else
-    {
+    } else {
         fprintf
             ( stderr
             , "error: lex_line129: at position %ld (iteration %u):\n"
@@ -105,18 +97,18 @@ static int action_line129
     }
 }
 
-int lex_line129 ()
+int lex_line129()
 {
     const size_t padding = 1; /* YYMAXFILL */
     int status = 0;
     size_t input_len = 0;
     size_t keys_count = 0;
-    YYCTYPE * input = NULL;
-    YYKEYTYPE * keys = NULL;
-    const YYCTYPE * cursor = NULL;
-    const YYCTYPE * limit = NULL;
-    const YYCTYPE * token = NULL;
-    const YYCTYPE * eof = NULL;
+    YYCTYPE *input = NULL;
+    YYKEYTYPE *keys = NULL;
+    const YYCTYPE *cursor = NULL;
+    const YYCTYPE *limit = NULL;
+    const YYCTYPE *token = NULL;
+    const YYCTYPE *eof = NULL;
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
@@ -125,8 +117,7 @@ int lex_line129 ()
         , padding
         , &input_len
         );
-    if (input == NULL)
-    {
+    if (input == NULL) {
         status = 1;
         goto end;
     }
@@ -137,8 +128,7 @@ int lex_line129 ()
         , 0
         , &keys_count
         );
-    if (keys == NULL)
-    {
+    if (keys == NULL) {
         status = 1;
         goto end;
     }
@@ -147,8 +137,7 @@ int lex_line129 ()
     limit = input + input_len + padding;
     eof = input + input_len;
 
-    for (i = 0; status == 0 && i < keys_count; ++i)
-    {
+    for (i = 0; status == 0 && i < keys_count; ++i) {
         token = cursor;
         YYCTYPE yych;
         static const unsigned char yybm[] = {
@@ -194,15 +183,15 @@ int lex_line129 ()
         if (yych <= '#') goto yy6;
         if (yych >= ';') goto yy4;
         YYSKIP ();
-        status = action_line129 (i, keys, input, token, &cursor, 0);
+        status = action_line129(i, keys, input, token, &cursor, 0);
         continue;
 yy4:
         YYSKIP ();
-        status = action_line129 (i, keys, input, token, &cursor, 1);
+        status = action_line129(i, keys, input, token, &cursor, 1);
         continue;
 yy6:
         YYSKIP ();
-        status = action_line129 (i, keys, input, token, &cursor, 2);
+        status = action_line129(i, keys, input, token, &cursor, 2);
         continue;
 yy8:
         YYSKIP ();
@@ -211,28 +200,25 @@ yy8:
         if (yybm[0+yych] & 128) {
             goto yy8;
         }
-        status = action_line129 (i, keys, input, token, &cursor, 3);
+        status = action_line129(i, keys, input, token, &cursor, 3);
         continue;
 
     }
-    if (status == 0)
-    {
-        if (cursor != eof)
-        {
+    if (status == 0) {
+        if (cursor != eof) {
             status = 1;
             const long pos = token - input;
-            fprintf (stderr, "error: lex_line129: unused input strings left at position %ld\n", pos);
+            fprintf(stderr, "error: lex_line129: unused input strings left at position %ld\n", pos);
         }
-        if (i != keys_count)
-        {
+        if (i != keys_count) {
             status = 1;
-            fprintf (stderr, "error: lex_line129: unused keys left after %u iterations\n", i);
+            fprintf(stderr, "error: lex_line129: unused keys left after %u iterations\n", i);
         }
     }
 
 end:
-    free (input);
-    free (keys);
+    free(input);
+    free(keys);
 
     return status;
 }
@@ -253,10 +239,10 @@ end:
 
 static int action_line315
     ( unsigned int i
-    , const YYKEYTYPE * keys
-    , const YYCTYPE * start
-    , const YYCTYPE * token
-    , const YYCTYPE ** cursor
+    , const YYKEYTYPE *keys
+    , const YYCTYPE *start
+    , const YYCTYPE *token
+    , const YYCTYPE **cursor
     , YYKEYTYPE rule_act
     )
 {
@@ -264,8 +250,7 @@ static int action_line315
     const long len_act = *cursor - token;
     const long len_exp = (long) keys [3 * i + 1];
     const YYKEYTYPE rule_exp = keys [3 * i + 2];
-    if (rule_exp == 255)
-    {
+    if (rule_exp == 255) {
         fprintf
             ( stderr
             , "warning: lex_line315: control flow is undefined for input"
@@ -273,14 +258,11 @@ static int action_line315
             , pos
             );
     }
-    if (len_act == len_exp && rule_act == rule_exp)
-    {
+    if (len_act == len_exp && rule_act == rule_exp) {
         const YYKEYTYPE offset = keys[3 * i];
         *cursor = token + offset;
         return 0;
-    }
-    else
-    {
+    } else {
         fprintf
             ( stderr
             , "error: lex_line315: at position %ld (iteration %u):\n"
@@ -297,18 +279,18 @@ static int action_line315
     }
 }
 
-int lex_line315 ()
+int lex_line315()
 {
     const size_t padding = 1; /* YYMAXFILL */
     int status = 0;
     size_t input_len = 0;
     size_t keys_count = 0;
-    YYCTYPE * input = NULL;
-    YYKEYTYPE * keys = NULL;
-    const YYCTYPE * cursor = NULL;
-    const YYCTYPE * limit = NULL;
-    const YYCTYPE * token = NULL;
-    const YYCTYPE * eof = NULL;
+    YYCTYPE *input = NULL;
+    YYKEYTYPE *keys = NULL;
+    const YYCTYPE *cursor = NULL;
+    const YYCTYPE *limit = NULL;
+    const YYCTYPE *token = NULL;
+    const YYCTYPE *eof = NULL;
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
@@ -317,8 +299,7 @@ int lex_line315 ()
         , padding
         , &input_len
         );
-    if (input == NULL)
-    {
+    if (input == NULL) {
         status = 1;
         goto end;
     }
@@ -329,8 +310,7 @@ int lex_line315 ()
         , 0
         , &keys_count
         );
-    if (keys == NULL)
-    {
+    if (keys == NULL) {
         status = 1;
         goto end;
     }
@@ -339,8 +319,7 @@ int lex_line315 ()
     limit = input + input_len + padding;
     eof = input + input_len;
 
-    for (i = 0; status == 0 && i < keys_count; ++i)
-    {
+    for (i = 0; status == 0 && i < keys_count; ++i) {
         token = cursor;
         YYCTYPE yych;
         static const unsigned char yybm[] = {
@@ -384,7 +363,7 @@ int lex_line315 ()
             goto yy15;
         }
         YYSKIP ();
-        status = action_line315 (i, keys, input, token, &cursor, 0);
+        status = action_line315(i, keys, input, token, &cursor, 0);
         continue;
 yy15:
         YYSKIP ();
@@ -393,28 +372,25 @@ yy15:
         if (yybm[0+yych] & 128) {
             goto yy15;
         }
-        status = action_line315 (i, keys, input, token, &cursor, 1);
+        status = action_line315(i, keys, input, token, &cursor, 1);
         continue;
 
     }
-    if (status == 0)
-    {
-        if (cursor != eof)
-        {
+    if (status == 0) {
+        if (cursor != eof) {
             status = 1;
             const long pos = token - input;
-            fprintf (stderr, "error: lex_line315: unused input strings left at position %ld\n", pos);
+            fprintf(stderr, "error: lex_line315: unused input strings left at position %ld\n", pos);
         }
-        if (i != keys_count)
-        {
+        if (i != keys_count) {
             status = 1;
-            fprintf (stderr, "error: lex_line315: unused keys left after %u iterations\n", i);
+            fprintf(stderr, "error: lex_line315: unused keys left after %u iterations\n", i);
         }
     }
 
 end:
-    free (input);
-    free (keys);
+    free(input);
+    free(keys);
 
     return status;
 }
@@ -435,10 +411,10 @@ end:
 
 static int action_line322
     ( unsigned int i
-    , const YYKEYTYPE * keys
-    , const YYCTYPE * start
-    , const YYCTYPE * token
-    , const YYCTYPE ** cursor
+    , const YYKEYTYPE *keys
+    , const YYCTYPE *start
+    , const YYCTYPE *token
+    , const YYCTYPE **cursor
     , YYKEYTYPE rule_act
     )
 {
@@ -446,8 +422,7 @@ static int action_line322
     const long len_act = *cursor - token;
     const long len_exp = (long) keys [3 * i + 1];
     const YYKEYTYPE rule_exp = keys [3 * i + 2];
-    if (rule_exp == 255)
-    {
+    if (rule_exp == 255) {
         fprintf
             ( stderr
             , "warning: lex_line322: control flow is undefined for input"
@@ -455,14 +430,11 @@ static int action_line322
             , pos
             );
     }
-    if (len_act == len_exp && rule_act == rule_exp)
-    {
+    if (len_act == len_exp && rule_act == rule_exp) {
         const YYKEYTYPE offset = keys[3 * i];
         *cursor = token + offset;
         return 0;
-    }
-    else
-    {
+    } else {
         fprintf
             ( stderr
             , "error: lex_line322: at position %ld (iteration %u):\n"
@@ -479,18 +451,18 @@ static int action_line322
     }
 }
 
-int lex_line322 ()
+int lex_line322()
 {
     const size_t padding = 2; /* YYMAXFILL */
     int status = 0;
     size_t input_len = 0;
     size_t keys_count = 0;
-    YYCTYPE * input = NULL;
-    YYKEYTYPE * keys = NULL;
-    const YYCTYPE * cursor = NULL;
-    const YYCTYPE * limit = NULL;
-    const YYCTYPE * token = NULL;
-    const YYCTYPE * eof = NULL;
+    YYCTYPE *input = NULL;
+    YYKEYTYPE *keys = NULL;
+    const YYCTYPE *cursor = NULL;
+    const YYCTYPE *limit = NULL;
+    const YYCTYPE *token = NULL;
+    const YYCTYPE *eof = NULL;
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
@@ -499,8 +471,7 @@ int lex_line322 ()
         , padding
         , &input_len
         );
-    if (input == NULL)
-    {
+    if (input == NULL) {
         status = 1;
         goto end;
     }
@@ -511,8 +482,7 @@ int lex_line322 ()
         , 0
         , &keys_count
         );
-    if (keys == NULL)
-    {
+    if (keys == NULL) {
         status = 1;
         goto end;
     }
@@ -521,8 +491,7 @@ int lex_line322 ()
     limit = input + input_len + padding;
     eof = input + input_len;
 
-    for (i = 0; status == 0 && i < keys_count; ++i)
-    {
+    for (i = 0; status == 0 && i < keys_count; ++i) {
         token = cursor;
         YYCTYPE yych;
         static const unsigned char yybm[] = {
@@ -574,11 +543,11 @@ yy20:
         yych = YYPEEK ();
         goto yy25;
 yy21:
-        status = action_line322 (i, keys, input, token, &cursor, 0);
+        status = action_line322(i, keys, input, token, &cursor, 0);
         continue;
 yy22:
         YYSKIP ();
-        status = action_line322 (i, keys, input, token, &cursor, 1);
+        status = action_line322(i, keys, input, token, &cursor, 1);
         continue;
 yy24:
         YYSKIP ();
@@ -591,24 +560,21 @@ yy25:
         goto yy21;
 
     }
-    if (status == 0)
-    {
-        if (cursor != eof)
-        {
+    if (status == 0) {
+        if (cursor != eof) {
             status = 1;
             const long pos = token - input;
-            fprintf (stderr, "error: lex_line322: unused input strings left at position %ld\n", pos);
+            fprintf(stderr, "error: lex_line322: unused input strings left at position %ld\n", pos);
         }
-        if (i != keys_count)
-        {
+        if (i != keys_count) {
             status = 1;
-            fprintf (stderr, "error: lex_line322: unused keys left after %u iterations\n", i);
+            fprintf(stderr, "error: lex_line322: unused keys left after %u iterations\n", i);
         }
     }
 
 end:
-    free (input);
-    free (keys);
+    free(input);
+    free(keys);
 
     return status;
 }
@@ -629,10 +595,10 @@ end:
 
 static int action_line334
     ( unsigned int i
-    , const YYKEYTYPE * keys
-    , const YYCTYPE * start
-    , const YYCTYPE * token
-    , const YYCTYPE ** cursor
+    , const YYKEYTYPE *keys
+    , const YYCTYPE *start
+    , const YYCTYPE *token
+    , const YYCTYPE **cursor
     , YYKEYTYPE rule_act
     )
 {
@@ -640,8 +606,7 @@ static int action_line334
     const long len_act = *cursor - token;
     const long len_exp = (long) keys [3 * i + 1];
     const YYKEYTYPE rule_exp = keys [3 * i + 2];
-    if (rule_exp == 255)
-    {
+    if (rule_exp == 255) {
         fprintf
             ( stderr
             , "warning: lex_line334: control flow is undefined for input"
@@ -649,14 +614,11 @@ static int action_line334
             , pos
             );
     }
-    if (len_act == len_exp && rule_act == rule_exp)
-    {
+    if (len_act == len_exp && rule_act == rule_exp) {
         const YYKEYTYPE offset = keys[3 * i];
         *cursor = token + offset;
         return 0;
-    }
-    else
-    {
+    } else {
         fprintf
             ( stderr
             , "error: lex_line334: at position %ld (iteration %u):\n"
@@ -673,18 +635,18 @@ static int action_line334
     }
 }
 
-int lex_line334 ()
+int lex_line334()
 {
     const size_t padding = 2; /* YYMAXFILL */
     int status = 0;
     size_t input_len = 0;
     size_t keys_count = 0;
-    YYCTYPE * input = NULL;
-    YYKEYTYPE * keys = NULL;
-    const YYCTYPE * cursor = NULL;
-    const YYCTYPE * limit = NULL;
-    const YYCTYPE * token = NULL;
-    const YYCTYPE * eof = NULL;
+    YYCTYPE *input = NULL;
+    YYKEYTYPE *keys = NULL;
+    const YYCTYPE *cursor = NULL;
+    const YYCTYPE *limit = NULL;
+    const YYCTYPE *token = NULL;
+    const YYCTYPE *eof = NULL;
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
@@ -693,8 +655,7 @@ int lex_line334 ()
         , padding
         , &input_len
         );
-    if (input == NULL)
-    {
+    if (input == NULL) {
         status = 1;
         goto end;
     }
@@ -705,8 +666,7 @@ int lex_line334 ()
         , 0
         , &keys_count
         );
-    if (keys == NULL)
-    {
+    if (keys == NULL) {
         status = 1;
         goto end;
     }
@@ -715,8 +675,7 @@ int lex_line334 ()
     limit = input + input_len + padding;
     eof = input + input_len;
 
-    for (i = 0; status == 0 && i < keys_count; ++i)
-    {
+    for (i = 0; status == 0 && i < keys_count; ++i) {
         token = cursor;
         YYCTYPE yych;
         static const unsigned char yybm[] = {
@@ -797,23 +756,23 @@ yy28:
         YYSKIP ();
         if ((yych = YYPEEK ()) == '>') goto yy39;
 yy29:
-        status = action_line334 (i, keys, input, token, &cursor, 3);
+        status = action_line334(i, keys, input, token, &cursor, 3);
         continue;
 yy30:
         YYSKIP ();
 yy31:
-        status = action_line334 (i, keys, input, token, &cursor, 0);
+        status = action_line334(i, keys, input, token, &cursor, 0);
         continue;
 yy32:
         YYSKIP ();
         yych = YYPEEK ();
         goto yy38;
 yy33:
-        status = action_line334 (i, keys, input, token, &cursor, 1);
+        status = action_line334(i, keys, input, token, &cursor, 1);
         continue;
 yy34:
         YYSKIP ();
-        status = action_line334 (i, keys, input, token, &cursor, 2);
+        status = action_line334(i, keys, input, token, &cursor, 2);
         continue;
 yy36:
         YYSKIP ();
@@ -834,24 +793,21 @@ yy39:
         goto yy31;
 
     }
-    if (status == 0)
-    {
-        if (cursor != eof)
-        {
+    if (status == 0) {
+        if (cursor != eof) {
             status = 1;
             const long pos = token - input;
-            fprintf (stderr, "error: lex_line334: unused input strings left at position %ld\n", pos);
+            fprintf(stderr, "error: lex_line334: unused input strings left at position %ld\n", pos);
         }
-        if (i != keys_count)
-        {
+        if (i != keys_count) {
             status = 1;
-            fprintf (stderr, "error: lex_line334: unused keys left after %u iterations\n", i);
+            fprintf(stderr, "error: lex_line334: unused keys left after %u iterations\n", i);
         }
     }
 
 end:
-    free (input);
-    free (keys);
+    free(input);
+    free(keys);
 
     return status;
 }
@@ -872,10 +828,10 @@ end:
 
 static int action_line341
     ( unsigned int i
-    , const YYKEYTYPE * keys
-    , const YYCTYPE * start
-    , const YYCTYPE * token
-    , const YYCTYPE ** cursor
+    , const YYKEYTYPE *keys
+    , const YYCTYPE *start
+    , const YYCTYPE *token
+    , const YYCTYPE **cursor
     , YYKEYTYPE rule_act
     )
 {
@@ -883,8 +839,7 @@ static int action_line341
     const long len_act = *cursor - token;
     const long len_exp = (long) keys [3 * i + 1];
     const YYKEYTYPE rule_exp = keys [3 * i + 2];
-    if (rule_exp == 255)
-    {
+    if (rule_exp == 255) {
         fprintf
             ( stderr
             , "warning: lex_line341: control flow is undefined for input"
@@ -892,14 +847,11 @@ static int action_line341
             , pos
             );
     }
-    if (len_act == len_exp && rule_act == rule_exp)
-    {
+    if (len_act == len_exp && rule_act == rule_exp) {
         const YYKEYTYPE offset = keys[3 * i];
         *cursor = token + offset;
         return 0;
-    }
-    else
-    {
+    } else {
         fprintf
             ( stderr
             , "error: lex_line341: at position %ld (iteration %u):\n"
@@ -916,18 +868,18 @@ static int action_line341
     }
 }
 
-int lex_line341 ()
+int lex_line341()
 {
     const size_t padding = 2; /* YYMAXFILL */
     int status = 0;
     size_t input_len = 0;
     size_t keys_count = 0;
-    YYCTYPE * input = NULL;
-    YYKEYTYPE * keys = NULL;
-    const YYCTYPE * cursor = NULL;
-    const YYCTYPE * limit = NULL;
-    const YYCTYPE * token = NULL;
-    const YYCTYPE * eof = NULL;
+    YYCTYPE *input = NULL;
+    YYKEYTYPE *keys = NULL;
+    const YYCTYPE *cursor = NULL;
+    const YYCTYPE *limit = NULL;
+    const YYCTYPE *token = NULL;
+    const YYCTYPE *eof = NULL;
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
@@ -936,8 +888,7 @@ int lex_line341 ()
         , padding
         , &input_len
         );
-    if (input == NULL)
-    {
+    if (input == NULL) {
         status = 1;
         goto end;
     }
@@ -948,8 +899,7 @@ int lex_line341 ()
         , 0
         , &keys_count
         );
-    if (keys == NULL)
-    {
+    if (keys == NULL) {
         status = 1;
         goto end;
     }
@@ -958,8 +908,7 @@ int lex_line341 ()
     limit = input + input_len + padding;
     eof = input + input_len;
 
-    for (i = 0; status == 0 && i < keys_count; ++i)
-    {
+    for (i = 0; status == 0 && i < keys_count; ++i) {
         token = cursor;
         YYCTYPE yych;
         static const unsigned char yybm[] = {
@@ -1008,11 +957,11 @@ yy42:
         yych = YYPEEK ();
         goto yy47;
 yy43:
-        status = action_line341 (i, keys, input, token, &cursor, 0);
+        status = action_line341(i, keys, input, token, &cursor, 0);
         continue;
 yy44:
         YYSKIP ();
-        status = action_line341 (i, keys, input, token, &cursor, 1);
+        status = action_line341(i, keys, input, token, &cursor, 1);
         continue;
 yy46:
         YYSKIP ();
@@ -1025,24 +974,21 @@ yy47:
         goto yy43;
 
     }
-    if (status == 0)
-    {
-        if (cursor != eof)
-        {
+    if (status == 0) {
+        if (cursor != eof) {
             status = 1;
             const long pos = token - input;
-            fprintf (stderr, "error: lex_line341: unused input strings left at position %ld\n", pos);
+            fprintf(stderr, "error: lex_line341: unused input strings left at position %ld\n", pos);
         }
-        if (i != keys_count)
-        {
+        if (i != keys_count) {
             status = 1;
-            fprintf (stderr, "error: lex_line341: unused keys left after %u iterations\n", i);
+            fprintf(stderr, "error: lex_line341: unused keys left after %u iterations\n", i);
         }
     }
 
 end:
-    free (input);
-    free (keys);
+    free(input);
+    free(keys);
 
     return status;
 }
@@ -1065,10 +1011,10 @@ end:
 
 static int action_line348
     ( unsigned int i
-    , const YYKEYTYPE * keys
-    , const YYCTYPE * start
-    , const YYCTYPE * token
-    , const YYCTYPE ** cursor
+    , const YYKEYTYPE *keys
+    , const YYCTYPE *start
+    , const YYCTYPE *token
+    , const YYCTYPE **cursor
     , YYKEYTYPE rule_act
     )
 {
@@ -1076,8 +1022,7 @@ static int action_line348
     const long len_act = *cursor - token;
     const long len_exp = (long) keys [3 * i + 1];
     const YYKEYTYPE rule_exp = keys [3 * i + 2];
-    if (rule_exp == 255)
-    {
+    if (rule_exp == 255) {
         fprintf
             ( stderr
             , "warning: lex_line348: control flow is undefined for input"
@@ -1085,14 +1030,11 @@ static int action_line348
             , pos
             );
     }
-    if (len_act == len_exp && rule_act == rule_exp)
-    {
+    if (len_act == len_exp && rule_act == rule_exp) {
         const YYKEYTYPE offset = keys[3 * i];
         *cursor = token + offset;
         return 0;
-    }
-    else
-    {
+    } else {
         fprintf
             ( stderr
             , "error: lex_line348: at position %ld (iteration %u):\n"
@@ -1109,18 +1051,18 @@ static int action_line348
     }
 }
 
-int lex_line348 ()
+int lex_line348()
 {
     const size_t padding = 2; /* YYMAXFILL */
     int status = 0;
     size_t input_len = 0;
     size_t keys_count = 0;
-    YYCTYPE * input = NULL;
-    YYKEYTYPE * keys = NULL;
-    const YYCTYPE * cursor = NULL;
-    const YYCTYPE * limit = NULL;
-    const YYCTYPE * token = NULL;
-    const YYCTYPE * eof = NULL;
+    YYCTYPE *input = NULL;
+    YYKEYTYPE *keys = NULL;
+    const YYCTYPE *cursor = NULL;
+    const YYCTYPE *limit = NULL;
+    const YYCTYPE *token = NULL;
+    const YYCTYPE *eof = NULL;
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
@@ -1129,8 +1071,7 @@ int lex_line348 ()
         , padding
         , &input_len
         );
-    if (input == NULL)
-    {
+    if (input == NULL) {
         status = 1;
         goto end;
     }
@@ -1141,8 +1082,7 @@ int lex_line348 ()
         , 0
         , &keys_count
         );
-    if (keys == NULL)
-    {
+    if (keys == NULL) {
         status = 1;
         goto end;
     }
@@ -1151,10 +1091,9 @@ int lex_line348 ()
     limit = input + input_len + padding;
     eof = input + input_len;
 
-    for (i = 0; status == 0 && i < keys_count; ++i)
-    {
+    for (i = 0; status == 0 && i < keys_count; ++i) {
         token = cursor;
-        const YYCTYPE * marker = NULL;
+        const YYCTYPE *marker = NULL;
         YYCTYPE yych;
         static const unsigned char yybm[] = {
               0,   0,   0,   0,   0,   0,   0,   0, 
@@ -1203,14 +1142,14 @@ yy50:
         if (yych == ' ') goto yy57;
         if (yych == '=') goto yy55;
 yy51:
-        status = action_line348 (i, keys, input, token, &cursor, 1);
+        status = action_line348(i, keys, input, token, &cursor, 1);
         continue;
 yy52:
         YYSKIP ();
         yych = YYPEEK ();
         goto yy56;
 yy53:
-        status = action_line348 (i, keys, input, token, &cursor, 0);
+        status = action_line348(i, keys, input, token, &cursor, 0);
         continue;
 yy54:
         YYSKIP ();
@@ -1235,24 +1174,21 @@ yy57:
         goto yy51;
 
     }
-    if (status == 0)
-    {
-        if (cursor != eof)
-        {
+    if (status == 0) {
+        if (cursor != eof) {
             status = 1;
             const long pos = token - input;
-            fprintf (stderr, "error: lex_line348: unused input strings left at position %ld\n", pos);
+            fprintf(stderr, "error: lex_line348: unused input strings left at position %ld\n", pos);
         }
-        if (i != keys_count)
-        {
+        if (i != keys_count) {
             status = 1;
-            fprintf (stderr, "error: lex_line348: unused keys left after %u iterations\n", i);
+            fprintf(stderr, "error: lex_line348: unused keys left after %u iterations\n", i);
         }
     }
 
 end:
-    free (input);
-    free (keys);
+    free(input);
+    free(keys);
 
     return status;
 }
@@ -1277,10 +1213,10 @@ end:
 
 static int action_line358
     ( unsigned int i
-    , const YYKEYTYPE * keys
-    , const YYCTYPE * start
-    , const YYCTYPE * token
-    , const YYCTYPE ** cursor
+    , const YYKEYTYPE *keys
+    , const YYCTYPE *start
+    , const YYCTYPE *token
+    , const YYCTYPE **cursor
     , YYKEYTYPE rule_act
     )
 {
@@ -1288,8 +1224,7 @@ static int action_line358
     const long len_act = *cursor - token;
     const long len_exp = (long) keys [3 * i + 1];
     const YYKEYTYPE rule_exp = keys [3 * i + 2];
-    if (rule_exp == 255)
-    {
+    if (rule_exp == 255) {
         fprintf
             ( stderr
             , "warning: lex_line358: control flow is undefined for input"
@@ -1297,14 +1232,11 @@ static int action_line358
             , pos
             );
     }
-    if (len_act == len_exp && rule_act == rule_exp)
-    {
+    if (len_act == len_exp && rule_act == rule_exp) {
         const YYKEYTYPE offset = keys[3 * i];
         *cursor = token + offset;
         return 0;
-    }
-    else
-    {
+    } else {
         fprintf
             ( stderr
             , "error: lex_line358: at position %ld (iteration %u):\n"
@@ -1321,18 +1253,18 @@ static int action_line358
     }
 }
 
-int lex_line358 ()
+int lex_line358()
 {
     const size_t padding = 2; /* YYMAXFILL */
     int status = 0;
     size_t input_len = 0;
     size_t keys_count = 0;
-    YYCTYPE * input = NULL;
-    YYKEYTYPE * keys = NULL;
-    const YYCTYPE * cursor = NULL;
-    const YYCTYPE * limit = NULL;
-    const YYCTYPE * token = NULL;
-    const YYCTYPE * eof = NULL;
+    YYCTYPE *input = NULL;
+    YYKEYTYPE *keys = NULL;
+    const YYCTYPE *cursor = NULL;
+    const YYCTYPE *limit = NULL;
+    const YYCTYPE *token = NULL;
+    const YYCTYPE *eof = NULL;
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
@@ -1341,8 +1273,7 @@ int lex_line358 ()
         , padding
         , &input_len
         );
-    if (input == NULL)
-    {
+    if (input == NULL) {
         status = 1;
         goto end;
     }
@@ -1353,8 +1284,7 @@ int lex_line358 ()
         , 0
         , &keys_count
         );
-    if (keys == NULL)
-    {
+    if (keys == NULL) {
         status = 1;
         goto end;
     }
@@ -1363,10 +1293,9 @@ int lex_line358 ()
     limit = input + input_len + padding;
     eof = input + input_len;
 
-    for (i = 0; status == 0 && i < keys_count; ++i)
-    {
+    for (i = 0; status == 0 && i < keys_count; ++i) {
         token = cursor;
-        const YYCTYPE * marker = NULL;
+        const YYCTYPE *marker = NULL;
         YYCTYPE yych;
         static const unsigned char yybm[] = {
             224, 224, 224, 224, 224, 224, 224, 224, 
@@ -1448,7 +1377,7 @@ yy62:
         yych = YYPEEK ();
         if (yych != '>') goto yy76;
 yy63:
-        status = action_line358 (i, keys, input, token, &cursor, 3);
+        status = action_line358(i, keys, input, token, &cursor, 3);
         continue;
 yy64:
         YYSKIP ();
@@ -1461,7 +1390,7 @@ yy65:
         yych = YYPEEK ();
         goto yy69;
 yy66:
-        status = action_line358 (i, keys, input, token, &cursor, 2);
+        status = action_line358(i, keys, input, token, &cursor, 2);
         continue;
 yy67:
         YYSKIP ();
@@ -1490,7 +1419,7 @@ yy72:
         goto yy63;
 yy73:
         YYSKIP ();
-        status = action_line358 (i, keys, input, token, &cursor, 1);
+        status = action_line358(i, keys, input, token, &cursor, 1);
         continue;
 yy75:
         YYSKIP ();
@@ -1502,28 +1431,25 @@ yy76:
         }
         if (yych >= '#') goto yy72;
         YYSKIP ();
-        status = action_line358 (i, keys, input, token, &cursor, 0);
+        status = action_line358(i, keys, input, token, &cursor, 0);
         continue;
 
     }
-    if (status == 0)
-    {
-        if (cursor != eof)
-        {
+    if (status == 0) {
+        if (cursor != eof) {
             status = 1;
             const long pos = token - input;
-            fprintf (stderr, "error: lex_line358: unused input strings left at position %ld\n", pos);
+            fprintf(stderr, "error: lex_line358: unused input strings left at position %ld\n", pos);
         }
-        if (i != keys_count)
-        {
+        if (i != keys_count) {
             status = 1;
-            fprintf (stderr, "error: lex_line358: unused keys left after %u iterations\n", i);
+            fprintf(stderr, "error: lex_line358: unused keys left after %u iterations\n", i);
         }
     }
 
 end:
-    free (input);
-    free (keys);
+    free(input);
+    free(keys);
 
     return status;
 }
@@ -1537,15 +1463,29 @@ end:
 #undef YYLESSTHAN
 #undef YYFILL
 
-int main ()
+int main()
 {
-    if (lex_line129 () != 0) return 1;
-    if (lex_line315 () != 0) return 1;
-    if (lex_line322 () != 0) return 1;
-    if (lex_line334 () != 0) return 1;
-    if (lex_line341 () != 0) return 1;
-    if (lex_line348 () != 0) return 1;
-    if (lex_line358 () != 0) return 1;
+    if(lex_line129() != 0) {
+        return 1;
+    }
+    if(lex_line315() != 0) {
+        return 1;
+    }
+    if(lex_line322() != 0) {
+        return 1;
+    }
+    if(lex_line334() != 0) {
+        return 1;
+    }
+    if(lex_line341() != 0) {
+        return 1;
+    }
+    if(lex_line348() != 0) {
+        return 1;
+    }
+    if(lex_line358() != 0) {
+        return 1;
+    }
     return 0;
 }
 :?#  #  :  ? "# ": "? $# $: $? 9# 9: 9? ;# ;: ;? ># >: >? @# @: @? ÿ# ÿ: ÿ?" #" :" ?""#"":""?"$#"$:"$?"9#"9:"9?";#";:";?">#">:">?"@#"@:"@?"ÿ#"ÿ:"ÿ?$ #$ :$ ?$"#$":$"?$$#$$:$$?$9#$9:$9?$;#$;:$;?$>#$>:$>?$@#$@:$@?$ÿ#$ÿ:$ÿ?9 #9 :9 ?9"#9":9"?9$#9$:9$?99#99:99?9;#9;:9;?9>#9>:9>?9@#9@:9@?9ÿ#9ÿ:9ÿ?; #; :; ?;"#;":;"?;$#;$:;$?;9#;9:;9?;;#;;:;;?;>#;>:;>?;@#;@:;@?;ÿ#;ÿ:;ÿ?> #> :> ?>"#>":>"?>$#>$:>$?>9#>9:>9?>;#>;:>;?>>#>>:>>?>@#>@:>@?>ÿ#>ÿ:>ÿ?@ #@ :@ ?@"#@":@"?@$#@$:@$?@9#@9:@9?@;#@;:@;?@>#@>:@>?@@#@@:@@?@ÿ#@ÿ:@ÿ?ÿ #ÿ :ÿ ?ÿ"#ÿ":ÿ"?ÿ$#ÿ$:ÿ$?ÿ9#ÿ9:ÿ9?ÿ;#ÿ;:ÿ;?ÿ>#ÿ>:ÿ>?ÿ@#ÿ@:ÿ@?ÿÿ#ÿÿ:ÿÿ? # : ?"#":"?$#$:$?9#9:9?;#;:;?>#>:>?@#@:@?ÿ#ÿ:ÿ? <  < ;< =< ÿ<; <;;<;=<;ÿ<= <=;<==<=ÿ<ÿ <ÿ;<ÿ=<ÿÿ< <;<=<ÿ< ::: :::9:::;:::@:::[:::`:::{:::ÿ::A ::A9::A;::A@::A[::A`::A{::Aÿ::Z ::Z9::Z;::Z@::Z[::Z`::Z{::Zÿ::a ::a9::a;::a@::a[::a`::a{::aÿ::z ::z9::z;::z@::z[::z`::z{::zÿ:A: :A:9:A:;:A:@:A:[:A:`:A:{:A:ÿ:AA :AA9:AA;:AA@:AA[:AA`:AA{:AAÿ:AZ :AZ9:AZ;:AZ@:AZ[:AZ`:AZ{:AZÿ:Aa :Aa9:Aa;:Aa@:Aa[:Aa`:Aa{:Aaÿ:Az :Az9:Az;:Az@:Az[:Az`:Az{:Azÿ:Z: :Z:9:Z:;:Z:@:Z:[:Z:`:Z:{:Z:ÿ:ZA :ZA9:ZA;:ZA@:ZA[:ZA`:ZA{:ZAÿ:ZZ :ZZ9:ZZ;:ZZ@:ZZ[:ZZ`:ZZ{:ZZÿ:Za :Za9:Za;:Za@:Za[:Za`:Za{:Zaÿ:Zz :Zz9:Zz;:Zz@:Zz[:Zz`:Zz{:Zzÿ:a: :a:9:a:;:a:@:a:[:a:`:a:{:a:ÿ:aA :aA9:aA;:aA@:aA[:aA`:aA{:aAÿ:aZ :aZ9:aZ;:aZ@:aZ[:aZ`:aZ{:aZÿ:aa :aa9:aa;:aa@:aa[:aa`:aa{:aaÿ:az :az9:az;:az@:az[:az`:az{:azÿ:z: :z:9:z:;:z:@:z:[:z:`:z:{:z:ÿ:zA :zA9:zA;:zA@:zA[:zA`:zA{:zAÿ:zZ :zZ9:zZ;:zZ@:zZ[:zZ`:zZ{:zZÿ:za :za9:za;:za@:za[:za`:za{:zaÿ:zz :zz9:zz;:zz@:zz[:zz`:zz{:zzÿA:: A::9A::;A::@A::[A::`A::{A::ÿA:A A:A9A:A;A:A@A:A[A:A`A:A{A:AÿA:Z A:Z9A:Z;A:Z@A:Z[A:Z`A:Z{A:ZÿA:a A:a9A:a;A:a@A:a[A:a`A:a{A:aÿA:z A:z9A:z;A:z@A:z[A:z`A:z{A:zÿAA: AA:9AA:;AA:@AA:[AA:`AA:{AA:ÿAAA AAA9AAA;AAA@AAA[AAA`AAA{AAAÿAAZ AAZ9AAZ;AAZ@AAZ[AAZ`AAZ{AAZÿAAa AAa9AAa;AAa@AAa[AAa`AAa{AAaÿAAz AAz9AAz;AAz@AAz[AAz`AAz{AAzÿAZ: AZ:9AZ:;AZ:@AZ:[AZ:`AZ:{AZ:ÿAZA AZA9AZA;AZA@AZA[AZA`AZA{AZAÿAZZ AZZ9AZZ;AZZ@AZZ[AZZ`AZZ{AZZÿAZa AZa9AZa;AZa@AZa[AZa`AZa{AZaÿAZz AZz9AZz;AZz@AZz[AZz`AZz{AZzÿAa: Aa:9Aa:;Aa:@Aa:[Aa:`Aa:{Aa:ÿAaA AaA9AaA;AaA@AaA[AaA`AaA{AaAÿAaZ AaZ9AaZ;AaZ@AaZ[AaZ`AaZ{AaZÿAaa Aaa9Aaa;Aaa@Aaa[Aaa`Aaa{AaaÿAaz Aaz9Aaz;Aaz@Aaz[Aaz`Aaz{AazÿAz: Az:9Az:;Az:@Az:[Az:`Az:{Az:ÿAzA AzA9AzA;AzA@AzA[AzA`AzA{AzAÿAzZ AzZ9AzZ;AzZ@AzZ[AzZ`AzZ{AzZÿAza Aza9Aza;Aza@Aza[Aza`Aza{AzaÿAzz Azz9Azz;Azz@Azz[Azz`Azz{AzzÿZ:: Z::9Z::;Z::@Z::[Z::`Z::{Z::ÿZ:A Z:A9Z:A;Z:A@Z:A[Z:A`Z:A{Z:AÿZ:Z Z:Z9Z:Z;Z:Z@Z:Z[Z:Z`Z:Z{Z:ZÿZ:a Z:a9Z:a;Z:a@Z:a[Z:a`Z:a{Z:aÿZ:z Z:z9Z:z;Z:z@Z:z[Z:z`Z:z{Z:zÿZA: ZA:9ZA:;ZA:@ZA:[ZA:`ZA:{ZA:ÿZAA ZAA9ZAA;ZAA@ZAA[ZAA`ZAA{ZAAÿZAZ ZAZ9ZAZ;ZAZ@ZAZ[ZAZ`ZAZ{ZAZÿZAa ZAa9ZAa;ZAa@ZAa[ZAa`ZAa{ZAaÿZAz ZAz9ZAz;ZAz@ZAz[ZAz`ZAz{ZAzÿZZ: ZZ:9ZZ:;ZZ:@ZZ:[ZZ:`ZZ:{ZZ:ÿZZA ZZA9ZZA;ZZA@ZZA[ZZA`ZZA{ZZAÿZZZ ZZZ9ZZZ;ZZZ@ZZZ[ZZZ`ZZZ{ZZZÿZZa ZZa9ZZa;ZZa@ZZa[ZZa`ZZa{ZZaÿZZz ZZz9ZZz;ZZz@ZZz[ZZz`ZZz{ZZzÿZa: Za:9Za:;Za:@Za:[Za:`Za:{Za:ÿZaA ZaA9ZaA;ZaA@ZaA[ZaA`ZaA{ZaAÿZaZ ZaZ9ZaZ;ZaZ@ZaZ[ZaZ`ZaZ{ZaZÿZaa Zaa9Zaa;Zaa@Zaa[Zaa`Zaa{ZaaÿZaz Zaz9Zaz;Zaz@Zaz[Zaz`Zaz{ZazÿZz: Zz:9Zz:;Zz:@Zz:[Zz:`Zz:{Zz:ÿZzA ZzA9ZzA;ZzA@ZzA[ZzA`ZzA{ZzAÿZzZ ZzZ9ZzZ;ZzZ@ZzZ[ZzZ`ZzZ{ZzZÿZza Zza9Zza;Zza@Zza[Zza`Zza{ZzaÿZzz Zzz9Zzz;Zzz@Zzz[Zzz`Zzz{Zzzÿa:: a::9a::;a::@a::[a::`a::{a::ÿa:A a:A9a:A;a:A@a:A[a:A`a:A{a:Aÿa:Z a:Z9a:Z;a:Z@a:Z[a:Z`a:Z{a:Zÿa:a a:a9a:a;a:a@a:a[a:a`a:a{a:aÿa:z a:z9a:z;a:z@a:z[a:z`a:z{a:zÿaA: aA:9aA:;aA:@aA:[aA:`aA:{aA:ÿaAA aAA9aAA;aAA@aAA[aAA`aAA{aAAÿaAZ aAZ9aAZ;aAZ@aAZ[aAZ`aAZ{aAZÿaAa aAa9aAa;aAa@aAa[aAa`aAa{aAaÿaAz aAz9aAz;aAz@aAz[aAz`aAz{aAzÿaZ: aZ:9aZ:;aZ:@aZ:[aZ:`aZ:{aZ:ÿaZA aZA9aZA;aZA@aZA[aZA`aZA{aZAÿaZZ aZZ9aZZ;aZZ@aZZ[aZZ`aZZ{aZZÿaZa aZa9aZa;aZa@aZa[aZa`aZa{aZaÿaZz aZz9aZz;aZz@aZz[aZz`aZz{aZzÿaa: aa:9aa:;aa:@aa:[aa:`aa:{aa:ÿaaA aaA9aaA;aaA@aaA[aaA`aaA{aaAÿaaZ aaZ9aaZ;aaZ@aaZ[aaZ`aaZ{aaZÿaaa aaa9aaa;aaa@aaa[aaa`aaa{aaaÿaaz aaz9aaz;aaz@aaz[aaz`aaz{aazÿaz: az:9az:;az:@az:[az:`az:{az:ÿazA azA9azA;azA@azA[azA`azA{azAÿazZ azZ9azZ;azZ@azZ[azZ`azZ{azZÿaza aza9aza;aza@aza[aza`aza{azaÿazz azz9azz;azz@azz[azz`azz{azzÿz:: z::9z::;z::@z::[z::`z::{z::ÿz:A z:A9z:A;z:A@z:A[z:A`z:A{z:Aÿz:Z z:Z9z:Z;z:Z@z:Z[z:Z`z:Z{z:Zÿz:a z:a9z:a;z:a@z:a[z:a`z:a{z:aÿz:z z:z9z:z;z:z@z:z[z:z`z:z{z:zÿzA: zA:9zA:;zA:@zA:[zA:`zA:{zA:ÿzAA zAA9zAA;zAA@zAA[zAA`zAA{zAAÿzAZ zAZ9zAZ;zAZ@zAZ[zAZ`zAZ{zAZÿzAa zAa9zAa;zAa@zAa[zAa`zAa{zAaÿzAz zAz9zAz;zAz@zAz[zAz`zAz{zAzÿzZ: zZ:9zZ:;zZ:@zZ:[zZ:`zZ:{zZ:ÿzZA zZA9zZA;zZA@zZA[zZA`zZA{zZAÿzZZ zZZ9zZZ;zZZ@zZZ[zZZ`zZZ{zZZÿzZa zZa9zZa;zZa@zZa[zZa`zZa{zZaÿzZz zZz9zZz;zZz@zZz[zZz`zZz{zZzÿza: za:9za:;za:@za:[za:`za:{za:ÿzaA zaA9zaA;zaA@zaA[zaA`zaA{zaAÿzaZ zaZ9zaZ;zaZ@zaZ[zaZ`zaZ{zaZÿzaa zaa9zaa;zaa@zaa[zaa`zaa{zaaÿzaz zaz9zaz;zaz@zaz[zaz`zaz{zazÿzz: zz:9zz:;zz:@zz:[zz:`zz:{zz:ÿzzA zzA9zzA;zzA@zzA[zzA`zzA{zzAÿzzZ zzZ9zzZ;zzZ@zzZ[zzZ`zzZ{zzZÿzza zza9zza;zza@zza[zza`zza{zzaÿzzz zzz9zzz;zzz@zzz[zzz`zzz{zzzÿ:: ::9::;::@::[::`::{::ÿ:A :A9:A;:A@:A[:A`:A{:Aÿ:Z :Z9:Z;:Z@:Z[:Z`:Z{:Zÿ:a :a9:a;:a@:a[:a`:a{:aÿ:z :z9:z;:z@:z[:z`:z{:zÿA: A:9A:;A:@A:[A:`A:{A:ÿAA AA9AA;AA@AA[AA`AA{AAÿAZ AZ9AZ;AZ@AZ[AZ`AZ{AZÿAa Aa9Aa;Aa@Aa[Aa`Aa{AaÿAz Az9Az;Az@Az[Az`Az{AzÿZ: Z:9Z:;Z:@Z:[Z:`Z:{Z:ÿZA ZA9ZA;ZA@ZA[ZA`ZA{ZAÿZZ ZZ9ZZ;ZZ@ZZ[ZZ`ZZ{ZZÿZa Za9Za;Za@Za[Za`Za{ZaÿZz Zz9Zz;Zz@Zz[Zz`Zz{Zzÿa: a:9a:;a:@a:[a:`a:{a:ÿaA aA9aA;aA@aA[aA`aA{aAÿaZ aZ9aZ;aZ@aZ[aZ`aZ{aZÿaa aa9aa;aa@aa[aa`aa{aaÿaz az9az;az@az[az`az{azÿz: z:9z:;z:@z:[z:`z:{z:ÿzA zA9zA;zA@zA[zA`zA{zAÿzZ zZ9zZ;zZ@zZ[zZ`zZ{zZÿza za9za;za@za[za`za{zaÿzz zz9zz;zz@zz[zz`zz{zzÿ: :9:;:@:[:`:{:ÿA A9A;A@A[A`A{AÿZ Z9Z;Z@Z[Z`Z{Zÿa a9a;a@a[a`a{aÿz z9z;z@z[z`z{zÿ 9;@[`{ÿ                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        />/ /=/?/ÿ>			 															!			ÿ		 										!		ÿ		 										!		ÿ		  		 		 		 		 		 !		 ÿ		 										!		ÿ	 					!	ÿ	 					!	ÿ	  	 	 	 	 	 !	 ÿ		 										!		ÿ	 					!	ÿ	 					!	ÿ	  	 	 	 	 	 !	 ÿ	 	 	 		 		 		 		 	!	 	ÿ	  	 	 	 	 	 !	 ÿ	  	 	 	 	 	 !	 ÿ	   	  	  	  	  	  !	  ÿ		 										!		ÿ	 					!	ÿ	 					!	ÿ	  	 	 	 	 	 !	 ÿ	 					!	ÿ !ÿ !ÿ       ! ÿ	 					!	ÿ !ÿ !ÿ       ! ÿ 	  	 	 	 	 	! 	ÿ       ! ÿ       ! ÿ             !  ÿ		 										!		ÿ	 					!	ÿ	 					!	ÿ	  	 	 	 	 	 !	 ÿ	 					!	ÿ !ÿ !ÿ       ! ÿ	 					!	ÿ !ÿ !ÿ       ! ÿ 	  	 	 	 	 	! 	ÿ       ! ÿ       ! ÿ             !  ÿ 		  		 		 		 		 		! 		ÿ 	  	 	 	 	 	! 	ÿ 	  	 	 	 	 	! 	ÿ 	   	  	  	  	  	 ! 	 ÿ 	  	 	 	 	 	! 	ÿ       ! ÿ       ! ÿ             !  ÿ 	  	 	 	 	 	! 	ÿ       ! ÿ       ! ÿ             !  ÿ  	   	  	  	  	  	!  	ÿ             !  ÿ             !  ÿ                   !   ÿ		 										!		ÿ	 					!	ÿ	 					!	ÿ	  	 	 	 	 	 !	 ÿ	 					!	ÿ !ÿ !ÿ       ! ÿ	 					!	ÿ !ÿ !ÿ       ! ÿ 	  	 	 	 	 	! 	ÿ       ! ÿ       ! ÿ             !  ÿ	 					!	ÿ !ÿ !ÿ       ! ÿAZaz !.0=?@[`{ÿ  A-- A--,A--.A--@A--[A--`A--{A--ÿA-A A-A,A-A.A-A@A-A[A-A`A-A{A-AÿA-Z A-Z,A-Z.A-Z@A-Z[A-Z`A-Z{A-ZÿA-a A-a,A-a.A-a@A-a[A-a`A-a{A-aÿA-z A-z,A-z.A-z@A-z[A-z`A-z{A-zÿAA- AA-,AA-.AA-@AA-[AA-`AA-{AA-ÿAAA AAA,AAA.AAA@AAA[AAA`AAA{AAAÿAAZ AAZ,AAZ.AAZ@AAZ[AAZ`AAZ{AAZÿAAa AAa,AAa.AAa@AAa[AAa`AAa{AAaÿAAz AAz,AAz.AAz@AAz[AAz`AAz{AAzÿAZ- AZ-,AZ-.AZ-@AZ-[AZ-`AZ-{AZ-ÿAZA AZA,AZA.AZA@AZA[AZA`AZA{AZAÿAZZ AZZ,AZZ.AZZ@AZZ[AZZ`AZZ{AZZÿAZa AZa,AZa.AZa@AZa[AZa`AZa{AZaÿAZz AZz,AZz.AZz@AZz[AZz`AZz{AZzÿAa- Aa-,Aa-.Aa-@Aa-[Aa-`Aa-{Aa-ÿAaA AaA,AaA.AaA@AaA[AaA`AaA{AaAÿAaZ AaZ,AaZ.AaZ@AaZ[AaZ`AaZ{AaZÿAaa Aaa,Aaa.Aaa@Aaa[Aaa`Aaa{AaaÿAaz Aaz,Aaz.Aaz@Aaz[Aaz`Aaz{AazÿAz- Az-,Az-.Az-@Az-[Az-`Az-{Az-ÿAzA AzA,AzA.AzA@AzA[AzA`AzA{AzAÿAzZ AzZ,AzZ.AzZ@AzZ[AzZ`AzZ{AzZÿAza Aza,Aza.Aza@Aza[Aza`Aza{AzaÿAzz Azz,Azz.Azz@Azz[Azz`Azz{AzzÿZ-- Z--,Z--.Z--@Z--[Z--`Z--{Z--ÿZ-A Z-A,Z-A.Z-A@Z-A[Z-A`Z-A{Z-AÿZ-Z Z-Z,Z-Z.Z-Z@Z-Z[Z-Z`Z-Z{Z-ZÿZ-a Z-a,Z-a.Z-a@Z-a[Z-a`Z-a{Z-aÿZ-z Z-z,Z-z.Z-z@Z-z[Z-z`Z-z{Z-zÿZA- ZA-,ZA-.ZA-@ZA-[ZA-`ZA-{ZA-ÿZAA ZAA,ZAA.ZAA@ZAA[ZAA`ZAA{ZAAÿZAZ ZAZ,ZAZ.ZAZ@ZAZ[ZAZ`ZAZ{ZAZÿZAa ZAa,ZAa.ZAa@ZAa[ZAa`ZAa{ZAaÿZAz ZAz,ZAz.ZAz@ZAz[ZAz`ZAz{ZAzÿZZ- ZZ-,ZZ-.ZZ-@ZZ-[ZZ-`ZZ-{ZZ-ÿZZA ZZA,ZZA.ZZA@ZZA[ZZA`ZZA{ZZAÿZZZ ZZZ,ZZZ.ZZZ@ZZZ[ZZZ`ZZZ{ZZZÿZZa ZZa,ZZa.ZZa@ZZa[ZZa`ZZa{ZZaÿZZz ZZz,ZZz.ZZz@ZZz[ZZz`ZZz{ZZzÿZa- Za-,Za-.Za-@Za-[Za-`Za-{Za-ÿZaA ZaA,ZaA.ZaA@ZaA[ZaA`ZaA{ZaAÿZaZ ZaZ,ZaZ.ZaZ@ZaZ[ZaZ`ZaZ{ZaZÿZaa Zaa,Zaa.Zaa@Zaa[Zaa`Zaa{ZaaÿZaz Zaz,Zaz.Zaz@Zaz[Zaz`Zaz{ZazÿZz- Zz-,Zz-.Zz-@Zz-[Zz-`Zz-{Zz-ÿZzA ZzA,ZzA.ZzA@ZzA[ZzA`ZzA{ZzAÿZzZ ZzZ,ZzZ.ZzZ@ZzZ[ZzZ`ZzZ{ZzZÿZza Zza,Zza.Zza@Zza[Zza`Zza{ZzaÿZzz Zzz,Zzz.Zzz@Zzz[Zzz`Zzz{Zzzÿa-- a--,a--.a--@a--[a--`a--{a--ÿa-A a-A,a-A.a-A@a-A[a-A`a-A{a-Aÿa-Z a-Z,a-Z.a-Z@a-Z[a-Z`a-Z{a-Zÿa-a a-a,a-a.a-a@a-a[a-a`a-a{a-aÿa-z a-z,a-z.a-z@a-z[a-z`a-z{a-zÿaA- aA-,aA-.aA-@aA-[aA-`aA-{aA-ÿaAA aAA,aAA.aAA@aAA[aAA`aAA{aAAÿaAZ aAZ,aAZ.aAZ@aAZ[aAZ`aAZ{aAZÿaAa aAa,aAa.aAa@aAa[aAa`aAa{aAaÿaAz aAz,aAz.aAz@aAz[aAz`aAz{aAzÿaZ- aZ-,aZ-.aZ-@aZ-[aZ-`aZ-{aZ-ÿaZA aZA,aZA.aZA@aZA[aZA`aZA{aZAÿaZZ aZZ,aZZ.aZZ@aZZ[aZZ`aZZ{aZZÿaZa aZa,aZa.aZa@aZa[aZa`aZa{aZaÿaZz aZz,aZz.aZz@aZz[aZz`aZz{aZzÿaa- aa-,aa-.aa-@aa-[aa-`aa-{aa-ÿaaA aaA,aaA.aaA@aaA[aaA`aaA{aaAÿaaZ aaZ,aaZ.aaZ@aaZ[aaZ`aaZ{aaZÿaaa aaa,aaa.aaa@aaa[aaa`aaa{aaaÿaaz aaz,aaz.aaz@aaz[aaz`aaz{aazÿaz- az-,az-.az-@az-[az-`az-{az-ÿazA azA,azA.azA@azA[azA`azA{azAÿazZ azZ,azZ.azZ@azZ[azZ`azZ{azZÿaza aza,aza.aza@aza[aza`aza{azaÿazz azz,azz.azz@azz[azz`azz{azzÿz-- z--,z--.z--@z--[z--`z--{z--ÿz-A z-A,z-A.z-A@z-A[z-A`z-A{z-Aÿz-Z z-Z,z-Z.z-Z@z-Z[z-Z`z-Z{z-Zÿz-a z-a,z-a.z-a@z-a[z-a`z-a{z-aÿz-z z-z,z-z.z-z@z-z[z-z`z-z{z-zÿzA- zA-,zA-.zA-@zA-[zA-`zA-{zA-ÿzAA zAA,zAA.zAA@zAA[zAA`zAA{zAAÿzAZ zAZ,zAZ.zAZ@zAZ[zAZ`zAZ{zAZÿzAa zAa,zAa.zAa@zAa[zAa`zAa{zAaÿzAz zAz,zAz.zAz@zAz[zAz`zAz{zAzÿzZ- zZ-,zZ-.zZ-@zZ-[zZ-`zZ-{zZ-ÿzZA zZA,zZA.zZA@zZA[zZA`zZA{zZAÿzZZ zZZ,zZZ.zZZ@zZZ[zZZ`zZZ{zZZÿzZa zZa,zZa.zZa@zZa[zZa`zZa{zZaÿzZz zZz,zZz.zZz@zZz[zZz`zZz{zZzÿza- za-,za-.za-@za-[za-`za-{za-ÿzaA zaA,zaA.zaA@zaA[zaA`zaA{zaAÿzaZ zaZ,zaZ.zaZ@zaZ[zaZ`zaZ{zaZÿzaa zaa,zaa.zaa@zaa[zaa`zaa{zaaÿzaz zaz,zaz.zaz@zaz[zaz`zaz{zazÿzz- zz-,zz-.zz-@zz-[zz-`zz-{zz-ÿzzA zzA,zzA.zzA@zzA[zzA`zzA{zzAÿzzZ zzZ,zzZ.zzZ@zzZ[zzZ`zzZ{zzZÿzza zza,zza.zza@zza[zza`zza{zzaÿzzz zzz,zzz.zzz@zzz[zzz`zzz{zzzÿA- A-,A-.A-@A-[A-`A-{A-ÿAA AA,AA.AA@AA[AA`AA{AAÿAZ AZ,AZ.AZ@AZ[AZ`AZ{AZÿAa Aa,Aa.Aa@Aa[Aa`Aa{AaÿAz Az,Az.Az@Az[Az`Az{AzÿZ- Z-,Z-.Z-@Z-[Z-`Z-{Z-ÿZA ZA,ZA.ZA@ZA[ZA`ZA{ZAÿZZ ZZ,ZZ.ZZ@ZZ[ZZ`ZZ{ZZÿZa Za,Za.Za@Za[Za`Za{ZaÿZz Zz,Zz.Zz@Zz[Zz`Zz{Zzÿa- a-,a-.a-@a-[a-`a-{a-ÿaA aA,aA.aA@aA[aA`aA{aAÿaZ aZ,aZ.aZ@aZ[aZ`aZ{aZÿaa aa,aa.aa@aa[aa`aa{aaÿaz az,az.az@az[az`az{azÿz- z-,z-.z-@z-[z-`z-{z-ÿzA zA,zA.zA@zA[zA`zA{zAÿzZ zZ,zZ.zZ@zZ[zZ`zZ{zZÿza za,za.za@za[za`za{zaÿzz zz,zz.zz@zz[zz`zz{zzÿA A,A.A@A[A`A{AÿZ Z,Z.Z@Z[Z`Z{Zÿa a,a.a@a[a`a{aÿz z,z.z@z[z`z{zÿ @[`{ÿ                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 =   =  = ! = ÿ =  = =! =ÿ  =    =   = !  = ÿ  =   =  =!  =ÿ   =     =    = !   = ÿ   =    =   =!   =ÿ          !   <   >   ÿ       !  <  >  ÿ    ! < > ÿ=   =  =  !=  ÿ=  = = != ÿ= ==!=ÿ !<>ÿ                                    "  "" !"" #"" ="" ?"" ÿ""! ""!!""!#""!=""!?""!ÿ""# ""#!""##""#=""#?""#ÿ""= ""=!""=#""==""=?""=ÿ""? ""?!""?#""?=""??""?ÿ""ÿ ""ÿ!""ÿ#""ÿ=""ÿ?""ÿÿ""  >" !>" #>" =>" ?>" ÿ>"! >"!!>"!#>"!=>"!?>"!ÿ>"# >"#!>"##>"#=>"#?>"#ÿ>"= >"=!>"=#>"==>"=?>"=ÿ>"? >"?!>"?#>"?=>"??>"?ÿ>"ÿ >"ÿ!>"ÿ#>"ÿ=>"ÿ?>"ÿÿ>" ""!""#""=""?""ÿ"" >"!>"#>"=>"?>"ÿ>""">'  '' &'' ('' ='' ?'' ÿ''& ''&&''&(''&=''&?''&ÿ''( ''(&''((''(=''(?''(ÿ''= ''=&''=(''==''=?''=ÿ''? ''?&''?(''?=''??''?ÿ''ÿ ''ÿ&''ÿ(''ÿ=''ÿ?''ÿÿ''  >' &>' (>' =>' ?>' ÿ>'& >'&&>'&(>'&=>'&?>'&ÿ>'( >'(&>'((>'(=>'(?>'(ÿ>'= >'=&>'=(>'==>'=?>'=ÿ>'? >'?&>'?(>'?=>'??>'?ÿ>'ÿ >'ÿ&>'ÿ(>'ÿ=>'ÿ?>'ÿÿ>' ''&''(''=''?''ÿ'' >'&>'(>'=>'?>'ÿ>'''>   	   

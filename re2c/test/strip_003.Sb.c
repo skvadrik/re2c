@@ -3,51 +3,47 @@
 #include <stdio.h>
 #include <stdlib.h> /* malloc, free */
 
-static void * read_file
-    ( const char * fname
+static void *read_file
+    ( const char *fname
     , size_t unit
     , size_t padding
-    , size_t * pfsize
+    , size_t *pfsize
     )
 {
-    void * buffer = NULL;
+    void *buffer = NULL;
     size_t fsize = 0;
 
     /* open file */
-    FILE * f = fopen (fname, "rb");
-    if (f == NULL)
-    {
+    FILE *f = fopen(fname, "rb");
+    if(f == NULL) {
         goto error;
     }
 
     /* get file size */
-    fseek (f, 0, SEEK_END);
-    fsize = (size_t) ftell (f) / unit;
-    fseek (f, 0, SEEK_SET);
+    fseek(f, 0, SEEK_END);
+    fsize = (size_t) ftell(f) / unit;
+    fseek(f, 0, SEEK_SET);
 
     /* allocate memory for file and padding */
-    buffer = malloc (unit * (fsize + padding));
-    if (buffer == NULL)
-    {
+    buffer = malloc(unit * (fsize + padding));
+    if (buffer == NULL) {
         goto error;
     }
 
     /* read the whole file in memory */
-    if (fread (buffer, unit, fsize, f) != fsize)
-    {
+    if (fread(buffer, unit, fsize, f) != fsize) {
         goto error;
     }
 
-    fclose (f);
+    fclose(f);
     *pfsize = fsize;
     return buffer;
 
 error:
-    fprintf (stderr, "error: cannot read file '%s'\n", fname);
-    free (buffer);
-    if (f != NULL)
-    {
-        fclose (f);
+    fprintf(stderr, "error: cannot read file '%s'\n", fname);
+    free(buffer);
+    if (f != NULL) {
+        fclose(f);
     }
     return NULL;
 }
@@ -66,10 +62,10 @@ error:
 
 static int action_line131
     ( unsigned int i
-    , const YYKEYTYPE * keys
-    , const YYCTYPE * start
-    , const YYCTYPE * token
-    , const YYCTYPE ** cursor
+    , const YYKEYTYPE *keys
+    , const YYCTYPE *start
+    , const YYCTYPE *token
+    , const YYCTYPE **cursor
     , YYKEYTYPE rule_act
     )
 {
@@ -77,8 +73,7 @@ static int action_line131
     const long len_act = *cursor - token;
     const long len_exp = (long) keys [3 * i + 1];
     const YYKEYTYPE rule_exp = keys [3 * i + 2];
-    if (rule_exp == 255)
-    {
+    if (rule_exp == 255) {
         fprintf
             ( stderr
             , "warning: lex_line131: control flow is undefined for input"
@@ -86,14 +81,11 @@ static int action_line131
             , pos
             );
     }
-    if (len_act == len_exp && rule_act == rule_exp)
-    {
+    if (len_act == len_exp && rule_act == rule_exp) {
         const YYKEYTYPE offset = keys[3 * i];
         *cursor = token + offset;
         return 0;
-    }
-    else
-    {
+    } else {
         fprintf
             ( stderr
             , "error: lex_line131: at position %ld (iteration %u):\n"
@@ -110,18 +102,18 @@ static int action_line131
     }
 }
 
-int lex_line131 ()
+int lex_line131()
 {
     const size_t padding = 4; /* YYMAXFILL */
     int status = 0;
     size_t input_len = 0;
     size_t keys_count = 0;
-    YYCTYPE * input = NULL;
-    YYKEYTYPE * keys = NULL;
-    const YYCTYPE * cursor = NULL;
-    const YYCTYPE * limit = NULL;
-    const YYCTYPE * token = NULL;
-    const YYCTYPE * eof = NULL;
+    YYCTYPE *input = NULL;
+    YYKEYTYPE *keys = NULL;
+    const YYCTYPE *cursor = NULL;
+    const YYCTYPE *limit = NULL;
+    const YYCTYPE *token = NULL;
+    const YYCTYPE *eof = NULL;
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
@@ -130,8 +122,7 @@ int lex_line131 ()
         , padding
         , &input_len
         );
-    if (input == NULL)
-    {
+    if (input == NULL) {
         status = 1;
         goto end;
     }
@@ -142,8 +133,7 @@ int lex_line131 ()
         , 0
         , &keys_count
         );
-    if (keys == NULL)
-    {
+    if (keys == NULL) {
         status = 1;
         goto end;
     }
@@ -152,11 +142,10 @@ int lex_line131 ()
     limit = input + input_len + padding;
     eof = input + input_len;
 
-    for (i = 0; status == 0 && i < keys_count; ++i)
-    {
+    for (i = 0; status == 0 && i < keys_count; ++i) {
         token = cursor;
-        const YYCTYPE * marker = NULL;
-        const YYCTYPE * ctxmarker = NULL;
+        const YYCTYPE *marker = NULL;
+        const YYCTYPE *ctxmarker = NULL;
         YYCTYPE yych;
 
         if (YYLESSTHAN (4)) YYFILL(4);
@@ -172,7 +161,7 @@ int lex_line131 ()
         if ((yych = YYPEEK ()) == '*') goto yy12;
         if (yych == '/') goto yy14;
 yy3:
-        status = action_line131 (i, keys, input, token, &cursor, 3);
+        status = action_line131(i, keys, input, token, &cursor, 3);
         continue;
 yy4:
         YYSKIP ();
@@ -201,7 +190,7 @@ yy8:
 yy9:
         YYSKIP ();
         YYRESTORECTX ();
-        status = action_line131 (i, keys, input, token, &cursor, 1);
+        status = action_line131(i, keys, input, token, &cursor, 1);
         continue;
 yy11:
         YYSKIP ();
@@ -211,32 +200,29 @@ yy11:
         goto yy8;
 yy12:
         YYSKIP ();
-        status = action_line131 (i, keys, input, token, &cursor, 2);
+        status = action_line131(i, keys, input, token, &cursor, 2);
         continue;
 yy14:
         YYSKIP ();
-        status = action_line131 (i, keys, input, token, &cursor, 0);
+        status = action_line131(i, keys, input, token, &cursor, 0);
         continue;
 
     }
-    if (status == 0)
-    {
-        if (cursor != eof)
-        {
+    if (status == 0) {
+        if (cursor != eof) {
             status = 1;
             const long pos = token - input;
-            fprintf (stderr, "error: lex_line131: unused input strings left at position %ld\n", pos);
+            fprintf(stderr, "error: lex_line131: unused input strings left at position %ld\n", pos);
         }
-        if (i != keys_count)
-        {
+        if (i != keys_count) {
             status = 1;
-            fprintf (stderr, "error: lex_line131: unused keys left after %u iterations\n", i);
+            fprintf(stderr, "error: lex_line131: unused keys left after %u iterations\n", i);
         }
     }
 
 end:
-    free (input);
-    free (keys);
+    free(input);
+    free(keys);
 
     return status;
 }
@@ -261,10 +247,10 @@ end:
 
 static int action_line137
     ( unsigned int i
-    , const YYKEYTYPE * keys
-    , const YYCTYPE * start
-    , const YYCTYPE * token
-    , const YYCTYPE ** cursor
+    , const YYKEYTYPE *keys
+    , const YYCTYPE *start
+    , const YYCTYPE *token
+    , const YYCTYPE **cursor
     , YYKEYTYPE rule_act
     )
 {
@@ -272,8 +258,7 @@ static int action_line137
     const long len_act = *cursor - token;
     const long len_exp = (long) keys [3 * i + 1];
     const YYKEYTYPE rule_exp = keys [3 * i + 2];
-    if (rule_exp == 255)
-    {
+    if (rule_exp == 255) {
         fprintf
             ( stderr
             , "warning: lex_line137: control flow is undefined for input"
@@ -281,14 +266,11 @@ static int action_line137
             , pos
             );
     }
-    if (len_act == len_exp && rule_act == rule_exp)
-    {
+    if (len_act == len_exp && rule_act == rule_exp) {
         const YYKEYTYPE offset = keys[3 * i];
         *cursor = token + offset;
         return 0;
-    }
-    else
-    {
+    } else {
         fprintf
             ( stderr
             , "error: lex_line137: at position %ld (iteration %u):\n"
@@ -305,18 +287,18 @@ static int action_line137
     }
 }
 
-int lex_line137 ()
+int lex_line137()
 {
     const size_t padding = 2; /* YYMAXFILL */
     int status = 0;
     size_t input_len = 0;
     size_t keys_count = 0;
-    YYCTYPE * input = NULL;
-    YYKEYTYPE * keys = NULL;
-    const YYCTYPE * cursor = NULL;
-    const YYCTYPE * limit = NULL;
-    const YYCTYPE * token = NULL;
-    const YYCTYPE * eof = NULL;
+    YYCTYPE *input = NULL;
+    YYKEYTYPE *keys = NULL;
+    const YYCTYPE *cursor = NULL;
+    const YYCTYPE *limit = NULL;
+    const YYCTYPE *token = NULL;
+    const YYCTYPE *eof = NULL;
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
@@ -325,8 +307,7 @@ int lex_line137 ()
         , padding
         , &input_len
         );
-    if (input == NULL)
-    {
+    if (input == NULL) {
         status = 1;
         goto end;
     }
@@ -337,8 +318,7 @@ int lex_line137 ()
         , 0
         , &keys_count
         );
-    if (keys == NULL)
-    {
+    if (keys == NULL) {
         status = 1;
         goto end;
     }
@@ -347,8 +327,7 @@ int lex_line137 ()
     limit = input + input_len + padding;
     eof = input + input_len;
 
-    for (i = 0; status == 0 && i < keys_count; ++i)
-    {
+    for (i = 0; status == 0 && i < keys_count; ++i) {
         token = cursor;
         YYCTYPE yych;
 
@@ -358,7 +337,7 @@ int lex_line137 ()
         YYSKIP ();
         if ((yych = YYPEEK ()) == '/') goto yy21;
 yy19:
-        status = action_line137 (i, keys, input, token, &cursor, 1);
+        status = action_line137(i, keys, input, token, &cursor, 1);
         continue;
 yy20:
         YYSKIP ();
@@ -366,28 +345,25 @@ yy20:
         goto yy19;
 yy21:
         YYSKIP ();
-        status = action_line137 (i, keys, input, token, &cursor, 0);
+        status = action_line137(i, keys, input, token, &cursor, 0);
         continue;
 
     }
-    if (status == 0)
-    {
-        if (cursor != eof)
-        {
+    if (status == 0) {
+        if (cursor != eof) {
             status = 1;
             const long pos = token - input;
-            fprintf (stderr, "error: lex_line137: unused input strings left at position %ld\n", pos);
+            fprintf(stderr, "error: lex_line137: unused input strings left at position %ld\n", pos);
         }
-        if (i != keys_count)
-        {
+        if (i != keys_count) {
             status = 1;
-            fprintf (stderr, "error: lex_line137: unused keys left after %u iterations\n", i);
+            fprintf(stderr, "error: lex_line137: unused keys left after %u iterations\n", i);
         }
     }
 
 end:
-    free (input);
-    free (keys);
+    free(input);
+    free(keys);
 
     return status;
 }
@@ -410,10 +386,10 @@ end:
 
 static int action_line152
     ( unsigned int i
-    , const YYKEYTYPE * keys
-    , const YYCTYPE * start
-    , const YYCTYPE * token
-    , const YYCTYPE ** cursor
+    , const YYKEYTYPE *keys
+    , const YYCTYPE *start
+    , const YYCTYPE *token
+    , const YYCTYPE **cursor
     , YYKEYTYPE rule_act
     )
 {
@@ -421,8 +397,7 @@ static int action_line152
     const long len_act = *cursor - token;
     const long len_exp = (long) keys [3 * i + 1];
     const YYKEYTYPE rule_exp = keys [3 * i + 2];
-    if (rule_exp == 255)
-    {
+    if (rule_exp == 255) {
         fprintf
             ( stderr
             , "warning: lex_line152: control flow is undefined for input"
@@ -430,14 +405,11 @@ static int action_line152
             , pos
             );
     }
-    if (len_act == len_exp && rule_act == rule_exp)
-    {
+    if (len_act == len_exp && rule_act == rule_exp) {
         const YYKEYTYPE offset = keys[3 * i];
         *cursor = token + offset;
         return 0;
-    }
-    else
-    {
+    } else {
         fprintf
             ( stderr
             , "error: lex_line152: at position %ld (iteration %u):\n"
@@ -454,18 +426,18 @@ static int action_line152
     }
 }
 
-int lex_line152 ()
+int lex_line152()
 {
     const size_t padding = 4; /* YYMAXFILL */
     int status = 0;
     size_t input_len = 0;
     size_t keys_count = 0;
-    YYCTYPE * input = NULL;
-    YYKEYTYPE * keys = NULL;
-    const YYCTYPE * cursor = NULL;
-    const YYCTYPE * limit = NULL;
-    const YYCTYPE * token = NULL;
-    const YYCTYPE * eof = NULL;
+    YYCTYPE *input = NULL;
+    YYKEYTYPE *keys = NULL;
+    const YYCTYPE *cursor = NULL;
+    const YYCTYPE *limit = NULL;
+    const YYCTYPE *token = NULL;
+    const YYCTYPE *eof = NULL;
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
@@ -474,8 +446,7 @@ int lex_line152 ()
         , padding
         , &input_len
         );
-    if (input == NULL)
-    {
+    if (input == NULL) {
         status = 1;
         goto end;
     }
@@ -486,8 +457,7 @@ int lex_line152 ()
         , 0
         , &keys_count
         );
-    if (keys == NULL)
-    {
+    if (keys == NULL) {
         status = 1;
         goto end;
     }
@@ -496,10 +466,9 @@ int lex_line152 ()
     limit = input + input_len + padding;
     eof = input + input_len;
 
-    for (i = 0; status == 0 && i < keys_count; ++i)
-    {
+    for (i = 0; status == 0 && i < keys_count; ++i) {
         token = cursor;
-        const YYCTYPE * marker = NULL;
+        const YYCTYPE *marker = NULL;
         YYCTYPE yych;
 
         if (YYLESSTHAN (4)) YYFILL(4);
@@ -524,7 +493,7 @@ int lex_line152 ()
         YYSKIP ();
         if ((yych = YYPEEK ()) == '\n') goto yy37;
 yy26:
-        status = action_line152 (i, keys, input, token, &cursor, 2);
+        status = action_line152(i, keys, input, token, &cursor, 2);
         continue;
 yy27:
         YYSKIP ();
@@ -532,13 +501,13 @@ yy27:
         yych = YYPEEK ();
         if (yych == '/') goto yy35;
 yy28:
-        status = action_line152 (i, keys, input, token, &cursor, 1);
+        status = action_line152(i, keys, input, token, &cursor, 1);
         continue;
 yy29:
         YYSKIP ();
         if ((yych = YYPEEK ()) == '*') goto yy33;
 yy30:
-        status = action_line152 (i, keys, input, token, &cursor, 3);
+        status = action_line152(i, keys, input, token, &cursor, 3);
         continue;
 yy31:
         YYSKIP ();
@@ -550,7 +519,7 @@ yy32:
         goto yy30;
 yy33:
         YYSKIP ();
-        status = action_line152 (i, keys, input, token, &cursor, 0);
+        status = action_line152(i, keys, input, token, &cursor, 0);
         continue;
 yy35:
         YYSKIP ();
@@ -566,24 +535,21 @@ yy37:
         goto yy28;
 
     }
-    if (status == 0)
-    {
-        if (cursor != eof)
-        {
+    if (status == 0) {
+        if (cursor != eof) {
             status = 1;
             const long pos = token - input;
-            fprintf (stderr, "error: lex_line152: unused input strings left at position %ld\n", pos);
+            fprintf(stderr, "error: lex_line152: unused input strings left at position %ld\n", pos);
         }
-        if (i != keys_count)
-        {
+        if (i != keys_count) {
             status = 1;
-            fprintf (stderr, "error: lex_line152: unused keys left after %u iterations\n", i);
+            fprintf(stderr, "error: lex_line152: unused keys left after %u iterations\n", i);
         }
     }
 
 end:
-    free (input);
-    free (keys);
+    free(input);
+    free(keys);
 
     return status;
 }
@@ -606,10 +572,10 @@ end:
 
 static int action_line158
     ( unsigned int i
-    , const YYKEYTYPE * keys
-    , const YYCTYPE * start
-    , const YYCTYPE * token
-    , const YYCTYPE ** cursor
+    , const YYKEYTYPE *keys
+    , const YYCTYPE *start
+    , const YYCTYPE *token
+    , const YYCTYPE **cursor
     , YYKEYTYPE rule_act
     )
 {
@@ -617,8 +583,7 @@ static int action_line158
     const long len_act = *cursor - token;
     const long len_exp = (long) keys [3 * i + 1];
     const YYKEYTYPE rule_exp = keys [3 * i + 2];
-    if (rule_exp == 255)
-    {
+    if (rule_exp == 255) {
         fprintf
             ( stderr
             , "warning: lex_line158: control flow is undefined for input"
@@ -626,14 +591,11 @@ static int action_line158
             , pos
             );
     }
-    if (len_act == len_exp && rule_act == rule_exp)
-    {
+    if (len_act == len_exp && rule_act == rule_exp) {
         const YYKEYTYPE offset = keys[3 * i];
         *cursor = token + offset;
         return 0;
-    }
-    else
-    {
+    } else {
         fprintf
             ( stderr
             , "error: lex_line158: at position %ld (iteration %u):\n"
@@ -650,18 +612,18 @@ static int action_line158
     }
 }
 
-int lex_line158 ()
+int lex_line158()
 {
     const size_t padding = 2; /* YYMAXFILL */
     int status = 0;
     size_t input_len = 0;
     size_t keys_count = 0;
-    YYCTYPE * input = NULL;
-    YYKEYTYPE * keys = NULL;
-    const YYCTYPE * cursor = NULL;
-    const YYCTYPE * limit = NULL;
-    const YYCTYPE * token = NULL;
-    const YYCTYPE * eof = NULL;
+    YYCTYPE *input = NULL;
+    YYKEYTYPE *keys = NULL;
+    const YYCTYPE *cursor = NULL;
+    const YYCTYPE *limit = NULL;
+    const YYCTYPE *token = NULL;
+    const YYCTYPE *eof = NULL;
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
@@ -670,8 +632,7 @@ int lex_line158 ()
         , padding
         , &input_len
         );
-    if (input == NULL)
-    {
+    if (input == NULL) {
         status = 1;
         goto end;
     }
@@ -682,8 +643,7 @@ int lex_line158 ()
         , 0
         , &keys_count
         );
-    if (keys == NULL)
-    {
+    if (keys == NULL) {
         status = 1;
         goto end;
     }
@@ -692,8 +652,7 @@ int lex_line158 ()
     limit = input + input_len + padding;
     eof = input + input_len;
 
-    for (i = 0; status == 0 && i < keys_count; ++i)
-    {
+    for (i = 0; status == 0 && i < keys_count; ++i) {
         token = cursor;
         YYCTYPE yych;
 
@@ -704,12 +663,12 @@ int lex_line158 ()
         YYSKIP ();
         if ((yych = YYPEEK ()) == '\n') goto yy45;
 yy41:
-        status = action_line158 (i, keys, input, token, &cursor, 1);
+        status = action_line158(i, keys, input, token, &cursor, 1);
         continue;
 yy42:
         YYSKIP ();
 yy43:
-        status = action_line158 (i, keys, input, token, &cursor, 0);
+        status = action_line158(i, keys, input, token, &cursor, 0);
         continue;
 yy44:
         YYSKIP ();
@@ -721,24 +680,21 @@ yy45:
         goto yy43;
 
     }
-    if (status == 0)
-    {
-        if (cursor != eof)
-        {
+    if (status == 0) {
+        if (cursor != eof) {
             status = 1;
             const long pos = token - input;
-            fprintf (stderr, "error: lex_line158: unused input strings left at position %ld\n", pos);
+            fprintf(stderr, "error: lex_line158: unused input strings left at position %ld\n", pos);
         }
-        if (i != keys_count)
-        {
+        if (i != keys_count) {
             status = 1;
-            fprintf (stderr, "error: lex_line158: unused keys left after %u iterations\n", i);
+            fprintf(stderr, "error: lex_line158: unused keys left after %u iterations\n", i);
         }
     }
 
 end:
-    free (input);
-    free (keys);
+    free(input);
+    free(keys);
 
     return status;
 }
@@ -750,12 +706,20 @@ end:
 #undef YYLESSTHAN
 #undef YYFILL
 
-int main ()
+int main()
 {
-    if (lex_line131 () != 0) return 1;
-    if (lex_line137 () != 0) return 1;
-    if (lex_line152 () != 0) return 1;
-    if (lex_line158 () != 0) return 1;
+    if(lex_line131() != 0) {
+        return 1;
+    }
+    if(lex_line137() != 0) {
+        return 1;
+    }
+    if(lex_line152() != 0) {
+        return 1;
+    }
+    if(lex_line158() != 0) {
+        return 1;
+    }
     return 0;
 }
 /*/// /)/+/./0/ÿ

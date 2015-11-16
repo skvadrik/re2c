@@ -3,51 +3,47 @@
 #include <stdio.h>
 #include <stdlib.h> /* malloc, free */
 
-static void * read_file
-    ( const char * fname
+static void *read_file
+    ( const char *fname
     , size_t unit
     , size_t padding
-    , size_t * pfsize
+    , size_t *pfsize
     )
 {
-    void * buffer = NULL;
+    void *buffer = NULL;
     size_t fsize = 0;
 
     /* open file */
-    FILE * f = fopen (fname, "rb");
-    if (f == NULL)
-    {
+    FILE *f = fopen(fname, "rb");
+    if(f == NULL) {
         goto error;
     }
 
     /* get file size */
-    fseek (f, 0, SEEK_END);
-    fsize = (size_t) ftell (f) / unit;
-    fseek (f, 0, SEEK_SET);
+    fseek(f, 0, SEEK_END);
+    fsize = (size_t) ftell(f) / unit;
+    fseek(f, 0, SEEK_SET);
 
     /* allocate memory for file and padding */
-    buffer = malloc (unit * (fsize + padding));
-    if (buffer == NULL)
-    {
+    buffer = malloc(unit * (fsize + padding));
+    if (buffer == NULL) {
         goto error;
     }
 
     /* read the whole file in memory */
-    if (fread (buffer, unit, fsize, f) != fsize)
-    {
+    if (fread(buffer, unit, fsize, f) != fsize) {
         goto error;
     }
 
-    fclose (f);
+    fclose(f);
     *pfsize = fsize;
     return buffer;
 
 error:
-    fprintf (stderr, "error: cannot read file '%s'\n", fname);
-    free (buffer);
-    if (f != NULL)
-    {
-        fclose (f);
+    fprintf(stderr, "error: cannot read file '%s'\n", fname);
+    free(buffer);
+    if (f != NULL) {
+        fclose(f);
     }
     return NULL;
 }
@@ -63,10 +59,10 @@ error:
 
 static int action_line26
     ( unsigned int i
-    , const YYKEYTYPE * keys
-    , const YYCTYPE * start
-    , const YYCTYPE * token
-    , const YYCTYPE ** cursor
+    , const YYKEYTYPE *keys
+    , const YYCTYPE *start
+    , const YYCTYPE *token
+    , const YYCTYPE **cursor
     , YYKEYTYPE rule_act
     )
 {
@@ -74,8 +70,7 @@ static int action_line26
     const long len_act = *cursor - token;
     const long len_exp = (long) keys [3 * i + 1];
     const YYKEYTYPE rule_exp = keys [3 * i + 2];
-    if (rule_exp == 255)
-    {
+    if (rule_exp == 255) {
         fprintf
             ( stderr
             , "warning: lex_line26: control flow is undefined for input"
@@ -83,14 +78,11 @@ static int action_line26
             , pos
             );
     }
-    if (len_act == len_exp && rule_act == rule_exp)
-    {
+    if (len_act == len_exp && rule_act == rule_exp) {
         const YYKEYTYPE offset = keys[3 * i];
         *cursor = token + offset;
         return 0;
-    }
-    else
-    {
+    } else {
         fprintf
             ( stderr
             , "error: lex_line26: at position %ld (iteration %u):\n"
@@ -107,18 +99,18 @@ static int action_line26
     }
 }
 
-int lex_line26 ()
+int lex_line26()
 {
     const size_t padding = 45; /* YYMAXFILL */
     int status = 0;
     size_t input_len = 0;
     size_t keys_count = 0;
-    YYCTYPE * input = NULL;
-    YYKEYTYPE * keys = NULL;
-    const YYCTYPE * cursor = NULL;
-    const YYCTYPE * limit = NULL;
-    const YYCTYPE * token = NULL;
-    const YYCTYPE * eof = NULL;
+    YYCTYPE *input = NULL;
+    YYKEYTYPE *keys = NULL;
+    const YYCTYPE *cursor = NULL;
+    const YYCTYPE *limit = NULL;
+    const YYCTYPE *token = NULL;
+    const YYCTYPE *eof = NULL;
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
@@ -127,8 +119,7 @@ int lex_line26 ()
         , padding
         , &input_len
         );
-    if (input == NULL)
-    {
+    if (input == NULL) {
         status = 1;
         goto end;
     }
@@ -139,8 +130,7 @@ int lex_line26 ()
         , 0
         , &keys_count
         );
-    if (keys == NULL)
-    {
+    if (keys == NULL) {
         status = 1;
         goto end;
     }
@@ -149,10 +139,9 @@ int lex_line26 ()
     limit = input + input_len + padding;
     eof = input + input_len;
 
-    for (i = 0; status == 0 && i < keys_count; ++i)
-    {
+    for (i = 0; status == 0 && i < keys_count; ++i) {
         token = cursor;
-        const YYCTYPE * marker = NULL;
+        const YYCTYPE *marker = NULL;
         YYCTYPE yych;
 
         if (YYLESSTHAN (45)) YYFILL(45);
@@ -172,7 +161,7 @@ yy2:
         default:    goto yy3;
         }
 yy3:
-        status = action_line26 (i, keys, input, token, &cursor, 1);
+        status = action_line26(i, keys, input, token, &cursor, 1);
         continue;
 yy4:
         YYSKIP ();
@@ -180,7 +169,7 @@ yy4:
         goto yy3;
 yy5:
         YYSKIP ();
-        status = action_line26 (i, keys, input, token, &cursor, 2);
+        status = action_line26(i, keys, input, token, &cursor, 2);
         continue;
 yy7:
         YYSKIP ();
@@ -520,28 +509,25 @@ yy50:
         }
 yy51:
         YYSKIP ();
-        status = action_line26 (i, keys, input, token, &cursor, 0);
+        status = action_line26(i, keys, input, token, &cursor, 0);
         continue;
 
     }
-    if (status == 0)
-    {
-        if (cursor != eof)
-        {
+    if (status == 0) {
+        if (cursor != eof) {
             status = 1;
             const long pos = token - input;
-            fprintf (stderr, "error: lex_line26: unused input strings left at position %ld\n", pos);
+            fprintf(stderr, "error: lex_line26: unused input strings left at position %ld\n", pos);
         }
-        if (i != keys_count)
-        {
+        if (i != keys_count) {
             status = 1;
-            fprintf (stderr, "error: lex_line26: unused keys left after %u iterations\n", i);
+            fprintf(stderr, "error: lex_line26: unused keys left after %u iterations\n", i);
         }
     }
 
 end:
-    free (input);
-    free (keys);
+    free(input);
+    free(keys);
 
     return status;
 }
@@ -556,9 +542,11 @@ end:
 #undef YYFILL
 #define YYMAXFILL 45
 
-int main ()
+int main()
 {
-    if (lex_line26 () != 0) return 1;
+    if(lex_line26() != 0) {
+        return 1;
+    }
     return 0;
 }
 (THIS FILE MUST BE CONVERTED WITH BINHEX 4. (this file must be converted with binhex 4./(THIS FILE MUST BE CONVERTED WITH BINHEX 4.1(this file must be converted with binhex 4.ÿ(THIS FILE MUST BE CONVERTED WITH BINHEX 4 (this file must be converted with binhex 4-(THIS FILE MUST BE CONVERTED WITH BINHEX 4/(this file must be converted with binhex 4ÿ(THIS FILE MUST BE CONVERTED WITH BINHEX  (this file must be converted with binhex 3(THIS FILE MUST BE CONVERTED WITH BINHEX 5(this file must be converted with binhex ÿ(THIS FILE MUST BE CONVERTED WITH BINHEX (this file must be converted with binhex(THIS FILE MUST BE CONVERTED WITH BINHEX!(this file must be converted with binhexÿ(THIS FILE MUST BE CONVERTED WITH BINHE (this file must be converted with binheW(THIS FILE MUST BE CONVERTED WITH BINHEY(this file must be converted with binhew(THIS FILE MUST BE CONVERTED WITH BINHEy(this file must be converted with binheÿ(THIS FILE MUST BE CONVERTED WITH BINH (this file must be converted with binhD(THIS FILE MUST BE CONVERTED WITH BINHF(this file must be converted with binhd(THIS FILE MUST BE CONVERTED WITH BINHf(this file must be converted with binhÿ(THIS FILE MUST BE CONVERTED WITH BIN (this file must be converted with binG(THIS FILE MUST BE CONVERTED WITH BINI(this file must be converted with bing(THIS FILE MUST BE CONVERTED WITH BINi(this file must be converted with binÿ(THIS FILE MUST BE CONVERTED WITH BI (this file must be converted with biM(THIS FILE MUST BE CONVERTED WITH BIO(this file must be converted with bim(THIS FILE MUST BE CONVERTED WITH BIo(this file must be converted with biÿ(THIS FILE MUST BE CONVERTED WITH B (this file must be converted with bH(THIS FILE MUST BE CONVERTED WITH BJ(this file must be converted with bh(THIS FILE MUST BE CONVERTED WITH Bj(this file must be converted with bÿ(THIS FILE MUST BE CONVERTED WITH  (this file must be converted with A(THIS FILE MUST BE CONVERTED WITH C(this file must be converted with a(THIS FILE MUST BE CONVERTED WITH c(this file must be converted with ÿ(THIS FILE MUST BE CONVERTED WITH (this file must be converted with(THIS FILE MUST BE CONVERTED WITH!(this file must be converted withÿ(THIS FILE MUST BE CONVERTED WIT (this file must be converted witG(THIS FILE MUST BE CONVERTED WITI(this file must be converted witg(THIS FILE MUST BE CONVERTED WITi(this file must be converted witÿ(THIS FILE MUST BE CONVERTED WI (this file must be converted wiS(THIS FILE MUST BE CONVERTED WIU(this file must be converted wis(THIS FILE MUST BE CONVERTED WIu(this file must be converted wiÿ(THIS FILE MUST BE CONVERTED W (this file must be converted wH(THIS FILE MUST BE CONVERTED WJ(this file must be converted wh(THIS FILE MUST BE CONVERTED Wj(this file must be converted wÿ(THIS FILE MUST BE CONVERTED  (this file must be converted V(THIS FILE MUST BE CONVERTED X(this file must be converted v(THIS FILE MUST BE CONVERTED x(this file must be converted ÿ(THIS FILE MUST BE CONVERTED (this file must be converted(THIS FILE MUST BE CONVERTED!(this file must be convertedÿ(THIS FILE MUST BE CONVERTE (this file must be converteC(THIS FILE MUST BE CONVERTEE(this file must be convertec(THIS FILE MUST BE CONVERTEe(this file must be converteÿ(THIS FILE MUST BE CONVERT (this file must be convertD(THIS FILE MUST BE CONVERTF(this file must be convertd(THIS FILE MUST BE CONVERTf(this file must be convertÿ(THIS FILE MUST BE CONVER (this file must be converS(THIS FILE MUST BE CONVERU(this file must be convers(THIS FILE MUST BE CONVERu(this file must be converÿ(THIS FILE MUST BE CONVE (this file must be conveQ(THIS FILE MUST BE CONVES(this file must be conveq(THIS FILE MUST BE CONVEs(this file must be conveÿ(THIS FILE MUST BE CONV (this file must be convD(THIS FILE MUST BE CONVF(this file must be convd(THIS FILE MUST BE CONVf(this file must be convÿ(THIS FILE MUST BE CON (this file must be conU(THIS FILE MUST BE CONW(this file must be conu(THIS FILE MUST BE CONw(this file must be conÿ(THIS FILE MUST BE CO (this file must be coM(THIS FILE MUST BE COO(this file must be com(THIS FILE MUST BE COo(this file must be coÿ(THIS FILE MUST BE C (this file must be cN(THIS FILE MUST BE CP(this file must be cn(THIS FILE MUST BE Cp(this file must be cÿ(THIS FILE MUST BE  (this file must be B(THIS FILE MUST BE D(this file must be b(THIS FILE MUST BE d(this file must be ÿ(THIS FILE MUST BE (this file must be(THIS FILE MUST BE!(this file must beÿ(THIS FILE MUST B (this file must bD(THIS FILE MUST BF(this file must bd(THIS FILE MUST Bf(this file must bÿ(THIS FILE MUST  (this file must A(THIS FILE MUST C(this file must a(THIS FILE MUST c(this file must ÿ(THIS FILE MUST (this file must(THIS FILE MUST!(this file mustÿ(THIS FILE MUS (this file musS(THIS FILE MUSU(this file muss(THIS FILE MUSu(this file musÿ(THIS FILE MU (this file muR(THIS FILE MUT(this file mur(THIS FILE MUt(this file muÿ(THIS FILE M (this file mT(THIS FILE MV(this file mt(THIS FILE Mv(this file mÿ(THIS FILE  (this file L(THIS FILE N(this file l(THIS FILE n(this file ÿ(THIS FILE (this file(THIS FILE!(this fileÿ(THIS FIL (this filD(THIS FILF(this fild(THIS FILf(this filÿ(THIS FI (this fiK(THIS FIM(this fik(THIS FIm(this fiÿ(THIS F (this fH(THIS FJ(this fh(THIS Fj(this fÿ(THIS  (this E(THIS G(this e(THIS g(this ÿ(THIS (this(THIS!(thisÿ(THI (thiR(THIT(thir(THIt(thiÿ(TH (thH(THJ(thh(THj(thÿ(T (tG(TI(tg(Ti(tÿ( (S(U(s(u(ÿ,,,,++++****))))((((((''''''&&&&&&%%%%%%$$$$$$######""""!!!!!!      

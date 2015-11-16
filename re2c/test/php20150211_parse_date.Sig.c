@@ -3,51 +3,47 @@
 #include <stdio.h>
 #include <stdlib.h> /* malloc, free */
 
-static void * read_file
-    ( const char * fname
+static void *read_file
+    ( const char *fname
     , size_t unit
     , size_t padding
-    , size_t * pfsize
+    , size_t *pfsize
     )
 {
-    void * buffer = NULL;
+    void *buffer = NULL;
     size_t fsize = 0;
 
     /* open file */
-    FILE * f = fopen (fname, "rb");
-    if (f == NULL)
-    {
+    FILE *f = fopen(fname, "rb");
+    if(f == NULL) {
         goto error;
     }
 
     /* get file size */
-    fseek (f, 0, SEEK_END);
-    fsize = (size_t) ftell (f) / unit;
-    fseek (f, 0, SEEK_SET);
+    fseek(f, 0, SEEK_END);
+    fsize = (size_t) ftell(f) / unit;
+    fseek(f, 0, SEEK_SET);
 
     /* allocate memory for file and padding */
-    buffer = malloc (unit * (fsize + padding));
-    if (buffer == NULL)
-    {
+    buffer = malloc(unit * (fsize + padding));
+    if (buffer == NULL) {
         goto error;
     }
 
     /* read the whole file in memory */
-    if (fread (buffer, unit, fsize, f) != fsize)
-    {
+    if (fread(buffer, unit, fsize, f) != fsize) {
         goto error;
     }
 
-    fclose (f);
+    fclose(f);
     *pfsize = fsize;
     return buffer;
 
 error:
-    fprintf (stderr, "error: cannot read file '%s'\n", fname);
-    free (buffer);
-    if (f != NULL)
-    {
-        fclose (f);
+    fprintf(stderr, "error: cannot read file '%s'\n", fname);
+    free(buffer);
+    if (f != NULL) {
+        fclose(f);
     }
     return NULL;
 }
@@ -63,10 +59,10 @@ error:
 
 static int action_line1719
     ( unsigned int i
-    , const YYKEYTYPE * keys
-    , const YYCTYPE * start
-    , const YYCTYPE * token
-    , const YYCTYPE ** cursor
+    , const YYKEYTYPE *keys
+    , const YYCTYPE *start
+    , const YYCTYPE *token
+    , const YYCTYPE **cursor
     , YYKEYTYPE rule_act
     )
 {
@@ -74,8 +70,7 @@ static int action_line1719
     const long len_act = *cursor - token;
     const long len_exp = (long) keys [3 * i + 1];
     const YYKEYTYPE rule_exp = keys [3 * i + 2];
-    if (rule_exp == 255)
-    {
+    if (rule_exp == 255) {
         fprintf
             ( stderr
             , "warning: lex_line1719: control flow is undefined for input"
@@ -83,14 +78,11 @@ static int action_line1719
             , pos
             );
     }
-    if (len_act == len_exp && rule_act == rule_exp)
-    {
+    if (len_act == len_exp && rule_act == rule_exp) {
         const YYKEYTYPE offset = keys[3 * i];
         *cursor = token + offset;
         return 0;
-    }
-    else
-    {
+    } else {
         fprintf
             ( stderr
             , "error: lex_line1719: at position %ld (iteration %u):\n"
@@ -107,18 +99,18 @@ static int action_line1719
     }
 }
 
-int lex_line1719 ()
+int lex_line1719()
 {
     const size_t padding = 31; /* YYMAXFILL */
     int status = 0;
     size_t input_len = 0;
     size_t keys_count = 0;
-    YYCTYPE * input = NULL;
-    YYKEYTYPE * keys = NULL;
-    const YYCTYPE * cursor = NULL;
-    const YYCTYPE * limit = NULL;
-    const YYCTYPE * token = NULL;
-    const YYCTYPE * eof = NULL;
+    YYCTYPE *input = NULL;
+    YYKEYTYPE *keys = NULL;
+    const YYCTYPE *cursor = NULL;
+    const YYCTYPE *limit = NULL;
+    const YYCTYPE *token = NULL;
+    const YYCTYPE *eof = NULL;
     unsigned int i = 0;
 
     input = (YYCTYPE *) read_file
@@ -127,8 +119,7 @@ int lex_line1719 ()
         , padding
         , &input_len
         );
-    if (input == NULL)
-    {
+    if (input == NULL) {
         status = 1;
         goto end;
     }
@@ -139,8 +130,7 @@ int lex_line1719 ()
         , 0
         , &keys_count
         );
-    if (keys == NULL)
-    {
+    if (keys == NULL) {
         status = 1;
         goto end;
     }
@@ -149,10 +139,9 @@ int lex_line1719 ()
     limit = input + input_len + padding;
     eof = input + input_len;
 
-    for (i = 0; status == 0 && i < keys_count; ++i)
-    {
+    for (i = 0; status == 0 && i < keys_count; ++i) {
         token = cursor;
-        const YYCTYPE * marker = NULL;
+        const YYCTYPE *marker = NULL;
         YYCTYPE yych;
         unsigned int yyaccept = 0;
         static const unsigned char yybm[] = {
@@ -269,7 +258,7 @@ yy2:
             goto *yytarget[(yych = YYPEEK ())];
         }
 yy3:
-        status = action_line1719 (i, keys, input, token, &cursor, 40);
+        status = action_line1719(i, keys, input, token, &cursor, 40);
         continue;
 yy4:
         YYSKIP ();
@@ -564,7 +553,7 @@ yy11:
         if (yych <= '/') goto yy12;
         if (yych <= '9') goto yy1385;
 yy12:
-        status = action_line1719 (i, keys, input, token, &cursor, 46);
+        status = action_line1719(i, keys, input, token, &cursor, 46);
         continue;
 yy13:
         YYSKIP ();
@@ -1907,7 +1896,7 @@ yy48:
         if (yych <= '/') goto yy49;
         if (yych <= '9') goto yy54;
 yy49:
-        status = action_line1719 (i, keys, input, token, &cursor, 44);
+        status = action_line1719(i, keys, input, token, &cursor, 44);
         continue;
 yy50:
         YYSKIP ();
@@ -1915,7 +1904,7 @@ yy50:
         goto yy49;
 yy51:
         YYSKIP ();
-        status = action_line1719 (i, keys, input, token, &cursor, 45);
+        status = action_line1719(i, keys, input, token, &cursor, 45);
         continue;
 yy53:
         YYSKIP ();
@@ -2258,7 +2247,7 @@ yy71:
         if (yych == 'S') goto yy73;
         if (yych == 's') goto yy73;
 yy72:
-        status = action_line1719 (i, keys, input, token, &cursor, 43);
+        status = action_line1719(i, keys, input, token, &cursor, 43);
         continue;
 yy73:
         YYSKIP ();
@@ -3359,7 +3348,7 @@ yy165:
             goto *yytarget[(yych = YYPEEK ())];
         }
 yy166:
-        status = action_line1719 (i, keys, input, token, &cursor, 36);
+        status = action_line1719(i, keys, input, token, &cursor, 36);
         continue;
 yy167:
         YYSKIP ();
@@ -4132,7 +4121,7 @@ yy192:
             goto *yytarget[yych];
         }
 yy193:
-        status = action_line1719 (i, keys, input, token, &cursor, 39);
+        status = action_line1719(i, keys, input, token, &cursor, 39);
         continue;
 yy194:
         YYSKIP ();
@@ -4198,7 +4187,7 @@ yy197:
             goto *yytarget[yych];
         }
 yy198:
-        status = action_line1719 (i, keys, input, token, &cursor, 24);
+        status = action_line1719(i, keys, input, token, &cursor, 24);
         continue;
 yy199:
         yyaccept = 6;
@@ -4592,7 +4581,7 @@ yy221:
             if (yych <= ':') goto yy224;
         }
 yy222:
-        status = action_line1719 (i, keys, input, token, &cursor, 42);
+        status = action_line1719(i, keys, input, token, &cursor, 42);
         continue;
 yy223:
         yyaccept = 7;
@@ -5591,7 +5580,7 @@ yy276:
         }
 yy277:
         YYSKIP ();
-        status = action_line1719 (i, keys, input, token, &cursor, 41);
+        status = action_line1719(i, keys, input, token, &cursor, 41);
         continue;
 yy279:
         YYSKIP ();
@@ -5809,7 +5798,7 @@ yy292:
 yy293:
         YYSKIP ();
 yy294:
-        status = action_line1719 (i, keys, input, token, &cursor, 22);
+        status = action_line1719(i, keys, input, token, &cursor, 22);
         continue;
 yy295:
         YYSKIP ();
@@ -7360,7 +7349,7 @@ yy361:
         if ((yych = YYPEEK ()) <= '/') goto yy363;
         if (yych <= '9') goto yy364;
 yy363:
-        status = action_line1719 (i, keys, input, token, &cursor, 31);
+        status = action_line1719(i, keys, input, token, &cursor, 31);
         continue;
 yy364:
         YYSKIP ();
@@ -8246,7 +8235,7 @@ yy391:
             if (yych <= 'z') goto yy142;
         }
 yy392:
-        status = action_line1719 (i, keys, input, token, &cursor, 35);
+        status = action_line1719(i, keys, input, token, &cursor, 35);
         continue;
 yy393:
         yyaccept = 5;
@@ -10296,7 +10285,7 @@ yy452:
 yy453:
         YYSKIP ();
 yy454:
-        status = action_line1719 (i, keys, input, token, &cursor, 15);
+        status = action_line1719(i, keys, input, token, &cursor, 15);
         continue;
 yy455:
         yyaccept = 0;
@@ -10914,7 +10903,7 @@ yy474:
             goto *yytarget[yych];
         }
 yy475:
-        status = action_line1719 (i, keys, input, token, &cursor, 25);
+        status = action_line1719(i, keys, input, token, &cursor, 25);
         continue;
 yy476:
         yyaccept = 10;
@@ -11135,7 +11124,7 @@ yy485:
         }
 yy487:
         YYSKIP ();
-        status = action_line1719 (i, keys, input, token, &cursor, 9);
+        status = action_line1719(i, keys, input, token, &cursor, 9);
         continue;
 yy489:
         yyaccept = 11;
@@ -11149,7 +11138,7 @@ yy489:
             if (yych <= ':') goto yy492;
         }
 yy490:
-        status = action_line1719 (i, keys, input, token, &cursor, 11);
+        status = action_line1719(i, keys, input, token, &cursor, 11);
         continue;
 yy491:
         yyaccept = 11;
@@ -11566,7 +11555,7 @@ yy520:
         }
 yy522:
         YYSKIP ();
-        status = action_line1719 (i, keys, input, token, &cursor, 10);
+        status = action_line1719(i, keys, input, token, &cursor, 10);
         continue;
 yy524:
         yyaccept = 11;
@@ -11731,7 +11720,7 @@ yy533:
         if ((yych = YYPEEK ()) <= '/') goto yy534;
         if (yych <= '9') goto yy540;
 yy534:
-        status = action_line1719 (i, keys, input, token, &cursor, 19);
+        status = action_line1719(i, keys, input, token, &cursor, 19);
         continue;
 yy535:
         YYSKIP ();
@@ -12865,7 +12854,7 @@ yy604:
         if (yych <= '/') goto yy56;
         if (yych >= ':') goto yy56;
         YYSKIP ();
-        status = action_line1719 (i, keys, input, token, &cursor, 20);
+        status = action_line1719(i, keys, input, token, &cursor, 20);
         continue;
 yy607:
         yyaccept = 11;
@@ -12905,7 +12894,7 @@ yy610:
         if (yych <= '/') goto yy611;
         if (yych <= '9') goto yy604;
 yy611:
-        status = action_line1719 (i, keys, input, token, &cursor, 21);
+        status = action_line1719(i, keys, input, token, &cursor, 21);
         continue;
 yy612:
         yyaccept = 11;
@@ -13929,7 +13918,7 @@ yy655:
             goto *yytarget[yych];
         }
 yy656:
-        status = action_line1719 (i, keys, input, token, &cursor, 18);
+        status = action_line1719(i, keys, input, token, &cursor, 18);
         continue;
 yy657:
         yyaccept = 13;
@@ -14123,7 +14112,7 @@ yy665:
             goto *yytarget[yych];
         }
 yy666:
-        status = action_line1719 (i, keys, input, token, &cursor, 14);
+        status = action_line1719(i, keys, input, token, &cursor, 14);
         continue;
 yy667:
         yyaccept = 14;
@@ -14466,7 +14455,7 @@ yy699:
         if (yych <= '9') goto yy702;
         if (yych <= ':') goto yy703;
 yy700:
-        status = action_line1719 (i, keys, input, token, &cursor, 33);
+        status = action_line1719(i, keys, input, token, &cursor, 33);
         continue;
 yy701:
         YYSKIP ();
@@ -15256,7 +15245,7 @@ yy762:
             if (yych <= 't') goto yy662;
         }
 yy763:
-        status = action_line1719 (i, keys, input, token, &cursor, 16);
+        status = action_line1719(i, keys, input, token, &cursor, 16);
         continue;
 yy764:
         YYSKIP ();
@@ -15294,7 +15283,7 @@ yy769:
         if (yych >= '2') goto yy56;
 yy770:
         YYSKIP ();
-        status = action_line1719 (i, keys, input, token, &cursor, 32);
+        status = action_line1719(i, keys, input, token, &cursor, 32);
         continue;
 yy772:
         YYSKIP ();
@@ -15471,7 +15460,7 @@ yy782:
             goto *yytarget[yych];
         }
 yy783:
-        status = action_line1719 (i, keys, input, token, &cursor, 34);
+        status = action_line1719(i, keys, input, token, &cursor, 34);
         continue;
 yy784:
         YYSKIP ();
@@ -15634,7 +15623,7 @@ yy792:
             if (yych <= 'X') goto yy883;
         }
 yy793:
-        status = action_line1719 (i, keys, input, token, &cursor, 23);
+        status = action_line1719(i, keys, input, token, &cursor, 23);
         continue;
 yy794:
         YYSKIP ();
@@ -15999,7 +15988,7 @@ yy813:
         if (yych <= '/') goto yy814;
         if (yych <= '7') goto yy816;
 yy814:
-        status = action_line1719 (i, keys, input, token, &cursor, 30);
+        status = action_line1719(i, keys, input, token, &cursor, 30);
         continue;
 yy815:
         YYSKIP ();
@@ -16008,7 +15997,7 @@ yy815:
         if (yych >= '8') goto yy56;
 yy816:
         YYSKIP ();
-        status = action_line1719 (i, keys, input, token, &cursor, 29);
+        status = action_line1719(i, keys, input, token, &cursor, 29);
         continue;
 yy818:
         YYSKIP ();
@@ -16066,7 +16055,7 @@ yy820:
             goto *yytarget[yych];
         }
 yy821:
-        status = action_line1719 (i, keys, input, token, &cursor, 28);
+        status = action_line1719(i, keys, input, token, &cursor, 28);
         continue;
 yy822:
         YYSKIP ();
@@ -16168,7 +16157,7 @@ yy840:
 yy841:
         YYSKIP ();
 yy842:
-        status = action_line1719 (i, keys, input, token, &cursor, 27);
+        status = action_line1719(i, keys, input, token, &cursor, 27);
         continue;
 yy843:
         YYSKIP ();
@@ -16350,7 +16339,7 @@ yy847:
             goto *yytarget[yych];
         }
 yy848:
-        status = action_line1719 (i, keys, input, token, &cursor, 26);
+        status = action_line1719(i, keys, input, token, &cursor, 26);
         continue;
 yy849:
         YYSKIP ();
@@ -17587,7 +17576,7 @@ yy972:
         if (yych <= '/') goto yy973;
         if (yych <= '9') goto yy995;
 yy973:
-        status = action_line1719 (i, keys, input, token, &cursor, 17);
+        status = action_line1719(i, keys, input, token, &cursor, 17);
         continue;
 yy974:
         yyaccept = 22;
@@ -18992,7 +18981,7 @@ yy1065:
             goto *yytarget[yych];
         }
 yy1067:
-        status = action_line1719 (i, keys, input, token, &cursor, 12);
+        status = action_line1719(i, keys, input, token, &cursor, 12);
         continue;
 yy1068:
         YYSKIP ();
@@ -19078,7 +19067,7 @@ yy1074:
             goto *yytarget[yych];
         }
 yy1075:
-        status = action_line1719 (i, keys, input, token, &cursor, 13);
+        status = action_line1719(i, keys, input, token, &cursor, 13);
         continue;
 yy1076:
         yyaccept = 25;
@@ -20016,7 +20005,7 @@ yy1116:
             goto *yytarget[yych];
         }
 yy1117:
-        status = action_line1719 (i, keys, input, token, &cursor, 38);
+        status = action_line1719(i, keys, input, token, &cursor, 38);
         continue;
 yy1118:
         YYSKIP ();
@@ -20089,7 +20078,7 @@ yy1124:
         if (yych != 'f') goto yy56;
 yy1125:
         YYSKIP ();
-        status = action_line1719 (i, keys, input, token, &cursor, 8);
+        status = action_line1719(i, keys, input, token, &cursor, 8);
         continue;
 yy1127:
         yyaccept = 26;
@@ -20281,7 +20270,7 @@ yy1140:
             goto *yytarget[yych];
         }
 yy1141:
-        status = action_line1719 (i, keys, input, token, &cursor, 37);
+        status = action_line1719(i, keys, input, token, &cursor, 37);
         continue;
 yy1142:
         YYSKIP ();
@@ -24186,7 +24175,7 @@ yy1293:
         if (yych <= '9') goto yy1296;
         goto yy1297;
 yy1294:
-        status = action_line1719 (i, keys, input, token, &cursor, 7);
+        status = action_line1719(i, keys, input, token, &cursor, 7);
         continue;
 yy1295:
         yyaccept = 28;
@@ -24562,7 +24551,7 @@ yy1314:
         if (yych != 'f') goto yy56;
 yy1315:
         YYSKIP ();
-        status = action_line1719 (i, keys, input, token, &cursor, 6);
+        status = action_line1719(i, keys, input, token, &cursor, 6);
         continue;
 yy1317:
         yyaccept = 0;
@@ -26648,7 +26637,7 @@ yy1385:
         if (yych <= '/') goto yy1387;
         if (yych <= '9') goto yy1385;
 yy1387:
-        status = action_line1719 (i, keys, input, token, &cursor, 5);
+        status = action_line1719(i, keys, input, token, &cursor, 5);
         continue;
 yy1388:
         YYSKIP ();
@@ -27360,7 +27349,7 @@ yy1415:
 yy1416:
         YYSKIP ();
 yy1417:
-        status = action_line1719 (i, keys, input, token, &cursor, 4);
+        status = action_line1719(i, keys, input, token, &cursor, 4);
         continue;
 yy1418:
         YYSKIP ();
@@ -27412,7 +27401,7 @@ yy1419:
             if (yych <= 'z') goto yy144;
         }
 yy1420:
-        status = action_line1719 (i, keys, input, token, &cursor, 3);
+        status = action_line1719(i, keys, input, token, &cursor, 3);
         continue;
 yy1421:
         YYSKIP ();
@@ -30319,7 +30308,7 @@ yy1499:
             if (yych <= 'z') goto yy142;
         }
 yy1500:
-        status = action_line1719 (i, keys, input, token, &cursor, 1);
+        status = action_line1719(i, keys, input, token, &cursor, 1);
         continue;
 yy1501:
         YYSKIP ();
@@ -30511,7 +30500,7 @@ yy1507:
             if (yych <= 'z') goto yy143;
         }
 yy1508:
-        status = action_line1719 (i, keys, input, token, &cursor, 2);
+        status = action_line1719(i, keys, input, token, &cursor, 2);
         continue;
 yy1509:
         yyaccept = 0;
@@ -31250,7 +31239,7 @@ yy1529:
 yy1530:
         YYSKIP ();
 yy1531:
-        status = action_line1719 (i, keys, input, token, &cursor, 0);
+        status = action_line1719(i, keys, input, token, &cursor, 0);
         continue;
 yy1532:
         yyaccept = 0;
@@ -31488,24 +31477,21 @@ yy1537:
         }
 
     }
-    if (status == 0)
-    {
-        if (cursor != eof)
-        {
+    if (status == 0) {
+        if (cursor != eof) {
             status = 1;
             const long pos = token - input;
-            fprintf (stderr, "error: lex_line1719: unused input strings left at position %ld\n", pos);
+            fprintf(stderr, "error: lex_line1719: unused input strings left at position %ld\n", pos);
         }
-        if (i != keys_count)
-        {
+        if (i != keys_count) {
             status = 1;
-            fprintf (stderr, "error: lex_line1719: unused keys left after %u iterations\n", i);
+            fprintf(stderr, "error: lex_line1719: unused keys left after %u iterations\n", i);
         }
     }
 
 end:
-    free (input);
-    free (keys);
+    free(input);
+    free(keys);
 
     return status;
 }
@@ -31520,9 +31506,11 @@ end:
 #undef YYFILL
 #define YYMAXFILL 31
 
-int main ()
+int main()
 {
-    if (lex_line1719 () != 0) return 1;
+    if(lex_line1719() != 0) {
+        return 1;
+    }
     return 0;
 }
 YA)YD)YF)YZ)YAA)YDZ)YFa)YZz)YAAA)YDZZ)YFaa)YZzz)YAAAA)YDZZZ)YFaaa)YZzzz)YAAAAA)YDZZZZ)YFaaaa)YZzzzz)YAAAA YDZZZ(YFaaa*YZzzz@YAAAA[YDZZZ`YFaaa{YZzzzÿYAAA YDZZ(YFaa*YZzz@YAAA[YDZZ`YFaa{YZzzÿYAA YDZ(YFa*YZz@YAA[YDZ`YFa{YZzÿYA YD(YF*YZ@YA[YD`YF{YZÿYa)Yd)Yf)Yz)YaA)YdZ)YfA)YzZ)Yaa)Ydz)Yfa)Yzz)YaaA)YdzZ)YfaA)YzzZ)Yaa-A-A Ydz/Z/Z,Yfa_a_a.Yzz-z-z0Yaa/A/A@Ydz_Z_Z[Yfa-a-a^Yzz/z/z`Yaa_A_A{Ydz-Z-ZÿYaa-A- Ydz/Z/@Yfa_a_[Yzz-z-`Yaa/A/{Ydz_Z_ÿYaa-AA Ydz/ZZ Yfa_aa Yzz-zz Yaa-A Ydz/Z,Yfa_a.Yzz-z0Yaa/A@Ydz_Z[Yfa-a^Yzz/z`Yaa_A{Ydz-ZÿYaa- Ydz/@Yfa_[Yzz-`Yaa/{Ydz_ÿYaaa)Ydzz)Yfaa)Yzzz)YaaaA)YdzzZ)YfaaA)YzzzZ)Yaaa-A Ydzz/A Yfaa_A Yzzz-A Yaaaa)Ydzzz)Yfaaa)Yzzzz)YaaaaA)YdzzzZ)YfaaaA)YzzzzZ)Yaaaa-A Ydzzz/A Yfaaa_A Yzzzz-A Yaaaaa)Ydzzzz)Yfaaaa)Yzzzzz)Yaaaaa-A Ydzzzz/A Yfaaaa_A Yzzzzz-A Yaaaaaa-A Ydzzzzz/A Yfaaaaa_A Yzzzzzz-A Yaaaaaaa-A Ydzzzzzz-A Yfaaaaaa-A Yzzzzzzz-A Yaaaaaa Ydzzzzz,Yfaaaaa.Yzzzzzz0Yaaaaaa^Ydzzzzz`Yfaaaaa{YzzzzzzÿYaaaaa Ydzzzz(Yfaaaa*Yzzzzz,Yaaaaa.Ydzzzz0Yfaaaa^Yzzzzz`Yaaaaa{YdzzzzÿYaaaa Ydzzz(Yfaaa*Yzzzz,Yaaaa.Ydzzz0Yfaaa@Yzzzz[Yaaaa^Ydzzz`Yfaaa{YzzzzÿYaaa Ydzz(Yfaa*Yzzz,Yaaa.Ydzz0Yfaa@Yzzz[Yaaa^Ydzz`Yfaa{YzzzÿYaa Ydz(Yfa*Yzz,Yaa.Ydz0Yfa@Yzz[Yaa^Ydz`Yfa{YzzÿYa-A Yd/A Yf_A Yz-A Ya Yd(Yf*Yz,Ya.Yd0Yf@Yz[Ya^Yd`Yf{YzÿYE)YEA)YER)YET)YEZ)YEa)YEr)YEt)YEz)YES)YEs)YESA)YEsS)YESU)YEsZ)YESa)YEss)YESu)YEsz)YEST)YEst)YESTA)YEstD)YESTF)YEstZ)YESTa)YEstd)YESTf)YEstz)YESTE)YEste)YESTEA)YEsteQ)YESTES)YEsteZ)YESTEa)YEsteq)YESTEs)YEstez)YESTER)YEster)YESTERDA YEsterdaXYESTERDAZYEsterdaxYESTERDAzYEsterdaÿYESTERD YEsterd@YESTERDBYEsterd`YESTERDbYEsterdÿYESTER YEster(YESTER*YEsterCYESTEREYEstercYESTEReYEsterÿYESTE YEste(YESTE*YEste@YESTE[YEste`YESTE{YEsteÿYEST YEst(YEST*YEst@YEST[YEst`YEST{YEstÿYES YEs(YES*YEs@YES[YEs`YES{YEsÿYE YE(YE*YE@YE[YE`YE{YEÿYe)YeA)YeR)YeT)YeZ)Yea)Yer)Yet)Yez)Ye-A Ye/A Ye_A YeS)Yes)YesA)YesS)YesU)YesZ)Yes-A Yes/A Yes_A Yesa)Yess)Yesu)Yesz)YesT)Yest)YestA)YestD)YestF)YestZ)Yest-A Yest/A Yest_A Yesta)Yestd)Yestf)Yestz)YestE)Yeste)YesteA)YesteQ)YesteS)YesteZ)Yeste-A Yeste/A Yeste_A Yestea)Yesteq)Yestes)Yestez)YesteR)Yester)Yester-A Yester/A Yester_A Yestera-A Yesterc-A Yestere-A Yesterz-A YesterDAYYesterd-A Yesterd/A Yesterd_A Yesterdb-A Yesterdz-A YesterdAYYesterda-A Yesterda/A Yesterda_A Yesterdaa-A Yesterdax-A Yesterdaz-A YesterdaYYesterday-A Yesterday/A Yesterday_A Yesterdaya-A Yesterdayz-A Yesterday Yesterday,Yesterday.Yesterday0Yesterday^Yesterday`Yesterday{YesterdayÿYesterda Yesterda,Yesterda.Yesterda0YesterdaXYesterdaZYesterda^Yesterda`Yesterda{YesterdaÿYesterd Yesterd,Yesterd.Yesterd0Yesterd@YesterdBYesterd^Yesterd`Yesterd{YesterdÿYester Yester(Yester*Yester,Yester.Yester0YesterCYesterEYester^Yester`Yester{YesterÿYeste Yeste(Yeste*Yeste,Yeste.Yeste0Yeste@Yeste[Yeste^Yeste`Yeste{YesteÿYest Yest(Yest*Yest,Yest.Yest0Yest@Yest[Yest^Yest`Yest{YestÿYes Yes(Yes*Yes,Yes.Yes0Yes@Yes[Yes^Yes`Yes{YesÿYe Ye(Ye*Ye,Ye.Ye0Ye@Ye[Ye^Ye`Ye{YeÿY Y(Y*Y@Y[Y`Y{Yÿy)yA)yD)yF)yZ)ya)yd)yf)yz)yE)ye)y y(y*y@y[y`y{yÿN)NA)ND)NF)NH)NJ)NN)NP)NZ)Na)Nd)Nf)Nh)Nj)Nn)Np)Nz)NO)NOA)NON)NOP)NOU)NOX)NOZ)NOa)NOn)NOp)NOu)NOx)NOz)NOW)NOw)NOWA)NOwZ)NOWa)NOwz)NOW NOw(NOW*NOw@NOW[NOw`NOW{NOwÿNOO)NOo)NOOA)NOoM)NOOO)NOoZ)NOOa)NOom)NOOo)NOoz)NOON)NOon)NOONA)NOonZ)NOONa)NOonz)NOON NOon(NOON*NOon@NOON[NOon`NOON{NOonÿNOO NOo(NOO*NOo@NOO[NOo`NOO{NOoÿNOV)NOv)NOVA)NOvD)NOVF)NOvZ)NOVa)NOvd)NOVf)NOvz)NOV		0s		T00.00.00		GA)NOv  2s  T19:59:59  GL)NOV.-0s,,T00.00.00		GN)NOv	.2s..T19:59:59  GZ)NOV 	0sddT00.00.00		GA)NOv. 2shhT19:59:59  GL)NOV	-0snnT00.00.00		GN)NOv .2srrT19:59:59  GZ)NOV.	0sttT00.00.00		GA)NOV		0s		T00.00.00		GAA)NOv  2s  T19:59:59  GLZ)NOV.-0s,,T00.00.00		GNa)NOv	.2s..T19:59:59  GZz)NOV 	0sddT00.00.00		GAA)NOv. 2shhT19:59:59  GLZ)NOV	-0snnT00.00.00		GNa)NOv .2srrT19:59:59  GZz)NOV.	0sttT00.00.00		GAA)NOV		0s		T00.00.00		GAAA)NOv  2s  T19:59:59  GLZZ)NOV.-0s,,T00.00.00		GNaa)NOv	.2s..T19:59:59  GZzz)NOV 	0sddT00.00.00		GAAA)NOv. 2shhT19:59:59  GLZZ)NOV	-0snnT00.00.00		GNaa)NOv .2srrT19:59:59  GZzz)NOV.	0sttT00.00.00		GAAA)NOV		0s		T00.00.00		GAAAA)NOv  2s  T19:59:59  GLZZZ)NOV.-0s,,T00.00.00		GNaaa)NOv	.2s..T19:59:59  GZzzz)NOV 	0sddT00.00.00		GAAAA)NOv. 2shhT19:59:59  GLZZZ)NOV	-0snnT00.00.00		GNaaa)NOv .2srrT19:59:59  GZzzz)NOV.	0sttT00.00.00		GAAAA)NOV		0s		T00.00.00		GAAAAA)NOv  2s  T19:59:59  GLZZZZ)NOV.-0s,,T00.00.00		GNaaaa)NOv	.2s..T19:59:59  GZzzzz)NOV 	0sddT00.00.00		GAAAAA)NOv. 2shhT19:59:59  GLZZZZ)NOV	-0snnT00.00.00		GNaaaa)NOv .2srrT19:59:59  GZzzzz)NOV.	0sttT00.00.00		GAAAAA)NOV		0s		T00.00.00		GAAAAA NOv  2s  T19:59:59  GLZZZZ(NOV.-0s,,T00.00.00		GNaaaa*NOv	.2s..T19:59:59  GZzzzzÿNOV 	0sddT00.00.00		GAAAAA NOv. 2shhT19:59:59  GLZZZZ(NOV	-0snnT00.00.00		GNaaaa*NOv .2srrT19:59:59  GZzzzzÿNOV.	0sttT00.00.00		GAAAAA NOV		0s		T00.00.00		GAAAA NOv  2s  T19:59:59  GLZZZ(NOV.-0s,,T00.00.00		GNaaa*NOv	.2s..T19:59:59  GZzzz@NOV 	0sddT00.00.00		GAAAA[NOv. 2shhT19:59:59  GLZZZ`NOV	-0snnT00.00.00		GNaaa{NOv .2srrT19:59:59  GZzzzÿNOV.	0sttT00.00.00		GAAAA NOV		0s		T00.00.00		GAAA NOv  2s  T19:59:59  GLZZ(NOV.-0s,,T00.00.00		GNaa*NOv	.2s..T19:59:59  GZzz@NOV 	0sddT00.00.00		GAAA[NOv. 2shhT19:59:59  GLZZ`NOV	-0snnT00.00.00		GNaa{NOv .2srrT19:59:59  GZzzÿNOV.	0sttT00.00.00		GAAA NOV		0s		T00.00.00		GAA NOv  2s  T19:59:59  GLZ(NOV.-0s,,T00.00.00		GNa*NOv	.2s..T19:59:59  GZz@NOV 	0sddT00.00.00		GAA[NOv. 2shhT19:59:59  GLZ`NOV	-0snnT00.00.00		GNa{NOv .2srrT19:59:59  GZzÿNOV.	0sttT00.00.00		GAA NOV		0s		T00.00.00		GA NOv  2s  T19:59:59  GL(NOV.-0s,,T00.00.00		GN*NOv	.2s..T19:59:59  GZ@NOV 	0sddT00.00.00		GA[NOv. 2shhT19:59:59  GL`NOV	-0snnT00.00.00		GN{NOv .2srrT19:59:59  GZÿNOV.	0sttT00.00.00		GA NOV		0s		T00.00.00		Ga)NOv  2s  T19:59:59  Gz)NOV.-0s,,T00.00.00		Ga)NOv	.2s..T19:59:59  Gz)NOV 	0sddT00.00.00		Ga)NOv. 2shhT19:59:59  Gz)NOV	-0snnT00.00.00		Ga)NOv .2srrT19:59:59  Gz)NOV.	0sttT00.00.00		Ga)NOV		0s		T00.00.00		GaA)NOv  2s  T19:59:59  GzZ)NOV.-0s,,T00.00.00		GaA)NOv	.2s..T19:59:59  GzZ)NOV 	0sddT00.00.00		GaA)NOv. 2shhT19:59:59  GzZ)NOV	-0snnT00.00.00		GaA)NOv .2srrT19:59:59  GzZ)NOV.	0sttT00.00.00		GaA)NOV		0s		T00.00.00		Gaa)NOv  2s  T19:59:59  Gzz)NOV.-0s,,T00.00.00		Gaa)NOv	.2s..T19:59:59  Gzz)NOV 	0sddT00.00.00		Gaa)NOv. 2shhT19:59:59  Gzz)NOV	-0snnT00.00.00		Gaa)NOv .2srrT19:59:59  Gzz)NOV.	0sttT00.00.00		Gaa)NOV		0s		T00.00.00		GaaA)NOv  2s  T19:59:59  GzzZ)NOV.-0s,,T00.00.00		GaaA)NOv	.2s..T19:59:59  GzzZ)NOV 	0sddT00.00.00		GaaA)NOv. 2shhT19:59:59  GzzZ)NOV	-0snnT00.00.00		GaaA)NOv .2srrT19:59:59  GzzZ)NOV.	0sttT00.00.00		GaaA)NOV		0s		T00.00.00		Gaa-A-A NOv  2s  T19:59:59  Gzz/Z/Z,NOV.-0s,,T00.00.00		Gaa_a_a.NOv	.2s..T19:59:59  Gzz-z-z0NOV 	0sddT00.00.00		Gaa/A/A@NOv. 2shhT19:59:59  Gzz_Z_Z[NOV	-0snnT00.00.00		Gaa-a-a^NOv .2srrT19:59:59  Gzz/z/z`NOV.	0sttT00.00.00		Gaa_A_A{NOv	 2s		T19:59:59  Gzz-Z-ZÿNOV		0s		T00.00.00		Gaa-A- NOv  2s  T19:59:59  Gzz/Z/@NOV.-0s,,T00.00.00		Gaa_a_[NOv	.2s..T19:59:59  Gzz-z-`NOV 	0sddT00.00.00		Gaa/A/{NOv. 2shhT19:59:59  Gzz_Z_ÿNOV	-0snnT00.00.00		Gaa-a- NOv .2srrT19:59:59  Gzz/z/@NOV.	0sttT00.00.00		Gaa_A_[NOV		0s		T00.00.00		Gaa-AA NOv  2s  T19:59:59  Gzz/ZZ NOV.-0s,,T00.00.00		Gaa_aa NOv	.2s..T19:59:59  Gzz-zz NOV 	0sddT00.00.00		Gaa/AA NOv. 2shhT19:59:59  Gzz_ZZ NOV	-0snnT00.00.00		Gaa-aa NOv .2srrT19:59:59  Gzz/zz NOV.	0sttT00.00.00		Gaa_AA NOV		0s		T00.00.00		Gaa-A NOv  2s  T19:59:59  Gzz/Z,NOV.-0s,,T00.00.00		Gaa_a.NOv	.2s..T19:59:59  Gzz-z0NOV 	0sddT00.00.00		Gaa/A@NOv. 2shhT19:59:59  Gzz_Z[NOV	-0snnT00.00.00		Gaa-a^NOv .2srrT19:59:59  Gzz/z`NOV.	0sttT00.00.00		Gaa_A{NOv	 2s		T19:59:59  Gzz-ZÿNOV		0s		T00.00.00		Gaa- NOv  2s  T19:59:59  Gzz/@NOV.-0s,,T00.00.00		Gaa_[NOv	.2s..T19:59:59  Gzz-`NOV 	0sddT00.00.00		Gaa/{NOv. 2shhT19:59:59  Gzz_ÿNOV	-0snnT00.00.00		Gaa- NOv .2srrT19:59:59  Gzz/@NOV.	0sttT00.00.00		Gaa_[NOV		0s		T00.00.00		Gaaa)NOv  2s  T19:59:59  Gzzz)NOV.-0s,,T00.00.00		Gaaa)NOv	.2s..T19:59:59  Gzzz)NOV 	0sddT00.00.00		Gaaa)NOv. 2shhT19:59:59  Gzzz)NOV	-0snnT00.00.00		Gaaa)NOv .2srrT19:59:59  Gzzz)NOV.	0sttT00.00.00		Gaaa)NOV		0s		T00.00.00		GaaaA)NOv  2s  T19:59:59  GzzzZ)NOV.-0s,,T00.00.00		GaaaA)NOv	.2s..T19:59:59  GzzzZ)NOV 	0sddT00.00.00		GaaaA)NOv. 2shhT19:59:59  GzzzZ)NOV	-0snnT00.00.00		GaaaA)NOv .2srrT19:59:59  GzzzZ)NOV.	0sttT00.00.00		GaaaA)NOV		0s		T00.00.00		Gaaa-A NOv  2s  T19:59:59  Gzzz/A NOV.-0s,,T00.00.00		Gaaa_A NOv	.2s..T19:59:59  Gzzz-A NOV 	0sddT00.00.00		Gaaa/A NOv. 2shhT19:59:59  Gzzz_A NOV	-0snnT00.00.00		Gaaa-A NOv .2srrT19:59:59  Gzzz/A NOV.	0sttT00.00.00		Gaaa_A NOV		0s		T00.00.00		Gaaaa)NOv  2s  T19:59:59  Gzzzz)NOV.-0s,,T00.00.00		Gaaaa)NOv	.2s..T19:59:59  Gzzzz)NOV 	0sddT00.00.00		Gaaaa)NOv. 2shhT19:59:59  Gzzzz)NOV	-0snnT00.00.00		Gaaaa)NOv .2srrT19:59:59  Gzzzz)NOV.	0sttT00.00.00		Gaaaa)NOV		0s		T00.00.00		GaaaaA)NOv  2s  T19:59:59  GzzzzZ)NOV.-0s,,T00.00.00		GaaaaA)NOv	.2s..T19:59:59  GzzzzZ)NOV 	0sddT00.00.00		GaaaaA)NOv. 2shhT19:59:59  GzzzzZ)NOV	-0snnT00.00.00		GaaaaA)NOv .2srrT19:59:59  GzzzzZ)NOV.	0sttT00.00.00		GaaaaA)NOV		0s		T00.00.00		Gaaaa-A NOv  2s  T19:59:59  Gzzzz/A NOV.-0s,,T00.00.00		Gaaaa_A NOv	.2s..T19:59:59  Gzzzz-A NOV 	0sddT00.00.00		Gaaaa/A NOv. 2shhT19:59:59  Gzzzz_A NOV	-0snnT00.00.00		Gaaaa-A NOv .2srrT19:59:59  Gzzzz/A NOV.	0sttT00.00.00		Gaaaa_A NOV		0s		T00.00.00		Gaaaaa)NOv  2s  T19:59:59  Gzzzzz)NOV.-0s,,T00.00.00		Gaaaaa)NOv	.2s..T19:59:59  Gzzzzz)NOV 	0sddT00.00.00		Gaaaaa)NOv. 2shhT19:59:59  Gzzzzz)NOV	-0snnT00.00.00		Gaaaaa)NOv .2srrT19:59:59  Gzzzzz)NOV.	0sttT00.00.00		Gaaaaa)NOV		0s		T00.00.00		Gaaaaa-A NOv  2s  T19:59:59  Gzzzzz/A NOV.-0s,,T00.00.00		Gaaaaa_A NOv	.2s..T19:59:59  Gzzzzz-A NOV 	0sddT00.00.00		Gaaaaa/A NOv. 2shhT19:59:59  Gzzzzz_A NOV	-0snnT00.00.00		Gaaaaa-A NOv .2srrT19:59:59  Gzzzzz/A NOV.	0sttT00.00.00		Gaaaaa_A NOV		0s		T00.00.00		Gaaaaaa-A NOv  2s  T19:59:59  Gzzzzzz/A NOV.-0s,,T00.00.00		Gaaaaaa_A NOv	.2s..T19:59:59  Gzzzzzz-A NOV 	0sddT00.00.00		Gaaaaaa/A NOv. 2shhT19:59:59  Gzzzzzz_A NOV	-0snnT00.00.00		Gaaaaaa-A NOv .2srrT19:59:59  Gzzzzzz/A NOV.	0sttT00.00.00		Gaaaaaa_A NOV		0s		T00.00.00		Gaaaaaaa-A NOv  2s  T19:59:59  Gzzzzzzz-A NOV.-0s,,T00.00.00		Gaaaaaaa-A NOv	.2s..T19:59:59  Gzzzzzzz-A NOV 	0sddT00.00.00		Gaaaaaaa-A NOv. 2shhT19:59:59  Gzzzzzzz-A NOV	-0snnT00.00.00		Gaaaaaaa-A NOv .2srrT19:59:59  Gzzzzzzz-A NOV.	0sttT00.00.00		Gaaaaaaa-A NOV		0s		T00.00.00		Gaaaaaa NOv  2s  T19:59:59  Gzzzzzz,NOV.-0s,,T00.00.00		Gaaaaaa.NOv	.2s..T19:59:59  Gzzzzzz0NOV 	0sddT00.00.00		Gaaaaaa^NOv. 2shhT19:59:59  Gzzzzzz`NOV	-0snnT00.00.00		Gaaaaaa{NOv .2srrT19:59:59  GzzzzzzÿNOV.	0sttT00.00.00		Gaaaaaa NOV		0s		T00.00.00		Gaaaaa NOv  2s  T19:59:59  Gzzzzz(NOV.-0s,,T00.00.00		Gaaaaa*NOv	.2s..T19:59:59  Gzzzzz,NOV 	0sddT00.00.00		Gaaaaa.NOv. 2shhT19:59:59  Gzzzzz0NOV	-0snnT00.00.00		Gaaaaa^NOv .2srrT19:59:59  Gzzzzz`NOV.	0sttT00.00.00		Gaaaaa{NOv	 2s		T19:59:59  GzzzzzÿNOV		0s		T00.00.00		Gaaaa NOv  2s  T19:59:59  Gzzzz(NOV.-0s,,T00.00.00		Gaaaa*NOv	.2s..T19:59:59  Gzzzz,NOV 	0sddT00.00.00		Gaaaa.NOv. 2shhT19:59:59  Gzzzz0NOV	-0snnT00.00.00		Gaaaa@NOv .2srrT19:59:59  Gzzzz[NOV.	0sttT00.00.00		Gaaaa^NOv	 2s		T19:59:59  Gzzzz`NOV -0s  T00.00.00		Gaaaa{NOv..2s,,T19:59:59  GzzzzÿNOV		0s		T00.00.00		Gaaa NOv  2s  T19:59:59  Gzzz(NOV.-0s,,T00.00.00		Gaaa*NOv	.2s..T19:59:59  Gzzz,NOV 	0sddT00.00.00		Gaaa.NOv. 2shhT19:59:59  Gzzz0NOV	-0snnT00.00.00		Gaaa@NOv .2srrT19:59:59  Gzzz[NOV.	0sttT00.00.00		Gaaa^NOv	 2s		T19:59:59  Gzzz`NOV -0s  T00.00.00		Gaaa{NOv..2s,,T19:59:59  GzzzÿNOV		0s		T00.00.00		Gaa NOv  2s  T19:59:59  Gzz(NOV.-0s,,T00.00.00		Gaa*NOv	.2s..T19:59:59  Gzz,NOV 	0sddT00.00.00		Gaa.NOv. 2shhT19:59:59  Gzz0NOV	-0snnT00.00.00		Gaa@NOv .2srrT19:59:59  Gzz[NOV.	0sttT00.00.00		Gaa^NOv	 2s		T19:59:59  Gzz`NOV -0s  T00.00.00		Gaa{NOv..2s,,T19:59:59  GzzÿNOV		0s		T00.00.00		Ga-A NOv  2s  T19:59:59  Gz/A NOV.-0s,,T00.00.00		Ga_A NOv	.2s..T19:59:59  Gz-A NOV 	0sddT00.00.00		Ga/A NOv. 2shhT19:59:59  Gz_A NOV	-0snnT00.00.00		Ga-A NOv .2srrT19:59:59  Gz/A NOV.	0sttT00.00.00		Ga_A NOV		0s		T00.00.00		Ga NOv  2s  T19:59:59  Gz(NOV.-0s,,T00.00.00		Ga*NOv	.2s..T19:59:59  Gz,NOV 	0sddT00.00.00		Ga.NOv. 2shhT19:59:59  Gz0NOV	-0snnT00.00.00		Ga@NOv .2srrT19:59:59  Gz[NOV.	0sttT00.00.00		Ga^NOv	 2s		T19:59:59  Gz`NOV -0s  T00.00.00		Ga{NOv..2s,,T19:59:59  GzÿNOV		0s		T00.00.00		GM)NOv  2s  T19:59:59  GM)NOV.-0s,,T00.00.00		GM)NOv	.2s..T19:59:59  GM)NOV 	0sddT00.00.00		GM)NOv. 2shhT19:59:59  GM)NOV	-0snnT00.00.00		GM)NOv .2srrT19:59:59  GM)NOV.	0sttT00.00.00		GM)NOV		0s		T00.00.00		GMA)NOv  2s  T19:59:59  GMS)NOV.-0s,,T00.00.00		GMU)NOv	.2s..T19:59:59  GMZ)NOV 	0sddT00.00.00		GMa)NOv. 2shhT19:59:59  GMz)NOV	-0snnT00.00.00		GMA)NOv .2srrT19:59:59  GMS)NOV.	0sttT00.00.00		GMU)NOV		0s		T00.00.00		GMT)NOv  2s  T19:59:59  GMT)NOV.-0s,,T00.00.00		GMT)NOv	.2s..T19:59:59  GMT)NOV 	0sddT00.00.00		GMT)NOv. 2shhT19:59:59  GMT)NOV	-0snnT00.00.00		GMT)NOv .2srrT19:59:59  GMT)NOV.	0sttT00.00.00		GMT)NOV		0s		T00.00.00		GMT+006NOv  2s  T19:59:59  GMT-199NOV.-0s,,T00.00.00		GMT+006NOv	.2s..T19:59:59  GMT-199NOV 	0sddT00.00.00		GMT+006NOv. 2shhT19:59:59  GMT-199NOV	-0snnT00.00.00		GMT+006NOv .2srrT19:59:59  GMT-199NOV.	0sttT00.00.00		GMT+006NOV		0s		T00.00.00		GMT+00:6NOv  2s  T19:59:59  GMT-19:9NOV.-0s,,T00.00.00		GMT+00:6NOv	.2s..T19:59:59  GMT-19:9NOV 	0sddT00.00.00		GMT+00:6NOv. 2shhT19:59:59  GMT-19:9NOV	-0snnT00.00.00		GMT+00:6NOv .2srrT19:59:59  GMT-19:9NOV.	0sttT00.00.00		GMT+00:6NOV		0s		T00.00.00		GMT+00:00NOv  2s  T19:59:59  GMT-19:59NOV.-0s,,T00.00.00		GMT+00:00NOv	.2s..T19:59:59  GMT-19:59NOV 	0sddT00.00.00		GMT+00:00NOv. 2shhT19:59:59  GMT-19:59NOV	-0snnT00.00.00		GMT+00:00NOv .2srrT19:59:59  GMT-19:59NOV.	0sttT00.00.00		GMT+00:00NOV		0s		T00.00.00		GMT+00:0 NOv  2s  T19:59:59  GMT-19:5/NOV.-0s,,T00.00.00		GMT+00:0:NOv	.2s..T19:59:59  GMT-19:5ÿNOV 	0sddT00.00.00		GMT+00:0 NOv. 2shhT19:59:59  GMT-19:5/NOV	-0snnT00.00.00		GMT+00:0:NOv .2srrT19:59:59  GMT-19:5ÿNOV.	0sttT00.00.00		GMT+00:0 NOV		0s		T00.00.00		GMT+00: NOv  2s  T19:59:59  GMT-19:/NOV.-0s,,T00.00.00		GMT+00::NOv	.2s..T19:59:59  GMT-19:ÿNOV 	0sddT00.00.00		GMT+00: NOv. 2shhT19:59:59  GMT-19:/NOV	-0snnT00.00.00		GMT+00::NOv .2srrT19:59:59  GMT-19:ÿNOV.	0sttT00.00.00		GMT+00: NOV		0s		T00.00.00		GMT+0000NOv  2s  T19:59:59  GMT-1950NOV.-0s,,T00.00.00		GMT+0000NOv	.2s..T19:59:59  GMT-1950NOV 	0sddT00.00.00		GMT+0000NOv. 2shhT19:59:59  GMT-1950NOV	-0snnT00.00.00		GMT+0000NOv .2srrT19:59:59  GMT-1950NOV.	0sttT00.00.00		GMT+0000NOV		0s		T00.00.00		GMT+00 NOv  2s  T19:59:59  GMT-19/NOV.-0s,,T00.00.00		GMT+00;NOv	.2s..T19:59:59  GMT-19ÿNOV 	0sddT00.00.00		GMT+00 NOv. 2shhT19:59:59  GMT-19/NOV	-0snnT00.00.00		GMT+00;NOv .2srrT19:59:59  GMT-19ÿNOV.	0sttT00.00.00		GMT+00 NOV		0s		T00.00.00		GMT+0:6NOv  2s  T19:59:59  GMT-1:6NOV.-0s,,T00.00.00		GMT+0:6NOv	.2s..T19:59:59  GMT-1:6NOV 	0sddT00.00.00		GMT+0:6NOv. 2shhT19:59:59  GMT-1:6NOV	-0snnT00.00.00		GMT+0:6NOv .2srrT19:59:59  GMT-1:6NOV.	0sttT00.00.00		GMT+0:6NOV		0s		T00.00.00		GMT+0 NOv  2s  T19:59:59  GMT-1/NOV.-0s,,T00.00.00		GMT+0;NOv	.2s..T19:59:59  GMT-1ÿNOV 	0sddT00.00.00		GMT+0 NOv. 2shhT19:59:59  GMT-1/NOV	-0snnT00.00.00		GMT+0;NOv .2srrT19:59:59  GMT-1ÿNOV.	0sttT00.00.00		GMT+0 NOV		0s		T00.00.00		GMT+26NOv  2s  T19:59:59  GMT-29NOV.-0s,,T00.00.00		GMT+26NOv	.2s..T19:59:59  GMT-29NOV 	0sddT00.00.00		GMT+26NOv. 2shhT19:59:59  GMT-29NOV	-0snnT00.00.00		GMT+26NOv .2srrT19:59:59  GMT-29NOV.	0sttT00.00.00		GMT+26NOV		0s		T00.00.00		GMT+206NOv  2s  T19:59:59  GMT-246NOV.-0s,,T00.00.00		GMT+206NOv	.2s..T19:59:59  GMT-246NOV 	0sddT00.00.00		GMT+206NOv. 2shhT19:59:59  GMT-246NOV	-0snnT00.00.00		GMT+206NOv .2srrT19:59:59  GMT-246NOV.	0sttT00.00.00		GMT+206NOV		0s		T00.00.00		GMT+2:6NOv  2s  T19:59:59  GMT-2:6NOV.-0s,,T00.00.00		GMT+2:6NOv	.2s..T19:59:59  GMT-2:6NOV 	0sddT00.00.00		GMT+2:6NOv. 2shhT19:59:59  GMT-2:6NOV	-0snnT00.00.00		GMT+2:6NOv .2srrT19:59:59  GMT-2:6NOV.	0sttT00.00.00		GMT+2:6NOV		0s		T00.00.00		GMT+250NOv  2s  T19:59:59  GMT-250NOV.-0s,,T00.00.00		GMT+250NOv	.2s..T19:59:59  GMT-250NOV 	0sddT00.00.00		GMT+250NOv. 2shhT19:59:59  GMT-250NOV	-0snnT00.00.00		GMT+250NOv .2srrT19:59:59  GMT-250NOV.	0sttT00.00.00		GMT+250NOV		0s		T00.00.00		GMT+2 NOv  2s  T19:59:59  GMT-2/NOV.-0s,,T00.00.00		GMT+2;NOv	.2s..T19:59:59  GMT-2ÿNOV 	0sddT00.00.00		GMT+2 NOv. 2shhT19:59:59  GMT-2/NOV	-0snnT00.00.00		GMT+2;NOv .2srrT19:59:59  GMT-2ÿNOV.	0sttT00.00.00		GMT+2 NOV		0s		T00.00.00		GMT+36NOv  2s  T19:59:59  GMT-96NOV.-0s,,T00.00.00		GMT+36NOv	.2s..T19:59:59  GMT-96NOV 	0sddT00.00.00		GMT+36NOv. 2shhT19:59:59  GMT-96NOV	-0snnT00.00.00		GMT+36NOv .2srrT19:59:59  GMT-96NOV.	0sttT00.00.00		GMT+36NOV		0s		T00.00.00		GMT+ NOv  2s  T19:59:59  GMT-/NOV.-0s,,T00.00.00		GMT+:NOv	.2s..T19:59:59  GMT-ÿNOV 	0sddT00.00.00		GMT+ NOv. 2shhT19:59:59  GMT-/NOV	-0snnT00.00.00		GMT+:NOv .2srrT19:59:59  GMT-ÿNOV.	0sttT00.00.00		GMT+ NOV		0s		T00.00.00		GMTA)NOv  2s  T19:59:59  GMTZ)NOV.-0s,,T00.00.00		GMTa)NOv	.2s..T19:59:59  GMTz)NOV 	0sddT00.00.00		GMTA)NOv. 2shhT19:59:59  GMTZ)NOV	-0snnT00.00.00		GMTa)NOv .2srrT19:59:59  GMTz)NOV.	0sttT00.00.00		GMTA)NOV		0s		T00.00.00		GMT NOv  2s  T19:59:59  GMT(NOV.-0s,,T00.00.00		GMT*NOv	.2s..T19:59:59  GMT,NOV 	0sddT00.00.00		GMT.NOv. 2shhT19:59:59  GMT@NOV	-0snnT00.00.00		GMT[NOv .2srrT19:59:59  GMT`NOV.	0sttT00.00.00		GMT{NOv	 2s		T19:59:59  GMTÿNOV		0s		T00.00.00		GM NOv  2s  T19:59:59  GM(NOV.-0s,,T00.00.00		GM*NOv	.2s..T19:59:59  GM@NOV 	0sddT00.00.00		GM[NOv. 2shhT19:59:59  GM`NOV	-0snnT00.00.00		GM{NOv .2srrT19:59:59  GMÿNOV.	0sttT00.00.00		GM NOV		0s		T00.00.00		G NOv  2s  T19:59:59  G(NOV.-0s,,T00.00.00		G*NOv	.2s..T19:59:59  G@NOV 	0sddT00.00.00		G[NOv. 2shhT19:59:59  G`NOV	-0snnT00.00.00		G{NOv .2srrT19:59:59  GÿNOV.	0sttT00.00.00		G NOV		0s		T00.00.00		+006NOv  2s  T19:59:59  -006NOV.-0s,,T00.00.00		+006NOv	.2s..T19:59:59  -006NOV 	0sddT00.00.00		+006NOv. 2shhT19:59:59  -006NOV	-0snnT00.00.00		+006NOv .2srrT19:59:59  -006NOV.	0sttT00.00.00		+006NOV		0s		T00.00.00		(A)NOv  2s  T19:59:59  (Z)NOV.-0s,,T00.00.00		(a)NOv	.2s..T19:59:59  (z)NOV 	0sddT00.00.00		(A)NOv. 2shhT19:59:59  (Z)NOV	-0snnT00.00.00		(a)NOv .2srrT19:59:59  (z)NOV.	0sttT00.00.00		(A)NOV		0s		T00.00.00		(AA)NOv  2s  T19:59:59  (ZZ)NOV.-0s,,T00.00.00		(aa)NOv	.2s..T19:59:59  (zz)NOV 	0sddT00.00.00		(AA)NOv. 2shhT19:59:59  (ZZ)NOV	-0snnT00.00.00		(aa)NOv .2srrT19:59:59  (zz)NOV.	0sttT00.00.00		(AA)NOV		0s		T00.00.00		(A NOv  2s  T19:59:59  (Z(NOV.-0s,,T00.00.00		(a*NOv	.2s..T19:59:59  (z@NOV 	0sddT00.00.00		(A[NOv. 2shhT19:59:59  (Z`NOV	-0snnT00.00.00		(a{NOv .2srrT19:59:59  (zÿNOV.	0sttT00.00.00		(A NOV		0s		T00.00.00		( NOv  2s  T19:59:59  (@NOV.-0s,,T00.00.00		([NOv	.2s..T19:59:59  (`NOV 	0sddT00.00.00		({NOv. 2shhT19:59:59  (ÿNOV	-0snnT00.00.00		( NOv .2srrT19:59:59  (@NOV.	0sttT00.00.00		([NOV		0s		T00.00.00		A)NOv  2s  T19:59:59  F)NOV.-0s,,T00.00.00		H)NOv	.2s..T19:59:59  Z)NOV 	0sddT00.00.00		A)NOv. 2shhT19:59:59  F)NOV	-0snnT00.00.00		H)NOv .2srrT19:59:59  Z)NOV.	0sttT00.00.00		A)NOV		0s		T00.00.00		AA)NOv  2s  T19:59:59  FZ)NOV.-0s,,T00.00.00		HA)NOv	.2s..T19:59:59  ZZ)NOV 	0sddT00.00.00		AA)NOv. 2shhT19:59:59  FZ)NOV	-0snnT00.00.00		HA)NOv .2srrT19:59:59  ZZ)NOV.	0sttT00.00.00		AA)NOV		0s		T00.00.00		Aa)NOv  2s  T19:59:59  Fz)NOV.-0s,,T00.00.00		Ha)NOv	.2s..T19:59:59  Zz)NOV 	0sddT00.00.00		Aa)NOv. 2shhT19:59:59  Fz)NOV	-0snnT00.00.00		Ha)NOv .2srrT19:59:59  Zz)NOV.	0sttT00.00.00		Aa)NOV		0s		T00.00.00		A NOv  2s  T19:59:59  F(NOV.-0s,,T00.00.00		H*NOv	.2s..T19:59:59  Z@NOV 	0sddT00.00.00		A[NOv. 2shhT19:59:59  F`NOV	-0snnT00.00.00		H{NOv .2srrT19:59:59  ZÿNOV.	0sttT00.00.00		A NOV		0s		T00.00.00		a)NOv  2s  T19:59:59  z)NOV.-0s,,T00.00.00		a)NOv	.2s..T19:59:59  z)NOV 	0sddT00.00.00		a)NOv. 2shhT19:59:59  z)NOV	-0snnT00.00.00		a)NOv .2srrT19:59:59  z)NOV.	0sttT00.00.00		a)NOV		0s		T00.00.00		 NOv  2s  T19:59:59  NOV.-0s,,T00.00.00		
