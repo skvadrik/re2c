@@ -116,7 +116,7 @@ or build re2c with `mingw <http://mingw.org/>`_:
 
 .. code-block:: bash
 
-    $ ../configure --host i686-w64-mingw32  [--prefix=<prefix>]
+    $ ./configure --host i686-w64-mingw32  [--prefix=<prefix>]
     $ make
     $ make install
 
