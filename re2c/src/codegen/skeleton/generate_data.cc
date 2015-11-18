@@ -146,13 +146,13 @@ template <typename cunit_t, typename key_t>
 	Node::covers_t Node::cover (const multipath_t & prefix, FILE * input, FILE * keys)
 {
 	covers_t size (0u);
+	if (end () && suffix == NULL)
+	{
+		suffix = new path_t (rule, ctx);
+	}
 	if (suffix != NULL)
 	{
 		size = cover_one<cunit_t, key_t> (input, keys, prefix, *suffix);
-	}
-	else if (end ())
-	{
-		suffix = new path_t (rule, ctx);
 	}
 	else if (loop < 2)
 	{
