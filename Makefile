@@ -72,7 +72,7 @@ SRC_OTH = \
     src/examples/05_parsing_integers_conditions.re \
     src/examples/06_braille.utf32.txt \
     src/examples/06_braille.re \
-    src/examples/07_c++98.re \
+    src/examples/07_cxx98.re \
     src/examples/01_recognizing_integers.re \
     src/examples/04_parsing_integers_blocks.re \
     src/examples/06_braille.ucs2.txt \

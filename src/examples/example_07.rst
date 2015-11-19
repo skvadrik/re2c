@@ -10,9 +10,9 @@ are parsed (not only recognized): numeric literals are converted to numbers, str
 Some additional checks described in standard (e.g. overflows in integer literals) are also done.
 In fact, C++ is an easy language to lex: unlike many other languages, lexer can proceed without feedback from parser.
 
-`[07_c++98.re] <07_c++98.re>`_
+`[07_cxx98.re] <07_cxx98.re>`_
 
-.. include:: 07_c++98.re
+.. include:: 07_cxx98.re
     :code: cpp
     :number-lines:
 
@@ -45,9 +45,9 @@ Generate, compile and run:
 
 .. code-block:: bash
 
-    $ re2c -o example.cc 07_c++98.re
+    $ re2c -o example.cc 07_cxx98.re
     $ g++ -o example example.cc
-    $ ./example 07_c++98.re | fold
+    $ ./example 07_cxx98.re | fold
      STATIC CONST size_t SIZE = 64 * 1024; STRUCT input_t { UNSIGNED CHAR buf[SIZE +
      YYMAXFILL]; UNSIGNED CHAR *lim; UNSIGNED CHAR *cur; UNSIGNED CHAR *mar; UNSIGNE
     D CHAR *tok; BOOL eof; FILE *CONST file; input_t(FILE *f) : buf() , lim(buf + SI
