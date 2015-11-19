@@ -18,7 +18,7 @@ Generate and render :
 .. code-block::
 
     $ re2c -D8 -o utf8_any.dot utf8_any.re
-    $ dot -T png -o utf8_any.png utf8_any.dot
+    $ dot -Tpng -o utf8_any.png utf8_any.dot
 
 Here is the picture:
 
@@ -43,12 +43,12 @@ Generate .dot file:
 
     $ re2c -Dc -o php_json.dot php_json.re
 
-Render with ```dot -G ratio=0.3 -T png -o php_json_dot.png php_json.dot```:
+Render with ```dot -Gratio=0.3 -Tpng -o php_json_dot.png php_json.dot```:
 
 .. image:: php_json_dot.png
     :width: 80%
 
-Render with ```neato -E len=4 -T png -o php_json_neato.png php_json.dot```:
+Render with ```neato -Elen=4 -Tpng -o php_json_neato.png php_json.dot```:
 
 .. image:: php_json_neato.png
     :width: 50%

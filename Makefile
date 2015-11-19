@@ -89,6 +89,16 @@ SRC_OTH = \
     src/manual/features/dot/php_json_neato.png \
     src/manual/features/dot/utf8_any.re \
     src/manual/features/dot/php_json.re \
+    src/manual/features/skeleton/collapsed.png \
+    src/manual/features/skeleton/collapsed_next.png \
+    src/manual/features/skeleton/example.c \
+    src/manual/features/skeleton/example.c.line4.input \
+    src/manual/features/skeleton/example.c.line4.keys \
+    src/manual/features/skeleton/example.png \
+    src/manual/features/skeleton/gen.sh \
+    src/manual/features/skeleton/hex2.re \
+    src/manual/features/skeleton/plot_input.png \
+    src/manual/features/skeleton/plot_keys.png \
     src/about/1994_bumbulis_cowan_re2c_a_more_versatile_scanner_generator.pdf
 
 OBJ_RST = $(SRC_RST:%.rst=%.html)
