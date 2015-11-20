@@ -6,20 +6,4 @@
     <id>http://re2c.org/</id>
     <updated>2015-11-14T19:40:00Z</updated>
 
-    <entry>
-        <title>re2c-0.15 release notes</title>
-        <link href="http://re2c.org/manual.html"/>
-        <id>http://re2c.org/manual.html</id>
-        <updated>2015-11-14T19:40:00Z</updated>
-        <summary type="xhtml">
-            <div xmlns="http://www.w3.org/1999/xhtml">
-                Some text <a href="http://re2c.org/manual.html">here</a>.
-            </div>
-        </summary>
-        <author>
-            <name>Ulya Trofimovich</name>
-            <email>skvadrik@gmail.com</email>
-        </author>
-    </entry>
-
 </feed>

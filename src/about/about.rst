@@ -43,5 +43,5 @@ be appreciated.
 Version
 -------
 
-This page describes ``re2c`` version 0.14.1.dev, package date 15 Oct 2015.
+This page describes ``re2c`` version 0.14.1.dev.
 
