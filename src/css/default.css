@@ -40,15 +40,14 @@ pre.code {
     border: 1px solid #557799;
     border-left: 8px solid #557799;
 
-    background-color: #f5f5f5;
+    background-color: #fafafa;
     display: block;
     white-space: pre;
     overflow: auto;
 }
 
 pre.code .ln { color: grey; } /* line numbers */
-pre.code .comment, code .comment { color: #0077ff; }
-pre.code .comment.preproc, code .comment.preproc { color: #9966ff; }
+pre.code .comment, code .comment { color: #004488; }
 pre.code .keyword, code .keyword { color: #003399; font-weight: bold; }
 pre.code .keyword.type, code .keyword.type { color: #aa3300; }
 pre.code .operator, code .operator { color: #000066; }
