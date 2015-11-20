@@ -68,6 +68,7 @@ SRC_CSS = src/css/default.css
 SRC_TPL = src/template.html
 
 SRC_OTH = \
+    src/CNAME \
     src/examples/06_braille.utf8.txt \
     src/examples/05_parsing_integers_conditions.re \
     src/examples/06_braille.utf32.txt \
