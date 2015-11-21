@@ -221,7 +221,7 @@ void vernum ()
 	{
 		vernum.insert(4, "0");
 	}
-	vernum.resize(6);
+	vernum.resize(6, '0');
 
 	printf ("%s\n", vernum.c_str ());
 }

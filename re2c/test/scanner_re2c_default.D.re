@@ -75,7 +75,10 @@ echo:
 					}
 					if (!DFlag)
 					{
-						out.write((const char*)(tok), (const char*)(&cursor[-7]) - (const char*)(tok));
+						const size_t lexeme_len = cursor[-1] == '{'
+							? sizeof ("%{") - 1
+							: sizeof ("/*!re2c") - 1;
+						out.write(tok, cursor - tok - lexeme_len);
 					}
 					tok = cursor;
 					RETURN(Parse);
@@ -108,7 +111,8 @@ echo:
 					}
 					if (!DFlag)
 					{
-						out.write((const char*)(tok), (const char*)(&cursor[-11]) - (const char*)(tok));
+						const size_t lexeme_len = sizeof ("/*!use:re2c") - 1;
+						out.write(tok, cursor - tok - lexeme_len);
 					}
 					tok = cursor;
 					RETURN(Reuse);
@@ -168,7 +172,7 @@ echo:
 					}
 					else if (!DFlag)
 					{
-						out.write((const char*)(tok), (const char*)(cursor) - (const char*)(tok));
+						out.write(tok, cursor - tok);
 					}
 					tok = pos = cursor;
 					goto echo;
@@ -185,7 +189,7 @@ echo:
 					}
 					else if (!DFlag)
 					{
-						out.write((const char*)(tok), (const char*)(cursor) - (const char*)(tok));
+						out.write(tok, cursor - tok);
 					}
 					tok = pos = cursor;
 					goto echo;
@@ -201,7 +205,7 @@ echo:
 					}
 					else if (!DFlag)
 					{
-						out.write((const char*)(tok), (const char*)(cursor) - (const char*)(tok));
+						out.write(tok, cursor - tok);
 					}
 					tok = pos = cursor;
 					cline++;
@@ -210,7 +214,7 @@ echo:
 	zero		{
 					if (!ignore_eoc && !DFlag)
 					{
-						out.write((const char*)(tok), (const char*)(cursor) - (const char*)(tok) - 1);
+						out.write(tok, cursor - tok - 1);
 						// -1 so we don't write out the \0
 					}
 					if(cursor == eof)
