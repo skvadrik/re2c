@@ -32,6 +32,7 @@ git commit -a -m "Release $version."
 git tag $version
 for r in `git remote`
 do
-    git push --follow-tags $r master
+    git push $r master
+    git push --tags $r master
 done
 
