@@ -7,7 +7,6 @@
 
 2. Edit the following files:
     CHANGELOG
-    on branch 'gh-pages': index.html
 
 3. Run release script:
     $ ./release.sh <version>
