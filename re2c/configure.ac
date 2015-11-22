@@ -15,13 +15,12 @@ AC_SUBST(PACKAGE_RELEASE, ${PACKAGE_RELEASE:-1})
 
 
 # --enable-docs
-AC_ARG_ENABLE([docs], [AS_HELP_STRING([--enable-docs], [regenerate man page and online documentation])])
+AC_ARG_ENABLE([docs], [AS_HELP_STRING([--enable-docs], [regenerate manpage])])
 AM_CONDITIONAL([REBUILD_DOCS], [test "x$enable_docs" = "xyes"])
 AM_COND_IF([REBUILD_DOCS], [
-    AC_CHECK_PROG(ASCIIDOC, asciidoc, yes, no)
-    AC_CHECK_PROG(A2X, a2x, yes, no)
-    AS_IF([test "x$ASCIIDOC" = "xno" -o "x$A2X" = "xno"], [
-        AC_MSG_ERROR([need asciidoc and a2x for --enable-docs])
+    AC_CHECK_PROG(RST2MAN, rst2man.py, yes, no)
+    AS_IF([test "x$RST2MAN" = "xno"], [
+        AC_MSG_ERROR([need rst2man.py for --enable-docs])
     ])
 ])
 
@@ -87,7 +86,7 @@ AC_CHECK_SIZEOF([0i8],       [], [[]])
 
 AC_CONFIG_FILES([\
     Makefile \
-    doc/re2c.ad \
+    doc/manpage.rst \
 ])
 AC_CONFIG_FILES([run_tests.sh], [chmod +x run_tests.sh])
 

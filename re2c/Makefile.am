@@ -146,13 +146,11 @@ BOOTSTRAP_LEX_CONF = bootstrap/src/parse/lex_conf.cc
 BOOTSTRAP_PARSEOPT = bootstrap/src/conf/parse_opts.cc
 BOOTSTRAP_PARSER = bootstrap/src/parse/parser.cc
 BOOTSTRAP_PARSER_HDR = bootstrap/src/parse/y.tab.h
-BOOTSTRAP_DOC_MAN = bootstrap/doc/re2c.1
-BOOTSTRAP_DOC_HTML = bootstrap/doc/manual.html
+BOOTSTRAP_DOC = bootstrap/doc/re2c.1
 BOOTSTRAP = \
 	$(BOOTSTRAP_LEX) \
 	$(BOOTSTRAP_LEX_CONF) \
-	$(BOOTSTRAP_DOC_HTML) \
-	$(BOOTSTRAP_DOC_MAN) \
+	$(BOOTSTRAP_DOC) \
 	$(BOOTSTRAP_PARSER) \
 	$(BOOTSTRAP_PARSER_HDR) \
 	$(BOOTSTRAP_PARSEOPT)
@@ -169,13 +167,9 @@ CUSTOM = \
 	$(CUSTOM_PARSEOPT)
 
 # docs
-SRC_DOC = doc/re2c.ad
-DOC_MAN = doc/re2c.1
-DOC_HTML = doc/manual.html
-DOC = \
-	$(DOC_HTML) \
-	$(DOC_MAN)
-man_MANS = $(DOC_MAN)
+SRC_DOC = doc/manpage.rst
+DOC = doc/re2c.1
+man_MANS = $(DOC)
 
 EXTRA_DIST = \
 	$(BOOTSTRAP) \
@@ -232,20 +226,15 @@ bootstrap: all
 
 .PHONY: docs
 if REBUILD_DOCS
-docs: $(DOC_MAN) $(DOC_HTML)
-$(DOC_MAN): $(SRC_DOC)
-	a2x -f manpage $(top_builddir)/$(SRC_DOC)
-	cp $@ $(top_srcdir)/$(BOOTSTRAP_DOC_MAN)
-$(DOC_HTML): $(SRC_DOC)
-	asciidoc -o $@ $(top_builddir)/$(SRC_DOC)
-	cp $@ $(top_srcdir)/$(BOOTSTRAP_DOC_HTML)
+docs: $(DOC)
+$(DOC): $(SRC_DOC)
+	rst2man.py $(top_builddir)/$(SRC_DOC) > $@
+	cp $@ $(top_srcdir)/$(BOOTSTRAP_DOC)
 else
-docs: $(DOC_MAN) $(DOC_HTML)
+docs: $(DOC)
 	@echo "Reconfigure to rebuild docs: ./configure --enable-docs"
-$(DOC_MAN): $(BOOTSTRAP_DOC_MAN)
-	cp $(top_srcdir)/$(BOOTSTRAP_DOC_MAN) $@
-$(DOC_HTML): $(BOOTSTRAP_DOC_HTML)
-	cp $(top_srcdir)/$(BOOTSTRAP_DOC_HTML) $@
+$(DOC): $(BOOTSTRAP_DOC)
+	cp $(top_srcdir)/$(BOOTSTRAP_DOC) $@
 endif
 
 all-local: docs $(BOOTSTRAP_PARSER)

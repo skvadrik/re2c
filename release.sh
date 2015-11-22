@@ -35,12 +35,3 @@ do
     git push --follow-tags $r master
 done
 
-# upload site
-git checkout gh-pages
-    cp -f re2c/$builddir/doc/manual.html manual.html
-    git commit -a -m "Updated site."
-    for r in `git remote`
-    do
-        git push $r gh-pages
-    done
-git checkout master

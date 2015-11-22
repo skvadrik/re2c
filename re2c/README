@@ -76,7 +76,7 @@ This will redirect test script output to file. If you want to see progress:
 Testing under valgrind (takes a long time):
     $ make vtests
 
-5. Rebuild documentation (requires asciidoc and a2x):
+5. Rebuild documentation (requires rst2man.py):
     $ ./configure --enable-docs [--prefix=<prefix>]
     $ make docs
     $ make install
