@@ -5,10 +5,12 @@ body {
     margin-bottom: 1%;
     margin-left: auto;
     width: 85%;
+    font-family: sans-serif;
 }
 
 h1, h2, h3, h4, h5, h6 {
     color: #557799;
+    font-weight: normal;
 }
 h1 {
     border-bottom: groove gray;
