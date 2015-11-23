@@ -1,0 +1,40 @@
+============
+Release 0.15
+============
+
+.. include:: ../home.rst
+
+This release started out in spring 2015 as a relatively simple code cleanup.
+
+I focused on the following problem: re2c used to repeat the whole generation process multiple times.
+Some parts of the generated program depend on the overall input statistics;
+they cannot be generated until the whole input has been processed.
+The usual way is to make stubs for all such things and fix them later.
+Instead, re2c used to process the whole input, gather statistics,
+discard the generated output and regenerate it from scratch.
+Moreover, each generation pass further duplicated certain calculations (for similar reasons).
+As a result code generation phase was repeated four times.
+
+The problem here is not inefficiency: re2c is fast enough to allow 4x overhead.
+The real problem is the complexity of code: you have to think of multiple execution layers all the time.
+Some parts of code are only executed on certain layers and affect each other.
+Simple reasoning gets really hard.
+
+So the main purpose of this release was to simplify code and make it easier to fix bugs and add new features.
+However, very soon I realized that some changes in code generation are hard to verify by hand.
+For example, even a minor rebalancing of ``if`` and ``switch`` statements
+may change the generated code significantly.
+In search of an automatic verification tool I encountered the idea of generating `skeleton <../../manual/features/skeleton/skeleton.html>`_ programs.
+
+Meanwhile I just couldn't help adding `warnings <../../manual/warnings/warnings.html>`_,
+updating build system and fixing various bugs.
+A heart-warming consequence of code simplification is that re2c now uses re2c more extensively:
+not only the main program, but also command-line options, inplace configurations
+and all kinds of escaped strings are parsed with re2c.
+l also updated the website (feel free to suggest improvements).
+
+Here is the list of all changes:
+
+.. include:: ../changelog/0_15_list.rst
+
+

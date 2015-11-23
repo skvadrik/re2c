@@ -1,0 +1,109 @@
+-----
+0.13x
+-----
+
+0.13.7.5 (2014-08-22)
+~~~~~~~~~~~~~~~~~~~~~
+
+- Fixed `Gentoo bug with PHP lexer <https://bugs.gentoo.org/show_bug.cgi?id=518904>`_
+
+0.13.7.4 (2014-07-29)
+~~~~~~~~~~~~~~~~~~~~~
+
+- Enabled ``make docs`` only if configured with ``--enable-docs``
+- Disallowed to use yacc/byacc instead of bison to build parser
+- Removed non-portable sed feature in script that runs tests
+
+0.13.7.3 (2014-07-27)
+~~~~~~~~~~~~~~~~~~~~~
+
+- Fixed CXX warning
+- Got rid of asciidoc build-time dependency
+
+0.13.7.2 (2014-07-27)
+~~~~~~~~~~~~~~~~~~~~~
+
+- Included man page into dist, respect users CXXFLAGS.
+
+0.13.7.1 (2014-07-26)
+~~~~~~~~~~~~~~~~~~~~~
+
+- Added missing files to tarball
+
+0.13.7 (2014-07-25)
+~~~~~~~~~~~~~~~~~~~
+
+- Added UTF-8 support
+- Added UTF-16 support
+- Added default rule
+- Added option to control ill-formed Unicode
+
+0.13.6 (2013-07-04)
+~~~~~~~~~~~~~~~~~~~
+
+- Fixed #2535084 uint problem with Sun C 5.8
+- #3308400: allow Yacc-style ``%{`` code brackets ``}%``
+- #2506253: allow C++ ``//`` comments
+- Fixed inplace configuration in ``-e`` mode.
+- Applied #2482572 Typos in error messages.
+- Applied #2482561 Error in manual section on ``-r`` mode.
+- Fixed #2478216 Wrong ``start_label`` in ``-c`` mode.
+- Fixed #2186718 Unescaped backslash in file name of ``#line`` directive.
+- Fixed #2102138 Duplicate case labels on EBCDIC.
+- Fixed #2088583 Compile problem on AIX.
+- Fixed #2038610 Ebcdic problem.
+- improve dot support: make char intervals (e.g. ``[A-Z]``) instead of one edge per char
+
+0.13.5 (2008-05-25)
+~~~~~~~~~~~~~~~~~~~
+
+- Fixed #1952896 Segfault in ``re2c::Scanner::scan``.
+- Fixed #1952842 Regression.
+
+0.13.4 (2008-04-05)
+~~~~~~~~~~~~~~~~~~~
+
+- Added transparent handling of ``#line`` directives in input files.
+- Added ``re2c:yyfill:check`` inplace configuration.
+- Added ``re2c:define:YYSETSTATE:naked`` inplace configuration.
+- Added ``re2c:flags:w`` and ``re2c:flags:u`` inplace configurations.
+- Added the ability to add rules in ``use:re2c`` blocks.
+- Changed ``-r`` flag to accept only ``rules:re2c`` and ``use:re2c`` blocks.
+
+0.13.3 (2008-03-14)
+~~~~~~~~~~~~~~~~~~~
+
+- Added ``-r`` flag to allow reuse of scanner definitions.
+- Added ``-F`` flag to support flex syntax in rules.
+- Fixed SEGV in scanner that occurs with very large blocks.
+- Fixed issue with unused ``yybm``.
+- Partial support for flex syntax.
+- Changed to allow ``/*`` comments with ``-c`` switch.
+- Added flag ``-D/--emit-dot``.
+
+0.13.2 (2008-02-14)
+~~~~~~~~~~~~~~~~~~~
+
+- Added flag ``--case-inverted``.
+- Added flag ``--case-insensitive``.
+- Added support for ``<!...>`` to enable rule setup.
+- Added support for ``=>`` style rules.
+- Added support for ``:=`` style rules.
+- Added support for ``:=>`` style rules.
+- Added ``re2c:cond:divider`` and ``re2c:cond:goto`` inplace configuration.
+- Fixed code generation to emit space after ``if``.
+
+0.13.1 (2007-08-24)
+~~~~~~~~~~~~~~~~~~~
+
+- Added custom build rules for Visual Studio 2005 (``re2c.rules``). (William Swanson)
+- Fixed issue with some compilers.
+- Fixed #1776177 Build on AIX.
+- Fixed #1743180 ``fwrite`` with 0 length crashes on OS X.
+
+0.13.0 (2007-06-24)
+~~~~~~~~~~~~~~~~~~~
+
+- Added ``-c`` and ``-t`` to generate scanners with (f)lex-like condition support.
+- Fixed issue with short form of switches and parameter if not first switch.
+- Fixed #1708378 segfault ``in actions.cc``.

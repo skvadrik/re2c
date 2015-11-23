@@ -4,5 +4,9 @@ News
 
 .. include:: ../home.rst
 
-* `Changelog <changelog.html>`_
+★
+
+* `Release 0.15.1 <release_notes/0_15_1.html>`_
+* `Release 0.15 <release_notes/0_15.html>`_
+* `Changelog <changelog/changelog.html>`_
 

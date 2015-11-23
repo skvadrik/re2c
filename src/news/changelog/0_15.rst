@@ -1,0 +1,14 @@
+-----
+0.15x
+-----
+
+0.15.1 (2015-11-22)
+~~~~~~~~~~~~~~~~~~~
+
+- Fixed test failures caused by locale-sensitive 'sort'.
+
+
+0.15 (2015-11-22)
+~~~~~~~~~~~~~~~~~
+
+.. include:: 0_15_list.rst
