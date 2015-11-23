@@ -1,7 +1,11 @@
+Version 0.15.2 (2015-11-23)
+---------------------------
+- Fixed build system: lexer depends on bison-generated parser
+  (Gentoo bug: https://bugs.gentoo.org/show_bug.cgi?id=566620)
+
 Version 0.15.1 (2015-11-22)
 ---------------------------
 - Fixed test failures caused by locale-sensitive 'sort'.
-
 
 Version 0.15 (2015-11-22)
 -------------------------
