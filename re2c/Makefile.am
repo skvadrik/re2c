@@ -199,6 +199,10 @@ $(AUTOGEN_PARSER): $(CUSTOM_PARSER)
 			$(top_srcdir)/$(CUSTOM_PARSER); \
 	fi
 
+# lexer depends on bison-generated header
+# so bison rule must be triggered before lexer rule
+$(AUTOGEN_LEX): $(AUTOGEN_PARSER)
+
 $(BOOTSTRAP_PARSER): $(CUSTOM_PARSER)
 	@test $(BISON) == "no" || \
 	$(BISON) \
