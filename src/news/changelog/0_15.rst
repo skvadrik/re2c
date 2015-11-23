@@ -2,6 +2,13 @@
 0.15x
 -----
 
+0.15.2 (2015-11-23)
+~~~~~~~~~~~~~~~~~~~
+
+- Fixed build system: lexer depends on bison-generated header
+  (Gentoo bug: https://bugs.gentoo.org/show_bug.cgi?id=566620)
+
+
 0.15.1 (2015-11-22)
 ~~~~~~~~~~~~~~~~~~~
 

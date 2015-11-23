@@ -69,6 +69,7 @@ SRC_RST = \
     src/news/changelog/beginning.rst \
     src/news/release_notes/0_15.rst \
     src/news/release_notes/0_15_1.rst \
+    src/news/release_notes/0_15_2.rst \
     src/news/home.rst \
     src/about/about.rst \
     src/install/install.rst \

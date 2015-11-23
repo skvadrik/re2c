@@ -4,7 +4,7 @@
     <title>re2c</title>
     <link rel="self" href="http://re2c.org/feed/atom.xml"/>
     <id>http://re2c.org/</id>
-    <updated>2015-11-23T00:00:00Z</updated>
+    <updated>2015-11-23T22:00:00Z</updated>
 
     <entry>
         <title>Release 0.15</title>
@@ -30,6 +30,22 @@
         <summary type="xhtml">
             <div xmlns="http://www.w3.org/1999/xhtml">
                 Minor release re2c-0.15.1 (<a href="http://re2c.org/news/release_notes/0_15_1.html">release notes</a>).
+            </div>
+        </summary>
+        <author>
+            <name>Ulya Trofimovich</name>
+            <email>skvadrik@gmail.com</email>
+        </author>
+    </entry>
+
+    <entry>
+        <title>Release 0.15.2</title>
+        <link href="http://re2c.org/news/release_notes/0_15_2.html"/>
+        <id>http://re2c.org/news/release_notes/0_15_2.html</id>
+        <updated>2015-11-23T22:00:00Z</updated>
+        <summary type="xhtml">
+            <div xmlns="http://www.w3.org/1999/xhtml">
+                Minor release re2c-0.15.2 (<a href="http://re2c.org/news/release_notes/0_15_2.html">release notes</a>).
             </div>
         </summary>
         <author>
