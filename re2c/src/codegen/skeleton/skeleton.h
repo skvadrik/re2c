@@ -17,13 +17,31 @@ namespace re2c
 
 struct Node
 {
-	// Types for counting arcs in path permutations and path cover.
+	/*
+	 * note [counting skeleton edges]
+	 *
+	 * To avoid any possible overflows all size calculations are wrapped in
+	 * a special truncated unsigned 32-bit integer type that checks overflow
+	 * on each binary operation or conversion from another type.
+	 *
+	 * Two things contribute to size calculation: path length and the number
+	 * of outgoing arcs in each node. Some considerations on why these values
+	 * will not overflow before they are converted to truncated type:
+	 *
+	 *   - Maximal number of outgoing arcs in each node cannot exceed 32 bits:
+	 *     it is bounded by the number of code units in current encoding, and
+	 *     re2c doesn't support any encoding with more than 2^32 code units.
+	 *     Conversion is safe.
+	 *
+	 *   - Maximal path length cannot exceed 32 bits: we estimate it right
+	 *     after skeleton construction and check for overflow. If path length
+	 *     does overflow, an error is reported and re2c aborts.
+	 */
+
+	// Type for calculating the size of path cover.
 	// Paths are dumped to file as soon as generated and don't eat
-	// heap space. Path permutations grow exponentially and are likely
-	// to exceed limit, so their limit should be low. Path cover grows
-	// linearly and is unlikely to exceed limit, so its limit may be
-	// high.
-	typedef u32lim_t<1024 * 1024 * 32> permuts_t; // ~32Mb
+	// heap space. The total size of path cover (measured in edges)
+	// is O(N^2) where N is the number of edges in skeleton.
 	typedef u32lim_t<1024 * 1024 * 1024> covers_t; // ~1Gb
 
 	// Type for counting arcs in paths that cause undefined behaviour.
@@ -69,9 +87,6 @@ struct Node
 	bool end () const;
 	void calc_dist ();
 	void calc_reachable ();
-	permuts_t sizeof_permutate (permuts_t inarcs, permuts_t len);
-	template <typename cunit_t, typename key_t>
-		void permutate (const multipath_t & prefix, FILE * input, FILE * keys);
 	template <typename cunit_t, typename key_t>
 		covers_t cover (const multipath_t & prefix, FILE * input, FILE * keys);
 	nakeds_t naked_ways (const way_t & prefix, std::vector<way_t> & ways);

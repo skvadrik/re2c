@@ -3,9 +3,9 @@
 namespace re2c
 {
 
-// see note [estimating total size of paths in skeleton]
 // We don't need all patterns that cause undefined behaviour.
 // We only need some examples, the shorter the better.
+// See also note [counting skeleton edges].
 Node::nakeds_t Node::naked_ways (const way_t & prefix, std::vector<way_t> & ways)
 {
 	if (!rule.rank.is_none ())
