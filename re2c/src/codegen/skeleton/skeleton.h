@@ -79,7 +79,7 @@ struct Node
 	std::set<rule_t> reachable;
 
 	// path to end node (for constructing path cover)
-	path_t * suffix;
+	multipath_t * suffix;
 
 	Node ();
 	void init (const State * s, const s2n_map & s2n);
@@ -88,7 +88,7 @@ struct Node
 	void calc_dist ();
 	void calc_reachable ();
 	template <typename cunit_t, typename key_t>
-		covers_t cover (const multipath_t & prefix, FILE * input, FILE * keys);
+		covers_t cover (multipath_t & prefix, FILE * input, FILE * keys);
 	nakeds_t naked_ways (const way_t & prefix, std::vector<way_t> & ways);
 
 	FORBID_COPY (Node);

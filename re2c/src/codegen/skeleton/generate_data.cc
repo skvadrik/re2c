@@ -9,7 +9,7 @@ namespace re2c
 {
 
 template <typename cunit_t, typename key_t>
-	static Node::covers_t cover_one (FILE * input, FILE * keys, const multipath_t & prefix, const path_t & suffix);
+	static Node::covers_t cover_one (FILE * input, FILE * keys, const multipath_t & path);
 
 /*
  * note [generating skeleton path cover]
@@ -41,16 +41,17 @@ template <typename cunit_t, typename key_t>
  *
  */
 template <typename cunit_t, typename key_t>
-	Node::covers_t Node::cover (const multipath_t & prefix, FILE * input, FILE * keys)
+	Node::covers_t Node::cover (multipath_t & prefix, FILE * input, FILE * keys)
 {
 	covers_t size = covers_t::from32(0u);
 	if (end () && suffix == NULL)
 	{
-		suffix = new path_t (rule, ctx);
+		suffix = new multipath_t (rule, ctx);
 	}
 	if (suffix != NULL)
 	{
-		size = cover_one<cunit_t, key_t> (input, keys, prefix, *suffix);
+		prefix.append (suffix);
+		size = cover_one<cunit_t, key_t> (input, keys, prefix);
 	}
 	else if (loop < 2)
 	{
@@ -66,8 +67,9 @@ template <typename cunit_t, typename key_t>
 			}
 			if (i->first->suffix != NULL && suffix == NULL)
 			{
-				suffix = new path_t (rule, ctx);
-				suffix->append (i->second[0], i->first->suffix);
+				suffix = new multipath_t (rule, ctx);
+				suffix->extend (i->first->rule, i->first->ctx, &i->second);
+				suffix->append (i->first->suffix);
 			}
 		}
 	}
@@ -152,16 +154,14 @@ template <typename key_t>
 }
 
 template <typename cunit_t, typename key_t>
-	static Node::covers_t cover_one (FILE * input, FILE * keys, const multipath_t & prefix, const path_t & suffix)
+	static Node::covers_t cover_one (FILE * input, FILE * keys, const multipath_t & path)
 {
-	const size_t prefix_len = prefix.len ();
-	const size_t suffix_len = suffix.len ();
-	const size_t len = prefix_len + suffix_len;
+	const size_t len = path.len ();
 
-	size_t count = 1; // width of suffix is one arc
-	for (size_t i = 0; i < prefix_len; ++i)
+	size_t count = 0;
+	for (size_t i = 0; i < len; ++i)
 	{
-		count = std::max (count, prefix[i]->size ());
+		count = std::max (count, path[i]->size ());
 	}
 
 	const Node::covers_t size = Node::covers_t::from64(len) * Node::covers_t::from64(count);
@@ -170,9 +170,9 @@ template <typename cunit_t, typename key_t>
 		// input
 		const size_t buffer_size = size.uint32 ();
 		cunit_t * buffer = new cunit_t [buffer_size];
-		for (size_t i = 0; i < prefix_len; ++i)
+		for (size_t i = 0; i < len; ++i)
 		{
-			const std::vector<uint32_t> & arc = *prefix[i];
+			const std::vector<uint32_t> & arc = *path[i];
 			const size_t width = arc.size ();
 			for (size_t j = 0; j < count; ++j)
 			{
@@ -180,20 +180,11 @@ template <typename cunit_t, typename key_t>
 				buffer[j * len + i] = static_cast<cunit_t> (arc[k]);
 			}
 		}
-		for (size_t i = 0; i < suffix_len; ++i)
-		{
-			const cunit_t c = static_cast<cunit_t> (suffix[i]);
-			const size_t k = prefix_len + i;
-			for (size_t j = 0; j < count; ++j)
-			{
-				buffer[j * len + k] = c;
-			}
-		}
 		fwrite (buffer, sizeof (cunit_t), buffer_size, input);
 		delete [] buffer;
 
 		// keys
-		keygen<key_t> (keys, count, len, len_matching (prefix, suffix), match (prefix, suffix));
+		keygen<key_t> (keys, count, len, path.len_matching (), path.match ());
 	}
 
 	return size;

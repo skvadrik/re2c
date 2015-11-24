@@ -79,9 +79,8 @@ public:
 			ctx_pos = arcs.size ();
 		}
 	}
-	void append (const arc_t & a, const generic_path_t<arc_t> * p)
+	void append (const generic_path_t<arc_t> * p)
 	{
-		arcs.push_back (a);
 		if (!p->rule.rank.is_none ())
 		{
 			rule = p->rule;
@@ -94,40 +93,7 @@ public:
 		}
 		arcs.insert (arcs.end (), p->arcs.begin (), p->arcs.end ());
 	}
-
-	template <typename arc1_t, typename arc2_t>
-		friend size_t len_matching (const generic_path_t<arc1_t> & prefix, const generic_path_t<arc2_t> & suffix);
-	template <typename arc1_t, typename arc2_t>
-		friend rule_rank_t match (const generic_path_t<arc1_t> & prefix, const generic_path_t<arc2_t> & suffix);
 };
-
-template <typename arc1_t, typename arc2_t>
-	size_t len_matching (const generic_path_t<arc1_t> & prefix, const generic_path_t<arc2_t> & suffix)
-{
-	const bool none = suffix.rule.rank.is_none ();
-	bool restorectx = none
-		? prefix.rule.restorectx
-		: suffix.rule.restorectx;
-	const size_t rule_pos = none
-		? prefix.rule_pos
-		: prefix.arcs.size () + suffix.rule_pos;
-
-	const size_t ctx_pos = suffix.ctx
-		? prefix.arcs.size () + suffix.ctx_pos
-		: prefix.ctx_pos;
-
-	return restorectx
-		? ctx_pos
-		: rule_pos;
-}
-
-template <typename arc1_t, typename arc2_t>
-	rule_rank_t match (const generic_path_t<arc1_t> & prefix, const generic_path_t<arc2_t> & suffix)
-{
-	return suffix.rule.rank.is_none ()
-		? prefix.rule.rank
-		: suffix.rule.rank;
-}
 
 typedef generic_path_t<uint32_t> path_t;
 
