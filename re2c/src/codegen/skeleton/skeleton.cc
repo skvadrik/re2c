@@ -38,11 +38,19 @@ void Node::init (const State * s, const s2n_map & s2n)
 			const Span & span = s->go.span[i];
 			Node * n = s2n.find (span.to)->second;
 			const uint32_t ub = span.ub - 1;
-			arcs[n].push_back (lb);
-			if (lb != ub)
+
+			// pick at most 0x100 unique edges from this range
+			// (for 1-byte code units this covers the whole range: [0 - 0xFF])
+			//   - range bounds must be included
+			//   - values should be evenly distributed
+			//   - values should be deterministic
+			const uint32_t step = 1 + (ub - lb) / 0x100;
+			for (uint32_t c = lb; c < ub; c += step)
 			{
-				arcs[n].push_back (ub);
+				arcs[n].push_back (c);
 			}
+			arcs[n].push_back (ub);
+
 			arcsets[n].push_back (std::make_pair (lb, ub));
 			lb = span.ub;
 		}
