@@ -28,10 +28,13 @@ struct rule_t
 	}
 };
 
-template <typename arc_t>
-class generic_path_t
+class path_t
 {
-	std::vector<arc_t> arcs;
+public:
+	typedef std::vector<uint32_t> arc_t;
+
+private:
+	std::vector<const arc_t *> arcs;
 
 	rule_t rule;
 	size_t rule_pos;
@@ -40,7 +43,7 @@ class generic_path_t
 	size_t ctx_pos;
 
 public:
-	explicit generic_path_t (rule_t r, bool c)
+	explicit path_t (rule_t r, bool c)
 		: arcs ()
 		, rule (r)
 		, rule_pos (0)
@@ -61,11 +64,11 @@ public:
 	{
 		return rule.rank;
 	}
-	const arc_t & operator [] (size_t i) const
+	const arc_t * operator [] (size_t i) const
 	{
 		return arcs[i];
 	}
-	void extend (rule_t r, bool c, const arc_t & a)
+	void extend (rule_t r, bool c, const arc_t * a)
 	{
 		arcs.push_back (a);
 		if (!r.rank.is_none ())
@@ -79,7 +82,7 @@ public:
 			ctx_pos = arcs.size ();
 		}
 	}
-	void append (const generic_path_t<arc_t> * p)
+	void append (const path_t * p)
 	{
 		if (!p->rule.rank.is_none ())
 		{
@@ -94,11 +97,6 @@ public:
 		arcs.insert (arcs.end (), p->arcs.begin (), p->arcs.end ());
 	}
 };
-
-typedef generic_path_t<uint32_t> path_t;
-
-typedef std::vector<uint32_t> multiarc_t;
-typedef generic_path_t<const multiarc_t *> multipath_t;
 
 } // namespace re2c
 

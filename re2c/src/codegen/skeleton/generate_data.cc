@@ -9,7 +9,7 @@ namespace re2c
 {
 
 template <typename cunit_t, typename key_t>
-	static Node::covers_t cover_one (FILE * input, FILE * keys, const multipath_t & path);
+	static Node::covers_t cover_one (FILE * input, FILE * keys, const path_t & path);
 
 /*
  * note [generating skeleton path cover]
@@ -41,12 +41,12 @@ template <typename cunit_t, typename key_t>
  *
  */
 template <typename cunit_t, typename key_t>
-	Node::covers_t Node::cover (multipath_t & prefix, FILE * input, FILE * keys)
+	Node::covers_t Node::cover (path_t & prefix, FILE * input, FILE * keys)
 {
 	covers_t size = covers_t::from32(0u);
 	if (end () && suffix == NULL)
 	{
-		suffix = new multipath_t (rule, ctx);
+		suffix = new path_t (rule, ctx);
 	}
 	if (suffix != NULL)
 	{
@@ -58,7 +58,7 @@ template <typename cunit_t, typename key_t>
 		local_inc _ (loop);
 		for (arcs_t::iterator i = arcs.begin (); i != arcs.end (); ++i)
 		{
-			multipath_t new_prefix = prefix;
+			path_t new_prefix = prefix;
 			new_prefix.extend (i->first->rule, i->first->ctx, &i->second);
 			size = size + i->first->cover<cunit_t, key_t> (new_prefix, input, keys);
 			if (size.overflow ())
@@ -67,7 +67,7 @@ template <typename cunit_t, typename key_t>
 			}
 			if (i->first->suffix != NULL && suffix == NULL)
 			{
-				suffix = new multipath_t (rule, ctx);
+				suffix = new path_t (rule, ctx);
 				suffix->extend (i->first->rule, i->first->ctx, &i->second);
 				suffix->append (i->first->suffix);
 			}
@@ -79,7 +79,7 @@ template <typename cunit_t, typename key_t>
 template <typename cunit_t, typename key_t>
 	void Skeleton::generate_paths_cunit_key (FILE * input, FILE * keys)
 {
-	multipath_t prefix (nodes->rule, nodes->ctx);
+	path_t prefix (nodes->rule, nodes->ctx);
 	if (nodes->cover<cunit_t, key_t> (prefix, input, keys).overflow ())
 	{
 		warning
@@ -154,7 +154,7 @@ template <typename key_t>
 }
 
 template <typename cunit_t, typename key_t>
-	static Node::covers_t cover_one (FILE * input, FILE * keys, const multipath_t & path)
+	static Node::covers_t cover_one (FILE * input, FILE * keys, const path_t & path)
 {
 	const size_t len = path.len ();
 

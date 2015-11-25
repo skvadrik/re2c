@@ -52,7 +52,7 @@ struct Node
 	typedef u32lim_t<1024 * 1024 * 64> nakeds_t; // ~64Mb
 
 	typedef std::map<const State *, Node *> s2n_map;
-	typedef std::map<Node *, multiarc_t> arcs_t;
+	typedef std::map<Node *, path_t::arc_t> arcs_t;
 	typedef std::map<Node *, way_arc_t> arcsets_t;
 	typedef local_increment_t<uint8_t> local_inc;
 
@@ -79,7 +79,7 @@ struct Node
 	std::set<rule_t> reachable;
 
 	// path to end node (for constructing path cover)
-	multipath_t * suffix;
+	path_t * suffix;
 
 	Node ();
 	void init (const State * s, const s2n_map & s2n);
@@ -88,7 +88,7 @@ struct Node
 	void calc_dist ();
 	void calc_reachable ();
 	template <typename cunit_t, typename key_t>
-		covers_t cover (multipath_t & prefix, FILE * input, FILE * keys);
+		covers_t cover (path_t & prefix, FILE * input, FILE * keys);
 	nakeds_t naked_ways (const way_t & prefix, std::vector<way_t> & ways);
 
 	FORBID_COPY (Node);
