@@ -81,13 +81,14 @@ public:
 	void write_line_info (uint32_t l, const char * fn);
 	void write_version_time ();
 	void write_user_start_label ();
-	friend OutputFile & operator << (OutputFile & o, char c);
-	friend OutputFile & operator << (OutputFile & o, uint32_t n);
-	friend OutputFile & operator << (OutputFile & o, uint64_t n);
-	friend OutputFile & operator << (OutputFile & o, const std::string & s);
-	friend OutputFile & operator << (OutputFile & o, const char * s);
-	friend OutputFile & operator << (OutputFile & o, label_t l);
-	friend OutputFile & operator << (OutputFile & o, rule_rank_t l);
+	OutputFile & wc (char c);
+	OutputFile & wu32 (uint32_t n);
+	OutputFile & wu64 (uint64_t n);
+	OutputFile & wstring (const std::string & s);
+	OutputFile & ws (const char * s);
+	OutputFile & wlabel (label_t l);
+	OutputFile & wrank (rule_rank_t l);
+	OutputFile & wind (uint32_t ind);
 
 	void insert_line_info ();
 	void insert_state_goto (uint32_t ind);

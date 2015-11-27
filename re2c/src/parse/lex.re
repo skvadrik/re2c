@@ -133,9 +133,9 @@ echo:
 					if (opts->target != opt_t::DOT)
 					{
 						out.insert_line_info ();
-						out << "\n";
+						out.ws("\n");
 						out.insert_types ();
-						out << "\n";
+						out.ws("\n");
 						out.write_line_info (cline, get_fname ().c_str ());
 					}
 					goto echo;
@@ -163,7 +163,7 @@ echo:
 					{
 						if (ignore_cnt)
 						{
-							out << "\n";
+							out.ws("\n");
 							out.write_line_info (cline, get_fname ().c_str ());
 						}
 						ignore_eoc = false;

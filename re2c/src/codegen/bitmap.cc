@@ -74,7 +74,7 @@ void BitMap::gen(OutputFile & o, uint32_t ind, uint32_t lb, uint32_t ub)
 {
 	if (first && bUsedYYBitmap)
 	{
-		o << indent(ind) << "static const unsigned char " << opts->yybm << "[] = {";
+		o.wind(ind).ws("static const unsigned char ").wstring(opts->yybm).ws("[] = {");
 
 		uint32_t c = 1, n = ub - lb;
 		const BitMap *cb = first;
@@ -100,14 +100,14 @@ void BitMap::gen(OutputFile & o, uint32_t ind, uint32_t lb, uint32_t ub)
 
 			if (c > 8)
 			{
-				o << "\n" << indent(ind+1) << "/* table " << t << " .. " << std::min(c, t+7) << ": " << i << " */";
+				o.ws("\n").wind(ind+1).ws("/* table ").wu32(t).ws(" .. ").wu32(std::min(c, t+7)).ws(": ").wu32(i).ws(" */");
 			}
 
 			for (uint32_t j = 0; j < n; ++j)
 			{
 				if (j % 8 == 0)
 				{
-					o << "\n" << indent(ind+1);
+					o.ws("\n").wind(ind+1);
 				}
 
 				if (opts->yybmHexTable)
@@ -118,11 +118,11 @@ void BitMap::gen(OutputFile & o, uint32_t ind, uint32_t lb, uint32_t ub)
 				{
 					o.write_uint32_t_width (bm[j], 3);
 				}
-				o  << ", ";
+				o.ws(", ");
 			}
 		}
 
-		o << "\n" << indent(ind) << "};\n";
+		o.ws("\n").wind(ind).ws("};\n");
 		
 		delete[] bm;
 	}

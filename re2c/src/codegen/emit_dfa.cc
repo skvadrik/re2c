@@ -27,17 +27,17 @@ void genGoTo(OutputFile & o, uint32_t ind, const State *from, const State *to, b
 {
 	if (opts->target == opt_t::DOT)
 	{
-		o << from->label << " -> " << to->label << "\n";
+		o.wlabel(from->label).ws(" -> ").wlabel(to->label).ws("\n");
 		return;
 	}
 
 	if (readCh && from->next != to)
 	{
-		o << opts->input_api.stmt_peek (ind);
+		o.wstring(opts->input_api.stmt_peek (ind));
 		readCh = false;
 	}
 
-	o << indent(ind) << "goto " << opts->labelPrefix << to->label << ";\n";
+	o.wind(ind).ws("goto ").wstring(opts->labelPrefix).wlabel(to->label).ws(";\n");
 }
 
 void emit_state (OutputFile & o, uint32_t ind, const State * s, bool used_label)
@@ -46,11 +46,11 @@ void emit_state (OutputFile & o, uint32_t ind, const State * s, bool used_label)
 	{
 		if (used_label)
 		{
-			o << opts->labelPrefix << s->label << ":\n";
+			o.wstring(opts->labelPrefix).wlabel(s->label).ws(":\n");
 		}
 		if (opts->dFlag && (s->action.type != Action::INITIAL))
 		{
-			o << indent(ind) << opts->yydebug << "(" << s->label << ", " << opts->input_api.expr_peek () << ");\n";
+			o.wind(ind).wstring(opts->yydebug).ws("(").wlabel(s->label).ws(", ").wstring(opts->input_api.expr_peek ()).ws(");\n");
 		}
 	}
 }
@@ -88,7 +88,7 @@ void DFA::emit_body (OutputFile & o, uint32_t& ind, const std::set<label_t> & us
 	// skip it when entering DFA.
 	if (used_labels.count(head->label))
 	{
-		o << indent(ind) << "goto " << opts->labelPrefix << initial << ";\n";
+		o.wind(ind).ws("goto ").wstring(opts->labelPrefix).wlabel(initial).ws(";\n");
 	}
 
 	const bool save_yyaccept = accepts.size () > 1;
@@ -145,12 +145,12 @@ void DFA::emit(Output & output, uint32_t& ind, bool isLastCond, bool& bPrologBra
 		// Generate prolog
 		if (bProlog)
 		{
-			o << "\n";
+			o.ws("\n");
 			o.insert_line_info ();
 			if (opts->target == opt_t::DOT)
 			{
 				bPrologBrace = true;
-				o << "digraph re2c {\n";
+				o.ws("digraph re2c {\n");
 			}
 			else if ((!opts->fFlag && o.get_used_yyaccept ())
 			||  (!opts->fFlag && opts->bEmitYYCh)
@@ -160,7 +160,7 @@ void DFA::emit(Output & output, uint32_t& ind, bool isLastCond, bool& bPrologBra
 			)
 			{
 				bPrologBrace = true;
-				o << indent(ind++) << "{\n";
+				o.wind(ind++).ws("{\n");
 			}
 			else if (ind == 0)
 			{
@@ -170,13 +170,13 @@ void DFA::emit(Output & output, uint32_t& ind, bool isLastCond, bool& bPrologBra
 			{
 				if (opts->bEmitYYCh)
 				{
-					o << indent(ind) << opts->yyctype << " " << opts->yych << ";\n";
+					o.wind(ind).wstring(opts->yyctype).ws(" ").wstring(opts->yych).ws(";\n");
 				}
 				o.insert_yyaccept_init (ind);
 			}
 			else
 			{
-				o << "\n";
+				o.ws("\n");
 			}
 		}
 		if (opts->bFlag && !opts->cFlag && BitMap::first)
@@ -194,7 +194,7 @@ void DFA::emit(Output & output, uint32_t& ind, bool isLastCond, bool& bPrologBra
 			{
 				if (used_labels.count(start_label))
 				{
-					o << opts->labelPrefix << start_label << ":\n";
+					o.wstring(opts->labelPrefix).wlabel(start_label).ws(":\n");
 				}
 			}
 			o.write_user_start_label ();
@@ -207,32 +207,32 @@ void DFA::emit(Output & output, uint32_t& ind, bool isLastCond, bool& bPrologBra
 		{
 			if (opts->condDivider.length())
 			{
-				o << replaceParam(opts->condDivider, opts->condDividerParam, cond) << "\n";
+				o.wstring(replaceParam(opts->condDivider, opts->condDividerParam, cond)).ws("\n");
 			}
 			if (opts->target == opt_t::DOT)
 			{
-				o << cond << " -> " << head->label << "\n";
+				o.wstring(cond).ws(" -> ").wlabel(head->label).ws("\n");
 			}
 			else
 			{
-				o << opts->condPrefix << cond << ":\n";
+				o.wstring(opts->condPrefix).wstring(cond).ws(":\n");
 			}
 		}
 		if (opts->cFlag && opts->bFlag && BitMap::first)
 		{
-			o << indent(ind++) << "{\n";
+			o.wind(ind++).ws("{\n");
 			BitMap::gen(o, ind, lbChar, ubChar <= 256 ? ubChar : 256);
 		}
 		// Generate code
 		emit_body (o, ind, used_labels, initial_label);
 		if (opts->cFlag && opts->bFlag && BitMap::first)
 		{
-			o << indent(--ind) << "}\n";
+			o.wind(--ind).ws("}\n");
 		}
 		// Generate epilog
 		if ((!opts->cFlag || isLastCond) && bPrologBrace)
 		{
-			o << indent(--ind) << "}\n";
+			o.wind(--ind).ws("}\n");
 		}
 	}
 
@@ -247,29 +247,29 @@ void DFA::emit(Output & output, uint32_t& ind, bool isLastCond, bool& bPrologBra
 void genCondTable(OutputFile & o, uint32_t ind, const std::vector<std::string> & condnames)
 {
 	const size_t conds = condnames.size ();
-	o << indent(ind++) << "static void *" << opts->yyctable << "[" << conds << "] = {\n";
+	o.wind(ind++).ws("static void *").wstring(opts->yyctable).ws("[").wu64(conds).ws("] = {\n");
 	for (size_t i = 0; i < conds; ++i)
 	{
-		o << indent(ind) << "&&" << opts->condPrefix << condnames[i] << ",\n";
+		o.wind(ind).ws("&&").wstring(opts->condPrefix).wstring(condnames[i]).ws(",\n");
 	}
-	o << indent(--ind) << "};\n";
+	o.wind(--ind).ws("};\n");
 }
 
 void genCondGotoSub(OutputFile & o, uint32_t ind, const std::vector<std::string> & condnames, uint32_t cMin, uint32_t cMax)
 {
 	if (cMin == cMax)
 	{
-		o << indent(ind) << "goto " << opts->condPrefix << condnames[cMin] << ";\n";
+		o.wind(ind).ws("goto ").wstring(opts->condPrefix).wstring(condnames[cMin]).ws(";\n");
 	}
 	else
 	{
 		uint32_t cMid = cMin + ((cMax - cMin + 1) / 2);
 
-		o << indent(ind) << "if (" << genGetCondition() << " < " << cMid << ") {\n";
+		o.wind(ind).ws("if (").wstring(genGetCondition()).ws(" < ").wu32(cMid).ws(") {\n");
 		genCondGotoSub(o, ind + 1, condnames, cMin, cMid - 1);
-		o << indent(ind) << "} else {\n";
+		o.wind(ind).ws("} else {\n");
 		genCondGotoSub(o, ind + 1, condnames, cMid, cMax);
-		o << indent(ind) << "}\n";
+		o.wind(ind).ws("}\n");
 	}
 }
 
@@ -305,12 +305,12 @@ void genCondGoto(OutputFile & o, uint32_t ind, const std::vector<std::string> & 
 		for (size_t i = 0; i < conds; ++i)
 		{
 			const std::string cond = condnames[i];
-			o << "0 -> " << cond << " [label=\"state=" << cond << "\"]\n";
+			o.ws("0 -> ").wstring(cond).ws(" [label=\"state=").wstring(cond).ws("\"]\n");
 		}
 	}
 	else if (opts->gFlag)
 	{
-		o << indent(ind) << "goto *" << opts->yyctable << "[" << genGetCondition() << "];\n";
+		o.wind(ind).ws("goto *").wstring(opts->yyctable).ws("[").wstring(genGetCondition()).ws("];\n");
 	}
 	else if (opts->sFlag)
 	{
@@ -323,13 +323,13 @@ void genCondGoto(OutputFile & o, uint32_t ind, const std::vector<std::string> & 
 	else
 	{
 		o.warn_condition_order = false; // see note [condition order]
-		o << indent(ind) << "switch (" << genGetCondition() << ") {\n";
+		o.wind(ind).ws("switch (").wstring(genGetCondition()).ws(") {\n");
 		for (size_t i = 0; i < conds; ++i)
 		{
 			const std::string & cond = condnames[i];
-			o << indent(ind) << "case " << opts->condEnumPrefix << cond << ": goto " << opts->condPrefix << cond << ";\n";
+			o.wind(ind).ws("case ").wstring(opts->condEnumPrefix).wstring(cond).ws(": goto ").wstring(opts->condPrefix).wstring(cond).ws(";\n");
 		}
-		o << indent(ind) << "}\n";
+		o.wind(ind).ws("}\n");
 	}
 	o.insert_warn_condition_order ();
 	bWroteCondCheck = true;

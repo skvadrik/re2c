@@ -132,50 +132,56 @@ void OutputFile::write_user_start_label ()
 	const std::string label = blocks.back ()->user_start_label;
 	if (!label.empty ())
 	{
-		* this << label << ":\n";
+		wstring(label).ws(":\n");
 	}
 }
 
-OutputFile & operator << (OutputFile & u, char c)
+OutputFile & OutputFile::wc (char c)
 {
-	u.stream () << c;
-	return u;
+	stream () << c;
+	return *this;
 }
 
-OutputFile & operator << (OutputFile & u, uint32_t n)
+OutputFile & OutputFile::wu32 (uint32_t n)
 {
-	u.stream () << n;
-	return u;
+	stream () << n;
+	return *this;
 }
 
-OutputFile & operator << (OutputFile & u, uint64_t n)
+OutputFile & OutputFile::wu64 (uint64_t n)
 {
-	u.stream () << n;
-	return u;
+	stream () << n;
+	return *this;
 }
 
-OutputFile & operator << (OutputFile & u, const std::string & s)
+OutputFile & OutputFile::wstring (const std::string & s)
 {
-	u.stream () << s;
-	return u;
+	stream () << s;
+	return *this;
 }
 
-OutputFile & operator << (OutputFile & u, const char * s)
+OutputFile & OutputFile::ws (const char * s)
 {
-	u.stream () << s;
-	return u;
+	stream () << s;
+	return *this;
 }
 
-OutputFile & operator << (OutputFile & u, label_t l)
+OutputFile & OutputFile::wlabel (label_t l)
 {
-	u.stream () << l;
-	return u;
+	stream () << l;
+	return *this;
 }
 
-OutputFile & operator << (OutputFile & u, rule_rank_t r)
+OutputFile & OutputFile::wrank (rule_rank_t r)
 {
-	u.stream () << r;
-	return u;
+	stream () << r;
+	return *this;
+}
+
+OutputFile & OutputFile::wind (uint32_t ind)
+{
+	stream () << indent(ind);
+	return *this;
 }
 
 void OutputFile::insert_code ()

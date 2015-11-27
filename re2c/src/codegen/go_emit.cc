@@ -27,19 +27,19 @@ std::string output_yych (bool & readCh)
 
 void output_if (OutputFile & o, uint32_t ind, bool & readCh, const std::string & compare, uint32_t value)
 {
-	o << indent(ind) << "if (" << output_yych (readCh) << " " << compare << " ";
+	o.wind(ind).ws("if (").wstring(output_yych (readCh)).ws(" ").wstring(compare).ws(" ");
 	o.write_char_hex (value);
-	o << ") ";
+	o.ws(") ");
 }
 
 void output_goto (OutputFile & o, uint32_t ind, bool & readCh, label_t to)
 {
 	if (readCh)
 	{
-		o << opts->input_api.stmt_peek (ind);
+		o.wstring(opts->input_api.stmt_peek (ind));
 		readCh = false;
 	}
-	o << indent (ind) << "goto " << opts->labelPrefix << to << ";\n";
+	o.wind(ind).ws("goto ").wstring(opts->labelPrefix).wlabel(to).ws(";\n");
 }
 
 std::string output_hgo (OutputFile & o, uint32_t ind, bool & readCh, SwitchIf * hgo)
@@ -47,14 +47,14 @@ std::string output_hgo (OutputFile & o, uint32_t ind, bool & readCh, SwitchIf * 
 	std::string yych = output_yych (readCh);
 	if (hgo != NULL)
 	{
-		o << indent (ind) << "if (" << yych <<" & ~0xFF) {\n";
+		o.wind(ind).ws("if (").wstring(yych).ws(" & ~0xFF) {\n");
 		hgo->emit (o, ind + 1, readCh);
-		o << indent (ind) << "} else ";
+		o.wind(ind).ws("} else ");
 		yych = opts->yych;
 	}
 	else
 	{
-		o << indent (ind);
+		o.wind(ind);
 	}
 	return yych;
 }
@@ -65,19 +65,19 @@ void Case::emit (OutputFile & o, uint32_t ind)
 	{
 		for (uint32_t b = ranges[i].first; b < ranges[i].second; ++b)
 		{
-			o << indent (ind) << "case ";
+			o.wind(ind).ws("case ");
 			o.write_char_hex (b);
-			o << ":";
+			o.ws(":");
 			if (opts->dFlag && opts->encoding.type () == Enc::EBCDIC)
 			{
 				const uint32_t c = opts->encoding.decodeUnsafe (b);
 				if (is_print (c))
-					o << " /* " << static_cast<char> (c) << " */";
+					o.ws(" /* ").wc(static_cast<char> (c)).ws(" */");
 			}
 			bool last_case = i == ranges.size () - 1 && b == ranges[i].second - 1;
 			if (!last_case)
 			{
-				o << "\n";
+				o.ws("\n");
 			}
 		}
 	}
@@ -85,7 +85,7 @@ void Case::emit (OutputFile & o, uint32_t ind)
 
 void Cases::emit (OutputFile & o, uint32_t ind, bool & readCh)
 {
-	o << indent(ind) << "switch (" << output_yych (readCh) << ") {\n";
+	o.wind(ind).ws("switch (").wstring(output_yych (readCh)).ws(") {\n");
 	for (uint32_t i = 0; i < cases_size; ++i)
 	{
 		if (cases[i].to != def)
@@ -94,19 +94,19 @@ void Cases::emit (OutputFile & o, uint32_t ind, bool & readCh)
 			output_goto (o, 1, readCh, cases[i].to->label);
 		}
 	}
-	o << indent (ind) << "default:";
+	o.wind(ind).ws("default:");
 	output_goto (o, 1, readCh, def->label);
-	o << indent (ind) << "}\n";
+	o.wind(ind).ws("}\n");
 }
 
 void Binary::emit (OutputFile & o, uint32_t ind, bool & readCh)
 {
 	output_if (o, ind, readCh, cond->compare, cond->value);
-	o << "{\n";
+	o.ws("{\n");
 	thn->emit (o, ind + 1, readCh);
-	o << indent (ind) << "} else {\n";
+	o.wind(ind).ws("} else {\n");
 	els->emit (o, ind + 1, readCh);
-	o << indent (ind) << "}\n";
+	o.wind(ind).ws("}\n");
 }
 
 void Linear::emit (OutputFile & o, uint32_t ind, bool & readCh)
@@ -154,18 +154,18 @@ void SwitchIf::emit (OutputFile & o, uint32_t ind, bool & readCh)
 void GoBitmap::emit (OutputFile & o, uint32_t ind, bool & readCh)
 {
 	std::string yych = output_hgo (o, ind, readCh, hgo);
-	o << "if (" << opts->yybm << "[" << bitmap->i << "+" << yych << "] & ";
+	o.ws("if (").wstring(opts->yybm).ws("[").wu32(bitmap->i).ws("+").wstring(yych).ws("] & ");
 	if (opts->yybmHexTable)
 	{
 		o.write_hex (bitmap->m);
 	}
 	else
 	{
-		o << (uint32_t) bitmap->m;
+		o.wu32(bitmap->m);
 	}
-	o << ") {\n";
+	o.ws(") {\n");
 	output_goto (o, ind + 1, readCh, bitmap_state->label);
-	o << indent (ind) << "}\n";
+	o.wind(ind).ws("}\n");
 	if (lgo != NULL)
 	{
 		lgo->emit (o, ind, readCh);
@@ -187,36 +187,36 @@ label_t CpgotoTable::max_label () const
 
 void CpgotoTable::emit (OutputFile & o, uint32_t ind)
 {
-	o << indent (ind) << "static void *" << opts->yytarget << "[256] = {\n";
-	o << indent (++ind);
+	o.wind(ind).ws("static void *").wstring(opts->yytarget).ws("[256] = {\n");
+	o.wind(++ind);
 	const uint32_t max_digits = max_label ().width ();
 	for (uint32_t i = 0; i < TABLE_SIZE; ++i)
 	{
-		o << "&&" << opts->labelPrefix << table[i]->label;
+		o.ws("&&").wstring(opts->labelPrefix).wlabel(table[i]->label);
 		if (i == TABLE_SIZE - 1)
 		{
-			o << "\n";
+			o.ws("\n");
 		}
 		else if (i % 8 == 7)
 		{
-			o << ",\n" << indent (ind);
+			o.ws(",\n").wind(ind);
 		}
 		else
 		{
 			const uint32_t padding = max_digits - table[i]->label.width () + 1;
-			o << "," << std::string (padding, ' ');
+			o.ws(",").wstring(std::string (padding, ' '));
 		}
 	}
-	o << indent (--ind) << "};\n";
+	o.wind(--ind).ws("};\n");
 }
 
 void Cpgoto::emit (OutputFile & o, uint32_t ind, bool & readCh)
 {
 	std::string yych = output_hgo (o, ind, readCh, hgo);
-	o << "{\n";
+	o.ws("{\n");
 	table->emit (o, ++ind);
-	o << indent(ind) << "goto *" << opts->yytarget << "[" << yych << "];\n";
-	o << indent(--ind) << "}\n";
+	o.wind(ind).ws("goto *").wstring(opts->yytarget).ws("[").wstring(yych).ws("];\n");
+	o.wind(--ind).ws("}\n");
 }
 
 void Dot::emit (OutputFile & o)
@@ -224,18 +224,18 @@ void Dot::emit (OutputFile & o)
 	const uint32_t n = cases->cases_size;
 	if (n == 1)
 	{
-		o << from->label << " -> " << cases->cases[0].to->label << "\n";
+		o.wlabel(from->label).ws(" -> ").wlabel(cases->cases[0].to->label).ws("\n");
 	}
 	else
 	{
 		for (uint32_t i = 0; i < n; ++i)
 		{
-			o << from->label << " -> " << cases->cases[i].to->label << " [label=\"";
+			o.wlabel(from->label).ws(" -> ").wlabel(cases->cases[i].to->label).ws(" [label=\"");
 			for (uint32_t j = 0; j < cases->cases[i].ranges.size (); ++j)
 			{
 				o.write_range (cases->cases[i].ranges[j].first, cases->cases[i].ranges[j].second);
 			}
-			o << "\"]\n";
+			o.ws("\"]\n");
 		}
 	}
 }
