@@ -214,7 +214,7 @@ $(BOOTSTRAP_PARSER): $(CUSTOM_PARSER)
 .re.cc:
 	@if test -x $(RE2C); \
 	then \
-		$(RE2C) $(RE2CFLAGS) -o $@ $< && \
+		$(top_builddir)/$(RE2C) $(RE2CFLAGS) -o $@ $< && \
 		cp $@ $(top_srcdir)/bootstrap/$@; \
 	else \
 		cp $(top_srcdir)/bootstrap/$@ $@; \
