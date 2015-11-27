@@ -145,8 +145,7 @@ void DFA::emit(Output & output, uint32_t& ind, bool isLastCond, bool& bPrologBra
 		// Generate prolog
 		if (bProlog)
 		{
-			o.ws("\n");
-			o.insert_line_info ();
+			o.ws("\n").wdelay_line_info ();
 			if (opts->target == opt_t::DOT)
 			{
 				bPrologBrace = true;
@@ -172,7 +171,7 @@ void DFA::emit(Output & output, uint32_t& ind, bool isLastCond, bool& bPrologBra
 				{
 					o.wind(ind).wstring(opts->yyctype).ws(" ").wstring(opts->yych).ws(";\n");
 				}
-				o.insert_yyaccept_init (ind);
+				o.wdelay_yyaccept_init (ind);
 			}
 			else
 			{
@@ -189,7 +188,7 @@ void DFA::emit(Output & output, uint32_t& ind, bool isLastCond, bool& bPrologBra
 			{
 				genCondTable(o, ind, output.types);
 			}
-			o.insert_state_goto (ind);
+			o.wdelay_state_goto (ind);
 			if (opts->cFlag && opts->target != opt_t::DOT)
 			{
 				if (used_labels.count(start_label))
@@ -197,7 +196,7 @@ void DFA::emit(Output & output, uint32_t& ind, bool isLastCond, bool& bPrologBra
 					o.wstring(opts->labelPrefix).wlabel(start_label).ws(":\n");
 				}
 			}
-			o.write_user_start_label ();
+			o.wuser_start_label ();
 			if (opts->cFlag && !bWroteCondCheck)
 			{
 				genCondGoto(o, ind, output.types);
@@ -331,7 +330,7 @@ void genCondGoto(OutputFile & o, uint32_t ind, const std::vector<std::string> & 
 		}
 		o.wind(ind).ws("}\n");
 	}
-	o.insert_warn_condition_order ();
+	o.wdelay_warn_condition_order ();
 	bWroteCondCheck = true;
 }
 

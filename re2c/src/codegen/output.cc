@@ -91,49 +91,57 @@ std::ostream & OutputFile::stream ()
 	return blocks.back ()->fragments.back ()->stream;
 }
 
-void OutputFile::write (const char * s, size_t n)
+OutputFile & OutputFile::wraw (const char * s, size_t n)
 {
 	stream ().write (s, static_cast<std::streamsize> (n));
+	return *this;
 }
 
-void OutputFile::write_hex (uint32_t n)
+OutputFile & OutputFile::wu32_hex (uint32_t n)
 {
 	prtHex (stream (), n);
+	return *this;
 }
 
-void OutputFile::write_char_hex (uint32_t n)
+OutputFile & OutputFile::wc_hex (uint32_t n)
 {
 	prtChOrHex (stream (), n);
+	return *this;
 }
 
-void OutputFile::write_range (uint32_t l, uint32_t u)
+OutputFile & OutputFile::wrange (uint32_t l, uint32_t u)
 {
 	printSpan (stream (), l, u);
+	return *this;
 }
 
-void OutputFile::write_uint32_t_width (uint32_t n, int w)
+OutputFile & OutputFile::wu32_width (uint32_t n, int w)
 {
 	stream () << std::setw (w);
 	stream () << n;
+	return *this;
 }
 
-void OutputFile::write_line_info (uint32_t l, const char * fn)
+OutputFile & OutputFile::wline_info (uint32_t l, const char * fn)
 {
 	output_line_info (stream (), l, fn);
+	return *this;
 }
 
-void OutputFile::write_version_time ()
+OutputFile & OutputFile::wversion_time ()
 {
 	output_version_time (stream ());
+	return *this;
 }
 
-void OutputFile::write_user_start_label ()
+OutputFile & OutputFile::wuser_start_label ()
 {
 	const std::string label = blocks.back ()->user_start_label;
 	if (!label.empty ())
 	{
 		wstring(label).ws(":\n");
 	}
+	return *this;
 }
 
 OutputFile & OutputFile::wc (char c)
@@ -189,13 +197,14 @@ void OutputFile::insert_code ()
 	blocks.back ()->fragments.push_back (new OutputFragment (OutputFragment::CODE, 0));
 }
 
-void OutputFile::insert_line_info ()
+OutputFile & OutputFile::wdelay_line_info ()
 {
 	blocks.back ()->fragments.push_back (new OutputFragment (OutputFragment::LINE_INFO, 0));
 	insert_code ();
+	return *this;
 }
 
-void OutputFile::insert_state_goto (uint32_t ind)
+OutputFile & OutputFile::wdelay_state_goto (uint32_t ind)
 {
 	if (opts->fFlag && !bWroteGetState)
 	{
@@ -203,31 +212,36 @@ void OutputFile::insert_state_goto (uint32_t ind)
 		insert_code ();
 		bWroteGetState = true;
 	}
+	return *this;
 }
 
-void OutputFile::insert_types ()
+OutputFile & OutputFile::wdelay_types ()
 {
 	warn_condition_order = false; // see note [condition order]
 	blocks.back ()->fragments.push_back (new OutputFragment (OutputFragment::TYPES, 0));
 	insert_code ();
+	return *this;
 }
 
-void OutputFile::insert_warn_condition_order ()
+OutputFile & OutputFile::wdelay_warn_condition_order ()
 {
 	blocks.back ()->fragments.push_back (new OutputFragment (OutputFragment::WARN_CONDITION_ORDER, 0));
 	insert_code ();
+	return *this;
 }
 
-void OutputFile::insert_yyaccept_init (uint32_t ind)
+OutputFile & OutputFile::wdelay_yyaccept_init (uint32_t ind)
 {
 	blocks.back ()->fragments.push_back (new OutputFragment (OutputFragment::YYACCEPT_INIT, ind));
 	insert_code ();
+	return *this;
 }
 
-void OutputFile::insert_yymaxfill ()
+OutputFile & OutputFile::wdelay_yymaxfill ()
 {
 	blocks.back ()->fragments.push_back (new OutputFragment (OutputFragment::YYMAXFILL, 0));
 	insert_code ();
+	return *this;
 }
 
 void OutputFile::set_used_yyaccept ()

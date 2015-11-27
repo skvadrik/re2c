@@ -112,11 +112,11 @@ void BitMap::gen(OutputFile & o, uint32_t ind, uint32_t lb, uint32_t ub)
 
 				if (opts->yybmHexTable)
 				{
-					o.write_hex (bm[j]);
+					o.wu32_hex(bm[j]);
 				}
 				else
 				{
-					o.write_uint32_t_width (bm[j], 3);
+					o.wu32_width(bm[j], 3);
 				}
 				o.ws(", ");
 			}

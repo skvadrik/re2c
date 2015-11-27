@@ -272,9 +272,9 @@ void emit_rule (OutputFile & o, uint32_t ind, const State * const s, const RuleO
 			{
 				o.wind(ind).wstring(yySetupRule).ws("\n");
 			}
-			o.write_line_info (rule->code->loc.line, rule->code->loc.filename.c_str ());
-			o.wind(ind).wstring(rule->code->text).ws("\n");
-			o.insert_line_info ();
+			o.wline_info(rule->code->loc.line, rule->code->loc.filename.c_str ())
+				.wind(ind).wstring(rule->code->text).ws("\n")
+				.wdelay_line_info ();
 		}
 		else if (!rule->newcond.empty ())
 		{

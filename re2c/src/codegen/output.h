@@ -73,29 +73,31 @@ public:
 
 	void new_block ();
 
-	void write (const char * s, size_t n);
-	void write_hex (uint32_t n);
-	void write_char_hex (uint32_t n);
-	void write_range (uint32_t u, uint32_t l);
-	void write_uint32_t_width (uint32_t n, int w);
-	void write_line_info (uint32_t l, const char * fn);
-	void write_version_time ();
-	void write_user_start_label ();
+	// immediate output
+	OutputFile & wraw (const char * s, size_t n);
 	OutputFile & wc (char c);
+	OutputFile & wc_hex (uint32_t n);
 	OutputFile & wu32 (uint32_t n);
+	OutputFile & wu32_hex (uint32_t n);
+	OutputFile & wu32_width (uint32_t n, int w);
 	OutputFile & wu64 (uint64_t n);
 	OutputFile & wstring (const std::string & s);
 	OutputFile & ws (const char * s);
 	OutputFile & wlabel (label_t l);
 	OutputFile & wrank (rule_rank_t l);
+	OutputFile & wrange (uint32_t u, uint32_t l);
+	OutputFile & wline_info (uint32_t l, const char * fn);
+	OutputFile & wversion_time ();
+	OutputFile & wuser_start_label ();
 	OutputFile & wind (uint32_t ind);
 
-	void insert_line_info ();
-	void insert_state_goto (uint32_t ind);
-	void insert_types ();
-	void insert_warn_condition_order ();
-	void insert_yyaccept_init (uint32_t ind);
-	void insert_yymaxfill ();
+	// delayed output
+	OutputFile & wdelay_line_info ();
+	OutputFile & wdelay_state_goto (uint32_t ind);
+	OutputFile & wdelay_types ();
+	OutputFile & wdelay_warn_condition_order ();
+	OutputFile & wdelay_yyaccept_init (uint32_t ind);
+	OutputFile & wdelay_yymaxfill ();
 
 	void set_used_yyaccept ();
 	bool get_used_yyaccept () const;

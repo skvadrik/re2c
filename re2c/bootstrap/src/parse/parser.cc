@@ -2259,8 +2259,8 @@ void parse(Scanner& i, Output & o)
 
 	in = &i;
 
-	o.source.write_version_time ();
-	o.source.write_line_info (in->get_cline (), in->get_fname ().c_str ());
+	o.source.wversion_time ()
+		.wline_info (in->get_cline (), in->get_fname ().c_str ());
 	if (opts->target == opt_t::SKELETON)
 	{
 		Skeleton::emit_prolog (o.source);
@@ -2411,7 +2411,7 @@ void parse(Scanner& i, Output & o)
 				}
 			}
 		}
-		o.source.write_line_info (in->get_cline (), in->get_fname ().c_str ());
+		o.source.wline_info (in->get_cline (), in->get_fname ().c_str ());
 		/* restore original char handling mode*/
 		opts.reset_encoding (encodingOld);
 	}

@@ -76,7 +76,7 @@ echo:
 						const size_t lexeme_len = cur[-1] == '{'
 							? sizeof ("%{") - 1
 							: sizeof ("/*!re2c") - 1;
-						out.write(tok, tok_len () - lexeme_len);
+						out.wraw(tok, tok_len () - lexeme_len);
 					}
 					tok = cur;
 					return Parse;
@@ -102,7 +102,7 @@ echo:
 					if (opts->target == opt_t::CODE)
 					{
 						const size_t lexeme_len = sizeof ("/*!use:re2c") - 1;
-						out.write(tok, tok_len () - lexeme_len);
+						out.wraw(tok, tok_len () - lexeme_len);
 					}
 					tok = cur;
 					return Reuse;
@@ -110,7 +110,7 @@ echo:
 	"/*!max:re2c" {
 					if (opts->target != opt_t::DOT)
 					{
-						out.insert_yymaxfill ();
+						out.wdelay_yymaxfill ();
 					}
 					tok = pos = cur;
 					ignore_eoc = true;
@@ -118,7 +118,7 @@ echo:
 				}
 	"/*!getstate:re2c" {
 					tok = pos = cur;
-					out.insert_state_goto (opts->topIndent);
+					out.wdelay_state_goto (opts->topIndent);
 					ignore_eoc = true;
 					goto echo;
 				}
@@ -132,11 +132,9 @@ echo:
 					ignore_eoc = true;
 					if (opts->target != opt_t::DOT)
 					{
-						out.insert_line_info ();
-						out.ws("\n");
-						out.insert_types ();
-						out.ws("\n");
-						out.write_line_info (cline, get_fname ().c_str ());
+						out.wdelay_line_info ().ws("\n")
+							.wdelay_types ().ws("\n")
+							.wline_info (cline, get_fname ().c_str ());
 					}
 					goto echo;
 				}
@@ -146,14 +144,14 @@ echo:
 					{
 						if (ignore_cnt)
 						{
-							out.write_line_info (cline, get_fname ().c_str ());
+							out.wline_info (cline, get_fname ().c_str ());
 						}
 						ignore_eoc = false;
 						ignore_cnt = 0;
 					}
 					else if (opts->target == opt_t::CODE)
 					{
-						out.write(tok, tok_len ());
+						out.wraw(tok, tok_len ());
 					}
 					tok = pos = cur;
 					goto echo;
@@ -163,15 +161,14 @@ echo:
 					{
 						if (ignore_cnt)
 						{
-							out.ws("\n");
-							out.write_line_info (cline, get_fname ().c_str ());
+							out.ws("\n").wline_info (cline, get_fname ().c_str ());
 						}
 						ignore_eoc = false;
 						ignore_cnt = 0;
 					}
 					else if (opts->target == opt_t::CODE)
 					{
-						out.write(tok, tok_len ());
+						out.wraw(tok, tok_len ());
 					}
 					tok = pos = cur;
 					goto echo;
@@ -187,7 +184,7 @@ echo:
 					}
 					else if (opts->target == opt_t::CODE)
 					{
-						out.write(tok, tok_len ());
+						out.wraw(tok, tok_len ());
 					}
 					tok = pos = cur;
 					cline++;
@@ -196,7 +193,7 @@ echo:
 	zero		{
 					if (!ignore_eoc && opts->target == opt_t::CODE)
 					{
-						out.write(tok, tok_len () - 1);
+						out.wraw(tok, tok_len () - 1);
 						// -1 so we don't write out the \0
 					}
 					if(cur == eof)

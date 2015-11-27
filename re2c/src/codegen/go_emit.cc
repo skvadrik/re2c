@@ -27,9 +27,7 @@ std::string output_yych (bool & readCh)
 
 void output_if (OutputFile & o, uint32_t ind, bool & readCh, const std::string & compare, uint32_t value)
 {
-	o.wind(ind).ws("if (").wstring(output_yych (readCh)).ws(" ").wstring(compare).ws(" ");
-	o.write_char_hex (value);
-	o.ws(") ");
+	o.wind(ind).ws("if (").wstring(output_yych (readCh)).ws(" ").wstring(compare).ws(" ").wc_hex (value).ws(") ");
 }
 
 void output_goto (OutputFile & o, uint32_t ind, bool & readCh, label_t to)
@@ -65,9 +63,7 @@ void Case::emit (OutputFile & o, uint32_t ind)
 	{
 		for (uint32_t b = ranges[i].first; b < ranges[i].second; ++b)
 		{
-			o.wind(ind).ws("case ");
-			o.write_char_hex (b);
-			o.ws(":");
+			o.wind(ind).ws("case ").wc_hex (b).ws(":");
 			if (opts->dFlag && opts->encoding.type () == Enc::EBCDIC)
 			{
 				const uint32_t c = opts->encoding.decodeUnsafe (b);
@@ -157,7 +153,7 @@ void GoBitmap::emit (OutputFile & o, uint32_t ind, bool & readCh)
 	o.ws("if (").wstring(opts->yybm).ws("[").wu32(bitmap->i).ws("+").wstring(yych).ws("] & ");
 	if (opts->yybmHexTable)
 	{
-		o.write_hex (bitmap->m);
+		o.wu32_hex(bitmap->m);
 	}
 	else
 	{
@@ -233,7 +229,7 @@ void Dot::emit (OutputFile & o)
 			o.wlabel(from->label).ws(" -> ").wlabel(cases->cases[i].to->label).ws(" [label=\"");
 			for (uint32_t j = 0; j < cases->cases[i].ranges.size (); ++j)
 			{
-				o.write_range (cases->cases[i].ranges[j].first, cases->cases[i].ranges[j].second);
+				o.wrange(cases->cases[i].ranges[j].first, cases->cases[i].ranges[j].second);
 			}
 			o.ws("\"]\n");
 		}
