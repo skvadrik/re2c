@@ -188,7 +188,7 @@ CLEANFILES = \
 	$(DOC)
 
 $(AUTOGEN_PARSER): $(CUSTOM_PARSER)
-	@if test $(BISON) == "no"; \
+	@if test $(BISON) = "no"; \
 	then \
 		cp $(top_srcdir)/$(BOOTSTRAP_PARSER) $@ && \
 		cp $(top_srcdir)/$(BOOTSTRAP_PARSER_HDR) $(AUTOGEN_PARSER_HDR); \
@@ -204,7 +204,7 @@ $(AUTOGEN_PARSER): $(CUSTOM_PARSER)
 $(AUTOGEN_LEX): $(AUTOGEN_PARSER)
 
 $(BOOTSTRAP_PARSER): $(CUSTOM_PARSER)
-	@test $(BISON) == "no" || \
+	@test $(BISON) = "no" || \
 	$(BISON) \
 		--output=$(top_srcdir)/$@ \
 		--defines=$(top_srcdir)/$(BOOTSTRAP_PARSER_HDR) \
