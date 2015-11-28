@@ -242,7 +242,7 @@ void default_rule(CondList *clist, const Code * code)
    enum yytokentype {
      CLOSE = 258,
      CLOSESIZE = 259,
-     CODE = 260,
+     TOKEN_CODE = 260,
      CONF = 261,
      ID = 262,
      FID = 263,
@@ -596,7 +596,7 @@ static const yytype_uint16 yyrline[] =
    First, the terminals, then, starting at YYNTOKENS, nonterminals.  */
 static const char *const yytname[] =
 {
-  "$end", "error", "$undefined", "CLOSE", "CLOSESIZE", "CODE", "CONF",
+  "$end", "error", "$undefined", "CLOSE", "CLOSESIZE", "TOKEN_CODE", "CONF",
   "ID", "FID", "FID_END", "NOCOND", "REGEXP", "SETUP", "STAR", "'='",
   "';'", "'/'", "'<'", "'>'", "':'", "','", "'|'", "'\\\\'", "'('", "')'",
   "$accept", "spec", "decl", "rule", "cond", "clist", "newcond", "look",

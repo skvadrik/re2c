@@ -23,6 +23,9 @@ public:
 	explicit u32lim_t (uint64_t x)
 		: value (x < LIMIT ? static_cast<uint32_t> (x) : LIMIT)
 	{}
+	explicit u32lim_t (size_t x)
+		: value (x < LIMIT ? static_cast<uint32_t> (x) : LIMIT)
+	{}
 
 	static u32lim_t limit ()
 	{

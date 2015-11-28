@@ -1448,7 +1448,7 @@ yy236:
 							--cur;
 						}
 						yylval.code = new Code (tok, tok_len (), get_fname (), tline);
-						return CODE;
+						return TOKEN_CODE;
 					}
 					else if (cur == eof)
 					{
@@ -1495,7 +1495,7 @@ yy241:
 					else if (--depth == 0)
 					{
 						yylval.code = new Code (tok, tok_len (), get_fname (), tline);
-						return CODE;
+						return TOKEN_CODE;
 					}
 					goto code;
 				}
