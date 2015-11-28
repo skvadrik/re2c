@@ -73,6 +73,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <iostream>
+#include <limits>
 #include <set>
 
 #include "config.h"
@@ -583,11 +584,11 @@ static const yytype_int8 yyrhs[] =
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint16 yyrline[] =
 {
-       0,   183,   183,   185,   189,   193,   202,   211,   215,   219,
-     223,   240,   258,   262,   268,   273,   279,   283,   298,   315,
-     320,   326,   342,   360,   380,   386,   394,   397,   404,   410,
-     420,   423,   431,   434,   441,   445,   452,   456,   463,   467,
-     474,   478,   493,   513,   517,   521,   525,   532,   542,   546
+       0,   184,   184,   186,   190,   194,   203,   212,   216,   220,
+     224,   241,   259,   263,   269,   274,   280,   284,   299,   316,
+     321,   327,   343,   361,   381,   387,   395,   398,   405,   411,
+     421,   424,   432,   435,   442,   446,   453,   457,   464,   468,
+     475,   479,   494,   514,   518,   522,   526,   533,   543,   547
 };
 #endif
 
@@ -1953,7 +1954,7 @@ yyreduce:
 
     {
 			(yyvsp[(1) - (2)].regexp)->ins_access = RegExp::PRIVATE;
-			if ((yyvsp[(2) - (2)].extop).max == UINT32_MAX)
+			if ((yyvsp[(2) - (2)].extop).max == std::numeric_limits<uint32_t>::max())
 			{
 				(yyval.regexp) = repeat_from ((yyvsp[(1) - (2)].regexp), (yyvsp[(2) - (2)].extop).min);
 			}

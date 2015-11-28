@@ -1,3 +1,5 @@
+#include <limits>
+
 #include "src/util/s_to_n32_unsafe.h"
 
 // assumes that string matches regexp [0-9]+
@@ -9,7 +11,7 @@ bool s_to_u32_unsafe (const char * s, const char * s_end, uint32_t & number)
 	{
 		u *= 10;
 		u += static_cast<uint32_t> (*s) - 0x30;
-		if (u >= UINT32_MAX)
+		if (u >= std::numeric_limits<uint32_t>::max())
 		{
 			return false;
 		}
@@ -30,7 +32,7 @@ bool s_to_i32_unsafe (const char * s, const char * s_end, int32_t & number)
 		{
 			i *= 10;
 			i -= *s - 0x30;
-			if (i < INT32_MIN)
+			if (i < std::numeric_limits<int32_t>::min())
 			{
 				return false;
 			}
@@ -42,7 +44,7 @@ bool s_to_i32_unsafe (const char * s, const char * s_end, int32_t & number)
 		{
 			i *= 10;
 			i += *s - 0x30;
-			if (i > INT32_MAX)
+			if (i > std::numeric_limits<int32_t>::max())
 			{
 				return false;
 			}

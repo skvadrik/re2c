@@ -1,10 +1,12 @@
+#include <limits>
+
 #include "src/codegen/skeleton/skeleton.h"
 
 namespace re2c
 {
 
-// 0 < DIST_MAX < DIST_ERROR <= UINT32_MAX
-const uint32_t Node::DIST_ERROR = UINT32_MAX;
+// 0 < DIST_MAX < DIST_ERROR <= std::numeric_limits<uint32_t>::max()
+const uint32_t Node::DIST_ERROR = std::numeric_limits<uint32_t>::max();
 const uint32_t Node::DIST_MAX = DIST_ERROR - 1;
 
 // different from YYMAXFILL calculation

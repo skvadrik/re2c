@@ -1,3 +1,4 @@
+#include <limits>
 #include <stdlib.h> // exit
 
 #include "src/codegen/skeleton/skeleton.h"
@@ -112,11 +113,11 @@ Skeleton::Skeleton (const DFA & dfa, const rules_t & rs)
 
 	// initialize size of key
 	const uint32_t max = std::max (maxlen, maxrule);
-	if (max <= UINT8_MAX)
+	if (max <= std::numeric_limits<uint8_t>::max())
 	{
 		sizeof_key = 1;
 	}
-	else if (max <= UINT16_MAX)
+	else if (max <= std::numeric_limits<uint16_t>::max())
 	{
 		sizeof_key = 2;
 	}
@@ -127,13 +128,13 @@ Skeleton::~Skeleton ()
 	delete [] nodes;
 }
 
-template <> uint32_t Skeleton::none<uint32_t> () { return UINT32_MAX; }
-template <> uint16_t Skeleton::none<uint16_t> () { return UINT16_MAX; }
-template <> uint8_t  Skeleton::none<uint8_t>  () { return UINT8_MAX;  }
+template <> uint32_t Skeleton::none<uint32_t> () { return std::numeric_limits<uint32_t>::max(); }
+template <> uint16_t Skeleton::none<uint16_t> () { return std::numeric_limits<uint16_t>::max(); }
+template <> uint8_t  Skeleton::none<uint8_t>  () { return std::numeric_limits<uint8_t >::max(); }
 
-template <> uint32_t Skeleton::def<uint32_t> () { return UINT32_MAX - 1; }
-template <> uint16_t Skeleton::def<uint16_t> () { return UINT16_MAX - 1; }
-template <> uint8_t  Skeleton::def<uint8_t>  () { return UINT8_MAX  - 1; }
+template <> uint32_t Skeleton::def<uint32_t> () { return std::numeric_limits<uint32_t>::max() - 1; }
+template <> uint16_t Skeleton::def<uint16_t> () { return std::numeric_limits<uint16_t>::max() - 1; }
+template <> uint8_t  Skeleton::def<uint8_t>  () { return std::numeric_limits<uint8_t >::max() - 1; }
 
 uint32_t Skeleton::rule2key (rule_rank_t r) const
 {

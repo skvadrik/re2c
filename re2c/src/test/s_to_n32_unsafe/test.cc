@@ -1,3 +1,4 @@
+#include <limits>
 #include <stdio.h>
 
 #include "src/util/s_to_n32_unsafe.h"
@@ -64,15 +65,17 @@ static int32_t test ()
 	{
 		ok |= test_u (i);
 	}
-	// UINT32_MAX neighbourhood
-	for (uint64_t i = UINT32_MAX - UDELTA; i <= UINT32_MAX + UDELTA; ++i)
+	// u32_max neighbourhood
+	static const uint64_t u32_max = std::numeric_limits<uint32_t>::max();
+	for (uint64_t i = u32_max - UDELTA; i <= u32_max + UDELTA; ++i)
 	{
 		ok |= test_u (i);
 	}
 
 	static const int64_t IDELTA = 0xFFFF;
-	// INT32_MIN neighbourhood
-	for (int64_t i = INT32_MIN - IDELTA; i <= INT32_MIN + IDELTA; ++i)
+	// i32_min neighbourhood
+	static const int64_t i32_min = std::numeric_limits<int32_t>::min();
+	for (int64_t i = i32_min - IDELTA; i <= i32_min + IDELTA; ++i)
 	{
 		ok |= test_i (i);
 	}
@@ -81,8 +84,9 @@ static int32_t test ()
 	{
 		ok |= test_i (i);
 	}
-	// INT32_MAX neighbourhood
-	for (int64_t i = INT32_MAX - IDELTA; i <= INT32_MAX + IDELTA; ++i)
+	// i32_max neighbourhood
+	static const int64_t i32_max = std::numeric_limits<int32_t>::max();
+	for (int64_t i = i32_max - IDELTA; i <= i32_max + IDELTA; ++i)
 	{
 		ok |= test_i (i);
 	}

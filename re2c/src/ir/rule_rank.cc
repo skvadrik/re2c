@@ -1,4 +1,5 @@
 #include <assert.h>
+#include <limits>
 #include <ostream>
 
 #include "src/ir/rule_rank.h"
@@ -6,7 +7,7 @@
 namespace re2c
 {
 
-const uint32_t rule_rank_t::NONE = UINT32_MAX;
+const uint32_t rule_rank_t::NONE = std::numeric_limits<uint32_t>::max();
 const uint32_t rule_rank_t::DEF = rule_rank_t::NONE - 1;
 
 rule_rank_t::rule_rank_t ()

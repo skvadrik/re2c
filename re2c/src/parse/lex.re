@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <iostream>
+#include <limits>
 #include <sstream>
 
 #include "src/ir/dfa/dfa.h"
@@ -303,7 +304,7 @@ start:
 					{
 						fatal ("repetition lower bound overflow");
 					}
-					yylval.extop.max = UINT32_MAX;
+					yylval.extop.max = std::numeric_limits<uint32_t>::max();
 					return CLOSESIZE;
 				}
 
