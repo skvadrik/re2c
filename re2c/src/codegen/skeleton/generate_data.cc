@@ -58,11 +58,11 @@ Node::permuts_t Node::sizeof_permutate (permuts_t wid, permuts_t len)
 	else if (loop < 2)
 	{
 		local_inc _ (loop);
-		permuts_t size (0u);
-		const permuts_t new_len = len + permuts_t (1u);
+		permuts_t size = permuts_t::from32(0u);
+		const permuts_t new_len = len + permuts_t::from32(1u);
 		for (arcs_t::iterator i = arcs.begin (); i != arcs.end (); ++i)
 		{
-			const permuts_t new_wid = wid * permuts_t (i->second.size ());
+			const permuts_t new_wid = wid * permuts_t::from64(i->second.size ());
 			if (new_wid.overflow ())
 			{
 				return permuts_t::limit ();
@@ -77,7 +77,7 @@ Node::permuts_t Node::sizeof_permutate (permuts_t wid, permuts_t len)
 	}
 	else
 	{
-		return permuts_t (0u);
+		return permuts_t::from32(0u);
 	}
 }
 
@@ -145,7 +145,7 @@ template <typename cunit_t, typename key_t>
 template <typename cunit_t, typename key_t>
 	Node::covers_t Node::cover (const multipath_t & prefix, FILE * input, FILE * keys)
 {
-	covers_t size (0u);
+	covers_t size = covers_t::from32(0u);
 	if (end () && suffix == NULL)
 	{
 		suffix = new path_t (rule, ctx);
@@ -180,7 +180,7 @@ template <typename cunit_t, typename key_t>
 	void Skeleton::generate_paths_cunit_key (FILE * input, FILE * keys)
 {
 	multipath_t prefix (nodes->rule, nodes->ctx);
-	if (nodes->sizeof_permutate (Node::permuts_t (1u), Node::permuts_t (0u)).overflow ())
+	if (nodes->sizeof_permutate (Node::permuts_t::from32(1u), Node::permuts_t::from32(0u)).overflow ())
 	{
 		if (nodes->cover<cunit_t, key_t> (prefix, input, keys).overflow ())
 		{
@@ -305,7 +305,7 @@ template <typename cunit_t, typename key_t>
 		count = std::max (count, prefix[i]->size ());
 	}
 
-	const Node::covers_t size = Node::covers_t (len) * Node::covers_t (count);
+	const Node::covers_t size = Node::covers_t::from64(len) * Node::covers_t::from64(count);
 	if (!size.overflow ())
 	{
 		// input

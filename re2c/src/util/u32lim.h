@@ -11,18 +11,22 @@ template<uint32_t LIMIT>
 class u32lim_t
 {
 	uint32_t value;
-
-public:
-	// implicit conversion is forbidden, because
-	// operands should be converted before operation:
-	//     uint32_t x, y; ... u32lim_t z = x + y;
-	// will result in 32-bit addition and may overflow
 	explicit u32lim_t (uint32_t x)
 		: value (x < LIMIT ? x : LIMIT)
 	{}
 	explicit u32lim_t (uint64_t x)
 		: value (x < LIMIT ? static_cast<uint32_t> (x) : LIMIT)
 	{}
+
+public:
+	// implicit conversion is forbidden, because
+	// operands should be converted before operation:
+	//     uint32_t x, y; ... u32lim_t z = x + y;
+	// will result in 32-bit addition and may overflow
+	// Don't export overloaded constructors: it breaks OS X builds
+	// ('size_t' causes resolution ambiguity)
+	static u32lim_t from32 (uint32_t x) { return u32lim_t(x); }
+	static u32lim_t from64 (uint64_t x) { return u32lim_t(x); }
 
 	static u32lim_t limit ()
 	{

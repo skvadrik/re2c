@@ -10,17 +10,17 @@ Node::nakeds_t Node::naked_ways (const way_t & prefix, std::vector<way_t> & ways
 {
 	if (!rule.rank.is_none ())
 	{
-		return nakeds_t (0u);
+		return nakeds_t::from32(0u);
 	}
 	else if (end ())
 	{
 		ways.push_back (prefix);
-		return nakeds_t (prefix.size ());
+		return nakeds_t::from64(prefix.size ());
 	}
 	else if (loop < 2)
 	{
 		local_inc _ (loop);
-		nakeds_t size (0u);
+		nakeds_t size = nakeds_t::from32(0u);
 		for (arcsets_t::iterator i = arcsets.begin (); i != arcsets.end (); ++i)
 		{
 			way_t w = prefix;
@@ -35,7 +35,7 @@ Node::nakeds_t Node::naked_ways (const way_t & prefix, std::vector<way_t> & ways
 	}
 	else
 	{
-		return nakeds_t (0u);
+		return nakeds_t::from32(0u);
 	}
 }
 
