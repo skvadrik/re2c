@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # somewhat portable way to detect CPU count
 detect_cpu_count () {
