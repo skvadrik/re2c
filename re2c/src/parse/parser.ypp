@@ -159,7 +159,7 @@ void default_rule(CondList *clist, const Code * code)
 
 %token CLOSE
 %token CLOSESIZE
-%token CODE
+%token TOKEN_CODE
 %token CONF
 %token ID
 %token FID
@@ -171,7 +171,7 @@ void default_rule(CondList *clist, const Code * code)
 
 %type <op>      CLOSE STAR SETUP close
 %type <extop>   CLOSESIZE
-%type <code>    CODE
+%type <code>    TOKEN_CODE
 %type <regexp>  REGEXP rule look expr diff term factor primary
 %type <str>     ID FID newcond
 %type <clist>   cond clist
@@ -220,7 +220,7 @@ decl:
 ;
 
 rule:
-		expr look CODE
+		expr look TOKEN_CODE
 		{
 			if (opts->cFlag)
 			{
@@ -237,7 +237,7 @@ rule:
 				);
 			spec.add (rule);
 		}
-	|	STAR CODE /* default rule */
+	|	STAR TOKEN_CODE /* default rule */
 		{
 			if (opts->cFlag)
 				in->fatal("condition or '<*>' required when using -c switch");
@@ -255,7 +255,7 @@ rule:
 				in->fatal("code to default rule is already defined");
 			}
 		}
-	|	'<' cond '>' expr look newcond CODE
+	|	'<' cond '>' expr look newcond TOKEN_CODE
 		{
 			context_rule ($2, $7->loc, $4, $5, $7, $6);
 		}
@@ -265,7 +265,7 @@ rule:
 			Loc loc (in->get_fname (), in->get_cline ());
 			context_rule ($2, loc, $4, $5, NULL, $7);
 		}
-	|	'<' cond '>' look newcond CODE
+	|	'<' cond '>' look newcond TOKEN_CODE
 		{
 			context_none($2);
 			delete $5;
@@ -276,11 +276,11 @@ rule:
 			context_none($2);
 			delete $6;
 		}
-	|	'<' cond '>' STAR CODE /* default rule for conditions */
+	|	'<' cond '>' STAR TOKEN_CODE /* default rule for conditions */
 		{
 			default_rule($2, $5);
 		}
-	|	'<' STAR '>' expr look newcond CODE
+	|	'<' STAR '>' expr look newcond TOKEN_CODE
 		{
 			context_check(NULL);
 			RuleOp * rule = new RuleOp
@@ -312,7 +312,7 @@ rule:
 			specStar.push_back (rule);
 			delete $7;
 		}
-	|	'<' STAR '>' look newcond CODE
+	|	'<' STAR '>' look newcond TOKEN_CODE
 		{
 			context_none(NULL);
 			delete $5;
@@ -323,7 +323,7 @@ rule:
 			context_none(NULL);
 			delete $6;
 		}
-	|	'<' STAR '>' STAR CODE /* default rule for all conditions */
+	|	'<' STAR '>' STAR TOKEN_CODE /* default rule for all conditions */
 		{
 			if (star_default)
 			{
@@ -339,7 +339,7 @@ rule:
 				, NULL
 				);
 		}
-	|	NOCOND newcond CODE
+	|	NOCOND newcond TOKEN_CODE
 		{
 			context_check(NULL);
 			if (specNone)
@@ -377,13 +377,13 @@ rule:
 				);
 			delete $3;
 		}
-	|	SETUP STAR '>' CODE
+	|	SETUP STAR '>' TOKEN_CODE
 		{
 			CondList *clist = new CondList();
 			clist->insert("*");
 			setup_rule(clist, $4);
 		}
-	|	SETUP cond '>' CODE
+	|	SETUP cond '>' TOKEN_CODE
 		{
 			setup_rule($2, $4);
 		}

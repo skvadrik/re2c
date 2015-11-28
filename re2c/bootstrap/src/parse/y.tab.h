@@ -40,7 +40,7 @@
    enum yytokentype {
      CLOSE = 258,
      CLOSESIZE = 259,
-     CODE = 260,
+     TOKEN_CODE = 260,
      CONF = 261,
      ID = 262,
      FID = 263,
