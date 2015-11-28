@@ -335,7 +335,10 @@ void OutputFile::emit
 
 HeaderFile::HeaderFile (const char * fn)
 	: stream ()
-	, file_name (fn)
+	// header is always generated, but not always dumped to file
+	// NULL filename crashes 'operator <<' on some platforms
+	// TODO: generate header only if necessary
+	, file_name (fn ? fn : "<stdout>.h")
 	, file (NULL)
 {}
 
