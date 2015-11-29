@@ -3,10 +3,6 @@
 
 #include "config.h"
 
-// these defines enable some parts of <stdint.h>
-#define __STDC_LIMIT_MACROS // C99-7.18.2.1 Limits of exact-width integer types
-#define __STDC_CONSTANT_MACROS // C99-7.18.4.1 Macros for minimum-width integer constants
-
 #if HAVE_STDINT_H
 #    include <stdint.h>
 #else // HAVE_STDINT_H
