@@ -15,6 +15,7 @@ namespace re2c
 	OPT1 (opt_t::target_t, target, CODE) \
 	/* fingerprint */ \
 	OPT (bool, bNoGenerationDate, false) \
+	OPT (bool, version, true) \
 	/* regular expressions */ \
 	OPT (Enc, encoding, Enc ()) \
 	OPT (bool, bCaseInsensitive, false) \

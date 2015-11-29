@@ -140,6 +140,7 @@ opt_long:
 	"reusable"           end { opts.set_rFlag (true);             goto opt; }
 	"nested-ifs"         end { opts.set_sFlag (true);             goto opt; }
 	"no-generation-date" end { opts.set_bNoGenerationDate (true); goto opt; }
+	"no-version"         end { opts.set_version (false);          goto opt; }
 	"case-insensitive"   end { opts.set_bCaseInsensitive (true);  goto opt; }
 	"case-inverted"      end { opts.set_bCaseInverted (true);     goto opt; }
 	"skeleton"           end { opts.set_target (opt_t::SKELETON); goto opt; }
