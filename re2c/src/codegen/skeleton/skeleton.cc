@@ -1,4 +1,3 @@
-#include <limits>
 #include <stdlib.h> // exit
 
 #include "src/codegen/skeleton/skeleton.h"
@@ -127,14 +126,6 @@ Skeleton::~Skeleton ()
 {
 	delete [] nodes;
 }
-
-template <> uint32_t Skeleton::none<uint32_t> () { return std::numeric_limits<uint32_t>::max(); }
-template <> uint16_t Skeleton::none<uint16_t> () { return std::numeric_limits<uint16_t>::max(); }
-template <> uint8_t  Skeleton::none<uint8_t>  () { return std::numeric_limits<uint8_t >::max(); }
-
-template <> uint32_t Skeleton::def<uint32_t> () { return std::numeric_limits<uint32_t>::max() - 1; }
-template <> uint16_t Skeleton::def<uint16_t> () { return std::numeric_limits<uint16_t>::max() - 1; }
-template <> uint8_t  Skeleton::def<uint8_t>  () { return std::numeric_limits<uint8_t >::max() - 1; }
 
 uint32_t Skeleton::rule2key (rule_rank_t r) const
 {

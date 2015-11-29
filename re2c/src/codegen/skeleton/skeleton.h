@@ -1,6 +1,7 @@
 #ifndef _RE2C_CODEGEN_SKELETON_SKELETON_
 #define _RE2C_CODEGEN_SKELETON_SKELETON_
 
+#include <limits>
 #include <map>
 
 #include "src/codegen/skeleton/path.h"
@@ -111,8 +112,6 @@ struct Skeleton
 	static void emit_epilog (OutputFile & o, const std::set<std::string> & names);
 	void emit_action (OutputFile & o, uint32_t ind, rule_rank_t rank) const;
 
-	template <typename key_t> static key_t none ();
-	template <typename key_t> static key_t def ();
 	template <typename key_t> static key_t rule2key (rule_rank_t r);
 	uint32_t rule2key (rule_rank_t r) const;
 
@@ -129,9 +128,10 @@ private:
 template<typename key_t> key_t Skeleton::rule2key (rule_rank_t r)
 {
 	if (r.is_none()) {
-		return none<key_t>();
+		return std::numeric_limits<key_t>::max();
 	} else if (r.is_def()) {
-		return def<key_t>();
+		key_t k = std::numeric_limits<key_t>::max();
+		return --k;
 	} else {
 		return static_cast<key_t>(r.uint32());
 	}
