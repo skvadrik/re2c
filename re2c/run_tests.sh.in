@@ -128,6 +128,10 @@ run_pack() {
 			-e 's/^\([^-]\)/-\1/' \
 			-e 's/--\([^ (-]*\)/ --\1/g' \
 			-e 's/(\([^)]*\))/ \1/g'`
+		# check that flags do not contain uppercase letters:
+		# file extensions are case-insensitive on some platforms
+		printf "%s" "$switches" | lc_run grep -q "[A-Z]" \
+			&& { echo "bad file extension: '$outx' (uppercase letters are not allowed)"; exit 1; }
 		local switches="$switches -o $outc --no-version --no-generation-date"
 		# enable warnings globally
 		local switches="$switches -W"
