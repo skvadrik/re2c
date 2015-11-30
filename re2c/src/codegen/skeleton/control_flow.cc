@@ -6,7 +6,7 @@ namespace re2c
 // We don't need all patterns that cause undefined behaviour.
 // We only need some examples, the shorter the better.
 // See also note [counting skeleton edges].
-Node::nakeds_t Node::naked_ways (const way_t & prefix, std::vector<way_t> & ways)
+Node::nakeds_t Node::naked_ways (way_t & prefix, std::vector<way_t> & ways)
 {
 	if (!rule.rank.is_none ())
 	{
@@ -23,9 +23,9 @@ Node::nakeds_t Node::naked_ways (const way_t & prefix, std::vector<way_t> & ways
 		nakeds_t size = nakeds_t::from32(0u);
 		for (arcsets_t::iterator i = arcsets.begin (); i != arcsets.end (); ++i)
 		{
-			way_t w = prefix;
-			w.push_back (&i->second);
-			size = size + i->first->naked_ways (w, ways);
+			prefix.push_back (&i->second);
+			size = size + i->first->naked_ways (prefix, ways);
+			prefix.pop_back ();
 			if (size.overflow ())
 			{
 				return nakeds_t::limit ();

@@ -133,38 +133,28 @@ void Warn::undefined_control_flow (uint32_t line, const std::string & cond, std:
 		const bool e = mask[UNDEFINED_CONTROL_FLOW] & ERROR;
 		error_accuml |= e;
 
-		// limit the number of patterns reported
-		static const size_t MAX = 8;
-		const size_t all = ways.size ();
-		const size_t some = std::min (MAX, all);
-		const size_t rest = all - some;
-
 		// report shorter patterns first
-		std::vector<way_t>::iterator middle = ways.begin ();
-		std::advance (middle, some);
-		std::partial_sort (ways.begin (), middle, ways.end (), cmp_ways);
+		std::sort (ways.begin (), ways.end (), cmp_ways);
 
 		warning_start (line, e);
 		fprintf (stderr, "control flow %sis undefined for strings that match ", incond (cond).c_str ());
-		if (some == 1)
+		const size_t count = ways.size ();
+		if (count == 1)
 		{
 			fprint_way (stderr, ways[0]);
 		}
 		else
 		{
-			for (size_t i = 0; i < some; ++i)
+			for (size_t i = 0; i < count; ++i)
 			{
 				fprintf (stderr, "\n\t");
 				fprint_way (stderr, ways[i]);
 			}
 			fprintf (stderr, "\n");
 		}
-		if (rest > 0)
+		if (overflow)
 		{
-			const char * at_least = overflow
-				? "at least "
-				: "";
-			fprintf (stderr, " ... and %s%lu more", at_least, rest);
+			fprintf (stderr, " ... and a few more");
 		}
 		fprintf (stderr, ", use default rule '*'");
 		warning_end (names[UNDEFINED_CONTROL_FLOW], e);

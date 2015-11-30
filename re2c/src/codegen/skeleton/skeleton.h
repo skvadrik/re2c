@@ -46,10 +46,9 @@ struct Node
 
 	// Type for counting arcs in paths that cause undefined behaviour.
 	// These paths are stored on heap, so the limit should be low.
-	// Most real-world cases have only a few paths. We don't need all
-	// paths anyway, just some examples. But we want short examples.
-	// Some synthetized tests can't find short paths with lower limit.
-	typedef u32lim_t<1024 * 1024 * 64> nakeds_t; // ~64Mb
+	// Most real-world cases have only a few short paths.
+	// We don't need all paths anyway, just some examples.
+	typedef u32lim_t<1024> nakeds_t; // ~1Kb
 
 	typedef std::map<const State *, Node *> s2n_map;
 	typedef std::map<Node *, path_t::arc_t> arcs_t;
@@ -89,7 +88,7 @@ struct Node
 	void calc_reachable ();
 	template <typename cunit_t, typename key_t>
 		covers_t cover (path_t & prefix, FILE * input, FILE * keys);
-	nakeds_t naked_ways (const way_t & prefix, std::vector<way_t> & ways);
+	nakeds_t naked_ways (way_t & prefix, std::vector<way_t> & ways);
 
 	FORBID_COPY (Node);
 };
