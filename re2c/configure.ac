@@ -33,8 +33,11 @@ AC_PROG_INSTALL
 
 # checks for C++ compiler flags
 AC_SUBST(CXXFLAGSDEFAULT, [])
-# TRY_CXXFLAG (flag)
-# appends 'flag' to CXXFLAGSDEFAULT iff C++ compiler knows this flag
+# TRY_CXXFLAG (flag [implied-flags])
+# Iff C++ compiler recognizes 'flag', append 'flag' and 'implied-flags' to CXXFLAGSDEFAULT
+# (Second param 'implied-flags' is needed for warning suppressions '-Wno-<warning>':
+# GCC warns about unrecognized suppressions options only in presence of other warnings,
+# which makes it hard to test for them with autoconf.)
 AC_DEFUN([TRY_CXXFLAG], [
     AC_MSG_CHECKING([C++ compiler flag $1])
     AS_VAR_SET([CXXFLAGS_BACKUP], ["$CXXFLAGS"])
@@ -44,7 +47,7 @@ AC_DEFUN([TRY_CXXFLAG], [
         [AC_LANG_PROGRAM()],
         [
             AS_VAR_SET([TRY_CXXFLAG_RESULT], [yes])
-            AS_VAR_SET([CXXFLAGSDEFAULT], ["$CXXFLAGSDEFAULT $1"])
+            AS_VAR_SET([CXXFLAGSDEFAULT], ["$CXXFLAGSDEFAULT $1 $2"])
         ],
         [AS_VAR_SET([TRY_CXXFLAG_RESULT], [no])]
     )
@@ -63,7 +66,12 @@ TRY_CXXFLAG([-Wsuggest-attribute=format])
 TRY_CXXFLAG([-Wconversion])
 TRY_CXXFLAG([-Wsign-conversion])
 TRY_CXXFLAG([-O2])
-TRY_CXXFLAG([-Weverything])
+TRY_CXXFLAG([-Weverything], m4_join([ ],
+    [-Wno-unknown-warning-option],  dnl CLANG eats some GCC options only to warn they are unknown
+    [-Wno-reserved-id-macro],       dnl to allow header guards of the form '_RE2C_PATH_TO_HEADER_BASENAME_'
+    [-Wno-padded],                  dnl perhaps later
+    [-Wno-old-style-cast],          dnl RE2C-generated lexer has lots of C-syle casts because of 're2c:yych:conversion = 1;'
+    [-Wno-covered-switch-default])) dnl GCC reports false positives in some cases
 
 
 # needed by src/c99_stdint.h
