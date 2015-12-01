@@ -1,26 +1,40 @@
 %{
 
+#include "src/util/c99_stdint.h"
 #include <assert.h>
-#include <time.h>
-#include <string.h>
+#include <stddef.h>
 #include <stdlib.h>
-#include <iostream>
 #include <limits>
+#include <list>
+#include <map>
 #include <set>
+#include <string>
+#include <utility>
+#include <vector>
 
-#include "config.h"
+#include "src/codegen/output.h"
 #include "src/codegen/skeleton/skeleton.h"
+#include "src/conf/opt.h"
+#include "src/globals.h"
 #include "src/ir/bytecode/bytecode.h"
+#include "src/ir/dfa/dfa.h"
 #include "src/ir/regexp/encoding/enc.h"
 #include "src/ir/regexp/encoding/range_suffix.h"
+#include "src/ir/regexp/regexp.h"
 #include "src/ir/regexp/regexp_cat.h"
 #include "src/ir/regexp/regexp_close.h"
 #include "src/ir/regexp/regexp_null.h"
-#include "src/globals.h"
+#include "src/ir/regexp/regexp_rule.h"
+#include "src/ir/rule_rank.h"
 #include "src/parse/code.h"
 #include "src/parse/extop.h"
+#include "src/parse/loc.h"
 #include "src/parse/parser.h"
-#include "src/util/c99_stdint.h"
+#include "src/parse/scanner.h"
+#include "src/parse/spec.h"
+#include "src/util/counter.h"
+#include "src/util/free_list.h"
+#include "src/util/range.h"
 #include "src/util/smart_ptr.h"
 
 #define YYMALLOC malloc

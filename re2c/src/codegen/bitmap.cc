@@ -1,8 +1,10 @@
+#include <algorithm> // min
 #include <string.h> // memset
 
 #include "src/codegen/bitmap.h"
 #include "src/codegen/go.h"
-#include "src/codegen/indent.h"
+#include "src/codegen/output.h"
+#include "src/conf/opt.h"
 #include "src/globals.h"
 
 namespace re2c

@@ -1,11 +1,12 @@
 #ifndef _RE2C_CONF_WARN_
 #define _RE2C_CONF_WARN_
 
+#include "src/util/c99_stdint.h"
+#include <string>
 #include <vector>
 
 #include "src/codegen/skeleton/way.h"
 #include "src/parse/rules.h"
-#include "src/util/c99_stdint.h"
 
 namespace re2c {
 

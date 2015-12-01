@@ -1,4 +1,14 @@
+#include "src/util/c99_stdint.h"
+#include <map>
+#include <set>
+#include <utility>
+
+#include "src/codegen/skeleton/path.h"
 #include "src/codegen/skeleton/skeleton.h"
+#include "src/conf/warn.h"
+#include "src/globals.h"
+#include "src/ir/rule_rank.h"
+#include "src/parse/rules.h"
 
 namespace re2c
 {

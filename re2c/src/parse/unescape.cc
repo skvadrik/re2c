@@ -1,6 +1,3 @@
-#include <string.h>
-
-#include "src/parse/scanner.h"
 #include "src/parse/unescape.h"
 
 namespace re2c {

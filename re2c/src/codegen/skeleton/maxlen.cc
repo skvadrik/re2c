@@ -1,4 +1,8 @@
+#include "src/util/c99_stdint.h"
+#include <algorithm>
 #include <limits>
+#include <map>
+#include <utility>
 
 #include "src/codegen/skeleton/skeleton.h"
 

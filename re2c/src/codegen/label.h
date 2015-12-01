@@ -1,12 +1,13 @@
 #ifndef _RE2C_CODEGEN_LABEL_
 #define _RE2C_CODEGEN_LABEL_
 
-#include <iosfwd>
+#include <iosfwd> // ostream
 
 #include "src/util/c99_stdint.h"
-#include "src/util/counter.h"
 
 namespace re2c {
+
+template <typename num_t> class counter_t;
 
 // label public API:
 //     - get first label

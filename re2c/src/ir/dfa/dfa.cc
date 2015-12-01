@@ -1,8 +1,14 @@
 #include <string.h>
+#include <map>
+#include <ostream>
 
+#include "src/codegen/go.h"
 #include "src/codegen/skeleton/skeleton.h"
 #include "src/ir/dfa/dfa.h"
+#include "src/ir/bytecode/ins.h"
+#include "src/ir/dfa/state.h"
 #include "src/ir/regexp/regexp_rule.h"
+#include "src/ir/rule_rank.h"
 #include "src/util/allocate.h"
 
 namespace re2c

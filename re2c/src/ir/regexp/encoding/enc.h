@@ -2,9 +2,10 @@
 #define _RE2C_IR_REGEXP_ENCODING_ENC_
 
 #include "src/util/c99_stdint.h"
-#include "src/util/range.h"
 
 namespace re2c {
+
+class Range;
 
 /*
  * note [encodings]

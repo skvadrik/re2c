@@ -1,6 +1,16 @@
+#include "src/util/c99_stdint.h"
+#include <stddef.h>
+#include <algorithm>
+#include <set>
+#include <string>
+
 #include "src/codegen/bitmap.h"
-#include "src/codegen/indent.h"
+#include "src/codegen/output.h"
 #include "src/codegen/skeleton/skeleton.h"
+#include "src/conf/opt.h"
+#include "src/globals.h"
+#include "src/ir/regexp/encoding/enc.h"
+#include "src/ir/rule_rank.h"
 
 namespace re2c
 {

@@ -1,8 +1,10 @@
-#include <stdio.h>
-
+#include "src/codegen/input_api.h"
 #include "src/conf/msg.h"
 #include "src/conf/opt.h"
+#include "src/conf/warn.h"
 #include "src/globals.h"
+#include "src/ir/regexp/empty_class_policy.h"
+#include "src/ir/regexp/encoding/enc.h"
 
 namespace re2c
 {

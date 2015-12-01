@@ -1,12 +1,25 @@
+#include "src/util/c99_stdint.h"
+#include <stddef.h>
+#include <set>
+#include <string>
+
 #include "src/codegen/emit.h"
-#include "src/codegen/indent.h"
 #include "src/codegen/input_api.h"
+#include "src/codegen/output.h"
 #include "src/codegen/skeleton/skeleton.h"
+#include "src/conf/opt.h"
+#include "src/globals.h"
 #include "src/ir/dfa/action.h"
+#include "src/ir/dfa/state.h"
+#include "src/ir/regexp/regexp.h"
 #include "src/ir/regexp/regexp_rule.h"
+#include "src/parse/code.h"
+#include "src/parse/loc.h"
 
 namespace re2c
 {
+
+class label_t;
 
 static void need               (OutputFile & o, uint32_t ind, bool & readCh, uint32_t n, bool bSetMarker);
 static void emit_match         (OutputFile & o, uint32_t ind, bool & readCh, const State * const s);

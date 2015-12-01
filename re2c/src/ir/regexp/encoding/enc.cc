@@ -1,4 +1,5 @@
 #include "src/ir/regexp/encoding/enc.h"
+#include "src/util/range.h"
 
 namespace re2c {
 

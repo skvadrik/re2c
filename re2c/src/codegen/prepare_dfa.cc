@@ -1,9 +1,17 @@
+#include "src/util/c99_stdint.h"
 #include <string.h>
+#include <map>
 
 #include "src/codegen/bitmap.h"
+#include "src/codegen/go.h"
 #include "src/codegen/scc.h"
+#include "src/conf/opt.h"
+#include "src/globals.h"
+#include "src/ir/dfa/action.h"
 #include "src/ir/dfa/dfa.h"
+#include "src/ir/dfa/state.h"
 #include "src/ir/regexp/regexp_rule.h"
+#include "src/ir/rule_rank.h"
 #include "src/util/allocate.h"
 
 namespace re2c {

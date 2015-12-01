@@ -1,19 +1,29 @@
 #ifndef _RE2C_CODEGEN_SKELETON_SKELETON_
 #define _RE2C_CODEGEN_SKELETON_SKELETON_
 
+#include "src/util/c99_stdint.h"
+#include <stddef.h>
+#include <stdio.h>
 #include <limits>
 #include <map>
+#include <set>
+#include <string>
+#include <vector>
 
 #include "src/codegen/skeleton/path.h"
 #include "src/codegen/skeleton/way.h"
-#include "src/ir/dfa/dfa.h"
-#include "src/util/c99_stdint.h"
-#include "src/util/forbid_copy.h"
+#include "src/ir/rule_rank.h"
+#include "src/parse/rules.h"
 #include "src/util/local_increment.h"
+#include "src/util/forbid_copy.h"
 #include "src/util/u32lim.h"
 
 namespace re2c
 {
+
+class DFA;
+class State;
+struct OutputFile;
 
 struct Node
 {

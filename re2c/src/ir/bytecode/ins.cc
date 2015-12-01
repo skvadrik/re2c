@@ -2,6 +2,7 @@
 
 #include "src/ir/bytecode/ins.h"
 #include "src/ir/regexp/regexp_rule.h"
+#include "src/ir/rule_rank.h"
 
 namespace re2c {
 

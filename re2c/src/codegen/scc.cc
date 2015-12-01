@@ -1,5 +1,6 @@
 #include "src/codegen/scc.h"
-#include "src/ir/dfa/dfa.h"
+#include "src/codegen/go.h"
+#include "src/ir/dfa/state.h"
 
 namespace re2c {
 

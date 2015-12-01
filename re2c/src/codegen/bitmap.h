@@ -1,8 +1,8 @@
 #ifndef _RE2C_CODEGEN_BITMAP_
 #define _RE2C_CODEGEN_BITMAP_
 
-#include "src/codegen/output.h"
 #include "src/util/c99_stdint.h"
+
 #include "src/util/forbid_copy.h"
 
 namespace re2c
@@ -11,6 +11,7 @@ namespace re2c
 struct Go;
 struct Span;
 class State;
+class OutputFile;
 
 class BitMap
 {

@@ -1,9 +1,16 @@
-#include <iostream>
 #include <stdarg.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <iostream>
+#include <new>
 
-#include "scanner.h"
+#include "src/codegen/label.h"
+#include "src/codegen/output.h"
+#include "src/conf/opt.h"
+#include "src/globals.h"
+#include "src/parse/scanner.h"
+#include "src/util/counter.h"
 
 // used by Scanner::fatal_at and Scanner::fatalf
 #if defined(_MSC_VER) && !defined(vsnprintf)

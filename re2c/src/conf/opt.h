@@ -1,11 +1,14 @@
 #ifndef _RE2C_CONF_OPT_
 #define _RE2C_CONF_OPT_
 
+#include "src/util/c99_stdint.h"
+#include <stddef.h>
 #include <string>
 
 #include "src/codegen/input_api.h"
-#include "src/ir/regexp/encoding/enc.h"
 #include "src/ir/regexp/empty_class_policy.h"
+#include "src/ir/regexp/encoding/enc.h"
+#include "src/util/forbid_copy.h"
 
 namespace re2c
 {

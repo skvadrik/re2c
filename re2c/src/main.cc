@@ -1,8 +1,14 @@
-#include "config.h"
+#include "src/util/c99_stdint.h"
+#include <string>
+
+#include "src/codegen/output.h"
 #include "src/conf/msg.h"
 #include "src/conf/opt.h"
+#include "src/conf/warn.h"
 #include "src/globals.h"
+#include "src/parse/input.h"
 #include "src/parse/parser.h"
+#include "src/parse/scanner.h"
 
 namespace re2c
 {

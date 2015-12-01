@@ -1,9 +1,8 @@
 #ifndef _RE2C_IR_BYTECODE_INS_
 #define _RE2C_IR_BYTECODE_INS_
 
-#include <iosfwd>
-
 #include "src/util/c99_stdint.h"
+#include <iosfwd>
 
 namespace re2c
 {

@@ -1,7 +1,8 @@
 #include <sstream>
 
-#include "src/codegen/indent.h"
 #include "src/codegen/input_api.h"
+#include "src/codegen/indent.h"
+#include "src/conf/opt.h"
 #include "src/globals.h"
 
 namespace re2c

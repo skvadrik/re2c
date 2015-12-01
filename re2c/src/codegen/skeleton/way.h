@@ -1,10 +1,10 @@
 #ifndef _RE2C_CODEGEN_SKELETON_WAY_
 #define _RE2C_CODEGEN_SKELETON_WAY_
 
-#include <stdio.h>
-#include <vector>
-
 #include "src/util/c99_stdint.h"
+#include <stdio.h>
+#include <utility>
+#include <vector>
 
 namespace re2c
 {

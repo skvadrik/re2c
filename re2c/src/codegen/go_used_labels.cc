@@ -1,5 +1,11 @@
+#include "src/util/c99_stdint.h"
+#include <set>
+#include <utility>
+#include <vector>
+
 #include "src/codegen/go.h"
-#include "src/ir/dfa/dfa.h"
+#include "src/codegen/label.h"
+#include "src/ir/dfa/state.h"
 
 namespace re2c
 {

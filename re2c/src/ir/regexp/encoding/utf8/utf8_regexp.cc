@@ -1,8 +1,11 @@
-#include "src/ir/regexp/encoding/utf8/utf8_range.h"
+#include "src/util/c99_stdint.h"
+
 #include "src/ir/regexp/encoding/utf8/utf8_regexp.h"
-#include "src/ir/regexp/regexp.h"
+#include "src/ir/regexp/encoding/range_suffix.h"
+#include "src/ir/regexp/encoding/utf8/utf8_range.h"
 #include "src/ir/regexp/regexp_cat.h"
 #include "src/ir/regexp/regexp_match.h"
+#include "src/util/range.h"
 
 namespace re2c {
 

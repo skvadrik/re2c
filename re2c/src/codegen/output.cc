@@ -1,12 +1,14 @@
-#include <iomanip>
 #include <stdio.h>
-#include <string.h>
 #include <time.h>
+#include <iomanip>
 
 #include "src/codegen/indent.h"
 #include "src/codegen/output.h"
 #include "src/codegen/print.h"
+#include "src/conf/opt.h"
+#include "src/conf/warn.h"
 #include "src/globals.h"
+#include "src/ir/rule_rank.h"
 
 namespace re2c
 {

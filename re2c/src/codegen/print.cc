@@ -1,7 +1,9 @@
 #include <iostream>
 
 #include "src/codegen/print.h"
+#include "src/conf/opt.h"
 #include "src/globals.h"
+#include "src/ir/regexp/encoding/enc.h"
 
 namespace re2c
 {

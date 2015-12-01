@@ -1,13 +1,13 @@
 #ifndef _RE2C_IR_RULE_RANK_
 #define _RE2C_IR_RULE_RANK_
 
-#include <iosfwd>
-
 #include "src/util/c99_stdint.h"
-#include "src/util/counter.h"
+#include <iosfwd>
 
 namespace re2c
 {
+
+template <typename num_t> class counter_t;
 
 // rule rank public API:
 //     - get rule rank corresponding to nonexistent/default rule

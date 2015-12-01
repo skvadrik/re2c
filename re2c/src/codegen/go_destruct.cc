@@ -1,5 +1,8 @@
+#include "src/util/c99_stdint.h"
+#include <utility>
+#include <vector>
+
 #include "src/codegen/go.h"
-#include "src/ir/dfa/dfa.h"
 
 namespace re2c
 {

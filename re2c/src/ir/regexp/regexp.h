@@ -1,15 +1,17 @@
 #ifndef _RE2C_IR_REGEXP_REGEXP_
 #define _RE2C_IR_REGEXP_REGEXP_
 
+#include "src/util/c99_stdint.h"
 #include <iosfwd>
 
-#include "src/ir/bytecode/charset.h"
-#include "src/ir/bytecode/ins.h"
-#include "src/globals.h"
+#include "src/util/free_list.h"
 #include "src/util/forbid_copy.h"
 
 namespace re2c
 {
+
+struct CharSet;
+union Ins;
 
 typedef uint32_t Char;
 

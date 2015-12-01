@@ -1,11 +1,23 @@
-#include <assert.h>
+#include "src/util/c99_stdint.h"
+#include <stddef.h>
+#include <set>
+#include <string>
+#include <utility>
+#include <vector>
 
 #include "src/codegen/bitmap.h"
 #include "src/codegen/emit.h"
 #include "src/codegen/go.h"
-#include "src/codegen/indent.h"
 #include "src/codegen/input_api.h"
+#include "src/codegen/label.h"
+#include "src/codegen/output.h"
 #include "src/codegen/skeleton/skeleton.h"
+#include "src/conf/opt.h"
+#include "src/globals.h"
+#include "src/ir/dfa/action.h"
+#include "src/ir/dfa/dfa.h"
+#include "src/ir/dfa/state.h"
+#include "src/util/counter.h"
 
 namespace re2c
 {

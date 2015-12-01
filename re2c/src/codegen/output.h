@@ -1,6 +1,9 @@
 #ifndef _RE2C_CODEGEN_OUTPUT_
 #define _RE2C_CODEGEN_OUTPUT_
 
+#include "src/util/c99_stdint.h"
+#include <stddef.h>
+#include <stdio.h>
 #include <fstream>
 #include <set>
 #include <sstream>
@@ -8,12 +11,13 @@
 #include <vector>
 
 #include "src/codegen/label.h"
-#include "src/ir/rule_rank.h"
-#include "src/util/c99_stdint.h"
+#include "src/util/counter.h"
 #include "src/util/forbid_copy.h"
 
 namespace re2c
 {
+
+class rule_rank_t;
 
 struct OutputFragment
 {

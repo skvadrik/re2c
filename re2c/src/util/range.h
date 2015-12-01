@@ -1,11 +1,11 @@
 #ifndef _RE2C_UTIL_RANGE_
 #define _RE2C_UTIL_RANGE_
 
+#include "src/util/c99_stdint.h"
 #include <assert.h>
 #include <stddef.h> // NULL
 
 #include "src/test/range/test.h"
-#include "src/util/c99_stdint.h"
 #include "src/util/forbid_copy.h"
 #include "src/util/free_list.h"
 

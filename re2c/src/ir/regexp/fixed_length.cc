@@ -1,3 +1,5 @@
+#include "src/util/c99_stdint.h"
+
 #include "src/ir/regexp/regexp.h"
 #include "src/ir/regexp/regexp_alt.h"
 #include "src/ir/regexp/regexp_cat.h"

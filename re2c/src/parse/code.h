@@ -1,8 +1,11 @@
 #ifndef _RE2C_PARSE_CODE_
 #define _RE2C_PARSE_CODE_
 
-#include "src/parse/loc.h"
 #include "src/util/c99_stdint.h"
+#include <stddef.h>
+#include <string>
+
+#include "src/parse/loc.h"
 #include "src/util/free_list.h"
 
 namespace re2c

@@ -1,14 +1,24 @@
 #ifndef _RE2C_IR_DFA_DFA_
 #define _RE2C_IR_DFA_DFA_
 
+#include "src/util/c99_stdint.h"
+#include <set>
+#include <string>
+
 #include "src/ir/dfa/action.h"
-#include "src/ir/dfa/state.h"
+#include "src/ir/regexp/regexp.h"
+#include "src/parse/rules.h"
 #include "src/util/forbid_copy.h"
 
 namespace re2c
 {
 
 struct Skeleton;
+class State;
+class label_t;
+struct Output;
+struct OutputFile;
+union Ins;
 
 class DFA
 {

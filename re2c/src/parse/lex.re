@@ -1,18 +1,26 @@
-#include <stdlib.h>
+#include "src/util/c99_stdint.h"
+#include <stddef.h>
 #include <string.h>
-#include <iostream>
+#include <algorithm>
 #include <limits>
-#include <sstream>
+#include <string>
 
-#include "src/ir/dfa/dfa.h"
-#include "src/ir/regexp/regexp_null.h"
+#include "src/codegen/output.h"
+#include "src/conf/opt.h"
+#include "src/conf/warn.h"
 #include "src/globals.h"
+#include "src/ir/regexp/encoding/enc.h"
+#include "src/ir/regexp/regexp.h"
+#include "src/ir/regexp/regexp_null.h"
+#include "src/parse/code.h"
 #include "src/parse/extop.h"
-#include "src/parse/parser.h"
+#include "src/parse/input.h"
 #include "src/parse/scanner.h"
+#include "src/parse/parser.h" // needed by "y.tab.h"
 #include "src/parse/unescape.h"
-#include "y.tab.h"
+#include "src/util/range.h"
 #include "src/util/s_to_n32_unsafe.h"
+#include "y.tab.h"
 
 extern YYSTYPE yylval;
 

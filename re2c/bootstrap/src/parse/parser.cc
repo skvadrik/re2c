@@ -68,27 +68,41 @@
 
 
 
+#include "src/util/c99_stdint.h"
 #include <assert.h>
-#include <time.h>
-#include <string.h>
+#include <stddef.h>
 #include <stdlib.h>
-#include <iostream>
 #include <limits>
+#include <list>
+#include <map>
 #include <set>
+#include <string>
+#include <utility>
+#include <vector>
 
-#include "config.h"
+#include "src/codegen/output.h"
 #include "src/codegen/skeleton/skeleton.h"
+#include "src/conf/opt.h"
+#include "src/globals.h"
 #include "src/ir/bytecode/bytecode.h"
+#include "src/ir/dfa/dfa.h"
 #include "src/ir/regexp/encoding/enc.h"
 #include "src/ir/regexp/encoding/range_suffix.h"
+#include "src/ir/regexp/regexp.h"
 #include "src/ir/regexp/regexp_cat.h"
 #include "src/ir/regexp/regexp_close.h"
 #include "src/ir/regexp/regexp_null.h"
-#include "src/globals.h"
+#include "src/ir/regexp/regexp_rule.h"
+#include "src/ir/rule_rank.h"
 #include "src/parse/code.h"
 #include "src/parse/extop.h"
+#include "src/parse/loc.h"
 #include "src/parse/parser.h"
-#include "src/util/c99_stdint.h"
+#include "src/parse/scanner.h"
+#include "src/parse/spec.h"
+#include "src/util/counter.h"
+#include "src/util/free_list.h"
+#include "src/util/range.h"
 #include "src/util/smart_ptr.h"
 
 #define YYMALLOC malloc
@@ -584,11 +598,11 @@ static const yytype_int8 yyrhs[] =
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint16 yyrline[] =
 {
-       0,   184,   184,   186,   190,   194,   203,   212,   216,   220,
-     224,   241,   259,   263,   269,   274,   280,   284,   299,   316,
-     321,   327,   343,   361,   381,   387,   395,   398,   405,   411,
-     421,   424,   432,   435,   442,   446,   453,   457,   464,   468,
-     475,   479,   494,   514,   518,   522,   526,   533,   543,   547
+       0,   198,   198,   200,   204,   208,   217,   226,   230,   234,
+     238,   255,   273,   277,   283,   288,   294,   298,   313,   330,
+     335,   341,   357,   375,   395,   401,   409,   412,   419,   425,
+     435,   438,   446,   449,   456,   460,   467,   471,   478,   482,
+     489,   493,   508,   528,   532,   536,   540,   547,   557,   561
 };
 #endif
 

@@ -1,9 +1,21 @@
-#include <stdlib.h> // exit
+#include "src/util/c99_stdint.h"
+#include <stddef.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <algorithm>
+#include <map>
+#include <string>
+#include <utility>
+#include <vector>
 
-#include "src/codegen/indent.h"
-#include "src/codegen/print.h"
+#include "src/codegen/skeleton/path.h"
 #include "src/codegen/skeleton/skeleton.h"
 #include "src/conf/msg.h"
+#include "src/conf/opt.h"
+#include "src/globals.h"
+#include "src/ir/regexp/encoding/enc.h"
+#include "src/ir/rule_rank.h"
+#include "src/util/u32lim.h"
 
 namespace re2c
 {

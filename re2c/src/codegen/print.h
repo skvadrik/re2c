@@ -1,9 +1,8 @@
 #ifndef _RE2C_CODEGEN_PRINT_
 #define _RE2C_CODEGEN_PRINT_
 
-#include <iosfwd>
-
 #include "src/util/c99_stdint.h"
+#include <iosfwd>
 
 namespace re2c
 {

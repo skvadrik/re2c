@@ -1,18 +1,20 @@
 #ifndef _RE2C_PARSE_SCANNER_
 #define _RE2C_PARSE_SCANNER_
 
+#include "src/util/c99_stdint.h"
+#include <stddef.h>
 #include <string>
 
-#include "src/codegen/output.h"
-#include "src/ir/regexp/regexp.h"
-#include "src/globals.h"
-#include "src/parse/code.h"
 #include "src/parse/input.h"
 #include "src/util/attribute.h"
 #include "src/util/forbid_copy.h"
 
 namespace re2c
 {
+
+class Range;
+class RegExp;
+struct OutputFile;
 
 struct ScannerState
 {

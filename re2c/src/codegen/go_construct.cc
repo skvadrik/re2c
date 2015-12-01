@@ -1,6 +1,13 @@
+#include "src/util/c99_stdint.h"
+#include <string>
+#include <utility>
+#include <vector>
+
 #include "src/codegen/bitmap.h"
 #include "src/codegen/go.h"
-#include "src/ir/dfa/dfa.h"
+#include "src/conf/opt.h"
+#include "src/globals.h"
+#include "src/ir/dfa/state.h"
 #include "src/util/allocate.h"
 
 namespace re2c

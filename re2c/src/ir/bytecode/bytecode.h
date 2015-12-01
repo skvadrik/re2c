@@ -1,14 +1,17 @@
 #ifndef _RE2C_IR_BYTECODE_BYTECODE_
 #define _RE2C_IR_BYTECODE_BYTECODE_
 
-#include "src/codegen/output.h"
-#include "src/ir/dfa/dfa.h"
-#include "src/ir/regexp/regexp.h"
-#include "src/parse/spec.h"
+#include "src/util/c99_stdint.h"
+#include <string>
+
 #include "src/util/smart_ptr.h"
 
 namespace re2c
 {
+
+class DFA;
+struct Output;
+struct Spec;
 
 smart_ptr<DFA> genCode (Spec & spec, Output & output, const std::string & cond, uint32_t cunits);
 

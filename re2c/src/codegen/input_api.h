@@ -1,10 +1,8 @@
 #ifndef _RE2C_CODEGEN_INPUT_API_
 #define _RE2C_CODEGEN_INPUT_API_
 
-#include <map>
-#include <string>
-
 #include "src/util/c99_stdint.h"
+#include <string>
 
 namespace re2c
 {

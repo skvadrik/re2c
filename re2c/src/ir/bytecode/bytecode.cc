@@ -1,8 +1,13 @@
 #include <string.h>
+#include <algorithm>
 
-#include "src/codegen/skeleton/skeleton.h"
+#include "src/codegen/output.h"
 #include "src/ir/bytecode/bytecode.h"
-#include "src/globals.h"
+#include "src/ir/bytecode/charset.h"
+#include "src/ir/bytecode/ins.h"
+#include "src/ir/dfa/dfa.h"
+#include "src/ir/regexp/regexp.h"
+#include "src/parse/spec.h"
 
 namespace re2c {
 

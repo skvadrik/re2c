@@ -1,6 +1,7 @@
 #include "src/ir/regexp/encoding/range_suffix.h"
 #include "src/ir/regexp/regexp.h"
 #include "src/ir/regexp/regexp_match.h"
+#include "src/util/range.h"
 
 namespace re2c {
 
