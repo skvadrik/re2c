@@ -241,17 +241,17 @@ void default_rule(CondList *clist, const Code * code)
    /* Put the tokens into the symbol table, so that GDB and other debuggers
       know about them.  */
    enum yytokentype {
-     CLOSE = 258,
-     CLOSESIZE = 259,
+     TOKEN_CLOSE = 258,
+     TOKEN_CLOSESIZE = 259,
      TOKEN_CODE = 260,
-     CONF = 261,
-     ID = 262,
-     FID = 263,
-     FID_END = 264,
-     NOCOND = 265,
-     REGEXP = 266,
-     SETUP = 267,
-     STAR = 268
+     TOKEN_CONF = 261,
+     TOKEN_ID = 262,
+     TOKEN_FID = 263,
+     TOKEN_FID_END = 264,
+     TOKEN_NOCOND = 265,
+     TOKEN_REGEXP = 266,
+     TOKEN_SETUP = 267,
+     TOKEN_STAR = 268
    };
 #endif
 
@@ -597,11 +597,12 @@ static const yytype_uint16 yyrline[] =
    First, the terminals, then, starting at YYNTOKENS, nonterminals.  */
 static const char *const yytname[] =
 {
-  "$end", "error", "$undefined", "CLOSE", "CLOSESIZE", "TOKEN_CODE",
-  "CONF", "ID", "FID", "FID_END", "NOCOND", "REGEXP", "SETUP", "STAR",
-  "'='", "';'", "'/'", "'<'", "'>'", "':'", "','", "'|'", "'\\\\'", "'('",
-  "')'", "$accept", "spec", "decl", "rule", "cond", "clist", "newcond",
-  "look", "expr", "diff", "term", "factor", "close", "primary", 0
+  "$end", "error", "$undefined", "TOKEN_CLOSE", "TOKEN_CLOSESIZE",
+  "TOKEN_CODE", "TOKEN_CONF", "TOKEN_ID", "TOKEN_FID", "TOKEN_FID_END",
+  "TOKEN_NOCOND", "TOKEN_REGEXP", "TOKEN_SETUP", "TOKEN_STAR", "'='",
+  "';'", "'/'", "'<'", "'>'", "':'", "','", "'|'", "'\\\\'", "'('", "')'",
+  "$accept", "spec", "decl", "rule", "cond", "clist", "newcond", "look",
+  "expr", "diff", "term", "factor", "close", "primary", 0
 };
 #endif
 

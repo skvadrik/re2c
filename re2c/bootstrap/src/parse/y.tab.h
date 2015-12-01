@@ -38,17 +38,17 @@
    /* Put the tokens into the symbol table, so that GDB and other debuggers
       know about them.  */
    enum yytokentype {
-     CLOSE = 258,
-     CLOSESIZE = 259,
+     TOKEN_CLOSE = 258,
+     TOKEN_CLOSESIZE = 259,
      TOKEN_CODE = 260,
-     CONF = 261,
-     ID = 262,
-     FID = 263,
-     FID_END = 264,
-     NOCOND = 265,
-     REGEXP = 266,
-     SETUP = 267,
-     STAR = 268
+     TOKEN_CONF = 261,
+     TOKEN_ID = 262,
+     TOKEN_FID = 263,
+     TOKEN_FID_END = 264,
+     TOKEN_NOCOND = 265,
+     TOKEN_REGEXP = 266,
+     TOKEN_SETUP = 267,
+     TOKEN_STAR = 268
    };
 #endif
 

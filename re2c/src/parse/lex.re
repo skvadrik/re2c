@@ -253,16 +253,16 @@ start:
 					return 0;
 				}
 
-	"'"  { yylval.regexp = lex_str('\'', opts->bCaseInsensitive || !opts->bCaseInverted); return REGEXP; }
-	"\"" { yylval.regexp = lex_str('"',  opts->bCaseInsensitive ||  opts->bCaseInverted); return REGEXP; }
-	"["  { yylval.regexp = lex_cls(false); return REGEXP; }
-	"[^" { yylval.regexp = lex_cls(true);  return REGEXP; }
+	"'"  { yylval.regexp = lex_str('\'', opts->bCaseInsensitive || !opts->bCaseInverted); return TOKEN_REGEXP; }
+	"\"" { yylval.regexp = lex_str('"',  opts->bCaseInsensitive ||  opts->bCaseInverted); return TOKEN_REGEXP; }
+	"["  { yylval.regexp = lex_cls(false); return TOKEN_REGEXP; }
+	"[^" { yylval.regexp = lex_cls(true);  return TOKEN_REGEXP; }
 
 	"<>" / (space* ("{" | "=>" | ":=")) {
-					return NOCOND;
+					return TOKEN_NOCOND;
 				}
 	"<!"		{
-					return SETUP;
+					return TOKEN_SETUP;
 				}
 	[<>,()|=;/\\]	{
 					return *tok;
@@ -270,11 +270,11 @@ start:
 
 	"*"			{
 					yylval.op = *tok;
-					return STAR;
+					return TOKEN_STAR;
 				}
 	[+?]		{
 					yylval.op = *tok;
-					return CLOSE;
+					return TOKEN_CLOSE;
 				}
 
 	"{" [0-9]+ "}"	{
@@ -283,7 +283,7 @@ start:
 						fatal ("repetition count overflow");
 					}
 					yylval.extop.max = yylval.extop.min;
-					return CLOSESIZE;
+					return TOKEN_CLOSESIZE;
 				}
 
 	"{" [0-9]+ "," [0-9]+ "}"	{
@@ -296,7 +296,7 @@ start:
 					{
 						fatal ("repetition upper bound overflow");
 					}
-					return CLOSESIZE;
+					return TOKEN_CLOSESIZE;
 				}
 
 	"{" [0-9]+ ",}"		{
@@ -305,7 +305,7 @@ start:
 						fatal ("repetition lower bound overflow");
 					}
 					yylval.extop.max = std::numeric_limits<uint32_t>::max();
-					return CLOSESIZE;
+					return TOKEN_CLOSESIZE;
 				}
 
 	"{" [0-9]* ","		{
@@ -317,33 +317,33 @@ start:
 						fatal("curly braces for names only allowed with -F switch");
 					}
 					yylval.str = new std::string (tok + 1, tok_len () - 2); // -2 to omit braces
-					return ID;
+					return TOKEN_ID;
 				}
 
-	"re2c:" { lex_conf (); return CONF; }
+	"re2c:" { lex_conf (); return TOKEN_CONF; }
 
 	name / (space+ [^=>,])	{
 					yylval.str = new std::string (tok, tok_len ());
 					if (opts->FFlag)
 					{
 						lexer_state = LEX_FLEX_NAME;
-						return FID;
+						return TOKEN_FID;
 					}
 					else
 					{
-						return ID;
+						return TOKEN_ID;
 					}
 				}
 
 	name / (space* [=>,])	{
 					yylval.str = new std::string (tok, tok_len ());
-					return ID;
+					return TOKEN_ID;
 				}
 
 	name / [^]	{
 					if (!opts->FFlag) {
 						yylval.str = new std::string (tok, tok_len());
-						return ID;
+						return TOKEN_ID;
 					} else {
 						RegExp *r = NULL;
 						const bool casing = opts->bCaseInsensitive || opts->bCaseInverted;
@@ -352,13 +352,13 @@ start:
 							r = doCat(r, casing ? ichr(c) : schr(c));
 						}
 						yylval.regexp = r ? r : new NullOp;
-						return REGEXP;
+						return TOKEN_REGEXP;
 					}
 				}
 
 	"."			{
 					yylval.regexp = mkDot();
-					return REGEXP;
+					return TOKEN_REGEXP;
 				}
 
 	space+		{
@@ -389,7 +389,7 @@ flex_name:
 	{
 		YYCURSOR = tok;
 		lexer_state = LEX_NORMAL;
-		return FID_END;
+		return TOKEN_FID_END;
 	}
 	*
 	{
