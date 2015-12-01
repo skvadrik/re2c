@@ -188,7 +188,7 @@ CLEANFILES = \
 	$(DOC)
 
 $(AUTOGEN_PARSER): $(CUSTOM_PARSER)
-	@if test $(BISON) = "no"; \
+	$(AM_V_GEN) if test $(BISON) = "no"; \
 	then \
 		cp $(top_srcdir)/$(BOOTSTRAP_PARSER) $@ && \
 		cp $(top_srcdir)/$(BOOTSTRAP_PARSER_HDR) $(AUTOGEN_PARSER_HDR); \
@@ -204,7 +204,7 @@ $(AUTOGEN_PARSER): $(CUSTOM_PARSER)
 $(AUTOGEN_LEX): $(AUTOGEN_PARSER)
 
 $(BOOTSTRAP_PARSER): $(CUSTOM_PARSER)
-	@test $(BISON) = "no" || \
+	$(AM_V_GEN) test $(BISON) = "no" || \
 	$(BISON) \
 		--output=$(top_srcdir)/$@ \
 		--defines=$(top_srcdir)/$(BOOTSTRAP_PARSER_HDR) \
@@ -212,7 +212,7 @@ $(BOOTSTRAP_PARSER): $(CUSTOM_PARSER)
 		$(top_srcdir)/$(CUSTOM_PARSER);
 
 .re.cc:
-	@if test -x $(RE2C); \
+	$(AM_V_GEN) if test -x $(RE2C); \
 	then \
 		$(top_builddir)/$(RE2C) $(RE2CFLAGS) -o $@ $< && \
 		cp $@ $(top_srcdir)/bootstrap/$@; \
