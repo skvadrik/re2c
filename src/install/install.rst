@@ -11,7 +11,7 @@ Download
 Tarballs
 --------
 
-* `re2c-0.15.2.tar.gz <https://github.com/skvadrik/re2c/releases/download/0.15.2/re2c-0.15.2.tar.gz>`_
+* `re2c-0.15.3.tar.gz <https://github.com/skvadrik/re2c/releases/download/0.15.3/re2c-0.15.3.tar.gz>`_
 * `re2c-0.14.3.tar.gz <https://github.com/skvadrik/re2c/releases/download/0.14.3/re2c-0.14.3.tar.gz>`_
 * `re2c-0.13.7.5.tar.gz <https://github.com/skvadrik/re2c/releases/download/0.13.7.5/re2c-0.13.7.5.tar.gz>`_
 * `re2c-0.13.6.tar.gz <https://github.com/skvadrik/re2c/releases/download/0.13.6/re2c-0.13.6.tar.gz>`_
@@ -68,7 +68,7 @@ Build
 You only need C++98 compier to build re2c from tarball.
 If you have bison, re2c will use it (otherwise it will use precompiled files).
 
-If you are building re2c from source, you will also need autotools:
+If you are building re2c from source (not from tarball), you will also need autotools:
 
 .. code-block:: bash
 

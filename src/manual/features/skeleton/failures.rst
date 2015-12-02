@@ -55,12 +55,19 @@ Now let's change the input string:
             expected: match length 1, rule 254
             actual:   match length 2, rule 0
 
+Finally, let's break the generated code:
+
+.. code-block:: bash
+
+    $ re2c -S -o example.c hex2.re
+    $ sed -i -e "s/case '7'://" example.c
+    $ gcc -o example example.c
+    $ ./example
+    error: lex_line4: at position 248 (iteration 241):
+            expected: match length 2, rule 0
+            actual:   match length 1, rule 254
+
 And so on.
-Of course, some errors won't be captured by skeleton program: it's not feasible to cover all possible inputs.
-For example, of all the hex digits ``[0-9a-fA-F]`` re2c uses only ``[09afAF]``:
-we can mangle the lexer to not to recognize ``[1-8b-eB-E]`` as hex digits and the program won't notice.
-However, the chosen values are the boundaries of disjoint character ranges and they are tested extensively
-(see the section about data generation for details).
 
 
 Undefined control flow

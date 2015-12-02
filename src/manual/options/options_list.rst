@@ -118,8 +118,10 @@
     quotes are case insensitive.
 
 ``--no-generation-date``
-    Suppress date output in the generated output so
-    that it only shows the ``re2c`` version.
+    Suppress date output in the generated file.
+
+``--no-version``
+    Suppress version output in the generated file.
 
 ``--encoding-policy POLICY``
     Specify how ``re2c`` must treat Unicode
