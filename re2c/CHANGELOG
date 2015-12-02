@@ -1,4 +1,4 @@
-Version 0.15.3 (2015-12-01)
+Version 0.15.3 (2015-12-02)
 ---------------------------
 - Fixed bugs and applied patches:
     #122 "clang does not compile re2c 0.15.x" (reported and fixed by Oleksii Taran).
