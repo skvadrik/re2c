@@ -16,10 +16,10 @@ public:
 		: exp1 (e1)
 		, exp2 (e2)
 	{}
-	void split (CharSet &);
-	void calcSize (Char *);
+	void split (charset_t &);
+	void calcSize (const charset_t &);
 	uint32_t fixedLength ();
-	uint32_t compile (Char *, Ins *);
+	uint32_t compile (const charset_t &, Ins *);
 	void decompile ();
 	void display (std::ostream & o) const;
 	friend RegExp * mkAlt (RegExp *, RegExp *);

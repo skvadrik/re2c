@@ -12,50 +12,46 @@
 namespace re2c
 {
 
-void AltOp::calcSize (Char * rep)
+void AltOp::calcSize (const charset_t & cs)
 {
-	exp1->calcSize (rep);
-	exp2->calcSize (rep);
+	exp1->calcSize (cs);
+	exp2->calcSize (cs);
 	size = exp1->size + exp2->size + 2;
 }
 
-void CatOp::calcSize (Char * rep)
+void CatOp::calcSize (const charset_t & cs)
 {
-	exp1->calcSize (rep);
-	exp2->calcSize (rep);
+	exp1->calcSize (cs);
+	exp2->calcSize (cs);
 	size = exp1->size + exp2->size;
 }
 
-void CloseOp::calcSize (Char * rep)
+void CloseOp::calcSize (const charset_t & cs)
 {
-	exp->calcSize (rep);
+	exp->calcSize (cs);
 	size = exp->size + 1;
 }
 
-void MatchOp::calcSize (Char * rep)
+void MatchOp::calcSize (const charset_t & cs)
 {
 	size = 1;
 	for (Range * r = match; r; r = r->next ())
 	{
-		for (uint32_t c = r->lower (); c < r->upper (); ++c)
-		{
-			if (rep[c] == c)
-			{
-				++size;
-			}
-		}
+		size += static_cast<uint32_t> (std::distance(
+			cs.find(r->lower()),
+			cs.find(r->upper())));
 	}
 }
 
-void NullOp::calcSize (Char *)
+void NullOp::calcSize (const charset_t &)
 {
 	size = 0;
 }
 
-void RuleOp::calcSize (Char * rep)
+void RuleOp::calcSize (const charset_t & cs)
 {
-	exp->calcSize (rep);
-	ctx->calcSize (rep);
+	exp->calcSize (cs);
+	ctx->calcSize (cs);
 	size = exp->size + (ctx->size ? ctx->size + 2 : 1);
 }
 

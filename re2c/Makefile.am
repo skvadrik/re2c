@@ -24,7 +24,6 @@ SRC_HDR = \
 	src/conf/msg.h \
 	src/conf/opt.h \
 	src/conf/warn.h \
-	src/ir/bytecode/charset.h \
 	src/ir/bytecode/bytecode.h \
 	src/ir/bytecode/ins.h \
 	src/ir/dfa/state.h \
@@ -98,7 +97,6 @@ SRC = \
 	src/conf/warn.cc \
 	src/ir/bytecode/bytecode.cc \
 	src/ir/bytecode/ins.cc \
-	src/ir/bytecode/charset.cc \
 	src/ir/bytecode/split.cc \
 	src/ir/bytecode/compile.cc \
 	src/ir/bytecode/calc_size.cc \

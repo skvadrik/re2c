@@ -39,7 +39,7 @@ static Ins **closure(Ins **cP, Ins *i)
 
 struct GoTo
 {
-	Char	ch;
+	uint32_t ch;
 	void	*to;
 };
 
@@ -50,7 +50,7 @@ DFA::DFA
 	, uint32_t ni
 	, uint32_t lb
 	, uint32_t ub
-	, const Char * rep
+	, const charset_t & cs
 	, rules_t rules
 	)
 	: accepts ()
@@ -65,7 +65,6 @@ DFA::DFA
 	, tail(&head)
 	, toDo(NULL)
 	, free_ins(ins)
-	, free_rep(rep)
 
 	// statistics
 	, max_fill (0)
@@ -153,16 +152,12 @@ DFA::DFA
 
 		s->go.nSpans = 0;
 
-		for (uint32_t j = 0; j < nc;)
+		for (charset_t::const_iterator j = cs.begin(); j != cs.end();)
 		{
-			State *to = (State*) goTo[rep[j]].to;
-
-			while (++j < nc && goTo[rep[j]].to == to) ;
-
-			span[s->go.nSpans].ub = lb + j;
-
+			State *to = (State*) goTo[*j].to;
+			while (++j != cs.end() && goTo[*j].to == to) ;
+			span[s->go.nSpans].ub = lb + (j == cs.end() ? nc : *j);
 			span[s->go.nSpans].to = to;
-
 			s->go.nSpans++;
 		}
 
@@ -199,7 +194,6 @@ DFA::~DFA()
 		delete s;
 	}
 	delete [] free_ins;
-	delete [] free_rep;
 
 	delete skeleton;
 }

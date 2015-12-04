@@ -15,7 +15,7 @@ namespace re2c
 
 static uint32_t compile_goto (Ins * ins, Ins * i);
 
-uint32_t AltOp::compile (Char * rep, Ins * i)
+uint32_t AltOp::compile (const charset_t & cs, Ins * i)
 {
 	if (ins_cache)
 	{
@@ -26,11 +26,11 @@ uint32_t AltOp::compile (Char * rep, Ins * i)
 		ins_cache = i;
 
 		i->i.tag = FORK;
-		const uint32_t sz1 = exp1->compile (rep, &i[1]);
+		const uint32_t sz1 = exp1->compile (cs, &i[1]);
 		Ins * const j = &i[sz1 + 1];
 		i->i.link = &j[1];
 		j->i.tag = GOTO;
-		const uint32_t sz2 = exp2->compile (rep, &j[1]);
+		const uint32_t sz2 = exp2->compile (cs, &j[1]);
 		j->i.link = &j[sz2 + 1];
 
 		if (ins_access == PRIVATE)
@@ -52,7 +52,7 @@ void AltOp::decompile ()
 	}
 }
 
-uint32_t CatOp::compile (Char * rep, Ins * i)
+uint32_t CatOp::compile (const charset_t & cs, Ins * i)
 {
 	if (ins_cache)
 	{
@@ -62,8 +62,8 @@ uint32_t CatOp::compile (Char * rep, Ins * i)
 	{
 		ins_cache = i;
 
-		const uint32_t sz1 = exp1->compile (rep, &i[0]);
-		const uint32_t sz2 = exp2->compile (rep, &i[sz1]);
+		const uint32_t sz1 = exp1->compile (cs, &i[0]);
+		const uint32_t sz2 = exp2->compile (cs, &i[sz1]);
 
 		if (ins_access == PRIVATE)
 		{
@@ -84,7 +84,7 @@ void CatOp::decompile ()
 	}
 }
 
-uint32_t CloseOp::compile (Char * rep, Ins * i)
+uint32_t CloseOp::compile (const charset_t & cs, Ins * i)
 {
 	if (ins_cache)
 	{
@@ -94,7 +94,7 @@ uint32_t CloseOp::compile (Char * rep, Ins * i)
 	{
 		ins_cache = i;
 
-		i += exp->compile (rep, &i[0]);
+		i += exp->compile (cs, &i[0]);
 		i->i.tag = FORK;
 		i->i.link = ins_cache;
 		++i;
@@ -118,7 +118,7 @@ void CloseOp::decompile ()
 	}
 }
 
-uint32_t MatchOp::compile (Char * rep, Ins * i)
+uint32_t MatchOp::compile (const charset_t & cs, Ins * i)
 {
 	if (ins_cache)
 	{
@@ -134,14 +134,13 @@ uint32_t MatchOp::compile (Char * rep, Ins * i)
 		uint32_t bump = size;
 		for (Range *r = match; r; r = r->next ())
 		{
-			for (uint32_t c = r->lower (); c < r->upper (); ++c)
+			charset_t::const_iterator l = cs.find(r->lower());
+			charset_t::const_iterator u = cs.find(r->upper());
+			for (; l != u; ++l)
 			{
-				if (rep[c] == c)
-				{
-					j->c.value = c;
-					j->c.bump = --bump;
-					j++;
-				}
+				j->c.value = *l;
+				j->c.bump = --bump;
+				j++;
 			}
 		}
 
@@ -159,14 +158,14 @@ void MatchOp::decompile ()
 	ins_cache = NULL;
 }
 
-uint32_t NullOp::compile (Char *, Ins *)
+uint32_t NullOp::compile (const charset_t &, Ins *)
 {
 	return 0;
 }
 
 void NullOp::decompile () {}
 
-uint32_t RuleOp::compile (Char * rep, Ins * i)
+uint32_t RuleOp::compile (const charset_t & cs, Ins * i)
 {
 	if (ins_cache)
 	{
@@ -176,13 +175,13 @@ uint32_t RuleOp::compile (Char * rep, Ins * i)
 	{
 		ins_cache = i;
 
-		i += exp->compile (rep, &i[0]);
+		i += exp->compile (cs, &i[0]);
 		if (ctx->size)
 		{
 			i->i.tag = CTXT;
 			i->i.link = &i[1];
 			++i;
-			i += ctx->compile (rep, &i[0]);
+			i += ctx->compile (cs, &i[0]);
 		}
 		i->i.tag = TERM;
 		i->i.link = this;

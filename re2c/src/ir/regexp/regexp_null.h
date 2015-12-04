@@ -9,10 +9,10 @@ namespace re2c
 class NullOp: public RegExp
 {
 public:
-	void split (CharSet &);
-	void calcSize (Char *);
+	void split (charset_t &);
+	void calcSize (const charset_t &);
 	uint32_t fixedLength ();
-	uint32_t compile (Char *, Ins *);
+	uint32_t compile (const charset_t &, Ins *);
 	void decompile ();
 	void display (std::ostream & o) const;
 };

@@ -3,6 +3,7 @@
 
 #include "src/util/c99_stdint.h"
 #include <iosfwd>
+#include <set>
 
 #include "src/util/free_list.h"
 #include "src/util/forbid_copy.h"
@@ -10,10 +11,9 @@
 namespace re2c
 {
 
-struct CharSet;
 union Ins;
 
-typedef uint32_t Char;
+typedef std::set<uint32_t> charset_t;
 
 class RegExp
 {
@@ -57,10 +57,10 @@ public:
 	{
 		vFreeList.erase (this);
 	}
-	virtual void split (CharSet &) = 0;
-	virtual void calcSize (Char *) = 0;
+	virtual void split (charset_t &) = 0;
+	virtual void calcSize (const charset_t &) = 0;
 	virtual uint32_t fixedLength ();
-	virtual uint32_t compile (Char *, Ins *) = 0;
+	virtual uint32_t compile (const charset_t &, Ins *) = 0;
 	virtual void decompile () = 0;
 	virtual void display (std::ostream &) const = 0;
 	friend std::ostream & operator << (std::ostream & o, const RegExp & re);

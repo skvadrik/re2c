@@ -1,9 +1,9 @@
+#include <assert.h>
 #include <string.h>
 #include <algorithm>
 
 #include "src/codegen/output.h"
 #include "src/ir/bytecode/bytecode.h"
-#include "src/ir/bytecode/charset.h"
 #include "src/ir/bytecode/ins.h"
 #include "src/ir/dfa/dfa.h"
 #include "src/ir/regexp/regexp.h"
@@ -17,23 +17,21 @@ smart_ptr<DFA> genCode (Spec & spec, Output & output, const std::string & cond, 
 {
 	RegExp * re = spec.re;
 
-	CharSet cs (cunits);
+	// The original set of code units (charset) might be very large.
+	// A common trick it is to split charset into disjoint character ranges
+	// and choose a representative of each range (we choose lower bound).
+	// The set of all representatives is the new (compacted) charset.
+	// (Don't forget to include zero and exclude upper bound.)
+	charset_t cs;
 	re->split(cs);
+	cs.insert(0);
+	cs.erase(cunits);
 
-	Char *rep = new Char[cunits];
+	re->calcSize(cs);
 
-	for (uint32_t j = 0; j < cunits; ++j)
-	{
-		if (!cs.rep[j]->nxt)
-			cs.rep[j]->nxt = &cs.ptn[j];
-
-		rep[j] = static_cast<Char> (cs.rep[j]->nxt - &cs.ptn[0]);
-	}
-
-	re->calcSize(rep);
 	Ins *ins = new Ins[re->size + 1];
 	memset(ins, 0, (re->size + 1)*sizeof(Ins));
-	const uint32_t size = re->compile(rep, ins);
+	const uint32_t size = re->compile(cs, ins);
 	Ins *eoi = &ins[size];
 	eoi->i.tag = GOTO;
 	eoi->i.link = eoi;
@@ -68,7 +66,7 @@ smart_ptr<DFA> genCode (Spec & spec, Output & output, const std::string & cond, 
 		, size
 		, 0
 		, cunits
-		, rep
+		, cs
 		, spec.rules
 		));
 

@@ -37,7 +37,6 @@ public:
 	State ** tail;
 	State * toDo;
 	const Ins * free_ins;
-	const Char * free_rep;
 
 	// statistics
 	uint32_t max_fill;
@@ -53,7 +52,7 @@ public:
 		, uint32_t
 		, uint32_t
 		, uint32_t
-		, const Char *
+		, const charset_t &
 		, rules_t
 		);
 	~DFA ();
