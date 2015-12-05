@@ -14,7 +14,7 @@ public:
 	inline CloseOp (RegExp * e)
 		: exp (e)
 	{}
-	void split (charset_t &);
+	void split (std::set<uint32_t> &);
 	void calcSize (const charset_t &);
 	uint32_t compile (const charset_t &, Ins *);
 	void decompile ();

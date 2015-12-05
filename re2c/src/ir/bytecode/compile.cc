@@ -132,13 +132,13 @@ uint32_t MatchOp::compile (const charset_t & cs, Ins * i)
 		i->i.link = &i[size];
 		Ins *j = &i[1];
 		uint32_t bump = size;
+		uint32_t k = 0;
 		for (Range *r = match; r; r = r->next ())
 		{
-			charset_t::const_iterator l = cs.find(r->lower());
-			charset_t::const_iterator u = cs.find(r->upper());
-			for (; l != u; ++l)
+			for (; cs[k] != r->lower(); ++k);
+			for (; cs[k] != r->upper(); ++k)
 			{
-				j->c.value = *l;
+				j->c.value = k;
 				j->c.bump = --bump;
 				j++;
 			}

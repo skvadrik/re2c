@@ -35,11 +35,14 @@ void CloseOp::calcSize (const charset_t & cs)
 void MatchOp::calcSize (const charset_t & cs)
 {
 	size = 1;
+	uint32_t k = 0;
 	for (Range * r = match; r; r = r->next ())
 	{
-		size += static_cast<uint32_t> (std::distance(
-			cs.find(r->lower()),
-			cs.find(r->upper())));
+		for (; cs[k] != r->lower(); ++k);
+		for (; cs[k] != r->upper(); ++k)
+		{
+			++size;
+		}
 	}
 }
 

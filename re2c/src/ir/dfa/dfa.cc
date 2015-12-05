@@ -37,12 +37,6 @@ static Ins **closure(Ins **cP, Ins *i)
 	return cP;
 }
 
-struct GoTo
-{
-	uint32_t ch;
-	void	*to;
-};
-
 DFA::DFA
 	( const std::string & c
 	, uint32_t l
@@ -82,21 +76,22 @@ DFA::DFA
 	}
 
 	Ins **work = new Ins * [ni + 1];
-	uint32_t nc = ub - lb;
-	GoTo *goTo = new GoTo[nc];
-	Span *span = allocate<Span> (nc);
-	memset((char*) goTo, 0, nc*sizeof(GoTo));
 	findState(work, closure(work, &ins[0]));
+
+	const size_t nc = cs.size() - 1; // (n + 1) bounds for n ranges
+	void **goTo = new void*[nc];
+	Span *span = allocate<Span> (nc);
 
 	while (toDo)
 	{
 		State *s = toDo;
 		toDo = s->link;
 
-		uint32_t nGoTos = 0;
+		std::vector<uint32_t> preserved_order;
+
+		memset(goTo, 0, nc * sizeof(void*));
 
 		s->rule = NULL;
-
 		for (uint32_t k = 0; k < s->kCount; ++k)
 		{
 			Ins * i = s->kernel[k];
@@ -104,10 +99,11 @@ DFA::DFA
 			{
 				for (Ins *j = i + 1; j < (Ins*) i->i.link; ++j)
 				{
-					if (!(j->c.link = goTo[j->c.value - lb].to))
-						goTo[nGoTos++].ch = j->c.value;
-
-					goTo[j->c.value - lb].to = j;
+					if (!(j->c.link = goTo[j->c.value]))
+					{
+						preserved_order.push_back(j->c.value);
+					}
+					goTo[j->c.value] = j;
 				}
 			}
 			else if (i->i.tag == TERM)
@@ -138,34 +134,26 @@ DFA::DFA
 			}
 		}
 
-		for (uint32_t j = 0; j < nGoTos; ++j)
+		for (uint32_t j = 0; j < preserved_order.size(); ++j)
 		{
-			GoTo *go = &goTo[goTo[j].ch - lb];
-			Ins * i = (Ins*) go->to;
-
-			Ins ** cP = work;
-			for (; i; i = (Ins*) i->c.link)
+			Ins **cP = work;
+			for (Ins *i = (Ins*)goTo[preserved_order[j]]; i; i = (Ins*) i->c.link)
+			{
 				cP = closure(cP, i + i->c.bump);
-
-			go->to = findState(work, cP);
+			}
+			goTo[preserved_order[j]] = findState(work, cP);
 		}
 
 		s->go.nSpans = 0;
-
-		for (charset_t::const_iterator j = cs.begin(); j != cs.end();)
+		for (uint32_t j = 0; j < nc;)
 		{
-			State *to = (State*) goTo[*j].to;
-			while (++j != cs.end() && goTo[*j].to == to) ;
-			span[s->go.nSpans].ub = lb + (j == cs.end() ? nc : *j);
+			State *to = (State*) goTo[j];
+			while (++j < nc && goTo[j] == to) ;
+			span[s->go.nSpans].ub = cs[j];
 			span[s->go.nSpans].to = to;
 			s->go.nSpans++;
 		}
-
-		for (uint32_t j = nGoTos; j-- > 0;)
-			goTo[goTo[j].ch - lb].to = NULL;
-
 		s->go.span = allocate<Span> (s->go.nSpans);
-
 		memcpy((char*) s->go.span, (char*) span, s->go.nSpans*sizeof(Span));
 	}
 

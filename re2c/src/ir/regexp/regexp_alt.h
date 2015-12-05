@@ -16,7 +16,7 @@ public:
 		: exp1 (e1)
 		, exp2 (e2)
 	{}
-	void split (charset_t &);
+	void split (std::set<uint32_t> &);
 	void calcSize (const charset_t &);
 	uint32_t fixedLength ();
 	uint32_t compile (const charset_t &, Ins *);

@@ -21,11 +21,17 @@ smart_ptr<DFA> genCode (Spec & spec, Output & output, const std::string & cond, 
 	// A common trick it is to split charset into disjoint character ranges
 	// and choose a representative of each range (we choose lower bound).
 	// The set of all representatives is the new (compacted) charset.
-	// (Don't forget to include zero and exclude upper bound.)
+	// Don't forget to include zero and upper bound, even if they
+	// do not explicitely apper in ranges.
+	std::set<uint32_t> bounds;
+	re->split(bounds);
+	bounds.insert(0);
+	bounds.insert(cunits);
 	charset_t cs;
-	re->split(cs);
-	cs.insert(0);
-	cs.erase(cunits);
+	for (std::set<uint32_t>::const_iterator i = bounds.begin(); i != bounds.end(); ++i)
+	{
+		cs.push_back(*i);
+	}
 
 	re->calcSize(cs);
 

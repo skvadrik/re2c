@@ -15,7 +15,7 @@ public:
 	inline MatchOp (Range * m)
 		: match (m)
 	{}
-	void split (charset_t &);
+	void split (std::set<uint32_t> &);
 	void calcSize (const charset_t &);
 	uint32_t fixedLength ();
 	uint32_t compile (const charset_t &, Ins *);

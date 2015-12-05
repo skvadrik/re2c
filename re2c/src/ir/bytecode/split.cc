@@ -11,24 +11,24 @@
 
 namespace re2c {
 
-void AltOp::split (charset_t & cs)
+void AltOp::split (std::set<uint32_t> & cs)
 {
 	exp1->split (cs);
 	exp2->split (cs);
 }
 
-void CatOp::split (charset_t & cs)
+void CatOp::split (std::set<uint32_t> & cs)
 {
 	exp1->split (cs);
 	exp2->split (cs);
 }
 
-void CloseOp::split (charset_t & cs)
+void CloseOp::split (std::set<uint32_t> & cs)
 {
 	exp->split (cs);
 }
 
-void MatchOp::split (charset_t & cs)
+void MatchOp::split (std::set<uint32_t> & cs)
 {
 	for (Range *r = match; r; r = r->next ())
 	{
@@ -37,9 +37,9 @@ void MatchOp::split (charset_t & cs)
 	}
 }
 
-void NullOp::split (charset_t &) {}
+void NullOp::split (std::set<uint32_t> &) {}
 
-void RuleOp::split (charset_t & cs)
+void RuleOp::split (std::set<uint32_t> & cs)
 {
 	exp->split (cs);
 	ctx->split (cs);
