@@ -240,9 +240,11 @@ yy28:
 		YYFILL(1);
 		yych = *YYCURSOR;
 		if (yych & ~0xFF) {
+			goto yy30;
 		} else if (yybm[0+yych] & 32) {
 			goto yy28;
 		}
+yy30:
 		{}
 yy31:
 		++YYCURSOR;
@@ -1269,6 +1271,7 @@ yy148:
 		yych = *YYCURSOR;
 yy149:
 		if (yych & ~0xFF) {
+			goto yy150;
 		} else if (yybm[0+yych] & 128) {
 			goto yy148;
 		}

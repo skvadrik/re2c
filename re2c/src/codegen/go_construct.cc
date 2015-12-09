@@ -138,7 +138,7 @@ SwitchIf::SwitchIf (const Span * sp, uint32_t nsp, const State * next)
 GoBitmap::GoBitmap (const Span * span, uint32_t nSpans, const Span * hspan, uint32_t hSpans, const BitMap * bm, const State * bm_state, const State * next)
 	: bitmap (bm)
 	, bitmap_state (bm_state)
-	, hgo (hSpans == 0 ? NULL : new SwitchIf (hspan, hSpans, next))
+	, hgo (NULL)
 	, lgo (NULL)
 {
 	Span * bspan = allocate<Span> (nSpans);
@@ -146,6 +146,11 @@ GoBitmap::GoBitmap (const Span * span, uint32_t nSpans, const Span * hspan, uint
 	lgo = bSpans == 0
 		? NULL
 		:  new SwitchIf (bspan, bSpans, next);
+	// if there are any low spans, then next state for high spans
+	// must be NULL to trigger explicit goto generation in linear 'if'
+	hgo = hSpans == 0
+		? NULL
+		: new SwitchIf (hspan, hSpans, lgo ? NULL : next);
 	operator delete (bspan);
 }
 
