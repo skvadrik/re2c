@@ -90,8 +90,6 @@ DFA::DFA
 		State *s = toDo;
 		toDo = s->link;
 
-		std::vector<uint32_t> preserved_order;
-
 		memset(goTo, 0, nc * sizeof(void*));
 
 		s->rule = NULL;
@@ -102,10 +100,7 @@ DFA::DFA
 			{
 				for (Ins *j = i + 1; j < (Ins*) i->i.link; ++j)
 				{
-					if (!(j->c.link = goTo[j->c.value]))
-					{
-						preserved_order.push_back(j->c.value);
-					}
+					j->c.link = goTo[j->c.value];
 					goTo[j->c.value] = j;
 				}
 			}
@@ -137,14 +132,17 @@ DFA::DFA
 			}
 		}
 
-		for (uint32_t j = 0; j < preserved_order.size(); ++j)
+		for (uint32_t j = 0; j < nc; ++j)
 		{
-			Ins **cP = work;
-			for (Ins *i = (Ins*)goTo[preserved_order[j]]; i; i = (Ins*) i->c.link)
+			if (goTo[j])
 			{
-				cP = closure(cP, i + i->c.bump);
+				Ins **cP = work;
+				for (Ins *i = (Ins*)goTo[j]; i; i = (Ins*) i->c.link)
+				{
+					cP = closure(cP, i + i->c.bump);
+				}
+				goTo[j] = findState(work, cP);
 			}
-			goTo[preserved_order[j]] = findState(work, cP);
 		}
 
 		s->go.nSpans = 0;
