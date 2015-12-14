@@ -7,18 +7,18 @@
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 'a':	goto yy2;
-	default:	goto yy4;
+	case 'a':	goto yy4;
+	default:	goto yy2;
 	}
 yy2:
 	++YYCURSOR;
-#line 3 "input5.re"
-	{ return 0; }
+#line 4 "input5.re"
+	{ return 1; }
 #line 18 "input5.c"
 yy4:
 	++YYCURSOR;
-#line 4 "input5.re"
-	{ return 1; }
+#line 3 "input5.re"
+	{ return 0; }
 #line 23 "input5.c"
 }
 #line 6 "input5.re"

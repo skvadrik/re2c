@@ -7,30 +7,30 @@ char scan(const unsigned char *s)
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 0x07:	goto yy6;
-	case 0x61:	goto yy4;
-	case 0x7F:	goto yy2;
-	default:	goto yy8;
+	case 0x07:	goto yy4;
+	case 0x61:	goto yy6;
+	case 0x7F:	goto yy8;
+	default:	goto yy2;
 	}
 yy2:
 	++YYCURSOR;
 	{
-		return '"';
+		return '\0';
 	}
 yy4:
 	++YYCURSOR;
 	{
-		return '\x2F';
+		return '\x7F';
 	}
 yy6:
 	++YYCURSOR;
 	{
-		return '\x7F';
+		return '\x2F';
 	}
 yy8:
 	++YYCURSOR;
 	{
-		return '\0';
+		return '"';
 	}
 }
 

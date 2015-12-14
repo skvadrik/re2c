@@ -61,6 +61,7 @@ public:
 private:
 	void addState (State **, State *);
 	State * findState (Ins **, Ins **);
+	void reorder();
 	void split (State *);
 	void findSCCs ();
 	void findBaseState ();

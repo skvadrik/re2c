@@ -19,10 +19,10 @@ int scan(char *s)
 			YYCTYPE yych;
 			yych = *YYCURSOR;
 			switch (yych) {
-			case 0x00:	goto yy10;
+			case 0x00:	goto yy2;
 			case '+':	goto yy6;
 			case '-':	goto yy8;
-			case '0':	goto yy2;
+			case '0':	goto yy10;
 			case '1':
 			case '2':
 			case '3':
@@ -31,10 +31,30 @@ int scan(char *s)
 			case '6':
 			case '7':
 			case '8':
-			case '9':	goto yy4;
-			default:	goto yy12;
+			case '9':	goto yy12;
+			default:	goto yy4;
 			}
 yy2:
+			++YYCURSOR;
+#line 23 "config6.re"
+			{ printf("EOF\n");	return 0; }
+#line 42 "config6.c"
+yy4:
+			++YYCURSOR;
+#line 24 "config6.re"
+			{ printf("ERR\n");	return 1; }
+#line 47 "config6.c"
+yy6:
+			++YYCURSOR;
+#line 21 "config6.re"
+			{ printf("+\n");	continue; }
+#line 52 "config6.c"
+yy8:
+			++YYCURSOR;
+#line 22 "config6.re"
+			{ printf("-\n");	continue; }
+#line 57 "config6.c"
+yy10:
 			++YYCURSOR;
 			switch ((yych = *YYCURSOR)) {
 			case '0':
@@ -46,45 +66,24 @@ yy2:
 			case '6':
 			case '7':
 			case '8':
-			case '9':	goto yy16;
-			default:	goto yy3;
+			case '9':	goto yy14;
+			default:	goto yy11;
 			}
-yy3:
+yy11:
 #line 20 "config6.re"
 			{ printf("Num\n");	continue; }
-#line 56 "config6.c"
-yy4:
-			++YYCURSOR;
-			yych = *YYCURSOR;
-			goto yy15;
-yy5:
-#line 19 "config6.re"
-			{ printf("Num\n");	continue; }
-#line 64 "config6.c"
-yy6:
-			++YYCURSOR;
-#line 21 "config6.re"
-			{ printf("+\n");	continue; }
-#line 69 "config6.c"
-yy8:
-			++YYCURSOR;
-#line 22 "config6.re"
-			{ printf("-\n");	continue; }
-#line 74 "config6.c"
-yy10:
-			++YYCURSOR;
-#line 23 "config6.re"
-			{ printf("EOF\n");	return 0; }
-#line 79 "config6.c"
+#line 76 "config6.c"
 yy12:
 			++YYCURSOR;
-#line 24 "config6.re"
-			{ printf("ERR\n");	return 1; }
+			yych = *YYCURSOR;
+			goto yy18;
+yy13:
+#line 19 "config6.re"
+			{ printf("Num\n");	continue; }
 #line 84 "config6.c"
 yy14:
 			++YYCURSOR;
 			yych = *YYCURSOR;
-yy15:
 			switch (yych) {
 			case '0':
 			case '1':
@@ -96,11 +95,16 @@ yy15:
 			case '7':
 			case '8':
 			case '9':	goto yy14;
-			default:	goto yy5;
+			default:	goto yy16;
 			}
 yy16:
+#line 18 "config6.re"
+			{ printf("Oct\n");	continue; }
+#line 104 "config6.c"
+yy17:
 			++YYCURSOR;
 			yych = *YYCURSOR;
+yy18:
 			switch (yych) {
 			case '0':
 			case '1':
@@ -111,13 +115,9 @@ yy16:
 			case '6':
 			case '7':
 			case '8':
-			case '9':	goto yy16;
-			default:	goto yy18;
+			case '9':	goto yy17;
+			default:	goto yy13;
 			}
-yy18:
-#line 18 "config6.re"
-			{ printf("Oct\n");	continue; }
-#line 121 "config6.c"
 		}
 #line 25 "config6.re"
 

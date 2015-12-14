@@ -27,43 +27,43 @@ yy3:
 yy4:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case 0xBB:	goto yy9;
+	case 0xBB:	goto yy6;
 	default:	goto yy3;
 	}
 yy5:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
 	case 0x80:	goto yy8;
-	case 0xB8:	goto yy6;
+	case 0xB8:	goto yy10;
 	default:	goto yy3;
 	}
 yy6:
-	yych = *++YYCURSOR;
-	switch (yych) {
-	case 0x83:
-	case 0x85:
-	case 0x8A:
-	case 0x8D:
-	case 0x9D:
-	case 0xA1:	goto yy9;
-	default:	goto yy7;
-	}
-yy7:
-	YYCURSOR = YYMARKER;
-	goto yy3;
+	++YYCURSOR;
+#line 12 "unicode_group_Pf.8--encoding-policy(substitute).re"
+	{ goto Pf; }
+#line 45 "unicode_group_Pf.8--encoding-policy(substitute).c"
 yy8:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 0x99:
 	case 0x9D:
-	case 0xBA:	goto yy9;
-	default:	goto yy7;
+	case 0xBA:	goto yy6;
+	default:	goto yy9;
 	}
 yy9:
+	YYCURSOR = YYMARKER;
+	goto yy3;
+yy10:
 	++YYCURSOR;
-#line 12 "unicode_group_Pf.8--encoding-policy(substitute).re"
-	{ goto Pf; }
-#line 67 "unicode_group_Pf.8--encoding-policy(substitute).c"
+	switch ((yych = *YYCURSOR)) {
+	case 0x83:
+	case 0x85:
+	case 0x8A:
+	case 0x8D:
+	case 0x9D:
+	case 0xA1:	goto yy6;
+	default:	goto yy9;
+	}
 }
 #line 14 "unicode_group_Pf.8--encoding-policy(substitute).re"
 

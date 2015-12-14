@@ -74,10 +74,10 @@ int scan(char *s, int l)
 			yych = *YYCURSOR;
 			switch (yych) {
 			case '\t':
-			case ' ':	goto yy2;
-			case '+':	goto yy7;
-			case '-':	goto yy9;
-			case '0':	goto yy4;
+			case ' ':	goto yy4;
+			case '+':	goto yy6;
+			case '-':	goto yy8;
+			case '0':	goto yy10;
 			case '1':
 			case '2':
 			case '3':
@@ -86,18 +86,33 @@ int scan(char *s, int l)
 			case '6':
 			case '7':
 			case '8':
-			case '9':	goto yy6;
-			default:	goto yy11;
+			case '9':	goto yy12;
+			default:	goto yy2;
 			}
 yy2:
 			++YYCURSOR;
+#line 96 "calc_005.re"
+			{ res = 1; 					continue; }
+#line 97 "calc_005.c"
+yy4:
+			++YYCURSOR;
 			yych = *YYCURSOR;
-			goto yy19;
-yy3:
+			goto yy14;
+yy5:
 #line 91 "calc_005.re"
 			{ continue; }
-#line 100 "calc_005.c"
-yy4:
+#line 105 "calc_005.c"
+yy6:
+			++YYCURSOR;
+#line 94 "calc_005.re"
+			{ res = stack_add();		continue; }
+#line 110 "calc_005.c"
+yy8:
+			++YYCURSOR;
+#line 95 "calc_005.re"
+			{ res = stack_sub();		continue; }
+#line 115 "calc_005.c"
+yy10:
 			++YYCURSOR;
 			switch ((yych = *YYCURSOR)) {
 			case '0':
@@ -110,46 +125,23 @@ yy4:
 			case '7':
 			case '8':
 			case '9':	goto yy15;
-			default:	goto yy5;
+			default:	goto yy11;
 			}
-yy5:
+yy11:
 #line 93 "calc_005.re"
 			{ res = push_num(t, p, 10); continue; }
-#line 119 "calc_005.c"
-yy6:
+#line 134 "calc_005.c"
+yy12:
 			yych = *++YYCURSOR;
-			goto yy14;
-yy7:
-			++YYCURSOR;
-#line 94 "calc_005.re"
-			{ res = stack_add();		continue; }
-#line 127 "calc_005.c"
-yy9:
-			++YYCURSOR;
-#line 95 "calc_005.re"
-			{ res = stack_sub();		continue; }
-#line 132 "calc_005.c"
-yy11:
-			++YYCURSOR;
-#line 96 "calc_005.re"
-			{ res = 1; 					continue; }
-#line 137 "calc_005.c"
+			goto yy19;
 yy13:
 			++YYCURSOR;
 			if (YYLIMIT <= YYCURSOR) YYFILL(1);
 			yych = *YYCURSOR;
 yy14:
 			switch (yych) {
-			case '0':
-			case '1':
-			case '2':
-			case '3':
-			case '4':
-			case '5':
-			case '6':
-			case '7':
-			case '8':
-			case '9':	goto yy13;
+			case '\t':
+			case ' ':	goto yy13;
 			default:	goto yy5;
 			}
 yy15:
@@ -172,16 +164,24 @@ yy15:
 yy17:
 #line 92 "calc_005.re"
 			{ res = push_num(t, p, 8);	continue; }
-#line 176 "calc_005.c"
+#line 168 "calc_005.c"
 yy18:
 			++YYCURSOR;
 			if (YYLIMIT <= YYCURSOR) YYFILL(1);
 			yych = *YYCURSOR;
 yy19:
 			switch (yych) {
-			case '\t':
-			case ' ':	goto yy18;
-			default:	goto yy3;
+			case '0':
+			case '1':
+			case '2':
+			case '3':
+			case '4':
+			case '5':
+			case '6':
+			case '7':
+			case '8':
+			case '9':	goto yy18;
+			default:	goto yy11;
 			}
 		}
 #line 97 "calc_005.re"

@@ -30,26 +30,21 @@ yy4:
 	case 0x85:
 	case 0x88:
 	case 0x8B:
-	case 0xB2:	goto yy9;
+	case 0xB2:	goto yy6;
 	default:	goto yy3;
 	}
 yy5:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
 	case 0xBE:	goto yy8;
-	case 0xBF:	goto yy6;
+	case 0xBF:	goto yy10;
 	default:	goto yy3;
 	}
 yy6:
-	yych = *++YYCURSOR;
-	switch (yych) {
-	case 0x8C:
-	case 0xBC:	goto yy9;
-	default:	goto yy7;
-	}
-yy7:
-	YYCURSOR = YYMARKER;
-	goto yy3;
+	++YYCURSOR;
+#line 12 "unicode_group_Lt.8--encoding-policy(ignore).re"
+	{ goto Lt; }
+#line 48 "unicode_group_Lt.8--encoding-policy(ignore).c"
 yy8:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -77,14 +72,19 @@ yy8:
 	case 0xAD:
 	case 0xAE:
 	case 0xAF:
-	case 0xBC:	goto yy9;
-	default:	goto yy7;
+	case 0xBC:	goto yy6;
+	default:	goto yy9;
 	}
 yy9:
+	YYCURSOR = YYMARKER;
+	goto yy3;
+yy10:
 	++YYCURSOR;
-#line 12 "unicode_group_Lt.8--encoding-policy(ignore).re"
-	{ goto Lt; }
-#line 88 "unicode_group_Lt.8--encoding-policy(ignore).c"
+	switch ((yych = *YYCURSOR)) {
+	case 0x8C:
+	case 0xBC:	goto yy6;
+	default:	goto yy9;
+	}
 }
 #line 14 "unicode_group_Lt.8--encoding-policy(ignore).re"
 

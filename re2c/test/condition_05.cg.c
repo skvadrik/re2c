@@ -67,49 +67,45 @@ char scan(Scanner *s)
 yyc_comment:
 			if ((s->lim - s->cur) < 2) { if(fill(s, 2) >= 0) break; }
 			yych = *s->cur;
-			if (yych != '*') goto yy5;
+			if (yych == '*') goto yy5;
 			++s->cur;
-			if ((yych = *s->cur) == '/') goto yy6;
 yy4:
 #line 83 "condition_05.cg.re"
 			{
 				goto yyc_comment;
 			}
-#line 79 "condition_05.cg.c"
+#line 78 "condition_05.cg.c"
 yy5:
 			yych = *++s->cur;
-			goto yy4;
-yy6:
+			if (yych != '/') goto yy4;
 			++s->cur;
 #line 79 "condition_05.cg.re"
 			{
 				continue;
 			}
-#line 89 "condition_05.cg.c"
+#line 87 "condition_05.cg.c"
 /* *********************************** */
 yyc_normal:
 			if ((s->lim - s->cur) < 2) { if(fill(s, 2) >= 0) break; }
 			yych = *s->cur;
-			if (yych != '/') goto yy12;
+			if (yych == '/') goto yy12;
 			++s->cur;
-			if ((yych = *s->cur) == '*') goto yy13;
 yy11:
 #line 74 "condition_05.cg.re"
 			{
 				fputc(*s->tok, stdout);
 				continue;
 			}
-#line 103 "condition_05.cg.c"
+#line 100 "condition_05.cg.c"
 yy12:
 			yych = *++s->cur;
-			goto yy11;
-yy13:
+			if (yych != '*') goto yy11;
 			++s->cur;
 #line 70 "condition_05.cg.re"
 			{
 				goto yyc_comment;
 			}
-#line 113 "condition_05.cg.c"
+#line 109 "condition_05.cg.c"
 		}
 #line 87 "condition_05.cg.re"
 

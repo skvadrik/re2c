@@ -31,16 +31,16 @@ int main ()
 /* *********************************** */
 yyc_a:
 	yych = *YYCURSOR;
-	if (yych != 'a') goto yy5;
-	++YYCURSOR;
-#line 26 "condtype_yysetcondition.cg.re"
-	{ printf ("a\n");      continue; }
-#line 39 "condtype_yysetcondition.cg.c"
-yy5:
+	if (yych == 'a') goto yy5;
 	++YYCURSOR;
 	YYSETCONDITION(yycb);
 #line 27 "condtype_yysetcondition.cg.re"
 	{ printf ("a => b\n"); continue; }
+#line 40 "condtype_yysetcondition.cg.c"
+yy5:
+	++YYCURSOR;
+#line 26 "condtype_yysetcondition.cg.re"
+	{ printf ("a\n");      continue; }
 #line 45 "condtype_yysetcondition.cg.c"
 /* *********************************** */
 yyc_b:

@@ -53,44 +53,30 @@ std:
 	yych = *YYCURSOR;
 	if (yych <= ' ') {
 		if (yych <= '\t') {
-			if (yych <= 0x08) goto yy9;
-			goto yy6;
+			if (yych >= '\t') goto yy4;
 		} else {
-			if (yych <= '\n') goto yy8;
-			if (yych <= 0x1F) goto yy9;
-			goto yy6;
+			if (yych <= '\n') goto yy6;
+			if (yych >= ' ') goto yy4;
 		}
 	} else {
 		if (yych <= '9') {
-			if (yych <= '/') goto yy9;
-			goto yy4;
+			if (yych >= '0') goto yy7;
 		} else {
-			if (yych <= '`') goto yy9;
-			if (yych >= 'c') goto yy9;
+			if (yych <= '`') goto yy2;
+			if (yych <= 'b') goto yy9;
 		}
 	}
+yy2:
 	++YYCURSOR;
-	YYCTXMARKER = YYCURSOR;
-	if ((yych = *YYCURSOR) <= '/') goto yy3;
-	if (yych == '1') goto yy15;
-	if (yych <= '9') goto yy12;
 yy3:
 #line 60 "ctx.s.re"
 	{
 		return UNEXPECTED;
 	}
-#line 83 "ctx.s.c"
+#line 77 "ctx.s.c"
 yy4:
 	++YYCURSOR;
-	yych = *YYCURSOR;
-	goto yy11;
 yy5:
-#line 50 "ctx.s.re"
-	{ return NUMBER;  }
-#line 91 "ctx.s.c"
-yy6:
-	++YYCURSOR;
-yy7:
 #line 53 "ctx.s.re"
 	{
 		if(s.cur == s.lim)
@@ -98,21 +84,33 @@ yy7:
 		cursor = s.cur;
 		goto std;
 	}
-#line 102 "ctx.s.c"
-yy8:
+#line 88 "ctx.s.c"
+yy6:
 	yych = *++YYCURSOR;
-	goto yy7;
+	goto yy5;
+yy7:
+	++YYCURSOR;
+	yych = *YYCURSOR;
+	goto yy11;
+yy8:
+#line 50 "ctx.s.re"
+	{ return NUMBER;  }
+#line 99 "ctx.s.c"
 yy9:
 	yych = *++YYCURSOR;
+	YYCTXMARKER = YYCURSOR;
+	if (yych <= '/') goto yy3;
+	if (yych == '1') goto yy15;
+	if (yych <= '9') goto yy12;
 	goto yy3;
 yy10:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 yy11:
-	if (yych <= '/') goto yy5;
+	if (yych <= '/') goto yy8;
 	if (yych <= '9') goto yy10;
-	goto yy5;
+	goto yy8;
 yy12:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
@@ -123,7 +121,7 @@ yy14:
 	YYCURSOR = YYCTXMARKER;
 #line 49 "ctx.s.re"
 	{ return KEYWORD; }
-#line 127 "ctx.s.c"
+#line 125 "ctx.s.c"
 yy15:
 	++YYCURSOR;
 	if ((yych = *YYCURSOR) <= '/') goto yy16;
@@ -132,7 +130,7 @@ yy16:
 	YYCURSOR = YYCTXMARKER;
 #line 48 "ctx.s.re"
 	{ return KEYWORD; }
-#line 136 "ctx.s.c"
+#line 134 "ctx.s.c"
 }
 #line 63 "ctx.s.re"
 

@@ -16,57 +16,51 @@ int scan(const char *p)
 	yych = *YYCURSOR;
 	switch (yych) {
 	case '\n':	goto yy2;
-	case '<':	goto yy3;
+	case '<':	goto yy5;
 	case '\\':	goto yy6;
-	case 'a':	goto yy5;
-	default:	goto yy7;
+	case 'a':	goto yy7;
+	default:	goto yy3;
 	}
 yy2:
 #line 15 "bug57.re"
 	{ return YYCURSOR - p; }
 #line 28 "bug57.c"
 yy3:
+	++YYCURSOR;
+yy4:
+#line 16 "bug57.re"
+	{ return 0; }
+#line 34 "bug57.c"
+yy5:
 	yyaccept = 0;
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
-	case '>':	goto yy15;
-	case '\\':	goto yy14;
+	case '>':	goto yy8;
+	case '\\':	goto yy10;
 	case 'x':
 	case 'y':	goto yy12;
 	default:	goto yy4;
 	}
-yy4:
-#line 16 "bug57.re"
-	{ return 0; }
-#line 42 "bug57.c"
-yy5:
-	yyaccept = 1;
-	yych = *(YYMARKER = ++YYCURSOR);
-	goto yy9;
 yy6:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case 'b':	goto yy8;
+	case 'b':	goto yy14;
 	default:	goto yy4;
 	}
 yy7:
-	yych = *++YYCURSOR;
-	goto yy4;
-yy8:
 	yyaccept = 1;
-	YYMARKER = ++YYCURSOR;
-	yych = *YYCURSOR;
-yy9:
-	switch (yych) {
-	case '\\':	goto yy10;
-	case 'a':	goto yy8;
-	default:	goto yy2;
-	}
+	yych = *(YYMARKER = ++YYCURSOR);
+	goto yy15;
+yy8:
+	++YYCURSOR;
+#line 14 "bug57.re"
+	{ return YYCURSOR - p; }
+#line 59 "bug57.c"
 yy10:
 	++YYCURSOR;
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 'b':	goto yy8;
+	case 'b':	goto yy12;
 	default:	goto yy11;
 	}
 yy11:
@@ -80,24 +74,29 @@ yy12:
 	++YYCURSOR;
 	yych = *YYCURSOR;
 	switch (yych) {
-	case '>':	goto yy15;
-	case '\\':	goto yy14;
+	case '>':	goto yy8;
+	case '\\':	goto yy10;
 	case 'x':
 	case 'y':	goto yy12;
 	default:	goto yy11;
 	}
 yy14:
+	yyaccept = 1;
+	YYMARKER = ++YYCURSOR;
+	yych = *YYCURSOR;
+yy15:
+	switch (yych) {
+	case '\\':	goto yy16;
+	case 'a':	goto yy14;
+	default:	goto yy2;
+	}
+yy16:
 	++YYCURSOR;
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 'b':	goto yy12;
+	case 'b':	goto yy14;
 	default:	goto yy11;
 	}
-yy15:
-	++YYCURSOR;
-#line 14 "bug57.re"
-	{ return YYCURSOR - p; }
-#line 101 "bug57.c"
 }
 #line 17 "bug57.re"
 

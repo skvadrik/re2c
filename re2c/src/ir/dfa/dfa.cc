@@ -1,5 +1,8 @@
+#include <assert.h>
 #include <string.h>
 #include <map>
+#include <set>
+#include <queue>
 #include <ostream>
 
 #include "src/codegen/go.h"
@@ -161,6 +164,27 @@ DFA::DFA
 	delete [] goTo;
 	operator delete (span);
 
+	/*
+	 * note [reordering DFA states]
+	 *
+	 * re2c-generated code depends on the order of states in DFA: simply
+	 * flipping two states may change the output significantly.
+	 * The order of states is affected by many factors, e.g.:
+	 *   - flipping left and right subtrees of alternative when constructing
+	 *     AST (also applies to iteration and counted repetition)
+	 *   - changing the order in which graph nodes are visited (applies to
+	 *     any intermediate representation: bytecode, NFA, DFA, etc.)
+	 *
+	 * To make the resulting code independent of such changes, we hereby
+	 * reorder DFA states. The ordering scheme is very simple:
+	 *
+	 * Starting with DFA root, walk DFA nodes in breadth-first order.
+	 * Child nodes are ordered accoding to the (alphabetically) first symbol
+	 * leading to each node. Each node must be visited exactly once.
+	 * Default state (NULL) is always the last state.
+	 */
+	reorder();
+
 	// skeleton must be constructed after DFA construction
 	// but prior to any other DFA transformations
 	skeleton = new Skeleton (*this, rules);
@@ -170,6 +194,41 @@ DFA::DFA
 
 	// finally gather overall DFA statistics
 	calc_stats ();
+}
+
+void DFA::reorder()
+{
+	std::vector<State*> ord;
+	ord.reserve(nStates);
+
+	std::queue<State*> todo;
+	todo.push(head);
+
+	std::set<State*> done;
+	done.insert(head);
+
+	for(;!todo.empty();)
+	{
+		State *s = todo.front();
+		todo.pop();
+		ord.push_back(s);
+		for(uint32_t i = 0; i < s->go.nSpans; ++i)
+		{
+			State *q = s->go.span[i].to;
+			if(q && done.insert(q).second)
+			{
+				todo.push(q);
+			}
+		}
+	}
+
+	assert(nStates == ord.size());
+
+	ord.push_back(NULL);
+	for(uint32_t i = 0; i < nStates; ++i)
+	{
+		ord[i]->next = ord[i + 1];
+	}
 }
 
 DFA::~DFA()

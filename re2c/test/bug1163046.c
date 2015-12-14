@@ -22,29 +22,28 @@ next:
 	if ((YYLIMIT - YYCURSOR) < 45) YYFILL(45);
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 0x00:	goto yy5;
-	case '(':	goto yy2;
+	case 0x00:	goto yy2;
+	case '(':	goto yy6;
 	default:	goto yy4;
 	}
 yy2:
+	++YYCURSOR;
+#line 25 "bug1163046.re"
+	{ return false; }
+#line 34 "bug1163046.c"
+yy4:
+	++YYCURSOR;
+yy5:
+#line 23 "bug1163046.re"
+	{ goto next; }
+#line 40 "bug1163046.c"
+yy6:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
 	case 'T':
 	case 't':	goto yy7;
-	default:	goto yy3;
+	default:	goto yy5;
 	}
-yy3:
-#line 23 "bug1163046.re"
-	{ goto next; }
-#line 40 "bug1163046.c"
-yy4:
-	yych = *++YYCURSOR;
-	goto yy3;
-yy5:
-	++YYCURSOR;
-#line 25 "bug1163046.re"
-	{ return false; }
-#line 48 "bug1163046.c"
 yy7:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -54,7 +53,7 @@ yy7:
 	}
 yy8:
 	YYCURSOR = YYMARKER;
-	goto yy3;
+	goto yy5;
 yy9:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -345,7 +344,7 @@ yy51:
 		if (token == start || *(token - 1) == '\n')
 		return true; else goto next;
 	}
-#line 349 "bug1163046.c"
+#line 348 "bug1163046.c"
 }
 #line 26 "bug1163046.re"
 

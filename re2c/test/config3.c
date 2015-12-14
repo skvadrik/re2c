@@ -26,21 +26,21 @@ char *scan0(char *p)
 	case '6':
 	case '7':
 	case '8':
-	case '9':	goto yy2;
-	default:	goto yy4;
+	case '9':	goto yy4;
+	default:	goto yy2;
 	}
 yy2:
 	++YYCURSOR;
-	yych = *YYCURSOR;
-	goto yy7;
-yy3:
-#line 13 "config3.re"
-	{ return YYCURSOR; }
-#line 40 "config3.c"
-yy4:
-	++YYCURSOR;
 #line 14 "config3.re"
 	{ return NULL; }
+#line 37 "config3.c"
+yy4:
+	++YYCURSOR;
+	yych = *YYCURSOR;
+	goto yy7;
+yy5:
+#line 13 "config3.re"
+	{ return YYCURSOR; }
 #line 45 "config3.c"
 yy6:
 	++YYCURSOR;
@@ -58,7 +58,7 @@ yy7:
 	case '7':
 	case '8':
 	case '9':	goto yy6;
-	default:	goto yy3;
+	default:	goto yy5;
 	}
 }
 #line 15 "config3.re"
@@ -85,21 +85,21 @@ yy8:
 	case '6':
 	case '7':
 	case '8':
-	case '9':	goto yy10;
-	default:	goto yy12;
+	case '9':	goto yy12;
+	default:	goto yy10;
 	}
 yy10:
 	++YYCURSOR;
-	yych = *YYCURSOR;
-	goto yy15;
-yy11:
-#line 23 "config3.re"
-	{ return YYCURSOR; }
-#line 99 "config3.c"
-yy12:
-	++YYCURSOR;
 #line 24 "config3.re"
 	{ return NULL; }
+#line 96 "config3.c"
+yy12:
+	++YYCURSOR;
+	yych = *YYCURSOR;
+	goto yy15;
+yy13:
+#line 23 "config3.re"
+	{ return YYCURSOR; }
 #line 104 "config3.c"
 yy14:
 	++YYCURSOR;
@@ -117,7 +117,7 @@ yy15:
 	case '7':
 	case '8':
 	case '9':	goto yy14;
-	default:	goto yy11;
+	default:	goto yy13;
 	}
 }
 #line 25 "config3.re"
@@ -144,21 +144,21 @@ startLabel:
 	case '6':
 	case '7':
 	case '8':
-	case '9':	goto yy18;
-	default:	goto yy20;
+	case '9':	goto yy20;
+	default:	goto yy18;
 	}
 yy18:
 	++YYCURSOR;
-	yych = *YYCURSOR;
-	goto yy23;
-yy19:
-#line 33 "config3.re"
-	{ return YYCURSOR; }
-#line 158 "config3.c"
-yy20:
-	++YYCURSOR;
 #line 34 "config3.re"
 	{ return NULL; }
+#line 155 "config3.c"
+yy20:
+	++YYCURSOR;
+	yych = *YYCURSOR;
+	goto yy23;
+yy21:
+#line 33 "config3.re"
+	{ return YYCURSOR; }
 #line 163 "config3.c"
 yy22:
 	++YYCURSOR;
@@ -176,7 +176,7 @@ yy23:
 	case '7':
 	case '8':
 	case '9':	goto yy22;
-	default:	goto yy19;
+	default:	goto yy21;
 	}
 }
 #line 35 "config3.re"
@@ -202,21 +202,21 @@ char *scan(char *p)
 	case '6':
 	case '7':
 	case '8':
-	case '9':	goto yy26;
-	default:	goto yy28;
+	case '9':	goto yy28;
+	default:	goto yy26;
 	}
 yy26:
 	++YYCURSOR;
-	yych = *YYCURSOR;
-	goto yy31;
-yy27:
-#line 43 "config3.re"
-	{ return YYCURSOR; }
-#line 216 "config3.c"
-yy28:
-	++YYCURSOR;
 #line 44 "config3.re"
 	{ return NULL; }
+#line 213 "config3.c"
+yy28:
+	++YYCURSOR;
+	yych = *YYCURSOR;
+	goto yy31;
+yy29:
+#line 43 "config3.re"
+	{ return YYCURSOR; }
 #line 221 "config3.c"
 yy30:
 	++YYCURSOR;
@@ -234,7 +234,7 @@ yy31:
 	case '7':
 	case '8':
 	case '9':	goto yy30;
-	default:	goto yy27;
+	default:	goto yy29;
 	}
 }
 #line 45 "config3.re"

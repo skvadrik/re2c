@@ -20,18 +20,18 @@ yyc_r1:
 	{
 		static void *yytarget[256] = {
 			&&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,
-			&&yy3,  &&yy3,  &&yy13, &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,
+			&&yy3,  &&yy3,  &&yy5,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,
 			&&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,
 			&&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,
 			&&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,
 			&&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,
-			&&yy3,  &&yy5,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,
+			&&yy3,  &&yy7,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,
 			&&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,
 			&&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,
 			&&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,
 			&&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,
 			&&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,
-			&&yy3,  &&yy7,  &&yy9,  &&yy11, &&yy3,  &&yy3,  &&yy3,  &&yy3,
+			&&yy3,  &&yy9,  &&yy11, &&yy13, &&yy3,  &&yy3,  &&yy3,  &&yy3,
 			&&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,
 			&&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,
 			&&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,
@@ -59,19 +59,19 @@ yy3:
 	{ return "."; }
 yy5:
 	++YYCURSOR;
-	{ return "1"; }
+	{ return "DEFAULT - r1"; }
 yy7:
 	++YYCURSOR;
-	{ return "a"; }
+	{ return "1"; }
 yy9:
 	++YYCURSOR;
-	{ return "b"; }
+	{ return "a"; }
 yy11:
 	++YYCURSOR;
-	{ return "c"; }
+	{ return "b"; }
 yy13:
 	++YYCURSOR;
-	{ return "DEFAULT - r1"; }
+	{ return "c"; }
 /* *********************************** */
 yyc_r2:
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
@@ -165,22 +165,22 @@ yyc_r2:
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	if (yych <= '`') {
-		if (yych == '\n') goto yy22;
+		if (yych == '\n') goto yy18;
 	} else {
-		if (yych <= 'a') goto yy18;
-		if (yych == 'c') goto yy20;
+		if (yych <= 'a') goto yy20;
+		if (yych == 'c') goto yy22;
 	}
 	++YYCURSOR;
 	{ return "."; }
 yy18:
 	++YYCURSOR;
-	{ return "a"; }
+	{ return "DEFAULT - r2"; }
 yy20:
 	++YYCURSOR;
-	{ return "c"; }
+	{ return "a"; }
 yy22:
 	++YYCURSOR;
-	{ return "DEFAULT - r2"; }
+	{ return "c"; }
 }
 
 re2c: warning: line 15: control flow in condition 'r2' is undefined for strings that match '\xA', use default rule '*' [-Wundefined-control-flow]

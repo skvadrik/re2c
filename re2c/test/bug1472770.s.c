@@ -28,22 +28,24 @@ yy1:
 yy0:
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
-	if (yych <= 0x00) goto yy5;
-	if (yych != '\n') goto yy1;
+	if (yych <= 0x00) goto yy3;
+	if (yych == '\n') goto yy5;
+	goto yy1;
+yy3:
+	++YYCURSOR;
+#line 26 "bug1472770.s.re"
+	{
+		return n;
+	}
+#line 41 "bug1472770.s.c"
+yy5:
 	++YYCURSOR;
 #line 21 "bug1472770.s.re"
 	{
 		++n;
 		goto start;
 	}
-#line 40 "bug1472770.s.c"
-yy5:
-	++YYCURSOR;
-#line 26 "bug1472770.s.re"
-	{
-		return n;
-	}
-#line 47 "bug1472770.s.c"
+#line 49 "bug1472770.s.c"
 }
 #line 29 "bug1472770.s.re"
 

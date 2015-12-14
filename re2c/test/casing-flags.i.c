@@ -6,17 +6,17 @@
 	yych = *YYCURSOR;
 	switch (yych) {
 	case 'B':
-	case 'b':	goto yy5;
-	case 'a':	goto yy3;
+	case 'b':	goto yy3;
+	case 'a':	goto yy5;
 	default:	goto yy2;
 	}
 yy2:
 yy3:
 	++YYCURSOR;
-	{return 'a';}
+	{return 'b';}
 yy5:
 	++YYCURSOR;
-	{return 'b';}
+	{return 'a';}
 }
 
 }

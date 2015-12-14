@@ -53,8 +53,8 @@ std:
 	yych = *YYCURSOR;
 	switch (yych) {
 	case '\t':
-	case ' ':	goto yy6;
-	case '\n':	goto yy8;
+	case ' ':	goto yy4;
+	case '\n':	goto yy6;
 	case '0':
 	case '1':
 	case '2':
@@ -64,15 +64,45 @@ std:
 	case '6':
 	case '7':
 	case '8':
-	case '9':	goto yy4;
+	case '9':	goto yy7;
 	case 'a':
-	case 'b':	goto yy2;
-	default:	goto yy9;
+	case 'b':	goto yy9;
+	default:	goto yy2;
 	}
 yy2:
 	++YYCURSOR;
+yy3:
+#line 60 "ctx.re"
+	{
+		return UNEXPECTED;
+	}
+#line 80 "ctx.c"
+yy4:
+	++YYCURSOR;
+yy5:
+#line 53 "ctx.re"
+	{
+		if(s.cur == s.lim)
+			return EOI;
+		cursor = s.cur;
+		goto std;
+	}
+#line 91 "ctx.c"
+yy6:
+	yych = *++YYCURSOR;
+	goto yy5;
+yy7:
+	++YYCURSOR;
+	yych = *YYCURSOR;
+	goto yy11;
+yy8:
+#line 50 "ctx.re"
+	{ return NUMBER;  }
+#line 102 "ctx.c"
+yy9:
+	yych = *++YYCURSOR;
 	YYCTXMARKER = YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	switch (yych) {
 	case '0':
 	case '2':
 	case '3':
@@ -85,37 +115,6 @@ yy2:
 	case '1':	goto yy15;
 	default:	goto yy3;
 	}
-yy3:
-#line 60 "ctx.re"
-	{
-		return UNEXPECTED;
-	}
-#line 94 "ctx.c"
-yy4:
-	++YYCURSOR;
-	yych = *YYCURSOR;
-	goto yy11;
-yy5:
-#line 50 "ctx.re"
-	{ return NUMBER;  }
-#line 102 "ctx.c"
-yy6:
-	++YYCURSOR;
-yy7:
-#line 53 "ctx.re"
-	{
-		if(s.cur == s.lim)
-			return EOI;
-		cursor = s.cur;
-		goto std;
-	}
-#line 113 "ctx.c"
-yy8:
-	yych = *++YYCURSOR;
-	goto yy7;
-yy9:
-	yych = *++YYCURSOR;
-	goto yy3;
 yy10:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
@@ -132,7 +131,7 @@ yy11:
 	case '7':
 	case '8':
 	case '9':	goto yy10;
-	default:	goto yy5;
+	default:	goto yy8;
 	}
 yy12:
 	++YYCURSOR;
@@ -155,7 +154,7 @@ yy14:
 	YYCURSOR = YYCTXMARKER;
 #line 49 "ctx.re"
 	{ return KEYWORD; }
-#line 159 "ctx.c"
+#line 158 "ctx.c"
 yy15:
 	++YYCURSOR;
 	switch ((yych = *YYCURSOR)) {
@@ -175,7 +174,7 @@ yy16:
 	YYCURSOR = YYCTXMARKER;
 #line 48 "ctx.re"
 	{ return KEYWORD; }
-#line 179 "ctx.c"
+#line 178 "ctx.c"
 }
 #line 63 "ctx.re"
 

@@ -45,30 +45,29 @@ loop:
 	if ((YYLIMIT - YYCURSOR) < 11) YYFILL(11);
 	yych = *YYCURSOR;
 	switch (yych) {
-	case '$':	goto yy2;
-	default:	goto yy4;
+	case '$':	goto yy4;
+	default:	goto yy2;
 	}
 yy2:
-	yych = *(YYMARKER = ++YYCURSOR);
-	switch (yych) {
-	case 'D':	goto yy10;
-	case 'I':	goto yy9;
-	case 'L':	goto yy8;
-	case 'R':	goto yy7;
-	case 'S':	goto yy5;
-	default:	goto yy3;
-	}
+	++YYCURSOR;
 yy3:
 #line 53 "cvsignore.re"
 	{ output[outsize++] = cursor[-1]; if (cursor >= limit) break; goto loop; }
-#line 65 "cvsignore.c"
+#line 57 "cvsignore.c"
 yy4:
-	yych = *++YYCURSOR;
-	goto yy3;
+	yych = *(YYMARKER = ++YYCURSOR);
+	switch (yych) {
+	case 'D':	goto yy5;
+	case 'I':	goto yy7;
+	case 'L':	goto yy8;
+	case 'R':	goto yy9;
+	case 'S':	goto yy10;
+	default:	goto yy3;
+	}
 yy5:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case 'o':	goto yy44;
+	case 'a':	goto yy11;
 	default:	goto yy6;
 	}
 yy6:
@@ -77,235 +76,235 @@ yy6:
 yy7:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case 'e':	goto yy32;
+	case 'd':	goto yy12;
 	default:	goto yy6;
 	}
 yy8:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case 'o':	goto yy25;
+	case 'o':	goto yy13;
 	default:	goto yy6;
 	}
 yy9:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case 'd':	goto yy19;
+	case 'e':	goto yy14;
 	default:	goto yy6;
 	}
 yy10:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case 'a':	goto yy11;
+	case 'o':	goto yy15;
 	default:	goto yy6;
 	}
 yy11:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case 't':	goto yy12;
+	case 't':	goto yy16;
 	default:	goto yy6;
 	}
 yy12:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case 'e':	goto yy13;
+	case '$':	goto yy17;
+	case ':':	goto yy19;
 	default:	goto yy6;
 	}
 yy13:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case '$':	goto yy15;
-	case ':':	goto yy14;
+	case 'g':	goto yy20;
 	default:	goto yy6;
 	}
 yy14:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case '$':	goto yy6;
-	default:	goto yy18;
+	case 'v':	goto yy21;
+	default:	goto yy6;
 	}
 yy15:
-	++YYCURSOR;
-#line 48 "cvsignore.re"
-	{ APPEND(L"$" L"Date$"); goto loop; }
-#line 131 "cvsignore.c"
+	yych = *++YYCURSOR;
+	switch (yych) {
+	case 'u':	goto yy22;
+	default:	goto yy6;
+	}
+yy16:
+	yych = *++YYCURSOR;
+	switch (yych) {
+	case 'e':	goto yy23;
+	default:	goto yy6;
+	}
 yy17:
 	++YYCURSOR;
-	if (YYLIMIT <= YYCURSOR) YYFILL(1);
-	yych = *YYCURSOR;
-yy18:
-	switch (yych) {
-	case '\n':	goto yy6;
-	case '$':	goto yy15;
-	default:	goto yy17;
-	}
+#line 49 "cvsignore.re"
+	{ APPEND(L"$" L"Id$"); goto loop; }
+#line 142 "cvsignore.c"
 yy19:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case '$':	goto yy21;
-	case ':':	goto yy20;
-	default:	goto yy6;
+	case '$':	goto yy6;
+	default:	goto yy25;
 	}
 yy20:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case '$':	goto yy6;
-	default:	goto yy24;
+	case '$':	goto yy26;
+	case ':':	goto yy28;
+	default:	goto yy6;
 	}
 yy21:
-	++YYCURSOR;
-#line 49 "cvsignore.re"
-	{ APPEND(L"$" L"Id$"); goto loop; }
-#line 159 "cvsignore.c"
+	yych = *++YYCURSOR;
+	switch (yych) {
+	case 'i':	goto yy29;
+	default:	goto yy6;
+	}
+yy22:
+	yych = *++YYCURSOR;
+	switch (yych) {
+	case 'r':	goto yy30;
+	default:	goto yy6;
+	}
 yy23:
+	yych = *++YYCURSOR;
+	switch (yych) {
+	case '$':	goto yy31;
+	case ':':	goto yy33;
+	default:	goto yy6;
+	}
+yy24:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
-yy24:
+yy25:
 	switch (yych) {
 	case '\n':	goto yy6;
-	case '$':	goto yy21;
-	default:	goto yy23;
-	}
-yy25:
-	yych = *++YYCURSOR;
-	switch (yych) {
-	case 'g':	goto yy26;
-	default:	goto yy6;
+	case '$':	goto yy17;
+	default:	goto yy24;
 	}
 yy26:
-	yych = *++YYCURSOR;
-	switch (yych) {
-	case '$':	goto yy28;
-	case ':':	goto yy27;
-	default:	goto yy6;
-	}
-yy27:
-	yych = *++YYCURSOR;
-	switch (yych) {
-	case '$':	goto yy6;
-	default:	goto yy31;
-	}
-yy28:
 	++YYCURSOR;
 #line 50 "cvsignore.re"
 	{ APPEND(L"$" L"Log$"); goto loop; }
-#line 193 "cvsignore.c"
-yy30:
-	++YYCURSOR;
-	if (YYLIMIT <= YYCURSOR) YYFILL(1);
-	yych = *YYCURSOR;
-yy31:
-	switch (yych) {
-	case '\n':	goto yy6;
-	case '$':	goto yy28;
-	default:	goto yy30;
-	}
-yy32:
+#line 189 "cvsignore.c"
+yy28:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case 'v':	goto yy33;
+	case '$':	goto yy6;
+	default:	goto yy35;
+	}
+yy29:
+	yych = *++YYCURSOR;
+	switch (yych) {
+	case 's':	goto yy36;
 	default:	goto yy6;
 	}
+yy30:
+	yych = *++YYCURSOR;
+	switch (yych) {
+	case 'c':	goto yy37;
+	default:	goto yy6;
+	}
+yy31:
+	++YYCURSOR;
+#line 48 "cvsignore.re"
+	{ APPEND(L"$" L"Date$"); goto loop; }
+#line 212 "cvsignore.c"
 yy33:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case 'i':	goto yy34;
-	default:	goto yy6;
+	case '$':	goto yy6;
+	default:	goto yy39;
 	}
 yy34:
-	yych = *++YYCURSOR;
-	switch (yych) {
-	case 's':	goto yy35;
-	default:	goto yy6;
-	}
+	++YYCURSOR;
+	if (YYLIMIT <= YYCURSOR) YYFILL(1);
+	yych = *YYCURSOR;
 yy35:
-	yych = *++YYCURSOR;
 	switch (yych) {
-	case 'i':	goto yy36;
-	default:	goto yy6;
+	case '\n':	goto yy6;
+	case '$':	goto yy26;
+	default:	goto yy34;
 	}
 yy36:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case 'o':	goto yy37;
+	case 'i':	goto yy40;
 	default:	goto yy6;
 	}
 yy37:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case 'n':	goto yy38;
+	case 'e':	goto yy41;
 	default:	goto yy6;
 	}
 yy38:
-	yych = *++YYCURSOR;
-	switch (yych) {
-	case '$':	goto yy40;
-	case ':':	goto yy39;
-	default:	goto yy6;
-	}
-yy39:
-	yych = *++YYCURSOR;
-	switch (yych) {
-	case '$':	goto yy6;
-	default:	goto yy43;
-	}
-yy40:
-	++YYCURSOR;
-#line 51 "cvsignore.re"
-	{ APPEND(L"$" L"Revision$"); goto loop; }
-#line 257 "cvsignore.c"
-yy42:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
-yy43:
+yy39:
 	switch (yych) {
 	case '\n':	goto yy6;
-	case '$':	goto yy40;
-	default:	goto yy42;
+	case '$':	goto yy31;
+	default:	goto yy38;
 	}
-yy44:
+yy40:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case 'u':	goto yy45;
+	case 'o':	goto yy42;
 	default:	goto yy6;
 	}
+yy41:
+	yych = *++YYCURSOR;
+	switch (yych) {
+	case '$':	goto yy43;
+	case ':':	goto yy45;
+	default:	goto yy6;
+	}
+yy42:
+	yych = *++YYCURSOR;
+	switch (yych) {
+	case 'n':	goto yy46;
+	default:	goto yy6;
+	}
+yy43:
+	++YYCURSOR;
+#line 52 "cvsignore.re"
+	{ APPEND(L"$" L"Source$"); goto loop; }
+#line 274 "cvsignore.c"
 yy45:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case 'r':	goto yy46;
-	default:	goto yy6;
+	case '$':	goto yy6;
+	default:	goto yy48;
 	}
 yy46:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case 'c':	goto yy47;
+	case '$':	goto yy49;
+	case ':':	goto yy51;
 	default:	goto yy6;
 	}
 yy47:
-	yych = *++YYCURSOR;
-	switch (yych) {
-	case 'e':	goto yy48;
-	default:	goto yy6;
-	}
+	++YYCURSOR;
+	if (YYLIMIT <= YYCURSOR) YYFILL(1);
+	yych = *YYCURSOR;
 yy48:
-	yych = *++YYCURSOR;
 	switch (yych) {
-	case '$':	goto yy50;
-	case ':':	goto yy49;
-	default:	goto yy6;
+	case '\n':	goto yy6;
+	case '$':	goto yy43;
+	default:	goto yy47;
 	}
 yy49:
+	++YYCURSOR;
+#line 51 "cvsignore.re"
+	{ APPEND(L"$" L"Revision$"); goto loop; }
+#line 302 "cvsignore.c"
+yy51:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case '$':	goto yy6;
 	default:	goto yy53;
 	}
-yy50:
-	++YYCURSOR;
-#line 52 "cvsignore.re"
-	{ APPEND(L"$" L"Source$"); goto loop; }
-#line 309 "cvsignore.c"
 yy52:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
@@ -313,7 +312,7 @@ yy52:
 yy53:
 	switch (yych) {
 	case '\n':	goto yy6;
-	case '$':	goto yy50;
+	case '$':	goto yy49;
 	default:	goto yy52;
 	}
 }

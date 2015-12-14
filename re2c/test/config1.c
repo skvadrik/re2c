@@ -26,21 +26,21 @@ char *scan0(char *p)
 	case '6':
 	case '7':
 	case '8':
-	case '9':	goto yy2;
-	default:	goto yy4;
+	case '9':	goto yy4;
+	default:	goto yy2;
 	}
 yy2:
 	++YYCURSOR;
-	yych = *YYCURSOR;
-	goto yy7;
-yy3:
-#line 13 "config1.re"
-	{ return YYCURSOR; }
-#line 40 "config1.c"
-yy4:
-	++YYCURSOR;
 #line 14 "config1.re"
 	{ return NULL; }
+#line 37 "config1.c"
+yy4:
+	++YYCURSOR;
+	yych = *YYCURSOR;
+	goto yy7;
+yy5:
+#line 13 "config1.re"
+	{ return YYCURSOR; }
 #line 45 "config1.c"
 yy6:
 	++YYCURSOR;
@@ -58,7 +58,7 @@ yy7:
 	case '7':
 	case '8':
 	case '9':	goto yy6;
-	default:	goto yy3;
+	default:	goto yy5;
 	}
 }
 #line 15 "config1.re"
@@ -84,21 +84,21 @@ char *scan1(char *p)
 		case '6':
 		case '7':
 		case '8':
-		case '9':	goto yy10;
-		default:	goto yy12;
+		case '9':	goto yy12;
+		default:	goto yy10;
 		}
 yy10:
 		++YYCURSOR;
-		yych = *YYCURSOR;
-		goto yy15;
-yy11:
-#line 23 "config1.re"
-		{ return YYCURSOR; }
-#line 98 "config1.c"
-yy12:
-		++YYCURSOR;
 #line 24 "config1.re"
 		{ return NULL; }
+#line 95 "config1.c"
+yy12:
+		++YYCURSOR;
+		yych = *YYCURSOR;
+		goto yy15;
+yy13:
+#line 23 "config1.re"
+		{ return YYCURSOR; }
 #line 103 "config1.c"
 yy14:
 		++YYCURSOR;
@@ -116,7 +116,7 @@ yy15:
 		case '7':
 		case '8':
 		case '9':	goto yy14;
-		default:	goto yy11;
+		default:	goto yy13;
 		}
 	}
 #line 25 "config1.re"
@@ -142,21 +142,21 @@ char *scan(char *p)
 		case '6':
 		case '7':
 		case '8':
-		case '9':	goto yy18;
-		default:	goto yy20;
+		case '9':	goto yy20;
+		default:	goto yy18;
 		}
 yy18:
 		++YYCURSOR;
-		yych = *YYCURSOR;
-		goto yy23;
-yy19:
-#line 32 "config1.re"
-		{ return YYCURSOR; }
-#line 156 "config1.c"
-yy20:
-		++YYCURSOR;
 #line 33 "config1.re"
 		{ return NULL; }
+#line 153 "config1.c"
+yy20:
+		++YYCURSOR;
+		yych = *YYCURSOR;
+		goto yy23;
+yy21:
+#line 32 "config1.re"
+		{ return YYCURSOR; }
 #line 161 "config1.c"
 yy22:
 		++YYCURSOR;
@@ -174,7 +174,7 @@ yy23:
 		case '7':
 		case '8':
 		case '9':	goto yy22;
-		default:	goto yy19;
+		default:	goto yy21;
 		}
 	}
 #line 34 "config1.re"

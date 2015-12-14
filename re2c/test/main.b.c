@@ -91,52 +91,54 @@ int ScanFullSpeed(char *pzStrToScan, size_t lenStrToScan)
 			if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
 			yych = *YYCURSOR;
 			if (yych <= ',') {
-				if (yych <= 0x00) goto yy10;
+				if (yych <= 0x00) goto yy2;
 				if (yych == '+') goto yy6;
-				goto yy12;
+				goto yy4;
 			} else {
 				if (yych <= '/') {
 					if (yych <= '-') goto yy8;
-					goto yy12;
+					goto yy4;
 				} else {
-					if (yych <= '0') goto yy4;
-					if (yych >= ':') goto yy12;
+					if (yych <= '0') goto yy10;
+					if (yych <= '9') goto yy11;
+					goto yy4;
 				}
 			}
+yy2:
 			++YYCURSOR;
-			yych = *YYCURSOR;
-			goto yy17;
-yy3:
-#line 93 "main.b.re"
-			{ continue; }
-#line 113 "main.b.c"
+#line 97 "main.b.re"
+			{ return 0; }
+#line 112 "main.b.c"
 yy4:
 			++YYCURSOR;
-			if (yybm[0+(yych = *YYCURSOR)] & 128) {
-				goto yy13;
-			}
 yy5:
 #line 98 "main.b.re"
 			{ return 1; }
-#line 122 "main.b.c"
+#line 118 "main.b.c"
 yy6:
 			++YYCURSOR;
 #line 95 "main.b.re"
 			{ continue; }
-#line 127 "main.b.c"
+#line 123 "main.b.c"
 yy8:
 			++YYCURSOR;
 #line 96 "main.b.re"
 			{ continue; }
-#line 132 "main.b.c"
+#line 128 "main.b.c"
 yy10:
-			++YYCURSOR;
-#line 97 "main.b.re"
-			{ return 0; }
-#line 137 "main.b.c"
-yy12:
 			yych = *++YYCURSOR;
+			if (yybm[0+yych] & 128) {
+				goto yy13;
+			}
 			goto yy5;
+yy11:
+			++YYCURSOR;
+			yych = *YYCURSOR;
+			goto yy17;
+yy12:
+#line 93 "main.b.re"
+			{ continue; }
+#line 142 "main.b.c"
 yy13:
 			++YYCURSOR;
 			if (YYLIMIT <= YYCURSOR) YYFILL(1);
@@ -146,15 +148,15 @@ yy13:
 			}
 #line 94 "main.b.re"
 			{ continue; }
-#line 150 "main.b.c"
+#line 152 "main.b.c"
 yy16:
 			++YYCURSOR;
 			if (YYLIMIT <= YYCURSOR) YYFILL(1);
 			yych = *YYCURSOR;
 yy17:
-			if (yych <= '/') goto yy3;
+			if (yych <= '/') goto yy12;
 			if (yych <= '9') goto yy16;
-			goto yy3;
+			goto yy12;
 		}
 #line 99 "main.b.re"
 
@@ -177,7 +179,7 @@ int scan(char *pzStrToScan, size_t lenStrToScan)
 	for(;;)
 	{
 
-#line 181 "main.b.c"
+#line 183 "main.b.c"
 		{
 			YYCTYPE yych;
 			static const unsigned char yybm[] = {
@@ -217,52 +219,54 @@ int scan(char *pzStrToScan, size_t lenStrToScan)
 			if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
 			yych = *YYCURSOR;
 			if (yych <= ',') {
-				if (yych <= 0x00) goto yy28;
+				if (yych <= 0x00) goto yy20;
 				if (yych == '+') goto yy24;
-				goto yy30;
+				goto yy22;
 			} else {
 				if (yych <= '/') {
 					if (yych <= '-') goto yy26;
-					goto yy30;
+					goto yy22;
 				} else {
-					if (yych <= '0') goto yy22;
-					if (yych >= ':') goto yy30;
+					if (yych <= '0') goto yy28;
+					if (yych <= '9') goto yy29;
+					goto yy22;
 				}
 			}
+yy20:
 			++YYCURSOR;
-			yych = *YYCURSOR;
-			goto yy35;
-yy21:
-#line 120 "main.b.re"
-			{ printf("Num\n"); strcat(gTestBuf, "Num "); continue; }
-#line 239 "main.b.c"
+#line 124 "main.b.re"
+			{ printf("EOF\n");                           return 0; }
+#line 240 "main.b.c"
 yy22:
 			++YYCURSOR;
-			if (yybm[0+(yych = *YYCURSOR)] & 128) {
-				goto yy31;
-			}
 yy23:
 #line 125 "main.b.re"
 			{ printf("ERR\n"); strcat(gTestBuf, "ERR "); return 1; }
-#line 248 "main.b.c"
+#line 246 "main.b.c"
 yy24:
 			++YYCURSOR;
 #line 122 "main.b.re"
 			{ printf("+\n");   strcat(gTestBuf, "+ ");   continue; }
-#line 253 "main.b.c"
+#line 251 "main.b.c"
 yy26:
 			++YYCURSOR;
 #line 123 "main.b.re"
 			{ printf("-\n");   strcat(gTestBuf, "- ");   continue; }
-#line 258 "main.b.c"
+#line 256 "main.b.c"
 yy28:
-			++YYCURSOR;
-#line 124 "main.b.re"
-			{ printf("EOF\n");                           return 0; }
-#line 263 "main.b.c"
-yy30:
 			yych = *++YYCURSOR;
+			if (yybm[0+yych] & 128) {
+				goto yy31;
+			}
 			goto yy23;
+yy29:
+			++YYCURSOR;
+			yych = *YYCURSOR;
+			goto yy35;
+yy30:
+#line 120 "main.b.re"
+			{ printf("Num\n"); strcat(gTestBuf, "Num "); continue; }
+#line 270 "main.b.c"
 yy31:
 			++YYCURSOR;
 			if (YYLIMIT <= YYCURSOR) YYFILL(1);
@@ -272,15 +276,15 @@ yy31:
 			}
 #line 121 "main.b.re"
 			{ printf("Oct\n"); strcat(gTestBuf, "Oct "); continue; }
-#line 276 "main.b.c"
+#line 280 "main.b.c"
 yy34:
 			++YYCURSOR;
 			if (YYLIMIT <= YYCURSOR) YYFILL(1);
 			yych = *YYCURSOR;
 yy35:
-			if (yych <= '/') goto yy21;
+			if (yych <= '/') goto yy30;
 			if (yych <= '9') goto yy34;
-			goto yy21;
+			goto yy30;
 		}
 #line 126 "main.b.re"
 

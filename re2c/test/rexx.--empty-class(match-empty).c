@@ -32,8 +32,8 @@ scan:
 	if ((YYLIMIT - YYCURSOR) < 13) YYFILL(13);
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 0x00:	goto yy63;
-	case '\n':	goto yy3;
+	case 0x00:	goto yy3;
+	case '\n':	goto yy7;
 	case '!':
 	case '?':
 	case 'G':
@@ -50,17 +50,17 @@ scan:
 	case 'm':
 	case 'x':
 	case 'y':
-	case 'z':	goto yy59;
-	case '"':	goto yy62;
-	case '%':	goto yy15;
-	case '&':	goto yy25;
-	case '\'':	goto yy60;
-	case '(':	goto yy31;
-	case ')':	goto yy33;
-	case '*':	goto yy11;
-	case '+':	goto yy7;
-	case ',':	goto yy29;
-	case '-':	goto yy9;
+	case 'z':	goto yy9;
+	case '"':	goto yy11;
+	case '%':	goto yy12;
+	case '&':	goto yy14;
+	case '\'':	goto yy16;
+	case '(':	goto yy17;
+	case ')':	goto yy19;
+	case '*':	goto yy21;
+	case '+':	goto yy23;
+	case ',':	goto yy25;
+	case '-':	goto yy27;
 	case '.':
 	case '0':
 	case '1':
@@ -71,55 +71,55 @@ scan:
 	case '6':
 	case '7':
 	case '8':
-	case '9':	goto yy57;
-	case '/':	goto yy13;
-	case ':':	goto yy27;
+	case '9':	goto yy29;
+	case '/':	goto yy31;
+	case ':':	goto yy33;
 	case ';':	goto yy35;
-	case '<':	goto yy21;
-	case '=':	goto yy17;
-	case '>':	goto yy23;
+	case '<':	goto yy37;
+	case '=':	goto yy39;
+	case '>':	goto yy41;
 	case 'A':
-	case 'a':	goto yy37;
+	case 'a':	goto yy43;
 	case 'B':
-	case 'b':	goto yy52;
+	case 'b':	goto yy44;
 	case 'C':
-	case 'c':	goto yy39;
+	case 'c':	goto yy45;
 	case 'D':
-	case 'd':	goto yy40;
+	case 'd':	goto yy46;
 	case 'E':
-	case 'e':	goto yy41;
+	case 'e':	goto yy47;
 	case 'F':
-	case 'f':	goto yy53;
+	case 'f':	goto yy48;
 	case 'H':
-	case 'h':	goto yy54;
+	case 'h':	goto yy49;
 	case 'I':
-	case 'i':	goto yy42;
+	case 'i':	goto yy50;
 	case 'L':
-	case 'l':	goto yy43;
+	case 'l':	goto yy51;
 	case 'N':
-	case 'n':	goto yy44;
+	case 'n':	goto yy52;
 	case 'O':
-	case 'o':	goto yy45;
+	case 'o':	goto yy53;
 	case 'P':
-	case 'p':	goto yy46;
+	case 'p':	goto yy54;
 	case 'Q':
-	case 'q':	goto yy47;
+	case 'q':	goto yy55;
 	case 'R':
-	case 'r':	goto yy48;
+	case 'r':	goto yy56;
 	case 'S':
-	case 's':	goto yy49;
+	case 's':	goto yy57;
 	case 'T':
-	case 't':	goto yy50;
+	case 't':	goto yy58;
 	case 'U':
-	case 'u':	goto yy55;
+	case 'u':	goto yy59;
 	case 'V':
-	case 'v':	goto yy56;
+	case 'v':	goto yy60;
 	case 'W':
-	case 'w':	goto yy51;
+	case 'w':	goto yy61;
 	case '\\':
-	case '~':	goto yy19;
-	case '|':	goto yy5;
-	default:	goto yy65;
+	case '~':	goto yy62;
+	case '|':	goto yy64;
+	default:	goto yy5;
 	}
 yy2:
 #line 253 "rexx.--empty-class(match-empty).re"
@@ -127,81 +127,136 @@ yy2:
 #line 128 "rexx.--empty-class(match-empty).c"
 yy3:
 	++YYCURSOR;
+#line 262 "rexx.--empty-class(match-empty).re"
+	{ RETURN(SU_EOF); }
+#line 133 "rexx.--empty-class(match-empty).c"
+yy5:
+	++YYCURSOR;
+yy6:
+#line 264 "rexx.--empty-class(match-empty).re"
+	{ RETURN(SU_ERROR); }
+#line 139 "rexx.--empty-class(match-empty).c"
+yy7:
+	++YYCURSOR;
 #line 68 "rexx.--empty-class(match-empty).re"
 	{
 		++(ScanCB.lineNum);
 		ScanCB.linePos = ScanCB.pos + (cursor - ScanCB.mrk);
 		RETURN(SU_EOL);
 	    }
-#line 137 "rexx.--empty-class(match-empty).c"
-yy5:
+#line 148 "rexx.--empty-class(match-empty).c"
+yy9:
+	++YYCURSOR;
+	yych = *YYCURSOR;
+	goto yy67;
+yy10:
+#line 249 "rexx.--empty-class(match-empty).re"
+	{ RETURN(SU_SYMBOL); }
+#line 156 "rexx.--empty-class(match-empty).c"
+yy11:
 	yyaccept = 0;
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
-	case '\t':
-	case ' ':	goto yy423;
-	case '|':	goto yy425;
-	default:	goto yy6;
+	case 0x00:
+	case '\n':	goto yy6;
+	default:	goto yy71;
 	}
-yy6:
-#line 116 "rexx.--empty-class(match-empty).re"
-	{ RETURN(OP_OR); }
-#line 150 "rexx.--empty-class(match-empty).c"
-yy7:
+yy12:
 	++YYCURSOR;
-#line 76 "rexx.--empty-class(match-empty).re"
-	{ RETURN(OP_PLUS); }
-#line 155 "rexx.--empty-class(match-empty).c"
-yy9:
-	++YYCURSOR;
-#line 78 "rexx.--empty-class(match-empty).re"
-	{ RETURN(OP_MINUS); }
-#line 160 "rexx.--empty-class(match-empty).c"
-yy11:
+#line 84 "rexx.--empty-class(match-empty).re"
+	{ RETURN(OP_IDIV); }
+#line 169 "rexx.--empty-class(match-empty).c"
+yy14:
 	yyaccept = 1;
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
 	case '\t':
-	case ' ':	goto yy419;
-	case '*':	goto yy421;
-	default:	goto yy12;
+	case ' ':	goto yy75;
+	case '&':	goto yy77;
+	default:	goto yy15;
 	}
-yy12:
-#line 80 "rexx.--empty-class(match-empty).re"
-	{ RETURN(OP_MULT); }
-#line 173 "rexx.--empty-class(match-empty).c"
-yy13:
+yy15:
+#line 114 "rexx.--empty-class(match-empty).re"
+	{ RETURN(OP_AND); }
+#line 182 "rexx.--empty-class(match-empty).c"
+yy16:
+	yyaccept = 0;
+	yych = *(YYMARKER = ++YYCURSOR);
+	switch (yych) {
+	case 0x00:
+	case '\n':	goto yy6;
+	default:	goto yy80;
+	}
+yy17:
+	++YYCURSOR;
+#line 127 "rexx.--empty-class(match-empty).re"
+	{ RETURN(SU_POPEN); }
+#line 195 "rexx.--empty-class(match-empty).c"
+yy19:
+	++YYCURSOR;
+#line 129 "rexx.--empty-class(match-empty).re"
+	{ RETURN(SU_PCLOSE); }
+#line 200 "rexx.--empty-class(match-empty).c"
+yy21:
 	yyaccept = 2;
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
 	case '\t':
-	case ' ':	goto yy415;
-	case '/':	goto yy417;
-	default:	goto yy14;
+	case ' ':	goto yy82;
+	case '*':	goto yy84;
+	default:	goto yy22;
 	}
-yy14:
-#line 82 "rexx.--empty-class(match-empty).re"
-	{ RETURN(OP_DIV); }
-#line 186 "rexx.--empty-class(match-empty).c"
-yy15:
+yy22:
+#line 80 "rexx.--empty-class(match-empty).re"
+	{ RETURN(OP_MULT); }
+#line 213 "rexx.--empty-class(match-empty).c"
+yy23:
 	++YYCURSOR;
-#line 84 "rexx.--empty-class(match-empty).re"
-	{ RETURN(OP_IDIV); }
-#line 191 "rexx.--empty-class(match-empty).c"
-yy17:
+#line 76 "rexx.--empty-class(match-empty).re"
+	{ RETURN(OP_PLUS); }
+#line 218 "rexx.--empty-class(match-empty).c"
+yy25:
+	++YYCURSOR;
+#line 125 "rexx.--empty-class(match-empty).re"
+	{ RETURN(SU_COMMA); }
+#line 223 "rexx.--empty-class(match-empty).c"
+yy27:
+	++YYCURSOR;
+#line 78 "rexx.--empty-class(match-empty).re"
+	{ RETURN(OP_MINUS); }
+#line 228 "rexx.--empty-class(match-empty).c"
+yy29:
+	++YYCURSOR;
+	yych = *YYCURSOR;
+	goto yy87;
+yy30:
+#line 247 "rexx.--empty-class(match-empty).re"
+	{ RETURN(SU_CONST); }
+#line 236 "rexx.--empty-class(match-empty).c"
+yy31:
 	yyaccept = 3;
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
 	case '\t':
-	case ' ':	goto yy411;
-	case '=':	goto yy413;
-	default:	goto yy18;
+	case ' ':	goto yy90;
+	case '/':	goto yy92;
+	default:	goto yy32;
 	}
-yy18:
-#line 90 "rexx.--empty-class(match-empty).re"
-	{ RETURN(OP_EQUAL); }
-#line 204 "rexx.--empty-class(match-empty).c"
-yy19:
+yy32:
+#line 82 "rexx.--empty-class(match-empty).re"
+	{ RETURN(OP_DIV); }
+#line 249 "rexx.--empty-class(match-empty).c"
+yy33:
+	++YYCURSOR;
+#line 123 "rexx.--empty-class(match-empty).re"
+	{ RETURN(SU_COLON); }
+#line 254 "rexx.--empty-class(match-empty).c"
+yy35:
+	++YYCURSOR;
+#line 131 "rexx.--empty-class(match-empty).re"
+	{ RETURN(SU_EOC); }
+#line 259 "rexx.--empty-class(match-empty).c"
+yy37:
 	yyaccept = 4;
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -209,29 +264,27 @@ yy19:
 	case ' ':
 	case '<':
 	case '=':
-	case '>':	goto yy399;
-	default:	goto yy20;
+	case '>':	goto yy95;
+	default:	goto yy38;
 	}
-yy20:
-#line 120 "rexx.--empty-class(match-empty).re"
-	{ RETURN(OP_NOT); }
-#line 219 "rexx.--empty-class(match-empty).c"
-yy21:
+yy38:
+#line 96 "rexx.--empty-class(match-empty).re"
+	{ RETURN(OP_LT); }
+#line 274 "rexx.--empty-class(match-empty).c"
+yy39:
 	yyaccept = 5;
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
 	case '\t':
-	case ' ':
-	case '<':
-	case '=':
-	case '>':	goto yy389;
-	default:	goto yy22;
+	case ' ':	goto yy102;
+	case '=':	goto yy104;
+	default:	goto yy40;
 	}
-yy22:
-#line 96 "rexx.--empty-class(match-empty).re"
-	{ RETURN(OP_LT); }
-#line 234 "rexx.--empty-class(match-empty).c"
-yy23:
+yy40:
+#line 90 "rexx.--empty-class(match-empty).re"
+	{ RETURN(OP_EQUAL); }
+#line 287 "rexx.--empty-class(match-empty).c"
+yy41:
 	yyaccept = 6;
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -239,586 +292,305 @@ yy23:
 	case ' ':
 	case '<':
 	case '=':
-	case '>':	goto yy377;
-	default:	goto yy24;
-	}
-yy24:
-#line 94 "rexx.--empty-class(match-empty).re"
-	{ RETURN(OP_GT); }
-#line 249 "rexx.--empty-class(match-empty).c"
-yy25:
-	yyaccept = 7;
-	yych = *(YYMARKER = ++YYCURSOR);
-	switch (yych) {
-	case '\t':
-	case ' ':	goto yy372;
-	case '&':	goto yy374;
-	default:	goto yy26;
-	}
-yy26:
-#line 114 "rexx.--empty-class(match-empty).re"
-	{ RETURN(OP_AND); }
-#line 262 "rexx.--empty-class(match-empty).c"
-yy27:
-	++YYCURSOR;
-#line 123 "rexx.--empty-class(match-empty).re"
-	{ RETURN(SU_COLON); }
-#line 267 "rexx.--empty-class(match-empty).c"
-yy29:
-	++YYCURSOR;
-#line 125 "rexx.--empty-class(match-empty).re"
-	{ RETURN(SU_COMMA); }
-#line 272 "rexx.--empty-class(match-empty).c"
-yy31:
-	++YYCURSOR;
-#line 127 "rexx.--empty-class(match-empty).re"
-	{ RETURN(SU_POPEN); }
-#line 277 "rexx.--empty-class(match-empty).c"
-yy33:
-	++YYCURSOR;
-#line 129 "rexx.--empty-class(match-empty).re"
-	{ RETURN(SU_PCLOSE); }
-#line 282 "rexx.--empty-class(match-empty).c"
-yy35:
-	++YYCURSOR;
-#line 131 "rexx.--empty-class(match-empty).re"
-	{ RETURN(SU_EOC); }
-#line 287 "rexx.--empty-class(match-empty).c"
-yy37:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
-	case 'D':
-	case 'd':	goto yy362;
-	case 'R':
-	case 'r':	goto yy363;
-	default:	goto yy81;
-	}
-yy38:
-#line 249 "rexx.--empty-class(match-empty).re"
-	{ RETURN(SU_SYMBOL); }
-#line 300 "rexx.--empty-class(match-empty).c"
-yy39:
-	yych = *++YYCURSOR;
-	switch (yych) {
-	case 'A':
-	case 'a':	goto yy358;
-	default:	goto yy81;
-	}
-yy40:
-	yych = *++YYCURSOR;
-	switch (yych) {
-	case 'I':
-	case 'i':	goto yy346;
-	case 'O':
-	case 'o':	goto yy347;
-	case 'R':
-	case 'r':	goto yy349;
-	default:	goto yy81;
-	}
-yy41:
-	yych = *++YYCURSOR;
-	switch (yych) {
-	case 'L':
-	case 'l':	goto yy315;
-	case 'N':
-	case 'n':	goto yy316;
-	case 'R':
-	case 'r':	goto yy317;
-	case 'X':
-	case 'x':	goto yy318;
-	default:	goto yy81;
+	case '>':	goto yy107;
+	default:	goto yy42;
 	}
 yy42:
-	yych = *++YYCURSOR;
-	switch (yych) {
-	case 'F':
-	case 'f':	goto yy297;
-	case 'N':
-	case 'n':	goto yy299;
-	case 'T':
-	case 't':	goto yy300;
-	default:	goto yy81;
-	}
+#line 94 "rexx.--empty-class(match-empty).re"
+	{ RETURN(OP_GT); }
+#line 302 "rexx.--empty-class(match-empty).c"
 yy43:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case 'E':
-	case 'e':	goto yy286;
-	case 'I':
-	case 'i':	goto yy287;
-	default:	goto yy81;
+	case 'D':
+	case 'd':	goto yy112;
+	case 'R':
+	case 'r':	goto yy113;
+	default:	goto yy67;
 	}
 yy44:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case 'A':
-	case 'a':	goto yy259;
-	case 'O':
-	case 'o':	goto yy260;
-	case 'U':
-	case 'u':	goto yy261;
-	default:	goto yy81;
+	case 'Y':
+	case 'y':	goto yy114;
+	default:	goto yy67;
 	}
 yy45:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case 'F':
-	case 'f':	goto yy238;
-	case 'N':
-	case 'n':	goto yy239;
-	case 'P':
-	case 'p':	goto yy241;
-	case 'T':
-	case 't':	goto yy242;
-	default:	goto yy81;
+	case 'A':
+	case 'a':	goto yy116;
+	default:	goto yy67;
 	}
 yy46:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case 'A':
-	case 'a':	goto yy217;
+	case 'I':
+	case 'i':	goto yy117;
+	case 'O':
+	case 'o':	goto yy118;
 	case 'R':
-	case 'r':	goto yy218;
-	case 'U':
-	case 'u':	goto yy219;
-	default:	goto yy81;
+	case 'r':	goto yy120;
+	default:	goto yy67;
 	}
 yy47:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case 'U':
-	case 'u':	goto yy212;
-	default:	goto yy81;
+	case 'L':
+	case 'l':	goto yy121;
+	case 'N':
+	case 'n':	goto yy122;
+	case 'R':
+	case 'r':	goto yy123;
+	case 'X':
+	case 'x':	goto yy124;
+	default:	goto yy67;
 	}
 yy48:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case 'E':
-	case 'e':	goto yy206;
-	default:	goto yy81;
+	case 'A':
+	case 'a':	goto yy125;
+	case 'O':
+	case 'o':	goto yy126;
+	case 'U':
+	case 'u':	goto yy127;
+	default:	goto yy67;
 	}
 yy49:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'A':
-	case 'a':	goto yy169;
-	case 'C':
-	case 'c':	goto yy170;
-	case 'E':
-	case 'e':	goto yy171;
-	case 'I':
-	case 'i':	goto yy172;
-	case 'O':
-	case 'o':	goto yy173;
-	case 'Y':
-	case 'y':	goto yy174;
-	default:	goto yy81;
+	case 'a':	goto yy128;
+	default:	goto yy67;
 	}
 yy50:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case 'H':
-	case 'h':	goto yy158;
-	case 'O':
-	case 'o':	goto yy159;
-	case 'R':
-	case 'r':	goto yy161;
-	default:	goto yy81;
+	case 'F':
+	case 'f':	goto yy129;
+	case 'N':
+	case 'n':	goto yy131;
+	case 'T':
+	case 't':	goto yy132;
+	default:	goto yy67;
 	}
 yy51:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case 'H':
-	case 'h':	goto yy146;
+	case 'E':
+	case 'e':	goto yy133;
 	case 'I':
-	case 'i':	goto yy147;
-	default:	goto yy81;
+	case 'i':	goto yy134;
+	default:	goto yy67;
 	}
 yy52:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case 'Y':
-	case 'y':	goto yy144;
-	default:	goto yy81;
+	case 'A':
+	case 'a':	goto yy135;
+	case 'O':
+	case 'o':	goto yy136;
+	case 'U':
+	case 'u':	goto yy137;
+	default:	goto yy67;
 	}
 yy53:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case 'A':
-	case 'a':	goto yy123;
-	case 'O':
-	case 'o':	goto yy124;
-	case 'U':
-	case 'u':	goto yy125;
-	default:	goto yy81;
+	case 'F':
+	case 'f':	goto yy138;
+	case 'N':
+	case 'n':	goto yy139;
+	case 'P':
+	case 'p':	goto yy141;
+	case 'T':
+	case 't':	goto yy142;
+	default:	goto yy67;
 	}
 yy54:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'A':
-	case 'a':	goto yy119;
-	default:	goto yy81;
+	case 'a':	goto yy143;
+	case 'R':
+	case 'r':	goto yy144;
+	case 'U':
+	case 'u':	goto yy145;
+	default:	goto yy67;
 	}
 yy55:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case 'N':
-	case 'n':	goto yy109;
-	case 'P':
-	case 'p':	goto yy110;
-	default:	goto yy81;
+	case 'U':
+	case 'u':	goto yy146;
+	default:	goto yy67;
 	}
 yy56:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case 'A':
-	case 'a':	goto yy95;
 	case 'E':
-	case 'e':	goto yy96;
-	default:	goto yy81;
-	}
-yy57:
-	++YYCURSOR;
-	yych = *YYCURSOR;
-	goto yy87;
-yy58:
-#line 247 "rexx.--empty-class(match-empty).re"
-	{ RETURN(SU_CONST); }
-#line 488 "rexx.--empty-class(match-empty).c"
-yy59:
-	yych = *++YYCURSOR;
-	goto yy81;
-yy60:
-	yyaccept = 8;
-	yych = *(YYMARKER = ++YYCURSOR);
-	switch (yych) {
-	case 0x00:
-	case '\n':	goto yy61;
-	default:	goto yy78;
-	}
-yy61:
-#line 264 "rexx.--empty-class(match-empty).re"
-	{ RETURN(SU_ERROR); }
-#line 503 "rexx.--empty-class(match-empty).c"
-yy62:
-	yyaccept = 8;
-	yych = *(YYMARKER = ++YYCURSOR);
-	switch (yych) {
-	case 0x00:
-	case '\n':	goto yy61;
+	case 'e':	goto yy147;
 	default:	goto yy67;
 	}
-yy63:
-	++YYCURSOR;
-#line 262 "rexx.--empty-class(match-empty).re"
-	{ RETURN(SU_EOF); }
-#line 516 "rexx.--empty-class(match-empty).c"
-yy65:
+yy57:
 	yych = *++YYCURSOR;
-	goto yy61;
+	switch (yych) {
+	case 'A':
+	case 'a':	goto yy148;
+	case 'C':
+	case 'c':	goto yy149;
+	case 'E':
+	case 'e':	goto yy150;
+	case 'I':
+	case 'i':	goto yy151;
+	case 'O':
+	case 'o':	goto yy152;
+	case 'Y':
+	case 'y':	goto yy153;
+	default:	goto yy67;
+	}
+yy58:
+	yych = *++YYCURSOR;
+	switch (yych) {
+	case 'H':
+	case 'h':	goto yy154;
+	case 'O':
+	case 'o':	goto yy155;
+	case 'R':
+	case 'r':	goto yy157;
+	default:	goto yy67;
+	}
+yy59:
+	yych = *++YYCURSOR;
+	switch (yych) {
+	case 'N':
+	case 'n':	goto yy158;
+	case 'P':
+	case 'p':	goto yy159;
+	default:	goto yy67;
+	}
+yy60:
+	yych = *++YYCURSOR;
+	switch (yych) {
+	case 'A':
+	case 'a':	goto yy160;
+	case 'E':
+	case 'e':	goto yy161;
+	default:	goto yy67;
+	}
+yy61:
+	yych = *++YYCURSOR;
+	switch (yych) {
+	case 'H':
+	case 'h':	goto yy162;
+	case 'I':
+	case 'i':	goto yy163;
+	default:	goto yy67;
+	}
+yy62:
+	yyaccept = 7;
+	yych = *(YYMARKER = ++YYCURSOR);
+	switch (yych) {
+	case '\t':
+	case ' ':
+	case '<':
+	case '=':
+	case '>':	goto yy165;
+	default:	goto yy63;
+	}
+yy63:
+#line 120 "rexx.--empty-class(match-empty).re"
+	{ RETURN(OP_NOT); }
+#line 506 "rexx.--empty-class(match-empty).c"
+yy64:
+	yyaccept = 8;
+	yych = *(YYMARKER = ++YYCURSOR);
+	switch (yych) {
+	case '\t':
+	case ' ':	goto yy169;
+	case '|':	goto yy171;
+	default:	goto yy65;
+	}
+yy65:
+#line 116 "rexx.--empty-class(match-empty).re"
+	{ RETURN(OP_OR); }
+#line 519 "rexx.--empty-class(match-empty).c"
 yy66:
 	++YYCURSOR;
-	if (YYLIMIT <= YYCURSOR) YYFILL(1);
+	if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
 	yych = *YYCURSOR;
 yy67:
 	switch (yych) {
-	case 0x00:
-	case '\n':	goto yy68;
-	case '"':	goto yy69;
-	default:	goto yy66;
+	case '!':
+	case '0':
+	case '1':
+	case '2':
+	case '3':
+	case '4':
+	case '5':
+	case '6':
+	case '7':
+	case '8':
+	case '9':
+	case '?':
+	case 'A':
+	case 'B':
+	case 'C':
+	case 'D':
+	case 'E':
+	case 'F':
+	case 'G':
+	case 'H':
+	case 'I':
+	case 'J':
+	case 'K':
+	case 'L':
+	case 'M':
+	case 'N':
+	case 'O':
+	case 'P':
+	case 'Q':
+	case 'R':
+	case 'S':
+	case 'T':
+	case 'U':
+	case 'V':
+	case 'W':
+	case 'X':
+	case 'Y':
+	case 'Z':
+	case '_':
+	case 'a':
+	case 'b':
+	case 'c':
+	case 'd':
+	case 'e':
+	case 'f':
+	case 'g':
+	case 'h':
+	case 'i':
+	case 'j':
+	case 'k':
+	case 'l':
+	case 'm':
+	case 'n':
+	case 'o':
+	case 'p':
+	case 'q':
+	case 'r':
+	case 's':
+	case 't':
+	case 'u':
+	case 'v':
+	case 'w':
+	case 'x':
+	case 'y':
+	case 'z':	goto yy66;
+	case '.':	goto yy68;
+	default:	goto yy10;
 	}
 yy68:
-	YYCURSOR = YYMARKER;
-	switch (yyaccept) {
-	case 0: 	goto yy6;
-	case 1: 	goto yy12;
-	case 2: 	goto yy14;
-	case 3: 	goto yy18;
-	case 4: 	goto yy20;
-	case 5: 	goto yy22;
-	case 6: 	goto yy24;
-	case 7: 	goto yy26;
-	case 8: 	goto yy61;
-	case 9: 	goto yy70;
-	case 10: 	goto yy58;
-	case 11: 	goto yy379;
-	case 12: 	goto yy391;
-	case 13: 	goto yy393;
-	case 14: 	goto yy381;
-	default:	goto yy383;
-	}
-yy69:
-	yyaccept = 9;
-	YYMARKER = ++YYCURSOR;
-	if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
-	yych = *YYCURSOR;
-	switch (yych) {
-	case '"':	goto yy66;
-	case 'B':
-	case 'b':	goto yy71;
-	case 'X':
-	case 'x':	goto yy72;
-	default:	goto yy70;
-	}
-yy70:
-#line 255 "rexx.--empty-class(match-empty).re"
-	{ RETURN(SU_LITERAL); }
-#line 567 "rexx.--empty-class(match-empty).c"
-yy71:
-	yych = *++YYCURSOR;
-	YYCTXMARKER = YYCURSOR;
-	switch (yych) {
-	case '!':
-	case '.':
-	case '0':
-	case '1':
-	case '2':
-	case '3':
-	case '4':
-	case '5':
-	case '6':
-	case '7':
-	case '8':
-	case '9':
-	case '?':
-	case 'A':
-	case 'B':
-	case 'C':
-	case 'D':
-	case 'E':
-	case 'F':
-	case 'G':
-	case 'H':
-	case 'I':
-	case 'J':
-	case 'K':
-	case 'L':
-	case 'M':
-	case 'N':
-	case 'O':
-	case 'P':
-	case 'Q':
-	case 'R':
-	case 'S':
-	case 'T':
-	case 'U':
-	case 'V':
-	case 'W':
-	case 'X':
-	case 'Y':
-	case 'Z':
-	case '_':
-	case 'a':
-	case 'b':
-	case 'c':
-	case 'd':
-	case 'e':
-	case 'f':
-	case 'g':
-	case 'h':
-	case 'i':
-	case 'j':
-	case 'k':
-	case 'l':
-	case 'm':
-	case 'n':
-	case 'o':
-	case 'p':
-	case 'q':
-	case 'r':
-	case 's':
-	case 't':
-	case 'u':
-	case 'v':
-	case 'w':
-	case 'x':
-	case 'y':
-	case 'z':	goto yy68;
-	default:	goto yy75;
-	}
-yy72:
-	yych = *++YYCURSOR;
-	YYCTXMARKER = YYCURSOR;
-	switch (yych) {
-	case '!':
-	case '.':
-	case '0':
-	case '1':
-	case '2':
-	case '3':
-	case '4':
-	case '5':
-	case '6':
-	case '7':
-	case '8':
-	case '9':
-	case '?':
-	case 'A':
-	case 'B':
-	case 'C':
-	case 'D':
-	case 'E':
-	case 'F':
-	case 'G':
-	case 'H':
-	case 'I':
-	case 'J':
-	case 'K':
-	case 'L':
-	case 'M':
-	case 'N':
-	case 'O':
-	case 'P':
-	case 'Q':
-	case 'R':
-	case 'S':
-	case 'T':
-	case 'U':
-	case 'V':
-	case 'W':
-	case 'X':
-	case 'Y':
-	case 'Z':
-	case '_':
-	case 'a':
-	case 'b':
-	case 'c':
-	case 'd':
-	case 'e':
-	case 'f':
-	case 'g':
-	case 'h':
-	case 'i':
-	case 'j':
-	case 'k':
-	case 'l':
-	case 'm':
-	case 'n':
-	case 'o':
-	case 'p':
-	case 'q':
-	case 'r':
-	case 's':
-	case 't':
-	case 'u':
-	case 'v':
-	case 'w':
-	case 'x':
-	case 'y':
-	case 'z':	goto yy68;
-	default:	goto yy73;
-	}
-yy73:
-	++YYCURSOR;
-	YYCURSOR = YYCTXMARKER;
-#line 259 "rexx.--empty-class(match-empty).re"
-	{ RETURN(SU_LITERAL_HEX); }
-#line 717 "rexx.--empty-class(match-empty).c"
-yy75:
-	++YYCURSOR;
-	YYCURSOR = YYCTXMARKER;
-#line 257 "rexx.--empty-class(match-empty).re"
-	{ RETURN(SU_LITERAL_BIN); }
-#line 723 "rexx.--empty-class(match-empty).c"
-yy77:
-	++YYCURSOR;
-	if (YYLIMIT <= YYCURSOR) YYFILL(1);
-	yych = *YYCURSOR;
-yy78:
-	switch (yych) {
-	case 0x00:
-	case '\n':	goto yy68;
-	case '\'':	goto yy79;
-	default:	goto yy77;
-	}
-yy79:
-	yyaccept = 9;
-	YYMARKER = ++YYCURSOR;
-	if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
-	yych = *YYCURSOR;
-	switch (yych) {
-	case '\'':	goto yy77;
-	case 'B':
-	case 'b':	goto yy71;
-	case 'X':
-	case 'x':	goto yy72;
-	default:	goto yy70;
-	}
-yy80:
-	++YYCURSOR;
-	if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
-	yych = *YYCURSOR;
-yy81:
-	switch (yych) {
-	case '!':
-	case '0':
-	case '1':
-	case '2':
-	case '3':
-	case '4':
-	case '5':
-	case '6':
-	case '7':
-	case '8':
-	case '9':
-	case '?':
-	case 'A':
-	case 'B':
-	case 'C':
-	case 'D':
-	case 'E':
-	case 'F':
-	case 'G':
-	case 'H':
-	case 'I':
-	case 'J':
-	case 'K':
-	case 'L':
-	case 'M':
-	case 'N':
-	case 'O':
-	case 'P':
-	case 'Q':
-	case 'R':
-	case 'S':
-	case 'T':
-	case 'U':
-	case 'V':
-	case 'W':
-	case 'X':
-	case 'Y':
-	case 'Z':
-	case '_':
-	case 'a':
-	case 'b':
-	case 'c':
-	case 'd':
-	case 'e':
-	case 'f':
-	case 'g':
-	case 'h':
-	case 'i':
-	case 'j':
-	case 'k':
-	case 'l':
-	case 'm':
-	case 'n':
-	case 'o':
-	case 'p':
-	case 'q':
-	case 'r':
-	case 's':
-	case 't':
-	case 'u':
-	case 'v':
-	case 'w':
-	case 'x':
-	case 'y':
-	case 'z':	goto yy80;
-	case '.':	goto yy82;
-	default:	goto yy38;
-	}
-yy82:
 	++YYCURSOR;
 	switch ((yych = *YYCURSOR)) {
 	case '!':
@@ -886,86 +658,115 @@ yy82:
 	case 'w':
 	case 'x':
 	case 'y':
-	case 'z':	goto yy84;
-	default:	goto yy83;
+	case 'z':	goto yy173;
+	default:	goto yy69;
 	}
-yy83:
+yy69:
 #line 251 "rexx.--empty-class(match-empty).re"
 	{ RETURN(SU_SYMBOL_STEM); }
-#line 896 "rexx.--empty-class(match-empty).c"
-yy84:
+#line 668 "rexx.--empty-class(match-empty).c"
+yy70:
+	++YYCURSOR;
+	if (YYLIMIT <= YYCURSOR) YYFILL(1);
+	yych = *YYCURSOR;
+yy71:
+	switch (yych) {
+	case 0x00:
+	case '\n':	goto yy72;
+	case '"':	goto yy73;
+	default:	goto yy70;
+	}
+yy72:
+	YYCURSOR = YYMARKER;
+	switch (yyaccept) {
+	case 0: 	goto yy6;
+	case 1: 	goto yy15;
+	case 2: 	goto yy22;
+	case 3: 	goto yy32;
+	case 4: 	goto yy38;
+	case 5: 	goto yy40;
+	case 6: 	goto yy42;
+	case 7: 	goto yy63;
+	case 8: 	goto yy65;
+	case 9: 	goto yy74;
+	case 10: 	goto yy30;
+	case 11: 	goto yy97;
+	case 12: 	goto yy111;
+	case 13: 	goto yy109;
+	case 14: 	goto yy101;
+	default:	goto yy99;
+	}
+yy73:
+	yyaccept = 9;
+	YYMARKER = ++YYCURSOR;
+	if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
+	yych = *YYCURSOR;
+	switch (yych) {
+	case '"':	goto yy70;
+	case 'B':
+	case 'b':	goto yy175;
+	case 'X':
+	case 'x':	goto yy176;
+	default:	goto yy74;
+	}
+yy74:
+#line 255 "rexx.--empty-class(match-empty).re"
+	{ RETURN(SU_LITERAL); }
+#line 716 "rexx.--empty-class(match-empty).c"
+yy75:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	switch (yych) {
-	case '!':
-	case '.':
-	case '0':
-	case '1':
-	case '2':
-	case '3':
-	case '4':
-	case '5':
-	case '6':
-	case '7':
-	case '8':
-	case '9':
-	case '?':
-	case 'A':
-	case 'B':
-	case 'C':
-	case 'D':
-	case 'E':
-	case 'F':
-	case 'G':
-	case 'H':
-	case 'I':
-	case 'J':
-	case 'K':
-	case 'L':
-	case 'M':
-	case 'N':
-	case 'O':
-	case 'P':
-	case 'Q':
-	case 'R':
-	case 'S':
-	case 'T':
-	case 'U':
-	case 'V':
-	case 'W':
-	case 'X':
-	case 'Y':
-	case 'Z':
-	case '_':
-	case 'a':
-	case 'b':
-	case 'c':
-	case 'd':
-	case 'e':
-	case 'f':
-	case 'g':
-	case 'h':
-	case 'i':
-	case 'j':
-	case 'k':
-	case 'l':
-	case 'm':
-	case 'n':
-	case 'o':
-	case 'p':
-	case 'q':
-	case 'r':
-	case 's':
-	case 't':
-	case 'u':
-	case 'v':
-	case 'w':
-	case 'x':
-	case 'y':
-	case 'z':	goto yy84;
-	default:	goto yy2;
+	case '\t':
+	case ' ':	goto yy75;
+	case '&':	goto yy77;
+	default:	goto yy72;
 	}
+yy77:
+	++YYCURSOR;
+#line 118 "rexx.--empty-class(match-empty).re"
+	{ RETURN(OP_XOR); }
+#line 731 "rexx.--empty-class(match-empty).c"
+yy79:
+	++YYCURSOR;
+	if (YYLIMIT <= YYCURSOR) YYFILL(1);
+	yych = *YYCURSOR;
+yy80:
+	switch (yych) {
+	case 0x00:
+	case '\n':	goto yy72;
+	case '\'':	goto yy81;
+	default:	goto yy79;
+	}
+yy81:
+	yyaccept = 9;
+	YYMARKER = ++YYCURSOR;
+	if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
+	yych = *YYCURSOR;
+	switch (yych) {
+	case '\'':	goto yy79;
+	case 'B':
+	case 'b':	goto yy175;
+	case 'X':
+	case 'x':	goto yy176;
+	default:	goto yy74;
+	}
+yy82:
+	++YYCURSOR;
+	if (YYLIMIT <= YYCURSOR) YYFILL(1);
+	yych = *YYCURSOR;
+	switch (yych) {
+	case '\t':
+	case ' ':	goto yy82;
+	case '*':	goto yy84;
+	default:	goto yy72;
+	}
+yy84:
+	++YYCURSOR;
+#line 88 "rexx.--empty-class(match-empty).re"
+	{ RETURN(OP_POWER); }
+#line 770 "rexx.--empty-class(match-empty).c"
 yy86:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
@@ -1038,7 +839,7 @@ yy87:
 	case 'z':	goto yy86;
 	case 'E':
 	case 'e':	goto yy88;
-	default:	goto yy58;
+	default:	goto yy30;
 	}
 yy88:
 	yyaccept = 10;
@@ -1101,7 +902,7 @@ yy88:
 	case 'y':
 	case 'z':	goto yy86;
 	case '+':
-	case '-':	goto yy90;
+	case '-':	goto yy177;
 	case '0':
 	case '1':
 	case '2':
@@ -1111,12 +912,1067 @@ yy88:
 	case '6':
 	case '7':
 	case '8':
-	case '9':	goto yy91;
+	case '9':	goto yy178;
 	case 'E':
 	case 'e':	goto yy88;
-	default:	goto yy58;
+	default:	goto yy30;
 	}
 yy90:
+	++YYCURSOR;
+	if (YYLIMIT <= YYCURSOR) YYFILL(1);
+	yych = *YYCURSOR;
+	switch (yych) {
+	case '\t':
+	case ' ':	goto yy90;
+	case '/':	goto yy92;
+	default:	goto yy72;
+	}
+yy92:
+	++YYCURSOR;
+#line 86 "rexx.--empty-class(match-empty).re"
+	{ RETURN(OP_REMAIN); }
+#line 935 "rexx.--empty-class(match-empty).c"
+yy94:
+	++YYCURSOR;
+	if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
+	yych = *YYCURSOR;
+yy95:
+	switch (yych) {
+	case '\t':
+	case ' ':	goto yy94;
+	case '<':	goto yy96;
+	case '=':	goto yy98;
+	case '>':	goto yy100;
+	default:	goto yy72;
+	}
+yy96:
+	yyaccept = 11;
+	yych = *(YYMARKER = ++YYCURSOR);
+	switch (yych) {
+	case '\t':
+	case ' ':	goto yy180;
+	case '=':	goto yy182;
+	default:	goto yy97;
+	}
+yy97:
+#line 108 "rexx.--empty-class(match-empty).re"
+	{ RETURN(OP_LT_STRICT); }
+#line 961 "rexx.--empty-class(match-empty).c"
+yy98:
+	++YYCURSOR;
+yy99:
+#line 100 "rexx.--empty-class(match-empty).re"
+	{ RETURN(OP_LE); }
+#line 967 "rexx.--empty-class(match-empty).c"
+yy100:
+	++YYCURSOR;
+yy101:
+#line 92 "rexx.--empty-class(match-empty).re"
+	{ RETURN(OP_EQUAL_N); }
+#line 973 "rexx.--empty-class(match-empty).c"
+yy102:
+	++YYCURSOR;
+	if (YYLIMIT <= YYCURSOR) YYFILL(1);
+	yych = *YYCURSOR;
+	switch (yych) {
+	case '\t':
+	case ' ':	goto yy102;
+	case '=':	goto yy104;
+	default:	goto yy72;
+	}
+yy104:
+	++YYCURSOR;
+#line 102 "rexx.--empty-class(match-empty).re"
+	{ RETURN(OP_EQUAL_EQ); }
+#line 988 "rexx.--empty-class(match-empty).c"
+yy106:
+	++YYCURSOR;
+	if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
+	yych = *YYCURSOR;
+yy107:
+	switch (yych) {
+	case '\t':
+	case ' ':	goto yy106;
+	case '<':	goto yy100;
+	case '=':	goto yy108;
+	case '>':	goto yy110;
+	default:	goto yy72;
+	}
+yy108:
+	++YYCURSOR;
+yy109:
+#line 98 "rexx.--empty-class(match-empty).re"
+	{ RETURN(OP_GE); }
+#line 1007 "rexx.--empty-class(match-empty).c"
+yy110:
+	yyaccept = 12;
+	yych = *(YYMARKER = ++YYCURSOR);
+	switch (yych) {
+	case '\t':
+	case ' ':	goto yy184;
+	case '=':	goto yy186;
+	default:	goto yy111;
+	}
+yy111:
+#line 106 "rexx.--empty-class(match-empty).re"
+	{ RETURN(OP_GT_STRICT); }
+#line 1020 "rexx.--empty-class(match-empty).c"
+yy112:
+	yych = *++YYCURSOR;
+	switch (yych) {
+	case 'D':
+	case 'd':	goto yy188;
+	default:	goto yy67;
+	}
+yy113:
+	yych = *++YYCURSOR;
+	switch (yych) {
+	case 'G':
+	case 'g':	goto yy189;
+	default:	goto yy67;
+	}
+yy114:
+	++YYCURSOR;
+	switch ((yych = *YYCURSOR)) {
+	case '!':
+	case '0':
+	case '1':
+	case '2':
+	case '3':
+	case '4':
+	case '5':
+	case '6':
+	case '7':
+	case '8':
+	case '9':
+	case '?':
+	case 'A':
+	case 'B':
+	case 'C':
+	case 'D':
+	case 'E':
+	case 'F':
+	case 'G':
+	case 'H':
+	case 'I':
+	case 'J':
+	case 'K':
+	case 'L':
+	case 'M':
+	case 'N':
+	case 'O':
+	case 'P':
+	case 'Q':
+	case 'R':
+	case 'S':
+	case 'T':
+	case 'U':
+	case 'V':
+	case 'W':
+	case 'X':
+	case 'Y':
+	case 'Z':
+	case '_':
+	case 'a':
+	case 'b':
+	case 'c':
+	case 'd':
+	case 'e':
+	case 'f':
+	case 'g':
+	case 'h':
+	case 'i':
+	case 'j':
+	case 'k':
+	case 'l':
+	case 'm':
+	case 'n':
+	case 'o':
+	case 'p':
+	case 'q':
+	case 'r':
+	case 's':
+	case 't':
+	case 'u':
+	case 'v':
+	case 'w':
+	case 'x':
+	case 'y':
+	case 'z':	goto yy66;
+	case '.':	goto yy68;
+	default:	goto yy115;
+	}
+yy115:
+#line 194 "rexx.--empty-class(match-empty).re"
+	{ RETURN(RXS_BY); }
+#line 1109 "rexx.--empty-class(match-empty).c"
+yy116:
+	yych = *++YYCURSOR;
+	switch (yych) {
+	case 'L':
+	case 'l':	goto yy191;
+	default:	goto yy67;
+	}
+yy117:
+	yych = *++YYCURSOR;
+	switch (yych) {
+	case 'G':
+	case 'g':	goto yy192;
+	default:	goto yy67;
+	}
+yy118:
+	++YYCURSOR;
+	switch ((yych = *YYCURSOR)) {
+	case '!':
+	case '0':
+	case '1':
+	case '2':
+	case '3':
+	case '4':
+	case '5':
+	case '6':
+	case '7':
+	case '8':
+	case '9':
+	case '?':
+	case 'A':
+	case 'B':
+	case 'C':
+	case 'D':
+	case 'E':
+	case 'F':
+	case 'G':
+	case 'H':
+	case 'I':
+	case 'J':
+	case 'K':
+	case 'L':
+	case 'M':
+	case 'N':
+	case 'O':
+	case 'P':
+	case 'Q':
+	case 'R':
+	case 'S':
+	case 'T':
+	case 'U':
+	case 'V':
+	case 'W':
+	case 'X':
+	case 'Y':
+	case 'Z':
+	case '_':
+	case 'a':
+	case 'b':
+	case 'c':
+	case 'd':
+	case 'e':
+	case 'f':
+	case 'g':
+	case 'h':
+	case 'i':
+	case 'j':
+	case 'k':
+	case 'l':
+	case 'm':
+	case 'n':
+	case 'o':
+	case 'p':
+	case 'q':
+	case 'r':
+	case 's':
+	case 't':
+	case 'u':
+	case 'v':
+	case 'w':
+	case 'x':
+	case 'y':
+	case 'z':	goto yy66;
+	case '.':	goto yy68;
+	default:	goto yy119;
+	}
+yy119:
+#line 140 "rexx.--empty-class(match-empty).re"
+	{ RETURN(RX_DO); }
+#line 1198 "rexx.--empty-class(match-empty).c"
+yy120:
+	yych = *++YYCURSOR;
+	switch (yych) {
+	case 'O':
+	case 'o':	goto yy193;
+	default:	goto yy67;
+	}
+yy121:
+	yych = *++YYCURSOR;
+	switch (yych) {
+	case 'S':
+	case 's':	goto yy194;
+	default:	goto yy67;
+	}
+yy122:
+	yych = *++YYCURSOR;
+	switch (yych) {
+	case 'D':
+	case 'd':	goto yy195;
+	case 'G':
+	case 'g':	goto yy197;
+	default:	goto yy67;
+	}
+yy123:
+	yych = *++YYCURSOR;
+	switch (yych) {
+	case 'R':
+	case 'r':	goto yy198;
+	default:	goto yy67;
+	}
+yy124:
+	yych = *++YYCURSOR;
+	switch (yych) {
+	case 'I':
+	case 'i':	goto yy199;
+	case 'P':
+	case 'p':	goto yy200;
+	default:	goto yy67;
+	}
+yy125:
+	yych = *++YYCURSOR;
+	switch (yych) {
+	case 'I':
+	case 'i':	goto yy201;
+	default:	goto yy67;
+	}
+yy126:
+	yych = *++YYCURSOR;
+	switch (yych) {
+	case 'R':
+	case 'r':	goto yy202;
+	default:	goto yy67;
+	}
+yy127:
+	yych = *++YYCURSOR;
+	switch (yych) {
+	case 'Z':
+	case 'z':	goto yy204;
+	default:	goto yy67;
+	}
+yy128:
+	yych = *++YYCURSOR;
+	switch (yych) {
+	case 'L':
+	case 'l':	goto yy205;
+	default:	goto yy67;
+	}
+yy129:
+	++YYCURSOR;
+	switch ((yych = *YYCURSOR)) {
+	case '!':
+	case '0':
+	case '1':
+	case '2':
+	case '3':
+	case '4':
+	case '5':
+	case '6':
+	case '7':
+	case '8':
+	case '9':
+	case '?':
+	case 'A':
+	case 'B':
+	case 'C':
+	case 'D':
+	case 'E':
+	case 'F':
+	case 'G':
+	case 'H':
+	case 'I':
+	case 'J':
+	case 'K':
+	case 'L':
+	case 'M':
+	case 'N':
+	case 'O':
+	case 'P':
+	case 'Q':
+	case 'R':
+	case 'S':
+	case 'T':
+	case 'U':
+	case 'V':
+	case 'W':
+	case 'X':
+	case 'Y':
+	case 'Z':
+	case '_':
+	case 'a':
+	case 'b':
+	case 'c':
+	case 'd':
+	case 'e':
+	case 'f':
+	case 'g':
+	case 'h':
+	case 'i':
+	case 'j':
+	case 'k':
+	case 'l':
+	case 'm':
+	case 'n':
+	case 'o':
+	case 'p':
+	case 'q':
+	case 'r':
+	case 's':
+	case 't':
+	case 'u':
+	case 'v':
+	case 'w':
+	case 'x':
+	case 'y':
+	case 'z':	goto yy66;
+	case '.':	goto yy68;
+	default:	goto yy130;
+	}
+yy130:
+#line 150 "rexx.--empty-class(match-empty).re"
+	{ RETURN(RX_IF); }
+#line 1340 "rexx.--empty-class(match-empty).c"
+yy131:
+	yych = *++YYCURSOR;
+	switch (yych) {
+	case 'T':
+	case 't':	goto yy206;
+	default:	goto yy67;
+	}
+yy132:
+	yych = *++YYCURSOR;
+	switch (yych) {
+	case 'E':
+	case 'e':	goto yy207;
+	default:	goto yy67;
+	}
+yy133:
+	yych = *++YYCURSOR;
+	switch (yych) {
+	case 'A':
+	case 'a':	goto yy208;
+	default:	goto yy67;
+	}
+yy134:
+	yych = *++YYCURSOR;
+	switch (yych) {
+	case 'N':
+	case 'n':	goto yy209;
+	default:	goto yy67;
+	}
+yy135:
+	yych = *++YYCURSOR;
+	switch (yych) {
+	case 'M':
+	case 'm':	goto yy210;
+	default:	goto yy67;
+	}
+yy136:
+	yych = *++YYCURSOR;
+	switch (yych) {
+	case 'P':
+	case 'p':	goto yy211;
+	case 'T':
+	case 't':	goto yy213;
+	case 'V':
+	case 'v':	goto yy214;
+	default:	goto yy67;
+	}
+yy137:
+	yych = *++YYCURSOR;
+	switch (yych) {
+	case 'M':
+	case 'm':	goto yy215;
+	default:	goto yy67;
+	}
+yy138:
+	yych = *++YYCURSOR;
+	switch (yych) {
+	case 'F':
+	case 'f':	goto yy216;
+	default:	goto yy67;
+	}
+yy139:
+	++YYCURSOR;
+	switch ((yych = *YYCURSOR)) {
+	case '!':
+	case '0':
+	case '1':
+	case '2':
+	case '3':
+	case '4':
+	case '5':
+	case '6':
+	case '7':
+	case '8':
+	case '9':
+	case '?':
+	case 'A':
+	case 'B':
+	case 'C':
+	case 'D':
+	case 'E':
+	case 'F':
+	case 'G':
+	case 'H':
+	case 'I':
+	case 'J':
+	case 'K':
+	case 'L':
+	case 'M':
+	case 'N':
+	case 'O':
+	case 'P':
+	case 'Q':
+	case 'R':
+	case 'S':
+	case 'T':
+	case 'U':
+	case 'V':
+	case 'W':
+	case 'X':
+	case 'Y':
+	case 'Z':
+	case '_':
+	case 'a':
+	case 'b':
+	case 'c':
+	case 'd':
+	case 'e':
+	case 'f':
+	case 'g':
+	case 'h':
+	case 'i':
+	case 'j':
+	case 'k':
+	case 'l':
+	case 'm':
+	case 'n':
+	case 'o':
+	case 'p':
+	case 'q':
+	case 'r':
+	case 's':
+	case 't':
+	case 'u':
+	case 'v':
+	case 'w':
+	case 'x':
+	case 'y':
+	case 'z':	goto yy66;
+	case '.':	goto yy68;
+	default:	goto yy140;
+	}
+yy140:
+#line 192 "rexx.--empty-class(match-empty).re"
+	{ RETURN(RXS_ON); }
+#line 1475 "rexx.--empty-class(match-empty).c"
+yy141:
+	yych = *++YYCURSOR;
+	switch (yych) {
+	case 'T':
+	case 't':	goto yy218;
+	default:	goto yy67;
+	}
+yy142:
+	yych = *++YYCURSOR;
+	switch (yych) {
+	case 'H':
+	case 'h':	goto yy219;
+	default:	goto yy67;
+	}
+yy143:
+	yych = *++YYCURSOR;
+	switch (yych) {
+	case 'R':
+	case 'r':	goto yy220;
+	default:	goto yy67;
+	}
+yy144:
+	yych = *++YYCURSOR;
+	switch (yych) {
+	case 'O':
+	case 'o':	goto yy221;
+	default:	goto yy67;
+	}
+yy145:
+	yych = *++YYCURSOR;
+	switch (yych) {
+	case 'L':
+	case 'l':	goto yy222;
+	case 'S':
+	case 's':	goto yy223;
+	default:	goto yy67;
+	}
+yy146:
+	yych = *++YYCURSOR;
+	switch (yych) {
+	case 'E':
+	case 'e':	goto yy224;
+	default:	goto yy67;
+	}
+yy147:
+	yych = *++YYCURSOR;
+	switch (yych) {
+	case 'T':
+	case 't':	goto yy225;
+	default:	goto yy67;
+	}
+yy148:
+	yych = *++YYCURSOR;
+	switch (yych) {
+	case 'Y':
+	case 'y':	goto yy226;
+	default:	goto yy67;
+	}
+yy149:
+	yych = *++YYCURSOR;
+	switch (yych) {
+	case 'I':
+	case 'i':	goto yy228;
+	default:	goto yy67;
+	}
+yy150:
+	yych = *++YYCURSOR;
+	switch (yych) {
+	case 'L':
+	case 'l':	goto yy229;
+	default:	goto yy67;
+	}
+yy151:
+	yych = *++YYCURSOR;
+	switch (yych) {
+	case 'G':
+	case 'g':	goto yy230;
+	default:	goto yy67;
+	}
+yy152:
+	yych = *++YYCURSOR;
+	switch (yych) {
+	case 'U':
+	case 'u':	goto yy231;
+	default:	goto yy67;
+	}
+yy153:
+	yych = *++YYCURSOR;
+	switch (yych) {
+	case 'N':
+	case 'n':	goto yy232;
+	default:	goto yy67;
+	}
+yy154:
+	yych = *++YYCURSOR;
+	switch (yych) {
+	case 'E':
+	case 'e':	goto yy233;
+	default:	goto yy67;
+	}
+yy155:
+	++YYCURSOR;
+	switch ((yych = *YYCURSOR)) {
+	case '!':
+	case '0':
+	case '1':
+	case '2':
+	case '3':
+	case '4':
+	case '5':
+	case '6':
+	case '7':
+	case '8':
+	case '9':
+	case '?':
+	case 'A':
+	case 'B':
+	case 'C':
+	case 'D':
+	case 'E':
+	case 'F':
+	case 'G':
+	case 'H':
+	case 'I':
+	case 'J':
+	case 'K':
+	case 'L':
+	case 'M':
+	case 'N':
+	case 'O':
+	case 'P':
+	case 'Q':
+	case 'R':
+	case 'S':
+	case 'T':
+	case 'U':
+	case 'V':
+	case 'W':
+	case 'X':
+	case 'Y':
+	case 'Z':
+	case '_':
+	case 'a':
+	case 'b':
+	case 'c':
+	case 'd':
+	case 'e':
+	case 'f':
+	case 'g':
+	case 'h':
+	case 'i':
+	case 'j':
+	case 'k':
+	case 'l':
+	case 'm':
+	case 'n':
+	case 'o':
+	case 'p':
+	case 'q':
+	case 'r':
+	case 's':
+	case 't':
+	case 'u':
+	case 'v':
+	case 'w':
+	case 'x':
+	case 'y':
+	case 'z':	goto yy66;
+	case '.':	goto yy68;
+	default:	goto yy156;
+	}
+yy156:
+#line 230 "rexx.--empty-class(match-empty).re"
+	{ RETURN(RXS_TO); }
+#line 1650 "rexx.--empty-class(match-empty).c"
+yy157:
+	yych = *++YYCURSOR;
+	switch (yych) {
+	case 'A':
+	case 'a':	goto yy234;
+	default:	goto yy67;
+	}
+yy158:
+	yych = *++YYCURSOR;
+	switch (yych) {
+	case 'T':
+	case 't':	goto yy235;
+	default:	goto yy67;
+	}
+yy159:
+	yych = *++YYCURSOR;
+	switch (yych) {
+	case 'P':
+	case 'p':	goto yy236;
+	default:	goto yy67;
+	}
+yy160:
+	yych = *++YYCURSOR;
+	switch (yych) {
+	case 'L':
+	case 'l':	goto yy237;
+	case 'R':
+	case 'r':	goto yy238;
+	default:	goto yy67;
+	}
+yy161:
+	yych = *++YYCURSOR;
+	switch (yych) {
+	case 'R':
+	case 'r':	goto yy240;
+	default:	goto yy67;
+	}
+yy162:
+	yych = *++YYCURSOR;
+	switch (yych) {
+	case 'E':
+	case 'e':	goto yy241;
+	case 'I':
+	case 'i':	goto yy242;
+	default:	goto yy67;
+	}
+yy163:
+	yych = *++YYCURSOR;
+	switch (yych) {
+	case 'T':
+	case 't':	goto yy243;
+	default:	goto yy67;
+	}
+yy164:
+	++YYCURSOR;
+	if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
+	yych = *YYCURSOR;
+yy165:
+	switch (yych) {
+	case '\t':
+	case ' ':	goto yy164;
+	case '<':	goto yy166;
+	case '=':	goto yy167;
+	case '>':	goto yy168;
+	default:	goto yy72;
+	}
+yy166:
+	yyaccept = 13;
+	yych = *(YYMARKER = ++YYCURSOR);
+	switch (yych) {
+	case '\t':
+	case ' ':	goto yy244;
+	case '<':	goto yy186;
+	default:	goto yy109;
+	}
+yy167:
+	yyaccept = 14;
+	yych = *(YYMARKER = ++YYCURSOR);
+	switch (yych) {
+	case '\t':
+	case ' ':	goto yy246;
+	case '=':	goto yy248;
+	default:	goto yy101;
+	}
+yy168:
+	yyaccept = 15;
+	yych = *(YYMARKER = ++YYCURSOR);
+	switch (yych) {
+	case '\t':
+	case ' ':	goto yy250;
+	case '>':	goto yy182;
+	default:	goto yy99;
+	}
+yy169:
+	++YYCURSOR;
+	if (YYLIMIT <= YYCURSOR) YYFILL(1);
+	yych = *YYCURSOR;
+	switch (yych) {
+	case '\t':
+	case ' ':	goto yy169;
+	case '|':	goto yy171;
+	default:	goto yy72;
+	}
+yy171:
+	++YYCURSOR;
+#line 74 "rexx.--empty-class(match-empty).re"
+	{ RETURN(OP_CONCAT); }
+#line 1758 "rexx.--empty-class(match-empty).c"
+yy173:
+	++YYCURSOR;
+	if (YYLIMIT <= YYCURSOR) YYFILL(1);
+	yych = *YYCURSOR;
+	switch (yych) {
+	case '!':
+	case '.':
+	case '0':
+	case '1':
+	case '2':
+	case '3':
+	case '4':
+	case '5':
+	case '6':
+	case '7':
+	case '8':
+	case '9':
+	case '?':
+	case 'A':
+	case 'B':
+	case 'C':
+	case 'D':
+	case 'E':
+	case 'F':
+	case 'G':
+	case 'H':
+	case 'I':
+	case 'J':
+	case 'K':
+	case 'L':
+	case 'M':
+	case 'N':
+	case 'O':
+	case 'P':
+	case 'Q':
+	case 'R':
+	case 'S':
+	case 'T':
+	case 'U':
+	case 'V':
+	case 'W':
+	case 'X':
+	case 'Y':
+	case 'Z':
+	case '_':
+	case 'a':
+	case 'b':
+	case 'c':
+	case 'd':
+	case 'e':
+	case 'f':
+	case 'g':
+	case 'h':
+	case 'i':
+	case 'j':
+	case 'k':
+	case 'l':
+	case 'm':
+	case 'n':
+	case 'o':
+	case 'p':
+	case 'q':
+	case 'r':
+	case 's':
+	case 't':
+	case 'u':
+	case 'v':
+	case 'w':
+	case 'x':
+	case 'y':
+	case 'z':	goto yy173;
+	default:	goto yy2;
+	}
+yy175:
+	yych = *++YYCURSOR;
+	YYCTXMARKER = YYCURSOR;
+	switch (yych) {
+	case '!':
+	case '.':
+	case '0':
+	case '1':
+	case '2':
+	case '3':
+	case '4':
+	case '5':
+	case '6':
+	case '7':
+	case '8':
+	case '9':
+	case '?':
+	case 'A':
+	case 'B':
+	case 'C':
+	case 'D':
+	case 'E':
+	case 'F':
+	case 'G':
+	case 'H':
+	case 'I':
+	case 'J':
+	case 'K':
+	case 'L':
+	case 'M':
+	case 'N':
+	case 'O':
+	case 'P':
+	case 'Q':
+	case 'R':
+	case 'S':
+	case 'T':
+	case 'U':
+	case 'V':
+	case 'W':
+	case 'X':
+	case 'Y':
+	case 'Z':
+	case '_':
+	case 'a':
+	case 'b':
+	case 'c':
+	case 'd':
+	case 'e':
+	case 'f':
+	case 'g':
+	case 'h':
+	case 'i':
+	case 'j':
+	case 'k':
+	case 'l':
+	case 'm':
+	case 'n':
+	case 'o':
+	case 'p':
+	case 'q':
+	case 'r':
+	case 's':
+	case 't':
+	case 'u':
+	case 'v':
+	case 'w':
+	case 'x':
+	case 'y':
+	case 'z':	goto yy72;
+	default:	goto yy252;
+	}
+yy176:
+	yych = *++YYCURSOR;
+	YYCTXMARKER = YYCURSOR;
+	switch (yych) {
+	case '!':
+	case '.':
+	case '0':
+	case '1':
+	case '2':
+	case '3':
+	case '4':
+	case '5':
+	case '6':
+	case '7':
+	case '8':
+	case '9':
+	case '?':
+	case 'A':
+	case 'B':
+	case 'C':
+	case 'D':
+	case 'E':
+	case 'F':
+	case 'G':
+	case 'H':
+	case 'I':
+	case 'J':
+	case 'K':
+	case 'L':
+	case 'M':
+	case 'N':
+	case 'O':
+	case 'P':
+	case 'Q':
+	case 'R':
+	case 'S':
+	case 'T':
+	case 'U':
+	case 'V':
+	case 'W':
+	case 'X':
+	case 'Y':
+	case 'Z':
+	case '_':
+	case 'a':
+	case 'b':
+	case 'c':
+	case 'd':
+	case 'e':
+	case 'f':
+	case 'g':
+	case 'h':
+	case 'i':
+	case 'j':
+	case 'k':
+	case 'l':
+	case 'm':
+	case 'n':
+	case 'o':
+	case 'p':
+	case 'q':
+	case 'r':
+	case 's':
+	case 't':
+	case 'u':
+	case 'v':
+	case 'w':
+	case 'x':
+	case 'y':
+	case 'z':	goto yy72;
+	default:	goto yy254;
+	}
+yy177:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case '0':
@@ -1128,10 +1984,10 @@ yy90:
 	case '6':
 	case '7':
 	case '8':
-	case '9':	goto yy93;
-	default:	goto yy68;
+	case '9':	goto yy256;
+	default:	goto yy72;
 	}
-yy91:
+yy178:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
@@ -1199,1904 +2055,49 @@ yy91:
 	case '6':
 	case '7':
 	case '8':
-	case '9':	goto yy91;
+	case '9':	goto yy178;
 	case 'E':
 	case 'e':	goto yy88;
-	default:	goto yy58;
+	default:	goto yy30;
 	}
-yy93:
+yy180:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	switch (yych) {
-	case '0':
-	case '1':
-	case '2':
-	case '3':
-	case '4':
-	case '5':
-	case '6':
-	case '7':
-	case '8':
-	case '9':	goto yy93;
-	default:	goto yy58;
-	}
-yy95:
-	yych = *++YYCURSOR;
-	switch (yych) {
-	case 'L':
-	case 'l':	goto yy103;
-	case 'R':
-	case 'r':	goto yy104;
-	default:	goto yy81;
-	}
-yy96:
-	yych = *++YYCURSOR;
-	switch (yych) {
-	case 'R':
-	case 'r':	goto yy97;
-	default:	goto yy81;
-	}
-yy97:
-	yych = *++YYCURSOR;
-	switch (yych) {
-	case 'S':
-	case 's':	goto yy98;
-	default:	goto yy81;
-	}
-yy98:
-	yych = *++YYCURSOR;
-	switch (yych) {
-	case 'I':
-	case 'i':	goto yy99;
-	default:	goto yy81;
-	}
-yy99:
-	yych = *++YYCURSOR;
-	switch (yych) {
-	case 'O':
-	case 'o':	goto yy100;
-	default:	goto yy81;
-	}
-yy100:
-	yych = *++YYCURSOR;
-	switch (yych) {
-	case 'N':
-	case 'n':	goto yy101;
-	default:	goto yy81;
-	}
-yy101:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
-	case '!':
-	case '0':
-	case '1':
-	case '2':
-	case '3':
-	case '4':
-	case '5':
-	case '6':
-	case '7':
-	case '8':
-	case '9':
-	case '?':
-	case 'A':
-	case 'B':
-	case 'C':
-	case 'D':
-	case 'E':
-	case 'F':
-	case 'G':
-	case 'H':
-	case 'I':
-	case 'J':
-	case 'K':
-	case 'L':
-	case 'M':
-	case 'N':
-	case 'O':
-	case 'P':
-	case 'Q':
-	case 'R':
-	case 'S':
-	case 'T':
-	case 'U':
-	case 'V':
-	case 'W':
-	case 'X':
-	case 'Y':
-	case 'Z':
-	case '_':
-	case 'a':
-	case 'b':
-	case 'c':
-	case 'd':
-	case 'e':
-	case 'f':
-	case 'g':
-	case 'h':
-	case 'i':
-	case 'j':
-	case 'k':
-	case 'l':
-	case 'm':
-	case 'n':
-	case 'o':
-	case 'p':
-	case 'q':
-	case 'r':
-	case 's':
-	case 't':
-	case 'u':
-	case 'v':
-	case 'w':
-	case 'x':
-	case 'y':
-	case 'z':	goto yy80;
-	case '.':	goto yy82;
-	default:	goto yy102;
-	}
-yy102:
-#line 240 "rexx.--empty-class(match-empty).re"
-	{ RETURN(RXS_VERSION); }
-#line 1343 "rexx.--empty-class(match-empty).c"
-yy103:
-	yych = *++YYCURSOR;
-	switch (yych) {
-	case 'U':
-	case 'u':	goto yy106;
-	default:	goto yy81;
-	}
-yy104:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
-	case '!':
-	case '0':
-	case '1':
-	case '2':
-	case '3':
-	case '4':
-	case '5':
-	case '6':
-	case '7':
-	case '8':
-	case '9':
-	case '?':
-	case 'A':
-	case 'B':
-	case 'C':
-	case 'D':
-	case 'E':
-	case 'F':
-	case 'G':
-	case 'H':
-	case 'I':
-	case 'J':
-	case 'K':
-	case 'L':
-	case 'M':
-	case 'N':
-	case 'O':
-	case 'P':
-	case 'Q':
-	case 'R':
-	case 'S':
-	case 'T':
-	case 'U':
-	case 'V':
-	case 'W':
-	case 'X':
-	case 'Y':
-	case 'Z':
-	case '_':
-	case 'a':
-	case 'b':
-	case 'c':
-	case 'd':
-	case 'e':
-	case 'f':
-	case 'g':
-	case 'h':
-	case 'i':
-	case 'j':
-	case 'k':
-	case 'l':
-	case 'm':
-	case 'n':
-	case 'o':
-	case 'p':
-	case 'q':
-	case 'r':
-	case 's':
-	case 't':
-	case 'u':
-	case 'v':
-	case 'w':
-	case 'x':
-	case 'y':
-	case 'z':	goto yy80;
-	case '.':	goto yy82;
-	default:	goto yy105;
-	}
-yy105:
-#line 238 "rexx.--empty-class(match-empty).re"
-	{ RETURN(RXS_VAR); }
-#line 1425 "rexx.--empty-class(match-empty).c"
-yy106:
-	yych = *++YYCURSOR;
-	switch (yych) {
-	case 'E':
-	case 'e':	goto yy107;
-	default:	goto yy81;
-	}
-yy107:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
-	case '!':
-	case '0':
-	case '1':
-	case '2':
-	case '3':
-	case '4':
-	case '5':
-	case '6':
-	case '7':
-	case '8':
-	case '9':
-	case '?':
-	case 'A':
-	case 'B':
-	case 'C':
-	case 'D':
-	case 'E':
-	case 'F':
-	case 'G':
-	case 'H':
-	case 'I':
-	case 'J':
-	case 'K':
-	case 'L':
-	case 'M':
-	case 'N':
-	case 'O':
-	case 'P':
-	case 'Q':
-	case 'R':
-	case 'S':
-	case 'T':
-	case 'U':
-	case 'V':
-	case 'W':
-	case 'X':
-	case 'Y':
-	case 'Z':
-	case '_':
-	case 'a':
-	case 'b':
-	case 'c':
-	case 'd':
-	case 'e':
-	case 'f':
-	case 'g':
-	case 'h':
-	case 'i':
-	case 'j':
-	case 'k':
-	case 'l':
-	case 'm':
-	case 'n':
-	case 'o':
-	case 'p':
-	case 'q':
-	case 'r':
-	case 's':
-	case 't':
-	case 'u':
-	case 'v':
-	case 'w':
-	case 'x':
-	case 'y':
-	case 'z':	goto yy80;
-	case '.':	goto yy82;
-	default:	goto yy108;
-	}
-yy108:
-#line 236 "rexx.--empty-class(match-empty).re"
-	{ RETURN(RXS_VALUE); }
-#line 1507 "rexx.--empty-class(match-empty).c"
-yy109:
-	yych = *++YYCURSOR;
-	switch (yych) {
-	case 'T':
-	case 't':	goto yy115;
-	default:	goto yy81;
-	}
-yy110:
-	yych = *++YYCURSOR;
-	switch (yych) {
-	case 'P':
-	case 'p':	goto yy111;
-	default:	goto yy81;
-	}
-yy111:
-	yych = *++YYCURSOR;
-	switch (yych) {
-	case 'E':
-	case 'e':	goto yy112;
-	default:	goto yy81;
-	}
-yy112:
-	yych = *++YYCURSOR;
-	switch (yych) {
-	case 'R':
-	case 'r':	goto yy113;
-	default:	goto yy81;
-	}
-yy113:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
-	case '!':
-	case '0':
-	case '1':
-	case '2':
-	case '3':
-	case '4':
-	case '5':
-	case '6':
-	case '7':
-	case '8':
-	case '9':
-	case '?':
-	case 'A':
-	case 'B':
-	case 'C':
-	case 'D':
-	case 'E':
-	case 'F':
-	case 'G':
-	case 'H':
-	case 'I':
-	case 'J':
-	case 'K':
-	case 'L':
-	case 'M':
-	case 'N':
-	case 'O':
-	case 'P':
-	case 'Q':
-	case 'R':
-	case 'S':
-	case 'T':
-	case 'U':
-	case 'V':
-	case 'W':
-	case 'X':
-	case 'Y':
-	case 'Z':
-	case '_':
-	case 'a':
-	case 'b':
-	case 'c':
-	case 'd':
-	case 'e':
-	case 'f':
-	case 'g':
-	case 'h':
-	case 'i':
-	case 'j':
-	case 'k':
-	case 'l':
-	case 'm':
-	case 'n':
-	case 'o':
-	case 'p':
-	case 'q':
-	case 'r':
-	case 's':
-	case 't':
-	case 'u':
-	case 'v':
-	case 'w':
-	case 'x':
-	case 'y':
-	case 'z':	goto yy80;
-	case '.':	goto yy82;
-	default:	goto yy114;
-	}
-yy114:
-#line 234 "rexx.--empty-class(match-empty).re"
-	{ RETURN(RXS_UPPER); }
-#line 1610 "rexx.--empty-class(match-empty).c"
-yy115:
-	yych = *++YYCURSOR;
-	switch (yych) {
-	case 'I':
-	case 'i':	goto yy116;
-	default:	goto yy81;
-	}
-yy116:
-	yych = *++YYCURSOR;
-	switch (yych) {
-	case 'L':
-	case 'l':	goto yy117;
-	default:	goto yy81;
-	}
-yy117:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
-	case '!':
-	case '0':
-	case '1':
-	case '2':
-	case '3':
-	case '4':
-	case '5':
-	case '6':
-	case '7':
-	case '8':
-	case '9':
-	case '?':
-	case 'A':
-	case 'B':
-	case 'C':
-	case 'D':
-	case 'E':
-	case 'F':
-	case 'G':
-	case 'H':
-	case 'I':
-	case 'J':
-	case 'K':
-	case 'L':
-	case 'M':
-	case 'N':
-	case 'O':
-	case 'P':
-	case 'Q':
-	case 'R':
-	case 'S':
-	case 'T':
-	case 'U':
-	case 'V':
-	case 'W':
-	case 'X':
-	case 'Y':
-	case 'Z':
-	case '_':
-	case 'a':
-	case 'b':
-	case 'c':
-	case 'd':
-	case 'e':
-	case 'f':
-	case 'g':
-	case 'h':
-	case 'i':
-	case 'j':
-	case 'k':
-	case 'l':
-	case 'm':
-	case 'n':
-	case 'o':
-	case 'p':
-	case 'q':
-	case 'r':
-	case 's':
-	case 't':
-	case 'u':
-	case 'v':
-	case 'w':
-	case 'x':
-	case 'y':
-	case 'z':	goto yy80;
-	case '.':	goto yy82;
-	default:	goto yy118;
-	}
-yy118:
-#line 232 "rexx.--empty-class(match-empty).re"
-	{ RETURN(RXS_UNTIL); }
-#line 1699 "rexx.--empty-class(match-empty).c"
-yy119:
-	yych = *++YYCURSOR;
-	switch (yych) {
-	case 'L':
-	case 'l':	goto yy120;
-	default:	goto yy81;
-	}
-yy120:
-	yych = *++YYCURSOR;
-	switch (yych) {
-	case 'T':
-	case 't':	goto yy121;
-	default:	goto yy81;
-	}
-yy121:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
-	case '!':
-	case '0':
-	case '1':
-	case '2':
-	case '3':
-	case '4':
-	case '5':
-	case '6':
-	case '7':
-	case '8':
-	case '9':
-	case '?':
-	case 'A':
-	case 'B':
-	case 'C':
-	case 'D':
-	case 'E':
-	case 'F':
-	case 'G':
-	case 'H':
-	case 'I':
-	case 'J':
-	case 'K':
-	case 'L':
-	case 'M':
-	case 'N':
-	case 'O':
-	case 'P':
-	case 'Q':
-	case 'R':
-	case 'S':
-	case 'T':
-	case 'U':
-	case 'V':
-	case 'W':
-	case 'X':
-	case 'Y':
-	case 'Z':
-	case '_':
-	case 'a':
-	case 'b':
-	case 'c':
-	case 'd':
-	case 'e':
-	case 'f':
-	case 'g':
-	case 'h':
-	case 'i':
-	case 'j':
-	case 'k':
-	case 'l':
-	case 'm':
-	case 'n':
-	case 'o':
-	case 'p':
-	case 'q':
-	case 'r':
-	case 's':
-	case 't':
-	case 'u':
-	case 'v':
-	case 'w':
-	case 'x':
-	case 'y':
-	case 'z':	goto yy80;
-	case '.':	goto yy82;
-	default:	goto yy122;
-	}
-yy122:
-#line 214 "rexx.--empty-class(match-empty).re"
-	{ RETURN(RXS_HALT); }
-#line 1788 "rexx.--empty-class(match-empty).c"
-yy123:
-	yych = *++YYCURSOR;
-	switch (yych) {
-	case 'I':
-	case 'i':	goto yy138;
-	default:	goto yy81;
-	}
-yy124:
-	yych = *++YYCURSOR;
-	switch (yych) {
-	case 'R':
-	case 'r':	goto yy129;
-	default:	goto yy81;
-	}
-yy125:
-	yych = *++YYCURSOR;
-	switch (yych) {
-	case 'Z':
-	case 'z':	goto yy126;
-	default:	goto yy81;
-	}
-yy126:
-	yych = *++YYCURSOR;
-	switch (yych) {
-	case 'Z':
-	case 'z':	goto yy127;
-	default:	goto yy81;
-	}
-yy127:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
-	case '!':
-	case '0':
-	case '1':
-	case '2':
-	case '3':
-	case '4':
-	case '5':
-	case '6':
-	case '7':
-	case '8':
-	case '9':
-	case '?':
-	case 'A':
-	case 'B':
-	case 'C':
-	case 'D':
-	case 'E':
-	case 'F':
-	case 'G':
-	case 'H':
-	case 'I':
-	case 'J':
-	case 'K':
-	case 'L':
-	case 'M':
-	case 'N':
-	case 'O':
-	case 'P':
-	case 'Q':
-	case 'R':
-	case 'S':
-	case 'T':
-	case 'U':
-	case 'V':
-	case 'W':
-	case 'X':
-	case 'Y':
-	case 'Z':
-	case '_':
-	case 'a':
-	case 'b':
-	case 'c':
-	case 'd':
-	case 'e':
-	case 'f':
-	case 'g':
-	case 'h':
-	case 'i':
-	case 'j':
-	case 'k':
-	case 'l':
-	case 'm':
-	case 'n':
-	case 'o':
-	case 'p':
-	case 'q':
-	case 'r':
-	case 's':
-	case 't':
-	case 'u':
-	case 'v':
-	case 'w':
-	case 'x':
-	case 'y':
-	case 'z':	goto yy80;
-	case '.':	goto yy82;
-	default:	goto yy128;
-	}
-yy128:
-#line 212 "rexx.--empty-class(match-empty).re"
-	{ RETURN(RXS_FUZZ); }
-#line 1891 "rexx.--empty-class(match-empty).c"
-yy129:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
-	case '!':
-	case '0':
-	case '1':
-	case '2':
-	case '3':
-	case '4':
-	case '5':
-	case '6':
-	case '7':
-	case '8':
-	case '9':
-	case '?':
-	case 'A':
-	case 'B':
-	case 'C':
-	case 'D':
-	case 'F':
-	case 'G':
-	case 'H':
-	case 'I':
-	case 'J':
-	case 'K':
-	case 'L':
-	case 'N':
-	case 'O':
-	case 'P':
-	case 'Q':
-	case 'R':
-	case 'S':
-	case 'T':
-	case 'U':
-	case 'V':
-	case 'W':
-	case 'X':
-	case 'Y':
-	case 'Z':
-	case '_':
-	case 'a':
-	case 'b':
-	case 'c':
-	case 'd':
-	case 'f':
-	case 'g':
-	case 'h':
-	case 'i':
-	case 'j':
-	case 'k':
-	case 'l':
-	case 'n':
-	case 'o':
-	case 'p':
-	case 'q':
-	case 'r':
-	case 's':
-	case 't':
-	case 'u':
-	case 'v':
-	case 'w':
-	case 'x':
-	case 'y':
-	case 'z':	goto yy80;
-	case '.':	goto yy82;
-	case 'E':
-	case 'e':	goto yy131;
-	case 'M':
-	case 'm':	goto yy132;
-	default:	goto yy130;
-	}
-yy130:
-#line 206 "rexx.--empty-class(match-empty).re"
-	{ RETURN(RXS_FOR); }
-#line 1966 "rexx.--empty-class(match-empty).c"
-yy131:
-	yych = *++YYCURSOR;
-	switch (yych) {
-	case 'V':
-	case 'v':	goto yy134;
-	default:	goto yy81;
-	}
-yy132:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
-	case '!':
-	case '0':
-	case '1':
-	case '2':
-	case '3':
-	case '4':
-	case '5':
-	case '6':
-	case '7':
-	case '8':
-	case '9':
-	case '?':
-	case 'A':
-	case 'B':
-	case 'C':
-	case 'D':
-	case 'E':
-	case 'F':
-	case 'G':
-	case 'H':
-	case 'I':
-	case 'J':
-	case 'K':
-	case 'L':
-	case 'M':
-	case 'N':
-	case 'O':
-	case 'P':
-	case 'Q':
-	case 'R':
-	case 'S':
-	case 'T':
-	case 'U':
-	case 'V':
-	case 'W':
-	case 'X':
-	case 'Y':
-	case 'Z':
-	case '_':
-	case 'a':
-	case 'b':
-	case 'c':
-	case 'd':
-	case 'e':
-	case 'f':
-	case 'g':
-	case 'h':
-	case 'i':
-	case 'j':
-	case 'k':
-	case 'l':
-	case 'm':
-	case 'n':
-	case 'o':
-	case 'p':
-	case 'q':
-	case 'r':
-	case 's':
-	case 't':
-	case 'u':
-	case 'v':
-	case 'w':
-	case 'x':
-	case 'y':
-	case 'z':	goto yy80;
-	case '.':	goto yy82;
-	default:	goto yy133;
-	}
-yy133:
-#line 210 "rexx.--empty-class(match-empty).re"
-	{ RETURN(RXS_FORM); }
-#line 2048 "rexx.--empty-class(match-empty).c"
-yy134:
-	yych = *++YYCURSOR;
-	switch (yych) {
-	case 'E':
-	case 'e':	goto yy135;
-	default:	goto yy81;
-	}
-yy135:
-	yych = *++YYCURSOR;
-	switch (yych) {
-	case 'R':
-	case 'r':	goto yy136;
-	default:	goto yy81;
-	}
-yy136:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
-	case '!':
-	case '0':
-	case '1':
-	case '2':
-	case '3':
-	case '4':
-	case '5':
-	case '6':
-	case '7':
-	case '8':
-	case '9':
-	case '?':
-	case 'A':
-	case 'B':
-	case 'C':
-	case 'D':
-	case 'E':
-	case 'F':
-	case 'G':
-	case 'H':
-	case 'I':
-	case 'J':
-	case 'K':
-	case 'L':
-	case 'M':
-	case 'N':
-	case 'O':
-	case 'P':
-	case 'Q':
-	case 'R':
-	case 'S':
-	case 'T':
-	case 'U':
-	case 'V':
-	case 'W':
-	case 'X':
-	case 'Y':
-	case 'Z':
-	case '_':
-	case 'a':
-	case 'b':
-	case 'c':
-	case 'd':
-	case 'e':
-	case 'f':
-	case 'g':
-	case 'h':
-	case 'i':
-	case 'j':
-	case 'k':
-	case 'l':
-	case 'm':
-	case 'n':
-	case 'o':
-	case 'p':
-	case 'q':
-	case 'r':
-	case 's':
-	case 't':
-	case 'u':
-	case 'v':
-	case 'w':
-	case 'x':
-	case 'y':
-	case 'z':	goto yy80;
-	case '.':	goto yy82;
-	default:	goto yy137;
-	}
-yy137:
-#line 208 "rexx.--empty-class(match-empty).re"
-	{ RETURN(RXS_FOREVER); }
-#line 2137 "rexx.--empty-class(match-empty).c"
-yy138:
-	yych = *++YYCURSOR;
-	switch (yych) {
-	case 'L':
-	case 'l':	goto yy139;
-	default:	goto yy81;
-	}
-yy139:
-	yych = *++YYCURSOR;
-	switch (yych) {
-	case 'U':
-	case 'u':	goto yy140;
-	default:	goto yy81;
-	}
-yy140:
-	yych = *++YYCURSOR;
-	switch (yych) {
-	case 'R':
-	case 'r':	goto yy141;
-	default:	goto yy81;
-	}
-yy141:
-	yych = *++YYCURSOR;
-	switch (yych) {
-	case 'E':
-	case 'e':	goto yy142;
-	default:	goto yy81;
-	}
-yy142:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
-	case '!':
-	case '0':
-	case '1':
-	case '2':
-	case '3':
-	case '4':
-	case '5':
-	case '6':
-	case '7':
-	case '8':
-	case '9':
-	case '?':
-	case 'A':
-	case 'B':
-	case 'C':
-	case 'D':
-	case 'E':
-	case 'F':
-	case 'G':
-	case 'H':
-	case 'I':
-	case 'J':
-	case 'K':
-	case 'L':
-	case 'M':
-	case 'N':
-	case 'O':
-	case 'P':
-	case 'Q':
-	case 'R':
-	case 'S':
-	case 'T':
-	case 'U':
-	case 'V':
-	case 'W':
-	case 'X':
-	case 'Y':
-	case 'Z':
-	case '_':
-	case 'a':
-	case 'b':
-	case 'c':
-	case 'd':
-	case 'e':
-	case 'f':
-	case 'g':
-	case 'h':
-	case 'i':
-	case 'j':
-	case 'k':
-	case 'l':
-	case 'm':
-	case 'n':
-	case 'o':
-	case 'p':
-	case 'q':
-	case 'r':
-	case 's':
-	case 't':
-	case 'u':
-	case 'v':
-	case 'w':
-	case 'x':
-	case 'y':
-	case 'z':	goto yy80;
-	case '.':	goto yy82;
-	default:	goto yy143;
-	}
-yy143:
-#line 204 "rexx.--empty-class(match-empty).re"
-	{ RETURN(RXS_FAILURE); }
-#line 2240 "rexx.--empty-class(match-empty).c"
-yy144:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
-	case '!':
-	case '0':
-	case '1':
-	case '2':
-	case '3':
-	case '4':
-	case '5':
-	case '6':
-	case '7':
-	case '8':
-	case '9':
-	case '?':
-	case 'A':
-	case 'B':
-	case 'C':
-	case 'D':
-	case 'E':
-	case 'F':
-	case 'G':
-	case 'H':
-	case 'I':
-	case 'J':
-	case 'K':
-	case 'L':
-	case 'M':
-	case 'N':
-	case 'O':
-	case 'P':
-	case 'Q':
-	case 'R':
-	case 'S':
-	case 'T':
-	case 'U':
-	case 'V':
-	case 'W':
-	case 'X':
-	case 'Y':
-	case 'Z':
-	case '_':
-	case 'a':
-	case 'b':
-	case 'c':
-	case 'd':
-	case 'e':
-	case 'f':
-	case 'g':
-	case 'h':
-	case 'i':
-	case 'j':
-	case 'k':
-	case 'l':
-	case 'm':
-	case 'n':
-	case 'o':
-	case 'p':
-	case 'q':
-	case 'r':
-	case 's':
-	case 't':
-	case 'u':
-	case 'v':
-	case 'w':
-	case 'x':
-	case 'y':
-	case 'z':	goto yy80;
-	case '.':	goto yy82;
-	default:	goto yy145;
-	}
-yy145:
-#line 194 "rexx.--empty-class(match-empty).re"
-	{ RETURN(RXS_BY); }
-#line 2315 "rexx.--empty-class(match-empty).c"
-yy146:
-	yych = *++YYCURSOR;
-	switch (yych) {
-	case 'E':
-	case 'e':	goto yy151;
-	case 'I':
-	case 'i':	goto yy152;
-	default:	goto yy81;
-	}
-yy147:
-	yych = *++YYCURSOR;
-	switch (yych) {
-	case 'T':
-	case 't':	goto yy148;
-	default:	goto yy81;
-	}
-yy148:
-	yych = *++YYCURSOR;
-	switch (yych) {
-	case 'H':
-	case 'h':	goto yy149;
-	default:	goto yy81;
-	}
-yy149:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
-	case '!':
-	case '0':
-	case '1':
-	case '2':
-	case '3':
-	case '4':
-	case '5':
-	case '6':
-	case '7':
-	case '8':
-	case '9':
-	case '?':
-	case 'A':
-	case 'B':
-	case 'C':
-	case 'D':
-	case 'E':
-	case 'F':
-	case 'G':
-	case 'H':
-	case 'I':
-	case 'J':
-	case 'K':
-	case 'L':
-	case 'M':
-	case 'N':
-	case 'O':
-	case 'P':
-	case 'Q':
-	case 'R':
-	case 'S':
-	case 'T':
-	case 'U':
-	case 'V':
-	case 'W':
-	case 'X':
-	case 'Y':
-	case 'Z':
-	case '_':
-	case 'a':
-	case 'b':
-	case 'c':
-	case 'd':
-	case 'e':
-	case 'f':
-	case 'g':
-	case 'h':
-	case 'i':
-	case 'j':
-	case 'k':
-	case 'l':
-	case 'm':
-	case 'n':
-	case 'o':
-	case 'p':
-	case 'q':
-	case 'r':
-	case 's':
-	case 't':
-	case 'u':
-	case 'v':
-	case 'w':
-	case 'x':
-	case 'y':
-	case 'z':	goto yy80;
-	case '.':	goto yy82;
-	default:	goto yy150;
-	}
-yy150:
-#line 244 "rexx.--empty-class(match-empty).re"
-	{ RETURN(RXS_WITH); }
-#line 2413 "rexx.--empty-class(match-empty).c"
-yy151:
-	yych = *++YYCURSOR;
-	switch (yych) {
-	case 'N':
-	case 'n':	goto yy156;
-	default:	goto yy81;
-	}
-yy152:
-	yych = *++YYCURSOR;
-	switch (yych) {
-	case 'L':
-	case 'l':	goto yy153;
-	default:	goto yy81;
-	}
-yy153:
-	yych = *++YYCURSOR;
-	switch (yych) {
-	case 'E':
-	case 'e':	goto yy154;
-	default:	goto yy81;
-	}
-yy154:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
-	case '!':
-	case '0':
-	case '1':
-	case '2':
-	case '3':
-	case '4':
-	case '5':
-	case '6':
-	case '7':
-	case '8':
-	case '9':
-	case '?':
-	case 'A':
-	case 'B':
-	case 'C':
-	case 'D':
-	case 'E':
-	case 'F':
-	case 'G':
-	case 'H':
-	case 'I':
-	case 'J':
-	case 'K':
-	case 'L':
-	case 'M':
-	case 'N':
-	case 'O':
-	case 'P':
-	case 'Q':
-	case 'R':
-	case 'S':
-	case 'T':
-	case 'U':
-	case 'V':
-	case 'W':
-	case 'X':
-	case 'Y':
-	case 'Z':
-	case '_':
-	case 'a':
-	case 'b':
-	case 'c':
-	case 'd':
-	case 'e':
-	case 'f':
-	case 'g':
-	case 'h':
-	case 'i':
-	case 'j':
-	case 'k':
-	case 'l':
-	case 'm':
-	case 'n':
-	case 'o':
-	case 'p':
-	case 'q':
-	case 'r':
-	case 's':
-	case 't':
-	case 'u':
-	case 'v':
-	case 'w':
-	case 'x':
-	case 'y':
-	case 'z':	goto yy80;
-	case '.':	goto yy82;
-	default:	goto yy155;
-	}
-yy155:
-#line 242 "rexx.--empty-class(match-empty).re"
-	{ RETURN(RXS_WHILE); }
-#line 2509 "rexx.--empty-class(match-empty).c"
-yy156:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
-	case '!':
-	case '0':
-	case '1':
-	case '2':
-	case '3':
-	case '4':
-	case '5':
-	case '6':
-	case '7':
-	case '8':
-	case '9':
-	case '?':
-	case 'A':
-	case 'B':
-	case 'C':
-	case 'D':
-	case 'E':
-	case 'F':
-	case 'G':
-	case 'H':
-	case 'I':
-	case 'J':
-	case 'K':
-	case 'L':
-	case 'M':
-	case 'N':
-	case 'O':
-	case 'P':
-	case 'Q':
-	case 'R':
-	case 'S':
-	case 'T':
-	case 'U':
-	case 'V':
-	case 'W':
-	case 'X':
-	case 'Y':
-	case 'Z':
-	case '_':
-	case 'a':
-	case 'b':
-	case 'c':
-	case 'd':
-	case 'e':
-	case 'f':
-	case 'g':
-	case 'h':
-	case 'i':
-	case 'j':
-	case 'k':
-	case 'l':
-	case 'm':
-	case 'n':
-	case 'o':
-	case 'p':
-	case 'q':
-	case 'r':
-	case 's':
-	case 't':
-	case 'u':
-	case 'v':
-	case 'w':
-	case 'x':
-	case 'y':
-	case 'z':	goto yy80;
-	case '.':	goto yy82;
-	default:	goto yy157;
-	}
-yy157:
-#line 188 "rexx.--empty-class(match-empty).re"
-	{ RETURN(RX_WHEN); }
-#line 2584 "rexx.--empty-class(match-empty).c"
-yy158:
-	yych = *++YYCURSOR;
-	switch (yych) {
-	case 'E':
-	case 'e':	goto yy166;
-	default:	goto yy81;
-	}
-yy159:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
-	case '!':
-	case '0':
-	case '1':
-	case '2':
-	case '3':
-	case '4':
-	case '5':
-	case '6':
-	case '7':
-	case '8':
-	case '9':
-	case '?':
-	case 'A':
-	case 'B':
-	case 'C':
-	case 'D':
-	case 'E':
-	case 'F':
-	case 'G':
-	case 'H':
-	case 'I':
-	case 'J':
-	case 'K':
-	case 'L':
-	case 'M':
-	case 'N':
-	case 'O':
-	case 'P':
-	case 'Q':
-	case 'R':
-	case 'S':
-	case 'T':
-	case 'U':
-	case 'V':
-	case 'W':
-	case 'X':
-	case 'Y':
-	case 'Z':
-	case '_':
-	case 'a':
-	case 'b':
-	case 'c':
-	case 'd':
-	case 'e':
-	case 'f':
-	case 'g':
-	case 'h':
-	case 'i':
-	case 'j':
-	case 'k':
-	case 'l':
-	case 'm':
-	case 'n':
-	case 'o':
-	case 'p':
-	case 'q':
-	case 'r':
-	case 's':
-	case 't':
-	case 'u':
-	case 'v':
-	case 'w':
-	case 'x':
-	case 'y':
-	case 'z':	goto yy80;
-	case '.':	goto yy82;
-	default:	goto yy160;
-	}
-yy160:
-#line 230 "rexx.--empty-class(match-empty).re"
-	{ RETURN(RXS_TO); }
-#line 2666 "rexx.--empty-class(match-empty).c"
-yy161:
-	yych = *++YYCURSOR;
-	switch (yych) {
-	case 'A':
-	case 'a':	goto yy162;
-	default:	goto yy81;
-	}
-yy162:
-	yych = *++YYCURSOR;
-	switch (yych) {
-	case 'C':
-	case 'c':	goto yy163;
-	default:	goto yy81;
-	}
-yy163:
-	yych = *++YYCURSOR;
-	switch (yych) {
-	case 'E':
-	case 'e':	goto yy164;
-	default:	goto yy81;
-	}
-yy164:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
-	case '!':
-	case '0':
-	case '1':
-	case '2':
-	case '3':
-	case '4':
-	case '5':
-	case '6':
-	case '7':
-	case '8':
-	case '9':
-	case '?':
-	case 'A':
-	case 'B':
-	case 'C':
-	case 'D':
-	case 'E':
-	case 'F':
-	case 'G':
-	case 'H':
-	case 'I':
-	case 'J':
-	case 'K':
-	case 'L':
-	case 'M':
-	case 'N':
-	case 'O':
-	case 'P':
-	case 'Q':
-	case 'R':
-	case 'S':
-	case 'T':
-	case 'U':
-	case 'V':
-	case 'W':
-	case 'X':
-	case 'Y':
-	case 'Z':
-	case '_':
-	case 'a':
-	case 'b':
-	case 'c':
-	case 'd':
-	case 'e':
-	case 'f':
-	case 'g':
-	case 'h':
-	case 'i':
-	case 'j':
-	case 'k':
-	case 'l':
-	case 'm':
-	case 'n':
-	case 'o':
-	case 'p':
-	case 'q':
-	case 'r':
-	case 's':
-	case 't':
-	case 'u':
-	case 'v':
-	case 'w':
-	case 'x':
-	case 'y':
-	case 'z':	goto yy80;
-	case '.':	goto yy82;
-	default:	goto yy165;
-	}
-yy165:
-#line 186 "rexx.--empty-class(match-empty).re"
-	{ RETURN(RX_TRACE); }
-#line 2762 "rexx.--empty-class(match-empty).c"
-yy166:
-	yych = *++YYCURSOR;
-	switch (yych) {
-	case 'N':
-	case 'n':	goto yy167;
-	default:	goto yy81;
-	}
-yy167:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
-	case '!':
-	case '0':
-	case '1':
-	case '2':
-	case '3':
-	case '4':
-	case '5':
-	case '6':
-	case '7':
-	case '8':
-	case '9':
-	case '?':
-	case 'A':
-	case 'B':
-	case 'C':
-	case 'D':
-	case 'E':
-	case 'F':
-	case 'G':
-	case 'H':
-	case 'I':
-	case 'J':
-	case 'K':
-	case 'L':
-	case 'M':
-	case 'N':
-	case 'O':
-	case 'P':
-	case 'Q':
-	case 'R':
-	case 'S':
-	case 'T':
-	case 'U':
-	case 'V':
-	case 'W':
-	case 'X':
-	case 'Y':
-	case 'Z':
-	case '_':
-	case 'a':
-	case 'b':
-	case 'c':
-	case 'd':
-	case 'e':
-	case 'f':
-	case 'g':
-	case 'h':
-	case 'i':
-	case 'j':
-	case 'k':
-	case 'l':
-	case 'm':
-	case 'n':
-	case 'o':
-	case 'p':
-	case 'q':
-	case 'r':
-	case 's':
-	case 't':
-	case 'u':
-	case 'v':
-	case 'w':
-	case 'x':
-	case 'y':
-	case 'z':	goto yy80;
-	case '.':	goto yy82;
-	default:	goto yy168;
-	}
-yy168:
-#line 184 "rexx.--empty-class(match-empty).re"
-	{ RETURN(RX_THEN); }
-#line 2844 "rexx.--empty-class(match-empty).c"
-yy169:
-	yych = *++YYCURSOR;
-	switch (yych) {
-	case 'Y':
-	case 'y':	goto yy204;
-	default:	goto yy81;
-	}
-yy170:
-	yych = *++YYCURSOR;
-	switch (yych) {
-	case 'I':
-	case 'i':	goto yy195;
-	default:	goto yy81;
-	}
-yy171:
-	yych = *++YYCURSOR;
-	switch (yych) {
-	case 'L':
-	case 'l':	goto yy190;
-	default:	goto yy81;
-	}
-yy172:
-	yych = *++YYCURSOR;
-	switch (yych) {
-	case 'G':
-	case 'g':	goto yy185;
-	default:	goto yy81;
-	}
-yy173:
-	yych = *++YYCURSOR;
-	switch (yych) {
-	case 'U':
-	case 'u':	goto yy180;
-	default:	goto yy81;
-	}
-yy174:
-	yych = *++YYCURSOR;
-	switch (yych) {
-	case 'N':
-	case 'n':	goto yy175;
-	default:	goto yy81;
-	}
-yy175:
-	yych = *++YYCURSOR;
-	switch (yych) {
-	case 'T':
-	case 't':	goto yy176;
-	default:	goto yy81;
-	}
-yy176:
-	yych = *++YYCURSOR;
-	switch (yych) {
-	case 'A':
-	case 'a':	goto yy177;
-	default:	goto yy81;
-	}
-yy177:
-	yych = *++YYCURSOR;
-	switch (yych) {
-	case 'X':
-	case 'x':	goto yy178;
-	default:	goto yy81;
-	}
-yy178:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
-	case '!':
-	case '0':
-	case '1':
-	case '2':
-	case '3':
-	case '4':
-	case '5':
-	case '6':
-	case '7':
-	case '8':
-	case '9':
-	case '?':
-	case 'A':
-	case 'B':
-	case 'C':
-	case 'D':
-	case 'E':
-	case 'F':
-	case 'G':
-	case 'H':
-	case 'I':
-	case 'J':
-	case 'K':
-	case 'L':
-	case 'M':
-	case 'N':
-	case 'O':
-	case 'P':
-	case 'Q':
-	case 'R':
-	case 'S':
-	case 'T':
-	case 'U':
-	case 'V':
-	case 'W':
-	case 'X':
-	case 'Y':
-	case 'Z':
-	case '_':
-	case 'a':
-	case 'b':
-	case 'c':
-	case 'd':
-	case 'e':
-	case 'f':
-	case 'g':
-	case 'h':
-	case 'i':
-	case 'j':
-	case 'k':
-	case 'l':
-	case 'm':
-	case 'n':
-	case 'o':
-	case 'p':
-	case 'q':
-	case 'r':
-	case 's':
-	case 't':
-	case 'u':
-	case 'v':
-	case 'w':
-	case 'x':
-	case 'y':
-	case 'z':	goto yy80;
-	case '.':	goto yy82;
-	default:	goto yy179;
-	}
-yy179:
-#line 228 "rexx.--empty-class(match-empty).re"
-	{ RETURN(RXS_SYNTAX); }
-#line 2982 "rexx.--empty-class(match-empty).c"
-yy180:
-	yych = *++YYCURSOR;
-	switch (yych) {
-	case 'R':
-	case 'r':	goto yy181;
-	default:	goto yy81;
-	}
-yy181:
-	yych = *++YYCURSOR;
-	switch (yych) {
-	case 'C':
-	case 'c':	goto yy182;
-	default:	goto yy81;
+	case '\t':
+	case ' ':	goto yy180;
+	case '=':	goto yy182;
+	default:	goto yy72;
 	}
 yy182:
-	yych = *++YYCURSOR;
-	switch (yych) {
-	case 'E':
-	case 'e':	goto yy183;
-	default:	goto yy81;
-	}
-yy183:
 	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
-	case '!':
-	case '0':
-	case '1':
-	case '2':
-	case '3':
-	case '4':
-	case '5':
-	case '6':
-	case '7':
-	case '8':
-	case '9':
-	case '?':
-	case 'A':
-	case 'B':
-	case 'C':
-	case 'D':
-	case 'E':
-	case 'F':
-	case 'G':
-	case 'H':
-	case 'I':
-	case 'J':
-	case 'K':
-	case 'L':
-	case 'M':
-	case 'N':
-	case 'O':
-	case 'P':
-	case 'Q':
-	case 'R':
-	case 'S':
-	case 'T':
-	case 'U':
-	case 'V':
-	case 'W':
-	case 'X':
-	case 'Y':
-	case 'Z':
-	case '_':
-	case 'a':
-	case 'b':
-	case 'c':
-	case 'd':
-	case 'e':
-	case 'f':
-	case 'g':
-	case 'h':
-	case 'i':
-	case 'j':
-	case 'k':
-	case 'l':
-	case 'm':
-	case 'n':
-	case 'o':
-	case 'p':
-	case 'q':
-	case 'r':
-	case 's':
-	case 't':
-	case 'u':
-	case 'v':
-	case 'w':
-	case 'x':
-	case 'y':
-	case 'z':	goto yy80;
-	case '.':	goto yy82;
-	default:	goto yy184;
-	}
+#line 112 "rexx.--empty-class(match-empty).re"
+	{ RETURN(OP_LE_STRICT); }
+#line 2078 "rexx.--empty-class(match-empty).c"
 yy184:
-#line 226 "rexx.--empty-class(match-empty).re"
-	{ RETURN(RXS_SOURCE); }
-#line 3078 "rexx.--empty-class(match-empty).c"
-yy185:
-	yych = *++YYCURSOR;
+	++YYCURSOR;
+	if (YYLIMIT <= YYCURSOR) YYFILL(1);
+	yych = *YYCURSOR;
 	switch (yych) {
-	case 'N':
-	case 'n':	goto yy186;
-	default:	goto yy81;
+	case '\t':
+	case ' ':	goto yy184;
+	case '=':	goto yy186;
+	default:	goto yy72;
 	}
 yy186:
-	yych = *++YYCURSOR;
-	switch (yych) {
-	case 'A':
-	case 'a':	goto yy187;
-	default:	goto yy81;
-	}
-yy187:
-	yych = *++YYCURSOR;
-	switch (yych) {
-	case 'L':
-	case 'l':	goto yy188;
-	default:	goto yy81;
-	}
+	++YYCURSOR;
+#line 110 "rexx.--empty-class(match-empty).re"
+	{ RETURN(OP_GE_STRICT); }
+#line 2093 "rexx.--empty-class(match-empty).c"
 yy188:
+	yych = *++YYCURSOR;
+	switch (yych) {
+	case 'R':
+	case 'r':	goto yy258;
+	default:	goto yy67;
+	}
+yy189:
 	++YYCURSOR;
 	switch ((yych = *YYCURSOR)) {
 	case '!':
@@ -3163,36 +2164,43 @@ yy188:
 	case 'w':
 	case 'x':
 	case 'y':
-	case 'z':	goto yy80;
-	case '.':	goto yy82;
-	default:	goto yy189;
+	case 'z':	goto yy66;
+	case '.':	goto yy68;
+	default:	goto yy190;
 	}
-yy189:
-#line 182 "rexx.--empty-class(match-empty).re"
-	{ RETURN(RX_SIGNAL); }
-#line 3174 "rexx.--empty-class(match-empty).c"
 yy190:
-	yych = *++YYCURSOR;
-	switch (yych) {
-	case 'E':
-	case 'e':	goto yy191;
-	default:	goto yy81;
-	}
+#line 136 "rexx.--empty-class(match-empty).re"
+	{ RETURN(RX_ARG); }
+#line 2175 "rexx.--empty-class(match-empty).c"
 yy191:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case 'C':
-	case 'c':	goto yy192;
-	default:	goto yy81;
+	case 'L':
+	case 'l':	goto yy259;
+	default:	goto yy67;
 	}
 yy192:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case 'T':
-	case 't':	goto yy193;
-	default:	goto yy81;
+	case 'I':
+	case 'i':	goto yy261;
+	default:	goto yy67;
 	}
 yy193:
+	yych = *++YYCURSOR;
+	switch (yych) {
+	case 'P':
+	case 'p':	goto yy262;
+	default:	goto yy67;
+	}
+yy194:
+	yych = *++YYCURSOR;
+	switch (yych) {
+	case 'E':
+	case 'e':	goto yy264;
+	default:	goto yy67;
+	}
+yy195:
 	++YYCURSOR;
 	switch ((yych = *YYCURSOR)) {
 	case '!':
@@ -3259,62 +2267,48 @@ yy193:
 	case 'w':
 	case 'x':
 	case 'y':
-	case 'z':	goto yy80;
-	case '.':	goto yy82;
-	default:	goto yy194;
-	}
-yy194:
-#line 180 "rexx.--empty-class(match-empty).re"
-	{ RETURN(RX_SELECT); }
-#line 3270 "rexx.--empty-class(match-empty).c"
-yy195:
-	yych = *++YYCURSOR;
-	switch (yych) {
-	case 'E':
-	case 'e':	goto yy196;
-	default:	goto yy81;
+	case 'z':	goto yy66;
+	case '.':	goto yy68;
+	default:	goto yy196;
 	}
 yy196:
-	yych = *++YYCURSOR;
-	switch (yych) {
-	case 'N':
-	case 'n':	goto yy197;
-	default:	goto yy81;
-	}
+#line 146 "rexx.--empty-class(match-empty).re"
+	{ RETURN(RX_END); }
+#line 2278 "rexx.--empty-class(match-empty).c"
 yy197:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case 'T':
-	case 't':	goto yy198;
-	default:	goto yy81;
+	case 'I':
+	case 'i':	goto yy266;
+	default:	goto yy67;
 	}
 yy198:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case 'I':
-	case 'i':	goto yy199;
-	default:	goto yy81;
+	case 'O':
+	case 'o':	goto yy267;
+	default:	goto yy67;
 	}
 yy199:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case 'F':
-	case 'f':	goto yy200;
-	default:	goto yy81;
+	case 'T':
+	case 't':	goto yy268;
+	default:	goto yy67;
 	}
 yy200:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case 'I':
-	case 'i':	goto yy201;
-	default:	goto yy81;
+	case 'O':
+	case 'o':	goto yy270;
+	default:	goto yy67;
 	}
 yy201:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case 'C':
-	case 'c':	goto yy202;
-	default:	goto yy81;
+	case 'L':
+	case 'l':	goto yy271;
+	default:	goto yy67;
 	}
 yy202:
 	++YYCURSOR;
@@ -3335,7 +2329,6 @@ yy202:
 	case 'B':
 	case 'C':
 	case 'D':
-	case 'E':
 	case 'F':
 	case 'G':
 	case 'H':
@@ -3343,7 +2336,6 @@ yy202:
 	case 'J':
 	case 'K':
 	case 'L':
-	case 'M':
 	case 'N':
 	case 'O':
 	case 'P':
@@ -3362,7 +2354,6 @@ yy202:
 	case 'b':
 	case 'c':
 	case 'd':
-	case 'e':
 	case 'f':
 	case 'g':
 	case 'h':
@@ -3370,7 +2361,6 @@ yy202:
 	case 'j':
 	case 'k':
 	case 'l':
-	case 'm':
 	case 'n':
 	case 'o':
 	case 'p':
@@ -3383,118 +2373,68 @@ yy202:
 	case 'w':
 	case 'x':
 	case 'y':
-	case 'z':	goto yy80;
-	case '.':	goto yy82;
+	case 'z':	goto yy66;
+	case '.':	goto yy68;
+	case 'E':
+	case 'e':	goto yy272;
+	case 'M':
+	case 'm':	goto yy273;
 	default:	goto yy203;
 	}
 yy203:
-#line 224 "rexx.--empty-class(match-empty).re"
-	{ RETURN(RXS_SCIENTIFIC); }
-#line 3394 "rexx.--empty-class(match-empty).c"
+#line 206 "rexx.--empty-class(match-empty).re"
+	{ RETURN(RXS_FOR); }
+#line 2388 "rexx.--empty-class(match-empty).c"
 yy204:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
-	case '!':
-	case '0':
-	case '1':
-	case '2':
-	case '3':
-	case '4':
-	case '5':
-	case '6':
-	case '7':
-	case '8':
-	case '9':
-	case '?':
-	case 'A':
-	case 'B':
-	case 'C':
-	case 'D':
-	case 'E':
-	case 'F':
-	case 'G':
-	case 'H':
-	case 'I':
-	case 'J':
-	case 'K':
-	case 'L':
-	case 'M':
-	case 'N':
-	case 'O':
-	case 'P':
-	case 'Q':
-	case 'R':
-	case 'S':
-	case 'T':
-	case 'U':
-	case 'V':
-	case 'W':
-	case 'X':
-	case 'Y':
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case 'Z':
-	case '_':
-	case 'a':
-	case 'b':
-	case 'c':
-	case 'd':
-	case 'e':
-	case 'f':
-	case 'g':
-	case 'h':
-	case 'i':
-	case 'j':
-	case 'k':
-	case 'l':
-	case 'm':
-	case 'n':
-	case 'o':
-	case 'p':
-	case 'q':
-	case 'r':
-	case 's':
-	case 't':
-	case 'u':
-	case 'v':
-	case 'w':
-	case 'x':
-	case 'y':
-	case 'z':	goto yy80;
-	case '.':	goto yy82;
-	default:	goto yy205;
+	case 'z':	goto yy275;
+	default:	goto yy67;
 	}
 yy205:
-#line 178 "rexx.--empty-class(match-empty).re"
-	{ RETURN(RX_SAY); }
-#line 3469 "rexx.--empty-class(match-empty).c"
-yy206:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'T':
-	case 't':	goto yy207;
-	default:	goto yy81;
+	case 't':	goto yy277;
+	default:	goto yy67;
+	}
+yy206:
+	yych = *++YYCURSOR;
+	switch (yych) {
+	case 'E':
+	case 'e':	goto yy279;
+	default:	goto yy67;
 	}
 yy207:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case 'U':
-	case 'u':	goto yy208;
-	default:	goto yy81;
+	case 'R':
+	case 'r':	goto yy280;
+	default:	goto yy67;
 	}
 yy208:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case 'R':
-	case 'r':	goto yy209;
-	default:	goto yy81;
+	case 'V':
+	case 'v':	goto yy281;
+	default:	goto yy67;
 	}
 yy209:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case 'N':
-	case 'n':	goto yy210;
-	default:	goto yy81;
+	case 'E':
+	case 'e':	goto yy282;
+	default:	goto yy67;
 	}
 yy210:
+	yych = *++YYCURSOR;
+	switch (yych) {
+	case 'E':
+	case 'e':	goto yy283;
+	default:	goto yy67;
+	}
+yy211:
 	++YYCURSOR;
 	switch ((yych = *YYCURSOR)) {
 	case '!':
@@ -3561,36 +2501,36 @@ yy210:
 	case 'w':
 	case 'x':
 	case 'y':
-	case 'z':	goto yy80;
-	case '.':	goto yy82;
-	default:	goto yy211;
+	case 'z':	goto yy66;
+	case '.':	goto yy68;
+	default:	goto yy212;
 	}
-yy211:
-#line 176 "rexx.--empty-class(match-empty).re"
-	{ RETURN(RX_RETURN); }
-#line 3572 "rexx.--empty-class(match-empty).c"
 yy212:
-	yych = *++YYCURSOR;
-	switch (yych) {
-	case 'E':
-	case 'e':	goto yy213;
-	default:	goto yy81;
-	}
+#line 158 "rexx.--empty-class(match-empty).re"
+	{ RETURN(RX_NOP); }
+#line 2512 "rexx.--empty-class(match-empty).c"
 yy213:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case 'U':
-	case 'u':	goto yy214;
-	default:	goto yy81;
+	case 'R':
+	case 'r':	goto yy285;
+	default:	goto yy67;
 	}
 yy214:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case 'E':
-	case 'e':	goto yy215;
-	default:	goto yy81;
+	case 'A':
+	case 'a':	goto yy286;
+	default:	goto yy67;
 	}
 yy215:
+	yych = *++YYCURSOR;
+	switch (yych) {
+	case 'E':
+	case 'e':	goto yy287;
+	default:	goto yy67;
+	}
+yy216:
 	++YYCURSOR;
 	switch ((yych = *YYCURSOR)) {
 	case '!':
@@ -3657,127 +2597,71 @@ yy215:
 	case 'w':
 	case 'x':
 	case 'y':
-	case 'z':	goto yy80;
-	case '.':	goto yy82;
-	default:	goto yy216;
+	case 'z':	goto yy66;
+	case '.':	goto yy68;
+	default:	goto yy217;
 	}
-yy216:
-#line 174 "rexx.--empty-class(match-empty).re"
-	{ RETURN(RX_QUEUE); }
-#line 3668 "rexx.--empty-class(match-empty).c"
 yy217:
-	yych = *++YYCURSOR;
-	switch (yych) {
-	case 'R':
-	case 'r':	goto yy234;
-	default:	goto yy81;
-	}
+#line 190 "rexx.--empty-class(match-empty).re"
+	{ RETURN(RXS_OFF); }
+#line 2608 "rexx.--empty-class(match-empty).c"
 yy218:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case 'O':
-	case 'o':	goto yy226;
-	default:	goto yy81;
+	case 'I':
+	case 'i':	goto yy288;
+	default:	goto yy67;
 	}
 yy219:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case 'L':
-	case 'l':	goto yy220;
-	case 'S':
-	case 's':	goto yy221;
-	default:	goto yy81;
+	case 'E':
+	case 'e':	goto yy289;
+	default:	goto yy67;
 	}
 yy220:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case 'L':
-	case 'l':	goto yy224;
-	default:	goto yy81;
+	case 'S':
+	case 's':	goto yy290;
+	default:	goto yy67;
 	}
 yy221:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case 'H':
-	case 'h':	goto yy222;
-	default:	goto yy81;
+	case 'C':
+	case 'c':	goto yy291;
+	default:	goto yy67;
 	}
 yy222:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
-	case '!':
-	case '0':
-	case '1':
-	case '2':
-	case '3':
-	case '4':
-	case '5':
-	case '6':
-	case '7':
-	case '8':
-	case '9':
-	case '?':
-	case 'A':
-	case 'B':
-	case 'C':
-	case 'D':
-	case 'E':
-	case 'F':
-	case 'G':
-	case 'H':
-	case 'I':
-	case 'J':
-	case 'K':
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case 'L':
-	case 'M':
-	case 'N':
-	case 'O':
-	case 'P':
-	case 'Q':
-	case 'R':
-	case 'S':
-	case 'T':
-	case 'U':
-	case 'V':
-	case 'W':
-	case 'X':
-	case 'Y':
-	case 'Z':
-	case '_':
-	case 'a':
-	case 'b':
-	case 'c':
-	case 'd':
-	case 'e':
-	case 'f':
-	case 'g':
-	case 'h':
-	case 'i':
-	case 'j':
-	case 'k':
-	case 'l':
-	case 'm':
-	case 'n':
-	case 'o':
-	case 'p':
-	case 'q':
-	case 'r':
-	case 's':
-	case 't':
-	case 'u':
-	case 'v':
-	case 'w':
-	case 'x':
-	case 'y':
-	case 'z':	goto yy80;
-	case '.':	goto yy82;
-	default:	goto yy223;
+	case 'l':	goto yy292;
+	default:	goto yy67;
 	}
 yy223:
-#line 172 "rexx.--empty-class(match-empty).re"
-	{ RETURN(RX_PUSH); }
-#line 3780 "rexx.--empty-class(match-empty).c"
+	yych = *++YYCURSOR;
+	switch (yych) {
+	case 'H':
+	case 'h':	goto yy294;
+	default:	goto yy67;
+	}
 yy224:
+	yych = *++YYCURSOR;
+	switch (yych) {
+	case 'U':
+	case 'u':	goto yy296;
+	default:	goto yy67;
+	}
+yy225:
+	yych = *++YYCURSOR;
+	switch (yych) {
+	case 'U':
+	case 'u':	goto yy297;
+	default:	goto yy67;
+	}
+yy226:
 	++YYCURSOR;
 	switch ((yych = *YYCURSOR)) {
 	case '!':
@@ -3844,228 +2728,85 @@ yy224:
 	case 'w':
 	case 'x':
 	case 'y':
-	case 'z':	goto yy80;
-	case '.':	goto yy82;
-	default:	goto yy225;
-	}
-yy225:
-#line 170 "rexx.--empty-class(match-empty).re"
-	{ RETURN(RX_PULL); }
-#line 3855 "rexx.--empty-class(match-empty).c"
-yy226:
-	yych = *++YYCURSOR;
-	switch (yych) {
-	case 'C':
-	case 'c':	goto yy227;
-	default:	goto yy81;
+	case 'z':	goto yy66;
+	case '.':	goto yy68;
+	default:	goto yy227;
 	}
 yy227:
-	yych = *++YYCURSOR;
-	switch (yych) {
-	case 'E':
-	case 'e':	goto yy228;
-	default:	goto yy81;
-	}
+#line 178 "rexx.--empty-class(match-empty).re"
+	{ RETURN(RX_SAY); }
+#line 2739 "rexx.--empty-class(match-empty).c"
 yy228:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case 'D':
-	case 'd':	goto yy229;
-	default:	goto yy81;
+	case 'E':
+	case 'e':	goto yy298;
+	default:	goto yy67;
 	}
 yy229:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case 'U':
-	case 'u':	goto yy230;
-	default:	goto yy81;
+	case 'E':
+	case 'e':	goto yy299;
+	default:	goto yy67;
 	}
 yy230:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case 'R':
-	case 'r':	goto yy231;
-	default:	goto yy81;
+	case 'N':
+	case 'n':	goto yy300;
+	default:	goto yy67;
 	}
 yy231:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case 'E':
-	case 'e':	goto yy232;
-	default:	goto yy81;
+	case 'R':
+	case 'r':	goto yy301;
+	default:	goto yy67;
 	}
 yy232:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
-	case '!':
-	case '0':
-	case '1':
-	case '2':
-	case '3':
-	case '4':
-	case '5':
-	case '6':
-	case '7':
-	case '8':
-	case '9':
-	case '?':
-	case 'A':
-	case 'B':
-	case 'C':
-	case 'D':
-	case 'E':
-	case 'F':
-	case 'G':
-	case 'H':
-	case 'I':
-	case 'J':
-	case 'K':
-	case 'L':
-	case 'M':
-	case 'N':
-	case 'O':
-	case 'P':
-	case 'Q':
-	case 'R':
-	case 'S':
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case 'T':
-	case 'U':
-	case 'V':
-	case 'W':
-	case 'X':
-	case 'Y':
-	case 'Z':
-	case '_':
-	case 'a':
-	case 'b':
-	case 'c':
-	case 'd':
-	case 'e':
-	case 'f':
-	case 'g':
-	case 'h':
-	case 'i':
-	case 'j':
-	case 'k':
-	case 'l':
-	case 'm':
-	case 'n':
-	case 'o':
-	case 'p':
-	case 'q':
-	case 'r':
-	case 's':
-	case 't':
-	case 'u':
-	case 'v':
-	case 'w':
-	case 'x':
-	case 'y':
-	case 'z':	goto yy80;
-	case '.':	goto yy82;
-	default:	goto yy233;
+	case 't':	goto yy302;
+	default:	goto yy67;
 	}
 yy233:
-#line 168 "rexx.--empty-class(match-empty).re"
-	{ RETURN(RX_PROCEDURE); }
-#line 3972 "rexx.--empty-class(match-empty).c"
+	yych = *++YYCURSOR;
+	switch (yych) {
+	case 'N':
+	case 'n':	goto yy303;
+	default:	goto yy67;
+	}
 yy234:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case 'S':
-	case 's':	goto yy235;
-	default:	goto yy81;
+	case 'C':
+	case 'c':	goto yy305;
+	default:	goto yy67;
 	}
 yy235:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case 'E':
-	case 'e':	goto yy236;
-	default:	goto yy81;
+	case 'I':
+	case 'i':	goto yy306;
+	default:	goto yy67;
 	}
 yy236:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
-	case '!':
-	case '0':
-	case '1':
-	case '2':
-	case '3':
-	case '4':
-	case '5':
-	case '6':
-	case '7':
-	case '8':
-	case '9':
-	case '?':
-	case 'A':
-	case 'B':
-	case 'C':
-	case 'D':
-	case 'E':
-	case 'F':
-	case 'G':
-	case 'H':
-	case 'I':
-	case 'J':
-	case 'K':
-	case 'L':
-	case 'M':
-	case 'N':
-	case 'O':
-	case 'P':
-	case 'Q':
-	case 'R':
-	case 'S':
-	case 'T':
-	case 'U':
-	case 'V':
-	case 'W':
-	case 'X':
-	case 'Y':
-	case 'Z':
-	case '_':
-	case 'a':
-	case 'b':
-	case 'c':
-	case 'd':
-	case 'e':
-	case 'f':
-	case 'g':
-	case 'h':
-	case 'i':
-	case 'j':
-	case 'k':
-	case 'l':
-	case 'm':
-	case 'n':
-	case 'o':
-	case 'p':
-	case 'q':
-	case 'r':
-	case 's':
-	case 't':
-	case 'u':
-	case 'v':
-	case 'w':
-	case 'x':
-	case 'y':
-	case 'z':	goto yy80;
-	case '.':	goto yy82;
-	default:	goto yy237;
-	}
-yy237:
-#line 166 "rexx.--empty-class(match-empty).re"
-	{ RETURN(RX_PARSE); }
-#line 4061 "rexx.--empty-class(match-empty).c"
-yy238:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case 'F':
-	case 'f':	goto yy257;
-	default:	goto yy81;
+	case 'E':
+	case 'e':	goto yy307;
+	default:	goto yy67;
 	}
-yy239:
+yy237:
+	yych = *++YYCURSOR;
+	switch (yych) {
+	case 'U':
+	case 'u':	goto yy308;
+	default:	goto yy67;
+	}
+yy238:
 	++YYCURSOR;
 	switch ((yych = *YYCURSOR)) {
 	case '!':
@@ -4132,252 +2873,94 @@ yy239:
 	case 'w':
 	case 'x':
 	case 'y':
-	case 'z':	goto yy80;
-	case '.':	goto yy82;
-	default:	goto yy240;
+	case 'z':	goto yy66;
+	case '.':	goto yy68;
+	default:	goto yy239;
 	}
+yy239:
+#line 238 "rexx.--empty-class(match-empty).re"
+	{ RETURN(RXS_VAR); }
+#line 2884 "rexx.--empty-class(match-empty).c"
 yy240:
-#line 192 "rexx.--empty-class(match-empty).re"
-	{ RETURN(RXS_ON); }
-#line 4143 "rexx.--empty-class(match-empty).c"
+	yych = *++YYCURSOR;
+	switch (yych) {
+	case 'S':
+	case 's':	goto yy309;
+	default:	goto yy67;
+	}
 yy241:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case 'T':
-	case 't':	goto yy251;
-	default:	goto yy81;
+	case 'N':
+	case 'n':	goto yy310;
+	default:	goto yy67;
 	}
 yy242:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case 'H':
-	case 'h':	goto yy243;
-	default:	goto yy81;
+	case 'L':
+	case 'l':	goto yy312;
+	default:	goto yy67;
 	}
 yy243:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case 'E':
-	case 'e':	goto yy244;
-	default:	goto yy81;
+	case 'H':
+	case 'h':	goto yy313;
+	default:	goto yy67;
 	}
 yy244:
-	yych = *++YYCURSOR;
+	++YYCURSOR;
+	if (YYLIMIT <= YYCURSOR) YYFILL(1);
+	yych = *YYCURSOR;
 	switch (yych) {
-	case 'R':
-	case 'r':	goto yy245;
-	default:	goto yy81;
-	}
-yy245:
-	yych = *++YYCURSOR;
-	switch (yych) {
-	case 'W':
-	case 'w':	goto yy246;
-	default:	goto yy81;
+	case '\t':
+	case ' ':	goto yy244;
+	case '<':	goto yy186;
+	default:	goto yy72;
 	}
 yy246:
-	yych = *++YYCURSOR;
+	++YYCURSOR;
+	if (YYLIMIT <= YYCURSOR) YYFILL(1);
+	yych = *YYCURSOR;
 	switch (yych) {
-	case 'I':
-	case 'i':	goto yy247;
-	default:	goto yy81;
-	}
-yy247:
-	yych = *++YYCURSOR;
-	switch (yych) {
-	case 'S':
-	case 's':	goto yy248;
-	default:	goto yy81;
+	case '\t':
+	case ' ':	goto yy246;
+	case '=':	goto yy248;
+	default:	goto yy72;
 	}
 yy248:
-	yych = *++YYCURSOR;
-	switch (yych) {
-	case 'E':
-	case 'e':	goto yy249;
-	default:	goto yy81;
-	}
-yy249:
 	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
-	case '!':
-	case '0':
-	case '1':
-	case '2':
-	case '3':
-	case '4':
-	case '5':
-	case '6':
-	case '7':
-	case '8':
-	case '9':
-	case '?':
-	case 'A':
-	case 'B':
-	case 'C':
-	case 'D':
-	case 'E':
-	case 'F':
-	case 'G':
-	case 'H':
-	case 'I':
-	case 'J':
-	case 'K':
-	case 'L':
-	case 'M':
-	case 'N':
-	case 'O':
-	case 'P':
-	case 'Q':
-	case 'R':
-	case 'S':
-	case 'T':
-	case 'U':
-	case 'V':
-	case 'W':
-	case 'X':
-	case 'Y':
-	case 'Z':
-	case '_':
-	case 'a':
-	case 'b':
-	case 'c':
-	case 'd':
-	case 'e':
-	case 'f':
-	case 'g':
-	case 'h':
-	case 'i':
-	case 'j':
-	case 'k':
-	case 'l':
-	case 'm':
-	case 'n':
-	case 'o':
-	case 'p':
-	case 'q':
-	case 'r':
-	case 's':
-	case 't':
-	case 'u':
-	case 'v':
-	case 'w':
-	case 'x':
-	case 'y':
-	case 'z':	goto yy80;
-	case '.':	goto yy82;
-	default:	goto yy250;
-	}
+#line 104 "rexx.--empty-class(match-empty).re"
+	{ RETURN(OP_EQUAL_EQ_N); }
+#line 2937 "rexx.--empty-class(match-empty).c"
 yy250:
-#line 164 "rexx.--empty-class(match-empty).re"
-	{ RETURN(RX_OTHERWISE); }
-#line 4274 "rexx.--empty-class(match-empty).c"
-yy251:
-	yych = *++YYCURSOR;
+	++YYCURSOR;
+	if (YYLIMIT <= YYCURSOR) YYFILL(1);
+	yych = *YYCURSOR;
 	switch (yych) {
-	case 'I':
-	case 'i':	goto yy252;
-	default:	goto yy81;
+	case '\t':
+	case ' ':	goto yy250;
+	case '>':	goto yy182;
+	default:	goto yy72;
 	}
 yy252:
-	yych = *++YYCURSOR;
-	switch (yych) {
-	case 'O':
-	case 'o':	goto yy253;
-	default:	goto yy81;
-	}
-yy253:
-	yych = *++YYCURSOR;
-	switch (yych) {
-	case 'N':
-	case 'n':	goto yy254;
-	default:	goto yy81;
-	}
+	++YYCURSOR;
+	YYCURSOR = YYCTXMARKER;
+#line 257 "rexx.--empty-class(match-empty).re"
+	{ RETURN(SU_LITERAL_BIN); }
+#line 2953 "rexx.--empty-class(match-empty).c"
 yy254:
-	yych = *++YYCURSOR;
-	switch (yych) {
-	case 'S':
-	case 's':	goto yy255;
-	default:	goto yy81;
-	}
-yy255:
 	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
-	case '!':
-	case '0':
-	case '1':
-	case '2':
-	case '3':
-	case '4':
-	case '5':
-	case '6':
-	case '7':
-	case '8':
-	case '9':
-	case '?':
-	case 'A':
-	case 'B':
-	case 'C':
-	case 'D':
-	case 'E':
-	case 'F':
-	case 'G':
-	case 'H':
-	case 'I':
-	case 'J':
-	case 'K':
-	case 'L':
-	case 'M':
-	case 'N':
-	case 'O':
-	case 'P':
-	case 'Q':
-	case 'R':
-	case 'S':
-	case 'T':
-	case 'U':
-	case 'V':
-	case 'W':
-	case 'X':
-	case 'Y':
-	case 'Z':
-	case '_':
-	case 'a':
-	case 'b':
-	case 'c':
-	case 'd':
-	case 'e':
-	case 'f':
-	case 'g':
-	case 'h':
-	case 'i':
-	case 'j':
-	case 'k':
-	case 'l':
-	case 'm':
-	case 'n':
-	case 'o':
-	case 'p':
-	case 'q':
-	case 'r':
-	case 's':
-	case 't':
-	case 'u':
-	case 'v':
-	case 'w':
-	case 'x':
-	case 'y':
-	case 'z':	goto yy80;
-	case '.':	goto yy82;
-	default:	goto yy256;
-	}
+	YYCURSOR = YYCTXMARKER;
+#line 259 "rexx.--empty-class(match-empty).re"
+	{ RETURN(SU_LITERAL_HEX); }
+#line 2959 "rexx.--empty-class(match-empty).c"
 yy256:
-#line 162 "rexx.--empty-class(match-empty).re"
-	{ RETURN(RX_OPTIONS); }
-#line 4377 "rexx.--empty-class(match-empty).c"
-yy257:
 	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
-	case '!':
+	if (YYLIMIT <= YYCURSOR) YYFILL(1);
+	yych = *YYCURSOR;
+	switch (yych) {
 	case '0':
 	case '1':
 	case '2':
@@ -4387,122 +2970,99 @@ yy257:
 	case '6':
 	case '7':
 	case '8':
-	case '9':
-	case '?':
-	case 'A':
-	case 'B':
-	case 'C':
-	case 'D':
-	case 'E':
-	case 'F':
-	case 'G':
-	case 'H':
-	case 'I':
-	case 'J':
-	case 'K':
-	case 'L':
-	case 'M':
-	case 'N':
-	case 'O':
-	case 'P':
-	case 'Q':
-	case 'R':
-	case 'S':
-	case 'T':
-	case 'U':
-	case 'V':
-	case 'W':
-	case 'X':
-	case 'Y':
-	case 'Z':
-	case '_':
-	case 'a':
-	case 'b':
-	case 'c':
-	case 'd':
-	case 'e':
-	case 'f':
-	case 'g':
-	case 'h':
-	case 'i':
-	case 'j':
-	case 'k':
-	case 'l':
-	case 'm':
-	case 'n':
-	case 'o':
-	case 'p':
-	case 'q':
-	case 'r':
-	case 's':
-	case 't':
-	case 'u':
-	case 'v':
-	case 'w':
-	case 'x':
-	case 'y':
-	case 'z':	goto yy80;
-	case '.':	goto yy82;
-	default:	goto yy258;
+	case '9':	goto yy256;
+	default:	goto yy30;
 	}
 yy258:
-#line 190 "rexx.--empty-class(match-empty).re"
-	{ RETURN(RXS_OFF); }
-#line 4452 "rexx.--empty-class(match-empty).c"
-yy259:
 	yych = *++YYCURSOR;
 	switch (yych) {
+	case 'E':
+	case 'e':	goto yy315;
+	default:	goto yy67;
+	}
+yy259:
+	++YYCURSOR;
+	switch ((yych = *YYCURSOR)) {
+	case '!':
+	case '0':
+	case '1':
+	case '2':
+	case '3':
+	case '4':
+	case '5':
+	case '6':
+	case '7':
+	case '8':
+	case '9':
+	case '?':
+	case 'A':
+	case 'B':
+	case 'C':
+	case 'D':
+	case 'E':
+	case 'F':
+	case 'G':
+	case 'H':
+	case 'I':
+	case 'J':
+	case 'K':
+	case 'L':
 	case 'M':
-	case 'm':	goto yy283;
-	default:	goto yy81;
+	case 'N':
+	case 'O':
+	case 'P':
+	case 'Q':
+	case 'R':
+	case 'S':
+	case 'T':
+	case 'U':
+	case 'V':
+	case 'W':
+	case 'X':
+	case 'Y':
+	case 'Z':
+	case '_':
+	case 'a':
+	case 'b':
+	case 'c':
+	case 'd':
+	case 'e':
+	case 'f':
+	case 'g':
+	case 'h':
+	case 'i':
+	case 'j':
+	case 'k':
+	case 'l':
+	case 'm':
+	case 'n':
+	case 'o':
+	case 'p':
+	case 'q':
+	case 'r':
+	case 's':
+	case 't':
+	case 'u':
+	case 'v':
+	case 'w':
+	case 'x':
+	case 'y':
+	case 'z':	goto yy66;
+	case '.':	goto yy68;
+	default:	goto yy260;
 	}
 yy260:
-	yych = *++YYCURSOR;
-	switch (yych) {
-	case 'P':
-	case 'p':	goto yy268;
-	case 'T':
-	case 't':	goto yy270;
-	case 'V':
-	case 'v':	goto yy271;
-	default:	goto yy81;
-	}
+#line 138 "rexx.--empty-class(match-empty).re"
+	{ RETURN(RX_CALL); }
+#line 3058 "rexx.--empty-class(match-empty).c"
 yy261:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case 'M':
-	case 'm':	goto yy262;
-	default:	goto yy81;
+	case 'T':
+	case 't':	goto yy316;
+	default:	goto yy67;
 	}
 yy262:
-	yych = *++YYCURSOR;
-	switch (yych) {
-	case 'E':
-	case 'e':	goto yy263;
-	default:	goto yy81;
-	}
-yy263:
-	yych = *++YYCURSOR;
-	switch (yych) {
-	case 'R':
-	case 'r':	goto yy264;
-	default:	goto yy81;
-	}
-yy264:
-	yych = *++YYCURSOR;
-	switch (yych) {
-	case 'I':
-	case 'i':	goto yy265;
-	default:	goto yy81;
-	}
-yy265:
-	yych = *++YYCURSOR;
-	switch (yych) {
-	case 'C':
-	case 'c':	goto yy266;
-	default:	goto yy81;
-	}
-yy266:
 	++YYCURSOR;
 	switch ((yych = *YYCURSOR)) {
 	case '!':
@@ -4569,14 +3129,103 @@ yy266:
 	case 'w':
 	case 'x':
 	case 'y':
-	case 'z':	goto yy80;
-	case '.':	goto yy82;
-	default:	goto yy267;
+	case 'z':	goto yy66;
+	case '.':	goto yy68;
+	default:	goto yy263;
+	}
+yy263:
+#line 142 "rexx.--empty-class(match-empty).re"
+	{ RETURN(RX_DROP); }
+#line 3140 "rexx.--empty-class(match-empty).c"
+yy264:
+	++YYCURSOR;
+	switch ((yych = *YYCURSOR)) {
+	case '!':
+	case '0':
+	case '1':
+	case '2':
+	case '3':
+	case '4':
+	case '5':
+	case '6':
+	case '7':
+	case '8':
+	case '9':
+	case '?':
+	case 'A':
+	case 'B':
+	case 'C':
+	case 'D':
+	case 'E':
+	case 'F':
+	case 'G':
+	case 'H':
+	case 'I':
+	case 'J':
+	case 'K':
+	case 'L':
+	case 'M':
+	case 'N':
+	case 'O':
+	case 'P':
+	case 'Q':
+	case 'R':
+	case 'S':
+	case 'T':
+	case 'U':
+	case 'V':
+	case 'W':
+	case 'X':
+	case 'Y':
+	case 'Z':
+	case '_':
+	case 'a':
+	case 'b':
+	case 'c':
+	case 'd':
+	case 'e':
+	case 'f':
+	case 'g':
+	case 'h':
+	case 'i':
+	case 'j':
+	case 'k':
+	case 'l':
+	case 'm':
+	case 'n':
+	case 'o':
+	case 'p':
+	case 'q':
+	case 'r':
+	case 's':
+	case 't':
+	case 'u':
+	case 'v':
+	case 'w':
+	case 'x':
+	case 'y':
+	case 'z':	goto yy66;
+	case '.':	goto yy68;
+	default:	goto yy265;
+	}
+yy265:
+#line 144 "rexx.--empty-class(match-empty).re"
+	{ RETURN(RX_ELSE); }
+#line 3215 "rexx.--empty-class(match-empty).c"
+yy266:
+	yych = *++YYCURSOR;
+	switch (yych) {
+	case 'N':
+	case 'n':	goto yy317;
+	default:	goto yy67;
 	}
 yy267:
-#line 160 "rexx.--empty-class(match-empty).re"
-	{ RETURN(RX_NUMERIC); }
-#line 4580 "rexx.--empty-class(match-empty).c"
+	yych = *++YYCURSOR;
+	switch (yych) {
+	case 'R':
+	case 'r':	goto yy318;
+	default:	goto yy67;
+	}
 yy268:
 	++YYCURSOR;
 	switch ((yych = *YYCURSOR)) {
@@ -4644,49 +3293,110 @@ yy268:
 	case 'w':
 	case 'x':
 	case 'y':
-	case 'z':	goto yy80;
-	case '.':	goto yy82;
+	case 'z':	goto yy66;
+	case '.':	goto yy68;
 	default:	goto yy269;
 	}
 yy269:
-#line 158 "rexx.--empty-class(match-empty).re"
-	{ RETURN(RX_NOP); }
-#line 4655 "rexx.--empty-class(match-empty).c"
+#line 148 "rexx.--empty-class(match-empty).re"
+	{ RETURN(RX_EXIT); }
+#line 3304 "rexx.--empty-class(match-empty).c"
 yy270:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case 'R':
-	case 'r':	goto yy277;
-	default:	goto yy81;
+	case 'S':
+	case 's':	goto yy320;
+	default:	goto yy67;
 	}
 yy271:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case 'A':
-	case 'a':	goto yy272;
-	default:	goto yy81;
+	case 'U':
+	case 'u':	goto yy321;
+	default:	goto yy67;
 	}
 yy272:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case 'L':
-	case 'l':	goto yy273;
-	default:	goto yy81;
+	case 'V':
+	case 'v':	goto yy322;
+	default:	goto yy67;
 	}
 yy273:
-	yych = *++YYCURSOR;
-	switch (yych) {
+	++YYCURSOR;
+	switch ((yych = *YYCURSOR)) {
+	case '!':
+	case '0':
+	case '1':
+	case '2':
+	case '3':
+	case '4':
+	case '5':
+	case '6':
+	case '7':
+	case '8':
+	case '9':
+	case '?':
+	case 'A':
+	case 'B':
+	case 'C':
+	case 'D':
+	case 'E':
+	case 'F':
+	case 'G':
+	case 'H':
+	case 'I':
+	case 'J':
+	case 'K':
+	case 'L':
+	case 'M':
+	case 'N':
+	case 'O':
+	case 'P':
+	case 'Q':
+	case 'R':
+	case 'S':
+	case 'T':
 	case 'U':
-	case 'u':	goto yy274;
-	default:	goto yy81;
+	case 'V':
+	case 'W':
+	case 'X':
+	case 'Y':
+	case 'Z':
+	case '_':
+	case 'a':
+	case 'b':
+	case 'c':
+	case 'd':
+	case 'e':
+	case 'f':
+	case 'g':
+	case 'h':
+	case 'i':
+	case 'j':
+	case 'k':
+	case 'l':
+	case 'm':
+	case 'n':
+	case 'o':
+	case 'p':
+	case 'q':
+	case 'r':
+	case 's':
+	case 't':
+	case 'u':
+	case 'v':
+	case 'w':
+	case 'x':
+	case 'y':
+	case 'z':	goto yy66;
+	case '.':	goto yy68;
+	default:	goto yy274;
 	}
 yy274:
-	yych = *++YYCURSOR;
-	switch (yych) {
-	case 'E':
-	case 'e':	goto yy275;
-	default:	goto yy81;
-	}
+#line 210 "rexx.--empty-class(match-empty).re"
+	{ RETURN(RXS_FORM); }
+#line 3400 "rexx.--empty-class(match-empty).c"
 yy275:
 	++YYCURSOR;
 	switch ((yych = *YYCURSOR)) {
@@ -4754,125 +3464,118 @@ yy275:
 	case 'w':
 	case 'x':
 	case 'y':
-	case 'z':	goto yy80;
-	case '.':	goto yy82;
+	case 'z':	goto yy66;
+	case '.':	goto yy68;
 	default:	goto yy276;
 	}
 yy276:
-#line 222 "rexx.--empty-class(match-empty).re"
-	{ RETURN(RXS_NOVALUE); }
-#line 4765 "rexx.--empty-class(match-empty).c"
+#line 212 "rexx.--empty-class(match-empty).re"
+	{ RETURN(RXS_FUZZ); }
+#line 3475 "rexx.--empty-class(match-empty).c"
 yy277:
-	yych = *++YYCURSOR;
-	switch (yych) {
+	++YYCURSOR;
+	switch ((yych = *YYCURSOR)) {
+	case '!':
+	case '0':
+	case '1':
+	case '2':
+	case '3':
+	case '4':
+	case '5':
+	case '6':
+	case '7':
+	case '8':
+	case '9':
+	case '?':
+	case 'A':
+	case 'B':
+	case 'C':
+	case 'D':
 	case 'E':
-	case 'e':	goto yy278;
-	default:	goto yy81;
+	case 'F':
+	case 'G':
+	case 'H':
+	case 'I':
+	case 'J':
+	case 'K':
+	case 'L':
+	case 'M':
+	case 'N':
+	case 'O':
+	case 'P':
+	case 'Q':
+	case 'R':
+	case 'S':
+	case 'T':
+	case 'U':
+	case 'V':
+	case 'W':
+	case 'X':
+	case 'Y':
+	case 'Z':
+	case '_':
+	case 'a':
+	case 'b':
+	case 'c':
+	case 'd':
+	case 'e':
+	case 'f':
+	case 'g':
+	case 'h':
+	case 'i':
+	case 'j':
+	case 'k':
+	case 'l':
+	case 'm':
+	case 'n':
+	case 'o':
+	case 'p':
+	case 'q':
+	case 'r':
+	case 's':
+	case 't':
+	case 'u':
+	case 'v':
+	case 'w':
+	case 'x':
+	case 'y':
+	case 'z':	goto yy66;
+	case '.':	goto yy68;
+	default:	goto yy278;
 	}
 yy278:
-	yych = *++YYCURSOR;
-	switch (yych) {
-	case 'A':
-	case 'a':	goto yy279;
-	default:	goto yy81;
-	}
+#line 214 "rexx.--empty-class(match-empty).re"
+	{ RETURN(RXS_HALT); }
+#line 3550 "rexx.--empty-class(match-empty).c"
 yy279:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case 'D':
-	case 'd':	goto yy280;
-	default:	goto yy81;
+	case 'R':
+	case 'r':	goto yy323;
+	default:	goto yy67;
 	}
 yy280:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case 'Y':
-	case 'y':	goto yy281;
-	default:	goto yy81;
+	case 'A':
+	case 'a':	goto yy324;
+	default:	goto yy67;
 	}
 yy281:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
-	case '!':
-	case '0':
-	case '1':
-	case '2':
-	case '3':
-	case '4':
-	case '5':
-	case '6':
-	case '7':
-	case '8':
-	case '9':
-	case '?':
-	case 'A':
-	case 'B':
-	case 'C':
-	case 'D':
-	case 'E':
-	case 'F':
-	case 'G':
-	case 'H':
-	case 'I':
-	case 'J':
-	case 'K':
-	case 'L':
-	case 'M':
-	case 'N':
-	case 'O':
-	case 'P':
-	case 'Q':
-	case 'R':
-	case 'S':
-	case 'T':
-	case 'U':
-	case 'V':
-	case 'W':
-	case 'X':
-	case 'Y':
-	case 'Z':
-	case '_':
-	case 'a':
-	case 'b':
-	case 'c':
-	case 'd':
-	case 'e':
-	case 'f':
-	case 'g':
-	case 'h':
-	case 'i':
-	case 'j':
-	case 'k':
-	case 'l':
-	case 'm':
-	case 'n':
-	case 'o':
-	case 'p':
-	case 'q':
-	case 'r':
-	case 's':
-	case 't':
-	case 'u':
-	case 'v':
-	case 'w':
-	case 'x':
-	case 'y':
-	case 'z':	goto yy80;
-	case '.':	goto yy82;
-	default:	goto yy282;
-	}
-yy282:
-#line 220 "rexx.--empty-class(match-empty).re"
-	{ RETURN(RXS_NOTREADY); }
-#line 4868 "rexx.--empty-class(match-empty).c"
-yy283:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'E':
-	case 'e':	goto yy284;
-	default:	goto yy81;
+	case 'e':	goto yy325;
+	default:	goto yy67;
 	}
-yy284:
+yy282:
+	yych = *++YYCURSOR;
+	switch (yych) {
+	case 'I':
+	case 'i':	goto yy327;
+	default:	goto yy67;
+	}
+yy283:
 	++YYCURSOR;
 	switch ((yych = *YYCURSOR)) {
 	case '!':
@@ -4939,331 +3642,263 @@ yy284:
 	case 'w':
 	case 'x':
 	case 'y':
-	case 'z':	goto yy80;
-	case '.':	goto yy82;
-	default:	goto yy285;
+	case 'z':	goto yy66;
+	case '.':	goto yy68;
+	default:	goto yy284;
 	}
-yy285:
+yy284:
 #line 218 "rexx.--empty-class(match-empty).re"
 	{ RETURN(RXS_NAME); }
-#line 4950 "rexx.--empty-class(match-empty).c"
+#line 3653 "rexx.--empty-class(match-empty).c"
+yy285:
+	yych = *++YYCURSOR;
+	switch (yych) {
+	case 'E':
+	case 'e':	goto yy328;
+	default:	goto yy67;
+	}
 yy286:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case 'A':
-	case 'a':	goto yy293;
-	default:	goto yy81;
+	case 'L':
+	case 'l':	goto yy329;
+	default:	goto yy67;
 	}
 yy287:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case 'N':
-	case 'n':	goto yy288;
-	default:	goto yy81;
+	case 'R':
+	case 'r':	goto yy330;
+	default:	goto yy67;
 	}
 yy288:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case 'E':
-	case 'e':	goto yy289;
-	default:	goto yy81;
+	case 'O':
+	case 'o':	goto yy331;
+	default:	goto yy67;
 	}
 yy289:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case 'I':
-	case 'i':	goto yy290;
-	default:	goto yy81;
+	case 'R':
+	case 'r':	goto yy332;
+	default:	goto yy67;
 	}
 yy290:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case 'N':
-	case 'n':	goto yy291;
-	default:	goto yy81;
+	case 'E':
+	case 'e':	goto yy333;
+	default:	goto yy67;
 	}
 yy291:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
-	case '!':
-	case '0':
-	case '1':
-	case '2':
-	case '3':
-	case '4':
-	case '5':
-	case '6':
-	case '7':
-	case '8':
-	case '9':
-	case '?':
-	case 'A':
-	case 'B':
-	case 'C':
-	case 'D':
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case 'E':
-	case 'F':
-	case 'G':
-	case 'H':
-	case 'I':
-	case 'J':
-	case 'K':
-	case 'L':
-	case 'M':
-	case 'N':
-	case 'O':
-	case 'P':
-	case 'Q':
-	case 'R':
-	case 'S':
-	case 'T':
-	case 'U':
-	case 'V':
-	case 'W':
-	case 'X':
-	case 'Y':
-	case 'Z':
-	case '_':
-	case 'a':
-	case 'b':
-	case 'c':
-	case 'd':
-	case 'e':
-	case 'f':
-	case 'g':
-	case 'h':
-	case 'i':
-	case 'j':
-	case 'k':
-	case 'l':
-	case 'm':
-	case 'n':
-	case 'o':
-	case 'p':
-	case 'q':
-	case 'r':
-	case 's':
-	case 't':
-	case 'u':
-	case 'v':
-	case 'w':
-	case 'x':
-	case 'y':
-	case 'z':	goto yy80;
-	case '.':	goto yy82;
-	default:	goto yy292;
+	case 'e':	goto yy335;
+	default:	goto yy67;
 	}
 yy292:
-#line 216 "rexx.--empty-class(match-empty).re"
-	{ RETURN(RXS_LINEIN); }
-#line 5060 "rexx.--empty-class(match-empty).c"
-yy293:
-	yych = *++YYCURSOR;
-	switch (yych) {
-	case 'V':
-	case 'v':	goto yy294;
-	default:	goto yy81;
-	}
-yy294:
-	yych = *++YYCURSOR;
-	switch (yych) {
+	++YYCURSOR;
+	switch ((yych = *YYCURSOR)) {
+	case '!':
+	case '0':
+	case '1':
+	case '2':
+	case '3':
+	case '4':
+	case '5':
+	case '6':
+	case '7':
+	case '8':
+	case '9':
+	case '?':
+	case 'A':
+	case 'B':
+	case 'C':
+	case 'D':
 	case 'E':
-	case 'e':	goto yy295;
-	default:	goto yy81;
+	case 'F':
+	case 'G':
+	case 'H':
+	case 'I':
+	case 'J':
+	case 'K':
+	case 'L':
+	case 'M':
+	case 'N':
+	case 'O':
+	case 'P':
+	case 'Q':
+	case 'R':
+	case 'S':
+	case 'T':
+	case 'U':
+	case 'V':
+	case 'W':
+	case 'X':
+	case 'Y':
+	case 'Z':
+	case '_':
+	case 'a':
+	case 'b':
+	case 'c':
+	case 'd':
+	case 'e':
+	case 'f':
+	case 'g':
+	case 'h':
+	case 'i':
+	case 'j':
+	case 'k':
+	case 'l':
+	case 'm':
+	case 'n':
+	case 'o':
+	case 'p':
+	case 'q':
+	case 'r':
+	case 's':
+	case 't':
+	case 'u':
+	case 'v':
+	case 'w':
+	case 'x':
+	case 'y':
+	case 'z':	goto yy66;
+	case '.':	goto yy68;
+	default:	goto yy293;
+	}
+yy293:
+#line 170 "rexx.--empty-class(match-empty).re"
+	{ RETURN(RX_PULL); }
+#line 3777 "rexx.--empty-class(match-empty).c"
+yy294:
+	++YYCURSOR;
+	switch ((yych = *YYCURSOR)) {
+	case '!':
+	case '0':
+	case '1':
+	case '2':
+	case '3':
+	case '4':
+	case '5':
+	case '6':
+	case '7':
+	case '8':
+	case '9':
+	case '?':
+	case 'A':
+	case 'B':
+	case 'C':
+	case 'D':
+	case 'E':
+	case 'F':
+	case 'G':
+	case 'H':
+	case 'I':
+	case 'J':
+	case 'K':
+	case 'L':
+	case 'M':
+	case 'N':
+	case 'O':
+	case 'P':
+	case 'Q':
+	case 'R':
+	case 'S':
+	case 'T':
+	case 'U':
+	case 'V':
+	case 'W':
+	case 'X':
+	case 'Y':
+	case 'Z':
+	case '_':
+	case 'a':
+	case 'b':
+	case 'c':
+	case 'd':
+	case 'e':
+	case 'f':
+	case 'g':
+	case 'h':
+	case 'i':
+	case 'j':
+	case 'k':
+	case 'l':
+	case 'm':
+	case 'n':
+	case 'o':
+	case 'p':
+	case 'q':
+	case 'r':
+	case 's':
+	case 't':
+	case 'u':
+	case 'v':
+	case 'w':
+	case 'x':
+	case 'y':
+	case 'z':	goto yy66;
+	case '.':	goto yy68;
+	default:	goto yy295;
 	}
 yy295:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
-	case '!':
-	case '0':
-	case '1':
-	case '2':
-	case '3':
-	case '4':
-	case '5':
-	case '6':
-	case '7':
-	case '8':
-	case '9':
-	case '?':
-	case 'A':
-	case 'B':
-	case 'C':
-	case 'D':
-	case 'E':
-	case 'F':
-	case 'G':
-	case 'H':
-	case 'I':
-	case 'J':
-	case 'K':
-	case 'L':
-	case 'M':
-	case 'N':
-	case 'O':
-	case 'P':
-	case 'Q':
-	case 'R':
-	case 'S':
-	case 'T':
-	case 'U':
-	case 'V':
-	case 'W':
-	case 'X':
-	case 'Y':
-	case 'Z':
-	case '_':
-	case 'a':
-	case 'b':
-	case 'c':
-	case 'd':
-	case 'e':
-	case 'f':
-	case 'g':
-	case 'h':
-	case 'i':
-	case 'j':
-	case 'k':
-	case 'l':
-	case 'm':
-	case 'n':
-	case 'o':
-	case 'p':
-	case 'q':
-	case 'r':
-	case 's':
-	case 't':
-	case 'u':
-	case 'v':
-	case 'w':
-	case 'x':
-	case 'y':
-	case 'z':	goto yy80;
-	case '.':	goto yy82;
-	default:	goto yy296;
-	}
+#line 172 "rexx.--empty-class(match-empty).re"
+	{ RETURN(RX_PUSH); }
+#line 3852 "rexx.--empty-class(match-empty).c"
 yy296:
-#line 156 "rexx.--empty-class(match-empty).re"
-	{ RETURN(RX_LEAVE); }
-#line 5149 "rexx.--empty-class(match-empty).c"
-yy297:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
-	case '!':
-	case '0':
-	case '1':
-	case '2':
-	case '3':
-	case '4':
-	case '5':
-	case '6':
-	case '7':
-	case '8':
-	case '9':
-	case '?':
-	case 'A':
-	case 'B':
-	case 'C':
-	case 'D':
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case 'E':
-	case 'F':
-	case 'G':
-	case 'H':
-	case 'I':
-	case 'J':
-	case 'K':
-	case 'L':
-	case 'M':
-	case 'N':
-	case 'O':
-	case 'P':
-	case 'Q':
+	case 'e':	goto yy336;
+	default:	goto yy67;
+	}
+yy297:
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case 'R':
-	case 'S':
-	case 'T':
-	case 'U':
-	case 'V':
-	case 'W':
-	case 'X':
-	case 'Y':
-	case 'Z':
-	case '_':
-	case 'a':
-	case 'b':
-	case 'c':
-	case 'd':
-	case 'e':
-	case 'f':
-	case 'g':
-	case 'h':
-	case 'i':
-	case 'j':
-	case 'k':
-	case 'l':
-	case 'm':
-	case 'n':
-	case 'o':
-	case 'p':
-	case 'q':
-	case 'r':
-	case 's':
-	case 't':
-	case 'u':
-	case 'v':
-	case 'w':
-	case 'x':
-	case 'y':
-	case 'z':	goto yy80;
-	case '.':	goto yy82;
-	default:	goto yy298;
+	case 'r':	goto yy338;
+	default:	goto yy67;
 	}
 yy298:
-#line 150 "rexx.--empty-class(match-empty).re"
-	{ RETURN(RX_IF); }
-#line 5224 "rexx.--empty-class(match-empty).c"
+	yych = *++YYCURSOR;
+	switch (yych) {
+	case 'N':
+	case 'n':	goto yy339;
+	default:	goto yy67;
+	}
 yy299:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case 'T':
-	case 't':	goto yy307;
-	default:	goto yy81;
+	case 'C':
+	case 'c':	goto yy340;
+	default:	goto yy67;
 	}
 yy300:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case 'E':
-	case 'e':	goto yy301;
-	default:	goto yy81;
+	case 'A':
+	case 'a':	goto yy341;
+	default:	goto yy67;
 	}
 yy301:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case 'R':
-	case 'r':	goto yy302;
-	default:	goto yy81;
+	case 'C':
+	case 'c':	goto yy342;
+	default:	goto yy67;
 	}
 yy302:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'A':
-	case 'a':	goto yy303;
-	default:	goto yy81;
+	case 'a':	goto yy343;
+	default:	goto yy67;
 	}
 yy303:
-	yych = *++YYCURSOR;
-	switch (yych) {
-	case 'T':
-	case 't':	goto yy304;
-	default:	goto yy81;
-	}
-yy304:
-	yych = *++YYCURSOR;
-	switch (yych) {
-	case 'E':
-	case 'e':	goto yy305;
-	default:	goto yy81;
-	}
-yy305:
 	++YYCURSOR;
 	switch ((yych = *YYCURSOR)) {
 	case '!':
@@ -5330,55 +3965,130 @@ yy305:
 	case 'w':
 	case 'x':
 	case 'y':
-	case 'z':	goto yy80;
-	case '.':	goto yy82;
-	default:	goto yy306;
+	case 'z':	goto yy66;
+	case '.':	goto yy68;
+	default:	goto yy304;
 	}
-yy306:
-#line 154 "rexx.--empty-class(match-empty).re"
-	{ RETURN(RX_ITERATE); }
-#line 5341 "rexx.--empty-class(match-empty).c"
-yy307:
+yy304:
+#line 184 "rexx.--empty-class(match-empty).re"
+	{ RETURN(RX_THEN); }
+#line 3976 "rexx.--empty-class(match-empty).c"
+yy305:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'E':
-	case 'e':	goto yy308;
-	default:	goto yy81;
+	case 'e':	goto yy344;
+	default:	goto yy67;
+	}
+yy306:
+	yych = *++YYCURSOR;
+	switch (yych) {
+	case 'L':
+	case 'l':	goto yy346;
+	default:	goto yy67;
+	}
+yy307:
+	yych = *++YYCURSOR;
+	switch (yych) {
+	case 'R':
+	case 'r':	goto yy348;
+	default:	goto yy67;
 	}
 yy308:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case 'R':
-	case 'r':	goto yy309;
-	default:	goto yy81;
+	case 'E':
+	case 'e':	goto yy350;
+	default:	goto yy67;
 	}
 yy309:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case 'P':
-	case 'p':	goto yy310;
-	default:	goto yy81;
+	case 'I':
+	case 'i':	goto yy352;
+	default:	goto yy67;
 	}
 yy310:
-	yych = *++YYCURSOR;
-	switch (yych) {
+	++YYCURSOR;
+	switch ((yych = *YYCURSOR)) {
+	case '!':
+	case '0':
+	case '1':
+	case '2':
+	case '3':
+	case '4':
+	case '5':
+	case '6':
+	case '7':
+	case '8':
+	case '9':
+	case '?':
+	case 'A':
+	case 'B':
+	case 'C':
+	case 'D':
+	case 'E':
+	case 'F':
+	case 'G':
+	case 'H':
+	case 'I':
+	case 'J':
+	case 'K':
+	case 'L':
+	case 'M':
+	case 'N':
+	case 'O':
+	case 'P':
+	case 'Q':
 	case 'R':
-	case 'r':	goto yy311;
-	default:	goto yy81;
+	case 'S':
+	case 'T':
+	case 'U':
+	case 'V':
+	case 'W':
+	case 'X':
+	case 'Y':
+	case 'Z':
+	case '_':
+	case 'a':
+	case 'b':
+	case 'c':
+	case 'd':
+	case 'e':
+	case 'f':
+	case 'g':
+	case 'h':
+	case 'i':
+	case 'j':
+	case 'k':
+	case 'l':
+	case 'm':
+	case 'n':
+	case 'o':
+	case 'p':
+	case 'q':
+	case 'r':
+	case 's':
+	case 't':
+	case 'u':
+	case 'v':
+	case 'w':
+	case 'x':
+	case 'y':
+	case 'z':	goto yy66;
+	case '.':	goto yy68;
+	default:	goto yy311;
 	}
 yy311:
-	yych = *++YYCURSOR;
-	switch (yych) {
-	case 'E':
-	case 'e':	goto yy312;
-	default:	goto yy81;
-	}
+#line 188 "rexx.--empty-class(match-empty).re"
+	{ RETURN(RX_WHEN); }
+#line 4086 "rexx.--empty-class(match-empty).c"
 yy312:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case 'T':
-	case 't':	goto yy313;
-	default:	goto yy81;
+	case 'E':
+	case 'e':	goto yy353;
+	default:	goto yy67;
 	}
 yy313:
 	++YYCURSOR;
@@ -5447,75 +4157,36 @@ yy313:
 	case 'w':
 	case 'x':
 	case 'y':
-	case 'z':	goto yy80;
-	case '.':	goto yy82;
+	case 'z':	goto yy66;
+	case '.':	goto yy68;
 	default:	goto yy314;
 	}
 yy314:
-#line 152 "rexx.--empty-class(match-empty).re"
-	{ RETURN(RX_INTERPRET); }
-#line 5458 "rexx.--empty-class(match-empty).c"
+#line 244 "rexx.--empty-class(match-empty).re"
+	{ RETURN(RXS_WITH); }
+#line 4168 "rexx.--empty-class(match-empty).c"
 yy315:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'S':
-	case 's':	goto yy343;
-	default:	goto yy81;
+	case 's':	goto yy355;
+	default:	goto yy67;
 	}
 yy316:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case 'D':
-	case 'd':	goto yy331;
-	case 'G':
-	case 'g':	goto yy333;
-	default:	goto yy81;
+	case 'S':
+	case 's':	goto yy356;
+	default:	goto yy67;
 	}
 yy317:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case 'R':
-	case 'r':	goto yy327;
-	default:	goto yy81;
+	case 'E':
+	case 'e':	goto yy358;
+	default:	goto yy67;
 	}
 yy318:
-	yych = *++YYCURSOR;
-	switch (yych) {
-	case 'I':
-	case 'i':	goto yy319;
-	case 'P':
-	case 'p':	goto yy320;
-	default:	goto yy81;
-	}
-yy319:
-	yych = *++YYCURSOR;
-	switch (yych) {
-	case 'T':
-	case 't':	goto yy325;
-	default:	goto yy81;
-	}
-yy320:
-	yych = *++YYCURSOR;
-	switch (yych) {
-	case 'O':
-	case 'o':	goto yy321;
-	default:	goto yy81;
-	}
-yy321:
-	yych = *++YYCURSOR;
-	switch (yych) {
-	case 'S':
-	case 's':	goto yy322;
-	default:	goto yy81;
-	}
-yy322:
-	yych = *++YYCURSOR;
-	switch (yych) {
-	case 'E':
-	case 'e':	goto yy323;
-	default:	goto yy81;
-	}
-yy323:
 	++YYCURSOR;
 	switch ((yych = *YYCURSOR)) {
 	case '!':
@@ -5582,14 +4253,49 @@ yy323:
 	case 'w':
 	case 'x':
 	case 'y':
-	case 'z':	goto yy80;
-	case '.':	goto yy82;
-	default:	goto yy324;
+	case 'z':	goto yy66;
+	case '.':	goto yy68;
+	default:	goto yy319;
+	}
+yy319:
+#line 200 "rexx.--empty-class(match-empty).re"
+	{ RETURN(RXS_ERROR); }
+#line 4264 "rexx.--empty-class(match-empty).c"
+yy320:
+	yych = *++YYCURSOR;
+	switch (yych) {
+	case 'E':
+	case 'e':	goto yy359;
+	default:	goto yy67;
+	}
+yy321:
+	yych = *++YYCURSOR;
+	switch (yych) {
+	case 'R':
+	case 'r':	goto yy361;
+	default:	goto yy67;
+	}
+yy322:
+	yych = *++YYCURSOR;
+	switch (yych) {
+	case 'E':
+	case 'e':	goto yy362;
+	default:	goto yy67;
+	}
+yy323:
+	yych = *++YYCURSOR;
+	switch (yych) {
+	case 'P':
+	case 'p':	goto yy363;
+	default:	goto yy67;
 	}
 yy324:
-#line 202 "rexx.--empty-class(match-empty).re"
-	{ RETURN(RXS_EXPOSE); }
-#line 5593 "rexx.--empty-class(match-empty).c"
+	yych = *++YYCURSOR;
+	switch (yych) {
+	case 'T':
+	case 't':	goto yy364;
+	default:	goto yy67;
+	}
 yy325:
 	++YYCURSOR;
 	switch ((yych = *YYCURSOR)) {
@@ -5657,104 +4363,57 @@ yy325:
 	case 'w':
 	case 'x':
 	case 'y':
-	case 'z':	goto yy80;
-	case '.':	goto yy82;
+	case 'z':	goto yy66;
+	case '.':	goto yy68;
 	default:	goto yy326;
 	}
 yy326:
-#line 148 "rexx.--empty-class(match-empty).re"
-	{ RETURN(RX_EXIT); }
-#line 5668 "rexx.--empty-class(match-empty).c"
+#line 156 "rexx.--empty-class(match-empty).re"
+	{ RETURN(RX_LEAVE); }
+#line 4374 "rexx.--empty-class(match-empty).c"
 yy327:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case 'O':
-	case 'o':	goto yy328;
-	default:	goto yy81;
+	case 'N':
+	case 'n':	goto yy365;
+	default:	goto yy67;
 	}
 yy328:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case 'R':
-	case 'r':	goto yy329;
-	default:	goto yy81;
+	case 'A':
+	case 'a':	goto yy367;
+	default:	goto yy67;
 	}
 yy329:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
-	case '!':
-	case '0':
-	case '1':
-	case '2':
-	case '3':
-	case '4':
-	case '5':
-	case '6':
-	case '7':
-	case '8':
-	case '9':
-	case '?':
-	case 'A':
-	case 'B':
-	case 'C':
-	case 'D':
-	case 'E':
-	case 'F':
-	case 'G':
-	case 'H':
-	case 'I':
-	case 'J':
-	case 'K':
-	case 'L':
-	case 'M':
-	case 'N':
-	case 'O':
-	case 'P':
-	case 'Q':
-	case 'R':
-	case 'S':
-	case 'T':
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case 'U':
-	case 'V':
-	case 'W':
-	case 'X':
-	case 'Y':
-	case 'Z':
-	case '_':
-	case 'a':
-	case 'b':
-	case 'c':
-	case 'd':
-	case 'e':
-	case 'f':
-	case 'g':
-	case 'h':
-	case 'i':
-	case 'j':
-	case 'k':
-	case 'l':
-	case 'm':
-	case 'n':
-	case 'o':
-	case 'p':
-	case 'q':
-	case 'r':
-	case 's':
-	case 't':
-	case 'u':
-	case 'v':
-	case 'w':
-	case 'x':
-	case 'y':
-	case 'z':	goto yy80;
-	case '.':	goto yy82;
-	default:	goto yy330;
+	case 'u':	goto yy368;
+	default:	goto yy67;
 	}
 yy330:
-#line 200 "rexx.--empty-class(match-empty).re"
-	{ RETURN(RXS_ERROR); }
-#line 5757 "rexx.--empty-class(match-empty).c"
+	yych = *++YYCURSOR;
+	switch (yych) {
+	case 'I':
+	case 'i':	goto yy369;
+	default:	goto yy67;
+	}
 yy331:
+	yych = *++YYCURSOR;
+	switch (yych) {
+	case 'N':
+	case 'n':	goto yy370;
+	default:	goto yy67;
+	}
+yy332:
+	yych = *++YYCURSOR;
+	switch (yych) {
+	case 'W':
+	case 'w':	goto yy371;
+	default:	goto yy67;
+	}
+yy333:
 	++YYCURSOR;
 	switch ((yych = *YYCURSOR)) {
 	case '!':
@@ -5821,151 +4480,137 @@ yy331:
 	case 'w':
 	case 'x':
 	case 'y':
-	case 'z':	goto yy80;
-	case '.':	goto yy82;
-	default:	goto yy332;
-	}
-yy332:
-#line 146 "rexx.--empty-class(match-empty).re"
-	{ RETURN(RX_END); }
-#line 5832 "rexx.--empty-class(match-empty).c"
-yy333:
-	yych = *++YYCURSOR;
-	switch (yych) {
-	case 'I':
-	case 'i':	goto yy334;
-	default:	goto yy81;
+	case 'z':	goto yy66;
+	case '.':	goto yy68;
+	default:	goto yy334;
 	}
 yy334:
-	yych = *++YYCURSOR;
-	switch (yych) {
-	case 'N':
-	case 'n':	goto yy335;
-	default:	goto yy81;
-	}
+#line 166 "rexx.--empty-class(match-empty).re"
+	{ RETURN(RX_PARSE); }
+#line 4491 "rexx.--empty-class(match-empty).c"
 yy335:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case 'E':
-	case 'e':	goto yy336;
-	default:	goto yy81;
+	case 'D':
+	case 'd':	goto yy372;
+	default:	goto yy67;
 	}
 yy336:
-	yych = *++YYCURSOR;
-	switch (yych) {
+	++YYCURSOR;
+	switch ((yych = *YYCURSOR)) {
+	case '!':
+	case '0':
+	case '1':
+	case '2':
+	case '3':
+	case '4':
+	case '5':
+	case '6':
+	case '7':
+	case '8':
+	case '9':
+	case '?':
+	case 'A':
+	case 'B':
+	case 'C':
+	case 'D':
 	case 'E':
-	case 'e':	goto yy337;
-	default:	goto yy81;
+	case 'F':
+	case 'G':
+	case 'H':
+	case 'I':
+	case 'J':
+	case 'K':
+	case 'L':
+	case 'M':
+	case 'N':
+	case 'O':
+	case 'P':
+	case 'Q':
+	case 'R':
+	case 'S':
+	case 'T':
+	case 'U':
+	case 'V':
+	case 'W':
+	case 'X':
+	case 'Y':
+	case 'Z':
+	case '_':
+	case 'a':
+	case 'b':
+	case 'c':
+	case 'd':
+	case 'e':
+	case 'f':
+	case 'g':
+	case 'h':
+	case 'i':
+	case 'j':
+	case 'k':
+	case 'l':
+	case 'm':
+	case 'n':
+	case 'o':
+	case 'p':
+	case 'q':
+	case 'r':
+	case 's':
+	case 't':
+	case 'u':
+	case 'v':
+	case 'w':
+	case 'x':
+	case 'y':
+	case 'z':	goto yy66;
+	case '.':	goto yy68;
+	default:	goto yy337;
 	}
 yy337:
-	yych = *++YYCURSOR;
-	switch (yych) {
-	case 'R':
-	case 'r':	goto yy338;
-	default:	goto yy81;
-	}
+#line 174 "rexx.--empty-class(match-empty).re"
+	{ RETURN(RX_QUEUE); }
+#line 4573 "rexx.--empty-class(match-empty).c"
 yy338:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case 'I':
-	case 'i':	goto yy339;
-	default:	goto yy81;
+	case 'N':
+	case 'n':	goto yy373;
+	default:	goto yy67;
 	}
 yy339:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case 'N':
-	case 'n':	goto yy340;
-	default:	goto yy81;
+	case 'T':
+	case 't':	goto yy375;
+	default:	goto yy67;
 	}
 yy340:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case 'G':
-	case 'g':	goto yy341;
-	default:	goto yy81;
+	case 'T':
+	case 't':	goto yy376;
+	default:	goto yy67;
 	}
 yy341:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
-	case '!':
-	case '0':
-	case '1':
-	case '2':
-	case '3':
-	case '4':
-	case '5':
-	case '6':
-	case '7':
-	case '8':
-	case '9':
-	case '?':
-	case 'A':
-	case 'B':
-	case 'C':
-	case 'D':
-	case 'E':
-	case 'F':
-	case 'G':
-	case 'H':
-	case 'I':
-	case 'J':
-	case 'K':
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case 'L':
-	case 'M':
-	case 'N':
-	case 'O':
-	case 'P':
-	case 'Q':
-	case 'R':
-	case 'S':
-	case 'T':
-	case 'U':
-	case 'V':
-	case 'W':
-	case 'X':
-	case 'Y':
-	case 'Z':
-	case '_':
-	case 'a':
-	case 'b':
-	case 'c':
-	case 'd':
-	case 'e':
-	case 'f':
-	case 'g':
-	case 'h':
-	case 'i':
-	case 'j':
-	case 'k':
-	case 'l':
-	case 'm':
-	case 'n':
-	case 'o':
-	case 'p':
-	case 'q':
-	case 'r':
-	case 's':
-	case 't':
-	case 'u':
-	case 'v':
-	case 'w':
-	case 'x':
-	case 'y':
-	case 'z':	goto yy80;
-	case '.':	goto yy82;
-	default:	goto yy342;
+	case 'l':	goto yy378;
+	default:	goto yy67;
 	}
 yy342:
-#line 198 "rexx.--empty-class(match-empty).re"
-	{ RETURN(RXS_ENGINEERING); }
-#line 5963 "rexx.--empty-class(match-empty).c"
-yy343:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'E':
-	case 'e':	goto yy344;
-	default:	goto yy81;
+	case 'e':	goto yy380;
+	default:	goto yy67;
+	}
+yy343:
+	yych = *++YYCURSOR;
+	switch (yych) {
+	case 'X':
+	case 'x':	goto yy382;
+	default:	goto yy67;
 	}
 yy344:
 	++YYCURSOR;
@@ -6034,22 +4679,90 @@ yy344:
 	case 'w':
 	case 'x':
 	case 'y':
-	case 'z':	goto yy80;
-	case '.':	goto yy82;
+	case 'z':	goto yy66;
+	case '.':	goto yy68;
 	default:	goto yy345;
 	}
 yy345:
-#line 144 "rexx.--empty-class(match-empty).re"
-	{ RETURN(RX_ELSE); }
-#line 6045 "rexx.--empty-class(match-empty).c"
+#line 186 "rexx.--empty-class(match-empty).re"
+	{ RETURN(RX_TRACE); }
+#line 4690 "rexx.--empty-class(match-empty).c"
 yy346:
-	yych = *++YYCURSOR;
-	switch (yych) {
+	++YYCURSOR;
+	switch ((yych = *YYCURSOR)) {
+	case '!':
+	case '0':
+	case '1':
+	case '2':
+	case '3':
+	case '4':
+	case '5':
+	case '6':
+	case '7':
+	case '8':
+	case '9':
+	case '?':
+	case 'A':
+	case 'B':
+	case 'C':
+	case 'D':
+	case 'E':
+	case 'F':
 	case 'G':
-	case 'g':	goto yy353;
-	default:	goto yy81;
+	case 'H':
+	case 'I':
+	case 'J':
+	case 'K':
+	case 'L':
+	case 'M':
+	case 'N':
+	case 'O':
+	case 'P':
+	case 'Q':
+	case 'R':
+	case 'S':
+	case 'T':
+	case 'U':
+	case 'V':
+	case 'W':
+	case 'X':
+	case 'Y':
+	case 'Z':
+	case '_':
+	case 'a':
+	case 'b':
+	case 'c':
+	case 'd':
+	case 'e':
+	case 'f':
+	case 'g':
+	case 'h':
+	case 'i':
+	case 'j':
+	case 'k':
+	case 'l':
+	case 'm':
+	case 'n':
+	case 'o':
+	case 'p':
+	case 'q':
+	case 'r':
+	case 's':
+	case 't':
+	case 'u':
+	case 'v':
+	case 'w':
+	case 'x':
+	case 'y':
+	case 'z':	goto yy66;
+	case '.':	goto yy68;
+	default:	goto yy347;
 	}
 yy347:
+#line 232 "rexx.--empty-class(match-empty).re"
+	{ RETURN(RXS_UNTIL); }
+#line 4765 "rexx.--empty-class(match-empty).c"
+yy348:
 	++YYCURSOR;
 	switch ((yych = *YYCURSOR)) {
 	case '!':
@@ -6116,29 +4829,97 @@ yy347:
 	case 'w':
 	case 'x':
 	case 'y':
-	case 'z':	goto yy80;
-	case '.':	goto yy82;
-	default:	goto yy348;
+	case 'z':	goto yy66;
+	case '.':	goto yy68;
+	default:	goto yy349;
 	}
-yy348:
-#line 140 "rexx.--empty-class(match-empty).re"
-	{ RETURN(RX_DO); }
-#line 6127 "rexx.--empty-class(match-empty).c"
 yy349:
-	yych = *++YYCURSOR;
-	switch (yych) {
-	case 'O':
-	case 'o':	goto yy350;
-	default:	goto yy81;
-	}
+#line 234 "rexx.--empty-class(match-empty).re"
+	{ RETURN(RXS_UPPER); }
+#line 4840 "rexx.--empty-class(match-empty).c"
 yy350:
-	yych = *++YYCURSOR;
-	switch (yych) {
+	++YYCURSOR;
+	switch ((yych = *YYCURSOR)) {
+	case '!':
+	case '0':
+	case '1':
+	case '2':
+	case '3':
+	case '4':
+	case '5':
+	case '6':
+	case '7':
+	case '8':
+	case '9':
+	case '?':
+	case 'A':
+	case 'B':
+	case 'C':
+	case 'D':
+	case 'E':
+	case 'F':
+	case 'G':
+	case 'H':
+	case 'I':
+	case 'J':
+	case 'K':
+	case 'L':
+	case 'M':
+	case 'N':
+	case 'O':
 	case 'P':
-	case 'p':	goto yy351;
-	default:	goto yy81;
+	case 'Q':
+	case 'R':
+	case 'S':
+	case 'T':
+	case 'U':
+	case 'V':
+	case 'W':
+	case 'X':
+	case 'Y':
+	case 'Z':
+	case '_':
+	case 'a':
+	case 'b':
+	case 'c':
+	case 'd':
+	case 'e':
+	case 'f':
+	case 'g':
+	case 'h':
+	case 'i':
+	case 'j':
+	case 'k':
+	case 'l':
+	case 'm':
+	case 'n':
+	case 'o':
+	case 'p':
+	case 'q':
+	case 'r':
+	case 's':
+	case 't':
+	case 'u':
+	case 'v':
+	case 'w':
+	case 'x':
+	case 'y':
+	case 'z':	goto yy66;
+	case '.':	goto yy68;
+	default:	goto yy351;
 	}
 yy351:
+#line 236 "rexx.--empty-class(match-empty).re"
+	{ RETURN(RXS_VALUE); }
+#line 4915 "rexx.--empty-class(match-empty).c"
+yy352:
+	yych = *++YYCURSOR;
+	switch (yych) {
+	case 'O':
+	case 'o':	goto yy384;
+	default:	goto yy67;
+	}
+yy353:
 	++YYCURSOR;
 	switch ((yych = *YYCURSOR)) {
 	case '!':
@@ -6205,34 +4986,20 @@ yy351:
 	case 'w':
 	case 'x':
 	case 'y':
-	case 'z':	goto yy80;
-	case '.':	goto yy82;
-	default:	goto yy352;
-	}
-yy352:
-#line 142 "rexx.--empty-class(match-empty).re"
-	{ RETURN(RX_DROP); }
-#line 6216 "rexx.--empty-class(match-empty).c"
-yy353:
-	yych = *++YYCURSOR;
-	switch (yych) {
-	case 'I':
-	case 'i':	goto yy354;
-	default:	goto yy81;
+	case 'z':	goto yy66;
+	case '.':	goto yy68;
+	default:	goto yy354;
 	}
 yy354:
-	yych = *++YYCURSOR;
-	switch (yych) {
-	case 'T':
-	case 't':	goto yy355;
-	default:	goto yy81;
-	}
+#line 242 "rexx.--empty-class(match-empty).re"
+	{ RETURN(RXS_WHILE); }
+#line 4997 "rexx.--empty-class(match-empty).c"
 yy355:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'S':
-	case 's':	goto yy356;
-	default:	goto yy81;
+	case 's':	goto yy385;
+	default:	goto yy67;
 	}
 yy356:
 	++YYCURSOR;
@@ -6301,29 +5068,22 @@ yy356:
 	case 'w':
 	case 'x':
 	case 'y':
-	case 'z':	goto yy80;
-	case '.':	goto yy82;
+	case 'z':	goto yy66;
+	case '.':	goto yy68;
 	default:	goto yy357;
 	}
 yy357:
 #line 196 "rexx.--empty-class(match-empty).re"
 	{ RETURN(RXS_DIGITS); }
-#line 6312 "rexx.--empty-class(match-empty).c"
+#line 5079 "rexx.--empty-class(match-empty).c"
 yy358:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case 'L':
-	case 'l':	goto yy359;
-	default:	goto yy81;
+	case 'E':
+	case 'e':	goto yy387;
+	default:	goto yy67;
 	}
 yy359:
-	yych = *++YYCURSOR;
-	switch (yych) {
-	case 'L':
-	case 'l':	goto yy360;
-	default:	goto yy81;
-	}
-yy360:
 	++YYCURSOR;
 	switch ((yych = *YYCURSOR)) {
 	case '!':
@@ -6390,29 +5150,43 @@ yy360:
 	case 'w':
 	case 'x':
 	case 'y':
-	case 'z':	goto yy80;
-	case '.':	goto yy82;
-	default:	goto yy361;
+	case 'z':	goto yy66;
+	case '.':	goto yy68;
+	default:	goto yy360;
 	}
+yy360:
+#line 202 "rexx.--empty-class(match-empty).re"
+	{ RETURN(RXS_EXPOSE); }
+#line 5161 "rexx.--empty-class(match-empty).c"
 yy361:
-#line 138 "rexx.--empty-class(match-empty).re"
-	{ RETURN(RX_CALL); }
-#line 6401 "rexx.--empty-class(match-empty).c"
+	yych = *++YYCURSOR;
+	switch (yych) {
+	case 'E':
+	case 'e':	goto yy388;
+	default:	goto yy67;
+	}
 yy362:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case 'D':
-	case 'd':	goto yy366;
-	default:	goto yy81;
+	case 'R':
+	case 'r':	goto yy390;
+	default:	goto yy67;
 	}
 yy363:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case 'G':
-	case 'g':	goto yy364;
-	default:	goto yy81;
+	case 'R':
+	case 'r':	goto yy392;
+	default:	goto yy67;
 	}
 yy364:
+	yych = *++YYCURSOR;
+	switch (yych) {
+	case 'E':
+	case 'e':	goto yy393;
+	default:	goto yy67;
+	}
+yy365:
 	++YYCURSOR;
 	switch ((yych = *YYCURSOR)) {
 	case '!':
@@ -6479,43 +5253,57 @@ yy364:
 	case 'w':
 	case 'x':
 	case 'y':
-	case 'z':	goto yy80;
-	case '.':	goto yy82;
-	default:	goto yy365;
+	case 'z':	goto yy66;
+	case '.':	goto yy68;
+	default:	goto yy366;
 	}
-yy365:
-#line 136 "rexx.--empty-class(match-empty).re"
-	{ RETURN(RX_ARG); }
-#line 6490 "rexx.--empty-class(match-empty).c"
 yy366:
-	yych = *++YYCURSOR;
-	switch (yych) {
-	case 'R':
-	case 'r':	goto yy367;
-	default:	goto yy81;
-	}
+#line 216 "rexx.--empty-class(match-empty).re"
+	{ RETURN(RXS_LINEIN); }
+#line 5264 "rexx.--empty-class(match-empty).c"
 yy367:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case 'E':
-	case 'e':	goto yy368;
-	default:	goto yy81;
+	case 'D':
+	case 'd':	goto yy395;
+	default:	goto yy67;
 	}
 yy368:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case 'S':
-	case 's':	goto yy369;
-	default:	goto yy81;
+	case 'E':
+	case 'e':	goto yy396;
+	default:	goto yy67;
 	}
 yy369:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case 'S':
-	case 's':	goto yy370;
-	default:	goto yy81;
+	case 'C':
+	case 'c':	goto yy398;
+	default:	goto yy67;
 	}
 yy370:
+	yych = *++YYCURSOR;
+	switch (yych) {
+	case 'S':
+	case 's':	goto yy400;
+	default:	goto yy67;
+	}
+yy371:
+	yych = *++YYCURSOR;
+	switch (yych) {
+	case 'I':
+	case 'i':	goto yy402;
+	default:	goto yy67;
+	}
+yy372:
+	yych = *++YYCURSOR;
+	switch (yych) {
+	case 'U':
+	case 'u':	goto yy403;
+	default:	goto yy67;
+	}
+yy373:
 	++YYCURSOR;
 	switch ((yych = *YYCURSOR)) {
 	case '!':
@@ -6582,263 +5370,1475 @@ yy370:
 	case 'w':
 	case 'x':
 	case 'y':
-	case 'z':	goto yy80;
-	case '.':	goto yy82;
-	default:	goto yy371;
-	}
-yy371:
-#line 134 "rexx.--empty-class(match-empty).re"
-	{ RETURN(RX_ADDRESS); }
-#line 6593 "rexx.--empty-class(match-empty).c"
-yy372:
-	++YYCURSOR;
-	if (YYLIMIT <= YYCURSOR) YYFILL(1);
-	yych = *YYCURSOR;
-	switch (yych) {
-	case '\t':
-	case ' ':	goto yy372;
-	case '&':	goto yy374;
-	default:	goto yy68;
+	case 'z':	goto yy66;
+	case '.':	goto yy68;
+	default:	goto yy374;
 	}
 yy374:
-	++YYCURSOR;
-#line 118 "rexx.--empty-class(match-empty).re"
-	{ RETURN(OP_XOR); }
-#line 6608 "rexx.--empty-class(match-empty).c"
+#line 176 "rexx.--empty-class(match-empty).re"
+	{ RETURN(RX_RETURN); }
+#line 5381 "rexx.--empty-class(match-empty).c"
+yy375:
+	yych = *++YYCURSOR;
+	switch (yych) {
+	case 'I':
+	case 'i':	goto yy404;
+	default:	goto yy67;
+	}
 yy376:
 	++YYCURSOR;
-	if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
-	yych = *YYCURSOR;
-yy377:
-	switch (yych) {
-	case '\t':
-	case ' ':	goto yy376;
-	case '<':	goto yy382;
-	case '=':	goto yy380;
-	case '>':	goto yy378;
-	default:	goto yy68;
+	switch ((yych = *YYCURSOR)) {
+	case '!':
+	case '0':
+	case '1':
+	case '2':
+	case '3':
+	case '4':
+	case '5':
+	case '6':
+	case '7':
+	case '8':
+	case '9':
+	case '?':
+	case 'A':
+	case 'B':
+	case 'C':
+	case 'D':
+	case 'E':
+	case 'F':
+	case 'G':
+	case 'H':
+	case 'I':
+	case 'J':
+	case 'K':
+	case 'L':
+	case 'M':
+	case 'N':
+	case 'O':
+	case 'P':
+	case 'Q':
+	case 'R':
+	case 'S':
+	case 'T':
+	case 'U':
+	case 'V':
+	case 'W':
+	case 'X':
+	case 'Y':
+	case 'Z':
+	case '_':
+	case 'a':
+	case 'b':
+	case 'c':
+	case 'd':
+	case 'e':
+	case 'f':
+	case 'g':
+	case 'h':
+	case 'i':
+	case 'j':
+	case 'k':
+	case 'l':
+	case 'm':
+	case 'n':
+	case 'o':
+	case 'p':
+	case 'q':
+	case 'r':
+	case 's':
+	case 't':
+	case 'u':
+	case 'v':
+	case 'w':
+	case 'x':
+	case 'y':
+	case 'z':	goto yy66;
+	case '.':	goto yy68;
+	default:	goto yy377;
 	}
+yy377:
+#line 180 "rexx.--empty-class(match-empty).re"
+	{ RETURN(RX_SELECT); }
+#line 5463 "rexx.--empty-class(match-empty).c"
 yy378:
-	yyaccept = 11;
-	yych = *(YYMARKER = ++YYCURSOR);
-	switch (yych) {
-	case '\t':
-	case ' ':	goto yy384;
-	case '=':	goto yy386;
+	++YYCURSOR;
+	switch ((yych = *YYCURSOR)) {
+	case '!':
+	case '0':
+	case '1':
+	case '2':
+	case '3':
+	case '4':
+	case '5':
+	case '6':
+	case '7':
+	case '8':
+	case '9':
+	case '?':
+	case 'A':
+	case 'B':
+	case 'C':
+	case 'D':
+	case 'E':
+	case 'F':
+	case 'G':
+	case 'H':
+	case 'I':
+	case 'J':
+	case 'K':
+	case 'L':
+	case 'M':
+	case 'N':
+	case 'O':
+	case 'P':
+	case 'Q':
+	case 'R':
+	case 'S':
+	case 'T':
+	case 'U':
+	case 'V':
+	case 'W':
+	case 'X':
+	case 'Y':
+	case 'Z':
+	case '_':
+	case 'a':
+	case 'b':
+	case 'c':
+	case 'd':
+	case 'e':
+	case 'f':
+	case 'g':
+	case 'h':
+	case 'i':
+	case 'j':
+	case 'k':
+	case 'l':
+	case 'm':
+	case 'n':
+	case 'o':
+	case 'p':
+	case 'q':
+	case 'r':
+	case 's':
+	case 't':
+	case 'u':
+	case 'v':
+	case 'w':
+	case 'x':
+	case 'y':
+	case 'z':	goto yy66;
+	case '.':	goto yy68;
 	default:	goto yy379;
 	}
 yy379:
-#line 106 "rexx.--empty-class(match-empty).re"
-	{ RETURN(OP_GT_STRICT); }
-#line 6634 "rexx.--empty-class(match-empty).c"
+#line 182 "rexx.--empty-class(match-empty).re"
+	{ RETURN(RX_SIGNAL); }
+#line 5538 "rexx.--empty-class(match-empty).c"
 yy380:
 	++YYCURSOR;
+	switch ((yych = *YYCURSOR)) {
+	case '!':
+	case '0':
+	case '1':
+	case '2':
+	case '3':
+	case '4':
+	case '5':
+	case '6':
+	case '7':
+	case '8':
+	case '9':
+	case '?':
+	case 'A':
+	case 'B':
+	case 'C':
+	case 'D':
+	case 'E':
+	case 'F':
+	case 'G':
+	case 'H':
+	case 'I':
+	case 'J':
+	case 'K':
+	case 'L':
+	case 'M':
+	case 'N':
+	case 'O':
+	case 'P':
+	case 'Q':
+	case 'R':
+	case 'S':
+	case 'T':
+	case 'U':
+	case 'V':
+	case 'W':
+	case 'X':
+	case 'Y':
+	case 'Z':
+	case '_':
+	case 'a':
+	case 'b':
+	case 'c':
+	case 'd':
+	case 'e':
+	case 'f':
+	case 'g':
+	case 'h':
+	case 'i':
+	case 'j':
+	case 'k':
+	case 'l':
+	case 'm':
+	case 'n':
+	case 'o':
+	case 'p':
+	case 'q':
+	case 'r':
+	case 's':
+	case 't':
+	case 'u':
+	case 'v':
+	case 'w':
+	case 'x':
+	case 'y':
+	case 'z':	goto yy66;
+	case '.':	goto yy68;
+	default:	goto yy381;
+	}
 yy381:
-#line 98 "rexx.--empty-class(match-empty).re"
-	{ RETURN(OP_GE); }
-#line 6640 "rexx.--empty-class(match-empty).c"
+#line 226 "rexx.--empty-class(match-empty).re"
+	{ RETURN(RXS_SOURCE); }
+#line 5613 "rexx.--empty-class(match-empty).c"
 yy382:
 	++YYCURSOR;
+	switch ((yych = *YYCURSOR)) {
+	case '!':
+	case '0':
+	case '1':
+	case '2':
+	case '3':
+	case '4':
+	case '5':
+	case '6':
+	case '7':
+	case '8':
+	case '9':
+	case '?':
+	case 'A':
+	case 'B':
+	case 'C':
+	case 'D':
+	case 'E':
+	case 'F':
+	case 'G':
+	case 'H':
+	case 'I':
+	case 'J':
+	case 'K':
+	case 'L':
+	case 'M':
+	case 'N':
+	case 'O':
+	case 'P':
+	case 'Q':
+	case 'R':
+	case 'S':
+	case 'T':
+	case 'U':
+	case 'V':
+	case 'W':
+	case 'X':
+	case 'Y':
+	case 'Z':
+	case '_':
+	case 'a':
+	case 'b':
+	case 'c':
+	case 'd':
+	case 'e':
+	case 'f':
+	case 'g':
+	case 'h':
+	case 'i':
+	case 'j':
+	case 'k':
+	case 'l':
+	case 'm':
+	case 'n':
+	case 'o':
+	case 'p':
+	case 'q':
+	case 'r':
+	case 's':
+	case 't':
+	case 'u':
+	case 'v':
+	case 'w':
+	case 'x':
+	case 'y':
+	case 'z':	goto yy66;
+	case '.':	goto yy68;
+	default:	goto yy383;
+	}
 yy383:
-#line 92 "rexx.--empty-class(match-empty).re"
-	{ RETURN(OP_EQUAL_N); }
-#line 6646 "rexx.--empty-class(match-empty).c"
+#line 228 "rexx.--empty-class(match-empty).re"
+	{ RETURN(RXS_SYNTAX); }
+#line 5688 "rexx.--empty-class(match-empty).c"
 yy384:
-	++YYCURSOR;
-	if (YYLIMIT <= YYCURSOR) YYFILL(1);
-	yych = *YYCURSOR;
+	yych = *++YYCURSOR;
 	switch (yych) {
-	case '\t':
-	case ' ':	goto yy384;
-	case '=':	goto yy386;
-	default:	goto yy68;
+	case 'N':
+	case 'n':	goto yy405;
+	default:	goto yy67;
+	}
+yy385:
+	++YYCURSOR;
+	switch ((yych = *YYCURSOR)) {
+	case '!':
+	case '0':
+	case '1':
+	case '2':
+	case '3':
+	case '4':
+	case '5':
+	case '6':
+	case '7':
+	case '8':
+	case '9':
+	case '?':
+	case 'A':
+	case 'B':
+	case 'C':
+	case 'D':
+	case 'E':
+	case 'F':
+	case 'G':
+	case 'H':
+	case 'I':
+	case 'J':
+	case 'K':
+	case 'L':
+	case 'M':
+	case 'N':
+	case 'O':
+	case 'P':
+	case 'Q':
+	case 'R':
+	case 'S':
+	case 'T':
+	case 'U':
+	case 'V':
+	case 'W':
+	case 'X':
+	case 'Y':
+	case 'Z':
+	case '_':
+	case 'a':
+	case 'b':
+	case 'c':
+	case 'd':
+	case 'e':
+	case 'f':
+	case 'g':
+	case 'h':
+	case 'i':
+	case 'j':
+	case 'k':
+	case 'l':
+	case 'm':
+	case 'n':
+	case 'o':
+	case 'p':
+	case 'q':
+	case 'r':
+	case 's':
+	case 't':
+	case 'u':
+	case 'v':
+	case 'w':
+	case 'x':
+	case 'y':
+	case 'z':	goto yy66;
+	case '.':	goto yy68;
+	default:	goto yy386;
 	}
 yy386:
-	++YYCURSOR;
-#line 110 "rexx.--empty-class(match-empty).re"
-	{ RETURN(OP_GE_STRICT); }
-#line 6661 "rexx.--empty-class(match-empty).c"
+#line 134 "rexx.--empty-class(match-empty).re"
+	{ RETURN(RX_ADDRESS); }
+#line 5770 "rexx.--empty-class(match-empty).c"
+yy387:
+	yych = *++YYCURSOR;
+	switch (yych) {
+	case 'R':
+	case 'r':	goto yy407;
+	default:	goto yy67;
+	}
 yy388:
 	++YYCURSOR;
-	if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
-	yych = *YYCURSOR;
-yy389:
-	switch (yych) {
-	case '\t':
-	case ' ':	goto yy388;
-	case '<':	goto yy390;
-	case '=':	goto yy392;
-	case '>':	goto yy382;
-	default:	goto yy68;
+	switch ((yych = *YYCURSOR)) {
+	case '!':
+	case '0':
+	case '1':
+	case '2':
+	case '3':
+	case '4':
+	case '5':
+	case '6':
+	case '7':
+	case '8':
+	case '9':
+	case '?':
+	case 'A':
+	case 'B':
+	case 'C':
+	case 'D':
+	case 'E':
+	case 'F':
+	case 'G':
+	case 'H':
+	case 'I':
+	case 'J':
+	case 'K':
+	case 'L':
+	case 'M':
+	case 'N':
+	case 'O':
+	case 'P':
+	case 'Q':
+	case 'R':
+	case 'S':
+	case 'T':
+	case 'U':
+	case 'V':
+	case 'W':
+	case 'X':
+	case 'Y':
+	case 'Z':
+	case '_':
+	case 'a':
+	case 'b':
+	case 'c':
+	case 'd':
+	case 'e':
+	case 'f':
+	case 'g':
+	case 'h':
+	case 'i':
+	case 'j':
+	case 'k':
+	case 'l':
+	case 'm':
+	case 'n':
+	case 'o':
+	case 'p':
+	case 'q':
+	case 'r':
+	case 's':
+	case 't':
+	case 'u':
+	case 'v':
+	case 'w':
+	case 'x':
+	case 'y':
+	case 'z':	goto yy66;
+	case '.':	goto yy68;
+	default:	goto yy389;
 	}
+yy389:
+#line 204 "rexx.--empty-class(match-empty).re"
+	{ RETURN(RXS_FAILURE); }
+#line 5852 "rexx.--empty-class(match-empty).c"
 yy390:
-	yyaccept = 12;
-	yych = *(YYMARKER = ++YYCURSOR);
-	switch (yych) {
-	case '\t':
-	case ' ':	goto yy394;
-	case '=':	goto yy396;
+	++YYCURSOR;
+	switch ((yych = *YYCURSOR)) {
+	case '!':
+	case '0':
+	case '1':
+	case '2':
+	case '3':
+	case '4':
+	case '5':
+	case '6':
+	case '7':
+	case '8':
+	case '9':
+	case '?':
+	case 'A':
+	case 'B':
+	case 'C':
+	case 'D':
+	case 'E':
+	case 'F':
+	case 'G':
+	case 'H':
+	case 'I':
+	case 'J':
+	case 'K':
+	case 'L':
+	case 'M':
+	case 'N':
+	case 'O':
+	case 'P':
+	case 'Q':
+	case 'R':
+	case 'S':
+	case 'T':
+	case 'U':
+	case 'V':
+	case 'W':
+	case 'X':
+	case 'Y':
+	case 'Z':
+	case '_':
+	case 'a':
+	case 'b':
+	case 'c':
+	case 'd':
+	case 'e':
+	case 'f':
+	case 'g':
+	case 'h':
+	case 'i':
+	case 'j':
+	case 'k':
+	case 'l':
+	case 'm':
+	case 'n':
+	case 'o':
+	case 'p':
+	case 'q':
+	case 'r':
+	case 's':
+	case 't':
+	case 'u':
+	case 'v':
+	case 'w':
+	case 'x':
+	case 'y':
+	case 'z':	goto yy66;
+	case '.':	goto yy68;
 	default:	goto yy391;
 	}
 yy391:
-#line 108 "rexx.--empty-class(match-empty).re"
-	{ RETURN(OP_LT_STRICT); }
-#line 6687 "rexx.--empty-class(match-empty).c"
+#line 208 "rexx.--empty-class(match-empty).re"
+	{ RETURN(RXS_FOREVER); }
+#line 5927 "rexx.--empty-class(match-empty).c"
 yy392:
-	++YYCURSOR;
-yy393:
-#line 100 "rexx.--empty-class(match-empty).re"
-	{ RETURN(OP_LE); }
-#line 6693 "rexx.--empty-class(match-empty).c"
-yy394:
-	++YYCURSOR;
-	if (YYLIMIT <= YYCURSOR) YYFILL(1);
-	yych = *YYCURSOR;
+	yych = *++YYCURSOR;
 	switch (yych) {
-	case '\t':
-	case ' ':	goto yy394;
-	case '=':	goto yy396;
-	default:	goto yy68;
+	case 'E':
+	case 'e':	goto yy408;
+	default:	goto yy67;
+	}
+yy393:
+	++YYCURSOR;
+	switch ((yych = *YYCURSOR)) {
+	case '!':
+	case '0':
+	case '1':
+	case '2':
+	case '3':
+	case '4':
+	case '5':
+	case '6':
+	case '7':
+	case '8':
+	case '9':
+	case '?':
+	case 'A':
+	case 'B':
+	case 'C':
+	case 'D':
+	case 'E':
+	case 'F':
+	case 'G':
+	case 'H':
+	case 'I':
+	case 'J':
+	case 'K':
+	case 'L':
+	case 'M':
+	case 'N':
+	case 'O':
+	case 'P':
+	case 'Q':
+	case 'R':
+	case 'S':
+	case 'T':
+	case 'U':
+	case 'V':
+	case 'W':
+	case 'X':
+	case 'Y':
+	case 'Z':
+	case '_':
+	case 'a':
+	case 'b':
+	case 'c':
+	case 'd':
+	case 'e':
+	case 'f':
+	case 'g':
+	case 'h':
+	case 'i':
+	case 'j':
+	case 'k':
+	case 'l':
+	case 'm':
+	case 'n':
+	case 'o':
+	case 'p':
+	case 'q':
+	case 'r':
+	case 's':
+	case 't':
+	case 'u':
+	case 'v':
+	case 'w':
+	case 'x':
+	case 'y':
+	case 'z':	goto yy66;
+	case '.':	goto yy68;
+	default:	goto yy394;
+	}
+yy394:
+#line 154 "rexx.--empty-class(match-empty).re"
+	{ RETURN(RX_ITERATE); }
+#line 6009 "rexx.--empty-class(match-empty).c"
+yy395:
+	yych = *++YYCURSOR;
+	switch (yych) {
+	case 'Y':
+	case 'y':	goto yy409;
+	default:	goto yy67;
 	}
 yy396:
 	++YYCURSOR;
-#line 112 "rexx.--empty-class(match-empty).re"
-	{ RETURN(OP_LE_STRICT); }
-#line 6708 "rexx.--empty-class(match-empty).c"
+	switch ((yych = *YYCURSOR)) {
+	case '!':
+	case '0':
+	case '1':
+	case '2':
+	case '3':
+	case '4':
+	case '5':
+	case '6':
+	case '7':
+	case '8':
+	case '9':
+	case '?':
+	case 'A':
+	case 'B':
+	case 'C':
+	case 'D':
+	case 'E':
+	case 'F':
+	case 'G':
+	case 'H':
+	case 'I':
+	case 'J':
+	case 'K':
+	case 'L':
+	case 'M':
+	case 'N':
+	case 'O':
+	case 'P':
+	case 'Q':
+	case 'R':
+	case 'S':
+	case 'T':
+	case 'U':
+	case 'V':
+	case 'W':
+	case 'X':
+	case 'Y':
+	case 'Z':
+	case '_':
+	case 'a':
+	case 'b':
+	case 'c':
+	case 'd':
+	case 'e':
+	case 'f':
+	case 'g':
+	case 'h':
+	case 'i':
+	case 'j':
+	case 'k':
+	case 'l':
+	case 'm':
+	case 'n':
+	case 'o':
+	case 'p':
+	case 'q':
+	case 'r':
+	case 's':
+	case 't':
+	case 'u':
+	case 'v':
+	case 'w':
+	case 'x':
+	case 'y':
+	case 'z':	goto yy66;
+	case '.':	goto yy68;
+	default:	goto yy397;
+	}
+yy397:
+#line 222 "rexx.--empty-class(match-empty).re"
+	{ RETURN(RXS_NOVALUE); }
+#line 6091 "rexx.--empty-class(match-empty).c"
 yy398:
 	++YYCURSOR;
-	if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
-	yych = *YYCURSOR;
-yy399:
-	switch (yych) {
-	case '\t':
-	case ' ':	goto yy398;
-	case '<':	goto yy401;
-	case '=':	goto yy402;
-	case '>':	goto yy400;
-	default:	goto yy68;
+	switch ((yych = *YYCURSOR)) {
+	case '!':
+	case '0':
+	case '1':
+	case '2':
+	case '3':
+	case '4':
+	case '5':
+	case '6':
+	case '7':
+	case '8':
+	case '9':
+	case '?':
+	case 'A':
+	case 'B':
+	case 'C':
+	case 'D':
+	case 'E':
+	case 'F':
+	case 'G':
+	case 'H':
+	case 'I':
+	case 'J':
+	case 'K':
+	case 'L':
+	case 'M':
+	case 'N':
+	case 'O':
+	case 'P':
+	case 'Q':
+	case 'R':
+	case 'S':
+	case 'T':
+	case 'U':
+	case 'V':
+	case 'W':
+	case 'X':
+	case 'Y':
+	case 'Z':
+	case '_':
+	case 'a':
+	case 'b':
+	case 'c':
+	case 'd':
+	case 'e':
+	case 'f':
+	case 'g':
+	case 'h':
+	case 'i':
+	case 'j':
+	case 'k':
+	case 'l':
+	case 'm':
+	case 'n':
+	case 'o':
+	case 'p':
+	case 'q':
+	case 'r':
+	case 's':
+	case 't':
+	case 'u':
+	case 'v':
+	case 'w':
+	case 'x':
+	case 'y':
+	case 'z':	goto yy66;
+	case '.':	goto yy68;
+	default:	goto yy399;
 	}
+yy399:
+#line 160 "rexx.--empty-class(match-empty).re"
+	{ RETURN(RX_NUMERIC); }
+#line 6166 "rexx.--empty-class(match-empty).c"
 yy400:
-	yyaccept = 13;
-	yych = *(YYMARKER = ++YYCURSOR);
-	switch (yych) {
-	case '\t':
-	case ' ':	goto yy409;
-	case '>':	goto yy396;
-	default:	goto yy393;
+	++YYCURSOR;
+	switch ((yych = *YYCURSOR)) {
+	case '!':
+	case '0':
+	case '1':
+	case '2':
+	case '3':
+	case '4':
+	case '5':
+	case '6':
+	case '7':
+	case '8':
+	case '9':
+	case '?':
+	case 'A':
+	case 'B':
+	case 'C':
+	case 'D':
+	case 'E':
+	case 'F':
+	case 'G':
+	case 'H':
+	case 'I':
+	case 'J':
+	case 'K':
+	case 'L':
+	case 'M':
+	case 'N':
+	case 'O':
+	case 'P':
+	case 'Q':
+	case 'R':
+	case 'S':
+	case 'T':
+	case 'U':
+	case 'V':
+	case 'W':
+	case 'X':
+	case 'Y':
+	case 'Z':
+	case '_':
+	case 'a':
+	case 'b':
+	case 'c':
+	case 'd':
+	case 'e':
+	case 'f':
+	case 'g':
+	case 'h':
+	case 'i':
+	case 'j':
+	case 'k':
+	case 'l':
+	case 'm':
+	case 'n':
+	case 'o':
+	case 'p':
+	case 'q':
+	case 'r':
+	case 's':
+	case 't':
+	case 'u':
+	case 'v':
+	case 'w':
+	case 'x':
+	case 'y':
+	case 'z':	goto yy66;
+	case '.':	goto yy68;
+	default:	goto yy401;
 	}
 yy401:
-	yyaccept = 14;
-	yych = *(YYMARKER = ++YYCURSOR);
-	switch (yych) {
-	case '\t':
-	case ' ':	goto yy407;
-	case '<':	goto yy386;
-	default:	goto yy381;
-	}
+#line 162 "rexx.--empty-class(match-empty).re"
+	{ RETURN(RX_OPTIONS); }
+#line 6241 "rexx.--empty-class(match-empty).c"
 yy402:
-	yyaccept = 15;
-	yych = *(YYMARKER = ++YYCURSOR);
+	yych = *++YYCURSOR;
 	switch (yych) {
-	case '\t':
-	case ' ':	goto yy403;
-	case '=':	goto yy405;
-	default:	goto yy383;
+	case 'S':
+	case 's':	goto yy411;
+	default:	goto yy67;
 	}
 yy403:
-	++YYCURSOR;
-	if (YYLIMIT <= YYCURSOR) YYFILL(1);
-	yych = *YYCURSOR;
+	yych = *++YYCURSOR;
 	switch (yych) {
-	case '\t':
-	case ' ':	goto yy403;
-	case '=':	goto yy405;
-	default:	goto yy68;
+	case 'R':
+	case 'r':	goto yy412;
+	default:	goto yy67;
+	}
+yy404:
+	yych = *++YYCURSOR;
+	switch (yych) {
+	case 'F':
+	case 'f':	goto yy413;
+	default:	goto yy67;
 	}
 yy405:
 	++YYCURSOR;
-#line 104 "rexx.--empty-class(match-empty).re"
-	{ RETURN(OP_EQUAL_EQ_N); }
-#line 6763 "rexx.--empty-class(match-empty).c"
+	switch ((yych = *YYCURSOR)) {
+	case '!':
+	case '0':
+	case '1':
+	case '2':
+	case '3':
+	case '4':
+	case '5':
+	case '6':
+	case '7':
+	case '8':
+	case '9':
+	case '?':
+	case 'A':
+	case 'B':
+	case 'C':
+	case 'D':
+	case 'E':
+	case 'F':
+	case 'G':
+	case 'H':
+	case 'I':
+	case 'J':
+	case 'K':
+	case 'L':
+	case 'M':
+	case 'N':
+	case 'O':
+	case 'P':
+	case 'Q':
+	case 'R':
+	case 'S':
+	case 'T':
+	case 'U':
+	case 'V':
+	case 'W':
+	case 'X':
+	case 'Y':
+	case 'Z':
+	case '_':
+	case 'a':
+	case 'b':
+	case 'c':
+	case 'd':
+	case 'e':
+	case 'f':
+	case 'g':
+	case 'h':
+	case 'i':
+	case 'j':
+	case 'k':
+	case 'l':
+	case 'm':
+	case 'n':
+	case 'o':
+	case 'p':
+	case 'q':
+	case 'r':
+	case 's':
+	case 't':
+	case 'u':
+	case 'v':
+	case 'w':
+	case 'x':
+	case 'y':
+	case 'z':	goto yy66;
+	case '.':	goto yy68;
+	default:	goto yy406;
+	}
+yy406:
+#line 240 "rexx.--empty-class(match-empty).re"
+	{ RETURN(RXS_VERSION); }
+#line 6337 "rexx.--empty-class(match-empty).c"
 yy407:
-	++YYCURSOR;
-	if (YYLIMIT <= YYCURSOR) YYFILL(1);
-	yych = *YYCURSOR;
+	yych = *++YYCURSOR;
 	switch (yych) {
-	case '\t':
-	case ' ':	goto yy407;
-	case '<':	goto yy386;
-	default:	goto yy68;
+	case 'I':
+	case 'i':	goto yy414;
+	default:	goto yy67;
+	}
+yy408:
+	yych = *++YYCURSOR;
+	switch (yych) {
+	case 'T':
+	case 't':	goto yy415;
+	default:	goto yy67;
 	}
 yy409:
 	++YYCURSOR;
-	if (YYLIMIT <= YYCURSOR) YYFILL(1);
-	yych = *YYCURSOR;
-	switch (yych) {
-	case '\t':
-	case ' ':	goto yy409;
-	case '>':	goto yy396;
-	default:	goto yy68;
+	switch ((yych = *YYCURSOR)) {
+	case '!':
+	case '0':
+	case '1':
+	case '2':
+	case '3':
+	case '4':
+	case '5':
+	case '6':
+	case '7':
+	case '8':
+	case '9':
+	case '?':
+	case 'A':
+	case 'B':
+	case 'C':
+	case 'D':
+	case 'E':
+	case 'F':
+	case 'G':
+	case 'H':
+	case 'I':
+	case 'J':
+	case 'K':
+	case 'L':
+	case 'M':
+	case 'N':
+	case 'O':
+	case 'P':
+	case 'Q':
+	case 'R':
+	case 'S':
+	case 'T':
+	case 'U':
+	case 'V':
+	case 'W':
+	case 'X':
+	case 'Y':
+	case 'Z':
+	case '_':
+	case 'a':
+	case 'b':
+	case 'c':
+	case 'd':
+	case 'e':
+	case 'f':
+	case 'g':
+	case 'h':
+	case 'i':
+	case 'j':
+	case 'k':
+	case 'l':
+	case 'm':
+	case 'n':
+	case 'o':
+	case 'p':
+	case 'q':
+	case 'r':
+	case 's':
+	case 't':
+	case 'u':
+	case 'v':
+	case 'w':
+	case 'x':
+	case 'y':
+	case 'z':	goto yy66;
+	case '.':	goto yy68;
+	default:	goto yy410;
 	}
+yy410:
+#line 220 "rexx.--empty-class(match-empty).re"
+	{ RETURN(RXS_NOTREADY); }
+#line 6426 "rexx.--empty-class(match-empty).c"
 yy411:
-	++YYCURSOR;
-	if (YYLIMIT <= YYCURSOR) YYFILL(1);
-	yych = *YYCURSOR;
+	yych = *++YYCURSOR;
 	switch (yych) {
-	case '\t':
-	case ' ':	goto yy411;
-	case '=':	goto yy413;
-	default:	goto yy68;
+	case 'E':
+	case 'e':	goto yy417;
+	default:	goto yy67;
+	}
+yy412:
+	yych = *++YYCURSOR;
+	switch (yych) {
+	case 'E':
+	case 'e':	goto yy419;
+	default:	goto yy67;
 	}
 yy413:
-	++YYCURSOR;
-#line 102 "rexx.--empty-class(match-empty).re"
-	{ RETURN(OP_EQUAL_EQ); }
-#line 6798 "rexx.--empty-class(match-empty).c"
+	yych = *++YYCURSOR;
+	switch (yych) {
+	case 'I':
+	case 'i':	goto yy421;
+	default:	goto yy67;
+	}
+yy414:
+	yych = *++YYCURSOR;
+	switch (yych) {
+	case 'N':
+	case 'n':	goto yy422;
+	default:	goto yy67;
+	}
 yy415:
 	++YYCURSOR;
-	if (YYLIMIT <= YYCURSOR) YYFILL(1);
-	yych = *YYCURSOR;
-	switch (yych) {
-	case '\t':
-	case ' ':	goto yy415;
-	case '/':	goto yy417;
-	default:	goto yy68;
+	switch ((yych = *YYCURSOR)) {
+	case '!':
+	case '0':
+	case '1':
+	case '2':
+	case '3':
+	case '4':
+	case '5':
+	case '6':
+	case '7':
+	case '8':
+	case '9':
+	case '?':
+	case 'A':
+	case 'B':
+	case 'C':
+	case 'D':
+	case 'E':
+	case 'F':
+	case 'G':
+	case 'H':
+	case 'I':
+	case 'J':
+	case 'K':
+	case 'L':
+	case 'M':
+	case 'N':
+	case 'O':
+	case 'P':
+	case 'Q':
+	case 'R':
+	case 'S':
+	case 'T':
+	case 'U':
+	case 'V':
+	case 'W':
+	case 'X':
+	case 'Y':
+	case 'Z':
+	case '_':
+	case 'a':
+	case 'b':
+	case 'c':
+	case 'd':
+	case 'e':
+	case 'f':
+	case 'g':
+	case 'h':
+	case 'i':
+	case 'j':
+	case 'k':
+	case 'l':
+	case 'm':
+	case 'n':
+	case 'o':
+	case 'p':
+	case 'q':
+	case 'r':
+	case 's':
+	case 't':
+	case 'u':
+	case 'v':
+	case 'w':
+	case 'x':
+	case 'y':
+	case 'z':	goto yy66;
+	case '.':	goto yy68;
+	default:	goto yy416;
 	}
+yy416:
+#line 152 "rexx.--empty-class(match-empty).re"
+	{ RETURN(RX_INTERPRET); }
+#line 6529 "rexx.--empty-class(match-empty).c"
 yy417:
 	++YYCURSOR;
-#line 86 "rexx.--empty-class(match-empty).re"
-	{ RETURN(OP_REMAIN); }
-#line 6813 "rexx.--empty-class(match-empty).c"
+	switch ((yych = *YYCURSOR)) {
+	case '!':
+	case '0':
+	case '1':
+	case '2':
+	case '3':
+	case '4':
+	case '5':
+	case '6':
+	case '7':
+	case '8':
+	case '9':
+	case '?':
+	case 'A':
+	case 'B':
+	case 'C':
+	case 'D':
+	case 'E':
+	case 'F':
+	case 'G':
+	case 'H':
+	case 'I':
+	case 'J':
+	case 'K':
+	case 'L':
+	case 'M':
+	case 'N':
+	case 'O':
+	case 'P':
+	case 'Q':
+	case 'R':
+	case 'S':
+	case 'T':
+	case 'U':
+	case 'V':
+	case 'W':
+	case 'X':
+	case 'Y':
+	case 'Z':
+	case '_':
+	case 'a':
+	case 'b':
+	case 'c':
+	case 'd':
+	case 'e':
+	case 'f':
+	case 'g':
+	case 'h':
+	case 'i':
+	case 'j':
+	case 'k':
+	case 'l':
+	case 'm':
+	case 'n':
+	case 'o':
+	case 'p':
+	case 'q':
+	case 'r':
+	case 's':
+	case 't':
+	case 'u':
+	case 'v':
+	case 'w':
+	case 'x':
+	case 'y':
+	case 'z':	goto yy66;
+	case '.':	goto yy68;
+	default:	goto yy418;
+	}
+yy418:
+#line 164 "rexx.--empty-class(match-empty).re"
+	{ RETURN(RX_OTHERWISE); }
+#line 6604 "rexx.--empty-class(match-empty).c"
 yy419:
 	++YYCURSOR;
-	if (YYLIMIT <= YYCURSOR) YYFILL(1);
-	yych = *YYCURSOR;
-	switch (yych) {
-	case '\t':
-	case ' ':	goto yy419;
-	case '*':	goto yy421;
-	default:	goto yy68;
+	switch ((yych = *YYCURSOR)) {
+	case '!':
+	case '0':
+	case '1':
+	case '2':
+	case '3':
+	case '4':
+	case '5':
+	case '6':
+	case '7':
+	case '8':
+	case '9':
+	case '?':
+	case 'A':
+	case 'B':
+	case 'C':
+	case 'D':
+	case 'E':
+	case 'F':
+	case 'G':
+	case 'H':
+	case 'I':
+	case 'J':
+	case 'K':
+	case 'L':
+	case 'M':
+	case 'N':
+	case 'O':
+	case 'P':
+	case 'Q':
+	case 'R':
+	case 'S':
+	case 'T':
+	case 'U':
+	case 'V':
+	case 'W':
+	case 'X':
+	case 'Y':
+	case 'Z':
+	case '_':
+	case 'a':
+	case 'b':
+	case 'c':
+	case 'd':
+	case 'e':
+	case 'f':
+	case 'g':
+	case 'h':
+	case 'i':
+	case 'j':
+	case 'k':
+	case 'l':
+	case 'm':
+	case 'n':
+	case 'o':
+	case 'p':
+	case 'q':
+	case 'r':
+	case 's':
+	case 't':
+	case 'u':
+	case 'v':
+	case 'w':
+	case 'x':
+	case 'y':
+	case 'z':	goto yy66;
+	case '.':	goto yy68;
+	default:	goto yy420;
 	}
+yy420:
+#line 168 "rexx.--empty-class(match-empty).re"
+	{ RETURN(RX_PROCEDURE); }
+#line 6679 "rexx.--empty-class(match-empty).c"
 yy421:
-	++YYCURSOR;
-#line 88 "rexx.--empty-class(match-empty).re"
-	{ RETURN(OP_POWER); }
-#line 6828 "rexx.--empty-class(match-empty).c"
+	yych = *++YYCURSOR;
+	switch (yych) {
+	case 'C':
+	case 'c':	goto yy423;
+	default:	goto yy67;
+	}
+yy422:
+	yych = *++YYCURSOR;
+	switch (yych) {
+	case 'G':
+	case 'g':	goto yy425;
+	default:	goto yy67;
+	}
 yy423:
 	++YYCURSOR;
-	if (YYLIMIT <= YYCURSOR) YYFILL(1);
-	yych = *YYCURSOR;
-	switch (yych) {
-	case '\t':
-	case ' ':	goto yy423;
-	case '|':	goto yy425;
-	default:	goto yy68;
+	switch ((yych = *YYCURSOR)) {
+	case '!':
+	case '0':
+	case '1':
+	case '2':
+	case '3':
+	case '4':
+	case '5':
+	case '6':
+	case '7':
+	case '8':
+	case '9':
+	case '?':
+	case 'A':
+	case 'B':
+	case 'C':
+	case 'D':
+	case 'E':
+	case 'F':
+	case 'G':
+	case 'H':
+	case 'I':
+	case 'J':
+	case 'K':
+	case 'L':
+	case 'M':
+	case 'N':
+	case 'O':
+	case 'P':
+	case 'Q':
+	case 'R':
+	case 'S':
+	case 'T':
+	case 'U':
+	case 'V':
+	case 'W':
+	case 'X':
+	case 'Y':
+	case 'Z':
+	case '_':
+	case 'a':
+	case 'b':
+	case 'c':
+	case 'd':
+	case 'e':
+	case 'f':
+	case 'g':
+	case 'h':
+	case 'i':
+	case 'j':
+	case 'k':
+	case 'l':
+	case 'm':
+	case 'n':
+	case 'o':
+	case 'p':
+	case 'q':
+	case 'r':
+	case 's':
+	case 't':
+	case 'u':
+	case 'v':
+	case 'w':
+	case 'x':
+	case 'y':
+	case 'z':	goto yy66;
+	case '.':	goto yy68;
+	default:	goto yy424;
 	}
+yy424:
+#line 224 "rexx.--empty-class(match-empty).re"
+	{ RETURN(RXS_SCIENTIFIC); }
+#line 6768 "rexx.--empty-class(match-empty).c"
 yy425:
 	++YYCURSOR;
-#line 74 "rexx.--empty-class(match-empty).re"
-	{ RETURN(OP_CONCAT); }
+	switch ((yych = *YYCURSOR)) {
+	case '!':
+	case '0':
+	case '1':
+	case '2':
+	case '3':
+	case '4':
+	case '5':
+	case '6':
+	case '7':
+	case '8':
+	case '9':
+	case '?':
+	case 'A':
+	case 'B':
+	case 'C':
+	case 'D':
+	case 'E':
+	case 'F':
+	case 'G':
+	case 'H':
+	case 'I':
+	case 'J':
+	case 'K':
+	case 'L':
+	case 'M':
+	case 'N':
+	case 'O':
+	case 'P':
+	case 'Q':
+	case 'R':
+	case 'S':
+	case 'T':
+	case 'U':
+	case 'V':
+	case 'W':
+	case 'X':
+	case 'Y':
+	case 'Z':
+	case '_':
+	case 'a':
+	case 'b':
+	case 'c':
+	case 'd':
+	case 'e':
+	case 'f':
+	case 'g':
+	case 'h':
+	case 'i':
+	case 'j':
+	case 'k':
+	case 'l':
+	case 'm':
+	case 'n':
+	case 'o':
+	case 'p':
+	case 'q':
+	case 'r':
+	case 's':
+	case 't':
+	case 'u':
+	case 'v':
+	case 'w':
+	case 'x':
+	case 'y':
+	case 'z':	goto yy66;
+	case '.':	goto yy68;
+	default:	goto yy426;
+	}
+yy426:
+#line 198 "rexx.--empty-class(match-empty).re"
+	{ RETURN(RXS_ENGINEERING); }
 #line 6843 "rexx.--empty-class(match-empty).c"
 }
 #line 265 "rexx.--empty-class(match-empty).re"
@@ -6861,38 +6861,37 @@ strip:
 	YYCTXMARKER = YYCURSOR;
 	switch (yych) {
 	case '\t':
-	case ' ':	goto yy433;
-	case '\r':	goto yy431;
-	case '/':	goto yy429;
-	default:	goto yy435;
+	case ' ':	goto yy431;
+	case '\r':	goto yy433;
+	case '/':	goto yy435;
+	default:	goto yy429;
 	}
 yy429:
 	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
-	case '*':	goto yy436;
-	default:	goto yy430;
-	}
 yy430:
 	YYCURSOR = YYCTXMARKER;
 #line 289 "rexx.--empty-class(match-empty).re"
 	{ RETURN(blanks); }
-#line 6880 "rexx.--empty-class(match-empty).c"
+#line 6876 "rexx.--empty-class(match-empty).c"
 yy431:
-	++YYCURSOR;
-#line 282 "rexx.--empty-class(match-empty).re"
-	{ goto strip; }
-#line 6885 "rexx.--empty-class(match-empty).c"
-yy433:
 	++YYCURSOR;
 #line 284 "rexx.--empty-class(match-empty).re"
 	{
 		blanks = TRUE;
 		goto strip;
 	    }
-#line 6893 "rexx.--empty-class(match-empty).c"
+#line 6884 "rexx.--empty-class(match-empty).c"
+yy433:
+	++YYCURSOR;
+#line 282 "rexx.--empty-class(match-empty).re"
+	{ goto strip; }
+#line 6889 "rexx.--empty-class(match-empty).c"
 yy435:
 	yych = *++YYCURSOR;
-	goto yy430;
+	switch (yych) {
+	case '*':	goto yy436;
+	default:	goto yy430;
+	}
 yy436:
 	++YYCURSOR;
 #line 277 "rexx.--empty-class(match-empty).re"
@@ -6900,38 +6899,39 @@ yy436:
 		depth = 1;
 		goto comment;
 	    }
-#line 6904 "rexx.--empty-class(match-empty).c"
+#line 6903 "rexx.--empty-class(match-empty).c"
 }
 #line 290 "rexx.--empty-class(match-empty).re"
 
 
 comment:
 
-#line 6911 "rexx.--empty-class(match-empty).c"
+#line 6910 "rexx.--empty-class(match-empty).c"
 {
 	YYCTYPE yych;
 	if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 0x00:	goto yy445;
-	case '\n':	goto yy442;
-	case '*':	goto yy440;
-	case '/':	goto yy444;
-	default:	goto yy447;
+	case 0x00:	goto yy440;
+	case '\n':	goto yy444;
+	case '*':	goto yy446;
+	case '/':	goto yy447;
+	default:	goto yy442;
 	}
 yy440:
 	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
-	case '/':	goto yy450;
-	default:	goto yy441;
-	}
-yy441:
+#line 313 "rexx.--empty-class(match-empty).re"
+	{ RETURN(blanks); }
+#line 6926 "rexx.--empty-class(match-empty).c"
+yy442:
+	++YYCURSOR;
+yy443:
 #line 315 "rexx.--empty-class(match-empty).re"
 	{
 		goto comment;
 	    }
 #line 6934 "rexx.--empty-class(match-empty).c"
-yy442:
+yy444:
 	++YYCURSOR;
 #line 302 "rexx.--empty-class(match-empty).re"
 	{
@@ -6940,29 +6940,19 @@ yy442:
 		goto comment;
 	    }
 #line 6943 "rexx.--empty-class(match-empty).c"
-yy444:
+yy446:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case '*':	goto yy448;
-	default:	goto yy441;
+	case '/':	goto yy448;
+	default:	goto yy443;
 	}
-yy445:
-	++YYCURSOR;
-#line 313 "rexx.--empty-class(match-empty).re"
-	{ RETURN(blanks); }
-#line 6954 "rexx.--empty-class(match-empty).c"
 yy447:
 	yych = *++YYCURSOR;
-	goto yy441;
+	switch (yych) {
+	case '*':	goto yy450;
+	default:	goto yy443;
+	}
 yy448:
-	++YYCURSOR;
-#line 308 "rexx.--empty-class(match-empty).re"
-	{
-		++depth;
-		goto comment;
-	    }
-#line 6965 "rexx.--empty-class(match-empty).c"
-yy450:
 	++YYCURSOR;
 #line 295 "rexx.--empty-class(match-empty).re"
 	{
@@ -6971,7 +6961,15 @@ yy450:
 		else
 		    goto comment;
 	    }
-#line 6975 "rexx.--empty-class(match-empty).c"
+#line 6965 "rexx.--empty-class(match-empty).c"
+yy450:
+	++YYCURSOR;
+#line 308 "rexx.--empty-class(match-empty).re"
+	{
+		++depth;
+		goto comment;
+	    }
+#line 6973 "rexx.--empty-class(match-empty).c"
 }
 #line 318 "rexx.--empty-class(match-empty).re"
 

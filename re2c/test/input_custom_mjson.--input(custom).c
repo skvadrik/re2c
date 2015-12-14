@@ -493,18 +493,18 @@ static void parsectx_next_token(mjson_parser_t* context)
             unsigned int yyaccept = 0;
             yych = YYPEEK ();
             switch (yych) {
-            case 0x00:    goto yy31;
+            case 0x00:    goto yy2;
             case '\t':
             case '\n':
             case '\r':
-            case ' ':    goto yy2;
-            case '"':    goto yy30;
+            case ' ':    goto yy6;
+            case '"':    goto yy8;
             case '+':
-            case '-':    goto yy22;
-            case ',':    goto yy18;
-            case '.':    goto yy24;
-            case '/':    goto yy4;
-            case '0':    goto yy20;
+            case '-':    goto yy9;
+            case ',':    goto yy10;
+            case '.':    goto yy12;
+            case '/':    goto yy13;
+            case '0':    goto yy14;
             case '1':
             case '2':
             case '3':
@@ -513,9 +513,9 @@ static void parsectx_next_token(mjson_parser_t* context)
             case '6':
             case '7':
             case '8':
-            case '9':    goto yy23;
-            case ':':    goto yy14;
-            case '=':    goto yy16;
+            case '9':    goto yy16;
+            case ':':    goto yy17;
+            case '=':    goto yy19;
             case 'A':
             case 'B':
             case 'C':
@@ -565,100 +565,104 @@ static void parsectx_next_token(mjson_parser_t* context)
             case 'w':
             case 'x':
             case 'y':
-            case 'z':    goto yy29;
-            case '[':    goto yy10;
-            case ']':    goto yy12;
+            case 'z':    goto yy21;
+            case '[':    goto yy23;
+            case ']':    goto yy25;
             case 'f':    goto yy27;
             case 'n':    goto yy28;
-            case 't':    goto yy25;
-            case '{':    goto yy6;
-            case '}':    goto yy8;
-            default:    goto yy33;
+            case 't':    goto yy29;
+            case '{':    goto yy30;
+            case '}':    goto yy32;
+            default:    goto yy4;
             }
 yy2:
             YYSKIP ();
-            yych = YYPEEK ();
-            goto yy126;
-yy3:
-#line 515 "input_custom_mjson.--input(custom).re"
-            {
-                continue; 
+#line 612 "input_custom_mjson.--input(custom).re"
+            { 
+                context->token = TOK_NONE;
+                return;
             }
-#line 588 "input_custom_mjson.--input(custom).c"
+#line 586 "input_custom_mjson.--input(custom).c"
 yy4:
-            yyaccept = 0;
             YYSKIP ();
-            YYBACKUP ();
-            yych = YYPEEK ();
-            switch (yych) {
-            case '*':    goto yy108;
-            case '/':    goto yy110;
-            default:    goto yy5;
-            }
 yy5:
 #line 622 "input_custom_mjson.--input(custom).re"
             {
                 context->token = TOK_INVALID;
                 return;
             }
-#line 605 "input_custom_mjson.--input(custom).c"
+#line 595 "input_custom_mjson.--input(custom).c"
 yy6:
             YYSKIP ();
-#line 527 "input_custom_mjson.--input(custom).re"
+            yych = YYPEEK ();
+            goto yy35;
+yy7:
+#line 515 "input_custom_mjson.--input(custom).re"
             {
-                token = TOK_LEFT_CURLY_BRACKET;
-                goto done;
+                continue; 
             }
-#line 613 "input_custom_mjson.--input(custom).c"
+#line 605 "input_custom_mjson.--input(custom).c"
 yy8:
+            yyaccept = 0;
             YYSKIP ();
-#line 532 "input_custom_mjson.--input(custom).re"
-            {
-                token = TOK_RIGHT_CURLY_BRACKET;
-                goto done;
+            YYBACKUP ();
+            yych = YYPEEK ();
+            if (yych <= 0x00) goto yy5;
+            goto yy37;
+yy9:
+            yyaccept = 0;
+            YYSKIP ();
+            YYBACKUP ();
+            yych = YYPEEK ();
+            switch (yych) {
+            case '.':    goto yy42;
+            case '0':    goto yy43;
+            case '1':
+            case '2':
+            case '3':
+            case '4':
+            case '5':
+            case '6':
+            case '7':
+            case '8':
+            case '9':    goto yy44;
+            default:    goto yy5;
             }
-#line 621 "input_custom_mjson.--input(custom).c"
 yy10:
-            YYSKIP ();
-#line 537 "input_custom_mjson.--input(custom).re"
-            {
-                token = TOK_LEFT_BRACKET;
-                goto done;
-            }
-#line 629 "input_custom_mjson.--input(custom).c"
-yy12:
-            YYSKIP ();
-#line 542 "input_custom_mjson.--input(custom).re"
-            {
-                token = TOK_RIGHT_BRACKET;
-                goto done;
-            }
-#line 637 "input_custom_mjson.--input(custom).c"
-yy14:
-            YYSKIP ();
-#line 547 "input_custom_mjson.--input(custom).re"
-            {
-                token = TOK_COLON;
-                goto done;
-            }
-#line 645 "input_custom_mjson.--input(custom).c"
-yy16:
-            YYSKIP ();
-#line 552 "input_custom_mjson.--input(custom).re"
-            {
-                token = TOK_EQUAL;
-                goto done;
-            }
-#line 653 "input_custom_mjson.--input(custom).c"
-yy18:
             YYSKIP ();
 #line 557 "input_custom_mjson.--input(custom).re"
             {
                 token = TOK_COMMA;
                 goto done;
             }
-#line 661 "input_custom_mjson.--input(custom).c"
-yy20:
+#line 639 "input_custom_mjson.--input(custom).c"
+yy12:
+            YYSKIP ();
+            yych = YYPEEK ();
+            switch (yych) {
+            case '0':
+            case '1':
+            case '2':
+            case '3':
+            case '4':
+            case '5':
+            case '6':
+            case '7':
+            case '8':
+            case '9':    goto yy46;
+            default:    goto yy5;
+            }
+yy13:
+            yyaccept = 0;
+            YYSKIP ();
+            YYBACKUP ();
+            yych = YYPEEK ();
+            switch (yych) {
+            case '*':    goto yy49;
+            case '/':    goto yy51;
+            default:    goto yy5;
+            }
+yy14:
             YYSKIP ();
             switch ((yych = YYPEEK ())) {
             case '.':
@@ -722,127 +726,141 @@ yy20:
             case 'v':
             case 'w':
             case 'y':
-            case 'z':    goto yy100;
+            case 'z':    goto yy55;
             case 'X':
-            case 'x':    goto yy104;
-            default:    goto yy21;
+            case 'x':    goto yy63;
+            default:    goto yy15;
             }
-yy21:
+yy15:
 #line 572 "input_custom_mjson.--input(custom).re"
             {
                 token = TOK_DEC_NUMBER;
                 goto done;
             }
-#line 737 "input_custom_mjson.--input(custom).c"
+#line 741 "input_custom_mjson.--input(custom).c"
+yy16:
+            YYSKIP ();
+            yych = YYPEEK ();
+            goto yy65;
+yy17:
+            YYSKIP ();
+#line 547 "input_custom_mjson.--input(custom).re"
+            {
+                token = TOK_COLON;
+                goto done;
+            }
+#line 753 "input_custom_mjson.--input(custom).c"
+yy19:
+            YYSKIP ();
+#line 552 "input_custom_mjson.--input(custom).re"
+            {
+                token = TOK_EQUAL;
+                goto done;
+            }
+#line 761 "input_custom_mjson.--input(custom).c"
+yy21:
+            YYSKIP ();
+            yych = YYPEEK ();
+            goto yy67;
 yy22:
-            yyaccept = 0;
-            YYSKIP ();
-            YYBACKUP ();
-            yych = YYPEEK ();
-            switch (yych) {
-            case '.':    goto yy95;
-            case '0':    goto yy92;
-            case '1':
-            case '2':
-            case '3':
-            case '4':
-            case '5':
-            case '6':
-            case '7':
-            case '8':
-            case '9':    goto yy93;
-            default:    goto yy5;
-            }
-yy23:
-            YYSKIP ();
-            yych = YYPEEK ();
-            goto yy71;
-yy24:
-            YYSKIP ();
-            yych = YYPEEK ();
-            switch (yych) {
-            case '0':
-            case '1':
-            case '2':
-            case '3':
-            case '4':
-            case '5':
-            case '6':
-            case '7':
-            case '8':
-            case '9':    goto yy63;
-            default:    goto yy5;
-            }
-yy25:
-            YYSKIP ();
-            switch ((yych = YYPEEK ())) {
-            case 'r':    goto yy59;
-            default:    goto yy49;
-            }
-yy26:
 #line 597 "input_custom_mjson.--input(custom).re"
             {
                 token = TOK_IDENTIFIER;
                 goto done;
             }
-#line 789 "input_custom_mjson.--input(custom).c"
+#line 772 "input_custom_mjson.--input(custom).c"
+yy23:
+            YYSKIP ();
+#line 537 "input_custom_mjson.--input(custom).re"
+            {
+                token = TOK_LEFT_BRACKET;
+                goto done;
+            }
+#line 780 "input_custom_mjson.--input(custom).c"
+yy25:
+            YYSKIP ();
+#line 542 "input_custom_mjson.--input(custom).re"
+            {
+                token = TOK_RIGHT_BRACKET;
+                goto done;
+            }
+#line 788 "input_custom_mjson.--input(custom).c"
 yy27:
             YYSKIP ();
             yych = YYPEEK ();
             switch (yych) {
-            case 'a':    goto yy54;
-            default:    goto yy49;
+            case 'a':    goto yy68;
+            default:    goto yy67;
             }
 yy28:
             YYSKIP ();
             yych = YYPEEK ();
             switch (yych) {
-            case 'u':    goto yy50;
-            default:    goto yy49;
+            case 'u':    goto yy69;
+            default:    goto yy67;
             }
 yy29:
             YYSKIP ();
             yych = YYPEEK ();
-            goto yy49;
-yy30:
-            yyaccept = 0;
-            YYSKIP ();
-            YYBACKUP ();
-            yych = YYPEEK ();
-            if (yych <= 0x00) goto yy5;
-            goto yy35;
-yy31:
-            YYSKIP ();
-#line 612 "input_custom_mjson.--input(custom).re"
-            { 
-                context->token = TOK_NONE;
-                return;
+            switch (yych) {
+            case 'r':    goto yy70;
+            default:    goto yy67;
             }
-#line 822 "input_custom_mjson.--input(custom).c"
-yy33:
+yy30:
             YYSKIP ();
-            yych = YYPEEK ();
-            goto yy5;
+#line 527 "input_custom_mjson.--input(custom).re"
+            {
+                token = TOK_LEFT_CURLY_BRACKET;
+                goto done;
+            }
+#line 817 "input_custom_mjson.--input(custom).c"
+yy32:
+            YYSKIP ();
+#line 532 "input_custom_mjson.--input(custom).re"
+            {
+                token = TOK_RIGHT_CURLY_BRACKET;
+                goto done;
+            }
+#line 825 "input_custom_mjson.--input(custom).c"
 yy34:
             YYSKIP ();
             yych = YYPEEK ();
 yy35:
             switch (yych) {
-            case 0x00:    goto yy36;
-            case '"':    goto yy38;
-            case '\\':    goto yy37;
-            default:    goto yy34;
+            case '\t':
+            case '\n':
+            case '\r':
+            case ' ':    goto yy34;
+            default:    goto yy7;
             }
 yy36:
+            YYSKIP ();
+            yych = YYPEEK ();
+yy37:
+            switch (yych) {
+            case 0x00:    goto yy38;
+            case '"':    goto yy39;
+            case '\\':    goto yy41;
+            default:    goto yy36;
+            }
+yy38:
             YYRESTORE ();
             switch (yyaccept) {
             case 0: 	goto yy5;
-            case 1: 	goto yy65;
-            case 2: 	goto yy74;
-            case 3: 	goto yy21;
-            default:	goto yy120;
+            case 1: 	goto yy15;
+            case 2: 	goto yy48;
+            case 3: 	goto yy59;
+            default:	goto yy106;
             }
-yy37:
+yy39:
+            YYSKIP ();
+#line 602 "input_custom_mjson.--input(custom).re"
+            {
+                token = TOK_NOESC_STRING;
+                goto done;
+            }
+#line 863 "input_custom_mjson.--input(custom).c"
+yy41:
             YYSKIP ();
             yych = YYPEEK ();
             switch (yych) {
@@ -853,19 +871,11 @@ yy37:
             case 'f':
             case 'n':
             case 'r':
-            case 't':    goto yy41;
-            case 'u':    goto yy40;
-            default:    goto yy36;
+            case 't':    goto yy71;
+            case 'u':    goto yy73;
+            default:    goto yy38;
             }
-yy38:
-            YYSKIP ();
-#line 602 "input_custom_mjson.--input(custom).re"
-            {
-                token = TOK_NOESC_STRING;
-                goto done;
-            }
-#line 868 "input_custom_mjson.--input(custom).c"
-yy40:
+yy42:
             YYSKIP ();
             yych = YYPEEK ();
             switch (yych) {
@@ -878,42 +888,16 @@ yy40:
             case '6':
             case '7':
             case '8':
-            case '9':
-            case 'A':
-            case 'B':
-            case 'C':
-            case 'D':
-            case 'E':
-            case 'F':
-            case 'a':
-            case 'b':
-            case 'c':
-            case 'd':
-            case 'e':
-            case 'f':    goto yy45;
-            default:    goto yy36;
-            }
-yy41:
-            YYSKIP ();
-            yych = YYPEEK ();
-            switch (yych) {
-            case 0x00:    goto yy36;
-            case '"':    goto yy43;
-            case '\\':    goto yy37;
-            default:    goto yy41;
+            case '9':    goto yy46;
+            default:    goto yy38;
             }
 yy43:
+            yyaccept = 1;
             YYSKIP ();
-#line 607 "input_custom_mjson.--input(custom).re"
-            {
-                token = TOK_STRING;
-                goto done;
-            }
-#line 913 "input_custom_mjson.--input(custom).c"
-yy45:
-            YYSKIP ();
+            YYBACKUP ();
             yych = YYPEEK ();
             switch (yych) {
+            case '.':    goto yy53;
             case '0':
             case '1':
             case '2':
@@ -923,23 +907,36 @@ yy45:
             case '6':
             case '7':
             case '8':
-            case '9':
-            case 'A':
-            case 'B':
-            case 'C':
-            case 'D':
+            case '9':    goto yy74;
             case 'E':
-            case 'F':
-            case 'a':
-            case 'b':
-            case 'c':
-            case 'd':
-            case 'e':
-            case 'f':    goto yy46;
-            default:    goto yy36;
+            case 'e':    goto yy76;
+            default:    goto yy15;
+            }
+yy44:
+            yyaccept = 1;
+            YYSKIP ();
+            YYBACKUP ();
+            yych = YYPEEK ();
+            switch (yych) {
+            case '.':    goto yy53;
+            case '0':
+            case '1':
+            case '2':
+            case '3':
+            case '4':
+            case '5':
+            case '6':
+            case '7':
+            case '8':
+            case '9':    goto yy44;
+            case 'E':
+            case 'e':    goto yy76;
+            default:    goto yy15;
             }
 yy46:
+            yyaccept = 2;
             YYSKIP ();
+            YYBACKUP ();
             yych = YYPEEK ();
             switch (yych) {
             case '0':
@@ -951,625 +948,127 @@ yy46:
             case '6':
             case '7':
             case '8':
-            case '9':
-            case 'A':
-            case 'B':
-            case 'C':
-            case 'D':
+            case '9':    goto yy46;
             case 'E':
-            case 'F':
-            case 'a':
-            case 'b':
-            case 'c':
-            case 'd':
-            case 'e':
-            case 'f':    goto yy47;
-            default:    goto yy36;
-            }
-yy47:
-            YYSKIP ();
-            yych = YYPEEK ();
-            switch (yych) {
-            case '0':
-            case '1':
-            case '2':
-            case '3':
-            case '4':
-            case '5':
-            case '6':
-            case '7':
-            case '8':
-            case '9':
-            case 'A':
-            case 'B':
-            case 'C':
-            case 'D':
-            case 'E':
-            case 'F':
-            case 'a':
-            case 'b':
-            case 'c':
-            case 'd':
-            case 'e':
-            case 'f':    goto yy41;
-            default:    goto yy36;
+            case 'e':    goto yy77;
+            default:    goto yy48;
             }
 yy48:
-            YYSKIP ();
-            yych = YYPEEK ();
-yy49:
-            switch (yych) {
-            case '0':
-            case '1':
-            case '2':
-            case '3':
-            case '4':
-            case '5':
-            case '6':
-            case '7':
-            case '8':
-            case '9':
-            case 'A':
-            case 'B':
-            case 'C':
-            case 'D':
-            case 'E':
-            case 'F':
-            case 'G':
-            case 'H':
-            case 'I':
-            case 'J':
-            case 'K':
-            case 'L':
-            case 'M':
-            case 'N':
-            case 'O':
-            case 'P':
-            case 'Q':
-            case 'R':
-            case 'S':
-            case 'T':
-            case 'U':
-            case 'V':
-            case 'W':
-            case 'X':
-            case 'Y':
-            case 'Z':
-            case '_':
-            case 'a':
-            case 'b':
-            case 'c':
-            case 'd':
-            case 'e':
-            case 'f':
-            case 'g':
-            case 'h':
-            case 'i':
-            case 'j':
-            case 'k':
-            case 'l':
-            case 'm':
-            case 'n':
-            case 'o':
-            case 'p':
-            case 'q':
-            case 'r':
-            case 's':
-            case 't':
-            case 'u':
-            case 'v':
-            case 'w':
-            case 'x':
-            case 'y':
-            case 'z':    goto yy48;
-            default:    goto yy26;
+#line 577 "input_custom_mjson.--input(custom).re"
+            {
+                token = TOK_FLOAT_NUMBER;
+                goto done;
             }
-yy50:
+#line 963 "input_custom_mjson.--input(custom).c"
+yy49:
             YYSKIP ();
             yych = YYPEEK ();
             switch (yych) {
-            case 'l':    goto yy51;
+            case 0x00:    goto yy38;
+            case '*':    goto yy78;
             default:    goto yy49;
             }
 yy51:
             YYSKIP ();
             yych = YYPEEK ();
             switch (yych) {
-            case 'l':    goto yy52;
-            default:    goto yy49;
-            }
-yy52:
-            YYSKIP ();
-            switch ((yych = YYPEEK ())) {
-            case '0':
-            case '1':
-            case '2':
-            case '3':
-            case '4':
-            case '5':
-            case '6':
-            case '7':
-            case '8':
-            case '9':
-            case 'A':
-            case 'B':
-            case 'C':
-            case 'D':
-            case 'E':
-            case 'F':
-            case 'G':
-            case 'H':
-            case 'I':
-            case 'J':
-            case 'K':
-            case 'L':
-            case 'M':
-            case 'N':
-            case 'O':
-            case 'P':
-            case 'Q':
-            case 'R':
-            case 'S':
-            case 'T':
-            case 'U':
-            case 'V':
-            case 'W':
-            case 'X':
-            case 'Y':
-            case 'Z':
-            case '_':
-            case 'a':
-            case 'b':
-            case 'c':
-            case 'd':
-            case 'e':
-            case 'f':
-            case 'g':
-            case 'h':
-            case 'i':
-            case 'j':
-            case 'k':
-            case 'l':
-            case 'm':
-            case 'n':
-            case 'o':
-            case 'p':
-            case 'q':
-            case 'r':
-            case 's':
-            case 't':
-            case 'u':
-            case 'v':
-            case 'w':
-            case 'x':
-            case 'y':
-            case 'z':    goto yy48;
-            default:    goto yy53;
+            case 0x00:    goto yy38;
+            case '\n':    goto yy79;
+            default:    goto yy51;
             }
 yy53:
-#line 592 "input_custom_mjson.--input(custom).re"
-            {
-                token = TOK_NULL;
-                goto done;
-            }
-#line 1156 "input_custom_mjson.--input(custom).c"
-yy54:
-            YYSKIP ();
-            yych = YYPEEK ();
-            switch (yych) {
-            case 'l':    goto yy55;
-            default:    goto yy49;
-            }
-yy55:
-            YYSKIP ();
-            yych = YYPEEK ();
-            switch (yych) {
-            case 's':    goto yy56;
-            default:    goto yy49;
-            }
-yy56:
-            YYSKIP ();
-            yych = YYPEEK ();
-            switch (yych) {
-            case 'e':    goto yy57;
-            default:    goto yy49;
-            }
-yy57:
-            YYSKIP ();
-            switch ((yych = YYPEEK ())) {
-            case '0':
-            case '1':
-            case '2':
-            case '3':
-            case '4':
-            case '5':
-            case '6':
-            case '7':
-            case '8':
-            case '9':
-            case 'A':
-            case 'B':
-            case 'C':
-            case 'D':
-            case 'E':
-            case 'F':
-            case 'G':
-            case 'H':
-            case 'I':
-            case 'J':
-            case 'K':
-            case 'L':
-            case 'M':
-            case 'N':
-            case 'O':
-            case 'P':
-            case 'Q':
-            case 'R':
-            case 'S':
-            case 'T':
-            case 'U':
-            case 'V':
-            case 'W':
-            case 'X':
-            case 'Y':
-            case 'Z':
-            case '_':
-            case 'a':
-            case 'b':
-            case 'c':
-            case 'd':
-            case 'e':
-            case 'f':
-            case 'g':
-            case 'h':
-            case 'i':
-            case 'j':
-            case 'k':
-            case 'l':
-            case 'm':
-            case 'n':
-            case 'o':
-            case 'p':
-            case 'q':
-            case 'r':
-            case 's':
-            case 't':
-            case 'u':
-            case 'v':
-            case 'w':
-            case 'x':
-            case 'y':
-            case 'z':    goto yy48;
-            default:    goto yy58;
-            }
-yy58:
-#line 587 "input_custom_mjson.--input(custom).re"
-            {
-                token = TOK_FALSE;
-                goto done;
-            }
-#line 1252 "input_custom_mjson.--input(custom).c"
-yy59:
-            YYSKIP ();
-            yych = YYPEEK ();
-            switch (yych) {
-            case 'u':    goto yy60;
-            default:    goto yy49;
-            }
-yy60:
-            YYSKIP ();
-            yych = YYPEEK ();
-            switch (yych) {
-            case 'e':    goto yy61;
-            default:    goto yy49;
-            }
-yy61:
-            YYSKIP ();
-            switch ((yych = YYPEEK ())) {
-            case '0':
-            case '1':
-            case '2':
-            case '3':
-            case '4':
-            case '5':
-            case '6':
-            case '7':
-            case '8':
-            case '9':
-            case 'A':
-            case 'B':
-            case 'C':
-            case 'D':
-            case 'E':
-            case 'F':
-            case 'G':
-            case 'H':
-            case 'I':
-            case 'J':
-            case 'K':
-            case 'L':
-            case 'M':
-            case 'N':
-            case 'O':
-            case 'P':
-            case 'Q':
-            case 'R':
-            case 'S':
-            case 'T':
-            case 'U':
-            case 'V':
-            case 'W':
-            case 'X':
-            case 'Y':
-            case 'Z':
-            case '_':
-            case 'a':
-            case 'b':
-            case 'c':
-            case 'd':
-            case 'e':
-            case 'f':
-            case 'g':
-            case 'h':
-            case 'i':
-            case 'j':
-            case 'k':
-            case 'l':
-            case 'm':
-            case 'n':
-            case 'o':
-            case 'p':
-            case 'q':
-            case 'r':
-            case 's':
-            case 't':
-            case 'u':
-            case 'v':
-            case 'w':
-            case 'x':
-            case 'y':
-            case 'z':    goto yy48;
-            default:    goto yy62;
-            }
-yy62:
-#line 582 "input_custom_mjson.--input(custom).re"
-            {
-                token = TOK_TRUE;
-                goto done;
-            }
-#line 1341 "input_custom_mjson.--input(custom).c"
-yy63:
-            yyaccept = 1;
-            YYSKIP ();
-            YYBACKUP ();
-            yych = YYPEEK ();
-            switch (yych) {
-            case '0':
-            case '1':
-            case '2':
-            case '3':
-            case '4':
-            case '5':
-            case '6':
-            case '7':
-            case '8':
-            case '9':    goto yy63;
-            case 'E':
-            case 'e':    goto yy66;
-            default:    goto yy65;
-            }
-yy65:
-#line 577 "input_custom_mjson.--input(custom).re"
-            {
-                token = TOK_FLOAT_NUMBER;
-                goto done;
-            }
-#line 1368 "input_custom_mjson.--input(custom).c"
-yy66:
-            YYSKIP ();
-            yych = YYPEEK ();
-            switch (yych) {
-            case '+':
-            case '-':    goto yy67;
-            case '0':
-            case '1':
-            case '2':
-            case '3':
-            case '4':
-            case '5':
-            case '6':
-            case '7':
-            case '8':
-            case '9':    goto yy68;
-            default:    goto yy36;
-            }
-yy67:
-            YYSKIP ();
-            yych = YYPEEK ();
-            switch (yych) {
-            case '0':
-            case '1':
-            case '2':
-            case '3':
-            case '4':
-            case '5':
-            case '6':
-            case '7':
-            case '8':
-            case '9':    goto yy68;
-            default:    goto yy36;
-            }
-yy68:
-            YYSKIP ();
-            yych = YYPEEK ();
-            switch (yych) {
-            case '0':
-            case '1':
-            case '2':
-            case '3':
-            case '4':
-            case '5':
-            case '6':
-            case '7':
-            case '8':
-            case '9':    goto yy68;
-            default:    goto yy65;
-            }
-yy70:
-            YYSKIP ();
-            yych = YYPEEK ();
-yy71:
-            switch (yych) {
-            case '.':    goto yy76;
-            case '0':
-            case '1':
-            case '2':
-            case '3':
-            case '4':
-            case '5':
-            case '6':
-            case '7':
-            case '8':
-            case '9':    goto yy70;
-            case 'A':
-            case 'B':
-            case 'C':
-            case 'D':
-            case 'F':
-            case 'G':
-            case 'H':
-            case 'I':
-            case 'J':
-            case 'K':
-            case 'L':
-            case 'M':
-            case 'N':
-            case 'O':
-            case 'P':
-            case 'Q':
-            case 'R':
-            case 'S':
-            case 'T':
-            case 'U':
-            case 'V':
-            case 'W':
-            case 'X':
-            case 'Y':
-            case 'Z':
-            case '_':
-            case 'a':
-            case 'b':
-            case 'c':
-            case 'd':
-            case 'f':
-            case 'g':
-            case 'h':
-            case 'i':
-            case 'j':
-            case 'k':
-            case 'l':
-            case 'm':
-            case 'n':
-            case 'o':
-            case 'p':
-            case 'q':
-            case 'r':
-            case 's':
-            case 't':
-            case 'u':
-            case 'v':
-            case 'w':
-            case 'x':
-            case 'y':
-            case 'z':    goto yy72;
-            case 'E':
-            case 'e':    goto yy75;
-            default:    goto yy21;
-            }
-yy72:
-            YYSKIP ();
-            yych = YYPEEK ();
-            switch (yych) {
-            case '0':
-            case '1':
-            case '2':
-            case '3':
-            case '4':
-            case '5':
-            case '6':
-            case '7':
-            case '8':
-            case '9':
-            case 'A':
-            case 'B':
-            case 'C':
-            case 'D':
-            case 'E':
-            case 'F':
-            case 'G':
-            case 'H':
-            case 'I':
-            case 'J':
-            case 'K':
-            case 'L':
-            case 'M':
-            case 'N':
-            case 'O':
-            case 'P':
-            case 'Q':
-            case 'R':
-            case 'S':
-            case 'T':
-            case 'U':
-            case 'V':
-            case 'W':
-            case 'X':
-            case 'Y':
-            case 'Z':
-            case '_':
-            case 'a':
-            case 'b':
-            case 'c':
-            case 'd':
-            case 'e':
-            case 'f':
-            case 'g':
-            case 'h':
-            case 'i':
-            case 'j':
-            case 'k':
-            case 'l':
-            case 'm':
-            case 'n':
-            case 'o':
-            case 'p':
-            case 'q':
-            case 'r':
-            case 's':
-            case 't':
-            case 'u':
-            case 'v':
-            case 'w':
-            case 'x':
-            case 'y':
-            case 'z':    goto yy72;
-            default:    goto yy74;
-            }
-yy74:
-#line 617 "input_custom_mjson.--input(custom).re"
-            {
-                context->token = TOK_INVALID;
-                return;
-            }
-#line 1565 "input_custom_mjson.--input(custom).c"
-yy75:
             yyaccept = 2;
             YYSKIP ();
             YYBACKUP ();
             yych = YYPEEK ();
             switch (yych) {
-            case '+':
-            case '-':    goto yy87;
+            case 'E':
+            case 'e':    goto yy83;
+            default:    goto yy82;
+            }
+yy54:
+            YYSKIP ();
+            yych = YYPEEK ();
+yy55:
+            switch (yych) {
+            case '.':    goto yy53;
+            case '0':
+            case '1':
+            case '2':
+            case '3':
+            case '4':
+            case '5':
+            case '6':
+            case '7':    goto yy54;
+            case '8':
+            case '9':    goto yy57;
+            case 'A':
+            case 'B':
+            case 'C':
+            case 'D':
+            case 'F':
+            case 'G':
+            case 'H':
+            case 'I':
+            case 'J':
+            case 'K':
+            case 'L':
+            case 'M':
+            case 'N':
+            case 'O':
+            case 'P':
+            case 'Q':
+            case 'R':
+            case 'S':
+            case 'T':
+            case 'U':
+            case 'V':
+            case 'W':
+            case 'X':
+            case 'Y':
+            case 'Z':
+            case '_':
+            case 'a':
+            case 'b':
+            case 'c':
+            case 'd':
+            case 'f':
+            case 'g':
+            case 'h':
+            case 'i':
+            case 'j':
+            case 'k':
+            case 'l':
+            case 'm':
+            case 'n':
+            case 'o':
+            case 'p':
+            case 'q':
+            case 'r':
+            case 's':
+            case 't':
+            case 'u':
+            case 'v':
+            case 'w':
+            case 'x':
+            case 'y':
+            case 'z':    goto yy60;
+            case 'E':
+            case 'e':    goto yy62;
+            default:    goto yy56;
+            }
+yy56:
+#line 562 "input_custom_mjson.--input(custom).re"
+            {
+                token = TOK_OCT_NUMBER;
+                goto done;
+            }
+#line 1067 "input_custom_mjson.--input(custom).c"
+yy57:
+            YYSKIP ();
+            yych = YYPEEK ();
+            switch (yych) {
+            case '.':    goto yy53;
             case '0':
             case '1':
             case '2':
@@ -1579,7 +1078,83 @@ yy75:
             case '6':
             case '7':
             case '8':
-            case '9':    goto yy88;
+            case '9':    goto yy57;
+            case 'A':
+            case 'B':
+            case 'C':
+            case 'D':
+            case 'F':
+            case 'G':
+            case 'H':
+            case 'I':
+            case 'J':
+            case 'K':
+            case 'L':
+            case 'M':
+            case 'N':
+            case 'O':
+            case 'P':
+            case 'Q':
+            case 'R':
+            case 'S':
+            case 'T':
+            case 'U':
+            case 'V':
+            case 'W':
+            case 'X':
+            case 'Y':
+            case 'Z':
+            case '_':
+            case 'a':
+            case 'b':
+            case 'c':
+            case 'd':
+            case 'f':
+            case 'g':
+            case 'h':
+            case 'i':
+            case 'j':
+            case 'k':
+            case 'l':
+            case 'm':
+            case 'n':
+            case 'o':
+            case 'p':
+            case 'q':
+            case 'r':
+            case 's':
+            case 't':
+            case 'u':
+            case 'v':
+            case 'w':
+            case 'x':
+            case 'y':
+            case 'z':    goto yy60;
+            case 'E':
+            case 'e':    goto yy62;
+            default:    goto yy59;
+            }
+yy59:
+#line 617 "input_custom_mjson.--input(custom).re"
+            {
+                context->token = TOK_INVALID;
+                return;
+            }
+#line 1144 "input_custom_mjson.--input(custom).c"
+yy60:
+            YYSKIP ();
+            yych = YYPEEK ();
+            switch (yych) {
+            case '0':
+            case '1':
+            case '2':
+            case '3':
+            case '4':
+            case '5':
+            case '6':
+            case '7':
+            case '8':
+            case '9':
             case 'A':
             case 'B':
             case 'C':
@@ -1632,92 +1207,13 @@ yy75:
             case 'w':
             case 'x':
             case 'y':
-            case 'z':    goto yy72;
-            default:    goto yy74;
+            case 'z':    goto yy60;
+            default:    goto yy59;
             }
-yy76:
-            yyaccept = 1;
+yy62:
+            yyaccept = 3;
             YYSKIP ();
             YYBACKUP ();
-            yych = YYPEEK ();
-            switch (yych) {
-            case 'E':
-            case 'e':    goto yy79;
-            default:    goto yy78;
-            }
-yy77:
-            yyaccept = 1;
-            YYSKIP ();
-            YYBACKUP ();
-            yych = YYPEEK ();
-yy78:
-            switch (yych) {
-            case '0':
-            case '1':
-            case '2':
-            case '3':
-            case '4':
-            case '5':
-            case '6':
-            case '7':
-            case '8':
-            case '9':    goto yy77;
-            case 'E':
-            case 'e':    goto yy83;
-            default:    goto yy65;
-            }
-yy79:
-            YYSKIP ();
-            yych = YYPEEK ();
-            switch (yych) {
-            case '+':
-            case '-':    goto yy80;
-            case '0':
-            case '1':
-            case '2':
-            case '3':
-            case '4':
-            case '5':
-            case '6':
-            case '7':
-            case '8':
-            case '9':    goto yy81;
-            default:    goto yy36;
-            }
-yy80:
-            YYSKIP ();
-            yych = YYPEEK ();
-            switch (yych) {
-            case '0':
-            case '1':
-            case '2':
-            case '3':
-            case '4':
-            case '5':
-            case '6':
-            case '7':
-            case '8':
-            case '9':    goto yy81;
-            default:    goto yy36;
-            }
-yy81:
-            YYSKIP ();
-            yych = YYPEEK ();
-            switch (yych) {
-            case '0':
-            case '1':
-            case '2':
-            case '3':
-            case '4':
-            case '5':
-            case '6':
-            case '7':
-            case '8':
-            case '9':    goto yy81;
-            default:    goto yy65;
-            }
-yy83:
-            YYSKIP ();
             yych = YYPEEK ();
             switch (yych) {
             case '+':
@@ -1732,7 +1228,437 @@ yy83:
             case '7':
             case '8':
             case '9':    goto yy85;
-            default:    goto yy36;
+            case 'A':
+            case 'B':
+            case 'C':
+            case 'D':
+            case 'E':
+            case 'F':
+            case 'G':
+            case 'H':
+            case 'I':
+            case 'J':
+            case 'K':
+            case 'L':
+            case 'M':
+            case 'N':
+            case 'O':
+            case 'P':
+            case 'Q':
+            case 'R':
+            case 'S':
+            case 'T':
+            case 'U':
+            case 'V':
+            case 'W':
+            case 'X':
+            case 'Y':
+            case 'Z':
+            case '_':
+            case 'a':
+            case 'b':
+            case 'c':
+            case 'd':
+            case 'e':
+            case 'f':
+            case 'g':
+            case 'h':
+            case 'i':
+            case 'j':
+            case 'k':
+            case 'l':
+            case 'm':
+            case 'n':
+            case 'o':
+            case 'p':
+            case 'q':
+            case 'r':
+            case 's':
+            case 't':
+            case 'u':
+            case 'v':
+            case 'w':
+            case 'x':
+            case 'y':
+            case 'z':    goto yy60;
+            default:    goto yy59;
+            }
+yy63:
+            YYSKIP ();
+            yych = YYPEEK ();
+            switch (yych) {
+            case '0':
+            case '1':
+            case '2':
+            case '3':
+            case '4':
+            case '5':
+            case '6':
+            case '7':
+            case '8':
+            case '9':
+            case 'A':
+            case 'B':
+            case 'C':
+            case 'D':
+            case 'E':
+            case 'F':
+            case 'G':
+            case 'H':
+            case 'I':
+            case 'J':
+            case 'K':
+            case 'L':
+            case 'M':
+            case 'N':
+            case 'O':
+            case 'P':
+            case 'Q':
+            case 'R':
+            case 'S':
+            case 'T':
+            case 'U':
+            case 'V':
+            case 'W':
+            case 'X':
+            case 'Y':
+            case 'Z':
+            case '_':
+            case 'a':
+            case 'b':
+            case 'c':
+            case 'd':
+            case 'e':
+            case 'f':
+            case 'g':
+            case 'h':
+            case 'i':
+            case 'j':
+            case 'k':
+            case 'l':
+            case 'm':
+            case 'n':
+            case 'o':
+            case 'p':
+            case 'q':
+            case 'r':
+            case 's':
+            case 't':
+            case 'u':
+            case 'v':
+            case 'w':
+            case 'x':
+            case 'y':
+            case 'z':    goto yy88;
+            default:    goto yy59;
+            }
+yy64:
+            YYSKIP ();
+            yych = YYPEEK ();
+yy65:
+            switch (yych) {
+            case '.':    goto yy53;
+            case '0':
+            case '1':
+            case '2':
+            case '3':
+            case '4':
+            case '5':
+            case '6':
+            case '7':
+            case '8':
+            case '9':    goto yy64;
+            case 'A':
+            case 'B':
+            case 'C':
+            case 'D':
+            case 'F':
+            case 'G':
+            case 'H':
+            case 'I':
+            case 'J':
+            case 'K':
+            case 'L':
+            case 'M':
+            case 'N':
+            case 'O':
+            case 'P':
+            case 'Q':
+            case 'R':
+            case 'S':
+            case 'T':
+            case 'U':
+            case 'V':
+            case 'W':
+            case 'X':
+            case 'Y':
+            case 'Z':
+            case '_':
+            case 'a':
+            case 'b':
+            case 'c':
+            case 'd':
+            case 'f':
+            case 'g':
+            case 'h':
+            case 'i':
+            case 'j':
+            case 'k':
+            case 'l':
+            case 'm':
+            case 'n':
+            case 'o':
+            case 'p':
+            case 'q':
+            case 'r':
+            case 's':
+            case 't':
+            case 'u':
+            case 'v':
+            case 'w':
+            case 'x':
+            case 'y':
+            case 'z':    goto yy60;
+            case 'E':
+            case 'e':    goto yy62;
+            default:    goto yy15;
+            }
+yy66:
+            YYSKIP ();
+            yych = YYPEEK ();
+yy67:
+            switch (yych) {
+            case '0':
+            case '1':
+            case '2':
+            case '3':
+            case '4':
+            case '5':
+            case '6':
+            case '7':
+            case '8':
+            case '9':
+            case 'A':
+            case 'B':
+            case 'C':
+            case 'D':
+            case 'E':
+            case 'F':
+            case 'G':
+            case 'H':
+            case 'I':
+            case 'J':
+            case 'K':
+            case 'L':
+            case 'M':
+            case 'N':
+            case 'O':
+            case 'P':
+            case 'Q':
+            case 'R':
+            case 'S':
+            case 'T':
+            case 'U':
+            case 'V':
+            case 'W':
+            case 'X':
+            case 'Y':
+            case 'Z':
+            case '_':
+            case 'a':
+            case 'b':
+            case 'c':
+            case 'd':
+            case 'e':
+            case 'f':
+            case 'g':
+            case 'h':
+            case 'i':
+            case 'j':
+            case 'k':
+            case 'l':
+            case 'm':
+            case 'n':
+            case 'o':
+            case 'p':
+            case 'q':
+            case 'r':
+            case 's':
+            case 't':
+            case 'u':
+            case 'v':
+            case 'w':
+            case 'x':
+            case 'y':
+            case 'z':    goto yy66;
+            default:    goto yy22;
+            }
+yy68:
+            YYSKIP ();
+            yych = YYPEEK ();
+            switch (yych) {
+            case 'l':    goto yy90;
+            default:    goto yy67;
+            }
+yy69:
+            YYSKIP ();
+            yych = YYPEEK ();
+            switch (yych) {
+            case 'l':    goto yy91;
+            default:    goto yy67;
+            }
+yy70:
+            YYSKIP ();
+            yych = YYPEEK ();
+            switch (yych) {
+            case 'u':    goto yy92;
+            default:    goto yy67;
+            }
+yy71:
+            YYSKIP ();
+            yych = YYPEEK ();
+            switch (yych) {
+            case 0x00:    goto yy38;
+            case '"':    goto yy93;
+            case '\\':    goto yy41;
+            default:    goto yy71;
+            }
+yy73:
+            YYSKIP ();
+            yych = YYPEEK ();
+            switch (yych) {
+            case '0':
+            case '1':
+            case '2':
+            case '3':
+            case '4':
+            case '5':
+            case '6':
+            case '7':
+            case '8':
+            case '9':
+            case 'A':
+            case 'B':
+            case 'C':
+            case 'D':
+            case 'E':
+            case 'F':
+            case 'a':
+            case 'b':
+            case 'c':
+            case 'd':
+            case 'e':
+            case 'f':    goto yy95;
+            default:    goto yy38;
+            }
+yy74:
+            YYSKIP ();
+            yych = YYPEEK ();
+            switch (yych) {
+            case '.':    goto yy53;
+            case '0':
+            case '1':
+            case '2':
+            case '3':
+            case '4':
+            case '5':
+            case '6':
+            case '7':
+            case '8':
+            case '9':    goto yy74;
+            case 'E':
+            case 'e':    goto yy76;
+            default:    goto yy38;
+            }
+yy76:
+            YYSKIP ();
+            yych = YYPEEK ();
+            switch (yych) {
+            case '+':
+            case '-':    goto yy84;
+            case '0':
+            case '1':
+            case '2':
+            case '3':
+            case '4':
+            case '5':
+            case '6':
+            case '7':
+            case '8':
+            case '9':    goto yy96;
+            default:    goto yy38;
+            }
+yy77:
+            YYSKIP ();
+            yych = YYPEEK ();
+            switch (yych) {
+            case '+':
+            case '-':    goto yy98;
+            case '0':
+            case '1':
+            case '2':
+            case '3':
+            case '4':
+            case '5':
+            case '6':
+            case '7':
+            case '8':
+            case '9':    goto yy99;
+            default:    goto yy38;
+            }
+yy78:
+            YYSKIP ();
+            yych = YYPEEK ();
+            switch (yych) {
+            case '*':    goto yy103;
+            case '/':    goto yy105;
+            default:    goto yy102;
+            }
+yy79:
+            YYSKIP ();
+#line 519 "input_custom_mjson.--input(custom).re"
+            {
+                continue; 
+            }
+#line 1624 "input_custom_mjson.--input(custom).c"
+yy81:
+            yyaccept = 2;
+            YYSKIP ();
+            YYBACKUP ();
+            yych = YYPEEK ();
+yy82:
+            switch (yych) {
+            case '0':
+            case '1':
+            case '2':
+            case '3':
+            case '4':
+            case '5':
+            case '6':
+            case '7':
+            case '8':
+            case '9':    goto yy81;
+            case 'E':
+            case 'e':    goto yy107;
+            default:    goto yy48;
+            }
+yy83:
+            YYSKIP ();
+            yych = YYPEEK ();
+            switch (yych) {
+            case '+':
+            case '-':    goto yy108;
+            case '0':
+            case '1':
+            case '2':
+            case '3':
+            case '4':
+            case '5':
+            case '6':
+            case '7':
+            case '8':
+            case '9':    goto yy109;
+            default:    goto yy38;
             }
 yy84:
             YYSKIP ();
@@ -1747,8 +1673,8 @@ yy84:
             case '6':
             case '7':
             case '8':
-            case '9':    goto yy85;
-            default:    goto yy36;
+            case '9':    goto yy96;
+            default:    goto yy38;
             }
 yy85:
             YYSKIP ();
@@ -1764,38 +1690,6 @@ yy85:
             case '7':
             case '8':
             case '9':    goto yy85;
-            default:    goto yy65;
-            }
-yy87:
-            YYSKIP ();
-            yych = YYPEEK ();
-            switch (yych) {
-            case '0':
-            case '1':
-            case '2':
-            case '3':
-            case '4':
-            case '5':
-            case '6':
-            case '7':
-            case '8':
-            case '9':    goto yy90;
-            default:    goto yy36;
-            }
-yy88:
-            YYSKIP ();
-            yych = YYPEEK ();
-            switch (yych) {
-            case '0':
-            case '1':
-            case '2':
-            case '3':
-            case '4':
-            case '5':
-            case '6':
-            case '7':
-            case '8':
-            case '9':    goto yy88;
             case 'A':
             case 'B':
             case 'C':
@@ -1848,67 +1742,115 @@ yy88:
             case 'w':
             case 'x':
             case 'y':
-            case 'z':    goto yy72;
-            default:    goto yy65;
+            case 'z':    goto yy60;
+            default:    goto yy48;
             }
+yy87:
+            YYSKIP ();
+            yych = YYPEEK ();
+yy88:
+            switch (yych) {
+            case '0':
+            case '1':
+            case '2':
+            case '3':
+            case '4':
+            case '5':
+            case '6':
+            case '7':
+            case '8':
+            case '9':
+            case 'A':
+            case 'B':
+            case 'C':
+            case 'D':
+            case 'E':
+            case 'F':
+            case 'a':
+            case 'b':
+            case 'c':
+            case 'd':
+            case 'e':
+            case 'f':    goto yy87;
+            case 'G':
+            case 'H':
+            case 'I':
+            case 'J':
+            case 'K':
+            case 'L':
+            case 'M':
+            case 'N':
+            case 'O':
+            case 'P':
+            case 'Q':
+            case 'R':
+            case 'S':
+            case 'T':
+            case 'U':
+            case 'V':
+            case 'W':
+            case 'X':
+            case 'Y':
+            case 'Z':
+            case '_':
+            case 'g':
+            case 'h':
+            case 'i':
+            case 'j':
+            case 'k':
+            case 'l':
+            case 'm':
+            case 'n':
+            case 'o':
+            case 'p':
+            case 'q':
+            case 'r':
+            case 's':
+            case 't':
+            case 'u':
+            case 'v':
+            case 'w':
+            case 'x':
+            case 'y':
+            case 'z':    goto yy60;
+            default:    goto yy89;
+            }
+yy89:
+#line 567 "input_custom_mjson.--input(custom).re"
+            {
+                token = TOK_HEX_NUMBER;
+                goto done;
+            }
+#line 1825 "input_custom_mjson.--input(custom).c"
 yy90:
             YYSKIP ();
             yych = YYPEEK ();
             switch (yych) {
-            case '0':
-            case '1':
-            case '2':
-            case '3':
-            case '4':
-            case '5':
-            case '6':
-            case '7':
-            case '8':
-            case '9':    goto yy90;
-            default:    goto yy65;
+            case 's':    goto yy111;
+            default:    goto yy67;
+            }
+yy91:
+            YYSKIP ();
+            yych = YYPEEK ();
+            switch (yych) {
+            case 'l':    goto yy112;
+            default:    goto yy67;
             }
 yy92:
-            yyaccept = 3;
             YYSKIP ();
-            YYBACKUP ();
             yych = YYPEEK ();
             switch (yych) {
-            case '.':    goto yy76;
-            case '0':
-            case '1':
-            case '2':
-            case '3':
-            case '4':
-            case '5':
-            case '6':
-            case '7':
-            case '8':
-            case '9':    goto yy97;
-            case 'E':
-            case 'e':    goto yy96;
-            default:    goto yy21;
+            case 'e':    goto yy114;
+            default:    goto yy67;
             }
 yy93:
-            yyaccept = 3;
             YYSKIP ();
-            YYBACKUP ();
-            yych = YYPEEK ();
-            switch (yych) {
-            case '.':    goto yy76;
-            case '0':
-            case '1':
-            case '2':
-            case '3':
-            case '4':
-            case '5':
-            case '6':
-            case '7':
-            case '8':
-            case '9':    goto yy93;
-            case 'E':
-            case 'e':    goto yy96;
-            default:    goto yy21;
+#line 607 "input_custom_mjson.--input(custom).re"
+            {
+                token = TOK_STRING;
+                goto done;
             }
+#line 1854 "input_custom_mjson.--input(custom).c"
 yy95:
             YYSKIP ();
             yych = YYPEEK ();
@@ -1922,15 +1864,25 @@ yy95:
             case '6':
             case '7':
             case '8':
-            case '9':    goto yy63;
-            default:    goto yy36;
+            case '9':
+            case 'A':
+            case 'B':
+            case 'C':
+            case 'D':
+            case 'E':
+            case 'F':
+            case 'a':
+            case 'b':
+            case 'c':
+            case 'd':
+            case 'e':
+            case 'f':    goto yy116;
+            default:    goto yy38;
             }
 yy96:
             YYSKIP ();
             yych = YYPEEK ();
             switch (yych) {
-            case '+':
-            case '-':    goto yy87;
             case '0':
             case '1':
             case '2':
@@ -1940,14 +1892,13 @@ yy96:
             case '6':
             case '7':
             case '8':
-            case '9':    goto yy90;
-            default:    goto yy36;
+            case '9':    goto yy96;
+            default:    goto yy48;
             }
-yy97:
+yy98:
             YYSKIP ();
             yych = YYPEEK ();
             switch (yych) {
-            case '.':    goto yy76;
             case '0':
             case '1':
             case '2':
@@ -1957,17 +1908,13 @@ yy97:
             case '6':
             case '7':
             case '8':
-            case '9':    goto yy97;
-            case 'E':
-            case 'e':    goto yy96;
-            default:    goto yy36;
+            case '9':    goto yy99;
+            default:    goto yy38;
             }
 yy99:
             YYSKIP ();
             yych = YYPEEK ();
-yy100:
             switch (yych) {
-            case '.':    goto yy76;
             case '0':
             case '1':
             case '2':
@@ -1975,215 +1922,43 @@ yy100:
             case '4':
             case '5':
             case '6':
-            case '7':    goto yy99;
+            case '7':
             case '8':
-            case '9':    goto yy102;
-            case 'A':
-            case 'B':
-            case 'C':
-            case 'D':
-            case 'F':
-            case 'G':
-            case 'H':
-            case 'I':
-            case 'J':
-            case 'K':
-            case 'L':
-            case 'M':
-            case 'N':
-            case 'O':
-            case 'P':
-            case 'Q':
-            case 'R':
-            case 'S':
-            case 'T':
-            case 'U':
-            case 'V':
-            case 'W':
-            case 'X':
-            case 'Y':
-            case 'Z':
-            case '_':
-            case 'a':
-            case 'b':
-            case 'c':
-            case 'd':
-            case 'f':
-            case 'g':
-            case 'h':
-            case 'i':
-            case 'j':
-            case 'k':
-            case 'l':
-            case 'm':
-            case 'n':
-            case 'o':
-            case 'p':
-            case 'q':
-            case 'r':
-            case 's':
-            case 't':
-            case 'u':
-            case 'v':
-            case 'w':
-            case 'x':
-            case 'y':
-            case 'z':    goto yy72;
-            case 'E':
-            case 'e':    goto yy75;
-            default:    goto yy101;
+            case '9':    goto yy99;
+            default:    goto yy48;
             }
 yy101:
-#line 562 "input_custom_mjson.--input(custom).re"
-            {
-                token = TOK_OCT_NUMBER;
-                goto done;
-            }
-#line 2043 "input_custom_mjson.--input(custom).c"
+            YYSKIP ();
+            yych = YYPEEK ();
 yy102:
-            YYSKIP ();
-            yych = YYPEEK ();
             switch (yych) {
-            case '.':    goto yy76;
-            case '0':
-            case '1':
-            case '2':
-            case '3':
-            case '4':
-            case '5':
-            case '6':
-            case '7':
-            case '8':
-            case '9':    goto yy102;
-            case 'A':
-            case 'B':
-            case 'C':
-            case 'D':
-            case 'F':
-            case 'G':
-            case 'H':
-            case 'I':
-            case 'J':
-            case 'K':
-            case 'L':
-            case 'M':
-            case 'N':
-            case 'O':
-            case 'P':
-            case 'Q':
-            case 'R':
-            case 'S':
-            case 'T':
-            case 'U':
-            case 'V':
-            case 'W':
-            case 'X':
-            case 'Y':
-            case 'Z':
-            case '_':
-            case 'a':
-            case 'b':
-            case 'c':
-            case 'd':
-            case 'f':
-            case 'g':
-            case 'h':
-            case 'i':
-            case 'j':
-            case 'k':
-            case 'l':
-            case 'm':
-            case 'n':
-            case 'o':
-            case 'p':
-            case 'q':
-            case 'r':
-            case 's':
-            case 't':
-            case 'u':
-            case 'v':
-            case 'w':
-            case 'x':
-            case 'y':
-            case 'z':    goto yy72;
-            case 'E':
-            case 'e':    goto yy75;
-            default:    goto yy74;
+            case 0x00:    goto yy38;
+            case '*':    goto yy117;
+            default:    goto yy101;
             }
-yy104:
+yy103:
             YYSKIP ();
             yych = YYPEEK ();
             switch (yych) {
-            case '0':
-            case '1':
-            case '2':
-            case '3':
-            case '4':
-            case '5':
-            case '6':
-            case '7':
-            case '8':
-            case '9':
-            case 'A':
-            case 'B':
-            case 'C':
-            case 'D':
-            case 'E':
-            case 'F':
-            case 'G':
-            case 'H':
-            case 'I':
-            case 'J':
-            case 'K':
-            case 'L':
-            case 'M':
-            case 'N':
-            case 'O':
-            case 'P':
-            case 'Q':
-            case 'R':
-            case 'S':
-            case 'T':
-            case 'U':
-            case 'V':
-            case 'W':
-            case 'X':
-            case 'Y':
-            case 'Z':
-            case '_':
-            case 'a':
-            case 'b':
-            case 'c':
-            case 'd':
-            case 'e':
-            case 'f':
-            case 'g':
-            case 'h':
-            case 'i':
-            case 'j':
-            case 'k':
-            case 'l':
-            case 'm':
-            case 'n':
-            case 'o':
-            case 'p':
-            case 'q':
-            case 'r':
-            case 's':
-            case 't':
-            case 'u':
-            case 'v':
-            case 'w':
-            case 'x':
-            case 'y':
-            case 'z':    goto yy106;
-            default:    goto yy74;
+            case 0x00:    goto yy38;
+            case '*':    goto yy103;
+            case '/':    goto yy118;
+            default:    goto yy101;
             }
 yy105:
             YYSKIP ();
-            yych = YYPEEK ();
 yy106:
+#line 523 "input_custom_mjson.--input(custom).re"
+            {
+                continue; 
+            }
+#line 1956 "input_custom_mjson.--input(custom).c"
+yy107:
+            YYSKIP ();
+            yych = YYPEEK ();
             switch (yych) {
+            case '+':
+            case '-':    goto yy119;
             case '0':
             case '1':
             case '2':
@@ -2193,164 +1968,388 @@ yy106:
             case '6':
             case '7':
             case '8':
-            case '9':
-            case 'A':
-            case 'B':
-            case 'C':
-            case 'D':
-            case 'E':
-            case 'F':
-            case 'a':
-            case 'b':
-            case 'c':
-            case 'd':
-            case 'e':
-            case 'f':    goto yy105;
-            case 'G':
-            case 'H':
-            case 'I':
-            case 'J':
-            case 'K':
-            case 'L':
-            case 'M':
-            case 'N':
-            case 'O':
-            case 'P':
-            case 'Q':
-            case 'R':
-            case 'S':
-            case 'T':
-            case 'U':
-            case 'V':
-            case 'W':
-            case 'X':
-            case 'Y':
-            case 'Z':
-            case '_':
-            case 'g':
-            case 'h':
-            case 'i':
-            case 'j':
-            case 'k':
-            case 'l':
-            case 'm':
-            case 'n':
-            case 'o':
-            case 'p':
-            case 'q':
-            case 'r':
-            case 's':
-            case 't':
-            case 'u':
-            case 'v':
-            case 'w':
-            case 'x':
-            case 'y':
-            case 'z':    goto yy72;
-            default:    goto yy107;
+            case '9':    goto yy120;
+            default:    goto yy38;
             }
-yy107:
-#line 567 "input_custom_mjson.--input(custom).re"
-            {
-                token = TOK_HEX_NUMBER;
-                goto done;
-            }
-#line 2259 "input_custom_mjson.--input(custom).c"
 yy108:
             YYSKIP ();
             yych = YYPEEK ();
             switch (yych) {
-            case 0x00:    goto yy36;
-            case '*':    goto yy114;
-            default:    goto yy108;
+            case '0':
+            case '1':
+            case '2':
+            case '3':
+            case '4':
+            case '5':
+            case '6':
+            case '7':
+            case '8':
+            case '9':    goto yy109;
+            default:    goto yy38;
             }
-yy110:
+yy109:
             YYSKIP ();
             yych = YYPEEK ();
             switch (yych) {
-            case 0x00:    goto yy36;
-            case '\n':    goto yy112;
-            default:    goto yy110;
+            case '0':
+            case '1':
+            case '2':
+            case '3':
+            case '4':
+            case '5':
+            case '6':
+            case '7':
+            case '8':
+            case '9':    goto yy109;
+            default:    goto yy48;
+            }
+yy111:
+            YYSKIP ();
+            yych = YYPEEK ();
+            switch (yych) {
+            case 'e':    goto yy122;
+            default:    goto yy67;
             }
 yy112:
             YYSKIP ();
-#line 519 "input_custom_mjson.--input(custom).re"
-            {
-                continue; 
+            switch ((yych = YYPEEK ())) {
+            case '0':
+            case '1':
+            case '2':
+            case '3':
+            case '4':
+            case '5':
+            case '6':
+            case '7':
+            case '8':
+            case '9':
+            case 'A':
+            case 'B':
+            case 'C':
+            case 'D':
+            case 'E':
+            case 'F':
+            case 'G':
+            case 'H':
+            case 'I':
+            case 'J':
+            case 'K':
+            case 'L':
+            case 'M':
+            case 'N':
+            case 'O':
+            case 'P':
+            case 'Q':
+            case 'R':
+            case 'S':
+            case 'T':
+            case 'U':
+            case 'V':
+            case 'W':
+            case 'X':
+            case 'Y':
+            case 'Z':
+            case '_':
+            case 'a':
+            case 'b':
+            case 'c':
+            case 'd':
+            case 'e':
+            case 'f':
+            case 'g':
+            case 'h':
+            case 'i':
+            case 'j':
+            case 'k':
+            case 'l':
+            case 'm':
+            case 'n':
+            case 'o':
+            case 'p':
+            case 'q':
+            case 'r':
+            case 's':
+            case 't':
+            case 'u':
+            case 'v':
+            case 'w':
+            case 'x':
+            case 'y':
+            case 'z':    goto yy66;
+            default:    goto yy113;
             }
-#line 2282 "input_custom_mjson.--input(custom).c"
+yy113:
+#line 592 "input_custom_mjson.--input(custom).re"
+            {
+                token = TOK_NULL;
+                goto done;
+            }
+#line 2088 "input_custom_mjson.--input(custom).c"
 yy114:
             YYSKIP ();
-            yych = YYPEEK ();
-            switch (yych) {
-            case '*':    goto yy117;
-            case '/':    goto yy119;
-            default:    goto yy116;
+            switch ((yych = YYPEEK ())) {
+            case '0':
+            case '1':
+            case '2':
+            case '3':
+            case '4':
+            case '5':
+            case '6':
+            case '7':
+            case '8':
+            case '9':
+            case 'A':
+            case 'B':
+            case 'C':
+            case 'D':
+            case 'E':
+            case 'F':
+            case 'G':
+            case 'H':
+            case 'I':
+            case 'J':
+            case 'K':
+            case 'L':
+            case 'M':
+            case 'N':
+            case 'O':
+            case 'P':
+            case 'Q':
+            case 'R':
+            case 'S':
+            case 'T':
+            case 'U':
+            case 'V':
+            case 'W':
+            case 'X':
+            case 'Y':
+            case 'Z':
+            case '_':
+            case 'a':
+            case 'b':
+            case 'c':
+            case 'd':
+            case 'e':
+            case 'f':
+            case 'g':
+            case 'h':
+            case 'i':
+            case 'j':
+            case 'k':
+            case 'l':
+            case 'm':
+            case 'n':
+            case 'o':
+            case 'p':
+            case 'q':
+            case 'r':
+            case 's':
+            case 't':
+            case 'u':
+            case 'v':
+            case 'w':
+            case 'x':
+            case 'y':
+            case 'z':    goto yy66;
+            default:    goto yy115;
             }
 yy115:
+#line 582 "input_custom_mjson.--input(custom).re"
+            {
+                token = TOK_TRUE;
+                goto done;
+            }
+#line 2163 "input_custom_mjson.--input(custom).c"
+yy116:
             YYSKIP ();
             yych = YYPEEK ();
-yy116:
             switch (yych) {
-            case 0x00:    goto yy36;
-            case '*':    goto yy122;
-            default:    goto yy115;
+            case '0':
+            case '1':
+            case '2':
+            case '3':
+            case '4':
+            case '5':
+            case '6':
+            case '7':
+            case '8':
+            case '9':
+            case 'A':
+            case 'B':
+            case 'C':
+            case 'D':
+            case 'E':
+            case 'F':
+            case 'a':
+            case 'b':
+            case 'c':
+            case 'd':
+            case 'e':
+            case 'f':    goto yy124;
+            default:    goto yy38;
             }
 yy117:
             YYSKIP ();
             yych = YYPEEK ();
             switch (yych) {
-            case 0x00:    goto yy36;
-            case '*':    goto yy117;
-            case '/':    goto yy121;
-            default:    goto yy115;
+            case 0x00:    goto yy38;
+            case '*':    goto yy125;
+            case '/':    goto yy105;
+            default:    goto yy101;
             }
-yy119:
-            YYSKIP ();
-yy120:
-#line 523 "input_custom_mjson.--input(custom).re"
-            {
-                continue; 
-            }
-#line 2316 "input_custom_mjson.--input(custom).c"
-yy121:
+yy118:
             yyaccept = 4;
             YYSKIP ();
             YYBACKUP ();
             yych = YYPEEK ();
             switch (yych) {
-            case 0x00:    goto yy120;
-            case '*':    goto yy122;
-            default:    goto yy115;
+            case 0x00:    goto yy106;
+            case '*':    goto yy117;
+            default:    goto yy101;
+            }
+yy119:
+            YYSKIP ();
+            yych = YYPEEK ();
+            switch (yych) {
+            case '0':
+            case '1':
+            case '2':
+            case '3':
+            case '4':
+            case '5':
+            case '6':
+            case '7':
+            case '8':
+            case '9':    goto yy120;
+            default:    goto yy38;
+            }
+yy120:
+            YYSKIP ();
+            yych = YYPEEK ();
+            switch (yych) {
+            case '0':
+            case '1':
+            case '2':
+            case '3':
+            case '4':
+            case '5':
+            case '6':
+            case '7':
+            case '8':
+            case '9':    goto yy120;
+            default:    goto yy48;
             }
 yy122:
             YYSKIP ();
-            yych = YYPEEK ();
-            switch (yych) {
-            case 0x00:    goto yy36;
-            case '*':    goto yy123;
-            case '/':    goto yy119;
-            default:    goto yy115;
+            switch ((yych = YYPEEK ())) {
+            case '0':
+            case '1':
+            case '2':
+            case '3':
+            case '4':
+            case '5':
+            case '6':
+            case '7':
+            case '8':
+            case '9':
+            case 'A':
+            case 'B':
+            case 'C':
+            case 'D':
+            case 'E':
+            case 'F':
+            case 'G':
+            case 'H':
+            case 'I':
+            case 'J':
+            case 'K':
+            case 'L':
+            case 'M':
+            case 'N':
+            case 'O':
+            case 'P':
+            case 'Q':
+            case 'R':
+            case 'S':
+            case 'T':
+            case 'U':
+            case 'V':
+            case 'W':
+            case 'X':
+            case 'Y':
+            case 'Z':
+            case '_':
+            case 'a':
+            case 'b':
+            case 'c':
+            case 'd':
+            case 'e':
+            case 'f':
+            case 'g':
+            case 'h':
+            case 'i':
+            case 'j':
+            case 'k':
+            case 'l':
+            case 'm':
+            case 'n':
+            case 'o':
+            case 'p':
+            case 'q':
+            case 'r':
+            case 's':
+            case 't':
+            case 'u':
+            case 'v':
+            case 'w':
+            case 'x':
+            case 'y':
+            case 'z':    goto yy66;
+            default:    goto yy123;
             }
 yy123:
+#line 587 "input_custom_mjson.--input(custom).re"
+            {
+                token = TOK_FALSE;
+                goto done;
+            }
+#line 2317 "input_custom_mjson.--input(custom).c"
+yy124:
             YYSKIP ();
             yych = YYPEEK ();
             switch (yych) {
-            case 0x00:    goto yy36;
-            case '*':    goto yy123;
-            case '/':    goto yy121;
-            default:    goto yy115;
+            case '0':
+            case '1':
+            case '2':
+            case '3':
+            case '4':
+            case '5':
+            case '6':
+            case '7':
+            case '8':
+            case '9':
+            case 'A':
+            case 'B':
+            case 'C':
+            case 'D':
+            case 'E':
+            case 'F':
+            case 'a':
+            case 'b':
+            case 'c':
+            case 'd':
+            case 'e':
+            case 'f':    goto yy71;
+            default:    goto yy38;
             }
 yy125:
             YYSKIP ();
             yych = YYPEEK ();
-yy126:
             switch (yych) {
-            case '\t':
-            case '\n':
-            case '\r':
-            case ' ':    goto yy125;
-            default:    goto yy3;
+            case 0x00:    goto yy38;
+            case '*':    goto yy125;
+            case '/':    goto yy118;
+            default:    goto yy101;
             }
         }
 #line 626 "input_custom_mjson.--input(custom).re"
@@ -2473,21 +2472,29 @@ static int parse_string(mjson_parser_t *context, uint32_t id)
         s = c;
 
 
-#line 2477 "input_custom_mjson.--input(custom).c"
+#line 2476 "input_custom_mjson.--input(custom).c"
         {
             YYCTYPE yych;
             yych = YYPEEK ();
             switch (yych) {
-            case 0x00:    goto yy135;
+            case 0x00:    goto yy129;
             case '"':    goto yy133;
-            case '\\':    goto yy131;
-            default:    goto yy129;
+            case '\\':    goto yy135;
+            default:    goto yy131;
             }
 yy129:
             YYSKIP ();
-            yych = YYPEEK ();
-            goto yy146;
 yy130:
+#line 810 "input_custom_mjson.--input(custom).re"
+            { 
+                assert(!"reachable");
+            }
+#line 2493 "input_custom_mjson.--input(custom).c"
+yy131:
+            YYSKIP ();
+            yych = YYPEEK ();
+            goto yy137;
+yy132:
 #line 745 "input_custom_mjson.--input(custom).re"
             {
                 str_dst = (uint8_t*)parsectx_allocate_output(context, c - s);
@@ -2498,8 +2505,20 @@ yy130:
 
                 continue;
             }
-#line 2502 "input_custom_mjson.--input(custom).c"
-yy131:
+#line 2509 "input_custom_mjson.--input(custom).c"
+yy133:
+            YYSKIP ();
+#line 801 "input_custom_mjson.--input(custom).re"
+            {
+                bdata->val_u32 = context->bjson - (uint8_t*)(bdata + 1);
+                *context->bjson++ = 0;
+                parsectx_align4_output(context);
+                parsectx_next_token(context);
+
+                return 1;
+            }
+#line 2521 "input_custom_mjson.--input(custom).c"
+yy135:
             YYSKIP ();
             YYBACKUP ();
             yych = YYPEEK ();
@@ -2512,62 +2531,19 @@ yy131:
             case 'n':
             case 'r':
             case 't':    goto yy138;
-            case 'u':    goto yy136;
-            default:    goto yy132;
+            case 'u':    goto yy140;
+            default:    goto yy130;
             }
-yy132:
-#line 810 "input_custom_mjson.--input(custom).re"
-            { 
-                assert(!"reachable");
-            }
-#line 2524 "input_custom_mjson.--input(custom).c"
-yy133:
-            YYSKIP ();
-#line 801 "input_custom_mjson.--input(custom).re"
-            {
-                bdata->val_u32 = context->bjson - (uint8_t*)(bdata + 1);
-                *context->bjson++ = 0;
-                parsectx_align4_output(context);
-                parsectx_next_token(context);
-
-                return 1;
-            }
-#line 2536 "input_custom_mjson.--input(custom).c"
-yy135:
-            YYSKIP ();
-            yych = YYPEEK ();
-            goto yy132;
 yy136:
             YYSKIP ();
             yych = YYPEEK ();
-            switch (yych) {
-            case '0':
-            case '1':
-            case '2':
-            case '3':
-            case '4':
-            case '5':
-            case '6':
-            case '7':
-            case '8':
-            case '9':
-            case 'A':
-            case 'B':
-            case 'C':
-            case 'D':
-            case 'E':
-            case 'F':
-            case 'a':
-            case 'b':
-            case 'c':
-            case 'd':
-            case 'e':
-            case 'f':    goto yy140;
-            default:    goto yy137;
-            }
 yy137:
-            YYRESTORE ();
-            goto yy132;
+            switch (yych) {
+            case 0x00:
+            case '"':
+            case '\\':    goto yy132;
+            default:    goto yy136;
+            }
 yy138:
             YYSKIP ();
 #line 756 "input_custom_mjson.--input(custom).re"
@@ -2601,7 +2577,7 @@ yy138:
                 
                 continue;
             }
-#line 2605 "input_custom_mjson.--input(custom).c"
+#line 2581 "input_custom_mjson.--input(custom).c"
 yy140:
             YYSKIP ();
             yych = YYPEEK ();
@@ -2627,37 +2603,12 @@ yy140:
             case 'c':
             case 'd':
             case 'e':
-            case 'f':    goto yy141;
-            default:    goto yy137;
+            case 'f':    goto yy142;
+            default:    goto yy141;
             }
 yy141:
-            YYSKIP ();
-            yych = YYPEEK ();
-            switch (yych) {
-            case '0':
-            case '1':
-            case '2':
-            case '3':
-            case '4':
-            case '5':
-            case '6':
-            case '7':
-            case '8':
-            case '9':
-            case 'A':
-            case 'B':
-            case 'C':
-            case 'D':
-            case 'E':
-            case 'F':
-            case 'a':
-            case 'b':
-            case 'c':
-            case 'd':
-            case 'e':
-            case 'f':    goto yy142;
-            default:    goto yy137;
-            }
+            YYRESTORE ();
+            goto yy130;
 yy142:
             YYSKIP ();
             yych = YYPEEK ();
@@ -2684,9 +2635,65 @@ yy142:
             case 'd':
             case 'e':
             case 'f':    goto yy143;
-            default:    goto yy137;
+            default:    goto yy141;
             }
 yy143:
+            YYSKIP ();
+            yych = YYPEEK ();
+            switch (yych) {
+            case '0':
+            case '1':
+            case '2':
+            case '3':
+            case '4':
+            case '5':
+            case '6':
+            case '7':
+            case '8':
+            case '9':
+            case 'A':
+            case 'B':
+            case 'C':
+            case 'D':
+            case 'E':
+            case 'F':
+            case 'a':
+            case 'b':
+            case 'c':
+            case 'd':
+            case 'e':
+            case 'f':    goto yy144;
+            default:    goto yy141;
+            }
+yy144:
+            YYSKIP ();
+            yych = YYPEEK ();
+            switch (yych) {
+            case '0':
+            case '1':
+            case '2':
+            case '3':
+            case '4':
+            case '5':
+            case '6':
+            case '7':
+            case '8':
+            case '9':
+            case 'A':
+            case 'B':
+            case 'C':
+            case 'D':
+            case 'E':
+            case 'F':
+            case 'a':
+            case 'b':
+            case 'c':
+            case 'd':
+            case 'e':
+            case 'f':    goto yy145;
+            default:    goto yy141;
+            }
+yy145:
             YYSKIP ();
 #line 787 "input_custom_mjson.--input(custom).re"
             {
@@ -2702,17 +2709,7 @@ yy143:
 
                 continue;
             }
-#line 2706 "input_custom_mjson.--input(custom).c"
-yy145:
-            YYSKIP ();
-            yych = YYPEEK ();
-yy146:
-            switch (yych) {
-            case 0x00:
-            case '"':
-            case '\\':    goto yy130;
-            default:    goto yy145;
-            }
+#line 2713 "input_custom_mjson.--input(custom).c"
         }
 #line 813 "input_custom_mjson.--input(custom).re"
 

@@ -3,34 +3,34 @@
 digraph re2c {
 
 1 -> 2 [label="[0x00-0x06][0x0E-!][#-&][(-[][0x5D-0xFF]"]
-1 -> 19 [label="[0x07]"]
-1 -> 13 [label="[0x08]"]
-1 -> 9 [label="[0x09]"]
-1 -> 7 [label="[0x0A]"]
+1 -> 3 [label="[0x07]"]
+1 -> 5 [label="[0x08]"]
+1 -> 7 [label="[0x09]"]
+1 -> 9 [label="[0x0A]"]
 1 -> 11 [label="[0x0B]"]
-1 -> 17 [label="[0x0C]"]
+1 -> 13 [label="[0x0C]"]
 1 -> 15 [label="[0x0D]"]
-1 -> 5 [label="[\"]"]
-1 -> 3 [label="[']"]
+1 -> 17 [label="[\"]"]
+1 -> 19 [label="[']"]
 1 -> 21 [label="[\\]"]
 3 -> 4
-4 [label="bug47_dot_escapes.--emit-dot.re:3"]
+4 [label="bug47_dot_escapes.--emit-dot.re:11"]
 5 -> 6
-6 [label="bug47_dot_escapes.--emit-dot.re:4"]
+6 [label="bug47_dot_escapes.--emit-dot.re:8"]
 7 -> 8
-8 [label="bug47_dot_escapes.--emit-dot.re:5"]
+8 [label="bug47_dot_escapes.--emit-dot.re:6"]
 9 -> 10
-10 [label="bug47_dot_escapes.--emit-dot.re:6"]
+10 [label="bug47_dot_escapes.--emit-dot.re:5"]
 11 -> 12
 12 [label="bug47_dot_escapes.--emit-dot.re:7"]
 13 -> 14
-14 [label="bug47_dot_escapes.--emit-dot.re:8"]
+14 [label="bug47_dot_escapes.--emit-dot.re:10"]
 15 -> 16
 16 [label="bug47_dot_escapes.--emit-dot.re:9"]
 17 -> 18
-18 [label="bug47_dot_escapes.--emit-dot.re:10"]
+18 [label="bug47_dot_escapes.--emit-dot.re:4"]
 19 -> 20
-20 [label="bug47_dot_escapes.--emit-dot.re:11"]
+20 [label="bug47_dot_escapes.--emit-dot.re:3"]
 21 -> 22
 22 [label="bug47_dot_escapes.--emit-dot.re:12"]
 }

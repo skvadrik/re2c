@@ -8,55 +8,51 @@
 	yych = *YYCURSOR;
 	if (yych <= '@') {
 		if (yych <= '/') {
-			if (yych == '-') goto yy7;
-			goto yy10;
+			if (yych == '-') goto yy4;
 		} else {
 			if (yych <= '0') goto yy5;
-			if (yych <= '9') goto yy9;
-			goto yy10;
+			if (yych <= '9') goto yy7;
 		}
 	} else {
 		if (yych <= 'q') {
-			if (yych <= 'Z') goto yy4;
-			if (yych <= '`') goto yy10;
-			goto yy4;
+			if (yych <= 'Z') goto yy8;
+			if (yych >= 'a') goto yy8;
 		} else {
-			if (yych <= 'r') goto yy2;
-			if (yych <= 'z') goto yy4;
-			goto yy10;
+			if (yych <= 'r') goto yy10;
+			if (yych <= 'z') goto yy8;
 		}
 	}
-yy2:
 	++YYCURSOR;
-	if ((yych = *YYCURSOR) == 'e') goto yy15;
-	goto yy14;
 yy3:
-#line 10 "input11.s.re"
-	{ return 1; }
-#line 37 "input11.s.c"
+#line 13 "input11.s.re"
+	{ return -1; }
+#line 30 "input11.s.c"
 yy4:
 	yych = *++YYCURSOR;
-	goto yy14;
+	if (yych <= '0') goto yy3;
+	if (yych <= '9') goto yy11;
+	goto yy3;
 yy5:
 	++YYCURSOR;
 yy6:
 #line 11 "input11.s.re"
 	{ return 2; }
-#line 46 "input11.s.c"
+#line 41 "input11.s.c"
 yy7:
-	++YYCURSOR;
-	if ((yych = *YYCURSOR) <= '0') goto yy8;
-	if (yych <= '9') goto yy11;
-yy8:
-#line 13 "input11.s.re"
-	{ return -1; }
-#line 54 "input11.s.c"
-yy9:
 	yych = *++YYCURSOR;
 	goto yy12;
+yy8:
+	++YYCURSOR;
+	yych = *YYCURSOR;
+	goto yy14;
+yy9:
+#line 10 "input11.s.re"
+	{ return 1; }
+#line 52 "input11.s.c"
 yy10:
 	yych = *++YYCURSOR;
-	goto yy8;
+	if (yych == 'e') goto yy15;
+	goto yy14;
 yy11:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
@@ -71,14 +67,14 @@ yy13:
 	yych = *YYCURSOR;
 yy14:
 	if (yych <= '@') {
-		if (yych <= '/') goto yy3;
+		if (yych <= '/') goto yy9;
 		if (yych <= '9') goto yy13;
-		goto yy3;
+		goto yy9;
 	} else {
 		if (yych <= 'Z') goto yy13;
-		if (yych <= '`') goto yy3;
+		if (yych <= '`') goto yy9;
 		if (yych <= 'z') goto yy13;
-		goto yy3;
+		goto yy9;
 	}
 yy15:
 	yych = *++YYCURSOR;
@@ -97,7 +93,7 @@ yy15:
 	}
 yy19:
 	YYCURSOR = YYMARKER;
-	goto yy3;
+	goto yy9;
 yy20:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
@@ -117,7 +113,7 @@ yy20:
 yy22:
 #line 9 "input11.s.re"
 	{ return 0; }
-#line 121 "input11.s.c"
+#line 117 "input11.s.c"
 }
 #line 15 "input11.s.re"
 

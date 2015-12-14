@@ -49,8 +49,8 @@ std:
 	curr = *s.cur;
 	switch (curr) {
 	case '\t':
-	case ' ':	goto xx6;
-	case '\n':	goto xx8;
+	case ' ':	goto xx4;
+	case '\n':	goto xx6;
 	case '0':
 	case '1':
 	case '2':
@@ -60,15 +60,45 @@ std:
 	case '6':
 	case '7':
 	case '8':
-	case '9':	goto xx4;
+	case '9':	goto xx7;
 	case 'a':
-	case 'b':	goto xx2;
-	default:	goto xx9;
+	case 'b':	goto xx9;
+	default:	goto xx2;
 	}
 xx2:
 	++s.cur;
+xx3:
+#line 67 "config10.re"
+	{
+		return UNEXPECTED;
+	}
+#line 76 "config10.c"
+xx4:
+	++s.cur;
+xx5:
+#line 60 "config10.re"
+	{
+		if(s.cur == s.lim)
+			return EOI;
+		cursor = s.cur;
+		goto std;
+	}
+#line 87 "config10.c"
+xx6:
+	curr = *++s.cur;
+	goto xx5;
+xx7:
+	++s.cur;
+	curr = *s.cur;
+	goto xx11;
+xx8:
+#line 57 "config10.re"
+	{ return NUMBER;  }
+#line 98 "config10.c"
+xx9:
+	curr = *++s.cur;
 	s.ctx = s.cur;
-	switch ((curr = *s.cur)) {
+	switch (curr) {
 	case '0':
 	case '2':
 	case '3':
@@ -81,37 +111,6 @@ xx2:
 	case '1':	goto xx15;
 	default:	goto xx3;
 	}
-xx3:
-#line 67 "config10.re"
-	{
-		return UNEXPECTED;
-	}
-#line 90 "config10.c"
-xx4:
-	++s.cur;
-	curr = *s.cur;
-	goto xx11;
-xx5:
-#line 57 "config10.re"
-	{ return NUMBER;  }
-#line 98 "config10.c"
-xx6:
-	++s.cur;
-xx7:
-#line 60 "config10.re"
-	{
-		if(s.cur == s.lim)
-			return EOI;
-		cursor = s.cur;
-		goto std;
-	}
-#line 109 "config10.c"
-xx8:
-	curr = *++s.cur;
-	goto xx7;
-xx9:
-	curr = *++s.cur;
-	goto xx3;
 xx10:
 	++s.cur;
 	if (s.lim <= s.cur) fill();
@@ -128,7 +127,7 @@ xx11:
 	case '7':
 	case '8':
 	case '9':	goto xx10;
-	default:	goto xx5;
+	default:	goto xx8;
 	}
 xx12:
 	++s.cur;
@@ -151,7 +150,7 @@ xx14:
 	s.cur = s.ctx;
 #line 56 "config10.re"
 	{ return KEYWORD; }
-#line 155 "config10.c"
+#line 154 "config10.c"
 xx15:
 	++s.cur;
 	switch ((curr = *s.cur)) {
@@ -171,7 +170,7 @@ xx16:
 	s.cur = s.ctx;
 #line 55 "config10.re"
 	{ return KEYWORD; }
-#line 175 "config10.c"
+#line 174 "config10.c"
 }
 #line 70 "config10.re"
 

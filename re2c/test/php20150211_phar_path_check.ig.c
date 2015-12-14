@@ -49,135 +49,49 @@ loop:
 	yych = *YYCURSOR;
 	{
 		static void *yytarget[256] = {
-			&&yy21, &&yy23, &&yy23, &&yy23, &&yy23, &&yy23, &&yy23, &&yy23,
-			&&yy23, &&yy23, &&yy2,  &&yy23, &&yy23, &&yy23, &&yy23, &&yy23,
-			&&yy23, &&yy23, &&yy23, &&yy23, &&yy23, &&yy23, &&yy23, &&yy23,
-			&&yy23, &&yy23, &&yy11, &&yy11, &&yy11, &&yy11, &&yy11, &&yy11,
-			&&yy11, &&yy11, &&yy11, &&yy11, &&yy11, &&yy11, &&yy11, &&yy11,
-			&&yy11, &&yy11, &&yy7,  &&yy11, &&yy11, &&yy11, &&yy11, &&yy3,
-			&&yy11, &&yy11, &&yy11, &&yy11, &&yy11, &&yy11, &&yy11, &&yy11,
-			&&yy11, &&yy11, &&yy11, &&yy11, &&yy11, &&yy11, &&yy11, &&yy9,
-			&&yy11, &&yy11, &&yy11, &&yy11, &&yy11, &&yy11, &&yy11, &&yy11,
-			&&yy11, &&yy11, &&yy11, &&yy11, &&yy11, &&yy11, &&yy11, &&yy11,
-			&&yy11, &&yy11, &&yy11, &&yy11, &&yy11, &&yy11, &&yy11, &&yy11,
-			&&yy11, &&yy11, &&yy11, &&yy11, &&yy5,  &&yy11, &&yy11, &&yy11,
-			&&yy11, &&yy11, &&yy11, &&yy11, &&yy11, &&yy11, &&yy11, &&yy11,
-			&&yy11, &&yy11, &&yy11, &&yy11, &&yy11, &&yy11, &&yy11, &&yy11,
-			&&yy11, &&yy11, &&yy11, &&yy11, &&yy11, &&yy11, &&yy11, &&yy11,
-			&&yy11, &&yy11, &&yy11, &&yy11, &&yy11, &&yy11, &&yy11, &&yy11,
-			&&yy23, &&yy23, &&yy23, &&yy23, &&yy23, &&yy23, &&yy23, &&yy23,
-			&&yy23, &&yy23, &&yy23, &&yy23, &&yy23, &&yy23, &&yy23, &&yy23,
-			&&yy23, &&yy23, &&yy23, &&yy23, &&yy23, &&yy23, &&yy23, &&yy23,
-			&&yy23, &&yy23, &&yy23, &&yy23, &&yy23, &&yy23, &&yy23, &&yy23,
-			&&yy23, &&yy23, &&yy23, &&yy23, &&yy23, &&yy23, &&yy23, &&yy23,
-			&&yy23, &&yy23, &&yy23, &&yy23, &&yy23, &&yy23, &&yy23, &&yy23,
-			&&yy23, &&yy23, &&yy23, &&yy23, &&yy23, &&yy23, &&yy23, &&yy23,
-			&&yy23, &&yy23, &&yy23, &&yy23, &&yy23, &&yy23, &&yy23, &&yy23,
-			&&yy23, &&yy23, &&yy12, &&yy12, &&yy12, &&yy12, &&yy12, &&yy12,
-			&&yy12, &&yy12, &&yy12, &&yy12, &&yy12, &&yy12, &&yy12, &&yy12,
-			&&yy12, &&yy12, &&yy12, &&yy12, &&yy12, &&yy12, &&yy12, &&yy12,
-			&&yy12, &&yy12, &&yy12, &&yy12, &&yy12, &&yy12, &&yy12, &&yy12,
-			&&yy14, &&yy15, &&yy15, &&yy15, &&yy15, &&yy15, &&yy15, &&yy15,
-			&&yy15, &&yy15, &&yy15, &&yy15, &&yy15, &&yy16, &&yy17, &&yy17,
-			&&yy18, &&yy19, &&yy19, &&yy19, &&yy20, &&yy23, &&yy23, &&yy23,
-			&&yy23, &&yy23, &&yy23, &&yy23, &&yy23, &&yy23, &&yy23, &&yy23
+			&&yy3,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,
+			&&yy5,  &&yy5,  &&yy2,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,
+			&&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,
+			&&yy5,  &&yy5,  &&yy7,  &&yy7,  &&yy7,  &&yy7,  &&yy7,  &&yy7,
+			&&yy7,  &&yy7,  &&yy7,  &&yy7,  &&yy7,  &&yy7,  &&yy7,  &&yy7,
+			&&yy7,  &&yy7,  &&yy9,  &&yy7,  &&yy7,  &&yy7,  &&yy7,  &&yy11,
+			&&yy7,  &&yy7,  &&yy7,  &&yy7,  &&yy7,  &&yy7,  &&yy7,  &&yy7,
+			&&yy7,  &&yy7,  &&yy7,  &&yy7,  &&yy7,  &&yy7,  &&yy7,  &&yy12,
+			&&yy7,  &&yy7,  &&yy7,  &&yy7,  &&yy7,  &&yy7,  &&yy7,  &&yy7,
+			&&yy7,  &&yy7,  &&yy7,  &&yy7,  &&yy7,  &&yy7,  &&yy7,  &&yy7,
+			&&yy7,  &&yy7,  &&yy7,  &&yy7,  &&yy7,  &&yy7,  &&yy7,  &&yy7,
+			&&yy7,  &&yy7,  &&yy7,  &&yy7,  &&yy14, &&yy7,  &&yy7,  &&yy7,
+			&&yy7,  &&yy7,  &&yy7,  &&yy7,  &&yy7,  &&yy7,  &&yy7,  &&yy7,
+			&&yy7,  &&yy7,  &&yy7,  &&yy7,  &&yy7,  &&yy7,  &&yy7,  &&yy7,
+			&&yy7,  &&yy7,  &&yy7,  &&yy7,  &&yy7,  &&yy7,  &&yy7,  &&yy7,
+			&&yy7,  &&yy7,  &&yy7,  &&yy7,  &&yy7,  &&yy7,  &&yy7,  &&yy7,
+			&&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,
+			&&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,
+			&&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,
+			&&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,
+			&&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,
+			&&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,
+			&&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,
+			&&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,
+			&&yy5,  &&yy5,  &&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16,
+			&&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16,
+			&&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16,
+			&&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16,
+			&&yy17, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18,
+			&&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy19, &&yy20, &&yy20,
+			&&yy21, &&yy22, &&yy22, &&yy22, &&yy23, &&yy5,  &&yy5,  &&yy5,
+			&&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5
 		};
 		goto *yytarget[yych];
 	}
 yy2:
 	YYCURSOR = YYMARKER;
 	if (yyaccept == 0) {
-		goto yy4;
+		goto yy8;
 	} else {
-		goto yy13;
+		goto yy6;
 	}
 yy3:
-	yyaccept = 0;
-	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych <= '-') goto yy4;
-	if (yych <= '.') goto yy35;
-	if (yych <= '/') goto yy36;
-yy4:
-	{
-			goto loop;
-		}
-yy5:
-	++YYCURSOR;
-	{
-			*error = "back-slash";
-			return pcr_err_back_slash;
-		}
-yy7:
-	++YYCURSOR;
-	{
-			*error = "star";
-			return pcr_err_star;
-		}
-yy9:
-	++YYCURSOR;
-	{
-			if (**s == '/') {
-				(*s)++;
-			}
-			*len = (p - (const unsigned char*)*s) -1;
-			*error = NULL;
-			return pcr_use_query;
-		}
-yy11:
-	yych = *++YYCURSOR;
-	goto yy4;
-yy12:
-	++YYCURSOR;
-	if ((yych = *YYCURSOR) <= 0x7F) goto yy13;
-	if (yych <= 0xBF) goto yy26;
-yy13:
-	{
-			*error ="illegal character";
-			return pcr_err_illegal_char;
-		}
-yy14:
-	yyaccept = 1;
-	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych <= 0x9F) goto yy13;
-	if (yych <= 0xBF) goto yy34;
-	goto yy13;
-yy15:
-	yyaccept = 1;
-	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych <= 0x7F) goto yy13;
-	if (yych <= 0xBF) goto yy33;
-	goto yy13;
-yy16:
-	yyaccept = 1;
-	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych <= 0x7F) goto yy13;
-	if (yych <= 0x9F) goto yy32;
-	goto yy13;
-yy17:
-	yyaccept = 1;
-	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych <= 0x7F) goto yy13;
-	if (yych <= 0xBF) goto yy31;
-	goto yy13;
-yy18:
-	yyaccept = 1;
-	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych <= 0x8F) goto yy13;
-	if (yych <= 0xBF) goto yy29;
-	goto yy13;
-yy19:
-	yyaccept = 1;
-	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych <= 0x7F) goto yy13;
-	if (yych <= 0xBF) goto yy27;
-	goto yy13;
-yy20:
-	yyaccept = 1;
-	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych <= 0x7F) goto yy13;
-	if (yych <= 0x8F) goto yy24;
-	goto yy13;
-yy21:
 	++YYCURSOR;
 	{
 			if (**s == '/') {
@@ -192,79 +106,172 @@ yy21:
 			*error = NULL;
 			return pcr_is_ok;
 		}
-yy23:
+yy5:
+	++YYCURSOR;
+yy6:
+	{
+			*error ="illegal character";
+			return pcr_err_illegal_char;
+		}
+yy7:
+	++YYCURSOR;
+yy8:
+	{
+			goto loop;
+		}
+yy9:
+	++YYCURSOR;
+	{
+			*error = "star";
+			return pcr_err_star;
+		}
+yy11:
+	yyaccept = 0;
+	yych = *(YYMARKER = ++YYCURSOR);
+	if (yych <= '-') goto yy8;
+	if (yych <= '.') goto yy24;
+	if (yych <= '/') goto yy25;
+	goto yy8;
+yy12:
+	++YYCURSOR;
+	{
+			if (**s == '/') {
+				(*s)++;
+			}
+			*len = (p - (const unsigned char*)*s) -1;
+			*error = NULL;
+			return pcr_use_query;
+		}
+yy14:
+	++YYCURSOR;
+	{
+			*error = "back-slash";
+			return pcr_err_back_slash;
+		}
+yy16:
 	yych = *++YYCURSOR;
-	goto yy13;
+	if (yych <= 0x7F) goto yy6;
+	if (yych <= 0xBF) goto yy27;
+	goto yy6;
+yy17:
+	yyaccept = 1;
+	yych = *(YYMARKER = ++YYCURSOR);
+	if (yych <= 0x9F) goto yy6;
+	if (yych <= 0xBF) goto yy28;
+	goto yy6;
+yy18:
+	yyaccept = 1;
+	yych = *(YYMARKER = ++YYCURSOR);
+	if (yych <= 0x7F) goto yy6;
+	if (yych <= 0xBF) goto yy29;
+	goto yy6;
+yy19:
+	yyaccept = 1;
+	yych = *(YYMARKER = ++YYCURSOR);
+	if (yych <= 0x7F) goto yy6;
+	if (yych <= 0x9F) goto yy30;
+	goto yy6;
+yy20:
+	yyaccept = 1;
+	yych = *(YYMARKER = ++YYCURSOR);
+	if (yych <= 0x7F) goto yy6;
+	if (yych <= 0xBF) goto yy31;
+	goto yy6;
+yy21:
+	yyaccept = 1;
+	yych = *(YYMARKER = ++YYCURSOR);
+	if (yych <= 0x8F) goto yy6;
+	if (yych <= 0xBF) goto yy32;
+	goto yy6;
+yy22:
+	yyaccept = 1;
+	yych = *(YYMARKER = ++YYCURSOR);
+	if (yych <= 0x7F) goto yy6;
+	if (yych <= 0xBF) goto yy33;
+	goto yy6;
+yy23:
+	yyaccept = 1;
+	yych = *(YYMARKER = ++YYCURSOR);
+	if (yych <= 0x7F) goto yy6;
+	if (yych <= 0x8F) goto yy34;
+	goto yy6;
 yy24:
 	yych = *++YYCURSOR;
-	if (yych <= 0x7F) goto yy2;
-	if (yych >= 0xC0) goto yy2;
-	yych = *++YYCURSOR;
-	if (yych <= 0x7F) goto yy2;
-	if (yych >= 0xC0) goto yy2;
-yy26:
-	yych = *++YYCURSOR;
-	goto yy4;
-yy27:
-	yych = *++YYCURSOR;
-	if (yych <= 0x7F) goto yy2;
-	if (yych >= 0xC0) goto yy2;
-	yych = *++YYCURSOR;
-	if (yych <= 0x7F) goto yy2;
-	if (yych <= 0xBF) goto yy26;
-	goto yy2;
-yy29:
-	yych = *++YYCURSOR;
-	if (yych <= 0x7F) goto yy2;
-	if (yych >= 0xC0) goto yy2;
-	yych = *++YYCURSOR;
-	if (yych <= 0x7F) goto yy2;
-	if (yych <= 0xBF) goto yy26;
-	goto yy2;
-yy31:
-	yych = *++YYCURSOR;
-	if (yych <= 0x7F) goto yy2;
-	if (yych <= 0xBF) goto yy26;
-	goto yy2;
-yy32:
-	yych = *++YYCURSOR;
-	if (yych <= 0x7F) goto yy2;
-	if (yych <= 0xBF) goto yy26;
-	goto yy2;
-yy33:
-	yych = *++YYCURSOR;
-	if (yych <= 0x7F) goto yy2;
-	if (yych <= 0xBF) goto yy26;
-	goto yy2;
-yy34:
-	yych = *++YYCURSOR;
-	if (yych <= 0x7F) goto yy2;
-	if (yych <= 0xBF) goto yy26;
-	goto yy2;
-yy35:
-	yych = *++YYCURSOR;
-	if (yych <= 0x00) goto yy39;
+	if (yych <= 0x00) goto yy35;
 	if (yych <= '-') goto yy2;
-	if (yych <= '.') goto yy38;
-	if (yych <= '/') goto yy39;
+	if (yych <= '.') goto yy37;
+	if (yych <= '/') goto yy35;
 	goto yy2;
-yy36:
+yy25:
 	++YYCURSOR;
 	{
 			*error = "double slash";
 			return pcr_err_double_slash;
 		}
-yy38:
+yy27:
 	yych = *++YYCURSOR;
-	if (yych <= 0x00) goto yy41;
-	if (yych == '/') goto yy41;
+	goto yy8;
+yy28:
+	yych = *++YYCURSOR;
+	if (yych <= 0x7F) goto yy2;
+	if (yych <= 0xBF) goto yy27;
 	goto yy2;
-yy39:
+yy29:
+	yych = *++YYCURSOR;
+	if (yych <= 0x7F) goto yy2;
+	if (yych <= 0xBF) goto yy27;
+	goto yy2;
+yy30:
+	yych = *++YYCURSOR;
+	if (yych <= 0x7F) goto yy2;
+	if (yych <= 0xBF) goto yy27;
+	goto yy2;
+yy31:
+	yych = *++YYCURSOR;
+	if (yych <= 0x7F) goto yy2;
+	if (yych <= 0xBF) goto yy27;
+	goto yy2;
+yy32:
+	yych = *++YYCURSOR;
+	if (yych <= 0x7F) goto yy2;
+	if (yych <= 0xBF) goto yy38;
+	goto yy2;
+yy33:
+	yych = *++YYCURSOR;
+	if (yych <= 0x7F) goto yy2;
+	if (yych <= 0xBF) goto yy39;
+	goto yy2;
+yy34:
+	yych = *++YYCURSOR;
+	if (yych <= 0x7F) goto yy2;
+	if (yych <= 0xBF) goto yy40;
+	goto yy2;
+yy35:
 	++YYCURSOR;
 	{
 			*error = "current directory reference";
 			return pcr_err_curr_dir;
 		}
+yy37:
+	yych = *++YYCURSOR;
+	if (yych <= 0x00) goto yy41;
+	if (yych == '/') goto yy41;
+	goto yy2;
+yy38:
+	yych = *++YYCURSOR;
+	if (yych <= 0x7F) goto yy2;
+	if (yych <= 0xBF) goto yy27;
+	goto yy2;
+yy39:
+	yych = *++YYCURSOR;
+	if (yych <= 0x7F) goto yy2;
+	if (yych <= 0xBF) goto yy27;
+	goto yy2;
+yy40:
+	yych = *++YYCURSOR;
+	if (yych <= 0x7F) goto yy2;
+	if (yych <= 0xBF) goto yy27;
+	goto yy2;
 yy41:
 	++YYCURSOR;
 	{

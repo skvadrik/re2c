@@ -63,38 +63,20 @@ std:
 	if ((YYLIMIT - YYCURSOR) < 4) YYFILL(4);
 	yych = *YYCURSOR;
 	switch (yych) {
-	case '\n':	goto yy6;
-	case '.':	goto yy4;
-	case '0':	goto yy2;
-	default:	goto yy8;
+	case '\n':	goto yy4;
+	case '.':	goto yy6;
+	case '0':	goto yy8;
+	default:	goto yy2;
 	}
 yy2:
-	yych = *(YYMARKER = ++YYCURSOR);
-	switch (yych) {
-	case '.':	goto yy11;
-	case '0':	goto yy12;
-	default:	goto yy3;
-	}
+	++YYCURSOR;
 yy3:
 #line 74 "bug1297658.re"
 	{
 		RET(UNEXPECTED);
 	}
-#line 84 "bug1297658.c"
+#line 79 "bug1297658.c"
 yy4:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
-	case 'L':	goto yy10;
-	case 'e':	goto yy9;
-	default:	goto yy5;
-	}
-yy5:
-#line 61 "bug1297658.re"
-	{
-		RET(FCON);
-	}
-#line 97 "bug1297658.c"
-yy6:
 	++YYCURSOR;
 #line 66 "bug1297658.re"
 	{
@@ -102,25 +84,42 @@ yy6:
 		if(1||s.cur == s.eof) RET(EOI);
 		goto std;
 	}
-#line 106 "bug1297658.c"
+#line 88 "bug1297658.c"
+yy6:
+	++YYCURSOR;
+	switch ((yych = *YYCURSOR)) {
+	case 'L':	goto yy9;
+	case 'e':	goto yy10;
+	default:	goto yy7;
+	}
+yy7:
+#line 61 "bug1297658.re"
+	{
+		RET(FCON);
+	}
+#line 101 "bug1297658.c"
 yy8:
-	yych = *++YYCURSOR;
-	goto yy3;
+	yych = *(YYMARKER = ++YYCURSOR);
+	switch (yych) {
+	case '.':	goto yy11;
+	case '0':	goto yy12;
+	default:	goto yy3;
+	}
 yy9:
 	yych = *++YYCURSOR;
-	switch (yych) {
-	case 'L':	goto yy10;
-	default:	goto yy5;
-	}
+	goto yy7;
 yy10:
 	yych = *++YYCURSOR;
-	goto yy5;
+	switch (yych) {
+	case 'L':	goto yy9;
+	default:	goto yy7;
+	}
 yy11:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case 'L':	goto yy10;
+	case 'L':	goto yy9;
 	case 'e':	goto yy15;
-	default:	goto yy5;
+	default:	goto yy7;
 	}
 yy12:
 	++YYCURSOR;
@@ -137,8 +136,8 @@ yy14:
 yy15:
 	++YYCURSOR;
 	switch ((yych = *YYCURSOR)) {
-	case 'L':	goto yy10;
-	default:	goto yy5;
+	case 'L':	goto yy9;
+	default:	goto yy7;
 	}
 }
 #line 77 "bug1297658.re"

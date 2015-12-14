@@ -34,21 +34,21 @@ yyFillLabel0:
 	case '6':
 	case '7':
 	case '8':
-	case '9':	goto yy2;
-	default:	goto yy4;
+	case '9':	goto yy4;
+	default:	goto yy2;
 	}
 yy2:
 	++YYCURSOR;
-	yych = *YYCURSOR;
-	goto yy7;
-yy3:
-#line 15 "config4e.f.re"
-	{ return YYCURSOR; }
-#line 48 "config4e.f.c"
-yy4:
-	++YYCURSOR;
 #line 16 "config4e.f.re"
 	{ return NULL; }
+#line 45 "config4e.f.c"
+yy4:
+	++YYCURSOR;
+	yych = *YYCURSOR;
+	goto yy7;
+yy5:
+#line 15 "config4e.f.re"
+	{ return YYCURSOR; }
 #line 53 "config4e.f.c"
 yy6:
 	++YYCURSOR;
@@ -68,7 +68,7 @@ yy7:
 	case '7':
 	case '8':
 	case '9':	goto yy6;
-	default:	goto yy3;
+	default:	goto yy5;
 	}
 #line 17 "config4e.f.re"
 

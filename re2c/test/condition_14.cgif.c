@@ -105,15 +105,13 @@ yyc_Comment:
 			if ((s->lim - s->cur) < 2) if (fill(s, 2) == ~0) break;
 yyFillLabel0:
 			s->yych = *s->cur;
-			if (s->yych != '*') goto yy5;
+			if (s->yych == '*') goto yy5;
 			++s->cur;
-			if ((s->yych = *s->cur) == '/') goto yy6;
 yy4:
 			continue;
 yy5:
 			s->yych = *++s->cur;
-			goto yy4;
-yy6:
+			if (s->yych != '/') goto yy4;
 			++s->cur;
 			s->cond = EStateNormal;(EStateNormal);
 			continue;
@@ -125,89 +123,84 @@ yyFillLabel1:
 			s->yych = *s->cur;
 			{
 				static void *yytarget[256] = {
-					&&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16,
-					&&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16,
-					&&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16,
-					&&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16,
-					&&yy16, &&yy16, &&yy14, &&yy16, &&yy16, &&yy16, &&yy16, &&yy13,
-					&&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy12,
-					&&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16,
-					&&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy10,
-					&&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16,
-					&&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16,
-					&&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16,
-					&&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16,
-					&&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16,
-					&&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16,
-					&&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16,
-					&&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16,
-					&&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16,
-					&&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16,
-					&&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16,
-					&&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16,
-					&&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16,
-					&&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16,
-					&&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16,
-					&&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16,
-					&&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16,
-					&&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16,
-					&&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16,
-					&&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16,
-					&&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16,
-					&&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16,
-					&&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16,
-					&&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16
+					&&yy10, &&yy10, &&yy10, &&yy10, &&yy10, &&yy10, &&yy10, &&yy10,
+					&&yy10, &&yy10, &&yy10, &&yy10, &&yy10, &&yy10, &&yy10, &&yy10,
+					&&yy10, &&yy10, &&yy10, &&yy10, &&yy10, &&yy10, &&yy10, &&yy10,
+					&&yy10, &&yy10, &&yy10, &&yy10, &&yy10, &&yy10, &&yy10, &&yy10,
+					&&yy10, &&yy10, &&yy12, &&yy10, &&yy10, &&yy10, &&yy10, &&yy14,
+					&&yy10, &&yy10, &&yy10, &&yy10, &&yy10, &&yy10, &&yy10, &&yy15,
+					&&yy10, &&yy10, &&yy10, &&yy10, &&yy10, &&yy10, &&yy10, &&yy10,
+					&&yy10, &&yy10, &&yy10, &&yy10, &&yy10, &&yy10, &&yy10, &&yy16,
+					&&yy10, &&yy10, &&yy10, &&yy10, &&yy10, &&yy10, &&yy10, &&yy10,
+					&&yy10, &&yy10, &&yy10, &&yy10, &&yy10, &&yy10, &&yy10, &&yy10,
+					&&yy10, &&yy10, &&yy10, &&yy10, &&yy10, &&yy10, &&yy10, &&yy10,
+					&&yy10, &&yy10, &&yy10, &&yy10, &&yy10, &&yy10, &&yy10, &&yy10,
+					&&yy10, &&yy10, &&yy10, &&yy10, &&yy10, &&yy10, &&yy10, &&yy10,
+					&&yy10, &&yy10, &&yy10, &&yy10, &&yy10, &&yy10, &&yy10, &&yy10,
+					&&yy10, &&yy10, &&yy10, &&yy10, &&yy10, &&yy10, &&yy10, &&yy10,
+					&&yy10, &&yy10, &&yy10, &&yy10, &&yy10, &&yy10, &&yy10, &&yy10,
+					&&yy10, &&yy10, &&yy10, &&yy10, &&yy10, &&yy10, &&yy10, &&yy10,
+					&&yy10, &&yy10, &&yy10, &&yy10, &&yy10, &&yy10, &&yy10, &&yy10,
+					&&yy10, &&yy10, &&yy10, &&yy10, &&yy10, &&yy10, &&yy10, &&yy10,
+					&&yy10, &&yy10, &&yy10, &&yy10, &&yy10, &&yy10, &&yy10, &&yy10,
+					&&yy10, &&yy10, &&yy10, &&yy10, &&yy10, &&yy10, &&yy10, &&yy10,
+					&&yy10, &&yy10, &&yy10, &&yy10, &&yy10, &&yy10, &&yy10, &&yy10,
+					&&yy10, &&yy10, &&yy10, &&yy10, &&yy10, &&yy10, &&yy10, &&yy10,
+					&&yy10, &&yy10, &&yy10, &&yy10, &&yy10, &&yy10, &&yy10, &&yy10,
+					&&yy10, &&yy10, &&yy10, &&yy10, &&yy10, &&yy10, &&yy10, &&yy10,
+					&&yy10, &&yy10, &&yy10, &&yy10, &&yy10, &&yy10, &&yy10, &&yy10,
+					&&yy10, &&yy10, &&yy10, &&yy10, &&yy10, &&yy10, &&yy10, &&yy10,
+					&&yy10, &&yy10, &&yy10, &&yy10, &&yy10, &&yy10, &&yy10, &&yy10,
+					&&yy10, &&yy10, &&yy10, &&yy10, &&yy10, &&yy10, &&yy10, &&yy10,
+					&&yy10, &&yy10, &&yy10, &&yy10, &&yy10, &&yy10, &&yy10, &&yy10,
+					&&yy10, &&yy10, &&yy10, &&yy10, &&yy10, &&yy10, &&yy10, &&yy10,
+					&&yy10, &&yy10, &&yy10, &&yy10, &&yy10, &&yy10, &&yy10, &&yy10
 				};
 				goto *yytarget[s->yych];
 			}
 yy10:
-			s->yych = *(s->tok = ++s->cur);
-			if (s->yych == '?') goto yy27;
+			++s->cur;
 yy11:
 			fputc(s->cur[-1], stdout);
 			continue;
 yy12:
-			s->yych = *++s->cur;
-			if (s->yych == '*') goto yy25;
-			if (s->yych == '/') goto yy23;
-			goto yy11;
-yy13:
-			s->yych = *(s->tok = ++s->cur);
-			if (s->yych == '"') goto yy17;
-			if (s->yych == '\\') goto yy19;
-			goto yy11;
-yy14:
 			++s->cur;
 			s->cond = EStateString;(EStateString);
 			fputc(s->cur[-1], stdout);
 			continue;
-yy16:
+yy14:
+			s->yych = *(s->tok = ++s->cur);
+			if (s->yych == '"') goto yy17;
+			if (s->yych == '\\') goto yy19;
+			goto yy11;
+yy15:
 			s->yych = *++s->cur;
+			if (s->yych == '*') goto yy20;
+			if (s->yych == '/') goto yy22;
+			goto yy11;
+yy16:
+			s->yych = *(s->tok = ++s->cur);
+			if (s->yych == '?') goto yy24;
 			goto yy11;
 yy17:
 			s->yych = *++s->cur;
-			if (s->yych == '\'') goto yy21;
+			if (s->yych == '\'') goto yy25;
 yy18:
 			s->cur = s->tok;
 			goto yy11;
 yy19:
 			s->yych = *++s->cur;
-			if (s->yych != '"') goto yy18;
-			s->yych = *++s->cur;
-			if (s->yych != '\'') goto yy18;
-yy21:
-			++s->cur;
-			fputl("'\"'", 3, stdout);
-			continue;
-yy23:
-			++s->cur;
-			s->cond = EStateSkiptoeol;(EStateSkiptoeol);
-			continue;
-yy25:
+			if (s->yych == '"') goto yy27;
+			goto yy18;
+yy20:
 			++s->cur;
 			s->cond = EStateComment;(EStateComment);
 			continue;
-yy27:
+yy22:
+			++s->cur;
+			s->cond = EStateSkiptoeol;(EStateSkiptoeol);
+			continue;
+yy24:
 			s->yych = *++s->cur;
 			{
 				static void *yytarget[256] = {
@@ -215,10 +208,10 @@ yy27:
 					&&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18,
 					&&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18,
 					&&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18,
-					&&yy18, &&yy42, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy40,
-					&&yy28, &&yy30, &&yy18, &&yy18, &&yy18, &&yy44, &&yy18, &&yy38,
+					&&yy18, &&yy28, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy30,
+					&&yy32, &&yy34, &&yy18, &&yy18, &&yy18, &&yy36, &&yy18, &&yy38,
 					&&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18,
-					&&yy18, &&yy18, &&yy18, &&yy18, &&yy32, &&yy36, &&yy34, &&yy18,
+					&&yy18, &&yy18, &&yy18, &&yy18, &&yy40, &&yy42, &&yy44, &&yy18,
 					&&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18,
 					&&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18,
 					&&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18,
@@ -246,25 +239,33 @@ yy27:
 				};
 				goto *yytarget[s->yych];
 			}
+yy25:
+			++s->cur;
+			fputl("'\"'", 3, stdout);
+			continue;
+yy27:
+			s->yych = *++s->cur;
+			if (s->yych == '\'') goto yy25;
+			goto yy18;
 yy28:
 			++s->cur;
-			fputc('[', stdout);
+			fputc('|', stdout);
 			continue;
 yy30:
 			++s->cur;
-			fputc(']', stdout);
+			fputc('^', stdout);
 			continue;
 yy32:
 			++s->cur;
-			fputc('{', stdout);
+			fputc('[', stdout);
 			continue;
 yy34:
 			++s->cur;
-			fputc('}', stdout);
+			fputc(']', stdout);
 			continue;
 yy36:
 			++s->cur;
-			fputc('#', stdout);
+			fputc('~', stdout);
 			continue;
 yy38:
 			++s->cur;
@@ -272,15 +273,15 @@ yy38:
 			continue;
 yy40:
 			++s->cur;
-			fputc('^', stdout);
+			fputc('{', stdout);
 			continue;
 yy42:
 			++s->cur;
-			fputc('|', stdout);
+			fputc('#', stdout);
 			continue;
 yy44:
 			++s->cur;
-			fputc('~', stdout);
+			fputc('}', stdout);
 			continue;
 /* *********************************** */
 yyc_Skiptoeol:
@@ -290,62 +291,62 @@ yyFillLabel2:
 			s->yych = *s->cur;
 			{
 				static void *yytarget[256] = {
-					&&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54,
-					&&yy54, &&yy54, &&yy52, &&yy54, &&yy54, &&yy51, &&yy54, &&yy54,
-					&&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54,
-					&&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54,
-					&&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54,
-					&&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54,
-					&&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54,
-					&&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy48,
-					&&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54,
-					&&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54,
-					&&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54,
-					&&yy54, &&yy54, &&yy54, &&yy54, &&yy50, &&yy54, &&yy54, &&yy54,
-					&&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54,
-					&&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54,
-					&&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54,
-					&&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54,
-					&&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54,
-					&&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54,
-					&&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54,
-					&&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54,
-					&&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54,
-					&&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54,
-					&&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54,
-					&&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54,
-					&&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54,
-					&&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54,
-					&&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54,
-					&&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54,
-					&&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54,
-					&&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54,
-					&&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54,
-					&&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54, &&yy54
+					&&yy48, &&yy48, &&yy48, &&yy48, &&yy48, &&yy48, &&yy48, &&yy48,
+					&&yy48, &&yy48, &&yy50, &&yy48, &&yy48, &&yy52, &&yy48, &&yy48,
+					&&yy48, &&yy48, &&yy48, &&yy48, &&yy48, &&yy48, &&yy48, &&yy48,
+					&&yy48, &&yy48, &&yy48, &&yy48, &&yy48, &&yy48, &&yy48, &&yy48,
+					&&yy48, &&yy48, &&yy48, &&yy48, &&yy48, &&yy48, &&yy48, &&yy48,
+					&&yy48, &&yy48, &&yy48, &&yy48, &&yy48, &&yy48, &&yy48, &&yy48,
+					&&yy48, &&yy48, &&yy48, &&yy48, &&yy48, &&yy48, &&yy48, &&yy48,
+					&&yy48, &&yy48, &&yy48, &&yy48, &&yy48, &&yy48, &&yy48, &&yy53,
+					&&yy48, &&yy48, &&yy48, &&yy48, &&yy48, &&yy48, &&yy48, &&yy48,
+					&&yy48, &&yy48, &&yy48, &&yy48, &&yy48, &&yy48, &&yy48, &&yy48,
+					&&yy48, &&yy48, &&yy48, &&yy48, &&yy48, &&yy48, &&yy48, &&yy48,
+					&&yy48, &&yy48, &&yy48, &&yy48, &&yy54, &&yy48, &&yy48, &&yy48,
+					&&yy48, &&yy48, &&yy48, &&yy48, &&yy48, &&yy48, &&yy48, &&yy48,
+					&&yy48, &&yy48, &&yy48, &&yy48, &&yy48, &&yy48, &&yy48, &&yy48,
+					&&yy48, &&yy48, &&yy48, &&yy48, &&yy48, &&yy48, &&yy48, &&yy48,
+					&&yy48, &&yy48, &&yy48, &&yy48, &&yy48, &&yy48, &&yy48, &&yy48,
+					&&yy48, &&yy48, &&yy48, &&yy48, &&yy48, &&yy48, &&yy48, &&yy48,
+					&&yy48, &&yy48, &&yy48, &&yy48, &&yy48, &&yy48, &&yy48, &&yy48,
+					&&yy48, &&yy48, &&yy48, &&yy48, &&yy48, &&yy48, &&yy48, &&yy48,
+					&&yy48, &&yy48, &&yy48, &&yy48, &&yy48, &&yy48, &&yy48, &&yy48,
+					&&yy48, &&yy48, &&yy48, &&yy48, &&yy48, &&yy48, &&yy48, &&yy48,
+					&&yy48, &&yy48, &&yy48, &&yy48, &&yy48, &&yy48, &&yy48, &&yy48,
+					&&yy48, &&yy48, &&yy48, &&yy48, &&yy48, &&yy48, &&yy48, &&yy48,
+					&&yy48, &&yy48, &&yy48, &&yy48, &&yy48, &&yy48, &&yy48, &&yy48,
+					&&yy48, &&yy48, &&yy48, &&yy48, &&yy48, &&yy48, &&yy48, &&yy48,
+					&&yy48, &&yy48, &&yy48, &&yy48, &&yy48, &&yy48, &&yy48, &&yy48,
+					&&yy48, &&yy48, &&yy48, &&yy48, &&yy48, &&yy48, &&yy48, &&yy48,
+					&&yy48, &&yy48, &&yy48, &&yy48, &&yy48, &&yy48, &&yy48, &&yy48,
+					&&yy48, &&yy48, &&yy48, &&yy48, &&yy48, &&yy48, &&yy48, &&yy48,
+					&&yy48, &&yy48, &&yy48, &&yy48, &&yy48, &&yy48, &&yy48, &&yy48,
+					&&yy48, &&yy48, &&yy48, &&yy48, &&yy48, &&yy48, &&yy48, &&yy48,
+					&&yy48, &&yy48, &&yy48, &&yy48, &&yy48, &&yy48, &&yy48, &&yy48
 				};
 				goto *yytarget[s->yych];
 			}
 yy48:
-			s->yych = *(s->tok = ++s->cur);
-			if (s->yych == '?') goto yy61;
+			++s->cur;
 yy49:
 			continue;
 yy50:
-			s->yych = *(s->tok = ++s->cur);
-			if (s->yych == '\n') goto yy59;
-			if (s->yych == '\r') goto yy57;
-			goto yy49;
-yy51:
-			s->yych = *++s->cur;
-			if (s->yych == '\n') goto yy55;
-			goto yy49;
-yy52:
 			++s->cur;
 			s->cond = EStateNormal;(EStateNormal);
 			fputc('\n', stdout);
 			continue;
-yy54:
+yy52:
 			s->yych = *++s->cur;
+			if (s->yych == '\n') goto yy55;
+			goto yy49;
+yy53:
+			s->yych = *(s->tok = ++s->cur);
+			if (s->yych == '?') goto yy57;
+			goto yy49;
+yy54:
+			s->yych = *(s->tok = ++s->cur);
+			if (s->yych == '\n') goto yy59;
+			if (s->yych == '\r') goto yy61;
 			goto yy49;
 yy55:
 			++s->cur;
@@ -355,7 +356,7 @@ yy55:
 			continue;
 yy57:
 			s->yych = *++s->cur;
-			if (s->yych == '\n') goto yy59;
+			if (s->yych == '/') goto yy62;
 yy58:
 			s->cur = s->tok;
 			goto yy49;
@@ -364,15 +365,20 @@ yy59:
 			continue;
 yy61:
 			s->yych = *++s->cur;
-			if (s->yych != '/') goto yy58;
+			if (s->yych == '\n') goto yy59;
+			goto yy58;
+yy62:
 			s->yych = *++s->cur;
-			if (s->yych == '\n') goto yy64;
-			if (s->yych != '\r') goto yy58;
-			s->yych = *++s->cur;
-			if (s->yych != '\n') goto yy58;
-yy64:
+			if (s->yych == '\n') goto yy63;
+			if (s->yych == '\r') goto yy65;
+			goto yy58;
+yy63:
 			++s->cur;
 			continue;
+yy65:
+			++s->cur;
+			if ((s->yych = *s->cur) == '\n') goto yy63;
+			goto yy58;
 /* *********************************** */
 yyc_String:
 			s->state = 3;(3);
@@ -380,9 +386,8 @@ yyc_String:
 yyFillLabel3:
 			s->yych = *s->cur;
 			if (s->yych == '"') goto yy70;
-			if (s->yych != '\\') goto yy72;
+			if (s->yych == '\\') goto yy72;
 			++s->cur;
-			if ((s->yych = *s->cur) != '\n') goto yy73;
 yy69:
 			fputc(s->cur[-1], stdout);
 			continue;
@@ -393,8 +398,7 @@ yy70:
 			continue;
 yy72:
 			s->yych = *++s->cur;
-			goto yy69;
-yy73:
+			if (s->yych == '\n') goto yy69;
 			++s->cur;
 			fputl((const char*)s->cur-2, 2, stdout);
 			continue;

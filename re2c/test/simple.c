@@ -24,21 +24,21 @@ char *q;
 	case '6':
 	case '7':
 	case '8':
-	case '9':	goto yy2;
-	default:	goto yy4;
+	case '9':	goto yy4;
+	default:	goto yy2;
 	}
 yy2:
 	++YYCURSOR;
-	yych = *YYCURSOR;
-	goto yy7;
-yy3:
-#line 10 "simple.re"
-	{return YYCURSOR;}
-#line 38 "simple.c"
-yy4:
-	++YYCURSOR;
 #line 11 "simple.re"
 	{return NULL;}
+#line 35 "simple.c"
+yy4:
+	++YYCURSOR;
+	yych = *YYCURSOR;
+	goto yy7;
+yy5:
+#line 10 "simple.re"
+	{return YYCURSOR;}
 #line 43 "simple.c"
 yy6:
 	++YYCURSOR;
@@ -56,7 +56,7 @@ yy7:
 	case '7':
 	case '8':
 	case '9':	goto yy6;
-	default:	goto yy3;
+	default:	goto yy5;
 	}
 }
 #line 12 "simple.re"

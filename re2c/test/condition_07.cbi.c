@@ -116,23 +116,23 @@ yyc_R1:
 				if ((s->lim - s->cur) < 2) { if(fill(s, 2) >= 0) break; }
 				yych = *s->cur;
 				if (yych <= '@') {
-					if (yych <= '/') goto yy5;
-					if (yych >= ':') goto yy5;
+					if (yych <= '/') goto yy3;
+					if (yych <= '9') goto yy5;
 				} else {
-					if (yych <= 'Z') goto yy3;
-					if (yych <= '`') goto yy5;
-					if (yych >= '{') goto yy5;
+					if (yych <= 'Z') goto yy5;
+					if (yych <= '`') goto yy3;
+					if (yych <= 'z') goto yy5;
 				}
 yy3:
 				++s->cur;
-				yych = *s->cur;
-				goto yy8;
-yy4:
 				{
 					continue;
 				}
 yy5:
 				++s->cur;
+				yych = *s->cur;
+				goto yy8;
+yy6:
 				{
 					continue;
 				}
@@ -144,7 +144,7 @@ yy8:
 				if (yybm[0+yych] & 128) {
 					goto yy7;
 				}
-				goto yy4;
+				goto yy6;
 			}
 /* *********************************** */
 yyc_R2:
@@ -186,23 +186,23 @@ yyc_R2:
 				if ((s->lim - s->cur) < 2) { if(fill(s, 2) >= 0) break; }
 				yych = *s->cur;
 				if (yych <= '@') {
-					if (yych <= '/') goto yy13;
-					if (yych >= ':') goto yy13;
+					if (yych <= '/') goto yy11;
+					if (yych <= '9') goto yy13;
 				} else {
-					if (yych <= 'Z') goto yy11;
-					if (yych <= '`') goto yy13;
-					if (yych >= '{') goto yy13;
+					if (yych <= 'Z') goto yy13;
+					if (yych <= '`') goto yy11;
+					if (yych <= 'z') goto yy13;
 				}
 yy11:
 				++s->cur;
-				yych = *s->cur;
-				goto yy16;
-yy12:
 				{
 					continue;
 				}
 yy13:
 				++s->cur;
+				yych = *s->cur;
+				goto yy16;
+yy14:
 				{
 					continue;
 				}
@@ -214,7 +214,7 @@ yy16:
 				if (yybm[0+yych] & 128) {
 					goto yy15;
 				}
-				goto yy12;
+				goto yy14;
 			}
 		}
 

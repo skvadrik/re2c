@@ -23,97 +23,95 @@ const char *q;
 	yych = *YYCURSOR;
 	switch (yych) {
 	case '\n':
-	case 'q':	goto yy7;
-	case 'A':	goto yy2;
-	case 'a':	goto yy4;
-	default:	goto yy6;
+	case 'q':	goto yy4;
+	case 'A':	goto yy6;
+	case 'a':	goto yy7;
+	default:	goto yy2;
 	}
 yy2:
-	yyaccept = 0;
-	yych = *(YYMARKER = ++YYCURSOR);
-	switch (yych) {
-	case '\n':	goto yy10;
-	case 'A':
-	case 'a':	goto yy8;
-	default:	goto yy3;
-	}
+	++YYCURSOR;
 yy3:
 #line 22 "repeater.re"
 	{RET(5);}
-#line 44 "repeater.c"
+#line 37 "repeater.c"
 yy4:
-	yyaccept = 1;
-	yych = *(YYMARKER = ++YYCURSOR);
-	switch (yych) {
-	case '\n':	goto yy10;
-	case 'A':
-	case 'a':	goto yy8;
-	default:	goto yy5;
-	}
+	++YYCURSOR;
 yy5:
 #line 23 "repeater.re"
 	{RET(0);}
-#line 57 "repeater.c"
+#line 43 "repeater.c"
 yy6:
-	yych = *++YYCURSOR;
-	goto yy3;
+	yyaccept = 0;
+	yych = *(YYMARKER = ++YYCURSOR);
+	switch (yych) {
+	case '\n':	goto yy8;
+	case 'A':
+	case 'a':	goto yy10;
+	default:	goto yy3;
+	}
 yy7:
-	yych = *++YYCURSOR;
-	goto yy5;
+	yyaccept = 1;
+	yych = *(YYMARKER = ++YYCURSOR);
+	switch (yych) {
+	case '\n':	goto yy8;
+	case 'A':
+	case 'a':	goto yy10;
+	default:	goto yy5;
+	}
 yy8:
+	++YYCURSOR;
+#line 18 "repeater.re"
+	{RET(1);}
+#line 66 "repeater.c"
+yy10:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case '\n':	goto yy13;
+	case '\n':	goto yy12;
 	case 'A':
-	case 'a':	goto yy12;
-	default:	goto yy9;
+	case 'a':	goto yy14;
+	default:	goto yy11;
 	}
-yy9:
+yy11:
 	YYCURSOR = YYMARKER;
 	if (yyaccept == 0) {
 		goto yy3;
 	} else {
 		goto yy5;
 	}
-yy10:
-	++YYCURSOR;
-#line 18 "repeater.re"
-	{RET(1);}
-#line 83 "repeater.c"
 yy12:
-	yych = *++YYCURSOR;
-	switch (yych) {
-	case '\n':	goto yy13;
-	case 'A':
-	case 'a':	goto yy15;
-	default:	goto yy9;
-	}
-yy13:
 	++YYCURSOR;
 #line 19 "repeater.re"
 	{RET(2);}
-#line 96 "repeater.c"
+#line 86 "repeater.c"
+yy14:
+	yych = *++YYCURSOR;
+	switch (yych) {
+	case '\n':	goto yy12;
+	case 'A':
+	case 'a':	goto yy15;
+	default:	goto yy11;
+	}
 yy15:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case '\n':	goto yy17;
+	case '\n':	goto yy16;
 	case 'A':
-	case 'a':	goto yy16;
-	default:	goto yy9;
+	case 'a':	goto yy18;
+	default:	goto yy11;
 	}
 yy16:
-	yych = *++YYCURSOR;
-	switch (yych) {
-	case '\n':	goto yy17;
-	case 'A':
-	case 'a':	goto yy19;
-	default:	goto yy9;
-	}
-yy17:
 	++YYCURSOR;
 #line 21 "repeater.re"
 	{RET(4);}
-#line 117 "repeater.c"
+#line 107 "repeater.c"
+yy18:
+	yych = *++YYCURSOR;
+	switch (yych) {
+	case '\n':	goto yy16;
+	case 'A':
+	case 'a':	goto yy19;
+	default:	goto yy11;
+	}
 yy19:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -124,17 +122,17 @@ yy20:
 	++YYCURSOR;
 #line 20 "repeater.re"
 	{RET(3);}
-#line 128 "repeater.c"
+#line 126 "repeater.c"
 yy22:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 yy23:
 	switch (yych) {
-	case '\n':	goto yy17;
+	case '\n':	goto yy16;
 	case 'A':
 	case 'a':	goto yy22;
-	default:	goto yy9;
+	default:	goto yy11;
 	}
 }
 #line 24 "repeater.re"
