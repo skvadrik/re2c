@@ -2364,11 +2364,11 @@ void parse(Scanner& i, Output & o)
 				{
 					for (RuleOpList::const_iterator itOp = specStar.begin(); itOp != specStar.end(); ++itOp)
 					{
-						it->second.addl (*itOp);
+						it->second.add (*itOp);
 					}
 					if (star_default)
 					{
-						it->second.addl (star_default);
+						it->second.add_def (star_default);
 					}
 				}
 

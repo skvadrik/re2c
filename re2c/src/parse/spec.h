@@ -34,7 +34,7 @@ struct Spec
 		}
 		else
 		{
-			addl (r);
+			add (r);
 			return true;
 		}
 	}
@@ -42,11 +42,6 @@ struct Spec
 	{
 		rules[r->rank].line = r->loc.line;
 		re = mkAlt (re, r);
-	}
-	void addl (RuleOp * r)
-	{
-		rules[r->rank].line = r->loc.line;
-		re = mkAlt (r, re);
 	}
 	void clear ()
 	{
