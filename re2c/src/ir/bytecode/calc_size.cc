@@ -29,7 +29,7 @@ void CatOp::calcSize (const charset_t & cs)
 void CloseOp::calcSize (const charset_t & cs)
 {
 	exp->calcSize (cs);
-	size = exp->size + 1;
+	size = exp->size + 2;
 }
 
 void MatchOp::calcSize (const charset_t & cs)

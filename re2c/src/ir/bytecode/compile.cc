@@ -94,10 +94,13 @@ uint32_t CloseOp::compile (const charset_t & cs, Ins * i)
 	{
 		ins_cache = i;
 
-		i += exp->compile (cs, &i[0]);
 		i->i.tag = FORK;
+		++i;
+		i += exp->compile (cs, i);
+		i->i.tag = GOTO;
 		i->i.link = ins_cache;
 		++i;
+		ins_cache->i.link = i;
 
 		const uint32_t sz = static_cast<uint32_t> (i - ins_cache);
 		if (ins_access == PRIVATE)

@@ -602,7 +602,7 @@ static const yytype_uint16 yyrline[] =
      238,   255,   273,   277,   283,   288,   294,   298,   313,   330,
      335,   341,   357,   375,   395,   401,   409,   412,   419,   425,
      435,   438,   446,   449,   456,   460,   467,   471,   478,   482,
-     489,   493,   508,   528,   532,   536,   540,   547,   557,   561
+     489,   493,   509,   529,   533,   537,   541,   548,   558,   562
 };
 #endif
 
@@ -1953,10 +1953,11 @@ yyreduce:
 			switch((yyvsp[(2) - (2)].op))
 			{
 			case '*':
-				(yyval.regexp) = mkAlt(new CloseOp((yyvsp[(1) - (2)].regexp)), new NullOp());
+				(yyval.regexp) = new CloseOp((yyvsp[(1) - (2)].regexp));
 				break;
 			case '+':
-				(yyval.regexp) = new CloseOp((yyvsp[(1) - (2)].regexp));
+				(yyvsp[(1) - (2)].regexp)->ins_access = RegExp::PRIVATE;
+				(yyval.regexp) = new CatOp (new CloseOp((yyvsp[(1) - (2)].regexp)), (yyvsp[(1) - (2)].regexp));
 				break;
 			case '?':
 				(yyval.regexp) = mkAlt((yyvsp[(1) - (2)].regexp), new NullOp());

@@ -495,10 +495,11 @@ factor:
 			switch($2)
 			{
 			case '*':
-				$$ = mkAlt(new CloseOp($1), new NullOp());
+				$$ = new CloseOp($1);
 				break;
 			case '+':
-				$$ = new CloseOp($1);
+				$1->ins_access = RegExp::PRIVATE;
+				$$ = new CatOp (new CloseOp($1), $1);
 				break;
 			case '?':
 				$$ = mkAlt($1, new NullOp());

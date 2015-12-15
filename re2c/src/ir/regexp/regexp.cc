@@ -247,7 +247,7 @@ RegExp * repeat_from_to (RegExp * e, uint32_t n, uint32_t m)
 RegExp * repeat_from (RegExp * e, uint32_t n)
 {
 	RegExp * r1 = repeat (e, n);
-	RegExp * r2 = mkAlt (new NullOp, new CloseOp (e));
+	RegExp * r2 = new CloseOp (e);
 	return doCat (r1, r2);
 }
 
