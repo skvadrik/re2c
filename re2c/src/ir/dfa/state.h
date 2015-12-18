@@ -9,6 +9,8 @@
 namespace re2c
 {
 
+struct nfa_state_t;
+
 class State
 {
 public:
@@ -18,7 +20,7 @@ public:
 	State * link;
 	uint32_t depth; // for finding SCCs
 	uint32_t kCount;
-	Ins ** kernel;
+	nfa_state_t ** kernel;
 
 	bool isPreCtxt;
 	bool isBase;

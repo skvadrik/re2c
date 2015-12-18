@@ -16,9 +16,9 @@ public:
 		: match (m)
 	{}
 	void split (std::set<uint32_t> &);
-	void calcSize (const charset_t &);
+	uint32_t calc_size() const;
 	uint32_t fixedLength ();
-	uint32_t compile (const charset_t &, Ins *);
+	nfa_state_t *compile(nfa_t &nfa, nfa_state_t *n);
 	void decompile ();
 	void display (std::ostream & o) const;
 

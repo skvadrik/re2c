@@ -24,8 +24,7 @@ SRC_HDR = \
 	src/conf/msg.h \
 	src/conf/opt.h \
 	src/conf/warn.h \
-	src/ir/bytecode/bytecode.h \
-	src/ir/bytecode/ins.h \
+	src/ir/bytecode/nfa.h \
 	src/ir/dfa/state.h \
 	src/ir/dfa/dfa.h \
 	src/ir/dfa/action.h \
@@ -46,6 +45,7 @@ SRC_HDR = \
 	src/ir/regexp/regexp_null.h \
 	src/ir/regexp/regexp.h \
 	src/ir/regexp/regexp_close.h \
+	src/ir/compile.h \
 	src/ir/rule_rank.h \
 	src/globals.h \
 	src/parse/code.h \
@@ -95,11 +95,9 @@ SRC = \
 	src/conf/msg.cc \
 	src/conf/opt.cc \
 	src/conf/warn.cc \
-	src/ir/bytecode/bytecode.cc \
-	src/ir/bytecode/ins.cc \
-	src/ir/bytecode/split.cc \
-	src/ir/bytecode/compile.cc \
-	src/ir/bytecode/calc_size.cc \
+	src/ir/nfa/calc_size.cc \
+	src/ir/nfa/nfa.cc \
+	src/ir/nfa/split.cc \
 	src/ir/dfa/dfa.cc \
 	src/ir/regexp/display.cc \
 	src/ir/regexp/encoding/enc.cc \
@@ -112,6 +110,7 @@ SRC = \
 	src/ir/regexp/encoding/utf16/utf16_range.cc \
 	src/ir/regexp/fixed_length.cc \
 	src/ir/regexp/regexp.cc \
+	src/ir/compile.cc \
 	src/ir/rule_rank.cc \
 	src/main.cc \
 	src/parse/code.cc \

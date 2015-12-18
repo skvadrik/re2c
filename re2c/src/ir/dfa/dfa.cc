@@ -1,40 +1,40 @@
 #include <assert.h>
-#include <string.h>
-#include <map>
-#include <set>
-#include <queue>
 #include <ostream>
+#include <set>
+#include <string.h>
+#include <queue>
 
 #include "src/codegen/go.h"
 #include "src/codegen/skeleton/skeleton.h"
 #include "src/ir/dfa/dfa.h"
-#include "src/ir/bytecode/ins.h"
+#include "src/ir/nfa/nfa.h"
 #include "src/ir/dfa/state.h"
 #include "src/ir/regexp/regexp_rule.h"
 #include "src/ir/rule_rank.h"
 #include "src/util/allocate.h"
+#include "src/util/range.h"
 
 namespace re2c
 {
 
-static Ins **closure(Ins **cP, Ins *i)
+static nfa_state_t **closure(nfa_state_t **cP, nfa_state_t *n)
 {
-	while (!isMarked(i))
+	if (!n->mark)
 	{
-		mark(i);
-		*(cP++) = i;
-
-		if (i->i.tag == FORK)
+		n->mark = true;
+		*(cP++) = n;
+		switch (n->type)
 		{
-			cP = closure(cP, i + 1);
-			i = (Ins*) i->i.link;
+			case nfa_state_t::ALT:
+				cP = closure(cP, n->value.alt.out2);
+				cP = closure(cP, n->value.alt.out1);
+				break;
+			case nfa_state_t::CTX:
+				cP = closure(cP, n->value.ctx.out);
+				break;
+			default:
+				break;
 		}
-		else if (i->i.tag == GOTO || i->i.tag == CTXT)
-		{
-			i = (Ins*) i->i.link;
-		}
-		else
-			break;
 	}
 
 	return cP;
@@ -43,12 +43,11 @@ static Ins **closure(Ins **cP, Ins *i)
 DFA::DFA
 	( const std::string & c
 	, uint32_t l
-	, Ins * ins
-	, uint32_t ni
 	, uint32_t lb
 	, uint32_t ub
 	, const charset_t & cs
-	, rules_t rules
+	, rules_t & rules
+	, nfa_t & nfa
 	)
 	: accepts ()
 	, skeleton (NULL)
@@ -61,7 +60,6 @@ DFA::DFA
 	, head(NULL)
 	, tail(&head)
 	, toDo(NULL)
-	, free_ins(ins)
 
 	// statistics
 	, max_fill (0)
@@ -78,11 +76,12 @@ DFA::DFA
 		name += cond;
 	}
 
-	Ins **work = new Ins * [ni + 1];
-	findState(work, closure(work, &ins[0]));
-
 	const size_t nc = cs.size() - 1; // (n + 1) bounds for n ranges
-	void **goTo = new void*[nc];
+
+	nfa_state_t **work = new nfa_state_t* [nfa.size];
+	findState(work, closure(work, nfa.root));
+
+	std::vector<nfa_state_t*> *go = new std::vector<nfa_state_t*>[nc];
 	Span *span = allocate<Span> (nc);
 
 	while (toDo)
@@ -90,66 +89,84 @@ DFA::DFA
 		State *s = toDo;
 		toDo = s->link;
 
-		memset(goTo, 0, nc * sizeof(void*));
+		for(uint32_t i = 0; i < nc; ++i)
+		{
+			go[i].clear();
+		}
+		memset(span, 0, sizeof(Span)*nc);
 
 		s->rule = NULL;
 		for (uint32_t k = 0; k < s->kCount; ++k)
 		{
-			Ins * i = s->kernel[k];
-			if (i->i.tag == CHAR)
+			nfa_state_t *n = s->kernel[k];
+			switch (n->type)
 			{
-				for (Ins *j = i + 1; j < (Ins*) i->i.link; ++j)
+//				case nfa_state_t::CHR:
+//					go[n->value.chr.chr].push_back(n->value.chr.out);
+//					break;
+				case nfa_state_t::RAN:
 				{
-					j->c.link = goTo[j->c.value];
-					goTo[j->c.value] = j;
-				}
-			}
-			else if (i->i.tag == TERM)
-			{
-				RuleOp * rule = static_cast<RuleOp *> (i->i.link);
-				if (!s->rule)
-				{
-					s->rule = rule;
-				}
-				else
-				{
-					const rule_rank_t r1 = s->rule->rank;
-					const rule_rank_t r2 = rule->rank;
-					if (r2 < r1)
+					nfa_state_t *n2 = n->value.ran.out;
+					uint32_t j = 0;
+					for (Range *r = n->value.ran.ran; r; r = r->next ())
 					{
-						rules[r1].shadow.insert (r2);
+						for (; cs[j] != r->lower(); ++j);
+						for (; cs[j] != r->upper(); ++j)
+						{
+							go[j].push_back(n2);
+						}
+					}
+					break;
+				}
+				case nfa_state_t::CTX:
+					s->isPreCtxt = true;
+					break;
+				case nfa_state_t::FIN:
+				{
+					RuleOp *rule = n->value.fin.rule;
+					if (!s->rule)
+					{
 						s->rule = rule;
 					}
-					else if (r1 < r2)
+					else
 					{
-						rules[r2].shadow.insert (r1);
+						const rule_rank_t r1 = s->rule->rank;
+						const rule_rank_t r2 = rule->rank;
+						if (r2 < r1)
+						{
+							rules[r1].shadow.insert (r2);
+							s->rule = rule;
+						}
+						else if (r1 < r2)
+						{
+							rules[r2].shadow.insert (r1);
+						}
 					}
+					break;
 				}
-			}
-			else if (i->i.tag == CTXT)
-			{
-				s->isPreCtxt = true;
+				default:
+					break;
 			}
 		}
 
-		for (uint32_t j = 0; j < nc; ++j)
+		for(uint32_t i = 0; i < nc; ++i)
 		{
-			if (goTo[j])
+			if(!go[i].empty())
 			{
-				Ins **cP = work;
-				for (Ins *i = (Ins*)goTo[j]; i; i = (Ins*) i->c.link)
+				nfa_state_t **cP = work;
+				for (std::vector<nfa_state_t*>::const_iterator j = go[i].begin(); j != go[i].end(); ++j)
 				{
-					cP = closure(cP, i + i->c.bump);
+					cP = closure(cP, *j);
 				}
-				goTo[j] = findState(work, cP);
+				span[i].to = findState(work, cP);
 			}
 		}
 
 		s->go.nSpans = 0;
 		for (uint32_t j = 0; j < nc;)
 		{
-			State *to = (State*) goTo[j];
-			while (++j < nc && goTo[j] == to) ;
+			State *to = span[j].to;
+			while (++j < nc && span[j].to == to) ;
 			span[s->go.nSpans].ub = cs[j];
 			span[s->go.nSpans].to = to;
 			s->go.nSpans++;
@@ -159,7 +176,7 @@ DFA::DFA
 	}
 
 	delete [] work;
-	delete [] goTo;
+	delete [] go;
 	operator delete (span);
 
 	/*
@@ -238,7 +255,6 @@ DFA::~DFA()
 		head = s->next;
 		delete s;
 	}
-	delete [] free_ins;
 
 	delete skeleton;
 }
@@ -253,19 +269,23 @@ void DFA::addState(State **a, State *s)
 		tail = &s->next;
 }
 
-State *DFA::findState(Ins **kernel, Ins ** kernel_end)
+State *DFA::findState(nfa_state_t **kernel, nfa_state_t ** kernel_end)
 {
 	uint32_t kCount = 0;
-	for (Ins ** i = kernel; i < kernel_end; ++i)
+	for (nfa_state_t ** pn = kernel; pn < kernel_end; ++pn)
 	{
-		Ins * ins = *i;
-		if (ins->i.tag == CHAR || ins->i.tag == TERM || ins->i.tag == CTXT)
+		nfa_state_t *n = *pn;
+		switch (n->type)
 		{
-			kernel[kCount++] = ins;
-		}
-		else
-		{
-			unmark (ins);
+//			case nfa_state_t::CHR:
+			case nfa_state_t::RAN:
+			case nfa_state_t::CTX:
+			case nfa_state_t::FIN:
+				kernel[kCount++] = n;
+				break;
+			default:
+				n->mark = false;
+				break;
 		}
 	}
 
@@ -277,7 +297,7 @@ State *DFA::findState(Ins **kernel, Ins ** kernel_end)
 			bool marked = true;
 			for (uint32_t i = 0; marked && i < s->kCount; ++i)
 			{
-				marked = isMarked (s->kernel[i]);
+				marked = s->kernel[i]->mark;
 			}
 			if (marked)
 			{
@@ -291,15 +311,15 @@ State *DFA::findState(Ins **kernel, Ins ** kernel_end)
 		s = new State;
 		addState(tail, s);
 		s->kCount = kCount;
-		s->kernel = new Ins * [kCount];
-		memcpy(s->kernel, kernel, kCount * sizeof (Ins *));
+		s->kernel = new nfa_state_t* [kCount];
+		memcpy(s->kernel, kernel, kCount * sizeof(nfa_state_t*));
 		s->link = toDo;
 		toDo = s;
 	}
 
 	for (uint32_t i = 0; i < kCount; ++i)
 	{
-		unmark (kernel[i]);
+		kernel[i]->mark = false;
 	}
 
 	return s;

@@ -84,7 +84,7 @@
 #include "src/codegen/skeleton/skeleton.h"
 #include "src/conf/opt.h"
 #include "src/globals.h"
-#include "src/ir/bytecode/bytecode.h"
+#include "src/ir/compile.h"
 #include "src/ir/dfa/dfa.h"
 #include "src/ir/regexp/encoding/enc.h"
 #include "src/ir/regexp/encoding/range_suffix.h"
@@ -2406,7 +2406,7 @@ void parse(Scanner& i, Output & o)
 						}
 					}
 
-					dfa_map[it->first] = genCode(it->second, o, it->first, opts->encoding.nCodeUnits ());
+					dfa_map[it->first] = compile(it->second, o, it->first, opts->encoding.nCodeUnits ());
 				}
 				if (parseMode != Scanner::Rules && dfa_map.find(it->first) != dfa_map.end())
 				{
@@ -2420,7 +2420,7 @@ void parse(Scanner& i, Output & o)
 			{
 				if (parseMode != Scanner::Reuse)
 				{
-					dfa_map[""] = genCode(spec, o, "", opts->encoding.nCodeUnits ());
+					dfa_map[""] = compile(spec, o, "", opts->encoding.nCodeUnits ());
 				}
 				if (parseMode != Scanner::Rules && dfa_map.find("") != dfa_map.end())
 				{

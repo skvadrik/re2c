@@ -12,7 +12,8 @@
 namespace re2c
 {
 
-union Ins;
+struct nfa_state_t;
+struct nfa_t;
 
 typedef std::vector<uint32_t> charset_t;
 
@@ -21,7 +22,6 @@ class RegExp
 public:
 	static free_list <RegExp *> vFreeList;
 
-	uint32_t size;
 	/*
 	 * There're several different cases when the same regexp
 	 * can be used multiple times:
@@ -40,7 +40,7 @@ public:
 	 * [^]{3} in UTF-8 mode, each of sub-regexps [^] will have common suffix
 	 * [\x80-\xBF] factored out, but they won't share instructions.
 	 */
-	Ins * ins_cache; /* if non-NULL, points to compiled instructions */
+	nfa_state_t *ins_cache; /* if non-NULL, points to compiled instructions */
 	enum InsAccess
 	{
 		SHARED,
@@ -48,8 +48,7 @@ public:
 	} ins_access;
 
 	inline RegExp ()
-		: size (0)
-		, ins_cache (NULL)
+		: ins_cache (NULL)
 		, ins_access (SHARED)
 	{
 		vFreeList.insert (this);
@@ -59,9 +58,9 @@ public:
 		vFreeList.erase (this);
 	}
 	virtual void split (std::set<uint32_t> &) = 0;
-	virtual void calcSize (const charset_t &) = 0;
+	virtual uint32_t calc_size() const = 0;
 	virtual uint32_t fixedLength ();
-	virtual uint32_t compile (const charset_t &, Ins *) = 0;
+	virtual nfa_state_t *compile(nfa_t &nfa, nfa_state_t *n) = 0;
 	virtual void decompile () = 0;
 	virtual void display (std::ostream &) const = 0;
 	friend std::ostream & operator << (std::ostream & o, const RegExp & re);

@@ -20,7 +20,6 @@ private:
 
 public:
 	RegExp * ctx;
-	Ins * ins;
 	rule_rank_t rank;
 	const Code * code;
 	const std::string newcond;
@@ -37,7 +36,6 @@ public:
 		: loc (l)
 		, exp (r1)
 		, ctx (r2)
-		, ins (NULL)
 		, rank (r)
 		, code (c)
 		, newcond (cond ? *cond : "")
@@ -46,8 +44,8 @@ public:
 	}
 	void display (std::ostream & o) const;
 	void split (std::set<uint32_t> &);
-	void calcSize (const charset_t &);
-	uint32_t compile (const charset_t &, Ins *);
+	uint32_t calc_size() const;
+	nfa_state_t *compile(nfa_t &nfa, nfa_state_t *n);
 	void decompile ();
 
 	FORBID_COPY (RuleOp);

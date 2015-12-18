@@ -19,6 +19,8 @@ class label_t;
 struct Output;
 struct OutputFile;
 union Ins;
+struct nfa_t;
+struct nfa_state_t;
 
 class DFA
 {
@@ -36,7 +38,6 @@ public:
 	State * head;
 	State ** tail;
 	State * toDo;
-	const Ins * free_ins;
 
 	// statistics
 	uint32_t max_fill;
@@ -48,19 +49,18 @@ public:
 	DFA
 		( const std::string &
 		, uint32_t
-		, Ins *
-		, uint32_t
 		, uint32_t
 		, uint32_t
 		, const charset_t &
-		, rules_t
+		, rules_t &
+		, nfa_t &
 		);
 	~DFA ();
 	void emit (Output &, uint32_t &, bool, bool &);
 
 private:
 	void addState (State **, State *);
-	State * findState (Ins **, Ins **);
+	State * findState (nfa_state_t **, nfa_state_t **);
 	void reorder();
 	void split (State *);
 	void findSCCs ();
