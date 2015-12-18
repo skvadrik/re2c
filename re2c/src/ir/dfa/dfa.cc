@@ -17,22 +17,43 @@
 namespace re2c
 {
 
+/*
+ * note [comapring DFA states]
+ *
+ * DFA state is a set of NFA states.
+ * However, DFA state includes not all NFA states that are in
+ * epsilon-closure (NFA states that have only epsilon-transitions
+ * and are not context of final states are be omitted).
+ * The included states are called 'kernel' states.
+ *
+ * We use marks in closure construction algorithm to avoid loops
+ * and to ensure that each kernel state is visited once.
+ *
+ * However, we use marks to compare two DFA states later,
+ * so kernel states must be left marked after closure construction.
+ * They will be unmarked after comparing DFA states.
+ *
+ * All other (non-kernel) states must be left unmarked after
+ * closure construction.
+ */
 static nfa_state_t **closure(nfa_state_t **cP, nfa_state_t *n)
 {
 	if (!n->mark)
 	{
 		n->mark = true;
-		*(cP++) = n;
 		switch (n->type)
 		{
 			case nfa_state_t::ALT:
 				cP = closure(cP, n->value.alt.out2);
 				cP = closure(cP, n->value.alt.out1);
+				n->mark = false;
 				break;
 			case nfa_state_t::CTX:
+				*(cP++) = n;
 				cP = closure(cP, n->value.ctx.out);
 				break;
 			default:
+				*(cP++) = n;
 				break;
 		}
 	}
@@ -271,23 +292,7 @@ void DFA::addState(State **a, State *s)
 
 State *DFA::findState(nfa_state_t **kernel, nfa_state_t ** kernel_end)
 {
-	uint32_t kCount = 0;
-	for (nfa_state_t ** pn = kernel; pn < kernel_end; ++pn)
-	{
-		nfa_state_t *n = *pn;
-		switch (n->type)
-		{
-//			case nfa_state_t::CHR:
-			case nfa_state_t::RAN:
-			case nfa_state_t::CTX:
-			case nfa_state_t::FIN:
-				kernel[kCount++] = n;
-				break;
-			default:
-				n->mark = false;
-				break;
-		}
-	}
+	const uint32_t kCount = static_cast<uint32_t>(kernel_end - kernel);
 
 	State * s;
 	for (s = head; s; s = s->next)
@@ -317,6 +322,7 @@ State *DFA::findState(nfa_state_t **kernel, nfa_state_t ** kernel_end)
 		toDo = s;
 	}
 
+	// see note [comapring DFA states]
 	for (uint32_t i = 0; i < kCount; ++i)
 	{
 		kernel[i]->mark = false;
