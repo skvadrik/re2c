@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <assert.h>
 #include <ostream>
 #include <set>
@@ -18,23 +19,27 @@ namespace re2c
 {
 
 /*
- * note [comapring DFA states]
+ * note [marking DFA states]
  *
  * DFA state is a set of NFA states.
  * However, DFA state includes not all NFA states that are in
  * epsilon-closure (NFA states that have only epsilon-transitions
- * and are not context of final states are be omitted).
+ * and are not context of final states are omitted).
  * The included states are called 'kernel' states.
  *
- * We use marks in closure construction algorithm to avoid loops
- * and to ensure that each kernel state is visited once.
+ * We mark visited NFA states during closure construction.
+ * These marks serve two purposes:
+ *   - avoid loops in NFA
+ *   - avoid duplication of NFA states in kernel
  *
- * However, we use marks to compare two DFA states later,
- * so kernel states must be left marked after closure construction.
- * They will be unmarked after comparing DFA states.
- *
- * All other (non-kernel) states must be left unmarked after
- * closure construction.
+ * Note that after closure construction:
+ *   - all non-kernel states must be unmarked (these states are
+ *     not stored in kernel and it is impossible to unmark them
+ *     afterwards)
+ *   - all kernel states must be marked (because we may later
+ *     extend this kernel with epsilon-closure of another NFA
+ *     state). Kernel states are unmarked later (before finding
+ *     or adding DFA state).
  */
 static nfa_state_t **closure(nfa_state_t **cP, nfa_state_t *n)
 {
@@ -81,6 +86,7 @@ DFA::DFA
 	, head(NULL)
 	, tail(&head)
 	, toDo(NULL)
+	, kernels()
 
 	// statistics
 	, max_fill (0)
@@ -294,40 +300,50 @@ State *DFA::findState(nfa_state_t **kernel, nfa_state_t ** kernel_end)
 {
 	const uint32_t kCount = static_cast<uint32_t>(kernel_end - kernel);
 
-	State * s;
-	for (s = head; s; s = s->next)
-	{
-		if (s->kCount == kCount)
-		{
-			bool marked = true;
-			for (uint32_t i = 0; marked && i < s->kCount; ++i)
-			{
-				marked = s->kernel[i]->mark;
-			}
-			if (marked)
-			{
-				break;
-			}
-		}
-	}
-
-	if (!s)
-	{
-		s = new State;
-		addState(tail, s);
-		s->kCount = kCount;
-		s->kernel = new nfa_state_t* [kCount];
-		memcpy(s->kernel, kernel, kCount * sizeof(nfa_state_t*));
-		s->link = toDo;
-		toDo = s;
-	}
-
-	// see note [comapring DFA states]
+	// see note [marking DFA states]
 	for (uint32_t i = 0; i < kCount; ++i)
 	{
 		kernel[i]->mark = false;
 	}
 
+	// sort kernel states: we need this to get stable hash
+	// and to compare states with simple 'memcmp'
+	std::sort(kernel, kernel_end);
+
+	// get hash of the new DFA state
+	uintptr_t hash = kCount; // seed
+	for (uint32_t i = 0; i < kCount; ++i)
+	{
+		hash = hash ^ ((hash << 5) + (hash >> 2) + (uintptr_t)kernel[i]);
+	}
+
+	// try to find an existing DFA state identical to the new state
+	std::map<uintptr_t, std::list<State*> >::const_iterator i = kernels.find(hash);
+	if (i != kernels.end())
+	{
+		std::list<State*>::const_iterator
+			j = i->second.begin(),
+			e = i->second.end();
+		for (; j != e; ++j)
+		{
+			State *s = *j;
+			if (s->kCount == kCount
+				&& memcmp(s->kernel, kernel, kCount * sizeof(nfa_state_t*)) == 0)
+			{
+				return s;
+			}
+		}
+	}
+
+	// no identical DFA state was found; add new state
+	State *s = new State;
+	addState(tail, s);
+	kernels[hash].push_back(s);
+	s->kCount = kCount;
+	s->kernel = new nfa_state_t* [kCount];
+	memcpy(s->kernel, kernel, kCount * sizeof(nfa_state_t*));
+	s->link = toDo;
+	toDo = s;
 	return s;
 }
 

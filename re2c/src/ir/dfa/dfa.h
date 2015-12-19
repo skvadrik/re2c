@@ -2,6 +2,7 @@
 #define _RE2C_IR_DFA_DFA_
 
 #include "src/util/c99_stdint.h"
+#include <list>
 #include <set>
 #include <string>
 
@@ -38,6 +39,7 @@ public:
 	State * head;
 	State ** tail;
 	State * toDo;
+	std::map<uintptr_t, std::list<State*> > kernels;
 
 	// statistics
 	uint32_t max_fill;
