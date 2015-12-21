@@ -89,7 +89,7 @@ void usage ()
 	"-g     --computed-gotos Implies -b. Generate computed goto code (only useable\n"
 	"                        with gcc).\n"
 	"\n"
-	"-i     --no-debug-info  Do not generate '#line' info (usefull for versioning).\n"
+	"-i     --no-debug-info  Do not generate '#line' info (useful for versioning).\n"
 	"\n"
 	"-o of  --output=of      Specify the output file (of) instead of stdout\n"
 	"\n"
