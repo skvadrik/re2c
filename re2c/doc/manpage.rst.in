@@ -532,7 +532,7 @@ INPLACE CONFIGURATIONS
     body.
 
 ``re2c:define:YYFILL@len = "@@";``
-    Any occurence of this text
+    Any occurrence of this text
     inside of ``YYFILL`` will be replaced with the actual argument.
 
 ``re2c:yyfill:parameter = 1;``
@@ -639,7 +639,7 @@ INPLACE CONFIGURATIONS
     ``YYSETCONDITION`` body.
 
 ``re2c:define:YYSETCONDITION@cond = "@@";``
-    Any occurence of this
+    Any occurrence of this
     text inside of ``YYSETCONDITION`` will be replaced with the actual
     argument.
 
@@ -670,7 +670,7 @@ INPLACE CONFIGURATIONS
     ``YYSETSTATE`` body.
 
 ``re2c:define:YYSETSTATE@state = "@@";``
-    Any occurence of this text
+    Any occurrence of this text
     inside of ``YYSETSTATE`` will be replaced with the actual argument.
 
 ``re2c:define:YYSETSTATE:naked = 0;``
@@ -739,10 +739,10 @@ REGULAR EXPRESSIONS
    which can be expressed as character classes.
 
 ``r*``
-    zero or more occurences of ``r``.
+    zero or more occurrences of ``r``.
 
 ``r+``
-    one or more occurences of ``r``.
+    one or more occurrences of ``r``.
 
 ``r?``
     optional ``r``.
