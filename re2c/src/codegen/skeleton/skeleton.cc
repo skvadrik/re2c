@@ -6,7 +6,6 @@
 #include "src/codegen/skeleton/skeleton.h"
 #include "src/conf/msg.h"
 #include "src/ir/dfa/dfa.h"
-#include "src/ir/dfa/state.h"
 #include "src/ir/regexp/regexp.h"
 #include "src/ir/regexp/regexp_rule.h"
 
@@ -24,42 +23,39 @@ Node::Node ()
 	, suffix (NULL)
 {}
 
-void Node::init (const State * s, const s2n_map & s2n)
+void Node::init(bool c, RuleOp *r, const std::vector<std::pair<Node*, uint32_t> > &a)
 {
-	const bool is_accepting = s && s->rule;
-	if (is_accepting)
+	if (r)
 	{
-		rule.rank = s->rule->rank;
-		rule.restorectx = s->rule->ctx->fixedLength () != 0;
+		rule.rank = r->rank;
+		rule.restorectx = r->ctx->fixedLength () != 0;
 	}
 
-	ctx = s && s->isPreCtxt;
+	ctx = c;
 
-	const bool is_final = !s || (s->go.nSpans == 1 && !s->go.span[0].to);
-	if (!is_final)
+	uint32_t lb = 0;
+	std::vector<std::pair<Node*, uint32_t> >::const_iterator
+		i = a.begin(),
+		e = a.end();
+	for (; i != e; ++i)
 	{
-		uint32_t lb = 0;
-		for (uint32_t i = 0; i < s->go.nSpans; ++i)
+		Node *n = i->first;
+		const uint32_t ub = i->second - 1;
+
+		// pick at most 0x100 unique edges from this range
+		// (for 1-byte code units this covers the whole range: [0 - 0xFF])
+		//   - range bounds must be included
+		//   - values should be evenly distributed
+		//   - values should be deterministic
+		const uint32_t step = 1 + (ub - lb) / 0x100;
+		for (uint32_t c = lb; c < ub; c += step)
 		{
-			const Span & span = s->go.span[i];
-			Node * n = s2n.find (span.to)->second;
-			const uint32_t ub = span.ub - 1;
-
-			// pick at most 0x100 unique edges from this range
-			// (for 1-byte code units this covers the whole range: [0 - 0xFF])
-			//   - range bounds must be included
-			//   - values should be evenly distributed
-			//   - values should be deterministic
-			const uint32_t step = 1 + (ub - lb) / 0x100;
-			for (uint32_t c = lb; c < ub; c += step)
-			{
-				arcs[n].push_back (c);
-			}
-			arcs[n].push_back (ub);
-
-			arcsets[n].push_back (std::make_pair (lb, ub));
-			lb = span.ub;
+			arcs[n].push_back (c);
 		}
+		arcs[n].push_back (ub);
+
+		arcsets[n].push_back (std::make_pair (lb, ub));
+		lb = ub + 1;
 	}
 }
 
@@ -73,34 +69,44 @@ bool Node::end () const
 	return arcs.size () == 0;
 }
 
-Skeleton::Skeleton (const DFA & dfa, const rules_t & rs)
+Skeleton::Skeleton
+	( const dfa_t &dfa
+	, const charset_t &cs
+	, const rules_t &rs
+	, const std::string &dfa_name
+	, const std::string &dfa_cond
+	, uint32_t dfa_line
+	)
 	// +1 for default DFA state (NULL)
-	: name (dfa.name)
-	, cond (dfa.cond)
-	, line (dfa.line)
-	, nodes_count (dfa.nStates + 1) // +1 for default state
+	: name (dfa_name)
+	, cond (dfa_cond)
+	, line (dfa_line)
+	, nodes_count (dfa.states.size() + 1) // +1 for default state
 	, nodes (new Node [nodes_count])
 	, sizeof_key (4)
 	, rules (rs)
 {
-	Node * n;
-
-	// map DFA states to skeleton nodes
-	Node::s2n_map s2n;
-	n = nodes;
-	for (State * s = dfa.head; s; s = s->next, ++n)
-	{
-		s2n[s] = n;
-	}
-	s2n[NULL] = n;
+	const size_t nc = cs.size() - 1;
 
 	// initialize skeleton nodes
-	n = nodes;
-	for (State * s = dfa.head; s; s = s->next, ++n)
+	for (size_t i = 0; i < nodes_count - 1; ++i)
 	{
-		n->init (s, s2n);
+		dfa_state_t *s = dfa.states[i];
+		std::vector<std::pair<Node*, uint32_t> > a;
+		for (size_t c = 0; c < nc;)
+		{
+			const size_t j = s->arcs[c];
+			for (;++c < nc && s->arcs[c] == j;);
+			a.push_back(std::make_pair(j == ~0u ? &nodes[nodes_count - 1] : &nodes[j], cs[c]));
+		}
+		if (a.size() == 1 && a[0].first == &nodes[nodes_count - 1])
+		{
+			a.clear();
+		}
+		nodes[i].init(s->ctx, s->rule, a);
 	}
-	n->init (NULL, s2n);
+	// last node (the one corresponding to default state)
+	// needs not to be initialized after construction
 
 	// calculate maximal path length, check overflow
 	nodes->calc_dist ();

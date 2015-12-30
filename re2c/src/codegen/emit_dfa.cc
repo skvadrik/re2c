@@ -14,9 +14,8 @@
 #include "src/codegen/skeleton/skeleton.h"
 #include "src/conf/opt.h"
 #include "src/globals.h"
-#include "src/ir/dfa/action.h"
-#include "src/ir/dfa/dfa.h"
-#include "src/ir/dfa/state.h"
+#include "src/ir/adfa/action.h"
+#include "src/ir/adfa/adfa.h"
 #include "src/util/counter.h"
 
 namespace re2c

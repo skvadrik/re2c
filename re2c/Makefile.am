@@ -25,9 +25,9 @@ SRC_HDR = \
 	src/conf/opt.h \
 	src/conf/warn.h \
 	src/ir/bytecode/nfa.h \
-	src/ir/dfa/state.h \
+	src/ir/adfa/action.h \
+	src/ir/adfa/adfa.h \
 	src/ir/dfa/dfa.h \
-	src/ir/dfa/action.h \
 	src/ir/regexp/encoding/case.h \
 	src/ir/regexp/encoding/enc.h \
 	src/ir/regexp/encoding/range_suffix.h \
@@ -98,6 +98,7 @@ SRC = \
 	src/ir/nfa/calc_size.cc \
 	src/ir/nfa/nfa.cc \
 	src/ir/nfa/split.cc \
+	src/ir/adfa/adfa.cc \
 	src/ir/dfa/dfa.cc \
 	src/ir/regexp/display.cc \
 	src/ir/regexp/encoding/enc.cc \

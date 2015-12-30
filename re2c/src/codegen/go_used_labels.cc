@@ -5,7 +5,7 @@
 
 #include "src/codegen/go.h"
 #include "src/codegen/label.h"
-#include "src/ir/dfa/state.h"
+#include "src/ir/adfa/adfa.h"
 
 namespace re2c
 {

@@ -1,5 +1,5 @@
-#ifndef _RE2C_IR_DFA_ACTION_
-#define _RE2C_IR_DFA_ACTION_
+#ifndef _RE2C_IR_ADFA_ACTION_
+#define _RE2C_IR_ADFA_ACTION_
 
 #include <vector>
 
@@ -106,4 +106,4 @@ private:
 
 } // namespace re2c
 
-#endif // _RE2C_IR_DFA_ACTION_
+#endif // _RE2C_IR_ADFA_ACTION_

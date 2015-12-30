@@ -2,11 +2,8 @@
 #define _RE2C_IR_DFA_DFA_
 
 #include "src/util/c99_stdint.h"
-#include <list>
-#include <set>
-#include <string>
+#include <vector>
 
-#include "src/ir/dfa/action.h"
 #include "src/ir/regexp/regexp.h"
 #include "src/parse/rules.h"
 #include "src/util/forbid_copy.h"
@@ -14,65 +11,41 @@
 namespace re2c
 {
 
-struct Skeleton;
-class State;
-class label_t;
-struct Output;
-struct OutputFile;
-union Ins;
-struct nfa_t;
 struct nfa_state_t;
+struct nfa_t;
+class RuleOp;
 
-class DFA
+struct dfa_state_t
 {
-	accept_t accepts;
-	Skeleton * skeleton;
+	size_t kCount;
+	nfa_state_t **kernel;
+	size_t *arcs;
+	RuleOp *rule;
+	bool ctx;
 
-public:
-	std::string name;
-	const std::string cond;
-	const uint32_t line;
+	dfa_state_t()
+		: kCount(0)
+		, kernel(NULL)
+		, arcs(NULL)
+		, rule(NULL)
+		, ctx(false)
+	{}
+	~dfa_state_t()
+	{
+		delete[] kernel;
+		delete[] arcs;
+	}
 
-	uint32_t lbChar;
-	uint32_t ubChar;
-	uint32_t nStates;
-	State * head;
-	State ** tail;
-	State * toDo;
-	std::map<uintptr_t, std::list<State*> > kernels;
+	FORBID_COPY(dfa_state_t);
+};
 
-	// statistics
-	uint32_t max_fill;
-	bool need_backup;
-	bool need_backupctx;
-	bool need_accept;
+struct dfa_t
+{
+	std::vector<dfa_state_t*> states;
+	const size_t nchars;
 
-public:
-	DFA
-		( const std::string &
-		, uint32_t
-		, uint32_t
-		, uint32_t
-		, const charset_t &
-		, rules_t &
-		, nfa_t &
-		);
-	~DFA ();
-	void emit (Output &, uint32_t &, bool, bool &);
-
-private:
-	void addState (State **, State *);
-	State * findState (nfa_state_t **, nfa_state_t **);
-	void reorder();
-	void split (State *);
-	void findSCCs ();
-	void findBaseState ();
-	void calc_stats ();
-	void prepare ();
-	void count_used_labels (std::set<label_t> & used, label_t prolog, label_t start, bool force_start) const;
-	void emit_body (OutputFile &, uint32_t &, const std::set<label_t> & used_labels, label_t initial) const;
-
-	FORBID_COPY (DFA);
+	dfa_t(const nfa_t &nfa, const charset_t &charset, rules_t &rules);
+	~dfa_t();
 };
 
 } // namespace re2c

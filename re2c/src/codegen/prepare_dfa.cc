@@ -7,9 +7,8 @@
 #include "src/codegen/scc.h"
 #include "src/conf/opt.h"
 #include "src/globals.h"
-#include "src/ir/dfa/action.h"
-#include "src/ir/dfa/dfa.h"
-#include "src/ir/dfa/state.h"
+#include "src/ir/adfa/action.h"
+#include "src/ir/adfa/adfa.h"
 #include "src/ir/regexp/regexp_rule.h"
 #include "src/ir/rule_rank.h"
 #include "src/util/allocate.h"
@@ -41,7 +40,7 @@ void DFA::findSCCs()
 void DFA::split(State *s)
 {
 	State *move = new State;
-	addState(&s->next, move);
+	addState(move, s);
 	move->action.set_move ();
 	move->link = s->link;
 	move->rule = s->rule;
@@ -180,7 +179,7 @@ void DFA::prepare ()
 				State *n = new State;
 				n->action.set_rule (s->rule);
 				rules[s->rule->rank] = n;
-				addState(&s->next, n);
+				addState(n, s);
 			}
 			for (uint32_t i = 0; i < s->go.nSpans; ++i)
 			{
@@ -203,7 +202,7 @@ void DFA::prepare ()
 				if (!default_state)
 				{
 					default_state = new State;
-					addState(&s->next, default_state);
+					addState(default_state, s);
 				}
 				s->go.span[i].to = default_state;
 			}

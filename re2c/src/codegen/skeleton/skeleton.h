@@ -12,6 +12,7 @@
 
 #include "src/codegen/skeleton/path.h"
 #include "src/codegen/skeleton/way.h"
+#include "src/ir/regexp/regexp.h"
 #include "src/ir/rule_rank.h"
 #include "src/parse/rules.h"
 #include "src/util/local_increment.h"
@@ -21,9 +22,9 @@
 namespace re2c
 {
 
-class DFA;
-class State;
+struct dfa_t;
 struct OutputFile;
+class RuleOp;
 
 struct Node
 {
@@ -60,7 +61,6 @@ struct Node
 	// We don't need all paths anyway, just some examples.
 	typedef u32lim_t<1024> nakeds_t; // ~1Kb
 
-	typedef std::map<const State *, Node *> s2n_map;
 	typedef std::map<Node *, path_t::arc_t> arcs_t;
 	typedef std::map<Node *, way_arc_t> arcsets_t;
 	typedef local_increment_t<uint8_t> local_inc;
@@ -91,7 +91,7 @@ struct Node
 	path_t * suffix;
 
 	Node ();
-	void init (const State * s, const s2n_map & s2n);
+	void init(bool b, RuleOp *r, const std::vector<std::pair<Node*, uint32_t> > &arcs);
 	~Node ();
 	bool end () const;
 	void calc_dist ();
@@ -105,16 +105,23 @@ struct Node
 
 struct Skeleton
 {
-	const std::string & name;
-	const std::string & cond;
+	const std::string name;
+	const std::string cond;
 	const uint32_t line;
 
-	const uint32_t nodes_count;
+	const size_t nodes_count;
 	Node * nodes;
 	size_t sizeof_key;
 	rules_t rules;
 
-	Skeleton (const DFA & dfa, const rules_t & rs);
+	Skeleton
+		( const dfa_t &dfa
+		, const charset_t &cs
+		, const rules_t & rs
+		, const std::string &dfa_name
+		, const std::string &dfa_cond
+		, uint32_t dfa_line
+		);
 	~Skeleton ();
 	void warn_undefined_control_flow ();
 	void warn_unreachable_rules ();

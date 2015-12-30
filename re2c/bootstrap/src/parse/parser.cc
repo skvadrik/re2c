@@ -85,7 +85,7 @@
 #include "src/conf/opt.h"
 #include "src/globals.h"
 #include "src/ir/compile.h"
-#include "src/ir/dfa/dfa.h"
+#include "src/ir/adfa/adfa.h"
 #include "src/ir/regexp/encoding/enc.h"
 #include "src/ir/regexp/encoding/range_suffix.h"
 #include "src/ir/regexp/regexp.h"

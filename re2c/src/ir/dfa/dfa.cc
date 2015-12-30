@@ -1,18 +1,14 @@
 #include <algorithm>
 #include <assert.h>
-#include <ostream>
+#include <list>
 #include <set>
 #include <string.h>
 #include <queue>
 
-#include "src/codegen/go.h"
-#include "src/codegen/skeleton/skeleton.h"
 #include "src/ir/dfa/dfa.h"
 #include "src/ir/nfa/nfa.h"
-#include "src/ir/dfa/state.h"
 #include "src/ir/regexp/regexp_rule.h"
 #include "src/ir/rule_rank.h"
-#include "src/util/allocate.h"
 #include "src/util/range.h"
 
 namespace re2c
@@ -66,79 +62,93 @@ static nfa_state_t **closure(nfa_state_t **cP, nfa_state_t *n)
 	return cP;
 }
 
-DFA::DFA
-	( const std::string & c
-	, uint32_t l
-	, uint32_t lb
-	, uint32_t ub
-	, const charset_t & cs
-	, rules_t & rules
-	, nfa_t & nfa
+static size_t findState
+	( nfa_state_t **kernel
+	, nfa_state_t **kernel_end
+	, std::vector<dfa_state_t*> &states
+	, std::map<uintptr_t, std::list<size_t> > &kernels
 	)
-	: accepts ()
-	, skeleton (NULL)
-	, name ()
-	, cond (c)
-	, line (l)
-	, lbChar(lb)
-	, ubChar(ub)
-	, nStates(0)
-	, head(NULL)
-	, tail(&head)
-	, toDo(NULL)
-	, kernels()
-
-	// statistics
-	, max_fill (0)
-	, need_backup (false)
-	, need_backupctx (false)
-	, need_accept (false)
 {
-	std::ostringstream s;
-	s << "line" << line;
-	name = s.str ();
-	if (!cond.empty ())
+	const size_t kCount = static_cast<size_t>(kernel_end - kernel);
+
+	// see note [marking DFA states]
+	for (size_t i = 0; i < kCount; ++i)
 	{
-		name += "_";
-		name += cond;
+		kernel[i]->mark = false;
 	}
 
-	const size_t nc = cs.size() - 1; // (n + 1) bounds for n ranges
+	// sort kernel states: we need this to get stable hash
+	// and to compare states with simple 'memcmp'
+	std::sort(kernel, kernel_end);
 
-	nfa_state_t **work = new nfa_state_t* [nfa.size];
-	findState(work, closure(work, nfa.root));
-
-	std::vector<nfa_state_t*> *go = new std::vector<nfa_state_t*>[nc];
-	Span *span = allocate<Span> (nc);
-
-	while (toDo)
+	// get hash of the new DFA state
+	uintptr_t hash = kCount; // seed
+	for (size_t i = 0; i < kCount; ++i)
 	{
-		State *s = toDo;
-		toDo = s->link;
+		hash = hash ^ ((hash << 5) + (hash >> 2) + (uintptr_t)kernel[i]);
+	}
 
-		for(uint32_t i = 0; i < nc; ++i)
+	// try to find an existing DFA state identical to the new state
+	std::map<uintptr_t, std::list<size_t> >::const_iterator i = kernels.find(hash);
+	if (i != kernels.end())
+	{
+		std::list<size_t>::const_iterator
+			j = i->second.begin(),
+			e = i->second.end();
+		for (; j != e; ++j)
+		{
+			const size_t k = *j;
+			if (states[k]->kCount == kCount
+				&& memcmp(states[k]->kernel, kernel, kCount * sizeof(nfa_state_t*)) == 0)
+			{
+				return k;
+			}
+		}
+	}
+
+	// no identical DFA state was found; add new state
+	dfa_state_t *s = new dfa_state_t;
+	s->kCount = kCount;
+	s->kernel = new nfa_state_t* [kCount];
+	memcpy(s->kernel, kernel, kCount * sizeof(nfa_state_t*));
+	const size_t k = states.size();
+	states.push_back(s);
+	kernels[hash].push_back(k);
+	return k;
+}
+
+dfa_t::dfa_t(const nfa_t &nfa, const charset_t &charset, rules_t &rules)
+	: states()
+	, nchars(charset.size() - 1) // (n + 1) bounds for n ranges
+{
+	std::map<uintptr_t, std::list<size_t> > kernels;
+	nfa_state_t **work = new nfa_state_t* [nfa.size];
+	std::vector<nfa_state_t*> *go = new std::vector<nfa_state_t*>[nchars];
+
+	findState(work, closure(work, nfa.root), states, kernels);
+	for (size_t k = 0; k < states.size(); ++k)
+	{
+		dfa_state_t *s = states[k];
+
+		for(size_t i = 0; i < nchars; ++i)
 		{
 			go[i].clear();
 		}
-		memset(span, 0, sizeof(Span)*nc);
 
 		s->rule = NULL;
-		for (uint32_t k = 0; k < s->kCount; ++k)
+		for (size_t k = 0; k < s->kCount; ++k)
 		{
 			nfa_state_t *n = s->kernel[k];
 			switch (n->type)
 			{
-//				case nfa_state_t::CHR:
-//					go[n->value.chr.chr].push_back(n->value.chr.out);
-//					break;
 				case nfa_state_t::RAN:
 				{
 					nfa_state_t *n2 = n->value.ran.out;
-					uint32_t j = 0;
+					size_t j = 0;
 					for (Range *r = n->value.ran.ran; r; r = r->next ())
 					{
-						for (; cs[j] != r->lower(); ++j);
-						for (; cs[j] != r->upper(); ++j)
+						for (; charset[j] != r->lower(); ++j);
+						for (; charset[j] != r->upper(); ++j)
 						{
 							go[j].push_back(n2);
 						}
@@ -146,7 +156,7 @@ DFA::DFA
 					break;
 				}
 				case nfa_state_t::CTX:
-					s->isPreCtxt = true;
+					s->ctx = true;
 					break;
 				case nfa_state_t::FIN:
 				{
@@ -176,7 +186,8 @@ DFA::DFA
 			}
 		}
 
-		for(uint32_t i = 0; i < nc; ++i)
+		s->arcs = new size_t[nchars];
+		for(size_t i = 0; i < nchars; ++i)
 		{
 			if(!go[i].empty())
 			{
@@ -185,176 +196,39 @@ DFA::DFA
 				{
 					cP = closure(cP, *j);
 				}
-				span[i].to = findState(work, cP);
+				s->arcs[i] = findState(work, cP, states, kernels);
+			}
+			else
+			{
+				s->arcs[i] = ~0u;
 			}
 		}
-
-		s->go.nSpans = 0;
-		for (uint32_t j = 0; j < nc;)
-		{
-			State *to = span[j].to;
-			while (++j < nc && span[j].to == to) ;
-			span[s->go.nSpans].ub = cs[j];
-			span[s->go.nSpans].to = to;
-			s->go.nSpans++;
-		}
-		s->go.span = allocate<Span> (s->go.nSpans);
-		memcpy((char*) s->go.span, (char*) span, s->go.nSpans*sizeof(Span));
 	}
-
 	delete [] work;
 	delete [] go;
-	operator delete (span);
 
-	/*
-	 * note [reordering DFA states]
-	 *
-	 * re2c-generated code depends on the order of states in DFA: simply
-	 * flipping two states may change the output significantly.
-	 * The order of states is affected by many factors, e.g.:
-	 *   - flipping left and right subtrees of alternative when constructing
-	 *     AST (also applies to iteration and counted repetition)
-	 *   - changing the order in which graph nodes are visited (applies to
-	 *     any intermediate representation: bytecode, NFA, DFA, etc.)
-	 *
-	 * To make the resulting code independent of such changes, we hereby
-	 * reorder DFA states. The ordering scheme is very simple:
-	 *
-	 * Starting with DFA root, walk DFA nodes in breadth-first order.
-	 * Child nodes are ordered accoding to the (alphabetically) first symbol
-	 * leading to each node. Each node must be visited exactly once.
-	 * Default state (NULL) is always the last state.
-	 */
-	reorder();
-
-	// skeleton must be constructed after DFA construction
-	// but prior to any other DFA transformations
-	skeleton = new Skeleton (*this, rules);
-
-	// skeleton is constructed, do further DFA transformations
-	prepare ();
-
-	// finally gather overall DFA statistics
-	calc_stats ();
-}
-
-void DFA::reorder()
-{
-	std::vector<State*> ord;
-	ord.reserve(nStates);
-
-	std::queue<State*> todo;
-	todo.push(head);
-
-	std::set<State*> done;
-	done.insert(head);
-
-	for(;!todo.empty();)
+	const size_t count = states.size();
+	for (size_t i = 0; i < count; ++i)
 	{
-		State *s = todo.front();
-		todo.pop();
-		ord.push_back(s);
-		for(uint32_t i = 0; i < s->go.nSpans; ++i)
+		for (size_t c = 0; c < nchars; ++c)
 		{
-			State *q = s->go.span[i].to;
-			if(q && done.insert(q).second)
+			if (states[i]->arcs[c] == ~0u)
 			{
-				todo.push(q);
+				states[i]->arcs[c] = count;
 			}
 		}
 	}
-
-	assert(nStates == ord.size());
-
-	ord.push_back(NULL);
-	for(uint32_t i = 0; i < nStates; ++i)
-	{
-		ord[i]->next = ord[i + 1];
-	}
 }
 
-DFA::~DFA()
+dfa_t::~dfa_t()
 {
-	State *s;
-
-	while ((s = head))
+	std::vector<dfa_state_t*>::iterator
+		i = states.begin(),
+		e = states.end();
+	for (; i != e; ++i)
 	{
-		head = s->next;
-		delete s;
+		delete *i;
 	}
-
-	delete skeleton;
-}
-
-void DFA::addState(State **a, State *s)
-{
-	++nStates;
-	s->next = *a;
-	*a = s;
-
-	if (a == tail)
-		tail = &s->next;
-}
-
-State *DFA::findState(nfa_state_t **kernel, nfa_state_t ** kernel_end)
-{
-	const uint32_t kCount = static_cast<uint32_t>(kernel_end - kernel);
-
-	// see note [marking DFA states]
-	for (uint32_t i = 0; i < kCount; ++i)
-	{
-		kernel[i]->mark = false;
-	}
-
-	// sort kernel states: we need this to get stable hash
-	// and to compare states with simple 'memcmp'
-	std::sort(kernel, kernel_end);
-
-	// get hash of the new DFA state
-	uintptr_t hash = kCount; // seed
-	for (uint32_t i = 0; i < kCount; ++i)
-	{
-		hash = hash ^ ((hash << 5) + (hash >> 2) + (uintptr_t)kernel[i]);
-	}
-
-	// try to find an existing DFA state identical to the new state
-	std::map<uintptr_t, std::list<State*> >::const_iterator i = kernels.find(hash);
-	if (i != kernels.end())
-	{
-		std::list<State*>::const_iterator
-			j = i->second.begin(),
-			e = i->second.end();
-		for (; j != e; ++j)
-		{
-			State *s = *j;
-			if (s->kCount == kCount
-				&& memcmp(s->kernel, kernel, kCount * sizeof(nfa_state_t*)) == 0)
-			{
-				return s;
-			}
-		}
-	}
-
-	// no identical DFA state was found; add new state
-	State *s = new State;
-	addState(tail, s);
-	kernels[hash].push_back(s);
-	s->kCount = kCount;
-	s->kernel = new nfa_state_t* [kCount];
-	memcpy(s->kernel, kernel, kCount * sizeof(nfa_state_t*));
-	s->link = toDo;
-	toDo = s;
-	return s;
-}
-
-std::ostream& operator<<(std::ostream &o, const DFA &dfa)
-{
-	for (State *s = dfa.head; s; s = s->next)
-	{
-		o << s << "\n\n";
-	}
-
-	return o;
 }
 
 } // namespace re2c
