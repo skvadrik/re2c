@@ -81,7 +81,6 @@
 #include <vector>
 
 #include "src/codegen/output.h"
-#include "src/codegen/skeleton/skeleton.h"
 #include "src/conf/opt.h"
 #include "src/globals.h"
 #include "src/ir/compile.h"
@@ -94,6 +93,7 @@
 #include "src/ir/regexp/regexp_null.h"
 #include "src/ir/regexp/regexp_rule.h"
 #include "src/ir/rule_rank.h"
+#include "src/ir/skeleton/skeleton.h"
 #include "src/parse/code.h"
 #include "src/parse/extop.h"
 #include "src/parse/loc.h"

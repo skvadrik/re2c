@@ -17,9 +17,6 @@ SRC_HDR = \
 	src/codegen/label.h \
 	src/codegen/output.h \
 	src/codegen/print.h \
-	src/codegen/skeleton/path.h \
-	src/codegen/skeleton/way.h \
-	src/codegen/skeleton/skeleton.h \
 	src/conf/msg.h \
 	src/conf/opt.h \
 	src/conf/warn.h \
@@ -47,6 +44,9 @@ SRC_HDR = \
 	src/ir/regexp/regexp_close.h \
 	src/ir/compile.h \
 	src/ir/rule_rank.h \
+	src/ir/skeleton/path.h \
+	src/ir/skeleton/way.h \
+	src/ir/skeleton/skeleton.h \
 	src/globals.h \
 	src/parse/code.h \
 	src/parse/extop.h \
@@ -82,14 +82,6 @@ SRC = \
 	src/codegen/input_api.cc \
 	src/codegen/output.cc \
 	src/codegen/print.cc \
-	src/codegen/skeleton/control_flow.cc \
-	src/codegen/skeleton/generate_code.cc \
-	src/codegen/skeleton/generate_data.cc \
-	src/codegen/skeleton/match_empty.cc \
-	src/codegen/skeleton/maxlen.cc \
-	src/codegen/skeleton/skeleton.cc \
-	src/codegen/skeleton/unreachable.cc \
-	src/codegen/skeleton/way.cc \
 	src/conf/msg.cc \
 	src/conf/opt.cc \
 	src/conf/warn.cc \
@@ -114,6 +106,14 @@ SRC = \
 	src/ir/regexp/regexp.cc \
 	src/ir/compile.cc \
 	src/ir/rule_rank.cc \
+	src/ir/skeleton/control_flow.cc \
+	src/ir/skeleton/generate_code.cc \
+	src/ir/skeleton/generate_data.cc \
+	src/ir/skeleton/match_empty.cc \
+	src/ir/skeleton/maxlen.cc \
+	src/ir/skeleton/skeleton.cc \
+	src/ir/skeleton/unreachable.cc \
+	src/ir/skeleton/way.cc \
 	src/main.cc \
 	src/parse/code.cc \
 	src/parse/input.cc \

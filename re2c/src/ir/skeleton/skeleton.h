@@ -1,5 +1,5 @@
-#ifndef _RE2C_CODEGEN_SKELETON_SKELETON_
-#define _RE2C_CODEGEN_SKELETON_SKELETON_
+#ifndef _RE2C_IR_SKELETON_SKELETON_
+#define _RE2C_IR_SKELETON_SKELETON_
 
 #include "src/util/c99_stdint.h"
 #include <stddef.h>
@@ -10,10 +10,10 @@
 #include <string>
 #include <vector>
 
-#include "src/codegen/skeleton/path.h"
-#include "src/codegen/skeleton/way.h"
 #include "src/ir/regexp/regexp.h"
 #include "src/ir/rule_rank.h"
+#include "src/ir/skeleton/path.h"
+#include "src/ir/skeleton/way.h"
 #include "src/parse/rules.h"
 #include "src/util/local_increment.h"
 #include "src/util/forbid_copy.h"
@@ -170,4 +170,4 @@ template<typename key_t> key_t Skeleton::rule2key (rule_rank_t r)
 
 } // namespace re2c
 
-#endif // _RE2C_CODEGEN_SKELETON_SKELETON_
+#endif // _RE2C_IR_SKELETON_SKELETON_

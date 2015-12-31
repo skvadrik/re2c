@@ -5,7 +5,7 @@
 #include <string>
 #include <vector>
 
-#include "src/codegen/skeleton/way.h"
+#include "src/ir/skeleton/way.h"
 #include "src/parse/rules.h"
 
 namespace re2c {

@@ -2,12 +2,12 @@
 #include <ostream>
 
 #include "src/codegen/output.h"
-#include "src/codegen/skeleton/skeleton.h"
 #include "src/ir/compile.h"
 #include "src/ir/adfa/adfa.h"
 #include "src/ir/dfa/dfa.h"
 #include "src/ir/nfa/nfa.h"
 #include "src/ir/regexp/regexp.h"
+#include "src/ir/skeleton/skeleton.h"
 #include "src/parse/spec.h"
 
 namespace re2c {

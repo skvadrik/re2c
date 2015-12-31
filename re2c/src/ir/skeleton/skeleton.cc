@@ -3,11 +3,11 @@
 #include <utility>
 
 #include "src/codegen/go.h"
-#include "src/codegen/skeleton/skeleton.h"
 #include "src/conf/msg.h"
 #include "src/ir/dfa/dfa.h"
 #include "src/ir/regexp/regexp.h"
 #include "src/ir/regexp/regexp_rule.h"
+#include "src/ir/skeleton/skeleton.h"
 
 namespace re2c
 {

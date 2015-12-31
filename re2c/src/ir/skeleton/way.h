@@ -1,5 +1,5 @@
-#ifndef _RE2C_CODEGEN_SKELETON_WAY_
-#define _RE2C_CODEGEN_SKELETON_WAY_
+#ifndef _RE2C_IR_SKELETON_WAY_
+#define _RE2C_IR_SKELETON_WAY_
 
 #include "src/util/c99_stdint.h"
 #include <stdio.h>
@@ -17,4 +17,4 @@ void fprint_way (FILE * f, const way_t & p);
 
 } // namespace re2c
 
-#endif // _RE2C_CODEGEN_SKELETON_WAY_
+#endif // _RE2C_IR_SKELETON_WAY_

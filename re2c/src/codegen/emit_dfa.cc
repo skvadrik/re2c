@@ -11,11 +11,11 @@
 #include "src/codegen/input_api.h"
 #include "src/codegen/label.h"
 #include "src/codegen/output.h"
-#include "src/codegen/skeleton/skeleton.h"
 #include "src/conf/opt.h"
 #include "src/globals.h"
 #include "src/ir/adfa/action.h"
 #include "src/ir/adfa/adfa.h"
+#include "src/ir/skeleton/skeleton.h"
 #include "src/util/counter.h"
 
 namespace re2c

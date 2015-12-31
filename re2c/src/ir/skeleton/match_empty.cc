@@ -1,11 +1,11 @@
 #include <map>
 #include <set>
 
-#include "src/codegen/skeleton/path.h"
-#include "src/codegen/skeleton/skeleton.h"
 #include "src/conf/warn.h"
 #include "src/globals.h"
 #include "src/ir/rule_rank.h"
+#include "src/ir/skeleton/path.h"
+#include "src/ir/skeleton/skeleton.h"
 #include "src/parse/rules.h"
 
 namespace re2c

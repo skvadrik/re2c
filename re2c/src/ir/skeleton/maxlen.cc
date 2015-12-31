@@ -4,7 +4,7 @@
 #include <map>
 #include <utility>
 
-#include "src/codegen/skeleton/skeleton.h"
+#include "src/ir/skeleton/skeleton.h"
 
 namespace re2c
 {

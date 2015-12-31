@@ -1,7 +1,7 @@
 #include <stddef.h>
 #include <algorithm>
 
-#include "src/codegen/skeleton/way.h"
+#include "src/ir/skeleton/way.h"
 
 namespace re2c
 {
