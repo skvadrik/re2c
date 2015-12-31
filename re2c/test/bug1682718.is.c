@@ -13,16 +13,10 @@ yy2:
 yy4:
 		++p;
 		yych = (unsigned char)*p;
-		goto yy7;
-yy5:
-		{return p;}
+		if (yych <= '/') goto yy6;
+		if (yych <= '9') goto yy4;
 yy6:
-		++p;
-		yych = (unsigned char)*p;
-yy7:
-		if (yych <= '/') goto yy5;
-		if (yych <= '9') goto yy6;
-		goto yy5;
+		{return p;}
 	}
 
 }

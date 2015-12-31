@@ -413,21 +413,21 @@ int lex_line247()
         switch (yych) {
         case '\t':
         case ' ':    goto yy33;
-        case '\n':    goto yy35;
-        case '\r':    goto yy37;
-        case '"':    goto yy38;
-        case '\'':    goto yy40;
+        case '\n':    goto yy36;
+        case '\r':    goto yy38;
+        case '"':    goto yy39;
+        case '\'':    goto yy41;
         case '(':
         case ')':
         case ';':
         case '=':
         case '\\':
-        case '|':    goto yy42;
-        case '*':    goto yy44;
+        case '|':    goto yy43;
+        case '*':    goto yy45;
         case '+':
-        case '?':    goto yy46;
-        case '.':    goto yy47;
-        case '/':    goto yy49;
+        case '?':    goto yy47;
+        case '.':    goto yy48;
+        case '/':    goto yy50;
         case 'A':
         case 'B':
         case 'C':
@@ -478,10 +478,10 @@ int lex_line247()
         case 'w':
         case 'x':
         case 'y':
-        case 'z':    goto yy50;
-        case '[':    goto yy52;
-        case 'r':    goto yy54;
-        case '{':    goto yy55;
+        case 'z':    goto yy51;
+        case '[':    goto yy54;
+        case 'r':    goto yy56;
+        case '{':    goto yy57;
         default:    goto yy31;
         }
 yy31:
@@ -491,209 +491,85 @@ yy32:
         continue;
 yy33:
         YYSKIP ();
+        if (YYLESSTHAN (1)) YYFILL(1);
         yych = YYPEEK ();
-        goto yy58;
-yy34:
+        switch (yych) {
+        case '\t':
+        case ' ':    goto yy33;
+        default:    goto yy35;
+        }
+yy35:
         status = action_line247(i, keys, input, token, &cursor, 20);
         continue;
-yy35:
-        YYSKIP ();
 yy36:
+        YYSKIP ();
         status = action_line247(i, keys, input, token, &cursor, 21);
         continue;
-yy37:
+yy38:
         YYSKIP ();
         yych = YYPEEK ();
         switch (yych) {
-        case '\n':    goto yy59;
+        case '\n':    goto yy36;
         default:    goto yy32;
         }
-yy38:
+yy39:
         yyaccept = 0;
         YYSKIP ();
         YYBACKUP ();
         yych = YYPEEK ();
         switch (yych) {
-        case '\n':    goto yy39;
-        default:    goto yy61;
+        case '\n':    goto yy40;
+        default:    goto yy60;
         }
-yy39:
+yy40:
         status = action_line247(i, keys, input, token, &cursor, 5);
         continue;
-yy40:
+yy41:
         yyaccept = 1;
         YYSKIP ();
         YYBACKUP ();
         yych = YYPEEK ();
         switch (yych) {
-        case '\n':    goto yy41;
-        default:    goto yy67;
+        case '\n':    goto yy42;
+        default:    goto yy66;
         }
-yy41:
+yy42:
         status = action_line247(i, keys, input, token, &cursor, 6);
         continue;
-yy42:
-        YYSKIP ();
 yy43:
+        YYSKIP ();
+yy44:
         status = action_line247(i, keys, input, token, &cursor, 10);
         continue;
-yy44:
+yy45:
         YYSKIP ();
         switch ((yych = YYPEEK ())) {
-        case '/':    goto yy71;
-        default:    goto yy45;
+        case '/':    goto yy70;
+        default:    goto yy46;
         }
-yy45:
+yy46:
         status = action_line247(i, keys, input, token, &cursor, 11);
         continue;
-yy46:
+yy47:
         YYSKIP ();
         yych = YYPEEK ();
-        goto yy45;
-yy47:
+        goto yy46;
+yy48:
         YYSKIP ();
         status = action_line247(i, keys, input, token, &cursor, 19);
         continue;
-yy49:
-        YYSKIP ();
-        yych = YYPEEK ();
-        switch (yych) {
-        case '*':    goto yy73;
-        default:    goto yy43;
-        }
 yy50:
         YYSKIP ();
         yych = YYPEEK ();
-        goto yy76;
+        switch (yych) {
+        case '*':    goto yy72;
+        default:    goto yy44;
+        }
 yy51:
-        status = action_line247(i, keys, input, token, &cursor, 18);
-        continue;
+        YYSKIP ();
+        if (YYLESSTHAN (1)) YYFILL(1);
+        yych = YYPEEK ();
 yy52:
-        yyaccept = 2;
-        YYSKIP ();
-        YYBACKUP ();
-        yych = YYPEEK ();
-        switch (yych) {
-        case '\n':    goto yy53;
-        case '^':    goto yy82;
-        default:    goto yy78;
-        }
-yy53:
-        status = action_line247(i, keys, input, token, &cursor, 9);
-        continue;
-yy54:
-        YYSKIP ();
-        yych = YYPEEK ();
-        switch (yych) {
-        case 'e':    goto yy84;
-        default:    goto yy76;
-        }
-yy55:
-        yyaccept = 3;
-        YYSKIP ();
-        YYBACKUP ();
-        yych = YYPEEK ();
-        switch (yych) {
-        case ',':    goto yy85;
-        case '0':    goto yy87;
-        case '1':
-        case '2':
-        case '3':
-        case '4':
-        case '5':
-        case '6':
-        case '7':
-        case '8':
-        case '9':    goto yy88;
-        default:    goto yy56;
-        }
-yy56:
-        status = action_line247(i, keys, input, token, &cursor, 0);
-        continue;
-yy57:
-        YYSKIP ();
-        if (YYLESSTHAN (1)) YYFILL(1);
-        yych = YYPEEK ();
-yy58:
-        switch (yych) {
-        case '\t':
-        case ' ':    goto yy57;
-        default:    goto yy34;
-        }
-yy59:
-        YYSKIP ();
-        yych = YYPEEK ();
-        goto yy36;
-yy60:
-        YYSKIP ();
-        if (YYLESSTHAN (1)) YYFILL(1);
-        yych = YYPEEK ();
-yy61:
-        switch (yych) {
-        case '\n':    goto yy62;
-        case '"':    goto yy63;
-        case '\\':    goto yy65;
-        default:    goto yy60;
-        }
-yy62:
-        YYRESTORE ();
-        switch (yyaccept) {
-        case 0: 	goto yy39;
-        case 1: 	goto yy41;
-        case 2: 	goto yy53;
-        case 3: 	goto yy56;
-        case 4: 	goto yy86;
-        case 5: 	goto yy51;
-        default:	goto yy110;
-        }
-yy63:
-        YYSKIP ();
-        status = action_line247(i, keys, input, token, &cursor, 3);
-        continue;
-yy65:
-        YYSKIP ();
-        if (YYLESSTHAN (1)) YYFILL(1);
-        yych = YYPEEK ();
-        switch (yych) {
-        case '\n':    goto yy62;
-        default:    goto yy60;
-        }
-yy66:
-        YYSKIP ();
-        if (YYLESSTHAN (1)) YYFILL(1);
-        yych = YYPEEK ();
-yy67:
-        switch (yych) {
-        case '\n':    goto yy62;
-        case '\'':    goto yy68;
-        case '\\':    goto yy70;
-        default:    goto yy66;
-        }
-yy68:
-        YYSKIP ();
-        status = action_line247(i, keys, input, token, &cursor, 4);
-        continue;
-yy70:
-        YYSKIP ();
-        if (YYLESSTHAN (1)) YYFILL(1);
-        yych = YYPEEK ();
-        switch (yych) {
-        case '\n':    goto yy62;
-        default:    goto yy66;
-        }
-yy71:
-        YYSKIP ();
-        status = action_line247(i, keys, input, token, &cursor, 2);
-        continue;
-yy73:
-        YYSKIP ();
-        status = action_line247(i, keys, input, token, &cursor, 1);
-        continue;
-yy75:
-        YYSKIP ();
-        if (YYLESSTHAN (1)) YYFILL(1);
-        yych = YYPEEK ();
-yy76:
         switch (yych) {
         case '0':
         case '1':
@@ -756,68 +632,178 @@ yy76:
         case 'w':
         case 'x':
         case 'y':
-        case 'z':    goto yy75;
-        default:    goto yy51;
+        case 'z':    goto yy51;
+        default:    goto yy53;
         }
-yy77:
+yy53:
+        status = action_line247(i, keys, input, token, &cursor, 18);
+        continue;
+yy54:
+        yyaccept = 2;
+        YYSKIP ();
+        YYBACKUP ();
+        yych = YYPEEK ();
+        switch (yych) {
+        case '\n':    goto yy55;
+        case '^':    goto yy79;
+        default:    goto yy75;
+        }
+yy55:
+        status = action_line247(i, keys, input, token, &cursor, 9);
+        continue;
+yy56:
+        YYSKIP ();
+        yych = YYPEEK ();
+        switch (yych) {
+        case 'e':    goto yy81;
+        default:    goto yy52;
+        }
+yy57:
+        yyaccept = 3;
+        YYSKIP ();
+        YYBACKUP ();
+        yych = YYPEEK ();
+        switch (yych) {
+        case ',':    goto yy82;
+        case '0':    goto yy84;
+        case '1':
+        case '2':
+        case '3':
+        case '4':
+        case '5':
+        case '6':
+        case '7':
+        case '8':
+        case '9':    goto yy85;
+        default:    goto yy58;
+        }
+yy58:
+        status = action_line247(i, keys, input, token, &cursor, 0);
+        continue;
+yy59:
         YYSKIP ();
         if (YYLESSTHAN (1)) YYFILL(1);
         yych = YYPEEK ();
-yy78:
+yy60:
         switch (yych) {
-        case '\n':    goto yy62;
-        case '\\':    goto yy79;
-        case ']':    goto yy80;
-        default:    goto yy77;
+        case '\n':    goto yy61;
+        case '"':    goto yy62;
+        case '\\':    goto yy64;
+        default:    goto yy59;
         }
+yy61:
+        YYRESTORE ();
+        switch (yyaccept) {
+        case 0: 	goto yy40;
+        case 1: 	goto yy42;
+        case 2: 	goto yy55;
+        case 3: 	goto yy58;
+        case 4: 	goto yy83;
+        case 5: 	goto yy53;
+        default:	goto yy107;
+        }
+yy62:
+        YYSKIP ();
+        status = action_line247(i, keys, input, token, &cursor, 3);
+        continue;
+yy64:
+        YYSKIP ();
+        if (YYLESSTHAN (1)) YYFILL(1);
+        yych = YYPEEK ();
+        switch (yych) {
+        case '\n':    goto yy61;
+        default:    goto yy59;
+        }
+yy65:
+        YYSKIP ();
+        if (YYLESSTHAN (1)) YYFILL(1);
+        yych = YYPEEK ();
+yy66:
+        switch (yych) {
+        case '\n':    goto yy61;
+        case '\'':    goto yy67;
+        case '\\':    goto yy69;
+        default:    goto yy65;
+        }
+yy67:
+        YYSKIP ();
+        status = action_line247(i, keys, input, token, &cursor, 4);
+        continue;
+yy69:
+        YYSKIP ();
+        if (YYLESSTHAN (1)) YYFILL(1);
+        yych = YYPEEK ();
+        switch (yych) {
+        case '\n':    goto yy61;
+        default:    goto yy65;
+        }
+yy70:
+        YYSKIP ();
+        status = action_line247(i, keys, input, token, &cursor, 2);
+        continue;
+yy72:
+        YYSKIP ();
+        status = action_line247(i, keys, input, token, &cursor, 1);
+        continue;
+yy74:
+        YYSKIP ();
+        if (YYLESSTHAN (1)) YYFILL(1);
+        yych = YYPEEK ();
+yy75:
+        switch (yych) {
+        case '\n':    goto yy61;
+        case '\\':    goto yy76;
+        case ']':    goto yy77;
+        default:    goto yy74;
+        }
+yy76:
+        YYSKIP ();
+        if (YYLESSTHAN (1)) YYFILL(1);
+        yych = YYPEEK ();
+        switch (yych) {
+        case '\n':    goto yy61;
+        default:    goto yy74;
+        }
+yy77:
+        YYSKIP ();
+        status = action_line247(i, keys, input, token, &cursor, 8);
+        continue;
 yy79:
         YYSKIP ();
         if (YYLESSTHAN (1)) YYFILL(1);
         yych = YYPEEK ();
         switch (yych) {
-        case '\n':    goto yy62;
-        default:    goto yy77;
+        case '\n':    goto yy61;
+        case '\\':    goto yy87;
+        case ']':    goto yy88;
+        default:    goto yy79;
         }
-yy80:
+yy81:
         YYSKIP ();
-        status = action_line247(i, keys, input, token, &cursor, 8);
-        continue;
-yy82:
-        YYSKIP ();
-        if (YYLESSTHAN (1)) YYFILL(1);
         yych = YYPEEK ();
         switch (yych) {
-        case '\n':    goto yy62;
-        case '\\':    goto yy90;
-        case ']':    goto yy91;
-        default:    goto yy82;
+        case '2':    goto yy90;
+        default:    goto yy52;
         }
+yy82:
+        YYSKIP ();
+yy83:
+        status = action_line247(i, keys, input, token, &cursor, 16);
+        continue;
 yy84:
         YYSKIP ();
         yych = YYPEEK ();
         switch (yych) {
-        case '2':    goto yy93;
-        default:    goto yy76;
+        case ',':    goto yy91;
+        default:    goto yy86;
         }
 yy85:
         YYSKIP ();
-yy86:
-        status = action_line247(i, keys, input, token, &cursor, 16);
-        continue;
-yy87:
-        YYSKIP ();
-        yych = YYPEEK ();
-        switch (yych) {
-        case ',':    goto yy94;
-        default:    goto yy89;
-        }
-yy88:
-        YYSKIP ();
         if (YYLESSTHAN (2)) YYFILL(2);
         yych = YYPEEK ();
-yy89:
+yy86:
         switch (yych) {
-        case ',':    goto yy97;
+        case ',':    goto yy94;
         case '0':
         case '1':
         case '2':
@@ -827,29 +813,52 @@ yy89:
         case '6':
         case '7':
         case '8':
-        case '9':    goto yy88;
-        case '}':    goto yy95;
-        default:    goto yy62;
+        case '9':    goto yy85;
+        case '}':    goto yy92;
+        default:    goto yy61;
         }
-yy90:
+yy87:
         YYSKIP ();
         if (YYLESSTHAN (1)) YYFILL(1);
         yych = YYPEEK ();
         switch (yych) {
-        case '\n':    goto yy62;
-        default:    goto yy82;
+        case '\n':    goto yy61;
+        default:    goto yy79;
         }
-yy91:
+yy88:
         YYSKIP ();
         status = action_line247(i, keys, input, token, &cursor, 7);
         continue;
-yy93:
+yy90:
         YYSKIP ();
         yych = YYPEEK ();
         switch (yych) {
-        case 'c':    goto yy98;
-        default:    goto yy76;
+        case 'c':    goto yy95;
+        default:    goto yy52;
         }
+yy91:
+        yyaccept = 4;
+        YYSKIP ();
+        YYBACKUP ();
+        yych = YYPEEK ();
+        switch (yych) {
+        case '0':
+        case '1':
+        case '2':
+        case '3':
+        case '4':
+        case '5':
+        case '6':
+        case '7':
+        case '8':
+        case '9':    goto yy96;
+        case '}':    goto yy98;
+        default:    goto yy83;
+        }
+yy92:
+        YYSKIP ();
+        status = action_line247(i, keys, input, token, &cursor, 13);
+        continue;
 yy94:
         yyaccept = 4;
         YYSKIP ();
@@ -865,43 +874,20 @@ yy94:
         case '6':
         case '7':
         case '8':
-        case '9':    goto yy99;
-        case '}':    goto yy101;
-        default:    goto yy86;
+        case '9':    goto yy96;
+        case '}':    goto yy100;
+        default:    goto yy83;
         }
 yy95:
-        YYSKIP ();
-        status = action_line247(i, keys, input, token, &cursor, 13);
-        continue;
-yy97:
-        yyaccept = 4;
-        YYSKIP ();
-        YYBACKUP ();
-        yych = YYPEEK ();
-        switch (yych) {
-        case '0':
-        case '1':
-        case '2':
-        case '3':
-        case '4':
-        case '5':
-        case '6':
-        case '7':
-        case '8':
-        case '9':    goto yy99;
-        case '}':    goto yy103;
-        default:    goto yy86;
-        }
-yy98:
         yyaccept = 5;
         YYSKIP ();
         YYBACKUP ();
         yych = YYPEEK ();
         switch (yych) {
-        case ':':    goto yy105;
-        default:    goto yy76;
+        case ':':    goto yy102;
+        default:    goto yy52;
         }
-yy99:
+yy96:
         YYSKIP ();
         if (YYLESSTHAN (1)) YYFILL(1);
         yych = YYPEEK ();
@@ -915,19 +901,19 @@ yy99:
         case '6':
         case '7':
         case '8':
-        case '9':    goto yy99;
-        case '}':    goto yy106;
-        default:    goto yy62;
+        case '9':    goto yy96;
+        case '}':    goto yy103;
+        default:    goto yy61;
         }
-yy101:
+yy98:
         YYSKIP ();
         status = action_line247(i, keys, input, token, &cursor, 12);
         continue;
-yy103:
+yy100:
         YYSKIP ();
         status = action_line247(i, keys, input, token, &cursor, 15);
         continue;
-yy105:
+yy102:
         YYSKIP ();
         if (YYLESSTHAN (1)) YYFILL(1);
         yych = YYPEEK ();
@@ -983,14 +969,14 @@ yy105:
         case 'w':
         case 'x':
         case 'y':
-        case 'z':    goto yy108;
-        default:    goto yy62;
+        case 'z':    goto yy105;
+        default:    goto yy61;
         }
-yy106:
+yy103:
         YYSKIP ();
         status = action_line247(i, keys, input, token, &cursor, 14);
         continue;
-yy108:
+yy105:
         yyaccept = 6;
         YYSKIP ();
         YYBACKUP ();
@@ -1059,11 +1045,11 @@ yy108:
         case 'w':
         case 'x':
         case 'y':
-        case 'z':    goto yy108;
-        case ':':    goto yy105;
-        default:    goto yy110;
+        case 'z':    goto yy105;
+        case ':':    goto yy102;
+        default:    goto yy107;
         }
-yy110:
+yy107:
         status = action_line247(i, keys, input, token, &cursor, 17);
         continue;
 
@@ -1195,86 +1181,86 @@ int lex_line264()
         if (YYLESSTHAN (2)) YYFILL(2);
         yych = YYPEEK ();
         switch (yych) {
-        case '\n':    goto yy115;
-        case '"':    goto yy117;
-        case '\'':    goto yy118;
-        case '{':    goto yy119;
-        case '}':    goto yy121;
-        default:    goto yy113;
+        case '\n':    goto yy112;
+        case '"':    goto yy114;
+        case '\'':    goto yy115;
+        case '{':    goto yy116;
+        case '}':    goto yy118;
+        default:    goto yy110;
         }
-yy113:
+yy110:
         YYSKIP ();
-yy114:
+yy111:
         status = action_line264(i, keys, input, token, &cursor, 3);
         continue;
-yy115:
+yy112:
         YYSKIP ();
         status = action_line264(i, keys, input, token, &cursor, 2);
         continue;
-yy117:
+yy114:
         YYSKIP ();
         YYBACKUP ();
         yych = YYPEEK ();
         switch (yych) {
-        case '\n':    goto yy114;
-        default:    goto yy124;
+        case '\n':    goto yy111;
+        default:    goto yy121;
         }
-yy118:
+yy115:
         YYSKIP ();
         YYBACKUP ();
         yych = YYPEEK ();
         switch (yych) {
-        case '\n':    goto yy114;
-        default:    goto yy128;
+        case '\n':    goto yy111;
+        default:    goto yy125;
         }
-yy119:
+yy116:
         YYSKIP ();
         status = action_line264(i, keys, input, token, &cursor, 1);
         continue;
-yy121:
+yy118:
         YYSKIP ();
         status = action_line264(i, keys, input, token, &cursor, 0);
         continue;
+yy120:
+        YYSKIP ();
+        if (YYLESSTHAN (1)) YYFILL(1);
+        yych = YYPEEK ();
+yy121:
+        switch (yych) {
+        case '\n':    goto yy122;
+        case '"':    goto yy110;
+        case '\\':    goto yy123;
+        default:    goto yy120;
+        }
+yy122:
+        YYRESTORE ();
+        goto yy111;
 yy123:
         YYSKIP ();
         if (YYLESSTHAN (1)) YYFILL(1);
         yych = YYPEEK ();
-yy124:
         switch (yych) {
-        case '\n':    goto yy125;
-        case '"':    goto yy113;
-        case '\\':    goto yy126;
-        default:    goto yy123;
+        case '\n':    goto yy122;
+        default:    goto yy120;
         }
+yy124:
+        YYSKIP ();
+        if (YYLESSTHAN (1)) YYFILL(1);
+        yych = YYPEEK ();
 yy125:
-        YYRESTORE ();
-        goto yy114;
+        switch (yych) {
+        case '\n':    goto yy122;
+        case '\'':    goto yy110;
+        case '\\':    goto yy126;
+        default:    goto yy124;
+        }
 yy126:
         YYSKIP ();
         if (YYLESSTHAN (1)) YYFILL(1);
         yych = YYPEEK ();
         switch (yych) {
-        case '\n':    goto yy125;
-        default:    goto yy123;
-        }
-yy127:
-        YYSKIP ();
-        if (YYLESSTHAN (1)) YYFILL(1);
-        yych = YYPEEK ();
-yy128:
-        switch (yych) {
-        case '\n':    goto yy125;
-        case '\'':    goto yy113;
-        case '\\':    goto yy129;
-        default:    goto yy127;
-        }
-yy129:
-        YYSKIP ();
-        if (YYLESSTHAN (1)) YYFILL(1);
-        yych = YYPEEK ();
-        switch (yych) {
-        case '\n':    goto yy125;
-        default:    goto yy127;
+        case '\n':    goto yy122;
+        default:    goto yy124;
         }
 
     }
@@ -1402,39 +1388,39 @@ int lex_line281()
         if (YYLESSTHAN (2)) YYFILL(2);
         yych = YYPEEK ();
         switch (yych) {
-        case '\n':    goto yy134;
-        case '*':    goto yy136;
-        case '/':    goto yy137;
-        default:    goto yy132;
+        case '\n':    goto yy131;
+        case '*':    goto yy133;
+        case '/':    goto yy134;
+        default:    goto yy129;
         }
-yy132:
+yy129:
         YYSKIP ();
-yy133:
+yy130:
         status = action_line281(i, keys, input, token, &cursor, 3);
         continue;
-yy134:
+yy131:
         YYSKIP ();
         status = action_line281(i, keys, input, token, &cursor, 2);
         continue;
-yy136:
+yy133:
         YYSKIP ();
         yych = YYPEEK ();
         switch (yych) {
-        case '/':    goto yy138;
-        default:    goto yy133;
+        case '/':    goto yy135;
+        default:    goto yy130;
         }
-yy137:
+yy134:
         YYSKIP ();
         yych = YYPEEK ();
         switch (yych) {
-        case '*':    goto yy140;
-        default:    goto yy133;
+        case '*':    goto yy137;
+        default:    goto yy130;
         }
-yy138:
+yy135:
         YYSKIP ();
         status = action_line281(i, keys, input, token, &cursor, 0);
         continue;
-yy140:
+yy137:
         YYSKIP ();
         status = action_line281(i, keys, input, token, &cursor, 1);
         continue;
@@ -1517,7 +1503,7 @@ static int action_line291
 
 int lex_line291()
 {
-    const size_t padding = 2; /* YYMAXFILL */
+    const size_t padding = 1; /* YYMAXFILL */
     int status = 0;
     size_t input_len = 0;
     size_t keys_count = 0;
@@ -1559,52 +1545,42 @@ int lex_line291()
         token = cursor;
         YYCTYPE yych;
 
-        if (YYLESSTHAN (2)) YYFILL(2);
+        if (YYLESSTHAN (1)) YYFILL(1);
+        yych = YYPEEK ();
+        switch (yych) {
+        case '\t':
+        case ' ':    goto yy143;
+        case '=':    goto yy146;
+        default:    goto yy141;
+        }
+yy141:
+        YYSKIP ();
+        status = action_line291(i, keys, input, token, &cursor, 2);
+        continue;
+yy143:
+        YYSKIP ();
+        if (YYLESSTHAN (1)) YYFILL(1);
+        yych = YYPEEK ();
+        switch (yych) {
+        case '\t':
+        case ' ':    goto yy143;
+        default:    goto yy145;
+        }
+yy145:
+        status = action_line291(i, keys, input, token, &cursor, 0);
+        continue;
+yy146:
+        YYSKIP ();
+        if (YYLESSTHAN (1)) YYFILL(1);
         yych = YYPEEK ();
         switch (yych) {
         case '\t':
         case ' ':    goto yy146;
-        case '=':    goto yy148;
-        default:    goto yy144;
+        default:    goto yy148;
         }
-yy144:
-        YYSKIP ();
-        status = action_line291(i, keys, input, token, &cursor, 2);
-        continue;
-yy146:
-        YYSKIP ();
-        yych = YYPEEK ();
-        goto yy151;
-yy147:
-        status = action_line291(i, keys, input, token, &cursor, 0);
-        continue;
 yy148:
-        YYSKIP ();
-        yych = YYPEEK ();
-        goto yy153;
-yy149:
         status = action_line291(i, keys, input, token, &cursor, 1);
         continue;
-yy150:
-        YYSKIP ();
-        if (YYLESSTHAN (1)) YYFILL(1);
-        yych = YYPEEK ();
-yy151:
-        switch (yych) {
-        case '\t':
-        case ' ':    goto yy150;
-        default:    goto yy147;
-        }
-yy152:
-        YYSKIP ();
-        if (YYLESSTHAN (1)) YYFILL(1);
-        yych = YYPEEK ();
-yy153:
-        switch (yych) {
-        case '\t':
-        case ' ':    goto yy152;
-        default:    goto yy149;
-        }
 
     }
     if (status == 0) {
@@ -1736,11 +1712,11 @@ int lex_line305()
         case '\n':
         case '\r':
         case ' ':
-        case ';':    goto yy156;
-        case '"':    goto yy159;
-        case '\'':    goto yy161;
-        case '-':    goto yy163;
-        case '0':    goto yy164;
+        case ';':    goto yy151;
+        case '"':    goto yy154;
+        case '\'':    goto yy156;
+        case '-':    goto yy158;
+        case '0':    goto yy159;
         case '1':
         case '2':
         case '3':
@@ -1749,26 +1725,26 @@ int lex_line305()
         case '6':
         case '7':
         case '8':
-        case '9':    goto yy166;
-        default:    goto yy157;
+        case '9':    goto yy161;
+        default:    goto yy152;
         }
-yy156:
+yy151:
         status = action_line305(i, keys, input, token, &cursor, 1);
         continue;
-yy157:
+yy152:
         YYSKIP ();
         if (YYLESSTHAN (1)) YYFILL(1);
         yych = YYPEEK ();
-yy158:
+yy153:
         switch (yych) {
         case '\t':
         case '\n':
         case '\r':
         case ' ':
-        case ';':    goto yy156;
-        default:    goto yy157;
+        case ';':    goto yy151;
+        default:    goto yy152;
         }
-yy159:
+yy154:
         YYSKIP ();
         YYBACKUP ();
         if (YYLESSTHAN (1)) YYFILL(1);
@@ -1777,13 +1753,13 @@ yy159:
         case '\t':
         case '\r':
         case ' ':
-        case ';':    goto yy168;
-        case '\n':    goto yy156;
-        case '"':    goto yy157;
-        case '\\':    goto yy171;
-        default:    goto yy159;
+        case ';':    goto yy163;
+        case '\n':    goto yy151;
+        case '"':    goto yy152;
+        case '\\':    goto yy166;
+        default:    goto yy154;
         }
-yy161:
+yy156:
         YYSKIP ();
         YYBACKUP ();
         if (YYLESSTHAN (1)) YYFILL(1);
@@ -1792,13 +1768,13 @@ yy161:
         case '\t':
         case '\r':
         case ' ':
-        case ';':    goto yy172;
-        case '\n':    goto yy156;
-        case '\'':    goto yy157;
-        case '\\':    goto yy174;
-        default:    goto yy161;
+        case ';':    goto yy167;
+        case '\n':    goto yy151;
+        case '\'':    goto yy152;
+        case '\\':    goto yy169;
+        default:    goto yy156;
         }
-yy163:
+yy158:
         YYSKIP ();
         yych = YYPEEK ();
         switch (yych) {
@@ -1810,23 +1786,23 @@ yy163:
         case '6':
         case '7':
         case '8':
-        case '9':    goto yy166;
-        default:    goto yy158;
+        case '9':    goto yy161;
+        default:    goto yy153;
         }
-yy164:
+yy159:
         YYSKIP ();
         switch ((yych = YYPEEK ())) {
         case '\t':
         case '\n':
         case '\r':
         case ' ':
-        case ';':    goto yy165;
-        default:    goto yy157;
+        case ';':    goto yy160;
+        default:    goto yy152;
         }
-yy165:
+yy160:
         status = action_line305(i, keys, input, token, &cursor, 0);
         continue;
-yy166:
+yy161:
         YYSKIP ();
         if (YYLESSTHAN (1)) YYFILL(1);
         yych = YYPEEK ();
@@ -1835,7 +1811,7 @@ yy166:
         case '\n':
         case '\r':
         case ' ':
-        case ';':    goto yy165;
+        case ';':    goto yy160;
         case '0':
         case '1':
         case '2':
@@ -1845,23 +1821,23 @@ yy166:
         case '6':
         case '7':
         case '8':
-        case '9':    goto yy166;
-        default:    goto yy157;
+        case '9':    goto yy161;
+        default:    goto yy152;
         }
-yy168:
+yy163:
         YYSKIP ();
         if (YYLESSTHAN (1)) YYFILL(1);
         yych = YYPEEK ();
         switch (yych) {
-        case '\n':    goto yy170;
-        case '"':    goto yy175;
-        case '\\':    goto yy176;
-        default:    goto yy168;
+        case '\n':    goto yy165;
+        case '"':    goto yy170;
+        case '\\':    goto yy171;
+        default:    goto yy163;
         }
-yy170:
+yy165:
         YYRESTORE ();
-        goto yy156;
-yy171:
+        goto yy151;
+yy166:
         YYSKIP ();
         YYBACKUP ();
         if (YYLESSTHAN (1)) YYFILL(1);
@@ -1870,52 +1846,52 @@ yy171:
         case '\t':
         case '\r':
         case ' ':
-        case ';':    goto yy168;
-        case '\n':    goto yy156;
-        default:    goto yy159;
+        case ';':    goto yy163;
+        case '\n':    goto yy151;
+        default:    goto yy154;
+        }
+yy167:
+        YYSKIP ();
+        if (YYLESSTHAN (1)) YYFILL(1);
+        yych = YYPEEK ();
+        switch (yych) {
+        case '\n':    goto yy165;
+        case '\'':    goto yy170;
+        case '\\':    goto yy172;
+        default:    goto yy167;
+        }
+yy169:
+        YYSKIP ();
+        YYBACKUP ();
+        if (YYLESSTHAN (1)) YYFILL(1);
+        yych = YYPEEK ();
+        switch (yych) {
+        case '\t':
+        case '\r':
+        case ' ':
+        case ';':    goto yy167;
+        case '\n':    goto yy151;
+        default:    goto yy156;
+        }
+yy170:
+        YYSKIP ();
+        yych = YYPEEK ();
+        goto yy151;
+yy171:
+        YYSKIP ();
+        if (YYLESSTHAN (1)) YYFILL(1);
+        yych = YYPEEK ();
+        switch (yych) {
+        case '\n':    goto yy165;
+        default:    goto yy163;
         }
 yy172:
         YYSKIP ();
         if (YYLESSTHAN (1)) YYFILL(1);
         yych = YYPEEK ();
         switch (yych) {
-        case '\n':    goto yy170;
-        case '\'':    goto yy175;
-        case '\\':    goto yy177;
-        default:    goto yy172;
-        }
-yy174:
-        YYSKIP ();
-        YYBACKUP ();
-        if (YYLESSTHAN (1)) YYFILL(1);
-        yych = YYPEEK ();
-        switch (yych) {
-        case '\t':
-        case '\r':
-        case ' ':
-        case ';':    goto yy172;
-        case '\n':    goto yy156;
-        default:    goto yy161;
-        }
-yy175:
-        YYSKIP ();
-        yych = YYPEEK ();
-        goto yy156;
-yy176:
-        YYSKIP ();
-        if (YYLESSTHAN (1)) YYFILL(1);
-        yych = YYPEEK ();
-        switch (yych) {
-        case '\n':    goto yy170;
-        default:    goto yy168;
-        }
-yy177:
-        YYSKIP ();
-        if (YYLESSTHAN (1)) YYFILL(1);
-        yych = YYPEEK ();
-        switch (yych) {
-        case '\n':    goto yy170;
-        default:    goto yy172;
+        case '\n':    goto yy165;
+        default:    goto yy167;
         }
 
     }

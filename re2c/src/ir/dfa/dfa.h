@@ -41,11 +41,22 @@ struct dfa_state_t
 
 struct dfa_t
 {
+	enum minimization_t
+	{
+		TABLE,
+		MOORE
+	};
+
 	std::vector<dfa_state_t*> states;
 	const size_t nchars;
 
 	dfa_t(const nfa_t &nfa, const charset_t &charset, rules_t &rules);
 	~dfa_t();
+	void minimize();
+
+private:
+	void minimize_table(size_t *part);
+	void minimize_moore(size_t *part);
 };
 
 } // namespace re2c

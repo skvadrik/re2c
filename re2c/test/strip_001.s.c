@@ -146,16 +146,13 @@ yy19:
 #line 147 "strip_001.s.c"
 yy20:
 			++YYCURSOR;
-yy21:
 #line 124 "strip_001.s.re"
 			{ fwrite(s.tok, 1, s.cur - s.tok, stdout); continue; }
-#line 153 "strip_001.s.c"
+#line 152 "strip_001.s.c"
 yy22:
-			yych = *++YYCURSOR;
-			if (yych != '\n') goto yy19;
 			++YYCURSOR;
-			yych = *YYCURSOR;
-			goto yy21;
+			if ((yych = *YYCURSOR) == '\n') goto yy20;
+			goto yy19;
 		}
 #line 126 "strip_001.s.re"
 

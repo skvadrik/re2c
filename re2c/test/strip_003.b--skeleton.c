@@ -504,26 +504,20 @@ yy30:
 yy31:
         YYSKIP ();
         yych = YYPEEK ();
-        if (yych == '\n') goto yy35;
+        if (yych == '\n') goto yy29;
         goto yy28;
 yy32:
         YYSKIP ();
         yych = YYPEEK ();
-        if (yych == '*') goto yy36;
+        if (yych == '*') goto yy35;
         goto yy26;
 yy33:
         YYSKIP ();
         yych = YYPEEK ();
-        if (yych == '*') goto yy36;
+        if (yych == '*') goto yy35;
         YYRESTORE ();
         goto yy30;
 yy35:
-        YYSKIP ();
-        YYBACKUP ();
-        yych = YYPEEK ();
-        if (yych == '/') goto yy33;
-        goto yy30;
-yy36:
         YYSKIP ();
         status = action_line152(i, keys, input, token, &cursor, 0);
         continue;
@@ -652,24 +646,20 @@ int lex_line158()
 
         if (YYLESSTHAN (2)) YYFILL(2);
         yych = YYPEEK ();
-        if (yych == '\n') goto yy42;
-        if (yych == '\r') goto yy44;
+        if (yych == '\n') goto yy41;
+        if (yych == '\r') goto yy43;
         YYSKIP ();
-yy41:
+yy40:
         status = action_line158(i, keys, input, token, &cursor, 1);
         continue;
-yy42:
+yy41:
         YYSKIP ();
-yy43:
         status = action_line158(i, keys, input, token, &cursor, 0);
         continue;
-yy44:
+yy43:
         YYSKIP ();
-        yych = YYPEEK ();
-        if (yych != '\n') goto yy41;
-        YYSKIP ();
-        yych = YYPEEK ();
-        goto yy43;
+        if ((yych = YYPEEK ()) == '\n') goto yy41;
+        goto yy40;
 
     }
     if (status == 0) {

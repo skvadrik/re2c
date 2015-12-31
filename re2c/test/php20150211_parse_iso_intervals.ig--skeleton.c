@@ -774,189 +774,159 @@ yy65:
         YYSKIP ();
         yych = YYPEEK ();
         if (yych <= '/') goto yy13;
-        if (yych <= '0') goto yy69;
-        if (yych <= '2') goto yy70;
-        if (yych <= '3') goto yy71;
+        if (yych <= '2') goto yy69;
+        if (yych <= '3') goto yy70;
         goto yy13;
 yy66:
         YYSKIP ();
         yych = YYPEEK ();
-        if (yych == 'T') goto yy72;
+        if (yych == 'T') goto yy71;
         goto yy13;
 yy67:
         YYSKIP ();
         yych = YYPEEK ();
         if (yych <= '/') goto yy13;
-        if (yych <= '9') goto yy73;
+        if (yych <= '9') goto yy72;
         goto yy13;
 yy68:
         YYSKIP ();
         yych = YYPEEK ();
         if (yych <= '/') goto yy13;
-        if (yych <= '4') goto yy73;
+        if (yych <= '4') goto yy72;
         goto yy13;
 yy69:
         YYSKIP ();
         yych = YYPEEK ();
         if (yych <= '/') goto yy13;
-        if (yych <= '9') goto yy74;
+        if (yych <= '9') goto yy73;
         goto yy13;
 yy70:
         YYSKIP ();
         yych = YYPEEK ();
         if (yych <= '/') goto yy13;
-        if (yych <= '9') goto yy74;
+        if (yych <= '1') goto yy73;
         goto yy13;
 yy71:
         YYSKIP ();
         yych = YYPEEK ();
         if (yych <= '/') goto yy13;
         if (yych <= '1') goto yy74;
+        if (yych <= '2') goto yy75;
         goto yy13;
 yy72:
         YYSKIP ();
         yych = YYPEEK ();
         if (yych <= '/') goto yy13;
-        if (yych <= '1') goto yy75;
-        if (yych <= '2') goto yy76;
+        if (yych <= '5') goto yy76;
         goto yy13;
 yy73:
         YYSKIP ();
         yych = YYPEEK ();
-        if (yych <= '/') goto yy13;
-        if (yych <= '5') goto yy77;
+        if (yych == 'T') goto yy77;
         goto yy13;
 yy74:
         YYSKIP ();
         yych = YYPEEK ();
-        if (yych == 'T') goto yy78;
+        if (yych <= '/') goto yy13;
+        if (yych <= '9') goto yy78;
         goto yy13;
 yy75:
         YYSKIP ();
         yych = YYPEEK ();
         if (yych <= '/') goto yy13;
-        if (yych <= '9') goto yy79;
+        if (yych <= '4') goto yy78;
         goto yy13;
 yy76:
         YYSKIP ();
         yych = YYPEEK ();
         if (yych <= '/') goto yy13;
-        if (yych <= '4') goto yy79;
+        if (yych <= '9') goto yy79;
         goto yy13;
 yy77:
         YYSKIP ();
         yych = YYPEEK ();
         if (yych <= '/') goto yy13;
-        if (yych <= '9') goto yy80;
+        if (yych <= '1') goto yy80;
+        if (yych <= '2') goto yy81;
         goto yy13;
 yy78:
         YYSKIP ();
         yych = YYPEEK ();
-        if (yych <= '/') goto yy13;
-        if (yych <= '1') goto yy81;
-        if (yych <= '2') goto yy82;
+        if (yych == ':') goto yy82;
         goto yy13;
 yy79:
         YYSKIP ();
         yych = YYPEEK ();
-        if (yych == ':') goto yy83;
+        if (yych <= '/') goto yy13;
+        if (yych <= '5') goto yy83;
         goto yy13;
 yy80:
         YYSKIP ();
         yych = YYPEEK ();
         if (yych <= '/') goto yy13;
-        if (yych <= '5') goto yy84;
+        if (yych <= '9') goto yy84;
         goto yy13;
 yy81:
         YYSKIP ();
         yych = YYPEEK ();
         if (yych <= '/') goto yy13;
-        if (yych <= '9') goto yy85;
+        if (yych <= '4') goto yy84;
         goto yy13;
 yy82:
         YYSKIP ();
         yych = YYPEEK ();
         if (yych <= '/') goto yy13;
-        if (yych <= '4') goto yy85;
+        if (yych <= '5') goto yy85;
         goto yy13;
 yy83:
         YYSKIP ();
         yych = YYPEEK ();
         if (yych <= '/') goto yy13;
-        if (yych <= '5') goto yy86;
+        if (yych <= '9') goto yy86;
         goto yy13;
 yy84:
         YYSKIP ();
         yych = YYPEEK ();
-        if (yych <= '/') goto yy13;
-        if (yych <= '9') goto yy87;
+        if (yych == ':') goto yy87;
         goto yy13;
 yy85:
         YYSKIP ();
         yych = YYPEEK ();
-        if (yych == ':') goto yy88;
+        if (yych <= '/') goto yy13;
+        if (yych <= '9') goto yy88;
         goto yy13;
 yy86:
         YYSKIP ();
         yych = YYPEEK ();
-        if (yych <= '/') goto yy13;
-        if (yych <= '9') goto yy89;
+        if (yych == 'Z') goto yy89;
         goto yy13;
 yy87:
         YYSKIP ();
         yych = YYPEEK ();
-        if (yych == 'Z') goto yy90;
+        if (yych <= '/') goto yy13;
+        if (yych <= '5') goto yy91;
         goto yy13;
 yy88:
         YYSKIP ();
         yych = YYPEEK ();
-        if (yych <= '/') goto yy13;
-        if (yych <= '5') goto yy92;
+        if (yych == ':') goto yy79;
         goto yy13;
 yy89:
         YYSKIP ();
-        yych = YYPEEK ();
-        if (yych == ':') goto yy93;
-        goto yy13;
-yy90:
-        YYSKIP ();
         status = action_line393(i, keys, input, token, &cursor, 1);
         continue;
-yy92:
+yy91:
         YYSKIP ();
         yych = YYPEEK ();
         if (yych <= '/') goto yy13;
-        if (yych <= '9') goto yy94;
-        goto yy13;
-yy93:
+        if (yych >= ':') goto yy13;
+        YYSKIP ();
+        yych = YYPEEK ();
+        if (yych != ':') goto yy13;
         YYSKIP ();
         yych = YYPEEK ();
         if (yych <= '/') goto yy13;
-        if (yych <= '5') goto yy95;
-        goto yy13;
-yy94:
-        YYSKIP ();
-        yych = YYPEEK ();
-        if (yych == ':') goto yy96;
-        goto yy13;
-yy95:
-        YYSKIP ();
-        yych = YYPEEK ();
-        if (yych <= '/') goto yy13;
-        if (yych <= '9') goto yy97;
-        goto yy13;
-yy96:
-        YYSKIP ();
-        yych = YYPEEK ();
-        if (yych <= '/') goto yy13;
-        if (yych <= '5') goto yy98;
-        goto yy13;
-yy97:
-        YYSKIP ();
-        yych = YYPEEK ();
-        if (yych == 'Z') goto yy90;
-        goto yy13;
-yy98:
+        if (yych >= '6') goto yy13;
         YYSKIP ();
         yych = YYPEEK ();
         if (yych <= '/') goto yy13;

@@ -130,28 +130,28 @@ std:
 {
 	YYCTYPE yych;
 	unsigned int yyaccept = 0;
-	if ((YYLIMIT - YYCURSOR) < 5) YYFILL(5);
+	if ((YYLIMIT - YYCURSOR) < 4) YYFILL(4);
 	yych = *YYCURSOR;
 	switch (yych) {
 	case '\t':
 	case '\v':
 	case '\f':
 	case ' ':	goto yy4;
-	case '\n':	goto yy6;
-	case '!':	goto yy8;
-	case '"':	goto yy10;
-	case '%':	goto yy11;
-	case '&':	goto yy13;
-	case '\'':	goto yy15;
-	case '(':	goto yy16;
-	case ')':	goto yy18;
-	case '*':	goto yy20;
-	case '+':	goto yy22;
-	case ',':	goto yy24;
-	case '-':	goto yy26;
-	case '.':	goto yy28;
-	case '/':	goto yy30;
-	case '0':	goto yy32;
+	case '\n':	goto yy7;
+	case '!':	goto yy9;
+	case '"':	goto yy11;
+	case '%':	goto yy12;
+	case '&':	goto yy14;
+	case '\'':	goto yy16;
+	case '(':	goto yy17;
+	case ')':	goto yy19;
+	case '*':	goto yy21;
+	case '+':	goto yy23;
+	case ',':	goto yy25;
+	case '-':	goto yy27;
+	case '.':	goto yy29;
+	case '/':	goto yy31;
+	case '0':	goto yy33;
 	case '1':
 	case '2':
 	case '3':
@@ -160,13 +160,13 @@ std:
 	case '6':
 	case '7':
 	case '8':
-	case '9':	goto yy34;
-	case ':':	goto yy35;
-	case ';':	goto yy37;
-	case '<':	goto yy39;
-	case '=':	goto yy41;
-	case '>':	goto yy43;
-	case '?':	goto yy45;
+	case '9':	goto yy35;
+	case ':':	goto yy37;
+	case ';':	goto yy39;
+	case '<':	goto yy41;
+	case '=':	goto yy43;
+	case '>':	goto yy45;
+	case '?':	goto yy47;
 	case 'A':
 	case 'B':
 	case 'C':
@@ -219,14 +219,14 @@ std:
 	case 'w':
 	case 'x':
 	case 'y':
-	case 'z':	goto yy47;
-	case '[':	goto yy49;
-	case ']':	goto yy51;
-	case '^':	goto yy53;
-	case '{':	goto yy55;
-	case '|':	goto yy57;
-	case '}':	goto yy59;
-	case '~':	goto yy61;
+	case 'z':	goto yy49;
+	case '[':	goto yy52;
+	case ']':	goto yy54;
+	case '^':	goto yy56;
+	case '{':	goto yy58;
+	case '|':	goto yy60;
+	case '}':	goto yy62;
+	case '~':	goto yy64;
 	default:	goto yy2;
 	}
 yy2:
@@ -240,13 +240,20 @@ yy3:
 #line 241 "cnokw.c"
 yy4:
 	++YYCURSOR;
+	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
-	goto yy64;
-yy5:
+	switch (yych) {
+	case '\t':
+	case '\v':
+	case '\f':
+	case ' ':	goto yy4;
+	default:	goto yy6;
+	}
+yy6:
 #line 198 "cnokw.re"
 	{ goto std; }
-#line 249 "cnokw.c"
-yy6:
+#line 256 "cnokw.c"
+yy7:
 	++YYCURSOR;
 #line 201 "cnokw.re"
 	{
@@ -254,105 +261,105 @@ yy6:
 		s->pos = cursor; s->line++;
 		goto std;
 	    }
-#line 258 "cnokw.c"
-yy8:
+#line 265 "cnokw.c"
+yy9:
 	++YYCURSOR;
 	switch ((yych = *YYCURSOR)) {
-	case '=':	goto yy65;
-	default:	goto yy9;
+	case '=':	goto yy66;
+	default:	goto yy10;
 	}
-yy9:
+yy10:
 #line 184 "cnokw.re"
 	{ RET('!'); }
-#line 268 "cnokw.c"
-yy10:
+#line 275 "cnokw.c"
+yy11:
 	yyaccept = 0;
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
 	case '\n':	goto yy3;
-	default:	goto yy68;
-	}
-yy11:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
-	case '=':	goto yy73;
-	default:	goto yy12;
+	default:	goto yy69;
 	}
 yy12:
-#line 190 "cnokw.re"
-	{ RET('%'); }
-#line 285 "cnokw.c"
-yy13:
 	++YYCURSOR;
 	switch ((yych = *YYCURSOR)) {
-	case '&':	goto yy75;
-	case '=':	goto yy77;
-	default:	goto yy14;
+	case '=':	goto yy74;
+	default:	goto yy13;
 	}
+yy13:
+#line 190 "cnokw.re"
+	{ RET('%'); }
+#line 292 "cnokw.c"
 yy14:
+	++YYCURSOR;
+	switch ((yych = *YYCURSOR)) {
+	case '&':	goto yy76;
+	case '=':	goto yy78;
+	default:	goto yy15;
+	}
+yy15:
 #line 183 "cnokw.re"
 	{ RET('&'); }
-#line 296 "cnokw.c"
-yy15:
+#line 303 "cnokw.c"
+yy16:
 	yyaccept = 0;
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
 	case '\n':	goto yy3;
-	default:	goto yy80;
+	default:	goto yy81;
 	}
-yy16:
+yy17:
 	++YYCURSOR;
 #line 178 "cnokw.re"
 	{ RET('('); }
-#line 308 "cnokw.c"
-yy18:
+#line 315 "cnokw.c"
+yy19:
 	++YYCURSOR;
 #line 179 "cnokw.re"
 	{ RET(')'); }
-#line 313 "cnokw.c"
-yy20:
+#line 320 "cnokw.c"
+yy21:
 	++YYCURSOR;
 	switch ((yych = *YYCURSOR)) {
-	case '=':	goto yy83;
-	default:	goto yy21;
+	case '=':	goto yy84;
+	default:	goto yy22;
 	}
-yy21:
+yy22:
 #line 188 "cnokw.re"
 	{ RET('*'); }
-#line 323 "cnokw.c"
-yy22:
+#line 330 "cnokw.c"
+yy23:
 	++YYCURSOR;
 	switch ((yych = *YYCURSOR)) {
-	case '+':	goto yy85;
-	case '=':	goto yy87;
-	default:	goto yy23;
+	case '+':	goto yy86;
+	case '=':	goto yy88;
+	default:	goto yy24;
 	}
-yy23:
+yy24:
 #line 187 "cnokw.re"
 	{ RET('+'); }
-#line 334 "cnokw.c"
-yy24:
+#line 341 "cnokw.c"
+yy25:
 	++YYCURSOR;
 #line 175 "cnokw.re"
 	{ RET(','); }
-#line 339 "cnokw.c"
-yy26:
+#line 346 "cnokw.c"
+yy27:
 	++YYCURSOR;
 	switch ((yych = *YYCURSOR)) {
-	case '-':	goto yy89;
-	case '=':	goto yy91;
-	case '>':	goto yy93;
-	default:	goto yy27;
+	case '-':	goto yy90;
+	case '=':	goto yy92;
+	case '>':	goto yy94;
+	default:	goto yy28;
 	}
-yy27:
+yy28:
 #line 186 "cnokw.re"
 	{ RET('-'); }
-#line 351 "cnokw.c"
-yy28:
+#line 358 "cnokw.c"
+yy29:
 	yyaccept = 1;
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
-	case '.':	goto yy95;
+	case '.':	goto yy96;
 	case '0':
 	case '1':
 	case '2':
@@ -362,193 +369,289 @@ yy28:
 	case '6':
 	case '7':
 	case '8':
-	case '9':	goto yy96;
-	default:	goto yy29;
+	case '9':	goto yy97;
+	default:	goto yy30;
 	}
-yy29:
+yy30:
 #line 182 "cnokw.re"
 	{ RET('.'); }
-#line 372 "cnokw.c"
-yy30:
+#line 379 "cnokw.c"
+yy31:
 	++YYCURSOR;
 	switch ((yych = *YYCURSOR)) {
-	case '*':	goto yy99;
-	case '=':	goto yy101;
-	default:	goto yy31;
+	case '*':	goto yy100;
+	case '=':	goto yy102;
+	default:	goto yy32;
 	}
-yy31:
+yy32:
 #line 189 "cnokw.re"
 	{ RET('/'); }
-#line 383 "cnokw.c"
-yy32:
+#line 390 "cnokw.c"
+yy33:
 	yyaccept = 2;
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
+	case '.':	goto yy97;
+	case '0':
+	case '1':
+	case '2':
+	case '3':
+	case '4':
+	case '5':
+	case '6':
+	case '7':
+	case '8':
+	case '9':	goto yy35;
+	case 'E':
+	case 'e':	goto yy104;
 	case 'L':
 	case 'U':
 	case 'l':
-	case 'u':	goto yy107;
+	case 'u':	goto yy105;
 	case 'X':
-	case 'x':	goto yy109;
-	default:	goto yy105;
+	case 'x':	goto yy107;
+	default:	goto yy34;
 	}
-yy33:
+yy34:
 #line 142 "cnokw.re"
 	{ RET(ICON); }
-#line 399 "cnokw.c"
-yy34:
-	yyaccept = 2;
-	yych = *(YYMARKER = ++YYCURSOR);
-	goto yy111;
+#line 419 "cnokw.c"
 yy35:
+	yyaccept = 2;
+	YYMARKER = ++YYCURSOR;
+	if ((YYLIMIT - YYCURSOR) < 3) YYFILL(3);
+	yych = *YYCURSOR;
+	switch (yych) {
+	case '.':	goto yy97;
+	case '0':
+	case '1':
+	case '2':
+	case '3':
+	case '4':
+	case '5':
+	case '6':
+	case '7':
+	case '8':
+	case '9':	goto yy35;
+	case 'E':
+	case 'e':	goto yy104;
+	case 'L':
+	case 'U':
+	case 'l':
+	case 'u':	goto yy105;
+	default:	goto yy34;
+	}
+yy37:
 	++YYCURSOR;
 #line 176 "cnokw.re"
 	{ RET(':'); }
-#line 408 "cnokw.c"
-yy37:
+#line 449 "cnokw.c"
+yy39:
 	++YYCURSOR;
 #line 172 "cnokw.re"
 	{ RET(';'); }
-#line 413 "cnokw.c"
-yy39:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
-	case '<':	goto yy112;
-	case '=':	goto yy114;
-	default:	goto yy40;
-	}
-yy40:
-#line 191 "cnokw.re"
-	{ RET('<'); }
-#line 424 "cnokw.c"
+#line 454 "cnokw.c"
 yy41:
 	++YYCURSOR;
 	switch ((yych = *YYCURSOR)) {
-	case '=':	goto yy116;
+	case '<':	goto yy108;
+	case '=':	goto yy110;
 	default:	goto yy42;
 	}
 yy42:
-#line 177 "cnokw.re"
-	{ RET('='); }
-#line 434 "cnokw.c"
+#line 191 "cnokw.re"
+	{ RET('<'); }
+#line 465 "cnokw.c"
 yy43:
 	++YYCURSOR;
 	switch ((yych = *YYCURSOR)) {
-	case '=':	goto yy118;
-	case '>':	goto yy120;
+	case '=':	goto yy112;
 	default:	goto yy44;
 	}
 yy44:
+#line 177 "cnokw.re"
+	{ RET('='); }
+#line 475 "cnokw.c"
+yy45:
+	++YYCURSOR;
+	switch ((yych = *YYCURSOR)) {
+	case '=':	goto yy114;
+	case '>':	goto yy116;
+	default:	goto yy46;
+	}
+yy46:
 #line 192 "cnokw.re"
 	{ RET('>'); }
-#line 445 "cnokw.c"
-yy45:
+#line 486 "cnokw.c"
+yy47:
 	++YYCURSOR;
 #line 195 "cnokw.re"
 	{ RET('?'); }
-#line 450 "cnokw.c"
-yy47:
+#line 491 "cnokw.c"
+yy49:
 	++YYCURSOR;
+	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
-	goto yy123;
-yy48:
+	switch (yych) {
+	case '0':
+	case '1':
+	case '2':
+	case '3':
+	case '4':
+	case '5':
+	case '6':
+	case '7':
+	case '8':
+	case '9':
+	case 'A':
+	case 'B':
+	case 'C':
+	case 'D':
+	case 'E':
+	case 'F':
+	case 'G':
+	case 'H':
+	case 'I':
+	case 'J':
+	case 'K':
+	case 'L':
+	case 'M':
+	case 'N':
+	case 'O':
+	case 'P':
+	case 'Q':
+	case 'R':
+	case 'S':
+	case 'T':
+	case 'U':
+	case 'V':
+	case 'W':
+	case 'X':
+	case 'Y':
+	case 'Z':
+	case '_':
+	case 'a':
+	case 'b':
+	case 'c':
+	case 'd':
+	case 'e':
+	case 'f':
+	case 'g':
+	case 'h':
+	case 'i':
+	case 'j':
+	case 'k':
+	case 'l':
+	case 'm':
+	case 'n':
+	case 'o':
+	case 'p':
+	case 'q':
+	case 'r':
+	case 's':
+	case 't':
+	case 'u':
+	case 'v':
+	case 'w':
+	case 'x':
+	case 'y':
+	case 'z':	goto yy49;
+	default:	goto yy51;
+	}
+yy51:
 #line 138 "cnokw.re"
 	{ RET(ID); }
-#line 458 "cnokw.c"
-yy49:
+#line 565 "cnokw.c"
+yy52:
 	++YYCURSOR;
 #line 180 "cnokw.re"
 	{ RET('['); }
-#line 463 "cnokw.c"
-yy51:
+#line 570 "cnokw.c"
+yy54:
 	++YYCURSOR;
 #line 181 "cnokw.re"
 	{ RET(']'); }
-#line 468 "cnokw.c"
-yy53:
+#line 575 "cnokw.c"
+yy56:
 	++YYCURSOR;
 	switch ((yych = *YYCURSOR)) {
-	case '=':	goto yy124;
-	default:	goto yy54;
+	case '=':	goto yy118;
+	default:	goto yy57;
 	}
-yy54:
+yy57:
 #line 193 "cnokw.re"
 	{ RET('^'); }
-#line 478 "cnokw.c"
-yy55:
+#line 585 "cnokw.c"
+yy58:
 	++YYCURSOR;
 #line 173 "cnokw.re"
 	{ RET('{'); }
-#line 483 "cnokw.c"
-yy57:
+#line 590 "cnokw.c"
+yy60:
 	++YYCURSOR;
 	switch ((yych = *YYCURSOR)) {
-	case '=':	goto yy126;
-	case '|':	goto yy128;
-	default:	goto yy58;
+	case '=':	goto yy120;
+	case '|':	goto yy122;
+	default:	goto yy61;
 	}
-yy58:
+yy61:
 #line 194 "cnokw.re"
 	{ RET('|'); }
-#line 494 "cnokw.c"
-yy59:
+#line 601 "cnokw.c"
+yy62:
 	++YYCURSOR;
 #line 174 "cnokw.re"
 	{ RET('}'); }
-#line 499 "cnokw.c"
-yy61:
+#line 606 "cnokw.c"
+yy64:
 	++YYCURSOR;
 #line 185 "cnokw.re"
 	{ RET('~'); }
-#line 504 "cnokw.c"
-yy63:
-	++YYCURSOR;
-	if (YYLIMIT <= YYCURSOR) YYFILL(1);
-	yych = *YYCURSOR;
-yy64:
-	switch (yych) {
-	case '\t':
-	case '\v':
-	case '\f':
-	case ' ':	goto yy63;
-	default:	goto yy5;
-	}
-yy65:
+#line 611 "cnokw.c"
+yy66:
 	++YYCURSOR;
 #line 171 "cnokw.re"
 	{ RET(NEQ); }
-#line 521 "cnokw.c"
-yy67:
+#line 616 "cnokw.c"
+yy68:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
-yy68:
-	switch (yych) {
-	case '\n':	goto yy69;
-	case '"':	goto yy70;
-	case '\\':	goto yy72;
-	default:	goto yy67;
-	}
 yy69:
+	switch (yych) {
+	case '\n':	goto yy70;
+	case '"':	goto yy71;
+	case '\\':	goto yy73;
+	default:	goto yy68;
+	}
+yy70:
 	YYCURSOR = YYMARKER;
 	switch (yyaccept) {
 	case 0: 	goto yy3;
-	case 1: 	goto yy29;
-	case 2: 	goto yy33;
-	default:	goto yy98;
+	case 1: 	goto yy30;
+	case 2: 	goto yy34;
+	default:	goto yy99;
 	}
-yy70:
+yy71:
 	++YYCURSOR;
 #line 148 "cnokw.re"
 	{ RET(SCON); }
-#line 545 "cnokw.c"
-yy72:
+#line 640 "cnokw.c"
+yy73:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	switch (yych) {
 	case '"':
 	case '\'':
+	case '0':
+	case '1':
+	case '2':
+	case '3':
+	case '4':
+	case '5':
+	case '6':
+	case '7':
 	case '?':
 	case '\\':
 	case 'a':
@@ -557,54 +660,54 @@ yy72:
 	case 'n':
 	case 'r':
 	case 't':
-	case 'v':	goto yy67;
-	case '0':
-	case '1':
-	case '2':
-	case '3':
-	case '4':
-	case '5':
-	case '6':
-	case '7':	goto yy130;
-	case 'x':	goto yy132;
-	default:	goto yy69;
+	case 'v':	goto yy68;
+	case 'x':	goto yy124;
+	default:	goto yy70;
 	}
-yy73:
+yy74:
 	++YYCURSOR;
 #line 157 "cnokw.re"
 	{ RET(MODEQ); }
-#line 577 "cnokw.c"
-yy75:
+#line 672 "cnokw.c"
+yy76:
 	++YYCURSOR;
 #line 166 "cnokw.re"
 	{ RET(ANDAND); }
-#line 582 "cnokw.c"
-yy77:
+#line 677 "cnokw.c"
+yy78:
 	++YYCURSOR;
 #line 158 "cnokw.re"
 	{ RET(ANDEQ); }
-#line 587 "cnokw.c"
-yy79:
+#line 682 "cnokw.c"
+yy80:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
-yy80:
-	switch (yych) {
-	case '\n':	goto yy69;
-	case '\'':	goto yy81;
-	case '\\':	goto yy82;
-	default:	goto yy79;
-	}
 yy81:
-	yych = *++YYCURSOR;
-	goto yy33;
+	switch (yych) {
+	case '\n':	goto yy70;
+	case '\'':	goto yy82;
+	case '\\':	goto yy83;
+	default:	goto yy80;
+	}
 yy82:
+	yych = *++YYCURSOR;
+	goto yy34;
+yy83:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	switch (yych) {
 	case '"':
 	case '\'':
+	case '0':
+	case '1':
+	case '2':
+	case '3':
+	case '4':
+	case '5':
+	case '6':
+	case '7':
 	case '?':
 	case '\\':
 	case 'a':
@@ -613,55 +716,47 @@ yy82:
 	case 'n':
 	case 'r':
 	case 't':
-	case 'v':	goto yy79;
-	case '0':
-	case '1':
-	case '2':
-	case '3':
-	case '4':
-	case '5':
-	case '6':
-	case '7':	goto yy133;
-	case 'x':	goto yy135;
-	default:	goto yy69;
+	case 'v':	goto yy80;
+	case 'x':	goto yy125;
+	default:	goto yy70;
 	}
-yy83:
+yy84:
 	++YYCURSOR;
 #line 155 "cnokw.re"
 	{ RET(MULEQ); }
-#line 633 "cnokw.c"
-yy85:
+#line 728 "cnokw.c"
+yy86:
 	++YYCURSOR;
 #line 163 "cnokw.re"
 	{ RET(INCR); }
-#line 638 "cnokw.c"
-yy87:
+#line 733 "cnokw.c"
+yy88:
 	++YYCURSOR;
 #line 153 "cnokw.re"
 	{ RET(ADDEQ); }
-#line 643 "cnokw.c"
-yy89:
+#line 738 "cnokw.c"
+yy90:
 	++YYCURSOR;
 #line 164 "cnokw.re"
 	{ RET(DECR); }
-#line 648 "cnokw.c"
-yy91:
+#line 743 "cnokw.c"
+yy92:
 	++YYCURSOR;
 #line 154 "cnokw.re"
 	{ RET(SUBEQ); }
-#line 653 "cnokw.c"
-yy93:
+#line 748 "cnokw.c"
+yy94:
 	++YYCURSOR;
 #line 165 "cnokw.re"
 	{ RET(DEREF); }
-#line 658 "cnokw.c"
-yy95:
+#line 753 "cnokw.c"
+yy96:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case '.':	goto yy136;
-	default:	goto yy69;
+	case '.':	goto yy126;
+	default:	goto yy70;
 	}
-yy96:
+yy97:
 	yyaccept = 3;
 	YYMARKER = ++YYCURSOR;
 	if ((YYLIMIT - YYCURSOR) < 3) YYFILL(3);
@@ -676,68 +771,34 @@ yy96:
 	case '6':
 	case '7':
 	case '8':
-	case '9':	goto yy96;
+	case '9':	goto yy97;
 	case 'E':
-	case 'e':	goto yy138;
+	case 'e':	goto yy104;
 	case 'F':
 	case 'L':
 	case 'f':
-	case 'l':	goto yy139;
-	default:	goto yy98;
+	case 'l':	goto yy128;
+	default:	goto yy99;
 	}
-yy98:
+yy99:
 #line 145 "cnokw.re"
 	{ RET(FCON); }
-#line 692 "cnokw.c"
-yy99:
+#line 787 "cnokw.c"
+yy100:
 	++YYCURSOR;
 #line 136 "cnokw.re"
 	{ goto comment; }
-#line 697 "cnokw.c"
-yy101:
+#line 792 "cnokw.c"
+yy102:
 	++YYCURSOR;
 #line 156 "cnokw.re"
 	{ RET(DIVEQ); }
-#line 702 "cnokw.c"
-yy103:
-	yyaccept = 3;
-	yych = *(YYMARKER = ++YYCURSOR);
-	switch (yych) {
-	case 'E':
-	case 'e':	goto yy142;
-	default:	goto yy141;
-	}
+#line 797 "cnokw.c"
 yy104:
-	yyaccept = 2;
-	YYMARKER = ++YYCURSOR;
-	if ((YYLIMIT - YYCURSOR) < 4) YYFILL(4);
-	yych = *YYCURSOR;
-yy105:
-	switch (yych) {
-	case '.':	goto yy103;
-	case '0':
-	case '1':
-	case '2':
-	case '3':
-	case '4':
-	case '5':
-	case '6':
-	case '7':
-	case '8':
-	case '9':	goto yy104;
-	case 'E':
-	case 'e':	goto yy106;
-	case 'L':
-	case 'U':
-	case 'l':
-	case 'u':	goto yy143;
-	default:	goto yy33;
-	}
-yy106:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case '+':
-	case '-':	goto yy145;
+	case '-':	goto yy129;
 	case '0':
 	case '1':
 	case '2':
@@ -747,10 +808,10 @@ yy106:
 	case '6':
 	case '7':
 	case '8':
-	case '9':	goto yy146;
-	default:	goto yy69;
+	case '9':	goto yy130;
+	default:	goto yy70;
 	}
-yy107:
+yy105:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
@@ -758,10 +819,10 @@ yy107:
 	case 'L':
 	case 'U':
 	case 'l':
-	case 'u':	goto yy107;
-	default:	goto yy33;
+	case 'u':	goto yy105;
+	default:	goto yy34;
 	}
-yy109:
+yy107:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case '0':
@@ -785,75 +846,63 @@ yy109:
 	case 'c':
 	case 'd':
 	case 'e':
-	case 'f':	goto yy148;
-	default:	goto yy69;
+	case 'f':	goto yy132;
+	default:	goto yy70;
 	}
-yy110:
-	yyaccept = 2;
-	YYMARKER = ++YYCURSOR;
-	if ((YYLIMIT - YYCURSOR) < 4) YYFILL(4);
-	yych = *YYCURSOR;
-yy111:
-	switch (yych) {
-	case '.':	goto yy103;
-	case '0':
-	case '1':
-	case '2':
-	case '3':
-	case '4':
-	case '5':
-	case '6':
-	case '7':
-	case '8':
-	case '9':	goto yy110;
-	case 'E':
-	case 'e':	goto yy106;
-	case 'L':
-	case 'U':
-	case 'l':
-	case 'u':	goto yy107;
-	default:	goto yy33;
-	}
-yy112:
+yy108:
 	++YYCURSOR;
 	switch ((yych = *YYCURSOR)) {
-	case '=':	goto yy150;
-	default:	goto yy113;
+	case '=':	goto yy134;
+	default:	goto yy109;
 	}
-yy113:
+yy109:
 #line 162 "cnokw.re"
 	{ RET(LSHIFT); }
-#line 827 "cnokw.c"
-yy114:
+#line 862 "cnokw.c"
+yy110:
 	++YYCURSOR;
 #line 168 "cnokw.re"
 	{ RET(LEQ); }
-#line 832 "cnokw.c"
-yy116:
+#line 867 "cnokw.c"
+yy112:
 	++YYCURSOR;
 #line 170 "cnokw.re"
 	{ RET(EQL); }
-#line 837 "cnokw.c"
-yy118:
+#line 872 "cnokw.c"
+yy114:
 	++YYCURSOR;
 #line 169 "cnokw.re"
 	{ RET(GEQ); }
-#line 842 "cnokw.c"
-yy120:
+#line 877 "cnokw.c"
+yy116:
 	++YYCURSOR;
 	switch ((yych = *YYCURSOR)) {
-	case '=':	goto yy152;
-	default:	goto yy121;
+	case '=':	goto yy136;
+	default:	goto yy117;
 	}
-yy121:
+yy117:
 #line 161 "cnokw.re"
 	{ RET(RSHIFT); }
-#line 852 "cnokw.c"
+#line 887 "cnokw.c"
+yy118:
+	++YYCURSOR;
+#line 159 "cnokw.re"
+	{ RET(XOREQ); }
+#line 892 "cnokw.c"
+yy120:
+	++YYCURSOR;
+#line 160 "cnokw.re"
+	{ RET(OREQ); }
+#line 897 "cnokw.c"
 yy122:
+	++YYCURSOR;
+#line 167 "cnokw.re"
+	{ RET(OROR); }
+#line 902 "cnokw.c"
+yy124:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
-yy123:
 	switch (yych) {
 	case '0':
 	case '1':
@@ -871,77 +920,71 @@ yy123:
 	case 'D':
 	case 'E':
 	case 'F':
-	case 'G':
-	case 'H':
-	case 'I':
-	case 'J':
-	case 'K':
-	case 'L':
-	case 'M':
-	case 'N':
-	case 'O':
-	case 'P':
-	case 'Q':
-	case 'R':
-	case 'S':
-	case 'T':
-	case 'U':
-	case 'V':
-	case 'W':
-	case 'X':
-	case 'Y':
-	case 'Z':
-	case '_':
 	case 'a':
 	case 'b':
 	case 'c':
 	case 'd':
 	case 'e':
-	case 'f':
-	case 'g':
-	case 'h':
-	case 'i':
-	case 'j':
-	case 'k':
-	case 'l':
-	case 'm':
-	case 'n':
-	case 'o':
-	case 'p':
-	case 'q':
-	case 'r':
-	case 's':
-	case 't':
-	case 'u':
-	case 'v':
-	case 'w':
-	case 'x':
-	case 'y':
-	case 'z':	goto yy122;
-	default:	goto yy48;
+	case 'f':	goto yy68;
+	default:	goto yy70;
 	}
-yy124:
+yy125:
 	++YYCURSOR;
-#line 159 "cnokw.re"
-	{ RET(XOREQ); }
-#line 928 "cnokw.c"
+	if (YYLIMIT <= YYCURSOR) YYFILL(1);
+	yych = *YYCURSOR;
+	switch (yych) {
+	case '0':
+	case '1':
+	case '2':
+	case '3':
+	case '4':
+	case '5':
+	case '6':
+	case '7':
+	case '8':
+	case '9':
+	case 'A':
+	case 'B':
+	case 'C':
+	case 'D':
+	case 'E':
+	case 'F':
+	case 'a':
+	case 'b':
+	case 'c':
+	case 'd':
+	case 'e':
+	case 'f':	goto yy80;
+	default:	goto yy70;
+	}
 yy126:
 	++YYCURSOR;
-#line 160 "cnokw.re"
-	{ RET(OREQ); }
-#line 933 "cnokw.c"
+#line 150 "cnokw.re"
+	{ RET(ELLIPSIS); }
+#line 965 "cnokw.c"
 yy128:
-	++YYCURSOR;
-#line 167 "cnokw.re"
-	{ RET(OROR); }
-#line 938 "cnokw.c"
+	yych = *++YYCURSOR;
+	goto yy99;
+yy129:
+	yych = *++YYCURSOR;
+	switch (yych) {
+	case '0':
+	case '1':
+	case '2':
+	case '3':
+	case '4':
+	case '5':
+	case '6':
+	case '7':
+	case '8':
+	case '9':	goto yy130;
+	default:	goto yy70;
+	}
 yy130:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	switch (yych) {
-	case '\n':	goto yy69;
-	case '"':	goto yy70;
 	case '0':
 	case '1':
 	case '2':
@@ -949,9 +992,14 @@ yy130:
 	case '4':
 	case '5':
 	case '6':
-	case '7':	goto yy130;
-	case '\\':	goto yy72;
-	default:	goto yy67;
+	case '7':
+	case '8':
+	case '9':	goto yy130;
+	case 'F':
+	case 'L':
+	case 'f':
+	case 'l':	goto yy128;
+	default:	goto yy99;
 	}
 yy132:
 	++YYCURSOR;
@@ -979,436 +1027,46 @@ yy132:
 	case 'c':
 	case 'd':
 	case 'e':
-	case 'f':	goto yy154;
-	default:	goto yy69;
-	}
-yy133:
-	++YYCURSOR;
-	if (YYLIMIT <= YYCURSOR) YYFILL(1);
-	yych = *YYCURSOR;
-	switch (yych) {
-	case '\n':	goto yy69;
-	case '\'':	goto yy81;
-	case '0':
-	case '1':
-	case '2':
-	case '3':
-	case '4':
-	case '5':
-	case '6':
-	case '7':	goto yy133;
-	case '\\':	goto yy82;
-	default:	goto yy79;
-	}
-yy135:
-	++YYCURSOR;
-	if (YYLIMIT <= YYCURSOR) YYFILL(1);
-	yych = *YYCURSOR;
-	switch (yych) {
-	case '0':
-	case '1':
-	case '2':
-	case '3':
-	case '4':
-	case '5':
-	case '6':
-	case '7':
-	case '8':
-	case '9':
-	case 'A':
-	case 'B':
-	case 'C':
-	case 'D':
-	case 'E':
-	case 'F':
-	case 'a':
-	case 'b':
-	case 'c':
-	case 'd':
-	case 'e':
-	case 'f':	goto yy156;
-	default:	goto yy69;
-	}
-yy136:
-	++YYCURSOR;
-#line 150 "cnokw.re"
-	{ RET(ELLIPSIS); }
-#line 1037 "cnokw.c"
-yy138:
-	yych = *++YYCURSOR;
-	switch (yych) {
-	case '+':
-	case '-':	goto yy158;
-	case '0':
-	case '1':
-	case '2':
-	case '3':
-	case '4':
-	case '5':
-	case '6':
-	case '7':
-	case '8':
-	case '9':	goto yy159;
-	default:	goto yy69;
-	}
-yy139:
-	yych = *++YYCURSOR;
-	goto yy98;
-yy140:
-	yyaccept = 3;
-	YYMARKER = ++YYCURSOR;
-	if ((YYLIMIT - YYCURSOR) < 3) YYFILL(3);
-	yych = *YYCURSOR;
-yy141:
-	switch (yych) {
-	case '0':
-	case '1':
-	case '2':
-	case '3':
-	case '4':
-	case '5':
-	case '6':
-	case '7':
-	case '8':
-	case '9':	goto yy140;
-	case 'E':
-	case 'e':	goto yy161;
-	case 'F':
-	case 'L':
-	case 'f':
-	case 'l':	goto yy139;
-	default:	goto yy98;
-	}
-yy142:
-	yych = *++YYCURSOR;
-	switch (yych) {
-	case '+':
-	case '-':	goto yy162;
-	case '0':
-	case '1':
-	case '2':
-	case '3':
-	case '4':
-	case '5':
-	case '6':
-	case '7':
-	case '8':
-	case '9':	goto yy163;
-	default:	goto yy69;
-	}
-yy143:
-	++YYCURSOR;
-	if (YYLIMIT <= YYCURSOR) YYFILL(1);
-	yych = *YYCURSOR;
-	switch (yych) {
+	case 'f':	goto yy132;
 	case 'L':
 	case 'U':
 	case 'l':
-	case 'u':	goto yy143;
-	default:	goto yy33;
+	case 'u':	goto yy105;
+	default:	goto yy34;
 	}
-yy145:
-	yych = *++YYCURSOR;
-	switch (yych) {
-	case '0':
-	case '1':
-	case '2':
-	case '3':
-	case '4':
-	case '5':
-	case '6':
-	case '7':
-	case '8':
-	case '9':	goto yy146;
-	default:	goto yy69;
-	}
-yy146:
-	++YYCURSOR;
-	if (YYLIMIT <= YYCURSOR) YYFILL(1);
-	yych = *YYCURSOR;
-	switch (yych) {
-	case '0':
-	case '1':
-	case '2':
-	case '3':
-	case '4':
-	case '5':
-	case '6':
-	case '7':
-	case '8':
-	case '9':	goto yy146;
-	case 'F':
-	case 'L':
-	case 'f':
-	case 'l':	goto yy139;
-	default:	goto yy98;
-	}
-yy148:
-	++YYCURSOR;
-	if (YYLIMIT <= YYCURSOR) YYFILL(1);
-	yych = *YYCURSOR;
-	switch (yych) {
-	case '0':
-	case '1':
-	case '2':
-	case '3':
-	case '4':
-	case '5':
-	case '6':
-	case '7':
-	case '8':
-	case '9':
-	case 'A':
-	case 'B':
-	case 'C':
-	case 'D':
-	case 'E':
-	case 'F':
-	case 'a':
-	case 'b':
-	case 'c':
-	case 'd':
-	case 'e':
-	case 'f':	goto yy148;
-	case 'L':
-	case 'U':
-	case 'l':
-	case 'u':	goto yy165;
-	default:	goto yy33;
-	}
-yy150:
+yy134:
 	++YYCURSOR;
 #line 152 "cnokw.re"
 	{ RET(LSHIFTEQ); }
-#line 1184 "cnokw.c"
-yy152:
+#line 1042 "cnokw.c"
+yy136:
 	++YYCURSOR;
 #line 151 "cnokw.re"
 	{ RET(RSHIFTEQ); }
-#line 1189 "cnokw.c"
-yy154:
-	++YYCURSOR;
-	if (YYLIMIT <= YYCURSOR) YYFILL(1);
-	yych = *YYCURSOR;
-	switch (yych) {
-	case '\n':	goto yy69;
-	case '"':	goto yy70;
-	case '0':
-	case '1':
-	case '2':
-	case '3':
-	case '4':
-	case '5':
-	case '6':
-	case '7':
-	case '8':
-	case '9':
-	case 'A':
-	case 'B':
-	case 'C':
-	case 'D':
-	case 'E':
-	case 'F':
-	case 'a':
-	case 'b':
-	case 'c':
-	case 'd':
-	case 'e':
-	case 'f':	goto yy154;
-	case '\\':	goto yy72;
-	default:	goto yy67;
-	}
-yy156:
-	++YYCURSOR;
-	if (YYLIMIT <= YYCURSOR) YYFILL(1);
-	yych = *YYCURSOR;
-	switch (yych) {
-	case '\n':	goto yy69;
-	case '\'':	goto yy81;
-	case '0':
-	case '1':
-	case '2':
-	case '3':
-	case '4':
-	case '5':
-	case '6':
-	case '7':
-	case '8':
-	case '9':
-	case 'A':
-	case 'B':
-	case 'C':
-	case 'D':
-	case 'E':
-	case 'F':
-	case 'a':
-	case 'b':
-	case 'c':
-	case 'd':
-	case 'e':
-	case 'f':	goto yy156;
-	case '\\':	goto yy82;
-	default:	goto yy79;
-	}
-yy158:
-	yych = *++YYCURSOR;
-	switch (yych) {
-	case '0':
-	case '1':
-	case '2':
-	case '3':
-	case '4':
-	case '5':
-	case '6':
-	case '7':
-	case '8':
-	case '9':	goto yy159;
-	default:	goto yy69;
-	}
-yy159:
-	++YYCURSOR;
-	if (YYLIMIT <= YYCURSOR) YYFILL(1);
-	yych = *YYCURSOR;
-	switch (yych) {
-	case '0':
-	case '1':
-	case '2':
-	case '3':
-	case '4':
-	case '5':
-	case '6':
-	case '7':
-	case '8':
-	case '9':	goto yy159;
-	case 'F':
-	case 'L':
-	case 'f':
-	case 'l':	goto yy139;
-	default:	goto yy98;
-	}
-yy161:
-	yych = *++YYCURSOR;
-	switch (yych) {
-	case '+':
-	case '-':	goto yy167;
-	case '0':
-	case '1':
-	case '2':
-	case '3':
-	case '4':
-	case '5':
-	case '6':
-	case '7':
-	case '8':
-	case '9':	goto yy168;
-	default:	goto yy69;
-	}
-yy162:
-	yych = *++YYCURSOR;
-	switch (yych) {
-	case '0':
-	case '1':
-	case '2':
-	case '3':
-	case '4':
-	case '5':
-	case '6':
-	case '7':
-	case '8':
-	case '9':	goto yy163;
-	default:	goto yy69;
-	}
-yy163:
-	++YYCURSOR;
-	if (YYLIMIT <= YYCURSOR) YYFILL(1);
-	yych = *YYCURSOR;
-	switch (yych) {
-	case '0':
-	case '1':
-	case '2':
-	case '3':
-	case '4':
-	case '5':
-	case '6':
-	case '7':
-	case '8':
-	case '9':	goto yy163;
-	case 'F':
-	case 'L':
-	case 'f':
-	case 'l':	goto yy139;
-	default:	goto yy98;
-	}
-yy165:
-	++YYCURSOR;
-	if (YYLIMIT <= YYCURSOR) YYFILL(1);
-	yych = *YYCURSOR;
-	switch (yych) {
-	case 'L':
-	case 'U':
-	case 'l':
-	case 'u':	goto yy165;
-	default:	goto yy33;
-	}
-yy167:
-	yych = *++YYCURSOR;
-	switch (yych) {
-	case '0':
-	case '1':
-	case '2':
-	case '3':
-	case '4':
-	case '5':
-	case '6':
-	case '7':
-	case '8':
-	case '9':	goto yy168;
-	default:	goto yy69;
-	}
-yy168:
-	++YYCURSOR;
-	if (YYLIMIT <= YYCURSOR) YYFILL(1);
-	yych = *YYCURSOR;
-	switch (yych) {
-	case '0':
-	case '1':
-	case '2':
-	case '3':
-	case '4':
-	case '5':
-	case '6':
-	case '7':
-	case '8':
-	case '9':	goto yy168;
-	case 'F':
-	case 'L':
-	case 'f':
-	case 'l':	goto yy139;
-	default:	goto yy98;
-	}
+#line 1047 "cnokw.c"
 }
 #line 212 "cnokw.re"
 
 
 comment:
 
-#line 1396 "cnokw.c"
+#line 1054 "cnokw.c"
 {
 	YYCTYPE yych;
 	if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
 	yych = *YYCURSOR;
 	switch (yych) {
-	case '\n':	goto yy174;
-	case '*':	goto yy176;
-	default:	goto yy172;
+	case '\n':	goto yy142;
+	case '*':	goto yy144;
+	default:	goto yy140;
 	}
-yy172:
+yy140:
 	++YYCURSOR;
-yy173:
+yy141:
 #line 223 "cnokw.re"
 	{ goto comment; }
-#line 1411 "cnokw.c"
-yy174:
+#line 1069 "cnokw.c"
+yy142:
 	++YYCURSOR;
 #line 218 "cnokw.re"
 	{
@@ -1416,18 +1074,18 @@ yy174:
 		s->tok = s->pos = cursor; s->line++;
 		goto comment;
 	    }
-#line 1420 "cnokw.c"
-yy176:
+#line 1078 "cnokw.c"
+yy144:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case '/':	goto yy177;
-	default:	goto yy173;
+	case '/':	goto yy145;
+	default:	goto yy141;
 	}
-yy177:
+yy145:
 	++YYCURSOR;
 #line 216 "cnokw.re"
 	{ goto std; }
-#line 1431 "cnokw.c"
+#line 1089 "cnokw.c"
 }
 #line 224 "cnokw.re"
 

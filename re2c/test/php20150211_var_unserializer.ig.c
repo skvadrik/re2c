@@ -859,14 +859,14 @@ yy46:
 			&&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18,
 			&&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18,
 			&&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18,
-			&&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy71, &&yy18,
+			&&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy69, &&yy18,
 			&&yy46, &&yy46, &&yy46, &&yy46, &&yy46, &&yy46, &&yy46, &&yy46,
-			&&yy46, &&yy46, &&yy18, &&yy73, &&yy18, &&yy18, &&yy18, &&yy18,
-			&&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy75, &&yy18, &&yy18,
+			&&yy46, &&yy46, &&yy18, &&yy71, &&yy18, &&yy18, &&yy18, &&yy18,
+			&&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy73, &&yy18, &&yy18,
 			&&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18,
 			&&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18,
 			&&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18,
-			&&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy75, &&yy18, &&yy18,
+			&&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy73, &&yy18, &&yy18,
 			&&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18,
 			&&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18,
 			&&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18,
@@ -891,11 +891,11 @@ yy46:
 	}
 yy48:
 	yych = *++YYCURSOR;
-	if (yych == 'N') goto yy76;
+	if (yych == 'N') goto yy74;
 	goto yy18;
 yy49:
 	yych = *++YYCURSOR;
-	if (yych == 'A') goto yy77;
+	if (yych == 'A') goto yy75;
 	goto yy18;
 yy50:
 	yych = *++YYCURSOR;
@@ -907,7 +907,7 @@ yy51:
 	yych = *YYCURSOR;
 	if (yych <= '/') goto yy18;
 	if (yych <= '9') goto yy51;
-	if (yych == ';') goto yy78;
+	if (yych == ';') goto yy76;
 	goto yy18;
 yy53:
 	yych = *++YYCURSOR;
@@ -919,7 +919,7 @@ yy54:
 	yych = *YYCURSOR;
 	if (yych <= '/') goto yy18;
 	if (yych <= '9') goto yy54;
-	if (yych <= ':') goto yy80;
+	if (yych <= ':') goto yy78;
 	goto yy18;
 yy56:
 	yych = *++YYCURSOR;
@@ -931,7 +931,7 @@ yy57:
 	yych = *YYCURSOR;
 	if (yych <= '/') goto yy18;
 	if (yych <= '9') goto yy57;
-	if (yych == ';') goto yy81;
+	if (yych == ';') goto yy79;
 	goto yy18;
 yy59:
 	yych = *++YYCURSOR;
@@ -943,11 +943,11 @@ yy60:
 	yych = *YYCURSOR;
 	if (yych <= '/') goto yy18;
 	if (yych <= '9') goto yy60;
-	if (yych <= ':') goto yy83;
+	if (yych <= ':') goto yy81;
 	goto yy18;
 yy62:
 	yych = *++YYCURSOR;
-	if (yych == '"') goto yy84;
+	if (yych == '"') goto yy82;
 	goto yy18;
 yy63:
 	++YYCURSOR;
@@ -974,11 +974,11 @@ yy63:
 }
 yy65:
 	yych = *++YYCURSOR;
-	if (yych == '"') goto yy86;
+	if (yych == '"') goto yy84;
 	goto yy18;
 yy66:
 	yych = *++YYCURSOR;
-	if (yych == '{') goto yy88;
+	if (yych == '{') goto yy86;
 	goto yy18;
 yy67:
 	++YYCURSOR;
@@ -1000,12 +1000,12 @@ yy69:
 			&&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18,
 			&&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18,
 			&&yy69, &&yy69, &&yy69, &&yy69, &&yy69, &&yy69, &&yy69, &&yy69,
-			&&yy69, &&yy69, &&yy18, &&yy73, &&yy18, &&yy18, &&yy18, &&yy18,
-			&&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy75, &&yy18, &&yy18,
+			&&yy69, &&yy69, &&yy18, &&yy71, &&yy18, &&yy18, &&yy18, &&yy18,
+			&&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy73, &&yy18, &&yy18,
 			&&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18,
 			&&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18,
 			&&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18,
-			&&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy75, &&yy18, &&yy18,
+			&&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy73, &&yy18, &&yy18,
 			&&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18,
 			&&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18,
 			&&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18,
@@ -1030,47 +1030,6 @@ yy69:
 	}
 yy71:
 	++YYCURSOR;
-	if ((YYLIMIT - YYCURSOR) < 4) YYFILL(4);
-	yych = *YYCURSOR;
-	{
-		static void *yytarget[256] = {
-			&&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18,
-			&&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18,
-			&&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18,
-			&&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18,
-			&&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18,
-			&&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18,
-			&&yy71, &&yy71, &&yy71, &&yy71, &&yy71, &&yy71, &&yy71, &&yy71,
-			&&yy71, &&yy71, &&yy18, &&yy73, &&yy18, &&yy18, &&yy18, &&yy18,
-			&&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy75, &&yy18, &&yy18,
-			&&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18,
-			&&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18,
-			&&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18,
-			&&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy75, &&yy18, &&yy18,
-			&&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18,
-			&&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18,
-			&&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18,
-			&&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18,
-			&&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18,
-			&&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18,
-			&&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18,
-			&&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18,
-			&&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18,
-			&&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18,
-			&&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18,
-			&&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18,
-			&&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18,
-			&&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18,
-			&&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18,
-			&&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18,
-			&&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18,
-			&&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18,
-			&&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18
-		};
-		goto *yytarget[yych];
-	}
-yy73:
-	++YYCURSOR;
 	{
 #if SIZEOF_ZEND_LONG == 4
 use_double:
@@ -1079,26 +1038,26 @@ use_double:
 	ZVAL_DOUBLE(rval, zend_strtod((const char *)start + 2, NULL));
 	return 1;
 }
-yy75:
+yy73:
 	yych = *++YYCURSOR;
 	if (yych <= ',') {
-		if (yych == '+') goto yy90;
+		if (yych == '+') goto yy88;
 		goto yy18;
 	} else {
-		if (yych <= '-') goto yy90;
+		if (yych <= '-') goto yy88;
 		if (yych <= '/') goto yy18;
-		if (yych <= '9') goto yy91;
+		if (yych <= '9') goto yy89;
 		goto yy18;
 	}
+yy74:
+	yych = *++YYCURSOR;
+	if (yych == 'F') goto yy91;
+	goto yy18;
+yy75:
+	yych = *++YYCURSOR;
+	if (yych == 'N') goto yy91;
+	goto yy18;
 yy76:
-	yych = *++YYCURSOR;
-	if (yych == 'F') goto yy93;
-	goto yy18;
-yy77:
-	yych = *++YYCURSOR;
-	if (yych == 'N') goto yy93;
-	goto yy18;
-yy78:
 	++YYCURSOR;
 	{
 #if SIZEOF_ZEND_LONG == 4
@@ -1125,11 +1084,11 @@ yy78:
 	ZVAL_LONG(rval, parse_iv(start + 2));
 	return 1;
 }
-yy80:
+yy78:
 	yych = *++YYCURSOR;
-	if (yych == '"') goto yy94;
+	if (yych == '"') goto yy92;
 	goto yy18;
-yy81:
+yy79:
 	++YYCURSOR;
 	{
 	zend_long id;
@@ -1153,11 +1112,11 @@ yy81:
 
 	return 1;
 }
-yy83:
+yy81:
 	yych = *++YYCURSOR;
-	if (yych == '"') goto yy96;
+	if (yych == '"') goto yy94;
 	goto yy18;
-yy84:
+yy82:
 	++YYCURSOR;
 	{
 	size_t len, len2, len3, maxlen;
@@ -1303,7 +1262,7 @@ yy84:
 
 	return object_common2(UNSERIALIZE_PASSTHRU, elements);
 }
-yy86:
+yy84:
 	++YYCURSOR;
 	{
 	size_t len, maxlen;
@@ -1332,7 +1291,7 @@ yy86:
 	ZVAL_STR(rval, str);
 	return 1;
 }
-yy88:
+yy86:
 	++YYCURSOR;
 	{
 	zend_long elements = parse_iv(start + 2);
@@ -1354,29 +1313,29 @@ yy88:
 
 	return finish_nested_data(UNSERIALIZE_PASSTHRU);
 }
-yy90:
+yy88:
 	yych = *++YYCURSOR;
 	if (yych <= ',') {
-		if (yych == '+') goto yy98;
+		if (yych == '+') goto yy96;
 		goto yy18;
 	} else {
-		if (yych <= '-') goto yy98;
+		if (yych <= '-') goto yy96;
 		if (yych <= '/') goto yy18;
 		if (yych >= ':') goto yy18;
 	}
-yy91:
+yy89:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	if (yych <= '/') goto yy18;
-	if (yych <= '9') goto yy91;
-	if (yych == ';') goto yy73;
+	if (yych <= '9') goto yy89;
+	if (yych == ';') goto yy71;
 	goto yy18;
-yy93:
+yy91:
 	yych = *++YYCURSOR;
-	if (yych == ';') goto yy99;
+	if (yych == ';') goto yy97;
 	goto yy18;
-yy94:
+yy92:
 	++YYCURSOR;
 	{
 
@@ -1385,7 +1344,7 @@ yy94:
 	return object_common2(UNSERIALIZE_PASSTHRU,
 			object_common1(UNSERIALIZE_PASSTHRU, ZEND_STANDARD_CLASS_DEF_PTR));
 }
-yy96:
+yy94:
 	++YYCURSOR;
 	{
 	size_t len, maxlen;
@@ -1413,12 +1372,12 @@ yy96:
 	ZVAL_STRINGL(rval, str, len);
 	return 1;
 }
-yy98:
+yy96:
 	yych = *++YYCURSOR;
 	if (yych <= '/') goto yy18;
-	if (yych <= '9') goto yy91;
+	if (yych <= '9') goto yy89;
 	goto yy18;
-yy99:
+yy97:
 	++YYCURSOR;
 	{
 	*p = YYCURSOR;

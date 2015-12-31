@@ -286,15 +286,15 @@ yyFillLabel0:
 			&&yy6,  &&yy4,  &&yy4,  &&yy4,  &&yy4,  &&yy4,  &&yy4,  &&yy4,
 			&&yy10, &&yy12, &&yy14, &&yy16, &&yy4,  &&yy18, &&yy4,  &&yy20,
 			&&yy22, &&yy22, &&yy22, &&yy22, &&yy22, &&yy22, &&yy22, &&yy22,
-			&&yy22, &&yy22, &&yy4,  &&yy4,  &&yy4,  &&yy24, &&yy4,  &&yy4,
-			&&yy4,  &&yy26, &&yy26, &&yy26, &&yy26, &&yy26, &&yy26, &&yy26,
-			&&yy26, &&yy26, &&yy26, &&yy26, &&yy26, &&yy26, &&yy26, &&yy26,
-			&&yy26, &&yy26, &&yy26, &&yy26, &&yy26, &&yy26, &&yy26, &&yy26,
-			&&yy26, &&yy26, &&yy26, &&yy4,  &&yy4,  &&yy4,  &&yy4,  &&yy26,
-			&&yy4,  &&yy26, &&yy28, &&yy26, &&yy26, &&yy29, &&yy30, &&yy31,
-			&&yy32, &&yy33, &&yy26, &&yy26, &&yy26, &&yy26, &&yy26, &&yy26,
-			&&yy26, &&yy26, &&yy34, &&yy26, &&yy26, &&yy26, &&yy26, &&yy35,
-			&&yy26, &&yy26, &&yy26, &&yy4,  &&yy4,  &&yy4,  &&yy4,  &&yy4,
+			&&yy22, &&yy22, &&yy4,  &&yy4,  &&yy4,  &&yy25, &&yy4,  &&yy4,
+			&&yy4,  &&yy27, &&yy27, &&yy27, &&yy27, &&yy27, &&yy27, &&yy27,
+			&&yy27, &&yy27, &&yy27, &&yy27, &&yy27, &&yy27, &&yy27, &&yy27,
+			&&yy27, &&yy27, &&yy27, &&yy27, &&yy27, &&yy27, &&yy27, &&yy27,
+			&&yy27, &&yy27, &&yy27, &&yy4,  &&yy4,  &&yy4,  &&yy4,  &&yy27,
+			&&yy4,  &&yy27, &&yy30, &&yy27, &&yy27, &&yy31, &&yy32, &&yy33,
+			&&yy27, &&yy34, &&yy27, &&yy27, &&yy27, &&yy27, &&yy27, &&yy27,
+			&&yy27, &&yy27, &&yy35, &&yy27, &&yy27, &&yy27, &&yy27, &&yy36,
+			&&yy27, &&yy27, &&yy27, &&yy4,  &&yy4,  &&yy4,  &&yy4,  &&yy4,
 			&&yy4,  &&yy4,  &&yy4,  &&yy4,  &&yy4,  &&yy4,  &&yy4,  &&yy4,
 			&&yy4,  &&yy4,  &&yy4,  &&yy4,  &&yy4,  &&yy4,  &&yy4,  &&yy4,
 			&&yy4,  &&yy4,  &&yy4,  &&yy4,  &&yy4,  &&yy4,  &&yy4,  &&yy4,
@@ -366,194 +366,178 @@ yy20:
 #line 367 "push.fg.c"
 yy22:
 	++YYCURSOR;
-	yych = *YYCURSOR;
-	goto yy37;
-yy23:
-#line 247 "push.fg.re"
-	{ SEND(kDecimalConstant);}
-#line 375 "push.fg.c"
-yy24:
-	++YYCURSOR;
-#line 249 "push.fg.re"
-	{ SEND(kEqual);          }
-#line 380 "push.fg.c"
-yy26:
-	++YYCURSOR;
-	yych = *YYCURSOR;
-	goto yy39;
-yy27:
-#line 246 "push.fg.re"
-	{ SEND(kIdentifier);     }
-#line 388 "push.fg.c"
-yy28:
-	yych = *++YYCURSOR;
-	if (yych == 'r') goto yy40;
-	goto yy39;
-yy29:
-	yych = *++YYCURSOR;
-	if (yych == 'l') goto yy41;
-	goto yy39;
-yy30:
-	yych = *++YYCURSOR;
-	if (yych == 'o') goto yy42;
-	goto yy39;
-yy31:
-	yych = *++YYCURSOR;
-	if (yych == 'o') goto yy43;
-	goto yy39;
-yy32:
-	yych = *++YYCURSOR;
-	goto yy39;
-yy33:
-	yych = *++YYCURSOR;
-	if (yych == 'f') goto yy44;
-	goto yy39;
-yy34:
-	yych = *++YYCURSOR;
-	if (yych == 'e') goto yy46;
-	goto yy39;
-yy35:
-	yych = *++YYCURSOR;
-	if (yych == 'h') goto yy47;
-	goto yy39;
-yy36:
-	++YYCURSOR;
 	YYSETSTATE(1);
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 yyFillLabel1:
 	yych = *YYCURSOR;
-yy37:
 	if (yybm[0+yych] & 64) {
-		goto yy36;
+		goto yy22;
 	}
-	goto yy23;
-yy38:
+#line 247 "push.fg.re"
+	{ SEND(kDecimalConstant);}
+#line 379 "push.fg.c"
+yy25:
+	++YYCURSOR;
+#line 249 "push.fg.re"
+	{ SEND(kEqual);          }
+#line 384 "push.fg.c"
+yy27:
 	++YYCURSOR;
 	YYSETSTATE(2);
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 yyFillLabel2:
 	yych = *YYCURSOR;
-yy39:
+yy28:
 	if (yybm[0+yych] & 128) {
-		goto yy38;
+		goto yy27;
 	}
-	goto yy27;
+#line 246 "push.fg.re"
+	{ SEND(kIdentifier);     }
+#line 397 "push.fg.c"
+yy30:
+	yych = *++YYCURSOR;
+	if (yych == 'r') goto yy37;
+	goto yy28;
+yy31:
+	yych = *++YYCURSOR;
+	if (yych == 'l') goto yy38;
+	goto yy28;
+yy32:
+	yych = *++YYCURSOR;
+	if (yych == 'o') goto yy39;
+	goto yy28;
+yy33:
+	yych = *++YYCURSOR;
+	if (yych == 'o') goto yy40;
+	goto yy28;
+yy34:
+	yych = *++YYCURSOR;
+	if (yych == 'f') goto yy41;
+	goto yy28;
+yy35:
+	yych = *++YYCURSOR;
+	if (yych == 'e') goto yy43;
+	goto yy28;
+yy36:
+	yych = *++YYCURSOR;
+	if (yych == 'h') goto yy44;
+	goto yy28;
+yy37:
+	yych = *++YYCURSOR;
+	if (yych == 'e') goto yy45;
+	goto yy28;
+yy38:
+	yych = *++YYCURSOR;
+	if (yych == 's') goto yy46;
+	goto yy28;
+yy39:
+	yych = *++YYCURSOR;
+	if (yych == 'r') goto yy47;
+	goto yy28;
 yy40:
 	yych = *++YYCURSOR;
-	if (yych == 'e') goto yy48;
-	goto yy39;
+	if (yych == 't') goto yy49;
+	goto yy28;
 yy41:
-	yych = *++YYCURSOR;
-	if (yych == 's') goto yy49;
-	goto yy39;
-yy42:
-	yych = *++YYCURSOR;
-	if (yych == 'r') goto yy50;
-	goto yy39;
-yy43:
-	yych = *++YYCURSOR;
-	if (yych == 't') goto yy52;
-	goto yy39;
-yy44:
 	++YYCURSOR;
 	if (yybm[0+(yych = *YYCURSOR)] & 128) {
-		goto yy38;
+		goto yy27;
 	}
 #line 239 "push.fg.re"
 	{ SEND(kIf);             }
-#line 465 "push.fg.c"
+#line 449 "push.fg.c"
+yy43:
+	yych = *++YYCURSOR;
+	if (yych == 't') goto yy50;
+	goto yy28;
+yy44:
+	yych = *++YYCURSOR;
+	if (yych == 'i') goto yy51;
+	goto yy28;
+yy45:
+	yych = *++YYCURSOR;
+	if (yych == 'a') goto yy52;
+	goto yy28;
 yy46:
 	yych = *++YYCURSOR;
-	if (yych == 't') goto yy53;
-	goto yy39;
+	if (yych == 'e') goto yy53;
+	goto yy28;
 yy47:
-	yych = *++YYCURSOR;
-	if (yych == 'i') goto yy54;
-	goto yy39;
-yy48:
-	yych = *++YYCURSOR;
-	if (yych == 'a') goto yy55;
-	goto yy39;
-yy49:
-	yych = *++YYCURSOR;
-	if (yych == 'e') goto yy56;
-	goto yy39;
-yy50:
 	++YYCURSOR;
 	if (yybm[0+(yych = *YYCURSOR)] & 128) {
-		goto yy38;
+		goto yy27;
 	}
 #line 240 "push.fg.re"
 	{ SEND(kFor);            }
-#line 489 "push.fg.c"
+#line 473 "push.fg.c"
+yy49:
+	yych = *++YYCURSOR;
+	if (yych == 'o') goto yy55;
+	goto yy28;
+yy50:
+	yych = *++YYCURSOR;
+	if (yych == 'u') goto yy57;
+	goto yy28;
+yy51:
+	yych = *++YYCURSOR;
+	if (yych == 'l') goto yy58;
+	goto yy28;
 yy52:
 	yych = *++YYCURSOR;
-	if (yych == 'o') goto yy58;
-	goto yy39;
+	if (yych == 'k') goto yy59;
+	goto yy28;
 yy53:
-	yych = *++YYCURSOR;
-	if (yych == 'u') goto yy60;
-	goto yy39;
-yy54:
-	yych = *++YYCURSOR;
-	if (yych == 'l') goto yy61;
-	goto yy39;
-yy55:
-	yych = *++YYCURSOR;
-	if (yych == 'k') goto yy62;
-	goto yy39;
-yy56:
 	++YYCURSOR;
 	if (yybm[0+(yych = *YYCURSOR)] & 128) {
-		goto yy38;
+		goto yy27;
 	}
 #line 241 "push.fg.re"
 	{ SEND(kElse);           }
-#line 513 "push.fg.c"
-yy58:
+#line 497 "push.fg.c"
+yy55:
 	++YYCURSOR;
 	if (yybm[0+(yych = *YYCURSOR)] & 128) {
-		goto yy38;
+		goto yy27;
 	}
 #line 242 "push.fg.re"
 	{ SEND(kGoto);           }
-#line 521 "push.fg.c"
-yy60:
+#line 505 "push.fg.c"
+yy57:
 	yych = *++YYCURSOR;
-	if (yych == 'r') goto yy64;
-	goto yy39;
-yy61:
+	if (yych == 'r') goto yy61;
+	goto yy28;
+yy58:
 	yych = *++YYCURSOR;
-	if (yych == 'e') goto yy65;
-	goto yy39;
-yy62:
+	if (yych == 'e') goto yy62;
+	goto yy28;
+yy59:
 	++YYCURSOR;
 	if (yybm[0+(yych = *YYCURSOR)] & 128) {
-		goto yy38;
+		goto yy27;
 	}
 #line 243 "push.fg.re"
 	{ SEND(kBreak);          }
-#line 537 "push.fg.c"
-yy64:
+#line 521 "push.fg.c"
+yy61:
 	yych = *++YYCURSOR;
-	if (yych == 'n') goto yy67;
-	goto yy39;
-yy65:
+	if (yych == 'n') goto yy64;
+	goto yy28;
+yy62:
 	++YYCURSOR;
 	if (yybm[0+(yych = *YYCURSOR)] & 128) {
-		goto yy38;
+		goto yy27;
 	}
 #line 244 "push.fg.re"
 	{ SEND(kWhile);          }
-#line 549 "push.fg.c"
-yy67:
+#line 533 "push.fg.c"
+yy64:
 	++YYCURSOR;
 	if (yybm[0+(yych = *YYCURSOR)] & 128) {
-		goto yy38;
+		goto yy27;
 	}
 #line 245 "push.fg.re"
 	{ SEND(kReturn);         }
-#line 557 "push.fg.c"
+#line 541 "push.fg.c"
 }
 #line 261 "push.fg.re"
 

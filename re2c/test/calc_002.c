@@ -81,7 +81,7 @@ yy10:
 			case '6':
 			case '7':
 			case '8':
-			case '9':	goto yy14;
+			case '9':	goto yy15;
 			default:	goto yy11;
 			}
 yy11:
@@ -90,13 +90,26 @@ yy11:
 #line 91 "calc_002.c"
 yy12:
 			++YYCURSOR;
+			if (YYLIMIT <= YYCURSOR) YYFILL(1);
 			yych = *YYCURSOR;
-			goto yy18;
-yy13:
+			switch (yych) {
+			case '0':
+			case '1':
+			case '2':
+			case '3':
+			case '4':
+			case '5':
+			case '6':
+			case '7':
+			case '8':
+			case '9':	goto yy12;
+			default:	goto yy14;
+			}
+yy14:
 #line 47 "calc_002.re"
 			{ printf("Num\n");	continue; }
-#line 99 "calc_002.c"
-yy14:
+#line 112 "calc_002.c"
+yy15:
 			++YYCURSOR;
 			if (YYLIMIT <= YYCURSOR) YYFILL(1);
 			yych = *YYCURSOR;
@@ -110,31 +123,13 @@ yy14:
 			case '6':
 			case '7':
 			case '8':
-			case '9':	goto yy14;
-			default:	goto yy16;
+			case '9':	goto yy15;
+			default:	goto yy17;
 			}
-yy16:
+yy17:
 #line 46 "calc_002.re"
 			{ printf("Oct\n");	continue; }
-#line 120 "calc_002.c"
-yy17:
-			++YYCURSOR;
-			if (YYLIMIT <= YYCURSOR) YYFILL(1);
-			yych = *YYCURSOR;
-yy18:
-			switch (yych) {
-			case '0':
-			case '1':
-			case '2':
-			case '3':
-			case '4':
-			case '5':
-			case '6':
-			case '7':
-			case '8':
-			case '9':	goto yy17;
-			default:	goto yy13;
-			}
+#line 133 "calc_002.c"
 		}
 #line 53 "calc_002.re"
 

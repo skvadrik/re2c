@@ -28,21 +28,15 @@ yy2:
 	{ return NULL; }
 yy4:
 	++p;
-	c = *p;
-	goto yy7;
-yy5:
-	{ return p; }
-yy6:
-	++p;
 	*state = 1;
 	if (p >= e) {
 		return NULL;
 	}
 yyFillLabel1:
 	c = *p;
-yy7:
-	if (c <= '/') goto yy5;
-	if (c <= '9') goto yy6;
-	goto yy5;
+	if (c <= '/') goto yy6;
+	if (c <= '9') goto yy4;
+yy6:
+	{ return p; }
 
 }

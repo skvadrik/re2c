@@ -15,11 +15,9 @@ yy3:
 	{ return FULL; }
 #line 17 "default_full.x.c"
 yy4:
-	yych = *++YYCURSOR;
-	if (yych <= 0xDBFF) goto yy3;
-	if (yych >= 0xE000) goto yy3;
 	++YYCURSOR;
-	yych = *YYCURSOR;
+	if ((yych = *YYCURSOR) <= 0xDBFF) goto yy3;
+	if (yych <= 0xDFFF) goto yy2;
 	goto yy3;
 }
 #line 4 "default_full.x.re"

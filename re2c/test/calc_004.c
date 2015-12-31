@@ -85,7 +85,7 @@ yy10:
 			case '6':
 			case '7':
 			case '8':
-			case '9':	goto yy13;
+			case '9':	goto yy14;
 			default:	goto yy11;
 			}
 yy11:
@@ -93,9 +93,6 @@ yy11:
 			{ t = tokendup(t, p); printf("Num: %s\n", t); free(t); continue; }
 #line 95 "calc_004.c"
 yy12:
-			yych = *++YYCURSOR;
-			goto yy17;
-yy13:
 			++YYCURSOR;
 			if (YYLIMIT <= YYCURSOR) YYFILL(1);
 			yych = *YYCURSOR;
@@ -109,31 +106,30 @@ yy13:
 			case '6':
 			case '7':
 			case '8':
-			case '9':	goto yy13;
-			default:	goto yy15;
-			}
-yy15:
-#line 56 "calc_004.re"
-			{ t = tokendup(t, p); printf("Oct: %s\n", t); free(t); continue; }
-#line 119 "calc_004.c"
-yy16:
-			++YYCURSOR;
-			if (YYLIMIT <= YYCURSOR) YYFILL(1);
-			yych = *YYCURSOR;
-yy17:
-			switch (yych) {
-			case '0':
-			case '1':
-			case '2':
-			case '3':
-			case '4':
-			case '5':
-			case '6':
-			case '7':
-			case '8':
-			case '9':	goto yy16;
+			case '9':	goto yy12;
 			default:	goto yy11;
 			}
+yy14:
+			++YYCURSOR;
+			if (YYLIMIT <= YYCURSOR) YYFILL(1);
+			yych = *YYCURSOR;
+			switch (yych) {
+			case '0':
+			case '1':
+			case '2':
+			case '3':
+			case '4':
+			case '5':
+			case '6':
+			case '7':
+			case '8':
+			case '9':	goto yy14;
+			default:	goto yy16;
+			}
+yy16:
+#line 56 "calc_004.re"
+			{ t = tokendup(t, p); printf("Oct: %s\n", t); free(t); continue; }
+#line 133 "calc_004.c"
 		}
 #line 62 "calc_004.re"
 

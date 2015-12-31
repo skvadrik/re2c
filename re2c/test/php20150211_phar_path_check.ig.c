@@ -78,8 +78,8 @@ loop:
 			&&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16,
 			&&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16, &&yy16,
 			&&yy17, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18,
-			&&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy19, &&yy20, &&yy20,
-			&&yy21, &&yy22, &&yy22, &&yy22, &&yy23, &&yy5,  &&yy5,  &&yy5,
+			&&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy19, &&yy18, &&yy18,
+			&&yy20, &&yy21, &&yy21, &&yy21, &&yy22, &&yy5,  &&yy5,  &&yy5,
 			&&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5
 		};
 		goto *yytarget[yych];
@@ -129,8 +129,8 @@ yy11:
 	yyaccept = 0;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= '-') goto yy8;
-	if (yych <= '.') goto yy24;
-	if (yych <= '/') goto yy25;
+	if (yych <= '.') goto yy23;
+	if (yych <= '/') goto yy24;
 	goto yy8;
 yy12:
 	++YYCURSOR;
@@ -151,128 +151,78 @@ yy14:
 yy16:
 	yych = *++YYCURSOR;
 	if (yych <= 0x7F) goto yy6;
-	if (yych <= 0xBF) goto yy27;
+	if (yych <= 0xBF) goto yy7;
 	goto yy6;
 yy17:
 	yyaccept = 1;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= 0x9F) goto yy6;
-	if (yych <= 0xBF) goto yy28;
+	if (yych <= 0xBF) goto yy26;
 	goto yy6;
 yy18:
 	yyaccept = 1;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= 0x7F) goto yy6;
-	if (yych <= 0xBF) goto yy29;
+	if (yych <= 0xBF) goto yy26;
 	goto yy6;
 yy19:
 	yyaccept = 1;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= 0x7F) goto yy6;
-	if (yych <= 0x9F) goto yy30;
+	if (yych <= 0x9F) goto yy26;
 	goto yy6;
 yy20:
 	yyaccept = 1;
 	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych <= 0x7F) goto yy6;
-	if (yych <= 0xBF) goto yy31;
+	if (yych <= 0x8F) goto yy6;
+	if (yych <= 0xBF) goto yy27;
 	goto yy6;
 yy21:
 	yyaccept = 1;
 	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych <= 0x8F) goto yy6;
-	if (yych <= 0xBF) goto yy32;
+	if (yych <= 0x7F) goto yy6;
+	if (yych <= 0xBF) goto yy27;
 	goto yy6;
 yy22:
 	yyaccept = 1;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= 0x7F) goto yy6;
-	if (yych <= 0xBF) goto yy33;
+	if (yych <= 0x8F) goto yy27;
 	goto yy6;
 yy23:
-	yyaccept = 1;
-	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych <= 0x7F) goto yy6;
-	if (yych <= 0x8F) goto yy34;
-	goto yy6;
-yy24:
 	yych = *++YYCURSOR;
-	if (yych <= 0x00) goto yy35;
+	if (yych <= 0x00) goto yy28;
 	if (yych <= '-') goto yy2;
-	if (yych <= '.') goto yy37;
-	if (yych <= '/') goto yy35;
+	if (yych <= '.') goto yy30;
+	if (yych <= '/') goto yy28;
 	goto yy2;
-yy25:
+yy24:
 	++YYCURSOR;
 	{
 			*error = "double slash";
 			return pcr_err_double_slash;
 		}
+yy26:
+	yych = *++YYCURSOR;
+	if (yych <= 0x7F) goto yy2;
+	if (yych <= 0xBF) goto yy7;
+	goto yy2;
 yy27:
 	yych = *++YYCURSOR;
-	goto yy8;
+	if (yych <= 0x7F) goto yy2;
+	if (yych <= 0xBF) goto yy26;
+	goto yy2;
 yy28:
-	yych = *++YYCURSOR;
-	if (yych <= 0x7F) goto yy2;
-	if (yych <= 0xBF) goto yy27;
-	goto yy2;
-yy29:
-	yych = *++YYCURSOR;
-	if (yych <= 0x7F) goto yy2;
-	if (yych <= 0xBF) goto yy27;
-	goto yy2;
-yy30:
-	yych = *++YYCURSOR;
-	if (yych <= 0x7F) goto yy2;
-	if (yych <= 0xBF) goto yy27;
-	goto yy2;
-yy31:
-	yych = *++YYCURSOR;
-	if (yych <= 0x7F) goto yy2;
-	if (yych <= 0xBF) goto yy27;
-	goto yy2;
-yy32:
-	yych = *++YYCURSOR;
-	if (yych <= 0x7F) goto yy2;
-	if (yych <= 0xBF) goto yy38;
-	goto yy2;
-yy33:
-	yych = *++YYCURSOR;
-	if (yych <= 0x7F) goto yy2;
-	if (yych <= 0xBF) goto yy39;
-	goto yy2;
-yy34:
-	yych = *++YYCURSOR;
-	if (yych <= 0x7F) goto yy2;
-	if (yych <= 0xBF) goto yy40;
-	goto yy2;
-yy35:
 	++YYCURSOR;
 	{
 			*error = "current directory reference";
 			return pcr_err_curr_dir;
 		}
-yy37:
+yy30:
 	yych = *++YYCURSOR;
-	if (yych <= 0x00) goto yy41;
-	if (yych == '/') goto yy41;
-	goto yy2;
-yy38:
-	yych = *++YYCURSOR;
-	if (yych <= 0x7F) goto yy2;
-	if (yych <= 0xBF) goto yy27;
-	goto yy2;
-yy39:
-	yych = *++YYCURSOR;
-	if (yych <= 0x7F) goto yy2;
-	if (yych <= 0xBF) goto yy27;
-	goto yy2;
-yy40:
-	yych = *++YYCURSOR;
-	if (yych <= 0x7F) goto yy2;
-	if (yych <= 0xBF) goto yy27;
-	goto yy2;
-yy41:
+	if (yych <= 0x00) goto yy31;
+	if (yych != '/') goto yy2;
+yy31:
 	++YYCURSOR;
 	{
 			*error = "upper directory reference";

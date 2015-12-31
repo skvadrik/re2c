@@ -101,8 +101,8 @@ yy7:
 yy8:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
-	case '.':	goto yy11;
-	case '0':	goto yy12;
+	case '.':	goto yy6;
+	case '0':	goto yy11;
 	default:	goto yy3;
 	}
 yy9:
@@ -115,30 +115,17 @@ yy10:
 	default:	goto yy7;
 	}
 yy11:
-	yych = *++YYCURSOR;
-	switch (yych) {
-	case 'L':	goto yy9;
-	case 'e':	goto yy15;
-	default:	goto yy7;
-	}
-yy12:
 	++YYCURSOR;
 	if ((YYLIMIT - YYCURSOR) < 3) YYFILL(3);
 	yych = *YYCURSOR;
 	switch (yych) {
-	case '.':	goto yy11;
-	case '0':	goto yy12;
-	default:	goto yy14;
+	case '.':	goto yy6;
+	case '0':	goto yy11;
+	default:	goto yy13;
 	}
-yy14:
+yy13:
 	YYCURSOR = YYMARKER;
 	goto yy3;
-yy15:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
-	case 'L':	goto yy9;
-	default:	goto yy7;
-	}
 }
 #line 77 "bug1297658.re"
 

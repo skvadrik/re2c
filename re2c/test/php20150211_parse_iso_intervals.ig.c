@@ -885,127 +885,121 @@ yy64:
 yy65:
 	yych = *++YYCURSOR;
 	if (yych <= '/') goto yy13;
-	if (yych <= '0') goto yy69;
-	if (yych <= '2') goto yy70;
-	if (yych <= '3') goto yy71;
+	if (yych <= '2') goto yy69;
+	if (yych <= '3') goto yy70;
 	goto yy13;
 yy66:
 	yych = *++YYCURSOR;
-	if (yych == 'T') goto yy72;
+	if (yych == 'T') goto yy71;
 	goto yy13;
 yy67:
 	yych = *++YYCURSOR;
 	if (yych <= '/') goto yy13;
-	if (yych <= '9') goto yy73;
+	if (yych <= '9') goto yy72;
 	goto yy13;
 yy68:
 	yych = *++YYCURSOR;
 	if (yych <= '/') goto yy13;
-	if (yych <= '4') goto yy73;
+	if (yych <= '4') goto yy72;
 	goto yy13;
 yy69:
 	yych = *++YYCURSOR;
 	if (yych <= '/') goto yy13;
-	if (yych <= '9') goto yy74;
+	if (yych <= '9') goto yy73;
 	goto yy13;
 yy70:
 	yych = *++YYCURSOR;
 	if (yych <= '/') goto yy13;
-	if (yych <= '9') goto yy74;
+	if (yych <= '1') goto yy73;
 	goto yy13;
 yy71:
 	yych = *++YYCURSOR;
 	if (yych <= '/') goto yy13;
 	if (yych <= '1') goto yy74;
+	if (yych <= '2') goto yy75;
 	goto yy13;
 yy72:
 	yych = *++YYCURSOR;
 	if (yych <= '/') goto yy13;
-	if (yych <= '1') goto yy75;
-	if (yych <= '2') goto yy76;
+	if (yych <= '5') goto yy76;
 	goto yy13;
 yy73:
 	yych = *++YYCURSOR;
-	if (yych <= '/') goto yy13;
-	if (yych <= '5') goto yy77;
+	if (yych == 'T') goto yy77;
 	goto yy13;
 yy74:
 	yych = *++YYCURSOR;
-	if (yych == 'T') goto yy78;
+	if (yych <= '/') goto yy13;
+	if (yych <= '9') goto yy78;
 	goto yy13;
 yy75:
 	yych = *++YYCURSOR;
 	if (yych <= '/') goto yy13;
-	if (yych <= '9') goto yy79;
+	if (yych <= '4') goto yy78;
 	goto yy13;
 yy76:
 	yych = *++YYCURSOR;
 	if (yych <= '/') goto yy13;
-	if (yych <= '4') goto yy79;
+	if (yych <= '9') goto yy79;
 	goto yy13;
 yy77:
 	yych = *++YYCURSOR;
 	if (yych <= '/') goto yy13;
-	if (yych <= '9') goto yy80;
+	if (yych <= '1') goto yy80;
+	if (yych <= '2') goto yy81;
 	goto yy13;
 yy78:
 	yych = *++YYCURSOR;
-	if (yych <= '/') goto yy13;
-	if (yych <= '1') goto yy81;
-	if (yych <= '2') goto yy82;
+	if (yych == ':') goto yy82;
 	goto yy13;
 yy79:
 	yych = *++YYCURSOR;
-	if (yych == ':') goto yy83;
+	if (yych <= '/') goto yy13;
+	if (yych <= '5') goto yy83;
 	goto yy13;
 yy80:
 	yych = *++YYCURSOR;
 	if (yych <= '/') goto yy13;
-	if (yych <= '5') goto yy84;
+	if (yych <= '9') goto yy84;
 	goto yy13;
 yy81:
 	yych = *++YYCURSOR;
 	if (yych <= '/') goto yy13;
-	if (yych <= '9') goto yy85;
+	if (yych <= '4') goto yy84;
 	goto yy13;
 yy82:
 	yych = *++YYCURSOR;
 	if (yych <= '/') goto yy13;
-	if (yych <= '4') goto yy85;
+	if (yych <= '5') goto yy85;
 	goto yy13;
 yy83:
 	yych = *++YYCURSOR;
 	if (yych <= '/') goto yy13;
-	if (yych <= '5') goto yy86;
+	if (yych <= '9') goto yy86;
 	goto yy13;
 yy84:
 	yych = *++YYCURSOR;
-	if (yych <= '/') goto yy13;
-	if (yych <= '9') goto yy87;
+	if (yych == ':') goto yy87;
 	goto yy13;
 yy85:
 	yych = *++YYCURSOR;
-	if (yych == ':') goto yy88;
+	if (yych <= '/') goto yy13;
+	if (yych <= '9') goto yy88;
 	goto yy13;
 yy86:
 	yych = *++YYCURSOR;
-	if (yych <= '/') goto yy13;
-	if (yych <= '9') goto yy89;
+	if (yych == 'Z') goto yy89;
 	goto yy13;
 yy87:
 	yych = *++YYCURSOR;
-	if (yych == 'Z') goto yy90;
+	if (yych <= '/') goto yy13;
+	if (yych <= '5') goto yy91;
 	goto yy13;
 yy88:
 	yych = *++YYCURSOR;
-	if (yych <= '/') goto yy13;
-	if (yych <= '5') goto yy92;
+	if (yych == ':') goto yy79;
 	goto yy13;
 yy89:
-	yych = *++YYCURSOR;
-	if (yych == ':') goto yy93;
-	goto yy13;
-yy90:
 	++YYCURSOR;
 	{
 		timelib_time *current;
@@ -1029,35 +1023,15 @@ yy90:
 		TIMELIB_DEINIT;
 		return TIMELIB_ISO_DATE;
 	}
-yy92:
+yy91:
 	yych = *++YYCURSOR;
 	if (yych <= '/') goto yy13;
-	if (yych <= '9') goto yy94;
-	goto yy13;
-yy93:
+	if (yych >= ':') goto yy13;
+	yych = *++YYCURSOR;
+	if (yych != ':') goto yy13;
 	yych = *++YYCURSOR;
 	if (yych <= '/') goto yy13;
-	if (yych <= '5') goto yy95;
-	goto yy13;
-yy94:
-	yych = *++YYCURSOR;
-	if (yych == ':') goto yy96;
-	goto yy13;
-yy95:
-	yych = *++YYCURSOR;
-	if (yych <= '/') goto yy13;
-	if (yych <= '9') goto yy97;
-	goto yy13;
-yy96:
-	yych = *++YYCURSOR;
-	if (yych <= '/') goto yy13;
-	if (yych <= '5') goto yy98;
-	goto yy13;
-yy97:
-	yych = *++YYCURSOR;
-	if (yych == 'Z') goto yy90;
-	goto yy13;
-yy98:
+	if (yych >= '6') goto yy13;
 	yych = *++YYCURSOR;
 	if (yych <= '/') goto yy13;
 	if (yych >= ':') goto yy13;

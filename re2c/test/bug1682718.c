@@ -28,15 +28,6 @@ yy2:
 yy4:
 		++p;
 		yych = (unsigned char)*p;
-		goto yy7;
-yy5:
-#line 9 "bug1682718.re"
-		{return p;}
-#line 36 "bug1682718.c"
-yy6:
-		++p;
-		yych = (unsigned char)*p;
-yy7:
 		switch (yych) {
 		case '0':
 		case '1':
@@ -47,9 +38,13 @@ yy7:
 		case '6':
 		case '7':
 		case '8':
-		case '9':	goto yy6;
-		default:	goto yy5;
+		case '9':	goto yy4;
+		default:	goto yy6;
 		}
+yy6:
+#line 9 "bug1682718.re"
+		{return p;}
+#line 48 "bug1682718.c"
 	}
 #line 11 "bug1682718.re"
 

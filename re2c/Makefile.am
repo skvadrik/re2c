@@ -100,6 +100,7 @@ SRC = \
 	src/ir/nfa/split.cc \
 	src/ir/adfa/adfa.cc \
 	src/ir/dfa/dfa.cc \
+	src/ir/dfa/minimize.cc \
 	src/ir/regexp/display.cc \
 	src/ir/regexp/encoding/enc.cc \
 	src/ir/regexp/encoding/range_suffix.cc \

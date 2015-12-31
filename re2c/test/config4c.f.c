@@ -21,7 +21,7 @@ char *scan(char *p)
 start:
 yy0:
 	YYSETSTATE(0);
-	if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
+	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 yyFillLabel0:
 	yych = *YYCURSOR;
 	switch (yych) {
@@ -44,19 +44,10 @@ yy2:
 #line 45 "config4c.f.c"
 yy4:
 	++YYCURSOR;
-	yych = *YYCURSOR;
-	goto yy7;
-yy5:
-#line 14 "config4c.f.re"
-	{ return YYCURSOR; }
-#line 53 "config4c.f.c"
-yy6:
-	++YYCURSOR;
 	YYSETSTATE(1);
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 yyFillLabel1:
 	yych = *YYCURSOR;
-yy7:
 	switch (yych) {
 	case '0':
 	case '1':
@@ -67,9 +58,13 @@ yy7:
 	case '6':
 	case '7':
 	case '8':
-	case '9':	goto yy6;
-	default:	goto yy5;
+	case '9':	goto yy4;
+	default:	goto yy6;
 	}
+yy6:
+#line 14 "config4c.f.re"
+	{ return YYCURSOR; }
+#line 68 "config4c.f.c"
 #line 16 "config4c.f.re"
 
 }

@@ -52,19 +52,18 @@ Cc:
 	}
 yy2:
 	++YYCURSOR;
-yy3:
 #line 12 "unicode_group_Cc.8--encoding-policy(substitute).re"
 	{ goto Cc; }
-#line 59 "unicode_group_Cc.8--encoding-policy(substitute).c"
+#line 58 "unicode_group_Cc.8--encoding-policy(substitute).c"
 yy4:
 	++YYCURSOR;
 yy5:
 #line 13 "unicode_group_Cc.8--encoding-policy(substitute).re"
 	{ return YYCURSOR == limit; }
-#line 65 "unicode_group_Cc.8--encoding-policy(substitute).c"
+#line 64 "unicode_group_Cc.8--encoding-policy(substitute).c"
 yy6:
-	yych = *++YYCURSOR;
-	switch (yych) {
+	++YYCURSOR;
+	switch ((yych = *YYCURSOR)) {
 	case 0x80:
 	case 0x81:
 	case 0x82:
@@ -96,13 +95,9 @@ yy6:
 	case 0x9C:
 	case 0x9D:
 	case 0x9E:
-	case 0x9F:	goto yy7;
+	case 0x9F:	goto yy2;
 	default:	goto yy5;
 	}
-yy7:
-	++YYCURSOR;
-	yych = *YYCURSOR;
-	goto yy3;
 }
 #line 14 "unicode_group_Cc.8--encoding-policy(substitute).re"
 

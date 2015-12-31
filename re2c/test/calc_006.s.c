@@ -80,13 +80,13 @@ int scan(char *s)
 				}
 			} else {
 				if (yych <= '-') {
-					if (yych <= '+') goto yy8;
+					if (yych <= '+') goto yy9;
 					if (yych <= ',') goto yy4;
-					goto yy10;
+					goto yy11;
 				} else {
 					if (yych <= '/') goto yy4;
-					if (yych <= '0') goto yy12;
-					if (yych <= '9') goto yy14;
+					if (yych <= '0') goto yy13;
+					if (yych <= '9') goto yy15;
 					goto yy4;
 				}
 			}
@@ -103,39 +103,35 @@ yy4:
 yy6:
 			++YYCURSOR;
 			yych = *YYCURSOR;
-			goto yy16;
-yy7:
+			if (yych == '\t') goto yy6;
+			if (yych == ' ') goto yy6;
 #line 107 "calc_006.s.re"
 			{ continue; }
 #line 111 "calc_006.s.c"
-yy8:
+yy9:
 			++YYCURSOR;
 #line 110 "calc_006.s.re"
 			{ res = stack_add();		continue; }
 #line 116 "calc_006.s.c"
-yy10:
+yy11:
 			++YYCURSOR;
 #line 111 "calc_006.s.re"
 			{ res = stack_sub();		continue; }
 #line 121 "calc_006.s.c"
-yy12:
-			++YYCURSOR;
-			if ((yych = *YYCURSOR) <= '/') goto yy13;
-			if (yych <= '9') goto yy17;
 yy13:
+			++YYCURSOR;
+			if ((yych = *YYCURSOR) <= '/') goto yy14;
+			if (yych <= '9') goto yy17;
+yy14:
 #line 109 "calc_006.s.re"
 			{ res = push_num(t, p, 10); continue; }
 #line 129 "calc_006.s.c"
-yy14:
-			yych = *++YYCURSOR;
-			goto yy21;
 yy15:
 			++YYCURSOR;
 			yych = *YYCURSOR;
-yy16:
-			if (yych == '\t') goto yy15;
-			if (yych == ' ') goto yy15;
-			goto yy7;
+			if (yych <= '/') goto yy14;
+			if (yych <= '9') goto yy15;
+			goto yy14;
 yy17:
 			++YYCURSOR;
 			yych = *YYCURSOR;
@@ -144,14 +140,7 @@ yy17:
 yy19:
 #line 108 "calc_006.s.re"
 			{ res = push_num(t, p, 8);	continue; }
-#line 148 "calc_006.s.c"
-yy20:
-			++YYCURSOR;
-			yych = *YYCURSOR;
-yy21:
-			if (yych <= '/') goto yy13;
-			if (yych <= '9') goto yy20;
-			goto yy13;
+#line 144 "calc_006.s.c"
 		}
 #line 114 "calc_006.s.re"
 

@@ -852,9 +852,9 @@ yy7:
 yy8:
 	yych = *++YYCURSOR;
 	if (yych <= '@') goto yy5;
-	if (yych <= 'Z') goto yy56;
+	if (yych <= 'Z') goto yy37;
 	if (yych <= '`') goto yy5;
-	if (yych <= 'z') goto yy56;
+	if (yych <= 'z') goto yy37;
 	goto yy5;
 yy9:
 	yyaccept = 1;
@@ -863,9 +863,9 @@ yy9:
 		if (yych == ' ') goto yy51;
 		goto yy5;
 	} else {
-		if (yych <= '1') goto yy57;
-		if (yych <= '2') goto yy58;
-		if (yych <= '9') goto yy59;
+		if (yych <= '1') goto yy56;
+		if (yych <= '2') goto yy57;
+		if (yych <= '9') goto yy58;
 		goto yy5;
 	}
 yy10:
@@ -911,11 +911,11 @@ yy11:
 	case 'm':
 	case 'o':
 	case 'w':
-	case 'y':	goto yy61;
-	case '-':	goto yy64;
-	case '.':	goto yy65;
-	case '/':	goto yy66;
-	case '0':	goto yy67;
+	case 'y':	goto yy60;
+	case '-':	goto yy63;
+	case '.':	goto yy64;
+	case '/':	goto yy65;
+	case '0':	goto yy66;
 	case '1':
 	case '2':
 	case '3':
@@ -924,12 +924,12 @@ yy11:
 	case '6':
 	case '7':
 	case '8':
-	case '9':	goto yy68;
-	case ':':	goto yy69;
-	case 'n':	goto yy86;
-	case 'r':	goto yy87;
-	case 's':	goto yy88;
-	case 't':	goto yy89;
+	case '9':	goto yy67;
+	case ':':	goto yy68;
+	case 'n':	goto yy85;
+	case 'r':	goto yy86;
+	case 's':	goto yy87;
+	case 't':	goto yy88;
 	default:	goto yy5;
 	}
 yy12:
@@ -974,25 +974,25 @@ yy12:
 	case 'o':
 	case 'p':
 	case 'w':
-	case 'y':	goto yy91;
-	case '-':	goto yy64;
-	case '.':	goto yy92;
-	case '/':	goto yy66;
+	case 'y':	goto yy90;
+	case '-':	goto yy63;
+	case '.':	goto yy91;
+	case '/':	goto yy65;
 	case '0':
 	case '1':
-	case '2':	goto yy68;
+	case '2':	goto yy67;
 	case '3':
 	case '4':
 	case '5':
 	case '6':
 	case '7':
 	case '8':
-	case '9':	goto yy93;
-	case ':':	goto yy94;
-	case 'n':	goto yy86;
-	case 'r':	goto yy87;
-	case 's':	goto yy88;
-	case 't':	goto yy89;
+	case '9':	goto yy92;
+	case ':':	goto yy93;
+	case 'n':	goto yy85;
+	case 'r':	goto yy86;
+	case 's':	goto yy87;
+	case 't':	goto yy88;
 	default:	goto yy5;
 	}
 yy13:
@@ -1037,25 +1037,25 @@ yy13:
 	case 'o':
 	case 'p':
 	case 'w':
-	case 'y':	goto yy91;
-	case '-':	goto yy64;
-	case '.':	goto yy92;
-	case '/':	goto yy66;
+	case 'y':	goto yy90;
+	case '-':	goto yy63;
+	case '.':	goto yy91;
+	case '/':	goto yy65;
 	case '0':
 	case '1':
 	case '2':
-	case '3':	goto yy93;
+	case '3':	goto yy92;
 	case '4':
 	case '5':
 	case '6':
 	case '7':
 	case '8':
-	case '9':	goto yy97;
-	case ':':	goto yy94;
-	case 'n':	goto yy86;
-	case 'r':	goto yy87;
-	case 's':	goto yy88;
-	case 't':	goto yy89;
+	case '9':	goto yy96;
+	case ':':	goto yy93;
+	case 'n':	goto yy85;
+	case 'r':	goto yy86;
+	case 's':	goto yy87;
+	case 't':	goto yy88;
 	default:	goto yy5;
 	}
 yy14:
@@ -1100,12 +1100,12 @@ yy14:
 	case 'o':
 	case 'p':
 	case 'w':
-	case 'y':	goto yy91;
-	case '-':	goto yy64;
-	case '.':	goto yy92;
-	case '/':	goto yy66;
+	case 'y':	goto yy90;
+	case '-':	goto yy63;
+	case '.':	goto yy91;
+	case '/':	goto yy65;
 	case '0':
-	case '1':	goto yy97;
+	case '1':	goto yy96;
 	case '2':
 	case '3':
 	case '4':
@@ -1113,12 +1113,12 @@ yy14:
 	case '6':
 	case '7':
 	case '8':
-	case '9':	goto yy98;
-	case ':':	goto yy94;
-	case 'n':	goto yy86;
-	case 'r':	goto yy87;
-	case 's':	goto yy88;
-	case 't':	goto yy89;
+	case '9':	goto yy97;
+	case ':':	goto yy93;
+	case 'n':	goto yy85;
+	case 'r':	goto yy86;
+	case 's':	goto yy87;
+	case 't':	goto yy88;
 	default:	goto yy5;
 	}
 yy15:
@@ -1163,10 +1163,10 @@ yy15:
 	case 'o':
 	case 'p':
 	case 'w':
-	case 'y':	goto yy91;
-	case '-':	goto yy64;
-	case '.':	goto yy92;
-	case '/':	goto yy66;
+	case 'y':	goto yy90;
+	case '-':	goto yy63;
+	case '.':	goto yy91;
+	case '/':	goto yy65;
 	case '0':
 	case '1':
 	case '2':
@@ -1176,52 +1176,52 @@ yy15:
 	case '6':
 	case '7':
 	case '8':
-	case '9':	goto yy98;
-	case ':':	goto yy94;
-	case 'n':	goto yy86;
-	case 'r':	goto yy87;
-	case 's':	goto yy88;
-	case 't':	goto yy89;
+	case '9':	goto yy97;
+	case ':':	goto yy93;
+	case 'n':	goto yy85;
+	case 'r':	goto yy86;
+	case 's':	goto yy87;
+	case 't':	goto yy88;
 	default:	goto yy5;
 	}
 yy16:
 	yyaccept = 1;
 	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych == '-') goto yy99;
+	if (yych == '-') goto yy98;
 	if (yych <= '0') goto yy5;
-	if (yych <= '9') goto yy100;
+	if (yych <= '9') goto yy99;
 	goto yy5;
 yy17:
 	++YYCURSOR;
 	if ((yych = *YYCURSOR) <= 'U') {
 		if (yych <= 'F') {
-			if (yych == ')') goto yy103;
-			if (yych >= 'A') goto yy104;
+			if (yych == ')') goto yy102;
+			if (yych >= 'A') goto yy103;
 		} else {
 			if (yych <= 'O') {
-				if (yych <= 'G') goto yy105;
-				goto yy104;
+				if (yych <= 'G') goto yy104;
+				goto yy103;
 			} else {
-				if (yych <= 'P') goto yy106;
-				if (yych <= 'T') goto yy104;
-				goto yy107;
+				if (yych <= 'P') goto yy105;
+				if (yych <= 'T') goto yy103;
+				goto yy106;
 			}
 		}
 	} else {
 		if (yych <= 'o') {
 			if (yych <= '`') {
-				if (yych <= 'Z') goto yy104;
+				if (yych <= 'Z') goto yy103;
 			} else {
-				if (yych == 'g') goto yy109;
-				goto yy108;
+				if (yych == 'g') goto yy108;
+				goto yy107;
 			}
 		} else {
 			if (yych <= 't') {
-				if (yych <= 'p') goto yy110;
-				goto yy108;
+				if (yych <= 'p') goto yy109;
+				goto yy107;
 			} else {
-				if (yych <= 'u') goto yy111;
-				if (yych <= 'z') goto yy108;
+				if (yych <= 'u') goto yy110;
+				if (yych <= 'z') goto yy107;
 			}
 		}
 	}
@@ -1240,12 +1240,12 @@ yy18:
 yy19:
 	yych = *++YYCURSOR;
 	if (yych <= '@') {
-		if (yych == ')') goto yy103;
+		if (yych == ')') goto yy102;
 		goto yy18;
 	} else {
-		if (yych <= 'Z') goto yy104;
+		if (yych <= 'Z') goto yy103;
 		if (yych <= '`') goto yy18;
-		if (yych <= 'z') goto yy108;
+		if (yych <= 'z') goto yy107;
 		goto yy18;
 	}
 yy20:
@@ -1253,20 +1253,20 @@ yy20:
 	if (yych <= 'E') {
 		if (yych <= ')') {
 			if (yych <= '(') goto yy18;
-			goto yy103;
+			goto yy102;
 		} else {
 			if (yych <= '@') goto yy18;
-			if (yych <= 'D') goto yy104;
-			goto yy112;
+			if (yych <= 'D') goto yy103;
+			goto yy111;
 		}
 	} else {
 		if (yych <= 'd') {
-			if (yych <= 'Z') goto yy104;
+			if (yych <= 'Z') goto yy103;
 			if (yych <= '`') goto yy18;
-			goto yy108;
+			goto yy107;
 		} else {
-			if (yych <= 'e') goto yy113;
-			if (yych <= 'z') goto yy108;
+			if (yych <= 'e') goto yy112;
+			if (yych <= 'z') goto yy107;
 			goto yy18;
 		}
 	}
@@ -1274,22 +1274,22 @@ yy21:
 	yych = *++YYCURSOR;
 	if (yych <= 'L') {
 		if (yych <= '@') {
-			if (yych == ')') goto yy103;
+			if (yych == ')') goto yy102;
 			goto yy18;
 		} else {
-			if (yych == 'I') goto yy114;
-			if (yych <= 'K') goto yy104;
-			goto yy115;
+			if (yych == 'I') goto yy113;
+			if (yych <= 'K') goto yy103;
+			goto yy114;
 		}
 	} else {
 		if (yych <= 'i') {
-			if (yych <= 'Z') goto yy104;
+			if (yych <= 'Z') goto yy103;
 			if (yych <= '`') goto yy18;
-			if (yych <= 'h') goto yy108;
-			goto yy116;
+			if (yych <= 'h') goto yy107;
+			goto yy115;
 		} else {
-			if (yych == 'l') goto yy117;
-			if (yych <= 'z') goto yy108;
+			if (yych == 'l') goto yy116;
+			if (yych <= 'z') goto yy107;
 			goto yy18;
 		}
 	}
@@ -1299,40 +1299,40 @@ yy22:
 		if (yych <= 'E') {
 			if (yych <= ')') {
 				if (yych <= '(') goto yy18;
-				goto yy103;
+				goto yy102;
 			} else {
 				if (yych <= '@') goto yy18;
-				if (yych <= 'D') goto yy104;
-				goto yy118;
+				if (yych <= 'D') goto yy103;
+				goto yy117;
 			}
 		} else {
 			if (yych <= 'N') {
-				if (yych == 'I') goto yy119;
-				goto yy104;
+				if (yych == 'I') goto yy118;
+				goto yy103;
 			} else {
-				if (yych <= 'O') goto yy120;
-				if (yych <= 'Q') goto yy104;
-				goto yy121;
+				if (yych <= 'O') goto yy119;
+				if (yych <= 'Q') goto yy103;
+				goto yy120;
 			}
 		}
 	} else {
 		if (yych <= 'i') {
 			if (yych <= 'd') {
-				if (yych <= 'Z') goto yy104;
+				if (yych <= 'Z') goto yy103;
 				if (yych <= '`') goto yy18;
-				goto yy108;
+				goto yy107;
 			} else {
-				if (yych <= 'e') goto yy122;
-				if (yych <= 'h') goto yy108;
-				goto yy123;
+				if (yych <= 'e') goto yy121;
+				if (yych <= 'h') goto yy107;
+				goto yy122;
 			}
 		} else {
 			if (yych <= 'q') {
-				if (yych == 'o') goto yy124;
-				goto yy108;
+				if (yych == 'o') goto yy123;
+				goto yy107;
 			} else {
-				if (yych <= 'r') goto yy125;
-				if (yych <= 'z') goto yy108;
+				if (yych <= 'r') goto yy124;
+				if (yych <= 'z') goto yy107;
 				goto yy18;
 			}
 		}
@@ -1343,26 +1343,26 @@ yy23:
 	if (yych <= 'H') {
 		if (yych <= '.') {
 			if (yych <= 0x1F) goto yy18;
-			if (yych == ')') goto yy128;
-			goto yy127;
+			if (yych == ')') goto yy127;
+			goto yy126;
 		} else {
 			if (yych <= '/') goto yy18;
-			if (yych <= '9') goto yy127;
+			if (yych <= '9') goto yy126;
 			if (yych <= '@') goto yy18;
-			goto yy104;
+			goto yy103;
 		}
 	} else {
 		if (yych <= 'W') {
-			if (yych <= 'I') goto yy133;
-			if (yych == 'V') goto yy134;
-			goto yy104;
+			if (yych <= 'I') goto yy132;
+			if (yych == 'V') goto yy133;
+			goto yy103;
 		} else {
 			if (yych <= 'Z') {
-				if (yych <= 'X') goto yy134;
-				goto yy104;
+				if (yych <= 'X') goto yy133;
+				goto yy103;
 			} else {
 				if (yych <= '`') goto yy18;
-				if (yych <= 'z') goto yy108;
+				if (yych <= 'z') goto yy107;
 				goto yy18;
 			}
 		}
@@ -1371,37 +1371,37 @@ yy24:
 	yych = *++YYCURSOR;
 	if (yych <= 'U') {
 		if (yych <= '@') {
-			if (yych == ')') goto yy103;
+			if (yych == ')') goto yy102;
 			goto yy18;
 		} else {
-			if (yych <= 'A') goto yy135;
-			if (yych <= 'T') goto yy104;
-			goto yy136;
+			if (yych <= 'A') goto yy134;
+			if (yych <= 'T') goto yy103;
+			goto yy135;
 		}
 	} else {
 		if (yych <= 'a') {
-			if (yych <= 'Z') goto yy104;
+			if (yych <= 'Z') goto yy103;
 			if (yych <= '`') goto yy18;
-			goto yy137;
+			goto yy136;
 		} else {
-			if (yych == 'u') goto yy138;
-			if (yych <= 'z') goto yy108;
+			if (yych == 'u') goto yy137;
+			if (yych <= 'z') goto yy107;
 			goto yy18;
 		}
 	}
 yy25:
 	yych = *++YYCURSOR;
 	if (yych <= 'A') {
-		if (yych == ')') goto yy103;
+		if (yych == ')') goto yy102;
 		if (yych <= '@') goto yy18;
-		goto yy139;
+		goto yy138;
 	} else {
 		if (yych <= '`') {
-			if (yych <= 'Z') goto yy104;
+			if (yych <= 'Z') goto yy103;
 			goto yy18;
 		} else {
-			if (yych <= 'a') goto yy140;
-			if (yych <= 'z') goto yy108;
+			if (yych <= 'a') goto yy139;
+			if (yych <= 'z') goto yy107;
 			goto yy18;
 		}
 	}
@@ -1409,27 +1409,27 @@ yy26:
 	yych = *++YYCURSOR;
 	if (yych <= 'O') {
 		if (yych <= 'A') {
-			if (yych == ')') goto yy103;
+			if (yych == ')') goto yy102;
 			if (yych <= '@') goto yy18;
-			goto yy141;
+			goto yy140;
 		} else {
-			if (yych == 'I') goto yy142;
-			if (yych <= 'N') goto yy104;
-			goto yy143;
+			if (yych == 'I') goto yy141;
+			if (yych <= 'N') goto yy103;
+			goto yy142;
 		}
 	} else {
 		if (yych <= 'h') {
-			if (yych <= 'Z') goto yy104;
+			if (yych <= 'Z') goto yy103;
 			if (yych <= '`') goto yy18;
-			if (yych <= 'a') goto yy144;
-			goto yy108;
+			if (yych <= 'a') goto yy143;
+			goto yy107;
 		} else {
 			if (yych <= 'n') {
-				if (yych <= 'i') goto yy145;
-				goto yy108;
+				if (yych <= 'i') goto yy144;
+				goto yy107;
 			} else {
-				if (yych <= 'o') goto yy146;
-				if (yych <= 'z') goto yy108;
+				if (yych <= 'o') goto yy145;
+				if (yych <= 'z') goto yy107;
 				goto yy18;
 			}
 		}
@@ -1438,35 +1438,35 @@ yy27:
 	yych = *++YYCURSOR;
 	if (yych <= 'O') {
 		if (yych <= 'D') {
-			if (yych == ')') goto yy103;
+			if (yych == ')') goto yy102;
 			if (yych <= '@') goto yy18;
-			goto yy104;
+			goto yy103;
 		} else {
 			if (yych <= 'H') {
-				if (yych <= 'E') goto yy147;
-				goto yy104;
+				if (yych <= 'E') goto yy146;
+				goto yy103;
 			} else {
-				if (yych <= 'I') goto yy148;
-				if (yych <= 'N') goto yy104;
-				goto yy149;
+				if (yych <= 'I') goto yy147;
+				if (yych <= 'N') goto yy103;
+				goto yy148;
 			}
 		}
 	} else {
 		if (yych <= 'h') {
 			if (yych <= '`') {
-				if (yych <= 'Z') goto yy104;
+				if (yych <= 'Z') goto yy103;
 				goto yy18;
 			} else {
-				if (yych == 'e') goto yy150;
-				goto yy108;
+				if (yych == 'e') goto yy149;
+				goto yy107;
 			}
 		} else {
 			if (yych <= 'n') {
-				if (yych <= 'i') goto yy151;
-				goto yy108;
+				if (yych <= 'i') goto yy150;
+				goto yy107;
 			} else {
-				if (yych <= 'o') goto yy152;
-				if (yych <= 'z') goto yy108;
+				if (yych <= 'o') goto yy151;
+				if (yych <= 'z') goto yy107;
 				goto yy18;
 			}
 		}
@@ -1476,20 +1476,20 @@ yy28:
 	if (yych <= 'C') {
 		if (yych <= ')') {
 			if (yych <= '(') goto yy18;
-			goto yy103;
+			goto yy102;
 		} else {
 			if (yych <= '@') goto yy18;
-			if (yych <= 'B') goto yy104;
-			goto yy153;
+			if (yych <= 'B') goto yy103;
+			goto yy152;
 		}
 	} else {
 		if (yych <= 'b') {
-			if (yych <= 'Z') goto yy104;
+			if (yych <= 'Z') goto yy103;
 			if (yych <= '`') goto yy18;
-			goto yy108;
+			goto yy107;
 		} else {
-			if (yych <= 'c') goto yy154;
-			if (yych <= 'z') goto yy108;
+			if (yych <= 'c') goto yy153;
+			if (yych <= 'z') goto yy107;
 			goto yy18;
 		}
 	}
@@ -1498,20 +1498,20 @@ yy29:
 	if (yych <= 'R') {
 		if (yych <= ')') {
 			if (yych <= '(') goto yy18;
-			goto yy103;
+			goto yy102;
 		} else {
 			if (yych <= '@') goto yy18;
-			if (yych <= 'Q') goto yy104;
-			goto yy155;
+			if (yych <= 'Q') goto yy103;
+			goto yy154;
 		}
 	} else {
 		if (yych <= 'q') {
-			if (yych <= 'Z') goto yy104;
+			if (yych <= 'Z') goto yy103;
 			if (yych <= '`') goto yy18;
-			goto yy108;
+			goto yy107;
 		} else {
-			if (yych <= 'r') goto yy156;
-			if (yych <= 'z') goto yy108;
+			if (yych <= 'r') goto yy155;
+			if (yych <= 'z') goto yy107;
 			goto yy18;
 		}
 	}
@@ -1521,39 +1521,39 @@ yy30:
 		if (yych <= 'D') {
 			if (yych <= ')') {
 				if (yych <= '(') goto yy18;
-				goto yy103;
+				goto yy102;
 			} else {
 				if (yych <= '@') goto yy18;
-				if (yych <= 'A') goto yy157;
-				goto yy104;
+				if (yych <= 'A') goto yy156;
+				goto yy103;
 			}
 		} else {
 			if (yych <= 'H') {
-				if (yych <= 'E') goto yy158;
-				goto yy104;
+				if (yych <= 'E') goto yy157;
+				goto yy103;
 			} else {
-				if (yych <= 'I') goto yy159;
-				if (yych <= 'T') goto yy104;
-				goto yy160;
+				if (yych <= 'I') goto yy158;
+				if (yych <= 'T') goto yy103;
+				goto yy142;
 			}
 		}
 	} else {
 		if (yych <= 'e') {
 			if (yych <= '`') {
-				if (yych <= 'Z') goto yy104;
+				if (yych <= 'Z') goto yy103;
 				goto yy18;
 			} else {
-				if (yych <= 'a') goto yy161;
-				if (yych <= 'd') goto yy108;
-				goto yy162;
+				if (yych <= 'a') goto yy159;
+				if (yych <= 'd') goto yy107;
+				goto yy160;
 			}
 		} else {
 			if (yych <= 't') {
-				if (yych == 'i') goto yy163;
-				goto yy108;
+				if (yych == 'i') goto yy161;
+				goto yy107;
 			} else {
-				if (yych <= 'u') goto yy164;
-				if (yych <= 'z') goto yy108;
+				if (yych <= 'u') goto yy145;
+				if (yych <= 'z') goto yy107;
 				goto yy18;
 			}
 		}
@@ -1563,42 +1563,42 @@ yy31:
 	if (yych <= 'W') {
 		if (yych <= 'G') {
 			if (yych <= '@') {
-				if (yych == ')') goto yy103;
+				if (yych == ')') goto yy102;
 				goto yy18;
 			} else {
-				if (yych == 'E') goto yy165;
-				goto yy104;
+				if (yych == 'E') goto yy147;
+				goto yy103;
 			}
 		} else {
 			if (yych <= 'O') {
-				if (yych <= 'H') goto yy166;
-				if (yych <= 'N') goto yy104;
-				goto yy167;
+				if (yych <= 'H') goto yy162;
+				if (yych <= 'N') goto yy103;
+				goto yy163;
 			} else {
-				if (yych == 'U') goto yy168;
-				if (yych <= 'V') goto yy104;
-				goto yy169;
+				if (yych == 'U') goto yy164;
+				if (yych <= 'V') goto yy103;
+				goto yy165;
 			}
 		}
 	} else {
 		if (yych <= 'n') {
 			if (yych <= 'd') {
-				if (yych <= 'Z') goto yy104;
+				if (yych <= 'Z') goto yy103;
 				if (yych <= '`') goto yy18;
-				goto yy108;
+				goto yy107;
 			} else {
-				if (yych <= 'e') goto yy170;
-				if (yych == 'h') goto yy171;
-				goto yy108;
+				if (yych <= 'e') goto yy150;
+				if (yych == 'h') goto yy166;
+				goto yy107;
 			}
 		} else {
 			if (yych <= 'u') {
-				if (yych <= 'o') goto yy172;
-				if (yych <= 't') goto yy108;
-				goto yy173;
+				if (yych <= 'o') goto yy167;
+				if (yych <= 't') goto yy107;
+				goto yy168;
 			} else {
-				if (yych == 'w') goto yy174;
-				if (yych <= 'z') goto yy108;
+				if (yych == 'w') goto yy169;
+				if (yych <= 'z') goto yy107;
 				goto yy18;
 			}
 		}
@@ -1609,21 +1609,21 @@ yy32:
 	if (yych <= '9') {
 		if (yych <= ')') {
 			if (yych <= 0x1F) goto yy18;
-			if (yych <= '(') goto yy127;
-			goto yy128;
+			if (yych <= '(') goto yy126;
+			goto yy127;
 		} else {
 			if (yych == '/') goto yy18;
-			goto yy127;
+			goto yy126;
 		}
 	} else {
 		if (yych <= 'I') {
 			if (yych <= '@') goto yy18;
-			if (yych <= 'H') goto yy104;
-			goto yy175;
+			if (yych <= 'H') goto yy103;
+			goto yy170;
 		} else {
-			if (yych <= 'Z') goto yy104;
+			if (yych <= 'Z') goto yy103;
 			if (yych <= '`') goto yy18;
-			if (yych <= 'z') goto yy108;
+			if (yych <= 'z') goto yy107;
 			goto yy18;
 		}
 	}
@@ -1632,20 +1632,20 @@ yy33:
 	if (yych <= 'E') {
 		if (yych <= ')') {
 			if (yych <= '(') goto yy18;
-			goto yy103;
+			goto yy102;
 		} else {
 			if (yych <= '@') goto yy18;
-			if (yych <= 'D') goto yy104;
-			goto yy176;
+			if (yych <= 'D') goto yy103;
+			goto yy171;
 		}
 	} else {
 		if (yych <= 'd') {
-			if (yych <= 'Z') goto yy104;
+			if (yych <= 'Z') goto yy103;
 			if (yych <= '`') goto yy18;
-			goto yy108;
+			goto yy107;
 		} else {
-			if (yych <= 'e') goto yy177;
-			if (yych <= 'z') goto yy108;
+			if (yych <= 'e') goto yy172;
+			if (yych <= 'z') goto yy107;
 			goto yy18;
 		}
 	}
@@ -1655,21 +1655,21 @@ yy34:
 	if (yych <= '9') {
 		if (yych <= ')') {
 			if (yych <= 0x1F) goto yy18;
-			if (yych <= '(') goto yy127;
-			goto yy128;
+			if (yych <= '(') goto yy126;
+			goto yy127;
 		} else {
 			if (yych == '/') goto yy18;
-			goto yy127;
+			goto yy126;
 		}
 	} else {
 		if (yych <= 'I') {
 			if (yych <= '@') goto yy18;
-			if (yych <= 'H') goto yy104;
-			goto yy178;
+			if (yych <= 'H') goto yy103;
+			goto yy132;
 		} else {
-			if (yych <= 'Z') goto yy104;
+			if (yych <= 'Z') goto yy103;
 			if (yych <= '`') goto yy18;
-			if (yych <= 'z') goto yy108;
+			if (yych <= 'z') goto yy107;
 			goto yy18;
 		}
 	}
@@ -1678,20 +1678,20 @@ yy35:
 	if (yych <= 'E') {
 		if (yych <= ')') {
 			if (yych <= '(') goto yy18;
-			goto yy103;
+			goto yy102;
 		} else {
 			if (yych <= '@') goto yy18;
-			if (yych <= 'D') goto yy104;
-			goto yy179;
+			if (yych <= 'D') goto yy103;
+			goto yy173;
 		}
 	} else {
 		if (yych <= 'd') {
-			if (yych <= 'Z') goto yy104;
+			if (yych <= 'Z') goto yy103;
 			if (yych <= '`') goto yy18;
-			goto yy108;
+			goto yy107;
 		} else {
-			if (yych <= 'e') goto yy180;
-			if (yych <= 'z') goto yy108;
+			if (yych <= 'e') goto yy174;
+			if (yych <= 'z') goto yy107;
 			goto yy18;
 		}
 	}
@@ -1699,35 +1699,35 @@ yy36:
 	yych = *++YYCURSOR;
 	if (yych <= 'U') {
 		if (yych <= 'F') {
-			if (yych == ')') goto yy103;
+			if (yych == ')') goto yy102;
 			if (yych <= '@') goto yy18;
-			goto yy104;
+			goto yy103;
 		} else {
 			if (yych <= 'O') {
-				if (yych <= 'G') goto yy105;
-				goto yy104;
+				if (yych <= 'G') goto yy104;
+				goto yy103;
 			} else {
-				if (yych <= 'P') goto yy106;
-				if (yych <= 'T') goto yy104;
-				goto yy107;
+				if (yych <= 'P') goto yy105;
+				if (yych <= 'T') goto yy103;
+				goto yy106;
 			}
 		}
 	} else {
 		if (yych <= 'o') {
 			if (yych <= '`') {
-				if (yych <= 'Z') goto yy104;
+				if (yych <= 'Z') goto yy103;
 				goto yy18;
 			} else {
-				if (yych == 'g') goto yy105;
-				goto yy104;
+				if (yych == 'g') goto yy104;
+				goto yy103;
 			}
 		} else {
 			if (yych <= 't') {
-				if (yych <= 'p') goto yy106;
-				goto yy104;
+				if (yych <= 'p') goto yy105;
+				goto yy103;
 			} else {
-				if (yych <= 'u') goto yy107;
-				if (yych <= 'z') goto yy104;
+				if (yych <= 'u') goto yy106;
+				if (yych <= 'z') goto yy103;
 				goto yy18;
 			}
 		}
@@ -1735,12 +1735,12 @@ yy36:
 yy37:
 	yych = *++YYCURSOR;
 	if (yych <= '@') {
-		if (yych == ')') goto yy103;
+		if (yych == ')') goto yy102;
 		goto yy18;
 	} else {
-		if (yych <= 'Z') goto yy104;
+		if (yych <= 'Z') goto yy103;
 		if (yych <= '`') goto yy18;
-		if (yych <= 'z') goto yy104;
+		if (yych <= 'z') goto yy103;
 		goto yy18;
 	}
 yy38:
@@ -1748,20 +1748,20 @@ yy38:
 	if (yych <= 'E') {
 		if (yych <= ')') {
 			if (yych <= '(') goto yy18;
-			goto yy103;
+			goto yy102;
 		} else {
 			if (yych <= '@') goto yy18;
-			if (yych <= 'D') goto yy104;
-			goto yy112;
+			if (yych <= 'D') goto yy103;
+			goto yy111;
 		}
 	} else {
 		if (yych <= 'd') {
-			if (yych <= 'Z') goto yy104;
+			if (yych <= 'Z') goto yy103;
 			if (yych <= '`') goto yy18;
-			goto yy104;
+			goto yy103;
 		} else {
-			if (yych <= 'e') goto yy112;
-			if (yych <= 'z') goto yy104;
+			if (yych <= 'e') goto yy111;
+			if (yych <= 'z') goto yy103;
 			goto yy18;
 		}
 	}
@@ -1769,22 +1769,22 @@ yy39:
 	yych = *++YYCURSOR;
 	if (yych <= 'L') {
 		if (yych <= '@') {
-			if (yych == ')') goto yy103;
+			if (yych == ')') goto yy102;
 			goto yy18;
 		} else {
-			if (yych == 'I') goto yy114;
-			if (yych <= 'K') goto yy104;
-			goto yy115;
+			if (yych == 'I') goto yy113;
+			if (yych <= 'K') goto yy103;
+			goto yy114;
 		}
 	} else {
 		if (yych <= 'i') {
-			if (yych <= 'Z') goto yy104;
+			if (yych <= 'Z') goto yy103;
 			if (yych <= '`') goto yy18;
-			if (yych <= 'h') goto yy104;
-			goto yy114;
+			if (yych <= 'h') goto yy103;
+			goto yy113;
 		} else {
-			if (yych == 'l') goto yy115;
-			if (yych <= 'z') goto yy104;
+			if (yych == 'l') goto yy114;
+			if (yych <= 'z') goto yy103;
 			goto yy18;
 		}
 	}
@@ -1794,40 +1794,40 @@ yy40:
 		if (yych <= 'E') {
 			if (yych <= ')') {
 				if (yych <= '(') goto yy18;
-				goto yy103;
+				goto yy102;
 			} else {
 				if (yych <= '@') goto yy18;
-				if (yych <= 'D') goto yy104;
-				goto yy118;
+				if (yych <= 'D') goto yy103;
+				goto yy117;
 			}
 		} else {
 			if (yych <= 'N') {
-				if (yych == 'I') goto yy119;
-				goto yy104;
+				if (yych == 'I') goto yy118;
+				goto yy103;
 			} else {
-				if (yych <= 'O') goto yy120;
-				if (yych <= 'Q') goto yy104;
-				goto yy121;
+				if (yych <= 'O') goto yy119;
+				if (yych <= 'Q') goto yy103;
+				goto yy120;
 			}
 		}
 	} else {
 		if (yych <= 'i') {
 			if (yych <= 'd') {
-				if (yych <= 'Z') goto yy104;
+				if (yych <= 'Z') goto yy103;
 				if (yych <= '`') goto yy18;
-				goto yy104;
+				goto yy103;
 			} else {
-				if (yych <= 'e') goto yy118;
-				if (yych <= 'h') goto yy104;
-				goto yy119;
+				if (yych <= 'e') goto yy117;
+				if (yych <= 'h') goto yy103;
+				goto yy118;
 			}
 		} else {
 			if (yych <= 'q') {
-				if (yych == 'o') goto yy120;
-				goto yy104;
+				if (yych == 'o') goto yy119;
+				goto yy103;
 			} else {
-				if (yych <= 'r') goto yy121;
-				if (yych <= 'z') goto yy104;
+				if (yych <= 'r') goto yy120;
+				if (yych <= 'z') goto yy103;
 				goto yy18;
 			}
 		}
@@ -1836,37 +1836,37 @@ yy41:
 	yych = *++YYCURSOR;
 	if (yych <= 'U') {
 		if (yych <= '@') {
-			if (yych == ')') goto yy103;
+			if (yych == ')') goto yy102;
 			goto yy18;
 		} else {
-			if (yych <= 'A') goto yy135;
-			if (yych <= 'T') goto yy104;
-			goto yy136;
+			if (yych <= 'A') goto yy134;
+			if (yych <= 'T') goto yy103;
+			goto yy135;
 		}
 	} else {
 		if (yych <= 'a') {
-			if (yych <= 'Z') goto yy104;
+			if (yych <= 'Z') goto yy103;
 			if (yych <= '`') goto yy18;
-			goto yy135;
+			goto yy134;
 		} else {
-			if (yych == 'u') goto yy136;
-			if (yych <= 'z') goto yy104;
+			if (yych == 'u') goto yy135;
+			if (yych <= 'z') goto yy103;
 			goto yy18;
 		}
 	}
 yy42:
 	yych = *++YYCURSOR;
 	if (yych <= 'A') {
-		if (yych == ')') goto yy103;
+		if (yych == ')') goto yy102;
 		if (yych <= '@') goto yy18;
-		goto yy139;
+		goto yy138;
 	} else {
 		if (yych <= '`') {
-			if (yych <= 'Z') goto yy104;
+			if (yych <= 'Z') goto yy103;
 			goto yy18;
 		} else {
-			if (yych <= 'a') goto yy139;
-			if (yych <= 'z') goto yy104;
+			if (yych <= 'a') goto yy138;
+			if (yych <= 'z') goto yy103;
 			goto yy18;
 		}
 	}
@@ -1874,27 +1874,27 @@ yy43:
 	yych = *++YYCURSOR;
 	if (yych <= 'O') {
 		if (yych <= 'A') {
-			if (yych == ')') goto yy103;
+			if (yych == ')') goto yy102;
 			if (yych <= '@') goto yy18;
-			goto yy141;
+			goto yy140;
 		} else {
-			if (yych == 'I') goto yy142;
-			if (yych <= 'N') goto yy104;
-			goto yy143;
+			if (yych == 'I') goto yy141;
+			if (yych <= 'N') goto yy103;
+			goto yy142;
 		}
 	} else {
 		if (yych <= 'h') {
-			if (yych <= 'Z') goto yy104;
+			if (yych <= 'Z') goto yy103;
 			if (yych <= '`') goto yy18;
-			if (yych <= 'a') goto yy141;
-			goto yy104;
+			if (yych <= 'a') goto yy140;
+			goto yy103;
 		} else {
 			if (yych <= 'n') {
-				if (yych <= 'i') goto yy142;
-				goto yy104;
+				if (yych <= 'i') goto yy141;
+				goto yy103;
 			} else {
-				if (yych <= 'o') goto yy143;
-				if (yych <= 'z') goto yy104;
+				if (yych <= 'o') goto yy142;
+				if (yych <= 'z') goto yy103;
 				goto yy18;
 			}
 		}
@@ -1903,35 +1903,35 @@ yy44:
 	yych = *++YYCURSOR;
 	if (yych <= 'O') {
 		if (yych <= 'D') {
-			if (yych == ')') goto yy103;
+			if (yych == ')') goto yy102;
 			if (yych <= '@') goto yy18;
-			goto yy104;
+			goto yy103;
 		} else {
 			if (yych <= 'H') {
-				if (yych <= 'E') goto yy147;
-				goto yy104;
+				if (yych <= 'E') goto yy146;
+				goto yy103;
 			} else {
-				if (yych <= 'I') goto yy148;
-				if (yych <= 'N') goto yy104;
-				goto yy149;
+				if (yych <= 'I') goto yy147;
+				if (yych <= 'N') goto yy103;
+				goto yy148;
 			}
 		}
 	} else {
 		if (yych <= 'h') {
 			if (yych <= '`') {
-				if (yych <= 'Z') goto yy104;
+				if (yych <= 'Z') goto yy103;
 				goto yy18;
 			} else {
-				if (yych == 'e') goto yy147;
-				goto yy104;
+				if (yych == 'e') goto yy146;
+				goto yy103;
 			}
 		} else {
 			if (yych <= 'n') {
-				if (yych <= 'i') goto yy148;
-				goto yy104;
+				if (yych <= 'i') goto yy147;
+				goto yy103;
 			} else {
-				if (yych <= 'o') goto yy149;
-				if (yych <= 'z') goto yy104;
+				if (yych <= 'o') goto yy148;
+				if (yych <= 'z') goto yy103;
 				goto yy18;
 			}
 		}
@@ -1941,20 +1941,20 @@ yy45:
 	if (yych <= 'C') {
 		if (yych <= ')') {
 			if (yych <= '(') goto yy18;
-			goto yy103;
+			goto yy102;
 		} else {
 			if (yych <= '@') goto yy18;
-			if (yych <= 'B') goto yy104;
-			goto yy153;
+			if (yych <= 'B') goto yy103;
+			goto yy152;
 		}
 	} else {
 		if (yych <= 'b') {
-			if (yych <= 'Z') goto yy104;
+			if (yych <= 'Z') goto yy103;
 			if (yych <= '`') goto yy18;
-			goto yy104;
+			goto yy103;
 		} else {
-			if (yych <= 'c') goto yy153;
-			if (yych <= 'z') goto yy104;
+			if (yych <= 'c') goto yy152;
+			if (yych <= 'z') goto yy103;
 			goto yy18;
 		}
 	}
@@ -1963,20 +1963,20 @@ yy46:
 	if (yych <= 'R') {
 		if (yych <= ')') {
 			if (yych <= '(') goto yy18;
-			goto yy103;
+			goto yy102;
 		} else {
 			if (yych <= '@') goto yy18;
-			if (yych <= 'Q') goto yy104;
-			goto yy155;
+			if (yych <= 'Q') goto yy103;
+			goto yy154;
 		}
 	} else {
 		if (yych <= 'q') {
-			if (yych <= 'Z') goto yy104;
+			if (yych <= 'Z') goto yy103;
 			if (yych <= '`') goto yy18;
-			goto yy104;
+			goto yy103;
 		} else {
-			if (yych <= 'r') goto yy155;
-			if (yych <= 'z') goto yy104;
+			if (yych <= 'r') goto yy154;
+			if (yych <= 'z') goto yy103;
 			goto yy18;
 		}
 	}
@@ -1986,39 +1986,39 @@ yy47:
 		if (yych <= 'D') {
 			if (yych <= ')') {
 				if (yych <= '(') goto yy18;
-				goto yy103;
+				goto yy102;
 			} else {
 				if (yych <= '@') goto yy18;
-				if (yych <= 'A') goto yy157;
-				goto yy104;
+				if (yych <= 'A') goto yy156;
+				goto yy103;
 			}
 		} else {
 			if (yych <= 'H') {
-				if (yych <= 'E') goto yy158;
-				goto yy104;
+				if (yych <= 'E') goto yy157;
+				goto yy103;
 			} else {
-				if (yych <= 'I') goto yy159;
-				if (yych <= 'T') goto yy104;
-				goto yy160;
+				if (yych <= 'I') goto yy158;
+				if (yych <= 'T') goto yy103;
+				goto yy142;
 			}
 		}
 	} else {
 		if (yych <= 'e') {
 			if (yych <= '`') {
-				if (yych <= 'Z') goto yy104;
+				if (yych <= 'Z') goto yy103;
 				goto yy18;
 			} else {
-				if (yych <= 'a') goto yy157;
-				if (yych <= 'd') goto yy104;
-				goto yy158;
+				if (yych <= 'a') goto yy156;
+				if (yych <= 'd') goto yy103;
+				goto yy157;
 			}
 		} else {
 			if (yych <= 't') {
-				if (yych == 'i') goto yy159;
-				goto yy104;
+				if (yych == 'i') goto yy158;
+				goto yy103;
 			} else {
-				if (yych <= 'u') goto yy160;
-				if (yych <= 'z') goto yy104;
+				if (yych <= 'u') goto yy142;
+				if (yych <= 'z') goto yy103;
 				goto yy18;
 			}
 		}
@@ -2028,42 +2028,42 @@ yy48:
 	if (yych <= 'W') {
 		if (yych <= 'G') {
 			if (yych <= '@') {
-				if (yych == ')') goto yy103;
+				if (yych == ')') goto yy102;
 				goto yy18;
 			} else {
-				if (yych == 'E') goto yy165;
-				goto yy104;
+				if (yych == 'E') goto yy147;
+				goto yy103;
 			}
 		} else {
 			if (yych <= 'O') {
-				if (yych <= 'H') goto yy166;
-				if (yych <= 'N') goto yy104;
-				goto yy167;
+				if (yych <= 'H') goto yy162;
+				if (yych <= 'N') goto yy103;
+				goto yy163;
 			} else {
-				if (yych == 'U') goto yy168;
-				if (yych <= 'V') goto yy104;
-				goto yy169;
+				if (yych == 'U') goto yy164;
+				if (yych <= 'V') goto yy103;
+				goto yy165;
 			}
 		}
 	} else {
 		if (yych <= 'n') {
 			if (yych <= 'd') {
-				if (yych <= 'Z') goto yy104;
+				if (yych <= 'Z') goto yy103;
 				if (yych <= '`') goto yy18;
-				goto yy104;
+				goto yy103;
 			} else {
-				if (yych <= 'e') goto yy165;
-				if (yych == 'h') goto yy166;
-				goto yy104;
+				if (yych <= 'e') goto yy147;
+				if (yych == 'h') goto yy162;
+				goto yy103;
 			}
 		} else {
 			if (yych <= 'u') {
-				if (yych <= 'o') goto yy167;
-				if (yych <= 't') goto yy104;
-				goto yy168;
+				if (yych <= 'o') goto yy163;
+				if (yych <= 't') goto yy103;
+				goto yy164;
 			} else {
-				if (yych == 'w') goto yy169;
-				if (yych <= 'z') goto yy104;
+				if (yych == 'w') goto yy165;
+				if (yych <= 'z') goto yy103;
 				goto yy18;
 			}
 		}
@@ -2073,20 +2073,20 @@ yy49:
 	if (yych <= 'E') {
 		if (yych <= ')') {
 			if (yych <= '(') goto yy18;
-			goto yy103;
+			goto yy102;
 		} else {
 			if (yych <= '@') goto yy18;
-			if (yych <= 'D') goto yy104;
-			goto yy176;
+			if (yych <= 'D') goto yy103;
+			goto yy171;
 		}
 	} else {
 		if (yych <= 'd') {
-			if (yych <= 'Z') goto yy104;
+			if (yych <= 'Z') goto yy103;
 			if (yych <= '`') goto yy18;
-			goto yy104;
+			goto yy103;
 		} else {
-			if (yych <= 'e') goto yy176;
-			if (yych <= 'z') goto yy104;
+			if (yych <= 'e') goto yy171;
+			if (yych <= 'z') goto yy103;
 			goto yy18;
 		}
 	}
@@ -2095,20 +2095,20 @@ yy50:
 	if (yych <= 'E') {
 		if (yych <= ')') {
 			if (yych <= '(') goto yy18;
-			goto yy103;
+			goto yy102;
 		} else {
 			if (yych <= '@') goto yy18;
-			if (yych <= 'D') goto yy104;
-			goto yy179;
+			if (yych <= 'D') goto yy103;
+			goto yy173;
 		}
 	} else {
 		if (yych <= 'd') {
-			if (yych <= 'Z') goto yy104;
+			if (yych <= 'Z') goto yy103;
 			if (yych <= '`') goto yy18;
-			goto yy104;
+			goto yy103;
 		} else {
-			if (yych <= 'e') goto yy179;
-			if (yych <= 'z') goto yy104;
+			if (yych <= 'e') goto yy173;
+			if (yych <= 'z') goto yy103;
 			goto yy18;
 		}
 	}
@@ -2134,44 +2134,44 @@ yy53:
 					if (yyaccept == 2) {
 						goto yy18;
 					} else {
-						goto yy75;
+						goto yy74;
 					}
 				}
 			} else {
 				if (yyaccept <= 5) {
 					if (yyaccept == 4) {
-						goto yy206;
+						goto yy192;
 					} else {
-						goto yy211;
+						goto yy197;
 					}
 				} else {
-					goto yy272;
+					goto yy256;
 				}
 			}
 		} else {
 			if (yyaccept <= 10) {
 				if (yyaccept <= 8) {
 					if (yyaccept == 7) {
-						goto yy291;
+						goto yy275;
 					} else {
-						goto yy130;
+						goto yy129;
 					}
 				} else {
 					if (yyaccept == 9) {
-						goto yy330;
+						goto yy304;
 					} else {
-						goto yy403;
+						goto yy357;
 					}
 				}
 			} else {
 				if (yyaccept <= 12) {
 					if (yyaccept == 11) {
-						goto yy405;
+						goto yy359;
 					} else {
-						goto yy409;
+						goto yy363;
 					}
 				} else {
-					goto yy498;
+					goto yy443;
 				}
 			}
 		}
@@ -2180,48 +2180,48 @@ yy53:
 			if (yyaccept <= 17) {
 				if (yyaccept <= 15) {
 					if (yyaccept == 14) {
-						goto yy538;
+						goto yy474;
 					} else {
-						goto yy664;
+						goto yy583;
 					}
 				} else {
 					if (yyaccept == 16) {
-						goto yy667;
+						goto yy586;
 					} else {
-						goto yy710;
+						goto yy622;
 					}
 				}
 			} else {
 				if (yyaccept <= 19) {
 					if (yyaccept == 18) {
-						goto yy757;
+						goto yy663;
 					} else {
-						goto yy915;
+						goto yy775;
 					}
 				} else {
-					goto yy581;
+					goto yy505;
 				}
 			}
 		} else {
 			if (yyaccept <= 23) {
 				if (yyaccept <= 22) {
 					if (yyaccept == 21) {
-						goto yy963;
+						goto yy803;
 					} else {
-						goto yy1031;
+						goto yy855;
 					}
 				} else {
-					goto yy1036;
+					goto yy860;
 				}
 			} else {
 				if (yyaccept <= 25) {
 					if (yyaccept == 24) {
-						goto yy1094;
+						goto yy900;
 					} else {
-						goto yy1165;
+						goto yy947;
 					}
 				} else {
-					goto yy1273;
+					goto yy1020;
 				}
 			}
 		}
@@ -2231,7 +2231,7 @@ yy54:
 	if ((YYLIMIT - YYCURSOR) < 11) YYFILL(11);
 	yych = *YYCURSOR;
 	switch (yych) {
-	case ' ':	goto yy181;
+	case ' ':	goto yy175;
 	case '0':
 	case '1':
 	case '2':
@@ -2243,33 +2243,56 @@ yy54:
 	case '8':
 	case '9':	goto yy54;
 	case 'D':
-	case 'd':	goto yy183;
+	case 'd':	goto yy177;
 	case 'F':
-	case 'f':	goto yy184;
+	case 'f':	goto yy178;
 	case 'H':
-	case 'h':	goto yy73;
+	case 'h':	goto yy72;
 	case 'M':
-	case 'm':	goto yy185;
+	case 'm':	goto yy179;
 	case 'S':
-	case 's':	goto yy186;
+	case 's':	goto yy180;
 	case 'T':
-	case 't':	goto yy81;
+	case 't':	goto yy80;
 	case 'W':
-	case 'w':	goto yy83;
+	case 'w':	goto yy82;
 	case 'Y':
-	case 'y':	goto yy85;
+	case 'y':	goto yy84;
 	default:	goto yy53;
 	}
 yy56:
-	yych = *++YYCURSOR;
-	if (yych <= '@') {
-		if (yych == ')') goto yy103;
-		goto yy18;
-	} else {
-		if (yych <= 'Z') goto yy104;
-		if (yych <= '`') goto yy18;
-		if (yych <= 'z') goto yy104;
-		goto yy18;
+	yyaccept = 2;
+	yych = *(YYMARKER = ++YYCURSOR);
+	switch (yych) {
+	case ' ':
+	case 'D':
+	case 'F':
+	case 'H':
+	case 'M':
+	case 'S':
+	case 'T':
+	case 'W':
+	case 'Y':
+	case 'd':
+	case 'f':
+	case 'h':
+	case 'm':
+	case 's':
+	case 't':
+	case 'w':
+	case 'y':	goto yy176;
+	case '0':
+	case '1':
+	case '2':
+	case '3':
+	case '4':
+	case '5':
+	case '6':
+	case '7':
+	case '8':
+	case '9':	goto yy58;
+	case ':':	goto yy181;
+	default:	goto yy18;
 	}
 yy57:
 	yyaccept = 2;
@@ -2291,18 +2314,18 @@ yy57:
 	case 's':
 	case 't':
 	case 'w':
-	case 'y':	goto yy182;
+	case 'y':	goto yy176;
 	case '0':
 	case '1':
 	case '2':
-	case '3':
+	case '3':	goto yy58;
 	case '4':
-	case '5':
+	case '5':	goto yy182;
 	case '6':
 	case '7':
 	case '8':
-	case '9':	goto yy59;
-	case ':':	goto yy187;
+	case '9':	goto yy183;
+	case ':':	goto yy181;
 	default:	goto yy18;
 	}
 yy58:
@@ -2325,61 +2348,27 @@ yy58:
 	case 's':
 	case 't':
 	case 'w':
-	case 'y':	goto yy182;
+	case 'y':	goto yy176;
 	case '0':
 	case '1':
 	case '2':
-	case '3':	goto yy59;
+	case '3':
 	case '4':
-	case '5':	goto yy188;
+	case '5':	goto yy182;
 	case '6':
 	case '7':
 	case '8':
-	case '9':	goto yy189;
-	case ':':	goto yy187;
+	case '9':	goto yy183;
+	case ':':	goto yy181;
 	default:	goto yy18;
 	}
 yy59:
-	yyaccept = 2;
-	yych = *(YYMARKER = ++YYCURSOR);
-	switch (yych) {
-	case ' ':
-	case 'D':
-	case 'F':
-	case 'H':
-	case 'M':
-	case 'S':
-	case 'T':
-	case 'W':
-	case 'Y':
-	case 'd':
-	case 'f':
-	case 'h':
-	case 'm':
-	case 's':
-	case 't':
-	case 'w':
-	case 'y':	goto yy182;
-	case '0':
-	case '1':
-	case '2':
-	case '3':
-	case '4':
-	case '5':	goto yy188;
-	case '6':
-	case '7':
-	case '8':
-	case '9':	goto yy189;
-	case ':':	goto yy187;
-	default:	goto yy18;
-	}
+	++YYCURSOR;
+	if ((YYLIMIT - YYCURSOR) < 13) YYFILL(13);
+	yych = *YYCURSOR;
 yy60:
-	++YYCURSOR;
-	if ((YYLIMIT - YYCURSOR) < 13) YYFILL(13);
-	yych = *YYCURSOR;
-yy61:
 	switch (yych) {
-	case ' ':	goto yy60;
+	case ' ':	goto yy59;
 	case '!':
 	case '"':
 	case '#':
@@ -2393,41 +2382,41 @@ yy61:
 	case '+':
 	case ',':
 	case '-':
-	case '.':	goto yy62;
+	case '.':	goto yy61;
 	case 'A':
-	case 'a':	goto yy70;
+	case 'a':	goto yy69;
 	case 'D':
-	case 'd':	goto yy71;
+	case 'd':	goto yy70;
 	case 'F':
-	case 'f':	goto yy72;
+	case 'f':	goto yy71;
 	case 'H':
-	case 'h':	goto yy73;
-	case 'I':	goto yy74;
+	case 'h':	goto yy72;
+	case 'I':	goto yy73;
 	case 'J':
-	case 'j':	goto yy76;
+	case 'j':	goto yy75;
 	case 'M':
-	case 'm':	goto yy77;
+	case 'm':	goto yy76;
 	case 'N':
-	case 'n':	goto yy78;
+	case 'n':	goto yy77;
 	case 'O':
-	case 'o':	goto yy79;
+	case 'o':	goto yy78;
 	case 'S':
-	case 's':	goto yy80;
+	case 's':	goto yy79;
 	case 'T':
-	case 't':	goto yy81;
-	case 'V':	goto yy82;
+	case 't':	goto yy80;
+	case 'V':	goto yy81;
 	case 'W':
-	case 'w':	goto yy83;
-	case 'X':	goto yy84;
+	case 'w':	goto yy82;
+	case 'X':	goto yy83;
 	case 'Y':
-	case 'y':	goto yy85;
+	case 'y':	goto yy84;
 	default:	goto yy53;
 	}
-yy62:
+yy61:
 	++YYCURSOR;
 	if ((YYLIMIT - YYCURSOR) < 13) YYFILL(13);
 	yych = *YYCURSOR;
-yy63:
+yy62:
 	switch (yych) {
 	case ' ':
 	case '!':
@@ -2443,230 +2432,206 @@ yy63:
 	case '+':
 	case ',':
 	case '-':
-	case '.':	goto yy62;
+	case '.':	goto yy61;
 	case 'A':
-	case 'a':	goto yy70;
+	case 'a':	goto yy69;
 	case 'D':
-	case 'd':	goto yy190;
+	case 'd':	goto yy184;
 	case 'F':
-	case 'f':	goto yy191;
-	case 'I':	goto yy74;
+	case 'f':	goto yy185;
+	case 'I':	goto yy73;
 	case 'J':
-	case 'j':	goto yy76;
+	case 'j':	goto yy75;
 	case 'M':
-	case 'm':	goto yy192;
+	case 'm':	goto yy186;
 	case 'N':
-	case 'n':	goto yy78;
+	case 'n':	goto yy77;
 	case 'O':
-	case 'o':	goto yy79;
+	case 'o':	goto yy78;
 	case 'S':
-	case 's':	goto yy193;
-	case 'V':	goto yy82;
-	case 'X':	goto yy84;
+	case 's':	goto yy187;
+	case 'V':	goto yy81;
+	case 'X':	goto yy83;
 	default:	goto yy53;
 	}
+yy63:
+	yych = *++YYCURSOR;
+	if (yych <= '/') goto yy62;
+	if (yych <= '0') goto yy188;
+	if (yych <= '1') goto yy189;
+	if (yych <= '9') goto yy190;
+	goto yy62;
 yy64:
 	yych = *++YYCURSOR;
-	switch (yych) {
-	case '0':	goto yy194;
-	case '1':	goto yy195;
-	case '2':
-	case '3':
-	case '4':
-	case '5':
-	case '6':
-	case '7':
-	case '8':
-	case '9':	goto yy196;
-	case 'A':
-	case 'a':	goto yy197;
-	case 'D':
-	case 'd':	goto yy198;
-	case 'F':
-	case 'f':	goto yy199;
-	case 'J':
-	case 'j':	goto yy200;
-	case 'M':
-	case 'm':	goto yy201;
-	case 'N':
-	case 'n':	goto yy202;
-	case 'O':
-	case 'o':	goto yy203;
-	case 'S':
-	case 's':	goto yy204;
-	default:	goto yy63;
+	if (yych <= '1') {
+		if (yych <= '/') goto yy62;
+		if (yych <= '0') goto yy191;
+		goto yy193;
+	} else {
+		if (yych <= '5') goto yy194;
+		if (yych <= '9') goto yy195;
+		goto yy62;
 	}
 yy65:
 	yych = *++YYCURSOR;
-	if (yych <= '1') {
-		if (yych <= '/') goto yy63;
-		if (yych <= '0') goto yy205;
-		goto yy207;
-	} else {
-		if (yych <= '5') goto yy208;
-		if (yych <= '9') goto yy209;
-		goto yy63;
-	}
-yy66:
-	yych = *++YYCURSOR;
 	switch (yych) {
 	case '0':
 	case '1':
-	case '2':	goto yy210;
-	case '3':	goto yy212;
+	case '2':	goto yy196;
+	case '3':	goto yy198;
 	case '4':
 	case '5':
 	case '6':
 	case '7':
 	case '8':
-	case '9':	goto yy213;
+	case '9':	goto yy199;
 	case 'A':
-	case 'a':	goto yy214;
+	case 'a':	goto yy200;
 	case 'D':
-	case 'd':	goto yy215;
+	case 'd':	goto yy201;
 	case 'F':
-	case 'f':	goto yy216;
+	case 'f':	goto yy202;
 	case 'J':
-	case 'j':	goto yy217;
+	case 'j':	goto yy203;
 	case 'M':
-	case 'm':	goto yy218;
+	case 'm':	goto yy204;
 	case 'N':
-	case 'n':	goto yy219;
+	case 'n':	goto yy205;
 	case 'O':
-	case 'o':	goto yy220;
+	case 'o':	goto yy206;
 	case 'S':
-	case 's':	goto yy221;
+	case 's':	goto yy207;
 	default:	goto yy53;
+	}
+yy66:
+	yych = *++YYCURSOR;
+	if (yych <= ':') {
+		if (yych <= '.') {
+			if (yych <= ',') goto yy60;
+			if (yych <= '-') goto yy63;
+			goto yy64;
+		} else {
+			if (yych <= '/') goto yy65;
+			if (yych <= '5') goto yy208;
+			if (yych <= '9') goto yy209;
+			goto yy68;
+		}
+	} else {
+		if (yych <= 'q') {
+			if (yych == 'n') goto yy85;
+			goto yy60;
+		} else {
+			if (yych <= 'r') goto yy86;
+			if (yych <= 's') goto yy87;
+			if (yych <= 't') goto yy88;
+			goto yy60;
+		}
 	}
 yy67:
 	yych = *++YYCURSOR;
 	if (yych <= ':') {
 		if (yych <= '.') {
-			if (yych <= ',') goto yy61;
-			if (yych <= '-') goto yy64;
-			goto yy65;
+			if (yych <= ',') goto yy90;
+			if (yych <= '-') goto yy63;
+			goto yy91;
 		} else {
-			if (yych <= '/') goto yy66;
-			if (yych <= '5') goto yy222;
-			if (yych <= '9') goto yy223;
-			goto yy69;
+			if (yych <= '/') goto yy65;
+			if (yych <= '5') goto yy208;
+			if (yych <= '9') goto yy209;
+			goto yy93;
 		}
 	} else {
 		if (yych <= 'q') {
-			if (yych == 'n') goto yy86;
-			goto yy61;
+			if (yych == 'n') goto yy85;
+			goto yy90;
 		} else {
-			if (yych <= 'r') goto yy87;
-			if (yych <= 's') goto yy88;
-			if (yych <= 't') goto yy89;
-			goto yy61;
+			if (yych <= 'r') goto yy86;
+			if (yych <= 's') goto yy87;
+			if (yych <= 't') goto yy88;
+			goto yy90;
 		}
 	}
 yy68:
 	yych = *++YYCURSOR;
-	if (yych <= ':') {
-		if (yych <= '.') {
-			if (yych <= ',') goto yy91;
-			if (yych <= '-') goto yy64;
-			goto yy92;
-		} else {
-			if (yych <= '/') goto yy66;
-			if (yych <= '5') goto yy222;
-			if (yych <= '9') goto yy223;
-			goto yy94;
-		}
-	} else {
-		if (yych <= 'q') {
-			if (yych == 'n') goto yy86;
-			goto yy91;
-		} else {
-			if (yych <= 'r') goto yy87;
-			if (yych <= 's') goto yy88;
-			if (yych <= 't') goto yy89;
-			goto yy91;
-		}
-	}
+	if (yych <= '/') goto yy53;
+	if (yych <= '5') goto yy210;
+	if (yych <= '9') goto yy211;
+	goto yy53;
 yy69:
 	yych = *++YYCURSOR;
-	if (yych <= '/') goto yy53;
-	if (yych <= '5') goto yy224;
-	if (yych <= '9') goto yy225;
-	goto yy53;
-yy70:
-	yych = *++YYCURSOR;
 	if (yych <= 'U') {
-		if (yych == 'P') goto yy226;
+		if (yych == 'P') goto yy212;
 		if (yych <= 'T') goto yy53;
-		goto yy227;
+		goto yy213;
 	} else {
 		if (yych <= 'p') {
 			if (yych <= 'o') goto yy53;
-			goto yy226;
+			goto yy212;
 		} else {
-			if (yych == 'u') goto yy227;
+			if (yych == 'u') goto yy213;
+			goto yy53;
+		}
+	}
+yy70:
+	yych = *++YYCURSOR;
+	if (yych <= 'E') {
+		if (yych == 'A') goto yy214;
+		if (yych <= 'D') goto yy53;
+		goto yy215;
+	} else {
+		if (yych <= 'a') {
+			if (yych <= '`') goto yy53;
+			goto yy214;
+		} else {
+			if (yych == 'e') goto yy215;
 			goto yy53;
 		}
 	}
 yy71:
 	yych = *++YYCURSOR;
-	if (yych <= 'E') {
-		if (yych == 'A') goto yy228;
-		if (yych <= 'D') goto yy53;
-		goto yy229;
-	} else {
-		if (yych <= 'a') {
-			if (yych <= '`') goto yy53;
-			goto yy228;
+	if (yych <= 'R') {
+		if (yych <= 'N') {
+			if (yych == 'E') goto yy216;
+			goto yy53;
 		} else {
-			if (yych == 'e') goto yy229;
+			if (yych <= 'O') goto yy217;
+			if (yych <= 'Q') goto yy53;
+			goto yy218;
+		}
+	} else {
+		if (yych <= 'n') {
+			if (yych == 'e') goto yy216;
+			goto yy53;
+		} else {
+			if (yych <= 'o') goto yy217;
+			if (yych == 'r') goto yy218;
 			goto yy53;
 		}
 	}
 yy72:
 	yych = *++YYCURSOR;
-	if (yych <= 'R') {
-		if (yych <= 'N') {
-			if (yych == 'E') goto yy230;
-			goto yy53;
-		} else {
-			if (yych <= 'O') goto yy231;
-			if (yych <= 'Q') goto yy53;
-			goto yy232;
-		}
-	} else {
-		if (yych <= 'n') {
-			if (yych == 'e') goto yy230;
-			goto yy53;
-		} else {
-			if (yych <= 'o') goto yy231;
-			if (yych == 'r') goto yy232;
-			goto yy53;
-		}
-	}
-yy73:
-	yych = *++YYCURSOR;
-	if (yych == 'O') goto yy233;
-	if (yych == 'o') goto yy233;
+	if (yych == 'O') goto yy219;
+	if (yych == 'o') goto yy219;
 	goto yy53;
-yy74:
+yy73:
 	yyaccept = 3;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= 'H') {
 		if (yych <= '.') {
-			if (yych >= ' ') goto yy234;
+			if (yych >= ' ') goto yy220;
 		} else {
-			if (yych <= '/') goto yy75;
-			if (yych <= '9') goto yy236;
+			if (yych <= '/') goto yy74;
+			if (yych <= '9') goto yy222;
 		}
 	} else {
 		if (yych <= 'V') {
-			if (yych <= 'I') goto yy238;
-			if (yych >= 'V') goto yy239;
+			if (yych <= 'I') goto yy224;
+			if (yych >= 'V') goto yy225;
 		} else {
-			if (yych == 'X') goto yy239;
+			if (yych == 'X') goto yy225;
 		}
 	}
-yy75:
+yy74:
 #line 1139 "parse_date.s.re"
 	{
 		DEBUG_OUTPUT("datenoyearrev");
@@ -2678,182 +2643,182 @@ yy75:
 		TIMELIB_DEINIT;
 		return TIMELIB_DATE_TEXT;
 	}
-#line 2682 "parse_date.s.c"
-yy76:
+#line 2647 "parse_date.s.c"
+yy75:
 	yych = *++YYCURSOR;
 	if (yych <= 'U') {
-		if (yych == 'A') goto yy240;
+		if (yych == 'A') goto yy226;
 		if (yych <= 'T') goto yy53;
-		goto yy241;
+		goto yy227;
 	} else {
 		if (yych <= 'a') {
 			if (yych <= '`') goto yy53;
-			goto yy240;
+			goto yy226;
 		} else {
-			if (yych == 'u') goto yy241;
+			if (yych == 'u') goto yy227;
+			goto yy53;
+		}
+	}
+yy76:
+	yych = *++YYCURSOR;
+	if (yych <= 'O') {
+		if (yych <= 'H') {
+			if (yych == 'A') goto yy228;
+			goto yy53;
+		} else {
+			if (yych <= 'I') goto yy229;
+			if (yych <= 'N') goto yy53;
+			goto yy230;
+		}
+	} else {
+		if (yych <= 'h') {
+			if (yych == 'a') goto yy228;
+			goto yy53;
+		} else {
+			if (yych <= 'i') goto yy229;
+			if (yych == 'o') goto yy230;
 			goto yy53;
 		}
 	}
 yy77:
 	yych = *++YYCURSOR;
-	if (yych <= 'O') {
-		if (yych <= 'H') {
-			if (yych == 'A') goto yy242;
-			goto yy53;
-		} else {
-			if (yych <= 'I') goto yy243;
-			if (yych <= 'N') goto yy53;
-			goto yy244;
-		}
-	} else {
-		if (yych <= 'h') {
-			if (yych == 'a') goto yy242;
-			goto yy53;
-		} else {
-			if (yych <= 'i') goto yy243;
-			if (yych == 'o') goto yy244;
-			goto yy53;
-		}
-	}
+	if (yych == 'O') goto yy231;
+	if (yych == 'o') goto yy231;
+	goto yy53;
 yy78:
 	yych = *++YYCURSOR;
-	if (yych == 'O') goto yy245;
-	if (yych == 'o') goto yy245;
+	if (yych == 'C') goto yy232;
+	if (yych == 'c') goto yy232;
 	goto yy53;
 yy79:
 	yych = *++YYCURSOR;
-	if (yych == 'C') goto yy246;
-	if (yych == 'c') goto yy246;
-	goto yy53;
-yy80:
-	yych = *++YYCURSOR;
 	if (yych <= 'U') {
 		if (yych <= 'D') {
-			if (yych == 'A') goto yy247;
+			if (yych == 'A') goto yy233;
 			goto yy53;
 		} else {
-			if (yych <= 'E') goto yy248;
+			if (yych <= 'E') goto yy234;
 			if (yych <= 'T') goto yy53;
-			goto yy249;
+			goto yy235;
 		}
 	} else {
 		if (yych <= 'd') {
-			if (yych == 'a') goto yy247;
+			if (yych == 'a') goto yy233;
 			goto yy53;
 		} else {
-			if (yych <= 'e') goto yy248;
-			if (yych == 'u') goto yy249;
+			if (yych <= 'e') goto yy234;
+			if (yych == 'u') goto yy235;
+			goto yy53;
+		}
+	}
+yy80:
+	yych = *++YYCURSOR;
+	if (yych <= 'U') {
+		if (yych == 'H') goto yy236;
+		if (yych <= 'T') goto yy53;
+		goto yy237;
+	} else {
+		if (yych <= 'h') {
+			if (yych <= 'g') goto yy53;
+			goto yy236;
+		} else {
+			if (yych == 'u') goto yy237;
 			goto yy53;
 		}
 	}
 yy81:
-	yych = *++YYCURSOR;
-	if (yych <= 'U') {
-		if (yych == 'H') goto yy250;
-		if (yych <= 'T') goto yy53;
-		goto yy251;
+	yyaccept = 3;
+	yych = *(YYMARKER = ++YYCURSOR);
+	if (yych <= '/') {
+		if (yych <= 0x1F) goto yy74;
+		if (yych <= '.') goto yy220;
+		goto yy74;
 	} else {
-		if (yych <= 'h') {
-			if (yych <= 'g') goto yy53;
-			goto yy250;
-		} else {
-			if (yych == 'u') goto yy251;
-			goto yy53;
-		}
+		if (yych <= '9') goto yy222;
+		if (yych == 'I') goto yy83;
+		goto yy74;
 	}
 yy82:
-	yyaccept = 3;
-	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych <= '/') {
-		if (yych <= 0x1F) goto yy75;
-		if (yych <= '.') goto yy234;
-		goto yy75;
-	} else {
-		if (yych <= '9') goto yy236;
-		if (yych == 'I') goto yy252;
-		goto yy75;
-	}
-yy83:
 	yych = *++YYCURSOR;
-	if (yych == 'E') goto yy253;
-	if (yych == 'e') goto yy253;
+	if (yych == 'E') goto yy238;
+	if (yych == 'e') goto yy238;
 	goto yy53;
-yy84:
+yy83:
 	yyaccept = 3;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= '/') {
-		if (yych <= 0x1F) goto yy75;
-		if (yych <= '.') goto yy234;
-		goto yy75;
+		if (yych <= 0x1F) goto yy74;
+		if (yych <= '.') goto yy220;
+		goto yy74;
 	} else {
-		if (yych <= '9') goto yy236;
-		if (yych == 'I') goto yy254;
-		goto yy75;
+		if (yych <= '9') goto yy222;
+		if (yych == 'I') goto yy224;
+		goto yy74;
 	}
+yy84:
+	yych = *++YYCURSOR;
+	if (yych == 'E') goto yy239;
+	if (yych == 'e') goto yy239;
+	goto yy53;
 yy85:
 	yych = *++YYCURSOR;
-	if (yych == 'E') goto yy255;
-	if (yych == 'e') goto yy255;
-	goto yy53;
-yy86:
-	yych = *++YYCURSOR;
 	if (yych <= 'c') {
-		if (yych == 'O') goto yy245;
+		if (yych == 'O') goto yy231;
 		goto yy53;
 	} else {
-		if (yych <= 'd') goto yy256;
-		if (yych == 'o') goto yy245;
+		if (yych <= 'd') goto yy240;
+		if (yych == 'o') goto yy231;
 		goto yy53;
 	}
-yy87:
+yy86:
 	yych = *++YYCURSOR;
-	if (yych == 'd') goto yy256;
+	if (yych == 'd') goto yy240;
 	goto yy53;
-yy88:
+yy87:
 	yych = *++YYCURSOR;
 	if (yych <= '`') {
 		if (yych <= 'D') {
-			if (yych == 'A') goto yy247;
+			if (yych == 'A') goto yy233;
 			goto yy53;
 		} else {
-			if (yych <= 'E') goto yy248;
-			if (yych == 'U') goto yy249;
+			if (yych <= 'E') goto yy234;
+			if (yych == 'U') goto yy235;
 			goto yy53;
 		}
 	} else {
 		if (yych <= 'e') {
-			if (yych <= 'a') goto yy247;
+			if (yych <= 'a') goto yy233;
 			if (yych <= 'd') goto yy53;
-			goto yy248;
+			goto yy234;
 		} else {
 			if (yych <= 's') goto yy53;
-			if (yych <= 't') goto yy256;
-			if (yych <= 'u') goto yy249;
+			if (yych <= 't') goto yy240;
+			if (yych <= 'u') goto yy235;
+			goto yy53;
+		}
+	}
+yy88:
+	yych = *++YYCURSOR;
+	if (yych <= 'U') {
+		if (yych == 'H') goto yy236;
+		if (yych <= 'T') goto yy53;
+		goto yy237;
+	} else {
+		if (yych <= 'h') {
+			if (yych <= 'g') goto yy53;
+			goto yy241;
+		} else {
+			if (yych == 'u') goto yy237;
 			goto yy53;
 		}
 	}
 yy89:
-	yych = *++YYCURSOR;
-	if (yych <= 'U') {
-		if (yych == 'H') goto yy250;
-		if (yych <= 'T') goto yy53;
-		goto yy251;
-	} else {
-		if (yych <= 'h') {
-			if (yych <= 'g') goto yy53;
-			goto yy257;
-		} else {
-			if (yych == 'u') goto yy251;
-			goto yy53;
-		}
-	}
-yy90:
 	++YYCURSOR;
 	if ((YYLIMIT - YYCURSOR) < 13) YYFILL(13);
 	yych = *YYCURSOR;
-yy91:
+yy90:
 	switch (yych) {
-	case ' ':	goto yy90;
+	case ' ':	goto yy89;
 	case '!':
 	case '"':
 	case '#':
@@ -2867,151 +2832,151 @@ yy91:
 	case '+':
 	case ',':
 	case '-':
-	case '.':	goto yy62;
+	case '.':	goto yy61;
 	case 'A':
-	case 'a':	goto yy95;
+	case 'a':	goto yy94;
 	case 'D':
-	case 'd':	goto yy71;
+	case 'd':	goto yy70;
 	case 'F':
-	case 'f':	goto yy72;
+	case 'f':	goto yy71;
 	case 'H':
-	case 'h':	goto yy73;
-	case 'I':	goto yy74;
+	case 'h':	goto yy72;
+	case 'I':	goto yy73;
 	case 'J':
-	case 'j':	goto yy76;
+	case 'j':	goto yy75;
 	case 'M':
-	case 'm':	goto yy77;
+	case 'm':	goto yy76;
 	case 'N':
-	case 'n':	goto yy78;
+	case 'n':	goto yy77;
 	case 'O':
-	case 'o':	goto yy79;
+	case 'o':	goto yy78;
 	case 'P':
-	case 'p':	goto yy96;
+	case 'p':	goto yy95;
 	case 'S':
-	case 's':	goto yy80;
+	case 's':	goto yy79;
 	case 'T':
-	case 't':	goto yy81;
-	case 'V':	goto yy82;
+	case 't':	goto yy80;
+	case 'V':	goto yy81;
 	case 'W':
-	case 'w':	goto yy83;
-	case 'X':	goto yy84;
+	case 'w':	goto yy82;
+	case 'X':	goto yy83;
 	case 'Y':
-	case 'y':	goto yy85;
+	case 'y':	goto yy84;
 	default:	goto yy53;
+	}
+yy91:
+	yych = *++YYCURSOR;
+	if (yych <= '1') {
+		if (yych <= '/') goto yy62;
+		if (yych <= '0') goto yy242;
+		goto yy243;
+	} else {
+		if (yych <= '5') goto yy244;
+		if (yych <= '9') goto yy245;
+		goto yy62;
 	}
 yy92:
 	yych = *++YYCURSOR;
-	if (yych <= '1') {
-		if (yych <= '/') goto yy63;
-		if (yych <= '0') goto yy258;
-		goto yy259;
-	} else {
-		if (yych <= '5') goto yy260;
-		if (yych <= '9') goto yy261;
-		goto yy63;
-	}
-yy93:
-	yych = *++YYCURSOR;
 	if (yych <= ':') {
 		if (yych <= '.') {
-			if (yych <= ',') goto yy61;
-			if (yych <= '-') goto yy64;
-			goto yy65;
+			if (yych <= ',') goto yy60;
+			if (yych <= '-') goto yy63;
+			goto yy64;
 		} else {
-			if (yych <= '/') goto yy262;
-			if (yych <= '5') goto yy222;
-			if (yych <= '9') goto yy223;
-			goto yy69;
+			if (yych <= '/') goto yy246;
+			if (yych <= '5') goto yy208;
+			if (yych <= '9') goto yy209;
+			goto yy68;
 		}
 	} else {
 		if (yych <= 'q') {
-			if (yych == 'n') goto yy86;
-			goto yy61;
+			if (yych == 'n') goto yy85;
+			goto yy60;
 		} else {
-			if (yych <= 'r') goto yy87;
-			if (yych <= 's') goto yy88;
-			if (yych <= 't') goto yy89;
-			goto yy61;
+			if (yych <= 'r') goto yy86;
+			if (yych <= 's') goto yy87;
+			if (yych <= 't') goto yy88;
+			goto yy60;
 		}
 	}
-yy94:
+yy93:
 	yych = *++YYCURSOR;
 	if (yych <= '/') goto yy53;
-	if (yych <= '5') goto yy263;
-	if (yych <= '9') goto yy264;
+	if (yych <= '5') goto yy247;
+	if (yych <= '9') goto yy248;
 	goto yy53;
-yy95:
+yy94:
 	yych = *++YYCURSOR;
 	if (yych <= 'T') {
 		if (yych <= 'L') {
-			if (yych == '.') goto yy265;
+			if (yych == '.') goto yy249;
 			goto yy53;
 		} else {
-			if (yych <= 'M') goto yy266;
-			if (yych == 'P') goto yy226;
+			if (yych <= 'M') goto yy250;
+			if (yych == 'P') goto yy212;
 			goto yy53;
 		}
 	} else {
 		if (yych <= 'o') {
-			if (yych <= 'U') goto yy227;
-			if (yych == 'm') goto yy266;
+			if (yych <= 'U') goto yy213;
+			if (yych == 'm') goto yy250;
 			goto yy53;
 		} else {
-			if (yych <= 'p') goto yy226;
-			if (yych == 'u') goto yy227;
+			if (yych <= 'p') goto yy212;
+			if (yych == 'u') goto yy213;
 			goto yy53;
 		}
+	}
+yy95:
+	yych = *++YYCURSOR;
+	if (yych <= 'L') {
+		if (yych == '.') goto yy249;
+		goto yy53;
+	} else {
+		if (yych <= 'M') goto yy250;
+		if (yych == 'm') goto yy250;
+		goto yy53;
 	}
 yy96:
 	yych = *++YYCURSOR;
-	if (yych <= 'L') {
-		if (yych == '.') goto yy265;
-		goto yy53;
-	} else {
-		if (yych <= 'M') goto yy266;
-		if (yych == 'm') goto yy266;
-		goto yy53;
-	}
-yy97:
-	yych = *++YYCURSOR;
 	if (yych <= 'm') {
 		if (yych <= '.') {
-			if (yych <= ',') goto yy61;
-			if (yych <= '-') goto yy64;
-			goto yy268;
+			if (yych <= ',') goto yy60;
+			if (yych <= '-') goto yy63;
+			goto yy252;
 		} else {
-			if (yych <= '/') goto yy262;
-			if (yych <= '9') goto yy223;
-			goto yy61;
+			if (yych <= '/') goto yy246;
+			if (yych <= '9') goto yy209;
+			goto yy60;
 		}
 	} else {
 		if (yych <= 'r') {
-			if (yych <= 'n') goto yy86;
-			if (yych <= 'q') goto yy61;
-			goto yy87;
+			if (yych <= 'n') goto yy85;
+			if (yych <= 'q') goto yy60;
+			goto yy86;
 		} else {
-			if (yych <= 's') goto yy88;
-			if (yych <= 't') goto yy89;
-			goto yy61;
+			if (yych <= 's') goto yy87;
+			if (yych <= 't') goto yy88;
+			goto yy60;
 		}
 	}
-yy98:
+yy97:
 	yych = *++YYCURSOR;
-	if (yych == '-') goto yy269;
-	if (yych <= '/') goto yy182;
-	if (yych <= '9') goto yy223;
-	goto yy182;
-yy99:
+	if (yych == '-') goto yy253;
+	if (yych <= '/') goto yy176;
+	if (yych <= '9') goto yy209;
+	goto yy176;
+yy98:
 	yych = *++YYCURSOR;
 	if (yych <= '0') goto yy53;
 	if (yych >= ':') goto yy53;
-yy100:
+yy99:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
-	if (yych <= '/') goto yy102;
-	if (yych <= '9') goto yy100;
-yy102:
+	if (yych <= '/') goto yy101;
+	if (yych <= '9') goto yy99;
+yy101:
 #line 905 "parse_date.s.re"
 	{
 		timelib_ull i;
@@ -3035,564 +3000,547 @@ yy102:
 		TIMELIB_DEINIT;
 		return TIMELIB_RELATIVE;
 	}
-#line 3039 "parse_date.s.c"
-yy103:
+#line 3004 "parse_date.s.c"
+yy102:
 	yych = *++YYCURSOR;
 	goto yy18;
-yy104:
+yy103:
 	yych = *++YYCURSOR;
 	if (yych <= '@') {
-		if (yych == ')') goto yy103;
+		if (yych == ')') goto yy102;
 		goto yy18;
 	} else {
-		if (yych <= 'Z') goto yy270;
+		if (yych <= 'Z') goto yy254;
 		if (yych <= '`') goto yy18;
-		if (yych <= 'z') goto yy270;
+		if (yych <= 'z') goto yy254;
 		goto yy18;
 	}
-yy105:
+yy104:
 	yych = *++YYCURSOR;
 	if (yych <= 'O') {
 		if (yych <= ')') {
 			if (yych <= '(') goto yy18;
-			goto yy103;
+			goto yy102;
 		} else {
 			if (yych <= '@') goto yy18;
-			if (yych <= 'N') goto yy270;
-			goto yy271;
+			if (yych <= 'N') goto yy254;
+			goto yy255;
 		}
 	} else {
 		if (yych <= 'n') {
-			if (yych <= 'Z') goto yy270;
+			if (yych <= 'Z') goto yy254;
 			if (yych <= '`') goto yy18;
-			goto yy270;
+			goto yy254;
 		} else {
-			if (yych <= 'o') goto yy271;
-			if (yych <= 'z') goto yy270;
+			if (yych <= 'o') goto yy255;
+			if (yych <= 'z') goto yy254;
+			goto yy18;
+		}
+	}
+yy105:
+	yych = *++YYCURSOR;
+	if (yych <= 'R') {
+		if (yych <= ')') {
+			if (yych <= '(') goto yy18;
+			goto yy102;
+		} else {
+			if (yych <= '@') goto yy18;
+			if (yych <= 'Q') goto yy254;
+			goto yy257;
+		}
+	} else {
+		if (yych <= 'q') {
+			if (yych <= 'Z') goto yy254;
+			if (yych <= '`') goto yy18;
+			goto yy254;
+		} else {
+			if (yych <= 'r') goto yy257;
+			if (yych <= 'z') goto yy254;
 			goto yy18;
 		}
 	}
 yy106:
 	yych = *++YYCURSOR;
-	if (yych <= 'R') {
+	if (yych <= 'G') {
 		if (yych <= ')') {
 			if (yych <= '(') goto yy18;
-			goto yy103;
+			goto yy102;
 		} else {
 			if (yych <= '@') goto yy18;
-			if (yych <= 'Q') goto yy270;
-			goto yy273;
+			if (yych <= 'F') goto yy254;
+			goto yy258;
 		}
 	} else {
-		if (yych <= 'q') {
-			if (yych <= 'Z') goto yy270;
+		if (yych <= 'f') {
+			if (yych <= 'Z') goto yy254;
 			if (yych <= '`') goto yy18;
-			goto yy270;
+			goto yy254;
 		} else {
-			if (yych <= 'r') goto yy273;
-			if (yych <= 'z') goto yy270;
+			if (yych <= 'g') goto yy258;
+			if (yych <= 'z') goto yy254;
 			goto yy18;
 		}
 	}
 yy107:
-	yych = *++YYCURSOR;
-	if (yych <= 'G') {
+	yyaccept = 2;
+	yych = *(YYMARKER = ++YYCURSOR);
+	if (yych <= '@') {
 		if (yych <= ')') {
 			if (yych <= '(') goto yy18;
-			goto yy103;
+			goto yy102;
 		} else {
-			if (yych <= '@') goto yy18;
-			if (yych <= 'F') goto yy270;
-			goto yy274;
+			if (yych == '/') goto yy259;
+			goto yy18;
 		}
 	} else {
-		if (yych <= 'f') {
-			if (yych <= 'Z') goto yy270;
-			if (yych <= '`') goto yy18;
-			goto yy270;
+		if (yych <= '_') {
+			if (yych <= 'Z') goto yy254;
+			if (yych <= '^') goto yy18;
+			goto yy259;
 		} else {
-			if (yych <= 'g') goto yy274;
-			if (yych <= 'z') goto yy270;
+			if (yych <= '`') goto yy18;
+			if (yych <= 'z') goto yy260;
 			goto yy18;
 		}
 	}
 yy108:
 	yyaccept = 2;
 	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych <= '@') {
-		if (yych <= ')') {
-			if (yych <= '(') goto yy18;
-			goto yy103;
-		} else {
-			if (yych == '/') goto yy275;
+	if (yych <= 'O') {
+		if (yych <= '.') {
+			if (yych == ')') goto yy102;
 			goto yy18;
+		} else {
+			if (yych <= '/') goto yy259;
+			if (yych <= '@') goto yy18;
+			if (yych <= 'N') goto yy254;
+			goto yy255;
 		}
 	} else {
-		if (yych <= '_') {
-			if (yych <= 'Z') goto yy270;
-			if (yych <= '^') goto yy18;
-			goto yy275;
+		if (yych <= '`') {
+			if (yych <= 'Z') goto yy254;
+			if (yych == '_') goto yy259;
+			goto yy18;
 		} else {
-			if (yych <= '`') goto yy18;
-			if (yych <= 'z') goto yy276;
+			if (yych == 'o') goto yy261;
+			if (yych <= 'z') goto yy260;
 			goto yy18;
 		}
 	}
 yy109:
 	yyaccept = 2;
 	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych <= 'O') {
+	if (yych <= 'R') {
 		if (yych <= '.') {
-			if (yych == ')') goto yy103;
+			if (yych == ')') goto yy102;
 			goto yy18;
 		} else {
-			if (yych <= '/') goto yy275;
+			if (yych <= '/') goto yy259;
 			if (yych <= '@') goto yy18;
-			if (yych <= 'N') goto yy270;
-			goto yy271;
+			if (yych <= 'Q') goto yy254;
+			goto yy257;
 		}
 	} else {
 		if (yych <= '`') {
-			if (yych <= 'Z') goto yy270;
-			if (yych == '_') goto yy275;
+			if (yych <= 'Z') goto yy254;
+			if (yych == '_') goto yy259;
 			goto yy18;
 		} else {
-			if (yych == 'o') goto yy277;
-			if (yych <= 'z') goto yy276;
+			if (yych == 'r') goto yy262;
+			if (yych <= 'z') goto yy260;
 			goto yy18;
 		}
 	}
 yy110:
 	yyaccept = 2;
 	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych <= 'R') {
+	if (yych <= 'G') {
 		if (yych <= '.') {
-			if (yych == ')') goto yy103;
+			if (yych == ')') goto yy102;
 			goto yy18;
 		} else {
-			if (yych <= '/') goto yy275;
+			if (yych <= '/') goto yy259;
 			if (yych <= '@') goto yy18;
-			if (yych <= 'Q') goto yy270;
-			goto yy273;
+			if (yych <= 'F') goto yy254;
+			goto yy258;
 		}
 	} else {
 		if (yych <= '`') {
-			if (yych <= 'Z') goto yy270;
-			if (yych == '_') goto yy275;
+			if (yych <= 'Z') goto yy254;
+			if (yych == '_') goto yy259;
 			goto yy18;
 		} else {
-			if (yych == 'r') goto yy278;
-			if (yych <= 'z') goto yy276;
+			if (yych == 'g') goto yy263;
+			if (yych <= 'z') goto yy260;
 			goto yy18;
 		}
 	}
 yy111:
-	yyaccept = 2;
-	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych <= 'G') {
-		if (yych <= '.') {
-			if (yych == ')') goto yy103;
-			goto yy18;
-		} else {
-			if (yych <= '/') goto yy275;
-			if (yych <= '@') goto yy18;
-			if (yych <= 'F') goto yy270;
-			goto yy274;
-		}
-	} else {
-		if (yych <= '`') {
-			if (yych <= 'Z') goto yy270;
-			if (yych == '_') goto yy275;
-			goto yy18;
-		} else {
-			if (yych == 'g') goto yy279;
-			if (yych <= 'z') goto yy276;
-			goto yy18;
-		}
-	}
-yy112:
 	yych = *++YYCURSOR;
 	if (yych <= 'C') {
 		if (yych <= ')') {
 			if (yych <= '(') goto yy18;
-			goto yy103;
+			goto yy102;
 		} else {
 			if (yych <= '@') goto yy18;
-			if (yych <= 'B') goto yy270;
-			goto yy280;
+			if (yych <= 'B') goto yy254;
+			goto yy264;
 		}
 	} else {
 		if (yych <= 'b') {
-			if (yych <= 'Z') goto yy270;
+			if (yych <= 'Z') goto yy254;
 			if (yych <= '`') goto yy18;
-			goto yy270;
+			goto yy254;
 		} else {
-			if (yych <= 'c') goto yy280;
-			if (yych <= 'z') goto yy270;
+			if (yych <= 'c') goto yy264;
+			if (yych <= 'z') goto yy254;
 			goto yy18;
 		}
 	}
-yy113:
+yy112:
 	yyaccept = 2;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= 'C') {
 		if (yych <= '.') {
-			if (yych == ')') goto yy103;
+			if (yych == ')') goto yy102;
 			goto yy18;
 		} else {
-			if (yych <= '/') goto yy275;
+			if (yych <= '/') goto yy259;
 			if (yych <= '@') goto yy18;
-			if (yych <= 'B') goto yy270;
-			goto yy280;
+			if (yych <= 'B') goto yy254;
+			goto yy264;
 		}
 	} else {
 		if (yych <= '`') {
-			if (yych <= 'Z') goto yy270;
-			if (yych == '_') goto yy275;
+			if (yych <= 'Z') goto yy254;
+			if (yych == '_') goto yy259;
 			goto yy18;
 		} else {
-			if (yych == 'c') goto yy281;
-			if (yych <= 'z') goto yy276;
+			if (yych == 'c') goto yy265;
+			if (yych <= 'z') goto yy260;
+			goto yy18;
+		}
+	}
+yy113:
+	yych = *++YYCURSOR;
+	if (yych <= 'G') {
+		if (yych <= ')') {
+			if (yych <= '(') goto yy18;
+			goto yy102;
+		} else {
+			if (yych <= '@') goto yy18;
+			if (yych <= 'F') goto yy254;
+			goto yy266;
+		}
+	} else {
+		if (yych <= 'f') {
+			if (yych <= 'Z') goto yy254;
+			if (yych <= '`') goto yy18;
+			goto yy254;
+		} else {
+			if (yych <= 'g') goto yy266;
+			if (yych <= 'z') goto yy254;
 			goto yy18;
 		}
 	}
 yy114:
 	yych = *++YYCURSOR;
-	if (yych <= 'G') {
+	if (yych <= 'E') {
 		if (yych <= ')') {
 			if (yych <= '(') goto yy18;
-			goto yy103;
+			goto yy102;
 		} else {
 			if (yych <= '@') goto yy18;
-			if (yych <= 'F') goto yy270;
-			goto yy282;
+			if (yych <= 'D') goto yy254;
+			goto yy267;
 		}
 	} else {
-		if (yych <= 'f') {
-			if (yych <= 'Z') goto yy270;
+		if (yych <= 'd') {
+			if (yych <= 'Z') goto yy254;
 			if (yych <= '`') goto yy18;
-			goto yy270;
+			goto yy254;
 		} else {
-			if (yych <= 'g') goto yy282;
-			if (yych <= 'z') goto yy270;
+			if (yych <= 'e') goto yy267;
+			if (yych <= 'z') goto yy254;
 			goto yy18;
 		}
 	}
 yy115:
-	yych = *++YYCURSOR;
-	if (yych <= 'E') {
-		if (yych <= ')') {
-			if (yych <= '(') goto yy18;
-			goto yy103;
+	yyaccept = 2;
+	yych = *(YYMARKER = ++YYCURSOR);
+	if (yych <= 'G') {
+		if (yych <= '.') {
+			if (yych == ')') goto yy102;
+			goto yy18;
 		} else {
+			if (yych <= '/') goto yy259;
 			if (yych <= '@') goto yy18;
-			if (yych <= 'D') goto yy270;
-			goto yy283;
+			if (yych <= 'F') goto yy254;
+			goto yy266;
 		}
 	} else {
-		if (yych <= 'd') {
-			if (yych <= 'Z') goto yy270;
-			if (yych <= '`') goto yy18;
-			goto yy270;
+		if (yych <= '`') {
+			if (yych <= 'Z') goto yy254;
+			if (yych == '_') goto yy259;
+			goto yy18;
 		} else {
-			if (yych <= 'e') goto yy283;
-			if (yych <= 'z') goto yy270;
+			if (yych == 'g') goto yy268;
+			if (yych <= 'z') goto yy260;
 			goto yy18;
 		}
 	}
 yy116:
 	yyaccept = 2;
 	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych <= 'G') {
+	if (yych <= 'E') {
 		if (yych <= '.') {
-			if (yych == ')') goto yy103;
+			if (yych == ')') goto yy102;
 			goto yy18;
 		} else {
-			if (yych <= '/') goto yy275;
+			if (yych <= '/') goto yy259;
 			if (yych <= '@') goto yy18;
-			if (yych <= 'F') goto yy270;
-			goto yy282;
+			if (yych <= 'D') goto yy254;
+			goto yy267;
 		}
 	} else {
 		if (yych <= '`') {
-			if (yych <= 'Z') goto yy270;
-			if (yych == '_') goto yy275;
+			if (yych <= 'Z') goto yy254;
+			if (yych == '_') goto yy259;
 			goto yy18;
 		} else {
-			if (yych == 'g') goto yy284;
-			if (yych <= 'z') goto yy276;
+			if (yych == 'e') goto yy269;
+			if (yych <= 'z') goto yy260;
 			goto yy18;
 		}
 	}
 yy117:
-	yyaccept = 2;
-	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych <= 'E') {
-		if (yych <= '.') {
-			if (yych == ')') goto yy103;
-			goto yy18;
+	yych = *++YYCURSOR;
+	if (yych <= 'B') {
+		if (yych <= ')') {
+			if (yych <= '(') goto yy18;
+			goto yy102;
 		} else {
-			if (yych <= '/') goto yy275;
 			if (yych <= '@') goto yy18;
-			if (yych <= 'D') goto yy270;
-			goto yy283;
+			if (yych <= 'A') goto yy254;
+			goto yy270;
 		}
 	} else {
-		if (yych <= '`') {
-			if (yych <= 'Z') goto yy270;
-			if (yych == '_') goto yy275;
-			goto yy18;
+		if (yych <= 'a') {
+			if (yych <= 'Z') goto yy254;
+			if (yych <= '`') goto yy18;
+			goto yy254;
 		} else {
-			if (yych == 'e') goto yy285;
-			if (yych <= 'z') goto yy276;
+			if (yych <= 'b') goto yy270;
+			if (yych <= 'z') goto yy254;
 			goto yy18;
 		}
 	}
 yy118:
 	yych = *++YYCURSOR;
-	if (yych <= 'B') {
-		if (yych <= ')') {
-			if (yych <= '(') goto yy18;
-			goto yy103;
+	if (yych <= 'R') {
+		if (yych <= '@') {
+			if (yych == ')') goto yy102;
+			goto yy18;
 		} else {
-			if (yych <= '@') goto yy18;
-			if (yych <= 'A') goto yy270;
-			goto yy286;
+			if (yych == 'F') goto yy271;
+			if (yych <= 'Q') goto yy254;
+			goto yy272;
 		}
 	} else {
-		if (yych <= 'a') {
-			if (yych <= 'Z') goto yy270;
+		if (yych <= 'f') {
+			if (yych <= 'Z') goto yy254;
 			if (yych <= '`') goto yy18;
-			goto yy270;
+			if (yych <= 'e') goto yy254;
+			goto yy271;
 		} else {
-			if (yych <= 'b') goto yy286;
-			if (yych <= 'z') goto yy270;
+			if (yych == 'r') goto yy272;
+			if (yych <= 'z') goto yy254;
 			goto yy18;
 		}
 	}
 yy119:
 	yych = *++YYCURSOR;
-	if (yych <= 'R') {
-		if (yych <= '@') {
-			if (yych == ')') goto yy103;
-			goto yy18;
+	if (yych <= 'U') {
+		if (yych <= ')') {
+			if (yych <= '(') goto yy18;
+			goto yy102;
 		} else {
-			if (yych == 'F') goto yy287;
-			if (yych <= 'Q') goto yy270;
-			goto yy288;
+			if (yych <= '@') goto yy18;
+			if (yych <= 'T') goto yy254;
+			goto yy273;
 		}
 	} else {
-		if (yych <= 'f') {
-			if (yych <= 'Z') goto yy270;
+		if (yych <= 't') {
+			if (yych <= 'Z') goto yy254;
 			if (yych <= '`') goto yy18;
-			if (yych <= 'e') goto yy270;
-			goto yy287;
+			goto yy254;
 		} else {
-			if (yych == 'r') goto yy288;
-			if (yych <= 'z') goto yy270;
+			if (yych <= 'u') goto yy273;
+			if (yych <= 'z') goto yy254;
 			goto yy18;
 		}
 	}
 yy120:
 	yych = *++YYCURSOR;
-	if (yych <= 'U') {
+	if (yych <= 'I') {
 		if (yych <= ')') {
 			if (yych <= '(') goto yy18;
-			goto yy103;
+			goto yy102;
 		} else {
 			if (yych <= '@') goto yy18;
-			if (yych <= 'T') goto yy270;
-			goto yy289;
+			if (yych <= 'H') goto yy254;
+			goto yy274;
 		}
 	} else {
-		if (yych <= 't') {
-			if (yych <= 'Z') goto yy270;
+		if (yych <= 'h') {
+			if (yych <= 'Z') goto yy254;
 			if (yych <= '`') goto yy18;
-			goto yy270;
+			goto yy254;
 		} else {
-			if (yych <= 'u') goto yy289;
-			if (yych <= 'z') goto yy270;
+			if (yych <= 'i') goto yy274;
+			if (yych <= 'z') goto yy254;
 			goto yy18;
 		}
 	}
 yy121:
-	yych = *++YYCURSOR;
-	if (yych <= 'I') {
-		if (yych <= ')') {
-			if (yych <= '(') goto yy18;
-			goto yy103;
+	yyaccept = 2;
+	yych = *(YYMARKER = ++YYCURSOR);
+	if (yych <= 'B') {
+		if (yych <= '.') {
+			if (yych == ')') goto yy102;
+			goto yy18;
 		} else {
+			if (yych <= '/') goto yy259;
 			if (yych <= '@') goto yy18;
-			if (yych <= 'H') goto yy270;
-			goto yy290;
+			if (yych <= 'A') goto yy254;
+			goto yy270;
 		}
 	} else {
-		if (yych <= 'h') {
-			if (yych <= 'Z') goto yy270;
-			if (yych <= '`') goto yy18;
-			goto yy270;
+		if (yych <= '`') {
+			if (yych <= 'Z') goto yy254;
+			if (yych == '_') goto yy259;
+			goto yy18;
 		} else {
-			if (yych <= 'i') goto yy290;
-			if (yych <= 'z') goto yy270;
+			if (yych == 'b') goto yy276;
+			if (yych <= 'z') goto yy260;
 			goto yy18;
 		}
 	}
 yy122:
 	yyaccept = 2;
 	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych <= 'B') {
-		if (yych <= '.') {
-			if (yych == ')') goto yy103;
-			goto yy18;
-		} else {
-			if (yych <= '/') goto yy275;
-			if (yych <= '@') goto yy18;
-			if (yych <= 'A') goto yy270;
-			goto yy286;
-		}
-	} else {
-		if (yych <= '`') {
-			if (yych <= 'Z') goto yy270;
-			if (yych == '_') goto yy275;
-			goto yy18;
-		} else {
-			if (yych == 'b') goto yy292;
-			if (yych <= 'z') goto yy276;
-			goto yy18;
-		}
-	}
-yy123:
-	yyaccept = 2;
-	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= 'R') {
 		if (yych <= '/') {
-			if (yych == ')') goto yy103;
+			if (yych == ')') goto yy102;
 			if (yych <= '.') goto yy18;
-			goto yy275;
+			goto yy259;
 		} else {
 			if (yych <= 'E') {
 				if (yych <= '@') goto yy18;
-				goto yy270;
+				goto yy254;
 			} else {
-				if (yych <= 'F') goto yy287;
-				if (yych <= 'Q') goto yy270;
-				goto yy288;
+				if (yych <= 'F') goto yy271;
+				if (yych <= 'Q') goto yy254;
+				goto yy272;
 			}
 		}
 	} else {
 		if (yych <= 'e') {
 			if (yych <= '^') {
-				if (yych <= 'Z') goto yy270;
+				if (yych <= 'Z') goto yy254;
 				goto yy18;
 			} else {
-				if (yych <= '_') goto yy275;
+				if (yych <= '_') goto yy259;
 				if (yych <= '`') goto yy18;
-				goto yy276;
+				goto yy260;
 			}
 		} else {
 			if (yych <= 'q') {
-				if (yych <= 'f') goto yy293;
-				goto yy276;
+				if (yych <= 'f') goto yy277;
+				goto yy260;
 			} else {
-				if (yych <= 'r') goto yy294;
-				if (yych <= 'z') goto yy276;
+				if (yych <= 'r') goto yy278;
+				if (yych <= 'z') goto yy260;
 				goto yy18;
 			}
+		}
+	}
+yy123:
+	yyaccept = 2;
+	yych = *(YYMARKER = ++YYCURSOR);
+	if (yych <= 'U') {
+		if (yych <= '.') {
+			if (yych == ')') goto yy102;
+			goto yy18;
+		} else {
+			if (yych <= '/') goto yy259;
+			if (yych <= '@') goto yy18;
+			if (yych <= 'T') goto yy254;
+			goto yy273;
+		}
+	} else {
+		if (yych <= '`') {
+			if (yych <= 'Z') goto yy254;
+			if (yych == '_') goto yy259;
+			goto yy18;
+		} else {
+			if (yych == 'u') goto yy279;
+			if (yych <= 'z') goto yy260;
+			goto yy18;
 		}
 	}
 yy124:
 	yyaccept = 2;
 	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych <= 'U') {
+	if (yych <= 'I') {
 		if (yych <= '.') {
-			if (yych == ')') goto yy103;
+			if (yych == ')') goto yy102;
 			goto yy18;
 		} else {
-			if (yych <= '/') goto yy275;
+			if (yych <= '/') goto yy259;
 			if (yych <= '@') goto yy18;
-			if (yych <= 'T') goto yy270;
-			goto yy289;
+			if (yych <= 'H') goto yy254;
+			goto yy274;
 		}
 	} else {
 		if (yych <= '`') {
-			if (yych <= 'Z') goto yy270;
-			if (yych == '_') goto yy275;
+			if (yych <= 'Z') goto yy254;
+			if (yych == '_') goto yy259;
 			goto yy18;
 		} else {
-			if (yych == 'u') goto yy295;
-			if (yych <= 'z') goto yy276;
+			if (yych == 'i') goto yy280;
+			if (yych <= 'z') goto yy260;
 			goto yy18;
 		}
 	}
 yy125:
-	yyaccept = 2;
-	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych <= 'I') {
-		if (yych <= '.') {
-			if (yych == ')') goto yy103;
-			goto yy18;
-		} else {
-			if (yych <= '/') goto yy275;
-			if (yych <= '@') goto yy18;
-			if (yych <= 'H') goto yy270;
-			goto yy290;
-		}
-	} else {
-		if (yych <= '`') {
-			if (yych <= 'Z') goto yy270;
-			if (yych == '_') goto yy275;
-			goto yy18;
-		} else {
-			if (yych == 'i') goto yy296;
-			if (yych <= 'z') goto yy276;
-			goto yy18;
-		}
-	}
-yy126:
 	++YYCURSOR;
 	if ((YYLIMIT - YYCURSOR) < 17) YYFILL(17);
 	yych = *YYCURSOR;
-yy127:
+yy126:
 	if (yych <= '/') {
 		if (yych <= 0x1F) goto yy53;
-		if (yych <= '.') goto yy126;
+		if (yych <= '.') goto yy125;
 		goto yy53;
 	} else {
-		if (yych <= '2') goto yy129;
-		if (yych <= '3') goto yy131;
-		if (yych <= '9') goto yy132;
+		if (yych <= '2') goto yy128;
+		if (yych <= '3') goto yy130;
+		if (yych <= '9') goto yy131;
 		goto yy53;
 	}
-yy128:
+yy127:
 	yyaccept = 2;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= 0x1F) goto yy18;
 	if (yych == '/') goto yy18;
-	if (yych <= '9') goto yy127;
+	if (yych <= '9') goto yy126;
 	goto yy18;
-yy129:
+yy128:
 	++YYCURSOR;
-	if ((yych = *YYCURSOR) <= 'm') {
-		if (yych <= '1') {
-			if (yych <= '/') goto yy298;
-			goto yy299;
-		} else {
-			if (yych <= '2') goto yy300;
-			if (yych <= '9') goto yy299;
-			goto yy298;
-		}
-	} else {
-		if (yych <= 'r') {
-			if (yych <= 'n') goto yy301;
-			if (yych <= 'q') goto yy298;
-			goto yy302;
-		} else {
-			if (yych <= 's') goto yy303;
-			if (yych <= 't') goto yy304;
-			goto yy298;
-		}
-	}
-yy130:
+	if ((yych = *YYCURSOR) <= '/') goto yy282;
+	if (yych <= '9') goto yy283;
+	goto yy282;
+yy129:
 #line 1126 "parse_date.s.re"
 	{
 		DEBUG_OUTPUT("datetextual | datenoyear");
@@ -3605,140 +3553,134 @@ yy130:
 		TIMELIB_DEINIT;
 		return TIMELIB_DATE_TEXT;
 	}
-#line 3609 "parse_date.s.c"
+#line 3557 "parse_date.s.c"
+yy130:
+	yych = *++YYCURSOR;
+	if (yych <= '/') goto yy282;
+	if (yych <= '1') goto yy283;
+	if (yych <= '2') goto yy284;
+	if (yych <= '9') goto yy285;
+	goto yy282;
 yy131:
 	yych = *++YYCURSOR;
-	if (yych <= 'm') {
-		if (yych <= '1') {
-			if (yych <= '/') goto yy298;
-			goto yy299;
-		} else {
-			if (yych <= '2') goto yy305;
-			if (yych <= '9') goto yy306;
-			goto yy298;
-		}
-	} else {
-		if (yych <= 'r') {
-			if (yych <= 'n') goto yy301;
-			if (yych <= 'q') goto yy298;
-			goto yy302;
-		} else {
-			if (yych <= 's') goto yy303;
-			if (yych <= 't') goto yy304;
-			goto yy298;
-		}
-	}
+	if (yych <= '/') goto yy282;
+	if (yych <= '1') goto yy286;
+	if (yych <= '2') goto yy284;
+	if (yych <= '9') goto yy285;
+	goto yy282;
 yy132:
-	yych = *++YYCURSOR;
-	if (yych <= 'm') {
-		if (yych <= '1') {
-			if (yych <= '/') goto yy298;
-			goto yy307;
-		} else {
-			if (yych <= '2') goto yy305;
-			if (yych <= '9') goto yy306;
-			goto yy298;
-		}
-	} else {
-		if (yych <= 'r') {
-			if (yych <= 'n') goto yy301;
-			if (yych <= 'q') goto yy298;
-			goto yy302;
-		} else {
-			if (yych <= 's') goto yy303;
-			if (yych <= 't') goto yy304;
-			goto yy298;
-		}
-	}
-yy133:
 	yyaccept = 2;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= '9') {
 		if (yych <= ')') {
 			if (yych <= 0x1F) goto yy18;
-			if (yych <= '(') goto yy127;
-			goto yy128;
+			if (yych <= '(') goto yy126;
+			goto yy127;
 		} else {
 			if (yych == '/') goto yy18;
-			goto yy127;
+			goto yy126;
 		}
 	} else {
 		if (yych <= 'I') {
 			if (yych <= '@') goto yy18;
-			if (yych <= 'H') goto yy270;
-			goto yy308;
+			if (yych <= 'H') goto yy254;
+			goto yy287;
 		} else {
-			if (yych <= 'Z') goto yy270;
+			if (yych <= 'Z') goto yy254;
 			if (yych <= '`') goto yy18;
-			if (yych <= 'z') goto yy270;
+			if (yych <= 'z') goto yy254;
 			goto yy18;
 		}
 	}
-yy134:
+yy133:
 	yyaccept = 2;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= '/') {
 		if (yych <= '(') {
 			if (yych <= 0x1F) goto yy18;
-			goto yy127;
+			goto yy126;
 		} else {
-			if (yych <= ')') goto yy128;
-			if (yych <= '.') goto yy127;
+			if (yych <= ')') goto yy127;
+			if (yych <= '.') goto yy126;
 			goto yy18;
 		}
 	} else {
 		if (yych <= 'Z') {
-			if (yych <= '9') goto yy127;
+			if (yych <= '9') goto yy126;
 			if (yych <= '@') goto yy18;
-			goto yy270;
+			goto yy254;
 		} else {
 			if (yych <= '`') goto yy18;
-			if (yych <= 'z') goto yy270;
+			if (yych <= 'z') goto yy254;
+			goto yy18;
+		}
+	}
+yy134:
+	yych = *++YYCURSOR;
+	if (yych <= 'N') {
+		if (yych <= ')') {
+			if (yych <= '(') goto yy18;
+			goto yy102;
+		} else {
+			if (yych <= '@') goto yy18;
+			if (yych <= 'M') goto yy254;
+			goto yy288;
+		}
+	} else {
+		if (yych <= 'm') {
+			if (yych <= 'Z') goto yy254;
+			if (yych <= '`') goto yy18;
+			goto yy254;
+		} else {
+			if (yych <= 'n') goto yy288;
+			if (yych <= 'z') goto yy254;
 			goto yy18;
 		}
 	}
 yy135:
 	yych = *++YYCURSOR;
 	if (yych <= 'N') {
-		if (yych <= ')') {
-			if (yych <= '(') goto yy18;
-			goto yy103;
+		if (yych <= '@') {
+			if (yych == ')') goto yy102;
+			goto yy18;
 		} else {
-			if (yych <= '@') goto yy18;
-			if (yych <= 'M') goto yy270;
-			goto yy309;
+			if (yych == 'L') goto yy289;
+			if (yych <= 'M') goto yy254;
+			goto yy290;
 		}
 	} else {
-		if (yych <= 'm') {
-			if (yych <= 'Z') goto yy270;
+		if (yych <= 'l') {
+			if (yych <= 'Z') goto yy254;
 			if (yych <= '`') goto yy18;
-			goto yy270;
+			if (yych <= 'k') goto yy254;
+			goto yy289;
 		} else {
-			if (yych <= 'n') goto yy309;
-			if (yych <= 'z') goto yy270;
+			if (yych == 'n') goto yy290;
+			if (yych <= 'z') goto yy254;
 			goto yy18;
 		}
 	}
 yy136:
-	yych = *++YYCURSOR;
+	yyaccept = 2;
+	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= 'N') {
-		if (yych <= '@') {
-			if (yych == ')') goto yy103;
+		if (yych <= '.') {
+			if (yych == ')') goto yy102;
 			goto yy18;
 		} else {
-			if (yych == 'L') goto yy310;
-			if (yych <= 'M') goto yy270;
-			goto yy311;
+			if (yych <= '/') goto yy259;
+			if (yych <= '@') goto yy18;
+			if (yych <= 'M') goto yy254;
+			goto yy288;
 		}
 	} else {
-		if (yych <= 'l') {
-			if (yych <= 'Z') goto yy270;
-			if (yych <= '`') goto yy18;
-			if (yych <= 'k') goto yy270;
-			goto yy310;
+		if (yych <= '`') {
+			if (yych <= 'Z') goto yy254;
+			if (yych == '_') goto yy259;
+			goto yy18;
 		} else {
-			if (yych == 'n') goto yy311;
-			if (yych <= 'z') goto yy270;
+			if (yych == 'n') goto yy291;
+			if (yych <= 'z') goto yy260;
 			goto yy18;
 		}
 	}
@@ -3746,1232 +3688,1092 @@ yy137:
 	yyaccept = 2;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= 'N') {
-		if (yych <= '.') {
-			if (yych == ')') goto yy103;
-			goto yy18;
-		} else {
-			if (yych <= '/') goto yy275;
-			if (yych <= '@') goto yy18;
-			if (yych <= 'M') goto yy270;
-			goto yy309;
-		}
-	} else {
-		if (yych <= '`') {
-			if (yych <= 'Z') goto yy270;
-			if (yych == '_') goto yy275;
-			goto yy18;
-		} else {
-			if (yych == 'n') goto yy312;
-			if (yych <= 'z') goto yy276;
-			goto yy18;
-		}
-	}
-yy138:
-	yyaccept = 2;
-	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych <= 'N') {
 		if (yych <= '/') {
-			if (yych == ')') goto yy103;
+			if (yych == ')') goto yy102;
 			if (yych <= '.') goto yy18;
-			goto yy275;
+			goto yy259;
 		} else {
 			if (yych <= 'K') {
 				if (yych <= '@') goto yy18;
-				goto yy270;
+				goto yy254;
 			} else {
-				if (yych <= 'L') goto yy310;
-				if (yych <= 'M') goto yy270;
-				goto yy311;
+				if (yych <= 'L') goto yy289;
+				if (yych <= 'M') goto yy254;
+				goto yy290;
 			}
 		}
 	} else {
 		if (yych <= 'k') {
 			if (yych <= '^') {
-				if (yych <= 'Z') goto yy270;
+				if (yych <= 'Z') goto yy254;
 				goto yy18;
 			} else {
-				if (yych <= '_') goto yy275;
+				if (yych <= '_') goto yy259;
 				if (yych <= '`') goto yy18;
-				goto yy276;
+				goto yy260;
 			}
 		} else {
 			if (yych <= 'm') {
-				if (yych <= 'l') goto yy313;
-				goto yy276;
+				if (yych <= 'l') goto yy292;
+				goto yy260;
 			} else {
-				if (yych <= 'n') goto yy314;
-				if (yych <= 'z') goto yy276;
+				if (yych <= 'n') goto yy293;
+				if (yych <= 'z') goto yy260;
 				goto yy18;
 			}
 		}
 	}
-yy139:
+yy138:
 	yych = *++YYCURSOR;
 	if (yych <= 'S') {
 		if (yych <= ')') {
 			if (yych <= '(') goto yy18;
-			goto yy103;
+			goto yy102;
 		} else {
 			if (yych <= '@') goto yy18;
-			if (yych <= 'R') goto yy270;
-			goto yy315;
+			if (yych <= 'R') goto yy254;
+			goto yy294;
 		}
 	} else {
 		if (yych <= 'r') {
-			if (yych <= 'Z') goto yy270;
+			if (yych <= 'Z') goto yy254;
 			if (yych <= '`') goto yy18;
-			goto yy270;
+			goto yy254;
 		} else {
-			if (yych <= 's') goto yy315;
-			if (yych <= 'z') goto yy270;
+			if (yych <= 's') goto yy294;
+			if (yych <= 'z') goto yy254;
 			goto yy18;
 		}
 	}
-yy140:
+yy139:
 	yyaccept = 2;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= 'S') {
 		if (yych <= '.') {
-			if (yych == ')') goto yy103;
+			if (yych == ')') goto yy102;
 			goto yy18;
 		} else {
-			if (yych <= '/') goto yy275;
+			if (yych <= '/') goto yy259;
 			if (yych <= '@') goto yy18;
-			if (yych <= 'R') goto yy270;
-			goto yy315;
+			if (yych <= 'R') goto yy254;
+			goto yy294;
 		}
 	} else {
 		if (yych <= '`') {
-			if (yych <= 'Z') goto yy270;
-			if (yych == '_') goto yy275;
+			if (yych <= 'Z') goto yy254;
+			if (yych == '_') goto yy259;
 			goto yy18;
 		} else {
-			if (yych == 's') goto yy316;
-			if (yych <= 'z') goto yy276;
+			if (yych == 's') goto yy295;
+			if (yych <= 'z') goto yy260;
+			goto yy18;
+		}
+	}
+yy140:
+	yych = *++YYCURSOR;
+	if (yych <= 'Y') {
+		if (yych <= '@') {
+			if (yych == ')') goto yy102;
+			goto yy18;
+		} else {
+			if (yych == 'R') goto yy296;
+			if (yych <= 'X') goto yy254;
+			goto yy297;
+		}
+	} else {
+		if (yych <= 'r') {
+			if (yych <= 'Z') goto yy254;
+			if (yych <= '`') goto yy18;
+			if (yych <= 'q') goto yy254;
+			goto yy296;
+		} else {
+			if (yych == 'y') goto yy297;
+			if (yych <= 'z') goto yy254;
 			goto yy18;
 		}
 	}
 yy141:
 	yych = *++YYCURSOR;
-	if (yych <= 'Y') {
-		if (yych <= '@') {
-			if (yych == ')') goto yy103;
-			goto yy18;
+	if (yych <= 'D') {
+		if (yych <= ')') {
+			if (yych <= '(') goto yy18;
+			goto yy102;
 		} else {
-			if (yych == 'R') goto yy317;
-			if (yych <= 'X') goto yy270;
-			goto yy318;
+			if (yych <= '@') goto yy18;
+			if (yych <= 'C') goto yy254;
+			goto yy298;
 		}
 	} else {
-		if (yych <= 'r') {
-			if (yych <= 'Z') goto yy270;
+		if (yych <= 'c') {
+			if (yych <= 'Z') goto yy254;
 			if (yych <= '`') goto yy18;
-			if (yych <= 'q') goto yy270;
-			goto yy317;
+			goto yy254;
 		} else {
-			if (yych == 'y') goto yy318;
-			if (yych <= 'z') goto yy270;
+			if (yych <= 'd') goto yy298;
+			if (yych <= 'z') goto yy254;
 			goto yy18;
 		}
 	}
 yy142:
 	yych = *++YYCURSOR;
-	if (yych <= 'D') {
+	if (yych <= 'N') {
 		if (yych <= ')') {
 			if (yych <= '(') goto yy18;
-			goto yy103;
+			goto yy102;
 		} else {
 			if (yych <= '@') goto yy18;
-			if (yych <= 'C') goto yy270;
-			goto yy319;
+			if (yych <= 'M') goto yy254;
+			goto yy274;
 		}
 	} else {
-		if (yych <= 'c') {
-			if (yych <= 'Z') goto yy270;
+		if (yych <= 'm') {
+			if (yych <= 'Z') goto yy254;
 			if (yych <= '`') goto yy18;
-			goto yy270;
+			goto yy254;
 		} else {
-			if (yych <= 'd') goto yy319;
-			if (yych <= 'z') goto yy270;
+			if (yych <= 'n') goto yy274;
+			if (yych <= 'z') goto yy254;
 			goto yy18;
 		}
 	}
 yy143:
-	yych = *++YYCURSOR;
-	if (yych <= 'N') {
-		if (yych <= ')') {
-			if (yych <= '(') goto yy18;
-			goto yy103;
-		} else {
-			if (yych <= '@') goto yy18;
-			if (yych <= 'M') goto yy270;
-			goto yy320;
-		}
-	} else {
-		if (yych <= 'm') {
-			if (yych <= 'Z') goto yy270;
-			if (yych <= '`') goto yy18;
-			goto yy270;
-		} else {
-			if (yych <= 'n') goto yy320;
-			if (yych <= 'z') goto yy270;
-			goto yy18;
-		}
-	}
-yy144:
 	yyaccept = 2;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= 'Y') {
 		if (yych <= '/') {
-			if (yych == ')') goto yy103;
+			if (yych == ')') goto yy102;
 			if (yych <= '.') goto yy18;
-			goto yy275;
+			goto yy259;
 		} else {
 			if (yych <= 'Q') {
 				if (yych <= '@') goto yy18;
-				goto yy270;
+				goto yy254;
 			} else {
-				if (yych <= 'R') goto yy317;
-				if (yych <= 'X') goto yy270;
-				goto yy318;
+				if (yych <= 'R') goto yy296;
+				if (yych <= 'X') goto yy254;
+				goto yy297;
 			}
 		}
 	} else {
 		if (yych <= 'q') {
 			if (yych <= '^') {
-				if (yych <= 'Z') goto yy270;
+				if (yych <= 'Z') goto yy254;
 				goto yy18;
 			} else {
-				if (yych <= '_') goto yy275;
+				if (yych <= '_') goto yy259;
 				if (yych <= '`') goto yy18;
-				goto yy276;
+				goto yy260;
 			}
 		} else {
 			if (yych <= 'x') {
-				if (yych <= 'r') goto yy321;
-				goto yy276;
+				if (yych <= 'r') goto yy299;
+				goto yy260;
 			} else {
-				if (yych <= 'y') goto yy322;
-				if (yych <= 'z') goto yy276;
+				if (yych <= 'y') goto yy300;
+				if (yych <= 'z') goto yy260;
 				goto yy18;
 			}
+		}
+	}
+yy144:
+	yyaccept = 2;
+	yych = *(YYMARKER = ++YYCURSOR);
+	if (yych <= 'D') {
+		if (yych <= '.') {
+			if (yych == ')') goto yy102;
+			goto yy18;
+		} else {
+			if (yych <= '/') goto yy259;
+			if (yych <= '@') goto yy18;
+			if (yych <= 'C') goto yy254;
+			goto yy298;
+		}
+	} else {
+		if (yych <= '`') {
+			if (yych <= 'Z') goto yy254;
+			if (yych == '_') goto yy259;
+			goto yy18;
+		} else {
+			if (yych == 'd') goto yy301;
+			if (yych <= 'z') goto yy260;
+			goto yy18;
 		}
 	}
 yy145:
 	yyaccept = 2;
 	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych <= 'D') {
+	if (yych <= 'N') {
 		if (yych <= '.') {
-			if (yych == ')') goto yy103;
+			if (yych == ')') goto yy102;
 			goto yy18;
 		} else {
-			if (yych <= '/') goto yy275;
+			if (yych <= '/') goto yy259;
 			if (yych <= '@') goto yy18;
-			if (yych <= 'C') goto yy270;
-			goto yy319;
+			if (yych <= 'M') goto yy254;
+			goto yy274;
 		}
 	} else {
 		if (yych <= '`') {
-			if (yych <= 'Z') goto yy270;
-			if (yych == '_') goto yy275;
+			if (yych <= 'Z') goto yy254;
+			if (yych == '_') goto yy259;
 			goto yy18;
 		} else {
-			if (yych == 'd') goto yy323;
-			if (yych <= 'z') goto yy276;
+			if (yych == 'n') goto yy280;
+			if (yych <= 'z') goto yy260;
 			goto yy18;
 		}
 	}
 yy146:
-	yyaccept = 2;
-	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych <= 'N') {
-		if (yych <= '.') {
-			if (yych == ')') goto yy103;
-			goto yy18;
+	yych = *++YYCURSOR;
+	if (yych <= 'X') {
+		if (yych <= ')') {
+			if (yych <= '(') goto yy18;
+			goto yy102;
 		} else {
-			if (yych <= '/') goto yy275;
 			if (yych <= '@') goto yy18;
-			if (yych <= 'M') goto yy270;
-			goto yy320;
+			if (yych <= 'W') goto yy254;
+			goto yy294;
 		}
 	} else {
-		if (yych <= '`') {
-			if (yych <= 'Z') goto yy270;
-			if (yych == '_') goto yy275;
-			goto yy18;
+		if (yych <= 'w') {
+			if (yych <= 'Z') goto yy254;
+			if (yych <= '`') goto yy18;
+			goto yy254;
 		} else {
-			if (yych == 'n') goto yy324;
-			if (yych <= 'z') goto yy276;
+			if (yych <= 'x') goto yy294;
+			if (yych <= 'z') goto yy254;
 			goto yy18;
 		}
 	}
 yy147:
 	yych = *++YYCURSOR;
-	if (yych <= 'X') {
+	if (yych <= 'N') {
 		if (yych <= ')') {
 			if (yych <= '(') goto yy18;
-			goto yy103;
+			goto yy102;
 		} else {
 			if (yych <= '@') goto yy18;
-			if (yych <= 'W') goto yy270;
-			goto yy325;
+			if (yych <= 'M') goto yy254;
+			goto yy271;
 		}
 	} else {
-		if (yych <= 'w') {
-			if (yych <= 'Z') goto yy270;
+		if (yych <= 'm') {
+			if (yych <= 'Z') goto yy254;
 			if (yych <= '`') goto yy18;
-			goto yy270;
+			goto yy254;
 		} else {
-			if (yych <= 'x') goto yy325;
-			if (yych <= 'z') goto yy270;
+			if (yych <= 'n') goto yy271;
+			if (yych <= 'z') goto yy254;
 			goto yy18;
 		}
 	}
 yy148:
 	yych = *++YYCURSOR;
-	if (yych <= 'N') {
-		if (yych <= ')') {
-			if (yych <= '(') goto yy18;
-			goto yy103;
-		} else {
-			if (yych <= '@') goto yy18;
-			if (yych <= 'M') goto yy270;
-			goto yy326;
-		}
-	} else {
-		if (yych <= 'm') {
-			if (yych <= 'Z') goto yy270;
-			if (yych <= '`') goto yy18;
-			goto yy270;
-		} else {
-			if (yych <= 'n') goto yy326;
-			if (yych <= 'z') goto yy270;
-			goto yy18;
-		}
-	}
-yy149:
-	yych = *++YYCURSOR;
 	if (yych <= 'W') {
 		if (yych <= 'N') {
-			if (yych == ')') goto yy103;
+			if (yych == ')') goto yy102;
 			if (yych <= '@') goto yy18;
-			goto yy270;
+			goto yy254;
 		} else {
-			if (yych <= 'O') goto yy327;
-			if (yych <= 'U') goto yy270;
-			if (yych <= 'V') goto yy328;
-			goto yy329;
+			if (yych <= 'O') goto yy302;
+			if (yych <= 'U') goto yy254;
+			if (yych <= 'V') goto yy264;
+			goto yy303;
 		}
 	} else {
 		if (yych <= 'o') {
-			if (yych <= 'Z') goto yy270;
+			if (yych <= 'Z') goto yy254;
 			if (yych <= '`') goto yy18;
-			if (yych <= 'n') goto yy270;
-			goto yy327;
+			if (yych <= 'n') goto yy254;
+			goto yy302;
 		} else {
 			if (yych <= 'v') {
-				if (yych <= 'u') goto yy270;
-				goto yy328;
+				if (yych <= 'u') goto yy254;
+				goto yy264;
 			} else {
-				if (yych <= 'w') goto yy329;
-				if (yych <= 'z') goto yy270;
+				if (yych <= 'w') goto yy303;
+				if (yych <= 'z') goto yy254;
 				goto yy18;
 			}
+		}
+	}
+yy149:
+	yyaccept = 2;
+	yych = *(YYMARKER = ++YYCURSOR);
+	if (yych <= 'X') {
+		if (yych <= '.') {
+			if (yych == ')') goto yy102;
+			goto yy18;
+		} else {
+			if (yych <= '/') goto yy259;
+			if (yych <= '@') goto yy18;
+			if (yych <= 'W') goto yy254;
+			goto yy294;
+		}
+	} else {
+		if (yych <= '`') {
+			if (yych <= 'Z') goto yy254;
+			if (yych == '_') goto yy259;
+			goto yy18;
+		} else {
+			if (yych == 'x') goto yy295;
+			if (yych <= 'z') goto yy260;
+			goto yy18;
 		}
 	}
 yy150:
 	yyaccept = 2;
 	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych <= 'X') {
+	if (yych <= 'N') {
 		if (yych <= '.') {
-			if (yych == ')') goto yy103;
+			if (yych == ')') goto yy102;
 			goto yy18;
 		} else {
-			if (yych <= '/') goto yy275;
+			if (yych <= '/') goto yy259;
 			if (yych <= '@') goto yy18;
-			if (yych <= 'W') goto yy270;
-			goto yy325;
+			if (yych <= 'M') goto yy254;
+			goto yy271;
 		}
 	} else {
 		if (yych <= '`') {
-			if (yych <= 'Z') goto yy270;
-			if (yych == '_') goto yy275;
+			if (yych <= 'Z') goto yy254;
+			if (yych == '_') goto yy259;
 			goto yy18;
 		} else {
-			if (yych == 'x') goto yy331;
-			if (yych <= 'z') goto yy276;
+			if (yych == 'n') goto yy277;
+			if (yych <= 'z') goto yy260;
 			goto yy18;
 		}
 	}
 yy151:
 	yyaccept = 2;
 	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych <= 'N') {
-		if (yych <= '.') {
-			if (yych == ')') goto yy103;
-			goto yy18;
-		} else {
-			if (yych <= '/') goto yy275;
-			if (yych <= '@') goto yy18;
-			if (yych <= 'M') goto yy270;
-			goto yy326;
-		}
-	} else {
-		if (yych <= '`') {
-			if (yych <= 'Z') goto yy270;
-			if (yych == '_') goto yy275;
-			goto yy18;
-		} else {
-			if (yych == 'n') goto yy332;
-			if (yych <= 'z') goto yy276;
-			goto yy18;
-		}
-	}
-yy152:
-	yyaccept = 2;
-	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= 'W') {
 		if (yych <= '@') {
 			if (yych <= ')') {
 				if (yych <= '(') goto yy18;
-				goto yy103;
+				goto yy102;
 			} else {
-				if (yych == '/') goto yy275;
+				if (yych == '/') goto yy259;
 				goto yy18;
 			}
 		} else {
 			if (yych <= 'O') {
-				if (yych <= 'N') goto yy270;
-				goto yy327;
+				if (yych <= 'N') goto yy254;
+				goto yy302;
 			} else {
-				if (yych <= 'U') goto yy270;
-				if (yych <= 'V') goto yy328;
-				goto yy329;
+				if (yych <= 'U') goto yy254;
+				if (yych <= 'V') goto yy264;
+				goto yy303;
 			}
 		}
 	} else {
 		if (yych <= 'n') {
 			if (yych <= '^') {
-				if (yych <= 'Z') goto yy270;
+				if (yych <= 'Z') goto yy254;
 				goto yy18;
 			} else {
-				if (yych <= '_') goto yy275;
+				if (yych <= '_') goto yy259;
 				if (yych <= '`') goto yy18;
-				goto yy276;
+				goto yy260;
 			}
 		} else {
 			if (yych <= 'v') {
-				if (yych <= 'o') goto yy333;
-				if (yych <= 'u') goto yy276;
-				goto yy334;
+				if (yych <= 'o') goto yy305;
+				if (yych <= 'u') goto yy260;
+				goto yy265;
 			} else {
-				if (yych <= 'w') goto yy335;
-				if (yych <= 'z') goto yy276;
+				if (yych <= 'w') goto yy306;
+				if (yych <= 'z') goto yy260;
 				goto yy18;
 			}
 		}
 	}
-yy153:
+yy152:
 	yych = *++YYCURSOR;
 	if (yych <= 'T') {
 		if (yych <= ')') {
 			if (yych <= '(') goto yy18;
-			goto yy103;
+			goto yy102;
 		} else {
 			if (yych <= '@') goto yy18;
-			if (yych <= 'S') goto yy270;
-			goto yy336;
+			if (yych <= 'S') goto yy254;
+			goto yy307;
 		}
 	} else {
 		if (yych <= 's') {
-			if (yych <= 'Z') goto yy270;
+			if (yych <= 'Z') goto yy254;
 			if (yych <= '`') goto yy18;
-			goto yy270;
+			goto yy254;
 		} else {
-			if (yych <= 't') goto yy336;
-			if (yych <= 'z') goto yy270;
+			if (yych <= 't') goto yy307;
+			if (yych <= 'z') goto yy254;
+			goto yy18;
+		}
+	}
+yy153:
+	yyaccept = 2;
+	yych = *(YYMARKER = ++YYCURSOR);
+	if (yych <= 'T') {
+		if (yych <= '.') {
+			if (yych == ')') goto yy102;
+			goto yy18;
+		} else {
+			if (yych <= '/') goto yy259;
+			if (yych <= '@') goto yy18;
+			if (yych <= 'S') goto yy254;
+			goto yy307;
+		}
+	} else {
+		if (yych <= '`') {
+			if (yych <= 'Z') goto yy254;
+			if (yych == '_') goto yy259;
+			goto yy18;
+		} else {
+			if (yych == 't') goto yy308;
+			if (yych <= 'z') goto yy260;
 			goto yy18;
 		}
 	}
 yy154:
-	yyaccept = 2;
-	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych <= 'T') {
-		if (yych <= '.') {
-			if (yych == ')') goto yy103;
-			goto yy18;
-		} else {
-			if (yych <= '/') goto yy275;
-			if (yych <= '@') goto yy18;
-			if (yych <= 'S') goto yy270;
-			goto yy336;
-		}
-	} else {
-		if (yych <= '`') {
-			if (yych <= 'Z') goto yy270;
-			if (yych == '_') goto yy275;
-			goto yy18;
-		} else {
-			if (yych == 't') goto yy337;
-			if (yych <= 'z') goto yy276;
-			goto yy18;
-		}
-	}
-yy155:
 	yych = *++YYCURSOR;
 	if (yych <= 'E') {
 		if (yych <= ')') {
 			if (yych <= '(') goto yy18;
-			goto yy103;
+			goto yy102;
 		} else {
 			if (yych <= '@') goto yy18;
-			if (yych <= 'D') goto yy270;
-			goto yy338;
+			if (yych <= 'D') goto yy254;
+			goto yy309;
 		}
 	} else {
 		if (yych <= 'd') {
-			if (yych <= 'Z') goto yy270;
+			if (yych <= 'Z') goto yy254;
 			if (yych <= '`') goto yy18;
-			goto yy270;
+			goto yy254;
 		} else {
-			if (yych <= 'e') goto yy338;
-			if (yych <= 'z') goto yy270;
+			if (yych <= 'e') goto yy309;
+			if (yych <= 'z') goto yy254;
 			goto yy18;
 		}
 	}
-yy156:
+yy155:
 	yyaccept = 2;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= 'E') {
 		if (yych <= '.') {
-			if (yych == ')') goto yy103;
+			if (yych == ')') goto yy102;
 			goto yy18;
 		} else {
-			if (yych <= '/') goto yy275;
+			if (yych <= '/') goto yy259;
 			if (yych <= '@') goto yy18;
-			if (yych <= 'D') goto yy270;
-			goto yy338;
+			if (yych <= 'D') goto yy254;
+			goto yy309;
 		}
 	} else {
 		if (yych <= '`') {
-			if (yych <= 'Z') goto yy270;
-			if (yych == '_') goto yy275;
+			if (yych <= 'Z') goto yy254;
+			if (yych == '_') goto yy259;
 			goto yy18;
 		} else {
-			if (yych == 'e') goto yy339;
-			if (yych <= 'z') goto yy276;
+			if (yych == 'e') goto yy310;
+			if (yych <= 'z') goto yy260;
+			goto yy18;
+		}
+	}
+yy156:
+	yych = *++YYCURSOR;
+	if (yych <= 'T') {
+		if (yych <= ')') {
+			if (yych <= '(') goto yy18;
+			goto yy102;
+		} else {
+			if (yych <= '@') goto yy18;
+			if (yych <= 'S') goto yy254;
+			goto yy311;
+		}
+	} else {
+		if (yych <= 's') {
+			if (yych <= 'Z') goto yy254;
+			if (yych <= '`') goto yy18;
+			goto yy254;
+		} else {
+			if (yych <= 't') goto yy311;
+			if (yych <= 'z') goto yy254;
 			goto yy18;
 		}
 	}
 yy157:
 	yych = *++YYCURSOR;
-	if (yych <= 'T') {
-		if (yych <= ')') {
-			if (yych <= '(') goto yy18;
-			goto yy103;
-		} else {
-			if (yych <= '@') goto yy18;
-			if (yych <= 'S') goto yy270;
-			goto yy340;
-		}
-	} else {
-		if (yych <= 's') {
-			if (yych <= 'Z') goto yy270;
-			if (yych <= '`') goto yy18;
-			goto yy270;
-		} else {
-			if (yych <= 't') goto yy340;
-			if (yych <= 'z') goto yy270;
-			goto yy18;
-		}
-	}
-yy158:
-	yych = *++YYCURSOR;
 	if (yych <= 'V') {
 		if (yych <= 'B') {
-			if (yych == ')') goto yy103;
+			if (yych == ')') goto yy102;
 			if (yych <= '@') goto yy18;
-			goto yy270;
+			goto yy254;
 		} else {
 			if (yych <= 'O') {
-				if (yych <= 'C') goto yy341;
-				goto yy270;
+				if (yych <= 'C') goto yy312;
+				goto yy254;
 			} else {
-				if (yych <= 'P') goto yy342;
-				if (yych <= 'U') goto yy270;
-				goto yy343;
+				if (yych <= 'P') goto yy313;
+				if (yych <= 'U') goto yy254;
+				goto yy314;
 			}
 		}
 	} else {
 		if (yych <= 'o') {
 			if (yych <= '`') {
-				if (yych <= 'Z') goto yy270;
+				if (yych <= 'Z') goto yy254;
 				goto yy18;
 			} else {
-				if (yych == 'c') goto yy341;
-				goto yy270;
+				if (yych == 'c') goto yy312;
+				goto yy254;
 			}
 		} else {
 			if (yych <= 'u') {
-				if (yych <= 'p') goto yy342;
-				goto yy270;
+				if (yych <= 'p') goto yy313;
+				goto yy254;
 			} else {
-				if (yych <= 'v') goto yy343;
-				if (yych <= 'z') goto yy270;
+				if (yych <= 'v') goto yy314;
+				if (yych <= 'z') goto yy254;
 				goto yy18;
 			}
 		}
 	}
-yy159:
+yy158:
 	yych = *++YYCURSOR;
 	if (yych <= 'X') {
 		if (yych <= ')') {
 			if (yych <= '(') goto yy18;
-			goto yy103;
+			goto yy102;
 		} else {
 			if (yych <= '@') goto yy18;
-			if (yych <= 'W') goto yy270;
-			goto yy344;
+			if (yych <= 'W') goto yy254;
+			goto yy271;
 		}
 	} else {
 		if (yych <= 'w') {
-			if (yych <= 'Z') goto yy270;
+			if (yych <= 'Z') goto yy254;
 			if (yych <= '`') goto yy18;
-			goto yy270;
+			goto yy254;
 		} else {
-			if (yych <= 'x') goto yy344;
-			if (yych <= 'z') goto yy270;
+			if (yych <= 'x') goto yy271;
+			if (yych <= 'z') goto yy254;
 			goto yy18;
 		}
 	}
-yy160:
-	yych = *++YYCURSOR;
-	if (yych <= 'N') {
-		if (yych <= ')') {
-			if (yych <= '(') goto yy18;
-			goto yy103;
-		} else {
-			if (yych <= '@') goto yy18;
-			if (yych <= 'M') goto yy270;
-			goto yy345;
-		}
-	} else {
-		if (yych <= 'm') {
-			if (yych <= 'Z') goto yy270;
-			if (yych <= '`') goto yy18;
-			goto yy270;
-		} else {
-			if (yych <= 'n') goto yy345;
-			if (yych <= 'z') goto yy270;
-			goto yy18;
-		}
-	}
-yy161:
+yy159:
 	yyaccept = 2;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= 'T') {
 		if (yych <= '.') {
-			if (yych == ')') goto yy103;
+			if (yych == ')') goto yy102;
 			goto yy18;
 		} else {
-			if (yych <= '/') goto yy275;
+			if (yych <= '/') goto yy259;
 			if (yych <= '@') goto yy18;
-			if (yych <= 'S') goto yy270;
-			goto yy340;
+			if (yych <= 'S') goto yy254;
+			goto yy311;
 		}
 	} else {
 		if (yych <= '`') {
-			if (yych <= 'Z') goto yy270;
-			if (yych == '_') goto yy275;
+			if (yych <= 'Z') goto yy254;
+			if (yych == '_') goto yy259;
 			goto yy18;
 		} else {
-			if (yych == 't') goto yy346;
-			if (yych <= 'z') goto yy276;
+			if (yych == 't') goto yy315;
+			if (yych <= 'z') goto yy260;
 			goto yy18;
 		}
 	}
-yy162:
+yy160:
 	yyaccept = 2;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= 'V') {
 		if (yych <= '@') {
 			if (yych <= ')') {
 				if (yych <= '(') goto yy18;
-				goto yy103;
+				goto yy102;
 			} else {
-				if (yych == '/') goto yy275;
+				if (yych == '/') goto yy259;
 				goto yy18;
 			}
 		} else {
 			if (yych <= 'O') {
-				if (yych == 'C') goto yy341;
-				goto yy270;
+				if (yych == 'C') goto yy312;
+				goto yy254;
 			} else {
-				if (yych <= 'P') goto yy342;
-				if (yych <= 'U') goto yy270;
-				goto yy343;
+				if (yych <= 'P') goto yy313;
+				if (yych <= 'U') goto yy254;
+				goto yy314;
 			}
 		}
 	} else {
 		if (yych <= 'c') {
 			if (yych <= '_') {
-				if (yych <= 'Z') goto yy270;
+				if (yych <= 'Z') goto yy254;
 				if (yych <= '^') goto yy18;
-				goto yy275;
+				goto yy259;
 			} else {
 				if (yych <= '`') goto yy18;
-				if (yych <= 'b') goto yy276;
-				goto yy347;
+				if (yych <= 'b') goto yy260;
+				goto yy316;
 			}
 		} else {
 			if (yych <= 'u') {
-				if (yych == 'p') goto yy348;
-				goto yy276;
+				if (yych == 'p') goto yy317;
+				goto yy260;
 			} else {
-				if (yych <= 'v') goto yy349;
-				if (yych <= 'z') goto yy276;
+				if (yych <= 'v') goto yy318;
+				if (yych <= 'z') goto yy260;
 				goto yy18;
 			}
 		}
 	}
-yy163:
+yy161:
 	yyaccept = 2;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= 'X') {
 		if (yych <= '.') {
-			if (yych == ')') goto yy103;
+			if (yych == ')') goto yy102;
 			goto yy18;
 		} else {
-			if (yych <= '/') goto yy275;
+			if (yych <= '/') goto yy259;
 			if (yych <= '@') goto yy18;
-			if (yych <= 'W') goto yy270;
-			goto yy344;
+			if (yych <= 'W') goto yy254;
+			goto yy271;
 		}
 	} else {
 		if (yych <= '`') {
-			if (yych <= 'Z') goto yy270;
-			if (yych == '_') goto yy275;
+			if (yych <= 'Z') goto yy254;
+			if (yych == '_') goto yy259;
 			goto yy18;
 		} else {
-			if (yych == 'x') goto yy350;
-			if (yych <= 'z') goto yy276;
+			if (yych == 'x') goto yy277;
+			if (yych <= 'z') goto yy260;
+			goto yy18;
+		}
+	}
+yy162:
+	yych = *++YYCURSOR;
+	if (yych <= 'U') {
+		if (yych <= '@') {
+			if (yych == ')') goto yy102;
+			goto yy18;
+		} else {
+			if (yych == 'I') goto yy319;
+			if (yych <= 'T') goto yy254;
+			goto yy320;
+		}
+	} else {
+		if (yych <= 'i') {
+			if (yych <= 'Z') goto yy254;
+			if (yych <= '`') goto yy18;
+			if (yych <= 'h') goto yy254;
+			goto yy319;
+		} else {
+			if (yych == 'u') goto yy320;
+			if (yych <= 'z') goto yy254;
+			goto yy18;
+		}
+	}
+yy163:
+	yych = *++YYCURSOR;
+	if (yych <= 'M') {
+		if (yych <= '@') {
+			if (yych == ')') goto yy102;
+			goto yy18;
+		} else {
+			if (yych == 'D') goto yy321;
+			if (yych <= 'L') goto yy254;
+			goto yy322;
+		}
+	} else {
+		if (yych <= 'd') {
+			if (yych <= 'Z') goto yy254;
+			if (yych <= '`') goto yy18;
+			if (yych <= 'c') goto yy254;
+			goto yy321;
+		} else {
+			if (yych == 'm') goto yy322;
+			if (yych <= 'z') goto yy254;
 			goto yy18;
 		}
 	}
 yy164:
-	yyaccept = 2;
-	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych <= 'N') {
-		if (yych <= '.') {
-			if (yych == ')') goto yy103;
-			goto yy18;
+	yych = *++YYCURSOR;
+	if (yych <= 'E') {
+		if (yych <= ')') {
+			if (yych <= '(') goto yy18;
+			goto yy102;
 		} else {
-			if (yych <= '/') goto yy275;
 			if (yych <= '@') goto yy18;
-			if (yych <= 'M') goto yy270;
-			goto yy345;
+			if (yych <= 'D') goto yy254;
+			goto yy323;
 		}
 	} else {
-		if (yych <= '`') {
-			if (yych <= 'Z') goto yy270;
-			if (yych == '_') goto yy275;
-			goto yy18;
+		if (yych <= 'd') {
+			if (yych <= 'Z') goto yy254;
+			if (yych <= '`') goto yy18;
+			goto yy254;
 		} else {
-			if (yych == 'n') goto yy351;
-			if (yych <= 'z') goto yy276;
+			if (yych <= 'e') goto yy323;
+			if (yych <= 'z') goto yy254;
 			goto yy18;
 		}
 	}
 yy165:
 	yych = *++YYCURSOR;
-	if (yych <= 'N') {
+	if (yych <= 'E') {
 		if (yych <= ')') {
 			if (yych <= '(') goto yy18;
-			goto yy103;
+			goto yy102;
 		} else {
 			if (yych <= '@') goto yy18;
-			if (yych <= 'M') goto yy270;
-			goto yy352;
+			if (yych <= 'D') goto yy254;
+			goto yy324;
 		}
 	} else {
-		if (yych <= 'm') {
-			if (yych <= 'Z') goto yy270;
+		if (yych <= 'd') {
+			if (yych <= 'Z') goto yy254;
 			if (yych <= '`') goto yy18;
-			goto yy270;
+			goto yy254;
 		} else {
-			if (yych <= 'n') goto yy352;
-			if (yych <= 'z') goto yy270;
+			if (yych <= 'e') goto yy324;
+			if (yych <= 'z') goto yy254;
 			goto yy18;
 		}
 	}
 yy166:
-	yych = *++YYCURSOR;
+	yyaccept = 2;
+	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= 'U') {
-		if (yych <= '@') {
-			if (yych == ')') goto yy103;
-			goto yy18;
+		if (yych <= '/') {
+			if (yych == ')') goto yy102;
+			if (yych <= '.') goto yy18;
+			goto yy259;
 		} else {
-			if (yych == 'I') goto yy353;
-			if (yych <= 'T') goto yy270;
-			goto yy354;
+			if (yych <= 'H') {
+				if (yych <= '@') goto yy18;
+				goto yy254;
+			} else {
+				if (yych <= 'I') goto yy319;
+				if (yych <= 'T') goto yy254;
+				goto yy320;
+			}
 		}
 	} else {
-		if (yych <= 'i') {
-			if (yych <= 'Z') goto yy270;
-			if (yych <= '`') goto yy18;
-			if (yych <= 'h') goto yy270;
-			goto yy353;
+		if (yych <= 'h') {
+			if (yych <= '^') {
+				if (yych <= 'Z') goto yy254;
+				goto yy18;
+			} else {
+				if (yych <= '_') goto yy259;
+				if (yych <= '`') goto yy18;
+				goto yy260;
+			}
 		} else {
-			if (yych == 'u') goto yy354;
-			if (yych <= 'z') goto yy270;
-			goto yy18;
+			if (yych <= 't') {
+				if (yych <= 'i') goto yy325;
+				goto yy260;
+			} else {
+				if (yych <= 'u') goto yy326;
+				if (yych <= 'z') goto yy260;
+				goto yy18;
+			}
 		}
 	}
 yy167:
-	yych = *++YYCURSOR;
+	yyaccept = 2;
+	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= 'M') {
-		if (yych <= '@') {
-			if (yych == ')') goto yy103;
-			goto yy18;
+		if (yych <= '/') {
+			if (yych == ')') goto yy102;
+			if (yych <= '.') goto yy18;
+			goto yy259;
 		} else {
-			if (yych == 'D') goto yy355;
-			if (yych <= 'L') goto yy270;
-			goto yy356;
+			if (yych <= 'C') {
+				if (yych <= '@') goto yy18;
+				goto yy254;
+			} else {
+				if (yych <= 'D') goto yy321;
+				if (yych <= 'L') goto yy254;
+				goto yy322;
+			}
 		}
 	} else {
-		if (yych <= 'd') {
-			if (yych <= 'Z') goto yy270;
-			if (yych <= '`') goto yy18;
-			if (yych <= 'c') goto yy270;
-			goto yy355;
+		if (yych <= 'c') {
+			if (yych <= '^') {
+				if (yych <= 'Z') goto yy254;
+				goto yy18;
+			} else {
+				if (yych <= '_') goto yy259;
+				if (yych <= '`') goto yy18;
+				goto yy260;
+			}
 		} else {
-			if (yych == 'm') goto yy356;
-			if (yych <= 'z') goto yy270;
-			goto yy18;
+			if (yych <= 'l') {
+				if (yych <= 'd') goto yy327;
+				goto yy260;
+			} else {
+				if (yych <= 'm') goto yy328;
+				if (yych <= 'z') goto yy260;
+				goto yy18;
+			}
 		}
 	}
 yy168:
-	yych = *++YYCURSOR;
+	yyaccept = 2;
+	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= 'E') {
-		if (yych <= ')') {
-			if (yych <= '(') goto yy18;
-			goto yy103;
+		if (yych <= '.') {
+			if (yych == ')') goto yy102;
+			goto yy18;
 		} else {
+			if (yych <= '/') goto yy259;
 			if (yych <= '@') goto yy18;
-			if (yych <= 'D') goto yy270;
-			goto yy357;
+			if (yych <= 'D') goto yy254;
+			goto yy323;
 		}
 	} else {
-		if (yych <= 'd') {
-			if (yych <= 'Z') goto yy270;
-			if (yych <= '`') goto yy18;
-			goto yy270;
+		if (yych <= '`') {
+			if (yych <= 'Z') goto yy254;
+			if (yych == '_') goto yy259;
+			goto yy18;
 		} else {
-			if (yych <= 'e') goto yy357;
-			if (yych <= 'z') goto yy270;
+			if (yych == 'e') goto yy329;
+			if (yych <= 'z') goto yy260;
 			goto yy18;
 		}
 	}
 yy169:
-	yych = *++YYCURSOR;
+	yyaccept = 2;
+	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= 'E') {
-		if (yych <= ')') {
-			if (yych <= '(') goto yy18;
-			goto yy103;
+		if (yych <= '.') {
+			if (yych == ')') goto yy102;
+			goto yy18;
 		} else {
+			if (yych <= '/') goto yy259;
 			if (yych <= '@') goto yy18;
-			if (yych <= 'D') goto yy270;
-			goto yy358;
+			if (yych <= 'D') goto yy254;
+			goto yy324;
 		}
 	} else {
-		if (yych <= 'd') {
-			if (yych <= 'Z') goto yy270;
-			if (yych <= '`') goto yy18;
-			goto yy270;
+		if (yych <= '`') {
+			if (yych <= 'Z') goto yy254;
+			if (yych == '_') goto yy259;
+			goto yy18;
 		} else {
-			if (yych <= 'e') goto yy358;
-			if (yych <= 'z') goto yy270;
+			if (yych == 'e') goto yy330;
+			if (yych <= 'z') goto yy260;
 			goto yy18;
 		}
 	}
 yy170:
 	yyaccept = 2;
 	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych <= 'N') {
-		if (yych <= '.') {
-			if (yych == ')') goto yy103;
-			goto yy18;
+	if (yych <= '9') {
+		if (yych <= ')') {
+			if (yych <= 0x1F) goto yy18;
+			if (yych <= '(') goto yy126;
+			goto yy127;
 		} else {
-			if (yych <= '/') goto yy275;
-			if (yych <= '@') goto yy18;
-			if (yych <= 'M') goto yy270;
-			goto yy352;
+			if (yych == '/') goto yy18;
+			goto yy126;
 		}
 	} else {
-		if (yych <= '`') {
-			if (yych <= 'Z') goto yy270;
-			if (yych == '_') goto yy275;
-			goto yy18;
+		if (yych <= 'I') {
+			if (yych <= '@') goto yy18;
+			if (yych <= 'H') goto yy254;
+			goto yy331;
 		} else {
-			if (yych == 'n') goto yy359;
-			if (yych <= 'z') goto yy276;
+			if (yych <= 'Z') goto yy254;
+			if (yych <= '`') goto yy18;
+			if (yych <= 'z') goto yy254;
 			goto yy18;
 		}
 	}
 yy171:
-	yyaccept = 2;
-	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych <= 'U') {
-		if (yych <= '/') {
-			if (yych == ')') goto yy103;
-			if (yych <= '.') goto yy18;
-			goto yy275;
+	yych = *++YYCURSOR;
+	if (yych <= 'D') {
+		if (yych <= ')') {
+			if (yych <= '(') goto yy18;
+			goto yy102;
 		} else {
-			if (yych <= 'H') {
-				if (yych <= '@') goto yy18;
-				goto yy270;
-			} else {
-				if (yych <= 'I') goto yy353;
-				if (yych <= 'T') goto yy270;
-				goto yy354;
-			}
+			if (yych <= '@') goto yy18;
+			if (yych <= 'C') goto yy254;
+			goto yy332;
 		}
 	} else {
-		if (yych <= 'h') {
-			if (yych <= '^') {
-				if (yych <= 'Z') goto yy270;
-				goto yy18;
-			} else {
-				if (yych <= '_') goto yy275;
-				if (yych <= '`') goto yy18;
-				goto yy276;
-			}
+		if (yych <= 'c') {
+			if (yych <= 'Z') goto yy254;
+			if (yych <= '`') goto yy18;
+			goto yy254;
 		} else {
-			if (yych <= 't') {
-				if (yych <= 'i') goto yy360;
-				goto yy276;
-			} else {
-				if (yych <= 'u') goto yy361;
-				if (yych <= 'z') goto yy276;
-				goto yy18;
-			}
+			if (yych <= 'd') goto yy332;
+			if (yych <= 'z') goto yy254;
+			goto yy18;
 		}
 	}
 yy172:
 	yyaccept = 2;
 	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych <= 'M') {
-		if (yych <= '/') {
-			if (yych == ')') goto yy103;
-			if (yych <= '.') goto yy18;
-			goto yy275;
-		} else {
-			if (yych <= 'C') {
-				if (yych <= '@') goto yy18;
-				goto yy270;
-			} else {
-				if (yych <= 'D') goto yy355;
-				if (yych <= 'L') goto yy270;
-				goto yy356;
-			}
-		}
-	} else {
-		if (yych <= 'c') {
-			if (yych <= '^') {
-				if (yych <= 'Z') goto yy270;
-				goto yy18;
-			} else {
-				if (yych <= '_') goto yy275;
-				if (yych <= '`') goto yy18;
-				goto yy276;
-			}
-		} else {
-			if (yych <= 'l') {
-				if (yych <= 'd') goto yy362;
-				goto yy276;
-			} else {
-				if (yych <= 'm') goto yy363;
-				if (yych <= 'z') goto yy276;
-				goto yy18;
-			}
-		}
-	}
-yy173:
-	yyaccept = 2;
-	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych <= 'E') {
+	if (yych <= 'D') {
 		if (yych <= '.') {
-			if (yych == ')') goto yy103;
+			if (yych == ')') goto yy102;
 			goto yy18;
 		} else {
-			if (yych <= '/') goto yy275;
+			if (yych <= '/') goto yy259;
 			if (yych <= '@') goto yy18;
-			if (yych <= 'D') goto yy270;
-			goto yy357;
+			if (yych <= 'C') goto yy254;
+			goto yy332;
 		}
 	} else {
 		if (yych <= '`') {
-			if (yych <= 'Z') goto yy270;
-			if (yych == '_') goto yy275;
+			if (yych <= 'Z') goto yy254;
+			if (yych == '_') goto yy259;
 			goto yy18;
 		} else {
-			if (yych == 'e') goto yy364;
-			if (yych <= 'z') goto yy276;
+			if (yych == 'd') goto yy333;
+			if (yych <= 'z') goto yy260;
+			goto yy18;
+		}
+	}
+yy173:
+	yych = *++YYCURSOR;
+	if (yych <= 'S') {
+		if (yych <= ')') {
+			if (yych <= '(') goto yy18;
+			goto yy102;
+		} else {
+			if (yych <= '@') goto yy18;
+			if (yych <= 'R') goto yy254;
+			goto yy334;
+		}
+	} else {
+		if (yych <= 'r') {
+			if (yych <= 'Z') goto yy254;
+			if (yych <= '`') goto yy18;
+			goto yy254;
+		} else {
+			if (yych <= 's') goto yy334;
+			if (yych <= 'z') goto yy254;
 			goto yy18;
 		}
 	}
 yy174:
 	yyaccept = 2;
 	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych <= 'E') {
+	if (yych <= 'S') {
 		if (yych <= '.') {
-			if (yych == ')') goto yy103;
+			if (yych == ')') goto yy102;
 			goto yy18;
 		} else {
-			if (yych <= '/') goto yy275;
+			if (yych <= '/') goto yy259;
 			if (yych <= '@') goto yy18;
-			if (yych <= 'D') goto yy270;
-			goto yy358;
+			if (yych <= 'R') goto yy254;
+			goto yy334;
 		}
 	} else {
 		if (yych <= '`') {
-			if (yych <= 'Z') goto yy270;
-			if (yych == '_') goto yy275;
+			if (yych <= 'Z') goto yy254;
+			if (yych == '_') goto yy259;
 			goto yy18;
 		} else {
-			if (yych == 'e') goto yy365;
-			if (yych <= 'z') goto yy276;
+			if (yych == 's') goto yy335;
+			if (yych <= 'z') goto yy260;
 			goto yy18;
 		}
 	}
 yy175:
-	yyaccept = 2;
-	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych <= '9') {
-		if (yych <= ')') {
-			if (yych <= 0x1F) goto yy18;
-			if (yych <= '(') goto yy127;
-			goto yy128;
-		} else {
-			if (yych == '/') goto yy18;
-			goto yy127;
-		}
-	} else {
-		if (yych <= 'I') {
-			if (yych <= '@') goto yy18;
-			if (yych <= 'H') goto yy270;
-			goto yy366;
-		} else {
-			if (yych <= 'Z') goto yy270;
-			if (yych <= '`') goto yy18;
-			if (yych <= 'z') goto yy270;
-			goto yy18;
-		}
-	}
+	++YYCURSOR;
+	if ((YYLIMIT - YYCURSOR) < 11) YYFILL(11);
+	yych = *YYCURSOR;
 yy176:
-	yych = *++YYCURSOR;
-	if (yych <= 'D') {
-		if (yych <= ')') {
-			if (yych <= '(') goto yy18;
-			goto yy103;
-		} else {
-			if (yych <= '@') goto yy18;
-			if (yych <= 'C') goto yy270;
-			goto yy367;
-		}
-	} else {
-		if (yych <= 'c') {
-			if (yych <= 'Z') goto yy270;
-			if (yych <= '`') goto yy18;
-			goto yy270;
-		} else {
-			if (yych <= 'd') goto yy367;
-			if (yych <= 'z') goto yy270;
-			goto yy18;
-		}
+	switch (yych) {
+	case ' ':	goto yy175;
+	case 'D':
+	case 'd':	goto yy177;
+	case 'F':
+	case 'f':	goto yy178;
+	case 'H':
+	case 'h':	goto yy72;
+	case 'M':
+	case 'm':	goto yy179;
+	case 'S':
+	case 's':	goto yy180;
+	case 'T':
+	case 't':	goto yy80;
+	case 'W':
+	case 'w':	goto yy82;
+	case 'Y':
+	case 'y':	goto yy84;
+	default:	goto yy53;
 	}
 yy177:
-	yyaccept = 2;
-	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych <= 'D') {
-		if (yych <= '.') {
-			if (yych == ')') goto yy103;
-			goto yy18;
-		} else {
-			if (yych <= '/') goto yy275;
-			if (yych <= '@') goto yy18;
-			if (yych <= 'C') goto yy270;
-			goto yy367;
-		}
-	} else {
-		if (yych <= '`') {
-			if (yych <= 'Z') goto yy270;
-			if (yych == '_') goto yy275;
-			goto yy18;
-		} else {
-			if (yych == 'd') goto yy368;
-			if (yych <= 'z') goto yy276;
-			goto yy18;
-		}
-	}
+	yych = *++YYCURSOR;
+	if (yych == 'A') goto yy214;
+	if (yych == 'a') goto yy214;
+	goto yy53;
 yy178:
-	yyaccept = 2;
-	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych <= '9') {
-		if (yych <= ')') {
-			if (yych <= 0x1F) goto yy18;
-			if (yych <= '(') goto yy127;
-			goto yy128;
-		} else {
-			if (yych == '/') goto yy18;
-			goto yy127;
-		}
+	yych = *++YYCURSOR;
+	if (yych <= 'R') {
+		if (yych == 'O') goto yy217;
+		if (yych <= 'Q') goto yy53;
+		goto yy218;
 	} else {
-		if (yych <= 'I') {
-			if (yych <= '@') goto yy18;
-			if (yych <= 'H') goto yy270;
-			goto yy308;
+		if (yych <= 'o') {
+			if (yych <= 'n') goto yy53;
+			goto yy217;
 		} else {
-			if (yych <= 'Z') goto yy270;
-			if (yych <= '`') goto yy18;
-			if (yych <= 'z') goto yy270;
-			goto yy18;
+			if (yych == 'r') goto yy218;
+			goto yy53;
 		}
 	}
 yy179:
 	yych = *++YYCURSOR;
-	if (yych <= 'S') {
-		if (yych <= ')') {
-			if (yych <= '(') goto yy18;
-			goto yy103;
-		} else {
-			if (yych <= '@') goto yy18;
-			if (yych <= 'R') goto yy270;
-			goto yy369;
-		}
-	} else {
-		if (yych <= 'r') {
-			if (yych <= 'Z') goto yy270;
-			if (yych <= '`') goto yy18;
-			goto yy270;
-		} else {
-			if (yych <= 's') goto yy369;
-			if (yych <= 'z') goto yy270;
-			goto yy18;
-		}
-	}
-yy180:
-	yyaccept = 2;
-	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych <= 'S') {
-		if (yych <= '.') {
-			if (yych == ')') goto yy103;
-			goto yy18;
-		} else {
-			if (yych <= '/') goto yy275;
-			if (yych <= '@') goto yy18;
-			if (yych <= 'R') goto yy270;
-			goto yy369;
-		}
-	} else {
-		if (yych <= '`') {
-			if (yych <= 'Z') goto yy270;
-			if (yych == '_') goto yy275;
-			goto yy18;
-		} else {
-			if (yych == 's') goto yy370;
-			if (yych <= 'z') goto yy276;
-			goto yy18;
-		}
-	}
-yy181:
-	++YYCURSOR;
-	if ((YYLIMIT - YYCURSOR) < 11) YYFILL(11);
-	yych = *YYCURSOR;
-yy182:
-	switch (yych) {
-	case ' ':	goto yy181;
-	case 'D':
-	case 'd':	goto yy183;
-	case 'F':
-	case 'f':	goto yy184;
-	case 'H':
-	case 'h':	goto yy73;
-	case 'M':
-	case 'm':	goto yy185;
-	case 'S':
-	case 's':	goto yy186;
-	case 'T':
-	case 't':	goto yy81;
-	case 'W':
-	case 'w':	goto yy83;
-	case 'Y':
-	case 'y':	goto yy85;
-	default:	goto yy53;
-	}
-yy183:
-	yych = *++YYCURSOR;
-	if (yych == 'A') goto yy228;
-	if (yych == 'a') goto yy228;
-	goto yy53;
-yy184:
-	yych = *++YYCURSOR;
-	if (yych <= 'R') {
-		if (yych == 'O') goto yy231;
-		if (yych <= 'Q') goto yy53;
-		goto yy232;
-	} else {
-		if (yych <= 'o') {
-			if (yych <= 'n') goto yy53;
-			goto yy231;
-		} else {
-			if (yych == 'r') goto yy232;
-			goto yy53;
-		}
-	}
-yy185:
-	yych = *++YYCURSOR;
 	if (yych <= 'O') {
-		if (yych == 'I') goto yy243;
+		if (yych == 'I') goto yy229;
 		if (yych <= 'N') goto yy53;
-		goto yy244;
+		goto yy230;
 	} else {
 		if (yych <= 'i') {
 			if (yych <= 'h') goto yy53;
-			goto yy243;
+			goto yy229;
 		} else {
-			if (yych == 'o') goto yy244;
+			if (yych == 'o') goto yy230;
 			goto yy53;
 		}
 	}
-yy186:
+yy180:
 	yych = *++YYCURSOR;
 	if (yych <= 'U') {
 		if (yych <= 'D') {
-			if (yych == 'A') goto yy247;
+			if (yych == 'A') goto yy233;
 			goto yy53;
 		} else {
-			if (yych <= 'E') goto yy371;
+			if (yych <= 'E') goto yy336;
 			if (yych <= 'T') goto yy53;
-			goto yy249;
+			goto yy235;
 		}
 	} else {
 		if (yych <= 'd') {
-			if (yych == 'a') goto yy247;
+			if (yych == 'a') goto yy233;
 			goto yy53;
 		} else {
-			if (yych <= 'e') goto yy371;
-			if (yych == 'u') goto yy249;
+			if (yych <= 'e') goto yy336;
+			if (yych == 'u') goto yy235;
 			goto yy53;
 		}
 	}
-yy187:
+yy181:
 	yych = *++YYCURSOR;
 	if (yych <= '/') goto yy18;
-	if (yych <= '5') goto yy372;
-	if (yych <= '9') goto yy103;
+	if (yych <= '5') goto yy337;
+	if (yych <= '9') goto yy102;
 	goto yy18;
-yy188:
+yy182:
 	yyaccept = 2;
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -4991,7 +4793,7 @@ yy188:
 	case 's':
 	case 't':
 	case 'w':
-	case 'y':	goto yy182;
+	case 'y':	goto yy176;
 	case '0':
 	case '1':
 	case '2':
@@ -5001,10 +4803,10 @@ yy188:
 	case '6':
 	case '7':
 	case '8':
-	case '9':	goto yy189;
+	case '9':	goto yy183;
 	default:	goto yy18;
 	}
-yy189:
+yy183:
 	yyaccept = 2;
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -5024,7 +4826,7 @@ yy189:
 	case 's':
 	case 't':
 	case 'w':
-	case 'y':	goto yy182;
+	case 'y':	goto yy176;
 	case '0':
 	case '1':
 	case '2':
@@ -5037,111 +4839,51 @@ yy189:
 	case '9':	goto yy54;
 	default:	goto yy18;
 	}
-yy190:
+yy184:
 	yych = *++YYCURSOR;
-	if (yych == 'E') goto yy229;
-	if (yych == 'e') goto yy229;
+	if (yych == 'E') goto yy215;
+	if (yych == 'e') goto yy215;
 	goto yy53;
-yy191:
+yy185:
 	yych = *++YYCURSOR;
-	if (yych == 'E') goto yy230;
-	if (yych == 'e') goto yy230;
+	if (yych == 'E') goto yy216;
+	if (yych == 'e') goto yy216;
 	goto yy53;
-yy192:
+yy186:
 	yych = *++YYCURSOR;
-	if (yych == 'A') goto yy242;
-	if (yych == 'a') goto yy242;
+	if (yych == 'A') goto yy228;
+	if (yych == 'a') goto yy228;
 	goto yy53;
-yy193:
+yy187:
 	yych = *++YYCURSOR;
-	if (yych == 'E') goto yy373;
-	if (yych == 'e') goto yy373;
+	if (yych == 'E') goto yy338;
+	if (yych == 'e') goto yy338;
 	goto yy53;
-yy194:
+yy188:
 	yych = *++YYCURSOR;
-	if (yych == '-') goto yy374;
+	if (yych == '-') goto yy339;
 	if (yych <= '/') goto yy53;
-	if (yych <= '9') goto yy196;
+	if (yych <= '9') goto yy190;
 	goto yy53;
-yy195:
+yy189:
 	yych = *++YYCURSOR;
-	if (yych == '-') goto yy374;
+	if (yych == '-') goto yy339;
 	if (yych <= '/') goto yy53;
 	if (yych >= '3') goto yy53;
-yy196:
+yy190:
 	yych = *++YYCURSOR;
-	if (yych == '-') goto yy374;
+	if (yych == '-') goto yy339;
 	goto yy53;
-yy197:
-	yych = *++YYCURSOR;
-	if (yych <= 'U') {
-		if (yych == 'P') goto yy375;
-		if (yych <= 'T') goto yy53;
-		goto yy376;
-	} else {
-		if (yych <= 'p') {
-			if (yych <= 'o') goto yy53;
-			goto yy375;
-		} else {
-			if (yych == 'u') goto yy376;
-			goto yy53;
-		}
-	}
-yy198:
-	yych = *++YYCURSOR;
-	if (yych == 'E') goto yy377;
-	if (yych == 'e') goto yy377;
-	goto yy53;
-yy199:
-	yych = *++YYCURSOR;
-	if (yych == 'E') goto yy378;
-	if (yych == 'e') goto yy378;
-	goto yy53;
-yy200:
-	yych = *++YYCURSOR;
-	if (yych <= 'U') {
-		if (yych == 'A') goto yy379;
-		if (yych <= 'T') goto yy53;
-		goto yy380;
-	} else {
-		if (yych <= 'a') {
-			if (yych <= '`') goto yy53;
-			goto yy379;
-		} else {
-			if (yych == 'u') goto yy380;
-			goto yy53;
-		}
-	}
-yy201:
-	yych = *++YYCURSOR;
-	if (yych == 'A') goto yy381;
-	if (yych == 'a') goto yy381;
-	goto yy53;
-yy202:
-	yych = *++YYCURSOR;
-	if (yych == 'O') goto yy382;
-	if (yych == 'o') goto yy382;
-	goto yy53;
-yy203:
-	yych = *++YYCURSOR;
-	if (yych == 'C') goto yy383;
-	if (yych == 'c') goto yy383;
-	goto yy53;
-yy204:
-	yych = *++YYCURSOR;
-	if (yych == 'E') goto yy384;
-	if (yych == 'e') goto yy384;
-	goto yy53;
-yy205:
+yy191:
 	yyaccept = 4;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= '/') {
-		if (yych == '.') goto yy385;
+		if (yych == '.') goto yy340;
 	} else {
-		if (yych <= '9') goto yy209;
-		if (yych <= ':') goto yy386;
+		if (yych <= '9') goto yy195;
+		if (yych <= ':') goto yy341;
 	}
-yy206:
+yy192:
 #line 946 "parse_date.s.re"
 	{
 		int tz_not_found;
@@ -5165,55 +4907,55 @@ yy206:
 		TIMELIB_DEINIT;
 		return TIMELIB_TIME24_WITH_ZONE;
 	}
-#line 5169 "parse_date.s.c"
-yy207:
+#line 4911 "parse_date.s.c"
+yy193:
 	yyaccept = 4;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= '/') {
-		if (yych == '.') goto yy385;
-		goto yy206;
+		if (yych == '.') goto yy340;
+		goto yy192;
 	} else {
-		if (yych <= '2') goto yy209;
-		if (yych <= '9') goto yy225;
-		if (yych <= ':') goto yy386;
-		goto yy206;
+		if (yych <= '2') goto yy195;
+		if (yych <= '9') goto yy211;
+		if (yych <= ':') goto yy341;
+		goto yy192;
 	}
-yy208:
+yy194:
 	yyaccept = 4;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= '/') {
-		if (yych == '.') goto yy385;
-		goto yy206;
+		if (yych == '.') goto yy340;
+		goto yy192;
 	} else {
-		if (yych <= '9') goto yy225;
-		if (yych <= ':') goto yy386;
-		goto yy206;
+		if (yych <= '9') goto yy211;
+		if (yych <= ':') goto yy341;
+		goto yy192;
 	}
-yy209:
+yy195:
 	yyaccept = 4;
 	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych == '.') goto yy385;
-	if (yych == ':') goto yy386;
-	goto yy206;
-yy210:
+	if (yych == '.') goto yy340;
+	if (yych == ':') goto yy341;
+	goto yy192;
+yy196:
 	yyaccept = 5;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= 'n') {
 		if (yych <= '/') {
-			if (yych >= '/') goto yy387;
+			if (yych >= '/') goto yy342;
 		} else {
-			if (yych <= '9') goto yy213;
-			if (yych >= 'n') goto yy388;
+			if (yych <= '9') goto yy199;
+			if (yych >= 'n') goto yy343;
 		}
 	} else {
 		if (yych <= 'r') {
-			if (yych >= 'r') goto yy389;
+			if (yych >= 'r') goto yy343;
 		} else {
-			if (yych <= 's') goto yy390;
-			if (yych <= 't') goto yy391;
+			if (yych <= 's') goto yy344;
+			if (yych <= 't') goto yy345;
 		}
 	}
-yy211:
+yy197:
 #line 1033 "parse_date.s.re"
 	{
 		DEBUG_OUTPUT("americanshort | american");
@@ -5228,189 +4970,188 @@ yy211:
 		TIMELIB_DEINIT;
 		return TIMELIB_AMERICAN;
 	}
-#line 5232 "parse_date.s.c"
-yy212:
+#line 4974 "parse_date.s.c"
+yy198:
 	yyaccept = 5;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= 'n') {
 		if (yych <= '/') {
-			if (yych <= '.') goto yy211;
-			goto yy387;
+			if (yych <= '.') goto yy197;
+			goto yy342;
 		} else {
-			if (yych <= '1') goto yy213;
-			if (yych <= 'm') goto yy211;
-			goto yy388;
+			if (yych <= '1') goto yy199;
+			if (yych <= 'm') goto yy197;
+			goto yy343;
 		}
 	} else {
 		if (yych <= 'r') {
-			if (yych <= 'q') goto yy211;
-			goto yy389;
+			if (yych <= 'q') goto yy197;
+			goto yy343;
 		} else {
-			if (yych <= 's') goto yy390;
-			if (yych <= 't') goto yy391;
-			goto yy211;
+			if (yych <= 's') goto yy344;
+			if (yych <= 't') goto yy345;
+			goto yy197;
 		}
 	}
-yy213:
+yy199:
 	yyaccept = 5;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= 'n') {
-		if (yych == '/') goto yy387;
-		if (yych <= 'm') goto yy211;
-		goto yy388;
+		if (yych == '/') goto yy342;
+		if (yych <= 'm') goto yy197;
+		goto yy343;
 	} else {
 		if (yych <= 'r') {
-			if (yych <= 'q') goto yy211;
-			goto yy389;
+			if (yych <= 'q') goto yy197;
+			goto yy343;
 		} else {
-			if (yych <= 's') goto yy390;
-			if (yych <= 't') goto yy391;
-			goto yy211;
+			if (yych <= 's') goto yy344;
+			if (yych <= 't') goto yy345;
+			goto yy197;
 		}
 	}
-yy214:
+yy200:
 	yych = *++YYCURSOR;
 	if (yych <= 'U') {
-		if (yych == 'P') goto yy392;
+		if (yych == 'P') goto yy346;
 		if (yych <= 'T') goto yy53;
-		goto yy393;
+		goto yy347;
 	} else {
 		if (yych <= 'p') {
 			if (yych <= 'o') goto yy53;
-			goto yy392;
+			goto yy346;
 		} else {
-			if (yych == 'u') goto yy393;
+			if (yych == 'u') goto yy347;
 			goto yy53;
 		}
 	}
-yy215:
+yy201:
 	yych = *++YYCURSOR;
-	if (yych == 'E') goto yy394;
-	if (yych == 'e') goto yy394;
+	if (yych == 'E') goto yy348;
+	if (yych == 'e') goto yy348;
 	goto yy53;
-yy216:
+yy202:
 	yych = *++YYCURSOR;
-	if (yych == 'E') goto yy395;
-	if (yych == 'e') goto yy395;
+	if (yych == 'E') goto yy349;
+	if (yych == 'e') goto yy349;
 	goto yy53;
-yy217:
+yy203:
 	yych = *++YYCURSOR;
 	if (yych <= 'U') {
-		if (yych == 'A') goto yy396;
+		if (yych == 'A') goto yy350;
 		if (yych <= 'T') goto yy53;
-		goto yy397;
+		goto yy351;
 	} else {
 		if (yych <= 'a') {
 			if (yych <= '`') goto yy53;
-			goto yy396;
+			goto yy350;
 		} else {
-			if (yych == 'u') goto yy397;
+			if (yych == 'u') goto yy351;
 			goto yy53;
 		}
 	}
-yy218:
+yy204:
 	yych = *++YYCURSOR;
-	if (yych == 'A') goto yy398;
-	if (yych == 'a') goto yy398;
+	if (yych == 'A') goto yy352;
+	if (yych == 'a') goto yy352;
 	goto yy53;
-yy219:
+yy205:
 	yych = *++YYCURSOR;
-	if (yych == 'O') goto yy399;
-	if (yych == 'o') goto yy399;
+	if (yych == 'O') goto yy353;
+	if (yych == 'o') goto yy353;
 	goto yy53;
-yy220:
+yy206:
 	yych = *++YYCURSOR;
-	if (yych == 'C') goto yy400;
-	if (yych == 'c') goto yy400;
+	if (yych == 'C') goto yy354;
+	if (yych == 'c') goto yy354;
 	goto yy53;
-yy221:
+yy207:
 	yych = *++YYCURSOR;
-	if (yych == 'E') goto yy401;
-	if (yych == 'e') goto yy401;
+	if (yych == 'E') goto yy355;
+	if (yych == 'e') goto yy355;
 	goto yy53;
-yy222:
+yy208:
 	yych = *++YYCURSOR;
-	if (yych == '-') goto yy269;
-	if (yych <= '/') goto yy182;
-	if (yych <= '9') goto yy402;
-	goto yy182;
-yy223:
+	if (yych == '-') goto yy253;
+	if (yych <= '/') goto yy176;
+	if (yych <= '9') goto yy356;
+	goto yy176;
+yy209:
 	yych = *++YYCURSOR;
-	if (yych == '-') goto yy269;
-	if (yych <= '/') goto yy182;
-	if (yych <= '9') goto yy404;
-	goto yy182;
-yy224:
+	if (yych == '-') goto yy253;
+	if (yych <= '/') goto yy176;
+	if (yych <= '9') goto yy358;
+	goto yy176;
+yy210:
 	yyaccept = 4;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= '/') {
-		if (yych == '.') goto yy386;
-		goto yy206;
+		if (yych == '.') goto yy341;
+		goto yy192;
 	} else {
-		if (yych <= '9') goto yy225;
-		if (yych <= ':') goto yy386;
-		goto yy206;
+		if (yych <= '9') goto yy211;
+		if (yych <= ':') goto yy341;
+		goto yy192;
 	}
-yy225:
+yy211:
 	yyaccept = 4;
 	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych == '.') goto yy386;
-	if (yych == ':') goto yy386;
-	goto yy206;
-yy226:
+	if (yych == '.') goto yy341;
+	if (yych == ':') goto yy341;
+	goto yy192;
+yy212:
 	yych = *++YYCURSOR;
-	if (yych == 'R') goto yy406;
-	if (yych == 'r') goto yy406;
+	if (yych == 'R') goto yy360;
+	if (yych == 'r') goto yy360;
 	goto yy53;
-yy227:
+yy213:
 	yych = *++YYCURSOR;
-	if (yych == 'G') goto yy407;
-	if (yych == 'g') goto yy407;
+	if (yych == 'G') goto yy361;
+	if (yych == 'g') goto yy361;
 	goto yy53;
-yy228:
+yy214:
 	yych = *++YYCURSOR;
-	if (yych == 'Y') goto yy408;
-	if (yych == 'y') goto yy408;
+	if (yych == 'Y') goto yy362;
+	if (yych == 'y') goto yy362;
 	goto yy53;
-yy229:
+yy215:
 	yych = *++YYCURSOR;
-	if (yych == 'C') goto yy410;
-	if (yych == 'c') goto yy410;
+	if (yych == 'C') goto yy364;
+	if (yych == 'c') goto yy364;
 	goto yy53;
-yy230:
+yy216:
 	yych = *++YYCURSOR;
-	if (yych == 'B') goto yy411;
-	if (yych == 'b') goto yy411;
+	if (yych == 'B') goto yy365;
+	if (yych == 'b') goto yy365;
 	goto yy53;
-yy231:
+yy217:
 	yych = *++YYCURSOR;
-	if (yych == 'R') goto yy412;
-	if (yych == 'r') goto yy412;
+	if (yych == 'R') goto yy366;
+	if (yych == 'r') goto yy366;
 	goto yy53;
-yy232:
+yy218:
 	yych = *++YYCURSOR;
-	if (yych == 'I') goto yy413;
-	if (yych == 'i') goto yy413;
+	if (yych == 'I') goto yy367;
+	if (yych == 'i') goto yy367;
 	goto yy53;
-yy233:
+yy219:
 	yych = *++YYCURSOR;
-	if (yych == 'U') goto yy414;
-	if (yych == 'u') goto yy414;
+	if (yych == 'U') goto yy368;
+	if (yych == 'u') goto yy368;
 	goto yy53;
-yy234:
+yy220:
 	++YYCURSOR;
 	if ((YYLIMIT - YYCURSOR) < 4) YYFILL(4);
 	yych = *YYCURSOR;
-yy235:
 	if (yych <= 0x1F) goto yy53;
-	if (yych <= '.') goto yy234;
+	if (yych <= '.') goto yy220;
 	if (yych <= '/') goto yy53;
 	if (yych >= ':') goto yy53;
-yy236:
+yy222:
 	++YYCURSOR;
-	if ((yych = *YYCURSOR) <= '/') goto yy237;
-	if (yych <= '9') goto yy415;
-yy237:
+	if ((yych = *YYCURSOR) <= '/') goto yy223;
+	if (yych <= '9') goto yy369;
+yy223:
 #line 1073 "parse_date.s.re"
 	{
 		DEBUG_OUTPUT("datefull");
@@ -5424,261 +5165,237 @@ yy237:
 		TIMELIB_DEINIT;
 		return TIMELIB_DATE_FULL;
 	}
-#line 5428 "parse_date.s.c"
-yy238:
+#line 5169 "parse_date.s.c"
+yy224:
 	yyaccept = 3;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= '/') {
-		if (yych <= 0x1F) goto yy75;
-		if (yych <= '.') goto yy234;
-		goto yy75;
+		if (yych <= 0x1F) goto yy74;
+		if (yych <= '.') goto yy220;
+		goto yy74;
 	} else {
-		if (yych <= '9') goto yy236;
-		if (yych != 'I') goto yy75;
+		if (yych <= '9') goto yy222;
+		if (yych != 'I') goto yy74;
 	}
-yy239:
+yy225:
 	yyaccept = 3;
 	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych <= 0x1F) goto yy75;
-	if (yych <= '.') goto yy234;
-	if (yych <= '/') goto yy75;
-	if (yych <= '9') goto yy236;
-	goto yy75;
-yy240:
+	if (yych <= 0x1F) goto yy74;
+	if (yych <= '.') goto yy220;
+	if (yych <= '/') goto yy74;
+	if (yych <= '9') goto yy222;
+	goto yy74;
+yy226:
 	yych = *++YYCURSOR;
-	if (yych == 'N') goto yy416;
-	if (yych == 'n') goto yy416;
+	if (yych == 'N') goto yy370;
+	if (yych == 'n') goto yy370;
 	goto yy53;
-yy241:
+yy227:
 	yych = *++YYCURSOR;
 	if (yych <= 'N') {
-		if (yych == 'L') goto yy417;
+		if (yych == 'L') goto yy371;
 		if (yych <= 'M') goto yy53;
-		goto yy418;
+		goto yy372;
 	} else {
 		if (yych <= 'l') {
 			if (yych <= 'k') goto yy53;
-			goto yy417;
+			goto yy371;
 		} else {
-			if (yych == 'n') goto yy418;
+			if (yych == 'n') goto yy372;
 			goto yy53;
 		}
 	}
-yy242:
+yy228:
 	yych = *++YYCURSOR;
 	if (yych <= 'Y') {
-		if (yych == 'R') goto yy419;
+		if (yych == 'R') goto yy373;
 		if (yych <= 'X') goto yy53;
-		goto yy239;
+		goto yy225;
 	} else {
 		if (yych <= 'r') {
 			if (yych <= 'q') goto yy53;
-			goto yy419;
+			goto yy373;
 		} else {
-			if (yych == 'y') goto yy239;
+			if (yych == 'y') goto yy225;
 			goto yy53;
 		}
 	}
-yy243:
+yy229:
 	yych = *++YYCURSOR;
-	if (yych == 'N') goto yy420;
-	if (yych == 'n') goto yy420;
+	if (yych == 'N') goto yy374;
+	if (yych == 'n') goto yy374;
 	goto yy53;
-yy244:
+yy230:
 	yych = *++YYCURSOR;
-	if (yych == 'N') goto yy421;
-	if (yych == 'n') goto yy421;
+	if (yych == 'N') goto yy375;
+	if (yych == 'n') goto yy375;
 	goto yy53;
-yy245:
+yy231:
 	yych = *++YYCURSOR;
-	if (yych == 'V') goto yy422;
-	if (yych == 'v') goto yy422;
+	if (yych == 'V') goto yy364;
+	if (yych == 'v') goto yy364;
 	goto yy53;
-yy246:
+yy232:
 	yych = *++YYCURSOR;
-	if (yych == 'T') goto yy423;
-	if (yych == 't') goto yy423;
+	if (yych == 'T') goto yy376;
+	if (yych == 't') goto yy376;
 	goto yy53;
-yy247:
+yy233:
 	yych = *++YYCURSOR;
-	if (yych == 'T') goto yy424;
-	if (yych == 't') goto yy424;
+	if (yych == 'T') goto yy377;
+	if (yych == 't') goto yy377;
 	goto yy53;
-yy248:
+yy234:
 	yych = *++YYCURSOR;
 	if (yych <= 'P') {
-		if (yych == 'C') goto yy425;
+		if (yych == 'C') goto yy378;
 		if (yych <= 'O') goto yy53;
-		goto yy426;
+		goto yy379;
 	} else {
 		if (yych <= 'c') {
 			if (yych <= 'b') goto yy53;
-			goto yy425;
+			goto yy378;
 		} else {
-			if (yych == 'p') goto yy426;
+			if (yych == 'p') goto yy379;
 			goto yy53;
 		}
 	}
-yy249:
+yy235:
 	yych = *++YYCURSOR;
-	if (yych == 'N') goto yy427;
-	if (yych == 'n') goto yy427;
+	if (yych == 'N') goto yy367;
+	if (yych == 'n') goto yy367;
 	goto yy53;
-yy250:
+yy236:
 	yych = *++YYCURSOR;
-	if (yych == 'U') goto yy428;
-	if (yych == 'u') goto yy428;
+	if (yych == 'U') goto yy380;
+	if (yych == 'u') goto yy380;
 	goto yy53;
-yy251:
+yy237:
 	yych = *++YYCURSOR;
-	if (yych == 'E') goto yy429;
-	if (yych == 'e') goto yy429;
+	if (yych == 'E') goto yy381;
+	if (yych == 'e') goto yy381;
 	goto yy53;
-yy252:
-	yyaccept = 3;
-	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych <= '/') {
-		if (yych <= 0x1F) goto yy75;
-		if (yych <= '.') goto yy234;
-		goto yy75;
-	} else {
-		if (yych <= '9') goto yy236;
-		if (yych == 'I') goto yy430;
-		goto yy75;
-	}
-yy253:
+yy238:
 	yych = *++YYCURSOR;
 	if (yych <= 'E') {
 		if (yych <= 'C') goto yy53;
-		if (yych <= 'D') goto yy431;
-		goto yy432;
+		if (yych <= 'D') goto yy382;
+		goto yy383;
 	} else {
 		if (yych <= 'c') goto yy53;
-		if (yych <= 'd') goto yy431;
-		if (yych <= 'e') goto yy432;
+		if (yych <= 'd') goto yy382;
+		if (yych <= 'e') goto yy383;
 		goto yy53;
 	}
-yy254:
-	yyaccept = 3;
-	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych <= '/') {
-		if (yych <= 0x1F) goto yy75;
-		if (yych <= '.') goto yy234;
-		goto yy75;
-	} else {
-		if (yych <= '9') goto yy236;
-		if (yych == 'I') goto yy239;
-		goto yy75;
-	}
-yy255:
+yy239:
 	yych = *++YYCURSOR;
-	if (yych == 'A') goto yy433;
-	if (yych == 'a') goto yy433;
+	if (yych == 'A') goto yy368;
+	if (yych == 'a') goto yy368;
 	goto yy53;
-yy256:
+yy240:
 	yych = *++YYCURSOR;
-	if (yych <= '-') goto yy63;
-	if (yych <= '.') goto yy268;
-	if (yych <= '/') goto yy262;
-	goto yy63;
-yy257:
+	if (yych <= '-') goto yy62;
+	if (yych <= '.') goto yy252;
+	if (yych <= '/') goto yy246;
+	goto yy62;
+yy241:
 	yych = *++YYCURSOR;
 	if (yych <= 'T') {
-		if (yych <= '-') goto yy63;
-		if (yych <= '.') goto yy268;
-		if (yych <= '/') goto yy262;
-		goto yy63;
+		if (yych <= '-') goto yy62;
+		if (yych <= '.') goto yy252;
+		if (yych <= '/') goto yy246;
+		goto yy62;
 	} else {
-		if (yych <= 'U') goto yy428;
-		if (yych == 'u') goto yy428;
-		goto yy63;
+		if (yych <= 'U') goto yy380;
+		if (yych == 'u') goto yy380;
+		goto yy62;
 	}
-yy258:
+yy242:
 	yyaccept = 4;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= '/') {
-		if (yych == '.') goto yy434;
-		goto yy206;
+		if (yych == '.') goto yy384;
+		goto yy192;
 	} else {
-		if (yych <= '9') goto yy435;
-		if (yych <= ':') goto yy436;
-		goto yy206;
+		if (yych <= '9') goto yy385;
+		if (yych <= ':') goto yy386;
+		goto yy192;
 	}
-yy259:
+yy243:
 	yyaccept = 4;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= '/') {
-		if (yych == '.') goto yy434;
-		goto yy206;
+		if (yych == '.') goto yy384;
+		goto yy192;
 	} else {
-		if (yych <= '2') goto yy435;
-		if (yych <= '9') goto yy437;
-		if (yych <= ':') goto yy436;
-		goto yy206;
+		if (yych <= '2') goto yy385;
+		if (yych <= '9') goto yy387;
+		if (yych <= ':') goto yy386;
+		goto yy192;
 	}
-yy260:
+yy244:
 	yyaccept = 4;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= '/') {
-		if (yych == '.') goto yy434;
-		goto yy206;
+		if (yych == '.') goto yy384;
+		goto yy192;
 	} else {
-		if (yych <= '9') goto yy437;
-		if (yych <= ':') goto yy436;
-		goto yy206;
+		if (yych <= '9') goto yy387;
+		if (yych <= ':') goto yy386;
+		goto yy192;
 	}
-yy261:
+yy245:
 	yyaccept = 4;
 	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych == '.') goto yy434;
-	if (yych == ':') goto yy436;
-	goto yy206;
-yy262:
+	if (yych == '.') goto yy384;
+	if (yych == ':') goto yy386;
+	goto yy192;
+yy246:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'A':
-	case 'a':	goto yy214;
+	case 'a':	goto yy200;
 	case 'D':
-	case 'd':	goto yy215;
+	case 'd':	goto yy201;
 	case 'F':
-	case 'f':	goto yy216;
+	case 'f':	goto yy202;
 	case 'J':
-	case 'j':	goto yy217;
+	case 'j':	goto yy203;
 	case 'M':
-	case 'm':	goto yy218;
+	case 'm':	goto yy204;
 	case 'N':
-	case 'n':	goto yy219;
+	case 'n':	goto yy205;
 	case 'O':
-	case 'o':	goto yy220;
+	case 'o':	goto yy206;
 	case 'S':
-	case 's':	goto yy221;
+	case 's':	goto yy207;
 	default:	goto yy53;
 	}
-yy263:
+yy247:
 	yyaccept = 4;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= '/') {
-		if (yych == '.') goto yy436;
-		goto yy206;
+		if (yych == '.') goto yy386;
+		goto yy192;
 	} else {
-		if (yych <= '9') goto yy437;
-		if (yych <= ':') goto yy436;
-		goto yy206;
+		if (yych <= '9') goto yy387;
+		if (yych <= ':') goto yy386;
+		goto yy192;
 	}
-yy264:
+yy248:
 	yyaccept = 4;
 	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych == '.') goto yy436;
-	if (yych == ':') goto yy436;
-	goto yy206;
-yy265:
+	if (yych == '.') goto yy386;
+	if (yych == ':') goto yy386;
+	goto yy192;
+yy249:
 	yych = *++YYCURSOR;
-	if (yych == 'M') goto yy266;
+	if (yych == 'M') goto yy250;
 	if (yych != 'm') goto yy53;
-yy266:
+yy250:
 	++YYCURSOR;
-	if ((yych = *YYCURSOR) == '.') goto yy438;
-yy267:
+	if ((yych = *YYCURSOR) == '.') goto yy388;
+yy251:
 #line 929 "parse_date.s.re"
 	{
 		DEBUG_OUTPUT("timetiny12 | timeshort12 | timelong12");
@@ -5695,19 +5412,19 @@ yy267:
 		TIMELIB_DEINIT;
 		return TIMELIB_TIME12;
 	}
-#line 5699 "parse_date.s.c"
-yy268:
+#line 5416 "parse_date.s.c"
+yy252:
 	yych = *++YYCURSOR;
-	if (yych <= '/') goto yy63;
-	if (yych <= '0') goto yy439;
-	if (yych <= '1') goto yy440;
-	if (yych <= '9') goto yy441;
-	goto yy63;
-yy269:
+	if (yych <= '/') goto yy62;
+	if (yych <= '0') goto yy389;
+	if (yych <= '1') goto yy390;
+	if (yych <= '9') goto yy391;
+	goto yy62;
+yy253:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case '0':	goto yy194;
-	case '1':	goto yy195;
+	case '0':	goto yy188;
+	case '1':	goto yy189;
 	case '2':
 	case '3':
 	case '4':
@@ -5715,46 +5432,46 @@ yy269:
 	case '6':
 	case '7':
 	case '8':
-	case '9':	goto yy196;
+	case '9':	goto yy190;
 	case 'A':
-	case 'a':	goto yy442;
+	case 'a':	goto yy392;
 	case 'D':
-	case 'd':	goto yy443;
+	case 'd':	goto yy393;
 	case 'F':
-	case 'f':	goto yy444;
+	case 'f':	goto yy394;
 	case 'J':
-	case 'j':	goto yy445;
+	case 'j':	goto yy395;
 	case 'M':
-	case 'm':	goto yy446;
+	case 'm':	goto yy396;
 	case 'N':
-	case 'n':	goto yy447;
+	case 'n':	goto yy397;
 	case 'O':
-	case 'o':	goto yy448;
+	case 'o':	goto yy398;
 	case 'S':
-	case 's':	goto yy449;
+	case 's':	goto yy399;
 	default:	goto yy53;
 	}
-yy270:
+yy254:
 	yych = *++YYCURSOR;
 	if (yych <= '@') {
-		if (yych == ')') goto yy103;
+		if (yych == ')') goto yy102;
 		goto yy18;
 	} else {
-		if (yych <= 'Z') goto yy450;
+		if (yych <= 'Z') goto yy400;
 		if (yych <= '`') goto yy18;
-		if (yych <= 'z') goto yy450;
+		if (yych <= 'z') goto yy400;
 		goto yy18;
 	}
-yy271:
+yy255:
 	++YYCURSOR;
 	if ((yych = *YYCURSOR) <= '@') {
-		if (yych == ')') goto yy103;
+		if (yych == ')') goto yy102;
 	} else {
-		if (yych <= 'Z') goto yy450;
-		if (yych <= '`') goto yy272;
-		if (yych <= 'z') goto yy450;
+		if (yych <= 'Z') goto yy400;
+		if (yych <= '`') goto yy256;
+		if (yych <= 'z') goto yy400;
 	}
-yy272:
+yy256:
 #line 1292 "parse_date.s.re"
 	{
 		DEBUG_OUTPUT("ago");
@@ -5769,469 +5486,469 @@ yy272:
 		TIMELIB_DEINIT;
 		return TIMELIB_AGO;
 	}
-#line 5773 "parse_date.s.c"
-yy273:
+#line 5490 "parse_date.s.c"
+yy257:
 	yyaccept = 2;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= '9') {
 		if (yych <= ',') {
 			if (yych <= 0x1F) goto yy18;
-			if (yych == ')') goto yy128;
-			goto yy127;
+			if (yych == ')') goto yy127;
+			goto yy126;
 		} else {
-			if (yych <= '-') goto yy451;
+			if (yych <= '-') goto yy401;
 			if (yych == '/') goto yy18;
-			goto yy127;
+			goto yy126;
 		}
 	} else {
 		if (yych <= 'Z') {
 			if (yych <= '@') goto yy18;
-			if (yych == 'I') goto yy452;
-			goto yy450;
+			if (yych == 'I') goto yy402;
+			goto yy400;
 		} else {
 			if (yych <= 'h') {
 				if (yych <= '`') goto yy18;
-				goto yy450;
+				goto yy400;
 			} else {
-				if (yych <= 'i') goto yy452;
-				if (yych <= 'z') goto yy450;
+				if (yych <= 'i') goto yy402;
+				if (yych <= 'z') goto yy400;
 				goto yy18;
 			}
 		}
 	}
-yy274:
+yy258:
 	yyaccept = 2;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= '9') {
 		if (yych <= ',') {
 			if (yych <= 0x1F) goto yy18;
-			if (yych == ')') goto yy128;
-			goto yy127;
+			if (yych == ')') goto yy127;
+			goto yy126;
 		} else {
-			if (yych <= '-') goto yy451;
+			if (yych <= '-') goto yy401;
 			if (yych == '/') goto yy18;
-			goto yy127;
+			goto yy126;
 		}
 	} else {
 		if (yych <= 'Z') {
 			if (yych <= '@') goto yy18;
-			if (yych == 'U') goto yy453;
-			goto yy450;
+			if (yych == 'U') goto yy403;
+			goto yy400;
 		} else {
 			if (yych <= 't') {
 				if (yych <= '`') goto yy18;
-				goto yy450;
+				goto yy400;
 			} else {
-				if (yych <= 'u') goto yy453;
-				if (yych <= 'z') goto yy450;
+				if (yych <= 'u') goto yy403;
+				if (yych <= 'z') goto yy400;
 				goto yy18;
 			}
 		}
 	}
-yy275:
+yy259:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	if (yych <= '@') goto yy53;
-	if (yych <= 'Z') goto yy454;
+	if (yych <= 'Z') goto yy404;
 	goto yy53;
-yy276:
+yy260:
 	yyaccept = 2;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= '@') {
 		if (yych <= ')') {
 			if (yych <= '(') goto yy18;
-			goto yy103;
+			goto yy102;
 		} else {
-			if (yych == '/') goto yy275;
+			if (yych == '/') goto yy259;
 			goto yy18;
 		}
 	} else {
 		if (yych <= '_') {
-			if (yych <= 'Z') goto yy450;
+			if (yych <= 'Z') goto yy400;
 			if (yych <= '^') goto yy18;
-			goto yy275;
+			goto yy259;
 		} else {
 			if (yych <= '`') goto yy18;
-			if (yych <= 'z') goto yy455;
+			if (yych <= 'z') goto yy405;
 			goto yy18;
 		}
 	}
-yy277:
+yy261:
 	yyaccept = 6;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= '@') {
 		if (yych <= ')') {
-			if (yych <= '(') goto yy272;
-			goto yy103;
+			if (yych <= '(') goto yy256;
+			goto yy102;
 		} else {
-			if (yych == '/') goto yy275;
-			goto yy272;
+			if (yych == '/') goto yy259;
+			goto yy256;
 		}
 	} else {
 		if (yych <= '_') {
-			if (yych <= 'Z') goto yy450;
-			if (yych <= '^') goto yy272;
-			goto yy275;
+			if (yych <= 'Z') goto yy400;
+			if (yych <= '^') goto yy256;
+			goto yy259;
 		} else {
-			if (yych <= '`') goto yy272;
-			if (yych <= 'z') goto yy455;
-			goto yy272;
+			if (yych <= '`') goto yy256;
+			if (yych <= 'z') goto yy405;
+			goto yy256;
 		}
 	}
-yy278:
+yy262:
 	yyaccept = 2;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= '@') {
 		if (yych <= ',') {
 			if (yych <= 0x1F) goto yy18;
-			if (yych == ')') goto yy128;
-			goto yy127;
+			if (yych == ')') goto yy127;
+			goto yy126;
 		} else {
 			if (yych <= '.') {
-				if (yych <= '-') goto yy451;
-				goto yy127;
+				if (yych <= '-') goto yy401;
+				goto yy126;
 			} else {
-				if (yych <= '/') goto yy275;
-				if (yych <= '9') goto yy127;
+				if (yych <= '/') goto yy259;
+				if (yych <= '9') goto yy126;
 				goto yy18;
 			}
 		}
 	} else {
 		if (yych <= '_') {
 			if (yych <= 'I') {
-				if (yych <= 'H') goto yy450;
-				goto yy452;
+				if (yych <= 'H') goto yy400;
+				goto yy402;
 			} else {
-				if (yych <= 'Z') goto yy450;
+				if (yych <= 'Z') goto yy400;
 				if (yych <= '^') goto yy18;
-				goto yy275;
+				goto yy259;
 			}
 		} else {
 			if (yych <= 'h') {
 				if (yych <= '`') goto yy18;
-				goto yy455;
+				goto yy405;
 			} else {
-				if (yych <= 'i') goto yy456;
-				if (yych <= 'z') goto yy455;
+				if (yych <= 'i') goto yy406;
+				if (yych <= 'z') goto yy405;
 				goto yy18;
 			}
 		}
 	}
-yy279:
+yy263:
 	yyaccept = 2;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= '@') {
 		if (yych <= ',') {
 			if (yych <= 0x1F) goto yy18;
-			if (yych == ')') goto yy128;
-			goto yy127;
+			if (yych == ')') goto yy127;
+			goto yy126;
 		} else {
 			if (yych <= '.') {
-				if (yych <= '-') goto yy451;
-				goto yy127;
+				if (yych <= '-') goto yy401;
+				goto yy126;
 			} else {
-				if (yych <= '/') goto yy275;
-				if (yych <= '9') goto yy127;
+				if (yych <= '/') goto yy259;
+				if (yych <= '9') goto yy126;
 				goto yy18;
 			}
 		}
 	} else {
 		if (yych <= '_') {
 			if (yych <= 'U') {
-				if (yych <= 'T') goto yy450;
-				goto yy453;
+				if (yych <= 'T') goto yy400;
+				goto yy403;
 			} else {
-				if (yych <= 'Z') goto yy450;
+				if (yych <= 'Z') goto yy400;
 				if (yych <= '^') goto yy18;
-				goto yy275;
+				goto yy259;
 			}
 		} else {
 			if (yych <= 't') {
 				if (yych <= '`') goto yy18;
-				goto yy455;
+				goto yy405;
 			} else {
-				if (yych <= 'u') goto yy457;
-				if (yych <= 'z') goto yy455;
+				if (yych <= 'u') goto yy407;
+				if (yych <= 'z') goto yy405;
 				goto yy18;
 			}
 		}
 	}
-yy280:
+yy264:
 	yyaccept = 2;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= '9') {
 		if (yych <= ',') {
 			if (yych <= 0x1F) goto yy18;
-			if (yych == ')') goto yy128;
-			goto yy127;
+			if (yych == ')') goto yy127;
+			goto yy126;
 		} else {
-			if (yych <= '-') goto yy451;
+			if (yych <= '-') goto yy401;
 			if (yych == '/') goto yy18;
-			goto yy127;
+			goto yy126;
 		}
 	} else {
 		if (yych <= 'Z') {
 			if (yych <= '@') goto yy18;
-			if (yych == 'E') goto yy458;
-			goto yy450;
+			if (yych == 'E') goto yy408;
+			goto yy400;
 		} else {
 			if (yych <= 'd') {
 				if (yych <= '`') goto yy18;
-				goto yy450;
+				goto yy400;
 			} else {
-				if (yych <= 'e') goto yy458;
-				if (yych <= 'z') goto yy450;
+				if (yych <= 'e') goto yy408;
+				if (yych <= 'z') goto yy400;
 				goto yy18;
 			}
 		}
 	}
-yy281:
+yy265:
 	yyaccept = 2;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= '@') {
 		if (yych <= ',') {
 			if (yych <= 0x1F) goto yy18;
-			if (yych == ')') goto yy128;
-			goto yy127;
+			if (yych == ')') goto yy127;
+			goto yy126;
 		} else {
 			if (yych <= '.') {
-				if (yych <= '-') goto yy451;
-				goto yy127;
+				if (yych <= '-') goto yy401;
+				goto yy126;
 			} else {
-				if (yych <= '/') goto yy275;
-				if (yych <= '9') goto yy127;
+				if (yych <= '/') goto yy259;
+				if (yych <= '9') goto yy126;
 				goto yy18;
 			}
 		}
 	} else {
 		if (yych <= '_') {
 			if (yych <= 'E') {
-				if (yych <= 'D') goto yy450;
-				goto yy458;
+				if (yych <= 'D') goto yy400;
+				goto yy408;
 			} else {
-				if (yych <= 'Z') goto yy450;
+				if (yych <= 'Z') goto yy400;
 				if (yych <= '^') goto yy18;
-				goto yy275;
+				goto yy259;
 			}
 		} else {
 			if (yych <= 'd') {
 				if (yych <= '`') goto yy18;
-				goto yy455;
+				goto yy405;
 			} else {
-				if (yych <= 'e') goto yy459;
-				if (yych <= 'z') goto yy455;
+				if (yych <= 'e') goto yy409;
+				if (yych <= 'z') goto yy405;
 				goto yy18;
 			}
 		}
 	}
-yy282:
+yy266:
 	yych = *++YYCURSOR;
 	if (yych <= 'H') {
 		if (yych <= ')') {
 			if (yych <= '(') goto yy18;
-			goto yy103;
+			goto yy102;
 		} else {
 			if (yych <= '@') goto yy18;
-			if (yych <= 'G') goto yy450;
-			goto yy460;
+			if (yych <= 'G') goto yy400;
+			goto yy410;
 		}
 	} else {
 		if (yych <= 'g') {
-			if (yych <= 'Z') goto yy450;
+			if (yych <= 'Z') goto yy400;
 			if (yych <= '`') goto yy18;
-			goto yy450;
+			goto yy400;
 		} else {
-			if (yych <= 'h') goto yy460;
-			if (yych <= 'z') goto yy450;
+			if (yych <= 'h') goto yy410;
+			if (yych <= 'z') goto yy400;
 			goto yy18;
 		}
 	}
-yy283:
+yy267:
 	yych = *++YYCURSOR;
 	if (yych <= 'V') {
 		if (yych <= ')') {
 			if (yych <= '(') goto yy18;
-			goto yy103;
+			goto yy102;
 		} else {
 			if (yych <= '@') goto yy18;
-			if (yych <= 'U') goto yy450;
-			goto yy461;
+			if (yych <= 'U') goto yy400;
+			goto yy411;
 		}
 	} else {
 		if (yych <= 'u') {
-			if (yych <= 'Z') goto yy450;
+			if (yych <= 'Z') goto yy400;
 			if (yych <= '`') goto yy18;
-			goto yy450;
+			goto yy400;
 		} else {
-			if (yych <= 'v') goto yy461;
-			if (yych <= 'z') goto yy450;
+			if (yych <= 'v') goto yy411;
+			if (yych <= 'z') goto yy400;
 			goto yy18;
 		}
 	}
-yy284:
+yy268:
 	yyaccept = 2;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= 'H') {
 		if (yych <= '.') {
-			if (yych == ')') goto yy103;
+			if (yych == ')') goto yy102;
 			goto yy18;
 		} else {
-			if (yych <= '/') goto yy275;
+			if (yych <= '/') goto yy259;
 			if (yych <= '@') goto yy18;
-			if (yych <= 'G') goto yy450;
-			goto yy460;
+			if (yych <= 'G') goto yy400;
+			goto yy410;
 		}
 	} else {
 		if (yych <= '`') {
-			if (yych <= 'Z') goto yy450;
-			if (yych == '_') goto yy275;
+			if (yych <= 'Z') goto yy400;
+			if (yych == '_') goto yy259;
 			goto yy18;
 		} else {
-			if (yych == 'h') goto yy462;
-			if (yych <= 'z') goto yy455;
+			if (yych == 'h') goto yy412;
+			if (yych <= 'z') goto yy405;
 			goto yy18;
 		}
 	}
-yy285:
+yy269:
 	yyaccept = 2;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= 'V') {
 		if (yych <= '.') {
-			if (yych == ')') goto yy103;
+			if (yych == ')') goto yy102;
 			goto yy18;
 		} else {
-			if (yych <= '/') goto yy275;
+			if (yych <= '/') goto yy259;
 			if (yych <= '@') goto yy18;
-			if (yych <= 'U') goto yy450;
-			goto yy461;
+			if (yych <= 'U') goto yy400;
+			goto yy411;
 		}
 	} else {
 		if (yych <= '`') {
-			if (yych <= 'Z') goto yy450;
-			if (yych == '_') goto yy275;
+			if (yych <= 'Z') goto yy400;
+			if (yych == '_') goto yy259;
 			goto yy18;
 		} else {
-			if (yych == 'v') goto yy463;
-			if (yych <= 'z') goto yy455;
+			if (yych == 'v') goto yy413;
+			if (yych <= 'z') goto yy405;
 			goto yy18;
 		}
 	}
-yy286:
+yy270:
 	yyaccept = 2;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= '9') {
 		if (yych <= ',') {
 			if (yych <= 0x1F) goto yy18;
-			if (yych == ')') goto yy128;
-			goto yy127;
+			if (yych == ')') goto yy127;
+			goto yy126;
 		} else {
-			if (yych <= '-') goto yy451;
+			if (yych <= '-') goto yy401;
 			if (yych == '/') goto yy18;
-			goto yy127;
+			goto yy126;
 		}
 	} else {
 		if (yych <= 'Z') {
 			if (yych <= '@') goto yy18;
-			if (yych == 'R') goto yy464;
-			goto yy450;
+			if (yych == 'R') goto yy414;
+			goto yy400;
 		} else {
 			if (yych <= 'q') {
 				if (yych <= '`') goto yy18;
-				goto yy450;
+				goto yy400;
 			} else {
-				if (yych <= 'r') goto yy464;
-				if (yych <= 'z') goto yy450;
+				if (yych <= 'r') goto yy414;
+				if (yych <= 'z') goto yy400;
 				goto yy18;
 			}
 		}
 	}
-yy287:
+yy271:
 	yych = *++YYCURSOR;
 	if (yych <= 'T') {
 		if (yych <= ')') {
 			if (yych <= '(') goto yy18;
-			goto yy103;
+			goto yy102;
 		} else {
 			if (yych <= '@') goto yy18;
-			if (yych <= 'S') goto yy450;
-			goto yy465;
+			if (yych <= 'S') goto yy400;
+			goto yy415;
 		}
 	} else {
 		if (yych <= 's') {
-			if (yych <= 'Z') goto yy450;
+			if (yych <= 'Z') goto yy400;
 			if (yych <= '`') goto yy18;
-			goto yy450;
+			goto yy400;
 		} else {
-			if (yych <= 't') goto yy465;
-			if (yych <= 'z') goto yy450;
+			if (yych <= 't') goto yy415;
+			if (yych <= 'z') goto yy400;
 			goto yy18;
 		}
 	}
-yy288:
+yy272:
 	yych = *++YYCURSOR;
 	if (yych <= 'S') {
 		if (yych <= ')') {
 			if (yych <= '(') goto yy18;
-			goto yy103;
+			goto yy102;
 		} else {
 			if (yych <= '@') goto yy18;
-			if (yych <= 'R') goto yy450;
-			goto yy466;
+			if (yych <= 'R') goto yy400;
+			goto yy410;
 		}
 	} else {
 		if (yych <= 'r') {
-			if (yych <= 'Z') goto yy450;
+			if (yych <= 'Z') goto yy400;
 			if (yych <= '`') goto yy18;
-			goto yy450;
+			goto yy400;
 		} else {
-			if (yych <= 's') goto yy466;
-			if (yych <= 'z') goto yy450;
+			if (yych <= 's') goto yy410;
+			if (yych <= 'z') goto yy400;
 			goto yy18;
 		}
 	}
-yy289:
+yy273:
 	yych = *++YYCURSOR;
 	if (yych <= 'R') {
 		if (yych <= ')') {
 			if (yych <= '(') goto yy18;
-			goto yy103;
+			goto yy102;
 		} else {
 			if (yych <= '@') goto yy18;
-			if (yych <= 'Q') goto yy450;
-			goto yy467;
+			if (yych <= 'Q') goto yy400;
+			goto yy416;
 		}
 	} else {
 		if (yych <= 'q') {
-			if (yych <= 'Z') goto yy450;
+			if (yych <= 'Z') goto yy400;
 			if (yych <= '`') goto yy18;
-			goto yy450;
+			goto yy400;
 		} else {
-			if (yych <= 'r') goto yy467;
-			if (yych <= 'z') goto yy450;
+			if (yych <= 'r') goto yy416;
+			if (yych <= 'z') goto yy400;
 			goto yy18;
 		}
 	}
-yy290:
+yy274:
 	++YYCURSOR;
 	if ((yych = *YYCURSOR) <= 'D') {
 		if (yych <= ')') {
-			if (yych >= ')') goto yy103;
+			if (yych >= ')') goto yy102;
 		} else {
-			if (yych <= '@') goto yy291;
-			if (yych <= 'C') goto yy450;
-			goto yy468;
+			if (yych <= '@') goto yy275;
+			if (yych <= 'C') goto yy400;
+			goto yy417;
 		}
 	} else {
 		if (yych <= 'c') {
-			if (yych <= 'Z') goto yy450;
-			if (yych >= 'a') goto yy450;
+			if (yych <= 'Z') goto yy400;
+			if (yych >= 'a') goto yy400;
 		} else {
-			if (yych <= 'd') goto yy468;
-			if (yych <= 'z') goto yy450;
+			if (yych <= 'd') goto yy417;
+			if (yych <= 'z') goto yy400;
 		}
 	}
-yy291:
+yy275:
 #line 1307 "parse_date.s.re"
 	{
 		const timelib_relunit* relunit;
@@ -6247,42 +5964,414 @@ yy291:
 		TIMELIB_DEINIT;
 		return TIMELIB_WEEKDAY;
 	}
-#line 6251 "parse_date.s.c"
-yy292:
+#line 5968 "parse_date.s.c"
+yy276:
 	yyaccept = 2;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= '@') {
 		if (yych <= ',') {
 			if (yych <= 0x1F) goto yy18;
-			if (yych == ')') goto yy128;
-			goto yy127;
+			if (yych == ')') goto yy127;
+			goto yy126;
 		} else {
 			if (yych <= '.') {
-				if (yych <= '-') goto yy451;
-				goto yy127;
+				if (yych <= '-') goto yy401;
+				goto yy126;
 			} else {
-				if (yych <= '/') goto yy275;
-				if (yych <= '9') goto yy127;
+				if (yych <= '/') goto yy259;
+				if (yych <= '9') goto yy126;
 				goto yy18;
 			}
 		}
 	} else {
 		if (yych <= '_') {
 			if (yych <= 'R') {
-				if (yych <= 'Q') goto yy450;
-				goto yy464;
+				if (yych <= 'Q') goto yy400;
+				goto yy414;
 			} else {
-				if (yych <= 'Z') goto yy450;
+				if (yych <= 'Z') goto yy400;
 				if (yych <= '^') goto yy18;
-				goto yy275;
+				goto yy259;
 			}
 		} else {
 			if (yych <= 'q') {
 				if (yych <= '`') goto yy18;
-				goto yy455;
+				goto yy405;
 			} else {
-				if (yych <= 'r') goto yy469;
-				if (yych <= 'z') goto yy455;
+				if (yych <= 'r') goto yy418;
+				if (yych <= 'z') goto yy405;
+				goto yy18;
+			}
+		}
+	}
+yy277:
+	yyaccept = 2;
+	yych = *(YYMARKER = ++YYCURSOR);
+	if (yych <= 'T') {
+		if (yych <= '.') {
+			if (yych == ')') goto yy102;
+			goto yy18;
+		} else {
+			if (yych <= '/') goto yy259;
+			if (yych <= '@') goto yy18;
+			if (yych <= 'S') goto yy400;
+			goto yy415;
+		}
+	} else {
+		if (yych <= '`') {
+			if (yych <= 'Z') goto yy400;
+			if (yych == '_') goto yy259;
+			goto yy18;
+		} else {
+			if (yych == 't') goto yy419;
+			if (yych <= 'z') goto yy405;
+			goto yy18;
+		}
+	}
+yy278:
+	yyaccept = 2;
+	yych = *(YYMARKER = ++YYCURSOR);
+	if (yych <= 'S') {
+		if (yych <= '.') {
+			if (yych == ')') goto yy102;
+			goto yy18;
+		} else {
+			if (yych <= '/') goto yy259;
+			if (yych <= '@') goto yy18;
+			if (yych <= 'R') goto yy400;
+			goto yy410;
+		}
+	} else {
+		if (yych <= '`') {
+			if (yych <= 'Z') goto yy400;
+			if (yych == '_') goto yy259;
+			goto yy18;
+		} else {
+			if (yych == 's') goto yy412;
+			if (yych <= 'z') goto yy405;
+			goto yy18;
+		}
+	}
+yy279:
+	yyaccept = 2;
+	yych = *(YYMARKER = ++YYCURSOR);
+	if (yych <= 'R') {
+		if (yych <= '.') {
+			if (yych == ')') goto yy102;
+			goto yy18;
+		} else {
+			if (yych <= '/') goto yy259;
+			if (yych <= '@') goto yy18;
+			if (yych <= 'Q') goto yy400;
+			goto yy416;
+		}
+	} else {
+		if (yych <= '`') {
+			if (yych <= 'Z') goto yy400;
+			if (yych == '_') goto yy259;
+			goto yy18;
+		} else {
+			if (yych == 'r') goto yy420;
+			if (yych <= 'z') goto yy405;
+			goto yy18;
+		}
+	}
+yy280:
+	yyaccept = 7;
+	yych = *(YYMARKER = ++YYCURSOR);
+	if (yych <= 'D') {
+		if (yych <= '.') {
+			if (yych == ')') goto yy102;
+			goto yy275;
+		} else {
+			if (yych <= '/') goto yy259;
+			if (yych <= '@') goto yy275;
+			if (yych <= 'C') goto yy400;
+			goto yy417;
+		}
+	} else {
+		if (yych <= '`') {
+			if (yych <= 'Z') goto yy400;
+			if (yych == '_') goto yy259;
+			goto yy275;
+		} else {
+			if (yych == 'd') goto yy421;
+			if (yych <= 'z') goto yy405;
+			goto yy275;
+		}
+	}
+yy281:
+	++YYCURSOR;
+	if ((YYLIMIT - YYCURSOR) < 14) YYFILL(14);
+	yych = *YYCURSOR;
+yy282:
+	if (yych <= '2') {
+		if (yych <= ',') {
+			if (yych == ' ') goto yy281;
+			if (yych <= '+') goto yy129;
+			goto yy281;
+		} else {
+			if (yych <= '.') {
+				if (yych <= '-') goto yy129;
+				goto yy281;
+			} else {
+				if (yych <= '/') goto yy129;
+				if (yych <= '1') goto yy422;
+				goto yy423;
+			}
+		}
+	} else {
+		if (yych <= 'h') {
+			if (yych <= 'c') {
+				if (yych <= '9') goto yy424;
+				goto yy129;
+			} else {
+				if (yych <= 'd') goto yy281;
+				if (yych <= 'g') goto yy129;
+				goto yy281;
+			}
+		} else {
+			if (yych <= 'n') {
+				if (yych <= 'm') goto yy129;
+				goto yy281;
+			} else {
+				if (yych <= 'q') goto yy129;
+				if (yych <= 't') goto yy281;
+				goto yy129;
+			}
+		}
+	}
+yy283:
+	yyaccept = 8;
+	yych = *(YYMARKER = ++YYCURSOR);
+	if (yych <= '1') {
+		if (yych == '.') goto yy425;
+		if (yych <= '/') goto yy282;
+		goto yy426;
+	} else {
+		if (yych <= '2') goto yy427;
+		if (yych <= '9') goto yy428;
+		if (yych <= ':') goto yy429;
+		goto yy282;
+	}
+yy284:
+	yyaccept = 8;
+	yych = *(YYMARKER = ++YYCURSOR);
+	if (yych <= '/') {
+		if (yych == '.') goto yy429;
+		goto yy129;
+	} else {
+		if (yych <= '3') goto yy430;
+		if (yych <= '9') goto yy431;
+		if (yych <= ':') goto yy429;
+		goto yy129;
+	}
+yy285:
+	yyaccept = 8;
+	yych = *(YYMARKER = ++YYCURSOR);
+	if (yych <= '/') {
+		if (yych == '.') goto yy429;
+		goto yy129;
+	} else {
+		if (yych <= '9') goto yy431;
+		if (yych <= ':') goto yy429;
+		goto yy129;
+	}
+yy286:
+	yyaccept = 8;
+	yych = *(YYMARKER = ++YYCURSOR);
+	if (yych <= '/') {
+		if (yych == '.') goto yy429;
+		goto yy129;
+	} else {
+		if (yych <= '9') goto yy430;
+		if (yych <= ':') goto yy429;
+		goto yy129;
+	}
+yy287:
+	yyaccept = 2;
+	yych = *(YYMARKER = ++YYCURSOR);
+	if (yych <= '/') {
+		if (yych <= '(') {
+			if (yych <= 0x1F) goto yy18;
+			goto yy126;
+		} else {
+			if (yych <= ')') goto yy127;
+			if (yych <= '.') goto yy126;
+			goto yy18;
+		}
+	} else {
+		if (yych <= 'Z') {
+			if (yych <= '9') goto yy126;
+			if (yych <= '@') goto yy18;
+			goto yy400;
+		} else {
+			if (yych <= '`') goto yy18;
+			if (yych <= 'z') goto yy400;
+			goto yy18;
+		}
+	}
+yy288:
+	yyaccept = 2;
+	yych = *(YYMARKER = ++YYCURSOR);
+	if (yych <= '9') {
+		if (yych <= ',') {
+			if (yych <= 0x1F) goto yy18;
+			if (yych == ')') goto yy127;
+			goto yy126;
+		} else {
+			if (yych <= '-') goto yy401;
+			if (yych == '/') goto yy18;
+			goto yy126;
+		}
+	} else {
+		if (yych <= 'Z') {
+			if (yych <= '@') goto yy18;
+			if (yych == 'U') goto yy432;
+			goto yy400;
+		} else {
+			if (yych <= 't') {
+				if (yych <= '`') goto yy18;
+				goto yy400;
+			} else {
+				if (yych <= 'u') goto yy432;
+				if (yych <= 'z') goto yy400;
+				goto yy18;
+			}
+		}
+	}
+yy289:
+	yyaccept = 2;
+	yych = *(YYMARKER = ++YYCURSOR);
+	if (yych <= '9') {
+		if (yych <= ',') {
+			if (yych <= 0x1F) goto yy18;
+			if (yych == ')') goto yy127;
+			goto yy126;
+		} else {
+			if (yych <= '-') goto yy401;
+			if (yych == '/') goto yy18;
+			goto yy126;
+		}
+	} else {
+		if (yych <= 'Z') {
+			if (yych <= '@') goto yy18;
+			if (yych == 'Y') goto yy433;
+			goto yy400;
+		} else {
+			if (yych <= 'x') {
+				if (yych <= '`') goto yy18;
+				goto yy400;
+			} else {
+				if (yych <= 'y') goto yy433;
+				if (yych <= 'z') goto yy400;
+				goto yy18;
+			}
+		}
+	}
+yy290:
+	yyaccept = 2;
+	yych = *(YYMARKER = ++YYCURSOR);
+	if (yych <= '9') {
+		if (yych <= ',') {
+			if (yych <= 0x1F) goto yy18;
+			if (yych == ')') goto yy127;
+			goto yy126;
+		} else {
+			if (yych <= '-') goto yy401;
+			if (yych == '/') goto yy18;
+			goto yy126;
+		}
+	} else {
+		if (yych <= 'Z') {
+			if (yych <= '@') goto yy18;
+			if (yych == 'E') goto yy433;
+			goto yy400;
+		} else {
+			if (yych <= 'd') {
+				if (yych <= '`') goto yy18;
+				goto yy400;
+			} else {
+				if (yych <= 'e') goto yy433;
+				if (yych <= 'z') goto yy400;
+				goto yy18;
+			}
+		}
+	}
+yy291:
+	yyaccept = 2;
+	yych = *(YYMARKER = ++YYCURSOR);
+	if (yych <= '@') {
+		if (yych <= ',') {
+			if (yych <= 0x1F) goto yy18;
+			if (yych == ')') goto yy127;
+			goto yy126;
+		} else {
+			if (yych <= '.') {
+				if (yych <= '-') goto yy401;
+				goto yy126;
+			} else {
+				if (yych <= '/') goto yy259;
+				if (yych <= '9') goto yy126;
+				goto yy18;
+			}
+		}
+	} else {
+		if (yych <= '_') {
+			if (yych <= 'U') {
+				if (yych <= 'T') goto yy400;
+				goto yy432;
+			} else {
+				if (yych <= 'Z') goto yy400;
+				if (yych <= '^') goto yy18;
+				goto yy259;
+			}
+		} else {
+			if (yych <= 't') {
+				if (yych <= '`') goto yy18;
+				goto yy405;
+			} else {
+				if (yych <= 'u') goto yy434;
+				if (yych <= 'z') goto yy405;
+				goto yy18;
+			}
+		}
+	}
+yy292:
+	yyaccept = 2;
+	yych = *(YYMARKER = ++YYCURSOR);
+	if (yych <= '@') {
+		if (yych <= ',') {
+			if (yych <= 0x1F) goto yy18;
+			if (yych == ')') goto yy127;
+			goto yy126;
+		} else {
+			if (yych <= '.') {
+				if (yych <= '-') goto yy401;
+				goto yy126;
+			} else {
+				if (yych <= '/') goto yy259;
+				if (yych <= '9') goto yy126;
+				goto yy18;
+			}
+		}
+	} else {
+		if (yych <= '_') {
+			if (yych <= 'Y') {
+				if (yych <= 'X') goto yy400;
+				goto yy433;
+			} else {
+				if (yych <= 'Z') goto yy400;
+				if (yych <= '^') goto yy18;
+				goto yy259;
+			}
+		} else {
+			if (yych <= 'x') {
+				if (yych <= '`') goto yy18;
+				goto yy405;
+			} else {
+				if (yych <= 'y') goto yy435;
+				if (yych <= 'z') goto yy405;
 				goto yy18;
 			}
 		}
@@ -6290,821 +6379,284 @@ yy292:
 yy293:
 	yyaccept = 2;
 	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych <= 'T') {
-		if (yych <= '.') {
-			if (yych == ')') goto yy103;
-			goto yy18;
-		} else {
-			if (yych <= '/') goto yy275;
-			if (yych <= '@') goto yy18;
-			if (yych <= 'S') goto yy450;
-			goto yy465;
-		}
-	} else {
-		if (yych <= '`') {
-			if (yych <= 'Z') goto yy450;
-			if (yych == '_') goto yy275;
-			goto yy18;
-		} else {
-			if (yych == 't') goto yy470;
-			if (yych <= 'z') goto yy455;
-			goto yy18;
-		}
-	}
-yy294:
-	yyaccept = 2;
-	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych <= 'S') {
-		if (yych <= '.') {
-			if (yych == ')') goto yy103;
-			goto yy18;
-		} else {
-			if (yych <= '/') goto yy275;
-			if (yych <= '@') goto yy18;
-			if (yych <= 'R') goto yy450;
-			goto yy466;
-		}
-	} else {
-		if (yych <= '`') {
-			if (yych <= 'Z') goto yy450;
-			if (yych == '_') goto yy275;
-			goto yy18;
-		} else {
-			if (yych == 's') goto yy471;
-			if (yych <= 'z') goto yy455;
-			goto yy18;
-		}
-	}
-yy295:
-	yyaccept = 2;
-	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych <= 'R') {
-		if (yych <= '.') {
-			if (yych == ')') goto yy103;
-			goto yy18;
-		} else {
-			if (yych <= '/') goto yy275;
-			if (yych <= '@') goto yy18;
-			if (yych <= 'Q') goto yy450;
-			goto yy467;
-		}
-	} else {
-		if (yych <= '`') {
-			if (yych <= 'Z') goto yy450;
-			if (yych == '_') goto yy275;
-			goto yy18;
-		} else {
-			if (yych == 'r') goto yy472;
-			if (yych <= 'z') goto yy455;
-			goto yy18;
-		}
-	}
-yy296:
-	yyaccept = 7;
-	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych <= 'D') {
-		if (yych <= '.') {
-			if (yych == ')') goto yy103;
-			goto yy291;
-		} else {
-			if (yych <= '/') goto yy275;
-			if (yych <= '@') goto yy291;
-			if (yych <= 'C') goto yy450;
-			goto yy468;
-		}
-	} else {
-		if (yych <= '`') {
-			if (yych <= 'Z') goto yy450;
-			if (yych == '_') goto yy275;
-			goto yy291;
-		} else {
-			if (yych == 'd') goto yy473;
-			if (yych <= 'z') goto yy455;
-			goto yy291;
-		}
-	}
-yy297:
-	++YYCURSOR;
-	if ((YYLIMIT - YYCURSOR) < 14) YYFILL(14);
-	yych = *YYCURSOR;
-yy298:
-	if (yych <= '2') {
-		if (yych <= ',') {
-			if (yych == ' ') goto yy297;
-			if (yych <= '+') goto yy130;
-			goto yy297;
-		} else {
-			if (yych <= '.') {
-				if (yych <= '-') goto yy130;
-				goto yy297;
-			} else {
-				if (yych <= '/') goto yy130;
-				if (yych <= '1') goto yy474;
-				goto yy475;
-			}
-		}
-	} else {
-		if (yych <= 'h') {
-			if (yych <= 'c') {
-				if (yych <= '9') goto yy476;
-				goto yy130;
-			} else {
-				if (yych <= 'd') goto yy297;
-				if (yych <= 'g') goto yy130;
-				goto yy297;
-			}
-		} else {
-			if (yych <= 'n') {
-				if (yych <= 'm') goto yy130;
-				goto yy297;
-			} else {
-				if (yych <= 'q') goto yy130;
-				if (yych <= 't') goto yy297;
-				goto yy130;
-			}
-		}
-	}
-yy299:
-	yyaccept = 8;
-	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych <= ':') {
-		if (yych <= '/') {
-			if (yych == '.') goto yy477;
-			goto yy298;
-		} else {
-			if (yych <= '1') goto yy478;
-			if (yych <= '2') goto yy479;
-			if (yych <= '9') goto yy480;
-			goto yy481;
-		}
-	} else {
-		if (yych <= 'q') {
-			if (yych == 'n') goto yy301;
-			goto yy298;
-		} else {
-			if (yych <= 'r') goto yy302;
-			if (yych <= 's') goto yy303;
-			if (yych <= 't') goto yy304;
-			goto yy298;
-		}
-	}
-yy300:
-	yyaccept = 8;
-	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych <= ':') {
-		if (yych <= '/') {
-			if (yych == '.') goto yy477;
-			goto yy298;
-		} else {
-			if (yych <= '1') goto yy478;
-			if (yych <= '2') goto yy479;
-			if (yych <= '9') goto yy480;
-			goto yy481;
-		}
-	} else {
-		if (yych <= 'q') {
-			if (yych != 'n') goto yy298;
-		} else {
-			if (yych <= 'r') goto yy302;
-			if (yych <= 's') goto yy303;
-			if (yych <= 't') goto yy304;
-			goto yy298;
-		}
-	}
-yy301:
-	yych = *++YYCURSOR;
-	goto yy298;
-yy302:
-	yych = *++YYCURSOR;
-	goto yy298;
-yy303:
-	yych = *++YYCURSOR;
-	goto yy298;
-yy304:
-	yych = *++YYCURSOR;
-	goto yy298;
-yy305:
-	yyaccept = 8;
-	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych <= '/') {
-		if (yych == '.') goto yy481;
-		goto yy130;
-	} else {
-		if (yych <= '3') goto yy482;
-		if (yych <= '9') goto yy483;
-		if (yych <= ':') goto yy481;
-		goto yy130;
-	}
-yy306:
-	yyaccept = 8;
-	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych <= '/') {
-		if (yych == '.') goto yy481;
-		goto yy130;
-	} else {
-		if (yych <= '9') goto yy483;
-		if (yych <= ':') goto yy481;
-		goto yy130;
-	}
-yy307:
-	yyaccept = 8;
-	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych <= '/') {
-		if (yych == '.') goto yy481;
-		goto yy130;
-	} else {
-		if (yych <= '9') goto yy482;
-		if (yych <= ':') goto yy481;
-		goto yy130;
-	}
-yy308:
-	yyaccept = 2;
-	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych <= '/') {
-		if (yych <= '(') {
-			if (yych <= 0x1F) goto yy18;
-			goto yy127;
-		} else {
-			if (yych <= ')') goto yy128;
-			if (yych <= '.') goto yy127;
-			goto yy18;
-		}
-	} else {
-		if (yych <= 'Z') {
-			if (yych <= '9') goto yy127;
-			if (yych <= '@') goto yy18;
-			goto yy450;
-		} else {
-			if (yych <= '`') goto yy18;
-			if (yych <= 'z') goto yy450;
-			goto yy18;
-		}
-	}
-yy309:
-	yyaccept = 2;
-	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych <= '9') {
-		if (yych <= ',') {
-			if (yych <= 0x1F) goto yy18;
-			if (yych == ')') goto yy128;
-			goto yy127;
-		} else {
-			if (yych <= '-') goto yy451;
-			if (yych == '/') goto yy18;
-			goto yy127;
-		}
-	} else {
-		if (yych <= 'Z') {
-			if (yych <= '@') goto yy18;
-			if (yych == 'U') goto yy484;
-			goto yy450;
-		} else {
-			if (yych <= 't') {
-				if (yych <= '`') goto yy18;
-				goto yy450;
-			} else {
-				if (yych <= 'u') goto yy484;
-				if (yych <= 'z') goto yy450;
-				goto yy18;
-			}
-		}
-	}
-yy310:
-	yyaccept = 2;
-	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych <= '9') {
-		if (yych <= ',') {
-			if (yych <= 0x1F) goto yy18;
-			if (yych == ')') goto yy128;
-			goto yy127;
-		} else {
-			if (yych <= '-') goto yy451;
-			if (yych == '/') goto yy18;
-			goto yy127;
-		}
-	} else {
-		if (yych <= 'Z') {
-			if (yych <= '@') goto yy18;
-			if (yych == 'Y') goto yy485;
-			goto yy450;
-		} else {
-			if (yych <= 'x') {
-				if (yych <= '`') goto yy18;
-				goto yy450;
-			} else {
-				if (yych <= 'y') goto yy485;
-				if (yych <= 'z') goto yy450;
-				goto yy18;
-			}
-		}
-	}
-yy311:
-	yyaccept = 2;
-	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych <= '9') {
-		if (yych <= ',') {
-			if (yych <= 0x1F) goto yy18;
-			if (yych == ')') goto yy128;
-			goto yy127;
-		} else {
-			if (yych <= '-') goto yy451;
-			if (yych == '/') goto yy18;
-			goto yy127;
-		}
-	} else {
-		if (yych <= 'Z') {
-			if (yych <= '@') goto yy18;
-			if (yych == 'E') goto yy485;
-			goto yy450;
-		} else {
-			if (yych <= 'd') {
-				if (yych <= '`') goto yy18;
-				goto yy450;
-			} else {
-				if (yych <= 'e') goto yy485;
-				if (yych <= 'z') goto yy450;
-				goto yy18;
-			}
-		}
-	}
-yy312:
-	yyaccept = 2;
-	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= '@') {
 		if (yych <= ',') {
 			if (yych <= 0x1F) goto yy18;
-			if (yych == ')') goto yy128;
-			goto yy127;
+			if (yych == ')') goto yy127;
+			goto yy126;
 		} else {
 			if (yych <= '.') {
-				if (yych <= '-') goto yy451;
-				goto yy127;
+				if (yych <= '-') goto yy401;
+				goto yy126;
 			} else {
-				if (yych <= '/') goto yy275;
-				if (yych <= '9') goto yy127;
-				goto yy18;
-			}
-		}
-	} else {
-		if (yych <= '_') {
-			if (yych <= 'U') {
-				if (yych <= 'T') goto yy450;
-				goto yy484;
-			} else {
-				if (yych <= 'Z') goto yy450;
-				if (yych <= '^') goto yy18;
-				goto yy275;
-			}
-		} else {
-			if (yych <= 't') {
-				if (yych <= '`') goto yy18;
-				goto yy455;
-			} else {
-				if (yych <= 'u') goto yy486;
-				if (yych <= 'z') goto yy455;
-				goto yy18;
-			}
-		}
-	}
-yy313:
-	yyaccept = 2;
-	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych <= '@') {
-		if (yych <= ',') {
-			if (yych <= 0x1F) goto yy18;
-			if (yych == ')') goto yy128;
-			goto yy127;
-		} else {
-			if (yych <= '.') {
-				if (yych <= '-') goto yy451;
-				goto yy127;
-			} else {
-				if (yych <= '/') goto yy275;
-				if (yych <= '9') goto yy127;
-				goto yy18;
-			}
-		}
-	} else {
-		if (yych <= '_') {
-			if (yych <= 'Y') {
-				if (yych <= 'X') goto yy450;
-				goto yy485;
-			} else {
-				if (yych <= 'Z') goto yy450;
-				if (yych <= '^') goto yy18;
-				goto yy275;
-			}
-		} else {
-			if (yych <= 'x') {
-				if (yych <= '`') goto yy18;
-				goto yy455;
-			} else {
-				if (yych <= 'y') goto yy487;
-				if (yych <= 'z') goto yy455;
-				goto yy18;
-			}
-		}
-	}
-yy314:
-	yyaccept = 2;
-	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych <= '@') {
-		if (yych <= ',') {
-			if (yych <= 0x1F) goto yy18;
-			if (yych == ')') goto yy128;
-			goto yy127;
-		} else {
-			if (yych <= '.') {
-				if (yych <= '-') goto yy451;
-				goto yy127;
-			} else {
-				if (yych <= '/') goto yy275;
-				if (yych <= '9') goto yy127;
+				if (yych <= '/') goto yy259;
+				if (yych <= '9') goto yy126;
 				goto yy18;
 			}
 		}
 	} else {
 		if (yych <= '_') {
 			if (yych <= 'E') {
-				if (yych <= 'D') goto yy450;
-				goto yy485;
+				if (yych <= 'D') goto yy400;
+				goto yy433;
 			} else {
-				if (yych <= 'Z') goto yy450;
+				if (yych <= 'Z') goto yy400;
 				if (yych <= '^') goto yy18;
-				goto yy275;
+				goto yy259;
 			}
 		} else {
 			if (yych <= 'd') {
 				if (yych <= '`') goto yy18;
-				goto yy455;
+				goto yy405;
 			} else {
-				if (yych <= 'e') goto yy487;
-				if (yych <= 'z') goto yy455;
+				if (yych <= 'e') goto yy435;
+				if (yych <= 'z') goto yy405;
 				goto yy18;
 			}
 		}
 	}
-yy315:
+yy294:
 	yych = *++YYCURSOR;
 	if (yych <= 'T') {
 		if (yych <= ')') {
 			if (yych <= '(') goto yy18;
-			goto yy103;
+			goto yy102;
 		} else {
 			if (yych <= '@') goto yy18;
-			if (yych <= 'S') goto yy450;
-			goto yy488;
+			if (yych <= 'S') goto yy400;
+			goto yy436;
 		}
 	} else {
 		if (yych <= 's') {
-			if (yych <= 'Z') goto yy450;
+			if (yych <= 'Z') goto yy400;
 			if (yych <= '`') goto yy18;
-			goto yy450;
+			goto yy400;
 		} else {
-			if (yych <= 't') goto yy488;
-			if (yych <= 'z') goto yy450;
+			if (yych <= 't') goto yy436;
+			if (yych <= 'z') goto yy400;
 			goto yy18;
 		}
 	}
-yy316:
+yy295:
 	yyaccept = 2;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= 'T') {
 		if (yych <= '.') {
-			if (yych == ')') goto yy103;
+			if (yych == ')') goto yy102;
 			goto yy18;
 		} else {
-			if (yych <= '/') goto yy275;
+			if (yych <= '/') goto yy259;
 			if (yych <= '@') goto yy18;
-			if (yych <= 'S') goto yy450;
-			goto yy488;
+			if (yych <= 'S') goto yy400;
+			goto yy436;
 		}
 	} else {
 		if (yych <= '`') {
-			if (yych <= 'Z') goto yy450;
-			if (yych == '_') goto yy275;
+			if (yych <= 'Z') goto yy400;
+			if (yych == '_') goto yy259;
 			goto yy18;
 		} else {
-			if (yych == 't') goto yy489;
-			if (yych <= 'z') goto yy455;
+			if (yych == 't') goto yy437;
+			if (yych <= 'z') goto yy405;
 			goto yy18;
 		}
 	}
-yy317:
+yy296:
 	yyaccept = 2;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= '9') {
 		if (yych <= ',') {
 			if (yych <= 0x1F) goto yy18;
-			if (yych == ')') goto yy128;
-			goto yy127;
+			if (yych == ')') goto yy127;
+			goto yy126;
 		} else {
-			if (yych <= '-') goto yy451;
+			if (yych <= '-') goto yy401;
 			if (yych == '/') goto yy18;
-			goto yy127;
+			goto yy126;
 		}
 	} else {
 		if (yych <= 'Z') {
 			if (yych <= '@') goto yy18;
-			if (yych == 'C') goto yy490;
-			goto yy450;
+			if (yych == 'C') goto yy438;
+			goto yy400;
 		} else {
 			if (yych <= 'b') {
 				if (yych <= '`') goto yy18;
-				goto yy450;
+				goto yy400;
 			} else {
-				if (yych <= 'c') goto yy490;
-				if (yych <= 'z') goto yy450;
+				if (yych <= 'c') goto yy438;
+				if (yych <= 'z') goto yy400;
 				goto yy18;
 			}
 		}
 	}
-yy318:
+yy297:
 	yyaccept = 2;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= '.') {
 		if (yych <= ')') {
 			if (yych <= 0x1F) goto yy18;
-			if (yych <= '(') goto yy127;
-			goto yy128;
-		} else {
-			if (yych == '-') goto yy451;
+			if (yych <= '(') goto yy126;
 			goto yy127;
+		} else {
+			if (yych == '-') goto yy401;
+			goto yy126;
 		}
 	} else {
 		if (yych <= '@') {
 			if (yych <= '/') goto yy18;
-			if (yych <= '9') goto yy127;
+			if (yych <= '9') goto yy126;
 			goto yy18;
 		} else {
-			if (yych <= 'Z') goto yy450;
+			if (yych <= 'Z') goto yy400;
 			if (yych <= '`') goto yy18;
-			if (yych <= 'z') goto yy450;
+			if (yych <= 'z') goto yy400;
 			goto yy18;
 		}
 	}
-yy319:
+yy298:
 	yych = *++YYCURSOR;
 	if (yych <= 'N') {
 		if (yych <= ')') {
 			if (yych <= '(') goto yy18;
-			goto yy103;
+			goto yy102;
 		} else {
 			if (yych <= '@') goto yy18;
-			if (yych <= 'M') goto yy450;
-			goto yy491;
+			if (yych <= 'M') goto yy400;
+			goto yy439;
 		}
 	} else {
 		if (yych <= 'm') {
-			if (yych <= 'Z') goto yy450;
+			if (yych <= 'Z') goto yy400;
 			if (yych <= '`') goto yy18;
-			goto yy450;
+			goto yy400;
 		} else {
-			if (yych <= 'n') goto yy491;
-			if (yych <= 'z') goto yy450;
+			if (yych <= 'n') goto yy439;
+			if (yych <= 'z') goto yy400;
 			goto yy18;
 		}
 	}
-yy320:
-	yych = *++YYCURSOR;
-	if (yych <= 'D') {
-		if (yych <= ')') {
-			if (yych <= '(') goto yy291;
-			goto yy103;
-		} else {
-			if (yych <= '@') goto yy291;
-			if (yych <= 'C') goto yy450;
-			goto yy492;
-		}
-	} else {
-		if (yych <= 'c') {
-			if (yych <= 'Z') goto yy450;
-			if (yych <= '`') goto yy291;
-			goto yy450;
-		} else {
-			if (yych <= 'd') goto yy492;
-			if (yych <= 'z') goto yy450;
-			goto yy291;
-		}
-	}
-yy321:
+yy299:
 	yyaccept = 2;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= '@') {
 		if (yych <= ',') {
 			if (yych <= 0x1F) goto yy18;
-			if (yych == ')') goto yy128;
-			goto yy127;
+			if (yych == ')') goto yy127;
+			goto yy126;
 		} else {
 			if (yych <= '.') {
-				if (yych <= '-') goto yy451;
-				goto yy127;
+				if (yych <= '-') goto yy401;
+				goto yy126;
 			} else {
-				if (yych <= '/') goto yy275;
-				if (yych <= '9') goto yy127;
+				if (yych <= '/') goto yy259;
+				if (yych <= '9') goto yy126;
 				goto yy18;
 			}
 		}
 	} else {
 		if (yych <= '_') {
 			if (yych <= 'C') {
-				if (yych <= 'B') goto yy450;
-				goto yy490;
+				if (yych <= 'B') goto yy400;
+				goto yy438;
 			} else {
-				if (yych <= 'Z') goto yy450;
+				if (yych <= 'Z') goto yy400;
 				if (yych <= '^') goto yy18;
-				goto yy275;
+				goto yy259;
 			}
 		} else {
 			if (yych <= 'b') {
 				if (yych <= '`') goto yy18;
-				goto yy455;
+				goto yy405;
 			} else {
-				if (yych <= 'c') goto yy493;
-				if (yych <= 'z') goto yy455;
+				if (yych <= 'c') goto yy440;
+				if (yych <= 'z') goto yy405;
 				goto yy18;
 			}
 		}
 	}
-yy322:
+yy300:
 	yyaccept = 2;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= '/') {
 		if (yych <= ')') {
 			if (yych <= 0x1F) goto yy18;
-			if (yych <= '(') goto yy127;
-			goto yy128;
+			if (yych <= '(') goto yy126;
+			goto yy127;
 		} else {
-			if (yych == '-') goto yy451;
-			if (yych <= '.') goto yy127;
-			goto yy275;
+			if (yych == '-') goto yy401;
+			if (yych <= '.') goto yy126;
+			goto yy259;
 		}
 	} else {
 		if (yych <= '^') {
-			if (yych <= '9') goto yy127;
+			if (yych <= '9') goto yy126;
 			if (yych <= '@') goto yy18;
-			if (yych <= 'Z') goto yy450;
+			if (yych <= 'Z') goto yy400;
 			goto yy18;
 		} else {
-			if (yych <= '_') goto yy275;
+			if (yych <= '_') goto yy259;
 			if (yych <= '`') goto yy18;
-			if (yych <= 'z') goto yy455;
+			if (yych <= 'z') goto yy405;
 			goto yy18;
 		}
 	}
-yy323:
+yy301:
 	yyaccept = 2;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= 'N') {
 		if (yych <= '.') {
-			if (yych == ')') goto yy103;
+			if (yych == ')') goto yy102;
 			goto yy18;
 		} else {
-			if (yych <= '/') goto yy275;
+			if (yych <= '/') goto yy259;
 			if (yych <= '@') goto yy18;
-			if (yych <= 'M') goto yy450;
-			goto yy491;
+			if (yych <= 'M') goto yy400;
+			goto yy439;
 		}
 	} else {
 		if (yych <= '`') {
-			if (yych <= 'Z') goto yy450;
-			if (yych == '_') goto yy275;
+			if (yych <= 'Z') goto yy400;
+			if (yych == '_') goto yy259;
 			goto yy18;
 		} else {
-			if (yych == 'n') goto yy494;
-			if (yych <= 'z') goto yy455;
-			goto yy18;
-		}
-	}
-yy324:
-	yyaccept = 7;
-	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych <= 'D') {
-		if (yych <= '.') {
-			if (yych == ')') goto yy103;
-			goto yy291;
-		} else {
-			if (yych <= '/') goto yy275;
-			if (yych <= '@') goto yy291;
-			if (yych <= 'C') goto yy450;
-			goto yy492;
-		}
-	} else {
-		if (yych <= '`') {
-			if (yych <= 'Z') goto yy450;
-			if (yych == '_') goto yy275;
-			goto yy291;
-		} else {
-			if (yych == 'd') goto yy495;
-			if (yych <= 'z') goto yy455;
-			goto yy291;
-		}
-	}
-yy325:
-	yych = *++YYCURSOR;
-	if (yych <= 'T') {
-		if (yych <= ')') {
-			if (yych <= '(') goto yy18;
-			goto yy103;
-		} else {
-			if (yych <= '@') goto yy18;
-			if (yych <= 'S') goto yy450;
-			goto yy488;
-		}
-	} else {
-		if (yych <= 's') {
-			if (yych <= 'Z') goto yy450;
-			if (yych <= '`') goto yy18;
-			goto yy450;
-		} else {
-			if (yych <= 't') goto yy488;
-			if (yych <= 'z') goto yy450;
+			if (yych == 'n') goto yy441;
+			if (yych <= 'z') goto yy405;
 			goto yy18;
 		}
 	}
-yy326:
-	yych = *++YYCURSOR;
-	if (yych <= 'T') {
-		if (yych <= ')') {
-			if (yych <= '(') goto yy18;
-			goto yy103;
-		} else {
-			if (yych <= '@') goto yy18;
-			if (yych <= 'S') goto yy450;
-			goto yy496;
-		}
-	} else {
-		if (yych <= 's') {
-			if (yych <= 'Z') goto yy450;
-			if (yych <= '`') goto yy18;
-			goto yy450;
-		} else {
-			if (yych <= 't') goto yy496;
-			if (yych <= 'z') goto yy450;
-			goto yy18;
-		}
-	}
-yy327:
+yy302:
 	yych = *++YYCURSOR;
 	if (yych <= 'N') {
 		if (yych <= ')') {
 			if (yych <= '(') goto yy18;
-			goto yy103;
+			goto yy102;
 		} else {
 			if (yych <= '@') goto yy18;
-			if (yych <= 'M') goto yy450;
-			goto yy497;
+			if (yych <= 'M') goto yy400;
+			goto yy442;
 		}
 	} else {
 		if (yych <= 'm') {
-			if (yych <= 'Z') goto yy450;
+			if (yych <= 'Z') goto yy400;
 			if (yych <= '`') goto yy18;
-			goto yy450;
+			goto yy400;
 		} else {
-			if (yych <= 'n') goto yy497;
-			if (yych <= 'z') goto yy450;
+			if (yych <= 'n') goto yy442;
+			if (yych <= 'z') goto yy400;
 			goto yy18;
 		}
 	}
-yy328:
-	yyaccept = 2;
-	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych <= '9') {
-		if (yych <= ',') {
-			if (yych <= 0x1F) goto yy18;
-			if (yych == ')') goto yy128;
-			goto yy127;
-		} else {
-			if (yych <= '-') goto yy451;
-			if (yych == '/') goto yy18;
-			goto yy127;
-		}
-	} else {
-		if (yych <= 'Z') {
-			if (yych <= '@') goto yy18;
-			if (yych == 'E') goto yy499;
-			goto yy450;
-		} else {
-			if (yych <= 'd') {
-				if (yych <= '`') goto yy18;
-				goto yy450;
-			} else {
-				if (yych <= 'e') goto yy499;
-				if (yych <= 'z') goto yy450;
-				goto yy18;
-			}
-		}
-	}
-yy329:
+yy303:
 	++YYCURSOR;
 	if ((yych = *YYCURSOR) <= '@') {
-		if (yych == ')') goto yy103;
+		if (yych == ')') goto yy102;
 	} else {
-		if (yych <= 'Z') goto yy450;
-		if (yych <= '`') goto yy330;
-		if (yych <= 'z') goto yy450;
+		if (yych <= 'Z') goto yy400;
+		if (yych <= '`') goto yy304;
+		if (yych <= 'z') goto yy400;
 	}
-yy330:
+yy304:
 #line 862 "parse_date.s.re"
 	{
 		DEBUG_OUTPUT("now");
@@ -7113,1189 +6665,890 @@ yy330:
 		TIMELIB_DEINIT;
 		return TIMELIB_RELATIVE;
 	}
-#line 7117 "parse_date.s.c"
-yy331:
-	yyaccept = 2;
-	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych <= 'T') {
-		if (yych <= '.') {
-			if (yych == ')') goto yy103;
-			goto yy18;
-		} else {
-			if (yych <= '/') goto yy275;
-			if (yych <= '@') goto yy18;
-			if (yych <= 'S') goto yy450;
-			goto yy488;
-		}
-	} else {
-		if (yych <= '`') {
-			if (yych <= 'Z') goto yy450;
-			if (yych == '_') goto yy275;
-			goto yy18;
-		} else {
-			if (yych == 't') goto yy489;
-			if (yych <= 'z') goto yy455;
-			goto yy18;
-		}
-	}
-yy332:
-	yyaccept = 2;
-	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych <= 'T') {
-		if (yych <= '.') {
-			if (yych == ')') goto yy103;
-			goto yy18;
-		} else {
-			if (yych <= '/') goto yy275;
-			if (yych <= '@') goto yy18;
-			if (yych <= 'S') goto yy450;
-			goto yy496;
-		}
-	} else {
-		if (yych <= '`') {
-			if (yych <= 'Z') goto yy450;
-			if (yych == '_') goto yy275;
-			goto yy18;
-		} else {
-			if (yych == 't') goto yy500;
-			if (yych <= 'z') goto yy455;
-			goto yy18;
-		}
-	}
-yy333:
+#line 6669 "parse_date.s.c"
+yy305:
 	yyaccept = 2;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= 'N') {
 		if (yych <= '.') {
-			if (yych == ')') goto yy103;
+			if (yych == ')') goto yy102;
 			goto yy18;
 		} else {
-			if (yych <= '/') goto yy275;
+			if (yych <= '/') goto yy259;
 			if (yych <= '@') goto yy18;
-			if (yych <= 'M') goto yy450;
-			goto yy497;
+			if (yych <= 'M') goto yy400;
+			goto yy442;
 		}
 	} else {
 		if (yych <= '`') {
-			if (yych <= 'Z') goto yy450;
-			if (yych == '_') goto yy275;
+			if (yych <= 'Z') goto yy400;
+			if (yych == '_') goto yy259;
 			goto yy18;
 		} else {
-			if (yych == 'n') goto yy501;
-			if (yych <= 'z') goto yy455;
+			if (yych == 'n') goto yy444;
+			if (yych <= 'z') goto yy405;
 			goto yy18;
 		}
 	}
-yy334:
-	yyaccept = 2;
-	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych <= '@') {
-		if (yych <= ',') {
-			if (yych <= 0x1F) goto yy18;
-			if (yych == ')') goto yy128;
-			goto yy127;
-		} else {
-			if (yych <= '.') {
-				if (yych <= '-') goto yy451;
-				goto yy127;
-			} else {
-				if (yych <= '/') goto yy275;
-				if (yych <= '9') goto yy127;
-				goto yy18;
-			}
-		}
-	} else {
-		if (yych <= '_') {
-			if (yych <= 'E') {
-				if (yych <= 'D') goto yy450;
-				goto yy499;
-			} else {
-				if (yych <= 'Z') goto yy450;
-				if (yych <= '^') goto yy18;
-				goto yy275;
-			}
-		} else {
-			if (yych <= 'd') {
-				if (yych <= '`') goto yy18;
-				goto yy455;
-			} else {
-				if (yych <= 'e') goto yy502;
-				if (yych <= 'z') goto yy455;
-				goto yy18;
-			}
-		}
-	}
-yy335:
+yy306:
 	yyaccept = 9;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= '@') {
 		if (yych <= ')') {
-			if (yych <= '(') goto yy330;
-			goto yy103;
+			if (yych <= '(') goto yy304;
+			goto yy102;
 		} else {
-			if (yych == '/') goto yy275;
-			goto yy330;
+			if (yych == '/') goto yy259;
+			goto yy304;
 		}
 	} else {
 		if (yych <= '_') {
-			if (yych <= 'Z') goto yy450;
-			if (yych <= '^') goto yy330;
-			goto yy275;
+			if (yych <= 'Z') goto yy400;
+			if (yych <= '^') goto yy304;
+			goto yy259;
 		} else {
-			if (yych <= '`') goto yy330;
-			if (yych <= 'z') goto yy455;
-			goto yy330;
+			if (yych <= '`') goto yy304;
+			if (yych <= 'z') goto yy405;
+			goto yy304;
 		}
 	}
-yy336:
+yy307:
 	yyaccept = 2;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= '9') {
 		if (yych <= ',') {
 			if (yych <= 0x1F) goto yy18;
-			if (yych == ')') goto yy128;
-			goto yy127;
+			if (yych == ')') goto yy127;
+			goto yy126;
 		} else {
-			if (yych <= '-') goto yy451;
+			if (yych <= '-') goto yy401;
 			if (yych == '/') goto yy18;
-			goto yy127;
+			goto yy126;
 		}
 	} else {
 		if (yych <= 'Z') {
 			if (yych <= '@') goto yy18;
-			if (yych == 'O') goto yy503;
-			goto yy450;
+			if (yych == 'O') goto yy445;
+			goto yy400;
 		} else {
 			if (yych <= 'n') {
 				if (yych <= '`') goto yy18;
-				goto yy450;
+				goto yy400;
 			} else {
-				if (yych <= 'o') goto yy503;
-				if (yych <= 'z') goto yy450;
+				if (yych <= 'o') goto yy445;
+				if (yych <= 'z') goto yy400;
 				goto yy18;
 			}
 		}
 	}
-yy337:
+yy308:
 	yyaccept = 2;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= '@') {
 		if (yych <= ',') {
 			if (yych <= 0x1F) goto yy18;
-			if (yych == ')') goto yy128;
-			goto yy127;
+			if (yych == ')') goto yy127;
+			goto yy126;
 		} else {
 			if (yych <= '.') {
-				if (yych <= '-') goto yy451;
-				goto yy127;
+				if (yych <= '-') goto yy401;
+				goto yy126;
 			} else {
-				if (yych <= '/') goto yy275;
-				if (yych <= '9') goto yy127;
+				if (yych <= '/') goto yy259;
+				if (yych <= '9') goto yy126;
 				goto yy18;
 			}
 		}
 	} else {
 		if (yych <= '_') {
 			if (yych <= 'O') {
-				if (yych <= 'N') goto yy450;
-				goto yy503;
+				if (yych <= 'N') goto yy400;
+				goto yy445;
 			} else {
-				if (yych <= 'Z') goto yy450;
+				if (yych <= 'Z') goto yy400;
 				if (yych <= '^') goto yy18;
-				goto yy275;
+				goto yy259;
 			}
 		} else {
 			if (yych <= 'n') {
 				if (yych <= '`') goto yy18;
-				goto yy455;
+				goto yy405;
 			} else {
-				if (yych <= 'o') goto yy504;
-				if (yych <= 'z') goto yy455;
+				if (yych <= 'o') goto yy446;
+				if (yych <= 'z') goto yy405;
 				goto yy18;
 			}
 		}
 	}
-yy338:
+yy309:
 	yych = *++YYCURSOR;
 	if (yych <= 'V') {
 		if (yych <= ')') {
 			if (yych <= '(') goto yy18;
-			goto yy103;
+			goto yy102;
 		} else {
 			if (yych <= '@') goto yy18;
-			if (yych <= 'U') goto yy450;
-			goto yy505;
+			if (yych <= 'U') goto yy400;
+			goto yy447;
 		}
 	} else {
 		if (yych <= 'u') {
-			if (yych <= 'Z') goto yy450;
+			if (yych <= 'Z') goto yy400;
 			if (yych <= '`') goto yy18;
-			goto yy450;
+			goto yy400;
 		} else {
-			if (yych <= 'v') goto yy505;
-			if (yych <= 'z') goto yy450;
+			if (yych <= 'v') goto yy447;
+			if (yych <= 'z') goto yy400;
 			goto yy18;
 		}
 	}
-yy339:
+yy310:
 	yyaccept = 2;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= 'V') {
 		if (yych <= '.') {
-			if (yych == ')') goto yy103;
+			if (yych == ')') goto yy102;
 			goto yy18;
 		} else {
-			if (yych <= '/') goto yy275;
+			if (yych <= '/') goto yy259;
 			if (yych <= '@') goto yy18;
-			if (yych <= 'U') goto yy450;
-			goto yy505;
+			if (yych <= 'U') goto yy400;
+			goto yy447;
 		}
 	} else {
 		if (yych <= '`') {
-			if (yych <= 'Z') goto yy450;
-			if (yych == '_') goto yy275;
+			if (yych <= 'Z') goto yy400;
+			if (yych == '_') goto yy259;
 			goto yy18;
 		} else {
-			if (yych == 'v') goto yy506;
-			if (yych <= 'z') goto yy455;
+			if (yych == 'v') goto yy448;
+			if (yych <= 'z') goto yy405;
 			goto yy18;
 		}
 	}
-yy340:
+yy311:
 	yych = *++YYCURSOR;
 	if (yych <= 'U') {
 		if (yych <= ')') {
-			if (yych <= '(') goto yy291;
-			goto yy103;
+			if (yych <= '(') goto yy275;
+			goto yy102;
 		} else {
-			if (yych <= '@') goto yy291;
-			if (yych <= 'T') goto yy450;
-			goto yy507;
+			if (yych <= '@') goto yy275;
+			if (yych <= 'T') goto yy400;
+			goto yy449;
 		}
 	} else {
 		if (yych <= 't') {
-			if (yych <= 'Z') goto yy450;
-			if (yych <= '`') goto yy291;
-			goto yy450;
+			if (yych <= 'Z') goto yy400;
+			if (yych <= '`') goto yy275;
+			goto yy400;
 		} else {
-			if (yych <= 'u') goto yy507;
-			if (yych <= 'z') goto yy450;
-			goto yy291;
+			if (yych <= 'u') goto yy449;
+			if (yych <= 'z') goto yy400;
+			goto yy275;
 		}
 	}
-yy341:
+yy312:
 	yych = *++YYCURSOR;
 	if (yych <= 'O') {
 		if (yych <= ')') {
 			if (yych <= '(') goto yy18;
-			goto yy103;
+			goto yy102;
 		} else {
 			if (yych <= '@') goto yy18;
-			if (yych <= 'N') goto yy450;
-			goto yy508;
+			if (yych <= 'N') goto yy400;
+			goto yy450;
 		}
 	} else {
 		if (yych <= 'n') {
-			if (yych <= 'Z') goto yy450;
+			if (yych <= 'Z') goto yy400;
 			if (yych <= '`') goto yy18;
-			goto yy450;
+			goto yy400;
 		} else {
-			if (yych <= 'o') goto yy508;
-			if (yych <= 'z') goto yy450;
+			if (yych <= 'o') goto yy450;
+			if (yych <= 'z') goto yy400;
 			goto yy18;
 		}
 	}
-yy342:
+yy313:
 	yyaccept = 2;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= '9') {
 		if (yych <= ',') {
 			if (yych <= 0x1F) goto yy18;
-			if (yych == ')') goto yy128;
-			goto yy127;
+			if (yych == ')') goto yy127;
+			goto yy126;
 		} else {
-			if (yych <= '-') goto yy451;
+			if (yych <= '-') goto yy401;
 			if (yych == '/') goto yy18;
-			goto yy127;
+			goto yy126;
 		}
 	} else {
 		if (yych <= 'Z') {
 			if (yych <= '@') goto yy18;
-			if (yych == 'T') goto yy509;
-			goto yy450;
+			if (yych == 'T') goto yy451;
+			goto yy400;
 		} else {
 			if (yych <= 's') {
 				if (yych <= '`') goto yy18;
-				goto yy450;
+				goto yy400;
 			} else {
-				if (yych <= 't') goto yy509;
-				if (yych <= 'z') goto yy450;
+				if (yych <= 't') goto yy451;
+				if (yych <= 'z') goto yy400;
 				goto yy18;
 			}
 		}
 	}
-yy343:
+yy314:
 	yych = *++YYCURSOR;
 	if (yych <= 'E') {
 		if (yych <= ')') {
 			if (yych <= '(') goto yy18;
-			goto yy103;
+			goto yy102;
 		} else {
 			if (yych <= '@') goto yy18;
-			if (yych <= 'D') goto yy450;
-			goto yy510;
+			if (yych <= 'D') goto yy400;
+			goto yy452;
 		}
 	} else {
 		if (yych <= 'd') {
-			if (yych <= 'Z') goto yy450;
+			if (yych <= 'Z') goto yy400;
 			if (yych <= '`') goto yy18;
-			goto yy450;
+			goto yy400;
 		} else {
-			if (yych <= 'e') goto yy510;
-			if (yych <= 'z') goto yy450;
+			if (yych <= 'e') goto yy452;
+			if (yych <= 'z') goto yy400;
 			goto yy18;
 		}
 	}
-yy344:
-	yych = *++YYCURSOR;
-	if (yych <= 'T') {
-		if (yych <= ')') {
-			if (yych <= '(') goto yy18;
-			goto yy103;
-		} else {
-			if (yych <= '@') goto yy18;
-			if (yych <= 'S') goto yy450;
-			goto yy511;
-		}
-	} else {
-		if (yych <= 's') {
-			if (yych <= 'Z') goto yy450;
-			if (yych <= '`') goto yy18;
-			goto yy450;
-		} else {
-			if (yych <= 't') goto yy511;
-			if (yych <= 'z') goto yy450;
-			goto yy18;
-		}
-	}
-yy345:
-	yych = *++YYCURSOR;
-	if (yych <= 'D') {
-		if (yych <= ')') {
-			if (yych <= '(') goto yy291;
-			goto yy103;
-		} else {
-			if (yych <= '@') goto yy291;
-			if (yych <= 'C') goto yy450;
-			goto yy512;
-		}
-	} else {
-		if (yych <= 'c') {
-			if (yych <= 'Z') goto yy450;
-			if (yych <= '`') goto yy291;
-			goto yy450;
-		} else {
-			if (yych <= 'd') goto yy512;
-			if (yych <= 'z') goto yy450;
-			goto yy291;
-		}
-	}
-yy346:
+yy315:
 	yyaccept = 7;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= 'U') {
 		if (yych <= '.') {
-			if (yych == ')') goto yy103;
-			goto yy291;
+			if (yych == ')') goto yy102;
+			goto yy275;
 		} else {
-			if (yych <= '/') goto yy275;
-			if (yych <= '@') goto yy291;
-			if (yych <= 'T') goto yy450;
-			goto yy507;
+			if (yych <= '/') goto yy259;
+			if (yych <= '@') goto yy275;
+			if (yych <= 'T') goto yy400;
+			goto yy449;
 		}
 	} else {
 		if (yych <= '`') {
-			if (yych <= 'Z') goto yy450;
-			if (yych == '_') goto yy275;
-			goto yy291;
+			if (yych <= 'Z') goto yy400;
+			if (yych == '_') goto yy259;
+			goto yy275;
 		} else {
-			if (yych == 'u') goto yy513;
-			if (yych <= 'z') goto yy455;
-			goto yy291;
+			if (yych == 'u') goto yy453;
+			if (yych <= 'z') goto yy405;
+			goto yy275;
 		}
 	}
-yy347:
+yy316:
 	yyaccept = 2;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= 'O') {
 		if (yych <= '.') {
-			if (yych == ')') goto yy103;
+			if (yych == ')') goto yy102;
 			goto yy18;
 		} else {
-			if (yych <= '/') goto yy275;
+			if (yych <= '/') goto yy259;
 			if (yych <= '@') goto yy18;
-			if (yych <= 'N') goto yy450;
-			goto yy508;
+			if (yych <= 'N') goto yy400;
+			goto yy450;
 		}
 	} else {
 		if (yych <= '`') {
-			if (yych <= 'Z') goto yy450;
-			if (yych == '_') goto yy275;
+			if (yych <= 'Z') goto yy400;
+			if (yych == '_') goto yy259;
 			goto yy18;
 		} else {
-			if (yych == 'o') goto yy514;
-			if (yych <= 'z') goto yy455;
+			if (yych == 'o') goto yy454;
+			if (yych <= 'z') goto yy405;
 			goto yy18;
 		}
 	}
-yy348:
+yy317:
 	yyaccept = 2;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= '@') {
 		if (yych <= ',') {
 			if (yych <= 0x1F) goto yy18;
-			if (yych == ')') goto yy128;
-			goto yy127;
+			if (yych == ')') goto yy127;
+			goto yy126;
 		} else {
 			if (yych <= '.') {
-				if (yych <= '-') goto yy451;
-				goto yy127;
+				if (yych <= '-') goto yy401;
+				goto yy126;
 			} else {
-				if (yych <= '/') goto yy275;
-				if (yych <= '9') goto yy127;
+				if (yych <= '/') goto yy259;
+				if (yych <= '9') goto yy126;
 				goto yy18;
 			}
 		}
 	} else {
 		if (yych <= '_') {
 			if (yych <= 'T') {
-				if (yych <= 'S') goto yy450;
-				goto yy509;
+				if (yych <= 'S') goto yy400;
+				goto yy451;
 			} else {
-				if (yych <= 'Z') goto yy450;
+				if (yych <= 'Z') goto yy400;
 				if (yych <= '^') goto yy18;
-				goto yy275;
+				goto yy259;
 			}
 		} else {
 			if (yych <= 's') {
 				if (yych <= '`') goto yy18;
-				goto yy455;
+				goto yy405;
 			} else {
-				if (yych <= 't') goto yy515;
-				if (yych <= 'z') goto yy455;
+				if (yych <= 't') goto yy455;
+				if (yych <= 'z') goto yy405;
 				goto yy18;
 			}
 		}
 	}
-yy349:
+yy318:
 	yyaccept = 2;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= 'E') {
 		if (yych <= '.') {
-			if (yych == ')') goto yy103;
+			if (yych == ')') goto yy102;
 			goto yy18;
 		} else {
-			if (yych <= '/') goto yy275;
+			if (yych <= '/') goto yy259;
 			if (yych <= '@') goto yy18;
-			if (yych <= 'D') goto yy450;
-			goto yy510;
+			if (yych <= 'D') goto yy400;
+			goto yy452;
 		}
 	} else {
 		if (yych <= '`') {
-			if (yych <= 'Z') goto yy450;
-			if (yych == '_') goto yy275;
+			if (yych <= 'Z') goto yy400;
+			if (yych == '_') goto yy259;
 			goto yy18;
 		} else {
-			if (yych == 'e') goto yy516;
-			if (yych <= 'z') goto yy455;
-			goto yy18;
-		}
-	}
-yy350:
-	yyaccept = 2;
-	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych <= 'T') {
-		if (yych <= '.') {
-			if (yych == ')') goto yy103;
-			goto yy18;
-		} else {
-			if (yych <= '/') goto yy275;
-			if (yych <= '@') goto yy18;
-			if (yych <= 'S') goto yy450;
-			goto yy511;
-		}
-	} else {
-		if (yych <= '`') {
-			if (yych <= 'Z') goto yy450;
-			if (yych == '_') goto yy275;
-			goto yy18;
-		} else {
-			if (yych == 't') goto yy517;
-			if (yych <= 'z') goto yy455;
+			if (yych == 'e') goto yy456;
+			if (yych <= 'z') goto yy405;
 			goto yy18;
 		}
 	}
-yy351:
-	yyaccept = 7;
-	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych <= 'D') {
-		if (yych <= '.') {
-			if (yych == ')') goto yy103;
-			goto yy291;
-		} else {
-			if (yych <= '/') goto yy275;
-			if (yych <= '@') goto yy291;
-			if (yych <= 'C') goto yy450;
-			goto yy512;
-		}
-	} else {
-		if (yych <= '`') {
-			if (yych <= 'Z') goto yy450;
-			if (yych == '_') goto yy275;
-			goto yy291;
-		} else {
-			if (yych == 'd') goto yy518;
-			if (yych <= 'z') goto yy455;
-			goto yy291;
-		}
-	}
-yy352:
-	yych = *++YYCURSOR;
-	if (yych <= 'T') {
-		if (yych <= ')') {
-			if (yych <= '(') goto yy18;
-			goto yy103;
-		} else {
-			if (yych <= '@') goto yy18;
-			if (yych <= 'S') goto yy450;
-			goto yy519;
-		}
-	} else {
-		if (yych <= 's') {
-			if (yych <= 'Z') goto yy450;
-			if (yych <= '`') goto yy18;
-			goto yy450;
-		} else {
-			if (yych <= 't') goto yy519;
-			if (yych <= 'z') goto yy450;
-			goto yy18;
-		}
-	}
-yy353:
+yy319:
 	yych = *++YYCURSOR;
 	if (yych <= 'S') {
 		if (yych <= '@') {
-			if (yych == ')') goto yy103;
+			if (yych == ')') goto yy102;
 			goto yy18;
 		} else {
-			if (yych <= 'Q') goto yy450;
-			if (yych <= 'R') goto yy520;
-			goto yy488;
+			if (yych <= 'Q') goto yy400;
+			if (yych <= 'R') goto yy457;
+			goto yy436;
 		}
 	} else {
 		if (yych <= 'q') {
-			if (yych <= 'Z') goto yy450;
+			if (yych <= 'Z') goto yy400;
 			if (yych <= '`') goto yy18;
-			goto yy450;
+			goto yy400;
 		} else {
-			if (yych <= 'r') goto yy520;
-			if (yych <= 's') goto yy488;
-			if (yych <= 'z') goto yy450;
+			if (yych <= 'r') goto yy457;
+			if (yych <= 's') goto yy436;
+			if (yych <= 'z') goto yy400;
 			goto yy18;
 		}
 	}
-yy354:
+yy320:
 	yych = *++YYCURSOR;
 	if (yych <= 'R') {
 		if (yych <= ')') {
-			if (yych <= '(') goto yy291;
-			goto yy103;
+			if (yych <= '(') goto yy275;
+			goto yy102;
 		} else {
-			if (yych <= '@') goto yy291;
-			if (yych <= 'Q') goto yy450;
-			goto yy521;
+			if (yych <= '@') goto yy275;
+			if (yych <= 'Q') goto yy400;
+			goto yy458;
 		}
 	} else {
 		if (yych <= 'q') {
-			if (yych <= 'Z') goto yy450;
-			if (yych <= '`') goto yy291;
-			goto yy450;
+			if (yych <= 'Z') goto yy400;
+			if (yych <= '`') goto yy275;
+			goto yy400;
 		} else {
-			if (yych <= 'r') goto yy521;
-			if (yych <= 'z') goto yy450;
-			goto yy291;
+			if (yych <= 'r') goto yy458;
+			if (yych <= 'z') goto yy400;
+			goto yy275;
 		}
 	}
-yy355:
+yy321:
 	yych = *++YYCURSOR;
 	if (yych <= 'A') {
-		if (yych == ')') goto yy103;
+		if (yych == ')') goto yy102;
 		if (yych <= '@') goto yy18;
-		goto yy522;
+		goto yy459;
 	} else {
 		if (yych <= '`') {
-			if (yych <= 'Z') goto yy450;
+			if (yych <= 'Z') goto yy400;
 			goto yy18;
 		} else {
-			if (yych <= 'a') goto yy522;
-			if (yych <= 'z') goto yy450;
+			if (yych <= 'a') goto yy459;
+			if (yych <= 'z') goto yy400;
 			goto yy18;
 		}
 	}
-yy356:
+yy322:
 	yych = *++YYCURSOR;
 	if (yych <= 'O') {
 		if (yych <= ')') {
 			if (yych <= '(') goto yy18;
-			goto yy103;
+			goto yy102;
 		} else {
 			if (yych <= '@') goto yy18;
-			if (yych <= 'N') goto yy450;
-			goto yy523;
+			if (yych <= 'N') goto yy400;
+			goto yy460;
 		}
 	} else {
 		if (yych <= 'n') {
-			if (yych <= 'Z') goto yy450;
+			if (yych <= 'Z') goto yy400;
 			if (yych <= '`') goto yy18;
-			goto yy450;
+			goto yy400;
 		} else {
-			if (yych <= 'o') goto yy523;
-			if (yych <= 'z') goto yy450;
+			if (yych <= 'o') goto yy460;
+			if (yych <= 'z') goto yy400;
 			goto yy18;
 		}
 	}
-yy357:
+yy323:
 	yych = *++YYCURSOR;
 	if (yych <= 'S') {
 		if (yych <= ')') {
-			if (yych <= '(') goto yy291;
-			goto yy103;
+			if (yych <= '(') goto yy275;
+			goto yy102;
 		} else {
-			if (yych <= '@') goto yy291;
-			if (yych <= 'R') goto yy450;
-			goto yy524;
+			if (yych <= '@') goto yy275;
+			if (yych <= 'R') goto yy400;
+			goto yy461;
 		}
 	} else {
 		if (yych <= 'r') {
-			if (yych <= 'Z') goto yy450;
-			if (yych <= '`') goto yy291;
-			goto yy450;
+			if (yych <= 'Z') goto yy400;
+			if (yych <= '`') goto yy275;
+			goto yy400;
 		} else {
-			if (yych <= 's') goto yy524;
-			if (yych <= 'z') goto yy450;
-			goto yy291;
+			if (yych <= 's') goto yy461;
+			if (yych <= 'z') goto yy400;
+			goto yy275;
 		}
 	}
-yy358:
+yy324:
 	yych = *++YYCURSOR;
 	if (yych <= 'L') {
 		if (yych <= ')') {
 			if (yych <= '(') goto yy18;
-			goto yy103;
+			goto yy102;
 		} else {
 			if (yych <= '@') goto yy18;
-			if (yych <= 'K') goto yy450;
-			goto yy525;
+			if (yych <= 'K') goto yy400;
+			goto yy462;
 		}
 	} else {
 		if (yych <= 'k') {
-			if (yych <= 'Z') goto yy450;
+			if (yych <= 'Z') goto yy400;
 			if (yych <= '`') goto yy18;
-			goto yy450;
+			goto yy400;
 		} else {
-			if (yych <= 'l') goto yy525;
-			if (yych <= 'z') goto yy450;
+			if (yych <= 'l') goto yy462;
+			if (yych <= 'z') goto yy400;
 			goto yy18;
 		}
 	}
-yy359:
-	yyaccept = 2;
-	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych <= 'T') {
-		if (yych <= '.') {
-			if (yych == ')') goto yy103;
-			goto yy18;
-		} else {
-			if (yych <= '/') goto yy275;
-			if (yych <= '@') goto yy18;
-			if (yych <= 'S') goto yy450;
-			goto yy519;
-		}
-	} else {
-		if (yych <= '`') {
-			if (yych <= 'Z') goto yy450;
-			if (yych == '_') goto yy275;
-			goto yy18;
-		} else {
-			if (yych == 't') goto yy526;
-			if (yych <= 'z') goto yy455;
-			goto yy18;
-		}
-	}
-yy360:
+yy325:
 	yyaccept = 2;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= 'S') {
 		if (yych <= '/') {
-			if (yych == ')') goto yy103;
+			if (yych == ')') goto yy102;
 			if (yych <= '.') goto yy18;
-			goto yy275;
+			goto yy259;
 		} else {
 			if (yych <= '@') goto yy18;
-			if (yych <= 'Q') goto yy450;
-			if (yych <= 'R') goto yy520;
-			goto yy488;
+			if (yych <= 'Q') goto yy400;
+			if (yych <= 'R') goto yy457;
+			goto yy436;
 		}
 	} else {
 		if (yych <= '`') {
-			if (yych <= 'Z') goto yy450;
-			if (yych == '_') goto yy275;
+			if (yych <= 'Z') goto yy400;
+			if (yych == '_') goto yy259;
 			goto yy18;
 		} else {
 			if (yych <= 'r') {
-				if (yych <= 'q') goto yy455;
-				goto yy527;
+				if (yych <= 'q') goto yy405;
+				goto yy463;
 			} else {
-				if (yych <= 's') goto yy489;
-				if (yych <= 'z') goto yy455;
+				if (yych <= 's') goto yy437;
+				if (yych <= 'z') goto yy405;
 				goto yy18;
 			}
 		}
 	}
-yy361:
+yy326:
 	yyaccept = 7;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= 'R') {
 		if (yych <= '.') {
-			if (yych == ')') goto yy103;
-			goto yy291;
+			if (yych == ')') goto yy102;
+			goto yy275;
 		} else {
-			if (yych <= '/') goto yy275;
-			if (yych <= '@') goto yy291;
-			if (yych <= 'Q') goto yy450;
-			goto yy521;
+			if (yych <= '/') goto yy259;
+			if (yych <= '@') goto yy275;
+			if (yych <= 'Q') goto yy400;
+			goto yy458;
 		}
 	} else {
 		if (yych <= '`') {
-			if (yych <= 'Z') goto yy450;
-			if (yych == '_') goto yy275;
-			goto yy291;
+			if (yych <= 'Z') goto yy400;
+			if (yych == '_') goto yy259;
+			goto yy275;
 		} else {
-			if (yych == 'r') goto yy528;
-			if (yych <= 'z') goto yy455;
-			goto yy291;
+			if (yych == 'r') goto yy464;
+			if (yych <= 'z') goto yy405;
+			goto yy275;
 		}
 	}
-yy362:
+yy327:
 	yyaccept = 2;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= 'A') {
 		if (yych <= '.') {
-			if (yych == ')') goto yy103;
+			if (yych == ')') goto yy102;
 			goto yy18;
 		} else {
-			if (yych <= '/') goto yy275;
+			if (yych <= '/') goto yy259;
 			if (yych <= '@') goto yy18;
-			goto yy522;
+			goto yy459;
 		}
 	} else {
 		if (yych <= '_') {
-			if (yych <= 'Z') goto yy450;
+			if (yych <= 'Z') goto yy400;
 			if (yych <= '^') goto yy18;
-			goto yy275;
+			goto yy259;
 		} else {
 			if (yych <= '`') goto yy18;
-			if (yych <= 'a') goto yy529;
-			if (yych <= 'z') goto yy455;
+			if (yych <= 'a') goto yy465;
+			if (yych <= 'z') goto yy405;
 			goto yy18;
 		}
 	}
-yy363:
+yy328:
 	yyaccept = 2;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= 'O') {
 		if (yych <= '.') {
-			if (yych == ')') goto yy103;
+			if (yych == ')') goto yy102;
 			goto yy18;
 		} else {
-			if (yych <= '/') goto yy275;
+			if (yych <= '/') goto yy259;
 			if (yych <= '@') goto yy18;
-			if (yych <= 'N') goto yy450;
-			goto yy523;
+			if (yych <= 'N') goto yy400;
+			goto yy460;
 		}
 	} else {
 		if (yych <= '`') {
-			if (yych <= 'Z') goto yy450;
-			if (yych == '_') goto yy275;
+			if (yych <= 'Z') goto yy400;
+			if (yych == '_') goto yy259;
 			goto yy18;
 		} else {
-			if (yych == 'o') goto yy530;
-			if (yych <= 'z') goto yy455;
+			if (yych == 'o') goto yy466;
+			if (yych <= 'z') goto yy405;
 			goto yy18;
 		}
 	}
-yy364:
+yy329:
 	yyaccept = 7;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= 'S') {
 		if (yych <= '.') {
-			if (yych == ')') goto yy103;
-			goto yy291;
+			if (yych == ')') goto yy102;
+			goto yy275;
 		} else {
-			if (yych <= '/') goto yy275;
-			if (yych <= '@') goto yy291;
-			if (yych <= 'R') goto yy450;
-			goto yy524;
+			if (yych <= '/') goto yy259;
+			if (yych <= '@') goto yy275;
+			if (yych <= 'R') goto yy400;
+			goto yy461;
 		}
 	} else {
 		if (yych <= '`') {
-			if (yych <= 'Z') goto yy450;
-			if (yych == '_') goto yy275;
-			goto yy291;
+			if (yych <= 'Z') goto yy400;
+			if (yych == '_') goto yy259;
+			goto yy275;
 		} else {
-			if (yych == 's') goto yy531;
-			if (yych <= 'z') goto yy455;
-			goto yy291;
+			if (yych == 's') goto yy467;
+			if (yych <= 'z') goto yy405;
+			goto yy275;
 		}
 	}
-yy365:
+yy330:
 	yyaccept = 2;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= 'L') {
 		if (yych <= '.') {
-			if (yych == ')') goto yy103;
+			if (yych == ')') goto yy102;
 			goto yy18;
 		} else {
-			if (yych <= '/') goto yy275;
+			if (yych <= '/') goto yy259;
 			if (yych <= '@') goto yy18;
-			if (yych <= 'K') goto yy450;
-			goto yy525;
+			if (yych <= 'K') goto yy400;
+			goto yy462;
 		}
 	} else {
 		if (yych <= '`') {
-			if (yych <= 'Z') goto yy450;
-			if (yych == '_') goto yy275;
+			if (yych <= 'Z') goto yy400;
+			if (yych == '_') goto yy259;
 			goto yy18;
 		} else {
-			if (yych == 'l') goto yy532;
-			if (yych <= 'z') goto yy455;
+			if (yych == 'l') goto yy468;
+			if (yych <= 'z') goto yy405;
 			goto yy18;
 		}
 	}
-yy366:
+yy331:
 	yyaccept = 2;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= '9') {
 		if (yych <= ')') {
 			if (yych <= 0x1F) goto yy18;
-			if (yych <= '(') goto yy127;
-			goto yy128;
+			if (yych <= '(') goto yy126;
+			goto yy127;
 		} else {
 			if (yych == '/') goto yy18;
-			goto yy127;
+			goto yy126;
 		}
 	} else {
 		if (yych <= 'I') {
 			if (yych <= '@') goto yy18;
-			if (yych <= 'H') goto yy450;
-			goto yy485;
+			if (yych <= 'H') goto yy400;
+			goto yy433;
 		} else {
-			if (yych <= 'Z') goto yy450;
+			if (yych <= 'Z') goto yy400;
 			if (yych <= '`') goto yy18;
-			if (yych <= 'z') goto yy450;
+			if (yych <= 'z') goto yy400;
 			goto yy18;
 		}
 	}
-yy367:
+yy332:
 	yych = *++YYCURSOR;
 	if (yych <= 'N') {
 		if (yych <= ')') {
-			if (yych <= '(') goto yy291;
-			goto yy103;
+			if (yych <= '(') goto yy275;
+			goto yy102;
 		} else {
-			if (yych <= '@') goto yy291;
-			if (yych <= 'M') goto yy450;
-			goto yy533;
+			if (yych <= '@') goto yy275;
+			if (yych <= 'M') goto yy400;
+			goto yy469;
 		}
 	} else {
 		if (yych <= 'm') {
-			if (yych <= 'Z') goto yy450;
-			if (yych <= '`') goto yy291;
-			goto yy450;
+			if (yych <= 'Z') goto yy400;
+			if (yych <= '`') goto yy275;
+			goto yy400;
 		} else {
-			if (yych <= 'n') goto yy533;
-			if (yych <= 'z') goto yy450;
-			goto yy291;
+			if (yych <= 'n') goto yy469;
+			if (yych <= 'z') goto yy400;
+			goto yy275;
 		}
 	}
-yy368:
+yy333:
 	yyaccept = 7;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= 'N') {
 		if (yych <= '.') {
-			if (yych == ')') goto yy103;
-			goto yy291;
+			if (yych == ')') goto yy102;
+			goto yy275;
 		} else {
-			if (yych <= '/') goto yy275;
-			if (yych <= '@') goto yy291;
-			if (yych <= 'M') goto yy450;
-			goto yy533;
+			if (yych <= '/') goto yy259;
+			if (yych <= '@') goto yy275;
+			if (yych <= 'M') goto yy400;
+			goto yy469;
 		}
 	} else {
 		if (yych <= '`') {
-			if (yych <= 'Z') goto yy450;
-			if (yych == '_') goto yy275;
-			goto yy291;
+			if (yych <= 'Z') goto yy400;
+			if (yych == '_') goto yy259;
+			goto yy275;
 		} else {
-			if (yych == 'n') goto yy534;
-			if (yych <= 'z') goto yy455;
-			goto yy291;
+			if (yych == 'n') goto yy470;
+			if (yych <= 'z') goto yy405;
+			goto yy275;
 		}
 	}
-yy369:
+yy334:
 	yych = *++YYCURSOR;
 	if (yych <= 'T') {
 		if (yych <= ')') {
 			if (yych <= '(') goto yy18;
-			goto yy103;
+			goto yy102;
 		} else {
 			if (yych <= '@') goto yy18;
-			if (yych <= 'S') goto yy450;
-			goto yy535;
+			if (yych <= 'S') goto yy400;
+			goto yy471;
 		}
 	} else {
 		if (yych <= 's') {
-			if (yych <= 'Z') goto yy450;
+			if (yych <= 'Z') goto yy400;
 			if (yych <= '`') goto yy18;
-			goto yy450;
+			goto yy400;
 		} else {
-			if (yych <= 't') goto yy535;
-			if (yych <= 'z') goto yy450;
+			if (yych <= 't') goto yy471;
+			if (yych <= 'z') goto yy400;
 			goto yy18;
 		}
 	}
-yy370:
+yy335:
 	yyaccept = 2;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= 'T') {
 		if (yych <= '.') {
-			if (yych == ')') goto yy103;
+			if (yych == ')') goto yy102;
 			goto yy18;
 		} else {
-			if (yych <= '/') goto yy275;
+			if (yych <= '/') goto yy259;
 			if (yych <= '@') goto yy18;
-			if (yych <= 'S') goto yy450;
-			goto yy535;
+			if (yych <= 'S') goto yy400;
+			goto yy471;
 		}
 	} else {
 		if (yych <= '`') {
-			if (yych <= 'Z') goto yy450;
-			if (yych == '_') goto yy275;
+			if (yych <= 'Z') goto yy400;
+			if (yych == '_') goto yy259;
 			goto yy18;
 		} else {
-			if (yych == 't') goto yy536;
-			if (yych <= 'z') goto yy455;
+			if (yych == 't') goto yy472;
+			if (yych <= 'z') goto yy405;
 			goto yy18;
 		}
 	}
-yy371:
+yy336:
 	yych = *++YYCURSOR;
-	if (yych == 'C') goto yy425;
-	if (yych == 'c') goto yy425;
+	if (yych == 'C') goto yy378;
+	if (yych == 'c') goto yy378;
 	goto yy53;
-yy372:
+yy337:
 	yych = *++YYCURSOR;
 	if (yych <= '/') goto yy18;
-	if (yych <= '9') goto yy103;
+	if (yych <= '9') goto yy102;
 	goto yy18;
-yy373:
+yy338:
 	yych = *++YYCURSOR;
-	if (yych == 'P') goto yy426;
-	if (yych == 'p') goto yy426;
+	if (yych == 'P') goto yy379;
+	if (yych == 'p') goto yy379;
 	goto yy53;
-yy374:
+yy339:
 	yych = *++YYCURSOR;
 	if (yych <= '/') goto yy53;
-	if (yych <= '2') goto yy537;
-	if (yych <= '3') goto yy539;
-	if (yych <= '9') goto yy540;
+	if (yych <= '2') goto yy473;
+	if (yych <= '3') goto yy475;
+	if (yych <= '9') goto yy476;
 	goto yy53;
-yy375:
+yy340:
 	yych = *++YYCURSOR;
-	if (yych == 'R') goto yy541;
-	if (yych == 'r') goto yy541;
+	if (yych <= '/') goto yy53;
+	if (yych <= '5') goto yy477;
+	if (yych <= '6') goto yy478;
+	if (yych <= '9') goto yy479;
 	goto yy53;
-yy376:
+yy341:
 	yych = *++YYCURSOR;
-	if (yych == 'G') goto yy542;
-	if (yych == 'g') goto yy542;
+	if (yych <= '/') goto yy53;
+	if (yych <= '5') goto yy480;
+	if (yych <= '6') goto yy481;
+	if (yych <= '9') goto yy482;
 	goto yy53;
-yy377:
+yy342:
 	yych = *++YYCURSOR;
-	if (yych == 'C') goto yy543;
-	if (yych == 'c') goto yy543;
+	if (yych <= '/') goto yy53;
+	if (yych <= '9') goto yy483;
 	goto yy53;
-yy378:
+yy343:
 	yych = *++YYCURSOR;
-	if (yych == 'B') goto yy544;
-	if (yych == 'b') goto yy544;
+	if (yych == 'd') goto yy484;
 	goto yy53;
-yy379:
+yy344:
 	yych = *++YYCURSOR;
-	if (yych == 'N') goto yy545;
-	if (yych == 'n') goto yy545;
+	if (yych == 't') goto yy484;
 	goto yy53;
-yy380:
+yy345:
+	yych = *++YYCURSOR;
+	if (yych == 'h') goto yy484;
+	goto yy53;
+yy346:
+	yych = *++YYCURSOR;
+	if (yych == 'R') goto yy485;
+	if (yych == 'r') goto yy485;
+	goto yy53;
+yy347:
+	yych = *++YYCURSOR;
+	if (yych == 'G') goto yy485;
+	if (yych == 'g') goto yy485;
+	goto yy53;
+yy348:
+	yych = *++YYCURSOR;
+	if (yych == 'C') goto yy485;
+	if (yych == 'c') goto yy485;
+	goto yy53;
+yy349:
+	yych = *++YYCURSOR;
+	if (yych == 'B') goto yy485;
+	if (yych == 'b') goto yy485;
+	goto yy53;
+yy350:
+	yych = *++YYCURSOR;
+	if (yych == 'N') goto yy485;
+	if (yych == 'n') goto yy485;
+	goto yy53;
+yy351:
 	yych = *++YYCURSOR;
 	if (yych <= 'N') {
-		if (yych == 'L') goto yy546;
+		if (yych == 'L') goto yy485;
 		if (yych <= 'M') goto yy53;
-		goto yy547;
+		goto yy485;
 	} else {
 		if (yych <= 'l') {
 			if (yych <= 'k') goto yy53;
-			goto yy546;
+			goto yy485;
 		} else {
-			if (yych == 'n') goto yy547;
+			if (yych == 'n') goto yy485;
 			goto yy53;
 		}
 	}
-yy381:
+yy352:
 	yych = *++YYCURSOR;
 	if (yych <= 'Y') {
-		if (yych == 'R') goto yy548;
+		if (yych == 'R') goto yy485;
 		if (yych <= 'X') goto yy53;
-		goto yy549;
+		goto yy485;
 	} else {
 		if (yych <= 'r') {
 			if (yych <= 'q') goto yy53;
-			goto yy548;
+			goto yy485;
 		} else {
-			if (yych == 'y') goto yy549;
+			if (yych == 'y') goto yy485;
 			goto yy53;
 		}
 	}
-yy382:
+yy353:
 	yych = *++YYCURSOR;
-	if (yych == 'V') goto yy550;
-	if (yych == 'v') goto yy550;
+	if (yych == 'V') goto yy485;
+	if (yych == 'v') goto yy485;
 	goto yy53;
-yy383:
+yy354:
 	yych = *++YYCURSOR;
-	if (yych == 'T') goto yy551;
-	if (yych == 't') goto yy551;
+	if (yych == 'T') goto yy485;
+	if (yych == 't') goto yy485;
 	goto yy53;
-yy384:
+yy355:
 	yych = *++YYCURSOR;
-	if (yych == 'P') goto yy552;
-	if (yych == 'p') goto yy552;
+	if (yych == 'P') goto yy486;
+	if (yych == 'p') goto yy486;
 	goto yy53;
-yy385:
-	yych = *++YYCURSOR;
-	if (yych <= '/') goto yy53;
-	if (yych <= '5') goto yy553;
-	if (yych <= '6') goto yy554;
-	if (yych <= '9') goto yy555;
-	goto yy53;
-yy386:
-	yych = *++YYCURSOR;
-	if (yych <= '/') goto yy53;
-	if (yych <= '5') goto yy556;
-	if (yych <= '6') goto yy557;
-	if (yych <= '9') goto yy558;
-	goto yy53;
-yy387:
-	yych = *++YYCURSOR;
-	if (yych <= '/') goto yy53;
-	if (yych <= '9') goto yy559;
-	goto yy53;
-yy388:
-	yych = *++YYCURSOR;
-	if (yych == 'd') goto yy560;
-	goto yy53;
-yy389:
-	yych = *++YYCURSOR;
-	if (yych == 'd') goto yy560;
-	goto yy53;
-yy390:
-	yych = *++YYCURSOR;
-	if (yych == 't') goto yy560;
-	goto yy53;
-yy391:
-	yych = *++YYCURSOR;
-	if (yych == 'h') goto yy560;
-	goto yy53;
-yy392:
-	yych = *++YYCURSOR;
-	if (yych == 'R') goto yy561;
-	if (yych == 'r') goto yy561;
-	goto yy53;
-yy393:
-	yych = *++YYCURSOR;
-	if (yych == 'G') goto yy561;
-	if (yych == 'g') goto yy561;
-	goto yy53;
-yy394:
-	yych = *++YYCURSOR;
-	if (yych == 'C') goto yy561;
-	if (yych == 'c') goto yy561;
-	goto yy53;
-yy395:
-	yych = *++YYCURSOR;
-	if (yych == 'B') goto yy561;
-	if (yych == 'b') goto yy561;
-	goto yy53;
-yy396:
-	yych = *++YYCURSOR;
-	if (yych == 'N') goto yy561;
-	if (yych == 'n') goto yy561;
-	goto yy53;
-yy397:
-	yych = *++YYCURSOR;
-	if (yych <= 'N') {
-		if (yych == 'L') goto yy561;
-		if (yych <= 'M') goto yy53;
-		goto yy561;
-	} else {
-		if (yych <= 'l') {
-			if (yych <= 'k') goto yy53;
-			goto yy561;
-		} else {
-			if (yych == 'n') goto yy561;
-			goto yy53;
-		}
-	}
-yy398:
-	yych = *++YYCURSOR;
-	if (yych <= 'Y') {
-		if (yych == 'R') goto yy561;
-		if (yych <= 'X') goto yy53;
-		goto yy561;
-	} else {
-		if (yych <= 'r') {
-			if (yych <= 'q') goto yy53;
-			goto yy561;
-		} else {
-			if (yych == 'y') goto yy561;
-			goto yy53;
-		}
-	}
-yy399:
-	yych = *++YYCURSOR;
-	if (yych == 'V') goto yy561;
-	if (yych == 'v') goto yy561;
-	goto yy53;
-yy400:
-	yych = *++YYCURSOR;
-	if (yych == 'T') goto yy561;
-	if (yych == 't') goto yy561;
-	goto yy53;
-yy401:
-	yych = *++YYCURSOR;
-	if (yych == 'P') goto yy562;
-	if (yych == 'p') goto yy562;
-	goto yy53;
-yy402:
+yy356:
 	yyaccept = 10;
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -8337,25 +7590,25 @@ yy402:
 	case 's':
 	case 't':
 	case 'w':
-	case 'y':	goto yy564;
-	case '-':	goto yy567;
-	case '.':	goto yy568;
-	case '/':	goto yy569;
-	case '0':	goto yy570;
-	case '1':	goto yy571;
-	case '2':	goto yy572;
-	case '3':	goto yy573;
+	case 'y':	goto yy488;
+	case '-':	goto yy491;
+	case '.':	goto yy492;
+	case '/':	goto yy493;
+	case '0':	goto yy494;
+	case '1':	goto yy495;
+	case '2':	goto yy496;
+	case '3':	goto yy497;
 	case '4':
-	case '5':	goto yy574;
-	case '6':	goto yy575;
+	case '5':	goto yy498;
+	case '6':	goto yy499;
 	case '7':
 	case '8':
 	case '9':	goto yy54;
-	case ':':	goto yy576;
-	case 'W':	goto yy588;
-	default:	goto yy403;
+	case ':':	goto yy500;
+	case 'W':	goto yy512;
+	default:	goto yy357;
 	}
-yy403:
+yy357:
 #line 970 "parse_date.s.re"
 	{
 		DEBUG_OUTPUT("gnunocolon");
@@ -8377,8 +7630,8 @@ yy403:
 		TIMELIB_DEINIT;
 		return TIMELIB_GNU_NOCOLON;
 	}
-#line 8381 "parse_date.s.c"
-yy404:
+#line 7634 "parse_date.s.c"
+yy358:
 	yyaccept = 11;
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -8420,25 +7673,25 @@ yy404:
 	case 's':
 	case 't':
 	case 'w':
-	case 'y':	goto yy564;
-	case '-':	goto yy567;
-	case '.':	goto yy568;
-	case '/':	goto yy569;
-	case '0':	goto yy590;
-	case '1':	goto yy591;
-	case '2':	goto yy592;
-	case '3':	goto yy593;
+	case 'y':	goto yy488;
+	case '-':	goto yy491;
+	case '.':	goto yy492;
+	case '/':	goto yy493;
+	case '0':	goto yy514;
+	case '1':	goto yy515;
+	case '2':	goto yy516;
+	case '3':	goto yy517;
 	case '4':
 	case '5':
 	case '6':
 	case '7':
 	case '8':
 	case '9':	goto yy54;
-	case ':':	goto yy576;
-	case 'W':	goto yy588;
-	default:	goto yy405;
+	case ':':	goto yy500;
+	case 'W':	goto yy512;
+	default:	goto yy359;
 	}
-yy405:
+yy359:
 #line 1283 "parse_date.s.re"
 	{
 		DEBUG_OUTPUT("year4");
@@ -8447,46 +7700,46 @@ yy405:
 		TIMELIB_DEINIT;
 		return TIMELIB_CLF;
 	}
-#line 8451 "parse_date.s.c"
-yy406:
+#line 7704 "parse_date.s.c"
+yy360:
 	yyaccept = 3;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= '9') {
-		if (yych <= 0x1F) goto yy75;
-		if (yych <= '.') goto yy234;
-		if (yych <= '/') goto yy75;
-		goto yy236;
+		if (yych <= 0x1F) goto yy74;
+		if (yych <= '.') goto yy220;
+		if (yych <= '/') goto yy74;
+		goto yy222;
 	} else {
 		if (yych <= 'I') {
-			if (yych <= 'H') goto yy75;
-			goto yy594;
+			if (yych <= 'H') goto yy74;
+			goto yy518;
 		} else {
-			if (yych == 'i') goto yy594;
-			goto yy75;
+			if (yych == 'i') goto yy518;
+			goto yy74;
 		}
 	}
-yy407:
+yy361:
 	yyaccept = 3;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= '9') {
-		if (yych <= 0x1F) goto yy75;
-		if (yych <= '.') goto yy234;
-		if (yych <= '/') goto yy75;
-		goto yy236;
+		if (yych <= 0x1F) goto yy74;
+		if (yych <= '.') goto yy220;
+		if (yych <= '/') goto yy74;
+		goto yy222;
 	} else {
 		if (yych <= 'U') {
-			if (yych <= 'T') goto yy75;
-			goto yy595;
+			if (yych <= 'T') goto yy74;
+			goto yy519;
 		} else {
-			if (yych == 'u') goto yy595;
-			goto yy75;
+			if (yych == 'u') goto yy519;
+			goto yy74;
 		}
 	}
-yy408:
+yy362:
 	++YYCURSOR;
-	if ((yych = *YYCURSOR) == 'S') goto yy596;
-	if (yych == 's') goto yy596;
-yy409:
+	if ((yych = *YYCURSOR) == 'S') goto yy520;
+	if (yych == 's') goto yy520;
+yy363:
 #line 1379 "parse_date.s.re"
 	{
 		timelib_ull i;
@@ -8502,951 +7755,878 @@ yy409:
 		TIMELIB_DEINIT;
 		return TIMELIB_RELATIVE;
 	}
-#line 8506 "parse_date.s.c"
-yy410:
+#line 7759 "parse_date.s.c"
+yy364:
 	yyaccept = 3;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= '9') {
-		if (yych <= 0x1F) goto yy75;
-		if (yych <= '.') goto yy234;
-		if (yych <= '/') goto yy75;
-		goto yy236;
+		if (yych <= 0x1F) goto yy74;
+		if (yych <= '.') goto yy220;
+		if (yych <= '/') goto yy74;
+		goto yy222;
 	} else {
 		if (yych <= 'E') {
-			if (yych <= 'D') goto yy75;
-			goto yy597;
+			if (yych <= 'D') goto yy74;
+			goto yy521;
 		} else {
-			if (yych == 'e') goto yy597;
-			goto yy75;
+			if (yych == 'e') goto yy521;
+			goto yy74;
 		}
 	}
-yy411:
+yy365:
 	yyaccept = 3;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= '9') {
-		if (yych <= 0x1F) goto yy75;
-		if (yych <= '.') goto yy234;
-		if (yych <= '/') goto yy75;
-		goto yy236;
+		if (yych <= 0x1F) goto yy74;
+		if (yych <= '.') goto yy220;
+		if (yych <= '/') goto yy74;
+		goto yy222;
 	} else {
 		if (yych <= 'R') {
-			if (yych <= 'Q') goto yy75;
-			goto yy598;
+			if (yych <= 'Q') goto yy74;
+			goto yy522;
 		} else {
-			if (yych == 'r') goto yy598;
-			goto yy75;
+			if (yych == 'r') goto yy522;
+			goto yy74;
 		}
 	}
-yy412:
+yy366:
 	yych = *++YYCURSOR;
-	if (yych == 'T') goto yy599;
-	if (yych == 't') goto yy599;
+	if (yych == 'T') goto yy523;
+	if (yych == 't') goto yy523;
 	goto yy53;
-yy413:
+yy367:
 	yyaccept = 12;
 	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych == 'D') goto yy600;
-	if (yych == 'd') goto yy600;
-	goto yy409;
-yy414:
+	if (yych == 'D') goto yy524;
+	if (yych == 'd') goto yy524;
+	goto yy363;
+yy368:
 	yych = *++YYCURSOR;
-	if (yych == 'R') goto yy408;
-	if (yych == 'r') goto yy408;
+	if (yych == 'R') goto yy362;
+	if (yych == 'r') goto yy362;
 	goto yy53;
-yy415:
+yy369:
 	yych = *++YYCURSOR;
-	if (yych <= '/') goto yy237;
-	if (yych <= '9') goto yy601;
-	goto yy237;
-yy416:
+	if (yych <= '/') goto yy223;
+	if (yych <= '9') goto yy525;
+	goto yy223;
+yy370:
 	yyaccept = 3;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= '9') {
-		if (yych <= 0x1F) goto yy75;
-		if (yych <= '.') goto yy234;
-		if (yych <= '/') goto yy75;
-		goto yy236;
+		if (yych <= 0x1F) goto yy74;
+		if (yych <= '.') goto yy220;
+		if (yych <= '/') goto yy74;
+		goto yy222;
 	} else {
 		if (yych <= 'U') {
-			if (yych <= 'T') goto yy75;
-			goto yy602;
+			if (yych <= 'T') goto yy74;
+			goto yy526;
 		} else {
-			if (yych == 'u') goto yy602;
-			goto yy75;
+			if (yych == 'u') goto yy526;
+			goto yy74;
 		}
 	}
-yy417:
+yy371:
 	yyaccept = 3;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= '9') {
-		if (yych <= 0x1F) goto yy75;
-		if (yych <= '.') goto yy234;
-		if (yych <= '/') goto yy75;
-		goto yy236;
+		if (yych <= 0x1F) goto yy74;
+		if (yych <= '.') goto yy220;
+		if (yych <= '/') goto yy74;
+		goto yy222;
 	} else {
 		if (yych <= 'Y') {
-			if (yych <= 'X') goto yy75;
-			goto yy239;
+			if (yych <= 'X') goto yy74;
+			goto yy225;
 		} else {
-			if (yych == 'y') goto yy239;
-			goto yy75;
+			if (yych == 'y') goto yy225;
+			goto yy74;
 		}
 	}
-yy418:
+yy372:
 	yyaccept = 3;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= '9') {
-		if (yych <= 0x1F) goto yy75;
-		if (yych <= '.') goto yy234;
-		if (yych <= '/') goto yy75;
-		goto yy236;
+		if (yych <= 0x1F) goto yy74;
+		if (yych <= '.') goto yy220;
+		if (yych <= '/') goto yy74;
+		goto yy222;
 	} else {
 		if (yych <= 'E') {
-			if (yych <= 'D') goto yy75;
-			goto yy239;
+			if (yych <= 'D') goto yy74;
+			goto yy225;
 		} else {
-			if (yych == 'e') goto yy239;
-			goto yy75;
+			if (yych == 'e') goto yy225;
+			goto yy74;
 		}
 	}
-yy419:
+yy373:
 	yyaccept = 3;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= '9') {
-		if (yych <= 0x1F) goto yy75;
-		if (yych <= '.') goto yy234;
-		if (yych <= '/') goto yy75;
-		goto yy236;
+		if (yych <= 0x1F) goto yy74;
+		if (yych <= '.') goto yy220;
+		if (yych <= '/') goto yy74;
+		goto yy222;
 	} else {
 		if (yych <= 'C') {
-			if (yych <= 'B') goto yy75;
-			goto yy603;
+			if (yych <= 'B') goto yy74;
+			goto yy527;
 		} else {
-			if (yych == 'c') goto yy603;
-			goto yy75;
+			if (yych == 'c') goto yy527;
+			goto yy74;
 		}
 	}
-yy420:
+yy374:
 	yyaccept = 12;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= 'U') {
-		if (yych == 'S') goto yy596;
-		if (yych <= 'T') goto yy409;
-		goto yy604;
+		if (yych == 'S') goto yy520;
+		if (yych <= 'T') goto yy363;
+		goto yy528;
 	} else {
 		if (yych <= 's') {
-			if (yych <= 'r') goto yy409;
-			goto yy596;
+			if (yych <= 'r') goto yy363;
+			goto yy520;
 		} else {
-			if (yych == 'u') goto yy604;
-			goto yy409;
+			if (yych == 'u') goto yy528;
+			goto yy363;
 		}
 	}
-yy421:
+yy375:
 	yyaccept = 12;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= 'T') {
-		if (yych == 'D') goto yy605;
-		if (yych <= 'S') goto yy409;
-		goto yy606;
+		if (yych == 'D') goto yy524;
+		if (yych <= 'S') goto yy363;
+		goto yy529;
 	} else {
 		if (yych <= 'd') {
-			if (yych <= 'c') goto yy409;
-			goto yy605;
+			if (yych <= 'c') goto yy363;
+			goto yy524;
 		} else {
-			if (yych == 't') goto yy606;
-			goto yy409;
+			if (yych == 't') goto yy529;
+			goto yy363;
 		}
 	}
-yy422:
+yy376:
 	yyaccept = 3;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= '9') {
-		if (yych <= 0x1F) goto yy75;
-		if (yych <= '.') goto yy234;
-		if (yych <= '/') goto yy75;
-		goto yy236;
-	} else {
-		if (yych <= 'E') {
-			if (yych <= 'D') goto yy75;
-			goto yy607;
-		} else {
-			if (yych == 'e') goto yy607;
-			goto yy75;
-		}
-	}
-yy423:
-	yyaccept = 3;
-	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych <= '9') {
-		if (yych <= 0x1F) goto yy75;
-		if (yych <= '.') goto yy234;
-		if (yych <= '/') goto yy75;
-		goto yy236;
+		if (yych <= 0x1F) goto yy74;
+		if (yych <= '.') goto yy220;
+		if (yych <= '/') goto yy74;
+		goto yy222;
 	} else {
 		if (yych <= 'O') {
-			if (yych <= 'N') goto yy75;
-			goto yy608;
+			if (yych <= 'N') goto yy74;
+			goto yy530;
 		} else {
-			if (yych == 'o') goto yy608;
-			goto yy75;
+			if (yych == 'o') goto yy530;
+			goto yy74;
 		}
 	}
-yy424:
+yy377:
 	yyaccept = 12;
 	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych == 'U') goto yy609;
-	if (yych == 'u') goto yy609;
-	goto yy409;
-yy425:
+	if (yych == 'U') goto yy531;
+	if (yych == 'u') goto yy531;
+	goto yy363;
+yy378:
 	yyaccept = 12;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= 'S') {
-		if (yych == 'O') goto yy610;
-		if (yych <= 'R') goto yy409;
-		goto yy596;
+		if (yych == 'O') goto yy532;
+		if (yych <= 'R') goto yy363;
+		goto yy520;
 	} else {
 		if (yych <= 'o') {
-			if (yych <= 'n') goto yy409;
-			goto yy610;
+			if (yych <= 'n') goto yy363;
+			goto yy532;
 		} else {
-			if (yych == 's') goto yy596;
-			goto yy409;
+			if (yych == 's') goto yy520;
+			goto yy363;
 		}
 	}
-yy426:
+yy379:
 	yyaccept = 3;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= '9') {
-		if (yych <= 0x1F) goto yy75;
-		if (yych <= '.') goto yy234;
-		if (yych <= '/') goto yy75;
-		goto yy236;
+		if (yych <= 0x1F) goto yy74;
+		if (yych <= '.') goto yy220;
+		if (yych <= '/') goto yy74;
+		goto yy222;
 	} else {
 		if (yych <= 'T') {
-			if (yych <= 'S') goto yy75;
-			goto yy611;
+			if (yych <= 'S') goto yy74;
+			goto yy364;
 		} else {
-			if (yych == 't') goto yy611;
-			goto yy75;
+			if (yych == 't') goto yy364;
+			goto yy74;
 		}
 	}
-yy427:
+yy380:
 	yyaccept = 12;
 	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych == 'D') goto yy612;
-	if (yych == 'd') goto yy612;
-	goto yy409;
-yy428:
+	if (yych == 'R') goto yy533;
+	if (yych == 'r') goto yy533;
+	goto yy363;
+yy381:
 	yyaccept = 12;
 	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych == 'R') goto yy613;
-	if (yych == 'r') goto yy613;
-	goto yy409;
-yy429:
+	if (yych == 'S') goto yy534;
+	if (yych == 's') goto yy534;
+	goto yy363;
+yy382:
 	yyaccept = 12;
 	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych == 'S') goto yy614;
-	if (yych == 's') goto yy614;
-	goto yy409;
-yy430:
-	yyaccept = 3;
-	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych <= '/') {
-		if (yych <= 0x1F) goto yy75;
-		if (yych <= '.') goto yy234;
-		goto yy75;
-	} else {
-		if (yych <= '9') goto yy236;
-		if (yych == 'I') goto yy239;
-		goto yy75;
-	}
-yy431:
-	yyaccept = 12;
-	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych == 'N') goto yy615;
-	if (yych == 'n') goto yy615;
-	goto yy409;
-yy432:
+	if (yych == 'N') goto yy535;
+	if (yych == 'n') goto yy535;
+	goto yy363;
+yy383:
 	yych = *++YYCURSOR;
-	if (yych == 'K') goto yy408;
-	if (yych == 'k') goto yy408;
+	if (yych == 'K') goto yy362;
+	if (yych == 'k') goto yy362;
 	goto yy53;
-yy433:
-	yych = *++YYCURSOR;
-	if (yych == 'R') goto yy408;
-	if (yych == 'r') goto yy408;
-	goto yy53;
-yy434:
+yy384:
 	yych = *++YYCURSOR;
 	if (yych <= '/') goto yy53;
-	if (yych <= '5') goto yy616;
-	if (yych <= '6') goto yy617;
-	if (yych <= '9') goto yy555;
+	if (yych <= '5') goto yy536;
+	if (yych <= '6') goto yy537;
+	if (yych <= '9') goto yy479;
 	goto yy53;
-yy435:
+yy385:
 	yyaccept = 4;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= '@') {
 		if (yych <= '-') {
-			if (yych == ' ') goto yy618;
-			goto yy206;
+			if (yych == ' ') goto yy538;
+			goto yy192;
 		} else {
-			if (yych <= '.') goto yy434;
-			if (yych != ':') goto yy206;
+			if (yych <= '.') goto yy384;
+			if (yych != ':') goto yy192;
 		}
 	} else {
 		if (yych <= '`') {
-			if (yych <= 'A') goto yy620;
-			if (yych == 'P') goto yy620;
-			goto yy206;
+			if (yych <= 'A') goto yy95;
+			if (yych == 'P') goto yy95;
+			goto yy192;
 		} else {
-			if (yych <= 'a') goto yy620;
-			if (yych == 'p') goto yy620;
-			goto yy206;
+			if (yych <= 'a') goto yy95;
+			if (yych == 'p') goto yy95;
+			goto yy192;
 		}
 	}
-yy436:
+yy386:
 	yych = *++YYCURSOR;
 	if (yych <= '/') goto yy53;
-	if (yych <= '5') goto yy621;
-	if (yych <= '6') goto yy622;
-	if (yych <= '9') goto yy558;
+	if (yych <= '5') goto yy540;
+	if (yych <= '6') goto yy541;
+	if (yych <= '9') goto yy482;
 	goto yy53;
-yy437:
+yy387:
 	yyaccept = 4;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= '@') {
 		if (yych <= '-') {
-			if (yych == ' ') goto yy618;
-			goto yy206;
+			if (yych == ' ') goto yy538;
+			goto yy192;
 		} else {
-			if (yych <= '.') goto yy436;
-			if (yych == ':') goto yy436;
-			goto yy206;
+			if (yych <= '.') goto yy386;
+			if (yych == ':') goto yy386;
+			goto yy192;
 		}
 	} else {
 		if (yych <= '`') {
-			if (yych <= 'A') goto yy620;
-			if (yych == 'P') goto yy620;
-			goto yy206;
+			if (yych <= 'A') goto yy95;
+			if (yych == 'P') goto yy95;
+			goto yy192;
 		} else {
-			if (yych <= 'a') goto yy620;
-			if (yych == 'p') goto yy620;
-			goto yy206;
+			if (yych <= 'a') goto yy95;
+			if (yych == 'p') goto yy95;
+			goto yy192;
 		}
 	}
-yy438:
+yy388:
 	yych = *++YYCURSOR;
-	goto yy267;
-yy439:
+	goto yy251;
+yy389:
 	yych = *++YYCURSOR;
-	if (yych == '.') goto yy623;
+	if (yych == '.') goto yy542;
 	if (yych <= '/') goto yy53;
-	if (yych <= '9') goto yy441;
+	if (yych <= '9') goto yy391;
 	goto yy53;
-yy440:
+yy390:
 	yych = *++YYCURSOR;
-	if (yych == '.') goto yy623;
+	if (yych == '.') goto yy542;
 	if (yych <= '/') goto yy53;
 	if (yych >= '3') goto yy53;
-yy441:
+yy391:
 	yych = *++YYCURSOR;
-	if (yych == '.') goto yy623;
+	if (yych == '.') goto yy542;
 	goto yy53;
-yy442:
+yy392:
 	yych = *++YYCURSOR;
 	if (yych <= 'U') {
-		if (yych == 'P') goto yy624;
+		if (yych == 'P') goto yy543;
 		if (yych <= 'T') goto yy53;
-		goto yy625;
+		goto yy544;
 	} else {
 		if (yych <= 'p') {
 			if (yych <= 'o') goto yy53;
-			goto yy624;
+			goto yy543;
 		} else {
-			if (yych == 'u') goto yy625;
+			if (yych == 'u') goto yy544;
 			goto yy53;
 		}
 	}
-yy443:
+yy393:
 	yych = *++YYCURSOR;
-	if (yych == 'E') goto yy626;
-	if (yych == 'e') goto yy626;
+	if (yych == 'E') goto yy545;
+	if (yych == 'e') goto yy545;
 	goto yy53;
-yy444:
+yy394:
 	yych = *++YYCURSOR;
-	if (yych == 'E') goto yy627;
-	if (yych == 'e') goto yy627;
+	if (yych == 'E') goto yy546;
+	if (yych == 'e') goto yy546;
 	goto yy53;
-yy445:
+yy395:
 	yych = *++YYCURSOR;
 	if (yych <= 'U') {
-		if (yych == 'A') goto yy628;
+		if (yych == 'A') goto yy547;
 		if (yych <= 'T') goto yy53;
-		goto yy629;
+		goto yy548;
 	} else {
 		if (yych <= 'a') {
 			if (yych <= '`') goto yy53;
-			goto yy628;
+			goto yy547;
 		} else {
-			if (yych == 'u') goto yy629;
+			if (yych == 'u') goto yy548;
 			goto yy53;
 		}
 	}
-yy446:
+yy396:
 	yych = *++YYCURSOR;
-	if (yych == 'A') goto yy630;
-	if (yych == 'a') goto yy630;
+	if (yych == 'A') goto yy549;
+	if (yych == 'a') goto yy549;
 	goto yy53;
-yy447:
+yy397:
 	yych = *++YYCURSOR;
-	if (yych == 'O') goto yy631;
-	if (yych == 'o') goto yy631;
+	if (yych == 'O') goto yy550;
+	if (yych == 'o') goto yy550;
 	goto yy53;
-yy448:
+yy398:
 	yych = *++YYCURSOR;
-	if (yych == 'C') goto yy632;
-	if (yych == 'c') goto yy632;
+	if (yych == 'C') goto yy551;
+	if (yych == 'c') goto yy551;
 	goto yy53;
-yy449:
+yy399:
 	yych = *++YYCURSOR;
-	if (yych == 'E') goto yy633;
-	if (yych == 'e') goto yy633;
+	if (yych == 'E') goto yy552;
+	if (yych == 'e') goto yy552;
 	goto yy53;
-yy450:
+yy400:
 	yych = *++YYCURSOR;
-	if (yych == ')') goto yy103;
+	if (yych == ')') goto yy102;
 	goto yy18;
-yy451:
+yy401:
 	yych = *++YYCURSOR;
-	if (yych <= '/') goto yy127;
-	if (yych <= '0') goto yy634;
-	if (yych <= '2') goto yy635;
-	if (yych <= '3') goto yy636;
-	goto yy127;
-yy452:
+	if (yych <= '/') goto yy126;
+	if (yych <= '0') goto yy553;
+	if (yych <= '2') goto yy554;
+	if (yych <= '3') goto yy555;
+	goto yy126;
+yy402:
 	yyaccept = 2;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= 'K') {
-		if (yych == ')') goto yy103;
+		if (yych == ')') goto yy102;
 		goto yy18;
 	} else {
-		if (yych <= 'L') goto yy126;
-		if (yych == 'l') goto yy126;
+		if (yych <= 'L') goto yy125;
+		if (yych == 'l') goto yy125;
 		goto yy18;
 	}
-yy453:
+yy403:
 	yyaccept = 2;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= 'R') {
-		if (yych == ')') goto yy103;
+		if (yych == ')') goto yy102;
 		goto yy18;
 	} else {
-		if (yych <= 'S') goto yy637;
-		if (yych == 's') goto yy637;
+		if (yych <= 'S') goto yy556;
+		if (yych == 's') goto yy556;
 		goto yy18;
 	}
-yy454:
+yy404:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	if (yych <= '`') goto yy53;
-	if (yych <= 'z') goto yy638;
+	if (yych <= 'z') goto yy557;
 	goto yy53;
-yy455:
+yy405:
 	yyaccept = 2;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= '/') {
-		if (yych == ')') goto yy103;
+		if (yych == ')') goto yy102;
 		if (yych <= '.') goto yy18;
-		goto yy275;
+		goto yy259;
 	} else {
 		if (yych <= '_') {
 			if (yych <= '^') goto yy18;
-			goto yy275;
+			goto yy259;
 		} else {
 			if (yych <= '`') goto yy18;
-			if (yych <= 'z') goto yy640;
+			if (yych <= 'z') goto yy559;
 			goto yy18;
 		}
 	}
-yy456:
+yy406:
 	yyaccept = 2;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= 'L') {
 		if (yych <= '.') {
-			if (yych == ')') goto yy103;
+			if (yych == ')') goto yy102;
 			goto yy18;
 		} else {
-			if (yych <= '/') goto yy275;
+			if (yych <= '/') goto yy259;
 			if (yych <= 'K') goto yy18;
-			goto yy126;
+			goto yy125;
 		}
 	} else {
 		if (yych <= '`') {
-			if (yych == '_') goto yy275;
+			if (yych == '_') goto yy259;
 			goto yy18;
 		} else {
-			if (yych == 'l') goto yy642;
-			if (yych <= 'z') goto yy640;
+			if (yych == 'l') goto yy561;
+			if (yych <= 'z') goto yy559;
 			goto yy18;
 		}
 	}
-yy457:
+yy407:
 	yyaccept = 2;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= 'S') {
 		if (yych <= '.') {
-			if (yych == ')') goto yy103;
+			if (yych == ')') goto yy102;
 			goto yy18;
 		} else {
-			if (yych <= '/') goto yy275;
+			if (yych <= '/') goto yy259;
 			if (yych <= 'R') goto yy18;
-			goto yy637;
+			goto yy556;
 		}
 	} else {
 		if (yych <= '`') {
-			if (yych == '_') goto yy275;
+			if (yych == '_') goto yy259;
 			goto yy18;
 		} else {
-			if (yych == 's') goto yy643;
-			if (yych <= 'z') goto yy640;
+			if (yych == 's') goto yy562;
+			if (yych <= 'z') goto yy559;
 			goto yy18;
 		}
 	}
-yy458:
+yy408:
 	yyaccept = 2;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= 'L') {
-		if (yych == ')') goto yy103;
+		if (yych == ')') goto yy102;
 		goto yy18;
 	} else {
-		if (yych <= 'M') goto yy644;
-		if (yych == 'm') goto yy644;
+		if (yych <= 'M') goto yy563;
+		if (yych == 'm') goto yy563;
 		goto yy18;
 	}
-yy459:
+yy409:
 	yyaccept = 2;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= 'M') {
 		if (yych <= '.') {
-			if (yych == ')') goto yy103;
+			if (yych == ')') goto yy102;
 			goto yy18;
 		} else {
-			if (yych <= '/') goto yy275;
+			if (yych <= '/') goto yy259;
 			if (yych <= 'L') goto yy18;
-			goto yy644;
+			goto yy563;
 		}
 	} else {
 		if (yych <= '`') {
-			if (yych == '_') goto yy275;
+			if (yych == '_') goto yy259;
 			goto yy18;
 		} else {
-			if (yych == 'm') goto yy645;
-			if (yych <= 'z') goto yy640;
+			if (yych == 'm') goto yy564;
+			if (yych <= 'z') goto yy559;
 			goto yy18;
 		}
 	}
-yy460:
+yy410:
 	yyaccept = 2;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= 'S') {
-		if (yych == ')') goto yy103;
+		if (yych == ')') goto yy102;
 		goto yy18;
 	} else {
-		if (yych <= 'T') goto yy646;
-		if (yych == 't') goto yy646;
+		if (yych <= 'T') goto yy565;
+		if (yych == 't') goto yy565;
 		goto yy18;
 	}
-yy461:
+yy411:
 	yyaccept = 2;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= 'D') {
-		if (yych == ')') goto yy103;
+		if (yych == ')') goto yy102;
 		goto yy18;
 	} else {
-		if (yych <= 'E') goto yy648;
-		if (yych == 'e') goto yy648;
+		if (yych <= 'E') goto yy567;
+		if (yych == 'e') goto yy567;
 		goto yy18;
 	}
-yy462:
+yy412:
 	yyaccept = 2;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= 'T') {
 		if (yych <= '.') {
-			if (yych == ')') goto yy103;
+			if (yych == ')') goto yy102;
 			goto yy18;
 		} else {
-			if (yych <= '/') goto yy275;
+			if (yych <= '/') goto yy259;
 			if (yych <= 'S') goto yy18;
-			goto yy646;
+			goto yy565;
 		}
 	} else {
 		if (yych <= '`') {
-			if (yych == '_') goto yy275;
+			if (yych == '_') goto yy259;
 			goto yy18;
 		} else {
-			if (yych == 't') goto yy649;
-			if (yych <= 'z') goto yy640;
+			if (yych == 't') goto yy568;
+			if (yych <= 'z') goto yy559;
 			goto yy18;
 		}
 	}
-yy463:
+yy413:
 	yyaccept = 2;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= 'E') {
 		if (yych <= '.') {
-			if (yych == ')') goto yy103;
+			if (yych == ')') goto yy102;
 			goto yy18;
 		} else {
-			if (yych <= '/') goto yy275;
+			if (yych <= '/') goto yy259;
 			if (yych <= 'D') goto yy18;
-			goto yy648;
+			goto yy567;
 		}
 	} else {
 		if (yych <= '`') {
-			if (yych == '_') goto yy275;
+			if (yych == '_') goto yy259;
 			goto yy18;
 		} else {
-			if (yych == 'e') goto yy650;
-			if (yych <= 'z') goto yy640;
+			if (yych == 'e') goto yy569;
+			if (yych <= 'z') goto yy559;
 			goto yy18;
 		}
 	}
-yy464:
+yy414:
 	yyaccept = 2;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= 'T') {
-		if (yych == ')') goto yy103;
+		if (yych == ')') goto yy102;
 		goto yy18;
 	} else {
-		if (yych <= 'U') goto yy651;
-		if (yych == 'u') goto yy651;
+		if (yych <= 'U') goto yy570;
+		if (yych == 'u') goto yy570;
 		goto yy18;
 	}
-yy465:
+yy415:
 	yyaccept = 2;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= 'G') {
-		if (yych == ')') goto yy103;
+		if (yych == ')') goto yy102;
 		goto yy18;
 	} else {
-		if (yych <= 'H') goto yy646;
-		if (yych == 'h') goto yy646;
+		if (yych <= 'H') goto yy565;
+		if (yych == 'h') goto yy565;
 		goto yy18;
 	}
-yy466:
+yy416:
 	yyaccept = 2;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= 'S') {
-		if (yych == ')') goto yy103;
+		if (yych == ')') goto yy102;
 		goto yy18;
 	} else {
-		if (yych <= 'T') goto yy646;
-		if (yych == 't') goto yy646;
+		if (yych <= 'T') goto yy571;
+		if (yych == 't') goto yy571;
 		goto yy18;
 	}
-yy467:
-	yyaccept = 2;
-	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych <= 'S') {
-		if (yych == ')') goto yy103;
-		goto yy18;
-	} else {
-		if (yych <= 'T') goto yy652;
-		if (yych == 't') goto yy652;
-		goto yy18;
-	}
-yy468:
+yy417:
 	yyaccept = 2;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= '@') {
-		if (yych == ')') goto yy103;
+		if (yych == ')') goto yy102;
 		goto yy18;
 	} else {
-		if (yych <= 'A') goto yy653;
-		if (yych == 'a') goto yy653;
+		if (yych <= 'A') goto yy572;
+		if (yych == 'a') goto yy572;
 		goto yy18;
 	}
-yy469:
+yy418:
 	yyaccept = 2;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= 'U') {
 		if (yych <= '.') {
-			if (yych == ')') goto yy103;
+			if (yych == ')') goto yy102;
 			goto yy18;
 		} else {
-			if (yych <= '/') goto yy275;
+			if (yych <= '/') goto yy259;
 			if (yych <= 'T') goto yy18;
-			goto yy651;
+			goto yy570;
 		}
 	} else {
 		if (yych <= '`') {
-			if (yych == '_') goto yy275;
+			if (yych == '_') goto yy259;
 			goto yy18;
 		} else {
-			if (yych == 'u') goto yy654;
-			if (yych <= 'z') goto yy640;
+			if (yych == 'u') goto yy573;
+			if (yych <= 'z') goto yy559;
 			goto yy18;
 		}
 	}
-yy470:
+yy419:
 	yyaccept = 2;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= 'H') {
 		if (yych <= '.') {
-			if (yych == ')') goto yy103;
+			if (yych == ')') goto yy102;
 			goto yy18;
 		} else {
-			if (yych <= '/') goto yy275;
+			if (yych <= '/') goto yy259;
 			if (yych <= 'G') goto yy18;
-			goto yy646;
+			goto yy565;
 		}
 	} else {
 		if (yych <= '`') {
-			if (yych == '_') goto yy275;
+			if (yych == '_') goto yy259;
 			goto yy18;
 		} else {
-			if (yych == 'h') goto yy649;
-			if (yych <= 'z') goto yy640;
+			if (yych == 'h') goto yy568;
+			if (yych <= 'z') goto yy559;
 			goto yy18;
 		}
 	}
-yy471:
+yy420:
 	yyaccept = 2;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= 'T') {
 		if (yych <= '.') {
-			if (yych == ')') goto yy103;
+			if (yych == ')') goto yy102;
 			goto yy18;
 		} else {
-			if (yych <= '/') goto yy275;
+			if (yych <= '/') goto yy259;
 			if (yych <= 'S') goto yy18;
-			goto yy646;
+			goto yy571;
 		}
 	} else {
 		if (yych <= '`') {
-			if (yych == '_') goto yy275;
+			if (yych == '_') goto yy259;
 			goto yy18;
 		} else {
-			if (yych == 't') goto yy649;
-			if (yych <= 'z') goto yy640;
+			if (yych == 't') goto yy574;
+			if (yych <= 'z') goto yy559;
 			goto yy18;
 		}
 	}
-yy472:
-	yyaccept = 2;
-	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych <= 'T') {
-		if (yych <= '.') {
-			if (yych == ')') goto yy103;
-			goto yy18;
-		} else {
-			if (yych <= '/') goto yy275;
-			if (yych <= 'S') goto yy18;
-			goto yy652;
-		}
-	} else {
-		if (yych <= '`') {
-			if (yych == '_') goto yy275;
-			goto yy18;
-		} else {
-			if (yych == 't') goto yy655;
-			if (yych <= 'z') goto yy640;
-			goto yy18;
-		}
-	}
-yy473:
+yy421:
 	yyaccept = 2;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= 'A') {
 		if (yych <= '.') {
-			if (yych == ')') goto yy103;
+			if (yych == ')') goto yy102;
 			goto yy18;
 		} else {
-			if (yych <= '/') goto yy275;
+			if (yych <= '/') goto yy259;
 			if (yych <= '@') goto yy18;
-			goto yy653;
+			goto yy572;
 		}
 	} else {
 		if (yych <= '`') {
-			if (yych == '_') goto yy275;
+			if (yych == '_') goto yy259;
 			goto yy18;
 		} else {
-			if (yych <= 'a') goto yy656;
-			if (yych <= 'z') goto yy640;
+			if (yych <= 'a') goto yy575;
+			if (yych <= 'z') goto yy559;
 			goto yy18;
 		}
 	}
-yy474:
+yy422:
 	yyaccept = 8;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= '/') {
-		if (yych == '.') goto yy481;
-		goto yy130;
+		if (yych == '.') goto yy429;
+		goto yy129;
 	} else {
-		if (yych <= '9') goto yy657;
-		if (yych <= ':') goto yy481;
-		goto yy130;
+		if (yych <= '9') goto yy576;
+		if (yych <= ':') goto yy429;
+		goto yy129;
 	}
-yy475:
+yy423:
 	yyaccept = 8;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= '/') {
-		if (yych == '.') goto yy481;
-		goto yy130;
+		if (yych == '.') goto yy429;
+		goto yy129;
 	} else {
-		if (yych <= '3') goto yy657;
-		if (yych <= '9') goto yy658;
-		if (yych <= ':') goto yy481;
-		goto yy130;
+		if (yych <= '3') goto yy576;
+		if (yych <= '9') goto yy577;
+		if (yych <= ':') goto yy429;
+		goto yy129;
 	}
-yy476:
+yy424:
 	yyaccept = 8;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= '/') {
-		if (yych == '.') goto yy481;
-		goto yy130;
+		if (yych == '.') goto yy429;
+		goto yy129;
 	} else {
-		if (yych <= '9') goto yy658;
-		if (yych <= ':') goto yy481;
-		goto yy130;
+		if (yych <= '9') goto yy577;
+		if (yych <= ':') goto yy429;
+		goto yy129;
 	}
-yy477:
+yy425:
 	yych = *++YYCURSOR;
 	if (yych <= '2') {
-		if (yych <= '/') goto yy298;
-		if (yych <= '1') goto yy659;
-		goto yy660;
+		if (yych <= '/') goto yy282;
+		if (yych <= '1') goto yy578;
+		goto yy579;
 	} else {
-		if (yych <= '5') goto yy661;
-		if (yych <= '9') goto yy662;
-		goto yy298;
+		if (yych <= '5') goto yy580;
+		if (yych <= '9') goto yy581;
+		goto yy282;
 	}
-yy478:
+yy426:
 	yyaccept = 8;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= '/') {
-		if (yych == '.') goto yy481;
-		goto yy130;
+		if (yych == '.') goto yy429;
+		goto yy129;
 	} else {
-		if (yych <= '9') goto yy663;
-		if (yych <= ':') goto yy481;
-		goto yy130;
+		if (yych <= '9') goto yy582;
+		if (yych <= ':') goto yy429;
+		goto yy129;
 	}
-yy479:
+yy427:
 	yyaccept = 8;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= '/') {
-		if (yych == '.') goto yy481;
-		goto yy130;
+		if (yych == '.') goto yy429;
+		goto yy129;
 	} else {
-		if (yych <= '3') goto yy663;
-		if (yych <= '9') goto yy665;
-		if (yych <= ':') goto yy481;
-		goto yy130;
+		if (yych <= '3') goto yy582;
+		if (yych <= '9') goto yy584;
+		if (yych <= ':') goto yy429;
+		goto yy129;
 	}
-yy480:
+yy428:
 	yyaccept = 8;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= '/') {
-		if (yych != '.') goto yy130;
+		if (yych != '.') goto yy129;
 	} else {
-		if (yych <= '9') goto yy665;
-		if (yych >= ';') goto yy130;
+		if (yych <= '9') goto yy584;
+		if (yych >= ';') goto yy129;
 	}
-yy481:
+yy429:
 	yych = *++YYCURSOR;
 	if (yych <= '/') goto yy53;
-	if (yych <= '5') goto yy666;
-	if (yych <= '9') goto yy668;
+	if (yych <= '5') goto yy585;
+	if (yych <= '9') goto yy587;
 	goto yy53;
-yy482:
+yy430:
 	yyaccept = 8;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= '/') {
-		if (yych == '.') goto yy481;
-		goto yy130;
+		if (yych == '.') goto yy429;
+		goto yy129;
 	} else {
-		if (yych <= '9') goto yy669;
-		if (yych <= ':') goto yy481;
-		goto yy130;
+		if (yych <= '9') goto yy588;
+		if (yych <= ':') goto yy429;
+		goto yy129;
 	}
-yy483:
+yy431:
 	yych = *++YYCURSOR;
-	if (yych <= '/') goto yy130;
-	if (yych <= '9') goto yy669;
-	goto yy130;
-yy484:
+	if (yych <= '/') goto yy129;
+	if (yych <= '9') goto yy588;
+	goto yy129;
+yy432:
 	yyaccept = 2;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= '@') {
-		if (yych == ')') goto yy103;
+		if (yych == ')') goto yy102;
 		goto yy18;
 	} else {
-		if (yych <= 'A') goto yy670;
-		if (yych == 'a') goto yy670;
+		if (yych <= 'A') goto yy589;
+		if (yych == 'a') goto yy589;
 		goto yy18;
 	}
-yy485:
+yy433:
 	yyaccept = 2;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= ')') {
 		if (yych <= 0x1F) goto yy18;
-		if (yych <= '(') goto yy127;
-		goto yy128;
+		if (yych <= '(') goto yy126;
+		goto yy127;
 	} else {
 		if (yych == '/') goto yy18;
-		if (yych <= '9') goto yy127;
+		if (yych <= '9') goto yy126;
 		goto yy18;
 	}
-yy486:
+yy434:
 	yyaccept = 2;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= 'A') {
 		if (yych <= '.') {
-			if (yych == ')') goto yy103;
+			if (yych == ')') goto yy102;
 			goto yy18;
 		} else {
-			if (yych <= '/') goto yy275;
+			if (yych <= '/') goto yy259;
 			if (yych <= '@') goto yy18;
-			goto yy670;
+			goto yy589;
 		}
 	} else {
 		if (yych <= '`') {
-			if (yych == '_') goto yy275;
+			if (yych == '_') goto yy259;
 			goto yy18;
 		} else {
-			if (yych <= 'a') goto yy671;
-			if (yych <= 'z') goto yy640;
+			if (yych <= 'a') goto yy590;
+			if (yych <= 'z') goto yy559;
 			goto yy18;
 		}
 	}
-yy487:
+yy435:
 	yyaccept = 2;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= '/') {
 		if (yych <= '(') {
 			if (yych <= 0x1F) goto yy18;
-			goto yy127;
+			goto yy126;
 		} else {
-			if (yych <= ')') goto yy128;
-			if (yych <= '.') goto yy127;
-			goto yy275;
+			if (yych <= ')') goto yy127;
+			if (yych <= '.') goto yy126;
+			goto yy259;
 		}
 	} else {
 		if (yych <= '_') {
-			if (yych <= '9') goto yy127;
+			if (yych <= '9') goto yy126;
 			if (yych <= '^') goto yy18;
-			goto yy275;
+			goto yy259;
 		} else {
 			if (yych <= '`') goto yy18;
-			if (yych <= 'z') goto yy640;
+			if (yych <= 'z') goto yy559;
 			goto yy18;
 		}
 	}
-yy488:
+yy436:
 	yyaccept = 2;
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -9466,11 +8646,11 @@ yy488:
 	case 's':
 	case 't':
 	case 'w':
-	case 'y':	goto yy647;
-	case ')':	goto yy103;
+	case 'y':	goto yy566;
+	case ')':	goto yy102;
 	default:	goto yy18;
 	}
-yy489:
+yy437:
 	yyaccept = 2;
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -9482,10 +8662,10 @@ yy489:
 	case 'S':
 	case 'T':
 	case 'W':
-	case 'Y':	goto yy647;
-	case ')':	goto yy103;
+	case 'Y':	goto yy566;
+	case ')':	goto yy102;
 	case '/':
-	case '_':	goto yy275;
+	case '_':	goto yy259;
 	case 'a':
 	case 'b':
 	case 'c':
@@ -9503,131 +8683,87 @@ yy489:
 	case 'u':
 	case 'v':
 	case 'x':
-	case 'z':	goto yy640;
-	case 'd':	goto yy680;
-	case 'f':	goto yy681;
-	case 'h':	goto yy682;
-	case 'm':	goto yy683;
-	case 's':	goto yy684;
-	case 't':	goto yy685;
-	case 'w':	goto yy686;
-	case 'y':	goto yy687;
+	case 'z':	goto yy559;
+	case 'd':	goto yy599;
+	case 'f':	goto yy600;
+	case 'h':	goto yy601;
+	case 'm':	goto yy602;
+	case 's':	goto yy603;
+	case 't':	goto yy604;
+	case 'w':	goto yy605;
+	case 'y':	goto yy606;
 	default:	goto yy18;
 	}
-yy490:
+yy438:
 	yyaccept = 2;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= 'G') {
-		if (yych == ')') goto yy103;
+		if (yych == ')') goto yy102;
 		goto yy18;
 	} else {
-		if (yych <= 'H') goto yy126;
-		if (yych == 'h') goto yy126;
+		if (yych <= 'H') goto yy125;
+		if (yych == 'h') goto yy125;
 		goto yy18;
 	}
-yy491:
+yy439:
 	yyaccept = 2;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= 'H') {
-		if (yych == ')') goto yy103;
+		if (yych == ')') goto yy102;
 		goto yy18;
 	} else {
-		if (yych <= 'I') goto yy688;
-		if (yych == 'i') goto yy688;
+		if (yych <= 'I') goto yy607;
+		if (yych == 'i') goto yy607;
 		goto yy18;
 	}
-yy492:
-	yyaccept = 2;
-	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych <= '@') {
-		if (yych == ')') goto yy103;
-		goto yy18;
-	} else {
-		if (yych <= 'A') goto yy689;
-		if (yych == 'a') goto yy689;
-		goto yy18;
-	}
-yy493:
+yy440:
 	yyaccept = 2;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= 'H') {
 		if (yych <= '.') {
-			if (yych == ')') goto yy103;
+			if (yych == ')') goto yy102;
 			goto yy18;
 		} else {
-			if (yych <= '/') goto yy275;
+			if (yych <= '/') goto yy259;
 			if (yych <= 'G') goto yy18;
-			goto yy126;
+			goto yy125;
 		}
 	} else {
 		if (yych <= '`') {
-			if (yych == '_') goto yy275;
+			if (yych == '_') goto yy259;
 			goto yy18;
 		} else {
-			if (yych == 'h') goto yy642;
-			if (yych <= 'z') goto yy640;
+			if (yych == 'h') goto yy561;
+			if (yych <= 'z') goto yy559;
 			goto yy18;
 		}
 	}
-yy494:
+yy441:
 	yyaccept = 2;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= 'I') {
 		if (yych <= '.') {
-			if (yych == ')') goto yy103;
+			if (yych == ')') goto yy102;
 			goto yy18;
 		} else {
-			if (yych <= '/') goto yy275;
+			if (yych <= '/') goto yy259;
 			if (yych <= 'H') goto yy18;
-			goto yy688;
+			goto yy607;
 		}
 	} else {
 		if (yych <= '`') {
-			if (yych == '_') goto yy275;
+			if (yych == '_') goto yy259;
 			goto yy18;
 		} else {
-			if (yych == 'i') goto yy690;
-			if (yych <= 'z') goto yy640;
+			if (yych == 'i') goto yy608;
+			if (yych <= 'z') goto yy559;
 			goto yy18;
 		}
 	}
-yy495:
-	yyaccept = 2;
-	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych <= 'A') {
-		if (yych <= '.') {
-			if (yych == ')') goto yy103;
-			goto yy18;
-		} else {
-			if (yych <= '/') goto yy275;
-			if (yych <= '@') goto yy18;
-			goto yy689;
-		}
-	} else {
-		if (yych <= '`') {
-			if (yych == '_') goto yy275;
-			goto yy18;
-		} else {
-			if (yych <= 'a') goto yy691;
-			if (yych <= 'z') goto yy640;
-			goto yy18;
-		}
-	}
-yy496:
-	yyaccept = 2;
-	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych <= 'G') {
-		if (yych == ')') goto yy103;
-		goto yy18;
-	} else {
-		if (yych <= 'H') goto yy646;
-		if (yych == 'h') goto yy646;
-		goto yy18;
-	}
-yy497:
+yy442:
 	++YYCURSOR;
-	if ((yych = *YYCURSOR) == ')') goto yy103;
-yy498:
+	if ((yych = *YYCURSOR) == ')') goto yy102;
+yy443:
 #line 871 "parse_date.s.re"
 	{
 		DEBUG_OUTPUT("noon");
@@ -9639,674 +8775,520 @@ yy498:
 		TIMELIB_DEINIT;
 		return TIMELIB_RELATIVE;
 	}
-#line 9643 "parse_date.s.c"
-yy499:
-	yyaccept = 2;
-	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych <= 'L') {
-		if (yych == ')') goto yy103;
-		goto yy18;
-	} else {
-		if (yych <= 'M') goto yy692;
-		if (yych == 'm') goto yy692;
-		goto yy18;
-	}
-yy500:
-	yyaccept = 2;
-	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych <= 'H') {
-		if (yych <= '.') {
-			if (yych == ')') goto yy103;
-			goto yy18;
-		} else {
-			if (yych <= '/') goto yy275;
-			if (yych <= 'G') goto yy18;
-			goto yy646;
-		}
-	} else {
-		if (yych <= '`') {
-			if (yych == '_') goto yy275;
-			goto yy18;
-		} else {
-			if (yych == 'h') goto yy649;
-			if (yych <= 'z') goto yy640;
-			goto yy18;
-		}
-	}
-yy501:
+#line 8779 "parse_date.s.c"
+yy444:
 	yyaccept = 13;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= '/') {
-		if (yych == ')') goto yy103;
-		if (yych <= '.') goto yy498;
-		goto yy275;
+		if (yych == ')') goto yy102;
+		if (yych <= '.') goto yy443;
+		goto yy259;
 	} else {
 		if (yych <= '_') {
-			if (yych <= '^') goto yy498;
-			goto yy275;
+			if (yych <= '^') goto yy443;
+			goto yy259;
 		} else {
-			if (yych <= '`') goto yy498;
-			if (yych <= 'z') goto yy640;
-			goto yy498;
+			if (yych <= '`') goto yy443;
+			if (yych <= 'z') goto yy559;
+			goto yy443;
 		}
 	}
-yy502:
-	yyaccept = 2;
-	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych <= 'M') {
-		if (yych <= '.') {
-			if (yych == ')') goto yy103;
-			goto yy18;
-		} else {
-			if (yych <= '/') goto yy275;
-			if (yych <= 'L') goto yy18;
-			goto yy692;
-		}
-	} else {
-		if (yych <= '`') {
-			if (yych == '_') goto yy275;
-			goto yy18;
-		} else {
-			if (yych == 'm') goto yy693;
-			if (yych <= 'z') goto yy640;
-			goto yy18;
-		}
-	}
-yy503:
+yy445:
 	yyaccept = 2;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= 'A') {
-		if (yych == ')') goto yy103;
+		if (yych == ')') goto yy102;
 		goto yy18;
 	} else {
-		if (yych <= 'B') goto yy694;
-		if (yych == 'b') goto yy694;
+		if (yych <= 'B') goto yy609;
+		if (yych == 'b') goto yy609;
 		goto yy18;
 	}
-yy504:
+yy446:
 	yyaccept = 2;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= 'B') {
 		if (yych <= '.') {
-			if (yych == ')') goto yy103;
+			if (yych == ')') goto yy102;
 			goto yy18;
 		} else {
-			if (yych <= '/') goto yy275;
+			if (yych <= '/') goto yy259;
 			if (yych <= 'A') goto yy18;
-			goto yy694;
+			goto yy609;
 		}
 	} else {
 		if (yych <= '`') {
-			if (yych == '_') goto yy275;
+			if (yych == '_') goto yy259;
 			goto yy18;
 		} else {
-			if (yych == 'b') goto yy695;
-			if (yych <= 'z') goto yy640;
+			if (yych == 'b') goto yy610;
+			if (yych <= 'z') goto yy559;
 			goto yy18;
 		}
 	}
-yy505:
+yy447:
 	yyaccept = 2;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= 'H') {
-		if (yych == ')') goto yy103;
+		if (yych == ')') goto yy102;
 		goto yy18;
 	} else {
-		if (yych <= 'I') goto yy696;
-		if (yych == 'i') goto yy696;
+		if (yych <= 'I') goto yy611;
+		if (yych == 'i') goto yy611;
 		goto yy18;
 	}
-yy506:
+yy448:
 	yyaccept = 2;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= 'I') {
 		if (yych <= '.') {
-			if (yych == ')') goto yy103;
+			if (yych == ')') goto yy102;
 			goto yy18;
 		} else {
-			if (yych <= '/') goto yy275;
+			if (yych <= '/') goto yy259;
 			if (yych <= 'H') goto yy18;
-			goto yy696;
+			goto yy611;
 		}
 	} else {
 		if (yych <= '`') {
-			if (yych == '_') goto yy275;
+			if (yych == '_') goto yy259;
 			goto yy18;
 		} else {
-			if (yych == 'i') goto yy697;
-			if (yych <= 'z') goto yy640;
+			if (yych == 'i') goto yy612;
+			if (yych <= 'z') goto yy559;
 			goto yy18;
 		}
 	}
-yy507:
+yy449:
 	yyaccept = 2;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= 'Q') {
-		if (yych == ')') goto yy103;
+		if (yych == ')') goto yy102;
 		goto yy18;
 	} else {
-		if (yych <= 'R') goto yy698;
-		if (yych == 'r') goto yy698;
+		if (yych <= 'R') goto yy613;
+		if (yych == 'r') goto yy613;
 		goto yy18;
 	}
-yy508:
+yy450:
 	yyaccept = 2;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= 'M') {
-		if (yych == ')') goto yy103;
+		if (yych == ')') goto yy102;
 		goto yy18;
 	} else {
-		if (yych <= 'N') goto yy699;
-		if (yych == 'n') goto yy699;
+		if (yych <= 'N') goto yy614;
+		if (yych == 'n') goto yy614;
 		goto yy18;
 	}
-yy509:
+yy451:
 	yyaccept = 2;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= '.') {
 		if (yych <= ')') {
 			if (yych <= 0x1F) goto yy18;
-			if (yych <= '(') goto yy127;
-			goto yy128;
-		} else {
-			if (yych == '-') goto yy451;
+			if (yych <= '(') goto yy126;
 			goto yy127;
+		} else {
+			if (yych == '-') goto yy401;
+			goto yy126;
 		}
 	} else {
 		if (yych <= 'D') {
 			if (yych <= '/') goto yy18;
-			if (yych <= '9') goto yy127;
+			if (yych <= '9') goto yy126;
 			goto yy18;
 		} else {
-			if (yych <= 'E') goto yy700;
-			if (yych == 'e') goto yy700;
+			if (yych <= 'E') goto yy615;
+			if (yych == 'e') goto yy615;
 			goto yy18;
 		}
 	}
-yy510:
+yy452:
 	yyaccept = 2;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= 'M') {
-		if (yych == ')') goto yy103;
+		if (yych == ')') goto yy102;
 		goto yy18;
 	} else {
-		if (yych <= 'N') goto yy701;
-		if (yych == 'n') goto yy701;
+		if (yych <= 'N') goto yy616;
+		if (yych == 'n') goto yy616;
 		goto yy18;
 	}
-yy511:
-	yyaccept = 2;
-	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych <= 'G') {
-		if (yych == ')') goto yy103;
-		goto yy18;
-	} else {
-		if (yych <= 'H') goto yy646;
-		if (yych == 'h') goto yy646;
-		goto yy18;
-	}
-yy512:
-	yyaccept = 2;
-	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych <= '@') {
-		if (yych == ')') goto yy103;
-		goto yy18;
-	} else {
-		if (yych <= 'A') goto yy702;
-		if (yych == 'a') goto yy702;
-		goto yy18;
-	}
-yy513:
+yy453:
 	yyaccept = 2;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= 'R') {
 		if (yych <= '.') {
-			if (yych == ')') goto yy103;
+			if (yych == ')') goto yy102;
 			goto yy18;
 		} else {
-			if (yych <= '/') goto yy275;
+			if (yych <= '/') goto yy259;
 			if (yych <= 'Q') goto yy18;
-			goto yy698;
+			goto yy613;
 		}
 	} else {
 		if (yych <= '`') {
-			if (yych == '_') goto yy275;
+			if (yych == '_') goto yy259;
 			goto yy18;
 		} else {
-			if (yych == 'r') goto yy703;
-			if (yych <= 'z') goto yy640;
+			if (yych == 'r') goto yy617;
+			if (yych <= 'z') goto yy559;
 			goto yy18;
 		}
 	}
-yy514:
+yy454:
 	yyaccept = 2;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= 'N') {
 		if (yych <= '.') {
-			if (yych == ')') goto yy103;
+			if (yych == ')') goto yy102;
 			goto yy18;
 		} else {
-			if (yych <= '/') goto yy275;
+			if (yych <= '/') goto yy259;
 			if (yych <= 'M') goto yy18;
-			goto yy699;
+			goto yy614;
 		}
 	} else {
 		if (yych <= '`') {
-			if (yych == '_') goto yy275;
+			if (yych == '_') goto yy259;
 			goto yy18;
 		} else {
-			if (yych == 'n') goto yy704;
-			if (yych <= 'z') goto yy640;
+			if (yych == 'n') goto yy618;
+			if (yych <= 'z') goto yy559;
 			goto yy18;
 		}
 	}
-yy515:
+yy455:
 	yyaccept = 2;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= '9') {
 		if (yych <= ',') {
 			if (yych <= 0x1F) goto yy18;
-			if (yych == ')') goto yy128;
-			goto yy127;
+			if (yych == ')') goto yy127;
+			goto yy126;
 		} else {
-			if (yych <= '-') goto yy451;
-			if (yych == '/') goto yy275;
-			goto yy127;
+			if (yych <= '-') goto yy401;
+			if (yych == '/') goto yy259;
+			goto yy126;
 		}
 	} else {
 		if (yych <= '_') {
-			if (yych == 'E') goto yy700;
+			if (yych == 'E') goto yy615;
 			if (yych <= '^') goto yy18;
-			goto yy275;
+			goto yy259;
 		} else {
 			if (yych <= 'd') {
 				if (yych <= '`') goto yy18;
-				goto yy640;
+				goto yy559;
 			} else {
-				if (yych <= 'e') goto yy705;
-				if (yych <= 'z') goto yy640;
+				if (yych <= 'e') goto yy619;
+				if (yych <= 'z') goto yy559;
 				goto yy18;
 			}
 		}
 	}
-yy516:
+yy456:
 	yyaccept = 2;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= 'N') {
 		if (yych <= '.') {
-			if (yych == ')') goto yy103;
+			if (yych == ')') goto yy102;
 			goto yy18;
 		} else {
-			if (yych <= '/') goto yy275;
+			if (yych <= '/') goto yy259;
 			if (yych <= 'M') goto yy18;
-			goto yy701;
+			goto yy616;
 		}
 	} else {
 		if (yych <= '`') {
-			if (yych == '_') goto yy275;
+			if (yych == '_') goto yy259;
 			goto yy18;
 		} else {
-			if (yych == 'n') goto yy706;
-			if (yych <= 'z') goto yy640;
+			if (yych == 'n') goto yy620;
+			if (yych <= 'z') goto yy559;
 			goto yy18;
 		}
 	}
-yy517:
-	yyaccept = 2;
-	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych <= 'H') {
-		if (yych <= '.') {
-			if (yych == ')') goto yy103;
-			goto yy18;
-		} else {
-			if (yych <= '/') goto yy275;
-			if (yych <= 'G') goto yy18;
-			goto yy646;
-		}
-	} else {
-		if (yych <= '`') {
-			if (yych == '_') goto yy275;
-			goto yy18;
-		} else {
-			if (yych == 'h') goto yy649;
-			if (yych <= 'z') goto yy640;
-			goto yy18;
-		}
-	}
-yy518:
-	yyaccept = 2;
-	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych <= 'A') {
-		if (yych <= '.') {
-			if (yych == ')') goto yy103;
-			goto yy18;
-		} else {
-			if (yych <= '/') goto yy275;
-			if (yych <= '@') goto yy18;
-			goto yy702;
-		}
-	} else {
-		if (yych <= '`') {
-			if (yych == '_') goto yy275;
-			goto yy18;
-		} else {
-			if (yych <= 'a') goto yy707;
-			if (yych <= 'z') goto yy640;
-			goto yy18;
-		}
-	}
-yy519:
-	yyaccept = 2;
-	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych <= 'G') {
-		if (yych == ')') goto yy103;
-		goto yy18;
-	} else {
-		if (yych <= 'H') goto yy646;
-		if (yych == 'h') goto yy646;
-		goto yy18;
-	}
-yy520:
+yy457:
 	yyaccept = 2;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= 'C') {
-		if (yych == ')') goto yy103;
+		if (yych == ')') goto yy102;
 		goto yy18;
 	} else {
-		if (yych <= 'D') goto yy646;
-		if (yych == 'd') goto yy646;
+		if (yych <= 'D') goto yy565;
+		if (yych == 'd') goto yy565;
 		goto yy18;
 	}
-yy521:
+yy458:
 	yyaccept = 2;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= 'R') {
-		if (yych == ')') goto yy103;
+		if (yych == ')') goto yy102;
 		goto yy18;
 	} else {
-		if (yych <= 'S') goto yy708;
-		if (yych == 's') goto yy708;
+		if (yych <= 'S') goto yy613;
+		if (yych == 's') goto yy613;
 		goto yy18;
 	}
-yy522:
+yy459:
 	yych = *++YYCURSOR;
 	if (yych <= 'X') {
-		if (yych == ')') goto yy103;
+		if (yych == ')') goto yy102;
 		goto yy18;
 	} else {
-		if (yych <= 'Y') goto yy709;
-		if (yych == 'y') goto yy709;
+		if (yych <= 'Y') goto yy621;
+		if (yych == 'y') goto yy621;
 		goto yy18;
 	}
-yy523:
+yy460:
 	yyaccept = 2;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= 'Q') {
-		if (yych == ')') goto yy103;
+		if (yych == ')') goto yy102;
 		goto yy18;
 	} else {
-		if (yych <= 'R') goto yy711;
-		if (yych == 'r') goto yy711;
+		if (yych <= 'R') goto yy623;
+		if (yych == 'r') goto yy623;
 		goto yy18;
 	}
-yy524:
+yy461:
 	yyaccept = 2;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= 'C') {
-		if (yych == ')') goto yy103;
+		if (yych == ')') goto yy102;
 		goto yy18;
 	} else {
-		if (yych <= 'D') goto yy712;
-		if (yych == 'd') goto yy712;
+		if (yych <= 'D') goto yy624;
+		if (yych == 'd') goto yy624;
 		goto yy18;
 	}
-yy525:
+yy462:
 	yyaccept = 2;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= 'E') {
-		if (yych == ')') goto yy103;
+		if (yych == ')') goto yy102;
 		goto yy18;
 	} else {
-		if (yych <= 'F') goto yy713;
-		if (yych == 'f') goto yy713;
+		if (yych <= 'F') goto yy616;
+		if (yych == 'f') goto yy616;
 		goto yy18;
 	}
-yy526:
-	yyaccept = 2;
-	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych <= 'H') {
-		if (yych <= '.') {
-			if (yych == ')') goto yy103;
-			goto yy18;
-		} else {
-			if (yych <= '/') goto yy275;
-			if (yych <= 'G') goto yy18;
-			goto yy646;
-		}
-	} else {
-		if (yych <= '`') {
-			if (yych == '_') goto yy275;
-			goto yy18;
-		} else {
-			if (yych == 'h') goto yy649;
-			if (yych <= 'z') goto yy640;
-			goto yy18;
-		}
-	}
-yy527:
+yy463:
 	yyaccept = 2;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= 'D') {
 		if (yych <= '.') {
-			if (yych == ')') goto yy103;
+			if (yych == ')') goto yy102;
 			goto yy18;
 		} else {
-			if (yych <= '/') goto yy275;
+			if (yych <= '/') goto yy259;
 			if (yych <= 'C') goto yy18;
-			goto yy646;
+			goto yy565;
 		}
 	} else {
 		if (yych <= '`') {
-			if (yych == '_') goto yy275;
+			if (yych == '_') goto yy259;
 			goto yy18;
 		} else {
-			if (yych == 'd') goto yy649;
-			if (yych <= 'z') goto yy640;
+			if (yych == 'd') goto yy568;
+			if (yych <= 'z') goto yy559;
 			goto yy18;
 		}
 	}
-yy528:
+yy464:
 	yyaccept = 2;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= 'S') {
 		if (yych <= '.') {
-			if (yych == ')') goto yy103;
+			if (yych == ')') goto yy102;
 			goto yy18;
 		} else {
-			if (yych <= '/') goto yy275;
+			if (yych <= '/') goto yy259;
 			if (yych <= 'R') goto yy18;
-			goto yy708;
+			goto yy613;
 		}
 	} else {
 		if (yych <= '`') {
-			if (yych == '_') goto yy275;
+			if (yych == '_') goto yy259;
 			goto yy18;
 		} else {
-			if (yych == 's') goto yy714;
-			if (yych <= 'z') goto yy640;
+			if (yych == 's') goto yy617;
+			if (yych <= 'z') goto yy559;
 			goto yy18;
 		}
 	}
-yy529:
+yy465:
 	yyaccept = 2;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= 'Y') {
 		if (yych <= '.') {
-			if (yych == ')') goto yy103;
+			if (yych == ')') goto yy102;
 			goto yy18;
 		} else {
-			if (yych <= '/') goto yy275;
+			if (yych <= '/') goto yy259;
 			if (yych <= 'X') goto yy18;
-			goto yy709;
+			goto yy621;
 		}
 	} else {
 		if (yych <= '`') {
-			if (yych == '_') goto yy275;
+			if (yych == '_') goto yy259;
 			goto yy18;
 		} else {
-			if (yych == 'y') goto yy715;
-			if (yych <= 'z') goto yy640;
+			if (yych == 'y') goto yy625;
+			if (yych <= 'z') goto yy559;
 			goto yy18;
 		}
 	}
-yy530:
+yy466:
 	yyaccept = 2;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= 'R') {
 		if (yych <= '.') {
-			if (yych == ')') goto yy103;
+			if (yych == ')') goto yy102;
 			goto yy18;
 		} else {
-			if (yych <= '/') goto yy275;
+			if (yych <= '/') goto yy259;
 			if (yych <= 'Q') goto yy18;
-			goto yy711;
+			goto yy623;
 		}
 	} else {
 		if (yych <= '`') {
-			if (yych == '_') goto yy275;
+			if (yych == '_') goto yy259;
 			goto yy18;
 		} else {
-			if (yych == 'r') goto yy716;
-			if (yych <= 'z') goto yy640;
+			if (yych == 'r') goto yy626;
+			if (yych <= 'z') goto yy559;
 			goto yy18;
 		}
 	}
-yy531:
+yy467:
 	yyaccept = 2;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= 'D') {
 		if (yych <= '.') {
-			if (yych == ')') goto yy103;
+			if (yych == ')') goto yy102;
 			goto yy18;
 		} else {
-			if (yych <= '/') goto yy275;
+			if (yych <= '/') goto yy259;
 			if (yych <= 'C') goto yy18;
-			goto yy712;
+			goto yy624;
 		}
 	} else {
 		if (yych <= '`') {
-			if (yych == '_') goto yy275;
+			if (yych == '_') goto yy259;
 			goto yy18;
 		} else {
-			if (yych == 'd') goto yy717;
-			if (yych <= 'z') goto yy640;
+			if (yych == 'd') goto yy627;
+			if (yych <= 'z') goto yy559;
 			goto yy18;
 		}
 	}
-yy532:
+yy468:
 	yyaccept = 2;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= 'F') {
 		if (yych <= '.') {
-			if (yych == ')') goto yy103;
+			if (yych == ')') goto yy102;
 			goto yy18;
 		} else {
-			if (yych <= '/') goto yy275;
+			if (yych <= '/') goto yy259;
 			if (yych <= 'E') goto yy18;
-			goto yy713;
+			goto yy616;
 		}
 	} else {
 		if (yych <= '`') {
-			if (yych == '_') goto yy275;
+			if (yych == '_') goto yy259;
 			goto yy18;
 		} else {
-			if (yych == 'f') goto yy718;
-			if (yych <= 'z') goto yy640;
+			if (yych == 'f') goto yy620;
+			if (yych <= 'z') goto yy559;
 			goto yy18;
 		}
 	}
-yy533:
+yy469:
 	yyaccept = 2;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= 'D') {
-		if (yych == ')') goto yy103;
+		if (yych == ')') goto yy102;
 		goto yy18;
 	} else {
-		if (yych <= 'E') goto yy719;
-		if (yych == 'e') goto yy719;
+		if (yych <= 'E') goto yy628;
+		if (yych == 'e') goto yy628;
 		goto yy18;
 	}
-yy534:
+yy470:
 	yyaccept = 2;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= 'E') {
 		if (yych <= '.') {
-			if (yych == ')') goto yy103;
+			if (yych == ')') goto yy102;
 			goto yy18;
 		} else {
-			if (yych <= '/') goto yy275;
+			if (yych <= '/') goto yy259;
 			if (yych <= 'D') goto yy18;
-			goto yy719;
+			goto yy628;
 		}
 	} else {
 		if (yych <= '`') {
-			if (yych == '_') goto yy275;
+			if (yych == '_') goto yy259;
 			goto yy18;
 		} else {
-			if (yych == 'e') goto yy720;
-			if (yych <= 'z') goto yy640;
+			if (yych == 'e') goto yy629;
+			if (yych <= 'z') goto yy559;
 			goto yy18;
 		}
 	}
-yy535:
+yy471:
 	yyaccept = 2;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= 'D') {
-		if (yych == ')') goto yy103;
+		if (yych == ')') goto yy102;
 		goto yy18;
 	} else {
-		if (yych <= 'E') goto yy721;
-		if (yych == 'e') goto yy721;
+		if (yych <= 'E') goto yy630;
+		if (yych == 'e') goto yy630;
 		goto yy18;
 	}
-yy536:
+yy472:
 	yyaccept = 2;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= 'E') {
 		if (yych <= '.') {
-			if (yych == ')') goto yy103;
+			if (yych == ')') goto yy102;
 			goto yy18;
 		} else {
-			if (yych <= '/') goto yy275;
+			if (yych <= '/') goto yy259;
 			if (yych <= 'D') goto yy18;
-			goto yy721;
+			goto yy630;
 		}
 	} else {
 		if (yych <= '`') {
-			if (yych == '_') goto yy275;
+			if (yych == '_') goto yy259;
 			goto yy18;
 		} else {
-			if (yych == 'e') goto yy722;
-			if (yych <= 'z') goto yy640;
+			if (yych == 'e') goto yy631;
+			if (yych <= 'z') goto yy559;
 			goto yy18;
 		}
 	}
-yy537:
+yy473:
 	yyaccept = 14;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= 'n') {
-		if (yych <= '/') goto yy538;
-		if (yych <= '9') goto yy540;
-		if (yych >= 'n') goto yy723;
+		if (yych <= '/') goto yy474;
+		if (yych <= '9') goto yy476;
+		if (yych >= 'n') goto yy632;
 	} else {
 		if (yych <= 'r') {
-			if (yych >= 'r') goto yy724;
+			if (yych >= 'r') goto yy632;
 		} else {
-			if (yych <= 's') goto yy725;
-			if (yych <= 't') goto yy726;
+			if (yych <= 's') goto yy633;
+			if (yych <= 't') goto yy634;
 		}
 	}
-yy538:
+yy474:
 #line 1060 "parse_date.s.re"
 	{
 		DEBUG_OUTPUT("gnudateshort");
@@ -10319,365 +9301,110 @@ yy538:
 		TIMELIB_DEINIT;
 		return TIMELIB_ISO_DATE;
 	}
-#line 10323 "parse_date.s.c"
-yy539:
+#line 9305 "parse_date.s.c"
+yy475:
 	yyaccept = 14;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= 'n') {
-		if (yych <= '/') goto yy538;
-		if (yych <= '1') goto yy540;
-		if (yych <= 'm') goto yy538;
-		goto yy723;
+		if (yych <= '/') goto yy474;
+		if (yych <= '1') goto yy476;
+		if (yych <= 'm') goto yy474;
+		goto yy632;
 	} else {
 		if (yych <= 'r') {
-			if (yych <= 'q') goto yy538;
-			goto yy724;
+			if (yych <= 'q') goto yy474;
+			goto yy632;
 		} else {
-			if (yych <= 's') goto yy725;
-			if (yych <= 't') goto yy726;
-			goto yy538;
+			if (yych <= 's') goto yy633;
+			if (yych <= 't') goto yy634;
+			goto yy474;
 		}
 	}
-yy540:
+yy476:
 	yyaccept = 14;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= 'q') {
-		if (yych == 'n') goto yy723;
-		goto yy538;
+		if (yych == 'n') goto yy632;
+		goto yy474;
 	} else {
-		if (yych <= 'r') goto yy724;
-		if (yych <= 's') goto yy725;
-		if (yych <= 't') goto yy726;
-		goto yy538;
+		if (yych <= 'r') goto yy632;
+		if (yych <= 's') goto yy633;
+		if (yych <= 't') goto yy634;
+		goto yy474;
 	}
-yy541:
-	yyaccept = 3;
-	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych <= '/') {
-		if (yych <= ',') {
-			if (yych <= 0x1F) goto yy75;
-			goto yy234;
-		} else {
-			if (yych <= '-') goto yy727;
-			if (yych <= '.') goto yy234;
-			goto yy75;
-		}
-	} else {
-		if (yych <= 'I') {
-			if (yych <= '9') goto yy236;
-			if (yych <= 'H') goto yy75;
-			goto yy594;
-		} else {
-			if (yych == 'i') goto yy594;
-			goto yy75;
-		}
-	}
-yy542:
-	yyaccept = 3;
-	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych <= '/') {
-		if (yych <= ',') {
-			if (yych <= 0x1F) goto yy75;
-			goto yy234;
-		} else {
-			if (yych <= '-') goto yy727;
-			if (yych <= '.') goto yy234;
-			goto yy75;
-		}
-	} else {
-		if (yych <= 'U') {
-			if (yych <= '9') goto yy236;
-			if (yych <= 'T') goto yy75;
-			goto yy595;
-		} else {
-			if (yych == 'u') goto yy595;
-			goto yy75;
-		}
-	}
-yy543:
-	yyaccept = 3;
-	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych <= '/') {
-		if (yych <= ',') {
-			if (yych <= 0x1F) goto yy75;
-			goto yy234;
-		} else {
-			if (yych <= '-') goto yy727;
-			if (yych <= '.') goto yy234;
-			goto yy75;
-		}
-	} else {
-		if (yych <= 'E') {
-			if (yych <= '9') goto yy236;
-			if (yych <= 'D') goto yy75;
-			goto yy597;
-		} else {
-			if (yych == 'e') goto yy597;
-			goto yy75;
-		}
-	}
-yy544:
-	yyaccept = 3;
-	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych <= '/') {
-		if (yych <= ',') {
-			if (yych <= 0x1F) goto yy75;
-			goto yy234;
-		} else {
-			if (yych <= '-') goto yy727;
-			if (yych <= '.') goto yy234;
-			goto yy75;
-		}
-	} else {
-		if (yych <= 'R') {
-			if (yych <= '9') goto yy236;
-			if (yych <= 'Q') goto yy75;
-			goto yy598;
-		} else {
-			if (yych == 'r') goto yy598;
-			goto yy75;
-		}
-	}
-yy545:
-	yyaccept = 3;
-	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych <= '/') {
-		if (yych <= ',') {
-			if (yych <= 0x1F) goto yy75;
-			goto yy234;
-		} else {
-			if (yych <= '-') goto yy727;
-			if (yych <= '.') goto yy234;
-			goto yy75;
-		}
-	} else {
-		if (yych <= 'U') {
-			if (yych <= '9') goto yy236;
-			if (yych <= 'T') goto yy75;
-			goto yy602;
-		} else {
-			if (yych == 'u') goto yy602;
-			goto yy75;
-		}
-	}
-yy546:
-	yyaccept = 3;
-	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych <= '/') {
-		if (yych <= ',') {
-			if (yych <= 0x1F) goto yy75;
-			goto yy234;
-		} else {
-			if (yych <= '-') goto yy727;
-			if (yych <= '.') goto yy234;
-			goto yy75;
-		}
-	} else {
-		if (yych <= 'Y') {
-			if (yych <= '9') goto yy236;
-			if (yych <= 'X') goto yy75;
-			goto yy239;
-		} else {
-			if (yych == 'y') goto yy239;
-			goto yy75;
-		}
-	}
-yy547:
-	yyaccept = 3;
-	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych <= '/') {
-		if (yych <= ',') {
-			if (yych <= 0x1F) goto yy75;
-			goto yy234;
-		} else {
-			if (yych <= '-') goto yy727;
-			if (yych <= '.') goto yy234;
-			goto yy75;
-		}
-	} else {
-		if (yych <= 'E') {
-			if (yych <= '9') goto yy236;
-			if (yych <= 'D') goto yy75;
-			goto yy239;
-		} else {
-			if (yych == 'e') goto yy239;
-			goto yy75;
-		}
-	}
-yy548:
-	yyaccept = 3;
-	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych <= '/') {
-		if (yych <= ',') {
-			if (yych <= 0x1F) goto yy75;
-			goto yy234;
-		} else {
-			if (yych <= '-') goto yy727;
-			if (yych <= '.') goto yy234;
-			goto yy75;
-		}
-	} else {
-		if (yych <= 'C') {
-			if (yych <= '9') goto yy236;
-			if (yych <= 'B') goto yy75;
-			goto yy603;
-		} else {
-			if (yych == 'c') goto yy603;
-			goto yy75;
-		}
-	}
-yy549:
-	yyaccept = 3;
-	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych <= '-') {
-		if (yych <= 0x1F) goto yy75;
-		if (yych <= ',') goto yy234;
-		goto yy727;
-	} else {
-		if (yych <= '.') goto yy234;
-		if (yych <= '/') goto yy75;
-		if (yych <= '9') goto yy236;
-		goto yy75;
-	}
-yy550:
-	yyaccept = 3;
-	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych <= '/') {
-		if (yych <= ',') {
-			if (yych <= 0x1F) goto yy75;
-			goto yy234;
-		} else {
-			if (yych <= '-') goto yy727;
-			if (yych <= '.') goto yy234;
-			goto yy75;
-		}
-	} else {
-		if (yych <= 'E') {
-			if (yych <= '9') goto yy236;
-			if (yych <= 'D') goto yy75;
-			goto yy607;
-		} else {
-			if (yych == 'e') goto yy607;
-			goto yy75;
-		}
-	}
-yy551:
-	yyaccept = 3;
-	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych <= '/') {
-		if (yych <= ',') {
-			if (yych <= 0x1F) goto yy75;
-			goto yy234;
-		} else {
-			if (yych <= '-') goto yy727;
-			if (yych <= '.') goto yy234;
-			goto yy75;
-		}
-	} else {
-		if (yych <= 'O') {
-			if (yych <= '9') goto yy236;
-			if (yych <= 'N') goto yy75;
-			goto yy608;
-		} else {
-			if (yych == 'o') goto yy608;
-			goto yy75;
-		}
-	}
-yy552:
-	yyaccept = 3;
-	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych <= '/') {
-		if (yych <= ',') {
-			if (yych <= 0x1F) goto yy75;
-			goto yy234;
-		} else {
-			if (yych <= '-') goto yy727;
-			if (yych <= '.') goto yy234;
-			goto yy75;
-		}
-	} else {
-		if (yych <= 'T') {
-			if (yych <= '9') goto yy236;
-			if (yych <= 'S') goto yy75;
-			goto yy728;
-		} else {
-			if (yych == 't') goto yy728;
-			goto yy75;
-		}
-	}
-yy553:
+yy477:
 	yyaccept = 4;
 	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych == '.') goto yy729;
-	if (yych <= '/') goto yy206;
-	if (yych <= '9') goto yy730;
-	goto yy206;
-yy554:
+	if (yych == '.') goto yy635;
+	if (yych <= '/') goto yy192;
+	if (yych <= '9') goto yy636;
+	goto yy192;
+yy478:
 	yyaccept = 4;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= '/') {
-		if (yych == '.') goto yy729;
-		goto yy206;
+		if (yych == '.') goto yy635;
+		goto yy192;
 	} else {
-		if (yych <= '0') goto yy730;
-		if (yych <= '9') goto yy731;
-		goto yy206;
+		if (yych <= '0') goto yy636;
+		if (yych <= '9') goto yy637;
+		goto yy192;
 	}
-yy555:
+yy479:
 	yyaccept = 4;
 	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych == '.') goto yy729;
-	if (yych <= '/') goto yy206;
-	if (yych <= '9') goto yy731;
-	goto yy206;
-yy556:
+	if (yych == '.') goto yy635;
+	if (yych <= '/') goto yy192;
+	if (yych <= '9') goto yy637;
+	goto yy192;
+yy480:
 	yyaccept = 4;
 	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych == '.') goto yy729;
-	if (yych <= '/') goto yy206;
-	if (yych <= '9') goto yy558;
-	goto yy206;
-yy557:
+	if (yych == '.') goto yy635;
+	if (yych <= '/') goto yy192;
+	if (yych <= '9') goto yy482;
+	goto yy192;
+yy481:
 	yyaccept = 4;
 	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych == '.') goto yy729;
-	if (yych != '0') goto yy206;
-yy558:
+	if (yych == '.') goto yy635;
+	if (yych != '0') goto yy192;
+yy482:
 	yyaccept = 4;
 	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych == '.') goto yy729;
-	goto yy206;
-yy559:
+	if (yych == '.') goto yy635;
+	goto yy192;
+yy483:
 	yych = *++YYCURSOR;
-	if (yych <= '/') goto yy211;
-	if (yych <= '9') goto yy733;
-	goto yy211;
-yy560:
+	if (yych <= '/') goto yy197;
+	if (yych <= '9') goto yy639;
+	goto yy197;
+yy484:
 	yyaccept = 5;
 	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych == '/') goto yy387;
-	goto yy211;
-yy561:
+	if (yych == '/') goto yy342;
+	goto yy197;
+yy485:
 	yych = *++YYCURSOR;
-	if (yych == '/') goto yy734;
+	if (yych == '/') goto yy640;
 	goto yy53;
-yy562:
+yy486:
 	yych = *++YYCURSOR;
 	if (yych <= 'S') {
-		if (yych == '/') goto yy734;
+		if (yych == '/') goto yy640;
 		goto yy53;
 	} else {
-		if (yych <= 'T') goto yy561;
-		if (yych == 't') goto yy561;
+		if (yych <= 'T') goto yy485;
+		if (yych == 't') goto yy485;
 		goto yy53;
 	}
-yy563:
+yy487:
 	++YYCURSOR;
 	if ((YYLIMIT - YYCURSOR) < 11) YYFILL(11);
 	yych = *YYCURSOR;
-yy564:
+yy488:
 	switch (yych) {
-	case ' ':	goto yy563;
+	case ' ':	goto yy487;
 	case '!':
 	case '"':
 	case '#':
@@ -10691,41 +9418,41 @@ yy564:
 	case '+':
 	case ',':
 	case '-':
-	case '.':	goto yy565;
+	case '.':	goto yy489;
 	case 'A':
-	case 'a':	goto yy577;
+	case 'a':	goto yy501;
 	case 'D':
-	case 'd':	goto yy578;
+	case 'd':	goto yy502;
 	case 'F':
-	case 'f':	goto yy579;
+	case 'f':	goto yy503;
 	case 'H':
-	case 'h':	goto yy73;
-	case 'I':	goto yy580;
+	case 'h':	goto yy72;
+	case 'I':	goto yy504;
 	case 'J':
-	case 'j':	goto yy582;
+	case 'j':	goto yy506;
 	case 'M':
-	case 'm':	goto yy583;
+	case 'm':	goto yy507;
 	case 'N':
-	case 'n':	goto yy584;
+	case 'n':	goto yy508;
 	case 'O':
-	case 'o':	goto yy585;
+	case 'o':	goto yy509;
 	case 'S':
-	case 's':	goto yy586;
+	case 's':	goto yy510;
 	case 'T':
-	case 't':	goto yy81;
-	case 'V':	goto yy587;
+	case 't':	goto yy80;
+	case 'V':	goto yy511;
 	case 'W':
-	case 'w':	goto yy83;
-	case 'X':	goto yy589;
+	case 'w':	goto yy82;
+	case 'X':	goto yy513;
 	case 'Y':
-	case 'y':	goto yy85;
+	case 'y':	goto yy84;
 	default:	goto yy53;
 	}
-yy565:
+yy489:
 	++YYCURSOR;
 	if ((YYLIMIT - YYCURSOR) < 9) YYFILL(9);
 	yych = *YYCURSOR;
-yy566:
+yy490:
 	switch (yych) {
 	case ' ':
 	case '!':
@@ -10741,33 +9468,33 @@ yy566:
 	case '+':
 	case ',':
 	case '-':
-	case '.':	goto yy565;
+	case '.':	goto yy489;
 	case 'A':
-	case 'a':	goto yy577;
+	case 'a':	goto yy501;
 	case 'D':
-	case 'd':	goto yy735;
+	case 'd':	goto yy641;
 	case 'F':
-	case 'f':	goto yy736;
-	case 'I':	goto yy580;
+	case 'f':	goto yy642;
+	case 'I':	goto yy504;
 	case 'J':
-	case 'j':	goto yy582;
+	case 'j':	goto yy506;
 	case 'M':
-	case 'm':	goto yy737;
+	case 'm':	goto yy643;
 	case 'N':
-	case 'n':	goto yy584;
+	case 'n':	goto yy508;
 	case 'O':
-	case 'o':	goto yy585;
+	case 'o':	goto yy509;
 	case 'S':
-	case 's':	goto yy738;
-	case 'V':	goto yy587;
-	case 'X':	goto yy589;
+	case 's':	goto yy644;
+	case 'V':	goto yy511;
+	case 'X':	goto yy513;
 	default:	goto yy53;
 	}
-yy567:
+yy491:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case '0':	goto yy739;
-	case '1':	goto yy740;
+	case '0':	goto yy645;
+	case '1':	goto yy646;
 	case '2':
 	case '3':
 	case '4':
@@ -10775,140 +9502,140 @@ yy567:
 	case '6':
 	case '7':
 	case '8':
-	case '9':	goto yy741;
+	case '9':	goto yy647;
 	case 'A':
-	case 'a':	goto yy742;
+	case 'a':	goto yy648;
 	case 'D':
-	case 'd':	goto yy743;
+	case 'd':	goto yy649;
 	case 'F':
-	case 'f':	goto yy744;
+	case 'f':	goto yy650;
 	case 'J':
-	case 'j':	goto yy745;
+	case 'j':	goto yy651;
 	case 'M':
-	case 'm':	goto yy746;
+	case 'm':	goto yy652;
 	case 'N':
-	case 'n':	goto yy747;
+	case 'n':	goto yy653;
 	case 'O':
-	case 'o':	goto yy748;
+	case 'o':	goto yy654;
 	case 'S':
-	case 's':	goto yy749;
-	default:	goto yy566;
+	case 's':	goto yy655;
+	default:	goto yy490;
 	}
-yy568:
+yy492:
 	yych = *++YYCURSOR;
-	if (yych <= '/') goto yy566;
-	if (yych <= '0') goto yy750;
-	if (yych <= '2') goto yy751;
-	if (yych <= '3') goto yy752;
-	goto yy566;
-yy569:
+	if (yych <= '/') goto yy490;
+	if (yych <= '0') goto yy656;
+	if (yych <= '2') goto yy657;
+	if (yych <= '3') goto yy658;
+	goto yy490;
+yy493:
 	yych = *++YYCURSOR;
 	if (yych <= '/') goto yy53;
-	if (yych <= '0') goto yy753;
-	if (yych <= '1') goto yy754;
-	if (yych <= '9') goto yy755;
+	if (yych <= '0') goto yy659;
+	if (yych <= '1') goto yy660;
+	if (yych <= '9') goto yy661;
 	goto yy53;
-yy570:
+yy494:
 	yych = *++YYCURSOR;
-	if (yych <= '/') goto yy182;
-	if (yych <= '0') goto yy756;
-	if (yych <= '9') goto yy758;
-	goto yy182;
-yy571:
+	if (yych <= '/') goto yy176;
+	if (yych <= '0') goto yy662;
+	if (yych <= '9') goto yy664;
+	goto yy176;
+yy495:
 	yych = *++YYCURSOR;
-	if (yych <= '/') goto yy182;
-	if (yych <= '2') goto yy759;
-	if (yych <= '9') goto yy760;
-	goto yy182;
-yy572:
+	if (yych <= '/') goto yy176;
+	if (yych <= '2') goto yy664;
+	if (yych <= '9') goto yy665;
+	goto yy176;
+yy496:
 	yych = *++YYCURSOR;
-	if (yych <= '/') goto yy182;
-	if (yych <= '9') goto yy760;
-	goto yy182;
-yy573:
+	if (yych <= '/') goto yy176;
+	if (yych <= '9') goto yy665;
+	goto yy176;
+yy497:
 	yych = *++YYCURSOR;
-	if (yych <= '/') goto yy182;
-	if (yych <= '5') goto yy761;
-	if (yych <= '6') goto yy762;
-	if (yych <= '9') goto yy763;
-	goto yy182;
-yy574:
+	if (yych <= '/') goto yy176;
+	if (yych <= '5') goto yy665;
+	if (yych <= '6') goto yy666;
+	if (yych <= '9') goto yy667;
+	goto yy176;
+yy498:
 	yych = *++YYCURSOR;
-	if (yych <= '/') goto yy182;
-	if (yych <= '9') goto yy763;
-	goto yy182;
-yy575:
+	if (yych <= '/') goto yy176;
+	if (yych <= '9') goto yy667;
+	goto yy176;
+yy499:
 	yych = *++YYCURSOR;
-	if (yych <= '/') goto yy182;
-	if (yych <= '0') goto yy763;
+	if (yych <= '/') goto yy176;
+	if (yych <= '0') goto yy667;
 	if (yych <= '9') goto yy54;
-	goto yy182;
-yy576:
+	goto yy176;
+yy500:
 	yych = *++YYCURSOR;
 	if (yych <= '/') goto yy53;
-	if (yych <= '0') goto yy764;
-	if (yych <= '1') goto yy765;
+	if (yych <= '0') goto yy668;
+	if (yych <= '1') goto yy669;
 	goto yy53;
-yy577:
+yy501:
 	yych = *++YYCURSOR;
 	if (yych <= 'U') {
-		if (yych == 'P') goto yy766;
+		if (yych == 'P') goto yy670;
 		if (yych <= 'T') goto yy53;
-		goto yy767;
+		goto yy671;
 	} else {
 		if (yych <= 'p') {
 			if (yych <= 'o') goto yy53;
-			goto yy766;
+			goto yy670;
 		} else {
-			if (yych == 'u') goto yy767;
+			if (yych == 'u') goto yy671;
 			goto yy53;
 		}
 	}
-yy578:
+yy502:
 	yych = *++YYCURSOR;
 	if (yych <= 'E') {
-		if (yych == 'A') goto yy228;
+		if (yych == 'A') goto yy214;
 		if (yych <= 'D') goto yy53;
-		goto yy768;
+		goto yy672;
 	} else {
 		if (yych <= 'a') {
 			if (yych <= '`') goto yy53;
-			goto yy228;
+			goto yy214;
 		} else {
-			if (yych == 'e') goto yy768;
+			if (yych == 'e') goto yy672;
 			goto yy53;
 		}
 	}
-yy579:
+yy503:
 	yych = *++YYCURSOR;
 	if (yych <= 'R') {
 		if (yych <= 'N') {
-			if (yych == 'E') goto yy769;
+			if (yych == 'E') goto yy673;
 			goto yy53;
 		} else {
-			if (yych <= 'O') goto yy231;
+			if (yych <= 'O') goto yy217;
 			if (yych <= 'Q') goto yy53;
-			goto yy232;
+			goto yy218;
 		}
 	} else {
 		if (yych <= 'n') {
-			if (yych == 'e') goto yy769;
+			if (yych == 'e') goto yy673;
 			goto yy53;
 		} else {
-			if (yych <= 'o') goto yy231;
-			if (yych == 'r') goto yy232;
+			if (yych <= 'o') goto yy217;
+			if (yych == 'r') goto yy218;
 			goto yy53;
 		}
 	}
-yy580:
+yy504:
 	++YYCURSOR;
 	if ((yych = *YYCURSOR) <= 'U') {
-		if (yych == 'I') goto yy770;
+		if (yych == 'I') goto yy674;
 	} else {
-		if (yych == 'W') goto yy581;
-		if (yych <= 'X') goto yy771;
+		if (yych == 'W') goto yy505;
+		if (yych <= 'X') goto yy675;
 	}
-yy581:
+yy505:
 #line 1113 "parse_date.s.re"
 	{
 		DEBUG_OUTPUT("datenodayrev");
@@ -10921,723 +9648,634 @@ yy581:
 		TIMELIB_DEINIT;
 		return TIMELIB_DATE_NO_DAY;
 	}
-#line 10925 "parse_date.s.c"
-yy582:
+#line 9652 "parse_date.s.c"
+yy506:
 	yych = *++YYCURSOR;
 	if (yych <= 'U') {
-		if (yych == 'A') goto yy772;
+		if (yych == 'A') goto yy676;
 		if (yych <= 'T') goto yy53;
-		goto yy773;
+		goto yy677;
 	} else {
 		if (yych <= 'a') {
 			if (yych <= '`') goto yy53;
-			goto yy772;
+			goto yy676;
 		} else {
-			if (yych == 'u') goto yy773;
+			if (yych == 'u') goto yy677;
 			goto yy53;
 		}
 	}
-yy583:
+yy507:
 	yych = *++YYCURSOR;
 	if (yych <= 'O') {
 		if (yych <= 'H') {
-			if (yych == 'A') goto yy774;
+			if (yych == 'A') goto yy678;
 			goto yy53;
 		} else {
-			if (yych <= 'I') goto yy243;
+			if (yych <= 'I') goto yy229;
 			if (yych <= 'N') goto yy53;
-			goto yy244;
+			goto yy230;
 		}
 	} else {
 		if (yych <= 'h') {
-			if (yych == 'a') goto yy774;
+			if (yych == 'a') goto yy678;
 			goto yy53;
 		} else {
-			if (yych <= 'i') goto yy243;
-			if (yych == 'o') goto yy244;
+			if (yych <= 'i') goto yy229;
+			if (yych == 'o') goto yy230;
 			goto yy53;
 		}
 	}
-yy584:
+yy508:
 	yych = *++YYCURSOR;
-	if (yych == 'O') goto yy775;
-	if (yych == 'o') goto yy775;
+	if (yych == 'O') goto yy679;
+	if (yych == 'o') goto yy679;
 	goto yy53;
-yy585:
+yy509:
 	yych = *++YYCURSOR;
-	if (yych == 'C') goto yy776;
-	if (yych == 'c') goto yy776;
+	if (yych == 'C') goto yy680;
+	if (yych == 'c') goto yy680;
 	goto yy53;
-yy586:
+yy510:
 	yych = *++YYCURSOR;
 	if (yych <= 'U') {
 		if (yych <= 'D') {
-			if (yych == 'A') goto yy247;
+			if (yych == 'A') goto yy233;
 			goto yy53;
 		} else {
-			if (yych <= 'E') goto yy777;
+			if (yych <= 'E') goto yy681;
 			if (yych <= 'T') goto yy53;
-			goto yy249;
+			goto yy235;
 		}
 	} else {
 		if (yych <= 'd') {
-			if (yych == 'a') goto yy247;
+			if (yych == 'a') goto yy233;
 			goto yy53;
 		} else {
-			if (yych <= 'e') goto yy777;
-			if (yych == 'u') goto yy249;
+			if (yych <= 'e') goto yy681;
+			if (yych == 'u') goto yy235;
 			goto yy53;
 		}
 	}
-yy587:
+yy511:
 	yych = *++YYCURSOR;
-	if (yych == 'I') goto yy778;
-	goto yy581;
-yy588:
+	if (yych == 'I') goto yy513;
+	goto yy505;
+yy512:
 	yych = *++YYCURSOR;
 	if (yych <= '5') {
 		if (yych <= '/') goto yy53;
-		if (yych <= '0') goto yy779;
-		if (yych <= '4') goto yy780;
-		goto yy781;
+		if (yych <= '0') goto yy682;
+		if (yych <= '4') goto yy683;
+		goto yy684;
 	} else {
 		if (yych <= 'E') {
 			if (yych <= 'D') goto yy53;
-			goto yy253;
+			goto yy238;
 		} else {
-			if (yych == 'e') goto yy253;
+			if (yych == 'e') goto yy238;
 			goto yy53;
 		}
 	}
-yy589:
+yy513:
 	yych = *++YYCURSOR;
-	if (yych == 'I') goto yy782;
-	goto yy581;
-yy590:
+	if (yych == 'I') goto yy674;
+	goto yy505;
+yy514:
 	yych = *++YYCURSOR;
-	if (yych <= '/') goto yy182;
-	if (yych <= '0') goto yy783;
-	if (yych <= '9') goto yy784;
-	goto yy182;
-yy591:
+	if (yych <= '/') goto yy176;
+	if (yych <= '0') goto yy685;
+	if (yych <= '9') goto yy686;
+	goto yy176;
+yy515:
 	yych = *++YYCURSOR;
-	if (yych <= '/') goto yy182;
-	if (yych <= '2') goto yy785;
-	if (yych <= '9') goto yy786;
-	goto yy182;
-yy592:
+	if (yych <= '/') goto yy176;
+	if (yych <= '2') goto yy686;
+	if (yych <= '9') goto yy687;
+	goto yy176;
+yy516:
 	yych = *++YYCURSOR;
-	if (yych <= '/') goto yy182;
-	if (yych <= '9') goto yy786;
-	goto yy182;
-yy593:
+	if (yych <= '/') goto yy176;
+	if (yych <= '9') goto yy687;
+	goto yy176;
+yy517:
 	yych = *++YYCURSOR;
-	if (yych <= '/') goto yy182;
-	if (yych <= '5') goto yy787;
-	if (yych <= '6') goto yy788;
+	if (yych <= '/') goto yy176;
+	if (yych <= '5') goto yy687;
+	if (yych <= '6') goto yy688;
 	if (yych <= '9') goto yy54;
-	goto yy182;
-yy594:
+	goto yy176;
+yy518:
 	yych = *++YYCURSOR;
-	if (yych == 'L') goto yy239;
-	if (yych == 'l') goto yy239;
+	if (yych == 'L') goto yy225;
+	if (yych == 'l') goto yy225;
 	goto yy53;
-yy595:
+yy519:
 	yych = *++YYCURSOR;
-	if (yych == 'S') goto yy789;
-	if (yych == 's') goto yy789;
+	if (yych == 'S') goto yy689;
+	if (yych == 's') goto yy689;
 	goto yy53;
-yy596:
+yy520:
 	yych = *++YYCURSOR;
-	goto yy409;
-yy597:
+	goto yy363;
+yy521:
 	yych = *++YYCURSOR;
-	if (yych == 'M') goto yy790;
-	if (yych == 'm') goto yy790;
+	if (yych == 'M') goto yy530;
+	if (yych == 'm') goto yy530;
 	goto yy53;
-yy598:
+yy522:
 	yych = *++YYCURSOR;
-	if (yych == 'U') goto yy791;
-	if (yych == 'u') goto yy791;
+	if (yych == 'U') goto yy526;
+	if (yych == 'u') goto yy526;
 	goto yy53;
-yy599:
+yy523:
 	yych = *++YYCURSOR;
 	if (yych <= 'N') {
-		if (yych == 'H') goto yy792;
+		if (yych == 'H') goto yy690;
 		if (yych <= 'M') goto yy53;
-		goto yy793;
+		goto yy691;
 	} else {
 		if (yych <= 'h') {
 			if (yych <= 'g') goto yy53;
-			goto yy792;
+			goto yy690;
 		} else {
-			if (yych == 'n') goto yy793;
+			if (yych == 'n') goto yy691;
 			goto yy53;
 		}
 	}
-yy600:
+yy524:
 	yych = *++YYCURSOR;
-	if (yych == 'A') goto yy794;
-	if (yych == 'a') goto yy794;
+	if (yych == 'A') goto yy692;
+	if (yych == 'a') goto yy692;
 	goto yy53;
-yy601:
+yy525:
 	yych = *++YYCURSOR;
-	if (yych <= '/') goto yy237;
-	if (yych <= '9') goto yy795;
-	goto yy237;
-yy602:
+	if (yych <= '/') goto yy223;
+	if (yych <= '9') goto yy693;
+	goto yy223;
+yy526:
 	yych = *++YYCURSOR;
-	if (yych == 'A') goto yy796;
-	if (yych == 'a') goto yy796;
+	if (yych == 'A') goto yy694;
+	if (yych == 'a') goto yy694;
 	goto yy53;
-yy603:
+yy527:
 	yych = *++YYCURSOR;
-	if (yych == 'H') goto yy239;
-	if (yych == 'h') goto yy239;
+	if (yych == 'H') goto yy225;
+	if (yych == 'h') goto yy225;
 	goto yy53;
-yy604:
+yy528:
 	yych = *++YYCURSOR;
-	if (yych == 'T') goto yy797;
-	if (yych == 't') goto yy797;
+	if (yych == 'T') goto yy695;
+	if (yych == 't') goto yy695;
 	goto yy53;
-yy605:
+yy529:
 	yych = *++YYCURSOR;
-	if (yych == 'A') goto yy798;
-	if (yych == 'a') goto yy798;
+	if (yych == 'H') goto yy362;
+	if (yych == 'h') goto yy362;
 	goto yy53;
-yy606:
+yy530:
 	yych = *++YYCURSOR;
-	if (yych == 'H') goto yy408;
-	if (yych == 'h') goto yy408;
+	if (yych == 'B') goto yy696;
+	if (yych == 'b') goto yy696;
 	goto yy53;
-yy607:
+yy531:
 	yych = *++YYCURSOR;
-	if (yych == 'M') goto yy799;
-	if (yych == 'm') goto yy799;
+	if (yych == 'R') goto yy534;
+	if (yych == 'r') goto yy534;
 	goto yy53;
-yy608:
+yy532:
 	yych = *++YYCURSOR;
-	if (yych == 'B') goto yy800;
-	if (yych == 'b') goto yy800;
+	if (yych == 'N') goto yy697;
+	if (yych == 'n') goto yy697;
 	goto yy53;
-yy609:
+yy533:
 	yych = *++YYCURSOR;
-	if (yych == 'R') goto yy801;
-	if (yych == 'r') goto yy801;
-	goto yy53;
-yy610:
+	if (yych == 'S') goto yy534;
+	if (yych != 's') goto yy53;
+yy534:
 	yych = *++YYCURSOR;
-	if (yych == 'N') goto yy802;
-	if (yych == 'n') goto yy802;
+	if (yych == 'D') goto yy524;
+	if (yych == 'd') goto yy524;
 	goto yy53;
-yy611:
-	yyaccept = 3;
-	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych <= '9') {
-		if (yych <= 0x1F) goto yy75;
-		if (yych <= '.') goto yy234;
-		if (yych <= '/') goto yy75;
-		goto yy236;
-	} else {
-		if (yych <= 'E') {
-			if (yych <= 'D') goto yy75;
-			goto yy803;
-		} else {
-			if (yych == 'e') goto yy803;
-			goto yy75;
-		}
-	}
-yy612:
+yy535:
 	yych = *++YYCURSOR;
-	if (yych == 'A') goto yy804;
-	if (yych == 'a') goto yy804;
+	if (yych == 'E') goto yy533;
+	if (yych == 'e') goto yy533;
 	goto yy53;
-yy613:
-	yych = *++YYCURSOR;
-	if (yych == 'S') goto yy805;
-	if (yych == 's') goto yy805;
-	goto yy53;
-yy614:
-	yych = *++YYCURSOR;
-	if (yych == 'D') goto yy806;
-	if (yych == 'd') goto yy806;
-	goto yy53;
-yy615:
-	yych = *++YYCURSOR;
-	if (yych == 'E') goto yy807;
-	if (yych == 'e') goto yy807;
-	goto yy53;
-yy616:
+yy536:
 	yyaccept = 4;
 	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych == '.') goto yy729;
-	if (yych <= '/') goto yy206;
-	if (yych <= '9') goto yy808;
-	goto yy206;
-yy617:
+	if (yych == '.') goto yy635;
+	if (yych <= '/') goto yy192;
+	if (yych <= '9') goto yy698;
+	goto yy192;
+yy537:
 	yyaccept = 4;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= '/') {
-		if (yych == '.') goto yy729;
-		goto yy206;
+		if (yych == '.') goto yy635;
+		goto yy192;
 	} else {
-		if (yych <= '0') goto yy808;
-		if (yych <= '9') goto yy731;
-		goto yy206;
+		if (yych <= '0') goto yy698;
+		if (yych <= '9') goto yy637;
+		goto yy192;
 	}
-yy618:
+yy538:
 	++YYCURSOR;
 	if ((YYLIMIT - YYCURSOR) < 4) YYFILL(4);
 	yych = *YYCURSOR;
 	if (yych <= 'O') {
 		if (yych <= ' ') {
 			if (yych <= 0x1F) goto yy53;
-			goto yy618;
+			goto yy538;
 		} else {
-			if (yych != 'A') goto yy53;
+			if (yych == 'A') goto yy95;
+			goto yy53;
 		}
 	} else {
 		if (yych <= 'a') {
-			if (yych <= 'P') goto yy620;
+			if (yych <= 'P') goto yy95;
 			if (yych <= '`') goto yy53;
+			goto yy95;
 		} else {
-			if (yych != 'p') goto yy53;
+			if (yych == 'p') goto yy95;
+			goto yy53;
 		}
 	}
-yy620:
-	yych = *++YYCURSOR;
-	if (yych <= 'L') {
-		if (yych == '.') goto yy809;
-		goto yy53;
-	} else {
-		if (yych <= 'M') goto yy810;
-		if (yych == 'm') goto yy810;
-		goto yy53;
-	}
-yy621:
+yy540:
 	yyaccept = 4;
 	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych == '.') goto yy729;
-	if (yych <= '/') goto yy206;
-	if (yych <= '9') goto yy811;
-	goto yy206;
-yy622:
+	if (yych == '.') goto yy635;
+	if (yych <= '/') goto yy192;
+	if (yych <= '9') goto yy699;
+	goto yy192;
+yy541:
 	yyaccept = 4;
 	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych == '.') goto yy729;
-	if (yych == '0') goto yy811;
-	goto yy206;
-yy623:
+	if (yych == '.') goto yy635;
+	if (yych == '0') goto yy699;
+	goto yy192;
+yy542:
 	yych = *++YYCURSOR;
 	if (yych <= '/') goto yy53;
-	if (yych <= '9') goto yy812;
+	if (yych <= '9') goto yy700;
 	goto yy53;
-yy624:
+yy543:
 	yych = *++YYCURSOR;
-	if (yych == 'R') goto yy813;
-	if (yych == 'r') goto yy813;
+	if (yych == 'R') goto yy701;
+	if (yych == 'r') goto yy701;
 	goto yy53;
-yy625:
+yy544:
 	yych = *++YYCURSOR;
-	if (yych == 'G') goto yy813;
-	if (yych == 'g') goto yy813;
+	if (yych == 'G') goto yy701;
+	if (yych == 'g') goto yy701;
 	goto yy53;
-yy626:
+yy545:
 	yych = *++YYCURSOR;
-	if (yych == 'C') goto yy813;
-	if (yych == 'c') goto yy813;
+	if (yych == 'C') goto yy701;
+	if (yych == 'c') goto yy701;
 	goto yy53;
-yy627:
+yy546:
 	yych = *++YYCURSOR;
-	if (yych == 'B') goto yy813;
-	if (yych == 'b') goto yy813;
+	if (yych == 'B') goto yy701;
+	if (yych == 'b') goto yy701;
 	goto yy53;
-yy628:
+yy547:
 	yych = *++YYCURSOR;
-	if (yych == 'N') goto yy813;
-	if (yych == 'n') goto yy813;
+	if (yych == 'N') goto yy701;
+	if (yych == 'n') goto yy701;
 	goto yy53;
-yy629:
+yy548:
 	yych = *++YYCURSOR;
 	if (yych <= 'N') {
-		if (yych == 'L') goto yy813;
+		if (yych == 'L') goto yy701;
 		if (yych <= 'M') goto yy53;
-		goto yy813;
+		goto yy701;
 	} else {
 		if (yych <= 'l') {
 			if (yych <= 'k') goto yy53;
-			goto yy813;
+			goto yy701;
 		} else {
-			if (yych == 'n') goto yy813;
+			if (yych == 'n') goto yy701;
 			goto yy53;
 		}
 	}
-yy630:
+yy549:
 	yych = *++YYCURSOR;
 	if (yych <= 'Y') {
-		if (yych == 'R') goto yy813;
+		if (yych == 'R') goto yy701;
 		if (yych <= 'X') goto yy53;
-		goto yy813;
+		goto yy701;
 	} else {
 		if (yych <= 'r') {
 			if (yych <= 'q') goto yy53;
-			goto yy813;
+			goto yy701;
 		} else {
-			if (yych == 'y') goto yy813;
+			if (yych == 'y') goto yy701;
 			goto yy53;
 		}
 	}
-yy631:
+yy550:
 	yych = *++YYCURSOR;
-	if (yych == 'V') goto yy813;
-	if (yych == 'v') goto yy813;
+	if (yych == 'V') goto yy701;
+	if (yych == 'v') goto yy701;
 	goto yy53;
-yy632:
+yy551:
 	yych = *++YYCURSOR;
-	if (yych == 'T') goto yy813;
-	if (yych == 't') goto yy813;
+	if (yych == 'T') goto yy701;
+	if (yych == 't') goto yy701;
 	goto yy53;
-yy633:
+yy552:
 	yych = *++YYCURSOR;
-	if (yych == 'P') goto yy814;
-	if (yych == 'p') goto yy814;
+	if (yych == 'P') goto yy702;
+	if (yych == 'p') goto yy702;
 	goto yy53;
-yy634:
+yy553:
 	yych = *++YYCURSOR;
-	if (yych <= 'm') {
-		if (yych <= '1') {
-			if (yych <= '/') goto yy298;
-			if (yych <= '0') goto yy299;
-			goto yy815;
-		} else {
-			if (yych <= '2') goto yy816;
-			if (yych <= '9') goto yy815;
-			goto yy298;
-		}
-	} else {
-		if (yych <= 'r') {
-			if (yych <= 'n') goto yy301;
-			if (yych <= 'q') goto yy298;
-			goto yy302;
-		} else {
-			if (yych <= 's') goto yy303;
-			if (yych <= 't') goto yy304;
-			goto yy298;
-		}
-	}
-yy635:
+	if (yych <= '/') goto yy282;
+	if (yych <= '0') goto yy283;
+	if (yych <= '9') goto yy703;
+	goto yy282;
+yy554:
 	yych = *++YYCURSOR;
-	if (yych <= 'm') {
-		if (yych <= '1') {
-			if (yych <= '/') goto yy298;
-			goto yy815;
-		} else {
-			if (yych <= '2') goto yy816;
-			if (yych <= '9') goto yy815;
-			goto yy298;
-		}
-	} else {
-		if (yych <= 'r') {
-			if (yych <= 'n') goto yy301;
-			if (yych <= 'q') goto yy298;
-			goto yy302;
-		} else {
-			if (yych <= 's') goto yy303;
-			if (yych <= 't') goto yy304;
-			goto yy298;
-		}
-	}
-yy636:
+	if (yych <= '/') goto yy282;
+	if (yych <= '9') goto yy703;
+	goto yy282;
+yy555:
 	yych = *++YYCURSOR;
-	if (yych <= 'm') {
-		if (yych <= '1') {
-			if (yych <= '/') goto yy298;
-			goto yy815;
-		} else {
-			if (yych <= '2') goto yy305;
-			if (yych <= '9') goto yy306;
-			goto yy298;
-		}
-	} else {
-		if (yych <= 'r') {
-			if (yych <= 'n') goto yy301;
-			if (yych <= 'q') goto yy298;
-			goto yy302;
-		} else {
-			if (yych <= 's') goto yy303;
-			if (yych <= 't') goto yy304;
-			goto yy298;
-		}
-	}
-yy637:
+	if (yych <= '/') goto yy282;
+	if (yych <= '1') goto yy703;
+	if (yych <= '2') goto yy284;
+	if (yych <= '9') goto yy285;
+	goto yy282;
+yy556:
 	yych = *++YYCURSOR;
-	if (yych == 'T') goto yy126;
-	if (yych == 't') goto yy126;
+	if (yych == 'T') goto yy125;
+	if (yych == 't') goto yy125;
 	goto yy53;
-yy638:
+yy557:
 	yyaccept = 2;
 	YYMARKER = ++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	if (yych <= '^') {
-		if (yych == '/') goto yy275;
+		if (yych == '/') goto yy259;
 		goto yy18;
 	} else {
-		if (yych <= '_') goto yy275;
+		if (yych <= '_') goto yy259;
 		if (yych <= '`') goto yy18;
-		if (yych <= 'z') goto yy638;
+		if (yych <= 'z') goto yy557;
 		goto yy18;
 	}
-yy640:
+yy559:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
-yy641:
+yy560:
 	if (yych <= '^') {
-		if (yych == '/') goto yy275;
+		if (yych == '/') goto yy259;
 		goto yy53;
 	} else {
-		if (yych <= '_') goto yy275;
+		if (yych <= '_') goto yy259;
 		if (yych <= '`') goto yy53;
-		if (yych <= 'z') goto yy640;
+		if (yych <= 'z') goto yy559;
 		goto yy53;
 	}
-yy642:
+yy561:
 	yych = *++YYCURSOR;
 	if (yych <= '^') {
-		if (yych == '/') goto yy275;
-		goto yy127;
+		if (yych == '/') goto yy259;
+		goto yy126;
 	} else {
-		if (yych <= '_') goto yy275;
-		if (yych <= '`') goto yy127;
-		if (yych <= 'z') goto yy640;
-		goto yy127;
+		if (yych <= '_') goto yy259;
+		if (yych <= '`') goto yy126;
+		if (yych <= 'z') goto yy559;
+		goto yy126;
 	}
-yy643:
+yy562:
 	yych = *++YYCURSOR;
 	if (yych <= '^') {
 		if (yych <= '/') {
 			if (yych <= '.') goto yy53;
-			goto yy275;
+			goto yy259;
 		} else {
-			if (yych == 'T') goto yy126;
+			if (yych == 'T') goto yy125;
 			goto yy53;
 		}
 	} else {
 		if (yych <= 's') {
-			if (yych <= '_') goto yy275;
+			if (yych <= '_') goto yy259;
 			if (yych <= '`') goto yy53;
-			goto yy640;
+			goto yy559;
 		} else {
-			if (yych <= 't') goto yy642;
-			if (yych <= 'z') goto yy640;
+			if (yych <= 't') goto yy561;
+			if (yych <= 'z') goto yy559;
 			goto yy53;
 		}
 	}
-yy644:
+yy563:
 	yych = *++YYCURSOR;
-	if (yych == 'B') goto yy817;
-	if (yych == 'b') goto yy817;
+	if (yych == 'B') goto yy609;
+	if (yych == 'b') goto yy609;
 	goto yy53;
-yy645:
+yy564:
 	yych = *++YYCURSOR;
-	if (yych == 'B') goto yy817;
-	if (yych == 'b') goto yy818;
-	goto yy641;
-yy646:
+	if (yych == 'B') goto yy609;
+	if (yych == 'b') goto yy610;
+	goto yy560;
+yy565:
 	++YYCURSOR;
 	if ((YYLIMIT - YYCURSOR) < 11) YYFILL(11);
 	yych = *YYCURSOR;
-yy647:
+yy566:
 	switch (yych) {
-	case ' ':	goto yy646;
+	case ' ':	goto yy565;
 	case 'D':
-	case 'd':	goto yy672;
+	case 'd':	goto yy591;
 	case 'F':
-	case 'f':	goto yy673;
+	case 'f':	goto yy592;
 	case 'H':
-	case 'h':	goto yy674;
+	case 'h':	goto yy593;
 	case 'M':
-	case 'm':	goto yy675;
+	case 'm':	goto yy594;
 	case 'S':
-	case 's':	goto yy676;
+	case 's':	goto yy595;
 	case 'T':
-	case 't':	goto yy677;
+	case 't':	goto yy596;
 	case 'W':
-	case 'w':	goto yy678;
+	case 'w':	goto yy597;
 	case 'Y':
-	case 'y':	goto yy679;
+	case 'y':	goto yy598;
 	default:	goto yy53;
 	}
-yy648:
+yy567:
 	yych = *++YYCURSOR;
-	if (yych == 'N') goto yy819;
-	if (yych == 'n') goto yy819;
+	if (yych == 'N') goto yy616;
+	if (yych == 'n') goto yy616;
 	goto yy53;
-yy649:
+yy568:
 	yych = *++YYCURSOR;
 	if (yych <= 'h') {
 		if (yych <= '`') {
 			if (yych <= '/') {
-				if (yych <= '.') goto yy647;
-				goto yy275;
+				if (yych <= '.') goto yy566;
+				goto yy259;
 			} else {
-				if (yych == '_') goto yy275;
-				goto yy647;
+				if (yych == '_') goto yy259;
+				goto yy566;
 			}
 		} else {
 			if (yych <= 'e') {
-				if (yych == 'd') goto yy680;
-				goto yy640;
+				if (yych == 'd') goto yy599;
+				goto yy559;
 			} else {
-				if (yych <= 'f') goto yy681;
-				if (yych <= 'g') goto yy640;
-				goto yy682;
+				if (yych <= 'f') goto yy600;
+				if (yych <= 'g') goto yy559;
+				goto yy601;
 			}
 		}
 	} else {
 		if (yych <= 't') {
 			if (yych <= 'm') {
-				if (yych <= 'l') goto yy640;
-				goto yy683;
+				if (yych <= 'l') goto yy559;
+				goto yy602;
 			} else {
-				if (yych <= 'r') goto yy640;
-				if (yych <= 's') goto yy684;
-				goto yy685;
+				if (yych <= 'r') goto yy559;
+				if (yych <= 's') goto yy603;
+				goto yy604;
 			}
 		} else {
 			if (yych <= 'x') {
-				if (yych == 'w') goto yy686;
-				goto yy640;
+				if (yych == 'w') goto yy605;
+				goto yy559;
 			} else {
-				if (yych <= 'y') goto yy687;
-				if (yych <= 'z') goto yy640;
-				goto yy647;
+				if (yych <= 'y') goto yy606;
+				if (yych <= 'z') goto yy559;
+				goto yy566;
 			}
 		}
 	}
-yy650:
+yy569:
 	yych = *++YYCURSOR;
-	if (yych == 'N') goto yy819;
-	if (yych == 'n') goto yy820;
-	goto yy641;
-yy651:
+	if (yych == 'N') goto yy616;
+	if (yych == 'n') goto yy620;
+	goto yy560;
+yy570:
 	yych = *++YYCURSOR;
-	if (yych == 'A') goto yy821;
-	if (yych == 'a') goto yy821;
+	if (yych == 'A') goto yy589;
+	if (yych == 'a') goto yy589;
 	goto yy53;
-yy652:
+yy571:
 	yych = *++YYCURSOR;
-	if (yych == 'H') goto yy646;
-	if (yych == 'h') goto yy646;
+	if (yych == 'H') goto yy565;
+	if (yych == 'h') goto yy565;
 	goto yy53;
-yy653:
+yy572:
 	yych = *++YYCURSOR;
-	if (yych == 'Y') goto yy822;
-	if (yych == 'y') goto yy822;
+	if (yych == 'Y') goto yy704;
+	if (yych == 'y') goto yy704;
 	goto yy53;
-yy654:
+yy573:
 	yych = *++YYCURSOR;
-	if (yych == 'A') goto yy821;
-	if (yych == 'a') goto yy823;
-	goto yy641;
-yy655:
+	if (yych == 'A') goto yy589;
+	if (yych == 'a') goto yy590;
+	goto yy560;
+yy574:
 	yych = *++YYCURSOR;
 	if (yych <= '^') {
 		if (yych <= '/') {
 			if (yych <= '.') goto yy53;
-			goto yy275;
+			goto yy259;
 		} else {
-			if (yych == 'H') goto yy646;
+			if (yych == 'H') goto yy565;
 			goto yy53;
 		}
 	} else {
 		if (yych <= 'g') {
-			if (yych <= '_') goto yy275;
+			if (yych <= '_') goto yy259;
 			if (yych <= '`') goto yy53;
-			goto yy640;
+			goto yy559;
 		} else {
-			if (yych <= 'h') goto yy649;
-			if (yych <= 'z') goto yy640;
+			if (yych <= 'h') goto yy568;
+			if (yych <= 'z') goto yy559;
 			goto yy53;
 		}
 	}
-yy656:
+yy575:
 	yych = *++YYCURSOR;
-	if (yych == 'Y') goto yy822;
-	if (yych == 'y') goto yy824;
-	goto yy641;
-yy657:
+	if (yych == 'Y') goto yy704;
+	if (yych == 'y') goto yy705;
+	goto yy560;
+yy576:
 	yyaccept = 8;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= '/') {
-		if (yych == '.') goto yy481;
-		goto yy130;
+		if (yych == '.') goto yy429;
+		goto yy129;
 	} else {
-		if (yych <= '9') goto yy825;
-		if (yych <= ':') goto yy481;
-		goto yy130;
+		if (yych <= '9') goto yy706;
+		if (yych <= ':') goto yy429;
+		goto yy129;
 	}
-yy658:
+yy577:
 	yych = *++YYCURSOR;
-	if (yych <= '/') goto yy130;
-	if (yych <= '9') goto yy825;
-	goto yy130;
-yy659:
+	if (yych <= '/') goto yy129;
+	if (yych <= '9') goto yy706;
+	goto yy129;
+yy578:
 	yyaccept = 8;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= '/') {
-		if (yych == '.') goto yy826;
-		goto yy130;
+		if (yych == '.') goto yy707;
+		goto yy129;
 	} else {
-		if (yych <= '9') goto yy827;
-		if (yych <= ':') goto yy826;
-		goto yy130;
+		if (yych <= '9') goto yy708;
+		if (yych <= ':') goto yy707;
+		goto yy129;
 	}
-yy660:
+yy579:
 	yyaccept = 8;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= '/') {
-		if (yych == '.') goto yy826;
-		goto yy130;
+		if (yych == '.') goto yy707;
+		goto yy129;
 	} else {
-		if (yych <= '3') goto yy827;
-		if (yych <= '9') goto yy828;
-		if (yych <= ':') goto yy826;
-		goto yy130;
+		if (yych <= '3') goto yy708;
+		if (yych <= '9') goto yy709;
+		if (yych <= ':') goto yy707;
+		goto yy129;
 	}
-yy661:
+yy580:
 	yyaccept = 8;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= '/') {
-		if (yych == '.') goto yy826;
-		goto yy130;
+		if (yych == '.') goto yy707;
+		goto yy129;
 	} else {
-		if (yych <= '9') goto yy828;
-		if (yych <= ':') goto yy826;
-		goto yy130;
+		if (yych <= '9') goto yy709;
+		if (yych <= ':') goto yy707;
+		goto yy129;
 	}
-yy662:
+yy581:
 	yyaccept = 8;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= '/') {
-		if (yych == '.') goto yy826;
-		goto yy130;
+		if (yych == '.') goto yy707;
+		goto yy129;
 	} else {
-		if (yych <= '9') goto yy658;
-		if (yych <= ':') goto yy826;
-		goto yy130;
+		if (yych <= '9') goto yy577;
+		if (yych <= ':') goto yy707;
+		goto yy129;
 	}
-yy663:
+yy582:
 	yyaccept = 15;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= '/') {
-		if (yych == '.') goto yy481;
+		if (yych == '.') goto yy429;
 	} else {
-		if (yych <= '9') goto yy825;
-		if (yych <= ':') goto yy481;
+		if (yych <= '9') goto yy706;
+		if (yych <= ':') goto yy429;
 	}
-yy664:
+yy583:
 #line 1100 "parse_date.s.re"
 	{
 		DEBUG_OUTPUT("datenoday");
@@ -11650,22 +10288,22 @@ yy664:
 		TIMELIB_DEINIT;
 		return TIMELIB_DATE_NO_DAY;
 	}
-#line 11654 "parse_date.s.c"
-yy665:
+#line 10292 "parse_date.s.c"
+yy584:
 	yych = *++YYCURSOR;
-	if (yych <= '/') goto yy664;
-	if (yych <= '9') goto yy825;
-	goto yy664;
-yy666:
+	if (yych <= '/') goto yy583;
+	if (yych <= '9') goto yy706;
+	goto yy583;
+yy585:
 	yyaccept = 16;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= '/') {
-		if (yych == '.') goto yy829;
+		if (yych == '.') goto yy710;
 	} else {
-		if (yych <= '9') goto yy668;
-		if (yych <= ':') goto yy829;
+		if (yych <= '9') goto yy587;
+		if (yych <= ':') goto yy710;
 	}
-yy667:
+yy586:
 #line 1351 "parse_date.s.re"
 	{
 		int tz_not_found;
@@ -11693,324 +10331,289 @@ yy667:
 		TIMELIB_DEINIT;
 		return TIMELIB_SHORTDATE_WITH_TIME;
 	}
-#line 11697 "parse_date.s.c"
-yy668:
+#line 10335 "parse_date.s.c"
+yy587:
 	yyaccept = 16;
 	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych == '.') goto yy829;
-	if (yych == ':') goto yy829;
-	goto yy667;
-yy669:
+	if (yych == '.') goto yy710;
+	if (yych == ':') goto yy710;
+	goto yy586;
+yy588:
 	yych = *++YYCURSOR;
-	if (yych <= '/') goto yy664;
-	if (yych <= '9') goto yy830;
-	goto yy664;
-yy670:
+	if (yych <= '/') goto yy583;
+	if (yych <= '9') goto yy711;
+	goto yy583;
+yy589:
 	yych = *++YYCURSOR;
-	if (yych == 'R') goto yy831;
-	if (yych == 'r') goto yy831;
+	if (yych == 'R') goto yy712;
+	if (yych == 'r') goto yy712;
 	goto yy53;
-yy671:
+yy590:
 	yych = *++YYCURSOR;
-	if (yych == 'R') goto yy831;
-	if (yych == 'r') goto yy832;
-	goto yy641;
-yy672:
+	if (yych == 'R') goto yy712;
+	if (yych == 'r') goto yy713;
+	goto yy560;
+yy591:
 	yych = *++YYCURSOR;
-	if (yych == 'A') goto yy833;
-	if (yych == 'a') goto yy833;
+	if (yych == 'A') goto yy714;
+	if (yych == 'a') goto yy714;
 	goto yy53;
-yy673:
+yy592:
 	yych = *++YYCURSOR;
 	if (yych <= 'R') {
-		if (yych == 'O') goto yy834;
+		if (yych == 'O') goto yy715;
 		if (yych <= 'Q') goto yy53;
-		goto yy835;
+		goto yy716;
 	} else {
 		if (yych <= 'o') {
 			if (yych <= 'n') goto yy53;
-			goto yy834;
+			goto yy715;
 		} else {
-			if (yych == 'r') goto yy835;
+			if (yych == 'r') goto yy716;
 			goto yy53;
 		}
 	}
-yy674:
+yy593:
 	yych = *++YYCURSOR;
-	if (yych == 'O') goto yy836;
-	if (yych == 'o') goto yy836;
+	if (yych == 'O') goto yy717;
+	if (yych == 'o') goto yy717;
 	goto yy53;
-yy675:
+yy594:
 	yych = *++YYCURSOR;
 	if (yych <= 'O') {
-		if (yych == 'I') goto yy837;
+		if (yych == 'I') goto yy718;
 		if (yych <= 'N') goto yy53;
-		goto yy838;
+		goto yy719;
 	} else {
 		if (yych <= 'i') {
 			if (yych <= 'h') goto yy53;
-			goto yy837;
+			goto yy718;
 		} else {
-			if (yych == 'o') goto yy838;
+			if (yych == 'o') goto yy719;
 			goto yy53;
 		}
 	}
-yy676:
+yy595:
 	yych = *++YYCURSOR;
 	if (yych <= 'U') {
 		if (yych <= 'D') {
-			if (yych == 'A') goto yy839;
+			if (yych == 'A') goto yy720;
 			goto yy53;
 		} else {
-			if (yych <= 'E') goto yy840;
+			if (yych <= 'E') goto yy721;
 			if (yych <= 'T') goto yy53;
-			goto yy841;
+			goto yy722;
 		}
 	} else {
 		if (yych <= 'd') {
-			if (yych == 'a') goto yy839;
+			if (yych == 'a') goto yy720;
 			goto yy53;
 		} else {
-			if (yych <= 'e') goto yy840;
-			if (yych == 'u') goto yy841;
+			if (yych <= 'e') goto yy721;
+			if (yych == 'u') goto yy722;
 			goto yy53;
 		}
 	}
-yy677:
+yy596:
 	yych = *++YYCURSOR;
 	if (yych <= 'U') {
-		if (yych == 'H') goto yy842;
+		if (yych == 'H') goto yy723;
 		if (yych <= 'T') goto yy53;
-		goto yy843;
+		goto yy724;
 	} else {
 		if (yych <= 'h') {
 			if (yych <= 'g') goto yy53;
-			goto yy842;
+			goto yy723;
 		} else {
-			if (yych == 'u') goto yy843;
+			if (yych == 'u') goto yy724;
 			goto yy53;
 		}
 	}
-yy678:
+yy597:
 	yych = *++YYCURSOR;
-	if (yych == 'E') goto yy844;
-	if (yych == 'e') goto yy844;
+	if (yych == 'E') goto yy725;
+	if (yych == 'e') goto yy725;
 	goto yy53;
-yy679:
+yy598:
 	yych = *++YYCURSOR;
-	if (yych == 'E') goto yy845;
-	if (yych == 'e') goto yy845;
+	if (yych == 'E') goto yy726;
+	if (yych == 'e') goto yy726;
 	goto yy53;
-yy680:
+yy599:
 	yych = *++YYCURSOR;
-	if (yych == 'A') goto yy833;
-	if (yych == 'a') goto yy846;
-	goto yy641;
-yy681:
+	if (yych == 'A') goto yy714;
+	if (yych == 'a') goto yy727;
+	goto yy560;
+yy600:
 	yych = *++YYCURSOR;
 	if (yych <= 'R') {
-		if (yych == 'O') goto yy834;
-		if (yych <= 'Q') goto yy641;
-		goto yy835;
+		if (yych == 'O') goto yy715;
+		if (yych <= 'Q') goto yy560;
+		goto yy716;
 	} else {
 		if (yych <= 'o') {
-			if (yych <= 'n') goto yy641;
-			goto yy847;
+			if (yych <= 'n') goto yy560;
+			goto yy728;
 		} else {
-			if (yych == 'r') goto yy848;
-			goto yy641;
+			if (yych == 'r') goto yy729;
+			goto yy560;
 		}
 	}
-yy682:
+yy601:
 	yych = *++YYCURSOR;
-	if (yych == 'O') goto yy836;
-	if (yych == 'o') goto yy849;
-	goto yy641;
-yy683:
+	if (yych == 'O') goto yy717;
+	if (yych == 'o') goto yy730;
+	goto yy560;
+yy602:
 	yych = *++YYCURSOR;
 	if (yych <= 'O') {
-		if (yych == 'I') goto yy837;
-		if (yych <= 'N') goto yy641;
-		goto yy838;
+		if (yych == 'I') goto yy718;
+		if (yych <= 'N') goto yy560;
+		goto yy719;
 	} else {
 		if (yych <= 'i') {
-			if (yych <= 'h') goto yy641;
-			goto yy850;
+			if (yych <= 'h') goto yy560;
+			goto yy731;
 		} else {
-			if (yych == 'o') goto yy851;
-			goto yy641;
+			if (yych == 'o') goto yy732;
+			goto yy560;
 		}
 	}
-yy684:
+yy603:
 	yych = *++YYCURSOR;
 	if (yych <= 'U') {
 		if (yych <= 'D') {
-			if (yych == 'A') goto yy839;
-			goto yy641;
+			if (yych == 'A') goto yy720;
+			goto yy560;
 		} else {
-			if (yych <= 'E') goto yy840;
-			if (yych <= 'T') goto yy641;
-			goto yy841;
+			if (yych <= 'E') goto yy721;
+			if (yych <= 'T') goto yy560;
+			goto yy722;
 		}
 	} else {
 		if (yych <= 'd') {
-			if (yych == 'a') goto yy852;
-			goto yy641;
+			if (yych == 'a') goto yy733;
+			goto yy560;
 		} else {
-			if (yych <= 'e') goto yy853;
-			if (yych == 'u') goto yy854;
-			goto yy641;
+			if (yych <= 'e') goto yy734;
+			if (yych == 'u') goto yy735;
+			goto yy560;
 		}
 	}
-yy685:
+yy604:
 	yych = *++YYCURSOR;
 	if (yych <= 'U') {
-		if (yych == 'H') goto yy842;
-		if (yych <= 'T') goto yy641;
-		goto yy843;
+		if (yych == 'H') goto yy723;
+		if (yych <= 'T') goto yy560;
+		goto yy724;
 	} else {
 		if (yych <= 'h') {
-			if (yych <= 'g') goto yy641;
-			goto yy855;
+			if (yych <= 'g') goto yy560;
+			goto yy736;
 		} else {
-			if (yych == 'u') goto yy856;
-			goto yy641;
+			if (yych == 'u') goto yy737;
+			goto yy560;
 		}
 	}
-yy686:
+yy605:
 	yych = *++YYCURSOR;
-	if (yych == 'E') goto yy844;
-	if (yych == 'e') goto yy857;
-	goto yy641;
-yy687:
+	if (yych == 'E') goto yy725;
+	if (yych == 'e') goto yy738;
+	goto yy560;
+yy606:
 	yych = *++YYCURSOR;
-	if (yych == 'E') goto yy845;
-	if (yych == 'e') goto yy858;
-	goto yy641;
-yy688:
+	if (yych == 'E') goto yy726;
+	if (yych == 'e') goto yy739;
+	goto yy560;
+yy607:
 	yych = *++YYCURSOR;
-	if (yych == 'G') goto yy859;
-	if (yych == 'g') goto yy859;
+	if (yych == 'G') goto yy740;
+	if (yych == 'g') goto yy740;
 	goto yy53;
-yy689:
+yy608:
 	yych = *++YYCURSOR;
-	if (yych == 'Y') goto yy822;
-	if (yych == 'y') goto yy822;
+	if (yych == 'G') goto yy740;
+	if (yych == 'g') goto yy741;
+	goto yy560;
+yy609:
+	yych = *++YYCURSOR;
+	if (yych == 'E') goto yy742;
+	if (yych == 'e') goto yy742;
 	goto yy53;
-yy690:
+yy610:
 	yych = *++YYCURSOR;
-	if (yych == 'G') goto yy859;
-	if (yych == 'g') goto yy860;
-	goto yy641;
-yy691:
+	if (yych == 'E') goto yy742;
+	if (yych == 'e') goto yy743;
+	goto yy560;
+yy611:
 	yych = *++YYCURSOR;
-	if (yych == 'Y') goto yy822;
-	if (yych == 'y') goto yy824;
-	goto yy641;
-yy692:
-	yych = *++YYCURSOR;
-	if (yych == 'B') goto yy861;
-	if (yych == 'b') goto yy861;
+	if (yych == 'O') goto yy744;
+	if (yych == 'o') goto yy744;
 	goto yy53;
-yy693:
+yy612:
 	yych = *++YYCURSOR;
-	if (yych == 'B') goto yy861;
-	if (yych == 'b') goto yy862;
-	goto yy641;
-yy694:
+	if (yych == 'O') goto yy744;
+	if (yych == 'o') goto yy745;
+	goto yy560;
+yy613:
 	yych = *++YYCURSOR;
-	if (yych == 'E') goto yy863;
-	if (yych == 'e') goto yy863;
+	if (yych == 'D') goto yy624;
+	if (yych == 'd') goto yy624;
 	goto yy53;
-yy695:
+yy614:
 	yych = *++YYCURSOR;
-	if (yych == 'E') goto yy863;
-	if (yych == 'e') goto yy864;
-	goto yy641;
-yy696:
-	yych = *++YYCURSOR;
-	if (yych == 'O') goto yy865;
-	if (yych == 'o') goto yy865;
+	if (yych == 'D') goto yy565;
+	if (yych == 'd') goto yy565;
 	goto yy53;
-yy697:
+yy615:
 	yych = *++YYCURSOR;
-	if (yych == 'O') goto yy865;
-	if (yych == 'o') goto yy866;
-	goto yy641;
-yy698:
-	yych = *++YYCURSOR;
-	if (yych == 'D') goto yy867;
-	if (yych == 'd') goto yy867;
+	if (yych == 'M') goto yy563;
+	if (yych == 'm') goto yy563;
 	goto yy53;
-yy699:
+yy616:
 	yych = *++YYCURSOR;
-	if (yych == 'D') goto yy646;
-	if (yych == 'd') goto yy646;
+	if (yych == 'T') goto yy571;
+	if (yych == 't') goto yy571;
 	goto yy53;
-yy700:
+yy617:
 	yych = *++YYCURSOR;
-	if (yych == 'M') goto yy868;
-	if (yych == 'm') goto yy868;
-	goto yy53;
-yy701:
-	yych = *++YYCURSOR;
-	if (yych == 'T') goto yy869;
-	if (yych == 't') goto yy869;
-	goto yy53;
-yy702:
-	yych = *++YYCURSOR;
-	if (yych == 'Y') goto yy822;
-	if (yych == 'y') goto yy822;
-	goto yy53;
-yy703:
-	yych = *++YYCURSOR;
-	if (yych == 'D') goto yy867;
-	if (yych == 'd') goto yy870;
-	goto yy641;
-yy704:
+	if (yych == 'D') goto yy624;
+	if (yych == 'd') goto yy627;
+	goto yy560;
+yy618:
 	yych = *++YYCURSOR;
 	if (yych <= '^') {
 		if (yych <= '/') {
 			if (yych <= '.') goto yy53;
-			goto yy275;
+			goto yy259;
 		} else {
-			if (yych == 'D') goto yy646;
+			if (yych == 'D') goto yy565;
 			goto yy53;
 		}
 	} else {
 		if (yych <= 'c') {
-			if (yych <= '_') goto yy275;
+			if (yych <= '_') goto yy259;
 			if (yych <= '`') goto yy53;
-			goto yy640;
+			goto yy559;
 		} else {
-			if (yych <= 'd') goto yy649;
-			if (yych <= 'z') goto yy640;
+			if (yych <= 'd') goto yy568;
+			if (yych <= 'z') goto yy559;
 			goto yy53;
 		}
 	}
-yy705:
+yy619:
 	yych = *++YYCURSOR;
-	if (yych == 'M') goto yy868;
-	if (yych == 'm') goto yy871;
-	goto yy641;
-yy706:
+	if (yych == 'M') goto yy563;
+	if (yych == 'm') goto yy564;
+	goto yy560;
+yy620:
 	yych = *++YYCURSOR;
-	if (yych == 'T') goto yy869;
-	if (yych == 't') goto yy872;
-	goto yy641;
-yy707:
-	yych = *++YYCURSOR;
-	if (yych == 'Y') goto yy822;
-	if (yych == 'y') goto yy824;
-	goto yy641;
-yy708:
-	yych = *++YYCURSOR;
-	if (yych == 'D') goto yy873;
-	if (yych == 'd') goto yy873;
-	goto yy53;
-yy709:
+	if (yych == 'T') goto yy571;
+	if (yych == 't') goto yy574;
+	goto yy560;
+yy621:
 	++YYCURSOR;
-yy710:
+yy622:
 #line 883 "parse_date.s.re"
 	{
 		DEBUG_OUTPUT("midnight | today");
@@ -12020,136 +10623,88 @@ yy710:
 		TIMELIB_DEINIT;
 		return TIMELIB_RELATIVE;
 	}
-#line 12024 "parse_date.s.c"
-yy711:
+#line 10627 "parse_date.s.c"
+yy623:
 	yych = *++YYCURSOR;
-	if (yych == 'R') goto yy874;
-	if (yych == 'r') goto yy874;
+	if (yych == 'R') goto yy746;
+	if (yych == 'r') goto yy746;
 	goto yy53;
-yy712:
+yy624:
 	yych = *++YYCURSOR;
-	if (yych == 'A') goto yy875;
-	if (yych == 'a') goto yy875;
+	if (yych == 'A') goto yy572;
+	if (yych == 'a') goto yy572;
 	goto yy53;
-yy713:
-	yych = *++YYCURSOR;
-	if (yych == 'T') goto yy876;
-	if (yych == 't') goto yy876;
-	goto yy53;
-yy714:
-	yych = *++YYCURSOR;
-	if (yych == 'D') goto yy873;
-	if (yych == 'd') goto yy877;
-	goto yy641;
-yy715:
+yy625:
 	yyaccept = 17;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= '^') {
-		if (yych == '/') goto yy275;
-		goto yy710;
+		if (yych == '/') goto yy259;
+		goto yy622;
 	} else {
-		if (yych <= '_') goto yy275;
-		if (yych <= '`') goto yy710;
-		if (yych <= 'z') goto yy640;
-		goto yy710;
+		if (yych <= '_') goto yy259;
+		if (yych <= '`') goto yy622;
+		if (yych <= 'z') goto yy559;
+		goto yy622;
 	}
-yy716:
+yy626:
 	yych = *++YYCURSOR;
-	if (yych == 'R') goto yy874;
-	if (yych == 'r') goto yy878;
-	goto yy641;
-yy717:
+	if (yych == 'R') goto yy746;
+	if (yych == 'r') goto yy747;
+	goto yy560;
+yy627:
 	yych = *++YYCURSOR;
-	if (yych == 'A') goto yy875;
-	if (yych == 'a') goto yy879;
-	goto yy641;
-yy718:
+	if (yych == 'A') goto yy572;
+	if (yych == 'a') goto yy575;
+	goto yy560;
+yy628:
 	yych = *++YYCURSOR;
-	if (yych == 'T') goto yy876;
-	if (yych == 't') goto yy880;
-	goto yy641;
-yy719:
-	yych = *++YYCURSOR;
-	if (yych == 'S') goto yy881;
-	if (yych == 's') goto yy881;
+	if (yych == 'S') goto yy613;
+	if (yych == 's') goto yy613;
 	goto yy53;
-yy720:
+yy629:
 	yych = *++YYCURSOR;
-	if (yych == 'S') goto yy881;
-	if (yych == 's') goto yy882;
-	goto yy641;
-yy721:
+	if (yych == 'S') goto yy613;
+	if (yych == 's') goto yy617;
+	goto yy560;
+yy630:
 	yych = *++YYCURSOR;
-	if (yych == 'R') goto yy883;
-	if (yych == 'r') goto yy883;
+	if (yych == 'R') goto yy748;
+	if (yych == 'r') goto yy748;
 	goto yy53;
-yy722:
+yy631:
 	yych = *++YYCURSOR;
-	if (yych == 'R') goto yy883;
-	if (yych == 'r') goto yy884;
-	goto yy641;
-yy723:
+	if (yych == 'R') goto yy748;
+	if (yych == 'r') goto yy749;
+	goto yy560;
+yy632:
 	yych = *++YYCURSOR;
-	if (yych == 'd') goto yy885;
+	if (yych == 'd') goto yy750;
 	goto yy53;
-yy724:
+yy633:
 	yych = *++YYCURSOR;
-	if (yych == 'd') goto yy885;
+	if (yych == 't') goto yy750;
 	goto yy53;
-yy725:
+yy634:
 	yych = *++YYCURSOR;
-	if (yych == 't') goto yy885;
+	if (yych == 'h') goto yy750;
 	goto yy53;
-yy726:
-	yych = *++YYCURSOR;
-	if (yych == 'h') goto yy885;
-	goto yy53;
-yy727:
-	yych = *++YYCURSOR;
-	if (yych <= '/') goto yy235;
-	if (yych <= '0') goto yy886;
-	if (yych <= '2') goto yy887;
-	if (yych <= '3') goto yy888;
-	goto yy235;
-yy728:
-	yyaccept = 3;
-	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych <= '/') {
-		if (yych <= ',') {
-			if (yych <= 0x1F) goto yy75;
-			goto yy234;
-		} else {
-			if (yych <= '-') goto yy727;
-			if (yych <= '.') goto yy234;
-			goto yy75;
-		}
-	} else {
-		if (yych <= 'E') {
-			if (yych <= '9') goto yy236;
-			if (yych <= 'D') goto yy75;
-			goto yy803;
-		} else {
-			if (yych == 'e') goto yy803;
-			goto yy75;
-		}
-	}
-yy729:
+yy635:
 	yych = *++YYCURSOR;
 	if (yych <= '/') goto yy53;
-	if (yych <= '9') goto yy889;
+	if (yych <= '9') goto yy751;
 	goto yy53;
-yy730:
+yy636:
 	yyaccept = 4;
 	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych == '.') goto yy729;
-	if (yych <= '/') goto yy206;
-	if (yych <= '9') goto yy891;
-	goto yy206;
-yy731:
+	if (yych == '.') goto yy635;
+	if (yych <= '/') goto yy192;
+	if (yych <= '9') goto yy753;
+	goto yy192;
+yy637:
 	++YYCURSOR;
-	if ((yych = *YYCURSOR) <= '/') goto yy732;
-	if (yych <= '9') goto yy891;
-yy732:
+	if ((yych = *YYCURSOR) <= '/') goto yy638;
+	if (yych <= '9') goto yy753;
+yy638:
 #line 1087 "parse_date.s.re"
 	{
 		DEBUG_OUTPUT("pointed date");
@@ -12162,152 +10717,152 @@ yy732:
 		TIMELIB_DEINIT;
 		return TIMELIB_DATE_FULL_POINTED;
 	}
-#line 12166 "parse_date.s.c"
-yy733:
+#line 10721 "parse_date.s.c"
+yy639:
 	yych = *++YYCURSOR;
-	if (yych <= '/') goto yy211;
-	if (yych <= '9') goto yy892;
-	goto yy211;
-yy734:
+	if (yych <= '/') goto yy197;
+	if (yych <= '9') goto yy754;
+	goto yy197;
+yy640:
 	yych = *++YYCURSOR;
 	if (yych <= '/') goto yy53;
-	if (yych <= '9') goto yy893;
+	if (yych <= '9') goto yy755;
 	goto yy53;
-yy735:
+yy641:
+	yych = *++YYCURSOR;
+	if (yych == 'E') goto yy672;
+	if (yych == 'e') goto yy672;
+	goto yy53;
+yy642:
+	yych = *++YYCURSOR;
+	if (yych == 'E') goto yy673;
+	if (yych == 'e') goto yy673;
+	goto yy53;
+yy643:
+	yych = *++YYCURSOR;
+	if (yych == 'A') goto yy678;
+	if (yych == 'a') goto yy678;
+	goto yy53;
+yy644:
+	yych = *++YYCURSOR;
+	if (yych == 'E') goto yy756;
+	if (yych == 'e') goto yy756;
+	goto yy53;
+yy645:
+	yych = *++YYCURSOR;
+	if (yych <= '/') {
+		if (yych == '-') goto yy757;
+		goto yy53;
+	} else {
+		if (yych <= '0') goto yy647;
+		if (yych <= '9') goto yy758;
+		goto yy53;
+	}
+yy646:
+	yych = *++YYCURSOR;
+	if (yych == '-') goto yy757;
+	if (yych <= '/') goto yy53;
+	if (yych <= '2') goto yy758;
+	goto yy53;
+yy647:
+	yych = *++YYCURSOR;
+	if (yych == '-') goto yy757;
+	goto yy53;
+yy648:
+	yych = *++YYCURSOR;
+	if (yych <= 'U') {
+		if (yych == 'P') goto yy759;
+		if (yych <= 'T') goto yy53;
+		goto yy760;
+	} else {
+		if (yych <= 'p') {
+			if (yych <= 'o') goto yy53;
+			goto yy759;
+		} else {
+			if (yych == 'u') goto yy760;
+			goto yy53;
+		}
+	}
+yy649:
+	yych = *++YYCURSOR;
+	if (yych == 'E') goto yy761;
+	if (yych == 'e') goto yy761;
+	goto yy53;
+yy650:
+	yych = *++YYCURSOR;
+	if (yych == 'E') goto yy762;
+	if (yych == 'e') goto yy762;
+	goto yy53;
+yy651:
+	yych = *++YYCURSOR;
+	if (yych <= 'U') {
+		if (yych == 'A') goto yy763;
+		if (yych <= 'T') goto yy53;
+		goto yy764;
+	} else {
+		if (yych <= 'a') {
+			if (yych <= '`') goto yy53;
+			goto yy763;
+		} else {
+			if (yych == 'u') goto yy764;
+			goto yy53;
+		}
+	}
+yy652:
+	yych = *++YYCURSOR;
+	if (yych == 'A') goto yy765;
+	if (yych == 'a') goto yy765;
+	goto yy53;
+yy653:
+	yych = *++YYCURSOR;
+	if (yych == 'O') goto yy766;
+	if (yych == 'o') goto yy766;
+	goto yy53;
+yy654:
+	yych = *++YYCURSOR;
+	if (yych == 'C') goto yy767;
+	if (yych == 'c') goto yy767;
+	goto yy53;
+yy655:
 	yych = *++YYCURSOR;
 	if (yych == 'E') goto yy768;
 	if (yych == 'e') goto yy768;
 	goto yy53;
-yy736:
-	yych = *++YYCURSOR;
-	if (yych == 'E') goto yy769;
-	if (yych == 'e') goto yy769;
-	goto yy53;
-yy737:
-	yych = *++YYCURSOR;
-	if (yych == 'A') goto yy774;
-	if (yych == 'a') goto yy774;
-	goto yy53;
-yy738:
-	yych = *++YYCURSOR;
-	if (yych == 'E') goto yy894;
-	if (yych == 'e') goto yy894;
-	goto yy53;
-yy739:
-	yych = *++YYCURSOR;
-	if (yych <= '/') {
-		if (yych == '-') goto yy895;
-		goto yy53;
-	} else {
-		if (yych <= '0') goto yy741;
-		if (yych <= '9') goto yy896;
-		goto yy53;
-	}
-yy740:
-	yych = *++YYCURSOR;
-	if (yych == '-') goto yy895;
-	if (yych <= '/') goto yy53;
-	if (yych <= '2') goto yy896;
-	goto yy53;
-yy741:
-	yych = *++YYCURSOR;
-	if (yych == '-') goto yy895;
-	goto yy53;
-yy742:
-	yych = *++YYCURSOR;
-	if (yych <= 'U') {
-		if (yych == 'P') goto yy897;
-		if (yych <= 'T') goto yy53;
-		goto yy898;
-	} else {
-		if (yych <= 'p') {
-			if (yych <= 'o') goto yy53;
-			goto yy897;
-		} else {
-			if (yych == 'u') goto yy898;
-			goto yy53;
-		}
-	}
-yy743:
-	yych = *++YYCURSOR;
-	if (yych == 'E') goto yy899;
-	if (yych == 'e') goto yy899;
-	goto yy53;
-yy744:
-	yych = *++YYCURSOR;
-	if (yych == 'E') goto yy900;
-	if (yych == 'e') goto yy900;
-	goto yy53;
-yy745:
-	yych = *++YYCURSOR;
-	if (yych <= 'U') {
-		if (yych == 'A') goto yy901;
-		if (yych <= 'T') goto yy53;
-		goto yy902;
-	} else {
-		if (yych <= 'a') {
-			if (yych <= '`') goto yy53;
-			goto yy901;
-		} else {
-			if (yych == 'u') goto yy902;
-			goto yy53;
-		}
-	}
-yy746:
-	yych = *++YYCURSOR;
-	if (yych == 'A') goto yy903;
-	if (yych == 'a') goto yy903;
-	goto yy53;
-yy747:
-	yych = *++YYCURSOR;
-	if (yych == 'O') goto yy904;
-	if (yych == 'o') goto yy904;
-	goto yy53;
-yy748:
-	yych = *++YYCURSOR;
-	if (yych == 'C') goto yy905;
-	if (yych == 'c') goto yy905;
-	goto yy53;
-yy749:
-	yych = *++YYCURSOR;
-	if (yych == 'E') goto yy906;
-	if (yych == 'e') goto yy906;
-	goto yy53;
-yy750:
+yy656:
 	yych = *++YYCURSOR;
 	if (yych <= '/') goto yy53;
-	if (yych <= '0') goto yy907;
-	if (yych <= '9') goto yy908;
+	if (yych <= '0') goto yy769;
+	if (yych <= '9') goto yy770;
 	goto yy53;
-yy751:
+yy657:
 	yych = *++YYCURSOR;
 	if (yych <= '/') goto yy53;
-	if (yych <= '9') goto yy909;
+	if (yych <= '9') goto yy770;
 	goto yy53;
-yy752:
+yy658:
 	yych = *++YYCURSOR;
 	if (yych <= '/') goto yy53;
-	if (yych <= '5') goto yy910;
-	if (yych <= '6') goto yy911;
+	if (yych <= '5') goto yy770;
+	if (yych <= '6') goto yy771;
 	goto yy53;
-yy753:
+yy659:
 	yych = *++YYCURSOR;
 	if (yych <= '.') goto yy53;
-	if (yych <= '/') goto yy912;
-	if (yych <= '0') goto yy755;
-	if (yych <= '9') goto yy913;
+	if (yych <= '/') goto yy772;
+	if (yych <= '0') goto yy661;
+	if (yych <= '9') goto yy773;
 	goto yy53;
-yy754:
+yy660:
 	yych = *++YYCURSOR;
 	if (yych <= '.') goto yy53;
-	if (yych <= '/') goto yy912;
-	if (yych <= '2') goto yy913;
+	if (yych <= '/') goto yy772;
+	if (yych <= '2') goto yy773;
 	goto yy53;
-yy755:
+yy661:
 	yych = *++YYCURSOR;
-	if (yych == '/') goto yy912;
+	if (yych == '/') goto yy772;
 	goto yy53;
-yy756:
+yy662:
 	yyaccept = 18;
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -12327,7 +10882,7 @@ yy756:
 	case 's':
 	case 't':
 	case 'w':
-	case 'y':	goto yy182;
+	case 'y':	goto yy176;
 	case '0':	goto yy54;
 	case '1':
 	case '2':
@@ -12337,10 +10892,10 @@ yy756:
 	case '6':
 	case '7':
 	case '8':
-	case '9':	goto yy914;
-	default:	goto yy757;
+	case '9':	goto yy774;
+	default:	goto yy663;
 	}
-yy757:
+yy663:
 #line 1015 "parse_date.s.re"
 	{
 		int tz_not_found;
@@ -12358,8 +10913,8 @@ yy757:
 		TIMELIB_DEINIT;
 		return TIMELIB_ISO_NOCOLON;
 	}
-#line 12362 "parse_date.s.c"
-yy758:
+#line 10917 "parse_date.s.c"
+yy664:
 	yyaccept = 18;
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -12379,20 +10934,20 @@ yy758:
 	case 's':
 	case 't':
 	case 'w':
-	case 'y':	goto yy182;
-	case '0':	goto yy916;
+	case 'y':	goto yy176;
+	case '0':	goto yy776;
 	case '1':
-	case '2':	goto yy917;
-	case '3':	goto yy918;
+	case '2':	goto yy777;
+	case '3':	goto yy778;
 	case '4':
 	case '5':
 	case '6':
 	case '7':
 	case '8':
-	case '9':	goto yy914;
-	default:	goto yy757;
+	case '9':	goto yy774;
+	default:	goto yy663;
 	}
-yy759:
+yy665:
 	yyaccept = 18;
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -12412,40 +10967,7 @@ yy759:
 	case 's':
 	case 't':
 	case 'w':
-	case 'y':	goto yy182;
-	case '0':	goto yy916;
-	case '1':
-	case '2':	goto yy917;
-	case '3':	goto yy918;
-	case '4':
-	case '5':
-	case '6':
-	case '7':
-	case '8':
-	case '9':	goto yy914;
-	default:	goto yy757;
-	}
-yy760:
-	yyaccept = 18;
-	yych = *(YYMARKER = ++YYCURSOR);
-	switch (yych) {
-	case ' ':
-	case 'D':
-	case 'F':
-	case 'H':
-	case 'M':
-	case 'S':
-	case 'T':
-	case 'W':
-	case 'Y':
-	case 'd':
-	case 'f':
-	case 'h':
-	case 'm':
-	case 's':
-	case 't':
-	case 'w':
-	case 'y':	goto yy182;
+	case 'y':	goto yy176;
 	case '0':
 	case '1':
 	case '2':
@@ -12455,10 +10977,10 @@ yy760:
 	case '6':
 	case '7':
 	case '8':
-	case '9':	goto yy914;
-	default:	goto yy757;
+	case '9':	goto yy774;
+	default:	goto yy663;
 	}
-yy761:
+yy666:
 	yyaccept = 18;
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -12478,53 +11000,20 @@ yy761:
 	case 's':
 	case 't':
 	case 'w':
-	case 'y':	goto yy182;
+	case 'y':	goto yy176;
 	case '0':
 	case '1':
 	case '2':
 	case '3':
 	case '4':
 	case '5':
-	case '6':
-	case '7':
-	case '8':
-	case '9':	goto yy914;
-	default:	goto yy757;
-	}
-yy762:
-	yyaccept = 18;
-	yych = *(YYMARKER = ++YYCURSOR);
-	switch (yych) {
-	case ' ':
-	case 'D':
-	case 'F':
-	case 'H':
-	case 'M':
-	case 'S':
-	case 'T':
-	case 'W':
-	case 'Y':
-	case 'd':
-	case 'f':
-	case 'h':
-	case 'm':
-	case 's':
-	case 't':
-	case 'w':
-	case 'y':	goto yy182;
-	case '0':
-	case '1':
-	case '2':
-	case '3':
-	case '4':
-	case '5':
-	case '6':	goto yy914;
+	case '6':	goto yy774;
 	case '7':
 	case '8':
 	case '9':	goto yy54;
-	default:	goto yy757;
+	default:	goto yy663;
 	}
-yy763:
+yy667:
 	yyaccept = 18;
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -12544,7 +11033,7 @@ yy763:
 	case 's':
 	case 't':
 	case 'w':
-	case 'y':	goto yy182;
+	case 'y':	goto yy176;
 	case '0':
 	case '1':
 	case '2':
@@ -12555,989 +11044,704 @@ yy763:
 	case '7':
 	case '8':
 	case '9':	goto yy54;
-	default:	goto yy757;
+	default:	goto yy663;
 	}
-yy764:
+yy668:
 	yych = *++YYCURSOR;
 	if (yych <= '0') goto yy53;
-	if (yych <= '9') goto yy919;
+	if (yych <= '9') goto yy779;
 	goto yy53;
-yy765:
+yy669:
 	yych = *++YYCURSOR;
 	if (yych <= '/') goto yy53;
-	if (yych <= '2') goto yy919;
+	if (yych <= '2') goto yy779;
 	goto yy53;
-yy766:
+yy670:
 	yych = *++YYCURSOR;
-	if (yych == 'R') goto yy920;
-	if (yych == 'r') goto yy920;
+	if (yych == 'R') goto yy780;
+	if (yych == 'r') goto yy780;
 	goto yy53;
-yy767:
+yy671:
 	yych = *++YYCURSOR;
-	if (yych == 'G') goto yy921;
-	if (yych == 'g') goto yy921;
+	if (yych == 'G') goto yy781;
+	if (yych == 'g') goto yy781;
 	goto yy53;
-yy768:
+yy672:
 	yych = *++YYCURSOR;
-	if (yych == 'C') goto yy922;
-	if (yych == 'c') goto yy922;
+	if (yych == 'C') goto yy782;
+	if (yych == 'c') goto yy782;
 	goto yy53;
-yy769:
+yy673:
 	yych = *++YYCURSOR;
-	if (yych == 'B') goto yy923;
-	if (yych == 'b') goto yy923;
+	if (yych == 'B') goto yy783;
+	if (yych == 'b') goto yy783;
 	goto yy53;
-yy770:
+yy674:
 	yych = *++YYCURSOR;
-	if (yych != 'I') goto yy581;
-yy771:
+	if (yych != 'I') goto yy505;
+yy675:
 	yych = *++YYCURSOR;
-	goto yy581;
-yy772:
+	goto yy505;
+yy676:
 	yych = *++YYCURSOR;
-	if (yych == 'N') goto yy924;
-	if (yych == 'n') goto yy924;
+	if (yych == 'N') goto yy784;
+	if (yych == 'n') goto yy784;
 	goto yy53;
-yy773:
+yy677:
 	yych = *++YYCURSOR;
 	if (yych <= 'N') {
-		if (yych == 'L') goto yy925;
+		if (yych == 'L') goto yy785;
 		if (yych <= 'M') goto yy53;
-		goto yy926;
+		goto yy786;
 	} else {
 		if (yych <= 'l') {
 			if (yych <= 'k') goto yy53;
-			goto yy925;
+			goto yy785;
 		} else {
-			if (yych == 'n') goto yy926;
+			if (yych == 'n') goto yy786;
 			goto yy53;
 		}
 	}
-yy774:
+yy678:
 	yych = *++YYCURSOR;
 	if (yych <= 'Y') {
-		if (yych == 'R') goto yy927;
+		if (yych == 'R') goto yy787;
 		if (yych <= 'X') goto yy53;
-		goto yy771;
+		goto yy675;
 	} else {
 		if (yych <= 'r') {
 			if (yych <= 'q') goto yy53;
-			goto yy927;
+			goto yy787;
 		} else {
-			if (yych == 'y') goto yy771;
+			if (yych == 'y') goto yy675;
 			goto yy53;
 		}
 	}
-yy775:
+yy679:
 	yych = *++YYCURSOR;
-	if (yych == 'V') goto yy928;
-	if (yych == 'v') goto yy928;
+	if (yych == 'V') goto yy782;
+	if (yych == 'v') goto yy782;
 	goto yy53;
-yy776:
+yy680:
 	yych = *++YYCURSOR;
-	if (yych == 'T') goto yy929;
-	if (yych == 't') goto yy929;
+	if (yych == 'T') goto yy788;
+	if (yych == 't') goto yy788;
 	goto yy53;
-yy777:
+yy681:
 	yych = *++YYCURSOR;
 	if (yych <= 'P') {
-		if (yych == 'C') goto yy425;
+		if (yych == 'C') goto yy378;
 		if (yych <= 'O') goto yy53;
-		goto yy930;
+		goto yy789;
 	} else {
 		if (yych <= 'c') {
 			if (yych <= 'b') goto yy53;
-			goto yy425;
+			goto yy378;
 		} else {
-			if (yych == 'p') goto yy930;
+			if (yych == 'p') goto yy789;
 			goto yy53;
 		}
 	}
-yy778:
-	yych = *++YYCURSOR;
-	if (yych == 'I') goto yy931;
-	goto yy581;
-yy779:
+yy682:
 	yych = *++YYCURSOR;
 	if (yych <= '0') goto yy53;
-	if (yych <= '9') goto yy932;
+	if (yych <= '9') goto yy790;
 	goto yy53;
-yy780:
+yy683:
 	yych = *++YYCURSOR;
 	if (yych <= '/') goto yy53;
-	if (yych <= '9') goto yy932;
+	if (yych <= '9') goto yy790;
 	goto yy53;
-yy781:
+yy684:
 	yych = *++YYCURSOR;
 	if (yych <= '/') goto yy53;
-	if (yych <= '3') goto yy932;
+	if (yych <= '3') goto yy790;
 	goto yy53;
-yy782:
+yy685:
 	yych = *++YYCURSOR;
-	if (yych == 'I') goto yy771;
-	goto yy581;
-yy783:
-	yych = *++YYCURSOR;
-	if (yych <= '/') goto yy182;
+	if (yych <= '/') goto yy176;
 	if (yych <= '0') goto yy54;
-	if (yych <= '9') goto yy914;
-	goto yy182;
-yy784:
+	if (yych <= '9') goto yy774;
+	goto yy176;
+yy686:
 	yych = *++YYCURSOR;
 	if (yych <= '2') {
-		if (yych <= '/') goto yy182;
-		if (yych <= '0') goto yy916;
-		goto yy917;
+		if (yych <= '/') goto yy176;
+		if (yych <= '0') goto yy776;
+		goto yy777;
 	} else {
-		if (yych <= '3') goto yy918;
-		if (yych <= '9') goto yy914;
-		goto yy182;
+		if (yych <= '3') goto yy778;
+		if (yych <= '9') goto yy774;
+		goto yy176;
 	}
-yy785:
+yy687:
 	yych = *++YYCURSOR;
-	if (yych <= '2') {
-		if (yych <= '/') goto yy182;
-		if (yych <= '0') goto yy916;
-		goto yy917;
-	} else {
-		if (yych <= '3') goto yy918;
-		if (yych <= '9') goto yy914;
-		goto yy182;
-	}
-yy786:
+	if (yych <= '/') goto yy176;
+	if (yych <= '9') goto yy774;
+	goto yy176;
+yy688:
 	yych = *++YYCURSOR;
-	if (yych <= '/') goto yy182;
-	if (yych <= '9') goto yy914;
-	goto yy182;
-yy787:
-	yych = *++YYCURSOR;
-	if (yych <= '/') goto yy182;
-	if (yych <= '9') goto yy914;
-	goto yy182;
-yy788:
-	yych = *++YYCURSOR;
-	if (yych <= '/') goto yy182;
-	if (yych <= '6') goto yy914;
+	if (yych <= '/') goto yy176;
+	if (yych <= '6') goto yy774;
 	if (yych <= '9') goto yy54;
-	goto yy182;
-yy789:
+	goto yy176;
+yy689:
 	yych = *++YYCURSOR;
-	if (yych == 'T') goto yy239;
-	if (yych == 't') goto yy239;
+	if (yych == 'T') goto yy225;
+	if (yych == 't') goto yy225;
 	goto yy53;
-yy790:
+yy690:
 	yych = *++YYCURSOR;
-	if (yych == 'B') goto yy934;
-	if (yych == 'b') goto yy934;
+	if (yych == 'N') goto yy691;
+	if (yych != 'n') goto yy53;
+yy691:
+	yych = *++YYCURSOR;
+	if (yych == 'I') goto yy792;
+	if (yych == 'i') goto yy792;
 	goto yy53;
-yy791:
+yy692:
 	yych = *++YYCURSOR;
-	if (yych == 'A') goto yy935;
-	if (yych == 'a') goto yy935;
+	if (yych == 'Y') goto yy520;
+	if (yych == 'y') goto yy520;
 	goto yy53;
-yy792:
+yy693:
 	yych = *++YYCURSOR;
-	if (yych == 'N') goto yy936;
-	if (yych == 'n') goto yy936;
+	goto yy223;
+yy694:
+	yych = *++YYCURSOR;
+	if (yych == 'R') goto yy793;
+	if (yych == 'r') goto yy793;
 	goto yy53;
-yy793:
+yy695:
 	yych = *++YYCURSOR;
-	if (yych == 'I') goto yy937;
-	if (yych == 'i') goto yy937;
+	if (yych == 'E') goto yy362;
+	if (yych == 'e') goto yy362;
 	goto yy53;
-yy794:
+yy696:
 	yych = *++YYCURSOR;
-	if (yych == 'Y') goto yy596;
-	if (yych == 'y') goto yy596;
+	if (yych == 'E') goto yy794;
+	if (yych == 'e') goto yy794;
 	goto yy53;
-yy795:
+yy697:
 	yych = *++YYCURSOR;
-	goto yy237;
-yy796:
-	yych = *++YYCURSOR;
-	if (yych == 'R') goto yy938;
-	if (yych == 'r') goto yy938;
+	if (yych == 'D') goto yy362;
+	if (yych == 'd') goto yy362;
 	goto yy53;
-yy797:
-	yych = *++YYCURSOR;
-	if (yych == 'E') goto yy408;
-	if (yych == 'e') goto yy408;
-	goto yy53;
-yy798:
-	yych = *++YYCURSOR;
-	if (yych == 'Y') goto yy596;
-	if (yych == 'y') goto yy596;
-	goto yy53;
-yy799:
-	yych = *++YYCURSOR;
-	if (yych == 'B') goto yy939;
-	if (yych == 'b') goto yy939;
-	goto yy53;
-yy800:
-	yych = *++YYCURSOR;
-	if (yych == 'E') goto yy940;
-	if (yych == 'e') goto yy940;
-	goto yy53;
-yy801:
-	yych = *++YYCURSOR;
-	if (yych == 'D') goto yy941;
-	if (yych == 'd') goto yy941;
-	goto yy53;
-yy802:
-	yych = *++YYCURSOR;
-	if (yych == 'D') goto yy408;
-	if (yych == 'd') goto yy408;
-	goto yy53;
-yy803:
-	yych = *++YYCURSOR;
-	if (yych == 'M') goto yy942;
-	if (yych == 'm') goto yy942;
-	goto yy53;
-yy804:
-	yych = *++YYCURSOR;
-	if (yych == 'Y') goto yy596;
-	if (yych == 'y') goto yy596;
-	goto yy53;
-yy805:
-	yych = *++YYCURSOR;
-	if (yych == 'D') goto yy943;
-	if (yych == 'd') goto yy943;
-	goto yy53;
-yy806:
-	yych = *++YYCURSOR;
-	if (yych == 'A') goto yy944;
-	if (yych == 'a') goto yy944;
-	goto yy53;
-yy807:
-	yych = *++YYCURSOR;
-	if (yych == 'S') goto yy945;
-	if (yych == 's') goto yy945;
-	goto yy53;
-yy808:
+yy698:
 	yyaccept = 4;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= '@') {
 		if (yych <= '-') {
-			if (yych == ' ') goto yy946;
-			goto yy206;
+			if (yych == ' ') goto yy538;
+			goto yy192;
 		} else {
-			if (yych <= '.') goto yy729;
-			if (yych <= '/') goto yy206;
-			if (yych <= '9') goto yy891;
-			goto yy206;
+			if (yych <= '.') goto yy635;
+			if (yych <= '/') goto yy192;
+			if (yych <= '9') goto yy753;
+			goto yy192;
 		}
 	} else {
 		if (yych <= '`') {
-			if (yych <= 'A') goto yy948;
-			if (yych == 'P') goto yy948;
-			goto yy206;
+			if (yych <= 'A') goto yy95;
+			if (yych == 'P') goto yy95;
+			goto yy192;
 		} else {
-			if (yych <= 'a') goto yy948;
-			if (yych == 'p') goto yy948;
-			goto yy206;
+			if (yych <= 'a') goto yy95;
+			if (yych == 'p') goto yy95;
+			goto yy192;
 		}
 	}
-yy809:
-	yych = *++YYCURSOR;
-	if (yych == 'M') goto yy810;
-	if (yych != 'm') goto yy53;
-yy810:
-	yych = *++YYCURSOR;
-	if (yych == '.') goto yy438;
-	goto yy267;
-yy811:
+yy699:
 	yyaccept = 4;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= 'A') {
 		if (yych <= '-') {
-			if (yych == ' ') goto yy946;
-			goto yy206;
+			if (yych == ' ') goto yy538;
+			goto yy192;
 		} else {
-			if (yych <= '.') goto yy729;
-			if (yych <= '@') goto yy206;
-			goto yy948;
+			if (yych <= '.') goto yy635;
+			if (yych <= '@') goto yy192;
+			goto yy95;
 		}
 	} else {
 		if (yych <= '`') {
-			if (yych == 'P') goto yy948;
-			goto yy206;
+			if (yych == 'P') goto yy95;
+			goto yy192;
 		} else {
-			if (yych <= 'a') goto yy948;
-			if (yych == 'p') goto yy948;
-			goto yy206;
+			if (yych <= 'a') goto yy95;
+			if (yych == 'p') goto yy95;
+			goto yy192;
 		}
 	}
-yy812:
+yy700:
 	yych = *++YYCURSOR;
-	if (yych <= '/') goto yy732;
-	if (yych <= '9') goto yy731;
-	goto yy732;
-yy813:
+	if (yych <= '/') goto yy638;
+	if (yych <= '9') goto yy637;
+	goto yy638;
+yy701:
 	yych = *++YYCURSOR;
-	if (yych == '-') goto yy949;
+	if (yych == '-') goto yy795;
 	goto yy53;
-yy814:
+yy702:
 	yych = *++YYCURSOR;
 	if (yych <= 'S') {
-		if (yych == '-') goto yy949;
+		if (yych == '-') goto yy795;
 		goto yy53;
 	} else {
-		if (yych <= 'T') goto yy813;
-		if (yych == 't') goto yy813;
+		if (yych <= 'T') goto yy701;
+		if (yych == 't') goto yy701;
 		goto yy53;
 	}
-yy815:
+yy703:
 	yyaccept = 8;
 	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych <= '9') {
-		if (yych <= '.') {
-			if (yych <= ',') goto yy298;
-			if (yych <= '-') goto yy950;
-			goto yy477;
-		} else {
-			if (yych <= '/') goto yy298;
-			if (yych <= '1') goto yy478;
-			if (yych <= '2') goto yy479;
-			goto yy480;
-		}
-	} else {
-		if (yych <= 'q') {
-			if (yych <= ':') goto yy481;
-			if (yych == 'n') goto yy301;
-			goto yy298;
-		} else {
-			if (yych <= 'r') goto yy302;
-			if (yych <= 's') goto yy303;
-			if (yych <= 't') goto yy304;
-			goto yy298;
-		}
+	switch (yych) {
+	case '-':	goto yy796;
+	case '.':	goto yy425;
+	case '0':
+	case '1':	goto yy426;
+	case '2':	goto yy427;
+	case '3':
+	case '4':
+	case '5':
+	case '6':
+	case '7':
+	case '8':
+	case '9':	goto yy428;
+	case ':':	goto yy429;
+	default:	goto yy282;
 	}
-yy816:
-	yyaccept = 8;
-	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych <= '9') {
-		if (yych <= '.') {
-			if (yych <= ',') goto yy298;
-			if (yych <= '-') goto yy950;
-			goto yy477;
-		} else {
-			if (yych <= '/') goto yy298;
-			if (yych <= '1') goto yy478;
-			if (yych <= '2') goto yy479;
-			goto yy480;
-		}
-	} else {
-		if (yych <= 'q') {
-			if (yych <= ':') goto yy481;
-			if (yych == 'n') goto yy301;
-			goto yy298;
-		} else {
-			if (yych <= 'r') goto yy302;
-			if (yych <= 's') goto yy303;
-			if (yych <= 't') goto yy304;
-			goto yy298;
-		}
-	}
-yy817:
+yy704:
 	yych = *++YYCURSOR;
-	if (yych == 'E') goto yy951;
-	if (yych == 'e') goto yy951;
-	goto yy53;
-yy818:
-	yych = *++YYCURSOR;
-	if (yych == 'E') goto yy951;
-	if (yych == 'e') goto yy952;
-	goto yy641;
-yy819:
-	yych = *++YYCURSOR;
-	if (yych == 'T') goto yy953;
-	if (yych == 't') goto yy953;
-	goto yy53;
-yy820:
-	yych = *++YYCURSOR;
-	if (yych == 'T') goto yy953;
-	if (yych == 't') goto yy954;
-	goto yy641;
-yy821:
-	yych = *++YYCURSOR;
-	if (yych == 'R') goto yy955;
-	if (yych == 'r') goto yy955;
-	goto yy53;
-yy822:
-	yych = *++YYCURSOR;
-	goto yy291;
-yy823:
-	yych = *++YYCURSOR;
-	if (yych == 'R') goto yy955;
-	if (yych == 'r') goto yy956;
-	goto yy641;
-yy824:
+	goto yy275;
+yy705:
 	yyaccept = 7;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= '^') {
-		if (yych == '/') goto yy275;
-		goto yy291;
+		if (yych == '/') goto yy259;
+		goto yy275;
 	} else {
-		if (yych <= '_') goto yy275;
-		if (yych <= '`') goto yy291;
-		if (yych <= 'z') goto yy640;
-		goto yy291;
+		if (yych <= '_') goto yy259;
+		if (yych <= '`') goto yy275;
+		if (yych <= 'z') goto yy559;
+		goto yy275;
 	}
-yy825:
+yy706:
 	yych = *++YYCURSOR;
-	if (yych <= '/') goto yy130;
-	if (yych <= '9') goto yy830;
-	goto yy130;
-yy826:
+	if (yych <= '/') goto yy129;
+	if (yych <= '9') goto yy711;
+	goto yy129;
+yy707:
 	yych = *++YYCURSOR;
 	if (yych <= '/') goto yy53;
-	if (yych <= '5') goto yy957;
-	if (yych <= '6') goto yy958;
-	if (yych <= '9') goto yy668;
+	if (yych <= '5') goto yy797;
+	if (yych <= '6') goto yy798;
+	if (yych <= '9') goto yy587;
 	goto yy53;
-yy827:
+yy708:
 	yyaccept = 8;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= '/') {
-		if (yych == '.') goto yy826;
-		goto yy130;
+		if (yych == '.') goto yy707;
+		goto yy129;
 	} else {
-		if (yych <= '9') goto yy825;
-		if (yych <= ':') goto yy826;
-		goto yy130;
+		if (yych <= '9') goto yy706;
+		if (yych <= ':') goto yy707;
+		goto yy129;
 	}
-yy828:
+yy709:
 	yyaccept = 8;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= '/') {
-		if (yych != '.') goto yy130;
+		if (yych != '.') goto yy129;
 	} else {
-		if (yych <= '9') goto yy825;
-		if (yych >= ';') goto yy130;
+		if (yych <= '9') goto yy706;
+		if (yych >= ';') goto yy129;
 	}
-yy829:
+yy710:
 	yych = *++YYCURSOR;
 	if (yych <= '/') goto yy53;
-	if (yych <= '5') goto yy959;
-	if (yych <= '6') goto yy960;
-	if (yych <= '9') goto yy961;
+	if (yych <= '5') goto yy799;
+	if (yych <= '6') goto yy800;
+	if (yych <= '9') goto yy801;
 	goto yy53;
-yy830:
+yy711:
 	yych = *++YYCURSOR;
-	goto yy130;
-yy831:
+	goto yy129;
+yy712:
 	yych = *++YYCURSOR;
-	if (yych == 'Y') goto yy126;
-	if (yych == 'y') goto yy126;
+	if (yych == 'Y') goto yy125;
+	if (yych == 'y') goto yy125;
 	goto yy53;
-yy832:
+yy713:
 	yych = *++YYCURSOR;
 	if (yych <= '^') {
 		if (yych <= '/') {
 			if (yych <= '.') goto yy53;
-			goto yy275;
+			goto yy259;
 		} else {
-			if (yych == 'Y') goto yy126;
+			if (yych == 'Y') goto yy125;
 			goto yy53;
 		}
 	} else {
 		if (yych <= 'x') {
-			if (yych <= '_') goto yy275;
+			if (yych <= '_') goto yy259;
 			if (yych <= '`') goto yy53;
-			goto yy640;
+			goto yy559;
 		} else {
-			if (yych <= 'y') goto yy642;
-			if (yych <= 'z') goto yy640;
+			if (yych <= 'y') goto yy561;
+			if (yych <= 'z') goto yy559;
 			goto yy53;
 		}
 	}
-yy833:
+yy714:
 	yych = *++YYCURSOR;
-	if (yych == 'Y') goto yy962;
-	if (yych == 'y') goto yy962;
+	if (yych == 'Y') goto yy802;
+	if (yych == 'y') goto yy802;
 	goto yy53;
-yy834:
+yy715:
 	yych = *++YYCURSOR;
-	if (yych == 'R') goto yy964;
-	if (yych == 'r') goto yy964;
+	if (yych == 'R') goto yy804;
+	if (yych == 'r') goto yy804;
 	goto yy53;
-yy835:
+yy716:
 	yych = *++YYCURSOR;
-	if (yych == 'I') goto yy965;
-	if (yych == 'i') goto yy965;
+	if (yych == 'I') goto yy805;
+	if (yych == 'i') goto yy805;
 	goto yy53;
-yy836:
+yy717:
 	yych = *++YYCURSOR;
-	if (yych == 'U') goto yy966;
-	if (yych == 'u') goto yy966;
+	if (yych == 'U') goto yy806;
+	if (yych == 'u') goto yy806;
 	goto yy53;
-yy837:
+yy718:
 	yych = *++YYCURSOR;
-	if (yych == 'N') goto yy967;
-	if (yych == 'n') goto yy967;
+	if (yych == 'N') goto yy807;
+	if (yych == 'n') goto yy807;
 	goto yy53;
-yy838:
+yy719:
 	yych = *++YYCURSOR;
-	if (yych == 'N') goto yy968;
-	if (yych == 'n') goto yy968;
+	if (yych == 'N') goto yy808;
+	if (yych == 'n') goto yy808;
 	goto yy53;
-yy839:
+yy720:
 	yych = *++YYCURSOR;
-	if (yych == 'T') goto yy969;
-	if (yych == 't') goto yy969;
+	if (yych == 'T') goto yy809;
+	if (yych == 't') goto yy809;
 	goto yy53;
-yy840:
+yy721:
 	yych = *++YYCURSOR;
-	if (yych == 'C') goto yy970;
-	if (yych == 'c') goto yy970;
+	if (yych == 'C') goto yy810;
+	if (yych == 'c') goto yy810;
 	goto yy53;
-yy841:
+yy722:
 	yych = *++YYCURSOR;
-	if (yych == 'N') goto yy971;
-	if (yych == 'n') goto yy971;
+	if (yych == 'N') goto yy805;
+	if (yych == 'n') goto yy805;
 	goto yy53;
-yy842:
+yy723:
 	yych = *++YYCURSOR;
-	if (yych == 'U') goto yy972;
-	if (yych == 'u') goto yy972;
+	if (yych == 'U') goto yy811;
+	if (yych == 'u') goto yy811;
 	goto yy53;
-yy843:
+yy724:
 	yych = *++YYCURSOR;
-	if (yych == 'E') goto yy973;
-	if (yych == 'e') goto yy973;
+	if (yych == 'E') goto yy812;
+	if (yych == 'e') goto yy812;
 	goto yy53;
-yy844:
+yy725:
 	yych = *++YYCURSOR;
 	if (yych <= 'E') {
 		if (yych <= 'C') goto yy53;
-		if (yych <= 'D') goto yy974;
-		goto yy975;
+		if (yych <= 'D') goto yy813;
+		goto yy814;
 	} else {
 		if (yych <= 'c') goto yy53;
-		if (yych <= 'd') goto yy974;
-		if (yych <= 'e') goto yy975;
+		if (yych <= 'd') goto yy813;
+		if (yych <= 'e') goto yy814;
 		goto yy53;
 	}
-yy845:
+yy726:
 	yych = *++YYCURSOR;
-	if (yych == 'A') goto yy976;
-	if (yych == 'a') goto yy976;
+	if (yych == 'A') goto yy806;
+	if (yych == 'a') goto yy806;
 	goto yy53;
-yy846:
+yy727:
 	yych = *++YYCURSOR;
-	if (yych == 'Y') goto yy962;
-	if (yych == 'y') goto yy977;
-	goto yy641;
-yy847:
+	if (yych == 'Y') goto yy802;
+	if (yych == 'y') goto yy815;
+	goto yy560;
+yy728:
 	yych = *++YYCURSOR;
-	if (yych == 'R') goto yy964;
-	if (yych == 'r') goto yy978;
-	goto yy641;
-yy848:
+	if (yych == 'R') goto yy804;
+	if (yych == 'r') goto yy816;
+	goto yy560;
+yy729:
 	yych = *++YYCURSOR;
-	if (yych == 'I') goto yy965;
-	if (yych == 'i') goto yy979;
-	goto yy641;
-yy849:
+	if (yych == 'I') goto yy805;
+	if (yych == 'i') goto yy817;
+	goto yy560;
+yy730:
 	yych = *++YYCURSOR;
-	if (yych == 'U') goto yy966;
-	if (yych == 'u') goto yy980;
-	goto yy641;
-yy850:
+	if (yych == 'U') goto yy806;
+	if (yych == 'u') goto yy818;
+	goto yy560;
+yy731:
 	yych = *++YYCURSOR;
-	if (yych == 'N') goto yy967;
-	if (yych == 'n') goto yy981;
-	goto yy641;
-yy851:
+	if (yych == 'N') goto yy807;
+	if (yych == 'n') goto yy819;
+	goto yy560;
+yy732:
 	yych = *++YYCURSOR;
-	if (yych == 'N') goto yy968;
-	if (yych == 'n') goto yy982;
-	goto yy641;
-yy852:
+	if (yych == 'N') goto yy808;
+	if (yych == 'n') goto yy820;
+	goto yy560;
+yy733:
 	yych = *++YYCURSOR;
-	if (yych == 'T') goto yy969;
-	if (yych == 't') goto yy983;
-	goto yy641;
-yy853:
+	if (yych == 'T') goto yy809;
+	if (yych == 't') goto yy821;
+	goto yy560;
+yy734:
 	yych = *++YYCURSOR;
-	if (yych == 'C') goto yy970;
-	if (yych == 'c') goto yy984;
-	goto yy641;
-yy854:
+	if (yych == 'C') goto yy810;
+	if (yych == 'c') goto yy822;
+	goto yy560;
+yy735:
 	yych = *++YYCURSOR;
-	if (yych == 'N') goto yy971;
-	if (yych == 'n') goto yy985;
-	goto yy641;
-yy855:
+	if (yych == 'N') goto yy805;
+	if (yych == 'n') goto yy817;
+	goto yy560;
+yy736:
 	yych = *++YYCURSOR;
-	if (yych == 'U') goto yy972;
-	if (yych == 'u') goto yy986;
-	goto yy641;
-yy856:
+	if (yych == 'U') goto yy811;
+	if (yych == 'u') goto yy823;
+	goto yy560;
+yy737:
 	yych = *++YYCURSOR;
-	if (yych == 'E') goto yy973;
-	if (yych == 'e') goto yy987;
-	goto yy641;
-yy857:
+	if (yych == 'E') goto yy812;
+	if (yych == 'e') goto yy824;
+	goto yy560;
+yy738:
 	yych = *++YYCURSOR;
 	if (yych <= 'E') {
-		if (yych <= 'C') goto yy641;
-		if (yych <= 'D') goto yy974;
-		goto yy975;
+		if (yych <= 'C') goto yy560;
+		if (yych <= 'D') goto yy813;
+		goto yy814;
 	} else {
-		if (yych <= 'c') goto yy641;
-		if (yych <= 'd') goto yy988;
-		if (yych <= 'e') goto yy989;
-		goto yy641;
+		if (yych <= 'c') goto yy560;
+		if (yych <= 'd') goto yy825;
+		if (yych <= 'e') goto yy826;
+		goto yy560;
 	}
-yy858:
+yy739:
 	yych = *++YYCURSOR;
-	if (yych == 'A') goto yy976;
-	if (yych == 'a') goto yy990;
-	goto yy641;
-yy859:
+	if (yych == 'A') goto yy806;
+	if (yych == 'a') goto yy818;
+	goto yy560;
+yy740:
 	yych = *++YYCURSOR;
-	if (yych == 'H') goto yy991;
-	if (yych == 'h') goto yy991;
+	if (yych == 'H') goto yy827;
+	if (yych == 'h') goto yy827;
 	goto yy53;
-yy860:
+yy741:
 	yych = *++YYCURSOR;
-	if (yych == 'H') goto yy991;
-	if (yych == 'h') goto yy992;
-	goto yy641;
-yy861:
+	if (yych == 'H') goto yy827;
+	if (yych == 'h') goto yy828;
+	goto yy560;
+yy742:
 	yych = *++YYCURSOR;
-	if (yych == 'E') goto yy993;
-	if (yych == 'e') goto yy993;
+	if (yych == 'R') goto yy125;
+	if (yych == 'r') goto yy125;
 	goto yy53;
-yy862:
-	yych = *++YYCURSOR;
-	if (yych == 'E') goto yy993;
-	if (yych == 'e') goto yy994;
-	goto yy641;
-yy863:
-	yych = *++YYCURSOR;
-	if (yych == 'R') goto yy126;
-	if (yych == 'r') goto yy126;
-	goto yy53;
-yy864:
+yy743:
 	yych = *++YYCURSOR;
 	if (yych <= '^') {
 		if (yych <= '/') {
 			if (yych <= '.') goto yy53;
-			goto yy275;
+			goto yy259;
 		} else {
-			if (yych == 'R') goto yy126;
+			if (yych == 'R') goto yy125;
 			goto yy53;
 		}
 	} else {
 		if (yych <= 'q') {
-			if (yych <= '_') goto yy275;
+			if (yych <= '_') goto yy259;
 			if (yych <= '`') goto yy53;
-			goto yy640;
+			goto yy559;
 		} else {
-			if (yych <= 'r') goto yy642;
-			if (yych <= 'z') goto yy640;
+			if (yych <= 'r') goto yy561;
+			if (yych <= 'z') goto yy559;
 			goto yy53;
 		}
 	}
-yy865:
+yy744:
 	yych = *++YYCURSOR;
-	if (yych == 'U') goto yy995;
-	if (yych == 'u') goto yy995;
+	if (yych == 'U') goto yy829;
+	if (yych == 'u') goto yy829;
 	goto yy53;
-yy866:
+yy745:
 	yych = *++YYCURSOR;
-	if (yych == 'U') goto yy995;
-	if (yych == 'u') goto yy996;
-	goto yy641;
-yy867:
+	if (yych == 'U') goto yy829;
+	if (yych == 'u') goto yy830;
+	goto yy560;
+yy746:
 	yych = *++YYCURSOR;
-	if (yych == 'A') goto yy997;
-	if (yych == 'a') goto yy997;
+	if (yych == 'O') goto yy831;
+	if (yych == 'o') goto yy831;
 	goto yy53;
-yy868:
+yy747:
 	yych = *++YYCURSOR;
-	if (yych == 'B') goto yy998;
-	if (yych == 'b') goto yy998;
+	if (yych == 'O') goto yy831;
+	if (yych == 'o') goto yy832;
+	goto yy560;
+yy748:
+	yych = *++YYCURSOR;
+	if (yych == 'D') goto yy833;
+	if (yych == 'd') goto yy833;
 	goto yy53;
-yy869:
+yy749:
 	yych = *++YYCURSOR;
-	if (yych == 'H') goto yy646;
-	if (yych == 'h') goto yy646;
-	goto yy53;
-yy870:
+	if (yych == 'D') goto yy833;
+	if (yych == 'd') goto yy834;
+	goto yy560;
+yy750:
 	yych = *++YYCURSOR;
-	if (yych == 'A') goto yy997;
-	if (yych == 'a') goto yy999;
-	goto yy641;
-yy871:
-	yych = *++YYCURSOR;
-	if (yych == 'B') goto yy998;
-	if (yych == 'b') goto yy1000;
-	goto yy641;
-yy872:
-	yych = *++YYCURSOR;
-	if (yych <= '^') {
-		if (yych <= '/') {
-			if (yych <= '.') goto yy53;
-			goto yy275;
-		} else {
-			if (yych == 'H') goto yy646;
-			goto yy53;
-		}
-	} else {
-		if (yych <= 'g') {
-			if (yych <= '_') goto yy275;
-			if (yych <= '`') goto yy53;
-			goto yy640;
-		} else {
-			if (yych <= 'h') goto yy649;
-			if (yych <= 'z') goto yy640;
-			goto yy53;
-		}
-	}
-yy873:
-	yych = *++YYCURSOR;
-	if (yych == 'A') goto yy1001;
-	if (yych == 'a') goto yy1001;
-	goto yy53;
-yy874:
-	yych = *++YYCURSOR;
-	if (yych == 'O') goto yy1002;
-	if (yych == 'o') goto yy1002;
-	goto yy53;
-yy875:
-	yych = *++YYCURSOR;
-	if (yych == 'Y') goto yy822;
-	if (yych == 'y') goto yy822;
-	goto yy53;
-yy876:
-	yych = *++YYCURSOR;
-	if (yych == 'H') goto yy646;
-	if (yych == 'h') goto yy646;
-	goto yy53;
-yy877:
-	yych = *++YYCURSOR;
-	if (yych == 'A') goto yy1001;
-	if (yych == 'a') goto yy1003;
-	goto yy641;
-yy878:
-	yych = *++YYCURSOR;
-	if (yych == 'O') goto yy1002;
-	if (yych == 'o') goto yy1004;
-	goto yy641;
-yy879:
-	yych = *++YYCURSOR;
-	if (yych == 'Y') goto yy822;
-	if (yych == 'y') goto yy824;
-	goto yy641;
-yy880:
-	yych = *++YYCURSOR;
-	if (yych <= '^') {
-		if (yych <= '/') {
-			if (yych <= '.') goto yy53;
-			goto yy275;
-		} else {
-			if (yych == 'H') goto yy646;
-			goto yy53;
-		}
-	} else {
-		if (yych <= 'g') {
-			if (yych <= '_') goto yy275;
-			if (yych <= '`') goto yy53;
-			goto yy640;
-		} else {
-			if (yych <= 'h') goto yy649;
-			if (yych <= 'z') goto yy640;
-			goto yy53;
-		}
-	}
-yy881:
-	yych = *++YYCURSOR;
-	if (yych == 'D') goto yy1005;
-	if (yych == 'd') goto yy1005;
-	goto yy53;
-yy882:
-	yych = *++YYCURSOR;
-	if (yych == 'D') goto yy1005;
-	if (yych == 'd') goto yy1006;
-	goto yy641;
-yy883:
-	yych = *++YYCURSOR;
-	if (yych == 'D') goto yy1007;
-	if (yych == 'd') goto yy1007;
-	goto yy53;
-yy884:
-	yych = *++YYCURSOR;
-	if (yych == 'D') goto yy1007;
-	if (yych == 'd') goto yy1008;
-	goto yy641;
-yy885:
-	yych = *++YYCURSOR;
-	goto yy538;
-yy886:
-	yych = *++YYCURSOR;
-	if (yych <= '/') goto yy237;
-	if (yych <= '0') goto yy415;
-	if (yych <= '9') goto yy1009;
-	goto yy237;
-yy887:
-	yych = *++YYCURSOR;
-	if (yych <= '/') goto yy237;
-	if (yych <= '9') goto yy1009;
-	goto yy237;
-yy888:
-	yych = *++YYCURSOR;
-	if (yych <= '/') goto yy237;
-	if (yych <= '1') goto yy1009;
-	if (yych <= '9') goto yy415;
-	goto yy237;
-yy889:
+	goto yy474;
+yy751:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
-	if (yych <= '/') goto yy206;
-	if (yych <= '9') goto yy889;
-	goto yy206;
-yy891:
+	if (yych <= '/') goto yy192;
+	if (yych <= '9') goto yy751;
+	goto yy192;
+yy753:
 	yych = *++YYCURSOR;
-	if (yych <= '/') goto yy732;
-	if (yych <= '9') goto yy1010;
-	goto yy732;
-yy892:
+	if (yych <= '/') goto yy638;
+	if (yych <= '9') goto yy835;
+	goto yy638;
+yy754:
 	yych = *++YYCURSOR;
-	if (yych <= '/') goto yy211;
-	if (yych <= '9') goto yy1011;
-	goto yy211;
-yy893:
-	yych = *++YYCURSOR;
-	if (yych <= '/') goto yy53;
-	if (yych <= '9') goto yy1012;
-	goto yy53;
-yy894:
-	yych = *++YYCURSOR;
-	if (yych == 'P') goto yy930;
-	if (yych == 'p') goto yy930;
-	goto yy53;
-yy895:
+	if (yych <= '/') goto yy197;
+	if (yych <= '9') goto yy836;
+	goto yy197;
+yy755:
 	yych = *++YYCURSOR;
 	if (yych <= '/') goto yy53;
-	if (yych <= '2') goto yy1013;
-	if (yych <= '3') goto yy1014;
-	if (yych <= '9') goto yy1015;
+	if (yych <= '9') goto yy837;
 	goto yy53;
-yy896:
+yy756:
 	yych = *++YYCURSOR;
-	if (yych == '-') goto yy1016;
+	if (yych == 'P') goto yy789;
+	if (yych == 'p') goto yy789;
 	goto yy53;
-yy897:
+yy757:
 	yych = *++YYCURSOR;
-	if (yych == 'R') goto yy1017;
-	if (yych == 'r') goto yy1017;
+	if (yych <= '/') goto yy53;
+	if (yych <= '2') goto yy838;
+	if (yych <= '3') goto yy839;
+	if (yych <= '9') goto yy840;
 	goto yy53;
-yy898:
+yy758:
 	yych = *++YYCURSOR;
-	if (yych == 'G') goto yy1018;
-	if (yych == 'g') goto yy1018;
+	if (yych == '-') goto yy841;
 	goto yy53;
-yy899:
+yy759:
 	yych = *++YYCURSOR;
-	if (yych == 'C') goto yy1019;
-	if (yych == 'c') goto yy1019;
+	if (yych == 'R') goto yy842;
+	if (yych == 'r') goto yy842;
 	goto yy53;
-yy900:
+yy760:
 	yych = *++YYCURSOR;
-	if (yych == 'B') goto yy1020;
-	if (yych == 'b') goto yy1020;
+	if (yych == 'G') goto yy843;
+	if (yych == 'g') goto yy843;
 	goto yy53;
-yy901:
+yy761:
 	yych = *++YYCURSOR;
-	if (yych == 'N') goto yy1021;
-	if (yych == 'n') goto yy1021;
+	if (yych == 'C') goto yy844;
+	if (yych == 'c') goto yy844;
 	goto yy53;
-yy902:
+yy762:
+	yych = *++YYCURSOR;
+	if (yych == 'B') goto yy845;
+	if (yych == 'b') goto yy845;
+	goto yy53;
+yy763:
+	yych = *++YYCURSOR;
+	if (yych == 'N') goto yy846;
+	if (yych == 'n') goto yy846;
+	goto yy53;
+yy764:
 	yych = *++YYCURSOR;
 	if (yych <= 'N') {
-		if (yych == 'L') goto yy1022;
+		if (yych == 'L') goto yy847;
 		if (yych <= 'M') goto yy53;
-		goto yy1023;
+		goto yy848;
 	} else {
 		if (yych <= 'l') {
 			if (yych <= 'k') goto yy53;
-			goto yy1022;
+			goto yy847;
 		} else {
-			if (yych == 'n') goto yy1023;
+			if (yych == 'n') goto yy848;
 			goto yy53;
 		}
 	}
-yy903:
+yy765:
 	yych = *++YYCURSOR;
 	if (yych <= 'Y') {
-		if (yych == 'R') goto yy1024;
+		if (yych == 'R') goto yy849;
 		if (yych <= 'X') goto yy53;
-		goto yy1025;
+		goto yy850;
 	} else {
 		if (yych <= 'r') {
 			if (yych <= 'q') goto yy53;
-			goto yy1024;
+			goto yy849;
 		} else {
-			if (yych == 'y') goto yy1025;
+			if (yych == 'y') goto yy850;
 			goto yy53;
 		}
 	}
-yy904:
+yy766:
 	yych = *++YYCURSOR;
-	if (yych == 'V') goto yy1026;
-	if (yych == 'v') goto yy1026;
+	if (yych == 'V') goto yy844;
+	if (yych == 'v') goto yy844;
 	goto yy53;
-yy905:
+yy767:
 	yych = *++YYCURSOR;
-	if (yych == 'T') goto yy1027;
-	if (yych == 't') goto yy1027;
+	if (yych == 'T') goto yy851;
+	if (yych == 't') goto yy851;
 	goto yy53;
-yy906:
+yy768:
 	yych = *++YYCURSOR;
-	if (yych == 'P') goto yy1028;
-	if (yych == 'p') goto yy1028;
+	if (yych == 'P') goto yy852;
+	if (yych == 'p') goto yy852;
 	goto yy53;
-yy907:
+yy769:
 	yych = *++YYCURSOR;
 	if (yych <= '0') goto yy53;
-	if (yych <= '9') goto yy1029;
+	if (yych <= '9') goto yy853;
 	goto yy53;
-yy908:
+yy770:
 	yych = *++YYCURSOR;
 	if (yych <= '/') goto yy53;
-	if (yych <= '9') goto yy1029;
+	if (yych <= '9') goto yy853;
 	goto yy53;
-yy909:
+yy771:
 	yych = *++YYCURSOR;
 	if (yych <= '/') goto yy53;
-	if (yych <= '9') goto yy1029;
+	if (yych <= '6') goto yy853;
 	goto yy53;
-yy910:
+yy772:
 	yych = *++YYCURSOR;
 	if (yych <= '/') goto yy53;
-	if (yych <= '9') goto yy1029;
+	if (yych <= '2') goto yy854;
+	if (yych <= '3') goto yy856;
+	if (yych <= '9') goto yy857;
 	goto yy53;
-yy911:
+yy773:
 	yych = *++YYCURSOR;
-	if (yych <= '/') goto yy53;
-	if (yych <= '6') goto yy1029;
+	if (yych == '/') goto yy858;
 	goto yy53;
-yy912:
-	yych = *++YYCURSOR;
-	if (yych <= '/') goto yy53;
-	if (yych <= '2') goto yy1030;
-	if (yych <= '3') goto yy1032;
-	if (yych <= '9') goto yy1033;
-	goto yy53;
-yy913:
-	yych = *++YYCURSOR;
-	if (yych == '/') goto yy1034;
-	goto yy53;
-yy914:
+yy774:
 	yyaccept = 19;
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -13557,7 +11761,7 @@ yy914:
 	case 's':
 	case 't':
 	case 'w':
-	case 'y':	goto yy182;
+	case 'y':	goto yy176;
 	case '0':
 	case '1':
 	case '2':
@@ -13568,9 +11772,9 @@ yy914:
 	case '7':
 	case '8':
 	case '9':	goto yy54;
-	default:	goto yy915;
+	default:	goto yy775;
 	}
-yy915:
+yy775:
 #line 1187 "parse_date.s.re"
 	{
 		DEBUG_OUTPUT("pgydotd");
@@ -13583,8 +11787,8 @@ yy915:
 		TIMELIB_DEINIT;
 		return TIMELIB_PG_YEARDAY;
 	}
-#line 13587 "parse_date.s.c"
-yy916:
+#line 11791 "parse_date.s.c"
+yy776:
 	yyaccept = 19;
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -13604,7 +11808,7 @@ yy916:
 	case 's':
 	case 't':
 	case 'w':
-	case 'y':	goto yy182;
+	case 'y':	goto yy176;
 	case '0':	goto yy54;
 	case '1':
 	case '2':
@@ -13614,10 +11818,10 @@ yy916:
 	case '6':
 	case '7':
 	case '8':
-	case '9':	goto yy1035;
-	default:	goto yy915;
+	case '9':	goto yy859;
+	default:	goto yy775;
 	}
-yy917:
+yy777:
 	yyaccept = 19;
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -13637,7 +11841,7 @@ yy917:
 	case 's':
 	case 't':
 	case 'w':
-	case 'y':	goto yy182;
+	case 'y':	goto yy176;
 	case '0':
 	case '1':
 	case '2':
@@ -13647,10 +11851,10 @@ yy917:
 	case '6':
 	case '7':
 	case '8':
-	case '9':	goto yy1035;
-	default:	goto yy915;
+	case '9':	goto yy859;
+	default:	goto yy775;
 	}
-yy918:
+yy778:
 	yyaccept = 19;
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -13670,9 +11874,9 @@ yy918:
 	case 's':
 	case 't':
 	case 'w':
-	case 'y':	goto yy182;
+	case 'y':	goto yy176;
 	case '0':
-	case '1':	goto yy1035;
+	case '1':	goto yy859;
 	case '2':
 	case '3':
 	case '4':
@@ -13681,84 +11885,74 @@ yy918:
 	case '7':
 	case '8':
 	case '9':	goto yy54;
-	default:	goto yy915;
+	default:	goto yy775;
 	}
-yy919:
+yy779:
 	yych = *++YYCURSOR;
-	if (yych == ':') goto yy1037;
+	if (yych == ':') goto yy861;
 	goto yy53;
-yy920:
+yy780:
 	yyaccept = 20;
 	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych == 'I') goto yy1038;
-	if (yych == 'i') goto yy1038;
-	goto yy581;
-yy921:
+	if (yych == 'I') goto yy862;
+	if (yych == 'i') goto yy862;
+	goto yy505;
+yy781:
 	yyaccept = 20;
 	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych == 'U') goto yy1039;
-	if (yych == 'u') goto yy1039;
-	goto yy581;
-yy922:
+	if (yych == 'U') goto yy863;
+	if (yych == 'u') goto yy863;
+	goto yy505;
+yy782:
 	yyaccept = 20;
 	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych == 'E') goto yy1040;
-	if (yych == 'e') goto yy1040;
-	goto yy581;
-yy923:
+	if (yych == 'E') goto yy864;
+	if (yych == 'e') goto yy864;
+	goto yy505;
+yy783:
 	yyaccept = 20;
 	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych == 'R') goto yy1041;
-	if (yych == 'r') goto yy1041;
-	goto yy581;
-yy924:
+	if (yych == 'R') goto yy865;
+	if (yych == 'r') goto yy865;
+	goto yy505;
+yy784:
 	yyaccept = 20;
 	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych == 'U') goto yy1042;
-	if (yych == 'u') goto yy1042;
-	goto yy581;
-yy925:
+	if (yych == 'U') goto yy866;
+	if (yych == 'u') goto yy866;
+	goto yy505;
+yy785:
 	yych = *++YYCURSOR;
-	if (yych == 'Y') goto yy771;
-	if (yych == 'y') goto yy771;
-	goto yy581;
-yy926:
+	if (yych == 'Y') goto yy675;
+	if (yych == 'y') goto yy675;
+	goto yy505;
+yy786:
 	yych = *++YYCURSOR;
-	if (yych == 'E') goto yy771;
-	if (yych == 'e') goto yy771;
-	goto yy581;
-yy927:
+	if (yych == 'E') goto yy675;
+	if (yych == 'e') goto yy675;
+	goto yy505;
+yy787:
 	yyaccept = 20;
 	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych == 'C') goto yy1043;
-	if (yych == 'c') goto yy1043;
-	goto yy581;
-yy928:
+	if (yych == 'C') goto yy867;
+	if (yych == 'c') goto yy867;
+	goto yy505;
+yy788:
 	yyaccept = 20;
 	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych == 'E') goto yy1044;
-	if (yych == 'e') goto yy1044;
-	goto yy581;
-yy929:
-	yyaccept = 20;
-	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych == 'O') goto yy1045;
-	if (yych == 'o') goto yy1045;
-	goto yy581;
-yy930:
+	if (yych == 'O') goto yy868;
+	if (yych == 'o') goto yy868;
+	goto yy505;
+yy789:
 	yych = *++YYCURSOR;
-	if (yych == 'T') goto yy1046;
-	if (yych == 't') goto yy1046;
-	goto yy581;
-yy931:
-	yych = *++YYCURSOR;
-	if (yych == 'I') goto yy771;
-	goto yy581;
-yy932:
+	if (yych == 'T') goto yy782;
+	if (yych == 't') goto yy782;
+	goto yy505;
+yy790:
 	++YYCURSOR;
-	if ((yych = *YYCURSOR) <= '/') goto yy933;
-	if (yych <= '7') goto yy1047;
-yy933:
+	if ((yych = *YYCURSOR) <= '/') goto yy791;
+	if (yych <= '7') goto yy869;
+yy791:
 #line 1219 "parse_date.s.re"
 	{
 		timelib_sll w, d;
@@ -13777,225 +11971,73 @@ yy933:
 		TIMELIB_DEINIT;
 		return TIMELIB_ISO_WEEK;
 	}
-#line 13781 "parse_date.s.c"
-yy934:
+#line 11975 "parse_date.s.c"
+yy792:
 	yych = *++YYCURSOR;
-	if (yych == 'E') goto yy1049;
-	if (yych == 'e') goto yy1049;
+	if (yych == 'G') goto yy871;
+	if (yych == 'g') goto yy871;
 	goto yy53;
-yy935:
+yy793:
 	yych = *++YYCURSOR;
-	if (yych == 'R') goto yy1050;
-	if (yych == 'r') goto yy1050;
+	if (yych == 'Y') goto yy225;
+	if (yych == 'y') goto yy225;
 	goto yy53;
-yy936:
+yy794:
 	yych = *++YYCURSOR;
-	if (yych == 'I') goto yy1051;
-	if (yych == 'i') goto yy1051;
+	if (yych == 'R') goto yy225;
+	if (yych == 'r') goto yy225;
 	goto yy53;
-yy937:
-	yych = *++YYCURSOR;
-	if (yych == 'G') goto yy1052;
-	if (yych == 'g') goto yy1052;
-	goto yy53;
-yy938:
-	yych = *++YYCURSOR;
-	if (yych == 'Y') goto yy239;
-	if (yych == 'y') goto yy239;
-	goto yy53;
-yy939:
-	yych = *++YYCURSOR;
-	if (yych == 'E') goto yy1053;
-	if (yych == 'e') goto yy1053;
-	goto yy53;
-yy940:
-	yych = *++YYCURSOR;
-	if (yych == 'R') goto yy239;
-	if (yych == 'r') goto yy239;
-	goto yy53;
-yy941:
-	yych = *++YYCURSOR;
-	if (yych == 'A') goto yy1054;
-	if (yych == 'a') goto yy1054;
-	goto yy53;
-yy942:
-	yych = *++YYCURSOR;
-	if (yych == 'B') goto yy1055;
-	if (yych == 'b') goto yy1055;
-	goto yy53;
-yy943:
-	yych = *++YYCURSOR;
-	if (yych == 'A') goto yy1056;
-	if (yych == 'a') goto yy1056;
-	goto yy53;
-yy944:
-	yych = *++YYCURSOR;
-	if (yych == 'Y') goto yy596;
-	if (yych == 'y') goto yy596;
-	goto yy53;
-yy945:
-	yych = *++YYCURSOR;
-	if (yych == 'D') goto yy1057;
-	if (yych == 'd') goto yy1057;
-	goto yy53;
-yy946:
-	++YYCURSOR;
-	if ((YYLIMIT - YYCURSOR) < 4) YYFILL(4);
-	yych = *YYCURSOR;
-	if (yych <= 'O') {
-		if (yych <= ' ') {
-			if (yych <= 0x1F) goto yy53;
-			goto yy946;
-		} else {
-			if (yych != 'A') goto yy53;
-		}
-	} else {
-		if (yych <= 'a') {
-			if (yych <= 'P') goto yy948;
-			if (yych <= '`') goto yy53;
-		} else {
-			if (yych != 'p') goto yy53;
-		}
-	}
-yy948:
-	yych = *++YYCURSOR;
-	if (yych <= 'L') {
-		if (yych == '.') goto yy1058;
-		goto yy53;
-	} else {
-		if (yych <= 'M') goto yy1059;
-		if (yych == 'm') goto yy1059;
-		goto yy53;
-	}
-yy949:
+yy795:
 	yych = *++YYCURSOR;
 	if (yych <= '/') goto yy53;
-	if (yych <= '0') goto yy1060;
-	if (yych <= '2') goto yy1061;
-	if (yych <= '3') goto yy1062;
+	if (yych <= '0') goto yy872;
+	if (yych <= '2') goto yy873;
+	if (yych <= '3') goto yy874;
 	goto yy53;
-yy950:
+yy796:
 	yych = *++YYCURSOR;
 	if (yych <= '/') goto yy53;
-	if (yych <= '9') goto yy1063;
+	if (yych <= '9') goto yy875;
 	goto yy53;
-yy951:
-	yych = *++YYCURSOR;
-	if (yych == 'R') goto yy126;
-	if (yych == 'r') goto yy126;
-	goto yy53;
-yy952:
-	yych = *++YYCURSOR;
-	if (yych <= '^') {
-		if (yych <= '/') {
-			if (yych <= '.') goto yy53;
-			goto yy275;
-		} else {
-			if (yych == 'R') goto yy126;
-			goto yy53;
-		}
-	} else {
-		if (yych <= 'q') {
-			if (yych <= '_') goto yy275;
-			if (yych <= '`') goto yy53;
-			goto yy640;
-		} else {
-			if (yych <= 'r') goto yy642;
-			if (yych <= 'z') goto yy640;
-			goto yy53;
-		}
-	}
-yy953:
-	yych = *++YYCURSOR;
-	if (yych == 'H') goto yy646;
-	if (yych == 'h') goto yy646;
-	goto yy53;
-yy954:
-	yych = *++YYCURSOR;
-	if (yych <= '^') {
-		if (yych <= '/') {
-			if (yych <= '.') goto yy53;
-			goto yy275;
-		} else {
-			if (yych == 'H') goto yy646;
-			goto yy53;
-		}
-	} else {
-		if (yych <= 'g') {
-			if (yych <= '_') goto yy275;
-			if (yych <= '`') goto yy53;
-			goto yy640;
-		} else {
-			if (yych <= 'h') goto yy649;
-			if (yych <= 'z') goto yy640;
-			goto yy53;
-		}
-	}
-yy955:
-	yych = *++YYCURSOR;
-	if (yych == 'Y') goto yy126;
-	if (yych == 'y') goto yy126;
-	goto yy53;
-yy956:
-	yych = *++YYCURSOR;
-	if (yych <= '^') {
-		if (yych <= '/') {
-			if (yych <= '.') goto yy53;
-			goto yy275;
-		} else {
-			if (yych == 'Y') goto yy126;
-			goto yy53;
-		}
-	} else {
-		if (yych <= 'x') {
-			if (yych <= '_') goto yy275;
-			if (yych <= '`') goto yy53;
-			goto yy640;
-		} else {
-			if (yych <= 'y') goto yy642;
-			if (yych <= 'z') goto yy640;
-			goto yy53;
-		}
-	}
-yy957:
+yy797:
 	yyaccept = 16;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= '/') {
-		if (yych == '.') goto yy829;
-		goto yy667;
+		if (yych == '.') goto yy710;
+		goto yy586;
 	} else {
-		if (yych <= '9') goto yy1065;
-		if (yych <= ':') goto yy829;
-		goto yy667;
+		if (yych <= '9') goto yy877;
+		if (yych <= ':') goto yy710;
+		goto yy586;
 	}
-yy958:
+yy798:
 	yyaccept = 16;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= '/') {
-		if (yych == '.') goto yy829;
-		goto yy667;
+		if (yych == '.') goto yy710;
+		goto yy586;
 	} else {
-		if (yych <= '0') goto yy1066;
-		if (yych == ':') goto yy829;
-		goto yy667;
+		if (yych <= '0') goto yy878;
+		if (yych == ':') goto yy710;
+		goto yy586;
 	}
-yy959:
+yy799:
 	yych = *++YYCURSOR;
-	if (yych <= '/') goto yy667;
-	if (yych <= '9') goto yy1066;
-	goto yy667;
-yy960:
+	if (yych <= '/') goto yy586;
+	if (yych <= '9') goto yy878;
+	goto yy586;
+yy800:
 	yych = *++YYCURSOR;
-	if (yych == '0') goto yy1066;
-	goto yy667;
-yy961:
+	if (yych == '0') goto yy878;
+	goto yy586;
+yy801:
 	yych = *++YYCURSOR;
-	goto yy667;
-yy962:
+	goto yy586;
+yy802:
 	++YYCURSOR;
-	if ((yych = *YYCURSOR) == 'S') goto yy1067;
-	if (yych == 's') goto yy1067;
-yy963:
+	if ((yych = *YYCURSOR) == 'S') goto yy879;
+	if (yych == 's') goto yy879;
+yy803:
 #line 1323 "parse_date.s.re"
 	{
 		timelib_sll i;
@@ -14012,711 +12054,591 @@ yy963:
 		TIMELIB_DEINIT;
 		return TIMELIB_RELATIVE;
 	}
-#line 14016 "parse_date.s.c"
-yy964:
+#line 12058 "parse_date.s.c"
+yy804:
 	yych = *++YYCURSOR;
-	if (yych == 'T') goto yy1068;
-	if (yych == 't') goto yy1068;
+	if (yych == 'T') goto yy880;
+	if (yych == 't') goto yy880;
 	goto yy53;
-yy965:
+yy805:
 	yyaccept = 21;
 	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych == 'D') goto yy1069;
-	if (yych == 'd') goto yy1069;
-	goto yy963;
-yy966:
+	if (yych == 'D') goto yy881;
+	if (yych == 'd') goto yy881;
+	goto yy803;
+yy806:
 	yych = *++YYCURSOR;
-	if (yych == 'R') goto yy962;
-	if (yych == 'r') goto yy962;
+	if (yych == 'R') goto yy802;
+	if (yych == 'r') goto yy802;
 	goto yy53;
-yy967:
+yy807:
 	yyaccept = 21;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= 'U') {
-		if (yych == 'S') goto yy1067;
-		if (yych <= 'T') goto yy963;
-		goto yy1070;
+		if (yych == 'S') goto yy879;
+		if (yych <= 'T') goto yy803;
+		goto yy882;
 	} else {
 		if (yych <= 's') {
-			if (yych <= 'r') goto yy963;
-			goto yy1067;
+			if (yych <= 'r') goto yy803;
+			goto yy879;
 		} else {
-			if (yych == 'u') goto yy1070;
-			goto yy963;
+			if (yych == 'u') goto yy882;
+			goto yy803;
 		}
 	}
-yy968:
+yy808:
 	yyaccept = 21;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= 'T') {
-		if (yych == 'D') goto yy1071;
-		if (yych <= 'S') goto yy963;
-		goto yy1072;
+		if (yych == 'D') goto yy881;
+		if (yych <= 'S') goto yy803;
+		goto yy883;
 	} else {
 		if (yych <= 'd') {
-			if (yych <= 'c') goto yy963;
-			goto yy1071;
+			if (yych <= 'c') goto yy803;
+			goto yy881;
 		} else {
-			if (yych == 't') goto yy1072;
-			goto yy963;
+			if (yych == 't') goto yy883;
+			goto yy803;
 		}
 	}
-yy969:
+yy809:
 	yyaccept = 21;
 	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych == 'U') goto yy1073;
-	if (yych == 'u') goto yy1073;
-	goto yy963;
-yy970:
+	if (yych == 'U') goto yy884;
+	if (yych == 'u') goto yy884;
+	goto yy803;
+yy810:
 	yyaccept = 21;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= 'S') {
-		if (yych == 'O') goto yy1074;
-		if (yych <= 'R') goto yy963;
-		goto yy1067;
+		if (yych == 'O') goto yy885;
+		if (yych <= 'R') goto yy803;
+		goto yy879;
 	} else {
 		if (yych <= 'o') {
-			if (yych <= 'n') goto yy963;
-			goto yy1074;
+			if (yych <= 'n') goto yy803;
+			goto yy885;
 		} else {
-			if (yych == 's') goto yy1067;
-			goto yy963;
+			if (yych == 's') goto yy879;
+			goto yy803;
 		}
 	}
-yy971:
+yy811:
 	yyaccept = 21;
 	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych == 'D') goto yy1075;
-	if (yych == 'd') goto yy1075;
-	goto yy963;
-yy972:
+	if (yych == 'R') goto yy886;
+	if (yych == 'r') goto yy886;
+	goto yy803;
+yy812:
 	yyaccept = 21;
 	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych == 'R') goto yy1076;
-	if (yych == 'r') goto yy1076;
-	goto yy963;
-yy973:
+	if (yych == 'S') goto yy887;
+	if (yych == 's') goto yy887;
+	goto yy803;
+yy813:
 	yyaccept = 21;
 	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych == 'S') goto yy1077;
-	if (yych == 's') goto yy1077;
-	goto yy963;
-yy974:
-	yyaccept = 21;
-	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych == 'N') goto yy1078;
-	if (yych == 'n') goto yy1078;
-	goto yy963;
-yy975:
+	if (yych == 'N') goto yy888;
+	if (yych == 'n') goto yy888;
+	goto yy803;
+yy814:
 	yych = *++YYCURSOR;
-	if (yych == 'K') goto yy962;
-	if (yych == 'k') goto yy962;
+	if (yych == 'K') goto yy802;
+	if (yych == 'k') goto yy802;
 	goto yy53;
-yy976:
-	yych = *++YYCURSOR;
-	if (yych == 'R') goto yy962;
-	if (yych == 'r') goto yy962;
-	goto yy53;
-yy977:
+yy815:
 	yyaccept = 21;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= '^') {
 		if (yych <= '/') {
-			if (yych <= '.') goto yy963;
-			goto yy275;
+			if (yych <= '.') goto yy803;
+			goto yy259;
 		} else {
-			if (yych == 'S') goto yy1067;
-			goto yy963;
+			if (yych == 'S') goto yy879;
+			goto yy803;
 		}
 	} else {
 		if (yych <= 'r') {
-			if (yych <= '_') goto yy275;
-			if (yych <= '`') goto yy963;
-			goto yy640;
+			if (yych <= '_') goto yy259;
+			if (yych <= '`') goto yy803;
+			goto yy559;
 		} else {
-			if (yych <= 's') goto yy1079;
-			if (yych <= 'z') goto yy640;
-			goto yy963;
+			if (yych <= 's') goto yy889;
+			if (yych <= 'z') goto yy559;
+			goto yy803;
 		}
 	}
-yy978:
+yy816:
 	yych = *++YYCURSOR;
-	if (yych == 'T') goto yy1068;
-	if (yych == 't') goto yy1080;
-	goto yy641;
-yy979:
+	if (yych == 'T') goto yy880;
+	if (yych == 't') goto yy890;
+	goto yy560;
+yy817:
 	yyaccept = 21;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= '^') {
 		if (yych <= '/') {
-			if (yych <= '.') goto yy963;
-			goto yy275;
+			if (yych <= '.') goto yy803;
+			goto yy259;
 		} else {
-			if (yych == 'D') goto yy1069;
-			goto yy963;
+			if (yych == 'D') goto yy881;
+			goto yy803;
 		}
 	} else {
 		if (yych <= 'c') {
-			if (yych <= '_') goto yy275;
-			if (yych <= '`') goto yy963;
-			goto yy640;
+			if (yych <= '_') goto yy259;
+			if (yych <= '`') goto yy803;
+			goto yy559;
 		} else {
-			if (yych <= 'd') goto yy1081;
-			if (yych <= 'z') goto yy640;
-			goto yy963;
+			if (yych <= 'd') goto yy891;
+			if (yych <= 'z') goto yy559;
+			goto yy803;
 		}
 	}
-yy980:
+yy818:
 	yych = *++YYCURSOR;
-	if (yych == 'R') goto yy962;
-	if (yych == 'r') goto yy977;
-	goto yy641;
-yy981:
+	if (yych == 'R') goto yy802;
+	if (yych == 'r') goto yy815;
+	goto yy560;
+yy819:
 	yyaccept = 21;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= '^') {
 		if (yych <= 'R') {
-			if (yych == '/') goto yy275;
-			goto yy963;
+			if (yych == '/') goto yy259;
+			goto yy803;
 		} else {
-			if (yych <= 'S') goto yy1067;
-			if (yych == 'U') goto yy1070;
-			goto yy963;
+			if (yych <= 'S') goto yy879;
+			if (yych == 'U') goto yy882;
+			goto yy803;
 		}
 	} else {
 		if (yych <= 's') {
-			if (yych <= '_') goto yy275;
-			if (yych <= '`') goto yy963;
-			if (yych <= 'r') goto yy640;
-			goto yy1079;
+			if (yych <= '_') goto yy259;
+			if (yych <= '`') goto yy803;
+			if (yych <= 'r') goto yy559;
+			goto yy889;
 		} else {
-			if (yych == 'u') goto yy1082;
-			if (yych <= 'z') goto yy640;
-			goto yy963;
+			if (yych == 'u') goto yy892;
+			if (yych <= 'z') goto yy559;
+			goto yy803;
 		}
 	}
-yy982:
+yy820:
 	yyaccept = 21;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= '^') {
 		if (yych <= 'C') {
-			if (yych == '/') goto yy275;
-			goto yy963;
+			if (yych == '/') goto yy259;
+			goto yy803;
 		} else {
-			if (yych <= 'D') goto yy1071;
-			if (yych == 'T') goto yy1072;
-			goto yy963;
+			if (yych <= 'D') goto yy881;
+			if (yych == 'T') goto yy883;
+			goto yy803;
 		}
 	} else {
 		if (yych <= 'd') {
-			if (yych <= '_') goto yy275;
-			if (yych <= '`') goto yy963;
-			if (yych <= 'c') goto yy640;
-			goto yy1083;
+			if (yych <= '_') goto yy259;
+			if (yych <= '`') goto yy803;
+			if (yych <= 'c') goto yy559;
+			goto yy891;
 		} else {
-			if (yych == 't') goto yy1084;
-			if (yych <= 'z') goto yy640;
-			goto yy963;
+			if (yych == 't') goto yy893;
+			if (yych <= 'z') goto yy559;
+			goto yy803;
 		}
 	}
-yy983:
+yy821:
 	yyaccept = 21;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= '^') {
 		if (yych <= '/') {
-			if (yych <= '.') goto yy963;
-			goto yy275;
+			if (yych <= '.') goto yy803;
+			goto yy259;
 		} else {
-			if (yych == 'U') goto yy1073;
-			goto yy963;
+			if (yych == 'U') goto yy884;
+			goto yy803;
 		}
 	} else {
 		if (yych <= 't') {
-			if (yych <= '_') goto yy275;
-			if (yych <= '`') goto yy963;
-			goto yy640;
+			if (yych <= '_') goto yy259;
+			if (yych <= '`') goto yy803;
+			goto yy559;
 		} else {
-			if (yych <= 'u') goto yy1085;
-			if (yych <= 'z') goto yy640;
-			goto yy963;
+			if (yych <= 'u') goto yy894;
+			if (yych <= 'z') goto yy559;
+			goto yy803;
 		}
 	}
-yy984:
+yy822:
 	yyaccept = 21;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= '^') {
 		if (yych <= 'N') {
-			if (yych == '/') goto yy275;
-			goto yy963;
+			if (yych == '/') goto yy259;
+			goto yy803;
 		} else {
-			if (yych <= 'O') goto yy1074;
-			if (yych == 'S') goto yy1067;
-			goto yy963;
+			if (yych <= 'O') goto yy885;
+			if (yych == 'S') goto yy879;
+			goto yy803;
 		}
 	} else {
 		if (yych <= 'o') {
-			if (yych <= '_') goto yy275;
-			if (yych <= '`') goto yy963;
-			if (yych <= 'n') goto yy640;
-			goto yy1086;
+			if (yych <= '_') goto yy259;
+			if (yych <= '`') goto yy803;
+			if (yych <= 'n') goto yy559;
+			goto yy895;
 		} else {
-			if (yych == 's') goto yy1079;
-			if (yych <= 'z') goto yy640;
-			goto yy963;
+			if (yych == 's') goto yy889;
+			if (yych <= 'z') goto yy559;
+			goto yy803;
 		}
 	}
-yy985:
+yy823:
 	yyaccept = 21;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= '^') {
 		if (yych <= '/') {
-			if (yych <= '.') goto yy963;
-			goto yy275;
+			if (yych <= '.') goto yy803;
+			goto yy259;
 		} else {
-			if (yych == 'D') goto yy1075;
-			goto yy963;
-		}
-	} else {
-		if (yych <= 'c') {
-			if (yych <= '_') goto yy275;
-			if (yych <= '`') goto yy963;
-			goto yy640;
-		} else {
-			if (yych <= 'd') goto yy1087;
-			if (yych <= 'z') goto yy640;
-			goto yy963;
-		}
-	}
-yy986:
-	yyaccept = 21;
-	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych <= '^') {
-		if (yych <= '/') {
-			if (yych <= '.') goto yy963;
-			goto yy275;
-		} else {
-			if (yych == 'R') goto yy1076;
-			goto yy963;
+			if (yych == 'R') goto yy886;
+			goto yy803;
 		}
 	} else {
 		if (yych <= 'q') {
-			if (yych <= '_') goto yy275;
-			if (yych <= '`') goto yy963;
-			goto yy640;
+			if (yych <= '_') goto yy259;
+			if (yych <= '`') goto yy803;
+			goto yy559;
 		} else {
-			if (yych <= 'r') goto yy1088;
-			if (yych <= 'z') goto yy640;
-			goto yy963;
+			if (yych <= 'r') goto yy896;
+			if (yych <= 'z') goto yy559;
+			goto yy803;
 		}
 	}
-yy987:
+yy824:
 	yyaccept = 21;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= '^') {
 		if (yych <= '/') {
-			if (yych <= '.') goto yy963;
-			goto yy275;
+			if (yych <= '.') goto yy803;
+			goto yy259;
 		} else {
-			if (yych == 'S') goto yy1077;
-			goto yy963;
+			if (yych == 'S') goto yy887;
+			goto yy803;
 		}
 	} else {
 		if (yych <= 'r') {
-			if (yych <= '_') goto yy275;
-			if (yych <= '`') goto yy963;
-			goto yy640;
+			if (yych <= '_') goto yy259;
+			if (yych <= '`') goto yy803;
+			goto yy559;
 		} else {
-			if (yych <= 's') goto yy1089;
-			if (yych <= 'z') goto yy640;
-			goto yy963;
+			if (yych <= 's') goto yy897;
+			if (yych <= 'z') goto yy559;
+			goto yy803;
 		}
 	}
-yy988:
+yy825:
 	yyaccept = 21;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= '^') {
 		if (yych <= '/') {
-			if (yych <= '.') goto yy963;
-			goto yy275;
+			if (yych <= '.') goto yy803;
+			goto yy259;
 		} else {
-			if (yych == 'N') goto yy1078;
-			goto yy963;
+			if (yych == 'N') goto yy888;
+			goto yy803;
 		}
 	} else {
 		if (yych <= 'm') {
-			if (yych <= '_') goto yy275;
-			if (yych <= '`') goto yy963;
-			goto yy640;
+			if (yych <= '_') goto yy259;
+			if (yych <= '`') goto yy803;
+			goto yy559;
 		} else {
-			if (yych <= 'n') goto yy1090;
-			if (yych <= 'z') goto yy640;
-			goto yy963;
+			if (yych <= 'n') goto yy898;
+			if (yych <= 'z') goto yy559;
+			goto yy803;
 		}
 	}
-yy989:
+yy826:
 	yych = *++YYCURSOR;
-	if (yych == 'K') goto yy962;
-	if (yych == 'k') goto yy977;
-	goto yy641;
-yy990:
+	if (yych == 'K') goto yy802;
+	if (yych == 'k') goto yy815;
+	goto yy560;
+yy827:
 	yych = *++YYCURSOR;
-	if (yych == 'R') goto yy962;
-	if (yych == 'r') goto yy977;
-	goto yy641;
-yy991:
-	yych = *++YYCURSOR;
-	if (yych == 'T') goto yy709;
-	if (yych == 't') goto yy709;
+	if (yych == 'T') goto yy621;
+	if (yych == 't') goto yy621;
 	goto yy53;
-yy992:
+yy828:
 	yych = *++YYCURSOR;
-	if (yych == 'T') goto yy709;
-	if (yych == 't') goto yy715;
-	goto yy641;
-yy993:
+	if (yych == 'T') goto yy621;
+	if (yych == 't') goto yy625;
+	goto yy560;
+yy829:
 	yych = *++YYCURSOR;
-	if (yych == 'R') goto yy126;
-	if (yych == 'r') goto yy126;
+	if (yych == 'S') goto yy565;
+	if (yych == 's') goto yy565;
 	goto yy53;
-yy994:
+yy830:
 	yych = *++YYCURSOR;
 	if (yych <= '^') {
 		if (yych <= '/') {
 			if (yych <= '.') goto yy53;
-			goto yy275;
+			goto yy259;
 		} else {
-			if (yych == 'R') goto yy126;
-			goto yy53;
-		}
-	} else {
-		if (yych <= 'q') {
-			if (yych <= '_') goto yy275;
-			if (yych <= '`') goto yy53;
-			goto yy640;
-		} else {
-			if (yych <= 'r') goto yy642;
-			if (yych <= 'z') goto yy640;
-			goto yy53;
-		}
-	}
-yy995:
-	yych = *++YYCURSOR;
-	if (yych == 'S') goto yy646;
-	if (yych == 's') goto yy646;
-	goto yy53;
-yy996:
-	yych = *++YYCURSOR;
-	if (yych <= '^') {
-		if (yych <= '/') {
-			if (yych <= '.') goto yy53;
-			goto yy275;
-		} else {
-			if (yych == 'S') goto yy646;
+			if (yych == 'S') goto yy565;
 			goto yy53;
 		}
 	} else {
 		if (yych <= 'r') {
-			if (yych <= '_') goto yy275;
+			if (yych <= '_') goto yy259;
 			if (yych <= '`') goto yy53;
-			goto yy640;
+			goto yy559;
 		} else {
-			if (yych <= 's') goto yy649;
-			if (yych <= 'z') goto yy640;
+			if (yych <= 's') goto yy568;
+			if (yych <= 'z') goto yy559;
 			goto yy53;
 		}
 	}
-yy997:
+yy831:
 	yych = *++YYCURSOR;
-	if (yych == 'Y') goto yy822;
-	if (yych == 'y') goto yy822;
+	if (yych == 'W') goto yy899;
+	if (yych == 'w') goto yy899;
 	goto yy53;
-yy998:
+yy832:
 	yych = *++YYCURSOR;
-	if (yych == 'E') goto yy1091;
-	if (yych == 'e') goto yy1091;
+	if (yych == 'W') goto yy899;
+	if (yych == 'w') goto yy901;
+	goto yy560;
+yy833:
+	yych = *++YYCURSOR;
+	if (yych == 'A') goto yy902;
+	if (yych == 'a') goto yy902;
 	goto yy53;
-yy999:
+yy834:
 	yych = *++YYCURSOR;
-	if (yych == 'Y') goto yy822;
-	if (yych == 'y') goto yy824;
-	goto yy641;
-yy1000:
+	if (yych == 'A') goto yy902;
+	if (yych == 'a') goto yy903;
+	goto yy560;
+yy835:
 	yych = *++YYCURSOR;
-	if (yych == 'E') goto yy1091;
-	if (yych == 'e') goto yy1092;
-	goto yy641;
-yy1001:
+	goto yy638;
+yy836:
 	yych = *++YYCURSOR;
-	if (yych == 'Y') goto yy822;
-	if (yych == 'y') goto yy822;
-	goto yy53;
-yy1002:
-	yych = *++YYCURSOR;
-	if (yych == 'W') goto yy1093;
-	if (yych == 'w') goto yy1093;
-	goto yy53;
-yy1003:
-	yych = *++YYCURSOR;
-	if (yych == 'Y') goto yy822;
-	if (yych == 'y') goto yy824;
-	goto yy641;
-yy1004:
-	yych = *++YYCURSOR;
-	if (yych == 'W') goto yy1093;
-	if (yych == 'w') goto yy1095;
-	goto yy641;
-yy1005:
-	yych = *++YYCURSOR;
-	if (yych == 'A') goto yy1096;
-	if (yych == 'a') goto yy1096;
-	goto yy53;
-yy1006:
-	yych = *++YYCURSOR;
-	if (yych == 'A') goto yy1096;
-	if (yych == 'a') goto yy1097;
-	goto yy641;
-yy1007:
-	yych = *++YYCURSOR;
-	if (yych == 'A') goto yy1098;
-	if (yych == 'a') goto yy1098;
-	goto yy53;
-yy1008:
-	yych = *++YYCURSOR;
-	if (yych == 'A') goto yy1098;
-	if (yych == 'a') goto yy1099;
-	goto yy641;
-yy1009:
-	yych = *++YYCURSOR;
-	if (yych <= '/') goto yy237;
-	if (yych <= '9') goto yy601;
-	goto yy237;
-yy1010:
-	yych = *++YYCURSOR;
-	goto yy732;
-yy1011:
-	yych = *++YYCURSOR;
-	goto yy211;
-yy1012:
+	goto yy197;
+yy837:
 	yych = *++YYCURSOR;
 	if (yych <= '/') goto yy53;
-	if (yych <= '9') goto yy1100;
+	if (yych <= '9') goto yy904;
 	goto yy53;
-yy1013:
+yy838:
 	yyaccept = 14;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= 'm') {
 		if (yych <= '9') {
-			if (yych <= '/') goto yy538;
-			goto yy1015;
+			if (yych <= '/') goto yy474;
+			goto yy840;
 		} else {
-			if (yych == 'T') goto yy1101;
-			goto yy538;
+			if (yych == 'T') goto yy905;
+			goto yy474;
 		}
 	} else {
 		if (yych <= 'r') {
-			if (yych <= 'n') goto yy1102;
-			if (yych <= 'q') goto yy538;
-			goto yy1103;
+			if (yych <= 'n') goto yy906;
+			if (yych <= 'q') goto yy474;
+			goto yy906;
 		} else {
-			if (yych <= 's') goto yy1104;
-			if (yych <= 't') goto yy1105;
-			goto yy538;
+			if (yych <= 's') goto yy907;
+			if (yych <= 't') goto yy908;
+			goto yy474;
 		}
 	}
-yy1014:
+yy839:
 	yyaccept = 14;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= 'm') {
 		if (yych <= '1') {
-			if (yych <= '/') goto yy538;
+			if (yych <= '/') goto yy474;
 		} else {
-			if (yych == 'T') goto yy1101;
-			goto yy538;
+			if (yych == 'T') goto yy905;
+			goto yy474;
 		}
 	} else {
 		if (yych <= 'r') {
-			if (yych <= 'n') goto yy1102;
-			if (yych <= 'q') goto yy538;
-			goto yy1103;
+			if (yych <= 'n') goto yy906;
+			if (yych <= 'q') goto yy474;
+			goto yy906;
 		} else {
-			if (yych <= 's') goto yy1104;
-			if (yych <= 't') goto yy1105;
-			goto yy538;
+			if (yych <= 's') goto yy907;
+			if (yych <= 't') goto yy908;
+			goto yy474;
 		}
 	}
-yy1015:
+yy840:
 	yyaccept = 14;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= 'n') {
-		if (yych == 'T') goto yy1101;
-		if (yych <= 'm') goto yy538;
-		goto yy1102;
+		if (yych == 'T') goto yy905;
+		if (yych <= 'm') goto yy474;
+		goto yy906;
 	} else {
 		if (yych <= 'r') {
-			if (yych <= 'q') goto yy538;
-			goto yy1103;
+			if (yych <= 'q') goto yy474;
+			goto yy906;
 		} else {
-			if (yych <= 's') goto yy1104;
-			if (yych <= 't') goto yy1105;
-			goto yy538;
+			if (yych <= 's') goto yy907;
+			if (yych <= 't') goto yy908;
+			goto yy474;
 		}
 	}
-yy1016:
+yy841:
 	yych = *++YYCURSOR;
 	if (yych <= '2') {
 		if (yych <= '/') goto yy53;
-		if (yych <= '0') goto yy1106;
-		goto yy1107;
+		if (yych <= '0') goto yy909;
+		goto yy910;
 	} else {
-		if (yych <= '3') goto yy1108;
-		if (yych <= '9') goto yy1015;
+		if (yych <= '3') goto yy911;
+		if (yych <= '9') goto yy840;
 		goto yy53;
 	}
-yy1017:
+yy842:
 	yyaccept = 20;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= 'H') {
-		if (yych == '-') goto yy949;
-		goto yy581;
+		if (yych == '-') goto yy795;
+		goto yy505;
 	} else {
-		if (yych <= 'I') goto yy1038;
-		if (yych == 'i') goto yy1038;
-		goto yy581;
+		if (yych <= 'I') goto yy862;
+		if (yych == 'i') goto yy862;
+		goto yy505;
 	}
-yy1018:
+yy843:
 	yyaccept = 20;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= 'T') {
-		if (yych == '-') goto yy949;
-		goto yy581;
+		if (yych == '-') goto yy795;
+		goto yy505;
 	} else {
-		if (yych <= 'U') goto yy1039;
-		if (yych == 'u') goto yy1039;
-		goto yy581;
+		if (yych <= 'U') goto yy863;
+		if (yych == 'u') goto yy863;
+		goto yy505;
 	}
-yy1019:
+yy844:
 	yyaccept = 20;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= 'D') {
-		if (yych == '-') goto yy949;
-		goto yy581;
+		if (yych == '-') goto yy795;
+		goto yy505;
 	} else {
-		if (yych <= 'E') goto yy1040;
-		if (yych == 'e') goto yy1040;
-		goto yy581;
+		if (yych <= 'E') goto yy864;
+		if (yych == 'e') goto yy864;
+		goto yy505;
 	}
-yy1020:
+yy845:
 	yyaccept = 20;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= 'Q') {
-		if (yych == '-') goto yy949;
-		goto yy581;
+		if (yych == '-') goto yy795;
+		goto yy505;
 	} else {
-		if (yych <= 'R') goto yy1041;
-		if (yych == 'r') goto yy1041;
-		goto yy581;
+		if (yych <= 'R') goto yy865;
+		if (yych == 'r') goto yy865;
+		goto yy505;
 	}
-yy1021:
+yy846:
 	yyaccept = 20;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= 'T') {
-		if (yych == '-') goto yy949;
-		goto yy581;
+		if (yych == '-') goto yy795;
+		goto yy505;
 	} else {
-		if (yych <= 'U') goto yy1042;
-		if (yych == 'u') goto yy1042;
-		goto yy581;
+		if (yych <= 'U') goto yy866;
+		if (yych == 'u') goto yy866;
+		goto yy505;
 	}
-yy1022:
+yy847:
 	yyaccept = 20;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= 'X') {
-		if (yych == '-') goto yy949;
-		goto yy581;
+		if (yych == '-') goto yy795;
+		goto yy505;
 	} else {
-		if (yych <= 'Y') goto yy771;
-		if (yych == 'y') goto yy771;
-		goto yy581;
+		if (yych <= 'Y') goto yy675;
+		if (yych == 'y') goto yy675;
+		goto yy505;
 	}
-yy1023:
+yy848:
 	yyaccept = 20;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= 'D') {
-		if (yych == '-') goto yy949;
-		goto yy581;
+		if (yych == '-') goto yy795;
+		goto yy505;
 	} else {
-		if (yych <= 'E') goto yy771;
-		if (yych == 'e') goto yy771;
-		goto yy581;
+		if (yych <= 'E') goto yy675;
+		if (yych == 'e') goto yy675;
+		goto yy505;
 	}
-yy1024:
+yy849:
 	yyaccept = 20;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= 'B') {
-		if (yych == '-') goto yy949;
-		goto yy581;
+		if (yych == '-') goto yy795;
+		goto yy505;
 	} else {
-		if (yych <= 'C') goto yy1043;
-		if (yych == 'c') goto yy1043;
-		goto yy581;
+		if (yych <= 'C') goto yy867;
+		if (yych == 'c') goto yy867;
+		goto yy505;
 	}
-yy1025:
+yy850:
 	yyaccept = 20;
 	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych == '-') goto yy949;
-	goto yy581;
-yy1026:
-	yyaccept = 20;
-	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych <= 'D') {
-		if (yych == '-') goto yy949;
-		goto yy581;
-	} else {
-		if (yych <= 'E') goto yy1044;
-		if (yych == 'e') goto yy1044;
-		goto yy581;
-	}
-yy1027:
+	if (yych == '-') goto yy795;
+	goto yy505;
+yy851:
 	yyaccept = 20;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= 'N') {
-		if (yych == '-') goto yy949;
-		goto yy581;
+		if (yych == '-') goto yy795;
+		goto yy505;
 	} else {
-		if (yych <= 'O') goto yy1045;
-		if (yych == 'o') goto yy1045;
-		goto yy581;
+		if (yych <= 'O') goto yy868;
+		if (yych == 'o') goto yy868;
+		goto yy505;
 	}
-yy1028:
+yy852:
 	yyaccept = 20;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= 'S') {
-		if (yych == '-') goto yy949;
-		goto yy581;
+		if (yych == '-') goto yy795;
+		goto yy505;
 	} else {
-		if (yych <= 'T') goto yy1109;
-		if (yych == 't') goto yy1109;
-		goto yy581;
+		if (yych <= 'T') goto yy844;
+		if (yych == 't') goto yy844;
+		goto yy505;
 	}
-yy1029:
+yy853:
 	yych = *++YYCURSOR;
-	goto yy915;
-yy1030:
+	goto yy775;
+yy854:
 	yyaccept = 22;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= 'n') {
-		if (yych <= '/') goto yy1031;
-		if (yych <= '9') goto yy1033;
-		if (yych >= 'n') goto yy1110;
+		if (yych <= '/') goto yy855;
+		if (yych <= '9') goto yy857;
+		if (yych >= 'n') goto yy912;
 	} else {
 		if (yych <= 'r') {
-			if (yych >= 'r') goto yy1111;
+			if (yych >= 'r') goto yy912;
 		} else {
-			if (yych <= 's') goto yy1112;
-			if (yych <= 't') goto yy1113;
+			if (yych <= 's') goto yy913;
+			if (yych <= 't') goto yy914;
 		}
 	}
-yy1031:
+yy855:
 #line 1048 "parse_date.s.re"
 	{
 		DEBUG_OUTPUT("iso8601date | iso8601dateslash | dateslash");
@@ -14728,53 +12650,53 @@ yy1031:
 		TIMELIB_DEINIT;
 		return TIMELIB_ISO_DATE;
 	}
-#line 14732 "parse_date.s.c"
-yy1032:
+#line 12654 "parse_date.s.c"
+yy856:
 	yyaccept = 22;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= 'n') {
-		if (yych <= '/') goto yy1031;
-		if (yych <= '1') goto yy1033;
-		if (yych <= 'm') goto yy1031;
-		goto yy1110;
+		if (yych <= '/') goto yy855;
+		if (yych <= '1') goto yy857;
+		if (yych <= 'm') goto yy855;
+		goto yy912;
 	} else {
 		if (yych <= 'r') {
-			if (yych <= 'q') goto yy1031;
-			goto yy1111;
+			if (yych <= 'q') goto yy855;
+			goto yy912;
 		} else {
-			if (yych <= 's') goto yy1112;
-			if (yych <= 't') goto yy1113;
-			goto yy1031;
+			if (yych <= 's') goto yy913;
+			if (yych <= 't') goto yy914;
+			goto yy855;
 		}
 	}
-yy1033:
+yy857:
 	yyaccept = 22;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= 'q') {
-		if (yych == 'n') goto yy1110;
-		goto yy1031;
+		if (yych == 'n') goto yy912;
+		goto yy855;
 	} else {
-		if (yych <= 'r') goto yy1111;
-		if (yych <= 's') goto yy1112;
-		if (yych <= 't') goto yy1113;
-		goto yy1031;
+		if (yych <= 'r') goto yy912;
+		if (yych <= 's') goto yy913;
+		if (yych <= 't') goto yy914;
+		goto yy855;
 	}
-yy1034:
+yy858:
 	yych = *++YYCURSOR;
 	if (yych <= '2') {
 		if (yych <= '/') goto yy53;
-		if (yych <= '0') goto yy1114;
-		goto yy1115;
+		if (yych <= '0') goto yy915;
+		goto yy916;
 	} else {
-		if (yych <= '3') goto yy1116;
-		if (yych <= '9') goto yy1033;
+		if (yych <= '3') goto yy917;
+		if (yych <= '9') goto yy857;
 		goto yy53;
 	}
-yy1035:
+yy859:
 	yyaccept = 23;
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
-	case ' ':	goto yy181;
+	case ' ':	goto yy175;
 	case '0':
 	case '1':
 	case '2':
@@ -14786,24 +12708,24 @@ yy1035:
 	case '8':
 	case '9':	goto yy54;
 	case 'D':
-	case 'd':	goto yy183;
+	case 'd':	goto yy177;
 	case 'F':
-	case 'f':	goto yy184;
+	case 'f':	goto yy178;
 	case 'H':
-	case 'h':	goto yy73;
+	case 'h':	goto yy72;
 	case 'M':
-	case 'm':	goto yy185;
+	case 'm':	goto yy179;
 	case 'S':
-	case 's':	goto yy186;
-	case 'T':	goto yy1117;
+	case 's':	goto yy180;
+	case 'T':	goto yy918;
 	case 'W':
-	case 'w':	goto yy83;
+	case 'w':	goto yy82;
 	case 'Y':
-	case 'y':	goto yy85;
-	case 't':	goto yy1118;
-	default:	goto yy1036;
+	case 'y':	goto yy84;
+	case 't':	goto yy919;
+	default:	goto yy860;
 	}
-yy1036:
+yy860:
 #line 1151 "parse_date.s.re"
 	{
 		DEBUG_OUTPUT("datenocolon");
@@ -14815,61 +12737,49 @@ yy1036:
 		TIMELIB_DEINIT;
 		return TIMELIB_DATE_NOCOLON;
 	}
-#line 14819 "parse_date.s.c"
-yy1037:
+#line 12741 "parse_date.s.c"
+yy861:
 	yych = *++YYCURSOR;
 	if (yych <= '/') goto yy53;
-	if (yych <= '0') goto yy1119;
-	if (yych <= '2') goto yy1120;
-	if (yych <= '3') goto yy1121;
+	if (yych <= '0') goto yy920;
+	if (yych <= '2') goto yy921;
+	if (yych <= '3') goto yy922;
 	goto yy53;
-yy1038:
+yy862:
 	yych = *++YYCURSOR;
-	if (yych == 'L') goto yy771;
-	if (yych == 'l') goto yy771;
+	if (yych == 'L') goto yy675;
+	if (yych == 'l') goto yy675;
 	goto yy53;
-yy1039:
+yy863:
 	yych = *++YYCURSOR;
-	if (yych == 'S') goto yy1122;
-	if (yych == 's') goto yy1122;
+	if (yych == 'S') goto yy923;
+	if (yych == 's') goto yy923;
 	goto yy53;
-yy1040:
+yy864:
 	yych = *++YYCURSOR;
-	if (yych == 'M') goto yy1123;
-	if (yych == 'm') goto yy1123;
+	if (yych == 'M') goto yy868;
+	if (yych == 'm') goto yy868;
 	goto yy53;
-yy1041:
+yy865:
 	yych = *++YYCURSOR;
-	if (yych == 'U') goto yy1124;
-	if (yych == 'u') goto yy1124;
-	goto yy53;
-yy1042:
+	if (yych == 'U') goto yy866;
+	if (yych != 'u') goto yy53;
+yy866:
 	yych = *++YYCURSOR;
-	if (yych == 'A') goto yy1125;
-	if (yych == 'a') goto yy1125;
+	if (yych == 'A') goto yy924;
+	if (yych == 'a') goto yy924;
 	goto yy53;
-yy1043:
+yy867:
 	yych = *++YYCURSOR;
-	if (yych == 'H') goto yy771;
-	if (yych == 'h') goto yy771;
+	if (yych == 'H') goto yy675;
+	if (yych == 'h') goto yy675;
 	goto yy53;
-yy1044:
+yy868:
 	yych = *++YYCURSOR;
-	if (yych == 'M') goto yy1126;
-	if (yych == 'm') goto yy1126;
+	if (yych == 'B') goto yy925;
+	if (yych == 'b') goto yy925;
 	goto yy53;
-yy1045:
-	yych = *++YYCURSOR;
-	if (yych == 'B') goto yy1127;
-	if (yych == 'b') goto yy1127;
-	goto yy53;
-yy1046:
-	yyaccept = 20;
-	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych == 'E') goto yy1128;
-	if (yych == 'e') goto yy1128;
-	goto yy581;
-yy1047:
+yy869:
 	++YYCURSOR;
 #line 1200 "parse_date.s.re"
 	{
@@ -14889,80 +12799,32 @@ yy1047:
 		TIMELIB_DEINIT;
 		return TIMELIB_ISO_WEEK;
 	}
-#line 14893 "parse_date.s.c"
-yy1049:
+#line 12803 "parse_date.s.c"
+yy871:
 	yych = *++YYCURSOR;
-	if (yych == 'R') goto yy239;
-	if (yych == 'r') goto yy239;
+	if (yych == 'H') goto yy926;
+	if (yych == 'h') goto yy926;
 	goto yy53;
-yy1050:
-	yych = *++YYCURSOR;
-	if (yych == 'Y') goto yy239;
-	if (yych == 'y') goto yy239;
-	goto yy53;
-yy1051:
-	yych = *++YYCURSOR;
-	if (yych == 'G') goto yy1129;
-	if (yych == 'g') goto yy1129;
-	goto yy53;
-yy1052:
-	yych = *++YYCURSOR;
-	if (yych == 'H') goto yy1130;
-	if (yych == 'h') goto yy1130;
-	goto yy53;
-yy1053:
-	yych = *++YYCURSOR;
-	if (yych == 'R') goto yy239;
-	if (yych == 'r') goto yy239;
-	goto yy53;
-yy1054:
-	yych = *++YYCURSOR;
-	if (yych == 'Y') goto yy596;
-	if (yych == 'y') goto yy596;
-	goto yy53;
-yy1055:
-	yych = *++YYCURSOR;
-	if (yych == 'E') goto yy1131;
-	if (yych == 'e') goto yy1131;
-	goto yy53;
-yy1056:
-	yych = *++YYCURSOR;
-	if (yych == 'Y') goto yy596;
-	if (yych == 'y') goto yy596;
-	goto yy53;
-yy1057:
-	yych = *++YYCURSOR;
-	if (yych == 'A') goto yy1132;
-	if (yych == 'a') goto yy1132;
-	goto yy53;
-yy1058:
-	yych = *++YYCURSOR;
-	if (yych == 'M') goto yy1059;
-	if (yych != 'm') goto yy53;
-yy1059:
-	yych = *++YYCURSOR;
-	if (yych == '.') goto yy438;
-	goto yy267;
-yy1060:
+yy872:
 	yych = *++YYCURSOR;
 	if (yych <= '0') goto yy53;
-	if (yych <= '9') goto yy1133;
+	if (yych <= '9') goto yy927;
 	goto yy53;
-yy1061:
+yy873:
 	yych = *++YYCURSOR;
 	if (yych <= '/') goto yy53;
-	if (yych <= '9') goto yy1133;
+	if (yych <= '9') goto yy927;
 	goto yy53;
-yy1062:
+yy874:
 	yych = *++YYCURSOR;
 	if (yych <= '/') goto yy53;
-	if (yych <= '1') goto yy1133;
+	if (yych <= '1') goto yy927;
 	goto yy53;
-yy1063:
+yy875:
 	++YYCURSOR;
-	if ((yych = *YYCURSOR) <= '/') goto yy1064;
-	if (yych <= '9') goto yy1135;
-yy1064:
+	if ((yych = *YYCURSOR) <= '/') goto yy876;
+	if (yych <= '9') goto yy929;
+yy876:
 #line 1238 "parse_date.s.re"
 	{
 		DEBUG_OUTPUT("pgtextshort");
@@ -14975,229 +12837,181 @@ yy1064:
 		TIMELIB_DEINIT;
 		return TIMELIB_PG_TEXT;
 	}
-#line 14979 "parse_date.s.c"
-yy1065:
+#line 12841 "parse_date.s.c"
+yy877:
 	yyaccept = 16;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= '-') {
 		if (yych <= '(') {
-			if (yych == ' ') goto yy1136;
-			if (yych <= '\'') goto yy667;
-			goto yy1138;
+			if (yych == ' ') goto yy930;
+			if (yych <= '\'') goto yy586;
+			goto yy932;
 		} else {
-			if (yych == '+') goto yy1139;
-			if (yych <= ',') goto yy667;
-			goto yy1139;
+			if (yych == '+') goto yy933;
+			if (yych <= ',') goto yy586;
+			goto yy933;
 		}
 	} else {
 		if (yych <= '@') {
-			if (yych <= '.') goto yy829;
-			if (yych == ':') goto yy829;
-			goto yy667;
+			if (yych <= '.') goto yy710;
+			if (yych == ':') goto yy710;
+			goto yy586;
 		} else {
-			if (yych <= 'Z') goto yy1140;
-			if (yych <= '`') goto yy667;
-			if (yych <= 'z') goto yy1141;
-			goto yy667;
+			if (yych <= 'Z') goto yy934;
+			if (yych <= '`') goto yy586;
+			if (yych <= 'z') goto yy935;
+			goto yy586;
 		}
 	}
-yy1066:
+yy878:
 	yyaccept = 16;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= '+') {
 		if (yych <= '\'') {
-			if (yych == ' ') goto yy1136;
-			goto yy667;
+			if (yych == ' ') goto yy930;
+			goto yy586;
 		} else {
-			if (yych <= '(') goto yy1138;
-			if (yych <= '*') goto yy667;
-			goto yy1139;
+			if (yych <= '(') goto yy932;
+			if (yych <= '*') goto yy586;
+			goto yy933;
 		}
 	} else {
 		if (yych <= '@') {
-			if (yych == '-') goto yy1139;
-			goto yy667;
+			if (yych == '-') goto yy933;
+			goto yy586;
 		} else {
-			if (yych <= 'Z') goto yy1140;
-			if (yych <= '`') goto yy667;
-			if (yych <= 'z') goto yy1141;
-			goto yy667;
+			if (yych <= 'Z') goto yy934;
+			if (yych <= '`') goto yy586;
+			if (yych <= 'z') goto yy935;
+			goto yy586;
 		}
 	}
-yy1067:
+yy879:
 	yych = *++YYCURSOR;
-	goto yy963;
-yy1068:
+	goto yy803;
+yy880:
 	yych = *++YYCURSOR;
 	if (yych <= 'N') {
-		if (yych == 'H') goto yy1142;
+		if (yych == 'H') goto yy936;
 		if (yych <= 'M') goto yy53;
-		goto yy1143;
+		goto yy937;
 	} else {
 		if (yych <= 'h') {
 			if (yych <= 'g') goto yy53;
-			goto yy1142;
+			goto yy936;
 		} else {
-			if (yych == 'n') goto yy1143;
+			if (yych == 'n') goto yy937;
 			goto yy53;
 		}
 	}
-yy1069:
+yy881:
 	yych = *++YYCURSOR;
-	if (yych == 'A') goto yy1144;
-	if (yych == 'a') goto yy1144;
+	if (yych == 'A') goto yy938;
+	if (yych == 'a') goto yy938;
 	goto yy53;
-yy1070:
+yy882:
 	yych = *++YYCURSOR;
-	if (yych == 'T') goto yy1145;
-	if (yych == 't') goto yy1145;
+	if (yych == 'T') goto yy939;
+	if (yych == 't') goto yy939;
 	goto yy53;
-yy1071:
+yy883:
 	yych = *++YYCURSOR;
-	if (yych == 'A') goto yy1146;
-	if (yych == 'a') goto yy1146;
+	if (yych == 'H') goto yy802;
+	if (yych == 'h') goto yy802;
 	goto yy53;
-yy1072:
+yy884:
 	yych = *++YYCURSOR;
-	if (yych == 'H') goto yy962;
-	if (yych == 'h') goto yy962;
+	if (yych == 'R') goto yy887;
+	if (yych == 'r') goto yy887;
 	goto yy53;
-yy1073:
+yy885:
 	yych = *++YYCURSOR;
-	if (yych == 'R') goto yy1147;
-	if (yych == 'r') goto yy1147;
+	if (yych == 'N') goto yy940;
+	if (yych == 'n') goto yy940;
 	goto yy53;
-yy1074:
+yy886:
 	yych = *++YYCURSOR;
-	if (yych == 'N') goto yy1148;
-	if (yych == 'n') goto yy1148;
-	goto yy53;
-yy1075:
+	if (yych == 'S') goto yy887;
+	if (yych != 's') goto yy53;
+yy887:
 	yych = *++YYCURSOR;
-	if (yych == 'A') goto yy1149;
-	if (yych == 'a') goto yy1149;
+	if (yych == 'D') goto yy881;
+	if (yych == 'd') goto yy881;
 	goto yy53;
-yy1076:
+yy888:
 	yych = *++YYCURSOR;
-	if (yych == 'S') goto yy1150;
-	if (yych == 's') goto yy1150;
+	if (yych == 'E') goto yy886;
+	if (yych == 'e') goto yy886;
 	goto yy53;
-yy1077:
-	yych = *++YYCURSOR;
-	if (yych == 'D') goto yy1151;
-	if (yych == 'd') goto yy1151;
-	goto yy53;
-yy1078:
-	yych = *++YYCURSOR;
-	if (yych == 'E') goto yy1152;
-	if (yych == 'e') goto yy1152;
-	goto yy53;
-yy1079:
+yy889:
 	yyaccept = 21;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= '^') {
-		if (yych == '/') goto yy275;
-		goto yy963;
+		if (yych == '/') goto yy259;
+		goto yy803;
 	} else {
-		if (yych <= '_') goto yy275;
-		if (yych <= '`') goto yy963;
-		if (yych <= 'z') goto yy640;
-		goto yy963;
+		if (yych <= '_') goto yy259;
+		if (yych <= '`') goto yy803;
+		if (yych <= 'z') goto yy559;
+		goto yy803;
 	}
-yy1080:
+yy890:
 	yych = *++YYCURSOR;
 	if (yych <= 'N') {
-		if (yych == 'H') goto yy1142;
-		if (yych <= 'M') goto yy641;
-		goto yy1143;
+		if (yych == 'H') goto yy936;
+		if (yych <= 'M') goto yy560;
+		goto yy937;
 	} else {
 		if (yych <= 'h') {
-			if (yych <= 'g') goto yy641;
-			goto yy1153;
+			if (yych <= 'g') goto yy560;
+			goto yy941;
 		} else {
-			if (yych == 'n') goto yy1154;
-			goto yy641;
+			if (yych == 'n') goto yy942;
+			goto yy560;
 		}
 	}
-yy1081:
+yy891:
 	yych = *++YYCURSOR;
-	if (yych == 'A') goto yy1144;
-	if (yych == 'a') goto yy1155;
-	goto yy641;
-yy1082:
+	if (yych == 'A') goto yy938;
+	if (yych == 'a') goto yy943;
+	goto yy560;
+yy892:
 	yych = *++YYCURSOR;
-	if (yych == 'T') goto yy1145;
-	if (yych == 't') goto yy1156;
-	goto yy641;
-yy1083:
+	if (yych == 'T') goto yy939;
+	if (yych == 't') goto yy944;
+	goto yy560;
+yy893:
 	yych = *++YYCURSOR;
-	if (yych == 'A') goto yy1146;
-	if (yych == 'a') goto yy1157;
-	goto yy641;
-yy1084:
+	if (yych == 'H') goto yy802;
+	if (yych == 'h') goto yy815;
+	goto yy560;
+yy894:
 	yych = *++YYCURSOR;
-	if (yych == 'H') goto yy962;
-	if (yych == 'h') goto yy977;
-	goto yy641;
-yy1085:
+	if (yych == 'R') goto yy887;
+	if (yych == 'r') goto yy897;
+	goto yy560;
+yy895:
 	yych = *++YYCURSOR;
-	if (yych == 'R') goto yy1147;
-	if (yych == 'r') goto yy1158;
-	goto yy641;
-yy1086:
+	if (yych == 'N') goto yy940;
+	if (yych == 'n') goto yy945;
+	goto yy560;
+yy896:
 	yych = *++YYCURSOR;
-	if (yych == 'N') goto yy1148;
-	if (yych == 'n') goto yy1159;
-	goto yy641;
-yy1087:
+	if (yych == 'S') goto yy887;
+	if (yych != 's') goto yy560;
+yy897:
 	yych = *++YYCURSOR;
-	if (yych == 'A') goto yy1149;
-	if (yych == 'a') goto yy1160;
-	goto yy641;
-yy1088:
+	if (yych == 'D') goto yy881;
+	if (yych == 'd') goto yy891;
+	goto yy560;
+yy898:
 	yych = *++YYCURSOR;
-	if (yych == 'S') goto yy1150;
-	if (yych == 's') goto yy1161;
-	goto yy641;
-yy1089:
-	yych = *++YYCURSOR;
-	if (yych == 'D') goto yy1151;
-	if (yych == 'd') goto yy1162;
-	goto yy641;
-yy1090:
-	yych = *++YYCURSOR;
-	if (yych == 'E') goto yy1152;
-	if (yych == 'e') goto yy1163;
-	goto yy641;
-yy1091:
-	yych = *++YYCURSOR;
-	if (yych == 'R') goto yy126;
-	if (yych == 'r') goto yy126;
-	goto yy53;
-yy1092:
-	yych = *++YYCURSOR;
-	if (yych <= '^') {
-		if (yych <= '/') {
-			if (yych <= '.') goto yy53;
-			goto yy275;
-		} else {
-			if (yych == 'R') goto yy126;
-			goto yy53;
-		}
-	} else {
-		if (yych <= 'q') {
-			if (yych <= '_') goto yy275;
-			if (yych <= '`') goto yy53;
-			goto yy640;
-		} else {
-			if (yych <= 'r') goto yy642;
-			if (yych <= 'z') goto yy640;
-			goto yy53;
-		}
-	}
-yy1093:
+	if (yych == 'E') goto yy886;
+	if (yych == 'e') goto yy896;
+	goto yy560;
+yy899:
 	++YYCURSOR;
-yy1094:
+yy900:
 #line 893 "parse_date.s.re"
 	{
 		DEBUG_OUTPUT("tomorrow");
@@ -15209,334 +13023,270 @@ yy1094:
 		TIMELIB_DEINIT;
 		return TIMELIB_RELATIVE;
 	}
-#line 15213 "parse_date.s.c"
-yy1095:
+#line 13027 "parse_date.s.c"
+yy901:
 	yyaccept = 24;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= '^') {
-		if (yych == '/') goto yy275;
-		goto yy1094;
+		if (yych == '/') goto yy259;
+		goto yy900;
 	} else {
-		if (yych <= '_') goto yy275;
-		if (yych <= '`') goto yy1094;
-		if (yych <= 'z') goto yy640;
-		goto yy1094;
+		if (yych <= '_') goto yy259;
+		if (yych <= '`') goto yy900;
+		if (yych <= 'z') goto yy559;
+		goto yy900;
 	}
-yy1096:
+yy902:
 	yych = *++YYCURSOR;
-	if (yych == 'Y') goto yy822;
-	if (yych == 'y') goto yy822;
+	if (yych == 'Y') goto yy946;
+	if (yych == 'y') goto yy946;
 	goto yy53;
-yy1097:
+yy903:
 	yych = *++YYCURSOR;
-	if (yych == 'Y') goto yy822;
-	if (yych == 'y') goto yy824;
-	goto yy641;
-yy1098:
-	yych = *++YYCURSOR;
-	if (yych == 'Y') goto yy1164;
-	if (yych == 'y') goto yy1164;
-	goto yy53;
-yy1099:
-	yych = *++YYCURSOR;
-	if (yych == 'Y') goto yy1164;
-	if (yych == 'y') goto yy1166;
-	goto yy641;
-yy1100:
+	if (yych == 'Y') goto yy946;
+	if (yych == 'y') goto yy948;
+	goto yy560;
+yy904:
 	yych = *++YYCURSOR;
 	if (yych <= '/') goto yy53;
-	if (yych <= '9') goto yy1167;
+	if (yych <= '9') goto yy949;
 	goto yy53;
-yy1101:
+yy905:
 	yych = *++YYCURSOR;
 	if (yych <= '/') goto yy53;
-	if (yych <= '1') goto yy1168;
-	if (yych <= '2') goto yy1169;
-	if (yych <= '9') goto yy1170;
+	if (yych <= '1') goto yy950;
+	if (yych <= '2') goto yy951;
+	if (yych <= '9') goto yy952;
 	goto yy53;
-yy1102:
+yy906:
 	yych = *++YYCURSOR;
-	if (yych == 'd') goto yy1171;
+	if (yych == 'd') goto yy953;
 	goto yy53;
-yy1103:
+yy907:
 	yych = *++YYCURSOR;
-	if (yych == 'd') goto yy1171;
+	if (yych == 't') goto yy953;
 	goto yy53;
-yy1104:
+yy908:
 	yych = *++YYCURSOR;
-	if (yych == 't') goto yy1171;
+	if (yych == 'h') goto yy953;
 	goto yy53;
-yy1105:
-	yych = *++YYCURSOR;
-	if (yych == 'h') goto yy1171;
-	goto yy53;
-yy1106:
+yy909:
 	yyaccept = 14;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= 'm') {
 		if (yych <= '9') {
-			if (yych <= '/') goto yy538;
-			if (yych <= '0') goto yy1015;
-			goto yy1172;
+			if (yych <= '/') goto yy474;
+			if (yych <= '0') goto yy840;
+			goto yy954;
 		} else {
-			if (yych == 'T') goto yy1101;
-			goto yy538;
+			if (yych == 'T') goto yy905;
+			goto yy474;
 		}
 	} else {
 		if (yych <= 'r') {
-			if (yych <= 'n') goto yy1102;
-			if (yych <= 'q') goto yy538;
-			goto yy1103;
+			if (yych <= 'n') goto yy906;
+			if (yych <= 'q') goto yy474;
+			goto yy906;
 		} else {
-			if (yych <= 's') goto yy1104;
-			if (yych <= 't') goto yy1105;
-			goto yy538;
+			if (yych <= 's') goto yy907;
+			if (yych <= 't') goto yy908;
+			goto yy474;
 		}
 	}
-yy1107:
+yy910:
 	yyaccept = 14;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= 'm') {
 		if (yych <= '9') {
-			if (yych <= '/') goto yy538;
-			goto yy1172;
+			if (yych <= '/') goto yy474;
+			goto yy954;
 		} else {
-			if (yych == 'T') goto yy1101;
-			goto yy538;
+			if (yych == 'T') goto yy905;
+			goto yy474;
 		}
 	} else {
 		if (yych <= 'r') {
-			if (yych <= 'n') goto yy1102;
-			if (yych <= 'q') goto yy538;
-			goto yy1103;
+			if (yych <= 'n') goto yy906;
+			if (yych <= 'q') goto yy474;
+			goto yy906;
 		} else {
-			if (yych <= 's') goto yy1104;
-			if (yych <= 't') goto yy1105;
-			goto yy538;
+			if (yych <= 's') goto yy907;
+			if (yych <= 't') goto yy908;
+			goto yy474;
 		}
 	}
-yy1108:
+yy911:
 	yyaccept = 14;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= 'm') {
 		if (yych <= '1') {
-			if (yych <= '/') goto yy538;
-			goto yy1172;
+			if (yych <= '/') goto yy474;
+			goto yy954;
 		} else {
-			if (yych == 'T') goto yy1101;
-			goto yy538;
+			if (yych == 'T') goto yy905;
+			goto yy474;
 		}
 	} else {
 		if (yych <= 'r') {
-			if (yych <= 'n') goto yy1102;
-			if (yych <= 'q') goto yy538;
-			goto yy1103;
+			if (yych <= 'n') goto yy906;
+			if (yych <= 'q') goto yy474;
+			goto yy906;
 		} else {
-			if (yych <= 's') goto yy1104;
-			if (yych <= 't') goto yy1105;
-			goto yy538;
+			if (yych <= 's') goto yy907;
+			if (yych <= 't') goto yy908;
+			goto yy474;
 		}
 	}
-yy1109:
-	yyaccept = 20;
-	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych <= 'D') {
-		if (yych == '-') goto yy949;
-		goto yy581;
-	} else {
-		if (yych <= 'E') goto yy1128;
-		if (yych == 'e') goto yy1128;
-		goto yy581;
-	}
-yy1110:
+yy912:
 	yych = *++YYCURSOR;
-	if (yych == 'd') goto yy1173;
+	if (yych == 'd') goto yy955;
 	goto yy53;
-yy1111:
+yy913:
 	yych = *++YYCURSOR;
-	if (yych == 'd') goto yy1173;
+	if (yych == 't') goto yy955;
 	goto yy53;
-yy1112:
+yy914:
 	yych = *++YYCURSOR;
-	if (yych == 't') goto yy1173;
+	if (yych == 'h') goto yy955;
 	goto yy53;
-yy1113:
-	yych = *++YYCURSOR;
-	if (yych == 'h') goto yy1173;
-	goto yy53;
-yy1114:
+yy915:
 	yyaccept = 22;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= 'n') {
 		if (yych <= '0') {
-			if (yych <= '/') goto yy1031;
-			goto yy1033;
+			if (yych <= '/') goto yy855;
+			goto yy857;
 		} else {
-			if (yych <= '9') goto yy1174;
-			if (yych <= 'm') goto yy1031;
-			goto yy1110;
+			if (yych <= '9') goto yy956;
+			if (yych <= 'm') goto yy855;
+			goto yy912;
 		}
 	} else {
 		if (yych <= 'r') {
-			if (yych <= 'q') goto yy1031;
-			goto yy1111;
+			if (yych <= 'q') goto yy855;
+			goto yy912;
 		} else {
-			if (yych <= 's') goto yy1112;
-			if (yych <= 't') goto yy1113;
-			goto yy1031;
+			if (yych <= 's') goto yy913;
+			if (yych <= 't') goto yy914;
+			goto yy855;
 		}
 	}
-yy1115:
+yy916:
 	yyaccept = 22;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= 'n') {
-		if (yych <= '/') goto yy1031;
-		if (yych <= '9') goto yy1174;
-		if (yych <= 'm') goto yy1031;
-		goto yy1110;
+		if (yych <= '/') goto yy855;
+		if (yych <= '9') goto yy956;
+		if (yych <= 'm') goto yy855;
+		goto yy912;
 	} else {
 		if (yych <= 'r') {
-			if (yych <= 'q') goto yy1031;
-			goto yy1111;
+			if (yych <= 'q') goto yy855;
+			goto yy912;
 		} else {
-			if (yych <= 's') goto yy1112;
-			if (yych <= 't') goto yy1113;
-			goto yy1031;
+			if (yych <= 's') goto yy913;
+			if (yych <= 't') goto yy914;
+			goto yy855;
 		}
 	}
-yy1116:
+yy917:
 	yyaccept = 22;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= 'n') {
-		if (yych <= '/') goto yy1031;
-		if (yych <= '1') goto yy1174;
-		if (yych <= 'm') goto yy1031;
-		goto yy1110;
+		if (yych <= '/') goto yy855;
+		if (yych <= '1') goto yy956;
+		if (yych <= 'm') goto yy855;
+		goto yy912;
 	} else {
 		if (yych <= 'r') {
-			if (yych <= 'q') goto yy1031;
-			goto yy1111;
+			if (yych <= 'q') goto yy855;
+			goto yy912;
 		} else {
-			if (yych <= 's') goto yy1112;
-			if (yych <= 't') goto yy1113;
-			goto yy1031;
+			if (yych <= 's') goto yy913;
+			if (yych <= 't') goto yy914;
+			goto yy855;
 		}
 	}
-yy1117:
+yy918:
 	yych = *++YYCURSOR;
 	if (yych <= 'H') {
 		if (yych <= '2') {
 			if (yych <= '/') goto yy53;
-			if (yych <= '1') goto yy1175;
-			goto yy1176;
+			if (yych <= '1') goto yy957;
+			goto yy958;
 		} else {
-			if (yych <= '9') goto yy1177;
+			if (yych <= '9') goto yy959;
 			if (yych <= 'G') goto yy53;
-			goto yy250;
+			goto yy236;
 		}
 	} else {
 		if (yych <= 'g') {
-			if (yych == 'U') goto yy251;
+			if (yych == 'U') goto yy237;
 			goto yy53;
 		} else {
-			if (yych <= 'h') goto yy250;
-			if (yych == 'u') goto yy251;
+			if (yych <= 'h') goto yy236;
+			if (yych == 'u') goto yy237;
 			goto yy53;
 		}
 	}
-yy1118:
+yy919:
 	yych = *++YYCURSOR;
 	if (yych <= 'H') {
 		if (yych <= '2') {
 			if (yych <= '/') goto yy53;
-			if (yych <= '1') goto yy1178;
-			goto yy1179;
+			if (yych <= '1') goto yy960;
+			goto yy961;
 		} else {
-			if (yych <= '9') goto yy1180;
+			if (yych <= '9') goto yy962;
 			if (yych <= 'G') goto yy53;
-			goto yy250;
+			goto yy236;
 		}
 	} else {
 		if (yych <= 'g') {
-			if (yych == 'U') goto yy251;
+			if (yych == 'U') goto yy237;
 			goto yy53;
 		} else {
-			if (yych <= 'h') goto yy250;
-			if (yych == 'u') goto yy251;
+			if (yych <= 'h') goto yy236;
+			if (yych == 'u') goto yy237;
 			goto yy53;
 		}
 	}
-yy1119:
+yy920:
 	yych = *++YYCURSOR;
 	if (yych <= '0') goto yy53;
-	if (yych <= '9') goto yy1181;
+	if (yych <= '9') goto yy963;
 	goto yy53;
-yy1120:
+yy921:
 	yych = *++YYCURSOR;
 	if (yych <= '/') goto yy53;
-	if (yych <= '9') goto yy1181;
+	if (yych <= '9') goto yy963;
 	goto yy53;
-yy1121:
+yy922:
 	yych = *++YYCURSOR;
 	if (yych <= '/') goto yy53;
-	if (yych <= '1') goto yy1181;
+	if (yych <= '1') goto yy963;
 	goto yy53;
-yy1122:
+yy923:
 	yych = *++YYCURSOR;
-	if (yych == 'T') goto yy771;
-	if (yych == 't') goto yy771;
+	if (yych == 'T') goto yy675;
+	if (yych == 't') goto yy675;
 	goto yy53;
-yy1123:
+yy924:
 	yych = *++YYCURSOR;
-	if (yych == 'B') goto yy1182;
-	if (yych == 'b') goto yy1182;
+	if (yych == 'R') goto yy964;
+	if (yych == 'r') goto yy964;
 	goto yy53;
-yy1124:
+yy925:
 	yych = *++YYCURSOR;
-	if (yych == 'A') goto yy1183;
-	if (yych == 'a') goto yy1183;
+	if (yych == 'E') goto yy965;
+	if (yych == 'e') goto yy965;
 	goto yy53;
-yy1125:
+yy926:
 	yych = *++YYCURSOR;
-	if (yych == 'R') goto yy1184;
-	if (yych == 'r') goto yy1184;
+	if (yych == 'T') goto yy362;
+	if (yych == 't') goto yy362;
 	goto yy53;
-yy1126:
-	yych = *++YYCURSOR;
-	if (yych == 'B') goto yy1185;
-	if (yych == 'b') goto yy1185;
-	goto yy53;
-yy1127:
-	yych = *++YYCURSOR;
-	if (yych == 'E') goto yy1186;
-	if (yych == 'e') goto yy1186;
-	goto yy53;
-yy1128:
-	yych = *++YYCURSOR;
-	if (yych == 'M') goto yy1187;
-	if (yych == 'm') goto yy1187;
-	goto yy53;
-yy1129:
-	yych = *++YYCURSOR;
-	if (yych == 'H') goto yy1188;
-	if (yych == 'h') goto yy1188;
-	goto yy53;
-yy1130:
-	yych = *++YYCURSOR;
-	if (yych == 'T') goto yy408;
-	if (yych == 't') goto yy408;
-	goto yy53;
-yy1131:
-	yych = *++YYCURSOR;
-	if (yych == 'R') goto yy239;
-	if (yych == 'r') goto yy239;
-	goto yy53;
-yy1132:
-	yych = *++YYCURSOR;
-	if (yych == 'Y') goto yy596;
-	if (yych == 'y') goto yy596;
-	goto yy53;
-yy1133:
+yy927:
 	++YYCURSOR;
 #line 1251 "parse_date.s.re"
 	{
@@ -15550,185 +13300,123 @@ yy1133:
 		TIMELIB_DEINIT;
 		return TIMELIB_PG_TEXT;
 	}
-#line 15554 "parse_date.s.c"
-yy1135:
+#line 13304 "parse_date.s.c"
+yy929:
 	yych = *++YYCURSOR;
-	if (yych <= '/') goto yy1064;
-	if (yych <= '9') goto yy1189;
-	goto yy1064;
-yy1136:
+	if (yych <= '/') goto yy876;
+	if (yych <= '9') goto yy966;
+	goto yy876;
+yy930:
 	++YYCURSOR;
 	if ((YYLIMIT - YYCURSOR) < 6) YYFILL(6);
 	yych = *YYCURSOR;
 	if (yych <= '+') {
 		if (yych <= '\'') {
-			if (yych == ' ') goto yy1136;
+			if (yych == ' ') goto yy930;
 			goto yy53;
 		} else {
-			if (yych <= '(') goto yy1138;
+			if (yych <= '(') goto yy932;
 			if (yych <= '*') goto yy53;
-			goto yy1139;
+			goto yy933;
 		}
 	} else {
 		if (yych <= '@') {
-			if (yych == '-') goto yy1139;
+			if (yych == '-') goto yy933;
 			goto yy53;
 		} else {
-			if (yych <= 'Z') goto yy1140;
+			if (yych <= 'Z') goto yy934;
 			if (yych <= '`') goto yy53;
-			if (yych <= 'z') goto yy1141;
+			if (yych <= 'z') goto yy935;
 			goto yy53;
 		}
 	}
-yy1138:
+yy932:
 	yych = *++YYCURSOR;
 	if (yych <= '@') goto yy53;
-	if (yych <= 'Z') goto yy1141;
+	if (yych <= 'Z') goto yy935;
 	if (yych <= '`') goto yy53;
-	if (yych <= 'z') goto yy1141;
+	if (yych <= 'z') goto yy935;
 	goto yy53;
-yy1139:
+yy933:
 	yych = *++YYCURSOR;
 	if (yych <= '/') goto yy53;
-	if (yych <= '1') goto yy1190;
-	if (yych <= '2') goto yy1191;
-	if (yych <= '9') goto yy1192;
+	if (yych <= '1') goto yy967;
+	if (yych <= '2') goto yy968;
+	if (yych <= '9') goto yy969;
 	goto yy53;
-yy1140:
+yy934:
 	yych = *++YYCURSOR;
 	if (yych <= '@') {
-		if (yych == ')') goto yy961;
-		goto yy667;
+		if (yych == ')') goto yy801;
+		goto yy586;
 	} else {
-		if (yych <= 'Z') goto yy1193;
-		if (yych <= '`') goto yy667;
-		if (yych <= 'z') goto yy1194;
-		goto yy667;
+		if (yych <= 'Z') goto yy970;
+		if (yych <= '`') goto yy586;
+		if (yych <= 'z') goto yy971;
+		goto yy586;
 	}
-yy1141:
+yy935:
 	yych = *++YYCURSOR;
 	if (yych <= '@') {
-		if (yych == ')') goto yy961;
-		goto yy667;
+		if (yych == ')') goto yy801;
+		goto yy586;
 	} else {
-		if (yych <= 'Z') goto yy1193;
-		if (yych <= '`') goto yy667;
-		if (yych <= 'z') goto yy1193;
-		goto yy667;
+		if (yych <= 'Z') goto yy970;
+		if (yych <= '`') goto yy586;
+		if (yych <= 'z') goto yy970;
+		goto yy586;
 	}
-yy1142:
+yy936:
 	yych = *++YYCURSOR;
-	if (yych == 'N') goto yy1195;
-	if (yych == 'n') goto yy1195;
+	if (yych == 'N') goto yy937;
+	if (yych != 'n') goto yy53;
+yy937:
+	yych = *++YYCURSOR;
+	if (yych == 'I') goto yy972;
+	if (yych == 'i') goto yy972;
 	goto yy53;
-yy1143:
+yy938:
 	yych = *++YYCURSOR;
-	if (yych == 'I') goto yy1196;
-	if (yych == 'i') goto yy1196;
+	if (yych == 'Y') goto yy879;
+	if (yych == 'y') goto yy879;
 	goto yy53;
-yy1144:
+yy939:
 	yych = *++YYCURSOR;
-	if (yych == 'Y') goto yy1067;
-	if (yych == 'y') goto yy1067;
+	if (yych == 'E') goto yy802;
+	if (yych == 'e') goto yy802;
 	goto yy53;
-yy1145:
+yy940:
 	yych = *++YYCURSOR;
-	if (yych == 'E') goto yy962;
-	if (yych == 'e') goto yy962;
+	if (yych == 'D') goto yy802;
+	if (yych == 'd') goto yy802;
 	goto yy53;
-yy1146:
+yy941:
 	yych = *++YYCURSOR;
-	if (yych == 'Y') goto yy1067;
-	if (yych == 'y') goto yy1067;
-	goto yy53;
-yy1147:
+	if (yych == 'N') goto yy937;
+	if (yych != 'n') goto yy560;
+yy942:
 	yych = *++YYCURSOR;
-	if (yych == 'D') goto yy1197;
-	if (yych == 'd') goto yy1197;
-	goto yy53;
-yy1148:
+	if (yych == 'I') goto yy972;
+	if (yych == 'i') goto yy973;
+	goto yy560;
+yy943:
 	yych = *++YYCURSOR;
-	if (yych == 'D') goto yy962;
-	if (yych == 'd') goto yy962;
-	goto yy53;
-yy1149:
+	if (yych == 'Y') goto yy879;
+	if (yych == 'y') goto yy889;
+	goto yy560;
+yy944:
 	yych = *++YYCURSOR;
-	if (yych == 'Y') goto yy1067;
-	if (yych == 'y') goto yy1067;
-	goto yy53;
-yy1150:
+	if (yych == 'E') goto yy802;
+	if (yych == 'e') goto yy815;
+	goto yy560;
+yy945:
 	yych = *++YYCURSOR;
-	if (yych == 'D') goto yy1198;
-	if (yych == 'd') goto yy1198;
-	goto yy53;
-yy1151:
-	yych = *++YYCURSOR;
-	if (yych == 'A') goto yy1199;
-	if (yych == 'a') goto yy1199;
-	goto yy53;
-yy1152:
-	yych = *++YYCURSOR;
-	if (yych == 'S') goto yy1200;
-	if (yych == 's') goto yy1200;
-	goto yy53;
-yy1153:
-	yych = *++YYCURSOR;
-	if (yych == 'N') goto yy1195;
-	if (yych == 'n') goto yy1201;
-	goto yy641;
-yy1154:
-	yych = *++YYCURSOR;
-	if (yych == 'I') goto yy1196;
-	if (yych == 'i') goto yy1202;
-	goto yy641;
-yy1155:
-	yych = *++YYCURSOR;
-	if (yych == 'Y') goto yy1067;
-	if (yych == 'y') goto yy1079;
-	goto yy641;
-yy1156:
-	yych = *++YYCURSOR;
-	if (yych == 'E') goto yy962;
-	if (yych == 'e') goto yy977;
-	goto yy641;
-yy1157:
-	yych = *++YYCURSOR;
-	if (yych == 'Y') goto yy1067;
-	if (yych == 'y') goto yy1079;
-	goto yy641;
-yy1158:
-	yych = *++YYCURSOR;
-	if (yych == 'D') goto yy1197;
-	if (yych == 'd') goto yy1203;
-	goto yy641;
-yy1159:
-	yych = *++YYCURSOR;
-	if (yych == 'D') goto yy962;
-	if (yych == 'd') goto yy977;
-	goto yy641;
-yy1160:
-	yych = *++YYCURSOR;
-	if (yych == 'Y') goto yy1067;
-	if (yych == 'y') goto yy1079;
-	goto yy641;
-yy1161:
-	yych = *++YYCURSOR;
-	if (yych == 'D') goto yy1198;
-	if (yych == 'd') goto yy1204;
-	goto yy641;
-yy1162:
-	yych = *++YYCURSOR;
-	if (yych == 'A') goto yy1199;
-	if (yych == 'a') goto yy1205;
-	goto yy641;
-yy1163:
-	yych = *++YYCURSOR;
-	if (yych == 'S') goto yy1200;
-	if (yych == 's') goto yy1206;
-	goto yy641;
-yy1164:
+	if (yych == 'D') goto yy802;
+	if (yych == 'd') goto yy815;
+	goto yy560;
+yy946:
 	++YYCURSOR;
-yy1165:
+yy947:
 #line 850 "parse_date.s.re"
 	{
 		DEBUG_OUTPUT("yesterday");
@@ -15740,667 +13428,490 @@ yy1165:
 		TIMELIB_DEINIT;
 		return TIMELIB_RELATIVE;
 	}
-#line 15744 "parse_date.s.c"
-yy1166:
+#line 13432 "parse_date.s.c"
+yy948:
 	yyaccept = 25;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= '^') {
-		if (yych == '/') goto yy275;
-		goto yy1165;
+		if (yych == '/') goto yy259;
+		goto yy947;
 	} else {
-		if (yych <= '_') goto yy275;
-		if (yych <= '`') goto yy1165;
-		if (yych <= 'z') goto yy640;
-		goto yy1165;
+		if (yych <= '_') goto yy259;
+		if (yych <= '`') goto yy947;
+		if (yych <= 'z') goto yy559;
+		goto yy947;
 	}
-yy1167:
+yy949:
 	yych = *++YYCURSOR;
-	if (yych == ':') goto yy1207;
+	if (yych == ':') goto yy974;
 	goto yy53;
-yy1168:
-	yych = *++YYCURSOR;
-	if (yych <= '/') goto yy53;
-	if (yych <= '9') goto yy1170;
-	if (yych <= ':') goto yy1208;
-	goto yy53;
-yy1169:
+yy950:
 	yych = *++YYCURSOR;
 	if (yych <= '/') goto yy53;
-	if (yych <= '3') goto yy1170;
-	if (yych == ':') goto yy1208;
+	if (yych <= '9') goto yy952;
+	if (yych <= ':') goto yy975;
 	goto yy53;
-yy1170:
+yy951:
 	yych = *++YYCURSOR;
-	if (yych == ':') goto yy1208;
+	if (yych <= '/') goto yy53;
+	if (yych <= '3') goto yy952;
+	if (yych == ':') goto yy975;
 	goto yy53;
-yy1171:
+yy952:
+	yych = *++YYCURSOR;
+	if (yych == ':') goto yy975;
+	goto yy53;
+yy953:
 	yyaccept = 14;
 	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych == 'T') goto yy1101;
-	goto yy538;
-yy1172:
+	if (yych == 'T') goto yy905;
+	goto yy474;
+yy954:
 	yyaccept = 22;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= 'n') {
-		if (yych == 'T') goto yy1209;
-		if (yych <= 'm') goto yy1031;
-		goto yy1102;
+		if (yych == 'T') goto yy976;
+		if (yych <= 'm') goto yy855;
+		goto yy906;
 	} else {
 		if (yych <= 'r') {
-			if (yych <= 'q') goto yy1031;
-			goto yy1103;
+			if (yych <= 'q') goto yy855;
+			goto yy906;
 		} else {
-			if (yych <= 's') goto yy1104;
-			if (yych <= 't') goto yy1105;
-			goto yy1031;
+			if (yych <= 's') goto yy907;
+			if (yych <= 't') goto yy908;
+			goto yy855;
 		}
 	}
-yy1173:
+yy955:
 	yych = *++YYCURSOR;
-	goto yy1031;
-yy1174:
+	goto yy855;
+yy956:
 	yyaccept = 22;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= 'n') {
-		if (yych == '/') goto yy1173;
-		if (yych <= 'm') goto yy1031;
-		goto yy1110;
+		if (yych == '/') goto yy955;
+		if (yych <= 'm') goto yy855;
+		goto yy912;
 	} else {
 		if (yych <= 'r') {
-			if (yych <= 'q') goto yy1031;
-			goto yy1111;
+			if (yych <= 'q') goto yy855;
+			goto yy912;
 		} else {
-			if (yych <= 's') goto yy1112;
-			if (yych <= 't') goto yy1113;
-			goto yy1031;
+			if (yych <= 's') goto yy913;
+			if (yych <= 't') goto yy914;
+			goto yy855;
 		}
 	}
-yy1175:
+yy957:
 	yych = *++YYCURSOR;
 	if (yych <= '/') goto yy53;
-	if (yych <= '5') goto yy1210;
-	if (yych <= '9') goto yy1177;
-	if (yych <= ':') goto yy1211;
+	if (yych <= '5') goto yy977;
+	if (yych <= '9') goto yy959;
+	if (yych <= ':') goto yy978;
 	goto yy53;
-yy1176:
+yy958:
 	yych = *++YYCURSOR;
 	if (yych <= '5') {
 		if (yych <= '/') goto yy53;
-		if (yych <= '3') goto yy1210;
-		goto yy1212;
+		if (yych <= '3') goto yy977;
+		goto yy979;
 	} else {
-		if (yych == ':') goto yy1211;
+		if (yych == ':') goto yy978;
 		goto yy53;
 	}
-yy1177:
+yy959:
 	yych = *++YYCURSOR;
 	if (yych <= '/') goto yy53;
-	if (yych <= '5') goto yy1212;
-	if (yych == ':') goto yy1211;
+	if (yych <= '5') goto yy979;
+	if (yych == ':') goto yy978;
 	goto yy53;
-yy1178:
+yy960:
 	yych = *++YYCURSOR;
 	if (yych <= '/') goto yy53;
-	if (yych <= '5') goto yy1213;
-	if (yych <= '9') goto yy1180;
+	if (yych <= '5') goto yy980;
+	if (yych <= '9') goto yy962;
 	goto yy53;
-yy1179:
+yy961:
 	yych = *++YYCURSOR;
 	if (yych <= '/') goto yy53;
-	if (yych <= '3') goto yy1213;
-	if (yych <= '5') goto yy1212;
+	if (yych <= '3') goto yy980;
+	if (yych <= '5') goto yy979;
 	goto yy53;
-yy1180:
+yy962:
 	yych = *++YYCURSOR;
 	if (yych <= '/') goto yy53;
-	if (yych <= '5') goto yy1212;
+	if (yych <= '5') goto yy979;
 	goto yy53;
-yy1181:
+yy963:
 	yych = *++YYCURSOR;
-	if (yych == ' ') goto yy1214;
+	if (yych == ' ') goto yy981;
 	goto yy53;
-yy1182:
+yy964:
 	yych = *++YYCURSOR;
-	if (yych == 'E') goto yy1215;
-	if (yych == 'e') goto yy1215;
+	if (yych == 'Y') goto yy675;
+	if (yych == 'y') goto yy675;
 	goto yy53;
-yy1183:
+yy965:
 	yych = *++YYCURSOR;
-	if (yych == 'R') goto yy1216;
-	if (yych == 'r') goto yy1216;
+	if (yych == 'R') goto yy675;
+	if (yych == 'r') goto yy675;
 	goto yy53;
-yy1184:
+yy966:
 	yych = *++YYCURSOR;
-	if (yych == 'Y') goto yy771;
-	if (yych == 'y') goto yy771;
-	goto yy53;
-yy1185:
+	if (yych <= '/') goto yy876;
+	if (yych <= '9') goto yy982;
+	goto yy876;
+yy967:
 	yych = *++YYCURSOR;
-	if (yych == 'E') goto yy1217;
-	if (yych == 'e') goto yy1217;
-	goto yy53;
-yy1186:
-	yych = *++YYCURSOR;
-	if (yych == 'R') goto yy771;
-	if (yych == 'r') goto yy771;
-	goto yy53;
-yy1187:
-	yych = *++YYCURSOR;
-	if (yych == 'B') goto yy1218;
-	if (yych == 'b') goto yy1218;
-	goto yy53;
-yy1188:
-	yych = *++YYCURSOR;
-	if (yych == 'T') goto yy408;
-	if (yych == 't') goto yy408;
-	goto yy53;
-yy1189:
-	yych = *++YYCURSOR;
-	if (yych <= '/') goto yy1064;
-	if (yych <= '9') goto yy1219;
-	goto yy1064;
-yy1190:
-	yych = *++YYCURSOR;
-	if (yych <= '/') goto yy667;
-	if (yych <= '9') goto yy1192;
-	if (yych <= ':') goto yy1220;
-	goto yy667;
-yy1191:
+	if (yych <= '/') goto yy586;
+	if (yych <= '9') goto yy969;
+	if (yych <= ':') goto yy983;
+	goto yy586;
+yy968:
 	yych = *++YYCURSOR;
 	if (yych <= '5') {
-		if (yych <= '/') goto yy667;
-		if (yych >= '4') goto yy1221;
+		if (yych <= '/') goto yy586;
+		if (yych >= '4') goto yy984;
 	} else {
-		if (yych <= '9') goto yy961;
-		if (yych <= ':') goto yy1220;
-		goto yy667;
+		if (yych <= '9') goto yy801;
+		if (yych <= ':') goto yy983;
+		goto yy586;
 	}
-yy1192:
+yy969:
 	yych = *++YYCURSOR;
-	if (yych <= '/') goto yy667;
-	if (yych <= '5') goto yy1221;
-	if (yych <= '9') goto yy961;
-	if (yych <= ':') goto yy1220;
-	goto yy667;
-yy1193:
+	if (yych <= '/') goto yy586;
+	if (yych <= '5') goto yy984;
+	if (yych <= '9') goto yy801;
+	if (yych <= ':') goto yy983;
+	goto yy586;
+yy970:
 	yych = *++YYCURSOR;
 	if (yych <= '@') {
-		if (yych == ')') goto yy961;
-		goto yy667;
+		if (yych == ')') goto yy801;
+		goto yy586;
 	} else {
-		if (yych <= 'Z') goto yy1222;
-		if (yych <= '`') goto yy667;
-		if (yych <= 'z') goto yy1222;
-		goto yy667;
+		if (yych <= 'Z') goto yy985;
+		if (yych <= '`') goto yy586;
+		if (yych <= 'z') goto yy985;
+		goto yy586;
 	}
-yy1194:
+yy971:
 	yyaccept = 16;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= '@') {
 		if (yych <= ')') {
-			if (yych <= '(') goto yy667;
-			goto yy961;
+			if (yych <= '(') goto yy586;
+			goto yy801;
 		} else {
-			if (yych == '/') goto yy1223;
-			goto yy667;
+			if (yych == '/') goto yy986;
+			goto yy586;
 		}
 	} else {
 		if (yych <= '_') {
-			if (yych <= 'Z') goto yy1222;
-			if (yych <= '^') goto yy667;
-			goto yy1223;
+			if (yych <= 'Z') goto yy985;
+			if (yych <= '^') goto yy586;
+			goto yy986;
 		} else {
-			if (yych <= '`') goto yy667;
-			if (yych <= 'z') goto yy1224;
-			goto yy667;
+			if (yych <= '`') goto yy586;
+			if (yych <= 'z') goto yy987;
+			goto yy586;
 		}
 	}
-yy1195:
+yy972:
 	yych = *++YYCURSOR;
-	if (yych == 'I') goto yy1225;
-	if (yych == 'i') goto yy1225;
+	if (yych == 'G') goto yy988;
+	if (yych == 'g') goto yy988;
 	goto yy53;
-yy1196:
+yy973:
 	yych = *++YYCURSOR;
-	if (yych == 'G') goto yy1226;
-	if (yych == 'g') goto yy1226;
-	goto yy53;
-yy1197:
-	yych = *++YYCURSOR;
-	if (yych == 'A') goto yy1227;
-	if (yych == 'a') goto yy1227;
-	goto yy53;
-yy1198:
-	yych = *++YYCURSOR;
-	if (yych == 'A') goto yy1228;
-	if (yych == 'a') goto yy1228;
-	goto yy53;
-yy1199:
-	yych = *++YYCURSOR;
-	if (yych == 'Y') goto yy1067;
-	if (yych == 'y') goto yy1067;
-	goto yy53;
-yy1200:
-	yych = *++YYCURSOR;
-	if (yych == 'D') goto yy1229;
-	if (yych == 'd') goto yy1229;
-	goto yy53;
-yy1201:
-	yych = *++YYCURSOR;
-	if (yych == 'I') goto yy1225;
-	if (yych == 'i') goto yy1230;
-	goto yy641;
-yy1202:
-	yych = *++YYCURSOR;
-	if (yych == 'G') goto yy1226;
-	if (yych == 'g') goto yy1231;
-	goto yy641;
-yy1203:
-	yych = *++YYCURSOR;
-	if (yych == 'A') goto yy1227;
-	if (yych == 'a') goto yy1232;
-	goto yy641;
-yy1204:
-	yych = *++YYCURSOR;
-	if (yych == 'A') goto yy1228;
-	if (yych == 'a') goto yy1233;
-	goto yy641;
-yy1205:
-	yych = *++YYCURSOR;
-	if (yych == 'Y') goto yy1067;
-	if (yych == 'y') goto yy1079;
-	goto yy641;
-yy1206:
-	yych = *++YYCURSOR;
-	if (yych == 'D') goto yy1229;
-	if (yych == 'd') goto yy1234;
-	goto yy641;
-yy1207:
+	if (yych == 'G') goto yy988;
+	if (yych == 'g') goto yy989;
+	goto yy560;
+yy974:
 	yych = *++YYCURSOR;
 	if (yych <= '/') goto yy53;
-	if (yych <= '1') goto yy1235;
-	if (yych <= '2') goto yy1236;
+	if (yych <= '1') goto yy990;
+	if (yych <= '2') goto yy991;
 	goto yy53;
-yy1208:
+yy975:
 	yych = *++YYCURSOR;
 	if (yych <= '/') goto yy53;
-	if (yych <= '5') goto yy1237;
-	if (yych <= '9') goto yy1238;
+	if (yych <= '5') goto yy992;
+	if (yych <= '9') goto yy993;
 	goto yy53;
-yy1209:
+yy976:
 	yych = *++YYCURSOR;
 	if (yych <= '/') goto yy53;
-	if (yych <= '1') goto yy1239;
-	if (yych <= '2') goto yy1240;
-	if (yych <= '9') goto yy1170;
+	if (yych <= '1') goto yy994;
+	if (yych <= '2') goto yy995;
+	if (yych <= '9') goto yy952;
 	goto yy53;
-yy1210:
+yy977:
 	yych = *++YYCURSOR;
 	if (yych <= '/') goto yy53;
-	if (yych <= '5') goto yy1241;
-	if (yych <= '9') goto yy1242;
+	if (yych <= '5') goto yy996;
+	if (yych <= '9') goto yy997;
 	if (yych >= ';') goto yy53;
-yy1211:
+yy978:
 	yych = *++YYCURSOR;
 	if (yych <= '/') goto yy53;
-	if (yych <= '5') goto yy1243;
+	if (yych <= '5') goto yy998;
 	goto yy53;
-yy1212:
+yy979:
 	yych = *++YYCURSOR;
 	if (yych <= '/') goto yy53;
-	if (yych <= '9') goto yy1242;
+	if (yych <= '9') goto yy997;
 	goto yy53;
-yy1213:
+yy980:
 	yych = *++YYCURSOR;
 	if (yych <= '/') goto yy53;
-	if (yych <= '5') goto yy1241;
-	if (yych <= '9') goto yy1242;
+	if (yych <= '5') goto yy996;
+	if (yych <= '9') goto yy997;
 	goto yy53;
-yy1214:
+yy981:
 	yych = *++YYCURSOR;
 	if (yych <= '/') goto yy53;
-	if (yych <= '1') goto yy1244;
-	if (yych <= '2') goto yy1245;
+	if (yych <= '1') goto yy999;
+	if (yych <= '2') goto yy1000;
 	goto yy53;
-yy1215:
+yy982:
 	yych = *++YYCURSOR;
-	if (yych == 'R') goto yy771;
-	if (yych == 'r') goto yy771;
-	goto yy53;
-yy1216:
+	goto yy876;
+yy983:
 	yych = *++YYCURSOR;
-	if (yych == 'Y') goto yy771;
-	if (yych == 'y') goto yy771;
-	goto yy53;
-yy1217:
+	if (yych <= '/') goto yy586;
+	if (yych <= '5') goto yy984;
+	if (yych <= '9') goto yy801;
+	goto yy586;
+yy984:
 	yych = *++YYCURSOR;
-	if (yych == 'R') goto yy771;
-	if (yych == 'r') goto yy771;
-	goto yy53;
-yy1218:
-	yych = *++YYCURSOR;
-	if (yych == 'E') goto yy1246;
-	if (yych == 'e') goto yy1246;
-	goto yy53;
-yy1219:
-	yych = *++YYCURSOR;
-	goto yy1064;
-yy1220:
-	yych = *++YYCURSOR;
-	if (yych <= '/') goto yy667;
-	if (yych <= '5') goto yy1221;
-	if (yych <= '9') goto yy961;
-	goto yy667;
-yy1221:
-	yych = *++YYCURSOR;
-	if (yych <= '/') goto yy667;
-	if (yych <= '9') goto yy961;
-	goto yy667;
-yy1222:
+	if (yych <= '/') goto yy586;
+	if (yych <= '9') goto yy801;
+	goto yy586;
+yy985:
 	yych = *++YYCURSOR;
 	if (yych <= '@') {
-		if (yych == ')') goto yy961;
-		goto yy667;
+		if (yych == ')') goto yy801;
+		goto yy586;
 	} else {
-		if (yych <= 'Z') goto yy1247;
-		if (yych <= '`') goto yy667;
-		if (yych <= 'z') goto yy1247;
-		goto yy667;
+		if (yych <= 'Z') goto yy1001;
+		if (yych <= '`') goto yy586;
+		if (yych <= 'z') goto yy1001;
+		goto yy586;
 	}
-yy1223:
+yy986:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	if (yych <= '@') goto yy53;
-	if (yych <= 'Z') goto yy1248;
+	if (yych <= 'Z') goto yy1002;
 	goto yy53;
-yy1224:
+yy987:
 	yyaccept = 16;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= '@') {
 		if (yych <= ')') {
-			if (yych <= '(') goto yy667;
-			goto yy961;
+			if (yych <= '(') goto yy586;
+			goto yy801;
 		} else {
-			if (yych == '/') goto yy1223;
-			goto yy667;
+			if (yych == '/') goto yy986;
+			goto yy586;
 		}
 	} else {
 		if (yych <= '_') {
-			if (yych <= 'Z') goto yy1247;
-			if (yych <= '^') goto yy667;
-			goto yy1223;
+			if (yych <= 'Z') goto yy1001;
+			if (yych <= '^') goto yy586;
+			goto yy986;
 		} else {
-			if (yych <= '`') goto yy667;
-			if (yych <= 'z') goto yy1249;
-			goto yy667;
+			if (yych <= '`') goto yy586;
+			if (yych <= 'z') goto yy1003;
+			goto yy586;
 		}
 	}
-yy1225:
+yy988:
 	yych = *++YYCURSOR;
-	if (yych == 'G') goto yy1250;
-	if (yych == 'g') goto yy1250;
+	if (yych == 'H') goto yy1004;
+	if (yych == 'h') goto yy1004;
 	goto yy53;
-yy1226:
+yy989:
 	yych = *++YYCURSOR;
-	if (yych == 'H') goto yy1251;
-	if (yych == 'h') goto yy1251;
-	goto yy53;
-yy1227:
-	yych = *++YYCURSOR;
-	if (yych == 'Y') goto yy1067;
-	if (yych == 'y') goto yy1067;
-	goto yy53;
-yy1228:
-	yych = *++YYCURSOR;
-	if (yych == 'Y') goto yy1067;
-	if (yych == 'y') goto yy1067;
-	goto yy53;
-yy1229:
-	yych = *++YYCURSOR;
-	if (yych == 'A') goto yy1252;
-	if (yych == 'a') goto yy1252;
-	goto yy53;
-yy1230:
-	yych = *++YYCURSOR;
-	if (yych == 'G') goto yy1250;
-	if (yych == 'g') goto yy1253;
-	goto yy641;
-yy1231:
-	yych = *++YYCURSOR;
-	if (yych == 'H') goto yy1251;
-	if (yych == 'h') goto yy1254;
-	goto yy641;
-yy1232:
-	yych = *++YYCURSOR;
-	if (yych == 'Y') goto yy1067;
-	if (yych == 'y') goto yy1079;
-	goto yy641;
-yy1233:
-	yych = *++YYCURSOR;
-	if (yych == 'Y') goto yy1067;
-	if (yych == 'y') goto yy1079;
-	goto yy641;
-yy1234:
-	yych = *++YYCURSOR;
-	if (yych == 'A') goto yy1252;
-	if (yych == 'a') goto yy1255;
-	goto yy641;
-yy1235:
+	if (yych == 'H') goto yy1004;
+	if (yych == 'h') goto yy1005;
+	goto yy560;
+yy990:
 	yych = *++YYCURSOR;
 	if (yych <= '/') goto yy53;
-	if (yych <= '9') goto yy1256;
+	if (yych <= '9') goto yy1006;
 	goto yy53;
-yy1236:
+yy991:
 	yych = *++YYCURSOR;
 	if (yych <= '/') goto yy53;
-	if (yych <= '3') goto yy1256;
+	if (yych <= '3') goto yy1006;
 	goto yy53;
-yy1237:
+yy992:
 	yych = *++YYCURSOR;
 	if (yych <= '/') goto yy53;
-	if (yych <= '9') goto yy1238;
-	if (yych <= ':') goto yy1257;
+	if (yych <= '9') goto yy993;
+	if (yych <= ':') goto yy1007;
 	goto yy53;
-yy1238:
+yy993:
 	yych = *++YYCURSOR;
-	if (yych == ':') goto yy1257;
+	if (yych == ':') goto yy1007;
 	goto yy53;
-yy1239:
-	yych = *++YYCURSOR;
-	if (yych <= '/') goto yy53;
-	if (yych <= '9') goto yy1258;
-	if (yych <= ':') goto yy1208;
-	goto yy53;
-yy1240:
+yy994:
 	yych = *++YYCURSOR;
 	if (yych <= '/') goto yy53;
-	if (yych <= '3') goto yy1258;
-	if (yych == ':') goto yy1208;
+	if (yych <= '9') goto yy1008;
+	if (yych <= ':') goto yy975;
 	goto yy53;
-yy1241:
+yy995:
 	yych = *++YYCURSOR;
 	if (yych <= '/') goto yy53;
-	if (yych <= '5') goto yy1259;
-	if (yych <= '6') goto yy1260;
+	if (yych <= '3') goto yy1008;
+	if (yych == ':') goto yy975;
+	goto yy53;
+yy996:
+	yych = *++YYCURSOR;
+	if (yych <= '/') goto yy53;
+	if (yych <= '5') goto yy1007;
+	if (yych <= '6') goto yy1009;
 	if (yych >= ':') goto yy53;
-yy1242:
+yy997:
 	yych = *++YYCURSOR;
 	if (yych <= '/') goto yy53;
-	if (yych <= '5') goto yy1261;
-	if (yych <= '6') goto yy1262;
+	if (yych <= '5') goto yy1010;
+	if (yych <= '6') goto yy1011;
 	goto yy53;
-yy1243:
+yy998:
 	yych = *++YYCURSOR;
 	if (yych <= '/') goto yy53;
-	if (yych <= '9') goto yy1263;
+	if (yych <= '9') goto yy1012;
 	goto yy53;
-yy1244:
+yy999:
 	yych = *++YYCURSOR;
 	if (yych <= '/') goto yy53;
-	if (yych <= '9') goto yy1264;
+	if (yych <= '9') goto yy1013;
 	goto yy53;
-yy1245:
+yy1000:
 	yych = *++YYCURSOR;
 	if (yych <= '/') goto yy53;
-	if (yych <= '3') goto yy1264;
+	if (yych <= '3') goto yy1013;
 	goto yy53;
-yy1246:
+yy1001:
 	yych = *++YYCURSOR;
-	if (yych == 'R') goto yy771;
-	if (yych == 'r') goto yy771;
-	goto yy53;
-yy1247:
-	yych = *++YYCURSOR;
-	if (yych == ')') goto yy961;
-	goto yy667;
-yy1248:
+	if (yych == ')') goto yy801;
+	goto yy586;
+yy1002:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	if (yych <= '`') goto yy53;
-	if (yych <= 'z') goto yy1265;
+	if (yych <= 'z') goto yy1014;
 	goto yy53;
-yy1249:
+yy1003:
 	yyaccept = 16;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= '/') {
-		if (yych == ')') goto yy961;
-		if (yych <= '.') goto yy667;
-		goto yy1223;
+		if (yych == ')') goto yy801;
+		if (yych <= '.') goto yy586;
+		goto yy986;
 	} else {
 		if (yych <= '_') {
-			if (yych <= '^') goto yy667;
-			goto yy1223;
+			if (yych <= '^') goto yy586;
+			goto yy986;
 		} else {
-			if (yych <= '`') goto yy667;
-			if (yych <= 'z') goto yy1267;
-			goto yy667;
+			if (yych <= '`') goto yy586;
+			if (yych <= 'z') goto yy1016;
+			goto yy586;
 		}
 	}
-yy1250:
+yy1004:
 	yych = *++YYCURSOR;
-	if (yych == 'H') goto yy1269;
-	if (yych == 'h') goto yy1269;
+	if (yych == 'T') goto yy802;
+	if (yych == 't') goto yy802;
 	goto yy53;
-yy1251:
+yy1005:
 	yych = *++YYCURSOR;
-	if (yych == 'T') goto yy962;
-	if (yych == 't') goto yy962;
+	if (yych == 'T') goto yy802;
+	if (yych == 't') goto yy815;
+	goto yy560;
+yy1006:
+	yych = *++YYCURSOR;
+	if (yych == ':') goto yy1018;
 	goto yy53;
-yy1252:
-	yych = *++YYCURSOR;
-	if (yych == 'Y') goto yy1067;
-	if (yych == 'y') goto yy1067;
-	goto yy53;
-yy1253:
-	yych = *++YYCURSOR;
-	if (yych == 'H') goto yy1269;
-	if (yych == 'h') goto yy1270;
-	goto yy641;
-yy1254:
-	yych = *++YYCURSOR;
-	if (yych == 'T') goto yy962;
-	if (yych == 't') goto yy977;
-	goto yy641;
-yy1255:
-	yych = *++YYCURSOR;
-	if (yych == 'Y') goto yy1067;
-	if (yych == 'y') goto yy1079;
-	goto yy641;
-yy1256:
-	yych = *++YYCURSOR;
-	if (yych == ':') goto yy1271;
-	goto yy53;
-yy1257:
+yy1007:
 	yych = *++YYCURSOR;
 	if (yych <= '/') goto yy53;
-	if (yych <= '5') goto yy1272;
-	if (yych <= '6') goto yy1274;
-	if (yych <= '9') goto yy1275;
+	if (yych <= '5') goto yy1019;
+	if (yych <= '6') goto yy1021;
+	if (yych <= '9') goto yy1022;
 	goto yy53;
-yy1258:
+yy1008:
 	yych = *++YYCURSOR;
-	if (yych == ':') goto yy1276;
+	if (yych == ':') goto yy1023;
 	goto yy53;
-yy1259:
-	yych = *++YYCURSOR;
-	if (yych <= '/') goto yy53;
-	if (yych <= '5') goto yy1277;
-	if (yych <= '6') goto yy1278;
-	if (yych <= '9') goto yy1275;
-	goto yy53;
-yy1260:
+yy1009:
 	yych = *++YYCURSOR;
 	if (yych <= '/') goto yy53;
-	if (yych <= '0') goto yy1277;
-	if (yych <= '5') goto yy1261;
-	if (yych <= '6') goto yy1262;
+	if (yych <= '0') goto yy1019;
+	if (yych <= '5') goto yy1010;
+	if (yych <= '6') goto yy1011;
 	goto yy53;
-yy1261:
+yy1010:
 	yych = *++YYCURSOR;
 	if (yych <= '/') goto yy53;
-	if (yych <= '9') goto yy1275;
+	if (yych <= '9') goto yy1022;
 	goto yy53;
-yy1262:
+yy1011:
 	yych = *++YYCURSOR;
-	if (yych == '0') goto yy1275;
+	if (yych == '0') goto yy1022;
 	goto yy53;
-yy1263:
+yy1012:
 	yych = *++YYCURSOR;
-	if (yych == ':') goto yy1279;
+	if (yych == ':') goto yy997;
 	goto yy53;
-yy1264:
+yy1013:
 	yych = *++YYCURSOR;
-	if (yych == ':') goto yy1280;
+	if (yych == ':') goto yy978;
 	goto yy53;
-yy1265:
+yy1014:
 	yyaccept = 16;
 	YYMARKER = ++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	if (yych <= '^') {
-		if (yych == '/') goto yy1223;
-		goto yy667;
+		if (yych == '/') goto yy986;
+		goto yy586;
 	} else {
-		if (yych <= '_') goto yy1223;
-		if (yych <= '`') goto yy667;
-		if (yych <= 'z') goto yy1265;
-		goto yy667;
+		if (yych <= '_') goto yy986;
+		if (yych <= '`') goto yy586;
+		if (yych <= 'z') goto yy1014;
+		goto yy586;
 	}
-yy1267:
+yy1016:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	if (yych <= '^') {
-		if (yych == '/') goto yy1223;
+		if (yych == '/') goto yy986;
 		goto yy53;
 	} else {
-		if (yych <= '_') goto yy1223;
+		if (yych <= '_') goto yy986;
 		if (yych <= '`') goto yy53;
-		if (yych <= 'z') goto yy1267;
+		if (yych <= 'z') goto yy1016;
 		goto yy53;
 	}
-yy1269:
-	yych = *++YYCURSOR;
-	if (yych == 'T') goto yy962;
-	if (yych == 't') goto yy962;
-	goto yy53;
-yy1270:
-	yych = *++YYCURSOR;
-	if (yych == 'T') goto yy962;
-	if (yych == 't') goto yy977;
-	goto yy641;
-yy1271:
+yy1018:
 	yych = *++YYCURSOR;
 	if (yych <= '/') goto yy53;
-	if (yych <= '5') goto yy1281;
+	if (yych <= '5') goto yy1024;
 	goto yy53;
-yy1272:
+yy1019:
 	++YYCURSOR;
-	if ((yych = *YYCURSOR) <= '/') goto yy1273;
-	if (yych <= '9') goto yy1275;
-yy1273:
+	if ((yych = *YYCURSOR) <= '/') goto yy1020;
+	if (yych <= '9') goto yy1022;
+yy1020:
 #line 1163 "parse_date.s.re"
 	{
 		int tz_not_found;
@@ -16424,175 +13935,122 @@ yy1273:
 		TIMELIB_DEINIT;
 		return TIMELIB_XMLRPC_SOAP;
 	}
-#line 16428 "parse_date.s.c"
-yy1274:
+#line 13939 "parse_date.s.c"
+yy1021:
 	yych = *++YYCURSOR;
-	if (yych != '0') goto yy1273;
-yy1275:
+	if (yych != '0') goto yy1020;
+yy1022:
 	yych = *++YYCURSOR;
-	goto yy1273;
-yy1276:
-	yych = *++YYCURSOR;
-	if (yych <= '/') goto yy53;
-	if (yych <= '5') goto yy1282;
-	if (yych <= '9') goto yy1238;
-	goto yy53;
-yy1277:
-	yych = *++YYCURSOR;
-	if (yych <= '/') goto yy1273;
-	if (yych <= '9') goto yy1275;
-	goto yy1273;
-yy1278:
-	yych = *++YYCURSOR;
-	if (yych == '0') goto yy1275;
-	goto yy1273;
-yy1279:
+	goto yy1020;
+yy1023:
 	yych = *++YYCURSOR;
 	if (yych <= '/') goto yy53;
-	if (yych <= '5') goto yy1283;
-	if (yych <= '6') goto yy1284;
+	if (yych <= '5') goto yy1025;
+	if (yych <= '9') goto yy993;
 	goto yy53;
-yy1280:
+yy1024:
 	yych = *++YYCURSOR;
 	if (yych <= '/') goto yy53;
-	if (yych <= '5') goto yy1285;
+	if (yych <= '9') goto yy1026;
 	goto yy53;
-yy1281:
+yy1025:
 	yych = *++YYCURSOR;
 	if (yych <= '/') goto yy53;
-	if (yych <= '9') goto yy1286;
+	if (yych <= '9') goto yy1027;
+	if (yych <= ':') goto yy1007;
 	goto yy53;
-yy1282:
+yy1026:
+	yych = *++YYCURSOR;
+	if (yych == ':') goto yy1028;
+	goto yy53;
+yy1027:
+	yych = *++YYCURSOR;
+	if (yych == ':') goto yy1029;
+	goto yy53;
+yy1028:
 	yych = *++YYCURSOR;
 	if (yych <= '/') goto yy53;
-	if (yych <= '9') goto yy1287;
-	if (yych <= ':') goto yy1257;
+	if (yych <= '5') goto yy1030;
+	if (yych <= '6') goto yy1031;
 	goto yy53;
-yy1283:
+yy1029:
 	yych = *++YYCURSOR;
 	if (yych <= '/') goto yy53;
-	if (yych <= '9') goto yy1275;
+	if (yych <= '5') goto yy1032;
+	if (yych <= '6') goto yy1033;
+	if (yych <= '9') goto yy1022;
 	goto yy53;
-yy1284:
-	yych = *++YYCURSOR;
-	if (yych == '0') goto yy1275;
-	goto yy53;
-yy1285:
+yy1030:
 	yych = *++YYCURSOR;
 	if (yych <= '/') goto yy53;
-	if (yych <= '9') goto yy1288;
+	if (yych <= '9') goto yy1034;
 	goto yy53;
-yy1286:
+yy1031:
 	yych = *++YYCURSOR;
-	if (yych == ':') goto yy1289;
+	if (yych == '0') goto yy1034;
 	goto yy53;
-yy1287:
+yy1032:
 	yych = *++YYCURSOR;
-	if (yych == ':') goto yy1290;
+	if (yych <= '/') goto yy1020;
+	if (yych <= '9') goto yy1035;
+	goto yy1020;
+yy1033:
+	yych = *++YYCURSOR;
+	if (yych == '0') goto yy1035;
+	goto yy1020;
+yy1034:
+	yych = *++YYCURSOR;
+	if (yych == ' ') goto yy1036;
 	goto yy53;
-yy1288:
-	yych = *++YYCURSOR;
-	if (yych == ':') goto yy1291;
-	goto yy53;
-yy1289:
-	yych = *++YYCURSOR;
-	if (yych <= '/') goto yy53;
-	if (yych <= '5') goto yy1292;
-	if (yych <= '6') goto yy1293;
-	goto yy53;
-yy1290:
-	yych = *++YYCURSOR;
-	if (yych <= '/') goto yy53;
-	if (yych <= '5') goto yy1294;
-	if (yych <= '6') goto yy1295;
-	if (yych <= '9') goto yy1275;
-	goto yy53;
-yy1291:
-	yych = *++YYCURSOR;
-	if (yych <= '/') goto yy53;
-	if (yych <= '5') goto yy1296;
-	if (yych <= '6') goto yy1297;
-	goto yy53;
-yy1292:
-	yych = *++YYCURSOR;
-	if (yych <= '/') goto yy53;
-	if (yych <= '9') goto yy1298;
-	goto yy53;
-yy1293:
-	yych = *++YYCURSOR;
-	if (yych == '0') goto yy1298;
-	goto yy53;
-yy1294:
-	yych = *++YYCURSOR;
-	if (yych <= '/') goto yy1273;
-	if (yych <= '9') goto yy1299;
-	goto yy1273;
-yy1295:
-	yych = *++YYCURSOR;
-	if (yych == '0') goto yy1299;
-	goto yy1273;
-yy1296:
-	yych = *++YYCURSOR;
-	if (yych <= '/') goto yy53;
-	if (yych <= '9') goto yy1275;
-	goto yy53;
-yy1297:
-	yych = *++YYCURSOR;
-	if (yych == '0') goto yy1275;
-	goto yy53;
-yy1298:
-	yych = *++YYCURSOR;
-	if (yych == ' ') goto yy1300;
-	goto yy53;
-yy1299:
+yy1035:
 	yyaccept = 26;
 	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych == '.') goto yy1302;
-	goto yy1273;
-yy1300:
+	if (yych == '.') goto yy1038;
+	goto yy1020;
+yy1036:
 	++YYCURSOR;
 	if ((YYLIMIT - YYCURSOR) < 6) YYFILL(6);
 	yych = *YYCURSOR;
 	if (yych <= '*') {
-		if (yych == ' ') goto yy1300;
+		if (yych == ' ') goto yy1036;
 		goto yy53;
 	} else {
 		if (yych == ',') goto yy53;
-		if (yych <= '-') goto yy1303;
+		if (yych <= '-') goto yy1039;
 		goto yy53;
 	}
-yy1302:
+yy1038:
 	yych = *++YYCURSOR;
 	if (yych <= '/') goto yy53;
-	if (yych <= '9') goto yy1304;
+	if (yych <= '9') goto yy1040;
 	goto yy53;
-yy1303:
+yy1039:
 	yych = *++YYCURSOR;
 	if (yych <= '/') goto yy53;
-	if (yych <= '1') goto yy1306;
-	if (yych <= '2') goto yy1308;
-	if (yych <= '9') goto yy1309;
+	if (yych <= '1') goto yy1042;
+	if (yych <= '2') goto yy1044;
+	if (yych <= '9') goto yy1045;
 	goto yy53;
-yy1304:
+yy1040:
 	yyaccept = 26;
 	YYMARKER = ++YYCURSOR;
 	if ((YYLIMIT - YYCURSOR) < 6) YYFILL(6);
 	yych = *YYCURSOR;
 	if (yych <= ',') {
-		if (yych == '+') goto yy1310;
-		goto yy1273;
+		if (yych == '+') goto yy1046;
+		goto yy1020;
 	} else {
-		if (yych <= '-') goto yy1310;
-		if (yych <= '/') goto yy1273;
-		if (yych <= '9') goto yy1304;
-		goto yy1273;
+		if (yych <= '-') goto yy1046;
+		if (yych <= '/') goto yy1020;
+		if (yych <= '9') goto yy1040;
+		goto yy1020;
 	}
-yy1306:
+yy1042:
 	++YYCURSOR;
-	if ((yych = *YYCURSOR) <= '/') goto yy1307;
-	if (yych <= '9') goto yy1309;
-	if (yych <= ':') goto yy1311;
-yy1307:
+	if ((yych = *YYCURSOR) <= '/') goto yy1043;
+	if (yych <= '9') goto yy1045;
+	if (yych <= ':') goto yy1047;
+yy1043:
 #line 1264 "parse_date.s.re"
 	{
 		int tz_not_found;
@@ -16611,77 +14069,72 @@ yy1307:
 		TIMELIB_DEINIT;
 		return TIMELIB_CLF;
 	}
-#line 16615 "parse_date.s.c"
-yy1308:
+#line 14073 "parse_date.s.c"
+yy1044:
 	yych = *++YYCURSOR;
 	if (yych <= '5') {
-		if (yych <= '/') goto yy1307;
-		if (yych >= '4') goto yy1312;
+		if (yych <= '/') goto yy1043;
+		if (yych >= '4') goto yy1048;
 	} else {
-		if (yych <= '9') goto yy1313;
-		if (yych <= ':') goto yy1311;
-		goto yy1307;
+		if (yych <= '9') goto yy1049;
+		if (yych <= ':') goto yy1047;
+		goto yy1043;
 	}
-yy1309:
+yy1045:
 	yych = *++YYCURSOR;
-	if (yych <= '/') goto yy1307;
-	if (yych <= '5') goto yy1312;
-	if (yych <= '9') goto yy1313;
-	if (yych <= ':') goto yy1311;
-	goto yy1307;
-yy1310:
+	if (yych <= '/') goto yy1043;
+	if (yych <= '5') goto yy1048;
+	if (yych <= '9') goto yy1049;
+	if (yych <= ':') goto yy1047;
+	goto yy1043;
+yy1046:
 	yych = *++YYCURSOR;
 	if (yych <= '/') goto yy53;
-	if (yych <= '1') goto yy1314;
-	if (yych <= '2') goto yy1315;
-	if (yych <= '9') goto yy1316;
+	if (yych <= '1') goto yy1050;
+	if (yych <= '2') goto yy1051;
+	if (yych <= '9') goto yy1052;
 	goto yy53;
-yy1311:
+yy1047:
 	yych = *++YYCURSOR;
-	if (yych <= '/') goto yy1307;
-	if (yych <= '5') goto yy1312;
-	if (yych <= '9') goto yy1313;
-	goto yy1307;
-yy1312:
+	if (yych <= '/') goto yy1043;
+	if (yych <= '5') goto yy1048;
+	if (yych <= '9') goto yy1049;
+	goto yy1043;
+yy1048:
 	yych = *++YYCURSOR;
-	if (yych <= '/') goto yy1307;
-	if (yych >= ':') goto yy1307;
-yy1313:
+	if (yych <= '/') goto yy1043;
+	if (yych >= ':') goto yy1043;
+yy1049:
 	yych = *++YYCURSOR;
-	goto yy1307;
-yy1314:
+	goto yy1043;
+yy1050:
 	yych = *++YYCURSOR;
-	if (yych <= '/') goto yy1273;
-	if (yych <= '9') goto yy1316;
-	if (yych <= ':') goto yy1317;
-	goto yy1273;
-yy1315:
+	if (yych <= '/') goto yy1020;
+	if (yych <= '9') goto yy1052;
+	if (yych <= ':') goto yy1053;
+	goto yy1020;
+yy1051:
 	yych = *++YYCURSOR;
 	if (yych <= '5') {
-		if (yych <= '/') goto yy1273;
-		if (yych >= '4') goto yy1318;
+		if (yych <= '/') goto yy1020;
+		if (yych >= '4') goto yy1019;
 	} else {
-		if (yych <= '9') goto yy1275;
-		if (yych <= ':') goto yy1317;
-		goto yy1273;
+		if (yych <= '9') goto yy1022;
+		if (yych <= ':') goto yy1053;
+		goto yy1020;
 	}
-yy1316:
+yy1052:
 	yych = *++YYCURSOR;
-	if (yych <= '/') goto yy1273;
-	if (yych <= '5') goto yy1318;
-	if (yych <= '9') goto yy1275;
-	if (yych >= ';') goto yy1273;
-yy1317:
-	yych = *++YYCURSOR;
-	if (yych <= '/') goto yy1273;
-	if (yych <= '5') goto yy1318;
-	if (yych <= '9') goto yy1275;
-	goto yy1273;
-yy1318:
+	if (yych <= '/') goto yy1020;
+	if (yych <= '5') goto yy1019;
+	if (yych <= '9') goto yy1022;
+	if (yych >= ';') goto yy1020;
+yy1053:
 	++YYCURSOR;
-	if ((yych = *YYCURSOR) <= '/') goto yy1273;
-	if (yych <= '9') goto yy1275;
-	goto yy1273;
+	if ((yych = *YYCURSOR) <= '/') goto yy1020;
+	if (yych <= '5') goto yy1019;
+	if (yych <= '9') goto yy1022;
+	goto yy1020;
 }
 #line 1411 "parse_date.s.re"
 

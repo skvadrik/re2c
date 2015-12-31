@@ -364,7 +364,7 @@ yy19:
 yy20:
         YYSKIP ();
         yych = YYPEEK ();
-        if (yych == '"') goto yy28;
+        if (yych == '"') goto yy18;
         goto yy19;
 yy21:
         YYSKIP ();
@@ -383,10 +383,10 @@ yy25:
                 &&yy19, &&yy19, &&yy19, &&yy19, &&yy19, &&yy19, &&yy19, &&yy19,
                 &&yy19, &&yy19, &&yy19, &&yy19, &&yy19, &&yy19, &&yy19, &&yy19,
                 &&yy19, &&yy19, &&yy19, &&yy19, &&yy19, &&yy19, &&yy19, &&yy19,
-                &&yy19, &&yy29, &&yy19, &&yy19, &&yy19, &&yy19, &&yy19, &&yy31,
-                &&yy33, &&yy35, &&yy19, &&yy19, &&yy19, &&yy37, &&yy19, &&yy39,
+                &&yy19, &&yy28, &&yy19, &&yy19, &&yy19, &&yy19, &&yy19, &&yy30,
+                &&yy32, &&yy34, &&yy19, &&yy19, &&yy19, &&yy36, &&yy19, &&yy38,
                 &&yy19, &&yy19, &&yy19, &&yy19, &&yy19, &&yy19, &&yy19, &&yy19,
-                &&yy19, &&yy19, &&yy19, &&yy19, &&yy41, &&yy43, &&yy45, &&yy19,
+                &&yy19, &&yy19, &&yy19, &&yy19, &&yy40, &&yy42, &&yy44, &&yy19,
                 &&yy19, &&yy19, &&yy19, &&yy19, &&yy19, &&yy19, &&yy19, &&yy19,
                 &&yy19, &&yy19, &&yy19, &&yy19, &&yy19, &&yy19, &&yy19, &&yy19,
                 &&yy19, &&yy19, &&yy19, &&yy19, &&yy19, &&yy19, &&yy19, &&yy19,
@@ -420,42 +420,37 @@ yy26:
         continue;
 yy28:
         YYSKIP ();
-        yych = YYPEEK ();
-        if (yych == '\'') goto yy26;
-        goto yy19;
-yy29:
-        YYSKIP ();
         status = action_line126_Normal(i, keys, input, token, &cursor, 7);
         continue;
-yy31:
+yy30:
         YYSKIP ();
         status = action_line126_Normal(i, keys, input, token, &cursor, 6);
         continue;
-yy33:
+yy32:
         YYSKIP ();
         status = action_line126_Normal(i, keys, input, token, &cursor, 0);
         continue;
-yy35:
+yy34:
         YYSKIP ();
         status = action_line126_Normal(i, keys, input, token, &cursor, 1);
         continue;
-yy37:
+yy36:
         YYSKIP ();
         status = action_line126_Normal(i, keys, input, token, &cursor, 8);
         continue;
-yy39:
+yy38:
         YYSKIP ();
         status = action_line126_Normal(i, keys, input, token, &cursor, 5);
         continue;
-yy41:
+yy40:
         YYSKIP ();
         status = action_line126_Normal(i, keys, input, token, &cursor, 2);
         continue;
-yy43:
+yy42:
         YYSKIP ();
         status = action_line126_Normal(i, keys, input, token, &cursor, 4);
         continue;
-yy45:
+yy44:
         YYSKIP ();
         status = action_line126_Normal(i, keys, input, token, &cursor, 3);
         continue;
@@ -589,102 +584,102 @@ int lex_line126_Skiptoeol()
         yych = YYPEEK ();
         {
             static void *yytarget[256] = {
-                &&yy50, &&yy50, &&yy50, &&yy50, &&yy50, &&yy50, &&yy50, &&yy50,
-                &&yy50, &&yy50, &&yy52, &&yy50, &&yy50, &&yy54, &&yy50, &&yy50,
-                &&yy50, &&yy50, &&yy50, &&yy50, &&yy50, &&yy50, &&yy50, &&yy50,
-                &&yy50, &&yy50, &&yy50, &&yy50, &&yy50, &&yy50, &&yy50, &&yy50,
-                &&yy50, &&yy50, &&yy50, &&yy50, &&yy50, &&yy50, &&yy50, &&yy50,
-                &&yy50, &&yy50, &&yy50, &&yy50, &&yy50, &&yy50, &&yy50, &&yy50,
-                &&yy50, &&yy50, &&yy50, &&yy50, &&yy50, &&yy50, &&yy50, &&yy50,
-                &&yy50, &&yy50, &&yy50, &&yy50, &&yy50, &&yy50, &&yy50, &&yy55,
-                &&yy50, &&yy50, &&yy50, &&yy50, &&yy50, &&yy50, &&yy50, &&yy50,
-                &&yy50, &&yy50, &&yy50, &&yy50, &&yy50, &&yy50, &&yy50, &&yy50,
-                &&yy50, &&yy50, &&yy50, &&yy50, &&yy50, &&yy50, &&yy50, &&yy50,
-                &&yy50, &&yy50, &&yy50, &&yy50, &&yy56, &&yy50, &&yy50, &&yy50,
-                &&yy50, &&yy50, &&yy50, &&yy50, &&yy50, &&yy50, &&yy50, &&yy50,
-                &&yy50, &&yy50, &&yy50, &&yy50, &&yy50, &&yy50, &&yy50, &&yy50,
-                &&yy50, &&yy50, &&yy50, &&yy50, &&yy50, &&yy50, &&yy50, &&yy50,
-                &&yy50, &&yy50, &&yy50, &&yy50, &&yy50, &&yy50, &&yy50, &&yy50,
-                &&yy50, &&yy50, &&yy50, &&yy50, &&yy50, &&yy50, &&yy50, &&yy50,
-                &&yy50, &&yy50, &&yy50, &&yy50, &&yy50, &&yy50, &&yy50, &&yy50,
-                &&yy50, &&yy50, &&yy50, &&yy50, &&yy50, &&yy50, &&yy50, &&yy50,
-                &&yy50, &&yy50, &&yy50, &&yy50, &&yy50, &&yy50, &&yy50, &&yy50,
-                &&yy50, &&yy50, &&yy50, &&yy50, &&yy50, &&yy50, &&yy50, &&yy50,
-                &&yy50, &&yy50, &&yy50, &&yy50, &&yy50, &&yy50, &&yy50, &&yy50,
-                &&yy50, &&yy50, &&yy50, &&yy50, &&yy50, &&yy50, &&yy50, &&yy50,
-                &&yy50, &&yy50, &&yy50, &&yy50, &&yy50, &&yy50, &&yy50, &&yy50,
-                &&yy50, &&yy50, &&yy50, &&yy50, &&yy50, &&yy50, &&yy50, &&yy50,
-                &&yy50, &&yy50, &&yy50, &&yy50, &&yy50, &&yy50, &&yy50, &&yy50,
-                &&yy50, &&yy50, &&yy50, &&yy50, &&yy50, &&yy50, &&yy50, &&yy50,
-                &&yy50, &&yy50, &&yy50, &&yy50, &&yy50, &&yy50, &&yy50, &&yy50,
-                &&yy50, &&yy50, &&yy50, &&yy50, &&yy50, &&yy50, &&yy50, &&yy50,
-                &&yy50, &&yy50, &&yy50, &&yy50, &&yy50, &&yy50, &&yy50, &&yy50,
-                &&yy50, &&yy50, &&yy50, &&yy50, &&yy50, &&yy50, &&yy50, &&yy50,
-                &&yy50, &&yy50, &&yy50, &&yy50, &&yy50, &&yy50, &&yy50, &&yy50
+                &&yy49, &&yy49, &&yy49, &&yy49, &&yy49, &&yy49, &&yy49, &&yy49,
+                &&yy49, &&yy49, &&yy51, &&yy49, &&yy49, &&yy53, &&yy49, &&yy49,
+                &&yy49, &&yy49, &&yy49, &&yy49, &&yy49, &&yy49, &&yy49, &&yy49,
+                &&yy49, &&yy49, &&yy49, &&yy49, &&yy49, &&yy49, &&yy49, &&yy49,
+                &&yy49, &&yy49, &&yy49, &&yy49, &&yy49, &&yy49, &&yy49, &&yy49,
+                &&yy49, &&yy49, &&yy49, &&yy49, &&yy49, &&yy49, &&yy49, &&yy49,
+                &&yy49, &&yy49, &&yy49, &&yy49, &&yy49, &&yy49, &&yy49, &&yy49,
+                &&yy49, &&yy49, &&yy49, &&yy49, &&yy49, &&yy49, &&yy49, &&yy54,
+                &&yy49, &&yy49, &&yy49, &&yy49, &&yy49, &&yy49, &&yy49, &&yy49,
+                &&yy49, &&yy49, &&yy49, &&yy49, &&yy49, &&yy49, &&yy49, &&yy49,
+                &&yy49, &&yy49, &&yy49, &&yy49, &&yy49, &&yy49, &&yy49, &&yy49,
+                &&yy49, &&yy49, &&yy49, &&yy49, &&yy55, &&yy49, &&yy49, &&yy49,
+                &&yy49, &&yy49, &&yy49, &&yy49, &&yy49, &&yy49, &&yy49, &&yy49,
+                &&yy49, &&yy49, &&yy49, &&yy49, &&yy49, &&yy49, &&yy49, &&yy49,
+                &&yy49, &&yy49, &&yy49, &&yy49, &&yy49, &&yy49, &&yy49, &&yy49,
+                &&yy49, &&yy49, &&yy49, &&yy49, &&yy49, &&yy49, &&yy49, &&yy49,
+                &&yy49, &&yy49, &&yy49, &&yy49, &&yy49, &&yy49, &&yy49, &&yy49,
+                &&yy49, &&yy49, &&yy49, &&yy49, &&yy49, &&yy49, &&yy49, &&yy49,
+                &&yy49, &&yy49, &&yy49, &&yy49, &&yy49, &&yy49, &&yy49, &&yy49,
+                &&yy49, &&yy49, &&yy49, &&yy49, &&yy49, &&yy49, &&yy49, &&yy49,
+                &&yy49, &&yy49, &&yy49, &&yy49, &&yy49, &&yy49, &&yy49, &&yy49,
+                &&yy49, &&yy49, &&yy49, &&yy49, &&yy49, &&yy49, &&yy49, &&yy49,
+                &&yy49, &&yy49, &&yy49, &&yy49, &&yy49, &&yy49, &&yy49, &&yy49,
+                &&yy49, &&yy49, &&yy49, &&yy49, &&yy49, &&yy49, &&yy49, &&yy49,
+                &&yy49, &&yy49, &&yy49, &&yy49, &&yy49, &&yy49, &&yy49, &&yy49,
+                &&yy49, &&yy49, &&yy49, &&yy49, &&yy49, &&yy49, &&yy49, &&yy49,
+                &&yy49, &&yy49, &&yy49, &&yy49, &&yy49, &&yy49, &&yy49, &&yy49,
+                &&yy49, &&yy49, &&yy49, &&yy49, &&yy49, &&yy49, &&yy49, &&yy49,
+                &&yy49, &&yy49, &&yy49, &&yy49, &&yy49, &&yy49, &&yy49, &&yy49,
+                &&yy49, &&yy49, &&yy49, &&yy49, &&yy49, &&yy49, &&yy49, &&yy49,
+                &&yy49, &&yy49, &&yy49, &&yy49, &&yy49, &&yy49, &&yy49, &&yy49,
+                &&yy49, &&yy49, &&yy49, &&yy49, &&yy49, &&yy49, &&yy49, &&yy49
             };
             goto *yytarget[yych];
         }
-yy50:
+yy49:
         YYSKIP ();
-yy51:
+yy50:
         status = action_line126_Skiptoeol(i, keys, input, token, &cursor, 20);
         continue;
-yy52:
+yy51:
         YYSKIP ();
         status = action_line126_Skiptoeol(i, keys, input, token, &cursor, 19);
         continue;
-yy54:
+yy53:
         YYSKIP ();
         yych = YYPEEK ();
-        if (yych == '\n') goto yy57;
-        goto yy51;
+        if (yych == '\n') goto yy56;
+        goto yy50;
+yy54:
+        YYSKIP ();
+        YYBACKUP ();
+        yych = YYPEEK ();
+        if (yych == '?') goto yy58;
+        goto yy50;
 yy55:
         YYSKIP ();
         YYBACKUP ();
         yych = YYPEEK ();
-        if (yych == '?') goto yy59;
-        goto yy51;
+        if (yych == '\n') goto yy60;
+        if (yych == '\r') goto yy62;
+        goto yy50;
 yy56:
-        YYSKIP ();
-        YYBACKUP ();
-        yych = YYPEEK ();
-        if (yych == '\n') goto yy61;
-        if (yych == '\r') goto yy63;
-        goto yy51;
-yy57:
         YYSKIP ();
         status = action_line126_Skiptoeol(i, keys, input, token, &cursor, 18);
         continue;
-yy59:
+yy58:
         YYSKIP ();
         yych = YYPEEK ();
-        if (yych == '/') goto yy64;
-yy60:
+        if (yych == '/') goto yy63;
+yy59:
         YYRESTORE ();
-        goto yy51;
-yy61:
+        goto yy50;
+yy60:
         YYSKIP ();
         status = action_line126_Skiptoeol(i, keys, input, token, &cursor, 17);
         continue;
+yy62:
+        YYSKIP ();
+        yych = YYPEEK ();
+        if (yych == '\n') goto yy60;
+        goto yy59;
 yy63:
         YYSKIP ();
         yych = YYPEEK ();
-        if (yych == '\n') goto yy61;
-        goto yy60;
+        if (yych == '\n') goto yy64;
+        if (yych == '\r') goto yy66;
+        goto yy59;
 yy64:
-        YYSKIP ();
-        yych = YYPEEK ();
-        if (yych == '\n') goto yy65;
-        if (yych == '\r') goto yy67;
-        goto yy60;
-yy65:
         YYSKIP ();
         status = action_line126_Skiptoeol(i, keys, input, token, &cursor, 16);
         continue;
-yy67:
+yy66:
         YYSKIP ();
-        if ((yych = YYPEEK ()) == '\n') goto yy65;
-        goto yy60;
+        if ((yych = YYPEEK ()) == '\n') goto yy64;
+        goto yy59;
 
     }
     if (status == 0) {
@@ -810,20 +805,20 @@ int lex_line126_String()
 
         if (YYLESSTHAN (2)) YYFILL(2);
         yych = YYPEEK ();
-        if (yych == '"') goto yy73;
-        if (yych == '\\') goto yy75;
+        if (yych == '"') goto yy72;
+        if (yych == '\\') goto yy74;
         YYSKIP ();
-yy72:
+yy71:
         status = action_line126_String(i, keys, input, token, &cursor, 23);
         continue;
-yy73:
+yy72:
         YYSKIP ();
         status = action_line126_String(i, keys, input, token, &cursor, 22);
         continue;
-yy75:
+yy74:
         YYSKIP ();
         yych = YYPEEK ();
-        if (yych == '\n') goto yy72;
+        if (yych == '\n') goto yy71;
         YYSKIP ();
         status = action_line126_String(i, keys, input, token, &cursor, 21);
         continue;

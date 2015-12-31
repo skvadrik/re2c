@@ -34,32 +34,28 @@ yy3:
 #line 35 "bug1390174.c"
 yy4:
 	++YYCURSOR;
-yy5:
 #line 18 "bug1390174.re"
 	{RET(1);}
-#line 41 "bug1390174.c"
+#line 40 "bug1390174.c"
 yy6:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
-	case '\n':	goto yy7;
+	case '\n':	goto yy4;
 	case 'A':
-	case 'a':	goto yy8;
+	case 'a':	goto yy7;
 	default:	goto yy3;
 	}
 yy7:
-	yych = *++YYCURSOR;
-	goto yy5;
-yy8:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	switch (yych) {
-	case '\n':	goto yy7;
+	case '\n':	goto yy4;
 	case 'A':
-	case 'a':	goto yy8;
-	default:	goto yy10;
+	case 'a':	goto yy7;
+	default:	goto yy9;
 	}
-yy10:
+yy9:
 	YYCURSOR = YYMARKER;
 	goto yy3;
 }

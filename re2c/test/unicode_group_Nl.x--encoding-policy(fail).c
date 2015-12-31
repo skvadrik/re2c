@@ -49,35 +49,31 @@ yy3:
 #line 50 "unicode_group_Nl.x--encoding-policy(fail).c"
 yy4:
 	++YYCURSOR;
-yy5:
 #line 12 "unicode_group_Nl.x--encoding-policy(fail).re"
 	{ goto Nl; }
-#line 56 "unicode_group_Nl.x--encoding-policy(fail).c"
+#line 55 "unicode_group_Nl.x--encoding-policy(fail).c"
 yy6:
 	yych = *++YYCURSOR;
 	if (yych <= 0xDF41) {
 		if (yych <= 0xDD3F) goto yy3;
-		if (yych <= 0xDD74) goto yy8;
+		if (yych <= 0xDD74) goto yy4;
 		if (yych <= 0xDF40) goto yy3;
-		goto yy8;
+		goto yy4;
 	} else {
 		if (yych <= 0xDF4A) {
 			if (yych <= 0xDF49) goto yy3;
-			goto yy8;
+			goto yy4;
 		} else {
 			if (yych <= 0xDFD0) goto yy3;
-			if (yych <= 0xDFD5) goto yy8;
+			if (yych <= 0xDFD5) goto yy4;
 			goto yy3;
 		}
 	}
 yy7:
-	yych = *++YYCURSOR;
-	if (yych <= 0xDBFF) goto yy3;
-	if (yych >= 0xDC63) goto yy3;
-yy8:
 	++YYCURSOR;
-	yych = *YYCURSOR;
-	goto yy5;
+	if ((yych = *YYCURSOR) <= 0xDBFF) goto yy3;
+	if (yych <= 0xDC62) goto yy4;
+	goto yy3;
 }
 #line 14 "unicode_group_Nl.x--encoding-policy(fail).re"
 

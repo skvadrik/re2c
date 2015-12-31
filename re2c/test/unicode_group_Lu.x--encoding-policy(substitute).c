@@ -1690,57 +1690,64 @@ yy3:
 #line 1691 "unicode_group_Lu.x--encoding-policy(substitute).c"
 yy4:
 	++YYCURSOR;
-yy5:
 #line 12 "unicode_group_Lu.x--encoding-policy(substitute).re"
 	{ goto Lu; }
-#line 1697 "unicode_group_Lu.x--encoding-policy(substitute).c"
+#line 1696 "unicode_group_Lu.x--encoding-policy(substitute).c"
 yy6:
 	yych = *++YYCURSOR;
 	if (yych <= 0xDBFF) goto yy3;
-	if (yych <= 0xDC27) goto yy8;
+	if (yych <= 0xDC27) goto yy4;
 	goto yy3;
 yy7:
-	yych = *++YYCURSOR;
-	if (yych <= 0xDD3A) {
+	++YYCURSOR;
+	if ((yych = *YYCURSOR) <= 0xDD3A) {
 		if (yych <= 0xDCA8) {
 			if (yych <= 0xDC9B) {
 				if (yych <= 0xDC33) {
 					if (yych <= 0xDBFF) goto yy3;
-					if (yych >= 0xDC1A) goto yy3;
+					if (yych <= 0xDC19) goto yy4;
+					goto yy3;
 				} else {
-					if (yych <= 0xDC4D) goto yy8;
+					if (yych <= 0xDC4D) goto yy4;
 					if (yych <= 0xDC67) goto yy3;
-					if (yych >= 0xDC82) goto yy3;
+					if (yych <= 0xDC81) goto yy4;
+					goto yy3;
 				}
 			} else {
 				if (yych <= 0xDCA1) {
 					if (yych == 0xDC9D) goto yy3;
-					if (yych >= 0xDCA0) goto yy3;
+					if (yych <= 0xDC9F) goto yy4;
+					goto yy3;
 				} else {
-					if (yych <= 0xDCA2) goto yy8;
+					if (yych <= 0xDCA2) goto yy4;
 					if (yych <= 0xDCA4) goto yy3;
-					if (yych >= 0xDCA7) goto yy3;
+					if (yych <= 0xDCA6) goto yy4;
+					goto yy3;
 				}
 			}
 		} else {
 			if (yych <= 0xDD06) {
 				if (yych <= 0xDCCF) {
 					if (yych == 0xDCAD) goto yy3;
-					if (yych >= 0xDCB6) goto yy3;
+					if (yych <= 0xDCB5) goto yy4;
+					goto yy3;
 				} else {
-					if (yych <= 0xDCE9) goto yy8;
+					if (yych <= 0xDCE9) goto yy4;
 					if (yych <= 0xDD03) goto yy3;
-					if (yych >= 0xDD06) goto yy3;
+					if (yych <= 0xDD05) goto yy4;
+					goto yy3;
 				}
 			} else {
 				if (yych <= 0xDD15) {
-					if (yych <= 0xDD0A) goto yy8;
+					if (yych <= 0xDD0A) goto yy4;
 					if (yych <= 0xDD0C) goto yy3;
-					if (yych >= 0xDD15) goto yy3;
+					if (yych <= 0xDD14) goto yy4;
+					goto yy3;
 				} else {
-					if (yych <= 0xDD1C) goto yy8;
+					if (yych <= 0xDD1C) goto yy4;
 					if (yych <= 0xDD37) goto yy3;
-					if (yych >= 0xDD3A) goto yy3;
+					if (yych <= 0xDD39) goto yy4;
+					goto yy3;
 				}
 			}
 		}
@@ -1749,50 +1756,54 @@ yy7:
 			if (yych <= 0xDD6B) {
 				if (yych <= 0xDD45) {
 					if (yych == 0xDD3F) goto yy3;
-					if (yych >= 0xDD45) goto yy3;
+					if (yych <= 0xDD44) goto yy4;
+					goto yy3;
 				} else {
-					if (yych <= 0xDD46) goto yy8;
+					if (yych <= 0xDD46) goto yy4;
 					if (yych <= 0xDD49) goto yy3;
-					if (yych >= 0xDD51) goto yy3;
+					if (yych <= 0xDD50) goto yy4;
+					goto yy3;
 				}
 			} else {
 				if (yych <= 0xDDD3) {
-					if (yych <= 0xDD85) goto yy8;
+					if (yych <= 0xDD85) goto yy4;
 					if (yych <= 0xDD9F) goto yy3;
-					if (yych >= 0xDDBA) goto yy3;
+					if (yych <= 0xDDB9) goto yy4;
+					goto yy3;
 				} else {
-					if (yych <= 0xDDED) goto yy8;
+					if (yych <= 0xDDED) goto yy4;
 					if (yych <= 0xDE07) goto yy3;
-					if (yych >= 0xDE22) goto yy3;
+					if (yych <= 0xDE21) goto yy4;
+					goto yy3;
 				}
 			}
 		} else {
 			if (yych <= 0xDF1B) {
 				if (yych <= 0xDEA7) {
-					if (yych <= 0xDE55) goto yy8;
+					if (yych <= 0xDE55) goto yy4;
 					if (yych <= 0xDE6F) goto yy3;
-					if (yych >= 0xDE8A) goto yy3;
+					if (yych <= 0xDE89) goto yy4;
+					goto yy3;
 				} else {
-					if (yych <= 0xDEC0) goto yy8;
+					if (yych <= 0xDEC0) goto yy4;
 					if (yych <= 0xDEE1) goto yy3;
-					if (yych >= 0xDEFB) goto yy3;
+					if (yych <= 0xDEFA) goto yy4;
+					goto yy3;
 				}
 			} else {
 				if (yych <= 0xDF8F) {
-					if (yych <= 0xDF34) goto yy8;
+					if (yych <= 0xDF34) goto yy4;
 					if (yych <= 0xDF55) goto yy3;
-					if (yych >= 0xDF6F) goto yy3;
+					if (yych <= 0xDF6E) goto yy4;
+					goto yy3;
 				} else {
-					if (yych <= 0xDFA8) goto yy8;
-					if (yych != 0xDFCA) goto yy3;
+					if (yych <= 0xDFA8) goto yy4;
+					if (yych == 0xDFCA) goto yy4;
+					goto yy3;
 				}
 			}
 		}
 	}
-yy8:
-	++YYCURSOR;
-	yych = *YYCURSOR;
-	goto yy5;
 }
 #line 14 "unicode_group_Lu.x--encoding-policy(substitute).re"
 

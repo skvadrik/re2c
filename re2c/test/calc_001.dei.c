@@ -72,7 +72,7 @@ yy10:
 			case 0xF6: /* 6 */
 			case 0xF7: /* 7 */
 			case 0xF8: /* 8 */
-			case 0xF9: /* 9 */	goto yy14;
+			case 0xF9: /* 9 */	goto yy15;
 			default:	goto yy11;
 			}
 yy11:
@@ -81,17 +81,31 @@ yy11:
 yy12:
 			YYDEBUG(12, *YYCURSOR);
 			++YYCURSOR;
+			if (YYLIMIT <= YYCURSOR) YYFILL(1);
 			yych = *YYCURSOR;
-			goto yy18;
-yy13:
 			YYDEBUG(13, *YYCURSOR);
-			{ printf("Num\n");	continue; }
+			switch (yych) {
+			case 0xF0: /* 0 */
+			case 0xF1: /* 1 */
+			case 0xF2: /* 2 */
+			case 0xF3: /* 3 */
+			case 0xF4: /* 4 */
+			case 0xF5: /* 5 */
+			case 0xF6: /* 6 */
+			case 0xF7: /* 7 */
+			case 0xF8: /* 8 */
+			case 0xF9: /* 9 */	goto yy12;
+			default:	goto yy14;
+			}
 yy14:
 			YYDEBUG(14, *YYCURSOR);
+			{ printf("Num\n");	continue; }
+yy15:
+			YYDEBUG(15, *YYCURSOR);
 			++YYCURSOR;
 			if (YYLIMIT <= YYCURSOR) YYFILL(1);
 			yych = *YYCURSOR;
-			YYDEBUG(15, *YYCURSOR);
+			YYDEBUG(16, *YYCURSOR);
 			switch (yych) {
 			case 0xF0: /* 0 */
 			case 0xF1: /* 1 */
@@ -102,32 +116,12 @@ yy14:
 			case 0xF6: /* 6 */
 			case 0xF7: /* 7 */
 			case 0xF8: /* 8 */
-			case 0xF9: /* 9 */	goto yy14;
-			default:	goto yy16;
+			case 0xF9: /* 9 */	goto yy15;
+			default:	goto yy17;
 			}
-yy16:
-			YYDEBUG(16, *YYCURSOR);
-			{ printf("Oct\n");	continue; }
 yy17:
 			YYDEBUG(17, *YYCURSOR);
-			++YYCURSOR;
-			if (YYLIMIT <= YYCURSOR) YYFILL(1);
-			yych = *YYCURSOR;
-yy18:
-			YYDEBUG(18, *YYCURSOR);
-			switch (yych) {
-			case 0xF0: /* 0 */
-			case 0xF1: /* 1 */
-			case 0xF2: /* 2 */
-			case 0xF3: /* 3 */
-			case 0xF4: /* 4 */
-			case 0xF5: /* 5 */
-			case 0xF6: /* 6 */
-			case 0xF7: /* 7 */
-			case 0xF8: /* 8 */
-			case 0xF9: /* 9 */	goto yy17;
-			default:	goto yy13;
-			}
+			{ printf("Oct\n");	continue; }
 		}
 
 	}

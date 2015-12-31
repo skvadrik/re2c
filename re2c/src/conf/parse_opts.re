@@ -156,6 +156,7 @@ opt_long:
 	"encoding-policy"    end { goto opt_encoding_policy; }
 	"input"              end { goto opt_input; }
 	"empty-class"        end { goto opt_empty_class; }
+	"dfa-minimization"   end { goto opt_dfa_minimization; }
 	"single-pass"        end { goto opt; } // deprecated
 */
 
@@ -227,6 +228,22 @@ opt_empty_class:
 	"match-empty" end { opts.set_empty_class_policy (EMPTY_CLASS_MATCH_EMPTY); goto opt; }
 	"match-none"  end { opts.set_empty_class_policy (EMPTY_CLASS_MATCH_NONE);  goto opt; }
 	"error"       end { opts.set_empty_class_policy (EMPTY_CLASS_ERROR);       goto opt; }
+*/
+
+opt_dfa_minimization:
+	if (!next (YYCURSOR, argv))
+	{
+		error_arg ("--minimization");
+		return EXIT_FAIL;
+	}
+/*!re2c
+	*
+	{
+		error ("bad argument to option --dfa-minimization (expected: table | moore): %s", *argv);
+		return EXIT_FAIL;
+	}
+	"table" end { opts.set_dfa_minimization (dfa_t::TABLE); goto opt; }
+	"moore" end { opts.set_dfa_minimization (dfa_t::MOORE); goto opt; }
 */
 
 end:

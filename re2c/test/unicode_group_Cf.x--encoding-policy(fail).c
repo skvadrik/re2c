@@ -59,28 +59,24 @@ yy3:
 #line 60 "unicode_group_Cf.x--encoding-policy(fail).c"
 yy4:
 	++YYCURSOR;
-yy5:
 #line 12 "unicode_group_Cf.x--encoding-policy(fail).re"
 	{ goto Cf; }
-#line 66 "unicode_group_Cf.x--encoding-policy(fail).c"
+#line 65 "unicode_group_Cf.x--encoding-policy(fail).c"
 yy6:
 	yych = *++YYCURSOR;
-	if (yych == 0xDCBD) goto yy9;
+	if (yych == 0xDCBD) goto yy4;
 	goto yy3;
 yy7:
 	yych = *++YYCURSOR;
 	if (yych <= 0xDD72) goto yy3;
-	if (yych <= 0xDD7A) goto yy9;
+	if (yych <= 0xDD7A) goto yy4;
 	goto yy3;
 yy8:
-	yych = *++YYCURSOR;
-	if (yych == 0xDC01) goto yy9;
-	if (yych <= 0xDC1F) goto yy3;
-	if (yych >= 0xDC80) goto yy3;
-yy9:
 	++YYCURSOR;
-	yych = *YYCURSOR;
-	goto yy5;
+	if ((yych = *YYCURSOR) == 0xDC01) goto yy4;
+	if (yych <= 0xDC1F) goto yy3;
+	if (yych <= 0xDC7F) goto yy4;
+	goto yy3;
 }
 #line 14 "unicode_group_Cf.x--encoding-policy(fail).re"
 

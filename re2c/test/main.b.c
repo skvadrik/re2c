@@ -127,36 +127,29 @@ yy8:
 #line 128 "main.b.c"
 yy10:
 			yych = *++YYCURSOR;
-			if (yybm[0+yych] & 128) {
-				goto yy13;
-			}
+			if (yych <= '/') goto yy5;
+			if (yych <= '9') goto yy14;
 			goto yy5;
 yy11:
 			++YYCURSOR;
-			yych = *YYCURSOR;
-			goto yy17;
-yy12:
-#line 93 "main.b.re"
-			{ continue; }
-#line 142 "main.b.c"
-yy13:
-			++YYCURSOR;
 			if (YYLIMIT <= YYCURSOR) YYFILL(1);
 			yych = *YYCURSOR;
 			if (yybm[0+yych] & 128) {
-				goto yy13;
+				goto yy11;
 			}
-#line 94 "main.b.re"
+#line 93 "main.b.re"
 			{ continue; }
-#line 152 "main.b.c"
-yy16:
+#line 143 "main.b.c"
+yy14:
 			++YYCURSOR;
 			if (YYLIMIT <= YYCURSOR) YYFILL(1);
 			yych = *YYCURSOR;
-yy17:
-			if (yych <= '/') goto yy12;
-			if (yych <= '9') goto yy16;
-			goto yy12;
+			if (yych <= '/') goto yy16;
+			if (yych <= '9') goto yy14;
+yy16:
+#line 94 "main.b.re"
+			{ continue; }
+#line 153 "main.b.c"
 		}
 #line 99 "main.b.re"
 
@@ -179,7 +172,7 @@ int scan(char *pzStrToScan, size_t lenStrToScan)
 	for(;;)
 	{
 
-#line 183 "main.b.c"
+#line 176 "main.b.c"
 		{
 			YYCTYPE yych;
 			static const unsigned char yybm[] = {
@@ -219,72 +212,65 @@ int scan(char *pzStrToScan, size_t lenStrToScan)
 			if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
 			yych = *YYCURSOR;
 			if (yych <= ',') {
-				if (yych <= 0x00) goto yy20;
-				if (yych == '+') goto yy24;
-				goto yy22;
+				if (yych <= 0x00) goto yy19;
+				if (yych == '+') goto yy23;
+				goto yy21;
 			} else {
 				if (yych <= '/') {
-					if (yych <= '-') goto yy26;
-					goto yy22;
+					if (yych <= '-') goto yy25;
+					goto yy21;
 				} else {
-					if (yych <= '0') goto yy28;
-					if (yych <= '9') goto yy29;
-					goto yy22;
+					if (yych <= '0') goto yy27;
+					if (yych <= '9') goto yy28;
+					goto yy21;
 				}
 			}
-yy20:
+yy19:
 			++YYCURSOR;
 #line 124 "main.b.re"
 			{ printf("EOF\n");                           return 0; }
-#line 240 "main.b.c"
-yy22:
+#line 233 "main.b.c"
+yy21:
 			++YYCURSOR;
-yy23:
+yy22:
 #line 125 "main.b.re"
 			{ printf("ERR\n"); strcat(gTestBuf, "ERR "); return 1; }
-#line 246 "main.b.c"
-yy24:
+#line 239 "main.b.c"
+yy23:
 			++YYCURSOR;
 #line 122 "main.b.re"
 			{ printf("+\n");   strcat(gTestBuf, "+ ");   continue; }
-#line 251 "main.b.c"
-yy26:
+#line 244 "main.b.c"
+yy25:
 			++YYCURSOR;
 #line 123 "main.b.re"
 			{ printf("-\n");   strcat(gTestBuf, "- ");   continue; }
-#line 256 "main.b.c"
-yy28:
+#line 249 "main.b.c"
+yy27:
 			yych = *++YYCURSOR;
-			if (yybm[0+yych] & 128) {
-				goto yy31;
-			}
-			goto yy23;
-yy29:
+			if (yych <= '/') goto yy22;
+			if (yych <= '9') goto yy31;
+			goto yy22;
+yy28:
 			++YYCURSOR;
+			if (YYLIMIT <= YYCURSOR) YYFILL(1);
 			yych = *YYCURSOR;
-			goto yy35;
-yy30:
+			if (yybm[0+yych] & 128) {
+				goto yy28;
+			}
 #line 120 "main.b.re"
 			{ printf("Num\n"); strcat(gTestBuf, "Num "); continue; }
-#line 270 "main.b.c"
+#line 264 "main.b.c"
 yy31:
 			++YYCURSOR;
 			if (YYLIMIT <= YYCURSOR) YYFILL(1);
 			yych = *YYCURSOR;
-			if (yybm[0+yych] & 128) {
-				goto yy31;
-			}
+			if (yych <= '/') goto yy33;
+			if (yych <= '9') goto yy31;
+yy33:
 #line 121 "main.b.re"
 			{ printf("Oct\n"); strcat(gTestBuf, "Oct "); continue; }
-#line 280 "main.b.c"
-yy34:
-			++YYCURSOR;
-			if (YYLIMIT <= YYCURSOR) YYFILL(1);
-			yych = *YYCURSOR;
-yy35:
-			if (yych <= '/') goto yy30;
-			if (yych <= '9') goto yy34;
-			goto yy30;
+#line 274 "main.b.c"
 		}
 #line 126 "main.b.re"
 

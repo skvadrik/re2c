@@ -175,7 +175,7 @@ yy18:
 		goto yy11;
 yy19:
 		s->yych = *++s->cur;
-		if (s->yych == '"') goto yy27;
+		if (s->yych == '"') goto yy17;
 		goto yy18;
 yy20:
 		++s->cur;
@@ -192,15 +192,15 @@ yy22:
 yy24:
 		s->yych = *++s->cur;
 		switch (s->yych) {
-		case '!':	goto yy28;
-		case '\'':	goto yy30;
-		case '(':	goto yy32;
-		case ')':	goto yy34;
-		case '-':	goto yy36;
-		case '/':	goto yy38;
-		case '<':	goto yy40;
-		case '=':	goto yy42;
-		case '>':	goto yy44;
+		case '!':	goto yy27;
+		case '\'':	goto yy29;
+		case '(':	goto yy31;
+		case ')':	goto yy33;
+		case '-':	goto yy35;
+		case '/':	goto yy37;
+		case '<':	goto yy39;
+		case '=':	goto yy41;
+		case '>':	goto yy43;
 		default:	goto yy18;
 		}
 yy25:
@@ -210,58 +210,54 @@ yy25:
 				continue;
 			}
 yy27:
-		s->yych = *++s->cur;
-		if (s->yych == '\'') goto yy25;
-		goto yy18;
-yy28:
 		++s->cur;
 		{
 				fputc('|', stdout);
 				continue;
 			}
-yy30:
+yy29:
 		++s->cur;
 		{
 				fputc('^', stdout);
 				continue;
 			}
-yy32:
+yy31:
 		++s->cur;
 		{
 				fputc('[', stdout);
 				continue;
 			}
-yy34:
+yy33:
 		++s->cur;
 		{
 				fputc(']', stdout);
 				continue;
 			}
-yy36:
+yy35:
 		++s->cur;
 		{
 				fputc('~', stdout);
 				continue;
 			}
-yy38:
+yy37:
 		++s->cur;
 		{
 				fputc('\\', stdout);
 				continue;
 			}
-yy40:
+yy39:
 		++s->cur;
 		{
 				fputc('{', stdout);
 				continue;
 			}
-yy42:
+yy41:
 		++s->cur;
 		{
 				fputc('#', stdout);
 				continue;
 			}
-yy44:
+yy43:
 		++s->cur;
 		{
 				fputc('}', stdout);
@@ -274,41 +270,41 @@ yyc_Skiptoeol:
 yyFillLabel2:
 		s->yych = *s->cur;
 		if (s->yych <= '\r') {
-			if (s->yych == '\n') goto yy50;
-			if (s->yych >= '\r') goto yy52;
+			if (s->yych == '\n') goto yy49;
+			if (s->yych >= '\r') goto yy51;
 		} else {
 			if (s->yych <= '?') {
-				if (s->yych >= '?') goto yy53;
+				if (s->yych >= '?') goto yy52;
 			} else {
-				if (s->yych == '\\') goto yy54;
+				if (s->yych == '\\') goto yy53;
 			}
 		}
 		++s->cur;
-yy49:
+yy48:
 		{
 				goto yyc_Skiptoeol;
 			}
-yy50:
+yy49:
 		++s->cur;
 		s->cond = EStateNormal;(EStateNormal);
 		{
 				fputc('\n', stdout);
 				continue;
 			}
-yy52:
+yy51:
 		s->yych = *++s->cur;
-		if (s->yych == '\n') goto yy55;
-		goto yy49;
+		if (s->yych == '\n') goto yy54;
+		goto yy48;
+yy52:
+		s->yych = *(s->tok = ++s->cur);
+		if (s->yych == '?') goto yy56;
+		goto yy48;
 yy53:
 		s->yych = *(s->tok = ++s->cur);
-		if (s->yych == '?') goto yy57;
-		goto yy49;
+		if (s->yych == '\n') goto yy58;
+		if (s->yych == '\r') goto yy60;
+		goto yy48;
 yy54:
-		s->yych = *(s->tok = ++s->cur);
-		if (s->yych == '\n') goto yy59;
-		if (s->yych == '\r') goto yy61;
-		goto yy49;
-yy55:
 		++s->cur;
 		s->cond = EStateNormal;(EStateNormal);
 		{
@@ -316,59 +312,59 @@ yy55:
 				fputc('\n', stdout);
 				continue;
 			}
-yy57:
+yy56:
 		s->yych = *++s->cur;
-		if (s->yych == '/') goto yy62;
-yy58:
+		if (s->yych == '/') goto yy61;
+yy57:
 		s->cur = s->tok;
-		goto yy49;
-yy59:
+		goto yy48;
+yy58:
 		++s->cur;
 		{
 				goto yyc_Skiptoeol;
 			}
+yy60:
+		s->yych = *++s->cur;
+		if (s->yych == '\n') goto yy58;
+		goto yy57;
 yy61:
 		s->yych = *++s->cur;
-		if (s->yych == '\n') goto yy59;
-		goto yy58;
+		if (s->yych == '\n') goto yy62;
+		if (s->yych == '\r') goto yy64;
+		goto yy57;
 yy62:
-		s->yych = *++s->cur;
-		if (s->yych == '\n') goto yy63;
-		if (s->yych == '\r') goto yy65;
-		goto yy58;
-yy63:
 		++s->cur;
 		{
 				goto yyc_Skiptoeol;
 			}
-yy65:
+yy64:
 		++s->cur;
-		if ((s->yych = *s->cur) == '\n') goto yy63;
-		goto yy58;
+		if ((s->yych = *s->cur) == '\n') goto yy62;
+		goto yy57;
 /* *********************************** */
 yyc_String:
 		s->state = 3;(3);
 		if ((s->lim - s->cur) < 2) if(fill(s, 2) == ~0) break;
 yyFillLabel3:
 		s->yych = *s->cur;
-		if (s->yych == '"') goto yy70;
-		if (s->yych == '\\') goto yy72;
+		if (s->yych == '"') goto yy69;
+		if (s->yych == '\\') goto yy71;
 		++s->cur;
-yy69:
+yy68:
 		{
 				fputc(s->cur[-1], stdout);
 				continue;
 			}
-yy70:
+yy69:
 		++s->cur;
 		s->cond = EStateNormal;(EStateNormal);
 		{
 				fputc(s->cur[-1], stdout);
 				continue;
 			}
-yy72:
+yy71:
 		s->yych = *++s->cur;
-		if (s->yych == '\n') goto yy69;
+		if (s->yych == '\n') goto yy68;
 		++s->cur;
 		{
 				fputl((const char*)s->cur-2, 2, stdout);

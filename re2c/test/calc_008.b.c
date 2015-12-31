@@ -99,24 +99,20 @@ int scan(char *p)
 				  0,   0,   0,   0,   0,   0,   0,   0, 
 			};
 			curr = (unsigned char)*p;
-			if (curr <= '*') {
-				if (curr <= '\t') {
-					if (curr <= 0x00) goto scan2;
-					if (curr <= 0x08) goto scan4;
-					goto scan6;
-				} else {
-					if (curr == ' ') goto scan6;
-					goto scan4;
-				}
+			if (yybm[0+curr] & 64) {
+				goto scan6;
+			}
+			if (curr <= ',') {
+				if (curr <= 0x00) goto scan2;
+				if (curr == '+') goto scan9;
+				goto scan4;
 			} else {
-				if (curr <= '-') {
-					if (curr <= '+') goto scan8;
-					if (curr <= ',') goto scan4;
-					goto scan10;
+				if (curr <= '/') {
+					if (curr <= '-') goto scan11;
+					goto scan4;
 				} else {
-					if (curr <= '/') goto scan4;
-					if (curr <= '0') goto scan12;
-					if (curr <= '9') goto scan14;
+					if (curr <= '0') goto scan13;
+					if (curr <= '9') goto scan15;
 					goto scan4;
 				}
 			}
@@ -124,66 +120,55 @@ scan2:
 			++p;
 #line 108 "calc_008.b.re"
 			{ res = depth == 1 ? 0 : 2;	break; }
-#line 128 "calc_008.b.c"
+#line 124 "calc_008.b.c"
 scan4:
 			++p;
 #line 109 "calc_008.b.re"
 			{ res = 1; 					continue; }
-#line 133 "calc_008.b.c"
+#line 129 "calc_008.b.c"
 scan6:
 			++p;
 			curr = (unsigned char)*p;
-			goto scan16;
-scan7:
+			if (yybm[0+curr] & 64) {
+				goto scan6;
+			}
 #line 103 "calc_008.b.re"
 			{ continue; }
-#line 141 "calc_008.b.c"
-scan8:
+#line 138 "calc_008.b.c"
+scan9:
 			++p;
 #line 106 "calc_008.b.re"
 			{ res = stack_add();		continue; }
-#line 146 "calc_008.b.c"
-scan10:
+#line 143 "calc_008.b.c"
+scan11:
 			++p;
 #line 107 "calc_008.b.re"
 			{ res = stack_sub();		continue; }
-#line 151 "calc_008.b.c"
-scan12:
-			++p;
-			if (yybm[0+(curr = (unsigned char)*p)] & 128) {
-				goto scan17;
-			}
+#line 148 "calc_008.b.c"
 scan13:
+			++p;
+			if ((curr = (unsigned char)*p) <= '/') goto scan14;
+			if (curr <= '9') goto scan17;
+scan14:
 #line 105 "calc_008.b.re"
 			{ res = push_num(t, p, 10); continue; }
-#line 160 "calc_008.b.c"
-scan14:
-			curr = (unsigned char)*++p;
-			goto scan21;
+#line 156 "calc_008.b.c"
 scan15:
 			++p;
 			curr = (unsigned char)*p;
-scan16:
-			if (yybm[0+curr] & 64) {
+			if (yybm[0+curr] & 128) {
 				goto scan15;
 			}
-			goto scan7;
+			goto scan14;
 scan17:
 			++p;
 			curr = (unsigned char)*p;
-			if (yybm[0+curr] & 128) {
-				goto scan17;
-			}
+			if (curr <= '/') goto scan19;
+			if (curr <= '9') goto scan17;
+scan19:
 #line 104 "calc_008.b.re"
 			{ res = push_num(t, p, 8);	continue; }
-#line 180 "calc_008.b.c"
-scan20:
-			++p;
-			curr = (unsigned char)*p;
-scan21:
-			if (curr <= '/') goto scan13;
-			if (curr <= '9') goto scan20;
-			goto scan13;
+#line 172 "calc_008.b.c"
 		}
 #line 110 "calc_008.b.re"
 

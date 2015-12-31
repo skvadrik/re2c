@@ -137,21 +137,21 @@ std:
 	case '\v':
 	case '\f':
 	case ' ':	goto yy4;
-	case '\n':	goto yy6;
-	case '!':	goto yy8;
-	case '"':	goto yy10;
-	case '%':	goto yy11;
-	case '&':	goto yy13;
-	case '\'':	goto yy15;
-	case '(':	goto yy16;
-	case ')':	goto yy18;
-	case '*':	goto yy20;
-	case '+':	goto yy22;
-	case ',':	goto yy24;
-	case '-':	goto yy26;
-	case '.':	goto yy28;
-	case '/':	goto yy30;
-	case '0':	goto yy32;
+	case '\n':	goto yy7;
+	case '!':	goto yy9;
+	case '"':	goto yy11;
+	case '%':	goto yy12;
+	case '&':	goto yy14;
+	case '\'':	goto yy16;
+	case '(':	goto yy17;
+	case ')':	goto yy19;
+	case '*':	goto yy21;
+	case '+':	goto yy23;
+	case ',':	goto yy25;
+	case '-':	goto yy27;
+	case '.':	goto yy29;
+	case '/':	goto yy31;
+	case '0':	goto yy33;
 	case '1':
 	case '2':
 	case '3':
@@ -160,13 +160,13 @@ std:
 	case '6':
 	case '7':
 	case '8':
-	case '9':	goto yy34;
-	case ':':	goto yy35;
-	case ';':	goto yy37;
-	case '<':	goto yy39;
-	case '=':	goto yy41;
-	case '>':	goto yy43;
-	case '?':	goto yy45;
+	case '9':	goto yy35;
+	case ':':	goto yy37;
+	case ';':	goto yy39;
+	case '<':	goto yy41;
+	case '=':	goto yy43;
+	case '>':	goto yy45;
+	case '?':	goto yy47;
 	case 'A':
 	case 'B':
 	case 'C':
@@ -219,14 +219,14 @@ std:
 	case 'w':
 	case 'x':
 	case 'y':
-	case 'z':	goto yy47;
-	case '[':	goto yy49;
-	case ']':	goto yy51;
-	case '^':	goto yy53;
-	case '{':	goto yy55;
-	case '|':	goto yy57;
-	case '}':	goto yy59;
-	case '~':	goto yy61;
+	case 'z':	goto yy49;
+	case '[':	goto yy51;
+	case ']':	goto yy53;
+	case '^':	goto yy55;
+	case '{':	goto yy57;
+	case '|':	goto yy59;
+	case '}':	goto yy61;
+	case '~':	goto yy63;
 	default:	goto yy2;
 	}
 yy2:
@@ -240,13 +240,20 @@ yy3:
 #line 241 "cunroll.c"
 yy4:
 	++YYCURSOR;
+	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
-	goto yy64;
-yy5:
+	switch (yych) {
+	case '\t':
+	case '\v':
+	case '\f':
+	case ' ':	goto yy4;
+	default:	goto yy6;
+	}
+yy6:
 #line 209 "cunroll.re"
 	{ goto std; }
-#line 249 "cunroll.c"
-yy6:
+#line 256 "cunroll.c"
+yy7:
 	++YYCURSOR;
 #line 212 "cunroll.re"
 	{
@@ -254,101 +261,101 @@ yy6:
 		s->pos = cursor; s->line++;
 		goto std;
 	    }
-#line 258 "cunroll.c"
-yy8:
+#line 265 "cunroll.c"
+yy9:
 	++YYCURSOR;
 	switch ((yych = *YYCURSOR)) {
 	case '=':	goto yy65;
-	default:	goto yy9;
+	default:	goto yy10;
 	}
-yy9:
+yy10:
 #line 195 "cunroll.re"
 	{ RET('!'); }
-#line 268 "cunroll.c"
-yy10:
+#line 275 "cunroll.c"
+yy11:
 	yyaccept = 0;
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
 	case '\n':	goto yy3;
 	default:	goto yy68;
 	}
-yy11:
+yy12:
 	++YYCURSOR;
 	switch ((yych = *YYCURSOR)) {
 	case '=':	goto yy73;
-	default:	goto yy12;
+	default:	goto yy13;
 	}
-yy12:
+yy13:
 #line 201 "cunroll.re"
 	{ RET('%'); }
-#line 285 "cunroll.c"
-yy13:
+#line 292 "cunroll.c"
+yy14:
 	++YYCURSOR;
 	switch ((yych = *YYCURSOR)) {
 	case '&':	goto yy75;
 	case '=':	goto yy77;
-	default:	goto yy14;
+	default:	goto yy15;
 	}
-yy14:
+yy15:
 #line 194 "cunroll.re"
 	{ RET('&'); }
-#line 296 "cunroll.c"
-yy15:
+#line 303 "cunroll.c"
+yy16:
 	yyaccept = 0;
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
 	case '\n':	goto yy3;
 	default:	goto yy80;
 	}
-yy16:
+yy17:
 	++YYCURSOR;
 #line 189 "cunroll.re"
 	{ RET('('); }
-#line 308 "cunroll.c"
-yy18:
+#line 315 "cunroll.c"
+yy19:
 	++YYCURSOR;
 #line 190 "cunroll.re"
 	{ RET(')'); }
-#line 313 "cunroll.c"
-yy20:
+#line 320 "cunroll.c"
+yy21:
 	++YYCURSOR;
 	switch ((yych = *YYCURSOR)) {
 	case '=':	goto yy83;
-	default:	goto yy21;
+	default:	goto yy22;
 	}
-yy21:
+yy22:
 #line 199 "cunroll.re"
 	{ RET('*'); }
-#line 323 "cunroll.c"
-yy22:
+#line 330 "cunroll.c"
+yy23:
 	++YYCURSOR;
 	switch ((yych = *YYCURSOR)) {
 	case '+':	goto yy85;
 	case '=':	goto yy87;
-	default:	goto yy23;
+	default:	goto yy24;
 	}
-yy23:
+yy24:
 #line 198 "cunroll.re"
 	{ RET('+'); }
-#line 334 "cunroll.c"
-yy24:
+#line 341 "cunroll.c"
+yy25:
 	++YYCURSOR;
 #line 186 "cunroll.re"
 	{ RET(','); }
-#line 339 "cunroll.c"
-yy26:
+#line 346 "cunroll.c"
+yy27:
 	++YYCURSOR;
 	switch ((yych = *YYCURSOR)) {
 	case '-':	goto yy89;
 	case '=':	goto yy91;
 	case '>':	goto yy93;
-	default:	goto yy27;
+	default:	goto yy28;
 	}
-yy27:
+yy28:
 #line 197 "cunroll.re"
 	{ RET('-'); }
-#line 351 "cunroll.c"
-yy28:
+#line 358 "cunroll.c"
+yy29:
 	yyaccept = 1;
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -363,91 +370,125 @@ yy28:
 	case '7':
 	case '8':
 	case '9':	goto yy96;
-	default:	goto yy29;
+	default:	goto yy30;
 	}
-yy29:
+yy30:
 #line 193 "cunroll.re"
 	{ RET('.'); }
-#line 372 "cunroll.c"
-yy30:
+#line 379 "cunroll.c"
+yy31:
 	++YYCURSOR;
 	switch ((yych = *YYCURSOR)) {
 	case '*':	goto yy99;
 	case '=':	goto yy101;
-	default:	goto yy31;
+	default:	goto yy32;
 	}
-yy31:
+yy32:
 #line 200 "cunroll.re"
 	{ RET('/'); }
-#line 383 "cunroll.c"
-yy32:
+#line 390 "cunroll.c"
+yy33:
 	yyaccept = 2;
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
+	case '.':	goto yy96;
+	case '0':
+	case '1':
+	case '2':
+	case '3':
+	case '4':
+	case '5':
+	case '6':
+	case '7':
+	case '8':
+	case '9':	goto yy35;
+	case 'E':
+	case 'e':	goto yy103;
 	case 'L':
 	case 'U':
 	case 'l':
-	case 'u':	goto yy107;
+	case 'u':	goto yy104;
 	case 'X':
-	case 'x':	goto yy109;
-	default:	goto yy105;
+	case 'x':	goto yy106;
+	default:	goto yy34;
 	}
-yy33:
+yy34:
 #line 153 "cunroll.re"
 	{ RET(ICON); }
-#line 399 "cunroll.c"
-yy34:
-	yyaccept = 2;
-	yych = *(YYMARKER = ++YYCURSOR);
-	goto yy111;
+#line 419 "cunroll.c"
 yy35:
+	yyaccept = 2;
+	YYMARKER = ++YYCURSOR;
+	if ((YYLIMIT - YYCURSOR) < 3) YYFILL(3);
+	yych = *YYCURSOR;
+	switch (yych) {
+	case '.':	goto yy96;
+	case '0':
+	case '1':
+	case '2':
+	case '3':
+	case '4':
+	case '5':
+	case '6':
+	case '7':
+	case '8':
+	case '9':	goto yy35;
+	case 'E':
+	case 'e':	goto yy103;
+	case 'L':
+	case 'U':
+	case 'l':
+	case 'u':	goto yy104;
+	default:	goto yy34;
+	}
+yy37:
 	++YYCURSOR;
 #line 187 "cunroll.re"
 	{ RET(':'); }
-#line 408 "cunroll.c"
-yy37:
+#line 449 "cunroll.c"
+yy39:
 	++YYCURSOR;
 #line 183 "cunroll.re"
 	{ RET(';'); }
-#line 413 "cunroll.c"
-yy39:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
-	case '<':	goto yy112;
-	case '=':	goto yy114;
-	default:	goto yy40;
-	}
-yy40:
-#line 202 "cunroll.re"
-	{ RET('<'); }
-#line 424 "cunroll.c"
+#line 454 "cunroll.c"
 yy41:
 	++YYCURSOR;
 	switch ((yych = *YYCURSOR)) {
-	case '=':	goto yy116;
+	case '<':	goto yy107;
+	case '=':	goto yy109;
 	default:	goto yy42;
 	}
 yy42:
-#line 188 "cunroll.re"
-	{ RET('='); }
-#line 434 "cunroll.c"
+#line 202 "cunroll.re"
+	{ RET('<'); }
+#line 465 "cunroll.c"
 yy43:
 	++YYCURSOR;
 	switch ((yych = *YYCURSOR)) {
-	case '=':	goto yy118;
-	case '>':	goto yy120;
+	case '=':	goto yy111;
 	default:	goto yy44;
 	}
 yy44:
+#line 188 "cunroll.re"
+	{ RET('='); }
+#line 475 "cunroll.c"
+yy45:
+	++YYCURSOR;
+	switch ((yych = *YYCURSOR)) {
+	case '=':	goto yy113;
+	case '>':	goto yy115;
+	default:	goto yy46;
+	}
+yy46:
 #line 203 "cunroll.re"
 	{ RET('>'); }
-#line 445 "cunroll.c"
-yy45:
+#line 486 "cunroll.c"
+yy47:
 	++YYCURSOR;
 #line 206 "cunroll.re"
 	{ RET('?'); }
-#line 450 "cunroll.c"
-yy47:
+#line 491 "cunroll.c"
+yy49:
 	++YYCURSOR;
 	switch ((yych = *YYCURSOR)) {
 	case '0':
@@ -512,76 +553,64 @@ yy47:
 	case 'w':
 	case 'x':
 	case 'y':
-	case 'z':	goto yy122;
-	default:	goto yy48;
+	case 'z':	goto yy117;
+	default:	goto yy50;
 	}
-yy48:
+yy50:
 #line 141 "cunroll.re"
 	{ RET(ID); }
-#line 522 "cunroll.c"
-yy49:
+#line 563 "cunroll.c"
+yy51:
 	++YYCURSOR;
 #line 191 "cunroll.re"
 	{ RET('['); }
-#line 527 "cunroll.c"
-yy51:
+#line 568 "cunroll.c"
+yy53:
 	++YYCURSOR;
 #line 192 "cunroll.re"
 	{ RET(']'); }
-#line 532 "cunroll.c"
-yy53:
+#line 573 "cunroll.c"
+yy55:
 	++YYCURSOR;
 	switch ((yych = *YYCURSOR)) {
-	case '=':	goto yy124;
-	default:	goto yy54;
+	case '=':	goto yy119;
+	default:	goto yy56;
 	}
-yy54:
+yy56:
 #line 204 "cunroll.re"
 	{ RET('^'); }
-#line 542 "cunroll.c"
-yy55:
+#line 583 "cunroll.c"
+yy57:
 	++YYCURSOR;
 #line 184 "cunroll.re"
 	{ RET('{'); }
-#line 547 "cunroll.c"
-yy57:
+#line 588 "cunroll.c"
+yy59:
 	++YYCURSOR;
 	switch ((yych = *YYCURSOR)) {
-	case '=':	goto yy126;
-	case '|':	goto yy128;
-	default:	goto yy58;
+	case '=':	goto yy121;
+	case '|':	goto yy123;
+	default:	goto yy60;
 	}
-yy58:
+yy60:
 #line 205 "cunroll.re"
 	{ RET('|'); }
-#line 558 "cunroll.c"
-yy59:
+#line 599 "cunroll.c"
+yy61:
 	++YYCURSOR;
 #line 185 "cunroll.re"
 	{ RET('}'); }
-#line 563 "cunroll.c"
-yy61:
+#line 604 "cunroll.c"
+yy63:
 	++YYCURSOR;
 #line 196 "cunroll.re"
 	{ RET('~'); }
-#line 568 "cunroll.c"
-yy63:
-	++YYCURSOR;
-	if (YYLIMIT <= YYCURSOR) YYFILL(1);
-	yych = *YYCURSOR;
-yy64:
-	switch (yych) {
-	case '\t':
-	case '\v':
-	case '\f':
-	case ' ':	goto yy63;
-	default:	goto yy5;
-	}
+#line 609 "cunroll.c"
 yy65:
 	++YYCURSOR;
 #line 182 "cunroll.re"
 	{ RET(NEQ); }
-#line 585 "cunroll.c"
+#line 614 "cunroll.c"
 yy67:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
@@ -597,15 +626,15 @@ yy69:
 	YYCURSOR = YYMARKER;
 	switch (yyaccept) {
 	case 0: 	goto yy3;
-	case 1: 	goto yy29;
-	case 2: 	goto yy33;
+	case 1: 	goto yy30;
+	case 2: 	goto yy34;
 	default:	goto yy98;
 	}
 yy70:
 	++YYCURSOR;
 #line 159 "cunroll.re"
 	{ RET(SCON); }
-#line 609 "cunroll.c"
+#line 638 "cunroll.c"
 yy72:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
@@ -613,6 +642,14 @@ yy72:
 	switch (yych) {
 	case '"':
 	case '\'':
+	case '0':
+	case '1':
+	case '2':
+	case '3':
+	case '4':
+	case '5':
+	case '6':
+	case '7':
 	case '?':
 	case '\\':
 	case 'a':
@@ -622,32 +659,24 @@ yy72:
 	case 'r':
 	case 't':
 	case 'v':	goto yy67;
-	case '0':
-	case '1':
-	case '2':
-	case '3':
-	case '4':
-	case '5':
-	case '6':
-	case '7':	goto yy130;
-	case 'x':	goto yy132;
+	case 'x':	goto yy125;
 	default:	goto yy69;
 	}
 yy73:
 	++YYCURSOR;
 #line 168 "cunroll.re"
 	{ RET(MODEQ); }
-#line 641 "cunroll.c"
+#line 670 "cunroll.c"
 yy75:
 	++YYCURSOR;
 #line 177 "cunroll.re"
 	{ RET(ANDAND); }
-#line 646 "cunroll.c"
+#line 675 "cunroll.c"
 yy77:
 	++YYCURSOR;
 #line 169 "cunroll.re"
 	{ RET(ANDEQ); }
-#line 651 "cunroll.c"
+#line 680 "cunroll.c"
 yy79:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
@@ -661,7 +690,7 @@ yy80:
 	}
 yy81:
 	yych = *++YYCURSOR;
-	goto yy33;
+	goto yy34;
 yy82:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
@@ -669,6 +698,14 @@ yy82:
 	switch (yych) {
 	case '"':
 	case '\'':
+	case '0':
+	case '1':
+	case '2':
+	case '3':
+	case '4':
+	case '5':
+	case '6':
+	case '7':
 	case '?':
 	case '\\':
 	case 'a':
@@ -678,51 +715,43 @@ yy82:
 	case 'r':
 	case 't':
 	case 'v':	goto yy79;
-	case '0':
-	case '1':
-	case '2':
-	case '3':
-	case '4':
-	case '5':
-	case '6':
-	case '7':	goto yy133;
-	case 'x':	goto yy135;
+	case 'x':	goto yy126;
 	default:	goto yy69;
 	}
 yy83:
 	++YYCURSOR;
 #line 166 "cunroll.re"
 	{ RET(MULEQ); }
-#line 697 "cunroll.c"
+#line 726 "cunroll.c"
 yy85:
 	++YYCURSOR;
 #line 174 "cunroll.re"
 	{ RET(INCR); }
-#line 702 "cunroll.c"
+#line 731 "cunroll.c"
 yy87:
 	++YYCURSOR;
 #line 164 "cunroll.re"
 	{ RET(ADDEQ); }
-#line 707 "cunroll.c"
+#line 736 "cunroll.c"
 yy89:
 	++YYCURSOR;
 #line 175 "cunroll.re"
 	{ RET(DECR); }
-#line 712 "cunroll.c"
+#line 741 "cunroll.c"
 yy91:
 	++YYCURSOR;
 #line 165 "cunroll.re"
 	{ RET(SUBEQ); }
-#line 717 "cunroll.c"
+#line 746 "cunroll.c"
 yy93:
 	++YYCURSOR;
 #line 176 "cunroll.re"
 	{ RET(DEREF); }
-#line 722 "cunroll.c"
+#line 751 "cunroll.c"
 yy95:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case '.':	goto yy136;
+	case '.':	goto yy127;
 	default:	goto yy69;
 	}
 yy96:
@@ -742,66 +771,32 @@ yy96:
 	case '8':
 	case '9':	goto yy96;
 	case 'E':
-	case 'e':	goto yy138;
+	case 'e':	goto yy103;
 	case 'F':
 	case 'L':
 	case 'f':
-	case 'l':	goto yy139;
+	case 'l':	goto yy129;
 	default:	goto yy98;
 	}
 yy98:
 #line 156 "cunroll.re"
 	{ RET(FCON); }
-#line 756 "cunroll.c"
+#line 785 "cunroll.c"
 yy99:
 	++YYCURSOR;
 #line 138 "cunroll.re"
 	{ goto comment; }
-#line 761 "cunroll.c"
+#line 790 "cunroll.c"
 yy101:
 	++YYCURSOR;
 #line 167 "cunroll.re"
 	{ RET(DIVEQ); }
-#line 766 "cunroll.c"
+#line 795 "cunroll.c"
 yy103:
-	yyaccept = 3;
-	yych = *(YYMARKER = ++YYCURSOR);
-	switch (yych) {
-	case 'E':
-	case 'e':	goto yy142;
-	default:	goto yy141;
-	}
-yy104:
-	yyaccept = 2;
-	YYMARKER = ++YYCURSOR;
-	if ((YYLIMIT - YYCURSOR) < 4) YYFILL(4);
-	yych = *YYCURSOR;
-yy105:
-	switch (yych) {
-	case '.':	goto yy103;
-	case '0':
-	case '1':
-	case '2':
-	case '3':
-	case '4':
-	case '5':
-	case '6':
-	case '7':
-	case '8':
-	case '9':	goto yy104;
-	case 'E':
-	case 'e':	goto yy106;
-	case 'L':
-	case 'U':
-	case 'l':
-	case 'u':	goto yy143;
-	default:	goto yy33;
-	}
-yy106:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case '+':
-	case '-':	goto yy145;
+	case '-':	goto yy130;
 	case '0':
 	case '1':
 	case '2':
@@ -811,10 +806,10 @@ yy106:
 	case '6':
 	case '7':
 	case '8':
-	case '9':	goto yy146;
+	case '9':	goto yy131;
 	default:	goto yy69;
 	}
-yy107:
+yy104:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
@@ -822,10 +817,10 @@ yy107:
 	case 'L':
 	case 'U':
 	case 'l':
-	case 'u':	goto yy107;
-	default:	goto yy33;
+	case 'u':	goto yy104;
+	default:	goto yy34;
 	}
-yy109:
+yy106:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case '0':
@@ -849,71 +844,45 @@ yy109:
 	case 'c':
 	case 'd':
 	case 'e':
-	case 'f':	goto yy148;
+	case 'f':	goto yy133;
 	default:	goto yy69;
 	}
-yy110:
-	yyaccept = 2;
-	YYMARKER = ++YYCURSOR;
-	if ((YYLIMIT - YYCURSOR) < 4) YYFILL(4);
-	yych = *YYCURSOR;
-yy111:
-	switch (yych) {
-	case '.':	goto yy103;
-	case '0':
-	case '1':
-	case '2':
-	case '3':
-	case '4':
-	case '5':
-	case '6':
-	case '7':
-	case '8':
-	case '9':	goto yy110;
-	case 'E':
-	case 'e':	goto yy106;
-	case 'L':
-	case 'U':
-	case 'l':
-	case 'u':	goto yy107;
-	default:	goto yy33;
-	}
-yy112:
+yy107:
 	++YYCURSOR;
 	switch ((yych = *YYCURSOR)) {
-	case '=':	goto yy150;
-	default:	goto yy113;
+	case '=':	goto yy135;
+	default:	goto yy108;
 	}
-yy113:
+yy108:
 #line 173 "cunroll.re"
 	{ RET(LSHIFT); }
-#line 891 "cunroll.c"
-yy114:
+#line 860 "cunroll.c"
+yy109:
 	++YYCURSOR;
 #line 179 "cunroll.re"
 	{ RET(LEQ); }
-#line 896 "cunroll.c"
-yy116:
+#line 865 "cunroll.c"
+yy111:
 	++YYCURSOR;
 #line 181 "cunroll.re"
 	{ RET(EQL); }
-#line 901 "cunroll.c"
-yy118:
+#line 870 "cunroll.c"
+yy113:
 	++YYCURSOR;
 #line 180 "cunroll.re"
 	{ RET(GEQ); }
-#line 906 "cunroll.c"
-yy120:
+#line 875 "cunroll.c"
+yy115:
 	++YYCURSOR;
 	switch ((yych = *YYCURSOR)) {
-	case '=':	goto yy152;
-	default:	goto yy121;
+	case '=':	goto yy137;
+	default:	goto yy116;
 	}
-yy121:
+yy116:
 #line 172 "cunroll.re"
 	{ RET(RSHIFT); }
-#line 916 "cunroll.c"
-yy122:
+#line 885 "cunroll.c"
+yy117:
 	++YYCURSOR;
 	switch ((yych = *YYCURSOR)) {
 	case '0':
@@ -978,47 +947,29 @@ yy122:
 	case 'w':
 	case 'x':
 	case 'y':
-	case 'z':	goto yy154;
-	default:	goto yy123;
+	case 'z':	goto yy139;
+	default:	goto yy118;
 	}
-yy123:
+yy118:
 #line 142 "cunroll.re"
 	{ RET(ID); }
-#line 988 "cunroll.c"
-yy124:
+#line 957 "cunroll.c"
+yy119:
 	++YYCURSOR;
 #line 170 "cunroll.re"
 	{ RET(XOREQ); }
-#line 993 "cunroll.c"
-yy126:
+#line 962 "cunroll.c"
+yy121:
 	++YYCURSOR;
 #line 171 "cunroll.re"
 	{ RET(OREQ); }
-#line 998 "cunroll.c"
-yy128:
+#line 967 "cunroll.c"
+yy123:
 	++YYCURSOR;
 #line 178 "cunroll.re"
 	{ RET(OROR); }
-#line 1003 "cunroll.c"
-yy130:
-	++YYCURSOR;
-	if (YYLIMIT <= YYCURSOR) YYFILL(1);
-	yych = *YYCURSOR;
-	switch (yych) {
-	case '\n':	goto yy69;
-	case '"':	goto yy70;
-	case '0':
-	case '1':
-	case '2':
-	case '3':
-	case '4':
-	case '5':
-	case '6':
-	case '7':	goto yy130;
-	case '\\':	goto yy72;
-	default:	goto yy67;
-	}
-yy132:
+#line 972 "cunroll.c"
+yy125:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
@@ -1044,16 +995,87 @@ yy132:
 	case 'c':
 	case 'd':
 	case 'e':
-	case 'f':	goto yy156;
+	case 'f':	goto yy67;
 	default:	goto yy69;
+	}
+yy126:
+	++YYCURSOR;
+	if (YYLIMIT <= YYCURSOR) YYFILL(1);
+	yych = *YYCURSOR;
+	switch (yych) {
+	case '0':
+	case '1':
+	case '2':
+	case '3':
+	case '4':
+	case '5':
+	case '6':
+	case '7':
+	case '8':
+	case '9':
+	case 'A':
+	case 'B':
+	case 'C':
+	case 'D':
+	case 'E':
+	case 'F':
+	case 'a':
+	case 'b':
+	case 'c':
+	case 'd':
+	case 'e':
+	case 'f':	goto yy79;
+	default:	goto yy69;
+	}
+yy127:
+	++YYCURSOR;
+#line 161 "cunroll.re"
+	{ RET(ELLIPSIS); }
+#line 1035 "cunroll.c"
+yy129:
+	yych = *++YYCURSOR;
+	goto yy98;
+yy130:
+	yych = *++YYCURSOR;
+	switch (yych) {
+	case '0':
+	case '1':
+	case '2':
+	case '3':
+	case '4':
+	case '5':
+	case '6':
+	case '7':
+	case '8':
+	case '9':	goto yy131;
+	default:	goto yy69;
+	}
+yy131:
+	++YYCURSOR;
+	if (YYLIMIT <= YYCURSOR) YYFILL(1);
+	yych = *YYCURSOR;
+	switch (yych) {
+	case '0':
+	case '1':
+	case '2':
+	case '3':
+	case '4':
+	case '5':
+	case '6':
+	case '7':
+	case '8':
+	case '9':	goto yy131;
+	case 'F':
+	case 'L':
+	case 'f':
+	case 'l':	goto yy129;
+	default:	goto yy98;
 	}
 yy133:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	switch (yych) {
-	case '\n':	goto yy69;
-	case '\'':	goto yy81;
 	case '0':
 	case '1':
 	case '2':
@@ -1061,197 +1083,38 @@ yy133:
 	case '4':
 	case '5':
 	case '6':
-	case '7':	goto yy133;
-	case '\\':	goto yy82;
-	default:	goto yy79;
+	case '7':
+	case '8':
+	case '9':
+	case 'A':
+	case 'B':
+	case 'C':
+	case 'D':
+	case 'E':
+	case 'F':
+	case 'a':
+	case 'b':
+	case 'c':
+	case 'd':
+	case 'e':
+	case 'f':	goto yy133;
+	case 'L':
+	case 'U':
+	case 'l':
+	case 'u':	goto yy104;
+	default:	goto yy34;
 	}
 yy135:
 	++YYCURSOR;
-	if (YYLIMIT <= YYCURSOR) YYFILL(1);
-	yych = *YYCURSOR;
-	switch (yych) {
-	case '0':
-	case '1':
-	case '2':
-	case '3':
-	case '4':
-	case '5':
-	case '6':
-	case '7':
-	case '8':
-	case '9':
-	case 'A':
-	case 'B':
-	case 'C':
-	case 'D':
-	case 'E':
-	case 'F':
-	case 'a':
-	case 'b':
-	case 'c':
-	case 'd':
-	case 'e':
-	case 'f':	goto yy158;
-	default:	goto yy69;
-	}
-yy136:
-	++YYCURSOR;
-#line 161 "cunroll.re"
-	{ RET(ELLIPSIS); }
-#line 1102 "cunroll.c"
-yy138:
-	yych = *++YYCURSOR;
-	switch (yych) {
-	case '+':
-	case '-':	goto yy160;
-	case '0':
-	case '1':
-	case '2':
-	case '3':
-	case '4':
-	case '5':
-	case '6':
-	case '7':
-	case '8':
-	case '9':	goto yy161;
-	default:	goto yy69;
-	}
-yy139:
-	yych = *++YYCURSOR;
-	goto yy98;
-yy140:
-	yyaccept = 3;
-	YYMARKER = ++YYCURSOR;
-	if ((YYLIMIT - YYCURSOR) < 3) YYFILL(3);
-	yych = *YYCURSOR;
-yy141:
-	switch (yych) {
-	case '0':
-	case '1':
-	case '2':
-	case '3':
-	case '4':
-	case '5':
-	case '6':
-	case '7':
-	case '8':
-	case '9':	goto yy140;
-	case 'E':
-	case 'e':	goto yy163;
-	case 'F':
-	case 'L':
-	case 'f':
-	case 'l':	goto yy139;
-	default:	goto yy98;
-	}
-yy142:
-	yych = *++YYCURSOR;
-	switch (yych) {
-	case '+':
-	case '-':	goto yy164;
-	case '0':
-	case '1':
-	case '2':
-	case '3':
-	case '4':
-	case '5':
-	case '6':
-	case '7':
-	case '8':
-	case '9':	goto yy165;
-	default:	goto yy69;
-	}
-yy143:
-	++YYCURSOR;
-	if (YYLIMIT <= YYCURSOR) YYFILL(1);
-	yych = *YYCURSOR;
-	switch (yych) {
-	case 'L':
-	case 'U':
-	case 'l':
-	case 'u':	goto yy143;
-	default:	goto yy33;
-	}
-yy145:
-	yych = *++YYCURSOR;
-	switch (yych) {
-	case '0':
-	case '1':
-	case '2':
-	case '3':
-	case '4':
-	case '5':
-	case '6':
-	case '7':
-	case '8':
-	case '9':	goto yy146;
-	default:	goto yy69;
-	}
-yy146:
-	++YYCURSOR;
-	if (YYLIMIT <= YYCURSOR) YYFILL(1);
-	yych = *YYCURSOR;
-	switch (yych) {
-	case '0':
-	case '1':
-	case '2':
-	case '3':
-	case '4':
-	case '5':
-	case '6':
-	case '7':
-	case '8':
-	case '9':	goto yy146;
-	case 'F':
-	case 'L':
-	case 'f':
-	case 'l':	goto yy139;
-	default:	goto yy98;
-	}
-yy148:
-	++YYCURSOR;
-	if (YYLIMIT <= YYCURSOR) YYFILL(1);
-	yych = *YYCURSOR;
-	switch (yych) {
-	case '0':
-	case '1':
-	case '2':
-	case '3':
-	case '4':
-	case '5':
-	case '6':
-	case '7':
-	case '8':
-	case '9':
-	case 'A':
-	case 'B':
-	case 'C':
-	case 'D':
-	case 'E':
-	case 'F':
-	case 'a':
-	case 'b':
-	case 'c':
-	case 'd':
-	case 'e':
-	case 'f':	goto yy148;
-	case 'L':
-	case 'U':
-	case 'l':
-	case 'u':	goto yy167;
-	default:	goto yy33;
-	}
-yy150:
-	++YYCURSOR;
 #line 163 "cunroll.re"
 	{ RET(LSHIFTEQ); }
-#line 1249 "cunroll.c"
-yy152:
+#line 1112 "cunroll.c"
+yy137:
 	++YYCURSOR;
 #line 162 "cunroll.re"
 	{ RET(RSHIFTEQ); }
-#line 1254 "cunroll.c"
-yy154:
+#line 1117 "cunroll.c"
+yy139:
 	++YYCURSOR;
 	switch ((yych = *YYCURSOR)) {
 	case '0':
@@ -1316,178 +1179,14 @@ yy154:
 	case 'w':
 	case 'x':
 	case 'y':
-	case 'z':	goto yy169;
-	default:	goto yy155;
+	case 'z':	goto yy141;
+	default:	goto yy140;
 	}
-yy155:
+yy140:
 #line 143 "cunroll.re"
 	{ RET(ID); }
-#line 1326 "cunroll.c"
-yy156:
-	++YYCURSOR;
-	if (YYLIMIT <= YYCURSOR) YYFILL(1);
-	yych = *YYCURSOR;
-	switch (yych) {
-	case '\n':	goto yy69;
-	case '"':	goto yy70;
-	case '0':
-	case '1':
-	case '2':
-	case '3':
-	case '4':
-	case '5':
-	case '6':
-	case '7':
-	case '8':
-	case '9':
-	case 'A':
-	case 'B':
-	case 'C':
-	case 'D':
-	case 'E':
-	case 'F':
-	case 'a':
-	case 'b':
-	case 'c':
-	case 'd':
-	case 'e':
-	case 'f':	goto yy156;
-	case '\\':	goto yy72;
-	default:	goto yy67;
-	}
-yy158:
-	++YYCURSOR;
-	if (YYLIMIT <= YYCURSOR) YYFILL(1);
-	yych = *YYCURSOR;
-	switch (yych) {
-	case '\n':	goto yy69;
-	case '\'':	goto yy81;
-	case '0':
-	case '1':
-	case '2':
-	case '3':
-	case '4':
-	case '5':
-	case '6':
-	case '7':
-	case '8':
-	case '9':
-	case 'A':
-	case 'B':
-	case 'C':
-	case 'D':
-	case 'E':
-	case 'F':
-	case 'a':
-	case 'b':
-	case 'c':
-	case 'd':
-	case 'e':
-	case 'f':	goto yy158;
-	case '\\':	goto yy82;
-	default:	goto yy79;
-	}
-yy160:
-	yych = *++YYCURSOR;
-	switch (yych) {
-	case '0':
-	case '1':
-	case '2':
-	case '3':
-	case '4':
-	case '5':
-	case '6':
-	case '7':
-	case '8':
-	case '9':	goto yy161;
-	default:	goto yy69;
-	}
-yy161:
-	++YYCURSOR;
-	if (YYLIMIT <= YYCURSOR) YYFILL(1);
-	yych = *YYCURSOR;
-	switch (yych) {
-	case '0':
-	case '1':
-	case '2':
-	case '3':
-	case '4':
-	case '5':
-	case '6':
-	case '7':
-	case '8':
-	case '9':	goto yy161;
-	case 'F':
-	case 'L':
-	case 'f':
-	case 'l':	goto yy139;
-	default:	goto yy98;
-	}
-yy163:
-	yych = *++YYCURSOR;
-	switch (yych) {
-	case '+':
-	case '-':	goto yy171;
-	case '0':
-	case '1':
-	case '2':
-	case '3':
-	case '4':
-	case '5':
-	case '6':
-	case '7':
-	case '8':
-	case '9':	goto yy172;
-	default:	goto yy69;
-	}
-yy164:
-	yych = *++YYCURSOR;
-	switch (yych) {
-	case '0':
-	case '1':
-	case '2':
-	case '3':
-	case '4':
-	case '5':
-	case '6':
-	case '7':
-	case '8':
-	case '9':	goto yy165;
-	default:	goto yy69;
-	}
-yy165:
-	++YYCURSOR;
-	if (YYLIMIT <= YYCURSOR) YYFILL(1);
-	yych = *YYCURSOR;
-	switch (yych) {
-	case '0':
-	case '1':
-	case '2':
-	case '3':
-	case '4':
-	case '5':
-	case '6':
-	case '7':
-	case '8':
-	case '9':	goto yy165;
-	case 'F':
-	case 'L':
-	case 'f':
-	case 'l':	goto yy139;
-	default:	goto yy98;
-	}
-yy167:
-	++YYCURSOR;
-	if (YYLIMIT <= YYCURSOR) YYFILL(1);
-	yych = *YYCURSOR;
-	switch (yych) {
-	case 'L':
-	case 'U':
-	case 'l':
-	case 'u':	goto yy167;
-	default:	goto yy33;
-	}
-yy169:
+#line 1189 "cunroll.c"
+yy141:
 	++YYCURSOR;
 	switch ((yych = *YYCURSOR)) {
 	case '0':
@@ -1552,50 +1251,14 @@ yy169:
 	case 'w':
 	case 'x':
 	case 'y':
-	case 'z':	goto yy174;
-	default:	goto yy170;
+	case 'z':	goto yy143;
+	default:	goto yy142;
 	}
-yy170:
+yy142:
 #line 144 "cunroll.re"
 	{ RET(ID); }
-#line 1562 "cunroll.c"
-yy171:
-	yych = *++YYCURSOR;
-	switch (yych) {
-	case '0':
-	case '1':
-	case '2':
-	case '3':
-	case '4':
-	case '5':
-	case '6':
-	case '7':
-	case '8':
-	case '9':	goto yy172;
-	default:	goto yy69;
-	}
-yy172:
-	++YYCURSOR;
-	if (YYLIMIT <= YYCURSOR) YYFILL(1);
-	yych = *YYCURSOR;
-	switch (yych) {
-	case '0':
-	case '1':
-	case '2':
-	case '3':
-	case '4':
-	case '5':
-	case '6':
-	case '7':
-	case '8':
-	case '9':	goto yy172;
-	case 'F':
-	case 'L':
-	case 'f':
-	case 'l':	goto yy139;
-	default:	goto yy98;
-	}
-yy174:
+#line 1261 "cunroll.c"
+yy143:
 	++YYCURSOR;
 	switch ((yych = *YYCURSOR)) {
 	case '0':
@@ -1660,14 +1323,14 @@ yy174:
 	case 'w':
 	case 'x':
 	case 'y':
-	case 'z':	goto yy176;
-	default:	goto yy175;
+	case 'z':	goto yy145;
+	default:	goto yy144;
 	}
-yy175:
+yy144:
 #line 145 "cunroll.re"
 	{ RET(ID); }
-#line 1670 "cunroll.c"
-yy176:
+#line 1333 "cunroll.c"
+yy145:
 	++YYCURSOR;
 	switch ((yych = *YYCURSOR)) {
 	case '0':
@@ -1732,14 +1395,14 @@ yy176:
 	case 'w':
 	case 'x':
 	case 'y':
-	case 'z':	goto yy178;
-	default:	goto yy177;
+	case 'z':	goto yy147;
+	default:	goto yy146;
 	}
-yy177:
+yy146:
 #line 146 "cunroll.re"
 	{ RET(ID); }
-#line 1742 "cunroll.c"
-yy178:
+#line 1405 "cunroll.c"
+yy147:
 	++YYCURSOR;
 	switch ((yych = *YYCURSOR)) {
 	case '0':
@@ -1804,14 +1467,14 @@ yy178:
 	case 'w':
 	case 'x':
 	case 'y':
-	case 'z':	goto yy180;
-	default:	goto yy179;
+	case 'z':	goto yy149;
+	default:	goto yy148;
 	}
-yy179:
+yy148:
 #line 147 "cunroll.re"
 	{ RET(ID); }
-#line 1814 "cunroll.c"
-yy180:
+#line 1477 "cunroll.c"
+yy149:
 	++YYCURSOR;
 	switch ((yych = *YYCURSOR)) {
 	case '0':
@@ -1876,14 +1539,14 @@ yy180:
 	case 'w':
 	case 'x':
 	case 'y':
-	case 'z':	goto yy182;
-	default:	goto yy181;
+	case 'z':	goto yy151;
+	default:	goto yy150;
 	}
-yy181:
+yy150:
 #line 148 "cunroll.re"
 	{ RET(ID); }
-#line 1886 "cunroll.c"
-yy182:
+#line 1549 "cunroll.c"
+yy151:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
@@ -1950,145 +1613,145 @@ yy182:
 	case 'w':
 	case 'x':
 	case 'y':
-	case 'z':	goto yy182;
-	default:	goto yy184;
+	case 'z':	goto yy151;
+	default:	goto yy153;
 	}
-yy184:
+yy153:
 #line 149 "cunroll.re"
 	{ RET(ID); }
-#line 1960 "cunroll.c"
+#line 1623 "cunroll.c"
 }
 #line 223 "cunroll.re"
 
 
 comment:
 
-#line 1967 "cunroll.c"
+#line 1630 "cunroll.c"
 {
 	YYCTYPE yych;
 	if ((YYLIMIT - YYCURSOR) < 8) YYFILL(8);
 	yych = *YYCURSOR;
 	switch (yych) {
-	case '\n':	goto yy189;
-	case '*':	goto yy191;
-	case '/':	goto yy193;
-	default:	goto yy187;
+	case '\n':	goto yy158;
+	case '*':	goto yy160;
+	case '/':	goto yy162;
+	default:	goto yy156;
 	}
-yy187:
+yy156:
 	++YYCURSOR;
 	switch ((yych = *YYCURSOR)) {
 	case '*':
-	case '/':	goto yy188;
-	default:	goto yy194;
+	case '/':	goto yy157;
+	default:	goto yy163;
 	}
-yy188:
+yy157:
 #line 234 "cunroll.re"
 	{ goto comment; }
-#line 1988 "cunroll.c"
-yy189:
+#line 1651 "cunroll.c"
+yy158:
 	++YYCURSOR;
 	switch ((yych = *YYCURSOR)) {
 	case '*':
-	case '/':	goto yy190;
-	default:	goto yy194;
+	case '/':	goto yy159;
+	default:	goto yy163;
 	}
-yy190:
+yy159:
 #line 229 "cunroll.re"
 	{
 		if(cursor == s->eof) RET(EOI);
 		s->tok = s->pos = cursor; s->line++;
 		goto comment;
 	    }
-#line 2003 "cunroll.c"
-yy191:
+#line 1666 "cunroll.c"
+yy160:
 	++YYCURSOR;
 	switch ((yych = *YYCURSOR)) {
-	case '/':	goto yy196;
-	default:	goto yy192;
+	case '/':	goto yy165;
+	default:	goto yy161;
 	}
-yy192:
+yy161:
 #line 242 "cunroll.re"
 	{ goto comment; }
-#line 2013 "cunroll.c"
-yy193:
+#line 1676 "cunroll.c"
+yy162:
 	yych = *++YYCURSOR;
-	goto yy192;
-yy194:
+	goto yy161;
+yy163:
 	++YYCURSOR;
 	switch ((yych = *YYCURSOR)) {
 	case '*':
-	case '/':	goto yy195;
-	default:	goto yy198;
+	case '/':	goto yy164;
+	default:	goto yy167;
 	}
-yy195:
+yy164:
 #line 235 "cunroll.re"
 	{ goto comment; }
-#line 2027 "cunroll.c"
-yy196:
+#line 1690 "cunroll.c"
+yy165:
 	++YYCURSOR;
 #line 227 "cunroll.re"
 	{ goto std; }
-#line 2032 "cunroll.c"
-yy198:
+#line 1695 "cunroll.c"
+yy167:
 	++YYCURSOR;
 	switch ((yych = *YYCURSOR)) {
 	case '*':
-	case '/':	goto yy199;
-	default:	goto yy200;
+	case '/':	goto yy168;
+	default:	goto yy169;
 	}
-yy199:
+yy168:
 #line 236 "cunroll.re"
 	{ goto comment; }
-#line 2043 "cunroll.c"
-yy200:
+#line 1706 "cunroll.c"
+yy169:
 	++YYCURSOR;
 	switch ((yych = *YYCURSOR)) {
 	case '*':
-	case '/':	goto yy201;
-	default:	goto yy202;
+	case '/':	goto yy170;
+	default:	goto yy171;
 	}
-yy201:
+yy170:
 #line 237 "cunroll.re"
 	{ goto comment; }
-#line 2054 "cunroll.c"
-yy202:
+#line 1717 "cunroll.c"
+yy171:
 	++YYCURSOR;
 	switch ((yych = *YYCURSOR)) {
 	case '*':
-	case '/':	goto yy203;
-	default:	goto yy204;
+	case '/':	goto yy172;
+	default:	goto yy173;
 	}
-yy203:
+yy172:
 #line 238 "cunroll.re"
 	{ goto comment; }
-#line 2065 "cunroll.c"
-yy204:
+#line 1728 "cunroll.c"
+yy173:
 	++YYCURSOR;
 	switch ((yych = *YYCURSOR)) {
 	case '*':
-	case '/':	goto yy205;
-	default:	goto yy206;
+	case '/':	goto yy174;
+	default:	goto yy175;
 	}
-yy205:
+yy174:
 #line 239 "cunroll.re"
 	{ goto comment; }
-#line 2076 "cunroll.c"
-yy206:
+#line 1739 "cunroll.c"
+yy175:
 	++YYCURSOR;
 	switch ((yych = *YYCURSOR)) {
 	case '*':
-	case '/':	goto yy207;
-	default:	goto yy208;
+	case '/':	goto yy176;
+	default:	goto yy177;
 	}
-yy207:
+yy176:
 #line 240 "cunroll.re"
 	{ goto comment; }
-#line 2087 "cunroll.c"
-yy208:
+#line 1750 "cunroll.c"
+yy177:
 	++YYCURSOR;
 #line 241 "cunroll.re"
 	{ goto comment; }
-#line 2092 "cunroll.c"
+#line 1755 "cunroll.c"
 }
 #line 243 "cunroll.re"
 

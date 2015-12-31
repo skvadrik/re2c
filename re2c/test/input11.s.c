@@ -15,11 +15,11 @@
 		}
 	} else {
 		if (yych <= 'q') {
-			if (yych <= 'Z') goto yy8;
-			if (yych >= 'a') goto yy8;
+			if (yych <= 'Z') goto yy9;
+			if (yych >= 'a') goto yy9;
 		} else {
-			if (yych <= 'r') goto yy10;
-			if (yych <= 'z') goto yy8;
+			if (yych <= 'r') goto yy12;
+			if (yych <= 'z') goto yy9;
 		}
 	}
 	++YYCURSOR;
@@ -30,7 +30,7 @@ yy3:
 yy4:
 	yych = *++YYCURSOR;
 	if (yych <= '0') goto yy3;
-	if (yych <= '9') goto yy11;
+	if (yych <= '9') goto yy7;
 	goto yy3;
 yy5:
 	++YYCURSOR;
@@ -39,81 +39,69 @@ yy6:
 	{ return 2; }
 #line 41 "input11.s.c"
 yy7:
-	yych = *++YYCURSOR;
-	goto yy12;
-yy8:
 	++YYCURSOR;
+	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
-	goto yy14;
+	if (yych <= '/') goto yy6;
+	if (yych <= '9') goto yy7;
+	goto yy6;
 yy9:
+	++YYCURSOR;
+	if (YYLIMIT <= YYCURSOR) YYFILL(1);
+	yych = *YYCURSOR;
+yy10:
+	if (yych <= '@') {
+		if (yych <= '/') goto yy11;
+		if (yych <= '9') goto yy9;
+	} else {
+		if (yych <= 'Z') goto yy9;
+		if (yych <= '`') goto yy11;
+		if (yych <= 'z') goto yy9;
+	}
+yy11:
 #line 10 "input11.s.re"
 	{ return 1; }
-#line 52 "input11.s.c"
-yy10:
-	yych = *++YYCURSOR;
-	if (yych == 'e') goto yy15;
-	goto yy14;
-yy11:
-	++YYCURSOR;
-	if (YYLIMIT <= YYCURSOR) YYFILL(1);
-	yych = *YYCURSOR;
+#line 65 "input11.s.c"
 yy12:
-	if (yych <= '/') goto yy6;
-	if (yych <= '9') goto yy11;
-	goto yy6;
-yy13:
-	++YYCURSOR;
-	if (YYLIMIT <= YYCURSOR) YYFILL(1);
-	yych = *YYCURSOR;
-yy14:
-	if (yych <= '@') {
-		if (yych <= '/') goto yy9;
-		if (yych <= '9') goto yy13;
-		goto yy9;
-	} else {
-		if (yych <= 'Z') goto yy13;
-		if (yych <= '`') goto yy9;
-		if (yych <= 'z') goto yy13;
-		goto yy9;
-	}
-yy15:
 	yych = *++YYCURSOR;
-	if (yych != '2') goto yy14;
+	if (yych != 'e') goto yy10;
 	yych = *++YYCURSOR;
-	if (yych != 'c') goto yy14;
+	if (yych != '2') goto yy10;
+	yych = *++YYCURSOR;
+	if (yych != 'c') goto yy10;
 	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych != ':') goto yy14;
+	if (yych != ':') goto yy10;
 	yych = *++YYCURSOR;
 	if (yych <= '^') {
-		if (yych <= '@') goto yy19;
-		if (yych <= 'Z') goto yy20;
+		if (yych <= '@') goto yy17;
+		if (yych <= 'Z') goto yy18;
 	} else {
-		if (yych == '`') goto yy19;
-		if (yych <= 'z') goto yy20;
+		if (yych == '`') goto yy17;
+		if (yych <= 'z') goto yy18;
 	}
-yy19:
+yy17:
 	YYCURSOR = YYMARKER;
-	goto yy9;
-yy20:
+	goto yy11;
+yy18:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	if (yych <= 'Z') {
-		if (yych <= '/') goto yy22;
-		if (yych <= ':') goto yy20;
-		if (yych >= 'A') goto yy20;
+		if (yych <= '/') goto yy20;
+		if (yych <= ':') goto yy18;
+		if (yych >= 'A') goto yy18;
 	} else {
 		if (yych <= '_') {
-			if (yych >= '_') goto yy20;
+			if (yych >= '_') goto yy18;
 		} else {
-			if (yych <= '`') goto yy22;
-			if (yych <= 'z') goto yy20;
+			if (yych <= '`') goto yy20;
+			if (yych <= 'z') goto yy18;
 		}
 	}
-yy22:
+yy20:
 #line 9 "input11.s.re"
 	{ return 0; }
-#line 117 "input11.s.c"
+#line 105 "input11.s.c"
 }
 #line 15 "input11.s.re"
 

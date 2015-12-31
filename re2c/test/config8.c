@@ -49,8 +49,8 @@ std:
 	curr = *s.cur;
 	switch (curr) {
 	case '\t':
+	case '\n':
 	case ' ':	goto xx4;
-	case '\n':	goto xx6;
 	case '0':
 	case '1':
 	case '2':
@@ -60,7 +60,7 @@ std:
 	case '6':
 	case '7':
 	case '8':
-	case '9':	goto xx7;
+	case '9':	goto xx6;
 	case 'a':
 	case 'b':	goto xx9;
 	default:	goto xx2;
@@ -75,7 +75,6 @@ xx3:
 #line 76 "config8.c"
 xx4:
 	++s.cur;
-xx5:
 #line 59 "config8.re"
 	{
 		if(s.cur == s.lim)
@@ -83,18 +82,28 @@ xx5:
 		cursor = s.cur;
 		goto std;
 	}
-#line 87 "config8.c"
+#line 86 "config8.c"
 xx6:
-	curr = *++s.cur;
-	goto xx5;
-xx7:
 	++s.cur;
+	if (s.lim <= s.cur) fill(1);
 	curr = *s.cur;
-	goto xx11;
+	switch (curr) {
+	case '0':
+	case '1':
+	case '2':
+	case '3':
+	case '4':
+	case '5':
+	case '6':
+	case '7':
+	case '8':
+	case '9':	goto xx6;
+	default:	goto xx8;
+	}
 xx8:
 #line 56 "config8.re"
 	{ return NUMBER;  }
-#line 98 "config8.c"
+#line 107 "config8.c"
 xx9:
 	curr = *++s.cur;
 	s.ctx = s.cur;
@@ -107,15 +116,14 @@ xx9:
 	case '6':
 	case '7':
 	case '8':
-	case '9':	goto xx12;
-	case '1':	goto xx15;
+	case '9':	goto xx10;
+	case '1':	goto xx13;
 	default:	goto xx3;
 	}
 xx10:
 	++s.cur;
 	if (s.lim <= s.cur) fill(1);
 	curr = *s.cur;
-xx11:
 	switch (curr) {
 	case '0':
 	case '1':
@@ -127,31 +135,14 @@ xx11:
 	case '7':
 	case '8':
 	case '9':	goto xx10;
-	default:	goto xx8;
+	default:	goto xx12;
 	}
 xx12:
-	++s.cur;
-	if (s.lim <= s.cur) fill(1);
-	curr = *s.cur;
-	switch (curr) {
-	case '0':
-	case '1':
-	case '2':
-	case '3':
-	case '4':
-	case '5':
-	case '6':
-	case '7':
-	case '8':
-	case '9':	goto xx12;
-	default:	goto xx14;
-	}
-xx14:
 	s.cur = s.ctx;
 #line 55 "config8.re"
 	{ return KEYWORD; }
-#line 154 "config8.c"
-xx15:
+#line 145 "config8.c"
+xx13:
 	++s.cur;
 	switch ((curr = *s.cur)) {
 	case '0':
@@ -163,14 +154,14 @@ xx15:
 	case '6':
 	case '7':
 	case '8':
-	case '9':	goto xx12;
-	default:	goto xx16;
+	case '9':	goto xx10;
+	default:	goto xx14;
 	}
-xx16:
+xx14:
 	s.cur = s.ctx;
 #line 54 "config8.re"
 	{ return KEYWORD; }
-#line 174 "config8.c"
+#line 165 "config8.c"
 }
 #line 69 "config8.re"
 

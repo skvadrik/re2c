@@ -27,10 +27,9 @@ yy3:
 #line 28 "unicode_group_Pc.8--encoding-policy(fail).c"
 yy4:
 	++YYCURSOR;
-yy5:
 #line 12 "unicode_group_Pc.8--encoding-policy(fail).re"
 	{ goto Pc; }
-#line 34 "unicode_group_Pc.8--encoding-policy(fail).c"
+#line 33 "unicode_group_Pc.8--encoding-policy(fail).c"
 yy6:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -49,7 +48,7 @@ yy7:
 yy8:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case 0xBF:	goto yy13;
+	case 0xBF:	goto yy4;
 	default:	goto yy9;
 	}
 yy9:
@@ -59,28 +58,24 @@ yy10:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 0x80:
-	case 0x94:	goto yy13;
+	case 0x94:	goto yy4;
 	default:	goto yy9;
 	}
 yy11:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 0xB3:
-	case 0xB4:	goto yy13;
+	case 0xB4:	goto yy4;
 	default:	goto yy9;
 	}
 yy12:
-	yych = *++YYCURSOR;
-	switch (yych) {
+	++YYCURSOR;
+	switch ((yych = *YYCURSOR)) {
 	case 0x8D:
 	case 0x8E:
-	case 0x8F:	goto yy13;
+	case 0x8F:	goto yy4;
 	default:	goto yy9;
 	}
-yy13:
-	++YYCURSOR;
-	yych = *YYCURSOR;
-	goto yy5;
 }
 #line 14 "unicode_group_Pc.8--encoding-policy(fail).re"
 
