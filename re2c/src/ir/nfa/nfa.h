@@ -19,7 +19,6 @@ struct nfa_state_t
 	enum type_t
 	{
 		ALT,
-//		CHR,
 		RAN,
 		CTX,
 		FIN
@@ -31,11 +30,6 @@ struct nfa_state_t
 			nfa_state_t *out1;
 			nfa_state_t *out2;
 		} alt;
-//		struct
-//		{
-//			nfa_state_t *out;
-//			uint32_t chr;
-//		} chr;
 		struct
 		{
 			nfa_state_t *out;
@@ -59,13 +53,6 @@ struct nfa_state_t
 		value.alt.out2 = s2;
 		mark = false;
 	}
-//	void chr(nfa_state_t *s, uint32_t c)
-//	{
-//		type = CHR;
-//		value.chr.out = s;
-//		value.chr.chr = c;
-//		mark = false;
-//	}
 	void ran(nfa_state_t *s, Range *r)
 	{
 		type = RAN;
