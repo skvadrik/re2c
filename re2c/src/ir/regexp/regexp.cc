@@ -47,11 +47,6 @@ RegExp * mkAlt (RegExp * e1, RegExp * e2)
 		m1 = dynamic_cast<MatchOp*> (a->exp1);
 		if (m1 != NULL)
 		{
-			if (e1->ins_access == RegExp::PRIVATE)
-			{
-				m1->ins_access = RegExp::PRIVATE;
-				a->exp2->ins_access = RegExp::PRIVATE;
-			}
 			e1 = a->exp2;
 		}
 	}
@@ -69,11 +64,6 @@ RegExp * mkAlt (RegExp * e1, RegExp * e2)
 		m2 = dynamic_cast<MatchOp*> (a->exp1);
 		if (m2 != NULL)
 		{
-			if (e2->ins_access == RegExp::PRIVATE)
-			{
-				m2->ins_access = RegExp::PRIVATE;
-				a->exp2->ins_access = RegExp::PRIVATE;
-			}
 			e2 = a->exp2;
 		}
 	}
@@ -100,11 +90,6 @@ MatchOp * merge (MatchOp * m1, MatchOp * m2)
 		return m1;
 	}
 	MatchOp * m = new MatchOp (Range::add (m1->match, m2->match));
-	if (m1->ins_access == RegExp::PRIVATE
-		|| m2->ins_access == RegExp::PRIVATE)
-	{
-		m->ins_access = RegExp::PRIVATE;
-	}
 	return m;
 }
 

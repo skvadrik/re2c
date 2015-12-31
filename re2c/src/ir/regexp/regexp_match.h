@@ -19,7 +19,6 @@ public:
 	uint32_t calc_size() const;
 	uint32_t fixedLength ();
 	nfa_state_t *compile(nfa_t &nfa, nfa_state_t *n);
-	void decompile ();
 	void display (std::ostream & o) const;
 
 	FORBID_COPY (MatchOp);

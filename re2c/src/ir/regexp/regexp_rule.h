@@ -29,7 +29,6 @@ public:
 		, RegExp * r1
 		, RegExp * r2
 		, rule_rank_t r
-		, InsAccess access
 		, const Code * c
 		, const std::string * cond
 		)
@@ -39,14 +38,11 @@ public:
 		, rank (r)
 		, code (c)
 		, newcond (cond ? *cond : "")
-	{
-		ins_access = access;
-	}
+	{}
 	void display (std::ostream & o) const;
 	void split (std::set<uint32_t> &);
 	uint32_t calc_size() const;
 	nfa_state_t *compile(nfa_t &nfa, nfa_state_t *n);
-	void decompile ();
 
 	FORBID_COPY (RuleOp);
 };
