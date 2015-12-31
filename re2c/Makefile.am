@@ -17,7 +17,6 @@ SRC_HDR = \
 	src/codegen/label.h \
 	src/codegen/output.h \
 	src/codegen/print.h \
-	src/codegen/scc.h \
 	src/codegen/skeleton/path.h \
 	src/codegen/skeleton/way.h \
 	src/codegen/skeleton/skeleton.h \
@@ -27,6 +26,7 @@ SRC_HDR = \
 	src/ir/bytecode/nfa.h \
 	src/ir/adfa/action.h \
 	src/ir/adfa/adfa.h \
+	src/ir/adfa/scc.h \
 	src/ir/dfa/dfa.h \
 	src/ir/regexp/encoding/case.h \
 	src/ir/regexp/encoding/enc.h \
@@ -75,7 +75,6 @@ SRC = \
 	src/codegen/emit_action.cc \
 	src/codegen/emit_dfa.cc \
 	src/codegen/label.cc \
-	src/codegen/prepare_dfa.cc \
 	src/codegen/go_construct.cc \
 	src/codegen/go_destruct.cc \
 	src/codegen/go_emit.cc \
@@ -83,7 +82,6 @@ SRC = \
 	src/codegen/input_api.cc \
 	src/codegen/output.cc \
 	src/codegen/print.cc \
-	src/codegen/scc.cc \
 	src/codegen/skeleton/control_flow.cc \
 	src/codegen/skeleton/generate_code.cc \
 	src/codegen/skeleton/generate_data.cc \
@@ -99,6 +97,8 @@ SRC = \
 	src/ir/nfa/nfa.cc \
 	src/ir/nfa/split.cc \
 	src/ir/adfa/adfa.cc \
+	src/ir/adfa/prepare.cc \
+	src/ir/adfa/scc.cc \
 	src/ir/dfa/dfa.cc \
 	src/ir/dfa/minimize.cc \
 	src/ir/regexp/display.cc \

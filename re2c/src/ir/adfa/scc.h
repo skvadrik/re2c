@@ -1,5 +1,5 @@
-#ifndef _RE2C_CODEGEN_SCC_
-#define _RE2C_CODEGEN_SCC_
+#ifndef _RE2C_IR_ADFA_SCC_
+#define _RE2C_IR_ADFA_SCC_
 
 #include "src/util/c99_stdint.h"
 #include "src/util/forbid_copy.h"
@@ -29,4 +29,4 @@ void calcDepth (State * head);
 
 } // namespace re2c
 
-#endif // _RE2C_CODEGEN_SCC_
+#endif // _RE2C_IR_ADFA_SCC_

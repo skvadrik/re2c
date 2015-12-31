@@ -1,6 +1,6 @@
-#include "src/codegen/scc.h"
 #include "src/codegen/go.h"
 #include "src/ir/adfa/adfa.h"
+#include "src/ir/adfa/scc.h"
 
 namespace re2c {
 
