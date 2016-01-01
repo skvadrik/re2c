@@ -91,8 +91,8 @@ SRC = \
 	src/ir/adfa/adfa.cc \
 	src/ir/adfa/prepare.cc \
 	src/ir/adfa/scc.cc \
-	src/ir/dfa/dfa.cc \
-	src/ir/dfa/minimize.cc \
+	src/ir/dfa/determinization.cc \
+	src/ir/dfa/minimization.cc \
 	src/ir/regexp/display.cc \
 	src/ir/regexp/encoding/enc.cc \
 	src/ir/regexp/encoding/range_suffix.cc \

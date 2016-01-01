@@ -54,7 +54,7 @@ smart_ptr<DFA> compile (Spec & spec, Output & output, const std::string & cond, 
 	// but prior to any other DFA transformations
 	Skeleton *skeleton = new Skeleton(dfa, cs, spec.rules, name, cond, line);
 
-	dfa.minimize();
+	dfa.minimization();
 
 	// ADFA stands for 'DFA with actions'
 	DFA *adfa = new DFA(dfa, skeleton, cs, name, cond, line);

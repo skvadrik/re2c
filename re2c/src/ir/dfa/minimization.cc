@@ -8,7 +8,7 @@
 namespace re2c
 {
 
-void dfa_t::minimize()
+void dfa_t::minimization()
 {
 	const size_t count = states.size();
 
@@ -16,8 +16,8 @@ void dfa_t::minimize()
 
 	switch (opts->dfa_minimization)
 	{
-		case TABLE: minimize_table(part); break;
-		case MOORE: minimize_moore(part); break;
+		case TABLE: minimization_table(part); break;
+		case MOORE: minimization_moore(part); break;
 	}
 
 	for (size_t i = 0; i < count; ++i)
@@ -54,7 +54,7 @@ void dfa_t::minimize()
  * the same symbol that go to distinguishable states. The algorithm
  * loops until the matrix stops changing.
  */
-void dfa_t::minimize_table(size_t *part)
+void dfa_t::minimization_table(size_t *part)
 {
 	const size_t count = states.size();
 
@@ -134,7 +134,7 @@ void dfa_t::minimize_table(size_t *part)
  * the same set of states.
  * The algorithm loops until partition stops changing.
  */
-void dfa_t::minimize_moore(size_t *part)
+void dfa_t::minimization_moore(size_t *part)
 {
 	const size_t count = states.size();
 
