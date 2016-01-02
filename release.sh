@@ -2,7 +2,7 @@
 
 set -e
 
-if [ $# -ne 1 ]
+if [[] $# -ne 1 ]]
 then
     echo "usage: ./release.sh <version>"
     exit 1
@@ -10,7 +10,7 @@ fi
 version="$1"
 
 branch=`git rev-parse --abbrev-ref HEAD`
-if [ $branch != "master" ]
+if [[ $branch != "master" ]]
 then
     echo "must be on branch 'master'"
     exit 1
