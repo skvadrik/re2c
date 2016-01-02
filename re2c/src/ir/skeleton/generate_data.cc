@@ -53,9 +53,8 @@ template <typename cunit_t, typename key_t>
  *
  */
 template <typename cunit_t, typename key_t>
-	Node::covers_t Node::cover (path_t & prefix, FILE * input, FILE * keys)
+	void Node::cover (path_t & prefix, FILE * input, FILE * keys, covers_t &size)
 {
-	covers_t size = covers_t::from32(0u);
 	if (end () && suffix == NULL)
 	{
 		suffix = new path_t (rule, ctx);
@@ -63,20 +62,17 @@ template <typename cunit_t, typename key_t>
 	if (suffix != NULL)
 	{
 		prefix.append (suffix);
-		size = cover_one<cunit_t, key_t> (input, keys, prefix);
+		size = size + cover_one<cunit_t, key_t> (input, keys, prefix);
 	}
 	else if (loop < 2)
 	{
 		local_inc _ (loop);
-		for (arcs_t::iterator i = arcs.begin (); i != arcs.end (); ++i)
+		for (arcs_t::iterator i = arcs.begin ();
+			i != arcs.end () && !size.overflow(); ++i)
 		{
 			path_t new_prefix = prefix;
 			new_prefix.extend (i->first->rule, i->first->ctx, &i->second);
-			size = size + i->first->cover<cunit_t, key_t> (new_prefix, input, keys);
-			if (size.overflow ())
-			{
-				return covers_t::limit ();
-			}
+			i->first->cover<cunit_t, key_t> (new_prefix, input, keys, size);
 			if (i->first->suffix != NULL && suffix == NULL)
 			{
 				suffix = new path_t (rule, ctx);
@@ -85,14 +81,17 @@ template <typename cunit_t, typename key_t>
 			}
 		}
 	}
-	return size;
 }
 
 template <typename cunit_t, typename key_t>
 	void Skeleton::generate_paths_cunit_key (FILE * input, FILE * keys)
 {
 	path_t prefix (nodes->rule, nodes->ctx);
-	if (nodes->cover<cunit_t, key_t> (prefix, input, keys).overflow ())
+	Node::covers_t size = Node::covers_t::from32(0u);
+
+	nodes->cover<cunit_t, key_t> (prefix, input, keys, size);
+
+	if (size.overflow ())
 	{
 		warning
 			( NULL

@@ -97,8 +97,8 @@ struct Node
 	void calc_dist ();
 	void calc_reachable ();
 	template <typename cunit_t, typename key_t>
-		covers_t cover (path_t & prefix, FILE * input, FILE * keys);
-	nakeds_t naked_ways (way_t & prefix, std::vector<way_t> & ways);
+		void cover (path_t & prefix, FILE * input, FILE * keys, covers_t &size);
+	void naked_ways (way_t & prefix, std::vector<way_t> & ways, nakeds_t &size);
 
 	FORBID_COPY (Node);
 };

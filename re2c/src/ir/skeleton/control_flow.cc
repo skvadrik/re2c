@@ -16,36 +16,27 @@ namespace re2c
 // We don't need all patterns that cause undefined behaviour.
 // We only need some examples, the shorter the better.
 // See also note [counting skeleton edges].
-Node::nakeds_t Node::naked_ways (way_t & prefix, std::vector<way_t> & ways)
+void Node::naked_ways (way_t & prefix, std::vector<way_t> & ways, nakeds_t &size)
 {
 	if (!rule.rank.is_none ())
 	{
-		return nakeds_t::from32(0u);
+		return;
 	}
 	else if (end ())
 	{
 		ways.push_back (prefix);
-		return nakeds_t::from64(prefix.size ());
+		size = size + nakeds_t::from64(prefix.size ());
 	}
 	else if (loop < 2)
 	{
 		local_inc _ (loop);
-		nakeds_t size = nakeds_t::from32(0u);
-		for (arcsets_t::iterator i = arcsets.begin (); i != arcsets.end (); ++i)
+		for (arcsets_t::iterator i = arcsets.begin ();
+			i != arcsets.end () && !size.overflow (); ++i)
 		{
 			prefix.push_back (&i->second);
-			size = size + i->first->naked_ways (prefix, ways);
+			i->first->naked_ways (prefix, ways, size);
 			prefix.pop_back ();
-			if (size.overflow ())
-			{
-				return nakeds_t::limit ();
-			}
 		}
-		return size;
-	}
-	else
-	{
-		return nakeds_t::from32(0u);
 	}
 }
 
@@ -53,12 +44,15 @@ void Skeleton::warn_undefined_control_flow ()
 {
 	way_t prefix;
 	std::vector<way_t> ways;
-	const bool overflow = nodes->naked_ways (prefix, ways).overflow ();
+	Node::nakeds_t size = Node::nakeds_t::from32(0u);
+
+	nodes->naked_ways (prefix, ways, size);
+
 	if (!ways.empty ())
 	{
-		warn.undefined_control_flow (line, cond, ways, overflow);
+		warn.undefined_control_flow (line, cond, ways, size.overflow ());
 	}
-	else if (overflow)
+	else if (size.overflow ())
 	{
 		warn.fail (Warn::UNDEFINED_CONTROL_FLOW, line, "DFA is too large to check undefined control flow");
 	}
