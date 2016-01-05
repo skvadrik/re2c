@@ -12,7 +12,7 @@ void dfa_t::minimization()
 {
 	const size_t count = states.size();
 
-	size_t *part = new size_t[count + 1];
+	size_t *part = new size_t[count];
 
 	switch (opts->dfa_minimization)
 	{
@@ -27,7 +27,10 @@ void dfa_t::minimization()
 			size_t *arcs = states[i]->arcs;
 			for (size_t c = 0; c < nchars; ++c)
 			{
-				arcs[c] = part[arcs[c]];
+				if (arcs[c] != NIL)
+				{
+					arcs[c] = part[arcs[c]];
+				}
 			}
 		}
 		else
@@ -58,9 +61,9 @@ void dfa_t::minimization_table(size_t *part)
 {
 	const size_t count = states.size();
 
-	bool **tbl = new bool*[count + 1];
-	tbl[0] = new bool[count * (count + 1) / 2];
-	for (size_t i = 0; i < count; ++i)
+	bool **tbl = new bool*[count];
+	tbl[0] = new bool[count * (count - 1) / 2];
+	for (size_t i = 0; i < count - 1; ++i)
 	{
 		tbl[i + 1] = tbl[i] + i;
 	}
@@ -74,7 +77,6 @@ void dfa_t::minimization_table(size_t *part)
 			tbl[i][j] = s1->ctx != s2->ctx
 				|| s1->rule != s2->rule;
 		}
-		tbl[count][i] = true;
 	}
 
 	for (bool loop = true; loop;)
@@ -94,7 +96,7 @@ void dfa_t::minimization_table(size_t *part)
 						{
 							std::swap(oi, oj);
 						}
-						if (oi != oj && tbl[oi][oj])
+						if (oi != oj && (oi == NIL || oj == NIL || tbl[oi][oj]))
 						{
 							tbl[i][j] = true;
 							loop = true;
@@ -106,7 +108,7 @@ void dfa_t::minimization_table(size_t *part)
 		}
 	}
 
-	for (size_t i = 0; i <= count; ++i)
+	for (size_t i = 0; i < count; ++i)
 	{
 		part[i] = i;
 		for (size_t j = 0; j < i; ++j)
@@ -148,7 +150,7 @@ void dfa_t::minimization_moore(size_t *part)
 		if (init.insert(std::make_pair(key, i)).second)
 		{
 			part[i] = i;
-			next[i] = count;
+			next[i] = NIL;
 		}
 		else
 		{
@@ -158,7 +160,6 @@ void dfa_t::minimization_moore(size_t *part)
 			next[j] = i;
 		}
 	}
-	part[count] = count;
 
 	size_t *out = new size_t[nchars * count];
 	size_t *diff = new size_t[count];
@@ -167,23 +168,23 @@ void dfa_t::minimization_moore(size_t *part)
 		loop = false;
 		for (size_t i = 0; i < count; ++i)
 		{
-			if (i != part[i] || next[i] == count)
+			if (i != part[i] || next[i] == NIL)
 			{
 				continue;
 			}
 
-			for (size_t j = i; j != count; j = next[j])
+			for (size_t j = i; j != NIL; j = next[j])
 			{
 				size_t *o = &out[j * nchars];
 				size_t *a = states[j]->arcs;
 				for (size_t c = 0; c < nchars; ++c)
 				{
-					o[c] = part[a[c]];
+					o[c] = a[c] == NIL ? NIL : part[a[c]];
 				}
 			}
 
 			size_t diff_count = 0;
-			for (size_t j = i; j != count;)
+			for (size_t j = i; j != NIL;)
 			{
 				const size_t j_next = next[j];
 				size_t n = 0;
@@ -202,7 +203,7 @@ void dfa_t::minimization_moore(size_t *part)
 				{
 					diff[diff_count++] = j;
 					part[j] = j;
-					next[j] = count;
+					next[j] = NIL;
 				}
 				j = j_next;
 			}

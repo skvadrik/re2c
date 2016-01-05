@@ -46,6 +46,7 @@ struct dfa_t
 		TABLE,
 		MOORE
 	};
+	static const size_t NIL;
 
 	std::vector<dfa_state_t*> states;
 	const size_t nchars;

@@ -1,5 +1,6 @@
 #include <algorithm>
 #include <assert.h>
+#include <limits>
 #include <list>
 #include <set>
 #include <string.h>
@@ -13,6 +14,8 @@
 
 namespace re2c
 {
+
+const size_t dfa_t::NIL = std::numeric_limits<size_t>::max();
 
 /*
  * note [marking DFA states]
@@ -122,20 +125,19 @@ dfa_t::dfa_t(const nfa_t &nfa, const charset_t &charset, rules_t &rules)
 	, nchars(charset.size() - 1) // (n + 1) bounds for n ranges
 {
 	std::map<uintptr_t, std::list<size_t> > kernels;
-	nfa_state_t **work = new nfa_state_t* [nfa.size];
-	std::vector<nfa_state_t*> *go = new std::vector<nfa_state_t*>[nchars];
+	nfa_state_t **kernel = new nfa_state_t*[nfa.size];
+	std::vector<nfa_state_t*> *arcs = new std::vector<nfa_state_t*>[nchars];
 
-	findState(work, closure(work, nfa.root), states, kernels);
-	for (size_t k = 0; k < states.size(); ++k)
+	findState(kernel, closure(kernel, nfa.root), states, kernels);
+	for (size_t n = 0; n < states.size(); ++n)
 	{
-		dfa_state_t *s = states[k];
+		dfa_state_t *s = states[n];
 
 		for(size_t i = 0; i < nchars; ++i)
 		{
-			go[i].clear();
+			arcs[i].clear();
 		}
 
-		s->rule = NULL;
 		for (size_t k = 0; k < s->kCount; ++k)
 		{
 			nfa_state_t *n = s->kernel[k];
@@ -150,7 +152,7 @@ dfa_t::dfa_t(const nfa_t &nfa, const charset_t &charset, rules_t &rules)
 						for (; charset[j] != r->lower(); ++j);
 						for (; charset[j] != r->upper(); ++j)
 						{
-							go[j].push_back(n2);
+							arcs[j].push_back(n2);
 						}
 					}
 					break;
@@ -189,35 +191,23 @@ dfa_t::dfa_t(const nfa_t &nfa, const charset_t &charset, rules_t &rules)
 		s->arcs = new size_t[nchars];
 		for(size_t i = 0; i < nchars; ++i)
 		{
-			if(!go[i].empty())
+			if(arcs[i].empty())
 			{
-				nfa_state_t **cP = work;
-				for (std::vector<nfa_state_t*>::const_iterator j = go[i].begin(); j != go[i].end(); ++j)
-				{
-					cP = closure(cP, *j);
-				}
-				s->arcs[i] = findState(work, cP, states, kernels);
+				s->arcs[i] = NIL;
 			}
 			else
 			{
-				s->arcs[i] = ~0u;
+				nfa_state_t **end = kernel;
+				for (std::vector<nfa_state_t*>::const_iterator j = arcs[i].begin(); j != arcs[i].end(); ++j)
+				{
+					end = closure(end, *j);
+				}
+				s->arcs[i] = findState(kernel, end, states, kernels);
 			}
 		}
 	}
-	delete [] work;
-	delete [] go;
-
-	const size_t count = states.size();
-	for (size_t i = 0; i < count; ++i)
-	{
-		for (size_t c = 0; c < nchars; ++c)
-		{
-			if (states[i]->arcs[c] == ~0u)
-			{
-				states[i]->arcs[c] = count;
-			}
-		}
-	}
+	delete[] kernel;
+	delete[] arcs;
 }
 
 dfa_t::~dfa_t()

@@ -39,12 +39,11 @@ DFA::DFA
 	const size_t nstates = dfa.states.size();
 	const size_t nchars = dfa.nchars;
 
-	State **i2s = new State*[nstates + 1];
+	State **i2s = new State*[nstates];
 	for (size_t i = 0; i < nstates; ++i)
 	{
 		i2s[i] = dfa.states[i] ? new State : NULL;
 	}
-	i2s[nstates] = NULL;
 
 	State **p = &head;
 	for (size_t i = 0; i < nstates; ++i)
@@ -66,7 +65,7 @@ DFA::DFA
 			{
 				const size_t to = t->arcs[c];
 				for (;++c < nchars && t->arcs[c] == to;);
-				s->go.span[j].to = i2s[to];
+				s->go.span[j].to = to == dfa_t::NIL ? NULL : i2s[to];
 				s->go.span[j].ub = charset[c];
 			}
 			s->go.nSpans = j;
