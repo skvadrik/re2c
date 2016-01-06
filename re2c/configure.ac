@@ -20,7 +20,7 @@ AM_CONDITIONAL([REBUILD_DOCS], [test "x$enable_docs" = "xyes"])
 AM_COND_IF([REBUILD_DOCS], [
     AC_CHECK_PROGS(RST2MAN, [rst2man rst2man.py], no)
     AS_IF([test "x$RST2MAN" = "xno"], [
-        AC_MSG_ERROR([need rst2man.py for --enable-docs])
+        AC_MSG_ERROR([need rst2man or rst2man.py for --enable-docs])
     ])
 ])
 
