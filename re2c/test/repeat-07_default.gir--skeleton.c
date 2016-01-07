@@ -310,6 +310,12 @@ int lex_line46()
         goto end;
     }
 
+    for (i = 0; i < input_len; ++i) {
+        /* from little-endian to host-endian */
+        unsigned char *p = (unsigned char*)&input[i];
+        input[i] = p[0] + (p[1] << 8u);
+    }
+
     keys = (YYKEYTYPE *) read_file
         ("repeat-07_default.gir--skeleton.c.line46.keys"
         , 3 * sizeof (YYKEYTYPE)
@@ -497,6 +503,12 @@ int lex_line64()
     if (input == NULL) {
         status = 1;
         goto end;
+    }
+
+    for (i = 0; i < input_len; ++i) {
+        /* from little-endian to host-endian */
+        unsigned char *p = (unsigned char*)&input[i];
+        input[i] = p[0] + (p[1] << 8u) + (p[2] << 16u) + (p[3] << 24u);
     }
 
     keys = (YYKEYTYPE *) read_file
