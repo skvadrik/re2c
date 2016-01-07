@@ -39,6 +39,18 @@ static void exact_uint (OutputFile & o, size_t width)
 	}
 }
 
+static void from_le(OutputFile &o, uint32_t ind, size_t size, const char *expr)
+{
+	o.ws("\n").wind(ind).ws("/* from little-endian to host-endian */");
+	o.ws("\n").wind(ind).ws("unsigned char *p = (unsigned char*)&").ws(expr).ws(";");
+	o.ws("\n").wind(ind).ws(expr).ws(" = p[0]");
+	for (uint32_t i = 1; i < size; ++i)
+	{
+		o.ws(" + (p[").wu32(i).ws("] << ").wu32(i * 8).ws("u)");
+	}
+	o.ws(";");
+}
+
 void Skeleton::emit_prolog (OutputFile & o)
 {
 	o.ws("\n#include <stdio.h>");
@@ -99,10 +111,11 @@ void Skeleton::emit_start
 	, bool accept
 	) const
 {
+	const size_t sizeof_cunit = opts->encoding.szCodeUnit();
 	const uint32_t default_rule = rule2key (rule_rank_t::none ());
 
 	o.ws("\n#define YYCTYPE ");
-	exact_uint (o, opts->encoding.szCodeUnit ());
+	exact_uint (o, sizeof_cunit);
 	o.ws("\n#define YYKEYTYPE ");
 	exact_uint (o, sizeof_key);
 	o.ws("\n#define YYPEEK() *cursor");
@@ -187,6 +200,13 @@ void Skeleton::emit_start
 	o.ws("\n").wind(2).ws("goto end;");
 	o.ws("\n").wind(1).ws("}");
 	o.ws("\n");
+	if (sizeof_cunit > 1)
+	{
+		o.ws("\n").wind(1).ws("for (i = 0; i < input_len; ++i) {");
+		from_le(o, 2, sizeof_cunit, "input[i]");
+		o.ws("\n").wind(1).ws("}");
+		o.ws("\n");
+	}
 	o.ws("\n").wind(1).ws("keys = (YYKEYTYPE *) read_file");
 	o.ws("\n").wind(2).ws("(\"").wstring(o.file_name).ws(".").wstring(name).ws(".keys\"");
 	o.ws("\n").wind(2).ws(", 3 * sizeof (YYKEYTYPE)");
@@ -198,6 +218,13 @@ void Skeleton::emit_start
 	o.ws("\n").wind(2).ws("goto end;");
 	o.ws("\n").wind(1).ws("}");
 	o.ws("\n");
+	if (sizeof_key > 1)
+	{
+		o.ws("\n").wind(1).ws("for (i = 0; i < 3 * keys_count; ++i) {");
+		from_le(o, 2, sizeof_key, "keys[i]");
+		o.ws("\n").wind(1).ws("}");
+		o.ws("\n");
+	}
 	o.ws("\n").wind(1).ws("cursor = input;");
 	o.ws("\n").wind(1).ws("limit = input + input_len + padding;");
 	o.ws("\n").wind(1).ws("eof = input + input_len;");

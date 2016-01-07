@@ -122,6 +122,12 @@ int lex_line344()
         goto end;
     }
 
+    for (i = 0; i < input_len; ++i) {
+        /* from little-endian to host-endian */
+        unsigned char *p = (unsigned char*)&input[i];
+        input[i] = p[0] + (p[1] << 8u);
+    }
+
     keys = (YYKEYTYPE *) read_file
         ("unicode_blocks.x--skeleton--encoding-policy(ignore).c.line344.keys"
         , 3 * sizeof (YYKEYTYPE)
@@ -251,6 +257,12 @@ int lex_line351()
     if (input == NULL) {
         status = 1;
         goto end;
+    }
+
+    for (i = 0; i < input_len; ++i) {
+        /* from little-endian to host-endian */
+        unsigned char *p = (unsigned char*)&input[i];
+        input[i] = p[0] + (p[1] << 8u);
     }
 
     keys = (YYKEYTYPE *) read_file
@@ -386,6 +398,12 @@ int lex_line358()
         goto end;
     }
 
+    for (i = 0; i < input_len; ++i) {
+        /* from little-endian to host-endian */
+        unsigned char *p = (unsigned char*)&input[i];
+        input[i] = p[0] + (p[1] << 8u);
+    }
+
     keys = (YYKEYTYPE *) read_file
         ("unicode_blocks.x--skeleton--encoding-policy(ignore).c.line358.keys"
         , 3 * sizeof (YYKEYTYPE)
@@ -517,6 +535,12 @@ int lex_line365()
     if (input == NULL) {
         status = 1;
         goto end;
+    }
+
+    for (i = 0; i < input_len; ++i) {
+        /* from little-endian to host-endian */
+        unsigned char *p = (unsigned char*)&input[i];
+        input[i] = p[0] + (p[1] << 8u);
     }
 
     keys = (YYKEYTYPE *) read_file
@@ -652,6 +676,12 @@ int lex_line372()
         goto end;
     }
 
+    for (i = 0; i < input_len; ++i) {
+        /* from little-endian to host-endian */
+        unsigned char *p = (unsigned char*)&input[i];
+        input[i] = p[0] + (p[1] << 8u);
+    }
+
     keys = (YYKEYTYPE *) read_file
         ("unicode_blocks.x--skeleton--encoding-policy(ignore).c.line372.keys"
         , 3 * sizeof (YYKEYTYPE)
@@ -783,6 +813,12 @@ int lex_line379()
     if (input == NULL) {
         status = 1;
         goto end;
+    }
+
+    for (i = 0; i < input_len; ++i) {
+        /* from little-endian to host-endian */
+        unsigned char *p = (unsigned char*)&input[i];
+        input[i] = p[0] + (p[1] << 8u);
     }
 
     keys = (YYKEYTYPE *) read_file
@@ -918,6 +954,12 @@ int lex_line386()
         goto end;
     }
 
+    for (i = 0; i < input_len; ++i) {
+        /* from little-endian to host-endian */
+        unsigned char *p = (unsigned char*)&input[i];
+        input[i] = p[0] + (p[1] << 8u);
+    }
+
     keys = (YYKEYTYPE *) read_file
         ("unicode_blocks.x--skeleton--encoding-policy(ignore).c.line386.keys"
         , 3 * sizeof (YYKEYTYPE)
@@ -1049,6 +1091,12 @@ int lex_line393()
     if (input == NULL) {
         status = 1;
         goto end;
+    }
+
+    for (i = 0; i < input_len; ++i) {
+        /* from little-endian to host-endian */
+        unsigned char *p = (unsigned char*)&input[i];
+        input[i] = p[0] + (p[1] << 8u);
     }
 
     keys = (YYKEYTYPE *) read_file
@@ -1184,6 +1232,12 @@ int lex_line400()
         goto end;
     }
 
+    for (i = 0; i < input_len; ++i) {
+        /* from little-endian to host-endian */
+        unsigned char *p = (unsigned char*)&input[i];
+        input[i] = p[0] + (p[1] << 8u);
+    }
+
     keys = (YYKEYTYPE *) read_file
         ("unicode_blocks.x--skeleton--encoding-policy(ignore).c.line400.keys"
         , 3 * sizeof (YYKEYTYPE)
@@ -1315,6 +1369,12 @@ int lex_line407()
     if (input == NULL) {
         status = 1;
         goto end;
+    }
+
+    for (i = 0; i < input_len; ++i) {
+        /* from little-endian to host-endian */
+        unsigned char *p = (unsigned char*)&input[i];
+        input[i] = p[0] + (p[1] << 8u);
     }
 
     keys = (YYKEYTYPE *) read_file
@@ -1450,6 +1510,12 @@ int lex_line414()
         goto end;
     }
 
+    for (i = 0; i < input_len; ++i) {
+        /* from little-endian to host-endian */
+        unsigned char *p = (unsigned char*)&input[i];
+        input[i] = p[0] + (p[1] << 8u);
+    }
+
     keys = (YYKEYTYPE *) read_file
         ("unicode_blocks.x--skeleton--encoding-policy(ignore).c.line414.keys"
         , 3 * sizeof (YYKEYTYPE)
@@ -1581,6 +1647,12 @@ int lex_line421()
     if (input == NULL) {
         status = 1;
         goto end;
+    }
+
+    for (i = 0; i < input_len; ++i) {
+        /* from little-endian to host-endian */
+        unsigned char *p = (unsigned char*)&input[i];
+        input[i] = p[0] + (p[1] << 8u);
     }
 
     keys = (YYKEYTYPE *) read_file
@@ -1716,6 +1788,12 @@ int lex_line428()
         goto end;
     }
 
+    for (i = 0; i < input_len; ++i) {
+        /* from little-endian to host-endian */
+        unsigned char *p = (unsigned char*)&input[i];
+        input[i] = p[0] + (p[1] << 8u);
+    }
+
     keys = (YYKEYTYPE *) read_file
         ("unicode_blocks.x--skeleton--encoding-policy(ignore).c.line428.keys"
         , 3 * sizeof (YYKEYTYPE)
@@ -1847,6 +1925,12 @@ int lex_line435()
     if (input == NULL) {
         status = 1;
         goto end;
+    }
+
+    for (i = 0; i < input_len; ++i) {
+        /* from little-endian to host-endian */
+        unsigned char *p = (unsigned char*)&input[i];
+        input[i] = p[0] + (p[1] << 8u);
     }
 
     keys = (YYKEYTYPE *) read_file
@@ -1982,6 +2066,12 @@ int lex_line442()
         goto end;
     }
 
+    for (i = 0; i < input_len; ++i) {
+        /* from little-endian to host-endian */
+        unsigned char *p = (unsigned char*)&input[i];
+        input[i] = p[0] + (p[1] << 8u);
+    }
+
     keys = (YYKEYTYPE *) read_file
         ("unicode_blocks.x--skeleton--encoding-policy(ignore).c.line442.keys"
         , 3 * sizeof (YYKEYTYPE)
@@ -2113,6 +2203,12 @@ int lex_line449()
     if (input == NULL) {
         status = 1;
         goto end;
+    }
+
+    for (i = 0; i < input_len; ++i) {
+        /* from little-endian to host-endian */
+        unsigned char *p = (unsigned char*)&input[i];
+        input[i] = p[0] + (p[1] << 8u);
     }
 
     keys = (YYKEYTYPE *) read_file
@@ -2248,6 +2344,12 @@ int lex_line456()
         goto end;
     }
 
+    for (i = 0; i < input_len; ++i) {
+        /* from little-endian to host-endian */
+        unsigned char *p = (unsigned char*)&input[i];
+        input[i] = p[0] + (p[1] << 8u);
+    }
+
     keys = (YYKEYTYPE *) read_file
         ("unicode_blocks.x--skeleton--encoding-policy(ignore).c.line456.keys"
         , 3 * sizeof (YYKEYTYPE)
@@ -2379,6 +2481,12 @@ int lex_line463()
     if (input == NULL) {
         status = 1;
         goto end;
+    }
+
+    for (i = 0; i < input_len; ++i) {
+        /* from little-endian to host-endian */
+        unsigned char *p = (unsigned char*)&input[i];
+        input[i] = p[0] + (p[1] << 8u);
     }
 
     keys = (YYKEYTYPE *) read_file
@@ -2514,6 +2622,12 @@ int lex_line470()
         goto end;
     }
 
+    for (i = 0; i < input_len; ++i) {
+        /* from little-endian to host-endian */
+        unsigned char *p = (unsigned char*)&input[i];
+        input[i] = p[0] + (p[1] << 8u);
+    }
+
     keys = (YYKEYTYPE *) read_file
         ("unicode_blocks.x--skeleton--encoding-policy(ignore).c.line470.keys"
         , 3 * sizeof (YYKEYTYPE)
@@ -2645,6 +2759,12 @@ int lex_line477()
     if (input == NULL) {
         status = 1;
         goto end;
+    }
+
+    for (i = 0; i < input_len; ++i) {
+        /* from little-endian to host-endian */
+        unsigned char *p = (unsigned char*)&input[i];
+        input[i] = p[0] + (p[1] << 8u);
     }
 
     keys = (YYKEYTYPE *) read_file
@@ -2780,6 +2900,12 @@ int lex_line484()
         goto end;
     }
 
+    for (i = 0; i < input_len; ++i) {
+        /* from little-endian to host-endian */
+        unsigned char *p = (unsigned char*)&input[i];
+        input[i] = p[0] + (p[1] << 8u);
+    }
+
     keys = (YYKEYTYPE *) read_file
         ("unicode_blocks.x--skeleton--encoding-policy(ignore).c.line484.keys"
         , 3 * sizeof (YYKEYTYPE)
@@ -2911,6 +3037,12 @@ int lex_line491()
     if (input == NULL) {
         status = 1;
         goto end;
+    }
+
+    for (i = 0; i < input_len; ++i) {
+        /* from little-endian to host-endian */
+        unsigned char *p = (unsigned char*)&input[i];
+        input[i] = p[0] + (p[1] << 8u);
     }
 
     keys = (YYKEYTYPE *) read_file
@@ -3046,6 +3178,12 @@ int lex_line498()
         goto end;
     }
 
+    for (i = 0; i < input_len; ++i) {
+        /* from little-endian to host-endian */
+        unsigned char *p = (unsigned char*)&input[i];
+        input[i] = p[0] + (p[1] << 8u);
+    }
+
     keys = (YYKEYTYPE *) read_file
         ("unicode_blocks.x--skeleton--encoding-policy(ignore).c.line498.keys"
         , 3 * sizeof (YYKEYTYPE)
@@ -3177,6 +3315,12 @@ int lex_line505()
     if (input == NULL) {
         status = 1;
         goto end;
+    }
+
+    for (i = 0; i < input_len; ++i) {
+        /* from little-endian to host-endian */
+        unsigned char *p = (unsigned char*)&input[i];
+        input[i] = p[0] + (p[1] << 8u);
     }
 
     keys = (YYKEYTYPE *) read_file
@@ -3312,6 +3456,12 @@ int lex_line512()
         goto end;
     }
 
+    for (i = 0; i < input_len; ++i) {
+        /* from little-endian to host-endian */
+        unsigned char *p = (unsigned char*)&input[i];
+        input[i] = p[0] + (p[1] << 8u);
+    }
+
     keys = (YYKEYTYPE *) read_file
         ("unicode_blocks.x--skeleton--encoding-policy(ignore).c.line512.keys"
         , 3 * sizeof (YYKEYTYPE)
@@ -3443,6 +3593,12 @@ int lex_line519()
     if (input == NULL) {
         status = 1;
         goto end;
+    }
+
+    for (i = 0; i < input_len; ++i) {
+        /* from little-endian to host-endian */
+        unsigned char *p = (unsigned char*)&input[i];
+        input[i] = p[0] + (p[1] << 8u);
     }
 
     keys = (YYKEYTYPE *) read_file
@@ -3578,6 +3734,12 @@ int lex_line526()
         goto end;
     }
 
+    for (i = 0; i < input_len; ++i) {
+        /* from little-endian to host-endian */
+        unsigned char *p = (unsigned char*)&input[i];
+        input[i] = p[0] + (p[1] << 8u);
+    }
+
     keys = (YYKEYTYPE *) read_file
         ("unicode_blocks.x--skeleton--encoding-policy(ignore).c.line526.keys"
         , 3 * sizeof (YYKEYTYPE)
@@ -3709,6 +3871,12 @@ int lex_line533()
     if (input == NULL) {
         status = 1;
         goto end;
+    }
+
+    for (i = 0; i < input_len; ++i) {
+        /* from little-endian to host-endian */
+        unsigned char *p = (unsigned char*)&input[i];
+        input[i] = p[0] + (p[1] << 8u);
     }
 
     keys = (YYKEYTYPE *) read_file
@@ -3844,6 +4012,12 @@ int lex_line540()
         goto end;
     }
 
+    for (i = 0; i < input_len; ++i) {
+        /* from little-endian to host-endian */
+        unsigned char *p = (unsigned char*)&input[i];
+        input[i] = p[0] + (p[1] << 8u);
+    }
+
     keys = (YYKEYTYPE *) read_file
         ("unicode_blocks.x--skeleton--encoding-policy(ignore).c.line540.keys"
         , 3 * sizeof (YYKEYTYPE)
@@ -3975,6 +4149,12 @@ int lex_line547()
     if (input == NULL) {
         status = 1;
         goto end;
+    }
+
+    for (i = 0; i < input_len; ++i) {
+        /* from little-endian to host-endian */
+        unsigned char *p = (unsigned char*)&input[i];
+        input[i] = p[0] + (p[1] << 8u);
     }
 
     keys = (YYKEYTYPE *) read_file
@@ -4110,6 +4290,12 @@ int lex_line554()
         goto end;
     }
 
+    for (i = 0; i < input_len; ++i) {
+        /* from little-endian to host-endian */
+        unsigned char *p = (unsigned char*)&input[i];
+        input[i] = p[0] + (p[1] << 8u);
+    }
+
     keys = (YYKEYTYPE *) read_file
         ("unicode_blocks.x--skeleton--encoding-policy(ignore).c.line554.keys"
         , 3 * sizeof (YYKEYTYPE)
@@ -4241,6 +4427,12 @@ int lex_line561()
     if (input == NULL) {
         status = 1;
         goto end;
+    }
+
+    for (i = 0; i < input_len; ++i) {
+        /* from little-endian to host-endian */
+        unsigned char *p = (unsigned char*)&input[i];
+        input[i] = p[0] + (p[1] << 8u);
     }
 
     keys = (YYKEYTYPE *) read_file
@@ -4376,6 +4568,12 @@ int lex_line568()
         goto end;
     }
 
+    for (i = 0; i < input_len; ++i) {
+        /* from little-endian to host-endian */
+        unsigned char *p = (unsigned char*)&input[i];
+        input[i] = p[0] + (p[1] << 8u);
+    }
+
     keys = (YYKEYTYPE *) read_file
         ("unicode_blocks.x--skeleton--encoding-policy(ignore).c.line568.keys"
         , 3 * sizeof (YYKEYTYPE)
@@ -4507,6 +4705,12 @@ int lex_line575()
     if (input == NULL) {
         status = 1;
         goto end;
+    }
+
+    for (i = 0; i < input_len; ++i) {
+        /* from little-endian to host-endian */
+        unsigned char *p = (unsigned char*)&input[i];
+        input[i] = p[0] + (p[1] << 8u);
     }
 
     keys = (YYKEYTYPE *) read_file
@@ -4642,6 +4846,12 @@ int lex_line582()
         goto end;
     }
 
+    for (i = 0; i < input_len; ++i) {
+        /* from little-endian to host-endian */
+        unsigned char *p = (unsigned char*)&input[i];
+        input[i] = p[0] + (p[1] << 8u);
+    }
+
     keys = (YYKEYTYPE *) read_file
         ("unicode_blocks.x--skeleton--encoding-policy(ignore).c.line582.keys"
         , 3 * sizeof (YYKEYTYPE)
@@ -4773,6 +4983,12 @@ int lex_line589()
     if (input == NULL) {
         status = 1;
         goto end;
+    }
+
+    for (i = 0; i < input_len; ++i) {
+        /* from little-endian to host-endian */
+        unsigned char *p = (unsigned char*)&input[i];
+        input[i] = p[0] + (p[1] << 8u);
     }
 
     keys = (YYKEYTYPE *) read_file
@@ -4908,6 +5124,12 @@ int lex_line596()
         goto end;
     }
 
+    for (i = 0; i < input_len; ++i) {
+        /* from little-endian to host-endian */
+        unsigned char *p = (unsigned char*)&input[i];
+        input[i] = p[0] + (p[1] << 8u);
+    }
+
     keys = (YYKEYTYPE *) read_file
         ("unicode_blocks.x--skeleton--encoding-policy(ignore).c.line596.keys"
         , 3 * sizeof (YYKEYTYPE)
@@ -5039,6 +5261,12 @@ int lex_line603()
     if (input == NULL) {
         status = 1;
         goto end;
+    }
+
+    for (i = 0; i < input_len; ++i) {
+        /* from little-endian to host-endian */
+        unsigned char *p = (unsigned char*)&input[i];
+        input[i] = p[0] + (p[1] << 8u);
     }
 
     keys = (YYKEYTYPE *) read_file
@@ -5174,6 +5402,12 @@ int lex_line610()
         goto end;
     }
 
+    for (i = 0; i < input_len; ++i) {
+        /* from little-endian to host-endian */
+        unsigned char *p = (unsigned char*)&input[i];
+        input[i] = p[0] + (p[1] << 8u);
+    }
+
     keys = (YYKEYTYPE *) read_file
         ("unicode_blocks.x--skeleton--encoding-policy(ignore).c.line610.keys"
         , 3 * sizeof (YYKEYTYPE)
@@ -5305,6 +5539,12 @@ int lex_line617()
     if (input == NULL) {
         status = 1;
         goto end;
+    }
+
+    for (i = 0; i < input_len; ++i) {
+        /* from little-endian to host-endian */
+        unsigned char *p = (unsigned char*)&input[i];
+        input[i] = p[0] + (p[1] << 8u);
     }
 
     keys = (YYKEYTYPE *) read_file
@@ -5440,6 +5680,12 @@ int lex_line624()
         goto end;
     }
 
+    for (i = 0; i < input_len; ++i) {
+        /* from little-endian to host-endian */
+        unsigned char *p = (unsigned char*)&input[i];
+        input[i] = p[0] + (p[1] << 8u);
+    }
+
     keys = (YYKEYTYPE *) read_file
         ("unicode_blocks.x--skeleton--encoding-policy(ignore).c.line624.keys"
         , 3 * sizeof (YYKEYTYPE)
@@ -5571,6 +5817,12 @@ int lex_line631()
     if (input == NULL) {
         status = 1;
         goto end;
+    }
+
+    for (i = 0; i < input_len; ++i) {
+        /* from little-endian to host-endian */
+        unsigned char *p = (unsigned char*)&input[i];
+        input[i] = p[0] + (p[1] << 8u);
     }
 
     keys = (YYKEYTYPE *) read_file
@@ -5706,6 +5958,12 @@ int lex_line638()
         goto end;
     }
 
+    for (i = 0; i < input_len; ++i) {
+        /* from little-endian to host-endian */
+        unsigned char *p = (unsigned char*)&input[i];
+        input[i] = p[0] + (p[1] << 8u);
+    }
+
     keys = (YYKEYTYPE *) read_file
         ("unicode_blocks.x--skeleton--encoding-policy(ignore).c.line638.keys"
         , 3 * sizeof (YYKEYTYPE)
@@ -5837,6 +6095,12 @@ int lex_line645()
     if (input == NULL) {
         status = 1;
         goto end;
+    }
+
+    for (i = 0; i < input_len; ++i) {
+        /* from little-endian to host-endian */
+        unsigned char *p = (unsigned char*)&input[i];
+        input[i] = p[0] + (p[1] << 8u);
     }
 
     keys = (YYKEYTYPE *) read_file
@@ -5972,6 +6236,12 @@ int lex_line652()
         goto end;
     }
 
+    for (i = 0; i < input_len; ++i) {
+        /* from little-endian to host-endian */
+        unsigned char *p = (unsigned char*)&input[i];
+        input[i] = p[0] + (p[1] << 8u);
+    }
+
     keys = (YYKEYTYPE *) read_file
         ("unicode_blocks.x--skeleton--encoding-policy(ignore).c.line652.keys"
         , 3 * sizeof (YYKEYTYPE)
@@ -6103,6 +6373,12 @@ int lex_line659()
     if (input == NULL) {
         status = 1;
         goto end;
+    }
+
+    for (i = 0; i < input_len; ++i) {
+        /* from little-endian to host-endian */
+        unsigned char *p = (unsigned char*)&input[i];
+        input[i] = p[0] + (p[1] << 8u);
     }
 
     keys = (YYKEYTYPE *) read_file
@@ -6238,6 +6514,12 @@ int lex_line666()
         goto end;
     }
 
+    for (i = 0; i < input_len; ++i) {
+        /* from little-endian to host-endian */
+        unsigned char *p = (unsigned char*)&input[i];
+        input[i] = p[0] + (p[1] << 8u);
+    }
+
     keys = (YYKEYTYPE *) read_file
         ("unicode_blocks.x--skeleton--encoding-policy(ignore).c.line666.keys"
         , 3 * sizeof (YYKEYTYPE)
@@ -6369,6 +6651,12 @@ int lex_line673()
     if (input == NULL) {
         status = 1;
         goto end;
+    }
+
+    for (i = 0; i < input_len; ++i) {
+        /* from little-endian to host-endian */
+        unsigned char *p = (unsigned char*)&input[i];
+        input[i] = p[0] + (p[1] << 8u);
     }
 
     keys = (YYKEYTYPE *) read_file
@@ -6504,6 +6792,12 @@ int lex_line680()
         goto end;
     }
 
+    for (i = 0; i < input_len; ++i) {
+        /* from little-endian to host-endian */
+        unsigned char *p = (unsigned char*)&input[i];
+        input[i] = p[0] + (p[1] << 8u);
+    }
+
     keys = (YYKEYTYPE *) read_file
         ("unicode_blocks.x--skeleton--encoding-policy(ignore).c.line680.keys"
         , 3 * sizeof (YYKEYTYPE)
@@ -6635,6 +6929,12 @@ int lex_line687()
     if (input == NULL) {
         status = 1;
         goto end;
+    }
+
+    for (i = 0; i < input_len; ++i) {
+        /* from little-endian to host-endian */
+        unsigned char *p = (unsigned char*)&input[i];
+        input[i] = p[0] + (p[1] << 8u);
     }
 
     keys = (YYKEYTYPE *) read_file
@@ -6770,6 +7070,12 @@ int lex_line694()
         goto end;
     }
 
+    for (i = 0; i < input_len; ++i) {
+        /* from little-endian to host-endian */
+        unsigned char *p = (unsigned char*)&input[i];
+        input[i] = p[0] + (p[1] << 8u);
+    }
+
     keys = (YYKEYTYPE *) read_file
         ("unicode_blocks.x--skeleton--encoding-policy(ignore).c.line694.keys"
         , 3 * sizeof (YYKEYTYPE)
@@ -6901,6 +7207,12 @@ int lex_line701()
     if (input == NULL) {
         status = 1;
         goto end;
+    }
+
+    for (i = 0; i < input_len; ++i) {
+        /* from little-endian to host-endian */
+        unsigned char *p = (unsigned char*)&input[i];
+        input[i] = p[0] + (p[1] << 8u);
     }
 
     keys = (YYKEYTYPE *) read_file
@@ -7036,6 +7348,12 @@ int lex_line708()
         goto end;
     }
 
+    for (i = 0; i < input_len; ++i) {
+        /* from little-endian to host-endian */
+        unsigned char *p = (unsigned char*)&input[i];
+        input[i] = p[0] + (p[1] << 8u);
+    }
+
     keys = (YYKEYTYPE *) read_file
         ("unicode_blocks.x--skeleton--encoding-policy(ignore).c.line708.keys"
         , 3 * sizeof (YYKEYTYPE)
@@ -7167,6 +7485,12 @@ int lex_line715()
     if (input == NULL) {
         status = 1;
         goto end;
+    }
+
+    for (i = 0; i < input_len; ++i) {
+        /* from little-endian to host-endian */
+        unsigned char *p = (unsigned char*)&input[i];
+        input[i] = p[0] + (p[1] << 8u);
     }
 
     keys = (YYKEYTYPE *) read_file
@@ -7302,6 +7626,12 @@ int lex_line722()
         goto end;
     }
 
+    for (i = 0; i < input_len; ++i) {
+        /* from little-endian to host-endian */
+        unsigned char *p = (unsigned char*)&input[i];
+        input[i] = p[0] + (p[1] << 8u);
+    }
+
     keys = (YYKEYTYPE *) read_file
         ("unicode_blocks.x--skeleton--encoding-policy(ignore).c.line722.keys"
         , 3 * sizeof (YYKEYTYPE)
@@ -7433,6 +7763,12 @@ int lex_line729()
     if (input == NULL) {
         status = 1;
         goto end;
+    }
+
+    for (i = 0; i < input_len; ++i) {
+        /* from little-endian to host-endian */
+        unsigned char *p = (unsigned char*)&input[i];
+        input[i] = p[0] + (p[1] << 8u);
     }
 
     keys = (YYKEYTYPE *) read_file
@@ -7568,6 +7904,12 @@ int lex_line736()
         goto end;
     }
 
+    for (i = 0; i < input_len; ++i) {
+        /* from little-endian to host-endian */
+        unsigned char *p = (unsigned char*)&input[i];
+        input[i] = p[0] + (p[1] << 8u);
+    }
+
     keys = (YYKEYTYPE *) read_file
         ("unicode_blocks.x--skeleton--encoding-policy(ignore).c.line736.keys"
         , 3 * sizeof (YYKEYTYPE)
@@ -7699,6 +8041,12 @@ int lex_line743()
     if (input == NULL) {
         status = 1;
         goto end;
+    }
+
+    for (i = 0; i < input_len; ++i) {
+        /* from little-endian to host-endian */
+        unsigned char *p = (unsigned char*)&input[i];
+        input[i] = p[0] + (p[1] << 8u);
     }
 
     keys = (YYKEYTYPE *) read_file
@@ -7834,6 +8182,12 @@ int lex_line750()
         goto end;
     }
 
+    for (i = 0; i < input_len; ++i) {
+        /* from little-endian to host-endian */
+        unsigned char *p = (unsigned char*)&input[i];
+        input[i] = p[0] + (p[1] << 8u);
+    }
+
     keys = (YYKEYTYPE *) read_file
         ("unicode_blocks.x--skeleton--encoding-policy(ignore).c.line750.keys"
         , 3 * sizeof (YYKEYTYPE)
@@ -7965,6 +8319,12 @@ int lex_line757()
     if (input == NULL) {
         status = 1;
         goto end;
+    }
+
+    for (i = 0; i < input_len; ++i) {
+        /* from little-endian to host-endian */
+        unsigned char *p = (unsigned char*)&input[i];
+        input[i] = p[0] + (p[1] << 8u);
     }
 
     keys = (YYKEYTYPE *) read_file
@@ -8100,6 +8460,12 @@ int lex_line764()
         goto end;
     }
 
+    for (i = 0; i < input_len; ++i) {
+        /* from little-endian to host-endian */
+        unsigned char *p = (unsigned char*)&input[i];
+        input[i] = p[0] + (p[1] << 8u);
+    }
+
     keys = (YYKEYTYPE *) read_file
         ("unicode_blocks.x--skeleton--encoding-policy(ignore).c.line764.keys"
         , 3 * sizeof (YYKEYTYPE)
@@ -8231,6 +8597,12 @@ int lex_line771()
     if (input == NULL) {
         status = 1;
         goto end;
+    }
+
+    for (i = 0; i < input_len; ++i) {
+        /* from little-endian to host-endian */
+        unsigned char *p = (unsigned char*)&input[i];
+        input[i] = p[0] + (p[1] << 8u);
     }
 
     keys = (YYKEYTYPE *) read_file
@@ -8366,6 +8738,12 @@ int lex_line778()
         goto end;
     }
 
+    for (i = 0; i < input_len; ++i) {
+        /* from little-endian to host-endian */
+        unsigned char *p = (unsigned char*)&input[i];
+        input[i] = p[0] + (p[1] << 8u);
+    }
+
     keys = (YYKEYTYPE *) read_file
         ("unicode_blocks.x--skeleton--encoding-policy(ignore).c.line778.keys"
         , 3 * sizeof (YYKEYTYPE)
@@ -8497,6 +8875,12 @@ int lex_line785()
     if (input == NULL) {
         status = 1;
         goto end;
+    }
+
+    for (i = 0; i < input_len; ++i) {
+        /* from little-endian to host-endian */
+        unsigned char *p = (unsigned char*)&input[i];
+        input[i] = p[0] + (p[1] << 8u);
     }
 
     keys = (YYKEYTYPE *) read_file
@@ -8632,6 +9016,12 @@ int lex_line792()
         goto end;
     }
 
+    for (i = 0; i < input_len; ++i) {
+        /* from little-endian to host-endian */
+        unsigned char *p = (unsigned char*)&input[i];
+        input[i] = p[0] + (p[1] << 8u);
+    }
+
     keys = (YYKEYTYPE *) read_file
         ("unicode_blocks.x--skeleton--encoding-policy(ignore).c.line792.keys"
         , 3 * sizeof (YYKEYTYPE)
@@ -8763,6 +9153,12 @@ int lex_line799()
     if (input == NULL) {
         status = 1;
         goto end;
+    }
+
+    for (i = 0; i < input_len; ++i) {
+        /* from little-endian to host-endian */
+        unsigned char *p = (unsigned char*)&input[i];
+        input[i] = p[0] + (p[1] << 8u);
     }
 
     keys = (YYKEYTYPE *) read_file
@@ -8898,6 +9294,12 @@ int lex_line806()
         goto end;
     }
 
+    for (i = 0; i < input_len; ++i) {
+        /* from little-endian to host-endian */
+        unsigned char *p = (unsigned char*)&input[i];
+        input[i] = p[0] + (p[1] << 8u);
+    }
+
     keys = (YYKEYTYPE *) read_file
         ("unicode_blocks.x--skeleton--encoding-policy(ignore).c.line806.keys"
         , 3 * sizeof (YYKEYTYPE)
@@ -9029,6 +9431,12 @@ int lex_line813()
     if (input == NULL) {
         status = 1;
         goto end;
+    }
+
+    for (i = 0; i < input_len; ++i) {
+        /* from little-endian to host-endian */
+        unsigned char *p = (unsigned char*)&input[i];
+        input[i] = p[0] + (p[1] << 8u);
     }
 
     keys = (YYKEYTYPE *) read_file
@@ -9164,6 +9572,12 @@ int lex_line820()
         goto end;
     }
 
+    for (i = 0; i < input_len; ++i) {
+        /* from little-endian to host-endian */
+        unsigned char *p = (unsigned char*)&input[i];
+        input[i] = p[0] + (p[1] << 8u);
+    }
+
     keys = (YYKEYTYPE *) read_file
         ("unicode_blocks.x--skeleton--encoding-policy(ignore).c.line820.keys"
         , 3 * sizeof (YYKEYTYPE)
@@ -9295,6 +9709,12 @@ int lex_line827()
     if (input == NULL) {
         status = 1;
         goto end;
+    }
+
+    for (i = 0; i < input_len; ++i) {
+        /* from little-endian to host-endian */
+        unsigned char *p = (unsigned char*)&input[i];
+        input[i] = p[0] + (p[1] << 8u);
     }
 
     keys = (YYKEYTYPE *) read_file
@@ -9430,6 +9850,12 @@ int lex_line834()
         goto end;
     }
 
+    for (i = 0; i < input_len; ++i) {
+        /* from little-endian to host-endian */
+        unsigned char *p = (unsigned char*)&input[i];
+        input[i] = p[0] + (p[1] << 8u);
+    }
+
     keys = (YYKEYTYPE *) read_file
         ("unicode_blocks.x--skeleton--encoding-policy(ignore).c.line834.keys"
         , 3 * sizeof (YYKEYTYPE)
@@ -9561,6 +9987,12 @@ int lex_line841()
     if (input == NULL) {
         status = 1;
         goto end;
+    }
+
+    for (i = 0; i < input_len; ++i) {
+        /* from little-endian to host-endian */
+        unsigned char *p = (unsigned char*)&input[i];
+        input[i] = p[0] + (p[1] << 8u);
     }
 
     keys = (YYKEYTYPE *) read_file
@@ -9696,6 +10128,12 @@ int lex_line848()
         goto end;
     }
 
+    for (i = 0; i < input_len; ++i) {
+        /* from little-endian to host-endian */
+        unsigned char *p = (unsigned char*)&input[i];
+        input[i] = p[0] + (p[1] << 8u);
+    }
+
     keys = (YYKEYTYPE *) read_file
         ("unicode_blocks.x--skeleton--encoding-policy(ignore).c.line848.keys"
         , 3 * sizeof (YYKEYTYPE)
@@ -9827,6 +10265,12 @@ int lex_line855()
     if (input == NULL) {
         status = 1;
         goto end;
+    }
+
+    for (i = 0; i < input_len; ++i) {
+        /* from little-endian to host-endian */
+        unsigned char *p = (unsigned char*)&input[i];
+        input[i] = p[0] + (p[1] << 8u);
     }
 
     keys = (YYKEYTYPE *) read_file
@@ -9962,6 +10406,12 @@ int lex_line862()
         goto end;
     }
 
+    for (i = 0; i < input_len; ++i) {
+        /* from little-endian to host-endian */
+        unsigned char *p = (unsigned char*)&input[i];
+        input[i] = p[0] + (p[1] << 8u);
+    }
+
     keys = (YYKEYTYPE *) read_file
         ("unicode_blocks.x--skeleton--encoding-policy(ignore).c.line862.keys"
         , 3 * sizeof (YYKEYTYPE)
@@ -10093,6 +10543,12 @@ int lex_line869()
     if (input == NULL) {
         status = 1;
         goto end;
+    }
+
+    for (i = 0; i < input_len; ++i) {
+        /* from little-endian to host-endian */
+        unsigned char *p = (unsigned char*)&input[i];
+        input[i] = p[0] + (p[1] << 8u);
     }
 
     keys = (YYKEYTYPE *) read_file
@@ -10228,6 +10684,12 @@ int lex_line876()
         goto end;
     }
 
+    for (i = 0; i < input_len; ++i) {
+        /* from little-endian to host-endian */
+        unsigned char *p = (unsigned char*)&input[i];
+        input[i] = p[0] + (p[1] << 8u);
+    }
+
     keys = (YYKEYTYPE *) read_file
         ("unicode_blocks.x--skeleton--encoding-policy(ignore).c.line876.keys"
         , 3 * sizeof (YYKEYTYPE)
@@ -10359,6 +10821,12 @@ int lex_line883()
     if (input == NULL) {
         status = 1;
         goto end;
+    }
+
+    for (i = 0; i < input_len; ++i) {
+        /* from little-endian to host-endian */
+        unsigned char *p = (unsigned char*)&input[i];
+        input[i] = p[0] + (p[1] << 8u);
     }
 
     keys = (YYKEYTYPE *) read_file
@@ -10494,6 +10962,12 @@ int lex_line890()
         goto end;
     }
 
+    for (i = 0; i < input_len; ++i) {
+        /* from little-endian to host-endian */
+        unsigned char *p = (unsigned char*)&input[i];
+        input[i] = p[0] + (p[1] << 8u);
+    }
+
     keys = (YYKEYTYPE *) read_file
         ("unicode_blocks.x--skeleton--encoding-policy(ignore).c.line890.keys"
         , 3 * sizeof (YYKEYTYPE)
@@ -10625,6 +11099,12 @@ int lex_line897()
     if (input == NULL) {
         status = 1;
         goto end;
+    }
+
+    for (i = 0; i < input_len; ++i) {
+        /* from little-endian to host-endian */
+        unsigned char *p = (unsigned char*)&input[i];
+        input[i] = p[0] + (p[1] << 8u);
     }
 
     keys = (YYKEYTYPE *) read_file
@@ -10760,6 +11240,12 @@ int lex_line904()
         goto end;
     }
 
+    for (i = 0; i < input_len; ++i) {
+        /* from little-endian to host-endian */
+        unsigned char *p = (unsigned char*)&input[i];
+        input[i] = p[0] + (p[1] << 8u);
+    }
+
     keys = (YYKEYTYPE *) read_file
         ("unicode_blocks.x--skeleton--encoding-policy(ignore).c.line904.keys"
         , 3 * sizeof (YYKEYTYPE)
@@ -10891,6 +11377,12 @@ int lex_line911()
     if (input == NULL) {
         status = 1;
         goto end;
+    }
+
+    for (i = 0; i < input_len; ++i) {
+        /* from little-endian to host-endian */
+        unsigned char *p = (unsigned char*)&input[i];
+        input[i] = p[0] + (p[1] << 8u);
     }
 
     keys = (YYKEYTYPE *) read_file
@@ -11026,6 +11518,12 @@ int lex_line918()
         goto end;
     }
 
+    for (i = 0; i < input_len; ++i) {
+        /* from little-endian to host-endian */
+        unsigned char *p = (unsigned char*)&input[i];
+        input[i] = p[0] + (p[1] << 8u);
+    }
+
     keys = (YYKEYTYPE *) read_file
         ("unicode_blocks.x--skeleton--encoding-policy(ignore).c.line918.keys"
         , 3 * sizeof (YYKEYTYPE)
@@ -11157,6 +11655,12 @@ int lex_line925()
     if (input == NULL) {
         status = 1;
         goto end;
+    }
+
+    for (i = 0; i < input_len; ++i) {
+        /* from little-endian to host-endian */
+        unsigned char *p = (unsigned char*)&input[i];
+        input[i] = p[0] + (p[1] << 8u);
     }
 
     keys = (YYKEYTYPE *) read_file
@@ -11292,6 +11796,12 @@ int lex_line932()
         goto end;
     }
 
+    for (i = 0; i < input_len; ++i) {
+        /* from little-endian to host-endian */
+        unsigned char *p = (unsigned char*)&input[i];
+        input[i] = p[0] + (p[1] << 8u);
+    }
+
     keys = (YYKEYTYPE *) read_file
         ("unicode_blocks.x--skeleton--encoding-policy(ignore).c.line932.keys"
         , 3 * sizeof (YYKEYTYPE)
@@ -11423,6 +11933,12 @@ int lex_line939()
     if (input == NULL) {
         status = 1;
         goto end;
+    }
+
+    for (i = 0; i < input_len; ++i) {
+        /* from little-endian to host-endian */
+        unsigned char *p = (unsigned char*)&input[i];
+        input[i] = p[0] + (p[1] << 8u);
     }
 
     keys = (YYKEYTYPE *) read_file
@@ -11558,6 +12074,12 @@ int lex_line946()
         goto end;
     }
 
+    for (i = 0; i < input_len; ++i) {
+        /* from little-endian to host-endian */
+        unsigned char *p = (unsigned char*)&input[i];
+        input[i] = p[0] + (p[1] << 8u);
+    }
+
     keys = (YYKEYTYPE *) read_file
         ("unicode_blocks.x--skeleton--encoding-policy(ignore).c.line946.keys"
         , 3 * sizeof (YYKEYTYPE)
@@ -11689,6 +12211,12 @@ int lex_line953()
     if (input == NULL) {
         status = 1;
         goto end;
+    }
+
+    for (i = 0; i < input_len; ++i) {
+        /* from little-endian to host-endian */
+        unsigned char *p = (unsigned char*)&input[i];
+        input[i] = p[0] + (p[1] << 8u);
     }
 
     keys = (YYKEYTYPE *) read_file
@@ -11824,6 +12352,12 @@ int lex_line960()
         goto end;
     }
 
+    for (i = 0; i < input_len; ++i) {
+        /* from little-endian to host-endian */
+        unsigned char *p = (unsigned char*)&input[i];
+        input[i] = p[0] + (p[1] << 8u);
+    }
+
     keys = (YYKEYTYPE *) read_file
         ("unicode_blocks.x--skeleton--encoding-policy(ignore).c.line960.keys"
         , 3 * sizeof (YYKEYTYPE)
@@ -11955,6 +12489,12 @@ int lex_line967()
     if (input == NULL) {
         status = 1;
         goto end;
+    }
+
+    for (i = 0; i < input_len; ++i) {
+        /* from little-endian to host-endian */
+        unsigned char *p = (unsigned char*)&input[i];
+        input[i] = p[0] + (p[1] << 8u);
     }
 
     keys = (YYKEYTYPE *) read_file
@@ -12090,6 +12630,12 @@ int lex_line974()
         goto end;
     }
 
+    for (i = 0; i < input_len; ++i) {
+        /* from little-endian to host-endian */
+        unsigned char *p = (unsigned char*)&input[i];
+        input[i] = p[0] + (p[1] << 8u);
+    }
+
     keys = (YYKEYTYPE *) read_file
         ("unicode_blocks.x--skeleton--encoding-policy(ignore).c.line974.keys"
         , 3 * sizeof (YYKEYTYPE)
@@ -12221,6 +12767,12 @@ int lex_line981()
     if (input == NULL) {
         status = 1;
         goto end;
+    }
+
+    for (i = 0; i < input_len; ++i) {
+        /* from little-endian to host-endian */
+        unsigned char *p = (unsigned char*)&input[i];
+        input[i] = p[0] + (p[1] << 8u);
     }
 
     keys = (YYKEYTYPE *) read_file
@@ -12356,6 +12908,12 @@ int lex_line988()
         goto end;
     }
 
+    for (i = 0; i < input_len; ++i) {
+        /* from little-endian to host-endian */
+        unsigned char *p = (unsigned char*)&input[i];
+        input[i] = p[0] + (p[1] << 8u);
+    }
+
     keys = (YYKEYTYPE *) read_file
         ("unicode_blocks.x--skeleton--encoding-policy(ignore).c.line988.keys"
         , 3 * sizeof (YYKEYTYPE)
@@ -12487,6 +13045,12 @@ int lex_line995()
     if (input == NULL) {
         status = 1;
         goto end;
+    }
+
+    for (i = 0; i < input_len; ++i) {
+        /* from little-endian to host-endian */
+        unsigned char *p = (unsigned char*)&input[i];
+        input[i] = p[0] + (p[1] << 8u);
     }
 
     keys = (YYKEYTYPE *) read_file
@@ -12622,6 +13186,12 @@ int lex_line1002()
         goto end;
     }
 
+    for (i = 0; i < input_len; ++i) {
+        /* from little-endian to host-endian */
+        unsigned char *p = (unsigned char*)&input[i];
+        input[i] = p[0] + (p[1] << 8u);
+    }
+
     keys = (YYKEYTYPE *) read_file
         ("unicode_blocks.x--skeleton--encoding-policy(ignore).c.line1002.keys"
         , 3 * sizeof (YYKEYTYPE)
@@ -12753,6 +13323,12 @@ int lex_line1009()
     if (input == NULL) {
         status = 1;
         goto end;
+    }
+
+    for (i = 0; i < input_len; ++i) {
+        /* from little-endian to host-endian */
+        unsigned char *p = (unsigned char*)&input[i];
+        input[i] = p[0] + (p[1] << 8u);
     }
 
     keys = (YYKEYTYPE *) read_file
@@ -12888,6 +13464,12 @@ int lex_line1016()
         goto end;
     }
 
+    for (i = 0; i < input_len; ++i) {
+        /* from little-endian to host-endian */
+        unsigned char *p = (unsigned char*)&input[i];
+        input[i] = p[0] + (p[1] << 8u);
+    }
+
     keys = (YYKEYTYPE *) read_file
         ("unicode_blocks.x--skeleton--encoding-policy(ignore).c.line1016.keys"
         , 3 * sizeof (YYKEYTYPE)
@@ -13019,6 +13601,12 @@ int lex_line1023()
     if (input == NULL) {
         status = 1;
         goto end;
+    }
+
+    for (i = 0; i < input_len; ++i) {
+        /* from little-endian to host-endian */
+        unsigned char *p = (unsigned char*)&input[i];
+        input[i] = p[0] + (p[1] << 8u);
     }
 
     keys = (YYKEYTYPE *) read_file
@@ -13154,6 +13742,12 @@ int lex_line1030()
         goto end;
     }
 
+    for (i = 0; i < input_len; ++i) {
+        /* from little-endian to host-endian */
+        unsigned char *p = (unsigned char*)&input[i];
+        input[i] = p[0] + (p[1] << 8u);
+    }
+
     keys = (YYKEYTYPE *) read_file
         ("unicode_blocks.x--skeleton--encoding-policy(ignore).c.line1030.keys"
         , 3 * sizeof (YYKEYTYPE)
@@ -13285,6 +13879,12 @@ int lex_line1037()
     if (input == NULL) {
         status = 1;
         goto end;
+    }
+
+    for (i = 0; i < input_len; ++i) {
+        /* from little-endian to host-endian */
+        unsigned char *p = (unsigned char*)&input[i];
+        input[i] = p[0] + (p[1] << 8u);
     }
 
     keys = (YYKEYTYPE *) read_file
@@ -13420,6 +14020,12 @@ int lex_line1044()
         goto end;
     }
 
+    for (i = 0; i < input_len; ++i) {
+        /* from little-endian to host-endian */
+        unsigned char *p = (unsigned char*)&input[i];
+        input[i] = p[0] + (p[1] << 8u);
+    }
+
     keys = (YYKEYTYPE *) read_file
         ("unicode_blocks.x--skeleton--encoding-policy(ignore).c.line1044.keys"
         , 3 * sizeof (YYKEYTYPE)
@@ -13551,6 +14157,12 @@ int lex_line1051()
     if (input == NULL) {
         status = 1;
         goto end;
+    }
+
+    for (i = 0; i < input_len; ++i) {
+        /* from little-endian to host-endian */
+        unsigned char *p = (unsigned char*)&input[i];
+        input[i] = p[0] + (p[1] << 8u);
     }
 
     keys = (YYKEYTYPE *) read_file
@@ -13686,6 +14298,12 @@ int lex_line1058()
         goto end;
     }
 
+    for (i = 0; i < input_len; ++i) {
+        /* from little-endian to host-endian */
+        unsigned char *p = (unsigned char*)&input[i];
+        input[i] = p[0] + (p[1] << 8u);
+    }
+
     keys = (YYKEYTYPE *) read_file
         ("unicode_blocks.x--skeleton--encoding-policy(ignore).c.line1058.keys"
         , 3 * sizeof (YYKEYTYPE)
@@ -13817,6 +14435,12 @@ int lex_line1065()
     if (input == NULL) {
         status = 1;
         goto end;
+    }
+
+    for (i = 0; i < input_len; ++i) {
+        /* from little-endian to host-endian */
+        unsigned char *p = (unsigned char*)&input[i];
+        input[i] = p[0] + (p[1] << 8u);
     }
 
     keys = (YYKEYTYPE *) read_file
@@ -13952,6 +14576,12 @@ int lex_line1072()
         goto end;
     }
 
+    for (i = 0; i < input_len; ++i) {
+        /* from little-endian to host-endian */
+        unsigned char *p = (unsigned char*)&input[i];
+        input[i] = p[0] + (p[1] << 8u);
+    }
+
     keys = (YYKEYTYPE *) read_file
         ("unicode_blocks.x--skeleton--encoding-policy(ignore).c.line1072.keys"
         , 3 * sizeof (YYKEYTYPE)
@@ -14081,6 +14711,12 @@ int lex_line1079()
     if (input == NULL) {
         status = 1;
         goto end;
+    }
+
+    for (i = 0; i < input_len; ++i) {
+        /* from little-endian to host-endian */
+        unsigned char *p = (unsigned char*)&input[i];
+        input[i] = p[0] + (p[1] << 8u);
     }
 
     keys = (YYKEYTYPE *) read_file

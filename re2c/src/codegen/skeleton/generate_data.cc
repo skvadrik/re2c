@@ -148,6 +148,17 @@ void Skeleton::emit_data (const char * fname)
 	fclose (keys);
 }
 
+template <typename uintn_t> static uintn_t to_le(uintn_t n)
+{
+	uintn_t m;
+	uint8_t *p = reinterpret_cast<uint8_t*>(&m);
+	for (size_t i = 0; i < sizeof(uintn_t); ++i)
+	{
+		p[i] = static_cast<uint8_t>(n >> (i * 8));
+	}
+	return m;
+}
+
 template <typename key_t>
 	static void keygen (FILE * f, size_t count, size_t len, size_t len_match, rule_rank_t match)
 {
@@ -157,9 +168,9 @@ template <typename key_t>
 	key_t * keys = new key_t [keys_size];
 	for (uint32_t i = 0; i < keys_size;)
 	{
-		keys[i++] = static_cast<key_t> (len);
-		keys[i++] = static_cast<key_t> (len_match);
-		keys[i++] = m;
+		keys[i++] = to_le<key_t>(static_cast<key_t> (len));
+		keys[i++] = to_le<key_t>(static_cast<key_t> (len_match));
+		keys[i++] = to_le<key_t>(m);
 	}
 	fwrite (keys, sizeof (key_t), keys_size, f);
 	delete [] keys;
@@ -189,7 +200,7 @@ template <typename cunit_t, typename key_t>
 			for (size_t j = 0; j < count; ++j)
 			{
 				const size_t k = j % width;
-				buffer[j * len + i] = static_cast<cunit_t> (arc[k]);
+				buffer[j * len + i] = to_le<cunit_t>(static_cast<cunit_t> (arc[k]));
 			}
 		}
 		fwrite (buffer, sizeof (cunit_t), buffer_size, input);
