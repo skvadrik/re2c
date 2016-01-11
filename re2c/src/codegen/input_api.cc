@@ -157,7 +157,7 @@ std::string InputAPI::expr_lessthan_one () const
 		: expr_lessthan (1);
 }
 
-std::string InputAPI::expr_lessthan (uint32_t n) const
+std::string InputAPI::expr_lessthan (size_t n) const
 {
 	std::ostringstream s;
 	switch (type_)

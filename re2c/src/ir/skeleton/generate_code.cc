@@ -105,7 +105,7 @@ void Skeleton::emit_prolog (OutputFile & o)
 
 void Skeleton::emit_start
 	( OutputFile & o
-	, uint32_t maxfill
+	, size_t maxfill
 	, bool backup
 	, bool backupctx
 	, bool accept
@@ -177,7 +177,7 @@ void Skeleton::emit_start
 	o.ws("\n");
 	o.ws("\nint lex_").wstring(name).ws("()");
 	o.ws("\n{");
-	o.ws("\n").wind(1).ws("const size_t padding = ").wu32(maxfill).ws("; /* YYMAXFILL */");
+	o.ws("\n").wind(1).ws("const size_t padding = ").wu64(maxfill).ws("; /* YYMAXFILL */");
 	o.ws("\n").wind(1).ws("int status = 0;");
 	o.ws("\n").wind(1).ws("size_t input_len = 0;");
 	o.ws("\n").wind(1).ws("size_t keys_count = 0;");

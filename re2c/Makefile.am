@@ -23,7 +23,6 @@ SRC_HDR = \
 	src/ir/bytecode/nfa.h \
 	src/ir/adfa/action.h \
 	src/ir/adfa/adfa.h \
-	src/ir/adfa/scc.h \
 	src/ir/dfa/dfa.h \
 	src/ir/regexp/encoding/case.h \
 	src/ir/regexp/encoding/enc.h \
@@ -90,8 +89,8 @@ SRC = \
 	src/ir/nfa/split.cc \
 	src/ir/adfa/adfa.cc \
 	src/ir/adfa/prepare.cc \
-	src/ir/adfa/scc.cc \
 	src/ir/dfa/determinization.cc \
+	src/ir/dfa/fillpoints.cc \
 	src/ir/dfa/minimization.cc \
 	src/ir/regexp/display.cc \
 	src/ir/regexp/encoding/enc.cc \

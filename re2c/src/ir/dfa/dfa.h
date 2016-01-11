@@ -60,6 +60,8 @@ private:
 	void minimization_moore(size_t *part);
 };
 
+void fillpoints(const dfa_t &dfa, std::vector<size_t> &fill);
+
 } // namespace re2c
 
 #endif // _RE2C_IR_DFA_DFA_

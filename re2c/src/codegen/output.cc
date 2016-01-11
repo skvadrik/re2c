@@ -289,7 +289,7 @@ void OutputFile::new_block ()
 
 void OutputFile::emit
 	( const std::vector<std::string> & types
-	, uint32_t max_fill
+	, size_t max_fill
 	)
 {
 	if (file != NULL)
@@ -416,7 +416,7 @@ void output_yyaccept_init (std::ostream & o, uint32_t ind, bool used_yyaccept)
 	}
 }
 
-void output_yymaxfill (std::ostream & o, uint32_t max_fill)
+void output_yymaxfill (std::ostream & o, size_t max_fill)
 {
 	o << "#define YYMAXFILL " << max_fill << "\n";
 }

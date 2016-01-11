@@ -14,6 +14,7 @@ namespace re2c
 
 DFA::DFA
 	( const dfa_t &dfa
+	, const std::vector<size_t> &fill
 	, Skeleton *skel
 	, const charset_t &charset
 	, const std::string &n
@@ -59,6 +60,7 @@ DFA::DFA
 			dfa_state_t *t = dfa.states[i];
 			s->isPreCtxt = t->ctx;
 			s->rule = t->rule;
+			s->fill = fill[i];
 			s->go.span = allocate<Span>(nchars);
 			uint32_t j = 0;
 			for (uint32_t c = 0; c < nchars; ++j)

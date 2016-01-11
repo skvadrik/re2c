@@ -130,7 +130,7 @@ struct Skeleton
 	static void emit_prolog (OutputFile & o);
 	void emit_start
 		( OutputFile & o
-		, uint32_t maxfill
+		, size_t maxfill
 		, bool backup
 		, bool backupctx
 		, bool accept

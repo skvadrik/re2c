@@ -56,8 +56,12 @@ smart_ptr<DFA> compile (Spec & spec, Output & output, const std::string & cond, 
 
 	dfa.minimization();
 
+	// find YYFILL states and calculate argument to YYFILL
+	std::vector<size_t> fill;
+	fillpoints(dfa, fill);
+
 	// ADFA stands for 'DFA with actions'
-	DFA *adfa = new DFA(dfa, skeleton, cs, name, cond, line);
+	DFA *adfa = new DFA(dfa, fill, skeleton, cs, name, cond, line);
 
 	/*
 	 * note [reordering DFA states]

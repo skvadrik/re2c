@@ -8,42 +8,19 @@
 #include "src/globals.h"
 #include "src/ir/adfa/action.h"
 #include "src/ir/adfa/adfa.h"
-#include "src/ir/adfa/scc.h"
 #include "src/ir/regexp/regexp_rule.h"
 #include "src/ir/rule_rank.h"
 #include "src/util/allocate.h"
 
 namespace re2c {
 
-void DFA::findSCCs()
-{
-	SCC scc(nStates);
-	State *s;
-
-	for (s = head; s; s = s->next)
-	{
-		s->depth = 0;
-		s->link = NULL;
-	}
-
-	for (s = head; s; s = s->next)
-	{
-		if (!s->depth)
-		{
-			scc.traverse(s);
-		}
-	}
-
-	calcDepth(head);
-}
-
 void DFA::split(State *s)
 {
 	State *move = new State;
 	addState(move, s);
 	move->action.set_move ();
-	move->link = s->link;
 	move->rule = s->rule;
+	move->fill = s->fill;
 	move->go = s->go;
 	s->rule = NULL;
 	s->go.nSpans = 1;
@@ -133,7 +110,7 @@ void DFA::findBaseState()
 
 	for (State *s = head; s; s = s->next)
 	{
-		if (!s->link)
+		if (s->fill == 0)
 		{
 			for (uint32_t i = 0; i < s->go.nSpans; ++i)
 			{
@@ -164,9 +141,6 @@ void DFA::findBaseState()
 void DFA::prepare ()
 {
 	bUsedYYBitmap = false;
-
-	findSCCs();
-	head->link = head;
 
 	// create rule states
 	std::map<rule_rank_t, State *> rules;
@@ -234,7 +208,7 @@ void DFA::prepare ()
 	{
 		s->isBase = false;
 
-		if (s->link)
+		if (s->fill != 0)
 		{
 			for (uint32_t i = 0; i < s->go.nSpans; ++i)
 			{
@@ -270,10 +244,9 @@ void DFA::calc_stats ()
 	max_fill = 0;
 	for (State * s = head; s; s = s->next)
 	{
-		s->depth = maxDist(s);
-		if (max_fill < s->depth)
+		if (max_fill < s->fill)
 		{
-			max_fill = s->depth;
+			max_fill = s->fill;
 		}
 	}
 

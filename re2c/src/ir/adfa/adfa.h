@@ -24,8 +24,7 @@ struct State
 	label_t label;
 	RuleOp * rule;
 	State * next;
-	State * link;
-	uint32_t depth; // for finding SCCs
+	size_t fill;
 
 	bool isPreCtxt;
 	bool isBase;
@@ -36,8 +35,7 @@ struct State
 		: label (label_t::first ())
 		, rule (NULL)
 		, next (0)
-		, link (NULL)
-		, depth (0)
+		, fill (0)
 		, isPreCtxt (false)
 		, isBase (false)
 		, go ()
@@ -67,13 +65,14 @@ public:
 	State * head;
 
 	// statistics
-	uint32_t max_fill;
+	size_t max_fill;
 	bool need_backup;
 	bool need_backupctx;
 	bool need_accept;
 
 public:
 	DFA	( const dfa_t &dfa
+		, const std::vector<size_t> &fill
 		, Skeleton *skel
 		, const charset_t &charset
 		, const std::string &n
@@ -89,7 +88,6 @@ public:
 private:
 	void addState(State*, State *);
 	void split (State *);
-	void findSCCs ();
 	void findBaseState ();
 	void count_used_labels (std::set<label_t> & used, label_t prolog, label_t start, bool force_start) const;
 	void emit_body (OutputFile &, uint32_t &, const std::set<label_t> & used_labels, label_t initial) const;
