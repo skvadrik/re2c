@@ -210,26 +210,39 @@ void minimization(dfa_t &dfa)
 			break;
 	}
 
-	for (size_t i = 0; i < count; ++i)
+	size_t *compact = new size_t[count];
+	for (size_t i = 0, j = 0; i < count; ++i)
 	{
 		if (i == part[i])
 		{
-			size_t *arcs = dfa.states[i]->arcs;
+			compact[i] = j++;
+		}
+	}
+
+	size_t new_count = 0;
+	for (size_t i = 0; i < count; ++i)
+	{
+		dfa_state_t *s = dfa.states[i];
+		if (i == part[i])
+		{
+			size_t *arcs = s->arcs;
 			for (size_t c = 0; c < dfa.nchars; ++c)
 			{
 				if (arcs[c] != dfa_t::NIL)
 				{
-					arcs[c] = part[arcs[c]];
+					arcs[c] = compact[part[arcs[c]]];
 				}
 			}
+			dfa.states[new_count++] = s;
 		}
 		else
 		{
-			delete dfa.states[i];
-			dfa.states[i] = NULL;
+			delete s;
 		}
 	}
+	dfa.states.resize(new_count);
 
+	delete[] compact;
 	delete[] part;
 }
 

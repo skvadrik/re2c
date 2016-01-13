@@ -43,35 +43,32 @@ DFA::DFA
 	State **i2s = new State*[nstates];
 	for (size_t i = 0; i < nstates; ++i)
 	{
-		i2s[i] = dfa.states[i] ? new State : NULL;
+		i2s[i] = new State;
 	}
 
 	State **p = &head;
 	for (size_t i = 0; i < nstates; ++i)
 	{
+		dfa_state_t *t = dfa.states[i];
 		State *s = i2s[i];
-		if (s)
+
+		++nStates;
+		*p = s;
+		p = &s->next;
+
+		s->isPreCtxt = t->ctx;
+		s->rule = t->rule;
+		s->fill = fill[i];
+		s->go.span = allocate<Span>(nchars);
+		uint32_t j = 0;
+		for (uint32_t c = 0; c < nchars; ++j)
 		{
-			++nStates;
-
-			*p = s;
-			p = &s->next;
-
-			dfa_state_t *t = dfa.states[i];
-			s->isPreCtxt = t->ctx;
-			s->rule = t->rule;
-			s->fill = fill[i];
-			s->go.span = allocate<Span>(nchars);
-			uint32_t j = 0;
-			for (uint32_t c = 0; c < nchars; ++j)
-			{
-				const size_t to = t->arcs[c];
-				for (;++c < nchars && t->arcs[c] == to;);
-				s->go.span[j].to = to == dfa_t::NIL ? NULL : i2s[to];
-				s->go.span[j].ub = charset[c];
-			}
-			s->go.nSpans = j;
+			const size_t to = t->arcs[c];
+			for (;++c < nchars && t->arcs[c] == to;);
+			s->go.span[j].to = to == dfa_t::NIL ? NULL : i2s[to];
+			s->go.span[j].ub = charset[c];
 		}
+		s->go.nSpans = j;
 	}
 	*p = NULL;
 
