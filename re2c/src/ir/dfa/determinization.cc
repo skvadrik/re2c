@@ -1,8 +1,6 @@
 #include <algorithm>
 #include <assert.h>
 #include <limits>
-#include <list>
-#include <set>
 #include <string.h>
 #include <queue>
 
@@ -10,6 +8,7 @@
 #include "src/ir/nfa/nfa.h"
 #include "src/ir/regexp/regexp_rule.h"
 #include "src/ir/rule_rank.h"
+#include "src/util/ord_hash_set.h"
 #include "src/util/range.h"
 
 namespace re2c
@@ -65,94 +64,62 @@ static nfa_state_t **closure(nfa_state_t **cP, nfa_state_t *n)
 	return cP;
 }
 
-static size_t findState
+static size_t find_state
 	( nfa_state_t **kernel
-	, nfa_state_t **kernel_end
-	, std::vector<dfa_state_t*> &states
-	, std::map<uintptr_t, std::list<size_t> > &kernels
+	, nfa_state_t **end
+	, ord_hash_set_t &kernels
 	)
 {
-	const size_t kCount = static_cast<size_t>(kernel_end - kernel);
+	// zero-sized kernel corresponds to default state
+	if (kernel == end)
+	{
+		return dfa_t::NIL;
+	}
 
 	// see note [marking DFA states]
-	for (size_t i = 0; i < kCount; ++i)
+	for (nfa_state_t **p = kernel; p != end; ++p)
 	{
-		kernel[i]->mark = false;
+		(*p)->mark = false;
 	}
 
 	// sort kernel states: we need this to get stable hash
 	// and to compare states with simple 'memcmp'
-	std::sort(kernel, kernel_end);
-
-	// get hash of the new DFA state
-	uintptr_t hash = kCount; // seed
-	for (size_t i = 0; i < kCount; ++i)
-	{
-		hash = hash ^ ((hash << 5) + (hash >> 2) + (uintptr_t)kernel[i]);
-	}
-
-	// try to find an existing DFA state identical to the new state
-	std::map<uintptr_t, std::list<size_t> >::const_iterator i = kernels.find(hash);
-	if (i != kernels.end())
-	{
-		std::list<size_t>::const_iterator
-			j = i->second.begin(),
-			e = i->second.end();
-		for (; j != e; ++j)
-		{
-			const size_t k = *j;
-			if (states[k]->kCount == kCount
-				&& memcmp(states[k]->kernel, kernel, kCount * sizeof(nfa_state_t*)) == 0)
-			{
-				return k;
-			}
-		}
-	}
-
-	// no identical DFA state was found; add new state
-	dfa_state_t *s = new dfa_state_t;
-	s->kCount = kCount;
-	s->kernel = new nfa_state_t* [kCount];
-	memcpy(s->kernel, kernel, kCount * sizeof(nfa_state_t*));
-	const size_t k = states.size();
-	states.push_back(s);
-	kernels[hash].push_back(k);
-	return k;
+	std::sort(kernel, end);
+	const size_t size = static_cast<size_t>(end - kernel) * sizeof(nfa_state_t*);
+	return kernels.insert(kernel, size);
 }
 
 dfa_t::dfa_t(const nfa_t &nfa, const charset_t &charset, rules_t &rules)
 	: states()
 	, nchars(charset.size() - 1) // (n + 1) bounds for n ranges
 {
-	std::map<uintptr_t, std::list<size_t> > kernels;
-	nfa_state_t **kernel = new nfa_state_t*[nfa.size];
-	std::vector<nfa_state_t*> *arcs = new std::vector<nfa_state_t*>[nchars];
+	ord_hash_set_t kernels;
+	nfa_state_t **const buffer = new nfa_state_t*[nfa.size];
+	std::vector<std::vector<nfa_state_t*> > arcs(nchars);
 
-	findState(kernel, closure(kernel, nfa.root), states, kernels);
-	for (size_t n = 0; n < states.size(); ++n)
+	find_state(buffer, closure(buffer, nfa.root), kernels);
+	for (size_t i = 0; i < kernels.size(); ++i)
 	{
-		dfa_state_t *s = states[n];
+		dfa_state_t *s = new dfa_state_t;
+		states.push_back(s);
 
-		for(size_t i = 0; i < nchars; ++i)
+		nfa_state_t **kernel;
+		const size_t kernel_size = kernels.deref<nfa_state_t*>(i, kernel);
+		for (size_t j = 0; j < kernel_size; ++j)
 		{
-			arcs[i].clear();
-		}
-
-		for (size_t k = 0; k < s->kCount; ++k)
-		{
-			nfa_state_t *n = s->kernel[k];
+			nfa_state_t *n = kernel[j];
 			switch (n->type)
 			{
 				case nfa_state_t::RAN:
 				{
-					nfa_state_t *n2 = n->value.ran.out;
-					size_t j = 0;
+					nfa_state_t *m = n->value.ran.out;
+					size_t c = 0;
 					for (Range *r = n->value.ran.ran; r; r = r->next ())
 					{
-						for (; charset[j] != r->lower(); ++j);
-						for (; charset[j] != r->upper(); ++j)
+						for (; charset[c] != r->lower(); ++c);
+						for (; charset[c] != r->upper(); ++c)
 						{
-							arcs[j].push_back(n2);
+							arcs[c].push_back(m);
 						}
 					}
 					break;
@@ -189,25 +156,22 @@ dfa_t::dfa_t(const nfa_t &nfa, const charset_t &charset, rules_t &rules)
 		}
 
 		s->arcs = new size_t[nchars];
-		for(size_t i = 0; i < nchars; ++i)
+		for(size_t c = 0; c < nchars; ++c)
 		{
-			if(arcs[i].empty())
+			nfa_state_t **end = buffer;
+			for (std::vector<nfa_state_t*>::const_iterator j = arcs[c].begin(); j != arcs[c].end(); ++j)
 			{
-				s->arcs[i] = NIL;
+				end = closure(end, *j);
 			}
-			else
-			{
-				nfa_state_t **end = kernel;
-				for (std::vector<nfa_state_t*>::const_iterator j = arcs[i].begin(); j != arcs[i].end(); ++j)
-				{
-					end = closure(end, *j);
-				}
-				s->arcs[i] = findState(kernel, end, states, kernels);
-			}
+			s->arcs[c] = find_state(buffer, end, kernels);
+		}
+
+		for(size_t c = 0; c < nchars; ++c)
+		{
+			arcs[c].clear();
 		}
 	}
-	delete[] kernel;
-	delete[] arcs;
+	delete[] buffer;
 }
 
 dfa_t::~dfa_t()

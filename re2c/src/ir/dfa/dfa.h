@@ -11,28 +11,22 @@
 namespace re2c
 {
 
-struct nfa_state_t;
 struct nfa_t;
 class RuleOp;
 
 struct dfa_state_t
 {
-	size_t kCount;
-	nfa_state_t **kernel;
 	size_t *arcs;
 	RuleOp *rule;
 	bool ctx;
 
 	dfa_state_t()
-		: kCount(0)
-		, kernel(NULL)
-		, arcs(NULL)
+		: arcs(NULL)
 		, rule(NULL)
 		, ctx(false)
 	{}
 	~dfa_state_t()
 	{
-		delete[] kernel;
 		delete[] arcs;
 	}
 

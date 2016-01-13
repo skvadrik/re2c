@@ -63,6 +63,7 @@ SRC_HDR = \
 	src/util/forbid_copy.h \
 	src/util/free_list.h \
 	src/util/local_increment.h \
+	src/util/ord_hash_set.h \
 	src/util/range.h \
 	src/util/s_to_n32_unsafe.h \
 	src/util/smart_ptr.h \
