@@ -5,6 +5,7 @@
 #include "src/ir/compile.h"
 #include "src/ir/adfa/adfa.h"
 #include "src/ir/dfa/dfa.h"
+#include "src/ir/dfa/minimization.h"
 #include "src/ir/nfa/nfa.h"
 #include "src/ir/regexp/regexp.h"
 #include "src/ir/skeleton/skeleton.h"
@@ -54,7 +55,7 @@ smart_ptr<DFA> compile (Spec & spec, Output & output, const std::string & cond, 
 	// but prior to any other DFA transformations
 	Skeleton *skeleton = new Skeleton(dfa, cs, spec.rules, name, cond, line);
 
-	dfa.minimization();
+	minimization(dfa);
 
 	// find YYFILL states and calculate argument to YYFILL
 	std::vector<size_t> fill;

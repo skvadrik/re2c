@@ -6,7 +6,7 @@
 #include <string>
 
 #include "src/codegen/input_api.h"
-#include "src/ir/dfa/dfa.h"
+#include "src/ir/dfa/minimization.h"
 #include "src/ir/regexp/empty_class_policy.h"
 #include "src/ir/regexp/encoding/enc.h"
 #include "src/util/forbid_copy.h"
@@ -102,7 +102,7 @@ namespace re2c
 	/* labels */ \
 	OPT (std::string, labelPrefix, "yy") \
 	/* internals */ \
-	OPT (dfa_t::minimization_t, dfa_minimization, dfa_t::MOORE)
+	OPT (dfa_minimization_t, dfa_minimization, DFA_MINIMIZATION_MOORE)
 
 struct opt_t
 {

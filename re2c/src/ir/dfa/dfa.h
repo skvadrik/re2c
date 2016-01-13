@@ -35,11 +35,6 @@ struct dfa_state_t
 
 struct dfa_t
 {
-	enum minimization_t
-	{
-		TABLE,
-		MOORE
-	};
 	static const size_t NIL;
 
 	std::vector<dfa_state_t*> states;
@@ -47,11 +42,6 @@ struct dfa_t
 
 	dfa_t(const nfa_t &nfa, const charset_t &charset, rules_t &rules);
 	~dfa_t();
-	void minimization();
-
-private:
-	void minimization_table(size_t *part);
-	void minimization_moore(size_t *part);
 };
 
 void fillpoints(const dfa_t &dfa, std::vector<size_t> &fill);

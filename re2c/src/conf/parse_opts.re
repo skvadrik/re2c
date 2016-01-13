@@ -242,8 +242,8 @@ opt_dfa_minimization:
 		error ("bad argument to option --dfa-minimization (expected: table | moore): %s", *argv);
 		return EXIT_FAIL;
 	}
-	"table" end { opts.set_dfa_minimization (dfa_t::TABLE); goto opt; }
-	"moore" end { opts.set_dfa_minimization (dfa_t::MOORE); goto opt; }
+	"table" end { opts.set_dfa_minimization (DFA_MINIMIZATION_TABLE); goto opt; }
+	"moore" end { opts.set_dfa_minimization (DFA_MINIMIZATION_MOORE); goto opt; }
 */
 
 end:

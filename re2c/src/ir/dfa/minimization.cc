@@ -2,46 +2,12 @@
 
 #include "src/conf/opt.h"
 #include "src/ir/dfa/dfa.h"
+#include "src/ir/dfa/minimization.h"
 #include "src/ir/regexp/regexp_rule.h"
 #include "src/globals.h"
 
 namespace re2c
 {
-
-void dfa_t::minimization()
-{
-	const size_t count = states.size();
-
-	size_t *part = new size_t[count];
-
-	switch (opts->dfa_minimization)
-	{
-		case TABLE: minimization_table(part); break;
-		case MOORE: minimization_moore(part); break;
-	}
-
-	for (size_t i = 0; i < count; ++i)
-	{
-		if (i == part[i])
-		{
-			size_t *arcs = states[i]->arcs;
-			for (size_t c = 0; c < nchars; ++c)
-			{
-				if (arcs[c] != NIL)
-				{
-					arcs[c] = part[arcs[c]];
-				}
-			}
-		}
-		else
-		{
-			delete states[i];
-			states[i] = NULL;
-		}
-	}
-
-	delete[] part;
-}
 
 /*
  * note [DFA minimization: table filling algorithm]
@@ -57,7 +23,10 @@ void dfa_t::minimization()
  * the same symbol that go to distinguishable states. The algorithm
  * loops until the matrix stops changing.
  */
-void dfa_t::minimization_table(size_t *part)
+static void minimization_table(
+	size_t *part,
+	const std::vector<dfa_state_t*> &states,
+	size_t nchars)
 {
 	const size_t count = states.size();
 
@@ -96,7 +65,10 @@ void dfa_t::minimization_table(size_t *part)
 						{
 							std::swap(oi, oj);
 						}
-						if (oi != oj && (oi == NIL || oj == NIL || tbl[oi][oj]))
+						if (oi != oj &&
+							(oi == dfa_t::NIL ||
+							oj == dfa_t::NIL ||
+							tbl[oi][oj]))
 						{
 							tbl[i][j] = true;
 							loop = true;
@@ -136,7 +108,10 @@ void dfa_t::minimization_table(size_t *part)
  * the same set of states.
  * The algorithm loops until partition stops changing.
  */
-void dfa_t::minimization_moore(size_t *part)
+static void minimization_moore(
+	size_t *part,
+	const std::vector<dfa_state_t*> &states,
+	size_t nchars)
 {
 	const size_t count = states.size();
 
@@ -150,7 +125,7 @@ void dfa_t::minimization_moore(size_t *part)
 		if (init.insert(std::make_pair(key, i)).second)
 		{
 			part[i] = i;
-			next[i] = NIL;
+			next[i] = dfa_t::NIL;
 		}
 		else
 		{
@@ -168,30 +143,34 @@ void dfa_t::minimization_moore(size_t *part)
 		loop = false;
 		for (size_t i = 0; i < count; ++i)
 		{
-			if (i != part[i] || next[i] == NIL)
+			if (i != part[i] || next[i] == dfa_t::NIL)
 			{
 				continue;
 			}
 
-			for (size_t j = i; j != NIL; j = next[j])
+			for (size_t j = i; j != dfa_t::NIL; j = next[j])
 			{
 				size_t *o = &out[j * nchars];
 				size_t *a = states[j]->arcs;
 				for (size_t c = 0; c < nchars; ++c)
 				{
-					o[c] = a[c] == NIL ? NIL : part[a[c]];
+					o[c] = a[c] == dfa_t::NIL
+						? dfa_t::NIL
+						: part[a[c]];
 				}
 			}
 
 			size_t diff_count = 0;
-			for (size_t j = i; j != NIL;)
+			for (size_t j = i; j != dfa_t::NIL;)
 			{
 				const size_t j_next = next[j];
 				size_t n = 0;
 				for (; n < diff_count; ++n)
 				{
 					size_t k = diff[n];
-					if (memcmp(&out[j * nchars], &out[k * nchars], nchars * sizeof(size_t)) == 0)
+					if (memcmp(&out[j * nchars],
+						&out[k * nchars],
+						nchars * sizeof(size_t)) == 0)
 					{
 						part[j] = k;
 						next[j] = next[k];
@@ -203,7 +182,7 @@ void dfa_t::minimization_moore(size_t *part)
 				{
 					diff[diff_count++] = j;
 					part[j] = j;
-					next[j] = NIL;
+					next[j] = dfa_t::NIL;
 				}
 				j = j_next;
 			}
@@ -213,6 +192,45 @@ void dfa_t::minimization_moore(size_t *part)
 	delete[] out;
 	delete[] diff;
 	delete[] next;
+}
+
+void minimization(dfa_t &dfa)
+{
+	const size_t count = dfa.states.size();
+
+	size_t *part = new size_t[count];
+
+	switch (opts->dfa_minimization)
+	{
+		case DFA_MINIMIZATION_TABLE:
+			minimization_table(part, dfa.states, dfa.nchars);
+			break;
+		case DFA_MINIMIZATION_MOORE:
+			minimization_moore(part, dfa.states, dfa.nchars);
+			break;
+	}
+
+	for (size_t i = 0; i < count; ++i)
+	{
+		if (i == part[i])
+		{
+			size_t *arcs = dfa.states[i]->arcs;
+			for (size_t c = 0; c < dfa.nchars; ++c)
+			{
+				if (arcs[c] != dfa_t::NIL)
+				{
+					arcs[c] = part[arcs[c]];
+				}
+			}
+		}
+		else
+		{
+			delete dfa.states[i];
+			dfa.states[i] = NULL;
+		}
+	}
+
+	delete[] part;
 }
 
 } // namespace re2c
