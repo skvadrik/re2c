@@ -2,7 +2,6 @@
 
 #include "src/conf/opt.h"
 #include "src/ir/dfa/dfa.h"
-#include "src/ir/dfa/minimization.h"
 #include "src/ir/regexp/regexp_rule.h"
 #include "src/globals.h"
 

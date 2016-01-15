@@ -44,6 +44,13 @@ struct dfa_t
 	~dfa_t();
 };
 
+enum dfa_minimization_t
+{
+	DFA_MINIMIZATION_TABLE,
+	DFA_MINIMIZATION_MOORE
+};
+
+void minimization(dfa_t &dfa);
 void fillpoints(const dfa_t &dfa, std::vector<size_t> &fill);
 
 } // namespace re2c

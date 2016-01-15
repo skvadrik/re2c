@@ -24,7 +24,6 @@ SRC_HDR = \
 	src/ir/adfa/action.h \
 	src/ir/adfa/adfa.h \
 	src/ir/dfa/dfa.h \
-	src/ir/dfa/minimization.h \
 	src/ir/regexp/encoding/case.h \
 	src/ir/regexp/encoding/enc.h \
 	src/ir/regexp/encoding/range_suffix.h \
