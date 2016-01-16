@@ -93,6 +93,7 @@ dfa_t::dfa_t(const nfa_t &nfa, const charset_t &charset, rules_t &rules)
 	: states()
 	, nchars(charset.size() - 1) // (n + 1) bounds for n ranges
 {
+	std::map<size_t, std::set<RuleOp*> > s2rules;
 	ord_hash_set_t kernels;
 	nfa_state_t **const buffer = new nfa_state_t*[nfa.size];
 	std::vector<std::vector<nfa_state_t*> > arcs(nchars);
@@ -128,28 +129,8 @@ dfa_t::dfa_t(const nfa_t &nfa, const charset_t &charset, rules_t &rules)
 					s->ctx = true;
 					break;
 				case nfa_state_t::FIN:
-				{
-					RuleOp *rule = n->value.fin.rule;
-					if (!s->rule)
-					{
-						s->rule = rule;
-					}
-					else
-					{
-						const rule_rank_t r1 = s->rule->rank;
-						const rule_rank_t r2 = rule->rank;
-						if (r2 < r1)
-						{
-							rules[r1].shadow.insert (r2);
-							s->rule = rule;
-						}
-						else if (r1 < r2)
-						{
-							rules[r2].shadow.insert (r1);
-						}
-					}
+					s2rules[i].insert(n->value.fin.rule);
 					break;
-				}
 				default:
 					break;
 			}
@@ -172,6 +153,31 @@ dfa_t::dfa_t(const nfa_t &nfa, const charset_t &charset, rules_t &rules)
 		}
 	}
 	delete[] buffer;
+
+	const size_t count = states.size();
+	for (size_t i = 0; i < count; ++i)
+	{
+		dfa_state_t *s = states[i];
+		std::set<RuleOp*> &rs = s2rules[i];
+		// for each final state: choose the rule with the smallest rank
+		for (std::set<RuleOp*>::const_iterator j = rs.begin(); j != rs.end(); ++j)
+		{
+			RuleOp *rule = *j;
+			if (!s->rule || rule->rank < s->rule->rank)
+			{
+				s->rule = rule;
+			}
+		}
+		// other rules are shadowed by the chosen rule
+		for (std::set<RuleOp*>::const_iterator j = rs.begin(); j != rs.end(); ++j)
+		{
+			RuleOp *rule = *j;
+			if (s->rule != rule)
+			{
+				rules[rule->rank].shadow.insert(s->rule->rank);
+			}
+		}
+	}
 }
 
 dfa_t::~dfa_t()
