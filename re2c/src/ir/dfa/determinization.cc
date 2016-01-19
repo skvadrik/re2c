@@ -1,13 +1,15 @@
 #include <algorithm>
-#include <assert.h>
 #include <limits>
-#include <string.h>
-#include <queue>
+#include <map>
+#include <set>
+#include <vector>
 
 #include "src/ir/dfa/dfa.h"
 #include "src/ir/nfa/nfa.h"
+#include "src/ir/regexp/regexp.h"
 #include "src/ir/regexp/regexp_rule.h"
 #include "src/ir/rule_rank.h"
+#include "src/parse/rules.h"
 #include "src/util/ord_hash_set.h"
 #include "src/util/range.h"
 

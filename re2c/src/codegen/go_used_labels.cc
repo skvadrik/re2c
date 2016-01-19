@@ -1,3 +1,4 @@
+#include <stddef.h>
 #include "src/util/c99_stdint.h"
 #include <set>
 #include <utility>

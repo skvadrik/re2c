@@ -1,12 +1,15 @@
 #include <string.h>
+#include <utility>
+#include <vector>
 
 #include "src/conf/opt.h"
 #include "src/ir/dfa/dfa.h"
-#include "src/ir/regexp/regexp_rule.h"
 #include "src/globals.h"
 
 namespace re2c
 {
+
+class RuleOp;
 
 /*
  * note [DFA minimization: table filling algorithm]

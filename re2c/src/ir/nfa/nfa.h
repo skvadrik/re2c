@@ -2,8 +2,6 @@
 #define _RE2C_IR_NFA_NFA_
 
 #include "src/util/c99_stdint.h"
-#include <vector>
-#include <set>
 
 #include "src/util/forbid_copy.h"
 

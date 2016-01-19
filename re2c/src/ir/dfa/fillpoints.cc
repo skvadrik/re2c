@@ -1,6 +1,6 @@
 #include <limits>
 #include <stack>
-#include <string.h>
+#include <vector>
 
 #include "src/ir/dfa/dfa.h"
 

@@ -1,3 +1,5 @@
+#include <stddef.h>
+
 #include "src/conf/opt.h"
 #include "src/conf/warn.h"
 #include "src/globals.h"

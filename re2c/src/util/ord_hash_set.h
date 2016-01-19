@@ -2,6 +2,8 @@
 #define _RE2C_UTIL_ORD_HASH_SET_
 
 #include "src/util/c99_stdint.h"
+#include <stdlib.h> // malloc, free
+#include <string.h> // memcpy
 #include <map>
 #include <vector>
 

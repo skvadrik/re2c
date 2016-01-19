@@ -1,5 +1,6 @@
 #include <algorithm>
 #include <ostream>
+#include <set>
 
 #include "src/codegen/output.h"
 #include "src/ir/compile.h"

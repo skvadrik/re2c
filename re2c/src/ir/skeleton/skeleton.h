@@ -9,6 +9,7 @@
 #include <set>
 #include <string>
 #include <vector>
+#include <utility>
 
 #include "src/ir/regexp/regexp.h"
 #include "src/ir/rule_rank.h"

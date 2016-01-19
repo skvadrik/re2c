@@ -4,7 +4,6 @@
 
 #include "src/codegen/bitmap.h"
 #include "src/codegen/go.h"
-#include "src/conf/opt.h"
 #include "src/globals.h"
 #include "src/ir/adfa/action.h"
 #include "src/ir/adfa/adfa.h"

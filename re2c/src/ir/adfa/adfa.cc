@@ -2,6 +2,7 @@
 #include <queue>
 #include <set>
 #include <vector>
+#include <utility>
 
 #include "src/codegen/go.h"
 #include "src/ir/adfa/adfa.h"

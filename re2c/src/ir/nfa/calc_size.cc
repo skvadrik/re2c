@@ -7,7 +7,6 @@
 #include "src/ir/regexp/regexp_match.h"
 #include "src/ir/regexp/regexp_null.h"
 #include "src/ir/regexp/regexp_rule.h"
-#include "src/util/range.h"
 
 namespace re2c
 {

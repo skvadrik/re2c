@@ -1,11 +1,13 @@
 #ifndef _RE2C_IR_ADFA_ADFA_
 #define _RE2C_IR_ADFA_ADFA_
 
+#include <stddef.h>
 #include "src/util/c99_stdint.h"
 #include <set>
 #include <string>
 
 #include "src/codegen/go.h"
+#include "src/codegen/label.h"
 #include "src/ir/adfa/action.h"
 #include "src/ir/regexp/regexp.h"
 #include "src/util/forbid_copy.h"
@@ -14,7 +16,6 @@ namespace re2c
 {
 
 struct Skeleton;
-class label_t;
 struct Output;
 struct OutputFile;
 struct dfa_t;
