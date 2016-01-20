@@ -85,7 +85,7 @@ size_t ord_hash_set_t::insert(const void *data, size_t size)
 {
 	const hash_t h = hash(data, size);
 
-	typename std::map<hash_t, elem_t*>::const_iterator i = lookup.find(h);
+	std::map<hash_t, elem_t*>::const_iterator i = lookup.find(h);
 	if (i != lookup.end())
 	{
 		for (elem_t *e = i->second; e; e = e->next)
