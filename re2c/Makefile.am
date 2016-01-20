@@ -20,10 +20,10 @@ SRC_HDR = \
 	src/conf/msg.h \
 	src/conf/opt.h \
 	src/conf/warn.h \
-	src/ir/bytecode/nfa.h \
 	src/ir/adfa/action.h \
 	src/ir/adfa/adfa.h \
 	src/ir/dfa/dfa.h \
+	src/ir/nfa/nfa.h \
 	src/ir/regexp/encoding/case.h \
 	src/ir/regexp/encoding/enc.h \
 	src/ir/regexp/encoding/range_suffix.h \
