@@ -92,7 +92,7 @@ yy4:
 	case 0xBC:
 	case 0xBD:
 	case 0xBE:
-	case 0xBF:	goto yy11;
+	case 0xBF:	goto yy8;
 	default:	goto yy3;
 	}
 yy5:
@@ -133,7 +133,7 @@ yy5:
 	case 0xA0:
 	case 0xA1:
 	case 0xA2:
-	case 0xA3:	goto yy11;
+	case 0xA3:	goto yy8;
 	default:	goto yy3;
 	}
 yy6:
@@ -154,7 +154,7 @@ yy6:
 	case 0xBC:
 	case 0xBD:
 	case 0xBE:	goto yy10;
-	case 0xBF:	goto yy8;
+	case 0xBF:	goto yy11;
 	default:	goto yy3;
 	}
 yy7:
@@ -175,7 +175,7 @@ yy7:
 	case 0x8C:
 	case 0x8D:
 	case 0x8E:	goto yy10;
-	case 0x8F:	goto yy8;
+	case 0x8F:	goto yy11;
 	default:	goto yy3;
 	}
 yy8:
@@ -243,8 +243,8 @@ yy8:
 	case 0xBB:
 	case 0xBC:
 	case 0xBD:
-	case 0xBE:	goto yy11;
-	case 0xBF:	goto yy14;
+	case 0xBE:
+	case 0xBF:	goto yy12;
 	default:	goto yy9;
 	}
 yy9:
@@ -316,7 +316,7 @@ yy10:
 	case 0xBC:
 	case 0xBD:
 	case 0xBE:
-	case 0xBF:	goto yy11;
+	case 0xBF:	goto yy8;
 	default:	goto yy9;
 	}
 yy11:
@@ -384,8 +384,8 @@ yy11:
 	case 0xBB:
 	case 0xBC:
 	case 0xBD:
-	case 0xBE:
-	case 0xBF:	goto yy12;
+	case 0xBE:	goto yy8;
+	case 0xBF:	goto yy14;
 	default:	goto yy9;
 	}
 yy12:

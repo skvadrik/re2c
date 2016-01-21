@@ -17,26 +17,17 @@ char *scan(char *p)
 		case '6':
 		case '7':
 		case '8':
-		case '9':	goto yy2;
-		default:	goto yy4;
+		case '9':	goto yy4;
+		default:	goto yy2;
 		}
 yy2:
 		++p;
-		yych = (unsigned char)*p;
-		goto yy7;
-yy3:
-#line 9 "bug1682718.re"
-		{return p;}
-#line 31 "bug1682718.c"
-yy4:
-		++p;
 #line 10 "bug1682718.re"
 		{return (char*)0;}
-#line 36 "bug1682718.c"
-yy6:
+#line 28 "bug1682718.c"
+yy4:
 		++p;
 		yych = (unsigned char)*p;
-yy7:
 		switch (yych) {
 		case '0':
 		case '1':
@@ -47,9 +38,13 @@ yy7:
 		case '6':
 		case '7':
 		case '8':
-		case '9':	goto yy6;
-		default:	goto yy3;
+		case '9':	goto yy4;
+		default:	goto yy6;
 		}
+yy6:
+#line 9 "bug1682718.re"
+		{return p;}
+#line 48 "bug1682718.c"
 	}
 #line 11 "bug1682718.re"
 

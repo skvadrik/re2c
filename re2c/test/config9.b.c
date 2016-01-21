@@ -81,46 +81,27 @@ std:
 	};
 	if ((s.lim - s.cur) < 3) fill(3);
 	curr = (unsigned char)*s.cur;
-	if (curr <= ' ') {
-		if (curr <= '\t') {
-			if (curr <= 0x08) goto xx9;
-			goto xx6;
-		} else {
-			if (curr <= '\n') goto xx8;
-			if (curr <= 0x1F) goto xx9;
-			goto xx6;
-		}
-	} else {
-		if (curr <= '9') {
-			if (curr <= '/') goto xx9;
-			goto xx4;
-		} else {
-			if (curr <= '`') goto xx9;
-			if (curr >= 'c') goto xx9;
-		}
+	if (yybm[0+curr] & 128) {
+		goto xx6;
 	}
+	if (curr <= 0x1F) {
+		if (curr <= 0x08) goto xx2;
+		if (curr <= '\n') goto xx4;
+	} else {
+		if (curr <= ' ') goto xx4;
+		if (curr <= '`') goto xx2;
+		if (curr <= 'b') goto xx9;
+	}
+xx2:
 	++s.cur;
-	s.ctx = s.cur;
-	if ((curr = (unsigned char)*s.cur) <= '/') goto xx3;
-	if (curr == '1') goto xx15;
-	if (curr <= '9') goto xx12;
 xx3:
 #line 68 "config9.b.re"
 	{
 		return UNEXPECTED;
 	}
-#line 113 "config9.b.c"
+#line 103 "config9.b.c"
 xx4:
 	++s.cur;
-	curr = (unsigned char)*s.cur;
-	goto xx11;
-xx5:
-#line 58 "config9.b.re"
-	{ return NUMBER;  }
-#line 121 "config9.b.c"
-xx6:
-	++s.cur;
-xx7:
 #line 61 "config9.b.re"
 	{
 		if(s.cur == s.lim)
@@ -128,42 +109,43 @@ xx7:
 		cursor = s.cur;
 		goto std;
 	}
-#line 132 "config9.b.c"
-xx8:
-	curr = (unsigned char)*++s.cur;
-	goto xx7;
+#line 113 "config9.b.c"
+xx6:
+	++s.cur;
+	if (s.lim <= s.cur) fill(1);
+	curr = (unsigned char)*s.cur;
+	if (yybm[0+curr] & 128) {
+		goto xx6;
+	}
+#line 58 "config9.b.re"
+	{ return NUMBER;  }
+#line 123 "config9.b.c"
 xx9:
 	curr = (unsigned char)*++s.cur;
-	goto xx3;
+	s.ctx = s.cur;
+	if (curr <= '/') goto xx3;
+	if (curr == '1') goto xx13;
+	if (curr >= ':') goto xx3;
 xx10:
 	++s.cur;
 	if (s.lim <= s.cur) fill(1);
 	curr = (unsigned char)*s.cur;
-xx11:
-	if (yybm[0+curr] & 128) {
-		goto xx10;
-	}
-	goto xx5;
+	if (curr <= '/') goto xx12;
+	if (curr <= '9') goto xx10;
 xx12:
-	++s.cur;
-	if (s.lim <= s.cur) fill(1);
-	curr = (unsigned char)*s.cur;
-	if (curr <= '/') goto xx14;
-	if (curr <= '9') goto xx12;
-xx14:
 	s.cur = s.ctx;
 #line 57 "config9.b.re"
 	{ return KEYWORD; }
-#line 158 "config9.b.c"
-xx15:
+#line 140 "config9.b.c"
+xx13:
 	++s.cur;
-	if ((curr = (unsigned char)*s.cur) <= '/') goto xx16;
-	if (curr <= '9') goto xx12;
-xx16:
+	if ((curr = (unsigned char)*s.cur) <= '/') goto xx14;
+	if (curr <= '9') goto xx10;
+xx14:
 	s.cur = s.ctx;
 #line 56 "config9.b.re"
 	{ return KEYWORD; }
-#line 167 "config9.b.c"
+#line 149 "config9.b.c"
 }
 #line 71 "config9.b.re"
 

@@ -20,7 +20,6 @@ private:
 
 public:
 	RegExp * ctx;
-	Ins * ins;
 	rule_rank_t rank;
 	const Code * code;
 	const std::string newcond;
@@ -30,25 +29,20 @@ public:
 		, RegExp * r1
 		, RegExp * r2
 		, rule_rank_t r
-		, InsAccess access
 		, const Code * c
 		, const std::string * cond
 		)
 		: loc (l)
 		, exp (r1)
 		, ctx (r2)
-		, ins (NULL)
 		, rank (r)
 		, code (c)
 		, newcond (cond ? *cond : "")
-	{
-		ins_access = access;
-	}
+	{}
 	void display (std::ostream & o) const;
-	void split (CharSet &);
-	void calcSize (Char *);
-	uint32_t compile (Char *, Ins *);
-	void decompile ();
+	void split (std::set<uint32_t> &);
+	uint32_t calc_size() const;
+	nfa_state_t *compile(nfa_t &nfa, nfa_state_t *n);
 
 	FORBID_COPY (RuleOp);
 };

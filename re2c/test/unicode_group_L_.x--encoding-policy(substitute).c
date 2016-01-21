@@ -302,52 +302,59 @@ yy3:
 #line 303 "unicode_group_L_.x--encoding-policy(substitute).c"
 yy4:
 	++YYCURSOR;
-yy5:
 #line 12 "unicode_group_L_.x--encoding-policy(substitute).re"
 	{ goto L_; }
-#line 309 "unicode_group_L_.x--encoding-policy(substitute).c"
+#line 308 "unicode_group_L_.x--encoding-policy(substitute).c"
 yy6:
 	yych = *++YYCURSOR;
 	if (yych <= 0xDBFF) goto yy3;
-	if (yych <= 0xDC4F) goto yy8;
+	if (yych <= 0xDC4F) goto yy4;
 	goto yy3;
 yy7:
-	yych = *++YYCURSOR;
-	if (yych <= 0xDD3E) {
+	++YYCURSOR;
+	if ((yych = *YYCURSOR) <= 0xDD3E) {
 		if (yych <= 0xDCBA) {
 			if (yych <= 0xDCA1) {
 				if (yych <= 0xDC55) {
 					if (yych <= 0xDBFF) goto yy3;
-					if (yych >= 0xDC55) goto yy3;
+					if (yych <= 0xDC54) goto yy4;
+					goto yy3;
 				} else {
 					if (yych == 0xDC9D) goto yy3;
-					if (yych >= 0xDCA0) goto yy3;
+					if (yych <= 0xDC9F) goto yy4;
+					goto yy3;
 				}
 			} else {
 				if (yych <= 0xDCA8) {
-					if (yych <= 0xDCA2) goto yy8;
+					if (yych <= 0xDCA2) goto yy4;
 					if (yych <= 0xDCA4) goto yy3;
-					if (yych >= 0xDCA7) goto yy3;
+					if (yych <= 0xDCA6) goto yy4;
+					goto yy3;
 				} else {
 					if (yych == 0xDCAD) goto yy3;
-					if (yych >= 0xDCBA) goto yy3;
+					if (yych <= 0xDCB9) goto yy4;
+					goto yy3;
 				}
 			}
 		} else {
 			if (yych <= 0xDD0A) {
 				if (yych <= 0xDCC3) {
 					if (yych == 0xDCBC) goto yy3;
+					goto yy4;
 				} else {
 					if (yych <= 0xDCC4) goto yy3;
 					if (yych == 0xDD06) goto yy3;
+					goto yy4;
 				}
 			} else {
 				if (yych <= 0xDD1C) {
 					if (yych <= 0xDD0C) goto yy3;
 					if (yych == 0xDD15) goto yy3;
+					goto yy4;
 				} else {
 					if (yych <= 0xDD1D) goto yy3;
 					if (yych == 0xDD3A) goto yy3;
+					goto yy4;
 				}
 			}
 		}
@@ -356,46 +363,50 @@ yy7:
 			if (yych <= 0xDD51) {
 				if (yych <= 0xDD45) {
 					if (yych <= 0xDD3F) goto yy3;
-					if (yych >= 0xDD45) goto yy3;
+					if (yych <= 0xDD44) goto yy4;
+					goto yy3;
 				} else {
-					if (yych <= 0xDD46) goto yy8;
+					if (yych <= 0xDD46) goto yy4;
 					if (yych <= 0xDD49) goto yy3;
-					if (yych >= 0xDD51) goto yy3;
+					if (yych <= 0xDD50) goto yy4;
+					goto yy3;
 				}
 			} else {
 				if (yych <= 0xDEC1) {
-					if (yych <= 0xDEA5) goto yy8;
+					if (yych <= 0xDEA5) goto yy4;
 					if (yych <= 0xDEA7) goto yy3;
-					if (yych >= 0xDEC1) goto yy3;
+					if (yych <= 0xDEC0) goto yy4;
+					goto yy3;
 				} else {
 					if (yych == 0xDEDB) goto yy3;
-					if (yych >= 0xDEFB) goto yy3;
+					if (yych <= 0xDEFA) goto yy4;
+					goto yy3;
 				}
 			}
 		} else {
 			if (yych <= 0xDF6F) {
 				if (yych <= 0xDF35) {
 					if (yych == 0xDF15) goto yy3;
-					if (yych >= 0xDF35) goto yy3;
+					if (yych <= 0xDF34) goto yy4;
+					goto yy3;
 				} else {
 					if (yych == 0xDF4F) goto yy3;
-					if (yych >= 0xDF6F) goto yy3;
+					if (yych <= 0xDF6E) goto yy4;
+					goto yy3;
 				}
 			} else {
 				if (yych <= 0xDFA9) {
 					if (yych == 0xDF89) goto yy3;
-					if (yych >= 0xDFA9) goto yy3;
+					if (yych <= 0xDFA8) goto yy4;
+					goto yy3;
 				} else {
 					if (yych == 0xDFC3) goto yy3;
-					if (yych >= 0xDFCC) goto yy3;
+					if (yych <= 0xDFCB) goto yy4;
+					goto yy3;
 				}
 			}
 		}
 	}
-yy8:
-	++YYCURSOR;
-	yych = *YYCURSOR;
-	goto yy5;
 }
 #line 14 "unicode_group_L_.x--encoding-policy(substitute).re"
 

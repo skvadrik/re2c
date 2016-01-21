@@ -14,10 +14,9 @@ public:
 	inline CloseOp (RegExp * e)
 		: exp (e)
 	{}
-	void split (CharSet &);
-	void calcSize (Char *);
-	uint32_t compile (Char *, Ins *);
-	void decompile ();
+	void split (std::set<uint32_t> &);
+	uint32_t calc_size() const;
+	nfa_state_t *compile(nfa_t &nfa, nfa_state_t *n);
 	void display (std::ostream & o) const;
 
 	FORBID_COPY (CloseOp);

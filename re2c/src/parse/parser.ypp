@@ -13,11 +13,10 @@
 #include <vector>
 
 #include "src/codegen/output.h"
-#include "src/codegen/skeleton/skeleton.h"
 #include "src/conf/opt.h"
 #include "src/globals.h"
-#include "src/ir/bytecode/bytecode.h"
-#include "src/ir/dfa/dfa.h"
+#include "src/ir/compile.h"
+#include "src/ir/adfa/adfa.h"
 #include "src/ir/regexp/encoding/enc.h"
 #include "src/ir/regexp/encoding/range_suffix.h"
 #include "src/ir/regexp/regexp.h"
@@ -26,6 +25,7 @@
 #include "src/ir/regexp/regexp_null.h"
 #include "src/ir/regexp/regexp_rule.h"
 #include "src/ir/rule_rank.h"
+#include "src/ir/skeleton/skeleton.h"
 #include "src/parse/code.h"
 #include "src/parse/extop.h"
 #include "src/parse/loc.h"
@@ -94,9 +94,6 @@ void context_rule
 	)
 {
 	context_check(clist);
-	const RegExp::InsAccess ins_access = clist->size() > 1
-		? RegExp::PRIVATE
-		: RegExp::SHARED;
 	for(CondList::const_iterator it = clist->begin(); it != clist->end(); ++it)
 	{
 		if (specMap.find(*it) == specMap.end())
@@ -109,7 +106,6 @@ void context_rule
 			, expr
 			, look
 			, rank_counter.next ()
-			, ins_access
 			, code
 			, newcond
 			);
@@ -147,7 +143,6 @@ void default_rule(CondList *clist, const Code * code)
 			, in->mkDefault ()
 			, new NullOp
 			, rule_rank_t::def ()
-			, RegExp::SHARED
 			, code
 			, NULL
 			);
@@ -212,7 +207,6 @@ decl:
 				in->fatal("sym already defined");
 			}
 			delete $1;
-			$3->ins_access = RegExp::PRIVATE;
 		}
 	|	TOKEN_FID expr TOKEN_FID_END
 		{
@@ -221,7 +215,6 @@ decl:
 				in->fatal("sym already defined");
 			}
 			delete $1;
-			$2->ins_access = RegExp::PRIVATE;
 		}
 	|	TOKEN_ID '=' expr '/'
 		{
@@ -246,7 +239,6 @@ rule:
 				, $1
 				, $2
 				, rank_counter.next ()
-				, RegExp::SHARED
 				, $3
 				, NULL
 				);
@@ -261,7 +253,6 @@ rule:
 				, in->mkDefault ()
 				, new NullOp
 				, rule_rank_t::def ()
-				, RegExp::SHARED
 				, $2
 				, NULL
 				);
@@ -303,7 +294,6 @@ rule:
 				, $4
 				, $5
 				, rank_counter.next ()
-				, RegExp::PRIVATE
 				, $7
 				, $6
 				);
@@ -320,7 +310,6 @@ rule:
 				, $4
 				, $5
 				, rank_counter.next ()
-				, RegExp::PRIVATE
 				, NULL
 				, $7
 				);
@@ -349,7 +338,6 @@ rule:
 				, in->mkDefault ()
 				, new NullOp
 				, rule_rank_t::def ()
-				, RegExp::PRIVATE
 				, $5
 				, NULL
 				);
@@ -366,7 +354,6 @@ rule:
 				, new NullOp
 				, new NullOp
 				, rank_counter.next ()
-				, RegExp::SHARED
 				, $3
 				, $2
 				);
@@ -386,7 +373,6 @@ rule:
 				, new NullOp
 				, new NullOp
 				, rank_counter.next ()
-				, RegExp::SHARED
 				, NULL
 				, $3
 				);
@@ -495,10 +481,10 @@ factor:
 			switch($2)
 			{
 			case '*':
-				$$ = mkAlt(new CloseOp($1), new NullOp());
+				$$ = new CloseOp($1);
 				break;
 			case '+':
-				$$ = new CloseOp($1);
+				$$ = new CatOp (new CloseOp($1), $1);
 				break;
 			case '?':
 				$$ = mkAlt($1, new NullOp());
@@ -507,7 +493,6 @@ factor:
 		}
 	|	primary TOKEN_CLOSESIZE
 		{
-			$1->ins_access = RegExp::PRIVATE;
 			if ($2.max == std::numeric_limits<uint32_t>::max())
 			{
 				$$ = repeat_from ($1, $2.min);
@@ -670,17 +655,15 @@ void parse(Scanner& i, Output & o)
 					(*itOp)->rank = rank_counter.next ();
 				}
 				// merge <*> rules to all conditions
-				// note that all conditions use the same regexp for <*> rules,
-				// but compile it separately because of RegExp::PRIVATE attribute
 				for (it = specMap.begin(); it != specMap.end(); ++it)
 				{
 					for (RuleOpList::const_iterator itOp = specStar.begin(); itOp != specStar.end(); ++itOp)
 					{
-						it->second.addl (*itOp);
+						it->second.add (*itOp);
 					}
 					if (star_default)
 					{
-						it->second.addl (star_default);
+						it->second.add_def (star_default);
 					}
 				}
 
@@ -717,7 +700,7 @@ void parse(Scanner& i, Output & o)
 						}
 					}
 
-					dfa_map[it->first] = genCode(it->second, o, it->first, opts->encoding.nCodeUnits ());
+					dfa_map[it->first] = compile(it->second, o, it->first, opts->encoding.nCodeUnits ());
 				}
 				if (parseMode != Scanner::Rules && dfa_map.find(it->first) != dfa_map.end())
 				{
@@ -731,7 +714,7 @@ void parse(Scanner& i, Output & o)
 			{
 				if (parseMode != Scanner::Reuse)
 				{
-					dfa_map[""] = genCode(spec, o, "", opts->encoding.nCodeUnits ());
+					dfa_map[""] = compile(spec, o, "", opts->encoding.nCodeUnits ());
 				}
 				if (parseMode != Scanner::Rules && dfa_map.find("") != dfa_map.end())
 				{

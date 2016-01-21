@@ -70,13 +70,13 @@ int scan(char *s)
 			YYCTYPE yych;
 			static const unsigned char yybm[] = {
 				  0,   0,   0,   0,   0,   0,   0,   0, 
-				  0, 128,   0,   0,   0,   0,   0,   0, 
+				  0,  64,   0,   0,   0,   0,   0,   0, 
 				  0,   0,   0,   0,   0,   0,   0,   0, 
 				  0,   0,   0,   0,   0,   0,   0,   0, 
-				128,   0,   0,   0,   0,   0,   0,   0, 
+				 64,   0,   0,   0,   0,   0,   0,   0, 
 				  0,   0,   0,   0,   0,   0,   0,   0, 
-				 64,  64,  64,  64,  64,  64,  64,  64, 
-				 64,  64,   0,   0,   0,   0,   0,   0, 
+				128, 128, 128, 128, 128, 128, 128, 128, 
+				128, 128,   0,   0,   0,   0,   0,   0, 
 				  0,   0,   0,   0,   0,   0,   0,   0, 
 				  0,   0,   0,   0,   0,   0,   0,   0, 
 				  0,   0,   0,   0,   0,   0,   0,   0, 
@@ -103,71 +103,67 @@ int scan(char *s)
 				  0,   0,   0,   0,   0,   0,   0,   0, 
 			};
 			yych = *YYCURSOR;
-			if (yych <= '*') {
-				if (yych <= '\t') {
-					if (yych <= 0x00) goto yy11;
-					if (yych <= 0x08) goto yy13;
-				} else {
-					if (yych != ' ') goto yy13;
-				}
+			if (yybm[0+yych] & 64) {
+				goto yy6;
+			}
+			if (yych <= ',') {
+				if (yych <= 0x00) goto yy2;
+				if (yych == '+') goto yy9;
+				goto yy4;
 			} else {
-				if (yych <= '-') {
-					if (yych <= '+') goto yy7;
-					if (yych <= ',') goto yy13;
-					goto yy9;
+				if (yych <= '/') {
+					if (yych <= '-') goto yy11;
+					goto yy4;
 				} else {
-					if (yych <= '/') goto yy13;
-					if (yych <= '0') goto yy4;
-					if (yych <= '9') goto yy6;
-					goto yy13;
+					if (yych <= '0') goto yy13;
+					if (yych <= '9') goto yy15;
+					goto yy4;
 				}
 			}
-			++YYCURSOR;
-			yych = *YYCURSOR;
-			goto yy21;
-yy3:
-#line 80 "calc_007.b.re"
-			{ continue; }
-#line 132 "calc_007.b.c"
-yy4:
-			++YYCURSOR;
-			if ((yych = *YYCURSOR) <= '/') goto yy5;
-			if (yych <= '9') goto yy17;
-yy5:
-#line 82 "calc_007.b.re"
-			{ res = push_num(t, p, 10); continue; }
-#line 140 "calc_007.b.c"
-yy6:
-			yych = *++YYCURSOR;
-			goto yy16;
-yy7:
-			++YYCURSOR;
-#line 83 "calc_007.b.re"
-			{ res = stack_add();		continue; }
-#line 148 "calc_007.b.c"
-yy9:
-			++YYCURSOR;
-#line 84 "calc_007.b.re"
-			{ res = stack_sub();		continue; }
-#line 153 "calc_007.b.c"
-yy11:
+yy2:
 			++YYCURSOR;
 #line 85 "calc_007.b.re"
 			{ res = depth == 1 ? 0 : 2;	break; }
-#line 158 "calc_007.b.c"
-yy13:
+#line 128 "calc_007.b.c"
+yy4:
 			++YYCURSOR;
 #line 86 "calc_007.b.re"
 			{ res = 1; 					continue; }
-#line 163 "calc_007.b.c"
+#line 133 "calc_007.b.c"
+yy6:
+			++YYCURSOR;
+			yych = *YYCURSOR;
+			if (yybm[0+yych] & 64) {
+				goto yy6;
+			}
+#line 80 "calc_007.b.re"
+			{ continue; }
+#line 142 "calc_007.b.c"
+yy9:
+			++YYCURSOR;
+#line 83 "calc_007.b.re"
+			{ res = stack_add();		continue; }
+#line 147 "calc_007.b.c"
+yy11:
+			++YYCURSOR;
+#line 84 "calc_007.b.re"
+			{ res = stack_sub();		continue; }
+#line 152 "calc_007.b.c"
+yy13:
+			++YYCURSOR;
+			if ((yych = *YYCURSOR) <= '/') goto yy14;
+			if (yych <= '9') goto yy17;
+yy14:
+#line 82 "calc_007.b.re"
+			{ res = push_num(t, p, 10); continue; }
+#line 160 "calc_007.b.c"
 yy15:
 			++YYCURSOR;
 			yych = *YYCURSOR;
-yy16:
-			if (yybm[0+yych] & 64) {
+			if (yybm[0+yych] & 128) {
 				goto yy15;
 			}
-			goto yy5;
+			goto yy14;
 yy17:
 			++YYCURSOR;
 			yych = *YYCURSOR;
@@ -176,15 +172,7 @@ yy17:
 yy19:
 #line 81 "calc_007.b.re"
 			{ res = push_num(t, p, 8);	continue; }
-#line 180 "calc_007.b.c"
-yy20:
-			++YYCURSOR;
-			yych = *YYCURSOR;
-yy21:
-			if (yybm[0+yych] & 128) {
-				goto yy20;
-			}
-			goto yy3;
+#line 176 "calc_007.b.c"
 		}
 #line 87 "calc_007.b.re"
 

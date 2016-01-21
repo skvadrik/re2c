@@ -1,5 +1,5 @@
-#ifndef _RE2C_CODEGEN_SKELETON_SKELETON_
-#define _RE2C_CODEGEN_SKELETON_SKELETON_
+#ifndef _RE2C_IR_SKELETON_SKELETON_
+#define _RE2C_IR_SKELETON_SKELETON_
 
 #include "src/util/c99_stdint.h"
 #include <stddef.h>
@@ -9,10 +9,12 @@
 #include <set>
 #include <string>
 #include <vector>
+#include <utility>
 
-#include "src/codegen/skeleton/path.h"
-#include "src/codegen/skeleton/way.h"
+#include "src/ir/regexp/regexp.h"
 #include "src/ir/rule_rank.h"
+#include "src/ir/skeleton/path.h"
+#include "src/ir/skeleton/way.h"
 #include "src/parse/rules.h"
 #include "src/util/local_increment.h"
 #include "src/util/forbid_copy.h"
@@ -21,9 +23,9 @@
 namespace re2c
 {
 
-class DFA;
-class State;
+struct dfa_t;
 struct OutputFile;
+class RuleOp;
 
 struct Node
 {
@@ -60,7 +62,6 @@ struct Node
 	// We don't need all paths anyway, just some examples.
 	typedef u32lim_t<1024> nakeds_t; // ~1Kb
 
-	typedef std::map<const State *, Node *> s2n_map;
 	typedef std::map<Node *, path_t::arc_t> arcs_t;
 	typedef std::map<Node *, way_arc_t> arcsets_t;
 	typedef local_increment_t<uint8_t> local_inc;
@@ -91,30 +92,37 @@ struct Node
 	path_t * suffix;
 
 	Node ();
-	void init (const State * s, const s2n_map & s2n);
+	void init(bool b, RuleOp *r, const std::vector<std::pair<Node*, uint32_t> > &arcs);
 	~Node ();
 	bool end () const;
 	void calc_dist ();
 	void calc_reachable ();
 	template <typename cunit_t, typename key_t>
-		covers_t cover (path_t & prefix, FILE * input, FILE * keys);
-	nakeds_t naked_ways (way_t & prefix, std::vector<way_t> & ways);
+		void cover (path_t & prefix, FILE * input, FILE * keys, covers_t &size);
+	void naked_ways (way_t & prefix, std::vector<way_t> & ways, nakeds_t &size);
 
 	FORBID_COPY (Node);
 };
 
 struct Skeleton
 {
-	const std::string & name;
-	const std::string & cond;
+	const std::string name;
+	const std::string cond;
 	const uint32_t line;
 
-	const uint32_t nodes_count;
+	const size_t nodes_count;
 	Node * nodes;
 	size_t sizeof_key;
 	rules_t rules;
 
-	Skeleton (const DFA & dfa, const rules_t & rs);
+	Skeleton
+		( const dfa_t &dfa
+		, const charset_t &cs
+		, const rules_t & rs
+		, const std::string &dfa_name
+		, const std::string &dfa_cond
+		, uint32_t dfa_line
+		);
 	~Skeleton ();
 	void warn_undefined_control_flow ();
 	void warn_unreachable_rules ();
@@ -123,7 +131,7 @@ struct Skeleton
 	static void emit_prolog (OutputFile & o);
 	void emit_start
 		( OutputFile & o
-		, uint32_t maxfill
+		, size_t maxfill
 		, bool backup
 		, bool backupctx
 		, bool accept
@@ -163,4 +171,4 @@ template<typename key_t> key_t Skeleton::rule2key (rule_rank_t r)
 
 } // namespace re2c
 
-#endif // _RE2C_CODEGEN_SKELETON_SKELETON_
+#endif // _RE2C_IR_SKELETON_SKELETON_

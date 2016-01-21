@@ -26,13 +26,24 @@ cont:
 	if ((YYLIMIT - YYCURSOR) < 3) YYFILL(3);
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 0x00:	goto yy4;
-	case '<':	goto yy2;
-	default:	goto yy6;
+	case 0x00:	goto yy2;
+	case '<':	goto yy6;
+	default:	goto yy4;
 	}
 yy2:
 	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+#line 24 "bug1054496.re"
+	{ RET(TAG_EOI); }
+#line 38 "bug1054496.c"
+yy4:
+	++YYCURSOR;
+yy5:
+#line 25 "bug1054496.re"
+	{ goto cont; }
+#line 44 "bug1054496.c"
+yy6:
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case 'A':
 	case 'a':	goto yy7;
 	case 'B':
@@ -85,20 +96,8 @@ yy2:
 	case 'x':
 	case 'y':
 	case 'z':	goto yy9;
-	default:	goto yy3;
+	default:	goto yy5;
 	}
-yy3:
-#line 25 "bug1054496.re"
-	{ goto cont; }
-#line 94 "bug1054496.c"
-yy4:
-	++YYCURSOR;
-#line 24 "bug1054496.re"
-	{ RET(TAG_EOI); }
-#line 99 "bug1054496.c"
-yy6:
-	yych = *++YYCURSOR;
-	goto yy3;
 yy7:
 	++YYCURSOR;
 	switch ((yych = *YYCURSOR)) {
@@ -159,7 +158,7 @@ yy7:
 yy8:
 #line 22 "bug1054496.re"
 	{ RET(TAG_A); }
-#line 163 "bug1054496.c"
+#line 162 "bug1054496.c"
 yy9:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
@@ -222,7 +221,7 @@ yy9:
 yy11:
 #line 23 "bug1054496.re"
 	{ RET(TAG_TAG); }
-#line 226 "bug1054496.c"
+#line 225 "bug1054496.c"
 }
 #line 26 "bug1054496.re"
 

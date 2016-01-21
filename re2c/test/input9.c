@@ -9,17 +9,17 @@
 	switch (yych) {
 	case 0x00:	goto yy2;
 	case 0x01:	goto yy4;
-	case 0x02:	goto yy16;
-	case 0x07:	goto yy6;
-	case 0x08:	goto yy8;
-	case ' ':	goto yy18;
-	case '4':	goto yy20;
-	case '@':	goto yy10;
-	case 'S':	goto yy12;
+	case 0x02:	goto yy6;
+	case 0x07:	goto yy10;
+	case 0x08:	goto yy12;
+	case ' ':	goto yy14;
+	case '4':	goto yy16;
+	case '@':	goto yy18;
+	case 'S':	goto yy20;
 	case 0xAB:	goto yy22;
 	case 0xCD:	goto yy24;
-	case 0xEE:	goto yy14;
-	default:	goto yy26;
+	case 0xEE:	goto yy26;
+	default:	goto yy8;
 	}
 yy2:
 	++YYCURSOR;
@@ -33,67 +33,66 @@ yy4:
 #line 34 "input9.c"
 yy6:
 	++YYCURSOR;
-#line 7 "input9.re"
-	{ return 3; }
+#line 13 "input9.re"
+	{ return 8; }
 #line 39 "input9.c"
 yy8:
 	++YYCURSOR;
-#line 8 "input9.re"
-	{ return 4; }
-#line 44 "input9.c"
-yy10:
-	++YYCURSOR;
-#line 9 "input9.re"
-	{ return 5; }
-#line 49 "input9.c"
-yy12:
-	++YYCURSOR;
-#line 10 "input9.re"
-	{ return 6; }
-#line 54 "input9.c"
-yy14:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
-	case '7':	goto yy27;
-	default:	goto yy15;
-	}
-yy15:
+yy9:
 #line 18 "input9.re"
 	{ return 0; }
-#line 64 "input9.c"
-yy16:
+#line 45 "input9.c"
+yy10:
 	++YYCURSOR;
-#line 13 "input9.re"
-	{ return 8; }
-#line 69 "input9.c"
-yy18:
+#line 7 "input9.re"
+	{ return 3; }
+#line 50 "input9.c"
+yy12:
+	++YYCURSOR;
+#line 8 "input9.re"
+	{ return 4; }
+#line 55 "input9.c"
+yy14:
 	++YYCURSOR;
 #line 14 "input9.re"
 	{ return 9; }
-#line 74 "input9.c"
-yy20:
+#line 60 "input9.c"
+yy16:
 	++YYCURSOR;
 #line 15 "input9.re"
 	{ return 10; }
-#line 79 "input9.c"
+#line 65 "input9.c"
+yy18:
+	++YYCURSOR;
+#line 9 "input9.re"
+	{ return 5; }
+#line 70 "input9.c"
+yy20:
+	++YYCURSOR;
+#line 10 "input9.re"
+	{ return 6; }
+#line 75 "input9.c"
 yy22:
 	++YYCURSOR;
 #line 16 "input9.re"
 	{ return 11; }
-#line 84 "input9.c"
+#line 80 "input9.c"
 yy24:
 	++YYCURSOR;
 #line 17 "input9.re"
 	{ return 12; }
-#line 89 "input9.c"
+#line 85 "input9.c"
 yy26:
 	yych = *++YYCURSOR;
-	goto yy15;
+	switch (yych) {
+	case '7':	goto yy27;
+	default:	goto yy9;
+	}
 yy27:
 	++YYCURSOR;
 #line 11 "input9.re"
 	{ return 7; }
-#line 97 "input9.c"
+#line 96 "input9.c"
 }
 #line 20 "input9.re"
 

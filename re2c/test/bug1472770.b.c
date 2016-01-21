@@ -65,19 +65,19 @@ yy0:
 	if (yybm[0+yych] & 128) {
 		goto yy1;
 	}
-	if (yych <= 0x00) goto yy5;
+	if (yych >= 0x01) goto yy5;
+	++YYCURSOR;
+#line 26 "bug1472770.b.re"
+	{
+		return n;
+	}
+#line 75 "bug1472770.b.c"
+yy5:
 	++YYCURSOR;
 #line 21 "bug1472770.b.re"
 	{
 		++n;
 		goto start;
-	}
-#line 76 "bug1472770.b.c"
-yy5:
-	++YYCURSOR;
-#line 26 "bug1472770.b.re"
-	{
-		return n;
 	}
 #line 83 "bug1472770.b.c"
 }

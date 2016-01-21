@@ -2,13 +2,13 @@
 
 digraph re2c {
 
-1 -> 6 [label="[0x00-/][9-0x5D][_-`][c-0xFD]"]
+1 -> 2 [label="[0x00-/][9-0x5D][_-`][c-0xFD]"]
 1 -> 4 [label="[0-8][^]"]
-1 -> 2 [label="[a-b][0xFE-0xFF]"]
+1 -> 6 [label="[a-b][0xFE-0xFF]"]
 2 -> 3
-3 [label="dot_ranges.--emit-dot.re:3"]
+3 [label="dot_ranges.--emit-dot.re:5"]
 4 -> 5
 5 [label="dot_ranges.--emit-dot.re:4"]
 6 -> 7
-7 [label="dot_ranges.--emit-dot.re:5"]
+7 [label="dot_ranges.--emit-dot.re:3"]
 }

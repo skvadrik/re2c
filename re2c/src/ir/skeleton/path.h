@@ -1,5 +1,5 @@
-#ifndef _RE2C_CODEGEN_SKELETON_PATH_
-#define _RE2C_CODEGEN_SKELETON_PATH_
+#ifndef _RE2C_IR_SKELETON_PATH_
+#define _RE2C_IR_SKELETON_PATH_
 
 #include <vector>
 
@@ -100,4 +100,4 @@ public:
 
 } // namespace re2c
 
-#endif // _RE2C_CODEGEN_SKELETON_PATH_
+#endif // _RE2C_IR_SKELETON_PATH_

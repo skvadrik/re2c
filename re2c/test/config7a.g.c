@@ -7,22 +7,22 @@
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	if (yych <= 'E') {
-		if (yych <= '@') goto yy4;
-		if (yych >= 'E') goto yy4;
+		if (yych <= '@') goto yy2;
+		if (yych <= 'D') goto yy4;
 	} else {
-		if (yych <= 'G') goto yy2;
-		if (yych <= '`') goto yy4;
-		if (yych >= 'h') goto yy4;
+		if (yych <= 'G') goto yy4;
+		if (yych <= '`') goto yy2;
+		if (yych <= 'g') goto yy4;
 	}
 yy2:
 	++YYCURSOR;
-#line 10 "config7a.g.re"
-	{ return 1; }
+#line 12 "config7a.g.re"
+	{ return -1; }
 #line 22 "config7a.g.c"
 yy4:
 	++YYCURSOR;
-#line 12 "config7a.g.re"
-	{ return -1; }
+#line 10 "config7a.g.re"
+	{ return 1; }
 #line 27 "config7a.g.c"
 }
 #line 14 "config7a.g.re"

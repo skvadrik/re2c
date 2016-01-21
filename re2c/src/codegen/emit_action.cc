@@ -6,13 +6,13 @@
 #include "src/codegen/emit.h"
 #include "src/codegen/input_api.h"
 #include "src/codegen/output.h"
-#include "src/codegen/skeleton/skeleton.h"
 #include "src/conf/opt.h"
 #include "src/globals.h"
-#include "src/ir/dfa/action.h"
-#include "src/ir/dfa/state.h"
+#include "src/ir/adfa/action.h"
+#include "src/ir/adfa/adfa.h"
 #include "src/ir/regexp/regexp.h"
 #include "src/ir/regexp/regexp_rule.h"
+#include "src/ir/skeleton/skeleton.h"
 #include "src/parse/code.h"
 #include "src/parse/loc.h"
 
@@ -21,14 +21,14 @@ namespace re2c
 
 class label_t;
 
-static void need               (OutputFile & o, uint32_t ind, bool & readCh, uint32_t n, bool bSetMarker);
+static void need               (OutputFile & o, uint32_t ind, bool & readCh, size_t n, bool bSetMarker);
 static void emit_match         (OutputFile & o, uint32_t ind, bool & readCh, const State * const s);
 static void emit_initial       (OutputFile & o, uint32_t ind, bool & readCh, const State * const s, const Initial & init, const std::set<label_t> & used_labels);
 static void emit_save          (OutputFile & o, uint32_t ind, bool & readCh, const State * const s, uint32_t save, bool save_yyaccept);
 static void emit_accept_binary (OutputFile & o, uint32_t ind, bool & readCh, const State * const s, const accept_t & accept, size_t l, size_t r);
 static void emit_accept        (OutputFile & o, uint32_t ind, bool & readCh, const State * const s, const accept_t & accept);
 static void emit_rule          (OutputFile & o, uint32_t ind, const State * const s, const RuleOp * const rule, const std::string & condName, const Skeleton * skeleton);
-static void genYYFill          (OutputFile & o, uint32_t need);
+static void genYYFill          (OutputFile & o, size_t need);
 static void genSetCondition    (OutputFile & o, uint32_t ind, const std::string & newcond);
 static void genSetState        (OutputFile & o, uint32_t ind, uint32_t fillIndex);
 
@@ -80,7 +80,7 @@ void emit_match (OutputFile & o, uint32_t ind, bool & readCh, const State * cons
 	const bool read_ahead = s
 		&& s->next
 		&& s->next->action.type != Action::RULE;
-	if (s->link)
+	if (s->fill != 0)
 	{
 		o.wstring(opts->input_api.stmt_skip (ind));
 	}
@@ -96,9 +96,9 @@ void emit_match (OutputFile & o, uint32_t ind, bool & readCh, const State * cons
 		readCh = false;
 	}
 
-	if (s->link)
+	if (s->fill != 0)
 	{
-		need(o, ind, readCh, s->depth, false);
+		need(o, ind, readCh, s->fill, false);
 	}
 }
 
@@ -111,7 +111,7 @@ void emit_initial (OutputFile & o, uint32_t ind, bool & readCh, const State * co
 
 	if (used_labels.count(s->label))
 	{
-		if (s->link)
+		if (s->fill != 0)
 		{
 			o.wstring(opts->input_api.stmt_skip (ind));
 		}
@@ -131,9 +131,9 @@ void emit_initial (OutputFile & o, uint32_t ind, bool & readCh, const State * co
 		o.wind(ind).wstring(opts->yydebug).ws("(").wlabel(initial.label).ws(", *").wstring(opts->yycursor).ws(");\n");
 	}
 
-	if (s->link)
+	if (s->fill != 0)
 	{
-		need(o, ind, readCh, s->depth, initial.setMarker);
+		need(o, ind, readCh, s->fill, initial.setMarker);
 	}
 	else
 	{
@@ -157,10 +157,10 @@ void emit_save (OutputFile & o, uint32_t ind, bool & readCh, const State * const
 		o.wind(ind).wstring(opts->yyaccept).ws(" = ").wu32(save).ws(";\n");
 	}
 
-	if (s->link)
+	if (s->fill != 0)
 	{
 		o.wstring(opts->input_api.stmt_skip_backup (ind));
-		need(o, ind, readCh, s->depth, false);
+		need(o, ind, readCh, s->fill, false);
 	}
 	else
 	{
@@ -296,7 +296,7 @@ void emit_rule (OutputFile & o, uint32_t ind, const State * const s, const RuleO
 	}
 }
 
-void need (OutputFile & o, uint32_t ind, bool & readCh, uint32_t n, bool bSetMarker)
+void need (OutputFile & o, uint32_t ind, bool & readCh, size_t n, bool bSetMarker)
 {
 	if (opts->target == opt_t::DOT)
 	{
@@ -351,14 +351,14 @@ void need (OutputFile & o, uint32_t ind, bool & readCh, uint32_t n, bool bSetMar
 	}
 }
 
-void genYYFill (OutputFile & o, uint32_t need)
+void genYYFill (OutputFile & o, size_t need)
 {
 	o.wstring(replaceParam (opts->fill, opts->fill_arg, need));
 	if (!opts->fill_naked)
 	{
 		if (opts->fill_arg_use)
 		{
-			o.ws("(").wu32(need).ws(")");
+			o.ws("(").wu64(need).ws(")");
 		}
 		o.ws(";");
 	}

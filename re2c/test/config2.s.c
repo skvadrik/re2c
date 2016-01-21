@@ -17,37 +17,38 @@ char *scan0(char *p)
    if (YYLIMIT <= YYCURSOR) YYFILL(1);
    yych = *YYCURSOR;
    if (yych <= 'b') {
-      if (yych <= '`') goto yy10;
-      if (yych >= 'b') goto yy4;
+      if (yych <= '`') goto yy2;
+      if (yych <= 'a') goto yy4;
+      goto yy6;
    } else {
-      if (yych <= 'c') goto yy6;
-      if (yych <= 'd') goto yy8;
-      goto yy10;
+      if (yych <= 'c') goto yy8;
+      if (yych <= 'd') goto yy10;
    }
-   ++YYCURSOR;
-#line 13 "config2.s.re"
-   { return YYCURSOR; }
-#line 31 "config2.s.c"
-yy4:
-   ++YYCURSOR;
-#line 14 "config2.s.re"
-   { return YYCURSOR; }
-#line 36 "config2.s.c"
-yy6:
-   ++YYCURSOR;
-#line 15 "config2.s.re"
-   { return YYCURSOR; }
-#line 41 "config2.s.c"
-yy8:
-   ++YYCURSOR;
-#line 16 "config2.s.re"
-   { return YYCURSOR; }
-#line 46 "config2.s.c"
-yy10:
+yy2:
    ++YYCURSOR;
 #line 17 "config2.s.re"
    { return NULL; }
-#line 51 "config2.s.c"
+#line 32 "config2.s.c"
+yy4:
+   ++YYCURSOR;
+#line 13 "config2.s.re"
+   { return YYCURSOR; }
+#line 37 "config2.s.c"
+yy6:
+   ++YYCURSOR;
+#line 14 "config2.s.re"
+   { return YYCURSOR; }
+#line 42 "config2.s.c"
+yy8:
+   ++YYCURSOR;
+#line 15 "config2.s.re"
+   { return YYCURSOR; }
+#line 47 "config2.s.c"
+yy10:
+   ++YYCURSOR;
+#line 16 "config2.s.re"
+   { return YYCURSOR; }
+#line 52 "config2.s.c"
 }
 #line 18 "config2.s.re"
 
@@ -57,43 +58,44 @@ char *scan1(char *p)
 {
 	char *q;
 
-#line 61 "config2.s.c"
+#line 62 "config2.s.c"
 {
 	YYCTYPE yych;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	if (yych <= 'b') {
-		if (yych <= '`') goto yy22;
-		if (yych >= 'b') goto yy16;
+		if (yych <= '`') goto yy14;
+		if (yych <= 'a') goto yy16;
+		goto yy18;
 	} else {
-		if (yych <= 'c') goto yy18;
-		if (yych <= 'd') goto yy20;
-		goto yy22;
+		if (yych <= 'c') goto yy20;
+		if (yych <= 'd') goto yy22;
 	}
-	++YYCURSOR;
-#line 26 "config2.s.re"
-	{ return YYCURSOR; }
-#line 77 "config2.s.c"
-yy16:
-	++YYCURSOR;
-#line 27 "config2.s.re"
-	{ return YYCURSOR; }
-#line 82 "config2.s.c"
-yy18:
-	++YYCURSOR;
-#line 28 "config2.s.re"
-	{ return YYCURSOR; }
-#line 87 "config2.s.c"
-yy20:
-	++YYCURSOR;
-#line 29 "config2.s.re"
-	{ return YYCURSOR; }
-#line 92 "config2.s.c"
-yy22:
+yy14:
 	++YYCURSOR;
 #line 30 "config2.s.re"
 	{ return NULL; }
-#line 97 "config2.s.c"
+#line 79 "config2.s.c"
+yy16:
+	++YYCURSOR;
+#line 26 "config2.s.re"
+	{ return YYCURSOR; }
+#line 84 "config2.s.c"
+yy18:
+	++YYCURSOR;
+#line 27 "config2.s.re"
+	{ return YYCURSOR; }
+#line 89 "config2.s.c"
+yy20:
+	++YYCURSOR;
+#line 28 "config2.s.re"
+	{ return YYCURSOR; }
+#line 94 "config2.s.c"
+yy22:
+	++YYCURSOR;
+#line 29 "config2.s.re"
+	{ return YYCURSOR; }
+#line 99 "config2.s.c"
 }
 #line 31 "config2.s.re"
 
@@ -103,43 +105,44 @@ char *scan(char *p)
 {
 	char *q;
 
-#line 107 "config2.s.c"
+#line 109 "config2.s.c"
 {
 YYCTYPE yych;
 if (YYLIMIT <= YYCURSOR) YYFILL(1);
 yych = *YYCURSOR;
 if (yych <= 'b') {
-if (yych <= '`') goto yy34;
-if (yych >= 'b') goto yy28;
+if (yych <= '`') goto yy26;
+if (yych <= 'a') goto yy28;
+goto yy30;
 } else {
-if (yych <= 'c') goto yy30;
-if (yych <= 'd') goto yy32;
-goto yy34;
+if (yych <= 'c') goto yy32;
+if (yych <= 'd') goto yy34;
 }
-++YYCURSOR;
-#line 39 "config2.s.re"
-{ return YYCURSOR; }
-#line 123 "config2.s.c"
-yy28:
-++YYCURSOR;
-#line 40 "config2.s.re"
-{ return YYCURSOR; }
-#line 128 "config2.s.c"
-yy30:
-++YYCURSOR;
-#line 41 "config2.s.re"
-{ return YYCURSOR; }
-#line 133 "config2.s.c"
-yy32:
-++YYCURSOR;
-#line 42 "config2.s.re"
-{ return YYCURSOR; }
-#line 138 "config2.s.c"
-yy34:
+yy26:
 ++YYCURSOR;
 #line 43 "config2.s.re"
 { return NULL; }
-#line 143 "config2.s.c"
+#line 126 "config2.s.c"
+yy28:
+++YYCURSOR;
+#line 39 "config2.s.re"
+{ return YYCURSOR; }
+#line 131 "config2.s.c"
+yy30:
+++YYCURSOR;
+#line 40 "config2.s.re"
+{ return YYCURSOR; }
+#line 136 "config2.s.c"
+yy32:
+++YYCURSOR;
+#line 41 "config2.s.re"
+{ return YYCURSOR; }
+#line 141 "config2.s.c"
+yy34:
+++YYCURSOR;
+#line 42 "config2.s.re"
+{ return YYCURSOR; }
+#line 146 "config2.s.c"
 }
 #line 44 "config2.s.re"
 

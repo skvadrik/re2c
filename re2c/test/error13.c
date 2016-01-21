@@ -9,22 +9,21 @@
 	if ((YYLIMIT - YYCURSOR) < 3) YYFILL(3);
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 'A':	goto yy2;
-	default:	goto yy4;
+	case 'A':	goto yy4;
+	default:	goto yy2;
 	}
 yy2:
+	++YYCURSOR;
+yy3:
+#line 6 "error13.re"
+	{ return 0; }
+#line 21 "error13.c"
+yy4:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
 	case 'B':	goto yy5;
 	default:	goto yy3;
 	}
-yy3:
-#line 6 "error13.re"
-	{ return 0; }
-#line 25 "error13.c"
-yy4:
-	yych = *++YYCURSOR;
-	goto yy3;
 yy5:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -39,12 +38,12 @@ yy7:
 	++YYCURSOR;
 #line 4 "error13.re"
 	{ return 1; }
-#line 43 "error13.c"
+#line 42 "error13.c"
 yy9:
 	++YYCURSOR;
 #line 5 "error13.re"
 	{ return 2; }
-#line 48 "error13.c"
+#line 47 "error13.c"
 }
 #line 7 "error13.re"
 

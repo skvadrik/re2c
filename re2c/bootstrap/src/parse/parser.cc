@@ -81,11 +81,10 @@
 #include <vector>
 
 #include "src/codegen/output.h"
-#include "src/codegen/skeleton/skeleton.h"
 #include "src/conf/opt.h"
 #include "src/globals.h"
-#include "src/ir/bytecode/bytecode.h"
-#include "src/ir/dfa/dfa.h"
+#include "src/ir/compile.h"
+#include "src/ir/adfa/adfa.h"
 #include "src/ir/regexp/encoding/enc.h"
 #include "src/ir/regexp/encoding/range_suffix.h"
 #include "src/ir/regexp/regexp.h"
@@ -94,6 +93,7 @@
 #include "src/ir/regexp/regexp_null.h"
 #include "src/ir/regexp/regexp_rule.h"
 #include "src/ir/rule_rank.h"
+#include "src/ir/skeleton/skeleton.h"
 #include "src/parse/code.h"
 #include "src/parse/extop.h"
 #include "src/parse/loc.h"
@@ -162,9 +162,6 @@ void context_rule
 	)
 {
 	context_check(clist);
-	const RegExp::InsAccess ins_access = clist->size() > 1
-		? RegExp::PRIVATE
-		: RegExp::SHARED;
 	for(CondList::const_iterator it = clist->begin(); it != clist->end(); ++it)
 	{
 		if (specMap.find(*it) == specMap.end())
@@ -177,7 +174,6 @@ void context_rule
 			, expr
 			, look
 			, rank_counter.next ()
-			, ins_access
 			, code
 			, newcond
 			);
@@ -215,7 +211,6 @@ void default_rule(CondList *clist, const Code * code)
 			, in->mkDefault ()
 			, new NullOp
 			, rule_rank_t::def ()
-			, RegExp::SHARED
 			, code
 			, NULL
 			);
@@ -598,11 +593,11 @@ static const yytype_int8 yyrhs[] =
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint16 yyrline[] =
 {
-       0,   198,   198,   200,   204,   208,   217,   226,   230,   234,
-     238,   255,   273,   277,   283,   288,   294,   298,   313,   330,
-     335,   341,   357,   375,   395,   401,   409,   412,   419,   425,
-     435,   438,   446,   449,   456,   460,   467,   471,   478,   482,
-     489,   493,   508,   528,   532,   536,   540,   547,   557,   561
+       0,   193,   193,   195,   199,   203,   211,   219,   223,   227,
+     231,   247,   264,   268,   274,   279,   285,   289,   303,   319,
+     324,   330,   345,   362,   381,   387,   395,   398,   405,   411,
+     421,   424,   432,   435,   442,   446,   453,   457,   464,   468,
+     475,   479,   494,   513,   517,   521,   525,   532,   542,   546
 };
 #endif
 
@@ -1588,7 +1583,6 @@ yyreduce:
 				in->fatal("sym already defined");
 			}
 			delete (yyvsp[(1) - (4)].str);
-			(yyvsp[(3) - (4)].regexp)->ins_access = RegExp::PRIVATE;
 		;}
     break;
 
@@ -1600,7 +1594,6 @@ yyreduce:
 				in->fatal("sym already defined");
 			}
 			delete (yyvsp[(1) - (3)].str);
-			(yyvsp[(2) - (3)].regexp)->ins_access = RegExp::PRIVATE;
 		;}
     break;
 
@@ -1635,7 +1628,6 @@ yyreduce:
 				, (yyvsp[(1) - (3)].regexp)
 				, (yyvsp[(2) - (3)].regexp)
 				, rank_counter.next ()
-				, RegExp::SHARED
 				, (yyvsp[(3) - (3)].code)
 				, NULL
 				);
@@ -1653,7 +1645,6 @@ yyreduce:
 				, in->mkDefault ()
 				, new NullOp
 				, rule_rank_t::def ()
-				, RegExp::SHARED
 				, (yyvsp[(2) - (2)].code)
 				, NULL
 				);
@@ -1713,7 +1704,6 @@ yyreduce:
 				, (yyvsp[(4) - (7)].regexp)
 				, (yyvsp[(5) - (7)].regexp)
 				, rank_counter.next ()
-				, RegExp::PRIVATE
 				, (yyvsp[(7) - (7)].code)
 				, (yyvsp[(6) - (7)].str)
 				);
@@ -1733,7 +1723,6 @@ yyreduce:
 				, (yyvsp[(4) - (7)].regexp)
 				, (yyvsp[(5) - (7)].regexp)
 				, rank_counter.next ()
-				, RegExp::PRIVATE
 				, NULL
 				, (yyvsp[(7) - (7)].str)
 				);
@@ -1771,7 +1760,6 @@ yyreduce:
 				, in->mkDefault ()
 				, new NullOp
 				, rule_rank_t::def ()
-				, RegExp::PRIVATE
 				, (yyvsp[(5) - (5)].code)
 				, NULL
 				);
@@ -1791,7 +1779,6 @@ yyreduce:
 				, new NullOp
 				, new NullOp
 				, rank_counter.next ()
-				, RegExp::SHARED
 				, (yyvsp[(3) - (3)].code)
 				, (yyvsp[(2) - (3)].str)
 				);
@@ -1814,7 +1801,6 @@ yyreduce:
 				, new NullOp
 				, new NullOp
 				, rank_counter.next ()
-				, RegExp::SHARED
 				, NULL
 				, (yyvsp[(3) - (3)].str)
 				);
@@ -1953,10 +1939,10 @@ yyreduce:
 			switch((yyvsp[(2) - (2)].op))
 			{
 			case '*':
-				(yyval.regexp) = mkAlt(new CloseOp((yyvsp[(1) - (2)].regexp)), new NullOp());
+				(yyval.regexp) = new CloseOp((yyvsp[(1) - (2)].regexp));
 				break;
 			case '+':
-				(yyval.regexp) = new CloseOp((yyvsp[(1) - (2)].regexp));
+				(yyval.regexp) = new CatOp (new CloseOp((yyvsp[(1) - (2)].regexp)), (yyvsp[(1) - (2)].regexp));
 				break;
 			case '?':
 				(yyval.regexp) = mkAlt((yyvsp[(1) - (2)].regexp), new NullOp());
@@ -1968,7 +1954,6 @@ yyreduce:
   case 42:
 
     {
-			(yyvsp[(1) - (2)].regexp)->ins_access = RegExp::PRIVATE;
 			if ((yyvsp[(2) - (2)].extop).max == std::numeric_limits<uint32_t>::max())
 			{
 				(yyval.regexp) = repeat_from ((yyvsp[(1) - (2)].regexp), (yyvsp[(2) - (2)].extop).min);
@@ -2358,17 +2343,15 @@ void parse(Scanner& i, Output & o)
 					(*itOp)->rank = rank_counter.next ();
 				}
 				// merge <*> rules to all conditions
-				// note that all conditions use the same regexp for <*> rules,
-				// but compile it separately because of RegExp::PRIVATE attribute
 				for (it = specMap.begin(); it != specMap.end(); ++it)
 				{
 					for (RuleOpList::const_iterator itOp = specStar.begin(); itOp != specStar.end(); ++itOp)
 					{
-						it->second.addl (*itOp);
+						it->second.add (*itOp);
 					}
 					if (star_default)
 					{
-						it->second.addl (star_default);
+						it->second.add_def (star_default);
 					}
 				}
 
@@ -2405,7 +2388,7 @@ void parse(Scanner& i, Output & o)
 						}
 					}
 
-					dfa_map[it->first] = genCode(it->second, o, it->first, opts->encoding.nCodeUnits ());
+					dfa_map[it->first] = compile(it->second, o, it->first, opts->encoding.nCodeUnits ());
 				}
 				if (parseMode != Scanner::Rules && dfa_map.find(it->first) != dfa_map.end())
 				{
@@ -2419,7 +2402,7 @@ void parse(Scanner& i, Output & o)
 			{
 				if (parseMode != Scanner::Reuse)
 				{
-					dfa_map[""] = genCode(spec, o, "", opts->encoding.nCodeUnits ());
+					dfa_map[""] = compile(spec, o, "", opts->encoding.nCodeUnits ());
 				}
 				if (parseMode != Scanner::Rules && dfa_map.find("") != dfa_map.end())
 				{

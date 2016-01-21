@@ -340,41 +340,37 @@ yy3:
 #line 341 "unicode_group_Mc.x--encoding-policy(substitute).c"
 yy4:
 	++YYCURSOR;
-yy5:
 #line 12 "unicode_group_Mc.x--encoding-policy(substitute).re"
 	{ goto Mc; }
-#line 347 "unicode_group_Mc.x--encoding-policy(substitute).c"
+#line 346 "unicode_group_Mc.x--encoding-policy(substitute).c"
 yy6:
 	yych = *++YYCURSOR;
 	if (yych <= 0xDC81) {
 		if (yych <= 0xDC00) {
 			if (yych <= 0xDBFF) goto yy3;
-			goto yy8;
+			goto yy4;
 		} else {
-			if (yych == 0xDC02) goto yy8;
+			if (yych == 0xDC02) goto yy4;
 			goto yy3;
 		}
 	} else {
 		if (yych <= 0xDCB2) {
-			if (yych <= 0xDC82) goto yy8;
+			if (yych <= 0xDC82) goto yy4;
 			if (yych <= 0xDCAF) goto yy3;
-			goto yy8;
+			goto yy4;
 		} else {
 			if (yych <= 0xDCB6) goto yy3;
-			if (yych <= 0xDCB8) goto yy8;
+			if (yych <= 0xDCB8) goto yy4;
 			goto yy3;
 		}
 	}
 yy7:
-	yych = *++YYCURSOR;
-	if (yych <= 0xDD64) goto yy3;
-	if (yych <= 0xDD66) goto yy8;
-	if (yych <= 0xDD6C) goto yy3;
-	if (yych >= 0xDD73) goto yy3;
-yy8:
 	++YYCURSOR;
-	yych = *YYCURSOR;
-	goto yy5;
+	if ((yych = *YYCURSOR) <= 0xDD64) goto yy3;
+	if (yych <= 0xDD66) goto yy4;
+	if (yych <= 0xDD6C) goto yy3;
+	if (yych <= 0xDD72) goto yy4;
+	goto yy3;
 }
 #line 14 "unicode_group_Mc.x--encoding-policy(substitute).re"
 

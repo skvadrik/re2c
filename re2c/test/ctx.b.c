@@ -85,46 +85,27 @@ std:
 	};
 	if ((YYLIMIT - YYCURSOR) < 3) YYFILL(3);
 	yych = *YYCURSOR;
-	if (yych <= ' ') {
-		if (yych <= '\t') {
-			if (yych <= 0x08) goto yy9;
-			goto yy6;
-		} else {
-			if (yych <= '\n') goto yy8;
-			if (yych <= 0x1F) goto yy9;
-			goto yy6;
-		}
-	} else {
-		if (yych <= '9') {
-			if (yych <= '/') goto yy9;
-			goto yy4;
-		} else {
-			if (yych <= '`') goto yy9;
-			if (yych >= 'c') goto yy9;
-		}
+	if (yybm[0+yych] & 128) {
+		goto yy6;
 	}
+	if (yych <= 0x1F) {
+		if (yych <= 0x08) goto yy2;
+		if (yych <= '\n') goto yy4;
+	} else {
+		if (yych <= ' ') goto yy4;
+		if (yych <= '`') goto yy2;
+		if (yych <= 'b') goto yy9;
+	}
+yy2:
 	++YYCURSOR;
-	YYCTXMARKER = YYCURSOR;
-	if ((yych = *YYCURSOR) <= '/') goto yy3;
-	if (yych == '1') goto yy15;
-	if (yych <= '9') goto yy12;
 yy3:
 #line 60 "ctx.b.re"
 	{
 		return UNEXPECTED;
 	}
-#line 117 "ctx.b.c"
+#line 107 "ctx.b.c"
 yy4:
 	++YYCURSOR;
-	yych = *YYCURSOR;
-	goto yy11;
-yy5:
-#line 50 "ctx.b.re"
-	{ return NUMBER;  }
-#line 125 "ctx.b.c"
-yy6:
-	++YYCURSOR;
-yy7:
 #line 53 "ctx.b.re"
 	{
 		if(s.cur == s.lim)
@@ -132,42 +113,43 @@ yy7:
 		cursor = s.cur;
 		goto std;
 	}
-#line 136 "ctx.b.c"
-yy8:
-	yych = *++YYCURSOR;
-	goto yy7;
+#line 117 "ctx.b.c"
+yy6:
+	++YYCURSOR;
+	if (YYLIMIT <= YYCURSOR) YYFILL(1);
+	yych = *YYCURSOR;
+	if (yybm[0+yych] & 128) {
+		goto yy6;
+	}
+#line 50 "ctx.b.re"
+	{ return NUMBER;  }
+#line 127 "ctx.b.c"
 yy9:
 	yych = *++YYCURSOR;
-	goto yy3;
+	YYCTXMARKER = YYCURSOR;
+	if (yych <= '/') goto yy3;
+	if (yych == '1') goto yy13;
+	if (yych >= ':') goto yy3;
 yy10:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
-yy11:
-	if (yybm[0+yych] & 128) {
-		goto yy10;
-	}
-	goto yy5;
+	if (yych <= '/') goto yy12;
+	if (yych <= '9') goto yy10;
 yy12:
-	++YYCURSOR;
-	if (YYLIMIT <= YYCURSOR) YYFILL(1);
-	yych = *YYCURSOR;
-	if (yych <= '/') goto yy14;
-	if (yych <= '9') goto yy12;
-yy14:
 	YYCURSOR = YYCTXMARKER;
 #line 49 "ctx.b.re"
 	{ return KEYWORD; }
-#line 162 "ctx.b.c"
-yy15:
+#line 144 "ctx.b.c"
+yy13:
 	++YYCURSOR;
-	if ((yych = *YYCURSOR) <= '/') goto yy16;
-	if (yych <= '9') goto yy12;
-yy16:
+	if ((yych = *YYCURSOR) <= '/') goto yy14;
+	if (yych <= '9') goto yy10;
+yy14:
 	YYCURSOR = YYCTXMARKER;
 #line 48 "ctx.b.re"
 	{ return KEYWORD; }
-#line 171 "ctx.b.c"
+#line 153 "ctx.b.c"
 }
 #line 63 "ctx.b.re"
 

@@ -24,8 +24,8 @@ yyc_r1:
 	yych = *cursor1;
 	if (yych <= '2') {
 		if (yych <= '0') goto yy3;
-		if (yych <= '1') goto yy6;
-		goto yy4;
+		if (yych <= '1') goto yy4;
+		goto yy6;
 	} else {
 		if (yych <= '`') goto yy3;
 		if (yych <= 'a') goto yy8;
@@ -34,10 +34,10 @@ yyc_r1:
 yy3:
 yy4:
 	++cursor1;
-	{ return "2"; }
+	{ return "1"; }
 yy6:
 	++cursor1;
-	{ return "1"; }
+	{ return "2"; }
 yy8:
 	++cursor1;
 	{ return "a"; }
@@ -50,18 +50,18 @@ yyc_r2:
 	yych = *cursor1;
 	if (yych <= '2') {
 		if (yych <= '0') goto yy14;
-		if (yych <= '1') goto yy17;
-		goto yy15;
+		if (yych <= '1') goto yy15;
+		goto yy17;
 	} else {
 		if (yych == 'b') goto yy19;
 	}
 yy14:
 yy15:
 	++cursor1;
-	{ return "2"; }
+	{ return "1"; }
 yy17:
 	++cursor1;
-	{ return "1"; }
+	{ return "2"; }
 yy19:
 	++cursor1;
 	{ return "b"; }
@@ -85,8 +85,8 @@ yyc_r1:
 	yych = *cursor2;
 	if (yych <= '2') {
 		if (yych <= '0') goto yy3;
-		if (yych <= '1') goto yy6;
-		goto yy4;
+		if (yych <= '1') goto yy4;
+		goto yy6;
 	} else {
 		if (yych <= '`') goto yy3;
 		if (yych <= 'a') goto yy8;
@@ -95,10 +95,10 @@ yyc_r1:
 yy3:
 yy4:
 	++cursor2;
-	{ return "2"; }
+	{ return "1"; }
 yy6:
 	++cursor2;
-	{ return "1"; }
+	{ return "2"; }
 yy8:
 	++cursor2;
 	{ return "a"; }
@@ -111,18 +111,18 @@ yyc_r2:
 	yych = *cursor2;
 	if (yych <= '2') {
 		if (yych <= '0') goto yy14;
-		if (yych <= '1') goto yy17;
-		goto yy15;
+		if (yych <= '1') goto yy15;
+		goto yy17;
 	} else {
 		if (yych == 'b') goto yy19;
 	}
 yy14:
 yy15:
 	++cursor2;
-	{ return "2"; }
+	{ return "1"; }
 yy17:
 	++cursor2;
-	{ return "1"; }
+	{ return "2"; }
 yy19:
 	++cursor2;
 	{ return "b"; }
@@ -146,8 +146,8 @@ yyc_r1:
 	yych = *cursor3;
 	if (yych <= '2') {
 		if (yych <= '0') goto yy3;
-		if (yych <= '1') goto yy6;
-		goto yy4;
+		if (yych <= '1') goto yy4;
+		goto yy6;
 	} else {
 		if (yych <= '`') goto yy3;
 		if (yych <= 'a') goto yy8;
@@ -156,10 +156,10 @@ yyc_r1:
 yy3:
 yy4:
 	++cursor3;
-	{ return "2"; }
+	{ return "1"; }
 yy6:
 	++cursor3;
-	{ return "1"; }
+	{ return "2"; }
 yy8:
 	++cursor3;
 	{ return "a"; }
@@ -172,18 +172,18 @@ yyc_r2:
 	yych = *cursor3;
 	if (yych <= '2') {
 		if (yych <= '0') goto yy14;
-		if (yych <= '1') goto yy17;
-		goto yy15;
+		if (yych <= '1') goto yy15;
+		goto yy17;
 	} else {
 		if (yych == 'b') goto yy19;
 	}
 yy14:
 yy15:
 	++cursor3;
-	{ return "2"; }
+	{ return "1"; }
 yy17:
 	++cursor3;
-	{ return "1"; }
+	{ return "2"; }
 yy19:
 	++cursor3;
 	{ return "b"; }

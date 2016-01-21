@@ -25,18 +25,18 @@ yyc_r1:
 	{
 		static void *yytarget[256] = {
 			&&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,
-			&&yy3,  &&yy3,  &&yy13, &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,
+			&&yy3,  &&yy3,  &&yy5,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,
 			&&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,
 			&&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,
 			&&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,
 			&&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,
-			&&yy3,  &&yy5,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,
+			&&yy3,  &&yy7,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,
 			&&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,
 			&&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,
 			&&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,
 			&&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,
 			&&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,
-			&&yy3,  &&yy7,  &&yy9,  &&yy11, &&yy3,  &&yy3,  &&yy3,  &&yy3,
+			&&yy3,  &&yy9,  &&yy11, &&yy13, &&yy3,  &&yy3,  &&yy3,  &&yy3,
 			&&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,
 			&&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,
 			&&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,
@@ -64,40 +64,40 @@ yy3:
 	{ return "."; }
 yy5:
 	++YYCURSOR;
-	{ return "1"; }
+	{ return "DEFAULT-r1"; }
 yy7:
 	++YYCURSOR;
-	{ return "a"; }
+	{ return "1"; }
 yy9:
 	++YYCURSOR;
-	{ return "b"; }
+	{ return "a"; }
 yy11:
 	++YYCURSOR;
-	{ return "c"; }
+	{ return "b"; }
 yy13:
 	++YYCURSOR;
-	{ return "DEFAULT-r1"; }
+	{ return "c"; }
 /* *********************************** */
 yyc_r2:
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	if (yych <= '`') {
-		if (yych == '\n') goto yy23;
+		if (yych == '\n') goto yy19;
 	} else {
-		if (yych <= 'a') goto yy19;
-		if (yych == 'c') goto yy21;
+		if (yych <= 'a') goto yy21;
+		if (yych == 'c') goto yy23;
 	}
 	++YYCURSOR;
 	{ return "."; }
 yy19:
 	++YYCURSOR;
-	{ return "a"; }
+	{ return "DEFAULT-r2"; }
 yy21:
 	++YYCURSOR;
-	{ return "c"; }
+	{ return "a"; }
 yy23:
 	++YYCURSOR;
-	{ return "DEFAULT-r2"; }
+	{ return "c"; }
 }
 
 
@@ -119,18 +119,18 @@ yyc_r1:
 	{
 		static void *yytarget[256] = {
 			&&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,
-			&&yy3,  &&yy3,  &&yy13, &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,
-			&&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,
-			&&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,
-			&&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,
-			&&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,
 			&&yy3,  &&yy3,  &&yy5,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,
 			&&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,
 			&&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,
 			&&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,
 			&&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,
+			&&yy3,  &&yy3,  &&yy7,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,
 			&&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,
-			&&yy3,  &&yy7,  &&yy9,  &&yy11, &&yy3,  &&yy3,  &&yy3,  &&yy3,
+			&&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,
+			&&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,
+			&&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,
+			&&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,
+			&&yy3,  &&yy9,  &&yy11, &&yy13, &&yy3,  &&yy3,  &&yy3,  &&yy3,
 			&&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,
 			&&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,
 			&&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,
@@ -158,19 +158,19 @@ yy3:
 	{ return "."; }
 yy5:
 	++YYCURSOR;
-	{ return "2"; }
+	{ return "DEFAULT-r1"; }
 yy7:
 	++YYCURSOR;
-	{ return "a"; }
+	{ return "2"; }
 yy9:
 	++YYCURSOR;
-	{ return "b"; }
+	{ return "a"; }
 yy11:
 	++YYCURSOR;
-	{ return "c"; }
+	{ return "b"; }
 yy13:
 	++YYCURSOR;
-	{ return "DEFAULT-r1"; }
+	{ return "c"; }
 /* *********************************** */
 yyc_r2:
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);

@@ -111,7 +111,7 @@ public:
 	void set_block_line (uint32_t l);
 	uint32_t get_block_line () const;
 
-	void emit (const std::vector<std::string> & types, uint32_t max_fill);
+	void emit (const std::vector<std::string> & types, size_t max_fill);
 
 	FORBID_COPY (OutputFile);
 };
@@ -137,7 +137,7 @@ struct Output
 	HeaderFile header;
 	std::vector<std::string> types;
 	std::set<std::string> skeletons;
-	uint32_t max_fill;
+	size_t max_fill;
 
 	Output (const char * source_name, const char * header_name);
 	~Output ();
@@ -148,7 +148,7 @@ void output_state_goto (std::ostream &, uint32_t, uint32_t);
 void output_types (std::ostream &, uint32_t, const std::vector<std::string> &);
 void output_version_time (std::ostream &);
 void output_yyaccept_init (std::ostream &, uint32_t, bool);
-void output_yymaxfill (std::ostream &, uint32_t);
+void output_yymaxfill (std::ostream &, size_t);
 
 // helpers
 std::string output_get_state ();

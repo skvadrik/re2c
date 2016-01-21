@@ -10,17 +10,17 @@ state1 -> 2
 2 -> 4 [label="[a]"]
 2 -> 5 [label="[f]"]
 4 -> 3 [label="[0x00-a][c-0xFF]"]
-4 -> 9 [label="[b]"]
+4 -> 6 [label="[b]"]
 5 -> 3 [label="[0x00-n][p-0xFF]"]
-5 -> 6 [label="[o]"]
-6 -> 3 [label="[0x00-n][p-0xFF]"]
-6 -> 7 [label="[o]"]
-7 -> 8
-8 [label="dot_conditions.c--emit-dot.re:8"]
-9 -> 3 [label="[0x00-b][d-0xFF]"]
-9 -> 10 [label="[c]"]
+5 -> 7 [label="[o]"]
+6 -> 3 [label="[0x00-b][d-0xFF]"]
+6 -> 8 [label="[c]"]
+7 -> 3 [label="[0x00-n][p-0xFF]"]
+7 -> 10 [label="[o]"]
+8 -> 9
+9 [label="dot_conditions.c--emit-dot.re:6"]
 10 -> 11
-11 [label="dot_conditions.c--emit-dot.re:6"]
+11 [label="dot_conditions.c--emit-dot.re:8"]
 /* *********************************** */
 state2 -> 13
 13 -> 14 [label="[0x00-`][b-0xFF]"]

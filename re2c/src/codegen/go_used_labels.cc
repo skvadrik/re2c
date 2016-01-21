@@ -1,3 +1,4 @@
+#include <stddef.h>
 #include "src/util/c99_stdint.h"
 #include <set>
 #include <utility>
@@ -5,7 +6,7 @@
 
 #include "src/codegen/go.h"
 #include "src/codegen/label.h"
-#include "src/ir/dfa/state.h"
+#include "src/ir/adfa/adfa.h"
 
 namespace re2c
 {

@@ -29,48 +29,48 @@ yy4:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 0x88:
-	case 0x89:	goto yy9;
+	case 0x89:	goto yy7;
 	default:	goto yy3;
 	}
 yy5:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
-	case 0x83:	goto yy11;
+	case 0x83:	goto yy9;
 	default:	goto yy3;
 	}
 yy6:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
-	case 0x99:	goto yy7;
+	case 0x99:	goto yy11;
 	default:	goto yy3;
 	}
 yy7:
-	yych = *++YYCURSOR;
-	switch (yych) {
-	case 0xB0:
-	case 0xB1:
-	case 0xB2:	goto yy9;
-	default:	goto yy8;
-	}
-yy8:
-	YYCURSOR = YYMARKER;
-	goto yy3;
-yy9:
 	++YYCURSOR;
 #line 12 "unicode_group_Me.8--encoding-policy(substitute).re"
 	{ goto Me; }
-#line 63 "unicode_group_Me.8--encoding-policy(substitute).c"
-yy11:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+#line 52 "unicode_group_Me.8--encoding-policy(substitute).c"
+yy9:
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case 0x9D:
 	case 0x9E:
 	case 0x9F:
 	case 0xA0:
 	case 0xA2:
 	case 0xA3:
-	case 0xA4:	goto yy9;
-	default:	goto yy8;
+	case 0xA4:	goto yy7;
+	default:	goto yy10;
+	}
+yy10:
+	YYCURSOR = YYMARKER;
+	goto yy3;
+yy11:
+	++YYCURSOR;
+	switch ((yych = *YYCURSOR)) {
+	case 0xB0:
+	case 0xB1:
+	case 0xB2:	goto yy7;
+	default:	goto yy10;
 	}
 }
 #line 14 "unicode_group_Me.8--encoding-policy(substitute).re"

@@ -1,13 +1,10 @@
 #include <stddef.h>
 #include <stdio.h>
 #include <algorithm>
-#include <set>
-#include <string>
 #include <utility>
 
 #include "src/conf/msg.h"
 #include "src/conf/warn.h"
-#include "src/ir/rule_rank.h"
 
 namespace re2c {
 

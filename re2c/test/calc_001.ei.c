@@ -23,10 +23,10 @@ int scan(char *s, int l)
 			if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
 			yych = *YYCURSOR;
 			switch (yych) {
-			case 0x00:	goto yy10;
+			case 0x00:	goto yy2;
 			case 0x4E:	goto yy6;
 			case 0x60:	goto yy8;
-			case 0xF0:	goto yy2;
+			case 0xF0:	goto yy10;
 			case 0xF1:
 			case 0xF2:
 			case 0xF3:
@@ -35,10 +35,22 @@ int scan(char *s, int l)
 			case 0xF6:
 			case 0xF7:
 			case 0xF8:
-			case 0xF9:	goto yy4;
-			default:	goto yy12;
+			case 0xF9:	goto yy12;
+			default:	goto yy4;
 			}
 yy2:
+			++YYCURSOR;
+			{ printf("EOF\n");	return 0; }
+yy4:
+			++YYCURSOR;
+			{ printf("ERR\n");	return 1; }
+yy6:
+			++YYCURSOR;
+			{ printf("+\n");	continue; }
+yy8:
+			++YYCURSOR;
+			{ printf("-\n");	continue; }
+yy10:
 			++YYCURSOR;
 			switch ((yych = *YYCURSOR)) {
 			case 0xF0:
@@ -50,48 +62,31 @@ yy2:
 			case 0xF6:
 			case 0xF7:
 			case 0xF8:
-			case 0xF9:	goto yy16;
-			default:	goto yy3;
+			case 0xF9:	goto yy15;
+			default:	goto yy11;
 			}
-yy3:
+yy11:
 			{ printf("Num\n");	continue; }
-yy4:
-			++YYCURSOR;
-			yych = *YYCURSOR;
-			goto yy15;
-yy5:
-			{ printf("Num\n");	continue; }
-yy6:
-			++YYCURSOR;
-			{ printf("+\n");	continue; }
-yy8:
-			++YYCURSOR;
-			{ printf("-\n");	continue; }
-yy10:
-			++YYCURSOR;
-			{ printf("EOF\n");	return 0; }
 yy12:
 			++YYCURSOR;
-			{ printf("ERR\n");	return 1; }
+			if (YYLIMIT <= YYCURSOR) YYFILL(1);
+			yych = *YYCURSOR;
+			switch (yych) {
+			case 0xF0:
+			case 0xF1:
+			case 0xF2:
+			case 0xF3:
+			case 0xF4:
+			case 0xF5:
+			case 0xF6:
+			case 0xF7:
+			case 0xF8:
+			case 0xF9:	goto yy12;
+			default:	goto yy14;
+			}
 yy14:
-			++YYCURSOR;
-			if (YYLIMIT <= YYCURSOR) YYFILL(1);
-			yych = *YYCURSOR;
+			{ printf("Num\n");	continue; }
 yy15:
-			switch (yych) {
-			case 0xF0:
-			case 0xF1:
-			case 0xF2:
-			case 0xF3:
-			case 0xF4:
-			case 0xF5:
-			case 0xF6:
-			case 0xF7:
-			case 0xF8:
-			case 0xF9:	goto yy14;
-			default:	goto yy5;
-			}
-yy16:
 			++YYCURSOR;
 			if (YYLIMIT <= YYCURSOR) YYFILL(1);
 			yych = *YYCURSOR;
@@ -105,10 +100,10 @@ yy16:
 			case 0xF6:
 			case 0xF7:
 			case 0xF8:
-			case 0xF9:	goto yy16;
-			default:	goto yy18;
+			case 0xF9:	goto yy15;
+			default:	goto yy17;
 			}
-yy18:
+yy17:
 			{ printf("Oct\n");	continue; }
 		}
 

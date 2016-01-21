@@ -12,7 +12,7 @@ char *q;
 #line 13 "simple.c"
 {
 	YYCTYPE yych;
-	if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
+	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	switch (yych) {
 	case '0':
@@ -24,27 +24,18 @@ char *q;
 	case '6':
 	case '7':
 	case '8':
-	case '9':	goto yy2;
-	default:	goto yy4;
+	case '9':	goto yy4;
+	default:	goto yy2;
 	}
 yy2:
 	++YYCURSOR;
-	yych = *YYCURSOR;
-	goto yy7;
-yy3:
-#line 10 "simple.re"
-	{return YYCURSOR;}
-#line 38 "simple.c"
-yy4:
-	++YYCURSOR;
 #line 11 "simple.re"
 	{return NULL;}
-#line 43 "simple.c"
-yy6:
+#line 35 "simple.c"
+yy4:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
-yy7:
 	switch (yych) {
 	case '0':
 	case '1':
@@ -55,9 +46,13 @@ yy7:
 	case '6':
 	case '7':
 	case '8':
-	case '9':	goto yy6;
-	default:	goto yy3;
+	case '9':	goto yy4;
+	default:	goto yy6;
 	}
+yy6:
+#line 10 "simple.re"
+	{return YYCURSOR;}
+#line 56 "simple.c"
 }
 #line 12 "simple.re"
 

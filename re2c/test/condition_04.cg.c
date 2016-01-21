@@ -15,8 +15,8 @@ yyc_r1:
 	yych = *YYCURSOR;
 	if (yych <= '2') {
 		if (yych <= '0') goto yy3;
-		if (yych <= '1') goto yy6;
-		goto yy4;
+		if (yych <= '1') goto yy4;
+		goto yy6;
 	} else {
 		if (yych <= '`') goto yy3;
 		if (yych <= 'a') goto yy8;
@@ -25,13 +25,13 @@ yyc_r1:
 yy3:
 yy4:
 	++YYCURSOR;
-#line 4 "condition_04.cg.re"
-	{ return "2"; }
+#line 3 "condition_04.cg.re"
+	{ return "1"; }
 #line 31 "condition_04.cg.c"
 yy6:
 	++YYCURSOR;
-#line 3 "condition_04.cg.re"
-	{ return "1"; }
+#line 4 "condition_04.cg.re"
+	{ return "2"; }
 #line 36 "condition_04.cg.c"
 yy8:
 	++YYCURSOR;
@@ -49,21 +49,21 @@ yyc_r2:
 	yych = *YYCURSOR;
 	if (yych <= '2') {
 		if (yych <= '0') goto yy14;
-		if (yych <= '1') goto yy17;
-		goto yy15;
+		if (yych <= '1') goto yy15;
+		goto yy17;
 	} else {
 		if (yych == 'b') goto yy19;
 	}
 yy14:
 yy15:
 	++YYCURSOR;
-#line 4 "condition_04.cg.re"
-	{ return "2"; }
+#line 3 "condition_04.cg.re"
+	{ return "1"; }
 #line 63 "condition_04.cg.c"
 yy17:
 	++YYCURSOR;
-#line 3 "condition_04.cg.re"
-	{ return "1"; }
+#line 4 "condition_04.cg.re"
+	{ return "2"; }
 #line 68 "condition_04.cg.c"
 yy19:
 	++YYCURSOR;

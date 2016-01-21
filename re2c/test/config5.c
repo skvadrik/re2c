@@ -10,22 +10,21 @@
 	if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 'a':	goto yy2;
-	default:	goto yy4;
+	case 'a':	goto yy4;
+	default:	goto yy2;
 	}
 yy2:
+	++YYCURSOR;
+yy3:
+#line 11 "config5.re"
+	{ return 0; }
+#line 22 "config5.c"
+yy4:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
 	case 'b':	goto yy5;
 	default:	goto yy3;
 	}
-yy3:
-#line 11 "config5.re"
-	{ return 0; }
-#line 26 "config5.c"
-yy4:
-	yych = *++YYCURSOR;
-	goto yy3;
 yy5:
 	++YYCURSOR;
 	if ((YYLIMIT - YYCURSOR) < 3) YYFILL(3);
@@ -54,7 +53,7 @@ yy10:
 	++YYCURSOR;
 #line 10 "config5.re"
 	{ return 1; }
-#line 58 "config5.c"
+#line 57 "config5.c"
 }
 #line 13 "config5.re"
 

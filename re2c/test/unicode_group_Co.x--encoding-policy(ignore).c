@@ -31,23 +31,17 @@ yy3:
 yy4:
 	yych = *++YYCURSOR;
 	if (yych <= 0xDBFF) goto yy3;
-	if (yych <= 0xDFFF) goto yy8;
+	if (yych <= 0xDFFF) goto yy6;
 	goto yy3;
 yy5:
 	yych = *++YYCURSOR;
 	if (yych <= 0xDBFF) goto yy3;
-	if (yych <= 0xDFFD) goto yy8;
-	goto yy3;
+	if (yych >= 0xDFFE) goto yy3;
 yy6:
 	++YYCURSOR;
-yy7:
 #line 12 "unicode_group_Co.x--encoding-policy(ignore).re"
 	{ goto Co; }
-#line 47 "unicode_group_Co.x--encoding-policy(ignore).c"
-yy8:
-	++YYCURSOR;
-	yych = *YYCURSOR;
-	goto yy7;
+#line 45 "unicode_group_Co.x--encoding-policy(ignore).c"
 }
 #line 14 "unicode_group_Co.x--encoding-policy(ignore).re"
 

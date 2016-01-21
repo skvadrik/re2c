@@ -22,7 +22,7 @@ yyNext:
 start:
 yy0:
 	YYSETSTATE(0);
-	if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
+	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 yyFillLabel0:
 	yych = *YYCURSOR;
 	switch (yych) {
@@ -35,29 +35,20 @@ yyFillLabel0:
 	case '6':
 	case '7':
 	case '8':
-	case '9':	goto yy2;
-	default:	goto yy4;
+	case '9':	goto yy4;
+	default:	goto yy2;
 	}
 yy2:
 	++YYCURSOR;
-	yych = *YYCURSOR;
-	goto yy7;
-yy3:
-#line 15 "config4d.f.re"
-	{ return YYCURSOR; }
-#line 49 "config4d.f.c"
-yy4:
-	++YYCURSOR;
 #line 16 "config4d.f.re"
 	{ return NULL; }
-#line 54 "config4d.f.c"
-yy6:
+#line 46 "config4d.f.c"
+yy4:
 	++YYCURSOR;
 	YYSETSTATE(1);
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 yyFillLabel1:
 	yych = *YYCURSOR;
-yy7:
 	switch (yych) {
 	case '0':
 	case '1':
@@ -68,9 +59,13 @@ yy7:
 	case '6':
 	case '7':
 	case '8':
-	case '9':	goto yy6;
-	default:	goto yy3;
+	case '9':	goto yy4;
+	default:	goto yy6;
 	}
+yy6:
+#line 15 "config4d.f.re"
+	{ return YYCURSOR; }
+#line 69 "config4d.f.c"
 #line 17 "config4d.f.re"
 
 }

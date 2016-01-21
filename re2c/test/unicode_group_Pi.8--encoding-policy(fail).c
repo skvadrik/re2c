@@ -27,30 +27,21 @@ yy3:
 yy4:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case 0xAB:	goto yy9;
+	case 0xAB:	goto yy6;
 	default:	goto yy3;
 	}
 yy5:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
 	case 0x80:	goto yy8;
-	case 0xB8:	goto yy6;
+	case 0xB8:	goto yy10;
 	default:	goto yy3;
 	}
 yy6:
-	yych = *++YYCURSOR;
-	switch (yych) {
-	case 0x82:
-	case 0x84:
-	case 0x89:
-	case 0x8C:
-	case 0x9C:
-	case 0xA0:	goto yy9;
-	default:	goto yy7;
-	}
-yy7:
-	YYCURSOR = YYMARKER;
-	goto yy3;
+	++YYCURSOR;
+#line 12 "unicode_group_Pi.8--encoding-policy(fail).re"
+	{ goto Pi; }
+#line 45 "unicode_group_Pi.8--encoding-policy(fail).c"
 yy8:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -58,14 +49,23 @@ yy8:
 	case 0x9B:
 	case 0x9C:
 	case 0x9F:
-	case 0xB9:	goto yy9;
-	default:	goto yy7;
+	case 0xB9:	goto yy6;
+	default:	goto yy9;
 	}
 yy9:
+	YYCURSOR = YYMARKER;
+	goto yy3;
+yy10:
 	++YYCURSOR;
-#line 12 "unicode_group_Pi.8--encoding-policy(fail).re"
-	{ goto Pi; }
-#line 69 "unicode_group_Pi.8--encoding-policy(fail).c"
+	switch ((yych = *YYCURSOR)) {
+	case 0x82:
+	case 0x84:
+	case 0x89:
+	case 0x8C:
+	case 0x9C:
+	case 0xA0:	goto yy6;
+	default:	goto yy9;
+	}
 }
 #line 14 "unicode_group_Pi.8--encoding-policy(fail).re"
 

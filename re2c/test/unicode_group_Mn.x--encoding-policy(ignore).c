@@ -626,32 +626,31 @@ yy3:
 #line 627 "unicode_group_Mn.x--encoding-policy(ignore).c"
 yy4:
 	++YYCURSOR;
-yy5:
 #line 12 "unicode_group_Mn.x--encoding-policy(ignore).re"
 	{ goto Mn; }
-#line 633 "unicode_group_Mn.x--encoding-policy(ignore).c"
+#line 632 "unicode_group_Mn.x--encoding-policy(ignore).c"
 yy6:
 	yych = *++YYCURSOR;
-	if (yych == 0xDDFD) goto yy11;
+	if (yych == 0xDDFD) goto yy4;
 	goto yy3;
 yy7:
 	yych = *++YYCURSOR;
 	if (yych <= 0xDE0B) {
 		if (yych <= 0xDE03) {
 			if (yych <= 0xDE00) goto yy3;
-			goto yy11;
+			goto yy4;
 		} else {
 			if (yych <= 0xDE04) goto yy3;
-			if (yych <= 0xDE06) goto yy11;
+			if (yych <= 0xDE06) goto yy4;
 			goto yy3;
 		}
 	} else {
 		if (yych <= 0xDE3A) {
-			if (yych <= 0xDE0F) goto yy11;
+			if (yych <= 0xDE0F) goto yy4;
 			if (yych <= 0xDE37) goto yy3;
-			goto yy11;
+			goto yy4;
 		} else {
-			if (yych == 0xDE3F) goto yy11;
+			if (yych == 0xDE3F) goto yy4;
 			goto yy3;
 		}
 	}
@@ -660,20 +659,20 @@ yy8:
 	if (yych <= 0xDC7F) {
 		if (yych <= 0xDC01) {
 			if (yych <= 0xDC00) goto yy3;
-			goto yy11;
+			goto yy4;
 		} else {
 			if (yych <= 0xDC37) goto yy3;
-			if (yych <= 0xDC46) goto yy11;
+			if (yych <= 0xDC46) goto yy4;
 			goto yy3;
 		}
 	} else {
 		if (yych <= 0xDCB6) {
-			if (yych <= 0xDC81) goto yy11;
+			if (yych <= 0xDC81) goto yy4;
 			if (yych <= 0xDCB2) goto yy3;
-			goto yy11;
+			goto yy4;
 		} else {
 			if (yych <= 0xDCB8) goto yy3;
-			if (yych <= 0xDCBA) goto yy11;
+			if (yych <= 0xDCBA) goto yy4;
 			goto yy3;
 		}
 	}
@@ -682,31 +681,28 @@ yy9:
 	if (yych <= 0xDD84) {
 		if (yych <= 0xDD69) {
 			if (yych <= 0xDD66) goto yy3;
-			goto yy11;
+			goto yy4;
 		} else {
 			if (yych <= 0xDD7A) goto yy3;
-			if (yych <= 0xDD82) goto yy11;
+			if (yych <= 0xDD82) goto yy4;
 			goto yy3;
 		}
 	} else {
 		if (yych <= 0xDDAD) {
-			if (yych <= 0xDD8B) goto yy11;
+			if (yych <= 0xDD8B) goto yy4;
 			if (yych <= 0xDDA9) goto yy3;
-			goto yy11;
+			goto yy4;
 		} else {
 			if (yych <= 0xDE41) goto yy3;
-			if (yych <= 0xDE44) goto yy11;
+			if (yych <= 0xDE44) goto yy4;
 			goto yy3;
 		}
 	}
 yy10:
-	yych = *++YYCURSOR;
-	if (yych <= 0xDCFF) goto yy3;
-	if (yych >= 0xDDF0) goto yy3;
-yy11:
 	++YYCURSOR;
-	yych = *YYCURSOR;
-	goto yy5;
+	if ((yych = *YYCURSOR) <= 0xDCFF) goto yy3;
+	if (yych <= 0xDDEF) goto yy4;
+	goto yy3;
 }
 #line 14 "unicode_group_Mn.x--encoding-policy(ignore).re"
 

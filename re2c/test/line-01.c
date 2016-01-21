@@ -10,46 +10,46 @@ const char* scan(unsigned char* in)
 	yych = *YYCURSOR;
 	switch (yych) {
 	case '\n':	goto yy2;
-	case 'a':	goto yy3;
-	case 'b':	goto yy5;
-	case 'c':	goto yy7;
-	case 'd':	goto yy9;
-	default:	goto yy11;
+	case 'a':	goto yy5;
+	case 'b':	goto yy7;
+	case 'c':	goto yy9;
+	case 'd':	goto yy11;
+	default:	goto yy3;
 	}
 yy2:
 yy3:
+	++YYCURSOR;
+#line 6 "d"
+	{
+		return ".";
+	}
+#line 27 "line-01.c"
+yy5:
 	++YYCURSOR;
 #line 1 "a"
 	{
 		return "a";
 	}
-#line 27 "line-01.c"
-yy5:
+#line 34 "line-01.c"
+yy7:
 	++YYCURSOR;
 #line 2 "b"
 	{
 		return "b";
 	}
-#line 34 "line-01.c"
-yy7:
+#line 41 "line-01.c"
+yy9:
 	++YYCURSOR;
 #line 5 "b"
 	{
 		return "c";
 	}
-#line 41 "line-01.c"
-yy9:
+#line 48 "line-01.c"
+yy11:
 	++YYCURSOR;
 #line 2 "d"
 	{
 		return "d";
-	}
-#line 48 "line-01.c"
-yy11:
-	++YYCURSOR;
-#line 6 "d"
-	{
-		return ".";
 	}
 #line 55 "line-01.c"
 }

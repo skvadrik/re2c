@@ -2,7 +2,7 @@
 #define _RE2C_CODEGEN_EMIT_
 
 #include "src/codegen/output.h"
-#include "src/ir/dfa/dfa.h"
+#include "src/ir/adfa/adfa.h"
 
 namespace re2c {
 

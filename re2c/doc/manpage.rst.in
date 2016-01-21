@@ -177,6 +177,11 @@ OPTIONS
     construct empty class, e.g: [], [^\\x00-\\xFF],
     [\\x00-\\xFF][\\x00-\\xFF].
 
+``--dfa-minimization <table | moore>``
+    Internal algorithm used by re2c to minimize DFA (defaults to ``moore``).
+    Both table filling and Moore's algorithms should produce identical DFA (up to states relabelling).
+    Table filling algorithm is much simpler and slower; it serves as a reference implementation.
+
 ``-1 --single-pass``
     Deprecated and does nothing (single pass is by default now).
 

@@ -7,7 +7,7 @@
 	if ((YYLIMIT - YYCURSOR) < 6) YYFILL(6);
 	yych = *YYCURSOR;
 	switch (yych) {
-	case '0':	goto yy5;
+	case '0':	goto yy4;
 	case '1':
 	case '2':
 	case '3':
@@ -16,7 +16,7 @@
 	case '6':
 	case '7':
 	case '8':
-	case '9':	goto yy7;
+	case '9':	goto yy6;
 	case 'a':
 	case 'b':
 	case 'c':
@@ -41,46 +41,30 @@
 	case 'w':
 	case 'x':
 	case 'y':
-	case 'z':	goto yy4;
-	case 'p':	goto yy2;
-	default:	goto yy8;
+	case 'z':	goto yy8;
+	case 'p':	goto yy11;
+	default:	goto yy2;
 	}
 yy2:
 	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
-	case 'r':	goto yy19;
-	default:	goto yy18;
-	}
-yy3:
-#line 3 "sample.re"
-	{return ID;}
-#line 58 "sample.c"
+#line 6 "sample.re"
+	{return ERR;}
+#line 53 "sample.c"
 yy4:
-	yych = *++YYCURSOR;
-	goto yy18;
-yy5:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
 	case 'x':	goto yy12;
-	default:	goto yy11;
+	default:	goto yy7;
 	}
-yy6:
+yy5:
 #line 4 "sample.re"
 	{return DEC;}
-#line 71 "sample.c"
-yy7:
-	yych = *++YYCURSOR;
-	goto yy11;
-yy8:
-	++YYCURSOR;
-#line 6 "sample.re"
-	{return ERR;}
-#line 79 "sample.c"
-yy10:
+#line 63 "sample.c"
+yy6:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
-yy11:
+yy7:
 	switch (yych) {
 	case '0':
 	case '1':
@@ -91,8 +75,52 @@ yy11:
 	case '6':
 	case '7':
 	case '8':
-	case '9':	goto yy10;
-	default:	goto yy6;
+	case '9':	goto yy6;
+	default:	goto yy5;
+	}
+yy8:
+	++YYCURSOR;
+	if (YYLIMIT <= YYCURSOR) YYFILL(1);
+	yych = *YYCURSOR;
+yy9:
+	switch (yych) {
+	case 'a':
+	case 'b':
+	case 'c':
+	case 'd':
+	case 'e':
+	case 'f':
+	case 'g':
+	case 'h':
+	case 'i':
+	case 'j':
+	case 'k':
+	case 'l':
+	case 'm':
+	case 'n':
+	case 'o':
+	case 'p':
+	case 'q':
+	case 'r':
+	case 's':
+	case 't':
+	case 'u':
+	case 'v':
+	case 'w':
+	case 'x':
+	case 'y':
+	case 'z':	goto yy8;
+	default:	goto yy10;
+	}
+yy10:
+#line 3 "sample.re"
+	{return ID;}
+#line 119 "sample.c"
+yy11:
+	yych = *++YYCURSOR;
+	switch (yych) {
+	case 'r':	goto yy14;
+	default:	goto yy9;
 	}
 yy12:
 	yych = *++YYCURSOR;
@@ -112,13 +140,19 @@ yy12:
 	case 'c':
 	case 'd':
 	case 'e':
-	case 'f':	goto yy14;
+	case 'f':	goto yy15;
 	default:	goto yy13;
 	}
 yy13:
 	YYCURSOR = YYMARKER;
-	goto yy6;
+	goto yy5;
 yy14:
+	yych = *++YYCURSOR;
+	switch (yych) {
+	case 'i':	goto yy18;
+	default:	goto yy9;
+	}
+yy15:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
@@ -138,66 +172,26 @@ yy14:
 	case 'c':
 	case 'd':
 	case 'e':
-	case 'f':	goto yy14;
-	default:	goto yy16;
+	case 'f':	goto yy15;
+	default:	goto yy17;
 	}
-yy16:
+yy17:
 #line 5 "sample.re"
 	{return HEX;}
-#line 148 "sample.c"
-yy17:
-	++YYCURSOR;
-	if (YYLIMIT <= YYCURSOR) YYFILL(1);
-	yych = *YYCURSOR;
+#line 182 "sample.c"
 yy18:
+	yych = *++YYCURSOR;
 	switch (yych) {
-	case 'a':
-	case 'b':
-	case 'c':
-	case 'd':
-	case 'e':
-	case 'f':
-	case 'g':
-	case 'h':
-	case 'i':
-	case 'j':
-	case 'k':
-	case 'l':
-	case 'm':
-	case 'n':
-	case 'o':
-	case 'p':
-	case 'q':
-	case 'r':
-	case 's':
-	case 't':
-	case 'u':
-	case 'v':
-	case 'w':
-	case 'x':
-	case 'y':
-	case 'z':	goto yy17;
-	default:	goto yy3;
+	case 'n':	goto yy19;
+	default:	goto yy9;
 	}
 yy19:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case 'i':	goto yy20;
-	default:	goto yy18;
+	case 't':	goto yy20;
+	default:	goto yy9;
 	}
 yy20:
-	yych = *++YYCURSOR;
-	switch (yych) {
-	case 'n':	goto yy21;
-	default:	goto yy18;
-	}
-yy21:
-	yych = *++YYCURSOR;
-	switch (yych) {
-	case 't':	goto yy22;
-	default:	goto yy18;
-	}
-yy22:
 	++YYCURSOR;
 	switch ((yych = *YYCURSOR)) {
 	case 'a':
@@ -225,13 +219,13 @@ yy22:
 	case 'w':
 	case 'x':
 	case 'y':
-	case 'z':	goto yy17;
-	default:	goto yy23;
+	case 'z':	goto yy8;
+	default:	goto yy21;
 	}
-yy23:
+yy21:
 #line 2 "sample.re"
 	{return PRINT;}
-#line 235 "sample.c"
+#line 229 "sample.c"
 }
 #line 7 "sample.re"
 

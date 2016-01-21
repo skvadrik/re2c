@@ -21,7 +21,7 @@ char *scan(char *p)
 	}
 yy0:
 	YYSETSTATE(0);
-	if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
+	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 yyFillLabel0:
 	yych = *YYCURSOR;
 	switch (yych) {
@@ -34,29 +34,20 @@ yyFillLabel0:
 	case '6':
 	case '7':
 	case '8':
-	case '9':	goto yy2;
-	default:	goto yy4;
+	case '9':	goto yy4;
+	default:	goto yy2;
 	}
 yy2:
 	++YYCURSOR;
-	yych = *YYCURSOR;
-	goto yy7;
-yy3:
-#line 13 "config4b.f.re"
-	{ return YYCURSOR; }
-#line 48 "config4b.f.c"
-yy4:
-	++YYCURSOR;
 #line 14 "config4b.f.re"
 	{ return NULL; }
-#line 53 "config4b.f.c"
-yy6:
+#line 45 "config4b.f.c"
+yy4:
 	++YYCURSOR;
 	YYSETSTATE(1);
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 yyFillLabel1:
 	yych = *YYCURSOR;
-yy7:
 	switch (yych) {
 	case '0':
 	case '1':
@@ -67,9 +58,13 @@ yy7:
 	case '6':
 	case '7':
 	case '8':
-	case '9':	goto yy6;
-	default:	goto yy3;
+	case '9':	goto yy4;
+	default:	goto yy6;
 	}
+yy6:
+#line 13 "config4b.f.re"
+	{ return YYCURSOR; }
+#line 68 "config4b.f.c"
 #line 15 "config4b.f.re"
 
 }

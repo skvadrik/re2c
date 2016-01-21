@@ -17,19 +17,13 @@ SRC_HDR = \
 	src/codegen/label.h \
 	src/codegen/output.h \
 	src/codegen/print.h \
-	src/codegen/scc.h \
-	src/codegen/skeleton/path.h \
-	src/codegen/skeleton/way.h \
-	src/codegen/skeleton/skeleton.h \
 	src/conf/msg.h \
 	src/conf/opt.h \
 	src/conf/warn.h \
-	src/ir/bytecode/charset.h \
-	src/ir/bytecode/bytecode.h \
-	src/ir/bytecode/ins.h \
-	src/ir/dfa/state.h \
+	src/ir/adfa/action.h \
+	src/ir/adfa/adfa.h \
 	src/ir/dfa/dfa.h \
-	src/ir/dfa/action.h \
+	src/ir/nfa/nfa.h \
 	src/ir/regexp/encoding/case.h \
 	src/ir/regexp/encoding/enc.h \
 	src/ir/regexp/encoding/range_suffix.h \
@@ -47,7 +41,11 @@ SRC_HDR = \
 	src/ir/regexp/regexp_null.h \
 	src/ir/regexp/regexp.h \
 	src/ir/regexp/regexp_close.h \
+	src/ir/compile.h \
 	src/ir/rule_rank.h \
+	src/ir/skeleton/path.h \
+	src/ir/skeleton/way.h \
+	src/ir/skeleton/skeleton.h \
 	src/globals.h \
 	src/parse/code.h \
 	src/parse/extop.h \
@@ -65,6 +63,7 @@ SRC_HDR = \
 	src/util/forbid_copy.h \
 	src/util/free_list.h \
 	src/util/local_increment.h \
+	src/util/ord_hash_set.h \
 	src/util/range.h \
 	src/util/s_to_n32_unsafe.h \
 	src/util/smart_ptr.h \
@@ -76,7 +75,6 @@ SRC = \
 	src/codegen/emit_action.cc \
 	src/codegen/emit_dfa.cc \
 	src/codegen/label.cc \
-	src/codegen/prepare_dfa.cc \
 	src/codegen/go_construct.cc \
 	src/codegen/go_destruct.cc \
 	src/codegen/go_emit.cc \
@@ -84,25 +82,17 @@ SRC = \
 	src/codegen/input_api.cc \
 	src/codegen/output.cc \
 	src/codegen/print.cc \
-	src/codegen/scc.cc \
-	src/codegen/skeleton/control_flow.cc \
-	src/codegen/skeleton/generate_code.cc \
-	src/codegen/skeleton/generate_data.cc \
-	src/codegen/skeleton/match_empty.cc \
-	src/codegen/skeleton/maxlen.cc \
-	src/codegen/skeleton/skeleton.cc \
-	src/codegen/skeleton/unreachable.cc \
-	src/codegen/skeleton/way.cc \
 	src/conf/msg.cc \
 	src/conf/opt.cc \
 	src/conf/warn.cc \
-	src/ir/bytecode/bytecode.cc \
-	src/ir/bytecode/ins.cc \
-	src/ir/bytecode/charset.cc \
-	src/ir/bytecode/split.cc \
-	src/ir/bytecode/compile.cc \
-	src/ir/bytecode/calc_size.cc \
-	src/ir/dfa/dfa.cc \
+	src/ir/nfa/calc_size.cc \
+	src/ir/nfa/nfa.cc \
+	src/ir/nfa/split.cc \
+	src/ir/adfa/adfa.cc \
+	src/ir/adfa/prepare.cc \
+	src/ir/dfa/determinization.cc \
+	src/ir/dfa/fillpoints.cc \
+	src/ir/dfa/minimization.cc \
 	src/ir/regexp/display.cc \
 	src/ir/regexp/encoding/enc.cc \
 	src/ir/regexp/encoding/range_suffix.cc \
@@ -114,7 +104,16 @@ SRC = \
 	src/ir/regexp/encoding/utf16/utf16_range.cc \
 	src/ir/regexp/fixed_length.cc \
 	src/ir/regexp/regexp.cc \
+	src/ir/compile.cc \
 	src/ir/rule_rank.cc \
+	src/ir/skeleton/control_flow.cc \
+	src/ir/skeleton/generate_code.cc \
+	src/ir/skeleton/generate_data.cc \
+	src/ir/skeleton/match_empty.cc \
+	src/ir/skeleton/maxlen.cc \
+	src/ir/skeleton/skeleton.cc \
+	src/ir/skeleton/unreachable.cc \
+	src/ir/skeleton/way.cc \
 	src/main.cc \
 	src/parse/code.cc \
 	src/parse/input.cc \

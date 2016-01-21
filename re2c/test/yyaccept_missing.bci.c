@@ -44,21 +44,22 @@ int scan(char *s, int l)
 yyc_INITIAL:
 			if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
 			yych = *YYCURSOR;
-			if (yych <= 0x00) goto yy5;
-			if (yych != '$') goto yy7;
-			++YYCURSOR;
-			if ((yych = *YYCURSOR) <= '@') goto yy4;
-			if (yych <= 'Z') goto yy8;
-			if (yych <= '`') goto yy4;
-			if (yych <= 'z') goto yy8;
-yy4:
-			{ printf("ERR\n");	return 1; }
-yy5:
+			if (yych <= 0x00) goto yy3;
+			if (yych == '$') goto yy7;
+			goto yy5;
+yy3:
 			++YYCURSOR;
 			{ printf("EOF\n");	return 0; }
+yy5:
+			++YYCURSOR;
+yy6:
+			{ printf("ERR\n");	return 1; }
 yy7:
 			yych = *++YYCURSOR;
-			goto yy4;
+			if (yych <= '@') goto yy6;
+			if (yych <= 'Z') goto yy8;
+			if (yych <= '`') goto yy6;
+			if (yych >= '{') goto yy6;
 yy8:
 			++YYCURSOR;
 			{
@@ -105,9 +106,9 @@ yyc_ST_VALUE:
 				if (YYLIMIT <= YYCURSOR) YYFILL(1);
 				yych = *(YYMARKER = YYCURSOR);
 				if (yybm[0+yych] & 128) {
-					goto yy15;
+					goto yy13;
 				}
-				if (yych == '$') goto yy13;
+				if (yych == '$') goto yy15;
 yy12:
 				{
 		YYSETCONDITION(STATE(INITIAL));
@@ -117,31 +118,31 @@ yy13:
 				++YYCURSOR;
 				if (YYLIMIT <= YYCURSOR) YYFILL(1);
 				yych = *YYCURSOR;
-				if (yych <= '@') goto yy14;
+				if (yybm[0+yych] & 128) {
+					goto yy13;
+				}
+				goto yy12;
+yy15:
+				++YYCURSOR;
+				if (YYLIMIT <= YYCURSOR) YYFILL(1);
+				yych = *YYCURSOR;
+				if (yych <= '@') goto yy16;
 				if (yych <= 'Z') goto yy17;
-				if (yych <= '`') goto yy14;
+				if (yych <= '`') goto yy16;
 				if (yych <= 'z') goto yy17;
-yy14:
+yy16:
 				YYCURSOR = YYMARKER;
 				if (yyaccept == 0) {
 					goto yy12;
 				} else {
 					goto yy18;
 				}
-yy15:
-				++YYCURSOR;
-				if (YYLIMIT <= YYCURSOR) YYFILL(1);
-				yych = *YYCURSOR;
-				if (yybm[0+yych] & 128) {
-					goto yy15;
-				}
-				goto yy12;
 yy17:
 				yyaccept = 1;
 				YYMARKER = ++YYCURSOR;
 				if (YYLIMIT <= YYCURSOR) YYFILL(1);
 				yych = *YYCURSOR;
-				if (yych == '$') goto yy13;
+				if (yych == '$') goto yy15;
 yy18:
 				{
 		printf("Found $ or $\\<x>\n");

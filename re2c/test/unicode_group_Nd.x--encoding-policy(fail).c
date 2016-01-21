@@ -153,28 +153,24 @@ yy3:
 #line 154 "unicode_group_Nd.x--encoding-policy(fail).c"
 yy4:
 	++YYCURSOR;
-yy5:
 #line 12 "unicode_group_Nd.x--encoding-policy(fail).re"
 	{ goto Nd; }
-#line 160 "unicode_group_Nd.x--encoding-policy(fail).c"
+#line 159 "unicode_group_Nd.x--encoding-policy(fail).c"
 yy6:
 	yych = *++YYCURSOR;
 	if (yych <= 0xDC9F) goto yy3;
-	if (yych <= 0xDCA9) goto yy9;
+	if (yych <= 0xDCA9) goto yy4;
 	goto yy3;
 yy7:
 	yych = *++YYCURSOR;
 	if (yych <= 0xDC65) goto yy3;
-	if (yych <= 0xDC6F) goto yy9;
+	if (yych <= 0xDC6F) goto yy4;
 	goto yy3;
 yy8:
-	yych = *++YYCURSOR;
-	if (yych <= 0xDFCD) goto yy3;
-	if (yych >= 0xE000) goto yy3;
-yy9:
 	++YYCURSOR;
-	yych = *YYCURSOR;
-	goto yy5;
+	if ((yych = *YYCURSOR) <= 0xDFCD) goto yy3;
+	if (yych <= 0xDFFF) goto yy4;
+	goto yy3;
 }
 #line 14 "unicode_group_Nd.x--encoding-policy(fail).re"
 

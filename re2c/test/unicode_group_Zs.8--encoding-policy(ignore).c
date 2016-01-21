@@ -29,28 +29,27 @@ yy3:
 #line 30 "unicode_group_Zs.8--encoding-policy(ignore).c"
 yy4:
 	++YYCURSOR;
-yy5:
 #line 12 "unicode_group_Zs.8--encoding-policy(ignore).re"
 	{ goto Zs; }
-#line 36 "unicode_group_Zs.8--encoding-policy(ignore).c"
+#line 35 "unicode_group_Zs.8--encoding-policy(ignore).c"
 yy6:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case 0xA0:	goto yy12;
+	case 0xA0:	goto yy4;
 	default:	goto yy3;
 	}
 yy7:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
 	case 0x9A:	goto yy10;
-	case 0xA0:	goto yy15;
+	case 0xA0:	goto yy12;
 	default:	goto yy3;
 	}
 yy8:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
-	case 0x80:	goto yy14;
-	case 0x81:	goto yy13;
+	case 0x80:	goto yy13;
+	case 0x81:	goto yy14;
 	default:	goto yy3;
 	}
 yy9:
@@ -62,7 +61,7 @@ yy9:
 yy10:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case 0x80:	goto yy12;
+	case 0x80:	goto yy4;
 	default:	goto yy11;
 	}
 yy11:
@@ -70,14 +69,11 @@ yy11:
 	goto yy3;
 yy12:
 	yych = *++YYCURSOR;
-	goto yy5;
-yy13:
-	yych = *++YYCURSOR;
 	switch (yych) {
-	case 0x9F:	goto yy12;
+	case 0x8E:	goto yy4;
 	default:	goto yy11;
 	}
-yy14:
+yy13:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 0x80:
@@ -91,13 +87,13 @@ yy14:
 	case 0x88:
 	case 0x89:
 	case 0x8A:
-	case 0xAF:	goto yy12;
+	case 0xAF:	goto yy4;
 	default:	goto yy11;
 	}
-yy15:
+yy14:
 	++YYCURSOR;
 	switch ((yych = *YYCURSOR)) {
-	case 0x8E:	goto yy12;
+	case 0x9F:	goto yy4;
 	default:	goto yy11;
 	}
 }

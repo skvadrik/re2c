@@ -25,9 +25,9 @@ size_t scan(const char *s, int l, char *r)
 	if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
 	yych = *(YYMARKER = YYCURSOR);
 	switch (yych) {
-	case 0x00:	goto yy5;
-	case '?':	goto yy3;
-	default:	goto yy7;
+	case 0x00:	goto yy3;
+	case '?':	goto yy7;
+	default:	goto yy5;
 	}
 yy2:
 #line 40 "bug1454253.re"
@@ -38,9 +38,27 @@ yy2:
 	}
 #line 40 "bug1454253.c"
 yy3:
+	++YYCURSOR;
+#line 34 "bug1454253.re"
+	{
+		*r++ = '3';
+		*r++ = '\0';
+		return p - s;
+	}
+#line 49 "bug1454253.c"
+yy5:
+	++YYCURSOR;
+	if (YYLIMIT <= YYCURSOR) YYFILL(1);
+	yych = *YYCURSOR;
+	switch (yych) {
+	case 0x00:
+	case '?':	goto yy2;
+	default:	goto yy5;
+	}
+yy7:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case '!':	goto yy12;
+	case '!':	goto yy9;
 	case '0':
 	case '1':
 	case '2':
@@ -102,30 +120,12 @@ yy3:
 	case 'w':
 	case 'x':
 	case 'y':
-	case 'z':	goto yy9;
-	default:	goto yy4;
+	case 'z':	goto yy12;
+	default:	goto yy8;
 	}
-yy4:
+yy8:
 	YYCURSOR = YYMARKER;
 	goto yy2;
-yy5:
-	++YYCURSOR;
-#line 34 "bug1454253.re"
-	{
-		*r++ = '3';
-		*r++ = '\0';
-		return p - s;
-	}
-#line 120 "bug1454253.c"
-yy7:
-	++YYCURSOR;
-	if (YYLIMIT <= YYCURSOR) YYFILL(1);
-	yych = *YYCURSOR;
-	switch (yych) {
-	case 0x00:
-	case '?':	goto yy2;
-	default:	goto yy7;
-	}
 yy9:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
@@ -196,9 +196,9 @@ yy9:
 	default:	goto yy11;
 	}
 yy11:
-#line 29 "bug1454253.re"
+#line 24 "bug1454253.re"
 	{
-		*r++ = '2';
+		*r++ = '1';
 		continue;
 	}
 #line 205 "bug1454253.c"
@@ -272,9 +272,9 @@ yy12:
 	default:	goto yy14;
 	}
 yy14:
-#line 24 "bug1454253.re"
+#line 29 "bug1454253.re"
 	{
-		*r++ = '1';
+		*r++ = '2';
 		continue;
 	}
 #line 281 "bug1454253.c"

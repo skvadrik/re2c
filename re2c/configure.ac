@@ -18,9 +18,9 @@ AC_SUBST(PACKAGE_RELEASE, ${PACKAGE_RELEASE:-1})
 AC_ARG_ENABLE([docs], [AS_HELP_STRING([--enable-docs], [regenerate manpage])])
 AM_CONDITIONAL([REBUILD_DOCS], [test "x$enable_docs" = "xyes"])
 AM_COND_IF([REBUILD_DOCS], [
-    AC_CHECK_PROG(RST2MAN, rst2man.py, yes, no)
+    AC_CHECK_PROGS(RST2MAN, [rst2man rst2man.py], no)
     AS_IF([test "x$RST2MAN" = "xno"], [
-        AC_MSG_ERROR([need rst2man.py for --enable-docs])
+        AC_MSG_ERROR([need rst2man or rst2man.py for --enable-docs])
     ])
 ])
 

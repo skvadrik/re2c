@@ -1,3 +1,4 @@
+#include <stddef.h>
 #include "src/util/c99_stdint.h"
 #include <string>
 #include <utility>
@@ -11,7 +12,7 @@
 #include "src/codegen/print.h"
 #include "src/conf/opt.h"
 #include "src/globals.h"
-#include "src/ir/dfa/state.h"
+#include "src/ir/adfa/adfa.h"
 #include "src/ir/regexp/encoding/enc.h"
 
 namespace re2c

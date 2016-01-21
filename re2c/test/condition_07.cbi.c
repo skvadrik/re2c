@@ -113,38 +113,25 @@ yyc_R1:
 					  0,   0,   0,   0,   0,   0,   0,   0, 
 					  0,   0,   0,   0,   0,   0,   0,   0, 
 				};
-				if ((s->lim - s->cur) < 2) { if(fill(s, 2) >= 0) break; }
+				if (s->lim <= s->cur) { if(fill(s, 1) >= 0) break; }
 				yych = *s->cur;
-				if (yych <= '@') {
-					if (yych <= '/') goto yy5;
-					if (yych >= ':') goto yy5;
-				} else {
-					if (yych <= 'Z') goto yy3;
-					if (yych <= '`') goto yy5;
-					if (yych >= '{') goto yy5;
+				if (yybm[0+yych] & 128) {
+					goto yy5;
 				}
-yy3:
 				++s->cur;
-				yych = *s->cur;
-				goto yy8;
-yy4:
 				{
 					continue;
 				}
 yy5:
 				++s->cur;
+				if (s->lim <= s->cur) { if(fill(s, 1) >= 0) break; }
+				yych = *s->cur;
+				if (yybm[0+yych] & 128) {
+					goto yy5;
+				}
 				{
 					continue;
 				}
-yy7:
-				++s->cur;
-				if (s->lim <= s->cur) { if(fill(s, 1) >= 0) break; }
-				yych = *s->cur;
-yy8:
-				if (yybm[0+yych] & 128) {
-					goto yy7;
-				}
-				goto yy4;
 			}
 /* *********************************** */
 yyc_R2:
@@ -183,38 +170,25 @@ yyc_R2:
 					  0,   0,   0,   0,   0,   0,   0,   0, 
 					  0,   0,   0,   0,   0,   0,   0,   0, 
 				};
-				if ((s->lim - s->cur) < 2) { if(fill(s, 2) >= 0) break; }
+				if (s->lim <= s->cur) { if(fill(s, 1) >= 0) break; }
 				yych = *s->cur;
-				if (yych <= '@') {
-					if (yych <= '/') goto yy13;
-					if (yych >= ':') goto yy13;
-				} else {
-					if (yych <= 'Z') goto yy11;
-					if (yych <= '`') goto yy13;
-					if (yych >= '{') goto yy13;
+				if (yybm[0+yych] & 128) {
+					goto yy12;
 				}
-yy11:
 				++s->cur;
-				yych = *s->cur;
-				goto yy16;
+				{
+					continue;
+				}
 yy12:
-				{
-					continue;
-				}
-yy13:
-				++s->cur;
-				{
-					continue;
-				}
-yy15:
 				++s->cur;
 				if (s->lim <= s->cur) { if(fill(s, 1) >= 0) break; }
 				yych = *s->cur;
-yy16:
 				if (yybm[0+yych] & 128) {
-					goto yy15;
+					goto yy12;
 				}
-				goto yy12;
+				{
+					continue;
+				}
 			}
 		}
 
