@@ -58,6 +58,7 @@ SRC_RST = \
     src/manual/options/options_list.rst \
     src/news/news.rst \
     src/news/changelog/changelog.rst \
+    src/news/changelog/0_16.rst \
     src/news/changelog/0_15_list.rst \
     src/news/changelog/0_15.rst \
     src/news/changelog/0_14.rst \
@@ -71,6 +72,7 @@ SRC_RST = \
     src/news/release_notes/0_15_1.rst \
     src/news/release_notes/0_15_2.rst \
     src/news/release_notes/0_15_3.rst \
+    src/news/release_notes/0_16.rst \
     src/news/home.rst \
     src/about/about.rst \
     src/install/install.rst \

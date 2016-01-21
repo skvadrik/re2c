@@ -11,6 +11,7 @@ Download
 Tarballs
 --------
 
+* `re2c-0.16.tar.gz <https://github.com/skvadrik/re2c/releases/download/0.16/re2c-0.16.tar.gz>`_
 * `re2c-0.15.3.tar.gz <https://github.com/skvadrik/re2c/releases/download/0.15.3/re2c-0.15.3.tar.gz>`_
 * `re2c-0.14.3.tar.gz <https://github.com/skvadrik/re2c/releases/download/0.14.3/re2c-0.14.3.tar.gz>`_
 * `re2c-0.13.7.5.tar.gz <https://github.com/skvadrik/re2c/releases/download/0.13.7.5/re2c-0.13.7.5.tar.gz>`_

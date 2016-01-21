@@ -5,6 +5,7 @@ Changelog
 .. include:: ../home.rst
 .. include:: ../../contents.rst
 
+.. include:: 0_16.rst
 .. include:: 0_15.rst
 .. include:: 0_14.rst
 .. include:: 0_13.rst
