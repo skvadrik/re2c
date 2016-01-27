@@ -49,7 +49,7 @@ do
 				threads=$number
 			fi
 			;;
-		* ) tests+=("$arg") ;;
+		* ) tests[${#tests[@]}]="$arg" ;; # array is continuous (old bash lacks +=)
 	esac
 done
 echo "Running in ${threads} thread(s)"
