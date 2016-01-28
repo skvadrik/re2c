@@ -214,7 +214,7 @@ for ((i = 0; i < ${#packs[@]}; i++))
 do
 	logs[$i]=`date +%y%m%d%H%M%S`_$i
 	run_pack ${logs[i]} ${packs[i]} &
-	wait_pids+=( $! )
+	wait_pids[${#wait_pids[@]}]=$! # array is continuous (old bash lacks +=)
 done
 wait ${wait_pids[@]}
 
