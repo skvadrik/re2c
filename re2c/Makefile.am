@@ -231,7 +231,7 @@ bootstrap: all
 if REBUILD_DOCS
 docs: $(DOC)
 $(DOC): $(SRC_DOC)
-	rst2man.py $(top_builddir)/$(SRC_DOC) > $@
+	$(RST2MAN) $(top_builddir)/$(SRC_DOC) > $@
 	cp $@ $(top_srcdir)/$(BOOTSTRAP_DOC)
 else
 docs: $(DOC)
