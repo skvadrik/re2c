@@ -59,12 +59,18 @@ nfa_state_t *RuleOp::compile(nfa_t &nfa, nfa_state_t *)
 {
 	nfa_state_t *s3 = &nfa.states[nfa.size++];
 	s3->fin(this);
-	if (ctx->calc_size() > 0)
+
+	if (ctx_len == ~0u)
 	{
 		nfa_state_t *s2 = &nfa.states[nfa.size++];
 		s2->ctx(ctx->compile(nfa, s3));
 		s3 = s2;
 	}
+	else if (ctx_len > 0)
+	{
+		s3 = ctx->compile(nfa, s3);
+	}
+
 	nfa_state_t *s1 = exp->compile(nfa, s3);
 	return s1;
 }

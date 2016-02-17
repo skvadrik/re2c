@@ -262,10 +262,16 @@ void emit_rule (OutputFile & o, uint32_t ind, const State * const s, const RuleO
 		return;
 	}
 
-	uint32_t back = rule->ctx->fixedLength();
-	if (back != 0u && opts->target != opt_t::DOT)
+	if (opts->target != opt_t::DOT)
 	{
-		o.wstring(opts->input_api.stmt_restorectx (ind));
+		if (rule->ctx_len == ~0u)
+		{
+			o.wstring(opts->input_api.stmt_restorectx_dynamic(ind));
+		}
+		else if (rule->ctx_len > 0)
+		{
+			o.wstring(opts->input_api.stmt_restorectx_static(ind, rule->ctx_len));
+		}
 	}
 
 	if (opts->target == opt_t::SKELETON)

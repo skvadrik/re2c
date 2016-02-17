@@ -1,3 +1,4 @@
+#include <assert.h>
 #include <sstream>
 
 #include "src/codegen/input_api.h"
@@ -107,7 +108,15 @@ std::string InputAPI::stmt_restore (uint32_t ind) const
 	return indent (ind) + s + ";\n";
 }
 
-std::string InputAPI::stmt_restorectx (uint32_t ind) const
+std::string InputAPI::stmt_restorectx_static (uint32_t ind, uint32_t off) const
+{
+	assert(type_ == DEFAULT);
+	std::ostringstream s;
+	s << indent (ind) << opts->yycursor << " -= " << off << ";\n";
+	return s.str ();
+}
+
+std::string InputAPI::stmt_restorectx_dynamic (uint32_t ind) const
 {
 	std::string s;
 	switch (type_)

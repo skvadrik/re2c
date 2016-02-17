@@ -881,7 +881,6 @@ yy133:
 	goto yy126;
 yy134:
 	yych = *++YYCURSOR;
-	YYCTXMARKER = YYCURSOR;
 	if (yych == '=') goto yy163;
 	goto yy113;
 yy135:
@@ -1082,7 +1081,7 @@ yy167:
 yy168:
 	++YYCURSOR;
 yy169:
-	YYCURSOR = YYCTXMARKER;
+	YYCURSOR -= 1;
 	{
 					if (!FFlag) {
 						cur = cursor;
@@ -1224,7 +1223,7 @@ yy190:
 	goto yy144;
 yy191:
 	++YYCURSOR;
-	YYCURSOR = YYCTXMARKER;
+	YYCURSOR -= 2;
 	{
 					RETURN(*tok);
 				}
@@ -1638,7 +1637,6 @@ yy251:
 yy252:
 	yyaccept = 0;
 	yych = *(YYMARKER = ++YYCURSOR);
-	YYCTXMARKER = YYCURSOR;
 	if (yych <= '\r') {
 		if (yych <= '\t') {
 			if (yych >= '\t') goto yy260;
@@ -1722,7 +1720,7 @@ yy260:
 		if (yych == '#') goto yy263;
 	}
 yy261:
-	YYCURSOR = YYCTXMARKER;
+	YYCURSOR -= 1;
 	{
 					if (depth == 0)
 					{

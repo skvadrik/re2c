@@ -6,7 +6,6 @@
 	YYCTYPE yych;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
-	YYCTXMARKER = YYCURSOR;
 	switch (yych) {
 	case 'a':	goto yy3;
 	default:	goto yy2;
@@ -14,10 +13,10 @@
 yy2:
 yy3:
 	++YYCURSOR;
-	YYCURSOR = YYCTXMARKER;
+	YYCURSOR -= 1;
 #line 2 "bug116.re"
 	{}
-#line 21 "bug116.c"
+#line 20 "bug116.c"
 }
 #line 3 "bug116.re"
 

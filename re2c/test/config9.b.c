@@ -142,7 +142,7 @@ xx13:
 	if ((curr = (unsigned char)*s.cur) <= '/') goto xx14;
 	if (curr <= '9') goto xx10;
 xx14:
-	s.cur = s.ctx;
+	s.cur -= 1;
 #line 56 "config9.b.re"
 	{ return KEYWORD; }
 #line 149 "config9.b.c"

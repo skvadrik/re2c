@@ -162,7 +162,7 @@ yy13:
 	default:	goto yy14;
 	}
 yy14:
-	YYCURSOR = YYCTXMARKER;
+	YYCURSOR -= 1;
 #line 48 "ctx.re"
 	{ return KEYWORD; }
 #line 169 "ctx.c"

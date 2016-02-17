@@ -29,7 +29,8 @@ public:
 	std::string stmt_backup (uint32_t ind) const;
 	std::string stmt_backupctx (uint32_t ind) const;
 	std::string stmt_restore (uint32_t ind) const;
-	std::string stmt_restorectx (uint32_t ind) const;
+	std::string stmt_restorectx_static (uint32_t ind, uint32_t off) const;
+	std::string stmt_restorectx_dynamic (uint32_t ind) const;
 	std::string stmt_skip_peek (uint32_t ind) const;
 	std::string stmt_skip_backup (uint32_t ind) const;
 	std::string stmt_backup_peek (uint32_t ind) const;

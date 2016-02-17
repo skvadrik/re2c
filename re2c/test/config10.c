@@ -158,7 +158,7 @@ xx13:
 	default:	goto xx14;
 	}
 xx14:
-	s.cur = s.ctx;
+	s.cur -= 1;
 #line 55 "config10.re"
 	{ return KEYWORD; }
 #line 165 "config10.c"

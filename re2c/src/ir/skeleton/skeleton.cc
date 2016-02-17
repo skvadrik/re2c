@@ -28,7 +28,7 @@ void Node::init(bool c, RuleOp *r, const std::vector<std::pair<Node*, uint32_t> 
 	if (r)
 	{
 		rule.rank = r->rank;
-		rule.restorectx = r->ctx->fixedLength () != 0;
+		rule.restorectx = r->ctx_len > 0;
 	}
 
 	ctx = c;

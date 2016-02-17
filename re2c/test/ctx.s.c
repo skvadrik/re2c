@@ -113,7 +113,7 @@ yy13:
 	if ((yych = *YYCURSOR) <= '/') goto yy14;
 	if (yych <= '9') goto yy10;
 yy14:
-	YYCURSOR = YYCTXMARKER;
+	YYCURSOR -= 1;
 #line 48 "ctx.s.re"
 	{ return KEYWORD; }
 #line 120 "ctx.s.c"

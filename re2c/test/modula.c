@@ -272,7 +272,6 @@ yy31:
 	YYMARKER = ++YYCURSOR;
 	if ((YYLIMIT - YYCURSOR) < 4) YYFILL(4);
 	yych = *YYCURSOR;
-	YYCTXMARKER = YYCURSOR;
 	switch (yych) {
 	case '.':	goto yy93;
 	case '0':
@@ -297,13 +296,12 @@ yy31:
 yy33:
 #line 70 "modula.re"
 	{RETURN(1);}
-#line 301 "modula.c"
+#line 300 "modula.c"
 yy34:
 	yyaccept = 1;
 	YYMARKER = ++YYCURSOR;
 	if ((YYLIMIT - YYCURSOR) < 4) YYFILL(4);
 	yych = *YYCURSOR;
-	YYCTXMARKER = YYCURSOR;
 	switch (yych) {
 	case '.':	goto yy93;
 	case '0':
@@ -334,12 +332,12 @@ yy36:
 yy37:
 #line 89 "modula.re"
 	{RETURN(18);}
-#line 338 "modula.c"
+#line 336 "modula.c"
 yy38:
 	++YYCURSOR;
 #line 91 "modula.re"
 	{RETURN(20);}
-#line 343 "modula.c"
+#line 341 "modula.c"
 yy40:
 	++YYCURSOR;
 	switch ((yych = *YYCURSOR)) {
@@ -350,12 +348,12 @@ yy40:
 yy41:
 #line 92 "modula.re"
 	{RETURN(21);}
-#line 354 "modula.c"
+#line 352 "modula.c"
 yy42:
 	++YYCURSOR;
 #line 95 "modula.re"
 	{RETURN(24);}
-#line 359 "modula.c"
+#line 357 "modula.c"
 yy44:
 	++YYCURSOR;
 	switch ((yych = *YYCURSOR)) {
@@ -365,7 +363,7 @@ yy44:
 yy45:
 #line 96 "modula.re"
 	{RETURN(25);}
-#line 369 "modula.c"
+#line 367 "modula.c"
 yy46:
 	++YYCURSOR;
 	switch ((yych = *YYCURSOR)) {
@@ -376,7 +374,7 @@ yy46:
 yy47:
 #line 147 "modula.re"
 	{RETURN(74);}
-#line 380 "modula.c"
+#line 378 "modula.c"
 yy48:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -573,37 +571,37 @@ yy68:
 	++YYCURSOR;
 #line 98 "modula.re"
 	{RETURN(27);}
-#line 577 "modula.c"
+#line 575 "modula.c"
 yy70:
 	++YYCURSOR;
 #line 99 "modula.re"
 	{RETURN(28);}
-#line 582 "modula.c"
+#line 580 "modula.c"
 yy72:
 	++YYCURSOR;
 #line 100 "modula.re"
 	{RETURN(29);}
-#line 587 "modula.c"
+#line 585 "modula.c"
 yy74:
 	++YYCURSOR;
 #line 101 "modula.re"
 	{RETURN(30);}
-#line 592 "modula.c"
+#line 590 "modula.c"
 yy76:
 	++YYCURSOR;
 #line 102 "modula.re"
 	{RETURN(31);}
-#line 597 "modula.c"
+#line 595 "modula.c"
 yy78:
 	++YYCURSOR;
 #line 103 "modula.re"
 	{RETURN(32);}
-#line 602 "modula.c"
+#line 600 "modula.c"
 yy80:
 	++YYCURSOR;
 #line 104 "modula.re"
 	{RETURN(33);}
-#line 607 "modula.c"
+#line 605 "modula.c"
 yy82:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
@@ -627,7 +625,7 @@ yy85:
 	++YYCURSOR;
 #line 76 "modula.re"
 	{RETURN(6);}
-#line 631 "modula.c"
+#line 629 "modula.c"
 yy87:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
@@ -642,12 +640,12 @@ yy89:
 	++YYCURSOR;
 #line 68 "modula.re"
 	{ depth = 1; goto comment; }
-#line 646 "modula.c"
+#line 644 "modula.c"
 yy91:
 	++YYCURSOR;
 #line 87 "modula.re"
 	{RETURN(16);}
-#line 651 "modula.c"
+#line 649 "modula.c"
 yy93:
 	yyaccept = 2;
 	yych = *(YYMARKER = ++YYCURSOR);
@@ -658,7 +656,7 @@ yy93:
 yy94:
 #line 75 "modula.re"
 	{RETURN(5);}
-#line 662 "modula.c"
+#line 660 "modula.c"
 yy95:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
@@ -709,7 +707,7 @@ yy97:
 yy98:
 #line 72 "modula.re"
 	{RETURN(2);}
-#line 713 "modula.c"
+#line 711 "modula.c"
 yy99:
 	yyaccept = 4;
 	yych = *(YYMARKER = ++YYCURSOR);
@@ -736,32 +734,32 @@ yy99:
 yy100:
 #line 73 "modula.re"
 	{RETURN(3);}
-#line 740 "modula.c"
+#line 738 "modula.c"
 yy101:
 	++YYCURSOR;
 #line 74 "modula.re"
 	{RETURN(4);}
-#line 745 "modula.c"
+#line 743 "modula.c"
 yy103:
 	++YYCURSOR;
 #line 90 "modula.re"
 	{RETURN(19);}
-#line 750 "modula.c"
+#line 748 "modula.c"
 yy105:
 	++YYCURSOR;
 #line 93 "modula.re"
 	{RETURN(22);}
-#line 755 "modula.c"
+#line 753 "modula.c"
 yy107:
 	++YYCURSOR;
 #line 94 "modula.re"
 	{RETURN(23);}
-#line 760 "modula.c"
+#line 758 "modula.c"
 yy109:
 	++YYCURSOR;
 #line 97 "modula.re"
 	{RETURN(26);}
-#line 765 "modula.c"
+#line 763 "modula.c"
 yy111:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -850,7 +848,7 @@ yy114:
 yy115:
 #line 109 "modula.re"
 	{RETURN(37);}
-#line 854 "modula.c"
+#line 852 "modula.c"
 yy116:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -945,7 +943,7 @@ yy120:
 yy121:
 #line 114 "modula.re"
 	{RETURN(42);}
-#line 949 "modula.c"
+#line 947 "modula.c"
 yy122:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -1047,7 +1045,7 @@ yy127:
 yy128:
 #line 122 "modula.re"
 	{RETURN(50);}
-#line 1051 "modula.c"
+#line 1049 "modula.c"
 yy129:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -1124,7 +1122,7 @@ yy130:
 yy131:
 #line 125 "modula.re"
 	{RETURN(53);}
-#line 1128 "modula.c"
+#line 1126 "modula.c"
 yy132:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -1213,7 +1211,7 @@ yy135:
 yy136:
 #line 130 "modula.re"
 	{RETURN(58);}
-#line 1217 "modula.c"
+#line 1215 "modula.c"
 yy137:
 	++YYCURSOR;
 	switch ((yych = *YYCURSOR)) {
@@ -1284,7 +1282,7 @@ yy137:
 yy138:
 #line 131 "modula.re"
 	{RETURN(59);}
-#line 1288 "modula.c"
+#line 1286 "modula.c"
 yy139:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -1393,7 +1391,7 @@ yy145:
 yy146:
 #line 140 "modula.re"
 	{RETURN(68);}
-#line 1397 "modula.c"
+#line 1395 "modula.c"
 yy147:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -1426,10 +1424,10 @@ yy151:
 	}
 yy152:
 	++YYCURSOR;
-	YYCURSOR = YYCTXMARKER;
+	YYCURSOR -= 2;
 #line 71 "modula.re"
 	{RETURN(1);}
-#line 1433 "modula.c"
+#line 1431 "modula.c"
 yy154:
 	yyaccept = 2;
 	YYMARKER = ++YYCURSOR;
@@ -1537,7 +1535,7 @@ yy157:
 yy158:
 #line 106 "modula.re"
 	{RETURN(34);}
-#line 1541 "modula.c"
+#line 1539 "modula.c"
 yy159:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -1638,7 +1636,7 @@ yy164:
 yy165:
 #line 113 "modula.re"
 	{RETURN(41);}
-#line 1642 "modula.c"
+#line 1640 "modula.c"
 yy166:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -1716,7 +1714,7 @@ yy167:
 yy168:
 #line 117 "modula.re"
 	{RETURN(45);}
-#line 1720 "modula.c"
+#line 1718 "modula.c"
 yy169:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -1799,7 +1797,7 @@ yy171:
 yy172:
 #line 120 "modula.re"
 	{RETURN(48);}
-#line 1803 "modula.c"
+#line 1801 "modula.c"
 yy173:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -1889,7 +1887,7 @@ yy176:
 yy177:
 #line 127 "modula.re"
 	{RETURN(55);}
-#line 1893 "modula.c"
+#line 1891 "modula.c"
 yy178:
 	++YYCURSOR;
 	switch ((yych = *YYCURSOR)) {
@@ -1960,7 +1958,7 @@ yy178:
 yy179:
 #line 129 "modula.re"
 	{RETURN(57);}
-#line 1964 "modula.c"
+#line 1962 "modula.c"
 yy180:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -2067,7 +2065,7 @@ yy186:
 yy187:
 #line 138 "modula.re"
 	{RETURN(66);}
-#line 2071 "modula.c"
+#line 2069 "modula.c"
 yy188:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -2156,7 +2154,7 @@ yy191:
 yy192:
 #line 143 "modula.re"
 	{RETURN(71);}
-#line 2160 "modula.c"
+#line 2158 "modula.c"
 yy193:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -2283,7 +2281,7 @@ yy200:
 yy201:
 #line 110 "modula.re"
 	{RETURN(38);}
-#line 2287 "modula.c"
+#line 2285 "modula.c"
 yy202:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -2366,7 +2364,7 @@ yy204:
 yy205:
 #line 115 "modula.re"
 	{RETURN(43);}
-#line 2370 "modula.c"
+#line 2368 "modula.c"
 yy206:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -2443,7 +2441,7 @@ yy207:
 yy208:
 #line 118 "modula.re"
 	{RETURN(46);}
-#line 2447 "modula.c"
+#line 2445 "modula.c"
 yy209:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -2520,7 +2518,7 @@ yy210:
 yy211:
 #line 121 "modula.re"
 	{RETURN(49);}
-#line 2524 "modula.c"
+#line 2522 "modula.c"
 yy212:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -2603,7 +2601,7 @@ yy214:
 yy215:
 #line 126 "modula.re"
 	{RETURN(54);}
-#line 2607 "modula.c"
+#line 2605 "modula.c"
 yy216:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -2716,7 +2714,7 @@ yy223:
 yy224:
 #line 139 "modula.re"
 	{RETURN(67);}
-#line 2720 "modula.c"
+#line 2718 "modula.c"
 yy225:
 	++YYCURSOR;
 	switch ((yych = *YYCURSOR)) {
@@ -2787,7 +2785,7 @@ yy225:
 yy226:
 #line 141 "modula.re"
 	{RETURN(69);}
-#line 2791 "modula.c"
+#line 2789 "modula.c"
 yy227:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -2870,7 +2868,7 @@ yy229:
 yy230:
 #line 145 "modula.re"
 	{RETURN(73);}
-#line 2874 "modula.c"
+#line 2872 "modula.c"
 yy231:
 	++YYCURSOR;
 	switch ((yych = *YYCURSOR)) {
@@ -2941,7 +2939,7 @@ yy231:
 yy232:
 #line 107 "modula.re"
 	{RETURN(35);}
-#line 2945 "modula.c"
+#line 2943 "modula.c"
 yy233:
 	++YYCURSOR;
 	switch ((yych = *YYCURSOR)) {
@@ -3012,7 +3010,7 @@ yy233:
 yy234:
 #line 108 "modula.re"
 	{RETURN(36);}
-#line 3016 "modula.c"
+#line 3014 "modula.c"
 yy235:
 	++YYCURSOR;
 	switch ((yych = *YYCURSOR)) {
@@ -3083,7 +3081,7 @@ yy235:
 yy236:
 #line 111 "modula.re"
 	{RETURN(39);}
-#line 3087 "modula.c"
+#line 3085 "modula.c"
 yy237:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -3160,7 +3158,7 @@ yy238:
 yy239:
 #line 116 "modula.re"
 	{RETURN(44);}
-#line 3164 "modula.c"
+#line 3162 "modula.c"
 yy240:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -3291,7 +3289,7 @@ yy250:
 yy251:
 #line 142 "modula.re"
 	{RETURN(70);}
-#line 3295 "modula.c"
+#line 3293 "modula.c"
 yy252:
 	++YYCURSOR;
 	switch ((yych = *YYCURSOR)) {
@@ -3362,7 +3360,7 @@ yy252:
 yy253:
 #line 144 "modula.re"
 	{RETURN(72);}
-#line 3366 "modula.c"
+#line 3364 "modula.c"
 yy254:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -3439,7 +3437,7 @@ yy255:
 yy256:
 #line 119 "modula.re"
 	{RETURN(47);}
-#line 3443 "modula.c"
+#line 3441 "modula.c"
 yy257:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -3516,7 +3514,7 @@ yy258:
 yy259:
 #line 124 "modula.re"
 	{RETURN(52);}
-#line 3520 "modula.c"
+#line 3518 "modula.c"
 yy260:
 	++YYCURSOR;
 	switch ((yych = *YYCURSOR)) {
@@ -3587,7 +3585,7 @@ yy260:
 yy261:
 #line 128 "modula.re"
 	{RETURN(56);}
-#line 3591 "modula.c"
+#line 3589 "modula.c"
 yy262:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -3676,7 +3674,7 @@ yy265:
 yy266:
 #line 135 "modula.re"
 	{RETURN(63);}
-#line 3680 "modula.c"
+#line 3678 "modula.c"
 yy267:
 	++YYCURSOR;
 	switch ((yych = *YYCURSOR)) {
@@ -3747,7 +3745,7 @@ yy267:
 yy268:
 #line 136 "modula.re"
 	{RETURN(64);}
-#line 3751 "modula.c"
+#line 3749 "modula.c"
 yy269:
 	++YYCURSOR;
 	switch ((yych = *YYCURSOR)) {
@@ -3818,7 +3816,7 @@ yy269:
 yy270:
 #line 137 "modula.re"
 	{RETURN(65);}
-#line 3822 "modula.c"
+#line 3820 "modula.c"
 yy271:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -3901,7 +3899,7 @@ yy273:
 yy274:
 #line 132 "modula.re"
 	{RETURN(60);}
-#line 3905 "modula.c"
+#line 3903 "modula.c"
 yy275:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -4020,7 +4018,7 @@ yy283:
 yy284:
 #line 133 "modula.re"
 	{RETURN(61);}
-#line 4024 "modula.c"
+#line 4022 "modula.c"
 yy285:
 	++YYCURSOR;
 	switch ((yych = *YYCURSOR)) {
@@ -4091,7 +4089,7 @@ yy285:
 yy286:
 #line 134 "modula.re"
 	{RETURN(62);}
-#line 4095 "modula.c"
+#line 4093 "modula.c"
 yy287:
 	++YYCURSOR;
 	switch ((yych = *YYCURSOR)) {
@@ -4162,7 +4160,7 @@ yy287:
 yy288:
 #line 112 "modula.re"
 	{RETURN(40);}
-#line 4166 "modula.c"
+#line 4164 "modula.c"
 yy289:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -4257,13 +4255,13 @@ yy293:
 yy294:
 #line 123 "modula.re"
 	{RETURN(51);}
-#line 4261 "modula.c"
+#line 4259 "modula.c"
 }
 #line 163 "modula.re"
 
 comment:
 
-#line 4267 "modula.c"
+#line 4265 "modula.c"
 {
 	YYCTYPE yych;
 	if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
@@ -4279,7 +4277,7 @@ yy297:
 yy298:
 #line 180 "modula.re"
 	{ goto comment; }
-#line 4283 "modula.c"
+#line 4281 "modula.c"
 yy299:
 	++YYCURSOR;
 #line 175 "modula.re"
@@ -4288,7 +4286,7 @@ yy299:
 		s->tok = s->pos = cursor; s->line++;
 		goto comment;
 	    }
-#line 4292 "modula.c"
+#line 4290 "modula.c"
 yy301:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -4305,7 +4303,7 @@ yy303:
 	++YYCURSOR;
 #line 173 "modula.re"
 	{ ++depth; goto comment; }
-#line 4309 "modula.c"
+#line 4307 "modula.c"
 yy305:
 	++YYCURSOR;
 #line 167 "modula.re"
@@ -4315,7 +4313,7 @@ yy305:
 		else
 		    goto comment;
 	    }
-#line 4319 "modula.c"
+#line 4317 "modula.c"
 }
 #line 181 "modula.re"
 
