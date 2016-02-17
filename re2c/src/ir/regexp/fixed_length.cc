@@ -17,7 +17,7 @@ uint32_t RegExp::fixedLength ()
 uint32_t AltOp::fixedLength ()
 {
 	uint32_t l1 = exp1->fixedLength ();
-	uint32_t l2 = exp1->fixedLength ();
+	uint32_t l2 = exp2->fixedLength ();
 
 	if (l1 != l2 || l1 == ~0u)
 	{
