@@ -86,7 +86,7 @@ struct Node
 	uint32_t dist;
 
 	// rules reachable from this node (including absent rule)
-	std::set<rule_t> reachable;
+	std::set<rule_rank_t> reachable;
 
 	// path to end node (for constructing path cover)
 	path_t * suffix;
@@ -114,6 +114,7 @@ struct Skeleton
 	Node * nodes;
 	size_t sizeof_key;
 	rules_t rules;
+	std::set<rule_rank_t> nullable_rules;
 
 	Skeleton
 		( const dfa_t &dfa
@@ -125,8 +126,7 @@ struct Skeleton
 		);
 	~Skeleton ();
 	void warn_undefined_control_flow ();
-	void warn_unreachable_rules ();
-	void warn_match_empty ();
+	void warn_unreachable_nullable_rules ();
 	void emit_data (const char * fname);
 	static void emit_prolog (OutputFile & o);
 	void emit_start

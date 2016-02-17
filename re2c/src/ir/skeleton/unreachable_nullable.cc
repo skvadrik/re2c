@@ -21,7 +21,7 @@ void Node::calc_reachable ()
 	}
 	else if (end ())
 	{
-		reachable.insert (rule);
+		reachable.insert (rule.rank);
 	}
 	else if (loop < 2)
 	{
@@ -34,23 +34,24 @@ void Node::calc_reachable ()
 	}
 }
 
-void Skeleton::warn_unreachable_rules ()
+void Skeleton::warn_unreachable_nullable_rules ()
 {
-	nodes->calc_reachable ();
+	// calculate reachable rules
+	nodes->calc_reachable();
 	for (uint32_t i = 0; i < nodes_count; ++i)
 	{
 		const rule_rank_t r1 = nodes[i].rule.rank;
-		const std::set<rule_t> & rs = nodes[i].reachable;
-		for (std::set<rule_t>::const_iterator j = rs.begin (); j != rs.end (); ++j)
+		const std::set<rule_rank_t> & rs = nodes[i].reachable;
+		for (std::set<rule_rank_t>::const_iterator j = rs.begin(); j != rs.end(); ++j)
 		{
-			const rule_rank_t r2 = j->rank;
-			if (r1 == r2 || r2.is_none ())
+			const rule_rank_t r2 = *j;
+			if (r1 == r2 || r2.is_none())
 			{
 				rules[r1].reachable = true;
 			}
 			else
 			{
-				rules[r1].shadow.insert (r2);
+				rules[r1].shadow.insert(r2);
 			}
 		}
 	}
@@ -60,12 +61,27 @@ void Skeleton::warn_unreachable_rules ()
 	//   - infinite rules that consume infinitely many characters and fail on YYFILL, e.g. '[^]*'
 	//   - rules that contain never-matching link, e.g. '[]' with option '--empty-class match-none'
 	// default rule '*' should not be reported
-	for (rules_t::const_iterator i = rules.begin (); i != rules.end (); ++i)
+	for (rules_t::const_iterator i = rules.begin(); i != rules.end(); ++i)
 	{
 		const rule_rank_t r = i->first;
-		if (!r.is_none () && !r.is_def () && !rules[r].reachable)
+		if (!r.is_none() && !r.is_def() && !rules[r].reachable)
 		{
-			warn.unreachable_rule (cond, i->second, rules);
+			warn.unreachable_rule(cond, i->second, rules);
+		}
+	}
+
+	// warn about nullable rules:
+	//    - rules that match empty string
+	//    - rules that match empty strins with nonempty trailing context
+	// false positives on partially shadowed (yet reachable) rules, e.g.:
+	//     [^]?
+	for (std::set<rule_rank_t>::const_iterator i = nullable_rules.begin();
+		i != nullable_rules.end(); ++i)
+	{
+		const rule_info_t &ri = rules[*i];
+		if (ri.reachable)
+		{
+			warn.match_empty_string(ri.line);
 		}
 	}
 }

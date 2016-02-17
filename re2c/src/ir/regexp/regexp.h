@@ -6,6 +6,7 @@
 #include <set>
 #include <vector>
 
+#include "src/ir/rule_rank.h"
 #include "src/util/free_list.h"
 #include "src/util/forbid_copy.h"
 
@@ -33,6 +34,8 @@ public:
 	virtual void split (std::set<uint32_t> &) = 0;
 	virtual uint32_t calc_size() const = 0;
 	virtual uint32_t fixedLength ();
+	virtual bool nullable() const = 0;
+	virtual void nullable_rules(std::set<rule_rank_t>&) const;
 	virtual nfa_state_t *compile(nfa_t &nfa, nfa_state_t *n) = 0;
 	virtual void display (std::ostream &) const = 0;
 	friend std::ostream & operator << (std::ostream & o, const RegExp & re);

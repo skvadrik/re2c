@@ -4,7 +4,6 @@
 #include <string>
 
 #include "src/ir/regexp/regexp.h"
-#include "src/ir/rule_rank.h"
 #include "src/parse/code.h"
 
 namespace re2c
@@ -39,6 +38,8 @@ public:
 		, code (c)
 		, newcond (cond ? *cond : "")
 	{}
+	bool nullable() const;
+	void nullable_rules(std::set<rule_rank_t>&) const;
 	void display (std::ostream & o) const;
 	void split (std::set<uint32_t> &);
 	uint32_t calc_size() const;

@@ -16,6 +16,7 @@ public:
 	{}
 	void split (std::set<uint32_t> &);
 	uint32_t calc_size() const;
+	bool nullable() const;
 	nfa_state_t *compile(nfa_t &nfa, nfa_state_t *n);
 	void display (std::ostream & o) const;
 

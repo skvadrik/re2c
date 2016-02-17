@@ -103,16 +103,16 @@ SRC = \
 	src/ir/regexp/encoding/utf16/utf16.cc \
 	src/ir/regexp/encoding/utf16/utf16_range.cc \
 	src/ir/regexp/fixed_length.cc \
+	src/ir/regexp/nullable.cc \
 	src/ir/regexp/regexp.cc \
 	src/ir/compile.cc \
 	src/ir/rule_rank.cc \
 	src/ir/skeleton/control_flow.cc \
 	src/ir/skeleton/generate_code.cc \
 	src/ir/skeleton/generate_data.cc \
-	src/ir/skeleton/match_empty.cc \
 	src/ir/skeleton/maxlen.cc \
 	src/ir/skeleton/skeleton.cc \
-	src/ir/skeleton/unreachable.cc \
+	src/ir/skeleton/unreachable_nullable.cc \
 	src/ir/skeleton/way.cc \
 	src/main.cc \
 	src/parse/code.cc \

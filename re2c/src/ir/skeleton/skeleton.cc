@@ -84,6 +84,7 @@ Skeleton::Skeleton
 	, nodes (new Node [nodes_count + 1]) // +1 for default state
 	, sizeof_key (4)
 	, rules (rs)
+	, nullable_rules ()
 {
 	const size_t nc = cs.size() - 1;
 
