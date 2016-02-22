@@ -116,7 +116,7 @@ dfa_t::dfa_t(const nfa_t &nfa, const charset_t &charset)
 				{
 					nfa_state_t *m = n->value.ran.out;
 					size_t c = 0;
-					for (Range *r = n->value.ran.ran; r; r = r->next ())
+					for (const Range *r = n->value.ran.ran; r; r = r->next ())
 					{
 						for (; charset[c] != r->lower(); ++c);
 						for (; charset[c] != r->upper(); ++c)

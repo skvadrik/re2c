@@ -12,7 +12,7 @@ void split(const RegExp* re, std::set<uint32_t> &cs)
 		case RegExp::NIL:
 			break;
 		case RegExp::SYM:
-			for (Range *r = re->pld.sym.range; r; r = r->next()) {
+			for (const Range *r = re->pld.sym.range; r; r = r->next()) {
 				cs.insert(r->lower());
 				cs.insert(r->upper());
 			}

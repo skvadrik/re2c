@@ -32,26 +32,26 @@ struct RegExp
 	{
 		struct
 		{
-			Range *range;
+			const Range *range;
 		} sym;
 		struct
 		{
-			RegExp *re1;
-			RegExp *re2;
+			const RegExp *re1;
+			const RegExp *re2;
 		} alt;
 		struct
 		{
-			RegExp *re1;
-			RegExp *re2;
+			const RegExp *re1;
+			const RegExp *re2;
 		} cat;
 		struct
 		{
-			RegExp *re;
+			const RegExp *re;
 		} iter;
 		struct
 		{
-			RegExp *re;
-			RegExp *ctx;
+			const RegExp *re;
+			const RegExp *ctx;
 			RuleInfo *info;
 		} rule;
 	};
@@ -61,39 +61,39 @@ struct RegExp
 	tag_t tag;
 	payload_t pld;
 
-	static RegExp *nil()
+	static const RegExp *nil()
 	{
 		return new RegExp(NIL);
 	}
-	static RegExp *sym(Range *r)
+	static const RegExp *sym(const Range *r)
 	{
 		RegExp *re = new RegExp(SYM);
 		re->pld.sym.range = r;
 		return re;
 	}
-	static RegExp *alt(RegExp *r1, RegExp *r2)
+	static const RegExp *alt(const RegExp *r1, const RegExp *r2)
 	{
 		RegExp *re = new RegExp(ALT);
 		re->pld.alt.re1 = r1;
 		re->pld.alt.re2 = r2;
 		return re;
 	}
-	static RegExp *cat(RegExp *r1, RegExp *r2)
+	static const RegExp *cat(const RegExp *r1, const RegExp *r2)
 	{
 		RegExp *re = new RegExp(CAT);
 		re->pld.cat.re1 = r1;
 		re->pld.cat.re2 = r2;
 		return re;
 	}
-	static RegExp *iter(RegExp *r)
+	static const RegExp *iter(const RegExp *r)
 	{
 		RegExp *re = new RegExp(ITER);
 		re->pld.iter.re = r;
 		return re;
 	}
-	static RegExp *rule(const Loc &loc, RegExp *r1, RegExp *r2,
+	static const RegExp *rule(const Loc &loc, const RegExp *r1, const RegExp *r2,
 		rule_rank_t rank, const Code *code, const std::string *newcond);
-	static RegExp *rule_copy(const RegExp *rule, rule_rank_t rank);
+	static const RegExp *rule_copy(const RegExp *rule, rule_rank_t rank);
 	inline ~RegExp()
 	{
 		if (tag == RULE) {
@@ -112,12 +112,12 @@ private:
 void split(const RegExp *re, std::set<uint32_t> &cs);
 void nullable_rules(const RegExp *re, std::vector<RuleInfo*> &rs);
 
-RegExp *mkAlt(RegExp *re1, RegExp *re2);
-RegExp *doAlt(RegExp *re1, RegExp *re2);
-RegExp *doCat(RegExp *re1, RegExp *re2);
-RegExp *repeat(RegExp *re, uint32_t n);
-RegExp *repeat_from_to(RegExp *re, uint32_t n, uint32_t m);
-RegExp *repeat_from(RegExp *re, uint32_t n);
+const RegExp *mkAlt(const RegExp *re1, const RegExp *re2);
+const RegExp *doAlt(const RegExp *re1, const RegExp *re2);
+const RegExp *doCat(const RegExp *re1, const RegExp *re2);
+const RegExp *repeat(const RegExp *re, uint32_t n);
+const RegExp *repeat_from_to(const RegExp *re, uint32_t n, uint32_t m);
+const RegExp *repeat_from(const RegExp *re, uint32_t n);
 
 } // end namespace re2c
 

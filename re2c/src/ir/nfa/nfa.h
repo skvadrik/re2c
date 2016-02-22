@@ -31,7 +31,7 @@ struct nfa_state_t
 		struct
 		{
 			nfa_state_t *out;
-			Range *ran;
+			const Range *ran;
 		} ran;
 		struct
 		{
@@ -51,7 +51,7 @@ struct nfa_state_t
 		value.alt.out2 = s2;
 		mark = false;
 	}
-	void ran(nfa_state_t *s, Range *r)
+	void ran(nfa_state_t *s, const Range *r)
 	{
 		type = RAN;
 		value.ran.out = s;
@@ -79,7 +79,7 @@ struct nfa_t
 	nfa_state_t *states;
 	nfa_state_t *root;
 
-	nfa_t(RegExp *re);
+	nfa_t(const RegExp *re);
 	~nfa_t();
 
 	FORBID_COPY(nfa_t);

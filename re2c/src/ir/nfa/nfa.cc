@@ -6,7 +6,7 @@ namespace re2c {
 static uint32_t calc_size(const RegExp *re);
 static nfa_state_t *compile(const RegExp *re, nfa_t &nfa, nfa_state_t *n);
 
-nfa_t::nfa_t(RegExp *re)
+nfa_t::nfa_t(const RegExp *re)
 	: max_size(calc_size(re))
 	, size(0)
 	, states(new nfa_state_t[max_size])
@@ -90,6 +90,5 @@ nfa_state_t *compile(const RegExp *re, nfa_t &nfa, nfa_state_t *t)
 	}
 	return s;
 }
-
 
 } // namespace re2c

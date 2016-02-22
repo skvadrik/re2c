@@ -8,8 +8,8 @@ namespace re2c {
 class Range;
 class RegExp;
 
-RegExp * UTF16Symbol(utf16::rune r);
-RegExp * UTF16Range(const Range * r);
+const RegExp * UTF16Symbol(utf16::rune r);
+const RegExp * UTF16Range(const Range * r);
 
 } // namespace re2c
 

@@ -17,7 +17,7 @@ static bool is_def(const RuleInfo *r)
 
 struct Spec
 {
-	RegExp * re;
+	const RegExp * re;
 	rules_t rules;
 
 	Spec ()
@@ -34,7 +34,7 @@ struct Spec
 		rules = spec.rules;
 		return *this;
 	}
-	bool add_def (RegExp * r)
+	bool add_def (const RegExp * r)
 	{
 		if (std::find_if(rules.begin(), rules.end(), is_def) != rules.end())
 		{
@@ -46,7 +46,7 @@ struct Spec
 			return true;
 		}
 	}
-	void add (RegExp * r)
+	void add (const RegExp * r)
 	{
 		rules.push_back(r->pld.rule.info);
 		re = mkAlt (re, r);

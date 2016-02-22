@@ -116,9 +116,9 @@ static counter_t<rule_rank_t> rank_counter;
 static std::vector<std::string> condnames;
 static re2c::SpecMap  specMap;
 static Spec spec;
-static RegExp *specNone = NULL;
+static const RegExp *specNone = NULL;
 static RuleList       specStar;
-static RegExp *star_default = NULL;
+static const RegExp *star_default = NULL;
 static Scanner          *in = NULL;
 static Scanner::ParseMode  parseMode;
 static SetupMap            ruleSetupMap;
@@ -151,8 +151,8 @@ void context_none(CondList *clist)
 void context_rule
 	( CondList * clist
 	, const Loc & loc
-	, RegExp * expr
-	, RegExp * look
+	, const RegExp * expr
+	, const RegExp * look
 	, const Code * code
 	, const std::string * newcond
 	)
@@ -165,7 +165,7 @@ void context_rule
 			condnames.push_back (*it);
 		}
 
-		RegExp *rule = RegExp::rule
+		const RegExp *rule = RegExp::rule
 			( loc
 			, expr
 			, look
@@ -202,7 +202,7 @@ void default_rule(CondList *clist, const Code * code)
 	context_check(clist);
 	for(CondList::const_iterator it = clist->begin(); it != clist->end(); ++it)
 	{
-		RegExp * def = RegExp::rule
+		const RegExp * def = RegExp::rule
 			( code->loc
 			, in->mkDefault ()
 			, RegExp::nil()
@@ -267,7 +267,7 @@ typedef union YYSTYPE
 {
 
 
-	re2c::RegExp * regexp;
+	const re2c::RegExp * regexp;
 	const re2c::Code * code;
 	char op;
 	re2c::ExtOp extop;
@@ -1619,7 +1619,7 @@ yyreduce:
 			{
 				in->fatal("condition or '<*>' required when using -c switch");
 			}
-			RegExp * rule = RegExp::rule
+			const RegExp * rule = RegExp::rule
 				( (yyvsp[(3) - (3)].code)->loc
 				, (yyvsp[(1) - (3)].regexp)
 				, (yyvsp[(2) - (3)].regexp)
@@ -1636,7 +1636,7 @@ yyreduce:
     {
 			if (opts->cFlag)
 				in->fatal("condition or '<*>' required when using -c switch");
-			RegExp * def = RegExp::rule
+			const RegExp * def = RegExp::rule
 				( (yyvsp[(2) - (2)].code)->loc
 				, in->mkDefault ()
 				, RegExp::nil()
@@ -1695,7 +1695,7 @@ yyreduce:
 
     {
 			context_check(NULL);
-			RegExp * rule = RegExp::rule
+			const RegExp * rule = RegExp::rule
 				( (yyvsp[(7) - (7)].code)->loc
 				, (yyvsp[(4) - (7)].regexp)
 				, (yyvsp[(5) - (7)].regexp)
@@ -1714,7 +1714,7 @@ yyreduce:
 			assert((yyvsp[(7) - (7)].str));
 			context_check(NULL);
 			Loc loc (in->get_fname (), in->get_cline ());
-			RegExp * rule = RegExp::rule
+			const RegExp * rule = RegExp::rule
 				( loc
 				, (yyvsp[(4) - (7)].regexp)
 				, (yyvsp[(5) - (7)].regexp)
@@ -2337,7 +2337,7 @@ void parse(Scanner& i, Output & o)
 				{
 					for (RuleList::const_iterator itOp = specStar.begin(); itOp != specStar.end(); ++itOp)
 					{
-						RegExp *r = RegExp::rule_copy(*itOp, rank_counter.next());
+						const RegExp *r = RegExp::rule_copy(*itOp, rank_counter.next());
 						it->second.add (r);
 					}
 					if (star_default)

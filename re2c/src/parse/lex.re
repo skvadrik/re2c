@@ -352,7 +352,7 @@ start:
 						yylval.str = new std::string (tok, tok_len());
 						return TOKEN_ID;
 					} else {
-						RegExp *r = NULL;
+						const RegExp *r = NULL;
 						const bool casing = opts->bCaseInsensitive || opts->bCaseInverted;
 						for (char *s = tok; s < cur; ++s) {
 							const uint32_t c = static_cast<uint8_t>(*s);
@@ -555,7 +555,7 @@ static void escape (std::string & dest, const std::string & src)
 	}
 }
 
-RegExp *Scanner::lex_cls(bool neg)
+const RegExp *Scanner::lex_cls(bool neg)
 {
 	Range *r = NULL, *s;
 	uint32_t u, l;
@@ -651,9 +651,9 @@ uint32_t Scanner::lex_str_chr(char quote, bool &end)
 	*/
 }
 
-RegExp *Scanner::lex_str(char quote, bool casing)
+const RegExp *Scanner::lex_str(char quote, bool casing)
 {
-	RegExp *r = NULL;
+	const RegExp *r = NULL;
 	for (bool end;;) {
 		const uint32_t c = lex_str_chr(quote, end);
 		if (end) {

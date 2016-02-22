@@ -17,11 +17,11 @@ extern void parse(Scanner &, Output &);
 extern void parse_cleanup();
 
 typedef std::set<std::string> CondList;
-typedef std::list<RegExp*> RuleList;
+typedef std::list<const RegExp*> RuleList;
 typedef std::map<std::string, Spec> SpecMap;
 typedef std::map<std::string, std::pair<uint32_t, std::string> > SetupMap;
 typedef std::map<std::string, const Code *> DefaultMap;
-typedef std::map<std::string, RegExp *> symbol_table_t;
+typedef std::map<std::string, const RegExp *> symbol_table_t;
 
 } // namespace re2c
 

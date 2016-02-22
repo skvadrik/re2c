@@ -62,11 +62,11 @@ private:
 	void set_sourceline ();
 	uint32_t lex_cls_chr();
 	uint32_t lex_str_chr(char quote, bool &end);
-	RegExp *lex_cls(bool neg);
-	RegExp *lex_str(char quote, bool casing);
-	RegExp *schr(uint32_t c) const;
-	RegExp *ichr(uint32_t c) const;
-	RegExp *cls(Range *r) const;
+	const RegExp *lex_cls(bool neg);
+	const RegExp *lex_str(char quote, bool casing);
+	const RegExp *schr(uint32_t c) const;
+	const RegExp *ichr(uint32_t c) const;
+	const RegExp *cls(const Range *r) const;
 
 	void lex_conf ();
 	void lex_conf_assign ();
@@ -104,9 +104,9 @@ public:
 	void fatal(const char*) const;
 	void fatal(ptrdiff_t, const char*) const;
 
-	RegExp * mkDiff (RegExp * e1, RegExp * e2) const;
-	RegExp * mkDot () const;
-	RegExp * mkDefault () const;
+	const RegExp * mkDiff (const RegExp * e1, const RegExp * e2) const;
+	const RegExp * mkDot () const;
+	const RegExp * mkDefault () const;
 
 	FORBID_COPY (Scanner);
 };

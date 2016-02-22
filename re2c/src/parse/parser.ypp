@@ -48,9 +48,9 @@ static counter_t<rule_rank_t> rank_counter;
 static std::vector<std::string> condnames;
 static re2c::SpecMap  specMap;
 static Spec spec;
-static RegExp *specNone = NULL;
+static const RegExp *specNone = NULL;
 static RuleList       specStar;
-static RegExp *star_default = NULL;
+static const RegExp *star_default = NULL;
 static Scanner          *in = NULL;
 static Scanner::ParseMode  parseMode;
 static SetupMap            ruleSetupMap;
@@ -83,8 +83,8 @@ void context_none(CondList *clist)
 void context_rule
 	( CondList * clist
 	, const Loc & loc
-	, RegExp * expr
-	, RegExp * look
+	, const RegExp * expr
+	, const RegExp * look
 	, const Code * code
 	, const std::string * newcond
 	)
@@ -97,7 +97,7 @@ void context_rule
 			condnames.push_back (*it);
 		}
 
-		RegExp *rule = RegExp::rule
+		const RegExp *rule = RegExp::rule
 			( loc
 			, expr
 			, look
@@ -134,7 +134,7 @@ void default_rule(CondList *clist, const Code * code)
 	context_check(clist);
 	for(CondList::const_iterator it = clist->begin(); it != clist->end(); ++it)
 	{
-		RegExp * def = RegExp::rule
+		const RegExp * def = RegExp::rule
 			( code->loc
 			, in->mkDefault ()
 			, RegExp::nil()
@@ -155,7 +155,7 @@ void default_rule(CondList *clist, const Code * code)
 %start	spec
 
 %union {
-	re2c::RegExp * regexp;
+	const re2c::RegExp * regexp;
 	const re2c::Code * code;
 	char op;
 	re2c::ExtOp extop;
@@ -230,7 +230,7 @@ rule:
 			{
 				in->fatal("condition or '<*>' required when using -c switch");
 			}
-			RegExp * rule = RegExp::rule
+			const RegExp * rule = RegExp::rule
 				( $3->loc
 				, $1
 				, $2
@@ -244,7 +244,7 @@ rule:
 		{
 			if (opts->cFlag)
 				in->fatal("condition or '<*>' required when using -c switch");
-			RegExp * def = RegExp::rule
+			const RegExp * def = RegExp::rule
 				( $2->loc
 				, in->mkDefault ()
 				, RegExp::nil()
@@ -285,7 +285,7 @@ rule:
 	|	'<' TOKEN_STAR '>' expr look newcond TOKEN_CODE
 		{
 			context_check(NULL);
-			RegExp * rule = RegExp::rule
+			const RegExp * rule = RegExp::rule
 				( $7->loc
 				, $4
 				, $5
@@ -301,7 +301,7 @@ rule:
 			assert($7);
 			context_check(NULL);
 			Loc loc (in->get_fname (), in->get_cline ());
-			RegExp * rule = RegExp::rule
+			const RegExp * rule = RegExp::rule
 				( loc
 				, $4
 				, $5
@@ -649,7 +649,7 @@ void parse(Scanner& i, Output & o)
 				{
 					for (RuleList::const_iterator itOp = specStar.begin(); itOp != specStar.end(); ++itOp)
 					{
-						RegExp *r = RegExp::rule_copy(*itOp, rank_counter.next());
+						const RegExp *r = RegExp::rule_copy(*itOp, rank_counter.next());
 						it->second.add (r);
 					}
 					if (star_default)

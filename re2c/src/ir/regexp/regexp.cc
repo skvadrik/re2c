@@ -19,7 +19,7 @@ static uint32_t fixlen(const RegExp *re);
 
 free_list<RegExp*> RegExp::flist;
 
-RegExp *doAlt(RegExp *re1, RegExp *re2)
+const RegExp *doAlt(const RegExp *re1, const RegExp *re2)
 {
 	if (!re1) {
 		return re2;
@@ -30,7 +30,7 @@ RegExp *doAlt(RegExp *re1, RegExp *re2)
 	return RegExp::alt(re1, re2);
 }
 
-static RegExp *merge(RegExp *sym1, RegExp *sym2)
+static const RegExp *merge(const RegExp *sym1, const RegExp *sym2)
 {
 	if (!sym1) {
 		return sym2;
@@ -43,19 +43,19 @@ static RegExp *merge(RegExp *sym1, RegExp *sym2)
 		sym2->pld.sym.range));
 }
 
-static RegExp *lift_sym(RegExp *&re)
+static const RegExp *lift_sym(const RegExp *&re)
 {
 	if (!re) {
 		return NULL;
 	}
 	if (re->tag == RegExp::SYM) {
-		RegExp *sym = re;
+		const RegExp *sym = re;
 		re = NULL;
 		return sym;
 	}
 	if (re->tag == RegExp::ALT) {
 		// second alternative cannot be SYM by construction
-		RegExp *alt1 = re->pld.alt.re1;
+		const RegExp *alt1 = re->pld.alt.re1;
 		if (alt1 && alt1->tag == RegExp::SYM) {
 			re = re->pld.alt.re2;
 			return alt1;
@@ -64,16 +64,16 @@ static RegExp *lift_sym(RegExp *&re)
 	return NULL;
 }
 
-RegExp *mkAlt(RegExp *re1, RegExp *re2)
+const RegExp *mkAlt(const RegExp *re1, const RegExp *re2)
 {
-	RegExp *sym1 = lift_sym(re1);
-	RegExp *sym2 = lift_sym(re2);
+	const RegExp *sym1 = lift_sym(re1);
+	const RegExp *sym2 = lift_sym(re2);
 	return doAlt(
 		merge(sym1, sym2),
 		doAlt(re1, re2));
 }
 
-RegExp *doCat(RegExp *re1, RegExp *re2)
+const RegExp *doCat(const RegExp *re1, const RegExp *re2)
 {
 	if (!re1) {
 		return re2;
@@ -84,7 +84,7 @@ RegExp *doCat(RegExp *re1, RegExp *re2)
 	return RegExp::cat(re1, re2);
 }
 
-RegExp *Scanner::schr(uint32_t c) const
+const RegExp *Scanner::schr(uint32_t c) const
 {
 	if (!opts->encoding.encode(c)) {
 		fatalf("Bad code point: '0x%X'", c);
@@ -96,18 +96,18 @@ RegExp *Scanner::schr(uint32_t c) const
 	}
 }
 
-RegExp *Scanner::ichr(uint32_t c) const
+const RegExp *Scanner::ichr(uint32_t c) const
 {
 	if (is_alpha(c)) {
-		RegExp *l = schr(to_lower_unsafe(c));
-		RegExp *u = schr(to_upper_unsafe(c));
+		const RegExp *l = schr(to_lower_unsafe(c));
+		const RegExp *u = schr(to_upper_unsafe(c));
 		return mkAlt(l, u);
 	} else {
 		return schr(c);
 	}
 }
 
-RegExp *Scanner::cls(Range *r) const
+const RegExp *Scanner::cls(const Range *r) const
 {
 	if (!r) {
 		switch (opts->empty_class_policy) {
@@ -130,7 +130,7 @@ RegExp *Scanner::cls(Range *r) const
 	}
 }
 
-RegExp *Scanner::mkDiff(RegExp *re1, RegExp *re2) const
+const RegExp *Scanner::mkDiff(const RegExp *re1, const RegExp *re2) const
 {
 	if (re1 && re2
 		&& re1->tag == RegExp::SYM
@@ -143,7 +143,7 @@ RegExp *Scanner::mkDiff(RegExp *re1, RegExp *re2) const
 	return NULL;
 }
 
-RegExp *Scanner::mkDot() const
+const RegExp *Scanner::mkDot() const
 {
 	uint32_t c = '\n';
 	if (!opts->encoding.encode(c)) {
@@ -164,7 +164,7 @@ RegExp *Scanner::mkDot() const
  * Also note that default range doesn't respect encoding policy
  * (the way invalid code points are treated).
  */
-RegExp *Scanner::mkDefault() const
+const RegExp *Scanner::mkDefault() const
 {
 	return RegExp::sym(Range::ran(0,
 		opts->encoding.nCodeUnits()));
@@ -180,9 +180,9 @@ RegExp *Scanner::mkDefault() const
  */
 
 // see note [counted repetition expansion]
-RegExp *repeat(RegExp *re, uint32_t n)
+const RegExp *repeat(const RegExp *re, uint32_t n)
 {
-	RegExp *r = NULL;
+	const RegExp *r = NULL;
 	for (uint32_t i = 0; i < n; ++i) {
 		r = doCat(r, re);
 	}
@@ -190,10 +190,10 @@ RegExp *repeat(RegExp *re, uint32_t n)
 }
 
 // see note [counted repetition expansion]
-RegExp *repeat_from_to(RegExp *re, uint32_t n, uint32_t m)
+const RegExp *repeat_from_to(const RegExp *re, uint32_t n, uint32_t m)
 {
-	RegExp *r1 = repeat(re, n);
-	RegExp *r2 = NULL;
+	const RegExp *r1 = repeat(re, n);
+	const RegExp *r2 = NULL;
 	for (uint32_t i = n; i < m; ++i) {
 		r2 = mkAlt(
 			RegExp::nil(),
@@ -203,14 +203,14 @@ RegExp *repeat_from_to(RegExp *re, uint32_t n, uint32_t m)
 }
 
 // see note [counted repetition expansion]
-RegExp *repeat_from(RegExp *re, uint32_t n)
+const RegExp *repeat_from(const RegExp *re, uint32_t n)
 {
 	return doCat(
 		repeat(re, n),
 		RegExp::iter(re));
 }
 
-RegExp* RegExp::rule(const Loc &loc, RegExp *r1, RegExp *r2,
+const RegExp* RegExp::rule(const Loc &loc, const RegExp *r1, const RegExp *r2,
 	rule_rank_t rank, const Code *code, const std::string *newcond)
 {
 	RegExp *re = new RegExp(RULE);
@@ -231,7 +231,7 @@ RegExp* RegExp::rule(const Loc &loc, RegExp *r1, RegExp *r2,
 
 // shallow-copies regexps, but deep-copies rule info
 // used to duplicate <*> rules in conditions
-RegExp* RegExp::rule_copy(const RegExp *rule, rule_rank_t rank)
+const RegExp* RegExp::rule_copy(const RegExp *rule, rule_rank_t rank)
 {
 	RegExp *re = new RegExp(RULE);
 	re->pld.rule.re = rule->pld.rule.re;
