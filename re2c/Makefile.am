@@ -93,6 +93,7 @@ SRC = \
 	src/ir/regexp/encoding/utf16/utf16_regexp.cc \
 	src/ir/regexp/encoding/utf16/utf16.cc \
 	src/ir/regexp/encoding/utf16/utf16_range.cc \
+	src/ir/regexp/make_rule.cc \
 	src/ir/regexp/regexp.cc \
 	src/ir/regexp/split_charset.cc \
 	src/ir/compile.cc \

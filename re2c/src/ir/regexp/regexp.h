@@ -91,9 +91,14 @@ struct RegExp
 		re->pld.iter.re = r;
 		return re;
 	}
-	static const RegExp *rule(const Loc &loc, const RegExp *r1, const RegExp *r2,
-		rule_rank_t rank, const Code *code, const std::string *newcond);
-	static const RegExp *rule_copy(const RegExp *rule, rule_rank_t rank);
+	static const RegExp *rule(const RegExp *r1, const RegExp *r2, RuleInfo *i)
+	{
+		RegExp *re = new RegExp(RULE);
+		re->pld.rule.re = r1;
+		re->pld.rule.ctx = r2;
+		re->pld.rule.info = i;
+		return re;
+	}
 	inline ~RegExp()
 	{
 		if (tag == RULE) {

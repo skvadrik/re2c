@@ -15,6 +15,9 @@ namespace re2c
 
 extern void parse(Scanner &, Output &);
 extern void parse_cleanup();
+const RegExp *make_rule(const Loc &loc, const RegExp *r1, const RegExp *r2,
+	rule_rank_t rank, const Code *code, const std::string *newcond);
+const RegExp *make_rule_copy(const RegExp *re, rule_rank_t rank);
 
 typedef std::set<std::string> CondList;
 typedef std::list<const RegExp*> RuleList;

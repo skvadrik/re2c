@@ -165,7 +165,7 @@ void context_rule
 			condnames.push_back (*it);
 		}
 
-		const RegExp *rule = RegExp::rule
+		const RegExp *rule = make_rule
 			( loc
 			, expr
 			, look
@@ -202,7 +202,7 @@ void default_rule(CondList *clist, const Code * code)
 	context_check(clist);
 	for(CondList::const_iterator it = clist->begin(); it != clist->end(); ++it)
 	{
-		const RegExp * def = RegExp::rule
+		const RegExp * def = make_rule
 			( code->loc
 			, in->mkDefault ()
 			, RegExp::nil()
@@ -1619,7 +1619,7 @@ yyreduce:
 			{
 				in->fatal("condition or '<*>' required when using -c switch");
 			}
-			const RegExp * rule = RegExp::rule
+			const RegExp * rule = make_rule
 				( (yyvsp[(3) - (3)].code)->loc
 				, (yyvsp[(1) - (3)].regexp)
 				, (yyvsp[(2) - (3)].regexp)
@@ -1636,7 +1636,7 @@ yyreduce:
     {
 			if (opts->cFlag)
 				in->fatal("condition or '<*>' required when using -c switch");
-			const RegExp * def = RegExp::rule
+			const RegExp * def = make_rule
 				( (yyvsp[(2) - (2)].code)->loc
 				, in->mkDefault ()
 				, RegExp::nil()
@@ -1695,7 +1695,7 @@ yyreduce:
 
     {
 			context_check(NULL);
-			const RegExp * rule = RegExp::rule
+			const RegExp * rule = make_rule
 				( (yyvsp[(7) - (7)].code)->loc
 				, (yyvsp[(4) - (7)].regexp)
 				, (yyvsp[(5) - (7)].regexp)
@@ -1714,7 +1714,7 @@ yyreduce:
 			assert((yyvsp[(7) - (7)].str));
 			context_check(NULL);
 			Loc loc (in->get_fname (), in->get_cline ());
-			const RegExp * rule = RegExp::rule
+			const RegExp * rule = make_rule
 				( loc
 				, (yyvsp[(4) - (7)].regexp)
 				, (yyvsp[(5) - (7)].regexp)
@@ -1751,7 +1751,7 @@ yyreduce:
 			{
 				in->fatal ("code to default rule '*' is already defined");
 			}
-			star_default = RegExp::rule
+			star_default = make_rule
 				( (yyvsp[(5) - (5)].code)->loc
 				, in->mkDefault ()
 				, RegExp::nil()
@@ -1770,7 +1770,7 @@ yyreduce:
 			{
 				in->fatal("code to handle illegal condition already defined");
 			}
-			(yyval.regexp) = specNone = RegExp::rule
+			(yyval.regexp) = specNone = make_rule
 				( (yyvsp[(3) - (3)].code)->loc
 				, RegExp::nil()
 				, RegExp::nil()
@@ -1792,7 +1792,7 @@ yyreduce:
 				in->fatal("code to handle illegal condition already defined");
 			}
 			Loc loc (in->get_fname (), in->get_cline ());
-			(yyval.regexp) = specNone = RegExp::rule
+			(yyval.regexp) = specNone = make_rule
 				( loc
 				, RegExp::nil()
 				, RegExp::nil()
@@ -2337,8 +2337,18 @@ void parse(Scanner& i, Output & o)
 				{
 					for (RuleList::const_iterator itOp = specStar.begin(); itOp != specStar.end(); ++itOp)
 					{
-						const RegExp *r = RegExp::rule_copy(*itOp, rank_counter.next());
-						it->second.add (r);
+						// Different condition share rule regexps (regexps are immutable anyway),
+						// but must have an individual copy of rule info (rule reachability
+						// and shadow set are not the same for different conditions).
+						// Also must update rule rank to guarantee lowest priority.
+						const RegExp *re = *itOp;
+						const RuleInfo *info = re->pld.rule.info;
+						const RegExp *re_copy = RegExp::rule(
+							re->pld.rule.re,
+							re->pld.rule.ctx,
+							new RuleInfo(info->loc, rank_counter.next(), info->code,
+								&info->newcond, info->ctx_len, info->nullable));
+						it->second.add(re_copy);
 					}
 					if (star_default)
 					{
