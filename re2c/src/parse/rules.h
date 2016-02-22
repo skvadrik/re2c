@@ -29,6 +29,7 @@ struct RuleInfo
 
 	std::set<uint32_t> shadow;
 	bool reachable;
+	bool nullable;
 
 	RuleInfo
 		( const Loc & l
@@ -36,6 +37,7 @@ struct RuleInfo
 		, const Code * c
 		, const std::string * cond
 		, uint32_t cl
+		, bool nl
 		)
 		: loc (l)
 		, ctx_len (cl)
@@ -44,6 +46,7 @@ struct RuleInfo
 		, newcond (cond ? *cond : "")
 		, shadow ()
 		, reachable (false)
+		, nullable (nl)
 	{}
 
 	FORBID_COPY(RuleInfo);

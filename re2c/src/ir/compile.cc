@@ -54,7 +54,6 @@ smart_ptr<DFA> compile (Spec & spec, Output & output, const std::string & cond, 
 	// skeleton must be constructed after DFA construction
 	// but prior to any other DFA transformations
 	Skeleton *skeleton = new Skeleton(dfa, cs, spec.rules, name, cond, line);
-	nullable_rules(spec.re, skeleton->nullable_rules);
 
 	minimization(dfa);
 

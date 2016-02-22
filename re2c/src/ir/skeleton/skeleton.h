@@ -114,7 +114,6 @@ struct Skeleton
 	Node * nodes;
 	size_t sizeof_key;
 	rules_t rules;
-	std::vector<RuleInfo*> nullable_rules;
 
 	Skeleton
 		( const dfa_t &dfa

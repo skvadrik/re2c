@@ -78,13 +78,12 @@ void Skeleton::warn_unreachable_nullable_rules ()
 	//    - rules that match empty strins with nonempty trailing context
 	// false positives on partially shadowed (yet reachable) rules, e.g.:
 	//     [^]?
-	for (std::vector<RuleInfo*>::const_iterator i = nullable_rules.begin();
-		i != nullable_rules.end(); ++i)
+	for (rules_t::const_iterator i = rules.begin(); i != rules.end(); ++i)
 	{
-		const RuleInfo *ri = *i;
-		if (ri->reachable)
+		const RuleInfo *r = *i;
+		if (r->nullable && r->reachable)
 		{
-			warn.match_empty_string(ri->loc.line);
+			warn.match_empty_string(r->loc.line);
 		}
 	}
 }

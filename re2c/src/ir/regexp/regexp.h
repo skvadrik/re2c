@@ -110,8 +110,6 @@ private:
 };
 
 void split(const RegExp *re, std::set<uint32_t> &cs);
-void nullable_rules(const RegExp *re, std::vector<RuleInfo*> &rs);
-
 const RegExp *mkAlt(const RegExp *re1, const RegExp *re2);
 const RegExp *doAlt(const RegExp *re1, const RegExp *re2);
 const RegExp *doCat(const RegExp *re1, const RegExp *re2);

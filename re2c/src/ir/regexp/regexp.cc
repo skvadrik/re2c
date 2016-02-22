@@ -16,6 +16,7 @@ namespace re2c
 {
 
 static uint32_t fixlen(const RegExp *re);
+static bool nullable(const RegExp *re);
 
 free_list<RegExp*> RegExp::flist;
 
@@ -225,7 +226,7 @@ const RegExp* RegExp::rule(const Loc &loc, const RegExp *r1, const RegExp *r2,
 		ctx_len = ~0u;
 	}
 
-	re->pld.rule.info = new RuleInfo(loc, rank, code, newcond, ctx_len);
+	re->pld.rule.info = new RuleInfo(loc, rank, code, newcond, ctx_len, nullable(r1));
 	return re;
 }
 
@@ -237,8 +238,8 @@ const RegExp* RegExp::rule_copy(const RegExp *rule, rule_rank_t rank)
 	re->pld.rule.re = rule->pld.rule.re;
 	re->pld.rule.ctx = rule->pld.rule.ctx;
 	const RuleInfo *info = rule->pld.rule.info;
-	re->pld.rule.info = new RuleInfo(info->loc, rank,
-		info->code, &info->newcond, info->ctx_len);
+	re->pld.rule.info = new RuleInfo(info->loc, rank, info->code,
+		&info->newcond, info->ctx_len, info->nullable);
 	return re;
 }
 
@@ -271,6 +272,27 @@ uint32_t fixlen(const RegExp *re)
 		case RegExp::RULE:
 		default:
 			return ~0u;
+	}
+}
+
+bool nullable(const RegExp *re)
+{
+	switch (re->tag) {
+		default:
+		case RegExp::NIL:
+			return true;
+		case RegExp::SYM:
+			return false;
+		case RegExp::ALT:
+			return nullable(re->pld.alt.re1)
+				|| nullable(re->pld.alt.re2);
+		case RegExp::CAT:
+			return nullable(re->pld.cat.re1)
+				&& nullable(re->pld.cat.re2);
+		case RegExp::ITER:
+			return true;
+		case RegExp::RULE:
+			return nullable(re->pld.rule.re);
 	}
 }
 
