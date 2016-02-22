@@ -6,7 +6,6 @@
 #include "src/conf/msg.h"
 #include "src/ir/dfa/dfa.h"
 #include "src/ir/regexp/regexp.h"
-#include "src/ir/regexp/regexp_rule.h"
 #include "src/ir/skeleton/skeleton.h"
 
 namespace re2c
@@ -16,19 +15,18 @@ Node::Node ()
 	: arcs ()
 	, arcsets ()
 	, loop (0)
-	, rule (rule_rank_t::none (), false)
+	, rule (NULL)
 	, ctx (false)
 	, dist (DIST_ERROR)
 	, reachable ()
 	, suffix (NULL)
 {}
 
-void Node::init(bool c, RuleOp *r, const std::vector<std::pair<Node*, uint32_t> > &a)
+void Node::init(bool c, RuleInfo *r, const std::vector<std::pair<Node*, uint32_t> > &a)
 {
 	if (r)
 	{
-		rule.rank = r->rank;
-		rule.restorectx = r->ctx_len > 0;
+		rule = r;
 	}
 
 	ctx = c;
@@ -124,10 +122,10 @@ Skeleton::Skeleton
 	uint32_t maxrule = 0;
 	for (uint32_t i = 0; i < nodes_count; ++i)
 	{
-		const rule_rank_t r = nodes[i].rule.rank;
-		if (!r.is_none () && !r.is_def ())
+		const RuleInfo *r = nodes[i].rule;
+		if (r && !r->rank.is_def())
 		{
-			maxrule = std::max (maxrule, r.uint32 ());
+			maxrule = std::max (maxrule, r->rank.uint32 ());
 		}
 	}
 	// two upper values reserved for default and none rules)

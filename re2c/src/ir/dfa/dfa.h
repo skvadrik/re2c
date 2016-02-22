@@ -17,7 +17,7 @@ class RuleOp;
 struct dfa_state_t
 {
 	size_t *arcs;
-	RuleOp *rule;
+	RuleInfo *rule;
 	bool ctx;
 
 	dfa_state_t()
@@ -40,7 +40,7 @@ struct dfa_t
 	std::vector<dfa_state_t*> states;
 	const size_t nchars;
 
-	dfa_t(const nfa_t &nfa, const charset_t &charset, rules_t &rules);
+	dfa_t(const nfa_t &nfa, const charset_t &charset);
 	~dfa_t();
 };
 

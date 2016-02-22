@@ -41,19 +41,19 @@ bool RuleOp::nullable() const
 	return exp->nullable();
 }
 
-void RegExp::nullable_rules(std::set<rule_rank_t>&) const {}
+void RegExp::nullable_rules(std::vector<RuleInfo*>&) const {}
 
-void AltOp::nullable_rules(std::set<rule_rank_t> &rs) const
+void AltOp::nullable_rules(std::vector<RuleInfo*> &rs) const
 {
 	exp1->nullable_rules(rs);
 	exp2->nullable_rules(rs);
 }
 
-void RuleOp::nullable_rules(std::set<rule_rank_t> &rs) const
+void RuleOp::nullable_rules(std::vector<RuleInfo*> &rs) const
 {
 	if (exp->nullable())
 	{
-		rs.insert(rank);
+		rs.push_back(info);
 	}
 }
 

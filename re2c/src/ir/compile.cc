@@ -49,7 +49,7 @@ smart_ptr<DFA> compile (Spec & spec, Output & output, const std::string & cond, 
 
 	nfa_t nfa(spec.re);
 
-	dfa_t dfa(nfa, cs, spec.rules);
+	dfa_t dfa(nfa, cs);
 
 	// skeleton must be constructed after DFA construction
 	// but prior to any other DFA transformations

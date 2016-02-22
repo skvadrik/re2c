@@ -20,7 +20,7 @@ public:
 	uint32_t calc_size() const;
 	uint32_t fixedLength ();
 	bool nullable() const;
-	void nullable_rules(std::set<rule_rank_t>&) const;
+	void nullable_rules(std::vector<RuleInfo*>&) const;
 	nfa_state_t *compile(nfa_t &nfa, nfa_state_t *n);
 	void display (std::ostream & o) const;
 	friend RegExp * mkAlt (RegExp *, RegExp *);

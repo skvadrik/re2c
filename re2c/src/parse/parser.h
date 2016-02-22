@@ -1,6 +1,7 @@
 #ifndef _RE2C_PARSE_PARSER_
 #define _RE2C_PARSE_PARSER_
 
+#include <map>
 #include <list>
 #include <string>
 

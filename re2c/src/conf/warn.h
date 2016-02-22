@@ -58,7 +58,7 @@ public:
 	void match_empty_string (uint32_t line);
 	void swapped_range (uint32_t line, uint32_t l, uint32_t u);
 	void undefined_control_flow (uint32_t line, const std::string & cond, std::vector<way_t> & ways, bool overflow);
-	void unreachable_rule (const std::string & cond, const rule_info_t & rule, const rules_t & rules);
+	void unreachable_rule (const std::string & cond, const RuleInfo *rule);
 	void useless_escape (uint32_t line, uint32_t col, char c);
 };
 

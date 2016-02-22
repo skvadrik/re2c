@@ -25,7 +25,7 @@ namespace re2c
 
 struct dfa_t;
 struct OutputFile;
-class RuleOp;
+class RuleInfo;
 
 struct Node
 {
@@ -75,7 +75,7 @@ struct Node
 	uint8_t loop;
 
 	// rule for corresponding DFA state (if any)
-	rule_t rule;
+	RuleInfo *rule;
 
 	// start of trailing context
 	bool ctx;
@@ -86,13 +86,13 @@ struct Node
 	uint32_t dist;
 
 	// rules reachable from this node (including absent rule)
-	std::set<rule_rank_t> reachable;
+	std::set<RuleInfo*> reachable;
 
 	// path to end node (for constructing path cover)
 	path_t * suffix;
 
 	Node ();
-	void init(bool b, RuleOp *r, const std::vector<std::pair<Node*, uint32_t> > &arcs);
+	void init(bool b, RuleInfo *r, const std::vector<std::pair<Node*, uint32_t> > &arcs);
 	~Node ();
 	bool end () const;
 	void calc_dist ();
@@ -114,7 +114,7 @@ struct Skeleton
 	Node * nodes;
 	size_t sizeof_key;
 	rules_t rules;
-	std::set<rule_rank_t> nullable_rules;
+	std::vector<RuleInfo*> nullable_rules;
 
 	Skeleton
 		( const dfa_t &dfa

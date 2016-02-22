@@ -18,7 +18,7 @@ namespace re2c
 // See also note [counting skeleton edges].
 void Node::naked_ways (way_t & prefix, std::vector<way_t> & ways, nakeds_t &size)
 {
-	if (!rule.rank.is_none ())
+	if (rule)
 	{
 		return;
 	}

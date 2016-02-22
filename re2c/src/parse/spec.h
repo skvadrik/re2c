@@ -1,11 +1,20 @@
 #ifndef _RE2C_PARSE_SPEC_
 #define _RE2C_PARSE_SPEC_
 
+#include <algorithm>
+
+#include "src/ir/regexp/regexp.h"
 #include "src/ir/regexp/regexp_rule.h"
 #include "src/parse/rules.h"
 
 namespace re2c
 {
+
+// for std::find_if
+static bool is_def(const RuleInfo *r)
+{
+	return r->rank.is_def();
+}
 
 struct Spec
 {
@@ -28,7 +37,7 @@ struct Spec
 	}
 	bool add_def (RuleOp * r)
 	{
-		if (rules.find (rule_rank_t::def ()) != rules.end ())
+		if (std::find_if(rules.begin(), rules.end(), is_def) != rules.end())
 		{
 			return false;
 		}
@@ -40,7 +49,7 @@ struct Spec
 	}
 	void add (RuleOp * r)
 	{
-		rules[r->rank].line = r->loc.line;
+		rules.push_back(r->info);
 		re = mkAlt (re, r);
 	}
 	void clear ()

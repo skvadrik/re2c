@@ -7,7 +7,6 @@
 #include "src/ir/dfa/dfa.h"
 #include "src/ir/nfa/nfa.h"
 #include "src/ir/regexp/regexp.h"
-#include "src/ir/regexp/regexp_rule.h"
 #include "src/ir/rule_rank.h"
 #include "src/parse/rules.h"
 #include "src/util/ord_hash_set.h"
@@ -91,11 +90,11 @@ static size_t find_state
 	return kernels.insert(kernel, size);
 }
 
-dfa_t::dfa_t(const nfa_t &nfa, const charset_t &charset, rules_t &rules)
+dfa_t::dfa_t(const nfa_t &nfa, const charset_t &charset)
 	: states()
 	, nchars(charset.size() - 1) // (n + 1) bounds for n ranges
 {
-	std::map<size_t, std::set<RuleOp*> > s2rules;
+	std::map<size_t, std::set<RuleInfo*> > s2rules;
 	ord_hash_set_t kernels;
 	nfa_state_t **const buffer = new nfa_state_t*[nfa.size];
 	std::vector<std::vector<nfa_state_t*> > arcs(nchars);
@@ -160,23 +159,23 @@ dfa_t::dfa_t(const nfa_t &nfa, const charset_t &charset, rules_t &rules)
 	for (size_t i = 0; i < count; ++i)
 	{
 		dfa_state_t *s = states[i];
-		std::set<RuleOp*> &rs = s2rules[i];
+		std::set<RuleInfo*> &rs = s2rules[i];
 		// for each final state: choose the rule with the smallest rank
-		for (std::set<RuleOp*>::const_iterator j = rs.begin(); j != rs.end(); ++j)
+		for (std::set<RuleInfo*>::const_iterator j = rs.begin(); j != rs.end(); ++j)
 		{
-			RuleOp *rule = *j;
+			RuleInfo *rule = *j;
 			if (!s->rule || rule->rank < s->rule->rank)
 			{
 				s->rule = rule;
 			}
 		}
 		// other rules are shadowed by the chosen rule
-		for (std::set<RuleOp*>::const_iterator j = rs.begin(); j != rs.end(); ++j)
+		for (std::set<RuleInfo*>::const_iterator j = rs.begin(); j != rs.end(); ++j)
 		{
-			RuleOp *rule = *j;
+			RuleInfo *rule = *j;
 			if (s->rule != rule)
 			{
-				rules[rule->rank].shadow.insert(s->rule->rank);
+				rule->shadow.insert(s->rule->loc.line);
 			}
 		}
 	}

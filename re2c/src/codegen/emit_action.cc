@@ -11,7 +11,6 @@
 #include "src/ir/adfa/action.h"
 #include "src/ir/adfa/adfa.h"
 #include "src/ir/regexp/regexp.h"
-#include "src/ir/regexp/regexp_rule.h"
 #include "src/ir/skeleton/skeleton.h"
 #include "src/parse/code.h"
 #include "src/parse/loc.h"
@@ -27,7 +26,7 @@ static void emit_initial       (OutputFile & o, uint32_t ind, bool & readCh, con
 static void emit_save          (OutputFile & o, uint32_t ind, bool & readCh, const State * const s, uint32_t save, bool save_yyaccept);
 static void emit_accept_binary (OutputFile & o, uint32_t ind, bool & readCh, const State * const s, const accept_t & accept, size_t l, size_t r);
 static void emit_accept        (OutputFile & o, uint32_t ind, bool & readCh, const State * const s, const accept_t & accept);
-static void emit_rule          (OutputFile & o, uint32_t ind, const State * const s, const RuleOp * const rule, const std::string & condName, const Skeleton * skeleton);
+static void emit_rule          (OutputFile & o, uint32_t ind, const State * const s, const RuleInfo * const rule, const std::string & condName, const Skeleton * skeleton);
 static void genYYFill          (OutputFile & o, size_t need);
 static void genSetCondition    (OutputFile & o, uint32_t ind, const std::string & newcond);
 static void genSetState        (OutputFile & o, uint32_t ind, uint32_t fillIndex);
@@ -249,7 +248,7 @@ void emit_accept (OutputFile & o, uint32_t ind, bool & readCh, const State * con
 	}
 }
 
-void emit_rule (OutputFile & o, uint32_t ind, const State * const s, const RuleOp * const rule, const std::string & condName, const Skeleton * skeleton)
+void emit_rule (OutputFile & o, uint32_t ind, const State * const s, const RuleInfo * const rule, const std::string & condName, const Skeleton * skeleton)
 {
 	if (opts->target == opt_t::DOT)
 	{

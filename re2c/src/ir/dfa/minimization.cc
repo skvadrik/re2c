@@ -1,3 +1,4 @@
+#include <map>
 #include <string.h>
 #include <utility>
 #include <vector>
@@ -9,7 +10,7 @@
 namespace re2c
 {
 
-class RuleOp;
+class RuleInfo;
 
 /*
  * note [DFA minimization: table filling algorithm]
@@ -119,11 +120,11 @@ static void minimization_moore(
 
 	size_t *next = new size_t[count];
 
-	std::map<std::pair<RuleOp*, bool>, size_t> init;
+	std::map<std::pair<const RuleInfo*, bool>, size_t> init;
 	for (size_t i = 0; i < count; ++i)
 	{
 		dfa_state_t *s = states[i];
-		std::pair<RuleOp*, bool> key(s->rule, s->ctx);
+		std::pair<const RuleInfo*, bool> key(s->rule, s->ctx);
 		if (init.insert(std::make_pair(key, i)).second)
 		{
 			part[i] = i;

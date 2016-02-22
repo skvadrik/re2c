@@ -10,7 +10,7 @@ namespace re2c
 
 struct Range;
 struct RegExp;
-struct RuleOp;
+struct RuleInfo;
 
 struct nfa_state_t
 {
@@ -39,7 +39,7 @@ struct nfa_state_t
 		} ctx;
 		struct
 		{
-			RuleOp *rule;
+			RuleInfo *rule;
 		} fin;
 	} value;
 	bool mark;
@@ -64,7 +64,7 @@ struct nfa_state_t
 		value.ctx.out = s;
 		mark = false;
 	}
-	void fin(RuleOp *r)
+	void fin(RuleInfo *r)
 	{
 		type = FIN;
 		value.fin.rule = r;

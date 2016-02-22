@@ -11,7 +11,7 @@ namespace re2c
 {
 
 struct OutputFile;
-class RuleOp;
+class RuleInfo;
 class State;
 
 struct Initial
@@ -44,7 +44,7 @@ public:
 		Initial * initial;
 		uint32_t save;
 		const accept_t * accepts;
-		const RuleOp * rule;
+		const RuleInfo * rule;
 	} info;
 
 public:
@@ -79,7 +79,7 @@ public:
 		type = ACCEPT;
 		info.accepts = accepts;
 	}
-	void set_rule (const RuleOp * const rule)
+	void set_rule (const RuleInfo * const rule)
 	{
 		clear ();
 		type = RULE;

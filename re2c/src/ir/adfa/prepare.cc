@@ -7,7 +7,6 @@
 #include "src/globals.h"
 #include "src/ir/adfa/action.h"
 #include "src/ir/adfa/adfa.h"
-#include "src/ir/regexp/regexp_rule.h"
 #include "src/ir/rule_rank.h"
 #include "src/util/allocate.h"
 

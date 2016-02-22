@@ -648,18 +648,13 @@ void parse(Scanner& i, Output & o)
 
 			if (parseMode != Scanner::Reuse)
 			{
-				// <*> rules must have the lowest priority
-				// now that all rules have been parsed, we can fix it
-				for (RuleOpList::const_iterator itOp = specStar.begin(); itOp != specStar.end(); ++itOp)
-				{
-					(*itOp)->rank = rank_counter.next ();
-				}
-				// merge <*> rules to all conditions
+				// merge <*> rules to all conditions with lowest priority
 				for (it = specMap.begin(); it != specMap.end(); ++it)
 				{
 					for (RuleOpList::const_iterator itOp = specStar.begin(); itOp != specStar.end(); ++itOp)
 					{
-						it->second.add (*itOp);
+						RuleOp *r = new RuleOp(*itOp, rank_counter.next());
+						it->second.add (r);
 					}
 					if (star_default)
 					{

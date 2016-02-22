@@ -21,7 +21,7 @@ void Node::calc_reachable ()
 	}
 	else if (end ())
 	{
-		reachable.insert (rule.rank);
+		reachable.insert (rule);
 	}
 	else if (loop < 2)
 	{
@@ -40,18 +40,21 @@ void Skeleton::warn_unreachable_nullable_rules ()
 	nodes->calc_reachable();
 	for (uint32_t i = 0; i < nodes_count; ++i)
 	{
-		const rule_rank_t r1 = nodes[i].rule.rank;
-		const std::set<rule_rank_t> & rs = nodes[i].reachable;
-		for (std::set<rule_rank_t>::const_iterator j = rs.begin(); j != rs.end(); ++j)
+		RuleInfo *r1 = nodes[i].rule;
+		if (!r1) {
+			continue;
+		}
+		const std::set<RuleInfo*> & rs = nodes[i].reachable;
+		for (std::set<RuleInfo*>::const_iterator j = rs.begin(); j != rs.end(); ++j)
 		{
-			const rule_rank_t r2 = *j;
-			if (r1 == r2 || r2.is_none())
+			RuleInfo* r2 = *j;
+			if (!r2 || r1->rank == r2->rank)
 			{
-				rules[r1].reachable = true;
+				r1->reachable = true;
 			}
 			else
 			{
-				rules[r1].shadow.insert(r2);
+				r1->shadow.insert(r2->loc.line);
 			}
 		}
 	}
@@ -63,10 +66,10 @@ void Skeleton::warn_unreachable_nullable_rules ()
 	// default rule '*' should not be reported
 	for (rules_t::const_iterator i = rules.begin(); i != rules.end(); ++i)
 	{
-		const rule_rank_t r = i->first;
-		if (!r.is_none() && !r.is_def() && !rules[r].reachable)
+		const RuleInfo *r = *i;
+		if (!r->rank.is_def() && !r->reachable)
 		{
-			warn.unreachable_rule(cond, i->second, rules);
+			warn.unreachable_rule(cond, r);
 		}
 	}
 
@@ -75,13 +78,13 @@ void Skeleton::warn_unreachable_nullable_rules ()
 	//    - rules that match empty strins with nonempty trailing context
 	// false positives on partially shadowed (yet reachable) rules, e.g.:
 	//     [^]?
-	for (std::set<rule_rank_t>::const_iterator i = nullable_rules.begin();
+	for (std::vector<RuleInfo*>::const_iterator i = nullable_rules.begin();
 		i != nullable_rules.end(); ++i)
 	{
-		const rule_info_t &ri = rules[*i];
-		if (ri.reachable)
+		const RuleInfo *ri = *i;
+		if (ri->reachable)
 		{
-			warn.match_empty_string(ri.line);
+			warn.match_empty_string(ri->loc.line);
 		}
 	}
 }

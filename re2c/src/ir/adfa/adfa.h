@@ -23,7 +23,7 @@ struct dfa_t;
 struct State
 {
 	label_t label;
-	RuleOp * rule;
+	const RuleInfo * rule;
 	State * next;
 	size_t fill;
 
