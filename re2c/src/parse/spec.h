@@ -4,7 +4,6 @@
 #include <algorithm>
 
 #include "src/ir/regexp/regexp.h"
-#include "src/ir/regexp/regexp_rule.h"
 #include "src/parse/rules.h"
 
 namespace re2c
@@ -35,7 +34,7 @@ struct Spec
 		rules = spec.rules;
 		return *this;
 	}
-	bool add_def (RuleOp * r)
+	bool add_def (RegExp * r)
 	{
 		if (std::find_if(rules.begin(), rules.end(), is_def) != rules.end())
 		{
@@ -47,9 +46,9 @@ struct Spec
 			return true;
 		}
 	}
-	void add (RuleOp * r)
+	void add (RegExp * r)
 	{
-		rules.push_back(r->info);
+		rules.push_back(r->pld.rule.info);
 		re = mkAlt (re, r);
 	}
 	void clear ()

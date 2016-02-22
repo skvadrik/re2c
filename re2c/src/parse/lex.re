@@ -11,7 +11,6 @@
 #include "src/globals.h"
 #include "src/ir/regexp/encoding/enc.h"
 #include "src/ir/regexp/regexp.h"
-#include "src/ir/regexp/regexp_null.h"
 #include "src/parse/code.h"
 #include "src/parse/extop.h"
 #include "src/parse/input.h"
@@ -359,7 +358,7 @@ start:
 							const uint32_t c = static_cast<uint8_t>(*s);
 							r = doCat(r, casing ? ichr(c) : schr(c));
 						}
-						yylval.regexp = r ? r : new NullOp;
+						yylval.regexp = r ? r : RegExp::nil();
 						return TOKEN_REGEXP;
 					}
 				}
@@ -658,7 +657,7 @@ RegExp *Scanner::lex_str(char quote, bool casing)
 	for (bool end;;) {
 		const uint32_t c = lex_str_chr(quote, end);
 		if (end) {
-			return r ? r : new NullOp;
+			return r ? r : RegExp::nil();
 		}
 		r = doCat(r, casing ? ichr(c) : schr(c));
 	}

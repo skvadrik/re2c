@@ -34,13 +34,7 @@ SRC_HDR = \
 	src/ir/regexp/encoding/utf16/utf16_regexp.h \
 	src/ir/regexp/encoding/utf16/utf16.h \
 	src/ir/regexp/empty_class_policy.h \
-	src/ir/regexp/regexp_alt.h \
-	src/ir/regexp/regexp_match.h \
-	src/ir/regexp/regexp_rule.h \
-	src/ir/regexp/regexp_cat.h \
-	src/ir/regexp/regexp_null.h \
 	src/ir/regexp/regexp.h \
-	src/ir/regexp/regexp_close.h \
 	src/ir/compile.h \
 	src/ir/rule_rank.h \
 	src/ir/skeleton/path.h \
@@ -85,15 +79,12 @@ SRC = \
 	src/conf/msg.cc \
 	src/conf/opt.cc \
 	src/conf/warn.cc \
-	src/ir/nfa/calc_size.cc \
 	src/ir/nfa/nfa.cc \
-	src/ir/nfa/split.cc \
 	src/ir/adfa/adfa.cc \
 	src/ir/adfa/prepare.cc \
 	src/ir/dfa/determinization.cc \
 	src/ir/dfa/fillpoints.cc \
 	src/ir/dfa/minimization.cc \
-	src/ir/regexp/display.cc \
 	src/ir/regexp/encoding/enc.cc \
 	src/ir/regexp/encoding/range_suffix.cc \
 	src/ir/regexp/encoding/utf8/utf8_regexp.cc \
@@ -102,9 +93,9 @@ SRC = \
 	src/ir/regexp/encoding/utf16/utf16_regexp.cc \
 	src/ir/regexp/encoding/utf16/utf16.cc \
 	src/ir/regexp/encoding/utf16/utf16_range.cc \
-	src/ir/regexp/fixed_length.cc \
 	src/ir/regexp/nullable.cc \
 	src/ir/regexp/regexp.cc \
+	src/ir/regexp/split_charset.cc \
 	src/ir/compile.cc \
 	src/ir/rule_rank.cc \
 	src/ir/skeleton/control_flow.cc \

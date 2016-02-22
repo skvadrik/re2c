@@ -9,103 +9,79 @@
 #include "src/ir/regexp/encoding/utf16/utf16_regexp.h"
 #include "src/ir/regexp/encoding/utf8/utf8_regexp.h"
 #include "src/ir/regexp/regexp.h"
-#include "src/ir/regexp/regexp_alt.h"
-#include "src/ir/regexp/regexp_cat.h"
-#include "src/ir/regexp/regexp_close.h"
-#include "src/ir/regexp/regexp_match.h"
-#include "src/ir/regexp/regexp_null.h"
 #include "src/parse/scanner.h"
 #include "src/util/range.h"
 
 namespace re2c
 {
 
-static MatchOp * merge (MatchOp * m1, MatchOp * m2);
+static uint32_t fixlen(const RegExp *re);
 
-free_list<RegExp*> RegExp::vFreeList;
+free_list<RegExp*> RegExp::flist;
 
-RegExp * doAlt (RegExp * e1, RegExp * e2)
+RegExp *doAlt(RegExp *re1, RegExp *re2)
 {
-	if (!e1)
-	{
-		return e2;
+	if (!re1) {
+		return re2;
 	}
-	if (!e2)
-	{
-		return e1;
+	if (!re2) {
+		return re1;
 	}
-	return new AltOp (e1, e2);
+	return RegExp::alt(re1, re2);
 }
 
-RegExp * mkAlt (RegExp * e1, RegExp * e2)
+static RegExp *merge(RegExp *sym1, RegExp *sym2)
 {
-	AltOp * a;
-	MatchOp * m1;
-	MatchOp * m2;
-
-	a = dynamic_cast<AltOp*> (e1);
-	if (a != NULL)
-	{
-		m1 = dynamic_cast<MatchOp*> (a->exp1);
-		if (m1 != NULL)
-		{
-			e1 = a->exp2;
-		}
+	if (!sym1) {
+		return sym2;
 	}
-	else
-	{
-		m1 = dynamic_cast<MatchOp*> (e1);
-		if (m1 != NULL)
-		{
-			e1 = NULL;
-		}
+	if (!sym2) {
+		return sym1;
 	}
-	a = dynamic_cast<AltOp*> (e2);
-	if (a != NULL)
-	{
-		m2 = dynamic_cast<MatchOp*> (a->exp1);
-		if (m2 != NULL)
-		{
-			e2 = a->exp2;
-		}
-	}
-	else
-	{
-		m2 = dynamic_cast<MatchOp*> (e2);
-		if (m2 != NULL)
-		{
-			e2 = NULL;
-		}
-	}
-
-	return doAlt (merge (m1, m2), doAlt (e1, e2));
+	return RegExp::sym(Range::add(
+		sym1->pld.sym.range,
+		sym2->pld.sym.range));
 }
 
-MatchOp * merge (MatchOp * m1, MatchOp * m2)
+static RegExp *lift_sym(RegExp *&re)
 {
-	if (!m1)
-	{
-		return m2;
+	if (!re) {
+		return NULL;
 	}
-	if (!m2)
-	{
-		return m1;
+	if (re->tag == RegExp::SYM) {
+		RegExp *sym = re;
+		re = NULL;
+		return sym;
 	}
-	MatchOp * m = new MatchOp (Range::add (m1->match, m2->match));
-	return m;
+	if (re->tag == RegExp::ALT) {
+		// second alternative cannot be SYM by construction
+		RegExp *alt1 = re->pld.alt.re1;
+		if (alt1 && alt1->tag == RegExp::SYM) {
+			re = re->pld.alt.re2;
+			return alt1;
+		}
+	}
+	return NULL;
 }
 
-RegExp * doCat (RegExp * e1, RegExp * e2)
+RegExp *mkAlt(RegExp *re1, RegExp *re2)
 {
-	if (!e1)
-	{
-		return e2;
+	RegExp *sym1 = lift_sym(re1);
+	RegExp *sym2 = lift_sym(re2);
+	return doAlt(
+		merge(sym1, sym2),
+		doAlt(re1, re2));
+}
+
+RegExp *doCat(RegExp *re1, RegExp *re2)
+{
+	if (!re1) {
+		return re2;
 	}
-	if (!e2)
-	{
-		return e1;
+	if (!re2) {
+		return re1;
 	}
-	return new CatOp (e1, e2);
+	return RegExp::cat(re1, re2);
 }
 
 RegExp *Scanner::schr(uint32_t c) const
@@ -116,7 +92,7 @@ RegExp *Scanner::schr(uint32_t c) const
 	switch (opts->encoding.type ()) {
 		case Enc::UTF16: return UTF16Symbol(c);
 		case Enc::UTF8:  return UTF8Symbol(c);
-		default:         return new MatchOp(Range::sym(c));
+		default:         return RegExp::sym(Range::sym(c));
 	}
 }
 
@@ -133,53 +109,49 @@ RegExp *Scanner::ichr(uint32_t c) const
 
 RegExp *Scanner::cls(Range *r) const
 {
-	if (!r)
-	{
-		switch (opts->empty_class_policy)
-		{
+	if (!r) {
+		switch (opts->empty_class_policy) {
 			case EMPTY_CLASS_MATCH_EMPTY:
-				warn.empty_class (get_line ());
-				return new NullOp;
+				warn.empty_class(get_line());
+				return RegExp::nil();
 			case EMPTY_CLASS_MATCH_NONE:
-				warn.empty_class (get_line ());
+				warn.empty_class(get_line());
 				break;
 			case EMPTY_CLASS_ERROR:
-				fatal ("empty character class");
+				fatal("empty character class");
 				break;
 		}
 	}
 
-	switch (opts->encoding.type ())
-	{
+	switch (opts->encoding.type()) {
 		case Enc::UTF16: return UTF16Range(r);
 		case Enc::UTF8:  return UTF8Range(r);
-		default:         return new MatchOp(r);
+		default:         return RegExp::sym(r);
 	}
 }
 
-RegExp * Scanner::mkDiff (RegExp * e1, RegExp * e2) const
+RegExp *Scanner::mkDiff(RegExp *re1, RegExp *re2) const
 {
-	MatchOp * m1 = dynamic_cast<MatchOp *> (e1);
-	MatchOp * m2 = dynamic_cast<MatchOp *> (e2);
-	if (m1 == NULL || m2 == NULL)
-	{
-		fatal("can only difference char sets");
+	if (re1 && re2
+		&& re1->tag == RegExp::SYM
+		&& re2->tag == RegExp::SYM) {
+		return cls(Range::sub(
+			re1->pld.sym.range,
+			re2->pld.sym.range));
 	}
-	Range * r = Range::sub (m1->match, m2->match);
-
-	return cls(r);
+	fatal("can only difference char sets");
+	return NULL;
 }
 
-RegExp * Scanner::mkDot() const
+RegExp *Scanner::mkDot() const
 {
-	Range * full = opts->encoding.fullRange();
 	uint32_t c = '\n';
-	if (!opts->encoding.encode(c))
+	if (!opts->encoding.encode(c)) {
 		fatalf("Bad code point: '0x%X'", c);
-	Range * ran = Range::sym (c);
-	Range * inv = Range::sub (full, ran);
-
-	return cls(inv);
+	}
+	return cls(Range::sub(
+		opts->encoding.fullRange(),
+		Range::sym(c)));
 }
 
 /*
@@ -192,10 +164,10 @@ RegExp * Scanner::mkDot() const
  * Also note that default range doesn't respect encoding policy
  * (the way invalid code points are treated).
  */
-RegExp * Scanner::mkDefault() const
+RegExp *Scanner::mkDefault() const
 {
-	Range * def = Range::ran (0, opts->encoding.nCodeUnits());
-	return new MatchOp(def);
+	return RegExp::sym(Range::ran(0,
+		opts->encoding.nCodeUnits()));
 }
 
 /*
@@ -208,34 +180,98 @@ RegExp * Scanner::mkDefault() const
  */
 
 // see note [counted repetition expansion]
-RegExp * repeat (RegExp * e, uint32_t n)
+RegExp *repeat(RegExp *re, uint32_t n)
 {
-	RegExp * r = NULL;
-	for (uint32_t i = 0; i < n; ++i)
-	{
-		r = doCat (r, e);
+	RegExp *r = NULL;
+	for (uint32_t i = 0; i < n; ++i) {
+		r = doCat(r, re);
 	}
 	return r;
 }
 
 // see note [counted repetition expansion]
-RegExp * repeat_from_to (RegExp * e, uint32_t n, uint32_t m)
+RegExp *repeat_from_to(RegExp *re, uint32_t n, uint32_t m)
 {
-	RegExp * r1 = repeat (e, n);
-	RegExp * r2 = NULL;
-	for (uint32_t i = n; i < m; ++i)
-	{
-		r2 = mkAlt (new NullOp, doCat (e, r2));
+	RegExp *r1 = repeat(re, n);
+	RegExp *r2 = NULL;
+	for (uint32_t i = n; i < m; ++i) {
+		r2 = mkAlt(
+			RegExp::nil(),
+			doCat(re, r2));
 	}
-	return doCat (r1, r2);
+	return doCat(r1, r2);
 }
 
 // see note [counted repetition expansion]
-RegExp * repeat_from (RegExp * e, uint32_t n)
+RegExp *repeat_from(RegExp *re, uint32_t n)
 {
-	RegExp * r1 = repeat (e, n);
-	RegExp * r2 = new CloseOp (e);
-	return doCat (r1, r2);
+	return doCat(
+		repeat(re, n),
+		RegExp::iter(re));
+}
+
+RegExp* RegExp::rule(const Loc &loc, RegExp *r1, RegExp *r2,
+	rule_rank_t rank, const Code *code, const std::string *newcond)
+{
+	RegExp *re = new RegExp(RULE);
+	re->pld.rule.re = r1;
+	re->pld.rule.ctx = r2;
+
+	uint32_t ctx_len = fixlen(r2);
+	// cannot emulate 'YYCURSOR -= N' operation with generic API
+	if (ctx_len != 0
+		&& opts->input_api.type() == InputAPI::CUSTOM)
+	{
+		ctx_len = ~0u;
+	}
+
+	re->pld.rule.info = new RuleInfo(loc, rank, code, newcond, ctx_len);
+	return re;
+}
+
+// shallow-copies regexps, but deep-copies rule info
+// used to duplicate <*> rules in conditions
+RegExp* RegExp::rule_copy(const RegExp *rule, rule_rank_t rank)
+{
+	RegExp *re = new RegExp(RULE);
+	re->pld.rule.re = rule->pld.rule.re;
+	re->pld.rule.ctx = rule->pld.rule.ctx;
+	const RuleInfo *info = rule->pld.rule.info;
+	re->pld.rule.info = new RuleInfo(info->loc, rank,
+		info->code, &info->newcond, info->ctx_len);
+	return re;
+}
+
+uint32_t fixlen(const RegExp *re)
+{
+	switch (re->tag) {
+		case RegExp::NIL:
+			return 0;
+		case RegExp::SYM:
+			return 1;
+		case RegExp::ALT:
+		{
+			const uint32_t l1 = fixlen(re->pld.alt.re1);
+			const uint32_t l2 = fixlen(re->pld.alt.re2);
+			return l1 == l2 ? l1 : ~0u;
+		}
+		case RegExp::CAT:
+		{
+			const uint32_t l1 = fixlen(re->pld.cat.re1);
+			if (l1 == ~0u) {
+				return ~0u;
+			}
+			const uint32_t l2 = fixlen(re->pld.cat.re2);
+			if (l2 == ~0u) {
+				return ~0u;
+			}
+			return l1 + l2;
+		}
+		case RegExp::ITER:
+		case RegExp::RULE:
+		default:
+			return ~0u;
+	}
 }
 
 } // namespace re2c

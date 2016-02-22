@@ -20,10 +20,6 @@
 #include "src/ir/regexp/encoding/enc.h"
 #include "src/ir/regexp/encoding/range_suffix.h"
 #include "src/ir/regexp/regexp.h"
-#include "src/ir/regexp/regexp_cat.h"
-#include "src/ir/regexp/regexp_close.h"
-#include "src/ir/regexp/regexp_null.h"
-#include "src/ir/regexp/regexp_rule.h"
 #include "src/ir/rule_rank.h"
 #include "src/ir/skeleton/skeleton.h"
 #include "src/parse/code.h"
@@ -52,9 +48,9 @@ static counter_t<rule_rank_t> rank_counter;
 static std::vector<std::string> condnames;
 static re2c::SpecMap  specMap;
 static Spec spec;
-static RuleOp *specNone = NULL;
-static RuleOpList       specStar;
-static RuleOp * star_default = NULL;
+static RegExp *specNone = NULL;
+static RuleList       specStar;
+static RegExp *star_default = NULL;
 static Scanner          *in = NULL;
 static Scanner::ParseMode  parseMode;
 static SetupMap            ruleSetupMap;
@@ -101,7 +97,7 @@ void context_rule
 			condnames.push_back (*it);
 		}
 
-		RuleOp * rule = new RuleOp
+		RegExp *rule = RegExp::rule
 			( loc
 			, expr
 			, look
@@ -138,10 +134,10 @@ void default_rule(CondList *clist, const Code * code)
 	context_check(clist);
 	for(CondList::const_iterator it = clist->begin(); it != clist->end(); ++it)
 	{
-		RuleOp * def = new RuleOp
+		RegExp * def = RegExp::rule
 			( code->loc
 			, in->mkDefault ()
-			, new NullOp
+			, RegExp::nil()
 			, rule_rank_t::def ()
 			, code
 			, NULL
@@ -234,7 +230,7 @@ rule:
 			{
 				in->fatal("condition or '<*>' required when using -c switch");
 			}
-			RuleOp * rule = new RuleOp
+			RegExp * rule = RegExp::rule
 				( $3->loc
 				, $1
 				, $2
@@ -248,10 +244,10 @@ rule:
 		{
 			if (opts->cFlag)
 				in->fatal("condition or '<*>' required when using -c switch");
-			RuleOp * def = new RuleOp
+			RegExp * def = RegExp::rule
 				( $2->loc
 				, in->mkDefault ()
-				, new NullOp
+				, RegExp::nil()
 				, rule_rank_t::def ()
 				, $2
 				, NULL
@@ -289,7 +285,7 @@ rule:
 	|	'<' TOKEN_STAR '>' expr look newcond TOKEN_CODE
 		{
 			context_check(NULL);
-			RuleOp * rule = new RuleOp
+			RegExp * rule = RegExp::rule
 				( $7->loc
 				, $4
 				, $5
@@ -305,7 +301,7 @@ rule:
 			assert($7);
 			context_check(NULL);
 			Loc loc (in->get_fname (), in->get_cline ());
-			RuleOp * rule = new RuleOp
+			RegExp * rule = RegExp::rule
 				( loc
 				, $4
 				, $5
@@ -333,10 +329,10 @@ rule:
 			{
 				in->fatal ("code to default rule '*' is already defined");
 			}
-			star_default = new RuleOp
+			star_default = RegExp::rule
 				( $5->loc
 				, in->mkDefault ()
-				, new NullOp
+				, RegExp::nil()
 				, rule_rank_t::def ()
 				, $5
 				, NULL
@@ -349,10 +345,10 @@ rule:
 			{
 				in->fatal("code to handle illegal condition already defined");
 			}
-			$$ = specNone = new RuleOp
+			$$ = specNone = RegExp::rule
 				( $3->loc
-				, new NullOp
-				, new NullOp
+				, RegExp::nil()
+				, RegExp::nil()
 				, rank_counter.next ()
 				, $3
 				, $2
@@ -368,10 +364,10 @@ rule:
 				in->fatal("code to handle illegal condition already defined");
 			}
 			Loc loc (in->get_fname (), in->get_cline ());
-			$$ = specNone = new RuleOp
+			$$ = specNone = RegExp::rule
 				( loc
-				, new NullOp
-				, new NullOp
+				, RegExp::nil()
+				, RegExp::nil()
 				, rank_counter.next ()
 				, NULL
 				, $3
@@ -430,7 +426,7 @@ newcond:
 look:
 		/* empty */
 		{
-			$$ = new NullOp;
+			$$ = RegExp::nil();
 		}
 	|	'/' expr
 		{
@@ -467,7 +463,7 @@ term:
 		}
 	|	term factor
 		{
-			$$ = new CatOp($1, $2);
+			$$ = RegExp::cat($1, $2);
 		}
 ;
 
@@ -481,13 +477,13 @@ factor:
 			switch($2)
 			{
 			case '*':
-				$$ = new CloseOp($1);
+				$$ = RegExp::iter($1);
 				break;
 			case '+':
-				$$ = new CatOp (new CloseOp($1), $1);
+				$$ = RegExp::cat(RegExp::iter($1), $1);
 				break;
 			case '?':
-				$$ = mkAlt($1, new NullOp());
+				$$ = mkAlt($1, RegExp::nil());
 				break;
 			}
 		}
@@ -505,7 +501,7 @@ factor:
 			{
 				$$ = repeat_from_to ($1, $2.min, $2.max);
 			}
-			$$ = $$ ? $$ : new NullOp;
+			$$ = $$ ? $$ : RegExp::nil();
 		}
 ;
 
@@ -651,9 +647,9 @@ void parse(Scanner& i, Output & o)
 				// merge <*> rules to all conditions with lowest priority
 				for (it = specMap.begin(); it != specMap.end(); ++it)
 				{
-					for (RuleOpList::const_iterator itOp = specStar.begin(); itOp != specStar.end(); ++itOp)
+					for (RuleList::const_iterator itOp = specStar.begin(); itOp != specStar.end(); ++itOp)
 					{
-						RuleOp *r = new RuleOp(*itOp, rank_counter.next());
+						RegExp *r = RegExp::rule_copy(*itOp, rank_counter.next());
 						it->second.add (r);
 					}
 					if (star_default)
@@ -755,7 +751,7 @@ void parse(Scanner& i, Output & o)
 
 void parse_cleanup()
 {
-	RegExp::vFreeList.clear();
+	RegExp::flist.clear();
 	Range::vFreeList.clear();
 	RangeSuffix::freeList.clear();
 	Code::freelist.clear();

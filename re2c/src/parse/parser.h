@@ -1,13 +1,12 @@
 #ifndef _RE2C_PARSE_PARSER_
 #define _RE2C_PARSE_PARSER_
 
-#include <map>
 #include <list>
+#include <map>
 #include <string>
 
 #include "src/codegen/output.h"
 #include "src/ir/regexp/regexp.h"
-#include "src/ir/regexp/regexp_rule.h"
 #include "src/parse/scanner.h"
 #include "src/parse/spec.h"
 
@@ -18,7 +17,7 @@ extern void parse(Scanner &, Output &);
 extern void parse_cleanup();
 
 typedef std::set<std::string> CondList;
-typedef std::list<RuleOp*> RuleOpList;
+typedef std::list<RegExp*> RuleList;
 typedef std::map<std::string, Spec> SpecMap;
 typedef std::map<std::string, std::pair<uint32_t, std::string> > SetupMap;
 typedef std::map<std::string, const Code *> DefaultMap;

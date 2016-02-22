@@ -1,59 +1,43 @@
 #include "src/ir/regexp/regexp.h"
-#include "src/ir/regexp/regexp_alt.h"
-#include "src/ir/regexp/regexp_cat.h"
-#include "src/ir/regexp/regexp_close.h"
-#include "src/ir/regexp/regexp_match.h"
-#include "src/ir/regexp/regexp_null.h"
-#include "src/ir/regexp/regexp_rule.h"
 
 namespace re2c
 {
 
-bool AltOp::nullable() const
+static bool nullable(const RegExp *re)
 {
-	return exp1->nullable()
-		|| exp2->nullable();
+	switch (re->tag) {
+		default:
+		case RegExp::NIL:
+			return true;
+		case RegExp::SYM:
+			return false;
+		case RegExp::ALT:
+			return nullable(re->pld.alt.re1)
+				|| nullable(re->pld.alt.re2);
+		case RegExp::CAT:
+			return nullable(re->pld.cat.re1)
+				&& nullable(re->pld.cat.re2);
+		case RegExp::ITER:
+			return true;
+		case RegExp::RULE:
+			return nullable(re->pld.rule.re);
+	}
 }
 
-bool CatOp::nullable() const
+void nullable_rules(const RegExp *re, std::vector<RuleInfo*> &rs)
 {
-	return exp1->nullable()
-		&& exp2->nullable();
-}
-
-bool CloseOp::nullable() const
-{
-	return true;
-}
-
-bool MatchOp::nullable() const
-{
-	return false;
-}
-
-bool NullOp::nullable() const
-{
-	return true;
-}
-
-bool RuleOp::nullable() const
-{
-	return exp->nullable();
-}
-
-void RegExp::nullable_rules(std::vector<RuleInfo*>&) const {}
-
-void AltOp::nullable_rules(std::vector<RuleInfo*> &rs) const
-{
-	exp1->nullable_rules(rs);
-	exp2->nullable_rules(rs);
-}
-
-void RuleOp::nullable_rules(std::vector<RuleInfo*> &rs) const
-{
-	if (exp->nullable())
-	{
-		rs.push_back(info);
+	switch (re->tag) {
+		case RegExp::ALT:
+			nullable_rules(re->pld.alt.re1, rs);
+			nullable_rules(re->pld.alt.re2, rs);
+			break;
+		case RegExp::RULE:
+			if (nullable(re->pld.rule.re)) {
+				rs.push_back(re->pld.rule.info);
+			}
+			break;
+		default:
+			break;
 	}
 }
 

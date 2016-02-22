@@ -88,10 +88,6 @@
 #include "src/ir/regexp/encoding/enc.h"
 #include "src/ir/regexp/encoding/range_suffix.h"
 #include "src/ir/regexp/regexp.h"
-#include "src/ir/regexp/regexp_cat.h"
-#include "src/ir/regexp/regexp_close.h"
-#include "src/ir/regexp/regexp_null.h"
-#include "src/ir/regexp/regexp_rule.h"
 #include "src/ir/rule_rank.h"
 #include "src/ir/skeleton/skeleton.h"
 #include "src/parse/code.h"
@@ -120,9 +116,9 @@ static counter_t<rule_rank_t> rank_counter;
 static std::vector<std::string> condnames;
 static re2c::SpecMap  specMap;
 static Spec spec;
-static RuleOp *specNone = NULL;
-static RuleOpList       specStar;
-static RuleOp * star_default = NULL;
+static RegExp *specNone = NULL;
+static RuleList       specStar;
+static RegExp *star_default = NULL;
 static Scanner          *in = NULL;
 static Scanner::ParseMode  parseMode;
 static SetupMap            ruleSetupMap;
@@ -169,7 +165,7 @@ void context_rule
 			condnames.push_back (*it);
 		}
 
-		RuleOp * rule = new RuleOp
+		RegExp *rule = RegExp::rule
 			( loc
 			, expr
 			, look
@@ -206,10 +202,10 @@ void default_rule(CondList *clist, const Code * code)
 	context_check(clist);
 	for(CondList::const_iterator it = clist->begin(); it != clist->end(); ++it)
 	{
-		RuleOp * def = new RuleOp
+		RegExp * def = RegExp::rule
 			( code->loc
 			, in->mkDefault ()
-			, new NullOp
+			, RegExp::nil()
 			, rule_rank_t::def ()
 			, code
 			, NULL
@@ -593,11 +589,11 @@ static const yytype_int8 yyrhs[] =
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint16 yyrline[] =
 {
-       0,   193,   193,   195,   199,   203,   211,   219,   223,   227,
-     231,   247,   264,   268,   274,   279,   285,   289,   303,   319,
-     324,   330,   345,   362,   381,   387,   395,   398,   405,   411,
-     421,   424,   432,   435,   442,   446,   453,   457,   464,   468,
-     475,   479,   494,   513,   517,   521,   525,   532,   542,   546
+       0,   189,   189,   191,   195,   199,   207,   215,   219,   223,
+     227,   243,   260,   264,   270,   275,   281,   285,   299,   315,
+     320,   326,   341,   358,   377,   383,   391,   394,   401,   407,
+     417,   420,   428,   431,   438,   442,   449,   453,   460,   464,
+     471,   475,   490,   509,   513,   517,   521,   528,   538,   542
 };
 #endif
 
@@ -1623,7 +1619,7 @@ yyreduce:
 			{
 				in->fatal("condition or '<*>' required when using -c switch");
 			}
-			RuleOp * rule = new RuleOp
+			RegExp * rule = RegExp::rule
 				( (yyvsp[(3) - (3)].code)->loc
 				, (yyvsp[(1) - (3)].regexp)
 				, (yyvsp[(2) - (3)].regexp)
@@ -1640,10 +1636,10 @@ yyreduce:
     {
 			if (opts->cFlag)
 				in->fatal("condition or '<*>' required when using -c switch");
-			RuleOp * def = new RuleOp
+			RegExp * def = RegExp::rule
 				( (yyvsp[(2) - (2)].code)->loc
 				, in->mkDefault ()
-				, new NullOp
+				, RegExp::nil()
 				, rule_rank_t::def ()
 				, (yyvsp[(2) - (2)].code)
 				, NULL
@@ -1699,7 +1695,7 @@ yyreduce:
 
     {
 			context_check(NULL);
-			RuleOp * rule = new RuleOp
+			RegExp * rule = RegExp::rule
 				( (yyvsp[(7) - (7)].code)->loc
 				, (yyvsp[(4) - (7)].regexp)
 				, (yyvsp[(5) - (7)].regexp)
@@ -1718,7 +1714,7 @@ yyreduce:
 			assert((yyvsp[(7) - (7)].str));
 			context_check(NULL);
 			Loc loc (in->get_fname (), in->get_cline ());
-			RuleOp * rule = new RuleOp
+			RegExp * rule = RegExp::rule
 				( loc
 				, (yyvsp[(4) - (7)].regexp)
 				, (yyvsp[(5) - (7)].regexp)
@@ -1755,10 +1751,10 @@ yyreduce:
 			{
 				in->fatal ("code to default rule '*' is already defined");
 			}
-			star_default = new RuleOp
+			star_default = RegExp::rule
 				( (yyvsp[(5) - (5)].code)->loc
 				, in->mkDefault ()
-				, new NullOp
+				, RegExp::nil()
 				, rule_rank_t::def ()
 				, (yyvsp[(5) - (5)].code)
 				, NULL
@@ -1774,10 +1770,10 @@ yyreduce:
 			{
 				in->fatal("code to handle illegal condition already defined");
 			}
-			(yyval.regexp) = specNone = new RuleOp
+			(yyval.regexp) = specNone = RegExp::rule
 				( (yyvsp[(3) - (3)].code)->loc
-				, new NullOp
-				, new NullOp
+				, RegExp::nil()
+				, RegExp::nil()
 				, rank_counter.next ()
 				, (yyvsp[(3) - (3)].code)
 				, (yyvsp[(2) - (3)].str)
@@ -1796,10 +1792,10 @@ yyreduce:
 				in->fatal("code to handle illegal condition already defined");
 			}
 			Loc loc (in->get_fname (), in->get_cline ());
-			(yyval.regexp) = specNone = new RuleOp
+			(yyval.regexp) = specNone = RegExp::rule
 				( loc
-				, new NullOp
-				, new NullOp
+				, RegExp::nil()
+				, RegExp::nil()
 				, rank_counter.next ()
 				, NULL
 				, (yyvsp[(3) - (3)].str)
@@ -1873,7 +1869,7 @@ yyreduce:
   case 32:
 
     {
-			(yyval.regexp) = new NullOp;
+			(yyval.regexp) = RegExp::nil();
 		;}
     break;
 
@@ -1922,7 +1918,7 @@ yyreduce:
   case 39:
 
     {
-			(yyval.regexp) = new CatOp((yyvsp[(1) - (2)].regexp), (yyvsp[(2) - (2)].regexp));
+			(yyval.regexp) = RegExp::cat((yyvsp[(1) - (2)].regexp), (yyvsp[(2) - (2)].regexp));
 		;}
     break;
 
@@ -1939,13 +1935,13 @@ yyreduce:
 			switch((yyvsp[(2) - (2)].op))
 			{
 			case '*':
-				(yyval.regexp) = new CloseOp((yyvsp[(1) - (2)].regexp));
+				(yyval.regexp) = RegExp::iter((yyvsp[(1) - (2)].regexp));
 				break;
 			case '+':
-				(yyval.regexp) = new CatOp (new CloseOp((yyvsp[(1) - (2)].regexp)), (yyvsp[(1) - (2)].regexp));
+				(yyval.regexp) = RegExp::cat(RegExp::iter((yyvsp[(1) - (2)].regexp)), (yyvsp[(1) - (2)].regexp));
 				break;
 			case '?':
-				(yyval.regexp) = mkAlt((yyvsp[(1) - (2)].regexp), new NullOp());
+				(yyval.regexp) = mkAlt((yyvsp[(1) - (2)].regexp), RegExp::nil());
 				break;
 			}
 		;}
@@ -1966,7 +1962,7 @@ yyreduce:
 			{
 				(yyval.regexp) = repeat_from_to ((yyvsp[(1) - (2)].regexp), (yyvsp[(2) - (2)].extop).min, (yyvsp[(2) - (2)].extop).max);
 			}
-			(yyval.regexp) = (yyval.regexp) ? (yyval.regexp) : new NullOp;
+			(yyval.regexp) = (yyval.regexp) ? (yyval.regexp) : RegExp::nil();
 		;}
     break;
 
@@ -2339,9 +2335,9 @@ void parse(Scanner& i, Output & o)
 				// merge <*> rules to all conditions with lowest priority
 				for (it = specMap.begin(); it != specMap.end(); ++it)
 				{
-					for (RuleOpList::const_iterator itOp = specStar.begin(); itOp != specStar.end(); ++itOp)
+					for (RuleList::const_iterator itOp = specStar.begin(); itOp != specStar.end(); ++itOp)
 					{
-						RuleOp *r = new RuleOp(*itOp, rank_counter.next());
+						RegExp *r = RegExp::rule_copy(*itOp, rank_counter.next());
 						it->second.add (r);
 					}
 					if (star_default)
@@ -2443,7 +2439,7 @@ void parse(Scanner& i, Output & o)
 
 void parse_cleanup()
 {
-	RegExp::vFreeList.clear();
+	RegExp::flist.clear();
 	Range::vFreeList.clear();
 	RangeSuffix::freeList.clear();
 	Code::freelist.clear();
