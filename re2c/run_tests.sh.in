@@ -54,14 +54,21 @@ do
 done
 echo "Running in ${threads} thread(s)"
 
-test_srcdir=""
-if [ ${#tests[@]} -eq 0 ]
-then
-    test_srcdir="@top_srcdir@/test"
-    tests=(`find $test_srcdir -name '*.re' | sort`)
-fi
 test_blddir="test_"`date +%y%m%d%H%M%S`
 rm -rf $test_blddir && mkdir $test_blddir
+
+# preserve directory structure unless given explicit args
+if [ ${#tests[@]} -eq 0 ]
+then
+    cp -R "@top_srcdir@/test"/* $test_blddir
+    find $test_blddir -type f ! -name '*.re' -a ! -name '*.c' -exec rm {} \;
+else
+    for f in ${tests[@]}
+    do
+        cp $f ${f%.re}.c $test_blddir
+    done
+fi
+tests=(`find $test_blddir -name '*.re' | sort`)
 
 tests_per_thread=$((${#tests[@]} / threads + 1))
 packs=()
@@ -108,16 +115,11 @@ run_pack() {
 	do
 		cd $test_blddir
 
-		# preserve directory structure unless given explicit args
-		if [ -z "$test_srcdir" ]
-		then
-			local outx=`basename $x`
-		else
-			# remove prefix
-			local outx=${x:$((${#test_srcdir} + 1))}
-			mkdir -p `dirname $outx`
-		fi
+		# remove prefix
+		local outx=${x:$((${#test_blddir} + 1))}
 		local outc="${outx%.re}.c"
+		local c="${outx%.re}.c.orig"
+		mv $outc $c
 
 		# filename (dot short* (long arg?)*)? ext
 		# must keep to POSIX standard: no syntactic sugar like +,?, etc.
@@ -178,17 +180,14 @@ run_pack() {
 				&& rm -rf "$tmpdir"
 
 			# compare results
-			local c="${x%.re}.c"
 			local status=""
-			[ -z $status ] && status=`[ -f "../$c" ] || echo "MISSING"`
-			[ -z $status ] && status=`$diff_prog "../$c" "$outc" > "$outc.diff" || echo "FAIL"`
+			[ -z $status ] && status=`[ -f "$c" ] || echo "MISSING"`
+			[ -z $status ] && status=`$diff_prog "$c" "$outc" > "$outc.diff" || echo "FAIL"`
 			[ -z $status ] && status="OK"
 			if [ $status = "OK" ]
 			then
-				rm "$outc" "$outc.diff"
+				rm "$outc" "$outc.diff" $c $outx
 			else
-				cp -f "../$x" "$outx"
-				cp -f "../$c" "$outc.orig"
 				local errcnt=$(($errcnt + 1))
 			fi
 
