@@ -118,8 +118,6 @@ run_pack() {
 		# remove prefix
 		local outx=${x:$((${#test_blddir} + 1))}
 		local outc="${outx%.re}.c"
-		local c="${outx%.re}.c.orig"
-		mv $outc $c
 
 		# filename (dot short* (long arg?)*)? ext
 		# must keep to POSIX standard: no syntactic sugar like +,?, etc.
@@ -140,6 +138,8 @@ run_pack() {
 
 		if [ $skeleton -eq 1 ]
 		then
+			rm -f "$outc"
+
 			local switches="$switches --skeleton -Werror-undefined-control-flow"
 
 			local status=0
@@ -156,12 +156,14 @@ run_pack() {
 			printf "%-25s $outx\n" "$msg"
 
 			if [ $status -le 1 ]; then
-				[ $keep_tmp_files -eq 0 ] && rm -f "$outc"{,.line*.{input,keys},.stderr,.out}
+				[ $keep_tmp_files -eq 0 ] && rm -f "$outx" "$outc"{,.line*.{input,keys},.stderr,.out}
 			else
-				cp -f "../$x" "$outx"
 				local errcnt=$(($errcnt + 1))
 			fi
 		else
+			local c="${outx%.re}.c.orig"
+			mv "$outc" "$c"
+
 			# create sandbox
 			tmpdir="tmp_$log" \
 				&& mkdir "$tmpdir" \
@@ -186,7 +188,7 @@ run_pack() {
 			[ -z $status ] && status="OK"
 			if [ $status = "OK" ]
 			then
-				rm "$outc" "$outc.diff" $c $outx
+				rm "$outc" "$outc.diff" "$c" "$outx"
 			else
 				local errcnt=$(($errcnt + 1))
 			fi
