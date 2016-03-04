@@ -1,8 +1,6 @@
 Reuse
 -----
 
-.. include:: ../home.rst
-
 Reuse mode is controlled by ``-r --reusable`` option.
 Allows reuse of scanner definitions with ``/*!use:re2c */`` after ``/*!rules:re2c */``.
 In this mode no ``/*!re2c */`` block and exactly one ``/*!rules:re2c */`` must be present.

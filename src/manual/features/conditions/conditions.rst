@@ -1,7 +1,8 @@
 Conditions
 ----------
 
-.. include:: ../home.rst
+.. toctree::
+    :hidden:
 
 You can preceed regular expressions with a list of condition names when
 using the ``-c`` switch. In this case ``re2c`` generates scanner blocks for

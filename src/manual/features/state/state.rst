@@ -1,7 +1,8 @@
 State
 -----
 
-.. include:: ../home.rst
+.. toctree::
+    :hidden:
 
 When the ``-f`` flag is specified, ``re2c`` generates a scanner that can
 store its current state, return to the caller, and later resume

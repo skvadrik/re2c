@@ -8,5 +8,5 @@ main =
             $ Snap.setAccessLog Snap.ConfigNoLog
             $ Snap.setErrorLog  Snap.ConfigNoLog
             $ Snap.emptyConfig
-    in  Snap.httpServe config $ Snap.serveDirectory "obj/src"
+    in  Snap.httpServe config $ Snap.serveDirectory "obj"
 

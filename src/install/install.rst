@@ -2,8 +2,8 @@
 Install
 =======
 
-.. include:: ../home.rst
-.. include:: ../contents.rst
+.. toctree::
+    :hidden:
 
 Download
 ========
@@ -17,6 +17,10 @@ Tarballs
 * `re2c-0.13.7.5.tar.gz <https://github.com/skvadrik/re2c/releases/download/0.13.7.5/re2c-0.13.7.5.tar.gz>`_
 * `re2c-0.13.6.tar.gz <https://github.com/skvadrik/re2c/releases/download/0.13.6/re2c-0.13.6.tar.gz>`_
 * `re2c-0.13.5.tar.gz <http://sourceforge.net/projects/re2c/files/re2c/0.13.5/re2c-0.13.5.tar.gz/download>`_
+
+You can find other releases `here <https://sourceforge.net/projects/re2c/files/old/>`_
+(but be aware that they are hidden for a good reason:
+most of them contain bugs that have been fixed in the next minor release).
 
 Sources
 -------

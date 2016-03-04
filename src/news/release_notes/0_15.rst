@@ -2,8 +2,6 @@
 Release 0.15
 ============
 
-.. include:: ../home.rst
-
 This release started out in spring 2015 as a relatively simple code cleanup.
 
 I focused on the following problem: re2c used to repeat the whole generation process multiple times.

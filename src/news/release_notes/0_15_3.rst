@@ -2,9 +2,6 @@
 Release 0.15.3
 ==============
 
-.. include:: ../home.rst
-
-
 This release fixes multiple build-time and run-time failures on OS X, FreeBSD and Windows.
 Most of the problems were reported and fixed by Oleksii Taran (on OS X)
 and Sergei Trofimovich (on FreeBSD and Windows).

@@ -17,7 +17,7 @@ Almost occasionally I found a real-world program that does use fixed condition n
 Here is the carcass of this program:
 
 .. code-block:: cpp
-    :number-lines:
+    :linenos:
 
     #define NORMAL 0
     #define PRE_RAW 1

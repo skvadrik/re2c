@@ -1,8 +1,8 @@
 [-Wunreachable-rules]
 --------------------------
 
-.. include:: ../home.rst
-.. include:: ../../../contents.rst
+.. toctree::
+    :hidden:
 
 .. include:: simple_example.rst
 .. include:: infinite_rules.rst

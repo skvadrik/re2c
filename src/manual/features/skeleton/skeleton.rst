@@ -1,9 +1,8 @@
 Skeleton
 --------
 
-.. include:: ../home.rst
-.. include:: ../../../contents.rst
-
+.. toctree::
+    :hidden:
 
 With ``-S, --skeleton`` option re2c ignores all non-re2c code and generates a self-contained C program
 that can be further compiled and executed.

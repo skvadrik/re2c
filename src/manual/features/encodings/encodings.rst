@@ -1,7 +1,8 @@
 Encodings
 ---------
 
-.. include:: ../home.rst
+.. toctree::
+    :hidden:
 
 ``re2c`` supports the following encodings: ASCII (default), EBCDIC (``-e``),
 UCS-2 (``-w``), UTF-16 (``-x``), UTF-32 (``-u``) and UTF-8 (``-8``).

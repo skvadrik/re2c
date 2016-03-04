@@ -2,8 +2,8 @@
 Changelog
 =========
 
-.. include:: ../home.rst
-.. include:: ../../contents.rst
+.. toctree::
+    :hidden:
 
 .. include:: 0_16.rst
 .. include:: 0_15.rst

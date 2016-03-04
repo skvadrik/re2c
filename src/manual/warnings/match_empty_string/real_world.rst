@@ -10,7 +10,7 @@ Typos in definitions
 Here is the skeleton of REXX lexer (the very lexer which motivated Peter to write re2c ``:)``).
 
 .. code-block:: cpp
-    :number-lines:
+    :linenos:
 
     /*!re2c
         all    = [\000-\377];
@@ -154,7 +154,7 @@ Here is the skeleton of REXX lexer (the very lexer which motivated Peter to writ
 
 ```re2c -Wmatch-empty-string``` warns:
 
-.. code-block::
+.. code-block:: none
 
     re2c: warning: line 133: rule matches empty string [-Wmatch-empty-string]
 
@@ -171,11 +171,9 @@ Sure, it's just a typo and the author meant ``symchr+``.
 Skipping uninteresting stuff
 ............................
 
-Like spaces.
-One often needs to skip variable number of them:
+One often needs to skip variable number of, say, spaces:
 
 .. code-block:: cpp
-    :number-lines:
 
     /*!re2c
         TABS_AND_SPACES = [ \t]*;
@@ -184,7 +182,6 @@ One often needs to skip variable number of them:
 This definition is ok when used inside of another (non-nullable) rule:
 
 .. code-block:: cpp
-    :number-lines:
 
     /*!re2c
         TABS_AND_SPACES = [ \t]*;

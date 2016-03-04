@@ -2,10 +2,8 @@
 Syntax
 ======
 
-.. include:: ../home.rst
-.. include:: ../../contents.rst
-
-
+.. toctree::
+    :hidden:
 
 Code for ``re2c`` consists of a set of `rules`_, `definitions`_ and
 `configurations`_.

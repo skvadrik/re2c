@@ -1,8 +1,8 @@
 [-Wuseless-escape]
 --------------------------
 
-.. include:: ../home.rst
-.. include:: ../../../contents.rst
+.. toctree::
+    :hidden:
 
 .. include:: simple_example.rst
 .. include:: how_it_works.rst

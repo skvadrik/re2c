@@ -1,8 +1,8 @@
 [-Wundefined-control-flow]
 --------------------------
 
-.. include:: ../home.rst
-.. include:: ../../../contents.rst
+.. toctree::
+    :hidden:
 
 .. include:: simple_example.rst
 .. include:: default_vs_any.rst

@@ -1,7 +1,8 @@
 Generic API
 -----------
 
-.. include:: ../home.rst
+.. toctree::
+    :hidden:
 
 ``re2c`` usually operates on input using pointer-like primitives
 ``YYCURSOR``, ``YYMARKER``, ``YYCTXMARKER`` and ``YYLIMIT``.

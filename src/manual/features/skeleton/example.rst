@@ -1,23 +1,22 @@
 Example
 ~~~~~~~
 
-`[hex2.re] <hex2.re>`_
+:download:`[hex2.re] <hex2.re.txt>`
 
-.. include:: hex2.re
-    :code: c
-    :number-lines:
+.. literalinclude:: hex2.re.txt
+    :language: c
 
 Here is a very simple program (it tries to match two-digit hexadecimal numbers).
 We can see the generated DFA using ```re2c -D hex2.re | dot -Gratio=0.5 -Tpng -o example.png```:
 
 .. image:: example.png
-    :width: 40%
+    :width: 50%
 
 Given this program, ```re2c -S -o example.c hex2.re``` generates three files:
 ``example.c`` (main program), ``example.c.line4.input`` (input data) and ``example.c.line4.keys`` (expected match results).
 First, let's look at the generated strings:
 
-`[example.c.line4.input] <example.c.line4.input>`_
+:download:`[example.c.line4.input] <example.c.line4.input>`
 
 .. code-block:: bash
 
@@ -59,7 +58,7 @@ Byte sequences correspond to the paths in DFA.
 All strings are glued together, so it's hard to tell where is the end of one string and the beginning of another.
 For that re2c generates keys:
 
-`[example.c.line4.keys] <example.c.line4.keys>`_
+:download:`[example.c.line4.keys] <example.c.line4.keys>`
 
 .. code-block:: bash
 
@@ -114,11 +113,11 @@ In our case each triplet occupies three bytes.
 
 And finally, the program itself:
 
-`[example.c] <example.c>`_
+:download:`[example.c] <example.c.txt>`
 
-.. include:: example.c
-    :code: c
-    :number-lines:
+.. literalinclude:: example.c.txt
+    :language: c
+    :linenos:
 
 re2c generated two auxilary functions: ``read_file`` and ``action_line4``.
 ``read_file`` is used to map ``.input`` and ``.keys`` files into memory (this function is shared between all lexers).

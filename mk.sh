@@ -1,9 +1,6 @@
 #!/bin/sh
 
-objdir="obj" \
-    && cd "$objdir" \
-    && make -f ../Makefile -j5 \
-    && cd ..
+sphinx-build -b html src obj
 
 runhaskell launch.hs
 

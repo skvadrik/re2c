@@ -1,17 +1,15 @@
 Parsing integers (conditions)
 -----------------------------
 
-.. include:: home.rst
-
 This example does exactly the same as `Parsing integers (multiple re2c blocks) <example_04.html>`_ example,
 but in a slightly different manner: it uses re2c conditions instead of blocks.
 Conditions allow to encode multiple interconnected lexers within a single re2c block.
 
-`[05_parsing_integers_conditions.re] <05_parsing_integers_conditions.re>`_
+:download:`[05_parsing_integers_conditions.re] <05_parsing_integers_conditions.re.txt>`
 
-.. include:: 05_parsing_integers_conditions.re
-    :code: cpp
-    :number-lines:
+.. literalinclude:: 05_parsing_integers_conditions.re.txt
+    :language: cpp
+    :linenos:
 
 Notes:
 

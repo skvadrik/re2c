@@ -2,7 +2,7 @@ A simple example
 ~~~~~~~~~~~~~~~~
 
 .. code-block:: cpp
-    :number-lines:
+    :linenos:
 
     /*!re2c
         *                        {}
@@ -13,7 +13,7 @@ A simple example
 
 Given this code, ```re2c -Wuseless-escape``` reports a bunch of warnings:
 
-.. code-block::
+.. code-block:: none
 
     re2c: warning: line 3: column 11: escape has no effect: '\A' [-Wuseless-escape]
     re2c: warning: line 3: column 15: escape has no effect: '\'' [-Wuseless-escape]
@@ -37,7 +37,7 @@ Useless escapes are ignored: the escaped symbol is treated as not escaped (``\A`
 The above example should be fixed as follows:
 
 .. code-block:: cpp
-    :number-lines:
+    :linenos:
 
     /*!re2c
         *                    {}

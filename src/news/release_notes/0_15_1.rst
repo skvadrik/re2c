@@ -2,9 +2,6 @@
 Release 0.15.1
 ==============
 
-.. include:: ../home.rst
-
-
 This release fixes an error in the testing script:
 it used locale-sensitive ``sort`` utility,
 which resulted in different order of files on different platforms.

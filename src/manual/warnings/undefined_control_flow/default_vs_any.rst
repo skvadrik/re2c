@@ -5,7 +5,6 @@ When the the world was young and re2c didn't have default rule ``*`` (that is, b
 everyone used ``[^]`` as default rule:
 
 .. code-block:: cpp
-    :number-lines:
 
     /*!re2c
         // ... normal rules ...
@@ -29,7 +28,7 @@ In variable-width encodings it consumes variable number of code units and may no
 The example above compiles without warnings with any fixed-width encoding (ASCII by default).
 However, with UTF-8 encoding ```re2c -i8 -Wundefined-control-flow``` says:
 
-.. code-block::
+.. code-block:: none
 
     re2c: warning: line 4: control flow is undefined for strings that match 
             '[\x80-\xC1\xF5-\xFF]'
@@ -48,7 +47,7 @@ One would expect that with UTF-16 (another variable-width encoding) re2c will al
 This is because by default re2c treats Unicode surrogates as normal code points (for backwards compatibility reasons).
 If we tell re2c to exclude surrogates, ```re2c -ix --encoding-policy fail -Wundefined-control-flow``` will warn:
 
-.. code-block::
+.. code-block:: none
 
     re2c: warning: line 4: control flow is undefined for strings that match 
             '[\xDC00-\xDFFF]'

@@ -2,12 +2,11 @@
 Manual
 ======
 
-.. include:: ../home.rst
+.. toctree::
+    :hidden:
 
-★
-
-* `Options   <options/options.html>`_
-* `Warnings  <warnings/warnings.html>`_
-* `Syntax    <syntax/syntax.html>`_
-* `Features  <features/features.html>`_
+    Options <options/options>
+    Warnings <warnings/warnings>
+    Syntax <syntax/syntax>
+    Features <features/features>
 

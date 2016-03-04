@@ -2,9 +2,6 @@
 Release 0.15.2
 ==============
 
-.. include:: ../home.rst
-
-
 This release fixes a bug in build system (`reported <https://bugs.gentoo.org/show_bug.cgi?id=566620>`_ on Gentoo bugtracker).
 Fix adds missing dependency (lexer depends on bison-generated header).
 It seems that the dependency has always been missing, build order just happened to be correct.

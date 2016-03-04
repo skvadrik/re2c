@@ -1,0 +1,14 @@
+{% extends "basic/layout.html" %}
+
+{% block linktags %}
+    <link rel="alternate" type="application/atom+xml" href="{{ pathto('_static/feed/atom.xml', 1) }}" title="Atom 1.0" />
+    {{ linktags }}
+{% endblock %}
+
+{# remove navigation header and footer #}
+{% block relbar1 %}{% endblock %}
+{% block relbar2 %}{% endblock %}
+
+{# put the sidebar before the body #}
+{% block sidebar1 %}{{ sidebar() }}{% endblock %}
+{% block sidebar2 %}{% endblock %}

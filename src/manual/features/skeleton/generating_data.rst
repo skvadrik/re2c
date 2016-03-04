@@ -27,7 +27,6 @@ The algorithm's implementation is limited by ~1Gb of edges and consumes constant
 We can study the algorithm simply alternating repetition counter in the example above:
 
 .. code-block:: cpp
-    :number-lines:
 
     /*!re2c
         *              {}
@@ -38,21 +37,21 @@ Each increment of the repetition counter adds 256 new edges the DFA.
 Compare the following pictures of DFA with one, two and three repetitions:
 
 .. image:: example_next.png
-    :width: 70%
+    :width: 80%
 
 We will use a simple script that dumps re2c source file,
 generates skeleton program and measures the size of ``.input`` and ``.keys`` files:
 
-`[gen.sh] <gen.sh>`_
+:download:`[gen.sh] <gen.sh.txt>`
 
-.. include:: gen.sh
-    :code: bash
-    :number-lines:
+.. literalinclude:: gen.sh.txt
+    :language: bash
+    :linenos:
 
 Script runs in a loop and expects two arguments:
 lower and upped bounds of the iteration counter.
 
-.. code-block::
+.. code-block:: none
 
     $ ./gen.sh 1 16
          iters     edges     input      keys

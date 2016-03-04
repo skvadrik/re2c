@@ -77,7 +77,7 @@ One special case of failure is caused by undefined control flow in the generated
 Suppose, for example, that we forgot to handle default case in the example above:
 
 .. code-block:: cpp
-    :number-lines:
+    :linenos:
 
     /*!re2c
         [0-9a-fA-F]{2} {}

@@ -1,8 +1,6 @@
 Recognizing strings: the need for YYMAXFILL
 -------------------------------------------
 
-.. include:: home.rst
-
 This example is about recognizing strings.
 Strings (in generic sense) are different from other kinds of lexemes: they can contain *arbitrary* characters.
 It makes them a way more difficult to lex: unlike `Recognizing integers: the sentinel method <example_01.html>`_ example,
@@ -40,11 +38,11 @@ Common hack is to pad input with a few fake characters that **do not form a vali
 The length of padding depends on the maximal argument to ``YYFILL``
 (this value is called ``YYMAXFILL`` and can be generated using ``/*!max:re2c*/`` directive).
 
-`[02_recognizing_strings.re] <02_recognizing_strings.re>`_
+:download:`[02_recognizing_strings.re] <02_recognizing_strings.re.txt>`
 
-.. include:: 02_recognizing_strings.re
-    :code: cpp
-    :number-lines:
+.. literalinclude:: 02_recognizing_strings.re.txt
+    :language: cpp
+    :linenos:
 
 Notes:
 

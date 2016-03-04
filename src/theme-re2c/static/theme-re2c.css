@@ -1,0 +1,118 @@
+
+
+
+body {
+    font-family: sans-serif;
+    margin: 0;
+}
+
+
+
+div.document {
+    margin: 0 0 0 20%;
+    padding: 1em;
+    text-align: justify;
+    color: darkslategray;
+}
+div.document a { color: steelblue; }
+div.document h1,
+div.document h2,
+div.document h3,
+div.document h4,
+div.document h5,
+div.document h6 {
+    font-weight: normal;
+    padding: 1em 0 0 0;
+}
+div.document h1 { text-align: center; }
+div.document h2 { border-bottom: 1px solid; }
+div.document h3 { border-bottom: 1px dotted; }
+div.document table, tr, td, th {
+    border: none;
+    padding: 0em 0.2em 0em 0.2em;
+}
+div.document img {
+    display: block;
+    border: 1px dotted;
+    margin: auto;
+}
+
+div.document img.feed {
+    display: inline;
+    border: none;
+    width: 2em;
+    vertical-align: middle;
+}
+div.document code {
+    font-size: 14px;
+    padding: 1px;
+    border: 1px solid gainsboro;
+    background-color: aliceblue;
+}
+/* :download: role; should look like a normal link rather than inline code block */
+div.document a code.download {
+    font-family: sans;
+    font-size: 1em;
+    padding: none;
+    border: none;
+    background-color: transparent;
+}
+
+
+div.footer {
+    margin: 0 0 0 20%;
+    padding: 1em;
+    float: right;
+    font-style: italic;
+    color: gainsboro;
+}
+
+
+
+div.sphinxsidebar {
+    border-right: 1px solid darkgray;
+    width: 20%;
+    text-align: left;
+    position: fixed;
+    background-color: gainsboro;
+    overflow: auto;
+    height: 100%;
+    color: midnightblue;
+}
+div.sphinxsidebar a { color: midnightblue; }
+div.sphinxsidebarwrapper { padding: 1em; }
+div.sphinxsidebarwrapper ul {
+    list-style-type: disc;
+    padding: 0 0 0 1em;
+    font-size: 0.95em;
+    color: darkgray;
+}
+div.sphinxsidebarwrapper h1,
+div.sphinxsidebarwrapper h2,
+div.sphinxsidebarwrapper h3,
+div.sphinxsidebarwrapper h4,
+div.sphinxsidebarwrapper h5,
+div.sphinxsidebarwrapper h6 {
+    padding: 0 0 0.1em 0;
+    border-bottom: 1px solid;
+}
+div.sphinxsidebarwrapper div.re2c-logo {
+    background-color: silver;
+    font-family: Courier;
+    font-size: 1.5em;
+    text-align: center;
+    border: 1px solid darkgray;
+    overflow: hidden;
+}
+div.re2c-toc-local {
+    padding: 0.5em;
+    background-color: linen;
+    border: 1px solid darkgray;
+    overflow: auto;
+}
+
+
+
+.headerlink { display: none; }
+
+a:focus { outline: none; }

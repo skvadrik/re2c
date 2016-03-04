@@ -8,7 +8,7 @@ However, in some cases the warning is quite interesting.
 Here is an example of a real-world lexer (all the non-re2c code has beed removed):
 
 .. code-block:: cpp
-    :number-lines:
+    :linenos:
 
     /*!re2c
         re2c:yyfill:check = 0;
@@ -68,7 +68,7 @@ Here is an example of a real-world lexer (all the non-re2c code has beed removed
 
 ```re2c -cF -Wunreachable-rules``` says:
 
-.. code-block::
+.. code-block:: none
 
     re2c: warning: line 54: unreachable rule in condition 'ST_DOUBLE_QUOTES' (shadowed by rules at lines 47, 48) [-Wunreachable-rules]
     re2c: warning: line 49: unreachable rule in condition 'ST_OFFSET' (shadowed by rule at line 45) [-Wunreachable-rules]
@@ -79,13 +79,13 @@ Here is an example of a real-world lexer (all the non-re2c code has beed removed
 The interesting part is the unreachable rule on line 49 in conditions ``ST_OFFSET`` and ``ST_SECTION_VALUE``.
 The rule is ``{WHITESPACE}``:
 
-.. code-block::
+.. code-block:: none
 
     WHITESPACE [ \t]+
 
 re2c claims that it is shadowed by the rule on line 45, which is ``{SECTION_VALUE_CHARS}+``:
 
-.. code-block::
+.. code-block:: none
 
     ANY_CHAR            (.|[\n\t])
     LITERAL_DOLLAR      ("$"([^{\000]|("\\"{ANY_CHAR})))

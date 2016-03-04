@@ -2,8 +2,8 @@
 About
 =====
 
-.. include:: ../home.rst
-.. include:: ../contents.rst
+.. toctree::
+    :hidden:
 
 Authors
 -------
@@ -43,5 +43,5 @@ be appreciated.
 Version
 -------
 
-This page describes ``re2c`` version 0.16 packaged on 21 January 2016.
+This page describes re2c version |version|.
 

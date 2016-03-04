@@ -2,7 +2,8 @@
 Options
 =======
 
-.. include:: ../home.rst
+.. toctree::
+    :hidden:
 
 .. include:: options_list.rst
 

@@ -2,8 +2,6 @@
 Release 0.16
 ==============
 
-.. include:: ../home.rst
-
 This release adds a very important step in the process of code generation:
 minimization of the underlying DFA (deterministic finite automaton).
 Simply speaking, this means that re2c now generates less code
