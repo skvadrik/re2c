@@ -48,8 +48,8 @@ Sourceforge is used as backup repository and to host mail
 News & updates
 --------------
 
-.. |feed| image:: _static/feed/feed.png
-    :target: _static/feed/atom.xml
+.. |feed| image:: feed/feed/feed.png
+    :target: feed/atom.xml
     :class:  feed
     :width:  2em
 

@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
     <title>re2c</title>
-    <link rel="self" href="http://re2c.org/_static/feed/atom.xml"/>
+    <link rel="self" href="http://re2c.org/feed/atom.xml"/>
     <id>http://re2c.org/</id>
     <updated>2016-01-21T00:00:00Z</updated>
 
