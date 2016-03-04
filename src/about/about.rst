@@ -10,7 +10,7 @@ Authors
 
 Originally written by Peter Bumbulis (peter@csg.uwaterloo.ca)
 and described in research article
-`"RE2C: a more versatile scanner generator" <1994_bumbulis_cowan_re2c_a_more_versatile_scanner_generator.pdf>`_
+:download:`"RE2C: a more versatile scanner generator" <1994_bumbulis_cowan_re2c_a_more_versatile_scanner_generator.pdf>`
 by Peter Bumbulis, Donald D. Cowan, 1994,
 ACM Letters on Programming Languages and Systems (LOPLAS).
 

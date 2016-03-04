@@ -23,7 +23,7 @@ If the check fails, lexer calls ``YYFILL(n)``, which can either supply at least 
 
 For those interested in the internal re2c algorithm used to determine checkpoints,
 here is a quote from the original paper
-`"RE2C: a more versatile scanner generator" <../about/1994_bumbulis_cowan_re2c_a_more_versatile_scanner_generator.pdf>`_
+:download:`"RE2C: a more versatile scanner generator" <../about/1994_bumbulis_cowan_re2c_a_more_versatile_scanner_generator.pdf>`
 by Peter Bumbulis, Donald D. Cowan, 1994, ACM Letters on Programming Languages and Systems (LOPLAS):
 
     *A set of key states can be determined by discovering the strongly-connected components (SCCs) of the
