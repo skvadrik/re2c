@@ -3,7 +3,7 @@ Features
 ========
 
 .. toctree::
-    :hidden:
+    :maxdepth: 1
 
     Conditions     <conditions/conditions>
     State          <state/state>

@@ -3,7 +3,7 @@ Manual
 ======
 
 .. toctree::
-    :hidden:
+    :maxdepth: 1
 
     Options <options/options>
     Warnings <warnings/warnings>

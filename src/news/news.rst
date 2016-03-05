@@ -3,7 +3,7 @@ News
 ====
 
 .. toctree::
-    :hidden:
+    :maxdepth: 1
 
     Release 0.16 <release_notes/0_16>
     Release 0.15.3 <release_notes/0_15_3>

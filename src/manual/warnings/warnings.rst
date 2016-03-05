@@ -2,8 +2,12 @@
 Warnings
 ========
 
+.. include:: warnings_general.rst
+
+re2c has the following warnings:
+
 .. toctree::
-    :hidden:
+    :maxdepth: 1
 
     [-Wundefined-control-flow] <undefined_control_flow/wundefined_control_flow>
     [-Wunreachable-rules]      <unreachable_rules/wunreachable_rules>
@@ -12,6 +16,3 @@ Warnings
     [-Wswapped-range]          <swapped_range/wswapped_range>
     [-Wempty-character-class]  <empty_character_class/wempty_character_class>
     [-Wmatch-empty-string]     <match_empty_string/wmatch_empty_string>
-
-.. include:: warnings_general.rst
-

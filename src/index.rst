@@ -13,20 +13,31 @@ re2c
 
 
 re2c is a lexer generator for C/C++.
-It has two key features:
+Its key features are:
 
-* Very fast lexers. The generated code is like a carefully tuned hand-crafted C/C++ lexer.
-  It's because re2c generates minimalistic hard-coded DFA
-  (as opposed to full-featured table based lexers).
+*   Very fast lexers: the generated code is as good as a carefully tuned hand-crafted C/C++ lexer.
+    It's because re2c generates minimalistic hard-coded state machine
+    (as opposed to full-featured table-based lexers).
 
-* Very flexible lexers. The generated code can be wired into virtually any environment.
-  Instead of exposing a traditional API, re2c gives you access to its internals,
-  so that you can mess with the guts of your lexer as much as you need.
-  Of course, this can lead to all sorts of bad things.
-  With great flexibility comes great responsibility. ;)
-  Be sure to take a look at `examples <examples/examples.html>`_,
-  they cover a lot of real-world cases and
-  shed some light on dark corners of re2c API.
+*   Flexible API: the generated code can be wired into virtually any environment.
+    Instead of exposing traditional ``yylex()`` style API, re2c exposes its internals.
+    This gives you several opportunities.
+    First, you can avoid unnecessary overhead: drop useless runtime checks, do inplace lexing, etc.
+    Second, you can adjust lexer to your particular input model.
+    Third, you can make all sorts of strange hacks.
+    Of course, this means that you have to be careful:
+    with great power comes great responsibility.
+    Be sure to take a look at `examples <examples/examples.html>`_,
+    they cover a lot of real-world cases and shed some light on dark corners of re2c API.
+
+*   `Warnings <manual/warnings/warnings.html>`_ (static analyses):
+    re2c warns you when your code is bad and suggests a fix.
+
+*   `Autognerated tests <manual/features/skeleton/skeleton.html>`_ (dynamic analyses):
+    re2c generates test program together with the input data.
+    The generated input has very good coverage.
+
+*   `License <about/about.html>`_ (public domain).
 
 
 
@@ -64,7 +75,7 @@ Projects that use re2c
 * `ninja <https://ninja-build.org/>`_ (a small build system with a focus on speed)
 * `yasm <http://yasm.tortall.net/>`_ (assembler)
 * `spamasassin <https://spamassassin.apache.org/>`_ (anti-spam platform)
-* `BLR-CAD <http://brlcad.org/>`_ (cross-platform solid modeling system)
+* `BRL-CAD <http://brlcad.org/>`_ (cross-platform solid modeling system)
 * ... last but not least, `re2c <http://re2c.org>`_
 
 This list is by no means complete;
