@@ -2337,18 +2337,7 @@ void parse(Scanner& i, Output & o)
 				{
 					for (RuleList::const_iterator itOp = specStar.begin(); itOp != specStar.end(); ++itOp)
 					{
-						// Different condition share rule regexps (regexps are immutable anyway),
-						// but must have an individual copy of rule info (rule reachability
-						// and shadow set are not the same for different conditions).
-						// Also must update rule rank to guarantee lowest priority.
-						const RegExp *re = *itOp;
-						const RuleInfo *info = re->pld.rule.info;
-						const RegExp *re_copy = RegExp::rule(
-							re->pld.rule.re,
-							re->pld.rule.ctx,
-							new RuleInfo(info->loc, rank_counter.next(), info->code,
-								&info->newcond, info->ctx_len, info->nullable));
-						it->second.add(re_copy);
+						it->second.add(make_rule_copy(*itOp, rank_counter.next()));
 					}
 					if (star_default)
 					{
