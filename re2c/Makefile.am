@@ -110,6 +110,7 @@ SRC = \
 	src/parse/input.cc \
 	src/parse/scanner.cc \
 	src/parse/unescape.cc \
+	src/util/ord_hash_set.cc \
 	src/util/s_to_n32_unsafe.cc \
 	src/util/range.cc
 re2c_SOURCES = \
