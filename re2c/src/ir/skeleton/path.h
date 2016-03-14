@@ -49,9 +49,14 @@ public:
 	}
 	size_t len_matching () const
 	{
-		return rule && rule->ctx_len == ~0u
-			? ctx_pos
-			: rule_pos;
+		if (rule) {
+			switch (rule->ctx_len) {
+				case 0:   return rule_pos;
+				case ~0u: return ctx_pos;
+				default:  return rule_pos - rule->ctx_len;
+			}
+		}
+		return 0;
 	}
 	rule_rank_t match () const
 	{
