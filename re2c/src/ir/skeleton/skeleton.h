@@ -13,7 +13,6 @@
 
 #include "src/ir/regexp/regexp.h"
 #include "src/ir/rule_rank.h"
-#include "src/ir/skeleton/path.h"
 #include "src/ir/skeleton/way.h"
 #include "src/parse/rules.h"
 #include "src/util/local_increment.h"
@@ -26,6 +25,7 @@ namespace re2c
 struct dfa_t;
 struct OutputFile;
 class RuleInfo;
+struct path_t;
 
 struct Node
 {
@@ -62,7 +62,7 @@ struct Node
 	// We don't need all paths anyway, just some examples.
 	typedef u32lim_t<1024> nakeds_t; // ~1Kb
 
-	typedef std::map<Node *, path_t::arc_t> arcs_t;
+	typedef std::map<Node *, std::vector<uint32_t> > arcs_t;
 	typedef std::map<Node *, way_arc_t> arcsets_t;
 	typedef local_increment_t<uint8_t> local_inc;
 

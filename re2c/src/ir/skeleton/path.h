@@ -4,95 +4,84 @@
 #include "src/util/c99_stdint.h"
 #include <vector>
 
-#include "src/parse/rules.h"
+#include "src/ir/skeleton/skeleton.h"
 
 namespace re2c
 {
 
 class path_t
 {
-public:
-	typedef std::vector<uint32_t> arc_t;
-
-private:
-	std::vector<const arc_t *> arcs;
-
-	const RuleInfo *rule;
-	size_t rule_pos;
-
-	bool ctx;
-	size_t ctx_pos;
+	std::vector<Node*> arcs;
 
 public:
-	explicit path_t (const RuleInfo *r, bool c)
-		: arcs ()
-		, rule (r)
-		, rule_pos (0)
-		, ctx (c)
-		, ctx_pos (0)
-	{}
-	path_t(const path_t &p)
-		: arcs(p.arcs)
-		, rule(p.rule)
-		, rule_pos(p.rule_pos)
-		, ctx(p.ctx)
-		, ctx_pos(p.ctx_pos)
-	{}
+	explicit path_t(Node *n) : arcs()
+	{
+		arcs.push_back(n);
+	}
+	path_t(const path_t &p) : arcs(p.arcs) {}
 	path_t &operator=(const path_t &p)
 	{
 		new (this) path_t(p);
 		return *this;
 	}
-	size_t len () const
+	size_t len() const
 	{
-		return arcs.size ();
+		return arcs.size() - 1;
 	}
 	size_t len_matching () const
 	{
-		if (rule) {
+		std::vector<Node*>::const_reverse_iterator
+			tail = arcs.rbegin(),
+			head = arcs.rend();
+		for (; tail != head; ++tail) {
+			RuleInfo *rule = (*tail)->rule;
+			if (rule == NULL) {
+				continue;
+			}
+			const size_t len = static_cast<size_t>(head - tail) - 1;
 			switch (rule->ctx_len) {
-				case 0:   return rule_pos;
-				case ~0u: return ctx_pos;
-				default:  return rule_pos - rule->ctx_len;
+				case 0:
+					return len;
+				case ~0u:
+					for (; tail != head; ++tail) {
+						if ((*tail)->ctx) {
+							return static_cast<size_t>(head - tail) - 1;
+						}
+					}
+					assert(false);
+				default:
+					return len - rule->ctx_len;
 			}
 		}
 		return 0;
 	}
-	rule_rank_t match () const
+	rule_rank_t match() const
 	{
-		return rule ? rule->rank : rule_rank_t::none();
+		std::vector<Node*>::const_reverse_iterator
+			tail = arcs.rbegin(),
+			head = arcs.rend();
+		for (; tail != head; ++tail) {
+			RuleInfo *rule = (*tail)->rule;
+			if (rule != NULL) {
+				return rule->rank;
+			}
+		}
+		return rule_rank_t::none();
 	}
-	const arc_t * operator [] (size_t i) const
+	const std::vector<uint32_t>& operator[](size_t i) const
 	{
-		return arcs[i];
+		Node *n1 = arcs[i];
+		Node *n2 = arcs[i + 1];
+		return n1->arcs[n2];
 	}
-	void extend (const RuleInfo *r, bool c, const arc_t * a)
+	void extend(Node *n)
 	{
-		arcs.push_back (a);
-		if (r)
-		{
-			rule = r;
-			rule_pos = arcs.size ();
-		}
-		if (c)
-		{
-			ctx = true;
-			ctx_pos = arcs.size ();
-		}
+		arcs.push_back(n);
 	}
-	void append (const path_t * p)
+	void append(const path_t *p)
 	{
-		if (p->rule)
-		{
-			rule = p->rule;
-			rule_pos = arcs.size () + p->rule_pos;
-		}
-		if (p->ctx)
-		{
-			ctx = true;
-			ctx_pos = arcs.size () + p->ctx_pos;
-		}
-		arcs.insert (arcs.end (), p->arcs.begin (), p->arcs.end ());
+		assert(arcs.back() == p->arcs.front());
+		arcs.insert(arcs.end(), p->arcs.begin() + 1, p->arcs.end());
 	}
 };
 

@@ -6,6 +6,7 @@
 #include "src/conf/msg.h"
 #include "src/ir/dfa/dfa.h"
 #include "src/ir/regexp/regexp.h"
+#include "src/ir/skeleton/path.h"
 #include "src/ir/skeleton/skeleton.h"
 
 namespace re2c
@@ -24,11 +25,7 @@ Node::Node ()
 
 void Node::init(bool c, RuleInfo *r, const std::vector<std::pair<Node*, uint32_t> > &a)
 {
-	if (r)
-	{
-		rule = r;
-	}
-
+	rule = r;
 	ctx = c;
 
 	uint32_t lb = 0;
