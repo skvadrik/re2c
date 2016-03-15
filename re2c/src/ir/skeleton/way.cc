@@ -1,50 +1,54 @@
 #include <stddef.h>
 #include <algorithm>
 
+#include "src/ir/skeleton/skeleton.h"
 #include "src/ir/skeleton/way.h"
 
 namespace re2c
 {
 
-static bool cmp_way_arcs (const way_arc_t * a1, const way_arc_t * a2);
 static void fprint_way_arc (FILE * f, const way_arc_t & arc);
-
-bool cmp_way_arcs (const way_arc_t * a1, const way_arc_t * a2)
-{
-	return std::lexicographical_compare(a1->begin(), a1->end(), a2->begin(), a2->end());
-}
 
 // define strict weak ordering on patterns:
 // 1st criterion is length (short patterns go first)
 // 2nd criterion is lexicographical order (applies to patterns of equal length)
-bool cmp_ways (const way_t & w1, const way_t & w2)
+bool cmp_ways (const way_t &w1, const way_t &w2)
 {
-	const size_t s1 = w1.size ();
-	const size_t s2 = w2.size ();
-	return (s1 == s2 && std::lexicographical_compare(w1.begin(), w1.end(), w2.begin(), w2.end(), cmp_way_arcs))
-		|| s1 < s2;
+	const size_t s1 = w1.size();
+	const size_t s2 = w2.size();
+	if (s1 == s2) {
+		for (size_t i = 1; i < s1; ++i) {
+			const way_arc_t
+				&a1 = w1[i - 1]->arcsets[w1[i]],
+				&a2 = w2[i - 1]->arcsets[w2[i]];
+			const size_t l1 = a1.size();
+			const size_t l2 = a2.size();
+			for (size_t j = 0; j < l1; ++j) {
+				if (j == l2 || a2[j] < a1[j]) {
+					return false;
+				} else if (a1[j] < a2[j]) {
+					return true;
+				}
+			}
+		}
+		return false;
+	} else {
+		return s1 < s2;
+	}
 }
 
-void fprint_way (FILE * f, const way_t & w)
+void fprint_way(FILE *f, const way_t &w)
 {
-	fprintf (f, "'");
-	const size_t len = w.size ();
-	for (size_t i = 0 ; i < len; ++i)
-	{
-		if (i > 0)
-		{
-			fprintf (f, " ");
+	fprintf(f, "'");
+	const size_t len = w.size();
+	for (size_t i = 1; i < len; ++i) {
+		if (i > 1) {
+			fprintf(f, " ");
 		}
-		if (w[i] == NULL)
-		{
-			fprintf (stderr, "(nil)");
-		}
-		else
-		{
-			fprint_way_arc (stderr, *w[i]);
-		}
+		const way_arc_t &arc = w[i - 1]->arcsets[w[i]];
+		fprint_way_arc(stderr, arc);
 	}
-	fprintf (f, "'");
+	fprintf(f, "'");
 }
 
 void fprint_way_arc (FILE * f, const way_arc_t & arc)

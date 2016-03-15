@@ -9,8 +9,10 @@
 namespace re2c
 {
 
+struct Node;
+
 typedef std::vector<std::pair<uint32_t, uint32_t> > way_arc_t;
-typedef std::vector<const way_arc_t *> way_t;
+typedef std::vector<Node*> way_t;
 
 bool cmp_ways (const way_t & w1, const way_t & w2);
 void fprint_way (FILE * f, const way_t & p);

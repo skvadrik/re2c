@@ -33,7 +33,7 @@ void Node::naked_ways (way_t & prefix, std::vector<way_t> & ways, nakeds_t &size
 		for (arcsets_t::iterator i = arcsets.begin ();
 			i != arcsets.end () && !size.overflow (); ++i)
 		{
-			prefix.push_back (&i->second);
+			prefix.push_back (i->first);
 			i->first->naked_ways (prefix, ways, size);
 			prefix.pop_back ();
 		}
@@ -43,6 +43,7 @@ void Node::naked_ways (way_t & prefix, std::vector<way_t> & ways, nakeds_t &size
 void Skeleton::warn_undefined_control_flow ()
 {
 	way_t prefix;
+	prefix.push_back(&nodes[0]);
 	std::vector<way_t> ways;
 	Node::nakeds_t size = Node::nakeds_t::from32(0u);
 
