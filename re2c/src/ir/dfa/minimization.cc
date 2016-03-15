@@ -40,6 +40,7 @@ static void minimization_table(
 		tbl[i + 1] = tbl[i] + i;
 	}
 
+	// see note [distinguish states by contexts]
 	for (size_t i = 0; i < count; ++i)
 	{
 		dfa_state_t *s1 = states[i];
@@ -83,6 +84,19 @@ static void minimization_table(
 		}
 	}
 
+	// Equivalence relation defined by the matrix is transitive
+	// by construction. Thus we can simply find the first state
+	// which is not distinguishable from current and choose it as a
+	// representative: all other states with the same representative
+	// have to be equivalent to current state due to transitivity.
+	//
+	// The only requirement is to deterministically choose the
+	// representative: e.g. always choose the one with the lowest
+	// index.
+	//
+	// Note that transitivity is crucial: without it the problem
+	// would be equivalent to the clique cover problem.
+
 	for (size_t i = 0; i < count; ++i)
 	{
 		part[i] = i;
@@ -120,6 +134,7 @@ static void minimization_moore(
 
 	size_t *next = new size_t[count];
 
+	// see note [distinguish states by contexts]
 	std::map<std::pair<const RuleInfo*, bool>, size_t> init;
 	for (size_t i = 0; i < count; ++i)
 	{
@@ -196,6 +211,15 @@ static void minimization_moore(
 	delete[] diff;
 	delete[] next;
 }
+
+/* note [distinguish states by contexts]
+ *
+ * States that differ only in context set must still be distinguished
+ * otherwise contexts that start with iteration  will be broken, e.g.:
+ *     "" / "b"* {}
+ * because first iteration will be merged with other iterations
+ * causing context being saved on each iteration.
+ */
 
 void minimization(dfa_t &dfa)
 {
