@@ -83,6 +83,7 @@ SRC = \
 	src/ir/adfa/adfa.cc \
 	src/ir/adfa/prepare.cc \
 	src/ir/dfa/determinization.cc \
+	src/ir/dfa/fallback.cc \
 	src/ir/dfa/fillpoints.cc \
 	src/ir/dfa/minimization.cc \
 	src/ir/regexp/encoding/enc.cc \

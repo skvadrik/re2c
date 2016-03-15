@@ -61,8 +61,12 @@ smart_ptr<DFA> compile (Spec & spec, Output & output, const std::string & cond, 
 	std::vector<size_t> fill;
 	fillpoints(dfa, fill);
 
+	// see note [fallback states]
+	std::vector<size_t> fallback;
+	fallback_states(dfa, fallback);
+
 	// ADFA stands for 'DFA with actions'
-	DFA *adfa = new DFA(dfa, fill, skeleton, cs, name, cond, line);
+	DFA *adfa = new DFA(dfa, fill, fallback, skeleton, cs, name, cond, line);
 
 	/*
 	 * note [reordering DFA states]

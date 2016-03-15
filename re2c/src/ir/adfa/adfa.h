@@ -26,6 +26,7 @@ struct State
 	const RuleInfo * rule;
 	State * next;
 	size_t fill;
+	bool fallback;
 
 	bool isPreCtxt;
 	bool isBase;
@@ -37,6 +38,7 @@ struct State
 		, rule (NULL)
 		, next (0)
 		, fill (0)
+		, fallback (false)
 		, isPreCtxt (false)
 		, isBase (false)
 		, go ()
@@ -74,6 +76,7 @@ public:
 public:
 	DFA	( const dfa_t &dfa
 		, const std::vector<size_t> &fill
+		, const std::vector<size_t> &fallback
 		, Skeleton *skel
 		, const charset_t &charset
 		, const std::string &n

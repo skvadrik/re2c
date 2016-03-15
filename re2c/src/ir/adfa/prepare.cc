@@ -181,24 +181,15 @@ void DFA::prepare ()
 		}
 	}
 
-	// find backup states and create accept state (if needed)
-	if (default_state)
-	{
-		for (State * s = head; s; s = s->next)
-		{
-			if (s->rule)
-			{
-				for (uint32_t i = 0; i < s->go.nSpans; ++i)
-				{
-					if (!s->go.span[i].to->rule && s->go.span[i].to->action.type != Action::RULE)
-					{
-						const uint32_t accept = static_cast<uint32_t> (accepts.find_or_add (rules[s->rule->rank]));
-						s->action.set_save (accept);
-					}
-				}
+	// bind save actions to fallback states and create accept state (if needed)
+	if (default_state) {
+		for (State *s = head; s; s = s->next) {
+			if (s->fallback) {
+				const uint32_t accept = static_cast<uint32_t>(accepts.find_or_add(rules[s->rule->rank]));
+				s->action.set_save(accept);
 			}
 		}
-		default_state->action.set_accept (&accepts);
+		default_state->action.set_accept(&accepts);
 	}
 
 	// split ``base'' states into two parts
