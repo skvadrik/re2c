@@ -13,7 +13,6 @@
 
 #include "src/ir/regexp/regexp.h"
 #include "src/ir/rule_rank.h"
-#include "src/ir/skeleton/way.h"
 #include "src/parse/rules.h"
 #include "src/util/local_increment.h"
 #include "src/util/forbid_copy.h"
@@ -62,8 +61,12 @@ struct Node
 	// We don't need all paths anyway, just some examples.
 	typedef u32lim_t<1024> nakeds_t; // ~1Kb
 
-	typedef std::map<Node *, std::vector<uint32_t> > arcs_t;
-	typedef std::map<Node *, way_arc_t> arcsets_t;
+	typedef std::vector<std::pair<uint32_t, uint32_t> > arcset_t;
+	typedef std::map<Node *, arcset_t> arcsets_t;
+
+	typedef std::vector<uint32_t> arc_t;
+	typedef std::map<Node *, arc_t> arcs_t;
+
 	typedef local_increment_t<uint8_t> local_inc;
 
 	// outgoing arcs
@@ -99,7 +102,7 @@ struct Node
 	void calc_reachable ();
 	template <typename cunit_t, typename key_t>
 		void cover (path_t & prefix, FILE * input, FILE * keys, covers_t &size);
-	void naked_ways (way_t & prefix, std::vector<way_t> & ways, nakeds_t &size);
+	void naked_paths(path_t &prefix, std::vector<path_t> &paths, nakeds_t &size);
 
 	FORBID_COPY (Node);
 };
@@ -167,6 +170,9 @@ template<typename key_t> key_t Skeleton::rule2key (rule_rank_t r)
 		return static_cast<key_t>(r.uint32());
 	}
 }
+
+bool compare_default_paths(const path_t &p1, const path_t &p2);
+void fprint_default_path(FILE *f, const path_t &p);
 
 } // namespace re2c
 

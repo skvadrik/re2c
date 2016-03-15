@@ -5,6 +5,8 @@
 
 #include "src/conf/msg.h"
 #include "src/conf/warn.h"
+#include "src/ir/skeleton/path.h"
+#include "src/ir/skeleton/skeleton.h"
 
 namespace re2c {
 
@@ -126,7 +128,7 @@ void Warn::swapped_range (uint32_t line, uint32_t l, uint32_t u)
 	}
 }
 
-void Warn::undefined_control_flow (uint32_t line, const std::string & cond, std::vector<way_t> & ways, bool overflow)
+void Warn::undefined_control_flow (uint32_t line, const std::string & cond, std::vector<path_t> & paths, bool overflow)
 {
 	if (mask[UNDEFINED_CONTROL_FLOW] & WARNING)
 	{
@@ -134,21 +136,21 @@ void Warn::undefined_control_flow (uint32_t line, const std::string & cond, std:
 		error_accuml |= e;
 
 		// report shorter patterns first
-		std::sort (ways.begin (), ways.end (), cmp_ways);
+		std::sort (paths.begin (), paths.end (), compare_default_paths);
 
 		warning_start (line, e);
 		fprintf (stderr, "control flow %sis undefined for strings that match ", incond (cond).c_str ());
-		const size_t count = ways.size ();
+		const size_t count = paths.size ();
 		if (count == 1)
 		{
-			fprint_way (stderr, ways[0]);
+			fprint_default_path (stderr, paths[0]);
 		}
 		else
 		{
 			for (size_t i = 0; i < count; ++i)
 			{
 				fprintf (stderr, "\n\t");
-				fprint_way (stderr, ways[i]);
+				fprint_default_path (stderr, paths[i]);
 			}
 			fprintf (stderr, "\n");
 		}

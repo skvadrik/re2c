@@ -38,7 +38,6 @@ SRC_HDR = \
 	src/ir/compile.h \
 	src/ir/rule_rank.h \
 	src/ir/skeleton/path.h \
-	src/ir/skeleton/way.h \
 	src/ir/skeleton/skeleton.h \
 	src/globals.h \
 	src/parse/code.h \
@@ -105,7 +104,6 @@ SRC = \
 	src/ir/skeleton/maxlen.cc \
 	src/ir/skeleton/skeleton.cc \
 	src/ir/skeleton/unreachable_nullable.cc \
-	src/ir/skeleton/way.cc \
 	src/main.cc \
 	src/parse/code.cc \
 	src/parse/input.cc \

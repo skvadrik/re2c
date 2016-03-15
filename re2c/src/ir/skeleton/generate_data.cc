@@ -71,12 +71,12 @@ template <typename cunit_t, typename key_t>
 			i != arcs.end () && !size.overflow(); ++i)
 		{
 			path_t new_prefix = prefix;
-			new_prefix.extend (i->first);
+			new_prefix.push (i->first);
 			i->first->cover<cunit_t, key_t> (new_prefix, input, keys, size);
 			if (i->first->suffix != NULL && suffix == NULL)
 			{
 				suffix = new path_t(this);
-				suffix->extend (i->first);
+				suffix->push (i->first);
 				suffix->append (i->first->suffix);
 			}
 		}
@@ -183,7 +183,7 @@ template <typename cunit_t, typename key_t>
 	size_t count = 0;
 	for (size_t i = 0; i < len; ++i)
 	{
-		count = std::max (count, path[i].size ());
+		count = std::max (count, path.arc(i).size ());
 	}
 
 	const Node::covers_t size = Node::covers_t::from64(len) * Node::covers_t::from64(count);
@@ -194,7 +194,7 @@ template <typename cunit_t, typename key_t>
 		cunit_t * buffer = new cunit_t [buffer_size];
 		for (size_t i = 0; i < len; ++i)
 		{
-			const std::vector<uint32_t> & arc = path[i];
+			const std::vector<uint32_t> & arc = path.arc(i);
 			const size_t width = arc.size ();
 			for (size_t j = 0; j < count; ++j)
 			{

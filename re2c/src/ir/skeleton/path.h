@@ -68,15 +68,21 @@ public:
 		}
 		return rule_rank_t::none();
 	}
-	const std::vector<uint32_t>& operator[](size_t i) const
+	const Node::arc_t& arc(size_t i) const
 	{
-		Node *n1 = arcs[i];
-		Node *n2 = arcs[i + 1];
-		return n1->arcs[n2];
+		return arcs[i]->arcs[arcs[i + 1]];
 	}
-	void extend(Node *n)
+	const Node::arcset_t& arcset(size_t i) const
+	{
+		return arcs[i]->arcsets[arcs[i + 1]];
+	}
+	void push(Node *n)
 	{
 		arcs.push_back(n);
+	}
+	void pop()
+	{
+		arcs.pop_back();
 	}
 	void append(const path_t *p)
 	{
