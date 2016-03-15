@@ -68,25 +68,7 @@ smart_ptr<DFA> compile (Spec & spec, Output & output, const std::string & cond, 
 	// ADFA stands for 'DFA with actions'
 	DFA *adfa = new DFA(dfa, fill, fallback, skeleton, cs, name, cond, line);
 
-	/*
-	 * note [reordering DFA states]
-	 *
-	 * re2c-generated code depends on the order of states in DFA: simply
-	 * flipping two states may change the output significantly.
-	 * The order of states is affected by many factors, e.g.:
-	 *   - flipping left and right subtrees of alternative when constructing
-	 *     AST (also applies to iteration and counted repetition)
-	 *   - changing the order in which graph nodes are visited (applies to
-	 *     any intermediate representation: bytecode, NFA, DFA, etc.)
-	 *
-	 * To make the resulting code independent of such changes, we hereby
-	 * reorder DFA states. The ordering scheme is very simple:
-	 *
-	 * Starting with DFA root, walk DFA nodes in breadth-first order.
-	 * Child nodes are ordered accoding to the (alphabetically) first symbol
-	 * leading to each node. Each node must be visited exactly once.
-	 * Default state (NULL) is always the last state.
-	 */
+	// see note [reordering DFA states]
 	adfa->reorder();
 
 	// skeleton is constructed, do further DFA transformations

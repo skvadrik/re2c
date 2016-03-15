@@ -94,6 +94,24 @@ DFA::~DFA()
 	delete skeleton;
 }
 
+/* note [reordering DFA states]
+ *
+ * re2c-generated code depends on the order of states in DFA: simply
+ * flipping two states may change the output significantly.
+ * The order of states is affected by many factors, e.g.:
+ *   - flipping left and right subtrees of alternative when constructing
+ *     AST (also applies to iteration and counted repetition)
+ *   - changing the order in which graph nodes are visited (applies to
+ *     any intermediate representation: bytecode, NFA, DFA, etc.)
+ *
+ * To make the resulting code independent of such changes, we hereby
+ * reorder DFA states. The ordering scheme is very simple:
+ *
+ * Starting with DFA root, walk DFA nodes in breadth-first order.
+ * Child nodes are ordered accoding to the (alphabetically) first symbol
+ * leading to each node. Each node must be visited exactly once.
+ * Default state (NULL) is always the last state.
+ */
 void DFA::reorder()
 {
 	std::vector<State*> ord;
