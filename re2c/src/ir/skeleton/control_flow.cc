@@ -15,25 +15,37 @@ namespace re2c
 // These paths are stored on heap, so the limit should be low.
 // Most real-world cases have only a few short paths.
 // We don't need all paths anyway, just some examples.
-typedef u32lim_t<1024> nakeds_t; // ~1Kb
+typedef u32lim_t<1024> ucf_size_t; // ~1Kb
+
+// UCF stands for 'undefined control flow'
+struct ucf_t
+{
+	std::vector<uint8_t> loops;
+	std::vector<path_t> paths;
+	path_t prefix;
+	ucf_size_t size;
+
+	ucf_t(size_t nnodes): loops(nnodes), paths(),
+		prefix(0), size(ucf_size_t::from32(0u)) {}
+};
 
 // We don't need all patterns that cause undefined behaviour.
 // We only need some examples, the shorter the better.
 static void naked_paths(
-	Skeleton &skel,
-	std::vector<path_t> &paths,
-	path_t &prefix,
-	nakeds_t &size,
+	const Skeleton &skel,
+	ucf_t &ucf,
 	size_t i)
 {
 	const Node &node = skel.nodes[i];
-	uint8_t &loop = skel.loops[i];
+	uint8_t &loop = ucf.loops[i];
+	path_t &prefix = ucf.prefix;
+	ucf_size_t &size = ucf.size;
 
 	if (node.rule) {
 		return;
 	} else if (node.end()) {
-		paths.push_back(prefix);
-		size = size + nakeds_t::from64(prefix.len());
+		ucf.paths.push_back(prefix);
+		size = size + ucf_size_t::from64(prefix.len());
 	} else if (loop < 2) {
 		local_inc _(loop);
 		Node::arcsets_t::const_iterator
@@ -42,23 +54,19 @@ static void naked_paths(
 		for (; arc != end && !size.overflow(); ++arc) {
 			const size_t j = arc->first;
 			prefix.push(j);
-			naked_paths(skel, paths, prefix, size, j);
+			naked_paths(skel, ucf, j);
 			prefix.pop();
 		}
 	}
 }
 
-void warn_undefined_control_flow(Skeleton &skel)
+void warn_undefined_control_flow(const Skeleton &skel)
 {
-	path_t prefix(0);
-	std::vector<path_t> paths;
-	nakeds_t size = nakeds_t::from32(0u);
-
-	naked_paths(skel, paths, prefix, size, 0);
-
-	if (!paths.empty()) {
-		warn.undefined_control_flow(skel, paths, size.overflow());
-	} else if (size.overflow()) {
+	ucf_t ucf(skel.nodes_count);
+	naked_paths(skel, ucf, 0);
+	if (!ucf.paths.empty()) {
+		warn.undefined_control_flow(skel, ucf.paths, ucf.size.overflow());
+	} else if (ucf.size.overflow()) {
 		warn.fail(Warn::UNDEFINED_CONTROL_FLOW, skel.line,
 			"DFA is too large to check undefined control flow");
 	}

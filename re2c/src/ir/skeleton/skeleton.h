@@ -54,9 +54,6 @@ struct Skeleton
 	const size_t nodes_count;
 	Node *nodes;
 
-	// visit counters (for graph traversal)
-	uint8_t *loops;
-
 	size_t sizeof_key;
 	rules_t rules;
 
@@ -82,10 +79,10 @@ template<typename key_t> key_t Skeleton::rule2key(rule_rank_t r)
 	}
 }
 
-uint32_t maxpath(Skeleton &skel);
-void warn_undefined_control_flow(Skeleton &skel);
+uint32_t maxpath(const Skeleton &skel);
+void warn_undefined_control_flow(const Skeleton &skel);
 void fprint_default_path(FILE *f, const Skeleton &skel, const path_t &p);
-void warn_unreachable_nullable_rules(Skeleton &skel);
+void warn_unreachable_nullable_rules(const Skeleton &skel);
 void emit_data(const Skeleton &skel, const char *fname);
 void emit_prolog(OutputFile & o);
 void emit_start(const Skeleton &skel, OutputFile &o, size_t maxfill,

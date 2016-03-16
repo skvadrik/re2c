@@ -16,12 +16,13 @@ static const uint32_t DIST_MAX = DIST_ERROR - 1;
 // different from YYMAXFILL calculation
 // in the way it handles loops and empty regexp
 static void calc_dist(
-	Skeleton &skel,
+	const Skeleton &skel,
+	std::vector<uint8_t> &loops,
 	std::vector<uint32_t> &dists,
 	size_t i)
 {
 	const Node &node = skel.nodes[i];
-	uint8_t &loop = skel.loops[i];
+	uint8_t &loop = loops[i];
 	uint32_t &dist = dists[i];
 
 	if (dist != DIST_ERROR) {
@@ -35,7 +36,7 @@ static void calc_dist(
 			end = node.arcs.end();
 		for (; arc != end; ++arc) {
 			const size_t j = arc->first;
-			calc_dist(skel, dists, j);
+			calc_dist(skel, loops, dists, j);
 			uint32_t &d = dists[j];
 			if (d != DIST_ERROR) {
 				if (dist == DIST_ERROR) {
@@ -50,10 +51,11 @@ static void calc_dist(
 }
 
 // calculate maximal path length, check overflow
-uint32_t maxpath(Skeleton &skel)
+uint32_t maxpath(const Skeleton &skel)
 {
+	std::vector<uint8_t> loops(skel.nodes_count);
 	std::vector<uint32_t> dists(skel.nodes_count);
-	calc_dist(skel, dists, 0);
+	calc_dist(skel, loops, dists, 0);
 	const uint32_t maxlen = dists[0];
 	if (maxlen == DIST_MAX) {
 		error("DFA path %sis too long", incond(skel.cond).c_str());

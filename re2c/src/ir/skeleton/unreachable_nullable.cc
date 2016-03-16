@@ -12,12 +12,13 @@ namespace re2c
 {
 
 static void calc_reachable(
-	Skeleton &skel,
+	const Skeleton &skel,
+	std::vector<uint8_t> &loops,
 	std::vector<std::set<RuleInfo*> > &reachs,
 	size_t i)
 {
 	const Node &node = skel.nodes[i];
-	uint8_t &loop = skel.loops[i];
+	uint8_t &loop = loops[i];
 	std::set<RuleInfo*> &reach = reachs[i];
 
 	if (!reach.empty()) {
@@ -31,17 +32,18 @@ static void calc_reachable(
 			end = node.arcs.end();
 		for (; arc != end; ++arc) {
 			const size_t j = arc->first;
-			calc_reachable(skel, reachs, j);
+			calc_reachable(skel, loops, reachs, j);
 			reach.insert(reachs[j].begin(), reachs[j].end());
 		}
 	}
 }
 
-void warn_unreachable_nullable_rules(Skeleton &skel)
+void warn_unreachable_nullable_rules(const Skeleton &skel)
 {
 	// calculate reachable rules
+	std::vector<uint8_t> loops(skel.nodes_count);
 	std::vector<std::set<RuleInfo*> > reachs(skel.nodes_count);
-	calc_reachable(skel, reachs, 0);
+	calc_reachable(skel, loops, reachs, 0);
 
 	for (uint32_t i = 0; i < skel.nodes_count; ++i) {
 		RuleInfo *r1 = skel.nodes[i].rule;

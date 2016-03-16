@@ -63,7 +63,6 @@ Skeleton::Skeleton(
 		line(dfa_line),
 		nodes_count(dfa.states.size() + 1), // +1 for default state
 		nodes(new Node[nodes_count]),
-		loops(new uint8_t[nodes_count]()),
 		sizeof_key(4),
 		rules(rs)
 {
@@ -113,7 +112,6 @@ Skeleton::Skeleton(
 Skeleton::~Skeleton()
 {
 	delete[] nodes;
-	delete[] loops;
 }
 
 uint32_t Skeleton::rule2key(rule_rank_t r) const
