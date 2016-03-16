@@ -21,7 +21,6 @@ namespace re2c
 struct dfa_t;
 struct OutputFile;
 struct path_t;
-struct suffix_t;
 
 typedef local_increment_t<uint8_t> local_inc;
 
@@ -58,9 +57,6 @@ struct Skeleton
 	// visit counters (for graph traversal)
 	uint8_t *loops;
 
-	// paths to end node (for constructing path cover)
-	suffix_t **suffixes;
-
 	size_t sizeof_key;
 	rules_t rules;
 
@@ -90,7 +86,7 @@ uint32_t maxpath(Skeleton &skel);
 void warn_undefined_control_flow(Skeleton &skel);
 void fprint_default_path(FILE *f, const Skeleton &skel, const path_t &p);
 void warn_unreachable_nullable_rules(Skeleton &skel);
-void emit_data(Skeleton &skel, const char *fname);
+void emit_data(const Skeleton &skel, const char *fname);
 void emit_prolog(OutputFile & o);
 void emit_start(const Skeleton &skel, OutputFile &o, size_t maxfill,
 	bool backup, bool backupctx, bool accept);

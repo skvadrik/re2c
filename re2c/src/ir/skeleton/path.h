@@ -9,12 +9,16 @@
 namespace re2c
 {
 
-class suffix_t
+struct suffix_t
 {
+	bool init;
+
+private:
 	std::vector<size_t> arcs;
 
 public:
-	suffix_t() : arcs() {}
+
+	suffix_t(): init(false), arcs() {}
 	void push(size_t i)
 	{
 		arcs.push_back(i);
@@ -77,11 +81,11 @@ public:
 	}
 	const Node::arc_t& arc(const Skeleton &skel, size_t i) const
 	{
-		return skel.nodes[arcs[i]].arcs[arcs[i + 1]];
+		return skel.nodes[arcs[i]].arcs.find(arcs[i + 1])->second;
 	}
 	const Node::arcset_t& arcset(const Skeleton &skel, size_t i) const
 	{
-		return skel.nodes[arcs[i]].arcsets[arcs[i + 1]];
+		return skel.nodes[arcs[i]].arcsets.find(arcs[i + 1])->second;
 	}
 	void push(size_t n)
 	{

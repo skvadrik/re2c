@@ -1,4 +1,3 @@
-#include <string.h>
 #include <algorithm>
 
 #include "src/ir/dfa/dfa.h"
@@ -64,14 +63,10 @@ Skeleton::Skeleton(
 		line(dfa_line),
 		nodes_count(dfa.states.size() + 1), // +1 for default state
 		nodes(new Node[nodes_count]),
-		loops(new uint8_t[nodes_count]),
-		suffixes(new suffix_t*[nodes_count]),
+		loops(new uint8_t[nodes_count]()),
 		sizeof_key(4),
 		rules(rs)
 {
-	memset(loops, 0, sizeof(uint8_t) * nodes_count);
-	memset(suffixes, 0, sizeof(suffix_t*) * nodes_count);
-
 	const size_t nc = cs.size() - 1;
 
 	// initialize skeleton nodes
@@ -119,10 +114,6 @@ Skeleton::~Skeleton()
 {
 	delete[] nodes;
 	delete[] loops;
-	for (size_t i = 0; i < nodes_count; ++i) {
-		delete suffixes[i];
-	}
-	delete[] suffixes;
 }
 
 uint32_t Skeleton::rule2key(rule_rank_t r) const

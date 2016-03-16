@@ -46,7 +46,24 @@ namespace re2c
 // Paths are dumped to file as soon as generated and don't eat
 // heap space. The total size of path cover (measured in edges)
 // is O(N^2) where N is the number of edges in skeleton.
-typedef u32lim_t<1024 * 1024 * 1024> covers_t; // ~1Gb
+typedef u32lim_t<1024 * 1024 * 1024> cover_size_t; // ~1Gb
+
+struct cover_t
+{
+	FILE *input;
+	FILE *keys;
+	std::vector<uint8_t> loops;
+	std::vector<suffix_t> suffixes;
+	path_t prefix;
+	cover_size_t size;
+
+	cover_t(FILE *fi, FILE *fk, size_t nnodes):
+		input(fi), keys(fk), loops(nnodes),
+		suffixes(nnodes), prefix(0),
+		size(cover_size_t::from32(0u)) {}
+
+	FORBID_COPY(cover_t);
+};
 
 template<typename uintn_t> static uintn_t to_le(uintn_t n)
 {
@@ -74,9 +91,10 @@ template<typename key_t> static void keygen(FILE *f, size_t count,
 	delete[] keys;
 }
 
-template<typename cunit_t, typename key_t> static covers_t cover_one(
-	Skeleton &skel, FILE *input, FILE * keys, const path_t & path)
+template<typename cunit_t, typename key_t> static cover_size_t cover_one(
+	const Skeleton &skel, cover_t &cover)
 {
+	const path_t &path = cover.prefix;
 	const size_t len = path.len();
 
 	size_t count = 0;
@@ -84,8 +102,8 @@ template<typename cunit_t, typename key_t> static covers_t cover_one(
 		count = std::max (count, path.arc(skel, i).size());
 	}
 
-	const covers_t size = covers_t::from64(len)
-		* covers_t::from64(count);
+	const cover_size_t size = cover_size_t::from64(len)
+		* cover_size_t::from64(count);
 	if (!size.overflow()) {
 		// input
 		const size_t buffer_size = size.uint32();
@@ -95,14 +113,16 @@ template<typename cunit_t, typename key_t> static covers_t cover_one(
 			const size_t width = arc.size();
 			for (size_t j = 0; j < count; ++j) {
 				const size_t k = j % width;
-				buffer[j * len + i] = to_le<cunit_t>(static_cast<cunit_t>(arc[k]));
+				buffer[j * len + i] = to_le<cunit_t>(
+					static_cast<cunit_t>(arc[k]));
 			}
 		}
-		fwrite (buffer, sizeof(cunit_t), buffer_size, input);
+		fwrite (buffer, sizeof(cunit_t), buffer_size, cover.input);
 		delete[] buffer;
 
 		// keys
-		keygen<key_t>(keys, count, len, path.len_matching(skel), path.match(skel));
+		keygen<key_t>(cover.keys, count, len,
+			path.len_matching(skel), path.match(skel));
 	}
 
 	return size;
@@ -137,29 +157,29 @@ template<typename cunit_t, typename key_t> static covers_t cover_one(
  * See also note [counting skeleton edges].
  *
  */
-template <typename cunit_t, typename key_t> static void cover(
-	Skeleton &skel,
-	FILE *input,
-	FILE *keys,
-	path_t &prefix,
-	covers_t &size,
+template <typename cunit_t, typename key_t> static void gencover(
+	const Skeleton &skel,
+	cover_t &cover,
 	size_t i)
 {
 	const Node &node = skel.nodes[i];
-	uint8_t &loop = skel.loops[i];
-	suffix_t *&suffix = skel.suffixes[i];
+	uint8_t &loop = cover.loops[i];
+	suffix_t &suffix = cover.suffixes[i];
+	path_t &prefix = cover.prefix;
+	cover_size_t &size = cover.size;
 
-	if (node.end() && suffix == NULL) {
-		suffix = new suffix_t;
+	if (node.end() && !suffix.init) {
+		suffix.init = true;
 	}
 
-	if (suffix != NULL)
+	if (suffix.init)
 	{
-		prefix.push_sfx(*suffix);
-		size = size + cover_one<cunit_t, key_t>(skel, input, keys, prefix);
-		prefix.pop_sfx(*suffix);
+		prefix.push_sfx(suffix);
+		size = size + cover_one<cunit_t, key_t>(skel, cover);
+		prefix.pop_sfx(suffix);
 	} else if (loop < 2) {
 		local_inc _(loop);
+
 		Node::arcs_t::const_iterator
 			arc = node.arcs.begin(),
 			end = node.arcs.end();
@@ -167,53 +187,49 @@ template <typename cunit_t, typename key_t> static void cover(
 			const size_t j = arc->first;
 
 			prefix.push(j);
-			cover<cunit_t, key_t>(skel, input, keys, prefix, size, j);
+			gencover<cunit_t, key_t>(skel, cover, j);
 			prefix.pop();
 
-			const suffix_t *sfx = skel.suffixes[j];
-			if (sfx != NULL && suffix == NULL) {
-				suffix = new suffix_t(*sfx);
-				suffix->push(j);
+			const suffix_t &sfx = cover.suffixes[j];
+			if (sfx.init && !suffix.init) {
+				suffix = sfx;
+				suffix.push(j);
 			}
 		}
 	}
 }
 
-template<typename cunit_t, typename key_t> static void generate_paths_cunit_key(
-	Skeleton &skel, FILE *input, FILE *keys)
+template<typename cunit_t, typename key_t>
+	static void generate_paths_cunit_key(const Skeleton &skel, cover_t &cover)
 {
-	path_t prefix(0);
-	covers_t size = covers_t::from32(0u);
-
-	cover<cunit_t, key_t>(skel, input, keys, prefix, size, 0);
-
-	if (size.overflow()) {
+	gencover<cunit_t, key_t>(skel, cover, 0);
+	if (cover.size.overflow()) {
 		warning(NULL, skel.line, false,
 			"DFA %sis too large: can only generate partial path cover",
 			incond(skel.cond).c_str());
 	}
 }
 
-template<typename cunit_t> static void generate_paths_cunit(
-	Skeleton &skel, FILE *input, FILE *keys)
+template<typename cunit_t>
+	static void generate_paths_cunit(const Skeleton &skel, cover_t &cover)
 {
 	switch (skel.sizeof_key) {
-		case 4: generate_paths_cunit_key<cunit_t, uint32_t>(skel, input, keys); break;
-		case 2: generate_paths_cunit_key<cunit_t, uint16_t>(skel, input, keys); break;
-		case 1: generate_paths_cunit_key<cunit_t, uint8_t>(skel, input, keys); break;
+		case 4: generate_paths_cunit_key<cunit_t, uint32_t>(skel, cover); break;
+		case 2: generate_paths_cunit_key<cunit_t, uint16_t>(skel, cover); break;
+		case 1: generate_paths_cunit_key<cunit_t, uint8_t>(skel, cover); break;
 	}
 }
 
-static void generate_paths(Skeleton &skel, FILE *input, FILE *keys)
+static void generate_paths(const Skeleton &skel, cover_t &cover)
 {
 	switch (opts->encoding.szCodeUnit()) {
-		case 4: generate_paths_cunit<uint32_t>(skel, input, keys); break;
-		case 2: generate_paths_cunit<uint16_t>(skel, input, keys); break;
-		case 1: generate_paths_cunit<uint8_t>(skel, input, keys); break;
+		case 4: generate_paths_cunit<uint32_t>(skel, cover); break;
+		case 2: generate_paths_cunit<uint16_t>(skel, cover); break;
+		case 1: generate_paths_cunit<uint8_t>(skel, cover); break;
 	}
 }
 
-void emit_data(Skeleton &skel, const char *fname)
+void emit_data(const Skeleton &skel, const char *fname)
 {
 	const std::string input_name = std::string(fname) + "." + skel.name + ".input";
 	FILE *input = fopen(input_name.c_str(), "wb");
@@ -228,7 +244,8 @@ void emit_data(Skeleton &skel, const char *fname)
 		exit(1);
 	}
 
-	generate_paths(skel, input, keys);
+	cover_t cover(input, keys, skel.nodes_count);
+	generate_paths(skel, cover);
 
 	fclose(input);
 	fclose(keys);
