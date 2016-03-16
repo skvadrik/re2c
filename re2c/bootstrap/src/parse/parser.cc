@@ -2260,7 +2260,7 @@ void parse(Scanner& i, Output & o)
 		.wline_info (in->get_cline (), in->get_fname ().c_str ());
 	if (opts->target == opt_t::SKELETON)
 	{
-		Skeleton::emit_prolog (o.source);
+		emit_prolog(o.source);
 	}
 
 	Enc encodingOld = opts->encoding;
@@ -2429,7 +2429,7 @@ void parse(Scanner& i, Output & o)
 
 	if (opts->target == opt_t::SKELETON)
 	{
-		Skeleton::emit_epilog (o.source, o.skeletons);
+		emit_epilog(o.source, o.skeletons);
 	}
 
 	parse_cleanup();

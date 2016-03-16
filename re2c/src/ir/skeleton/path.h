@@ -11,30 +11,24 @@ namespace re2c
 
 class path_t
 {
-	std::vector<Node*> arcs;
+	std::vector<size_t> arcs;
 
 public:
-	explicit path_t(Node *n) : arcs()
+	explicit path_t(size_t i) : arcs()
 	{
-		arcs.push_back(n);
-	}
-	path_t(const path_t &p) : arcs(p.arcs) {}
-	path_t &operator=(const path_t &p)
-	{
-		new (this) path_t(p);
-		return *this;
+		arcs.push_back(i);
 	}
 	size_t len() const
 	{
 		return arcs.size() - 1;
 	}
-	size_t len_matching () const
+	size_t len_matching(const Skeleton &skel) const
 	{
-		std::vector<Node*>::const_reverse_iterator
+		std::vector<size_t>::const_reverse_iterator
 			tail = arcs.rbegin(),
 			head = arcs.rend();
 		for (; tail != head; ++tail) {
-			RuleInfo *rule = (*tail)->rule;
+			RuleInfo *rule = skel.nodes[*tail].rule;
 			if (rule == NULL) {
 				continue;
 			}
@@ -44,7 +38,7 @@ public:
 					return len;
 				case ~0u:
 					for (; tail != head; ++tail) {
-						if ((*tail)->ctx) {
+						if (skel.nodes[*tail].ctx) {
 							return static_cast<size_t>(head - tail) - 1;
 						}
 					}
@@ -55,28 +49,28 @@ public:
 		}
 		return 0;
 	}
-	rule_rank_t match() const
+	rule_rank_t match(const Skeleton &skel) const
 	{
-		std::vector<Node*>::const_reverse_iterator
+		std::vector<size_t>::const_reverse_iterator
 			tail = arcs.rbegin(),
 			head = arcs.rend();
 		for (; tail != head; ++tail) {
-			RuleInfo *rule = (*tail)->rule;
+			RuleInfo *rule = skel.nodes[*tail].rule;
 			if (rule != NULL) {
 				return rule->rank;
 			}
 		}
 		return rule_rank_t::none();
 	}
-	const Node::arc_t& arc(size_t i) const
+	const Node::arc_t& arc(const Skeleton &skel, size_t i) const
 	{
-		return arcs[i]->arcs[arcs[i + 1]];
+		return skel.nodes[arcs[i]].arcs[arcs[i + 1]];
 	}
-	const Node::arcset_t& arcset(size_t i) const
+	const Node::arcset_t& arcset(const Skeleton &skel, size_t i) const
 	{
-		return arcs[i]->arcsets[arcs[i + 1]];
+		return skel.nodes[arcs[i]].arcsets[arcs[i + 1]];
 	}
-	void push(Node *n)
+	void push(size_t n)
 	{
 		arcs.push_back(n);
 	}
@@ -88,6 +82,14 @@ public:
 	{
 		assert(arcs.back() == p->arcs.front());
 		arcs.insert(arcs.end(), p->arcs.begin() + 1, p->arcs.end());
+	}
+	bool operator<(const path_t &p) const
+	{
+		const size_t
+			s1 = arcs.size(),
+			s2 = p.arcs.size();
+		return (s1 == s2 && arcs < p.arcs)
+			|| s1 < s2;
 	}
 };
 

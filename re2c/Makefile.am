@@ -101,7 +101,7 @@ SRC = \
 	src/ir/skeleton/control_flow.cc \
 	src/ir/skeleton/generate_code.cc \
 	src/ir/skeleton/generate_data.cc \
-	src/ir/skeleton/maxlen.cc \
+	src/ir/skeleton/maxpath.cc \
 	src/ir/skeleton/skeleton.cc \
 	src/ir/skeleton/unreachable_nullable.cc \
 	src/main.cc \

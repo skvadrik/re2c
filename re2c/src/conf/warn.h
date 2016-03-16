@@ -10,6 +10,7 @@
 namespace re2c {
 
 struct path_t;
+struct Skeleton;
 
 #define RE2C_WARNING_TYPES \
 	W (CONDITION_ORDER,        "condition-order"), \
@@ -58,7 +59,7 @@ public:
 	void empty_class (uint32_t line);
 	void match_empty_string (uint32_t line);
 	void swapped_range (uint32_t line, uint32_t l, uint32_t u);
-	void undefined_control_flow (uint32_t line, const std::string & cond, std::vector<path_t> & paths, bool overflow);
+	void undefined_control_flow (const Skeleton &skel, std::vector<path_t> & paths, bool overflow);
 	void unreachable_rule (const std::string & cond, const RuleInfo *rule);
 	void useless_escape (uint32_t line, uint32_t col, char c);
 };

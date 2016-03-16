@@ -275,7 +275,7 @@ void emit_rule (OutputFile & o, uint32_t ind, const State * const s, const RuleI
 
 	if (opts->target == opt_t::SKELETON)
 	{
-		skeleton->emit_action (o, ind, rule->rank);
+		emit_action(*skeleton, o, ind, rule->rank);
 	}
 	else
 	{

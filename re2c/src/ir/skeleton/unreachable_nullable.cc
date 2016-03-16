@@ -1,7 +1,5 @@
 #include "src/util/c99_stdint.h"
-#include <map>
 #include <set>
-#include <utility>
 
 #include "src/conf/warn.h"
 #include "src/globals.h"
@@ -13,47 +11,51 @@
 namespace re2c
 {
 
-void Node::calc_reachable ()
+static void calc_reachable(
+	Skeleton &skel,
+	std::vector<std::set<RuleInfo*> > &reachs,
+	size_t i)
 {
-	if (!reachable.empty ())
-	{
+	const Node &node = skel.nodes[i];
+	uint8_t &loop = skel.loops[i];
+	std::set<RuleInfo*> &reach = reachs[i];
+
+	if (!reach.empty()) {
 		return;
-	}
-	else if (end ())
-	{
-		reachable.insert (rule);
-	}
-	else if (loop < 2)
-	{
-		local_inc _ (loop);
-		for (arcs_t::iterator i = arcs.begin (); i != arcs.end (); ++i)
-		{
-			i->first->calc_reachable ();
-			reachable.insert (i->first->reachable.begin (), i->first->reachable.end ());
+	} else if (node.end()) {
+		reach.insert(node.rule);
+	} else if (loop < 2) {
+		local_inc _(loop);
+		Node::arcs_t::const_iterator
+			arc = node.arcs.begin(),
+			end = node.arcs.end();
+		for (; arc != end; ++arc) {
+			const size_t j = arc->first;
+			calc_reachable(skel, reachs, j);
+			reach.insert(reachs[j].begin(), reachs[j].end());
 		}
 	}
 }
 
-void Skeleton::warn_unreachable_nullable_rules ()
+void warn_unreachable_nullable_rules(Skeleton &skel)
 {
 	// calculate reachable rules
-	nodes->calc_reachable();
-	for (uint32_t i = 0; i < nodes_count; ++i)
-	{
-		RuleInfo *r1 = nodes[i].rule;
+	std::vector<std::set<RuleInfo*> > reachs(skel.nodes_count);
+	calc_reachable(skel, reachs, 0);
+
+	for (uint32_t i = 0; i < skel.nodes_count; ++i) {
+		RuleInfo *r1 = skel.nodes[i].rule;
 		if (!r1) {
 			continue;
 		}
-		const std::set<RuleInfo*> & rs = nodes[i].reachable;
-		for (std::set<RuleInfo*>::const_iterator j = rs.begin(); j != rs.end(); ++j)
-		{
-			RuleInfo* r2 = *j;
-			if (!r2 || r1->rank == r2->rank)
-			{
+		std::set<RuleInfo*>::const_iterator
+			rule = reachs[i].begin(),
+			end = reachs[i].end();
+		for (; rule != end; ++rule) {
+			RuleInfo* r2 = *rule;
+			if (!r2 || r1->rank == r2->rank) {
 				r1->reachable = true;
-			}
-			else
-			{
+			} else {
 				r1->shadow.insert(r2->loc.line);
 			}
 		}
@@ -64,12 +66,10 @@ void Skeleton::warn_unreachable_nullable_rules ()
 	//   - infinite rules that consume infinitely many characters and fail on YYFILL, e.g. '[^]*'
 	//   - rules that contain never-matching link, e.g. '[]' with option '--empty-class match-none'
 	// default rule '*' should not be reported
-	for (rules_t::const_iterator i = rules.begin(); i != rules.end(); ++i)
-	{
+	for (rules_t::const_iterator i = skel.rules.begin(); i != skel.rules.end(); ++i) {
 		const RuleInfo *r = *i;
-		if (!r->rank.is_def() && !r->reachable)
-		{
-			warn.unreachable_rule(cond, r);
+		if (!r->rank.is_def() && !r->reachable) {
+			warn.unreachable_rule(skel.cond, r);
 		}
 	}
 
@@ -78,11 +78,9 @@ void Skeleton::warn_unreachable_nullable_rules ()
 	//    - rules that match empty strins with nonempty trailing context
 	// false positives on partially shadowed (yet reachable) rules, e.g.:
 	//     [^]?
-	for (rules_t::const_iterator i = rules.begin(); i != rules.end(); ++i)
-	{
+	for (rules_t::const_iterator i = skel.rules.begin(); i != skel.rules.end(); ++i) {
 		const RuleInfo *r = *i;
-		if (r->nullable && r->reachable)
-		{
+		if (r->nullable && r->reachable) {
 			warn.match_empty_string(r->loc.line);
 		}
 	}

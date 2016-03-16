@@ -136,18 +136,18 @@ void DFA::emit(Output & output, uint32_t& ind, bool isLastCond, bool& bPrologBra
 
 	head->action.set_initial (initial_label, head->action.type == Action::SAVE);
 
-	skeleton->warn_undefined_control_flow ();
-	skeleton->warn_unreachable_nullable_rules ();
+	warn_undefined_control_flow(*skeleton);
+	warn_unreachable_nullable_rules(*skeleton);
 
 	if (opts->target == opt_t::SKELETON)
 	{
 		if (output.skeletons.insert (name).second)
 		{
-			skeleton->emit_data (o.file_name);
-			skeleton->emit_start (o, max_fill, need_backup, need_backupctx, need_accept);
+			emit_data(*skeleton, o.file_name);
+			emit_start(*skeleton, o, max_fill, need_backup, need_backupctx, need_accept);
 			uint32_t i = 2;
 			emit_body (o, i, used_labels, initial_label);
-			skeleton->emit_end (o, need_backup, need_backupctx);
+			emit_end(*skeleton, o, need_backup, need_backupctx);
 		}
 	}
 	else

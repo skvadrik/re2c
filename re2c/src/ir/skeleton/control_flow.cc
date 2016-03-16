@@ -1,5 +1,3 @@
-#include <map>
-#include <utility>
 #include <vector>
 
 #include "src/conf/warn.h"
@@ -12,71 +10,57 @@
 namespace re2c
 {
 
+// See note [counting skeleton edges].
+// Type for counting arcs in paths that cause undefined behaviour.
+// These paths are stored on heap, so the limit should be low.
+// Most real-world cases have only a few short paths.
+// We don't need all paths anyway, just some examples.
+typedef u32lim_t<1024> nakeds_t; // ~1Kb
+
 // We don't need all patterns that cause undefined behaviour.
 // We only need some examples, the shorter the better.
-// See also note [counting skeleton edges].
-void Node::naked_paths(
-	path_t &prefix,
+static void naked_paths(
+	Skeleton &skel,
 	std::vector<path_t> &paths,
-	nakeds_t &size)
+	path_t &prefix,
+	nakeds_t &size,
+	size_t i)
 {
-	if (rule) {
+	const Node &node = skel.nodes[i];
+	uint8_t &loop = skel.loops[i];
+
+	if (node.rule) {
 		return;
-	} else if (end()) {
+	} else if (node.end()) {
 		paths.push_back(prefix);
 		size = size + nakeds_t::from64(prefix.len());
 	} else if (loop < 2) {
 		local_inc _(loop);
-		for (arcsets_t::iterator i = arcsets.begin();
-			i != arcsets.end() && !size.overflow(); ++i) {
-			prefix.push(i->first);
-			i->first->naked_paths(prefix, paths, size);
+		Node::arcsets_t::const_iterator
+			arc = node.arcsets.begin(),
+			end = node.arcsets.end();
+		for (; arc != end && !size.overflow(); ++arc) {
+			const size_t j = arc->first;
+			prefix.push(j);
+			naked_paths(skel, paths, prefix, size, j);
 			prefix.pop();
 		}
 	}
 }
 
-void Skeleton::warn_undefined_control_flow()
+void warn_undefined_control_flow(Skeleton &skel)
 {
-	path_t prefix(&nodes[0]);
+	path_t prefix(0);
 	std::vector<path_t> paths;
-	Node::nakeds_t size = Node::nakeds_t::from32(0u);
+	nakeds_t size = nakeds_t::from32(0u);
 
-	nodes->naked_paths(prefix, paths, size);
+	naked_paths(skel, paths, prefix, size, 0);
 
 	if (!paths.empty()) {
-		warn.undefined_control_flow(line, cond, paths, size.overflow());
+		warn.undefined_control_flow(skel, paths, size.overflow());
 	} else if (size.overflow()) {
-		warn.fail(Warn::UNDEFINED_CONTROL_FLOW, line,
+		warn.fail(Warn::UNDEFINED_CONTROL_FLOW, skel.line,
 			"DFA is too large to check undefined control flow");
-	}
-}
-
-// define strict weak ordering on patterns:
-// 1st criterion is length (short patterns go first)
-// 2nd criterion is lexicographical order (applies to patterns of equal length)
-bool compare_default_paths(const path_t &p1, const path_t &p2)
-{
-	const size_t l1 = p1.len();
-	const size_t l2 = p2.len();
-	if (l1 == l2) {
-		for (size_t i = 0; i < l1; ++i) {
-			const Node::arcset_t
-				&a1 = p1.arcset(i),
-				&a2 = p2.arcset(i);
-			const size_t s1 = a1.size();
-			const size_t s2 = a2.size();
-			for (size_t j = 0; j < s1; ++j) {
-				if (j == s2 || a2[j] < a1[j]) {
-					return false;
-				} else if (a1[j] < a2[j]) {
-					return true;
-				}
-			}
-		}
-		return false;
-	} else {
-		return l1 < l2;
 	}
 }
 
@@ -99,7 +83,10 @@ static void fprint_default_arc(FILE *f, const Node::arcset_t &arc)
 	}
 }
 
-void fprint_default_path(FILE *f, const path_t &p)
+void fprint_default_path(
+	FILE *f,
+	const Skeleton &skel,
+	const path_t &p)
 {
 	fprintf(f, "'");
 	const size_t len = p.len();
@@ -107,7 +94,7 @@ void fprint_default_path(FILE *f, const path_t &p)
 		if (i > 0) {
 			fprintf(f, " ");
 		}
-		const Node::arcset_t &arc = p.arcset(i);
+		const Node::arcset_t &arc = p.arcset(skel, i);
 		fprint_default_arc(stderr, arc);
 	}
 	fprintf(f, "'");
