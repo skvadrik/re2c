@@ -9,6 +9,19 @@
 namespace re2c
 {
 
+class suffix_t
+{
+	std::vector<size_t> arcs;
+
+public:
+	suffix_t() : arcs() {}
+	void push(size_t i)
+	{
+		arcs.push_back(i);
+	}
+	friend class path_t;
+};
+
 class path_t
 {
 	std::vector<size_t> arcs;
@@ -78,10 +91,13 @@ public:
 	{
 		arcs.pop_back();
 	}
-	void append(const path_t *p)
+	void push_sfx(const suffix_t &suffix)
 	{
-		assert(arcs.back() == p->arcs.front());
-		arcs.insert(arcs.end(), p->arcs.begin() + 1, p->arcs.end());
+		arcs.insert(arcs.end(), suffix.arcs.rbegin(), suffix.arcs.rend());
+	}
+	void pop_sfx(const suffix_t &suffix)
+	{
+		arcs.resize(arcs.size() - suffix.arcs.size());
 	}
 	bool operator<(const path_t &p) const
 	{

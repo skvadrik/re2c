@@ -21,6 +21,7 @@ namespace re2c
 struct dfa_t;
 struct OutputFile;
 struct path_t;
+struct suffix_t;
 
 typedef local_increment_t<uint8_t> local_inc;
 
@@ -58,7 +59,7 @@ struct Skeleton
 	uint8_t *loops;
 
 	// paths to end node (for constructing path cover)
-	path_t **suffixes;
+	suffix_t **suffixes;
 
 	size_t sizeof_key;
 	rules_t rules;

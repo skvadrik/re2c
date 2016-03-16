@@ -147,16 +147,17 @@ template <typename cunit_t, typename key_t> static void cover(
 {
 	const Node &node = skel.nodes[i];
 	uint8_t &loop = skel.loops[i];
-	path_t *&suffix = skel.suffixes[i];
+	suffix_t *&suffix = skel.suffixes[i];
 
 	if (node.end() && suffix == NULL) {
-		suffix = new path_t(i);
+		suffix = new suffix_t;
 	}
 
 	if (suffix != NULL)
 	{
-		prefix.append(suffix);
+		prefix.push_sfx(*suffix);
 		size = size + cover_one<cunit_t, key_t>(skel, input, keys, prefix);
+		prefix.pop_sfx(*suffix);
 	} else if (loop < 2) {
 		local_inc _(loop);
 		Node::arcs_t::const_iterator
@@ -165,15 +166,14 @@ template <typename cunit_t, typename key_t> static void cover(
 		for (; arc != end && !size.overflow(); ++arc) {
 			const size_t j = arc->first;
 
-			path_t new_prefix = prefix;
-			new_prefix.push(j);
-			cover<cunit_t, key_t>(skel, input, keys, new_prefix, size, j);
+			prefix.push(j);
+			cover<cunit_t, key_t>(skel, input, keys, prefix, size, j);
+			prefix.pop();
 
-			const path_t *sfx = skel.suffixes[j];
+			const suffix_t *sfx = skel.suffixes[j];
 			if (sfx != NULL && suffix == NULL) {
-				suffix = new path_t(i);
+				suffix = new suffix_t(*sfx);
 				suffix->push(j);
-				suffix->append(sfx);
 			}
 		}
 	}
