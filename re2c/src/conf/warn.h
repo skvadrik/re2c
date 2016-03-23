@@ -13,13 +13,14 @@ struct path_t;
 struct Skeleton;
 
 #define RE2C_WARNING_TYPES \
-	W (CONDITION_ORDER,        "condition-order"), \
-	W (EMPTY_CHARACTER_CLASS,  "empty-character-class"), \
-	W (MATCH_EMPTY_STRING,     "match-empty-string"), \
-	W (SWAPPED_RANGE,          "swapped-range"), \
-	W (UNDEFINED_CONTROL_FLOW, "undefined-control-flow"), \
-	W (UNREACHABLE_RULES,      "unreachable-rules"), \
-	W (USELESS_ESCAPE,         "useless-escape"),
+	W (CONDITION_ORDER,          "condition-order"), \
+	W (EMPTY_CHARACTER_CLASS,    "empty-character-class"), \
+	W (MATCH_EMPTY_STRING,       "match-empty-string"), \
+	W (SELFOVERLAPPING_CONTEXTS, "selfoverlapping-contexts"), \
+	W (SWAPPED_RANGE,            "swapped-range"), \
+	W (UNDEFINED_CONTROL_FLOW,   "undefined-control-flow"), \
+	W (UNREACHABLE_RULES,        "unreachable-rules"), \
+	W (USELESS_ESCAPE,           "useless-escape"),
 
 class Warn
 {
@@ -58,6 +59,7 @@ public:
 	void condition_order (uint32_t line);
 	void empty_class (uint32_t line);
 	void match_empty_string (uint32_t line);
+	void selfoverlapping_contexts(uint32_t line, const std::string &cond, const CtxVar &ctx);
 	void swapped_range (uint32_t line, uint32_t l, uint32_t u);
 	void undefined_control_flow (const Skeleton &skel, std::vector<path_t> & paths, bool overflow);
 	void unreachable_rule (const std::string & cond, const RuleInfo *rule);

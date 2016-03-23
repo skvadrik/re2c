@@ -199,6 +199,13 @@ void OutputFile::insert_code ()
 	blocks.back ()->fragments.push_back (new OutputFragment (OutputFragment::CODE, 0));
 }
 
+OutputFile &OutputFile::wdelay_contexts(uint32_t ind)
+{
+	blocks.back()->fragments.push_back(new OutputFragment(OutputFragment::CONTEXTS, ind));
+	insert_code();
+	return *this;
+}
+
 OutputFile & OutputFile::wdelay_line_info ()
 {
 	blocks.back ()->fragments.push_back (new OutputFragment (OutputFragment::LINE_INFO, 0));
@@ -287,10 +294,10 @@ void OutputFile::new_block ()
 	insert_code ();
 }
 
-void OutputFile::emit
-	( const std::vector<std::string> & types
-	, size_t max_fill
-	)
+void OutputFile::emit(
+	const std::vector<std::string> &types,
+	const std::set<std::string> &contexts,
+	size_t max_fill)
 {
 	if (file != NULL)
 	{
@@ -304,6 +311,9 @@ void OutputFile::emit
 				switch (f.type)
 				{
 					case OutputFragment::CODE:
+						break;
+					case OutputFragment::CONTEXTS:
+						output_contexts(f.stream, f.indent, contexts);
 						break;
 					case OutputFragment::LINE_INFO:
 						output_line_info (f.stream, line_count + 1, file_name);
@@ -373,6 +383,7 @@ Output::Output (const char * source_name, const char * header_name)
 	, header (header_name)
 	, types ()
 	, skeletons ()
+	, contexts ()
 	, max_fill (1)
 {}
 
@@ -380,9 +391,24 @@ Output::~Output ()
 {
 	if (!warn.error ())
 	{
-		source.emit (types, max_fill);
+		source.emit (types, contexts, max_fill);
 		header.emit (types);
 	}
+}
+
+void output_contexts(std::ostream &o, uint32_t ind, const std::set<std::string> &contexts)
+{
+	if (!contexts.empty()) {
+		std::set<std::string>::const_iterator
+			ctx = contexts.begin(),
+			end = contexts.end();
+		o << indent(ind) << "YYDISTTYPE " << *ctx;
+		for (++ctx; ctx != end; ++ctx) {
+			o << ", " << *ctx;
+		}
+		o << ";\n";
+	}
+	o << opts->input_api.stmt_backupctx(ind);
 }
 
 void output_state_goto (std::ostream & o, uint32_t ind, uint32_t start_label)

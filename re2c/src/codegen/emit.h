@@ -18,6 +18,7 @@ void emit_action
 	, const Skeleton * skeleton
 	, const std::set<label_t> & used_labels
 	, bool save_yyaccept
+	, bool base_ctxmarker
 	);
 
 // helpers

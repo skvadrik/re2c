@@ -47,7 +47,7 @@ static void minimization_table(
 		for (size_t j = 0; j < i; ++j)
 		{
 			dfa_state_t *s2 = states[j];
-			tbl[i][j] = s1->ctx != s2->ctx
+			tbl[i][j] = s1->ctxs != s2->ctxs
 				|| s1->rule != s2->rule;
 		}
 	}
@@ -135,11 +135,11 @@ static void minimization_moore(
 	size_t *next = new size_t[count];
 
 	// see note [distinguish states by contexts]
-	std::map<std::pair<const RuleInfo*, bool>, size_t> init;
+	std::map<std::pair<const RuleInfo*, std::set<size_t> >, size_t> init;
 	for (size_t i = 0; i < count; ++i)
 	{
 		dfa_state_t *s = states[i];
-		std::pair<const RuleInfo*, bool> key(s->rule, s->ctx);
+		std::pair<const RuleInfo*, std::set<size_t> > key(s->rule, s->ctxs);
 		if (init.insert(std::make_pair(key, i)).second)
 		{
 			part[i] = i;

@@ -94,7 +94,8 @@ void emit_prolog(OutputFile &o)
 }
 
 void emit_start(const Skeleton &skel, OutputFile &o, size_t maxfill,
-	bool backup, bool backupctx, bool accept)
+	bool backup, bool backupctx, bool accept, bool base_ctxmarker,
+	const std::set<std::string> &ctxnames)
 {
 	const size_t
 		sizeof_cunit = opts->encoding.szCodeUnit(),
@@ -114,7 +115,13 @@ void emit_start(const Skeleton &skel, OutputFile &o, size_t maxfill,
 	}
 	if (backupctx) {
 		o.ws("\n#define YYBACKUPCTX() ctxmarker = cursor");
-		o.ws("\n#define YYRESTORECTX() cursor = ctxmarker");
+		if(base_ctxmarker) {
+			o.ws("\n#define YYRESTORECTX(dist) cursor = ctxmarker + dist");
+			o.ws("\n#define YYDIST() (cursor - ctxmarker)");
+			o.ws("\n#define YYDISTTYPE long");
+		} else {
+			o.ws("\n#define YYRESTORECTX() cursor = ctxmarker");
+		}
 	}
 	o.ws("\n#define YYLESSTHAN(n) (limit - cursor) < n");
 	o.ws("\n#define YYFILL(n) { break; }");
@@ -225,6 +232,10 @@ void emit_start(const Skeleton &skel, OutputFile &o, size_t maxfill,
 	o.ws("\n").wind(2).ws("YYCTYPE yych;");
 	if (accept) {
 		o.ws("\n").wind(2).ws("unsigned int yyaccept = 0;");
+	}
+	if (!ctxnames.empty()) {
+		o.ws("\n");
+		output_contexts(o.stream(), 2, ctxnames);
 	}
 	o.ws("\n");
 	if (opts->bFlag && BitMap::first) {

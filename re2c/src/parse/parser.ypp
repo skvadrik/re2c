@@ -49,13 +49,14 @@ static std::vector<std::string> condnames;
 static re2c::SpecMap  specMap;
 static Spec spec;
 static const RegExp *specNone = NULL;
-static RuleList       specStar;
+static SpecStar specStar;
 static const RegExp *star_default = NULL;
 static Scanner          *in = NULL;
 static Scanner::ParseMode  parseMode;
 static SetupMap            ruleSetupMap;
 static bool                foundRules;
 static symbol_table_t symbol_table;
+static zzz_t ctxs;
 
 /* Bison version 1.875 emits a definition that is not working
  * with several g++ version. Hence we disable it here.
@@ -83,8 +84,7 @@ void context_none(CondList *clist)
 void context_rule
 	( CondList * clist
 	, const Loc & loc
-	, const RegExp * expr
-	, const RegExp * look
+	, std::pair<std::vector<const RegExp*>, std::vector<std::string*> > * expr
 	, const Code * code
 	, const std::string * newcond
 	)
@@ -98,9 +98,9 @@ void context_rule
 		}
 
 		const RegExp *rule = make_rule
-			( loc
+			( specMap[*it].contexts
+			, loc
 			, expr
-			, look
 			, rank_counter.next ()
 			, code
 			, newcond
@@ -134,10 +134,9 @@ void default_rule(CondList *clist, const Code * code)
 	context_check(clist);
 	for(CondList::const_iterator it = clist->begin(); it != clist->end(); ++it)
 	{
-		const RegExp * def = make_rule
+		const RegExp * def = make_rule_ctxfree
 			( code->loc
 			, in->mkDefault ()
-			, RegExp::nil()
 			, rule_rank_t::def ()
 			, code
 			, NULL
@@ -161,12 +160,14 @@ void default_rule(CondList *clist, const Code * code)
 	re2c::ExtOp extop;
 	std::string * str;
 	re2c::CondList * clist;
+	re2c::zzz_t *ctxs;
 };
 
 %token TOKEN_CLOSE
 %token TOKEN_CLOSESIZE
 %token TOKEN_CODE
 %token TOKEN_CONF
+%token TOKEN_CTX
 %token TOKEN_ID
 %token TOKEN_FID
 %token TOKEN_FID_END
@@ -179,8 +180,9 @@ void default_rule(CondList *clist, const Code * code)
 %type <extop>   TOKEN_CLOSESIZE
 %type <code>    TOKEN_CODE
 %type <regexp>  TOKEN_REGEXP rule look expr diff term factor primary
-%type <str>     TOKEN_ID TOKEN_FID newcond
+%type <str>     TOKEN_ID TOKEN_FID TOKEN_CTX newcond
 %type <clist>   cond clist
+%type <ctxs>    ctxexpr trailexpr
 
 %%
 
@@ -224,18 +226,18 @@ decl:
 ;
 
 rule:
-		expr look TOKEN_CODE
+		trailexpr TOKEN_CODE
 		{
 			if (opts->cFlag)
 			{
 				in->fatal("condition or '<*>' required when using -c switch");
 			}
 			const RegExp * rule = make_rule
-				( $3->loc
+				( spec.contexts
+				, $2->loc
 				, $1
-				, $2
 				, rank_counter.next ()
-				, $3
+				, $2
 				, NULL
 				);
 			spec.add (rule);
@@ -244,10 +246,9 @@ rule:
 		{
 			if (opts->cFlag)
 				in->fatal("condition or '<*>' required when using -c switch");
-			const RegExp * def = make_rule
+			const RegExp * def = make_rule_ctxfree
 				( $2->loc
 				, in->mkDefault ()
-				, RegExp::nil()
 				, rule_rank_t::def ()
 				, $2
 				, NULL
@@ -257,15 +258,15 @@ rule:
 				in->fatal("code to default rule is already defined");
 			}
 		}
-	|	'<' cond '>' expr look newcond TOKEN_CODE
+	|	'<' cond '>' trailexpr newcond TOKEN_CODE
 		{
-			context_rule ($2, $7->loc, $4, $5, $7, $6);
+			context_rule ($2, $6->loc, $4, $6, $5);
 		}
-	|	'<' cond '>' expr look ':' newcond
+	|	'<' cond '>' trailexpr ':' newcond
 		{
-			assert($7);
+			assert($6);
 			Loc loc (in->get_fname (), in->get_cline ());
-			context_rule ($2, loc, $4, $5, NULL, $7);
+			context_rule ($2, loc, $4, NULL, $6);
 		}
 	|	'<' cond '>' look newcond TOKEN_CODE
 		{
@@ -282,35 +283,35 @@ rule:
 		{
 			default_rule($2, $5);
 		}
-	|	'<' TOKEN_STAR '>' expr look newcond TOKEN_CODE
+	|	'<' TOKEN_STAR '>' trailexpr newcond TOKEN_CODE
 		{
 			context_check(NULL);
 			const RegExp * rule = make_rule
-				( $7->loc
+				( specStar.contexts
+				, $6->loc
 				, $4
-				, $5
 				, rank_counter.next ()
-				, $7
 				, $6
+				, $5
 				);
-			specStar.push_back (rule);
-			delete $6;
+			specStar.rules.push_back (rule);
+			delete $5;
 		}
-	|	'<' TOKEN_STAR '>' expr look ':' newcond
+	|	'<' TOKEN_STAR '>' trailexpr ':' newcond
 		{
-			assert($7);
+			assert($6);
 			context_check(NULL);
 			Loc loc (in->get_fname (), in->get_cline ());
 			const RegExp * rule = make_rule
-				( loc
+				( specStar.contexts
+				, loc
 				, $4
-				, $5
 				, rank_counter.next ()
 				, NULL
-				, $7
+				, $6
 				);
-			specStar.push_back (rule);
-			delete $7;
+			specStar.rules.push_back (rule);
+			delete $6;
 		}
 	|	'<' TOKEN_STAR '>' look newcond TOKEN_CODE
 		{
@@ -329,10 +330,9 @@ rule:
 			{
 				in->fatal ("code to default rule '*' is already defined");
 			}
-			star_default = make_rule
+			star_default = make_rule_ctxfree
 				( $5->loc
 				, in->mkDefault ()
-				, RegExp::nil()
 				, rule_rank_t::def ()
 				, $5
 				, NULL
@@ -345,9 +345,8 @@ rule:
 			{
 				in->fatal("code to handle illegal condition already defined");
 			}
-			$$ = specNone = make_rule
+			$$ = specNone = make_rule_ctxfree
 				( $3->loc
-				, RegExp::nil()
 				, RegExp::nil()
 				, rank_counter.next ()
 				, $3
@@ -364,9 +363,8 @@ rule:
 				in->fatal("code to handle illegal condition already defined");
 			}
 			Loc loc (in->get_fname (), in->get_cline ());
-			$$ = specNone = make_rule
+			$$ = specNone = make_rule_ctxfree
 				( loc
-				, RegExp::nil()
 				, RegExp::nil()
 				, rank_counter.next ()
 				, NULL
@@ -422,6 +420,33 @@ newcond:
 			$$ = $3;
 		}
 ;
+
+trailexpr:
+	ctxexpr {
+		$$ = $1;
+	} | ctxexpr '/' expr {
+		// multiple trailing contexts on the same rule are not allowed
+		$$ = $1;
+		$$->first.push_back($3);
+		$$->second.push_back(NULL);
+	};
+
+ctxexpr:
+	expr {
+		ctxs.first.clear();
+		ctxs.second.clear();
+		$$ = &ctxs;
+		$$->first.push_back($1);
+	} | ctxexpr TOKEN_CTX expr {
+		if (!opts->contexts) {
+			delete $2;
+			in->fatal("non-trailing contexts are only allowed"
+				" with '-C, --contexts' option");
+		}
+		$$ = $1;
+		$$->first.push_back($3);
+		$$->second.push_back($2);
+	};
 
 look:
 		/* empty */
@@ -572,7 +597,7 @@ void parse(Scanner& i, Output & o)
 		.wline_info (in->get_cline (), in->get_fname ().c_str ());
 	if (opts->target == opt_t::SKELETON)
 	{
-		emit_prolog(o.source);
+		emit_prolog (o.source);
 	}
 
 	Enc encodingOld = opts->encoding;
@@ -647,9 +672,13 @@ void parse(Scanner& i, Output & o)
 				// merge <*> rules to all conditions with lowest priority
 				for (it = specMap.begin(); it != specMap.end(); ++it)
 				{
-					for (RuleList::const_iterator itOp = specStar.begin(); itOp != specStar.end(); ++itOp)
-					{
-						it->second.add(make_rule_copy(*itOp, rank_counter.next()));
+					const size_t shift = it->second.contexts.size();
+					it->second.contexts.insert(it->second.contexts.end(), specStar.contexts.begin(), specStar.contexts.end());
+					std::vector<const RegExp*>::const_iterator
+						star = specStar.rules.begin(),
+						star_end = specStar.rules.end();
+					for (; star != star_end; ++star) {
+						it->second.add(make_rule_copy(*star, rank_counter.next(), shift));
 					}
 					if (star_default)
 					{
@@ -741,7 +770,7 @@ void parse(Scanner& i, Output & o)
 
 	if (opts->target == opt_t::SKELETON)
 	{
-		emit_epilog(o.source, o.skeletons);
+		emit_epilog (o.source, o.skeletons);
 	}
 
 	parse_cleanup();

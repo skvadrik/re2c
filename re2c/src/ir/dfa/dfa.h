@@ -3,10 +3,12 @@
 
 #include "src/util/c99_stdint.h"
 #include <vector>
+#include <set>
 
 #include "src/ir/regexp/regexp.h"
 #include "src/parse/rules.h"
 #include "src/util/forbid_copy.h"
+#include "src/util/ord_hash_set.h"
 
 namespace re2c
 {
@@ -18,12 +20,12 @@ struct dfa_state_t
 {
 	size_t *arcs;
 	RuleInfo *rule;
-	bool ctx;
+	std::set<size_t> ctxs;
 
 	dfa_state_t()
 		: arcs(NULL)
 		, rule(NULL)
-		, ctx(false)
+		, ctxs()
 	{}
 	~dfa_state_t()
 	{
@@ -39,9 +41,13 @@ struct dfa_t
 
 	std::vector<dfa_state_t*> states;
 	const size_t nchars;
+	std::vector<CtxVar> &contexts;
 
-	dfa_t(const nfa_t &nfa, const charset_t &charset);
+	dfa_t(const nfa_t &nfa, const charset_t &charset,
+		uint32_t line, const std::string &cond);
 	~dfa_t();
+
+	FORBID_COPY(dfa_t);
 };
 
 enum dfa_minimization_t
@@ -50,9 +56,13 @@ enum dfa_minimization_t
 	DFA_MINIMIZATION_MOORE
 };
 
+void check_context_selfoverlap(ord_hash_set_t &kernels,
+	const std::vector<CtxVar> &contexts,
+	uint32_t line, const std::string &cond);
 void minimization(dfa_t &dfa);
 void fillpoints(const dfa_t &dfa, std::vector<size_t> &fill);
 void fallback_states(const dfa_t &dfa, std::vector<size_t> &fallback);
+bool deduplicate_contexts(const dfa_t &dfa, const std::vector<size_t> &fallback);
 
 } // namespace re2c
 

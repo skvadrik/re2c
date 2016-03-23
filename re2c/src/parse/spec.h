@@ -19,21 +19,18 @@ struct Spec
 {
 	const RegExp * re;
 	rules_t rules;
+	std::vector<CtxVar> contexts;
 
 	Spec ()
 		: re (NULL)
 		, rules ()
+		, contexts ()
 	{}
 	Spec (const Spec & spec)
 		: re (spec.re)
 		, rules (spec.rules)
+		, contexts (spec.contexts)
 	{}
-	Spec & operator = (const Spec & spec)
-	{
-		re = spec.re;
-		rules = spec.rules;
-		return *this;
-	}
 	bool add_def (const RegExp * r)
 	{
 		if (std::find_if(rules.begin(), rules.end(), is_def) != rules.end())
@@ -55,6 +52,23 @@ struct Spec
 	{
 		re = NULL;
 		rules.clear ();
+		contexts.clear();
+	}
+
+private:
+	Spec& operator=(const Spec&);
+};
+
+struct SpecStar
+{
+	std::vector<const RegExp*> rules;
+	std::vector<CtxVar> contexts;
+
+	SpecStar(): rules(), contexts() {}
+	void clear()
+	{
+		rules.clear();
+		contexts.clear();
 	}
 };
 

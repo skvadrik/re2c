@@ -26,7 +26,9 @@ static void emit_initial       (OutputFile & o, uint32_t ind, bool & readCh, con
 static void emit_save          (OutputFile & o, uint32_t ind, bool & readCh, const State * const s, uint32_t save, bool save_yyaccept);
 static void emit_accept_binary (OutputFile & o, uint32_t ind, bool & readCh, const State * const s, const accept_t & accept, size_t l, size_t r);
 static void emit_accept        (OutputFile & o, uint32_t ind, bool & readCh, const State * const s, const accept_t & accept);
-static void emit_rule          (OutputFile & o, uint32_t ind, const State * const s, const RuleInfo * const rule, const std::string & condName, const Skeleton * skeleton);
+static void emit_rule(OutputFile &o, uint32_t ind, const State *const s,
+	const RuleInfo *const rule, const std::string &condName,
+	const Skeleton *skeleton, bool base_ctxmarker);
 static void genYYFill          (OutputFile & o, size_t need);
 static void genSetCondition    (OutputFile & o, uint32_t ind, const std::string & newcond);
 static void genSetState        (OutputFile & o, uint32_t ind, uint32_t fillIndex);
@@ -41,6 +43,7 @@ void emit_action
 	, const Skeleton * skeleton
 	, const std::set<label_t> & used_labels
 	, bool save_yyaccept
+	, bool base_ctxmarker
 	)
 {
 	switch (action.type)
@@ -60,12 +63,15 @@ void emit_action
 			emit_accept (o, ind, readCh, s, * action.info.accepts);
 			break;
 		case Action::RULE:
-			emit_rule (o, ind, s, action.info.rule, condName, skeleton);
+			emit_rule (o, ind, s, action.info.rule, condName, skeleton, base_ctxmarker);
 			break;
 	}
-	if (s->isPreCtxt && opts->target != opt_t::DOT)
-	{
-		o.wstring(opts->input_api.stmt_backupctx (ind));
+	if (opts->target != opt_t::DOT && !s->ctxs.empty()) {
+		if (base_ctxmarker) {
+			o.wstring(opts->input_api.stmt_dist(ind, s->ctxs, skeleton->contexts));
+		} else {
+			o.wstring(opts->input_api.stmt_backupctx(ind));
+		}
 	}
 }
 
@@ -248,7 +254,49 @@ void emit_accept (OutputFile & o, uint32_t ind, bool & readCh, const State * con
 	}
 }
 
-void emit_rule (OutputFile & o, uint32_t ind, const State * const s, const RuleInfo * const rule, const std::string & condName, const Skeleton * skeleton)
+static void rreplace_substr(std::string &s,
+	const std::string &s1, const std::string &s2)
+{
+	if (!s1.empty()) {
+		std::string::size_type pos;
+		while ((pos = s.find(s1)) != std::string::npos) {
+			s.replace(pos, s1.length(), s2);
+		}
+	}
+}
+
+static std::string apply_rule_subst(const RuleInfo *rule, const std::vector<CtxVar> &contexts)
+{
+	std::string action = rule->code->text;
+
+	for (size_t i = 0; i < rule->ctxvar.size(); ++i) {
+		const CtxVar &ctx = contexts[rule->ctxvar[i]];
+		rreplace_substr(action, "@" + *ctx.name,
+			opts->input_api.expr_ctx(ctx.fullname));
+	}
+
+	for (size_t i = 0; i < rule->ctxfix.size(); ++i) {
+		const CtxFix &ctx = rule->ctxfix[i];
+		const std::string basename = (ctx.base == CtxFix::RIGHTMOST)
+			? opts->input_api.expr_dist()
+			: contexts[ctx.base].fullname;
+		std::ostringstream offs;
+		offs << "(" << basename << " - " << ctx.dist << ")";
+		const std::string ctx_value = opts->input_api.expr_ctx(offs.str());
+		rreplace_substr(action, "@" + *ctx.name, ctx_value);
+	}
+
+	return action;
+}
+
+void emit_rule(
+	OutputFile &o,
+	uint32_t ind,
+	const State *const s,
+	const RuleInfo *const rule,
+	const std::string &condName,
+	const Skeleton *skeleton,
+	bool base_ctxmarker)
 {
 	if (opts->target == opt_t::DOT)
 	{
@@ -261,15 +309,21 @@ void emit_rule (OutputFile & o, uint32_t ind, const State * const s, const RuleI
 		return;
 	}
 
-	if (opts->target != opt_t::DOT)
-	{
-		if (rule->ctx_len == ~0u)
-		{
-			o.wstring(opts->input_api.stmt_restorectx_dynamic(ind));
-		}
-		else if (rule->ctx_len > 0)
-		{
-			o.wstring(opts->input_api.stmt_restorectx_static(ind, rule->ctx_len));
+	if (opts->target != opt_t::DOT) {
+		switch (rule->trail.type) {
+			case Trail::NONE:
+				break;
+			case Trail::VAR:
+				if (base_ctxmarker) {
+					const std::string name = skeleton->contexts[rule->trail.pld.var].fullname;
+					o.wstring(opts->input_api.stmt_restorectx_var_base(ind, name));
+				} else {
+					o.wstring(opts->input_api.stmt_restorectx_var(ind));
+				}
+				break;
+			case Trail::FIX:
+				o.wstring(opts->input_api.stmt_restorectx_fix(ind, rule->trail.pld.fix));
+				break;
 		}
 	}
 
@@ -290,8 +344,9 @@ void emit_rule (OutputFile & o, uint32_t ind, const State * const s, const RuleI
 			{
 				o.wind(ind).wstring(yySetupRule).ws("\n");
 			}
+			const std::string action = apply_rule_subst(rule, skeleton->contexts);
 			o.wline_info(rule->code->loc.line, rule->code->loc.filename.c_str ())
-				.wind(ind).wstring(rule->code->text).ws("\n")
+				.wind(ind).wstring(action).ws("\n")
 				.wdelay_line_info ();
 		}
 		else if (!rule->newcond.empty ())

@@ -28,7 +28,7 @@ struct State
 	size_t fill;
 	bool fallback;
 
-	bool isPreCtxt;
+	std::set<size_t> ctxs;
 	bool isBase;
 	Go go;
 	Action action;
@@ -39,7 +39,7 @@ struct State
 		, next (0)
 		, fill (0)
 		, fallback (false)
-		, isPreCtxt (false)
+		, ctxs ()
 		, isBase (false)
 		, go ()
 		, action ()
@@ -66,12 +66,14 @@ public:
 	uint32_t ubChar;
 	uint32_t nStates;
 	State * head;
+	std::vector<CtxVar> &contexts;
 
 	// statistics
 	size_t max_fill;
 	bool need_backup;
 	bool need_backupctx;
 	bool need_accept;
+	bool base_ctxmarker;
 
 public:
 	DFA	( const dfa_t &dfa
@@ -82,6 +84,7 @@ public:
 		, const std::string &n
 		, const std::string &c
 		, uint32_t l
+		, bool base_ctx
 		);
 	~DFA ();
 	void reorder();

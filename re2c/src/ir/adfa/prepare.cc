@@ -243,11 +243,10 @@ void DFA::calc_stats ()
 	need_backup = accepts.size () > 0;
 
 	// determine if 'YYCTXMARKER' or 'YYBACKUPCTX'/'YYRESTORECTX' pair is used
-	for (State * s = head; s; s = s->next)
-	{
-		if (s->isPreCtxt)
-		{
+	for (State * s = head; s; s = s->next) {
+		if (!s->ctxs.empty()) {
 			need_backupctx = true;
+			break;
 		}
 	}
 

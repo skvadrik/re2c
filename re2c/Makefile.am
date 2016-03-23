@@ -55,6 +55,7 @@ SRC_HDR = \
 	src/util/counter.h \
 	src/util/forbid_copy.h \
 	src/util/free_list.h \
+	src/util/intersect_sorted.h \
 	src/util/local_increment.h \
 	src/util/ord_hash_set.h \
 	src/util/range.h \
@@ -81,6 +82,8 @@ SRC = \
 	src/ir/nfa/nfa.cc \
 	src/ir/adfa/adfa.cc \
 	src/ir/adfa/prepare.cc \
+	src/ir/dfa/context_deduplication.cc \
+	src/ir/dfa/context_selfoverlap.cc \
 	src/ir/dfa/determinization.cc \
 	src/ir/dfa/fallback.cc \
 	src/ir/dfa/fillpoints.cc \

@@ -90,7 +90,38 @@ std::string InputAPI::stmt_backupctx (uint32_t ind) const
 			s = opts->yybackupctx + " ()";
 			break;
 	}
-	return indent (ind) + s + ";\n";
+	return indent(ind) + s + ";\n";
+}
+
+std::string InputAPI::expr_dist () const
+{
+	std::string s;
+	switch (type_) {
+		case DEFAULT:
+			return "(" + opts->yycursor + " - " + opts->yyctxmarker + ")";
+		case CUSTOM:
+			return "YYDIST()";
+	}
+}
+
+std::string InputAPI::stmt_dist (uint32_t ind, const std::set<size_t> &ctxs,
+		const std::vector<CtxVar> &contexts) const
+{
+	std::string s = indent(ind);
+	for (std::set<size_t>::const_iterator i = ctxs.begin(); i != ctxs.end(); ++i) {
+		s += contexts[*i].fullname + " = ";
+	}
+	return s + expr_dist() + ";\n";
+}
+
+std::string InputAPI::expr_ctx (const std::string &ctx) const
+{
+	switch (type_) {
+		case DEFAULT:
+			return "(" + opts->yyctxmarker + " + " + ctx + ")";
+		case CUSTOM:
+			return "YYCTX(" + ctx + ")";
+	}
 }
 
 std::string InputAPI::stmt_restore (uint32_t ind) const
@@ -108,27 +139,46 @@ std::string InputAPI::stmt_restore (uint32_t ind) const
 	return indent (ind) + s + ";\n";
 }
 
-std::string InputAPI::stmt_restorectx_static (uint32_t ind, uint32_t off) const
+std::string InputAPI::stmt_restorectx_fix(uint32_t ind, size_t dist) const
 {
-	assert(type_ == DEFAULT);
 	std::ostringstream s;
-	s << indent (ind) << opts->yycursor << " -= " << off << ";\n";
-	return s.str ();
-}
-
-std::string InputAPI::stmt_restorectx_dynamic (uint32_t ind) const
-{
-	std::string s;
-	switch (type_)
-	{
+	switch (type_) {
 		case DEFAULT:
-			s = indent (ind) + opts->yycursor + " = " + opts->yyctxmarker + ";\n";
+			s << opts->yycursor << " -= " << dist;
 			break;
 		case CUSTOM:
-			s = indent (ind) + opts->yyrestorectx + " ();\n";
+			s << opts->yyrestorectx << " (YYDIST() - " << dist << ")";
 			break;
 	}
-	return s;
+	return indent(ind) + s.str() + ";\n";
+}
+
+std::string InputAPI::stmt_restorectx_var_base(uint32_t ind, const std::string &ctx) const
+{
+	std::string s;
+	switch (type_) {
+		case DEFAULT:
+			s = opts->yycursor + " = " + opts->yyctxmarker + " + " + ctx;
+			break;
+		case CUSTOM:
+			s = opts->yyrestorectx + " (" + ctx + ")";
+			break;
+	}
+	return indent(ind) + s + ";\n";
+}
+
+std::string InputAPI::stmt_restorectx_var(uint32_t ind) const
+{
+	std::string s;
+	switch (type_) {
+		case DEFAULT:
+			s = opts->yycursor + " = " + opts->yyctxmarker;
+			break;
+		case CUSTOM:
+			s = opts->yyrestorectx + " ()";
+			break;
+	}
+	return indent(ind) + s + ";\n";
 }
 
 std::string InputAPI::stmt_skip_peek (uint32_t ind) const

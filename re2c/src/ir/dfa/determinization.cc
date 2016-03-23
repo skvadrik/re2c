@@ -9,7 +9,6 @@
 #include "src/ir/regexp/regexp.h"
 #include "src/ir/rule_rank.h"
 #include "src/parse/rules.h"
-#include "src/util/ord_hash_set.h"
 #include "src/util/range.h"
 
 namespace re2c
@@ -90,9 +89,14 @@ static size_t find_state
 	return kernels.insert(kernel, size);
 }
 
-dfa_t::dfa_t(const nfa_t &nfa, const charset_t &charset)
+dfa_t::dfa_t(
+	const nfa_t &nfa,
+	const charset_t &charset,
+	uint32_t line,
+	const std::string &cond)
 	: states()
 	, nchars(charset.size() - 1) // (n + 1) bounds for n ranges
+	, contexts(nfa.contexts)
 {
 	std::map<size_t, std::set<RuleInfo*> > s2rules;
 	ord_hash_set_t kernels;
@@ -127,7 +131,7 @@ dfa_t::dfa_t(const nfa_t &nfa, const charset_t &charset)
 					break;
 				}
 				case nfa_state_t::CTX:
-					s->ctx = true;
+					s->ctxs.insert(n->value.ctx.info);
 					break;
 				case nfa_state_t::FIN:
 					s2rules[i].insert(n->value.fin.rule);
@@ -179,6 +183,8 @@ dfa_t::dfa_t(const nfa_t &nfa, const charset_t &charset)
 			}
 		}
 	}
+
+	check_context_selfoverlap(kernels, contexts, line, cond);
 }
 
 dfa_t::~dfa_t()

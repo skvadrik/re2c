@@ -28,9 +28,11 @@ void split(const RegExp* re, std::set<uint32_t> &cs)
 		case RegExp::ITER:
 			split(re->pld.iter.re, cs);
 			break;
+		case RegExp::CTX:
+			split(re->pld.ctx.re, cs);
+			break;
 		case RegExp::RULE:
-			split(re->pld.rule.re,  cs);
-			split(re->pld.rule.ctx, cs);
+			split(re->pld.rule.re, cs);
 			break;
 	}
 }

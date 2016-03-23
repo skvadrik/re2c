@@ -1,8 +1,12 @@
 #ifndef _RE2C_IR_NFA_NFA_
 #define _RE2C_IR_NFA_NFA_
 
+#include <stddef.h>
 #include "src/util/c99_stdint.h"
+#include <vector>
 
+#include "src/parse/rules.h"
+#include "src/parse/spec.h"
 #include "src/util/forbid_copy.h"
 
 namespace re2c
@@ -36,6 +40,7 @@ struct nfa_state_t
 		struct
 		{
 			nfa_state_t *out;
+			size_t info;
 		} ctx;
 		struct
 		{
@@ -58,10 +63,11 @@ struct nfa_state_t
 		value.ran.ran = r;
 		mark = false;
 	}
-	void ctx(nfa_state_t *s)
+	void ctx(nfa_state_t *s, size_t i)
 	{
 		type = CTX;
 		value.ctx.out = s;
+		value.ctx.info = i;
 		mark = false;
 	}
 	void fin(RuleInfo *r)
@@ -77,9 +83,10 @@ struct nfa_t
 	const uint32_t max_size;
 	uint32_t size;
 	nfa_state_t *states;
+	std::vector<CtxVar> &contexts;
 	nfa_state_t *root;
 
-	nfa_t(const RegExp *re);
+	nfa_t(Spec &spec);
 	~nfa_t();
 
 	FORBID_COPY(nfa_t);

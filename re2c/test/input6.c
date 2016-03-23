@@ -7,14 +7,15 @@
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	goto yy3;
+	YYCURSOR -= 0;
 #line 3 "input6.re"
 	{ return 0; }
-#line 13 "input6.c"
+#line 14 "input6.c"
 yy3:
 	++YYCURSOR;
 #line 4 "input6.re"
 	{ return 1; }
-#line 18 "input6.c"
+#line 19 "input6.c"
 }
 #line 6 "input6.re"
 

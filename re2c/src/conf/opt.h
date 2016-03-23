@@ -55,6 +55,8 @@ namespace re2c
 	OPT (bool, bUseStateAbort, false) \
 	OPT (bool, bUseStateNext, false) \
 	/* reuse */ \
+	OPT (bool, contexts, false) \
+	/* reuse */ \
 	OPT (bool, rFlag, false) \
 	/* partial flex syntax support */ \
 	OPT (bool, FFlag, false) \

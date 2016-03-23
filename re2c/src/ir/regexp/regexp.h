@@ -26,6 +26,7 @@ struct RegExp
 		ALT,
 		CAT,
 		ITER,
+		CTX,
 		RULE
 	};
 	union payload_t
@@ -51,7 +52,11 @@ struct RegExp
 		struct
 		{
 			const RegExp *re;
-			const RegExp *ctx;
+			size_t info;
+		} ctx;
+		struct
+		{
+			const RegExp *re;
 			RuleInfo *info;
 		} rule;
 	};
@@ -91,11 +96,17 @@ struct RegExp
 		re->pld.iter.re = r;
 		return re;
 	}
-	static const RegExp *rule(const RegExp *r1, const RegExp *r2, RuleInfo *i)
+	static const RegExp *ctx(const RegExp *r, size_t i)
+	{
+		RegExp *re = new RegExp(CTX);
+		re->pld.ctx.re = r;
+		re->pld.ctx.info = i;
+		return re;
+	}
+	static const RegExp *rule(const RegExp *r, RuleInfo *i)
 	{
 		RegExp *re = new RegExp(RULE);
-		re->pld.rule.re = r1;
-		re->pld.rule.ctx = r2;
+		re->pld.rule.re = r;
 		re->pld.rule.info = i;
 		return re;
 	}

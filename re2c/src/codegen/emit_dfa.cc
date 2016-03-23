@@ -107,7 +107,8 @@ void DFA::emit_body (OutputFile & o, uint32_t& ind, const std::set<label_t> & us
 	{
 		bool readCh = false;
 		emit_state (o, ind, s, used_labels.count (s->label));
-		emit_action (s->action, o, ind, readCh, s, cond, skeleton, used_labels, save_yyaccept);
+		emit_action (s->action, o, ind, readCh, s, cond, skeleton,
+			used_labels, save_yyaccept, base_ctxmarker);
 		s->go.emit(o, ind, readCh);
 	}
 }
@@ -115,6 +116,16 @@ void DFA::emit_body (OutputFile & o, uint32_t& ind, const std::set<label_t> & us
 void DFA::emit(Output & output, uint32_t& ind, bool isLastCond, bool& bPrologBrace)
 {
 	OutputFile & o = output.source;
+
+	std::set<std::string> ctxnames;
+	if (base_ctxmarker) {
+		for (State *s = head; s; s = s->next) {
+			for (std::set<size_t>::const_iterator i = s->ctxs.begin(); i != s->ctxs.end(); ++i) {
+				ctxnames.insert(contexts[*i].fullname);
+			}
+		}
+		output.contexts.insert(ctxnames.begin(), ctxnames.end());
+	}
 
 	bool bProlog = (!opts->cFlag || !bWroteCondCheck);
 
@@ -144,7 +155,8 @@ void DFA::emit(Output & output, uint32_t& ind, bool isLastCond, bool& bPrologBra
 		if (output.skeletons.insert (name).second)
 		{
 			emit_data(*skeleton, o.file_name);
-			emit_start(*skeleton, o, max_fill, need_backup, need_backupctx, need_accept);
+			emit_start(*skeleton, o, max_fill, need_backup, need_backupctx,
+				need_accept, base_ctxmarker, ctxnames);
 			uint32_t i = 2;
 			emit_body (o, i, used_labels, initial_label);
 			emit_end(*skeleton, o, need_backup, need_backupctx);
@@ -182,6 +194,9 @@ void DFA::emit(Output & output, uint32_t& ind, bool isLastCond, bool& bPrologBra
 					o.wind(ind).wstring(opts->yyctype).ws(" ").wstring(opts->yych).ws(";\n");
 				}
 				o.wdelay_yyaccept_init (ind);
+				if (base_ctxmarker) {
+					o.wdelay_contexts(ind);
+				}
 			}
 			else
 			{

@@ -271,6 +271,12 @@ start:
 	"<!"		{
 					return TOKEN_SETUP;
 				}
+
+	"@" name {
+		yylval.str = new std::string(tok + 1, tok_len() - 1);
+		return TOKEN_CTX;
+	}
+
 	[<>,()|=;/\\]	{
 					return *tok;
 				}

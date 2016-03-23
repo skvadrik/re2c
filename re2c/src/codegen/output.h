@@ -23,6 +23,7 @@ struct OutputFragment
 {
 	enum type_t
 		{ CODE
+		, CONTEXTS
 //		, CONFIG
 		, LINE_INFO
 		, STATE_GOTO
@@ -65,16 +66,12 @@ public:
 	counter_t<label_t> label_counter;
 	bool warn_condition_order;
 
-private:
-	std::ostream & stream ();
-	void insert_code ();
-
-public:
 	OutputFile (const char * fn);
 	~OutputFile ();
 
+	std::ostream & stream ();
+	void insert_code ();
 	bool open ();
-
 	void new_block ();
 
 	// immediate output
@@ -96,6 +93,7 @@ public:
 	OutputFile & wind (uint32_t ind);
 
 	// delayed output
+	OutputFile & wdelay_contexts(uint32_t ind);
 	OutputFile & wdelay_line_info ();
 	OutputFile & wdelay_state_goto (uint32_t ind);
 	OutputFile & wdelay_types ();
@@ -111,7 +109,8 @@ public:
 	void set_block_line (uint32_t l);
 	uint32_t get_block_line () const;
 
-	void emit (const std::vector<std::string> & types, size_t max_fill);
+	void emit(const std::vector<std::string> &types,
+		const std::set<std::string> &contexts, size_t max_fill);
 
 	FORBID_COPY (OutputFile);
 };
@@ -137,12 +136,14 @@ struct Output
 	HeaderFile header;
 	std::vector<std::string> types;
 	std::set<std::string> skeletons;
+	std::set<std::string> contexts;
 	size_t max_fill;
 
 	Output (const char * source_name, const char * header_name);
 	~Output ();
 };
 
+void output_contexts(std::ostream &o, uint32_t ind, const std::set<std::string> &contexts);
 void output_line_info (std::ostream &, uint32_t, const char *);
 void output_state_goto (std::ostream &, uint32_t, uint32_t);
 void output_types (std::ostream &, uint32_t, const std::vector<std::string> &);

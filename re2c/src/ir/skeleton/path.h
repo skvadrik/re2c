@@ -49,19 +49,24 @@ public:
 			if (rule == NULL) {
 				continue;
 			}
-			const size_t len = static_cast<size_t>(head - tail) - 1;
-			switch (rule->ctx_len) {
-				case 0:
+			size_t len = static_cast<size_t>(head - tail) - 1;
+
+			switch (rule->trail.type) {
+				case Trail::NONE:
 					return len;
-				case ~0u:
+				case Trail::FIX:
+					return len - rule->trail.pld.fix;
+				case Trail::VAR: {
+					const size_t ctx = rule->trail.pld.var;
 					for (; tail != head; ++tail) {
-						if (skel.nodes[*tail].ctx) {
+						std::set<size_t> &ctxs = skel.nodes[*tail].ctxs;
+						if (ctxs.find(ctx) != ctxs.end()) {
 							return static_cast<size_t>(head - tail) - 1;
 						}
 					}
 					assert(false);
-				default:
-					return len - rule->ctx_len;
+					break;
+				}
 			}
 		}
 		return 0;

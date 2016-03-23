@@ -2,10 +2,14 @@
 #define _RE2C_CODEGEN_INPUT_API_
 
 #include "src/util/c99_stdint.h"
+#include <set>
 #include <string>
+#include <vector>
 
 namespace re2c
 {
+
+struct CtxVar;
 
 class InputAPI
 {
@@ -28,9 +32,14 @@ public:
 	std::string stmt_skip (uint32_t ind) const;
 	std::string stmt_backup (uint32_t ind) const;
 	std::string stmt_backupctx (uint32_t ind) const;
+	std::string expr_dist () const;
+	std::string stmt_dist (uint32_t ind, const std::set<size_t> &ctxs,
+		const std::vector<CtxVar> &contexts) const;
+	std::string expr_ctx (const std::string &ctx) const;
 	std::string stmt_restore (uint32_t ind) const;
-	std::string stmt_restorectx_static (uint32_t ind, uint32_t off) const;
-	std::string stmt_restorectx_dynamic (uint32_t ind) const;
+	std::string stmt_restorectx_fix (uint32_t ind, size_t dist) const;
+	std::string stmt_restorectx_var (uint32_t ind) const;
+	std::string stmt_restorectx_var_base (uint32_t ind, const std::string &ctx) const;
 	std::string stmt_skip_peek (uint32_t ind) const;
 	std::string stmt_skip_backup (uint32_t ind) const;
 	std::string stmt_backup_peek (uint32_t ind) const;

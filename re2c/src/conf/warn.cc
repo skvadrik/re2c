@@ -118,6 +118,30 @@ void Warn::match_empty_string (uint32_t line)
 	}
 }
 
+void Warn::selfoverlapping_contexts(
+	uint32_t line,
+	const std::string &cond,
+	const CtxVar &ctx)
+{
+	if (mask[SELFOVERLAPPING_CONTEXTS] & WARNING)
+	{
+		const bool e = mask[SELFOVERLAPPING_CONTEXTS] & ERROR;
+		error_accuml |= e;
+
+		const char *trail, *name;
+		if (ctx.name == NULL) {
+			trail = "trailing context";
+			name = "";
+		} else {
+			trail = "context ";
+			name = ctx.name->c_str();
+		}
+		warning(names[SELFOVERLAPPING_CONTEXTS], line, e,
+			"%s%s %sis self-overlapping", trail, name,
+			incond(cond).c_str());
+	}
+}
+
 void Warn::swapped_range (uint32_t line, uint32_t l, uint32_t u)
 {
 	if (mask[SWAPPED_RANGE] & WARNING)

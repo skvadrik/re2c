@@ -4,11 +4,13 @@
 #include <vector>
 #include <utility>
 
+#include "src/conf/opt.h"
 #include "src/codegen/go.h"
 #include "src/ir/adfa/adfa.h"
 #include "src/ir/dfa/dfa.h"
 #include "src/ir/skeleton/skeleton.h"
 #include "src/util/allocate.h"
+#include "src/globals.h"
 
 namespace re2c
 {
@@ -22,6 +24,7 @@ DFA::DFA
 	, const std::string &n
 	, const std::string &c
 	, uint32_t l
+	, bool base_ctx
 	)
 	: accepts ()
 	, skeleton (skel)
@@ -32,12 +35,14 @@ DFA::DFA
 	, ubChar(charset.back())
 	, nStates(0)
 	, head(NULL)
+	, contexts(dfa.contexts)
 
 	// statistics
 	, max_fill (0)
 	, need_backup (false)
-	, need_backupctx (false)
+	, need_backupctx (opts->contexts)
 	, need_accept (false)
+	, base_ctxmarker (base_ctx)
 {
 	const size_t nstates = dfa.states.size();
 	const size_t nchars = dfa.nchars;
@@ -58,7 +63,7 @@ DFA::DFA
 		*p = s;
 		p = &s->next;
 
-		s->isPreCtxt = t->ctx;
+		s->ctxs = t->ctxs;
 		s->rule = t->rule;
 		s->fill = fill[i];
 		s->go.span = allocate<Span>(nchars);

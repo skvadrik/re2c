@@ -78,13 +78,14 @@ opt_warn:
 		error ("bad warning: %s", *argv);
 		return EXIT_FAIL;
 	}
-	"condition-order"        end { warn.set (Warn::CONDITION_ORDER,        option); goto opt; }
-	"empty-character-class"  end { warn.set (Warn::EMPTY_CHARACTER_CLASS,  option); goto opt; }
-	"match-empty-string"     end { warn.set (Warn::MATCH_EMPTY_STRING,     option); goto opt; }
-	"swapped-range"          end { warn.set (Warn::SWAPPED_RANGE,          option); goto opt; }
-	"undefined-control-flow" end { warn.set (Warn::UNDEFINED_CONTROL_FLOW, option); goto opt; }
-	"unreachable-rules"      end { warn.set (Warn::UNREACHABLE_RULES,      option); goto opt; }
-	"useless-escape"         end { warn.set (Warn::USELESS_ESCAPE,         option); goto opt; }
+	"condition-order"          end { warn.set (Warn::CONDITION_ORDER,          option); goto opt; }
+	"empty-character-class"    end { warn.set (Warn::EMPTY_CHARACTER_CLASS,    option); goto opt; }
+	"match-empty-string"       end { warn.set (Warn::MATCH_EMPTY_STRING,       option); goto opt; }
+	"selfoverlapping-contexts" end { warn.set (Warn::SELFOVERLAPPING_CONTEXTS, option); goto opt; }
+	"swapped-range"            end { warn.set (Warn::SWAPPED_RANGE,            option); goto opt; }
+	"undefined-control-flow"   end { warn.set (Warn::UNDEFINED_CONTROL_FLOW,   option); goto opt; }
+	"unreachable-rules"        end { warn.set (Warn::UNREACHABLE_RULES,        option); goto opt; }
+	"useless-escape"           end { warn.set (Warn::USELESS_ESCAPE,           option); goto opt; }
 */
 
 opt_short:
@@ -100,6 +101,7 @@ opt_short:
 	"V"  { vernum ();  return EXIT_OK; }
 	"b" { opts.set_bFlag (true);             goto opt_short; }
 	"c" { opts.set_cFlag (true);             goto opt_short; }
+	"C" { opts.set_contexts (true);          goto opt_short; }
 	"d" { opts.set_dFlag (true);             goto opt_short; }
 	"D" { opts.set_target (opt_t::DOT);      goto opt_short; }
 	"f" { opts.set_fFlag (true);             goto opt_short; }
@@ -133,6 +135,7 @@ opt_long:
 	"vernum"             end { vernum ();  return EXIT_OK; }
 	"bit-vectors"        end { opts.set_bFlag (true);             goto opt; }
 	"start-conditions"   end { opts.set_cFlag (true);             goto opt; }
+	"contexts"           end { opts.set_contexts (true);          goto opt; }
 	"debug-output"       end { opts.set_dFlag (true);             goto opt; }
 	"emit-dot"           end { opts.set_target (opt_t::DOT);      goto opt; }
 	"storable-state"     end { opts.set_fFlag (true);             goto opt; }

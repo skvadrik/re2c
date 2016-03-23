@@ -42,13 +42,14 @@
      TOKEN_CLOSESIZE = 259,
      TOKEN_CODE = 260,
      TOKEN_CONF = 261,
-     TOKEN_ID = 262,
-     TOKEN_FID = 263,
-     TOKEN_FID_END = 264,
-     TOKEN_NOCOND = 265,
-     TOKEN_REGEXP = 266,
-     TOKEN_SETUP = 267,
-     TOKEN_STAR = 268
+     TOKEN_CTX = 262,
+     TOKEN_ID = 263,
+     TOKEN_FID = 264,
+     TOKEN_FID_END = 265,
+     TOKEN_NOCOND = 266,
+     TOKEN_REGEXP = 267,
+     TOKEN_SETUP = 268,
+     TOKEN_STAR = 269
    };
 #endif
 
@@ -65,6 +66,7 @@ typedef union YYSTYPE
 	re2c::ExtOp extop;
 	std::string * str;
 	re2c::CondList * clist;
+	re2c::zzz_t *ctxs;
 
 
 

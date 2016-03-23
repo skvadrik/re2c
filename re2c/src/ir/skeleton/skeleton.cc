@@ -11,16 +11,16 @@ Node::Node() :
 	arcs(),
 	arcsets(),
 	rule(NULL),
-	ctx(false)
+	ctxs()
 {}
 
 void Node::init(
-	bool c,
+	const std::set<size_t> &cs,
 	RuleInfo *r,
 	const std::vector<std::pair<size_t, uint32_t> > &a)
 {
 	rule = r;
-	ctx = c;
+	ctxs = cs;
 
 	uint32_t lb = 0;
 	std::vector<std::pair<size_t, uint32_t> >::const_iterator
@@ -64,7 +64,8 @@ Skeleton::Skeleton(
 		nodes_count(dfa.states.size() + 1), // +1 for default state
 		nodes(new Node[nodes_count]),
 		sizeof_key(4),
-		rules(rs)
+		rules(rs),
+		contexts(dfa.contexts)
 {
 	const size_t nc = cs.size() - 1;
 
@@ -84,7 +85,7 @@ Skeleton::Skeleton(
 		if (arcs.size() == 1 && arcs[0].first == nodes_count - 1) {
 			arcs.clear();
 		}
-		nodes[i].init(s->ctx, s->rule, arcs);
+		nodes[i].init(s->ctxs, s->rule, arcs);
 	}
 
 	const uint32_t maxlen = maxpath(*this);

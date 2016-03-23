@@ -1,5 +1,6 @@
 #include "src/conf/msg.h"
 #include "src/conf/opt.h"
+#include "src/globals.h"
 
 namespace re2c
 {
@@ -213,6 +214,9 @@ void opt_t::fix ()
 			break;
 		default:
 			break;
+	}
+	if (contexts) {
+		warn.set(Warn::SELFOVERLAPPING_CONTEXTS, Warn::WERROR);
 	}
 	if (bFlag)
 	{
