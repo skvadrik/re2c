@@ -28,7 +28,12 @@ static std::string make_name(const std::string &cond, uint32_t line)
 	return name;
 }
 
-smart_ptr<DFA> compile (Spec & spec, Output & output, const std::string & cond, uint32_t cunits)
+static smart_ptr<DFA> compile_rules(
+	const std::vector<const RegExpRule*> &rules,
+	size_t defrule,
+	Output &output,
+	const std::string &cond,
+	uint32_t cunits)
 {
 	const uint32_t line = output.source.get_block_line();
 	const std::string name = make_name(cond, line);
@@ -40,7 +45,7 @@ smart_ptr<DFA> compile (Spec & spec, Output & output, const std::string & cond, 
 	// Don't forget to include zero and upper bound, even if they
 	// do not explicitely apper in ranges.
 	std::set<uint32_t> bounds;
-	split(spec.res, bounds);
+	split(rules, bounds);
 	bounds.insert(0);
 	bounds.insert(cunits);
 	charset_t cs;
@@ -49,15 +54,12 @@ smart_ptr<DFA> compile (Spec & spec, Output & output, const std::string & cond, 
 		cs.push_back(*i);
 	}
 
-	nfa_t nfa(spec);
+	nfa_t nfa(rules);
 
 	dfa_t dfa(nfa, cs, line, cond);
 
 	// skeleton must be constructed after DFA construction
 	// but prior to any other DFA transformations
-	const size_t defrule = spec.def
-		? dfa.rules.size() - 1
-		: Rule::NONE;
 	Skeleton *skeleton = new Skeleton(dfa, cs, defrule, name, cond, line);
 
 	minimization(dfa);
@@ -107,6 +109,22 @@ smart_ptr<DFA> compile (Spec & spec, Output & output, const std::string & cond, 
 	}
 
 	return make_smart_ptr(adfa);
+}
+
+// small wrapper that makes sure default rule is not forgotten
+smart_ptr<DFA> compile(
+	const Spec &spec,
+	Output &output,
+	const std::string &cond,
+	uint32_t cunits)
+{
+	size_t defrule = Rule::NONE;
+	std::vector<const RegExpRule*> rules(spec.res);
+	if (spec.def) {
+		defrule = spec.res.size();
+		rules.push_back(spec.def);
+	}
+	return compile_rules(rules, defrule, output, cond, cunits);
 }
 
 } // namespace re2c

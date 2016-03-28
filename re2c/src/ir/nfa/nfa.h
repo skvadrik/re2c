@@ -6,7 +6,6 @@
 #include <vector>
 
 #include "src/ir/rule.h"
-#include "src/parse/spec.h"
 #include "src/util/forbid_copy.h"
 
 namespace re2c
@@ -87,7 +86,7 @@ struct nfa_t
 	std::vector<CtxVar> &contexts;
 	nfa_state_t *root;
 
-	nfa_t(Spec &spec);
+	nfa_t(const std::vector<const RegExpRule*> &rs);
 	~nfa_t();
 
 	FORBID_COPY(nfa_t);

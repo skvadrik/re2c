@@ -27,20 +27,11 @@ static size_t calc_size(const RegExp *re)
 	}
 }
 
-static size_t calc_size_all(
-	const std::vector<const RegExpRule*> &rules,
-	const RegExpRule *def)
+static size_t calc_size_all(const std::vector<const RegExpRule*> &rs)
 {
-	size_t size = rules.size() - 1 + (def ? 1 : 0);
-	for (size_t i = 0; i < rules.size(); ++i) {
-		const std::vector<const RegExp*> &regexps = rules[i]->regexps;
-		for (size_t j = 0; j < regexps.size(); ++j) {
-			size += calc_size(regexps[j]);
-		}
-		size += regexps.size();
-	}
-	if (def != NULL) {
-		const std::vector<const RegExp*> &regexps = def->regexps;
+	size_t size = rs.size() - 1;
+	for (size_t i = 0; i < rs.size(); ++i) {
+		const std::vector<const RegExp*> &regexps = rs[i]->regexps;
 		for (size_t j = 0; j < regexps.size(); ++j) {
 			size += calc_size(regexps[j]);
 		}
@@ -206,41 +197,29 @@ static nfa_state_t *compile_rule(
 }
 
 static nfa_state_t *compile_rules(
-	const std::vector<const RegExpRule*> &rules,
-	const RegExpRule* defrule,
+	const std::vector<const RegExpRule*> &rs,
 	nfa_t &nfa)
 {
 	nfa_state_t *s = NULL;
-
-	if (!rules.empty()) {
-		s = compile_rule(rules[0], nfa);
-		for (size_t i = 1; i < rules.size(); ++i) {
+	const size_t nrs = rs.size();
+	if (nrs > 0) {
+		s = compile_rule(rs[0], nfa);
+		for (size_t i = 1; i < nrs; ++i) {
 			nfa_state_t *q = &nfa.states[nfa.size++];
-			q->alt(s, compile_rule(rules[i], nfa));
+			q->alt(s, compile_rule(rs[i], nfa));
 			s = q;
 		}
 	}
-	// default rule goes last
-	if (defrule) {
-		if (s) {
-			nfa_state_t *q = &nfa.states[nfa.size++];
-			q->alt(s, compile_rule(defrule, nfa));
-			s = q;
-		} else {
-			s = compile_rule(defrule, nfa);
-		}
-	}
-
 	return s;
 }
 
-nfa_t::nfa_t(Spec &spec)
-	: max_size(calc_size_all(spec.res, spec.def))
+nfa_t::nfa_t(const std::vector<const RegExpRule*> &rs)
+	: max_size(calc_size_all(rs))
 	, size(0)
 	, states(new nfa_state_t[max_size])
 	, rules(*new std::vector<Rule>)
 	, contexts(*new std::vector<CtxVar>)
-	, root(compile_rules(spec.res, spec.def, *this))
+	, root(compile_rules(rs, *this))
 {}
 
 

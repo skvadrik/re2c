@@ -111,10 +111,10 @@ size_t Skeleton::rule2key(size_t r) const
 {
 	switch (sizeof_key) {
 		default: // shouldn't happen
-		case 8: return rule2key<uint64_t>(r);
-		case 4: return rule2key<uint32_t>(r);
-		case 2: return rule2key<uint16_t>(r);
-		case 1: return rule2key<uint8_t>(r);
+		case 8: return rule2key<uint64_t>(r, defrule);
+		case 4: return rule2key<uint32_t>(r, defrule);
+		case 2: return rule2key<uint16_t>(r, defrule);
+		case 1: return rule2key<uint8_t>(r, defrule);
 	}
 }
 

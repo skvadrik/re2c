@@ -13,7 +13,8 @@ class DFA;
 struct Output;
 struct Spec;
 
-smart_ptr<DFA> compile (Spec & spec, Output & output, const std::string & cond, uint32_t cunits);
+smart_ptr<DFA> compile(const Spec &spec, Output &output,
+	const std::string &cond, uint32_t cunits);
 
 } // namespace re2c
 

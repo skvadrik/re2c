@@ -64,16 +64,16 @@ struct Skeleton
 		uint32_t dfa_line);
 	~Skeleton ();
 	size_t rule2key(size_t r) const;
-	template<typename key_t> key_t rule2key(size_t r) const;
+	template<typename key_t> key_t rule2key(size_t r, size_t def) const;
 
 	FORBID_COPY(Skeleton);
 };
 
-template<typename key_t> key_t Skeleton::rule2key(size_t r) const
+template<typename key_t> key_t Skeleton::rule2key(size_t r, size_t def) const
 {
 	if (r == Rule::NONE) {
 		return std::numeric_limits<key_t>::max();
-	} else if (r == defrule) {
+	} else if (r == def) {
 		key_t k = std::numeric_limits<key_t>::max();
 		return --k;
 	} else {
