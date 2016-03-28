@@ -98,10 +98,13 @@ std::string InputAPI::expr_dist () const
 	std::string s;
 	switch (type_) {
 		case DEFAULT:
-			return "(" + opts->yycursor + " - " + opts->yyctxmarker + ")";
+			s = "(" + opts->yycursor + " - " + opts->yyctxmarker + ")";
+			break;
 		case CUSTOM:
-			return "YYDIST()";
+			s = "YYDIST()";
+			break;
 	}
+	return s;
 }
 
 std::string InputAPI::stmt_dist (uint32_t ind, const std::set<size_t> &ctxs,
@@ -116,12 +119,16 @@ std::string InputAPI::stmt_dist (uint32_t ind, const std::set<size_t> &ctxs,
 
 std::string InputAPI::expr_ctx (const std::string &ctx) const
 {
+	std::string s;
 	switch (type_) {
 		case DEFAULT:
-			return "(" + opts->yyctxmarker + " + " + ctx + ")";
+			s = "(" + opts->yyctxmarker + " + " + ctx + ")";
+			break;
 		case CUSTOM:
-			return "YYCTX(" + ctx + ")";
+			s = "YYCTX(" + ctx + ")";
+			break;
 	}
+	return s;
 }
 
 std::string InputAPI::stmt_restore (uint32_t ind) const

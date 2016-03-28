@@ -9,7 +9,6 @@
 #include "src/conf/opt.h"
 #include "src/globals.h"
 #include "src/ir/regexp/encoding/enc.h"
-#include "src/ir/rule_rank.h"
 #include "src/ir/skeleton/skeleton.h"
 
 namespace re2c
@@ -100,7 +99,7 @@ void emit_start(const Skeleton &skel, OutputFile &o, size_t maxfill,
 	const size_t
 		sizeof_cunit = opts->encoding.szCodeUnit(),
 		sizeof_key = skel.sizeof_key;
-	const uint32_t default_rule = skel.rule2key(rule_rank_t::none());
+	const size_t norule = skel.rule2key(Rule::NONE);
 	const std::string &name = skel.name;
 
 	o.ws("\n#define YYCTYPE ");
@@ -139,7 +138,7 @@ void emit_start(const Skeleton &skel, OutputFile &o, size_t maxfill,
 	o.ws("\n").wind(1).ws("const long len_act = *cursor - token;");
 	o.ws("\n").wind(1).ws("const long len_exp = (long) keys [3 * i + 1];");
 	o.ws("\n").wind(1).ws("const YYKEYTYPE rule_exp = keys [3 * i + 2];");
-	o.ws("\n").wind(1).ws("if (rule_exp == ").wu32(default_rule).ws(") {");
+	o.ws("\n").wind(1).ws("if (rule_exp == ").wu64(norule).ws(") {");
 	o.ws("\n").wind(2).ws("fprintf");
 	o.ws("\n").wind(3).ws("( stderr");
 	o.ws("\n").wind(3).ws(", \"warning: lex_").wstring(name).ws(": control flow is undefined for input\"");
@@ -301,9 +300,11 @@ void emit_epilog(OutputFile &o, const std::set<std::string> &names)
 	o.ws("\n");
 }
 
-void emit_action(const Skeleton &skel, OutputFile &o, uint32_t ind, rule_rank_t rank)
+void emit_action(const Skeleton &skel, OutputFile &o, uint32_t ind, size_t rule)
 {
-	o.wind(ind).ws("status = action_").wstring(skel.name).ws("(i, keys, input, token, &cursor, ").wu32(skel.rule2key(rank)).ws(");\n");
+	o.wind(ind).ws("status = action_").wstring(skel.name)
+		.ws("(i, keys, input, token, &cursor, ")
+		.wu64(skel.rule2key(rule)).ws(");\n");
 	o.wind(ind).ws("continue;\n");
 }
 

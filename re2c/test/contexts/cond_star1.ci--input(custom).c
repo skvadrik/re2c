@@ -2,7 +2,7 @@
 
 {
 	YYCTYPE yych;
-	YYDISTTYPE yyctx0, yyctx2;
+	YYDISTTYPE yyctx0, yyctx1;
 	YYBACKUPCTX ();
 	switch (YYGETCONDITION()) {
 	case yycc1: goto yyc_c1;
@@ -21,13 +21,13 @@ yy3:
 	{}
 yy5:
 	YYSKIP ();
-	yyctx2 = YYDIST();
+	yyctx1 = YYDIST();
 	switch ((yych = YYPEEK ())) {
 	case 'b':	goto yy7;
 	default:	goto yy6;
 	}
 yy6:
-	YYRESTORECTX (yyctx2);
+	YYRESTORECTX (yyctx1);
 	{}
 yy7:
 	YYSKIP ();

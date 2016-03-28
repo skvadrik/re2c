@@ -36,6 +36,7 @@ DFA::DFA
 	, nStates(0)
 	, head(NULL)
 	, contexts(dfa.contexts)
+	, rules(dfa.rules)
 
 	// statistics
 	, max_fill (0)
@@ -97,6 +98,9 @@ DFA::~DFA()
 	}
 
 	delete skeleton;
+
+	delete &contexts;
+	delete &rules;
 }
 
 /* note [reordering DFA states]

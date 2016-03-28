@@ -10,8 +10,6 @@
 namespace re2c
 {
 
-class RuleInfo;
-
 /*
  * note [DFA minimization: table filling algorithm]
  *
@@ -135,11 +133,11 @@ static void minimization_moore(
 	size_t *next = new size_t[count];
 
 	// see note [distinguish states by contexts]
-	std::map<std::pair<const RuleInfo*, std::set<size_t> >, size_t> init;
+	std::map<std::pair<size_t, std::set<size_t> >, size_t> init;
 	for (size_t i = 0; i < count; ++i)
 	{
 		dfa_state_t *s = states[i];
-		std::pair<const RuleInfo*, std::set<size_t> > key(s->rule, s->ctxs);
+		std::pair<size_t, std::set<size_t> > key(s->rule, s->ctxs);
 		if (init.insert(std::make_pair(key, i)).second)
 		{
 			part[i] = i;

@@ -2,7 +2,6 @@
 
 #include "src/conf/warn.h"
 #include "src/globals.h"
-#include "src/ir/rule_rank.h"
 #include "src/ir/skeleton/path.h"
 #include "src/ir/skeleton/skeleton.h"
 #include "src/util/u32lim.h"
@@ -41,7 +40,7 @@ static void naked_paths(
 	path_t &prefix = ucf.prefix;
 	ucf_size_t &size = ucf.size;
 
-	if (node.rule) {
+	if (node.rule != Rule::NONE) {
 		return;
 	} else if (node.end()) {
 		ucf.paths.push_back(prefix);

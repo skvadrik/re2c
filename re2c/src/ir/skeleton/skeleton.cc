@@ -10,13 +10,13 @@ namespace re2c
 Node::Node() :
 	arcs(),
 	arcsets(),
-	rule(NULL),
+	rule(Rule::NONE),
 	ctxs()
 {}
 
 void Node::init(
 	const std::set<size_t> &cs,
-	RuleInfo *r,
+	size_t r,
 	const std::vector<std::pair<size_t, uint32_t> > &a)
 {
 	rule = r;
@@ -54,18 +54,19 @@ bool Node::end() const
 Skeleton::Skeleton(
 	const dfa_t &dfa,
 	const charset_t &cs,
-	const rules_t &rs,
+	size_t def,
 	const std::string &dfa_name,
 	const std::string &dfa_cond,
-	uint32_t dfa_line) :
-		name(dfa_name),
-		cond(dfa_cond),
-		line(dfa_line),
-		nodes_count(dfa.states.size() + 1), // +1 for default state
-		nodes(new Node[nodes_count]),
-		sizeof_key(4),
-		rules(rs),
-		contexts(dfa.contexts)
+	uint32_t dfa_line)
+	: name(dfa_name)
+	, cond(dfa_cond)
+	, line(dfa_line)
+	, nodes_count(dfa.states.size() + 1) // +1 for default state
+	, nodes(new Node[nodes_count])
+	, sizeof_key(8)
+	, rules(dfa.rules)
+	, defrule(def)
+	, contexts(dfa.contexts)
 {
 	const size_t nc = cs.size() - 1;
 
@@ -88,25 +89,16 @@ Skeleton::Skeleton(
 		nodes[i].init(s->ctxs, s->rule, arcs);
 	}
 
-	const uint32_t maxlen = maxpath(*this);
-
-	// calculate maximal rule rank (disregarding default and none rules)
-	uint32_t maxrule = 0;
-	for (uint32_t i = 0; i < nodes_count; ++i) {
-		const RuleInfo *r = nodes[i].rule;
-		if (r && !r->rank.is_def()) {
-			maxrule = std::max(maxrule, r->rank.uint32());
-		}
-	}
-	// two upper values reserved for default and none rules)
-	maxrule += 2;
-
 	// initialize size of key
-	const uint32_t max = std::max(maxlen, maxrule);
+	const size_t maxlen = maxpath(*this);
+	const size_t maxrule = rules.size() + 1; // +1 for none-rule
+	const size_t max = std::max(maxlen, maxrule);
 	if (max <= std::numeric_limits<uint8_t>::max()) {
 		sizeof_key = 1;
 	} else if (max <= std::numeric_limits<uint16_t>::max()) {
 		sizeof_key = 2;
+	} else if (max <= std::numeric_limits<uint32_t>::max()) {
+		sizeof_key = 4;
 	}
 }
 
@@ -115,10 +107,11 @@ Skeleton::~Skeleton()
 	delete[] nodes;
 }
 
-uint32_t Skeleton::rule2key(rule_rank_t r) const
+size_t Skeleton::rule2key(size_t r) const
 {
 	switch (sizeof_key) {
 		default: // shouldn't happen
+		case 8: return rule2key<uint64_t>(r);
 		case 4: return rule2key<uint32_t>(r);
 		case 2: return rule2key<uint16_t>(r);
 		case 1: return rule2key<uint8_t>(r);

@@ -40,7 +40,7 @@ smart_ptr<DFA> compile (Spec & spec, Output & output, const std::string & cond, 
 	// Don't forget to include zero and upper bound, even if they
 	// do not explicitely apper in ranges.
 	std::set<uint32_t> bounds;
-	split(spec.re, bounds);
+	split(spec.res, bounds);
 	bounds.insert(0);
 	bounds.insert(cunits);
 	charset_t cs;
@@ -55,7 +55,10 @@ smart_ptr<DFA> compile (Spec & spec, Output & output, const std::string & cond, 
 
 	// skeleton must be constructed after DFA construction
 	// but prior to any other DFA transformations
-	Skeleton *skeleton = new Skeleton(dfa, cs, spec.rules, name, cond, line);
+	const size_t defrule = spec.def
+		? dfa.rules.size() - 1
+		: Rule::NONE;
+	Skeleton *skeleton = new Skeleton(dfa, cs, defrule, name, cond, line);
 
 	minimization(dfa);
 

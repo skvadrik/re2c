@@ -8,7 +8,6 @@
 #include "src/conf/opt.h"
 #include "src/conf/warn.h"
 #include "src/globals.h"
-#include "src/ir/rule_rank.h"
 
 namespace re2c
 {
@@ -179,12 +178,6 @@ OutputFile & OutputFile::ws (const char * s)
 OutputFile & OutputFile::wlabel (label_t l)
 {
 	stream () << l;
-	return *this;
-}
-
-OutputFile & OutputFile::wrank (rule_rank_t r)
-{
-	stream () << r;
 	return *this;
 }
 

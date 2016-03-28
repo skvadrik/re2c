@@ -6,7 +6,7 @@
 
 namespace re2c {
 
-void split(const RegExp* re, std::set<uint32_t> &cs)
+static void split(const RegExp* re, std::set<uint32_t> &cs)
 {
 	switch (re->tag) {
 		case RegExp::NIL:
@@ -28,12 +28,16 @@ void split(const RegExp* re, std::set<uint32_t> &cs)
 		case RegExp::ITER:
 			split(re->pld.iter.re, cs);
 			break;
-		case RegExp::CTX:
-			split(re->pld.ctx.re, cs);
-			break;
-		case RegExp::RULE:
-			split(re->pld.rule.re, cs);
-			break;
+	}
+}
+
+void split(const std::vector<const RegExpRule*> &rs, std::set<uint32_t> &cs)
+{
+	for (size_t i = 0; i < rs.size(); ++i) {
+		const std::vector<const RegExp*> &regexps = rs[i]->regexps;
+		for (size_t j = 0; j < regexps.size(); ++j) {
+			split(regexps[j], cs);
+		}
 	}
 }
 

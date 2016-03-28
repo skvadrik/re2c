@@ -10,6 +10,7 @@
 #include "src/codegen/label.h"
 #include "src/ir/adfa/action.h"
 #include "src/ir/regexp/regexp.h"
+#include "src/ir/rule.h"
 #include "src/util/forbid_copy.h"
 
 namespace re2c
@@ -23,11 +24,11 @@ struct dfa_t;
 struct State
 {
 	label_t label;
-	const RuleInfo * rule;
 	State * next;
 	size_t fill;
 	bool fallback;
 
+	size_t rule;
 	std::set<size_t> ctxs;
 	bool isBase;
 	Go go;
@@ -35,10 +36,10 @@ struct State
 
 	State ()
 		: label (label_t::first ())
-		, rule (NULL)
 		, next (0)
 		, fill (0)
 		, fallback (false)
+		, rule (Rule::NONE)
 		, ctxs ()
 		, isBase (false)
 		, go ()
@@ -67,6 +68,7 @@ public:
 	uint32_t nStates;
 	State * head;
 	std::vector<CtxVar> &contexts;
+	std::vector<Rule> &rules;
 
 	// statistics
 	size_t max_fill;

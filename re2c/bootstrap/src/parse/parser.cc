@@ -88,7 +88,6 @@
 #include "src/ir/regexp/encoding/enc.h"
 #include "src/ir/regexp/encoding/range_suffix.h"
 #include "src/ir/regexp/regexp.h"
-#include "src/ir/rule_rank.h"
 #include "src/ir/skeleton/skeleton.h"
 #include "src/parse/code.h"
 #include "src/parse/extop.h"
@@ -96,7 +95,6 @@
 #include "src/parse/parser.h"
 #include "src/parse/scanner.h"
 #include "src/parse/spec.h"
-#include "src/util/counter.h"
 #include "src/util/free_list.h"
 #include "src/util/range.h"
 #include "src/util/smart_ptr.h"
@@ -112,19 +110,16 @@ int yylex();
 void yyerror(const char*);
 }
 
-static counter_t<rule_rank_t> rank_counter;
 static std::vector<std::string> condnames;
 static re2c::SpecMap  specMap;
 static Spec spec;
-static const RegExp *specNone = NULL;
-static SpecStar specStar;
-static const RegExp *star_default = NULL;
+static RegExpRule *specNone = NULL;
+static Spec specStar;
 static Scanner          *in = NULL;
 static Scanner::ParseMode  parseMode;
 static SetupMap            ruleSetupMap;
 static bool                foundRules;
 static symbol_table_t symbol_table;
-static zzz_t ctxs;
 
 /* Bison version 1.875 emits a definition that is not working
  * with several g++ version. Hence we disable it here.
@@ -149,31 +144,21 @@ void context_none(CondList *clist)
 	in->fatal("no expression specified");
 }
 
-void context_rule
-	( CondList * clist
-	, const Loc & loc
-	, std::pair<std::vector<const RegExp*>, std::vector<std::string*> > * expr
-	, const Code * code
-	, const std::string * newcond
-	)
+void context_rule(
+	CondList *clist,
+	const Loc &loc,
+	RegExpRule *rule,
+	const Code *code,
+	const std::string *newcond)
 {
 	context_check(clist);
-	for(CondList::const_iterator it = clist->begin(); it != clist->end(); ++it)
-	{
-		if (specMap.find(*it) == specMap.end())
-		{
-			condnames.push_back (*it);
+	rule->info = new RuleInfo(loc, code, newcond);
+	for(CondList::const_iterator i = clist->begin(); i != clist->end(); ++i) {
+		const std::string &cond = *i;
+		if (specMap.find(cond) == specMap.end()) {
+			condnames.push_back(cond);
 		}
-
-		const RegExp *rule = make_rule
-			( specMap[*it].contexts
-			, loc
-			, expr
-			, rank_counter.next ()
-			, code
-			, newcond
-			);
-		specMap[*it].add (rule);
+		specMap[cond].add(rule);
 	}
 	delete clist;
 	delete newcond;
@@ -195,23 +180,14 @@ void setup_rule(CondList *clist, const Code * code)
 	delete clist;
 }
 
-void default_rule(CondList *clist, const Code * code)
+void default_rule(CondList *clist, RegExpRule *rule)
 {
-	assert(clist);
-	assert(code);
 	context_check(clist);
-	for(CondList::const_iterator it = clist->begin(); it != clist->end(); ++it)
-	{
-		const RegExp * def = make_rule_ctxfree
-			( code->loc
-			, in->mkDefault ()
-			, rule_rank_t::def ()
-			, code
-			, NULL
-			);
-		if (!specMap[*it].add_def (def))
-		{
-			in->fatalf_at(code->loc.line, "code to default rule '%s' is already defined", it->c_str());
+	for (CondList::const_iterator i = clist->begin(); i != clist->end(); ++i) {
+		if (!specMap[*i].add_def(rule)) {
+			in->fatalf_at(rule->info->loc.line,
+				"code to default rule '%s' is already defined",
+				i->c_str());
 		}
 	}
 	delete clist;
@@ -273,7 +249,7 @@ typedef union YYSTYPE
 	re2c::ExtOp extop;
 	std::string * str;
 	re2c::CondList * clist;
-	re2c::zzz_t *ctxs;
+	re2c::RegExpRule *rule;
 
 
 
@@ -592,12 +568,12 @@ static const yytype_int8 yyrhs[] =
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint16 yyrline[] =
 {
-       0,   191,   191,   193,   197,   201,   209,   217,   221,   225,
-     229,   245,   261,   265,   271,   276,   282,   286,   300,   316,
-     321,   327,   341,   357,   375,   381,   389,   392,   399,   405,
-     415,   418,   425,   427,   435,   440,   453,   456,   463,   467,
-     474,   478,   485,   489,   496,   500,   515,   534,   538,   542,
-     546,   553,   563,   567
+       0,   167,   167,   169,   173,   177,   185,   193,   197,   201,
+     205,   214,   225,   229,   234,   239,   245,   251,   258,   266,
+     271,   278,   286,   296,   307,   313,   319,   322,   329,   335,
+     345,   348,   355,   359,   367,   371,   384,   387,   394,   398,
+     405,   409,   416,   420,   427,   431,   446,   465,   469,   473,
+     477,   484,   494,   498
 };
 #endif
 
@@ -1620,205 +1596,158 @@ yyreduce:
   case 10:
 
     {
-			if (opts->cFlag)
-			{
-				in->fatal("condition or '<*>' required when using -c switch");
-			}
-			const RegExp * rule = make_rule
-				( spec.contexts
-				, (yyvsp[(2) - (2)].code)->loc
-				, (yyvsp[(1) - (2)].ctxs)
-				, rank_counter.next ()
-				, (yyvsp[(2) - (2)].code)
-				, NULL
-				);
-			spec.add (rule);
-		;}
+		if (opts->cFlag) {
+			in->fatal("condition or '<*>' required when using -c switch");
+		}
+		(yyvsp[(1) - (2)].rule)->info = new RuleInfo((yyvsp[(2) - (2)].code)->loc, (yyvsp[(2) - (2)].code), NULL);
+		spec.add((yyvsp[(1) - (2)].rule));
+	;}
     break;
 
   case 11:
 
     {
-			if (opts->cFlag)
-				in->fatal("condition or '<*>' required when using -c switch");
-			const RegExp * def = make_rule_ctxfree
-				( (yyvsp[(2) - (2)].code)->loc
-				, in->mkDefault ()
-				, rule_rank_t::def ()
-				, (yyvsp[(2) - (2)].code)
-				, NULL
-				);
-			if (!spec.add_def (def))
-			{
-				in->fatal("code to default rule is already defined");
-			}
-		;}
+		if (opts->cFlag) {
+			in->fatal("condition or '<*>' required when using -c switch");
+		}
+		RegExpRule *def = new RegExpRule(in->mkDefault());
+		def->info = new RuleInfo((yyvsp[(2) - (2)].code)->loc, (yyvsp[(2) - (2)].code), NULL);
+		if (!spec.add_def(def)) {
+			in->fatal("code to default rule is already defined");
+		}
+	;}
     break;
 
   case 12:
 
     {
-			context_rule ((yyvsp[(2) - (6)].clist), (yyvsp[(6) - (6)].code)->loc, (yyvsp[(4) - (6)].ctxs), (yyvsp[(6) - (6)].code), (yyvsp[(5) - (6)].str));
-		;}
+		context_rule((yyvsp[(2) - (6)].clist), (yyvsp[(6) - (6)].code)->loc, (yyvsp[(4) - (6)].rule), (yyvsp[(6) - (6)].code), (yyvsp[(5) - (6)].str));
+	;}
     break;
 
   case 13:
 
     {
-			assert((yyvsp[(6) - (6)].str));
-			Loc loc (in->get_fname (), in->get_cline ());
-			context_rule ((yyvsp[(2) - (6)].clist), loc, (yyvsp[(4) - (6)].ctxs), NULL, (yyvsp[(6) - (6)].str));
-		;}
+		Loc loc(in->get_fname(), in->get_cline());
+		context_rule((yyvsp[(2) - (6)].clist), loc, (yyvsp[(4) - (6)].rule), NULL, (yyvsp[(6) - (6)].str));
+	;}
     break;
 
   case 14:
 
     {
-			context_none((yyvsp[(2) - (6)].clist));
-			delete (yyvsp[(5) - (6)].str);
-		;}
+		context_none((yyvsp[(2) - (6)].clist));
+		delete (yyvsp[(5) - (6)].str);
+	;}
     break;
 
   case 15:
 
     {
-			assert((yyvsp[(6) - (6)].str));
-			context_none((yyvsp[(2) - (6)].clist));
-			delete (yyvsp[(6) - (6)].str);
-		;}
+		context_none((yyvsp[(2) - (6)].clist));
+		delete (yyvsp[(6) - (6)].str);
+	;}
     break;
 
   case 16:
 
     {
-			default_rule((yyvsp[(2) - (5)].clist), (yyvsp[(5) - (5)].code));
-		;}
+		RegExpRule *def = new RegExpRule(in->mkDefault());
+		def->info = new RuleInfo((yyvsp[(5) - (5)].code)->loc, (yyvsp[(5) - (5)].code), NULL);
+		default_rule((yyvsp[(2) - (5)].clist), def);
+	;}
     break;
 
   case 17:
 
     {
-			context_check(NULL);
-			const RegExp * rule = make_rule
-				( specStar.contexts
-				, (yyvsp[(6) - (6)].code)->loc
-				, (yyvsp[(4) - (6)].ctxs)
-				, rank_counter.next ()
-				, (yyvsp[(6) - (6)].code)
-				, (yyvsp[(5) - (6)].str)
-				);
-			specStar.rules.push_back (rule);
-			delete (yyvsp[(5) - (6)].str);
-		;}
+		context_check(NULL);
+		(yyvsp[(4) - (6)].rule)->info = new RuleInfo((yyvsp[(6) - (6)].code)->loc, (yyvsp[(6) - (6)].code), (yyvsp[(5) - (6)].str));
+		specStar.add((yyvsp[(4) - (6)].rule));
+		delete (yyvsp[(5) - (6)].str);
+	;}
     break;
 
   case 18:
 
     {
-			assert((yyvsp[(6) - (6)].str));
-			context_check(NULL);
-			Loc loc (in->get_fname (), in->get_cline ());
-			const RegExp * rule = make_rule
-				( specStar.contexts
-				, loc
-				, (yyvsp[(4) - (6)].ctxs)
-				, rank_counter.next ()
-				, NULL
-				, (yyvsp[(6) - (6)].str)
-				);
-			specStar.rules.push_back (rule);
-			delete (yyvsp[(6) - (6)].str);
-		;}
+		context_check(NULL);
+		Loc loc(in->get_fname(), in->get_cline());
+		(yyvsp[(4) - (6)].rule)->info = new RuleInfo(loc, NULL, (yyvsp[(6) - (6)].str));
+		specStar.add((yyvsp[(4) - (6)].rule));
+		delete (yyvsp[(6) - (6)].str);
+	;}
     break;
 
   case 19:
 
     {
-			context_none(NULL);
-			delete (yyvsp[(5) - (6)].str);
-		;}
+		context_none(NULL);
+		delete (yyvsp[(5) - (6)].str);
+	;}
     break;
 
   case 20:
 
     {
-			assert((yyvsp[(6) - (6)].str));
-			context_none(NULL);
-			delete (yyvsp[(6) - (6)].str);
-		;}
+		assert((yyvsp[(6) - (6)].str));
+		context_none(NULL);
+		delete (yyvsp[(6) - (6)].str);
+	;}
     break;
 
   case 21:
 
     {
-			if (star_default)
-			{
-				in->fatal ("code to default rule '*' is already defined");
-			}
-			star_default = make_rule_ctxfree
-				( (yyvsp[(5) - (5)].code)->loc
-				, in->mkDefault ()
-				, rule_rank_t::def ()
-				, (yyvsp[(5) - (5)].code)
-				, NULL
-				);
-		;}
+		RegExpRule *def = new RegExpRule(in->mkDefault());
+		def->info = new RuleInfo((yyvsp[(5) - (5)].code)->loc, (yyvsp[(5) - (5)].code), NULL);
+		if (!specStar.add_def(def)) {
+			in->fatal("code to default rule '*' is already defined");
+		}
+	;}
     break;
 
   case 22:
 
     {
-			context_check(NULL);
-			if (specNone)
-			{
-				in->fatal("code to handle illegal condition already defined");
-			}
-			(yyval.regexp) = specNone = make_rule_ctxfree
-				( (yyvsp[(3) - (3)].code)->loc
-				, RegExp::nil()
-				, rank_counter.next ()
-				, (yyvsp[(3) - (3)].code)
-				, (yyvsp[(2) - (3)].str)
-				);
-			delete (yyvsp[(2) - (3)].str);
-		;}
+		context_check(NULL);
+		if (specNone) {
+			in->fatal("code to handle illegal condition already defined");
+		}
+		specNone = new RegExpRule(RegExp::nil());
+		specNone->info = new RuleInfo((yyvsp[(3) - (3)].code)->loc, (yyvsp[(3) - (3)].code), (yyvsp[(2) - (3)].str));
+		delete (yyvsp[(2) - (3)].str);
+	;}
     break;
 
   case 23:
 
     {
-			assert((yyvsp[(3) - (3)].str));
-			context_check(NULL);
-			if (specNone)
-			{
-				in->fatal("code to handle illegal condition already defined");
-			}
-			Loc loc (in->get_fname (), in->get_cline ());
-			(yyval.regexp) = specNone = make_rule_ctxfree
-				( loc
-				, RegExp::nil()
-				, rank_counter.next ()
-				, NULL
-				, (yyvsp[(3) - (3)].str)
-				);
-			delete (yyvsp[(3) - (3)].str);
-		;}
+		context_check(NULL);
+		if (specNone) {
+			in->fatal("code to handle illegal condition already defined");
+		}
+		Loc loc(in->get_fname(), in->get_cline());
+		specNone = new RegExpRule(RegExp::nil());
+		specNone->info = new RuleInfo(loc, NULL, (yyvsp[(3) - (3)].str));
+		delete (yyvsp[(3) - (3)].str);
+	;}
     break;
 
   case 24:
 
     {
-			CondList *clist = new CondList();
-			clist->insert("*");
-			setup_rule(clist, (yyvsp[(4) - (4)].code));
-		;}
+		CondList *clist = new CondList;
+		clist->insert("*");
+		setup_rule(clist, (yyvsp[(4) - (4)].code));
+	;}
     break;
 
   case 25:
 
     {
-			setup_rule((yyvsp[(2) - (4)].clist), (yyvsp[(4) - (4)].code));
-		;}
+		setup_rule((yyvsp[(2) - (4)].clist), (yyvsp[(4) - (4)].code));
+	;}
     break;
 
   case 26:
@@ -1870,7 +1799,7 @@ yyreduce:
   case 32:
 
     {
-		(yyval.ctxs) = (yyvsp[(1) - (1)].ctxs);
+		(yyval.rule) = (yyvsp[(1) - (1)].rule);
 	;}
     break;
 
@@ -1878,19 +1807,16 @@ yyreduce:
 
     {
 		// multiple trailing contexts on the same rule are not allowed
-		(yyval.ctxs) = (yyvsp[(1) - (3)].ctxs);
-		(yyval.ctxs)->first.push_back((yyvsp[(3) - (3)].regexp));
-		(yyval.ctxs)->second.push_back(NULL);
+		(yyval.rule) = (yyvsp[(1) - (3)].rule);
+		(yyval.rule)->regexps.push_back((yyvsp[(3) - (3)].regexp));
+		(yyval.rule)->ctxnames.push_back(NULL);
 	;}
     break;
 
   case 34:
 
     {
-		ctxs.first.clear();
-		ctxs.second.clear();
-		(yyval.ctxs) = &ctxs;
-		(yyval.ctxs)->first.push_back((yyvsp[(1) - (1)].regexp));
+		(yyval.rule) = new RegExpRule((yyvsp[(1) - (1)].regexp));
 	;}
     break;
 
@@ -1902,9 +1828,9 @@ yyreduce:
 			in->fatal("non-trailing contexts are only allowed"
 				" with '-C, --contexts' option");
 		}
-		(yyval.ctxs) = (yyvsp[(1) - (3)].ctxs);
-		(yyval.ctxs)->first.push_back((yyvsp[(3) - (3)].regexp));
-		(yyval.ctxs)->second.push_back((yyvsp[(2) - (3)].str));
+		(yyval.rule) = (yyvsp[(1) - (3)].rule);
+		(yyval.rule)->regexps.push_back((yyvsp[(3) - (3)].regexp));
+		(yyval.rule)->ctxnames.push_back((yyvsp[(2) - (3)].str));
 	;}
     break;
 
@@ -2335,7 +2261,6 @@ void parse(Scanner& i, Output & o)
 		{
 			dfa_map.clear();
 		}
-		rank_counter.reset ();
 		spec.clear ();
 		in->set_in_parse(true);
 		yyparse();
@@ -2351,7 +2276,6 @@ void parse(Scanner& i, Output & o)
 				dfa_map.clear();
 				parse_cleanup();
 				spec.clear ();
-				rank_counter.reset ();
 				in->set_in_parse(true);
 				yyparse();
 				in->set_in_parse(false);
@@ -2377,17 +2301,12 @@ void parse(Scanner& i, Output & o)
 				// merge <*> rules to all conditions with lowest priority
 				for (it = specMap.begin(); it != specMap.end(); ++it)
 				{
-					const size_t shift = it->second.contexts.size();
-					it->second.contexts.insert(it->second.contexts.end(), specStar.contexts.begin(), specStar.contexts.end());
-					std::vector<const RegExp*>::const_iterator
-						star = specStar.rules.begin(),
-						star_end = specStar.rules.end();
-					for (; star != star_end; ++star) {
-						it->second.add(make_rule_copy(*star, rank_counter.next(), shift));
+					for (size_t j = 0; j < specStar.res.size(); ++j) {
+						it->second.add(specStar.res[j]);
 					}
-					if (star_default)
-					{
-						it->second.add_def (star_default);
+					if (specStar.def) {
+						// ignore possible failure
+						it->second.add_def(specStar.def);
 					}
 				}
 
@@ -2434,7 +2353,7 @@ void parse(Scanner& i, Output & o)
 		}
 		else
 		{
-			if (spec.re || !dfa_map.empty())
+			if (!spec.res.empty() || spec.def || !dfa_map.empty())
 			{
 				if (parseMode != Scanner::Reuse)
 				{
@@ -2492,7 +2411,6 @@ void parse_cleanup()
 	condnames.clear ();
 	specMap.clear();
 	specStar.clear();
-	star_default = NULL;
 	specNone = NULL;
 }
 

@@ -7,7 +7,6 @@
 #include "src/globals.h"
 #include "src/ir/adfa/action.h"
 #include "src/ir/adfa/adfa.h"
-#include "src/ir/rule_rank.h"
 #include "src/util/allocate.h"
 
 namespace re2c {
@@ -20,7 +19,7 @@ void DFA::split(State *s)
 	move->rule = s->rule;
 	move->fill = s->fill;
 	move->go = s->go;
-	s->rule = NULL;
+	s->rule = Rule::NONE;
 	s->go.nSpans = 1;
 	s->go.span = allocate<Span> (1);
 	s->go.span[0].ub = ubChar;
@@ -141,23 +140,18 @@ void DFA::prepare ()
 	bUsedYYBitmap = false;
 
 	// create rule states
-	std::map<rule_rank_t, State *> rules;
-	for (State * s = head; s; s = s->next)
-	{
-		if (s->rule)
-		{
-			if (rules.find (s->rule->rank) == rules.end ())
-			{
+	std::vector<State*> rule2state(rules.size());
+	for (State *s = head; s; s = s->next) {
+		if (s->rule != Rule::NONE) {
+			if (!rule2state[s->rule]) {
 				State *n = new State;
-				n->action.set_rule (s->rule);
-				rules[s->rule->rank] = n;
+				n->action.set_rule(s->rule);
+				rule2state[s->rule] = n;
 				addState(n, s);
 			}
-			for (uint32_t i = 0; i < s->go.nSpans; ++i)
-			{
-				if (!s->go.span[i].to)
-				{
-					s->go.span[i].to = rules[s->rule->rank];
+			for (uint32_t i = 0; i < s->go.nSpans; ++i) {
+				if (!s->go.span[i].to) {
+					s->go.span[i].to = rule2state[s->rule];
 				}
 			}
 		}
@@ -185,8 +179,8 @@ void DFA::prepare ()
 	if (default_state) {
 		for (State *s = head; s; s = s->next) {
 			if (s->fallback) {
-				const uint32_t accept = static_cast<uint32_t>(accepts.find_or_add(rules[s->rule->rank]));
-				s->action.set_save(accept);
+				const size_t accept = accepts.find_or_add(rule2state[s->rule]);
+				s->action.set_save(static_cast<uint32_t>(accept));
 			}
 		}
 		default_state->action.set_accept(&accepts);

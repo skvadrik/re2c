@@ -12,7 +12,6 @@
 #include "src/conf/opt.h"
 #include "src/globals.h"
 #include "src/ir/regexp/encoding/enc.h"
-#include "src/ir/rule_rank.h"
 #include "src/ir/skeleton/path.h"
 #include "src/ir/skeleton/skeleton.h"
 #include "src/util/u32lim.h"
@@ -76,16 +75,14 @@ template<typename uintn_t> static uintn_t to_le(uintn_t n)
 }
 
 template<typename key_t> static void keygen(FILE *f, size_t count,
-	size_t len, size_t len_match, rule_rank_t match)
+	size_t len, size_t len_match, key_t match)
 {
-	const key_t m = Skeleton::rule2key<key_t>(match);
-
 	const size_t keys_size = 3 * count;
 	key_t * keys = new key_t[keys_size];
 	for (uint32_t i = 0; i < keys_size;) {
 		keys[i++] = to_le<key_t>(static_cast<key_t>(len));
 		keys[i++] = to_le<key_t>(static_cast<key_t>(len_match));
-		keys[i++] = to_le<key_t>(m);
+		keys[i++] = to_le<key_t>(match);
 	}
 	fwrite(keys, sizeof(key_t), keys_size, f);
 	delete[] keys;
@@ -121,8 +118,9 @@ template<typename cunit_t, typename key_t> static cover_size_t cover_one(
 		delete[] buffer;
 
 		// keys
+		const key_t match = skel.rule2key<key_t>(path.match(skel));
 		keygen<key_t>(cover.keys, count, len,
-			path.len_matching(skel), path.match(skel));
+			path.len_matching(skel), match);
 	}
 
 	return size;
@@ -214,6 +212,7 @@ template<typename cunit_t>
 	static void generate_paths_cunit(const Skeleton &skel, cover_t &cover)
 {
 	switch (skel.sizeof_key) {
+		case 8: generate_paths_cunit_key<cunit_t, uint64_t>(skel, cover); break;
 		case 4: generate_paths_cunit_key<cunit_t, uint32_t>(skel, cover); break;
 		case 2: generate_paths_cunit_key<cunit_t, uint16_t>(skel, cover); break;
 		case 1: generate_paths_cunit_key<cunit_t, uint8_t>(skel, cover); break;

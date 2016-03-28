@@ -7,8 +7,6 @@
 #include "src/ir/dfa/dfa.h"
 #include "src/ir/nfa/nfa.h"
 #include "src/ir/regexp/regexp.h"
-#include "src/ir/rule_rank.h"
-#include "src/parse/rules.h"
 #include "src/util/range.h"
 
 namespace re2c
@@ -97,8 +95,9 @@ dfa_t::dfa_t(
 	: states()
 	, nchars(charset.size() - 1) // (n + 1) bounds for n ranges
 	, contexts(nfa.contexts)
+	, rules(nfa.rules)
 {
-	std::map<size_t, std::set<RuleInfo*> > s2rules;
+	std::map<size_t, std::set<size_t> > s2rules;
 	ord_hash_set_t kernels;
 	nfa_state_t **const buffer = new nfa_state_t*[nfa.size];
 	std::vector<std::vector<nfa_state_t*> > arcs(nchars);
@@ -160,26 +159,21 @@ dfa_t::dfa_t(
 	delete[] buffer;
 
 	const size_t count = states.size();
-	for (size_t i = 0; i < count; ++i)
-	{
+	for (size_t i = 0; i < count; ++i) {
 		dfa_state_t *s = states[i];
-		std::set<RuleInfo*> &rs = s2rules[i];
+		std::set<size_t> &rs = s2rules[i];
 		// for each final state: choose the rule with the smallest rank
-		for (std::set<RuleInfo*>::const_iterator j = rs.begin(); j != rs.end(); ++j)
-		{
-			RuleInfo *rule = *j;
-			if (!s->rule || rule->rank < s->rule->rank)
-			{
+		for (std::set<size_t>::const_iterator j = rs.begin(); j != rs.end(); ++j) {
+			const size_t rule = *j;
+			if (s->rule == Rule::NONE || rule < s->rule) {
 				s->rule = rule;
 			}
 		}
 		// other rules are shadowed by the chosen rule
-		for (std::set<RuleInfo*>::const_iterator j = rs.begin(); j != rs.end(); ++j)
-		{
-			RuleInfo *rule = *j;
-			if (s->rule != rule)
-			{
-				rule->shadow.insert(s->rule->loc.line);
+		for (std::set<size_t>::const_iterator j = rs.begin(); j != rs.end(); ++j) {
+			const size_t rule = *j;
+			if (s->rule != rule) {
+				rules[rule].shadow.insert(rules[s->rule].info->loc.line);
 			}
 		}
 	}

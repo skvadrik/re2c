@@ -17,8 +17,6 @@
 namespace re2c
 {
 
-class rule_rank_t;
-
 struct OutputFragment
 {
 	enum type_t
@@ -85,7 +83,6 @@ public:
 	OutputFile & wstring (const std::string & s);
 	OutputFile & ws (const char * s);
 	OutputFile & wlabel (label_t l);
-	OutputFile & wrank (rule_rank_t l);
 	OutputFile & wrange (uint32_t u, uint32_t l);
 	OutputFile & wline_info (uint32_t l, const char * fn);
 	OutputFile & wversion_time ();

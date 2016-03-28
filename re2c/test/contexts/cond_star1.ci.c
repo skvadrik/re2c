@@ -2,7 +2,7 @@
 
 {
 	YYCTYPE yych;
-	YYDISTTYPE yyctx0, yyctx2;
+	YYDISTTYPE yyctx0, yyctx1;
 	YYCTXMARKER = YYCURSOR;
 	switch (YYGETCONDITION()) {
 	case yycc1: goto yyc_c1;
@@ -21,13 +21,13 @@ yy3:
 	{}
 yy5:
 	++YYCURSOR;
-	yyctx2 = (YYCURSOR - YYCTXMARKER);
+	yyctx1 = (YYCURSOR - YYCTXMARKER);
 	switch ((yych = *YYCURSOR)) {
 	case 'b':	goto yy7;
 	default:	goto yy6;
 	}
 yy6:
-	YYCURSOR = YYCTXMARKER + yyctx2;
+	YYCURSOR = YYCTXMARKER + yyctx1;
 	{}
 yy7:
 	++YYCURSOR;

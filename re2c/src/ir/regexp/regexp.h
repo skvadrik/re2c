@@ -3,9 +3,10 @@
 
 #include "src/util/c99_stdint.h"
 #include <set>
+#include <string>
 #include <vector>
 
-#include "src/parse/rules.h"
+#include "src/ir/rule.h"
 #include "src/util/free_list.h"
 #include "src/util/range.h"
 
@@ -25,9 +26,7 @@ struct RegExp
 		SYM,
 		ALT,
 		CAT,
-		ITER,
-		CTX,
-		RULE
+		ITER
 	};
 	union payload_t
 	{
@@ -49,16 +48,6 @@ struct RegExp
 		{
 			const RegExp *re;
 		} iter;
-		struct
-		{
-			const RegExp *re;
-			size_t info;
-		} ctx;
-		struct
-		{
-			const RegExp *re;
-			RuleInfo *info;
-		} rule;
 	};
 
 	static free_list<RegExp*> flist;
@@ -96,25 +85,8 @@ struct RegExp
 		re->pld.iter.re = r;
 		return re;
 	}
-	static const RegExp *ctx(const RegExp *r, size_t i)
-	{
-		RegExp *re = new RegExp(CTX);
-		re->pld.ctx.re = r;
-		re->pld.ctx.info = i;
-		return re;
-	}
-	static const RegExp *rule(const RegExp *r, RuleInfo *i)
-	{
-		RegExp *re = new RegExp(RULE);
-		re->pld.rule.re = r;
-		re->pld.rule.info = i;
-		return re;
-	}
 	inline ~RegExp()
 	{
-		if (tag == RULE) {
-			delete pld.rule.info;
-		}
 		flist.erase(this);
 	}
 
@@ -125,7 +97,34 @@ private:
 	}
 };
 
-void split(const RegExp *re, std::set<uint32_t> &cs);
+struct RegExpRule
+{
+	static free_list<RegExpRule*> flist;
+
+	std::vector<const RegExp*> regexps;
+	std::vector<const std::string*> ctxnames;
+	RuleInfo *info;
+
+	RegExpRule(const RegExp* r)
+		: regexps(1, r)
+		, ctxnames()
+		, info(NULL)
+	{
+		flist.insert(this);
+	}
+	~RegExpRule()
+	{
+		for (size_t i = 0; i < ctxnames.size(); ++i) {
+			delete ctxnames[i];
+		}
+		delete info;
+		flist.erase(this);
+	}
+
+	FORBID_COPY(RegExpRule);
+};
+
+void split(const std::vector<const RegExpRule*> &rs, std::set<uint32_t> &cs);
 const RegExp *mkAlt(const RegExp *re1, const RegExp *re2);
 const RegExp *doAlt(const RegExp *re1, const RegExp *re2);
 const RegExp *doCat(const RegExp *re1, const RegExp *re2);

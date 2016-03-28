@@ -30,11 +30,11 @@ static void calc_live(
 			}
 		}
 
-		if (s->rule != NULL) {
-			live[i].insert(s->rule->ctxvar.begin(), s->rule->ctxvar.end());
-			const Trail &ctx = s->rule->trail;
-			if (ctx.type == Trail::VAR) {
-				live[i].insert(ctx.pld.var);
+		if (s->rule != Rule::NONE) {
+			const Rule &rule = dfa.rules[s->rule];
+			live[i].insert(rule.ctxvar.begin(), rule.ctxvar.end());
+			if (rule.trail.type == Trail::VAR) {
+				live[i].insert(rule.trail.pld.var);
 			}
 		} else if (fallthru) {
 			// transition to default state: all fallback rules
@@ -55,10 +55,10 @@ bool deduplicate_contexts(
 
 	std::set<size_t> fbctxs;
 	for (size_t i = 0; i < fallback.size(); ++i) {
-		const RuleInfo *rule = dfa.states[fallback[i]]->rule;
-		fbctxs.insert(rule->ctxvar.begin(), rule->ctxvar.end());
-		if (rule->trail.type == Trail::VAR) {
-			fbctxs.insert(rule->trail.pld.var);
+		const Rule &rule = dfa.rules[dfa.states[fallback[i]]->rule];
+		fbctxs.insert(rule.ctxvar.begin(), rule.ctxvar.end());
+		if (rule.trail.type == Trail::VAR) {
+			fbctxs.insert(rule.trail.pld.var);
 		}
 	}
 

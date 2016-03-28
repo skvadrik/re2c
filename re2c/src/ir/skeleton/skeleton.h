@@ -11,7 +11,7 @@
 #include <utility>
 
 #include "src/ir/regexp/regexp.h"
-#include "src/parse/rules.h"
+#include "src/ir/rule.h"
 #include "src/util/local_increment.h"
 #include "src/util/forbid_copy.h"
 
@@ -34,11 +34,11 @@ struct Node
 
 	arcs_t arcs;
 	arcsets_t arcsets;
-	RuleInfo *rule;
+	size_t rule;
 	std::set<size_t> ctxs;
 
 	Node();
-	void init(const std::set<size_t> &cs, RuleInfo *r,
+	void init(const std::set<size_t> &cs, size_t r,
 		const std::vector<std::pair<size_t, uint32_t> > &arcs);
 	bool end() const;
 
@@ -55,28 +55,29 @@ struct Skeleton
 	Node *nodes;
 
 	size_t sizeof_key;
-	rules_t rules;
+	std::vector<Rule> &rules;
+	const size_t defrule;
 	std::vector<CtxVar> &contexts;
 
-	Skeleton(const dfa_t &dfa, const charset_t &cs, const rules_t &rs,
+	Skeleton(const dfa_t &dfa, const charset_t &cs, size_t def,
 		const std::string &dfa_name, const std::string &dfa_cond,
 		uint32_t dfa_line);
 	~Skeleton ();
-	uint32_t rule2key(rule_rank_t r) const;
-	template<typename key_t> static key_t rule2key(rule_rank_t r);
+	size_t rule2key(size_t r) const;
+	template<typename key_t> key_t rule2key(size_t r) const;
 
 	FORBID_COPY(Skeleton);
 };
 
-template<typename key_t> key_t Skeleton::rule2key(rule_rank_t r)
+template<typename key_t> key_t Skeleton::rule2key(size_t r) const
 {
-	if (r.is_none()) {
+	if (r == Rule::NONE) {
 		return std::numeric_limits<key_t>::max();
-	} else if (r.is_def()) {
+	} else if (r == defrule) {
 		key_t k = std::numeric_limits<key_t>::max();
 		return --k;
 	} else {
-		return static_cast<key_t>(r.uint32());
+		return static_cast<key_t>(r);
 	}
 }
 
@@ -92,7 +93,7 @@ void emit_start(const Skeleton &skel, OutputFile &o, size_t maxfill,
 void emit_end(const Skeleton &skel, OutputFile &o, bool backup, bool backupctx);
 void emit_epilog(OutputFile &o, const std::set<std::string> &names);
 void emit_action(const Skeleton &skel, OutputFile &o, uint32_t ind,
-	rule_rank_t rank);
+	size_t rule);
 
 } // namespace re2c
 

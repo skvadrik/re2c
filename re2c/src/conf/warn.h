@@ -5,7 +5,7 @@
 #include <string>
 #include <vector>
 
-#include "src/parse/rules.h"
+#include "src/ir/rule.h"
 
 namespace re2c {
 
@@ -62,7 +62,7 @@ public:
 	void selfoverlapping_contexts(uint32_t line, const std::string &cond, const CtxVar &ctx);
 	void swapped_range (uint32_t line, uint32_t l, uint32_t u);
 	void undefined_control_flow (const Skeleton &skel, std::vector<path_t> & paths, bool overflow);
-	void unreachable_rule (const std::string & cond, const RuleInfo *rule);
+	void unreachable_rule (const std::string & cond, const Rule &rule);
 	void useless_escape (uint32_t line, uint32_t col, char c);
 };
 

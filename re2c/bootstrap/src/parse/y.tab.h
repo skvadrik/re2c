@@ -66,7 +66,7 @@ typedef union YYSTYPE
 	re2c::ExtOp extop;
 	std::string * str;
 	re2c::CondList * clist;
-	re2c::zzz_t *ctxs;
+	re2c::RegExpRule *rule;
 
 
 

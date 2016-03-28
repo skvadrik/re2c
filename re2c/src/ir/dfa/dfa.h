@@ -6,7 +6,7 @@
 #include <set>
 
 #include "src/ir/regexp/regexp.h"
-#include "src/parse/rules.h"
+#include "src/ir/rule.h"
 #include "src/util/forbid_copy.h"
 #include "src/util/ord_hash_set.h"
 
@@ -14,17 +14,16 @@ namespace re2c
 {
 
 struct nfa_t;
-class RuleOp;
 
 struct dfa_state_t
 {
 	size_t *arcs;
-	RuleInfo *rule;
+	size_t rule;
 	std::set<size_t> ctxs;
 
 	dfa_state_t()
 		: arcs(NULL)
-		, rule(NULL)
+		, rule(Rule::NONE)
 		, ctxs()
 	{}
 	~dfa_state_t()
@@ -42,6 +41,7 @@ struct dfa_t
 	std::vector<dfa_state_t*> states;
 	const size_t nchars;
 	std::vector<CtxVar> &contexts;
+	std::vector<Rule> &rules;
 
 	dfa_t(const nfa_t &nfa, const charset_t &charset,
 		uint32_t line, const std::string &cond);

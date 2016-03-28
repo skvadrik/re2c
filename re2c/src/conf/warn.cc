@@ -187,29 +187,27 @@ void Warn::undefined_control_flow (const Skeleton &skel, std::vector<path_t> & p
 	}
 }
 
-void Warn::unreachable_rule (const std::string & cond, const RuleInfo *rule)
+void Warn::unreachable_rule(const std::string &cond, const Rule &rule)
 {
-	if (mask[UNREACHABLE_RULES] & WARNING)
-	{
+	if (mask[UNREACHABLE_RULES] & WARNING) {
 		const bool e = mask[UNREACHABLE_RULES] & ERROR;
 		error_accuml |= e;
-		warning_start (rule->loc.line, e);
-		fprintf (stderr, "unreachable rule %s", incond (cond).c_str ());
-		const size_t shadows = rule->shadow.size ();
-		if (shadows > 0)
-		{
+
+		warning_start(rule.info->loc.line, e);
+		fprintf(stderr, "unreachable rule %s", incond(cond).c_str());
+		const size_t shadows = rule.shadow.size();
+		if (shadows > 0) {
 			const char * pl = shadows > 1
 				? "s"
 				: "";
-			std::set<uint32_t>::const_iterator i = rule->shadow.begin();
+			std::set<uint32_t>::const_iterator i = rule.shadow.begin();
 			fprintf (stderr, "(shadowed by rule%s at line%s %u", pl, pl, *i);
-			for (++i; i != rule->shadow.end(); ++i)
-			{
-				fprintf (stderr, ", %u", *i);
+			for (++i; i != rule.shadow.end(); ++i) {
+				fprintf(stderr, ", %u", *i);
 			}
-			fprintf (stderr, ")");
+			fprintf(stderr, ")");
 		}
-		warning_end (names[UNREACHABLE_RULES], e);
+		warning_end(names[UNREACHABLE_RULES], e);
 	}
 }
 

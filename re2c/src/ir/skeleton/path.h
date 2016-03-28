@@ -45,19 +45,19 @@ public:
 			tail = arcs.rbegin(),
 			head = arcs.rend();
 		for (; tail != head; ++tail) {
-			RuleInfo *rule = skel.nodes[*tail].rule;
-			if (rule == NULL) {
+			const size_t rule_idx = skel.nodes[*tail].rule;
+			if (rule_idx == Rule::NONE) {
 				continue;
 			}
 			size_t len = static_cast<size_t>(head - tail) - 1;
-
-			switch (rule->trail.type) {
+			const Trail &trail = skel.rules[rule_idx].trail;
+			switch (trail.type) {
 				case Trail::NONE:
 					return len;
 				case Trail::FIX:
-					return len - rule->trail.pld.fix;
+					return len - trail.pld.fix;
 				case Trail::VAR: {
-					const size_t ctx = rule->trail.pld.var;
+					const size_t ctx = trail.pld.var;
 					for (; tail != head; ++tail) {
 						std::set<size_t> &ctxs = skel.nodes[*tail].ctxs;
 						if (ctxs.find(ctx) != ctxs.end()) {
@@ -71,18 +71,18 @@ public:
 		}
 		return 0;
 	}
-	rule_rank_t match(const Skeleton &skel) const
+	size_t match(const Skeleton &skel) const
 	{
 		std::vector<size_t>::const_reverse_iterator
 			tail = arcs.rbegin(),
 			head = arcs.rend();
 		for (; tail != head; ++tail) {
-			RuleInfo *rule = skel.nodes[*tail].rule;
-			if (rule != NULL) {
-				return rule->rank;
+			const size_t rule = skel.nodes[*tail].rule;
+			if (rule != Rule::NONE) {
+				return rule;
 			}
 		}
-		return rule_rank_t::none();
+		return Rule::NONE;
 	}
 	const Node::arc_t& arc(const Skeleton &skel, size_t i) const
 	{

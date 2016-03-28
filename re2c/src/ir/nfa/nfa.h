@@ -5,7 +5,7 @@
 #include "src/util/c99_stdint.h"
 #include <vector>
 
-#include "src/parse/rules.h"
+#include "src/ir/rule.h"
 #include "src/parse/spec.h"
 #include "src/util/forbid_copy.h"
 
@@ -44,7 +44,7 @@ struct nfa_state_t
 		} ctx;
 		struct
 		{
-			RuleInfo *rule;
+			size_t rule;
 		} fin;
 	} value;
 	bool mark;
@@ -70,7 +70,7 @@ struct nfa_state_t
 		value.ctx.info = i;
 		mark = false;
 	}
-	void fin(RuleInfo *r)
+	void fin(size_t r)
 	{
 		type = FIN;
 		value.fin.rule = r;
@@ -80,9 +80,10 @@ struct nfa_state_t
 
 struct nfa_t
 {
-	const uint32_t max_size;
-	uint32_t size;
+	const size_t max_size;
+	size_t size;
 	nfa_state_t *states;
+	std::vector<Rule> &rules;
 	std::vector<CtxVar> &contexts;
 	nfa_state_t *root;
 

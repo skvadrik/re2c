@@ -36,7 +36,8 @@ SRC_HDR = \
 	src/ir/regexp/empty_class_policy.h \
 	src/ir/regexp/regexp.h \
 	src/ir/compile.h \
-	src/ir/rule_rank.h \
+	src/ir/ctx.h \
+	src/ir/rule.h \
 	src/ir/skeleton/path.h \
 	src/ir/skeleton/skeleton.h \
 	src/globals.h \
@@ -96,11 +97,11 @@ SRC = \
 	src/ir/regexp/encoding/utf16/utf16_regexp.cc \
 	src/ir/regexp/encoding/utf16/utf16.cc \
 	src/ir/regexp/encoding/utf16/utf16_range.cc \
-	src/ir/regexp/make_rule.cc \
 	src/ir/regexp/regexp.cc \
 	src/ir/regexp/split_charset.cc \
 	src/ir/compile.cc \
-	src/ir/rule_rank.cc \
+	src/ir/ctx.cc \
+	src/ir/rule.cc \
 	src/ir/skeleton/control_flow.cc \
 	src/ir/skeleton/generate_code.cc \
 	src/ir/skeleton/generate_data.cc \
