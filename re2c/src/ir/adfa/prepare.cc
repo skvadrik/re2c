@@ -180,7 +180,7 @@ void DFA::prepare ()
 		for (State *s = head; s; s = s->next) {
 			if (s->fallback) {
 				const size_t accept = accepts.find_or_add(rule2state[s->rule]);
-				s->action.set_save(static_cast<uint32_t>(accept));
+				s->action.set_save(accept);
 			}
 		}
 		default_state->action.set_accept(&accepts);

@@ -41,7 +41,7 @@ public:
 	union
 	{
 		Initial * initial;
-		uint32_t save;
+		size_t save;
 		const accept_t * accepts;
 		size_t rule;
 	} info;
@@ -61,7 +61,7 @@ public:
 		type = INITIAL;
 		info.initial = new Initial (label, used_marker);
 	}
-	void set_save (uint32_t save)
+	void set_save (size_t save)
 	{
 		clear ();
 		type = SAVE;

@@ -23,7 +23,7 @@ class label_t;
 static void need               (OutputFile & o, uint32_t ind, bool & readCh, size_t n, bool bSetMarker);
 static void emit_match         (OutputFile & o, uint32_t ind, bool & readCh, const State * const s);
 static void emit_initial       (OutputFile & o, uint32_t ind, bool & readCh, const State * const s, const Initial & init, const std::set<label_t> & used_labels);
-static void emit_save          (OutputFile & o, uint32_t ind, bool & readCh, const State * const s, uint32_t save, bool save_yyaccept);
+static void emit_save          (OutputFile & o, uint32_t ind, bool & readCh, const State * const s, size_t save, bool save_yyaccept);
 static void emit_accept_binary (OutputFile & o, uint32_t ind, bool & readCh, const State * const s, const accept_t & accept, size_t l, size_t r);
 static void emit_accept        (OutputFile & o, uint32_t ind, bool & readCh, const State * const s, const accept_t & accept);
 static void emit_rule(OutputFile &o, uint32_t ind, const State *const s,
@@ -150,26 +150,23 @@ void emit_initial (OutputFile & o, uint32_t ind, bool & readCh, const State * co
 	}
 }
 
-void emit_save (OutputFile & o, uint32_t ind, bool & readCh, const State * const s, uint32_t save, bool save_yyaccept)
+void emit_save(OutputFile &o, uint32_t ind, bool &readCh,
+	const State *const s, size_t save, bool save_yyaccept)
 {
-	if (opts->target == opt_t::DOT)
-	{
+	if (opts->target == opt_t::DOT) {
 		return;
 	}
 
-	if (save_yyaccept)
-	{
-		o.wind(ind).wstring(opts->yyaccept).ws(" = ").wu32(save).ws(";\n");
+	if (save_yyaccept) {
+		o.wind(ind).wstring(opts->yyaccept).ws(" = ")
+			.wu64(save).ws(";\n");
 	}
 
-	if (s->fill != 0)
-	{
-		o.wstring(opts->input_api.stmt_skip_backup (ind));
+	if (s->fill != 0) {
+		o.wstring(opts->input_api.stmt_skip_backup(ind));
 		need(o, ind, readCh, s->fill, false);
-	}
-	else
-	{
-		o.wstring(opts->input_api.stmt_skip_backup_peek (ind));
+	} else {
+		o.wstring(opts->input_api.stmt_skip_backup_peek(ind));
 		readCh = false;
 	}
 }
