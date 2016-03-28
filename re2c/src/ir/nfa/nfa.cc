@@ -120,7 +120,8 @@ static bool nullable(const RegExp *re)
 
 static nfa_state_t *compile_rule(
 	const RegExpRule *rule,
-	nfa_t &nfa)
+	nfa_t &nfa,
+	size_t nrule)
 {
 	const std::vector<const RegExp*> &rs = rule->regexps;
 	const std::vector<const std::string*> &ctxnames = rule->ctxnames;
@@ -149,10 +150,11 @@ static nfa_state_t *compile_rule(
 		}
 	}
 
+	Rule &r = nfa.rules[nrule];
+	r.info = rule->info;
+
 	nfa_state_t *t = &nfa.states[nfa.size++];
-	const size_t nrule = nfa.rules.size();
 	t->fin(nrule);
-	Rule r(rule->info);
 
 	std::vector<size_t> &ctxvar = r.ctxvar;
 	std::vector<CtxFix> &ctxfix = r.ctxfix;
@@ -191,8 +193,6 @@ static nfa_state_t *compile_rule(
 	}
 	r.nullable = null;
 
-	nfa.rules.push_back(r);
-
 	return t;
 }
 
@@ -203,10 +203,10 @@ static nfa_state_t *compile_rules(
 	nfa_state_t *s = NULL;
 	const size_t nrs = rs.size();
 	if (nrs > 0) {
-		s = compile_rule(rs[0], nfa);
+		s = compile_rule(rs[0], nfa, 0);
 		for (size_t i = 1; i < nrs; ++i) {
 			nfa_state_t *q = &nfa.states[nfa.size++];
-			q->alt(s, compile_rule(rs[i], nfa));
+			q->alt(s, compile_rule(rs[i], nfa, i));
 			s = q;
 		}
 	}
@@ -217,7 +217,7 @@ nfa_t::nfa_t(const std::vector<const RegExpRule*> &rs)
 	: max_size(calc_size_all(rs))
 	, size(0)
 	, states(new nfa_state_t[max_size])
-	, rules(*new std::vector<Rule>)
+	, rules(*new std::valarray<Rule>(rs.size()))
 	, contexts(*new std::vector<CtxVar>)
 	, root(compile_rules(rs, *this))
 {}

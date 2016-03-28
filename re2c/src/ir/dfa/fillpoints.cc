@@ -7,8 +7,8 @@
 namespace re2c
 {
 
-static const size_t INFINITY = std::numeric_limits<size_t>::max();
-static const size_t UNDEFINED = INFINITY - 1;
+static const size_t SCC_INF = std::numeric_limits<size_t>::max();
+static const size_t SCC_UND = SCC_INF - 1;
 
 static bool loopback(size_t node, size_t narcs, const size_t *arcs)
 {
@@ -37,13 +37,13 @@ static bool loopback(size_t node, size_t narcs, const size_t *arcs)
  * We use lowlink to hold different kinds of information:
  *   - values in range [0 .. stack size] mean that this node is on stack
  *     (link to a node with the smallest index reachable from this one)
- *   - UNDEFINED means that this node has not been visited yet
- *   - INFINITY means that this node has already been popped off stack
+ *   - SCC_UND means that this node has not been visited yet
+ *   - SCC_INF means that this node has already been popped off stack
  *
  * We use stack size (rather than topological sort index) as unique index
  * of a node on stack. This is safe because indices of nodes on stack are
  * still unique and less than indices of nodes that have been popped off
- * stack (INFINITY).
+ * stack (SCC_INF).
  *
  */
 static void scc(
@@ -63,7 +63,7 @@ static void scc(
 		const size_t j = arcs[c];
 		if (j != dfa_t::NIL)
 		{
-			if (lowlink[j] == UNDEFINED)
+			if (lowlink[j] == SCC_UND)
 			{
 				scc(dfa, stack, lowlink, trivial, j);
 			}
@@ -87,7 +87,7 @@ static void scc(
 		{
 			j = stack.top();
 			stack.pop();
-			lowlink[j] = INFINITY;
+			lowlink[j] = SCC_INF;
 		}
 		while (j != i);
 	}
@@ -99,7 +99,7 @@ static void calc_fill(
 	std::vector<size_t> &fill,
 	size_t i)
 {
-	if (fill[i] == UNDEFINED)
+	if (fill[i] == SCC_UND)
 	{
 		fill[i] = 0;
 		const size_t *arcs = dfa.states[i]->arcs;
@@ -129,13 +129,13 @@ void fillpoints(const dfa_t &dfa, std::vector<size_t> &fill)
 
 	// find DFA states that belong to non-trivial SCC
 	std::stack<size_t> stack;
-	std::vector<size_t> lowlink(size, UNDEFINED);
+	std::vector<size_t> lowlink(size, SCC_UND);
 	std::vector<bool> trivial(size, false);
 	scc(dfa, stack, lowlink, trivial, 0);
 
 	// for each DFA state, calculate YYFILL argument:
 	// maximal path length to the next YYFILL state
-	fill.resize(size, UNDEFINED);
+	fill.resize(size, SCC_UND);
 	calc_fill(dfa, trivial, fill, 0);
 
 	// The following states must trigger YYFILL:

@@ -43,8 +43,8 @@ struct Rule
 	std::set<uint32_t> shadow;
 	bool reachable;
 
-	explicit Rule(const RuleInfo *i)
-		: info(i)
+	Rule()
+		: info(NULL)
 		, ctxvar()
 		, ctxfix()
 		, trail()
@@ -52,28 +52,8 @@ struct Rule
 		, shadow()
 		, reachable(false)
 	{}
-	Rule (const Rule &rule)
-		: info(rule.info)
-		, ctxvar(rule.ctxvar)
-		, ctxfix(rule.ctxfix)
-		, trail(rule.trail)
-		, nullable(rule.nullable)
-		, shadow(rule.shadow)
-		, reachable(rule.reachable)
-	{}
-	Rule& operator=(const Rule &rule)
-	{
-		info = rule.info;
-		ctxvar = rule.ctxvar;
-		ctxfix = rule.ctxfix;
-		trail = rule.trail;
-		nullable = rule.nullable;
-		shadow = rule.shadow;
-		reachable = rule.reachable;
-		return *this;
-	}
 
-//	FORBID_COPY(Rule);
+	FORBID_COPY(Rule);
 };
 
 } // namespace re2c

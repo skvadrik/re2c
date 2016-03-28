@@ -7,6 +7,7 @@
 #include <map>
 #include <set>
 #include <string>
+#include <valarray>
 #include <vector>
 #include <utility>
 
@@ -55,7 +56,7 @@ struct Skeleton
 	Node *nodes;
 
 	size_t sizeof_key;
-	std::vector<Rule> &rules;
+	std::valarray<Rule> &rules;
 	const size_t defrule;
 	std::vector<CtxVar> &contexts;
 

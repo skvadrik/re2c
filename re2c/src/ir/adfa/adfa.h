@@ -5,6 +5,7 @@
 #include "src/util/c99_stdint.h"
 #include <set>
 #include <string>
+#include <valarray>
 
 #include "src/codegen/go.h"
 #include "src/codegen/label.h"
@@ -67,8 +68,8 @@ public:
 	uint32_t ubChar;
 	uint32_t nStates;
 	State * head;
+	std::valarray<Rule> &rules;
 	std::vector<CtxVar> &contexts;
-	std::vector<Rule> &rules;
 
 	// statistics
 	size_t max_fill;

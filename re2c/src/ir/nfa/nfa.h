@@ -3,6 +3,7 @@
 
 #include <stddef.h>
 #include "src/util/c99_stdint.h"
+#include <valarray>
 #include <vector>
 
 #include "src/ir/rule.h"
@@ -82,7 +83,7 @@ struct nfa_t
 	const size_t max_size;
 	size_t size;
 	nfa_state_t *states;
-	std::vector<Rule> &rules;
+	std::valarray<Rule> &rules;
 	std::vector<CtxVar> &contexts;
 	nfa_state_t *root;
 

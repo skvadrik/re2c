@@ -94,8 +94,8 @@ dfa_t::dfa_t(
 	const std::string &cond)
 	: states()
 	, nchars(charset.size() - 1) // (n + 1) bounds for n ranges
-	, contexts(nfa.contexts)
 	, rules(nfa.rules)
+	, contexts(nfa.contexts)
 {
 	std::map<size_t, std::set<size_t> > s2rules;
 	ord_hash_set_t kernels;

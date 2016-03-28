@@ -35,8 +35,8 @@ DFA::DFA
 	, ubChar(charset.back())
 	, nStates(0)
 	, head(NULL)
-	, contexts(dfa.contexts)
 	, rules(dfa.rules)
+	, contexts(dfa.contexts)
 
 	// statistics
 	, max_fill (0)

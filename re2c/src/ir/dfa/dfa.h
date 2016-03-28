@@ -2,6 +2,7 @@
 #define _RE2C_IR_DFA_DFA_
 
 #include "src/util/c99_stdint.h"
+#include <valarray>
 #include <vector>
 #include <set>
 
@@ -40,8 +41,8 @@ struct dfa_t
 
 	std::vector<dfa_state_t*> states;
 	const size_t nchars;
+	std::valarray<Rule> &rules;
 	std::vector<CtxVar> &contexts;
-	std::vector<Rule> &rules;
 
 	dfa_t(const nfa_t &nfa, const charset_t &charset,
 		uint32_t line, const std::string &cond);

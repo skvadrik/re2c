@@ -44,7 +44,7 @@ void warn_unreachable_nullable_rules(const Skeleton &skel)
 	std::vector<std::set<size_t> > reachs(nnodes);
 	calc_reachable(skel, loops, reachs, 0);
 
-	std::vector<Rule> &rules = skel.rules;
+	std::valarray<Rule> &rules = skel.rules;
 	const size_t nrules = rules.size();
 
 	for (size_t i = 0; i < nnodes; ++i) {
