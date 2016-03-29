@@ -1,7 +1,9 @@
 #include <limits>
 #include <sstream>
 
+#include "src/conf/opt.h"
 #include "src/ir/ctx.h"
+#include "src/globals.h"
 
 namespace re2c
 {
@@ -11,7 +13,7 @@ CtxVar::CtxVar(const std::string *n, size_t idx)
 	, fullname()
 {
 	std::ostringstream s;
-	s << "yyctx" << idx;
+	s << opts->ctxprefix << idx;
 	if (name != NULL) {
 		s << *name;
 	}

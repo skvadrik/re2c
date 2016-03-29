@@ -2,7 +2,7 @@
 
 {
 	YYCTYPE yych;
-	YYDISTTYPE yyctx0, yyctx1;
+	long yyctx0, yyctx1;
 	YYBACKUPCTX ();
 	if (YYLESSTHAN (3)) YYFILL(3);
 	yych = YYPEEK ();

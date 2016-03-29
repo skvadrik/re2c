@@ -118,6 +118,11 @@ void Scanner::lex_conf ()
 	"define:YYRESTORECTX" { opts.set_yyrestorectx (lex_conf_string ()); return; }
 	"define:YYLESSTHAN"   { opts.set_yylessthan   (lex_conf_string ()); return; }
 
+	"define:YYCTX"        { opts.set_yyctx        (lex_conf_string ()); return; }
+	"define:YYDIST"       { opts.set_yydist       (lex_conf_string ()); return; }
+	"define:YYDISTTYPE"   { opts.set_yydisttype   (lex_conf_string ()); return; }
+	"ctxprefix"           { opts.set_ctxprefix    (lex_conf_string ()); return; }
+
 	"indent:string" { opts.set_indString (lex_conf_string ()); return; }
 	"indent:top"
 	{

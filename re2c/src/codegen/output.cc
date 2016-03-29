@@ -395,7 +395,7 @@ void output_contexts(std::ostream &o, uint32_t ind, const std::set<std::string> 
 		std::set<std::string>::const_iterator
 			ctx = contexts.begin(),
 			end = contexts.end();
-		o << indent(ind) << "YYDISTTYPE " << *ctx;
+		o << indent(ind) << opts->yydisttype << " " << *ctx;
 		for (++ctx; ctx != end; ++ctx) {
 			o << ", " << *ctx;
 		}

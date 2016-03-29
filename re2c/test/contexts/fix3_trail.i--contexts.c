@@ -4,13 +4,12 @@
 
 static void lex(const char *YYCURSOR)
 {
-#define YYDISTTYPE ptrdiff_t
     const char *YYMARKER;
     const char *YYCTXMARKER;
     
 {
 	char yych;
-	YYDISTTYPE yyctx0, yyctx0p1, yyctx0p2, yyctx0p3;
+	long yyctx0, yyctx0p1, yyctx0p2, yyctx0p3;
 	YYCTXMARKER = YYCURSOR;
 	yych = *YYCURSOR;
 	yyctx0 = yyctx0p3 = yyctx0p2 = yyctx0p1 = (YYCURSOR - YYCTXMARKER);
@@ -96,4 +95,4 @@ int main(int argc, char **argv)
     }
     return 0;
 }
-re2c: warning: line 18: rule matches empty string [-Wmatch-empty-string]
+re2c: warning: line 17: rule matches empty string [-Wmatch-empty-string]

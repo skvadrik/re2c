@@ -4,7 +4,6 @@
 
 static void lex(const char *YYCURSOR)
 {
-#define YYDISTTYPE ptrdiff_t
     const char *YYMARKER;
     const char *YYCTXMARKER;
     

@@ -2,14 +2,22 @@
 #include <stddef.h>
 #include <stdio.h>
 
-static void lex(const char *YYCURSOR)
+static void lex(const char *cursor)
 {
-    const char *YYMARKER;
-    const char *YYCTXMARKER;
+#   define YYPEEK()           *cursor
+#   define YYSKIP()           ++cursor
+#   define YYBACKUP()         marker = cursor
+#   define YYBACKUPCTX()      ctxmarker = cursor
+#   define YYRESTORE()        cursor = marker
+#   define YYRESTORECTX(dist) cursor = ctxmarker + dist
+#   define ZZZ_DIST()         (cursor - ctxmarker)
+#   define ZZZ_CTX(dist)      (ctxmarker + dist)
+    const char *marker;
+    const char *ctxmarker;
     
 {
 	char yych;
-	long yyctx0, yyctx0p2;
+	ptrdiff_t zzz_0, zzz_0p2;
 	YYBACKUPCTX ();
 	yych = YYPEEK ();
 	switch (yych) {
@@ -34,7 +42,7 @@ yy5:
 	YYSKIP ();
 	YYBACKUP ();
 	yych = YYPEEK ();
-	yyctx0p2 = YYDIST();
+	zzz_0p2 = ZZZ_DIST();
 	switch (yych) {
 	case '2':
 	case '3':	goto yy11;
@@ -55,7 +63,7 @@ yy8:
 yy9:
 	YYSKIP ();
 	yych = YYPEEK ();
-	yyctx0p2 = YYDIST();
+	zzz_0p2 = ZZZ_DIST();
 	goto yy11;
 yy10:
 	YYSKIP ();
@@ -68,18 +76,18 @@ yy11:
 	}
 yy12:
 	YYSKIP ();
-	yyctx0 = YYDIST();
+	zzz_0 = ZZZ_DIST();
 	yych = YYPEEK ();
 	goto yy15;
 yy13:
-	YYRESTORECTX (yyctx0);
+	YYRESTORECTX (zzz_0);
 	{
             printf("'%.*s', '%.*s', '%.*s', '%.*s', '%s'\n",
-                YYCTX((yyctx0p2 - 1)) - YYCTXMARKER, YYCTXMARKER,
-                YYCTX(yyctx0p2) - YYCTX((yyctx0p2 - 1)), YYCTX((yyctx0p2 - 1)),
-                YYCTX((yyctx0 - 1)) - YYCTX(yyctx0p2), YYCTX(yyctx0p2),
-                YYCURSOR - YYCTX((yyctx0 - 1)), YYCTX((yyctx0 - 1)),
-                YYCURSOR);
+                ZZZ_CTX((zzz_0p2 - 1)) - ctxmarker, ctxmarker,
+                ZZZ_CTX(zzz_0p2) - ZZZ_CTX((zzz_0p2 - 1)), ZZZ_CTX((zzz_0p2 - 1)),
+                ZZZ_CTX((zzz_0 - 1)) - ZZZ_CTX(zzz_0p2), ZZZ_CTX(zzz_0p2),
+                cursor - ZZZ_CTX((zzz_0 - 1)), ZZZ_CTX((zzz_0 - 1)),
+                cursor);
                 return;
         }
 yy14:

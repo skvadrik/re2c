@@ -101,7 +101,7 @@ std::string InputAPI::expr_dist () const
 			s = "(" + opts->yycursor + " - " + opts->yyctxmarker + ")";
 			break;
 		case CUSTOM:
-			s = "YYDIST()";
+			s = opts->yydist + "()";
 			break;
 	}
 	return s;
@@ -125,7 +125,7 @@ std::string InputAPI::expr_ctx (const std::string &ctx) const
 			s = "(" + opts->yyctxmarker + " + " + ctx + ")";
 			break;
 		case CUSTOM:
-			s = "YYCTX(" + ctx + ")";
+			s = opts->yyctx + "(" + ctx + ")";
 			break;
 	}
 	return s;
@@ -154,7 +154,7 @@ std::string InputAPI::stmt_restorectx_fix(uint32_t ind, size_t dist) const
 			s << opts->yycursor << " -= " << dist;
 			break;
 		case CUSTOM:
-			s << opts->yyrestorectx << " (YYDIST() - " << dist << ")";
+			s << opts->yyrestorectx << " (" + opts->yydist + "() - " << dist << ")";
 			break;
 	}
 	return indent(ind) + s.str() + ";\n";

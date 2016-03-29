@@ -9,40 +9,36 @@ static void lex(const char *YYCURSOR)
     
 {
 	char yych;
-	long yyctx0, yyctx0p2;
-	YYBACKUPCTX ();
-	yych = YYPEEK ();
+	ptrdiff_t zzz_0, zzz_0p2;
+	YYCTXMARKER = YYCURSOR;
+	yych = *YYCURSOR;
 	switch (yych) {
 	case '0':	goto yy4;
 	case '1':	goto yy5;
 	default:	goto yy2;
 	}
 yy2:
-	YYSKIP ();
+	++YYCURSOR;
 yy3:
 	{ printf("error\n"); return; }
 yy4:
-	YYSKIP ();
-	YYBACKUP ();
-	yych = YYPEEK ();
+	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
 	case '0':
 	case '1':	goto yy7;
 	default:	goto yy3;
 	}
 yy5:
-	YYSKIP ();
-	YYBACKUP ();
-	yych = YYPEEK ();
-	yyctx0p2 = YYDIST();
+	yych = *(YYMARKER = ++YYCURSOR);
+	zzz_0p2 = (YYCURSOR - YYCTXMARKER);
 	switch (yych) {
 	case '2':
 	case '3':	goto yy11;
 	default:	goto yy3;
 	}
 yy6:
-	YYSKIP ();
-	yych = YYPEEK ();
+	++YYCURSOR;
+	yych = *YYCURSOR;
 yy7:
 	switch (yych) {
 	case '0':	goto yy6;
@@ -50,16 +46,15 @@ yy7:
 	default:	goto yy8;
 	}
 yy8:
-	YYRESTORE ();
+	YYCURSOR = YYMARKER;
 	goto yy3;
 yy9:
-	YYSKIP ();
-	yych = YYPEEK ();
-	yyctx0p2 = YYDIST();
+	yych = *++YYCURSOR;
+	zzz_0p2 = (YYCURSOR - YYCTXMARKER);
 	goto yy11;
 yy10:
-	YYSKIP ();
-	yych = YYPEEK ();
+	++YYCURSOR;
+	yych = *YYCURSOR;
 yy11:
 	switch (yych) {
 	case '2':	goto yy10;
@@ -67,24 +62,24 @@ yy11:
 	default:	goto yy8;
 	}
 yy12:
-	YYSKIP ();
-	yyctx0 = YYDIST();
-	yych = YYPEEK ();
+	++YYCURSOR;
+	zzz_0 = (YYCURSOR - YYCTXMARKER);
+	yych = *YYCURSOR;
 	goto yy15;
 yy13:
-	YYRESTORECTX (yyctx0);
+	YYCURSOR = YYCTXMARKER + zzz_0;
 	{
             printf("'%.*s', '%.*s', '%.*s', '%.*s', '%s'\n",
-                YYCTX((yyctx0p2 - 1)) - YYCTXMARKER, YYCTXMARKER,
-                YYCTX(yyctx0p2) - YYCTX((yyctx0p2 - 1)), YYCTX((yyctx0p2 - 1)),
-                YYCTX((yyctx0 - 1)) - YYCTX(yyctx0p2), YYCTX(yyctx0p2),
-                YYCURSOR - YYCTX((yyctx0 - 1)), YYCTX((yyctx0 - 1)),
+                (YYCTXMARKER + (zzz_0p2 - 1)) - YYCTXMARKER, YYCTXMARKER,
+                (YYCTXMARKER + zzz_0p2) - (YYCTXMARKER + (zzz_0p2 - 1)), (YYCTXMARKER + (zzz_0p2 - 1)),
+                (YYCTXMARKER + (zzz_0 - 1)) - (YYCTXMARKER + zzz_0p2), (YYCTXMARKER + zzz_0p2),
+                YYCURSOR - (YYCTXMARKER + (zzz_0 - 1)), (YYCTXMARKER + (zzz_0 - 1)),
                 YYCURSOR);
                 return;
         }
 yy14:
-	YYSKIP ();
-	yych = YYPEEK ();
+	++YYCURSOR;
+	yych = *YYCURSOR;
 yy15:
 	switch (yych) {
 	case '4':	goto yy14;

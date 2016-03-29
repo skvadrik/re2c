@@ -117,7 +117,6 @@ void emit_start(const Skeleton &skel, OutputFile &o, size_t maxfill,
 		if(base_ctxmarker) {
 			o.ws("\n#define YYRESTORECTX(dist) cursor = ctxmarker + dist");
 			o.ws("\n#define YYDIST() (cursor - ctxmarker)");
-			o.ws("\n#define YYDISTTYPE long");
 		} else {
 			o.ws("\n#define YYRESTORECTX() cursor = ctxmarker");
 		}

@@ -54,8 +54,12 @@ namespace re2c
 	OPT (std::string, yyaccept, "yyaccept") \
 	OPT (bool, bUseStateAbort, false) \
 	OPT (bool, bUseStateNext, false) \
-	/* reuse */ \
+	/* contexts */ \
 	OPT (bool, contexts, false) \
+	OPT (std::string, yyctx, "YYCTX") \
+	OPT (std::string, yydist, "YYDIST") \
+	OPT (std::string, yydisttype, "long") \
+	OPT (std::string, ctxprefix, "yyctx") \
 	/* reuse */ \
 	OPT (bool, rFlag, false) \
 	/* partial flex syntax support */ \

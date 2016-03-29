@@ -2,7 +2,7 @@
 
 {
 	YYCTYPE yych;
-	YYDISTTYPE yyctx0, yyctx2;
+	long yyctx0, yyctx2;
 	YYCTXMARKER = YYCURSOR;
 	if ((YYLIMIT - YYCURSOR) < 3) YYFILL(3);
 	yych = *YYCURSOR;

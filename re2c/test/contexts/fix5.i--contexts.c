@@ -4,13 +4,12 @@
 
 static void lex(const char *YYCURSOR)
 {
-#define YYDISTTYPE ptrdiff_t
     const char *YYMARKER;
     const char *YYCTXMARKER;
     
 {
 	char yych;
-	YYDISTTYPE yyctx0p2, yyctx0p4;
+	long yyctx0p2, yyctx0p4;
 	YYCTXMARKER = YYCURSOR;
 	yych = *YYCURSOR;
 	switch (yych) {
