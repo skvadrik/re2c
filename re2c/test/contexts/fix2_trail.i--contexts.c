@@ -111,10 +111,10 @@ yy19:
 	YYCURSOR -= 5;
 	{
             printf("'%.*s', '%.*s', '%.*s', '%.*s', '%s'\n",
-                (YYCTXMARKER + ((YYCURSOR - YYCTXMARKER) - 9)) - YYCTXMARKER, YYCTXMARKER,
-                (YYCTXMARKER + ((YYCURSOR - YYCTXMARKER) - 7)) - (YYCTXMARKER + ((YYCURSOR - YYCTXMARKER) - 9)), (YYCTXMARKER + ((YYCURSOR - YYCTXMARKER) - 9)),
-                (YYCTXMARKER + ((YYCURSOR - YYCTXMARKER) - 4)) - (YYCTXMARKER + ((YYCURSOR - YYCTXMARKER) - 7)), (YYCTXMARKER + ((YYCURSOR - YYCTXMARKER) - 7)),
-                YYCURSOR - (YYCTXMARKER + ((YYCURSOR - YYCTXMARKER) - 4)), (YYCTXMARKER + ((YYCURSOR - YYCTXMARKER) - 4)),
+                (YYCURSOR - 9) - YYCTXMARKER, YYCTXMARKER,
+                (YYCURSOR - 7) - (YYCURSOR - 9), (YYCURSOR - 9),
+                (YYCURSOR - 4) - (YYCURSOR - 7), (YYCURSOR - 7),
+                YYCURSOR - (YYCURSOR - 4), (YYCURSOR - 4),
                 YYCURSOR);
                 return;
         }

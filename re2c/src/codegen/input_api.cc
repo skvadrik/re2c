@@ -117,18 +117,34 @@ std::string InputAPI::stmt_dist (uint32_t ind, const std::set<size_t> &ctxs,
 	return s + expr_dist() + ";\n";
 }
 
-std::string InputAPI::expr_ctx (const std::string &ctx) const
+std::string InputAPI::expr_ctx(const std::string &ctx) const
 {
-	std::string s;
 	switch (type_) {
-		case DEFAULT:
-			s = "(" + opts->yyctxmarker + " + " + ctx + ")";
-			break;
-		case CUSTOM:
-			s = opts->yyctx + "(" + ctx + ")";
-			break;
+		case DEFAULT: return "(" + opts->yyctxmarker + " + " + ctx + ")";
+		case CUSTOM:  return opts->yyctx + "(" + ctx + ")";
+		default:      assert(false);
 	}
-	return s;
+}
+
+std::string InputAPI::expr_ctx_fix(const CtxFix &ctx, const std::vector<CtxVar> &ctxvars) const
+{
+	std::ostringstream s;
+	if (ctx.base == CtxFix::RIGHTMOST) {
+		switch (type_) {
+			case DEFAULT:
+				// optimize '(YYCTXMARKER + ((YYCURSOR - YCTXMARKER) - yyctx))'
+				// to       '(YYCURSOR - yyctx)'
+				s << "(" << opts->yycursor << " - " << ctx.dist << ")";
+				break;
+			case CUSTOM:
+				s << opts->yyctx << "(" << opts->yydist << "() - " << ctx.dist << ")";
+				break;
+		}
+		return s.str();
+	} else {
+		s << "(" << ctxvars[ctx.base].fullname << " - " << ctx.dist << ")";
+		return expr_ctx(s.str());
+	}
 }
 
 std::string InputAPI::stmt_restore (uint32_t ind) const

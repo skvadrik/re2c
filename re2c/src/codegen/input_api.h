@@ -6,10 +6,10 @@
 #include <string>
 #include <vector>
 
+#include "src/ir/ctx.h"
+
 namespace re2c
 {
-
-struct CtxVar;
 
 class InputAPI
 {
@@ -36,6 +36,7 @@ public:
 	std::string stmt_dist (uint32_t ind, const std::set<size_t> &ctxs,
 		const std::vector<CtxVar> &contexts) const;
 	std::string expr_ctx (const std::string &ctx) const;
+	std::string expr_ctx_fix (const CtxFix &ctx, const std::vector<CtxVar> &ctxvars) const;
 	std::string stmt_restore (uint32_t ind) const;
 	std::string stmt_restorectx_fix (uint32_t ind, size_t dist) const;
 	std::string stmt_restorectx_var (uint32_t ind) const;

@@ -60,8 +60,8 @@ yy11:
                 (YYCTXMARKER + yyctx0p1) - YYCTXMARKER, YYCTXMARKER,
                 (YYCTXMARKER + (yyctx0p3 - 1)) - (YYCTXMARKER + yyctx0p1), (YYCTXMARKER + yyctx0p1),
                 (YYCTXMARKER + yyctx0p3) - (YYCTXMARKER + (yyctx0p3 - 1)), (YYCTXMARKER + (yyctx0p3 - 1)),
-                (YYCTXMARKER + ((YYCURSOR - YYCTXMARKER) - 1)) - (YYCTXMARKER + yyctx0p3), (YYCTXMARKER + yyctx0p3),
-                YYCURSOR - (YYCTXMARKER + ((YYCURSOR - YYCTXMARKER) - 1)), (YYCTXMARKER + ((YYCURSOR - YYCTXMARKER) - 1)));
+                (YYCURSOR - 1) - (YYCTXMARKER + yyctx0p3), (YYCTXMARKER + yyctx0p3),
+                YYCURSOR - (YYCURSOR - 1), (YYCURSOR - 1));
                 return;
         }
 }

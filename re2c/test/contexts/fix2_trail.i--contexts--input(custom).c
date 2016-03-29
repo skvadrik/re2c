@@ -126,10 +126,10 @@ yy19:
 	YYRESTORECTX (YYDIST() - 5);
 	{
             printf("'%.*s', '%.*s', '%.*s', '%.*s', '%s'\n",
-                YYCTX((YYDIST() - 9)) - YYCTXMARKER, YYCTXMARKER,
-                YYCTX((YYDIST() - 7)) - YYCTX((YYDIST() - 9)), YYCTX((YYDIST() - 9)),
-                YYCTX((YYDIST() - 4)) - YYCTX((YYDIST() - 7)), YYCTX((YYDIST() - 7)),
-                YYCURSOR - YYCTX((YYDIST() - 4)), YYCTX((YYDIST() - 4)),
+                YYCTX(YYDIST() - 9) - YYCTXMARKER, YYCTXMARKER,
+                YYCTX(YYDIST() - 7) - YYCTX(YYDIST() - 9), YYCTX(YYDIST() - 9),
+                YYCTX(YYDIST() - 4) - YYCTX(YYDIST() - 7), YYCTX(YYDIST() - 7),
+                YYCURSOR - YYCTX(YYDIST() - 4), YYCTX(YYDIST() - 4),
                 YYCURSOR);
                 return;
         }

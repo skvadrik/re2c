@@ -275,13 +275,8 @@ static void subst_contexts(
 
 	for (size_t i = 0; i < rule.ctxfix.size(); ++i) {
 		const CtxFix &ctx = rule.ctxfix[i];
-		const std::string basename = (ctx.base == CtxFix::RIGHTMOST)
-			? opts->input_api.expr_dist()
-			: contexts[ctx.base].fullname;
-		std::ostringstream offs;
-		offs << "(" << basename << " - " << ctx.dist << ")";
-		const std::string ctx_value = opts->input_api.expr_ctx(offs.str());
-		rreplace_substr(action, "@" + *ctx.name, ctx_value);
+		rreplace_substr(action, "@" + *ctx.name,
+			opts->input_api.expr_ctx_fix(ctx, contexts));
 	}
 }
 
