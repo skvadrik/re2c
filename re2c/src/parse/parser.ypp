@@ -69,13 +69,6 @@ void context_check(CondList *clist)
 	}
 }
 
-void context_none(CondList *clist)
-{
-	delete clist;
-	context_check(NULL);
-	in->fatal("no expression specified");
-}
-
 void context_rule(
 	CondList *clist,
 	const Loc &loc,
@@ -155,51 +148,44 @@ void default_rule(CondList *clist, RegExpRule *rule)
 %type <op>      TOKEN_CLOSE TOKEN_STAR TOKEN_SETUP close
 %type <extop>   TOKEN_CLOSESIZE
 %type <code>    TOKEN_CODE
-%type <regexp>  TOKEN_REGEXP rule look expr diff term factor primary
-%type <str>     TOKEN_ID TOKEN_FID TOKEN_CTX newcond
+%type <regexp>  TOKEN_REGEXP rule expr diff term factor primary
+%type <str>     TOKEN_ID TOKEN_FID TOKEN_CTX newcond name
 %type <clist>   cond clist
 %type <rule>    ctxexpr trailexpr
 
 %%
 
-spec:
-		/* empty */
-		{
-		}
-	|	spec rule
-		{
-			foundRules = true;
-		}
-	|	spec decl
-;
+spec
+	: /* empty */
+	| spec TOKEN_CONF
+	| spec def
+	| spec rule {
+		foundRules = true;
+	};
 
-decl:
-		TOKEN_ID '=' expr ';'
-		{
-			if (!symbol_table.insert (std::make_pair (* $1, $3)).second)
-			{
-				in->fatal("sym already defined");
-			}
-			delete $1;
+def
+	: name expr enddef {
+		if (!symbol_table.insert(std::make_pair(*$1, $2)).second) {
+			in->fatal("sym already defined");
 		}
-	|	TOKEN_FID expr TOKEN_FID_END
-		{
-			if (!symbol_table.insert (std::make_pair (* $1, $2)).second)
-			{
-				in->fatal("sym already defined");
-			}
-			delete $1;
-		}
-	|	TOKEN_ID '=' expr '/'
-		{
-			in->fatal("trailing contexts are not allowed in named definitions");
-		}
-	|	TOKEN_FID expr '/'
-		{
-			in->fatal("trailing contexts are not allowed in named definitions");
-		}
-	|	TOKEN_CONF {}
-;
+		delete $1;
+	}
+	/* errors */
+	| name expr ctx {
+		in->fatal("contexts are not allowed in named definitions");
+	};
+
+name
+	: TOKEN_ID '=' {
+		$$ = $1;
+	}
+	| TOKEN_FID {
+		$$ = $1;
+	};
+
+enddef: ';' | TOKEN_FID_END;
+
+ctx: '/' | TOKEN_CTX;
 
 rule
 	: trailexpr TOKEN_CODE {
@@ -231,16 +217,6 @@ rule
 		context_rule($2, loc, $4, NULL, $6);
 	}
 
-	| '<' cond '>' look newcond TOKEN_CODE {
-		context_none($2);
-		delete $5;
-	}
-
-	| '<' cond '>' look ':' newcond {
-		context_none($2);
-		delete $6;
-	}
-
 	/* default rule for conditions */
 	| '<' cond '>' TOKEN_STAR TOKEN_CODE {
 		RegExpRule *def = new RegExpRule(in->mkDefault());
@@ -260,17 +236,6 @@ rule
 		Loc loc(in->get_fname(), in->get_cline());
 		$4->info = new RuleInfo(loc, NULL, $6);
 		specStar.add($4);
-		delete $6;
-	}
-
-	| '<' TOKEN_STAR '>' look newcond TOKEN_CODE {
-		context_none(NULL);
-		delete $5;
-	}
-
-	| '<' TOKEN_STAR '>' look ':' newcond {
-		assert($6);
-		context_none(NULL);
 		delete $6;
 	}
 
@@ -378,17 +343,6 @@ ctxexpr
 		$$->regexps.push_back($3);
 		$$->ctxnames.push_back($2);
 	};
-
-look:
-		/* empty */
-		{
-			$$ = RegExp::nil();
-		}
-	|	'/' expr
-		{
-			$$ = $2;
-		}
-;
 
 expr:
 		diff
