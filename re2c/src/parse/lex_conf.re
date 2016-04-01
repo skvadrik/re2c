@@ -31,7 +31,7 @@ namespace re2c
 	conf_assign = space* "=" space*;
 
 	naked_char = . \ (space | [;]);
-	naked      = "" | (naked_char \ ['"]) naked_char*;
+	naked      = (naked_char \ ['"]) naked_char*;
 
 	number = "0" | ("-"? [1-9] [0-9]*);
 */
@@ -235,6 +235,7 @@ std::string Scanner::lex_conf_string ()
 		s = std::string(tok, tok_len());
 		goto end;
 	}
+	"" { goto end; }
 */
 end:
 	lex_conf_semicolon ();
