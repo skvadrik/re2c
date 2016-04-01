@@ -2,7 +2,8 @@
 
 {
 	YYCTYPE yych;
-	long yyctx0, yyctx1;
+	long yyctx0;
+	long yyctx1;
 	YYBACKUPCTX ();
 	switch (YYGETCONDITION()) {
 	case yycc1: goto yyc_c1;

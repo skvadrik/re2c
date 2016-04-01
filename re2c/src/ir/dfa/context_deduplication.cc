@@ -159,7 +159,7 @@ bool deduplicate_contexts(
 		s->ctxs.swap(ctxs);
 	}
 	for (size_t i = 0; i < nctxs; ++i) {
-		dfa.contexts[i].fullname = dfa.contexts[part[i]].fullname;
+		dfa.contexts[i].uniqname = dfa.contexts[part[i]].uniqname;
 	}
 
 	return multiple_contexts;

@@ -58,8 +58,8 @@ namespace re2c
 	OPT (bool, contexts, false) \
 	OPT (std::string, yyctx, "YYCTX") \
 	OPT (std::string, yydist, "YYDIST") \
-	OPT (std::string, yydisttype, "long") \
-	OPT (std::string, ctxprefix, "yyctx") \
+	OPT (std::string, contexts_prefix, "yyctx") \
+	OPT (std::string, contexts_expr, "@@") \
 	/* reuse */ \
 	OPT (bool, rFlag, false) \
 	/* partial flex syntax support */ \

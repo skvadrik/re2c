@@ -24,21 +24,6 @@ void emit_action
 // helpers
 void genGoTo (OutputFile & o, uint32_t ind, const State * from, const State * to, bool & readCh);
 
-template<typename _Ty> std::string replaceParam (std::string str, const std::string & param, const _Ty & value)
-{
-	if (!param.empty ())
-	{
-		std::ostringstream strValue;
-		strValue << value;
-		std::string::size_type pos;
-		while((pos = str.find(param)) != std::string::npos)
-		{
-			str.replace(pos, param.length(), strValue.str());
-		}
-	}
-	return str;
-}
-
 } // namespace re2c
 
 #endif // _RE2C_CODEGEN_EMIT_

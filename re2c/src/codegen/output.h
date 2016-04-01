@@ -17,6 +17,13 @@
 namespace re2c
 {
 
+struct ConfContexts
+{
+	std::string line;
+	std::string sep;
+	ConfContexts(): line("long @@;"), sep("") {}
+};
+
 struct OutputFragment
 {
 	enum type_t
@@ -34,8 +41,13 @@ struct OutputFragment
 	type_t type;
 	std::ostringstream stream;
 	uint32_t indent;
+	union
+	{
+		const ConfContexts* contexts;
+	};
 
 	OutputFragment (type_t t, uint32_t i);
+	~OutputFragment ();
 	uint32_t count_lines ();
 };
 
@@ -63,6 +75,7 @@ private:
 public:
 	counter_t<label_t> label_counter;
 	bool warn_condition_order;
+	bool default_contexts;
 
 	OutputFile (const char * fn);
 	~OutputFile ();
@@ -90,7 +103,7 @@ public:
 	OutputFile & wind (uint32_t ind);
 
 	// delayed output
-	OutputFile & wdelay_contexts(uint32_t ind);
+	OutputFile & wdelay_contexts(uint32_t ind, const ConfContexts *cf);
 	OutputFile & wdelay_line_info ();
 	OutputFile & wdelay_state_goto (uint32_t ind);
 	OutputFile & wdelay_types ();
@@ -140,7 +153,10 @@ struct Output
 	~Output ();
 };
 
-void output_contexts(std::ostream &o, uint32_t ind, const std::set<std::string> &contexts);
+void output_contexts(std::ostream &o, const ConfContexts &conf,
+	const std::set<std::string> &contexts);
+void output_contexts_default(std::ostream &o, uint32_t ind,
+	const std::set<std::string> &contexts);
 void output_line_info (std::ostream &, uint32_t, const char *);
 void output_state_goto (std::ostream &, uint32_t, uint32_t);
 void output_types (std::ostream &, uint32_t, const std::vector<std::string> &);

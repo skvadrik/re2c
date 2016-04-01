@@ -2,7 +2,9 @@
 
 {
 	YYCTYPE yych;
-	long yyctx0, yyctx1, yyctx3;
+	long yyctx0;
+	long yyctx1;
+	long yyctx3;
 	YYCTXMARKER = YYCURSOR;
 	switch (YYGETCONDITION()) {
 	case yycc1: goto yyc_c1;

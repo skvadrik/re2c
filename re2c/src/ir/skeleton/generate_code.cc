@@ -233,7 +233,8 @@ void emit_start(const Skeleton &skel, OutputFile &o, size_t maxfill,
 	}
 	if (!ctxnames.empty()) {
 		o.ws("\n");
-		output_contexts(o.stream(), 2, ctxnames);
+		output_contexts_default(o.stream(), 2, ctxnames);
+		o.ws("\n").wstring(opts->input_api.stmt_backupctx(2));
 	}
 	o.ws("\n");
 	if (opts->bFlag && BitMap::first) {

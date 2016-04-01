@@ -14,6 +14,7 @@
 #include "src/ir/skeleton/skeleton.h"
 #include "src/parse/code.h"
 #include "src/parse/loc.h"
+#include "src/util/strrreplace.h"
 
 namespace re2c
 {
@@ -251,17 +252,6 @@ void emit_accept (OutputFile & o, uint32_t ind, bool & readCh, const State * con
 	}
 }
 
-static void rreplace_substr(std::string &s,
-	const std::string &s1, const std::string &s2)
-{
-	if (!s1.empty()) {
-		std::string::size_type pos;
-		while ((pos = s.find(s1)) != std::string::npos) {
-			s.replace(pos, s1.length(), s2);
-		}
-	}
-}
-
 static void subst_contexts(
 	std::string &action,
 	const Rule &rule,
@@ -269,13 +259,13 @@ static void subst_contexts(
 {
 	for (size_t i = 0; i < rule.ctxvar.size(); ++i) {
 		const CtxVar &ctx = contexts[rule.ctxvar[i]];
-		rreplace_substr(action, "@" + *ctx.name,
-			opts->input_api.expr_ctx(ctx.fullname));
+		strrreplace(action, "@" + *ctx.codename,
+			opts->input_api.expr_ctx(ctx.expr()));
 	}
 
 	for (size_t i = 0; i < rule.ctxfix.size(); ++i) {
 		const CtxFix &ctx = rule.ctxfix[i];
-		rreplace_substr(action, "@" + *ctx.name,
+		strrreplace(action, "@" + *ctx.codename,
 			opts->input_api.expr_ctx_fix(ctx, contexts));
 	}
 }
@@ -309,8 +299,8 @@ void emit_rule(
 			break;
 		case Trail::VAR:
 			if (base_ctxmarker) {
-				const std::string name = skeleton->contexts[trail.pld.var].fullname;
-				o.wstring(opts->input_api.stmt_restorectx_var_base(ind, name));
+				o.wstring(opts->input_api.stmt_restorectx_var_base(ind,
+					skeleton->contexts[trail.pld.var].expr()));
 			} else {
 				o.wstring(opts->input_api.stmt_restorectx_var(ind));
 			}
@@ -338,8 +328,8 @@ void emit_rule(
 				.wind(ind).wstring(action).ws("\n")
 				.wdelay_line_info();
 		} else if (!newcond.empty()) {
-			const std::string action = replaceParam(opts->condGoto,
-				opts->condGotoParam, opts->condPrefix + newcond);
+			std::string action = opts->condGoto;
+			strrreplace(action, opts->condGotoParam, opts->condPrefix + newcond);
 			o.wind(ind).wstring(action).ws("\n");
 		}
 	}
@@ -402,7 +392,9 @@ void need (OutputFile & o, uint32_t ind, bool & readCh, size_t n, bool bSetMarke
 
 void genYYFill (OutputFile & o, size_t need)
 {
-	o.wstring(replaceParam (opts->fill, opts->fill_arg, need));
+	std::string fill = opts->fill;
+	strrreplace(fill, opts->fill_arg, need);
+	o.wstring(fill);
 	if (!opts->fill_naked)
 	{
 		if (opts->fill_arg_use)
@@ -416,7 +408,9 @@ void genYYFill (OutputFile & o, size_t need)
 
 void genSetCondition(OutputFile & o, uint32_t ind, const std::string& newcond)
 {
-	o.wind(ind).wstring(replaceParam (opts->cond_set, opts->cond_set_arg, opts->condEnumPrefix + newcond));
+	std::string cond_set = opts->cond_set;
+	strrreplace(cond_set, opts->cond_set_arg, opts->condEnumPrefix + newcond);
+	o.wind(ind).wstring(cond_set);
 	if (!opts->cond_set_naked)
 	{
 		o.ws("(").wstring(opts->condEnumPrefix).wstring(newcond).ws(");");
@@ -426,7 +420,9 @@ void genSetCondition(OutputFile & o, uint32_t ind, const std::string& newcond)
 
 void genSetState(OutputFile & o, uint32_t ind, uint32_t fillIndex)
 {
-	o.wind(ind).wstring(replaceParam (opts->state_set, opts->state_set_arg, fillIndex));
+	std::string state_set = opts->state_set;
+	strrreplace(state_set, opts->state_set_arg, fillIndex);
+	o.wind(ind).wstring(state_set);
 	if (!opts->state_set_naked)
 	{
 		o.ws("(").wu32(fillIndex).ws(");");

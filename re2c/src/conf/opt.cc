@@ -78,8 +78,8 @@ void opt_t::fix ()
 			state_set_naked = Opt::baseopt.state_set_naked;
 			yyctx = Opt::baseopt.yyctx;
 			yydist = Opt::baseopt.yydist;
-			yydisttype = Opt::baseopt.yydisttype;
-			ctxprefix = Opt::baseopt.ctxprefix;
+			contexts_prefix = Opt::baseopt.contexts_prefix;
+			contexts_expr = Opt::baseopt.contexts_expr;
 			yyfilllabel = Opt::baseopt.yyfilllabel;
 			yynext = Opt::baseopt.yynext;
 			yyaccept = Opt::baseopt.yyaccept;
@@ -158,8 +158,8 @@ void opt_t::fix ()
 	{
 		yyctx = Opt::baseopt.yyctx;
 		yydist = Opt::baseopt.yydist;
-		yydisttype = Opt::baseopt.yydisttype;
-		ctxprefix = Opt::baseopt.ctxprefix;
+		contexts_prefix = Opt::baseopt.contexts_prefix;
+		contexts_expr = Opt::baseopt.contexts_expr;
 	}
 	if (!bFlag)
 	{
@@ -336,7 +336,6 @@ void Opt::reset_mapCodeName ()
 	useropt->yyskip = Opt::baseopt.yyskip;
 	useropt->yyctx = Opt::baseopt.yyctx;
 	useropt->yydist = Opt::baseopt.yydist;
-	useropt->yydisttype = Opt::baseopt.yydisttype;
 	useropt->yyfilllabel = Opt::baseopt.yyfilllabel;
 	useropt->yynext = Opt::baseopt.yynext;
 	useropt->yyaccept = Opt::baseopt.yyaccept;

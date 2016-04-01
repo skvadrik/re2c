@@ -7,6 +7,7 @@
 #include "src/codegen/print.h"
 #include "src/conf/opt.h"
 #include "src/conf/warn.h"
+#include "src/util/strrreplace.h"
 #include "src/globals.h"
 
 namespace re2c
@@ -17,6 +18,13 @@ OutputFragment::OutputFragment (type_t t, uint32_t i)
 	, stream ()
 	, indent (i)
 {}
+
+OutputFragment::~OutputFragment()
+{
+	if (type == CONTEXTS) {
+		delete contexts;
+	}
+}
 
 uint32_t OutputFragment::count_lines ()
 {
@@ -57,6 +65,7 @@ OutputFile::OutputFile (const char * fn)
 	, blocks ()
 	, label_counter ()
 	, warn_condition_order (!opts->tFlag) // see note [condition order]
+	, default_contexts (true)
 {
 	new_block ();
 }
@@ -192,9 +201,14 @@ void OutputFile::insert_code ()
 	blocks.back ()->fragments.push_back (new OutputFragment (OutputFragment::CODE, 0));
 }
 
-OutputFile &OutputFile::wdelay_contexts(uint32_t ind)
+OutputFile &OutputFile::wdelay_contexts(uint32_t ind, const ConfContexts *cf)
 {
-	blocks.back()->fragments.push_back(new OutputFragment(OutputFragment::CONTEXTS, ind));
+	OutputFragment *frag = new OutputFragment(OutputFragment::CONTEXTS, ind);
+	frag->contexts = cf;
+	if (cf) {
+		default_contexts = false;
+	}
+	blocks.back()->fragments.push_back(frag);
 	insert_code();
 	return *this;
 }
@@ -306,7 +320,11 @@ void OutputFile::emit(
 					case OutputFragment::CODE:
 						break;
 					case OutputFragment::CONTEXTS:
-						output_contexts(f.stream, f.indent, contexts);
+						if (f.contexts) {
+							output_contexts(f.stream, *f.contexts, contexts);
+						} else if (default_contexts) {
+							output_contexts_default(f.stream, f.indent, contexts);
+						}
 						break;
 					case OutputFragment::LINE_INFO:
 						output_line_info (f.stream, line_count + 1, file_name);
@@ -389,19 +407,36 @@ Output::~Output ()
 	}
 }
 
-void output_contexts(std::ostream &o, uint32_t ind, const std::set<std::string> &contexts)
+void output_contexts(
+	std::ostream &o,
+	const ConfContexts &conf,
+	const std::set<std::string> &contexts)
 {
-	if (!contexts.empty()) {
-		std::set<std::string>::const_iterator
-			ctx = contexts.begin(),
-			end = contexts.end();
-		o << indent(ind) << opts->yydisttype << " " << *ctx;
-		for (++ctx; ctx != end; ++ctx) {
-			o << ", " << *ctx;
+	std::set<std::string>::const_iterator
+		ctx = contexts.begin(),
+		end = contexts.end();
+	for (;ctx != end;) {
+		std::string line = conf.line;
+		strrreplace(line, "@@", *ctx);
+		o << line;
+		if (++ctx == end) {
+			break;
 		}
-		o << ";\n";
+		o << conf.sep;
 	}
-	o << opts->input_api.stmt_backupctx(ind);
+}
+
+void output_contexts_default(
+	std::ostream &o,
+	uint32_t ind,
+	const std::set<std::string> &contexts)
+{
+	std::set<std::string>::const_iterator
+		ctx = contexts.begin(),
+		end = contexts.end();
+	for (;ctx != end; ++ctx) {
+		o << indent(ind) << "long " << *ctx << ";\n";
+	}
 }
 
 void output_state_goto (std::ostream & o, uint32_t ind, uint32_t start_label)

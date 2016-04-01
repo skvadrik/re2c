@@ -15,6 +15,7 @@ namespace re2c
 class Range;
 class RegExp;
 struct OutputFile;
+struct ConfContexts;
 
 struct ScannerState
 {
@@ -69,6 +70,7 @@ private:
 	const RegExp *cls(const Range *r) const;
 
 	void lex_conf ();
+	void lex_conf_contexts(ConfContexts &conf);
 	void lex_conf_assign ();
 	void lex_conf_semicolon ();
 	int32_t lex_conf_number ();

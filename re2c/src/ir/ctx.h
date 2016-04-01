@@ -8,32 +8,34 @@ namespace re2c
 
 struct CtxVar
 {
-	const std::string *name;
-	std::string fullname;
+	const std::string *codename;
+	std::string uniqname;
 
 	CtxVar(const std::string *n, size_t idx);
 	CtxVar(const CtxVar &ctx)
-		: name(ctx.name)
-		, fullname(ctx.fullname)
+		: codename(ctx.codename)
+		, uniqname(ctx.uniqname)
 	{}
 	CtxVar& operator=(const CtxVar &ctx)
 	{
-		name = ctx.name;
-		fullname = ctx.fullname;
+		codename = ctx.codename;
+		uniqname = ctx.uniqname;
 		return *this;
 	}
+	std::string name() const;
+	std::string expr() const;
 };
 
 struct CtxFix
 {
 	static const size_t RIGHTMOST;
 
-	const std::string *name;
+	const std::string *codename;
 	size_t base;
 	size_t dist;
 
 	CtxFix(const std::string *n, size_t b, size_t d)
-		: name(n)
+		: codename(n)
 		, base(b)
 		, dist(d)
 	{}

@@ -9,7 +9,8 @@ static void lex(const char *YYCURSOR)
     
 {
 	char yych;
-	long yyctx0p2, yyctx0p4;
+	long yyctx0p2;
+	long yyctx0p4;
 	YYCTXMARKER = YYCURSOR;
 	yych = *YYCURSOR;
 	switch (yych) {

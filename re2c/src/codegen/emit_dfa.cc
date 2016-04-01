@@ -17,6 +17,7 @@
 #include "src/ir/adfa/adfa.h"
 #include "src/ir/skeleton/skeleton.h"
 #include "src/util/counter.h"
+#include "src/util/strrreplace.h"
 
 namespace re2c
 {
@@ -121,7 +122,7 @@ void DFA::emit(Output & output, uint32_t& ind, bool isLastCond, bool& bPrologBra
 	if (base_ctxmarker) {
 		for (State *s = head; s; s = s->next) {
 			for (std::set<size_t>::const_iterator i = s->ctxs.begin(); i != s->ctxs.end(); ++i) {
-				ctxnames.insert(contexts[*i].fullname);
+				ctxnames.insert(contexts[*i].name());
 			}
 		}
 		output.contexts.insert(ctxnames.begin(), ctxnames.end());
@@ -195,7 +196,8 @@ void DFA::emit(Output & output, uint32_t& ind, bool isLastCond, bool& bPrologBra
 				}
 				o.wdelay_yyaccept_init (ind);
 				if (base_ctxmarker) {
-					o.wdelay_contexts(ind);
+					o.wdelay_contexts(ind, NULL);
+					o.wstring(opts->input_api.stmt_backupctx(ind));
 				}
 			}
 			else
@@ -231,7 +233,9 @@ void DFA::emit(Output & output, uint32_t& ind, bool isLastCond, bool& bPrologBra
 		{
 			if (opts->condDivider.length())
 			{
-				o.wstring(replaceParam(opts->condDivider, opts->condDividerParam, cond)).ws("\n");
+				std::string divider = opts->condDivider;
+				strrreplace(divider, opts->condDividerParam, cond);
+				o.wstring(divider).ws("\n");
 			}
 			if (opts->target == opt_t::DOT)
 			{

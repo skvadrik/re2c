@@ -26,6 +26,7 @@ namespace re2c
 	re2c:yych:conversion = 1;
 
 	space = [ \t];
+	eol   = "\r"? "\n";
 
 	conf_assign = space* "=" space*;
 
@@ -117,11 +118,11 @@ void Scanner::lex_conf ()
 	"define:YYRESTORE"    { opts.set_yyrestore    (lex_conf_string ()); return; }
 	"define:YYRESTORECTX" { opts.set_yyrestorectx (lex_conf_string ()); return; }
 	"define:YYLESSTHAN"   { opts.set_yylessthan   (lex_conf_string ()); return; }
-
 	"define:YYCTX"        { opts.set_yyctx        (lex_conf_string ()); return; }
 	"define:YYDIST"       { opts.set_yydist       (lex_conf_string ()); return; }
-	"define:YYDISTTYPE"   { opts.set_yydisttype   (lex_conf_string ()); return; }
-	"ctxprefix"           { opts.set_ctxprefix    (lex_conf_string ()); return; }
+
+	"contexts:prefix" { opts.set_contexts_prefix(lex_conf_string ()); return; }
+	"contexts:expr"   { opts.set_contexts_expr  (lex_conf_string ()); return; }
 
 	"indent:string" { opts.set_indString (lex_conf_string ()); return; }
 	"indent:top"
@@ -158,6 +159,22 @@ void Scanner::lex_conf ()
 	// deprecated
 	"variable:yystable" { lex_conf_string (); return; }
 */
+}
+
+void Scanner::lex_conf_contexts(ConfContexts &conf)
+{
+	for (;;) {
+	/*!re2c
+		* { fatal("unrecognized configuration"); }
+
+		space*  { continue; }
+		eol     { ++cline; continue; }
+		"*" "/" { return; }
+
+		"line" { conf.line = lex_conf_string(); continue; }
+		"sep"  { conf.sep  = lex_conf_string(); continue; }
+	*/
+	}
 }
 
 void Scanner::lex_conf_assign ()

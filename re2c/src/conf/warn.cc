@@ -129,12 +129,12 @@ void Warn::selfoverlapping_contexts(
 		error_accuml |= e;
 
 		const char *trail, *name;
-		if (ctx.name == NULL) {
+		if (ctx.codename == NULL) {
 			trail = "trailing context";
 			name = "";
 		} else {
 			trail = "context ";
-			name = ctx.name->c_str();
+			name = ctx.codename->c_str();
 		}
 		warning(names[SELFOVERLAPPING_CONTEXTS], line, e,
 			"%s%s %sis self-overlapping", trail, name,

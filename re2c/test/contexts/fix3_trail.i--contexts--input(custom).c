@@ -9,7 +9,10 @@ static void lex(const char *YYCURSOR)
     
 {
 	char yych;
-	long yyctx0, yyctx0p1, yyctx0p2, yyctx0p3;
+	long yyctx0;
+	long yyctx0p1;
+	long yyctx0p2;
+	long yyctx0p3;
 	YYBACKUPCTX ();
 	yych = YYPEEK ();
 	yyctx0 = yyctx0p3 = yyctx0p2 = yyctx0p1 = YYDIST();

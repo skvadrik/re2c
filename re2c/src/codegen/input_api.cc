@@ -112,7 +112,7 @@ std::string InputAPI::stmt_dist (uint32_t ind, const std::set<size_t> &ctxs,
 {
 	std::string s = indent(ind);
 	for (std::set<size_t>::const_iterator i = ctxs.begin(); i != ctxs.end(); ++i) {
-		s += contexts[*i].fullname + " = ";
+		s += contexts[*i].expr() + " = ";
 	}
 	return s + expr_dist() + ";\n";
 }
@@ -142,7 +142,7 @@ std::string InputAPI::expr_ctx_fix(const CtxFix &ctx, const std::vector<CtxVar> 
 		}
 		return s.str();
 	} else {
-		s << "(" << ctxvars[ctx.base].fullname << " - " << ctx.dist << ")";
+		s << "(" << ctxvars[ctx.base].expr() << " - " << ctx.dist << ")";
 		return expr_ctx(s.str());
 	}
 }

@@ -146,6 +146,23 @@ echo:
 					}
 					goto echo;
 				}
+
+	"/*!contexts:re2c" {
+		if (opts->target == opt_t::CODE) {
+			const size_t len = sizeof("/*!contexts:re2c") - 1;
+			out.wraw(tok, tok_len() - len);
+		}
+
+		ConfContexts *conf = new ConfContexts;
+		lex_conf_contexts(*conf);
+		if (opts->target == opt_t::CODE) {
+			out.wdelay_contexts(opts->topIndent, conf);
+		}
+
+		tok = pos = cur;
+		goto echo;
+	}
+
 	"*" "/"	"\r"? "\n"	{
 					cline++;
 					if (ignore_eoc)
