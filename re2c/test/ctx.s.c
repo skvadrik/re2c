@@ -124,6 +124,7 @@ yy14:
 
 #define YYMAXFILL 3
 
+
 int main(int,char**)
 {
 	Scanner s("a77 a1 b8 b1");

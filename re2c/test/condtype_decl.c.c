@@ -9,13 +9,14 @@ enum YYCONDTYPE {
 
 #line 1 "condtype_decl.c.re"
 
+
 int main ()
 {
 	YYCONDTYPE cond;
 	char * YYCURSOR;
 #define YYGETCONDITION() cond
 
-#line 19 "condtype_decl.c.c"
+#line 20 "condtype_decl.c.c"
 {
 	unsigned char yych;
 	switch (YYGETCONDITION()) {
@@ -34,7 +35,7 @@ yy4:
 	++YYCURSOR;
 #line 11 "condtype_decl.c.re"
 	{}
-#line 38 "condtype_decl.c.c"
+#line 39 "condtype_decl.c.c"
 /* *********************************** */
 yyc_b:
 	yych = *YYCURSOR;
@@ -47,7 +48,7 @@ yy9:
 	++YYCURSOR;
 #line 12 "condtype_decl.c.re"
 	{}
-#line 51 "condtype_decl.c.c"
+#line 52 "condtype_decl.c.c"
 }
 #line 13 "condtype_decl.c.re"
 

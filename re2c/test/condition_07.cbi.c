@@ -59,6 +59,7 @@ enum YYCONDTYPE {
 };
 
 
+
 void scan(Scanner *s)
 {
 	int cond = EStateR1;

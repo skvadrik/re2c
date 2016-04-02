@@ -22,6 +22,7 @@ enum YYCONDTYPE {
 };
 
 
+
 int scan(char *s, int l)
 {
 	char *p = s;

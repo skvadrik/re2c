@@ -68,6 +68,7 @@
 /* perform sanity check. If this message is triggered you should
    increase the ZEND_MMAP_AHEAD value in the zend_streams.h file */
 #define YYMAXFILL 6
+
 #if ZEND_MMAP_AHEAD < (YYMAXFILL + 1)
 # error ZEND_MMAP_AHEAD should be greater than YYMAXFILL
 #endif

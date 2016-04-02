@@ -14,6 +14,7 @@ const unsigned char *scan(const unsigned char *p, unsigned int len, int *state)
 	}
 
 
+
 yy0:
 	*state = 0;
 	if (p >= e) {

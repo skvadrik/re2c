@@ -18,10 +18,11 @@ char *scan(char *p)
 	case 1: goto yyFillLabel1;
 	}
 
+
 	// after getstate
 
 
-#line 25 "config4f.f.c"
+#line 26 "config4f.f.c"
 
 yy0:
 	YYSETSTATE(0);
@@ -45,7 +46,7 @@ yy2:
 	++YYCURSOR;
 #line 22 "config4f.f.re"
 	{ return NULL; }
-#line 49 "config4f.f.c"
+#line 50 "config4f.f.c"
 yy4:
 	++YYCURSOR;
 	YYSETSTATE(1);
@@ -68,7 +69,7 @@ yyFillLabel1:
 yy6:
 #line 21 "config4f.f.re"
 	{ return YYCURSOR; }
-#line 72 "config4f.f.c"
+#line 73 "config4f.f.c"
 #line 23 "config4f.f.re"
 
 }

@@ -14,6 +14,7 @@ enum ScanContition {
 };
 
 
+
 typedef struct Scanner
 {
 	FILE			    *fp;

@@ -8,6 +8,7 @@ enum YYCONDTYPE {
 };
 
 
+
 void scan(unsigned char* in)
 {
 

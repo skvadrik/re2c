@@ -1063,6 +1063,7 @@ yy91:
 
 #define YYMAXFILL 20
 
+
 void timelib_strtointerval(char *s, size_t len,
                            timelib_time **begin, timelib_time **end,
 						   timelib_rel_time **period, int *recurrences,

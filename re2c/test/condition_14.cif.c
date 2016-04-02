@@ -14,6 +14,7 @@ enum ScanContition {
 };
 
 
+
 typedef struct Scanner
 {
 	FILE			    *fp;
@@ -85,6 +86,7 @@ void scan(Scanner *s)
 	case 2: goto yyFillLabel2;
 	case 3: goto yyFillLabel3;
 	}
+
 	for(;;)
 	{
 		s->tok = s->cur;

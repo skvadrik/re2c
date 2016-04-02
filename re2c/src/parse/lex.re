@@ -204,16 +204,6 @@ eoc:
 		tok = pos = cur;
 		goto echo;
 	}
-	eoc eol {
-		++cline;
-		if (ignored > 0) {
-			cline += ignored;
-			ignored = 0;
-			out.wline_info(cline, get_fname().c_str());
-		}
-		tok = pos = cur;
-		goto echo;
-	}
 */
 }
 
