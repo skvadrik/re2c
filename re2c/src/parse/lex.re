@@ -50,7 +50,8 @@ lineno  = [1-9] digit*;
 name    = (letter|digit|"_")+;
 space   = [ \t];
 ws      = (space | [\r\n]);
-eol     = ("\r\n" | "\n");
+eol     = "\r"? "\n";
+eoc     = "*" "/";
 lineinf = lineno (space+ dstring)? eol;
 
 	esc = "\\";
@@ -62,8 +63,7 @@ lineinf = lineno (space+ dstring)? eol;
 
 Scanner::ParseMode Scanner::echo()
 {
-	bool ignore_eoc = false;
-	int  ignore_cnt = 0;
+	uint32_t ignored = 0;
 
 	if (eof && cur == eof) // Catch EOF
 	{
@@ -115,120 +115,105 @@ echo:
 					tok = cur;
 					return Reuse;
 				}
+
+	"/*!ignore:re2c" { goto eoc; }
+
 	"/*!max:re2c" {
-					if (opts->target != opt_t::DOT)
-					{
-						out.wdelay_yymaxfill ();
-					}
-					tok = pos = cur;
-					ignore_eoc = true;
-					goto echo;
-				}
+		if (opts->target == opt_t::CODE) {
+			out.wdelay_yymaxfill();
+		}
+		goto eoc;
+	}
+
 	"/*!getstate:re2c" {
-					tok = pos = cur;
-					out.wdelay_state_goto (opts->topIndent);
-					ignore_eoc = true;
-					goto echo;
-				}
-	"/*!ignore:re2c" {
-					tok = pos = cur;
-					ignore_eoc = true;
-					goto echo;
-				}
+		if (opts->target == opt_t::CODE) {
+			out.wdelay_state_goto(opts->topIndent);
+		}
+		goto eoc;
+	}
+
 	"/*!types:re2c" {
-					tok = pos = cur;
-					ignore_eoc = true;
-					if (opts->target != opt_t::DOT)
-					{
-						out.wdelay_line_info ().ws("\n")
-							.wdelay_types ().ws("\n")
-							.wline_info (cline, get_fname ().c_str ());
-					}
-					goto echo;
-				}
+		if (opts->target == opt_t::CODE) {
+			out.wdelay_line_info().ws("\n")
+				.wdelay_types().ws("\n")
+				.wline_info(cline, get_fname().c_str());
+		}
+		goto eoc;
+	}
 
 	"/*!contexts:re2c" {
 		if (opts->target == opt_t::CODE) {
 			const size_t len = sizeof("/*!contexts:re2c") - 1;
 			out.wraw(tok, tok_len() - len);
 		}
-
 		ConfContexts *conf = new ConfContexts;
 		lex_conf_contexts(*conf);
 		if (opts->target == opt_t::CODE) {
 			out.wdelay_contexts(opts->topIndent, conf);
 		}
-
 		tok = pos = cur;
 		goto echo;
 	}
 
-	"*" "/"	"\r"? "\n"	{
-					cline++;
-					if (ignore_eoc)
-					{
-						if (ignore_cnt)
-						{
-							out.wline_info (cline, get_fname ().c_str ());
-						}
-						ignore_eoc = false;
-						ignore_cnt = 0;
-					}
-					else if (opts->target == opt_t::CODE)
-					{
-						out.wraw(tok, tok_len ());
-					}
-					tok = pos = cur;
-					goto echo;
-				}
-	"*" "/"		{
-					if (ignore_eoc)
-					{
-						if (ignore_cnt)
-						{
-							out.ws("\n").wline_info (cline, get_fname ().c_str ());
-						}
-						ignore_eoc = false;
-						ignore_cnt = 0;
-					}
-					else if (opts->target == opt_t::CODE)
-					{
-						out.wraw(tok, tok_len ());
-					}
-					tok = pos = cur;
-					goto echo;
-				}
-	"\n" space* "#" space* "line" space+ / lineinf {
-					set_sourceline ();
-					goto echo;
-				}
-	"\n"		{
-					if (ignore_eoc)
-					{
-						ignore_cnt++;
-					}
-					else if (opts->target == opt_t::CODE)
-					{
-						out.wraw(tok, tok_len ());
-					}
-					tok = pos = cur;
-					cline++;
-					goto echo;
-				}
-	zero		{
-					if (!ignore_eoc && opts->target == opt_t::CODE)
-					{
-						out.wraw(tok, tok_len () - 1);
-						// -1 so we don't write out the \0
-					}
-					if(cur == eof)
-					{
-						return Stop;
-					}
-				}
-	*			{
-					goto echo;
-				}
+	eoc {
+		if (opts->target == opt_t::CODE) {
+			out.wraw(tok, tok_len ());
+		}
+		tok = pos = cur;
+		goto echo;
+	}
+
+	eol space* "#" space* "line" space+ / lineinf {
+		set_sourceline();
+		goto echo;
+	}
+
+	eol {
+		if (opts->target == opt_t::CODE) {
+			out.wraw(tok, tok_len ());
+		}
+		cline++;
+		tok = pos = cur;
+		goto echo;
+	}
+
+	zero {
+		if (opts->target == opt_t::CODE) {
+			out.wraw(tok, tok_len () - 1);
+			// -1 so we don't write out the \0
+		}
+		if (cur == eof) {
+			return Stop;
+		}
+	}
+
+	* { goto echo; }
+*/
+
+eoc:
+/*!re2c
+	zero { fatal("expected end of block"); }
+	*    { goto eoc; }
+	eol  { ++ignored; goto eoc; }
+	eoc  {
+		if (ignored > 0) {
+			cline += ignored;
+			ignored = 0;
+			out.ws("\n").wline_info(cline, get_fname().c_str());
+		}
+		tok = pos = cur;
+		goto echo;
+	}
+	eoc eol {
+		++cline;
+		if (ignored > 0) {
+			cline += ignored;
+			ignored = 0;
+			out.wline_info(cline, get_fname().c_str());
+		}
+		tok = pos = cur;
+		goto echo;
+	}
 */
 }
 

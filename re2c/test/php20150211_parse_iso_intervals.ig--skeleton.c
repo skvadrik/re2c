@@ -963,7 +963,6 @@ end:
 #undef YYRESTORE
 #undef YYLESSTHAN
 #undef YYFILL
-#define YYMAXFILL 20
 
 int main()
 {

@@ -27,6 +27,7 @@ namespace re2c
 
 	space = [ \t];
 	eol   = "\r"? "\n";
+	eoc   = "*" "/";
 
 	conf_assign = space* "=" space*;
 
@@ -167,9 +168,9 @@ void Scanner::lex_conf_contexts(ConfContexts &conf)
 	/*!re2c
 		* { fatal("unrecognized configuration"); }
 
-		space*  { continue; }
-		eol     { ++cline; continue; }
-		"*" "/" { return; }
+		space+ { continue; }
+		eol    { ++cline; continue; }
+		eoc    { return; }
 
 		"line" { conf.line = lex_conf_string(); continue; }
 		"sep"  { conf.sep  = lex_conf_string(); continue; }

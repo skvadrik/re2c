@@ -48,11 +48,6 @@ error:
     return NULL;
 }
 
-enum YYCONDTYPE {
-    yycr2,
-};
-
-
 #define YYCTYPE unsigned char
 #define YYKEYTYPE unsigned char
 #define YYPEEK() *cursor

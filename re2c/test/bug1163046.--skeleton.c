@@ -538,7 +538,6 @@ end:
 #undef YYRESTORE
 #undef YYLESSTHAN
 #undef YYFILL
-#define YYMAXFILL 45
 
 int main()
 {

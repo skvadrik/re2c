@@ -47,7 +47,6 @@ error:
     }
     return NULL;
 }
-#define YYMAXFILL 16
 
 #define YYCTYPE unsigned char
 #define YYKEYTYPE unsigned char
