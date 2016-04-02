@@ -155,14 +155,6 @@ echo:
 		goto echo;
 	}
 
-	eoc {
-		if (opts->target == opt_t::CODE) {
-			out.wraw(tok, tok_len ());
-		}
-		tok = pos = cur;
-		goto echo;
-	}
-
 	eol space* "#" space* "line" space+ / lineinf {
 		set_sourceline();
 		goto echo;
