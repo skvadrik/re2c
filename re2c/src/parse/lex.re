@@ -72,69 +72,69 @@ Scanner::ParseMode Scanner::echo()
 
 	tok = cur;
 echo:
-/*!re2c
-   beginRE     =  "%{" | "/*!re2c";
-   beginRE     {
-					if (opts->rFlag)
-					{
-						fatal("found standard 're2c' block while using -r flag");
-					}
-					if (opts->target == opt_t::CODE)
-					{
-						const size_t lexeme_len = cur[-1] == '{'
-							? sizeof ("%{") - 1
-							: sizeof ("/*!re2c") - 1;
-						out.wraw(tok, tok_len () - lexeme_len);
-					}
-					tok = cur;
-					return Parse;
-				}
-	"/*!rules:re2c"	{
-					if (opts->rFlag)
-					{
-						opts.reset_mapCodeName ();
-					}
-					else
-					{
-						fatal("found 'rules:re2c' block without -r flag");
-					}
-					tok = cur;
-					return Rules;
-				}
-	"/*!use:re2c"	{
-					if (!opts->rFlag)
-					{
-						fatal("found 'use:re2c' block without -r flag");
-					}
-					reuse();
-					if (opts->target == opt_t::CODE)
-					{
-						const size_t lexeme_len = sizeof ("/*!use:re2c") - 1;
-						out.wraw(tok, tok_len () - lexeme_len);
-					}
-					tok = cur;
-					return Reuse;
-				}
+	const char *start = cur;
 
-	"/*!ignore:re2c" { goto eoc; }
+/*!re2c
+	"%{" | "/*!re2c" {
+		if (opts->target == opt_t::CODE) {
+			out.wraw(tok, start);
+		}
+		if (opts->rFlag) {
+			fatal("found standard 're2c' block while using -r flag");
+		}
+		return Parse;
+	}
+
+	"/*!rules:re2c" {
+		if (opts->target == opt_t::CODE) {
+			out.wraw(tok, start);
+		}
+		if (opts->rFlag) {
+			opts.reset_mapCodeName ();
+		} else {
+			fatal("found 'rules:re2c' block without -r flag");
+		}
+		return Rules;
+	}
+
+	"/*!use:re2c" {
+		if (opts->target == opt_t::CODE) {
+			out.wraw(tok, start);
+		}
+		if (!opts->rFlag) {
+			fatal("found 'use:re2c' block without -r flag");
+		}
+		reuse();
+		return Reuse;
+	}
+
+	"/*!ignore:re2c" {
+		if (opts->target == opt_t::CODE) {
+			out.wraw(tok, start);
+		}
+		goto eoc;
+	}
 
 	"/*!max:re2c" {
 		if (opts->target == opt_t::CODE) {
-			out.wdelay_yymaxfill();
+			out.wraw(tok, start)
+				.wdelay_yymaxfill();
 		}
 		goto eoc;
 	}
 
 	"/*!getstate:re2c" {
 		if (opts->target == opt_t::CODE) {
-			out.wdelay_state_goto(opts->topIndent);
+			out.wraw(tok, start)
+				.wdelay_state_goto(opts->topIndent);
 		}
 		goto eoc;
 	}
 
 	"/*!types:re2c" {
 		if (opts->target == opt_t::CODE) {
-			out.wdelay_line_info().ws("\n")
+			out.wraw(tok, start)
+				.wdelay_line_info().ws("\n")
 				.wdelay_types().ws("\n")
 				.wline_info(cline, get_fname().c_str());
 		}
@@ -143,8 +143,7 @@ echo:
 
 	"/*!contexts:re2c" {
 		if (opts->target == opt_t::CODE) {
-			const size_t len = sizeof("/*!contexts:re2c") - 1;
-			out.wraw(tok, tok_len() - len);
+			out.wraw(tok, start);
 		}
 		ConfContexts *conf = new ConfContexts;
 		lex_conf_contexts(*conf);
@@ -155,28 +154,24 @@ echo:
 		goto echo;
 	}
 
+	zero {
+		if (opts->target == opt_t::CODE) {
+			out.wraw(tok, start);
+		}
+		if (cur == eof) {
+			return Stop;
+		}
+	}
+
 	eol space* "#" space* "line" space+ / lineinf {
 		set_sourceline();
 		goto echo;
 	}
 
 	eol {
-		if (opts->target == opt_t::CODE) {
-			out.wraw(tok, tok_len ());
-		}
 		cline++;
-		tok = pos = cur;
+		pos = cur;
 		goto echo;
-	}
-
-	zero {
-		if (opts->target == opt_t::CODE) {
-			out.wraw(tok, tok_len () - 1);
-			// -1 so we don't write out the \0
-		}
-		if (cur == eof) {
-			return Stop;
-		}
 	}
 
 	* { goto echo; }

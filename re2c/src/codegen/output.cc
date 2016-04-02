@@ -101,9 +101,9 @@ std::ostream & OutputFile::stream ()
 	return blocks.back ()->fragments.back ()->stream;
 }
 
-OutputFile & OutputFile::wraw (const char * s, size_t n)
+OutputFile &OutputFile::wraw(const char *s, const char *e)
 {
-	stream ().write (s, static_cast<std::streamsize> (n));
+	stream().write(s, static_cast<std::streamsize>(e - s));
 	return *this;
 }
 

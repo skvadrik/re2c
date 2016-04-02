@@ -86,7 +86,7 @@ public:
 	void new_block ();
 
 	// immediate output
-	OutputFile & wraw (const char * s, size_t n);
+	OutputFile & wraw (const char *s, const char *e);
 	OutputFile & wc (char c);
 	OutputFile & wc_hex (uint32_t n);
 	OutputFile & wu32 (uint32_t n);
