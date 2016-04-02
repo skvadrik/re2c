@@ -15,7 +15,6 @@ namespace re2c
 class Range;
 class RegExp;
 struct OutputFile;
-struct ConfContexts;
 
 struct ScannerState
 {
@@ -60,6 +59,8 @@ public:
 
 private:
 	void fill (uint32_t);
+	void lex_end_of_comment();
+	void lex_contexts();
 	void set_sourceline ();
 	uint32_t lex_cls_chr();
 	uint32_t lex_str_chr(char quote, bool &end);
@@ -70,7 +71,6 @@ private:
 	const RegExp *cls(const Range *r) const;
 
 	void lex_conf ();
-	void lex_conf_contexts(ConfContexts &conf);
 	void lex_conf_assign ();
 	void lex_conf_semicolon ();
 	int32_t lex_conf_number ();

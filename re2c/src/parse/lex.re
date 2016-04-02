@@ -63,8 +63,6 @@ lineinf = lineno (space+ dstring)? eol;
 
 Scanner::ParseMode Scanner::echo()
 {
-	uint32_t ignored = 0;
-
 	if (eof && cur == eof) // Catch EOF
 	{
 		return Stop;
@@ -112,7 +110,8 @@ echo:
 		if (opts->target == opt_t::CODE) {
 			out.wraw(tok, start);
 		}
-		goto eoc;
+		lex_end_of_comment();
+		goto echo;
 	}
 
 	"/*!max:re2c" {
@@ -120,7 +119,8 @@ echo:
 			out.wraw(tok, start)
 				.wdelay_yymaxfill();
 		}
-		goto eoc;
+		lex_end_of_comment();
+		goto echo;
 	}
 
 	"/*!getstate:re2c" {
@@ -128,7 +128,8 @@ echo:
 			out.wraw(tok, start)
 				.wdelay_state_goto(opts->topIndent);
 		}
-		goto eoc;
+		lex_end_of_comment();
+		goto echo;
 	}
 
 	"/*!types:re2c" {
@@ -138,19 +139,15 @@ echo:
 				.wdelay_types().ws("\n")
 				.wline_info(cline, get_fname().c_str());
 		}
-		goto eoc;
+		lex_end_of_comment();
+		goto echo;
 	}
 
 	"/*!contexts:re2c" {
 		if (opts->target == opt_t::CODE) {
 			out.wraw(tok, start);
 		}
-		ConfContexts *conf = new ConfContexts;
-		lex_conf_contexts(*conf);
-		if (opts->target == opt_t::CODE) {
-			out.wdelay_contexts(opts->topIndent, conf);
-		}
-		tok = pos = cur;
+		lex_contexts();
 		goto echo;
 	}
 
@@ -176,22 +173,47 @@ echo:
 
 	* { goto echo; }
 */
+}
 
-eoc:
-/*!re2c
-	zero { fatal("expected end of block"); }
-	*    { goto eoc; }
-	eol  { ++ignored; goto eoc; }
-	eoc  {
-		if (ignored > 0) {
-			cline += ignored;
-			ignored = 0;
-			out.ws("\n").wline_info(cline, get_fname().c_str());
+void Scanner::lex_end_of_comment()
+{
+	uint32_t ignored = 0;
+	for (;;) {/*!re2c
+		zero { fatal("expected end of block"); }
+
+		*    { continue; }
+		eol  { ++ignored; continue; }
+		eoc  {
+			if (ignored > 0) {
+				cline += ignored;
+				out.ws("\n").wline_info(cline, get_fname().c_str());
+			}
+			tok = pos = cur;
+			return;
 		}
-		tok = pos = cur;
-		goto echo;
-	}
-*/
+	*/}
+}
+
+void Scanner::lex_contexts()
+{
+	ConfContexts conf;
+	for (;;) {/*!re2c
+		*      { fatal("unrecognized configuration"); }
+
+		"line" { conf.line = lex_conf_string(); continue; }
+		"sep"  { conf.sep  = lex_conf_string(); continue; }
+
+		space+ { continue; }
+		eol    { ++cline; continue; }
+		eoc    {
+			if (opts->target == opt_t::CODE) {
+				out.wdelay_contexts(opts->topIndent,
+					new ConfContexts(conf));
+			}
+			tok = pos = cur;
+			return;
+		}
+	*/}
 }
 
 int Scanner::scan()
