@@ -74,33 +74,32 @@ echo:
 
 /*!re2c
 	"%{" | "/*!re2c" {
-		if (opts->target == opt_t::CODE) {
-			out.wraw(tok, start);
-		}
 		if (opts->rFlag) {
 			fatal("found standard 're2c' block while using -r flag");
+		}
+		if (opts->target == opt_t::CODE) {
+			out.wraw(tok, start);
 		}
 		return Parse;
 	}
 
 	"/*!rules:re2c" {
+		if (!opts->rFlag) {
+			fatal("found 'rules:re2c' block without -r flag");
+		}
 		if (opts->target == opt_t::CODE) {
 			out.wraw(tok, start);
 		}
-		if (opts->rFlag) {
-			opts.reset_mapCodeName ();
-		} else {
-			fatal("found 'rules:re2c' block without -r flag");
-		}
+		opts.reset_mapCodeName ();
 		return Rules;
 	}
 
 	"/*!use:re2c" {
-		if (opts->target == opt_t::CODE) {
-			out.wraw(tok, start);
-		}
 		if (!opts->rFlag) {
 			fatal("found 'use:re2c' block without -r flag");
+		}
+		if (opts->target == opt_t::CODE) {
+			out.wraw(tok, start);
 		}
 		reuse();
 		return Reuse;
