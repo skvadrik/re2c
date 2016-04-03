@@ -27,12 +27,13 @@ static void emit_initial       (OutputFile & o, uint32_t ind, bool & readCh, con
 static void emit_save          (OutputFile & o, uint32_t ind, bool & readCh, const State * const s, size_t save, bool save_yyaccept);
 static void emit_accept_binary (OutputFile & o, uint32_t ind, bool & readCh, const State * const s, const accept_t & accept, size_t l, size_t r);
 static void emit_accept        (OutputFile & o, uint32_t ind, bool & readCh, const State * const s, const accept_t & accept);
-static void emit_rule(OutputFile &o, uint32_t ind, const State *const s,
+static void emit_rule(OutputFile &o, uint32_t ind,
 	size_t rule, const std::string &condName,
 	const Skeleton *skeleton, bool base_ctxmarker);
 static void genYYFill          (OutputFile & o, size_t need);
 static void genSetCondition    (OutputFile & o, uint32_t ind, const std::string & newcond);
 static void genSetState        (OutputFile & o, uint32_t ind, uint32_t fillIndex);
+static void genGoTo            (OutputFile & o, uint32_t ind, const State * from, const State * to, bool & readCh);
 
 void emit_action
 	( const Action & action
@@ -64,10 +65,10 @@ void emit_action
 			emit_accept (o, ind, readCh, s, * action.info.accepts);
 			break;
 		case Action::RULE:
-			emit_rule (o, ind, s, action.info.rule, condName, skeleton, base_ctxmarker);
+			emit_rule (o, ind, action.info.rule, condName, skeleton, base_ctxmarker);
 			break;
 	}
-	if (opts->target != opt_t::DOT && !s->ctxs.empty()) {
+	if (!s->ctxs.empty()) {
 		if (base_ctxmarker) {
 			o.wstring(opts->input_api.stmt_dist(ind, s->ctxs, skeleton->contexts));
 		} else {
@@ -78,11 +79,6 @@ void emit_action
 
 void emit_match (OutputFile & o, uint32_t ind, bool & readCh, const State * const s)
 {
-	if (opts->target == opt_t::DOT)
-	{
-		return;
-	}
-
 	const bool read_ahead = s
 		&& s->next
 		&& s->next->action.type != Action::RULE;
@@ -110,11 +106,6 @@ void emit_match (OutputFile & o, uint32_t ind, bool & readCh, const State * cons
 
 void emit_initial (OutputFile & o, uint32_t ind, bool & readCh, const State * const s, const Initial & initial, const std::set<label_t> & used_labels)
 {
-	if (opts->target == opt_t::DOT)
-	{
-		return;
-	}
-
 	if (used_labels.count(s->label))
 	{
 		if (s->fill != 0)
@@ -154,10 +145,6 @@ void emit_initial (OutputFile & o, uint32_t ind, bool & readCh, const State * co
 void emit_save(OutputFile &o, uint32_t ind, bool &readCh,
 	const State *const s, size_t save, bool save_yyaccept)
 {
-	if (opts->target == opt_t::DOT) {
-		return;
-	}
-
 	if (save_yyaccept) {
 		o.wind(ind).wstring(opts->yyaccept).ws(" = ")
 			.wu64(save).ws(";\n");
@@ -194,10 +181,7 @@ void emit_accept (OutputFile & o, uint32_t ind, bool & readCh, const State * con
 	const size_t accepts_size = accepts.size ();
 	if (accepts_size > 0)
 	{
-		if (opts->target != opt_t::DOT)
-		{
-			o.wstring(opts->input_api.stmt_restore (ind));
-		}
+		o.wstring(opts->input_api.stmt_restore (ind));
 
 		if (readCh) // shouldn't be necessary, but might become at some point
 		{
@@ -219,17 +203,9 @@ void emit_accept (OutputFile & o, uint32_t ind, bool & readCh, const State * con
 				o.wind(ind).ws("goto *").wstring(opts->yytarget).ws("[").wstring(opts->yyaccept).ws("];\n");
 				o.wind(--ind).ws("}\n");
 			}
-			else if (opts->sFlag || (accepts_size == 2 && opts->target != opt_t::DOT))
+			else if (opts->sFlag || (accepts_size == 2))
 			{
 				emit_accept_binary (o, ind, readCh, s, accepts, 0, accepts_size - 1);
-			}
-			else if (opts->target == opt_t::DOT)
-			{
-				for (uint32_t i = 0; i < accepts_size; ++i)
-				{
-					o.wlabel(s->label).ws(" -> ").wlabel(accepts[i]->label);
-					o.ws(" [label=\"yyaccept=").wu32(i).ws("\"]\n");
-				}
 			}
 			else
 			{
@@ -273,7 +249,6 @@ static void subst_contexts(
 void emit_rule(
 	OutputFile &o,
 	uint32_t ind,
-	const State *const s,
 	size_t rule_idx,
 	const std::string &condName,
 	const Skeleton *skeleton,
@@ -281,17 +256,6 @@ void emit_rule(
 {
 	const Rule &rule = skeleton->rules[rule_idx];
 	const RuleInfo *info = rule.info;
-
-	if (opts->target == opt_t::DOT) {
-		o.wlabel(s->label);
-		const Code *code = info->code;
-		if (code) {
-			o.ws(" [label=\"").wstring(code->loc.filename)
-				.ws(":").wu32(code->loc.line).ws("\"]");
-		}
-		o.ws("\n");
-		return;
-	}
 
 	const Trail &trail = rule.trail;
 	switch (trail.type) {
@@ -337,11 +301,6 @@ void emit_rule(
 
 void need (OutputFile & o, uint32_t ind, bool & readCh, size_t n, bool bSetMarker)
 {
-	if (opts->target == opt_t::DOT)
-	{
-		return;
-	}
-
 	uint32_t fillIndex = last_fill_index;
 
 	if (opts->fFlag)
@@ -428,6 +387,17 @@ void genSetState(OutputFile & o, uint32_t ind, uint32_t fillIndex)
 		o.ws("(").wu32(fillIndex).ws(");");
 	}
 	o.ws("\n");
+}
+
+void genGoTo(OutputFile & o, uint32_t ind, const State *from, const State *to, bool & readCh)
+{
+	if (readCh && from->next != to)
+	{
+		o.wstring(opts->input_api.stmt_peek (ind));
+		readCh = false;
+	}
+
+	o.wind(ind).ws("goto ").wstring(opts->labelPrefix).wlabel(to->label).ws(";\n");
 }
 
 } // namespace re2c

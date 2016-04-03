@@ -21,9 +21,6 @@ void emit_action
 	, bool base_ctxmarker
 	);
 
-// helpers
-void genGoTo (OutputFile & o, uint32_t ind, const State * from, const State * to, bool & readCh);
-
 } // namespace re2c
 
 #endif // _RE2C_CODEGEN_EMIT_

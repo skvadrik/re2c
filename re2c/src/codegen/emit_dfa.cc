@@ -35,35 +35,15 @@ std::string genGetCondition()
 		: opts->cond_get + "()";
 }
 
-void genGoTo(OutputFile & o, uint32_t ind, const State *from, const State *to, bool & readCh)
-{
-	if (opts->target == opt_t::DOT)
-	{
-		o.wlabel(from->label).ws(" -> ").wlabel(to->label).ws("\n");
-		return;
-	}
-
-	if (readCh && from->next != to)
-	{
-		o.wstring(opts->input_api.stmt_peek (ind));
-		readCh = false;
-	}
-
-	o.wind(ind).ws("goto ").wstring(opts->labelPrefix).wlabel(to->label).ws(";\n");
-}
-
 void emit_state (OutputFile & o, uint32_t ind, const State * s, bool used_label)
 {
-	if (opts->target != opt_t::DOT)
+	if (used_label)
 	{
-		if (used_label)
-		{
-			o.wstring(opts->labelPrefix).wlabel(s->label).ws(":\n");
-		}
-		if (opts->dFlag && (s->action.type != Action::INITIAL))
-		{
-			o.wind(ind).wstring(opts->yydebug).ws("(").wlabel(s->label).ws(", ").wstring(opts->input_api.expr_peek ()).ws(");\n");
-		}
+		o.wstring(opts->labelPrefix).wlabel(s->label).ws(":\n");
+	}
+	if (opts->dFlag && (s->action.type != Action::INITIAL))
+	{
+		o.wind(ind).wstring(opts->yydebug).ws("(").wlabel(s->label).ws(", ").wstring(opts->input_api.expr_peek ()).ws(");\n");
 	}
 }
 
@@ -114,6 +94,52 @@ void DFA::emit_body (OutputFile & o, uint32_t& ind, const std::set<label_t> & us
 	}
 }
 
+void DFA::emit_dot(
+	OutputFile &o,
+	bool last_cond,
+	const std::vector<std::string> &conds) const
+{
+	if (!opts->cFlag || !bWroteCondCheck) {
+		o.ws("digraph re2c {\n");
+	}
+	if (opts->cFlag) {
+		if (!bWroteCondCheck) {
+			for (size_t i = 0; i < conds.size(); ++i) {
+				const std::string &cond = conds[i];
+				o.ws("0 -> ").wstring(cond)
+					.ws(" [label=\"state=")
+					.wstring(cond).ws("\"]\n");
+			}
+			bWroteCondCheck = true;
+		}
+		o.wstring(cond).ws(" -> ").wlabel(head->label).ws("\n");
+	}
+	for (State *s = head; s; s = s->next) {
+		if (s->action.type == Action::ACCEPT) {
+			const accept_t &accepts = *s->action.info.accepts;
+			for (uint32_t i = 0; i < accepts.size(); ++i) {
+				o.wlabel(s->label).ws(" -> ")
+					.wlabel(accepts[i]->label)
+					.ws(" [label=\"yyaccept=")
+					.wu32(i).ws("\"]").ws("\n");
+			}
+		} else if (s->action.type == Action::RULE) {
+			const Code *code = rules[s->action.info.rule].info->code;
+			if (code) {
+				o.wlabel(s->label).ws(" [label=\"")
+					.wstring(code->loc.filename)
+					.ws(":").wu32(code->loc.line)
+					.ws("\"]").ws("\n");
+			}
+		}
+		bool readCh = false;
+		s->go.emit(o, 0, readCh);
+	}
+	if (!opts->cFlag || last_cond) {
+		o.ws("}\n");
+	}
+}
+
 void DFA::emit(Output & output, uint32_t& ind, bool isLastCond, bool& bPrologBrace)
 {
 	OutputFile & o = output.source;
@@ -151,8 +177,7 @@ void DFA::emit(Output & output, uint32_t& ind, bool isLastCond, bool& bPrologBra
 	warn_undefined_control_flow(*skeleton);
 	warn_unreachable_nullable_rules(*skeleton);
 
-	if (opts->target == opt_t::SKELETON)
-	{
+	if (opts->target == opt_t::SKELETON) {
 		if (output.skeletons.insert (name).second)
 		{
 			emit_data(*skeleton, o.file_name);
@@ -162,19 +187,14 @@ void DFA::emit(Output & output, uint32_t& ind, bool isLastCond, bool& bPrologBra
 			emit_body (o, i, used_labels, initial_label);
 			emit_end(*skeleton, o, need_backup, need_backupctx);
 		}
-	}
-	else
-	{
+	} else if (opts->target == opt_t::DOT) {
+		emit_dot(o, isLastCond, output.types);
+	} else {
 		// Generate prolog
 		if (bProlog)
 		{
 			o.ws("\n").wdelay_line_info ();
-			if (opts->target == opt_t::DOT)
-			{
-				bPrologBrace = true;
-				o.ws("digraph re2c {\n");
-			}
-			else if ((!opts->fFlag && o.get_used_yyaccept ())
+			if ((!opts->fFlag && o.get_used_yyaccept ())
 			||  (!opts->fFlag && opts->bEmitYYCh)
 			||  (opts->bFlag && !opts->cFlag && BitMap::first)
 			||  (opts->cFlag && !bWroteCondCheck && opts->gFlag)
@@ -188,7 +208,7 @@ void DFA::emit(Output & output, uint32_t& ind, bool isLastCond, bool& bPrologBra
 			{
 				ind = 1;
 			}
-			if (!opts->fFlag && opts->target != opt_t::DOT)
+			if (!opts->fFlag)
 			{
 				if (opts->bEmitYYCh)
 				{
@@ -216,7 +236,7 @@ void DFA::emit(Output & output, uint32_t& ind, bool isLastCond, bool& bPrologBra
 				genCondTable(o, ind, output.types);
 			}
 			o.wdelay_state_goto (ind);
-			if (opts->cFlag && opts->target != opt_t::DOT)
+			if (opts->cFlag)
 			{
 				if (used_labels.count(start_label))
 				{
@@ -237,14 +257,7 @@ void DFA::emit(Output & output, uint32_t& ind, bool isLastCond, bool& bPrologBra
 				strrreplace(divider, opts->condDividerParam, cond);
 				o.wstring(divider).ws("\n");
 			}
-			if (opts->target == opt_t::DOT)
-			{
-				o.wstring(cond).ws(" -> ").wlabel(head->label).ws("\n");
-			}
-			else
-			{
-				o.wstring(opts->condPrefix).wstring(cond).ws(":\n");
-			}
+			o.wstring(opts->condPrefix).wstring(cond).ws(":\n");
 		}
 		if (opts->cFlag && opts->bFlag && BitMap::first)
 		{
@@ -327,16 +340,7 @@ void genCondGotoSub(OutputFile & o, uint32_t ind, const std::vector<std::string>
 void genCondGoto(OutputFile & o, uint32_t ind, const std::vector<std::string> & condnames)
 {
 	const size_t conds = condnames.size ();
-	if (opts->target == opt_t::DOT)
-	{
-		o.warn_condition_order = false; // see note [condition order]
-		for (size_t i = 0; i < conds; ++i)
-		{
-			const std::string cond = condnames[i];
-			o.ws("0 -> ").wstring(cond).ws(" [label=\"state=").wstring(cond).ws("\"]\n");
-		}
-	}
-	else if (opts->gFlag)
+	if (opts->gFlag)
 	{
 		o.wind(ind).ws("goto *").wstring(opts->yyctable).ws("[").wstring(genGetCondition()).ws("];\n");
 	}

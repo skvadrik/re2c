@@ -101,6 +101,7 @@ private:
 	void findBaseState ();
 	void count_used_labels (std::set<label_t> & used, label_t prolog, label_t start, bool force_start) const;
 	void emit_body (OutputFile &, uint32_t &, const std::set<label_t> & used_labels, label_t initial) const;
+	void emit_dot(OutputFile &o, bool last_cond, const std::vector<std::string> &conds) const;
 
 	FORBID_COPY (DFA);
 };

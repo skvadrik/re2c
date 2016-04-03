@@ -8,12 +8,10 @@
 namespace re2c
 {
 
-inline std::string indent (uint32_t ind)
+inline std::string indent(uint32_t ind)
 {
 	std::string str;
-
-	while (opts->target != opt_t::DOT && ind-- > 0)
-	{
+	while (ind-- > 0) {
 		str += opts->indString;
 	}
 	return str;
