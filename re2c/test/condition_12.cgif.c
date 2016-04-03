@@ -5,14 +5,12 @@
 
 #define	BSIZE	8192
 
-
 enum ScanContition {
 	EStateNormal,
 	EStateComment,
 	EStateSkiptoeol,
 	EStateString,
 };
-
 
 
 typedef struct Scanner

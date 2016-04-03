@@ -15,12 +15,10 @@
 
 static enum YYCONDTYPE yy_state;
 
-
 enum YYCONDTYPE {
 	yycINITIAL,
 	yycST_VALUE,
 };
-
 
 
 int scan(char *s, int l)

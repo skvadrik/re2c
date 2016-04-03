@@ -3,11 +3,9 @@
 // 're2c: error: line 11, column 9: code to default rule 'r1' is already defined'
 // This must be fixed later
 
-
 enum YYCONDTYPE {
 	yycr2,
 };
-
 
 
 void scan(unsigned char* in)

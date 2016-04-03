@@ -134,8 +134,8 @@ echo:
 	"/*!types:re2c" {
 		if (opts->target == opt_t::CODE) {
 			out.wraw(tok, start)
-				.wdelay_line_info().ws("\n")
-				.wdelay_types().ws("\n")
+				.wdelay_line_info()
+				.wdelay_types()
 				.wline_info(cline, get_fname().c_str());
 		}
 		lex_end_of_comment();
