@@ -35,7 +35,7 @@ static smart_ptr<DFA> compile_rules(
 	const std::string &cond,
 	uint32_t cunits)
 {
-	const uint32_t line = output.source.get_block_line();
+	const uint32_t line = output.source.block().line;
 	const std::string name = make_name(cond, line);
 
 	// The original set of code units (charset) might be very large.
@@ -105,7 +105,7 @@ static smart_ptr<DFA> compile_rules(
 	output.max_fill = std::max (output.max_fill, adfa->max_fill);
 	if (adfa->need_accept)
 	{
-		output.source.set_used_yyaccept ();
+		output.source.block().used_yyaccept = true;
 	}
 
 	return make_smart_ptr(adfa);

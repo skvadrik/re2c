@@ -13,6 +13,7 @@
 #include "src/codegen/label.h"
 #include "src/util/counter.h"
 #include "src/util/forbid_copy.h"
+#include "src/util/uniq_vector.h"
 
 namespace re2c
 {
@@ -58,6 +59,8 @@ struct OutputBlock
 	bool force_start_label;
 	std::string user_start_label;
 	uint32_t line;
+	std::vector<std::string> types;
+	std::set<std::string> contexts;
 
 	OutputBlock ();
 	~OutputBlock ();
@@ -81,6 +84,7 @@ public:
 	~OutputFile ();
 
 	std::ostream & stream ();
+	OutputBlock &block();
 	void insert_code ();
 	bool open ();
 	void new_block ();
@@ -111,16 +115,11 @@ public:
 	OutputFile & wdelay_yyaccept_init (uint32_t ind);
 	OutputFile & wdelay_yymaxfill ();
 
-	void set_used_yyaccept ();
-	bool get_used_yyaccept () const;
-	void set_force_start_label (bool force);
-	void set_user_start_label (const std::string & label);
-	bool get_force_start_label () const;
-	void set_block_line (uint32_t l);
-	uint32_t get_block_line () const;
+	void global_lists(uniq_vector_t<std::string> &types,
+		std::set<std::string> &contexts) const;
 
-	void emit(const std::vector<std::string> &types,
-		const std::set<std::string> &contexts, size_t max_fill);
+	void emit(const uniq_vector_t<std::string> &global_types,
+		const std::set<std::string> &global_contexts, size_t max_fill);
 
 	FORBID_COPY (OutputFile);
 };
@@ -130,7 +129,7 @@ struct HeaderFile
 	HeaderFile(const std::string &fn);
 	~HeaderFile ();
 	bool open ();
-	void emit (const std::vector<std::string> & types);
+	void emit(const uniq_vector_t<std::string> &types);
 
 private:
 	std::ostringstream stream;
@@ -144,9 +143,7 @@ struct Output
 {
 	OutputFile source;
 	HeaderFile header;
-	std::vector<std::string> types;
 	std::set<std::string> skeletons;
-	std::set<std::string> contexts;
 	size_t max_fill;
 
 	Output(const std::string &source_name, const std::string &header_name);
@@ -159,7 +156,7 @@ void output_contexts_default(std::ostream &o, uint32_t ind,
 	const std::set<std::string> &contexts);
 void output_line_info (std::ostream &, uint32_t, const std::string&);
 void output_state_goto (std::ostream &, uint32_t, uint32_t);
-void output_types (std::ostream &, uint32_t, const std::vector<std::string> &);
+void output_types(std::ostream &o, uint32_t, const uniq_vector_t<std::string> &types);
 void output_version_time (std::ostream &);
 void output_yyaccept_init (std::ostream &, uint32_t, bool);
 void output_yymaxfill (std::ostream &, size_t);

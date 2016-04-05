@@ -4,13 +4,13 @@
 	YYCTYPE yych;
 	long yyctx0;
 	long yyctx1;
-	YYBACKUPCTX ();
 	switch (YYGETCONDITION()) {
 	case yycc1: goto yyc_c1;
 	case yycc2: goto yyc_c2;
 	}
 /* *********************************** */
 yyc_c1:
+	YYBACKUPCTX ();
 	if (YYLESSTHAN (3)) YYFILL(3);
 	yych = YYPEEK ();
 	switch (yych) {

@@ -47,6 +47,8 @@ OutputBlock::OutputBlock ()
 	, force_start_label (false)
 	, user_start_label ()
 	, line (0)
+	, types ()
+	, contexts ()
 {
 	fragments.push_back (new OutputFragment (OutputFragment::CODE, 0));
 }
@@ -96,9 +98,14 @@ OutputFile::~OutputFile ()
 	}
 }
 
+OutputBlock& OutputFile::block()
+{
+	return *blocks.back();
+}
+
 std::ostream & OutputFile::stream ()
 {
-	return blocks.back ()->fragments.back ()->stream;
+	return block().fragments.back ()->stream;
 }
 
 OutputFile &OutputFile::wraw(const char *s, const char *e)
@@ -146,7 +153,7 @@ OutputFile & OutputFile::wversion_time ()
 
 OutputFile & OutputFile::wuser_start_label ()
 {
-	const std::string label = blocks.back ()->user_start_label;
+	const std::string label = block().user_start_label;
 	if (!label.empty ())
 	{
 		wstring(label).ws(":\n");
@@ -198,7 +205,7 @@ OutputFile & OutputFile::wind (uint32_t ind)
 
 void OutputFile::insert_code ()
 {
-	blocks.back ()->fragments.push_back (new OutputFragment (OutputFragment::CODE, 0));
+	block().fragments.push_back (new OutputFragment (OutputFragment::CODE, 0));
 }
 
 OutputFile &OutputFile::wdelay_contexts(uint32_t ind, const ConfContexts *cf)
@@ -215,7 +222,7 @@ OutputFile &OutputFile::wdelay_contexts(uint32_t ind, const ConfContexts *cf)
 
 OutputFile & OutputFile::wdelay_line_info ()
 {
-	blocks.back ()->fragments.push_back (new OutputFragment (OutputFragment::LINE_INFO, 0));
+	block().fragments.push_back (new OutputFragment (OutputFragment::LINE_INFO, 0));
 	insert_code ();
 	return *this;
 }
@@ -224,7 +231,7 @@ OutputFile & OutputFile::wdelay_state_goto (uint32_t ind)
 {
 	if (opts->fFlag && !bWroteGetState)
 	{
-		blocks.back ()->fragments.push_back (new OutputFragment (OutputFragment::STATE_GOTO, ind));
+		block().fragments.push_back (new OutputFragment (OutputFragment::STATE_GOTO, ind));
 		insert_code ();
 		bWroteGetState = true;
 	}
@@ -234,65 +241,30 @@ OutputFile & OutputFile::wdelay_state_goto (uint32_t ind)
 OutputFile & OutputFile::wdelay_types ()
 {
 	warn_condition_order = false; // see note [condition order]
-	blocks.back ()->fragments.push_back (new OutputFragment (OutputFragment::TYPES, 0));
+	block().fragments.push_back (new OutputFragment (OutputFragment::TYPES, 0));
 	insert_code ();
 	return *this;
 }
 
 OutputFile & OutputFile::wdelay_warn_condition_order ()
 {
-	blocks.back ()->fragments.push_back (new OutputFragment (OutputFragment::WARN_CONDITION_ORDER, 0));
+	block().fragments.push_back (new OutputFragment (OutputFragment::WARN_CONDITION_ORDER, 0));
 	insert_code ();
 	return *this;
 }
 
 OutputFile & OutputFile::wdelay_yyaccept_init (uint32_t ind)
 {
-	blocks.back ()->fragments.push_back (new OutputFragment (OutputFragment::YYACCEPT_INIT, ind));
+	block().fragments.push_back (new OutputFragment (OutputFragment::YYACCEPT_INIT, ind));
 	insert_code ();
 	return *this;
 }
 
 OutputFile & OutputFile::wdelay_yymaxfill ()
 {
-	blocks.back ()->fragments.push_back (new OutputFragment (OutputFragment::YYMAXFILL, 0));
+	block().fragments.push_back (new OutputFragment (OutputFragment::YYMAXFILL, 0));
 	insert_code ();
 	return *this;
-}
-
-void OutputFile::set_used_yyaccept ()
-{
-	blocks.back ()->used_yyaccept = true;
-}
-
-bool OutputFile::get_used_yyaccept () const
-{
-	return blocks.back ()->used_yyaccept;
-}
-
-void OutputFile::set_force_start_label (bool force)
-{
-	blocks.back ()->force_start_label = force;
-}
-
-void OutputFile::set_user_start_label (const std::string & label)
-{
-	blocks.back ()->user_start_label = label;
-}
-
-bool OutputFile::get_force_start_label () const
-{
-	return blocks.back ()->force_start_label;
-}
-
-void OutputFile::set_block_line (uint32_t l)
-{
-	blocks.back ()->line = l;
-}
-
-uint32_t OutputFile::get_block_line () const
-{
-	return blocks.back ()->line;
 }
 
 void OutputFile::new_block ()
@@ -301,9 +273,25 @@ void OutputFile::new_block ()
 	insert_code ();
 }
 
+void OutputFile::global_lists(
+	uniq_vector_t<std::string> &types,
+	std::set<std::string> &contexts) const
+{
+	for (unsigned int i = 0; i < blocks.size(); ++i) {
+
+		const std::vector<std::string> &ts = blocks[i]->types;
+		for (size_t j = 0; j < ts.size(); ++j) {
+			types.find_or_add(ts[j]);
+		}
+
+		const std::set<std::string> &cs = blocks[i]->contexts;
+		contexts.insert(cs.begin(), cs.end());
+	}
+}
+
 void OutputFile::emit(
-	const std::vector<std::string> &types,
-	const std::set<std::string> &contexts,
+	const uniq_vector_t<std::string> &global_types,
+	const std::set<std::string> &global_contexts,
 	size_t max_fill)
 {
 	if (file != NULL)
@@ -321,9 +309,9 @@ void OutputFile::emit(
 						break;
 					case OutputFragment::CONTEXTS:
 						if (f.contexts) {
-							output_contexts(f.stream, *f.contexts, contexts);
+							output_contexts(f.stream, *f.contexts, global_contexts);
 						} else if (default_contexts) {
-							output_contexts_default(f.stream, f.indent, contexts);
+							output_contexts_default(f.stream, f.indent, b.contexts);
 						}
 						break;
 					case OutputFragment::LINE_INFO:
@@ -333,7 +321,7 @@ void OutputFile::emit(
 						output_state_goto (f.stream, f.indent, 0);
 						break;
 					case OutputFragment::TYPES:
-						output_types (f.stream, f.indent, types);
+						output_types (f.stream, f.indent, global_types);
 						break;
 					case OutputFragment::WARN_CONDITION_ORDER:
 						if (warn_condition_order) // see note [condition order]
@@ -375,12 +363,12 @@ bool HeaderFile::open ()
 	return file != NULL;
 }
 
-void HeaderFile::emit (const std::vector<std::string> & types)
+void HeaderFile::emit(const uniq_vector_t<std::string> &types)
 {
 	output_version_time (stream);
 	output_line_info (stream, 3, file_name);
 	stream << "\n";
-	output_types (stream, 0, types);
+	output_types(stream, 0, types);
 }
 
 HeaderFile::~HeaderFile ()
@@ -396,9 +384,7 @@ HeaderFile::~HeaderFile ()
 Output::Output(const std::string &source_name, const std::string &header_name)
 	: source(source_name)
 	, header(header_name)
-	, types()
 	, skeletons()
-	, contexts()
 	, max_fill(1)
 {}
 
@@ -406,8 +392,12 @@ Output::~Output ()
 {
 	if (!warn.error ())
 	{
-		source.emit (types, contexts, max_fill);
-		header.emit (types);
+		uniq_vector_t<std::string> types;
+		std::set<std::string> contexts;
+		source.global_lists(types, contexts);
+
+		source.emit(types, contexts, max_fill);
+		header.emit(types);
 	}
 }
 
@@ -487,14 +477,16 @@ void output_line_info (std::ostream & o, uint32_t line_number, const std::string
 	}
 }
 
-void output_types (std::ostream & o, uint32_t ind, const std::vector<std::string> & types)
+void output_types(
+	std::ostream &o,
+	uint32_t ind,
+	const uniq_vector_t<std::string> &types)
 {
-	o << indent (ind++) << "enum " << opts->yycondtype << " {\n";
-	for (unsigned int i = 0; i < types.size (); ++i)
-	{
-		o << indent (ind) << opts->condEnumPrefix << types[i] << ",\n";
+	o << indent(ind++) << "enum " << opts->yycondtype << " {\n";
+	for (size_t i = 0; i < types.size(); ++i) {
+		o << indent(ind) << opts->condEnumPrefix << types[i] << ",\n";
 	}
-	o << indent (--ind) << "};\n";
+	o << indent(--ind) << "};\n";
 }
 
 void output_version_time (std::ostream & o)

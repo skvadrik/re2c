@@ -142,7 +142,8 @@ void DFA::emit_dot(
 
 void DFA::emit(Output & output, uint32_t& ind, bool isLastCond, bool& bPrologBrace)
 {
-	OutputFile & o = output.source;
+	OutputFile &o = output.source;
+	OutputBlock &ob = o.block();
 
 	std::set<std::string> ctxnames;
 	if (base_ctxmarker) {
@@ -151,7 +152,7 @@ void DFA::emit(Output & output, uint32_t& ind, bool isLastCond, bool& bPrologBra
 				ctxnames.insert(contexts[*i].name());
 			}
 		}
-		output.contexts.insert(ctxnames.begin(), ctxnames.end());
+		ob.contexts.insert(ctxnames.begin(), ctxnames.end());
 	}
 
 	bool bProlog = (!opts->cFlag || !bWroteCondCheck);
@@ -170,7 +171,7 @@ void DFA::emit(Output & output, uint32_t& ind, bool isLastCond, bool& bPrologBra
 		s->label = o.label_counter.next ();
 	}
 	std::set<label_t> used_labels;
-	count_used_labels (used_labels, start_label, initial_label, o.get_force_start_label ());
+	count_used_labels (used_labels, start_label, initial_label, ob.force_start_label);
 
 	head->action.set_initial (initial_label, head->action.type == Action::SAVE);
 
@@ -188,13 +189,13 @@ void DFA::emit(Output & output, uint32_t& ind, bool isLastCond, bool& bPrologBra
 			emit_end(*skeleton, o, need_backup, need_backupctx);
 		}
 	} else if (opts->target == opt_t::DOT) {
-		emit_dot(o, isLastCond, output.types);
+		emit_dot(o, isLastCond, ob.types);
 	} else {
 		// Generate prolog
 		if (bProlog)
 		{
 			o.ws("\n").wdelay_line_info ();
-			if ((!opts->fFlag && o.get_used_yyaccept ())
+			if ((!opts->fFlag && ob.used_yyaccept)
 			||  (!opts->fFlag && opts->bEmitYYCh)
 			||  (opts->bFlag && !opts->cFlag && BitMap::first)
 			||  (opts->cFlag && !bWroteCondCheck && opts->gFlag)
@@ -215,10 +216,7 @@ void DFA::emit(Output & output, uint32_t& ind, bool isLastCond, bool& bPrologBra
 					o.wind(ind).wstring(opts->yyctype).ws(" ").wstring(opts->yych).ws(";\n");
 				}
 				o.wdelay_yyaccept_init (ind);
-				if (base_ctxmarker) {
-					o.wdelay_contexts(ind, NULL);
-					o.wstring(opts->input_api.stmt_backupctx(ind));
-				}
+				o.wdelay_contexts(ind, NULL);
 			}
 			else
 			{
@@ -233,7 +231,7 @@ void DFA::emit(Output & output, uint32_t& ind, bool isLastCond, bool& bPrologBra
 		{
 			if (opts->cFlag && !bWroteCondCheck && opts->gFlag)
 			{
-				genCondTable(o, ind, output.types);
+				genCondTable(o, ind, ob.types);
 			}
 			o.wdelay_state_goto (ind);
 			if (opts->cFlag)
@@ -246,7 +244,7 @@ void DFA::emit(Output & output, uint32_t& ind, bool isLastCond, bool& bPrologBra
 			o.wuser_start_label ();
 			if (opts->cFlag && !bWroteCondCheck)
 			{
-				genCondGoto(o, ind, output.types);
+				genCondGoto(o, ind, ob.types);
 			}
 		}
 		if (opts->cFlag && !cond.empty())
@@ -258,6 +256,9 @@ void DFA::emit(Output & output, uint32_t& ind, bool isLastCond, bool& bPrologBra
 				o.wstring(divider).ws("\n");
 			}
 			o.wstring(opts->condPrefix).wstring(cond).ws(":\n");
+		}
+		if (base_ctxmarker) {
+			o.wstring(opts->input_api.stmt_backupctx(ind));
 		}
 		if (opts->cFlag && opts->bFlag && BitMap::first)
 		{

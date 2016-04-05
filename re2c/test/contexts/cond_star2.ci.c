@@ -5,13 +5,13 @@
 	long yyctx0;
 	long yyctx1;
 	long yyctx3;
-	YYCTXMARKER = YYCURSOR;
 	switch (YYGETCONDITION()) {
 	case yycc1: goto yyc_c1;
 	case yycc2: goto yyc_c2;
 	}
 /* *********************************** */
 yyc_c1:
+	YYCTXMARKER = YYCURSOR;
 	if ((YYLIMIT - YYCURSOR) < 3) YYFILL(3);
 	yych = *YYCURSOR;
 	switch (yych) {
@@ -60,6 +60,7 @@ yy11:
 	}
 /* *********************************** */
 yyc_c2:
+	YYCTXMARKER = YYCURSOR;
 	if ((YYLIMIT - YYCURSOR) < 3) YYFILL(3);
 	yych = *YYCURSOR;
 	switch (yych) {

@@ -159,8 +159,8 @@ void Scanner::lex_conf ()
 	"labelprefix" { opts.set_labelPrefix (lex_conf_string ()); return; }
 
 	// try to lex number first, otherwize it would be lexed as a naked string
-	"startlabel" / conf_assign number { out.set_force_start_label (lex_conf_bool()); return; }
-	"startlabel"                      { out.set_user_start_label (lex_conf_string ()); return; }
+	"startlabel" / conf_assign number { out.block().force_start_label = lex_conf_bool(); return; }
+	"startlabel"                      { out.block().user_start_label = lex_conf_string(); return; }
 
 	// deprecated
 	"variable:yystable" { lex_conf_string (); return; }

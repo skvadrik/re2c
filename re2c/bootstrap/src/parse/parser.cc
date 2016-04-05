@@ -2211,7 +2211,7 @@ void parse(Scanner& i, Output & o)
 			}
 			encodingOld = opts->encoding;
 		}
-		o.source.set_block_line (in->get_cline ());
+		o.source.block().line = in->get_cline();
 		uint32_t ind = opts->topIndent;
 		if (opts->cFlag)
 		{
@@ -2238,8 +2238,8 @@ void parse(Scanner& i, Output & o)
 					// Note that "0" inserts first, which is important.
 					condnames.insert (condnames.begin (), "0");
 				}
-				o.types = condnames;
 			}
+			o.source.block().types = condnames;
 
 			size_t nCount = specMap.size();
 
