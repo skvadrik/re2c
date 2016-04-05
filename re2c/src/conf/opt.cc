@@ -238,7 +238,7 @@ void opt_t::fix ()
 		bFlag = true;
 		sFlag = true;
 	}
-	if (header_file != NULL)
+	if (!header_file.empty())
 	{
 		tFlag = true;
 	}
@@ -278,7 +278,7 @@ opt_t * useropt_t::operator -> ()
 
 const opt_t Opt::baseopt;
 
-bool Opt::source (const char * s)
+bool Opt::source (const char *s)
 {
 	if (source_file)
 	{
@@ -292,11 +292,11 @@ bool Opt::source (const char * s)
 	}
 }
 
-bool Opt::output (const char * s)
+bool Opt::output (const std::string &s)
 {
-	if (output_file)
+	if (!output_file.empty())
 	{
-		error ("multiple output files: %s, %s", output_file, s);
+		error ("multiple output files: %s, %s", output_file.c_str(), s.c_str());
 		return false;
 	}
 	else

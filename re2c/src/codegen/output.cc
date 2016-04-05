@@ -59,7 +59,7 @@ OutputBlock::~OutputBlock ()
 	}
 }
 
-OutputFile::OutputFile (const char * fn)
+OutputFile::OutputFile(const std::string &fn)
 	: file_name (fn)
 	, file (NULL)
 	, blocks ()
@@ -72,14 +72,14 @@ OutputFile::OutputFile (const char * fn)
 
 bool OutputFile::open ()
 {
-	if (file_name == NULL)
+	if (file_name.empty())
 	{
 		file_name = "<stdout>";
 		file = stdout;
 	}
 	else
 	{
-		file = fopen (file_name, "wb");
+		file = fopen (file_name.c_str(), "wb");
 	}
 	return file != NULL;
 }
@@ -356,18 +356,22 @@ void OutputFile::emit(
 	}
 }
 
-HeaderFile::HeaderFile (const char * fn)
+HeaderFile::HeaderFile(const std::string &fn)
 	: stream ()
 	// header is always generated, but not always dumped to file
 	// NULL filename crashes 'operator <<' on some platforms
 	// TODO: generate header only if necessary
-	, file_name (fn ? fn : "<stdout>.h")
+	, file_name (fn)
 	, file (NULL)
-{}
+{
+	if (file_name.empty()) {
+		file_name = "<stdout>.h";
+	}
+}
 
 bool HeaderFile::open ()
 {
-	file = fopen (file_name, "wb");
+	file = fopen (file_name.c_str(), "wb");
 	return file != NULL;
 }
 
@@ -389,13 +393,13 @@ HeaderFile::~HeaderFile ()
 	}
 }
 
-Output::Output (const char * source_name, const char * header_name)
-	: source (source_name)
-	, header (header_name)
-	, types ()
-	, skeletons ()
-	, contexts ()
-	, max_fill (1)
+Output::Output(const std::string &source_name, const std::string &header_name)
+	: source(source_name)
+	, header(header_name)
+	, types()
+	, skeletons()
+	, contexts()
+	, max_fill(1)
 {}
 
 Output::~Output ()
@@ -475,7 +479,7 @@ void output_yymaxfill (std::ostream & o, size_t max_fill)
 	o << "#define YYMAXFILL " << max_fill << "\n";
 }
 
-void output_line_info (std::ostream & o, uint32_t line_number, const char * file_name)
+void output_line_info (std::ostream & o, uint32_t line_number, const std::string &file_name)
 {
 	if (!opts->iFlag)
 	{

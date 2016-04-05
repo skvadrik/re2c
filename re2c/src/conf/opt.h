@@ -28,7 +28,7 @@ namespace re2c
 	/* conditions */ \
 	OPT (bool, cFlag, false) \
 	OPT (bool, tFlag, false) \
-	OPT (const char *,  header_file, NULL) \
+	OPT (std::string,  header_file, "") \
 	OPT (std::string, yycondtype, "YYCONDTYPE") \
 	OPT (std::string, cond_get, "YYGETCONDITION") \
 	OPT (bool, cond_get_naked, false) \
@@ -156,8 +156,8 @@ struct Opt
 {
 	static const opt_t baseopt;
 
-	const char * source_file;
-	const char * output_file;
+	const char *source_file;
+	std::string output_file;
 
 private:
 	useropt_t useropt;
@@ -166,7 +166,7 @@ private:
 public:
 	Opt ()
 		: source_file (NULL)
-		, output_file (NULL)
+		, output_file ()
 		, useropt ()
 		, realopt (useropt)
 	{}
@@ -177,8 +177,8 @@ public:
 		return realopt.operator -> ();
 	}
 
-	bool source (const char * s);
-	bool output (const char * s);
+	bool source (const char *s);
+	bool output (const std::string &s);
 
 	// Inplace configurations are applied immediately when parsed.
 	// This is very bad: first, re2c behaviour is changed in the middle

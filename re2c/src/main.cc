@@ -44,12 +44,12 @@ int main(int, char *argv[])
 	re2c::Output output (opts.output_file, opts->header_file);
 	if (!output.source.open ())
 	{
-		error ("cannot open output file: %s", opts.output_file);
+		error ("cannot open output file: %s", opts.output_file.c_str());
 		return 1;
 	}
 	if (opts->tFlag && !output.header.open ())
 	{
-		error ("cannot open header file: %s", opts->header_file);
+		error ("cannot open header file: %s", opts->header_file.c_str());
 		return 1;
 	}
 

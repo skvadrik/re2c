@@ -228,9 +228,9 @@ static void generate_paths(const Skeleton &skel, cover_t &cover)
 	}
 }
 
-void emit_data(const Skeleton &skel, const char *fname)
+void emit_data(const Skeleton &skel, const std::string &fname)
 {
-	const std::string input_name = std::string(fname) + "." + skel.name + ".input";
+	const std::string input_name = fname + "." + skel.name + ".input";
 	FILE *input = fopen(input_name.c_str(), "wb");
 	if (!input) {
 		error("cannot open file: %s", input_name.c_str());

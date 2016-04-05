@@ -71,10 +71,16 @@ private:
 	const RegExp *cls(const Range *r) const;
 
 	void lex_conf ();
-	void lex_conf_assign ();
-	void lex_conf_semicolon ();
-	int32_t lex_conf_number ();
-	std::string lex_conf_string ();
+	void lex_conf_encoding_policy();
+	void lex_conf_input();
+	void lex_conf_empty_class();
+	void lex_conf_dfa_minimization();
+	void lex_conf_enc(Enc::type_t enc);
+	void lex_conf_assign();
+	void lex_conf_semicolon();
+	int32_t lex_conf_number();
+	bool lex_conf_bool();
+	std::string lex_conf_string();
 
 	size_t tok_len () const;
 

@@ -66,7 +66,7 @@ struct OutputBlock
 struct OutputFile
 {
 public:
-	const char * file_name;
+	std::string file_name;
 
 private:
 	FILE * file;
@@ -77,7 +77,7 @@ public:
 	bool warn_condition_order;
 	bool default_contexts;
 
-	OutputFile (const char * fn);
+	OutputFile(const std::string &fn);
 	~OutputFile ();
 
 	std::ostream & stream ();
@@ -127,14 +127,14 @@ public:
 
 struct HeaderFile
 {
-	HeaderFile (const char * fn);
+	HeaderFile(const std::string &fn);
 	~HeaderFile ();
 	bool open ();
 	void emit (const std::vector<std::string> & types);
 
 private:
 	std::ostringstream stream;
-	const char * file_name;
+	std::string file_name;
 	FILE * file;
 
 	FORBID_COPY (HeaderFile);
@@ -149,7 +149,7 @@ struct Output
 	std::set<std::string> contexts;
 	size_t max_fill;
 
-	Output (const char * source_name, const char * header_name);
+	Output(const std::string &source_name, const std::string &header_name);
 	~Output ();
 };
 
@@ -157,7 +157,7 @@ void output_contexts(std::ostream &o, const ConfContexts &conf,
 	const std::set<std::string> &contexts);
 void output_contexts_default(std::ostream &o, uint32_t ind,
 	const std::set<std::string> &contexts);
-void output_line_info (std::ostream &, uint32_t, const char *);
+void output_line_info (std::ostream &, uint32_t, const std::string&);
 void output_state_goto (std::ostream &, uint32_t, uint32_t);
 void output_types (std::ostream &, uint32_t, const std::vector<std::string> &);
 void output_version_time (std::ostream &);
