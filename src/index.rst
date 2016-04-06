@@ -19,23 +19,20 @@ Its key features are:
     It's because re2c generates minimalistic hard-coded state machine
     (as opposed to full-featured table-based lexers).
 
-*   Flexible API: the generated code can be wired into virtually any environment.
-    Instead of exposing traditional ``yylex()`` style API, re2c exposes its internals.
-    This gives you several opportunities.
-    First, you can avoid unnecessary overhead: drop useless runtime checks, do inplace lexing, etc.
-    Second, you can adjust lexer to your particular input model.
-    Third, you can make all sorts of strange hacks.
-    Of course, this means that you have to be careful:
-    with great power comes great responsibility.
-    Be sure to take a look at `examples <examples/examples.html>`_,
-    they cover a lot of real-world cases and shed some light on dark corners of re2c API.
+*   Flexible API: one can `configure <manual/syntax/syntax.html#configurations>`_
+    or even `completely override <manual/features/generic_api/generic_api.html>`_
+    the way re2c generates code.
+    Programmers can adjust lexer to a particular input model,
+    avoid unnecessary overhead (drop useless runtime checks, do inplace lexing, etc.)
+    and make all sorts of hacks.
+    `Examples <examples/examples.html>`_ cover many real-world cases and shed some light on dark corners of re2c API.
 
-*   `Warnings <manual/warnings/warnings.html>`_ (static analyses):
-    re2c warns you when your code is bad and suggests a fix.
+*   Efficient `Unicode support <manual/features/encodings/encodings.html>`_
+    (code points are compiled into executable finite-state machines).
 
-*   `Autognerated tests <manual/features/skeleton/skeleton.html>`_ (dynamic analyses):
-    re2c generates test program together with the input data.
-    The generated input has very good coverage.
+*   `Warnings <manual/warnings/warnings.html>`_.
+
+*   `Autognerated tests <manual/features/skeleton/skeleton.html>`_ with a very good coverage.
 
 *   `License <about/about.html>`_ (public domain).
 
