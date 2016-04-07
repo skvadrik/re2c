@@ -36,12 +36,21 @@ div.document img {
     border: 1px dotted;
     margin: auto;
 }
-
 div.document img.feed {
     display: inline;
     border: none;
     width: 2em;
     vertical-align: middle;
+}
+div.document img.math {
+    display: inline;
+    border: none;
+    vertical-align: middle;
+}
+div.document div.math img {
+    display: block;
+    border: none;
+    margin: auto;
 }
 div.document code {
     font-size: 14px;
