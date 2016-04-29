@@ -170,6 +170,8 @@ run_pack() {
 				&& cp "../../$x" "$outx"
 			# run re2c
 			$valgrind $wine ../../$re2c $switches "$outx" 2>"$outc.stderr" 1>&2
+			# on windows stdout and stderr contain CR LF, cut CR to match test results
+			sed -i 's/\r//g' "$outc.stderr"
 			# paste all files dropped by re2c into output file
 			rm "$outx" && find . -type f \
 				| lc_run sort \
