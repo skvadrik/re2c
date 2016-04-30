@@ -26,79 +26,37 @@ void DFA::split(State *s)
 	s->go.span[0].to = move;
 }
 
-static uint32_t merge(Span *x0, State *fg, State *bg)
+static uint32_t merge(Span *x, State *fg, State *bg)
 {
-	Span *x = x0, *f = fg->go.span, *b = bg->go.span;
-	uint32_t nf = fg->go.nSpans, nb = bg->go.nSpans;
-	State *prev = NULL, *to;
-	// NB: we assume both spans are for same range
+	Span *f = fg->go.span;
+	Span *b = bg->go.span;
+	Span *const fe = f + fg->go.nSpans;
+	Span *const be = b + bg->go.nSpans;
+	Span *const x0 = x;
 
-	for (;;)
-	{
-		if (f->ub == b->ub)
-		{
-			to = f->to == b->to ? bg : f->to;
-
-			if (to == prev)
-			{
-				--x;
-			}
-			else
-			{
-				x->to = prev = to;
-			}
-
-			x->ub = f->ub;
-			++x;
-			++f;
-			--nf;
-			++b;
-			--nb;
-
-			if (nf == 0 && nb == 0)
-			{
-				return static_cast<uint32_t> (x - x0);
-			}
+	for (;!(f == fe && b == be);) {
+		if (f->to == b->to) {
+			x->to = bg;
+		} else {
+			x->to = f->to;
 		}
-
-		while (f->ub < b->ub)
-		{
-			to = f->to == b->to ? bg : f->to;
-
-			if (to == prev)
-			{
-				--x;
-			}
-			else
-			{
-				x->to = prev = to;
-			}
-
-			x->ub = f->ub;
+		if (x == x0
+			|| x[-1].to != x->to) {
 			++x;
-			++f;
-			--nf;
 		}
+		x[-1].ub = std::min(f->ub, b->ub);
 
-		while (b->ub < f->ub)
-		{
-			to = b->to == f->to ? bg : f->to;
-
-			if (to == prev)
-			{
-				--x;
-			}
-			else
-			{
-				x->to = prev = to;
-			}
-
-			x->ub = b->ub;
-			++x;
+		if (f->ub < b->ub) {
+			++f;
+		} else if (f->ub > b->ub) {
 			++b;
-			--nb;
+		} else {
+			++f;
+			++b;
 		}
 	}
+
+	return static_cast<uint32_t>(x - x0);
 }
 
 void DFA::findBaseState()
