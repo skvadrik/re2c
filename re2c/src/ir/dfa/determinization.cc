@@ -97,16 +97,20 @@ dfa_t::dfa_t(
 	, rules(nfa.rules)
 	, contexts(nfa.contexts)
 {
-	std::map<size_t, std::set<size_t> > s2rules;
+	const size_t nrules = rules.size();
+
 	ord_hash_set_t kernels;
 	nfa_state_t **const buffer = new nfa_state_t*[nfa.size];
 	std::vector<std::vector<nfa_state_t*> > arcs(nchars);
+	bool *fin = new bool[nrules];
 
 	find_state(buffer, closure(buffer, nfa.root), kernels);
 	for (size_t i = 0; i < kernels.size(); ++i)
 	{
 		dfa_state_t *s = new dfa_state_t;
 		states.push_back(s);
+
+		memset(fin, 0, nrules * sizeof(bool));
 
 		nfa_state_t **kernel;
 		const size_t kernel_size = kernels.deref<nfa_state_t*>(i, kernel);
@@ -133,7 +137,7 @@ dfa_t::dfa_t(
 					s->ctxs.insert(n->value.ctx.info);
 					break;
 				case nfa_state_t::FIN:
-					s2rules[i].insert(n->value.fin.rule);
+					fin[n->value.fin.rule] = true;
 					break;
 				default:
 					break;
@@ -151,32 +155,28 @@ dfa_t::dfa_t(
 			s->arcs[c] = find_state(buffer, end, kernels);
 		}
 
+		// choose the first rule (the one with smallest rank)
+		size_t r;
+		for (r = 0; r < nrules; ++r) {
+			if (fin[r]) {
+				s->rule = r;
+				break;
+			}
+		}
+		// mark other rules as shadowed by this one
+		for (++r; r < nrules; ++r) {
+			if (fin[r]) {
+				rules[r].shadow.insert(rules[s->rule].info->loc.line);
+			}
+		}
+
 		for(size_t c = 0; c < nchars; ++c)
 		{
 			arcs[c].clear();
 		}
 	}
 	delete[] buffer;
-
-	const size_t count = states.size();
-	for (size_t i = 0; i < count; ++i) {
-		dfa_state_t *s = states[i];
-		std::set<size_t> &rs = s2rules[i];
-		// for each final state: choose the rule with the smallest rank
-		for (std::set<size_t>::const_iterator j = rs.begin(); j != rs.end(); ++j) {
-			const size_t rule = *j;
-			if (s->rule == Rule::NONE || rule < s->rule) {
-				s->rule = rule;
-			}
-		}
-		// other rules are shadowed by the chosen rule
-		for (std::set<size_t>::const_iterator j = rs.begin(); j != rs.end(); ++j) {
-			const size_t rule = *j;
-			if (s->rule != rule) {
-				rules[rule].shadow.insert(rules[s->rule].info->loc.line);
-			}
-		}
-	}
+	delete[] fin;
 
 	check_context_selfoverlap(kernels, contexts, line, cond);
 }
