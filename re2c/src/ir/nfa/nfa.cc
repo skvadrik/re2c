@@ -156,7 +156,7 @@ static nfa_state_t *compile_rule(
 	nfa_state_t *t = &nfa.states[nfa.size++];
 	t->fin(nrule);
 
-	std::vector<size_t> &ctxvar = r.ctxvar;
+	r.ltag = nfa.contexts.size();
 	std::vector<CtxFix> &ctxfix = r.ctxfix;
 	Trail &trail = r.trail;
 	// base2var is filled in right-to-left, this is crucial
@@ -168,9 +168,8 @@ static nfa_state_t *compile_rule(
 			const size_t idx = nfa.contexts.size();
 			base2var[i - 1] = idx;
 			nfa.contexts.push_back(CtxVar(name, nrule));
-			if (name != NULL) {
-				ctxvar.push_back(idx);
-			} else {
+			if (name == NULL) {
+				++r.ltag;
 				trail.make_var(idx);
 			}
 			nfa_state_t *q = &nfa.states[nfa.size++];
@@ -185,6 +184,7 @@ static nfa_state_t *compile_rule(
 			}
 		}
 	}
+	r.htag = nfa.contexts.size();
 	t = compile(rs[0], nfa, t);
 
 	bool null = nullable(rs[0]);

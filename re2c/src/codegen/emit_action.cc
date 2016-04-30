@@ -233,8 +233,8 @@ static void subst_contexts(
 	const Rule &rule,
 	const std::vector<CtxVar> &contexts)
 {
-	for (size_t i = 0; i < rule.ctxvar.size(); ++i) {
-		const CtxVar &ctx = contexts[rule.ctxvar[i]];
+	for (size_t i = rule.ltag; i < rule.htag; ++i) {
+		const CtxVar &ctx = contexts[i];
 		strrreplace(action, "@" + *ctx.codename,
 			opts->input_api.expr_ctx(ctx.expr()));
 	}

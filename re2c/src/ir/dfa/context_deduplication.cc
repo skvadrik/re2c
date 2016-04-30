@@ -32,7 +32,9 @@ static void calc_live(
 
 		if (s->rule != Rule::NONE) {
 			const Rule &rule = dfa.rules[s->rule];
-			live[i].insert(rule.ctxvar.begin(), rule.ctxvar.end());
+			for (size_t j = rule.ltag; j < rule.htag; ++j) {
+				live[i].insert(j);
+			}
 			if (rule.trail.type == Trail::VAR) {
 				live[i].insert(rule.trail.pld.var);
 			}
@@ -55,7 +57,9 @@ size_t deduplicate_contexts(dfa_t &dfa,
 	std::set<size_t> fbctxs;
 	for (size_t i = 0; i < fallback.size(); ++i) {
 		const Rule &rule = dfa.rules[dfa.states[fallback[i]]->rule];
-		fbctxs.insert(rule.ctxvar.begin(), rule.ctxvar.end());
+		for (size_t j = rule.ltag; j < rule.htag; ++j) {
+			fbctxs.insert(j);
+		}
 		if (rule.trail.type == Trail::VAR) {
 			fbctxs.insert(rule.trail.pld.var);
 		}

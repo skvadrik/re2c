@@ -35,7 +35,8 @@ struct Rule
 
 	const RuleInfo *info;
 
-	std::vector<size_t> ctxvar;
+	size_t ltag;
+	size_t htag;
 	std::vector<CtxFix> ctxfix;
 	Trail trail;
 	bool nullable;
@@ -45,7 +46,8 @@ struct Rule
 
 	Rule()
 		: info(NULL)
-		, ctxvar()
+		, ltag(0)
+		, htag(0)
 		, ctxfix()
 		, trail()
 		, nullable(false)
