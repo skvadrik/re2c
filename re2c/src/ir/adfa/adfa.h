@@ -87,7 +87,7 @@ public:
 		, const std::string &n
 		, const std::string &c
 		, uint32_t l
-		, bool base_ctx
+		, size_t used_tags
 		);
 	~DFA ();
 	void reorder();

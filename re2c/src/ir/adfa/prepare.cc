@@ -194,14 +194,6 @@ void DFA::calc_stats ()
 	// determine if 'YYMARKER' or 'YYBACKUP'/'YYRESTORE' pair is used
 	need_backup = accepts.size () > 0;
 
-	// determine if 'YYCTXMARKER' or 'YYBACKUPCTX'/'YYRESTORECTX' pair is used
-	for (State * s = head; s; s = s->next) {
-		if (!s->ctxs.empty()) {
-			need_backupctx = true;
-			break;
-		}
-	}
-
 	// determine if 'yyaccept' variable is used
 	need_accept = accepts.size () > 1;
 }

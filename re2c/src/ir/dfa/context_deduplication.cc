@@ -44,13 +44,12 @@ static void calc_live(
 	}
 }
 
-bool deduplicate_contexts(
-	const dfa_t &dfa,
+size_t deduplicate_contexts(dfa_t &dfa,
 	const std::vector<size_t> &fallback)
 {
 	const size_t nctxs = dfa.contexts.size();
 	if (nctxs < 2) {
-		return false;
+		return nctxs;
 	}
 
 	std::set<size_t> fbctxs;
@@ -124,32 +123,13 @@ bool deduplicate_contexts(
 			head[0] = c;
 		}
 	}
-	const bool multiple_contexts = head[0] != END;
-
-/*
-	std::vector<size_t> c2c;
-	std::vector<std::vector<size_t> > part;
+	size_t ncontexts = 0;
 	for (size_t i = 0; i < nctxs; ++i) {
-		size_t j;
-		for (j = 0; j < partn.size(); ++j) {
-			std::vector<size_t> &p = part[j];
-			size_t k;
-			for (k = 0; k < p.size(); ++k) {
-				if (xxx[i * nctxs + p[k]]) {
-					break;
-				}
-			}
-			if (k == p.size()) {
-				break;
-			}
+		if (part[i] == i) {
+			++ncontexts;
 		}
-		if (j == part.size()) {
-			part.push_back(std::vector<size_t>());
-		}
-		part[j].push_back(i);
-		c2c[i] = part[j][0];
 	}
-*/
+
 	for (size_t i = 0; i < nstates; ++i) {
 		dfa_state_t *s = dfa.states[i];
 		std::set<size_t> ctxs;
@@ -162,7 +142,7 @@ bool deduplicate_contexts(
 		dfa.contexts[i].uniqname = dfa.contexts[part[i]].uniqname;
 	}
 
-	return multiple_contexts;
+	return ncontexts;
 }
 
 

@@ -63,7 +63,7 @@ void check_context_selfoverlap(ord_hash_set_t &kernels,
 void minimization(dfa_t &dfa);
 void fillpoints(const dfa_t &dfa, std::vector<size_t> &fill);
 void fallback_states(const dfa_t &dfa, std::vector<size_t> &fallback);
-bool deduplicate_contexts(const dfa_t &dfa, const std::vector<size_t> &fallback);
+size_t deduplicate_contexts(dfa_t &dfa, const std::vector<size_t> &fallback);
 
 } // namespace re2c
 

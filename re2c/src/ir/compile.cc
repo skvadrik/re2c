@@ -72,25 +72,12 @@ static smart_ptr<DFA> compile_rules(
 	std::vector<size_t> fallback;
 	fallback_states(dfa, fallback);
 
-	// Non-trailing contexts imply the existence of base context marker
-	// that points at the beginning of lexeme. First, it is a feature
-	// of re2c API. Second, it simplifies implementation (otherwise
-	// it would be hard to mix generic API and fixed-length contexts).
-	//
-	// The only case without base context marker is when:
-	//     - only trailing contexts are allowed
-	//     - they don't overlap (one marker is enough for all of them)
-	//     - with generic API fixed-length contexts are forbidden
-	// Note that in this case, if generic API is used, fixed-length
-	// contexts are forbidden (which may cause additional overlaps).
-	const bool multiple_ctxmarkers = deduplicate_contexts(dfa, fallback);
-	const bool base_ctxmarker
-		= multiple_ctxmarkers
-		|| opts->contexts;
+	// try to minimize the number of tag variables
+	const size_t used_tags = deduplicate_contexts(dfa, fallback);
 
 	// ADFA stands for 'DFA with actions'
 	DFA *adfa = new DFA(dfa, fill, fallback, skeleton, cs,
-		name, cond, line, base_ctxmarker);
+		name, cond, line, used_tags);
 
 	// see note [reordering DFA states]
 	adfa->reorder();
