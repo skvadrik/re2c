@@ -694,13 +694,13 @@ yy60:
 yy61:
         YYRESTORE ();
         switch (yyaccept) {
-        case 0: 	goto yy40;
-        case 1: 	goto yy42;
-        case 2: 	goto yy55;
-        case 3: 	goto yy58;
-        case 4: 	goto yy83;
-        case 5: 	goto yy53;
-        default:	goto yy107;
+        case 0:     goto yy40;
+        case 1:     goto yy42;
+        case 2:     goto yy55;
+        case 3:     goto yy58;
+        case 4:     goto yy83;
+        case 5:     goto yy53;
+        default:    goto yy107;
         }
 yy62:
         YYSKIP ();

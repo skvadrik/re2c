@@ -6,6 +6,7 @@
 
 #include "src/codegen/bitmap.h"
 #include "src/codegen/go.h"
+#include "src/codegen/emit.h"
 #include "src/codegen/input_api.h"
 #include "src/codegen/label.h"
 #include "src/codegen/output.h"
@@ -19,7 +20,6 @@ namespace re2c
 {
 
 static void output_if (OutputFile & o, uint32_t ind, bool & readCh, const std::string & compare, uint32_t value);
-static void output_goto (OutputFile & o, uint32_t ind, bool & readCh, label_t to);
 static std::string output_yych (bool & readCh);
 static std::string output_hgo (OutputFile & o, uint32_t ind, bool & readCh, SwitchIf * hgo);
 
@@ -39,16 +39,6 @@ std::string output_yych (bool & readCh)
 void output_if (OutputFile & o, uint32_t ind, bool & readCh, const std::string & compare, uint32_t value)
 {
 	o.wind(ind).ws("if (").wstring(output_yych (readCh)).ws(" ").wstring(compare).ws(" ").wc_hex (value).ws(") ");
-}
-
-void output_goto (OutputFile & o, uint32_t ind, bool & readCh, label_t to)
-{
-	if (readCh)
-	{
-		o.wstring(opts->input_api.stmt_peek (ind));
-		readCh = false;
-	}
-	o.wind(ind).ws("goto ").wstring(opts->labelPrefix).wlabel(to).ws(";\n");
 }
 
 std::string output_hgo (OutputFile & o, uint32_t ind, bool & readCh, SwitchIf * hgo)
@@ -98,11 +88,11 @@ void Cases::emit (OutputFile & o, uint32_t ind, bool & readCh)
 		if (cases[i].to != def)
 		{
 			cases[i].emit (o, ind);
-			output_goto (o, 1, readCh, cases[i].to->label);
+			gen_goto_case(o, 1, readCh, cases[i].to);
 		}
 	}
 	o.wind(ind).ws("default:");
-	output_goto (o, 1, readCh, def->label);
+	gen_goto_case(o, 1, readCh, def);
 	o.wind(ind).ws("}\n");
 }
 
@@ -123,11 +113,11 @@ void Linear::emit (OutputFile & o, uint32_t ind, bool & readCh)
 		if (branches[i].first != NULL)
 		{
 			output_if (o, ind, readCh, branches[i].first->compare, branches[i].first->value);
-			output_goto (o, 0, readCh, branches[i].second->label);
+			gen_goto_if(o, ind, readCh, branches[i].second);
 		}
 		else
 		{
-			output_goto (o, ind, readCh, branches[i].second->label);
+			gen_goto(o, ind, readCh, branches[i].second);
 		}
 	}
 }
@@ -171,7 +161,7 @@ void GoBitmap::emit (OutputFile & o, uint32_t ind, bool & readCh)
 		o.wu32(bitmap->m);
 	}
 	o.ws(") {\n");
-	output_goto (o, ind + 1, readCh, bitmap_state->label);
+	gen_goto(o, ind + 1, readCh, bitmap_state);
 	o.wind(ind).ws("}\n");
 	if (lgo != NULL)
 	{

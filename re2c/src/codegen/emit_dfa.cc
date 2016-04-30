@@ -73,23 +73,21 @@ void DFA::count_used_labels (std::set<label_t> & used, label_t start, label_t in
 	}
 }
 
-void DFA::emit_body (OutputFile & o, uint32_t& ind, const std::set<label_t> & used_labels, label_t initial) const
+void DFA::emit_body(OutputFile &o, uint32_t& ind,
+	const std::set<label_t> &used_labels, label_t initial) const
 {
 	// If DFA has transitions to initial state, then initial state
 	// has a piece of code that advances input position. Wee must
 	// skip it when entering DFA.
-	if (used_labels.count(head->label))
-	{
-		o.wind(ind).ws("goto ").wstring(opts->labelPrefix).wlabel(initial).ws(";\n");
+	if (used_labels.count(head->label)) {
+		o.wind(ind).ws("goto ").wstring(opts->labelPrefix)
+			.wlabel(initial).ws(";\n");
 	}
 
-	const bool save_yyaccept = accepts.size () > 1;
-	for (State * s = head; s; s = s->next)
-	{
+	for (State * s = head; s; s = s->next) {
 		bool readCh = false;
-		emit_state (o, ind, s, used_labels.count (s->label));
-		emit_action (s->action, o, ind, readCh, s, cond, skeleton,
-			used_labels, save_yyaccept, base_ctxmarker);
+		emit_state(o, ind, s, used_labels.count(s->label));
+		emit_action(o, ind, readCh, *this, s, used_labels);
 		s->go.emit(o, ind, readCh);
 	}
 }

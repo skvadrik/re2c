@@ -54,31 +54,25 @@ struct State
 	FORBID_COPY (State);
 };
 
-class DFA
+struct DFA
 {
 	accept_t accepts;
 	Skeleton * skeleton;
-
-public:
 	const std::string name;
 	const std::string cond;
 	const uint32_t line;
-
 	uint32_t lbChar;
 	uint32_t ubChar;
 	uint32_t nStates;
 	State * head;
 	std::valarray<Rule> &rules;
 	std::vector<CtxVar> &contexts;
-
-	// statistics
 	size_t max_fill;
 	bool need_backup;
 	bool need_backupctx;
 	bool need_accept;
 	bool base_ctxmarker;
 
-public:
 	DFA	( const dfa_t &dfa
 		, const std::vector<size_t> &fill
 		, const std::vector<size_t> &fallback

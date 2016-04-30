@@ -875,22 +875,22 @@ yy71:
 yy72:
         YYRESTORE ();
         switch (yyaccept) {
-        case 0: 	goto yy6;
-        case 1: 	goto yy16;
-        case 2: 	goto yy23;
-        case 3: 	goto yy34;
-        case 4: 	goto yy40;
-        case 5: 	goto yy42;
-        case 6: 	goto yy44;
-        case 7: 	goto yy65;
-        case 8: 	goto yy67;
-        case 9: 	goto yy74;
-        case 10: 	goto yy32;
-        case 11: 	goto yy95;
-        case 12: 	goto yy109;
-        case 13: 	goto yy107;
-        case 14: 	goto yy99;
-        default:	goto yy97;
+        case 0:     goto yy6;
+        case 1:     goto yy16;
+        case 2:     goto yy23;
+        case 3:     goto yy34;
+        case 4:     goto yy40;
+        case 5:     goto yy42;
+        case 6:     goto yy44;
+        case 7:     goto yy65;
+        case 8:     goto yy67;
+        case 9:     goto yy74;
+        case 10:     goto yy32;
+        case 11:     goto yy95;
+        case 12:     goto yy109;
+        case 13:     goto yy107;
+        case 14:     goto yy99;
+        default:    goto yy97;
         }
 yy73:
         yyaccept = 9;

@@ -973,11 +973,11 @@ yy38:
 yy39:
             YYRESTORE ();
             switch (yyaccept) {
-            case 0: 	goto yy5;
-            case 1: 	goto yy16;
-            case 2: 	goto yy49;
-            case 3: 	goto yy59;
-            default:	goto yy93;
+            case 0:     goto yy5;
+            case 1:     goto yy16;
+            case 2:     goto yy49;
+            case 3:     goto yy59;
+            default:    goto yy93;
             }
 yy40:
             YYSKIP ();

@@ -21,133 +21,108 @@ namespace re2c
 
 class label_t;
 
-static void need               (OutputFile & o, uint32_t ind, bool & readCh, size_t n, bool bSetMarker);
-static void emit_match         (OutputFile & o, uint32_t ind, bool & readCh, const State * const s);
-static void emit_initial       (OutputFile & o, uint32_t ind, bool & readCh, const State * const s, const Initial & init, const std::set<label_t> & used_labels);
-static void emit_save          (OutputFile & o, uint32_t ind, bool & readCh, const State * const s, size_t save, bool save_yyaccept);
-static void emit_accept_binary (OutputFile & o, uint32_t ind, bool & readCh, const State * const s, const accept_t & accept, size_t l, size_t r);
-static void emit_accept        (OutputFile & o, uint32_t ind, bool & readCh, const State * const s, const accept_t & accept);
-static void emit_rule(OutputFile &o, uint32_t ind,
-	size_t rule, const std::string &condName,
-	const Skeleton *skeleton, bool base_ctxmarker);
-static void genYYFill          (OutputFile & o, size_t need);
-static void genSetCondition    (OutputFile & o, uint32_t ind, const std::string & newcond);
-static void genSetState        (OutputFile & o, uint32_t ind, uint32_t fillIndex);
-static void genGoTo            (OutputFile & o, uint32_t ind, const State * from, const State * to, bool & readCh);
+static void need(OutputFile &o, uint32_t ind, bool &readCh, size_t n, bool bSetMarker);
+static void emit_match(OutputFile &o, uint32_t ind, bool &readCh, const State *s);
+static void emit_initial(OutputFile &o, uint32_t ind, bool &readCh, const State *s, const std::set<label_t> &used_labels);
+static void emit_save(OutputFile &o, uint32_t ind, bool &readCh, const State *s, bool save_yyaccept);
+static void emit_accept_binary(OutputFile &o, uint32_t ind, bool &readCh, const DFA &dfa, const State *s, size_t l, size_t r);
+static void emit_accept(OutputFile &o, uint32_t ind, bool &readCh, const DFA &dfa, const State *s);
+static void emit_rule(OutputFile &o, uint32_t ind, const DFA &dfa, size_t rule_idx);
+static void genYYFill(OutputFile &o, size_t need);
+static void genSetCondition(OutputFile &o, uint32_t ind, const std::string &cond);
+static void genSetState(OutputFile &o, uint32_t ind, uint32_t fillIndex);
 
-void emit_action
-	( const Action & action
-	, OutputFile & o
-	, uint32_t ind
-	, bool & readCh
-	, const State * const s
-	, const std::string & condName
-	, const Skeleton * skeleton
-	, const std::set<label_t> & used_labels
-	, bool save_yyaccept
-	, bool base_ctxmarker
-	)
+void emit_action(OutputFile &o, uint32_t ind, bool &readCh,
+	const DFA &dfa, const State *s, const std::set<label_t> &used_labels)
 {
-	switch (action.type)
-	{
+	switch (s->action.type) {
 		case Action::MATCH:
-			emit_match (o, ind, readCh, s);
+			emit_match(o, ind, readCh, s);
 			break;
 		case Action::INITIAL:
-			emit_initial (o, ind, readCh, s, * action.info.initial, used_labels);
+			emit_initial(o, ind, readCh, s, used_labels);
 			break;
 		case Action::SAVE:
-			emit_save (o, ind, readCh, s, action.info.save, save_yyaccept);
+			emit_save(o, ind, readCh, s, dfa.accepts.size() > 1);
 			break;
 		case Action::MOVE:
 			break;
 		case Action::ACCEPT:
-			emit_accept (o, ind, readCh, s, * action.info.accepts);
+			emit_accept(o, ind, readCh, dfa, s);
 			break;
 		case Action::RULE:
-			emit_rule (o, ind, action.info.rule, condName, skeleton, base_ctxmarker);
+			emit_rule(o, ind, dfa, s->action.info.rule);
 			break;
 	}
 	if (!s->ctxs.empty()) {
-		if (base_ctxmarker) {
-			o.wstring(opts->input_api.stmt_dist(ind, s->ctxs, skeleton->contexts));
+		if (dfa.base_ctxmarker) {
+			o.wstring(opts->input_api.stmt_dist(ind, s->ctxs, dfa.contexts));
 		} else {
 			o.wstring(opts->input_api.stmt_backupctx(ind));
 		}
 	}
 }
 
-void emit_match (OutputFile & o, uint32_t ind, bool & readCh, const State * const s)
+void emit_match(OutputFile &o, uint32_t ind, bool &readCh, const State *s)
 {
 	const bool read_ahead = s
 		&& s->next
 		&& s->next->action.type != Action::RULE;
-	if (s->fill != 0)
-	{
-		o.wstring(opts->input_api.stmt_skip (ind));
-	}
-	else if (!read_ahead)
-	{
+
+	if (s->fill != 0) {
+		o.wstring(opts->input_api.stmt_skip(ind));
+	} else if (!read_ahead) {
 		/* do not read next char if match */
-		o.wstring(opts->input_api.stmt_skip (ind));
+		o.wstring(opts->input_api.stmt_skip(ind));
 		readCh = true;
-	}
-	else
-	{
-		o.wstring(opts->input_api.stmt_skip_peek (ind));
+	} else {
+		o.wstring(opts->input_api.stmt_skip_peek(ind));
 		readCh = false;
 	}
 
-	if (s->fill != 0)
-	{
+	if (s->fill != 0) {
 		need(o, ind, readCh, s->fill, false);
 	}
 }
 
-void emit_initial (OutputFile & o, uint32_t ind, bool & readCh, const State * const s, const Initial & initial, const std::set<label_t> & used_labels)
+void emit_initial(OutputFile &o, uint32_t ind, bool &readCh,
+	const State *s, const std::set<label_t> &used_labels)
 {
-	if (used_labels.count(s->label))
-	{
-		if (s->fill != 0)
-		{
-			o.wstring(opts->input_api.stmt_skip (ind));
-		}
-		else
-		{
-			o.wstring(opts->input_api.stmt_skip_peek (ind));
+	if (used_labels.count(s->label)) {
+		if (s->fill != 0) {
+			o.wstring(opts->input_api.stmt_skip(ind));
+		} else {
+			o.wstring(opts->input_api.stmt_skip_peek(ind));
 		}
 	}
 
-	if (used_labels.count(initial.label))
-	{
+	const Initial &initial = *s->action.info.initial;
+	if (used_labels.count(initial.label)) {
 		o.wstring(opts->labelPrefix).wlabel(initial.label).ws(":\n");
 	}
 
-	if (opts->dFlag)
-	{
-		o.wind(ind).wstring(opts->yydebug).ws("(").wlabel(initial.label).ws(", *").wstring(opts->yycursor).ws(");\n");
+	if (opts->dFlag) {
+		o.wind(ind).wstring(opts->yydebug).ws("(")
+			.wlabel(initial.label).ws(", *")
+			.wstring(opts->yycursor).ws(");\n");
 	}
 
-	if (s->fill != 0)
-	{
+	if (s->fill != 0) {
 		need(o, ind, readCh, s->fill, initial.setMarker);
-	}
-	else
-	{
-		if (initial.setMarker)
-		{
-			o.wstring(opts->input_api.stmt_backup (ind));
+	} else {
+		if (initial.setMarker) {
+			o.wstring(opts->input_api.stmt_backup(ind));
 		}
 		readCh = false;
 	}
 }
 
 void emit_save(OutputFile &o, uint32_t ind, bool &readCh,
-	const State *const s, size_t save, bool save_yyaccept)
+	const State *const s, bool save_yyaccept)
 {
 	if (save_yyaccept) {
 		o.wind(ind).wstring(opts->yyaccept).ws(" = ")
-			.wu64(save).ws(";\n");
+			.wu64(s->action.info.save).ws(";\n");
 	}
 
 	if (s->fill != 0) {
@@ -159,78 +134,81 @@ void emit_save(OutputFile &o, uint32_t ind, bool &readCh,
 	}
 }
 
-void emit_accept_binary (OutputFile & o, uint32_t ind, bool & readCh, const State * const s, const accept_t & accepts, size_t l, size_t r)
+void emit_accept_binary(OutputFile &o, uint32_t ind, bool &readCh,
+	const DFA &dfa, const State *s, size_t l, size_t r)
 {
-	if (l < r)
-	{
+	if (l < r) {
 		const size_t m = (l + r) >> 1;
-		o.wind(ind).ws("if (").wstring(opts->yyaccept).ws(r == l+1 ? " == " : " <= ").wu64(m).ws(") {\n");
-		emit_accept_binary (o, ++ind, readCh, s, accepts, l, m);
+		o.wind(ind).ws("if (").wstring(opts->yyaccept)
+			.ws(r == l+1 ? " == " : " <= ").wu64(m).ws(") {\n");
+		emit_accept_binary (o, ++ind, readCh, dfa, s, l, m);
 		o.wind(--ind).ws("} else {\n");
-		emit_accept_binary (o, ++ind, readCh, s, accepts, m + 1, r);
+		emit_accept_binary (o, ++ind, readCh, dfa, s, m + 1, r);
 		o.wind(--ind).ws("}\n");
-	}
-	else
-	{
-		genGoTo(o, ind, s, accepts[l], readCh);
+	} else {
+		const accept_t &acc = *s->action.info.accepts;
+		gen_goto(o, ind, readCh, acc[l]);
 	}
 }
 
-void emit_accept (OutputFile & o, uint32_t ind, bool & readCh, const State * const s, const accept_t & accepts)
+void emit_accept(OutputFile &o, uint32_t ind, bool &readCh,
+	const DFA &dfa, const State *s)
 {
-	const size_t accepts_size = accepts.size ();
-	if (accepts_size > 0)
-	{
-		o.wstring(opts->input_api.stmt_restore (ind));
+	const accept_t &acc = *s->action.info.accepts;
+	const size_t nacc = acc.size();
 
-		if (readCh) // shouldn't be necessary, but might become at some point
-		{
-			o.wstring(opts->input_api.stmt_peek (ind));
-			readCh = false;
-		}
-
-		if (accepts_size > 1)
-		{
-			if (opts->gFlag && accepts_size >= opts->cGotoThreshold)
-			{
-				o.wind(ind++).ws("{\n");
-				o.wind(ind++).ws("static void *").wstring(opts->yytarget).ws("[").wu64(accepts_size).ws("] = {\n");
-				for (uint32_t i = 0; i < accepts_size; ++i)
-				{
-					o.wind(ind).ws("&&").wstring(opts->labelPrefix).wlabel(accepts[i]->label).ws(",\n");
-				}
-				o.wind(--ind).ws("};\n");
-				o.wind(ind).ws("goto *").wstring(opts->yytarget).ws("[").wstring(opts->yyaccept).ws("];\n");
-				o.wind(--ind).ws("}\n");
-			}
-			else if (opts->sFlag || (accepts_size == 2))
-			{
-				emit_accept_binary (o, ind, readCh, s, accepts, 0, accepts_size - 1);
-			}
-			else
-			{
-				o.wind(ind).ws("switch (").wstring(opts->yyaccept).ws(") {\n");
-				for (uint32_t i = 0; i < accepts_size - 1; ++i)
-				{
-					o.wind(ind).ws("case ").wu32(i).ws(": \t");
-					genGoTo(o, 0, s, accepts[i], readCh);
-				}
-				o.wind(ind).ws("default:\t");
-				genGoTo(o, 0, s, accepts[accepts_size - 1], readCh);
-				o.wind(ind).ws("}\n");
-			}
-		}
-		else
-		{
-			// no need to write if statement here since there is only case 0.
-			genGoTo(o, ind, s, accepts[0], readCh);
-		}
+	if (nacc == 0) {
+		return;
 	}
+
+	o.wstring(opts->input_api.stmt_restore(ind));
+	if (readCh) {
+		o.wstring(opts->input_api.stmt_peek(ind));
+		readCh = false;
+	}
+
+	// only one possible 'yyaccept' value: unconditional jump
+	if (nacc == 1) {
+		gen_goto(o, ind, readCh, acc[0]);
+		return;
+	}
+
+	// jump table
+	if (opts->gFlag && nacc >= opts->cGotoThreshold) {
+		o.wind(ind).ws("{\n")
+			.wind(ind + 1).ws("static void *")
+			.wstring(opts->yytarget).ws("[")
+			.wu64(nacc).ws("] = {\n");
+		for (uint32_t i = 0; i < nacc; ++i) {
+			o.wind(ind + 2).ws("&&").wstring(opts->labelPrefix)
+				.wlabel(acc[i]->label).ws(",\n");
+		}
+		o.wind(ind + 1).ws("};\n")
+			.wind(ind + 1).ws("goto *")
+			.wstring(opts->yytarget).ws("[")
+			.wstring(opts->yyaccept).ws("];\n")
+			.wind(ind).ws("}\n");
+		return;
+	}
+
+	// nested ifs
+	if (opts->sFlag || nacc == 2) {
+		emit_accept_binary(o, ind, readCh, dfa, s, 0, nacc - 1);
+		return;
+	}
+
+	// switch
+	o.wind(ind).ws("switch (").wstring(opts->yyaccept).ws(") {\n");
+	for (uint32_t i = 0; i < nacc - 1; ++i) {
+		o.wind(ind).ws("case ").wu32(i).ws(": ");
+		gen_goto_case(o, ind, readCh, acc[i]);
+	}
+	o.wind(ind).ws("default:");
+	gen_goto_case(o, ind, readCh, acc[nacc - 1]);
+	o.wind(ind).ws("}\n");
 }
 
-static void subst_contexts(
-	std::string &action,
-	const Rule &rule,
+static void subst_contexts(std::string &action, const Rule &rule,
 	const std::vector<CtxVar> &contexts)
 {
 	for (size_t i = rule.ltag; i < rule.htag; ++i) {
@@ -246,25 +224,18 @@ static void subst_contexts(
 	}
 }
 
-void emit_rule(
-	OutputFile &o,
-	uint32_t ind,
-	size_t rule_idx,
-	const std::string &condName,
-	const Skeleton *skeleton,
-	bool base_ctxmarker)
+void emit_rule(OutputFile &o, uint32_t ind, const DFA &dfa, size_t rule_idx)
 {
-	const Rule &rule = skeleton->rules[rule_idx];
+	const Rule &rule = dfa.rules[rule_idx];
 	const RuleInfo *info = rule.info;
 
 	const Trail &trail = rule.trail;
 	switch (trail.type) {
-		case Trail::NONE:
-			break;
+		case Trail::NONE: break;
 		case Trail::VAR:
-			if (base_ctxmarker) {
+			if (dfa.base_ctxmarker) {
 				o.wstring(opts->input_api.stmt_restorectx_var_base(ind,
-					skeleton->contexts[trail.pld.var].expr()));
+					dfa.contexts[trail.pld.var].expr()));
 			} else {
 				o.wstring(opts->input_api.stmt_restorectx_var(ind));
 			}
@@ -275,11 +246,11 @@ void emit_rule(
 	}
 
 	if (opts->target == opt_t::SKELETON) {
-		emit_action(*skeleton, o, ind, rule_idx);
+		emit_action(*dfa.skeleton, o, ind, rule_idx);
 	} else {
-		const std::string &newcond = info->newcond;
-		if (!newcond.empty() && condName != newcond) {
-			genSetCondition(o, ind, newcond);
+		const std::string &cond = info->newcond;
+		if (!cond.empty() && dfa.cond != cond) {
+			genSetCondition(o, ind, cond);
 		}
 		const Code *code = info->code;
 		if (code) {
@@ -287,77 +258,63 @@ void emit_rule(
 				o.wind(ind).wstring(yySetupRule).ws("\n");
 			}
 			std::string action = code->text;
-			subst_contexts(action, rule, skeleton->contexts);
+			subst_contexts(action, rule, dfa.contexts);
 			o.wline_info(code->loc.line, code->loc.filename.c_str())
 				.wind(ind).wstring(action).ws("\n")
 				.wdelay_line_info();
-		} else if (!newcond.empty()) {
+		} else if (!cond.empty()) {
 			std::string action = opts->condGoto;
-			strrreplace(action, opts->condGotoParam, opts->condPrefix + newcond);
+			strrreplace(action, opts->condGotoParam, opts->condPrefix + cond);
 			o.wind(ind).wstring(action).ws("\n");
 		}
 	}
 }
 
-void need (OutputFile & o, uint32_t ind, bool & readCh, size_t n, bool bSetMarker)
+void need(OutputFile &o, uint32_t ind, bool &readCh, size_t n, bool bSetMarker)
 {
 	uint32_t fillIndex = last_fill_index;
 
-	if (opts->fFlag)
-	{
+	if (opts->fFlag) {
 		last_fill_index++;
-		genSetState (o, ind, fillIndex);
+		genSetState(o, ind, fillIndex);
 	}
 
-	if (opts->fill_use && n > 0)
-	{
+	if (opts->fill_use && n > 0) {
 		o.wind(ind);
-		if (n == 1)
-		{
-			if (opts->fill_check)
-			{
-				o.ws("if (").wstring(opts->input_api.expr_lessthan_one ()).ws(") ");
+		if (n == 1) {
+			if (opts->fill_check) {
+				o.ws("if (").wstring(opts->input_api.expr_lessthan_one()).ws(") ");
 			}
 			genYYFill(o, n);
-		}
-		else
-		{
-			if (opts->fill_check)
-			{
-				o.ws("if (").wstring(opts->input_api.expr_lessthan (n)).ws(") ");
+		} else {
+			if (opts->fill_check) {
+				o.ws("if (").wstring(opts->input_api.expr_lessthan(n)).ws(") ");
 			}
 			genYYFill(o, n);
 		}
 	}
 
-	if (opts->fFlag)
-	{
+	if (opts->fFlag) {
 		o.wstring(opts->yyfilllabel).wu32(fillIndex).ws(":\n");
 	}
 
-	if (n > 0)
-	{
-		if (bSetMarker)
-		{
-			o.wstring(opts->input_api.stmt_backup_peek (ind));
-		}
-		else
-		{
-			o.wstring(opts->input_api.stmt_peek (ind));
+	if (n > 0) {
+		if (bSetMarker) {
+			o.wstring(opts->input_api.stmt_backup_peek(ind));
+		} else {
+			o.wstring(opts->input_api.stmt_peek(ind));
 		}
 		readCh = false;
 	}
 }
 
-void genYYFill (OutputFile & o, size_t need)
+void genYYFill(OutputFile &o, size_t need)
 {
 	std::string fill = opts->fill;
 	strrreplace(fill, opts->fill_arg, need);
 	o.wstring(fill);
-	if (!opts->fill_naked)
-	{
-		if (opts->fill_arg_use)
-		{
+	if (!opts->fill_naked) {
+		if (opts->fill_arg_use) {
 			o.ws("(").wu64(need).ws(")");
 		}
 		o.ws(";");
@@ -365,39 +322,67 @@ void genYYFill (OutputFile & o, size_t need)
 	o.ws("\n");
 }
 
-void genSetCondition(OutputFile & o, uint32_t ind, const std::string& newcond)
+void genSetCondition(OutputFile &o, uint32_t ind, const std::string &cond)
 {
 	std::string cond_set = opts->cond_set;
-	strrreplace(cond_set, opts->cond_set_arg, opts->condEnumPrefix + newcond);
+	strrreplace(cond_set, opts->cond_set_arg, opts->condEnumPrefix + cond);
 	o.wind(ind).wstring(cond_set);
-	if (!opts->cond_set_naked)
-	{
-		o.ws("(").wstring(opts->condEnumPrefix).wstring(newcond).ws(");");
+	if (!opts->cond_set_naked) {
+		o.ws("(").wstring(opts->condEnumPrefix).wstring(cond).ws(");");
 	}
 	o.ws("\n");
 }
 
-void genSetState(OutputFile & o, uint32_t ind, uint32_t fillIndex)
+void genSetState(OutputFile &o, uint32_t ind, uint32_t fillIndex)
 {
 	std::string state_set = opts->state_set;
 	strrreplace(state_set, opts->state_set_arg, fillIndex);
 	o.wind(ind).wstring(state_set);
-	if (!opts->state_set_naked)
-	{
+	if (!opts->state_set_naked) {
 		o.ws("(").wu32(fillIndex).ws(");");
 	}
 	o.ws("\n");
 }
 
-void genGoTo(OutputFile & o, uint32_t ind, const State *from, const State *to, bool & readCh)
+void gen_goto_case(OutputFile &o, uint32_t ind, bool &readCh,  const State *to)
 {
-	if (readCh && from->next != to)
-	{
-		o.wstring(opts->input_api.stmt_peek (ind));
+	const bool multiline = readCh;
+
+	if (multiline) {
+		o.ws("\n");
+		gen_goto(o, ind + 1, readCh, to);
+	} else {
+		gen_goto(o, 1, readCh, to);
+	}
+}
+
+void gen_goto_if(OutputFile &o, uint32_t ind, bool &readCh, const State *to)
+{
+	const int32_t linecount = (readCh && to != NULL)
+		|| (to != NULL);
+
+	if (linecount > 1) {
+		o.ws("{\n");
+		gen_goto(o, ind + 1, readCh, to);
+		o.wind(ind).ws("}\n");
+	} else {
+		gen_goto(o, 0, readCh, to);
+	}
+}
+
+void gen_goto(OutputFile &o, uint32_t ind, bool &readCh, const State *to)
+{
+	if (to == NULL) {
 		readCh = false;
 	}
-
-	o.wind(ind).ws("goto ").wstring(opts->labelPrefix).wlabel(to->label).ws(";\n");
+	if (readCh) {
+		o.wstring(opts->input_api.stmt_peek(ind));
+		readCh = false;
+	}
+	if (to) {
+		o.wind(ind).ws("goto ").wstring(opts->labelPrefix)
+			.wlabel(to->label).ws(";\n");
+	}
 }
 
 } // namespace re2c
