@@ -21,6 +21,7 @@ void fallback_states(const dfa_t &dfa, std::vector<size_t> &fallback)
 				if (j != dfa_t::NIL
 					&& dfa.states[j]->rule == Rule::NONE) {
 					fallback.push_back(i);
+					break;
 				}
 			}
 		}
