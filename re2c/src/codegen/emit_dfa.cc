@@ -147,10 +147,8 @@ void DFA::emit(Output & output, uint32_t& ind, bool isLastCond, bool& bPrologBra
 
 	std::set<std::string> ctxnames;
 	if (base_ctxmarker) {
-		for (State *s = head; s; s = s->next) {
-			for (std::set<size_t>::const_iterator i = s->ctxs.begin(); i != s->ctxs.end(); ++i) {
-				ctxnames.insert(contexts[*i].name());
-			}
+		for (size_t i = 0; i < contexts.size(); ++i) {
+			ctxnames.insert(contexts[i].name());
 		}
 		ob.contexts.insert(ctxnames.begin(), ctxnames.end());
 	}
