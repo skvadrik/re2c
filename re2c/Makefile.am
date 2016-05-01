@@ -38,6 +38,7 @@ SRC_HDR = \
 	src/ir/compile.h \
 	src/ir/ctx.h \
 	src/ir/rule.h \
+	src/ir/tagpool.h \
 	src/ir/skeleton/path.h \
 	src/ir/skeleton/skeleton.h \
 	src/globals.h \

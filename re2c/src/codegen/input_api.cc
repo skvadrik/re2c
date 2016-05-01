@@ -107,12 +107,14 @@ std::string InputAPI::expr_dist () const
 	return s;
 }
 
-std::string InputAPI::stmt_dist (uint32_t ind, const std::set<size_t> &ctxs,
+std::string InputAPI::stmt_dist (uint32_t ind, const bool *tags,
 		const std::vector<CtxVar> &contexts) const
 {
 	std::string s = indent(ind);
-	for (std::set<size_t>::const_iterator i = ctxs.begin(); i != ctxs.end(); ++i) {
-		s += contexts[*i].expr() + " = ";
+	for (size_t i = 0; i < contexts.size(); ++i) {
+		if (tags[i]) {
+			s += contexts[i].expr() + " = ";
+		}
 	}
 	return s + expr_dist() + ";\n";
 }

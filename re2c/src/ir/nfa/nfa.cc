@@ -220,8 +220,13 @@ nfa_t::nfa_t(const std::vector<const RegExpRule*> &rs)
 	, rules(*new std::valarray<Rule>(rs.size()))
 	, contexts(*new std::vector<CtxVar>)
 	, root(compile_rules(rs, *this))
-{}
-
+{
+	const size_t nrules = rules.size();
+	const size_t ntags = contexts.size();
+	for (size_t i = 0; i < nrules; ++i) {
+		init_tags(rules[i], ntags);
+	}
+}
 
 nfa_t::~nfa_t()
 {

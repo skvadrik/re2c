@@ -37,6 +37,7 @@ DFA::DFA
 	, head(NULL)
 	, rules(dfa.rules)
 	, contexts(dfa.contexts)
+	, tagpool(dfa.tagpool)
 
 	// statistics
 	, max_fill (0)
@@ -78,7 +79,7 @@ DFA::DFA
 		*p = s;
 		p = &s->next;
 
-		s->ctxs = t->ctxs;
+		s->tags = t->tags;
 		s->rule = t->rule;
 		s->fill = fill[i];
 		s->go.span = allocate<Span>(nchars);
@@ -112,9 +113,9 @@ DFA::~DFA()
 	}
 
 	delete skeleton;
-
-	delete &contexts;
 	delete &rules;
+	delete &contexts;
+	delete &tagpool;
 }
 
 /* note [reordering DFA states]

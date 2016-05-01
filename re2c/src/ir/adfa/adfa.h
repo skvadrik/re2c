@@ -12,6 +12,7 @@
 #include "src/ir/adfa/action.h"
 #include "src/ir/regexp/regexp.h"
 #include "src/ir/rule.h"
+#include "src/ir/tagpool.h"
 #include "src/util/forbid_copy.h"
 
 namespace re2c
@@ -30,7 +31,7 @@ struct State
 	bool fallback;
 
 	size_t rule;
-	std::set<size_t> ctxs;
+	size_t tags;
 	bool isBase;
 	Go go;
 	Action action;
@@ -41,7 +42,7 @@ struct State
 		, fill (0)
 		, fallback (false)
 		, rule (Rule::NONE)
-		, ctxs ()
+		, tags (0)
 		, isBase (false)
 		, go ()
 		, action ()
@@ -67,6 +68,7 @@ struct DFA
 	State * head;
 	std::valarray<Rule> &rules;
 	std::vector<CtxVar> &contexts;
+	Tagpool &tagpool;
 	size_t max_fill;
 	bool need_backup;
 	bool need_backupctx;

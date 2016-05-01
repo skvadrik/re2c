@@ -1,156 +1,252 @@
 #include <limits>
-#include <set>
-#include <vector>
 
 #include "src/ir/dfa/dfa.h"
 
 namespace re2c
 {
 
-static void calc_live(
-	const dfa_t &dfa,
-	const std::set<size_t> &fallback,
-	std::vector<bool> &visited,
-	std::vector<std::set<size_t> > &live,
+static size_t mask_dead_tags(Tagpool &tagpool,
+	size_t oldidx, const bool *live)
+{
+	const bool *oldtags = tagpool[oldidx];
+	bool *newtags = new bool[tagpool.ntags];
+	for (size_t i = 0; i < tagpool.ntags; ++i) {
+		newtags[i] = oldtags[i] & live[i];
+	}
+	const size_t newidx = tagpool.insert(newtags);
+	delete[] newtags;
+	return newidx;
+}
+
+static bool dangling_arcs(const size_t *arcs, size_t narcs)
+{
+	for (size_t i = 0; i < narcs; ++i) {
+		if (arcs[i] == dfa_t::NIL) {
+			return true;
+		}
+	}
+	return false;
+}
+
+/* note [liveness analyses on tags]
+ *
+ * Tag T is alive in state S if either:
+ *
+ *    - There is a transition from S to default state, S does not set T,
+ *      S is final and T belongs to tag set associated with rule in S.
+ *
+ *    - There is a transition from S to default state, S does not set T
+ *      and T belongs to any tag set associated with fallback rules.
+ *
+ *    - There is a transition from S to some state S' (maybe equal to S),
+ *      S does not set T and T is alive in S'.
+ */
+static void calc_live(const dfa_t &dfa,
+	const bool *fallback,
+	bool *visited,
+	bool *live,
 	size_t i)
 {
-	if (!visited[i]) {
-		visited[i] = true;
+	if (visited[i]) {
+		return;
+	}
 
-		dfa_state_t *s = dfa.states[i];
+	visited[i] = true;
+	dfa_state_t *s = dfa.states[i];
+	const size_t ntags = dfa.contexts.size();
 
-		bool fallthru = false;
-		for (size_t c = 0; c < dfa.nchars; ++c) {
-			const size_t j = s->arcs[c];
-			if (j != dfa_t::NIL) {
-				calc_live(dfa, fallback, visited, live, j);
-				live[i].insert(live[j].begin(), live[j].end());
-			} else {
-				fallthru = true;
-			}
-		}
-
+	// add tags before recursing to child states,
+	// so that tags propagate into loopbacks to this state
+	if (dangling_arcs(s->arcs, dfa.nchars)) {
 		if (s->rule != Rule::NONE) {
-			const Rule &rule = dfa.rules[s->rule];
-			for (size_t j = rule.ltag; j < rule.htag; ++j) {
-				live[i].insert(j);
-			}
-			if (rule.trail.type == Trail::VAR) {
-				live[i].insert(rule.trail.pld.var);
-			}
-		} else if (fallthru) {
-			// transition to default state: all fallback rules
-			// are potentialy reachable, their contexts are alive
-			live[i].insert(fallback.begin(), fallback.end());
+			// final state, only rule tags are alive
+			add_tags_with_mask(&live[i * ntags],
+				dfa.rules[s->rule].tags,
+				dfa.tagpool[s->tags],
+				ntags);
+		} else {
+			// transition to default state and dispatch on
+			// 'yyaccept': all fallback rules are potentially
+			// reachable, their tags are alive
+			// no mask (no rule implies no rule tags)
+			add_tags(&live[i * ntags], fallback, ntags);
+		}
+	}
+
+	for (size_t c = 0; c < dfa.nchars; ++c) {
+		const size_t j = s->arcs[c];
+		if (j != dfa_t::NIL) {
+			calc_live(dfa, fallback, visited, live, j);
+			add_tags_with_mask(&live[i * ntags],
+				&live[j * ntags],
+				dfa.tagpool[s->tags],
+				ntags);
 		}
 	}
 }
 
-size_t deduplicate_contexts(dfa_t &dfa,
-	const std::vector<size_t> &fallback)
+static void mask_dead(dfa_t &dfa,
+	const bool *livetags)
 {
-	const size_t nctxs = dfa.contexts.size();
-	if (nctxs < 2) {
-		return nctxs;
-	}
-
-	std::set<size_t> fbctxs;
-	for (size_t i = 0; i < fallback.size(); ++i) {
-		const Rule &rule = dfa.rules[dfa.states[fallback[i]]->rule];
-		for (size_t j = rule.ltag; j < rule.htag; ++j) {
-			fbctxs.insert(j);
-		}
-		if (rule.trail.type == Trail::VAR) {
-			fbctxs.insert(rule.trail.pld.var);
-		}
-	}
-
 	const size_t nstates = dfa.states.size();
-
-	std::vector<bool> visited(nstates);
-	std::vector<std::set<size_t> > live(nstates);
-	calc_live(dfa, fbctxs, visited, live, 0);
-
-	std::vector<size_t> buffer(nctxs);
-	std::vector<bool> xxx(nctxs * nctxs);
+	const size_t ntags = dfa.contexts.size();
 	for (size_t i = 0; i < nstates; ++i) {
-		const std::set<size_t>
-			&ctxs = dfa.states[i]->ctxs,
-			&liv = live[i];
-		std::vector<size_t>::iterator
-			diff = buffer.begin(),
-			diff_end = std::set_difference(liv.begin(), liv.end(),
-				ctxs.begin(), ctxs.end(), diff);
-		for (; diff != diff_end; ++diff) {
-			for (std::set<size_t>::const_iterator j = ctxs.begin(); j != ctxs.end(); ++j) {
-				xxx[*diff * nctxs + *j] = xxx[*j * nctxs + *diff] = true;
+		dfa_state_t *s = dfa.states[i];
+		mask_dead_tags(dfa.tagpool, s->tags, &livetags[i * ntags]);
+	}
+}
+
+// tags that are updated here are pairwise incompatible
+// with all tags that are alive, but not updated here
+static void incompatible(bool *tbl,
+	const bool *live,
+	const bool *tags,
+	size_t ntags)
+{
+	for (size_t i = 0; i < ntags; ++i) {
+		if (live[i] && !tags[i]) {
+			for (size_t j = 0; j < ntags; ++j) {
+				if (tags[j]) {
+					tbl[i * ntags + j] = tbl[j * ntags + i] = true;
+				}
 			}
 		}
 	}
+}
 
-	// We have a binary relation on the set of all contexts
-	// and must construct set decomposition into subsets such that
-	// all contexts in the same subset are equivalent.
-	//
-	// This problem is isomorphic to partitioning graph into cliques
-	// (aka finding the 'clique cover' of a graph).
-	//
-	// Finding minimal clique cover in arbitrary graph is NP-complete.
-	// We build just some cover (not necessarily minimal).
-	// The algorithm takes quadratic (in the number of contexts) time.
+static void incompatibility_table(const dfa_t &dfa,
+	const bool *livetags,
+	bool *incompattbl)
+{
+	const size_t nstates = dfa.states.size();
+	const size_t ntags = dfa.contexts.size();
+	for (size_t i = 0; i < nstates; ++i) {
+		const dfa_state_t *s = dfa.states[i];
+		incompatible(incompattbl, &livetags[i * ntags],
+			dfa.tagpool[s->tags], ntags);
+	}
+}
 
+/* We have a binary relation on the set of all tags
+ * and must construct set decomposition into subsets such that
+ * all contexts in the same subset are equivalent.
+ *
+ * This problem is isomorphic to partitioning graph into cliques
+ * (aka finding the 'clique cover' of a graph).
+ *
+ * Finding minimal clique cover in arbitrary graph is NP-complete.
+ * We build just some cover (not necessarily minimal).
+ * The algorithm takes quadratic (in the number of tags) time.
+ * static void equivalence_classes(const std::vector<bool> &incompattbl,
+ */
+static size_t equivalence_classes(const bool *incompattbl,
+	size_t ntags, std::vector<size_t> &represent)
+{
 	static const size_t END = std::numeric_limits<size_t>::max();
 	std::vector<size_t>
-		part(nctxs, 0),   // partition: mapping of context to its representative
-		head(nctxs, END), // list of representatives
-		next(nctxs, END); // list of contexts mapped to the same representative
-	// skip the 1st context, it maps to itself
-	for (size_t c = 1; c < nctxs; ++c) {
+		head(ntags, END), // list of representatives
+		next(ntags, END); // list of tags mapped to the same representative
+
+	// skip the 1st tag, it maps to itself
+	for (size_t c = 1; c < ntags; ++c) {
 		size_t h;
 		for (h = 0; h != END; h = head[h]) {
 			size_t n;
 			for (n = h; n != END; n = next[n]) {
-				if (xxx[c * nctxs + n]) {
+				if (incompattbl[c * ntags + n]) {
 					break;
 				}
 			}
 			if (n == END) {
-				part[c] = h;
+				represent[c] = h;
 				next[c] = next[h];
 				next[h] = c;
 				break;
 			}
 		}
 		if (h == END) {
-			part[c] = c;
+			represent[c] = c;
 			head[c] = head[0];
 			head[0] = c;
 		}
 	}
-	size_t ncontexts = 0;
-	for (size_t i = 0; i < nctxs; ++i) {
-		if (part[i] == i) {
-			++ncontexts;
+
+	size_t nreps = 0;
+	for (size_t i = 0; i < ntags; ++i) {
+		if (represent[i] == i) {
+			++nreps;
 		}
 	}
-
-	for (size_t i = 0; i < nstates; ++i) {
-		dfa_state_t *s = dfa.states[i];
-		std::set<size_t> ctxs;
-		for (std::set<size_t>::const_iterator j = s->ctxs.begin(); j != s->ctxs.end(); ++j) {
-			ctxs.insert(part[*j]);
-		}
-		s->ctxs.swap(ctxs);
-	}
-	for (size_t i = 0; i < nctxs; ++i) {
-		dfa.contexts[i].uniqname = dfa.contexts[part[i]].uniqname;
-	}
-
-	return ncontexts;
+	return nreps;
 }
 
+static size_t patch_tagset(Tagpool &tagpool, size_t oldidx,
+	const std::vector<size_t> &represent)
+{
+	const bool *oldtags = tagpool[oldidx];
+	bool *newtags = new bool[tagpool.ntags]();
+	for (size_t i = 0; i < tagpool.ntags; ++i) {
+		if (oldtags[i]) {
+			newtags[represent[i]] = true;
+		}
+	}
+	const size_t newidx = tagpool.insert(newtags);
+	delete[] newtags;
+	return newidx;
+}
 
+static void patch_tags(dfa_t &dfa, const std::vector<size_t> &represent)
+{
+	const size_t nstates = dfa.states.size();
+	for (size_t i = 0; i < nstates; ++i) {
+		dfa_state_t *s = dfa.states[i];
+		s->tags = patch_tagset(dfa.tagpool, s->tags, represent);
+	}
 
+	const size_t ntags = dfa.contexts.size();
+	for (size_t i = 0; i < ntags; ++i) {
+		dfa.contexts[i].uniqname = dfa.contexts[represent[i]].uniqname;
+	}
+}
+
+size_t deduplicate_contexts(dfa_t &dfa,
+	const std::vector<size_t> &fallback)
+{
+	const size_t ntags = dfa.contexts.size();
+	if (ntags == 0) {
+		return 0;
+	}
+
+	bool *fbctxs = new bool[ntags]();
+	for (size_t i = 0; i < fallback.size(); ++i) {
+		const size_t r = dfa.states[fallback[i]]->rule;
+		add_tags(fbctxs, dfa.rules[r].tags, ntags);
+	}
+
+	const size_t nstates = dfa.states.size();
+	bool *visited = new bool[nstates]();
+	bool *live = new bool[nstates * ntags]();
+	calc_live(dfa, fbctxs, visited, live, 0);
+
+	mask_dead(dfa, live);
+
+	bool *incompattbl = new bool[ntags * ntags]();
+	incompatibility_table(dfa, live, incompattbl);
+
+	std::vector<size_t> represent(ntags, 0);
+	const size_t nreps = equivalence_classes(incompattbl, ntags, represent);
+
+	if (nreps < ntags) {
+		patch_tags(dfa, represent);
+	}
+
+	delete[] fbctxs;
+	delete[] visited;
+	delete[] live;
+	delete[] incompattbl;
+
+	return nreps;
+}
 
 } // namespace re2c
 

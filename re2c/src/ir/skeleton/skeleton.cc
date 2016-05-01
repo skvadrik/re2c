@@ -7,20 +7,18 @@
 namespace re2c
 {
 
-Node::Node() :
-	arcs(),
-	arcsets(),
-	rule(Rule::NONE),
-	ctxs()
+Node::Node()
+	: arcs()
+	, arcsets()
+	, rule(Rule::NONE)
+	, tags(NULL)
 {}
 
-void Node::init(
-	const std::set<size_t> &cs,
-	size_t r,
+void Node::init(const bool *ts, size_t r,
 	const std::vector<std::pair<size_t, uint32_t> > &a)
 {
 	rule = r;
-	ctxs = cs;
+	tags = ts;
 
 	uint32_t lb = 0;
 	std::vector<std::pair<size_t, uint32_t> >::const_iterator
@@ -86,7 +84,7 @@ Skeleton::Skeleton(
 		if (arcs.size() == 1 && arcs[0].first == nodes_count - 1) {
 			arcs.clear();
 		}
-		nodes[i].init(s->ctxs, s->rule, arcs);
+		nodes[i].init(dfa.tagpool[s->tags], s->rule, arcs);
 	}
 
 	// initialize size of key

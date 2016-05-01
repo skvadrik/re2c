@@ -8,6 +8,7 @@
 
 #include "src/ir/regexp/regexp.h"
 #include "src/ir/rule.h"
+#include "src/ir/tagpool.h"
 #include "src/util/forbid_copy.h"
 #include "src/util/ord_hash_set.h"
 
@@ -20,12 +21,12 @@ struct dfa_state_t
 {
 	size_t *arcs;
 	size_t rule;
-	std::set<size_t> ctxs;
+	size_t tags;
 
-	dfa_state_t()
-		: arcs(NULL)
+	explicit dfa_state_t(size_t nchars)
+		: arcs(new size_t[nchars])
 		, rule(Rule::NONE)
-		, ctxs()
+		, tags(0)
 	{}
 	~dfa_state_t()
 	{
@@ -43,6 +44,7 @@ struct dfa_t
 	const size_t nchars;
 	std::valarray<Rule> &rules;
 	std::vector<CtxVar> &contexts;
+	Tagpool &tagpool;
 
 	dfa_t(const nfa_t &nfa, const charset_t &charset,
 		uint32_t line, const std::string &cond);

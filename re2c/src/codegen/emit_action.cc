@@ -54,9 +54,9 @@ void emit_action(OutputFile &o, uint32_t ind, bool &readCh,
 			emit_rule(o, ind, dfa, s->action.info.rule);
 			break;
 	}
-	if (!s->ctxs.empty()) {
+	if (s->tags != 0) {
 		if (dfa.base_ctxmarker) {
-			o.wstring(opts->input_api.stmt_dist(ind, s->ctxs, dfa.contexts));
+			o.wstring(opts->input_api.stmt_dist(ind, dfa.tagpool[s->tags], dfa.contexts));
 		} else {
 			o.wstring(opts->input_api.stmt_backupctx(ind));
 		}

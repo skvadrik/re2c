@@ -40,7 +40,7 @@ struct Rule
 	std::vector<CtxFix> ctxfix;
 	Trail trail;
 	bool nullable;
-
+	bool *tags;
 	std::set<uint32_t> shadow;
 	bool reachable;
 
@@ -51,12 +51,19 @@ struct Rule
 		, ctxfix()
 		, trail()
 		, nullable(false)
+		, tags(NULL)
 		, shadow()
 		, reachable(false)
 	{}
+	~Rule()
+	{
+		delete[] tags;
+	}
 
 	FORBID_COPY(Rule);
 };
+
+void init_tags(Rule &rule, size_t ntags);
 
 } // namespace re2c
 

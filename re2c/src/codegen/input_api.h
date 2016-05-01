@@ -33,7 +33,7 @@ public:
 	std::string stmt_backup (uint32_t ind) const;
 	std::string stmt_backupctx (uint32_t ind) const;
 	std::string expr_dist () const;
-	std::string stmt_dist (uint32_t ind, const std::set<size_t> &ctxs,
+	std::string stmt_dist (uint32_t ind, const bool *tags,
 		const std::vector<CtxVar> &contexts) const;
 	std::string expr_ctx (const std::string &ctx) const;
 	std::string expr_ctx_fix (const CtxFix &ctx, const std::vector<CtxVar> &ctxvars) const;

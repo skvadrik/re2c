@@ -36,10 +36,10 @@ struct Node
 	arcs_t arcs;
 	arcsets_t arcsets;
 	size_t rule;
-	std::set<size_t> ctxs;
+	const bool *tags;
 
 	Node();
-	void init(const std::set<size_t> &cs, size_t r,
+	void init(const bool *ts, size_t r,
 		const std::vector<std::pair<size_t, uint32_t> > &arcs);
 	bool end() const;
 

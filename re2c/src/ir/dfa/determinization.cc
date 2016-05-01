@@ -96,21 +96,25 @@ dfa_t::dfa_t(
 	, nchars(charset.size() - 1) // (n + 1) bounds for n ranges
 	, rules(nfa.rules)
 	, contexts(nfa.contexts)
+	, tagpool(*new Tagpool(contexts.size()))
 {
+	const size_t ntags = contexts.size();
 	const size_t nrules = rules.size();
 
 	ord_hash_set_t kernels;
 	nfa_state_t **const buffer = new nfa_state_t*[nfa.size];
 	std::vector<std::vector<nfa_state_t*> > arcs(nchars);
 	bool *fin = new bool[nrules];
+	bool *tags = new bool[ntags];
 
 	find_state(buffer, closure(buffer, nfa.root), kernels);
 	for (size_t i = 0; i < kernels.size(); ++i)
 	{
-		dfa_state_t *s = new dfa_state_t;
+		dfa_state_t *s = new dfa_state_t(nchars);
 		states.push_back(s);
 
 		memset(fin, 0, nrules * sizeof(bool));
+		memset(tags, 0, ntags * sizeof(bool));
 
 		nfa_state_t **kernel;
 		const size_t kernel_size = kernels.deref<nfa_state_t*>(i, kernel);
@@ -134,7 +138,7 @@ dfa_t::dfa_t(
 					break;
 				}
 				case nfa_state_t::CTX:
-					s->ctxs.insert(n->value.ctx.info);
+					tags[n->value.ctx.info] = true;
 					break;
 				case nfa_state_t::FIN:
 					fin[n->value.fin.rule] = true;
@@ -144,7 +148,6 @@ dfa_t::dfa_t(
 			}
 		}
 
-		s->arcs = new size_t[nchars];
 		for(size_t c = 0; c < nchars; ++c)
 		{
 			nfa_state_t **end = buffer;
@@ -154,6 +157,7 @@ dfa_t::dfa_t(
 			}
 			s->arcs[c] = find_state(buffer, end, kernels);
 		}
+		s->tags = tagpool.insert(tags);
 
 		// choose the first rule (the one with smallest rank)
 		size_t r;
@@ -177,6 +181,7 @@ dfa_t::dfa_t(
 	}
 	delete[] buffer;
 	delete[] fin;
+	delete[] tags;
 
 	check_context_selfoverlap(kernels, contexts, line, cond);
 }

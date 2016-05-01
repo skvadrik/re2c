@@ -59,8 +59,7 @@ public:
 				case Trail::VAR: {
 					const size_t ctx = trail.pld.var;
 					for (; tail != head; ++tail) {
-						std::set<size_t> &ctxs = skel.nodes[*tail].ctxs;
-						if (ctxs.find(ctx) != ctxs.end()) {
+						if (skel.nodes[*tail].tags[ctx]) {
 							return static_cast<size_t>(head - tail) - 1;
 						}
 					}
