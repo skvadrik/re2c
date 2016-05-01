@@ -27,9 +27,11 @@ void Binary::used_labels (std::set<label_t> & used)
 
 void Linear::used_labels (std::set<label_t> & used)
 {
-	for (uint32_t i = 0; i < branches.size (); ++i)
-	{
-		used.insert (branches[i].second->label);
+	for (uint32_t i = 0; i < nbranches; ++i) {
+		const State *to = branches[i].to;
+		if (to) {
+			used.insert(to->label);
+		}
 	}
 }
 

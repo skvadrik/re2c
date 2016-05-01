@@ -21,10 +21,10 @@ Binary::~Binary ()
 
 Linear::~Linear ()
 {
-	for (uint32_t i = 0; i < branches.size (); ++i)
-	{
-		delete branches[i].first;
+	for (uint32_t i = 0; i < nbranches; ++i) {
+		delete branches[i].cond;
 	}
+	delete[] branches;
 }
 
 If::~If ()

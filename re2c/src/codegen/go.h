@@ -27,29 +27,24 @@ struct Span
 struct Case
 {
 	std::vector<std::pair<uint32_t, uint32_t> > ranges;
-	const State * to;
-	void emit (OutputFile & o, uint32_t ind);
+	const State *to;
 
-	inline Case ()
-		: ranges ()
-		, to (NULL)
-	{}
-
-	FORBID_COPY (Case);
+	void emit(OutputFile &o, uint32_t ind) const;
+	inline Case(): ranges(), to(NULL) {}
+	FORBID_COPY(Case);
 };
 
 struct Cases
 {
-	const State * def;
-	Case * cases;
+	Case *cases;
 	uint32_t cases_size;
-	void add (uint32_t lb, uint32_t ub, State * to);
-	Cases (const Span * s, uint32_t n);
-	~Cases ();
-	void emit (OutputFile & o, uint32_t ind, bool & readCh);
-	void used_labels (std::set<label_t> & used);
 
-	FORBID_COPY (Cases);
+	void add(uint32_t lb, uint32_t ub, State *to);
+	Cases(const Span *spans, uint32_t nspans);
+	~Cases();
+	void emit(OutputFile &o, uint32_t ind, bool &readCh) const;
+	void used_labels(std::set<label_t> &used);
+	FORBID_COPY(Cases);
 };
 
 struct Cond
@@ -74,11 +69,28 @@ struct Binary
 
 struct Linear
 {
-	std::vector<std::pair<const Cond *, const State *> > branches;
-	Linear (const Span * s, uint32_t n, const State * next);
-	~Linear ();
-	void emit (OutputFile & o, uint32_t ind, bool & readCh);
-	void used_labels (std::set<label_t> & used);
+	struct Branch
+	{
+		const Cond *cond;
+		const State *to;
+
+		Branch(): cond(NULL), to(NULL) {}
+		void init(const Cond *c, const State *s)
+		{
+			cond = c;
+			to = s;
+		}
+		FORBID_COPY(Branch);
+	};
+
+	size_t nbranches;
+	Branch *branches;
+
+	Linear(const Span *s, uint32_t n, const State *next);
+	~Linear();
+	void emit(OutputFile &o, uint32_t ind, bool &readCh);
+	void used_labels(std::set<label_t> &used);
+	FORBID_COPY(Linear);
 };
 
 struct If

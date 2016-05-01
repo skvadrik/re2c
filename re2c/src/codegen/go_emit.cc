@@ -58,7 +58,7 @@ std::string output_hgo (OutputFile & o, uint32_t ind, bool & readCh, SwitchIf * 
 	return yych;
 }
 
-void Case::emit (OutputFile & o, uint32_t ind)
+void Case::emit (OutputFile & o, uint32_t ind) const
 {
 	for (uint32_t i = 0; i < ranges.size (); ++i)
 	{
@@ -80,19 +80,21 @@ void Case::emit (OutputFile & o, uint32_t ind)
 	}
 }
 
-void Cases::emit (OutputFile & o, uint32_t ind, bool & readCh)
+void Cases::emit(OutputFile &o, uint32_t ind, bool &readCh) const
 {
-	o.wind(ind).ws("switch (").wstring(output_yych (readCh)).ws(") {\n");
-	for (uint32_t i = 0; i < cases_size; ++i)
-	{
-		if (cases[i].to != def)
-		{
-			cases[i].emit (o, ind);
-			gen_goto_case(o, 1, readCh, cases[i].to);
-		}
+	o.wind(ind).ws("switch (").wstring(output_yych(readCh)).ws(") {\n");
+
+	for (uint32_t i = 1; i < cases_size; ++i) {
+		const Case &c = cases[i];
+		c.emit(o, ind);
+		gen_goto_case(o, ind, readCh, c.to);
 	}
+
+	// default case must be the last one
+	const Case &c = cases[0];
 	o.wind(ind).ws("default:");
-	gen_goto_case(o, 1, readCh, def);
+	gen_goto_case(o, ind, readCh, c.to);
+
 	o.wind(ind).ws("}\n");
 }
 
@@ -106,18 +108,16 @@ void Binary::emit (OutputFile & o, uint32_t ind, bool & readCh)
 	o.wind(ind).ws("}\n");
 }
 
-void Linear::emit (OutputFile & o, uint32_t ind, bool & readCh)
+void Linear::emit(OutputFile &o, uint32_t ind, bool &readCh)
 {
-	for (uint32_t i = 0; i < branches.size (); ++i)
-	{
-		if (branches[i].first != NULL)
-		{
-			output_if (o, ind, readCh, branches[i].first->compare, branches[i].first->value);
-			gen_goto_if(o, ind, readCh, branches[i].second);
-		}
-		else
-		{
-			gen_goto(o, ind, readCh, branches[i].second);
+	for (uint32_t i = 0; i < nbranches; ++i) {
+		const Branch &b = branches[i];
+		const Cond *cond = b.cond;
+		if (cond) {
+			output_if(o, ind, readCh, cond->compare, cond->value);
+			gen_goto_if(o, ind, readCh, b.to);
+		} else {
+			gen_goto(o, ind, readCh, b.to);
 		}
 	}
 }
@@ -219,18 +219,14 @@ void Cpgoto::emit (OutputFile & o, uint32_t ind, bool & readCh)
 void Dot::emit (OutputFile & o)
 {
 	const uint32_t n = cases->cases_size;
-	if (n == 1)
-	{
+	if (n == 1) {
 		o.wlabel(from->label).ws(" -> ").wlabel(cases->cases[0].to->label).ws("\n");
-	}
-	else
-	{
-		for (uint32_t i = 0; i < n; ++i)
-		{
-			o.wlabel(from->label).ws(" -> ").wlabel(cases->cases[i].to->label).ws(" [label=\"");
-			for (uint32_t j = 0; j < cases->cases[i].ranges.size (); ++j)
-			{
-				o.wrange(cases->cases[i].ranges[j].first, cases->cases[i].ranges[j].second);
+	} else {
+		for (uint32_t i = 0; i < n; ++i) {
+			const Case &c = cases->cases[i];
+			o.wlabel(from->label).ws(" -> ").wlabel(c.to->label).ws(" [label=\"");
+			for (uint32_t j = 0; j < c.ranges.size(); ++j) {
+				o.wrange(c.ranges[j].first, c.ranges[j].second);
 			}
 			o.ws("\"]\n");
 		}

@@ -16,31 +16,36 @@ namespace re2c
 
 static uint32_t unmap (Span * new_span, const Span * old_span, uint32_t old_nspans, const State * x);
 
-Cases::Cases (const Span * span, uint32_t span_size)
-	: def (span_size == 0 ? NULL : span[span_size - 1].to)
-	, cases (new Case[span_size])
-	, cases_size (0)
+Cases::Cases(const Span *spans, uint32_t nspans)
+	: cases(new Case[nspans])
+	, cases_size(0)
 {
-	for (uint32_t i = 0, lb = 0; i < span_size; ++ i)
-	{
-		add (lb, span[i].ub, span[i].to);
-		lb = span[i].ub;
+	assert(nspans > 0);
+
+	// first case is default case
+	Case &c = cases[cases_size++];
+	const Span &s = spans[nspans - 1];
+	c.to = s.to;
+
+	for (uint32_t i = 0, lb = 0; i < nspans; ++i) {
+		const Span &s = spans[i];
+		add(lb, s.ub, s.to);
+		lb = s.ub;
 	}
 }
 
-void Cases::add (uint32_t lb, uint32_t ub, State * to)
+void Cases::add(uint32_t lb, uint32_t ub, State *to)
 {
-	for (uint32_t i = 0; i < cases_size; ++i)
-	{
-		if (cases[i].to == to)
-		{
-			cases[i].ranges.push_back (std::make_pair (lb, ub));
+	for (uint32_t i = 0; i < cases_size; ++i) {
+		Case &c = cases[i];
+		if (c.to == to) {
+			c.ranges.push_back(std::make_pair(lb, ub));
 			return;
 		}
 	}
-	cases[cases_size].ranges.push_back (std::make_pair (lb, ub));
-	cases[cases_size].to = to;
-	++cases_size;
+	Case &c = cases[cases_size++];
+	c.ranges.push_back(std::make_pair(lb, ub));
+	c.to = to;
 }
 
 Cond::Cond (const std::string & cmp, uint32_t val)
@@ -60,42 +65,36 @@ Binary::Binary (const Span * s, uint32_t n, const State * next)
 	els = new If (h > 4 ? If::BINARY : If::LINEAR, &s[l], h, next);
 }
 
-Linear::Linear (const Span * s, uint32_t n, const State * next)
-	: branches ()
+Linear::Linear(const Span *s, uint32_t n, const State *next)
+	: nbranches(0)
+	, branches(new Branch[n])
 {
-	for (;;)
-	{
-		const State *bg = s[0].to;
-		while (n >= 3 && s[2].to == bg && (s[1].ub - s[0].ub) == 1)
-		{
-			if (s[1].to == next && n == 3)
-			{
-				branches.push_back (std::make_pair (new Cond ("!=", s[0].ub), bg));
-				return ;
-			}
-			else
-			{
-				branches.push_back (std::make_pair (new Cond ("==", s[0].ub), s[1].to));
-			}
+	for (;;) {
+		if (n == 1 && s[0].to == next) {
+			branches[nbranches++].init(NULL, NULL);
+			return;
+		} else if (n == 1) {
+			branches[nbranches++].init(NULL, s[0].to);
+			return;
+		} else if (n == 2 && s[0].to == next) {
+			branches[nbranches++].init(new Cond(">=", s[0].ub), s[1].to);
+			branches[nbranches++].init(NULL, NULL);
+			return;
+		} else if (n == 3
+			&& s[1].to == next
+			&& s[1].ub - s[0].ub == 1
+			&& s[2].to == s[0].to) {
+			branches[nbranches++].init(new Cond("!=", s[0].ub), s[0].to);
+			branches[nbranches++].init(NULL, NULL);
+			return;
+		} else if (n >= 3
+			&& s[1].ub - s[0].ub == 1
+			&& s[2].to == s[0].to) {
+			branches[nbranches++].init(new Cond("==", s[0].ub), s[1].to);
 			n -= 2;
 			s += 2;
-		}
-		if (n == 1)
-		{
-			if (next == NULL || s[0].to != next)
-			{
-				branches.push_back (std::make_pair (static_cast<const Cond *> (NULL), s[0].to));
-			}
-			return;
-		}
-		else if (n == 2 && bg == next)
-		{
-			branches.push_back (std::make_pair (new Cond (">=", s[0].ub), s[1].to));
-			return;
-		}
-		else
-		{
-			branches.push_back (std::make_pair (new Cond ("<=", s[0].ub - 1), bg));
+		} else {
+			branches[nbranches++].init(new Cond("<=", s[0].ub - 1), s[0].to);
 			n -= 1;
 			s += 1;
 		}
