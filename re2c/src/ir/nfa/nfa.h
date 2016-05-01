@@ -42,38 +42,38 @@ struct nfa_state_t
 			nfa_state_t *out;
 			size_t info;
 		} ctx;
-		struct
-		{
-			size_t rule;
-		} fin;
 	} value;
+	size_t rule;
 	bool mark;
 
-	void alt(nfa_state_t *s1, nfa_state_t *s2)
+	void alt(size_t r, nfa_state_t *s1, nfa_state_t *s2)
 	{
 		type = ALT;
 		value.alt.out1 = s1;
 		value.alt.out2 = s2;
+		rule = r;
 		mark = false;
 	}
-	void ran(nfa_state_t *s, const Range *r)
+	void ran(size_t r, nfa_state_t *s, const Range *p)
 	{
 		type = RAN;
 		value.ran.out = s;
-		value.ran.ran = r;
+		value.ran.ran = p;
+		rule = r;
 		mark = false;
 	}
-	void ctx(nfa_state_t *s, size_t i)
+	void ctx(size_t r, nfa_state_t *s, size_t i)
 	{
 		type = CTX;
 		value.ctx.out = s;
 		value.ctx.info = i;
+		rule = r;
 		mark = false;
 	}
 	void fin(size_t r)
 	{
 		type = FIN;
-		value.fin.rule = r;
+		rule = r;
 		mark = false;
 	}
 };

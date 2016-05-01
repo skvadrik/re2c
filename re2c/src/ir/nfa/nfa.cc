@@ -40,7 +40,7 @@ static size_t calc_size_all(const std::vector<const RegExpRule*> &rs)
 	return size;
 }
 
-static nfa_state_t *compile(const RegExp *re, nfa_t &nfa, nfa_state_t *t)
+static nfa_state_t *compile(const RegExp *re, size_t rule, nfa_t &nfa, nfa_state_t *t)
 {
 	nfa_state_t *s = NULL;
 	switch (re->tag) {
@@ -49,20 +49,21 @@ static nfa_state_t *compile(const RegExp *re, nfa_t &nfa, nfa_state_t *t)
 			break;
 		case RegExp::SYM:
 			s = &nfa.states[nfa.size++];
-			s->ran(t, re->pld.sym.range);
+			s->ran(rule, t, re->pld.sym.range);
 			break;
 		case RegExp::ALT:
 			s = &nfa.states[nfa.size++];
-			s->alt(compile(re->pld.alt.re1, nfa, t),
-				compile(re->pld.alt.re2, nfa, t));
+			s->alt(rule,
+				compile(re->pld.alt.re1, rule, nfa, t),
+				compile(re->pld.alt.re2, rule, nfa, t));
 			break;
 		case RegExp::CAT:
-			s = compile(re->pld.cat.re2, nfa, t);
-			s = compile(re->pld.cat.re1, nfa, s);
+			s = compile(re->pld.cat.re2, rule, nfa, t);
+			s = compile(re->pld.cat.re1, rule, nfa, s);
 			break;
 		case RegExp::ITER:
 			s = &nfa.states[nfa.size++];
-			s->alt(t, compile(re->pld.iter.re, nfa, s));
+			s->alt(rule, t, compile(re->pld.iter.re, rule, nfa, s));
 			break;
 	}
 	return s;
@@ -162,7 +163,7 @@ static nfa_state_t *compile_rule(
 	// base2var is filled in right-to-left, this is crucial
 	std::vector<size_t> base2var(nctxs + 1, CtxFix::RIGHTMOST);
 	for (size_t i = nctxs; i > 0; --i) {
-		t = compile(rs[i], nfa, t);
+		t = compile(rs[i], nrule, nfa, t);
 		const std::string *name = ctxnames[i - 1];
 		if (base[i - 1] == i - 1) {
 			const size_t idx = nfa.contexts.size();
@@ -173,7 +174,7 @@ static nfa_state_t *compile_rule(
 				trail.make_var(idx);
 			}
 			nfa_state_t *q = &nfa.states[nfa.size++];
-			q->ctx(t, idx);
+			q->ctx(nrule, t, idx);
 			t = q;
 		} else {
 			if (name != NULL) {
@@ -185,7 +186,7 @@ static nfa_state_t *compile_rule(
 		}
 	}
 	r.htag = nfa.contexts.size();
-	t = compile(rs[0], nfa, t);
+	t = compile(rs[0], nrule, nfa, t);
 
 	bool null = nullable(rs[0]);
 	for (size_t i = 0; i < nctxs && null && ctxnames[i] != NULL; ++i) {
@@ -206,7 +207,7 @@ static nfa_state_t *compile_rules(
 		s = compile_rule(rs[0], nfa, 0);
 		for (size_t i = 1; i < nrs; ++i) {
 			nfa_state_t *q = &nfa.states[nfa.size++];
-			q->alt(s, compile_rule(rs[i], nfa, i));
+			q->alt(i, s, compile_rule(rs[i], nfa, i));
 			s = q;
 		}
 	}

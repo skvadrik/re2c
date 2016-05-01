@@ -141,7 +141,7 @@ dfa_t::dfa_t(
 					tags[n->value.ctx.info] = true;
 					break;
 				case nfa_state_t::FIN:
-					fin[n->value.fin.rule] = true;
+					fin[n->rule] = true;
 					break;
 				default:
 					break;
