@@ -33,6 +33,7 @@ static void merge_tags_with_mask(bool *oldtags, const bool *newtags,
 		oldmask[i] |= newmask[i];
 	}
 }
+
 struct kitem_t
 {
 	nfa_state_t *state;
@@ -42,10 +43,10 @@ struct kitem_t
 		size_t tagidx;
 	};
 
-	bool operator <(const kitem_t &k)
+	static bool compare(const kitem_t &k1, const kitem_t &k2)
 	{
-		return state < k.state
-			|| (state == k.state && tagidx < k.tagidx);
+		return k1.state < k2.state
+			|| (k1.state == k2.state && k1.tagidx < k2.tagidx);
 	}
 };
 
@@ -122,7 +123,7 @@ static size_t find_state(kitem_t *kernel, kitem_t *kend,
 	}
 
 	// sort kernel items to allow comparison by hash and 'memcmp'
-	std::sort(kernel, kend);
+	std::sort(kernel, kend, kitem_t::compare);
 
 	return kernels.insert(kernel, kcount * sizeof(kitem_t));
 }
