@@ -86,7 +86,6 @@ SRC = \
 	src/ir/adfa/adfa.cc \
 	src/ir/adfa/prepare.cc \
 	src/ir/dfa/context_deduplication.cc \
-	src/ir/dfa/context_selfoverlap.cc \
 	src/ir/dfa/determinization.cc \
 	src/ir/dfa/fallback.cc \
 	src/ir/dfa/fillpoints.cc \

@@ -20,17 +20,20 @@ struct nfa_t;
 struct dfa_state_t
 {
 	size_t *arcs;
+	size_t *tags;
 	size_t rule;
-	size_t tags;
+	size_t rule_tags;
 
 	explicit dfa_state_t(size_t nchars)
 		: arcs(new size_t[nchars])
+		, tags(new size_t[nchars])
 		, rule(Rule::NONE)
-		, tags(0)
+		, rule_tags(0)
 	{}
 	~dfa_state_t()
 	{
 		delete[] arcs;
+		delete[] tags;
 	}
 
 	FORBID_COPY(dfa_state_t);
@@ -59,9 +62,6 @@ enum dfa_minimization_t
 	DFA_MINIMIZATION_MOORE
 };
 
-void check_context_selfoverlap(ord_hash_set_t &kernels,
-	const std::vector<CtxVar> &contexts,
-	uint32_t line, const std::string &cond);
 void minimization(dfa_t &dfa);
 void fillpoints(const dfa_t &dfa, std::vector<size_t> &fill);
 void fallback_states(const dfa_t &dfa, std::vector<size_t> &fallback);

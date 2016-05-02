@@ -54,13 +54,6 @@ void emit_action(OutputFile &o, uint32_t ind, bool &readCh,
 			emit_rule(o, ind, dfa, s->action.info.rule);
 			break;
 	}
-	if (s->tags != 0) {
-		if (dfa.base_ctxmarker) {
-			o.wstring(opts->input_api.stmt_dist(ind, dfa.tagpool[s->tags], dfa.contexts));
-		} else {
-			o.wstring(opts->input_api.stmt_backupctx(ind));
-		}
-	}
 }
 
 void emit_match(OutputFile &o, uint32_t ind, bool &readCh, const State *s)
@@ -147,7 +140,7 @@ void emit_accept_binary(OutputFile &o, uint32_t ind, bool &readCh,
 		o.wind(--ind).ws("}\n");
 	} else {
 		const accept_t &acc = *s->action.info.accepts;
-		gen_goto(o, ind, readCh, acc[l]);
+		gen_goto(o, ind, readCh, acc[l].first, dfa, acc[l].second);
 	}
 }
 
@@ -169,19 +162,27 @@ void emit_accept(OutputFile &o, uint32_t ind, bool &readCh,
 
 	// only one possible 'yyaccept' value: unconditional jump
 	if (nacc == 1) {
-		gen_goto(o, ind, readCh, acc[0]);
+		gen_goto(o, ind, readCh, acc[0].first, dfa, acc[0].second);
 		return;
 	}
 
+	bool have_tags = false;
+	for (size_t i = 0; i < nacc; ++i) {
+		if (acc[i].second != 0) {
+			have_tags = true;
+			break;
+		}
+	}
+
 	// jump table
-	if (opts->gFlag && nacc >= opts->cGotoThreshold) {
+	if (opts->gFlag && nacc >= opts->cGotoThreshold && !have_tags) {
 		o.wind(ind).ws("{\n")
 			.wind(ind + 1).ws("static void *")
 			.wstring(opts->yytarget).ws("[")
 			.wu64(nacc).ws("] = {\n");
 		for (uint32_t i = 0; i < nacc; ++i) {
 			o.wind(ind + 2).ws("&&").wstring(opts->labelPrefix)
-				.wlabel(acc[i]->label).ws(",\n");
+				.wlabel(acc[i].first->label).ws(",\n");
 		}
 		o.wind(ind + 1).ws("};\n")
 			.wind(ind + 1).ws("goto *")
@@ -201,10 +202,10 @@ void emit_accept(OutputFile &o, uint32_t ind, bool &readCh,
 	o.wind(ind).ws("switch (").wstring(opts->yyaccept).ws(") {\n");
 	for (uint32_t i = 0; i < nacc - 1; ++i) {
 		o.wind(ind).ws("case ").wu32(i).ws(": ");
-		gen_goto_case(o, ind, readCh, acc[i]);
+		gen_goto_case(o, ind, readCh, acc[i].first, dfa, acc[i].second);
 	}
 	o.wind(ind).ws("default:");
-	gen_goto_case(o, ind, readCh, acc[nacc - 1]);
+	gen_goto_case(o, ind, readCh, acc[nacc - 1].first, dfa, acc[nacc - 1].second);
 	o.wind(ind).ws("}\n");
 }
 
@@ -344,33 +345,37 @@ void genSetState(OutputFile &o, uint32_t ind, uint32_t fillIndex)
 	o.ws("\n");
 }
 
-void gen_goto_case(OutputFile &o, uint32_t ind, bool &readCh,  const State *to)
+void gen_goto_case(OutputFile &o, uint32_t ind, bool &readCh,
+	const State *to, const DFA &dfa, size_t tags)
 {
-	const bool multiline = readCh;
+	const bool multiline = readCh || (tags != 0);
 
 	if (multiline) {
 		o.ws("\n");
-		gen_goto(o, ind + 1, readCh, to);
+		gen_goto(o, ind + 1, readCh, to, dfa, tags);
 	} else {
-		gen_goto(o, 1, readCh, to);
+		gen_goto(o, 1, readCh, to, dfa, tags);
 	}
 }
 
-void gen_goto_if(OutputFile &o, uint32_t ind, bool &readCh, const State *to)
+void gen_goto_if(OutputFile &o, uint32_t ind, bool &readCh,
+	const State *to, const DFA &dfa, size_t tags)
 {
 	const int32_t linecount = (readCh && to != NULL)
-		|| (to != NULL);
+		+ (tags != 0)
+		+ (to != NULL);
 
 	if (linecount > 1) {
 		o.ws("{\n");
-		gen_goto(o, ind + 1, readCh, to);
+		gen_goto(o, ind + 1, readCh, to, dfa, tags);
 		o.wind(ind).ws("}\n");
 	} else {
-		gen_goto(o, 0, readCh, to);
+		gen_goto(o, 0, readCh, to, dfa, tags);
 	}
 }
 
-void gen_goto(OutputFile &o, uint32_t ind, bool &readCh, const State *to)
+void gen_goto(OutputFile &o, uint32_t ind, bool &readCh,
+	const State *to, const DFA &dfa, size_t tags)
 {
 	if (to == NULL) {
 		readCh = false;
@@ -379,9 +384,22 @@ void gen_goto(OutputFile &o, uint32_t ind, bool &readCh, const State *to)
 		o.wstring(opts->input_api.stmt_peek(ind));
 		readCh = false;
 	}
+	gen_settags(o, ind, dfa, tags);
 	if (to) {
 		o.wind(ind).ws("goto ").wstring(opts->labelPrefix)
 			.wlabel(to->label).ws(";\n");
+	}
+}
+
+void gen_settags(OutputFile &o, uint32_t ind, const DFA &dfa, size_t tags)
+{
+	if (tags != 0) {
+		if (dfa.base_ctxmarker) {
+			o.wstring(opts->input_api.stmt_dist(ind,
+				dfa.tagpool[tags], dfa.contexts));
+		} else {
+			o.wstring(opts->input_api.stmt_backupctx(ind));
+		}
 	}
 }
 

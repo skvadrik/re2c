@@ -64,7 +64,7 @@ void DFA::count_used_labels (std::set<label_t> & used, label_t start, label_t in
 	}
 	for (uint32_t i = 0; i < accepts.size (); ++i)
 	{
-		used.insert (accepts[i]->label);
+		used.insert (accepts[i].first->label);
 	}
 	// must go last: it needs the set of used labels
 	if (used.count (head->label))
@@ -88,7 +88,7 @@ void DFA::emit_body(OutputFile &o, uint32_t& ind,
 		bool readCh = false;
 		emit_state(o, ind, s, used_labels.count(s->label));
 		emit_action(o, ind, readCh, *this, s, used_labels);
-		s->go.emit(o, ind, readCh);
+		s->go.emit(o, ind, *this, readCh);
 	}
 }
 
@@ -117,7 +117,7 @@ void DFA::emit_dot(
 			const accept_t &accepts = *s->action.info.accepts;
 			for (uint32_t i = 0; i < accepts.size(); ++i) {
 				o.wlabel(s->label).ws(" -> ")
-					.wlabel(accepts[i]->label)
+					.wlabel(accepts[i].first->label)
 					.ws(" [label=\"yyaccept=")
 					.wu32(i).ws("\"]").ws("\n");
 			}
@@ -131,7 +131,7 @@ void DFA::emit_dot(
 			}
 		}
 		bool readCh = false;
-		s->go.emit(o, 0, readCh);
+		s->go.emit(o, 0, *this, readCh);
 	}
 	if (!opts->cFlag || last_cond) {
 		o.ws("}\n");

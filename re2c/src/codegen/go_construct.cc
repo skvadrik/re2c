@@ -26,19 +26,20 @@ Cases::Cases(const Span *spans, uint32_t nspans)
 	Case &c = cases[cases_size++];
 	const Span &s = spans[nspans - 1];
 	c.to = s.to;
+	c.tags = s.tags;
 
 	for (uint32_t i = 0, lb = 0; i < nspans; ++i) {
 		const Span &s = spans[i];
-		add(lb, s.ub, s.to);
+		add(lb, s.ub, s.to, s.tags);
 		lb = s.ub;
 	}
 }
 
-void Cases::add(uint32_t lb, uint32_t ub, State *to)
+void Cases::add(uint32_t lb, uint32_t ub, State *to, size_t tags)
 {
 	for (uint32_t i = 0; i < cases_size; ++i) {
 		Case &c = cases[i];
-		if (c.to == to) {
+		if (c.to == to && c.tags == tags) {
 			c.ranges.push_back(std::make_pair(lb, ub));
 			return;
 		}
@@ -46,6 +47,7 @@ void Cases::add(uint32_t lb, uint32_t ub, State *to)
 	Case &c = cases[cases_size++];
 	c.ranges.push_back(std::make_pair(lb, ub));
 	c.to = to;
+	c.tags = tags;
 }
 
 Cond::Cond (const std::string & cmp, uint32_t val)
@@ -71,30 +73,32 @@ Linear::Linear(const Span *s, uint32_t n, const State *next)
 {
 	for (;;) {
 		if (n == 1 && s[0].to == next) {
-			branches[nbranches++].init(NULL, NULL);
+			branches[nbranches++].init(NULL, NULL, s[0].tags);
 			return;
 		} else if (n == 1) {
-			branches[nbranches++].init(NULL, s[0].to);
+			branches[nbranches++].init(NULL, s[0].to, s[0].tags);
 			return;
 		} else if (n == 2 && s[0].to == next) {
-			branches[nbranches++].init(new Cond(">=", s[0].ub), s[1].to);
-			branches[nbranches++].init(NULL, NULL);
+			branches[nbranches++].init(new Cond(">=", s[0].ub), s[1].to, s[1].tags);
+			branches[nbranches++].init(NULL, NULL, s[0].tags);
 			return;
 		} else if (n == 3
 			&& s[1].to == next
 			&& s[1].ub - s[0].ub == 1
-			&& s[2].to == s[0].to) {
-			branches[nbranches++].init(new Cond("!=", s[0].ub), s[0].to);
-			branches[nbranches++].init(NULL, NULL);
+			&& s[2].to == s[0].to
+			&& s[2].tags == s[0].tags) {
+			branches[nbranches++].init(new Cond("!=", s[0].ub), s[0].to, s[0].tags);
+			branches[nbranches++].init(NULL, NULL, s[1].tags);
 			return;
 		} else if (n >= 3
 			&& s[1].ub - s[0].ub == 1
-			&& s[2].to == s[0].to) {
-			branches[nbranches++].init(new Cond("==", s[0].ub), s[1].to);
+			&& s[2].to == s[0].to
+			&& s[2].tags == s[0].tags) {
+			branches[nbranches++].init(new Cond("==", s[0].ub), s[1].to, s[1].tags);
 			n -= 2;
 			s += 2;
 		} else {
-			branches[nbranches++].init(new Cond("<=", s[0].ub - 1), s[0].to);
+			branches[nbranches++].init(new Cond("<=", s[0].ub - 1), s[0].to, s[0].tags);
 			n -= 1;
 			s += 1;
 		}
@@ -182,6 +186,7 @@ Dot::Dot (const Span * sp, uint32_t nsp, const State * s)
 Go::Go ()
 	: nSpans (0)
 	, span (NULL)
+	, tags (0)
 	, type (EMPTY)
 	, info ()
 {}
@@ -202,6 +207,14 @@ void Go::init (const State * from)
 		{
 			hspan = &span[i];
 			hSpans = nSpans - i;
+			break;
+		}
+	}
+
+	bool low_spans_have_tags = false;
+	for (uint32_t i = 0; i < nSpans - hSpans; ++i) {
+		if (span[i].tags != 0) {
+			low_spans_have_tags = true;
 			break;
 		}
 	}
@@ -233,7 +246,7 @@ void Go::init (const State * from)
 		type = DOT;
 		info.dot = new Dot (span, nSpans, from);
 	}
-	else if (opts->gFlag && (dSpans >= opts->cGotoThreshold))
+	else if (opts->gFlag && (dSpans >= opts->cGotoThreshold) && !low_spans_have_tags)
 	{
 		type = CPGOTO;
 		info.cpgoto = new Cpgoto (span, nSpans, hspan, hSpans, from->next);
@@ -265,12 +278,15 @@ uint32_t unmap (Span * new_span, const Span * old_span, uint32_t old_nspans, con
 	{
 		if (old_span[i].to != x)
 		{
-			if (new_nspans > 0 && new_span[new_nspans - 1].to == old_span[i].to)
+			if (new_nspans > 0
+				&& new_span[new_nspans - 1].to == old_span[i].to
+				&& new_span[new_nspans - 1].tags == old_span[i].tags)
 				new_span[new_nspans - 1].ub = old_span[i].ub;
 			else
 			{
 				new_span[new_nspans].to = old_span[i].to;
 				new_span[new_nspans].ub = old_span[i].ub;
+				new_span[new_nspans].tags = old_span[i].tags;
 				++new_nspans;
 			}
 		}

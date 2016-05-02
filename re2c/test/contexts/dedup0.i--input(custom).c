@@ -16,19 +16,23 @@ yy4:
 	YYSKIP ();
 	YYBACKUP ();
 	yych = YYPEEK ();
-	YYBACKUPCTX ();
 	switch (yych) {
 	case 'a':	goto yy5;
-	case 'b':	goto yy7;
-	case 'c':	goto yy10;
+	case 'b':
+		YYBACKUPCTX ();
+		goto yy7;
+	case 'c':
+		YYBACKUPCTX ();
+		goto yy10;
 	default:	goto yy3;
 	}
 yy5:
 	YYSKIP ();
 	yych = YYPEEK ();
-	YYBACKUPCTX ();
 	switch (yych) {
-	case 'z':	goto yy13;
+	case 'z':
+		YYBACKUPCTX ();
+		goto yy13;
 	default:	goto yy6;
 	}
 yy6:

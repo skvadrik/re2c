@@ -110,7 +110,6 @@ yy8:
 #line 111 "ctx.c"
 yy9:
 	yych = *++YYCURSOR;
-	YYCTXMARKER = YYCURSOR;
 	switch (yych) {
 	case '0':
 	case '2':
@@ -120,8 +119,12 @@ yy9:
 	case '6':
 	case '7':
 	case '8':
-	case '9':	goto yy10;
-	case '1':	goto yy13;
+	case '9':
+		YYCTXMARKER = YYCURSOR;
+		goto yy10;
+	case '1':
+		YYCTXMARKER = YYCURSOR;
+		goto yy13;
 	default:	goto yy3;
 	}
 yy10:
@@ -145,7 +148,7 @@ yy12:
 	YYCURSOR = YYCTXMARKER;
 #line 49 "ctx.re"
 	{ return KEYWORD; }
-#line 149 "ctx.c"
+#line 152 "ctx.c"
 yy13:
 	++YYCURSOR;
 	switch ((yych = *YYCURSOR)) {
@@ -165,7 +168,7 @@ yy14:
 	YYCURSOR -= 1;
 #line 48 "ctx.re"
 	{ return KEYWORD; }
-#line 169 "ctx.c"
+#line 172 "ctx.c"
 }
 #line 63 "ctx.re"
 

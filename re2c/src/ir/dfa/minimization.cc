@@ -45,8 +45,8 @@ static void minimization_table(
 		for (size_t j = 0; j < i; ++j)
 		{
 			dfa_state_t *s2 = states[j];
-			tbl[i][j] = s1->tags != s2->tags
-				|| s1->rule != s2->rule;
+			tbl[i][j] = s1->rule != s2->rule
+				|| s1->rule_tags != s2->rule_tags;
 		}
 	}
 
@@ -68,9 +68,10 @@ static void minimization_table(
 							std::swap(oi, oj);
 						}
 						if (oi != oj &&
-							(oi == dfa_t::NIL ||
-							oj == dfa_t::NIL ||
-							tbl[oi][oj]))
+							(oi == dfa_t::NIL
+							|| oj == dfa_t::NIL
+							|| tbl[oi][oj]
+							|| memcmp(states[i]->tags, states[j]->tags, nchars * sizeof(size_t)) != 0))
 						{
 							tbl[i][j] = true;
 							loop = true;
@@ -137,7 +138,7 @@ static void minimization_moore(
 	for (size_t i = 0; i < count; ++i)
 	{
 		dfa_state_t *s = states[i];
-		std::pair<size_t, size_t> key(s->rule, s->tags);
+		std::pair<size_t, size_t> key(s->rule, s->rule_tags);
 		if (init.insert(std::make_pair(key, i)).second)
 		{
 			part[i] = i;
@@ -186,7 +187,8 @@ static void minimization_moore(
 					size_t k = diff[n];
 					if (memcmp(&out[j * nchars],
 						&out[k * nchars],
-						nchars * sizeof(size_t)) == 0)
+						nchars * sizeof(size_t)) == 0
+						&& memcmp(states[j]->tags, states[k]->tags, nchars * sizeof(size_t)) == 0)
 					{
 						part[j] = k;
 						next[j] = next[k];

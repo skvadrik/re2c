@@ -93,10 +93,13 @@ yy8:
 #line 94 "ctx.s.c"
 yy9:
 	yych = *++YYCURSOR;
-	YYCTXMARKER = YYCURSOR;
 	if (yych <= '/') goto yy3;
-	if (yych == '1') goto yy13;
+	if (yych == '1') {
+		YYCTXMARKER = YYCURSOR;
+		goto yy13;
+	}
 	if (yych >= ':') goto yy3;
+	YYCTXMARKER = YYCURSOR;
 yy10:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
@@ -107,7 +110,7 @@ yy12:
 	YYCURSOR = YYCTXMARKER;
 #line 49 "ctx.s.re"
 	{ return KEYWORD; }
-#line 111 "ctx.s.c"
+#line 114 "ctx.s.c"
 yy13:
 	++YYCURSOR;
 	if ((yych = *YYCURSOR) <= '/') goto yy14;
@@ -116,7 +119,7 @@ yy14:
 	YYCURSOR -= 1;
 #line 48 "ctx.s.re"
 	{ return KEYWORD; }
-#line 120 "ctx.s.c"
+#line 123 "ctx.s.c"
 }
 #line 63 "ctx.s.re"
 

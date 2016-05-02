@@ -108,9 +108,10 @@ yy14:
 yy15:
 	YYSKIP ();
 	yych = YYPEEK ();
-	YYBACKUPCTX ();
 	switch (yych) {
-	case '[':	goto yy16;
+	case '[':
+		YYBACKUPCTX ();
+		goto yy16;
 	default:	goto yy6;
 	}
 yy16:
@@ -152,7 +153,7 @@ yy19:
 	YYRESTORECTX ();
 #line 17 "input_custom_istringstream.--input(custom).re"
 	{ return true; }
-#line 156 "input_custom_istringstream.--input(custom).c"
+#line 157 "input_custom_istringstream.--input(custom).c"
 }
 #line 19 "input_custom_istringstream.--input(custom).re"
 

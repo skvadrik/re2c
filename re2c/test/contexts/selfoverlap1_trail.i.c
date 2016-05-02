@@ -20,17 +20,19 @@ yy3:
 	{ printf("error\n"); return; }
 yy4:
 	yych = *++YYCURSOR;
-	YYCTXMARKER = YYCURSOR;
 	switch (yych) {
-	case 'a':	goto yy5;
+	case 'a':
+		YYCTXMARKER = YYCURSOR;
+		goto yy5;
 	default:	goto yy3;
 	}
 yy5:
 	++YYCURSOR;
 	yych = *YYCURSOR;
-	YYCTXMARKER = YYCURSOR;
 	switch (yych) {
-	case 'a':	goto yy5;
+	case 'a':
+		YYCTXMARKER = YYCURSOR;
+		goto yy5;
 	default:	goto yy7;
 	}
 yy7:

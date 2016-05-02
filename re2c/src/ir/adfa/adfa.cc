@@ -79,17 +79,19 @@ DFA::DFA
 		*p = s;
 		p = &s->next;
 
-		s->tags = t->tags;
 		s->rule = t->rule;
+		s->rule_tags = t->rule_tags;
 		s->fill = fill[i];
 		s->go.span = allocate<Span>(nchars);
 		uint32_t j = 0;
 		for (uint32_t c = 0; c < nchars; ++j)
 		{
 			const size_t to = t->arcs[c];
-			for (;++c < nchars && t->arcs[c] == to;);
+			const size_t tags = t->tags[c];
+			for (;++c < nchars && t->arcs[c] == to && t->tags[c] == tags;);
 			s->go.span[j].to = to == dfa_t::NIL ? NULL : i2s[to];
 			s->go.span[j].ub = charset[c];
+			s->go.span[j].tags = tags;
 		}
 		s->go.nSpans = j;
 	}

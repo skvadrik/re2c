@@ -41,9 +41,10 @@ yy3:
 	{ printf("error\n"); return; }
 yy4:
 	yych = *(YYMARKER = ++YYCURSOR);
-	zz_0p1 = (YYCURSOR - YYCTXMARKER);
 	switch (yych) {
-	case '.':	goto yy5;
+	case '.':
+		zz_0p1 = (YYCURSOR - YYCTXMARKER);
+		goto yy5;
 	case '0':
 	case '1':
 	case '2':
@@ -76,9 +77,10 @@ yy6:
 	goto yy3;
 yy7:
 	yych = *++YYCURSOR;
-	zz_0p1 = (YYCURSOR - YYCTXMARKER);
 	switch (yych) {
-	case '.':	goto yy5;
+	case '.':
+		zz_0p1 = (YYCURSOR - YYCTXMARKER);
+		goto yy5;
 	case '0':
 	case '1':
 	case '2':
@@ -93,9 +95,10 @@ yy7:
 	}
 yy8:
 	yych = *++YYCURSOR;
-	zz_0p2 = (YYCURSOR - YYCTXMARKER);
 	switch (yych) {
-	case '.':	goto yy10;
+	case '.':
+		zz_0p2 = (YYCURSOR - YYCTXMARKER);
+		goto yy10;
 	case '0':
 	case '1':
 	case '2':
@@ -110,9 +113,10 @@ yy8:
 	}
 yy9:
 	yych = *++YYCURSOR;
-	zz_0p1 = (YYCURSOR - YYCTXMARKER);
 	switch (yych) {
-	case '.':	goto yy5;
+	case '.':
+		zz_0p1 = (YYCURSOR - YYCTXMARKER);
+		goto yy5;
 	default:	goto yy6;
 	}
 yy10:
@@ -132,9 +136,10 @@ yy10:
 	}
 yy11:
 	yych = *++YYCURSOR;
-	zz_0p2 = (YYCURSOR - YYCTXMARKER);
 	switch (yych) {
-	case '.':	goto yy10;
+	case '.':
+		zz_0p2 = (YYCURSOR - YYCTXMARKER);
+		goto yy10;
 	case '0':
 	case '1':
 	case '2':
@@ -149,9 +154,10 @@ yy11:
 	}
 yy12:
 	yych = *++YYCURSOR;
-	zz_0p3 = (YYCURSOR - YYCTXMARKER);
 	switch (yych) {
-	case '.':	goto yy14;
+	case '.':
+		zz_0p3 = (YYCURSOR - YYCTXMARKER);
+		goto yy14;
 	case '0':
 	case '1':
 	case '2':
@@ -166,9 +172,10 @@ yy12:
 	}
 yy13:
 	yych = *++YYCURSOR;
-	zz_0p2 = (YYCURSOR - YYCTXMARKER);
 	switch (yych) {
-	case '.':	goto yy10;
+	case '.':
+		zz_0p2 = (YYCURSOR - YYCTXMARKER);
+		goto yy10;
 	default:	goto yy6;
 	}
 yy14:
@@ -188,9 +195,10 @@ yy14:
 	}
 yy15:
 	yych = *++YYCURSOR;
-	zz_0p3 = (YYCURSOR - YYCTXMARKER);
 	switch (yych) {
-	case '.':	goto yy14;
+	case '.':
+		zz_0p3 = (YYCURSOR - YYCTXMARKER);
+		goto yy14;
 	case '0':
 	case '1':
 	case '2':
@@ -229,9 +237,10 @@ yy17:
         }
 yy18:
 	yych = *++YYCURSOR;
-	zz_0p3 = (YYCURSOR - YYCTXMARKER);
 	switch (yych) {
-	case '.':	goto yy14;
+	case '.':
+		zz_0p3 = (YYCURSOR - YYCTXMARKER);
+		goto yy14;
 	default:	goto yy6;
 	}
 yy19:

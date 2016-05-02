@@ -164,8 +164,10 @@ yy4:
         YYSKIP ();
         YYBACKUP ();
         yych = YYPEEK ();
-        YYBACKUPCTX ();
-        if (yych == '/') goto yy7;
+        if (yych == '/') {
+            YYBACKUPCTX ();
+            goto yy7;
+        }
         goto yy3;
 yy5:
         YYSKIP ();
@@ -189,8 +191,10 @@ yy8:
 yy9:
         YYSKIP ();
         yych = YYPEEK ();
-        YYBACKUPCTX ();
-        if (yych == '/') goto yy7;
+        if (yych == '/') {
+            YYBACKUPCTX ();
+            goto yy7;
+        }
         goto yy8;
 yy10:
         YYSKIP ();

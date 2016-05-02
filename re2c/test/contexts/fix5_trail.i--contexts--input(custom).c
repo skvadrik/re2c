@@ -35,10 +35,13 @@ yy5:
 	YYSKIP ();
 	YYBACKUP ();
 	yych = YYPEEK ();
-	yyctx0p2 = YYDIST();
 	switch (yych) {
 	case '2':
-	case '3':	goto yy11;
+		yyctx0p2 = YYDIST();
+		goto yy10;
+	case '3':
+		yyctx0p2 = YYDIST();
+		goto yy12;
 	default:	goto yy3;
 	}
 yy6:
@@ -56,12 +59,18 @@ yy8:
 yy9:
 	YYSKIP ();
 	yych = YYPEEK ();
-	yyctx0p2 = YYDIST();
-	goto yy11;
+	switch (yych) {
+	case '2':
+		yyctx0p2 = YYDIST();
+		goto yy10;
+	case '3':
+		yyctx0p2 = YYDIST();
+		goto yy12;
+	default:	goto yy8;
+	}
 yy10:
 	YYSKIP ();
 	yych = YYPEEK ();
-yy11:
 	switch (yych) {
 	case '2':	goto yy10;
 	case '3':	goto yy12;

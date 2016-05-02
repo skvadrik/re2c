@@ -19,11 +19,13 @@ void DFA::split(State *s)
 	move->rule = s->rule;
 	move->fill = s->fill;
 	move->go = s->go;
+	move->rule_tags = s->rule_tags;
 	s->rule = Rule::NONE;
 	s->go.nSpans = 1;
 	s->go.span = allocate<Span> (1);
 	s->go.span[0].ub = ubChar;
 	s->go.span[0].to = move;
+	s->go.span[0].tags = 0;
 }
 
 static uint32_t merge(Span *x, State *fg, State *bg)
@@ -35,13 +37,16 @@ static uint32_t merge(Span *x, State *fg, State *bg)
 	Span *const x0 = x;
 
 	for (;!(f == fe && b == be);) {
-		if (f->to == b->to) {
+		if (f->to == b->to && f->tags == b->tags) {
 			x->to = bg;
+			x->tags = 0;
 		} else {
 			x->to = f->to;
+			x->tags = f->tags;
 		}
 		if (x == x0
-			|| x[-1].to != x->to) {
+			|| x[-1].to != x->to
+			|| x[-1].tags != x->tags) {
 			++x;
 		}
 		x[-1].ub = std::min(f->ub, b->ub);
@@ -110,6 +115,7 @@ void DFA::prepare ()
 			for (uint32_t i = 0; i < s->go.nSpans; ++i) {
 				if (!s->go.span[i].to) {
 					s->go.span[i].to = rule2state[s->rule];
+					s->go.span[i].tags = s->rule_tags;
 				}
 			}
 		}
@@ -137,12 +143,16 @@ void DFA::prepare ()
 	if (default_state) {
 		for (State *s = head; s; s = s->next) {
 			if (s->fallback) {
-				const size_t accept = accepts.find_or_add(rule2state[s->rule]);
-				s->action.set_save(accept);
+				const std::pair<const State*, size_t> acc(rule2state[s->rule], s->rule_tags);
+				s->action.set_save(accepts.find_or_add(acc));
 			}
 		}
 		default_state->action.set_accept(&accepts);
 	}
+
+	// tag hoisting should be done before tunneling, but after
+	// binding default arcs (which may introduce new tags)
+	hoist_tags();
 
 	// split ``base'' states into two parts
 	for (State * s = head; s; s = s->next)
@@ -169,7 +179,6 @@ void DFA::prepare ()
 			}
 		}
 	}
-
 	// find ``base'' state, if possible
 	findBaseState();
 
@@ -196,6 +205,27 @@ void DFA::calc_stats ()
 
 	// determine if 'yyaccept' variable is used
 	need_accept = accepts.size () > 1;
+}
+
+void DFA::hoist_tags()
+{
+	for (State * s = head; s; s = s->next) {
+		const size_t nsp = s->go.nSpans;
+		if (nsp > 0) {
+			Span *sp = s->go.span;
+			const size_t tags0 = sp[0].tags;
+			bool common_tags = tags0 != 0;
+			for (uint32_t i = 1; common_tags && i < nsp; ++i) {
+				common_tags &= sp[i].tags == tags0;
+			}
+			if (common_tags) {
+				s->go.tags = tags0;
+				for (uint32_t i = 0; i < nsp; ++i) {
+					sp[i].tags = 0;
+				}
+			}
+		}
+	}
 }
 
 } // namespace re2c

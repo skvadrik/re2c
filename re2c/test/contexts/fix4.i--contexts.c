@@ -23,16 +23,18 @@ yy3:
 	{ printf("error\n"); return; }
 yy4:
 	yych = *(YYMARKER = ++YYCURSOR);
-	yyctx0p1 = (YYCURSOR - YYCTXMARKER);
 	switch (yych) {
 	case '1':
-	case '2':	goto yy6;
+		yyctx0p1 = (YYCURSOR - YYCTXMARKER);
+		goto yy5;
+	case '2':
+		yyctx0p1 = (YYCURSOR - YYCTXMARKER);
+		goto yy8;
 	default:	goto yy3;
 	}
 yy5:
 	++YYCURSOR;
 	yych = *YYCURSOR;
-yy6:
 	switch (yych) {
 	case '1':	goto yy5;
 	case '2':	goto yy8;
@@ -43,12 +45,18 @@ yy7:
 	goto yy3;
 yy8:
 	yych = *++YYCURSOR;
-	yyctx0p3 = (YYCURSOR - YYCTXMARKER);
-	goto yy10;
+	switch (yych) {
+	case '3':
+		yyctx0p3 = (YYCURSOR - YYCTXMARKER);
+		goto yy9;
+	case '4':
+		yyctx0p3 = (YYCURSOR - YYCTXMARKER);
+		goto yy11;
+	default:	goto yy7;
+	}
 yy9:
 	++YYCURSOR;
 	yych = *YYCURSOR;
-yy10:
 	switch (yych) {
 	case '3':	goto yy9;
 	case '4':	goto yy11;

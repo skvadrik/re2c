@@ -50,9 +50,10 @@ yy4:
 	YYSKIP ();
 	YYBACKUP ();
 	yych = YYPEEK ();
-	zz_0p1 = ZZ_DIST();
 	switch (yych) {
-	case '.':	goto yy5;
+	case '.':
+		zz_0p1 = ZZ_DIST();
+		goto yy5;
 	case '0':
 	case '1':
 	case '2':
@@ -87,9 +88,10 @@ yy6:
 yy7:
 	YYSKIP ();
 	yych = YYPEEK ();
-	zz_0p1 = ZZ_DIST();
 	switch (yych) {
-	case '.':	goto yy5;
+	case '.':
+		zz_0p1 = ZZ_DIST();
+		goto yy5;
 	case '0':
 	case '1':
 	case '2':
@@ -105,9 +107,10 @@ yy7:
 yy8:
 	YYSKIP ();
 	yych = YYPEEK ();
-	zz_0p2 = ZZ_DIST();
 	switch (yych) {
-	case '.':	goto yy10;
+	case '.':
+		zz_0p2 = ZZ_DIST();
+		goto yy10;
 	case '0':
 	case '1':
 	case '2':
@@ -123,9 +126,10 @@ yy8:
 yy9:
 	YYSKIP ();
 	yych = YYPEEK ();
-	zz_0p1 = ZZ_DIST();
 	switch (yych) {
-	case '.':	goto yy5;
+	case '.':
+		zz_0p1 = ZZ_DIST();
+		goto yy5;
 	default:	goto yy6;
 	}
 yy10:
@@ -147,9 +151,10 @@ yy10:
 yy11:
 	YYSKIP ();
 	yych = YYPEEK ();
-	zz_0p2 = ZZ_DIST();
 	switch (yych) {
-	case '.':	goto yy10;
+	case '.':
+		zz_0p2 = ZZ_DIST();
+		goto yy10;
 	case '0':
 	case '1':
 	case '2':
@@ -165,9 +170,10 @@ yy11:
 yy12:
 	YYSKIP ();
 	yych = YYPEEK ();
-	zz_0p3 = ZZ_DIST();
 	switch (yych) {
-	case '.':	goto yy14;
+	case '.':
+		zz_0p3 = ZZ_DIST();
+		goto yy14;
 	case '0':
 	case '1':
 	case '2':
@@ -183,9 +189,10 @@ yy12:
 yy13:
 	YYSKIP ();
 	yych = YYPEEK ();
-	zz_0p2 = ZZ_DIST();
 	switch (yych) {
-	case '.':	goto yy10;
+	case '.':
+		zz_0p2 = ZZ_DIST();
+		goto yy10;
 	default:	goto yy6;
 	}
 yy14:
@@ -207,9 +214,10 @@ yy14:
 yy15:
 	YYSKIP ();
 	yych = YYPEEK ();
-	zz_0p3 = ZZ_DIST();
 	switch (yych) {
-	case '.':	goto yy14;
+	case '.':
+		zz_0p3 = ZZ_DIST();
+		goto yy14;
 	case '0':
 	case '1':
 	case '2':
@@ -249,9 +257,10 @@ yy17:
 yy18:
 	YYSKIP ();
 	yych = YYPEEK ();
-	zz_0p3 = ZZ_DIST();
 	switch (yych) {
-	case '.':	goto yy14;
+	case '.':
+		zz_0p3 = ZZ_DIST();
+		goto yy14;
 	default:	goto yy6;
 	}
 yy19:

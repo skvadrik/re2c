@@ -21,7 +21,7 @@ namespace re2c
 
 static void output_if (OutputFile & o, uint32_t ind, bool & readCh, const std::string & compare, uint32_t value);
 static std::string output_yych (bool & readCh);
-static std::string output_hgo (OutputFile & o, uint32_t ind, bool & readCh, SwitchIf * hgo);
+static std::string output_hgo (OutputFile & o, uint32_t ind, const DFA &dfa, bool & readCh, SwitchIf * hgo);
 
 std::string output_yych (bool & readCh)
 {
@@ -41,13 +41,13 @@ void output_if (OutputFile & o, uint32_t ind, bool & readCh, const std::string &
 	o.wind(ind).ws("if (").wstring(output_yych (readCh)).ws(" ").wstring(compare).ws(" ").wc_hex (value).ws(") ");
 }
 
-std::string output_hgo (OutputFile & o, uint32_t ind, bool & readCh, SwitchIf * hgo)
+std::string output_hgo (OutputFile & o, uint32_t ind, const DFA &dfa, bool & readCh, SwitchIf * hgo)
 {
 	std::string yych = output_yych (readCh);
 	if (hgo != NULL)
 	{
 		o.wind(ind).ws("if (").wstring(yych).ws(" & ~0xFF) {\n");
-		hgo->emit (o, ind + 1, readCh);
+		hgo->emit (o, ind + 1, dfa, readCh);
 		o.wind(ind).ws("} else ");
 		yych = opts->yych;
 	}
@@ -80,77 +80,67 @@ void Case::emit (OutputFile & o, uint32_t ind) const
 	}
 }
 
-void Cases::emit(OutputFile &o, uint32_t ind, bool &readCh) const
+void Cases::emit(OutputFile &o, uint32_t ind, const DFA &dfa, bool &readCh) const
 {
 	o.wind(ind).ws("switch (").wstring(output_yych(readCh)).ws(") {\n");
 
 	for (uint32_t i = 1; i < cases_size; ++i) {
 		const Case &c = cases[i];
 		c.emit(o, ind);
-		gen_goto_case(o, ind, readCh, c.to);
+		gen_goto_case(o, ind, readCh, c.to, dfa, c.tags);
 	}
 
 	// default case must be the last one
 	const Case &c = cases[0];
 	o.wind(ind).ws("default:");
-	gen_goto_case(o, ind, readCh, c.to);
+	gen_goto_case(o, ind, readCh, c.to, dfa, c.tags);
 
 	o.wind(ind).ws("}\n");
 }
 
-void Binary::emit (OutputFile & o, uint32_t ind, bool & readCh)
+void Binary::emit(OutputFile &o, uint32_t ind, const DFA &dfa, bool &readCh)
 {
-	output_if (o, ind, readCh, cond->compare, cond->value);
+	output_if(o, ind, readCh, cond->compare, cond->value);
 	o.ws("{\n");
-	thn->emit (o, ind + 1, readCh);
+	thn->emit(o, ind + 1, dfa, readCh);
 	o.wind(ind).ws("} else {\n");
-	els->emit (o, ind + 1, readCh);
+	els->emit(o, ind + 1, dfa, readCh);
 	o.wind(ind).ws("}\n");
 }
 
-void Linear::emit(OutputFile &o, uint32_t ind, bool &readCh)
+void Linear::emit(OutputFile &o, uint32_t ind, const DFA &dfa, bool &readCh)
 {
 	for (uint32_t i = 0; i < nbranches; ++i) {
 		const Branch &b = branches[i];
 		const Cond *cond = b.cond;
 		if (cond) {
 			output_if(o, ind, readCh, cond->compare, cond->value);
-			gen_goto_if(o, ind, readCh, b.to);
+			gen_goto_if(o, ind, readCh, b.to, dfa, b.tags);
 		} else {
-			gen_goto(o, ind, readCh, b.to);
+			gen_goto(o, ind, readCh, b.to, dfa, b.tags);
 		}
 	}
 }
 
-void If::emit (OutputFile & o, uint32_t ind, bool & readCh)
+void If::emit(OutputFile &o, uint32_t ind, const DFA &dfa, bool &readCh)
 {
-	switch (type)
-	{
-		case BINARY:
-			info.binary->emit (o, ind, readCh);
-			break;
-		case LINEAR:
-			info.linear->emit (o, ind, readCh);
-			break;
+	switch (type) {
+		case BINARY: info.binary->emit(o, ind, dfa, readCh); break;
+		case LINEAR: info.linear->emit(o, ind, dfa, readCh); break;
 	}
 }
 
-void SwitchIf::emit (OutputFile & o, uint32_t ind, bool & readCh)
+void SwitchIf::emit(OutputFile &o, uint32_t ind, const DFA &dfa, bool &readCh)
 {
-	switch (type)
-	{
-		case SWITCH:
-			info.cases->emit (o, ind, readCh);
-			break;
-		case IF:
-			info.ifs->emit (o, ind, readCh);
-			break;
+	switch (type) {
+		case SWITCH: info.cases->emit(o, ind, dfa, readCh); break;
+		case IF:     info.ifs->emit(o, ind, dfa, readCh); break;
 	}
 }
 
-void GoBitmap::emit (OutputFile & o, uint32_t ind, bool & readCh)
+void GoBitmap::emit (OutputFile & o, uint32_t ind, const DFA &dfa, bool & readCh)
 {
-	std::string yych = output_hgo (o, ind, readCh, hgo);
+	std::string yych = output_hgo (o, ind, dfa, readCh, hgo);
 	o.ws("if (").wstring(opts->yybm).ws("[").wu32(bitmap->i).ws("+").wstring(yych).ws("] & ");
 	if (opts->yybmHexTable)
 	{
@@ -161,11 +151,11 @@ void GoBitmap::emit (OutputFile & o, uint32_t ind, bool & readCh)
 		o.wu32(bitmap->m);
 	}
 	o.ws(") {\n");
-	gen_goto(o, ind + 1, readCh, bitmap_state);
+	gen_goto(o, ind + 1, readCh, bitmap_state, dfa, 0);
 	o.wind(ind).ws("}\n");
 	if (lgo != NULL)
 	{
-		lgo->emit (o, ind, readCh);
+		lgo->emit (o, ind, dfa, readCh);
 	}
 }
 
@@ -207,16 +197,16 @@ void CpgotoTable::emit (OutputFile & o, uint32_t ind)
 	o.wind(--ind).ws("};\n");
 }
 
-void Cpgoto::emit (OutputFile & o, uint32_t ind, bool & readCh)
+void Cpgoto::emit (OutputFile & o, uint32_t ind, const DFA &dfa, bool & readCh)
 {
-	std::string yych = output_hgo (o, ind, readCh, hgo);
+	std::string yych = output_hgo (o, ind, dfa, readCh, hgo);
 	o.ws("{\n");
 	table->emit (o, ++ind);
 	o.wind(ind).ws("goto *").wstring(opts->yytarget).ws("[").wstring(yych).ws("];\n");
 	o.wind(--ind).ws("}\n");
 }
 
-void Dot::emit (OutputFile & o)
+void Dot::emit(OutputFile &o, const DFA &dfa)
 {
 	const uint32_t n = cases->cases_size;
 	if (n == 1) {
@@ -228,28 +218,34 @@ void Dot::emit (OutputFile & o)
 			for (uint32_t j = 0; j < c.ranges.size(); ++j) {
 				o.wrange(c.ranges[j].first, c.ranges[j].second);
 			}
+			const bool *tags = dfa.tagpool[c.tags];
+			for (size_t j = 0; j < dfa.tagpool.ntags; ++j) {
+				if (tags[j]) {
+					o.ws("<").wstring(dfa.contexts[j].name()).ws(">");
+				}
+			}
 			o.ws("\"]\n");
 		}
 	}
 }
 
-void Go::emit (OutputFile & o, uint32_t ind, bool & readCh)
+void Go::emit (OutputFile & o, uint32_t ind, const DFA &dfa, bool & readCh)
 {
-	switch (type)
-	{
+	gen_settags(o, ind, dfa, tags);
+	switch (type) {
 		case EMPTY:
 			break;
 		case SWITCH_IF:
-			info.switchif->emit (o, ind, readCh);
+			info.switchif->emit (o, ind, dfa, readCh);
 			break;
 		case BITMAP:
-			info.bitmap->emit (o, ind, readCh);
+			info.bitmap->emit (o, ind, dfa, readCh);
 			break;
 		case CPGOTO:
-			info.cpgoto->emit (o, ind, readCh);
+			info.cpgoto->emit (o, ind, dfa, readCh);
 			break;
 		case DOT:
-			info.dot->emit (o);
+			info.dot->emit (o, dfa);
 			break;
 	}
 }

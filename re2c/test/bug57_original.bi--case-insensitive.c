@@ -8486,23 +8486,29 @@ yy918:
 yy919:
 	++p;
 	yych = *p;
-	marker = p;
-	if (yybm[0+yych] & 64) {
-		goto yy923;
+	if (yybm[0+yych] & 16) {
+		goto yy919;
 	}
 	if (yych <= 0x00) goto yy917;
-	if (yych <= '\n') goto yy925;
-	goto yy919;
+	if (yych == '\n') {
+		marker = p;
+		goto yy925;
+	}
+	marker = p;
+	goto yy923;
 yy921:
 	++p;
 	yych = *p;
-	marker = p;
-	if (yybm[0+yych] & 128) {
-		goto yy927;
+	if (yybm[0+yych] & 32) {
+		goto yy921;
 	}
 	if (yych <= 0x00) goto yy917;
-	if (yych <= '\n') goto yy929;
-	goto yy921;
+	if (yych == '\n') {
+		marker = p;
+		goto yy929;
+	}
+	marker = p;
+	goto yy927;
 yy923:
 	++p;
 	yych = *p;
@@ -8611,27 +8617,43 @@ yy939:
 yy940:
 	++p;
 	yych = *p;
-	marker = p;
-	if (yybm[0+yych] & 128) {
-		goto yy944;
+	if (yybm[0+yych] & 32) {
+		goto yy940;
 	}
-	if (yych <= 0x08) goto yy938;
-	if (yych <= '\n') goto yy946;
-	if (yych == '`') goto yy940;
-	goto yy938;
+	if (yych <= '\n') {
+		if (yych <= 0x08) goto yy938;
+		if (yych <= '\t') {
+			marker = p;
+			goto yy944;
+		}
+		marker = p;
+		goto yy946;
+	} else {
+		if (yych == ' ') {
+			marker = p;
+			goto yy944;
+		}
+		goto yy938;
+	}
 yy942:
 	++p;
 	yych = *p;
-	marker = p;
 	if (yybm[0+yych] & 64) {
 		goto yy942;
 	}
 	if (yych <= '\n') {
 		if (yych <= 0x08) goto yy938;
-		if (yych <= '\t') goto yy948;
+		if (yych <= '\t') {
+			marker = p;
+			goto yy948;
+		}
+		marker = p;
 		goto yy950;
 	} else {
-		if (yych == ' ') goto yy948;
+		if (yych == ' ') {
+			marker = p;
+			goto yy948;
+		}
 		goto yy938;
 	}
 yy944:

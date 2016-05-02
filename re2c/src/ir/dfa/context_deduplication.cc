@@ -32,14 +32,14 @@ static bool dangling_arcs(const size_t *arcs, size_t narcs)
  *
  * Tag T is alive in state S if either:
  *
- *    - There is a transition from S to default state, S does not set T,
+ *    - There is a transition from S to default state that does not set T,
  *      S is final and T belongs to tag set associated with rule in S.
  *
- *    - There is a transition from S to default state, S does not set T
+ *    - There is a transition from S to default state that does not set T
  *      and T belongs to any tag set associated with fallback rules.
  *
- *    - There is a transition from S to some state S' (maybe equal to S),
- *      S does not set T and T is alive in S'.
+ *    - There is a transition from S to some state S' (maybe equal to S)
+ *      that does not set T and T is alive in S'.
  */
 static void calc_live(const dfa_t &dfa,
 	const bool *fallback,
@@ -62,7 +62,7 @@ static void calc_live(const dfa_t &dfa,
 			// final state, only rule tags are alive
 			add_tags_with_mask(&live[i * ntags],
 				dfa.rules[s->rule].tags,
-				dfa.tagpool[s->tags],
+				dfa.tagpool[s->rule_tags],
 				ntags);
 		} else {
 			// transition to default state and dispatch on
@@ -79,7 +79,7 @@ static void calc_live(const dfa_t &dfa,
 			calc_live(dfa, fallback, visited, live, j);
 			add_tags_with_mask(&live[i * ntags],
 				&live[j * ntags],
-				dfa.tagpool[s->tags],
+				dfa.tagpool[s->tags[c]],
 				ntags);
 		}
 	}
@@ -92,7 +92,17 @@ static void mask_dead(dfa_t &dfa,
 	const size_t ntags = dfa.contexts.size();
 	for (size_t i = 0; i < nstates; ++i) {
 		dfa_state_t *s = dfa.states[i];
-		mask_dead_tags(dfa.tagpool, s->tags, &livetags[i * ntags]);
+		for (size_t c = 0; c < dfa.nchars; ++c) {
+			const size_t j = s->arcs[c];
+			if (j != dfa_t::NIL) {
+				s->tags[c] = mask_dead_tags(dfa.tagpool,
+					s->tags[c], &livetags[j * ntags]);
+			}
+		}
+		if (s->rule != Rule::NONE) {
+			s->rule_tags = mask_dead_tags(dfa.tagpool,
+				s->rule_tags, dfa.rules[s->rule].tags);
+		}
 	}
 }
 
@@ -116,14 +126,35 @@ static void incompatible(bool *tbl,
 
 static void incompatibility_table(const dfa_t &dfa,
 	const bool *livetags,
+	const bool *deftags,
 	bool *incompattbl)
 {
 	const size_t nstates = dfa.states.size();
 	const size_t ntags = dfa.contexts.size();
 	for (size_t i = 0; i < nstates; ++i) {
 		const dfa_state_t *s = dfa.states[i];
-		incompatible(incompattbl, &livetags[i * ntags],
-			dfa.tagpool[s->tags], ntags);
+		for (size_t c = 0; c < dfa.nchars; ++c) {
+			const size_t j = s->arcs[c];
+			if (j != dfa_t::NIL) {
+				incompatible(incompattbl,
+					&livetags[j * ntags],
+					dfa.tagpool[s->tags[c]],
+					ntags);
+			}
+		}
+		if (dangling_arcs(s->arcs, dfa.nchars)) {
+			if (s->rule != Rule::NONE) {
+				incompatible(incompattbl,
+					dfa.rules[s->rule].tags,
+					dfa.tagpool[s->rule_tags],
+					ntags);
+			} else {
+				incompatible(incompattbl,
+					deftags,
+					dfa.tagpool[s->rule_tags],
+					ntags);
+			}
+		}
 	}
 }
 
@@ -200,7 +231,10 @@ static void patch_tags(dfa_t &dfa, const std::vector<size_t> &represent)
 	const size_t nstates = dfa.states.size();
 	for (size_t i = 0; i < nstates; ++i) {
 		dfa_state_t *s = dfa.states[i];
-		s->tags = patch_tagset(dfa.tagpool, s->tags, represent);
+		for (size_t c = 0; c < dfa.nchars; ++c) {
+			s->tags[c] = patch_tagset(dfa.tagpool, s->tags[c], represent);
+		}
+		s->rule_tags = patch_tagset(dfa.tagpool, s->rule_tags, represent);
 	}
 
 	const size_t ntags = dfa.contexts.size();
@@ -231,7 +265,7 @@ size_t deduplicate_contexts(dfa_t &dfa,
 	mask_dead(dfa, live);
 
 	bool *incompattbl = new bool[ntags * ntags]();
-	incompatibility_table(dfa, live, incompattbl);
+	incompatibility_table(dfa, live, fbctxs, incompattbl);
 
 	std::vector<size_t> represent(ntags, 0);
 	const size_t nreps = equivalence_classes(incompattbl, ntags, represent);

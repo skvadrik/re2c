@@ -1992,7 +1992,6 @@ yy171:
 yy173:
         YYSKIP ();
         yych = YYPEEK ();
-        YYBACKUPCTX ();
         switch (yych) {
         case '!':
         case '.':
@@ -2060,12 +2059,13 @@ yy173:
         case 'x':
         case 'y':
         case 'z':    goto yy72;
-        default:    goto yy248;
+        default:
+            YYBACKUPCTX ();
+            goto yy248;
         }
 yy174:
         YYSKIP ();
         yych = YYPEEK ();
-        YYBACKUPCTX ();
         switch (yych) {
         case '!':
         case '.':
@@ -2133,7 +2133,9 @@ yy174:
         case 'x':
         case 'y':
         case 'z':    goto yy72;
-        default:    goto yy250;
+        default:
+            YYBACKUPCTX ();
+            goto yy250;
         }
 yy175:
         YYSKIP ();
@@ -7128,13 +7130,16 @@ int lex_line290()
 
         if (YYLESSTHAN (2)) YYFILL(2);
         yych = YYPEEK ();
-        YYBACKUPCTX ();
         switch (yych) {
         case '\t':
         case ' ':    goto yy427;
         case '\r':    goto yy429;
-        case '/':    goto yy431;
-        default:    goto yy425;
+        case '/':
+            YYBACKUPCTX ();
+            goto yy431;
+        default:
+            YYBACKUPCTX ();
+            goto yy425;
         }
 yy425:
         YYSKIP ();

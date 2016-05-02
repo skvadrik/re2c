@@ -122,10 +122,13 @@ xx6:
 #line 123 "config9.b.c"
 xx9:
 	curr = (unsigned char)*++s.cur;
-	s.ctx = s.cur;
 	if (curr <= '/') goto xx3;
-	if (curr == '1') goto xx13;
+	if (curr == '1') {
+		s.ctx = s.cur;
+		goto xx13;
+	}
 	if (curr >= ':') goto xx3;
+	s.ctx = s.cur;
 xx10:
 	++s.cur;
 	if (s.lim <= s.cur) fill(1);
@@ -136,7 +139,7 @@ xx12:
 	s.cur = s.ctx;
 #line 57 "config9.b.re"
 	{ return KEYWORD; }
-#line 140 "config9.b.c"
+#line 143 "config9.b.c"
 xx13:
 	++s.cur;
 	if ((curr = (unsigned char)*s.cur) <= '/') goto xx14;
@@ -145,7 +148,7 @@ xx14:
 	s.cur -= 1;
 #line 56 "config9.b.re"
 	{ return KEYWORD; }
-#line 149 "config9.b.c"
+#line 152 "config9.b.c"
 }
 #line 71 "config9.b.re"
 

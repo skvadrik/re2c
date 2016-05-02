@@ -1,90 +1,130 @@
 #include <algorithm>
 #include <limits>
-#include <map>
-#include <set>
 #include <vector>
 
+#include "src/conf/warn.h"
 #include "src/ir/dfa/dfa.h"
 #include "src/ir/nfa/nfa.h"
 #include "src/ir/regexp/regexp.h"
 #include "src/util/range.h"
+#include "src/globals.h"
 
 namespace re2c
 {
 
 const size_t dfa_t::NIL = std::numeric_limits<size_t>::max();
 
-/*
- * note [marking DFA states]
+static void merge_tags(bool *oldtags, const bool *newtags,
+	bool *badtags, size_t ntags)
+{
+	for (size_t i = 0; i < ntags; ++i) {
+		badtags[i] |= oldtags[i] ^ newtags[i];
+		oldtags[i] |= newtags[i];
+	}
+}
+
+static void merge_tags_with_mask(bool *oldtags, const bool *newtags,
+	bool *oldmask, const bool *newmask,
+	bool *badtags, size_t ntags)
+{
+	for (size_t i = 0; i < ntags; ++i) {
+		badtags[i] |= oldmask[i] & newmask[i] & (oldtags[i] ^ newtags[i]);
+		oldtags[i] |= newtags[i];
+		oldmask[i] |= newmask[i];
+	}
+}
+struct kitem_t
+{
+	nfa_state_t *state;
+	union
+	{
+		bool *tagptr;
+		size_t tagidx;
+	};
+
+	bool operator <(const kitem_t &k)
+	{
+		return state < k.state
+			|| (state == k.state && tagidx < k.tagidx);
+	}
+};
+
+/* note [epsilon-closures in tagged NFA]
  *
  * DFA state is a set of NFA states.
  * However, DFA state includes not all NFA states that are in
  * epsilon-closure (NFA states that have only epsilon-transitions
- * and are not context of final states are omitted).
+ * and are not final states are omitted).
  * The included states are called 'kernel' states.
  *
- * We mark visited NFA states during closure construction.
- * These marks serve two purposes:
- *   - avoid loops in NFA
- *   - avoid duplication of NFA states in kernel
- *
- * Note that after closure construction:
- *   - all non-kernel states must be unmarked (these states are
- *     not stored in kernel and it is impossible to unmark them
- *     afterwards)
- *   - all kernel states must be marked (because we may later
- *     extend this kernel with epsilon-closure of another NFA
- *     state). Kernel states are unmarked later (before finding
- *     or adding DFA state).
+ * For tagged NFA we have to trace all epsilon-paths to each
+ * kernel state, accumulate tags along the way and compare
+ * resulting tag sets: if they differ, then NFA is tagwise
+ * ambiguous. All tags are merged together; ambiguity is reported.
  */
-static nfa_state_t **closure(nfa_state_t **cP, nfa_state_t *n)
+static void closure(kitem_t *const kernel, kitem_t *&kend,
+	nfa_state_t *n, bool *tags, bool *badtags, size_t ntags)
 {
-	if (!n->mark)
-	{
-		n->mark = true;
-		switch (n->type)
-		{
-			case nfa_state_t::ALT:
-				cP = closure(cP, n->value.alt.out2);
-				cP = closure(cP, n->value.alt.out1);
-				n->mark = false;
-				break;
-			case nfa_state_t::CTX:
-				*(cP++) = n;
-				cP = closure(cP, n->value.ctx.out);
-				break;
-			default:
-				*(cP++) = n;
-				break;
-		}
+	if (n->mark) {
+		return;
 	}
 
-	return cP;
+	n->mark = true;
+	switch (n->type) {
+		case nfa_state_t::ALT:
+			closure(kernel, kend, n->value.alt.out2, tags, badtags, ntags);
+			closure(kernel, kend, n->value.alt.out1, tags, badtags, ntags);
+			break;
+		case nfa_state_t::CTX: {
+			const size_t ctx = n->value.ctx.info;
+			const bool old = tags[ctx];
+			tags[ctx] = true;
+			closure(kernel, kend, n->value.ctx.out, tags, badtags, ntags);
+			tags[ctx] = old;
+			break;
+		}
+		case nfa_state_t::RAN:
+		case nfa_state_t::FIN: {
+			kitem_t *k = kernel;
+			while (k != kend && k->state != n) ++k;
+			if (k == kend) {
+				kend->state = n;
+				kend->tagptr = new bool[ntags];
+				memcpy(kend->tagptr, tags, ntags * sizeof(bool));
+				++kend;
+			} else {
+				// it is impossible to reach the same NFA state from
+				// different rules, so no need to mess with masks here
+				merge_tags(k->tagptr, tags, badtags, ntags);
+			}
+			break;
+		}
+	}
+	n->mark = false;
 }
 
-static size_t find_state
-	( nfa_state_t **kernel
-	, nfa_state_t **end
-	, ord_hash_set_t &kernels
-	)
+static size_t find_state(kitem_t *kernel, kitem_t *kend,
+	ord_hash_set_t &kernels, Tagpool &tagpool)
 {
+	const size_t kcount = static_cast<size_t>(kend - kernel);
+
 	// zero-sized kernel corresponds to default state
-	if (kernel == end)
-	{
+	if (kcount == 0) {
 		return dfa_t::NIL;
 	}
 
-	// see note [marking DFA states]
-	for (nfa_state_t **p = kernel; p != end; ++p)
-	{
-		(*p)->mark = false;
+	// dump tagsets to tagpool and address them by index:
+	// this simpifies storing and comparing kernels
+	for (kitem_t *k = kernel; k != kend; ++k) {
+		bool *tags = k->tagptr;
+		k->tagidx = tagpool.insert(tags);
+		delete[] tags;
 	}
 
-	// sort kernel states: we need this to get stable hash
-	// and to compare states with simple 'memcmp'
-	std::sort(kernel, end);
-	const size_t size = static_cast<size_t>(end - kernel) * sizeof(nfa_state_t*);
-	return kernels.insert(kernel, size);
+	// sort kernel items to allow comparison by hash and 'memcmp'
+	std::sort(kernel, kend);
+
+	return kernels.insert(kernel, kcount * sizeof(kitem_t));
 }
 
 dfa_t::dfa_t(
@@ -100,64 +140,72 @@ dfa_t::dfa_t(
 {
 	const size_t ntags = contexts.size();
 	const size_t nrules = rules.size();
+	const size_t mask_size = (nchars + 1) * ntags;
 
 	ord_hash_set_t kernels;
-	nfa_state_t **const buffer = new nfa_state_t*[nfa.size];
-	std::vector<std::vector<nfa_state_t*> > arcs(nchars);
+	kitem_t *kstart = new kitem_t[nfa.size], *kend = kstart;
+	bool *ktags = new bool[ntags]();
+	bool *badtags = new bool[ntags]();
+	bool *tags = new bool[mask_size];
+	bool *mask = new bool[mask_size];
 	bool *fin = new bool[nrules];
-	bool *tags = new bool[ntags];
+	std::vector<nfa_state_t*> *arcs = new std::vector<nfa_state_t*>[nchars];
 
-	find_state(buffer, closure(buffer, nfa.root), kernels);
-	for (size_t i = 0; i < kernels.size(); ++i)
-	{
+	closure(kstart, kend, nfa.root, ktags, badtags, ntags);
+	find_state(kstart, kend, kernels, tagpool);
+	for (size_t i = 0; i < kernels.size(); ++i) {
+		memset(fin, 0, nrules * sizeof(bool));
+		memset(tags, 0, mask_size * sizeof(bool));
+		memset(mask, 0, mask_size * sizeof(bool));
+		for(size_t c = 0; c < nchars; ++c) {
+			arcs[c].clear();
+		}
+
 		dfa_state_t *s = new dfa_state_t(nchars);
 		states.push_back(s);
 
-		memset(fin, 0, nrules * sizeof(bool));
-		memset(tags, 0, ntags * sizeof(bool));
-
-		nfa_state_t **kernel;
-		const size_t kernel_size = kernels.deref<nfa_state_t*>(i, kernel);
-		for (size_t j = 0; j < kernel_size; ++j)
-		{
-			nfa_state_t *n = kernel[j];
-			switch (n->type)
-			{
-				case nfa_state_t::RAN:
-				{
+		const kitem_t *kernel;
+		const size_t kcount = kernels.deref<const kitem_t>(i, kernel);
+		for (size_t j = 0; j < kcount; ++j) {
+			nfa_state_t *n = kernel[j].state;
+			const bool *newtags = tagpool[kernel[j].tagidx];
+			switch (n->type) {
+				case nfa_state_t::RAN: {
 					nfa_state_t *m = n->value.ran.out;
 					size_t c = 0;
-					for (const Range *r = n->value.ran.ran; r; r = r->next ())
-					{
+					for (const Range *r = n->value.ran.ran; r; r = r->next ()) {
 						for (; charset[c] != r->lower(); ++c);
-						for (; charset[c] != r->upper(); ++c)
-						{
+						for (; charset[c] != r->upper(); ++c) {
+							merge_tags_with_mask(&tags[c * ntags], newtags,
+								&mask[c * ntags], rules[m->rule].tags,
+								badtags, ntags);
 							arcs[c].push_back(m);
 						}
 					}
 					break;
 				}
-				case nfa_state_t::CTX:
-					tags[n->value.ctx.info] = true;
-					break;
 				case nfa_state_t::FIN:
+					merge_tags_with_mask(&tags[nchars * ntags], newtags,
+						&mask[nchars * ntags], rules[n->rule].tags,
+						badtags, ntags);
 					fin[n->rule] = true;
 					break;
 				default:
+					assert(false);
 					break;
 			}
 		}
 
-		for(size_t c = 0; c < nchars; ++c)
-		{
-			nfa_state_t **end = buffer;
-			for (std::vector<nfa_state_t*>::const_iterator j = arcs[c].begin(); j != arcs[c].end(); ++j)
-			{
-				end = closure(end, *j);
+		for (size_t c = 0; c < nchars; ++c) {
+			kend = kstart;
+			const std::vector<nfa_state_t*> &a = arcs[c];
+			for (size_t j = 0; j < a.size(); ++j) {
+				closure(kstart, kend, a[j], ktags, badtags, ntags);
 			}
-			s->arcs[c] = find_state(buffer, end, kernels);
+			s->arcs[c] = find_state(kstart, kend, kernels, tagpool);
+			s->tags[c] = tagpool.insert(&tags[c * ntags]);
 		}
-		s->tags = tagpool.insert(tags);
+		s->rule_tags = tagpool.insert(&tags[nchars * ntags]);
 
 		// choose the first rule (the one with smallest rank)
 		size_t r;
@@ -173,17 +221,22 @@ dfa_t::dfa_t(
 				rules[r].shadow.insert(rules[s->rule].info->loc.line);
 			}
 		}
+	}
 
-		for(size_t c = 0; c < nchars; ++c)
-		{
-			arcs[c].clear();
+	for (size_t i = 0; i < ntags; ++i) {
+		if (badtags[i]) {
+			// TODO: use rule line, add rule reference to context struct
+			warn.selfoverlapping_contexts(line, cond, contexts[i]);
 		}
 	}
-	delete[] buffer;
-	delete[] fin;
-	delete[] tags;
 
-	check_context_selfoverlap(kernels, contexts, line, cond);
+	delete[] kstart;
+	delete[] ktags;
+	delete[] badtags;
+	delete[] tags;
+	delete[] mask;
+	delete[] fin;
+	delete[] arcs;
 }
 
 dfa_t::~dfa_t()

@@ -106,7 +106,6 @@ xx8:
 #line 107 "config10.c"
 xx9:
 	curr = *++s.cur;
-	s.ctx = s.cur;
 	switch (curr) {
 	case '0':
 	case '2':
@@ -116,8 +115,12 @@ xx9:
 	case '6':
 	case '7':
 	case '8':
-	case '9':	goto xx10;
-	case '1':	goto xx13;
+	case '9':
+		s.ctx = s.cur;
+		goto xx10;
+	case '1':
+		s.ctx = s.cur;
+		goto xx13;
 	default:	goto xx3;
 	}
 xx10:
@@ -141,7 +144,7 @@ xx12:
 	s.cur = s.ctx;
 #line 56 "config10.re"
 	{ return KEYWORD; }
-#line 145 "config10.c"
+#line 148 "config10.c"
 xx13:
 	++s.cur;
 	switch ((curr = *s.cur)) {
@@ -161,7 +164,7 @@ xx14:
 	s.cur -= 1;
 #line 55 "config10.re"
 	{ return KEYWORD; }
-#line 165 "config10.c"
+#line 168 "config10.c"
 }
 #line 70 "config10.re"
 

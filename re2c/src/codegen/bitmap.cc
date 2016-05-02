@@ -156,7 +156,12 @@ bool matches(const Span * b1, uint32_t n1, const State * s1, const Span * b2, ui
 		{
 			return false;
 		}
-		if (lb1 != lb2 || b1->ub != b2->ub)
+		// tags are forbidden: transitions on different symbols
+		// might go to the same state, but have different tag sets
+		if (lb1 != lb2
+			|| b1->ub != b2->ub
+			|| b1->tags != 0
+			|| b2->tags != 0)
 		{
 			return false;
 		}
