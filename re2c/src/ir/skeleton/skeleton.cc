@@ -69,7 +69,7 @@ Skeleton::Skeleton(
 	, sizeof_key(8)
 	, rules(dfa.rules)
 	, defrule(def)
-	, contexts(dfa.contexts)
+	, fixtags(dfa.fixtags)
 {
 	const size_t nc = cs.size() - 1;
 	const size_t ntags = dfa.tagpool.ntags;

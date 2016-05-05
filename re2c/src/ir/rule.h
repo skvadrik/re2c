@@ -35,9 +35,10 @@ struct Rule
 
 	const RuleInfo *info;
 
-	size_t ltag;
-	size_t htag;
-	std::vector<CtxFix> ctxfix;
+	size_t lvartag;
+	size_t hvartag;
+	size_t lfixtag;
+	size_t hfixtag;
 	Trail trail;
 	bool nullable;
 	bool *tags;
@@ -46,9 +47,10 @@ struct Rule
 
 	Rule()
 		: info(NULL)
-		, ltag(0)
-		, htag(0)
-		, ctxfix()
+		, lvartag(0)
+		, hvartag(0)
+		, lfixtag(0)
+		, hfixtag(0)
 		, trail()
 		, nullable(false)
 		, tags(NULL)
@@ -62,8 +64,6 @@ struct Rule
 
 	FORBID_COPY(Rule);
 };
-
-void init_tags(Rule &rule, size_t ntags);
 
 } // namespace re2c
 

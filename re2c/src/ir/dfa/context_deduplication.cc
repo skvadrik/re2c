@@ -53,7 +53,7 @@ static void calc_live(const dfa_t &dfa,
 
 	visited[i] = true;
 	dfa_state_t *s = dfa.states[i];
-	const size_t ntags = dfa.contexts.size();
+	const size_t ntags = dfa.vartags.size();
 
 	// add tags before recursing to child states,
 	// so that tags propagate into loopbacks to this state
@@ -89,7 +89,7 @@ static void mask_dead(dfa_t &dfa,
 	const bool *livetags)
 {
 	const size_t nstates = dfa.states.size();
-	const size_t ntags = dfa.contexts.size();
+	const size_t ntags = dfa.vartags.size();
 	for (size_t i = 0; i < nstates; ++i) {
 		dfa_state_t *s = dfa.states[i];
 		for (size_t c = 0; c < dfa.nchars; ++c) {
@@ -130,7 +130,7 @@ static void incompatibility_table(const dfa_t &dfa,
 	bool *incompattbl)
 {
 	const size_t nstates = dfa.states.size();
-	const size_t ntags = dfa.contexts.size();
+	const size_t ntags = dfa.vartags.size();
 	for (size_t i = 0; i < nstates; ++i) {
 		const dfa_state_t *s = dfa.states[i];
 		for (size_t c = 0; c < dfa.nchars; ++c) {
@@ -237,16 +237,16 @@ static void patch_tags(dfa_t &dfa, const std::vector<size_t> &represent)
 		s->rule_tags = patch_tagset(dfa.tagpool, s->rule_tags, represent);
 	}
 
-	const size_t ntags = dfa.contexts.size();
+	const size_t ntags = dfa.vartags.size();
 	for (size_t i = 0; i < ntags; ++i) {
-		dfa.contexts[i].uniqname = dfa.contexts[represent[i]].uniqname;
+		dfa.vartags[i].uniqname = dfa.vartags[represent[i]].uniqname;
 	}
 }
 
 size_t deduplicate_contexts(dfa_t &dfa,
 	const std::vector<size_t> &fallback)
 {
-	const size_t ntags = dfa.contexts.size();
+	const size_t ntags = dfa.vartags.size();
 	if (ntags == 0) {
 		return 0;
 	}

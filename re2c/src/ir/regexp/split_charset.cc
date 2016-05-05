@@ -10,6 +10,7 @@ static void split(const RegExp* re, std::set<uint32_t> &cs)
 {
 	switch (re->tag) {
 		case RegExp::NIL:
+		case RegExp::TAG:
 			break;
 		case RegExp::SYM:
 			for (const Range *r = re->pld.sym.range; r; r = r->next()) {
@@ -33,11 +34,9 @@ static void split(const RegExp* re, std::set<uint32_t> &cs)
 
 void split(const std::vector<const RegExpRule*> &rs, std::set<uint32_t> &cs)
 {
-	for (size_t i = 0; i < rs.size(); ++i) {
-		const std::vector<const RegExp*> &regexps = rs[i]->regexps;
-		for (size_t j = 0; j < regexps.size(); ++j) {
-			split(regexps[j], cs);
-		}
+	const size_t nrs = rs.size();
+	for (size_t i = 0; i < nrs; ++i) {
+		split(rs[i]->re, cs);
 	}
 }
 

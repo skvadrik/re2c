@@ -136,7 +136,6 @@ void default_rule(CondList *clist, RegExpRule *rule)
 %token TOKEN_CLOSESIZE
 %token TOKEN_CODE
 %token TOKEN_CONF
-%token TOKEN_CTX
 %token TOKEN_ID
 %token TOKEN_FID
 %token TOKEN_FID_END
@@ -149,9 +148,9 @@ void default_rule(CondList *clist, RegExpRule *rule)
 %type <extop>   TOKEN_CLOSESIZE
 %type <code>    TOKEN_CODE
 %type <regexp>  TOKEN_REGEXP rule expr diff term factor primary
-%type <str>     TOKEN_ID TOKEN_FID TOKEN_CTX newcond name
+%type <str>     TOKEN_ID TOKEN_FID newcond name
 %type <clist>   cond clist
-%type <rule>    ctxexpr trailexpr
+%type <rule>    trailexpr
 
 %%
 
@@ -171,8 +170,8 @@ def
 		delete $1;
 	}
 	/* errors */
-	| name expr ctx {
-		in->fatal("contexts are not allowed in named definitions");
+	| name expr '/' {
+		in->fatal("trailing contexts are not allowed in named definitions");
 	};
 
 name
@@ -184,8 +183,6 @@ name
 	};
 
 enddef: ';' | TOKEN_FID_END;
-
-ctx: '/' | TOKEN_CTX;
 
 rule
 	: trailexpr TOKEN_CODE {
@@ -317,31 +314,12 @@ newcond:
 ;
 
 trailexpr
-	: ctxexpr {
-		$$ = $1;
-	}
-
-	| ctxexpr '/' expr {
-		// multiple trailing contexts on the same rule are not allowed
-		$$ = $1;
-		$$->regexps.push_back($3);
-		$$->ctxnames.push_back(NULL);
-	};
-
-ctxexpr
 	: expr {
 		$$ = new RegExpRule($1);
 	}
 
-	| ctxexpr TOKEN_CTX expr {
-		if (!opts->contexts) {
-			delete $2;
-			in->fatal("non-trailing contexts are only allowed"
-				" with '-C, --contexts' option");
-		}
-		$$ = $1;
-		$$->regexps.push_back($3);
-		$$->ctxnames.push_back($2);
+	| expr '/' expr {
+		$$ = new RegExpRule(RegExp::cat($1, RegExp::cat(RegExp::ctx(NULL), $3)));
 	};
 
 expr:

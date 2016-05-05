@@ -136,10 +136,11 @@ dfa_t::dfa_t(
 	: states()
 	, nchars(charset.size() - 1) // (n + 1) bounds for n ranges
 	, rules(nfa.rules)
-	, contexts(nfa.contexts)
-	, tagpool(*new Tagpool(contexts.size()))
+	, vartags(nfa.vartags)
+	, fixtags(nfa.fixtags)
+	, tagpool(*new Tagpool(vartags.size()))
 {
-	const size_t ntags = contexts.size();
+	const size_t ntags = vartags.size();
 	const size_t nrules = rules.size();
 	const size_t mask_size = (nchars + 1) * ntags;
 
@@ -227,7 +228,7 @@ dfa_t::dfa_t(
 	for (size_t i = 0; i < ntags; ++i) {
 		if (badtags[i]) {
 			// TODO: use rule line, add rule reference to context struct
-			warn.selfoverlapping_contexts(line, cond, contexts[i]);
+			warn.selfoverlapping_contexts(line, cond, vartags[i]);
 		}
 	}
 

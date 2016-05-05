@@ -8,16 +8,19 @@ namespace re2c
 
 struct CtxVar
 {
+	size_t rule;
 	const std::string *codename;
 	std::string uniqname;
 
-	CtxVar(const std::string *n, size_t idx);
+	CtxVar(const std::string *n, size_t r);
 	CtxVar(const CtxVar &ctx)
-		: codename(ctx.codename)
+		: rule(ctx.rule)
+		, codename(ctx.codename)
 		, uniqname(ctx.uniqname)
 	{}
 	CtxVar& operator=(const CtxVar &ctx)
 	{
+		rule = ctx.rule;
 		codename = ctx.codename;
 		uniqname = ctx.uniqname;
 		return *this;
@@ -30,12 +33,14 @@ struct CtxFix
 {
 	static const size_t RIGHTMOST;
 
+	size_t rule;
 	const std::string *codename;
 	size_t base;
 	size_t dist;
 
-	CtxFix(const std::string *n, size_t b, size_t d)
-		: codename(n)
+	CtxFix(const std::string *n, size_t r, size_t b, size_t d)
+		: rule(r)
+		, codename(n)
 		, base(b)
 		, dist(d)
 	{}
@@ -47,19 +52,19 @@ struct Trail
 	union
 	{
 		size_t var;
-		size_t fix; // trailing means rightmost; no need for base
-	} pld;
+		size_t fix;
+	};
 
-	Trail(): type(NONE), pld() {}
+	Trail(): type(NONE) {}
 	void make_var(size_t v)
 	{
 		type = VAR;
-		pld.var = v;
+		var = v;
 	}
 	void make_fix(size_t f)
 	{
 		type = FIX;
-		pld.fix = f;
+		fix = f;
 	}
 };
 

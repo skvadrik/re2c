@@ -145,8 +145,8 @@ void DFA::emit(Output & output, uint32_t& ind, bool isLastCond, bool& bPrologBra
 
 	std::set<std::string> ctxnames;
 	if (base_ctxmarker) {
-		for (size_t i = 0; i < contexts.size(); ++i) {
-			ctxnames.insert(contexts[i].name());
+		for (size_t i = 0; i < vartags.size(); ++i) {
+			ctxnames.insert(vartags[i].name());
 		}
 		ob.contexts.insert(ctxnames.begin(), ctxnames.end());
 	}

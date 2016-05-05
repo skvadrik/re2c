@@ -9,12 +9,13 @@
 namespace re2c
 {
 
-CtxVar::CtxVar(const std::string *n, size_t idx)
-	: codename(n)
+CtxVar::CtxVar(const std::string *n, size_t r)
+	: rule(r)
+	, codename(n)
 	, uniqname()
 {
 	std::ostringstream s;
-	s << idx;
+	s << rule;
 	if (codename != NULL) {
 		s << *codename;
 	}

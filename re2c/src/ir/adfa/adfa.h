@@ -67,7 +67,8 @@ struct DFA
 	uint32_t nStates;
 	State * head;
 	std::valarray<Rule> &rules;
-	std::vector<CtxVar> &contexts;
+	std::vector<CtxVar> &vartags;
+	std::vector<CtxFix> &fixtags;
 	Tagpool &tagpool;
 	size_t max_fill;
 	bool need_backup;

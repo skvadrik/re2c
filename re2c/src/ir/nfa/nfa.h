@@ -6,15 +6,12 @@
 #include <valarray>
 #include <vector>
 
+#include "src/ir/regexp/regexp.h"
 #include "src/ir/rule.h"
 #include "src/util/forbid_copy.h"
 
 namespace re2c
 {
-
-struct Range;
-struct RegExp;
-struct RuleInfo;
 
 struct nfa_state_t
 {
@@ -84,7 +81,8 @@ struct nfa_t
 	size_t size;
 	nfa_state_t *states;
 	std::valarray<Rule> &rules;
-	std::vector<CtxVar> &contexts;
+	std::vector<CtxVar> &vartags;
+	std::vector<CtxFix> &fixtags;
 	nfa_state_t *root;
 
 	nfa_t(const std::vector<const RegExpRule*> &rs);
@@ -92,6 +90,16 @@ struct nfa_t
 
 	FORBID_COPY(nfa_t);
 };
+
+size_t sizeof_regexps(const std::vector<const RegExpRule*> &regexps);
+void make_tags(const std::vector<const RegExpRule*> &rs,
+	std::vector<CtxVar> &vartags, std::vector<CtxFix> &fixtags);
+void regexps2nfa(const std::vector<const RegExpRule*> &rs, nfa_t &nfa);
+bool nullable_rule(const RegExpRule *rule);
+void init_rules(std::valarray<Rule> &rules,
+	const std::vector<const RegExpRule*> &regexps,
+	const std::vector<CtxVar> &vartags,
+	const std::vector<CtxFix> &fixtags);
 
 } // namespace re2c
 

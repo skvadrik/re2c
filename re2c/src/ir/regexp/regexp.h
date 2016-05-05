@@ -26,7 +26,8 @@ struct RegExp
 		SYM,
 		ALT,
 		CAT,
-		ITER
+		ITER,
+		TAG
 	};
 	union payload_t
 	{
@@ -48,6 +49,11 @@ struct RegExp
 		{
 			const RegExp *re;
 		} iter;
+		struct
+		{
+			const std::string *name;
+			size_t idx;
+		} ctx;
 	};
 
 	static free_list<RegExp*> flist;
@@ -85,6 +91,13 @@ struct RegExp
 		re->pld.iter.re = r;
 		return re;
 	}
+	static const RegExp *ctx(const std::string *n)
+	{
+		RegExp *re = new RegExp(TAG);
+		re->pld.ctx.name = n;
+		re->pld.ctx.idx = ~0u;
+		return re;
+	}
 	inline ~RegExp()
 	{
 		flist.erase(this);
@@ -101,22 +114,17 @@ struct RegExpRule
 {
 	static free_list<RegExpRule*> flist;
 
-	std::vector<const RegExp*> regexps;
-	std::vector<const std::string*> ctxnames;
+	const RegExp *re;
 	RuleInfo *info;
 
 	RegExpRule(const RegExp* r)
-		: regexps(1, r)
-		, ctxnames()
+		: re(r)
 		, info(NULL)
 	{
 		flist.insert(this);
 	}
 	~RegExpRule()
 	{
-		for (size_t i = 0; i < ctxnames.size(); ++i) {
-			delete ctxnames[i];
-		}
 		delete info;
 		flist.erase(this);
 	}

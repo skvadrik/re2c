@@ -46,7 +46,8 @@ struct dfa_t
 	std::vector<dfa_state_t*> states;
 	const size_t nchars;
 	std::valarray<Rule> &rules;
-	std::vector<CtxVar> &contexts;
+	std::vector<CtxVar> &vartags;
+	std::vector<CtxFix> &fixtags;
 	Tagpool &tagpool;
 
 	dfa_t(const nfa_t &nfa, const charset_t &charset,

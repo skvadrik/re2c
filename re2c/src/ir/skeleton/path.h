@@ -55,9 +55,9 @@ public:
 				case Trail::NONE:
 					return len;
 				case Trail::FIX:
-					return len - trail.pld.fix;
+					return len - skel.fixtags[trail.fix].dist;
 				case Trail::VAR: {
-					const size_t ctx = trail.pld.var;
+					const size_t ctx = trail.var;
 					for (; tail != head; ++tail) {
 						if (skel.nodes[*tail].tags[ctx]) {
 							return static_cast<size_t>(head - tail) - 1;

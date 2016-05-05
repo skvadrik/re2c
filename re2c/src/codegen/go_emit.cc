@@ -221,7 +221,7 @@ void Dot::emit(OutputFile &o, const DFA &dfa)
 			const bool *tags = dfa.tagpool[c.tags];
 			for (size_t j = 0; j < dfa.tagpool.ntags; ++j) {
 				if (tags[j]) {
-					o.ws("<").wstring(dfa.contexts[j].name()).ws(">");
+					o.ws("<").wstring(dfa.vartags[j].name()).ws(">");
 				}
 			}
 			o.ws("\"]\n");

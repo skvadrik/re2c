@@ -273,8 +273,12 @@ start:
 				}
 
 	"@" name {
-		yylval.str = new std::string(tok + 1, tok_len() - 1);
-		return TOKEN_CTX;
+		if (!opts->contexts) {
+			fatal("tags are only allowed with '-T, --tags' option");
+		}
+		const std::string *name = new std::string(tok + 1, tok_len() - 1);
+		yylval.regexp = RegExp::ctx(name);
+		return TOKEN_REGEXP;
 	}
 
 	[<>,()|=;/\\]	{
