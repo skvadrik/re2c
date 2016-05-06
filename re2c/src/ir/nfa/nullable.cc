@@ -7,23 +7,23 @@ static bool nullable(const RegExp *re, bool &trail)
 	if (trail) {
 		return true;
 	}
-	switch (re->tag) {
+	switch (re->type) {
 		case RegExp::NIL:
 		case RegExp::ITER:
 			return true;
 		case RegExp::TAG:
-			if (re->pld.ctx.name == NULL) {
+			if (re->tag == NULL) {
 				trail = true;
 			}
 			return true;
 		case RegExp::SYM:
 			return false;
 		case RegExp::ALT:
-			return nullable(re->pld.alt.re1, trail)
-				|| nullable(re->pld.alt.re2, trail);
+			return nullable(re->alt.re1, trail)
+				|| nullable(re->alt.re2, trail);
 		case RegExp::CAT:
-			return nullable(re->pld.cat.re1, trail)
-				&& nullable(re->pld.cat.re2, trail);
+			return nullable(re->cat.re1, trail)
+				&& nullable(re->cat.re2, trail);
 		default:
 			assert(false);
 	}

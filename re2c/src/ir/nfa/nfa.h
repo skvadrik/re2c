@@ -91,10 +91,15 @@ struct nfa_t
 	FORBID_COPY(nfa_t);
 };
 
+typedef std::vector<size_t>::const_iterator tagidx_t;
+
 size_t sizeof_regexps(const std::vector<const RegExpRule*> &regexps);
 void make_tags(const std::vector<const RegExpRule*> &rs,
-	std::vector<CtxVar> &vartags, std::vector<CtxFix> &fixtags);
-void regexps2nfa(const std::vector<const RegExpRule*> &rs, nfa_t &nfa);
+	std::vector<CtxVar> &vartags,
+	std::vector<CtxFix> &fixtags,
+	std::vector<size_t> &tagidxs);
+void regexps2nfa(const std::vector<const RegExpRule*> &rs,
+	nfa_t &nfa, tagidx_t tagidx);
 bool nullable_rule(const RegExpRule *rule);
 void init_rules(std::valarray<Rule> &rules,
 	const std::vector<const RegExpRule*> &regexps,

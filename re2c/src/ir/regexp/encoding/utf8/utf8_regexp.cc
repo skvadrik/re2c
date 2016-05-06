@@ -12,9 +12,10 @@ const RegExp * UTF8Symbol(utf8::rune r)
 {
 	uint32_t chars[utf8::MAX_RUNE_LENGTH];
 	const uint32_t chars_count = utf8::rune_to_bytes(chars, r);
-	const RegExp * re = RegExp::sym(Range::sym (chars[0]));
-	for (uint32_t i = 1; i < chars_count; ++i)
-		re = RegExp::cat(re, RegExp::sym(Range::sym (chars[i])));
+	const RegExp *re = RegExp::make_sym(Range::sym(chars[0]));
+	for (uint32_t i = 1; i < chars_count; ++i) {
+		re = RegExp::make_cat(re, RegExp::make_sym(Range::sym(chars[i])));
+	}
 	return re;
 }
 

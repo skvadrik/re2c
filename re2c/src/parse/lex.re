@@ -277,7 +277,7 @@ start:
 			fatal("tags are only allowed with '-T, --tags' option");
 		}
 		const std::string *name = new std::string(tok + 1, tok_len() - 1);
-		yylval.regexp = RegExp::ctx(name);
+		yylval.regexp = RegExp::make_tag(name);
 		return TOKEN_REGEXP;
 	}
 
@@ -368,7 +368,7 @@ start:
 							const uint32_t c = static_cast<uint8_t>(*s);
 							r = doCat(r, casing ? ichr(c) : schr(c));
 						}
-						yylval.regexp = r ? r : RegExp::nil();
+						yylval.regexp = r ? r : RegExp::make_nil();
 						return TOKEN_REGEXP;
 					}
 				}
@@ -667,7 +667,7 @@ const RegExp *Scanner::lex_str(char quote, bool casing)
 	for (bool end;;) {
 		const uint32_t c = lex_str_chr(quote, end);
 		if (end) {
-			return r ? r : RegExp::nil();
+			return r ? r : RegExp::make_nil();
 		}
 		r = doCat(r, casing ? ichr(c) : schr(c));
 	}

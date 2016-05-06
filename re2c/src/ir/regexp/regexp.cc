@@ -1,3 +1,4 @@
+#include <limits>
 #include <stddef.h>
 
 #include "src/conf/opt.h"
@@ -26,7 +27,7 @@ const RegExp *doAlt(const RegExp *re1, const RegExp *re2)
 	if (!re2) {
 		return re1;
 	}
-	return RegExp::alt(re1, re2);
+	return RegExp::make_alt(re1, re2);
 }
 
 static const RegExp *merge(const RegExp *sym1, const RegExp *sym2)
@@ -37,9 +38,7 @@ static const RegExp *merge(const RegExp *sym1, const RegExp *sym2)
 	if (!sym2) {
 		return sym1;
 	}
-	return RegExp::sym(Range::add(
-		sym1->pld.sym.range,
-		sym2->pld.sym.range));
+	return RegExp::make_sym(Range::add(sym1->sym, sym2->sym));
 }
 
 static const RegExp *lift_sym(const RegExp *&re)
@@ -47,16 +46,16 @@ static const RegExp *lift_sym(const RegExp *&re)
 	if (!re) {
 		return NULL;
 	}
-	if (re->tag == RegExp::SYM) {
+	if (re->type == RegExp::SYM) {
 		const RegExp *sym = re;
 		re = NULL;
 		return sym;
 	}
-	if (re->tag == RegExp::ALT) {
+	if (re->type == RegExp::ALT) {
 		// second alternative cannot be SYM by construction
-		const RegExp *alt1 = re->pld.alt.re1;
-		if (alt1 && alt1->tag == RegExp::SYM) {
-			re = re->pld.alt.re2;
+		const RegExp *alt1 = re->alt.re1;
+		if (alt1 && alt1->type == RegExp::SYM) {
+			re = re->alt.re2;
 			return alt1;
 		}
 	}
@@ -80,7 +79,7 @@ const RegExp *doCat(const RegExp *re1, const RegExp *re2)
 	if (!re2) {
 		return re1;
 	}
-	return RegExp::cat(re1, re2);
+	return RegExp::make_cat(re1, re2);
 }
 
 const RegExp *Scanner::schr(uint32_t c) const
@@ -91,7 +90,7 @@ const RegExp *Scanner::schr(uint32_t c) const
 	switch (opts->encoding.type ()) {
 		case Enc::UTF16: return UTF16Symbol(c);
 		case Enc::UTF8:  return UTF8Symbol(c);
-		default:         return RegExp::sym(Range::sym(c));
+		default:         return RegExp::make_sym(Range::sym(c));
 	}
 }
 
@@ -112,7 +111,7 @@ const RegExp *Scanner::cls(const Range *r) const
 		switch (opts->empty_class_policy) {
 			case EMPTY_CLASS_MATCH_EMPTY:
 				warn.empty_class(get_line());
-				return RegExp::nil();
+				return RegExp::make_nil();
 			case EMPTY_CLASS_MATCH_NONE:
 				warn.empty_class(get_line());
 				break;
@@ -125,18 +124,16 @@ const RegExp *Scanner::cls(const Range *r) const
 	switch (opts->encoding.type()) {
 		case Enc::UTF16: return UTF16Range(r);
 		case Enc::UTF8:  return UTF8Range(r);
-		default:         return RegExp::sym(r);
+		default:         return RegExp::make_sym(r);
 	}
 }
 
 const RegExp *Scanner::mkDiff(const RegExp *re1, const RegExp *re2) const
 {
 	if (re1 && re2
-		&& re1->tag == RegExp::SYM
-		&& re2->tag == RegExp::SYM) {
-		return cls(Range::sub(
-			re1->pld.sym.range,
-			re2->pld.sym.range));
+		&& re1->type == RegExp::SYM
+		&& re2->type == RegExp::SYM) {
+		return cls(Range::sub(re1->sym, re2->sym));
 	}
 	fatal("can only difference char sets");
 	return NULL;
@@ -148,8 +145,7 @@ const RegExp *Scanner::mkDot() const
 	if (!opts->encoding.encode(c)) {
 		fatalf("Bad code point: '0x%X'", c);
 	}
-	return cls(Range::sub(
-		opts->encoding.fullRange(),
+	return cls(Range::sub(opts->encoding.fullRange(),
 		Range::sym(c)));
 }
 
@@ -165,7 +161,7 @@ const RegExp *Scanner::mkDot() const
  */
 const RegExp *Scanner::mkDefault() const
 {
-	return RegExp::sym(Range::ran(0,
+	return RegExp::make_sym(Range::ran(0,
 		opts->encoding.nCodeUnits()));
 }
 
@@ -194,8 +190,7 @@ const RegExp *repeat_from_to(const RegExp *re, uint32_t n, uint32_t m)
 	const RegExp *r1 = repeat(re, n);
 	const RegExp *r2 = NULL;
 	for (uint32_t i = n; i < m; ++i) {
-		r2 = mkAlt(
-			RegExp::nil(),
+		r2 = mkAlt(RegExp::make_nil(),
 			doCat(re, r2));
 	}
 	return doCat(r1, r2);
@@ -204,9 +199,8 @@ const RegExp *repeat_from_to(const RegExp *re, uint32_t n, uint32_t m)
 // see note [counted repetition expansion]
 const RegExp *repeat_from(const RegExp *re, uint32_t n)
 {
-	return doCat(
-		repeat(re, n),
-		RegExp::iter(re));
+	return doCat(repeat(re, n),
+		RegExp::make_iter(re));
 }
 
 } // namespace re2c

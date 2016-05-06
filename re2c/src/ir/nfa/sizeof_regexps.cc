@@ -4,20 +4,20 @@ namespace re2c {
 
 static size_t sizeof_regexp(const RegExp *re)
 {
-	switch (re->tag) {
+	switch (re->type) {
 		case RegExp::NIL:
 			return 0;
 		case RegExp::SYM:
 			return 1;
 		case RegExp::ALT:
-			return sizeof_regexp(re->pld.alt.re1)
-				+ sizeof_regexp(re->pld.alt.re2)
+			return sizeof_regexp(re->alt.re1)
+				+ sizeof_regexp(re->alt.re2)
 				+ 1;
 		case RegExp::CAT:
-			return sizeof_regexp(re->pld.cat.re1)
-				+ sizeof_regexp(re->pld.cat.re2);
+			return sizeof_regexp(re->cat.re1)
+				+ sizeof_regexp(re->cat.re2);
 		case RegExp::ITER:
-			return sizeof_regexp(re->pld.iter.re)
+			return sizeof_regexp(re->iter)
 				+ 1;
 		case RegExp::TAG:
 			return 1;

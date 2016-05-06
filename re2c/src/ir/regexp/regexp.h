@@ -20,21 +20,13 @@ typedef std::vector<uint32_t> charset_t;
 
 struct RegExp
 {
-	enum tag_t
+	static free_list<RegExp*> flist;
+	static const size_t NO_TAG;
+
+	enum type_t {NIL, SYM, ALT, CAT, ITER, TAG} type;
+	union
 	{
-		NIL,
-		SYM,
-		ALT,
-		CAT,
-		ITER,
-		TAG
-	};
-	union payload_t
-	{
-		struct
-		{
-			const Range *range;
-		} sym;
+		const Range *sym;
 		struct
 		{
 			const RegExp *re1;
@@ -45,57 +37,44 @@ struct RegExp
 			const RegExp *re1;
 			const RegExp *re2;
 		} cat;
-		struct
-		{
-			const RegExp *re;
-		} iter;
-		struct
-		{
-			const std::string *name;
-			size_t idx;
-		} ctx;
+		const RegExp *iter;
+		const std::string *tag;
 	};
 
-	static free_list<RegExp*> flist;
-
-	tag_t tag;
-	payload_t pld;
-
-	static const RegExp *nil()
+	static const RegExp *make_nil()
 	{
 		return new RegExp(NIL);
 	}
-	static const RegExp *sym(const Range *r)
+	static const RegExp *make_sym(const Range *r)
 	{
 		RegExp *re = new RegExp(SYM);
-		re->pld.sym.range = r;
+		re->sym = r;
 		return re;
 	}
-	static const RegExp *alt(const RegExp *r1, const RegExp *r2)
+	static const RegExp *make_alt(const RegExp *r1, const RegExp *r2)
 	{
 		RegExp *re = new RegExp(ALT);
-		re->pld.alt.re1 = r1;
-		re->pld.alt.re2 = r2;
+		re->alt.re1 = r1;
+		re->alt.re2 = r2;
 		return re;
 	}
-	static const RegExp *cat(const RegExp *r1, const RegExp *r2)
+	static const RegExp *make_cat(const RegExp *r1, const RegExp *r2)
 	{
 		RegExp *re = new RegExp(CAT);
-		re->pld.cat.re1 = r1;
-		re->pld.cat.re2 = r2;
+		re->cat.re1 = r1;
+		re->cat.re2 = r2;
 		return re;
 	}
-	static const RegExp *iter(const RegExp *r)
+	static const RegExp *make_iter(const RegExp *r)
 	{
 		RegExp *re = new RegExp(ITER);
-		re->pld.iter.re = r;
+		re->iter = r;
 		return re;
 	}
-	static const RegExp *ctx(const std::string *n)
+	static const RegExp *make_tag(const std::string *t)
 	{
 		RegExp *re = new RegExp(TAG);
-		re->pld.ctx.name = n;
-		re->pld.ctx.idx = ~0u;
+		re->tag = t;
 		return re;
 	}
 	inline ~RegExp()
@@ -104,7 +83,7 @@ struct RegExp
 	}
 
 private:
-	inline RegExp(tag_t t) : tag(t), pld()
+	inline RegExp(type_t t) : type(t)
 	{
 		flist.insert(this);
 	}
@@ -117,9 +96,7 @@ struct RegExpRule
 	const RegExp *re;
 	RuleInfo *info;
 
-	RegExpRule(const RegExp* r)
-		: re(r)
-		, info(NULL)
+	explicit RegExpRule(const RegExp *r): re(r), info(NULL)
 	{
 		flist.insert(this);
 	}
@@ -128,7 +105,6 @@ struct RegExpRule
 		delete info;
 		flist.erase(this);
 	}
-
 	FORBID_COPY(RegExpRule);
 };
 

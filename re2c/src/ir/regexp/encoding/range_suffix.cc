@@ -10,9 +10,8 @@ free_list<RangeSuffix *> RangeSuffix::freeList;
 
 const RegExp * to_regexp (RangeSuffix * p)
 {
-	return p
-		? emit (p, NULL)
-		: RegExp::sym(NULL);
+	return p ? emit(p, NULL)
+		: RegExp::make_sym(NULL);
 }
 
 /*
@@ -20,14 +19,12 @@ const RegExp * to_regexp (RangeSuffix * p)
  */
 const RegExp * emit(RangeSuffix * p, const RegExp * re)
 {
-	if (p == NULL)
+	if (p == NULL) {
 		return re;
-	else
-	{
-		const RegExp * regexp = NULL;
-		for (; p != NULL; p = p->next)
-		{
-			const RegExp * re1 = doCat(RegExp::sym(Range::ran (p->l, p->h + 1)), re);
+	} else {
+		const RegExp *regexp = NULL;
+		for (; p != NULL; p = p->next) {
+			const RegExp *re1 = doCat(RegExp::make_sym(Range::ran(p->l, p->h + 1)), re);
 			regexp = doAlt(regexp, emit(p->child, re1));
 		}
 		return regexp;

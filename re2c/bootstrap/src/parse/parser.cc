@@ -558,8 +558,8 @@ static const yytype_uint16 yyrline[] =
        0,   157,   157,   159,   160,   161,   166,   173,   178,   181,
      185,   185,   188,   197,   208,   212,   218,   224,   231,   240,
      248,   258,   269,   275,   281,   284,   291,   297,   307,   310,
-     317,   321,   326,   330,   337,   341,   348,   352,   359,   363,
-     378,   397,   401,   405,   409,   416,   426,   430
+     317,   321,   327,   331,   338,   342,   349,   353,   360,   364,
+     379,   398,   402,   406,   410,   417,   427,   431
 };
 #endif
 
@@ -1641,7 +1641,7 @@ yyreduce:
 		if (specNone) {
 			in->fatal("code to handle illegal condition already defined");
 		}
-		specNone = new RegExpRule(RegExp::nil());
+		specNone = new RegExpRule(RegExp::make_nil());
 		specNone->info = new RuleInfo((yyvsp[(3) - (3)].code)->loc, (yyvsp[(3) - (3)].code), (yyvsp[(2) - (3)].str));
 		delete (yyvsp[(2) - (3)].str);
 	;}
@@ -1655,7 +1655,7 @@ yyreduce:
 			in->fatal("code to handle illegal condition already defined");
 		}
 		Loc loc(in->get_fname(), in->get_cline());
-		specNone = new RegExpRule(RegExp::nil());
+		specNone = new RegExpRule(RegExp::make_nil());
 		specNone->info = new RuleInfo(loc, NULL, (yyvsp[(3) - (3)].str));
 		delete (yyvsp[(3) - (3)].str);
 	;}
@@ -1733,7 +1733,8 @@ yyreduce:
   case 31:
 
     {
-		(yyval.rule) = new RegExpRule(RegExp::cat((yyvsp[(1) - (3)].regexp), RegExp::cat(RegExp::ctx(NULL), (yyvsp[(3) - (3)].regexp))));
+		(yyval.rule) = new RegExpRule(RegExp::make_cat((yyvsp[(1) - (3)].regexp),
+			RegExp::make_cat(RegExp::make_tag(NULL), (yyvsp[(3) - (3)].regexp))));
 	;}
     break;
 
@@ -1775,7 +1776,7 @@ yyreduce:
   case 37:
 
     {
-			(yyval.regexp) = RegExp::cat((yyvsp[(1) - (2)].regexp), (yyvsp[(2) - (2)].regexp));
+			(yyval.regexp) = RegExp::make_cat((yyvsp[(1) - (2)].regexp), (yyvsp[(2) - (2)].regexp));
 		;}
     break;
 
@@ -1792,13 +1793,13 @@ yyreduce:
 			switch((yyvsp[(2) - (2)].op))
 			{
 			case '*':
-				(yyval.regexp) = RegExp::iter((yyvsp[(1) - (2)].regexp));
+				(yyval.regexp) = RegExp::make_iter((yyvsp[(1) - (2)].regexp));
 				break;
 			case '+':
-				(yyval.regexp) = RegExp::cat(RegExp::iter((yyvsp[(1) - (2)].regexp)), (yyvsp[(1) - (2)].regexp));
+				(yyval.regexp) = RegExp::make_cat(RegExp::make_iter((yyvsp[(1) - (2)].regexp)), (yyvsp[(1) - (2)].regexp));
 				break;
 			case '?':
-				(yyval.regexp) = mkAlt((yyvsp[(1) - (2)].regexp), RegExp::nil());
+				(yyval.regexp) = mkAlt((yyvsp[(1) - (2)].regexp), RegExp::make_nil());
 				break;
 			}
 		;}
@@ -1819,7 +1820,7 @@ yyreduce:
 			{
 				(yyval.regexp) = repeat_from_to ((yyvsp[(1) - (2)].regexp), (yyvsp[(2) - (2)].extop).min, (yyvsp[(2) - (2)].extop).max);
 			}
-			(yyval.regexp) = (yyval.regexp) ? (yyval.regexp) : RegExp::nil();
+			(yyval.regexp) = (yyval.regexp) ? (yyval.regexp) : RegExp::make_nil();
 		;}
     break;
 

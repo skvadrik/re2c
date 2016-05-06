@@ -10,13 +10,13 @@ namespace re2c {
 
 const RegExp * UTF16Symbol(utf16::rune r)
 {
-	if (r <= utf16::MAX_1WORD_RUNE)
-		return RegExp::sym(Range::sym (r));
-	else
-	{
+	if (r <= utf16::MAX_1WORD_RUNE) {
+		return RegExp::make_sym(Range::sym(r));
+	} else {
 		const uint32_t ld = utf16::lead_surr(r);
 		const uint32_t tr = utf16::trail_surr(r);
-		return RegExp::cat(RegExp::sym(Range::sym (ld)), RegExp::sym(Range::sym (tr)));
+		return RegExp::make_cat(RegExp::make_sym(Range::sym(ld)),
+			RegExp::make_sym(Range::sym(tr)));
 	}
 }
 

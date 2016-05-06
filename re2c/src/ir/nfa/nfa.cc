@@ -11,8 +11,11 @@ nfa_t::nfa_t(const std::vector<const RegExpRule*> &regexps)
 	, fixtags(*new std::vector<CtxFix>)
 	, root(NULL)
 {
-	make_tags(regexps, vartags, fixtags);
-	regexps2nfa(regexps, *this);
+	std::vector<size_t> tagidxs;
+	make_tags(regexps, vartags, fixtags, tagidxs);
+
+	regexps2nfa(regexps, *this, tagidxs.begin());
+
 	init_rules(rules, regexps, vartags, fixtags);
 }
 

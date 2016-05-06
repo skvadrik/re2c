@@ -1,10 +1,13 @@
 #ifndef _RE2C_IR_CTX_
 #define _RE2C_IR_CTX_
 
+#include <limits>
 #include <string>
 
 namespace re2c
 {
+
+static const size_t NO_TAG = std::numeric_limits<size_t>::max();
 
 struct CtxVar
 {

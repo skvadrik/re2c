@@ -250,7 +250,7 @@ rule
 		if (specNone) {
 			in->fatal("code to handle illegal condition already defined");
 		}
-		specNone = new RegExpRule(RegExp::nil());
+		specNone = new RegExpRule(RegExp::make_nil());
 		specNone->info = new RuleInfo($3->loc, $3, $2);
 		delete $2;
 	}
@@ -261,7 +261,7 @@ rule
 			in->fatal("code to handle illegal condition already defined");
 		}
 		Loc loc(in->get_fname(), in->get_cline());
-		specNone = new RegExpRule(RegExp::nil());
+		specNone = new RegExpRule(RegExp::make_nil());
 		specNone->info = new RuleInfo(loc, NULL, $3);
 		delete $3;
 	}
@@ -319,7 +319,8 @@ trailexpr
 	}
 
 	| expr '/' expr {
-		$$ = new RegExpRule(RegExp::cat($1, RegExp::cat(RegExp::ctx(NULL), $3)));
+		$$ = new RegExpRule(RegExp::make_cat($1,
+			RegExp::make_cat(RegExp::make_tag(NULL), $3)));
 	};
 
 expr:
@@ -351,7 +352,7 @@ term:
 		}
 	|	term factor
 		{
-			$$ = RegExp::cat($1, $2);
+			$$ = RegExp::make_cat($1, $2);
 		}
 ;
 
@@ -365,13 +366,13 @@ factor:
 			switch($2)
 			{
 			case '*':
-				$$ = RegExp::iter($1);
+				$$ = RegExp::make_iter($1);
 				break;
 			case '+':
-				$$ = RegExp::cat(RegExp::iter($1), $1);
+				$$ = RegExp::make_cat(RegExp::make_iter($1), $1);
 				break;
 			case '?':
-				$$ = mkAlt($1, RegExp::nil());
+				$$ = mkAlt($1, RegExp::make_nil());
 				break;
 			}
 		}
@@ -389,7 +390,7 @@ factor:
 			{
 				$$ = repeat_from_to ($1, $2.min, $2.max);
 			}
-			$$ = $$ ? $$ : RegExp::nil();
+			$$ = $$ ? $$ : RegExp::make_nil();
 		}
 ;
 
