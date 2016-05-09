@@ -69,10 +69,10 @@ Skeleton::Skeleton(
 	, sizeof_key(8)
 	, rules(dfa.rules)
 	, defrule(def)
-	, fixtags(dfa.fixtags)
+	, tags(dfa.tags)
 {
 	const size_t nc = cs.size() - 1;
-	const size_t ntags = dfa.tagpool.ntags;
+	const size_t ntags = tags.size();
 
 	// initialize skeleton nodes
 	for (size_t i = 0; i < nodes_count - 1; ++i) {

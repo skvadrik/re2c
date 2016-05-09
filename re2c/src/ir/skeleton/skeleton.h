@@ -59,7 +59,7 @@ struct Skeleton
 	size_t sizeof_key;
 	std::valarray<Rule> &rules;
 	const size_t defrule;
-	std::vector<CtxFix> &fixtags;
+	const std::valarray<Tag> &tags;
 
 	Skeleton(const dfa_t &dfa, const charset_t &cs, size_t def,
 		const std::string &dfa_name, const std::string &dfa_cond,

@@ -50,22 +50,21 @@ public:
 				continue;
 			}
 			size_t len = static_cast<size_t>(head - tail) - 1;
-			const Trail &trail = skel.rules[rule_idx].trail;
-			switch (trail.type) {
-				case Trail::NONE:
-					return len;
-				case Trail::FIX:
-					return len - skel.fixtags[trail.fix].dist;
-				case Trail::VAR: {
-					const size_t ctx = trail.var;
+			const size_t trail = skel.rules[rule_idx].trail;
+			if (trail == Tag::NONE) {
+				return len;
+			}
+			const Tag &tag = skel.tags[trail];
+			switch (tag.type) {
+				case Tag::VAR:
 					for (; tail != head; ++tail) {
-						if (skel.nodes[*tail].tags[ctx]) {
+						if (skel.nodes[*tail].tags[trail]) {
 							return static_cast<size_t>(head - tail) - 1;
 						}
 					}
 					assert(false);
-					break;
-				}
+				case Tag::FIX:
+					return len - tag.fix.dist;
 			}
 		}
 		return 0;

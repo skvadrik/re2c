@@ -145,8 +145,11 @@ void DFA::emit(Output & output, uint32_t& ind, bool isLastCond, bool& bPrologBra
 
 	std::set<std::string> ctxnames;
 	if (base_ctxmarker) {
-		for (size_t i = 0; i < vartags.size(); ++i) {
-			ctxnames.insert(vartags[i].name());
+		for (size_t i = 0; i < tags.size(); ++i) {
+			const Tag &t = tags[i];
+			if (t.type == Tag::VAR && t.var.orig == i) {
+				ctxnames.insert(vartag_name(t.name, t.rule));
+			}
 		}
 		ob.contexts.insert(ctxnames.begin(), ctxnames.end());
 	}
@@ -362,6 +365,24 @@ void genCondGoto(OutputFile & o, uint32_t ind, const std::vector<std::string> & 
 	}
 	o.wdelay_warn_condition_order ();
 	bWroteCondCheck = true;
+}
+
+std::string vartag_name(const std::string *name, size_t rule)
+{
+	std::ostringstream s;
+	s << opts->contexts_prefix << rule;
+	if (name != NULL) {
+		s << *name;
+	}
+	return s.str();
+}
+
+std::string vartag_expr(const std::string *name, size_t rule)
+{
+	const std::string s = vartag_name(name, rule);
+	std::string e = opts->contexts_expr;
+	strrreplace(e, "@@", s);
+	return e;
 }
 
 } // end namespace re2c

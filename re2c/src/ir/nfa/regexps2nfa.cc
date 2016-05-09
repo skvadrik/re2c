@@ -3,7 +3,7 @@
 namespace re2c {
 
 static nfa_state_t *regexp2nfa(nfa_t &nfa, size_t nrule,
-	tagidx_t &tagidx, const RegExp *re, nfa_state_t *t)
+	size_t &tagidx, const RegExp *re, nfa_state_t *t)
 {
 	nfa_state_t *s = NULL;
 	switch (re->type) {
@@ -28,41 +28,40 @@ static nfa_state_t *regexp2nfa(nfa_t &nfa, size_t nrule,
 			s = &nfa.states[nfa.size++];
 			s->alt(nrule, t, regexp2nfa(nfa, nrule, tagidx, re->iter, s));
 			break;
-		case RegExp::TAG: {
-			const size_t idx = *tagidx++;
-			if (idx != NO_TAG) {
+		case RegExp::TAG:
+			if ((*nfa.tags)[tagidx].type == Tag::VAR) {
 				s = &nfa.states[nfa.size++];
-				s->ctx(nrule, t, idx);
+				s->ctx(nrule, t, tagidx);
 			} else {
 				s = t;
 			}
+			++tagidx;
 			break;
-		}
 	}
 	return s;
 }
 
 static nfa_state_t *regexp2nfa_rule(nfa_t &nfa, size_t nrule,
-	tagidx_t &tagidx, const RegExpRule *rule)
+	size_t &tagidx, const RegExpRule *rule)
 {
 	nfa_state_t *s = &nfa.states[nfa.size++];
 	s->fin(nrule);
 	return regexp2nfa(nfa, nrule, tagidx, rule->re, s);
 }
 
-void regexps2nfa(const std::vector<const RegExpRule*> &rs,
-	nfa_t &nfa, tagidx_t tagidx)
+void regexps2nfa(const std::vector<const RegExpRule*> &regexps, nfa_t &nfa)
 {
-	const size_t nrs = rs.size();
+	const size_t nregexps = regexps.size();
 
-	if (nrs == 0) {
+	if (nregexps == 0) {
 		return;
 	}
 
-	nfa_state_t *s = regexp2nfa_rule(nfa, 0, tagidx, rs[0]);
-	for (size_t i = 1; i < nrs; ++i) {
+	size_t tagidx = 0;
+	nfa_state_t *s = regexp2nfa_rule(nfa, 0, tagidx, regexps[0]);
+	for (size_t i = 1; i < nregexps; ++i) {
 		nfa_state_t *t = &nfa.states[nfa.size++];
-		t->alt(i, s, regexp2nfa_rule(nfa, i, tagidx, rs[i]));
+		t->alt(i, s, regexp2nfa_rule(nfa, i, tagidx, regexps[i]));
 		s = t;
 	}
 	nfa.root = s;

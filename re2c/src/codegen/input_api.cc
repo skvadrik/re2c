@@ -1,6 +1,7 @@
 #include <assert.h>
 #include <sstream>
 
+#include "src/codegen/emit.h"
 #include "src/codegen/input_api.h"
 #include "src/codegen/indent.h"
 #include "src/conf/opt.h"
@@ -107,44 +108,46 @@ std::string InputAPI::expr_dist () const
 	return s;
 }
 
-std::string InputAPI::stmt_dist (uint32_t ind, const bool *tags,
-		const std::vector<CtxVar> &contexts) const
+std::string InputAPI::stmt_dist (uint32_t ind, const bool *mask,
+	const std::valarray<Tag> &tags) const
 {
 	std::string s = indent(ind);
-	for (size_t i = 0; i < contexts.size(); ++i) {
-		if (tags[i]) {
-			s += contexts[i].expr() + " = ";
+	for (size_t i = 0; i < tags.size(); ++i) {
+		if (mask[i]) {
+			const Tag &t = tags[tags[i].var.orig];
+			s += vartag_expr(t.name, t.rule) + " = ";
 		}
 	}
 	return s + expr_dist() + ";\n";
 }
 
-std::string InputAPI::expr_ctx(const std::string &ctx) const
+std::string InputAPI::expr_ctx(const std::string &var) const
 {
 	switch (type_) {
-		case DEFAULT: return "(" + opts->yyctxmarker + " + " + ctx + ")";
-		case CUSTOM:  return opts->yyctx + "(" + ctx + ")";
+		case DEFAULT: return "(" + opts->yyctxmarker + " + " + var + ")";
+		case CUSTOM:  return opts->yyctx + "(" + var + ")";
 		default:      assert(false);
 	}
 }
 
-std::string InputAPI::expr_ctx_fix(const CtxFix &ctx, const std::vector<CtxVar> &ctxvars) const
+std::string InputAPI::expr_ctx_fix(const Tag &tag, const std::valarray<Tag> &tags) const
 {
 	std::ostringstream s;
-	if (ctx.base == CtxFix::RIGHTMOST) {
+	if (tag.fix.base == Tag::NONE) {
 		switch (type_) {
 			case DEFAULT:
 				// optimize '(YYCTXMARKER + ((YYCURSOR - YCTXMARKER) - yyctx))'
 				// to       '(YYCURSOR - yyctx)'
-				s << "(" << opts->yycursor << " - " << ctx.dist << ")";
+				s << "(" << opts->yycursor << " - " << tag.fix.dist << ")";
 				break;
 			case CUSTOM:
-				s << opts->yyctx << "(" << opts->yydist << "() - " << ctx.dist << ")";
+				s << opts->yyctx << "(" << opts->yydist << "() - " << tag.fix.dist << ")";
 				break;
 		}
 		return s.str();
 	} else {
-		s << "(" << ctxvars[ctx.base].expr() << " - " << ctx.dist << ")";
+		const Tag &t = tags[tags[tag.fix.base].var.orig];
+		s << "(" << vartag_expr(t.name, t.rule) << " - " << tag.fix.dist << ")";
 		return expr_ctx(s.str());
 	}
 }

@@ -53,7 +53,7 @@ static void calc_live(const dfa_t &dfa,
 
 	visited[i] = true;
 	dfa_state_t *s = dfa.states[i];
-	const size_t ntags = dfa.vartags.size();
+	const size_t ntags = dfa.tags.size();
 
 	// add tags before recursing to child states,
 	// so that tags propagate into loopbacks to this state
@@ -89,7 +89,7 @@ static void mask_dead(dfa_t &dfa,
 	const bool *livetags)
 {
 	const size_t nstates = dfa.states.size();
-	const size_t ntags = dfa.vartags.size();
+	const size_t ntags = dfa.tags.size();
 	for (size_t i = 0; i < nstates; ++i) {
 		dfa_state_t *s = dfa.states[i];
 		for (size_t c = 0; c < dfa.nchars; ++c) {
@@ -130,7 +130,7 @@ static void incompatibility_table(const dfa_t &dfa,
 	bool *incompattbl)
 {
 	const size_t nstates = dfa.states.size();
-	const size_t ntags = dfa.vartags.size();
+	const size_t ntags = dfa.tags.size();
 	for (size_t i = 0; i < nstates; ++i) {
 		const dfa_state_t *s = dfa.states[i];
 		for (size_t c = 0; c < dfa.nchars; ++c) {
@@ -156,6 +156,18 @@ static void incompatibility_table(const dfa_t &dfa,
 			}
 		}
 	}
+
+	// fixed tags should not participate in deduplication, so
+	// each fixed tag is incompatible with all other tags
+	for (size_t i = 0; i < ntags; ++i) {
+		if (dfa.tags[i].type == Tag::FIX) {
+			for (size_t j = 0; j < ntags; ++j) {
+				incompattbl[i * ntags + j]
+					= incompattbl[j * ntags + i]
+					= j != i;
+			}
+		}
+	}
 }
 
 /* We have a binary relation on the set of all tags
@@ -170,7 +182,7 @@ static void incompatibility_table(const dfa_t &dfa,
  * The algorithm takes quadratic (in the number of tags) time.
  * static void equivalence_classes(const std::vector<bool> &incompattbl,
  */
-static size_t equivalence_classes(const bool *incompattbl,
+static void equivalence_classes(const bool *incompattbl,
 	size_t ntags, std::vector<size_t> &represent)
 {
 	static const size_t END = std::numeric_limits<size_t>::max();
@@ -201,14 +213,6 @@ static size_t equivalence_classes(const bool *incompattbl,
 			head[0] = c;
 		}
 	}
-
-	size_t nreps = 0;
-	for (size_t i = 0; i < ntags; ++i) {
-		if (represent[i] == i) {
-			++nreps;
-		}
-	}
-	return nreps;
 }
 
 static size_t patch_tagset(Tagpool &tagpool, size_t oldidx,
@@ -237,16 +241,19 @@ static void patch_tags(dfa_t &dfa, const std::vector<size_t> &represent)
 		s->rule_tags = patch_tagset(dfa.tagpool, s->rule_tags, represent);
 	}
 
-	const size_t ntags = dfa.vartags.size();
+	const size_t ntags = dfa.tags.size();
 	for (size_t i = 0; i < ntags; ++i) {
-		dfa.vartags[i].uniqname = dfa.vartags[represent[i]].uniqname;
+		Tag &t = dfa.tags[i];
+		if (t.type == Tag::VAR) {
+			t.var.orig = represent[i];
+		}
 	}
 }
 
 size_t deduplicate_contexts(dfa_t &dfa,
 	const std::vector<size_t> &fallback)
 {
-	const size_t ntags = dfa.vartags.size();
+	const size_t ntags = dfa.tags.size();
 	if (ntags == 0) {
 		return 0;
 	}
@@ -268,7 +275,14 @@ size_t deduplicate_contexts(dfa_t &dfa,
 	incompatibility_table(dfa, live, fbctxs, incompattbl);
 
 	std::vector<size_t> represent(ntags, 0);
-	const size_t nreps = equivalence_classes(incompattbl, ntags, represent);
+	equivalence_classes(incompattbl, ntags, represent);
+
+	size_t nreps = 0;
+	for (size_t i = 0; i < ntags; ++i) {
+		if (dfa.tags[i].type == Tag::VAR && represent[i] == i) {
+			++nreps;
+		}
+	}
 
 	if (nreps < ntags) {
 		patch_tags(dfa, represent);

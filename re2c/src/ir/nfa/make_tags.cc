@@ -9,10 +9,8 @@ namespace re2c {
 static const size_t VARDIST = std::numeric_limits<size_t>::max();
 
 static void make_tags_var(size_t nrule,
-	std::vector<CtxVar> &vartags,
-	std::vector<size_t> &tagidxs,
-	const RegExp *re,
-	size_t &dist)
+	std::valarray<Tag> &tags, size_t &tagidx,
+	const RegExp *re, size_t &dist)
 {
 	switch (re->type) {
 		case RegExp::NIL: break;
@@ -23,54 +21,50 @@ static void make_tags_var(size_t nrule,
 			break;
 		case RegExp::ALT: {
 			size_t d1 = dist, d2 = dist;
-			make_tags_var(nrule, vartags, tagidxs, re->alt.re1, d1);
-			make_tags_var(nrule, vartags, tagidxs, re->alt.re2, d2);
+			make_tags_var(nrule, tags, tagidx, re->alt.re1, d1);
+			make_tags_var(nrule, tags, tagidx, re->alt.re2, d2);
 			dist = (d1 == d2) ? d1 : VARDIST;
 			break;
 		}
 		case RegExp::CAT:
-			make_tags_var(nrule, vartags, tagidxs, re->cat.re2, dist);
-			make_tags_var(nrule, vartags, tagidxs, re->cat.re1, dist);
+			make_tags_var(nrule, tags, tagidx, re->cat.re2, dist);
+			make_tags_var(nrule, tags, tagidx, re->cat.re1, dist);
 			break;
 		case RegExp::ITER:
 			dist = VARDIST;
-			make_tags_var(nrule, vartags, tagidxs, re->iter, dist);
+			make_tags_var(nrule, tags, tagidx, re->iter, dist);
 			break;
-		case RegExp::TAG:
-			tagidxs.push_back(vartags.size());
-			vartags.push_back(CtxVar(re->tag, nrule));
+		case RegExp::TAG: {
+			const size_t orig = tagidx;
+			init_var_tag(tags[tagidx++], nrule, re->tag, orig);
 			break;
+		}
 	}
 }
 
 static void make_tags_var_fix(size_t nrule,
-	std::vector<CtxVar> &vartags,
-	std::vector<CtxFix> &fixtags,
-	std::vector<size_t> &tagidxs,
-	const RegExp *re,
-	size_t &dist,
-	size_t &base)
+	std::valarray<Tag> &tags, size_t &tagidx,
+	const RegExp *re, size_t &dist, size_t &base)
 {
 	switch (re->type) {
 		case RegExp::NIL:
 		case RegExp::SYM:
 		case RegExp::ALT:
 		case RegExp::ITER:
-			make_tags_var(nrule, vartags, tagidxs, re, dist);
+			make_tags_var(nrule, tags, tagidx, re, dist);
 			break;
 		case RegExp::CAT:
-			make_tags_var_fix(nrule, vartags, fixtags, tagidxs, re->cat.re2, dist, base);
-			make_tags_var_fix(nrule, vartags, fixtags, tagidxs, re->cat.re1, dist, base);
+			make_tags_var_fix(nrule, tags, tagidx, re->cat.re2, dist, base);
+			make_tags_var_fix(nrule, tags, tagidx, re->cat.re1, dist, base);
 			break;
 		case RegExp::TAG: {
 			const std::string *name = re->tag;
 			if (dist == VARDIST) {
-				tagidxs.push_back(base = vartags.size());
-				vartags.push_back(CtxVar(name, nrule));
+				base = tagidx;
+				init_var_tag(tags[tagidx++], nrule, name, base);
 				dist = 0;
 			} else {
-				tagidxs.push_back(NO_TAG);
-				fixtags.push_back(CtxFix(name, nrule, base, dist));
+				init_fix_tag(tags[tagidx++], nrule, name, base, dist);
 			}
 			if (name == NULL) {
 				dist = 0;
@@ -101,14 +95,11 @@ static void make_tags_var_fix(size_t nrule,
  * calculate fixed tag value based on initialized value
  * (and spoil default value expected by the programmer).
  */
-void make_tags(const std::vector<const RegExpRule*> &rs,
-	std::vector<CtxVar> &vartags,
-	std::vector<CtxFix> &fixtags,
-	std::vector<size_t> &tagidxs)
+void make_tags(const std::vector<const RegExpRule*> &rs, std::valarray<Tag> &tags)
 {
 	const size_t nrs = rs.size();
-	for (size_t i = 0; i < nrs; ++i) {
-		size_t base = CtxFix::RIGHTMOST, dist = 0;
+	for (size_t i = 0, tagidx = 0; i < nrs; ++i) {
+		size_t base = Tag::NONE, dist = 0;
 		// don't optimize fixed-length trailing context with generic API
 		// unless tags are explicitly enabled: generic API needs base tag
 		// to restore fixed-length trailing context, and base existence
@@ -116,7 +107,7 @@ void make_tags(const std::vector<const RegExpRule*> &rs,
 		if (!opts->contexts && opts->input_api.type() == InputAPI::CUSTOM) {
 			dist = VARDIST;
 		}
-		make_tags_var_fix(i, vartags, fixtags, tagidxs, rs[i]->re, dist, base);
+		make_tags_var_fix(i, tags, tagidx, rs[i]->re, dist, base);
 	}
 
 }

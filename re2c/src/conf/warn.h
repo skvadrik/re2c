@@ -59,7 +59,7 @@ public:
 	void condition_order (uint32_t line);
 	void empty_class (uint32_t line);
 	void match_empty_string (uint32_t line);
-	void selfoverlapping_contexts(uint32_t line, const std::string &cond, const CtxVar &ctx);
+	void selfoverlapping_contexts(uint32_t line, const std::string &cond, const std::string *tagname);
 	void swapped_range (uint32_t line, uint32_t l, uint32_t u);
 	void undefined_control_flow (const Skeleton &skel, std::vector<path_t> & paths, bool overflow);
 	void unreachable_rule (const std::string & cond, const Rule &rule);

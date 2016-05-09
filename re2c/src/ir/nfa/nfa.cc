@@ -3,20 +3,23 @@
 namespace re2c {
 
 nfa_t::nfa_t(const std::vector<const RegExpRule*> &regexps)
-	: max_size(sizeof_regexps(regexps))
+	: max_size(0)
 	, size(0)
-	, states(new nfa_state_t[max_size])
+	, states(NULL)
 	, rules(*new std::valarray<Rule>(regexps.size()))
-	, vartags(*new std::vector<CtxVar>)
-	, fixtags(*new std::vector<CtxFix>)
+	, tags(NULL)
 	, root(NULL)
 {
-	std::vector<size_t> tagidxs;
-	make_tags(regexps, vartags, fixtags, tagidxs);
+	size_t ntags = 0;
+	max_size = counters(regexps, ntags);
 
-	regexps2nfa(regexps, *this, tagidxs.begin());
+	tags = new std::valarray<Tag>(ntags);
+	make_tags(regexps, *tags);
 
-	init_rules(rules, regexps, vartags, fixtags);
+	states = new nfa_state_t[max_size];
+	regexps2nfa(regexps, *this);
+
+	init_rules(regexps, rules, *tags);
 }
 
 nfa_t::~nfa_t()

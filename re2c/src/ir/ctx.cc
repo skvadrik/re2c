@@ -9,31 +9,29 @@
 namespace re2c
 {
 
-CtxVar::CtxVar(const std::string *n, size_t r)
-	: rule(r)
-	, codename(n)
-	, uniqname()
+const size_t Tag::NONE = std::numeric_limits<size_t>::max();
+
+Tag::Tag()
+	: type(VAR)
+	, rule(Rule::NONE)
+	, name(NULL)
+{}
+
+void init_var_tag(Tag &tag, size_t r, const std::string *n, size_t o)
 {
-	std::ostringstream s;
-	s << rule;
-	if (codename != NULL) {
-		s << *codename;
-	}
-	uniqname = s.str();
+	tag.type = Tag::VAR;
+	tag.rule = r;
+	tag.name = n;
+	tag.var.orig = o;
 }
 
-std::string CtxVar::name() const
+void init_fix_tag(Tag &tag, size_t r, const std::string *n, size_t b, size_t d)
 {
-	return opts->contexts_prefix + uniqname;
+	tag.type = Tag::FIX;
+	tag.rule = r;
+	tag.name = n;
+	tag.fix.base = b;
+	tag.fix.dist = d;
 }
-
-std::string CtxVar::expr() const
-{
-	std::string e = opts->contexts_expr;
-	strrreplace(e, "@@", opts->contexts_prefix + uniqname);
-	return e;
-}
-
-const size_t CtxFix::RIGHTMOST = std::numeric_limits<size_t>::max();
 
 } // namespace re2c

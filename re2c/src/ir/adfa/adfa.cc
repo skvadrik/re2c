@@ -36,8 +36,7 @@ DFA::DFA
 	, nStates(0)
 	, head(NULL)
 	, rules(dfa.rules)
-	, vartags(dfa.vartags)
-	, fixtags(dfa.fixtags)
+	, tags(dfa.tags)
 	, tagpool(dfa.tagpool)
 
 	// statistics
@@ -117,8 +116,7 @@ DFA::~DFA()
 
 	delete skeleton;
 	delete &rules;
-	delete &vartags;
-	delete &fixtags;
+	delete &tags;
 	delete &tagpool;
 }
 

@@ -136,11 +136,10 @@ dfa_t::dfa_t(
 	: states()
 	, nchars(charset.size() - 1) // (n + 1) bounds for n ranges
 	, rules(nfa.rules)
-	, vartags(nfa.vartags)
-	, fixtags(nfa.fixtags)
-	, tagpool(*new Tagpool(vartags.size()))
+	, tags(*nfa.tags)
+	, tagpool(*new Tagpool(tags.size()))
 {
-	const size_t ntags = vartags.size();
+	const size_t ntags = tags.size();
 	const size_t nrules = rules.size();
 	const size_t mask_size = (nchars + 1) * ntags;
 
@@ -148,7 +147,7 @@ dfa_t::dfa_t(
 	kitem_t *kstart = new kitem_t[nfa.size], *kend = kstart;
 	bool *ktags = new bool[ntags]();
 	bool *badtags = new bool[ntags]();
-	bool *tags = new bool[mask_size];
+	bool *arctags = new bool[mask_size];
 	bool *mask = new bool[mask_size];
 	bool *fin = new bool[nrules];
 	std::vector<nfa_state_t*> *arcs = new std::vector<nfa_state_t*>[nchars];
@@ -157,7 +156,7 @@ dfa_t::dfa_t(
 	find_state(kstart, kend, kernels, tagpool);
 	for (size_t i = 0; i < kernels.size(); ++i) {
 		memset(fin, 0, nrules * sizeof(bool));
-		memset(tags, 0, mask_size * sizeof(bool));
+		memset(arctags, 0, mask_size * sizeof(bool));
 		memset(mask, 0, mask_size * sizeof(bool));
 		for(size_t c = 0; c < nchars; ++c) {
 			arcs[c].clear();
@@ -178,7 +177,7 @@ dfa_t::dfa_t(
 					for (const Range *r = n->value.ran.ran; r; r = r->next ()) {
 						for (; charset[c] != r->lower(); ++c);
 						for (; charset[c] != r->upper(); ++c) {
-							merge_tags_with_mask(&tags[c * ntags], newtags,
+							merge_tags_with_mask(&arctags[c * ntags], newtags,
 								&mask[c * ntags], rules[m->rule].tags,
 								badtags, ntags);
 							arcs[c].push_back(m);
@@ -187,7 +186,7 @@ dfa_t::dfa_t(
 					break;
 				}
 				case nfa_state_t::FIN:
-					merge_tags_with_mask(&tags[nchars * ntags], newtags,
+					merge_tags_with_mask(&arctags[nchars * ntags], newtags,
 						&mask[nchars * ntags], rules[n->rule].tags,
 						badtags, ntags);
 					fin[n->rule] = true;
@@ -205,9 +204,9 @@ dfa_t::dfa_t(
 				closure(kstart, kend, a[j], ktags, badtags, ntags);
 			}
 			s->arcs[c] = find_state(kstart, kend, kernels, tagpool);
-			s->tags[c] = tagpool.insert(&tags[c * ntags]);
+			s->tags[c] = tagpool.insert(&arctags[c * ntags]);
 		}
-		s->rule_tags = tagpool.insert(&tags[nchars * ntags]);
+		s->rule_tags = tagpool.insert(&arctags[nchars * ntags]);
 
 		// choose the first rule (the one with smallest rank)
 		size_t r;
@@ -228,14 +227,14 @@ dfa_t::dfa_t(
 	for (size_t i = 0; i < ntags; ++i) {
 		if (badtags[i]) {
 			// TODO: use rule line, add rule reference to context struct
-			warn.selfoverlapping_contexts(line, cond, vartags[i]);
+			warn.selfoverlapping_contexts(line, cond, tags[i].name);
 		}
 	}
 
 	delete[] kstart;
 	delete[] ktags;
 	delete[] badtags;
-	delete[] tags;
+	delete[] arctags;
 	delete[] mask;
 	delete[] fin;
 	delete[] arcs;

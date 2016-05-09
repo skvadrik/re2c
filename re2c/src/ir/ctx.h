@@ -1,75 +1,39 @@
 #ifndef _RE2C_IR_CTX_
 #define _RE2C_IR_CTX_
 
-#include <limits>
 #include <string>
+
+#include "src/util/forbid_copy.h"
 
 namespace re2c
 {
 
-static const size_t NO_TAG = std::numeric_limits<size_t>::max();
-
-struct CtxVar
+struct Tag
 {
+	static const size_t NONE;
+
+	enum {VAR, FIX} type;
 	size_t rule;
-	const std::string *codename;
-	std::string uniqname;
-
-	CtxVar(const std::string *n, size_t r);
-	CtxVar(const CtxVar &ctx)
-		: rule(ctx.rule)
-		, codename(ctx.codename)
-		, uniqname(ctx.uniqname)
-	{}
-	CtxVar& operator=(const CtxVar &ctx)
-	{
-		rule = ctx.rule;
-		codename = ctx.codename;
-		uniqname = ctx.uniqname;
-		return *this;
-	}
-	std::string name() const;
-	std::string expr() const;
-};
-
-struct CtxFix
-{
-	static const size_t RIGHTMOST;
-
-	size_t rule;
-	const std::string *codename;
-	size_t base;
-	size_t dist;
-
-	CtxFix(const std::string *n, size_t r, size_t b, size_t d)
-		: rule(r)
-		, codename(n)
-		, base(b)
-		, dist(d)
-	{}
-};
-
-struct Trail
-{
-	enum {NONE, VAR, FIX} type;
+	const std::string *name;
 	union
 	{
-		size_t var;
-		size_t fix;
+		struct
+		{
+			size_t orig;
+		} var;
+		struct
+		{
+			size_t base;
+			size_t dist;
+		} fix;
 	};
 
-	Trail(): type(NONE) {}
-	void make_var(size_t v)
-	{
-		type = VAR;
-		var = v;
-	}
-	void make_fix(size_t f)
-	{
-		type = FIX;
-		fix = f;
-	}
+	Tag();
+	FORBID_COPY(Tag);
 };
+
+void init_var_tag(Tag &tag, size_t r, const std::string *n, size_t o);
+void init_fix_tag(Tag &tag, size_t r, const std::string *n, size_t b, size_t d);
 
 } // namespace re2c
 

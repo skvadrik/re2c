@@ -209,20 +209,15 @@ void emit_accept(OutputFile &o, uint32_t ind, bool &readCh,
 	o.wind(ind).ws("}\n");
 }
 
-static void subst_contexts(std::string &action, const Rule &rule,
-	const std::vector<CtxVar> &vartags,
-	const std::vector<CtxFix> &fixtags)
+static void subst_contexts(std::string &action,
+	const Rule &rule, const std::valarray<Tag> &tags)
 {
-	for (size_t i = rule.lvartag; i < rule.hvartag; ++i) {
-		const CtxVar &ctx = vartags[i];
-		strrreplace(action, "@" + *ctx.codename,
-			opts->input_api.expr_ctx(ctx.expr()));
-	}
-
-	for (size_t i = rule.lfixtag; i < rule.hfixtag; ++i) {
-		const CtxFix &ctx = fixtags[i];
-		strrreplace(action, "@" + *ctx.codename,
-			opts->input_api.expr_ctx_fix(ctx, vartags));
+	for (size_t i = rule.ltag; i < rule.htag; ++i) {
+		const Tag &tag = tags[i];
+		const std::string s = tag.type == Tag::VAR
+			? opts->input_api.expr_ctx(vartag_expr(tag.name, tag.rule))
+			: opts->input_api.expr_ctx_fix(tag, tags);
+		strrreplace(action, "@" + *tag.name, s);
 	}
 }
 
@@ -231,21 +226,18 @@ void emit_rule(OutputFile &o, uint32_t ind, const DFA &dfa, size_t rule_idx)
 	const Rule &rule = dfa.rules[rule_idx];
 	const RuleInfo *info = rule.info;
 
-	const Trail &trail = rule.trail;
-	switch (trail.type) {
-		case Trail::NONE: break;
-		case Trail::VAR:
+	if (rule.trail != Tag::NONE) {
+		const Tag &tag = dfa.tags[rule.trail];
+		if (tag.type == Tag::VAR) {
 			if (dfa.base_ctxmarker) {
 				o.wstring(opts->input_api.stmt_restorectx_var_base(ind,
-					dfa.vartags[trail.var].expr()));
+					vartag_expr(tag.name, tag.rule)));
 			} else {
 				o.wstring(opts->input_api.stmt_restorectx_var(ind));
 			}
-			break;
-		case Trail::FIX:
-			o.wstring(opts->input_api.stmt_restorectx_fix(ind,
-				dfa.fixtags[trail.fix].dist));
-			break;
+		} else {
+			o.wstring(opts->input_api.stmt_restorectx_fix(ind, tag.fix.dist));
+		}
 	}
 
 	if (opts->target == opt_t::SKELETON) {
@@ -261,7 +253,7 @@ void emit_rule(OutputFile &o, uint32_t ind, const DFA &dfa, size_t rule_idx)
 				o.wind(ind).wstring(yySetupRule).ws("\n");
 			}
 			std::string action = code->text;
-			subst_contexts(action, rule, dfa.vartags, dfa.fixtags);
+			subst_contexts(action, rule, dfa.tags);
 			o.wline_info(code->loc.line, code->loc.filename.c_str())
 				.wind(ind).wstring(action).ws("\n")
 				.wdelay_line_info();
@@ -398,7 +390,7 @@ void gen_settags(OutputFile &o, uint32_t ind, const DFA &dfa, size_t tags)
 	if (tags != 0) {
 		if (dfa.base_ctxmarker) {
 			o.wstring(opts->input_api.stmt_dist(ind,
-				dfa.tagpool[tags], dfa.vartags));
+				dfa.tagpool[tags], dfa.tags));
 		} else {
 			o.wstring(opts->input_api.stmt_backupctx(ind));
 		}

@@ -121,7 +121,7 @@ void Warn::match_empty_string (uint32_t line)
 void Warn::selfoverlapping_contexts(
 	uint32_t line,
 	const std::string &cond,
-	const CtxVar &ctx)
+	const std::string *tagname)
 {
 	if (mask[SELFOVERLAPPING_CONTEXTS] & WARNING)
 	{
@@ -129,12 +129,12 @@ void Warn::selfoverlapping_contexts(
 		error_accuml |= e;
 
 		const char *trail, *name;
-		if (ctx.codename == NULL) {
+		if (tagname == NULL) {
 			trail = "trailing context";
 			name = "";
 		} else {
 			trail = "context ";
-			name = ctx.codename->c_str();
+			name = tagname->c_str();
 		}
 		warning(names[SELFOVERLAPPING_CONTEXTS], line, e,
 			"%s%s %sis self-overlapping", trail, name,

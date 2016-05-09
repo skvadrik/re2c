@@ -82,12 +82,12 @@ SRC = \
 	src/conf/msg.cc \
 	src/conf/opt.cc \
 	src/conf/warn.cc \
+	src/ir/nfa/counters.cc \
 	src/ir/nfa/init_rules.cc \
 	src/ir/nfa/make_tags.cc \
 	src/ir/nfa/nfa.cc \
 	src/ir/nfa/nullable.cc \
 	src/ir/nfa/regexps2nfa.cc \
-	src/ir/nfa/sizeof_regexps.cc \
 	src/ir/adfa/adfa.cc \
 	src/ir/adfa/prepare.cc \
 	src/ir/dfa/context_deduplication.cc \

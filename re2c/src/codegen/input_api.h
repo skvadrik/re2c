@@ -4,7 +4,7 @@
 #include "src/util/c99_stdint.h"
 #include <set>
 #include <string>
-#include <vector>
+#include <valarray>
 
 #include "src/ir/ctx.h"
 
@@ -33,10 +33,10 @@ public:
 	std::string stmt_backup (uint32_t ind) const;
 	std::string stmt_backupctx (uint32_t ind) const;
 	std::string expr_dist () const;
-	std::string stmt_dist (uint32_t ind, const bool *tags,
-		const std::vector<CtxVar> &contexts) const;
-	std::string expr_ctx (const std::string &ctx) const;
-	std::string expr_ctx_fix (const CtxFix &ctx, const std::vector<CtxVar> &ctxvars) const;
+	std::string stmt_dist (uint32_t ind, const bool *tagmask,
+		const std::valarray<Tag> &tags) const;
+	std::string expr_ctx(const std::string &var) const;
+	std::string expr_ctx_fix(const Tag &tag, const std::valarray<Tag> &tags) const;
 	std::string stmt_restore (uint32_t ind) const;
 	std::string stmt_restorectx_fix (uint32_t ind, size_t dist) const;
 	std::string stmt_restorectx_var (uint32_t ind) const;

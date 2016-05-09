@@ -35,11 +35,9 @@ struct Rule
 
 	const RuleInfo *info;
 
-	size_t lvartag;
-	size_t hvartag;
-	size_t lfixtag;
-	size_t hfixtag;
-	Trail trail;
+	size_t ltag;
+	size_t htag;
+	size_t trail;
 	bool nullable;
 	bool *tags;
 	std::set<uint32_t> shadow;
@@ -47,11 +45,9 @@ struct Rule
 
 	Rule()
 		: info(NULL)
-		, lvartag(0)
-		, hvartag(0)
-		, lfixtag(0)
-		, hfixtag(0)
-		, trail()
+		, ltag(0)
+		, htag(0)
+		, trail(Tag::NONE)
 		, nullable(false)
 		, tags(NULL)
 		, shadow()
