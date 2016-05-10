@@ -73,14 +73,14 @@ static void closure(kitem_t *const kernel, kitem_t *&kend,
 	n->mark = true;
 	switch (n->type) {
 		case nfa_state_t::ALT:
-			closure(kernel, kend, n->value.alt.out2, tags, badtags, ntags);
-			closure(kernel, kend, n->value.alt.out1, tags, badtags, ntags);
+			closure(kernel, kend, n->alt.out2, tags, badtags, ntags);
+			closure(kernel, kend, n->alt.out1, tags, badtags, ntags);
 			break;
 		case nfa_state_t::TAG: {
-			const size_t t = n->value.tag.info;
+			const size_t t = n->tag.info;
 			const bool old = tags[t];
 			tags[t] = true;
-			closure(kernel, kend, n->value.tag.out, tags, badtags, ntags);
+			closure(kernel, kend, n->tag.out, tags, badtags, ntags);
 			tags[t] = old;
 			break;
 		}
@@ -170,9 +170,9 @@ dfa_t::dfa_t(const nfa_t &nfa,
 			const bool *newtags = tagpool[kernel[j].tagidx];
 			switch (n->type) {
 				case nfa_state_t::RAN: {
-					nfa_state_t *m = n->value.ran.out;
+					nfa_state_t *m = n->ran.out;
 					size_t c = 0;
-					for (const Range *r = n->value.ran.ran; r; r = r->next ()) {
+					for (const Range *r = n->ran.ran; r; r = r->next ()) {
 						for (; charset[c] != r->lower(); ++c);
 						for (; charset[c] != r->upper(); ++c) {
 							merge_tags_with_mask(&arctags[c * ntags], newtags,

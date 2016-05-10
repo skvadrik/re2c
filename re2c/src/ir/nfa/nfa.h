@@ -33,35 +33,35 @@ struct nfa_state_t
 			nfa_state_t *out;
 			size_t info;
 		} tag;
-	} value;
+	};
 	size_t rule;
 	bool mark;
 
-	void alt(size_t r, nfa_state_t *s1, nfa_state_t *s2)
+	void make_alt(size_t r, nfa_state_t *s1, nfa_state_t *s2)
 	{
 		type = ALT;
-		value.alt.out1 = s1;
-		value.alt.out2 = s2;
+		alt.out1 = s1;
+		alt.out2 = s2;
 		rule = r;
 		mark = false;
 	}
-	void ran(size_t r, nfa_state_t *s, const Range *p)
+	void make_ran(size_t r, nfa_state_t *s, const Range *p)
 	{
 		type = RAN;
-		value.ran.out = s;
-		value.ran.ran = p;
+		ran.out = s;
+		ran.ran = p;
 		rule = r;
 		mark = false;
 	}
-	void tag(size_t r, nfa_state_t *s, size_t i)
+	void make_tag(size_t r, nfa_state_t *s, size_t i)
 	{
 		type = TAG;
-		value.tag.out = s;
-		value.tag.info = i;
+		tag.out = s;
+		tag.info = i;
 		rule = r;
 		mark = false;
 	}
-	void fin(size_t r)
+	void make_fin(size_t r)
 	{
 		type = FIN;
 		rule = r;
