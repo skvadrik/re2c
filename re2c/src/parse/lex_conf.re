@@ -173,10 +173,12 @@ void Scanner::lex_conf_encoding_policy()
 /*!re2c
 	* { fatal("bad configuration value"
 		" (expected: 'ignore', 'substitute', 'fail')"); }
-	"ignore"     { opts.set_encoding_policy(Enc::POLICY_IGNORE);     return; }
-	"substitute" { opts.set_encoding_policy(Enc::POLICY_SUBSTITUTE); return; }
-	"fail"       { opts.set_encoding_policy(Enc::POLICY_FAIL);       return; }
+	"ignore"     { opts.set_encoding_policy(Enc::POLICY_IGNORE);     goto end; }
+	"substitute" { opts.set_encoding_policy(Enc::POLICY_SUBSTITUTE); goto end; }
+	"fail"       { opts.set_encoding_policy(Enc::POLICY_FAIL);       goto end; }
 */
+end:
+	lex_conf_semicolon();
 }
 
 void Scanner::lex_conf_input()
@@ -185,9 +187,11 @@ void Scanner::lex_conf_input()
 /*!re2c
 	* { fatal("bad configuration value"
 		" (expected: 'default', 'custom')"); }
-	"default" { opts.set_input_api(InputAPI::DEFAULT); return; }
-	"custom"  { opts.set_input_api(InputAPI::CUSTOM);  return; }
+	"default" { opts.set_input_api(InputAPI::DEFAULT); goto end; }
+	"custom"  { opts.set_input_api(InputAPI::CUSTOM);  goto end; }
 */
+end:
+	lex_conf_semicolon();
 }
 
 void Scanner::lex_conf_empty_class()
@@ -196,10 +200,12 @@ void Scanner::lex_conf_empty_class()
 /*!re2c
 	* { fatal("bad configuration value"
 		" (expected: 'match-empty', 'match-none', 'error')"); }
-	"match-empty" { opts.set_empty_class_policy(EMPTY_CLASS_MATCH_EMPTY); return; }
-	"match-none"  { opts.set_empty_class_policy(EMPTY_CLASS_MATCH_NONE);  return; }
-	"error"       { opts.set_empty_class_policy(EMPTY_CLASS_ERROR);       return; }
+	"match-empty" { opts.set_empty_class_policy(EMPTY_CLASS_MATCH_EMPTY); goto end; }
+	"match-none"  { opts.set_empty_class_policy(EMPTY_CLASS_MATCH_NONE);  goto end; }
+	"error"       { opts.set_empty_class_policy(EMPTY_CLASS_ERROR);       goto end; }
 */
+end:
+	lex_conf_semicolon();
 }
 
 void Scanner::lex_conf_dfa_minimization()
@@ -208,9 +214,11 @@ void Scanner::lex_conf_dfa_minimization()
 /*!re2c
 	* { fatal("bad configuration value"
 		" (expected: 'table', 'moore')"); }
-	"table" { opts.set_dfa_minimization(DFA_MINIMIZATION_TABLE); return; }
-	"moore" { opts.set_dfa_minimization(DFA_MINIMIZATION_MOORE); return; }
+	"table" { opts.set_dfa_minimization(DFA_MINIMIZATION_TABLE); goto end; }
+	"moore" { opts.set_dfa_minimization(DFA_MINIMIZATION_MOORE); goto end; }
 */
+end:
+	lex_conf_semicolon();
 }
 
 void Scanner::lex_conf_enc(Enc::type_t enc)
