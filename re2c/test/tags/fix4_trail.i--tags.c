@@ -9,8 +9,8 @@ static void lex(const char *YYCURSOR)
     
 {
 	char yych;
-	long yyctx0p1;
-	long yyctx0p3;
+	long yytag0p1;
+	long yytag0p3;
 	YYCTXMARKER = YYCURSOR;
 	yych = *YYCURSOR;
 	switch (yych) {
@@ -25,10 +25,10 @@ yy4:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
 	case '1':
-		yyctx0p1 = (YYCURSOR - YYCTXMARKER);
+		yytag0p1 = (YYCURSOR - YYCTXMARKER);
 		goto yy5;
 	case '2':
-		yyctx0p1 = (YYCURSOR - YYCTXMARKER);
+		yytag0p1 = (YYCURSOR - YYCTXMARKER);
 		goto yy8;
 	default:	goto yy3;
 	}
@@ -47,10 +47,10 @@ yy8:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case '3':
-		yyctx0p3 = (YYCURSOR - YYCTXMARKER);
+		yytag0p3 = (YYCURSOR - YYCTXMARKER);
 		goto yy9;
 	case '4':
-		yyctx0p3 = (YYCURSOR - YYCTXMARKER);
+		yytag0p3 = (YYCURSOR - YYCTXMARKER);
 		goto yy11;
 	default:	goto yy7;
 	}
@@ -67,10 +67,10 @@ yy11:
 	YYCURSOR -= 1;
 	{
             printf("'%.*s', '%.*s', '%.*s', '%.*s', '%s'\n",
-                (YYCTXMARKER + yyctx0p1) - YYCTXMARKER, YYCTXMARKER,
-                (YYCTXMARKER + (yyctx0p3 - 1)) - (YYCTXMARKER + yyctx0p1), (YYCTXMARKER + yyctx0p1),
-                (YYCTXMARKER + yyctx0p3) - (YYCTXMARKER + (yyctx0p3 - 1)), (YYCTXMARKER + (yyctx0p3 - 1)),
-                YYCURSOR - (YYCTXMARKER + yyctx0p3), (YYCTXMARKER + yyctx0p3),
+                (YYCTXMARKER + yytag0p1) - YYCTXMARKER, YYCTXMARKER,
+                (YYCTXMARKER + (yytag0p3 - 1)) - (YYCTXMARKER + yytag0p1), (YYCTXMARKER + yytag0p1),
+                (YYCTXMARKER + yytag0p3) - (YYCTXMARKER + (yytag0p3 - 1)), (YYCTXMARKER + (yytag0p3 - 1)),
+                YYCURSOR - (YYCTXMARKER + yytag0p3), (YYCTXMARKER + yytag0p3),
                 YYCURSOR);
                 return;
         }

@@ -54,4 +54,4 @@ int main(int argc, char **argv)
     }
     return 0;
 }
-re2c: warning: line 19: trailing context is self-overlapping [-Wselfoverlapping-contexts]
+re2c: warning: line 13: trailing context is nondeterministic [-Wnondeterministic-tags]

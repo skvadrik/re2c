@@ -46,7 +46,6 @@ void Scanner::lex_conf ()
 
 	"flags:" ("b" | "bit-vectors")       { opts.set_bFlag(lex_conf_bool());             return; }
 	"flags:" ("c" | "start-conditions")  { opts.set_cFlag(lex_conf_bool());             return; }
-	"flags:" ("C" | "contexts")          { opts.set_contexts(lex_conf_bool());          return; }
 	"flags:" ("d" | "debug-output")      { opts.set_dFlag(lex_conf_bool());             return; }
 	"flags:" ("f" | "storable-state")    { opts.set_fFlag(lex_conf_bool());             return; }
 	"flags:" ("F" | "flex-syntax")       { opts.set_FFlag(lex_conf_bool());             return; }
@@ -54,6 +53,7 @@ void Scanner::lex_conf ()
 	"flags:" ("i" | "no-debug-info")     { opts.set_iFlag(lex_conf_bool());             return; }
 	"flags:" ("r" | "reusable")          { opts.set_rFlag(lex_conf_bool());             return; }
 	"flags:" ("s" | "nested-ifs")        { opts.set_sFlag(lex_conf_bool());             return; }
+	"flags:" ("T" | "tags")              { opts.set_tags(lex_conf_bool());              return; }
 	"flags:no-generation-date"           { opts.set_bNoGenerationDate(lex_conf_bool()); return; }
 	"flags:no-version"                   { opts.set_version(!lex_conf_bool());          return; }
 	"flags:case-insensitive"             { opts.set_bCaseInsensitive(lex_conf_bool());  return; }
@@ -124,11 +124,11 @@ void Scanner::lex_conf ()
 	"define:YYRESTORE"    { opts.set_yyrestore    (lex_conf_string ()); return; }
 	"define:YYRESTORECTX" { opts.set_yyrestorectx (lex_conf_string ()); return; }
 	"define:YYLESSTHAN"   { opts.set_yylessthan   (lex_conf_string ()); return; }
-	"define:YYCTX"        { opts.set_yyctx        (lex_conf_string ()); return; }
-	"define:YYDIST"       { opts.set_yydist       (lex_conf_string ()); return; }
+	"define:YYTAG"        { opts.set_tags_yytag   (lex_conf_string ()); return; }
+	"define:YYDIST"       { opts.set_tags_yydist  (lex_conf_string ()); return; }
 
-	"contexts:prefix" { opts.set_contexts_prefix(lex_conf_string ()); return; }
-	"contexts:expr"   { opts.set_contexts_expr  (lex_conf_string ()); return; }
+	"tags:prefix" { opts.set_tags_prefix(lex_conf_string ()); return; }
+	"tags:expr"   { opts.set_tags_expr  (lex_conf_string ()); return; }
 
 	"indent:string" { opts.set_indString (lex_conf_string ()); return; }
 	"indent:top"

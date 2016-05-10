@@ -31,7 +31,7 @@ static nfa_state_t *regexp2nfa(nfa_t &nfa, size_t nrule,
 		case RegExp::TAG:
 			if ((*nfa.tags)[tagidx].type == Tag::VAR) {
 				s = &nfa.states[nfa.size++];
-				s->ctx(nrule, t, tagidx);
+				s->tag(nrule, t, tagidx);
 			} else {
 				s = t;
 			}

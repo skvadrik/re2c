@@ -14,12 +14,12 @@ static void lex(const char *YYCURSOR)
 {
     const char *YYMARKER;
     const char *YYCTXMARKER;
-    /*!contexts:re2c sep="\n"; line="long @@ = 0;"; line=; sep=; */
-    ptrdiff_t /*!contexts:re2c sep=", "; line="@@ = 0"; */;
+    /*!tags:re2c sep="\n"; line="long @@ = 0;"; line=; sep=; */
+    ptrdiff_t /*!tags:re2c sep=", "; line="@@ = 0"; */;
     /*!re2c
         re2c:define:YYCTYPE = char;
         re2c:yyfill:enable = 0;
-        re2c:contexts:prefix = "zz_";
+        re2c:tags:prefix = "zz_";
 
         oct = [0-9]{1,3};
         d   = ".";

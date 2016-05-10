@@ -118,27 +118,25 @@ void Warn::match_empty_string (uint32_t line)
 	}
 }
 
-void Warn::selfoverlapping_contexts(
+void Warn::nondeterministic_tags(
 	uint32_t line,
 	const std::string &cond,
 	const std::string *tagname)
 {
-	if (mask[SELFOVERLAPPING_CONTEXTS] & WARNING)
+	if (mask[NONDETERMINISTIC_TAGS] & WARNING)
 	{
-		const bool e = mask[SELFOVERLAPPING_CONTEXTS] & ERROR;
+		const bool e = mask[NONDETERMINISTIC_TAGS] & ERROR;
 		error_accuml |= e;
 
-		const char *trail, *name;
 		if (tagname == NULL) {
-			trail = "trailing context";
-			name = "";
+			warning(names[NONDETERMINISTIC_TAGS], line, e,
+				"trailing context %sis nondeterministic",
+				incond(cond).c_str());
 		} else {
-			trail = "context ";
-			name = tagname->c_str();
+			warning(names[NONDETERMINISTIC_TAGS], line, e,
+				"tag '%s' %sis nondeterministic",
+				tagname->c_str(), incond(cond).c_str());
 		}
-		warning(names[SELFOVERLAPPING_CONTEXTS], line, e,
-			"%s%s %sis self-overlapping", trail, name,
-			incond(cond).c_str());
 	}
 }
 

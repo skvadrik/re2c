@@ -1,5 +1,5 @@
-#ifndef _RE2C_IR_CTX_
-#define _RE2C_IR_CTX_
+#ifndef _RE2C_IR_TAG_
+#define _RE2C_IR_TAG_
 
 #include <string>
 
@@ -37,4 +37,4 @@ void init_fix_tag(Tag &tag, size_t r, const std::string *n, size_t b, size_t d);
 
 } // namespace re2c
 
-#endif // _RE2C_IR_CTX_
+#endif // _RE2C_IR_TAG_

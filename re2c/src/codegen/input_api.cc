@@ -102,7 +102,7 @@ std::string InputAPI::expr_dist () const
 			s = "(" + opts->yycursor + " - " + opts->yyctxmarker + ")";
 			break;
 		case CUSTOM:
-			s = opts->yydist + "()";
+			s = opts->tags_yydist + "()";
 			break;
 	}
 	return s;
@@ -121,34 +121,34 @@ std::string InputAPI::stmt_dist (uint32_t ind, const bool *mask,
 	return s + expr_dist() + ";\n";
 }
 
-std::string InputAPI::expr_ctx(const std::string &var) const
+std::string InputAPI::expr_tag(const std::string &var) const
 {
 	switch (type_) {
 		case DEFAULT: return "(" + opts->yyctxmarker + " + " + var + ")";
-		case CUSTOM:  return opts->yyctx + "(" + var + ")";
+		case CUSTOM:  return opts->tags_yytag + "(" + var + ")";
 		default:      assert(false);
 	}
 }
 
-std::string InputAPI::expr_ctx_fix(const Tag &tag, const std::valarray<Tag> &tags) const
+std::string InputAPI::expr_tag_fix(const Tag &tag, const std::valarray<Tag> &tags) const
 {
 	std::ostringstream s;
 	if (tag.fix.base == Tag::NONE) {
 		switch (type_) {
 			case DEFAULT:
 				// optimize '(YYCTXMARKER + ((YYCURSOR - YCTXMARKER) - yyctx))'
-				// to       '(YYCURSOR - yyctx)'
+				// to       '(YYCURSOR - yytag)'
 				s << "(" << opts->yycursor << " - " << tag.fix.dist << ")";
 				break;
 			case CUSTOM:
-				s << opts->yyctx << "(" << opts->yydist << "() - " << tag.fix.dist << ")";
+				s << opts->tags_yytag << "(" << opts->tags_yydist << "() - " << tag.fix.dist << ")";
 				break;
 		}
 		return s.str();
 	} else {
 		const Tag &t = tags[tags[tag.fix.base].var.orig];
 		s << "(" << vartag_expr(t.name, t.rule) << " - " << tag.fix.dist << ")";
-		return expr_ctx(s.str());
+		return expr_tag(s.str());
 	}
 }
 
@@ -175,7 +175,7 @@ std::string InputAPI::stmt_restorectx_fix(uint32_t ind, size_t dist) const
 			s << opts->yycursor << " -= " << dist;
 			break;
 		case CUSTOM:
-			s << opts->yyrestorectx << " (" + opts->yydist + "() - " << dist << ")";
+			s << opts->yyrestorectx << " (" + opts->tags_yydist + "() - " << dist << ")";
 			break;
 	}
 	return indent(ind) + s.str() + ";\n";

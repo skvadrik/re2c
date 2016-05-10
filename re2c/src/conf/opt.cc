@@ -76,10 +76,10 @@ void opt_t::fix ()
 			state_set = Opt::baseopt.state_set;
 			state_set_arg = Opt::baseopt.state_set_arg;
 			state_set_naked = Opt::baseopt.state_set_naked;
-			yyctx = Opt::baseopt.yyctx;
-			yydist = Opt::baseopt.yydist;
-			contexts_prefix = Opt::baseopt.contexts_prefix;
-			contexts_expr = Opt::baseopt.contexts_expr;
+			tags_yytag = Opt::baseopt.tags_yytag;
+			tags_yydist = Opt::baseopt.tags_yydist;
+			tags_prefix = Opt::baseopt.tags_prefix;
+			tags_expr = Opt::baseopt.tags_expr;
 			yyfilllabel = Opt::baseopt.yyfilllabel;
 			yynext = Opt::baseopt.yynext;
 			yyaccept = Opt::baseopt.yyaccept;
@@ -154,12 +154,12 @@ void opt_t::fix ()
 		bUseStateAbort = Opt::baseopt.bUseStateAbort;
 		bUseStateNext = Opt::baseopt.bUseStateNext;
 	}
-	if (!contexts)
+	if (!tags)
 	{
-		yyctx = Opt::baseopt.yyctx;
-		yydist = Opt::baseopt.yydist;
-		contexts_prefix = Opt::baseopt.contexts_prefix;
-		contexts_expr = Opt::baseopt.contexts_expr;
+		tags_yytag = Opt::baseopt.tags_yytag;
+		tags_yydist = Opt::baseopt.tags_yydist;
+		tags_prefix = Opt::baseopt.tags_prefix;
+		tags_expr = Opt::baseopt.tags_expr;
 	}
 	if (!bFlag)
 	{
@@ -226,8 +226,8 @@ void opt_t::fix ()
 		default:
 			break;
 	}
-	if (contexts) {
-		warn.set(Warn::SELFOVERLAPPING_CONTEXTS, Warn::WERROR);
+	if (tags) {
+		warn.set(Warn::NONDETERMINISTIC_TAGS, Warn::WERROR);
 	}
 	if (bFlag)
 	{
@@ -334,8 +334,8 @@ void Opt::reset_mapCodeName ()
 	useropt->yyrestore = Opt::baseopt.yyrestore;
 	useropt->yyrestorectx = Opt::baseopt.yyrestorectx;
 	useropt->yyskip = Opt::baseopt.yyskip;
-	useropt->yyctx = Opt::baseopt.yyctx;
-	useropt->yydist = Opt::baseopt.yydist;
+	useropt->tags_yytag = Opt::baseopt.tags_yytag;
+	useropt->tags_yydist = Opt::baseopt.tags_yydist;
 	useropt->yyfilllabel = Opt::baseopt.yyfilllabel;
 	useropt->yynext = Opt::baseopt.yynext;
 	useropt->yyaccept = Opt::baseopt.yyaccept;

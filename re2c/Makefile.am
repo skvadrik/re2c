@@ -36,8 +36,8 @@ SRC_HDR = \
 	src/ir/regexp/empty_class_policy.h \
 	src/ir/regexp/regexp.h \
 	src/ir/compile.h \
-	src/ir/ctx.h \
 	src/ir/rule.h \
+	src/ir/tag.h \
 	src/ir/tagpool.h \
 	src/ir/skeleton/path.h \
 	src/ir/skeleton/skeleton.h \
@@ -90,11 +90,11 @@ SRC = \
 	src/ir/nfa/regexps2nfa.cc \
 	src/ir/adfa/adfa.cc \
 	src/ir/adfa/prepare.cc \
-	src/ir/dfa/context_deduplication.cc \
 	src/ir/dfa/determinization.cc \
 	src/ir/dfa/fallback.cc \
 	src/ir/dfa/fillpoints.cc \
 	src/ir/dfa/minimization.cc \
+	src/ir/dfa/tag_deduplication.cc \
 	src/ir/regexp/encoding/enc.cc \
 	src/ir/regexp/encoding/range_suffix.cc \
 	src/ir/regexp/encoding/utf8/utf8_regexp.cc \
@@ -106,7 +106,6 @@ SRC = \
 	src/ir/regexp/regexp.cc \
 	src/ir/regexp/split_charset.cc \
 	src/ir/compile.cc \
-	src/ir/ctx.cc \
 	src/ir/rule.cc \
 	src/ir/skeleton/control_flow.cc \
 	src/ir/skeleton/generate_code.cc \
@@ -114,6 +113,7 @@ SRC = \
 	src/ir/skeleton/maxpath.cc \
 	src/ir/skeleton/skeleton.cc \
 	src/ir/skeleton/unreachable_nullable.cc \
+	src/ir/tag.cc \
 	src/main.cc \
 	src/parse/code.cc \
 	src/parse/input.cc \

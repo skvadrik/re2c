@@ -10,23 +10,6 @@ static inline unsigned parse_oct(const char *s, const char *e)
     return oct;
 }
 
-struct contexts_t
-{
-    /*!contexts:re2c
-        line = "long @@;";
-    */
-
-    contexts_t();
-    void push(/*!contexts:re2c
-        line = "long arg_@@";
-        sep = ",";
-    */);
-    void pop(/*!contexts:re2c
-        line = "long &arg_@@";
-        sep = ",";
-    */);
-};
-
 static void lex(const char *s)
 {
 #define YYPEEK()           *s
@@ -39,15 +22,9 @@ static void lex(const char *s)
 #define ZZ_DIST()          (s - basectx)
     const char *marker;
     const char *basectx;
-    contexts_t ctxs;
     /*!re2c
         re2c:define:YYCTYPE = char;
         re2c:yyfill:enable = 0;
-
-        re2c:define:YYCTX = "ZZ_CTX";
-        re2c:define:YYDIST = "ZZ_DIST";
-        re2c:contexts:prefix = "zz_";
-        re2c:contexts:expr = "ctxs.@@";
 
         oct = [0-9]{1,3};
         d   = ".";
@@ -65,29 +42,12 @@ static void lex(const char *s)
                 parse_oct(@p3 + 1, s));
             return;
         }
+
+        re2c:define:YYTAG = "ZZ_CTX";
+        re2c:define:YYDIST = "ZZ_DIST";
+        re2c:tags:prefix = "zz_";
     */
 }
-
-contexts_t::contexts_t(): /*!contexts:re2c
-    line = "@@(0)";
-    sep = ",";
-*/ {}
-
-void contexts_t::push(/*!contexts:re2c
-    line = "long arg_@@";
-    sep = ",";
-*/)
-{/*!contexts:re2c
-    line = "@@ = arg_@@;";
-*/}
-
-void contexts_t::pop(/*!contexts:re2c
-    line = "long &arg_@@";
-    sep = ",";
-*/)
-{/*!contexts:re2c
-    line = "arg_@@ = @@;";
-*/}
 
 int main(int argc, char **argv)
 {

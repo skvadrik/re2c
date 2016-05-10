@@ -50,7 +50,7 @@ struct dfa_t
 	Tagpool &tagpool;
 
 	dfa_t(const nfa_t &nfa, const charset_t &charset,
-		uint32_t line, const std::string &cond);
+		const std::string &cond);
 	~dfa_t();
 
 	FORBID_COPY(dfa_t);
@@ -65,7 +65,7 @@ enum dfa_minimization_t
 void minimization(dfa_t &dfa);
 void fillpoints(const dfa_t &dfa, std::vector<size_t> &fill);
 void fallback_states(const dfa_t &dfa, std::vector<size_t> &fallback);
-size_t deduplicate_contexts(dfa_t &dfa, const std::vector<size_t> &fallback);
+size_t deduplicate_tags(dfa_t &dfa, const std::vector<size_t> &fallback);
 
 } // namespace re2c
 

@@ -81,7 +81,7 @@ opt_warn:
 	"condition-order"          end { warn.set (Warn::CONDITION_ORDER,          option); goto opt; }
 	"empty-character-class"    end { warn.set (Warn::EMPTY_CHARACTER_CLASS,    option); goto opt; }
 	"match-empty-string"       end { warn.set (Warn::MATCH_EMPTY_STRING,       option); goto opt; }
-	"selfoverlapping-contexts" end { warn.set (Warn::SELFOVERLAPPING_CONTEXTS, option); goto opt; }
+	"nondeterministic-tags"    end { warn.set (Warn::NONDETERMINISTIC_TAGS,    option); goto opt; }
 	"swapped-range"            end { warn.set (Warn::SWAPPED_RANGE,            option); goto opt; }
 	"undefined-control-flow"   end { warn.set (Warn::UNDEFINED_CONTROL_FLOW,   option); goto opt; }
 	"unreachable-rules"        end { warn.set (Warn::UNREACHABLE_RULES,        option); goto opt; }
@@ -101,7 +101,6 @@ opt_short:
 	"V"  { vernum ();  return EXIT_OK; }
 	"b" { opts.set_bFlag (true);             goto opt_short; }
 	"c" { opts.set_cFlag (true);             goto opt_short; }
-	"C" { opts.set_contexts (true);          goto opt_short; }
 	"d" { opts.set_dFlag (true);             goto opt_short; }
 	"D" { opts.set_target (opt_t::DOT);      goto opt_short; }
 	"f" { opts.set_fFlag (true);             goto opt_short; }
@@ -111,6 +110,7 @@ opt_short:
 	"r" { opts.set_rFlag (true);             goto opt_short; }
 	"s" { opts.set_sFlag (true);             goto opt_short; }
 	"S" { opts.set_target (opt_t::SKELETON); goto opt_short; }
+	"T" { opts.set_tags (true);              goto opt_short; }
 	"e" { if (!opts.set_encoding (Enc::EBCDIC)) { error_encoding (); return EXIT_FAIL; } goto opt_short; }
 	"u" { if (!opts.set_encoding (Enc::UTF32))  { error_encoding (); return EXIT_FAIL; } goto opt_short; }
 	"w" { if (!opts.set_encoding (Enc::UCS2))   { error_encoding (); return EXIT_FAIL; } goto opt_short; }
@@ -135,7 +135,6 @@ opt_long:
 	"vernum"             end { vernum ();  return EXIT_OK; }
 	"bit-vectors"        end { opts.set_bFlag (true);             goto opt; }
 	"start-conditions"   end { opts.set_cFlag (true);             goto opt; }
-	"contexts"           end { opts.set_contexts (true);          goto opt; }
 	"debug-output"       end { opts.set_dFlag (true);             goto opt; }
 	"emit-dot"           end { opts.set_target (opt_t::DOT);      goto opt; }
 	"storable-state"     end { opts.set_fFlag (true);             goto opt; }
@@ -149,6 +148,7 @@ opt_long:
 	"case-insensitive"   end { opts.set_bCaseInsensitive (true);  goto opt; }
 	"case-inverted"      end { opts.set_bCaseInverted (true);     goto opt; }
 	"skeleton"           end { opts.set_target (opt_t::SKELETON); goto opt; }
+	"tags"               end { opts.set_tags (true);              goto opt; }
 	"ecb"                end { if (!opts.set_encoding (Enc::EBCDIC)) { error_encoding (); return EXIT_FAIL; } goto opt; }
 	"unicode"            end { if (!opts.set_encoding (Enc::UTF32))  { error_encoding (); return EXIT_FAIL; } goto opt; }
 	"wide-chars"         end { if (!opts.set_encoding (Enc::UCS2))   { error_encoding (); return EXIT_FAIL; } goto opt; }

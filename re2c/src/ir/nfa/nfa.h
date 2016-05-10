@@ -15,13 +15,7 @@ namespace re2c
 
 struct nfa_state_t
 {
-	enum type_t
-	{
-		ALT,
-		RAN,
-		CTX,
-		FIN
-	} type;
+	enum type_t {ALT, RAN, TAG, FIN} type;
 	union
 	{
 		struct
@@ -38,7 +32,7 @@ struct nfa_state_t
 		{
 			nfa_state_t *out;
 			size_t info;
-		} ctx;
+		} tag;
 	} value;
 	size_t rule;
 	bool mark;
@@ -59,11 +53,11 @@ struct nfa_state_t
 		rule = r;
 		mark = false;
 	}
-	void ctx(size_t r, nfa_state_t *s, size_t i)
+	void tag(size_t r, nfa_state_t *s, size_t i)
 	{
-		type = CTX;
-		value.ctx.out = s;
-		value.ctx.info = i;
+		type = TAG;
+		value.tag.out = s;
+		value.tag.info = i;
 		rule = r;
 		mark = false;
 	}

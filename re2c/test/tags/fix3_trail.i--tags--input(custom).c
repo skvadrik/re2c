@@ -9,36 +9,36 @@ static void lex(const char *YYCURSOR)
     
 {
 	char yych;
-	long yyctx0;
-	long yyctx0p1;
-	long yyctx0p2;
-	long yyctx0p3;
+	long yytag0;
+	long yytag0p1;
+	long yytag0p2;
+	long yytag0p3;
 	YYBACKUPCTX ();
 	yych = YYPEEK ();
 	switch (yych) {
 	case '0':	goto yy5;
 	case '1':
-		yyctx0p1 = YYDIST();
+		yytag0p1 = YYDIST();
 		goto yy7;
 	case '2':
-		yyctx0p2 = yyctx0p1 = YYDIST();
+		yytag0p2 = yytag0p1 = YYDIST();
 		goto yy9;
 	case '3':
-		yyctx0p3 = yyctx0p2 = yyctx0p1 = YYDIST();
+		yytag0p3 = yytag0p2 = yytag0p1 = YYDIST();
 		goto yy11;
 	case '4':
-		yyctx0 = yyctx0p3 = yyctx0p2 = yyctx0p1 = YYDIST();
+		yytag0 = yytag0p3 = yytag0p2 = yytag0p1 = YYDIST();
 		goto yy13;
 	default:	goto yy3;
 	}
 yy2:
-	YYRESTORECTX (yyctx0);
+	YYRESTORECTX (yytag0);
 	{
             printf("'%.*s', '%.*s', '%.*s', '%.*s', '%s'\n",
-                YYCTX(yyctx0p1) - YYCTXMARKER, YYCTXMARKER,
-                YYCTX(yyctx0p2) - YYCTX(yyctx0p1), YYCTX(yyctx0p1),
-                YYCTX(yyctx0p3) - YYCTX(yyctx0p2), YYCTX(yyctx0p2),
-                YYCURSOR - YYCTX(yyctx0p3), YYCTX(yyctx0p3),
+                YYTAG(yytag0p1) - YYCTXMARKER, YYCTXMARKER,
+                YYTAG(yytag0p2) - YYTAG(yytag0p1), YYTAG(yytag0p1),
+                YYTAG(yytag0p3) - YYTAG(yytag0p2), YYTAG(yytag0p2),
+                YYCURSOR - YYTAG(yytag0p3), YYTAG(yytag0p3),
                 YYCURSOR);
                 return;
         }
@@ -51,19 +51,19 @@ yy5:
 	switch (yych) {
 	case '0':	goto yy5;
 	case '1':
-		yyctx0p1 = YYDIST();
+		yytag0p1 = YYDIST();
 		goto yy7;
 	case '2':
-		yyctx0p2 = yyctx0p1 = YYDIST();
+		yytag0p2 = yytag0p1 = YYDIST();
 		goto yy9;
 	case '3':
-		yyctx0p3 = yyctx0p2 = yyctx0p1 = YYDIST();
+		yytag0p3 = yytag0p2 = yytag0p1 = YYDIST();
 		goto yy11;
 	case '4':
-		yyctx0 = yyctx0p3 = yyctx0p2 = yyctx0p1 = YYDIST();
+		yytag0 = yytag0p3 = yytag0p2 = yytag0p1 = YYDIST();
 		goto yy13;
 	default:
-		yyctx0 = yyctx0p3 = yyctx0p2 = yyctx0p1 = YYDIST();
+		yytag0 = yytag0p3 = yytag0p2 = yytag0p1 = YYDIST();
 		goto yy2;
 	}
 yy7:
@@ -72,16 +72,16 @@ yy7:
 	switch (yych) {
 	case '1':	goto yy7;
 	case '2':
-		yyctx0p2 = YYDIST();
+		yytag0p2 = YYDIST();
 		goto yy9;
 	case '3':
-		yyctx0p3 = yyctx0p2 = YYDIST();
+		yytag0p3 = yytag0p2 = YYDIST();
 		goto yy11;
 	case '4':
-		yyctx0 = yyctx0p3 = yyctx0p2 = YYDIST();
+		yytag0 = yytag0p3 = yytag0p2 = YYDIST();
 		goto yy13;
 	default:
-		yyctx0 = yyctx0p3 = yyctx0p2 = YYDIST();
+		yytag0 = yytag0p3 = yytag0p2 = YYDIST();
 		goto yy2;
 	}
 yy9:
@@ -90,13 +90,13 @@ yy9:
 	switch (yych) {
 	case '2':	goto yy9;
 	case '3':
-		yyctx0p3 = YYDIST();
+		yytag0p3 = YYDIST();
 		goto yy11;
 	case '4':
-		yyctx0 = yyctx0p3 = YYDIST();
+		yytag0 = yytag0p3 = YYDIST();
 		goto yy13;
 	default:
-		yyctx0 = yyctx0p3 = YYDIST();
+		yytag0 = yytag0p3 = YYDIST();
 		goto yy2;
 	}
 yy11:
@@ -105,10 +105,10 @@ yy11:
 	switch (yych) {
 	case '3':	goto yy11;
 	case '4':
-		yyctx0 = YYDIST();
+		yytag0 = YYDIST();
 		goto yy13;
 	default:
-		yyctx0 = YYDIST();
+		yytag0 = YYDIST();
 		goto yy2;
 	}
 yy13:

@@ -18,7 +18,7 @@ namespace re2c
  * The algorithm constructs (strictly lower triangular) boolean matrix
  * indexed by DFA states. Each matrix cell (S1,S2) indicates if states
  * S1 and S2 are distinguishable. Initialy states are distinguished
- * according to their rule and context. One step of the algorithm
+ * according to their rule and tag set. One step of the algorithm
  * updates the matrix as follows: each pair of states S1 and S2 is
  * marked as distinguishable iff exist transitions from S1 and S2 on
  * the same symbol that go to distinguishable states. The algorithm
@@ -38,7 +38,7 @@ static void minimization_table(
 		tbl[i + 1] = tbl[i] + i;
 	}
 
-	// see note [distinguish states by contexts]
+	// see note [distinguish states by tags]
 	for (size_t i = 0; i < count; ++i)
 	{
 		dfa_state_t *s1 = states[i];
@@ -118,7 +118,7 @@ static void minimization_table(
  *
  * The algorithm maintains partition of DFA states.
  * Initial partition is coarse: states are distinguished according
- * to their rule and context. Partition is gradually refined: each
+ * to their rule and tag set. Partition is gradually refined: each
  * set of states is split into minimal number of subsets such that
  * for all states in a subset transitions on the same symbol go to
  * the same set of states.
@@ -133,7 +133,7 @@ static void minimization_moore(
 
 	size_t *next = new size_t[count];
 
-	// see note [distinguish states by contexts]
+	// see note [distinguish states by tags]
 	std::map<std::pair<size_t, size_t>, size_t> init;
 	for (size_t i = 0; i < count; ++i)
 	{
@@ -212,13 +212,16 @@ static void minimization_moore(
 	delete[] next;
 }
 
-/* note [distinguish states by contexts]
+/* note [distinguish states by tags]
  *
- * States that differ only in context set must still be distinguished
- * otherwise contexts that start with iteration  will be broken, e.g.:
- *     "" / "b"* {}
- * because first iteration will be merged with other iterations
- * causing context being saved on each iteration.
+ * Final states may have 'rule' tags: tags that must be set when lexer
+ * takes epsilon-transition to the binded action. Final states with
+ * the same rule but different sets on 'rule' tags cannot be merged.
+ *
+ * Compare the following two cases:
+ *     "ac" | "bc"
+ *     "ac" @p | "bc"
+ * Tail "c" can be deduplicated in the 1st case, but not in the 2nd.
  */
 
 void minimization(dfa_t &dfa)

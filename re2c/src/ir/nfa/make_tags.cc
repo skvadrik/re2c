@@ -104,7 +104,7 @@ void make_tags(const std::vector<const RegExpRule*> &rs, std::valarray<Tag> &tag
 		// unless tags are explicitly enabled: generic API needs base tag
 		// to restore fixed-length trailing context, and base existence
 		// is only guaranteed if tags are mandatory
-		if (!opts->contexts && opts->input_api.type() == InputAPI::CUSTOM) {
+		if (!opts->tags && opts->input_api.type() == InputAPI::CUSTOM) {
 			dist = VARDIST;
 		}
 		make_tags_var_fix(i, tags, tagidx, rs[i]->re, dist, base);

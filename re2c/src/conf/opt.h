@@ -54,12 +54,12 @@ namespace re2c
 	OPT (std::string, yyaccept, "yyaccept") \
 	OPT (bool, bUseStateAbort, false) \
 	OPT (bool, bUseStateNext, false) \
-	/* contexts */ \
-	OPT (bool, contexts, false) \
-	OPT (std::string, yyctx, "YYCTX") \
-	OPT (std::string, yydist, "YYDIST") \
-	OPT (std::string, contexts_prefix, "yyctx") \
-	OPT (std::string, contexts_expr, "@@") \
+	/* tags */ \
+	OPT (bool, tags, false) \
+	OPT (std::string, tags_yytag, "YYTAG") \
+	OPT (std::string, tags_yydist, "YYDIST") \
+	OPT (std::string, tags_prefix, "yytag") \
+	OPT (std::string, tags_expr, "@@") \
 	/* reuse */ \
 	OPT (bool, rFlag, false) \
 	/* partial flex syntax support */ \

@@ -10,6 +10,21 @@ static inline unsigned parse_oct(const char *s, const char *e)
     return oct;
 }
 
+struct contexts_t
+{
+    /*!tags:re2c line="long @@;"; */
+
+    contexts_t(): /*!tags:re2c line="@@(0)"; sep=","; */ {}
+    void push(/*!tags:re2c line="long arg_@@"; sep=","; */)
+    {
+        /*!tags:re2c line="@@ = arg_@@;"; */
+    }
+    void pop(/*!tags:re2c line="long &arg_@@"; sep=","; */)
+    {
+        /*!tags:re2c line="arg_@@ = @@;"; */
+    }
+};
+
 static void lex(const char *s)
 {
 #define YYPEEK()           *s
@@ -22,9 +37,15 @@ static void lex(const char *s)
 #define ZZ_DIST()          (s - basectx)
     const char *marker;
     const char *basectx;
+    contexts_t ctxs;
     /*!re2c
         re2c:define:YYCTYPE = char;
         re2c:yyfill:enable = 0;
+
+        re2c:define:YYTAG = "ZZ_CTX";
+        re2c:define:YYDIST = "ZZ_DIST";
+        re2c:tags:prefix = "zz_";
+        re2c:tags:expr = "ctxs.@@";
 
         oct = [0-9]{1,3};
         d   = ".";
@@ -42,10 +63,6 @@ static void lex(const char *s)
                 parse_oct(@p3 + 1, s));
             return;
         }
-
-        re2c:define:YYCTX = "ZZ_CTX";
-        re2c:define:YYDIST = "ZZ_DIST";
-        re2c:contexts:prefix = "zz_";
     */
 }
 

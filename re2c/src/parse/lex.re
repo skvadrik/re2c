@@ -142,11 +142,11 @@ echo:
 		goto echo;
 	}
 
-	"/*!contexts:re2c" {
+	"/*!tags:re2c" {
 		if (opts->target == opt_t::CODE) {
 			out.wraw(tok, start);
 		}
-		lex_contexts();
+		lex_tags();
 		goto echo;
 	}
 
@@ -193,9 +193,9 @@ void Scanner::lex_end_of_comment()
 	*/}
 }
 
-void Scanner::lex_contexts()
+void Scanner::lex_tags()
 {
-	ConfContexts conf;
+	ConfTags conf;
 	for (;;) {/*!re2c
 		*      { fatal("unrecognized configuration"); }
 
@@ -206,8 +206,8 @@ void Scanner::lex_contexts()
 		eol    { ++cline; continue; }
 		eoc    {
 			if (opts->target == opt_t::CODE) {
-				out.wdelay_contexts(opts->topIndent,
-					new ConfContexts(conf));
+				out.wdelay_tags(opts->topIndent,
+					new ConfTags(conf));
 			}
 			tok = pos = cur;
 			return;
@@ -273,7 +273,7 @@ start:
 				}
 
 	"@" name {
-		if (!opts->contexts) {
+		if (!opts->tags) {
 			fatal("tags are only allowed with '-T, --tags' option");
 		}
 		const std::string *name = new std::string(tok + 1, tok_len() - 1);

@@ -10,15 +10,26 @@ static inline unsigned parse_oct(const char *s, const char *e)
     return oct;
 }
 
-static void lex(const char *YYCURSOR)
+static void lex(const char *s)
 {
-    const char *YYMARKER;
-    const char *YYCTXMARKER;
-    /*!contexts:re2c*/
+#define YYPEEK()           *s
+#define YYSKIP()           ++s
+#define YYBACKUP()         marker = s
+#define YYRESTORE()        s = marker
+#define YYBACKUPCTX()      basectx = s
+#define YYRESTORECTX(dist) s = basectx + dist
+#define ZZ_CTX(dist)       (basectx + dist)
+#define ZZ_DIST()          (s - basectx)
+    const char *marker;
+    const char *basectx;
+    /*!tags:re2c sep="\n"; line="long @@ = 0;"; line=; sep=; */
+    ptrdiff_t /*!tags:re2c sep=", "; line="@@ = 0"; */;
     /*!re2c
         re2c:define:YYCTYPE = char;
         re2c:yyfill:enable = 0;
-        re2c:contexts:prefix = "zz_";
+        re2c:define:YYTAG = "ZZ_CTX";
+        re2c:define:YYDIST = "ZZ_DIST";
+        re2c:tags:prefix = "zz_";
 
         oct = [0-9]{1,3};
         d   = ".";
@@ -30,10 +41,10 @@ static void lex(const char *YYCURSOR)
         d oct @p3
         d oct {
             printf("%u.%u.%u.%u\n",
-                parse_oct(YYCTXMARKER, @p1),
+                parse_oct(basectx, @p1),
                 parse_oct(@p1 + 1, @p2),
                 parse_oct(@p2 + 1, @p3),
-                parse_oct(@p3 + 1, YYCURSOR));
+                parse_oct(@p3 + 1, s));
             return;
         }
     */

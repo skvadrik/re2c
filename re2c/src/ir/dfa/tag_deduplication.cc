@@ -172,7 +172,7 @@ static void incompatibility_table(const dfa_t &dfa,
 
 /* We have a binary relation on the set of all tags
  * and must construct set decomposition into subsets such that
- * all contexts in the same subset are equivalent.
+ * all tags in the same subset are equivalent.
  *
  * This problem is isomorphic to partitioning graph into cliques
  * (aka finding the 'clique cover' of a graph).
@@ -250,7 +250,7 @@ static void patch_tags(dfa_t &dfa, const std::vector<size_t> &represent)
 	}
 }
 
-size_t deduplicate_contexts(dfa_t &dfa,
+size_t deduplicate_tags(dfa_t &dfa,
 	const std::vector<size_t> &fallback)
 {
 	const size_t ntags = dfa.tags.size();
@@ -258,21 +258,21 @@ size_t deduplicate_contexts(dfa_t &dfa,
 		return 0;
 	}
 
-	bool *fbctxs = new bool[ntags]();
+	bool *fbtags = new bool[ntags]();
 	for (size_t i = 0; i < fallback.size(); ++i) {
 		const size_t r = dfa.states[fallback[i]]->rule;
-		add_tags(fbctxs, dfa.rules[r].tags, ntags);
+		add_tags(fbtags, dfa.rules[r].tags, ntags);
 	}
 
 	const size_t nstates = dfa.states.size();
 	bool *visited = new bool[nstates]();
 	bool *live = new bool[nstates * ntags]();
-	calc_live(dfa, fbctxs, visited, live, 0);
+	calc_live(dfa, fbtags, visited, live, 0);
 
 	mask_dead(dfa, live);
 
 	bool *incompattbl = new bool[ntags * ntags]();
-	incompatibility_table(dfa, live, fbctxs, incompattbl);
+	incompatibility_table(dfa, live, fbtags, incompattbl);
 
 	std::vector<size_t> represent(ntags, 0);
 	equivalence_classes(incompattbl, ntags, represent);
@@ -288,7 +288,7 @@ size_t deduplicate_contexts(dfa_t &dfa,
 		patch_tags(dfa, represent);
 	}
 
-	delete[] fbctxs;
+	delete[] fbtags;
 	delete[] visited;
 	delete[] live;
 	delete[] incompattbl;

@@ -2,7 +2,7 @@
 #include <sstream>
 
 #include "src/conf/opt.h"
-#include "src/ir/ctx.h"
+#include "src/ir/tag.h"
 #include "src/util/strrreplace.h"
 #include "src/globals.h"
 

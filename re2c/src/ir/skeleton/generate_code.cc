@@ -93,8 +93,8 @@ void emit_prolog(OutputFile &o)
 }
 
 void emit_start(const Skeleton &skel, OutputFile &o, size_t maxfill,
-	bool backup, bool backupctx, bool accept, bool base_ctxmarker,
-	const std::set<std::string> &ctxnames)
+	bool backup, bool backupctx, bool accept, bool basetag,
+	const std::set<std::string> &tagnames)
 {
 	const size_t
 		sizeof_cunit = opts->encoding.szCodeUnit(),
@@ -114,7 +114,7 @@ void emit_start(const Skeleton &skel, OutputFile &o, size_t maxfill,
 	}
 	if (backupctx) {
 		o.ws("\n#define YYBACKUPCTX() ctxmarker = cursor");
-		if(base_ctxmarker) {
+		if(basetag) {
 			o.ws("\n#define YYRESTORECTX(dist) cursor = ctxmarker + dist");
 			o.ws("\n#define YYDIST() (cursor - ctxmarker)");
 		} else {
@@ -231,9 +231,9 @@ void emit_start(const Skeleton &skel, OutputFile &o, size_t maxfill,
 	if (accept) {
 		o.ws("\n").wind(2).ws("unsigned int yyaccept = 0;");
 	}
-	if (!ctxnames.empty()) {
+	if (!tagnames.empty()) {
 		o.ws("\n");
-		output_contexts_default(o.stream(), 2, ctxnames);
+		output_tags_default(o.stream(), 2, tagnames);
 		o.ws("\n").wstring(opts->input_api.stmt_backupctx(2));
 	}
 	o.ws("\n");

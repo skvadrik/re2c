@@ -73,7 +73,7 @@ struct DFA
 	bool need_backup;
 	bool need_backupctx;
 	bool need_accept;
-	bool base_ctxmarker;
+	bool basetag;
 
 	DFA	( const dfa_t &dfa
 		, const std::vector<size_t> &fill

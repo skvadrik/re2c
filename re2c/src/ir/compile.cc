@@ -56,7 +56,7 @@ static smart_ptr<DFA> compile_rules(
 
 	nfa_t nfa(rules);
 
-	dfa_t dfa(nfa, cs, line, cond);
+	dfa_t dfa(nfa, cs, cond);
 
 	// skeleton must be constructed after DFA construction
 	// but prior to any other DFA transformations
@@ -73,7 +73,7 @@ static smart_ptr<DFA> compile_rules(
 	fallback_states(dfa, fallback);
 
 	// try to minimize the number of tag variables
-	const size_t used_tags = deduplicate_contexts(dfa, fallback);
+	const size_t used_tags = deduplicate_tags(dfa, fallback);
 
 	// ADFA stands for 'DFA with actions'
 	DFA *adfa = new DFA(dfa, fill, fallback, skeleton, cs,

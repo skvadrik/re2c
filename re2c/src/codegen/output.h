@@ -18,21 +18,21 @@
 namespace re2c
 {
 
-struct ConfContexts
+struct ConfTags
 {
 	std::string line;
 	std::string sep;
-	ConfContexts(): line("long @@;"), sep("") {}
+	ConfTags(): line("long @@;"), sep("") {}
 };
 
 struct OutputFragment
 {
 	enum type_t
 		{ CODE
-		, CONTEXTS
 //		, CONFIG
 		, LINE_INFO
 		, STATE_GOTO
+		, TAGS
 		, TYPES
 		, WARN_CONDITION_ORDER
 		, YYACCEPT_INIT
@@ -44,7 +44,7 @@ struct OutputFragment
 	uint32_t indent;
 	union
 	{
-		const ConfContexts* contexts;
+		const ConfTags* tags;
 	};
 
 	OutputFragment (type_t t, uint32_t i);
@@ -60,7 +60,7 @@ struct OutputBlock
 	std::string user_start_label;
 	uint32_t line;
 	std::vector<std::string> types;
-	std::set<std::string> contexts;
+	std::set<std::string> tags;
 
 	OutputBlock ();
 	~OutputBlock ();
@@ -78,7 +78,7 @@ private:
 public:
 	counter_t<label_t> label_counter;
 	bool warn_condition_order;
-	bool default_contexts;
+	bool default_tags;
 
 	OutputFile(const std::string &fn);
 	~OutputFile ();
@@ -107,7 +107,7 @@ public:
 	OutputFile & wind (uint32_t ind);
 
 	// delayed output
-	OutputFile & wdelay_contexts(uint32_t ind, const ConfContexts *cf);
+	OutputFile & wdelay_tags(uint32_t ind, const ConfTags *cf);
 	OutputFile & wdelay_line_info ();
 	OutputFile & wdelay_state_goto (uint32_t ind);
 	OutputFile & wdelay_types ();
@@ -116,10 +116,10 @@ public:
 	OutputFile & wdelay_yymaxfill ();
 
 	void global_lists(uniq_vector_t<std::string> &types,
-		std::set<std::string> &contexts) const;
+		std::set<std::string> &tags) const;
 
 	void emit(const uniq_vector_t<std::string> &global_types,
-		const std::set<std::string> &global_contexts, size_t max_fill);
+		const std::set<std::string> &global_tags, size_t max_fill);
 
 	FORBID_COPY (OutputFile);
 };
@@ -150,10 +150,10 @@ struct Output
 	~Output ();
 };
 
-void output_contexts(std::ostream &o, const ConfContexts &conf,
-	const std::set<std::string> &contexts);
-void output_contexts_default(std::ostream &o, uint32_t ind,
-	const std::set<std::string> &contexts);
+void output_tags(std::ostream &o, const ConfTags &conf,
+	const std::set<std::string> &tags);
+void output_tags_default(std::ostream &o, uint32_t ind,
+	const std::set<std::string> &tags);
 void output_line_info (std::ostream &, uint32_t, const std::string&);
 void output_state_goto (std::ostream &, uint32_t, uint32_t);
 void output_types(std::ostream &o, uint32_t, const uniq_vector_t<std::string> &types);

@@ -44,21 +44,21 @@ DFA::DFA
 	, need_backup (false)
 
 	// determine if 'YYCTXMARKER' or 'YYBACKUPCTX'/'YYRESTORECTX' pair is used
-	, need_backupctx (used_tags > 0 || opts->contexts)
+	, need_backupctx (used_tags > 0 || opts->tags)
 	, need_accept (false)
 
-	// Non-trailing contexts imply the existence of base context marker
+	// Tags (except trailing contexts) imply the existence of base marker
 	// that points at the beginning of lexeme. First, it is a feature
 	// of re2c API. Second, it simplifies implementation (otherwise
 	// it would be hard to mix generic API and fixed-length contexts).
 	//
-	// The only case without base context marker is when:
-	//     - only trailing contexts are allowed
-	//     - they don't overlap (one marker is enough for all of them)
-	//     - with generic API fixed-length contexts are forbidden
-	// Note that in this case, if generic API is used, fixed-length
-	// contexts are forbidden (which may cause additional overlaps).
-	, base_ctxmarker (used_tags > 1 || opts->contexts)
+	// The only case without base marker is when:
+	//     - tags are disabled, only trailing contexts are allowed
+	//     - trailing contexts don't overlap (one marker is enough
+	//       for all of them)
+	// If generic API is used, fixed-length contexts are forbidden,
+	// which may cause additional overlaps.
+	, basetag (used_tags > 1 || opts->tags)
 {
 	const size_t nstates = dfa.states.size();
 	const size_t nchars = dfa.nchars;

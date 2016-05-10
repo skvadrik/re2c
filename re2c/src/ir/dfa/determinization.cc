@@ -76,12 +76,12 @@ static void closure(kitem_t *const kernel, kitem_t *&kend,
 			closure(kernel, kend, n->value.alt.out2, tags, badtags, ntags);
 			closure(kernel, kend, n->value.alt.out1, tags, badtags, ntags);
 			break;
-		case nfa_state_t::CTX: {
-			const size_t ctx = n->value.ctx.info;
-			const bool old = tags[ctx];
-			tags[ctx] = true;
-			closure(kernel, kend, n->value.ctx.out, tags, badtags, ntags);
-			tags[ctx] = old;
+		case nfa_state_t::TAG: {
+			const size_t t = n->value.tag.info;
+			const bool old = tags[t];
+			tags[t] = true;
+			closure(kernel, kend, n->value.tag.out, tags, badtags, ntags);
+			tags[t] = old;
 			break;
 		}
 		case nfa_state_t::RAN:
@@ -128,10 +128,8 @@ static size_t find_state(kitem_t *kernel, kitem_t *kend,
 	return kernels.insert(kernel, kcount * sizeof(kitem_t));
 }
 
-dfa_t::dfa_t(
-	const nfa_t &nfa,
+dfa_t::dfa_t(const nfa_t &nfa,
 	const charset_t &charset,
-	uint32_t line,
 	const std::string &cond)
 	: states()
 	, nchars(charset.size() - 1) // (n + 1) bounds for n ranges
@@ -226,8 +224,8 @@ dfa_t::dfa_t(
 
 	for (size_t i = 0; i < ntags; ++i) {
 		if (badtags[i]) {
-			// TODO: use rule line, add rule reference to context struct
-			warn.selfoverlapping_contexts(line, cond, tags[i].name);
+			warn.nondeterministic_tags(rules[tags[i].rule].info->loc.line,
+				cond, tags[i].name);
 		}
 	}
 

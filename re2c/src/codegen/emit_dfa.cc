@@ -143,15 +143,15 @@ void DFA::emit(Output & output, uint32_t& ind, bool isLastCond, bool& bPrologBra
 	OutputFile &o = output.source;
 	OutputBlock &ob = o.block();
 
-	std::set<std::string> ctxnames;
-	if (base_ctxmarker) {
+	std::set<std::string> tagnames;
+	if (basetag) {
 		for (size_t i = 0; i < tags.size(); ++i) {
 			const Tag &t = tags[i];
 			if (t.type == Tag::VAR && t.var.orig == i) {
-				ctxnames.insert(vartag_name(t.name, t.rule));
+				tagnames.insert(vartag_name(t.name, t.rule));
 			}
 		}
-		ob.contexts.insert(ctxnames.begin(), ctxnames.end());
+		ob.tags.insert(tagnames.begin(), tagnames.end());
 	}
 
 	bool bProlog = (!opts->cFlag || !bWroteCondCheck);
@@ -182,7 +182,7 @@ void DFA::emit(Output & output, uint32_t& ind, bool isLastCond, bool& bPrologBra
 		{
 			emit_data(*skeleton, o.file_name);
 			emit_start(*skeleton, o, max_fill, need_backup, need_backupctx,
-				need_accept, base_ctxmarker, ctxnames);
+				need_accept, basetag, tagnames);
 			uint32_t i = 2;
 			emit_body (o, i, used_labels, initial_label);
 			emit_end(*skeleton, o, need_backup, need_backupctx);
@@ -215,7 +215,7 @@ void DFA::emit(Output & output, uint32_t& ind, bool isLastCond, bool& bPrologBra
 					o.wind(ind).wstring(opts->yyctype).ws(" ").wstring(opts->yych).ws(";\n");
 				}
 				o.wdelay_yyaccept_init (ind);
-				o.wdelay_contexts(ind, NULL);
+				o.wdelay_tags(ind, NULL);
 			}
 			else
 			{
@@ -256,7 +256,7 @@ void DFA::emit(Output & output, uint32_t& ind, bool isLastCond, bool& bPrologBra
 			}
 			o.wstring(opts->condPrefix).wstring(cond).ws(":\n");
 		}
-		if (base_ctxmarker) {
+		if (basetag) {
 			o.wstring(opts->input_api.stmt_backupctx(ind));
 		}
 		if (opts->cFlag && opts->bFlag && BitMap::first)
@@ -370,7 +370,7 @@ void genCondGoto(OutputFile & o, uint32_t ind, const std::vector<std::string> & 
 std::string vartag_name(const std::string *name, size_t rule)
 {
 	std::ostringstream s;
-	s << opts->contexts_prefix << rule;
+	s << opts->tags_prefix << rule;
 	if (name != NULL) {
 		s << *name;
 	}
@@ -380,7 +380,7 @@ std::string vartag_name(const std::string *name, size_t rule)
 std::string vartag_expr(const std::string *name, size_t rule)
 {
 	const std::string s = vartag_name(name, rule);
-	std::string e = opts->contexts_expr;
+	std::string e = opts->tags_expr;
 	strrreplace(e, "@@", s);
 	return e;
 }

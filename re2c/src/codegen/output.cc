@@ -21,8 +21,8 @@ OutputFragment::OutputFragment (type_t t, uint32_t i)
 
 OutputFragment::~OutputFragment()
 {
-	if (type == CONTEXTS) {
-		delete contexts;
+	if (type == TAGS) {
+		delete tags;
 	}
 }
 
@@ -48,7 +48,7 @@ OutputBlock::OutputBlock ()
 	, user_start_label ()
 	, line (0)
 	, types ()
-	, contexts ()
+	, tags ()
 {
 	fragments.push_back (new OutputFragment (OutputFragment::CODE, 0));
 }
@@ -67,7 +67,7 @@ OutputFile::OutputFile(const std::string &fn)
 	, blocks ()
 	, label_counter ()
 	, warn_condition_order (!opts->tFlag) // see note [condition order]
-	, default_contexts (true)
+	, default_tags (true)
 {
 	new_block ();
 }
@@ -208,12 +208,12 @@ void OutputFile::insert_code ()
 	block().fragments.push_back (new OutputFragment (OutputFragment::CODE, 0));
 }
 
-OutputFile &OutputFile::wdelay_contexts(uint32_t ind, const ConfContexts *cf)
+OutputFile &OutputFile::wdelay_tags(uint32_t ind, const ConfTags *cf)
 {
-	OutputFragment *frag = new OutputFragment(OutputFragment::CONTEXTS, ind);
-	frag->contexts = cf;
+	OutputFragment *frag = new OutputFragment(OutputFragment::TAGS, ind);
+	frag->tags = cf;
 	if (cf) {
-		default_contexts = false;
+		default_tags = false;
 	}
 	blocks.back()->fragments.push_back(frag);
 	insert_code();
@@ -275,7 +275,7 @@ void OutputFile::new_block ()
 
 void OutputFile::global_lists(
 	uniq_vector_t<std::string> &types,
-	std::set<std::string> &contexts) const
+	std::set<std::string> &tags) const
 {
 	for (unsigned int i = 0; i < blocks.size(); ++i) {
 
@@ -284,14 +284,14 @@ void OutputFile::global_lists(
 			types.find_or_add(ts[j]);
 		}
 
-		const std::set<std::string> &cs = blocks[i]->contexts;
-		contexts.insert(cs.begin(), cs.end());
+		const std::set<std::string> &cs = blocks[i]->tags;
+		tags.insert(cs.begin(), cs.end());
 	}
 }
 
 void OutputFile::emit(
 	const uniq_vector_t<std::string> &global_types,
-	const std::set<std::string> &global_contexts,
+	const std::set<std::string> &global_tags,
 	size_t max_fill)
 {
 	if (file != NULL)
@@ -307,18 +307,18 @@ void OutputFile::emit(
 				{
 					case OutputFragment::CODE:
 						break;
-					case OutputFragment::CONTEXTS:
-						if (f.contexts) {
-							output_contexts(f.stream, *f.contexts, global_contexts);
-						} else if (default_contexts) {
-							output_contexts_default(f.stream, f.indent, b.contexts);
-						}
-						break;
 					case OutputFragment::LINE_INFO:
 						output_line_info (f.stream, line_count + 1, file_name);
 						break;
 					case OutputFragment::STATE_GOTO:
 						output_state_goto (f.stream, f.indent, 0);
+						break;
+					case OutputFragment::TAGS:
+						if (f.tags) {
+							output_tags(f.stream, *f.tags, global_tags);
+						} else if (default_tags) {
+							output_tags_default(f.stream, f.indent, b.tags);
+						}
 						break;
 					case OutputFragment::TYPES:
 						output_types (f.stream, f.indent, global_types);
@@ -393,43 +393,39 @@ Output::~Output ()
 	if (!warn.error ())
 	{
 		uniq_vector_t<std::string> types;
-		std::set<std::string> contexts;
-		source.global_lists(types, contexts);
+		std::set<std::string> tags;
+		source.global_lists(types, tags);
 
-		source.emit(types, contexts, max_fill);
+		source.emit(types, tags, max_fill);
 		header.emit(types);
 	}
 }
 
-void output_contexts(
-	std::ostream &o,
-	const ConfContexts &conf,
-	const std::set<std::string> &contexts)
+void output_tags(std::ostream &o, const ConfTags &conf,
+	const std::set<std::string> &tags)
 {
 	std::set<std::string>::const_iterator
-		ctx = contexts.begin(),
-		end = contexts.end();
-	for (;ctx != end;) {
+		tag = tags.begin(),
+		end = tags.end();
+	for (;tag != end;) {
 		std::string line = conf.line;
-		strrreplace(line, "@@", *ctx);
+		strrreplace(line, "@@", *tag);
 		o << line;
-		if (++ctx == end) {
+		if (++tag == end) {
 			break;
 		}
 		o << conf.sep;
 	}
 }
 
-void output_contexts_default(
-	std::ostream &o,
-	uint32_t ind,
-	const std::set<std::string> &contexts)
+void output_tags_default(std::ostream &o, uint32_t ind,
+	const std::set<std::string> &tags)
 {
 	std::set<std::string>::const_iterator
-		ctx = contexts.begin(),
-		end = contexts.end();
-	for (;ctx != end; ++ctx) {
-		o << indent(ind) << "long " << *ctx << ";\n";
+		tag = tags.begin(),
+		end = tags.end();
+	for (;tag != end; ++tag) {
+		o << indent(ind) << "long " << *tag << ";\n";
 	}
 }
 
