@@ -124,18 +124,18 @@ void Warn::nondeterministic_tags(
 	const std::string &cond,
 	const std::string *tagname)
 {
-	if (mask[NONDETERMINISTIC_TAGS] & WARNING)
-	{
-		bool e = mask[NONDETERMINISTIC_TAGS] & ERROR;
-
-		// a very bad hack to temporarily turn on -Werror
-		// TODO: userwarn/realwarn (like useropt/realopt)
-		if (opts->tags) {
-			e = true;
+	if (opts->tags) {
+		error_accuml = true;
+		if (tagname == NULL) {
+			re2c::error("line %u: trailing context %sis nondeterministic",
+				line, incond(cond).c_str());
+		} else {
+			re2c::error("line %u: tag '%s' %sis nondeterministic",
+				line, tagname->c_str(), incond(cond).c_str());
 		}
-
+	} else if (mask[NONDETERMINISTIC_TAGS] & WARNING) {
+		bool e = mask[NONDETERMINISTIC_TAGS] & ERROR;
 		error_accuml |= e;
-
 		if (tagname == NULL) {
 			warning(names[NONDETERMINISTIC_TAGS], line, e,
 				"trailing context %sis nondeterministic",
