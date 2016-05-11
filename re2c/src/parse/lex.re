@@ -200,14 +200,14 @@ echo:
 					goto echo;
 				}
 	zero		{
-					if (!ignore_eoc && opts->target == opt_t::CODE)
-					{
-						out.wraw(tok, tok_len () - 1);
-						// -1 so we don't write out the \0
-					}
-					if(cur == eof)
-					{
+					if(cur == eof) {
+						if (!ignore_eoc && opts->target == opt_t::CODE) {
+							out.wraw(tok, tok_len () - 1);
+							// -1 so we don't write out the \0
+						}
 						return Stop;
+					} else {
+						goto echo;
 					}
 				}
 	*			{
