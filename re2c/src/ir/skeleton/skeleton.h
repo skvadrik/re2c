@@ -87,7 +87,7 @@ uint32_t maxpath(const Skeleton &skel);
 void warn_undefined_control_flow(const Skeleton &skel);
 void fprint_default_path(FILE *f, const Skeleton &skel, const path_t &p);
 void warn_unreachable_nullable_rules(const Skeleton &skel);
-void emit_data(const Skeleton &skel, const std::string &fname);
+void emit_data(const Skeleton &skel);
 void emit_prolog(OutputFile & o);
 void emit_start(const Skeleton &skel, OutputFile &o, size_t maxfill,
 	bool backup, bool backupctx, bool accept, bool basetag,

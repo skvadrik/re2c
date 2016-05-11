@@ -101,6 +101,10 @@ void emit_start(const Skeleton &skel, OutputFile &o, size_t maxfill,
 		sizeof_key = skel.sizeof_key;
 	const size_t norule = skel.rule2key(Rule::NONE);
 	const std::string &name = skel.name;
+	std::string filename = opts->output_file;
+	if (filename.empty()) {
+		filename = "<stdout>";
+	}
 
 	o.ws("\n#define YYCTYPE ");
 	exact_uint (o, sizeof_cunit);
@@ -181,7 +185,7 @@ void emit_start(const Skeleton &skel, OutputFile &o, size_t maxfill,
 	o.ws("\n").wind(1).ws("unsigned int i = 0;");
 	o.ws("\n");
 	o.ws("\n").wind(1).ws("input = (YYCTYPE *) read_file");
-	o.ws("\n").wind(2).ws("(\"").wstring(o.file_name).ws(".").wstring(name).ws(".input\"");
+	o.ws("\n").wind(2).ws("(\"").wstring(filename).ws(".").wstring(name).ws(".input\"");
 	o.ws("\n").wind(2).ws(", sizeof (YYCTYPE)");
 	o.ws("\n").wind(2).ws(", padding");
 	o.ws("\n").wind(2).ws(", &input_len");
@@ -198,7 +202,7 @@ void emit_start(const Skeleton &skel, OutputFile &o, size_t maxfill,
 		o.ws("\n");
 	}
 	o.ws("\n").wind(1).ws("keys = (YYKEYTYPE *) read_file");
-	o.ws("\n").wind(2).ws("(\"").wstring(o.file_name).ws(".").wstring(name).ws(".keys\"");
+	o.ws("\n").wind(2).ws("(\"").wstring(filename).ws(".").wstring(name).ws(".keys\"");
 	o.ws("\n").wind(2).ws(", 3 * sizeof (YYKEYTYPE)");
 	o.ws("\n").wind(2).ws(", 0");
 	o.ws("\n").wind(2).ws(", &keys_count");

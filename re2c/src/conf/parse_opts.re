@@ -170,7 +170,7 @@ opt_output:
 		error ("bad argument to option -o, --output: %s", *argv);
 		return EXIT_FAIL;
 	}
-	filename end { if (!opts.output (*argv)) return EXIT_FAIL; goto opt; }
+	filename end { opts.set_output_file(*argv); goto opt; }
 */
 
 opt_header:

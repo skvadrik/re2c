@@ -65,7 +65,7 @@ void Scanner::lex_conf ()
 	"flags:" ("x" | "utf-16")     { lex_conf_enc(Enc::UTF16);  return; }
 	"flags:" ("8" | "utf-8")      { lex_conf_enc(Enc::UTF8);   return; }
 
-	"flags:" ("o" | "output")      { if (!opts.output(lex_conf_string())) exit(1); return; }
+	"flags:" ("o" | "output")      { opts.set_output_file(lex_conf_string()); return; }
 	"flags:" ("t" | "type-header") { opts.set_header_file(lex_conf_string()); return; }
 
 	"flags:encoding-policy"  { lex_conf_encoding_policy();  return; }

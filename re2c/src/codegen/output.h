@@ -66,13 +66,8 @@ struct OutputBlock
 	~OutputBlock ();
 };
 
-struct OutputFile
+class OutputFile
 {
-public:
-	std::string file_name;
-
-private:
-	FILE * file;
 	std::vector<OutputBlock *> blocks;
 
 public:
@@ -80,8 +75,8 @@ public:
 	bool warn_condition_order;
 	bool default_tags;
 
-	OutputFile(const std::string &fn);
-	~OutputFile ();
+	OutputFile();
+	~OutputFile();
 
 	std::ostream & stream ();
 	OutputBlock &block();
@@ -118,24 +113,19 @@ public:
 	void global_lists(uniq_vector_t<std::string> &types,
 		std::set<std::string> &tags) const;
 
-	void emit(const uniq_vector_t<std::string> &global_types,
+	bool emit(const uniq_vector_t<std::string> &global_types,
 		const std::set<std::string> &global_tags, size_t max_fill);
 
 	FORBID_COPY (OutputFile);
 };
 
-struct HeaderFile
+class HeaderFile
 {
-	HeaderFile(const std::string &fn);
-	~HeaderFile ();
-	bool open ();
-	void emit(const uniq_vector_t<std::string> &types);
-
-private:
 	std::ostringstream stream;
-	std::string file_name;
-	FILE * file;
 
+public:
+	HeaderFile(): stream() {}
+	bool emit(const uniq_vector_t<std::string> &types);
 	FORBID_COPY (HeaderFile);
 };
 
@@ -146,8 +136,8 @@ struct Output
 	std::set<std::string> skeletons;
 	size_t max_fill;
 
-	Output(const std::string &source_name, const std::string &header_name);
-	~Output ();
+	Output();
+	bool emit();
 };
 
 void output_tags(std::ostream &o, const ConfTags &conf,

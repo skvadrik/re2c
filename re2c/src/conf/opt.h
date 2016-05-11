@@ -17,6 +17,8 @@ namespace re2c
 #define RE2C_OPTS \
 	/* target */ \
 	OPT1 (opt_t::target_t, target, CODE) \
+	/* output file */ \
+	OPT (std::string, output_file, "") \
 	/* fingerprint */ \
 	OPT (bool, bNoGenerationDate, false) \
 	OPT (bool, version, true) \
@@ -28,7 +30,7 @@ namespace re2c
 	/* conditions */ \
 	OPT (bool, cFlag, false) \
 	OPT (bool, tFlag, false) \
-	OPT (std::string,  header_file, "") \
+	OPT (std::string, header_file, "") \
 	OPT (std::string, yycondtype, "YYCONDTYPE") \
 	OPT (std::string, cond_get, "YYGETCONDITION") \
 	OPT (bool, cond_get_naked, false) \
@@ -157,7 +159,6 @@ struct Opt
 	static const opt_t baseopt;
 
 	const char *source_file;
-	std::string output_file;
 
 private:
 	useropt_t useropt;
@@ -166,7 +167,6 @@ private:
 public:
 	Opt ()
 		: source_file (NULL)
-		, output_file ()
 		, useropt ()
 		, realopt (useropt)
 	{}
@@ -178,7 +178,6 @@ public:
 	}
 
 	bool source (const char *s);
-	bool output (const std::string &s);
 
 	// Inplace configurations are applied immediately when parsed.
 	// This is very bad: first, re2c behaviour is changed in the middle

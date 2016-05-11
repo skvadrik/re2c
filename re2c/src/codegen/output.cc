@@ -5,6 +5,7 @@
 #include "src/codegen/indent.h"
 #include "src/codegen/output.h"
 #include "src/codegen/print.h"
+#include "src/conf/msg.h"
 #include "src/conf/opt.h"
 #include "src/conf/warn.h"
 #include "src/util/strrreplace.h"
@@ -61,10 +62,8 @@ OutputBlock::~OutputBlock ()
 	}
 }
 
-OutputFile::OutputFile(const std::string &fn)
-	: file_name (fn)
-	, file (NULL)
-	, blocks ()
+OutputFile::OutputFile()
+	: blocks ()
 	, label_counter ()
 	, warn_condition_order (!opts->tFlag) // see note [condition order]
 	, default_tags (true)
@@ -72,28 +71,9 @@ OutputFile::OutputFile(const std::string &fn)
 	new_block ();
 }
 
-bool OutputFile::open ()
-{
-	if (file_name.empty())
-	{
-		file_name = "<stdout>";
-		file = stdout;
-	}
-	else
-	{
-		file = fopen (file_name.c_str(), "wb");
-	}
-	return file != NULL;
-}
-
 OutputFile::~OutputFile ()
 {
-	if (file != NULL && file != stdout)
-	{
-		fclose (file);
-	}
-	for (unsigned int i = 0; i < blocks.size (); ++i)
-	{
+	for (unsigned int i = 0; i < blocks.size(); ++i) {
 		delete blocks[i];
 	}
 }
@@ -289,116 +269,118 @@ void OutputFile::global_lists(
 	}
 }
 
-void OutputFile::emit(
-	const uniq_vector_t<std::string> &global_types,
+bool OutputFile::emit(const uniq_vector_t<std::string> &global_types,
 	const std::set<std::string> &global_tags,
 	size_t max_fill)
 {
-	if (file != NULL)
-	{
-		unsigned int line_count = 1;
-		for (unsigned int j = 0; j < blocks.size (); ++j)
-		{
-			OutputBlock & b = * blocks[j];
-			for (unsigned int i = 0; i < b.fragments.size (); ++i)
-			{
-				OutputFragment & f = * b.fragments[i];
-				switch (f.type)
-				{
-					case OutputFragment::CODE:
-						break;
-					case OutputFragment::LINE_INFO:
-						output_line_info (f.stream, line_count + 1, file_name);
-						break;
-					case OutputFragment::STATE_GOTO:
-						output_state_goto (f.stream, f.indent, 0);
-						break;
-					case OutputFragment::TAGS:
-						if (f.tags) {
-							output_tags(f.stream, *f.tags, global_tags);
-						} else if (default_tags) {
-							output_tags_default(f.stream, f.indent, b.tags);
-						}
-						break;
-					case OutputFragment::TYPES:
-						output_types (f.stream, f.indent, global_types);
-						break;
-					case OutputFragment::WARN_CONDITION_ORDER:
-						if (warn_condition_order) // see note [condition order]
-						{
-							warn.condition_order (b.line);
-						}
-						break;
-					case OutputFragment::YYACCEPT_INIT:
-						output_yyaccept_init (f.stream, f.indent, b.used_yyaccept);
-						break;
-					case OutputFragment::YYMAXFILL:
-						output_yymaxfill (f.stream, max_fill);
-						break;
-				}
-				std::string content = f.stream.str ();
-				fwrite (content.c_str (), 1, content.size (), file);
-				line_count += f.count_lines ();
-			}
+	FILE *file = NULL;
+	std::string filename = opts->output_file;
+	if (filename.empty()) {
+		filename = "<stdout>";
+		file = stdout;
+	} else {
+		file = fopen(filename.c_str(), "wb");
+		if (!file) {
+			error("cannot open output file: %s", filename.c_str());
+			return false;
 		}
 	}
-}
 
-HeaderFile::HeaderFile(const std::string &fn)
-	: stream ()
-	// header is always generated, but not always dumped to file
-	// NULL filename crashes 'operator <<' on some platforms
-	// TODO: generate header only if necessary
-	, file_name (fn)
-	, file (NULL)
-{
-	if (file_name.empty()) {
-		file_name = "<stdout>.h";
+	unsigned int line_count = 1;
+	for (unsigned int j = 0; j < blocks.size(); ++j) {
+		OutputBlock & b = * blocks[j];
+		for (unsigned int i = 0; i < b.fragments.size(); ++i) {
+			OutputFragment & f = * b.fragments[i];
+			switch (f.type) {
+				case OutputFragment::CODE: break;
+				case OutputFragment::LINE_INFO:
+					output_line_info(f.stream, line_count + 1, filename);
+					break;
+				case OutputFragment::STATE_GOTO:
+					output_state_goto(f.stream, f.indent, 0);
+					break;
+				case OutputFragment::TAGS:
+					if (f.tags) {
+						output_tags(f.stream, *f.tags, global_tags);
+					} else if (default_tags) {
+						output_tags_default(f.stream, f.indent, b.tags);
+					}
+					break;
+				case OutputFragment::TYPES:
+					output_types(f.stream, f.indent, global_types);
+					break;
+				case OutputFragment::WARN_CONDITION_ORDER:
+					if (warn_condition_order) {// see note [condition order]
+						warn.condition_order (b.line);
+					}
+					break;
+				case OutputFragment::YYACCEPT_INIT:
+					output_yyaccept_init(f.stream, f.indent, b.used_yyaccept);
+					break;
+				case OutputFragment::YYMAXFILL:
+					output_yymaxfill(f.stream, max_fill);
+					break;
+			}
+			std::string content = f.stream.str();
+			fwrite(content.c_str(), 1, content.size(), file);
+			line_count += f.count_lines();
+		}
 	}
+
+	fclose(file);
+	return true;
 }
 
-bool HeaderFile::open ()
+bool HeaderFile::emit(const uniq_vector_t<std::string> &types)
 {
-	file = fopen (file_name.c_str(), "wb");
-	return file != NULL;
-}
+	if (!opts->tFlag) {
+		return true;
+	}
 
-void HeaderFile::emit(const uniq_vector_t<std::string> &types)
-{
-	output_version_time (stream);
-	output_line_info (stream, 3, file_name);
+	FILE *file = NULL;
+	std::string filename = opts->header_file;
+	if (filename.empty()) {
+		filename = "<stdout>.h";
+		file = stdout;
+	} else {
+		file = fopen(filename.c_str(), "wb");
+		if (!file) {
+			error("cannot open header file: %s", filename.c_str());
+			return false;
+		}
+	}
+
+	output_version_time(stream);
+	output_line_info(stream, 3, filename);
 	stream << "\n";
 	output_types(stream, 0, types);
+
+	std::string content = stream.str();
+	fwrite(content.c_str(), 1, content.size(), file);
+
+	fclose(file);
+	return true;
 }
 
-HeaderFile::~HeaderFile ()
-{
-	if (file != NULL)
-	{
-		std::string content = stream.str ();
-		fwrite (content.c_str (), 1, content.size (), file);
-		fclose (file);
-	}
-}
-
-Output::Output(const std::string &source_name, const std::string &header_name)
-	: source(source_name)
-	, header(header_name)
+Output::Output()
+	: source()
+	, header()
 	, skeletons()
 	, max_fill(1)
 {}
 
-Output::~Output ()
+bool Output::emit()
 {
-	if (!warn.error ())
-	{
-		uniq_vector_t<std::string> types;
-		std::set<std::string> tags;
-		source.global_lists(types, tags);
-
-		source.emit(types, tags, max_fill);
-		header.emit(types);
+	if (warn.error()) {
+		return false;
 	}
+
+	uniq_vector_t<std::string> types;
+	std::set<std::string> tags;
+	source.global_lists(types, tags);
+
+	return source.emit(types, tags, max_fill)
+		&& header.emit(types);
 }
 
 void output_tags(std::ostream &o, const ConfTags &conf,

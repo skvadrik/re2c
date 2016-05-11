@@ -292,20 +292,6 @@ bool Opt::source (const char *s)
 	}
 }
 
-bool Opt::output (const std::string &s)
-{
-	if (!output_file.empty())
-	{
-		error ("multiple output files: %s, %s", output_file.c_str(), s.c_str());
-		return false;
-	}
-	else
-	{
-		output_file = s;
-		return true;
-	}
-}
-
 void Opt::reset_encoding (const Enc & enc)
 {
 	useropt->encoding = enc;

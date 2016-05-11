@@ -228,8 +228,13 @@ static void generate_paths(const Skeleton &skel, cover_t &cover)
 	}
 }
 
-void emit_data(const Skeleton &skel, const std::string &fname)
+void emit_data(const Skeleton &skel)
 {
+	std::string fname = opts->output_file;
+	if (fname.empty()) {
+		fname = "<stdout>";
+	}
+
 	const std::string input_name = fname + "." + skel.name + ".input";
 	FILE *input = fopen(input_name.c_str(), "wb");
 	if (!input) {

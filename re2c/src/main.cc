@@ -41,20 +41,13 @@ int main(int, char *argv[])
 	}
 
 	// set up the output streams
-	re2c::Output output (opts.output_file, opts->header_file);
-	if (!output.source.open ())
-	{
-		error ("cannot open output file: %s", opts.output_file.c_str());
-		return 1;
-	}
-	if (opts->tFlag && !output.header.open ())
-	{
-		error ("cannot open header file: %s", opts->header_file.c_str());
-		return 1;
-	}
+	re2c::Output output;
 
 	Scanner scanner (input, output.source);
 	parse (scanner, output);
+	if (!output.emit()) {
+		return 1;
+	}
 
 	return warn.error () ? 1 : 0;
 }

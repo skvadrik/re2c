@@ -40,6 +40,11 @@
     re2c:flags:8 = 1;
     re2c:flags:utf-8 = 0;
 
+    re2c:flags:o = "flags_x.c";
+    re2c:flags:output = "flags.c";
+    re2c:flags:t = "flags_x.h";
+    re2c:flags:type-header = "flags.h";
+
     re2c:flags:encoding-policy = ignore;
     re2c:flags:encoding-policy = substitute;
     re2c:flags:encoding-policy = fail;
