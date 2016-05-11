@@ -151,12 +151,13 @@ echo:
 	}
 
 	zero {
-		if (opts->target == opt_t::CODE) {
-			out.wraw(tok, start);
-		}
 		if (cur == eof) {
+			if (opts->target == opt_t::CODE) {
+				out.wraw(tok, start);
+			}
 			return Stop;
 		}
+		goto echo;
 	}
 
 	eol space* "#" space* "line" space+ / lineinf {
