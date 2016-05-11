@@ -7,6 +7,7 @@
 #include "src/conf/warn.h"
 #include "src/ir/skeleton/path.h"
 #include "src/ir/skeleton/skeleton.h"
+#include "src/globals.h"
 
 namespace re2c {
 
@@ -125,7 +126,14 @@ void Warn::nondeterministic_tags(
 {
 	if (mask[NONDETERMINISTIC_TAGS] & WARNING)
 	{
-		const bool e = mask[NONDETERMINISTIC_TAGS] & ERROR;
+		bool e = mask[NONDETERMINISTIC_TAGS] & ERROR;
+
+		// a very bad hack to temporarily turn on -Werror
+		// TODO: userwarn/realwarn (like useropt/realopt)
+		if (opts->tags) {
+			e = true;
+		}
+
 		error_accuml |= e;
 
 		if (tagname == NULL) {

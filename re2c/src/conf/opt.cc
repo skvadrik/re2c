@@ -226,9 +226,6 @@ void opt_t::fix ()
 		default:
 			break;
 	}
-	if (tags) {
-		warn.set(Warn::NONDETERMINISTIC_TAGS, Warn::WERROR);
-	}
 	if (bFlag)
 	{
 		sFlag = true;

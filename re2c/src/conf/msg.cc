@@ -31,7 +31,7 @@ void error_arg (const char * option)
 
 void warning_start (uint32_t line, bool error)
 {
-	static const char * msg = error ? "error" : "warning";
+	const char * msg = error ? "error" : "warning";
 	fprintf (stderr, "re2c: %s: line %u: ", msg, line);
 }
 
