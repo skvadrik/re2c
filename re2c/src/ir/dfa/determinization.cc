@@ -66,11 +66,13 @@ struct kitem_t
 static void closure(kitem_t *const kernel, kitem_t *&kend,
 	nfa_state_t *n, bool *tags, bool *badtags, size_t ntags)
 {
-	if (n->mark) {
+	// trace the first iteration of each loop:
+	// epsilon-loops may add ney tags and reveal conflicts
+	if (n->loop > 1) {
 		return;
 	}
 
-	n->mark = true;
+	++n->loop;
 	switch (n->type) {
 		case nfa_state_t::ALT:
 			closure(kernel, kend, n->alt.out2, tags, badtags, ntags);
@@ -101,7 +103,7 @@ static void closure(kitem_t *const kernel, kitem_t *&kend,
 			break;
 		}
 	}
-	n->mark = false;
+	--n->loop;
 }
 
 static size_t find_state(kitem_t *kernel, kitem_t *kend,

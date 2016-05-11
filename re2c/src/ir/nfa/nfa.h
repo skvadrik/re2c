@@ -35,7 +35,7 @@ struct nfa_state_t
 		} tag;
 	};
 	size_t rule;
-	bool mark;
+	uint8_t loop;
 
 	void make_alt(size_t r, nfa_state_t *s1, nfa_state_t *s2)
 	{
@@ -43,7 +43,7 @@ struct nfa_state_t
 		alt.out1 = s1;
 		alt.out2 = s2;
 		rule = r;
-		mark = false;
+		loop = 0;
 	}
 	void make_ran(size_t r, nfa_state_t *s, const Range *p)
 	{
@@ -51,7 +51,7 @@ struct nfa_state_t
 		ran.out = s;
 		ran.ran = p;
 		rule = r;
-		mark = false;
+		loop = 0;
 	}
 	void make_tag(size_t r, nfa_state_t *s, size_t i)
 	{
@@ -59,13 +59,13 @@ struct nfa_state_t
 		tag.out = s;
 		tag.info = i;
 		rule = r;
-		mark = false;
+		loop = 0;
 	}
 	void make_fin(size_t r)
 	{
 		type = FIN;
 		rule = r;
-		mark = false;
+		loop = 0;
 	}
 };
 
