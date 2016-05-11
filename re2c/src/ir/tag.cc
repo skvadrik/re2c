@@ -1,10 +1,7 @@
 #include <limits>
-#include <sstream>
 
-#include "src/conf/opt.h"
+#include "src/ir/rule.h"
 #include "src/ir/tag.h"
-#include "src/util/strrreplace.h"
-#include "src/globals.h"
 
 namespace re2c
 {
