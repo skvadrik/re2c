@@ -41,12 +41,9 @@ std::string subst_tags(const std::string &action,
 		"@" @name [a-zA-Z0-9_]+ {
 			const std::string name(@name, head);
 			for (size_t i = ltag; i < htag; ++i) {
-				const Tag &t = tags[i];
-				if (name == *t.name) {
+				if (name == *tags[i].name) {
 					result.append(tail, base);
-					result.append(t.type == Tag::VAR
-						? opts->input_api.expr_tag(vartag_expr(t.name, t.rule))
-						: opts->input_api.expr_tag_fix(t, tags));
+					result.append(opts->input_api.expr_tag(tags, i));
 					tail = head;
 					break;
 				}
