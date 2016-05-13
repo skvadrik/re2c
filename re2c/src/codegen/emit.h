@@ -17,6 +17,8 @@ void gen_goto_if(OutputFile &o, uint32_t ind, bool &readCh,
 void gen_settags(OutputFile &o, uint32_t ind, const DFA &dfa, size_t tags);
 std::string vartag_name(const std::string *name, size_t rule);
 std::string vartag_expr(const std::string *name, size_t rule);
+std::string subst_tags(const std::string &action,
+	const std::valarray<Tag> &tags, size_t ltag, size_t htag);
 
 } // namespace re2c
 

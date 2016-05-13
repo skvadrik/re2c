@@ -209,18 +209,6 @@ void emit_accept(OutputFile &o, uint32_t ind, bool &readCh,
 	o.wind(ind).ws("}\n");
 }
 
-static void subst_tags(std::string &action,
-	const Rule &rule, const std::valarray<Tag> &tags)
-{
-	for (size_t i = rule.ltag; i < rule.htag; ++i) {
-		const Tag &tag = tags[i];
-		const std::string s = tag.type == Tag::VAR
-			? opts->input_api.expr_tag(vartag_expr(tag.name, tag.rule))
-			: opts->input_api.expr_tag_fix(tag, tags);
-		strrreplace(action, "@" + *tag.name, s);
-	}
-}
-
 void emit_rule(OutputFile &o, uint32_t ind, const DFA &dfa, size_t rule_idx)
 {
 	const Rule &rule = dfa.rules[rule_idx];
@@ -252,8 +240,7 @@ void emit_rule(OutputFile &o, uint32_t ind, const DFA &dfa, size_t rule_idx)
 			if (!yySetupRule.empty()) {
 				o.wind(ind).wstring(yySetupRule).ws("\n");
 			}
-			std::string action = code->text;
-			subst_tags(action, rule, dfa.tags);
+			const std::string action = subst_tags(code->text, dfa.tags, rule.ltag, rule.htag);
 			o.wline_info(code->loc.line, code->loc.filename.c_str())
 				.wind(ind).wstring(action).ws("\n")
 				.wdelay_line_info();
