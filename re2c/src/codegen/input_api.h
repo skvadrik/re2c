@@ -35,7 +35,7 @@ public:
 	std::string expr_dist () const;
 	std::string stmt_dist (uint32_t ind, const bool *tagmask,
 		const std::valarray<Tag> &tags) const;
-	std::string expr_tag(const std::valarray<Tag> &tags, size_t idx) const;
+	std::string expr_tag(const std::valarray<Tag> &tags, const Tag &tag) const;
 	std::string stmt_restore (uint32_t ind) const;
 	std::string stmt_restorectx(uint32_t ind,
 		const std::valarray<Tag> &tags, const Tag &tag, bool basetag) const;
@@ -45,9 +45,6 @@ public:
 	std::string stmt_skip_backup_peek (uint32_t ind) const;
 	std::string expr_lessthan_one () const;
 	std::string expr_lessthan (size_t n) const;
-
-private:
-	std::string expr_tag_var(const std::string &expr) const;
 };
 
 } // end namespace re2c

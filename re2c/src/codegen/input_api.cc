@@ -129,40 +129,31 @@ std::string InputAPI::stmt_dist (uint32_t ind, const bool *mask,
 	return s + expr_dist() + ";\n";
 }
 
-std::string InputAPI::expr_tag_var(const std::string &expr) const
+std::string InputAPI::expr_tag(const std::valarray<Tag> &tags, const Tag &tag) const
 {
-	switch (type_) {
-		case DEFAULT: return "(" + opts->yyctxmarker + " + " + expr + ")";
-		case CUSTOM:  return opts->tags_yytag + "(" + expr + ")";
-		default:      assert(false);
-	}
-}
+	std::string expr;
 
-std::string InputAPI::expr_tag(const std::valarray<Tag> &tags, size_t idx) const
-{
-	const Tag &t = tags[idx];
-	if (t.type == Tag::VAR) {
-		const Tag &o = tags[t.var.orig];
-		return expr_tag_var(vartag_expr(o.name, o.rule));
-	} else if (t.fix.base != Tag::NONE) {
-		const Tag &o = tags[tags[t.fix.base].var.orig];
-		std::ostringstream s;
-		s << "(" << vartag_expr(o.name, o.rule) << " - " << t.fix.dist << ")";
-		return expr_tag_var(s.str());
+	if (tag.type == Tag::VAR) {
+		const Tag &orig = tags[tag.var.orig];
+		expr = vartag_expr(orig.name, orig.rule);
 	} else {
-		std::ostringstream s;
-		switch (type_) {
-			case DEFAULT:
+		const std::string dist = to_string(tag.fix.dist);
+		if (tag.fix.base == Tag::NONE) {
+			if (type_ == DEFAULT) {
 				// optimize '(YYCTXMARKER + ((YYCURSOR - YCTXMARKER) - yyctx))'
 				// to       '(YYCURSOR - yytag)'
-				s << "(" << opts->yycursor << " - " << t.fix.dist << ")";
-				break;
-			case CUSTOM:
-				s << opts->tags_yytag << "(" << opts->tags_yydist << "() - " << t.fix.dist << ")";
-				break;
+				return "(" + opts->yycursor + " - " + dist + ")";
+			}
+			expr = opts->tags_yydist + "() - " + dist;
+		} else {
+			const Tag &orig = tags[tags[tag.fix.base].var.orig];
+			expr = "(" + vartag_expr(orig.name, orig.rule) + " - " + dist + ")";
 		}
-		return s.str();
 	}
+
+	return (type_ == DEFAULT)
+		? "(" + opts->yyctxmarker + " + " + expr + ")"
+		: opts->tags_yytag + "(" + expr + ")";
 }
 
 std::string InputAPI::stmt_restore (uint32_t ind) const
