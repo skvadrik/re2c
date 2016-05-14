@@ -10,6 +10,14 @@
 namespace re2c
 {
 
+template<typename T>
+static std::string to_string(const T &v)
+{
+	std::ostringstream s;
+	s << v;
+	return s.str();
+}
+
 InputAPI::InputAPI ()
 	: type_ (DEFAULT)
 {}
@@ -134,7 +142,8 @@ std::string InputAPI::expr_tag(const std::valarray<Tag> &tags, size_t idx) const
 {
 	const Tag &t = tags[idx];
 	if (t.type == Tag::VAR) {
-		return expr_tag_var(vartag_expr(t.name, t.rule));
+		const Tag &o = tags[t.var.orig];
+		return expr_tag_var(vartag_expr(o.name, o.rule));
 	} else if (t.fix.base != Tag::NONE) {
 		const Tag &o = tags[tags[t.fix.base].var.orig];
 		std::ostringstream s;
@@ -171,45 +180,28 @@ std::string InputAPI::stmt_restore (uint32_t ind) const
 	return indent (ind) + s + ";\n";
 }
 
-std::string InputAPI::stmt_restorectx_fix(uint32_t ind, size_t dist) const
-{
-	std::ostringstream s;
-	switch (type_) {
-		case DEFAULT:
-			s << opts->yycursor << " -= " << dist;
-			break;
-		case CUSTOM:
-			s << opts->yyrestorectx << " (" + opts->tags_yydist + "() - " << dist << ")";
-			break;
-	}
-	return indent(ind) + s.str() + ";\n";
-}
-
-std::string InputAPI::stmt_restorectx_var_base(uint32_t ind, const std::string &ctx) const
+std::string InputAPI::stmt_restorectx(uint32_t ind,
+	const std::valarray<Tag> &tags, const Tag &tag, bool basetag) const
 {
 	std::string s;
-	switch (type_) {
-		case DEFAULT:
-			s = opts->yycursor + " = " + opts->yyctxmarker + " + " + ctx;
-			break;
-		case CUSTOM:
-			s = opts->yyrestorectx + " (" + ctx + ")";
-			break;
-	}
-	return indent(ind) + s + ";\n";
-}
 
-std::string InputAPI::stmt_restorectx_var(uint32_t ind) const
-{
-	std::string s;
-	switch (type_) {
-		case DEFAULT:
-			s = opts->yycursor + " = " + opts->yyctxmarker;
-			break;
-		case CUSTOM:
-			s = opts->yyrestorectx + " ()";
-			break;
+	if (tag.type == Tag::FIX) {
+		const std::string dist = to_string(tag.fix.dist);
+		s = (type_ == DEFAULT)
+			? opts->yycursor + " -= " + dist
+			: opts->yyrestorectx + " (" + opts->tags_yydist + "() - " + dist + ")";
+	} else if (basetag) {
+		const Tag &orig = tags[tag.var.orig];
+		const std::string expr = vartag_expr(orig.name, orig.rule);
+		s = (type_ == DEFAULT)
+			? opts->yycursor + " = " + opts->yyctxmarker + " + " + expr
+			: opts->yyrestorectx + " (" + expr + ")";
+	} else {
+		s = (type_ == DEFAULT)
+			? opts->yycursor + " = " + opts->yyctxmarker
+			: opts->yyrestorectx + " ()";
 	}
+
 	return indent(ind) + s + ";\n";
 }
 

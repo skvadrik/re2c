@@ -37,9 +37,8 @@ public:
 		const std::valarray<Tag> &tags) const;
 	std::string expr_tag(const std::valarray<Tag> &tags, size_t idx) const;
 	std::string stmt_restore (uint32_t ind) const;
-	std::string stmt_restorectx_fix (uint32_t ind, size_t dist) const;
-	std::string stmt_restorectx_var (uint32_t ind) const;
-	std::string stmt_restorectx_var_base (uint32_t ind, const std::string &ctx) const;
+	std::string stmt_restorectx(uint32_t ind,
+		const std::valarray<Tag> &tags, const Tag &tag, bool basetag) const;
 	std::string stmt_skip_peek (uint32_t ind) const;
 	std::string stmt_skip_backup (uint32_t ind) const;
 	std::string stmt_backup_peek (uint32_t ind) const;

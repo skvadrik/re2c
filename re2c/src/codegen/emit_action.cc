@@ -215,17 +215,7 @@ void emit_rule(OutputFile &o, uint32_t ind, const DFA &dfa, size_t rule_idx)
 	const RuleInfo *info = rule.info;
 
 	if (rule.trail != Tag::NONE) {
-		const Tag &tag = dfa.tags[rule.trail];
-		if (tag.type == Tag::VAR) {
-			if (dfa.basetag) {
-				o.wstring(opts->input_api.stmt_restorectx_var_base(ind,
-					vartag_expr(tag.name, tag.rule)));
-			} else {
-				o.wstring(opts->input_api.stmt_restorectx_var(ind));
-			}
-		} else {
-			o.wstring(opts->input_api.stmt_restorectx_fix(ind, tag.fix.dist));
-		}
+		o.wstring(opts->input_api.stmt_restorectx(ind, dfa.tags, dfa.tags[rule.trail], dfa.basetag));
 	}
 
 	if (opts->target == opt_t::SKELETON) {
