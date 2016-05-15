@@ -80,6 +80,9 @@ struct RegExp
 	inline ~RegExp()
 	{
 		flist.erase(this);
+		if (type == TAG) {
+			delete tag;
+		}
 	}
 
 private:

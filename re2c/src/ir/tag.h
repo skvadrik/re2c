@@ -29,7 +29,6 @@ struct Tag
 	};
 
 	Tag();
-	~Tag();
 	FORBID_COPY(Tag);
 };
 

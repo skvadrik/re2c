@@ -14,11 +14,6 @@ Tag::Tag()
 	, name(NULL)
 {}
 
-Tag::~Tag()
-{
-	delete name;
-}
-
 void init_var_tag(Tag &tag, size_t r, const std::string *n, size_t o)
 {
 	tag.type = Tag::VAR;
