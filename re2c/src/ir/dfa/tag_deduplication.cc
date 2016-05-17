@@ -56,15 +56,15 @@ static void calc_live(const dfa_t &dfa, size_t fallback, size_t *live)
 	for (bool loop = true; loop;) {
 		loop = false;
 		for (size_t i = 0; i < nstates; ++i) {
+			const size_t l = live[i];
 			dfa_state_t *s = dfa.states[i];
 			for (size_t c = 0; c < dfa.nchars; ++c) {
 				const size_t j = s->arcs[c];
 				if (j != dfa_t::NIL) {
-					const size_t old = live[i];
 					dfa.tagpool.orl_with_mask(&live[i], live[j], s->tags[c]);
-					loop |= old != live[i];
 				}
 			}
+			loop |= live[i] != l;
 		}
 	}
 }
