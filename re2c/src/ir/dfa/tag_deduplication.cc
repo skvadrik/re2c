@@ -41,46 +41,43 @@ static bool dangling_arcs(const size_t *arcs, size_t narcs)
  *    - There is a transition from S to some state S' (maybe equal to S)
  *      that does not set T and T is alive in S'.
  */
-static void calc_live(const dfa_t &dfa,
-	const bool *fallback,
-	bool *visited,
-	bool *live,
-	size_t i)
+static void calc_live(const dfa_t &dfa, const bool *fallback, bool *live)
 {
-	if (visited[i]) {
-		return;
-	}
-
-	visited[i] = true;
-	dfa_state_t *s = dfa.states[i];
+	const size_t nstates = dfa.states.size();
 	const size_t ntags = dfa.tags.size();
 
-	// add tags before recursing to child states,
-	// so that tags propagate into loopbacks to this state
-	if (dangling_arcs(s->arcs, dfa.nchars)) {
-		if (s->rule != Rule::NONE) {
-			// final state, only rule tags are alive
-			add_tags_with_mask(&live[i * ntags],
-				dfa.rules[s->rule].tags,
-				dfa.tagpool[s->rule_tags],
-				ntags);
-		} else {
-			// transition to default state and dispatch on
-			// 'yyaccept': all fallback rules are potentially
-			// reachable, their tags are alive
-			// no mask (no rule implies no rule tags)
-			add_tags(&live[i * ntags], fallback, ntags);
+	for (size_t i = 0; i < nstates; ++i) {
+		dfa_state_t *s = dfa.states[i];
+		if (dangling_arcs(s->arcs, dfa.nchars)) {
+			if (s->rule != Rule::NONE) {
+				// final state, only rule tags are alive
+				add_tags_with_mask(&live[i * ntags],
+					dfa.rules[s->rule].tags,
+					dfa.tagpool[s->rule_tags],
+					ntags);
+			} else {
+				// transition to default state and dispatch on
+				// 'yyaccept': all fallback rules are potentially
+				// reachable, their tags are alive
+				// no mask: no rule implies no rule tags
+				add_tags(&live[i * ntags], fallback, ntags);
+			}
 		}
 	}
 
-	for (size_t c = 0; c < dfa.nchars; ++c) {
-		const size_t j = s->arcs[c];
-		if (j != dfa_t::NIL) {
-			calc_live(dfa, fallback, visited, live, j);
-			add_tags_with_mask(&live[i * ntags],
-				&live[j * ntags],
-				dfa.tagpool[s->tags[c]],
-				ntags);
+	for (bool loop = true; loop;) {
+		loop = false;
+		for (size_t i = 0; i < nstates; ++i) {
+			dfa_state_t *s = dfa.states[i];
+			for (size_t c = 0; c < dfa.nchars; ++c) {
+				const size_t j = s->arcs[c];
+				if (j != dfa_t::NIL) {
+					loop |= addcmp_tags_with_mask(&live[i * ntags],
+						&live[j * ntags],
+						dfa.tagpool[s->tags[c]],
+						ntags);
+				}
+			}
 		}
 	}
 }
@@ -265,9 +262,8 @@ size_t deduplicate_tags(dfa_t &dfa,
 	}
 
 	const size_t nstates = dfa.states.size();
-	bool *visited = new bool[nstates]();
 	bool *live = new bool[nstates * ntags]();
-	calc_live(dfa, fbtags, visited, live, 0);
+	calc_live(dfa, fbtags, live);
 
 	mask_dead(dfa, live);
 
@@ -289,7 +285,6 @@ size_t deduplicate_tags(dfa_t &dfa,
 	}
 
 	delete[] fbtags;
-	delete[] visited;
 	delete[] live;
 	delete[] incompattbl;
 

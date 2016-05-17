@@ -55,6 +55,18 @@ inline void add_tags_with_mask(bool *oldtags, const bool *newtags,
 	}
 }
 
+inline bool addcmp_tags_with_mask(bool *oldtags, const bool *newtags,
+	const bool *mask, size_t ntags)
+{
+	bool diff = false;
+	for (size_t i = 0; i < ntags; ++i) {
+		const bool old = oldtags[i];
+		oldtags[i] |= newtags[i] & ~mask[i];
+		diff |= old != oldtags[i];
+	}
+	return diff;
+}
+
 } // namespace re2c
 
 #endif // _RE2C_IR_TAGPOOL_
