@@ -114,6 +114,7 @@ SRC = \
 	src/ir/skeleton/skeleton.cc \
 	src/ir/skeleton/unreachable_nullable.cc \
 	src/ir/tag.cc \
+	src/ir/tagpool.cc \
 	src/main.cc \
 	src/parse/code.cc \
 	src/parse/input.cc \

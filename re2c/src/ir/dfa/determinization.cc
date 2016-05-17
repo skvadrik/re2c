@@ -137,7 +137,7 @@ dfa_t::dfa_t(const nfa_t &nfa,
 	, nchars(charset.size() - 1) // (n + 1) bounds for n ranges
 	, rules(nfa.rules)
 	, tags(*nfa.tags)
-	, tagpool(*new Tagpool(tags.size()))
+	, tagpool(*nfa.tagpool)
 {
 	const size_t ntags = tags.size();
 	const size_t nrules = rules.size();
@@ -178,7 +178,7 @@ dfa_t::dfa_t(const nfa_t &nfa,
 						for (; charset[c] != r->lower(); ++c);
 						for (; charset[c] != r->upper(); ++c) {
 							merge_tags_with_mask(&arctags[c * ntags], newtags,
-								&mask[c * ntags], rules[m->rule].tags,
+								&mask[c * ntags], tagpool[rules[m->rule].tags],
 								badtags, ntags);
 							arcs[c].push_back(m);
 						}
@@ -187,7 +187,7 @@ dfa_t::dfa_t(const nfa_t &nfa,
 				}
 				case nfa_state_t::FIN:
 					merge_tags_with_mask(&arctags[nchars * ntags], newtags,
-						&mask[nchars * ntags], rules[n->rule].tags,
+						&mask[nchars * ntags], tagpool[rules[n->rule].tags],
 						badtags, ntags);
 					fin[n->rule] = true;
 					break;

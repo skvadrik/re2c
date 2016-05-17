@@ -8,6 +8,7 @@
 
 #include "src/ir/regexp/regexp.h"
 #include "src/ir/rule.h"
+#include "src/ir/tagpool.h"
 #include "src/util/forbid_copy.h"
 
 namespace re2c
@@ -76,6 +77,7 @@ struct nfa_t
 	nfa_state_t *states;
 	std::valarray<Rule> &rules;
 	std::valarray<Tag> *tags;
+	Tagpool *tagpool;
 	nfa_state_t *root;
 
 	nfa_t(const std::vector<const RegExpRule*> &rs);
@@ -90,7 +92,8 @@ void regexps2nfa(const std::vector<const RegExpRule*> &regexps, nfa_t &nfa);
 bool nullable_rule(const RegExpRule *rule);
 void init_rules(const std::vector<const RegExpRule*> &regexps,
 	std::valarray<Rule> &rules,
-	const std::valarray<Tag> &tags);
+	const std::valarray<Tag> &tags,
+	Tagpool &tagpool);
 
 } // namespace re2c
 

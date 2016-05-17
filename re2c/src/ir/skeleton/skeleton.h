@@ -39,7 +39,6 @@ struct Node
 	const bool *tags;
 
 	Node();
-	~Node();
 	void init(const bool *ts, size_t r,
 		const std::vector<std::pair<size_t, uint32_t> > &arcs);
 	bool end() const;

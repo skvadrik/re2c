@@ -2,6 +2,7 @@
 #define _RE2C_IR_TAGPOOL_
 
 #include "src/util/ord_hash_set.h"
+#include "src/util/forbid_copy.h"
 
 namespace re2c
 {
@@ -12,60 +13,19 @@ struct Tagpool
 
 private:
 	ord_hash_set_t pool;
+	bool *buff;
 
 public:
-	explicit inline Tagpool(size_t n);
-	inline size_t insert(const bool *tags);
-	inline const bool *operator[](size_t idx);
+	explicit Tagpool(size_t n);
+	~Tagpool();
+	size_t insert(const bool *tags);
+	void orl(size_t *pt, size_t o);
+	void orl_with_mask(size_t *pt, size_t o, size_t m);
+	void andl(size_t *pt, size_t a);
+	void subst(size_t *pt, const std::vector<size_t> &represent);
+	const bool *operator[](size_t idx);
+	FORBID_COPY(Tagpool);
 };
-
-Tagpool::Tagpool(size_t n)
-	: ntags(n)
-	, pool()
-{
-	const bool *zerotags = new bool[ntags]();
-	insert(zerotags);
-	delete[] zerotags;
-}
-
-size_t Tagpool::insert(const bool *tags)
-{
-	return pool.insert(tags, ntags * sizeof(bool));
-}
-
-const bool *Tagpool::operator[](size_t idx)
-{
-	const bool *tags;
-	pool.deref<const bool>(idx, tags);
-	return tags;
-}
-
-inline void add_tags(bool *oldtags, const bool *newtags, size_t ntags)
-{
-	for (size_t i = 0; i < ntags; ++i) {
-		oldtags[i] |= newtags[i];
-	}
-}
-
-inline void add_tags_with_mask(bool *oldtags, const bool *newtags,
-	const bool *mask, size_t ntags)
-{
-	for (size_t i = 0; i < ntags; ++i) {
-		oldtags[i] |= newtags[i] & ~mask[i];
-	}
-}
-
-inline bool addcmp_tags_with_mask(bool *oldtags, const bool *newtags,
-	const bool *mask, size_t ntags)
-{
-	bool diff = false;
-	for (size_t i = 0; i < ntags; ++i) {
-		const bool old = oldtags[i];
-		oldtags[i] |= newtags[i] & ~mask[i];
-		diff |= old != oldtags[i];
-	}
-	return diff;
-}
 
 } // namespace re2c
 

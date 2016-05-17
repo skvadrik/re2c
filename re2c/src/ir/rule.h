@@ -38,8 +38,8 @@ struct Rule
 	size_t ltag;
 	size_t htag;
 	size_t trail;
+	size_t tags;
 	bool nullable;
-	bool *tags;
 	std::set<uint32_t> shadow;
 	bool reachable;
 
@@ -48,15 +48,11 @@ struct Rule
 		, ltag(0)
 		, htag(0)
 		, trail(Tag::NONE)
+		, tags(0)
 		, nullable(false)
-		, tags(NULL)
 		, shadow()
 		, reachable(false)
 	{}
-	~Rule()
-	{
-		delete[] tags;
-	}
 
 	FORBID_COPY(Rule);
 };

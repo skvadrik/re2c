@@ -44,11 +44,6 @@ void Node::init(const bool *ts, size_t r,
 	}
 }
 
-Node::~Node()
-{
-	delete[] tags;
-}
-
 bool Node::end() const
 {
 	return arcs.size() == 0;
@@ -72,7 +67,6 @@ Skeleton::Skeleton(
 	, tags(dfa.tags)
 {
 	const size_t nc = cs.size() - 1;
-	const size_t ntags = tags.size();
 
 	// initialize skeleton nodes
 	for (size_t i = 0; i < nodes_count - 1; ++i) {
@@ -93,13 +87,12 @@ Skeleton::Skeleton(
 
 		// in skeleton we are only interested in trailing contexts
 		// which may be attributed to states rather than transitions
-		bool *tags = new bool[ntags]();
-		add_tags(tags, dfa.tagpool[s->rule_tags], ntags);
+		size_t tags = s->rule_tags;
 		for (size_t c = 0; c < nc; ++c) {
-			add_tags(tags, dfa.tagpool[s->tags[c]], ntags);
+			dfa.tagpool.orl(&tags, s->tags[c]);
 		}
 
-		nodes[i].init(tags, s->rule, arcs);
+		nodes[i].init(dfa.tagpool[tags], s->rule, arcs);
 	}
 
 	// initialize size of key
