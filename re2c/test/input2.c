@@ -37,7 +37,5 @@ yy6:
 re2c: warning: line 5: control flow is undefined for strings that match 
 	'[\x0-\x60\x62-\xFF]'
 	'\x61 [\x0-\x60\x63-\xFF]'
-	'\x61 \x61 [\x0-\x60\x63-\xFF]'
 	'\x61 \x62 [\x0-\x61\x63-\xFF]'
-	'\x61 \x61 \x62 [\x0-\x61\x63-\xFF]'
 , use default rule '*' [-Wundefined-control-flow]

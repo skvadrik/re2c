@@ -1,3 +1,4 @@
+#include <valarray>
 #include <vector>
 
 #include "src/conf/warn.h"
@@ -19,7 +20,7 @@ typedef u32lim_t<1024> ucf_size_t; // ~1Kb
 // UCF stands for 'undefined control flow'
 struct ucf_t
 {
-	std::vector<uint8_t> loops;
+	std::valarray<bool> loops;
 	std::vector<path_t> paths;
 	path_t prefix;
 	ucf_size_t size;
@@ -36,7 +37,7 @@ static void naked_paths(
 	size_t i)
 {
 	const Node &node = skel.nodes[i];
-	uint8_t &loop = ucf.loops[i];
+	bool &loop = ucf.loops[i];
 	path_t &prefix = ucf.prefix;
 	ucf_size_t &size = ucf.size;
 
@@ -45,8 +46,8 @@ static void naked_paths(
 	} else if (node.end()) {
 		ucf.paths.push_back(prefix);
 		size = size + ucf_size_t::from64(prefix.len());
-	} else if (loop < 2) {
-		local_inc _(loop);
+	} else if (!loop) {
+		loop = true;
 		Node::arcsets_t::const_iterator
 			arc = node.arcsets.begin(),
 			end = node.arcsets.end();
