@@ -15,56 +15,114 @@ static bool dangling_arcs(const size_t *arcs, size_t narcs)
 	return false;
 }
 
+// reversed DFA
+struct rdfa_t
+{
+	struct arc_t
+	{
+		size_t dest;
+		size_t tags;
+		arc_t *next;
+
+		arc_t()
+			: dest(dfa_t::NIL)
+			, tags(0)
+			, next(NULL)
+		{}
+	};
+
+	arc_t **head;
+	arc_t *list;
+
+	explicit rdfa_t(const dfa_t &dfa)
+		: head(NULL)
+		, list(NULL)
+	{
+		const size_t nstates = dfa.states.size();
+		head = new arc_t*[nstates]();
+		list = new arc_t[nstates * dfa.nchars];
+
+		arc_t *a = list;
+		for (size_t i = 0; i < nstates; ++i) {
+			dfa_state_t *s = dfa.states[i];
+			for (size_t c = 0; c < dfa.nchars; ++c) {
+				const size_t j = s->arcs[c];
+				if (j != dfa_t::NIL) {
+					a->dest = i;
+					a->tags = s->tags[c];
+					a->next = head[j];
+					head[j] = a++;
+				}
+			}
+		}
+	}
+
+	~rdfa_t()
+	{
+		delete[] head;
+		delete[] list;
+	}
+
+	FORBID_COPY(rdfa_t);
+};
+
+static void backprop(const rdfa_t &rdfa,
+	Tagpool &tagpool,
+	size_t *live,
+	size_t tags,
+	size_t state)
+{
+	const size_t l = live[state];
+	live[state] = tagpool.orl(l, tags);
+	if (l == live[state]) return;
+
+	for (rdfa_t::arc_t *a = rdfa.head[state]; a; a = a->next) {
+		backprop(rdfa, tagpool, live,
+			tagpool.andlinv(tags, a->tags), a->dest);
+	}
+}
+
 /* note [liveness analyses on tags]
  *
  * Tag T is alive in state S if there is a transition
  * from S to some state S' that does not update T
  * and either:
  *
- *    - S' is the default state
+ *  (1) S' is the default state
  *      and S is final
  *      and T belongs to S's final tag set
  *
- *    - S' is the default state
+ *  (2) S' is the default state
  *      and S is not final
  *      and T belongs to fallback tag set
  *
- *    - S' is not the default state
+ *  (3) S' is not the default state
  *      and T is alive in S'
+ *
+ * The algorithm inspects all DFA states one by one.
+ * If a state satisfies (1) or (2) for some set of tags,
+ * the algorithm propagates all these tags backwards to
+ * fulfill (3). Propagation stops if either all tags are masked
+ * or live set in not changed after adding new tags.
  */
 static void calc_live(const dfa_t &dfa, size_t fallback, size_t *live)
 {
-	const size_t nstates = dfa.states.size();
+	rdfa_t rdfa(dfa);
 
+	const size_t nstates = dfa.states.size();
 	for (size_t i = 0; i < nstates; ++i) {
 		dfa_state_t *s = dfa.states[i];
 		if (dangling_arcs(s->arcs, dfa.nchars)) {
-			if (s->rule != Rule::NONE) {
+			const size_t tags = s->rule != Rule::NONE
 				// final state, only rule tags are alive
-				dfa.tagpool.orl_with_mask(&live[i],
-					dfa.rules[s->rule].tags, s->rule_tags);
-			} else {
+				? dfa.tagpool.andlinv(dfa.rules[s->rule].tags,
+					s->rule_tags)
 				// transition to default state and dispatch on
 				// 'yyaccept': all fallback rules are potentially
 				// reachable, their tags are alive
 				// no mask: no rule implies no rule tags
-				dfa.tagpool.orl(&live[i], fallback);
-			}
-		}
-	}
-
-	for (bool loop = true; loop;) {
-		loop = false;
-		for (size_t i = 0; i < nstates; ++i) {
-			const size_t l = live[i];
-			dfa_state_t *s = dfa.states[i];
-			for (size_t c = 0; c < dfa.nchars; ++c) {
-				const size_t j = s->arcs[c];
-				if (j != dfa_t::NIL) {
-					dfa.tagpool.orl_with_mask(&live[i], live[j], s->tags[c]);
-				}
-			}
-			loop |= live[i] != l;
+				: fallback;
+			backprop(rdfa, dfa.tagpool, live, tags, i);
 		}
 	}
 }
@@ -77,11 +135,13 @@ static void mask_dead(dfa_t &dfa, const size_t *live)
 		for (size_t c = 0; c < dfa.nchars; ++c) {
 			const size_t j = s->arcs[c];
 			if (j != dfa_t::NIL) {
-				dfa.tagpool.andl(&s->tags[c], live[j]);
+				s->tags[c] = dfa.tagpool.andl(s->tags[c],
+					live[j]);
 			}
 		}
 		if (s->rule != Rule::NONE) {
-			dfa.tagpool.andl(&s->rule_tags, dfa.rules[s->rule].tags);
+			s->rule_tags = dfa.tagpool.andl(s->rule_tags,
+				dfa.rules[s->rule].tags);
 		}
 	}
 }
@@ -156,7 +216,7 @@ static void incompatibility_table(const dfa_t &dfa,
  * The algorithm takes quadratic (in the number of tags) time.
  */
 static void equivalence_classes(const bool *incompattbl,
-	size_t ntags, std::vector<size_t> &represent)
+	size_t ntags, size_t *represent)
 {
 	static const size_t END = std::numeric_limits<size_t>::max();
 	std::vector<size_t>
@@ -188,15 +248,15 @@ static void equivalence_classes(const bool *incompattbl,
 	}
 }
 
-static void patch_tags(dfa_t &dfa, const std::vector<size_t> &represent)
+static void patch_tags(dfa_t &dfa, const size_t *represent)
 {
 	const size_t nstates = dfa.states.size();
 	for (size_t i = 0; i < nstates; ++i) {
 		dfa_state_t *s = dfa.states[i];
 		for (size_t c = 0; c < dfa.nchars; ++c) {
-			dfa.tagpool.subst(&s->tags[c], represent);
+			s->tags[c] = dfa.tagpool.subst(s->tags[c], represent);
 		}
-		dfa.tagpool.subst(&s->rule_tags, represent);
+		s->rule_tags = dfa.tagpool.subst(s->rule_tags, represent);
 	}
 
 	const size_t ntags = dfa.tags.size();
@@ -219,7 +279,7 @@ size_t deduplicate_tags(dfa_t &dfa,
 	size_t fbtags = 0;
 	for (size_t i = 0; i < fallback.size(); ++i) {
 		const size_t r = dfa.states[fallback[i]]->rule;
-		dfa.tagpool.orl(&fbtags, dfa.rules[r].tags);
+		fbtags = dfa.tagpool.orl(fbtags, dfa.rules[r].tags);
 	}
 
 	const size_t nstates = dfa.states.size();
@@ -231,7 +291,7 @@ size_t deduplicate_tags(dfa_t &dfa,
 	bool *incompattbl = new bool[ntags * ntags]();
 	incompatibility_table(dfa, live, fbtags, incompattbl);
 
-	std::vector<size_t> represent(ntags, 0);
+	size_t *represent = new size_t[ntags]();
 	equivalence_classes(incompattbl, ntags, represent);
 
 	size_t nreps = 0;
@@ -247,6 +307,7 @@ size_t deduplicate_tags(dfa_t &dfa,
 
 	delete[] live;
 	delete[] incompattbl;
+	delete[] represent;
 
 	return nreps;
 }

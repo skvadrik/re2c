@@ -89,7 +89,7 @@ Skeleton::Skeleton(
 		// which may be attributed to states rather than transitions
 		size_t tags = s->rule_tags;
 		for (size_t c = 0; c < nc; ++c) {
-			dfa.tagpool.orl(&tags, s->tags[c]);
+			tags = dfa.tagpool.orl(tags, s->tags[c]);
 		}
 
 		nodes[i].init(dfa.tagpool[tags], s->rule, arcs);

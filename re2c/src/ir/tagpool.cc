@@ -23,14 +23,12 @@ size_t Tagpool::insert(const bool *tags)
 	return pool.insert(tags, ntags * sizeof(bool));
 }
 
-void Tagpool::orl(size_t *pt, size_t o)
+size_t Tagpool::orl(size_t t, size_t o)
 {
-	const size_t t = *pt;
 	if (t == o || o == 0) {
-		return;
+		return t;
 	} else if (t == 0) {
-		*pt = o;
-		return;
+		return o;
 	}
 
 	const bool *tags = operator[](t);
@@ -38,33 +36,15 @@ void Tagpool::orl(size_t *pt, size_t o)
 	for (size_t i = 0; i < ntags; ++i) {
 		buff[i] = tags[i] | ortags[i];
 	}
-	*pt = insert(buff);
+	return insert(buff);
 }
 
-void Tagpool::orl_with_mask(size_t *pt, size_t o, size_t m)
+size_t Tagpool::andl(size_t t, size_t a)
 {
-	const size_t t = *pt;
-	if (t == o || o == 0) {
-		return;
-	}
-
-	const bool *tags = operator[](t);
-	const bool *ortags = operator[](o);
-	const bool *masktags = operator[](m);
-	for (size_t i = 0; i < ntags; ++i) {
-		buff[i] = tags[i] | (ortags[i] & ~masktags[i]);
-	}
-	*pt = insert(buff);
-}
-
-void Tagpool::andl(size_t *pt, size_t a)
-{
-	const size_t t = *pt;
 	if (t == a) {
-		return;
+		return t;
 	} else if (t == 0 || a == 0) {
-		*pt = 0;
-		return;
+		return 0;
 	}
 
 	const bool *tags = operator[](t);
@@ -72,19 +52,35 @@ void Tagpool::andl(size_t *pt, size_t a)
 	for (size_t i = 0; i < ntags; ++i) {
 		buff[i] = tags[i] & andtags[i];
 	}
-	*pt = insert(buff);
+	return insert(buff);
 }
 
-void Tagpool::subst(size_t *pt, const std::vector<size_t> &represent)
+size_t Tagpool::andlinv(size_t t, size_t a)
 {
-	const bool *tags = operator[](*pt);
+	if (a == 0) {
+		return t;
+	} else if (t == 0 || t == a) {
+		return 0;
+	}
+
+	const bool *tags = operator[](t);
+	const bool *andinvtags = operator[](a);
+	for (size_t i = 0; i < ntags; ++i) {
+		buff[i] = tags[i] & ~andinvtags[i];
+	}
+	return insert(buff);
+}
+
+size_t Tagpool::subst(size_t t, const size_t *represent)
+{
+	const bool *tags = operator[](t);
 	memset(buff, 0, ntags * sizeof(bool));
 	for (size_t i = 0; i < ntags; ++i) {
 		if (tags[i]) {
 			buff[represent[i]] = true;
 		}
 	}
-	*pt = insert(buff);
+	return insert(buff);
 }
 
 const bool *Tagpool::operator[](size_t idx)

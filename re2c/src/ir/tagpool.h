@@ -19,10 +19,10 @@ public:
 	explicit Tagpool(size_t n);
 	~Tagpool();
 	size_t insert(const bool *tags);
-	void orl(size_t *pt, size_t o);
-	void orl_with_mask(size_t *pt, size_t o, size_t m);
-	void andl(size_t *pt, size_t a);
-	void subst(size_t *pt, const std::vector<size_t> &represent);
+	size_t orl(size_t t, size_t o);
+	size_t andl(size_t t, size_t a);
+	size_t andlinv(size_t t, size_t a);
+	size_t subst(size_t t, const size_t *represent);
 	const bool *operator[](size_t idx);
 	FORBID_COPY(Tagpool);
 };
