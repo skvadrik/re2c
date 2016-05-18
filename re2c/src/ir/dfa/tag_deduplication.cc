@@ -5,68 +5,14 @@
 namespace re2c
 {
 
-static bool dangling_arcs(const size_t *arcs, size_t narcs)
+struct revarc_t
 {
-	for (size_t i = 0; i < narcs; ++i) {
-		if (arcs[i] == dfa_t::NIL) {
-			return true;
-		}
-	}
-	return false;
-}
-
-// reversed DFA
-struct rdfa_t
-{
-	struct arc_t
-	{
-		size_t dest;
-		size_t tags;
-		arc_t *next;
-
-		arc_t()
-			: dest(dfa_t::NIL)
-			, tags(0)
-			, next(NULL)
-		{}
-	};
-
-	arc_t **head;
-	arc_t *list;
-
-	explicit rdfa_t(const dfa_t &dfa)
-		: head(NULL)
-		, list(NULL)
-	{
-		const size_t nstates = dfa.states.size();
-		head = new arc_t*[nstates]();
-		list = new arc_t[nstates * dfa.nchars];
-
-		arc_t *a = list;
-		for (size_t i = 0; i < nstates; ++i) {
-			dfa_state_t *s = dfa.states[i];
-			for (size_t c = 0; c < dfa.nchars; ++c) {
-				const size_t j = s->arcs[c];
-				if (j != dfa_t::NIL) {
-					a->dest = i;
-					a->tags = s->tags[c];
-					a->next = head[j];
-					head[j] = a++;
-				}
-			}
-		}
-	}
-
-	~rdfa_t()
-	{
-		delete[] head;
-		delete[] list;
-	}
-
-	FORBID_COPY(rdfa_t);
+	size_t dest;
+	size_t tags;
+	revarc_t *next;
 };
 
-static void backprop(const rdfa_t &rdfa,
+static void backprop(revarc_t **rdfa,
 	Tagpool &tagpool,
 	size_t *live,
 	size_t tags,
@@ -76,7 +22,7 @@ static void backprop(const rdfa_t &rdfa,
 	live[state] = tagpool.orl(l, tags);
 	if (l == live[state]) return;
 
-	for (rdfa_t::arc_t *a = rdfa.head[state]; a; a = a->next) {
+	for (const revarc_t *a = rdfa[state]; a; a = a->next) {
 		backprop(rdfa, tagpool, live,
 			tagpool.andlinv(tags, a->tags), a->dest);
 	}
@@ -107,12 +53,30 @@ static void backprop(const rdfa_t &rdfa,
  */
 static void calc_live(const dfa_t &dfa, size_t fallback, size_t *live)
 {
-	rdfa_t rdfa(dfa);
-
 	const size_t nstates = dfa.states.size();
+
+	bool *fallthru = new bool[nstates]();
+	revarc_t **rdfa = new revarc_t*[nstates]();
+	revarc_t *rarcs = new revarc_t[nstates * dfa.nchars];
+	revarc_t *a = rarcs;
 	for (size_t i = 0; i < nstates; ++i) {
 		dfa_state_t *s = dfa.states[i];
-		if (dangling_arcs(s->arcs, dfa.nchars)) {
+		for (size_t c = 0; c < dfa.nchars; ++c) {
+			const size_t j = s->arcs[c];
+			if (j != dfa_t::NIL) {
+				a->dest = i;
+				a->tags = s->tags[c];
+				a->next = rdfa[j];
+				rdfa[j] = a++;
+			} else {
+				fallthru[i] = true;
+			}
+		}
+	}
+
+	for (size_t i = 0; i < nstates; ++i) {
+		const dfa_state_t *s = dfa.states[i];
+		if (fallthru[i]) {
 			const size_t tags = s->rule != Rule::NONE
 				// final state, only rule tags are alive
 				? dfa.tagpool.andlinv(dfa.rules[s->rule].tags,
@@ -125,6 +89,10 @@ static void calc_live(const dfa_t &dfa, size_t fallback, size_t *live)
 			backprop(rdfa, dfa.tagpool, live, tags, i);
 		}
 	}
+
+	delete[] rdfa;
+	delete[] rarcs;
+	delete[] fallthru;
 }
 
 static void mask_dead(dfa_t &dfa, const size_t *live)
@@ -173,14 +141,17 @@ static void incompatibility_table(const dfa_t &dfa,
 	const size_t ntags = dfa.tags.size();
 	for (size_t i = 0; i < nstates; ++i) {
 		const dfa_state_t *s = dfa.states[i];
+		bool fallthru = false;
 		for (size_t c = 0; c < dfa.nchars; ++c) {
 			const size_t j = s->arcs[c];
 			if (j != dfa_t::NIL) {
 				incompatible(incompattbl, dfa.tagpool,
 					livetags[j], s->tags[c]);
+			} else {
+				fallthru = true;
 			}
 		}
-		if (dangling_arcs(s->arcs, dfa.nchars)) {
+		if (fallthru) {
 			if (s->rule != Rule::NONE) {
 				incompatible(incompattbl, dfa.tagpool,
 					dfa.rules[s->rule].tags, s->rule_tags);
