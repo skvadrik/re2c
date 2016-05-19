@@ -77,7 +77,6 @@ struct DFA
 
 	DFA	( const dfa_t &dfa
 		, const std::vector<size_t> &fill
-		, const std::vector<size_t> &fallback
 		, Skeleton *skel
 		, const charset_t &charset
 		, const std::string &n

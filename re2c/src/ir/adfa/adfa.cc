@@ -18,7 +18,6 @@ namespace re2c
 DFA::DFA
 	( const dfa_t &dfa
 	, const std::vector<size_t> &fill
-	, const std::vector<size_t> &fallback
 	, Skeleton *skel
 	, const charset_t &charset
 	, const std::string &n
@@ -82,6 +81,8 @@ DFA::DFA
 		s->rule = t->rule;
 		s->rule_tags = t->rule_tags;
 		s->fill = fill[i];
+		s->fallback = fallback_state(dfa, i); // see note [fallback states]
+
 		s->go.span = allocate<Span>(nchars);
 		uint32_t j = 0;
 		for (uint32_t c = 0; c < nchars; ++j)
@@ -96,10 +97,6 @@ DFA::DFA
 		s->go.nSpans = j;
 	}
 	*p = NULL;
-
-	for (size_t i = 0; i < fallback.size(); ++i) {
-		i2s[fallback[i]]->fallback = true;
-	}
 
 	delete[] i2s;
 }

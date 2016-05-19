@@ -2,7 +2,7 @@
 
 {
 	YYCTYPE yych;
-	if (YYLESSTHAN (3)) YYFILL(3);
+	if (YYLESSTHAN (2)) YYFILL(2);
 	yych = YYPEEK ();
 	switch (yych) {
 	case 'a':	goto yy4;
@@ -16,10 +16,8 @@ yy2:
 	{}
 yy4:
 	YYSKIP ();
-	switch ((yych = YYPEEK ())) {
-	case 'a':	goto yy10;
-	default:	goto yy8;
-	}
+	yych = YYPEEK ();
+	goto yy8;
 	YYRESTORECTX ();
 	{}
 yy6:
@@ -30,10 +28,6 @@ yy6:
 yy8:
 	YYSKIP ();
 	if (YYLESSTHAN (1)) YYFILL(1);
-	yych = YYPEEK ();
-	goto yy8;
-yy10:
-	YYSKIP ();
 	yych = YYPEEK ();
 	goto yy8;
 }

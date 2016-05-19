@@ -239,28 +239,38 @@ static void patch_tags(dfa_t &dfa, const size_t *represent)
 	}
 }
 
-size_t deduplicate_tags(dfa_t &dfa,
-	const std::vector<size_t> &fallback)
+// see note [fallback states]
+// fallback tags are all tags that belong to fallback rules
+static size_t fallback_tags(const dfa_t &dfa)
+{
+	const size_t nstates = dfa.states.size();
+	size_t tags = 0;
+	for (size_t i = 0; i < nstates; ++i) {
+		if (fallback_state(dfa, i)) {
+			const size_t r = dfa.states[i]->rule;
+			tags = dfa.tagpool.orl(tags, dfa.rules[r].tags);
+		}
+	}
+	return tags;
+}
+
+size_t deduplicate_tags(dfa_t &dfa)
 {
 	const size_t ntags = dfa.tags.size();
 	if (ntags == 0) {
 		return 0;
 	}
 
-	size_t fbtags = 0;
-	for (size_t i = 0; i < fallback.size(); ++i) {
-		const size_t r = dfa.states[fallback[i]]->rule;
-		fbtags = dfa.tagpool.orl(fbtags, dfa.rules[r].tags);
-	}
+	const size_t fallback = fallback_tags(dfa);
 
 	const size_t nstates = dfa.states.size();
 	size_t *live = new size_t[nstates]();
-	calc_live(dfa, fbtags, live);
+	calc_live(dfa, fallback, live);
 
 	mask_dead(dfa, live);
 
 	bool *incompattbl = new bool[ntags * ntags]();
-	incompatibility_table(dfa, live, fbtags, incompattbl);
+	incompatibility_table(dfa, live, fallback, incompattbl);
 
 	size_t *represent = new size_t[ntags]();
 	equivalence_classes(incompattbl, ntags, represent);

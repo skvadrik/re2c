@@ -64,21 +64,17 @@ static smart_ptr<DFA> compile_rules(
 	// but prior to any other DFA transformations
 	Skeleton *skeleton = new Skeleton(dfa, cs, defrule, name, cond, line);
 
+	// try to minimize the number of tag variables
+	const size_t used_tags = deduplicate_tags(dfa);
+
 	minimization(dfa);
 
 	// find YYFILL states and calculate argument to YYFILL
 	std::vector<size_t> fill;
 	fillpoints(dfa, fill);
 
-	// see note [fallback states]
-	std::vector<size_t> fallback;
-	fallback_states(dfa, fallback);
-
-	// try to minimize the number of tag variables
-	const size_t used_tags = deduplicate_tags(dfa, fallback);
-
 	// ADFA stands for 'DFA with actions'
-	DFA *adfa = new DFA(dfa, fill, fallback, skeleton, cs,
+	DFA *adfa = new DFA(dfa, fill, skeleton, cs,
 		name, cond, line, used_tags);
 
 	// see note [reordering DFA states]

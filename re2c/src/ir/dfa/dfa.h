@@ -64,8 +64,8 @@ enum dfa_minimization_t
 
 void minimization(dfa_t &dfa);
 void fillpoints(const dfa_t &dfa, std::vector<size_t> &fill);
-void fallback_states(const dfa_t &dfa, std::vector<size_t> &fallback);
-size_t deduplicate_tags(dfa_t &dfa, const std::vector<size_t> &fallback);
+bool fallback_state(const dfa_t &dfa, size_t i);
+size_t deduplicate_tags(dfa_t &dfa);
 
 } // namespace re2c
 
