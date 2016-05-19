@@ -175,7 +175,7 @@ void DFA::emit(Output & output, uint32_t& ind, bool isLastCond, bool& bPrologBra
 	head->action.set_initial (initial_label, head->action.type == Action::SAVE);
 
 	warn_undefined_control_flow(*skeleton);
-	warn_unreachable_nullable_rules(*skeleton);
+	warn_unreachable(*skeleton);
 
 	if (opts->target == opt_t::SKELETON) {
 		if (output.skeletons.insert (name).second)

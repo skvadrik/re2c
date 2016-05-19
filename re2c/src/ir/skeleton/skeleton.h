@@ -85,7 +85,7 @@ template<typename key_t> key_t Skeleton::rule2key(size_t r, size_t def) const
 uint32_t maxpath(const Skeleton &skel);
 void warn_undefined_control_flow(const Skeleton &skel);
 void fprint_default_path(FILE *f, const Skeleton &skel, const path_t &p);
-void warn_unreachable_nullable_rules(const Skeleton &skel);
+void warn_unreachable(const Skeleton &skel);
 void emit_data(const Skeleton &skel);
 void emit_prolog(OutputFile & o);
 void emit_start(const Skeleton &skel, OutputFile &o, size_t maxfill,

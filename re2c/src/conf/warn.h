@@ -58,7 +58,7 @@ public:
 
 	void condition_order (uint32_t line);
 	void empty_class (uint32_t line);
-	void match_empty_string (uint32_t line);
+	void match_empty_string (uint32_t line, const std::string &cond);
 	void nondeterministic_tags(uint32_t line, const std::string &cond, const std::string *tagname);
 	void swapped_range (uint32_t line, uint32_t l, uint32_t u);
 	void undefined_control_flow (const Skeleton &skel, std::vector<path_t> & paths, bool overflow);

@@ -39,7 +39,6 @@ struct Rule
 	size_t htag;
 	size_t trail;
 	size_t tags;
-	bool nullable;
 	std::set<uint32_t> shadow;
 	bool reachable;
 
@@ -49,7 +48,6 @@ struct Rule
 		, htag(0)
 		, trail(Tag::NONE)
 		, tags(0)
-		, nullable(false)
 		, shadow()
 		, reachable(false)
 	{}

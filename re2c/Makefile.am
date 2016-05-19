@@ -86,7 +86,6 @@ SRC = \
 	src/ir/nfa/init_rules.cc \
 	src/ir/nfa/make_tags.cc \
 	src/ir/nfa/nfa.cc \
-	src/ir/nfa/nullable.cc \
 	src/ir/nfa/regexps2nfa.cc \
 	src/ir/adfa/adfa.cc \
 	src/ir/adfa/prepare.cc \
@@ -103,6 +102,7 @@ SRC = \
 	src/ir/regexp/encoding/utf16/utf16_regexp.cc \
 	src/ir/regexp/encoding/utf16/utf16.cc \
 	src/ir/regexp/encoding/utf16/utf16_range.cc \
+	src/ir/regexp/nullable.cc \
 	src/ir/regexp/regexp.cc \
 	src/ir/regexp/split_charset.cc \
 	src/ir/compile.cc \
@@ -112,7 +112,7 @@ SRC = \
 	src/ir/skeleton/generate_data.cc \
 	src/ir/skeleton/maxpath.cc \
 	src/ir/skeleton/skeleton.cc \
-	src/ir/skeleton/unreachable_nullable.cc \
+	src/ir/skeleton/unreachable.cc \
 	src/ir/tag.cc \
 	src/ir/tagpool.cc \
 	src/main.cc \

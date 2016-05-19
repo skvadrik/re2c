@@ -44,7 +44,6 @@ void init_rules(const std::vector<const RegExpRule*> &regexps,
 	for (size_t r = 0, t = 0; r < nr; ++r) {
 		Rule &rule = rules[r];
 		rule.info = regexps[r]->info;
-		rule.nullable = nullable_rule(regexps[r]);
 
 		rule.ltag = t;
 		for (; t < nt && tags[t].rule == r; ++t);

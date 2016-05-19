@@ -13,4 +13,5 @@ yy0:
 	{}
 }
 
+re2c: warning: line 3: rule matches empty string [-Wmatch-empty-string]
 re2c: warning: line 3: unreachable rule  [-Wunreachable-rules]

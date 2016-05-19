@@ -36,7 +36,7 @@ static void calc_reachable(
 	}
 }
 
-void warn_unreachable_nullable_rules(const Skeleton &skel)
+void warn_unreachable(const Skeleton &skel)
 {
 	// calculate reachable rules
 	const size_t nnodes = skel.nodes_count;
@@ -74,18 +74,6 @@ void warn_unreachable_nullable_rules(const Skeleton &skel)
 		const Rule &rule = rules[i];
 		if (i != skel.defrule && !rule.reachable) {
 			warn.unreachable_rule(skel.cond, rule);
-		}
-	}
-
-	// warn about nullable rules:
-	//    - rules that match empty string
-	//    - rules that match empty strins with nonempty trailing context
-	// false positives on partially shadowed (yet reachable) rules, e.g.:
-	//     [^]?
-	for (size_t i = 0; i < nrules; ++i) {
-		const Rule &rule = rules[i];
-		if (rule.nullable && rule.reachable) {
-			warn.match_empty_string(rule.info->loc.line);
 		}
 	}
 }

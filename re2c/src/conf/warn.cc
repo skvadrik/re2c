@@ -109,13 +109,14 @@ void Warn::empty_class (uint32_t line)
 	}
 }
 
-void Warn::match_empty_string (uint32_t line)
+void Warn::match_empty_string (uint32_t line, const std::string &cond)
 {
 	if (mask[MATCH_EMPTY_STRING] & WARNING)
 	{
 		const bool e = mask[MATCH_EMPTY_STRING] & ERROR;
 		error_accuml |= e;
-		warning (names[MATCH_EMPTY_STRING], line, e, "rule matches empty string");
+		warning (names[MATCH_EMPTY_STRING], line, e,
+			"rule %smatches empty string", incond(cond).c_str());
 	}
 }
 

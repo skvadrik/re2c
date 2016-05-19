@@ -38,6 +38,8 @@ static smart_ptr<DFA> compile_rules(
 	const uint32_t line = output.source.block().line;
 	const std::string name = make_name(cond, line);
 
+	warn_nullable(rules, cond);
+
 	// The original set of code units (charset) might be very large.
 	// A common trick it is to split charset into disjoint character ranges
 	// and choose a representative of each range (we choose lower bound).

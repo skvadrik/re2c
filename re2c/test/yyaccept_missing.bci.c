@@ -165,4 +165,4 @@ int main(int argc, char **argv)
 		return 1;
 	}
 }
-re2c: warning: line 44: rule matches empty string [-Wmatch-empty-string]
+re2c: warning: line 44: rule in condition 'ST_VALUE' matches empty string [-Wmatch-empty-string]

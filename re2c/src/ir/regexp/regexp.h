@@ -118,6 +118,8 @@ const RegExp *doCat(const RegExp *re1, const RegExp *re2);
 const RegExp *repeat(const RegExp *re, uint32_t n);
 const RegExp *repeat_from_to(const RegExp *re, uint32_t n, uint32_t m);
 const RegExp *repeat_from(const RegExp *re, uint32_t n);
+void warn_nullable(const std::vector<const RegExpRule*> &regexps,
+	const std::string &cond);
 
 } // end namespace re2c
 

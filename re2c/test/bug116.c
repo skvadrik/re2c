@@ -20,5 +20,5 @@ yy3:
 }
 #line 3 "bug116.re"
 
-re2c: warning: line 3: control flow is undefined for strings that match '[\x0-\x60\x62-\xFF]', use default rule '*' [-Wundefined-control-flow]
 re2c: warning: line 2: rule matches empty string [-Wmatch-empty-string]
+re2c: warning: line 3: control flow is undefined for strings that match '[\x0-\x60\x62-\xFF]', use default rule '*' [-Wundefined-control-flow]

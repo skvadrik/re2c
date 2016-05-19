@@ -19,5 +19,6 @@ yy3:
 #line 7 "input4.re"
 
 re2c: warning: line 3: empty character class [-Wempty-character-class]
+re2c: warning: line 3: rule matches empty string [-Wmatch-empty-string]
 re2c: warning: line 3: unreachable rule (shadowed by rule at line 4) [-Wunreachable-rules]
 re2c: warning: line 5: unreachable rule (shadowed by rule at line 4) [-Wunreachable-rules]
