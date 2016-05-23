@@ -81,7 +81,7 @@ DFA::DFA
 		s->rule = t->rule;
 		s->rule_tags = t->rule_tags;
 		s->fill = fill[i];
-		s->fallback = fallback_state(dfa, i); // see note [fallback states]
+		s->fallback = t->fallback; // see note [fallback states]
 
 		s->go.span = allocate<Span>(nchars);
 		uint32_t j = 0;

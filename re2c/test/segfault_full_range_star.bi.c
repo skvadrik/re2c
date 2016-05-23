@@ -45,7 +45,6 @@ yy0:
 	if (yybm[0+yych] & 128) {
 		goto yy1;
 	}
-	{}
 }
 
 re2c: warning: line 2: rule matches empty string [-Wmatch-empty-string]

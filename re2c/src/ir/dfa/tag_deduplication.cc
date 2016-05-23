@@ -246,9 +246,9 @@ static size_t fallback_tags(const dfa_t &dfa)
 	const size_t nstates = dfa.states.size();
 	size_t tags = 0;
 	for (size_t i = 0; i < nstates; ++i) {
-		if (fallback_state(dfa, i)) {
-			const size_t r = dfa.states[i]->rule;
-			tags = dfa.tagpool.orl(tags, dfa.rules[r].tags);
+		const dfa_state_t *s = dfa.states[i];
+		if (s->fallback) { // see note [fallback states]
+			tags = dfa.tagpool.orl(tags, dfa.rules[s->rule].tags);
 		}
 	}
 	return tags;

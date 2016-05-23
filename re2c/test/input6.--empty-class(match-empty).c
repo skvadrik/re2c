@@ -6,16 +6,10 @@
 	YYCTYPE yych;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
-	goto yy3;
-	YYCURSOR -= 0;
-#line 3 "input6.--empty-class(match-empty).re"
-	{ return 0; }
-#line 14 "input6.--empty-class(match-empty).c"
-yy3:
 	++YYCURSOR;
 #line 4 "input6.--empty-class(match-empty).re"
 	{ return 1; }
-#line 19 "input6.--empty-class(match-empty).c"
+#line 13 "input6.--empty-class(match-empty).c"
 }
 #line 6 "input6.--empty-class(match-empty).re"
 

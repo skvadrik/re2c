@@ -10,7 +10,6 @@ yy0:
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	goto yy1;
-	{}
 }
 
 re2c: warning: line 3: rule matches empty string [-Wmatch-empty-string]

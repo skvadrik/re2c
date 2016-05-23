@@ -51,7 +51,6 @@ static int scan(Scanner *s)
 	
 {
 	YYCTYPE yych;
-	unsigned int yyaccept = 0;
 	static const unsigned char yybm[] = {
 		/* table 1 .. 8: 0 */
 		 96,  99,  99,  99,  99,  99,  99,  99, 
@@ -161,11 +160,7 @@ static int scan(Scanner *s)
 	}
 yy2:
 	YYCURSOR = YYMARKER;
-	if (yyaccept == 0) {
-		goto yy7;
-	} else {
-		goto yy5;
-	}
+	goto yy7;
 yy3:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
@@ -174,16 +169,13 @@ yy4:
 	if (yybm[256+yych] & 32) {
 		goto yy3;
 	}
-yy5:
 	{ RET(PDO_PARSER_TEXT); }
 yy6:
-	yyaccept = 0;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych >= 0x01) goto yy15;
 yy7:
 	{ SKIP_ONE(PDO_PARSER_TEXT); }
 yy8:
-	yyaccept = 0;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= 0x00) goto yy7;
 	goto yy20;
@@ -258,8 +250,7 @@ yy24:
 yy26:
 	{ RET(PDO_PARSER_TEXT); }
 yy27:
-	yyaccept = 1;
-	YYMARKER = ++YYCURSOR;
+	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	if (yybm[0+yych] & 2) {
@@ -310,8 +301,7 @@ yy39:
 	}
 	goto yy43;
 yy41:
-	yyaccept = 1;
-	YYMARKER = ++YYCURSOR;
+	++YYCURSOR;
 	if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
 	yych = *YYCURSOR;
 	{

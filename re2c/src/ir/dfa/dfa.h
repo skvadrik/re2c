@@ -23,12 +23,14 @@ struct dfa_state_t
 	size_t *tags;
 	size_t rule;
 	size_t rule_tags;
+	bool fallback;
 
 	explicit dfa_state_t(size_t nchars)
 		: arcs(new size_t[nchars])
 		, tags(new size_t[nchars])
 		, rule(Rule::NONE)
 		, rule_tags(0)
+		, fallback(false)
 	{}
 	~dfa_state_t()
 	{
@@ -64,7 +66,6 @@ enum dfa_minimization_t
 
 void minimization(dfa_t &dfa);
 void fillpoints(const dfa_t &dfa, std::vector<size_t> &fill);
-bool fallback_state(const dfa_t &dfa, size_t i);
 void cutoff_dead_rules(dfa_t &dfa, size_t defrule, const std::string &cond);
 size_t deduplicate_tags(dfa_t &dfa);
 

@@ -2,34 +2,13 @@
 
 {
 	YYCTYPE yych;
-	if (YYLESSTHAN (2)) YYFILL(2);
-	yych = YYPEEK ();
-	switch (yych) {
-	case 'a':	goto yy4;
-	default:	goto yy2;
-	}
-yy2:
+	goto yy0;
+yy1:
 	YYSKIP ();
-	yych = YYPEEK ();
-	goto yy6;
-	YYRESTORECTX ();
-	{}
-yy4:
-	YYSKIP ();
-	yych = YYPEEK ();
-	goto yy8;
-	YYRESTORECTX ();
-	{}
-yy6:
-	YYSKIP ();
+yy0:
 	if (YYLESSTHAN (1)) YYFILL(1);
 	yych = YYPEEK ();
-	goto yy6;
-yy8:
-	YYSKIP ();
-	if (YYLESSTHAN (1)) YYFILL(1);
-	yych = YYPEEK ();
-	goto yy8;
+	goto yy1;
 }
 
 re2c: warning: line 2: unreachable rule  [-Wunreachable-rules]

@@ -21,9 +21,6 @@ yyc_c2:
 yyc_c3:
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
-	goto yy12;
-	{ return C3; }
-yy12:
 	++YYCURSOR;
 	{ return DEFAULT-*; }
 }

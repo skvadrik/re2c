@@ -2,34 +2,13 @@
 
 {
 	YYCTYPE yych;
-	if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
-	yych = *YYCURSOR;
-	switch (yych) {
-	case 'a':	goto yy4;
-	default:	goto yy2;
-	}
-yy2:
+	goto yy0;
+yy1:
 	++YYCURSOR;
-	yych = *YYCURSOR;
-	goto yy6;
-	YYCURSOR = YYCTXMARKER;
-	{}
-yy4:
-	++YYCURSOR;
-	yych = *YYCURSOR;
-	goto yy8;
-	YYCURSOR = YYCTXMARKER;
-	{}
-yy6:
-	++YYCURSOR;
+yy0:
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
-	goto yy6;
-yy8:
-	++YYCURSOR;
-	if (YYLIMIT <= YYCURSOR) YYFILL(1);
-	yych = *YYCURSOR;
-	goto yy8;
+	goto yy1;
 }
 
 re2c: warning: line 2: unreachable rule  [-Wunreachable-rules]
