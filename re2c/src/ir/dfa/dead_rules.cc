@@ -111,7 +111,7 @@ static void backprop(const rdfa_t &rdfa, bool *live,
 	// if the rule has already been set, than either it's a loop
 	// or another branch of back propagation has already been here,
 	// in both cases we should stop: there's nothing new to propagate
-	bool &l = live[state * (rdfa.nrules + 1) + rule];
+	bool &l = live[rule * rdfa.nstates + state];
 	if (l) return;
 	l = true;
 
@@ -137,12 +137,11 @@ static void warn_dead_rules(const dfa_t &dfa, size_t defrule,
 	const size_t nrules = dfa.rules.size();
 
 	for (size_t i = 0; i < nstates; ++i) {
-		const bool *l = &live[i * (nrules + 1)];
 		const size_t r = dfa.states[i]->rule;
-		if (r != Rule::NONE && !l[r]) {
+		if (r != Rule::NONE && !live[r * nstates + i]) {
 			// skip last rule (it's the NONE-rule)
 			for (size_t j = 0; j < nrules; ++j) {
-				if (l[j]) {
+				if (live[j * nstates + i]) {
 					dfa.rules[r].shadow.insert(dfa.rules[j].info->loc.line);
 				}
 			}
@@ -151,7 +150,7 @@ static void warn_dead_rules(const dfa_t &dfa, size_t defrule,
 
 	for (size_t i = 0; i < nrules; ++i) {
 		// default rule '*' should not be reported
-		if (i != defrule && !live[i]) {
+		if (i != defrule && !live[i * nstates]) {
 			warn.unreachable_rule(cond, dfa.rules[i]);
 		}
 	}
@@ -160,11 +159,10 @@ static void warn_dead_rules(const dfa_t &dfa, size_t defrule,
 static void remove_dead_final_states(dfa_t &dfa, const bool *live)
 {
 	const size_t nstates = dfa.states.size();
-	const size_t nrules = dfa.rules.size();
 	for (size_t i = 0; i < nstates; ++i) {
 		dfa_state_t *s = dfa.states[i];
 		if (s->rule != Rule::NONE
-			&& !live[i * (nrules + 1) + s->rule]) {
+			&& !live[s->rule * nstates + i]) {
 			s->rule = Rule::NONE;
 			s->rule_tags = 0;
 		}
@@ -190,13 +188,13 @@ static void find_fallback_states(dfa_t &dfa, const bool *live)
 {
 	const size_t nstates = dfa.states.size();
 	const size_t nrules = dfa.rules.size();
+	const bool *fallthru = &live[nrules * nstates];
 	for (size_t i = 0; i < nstates; ++i) {
 		dfa_state_t *s = dfa.states[i];
 		if (s->rule != Rule::NONE) {
 			for (size_t c = 0; c < dfa.nchars; ++c) {
 				const size_t j = s->arcs[c];
-				if (j != dfa_t::NIL
-					&& live[j * (nrules + 1) + nrules]) {
+				if (j != dfa_t::NIL && fallthru[j]) {
 					s->fallback = true;
 					break;
 				}
@@ -208,7 +206,7 @@ static void find_fallback_states(dfa_t &dfa, const bool *live)
 void cutoff_dead_rules(dfa_t &dfa, size_t defrule, const std::string &cond)
 {
 	const rdfa_t rdfa(dfa);
-	bool *live = new bool[rdfa.nstates * (rdfa.nrules + 1)]();
+	bool *live = new bool[(rdfa.nrules + 1) * rdfa.nstates]();
 
 	liveness_analyses(rdfa, live);
 	warn_dead_rules(dfa, defrule, cond, live);
