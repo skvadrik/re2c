@@ -89,6 +89,7 @@ SRC = \
 	src/ir/nfa/regexps2nfa.cc \
 	src/ir/adfa/adfa.cc \
 	src/ir/adfa/prepare.cc \
+	src/ir/dfa/dead_rules.cc \
 	src/ir/dfa/determinization.cc \
 	src/ir/dfa/fallback.cc \
 	src/ir/dfa/fillpoints.cc \
@@ -112,7 +113,6 @@ SRC = \
 	src/ir/skeleton/generate_data.cc \
 	src/ir/skeleton/maxpath.cc \
 	src/ir/skeleton/skeleton.cc \
-	src/ir/skeleton/unreachable.cc \
 	src/ir/tag.cc \
 	src/ir/tagpool.cc \
 	src/main.cc \

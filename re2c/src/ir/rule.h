@@ -40,7 +40,6 @@ struct Rule
 	size_t trail;
 	size_t tags;
 	std::set<uint32_t> shadow;
-	bool reachable;
 
 	Rule()
 		: info(NULL)
@@ -49,7 +48,6 @@ struct Rule
 		, trail(Tag::NONE)
 		, tags(0)
 		, shadow()
-		, reachable(false)
 	{}
 
 	FORBID_COPY(Rule);

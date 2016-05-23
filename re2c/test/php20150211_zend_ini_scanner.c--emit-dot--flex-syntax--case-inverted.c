@@ -580,6 +580,7 @@ re2c: warning: line 384: column 13: escape has no effect: '\.' [-Wuseless-escape
 re2c: warning: line 384: column 32: escape has no effect: '\.' [-Wuseless-escape]
 re2c: warning: line 391: column 27: escape has no effect: '\[' [-Wuseless-escape]
 re2c: warning: line 392: column 11: escape has no effect: '\[' [-Wuseless-escape]
+re2c: warning: line 648: unreachable rule in condition 'INITIAL' (shadowed by rules at lines 406, 481, 491, 555, 627, 632, 637) [-Wunreachable-rules]
 re2c: warning: line 648: unreachable rule in condition 'ST_DOUBLE_QUOTES' (shadowed by rules at lines 582, 587) [-Wunreachable-rules]
 re2c: warning: line 623: unreachable rule in condition 'ST_OFFSET' (shadowed by rule at line 573) [-Wunreachable-rules]
 re2c: warning: line 648: unreachable rule in condition 'ST_RAW' (shadowed by rules at lines 500, 541, 643) [-Wunreachable-rules]

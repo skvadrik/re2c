@@ -64,6 +64,8 @@ static smart_ptr<DFA> compile_rules(
 	// but prior to any other DFA transformations
 	Skeleton *skeleton = new Skeleton(dfa, cs, defrule, name, cond, line);
 
+	cutoff_dead_rules(dfa, defrule, cond);
+
 	// try to minimize the number of tag variables
 	const size_t used_tags = deduplicate_tags(dfa);
 
