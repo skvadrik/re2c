@@ -98,10 +98,8 @@ struct rdfa_t
 	FORBID_COPY(rdfa_t);
 };
 
-static void backprop(const rdfa_t &rdfa,
-	bool *reachable,
-	size_t rule,
-	size_t state)
+static void backprop(const rdfa_t &rdfa, bool *live,
+	size_t rule, size_t state)
 {
 	// "none-rule" is unreachable from final states:
 	// be careful to mask it before propagating
@@ -113,38 +111,38 @@ static void backprop(const rdfa_t &rdfa,
 	// if the rule has already been set, than either it's a loop
 	// or another branch of back propagation has already been here,
 	// in both cases we should stop: there's nothing new to propagate
-	bool &reach = reachable[state * (rdfa.nrules + 1) + rule];
-	if (reach) return;
-	reach = true;
+	bool &l = live[state * (rdfa.nrules + 1) + rule];
+	if (l) return;
+	l = true;
 
 	for (const rdfa_t::arc_t *a = s.arcs; a; a = a->next) {
-		backprop(rdfa, reachable, rule, a->dest);
+		backprop(rdfa, live, rule, a->dest);
 	}
 }
 
-static void calc_reachable(const rdfa_t &rdfa, bool *reachable)
+static void liveness_analyses(const rdfa_t &rdfa, bool *live)
 {
 	for (size_t i = 0; i < rdfa.nstates; ++i) {
 		const rdfa_t::state_t &s = rdfa.states[i];
 		if (s.fallthru) {
-			backprop(rdfa, reachable, s.rule, i);
+			backprop(rdfa, live, s.rule, i);
 		}
 	}
 }
 
-static void warn_unreachable(const dfa_t &dfa, size_t defrule,
-	const std::string &cond, const bool *reachable)
+static void warn_dead_rules(const dfa_t &dfa, size_t defrule,
+	const std::string &cond, const bool *live)
 {
 	const size_t nstates = dfa.states.size();
 	const size_t nrules = dfa.rules.size();
 
 	for (size_t i = 0; i < nstates; ++i) {
-		const bool *reach = &reachable[i * (nrules + 1)];
+		const bool *l = &live[i * (nrules + 1)];
 		const size_t r = dfa.states[i]->rule;
-		if (r != Rule::NONE && !reach[r]) {
+		if (r != Rule::NONE && !l[r]) {
 			// skip last rule (it's the NONE-rule)
 			for (size_t j = 0; j < nrules; ++j) {
-				if (reach[j]) {
+				if (l[j]) {
 					dfa.rules[r].shadow.insert(dfa.rules[j].info->loc.line);
 				}
 			}
@@ -153,13 +151,13 @@ static void warn_unreachable(const dfa_t &dfa, size_t defrule,
 
 	for (size_t i = 0; i < nrules; ++i) {
 		// default rule '*' should not be reported
-		if (i != defrule && !reachable[i]) {
+		if (i != defrule && !live[i]) {
 			warn.unreachable_rule(cond, dfa.rules[i]);
 		}
 	}
 }
 
-static void mask_dead(dfa_t &dfa, const bool *live)
+static void remove_dead_final_states(dfa_t &dfa, const bool *live)
 {
 	const size_t nstates = dfa.states.size();
 	const size_t nrules = dfa.rules.size();
@@ -210,14 +208,14 @@ static void find_fallback_states(dfa_t &dfa, const bool *live)
 void cutoff_dead_rules(dfa_t &dfa, size_t defrule, const std::string &cond)
 {
 	const rdfa_t rdfa(dfa);
-	bool *reachable = new bool[rdfa.nstates * (rdfa.nrules + 1)]();
+	bool *live = new bool[rdfa.nstates * (rdfa.nrules + 1)]();
 
-	calc_reachable(rdfa, reachable);
-	warn_unreachable(dfa, defrule, cond, reachable);
-	mask_dead(dfa, reachable);
-	find_fallback_states(dfa, reachable);
+	liveness_analyses(rdfa, live);
+	warn_dead_rules(dfa, defrule, cond, live);
+	remove_dead_final_states(dfa, live);
+	find_fallback_states(dfa, live);
 
-	delete[] reachable;
+	delete[] live;
 }
 
 } // namespace re2c
