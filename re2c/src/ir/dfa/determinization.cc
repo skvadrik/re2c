@@ -75,8 +75,8 @@ static void closure(kitem_t *const kernel, kitem_t *&kend,
 	++n->loop;
 	switch (n->type) {
 		case nfa_state_t::ALT:
-			closure(kernel, kend, n->alt.out2, tags, badtags, ntags);
 			closure(kernel, kend, n->alt.out1, tags, badtags, ntags);
+			closure(kernel, kend, n->alt.out2, tags, badtags, ntags);
 			break;
 		case nfa_state_t::TAG: {
 			const size_t t = n->tag.info;
