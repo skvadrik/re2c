@@ -138,6 +138,10 @@ void default_rule(CondList *clist, const Code * code)
 	context_check(clist);
 	for(CondList::const_iterator it = clist->begin(); it != clist->end(); ++it)
 	{
+		if (specMap.find(*it) == specMap.end())
+		{
+			condnames.push_back (*it);
+		}
 		RuleOp * def = new RuleOp
 			( code->loc
 			, in->mkDefault ()

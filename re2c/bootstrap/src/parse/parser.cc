@@ -206,6 +206,10 @@ void default_rule(CondList *clist, const Code * code)
 	context_check(clist);
 	for(CondList::const_iterator it = clist->begin(); it != clist->end(); ++it)
 	{
+		if (specMap.find(*it) == specMap.end())
+		{
+			condnames.push_back (*it);
+		}
 		RuleOp * def = new RuleOp
 			( code->loc
 			, in->mkDefault ()
@@ -593,11 +597,11 @@ static const yytype_int8 yyrhs[] =
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint16 yyrline[] =
 {
-       0,   193,   193,   195,   199,   203,   211,   219,   223,   227,
-     231,   247,   264,   268,   274,   279,   285,   289,   303,   319,
-     324,   330,   345,   362,   381,   387,   395,   398,   405,   411,
-     421,   424,   432,   435,   442,   446,   453,   457,   464,   468,
-     475,   479,   494,   513,   517,   521,   525,   532,   542,   546
+       0,   197,   197,   199,   203,   207,   215,   223,   227,   231,
+     235,   251,   268,   272,   278,   283,   289,   293,   307,   323,
+     328,   334,   349,   366,   385,   391,   399,   402,   409,   415,
+     425,   428,   436,   439,   446,   450,   457,   461,   468,   472,
+     479,   483,   498,   517,   521,   525,   529,   536,   546,   550
 };
 #endif
 

@@ -49,6 +49,7 @@ error:
 }
 
 enum YYCONDTYPE {
+    yycr1,
     yycr2,
 };
 
