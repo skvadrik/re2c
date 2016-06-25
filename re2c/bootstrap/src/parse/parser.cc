@@ -2006,11 +2006,11 @@ yyreduce:
 
     {
 			symbol_table_t::iterator i = symbol_table.find (* (yyvsp[(1) - (1)].str));
-			delete (yyvsp[(1) - (1)].str);
 			if (i == symbol_table.end ())
 			{
-				in->fatal("can't find symbol");
+				in->fatalf("'%s' is not defined", (yyvsp[(1) - (1)].str)->c_str());
 			}
+			delete (yyvsp[(1) - (1)].str);
 			(yyval.regexp) = i->second;
 		;}
     break;

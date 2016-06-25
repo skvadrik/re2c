@@ -536,11 +536,11 @@ primary:
 		TOKEN_ID
 		{
 			symbol_table_t::iterator i = symbol_table.find (* $1);
-			delete $1;
 			if (i == symbol_table.end ())
 			{
-				in->fatal("can't find symbol");
+				in->fatalf("'%s' is not defined", $1->c_str());
 			}
+			delete $1;
 			$$ = i->second;
 		}
 	|	TOKEN_REGEXP

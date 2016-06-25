@@ -159,17 +159,19 @@ void Scanner::fatalf_at(uint32_t line, const char* fmt, ...) const
 
 void Scanner::fatalf(const char *fmt, ...) const
 {
-	char szBuf[4096];
+	static const char tail[] = "...";
+	static const size_t TAIL = sizeof(tail);
+	static const size_t MAX = 4096;
+	char msg[MAX + TAIL];
 
 	va_list args;
-	
 	va_start(args, fmt);
-	vsnprintf(szBuf, sizeof(szBuf), fmt, args);
+	vsnprintf(msg, MAX, fmt, args);
 	va_end(args);
-	
-	szBuf[sizeof(szBuf)-1] = '0';
-	
-	fatal(szBuf);
+
+	sprintf(&msg[MAX - 1], tail);
+
+	fatal(msg);
 }
 
 Scanner::~Scanner()
