@@ -234,7 +234,8 @@ primary
 	| TOKEN_ID {
 		symtab_t::iterator i = context.symtab.find(*$1);
 		if (i == context.symtab.end()) {
-			fatal_l(context.input.get_cline(), "can't find symbol");
+			fatal_l(context.input.get_cline(),
+				"undefined symbol '%s'", $1->c_str());
 		}
 		$$ = i->second;
 		if (ast_need_wrap($$)) {

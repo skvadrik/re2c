@@ -475,7 +475,7 @@ static const yytype_uint8 yyrline[] =
       92,    96,    96,    99,   103,   107,   114,   121,   128,   134,
      136,   142,   149,   150,   156,   162,   169,   171,   177,   181,
      188,   192,   199,   203,   210,   211,   217,   222,   223,   227,
-     228,   229,   233,   234,   244
+     228,   229,   233,   234,   245
 };
 #endif
 
@@ -1557,7 +1557,8 @@ yyreduce:
     {
 		symtab_t::iterator i = context.symtab.find(*(yyvsp[0].str));
 		if (i == context.symtab.end()) {
-			fatal_l(context.input.get_cline(), "can't find symbol");
+			fatal_l(context.input.get_cline(),
+				"undefined symbol '%s'", (yyvsp[0].str)->c_str());
 		}
 		(yyval.regexp) = i->second;
 		if (ast_need_wrap((yyval.regexp))) {
