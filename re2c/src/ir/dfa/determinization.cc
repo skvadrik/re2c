@@ -14,7 +14,37 @@
 namespace re2c
 {
 
+static nfa_state_t *transition(nfa_state_t *state, uint32_t symbol);
+static void reach(const kitem_t *kernel, size_t kcount, kitem_t *&r, uint32_t symbol);
+
 const size_t dfa_t::NIL = std::numeric_limits<size_t>::max();
+
+nfa_state_t *transition(nfa_state_t *state, uint32_t symbol)
+{
+	if (state->type != nfa_state_t::RAN) {
+		return NULL;
+	}
+	for (const Range *r = state->ran.ran; r; r = r->next()) {
+		if ((r->lower() <= symbol) && (symbol < r->upper())) {
+			return state->ran.out;
+		}
+	}
+	return NULL;
+}
+
+void reach(const kitem_t *kernel, size_t kcount, kitem_t *&r, uint32_t symbol)
+{
+	for (size_t i = 0; i < kcount; ++i) {
+		nfa_state_t
+			*s = kernel[i].state,
+			*t = transition(s, symbol);
+		if (t) {
+			r->state = t;
+			r->tagidx = kernel[i].tagidx;
+			++r;
+		}
+	}
+}
 
 static void merge_tags_with_mask(bool *oldtags, const bool *newtags,
 	bool *oldmask, const bool *newmask,
@@ -38,73 +68,56 @@ dfa_t::dfa_t(const nfa_t &nfa,
 {
 	const size_t ntags = tags.size();
 	const size_t nrules = rules.size();
-	const size_t mask_size = (nchars + 1) * ntags;
 
 	ord_hash_set_t kernels;
+	kitem_t *rstart = new kitem_t[nfa.size], *rend = rstart;
 	kitem_t *kstart = new kitem_t[nfa.size], *kend = kstart;
 	bool *ktags = new bool[ntags]();
 	bool *badtags = new bool[ntags]();
-	bool *arctags = new bool[mask_size];
-	bool *mask = new bool[mask_size];
+	bool *arctags = new bool[ntags];
+	bool *mask = new bool[ntags];
 	bool *fin = new bool[nrules];
-	std::vector<nfa_state_t*> *arcs = new std::vector<nfa_state_t*>[nchars];
 
 	closure(kstart, kend, nfa.root, ktags, badtags, ntags);
 	find_state(kstart, kend, kernels, tagpool);
 	for (size_t i = 0; i < kernels.size(); ++i) {
-		memset(fin, 0, nrules * sizeof(bool));
-		memset(arctags, 0, mask_size * sizeof(bool));
-		memset(mask, 0, mask_size * sizeof(bool));
-		for(size_t c = 0; c < nchars; ++c) {
-			arcs[c].clear();
-		}
-
 		dfa_state_t *s = new dfa_state_t(nchars);
 		states.push_back(s);
 
 		const kitem_t *kernel;
 		const size_t kcount = kernels.deref<const kitem_t>(i, kernel);
-		for (size_t j = 0; j < kcount; ++j) {
-			nfa_state_t *n = kernel[j].state;
-			const bool *newtags = tagpool[kernel[j].tagidx];
-			switch (n->type) {
-				case nfa_state_t::RAN: {
-					nfa_state_t *m = n->ran.out;
-					size_t c = 0;
-					for (const Range *r = n->ran.ran; r; r = r->next ()) {
-						for (; charset[c] != r->lower(); ++c);
-						for (; charset[c] != r->upper(); ++c) {
-							merge_tags_with_mask(&arctags[c * ntags], newtags,
-								&mask[c * ntags], tagpool[rules[m->rule].tags],
-								badtags, ntags);
-							arcs[c].push_back(m);
-						}
-					}
-					break;
-				}
-				case nfa_state_t::FIN:
-					merge_tags_with_mask(&arctags[nchars * ntags], newtags,
-						&mask[nchars * ntags], tagpool[rules[n->rule].tags],
-						badtags, ntags);
-					fin[n->rule] = true;
-					break;
-				default:
-					assert(false);
-					break;
-			}
-		}
 
 		for (size_t c = 0; c < nchars; ++c) {
+			rend = rstart;
+			reach(kernel, kcount, rend, charset[c]);
+
 			kend = kstart;
-			const std::vector<nfa_state_t*> &a = arcs[c];
-			for (size_t j = 0; j < a.size(); ++j) {
-				closure(kstart, kend, a[j], ktags, badtags, ntags);
+			for (const kitem_t *r = rstart; r != rend; ++r) {
+				closure(kstart, kend, r->state, ktags, badtags, ntags);
 			}
 			s->arcs[c] = find_state(kstart, kend, kernels, tagpool);
-			s->tags[c] = tagpool.insert(&arctags[c * ntags]);
-		}
-		s->rule_tags = tagpool.insert(&arctags[nchars * ntags]);
 
+			memset(arctags, 0, ntags * sizeof(bool));
+			memset(mask, 0, ntags * sizeof(bool));
+			for (const kitem_t *r = rstart; r != rend; ++r) {
+				merge_tags_with_mask(arctags, tagpool[r->tagidx], mask,
+					tagpool[rules[r->state->rule].tags], badtags, ntags);
+			}
+			s->tags[c] = tagpool.insert(arctags);
+		}
+
+		memset(fin, 0, nrules * sizeof(bool));
+		memset(arctags, 0, ntags * sizeof(bool));
+		memset(mask, 0, ntags * sizeof(bool));
+		for (size_t j = 0; j < kcount; ++j) {
+			nfa_state_t *n = kernel[j].state;
+			if (n->type == nfa_state_t::FIN) {
+				merge_tags_with_mask(arctags, tagpool[kernel[j].tagidx], mask,
+					tagpool[rules[n->rule].tags], badtags, ntags);
+				fin[n->rule] = true;
+			}
+		}
+		s->rule_tags = tagpool.insert(arctags);
 		// choose the first rule (the one with smallest rank)
 		size_t r;
 		for (r = 0; r < nrules; ++r) {
@@ -128,13 +141,13 @@ dfa_t::dfa_t(const nfa_t &nfa,
 		}
 	}
 
+	delete[] rstart;
 	delete[] kstart;
 	delete[] ktags;
 	delete[] badtags;
 	delete[] arctags;
 	delete[] mask;
 	delete[] fin;
-	delete[] arcs;
 }
 
 dfa_t::~dfa_t()
