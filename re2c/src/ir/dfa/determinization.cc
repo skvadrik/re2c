@@ -4,6 +4,8 @@
 
 #include "src/conf/warn.h"
 #include "src/ir/dfa/dfa.h"
+#include "src/ir/dfa/closure.h"
+#include "src/ir/dfa/find_state.h"
 #include "src/ir/nfa/nfa.h"
 #include "src/ir/regexp/regexp.h"
 #include "src/util/range.h"
@@ -14,15 +16,6 @@ namespace re2c
 
 const size_t dfa_t::NIL = std::numeric_limits<size_t>::max();
 
-static void merge_tags(bool *oldtags, const bool *newtags,
-	bool *badtags, size_t ntags)
-{
-	for (size_t i = 0; i < ntags; ++i) {
-		badtags[i] |= oldtags[i] ^ newtags[i];
-		oldtags[i] |= newtags[i];
-	}
-}
-
 static void merge_tags_with_mask(bool *oldtags, const bool *newtags,
 	bool *oldmask, const bool *newmask,
 	bool *badtags, size_t ntags)
@@ -32,102 +25,6 @@ static void merge_tags_with_mask(bool *oldtags, const bool *newtags,
 		oldtags[i] |= newtags[i];
 		oldmask[i] |= newmask[i];
 	}
-}
-
-struct kitem_t
-{
-	nfa_state_t *state;
-	union
-	{
-		bool *tagptr;
-		size_t tagidx;
-	};
-
-	static bool compare(const kitem_t &k1, const kitem_t &k2)
-	{
-		return k1.state < k2.state
-			|| (k1.state == k2.state && k1.tagidx < k2.tagidx);
-	}
-};
-
-/* note [epsilon-closures in tagged NFA]
- *
- * DFA state is a set of NFA states.
- * However, DFA state includes not all NFA states that are in
- * epsilon-closure (NFA states that have only epsilon-transitions
- * and are not final states are omitted).
- * The included states are called 'kernel' states.
- *
- * For tagged NFA we have to trace all epsilon-paths to each
- * kernel state, accumulate tags along the way and compare
- * resulting tag sets: if they differ, then NFA is tagwise
- * ambiguous. All tags are merged together; ambiguity is reported.
- */
-static void closure(kitem_t *const kernel, kitem_t *&kend,
-	nfa_state_t *n, bool *tags, bool *badtags, size_t ntags)
-{
-	// trace the first iteration of each loop:
-	// epsilon-loops may add ney tags and reveal conflicts
-	if (n->loop > 1) {
-		return;
-	}
-
-	++n->loop;
-	switch (n->type) {
-		case nfa_state_t::ALT:
-			closure(kernel, kend, n->alt.out1, tags, badtags, ntags);
-			closure(kernel, kend, n->alt.out2, tags, badtags, ntags);
-			break;
-		case nfa_state_t::TAG: {
-			const size_t t = n->tag.info;
-			const bool old = tags[t];
-			tags[t] = true;
-			closure(kernel, kend, n->tag.out, tags, badtags, ntags);
-			tags[t] = old;
-			break;
-		}
-		case nfa_state_t::RAN:
-		case nfa_state_t::FIN: {
-			kitem_t *k = kernel;
-			while (k != kend && k->state != n) ++k;
-			if (k == kend) {
-				kend->state = n;
-				kend->tagptr = new bool[ntags];
-				memcpy(kend->tagptr, tags, ntags * sizeof(bool));
-				++kend;
-			} else {
-				// it is impossible to reach the same NFA state from
-				// different rules, so no need to mess with masks here
-				merge_tags(k->tagptr, tags, badtags, ntags);
-			}
-			break;
-		}
-	}
-	--n->loop;
-}
-
-static size_t find_state(kitem_t *kernel, kitem_t *kend,
-	ord_hash_set_t &kernels, Tagpool &tagpool)
-{
-	const size_t kcount = static_cast<size_t>(kend - kernel);
-
-	// zero-sized kernel corresponds to default state
-	if (kcount == 0) {
-		return dfa_t::NIL;
-	}
-
-	// dump tagsets to tagpool and address them by index:
-	// this simpifies storing and comparing kernels
-	for (kitem_t *k = kernel; k != kend; ++k) {
-		bool *tags = k->tagptr;
-		k->tagidx = tagpool.insert(tags);
-		delete[] tags;
-	}
-
-	// sort kernel items to allow comparison by hash and 'memcmp'
-	std::sort(kernel, kend, kitem_t::compare);
-
-	return kernels.insert(kernel, kcount * sizeof(kitem_t));
 }
 
 dfa_t::dfa_t(const nfa_t &nfa,

@@ -22,7 +22,9 @@ SRC_HDR = \
 	src/conf/warn.h \
 	src/ir/adfa/action.h \
 	src/ir/adfa/adfa.h \
+	src/ir/dfa/closure.h \
 	src/ir/dfa/dfa.h \
+	src/ir/dfa/find_state.h \
 	src/ir/nfa/nfa.h \
 	src/ir/regexp/encoding/case.h \
 	src/ir/regexp/encoding/enc.h \
@@ -89,9 +91,11 @@ SRC = \
 	src/ir/nfa/regexps2nfa.cc \
 	src/ir/adfa/adfa.cc \
 	src/ir/adfa/prepare.cc \
+	src/ir/dfa/closure.cc \
 	src/ir/dfa/dead_rules.cc \
 	src/ir/dfa/determinization.cc \
 	src/ir/dfa/fillpoints.cc \
+	src/ir/dfa/find_state.cc \
 	src/ir/dfa/minimization.cc \
 	src/ir/dfa/tag_deduplication.cc \
 	src/ir/regexp/encoding/enc.cc \
