@@ -10,24 +10,21 @@ static bool nullable(const RegExp *re, bool &trail)
 		return true;
 	}
 	switch (re->type) {
-		case RegExp::NIL:
-		case RegExp::ITER:
-			return true;
+		default: assert(false);
+		case RegExp::NIL: return true;
+		case RegExp::SYM:
+		case RegExp::ITER: return false;
 		case RegExp::TAG:
 			if (re->tag == NULL) {
 				trail = true;
 			}
 			return true;
-		case RegExp::SYM:
-			return false;
 		case RegExp::ALT:
 			return nullable(re->alt.re1, trail)
 				|| nullable(re->alt.re2, trail);
 		case RegExp::CAT:
 			return nullable(re->cat.re1, trail)
 				&& nullable(re->cat.re2, trail);
-		default:
-			assert(false);
 	}
 }
 

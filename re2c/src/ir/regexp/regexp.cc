@@ -199,8 +199,9 @@ const RegExp *repeat_from_to(const RegExp *re, uint32_t n, uint32_t m)
 // see note [counted repetition expansion]
 const RegExp *repeat_from(const RegExp *re, uint32_t n)
 {
+	// see note [Kleene star is expressed in terms of plus]
 	return doCat(repeat(re, n),
-		RegExp::make_iter(re));
+		RegExp::make_alt(RegExp::make_nil(), RegExp::make_iter(re)));
 }
 
 } // namespace re2c

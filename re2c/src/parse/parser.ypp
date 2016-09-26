@@ -363,13 +363,15 @@ factor:
 		}
 	|	primary close
 		{
+			// see note [Kleene star is expressed in terms of plus]
 			switch($2)
 			{
 			case '*':
-				$$ = RegExp::make_iter($1);
+				$$ = RegExp::make_alt(RegExp::make_nil(),
+					RegExp::make_iter($1));
 				break;
 			case '+':
-				$$ = RegExp::make_cat(RegExp::make_iter($1), $1);
+				$$ = RegExp::make_iter($1);
 				break;
 			case '?':
 				$$ = mkAlt($1, RegExp::make_nil());

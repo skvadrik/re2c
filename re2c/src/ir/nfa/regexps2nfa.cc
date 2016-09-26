@@ -24,10 +24,13 @@ static nfa_state_t *regexp2nfa(nfa_t &nfa, size_t nrule,
 			s = regexp2nfa(nfa, nrule, tagidx, re->cat.re2, t);
 			s = regexp2nfa(nfa, nrule, tagidx, re->cat.re1, s);
 			break;
-		case RegExp::ITER:
-			s = &nfa.states[nfa.size++];
-			s->make_alt(nrule, t, regexp2nfa(nfa, nrule, tagidx, re->iter, s));
+		case RegExp::ITER: {
+			// see note [Kleene star is expressed in terms of plus]
+			nfa_state_t *q = &nfa.states[nfa.size++];
+			s = regexp2nfa(nfa, nrule, tagidx, re->iter, q);
+			q->make_alt(nrule, t, s);
 			break;
+		}
 		case RegExp::TAG:
 			if ((*nfa.tags)[tagidx].type == Tag::VAR) {
 				s = &nfa.states[nfa.size++];

@@ -559,7 +559,7 @@ static const yytype_uint16 yyrline[] =
      185,   185,   188,   197,   208,   212,   218,   224,   231,   240,
      248,   258,   269,   275,   281,   284,   291,   297,   307,   310,
      317,   321,   327,   331,   338,   342,   349,   353,   360,   364,
-     379,   398,   402,   406,   410,   417,   427,   431
+     381,   400,   404,   408,   412,   419,   429,   433
 };
 #endif
 
@@ -1790,13 +1790,15 @@ yyreduce:
   case 39:
 
     {
+			// see note [Kleene star is expressed in terms of plus]
 			switch((yyvsp[(2) - (2)].op))
 			{
 			case '*':
-				(yyval.regexp) = RegExp::make_iter((yyvsp[(1) - (2)].regexp));
+				(yyval.regexp) = RegExp::make_alt(RegExp::make_nil(),
+					RegExp::make_iter((yyvsp[(1) - (2)].regexp)));
 				break;
 			case '+':
-				(yyval.regexp) = RegExp::make_cat(RegExp::make_iter((yyvsp[(1) - (2)].regexp)), (yyvsp[(1) - (2)].regexp));
+				(yyval.regexp) = RegExp::make_iter((yyvsp[(1) - (2)].regexp));
 				break;
 			case '?':
 				(yyval.regexp) = mkAlt((yyvsp[(1) - (2)].regexp), RegExp::make_nil());

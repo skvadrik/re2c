@@ -18,6 +18,16 @@ struct nfa_t;
 
 typedef std::vector<uint32_t> charset_t;
 
+/* note [Kleene star is expressed in terms of plus]
+ *
+ * In literature Kleene star 'r*' (zero or more repetitions of 'r')
+ * is the basic operation. In practice it is more convenient to use
+ * 'r+' (one or more repetitions of 'r'), because expansion 'r+ ::= r r*'
+ * duplicates 'r', while expansion 'r* = r+ | <empty>' allows to
+ * avoid duplication. This is more efficient in general and crucial
+ * in cases when duplication of 'r' is forbidden (e.g. if 'r' has tags).
+ */
+
 struct RegExp
 {
 	static free_list<RegExp*> flist;
