@@ -23,7 +23,7 @@ public:
 	size_t insert(const closure_t &clos);
 };
 
-size_t find_state(closure_t &clos, clospool_t &clospool, Tagpool &tagpool);
+size_t find_state(closure_t &clos, clospool_t &clospool);
 
 } // namespace re2c
 

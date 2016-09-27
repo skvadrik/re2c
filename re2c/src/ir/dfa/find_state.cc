@@ -68,19 +68,11 @@ size_t clospool_t::insert(const closure_t &clos)
 	return lookup.push(hash, new closure_t(clos));
 }
 
-size_t find_state(closure_t &clos, clospool_t &clospool, Tagpool &tagpool)
+size_t find_state(closure_t &clos, clospool_t &clospool)
 {
 	// empty closure corresponds to default state
 	if (clos.empty()) {
 		return dfa_t::NIL;
-	}
-
-	// dump tagsets to tagpool and address them by index:
-	// this simpifies storing and comparing closures
-	for (clositer_t c = clos.begin(); c != clos.end(); ++c) {
-		bool *tags = c->tagptr;
-		c->tagidx = tagpool.insert(tags);
-		delete[] tags;
 	}
 
 	// sort closure to allow comparison by hash and 'memcmp'

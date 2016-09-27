@@ -6,14 +6,15 @@
 namespace re2c
 {
 
-static void closure_one(closure_t &clos, nfa_state_t *n, bool *tags, bool *badtags, size_t ntags);
-static void check_tags(const bool *oldtags, const bool *newtags, bool *badtags, size_t ntags);
+static void closure_one(closure_t &clos, Tagpool &tagpool, nfa_state_t *n, bool *tags, bool *badtags);
+static void check_tags(const Tagpool &tagpool, size_t oldidx, size_t newidx, bool *badtags);
 
-void closure(const closure_t &clos1, closure_t &clos2, bool *tags, bool *badtags, size_t ntags)
+void closure(const closure_t &clos1, closure_t &clos2,
+	Tagpool &tagpool, bool *tags, bool *badtags)
 {
 	clos2.clear();
 	for (cclositer_t c = clos1.begin(); c != clos1.end(); ++c) {
-		closure_one(clos2, c->state, tags, badtags, ntags);
+		closure_one(clos2, tagpool, c->state, tags, badtags);
 	}
 }
 
@@ -30,7 +31,8 @@ void closure(const closure_t &clos1, closure_t &clos2, bool *tags, bool *badtags
  * resulting tag sets: if they differ, then NFA is tagwise
  * ambiguous. All tags are merged together; ambiguity is reported.
  */
-void closure_one(closure_t &clos, nfa_state_t *n, bool *tags, bool *badtags, size_t ntags)
+void closure_one(closure_t &clos, Tagpool &tagpool,
+	nfa_state_t *n, bool *tags, bool *badtags)
 {
 	// trace the first iteration of each loop:
 	// epsilon-loops may add ney tags and reveal conflicts
@@ -41,29 +43,28 @@ void closure_one(closure_t &clos, nfa_state_t *n, bool *tags, bool *badtags, siz
 	++n->loop;
 	switch (n->type) {
 		case nfa_state_t::ALT:
-			closure_one(clos, n->alt.out1, tags, badtags, ntags);
-			closure_one(clos, n->alt.out2, tags, badtags, ntags);
+			closure_one(clos, tagpool, n->alt.out1, tags, badtags);
+			closure_one(clos, tagpool, n->alt.out2, tags, badtags);
 			break;
 		case nfa_state_t::TAG: {
 			const size_t t = n->tag.info;
 			const bool old = tags[t];
 			tags[t] = true;
-			closure_one(clos, n->tag.out, tags, badtags, ntags);
+			closure_one(clos, tagpool, n->tag.out, tags, badtags);
 			tags[t] = old;
 			break;
 		}
 		case nfa_state_t::RAN:
 		case nfa_state_t::FIN: {
+			const size_t tagidx = tagpool.insert(tags);
 			clositer_t
 				c = clos.begin(),
 				e = clos.end();
 			for (; c != e && c->state != n; ++c);
 			if (c == e) {
-				bool *tagptr = new bool[ntags];
-				memcpy(tagptr, tags, ntags * sizeof(bool));
-				clos.push_back(clos_t(n, tagptr));
+				clos.push_back(clos_t(n, tagidx));
 			} else {
-				check_tags(c->tagptr, tags, badtags, ntags);
+				check_tags(tagpool, c->tagidx, tagidx, badtags);
 			}
 			break;
 		}
@@ -78,10 +79,12 @@ void closure_one(closure_t &clos, nfa_state_t *n, bool *tags, bool *badtags, siz
  * rules, and it is impossible to reach the same NFA state from different
  * rules (hence no need to mess with masks here).
  */
-void check_tags(const bool *oldtags, const bool *newtags,
-	bool *badtags, size_t ntags)
+void check_tags(const Tagpool &tagpool, size_t oldidx, size_t newidx, bool *badtags)
 {
-	for (size_t i = 0; i < ntags; ++i) {
+	const bool
+		*oldtags = tagpool[oldidx],
+		*newtags = tagpool[newidx];
+	for (size_t i = 0; i < tagpool.ntags; ++i) {
 		badtags[i] |= oldtags[i] ^ newtags[i];
 	}
 }

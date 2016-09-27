@@ -40,7 +40,7 @@ public:
 	size_t andl(size_t t, size_t a);
 	size_t andlinv(size_t t, size_t a);
 	size_t subst(size_t t, const size_t *represent);
-	const bool *operator[](size_t idx);
+	const bool *operator[](size_t idx) const;
 	FORBID_COPY(Tagpool);
 };
 

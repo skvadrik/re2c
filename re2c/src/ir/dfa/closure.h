@@ -12,15 +12,10 @@ namespace re2c
 struct clos_t
 {
 	nfa_state_t *state;
-	union
-	{
-		bool *tagptr;
-		size_t tagidx;
-	};
+	size_t tagidx;
 
 	inline clos_t();
 	inline clos_t(nfa_state_t *s, size_t i);
-	inline clos_t(nfa_state_t *s, bool *p);
 	static inline bool compare(const clos_t &c1, const clos_t &c2);
 };
 
@@ -28,7 +23,7 @@ typedef std::vector<clos_t> closure_t;
 typedef closure_t::iterator clositer_t;
 typedef closure_t::const_iterator cclositer_t;
 
-void closure(const closure_t &clos1, closure_t &clos2, bool *tags, bool *badtags, size_t ntags);
+void closure(const closure_t &clos1, closure_t &clos2, Tagpool &tagpool, bool *tags, bool *badtags);
 
 clos_t::clos_t()
 	: state(NULL)
@@ -38,11 +33,6 @@ clos_t::clos_t()
 clos_t::clos_t(nfa_state_t *s, size_t i)
 	: state(s)
 	, tagidx(i)
-{}
-
-clos_t::clos_t(nfa_state_t *s, bool *t)
-	: state(s)
-	, tagptr(t)
 {}
 
 bool clos_t::compare(const clos_t &c1, const clos_t &c2)

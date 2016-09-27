@@ -40,7 +40,7 @@ size_t Tagpool::insert(const bool *tags)
 	return lookup.push(hash, copy);
 }
 
-const bool *Tagpool::operator[](size_t idx)
+const bool *Tagpool::operator[](size_t idx) const
 {
 	return lookup[idx];
 }

@@ -80,8 +80,8 @@ dfa_t::dfa_t(const nfa_t &nfa,
 	bool *fin = new bool[nrules];
 
 	clos1.push_back(clos_t(nfa.root, ZERO_TAGS));
-	closure(clos1, clos2, ktags, badtags, ntags);
-	find_state(clos2, clospool, tagpool);
+	closure(clos1, clos2, tagpool, ktags, badtags);
+	find_state(clos2, clospool);
 
 	for (size_t i = 0; i < clospool.size(); ++i) {
 		const closure_t &clos0 = clospool[i];
@@ -90,8 +90,8 @@ dfa_t::dfa_t(const nfa_t &nfa,
 
 		for (size_t c = 0; c < nchars; ++c) {
 			reach(clos0, clos1, charset[c]);
-			closure(clos1, clos2, ktags, badtags, ntags);
-			s->arcs[c] = find_state(clos2, clospool, tagpool);
+			closure(clos1, clos2, tagpool, ktags, badtags);
+			s->arcs[c] = find_state(clos2, clospool);
 
 			memset(arctags, 0, ntags * sizeof(bool));
 			memset(mask, 0, ntags * sizeof(bool));
