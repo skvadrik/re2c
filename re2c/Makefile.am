@@ -62,7 +62,6 @@ SRC_HDR = \
 	src/util/hash32.h \
 	src/util/local_increment.h \
 	src/util/lookup.h \
-	src/util/ord_hash_set.h \
 	src/util/range.h \
 	src/util/s_to_n32_unsafe.h \
 	src/util/smart_ptr.h \
@@ -124,7 +123,6 @@ SRC = \
 	src/parse/input.cc \
 	src/parse/scanner.cc \
 	src/parse/unescape.cc \
-	src/util/ord_hash_set.cc \
 	src/util/s_to_n32_unsafe.cc \
 	src/util/range.cc
 re2c_SOURCES = \

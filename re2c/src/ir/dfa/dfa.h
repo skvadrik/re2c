@@ -10,7 +10,6 @@
 #include "src/ir/rule.h"
 #include "src/ir/tagpool.h"
 #include "src/util/forbid_copy.h"
-#include "src/util/ord_hash_set.h"
 
 namespace re2c
 {

@@ -1,18 +1,33 @@
 #ifndef _RE2C_IR_TAGPOOL_
 #define _RE2C_IR_TAGPOOL_
 
-#include "src/util/ord_hash_set.h"
+#include <stdlib.h> // malloc
+#include <string.h> // memcpy, memcmp
+
+#include "src/util/lookup.h"
 #include "src/util/forbid_copy.h"
 
 namespace re2c
 {
+
+struct eqtag_t
+{
+	size_t ntags;
+
+	explicit eqtag_t(size_t n): ntags(n) {}
+	inline bool operator()(const bool *x, const bool *y)
+	{
+		return memcmp(x, y, ntags * sizeof(bool)) == 0;
+	}
+};
 
 struct Tagpool
 {
 	const size_t ntags;
 
 private:
-	ord_hash_set_t pool;
+	typedef lookup_t<const bool*> taglookup_t;
+	taglookup_t lookup;
 	bool *buff;
 
 public:

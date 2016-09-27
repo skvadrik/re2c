@@ -1,12 +1,12 @@
 #include "src/ir/tagpool.h"
-#include "src/util/forbid_copy.h"
+#include "src/util/hash32.h"
 
 namespace re2c
 {
 
 Tagpool::Tagpool(size_t n)
 	: ntags(n)
-	, pool()
+	, lookup()
 	, buff(new bool[ntags]())
 {
 	// all-no tag set must have number 0
@@ -16,11 +16,31 @@ Tagpool::Tagpool(size_t n)
 Tagpool::~Tagpool()
 {
 	delete[] buff;
+	const size_t n = lookup.size();
+	for (size_t i = 0; i < n; ++i) {
+		free(const_cast<bool*>(lookup[i]));
+	}
 }
 
 size_t Tagpool::insert(const bool *tags)
 {
-	return pool.insert(tags, ntags * sizeof(bool));
+	const size_t size = ntags * sizeof(bool);
+	const uint32_t hash = hash32(0, tags, size);
+
+	eqtag_t eq(ntags);
+	const size_t idx = lookup.find_with(hash, tags, eq);
+	if (idx != taglookup_t::NIL) {
+		return idx;
+	}
+
+	bool *copy = static_cast<bool*>(malloc(size));
+	memcpy(copy, tags, size);
+	return lookup.push(hash, copy);
+}
+
+const bool *Tagpool::operator[](size_t idx)
+{
+	return lookup[idx];
 }
 
 size_t Tagpool::orl(size_t t, size_t o)
@@ -81,13 +101,6 @@ size_t Tagpool::subst(size_t t, const size_t *represent)
 		}
 	}
 	return insert(buff);
-}
-
-const bool *Tagpool::operator[](size_t idx)
-{
-	const bool *tags;
-	pool.deref<const bool>(idx, tags);
-	return tags;
 }
 
 } // namespace re2c
