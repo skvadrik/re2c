@@ -9,7 +9,7 @@
 namespace re2c
 {
 
-struct kitem_t
+struct clos_t
 {
 	nfa_state_t *state;
 	union
@@ -18,15 +18,41 @@ struct kitem_t
 		size_t tagidx;
 	};
 
-	static bool compare(const kitem_t &k1, const kitem_t &k2)
-	{
-		return k1.state < k2.state
-			|| (k1.state == k2.state && k1.tagidx < k2.tagidx);
-	}
+	inline clos_t();
+	inline clos_t(nfa_state_t *s, size_t i);
+	inline clos_t(nfa_state_t *s, bool *p);
+	static inline bool compare(const clos_t &c1, const clos_t &c2);
 };
 
-void closure(kitem_t *const kernel, kitem_t *&kend, nfa_state_t *n,
-	bool *tags, bool *badtags, size_t ntags);
+typedef std::vector<clos_t> closure_t;
+typedef closure_t::iterator clositer_t;
+typedef closure_t::const_iterator cclositer_t;
+
+void closure(const closure_t &clos1, closure_t &clos2, bool *tags, bool *badtags, size_t ntags);
+
+clos_t::clos_t()
+	: state(NULL)
+	, tagidx(0)
+{}
+
+clos_t::clos_t(nfa_state_t *s, size_t i)
+	: state(s)
+	, tagidx(i)
+{}
+
+clos_t::clos_t(nfa_state_t *s, bool *t)
+	: state(s)
+	, tagptr(t)
+{}
+
+bool clos_t::compare(const clos_t &c1, const clos_t &c2)
+{
+	const nfa_state_t
+		*s1 = c1.state,
+		*s2 = c2.state;
+	return s1 < s2
+		|| (s1 == s2 && c1.tagidx < c2.tagidx);
+}
 
 } // namespace re2c
 

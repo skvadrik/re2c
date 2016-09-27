@@ -15,7 +15,7 @@ namespace re2c
 {
 
 static nfa_state_t *transition(nfa_state_t *state, uint32_t symbol);
-static void reach(const kitem_t *kernel, size_t kcount, kitem_t *&r, uint32_t symbol);
+static void reach(const closure_t &clos1, closure_t &clos2, uint32_t symbol);
 
 const size_t dfa_t::NIL = std::numeric_limits<size_t>::max();
 
@@ -32,16 +32,15 @@ nfa_state_t *transition(nfa_state_t *state, uint32_t symbol)
 	return NULL;
 }
 
-void reach(const kitem_t *kernel, size_t kcount, kitem_t *&r, uint32_t symbol)
+void reach(const closure_t &clos1, closure_t &clos2, uint32_t symbol)
 {
-	for (size_t i = 0; i < kcount; ++i) {
+	clos2.clear();
+	for (cclositer_t c = clos1.begin(); c != clos1.end(); ++c) {
 		nfa_state_t
-			*s = kernel[i].state,
-			*t = transition(s, symbol);
-		if (t) {
-			r->state = t;
-			r->tagidx = kernel[i].tagidx;
-			++r;
+			*s1 = c->state,
+			*s2 = transition(s1, symbol);
+		if (s2) {
+			clos2.push_back(clos_t(s2, c->tagidx));
 		}
 	}
 }
@@ -66,42 +65,35 @@ dfa_t::dfa_t(const nfa_t &nfa,
 	, tags(*nfa.tags)
 	, tagpool(*nfa.tagpool)
 {
+	clospool_t clospool;
+	closure_t clos1, clos2;
 	const size_t ntags = tags.size();
 	const size_t nrules = rules.size();
-
-	ord_hash_set_t kernels;
-	kitem_t *rstart = new kitem_t[nfa.size], *rend = rstart;
-	kitem_t *kstart = new kitem_t[nfa.size], *kend = kstart;
 	bool *ktags = new bool[ntags]();
 	bool *badtags = new bool[ntags]();
 	bool *arctags = new bool[ntags];
 	bool *mask = new bool[ntags];
 	bool *fin = new bool[nrules];
 
-	closure(kstart, kend, nfa.root, ktags, badtags, ntags);
-	find_state(kstart, kend, kernels, tagpool);
-	for (size_t i = 0; i < kernels.size(); ++i) {
+	clos1.push_back(clos_t(nfa.root, static_cast<size_t>(0)));
+	closure(clos1, clos2, ktags, badtags, ntags);
+	find_state(clos2, clospool, tagpool);
+
+	for (size_t i = 0; i < clospool.size(); ++i) {
+		const closure_t &clos0 = clospool[i];
 		dfa_state_t *s = new dfa_state_t(nchars);
 		states.push_back(s);
 
-		const kitem_t *kernel;
-		const size_t kcount = kernels.deref<const kitem_t>(i, kernel);
-
 		for (size_t c = 0; c < nchars; ++c) {
-			rend = rstart;
-			reach(kernel, kcount, rend, charset[c]);
-
-			kend = kstart;
-			for (const kitem_t *r = rstart; r != rend; ++r) {
-				closure(kstart, kend, r->state, ktags, badtags, ntags);
-			}
-			s->arcs[c] = find_state(kstart, kend, kernels, tagpool);
+			reach(clos0, clos1, charset[c]);
+			closure(clos1, clos2, ktags, badtags, ntags);
+			s->arcs[c] = find_state(clos2, clospool, tagpool);
 
 			memset(arctags, 0, ntags * sizeof(bool));
 			memset(mask, 0, ntags * sizeof(bool));
-			for (const kitem_t *r = rstart; r != rend; ++r) {
-				merge_tags_with_mask(arctags, tagpool[r->tagidx], mask,
-					tagpool[rules[r->state->rule].tags], badtags, ntags);
+			for (cclositer_t p = clos1.begin(); p != clos1.end(); ++p) {
+				merge_tags_with_mask(arctags, tagpool[p->tagidx], mask,
+					tagpool[rules[p->state->rule].tags], badtags, ntags);
 			}
 			s->tags[c] = tagpool.insert(arctags);
 		}
@@ -109,10 +101,10 @@ dfa_t::dfa_t(const nfa_t &nfa,
 		memset(fin, 0, nrules * sizeof(bool));
 		memset(arctags, 0, ntags * sizeof(bool));
 		memset(mask, 0, ntags * sizeof(bool));
-		for (size_t j = 0; j < kcount; ++j) {
-			nfa_state_t *n = kernel[j].state;
+		for (cclositer_t p = clos0.begin(); p != clos0.end(); ++p) {
+			nfa_state_t *n = p->state;
 			if (n->type == nfa_state_t::FIN) {
-				merge_tags_with_mask(arctags, tagpool[kernel[j].tagidx], mask,
+				merge_tags_with_mask(arctags, tagpool[p->tagidx], mask,
 					tagpool[rules[n->rule].tags], badtags, ntags);
 				fin[n->rule] = true;
 			}
@@ -141,8 +133,6 @@ dfa_t::dfa_t(const nfa_t &nfa,
 		}
 	}
 
-	delete[] rstart;
-	delete[] kstart;
 	delete[] ktags;
 	delete[] badtags;
 	delete[] arctags;

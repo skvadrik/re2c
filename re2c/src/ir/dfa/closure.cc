@@ -6,7 +6,16 @@
 namespace re2c
 {
 
+static void closure_one(closure_t &clos, nfa_state_t *n, bool *tags, bool *badtags, size_t ntags);
 static void merge_tags(bool *oldtags, const bool *newtags, bool *badtags, size_t ntags);
+
+void closure(const closure_t &clos1, closure_t &clos2, bool *tags, bool *badtags, size_t ntags)
+{
+	clos2.clear();
+	for (cclositer_t c = clos1.begin(); c != clos1.end(); ++c) {
+		closure_one(clos2, c->state, tags, badtags, ntags);
+	}
+}
 
 void merge_tags(bool *oldtags, const bool *newtags,
 	bool *badtags, size_t ntags)
@@ -30,8 +39,7 @@ void merge_tags(bool *oldtags, const bool *newtags,
  * resulting tag sets: if they differ, then NFA is tagwise
  * ambiguous. All tags are merged together; ambiguity is reported.
  */
-void closure(kitem_t *const kernel, kitem_t *&kend,
-	nfa_state_t *n, bool *tags, bool *badtags, size_t ntags)
+void closure_one(closure_t &clos, nfa_state_t *n, bool *tags, bool *badtags, size_t ntags)
 {
 	// trace the first iteration of each loop:
 	// epsilon-loops may add ney tags and reveal conflicts
@@ -42,30 +50,31 @@ void closure(kitem_t *const kernel, kitem_t *&kend,
 	++n->loop;
 	switch (n->type) {
 		case nfa_state_t::ALT:
-			closure(kernel, kend, n->alt.out1, tags, badtags, ntags);
-			closure(kernel, kend, n->alt.out2, tags, badtags, ntags);
+			closure_one(clos, n->alt.out1, tags, badtags, ntags);
+			closure_one(clos, n->alt.out2, tags, badtags, ntags);
 			break;
 		case nfa_state_t::TAG: {
 			const size_t t = n->tag.info;
 			const bool old = tags[t];
 			tags[t] = true;
-			closure(kernel, kend, n->tag.out, tags, badtags, ntags);
+			closure_one(clos, n->tag.out, tags, badtags, ntags);
 			tags[t] = old;
 			break;
 		}
 		case nfa_state_t::RAN:
 		case nfa_state_t::FIN: {
-			kitem_t *k = kernel;
-			while (k != kend && k->state != n) ++k;
-			if (k == kend) {
-				kend->state = n;
-				kend->tagptr = new bool[ntags];
-				memcpy(kend->tagptr, tags, ntags * sizeof(bool));
-				++kend;
+			clositer_t
+				c = clos.begin(),
+				e = clos.end();
+			for (; c != e && c->state != n; ++c);
+			if (c == e) {
+				bool *tagptr = new bool[ntags];
+				memcpy(tagptr, tags, ntags * sizeof(bool));
+				clos.push_back(clos_t(n, tagptr));
 			} else {
 				// it is impossible to reach the same NFA state from
 				// different rules, so no need to mess with masks here
-				merge_tags(k->tagptr, tags, badtags, ntags);
+				merge_tags(c->tagptr, tags, badtags, ntags);
 			}
 			break;
 		}

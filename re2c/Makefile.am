@@ -59,8 +59,10 @@ SRC_HDR = \
 	src/util/counter.h \
 	src/util/forbid_copy.h \
 	src/util/free_list.h \
+	src/util/hash32.h \
 	src/util/intersect_sorted.h \
 	src/util/local_increment.h \
+	src/util/lookup.h \
 	src/util/ord_hash_set.h \
 	src/util/range.h \
 	src/util/s_to_n32_unsafe.h \

@@ -2,13 +2,28 @@
 #define _RE2C_IR_DFA_FIND_STATE_
 
 #include "src/ir/dfa/closure.h"
-#include "src/ir/tagpool.h"
-#include "src/util/ord_hash_set.h"
+#include "src/util/lookup.h"
 
 namespace re2c
 {
 
-size_t find_state(kitem_t *kernel, kitem_t *kend, ord_hash_set_t &kernels, Tagpool &tagpool);
+struct Tagpool;
+
+struct clospool_t
+{
+private:
+	typedef lookup_t<const closure_t*> closlookup_t;
+	closlookup_t lookup;
+
+public:
+	clospool_t();
+	~clospool_t();
+	size_t size() const;
+	const closure_t& operator[](size_t idx) const;
+	size_t insert(const closure_t &clos);
+};
+
+size_t find_state(closure_t &clos, clospool_t &clospool, Tagpool &tagpool);
 
 } // namespace re2c
 
