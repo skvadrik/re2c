@@ -7,22 +7,13 @@ namespace re2c
 {
 
 static void closure_one(closure_t &clos, nfa_state_t *n, bool *tags, bool *badtags, size_t ntags);
-static void merge_tags(bool *oldtags, const bool *newtags, bool *badtags, size_t ntags);
+static void check_tags(const bool *oldtags, const bool *newtags, bool *badtags, size_t ntags);
 
 void closure(const closure_t &clos1, closure_t &clos2, bool *tags, bool *badtags, size_t ntags)
 {
 	clos2.clear();
 	for (cclositer_t c = clos1.begin(); c != clos1.end(); ++c) {
 		closure_one(clos2, c->state, tags, badtags, ntags);
-	}
-}
-
-void merge_tags(bool *oldtags, const bool *newtags,
-	bool *badtags, size_t ntags)
-{
-	for (size_t i = 0; i < ntags; ++i) {
-		badtags[i] |= oldtags[i] ^ newtags[i];
-		oldtags[i] |= newtags[i];
 	}
 }
 
@@ -72,14 +63,27 @@ void closure_one(closure_t &clos, nfa_state_t *n, bool *tags, bool *badtags, siz
 				memcpy(tagptr, tags, ntags * sizeof(bool));
 				clos.push_back(clos_t(n, tagptr));
 			} else {
-				// it is impossible to reach the same NFA state from
-				// different rules, so no need to mess with masks here
-				merge_tags(c->tagptr, tags, badtags, ntags);
+				check_tags(c->tagptr, tags, badtags, ntags);
 			}
 			break;
 		}
 	}
 	--n->loop;
+}
+
+/*
+ * Check configurations for possible conflicts.
+ * In case of conflict choose random configuration (e.g. the first one)
+ * and don't merge: merging only makes sense for tags from different
+ * rules, and it is impossible to reach the same NFA state from different
+ * rules (hence no need to mess with masks here).
+ */
+void check_tags(const bool *oldtags, const bool *newtags,
+	bool *badtags, size_t ntags)
+{
+	for (size_t i = 0; i < ntags; ++i) {
+		badtags[i] |= oldtags[i] ^ newtags[i];
+	}
 }
 
 } // namespace re2c

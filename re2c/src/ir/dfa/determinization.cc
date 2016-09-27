@@ -50,8 +50,12 @@ static void merge_tags_with_mask(bool *oldtags, const bool *newtags,
 	bool *badtags, size_t ntags)
 {
 	for (size_t i = 0; i < ntags; ++i) {
-		badtags[i] |= oldmask[i] & newmask[i] & (oldtags[i] ^ newtags[i]);
-		oldtags[i] |= newtags[i];
+		const bool bad = oldmask[i] & newmask[i] & (oldtags[i] ^ newtags[i]);
+		// don't merge conflicting tags, only note the conflict
+		if (!bad) {
+			oldtags[i] |= newtags[i];
+		}
+		badtags[i] |= bad;
 		oldmask[i] |= newmask[i];
 	}
 }
