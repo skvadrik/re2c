@@ -319,7 +319,7 @@ void genSetState(OutputFile &o, uint32_t ind, uint32_t fillIndex)
 void gen_goto_case(OutputFile &o, uint32_t ind, bool &readCh,
 	const State *to, const DFA &dfa, size_t tags)
 {
-	const bool multiline = readCh || (tags != 0);
+	const bool multiline = readCh || (tags != ZERO_TAGS);
 
 	if (multiline) {
 		o.ws("\n");
@@ -333,7 +333,7 @@ void gen_goto_if(OutputFile &o, uint32_t ind, bool &readCh,
 	const State *to, const DFA &dfa, size_t tags)
 {
 	const int32_t linecount = (readCh && to != NULL)
-		+ (tags != 0)
+		+ (tags != ZERO_TAGS)
 		+ (to != NULL);
 
 	if (linecount > 1) {
@@ -364,7 +364,7 @@ void gen_goto(OutputFile &o, uint32_t ind, bool &readCh,
 
 void gen_settags(OutputFile &o, uint32_t ind, const DFA &dfa, size_t tags)
 {
-	if (tags != 0) {
+	if (tags != ZERO_TAGS) {
 		if (dfa.basetag) {
 			o.wstring(opts->input_api.stmt_dist(ind,
 				dfa.tagpool[tags], dfa.tags));

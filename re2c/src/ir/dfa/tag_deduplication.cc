@@ -244,7 +244,7 @@ static void patch_tags(dfa_t &dfa, const size_t *represent)
 static size_t fallback_tags(const dfa_t &dfa)
 {
 	const size_t nstates = dfa.states.size();
-	size_t tags = 0;
+	size_t tags = ZERO_TAGS;
 	for (size_t i = 0; i < nstates; ++i) {
 		const dfa_state_t *s = dfa.states[i];
 		if (s->fallback) { // see note [fallback states]

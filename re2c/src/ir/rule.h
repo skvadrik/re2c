@@ -6,6 +6,7 @@
 #include <vector>
 
 #include "src/ir/tag.h"
+#include "src/ir/tagpool.h"
 #include "src/parse/code.h"
 #include "src/parse/loc.h"
 #include "src/util/forbid_copy.h"
@@ -46,7 +47,7 @@ struct Rule
 		, ltag(0)
 		, htag(0)
 		, trail(Tag::NONE)
-		, tags(0)
+		, tags(ZERO_TAGS)
 		, shadow()
 	{}
 

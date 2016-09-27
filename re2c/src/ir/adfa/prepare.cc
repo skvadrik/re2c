@@ -25,7 +25,7 @@ void DFA::split(State *s)
 	s->go.span = allocate<Span> (1);
 	s->go.span[0].ub = ubChar;
 	s->go.span[0].to = move;
-	s->go.span[0].tags = 0;
+	s->go.span[0].tags = ZERO_TAGS;
 }
 
 static uint32_t merge(Span *x, State *fg, State *bg)
@@ -39,7 +39,7 @@ static uint32_t merge(Span *x, State *fg, State *bg)
 	for (;!(f == fe && b == be);) {
 		if (f->to == b->to && f->tags == b->tags) {
 			x->to = bg;
-			x->tags = 0;
+			x->tags = ZERO_TAGS;
 		} else {
 			x->to = f->to;
 			x->tags = f->tags;
@@ -214,14 +214,14 @@ void DFA::hoist_tags()
 		if (nsp > 0) {
 			Span *sp = s->go.span;
 			const size_t tags0 = sp[0].tags;
-			bool common_tags = tags0 != 0;
+			bool common_tags = tags0 != ZERO_TAGS;
 			for (uint32_t i = 1; common_tags && i < nsp; ++i) {
 				common_tags &= sp[i].tags == tags0;
 			}
 			if (common_tags) {
 				s->go.tags = tags0;
 				for (uint32_t i = 0; i < nsp; ++i) {
-					sp[i].tags = 0;
+					sp[i].tags = ZERO_TAGS;
 				}
 			}
 		}

@@ -186,7 +186,7 @@ Dot::Dot (const Span * sp, uint32_t nsp, const State * s)
 Go::Go ()
 	: nSpans (0)
 	, span (NULL)
-	, tags (0)
+	, tags (ZERO_TAGS)
 	, type (EMPTY)
 	, info ()
 {}
@@ -213,7 +213,7 @@ void Go::init (const State * from)
 
 	bool low_spans_have_tags = false;
 	for (uint32_t i = 0; i < nSpans - hSpans; ++i) {
-		if (span[i].tags != 0) {
+		if (span[i].tags != ZERO_TAGS) {
 			low_spans_have_tags = true;
 			break;
 		}

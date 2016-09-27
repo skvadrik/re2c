@@ -6,6 +6,7 @@
 #include <vector>
 
 #include "src/codegen/output.h"
+#include "src/ir/tagpool.h"
 #include "src/util/c99_stdint.h"
 #include "src/util/forbid_copy.h"
 
@@ -33,7 +34,7 @@ struct Case
 	size_t tags;
 
 	void emit(OutputFile &o, uint32_t ind) const;
-	inline Case(): ranges(), to(NULL), tags(0) {}
+	inline Case(): ranges(), to(NULL), tags(ZERO_TAGS) {}
 	FORBID_COPY(Case);
 };
 
@@ -78,7 +79,7 @@ struct Linear
 		const State *to;
 		size_t tags;
 
-		Branch(): cond(NULL), to(NULL), tags(0) {}
+		Branch(): cond(NULL), to(NULL), tags(ZERO_TAGS) {}
 		void init(const Cond *c, const State *s, size_t ts)
 		{
 			cond = c;

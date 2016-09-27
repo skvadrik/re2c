@@ -75,7 +75,7 @@ dfa_t::dfa_t(const nfa_t &nfa,
 	bool *mask = new bool[ntags];
 	bool *fin = new bool[nrules];
 
-	clos1.push_back(clos_t(nfa.root, static_cast<size_t>(0)));
+	clos1.push_back(clos_t(nfa.root, ZERO_TAGS));
 	closure(clos1, clos2, ktags, badtags, ntags);
 	find_state(clos2, clospool, tagpool);
 

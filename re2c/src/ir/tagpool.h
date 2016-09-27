@@ -10,6 +10,8 @@
 namespace re2c
 {
 
+static const size_t ZERO_TAGS = 0;
+
 struct eqtag_t
 {
 	size_t ntags;

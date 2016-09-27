@@ -28,7 +28,7 @@ struct dfa_state_t
 		: arcs(new size_t[nchars])
 		, tags(new size_t[nchars])
 		, rule(Rule::NONE)
-		, rule_tags(0)
+		, rule_tags(ZERO_TAGS)
 		, fallback(false)
 	{}
 	~dfa_state_t()

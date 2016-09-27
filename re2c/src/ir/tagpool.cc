@@ -1,3 +1,5 @@
+#include <assert.h>
+
 #include "src/ir/tagpool.h"
 #include "src/util/hash32.h"
 
@@ -9,8 +11,8 @@ Tagpool::Tagpool(size_t n)
 	, lookup()
 	, buff(new bool[ntags]())
 {
-	// all-no tag set must have number 0
-	insert(buff);
+	// all-zero tag configuration must have static number zero
+	assert(ZERO_TAGS == insert(buff));
 }
 
 Tagpool::~Tagpool()
@@ -47,7 +49,7 @@ size_t Tagpool::orl(size_t t, size_t o)
 {
 	if (t == o || o == 0) {
 		return t;
-	} else if (t == 0) {
+	} else if (t == ZERO_TAGS) {
 		return o;
 	}
 
@@ -63,8 +65,8 @@ size_t Tagpool::andl(size_t t, size_t a)
 {
 	if (t == a) {
 		return t;
-	} else if (t == 0 || a == 0) {
-		return 0;
+	} else if (t == ZERO_TAGS || a == ZERO_TAGS) {
+		return ZERO_TAGS;
 	}
 
 	const bool *tags = operator[](t);
@@ -77,10 +79,10 @@ size_t Tagpool::andl(size_t t, size_t a)
 
 size_t Tagpool::andlinv(size_t t, size_t a)
 {
-	if (a == 0) {
+	if (a == ZERO_TAGS) {
 		return t;
-	} else if (t == 0 || t == a) {
-		return 0;
+	} else if (t == ZERO_TAGS || t == a) {
+		return ZERO_TAGS;
 	}
 
 	const bool *tags = operator[](t);
