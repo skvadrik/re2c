@@ -72,15 +72,13 @@ dfa_t::dfa_t(const nfa_t &nfa,
 	clospool_t clospool;
 	closure_t clos1, clos2;
 	const size_t ntags = tags.size();
-	const size_t nrules = rules.size();
 	bool *ktags = new bool[ntags]();
 	bool *badtags = new bool[ntags]();
 	bool *arctags = new bool[ntags];
 	bool *mask = new bool[ntags];
-	bool *fin = new bool[nrules];
 
 	clos1.push_back(clos_t(nfa.root, ZERO_TAGS));
-	closure(clos1, clos2, tagpool, ktags, badtags);
+	closure(clos1, clos2, tagpool, rules, ktags, badtags);
 	find_state(clos2, clospool);
 
 	for (size_t i = 0; i < clospool.size(); ++i) {
@@ -90,7 +88,7 @@ dfa_t::dfa_t(const nfa_t &nfa,
 
 		for (size_t c = 0; c < nchars; ++c) {
 			reach(clos0, clos1, charset[c]);
-			closure(clos1, clos2, tagpool, ktags, badtags);
+			closure(clos1, clos2, tagpool, rules, ktags, badtags);
 			s->arcs[c] = find_state(clos2, clospool);
 
 			memset(arctags, 0, ntags * sizeof(bool));
@@ -102,31 +100,13 @@ dfa_t::dfa_t(const nfa_t &nfa,
 			s->tags[c] = tagpool.insert(arctags);
 		}
 
-		memset(fin, 0, nrules * sizeof(bool));
-		memset(arctags, 0, ntags * sizeof(bool));
-		memset(mask, 0, ntags * sizeof(bool));
-		for (cclositer_t p = clos0.begin(); p != clos0.end(); ++p) {
-			nfa_state_t *n = p->state;
-			if (n->type == nfa_state_t::FIN) {
-				merge_tags_with_mask(arctags, tagpool[p->tagidx], mask,
-					tagpool[rules[n->rule].tags], badtags, ntags);
-				fin[n->rule] = true;
-			}
-		}
-		s->rule_tags = tagpool.insert(arctags);
-		// choose the first rule (the one with smallest rank)
-		size_t r;
-		for (r = 0; r < nrules; ++r) {
-			if (fin[r]) {
-				s->rule = r;
-				break;
-			}
-		}
-		// mark other rules as shadowed by this one
-		for (++r; r < nrules; ++r) {
-			if (fin[r]) {
-				rules[r].shadow.insert(rules[s->rule].info->loc.line);
-			}
+		// see node [at most one final item per closure]
+		cclositer_t
+			e = clos0.end(),
+			f = std::find_if(clos0.begin(), e, clos_t::final);
+		if (f != e) {
+			s->rule = f->state->rule;
+			s->rule_tags = f->tagidx;
 		}
 	}
 
@@ -141,7 +121,6 @@ dfa_t::dfa_t(const nfa_t &nfa,
 	delete[] badtags;
 	delete[] arctags;
 	delete[] mask;
-	delete[] fin;
 }
 
 dfa_t::~dfa_t()
