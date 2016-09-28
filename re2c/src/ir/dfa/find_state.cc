@@ -56,6 +56,11 @@ const closure_t& clospool_t::operator[](size_t idx) const
 
 size_t clospool_t::insert(const closure_t &clos)
 {
+	// empty closure corresponds to default state
+	if (clos.empty()) {
+		return dfa_t::NIL;
+	}
+
 	const uint32_t hash = hashclos(clos);
 
 	// try to find an identical DFA state
@@ -66,16 +71,6 @@ size_t clospool_t::insert(const closure_t &clos)
 
 	// otherwise add a new state
 	return lookup.push(hash, new closure_t(clos));
-}
-
-size_t find_state(const closure_t &clos, clospool_t &clospool)
-{
-	// empty closure corresponds to default state
-	if (clos.empty()) {
-		return dfa_t::NIL;
-	}
-
-	return clospool.insert(clos);
 }
 
 } // namespace re2c

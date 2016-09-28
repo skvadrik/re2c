@@ -62,26 +62,32 @@ dfa_t::dfa_t(const nfa_t &nfa,
 
 	clos1.push_back(clos_t(nfa.root, ZERO_TAGS));
 	closure(clos1, clos2, tagpool, rules, badtags);
-	find_state(clos2, clospool);
+	clospool.insert(clos2);
 
+	// closures are in sync with DFA states
 	for (size_t i = 0; i < clospool.size(); ++i) {
 		const closure_t &clos0 = clospool[i];
+
+		// create new DFA state
 		dfa_state_t *s = new dfa_state_t(nchars);
 		states.push_back(s);
 
-		for (size_t c = 0; c < nchars; ++c) {
-			reach(clos0, clos1, charset[c]);
-			s->tags[c] = closure(clos1, clos2, tagpool, rules, badtags);
-			s->arcs[c] = find_state(clos2, clospool);
-		}
-
+		// check if the new state is final
 		// see note [at most one final item per closure]
-		cclositer_t
-			e = clos0.end(),
+		cclositer_t e = clos0.end(),
 			f = std::find_if(clos0.begin(), e, clos_t::final);
 		if (f != e) {
 			s->rule = f->state->rule;
 			s->rule_tags = f->tagidx;
+		}
+
+		// for each alphabet symbol, build tagged epsilon-closure
+		// of all NFA states reachable on that symbol, then try to
+		// find identical closure or add the new one
+		for (size_t c = 0; c < nchars; ++c) {
+			reach(clos0, clos1, charset[c]);
+			s->tags[c] = closure(clos1, clos2, tagpool, rules, badtags);
+			s->arcs[c] = clospool.insert(clos2);
 		}
 	}
 

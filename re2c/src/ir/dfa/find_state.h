@@ -23,8 +23,6 @@ public:
 	size_t insert(const closure_t &clos);
 };
 
-size_t find_state(const closure_t &clos, clospool_t &clospool);
-
 } // namespace re2c
 
 #endif // _RE2C_IR_DFA_FIND_STATE_
