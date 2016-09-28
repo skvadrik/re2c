@@ -120,7 +120,7 @@ bool compare_by_rule(const clos_t &c1, const clos_t &c2)
 	return false;
 }
 
-/* node [at most one final item per closure]
+/* note [at most one final item per closure]
  *
  * By construction NFA has exactly one final state per rule.
  * Thus closure has at most one final item per rule (in other

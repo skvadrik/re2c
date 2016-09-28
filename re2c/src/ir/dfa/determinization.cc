@@ -100,7 +100,7 @@ dfa_t::dfa_t(const nfa_t &nfa,
 			s->tags[c] = tagpool.insert(arctags);
 		}
 
-		// see node [at most one final item per closure]
+		// see note [at most one final item per closure]
 		cclositer_t
 			e = clos0.end(),
 			f = std::find_if(clos0.begin(), e, clos_t::final);
