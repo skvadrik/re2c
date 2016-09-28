@@ -25,14 +25,16 @@ struct eqtag_t
 
 struct Tagpool
 {
-	const size_t ntags;
-
 private:
 	typedef lookup_t<const bool*> taglookup_t;
 	taglookup_t lookup;
-	bool *buff;
+	bool *buffer;
 
 public:
+	const size_t ntags;
+	bool *buffer1;
+	bool *buffer2;
+
 	explicit Tagpool(size_t n);
 	~Tagpool();
 	size_t insert(const bool *tags);

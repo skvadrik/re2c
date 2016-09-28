@@ -16,6 +16,8 @@ namespace re2c
 
 static nfa_state_t *transition(nfa_state_t *state, uint32_t symbol);
 static void reach(const closure_t &clos1, closure_t &clos2, uint32_t symbol);
+static void warn_bad_tags(const bool *badtags, const std::valarray<Tag> &tags,
+	const std::valarray<Rule> &rules, const std::string &cond);
 
 const size_t dfa_t::NIL = std::numeric_limits<size_t>::max();
 
@@ -45,21 +47,6 @@ void reach(const closure_t &clos1, closure_t &clos2, uint32_t symbol)
 	}
 }
 
-static void merge_tags_with_mask(bool *oldtags, const bool *newtags,
-	bool *oldmask, const bool *newmask,
-	bool *badtags, size_t ntags)
-{
-	for (size_t i = 0; i < ntags; ++i) {
-		const bool bad = oldmask[i] & newmask[i] & (oldtags[i] ^ newtags[i]);
-		// don't merge conflicting tags, only note the conflict
-		if (!bad) {
-			oldtags[i] |= newtags[i];
-		}
-		badtags[i] |= bad;
-		oldmask[i] |= newmask[i];
-	}
-}
-
 dfa_t::dfa_t(const nfa_t &nfa,
 	const charset_t &charset,
 	const std::string &cond)
@@ -71,14 +58,10 @@ dfa_t::dfa_t(const nfa_t &nfa,
 {
 	clospool_t clospool;
 	closure_t clos1, clos2;
-	const size_t ntags = tags.size();
-	bool *ktags = new bool[ntags]();
-	bool *badtags = new bool[ntags]();
-	bool *arctags = new bool[ntags];
-	bool *mask = new bool[ntags];
+	bool *badtags = new bool[tags.size()]();
 
 	clos1.push_back(clos_t(nfa.root, ZERO_TAGS));
-	closure(clos1, clos2, tagpool, rules, ktags, badtags);
+	closure(clos1, clos2, tagpool, rules, badtags);
 	find_state(clos2, clospool);
 
 	for (size_t i = 0; i < clospool.size(); ++i) {
@@ -88,16 +71,8 @@ dfa_t::dfa_t(const nfa_t &nfa,
 
 		for (size_t c = 0; c < nchars; ++c) {
 			reach(clos0, clos1, charset[c]);
-			closure(clos1, clos2, tagpool, rules, ktags, badtags);
+			s->tags[c] = closure(clos1, clos2, tagpool, rules, badtags);
 			s->arcs[c] = find_state(clos2, clospool);
-
-			memset(arctags, 0, ntags * sizeof(bool));
-			memset(mask, 0, ntags * sizeof(bool));
-			for (cclositer_t p = clos1.begin(); p != clos1.end(); ++p) {
-				merge_tags_with_mask(arctags, tagpool[p->tagidx], mask,
-					tagpool[rules[p->state->rule].tags], badtags, ntags);
-			}
-			s->tags[c] = tagpool.insert(arctags);
 		}
 
 		// see note [at most one final item per closure]
@@ -110,17 +85,23 @@ dfa_t::dfa_t(const nfa_t &nfa,
 		}
 	}
 
+	warn_bad_tags(badtags, tags, rules, cond);
+	delete[] badtags;
+}
+
+void warn_bad_tags(const bool *badtags,
+	const std::valarray<Tag> &tags,
+	const std::valarray<Rule> &rules,
+	const std::string &cond)
+{
+	const size_t ntags = tags.size();
 	for (size_t i = 0; i < ntags; ++i) {
 		if (badtags[i]) {
-			warn.nondeterministic_tags(rules[tags[i].rule].info->loc.line,
-				cond, tags[i].name);
+			const Tag &tag = tags[i];
+			const uint32_t line = rules[tag.rule].info->loc.line;
+			warn.nondeterministic_tags(line, cond, tag.name);
 		}
 	}
-
-	delete[] ktags;
-	delete[] badtags;
-	delete[] arctags;
-	delete[] mask;
 }
 
 dfa_t::~dfa_t()

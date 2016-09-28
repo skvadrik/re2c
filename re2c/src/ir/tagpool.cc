@@ -7,17 +7,20 @@ namespace re2c
 {
 
 Tagpool::Tagpool(size_t n)
-	: ntags(n)
-	, lookup()
-	, buff(new bool[ntags]())
+	: lookup()
+	, buffer(new bool[n * 3])
+	, ntags(n)
+	, buffer1(&buffer[n * 1])
+	, buffer2(&buffer[n * 2])
 {
 	// all-zero tag configuration must have static number zero
-	assert(ZERO_TAGS == insert(buff));
+	std::fill(buffer, buffer + ntags, false);
+	assert(ZERO_TAGS == insert(buffer));
 }
 
 Tagpool::~Tagpool()
 {
-	delete[] buff;
+	delete[] buffer;
 	const size_t n = lookup.size();
 	for (size_t i = 0; i < n; ++i) {
 		free(const_cast<bool*>(lookup[i]));
@@ -56,9 +59,9 @@ size_t Tagpool::orl(size_t t, size_t o)
 	const bool *tags = operator[](t);
 	const bool *ortags = operator[](o);
 	for (size_t i = 0; i < ntags; ++i) {
-		buff[i] = tags[i] | ortags[i];
+		buffer[i] = tags[i] | ortags[i];
 	}
-	return insert(buff);
+	return insert(buffer);
 }
 
 size_t Tagpool::andl(size_t t, size_t a)
@@ -72,9 +75,9 @@ size_t Tagpool::andl(size_t t, size_t a)
 	const bool *tags = operator[](t);
 	const bool *andtags = operator[](a);
 	for (size_t i = 0; i < ntags; ++i) {
-		buff[i] = tags[i] & andtags[i];
+		buffer[i] = tags[i] & andtags[i];
 	}
-	return insert(buff);
+	return insert(buffer);
 }
 
 size_t Tagpool::andlinv(size_t t, size_t a)
@@ -88,21 +91,21 @@ size_t Tagpool::andlinv(size_t t, size_t a)
 	const bool *tags = operator[](t);
 	const bool *andinvtags = operator[](a);
 	for (size_t i = 0; i < ntags; ++i) {
-		buff[i] = tags[i] & ~andinvtags[i];
+		buffer[i] = tags[i] & ~andinvtags[i];
 	}
-	return insert(buff);
+	return insert(buffer);
 }
 
 size_t Tagpool::subst(size_t t, const size_t *represent)
 {
 	const bool *tags = operator[](t);
-	memset(buff, 0, ntags * sizeof(bool));
+	memset(buffer, 0, ntags * sizeof(bool));
 	for (size_t i = 0; i < ntags; ++i) {
 		if (tags[i]) {
-			buff[represent[i]] = true;
+			buffer[represent[i]] = true;
 		}
 	}
-	return insert(buff);
+	return insert(buffer);
 }
 
 } // namespace re2c

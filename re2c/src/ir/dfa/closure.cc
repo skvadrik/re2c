@@ -10,20 +10,34 @@ static void closure_one(closure_t &clos, Tagpool &tagpool, nfa_state_t *n, bool 
 static void check_tags(const Tagpool &tagpool, size_t oldidx, size_t newidx, bool *badtags);
 static bool compare_by_rule(const clos_t &c1, const clos_t &c2);
 static void prune_final_items(closure_t &clos, std::valarray<Rule> &rules);
+static void merge_tags_with_mask(bool *oldtags, const bool *newtags, bool *oldmask, const bool *newmask, bool *badtags, size_t ntags);
 
-void closure(const closure_t &clos1, closure_t &clos2,
-	Tagpool &tagpool, std::valarray<Rule> &rules,
-	bool *tags, bool *badtags)
+size_t closure(const closure_t &clos1, closure_t &clos2,
+	Tagpool &tagpool, std::valarray<Rule> &rules, bool *badtags)
 {
+	const size_t ntags = tagpool.ntags;
+	bool *buf1 = tagpool.buffer1,
+		*buf2 = tagpool.buffer2;
+
 	clos2.clear();
+	std::fill(buf1, buf1 + ntags, false);
 	for (cclositer_t c = clos1.begin(); c != clos1.end(); ++c) {
-		closure_one(clos2, tagpool, c->state, tags, badtags);
+		closure_one(clos2, tagpool, c->state, buf1, badtags);
 	}
 
 	prune_final_items(clos2, rules);
 
 	// sort closure: we need this to compare closures by hash
 	std::sort(clos2.begin(), clos2.end(), compare_by_rule);
+
+	// merge tags from different rules
+	std::fill(buf1, buf1 + ntags, false);
+	std::fill(buf2, buf2 + ntags, false);
+	for (cclositer_t c = clos1.begin(); c != clos1.end(); ++c) {
+		merge_tags_with_mask(buf1, tagpool[c->tagidx], buf2,
+			tagpool[rules[c->state->rule].tags], badtags, ntags);
+	}
+	return tagpool.insert(buf1);
 }
 
 /* note [epsilon-closures in tagged NFA]
@@ -153,6 +167,21 @@ void prune_final_items(closure_t &clos, std::valarray<Rule> &rules)
 		}
 		// remove shadowed final items from closure
 		clos.resize(static_cast<size_t>(f - b) + 1);
+	}
+}
+
+void merge_tags_with_mask(bool *oldtags, const bool *newtags,
+	bool *oldmask, const bool *newmask,
+	bool *badtags, size_t ntags)
+{
+	for (size_t i = 0; i < ntags; ++i) {
+		const bool bad = oldmask[i] & newmask[i] & (oldtags[i] ^ newtags[i]);
+		// don't merge conflicting tags, only note the conflict
+		if (!bad) {
+			oldtags[i] |= newtags[i];
+		}
+		badtags[i] |= bad;
+		oldmask[i] |= newmask[i];
 	}
 }
 
