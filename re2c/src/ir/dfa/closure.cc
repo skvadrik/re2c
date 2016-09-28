@@ -1,4 +1,4 @@
-#include <string.h>
+#include <algorithm>
 
 #include "src/ir/dfa/closure.h"
 #include "src/ir/nfa/nfa.h"
@@ -21,6 +21,9 @@ void closure(const closure_t &clos1, closure_t &clos2,
 	}
 
 	prune_final_items(clos2, rules);
+
+	// sort closure: we need this to compare closures by hash
+	std::sort(clos2.begin(), clos2.end(), compare_by_rule);
 }
 
 /* note [epsilon-closures in tagged NFA]

@@ -68,15 +68,12 @@ size_t clospool_t::insert(const closure_t &clos)
 	return lookup.push(hash, new closure_t(clos));
 }
 
-size_t find_state(closure_t &clos, clospool_t &clospool)
+size_t find_state(const closure_t &clos, clospool_t &clospool)
 {
 	// empty closure corresponds to default state
 	if (clos.empty()) {
 		return dfa_t::NIL;
 	}
-
-	// sort closure to allow comparison by hash and 'memcmp'
-	std::sort(clos.begin(), clos.end(), clos_t::compare);
 
 	return clospool.insert(clos);
 }

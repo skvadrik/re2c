@@ -16,7 +16,6 @@ struct clos_t
 
 	inline clos_t();
 	inline clos_t(nfa_state_t *s, size_t i);
-	static inline bool compare(const clos_t &c1, const clos_t &c2);
 	static inline bool final(const clos_t &c);
 	static inline bool not_final(const clos_t &c);
 };
@@ -38,15 +37,6 @@ clos_t::clos_t(nfa_state_t *s, size_t i)
 	: state(s)
 	, tagidx(i)
 {}
-
-bool clos_t::compare(const clos_t &c1, const clos_t &c2)
-{
-	const nfa_state_t
-		*s1 = c1.state,
-		*s2 = c2.state;
-	return s1 < s2
-		|| (s1 == s2 && c1.tagidx < c2.tagidx);
-}
 
 bool clos_t::final(const clos_t &c)
 {
