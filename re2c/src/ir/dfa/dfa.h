@@ -22,6 +22,7 @@ struct dfa_state_t
 	size_t *tags;
 	size_t rule;
 	size_t rule_tags;
+	bool fallthru;
 	bool fallback;
 
 	explicit dfa_state_t(size_t nchars)
@@ -29,6 +30,7 @@ struct dfa_state_t
 		, tags(new size_t[nchars])
 		, rule(Rule::NONE)
 		, rule_tags(ZERO_TAGS)
+		, fallthru(false)
 		, fallback(false)
 	{}
 	~dfa_state_t()

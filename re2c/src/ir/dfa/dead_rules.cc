@@ -191,6 +191,9 @@ static void find_fallback_states(dfa_t &dfa, const bool *live)
 	const bool *fallthru = &live[nrules * nstates];
 	for (size_t i = 0; i < nstates; ++i) {
 		dfa_state_t *s = dfa.states[i];
+		if (fallthru[i]) {
+			s->fallthru = true;
+		}
 		if (s->rule != Rule::NONE) {
 			for (size_t c = 0; c < dfa.nchars; ++c) {
 				const size_t j = s->arcs[c];

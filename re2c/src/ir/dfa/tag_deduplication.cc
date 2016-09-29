@@ -28,34 +28,37 @@ static void backprop(revarc_t **rdfa,
 	}
 }
 
+static void forwprop(const dfa_t &dfa, bool *been, size_t state,
+	size_t *live, size_t need)
+{
+	if (been[state]) return;
+	been[state] = true;
+
+	live[state] = dfa.tagpool.orl(live[state], need);
+
+	const dfa_state_t *s = dfa.states[state];
+	for (size_t c = 0; c < dfa.nchars; ++c) {
+		const size_t dest = s->arcs[c];
+		if (dest != dfa_t::NIL && dfa.states[dest]->fallthru) {
+			forwprop(dfa, been, dest, live, need);
+		}
+	}
+}
+
 /* note [liveness analyses on tags]
  *
- * Tag T is alive in state S if there is a transition
- * from S to some state S' that does not update T
- * and either:
+ * Liveness of a rule tag is propagated backwards from final
+ * state and until we meet transition that updates this tag.
  *
- *  (1) S' is the default state
- *      and S is final
- *      and T belongs to S's final tag set
- *
- *  (2) S' is the default state
- *      and S is not final
- *      and T belongs to fallback tag set
- *
- *  (3) S' is not the default state
- *      and T is alive in S'
- *
- * The algorithm inspects all DFA states one by one.
- * If a state satisfies (1) or (2) for some set of tags,
- * the algorithm propagates all these tags backwards to
- * fulfill (3). Propagation stops if either all tags are masked
- * or live set in not changed after adding new tags.
+ * Liveness of fallback tag is propagated forward from fallback
+ * state (see note [fallback states]) and until there remain
+ * any fallthrough paths from current state.
  */
-static void calc_live(const dfa_t &dfa, size_t fallback, size_t *live)
+static void calc_live(const dfa_t &dfa, size_t *live)
 {
 	const size_t nstates = dfa.states.size();
 
-	bool *fallthru = new bool[nstates]();
+	// backward-propagate rule tags
 	revarc_t **rdfa = new revarc_t*[nstates]();
 	revarc_t *rarcs = new revarc_t[nstates * dfa.nchars];
 	revarc_t *a = rarcs;
@@ -68,31 +71,32 @@ static void calc_live(const dfa_t &dfa, size_t fallback, size_t *live)
 				a->tags = s->tags[c];
 				a->next = rdfa[j];
 				rdfa[j] = a++;
-			} else {
-				fallthru[i] = true;
 			}
 		}
 	}
-
 	for (size_t i = 0; i < nstates; ++i) {
 		const dfa_state_t *s = dfa.states[i];
-		if (fallthru[i]) {
-			const size_t tags = s->rule != Rule::NONE
-				// final state, only rule tags are alive
-				? dfa.tagpool.andlinv(dfa.rules[s->rule].tags,
-					s->rule_tags)
-				// transition to default state and dispatch on
-				// 'yyaccept': all fallback rules are potentially
-				// reachable, their tags are alive
-				// no mask: no rule implies no rule tags
-				: fallback;
-			backprop(rdfa, dfa.tagpool, live, tags, i);
+		if (s->rule != Rule::NONE) {
+			const size_t need = dfa.tagpool.andlinv(
+				dfa.rules[s->rule].tags, s->rule_tags);
+			backprop(rdfa, dfa.tagpool, live, need, i);
 		}
 	}
-
 	delete[] rdfa;
 	delete[] rarcs;
-	delete[] fallthru;
+
+	// forward-propagate fallback tags
+	bool *been = new bool[nstates];
+	for (size_t i = 0; i < nstates; ++i) {
+		dfa_state_t *s = dfa.states[i];
+		if (s->fallback) {
+			const size_t need = dfa.tagpool.andlinv(
+				dfa.rules[s->rule].tags, s->rule_tags);
+			std::fill(been, been + nstates, false);
+			forwprop(dfa, been, i, live, need);
+		}
+	}
+	delete[] been;
 }
 
 static void mask_dead(dfa_t &dfa, const size_t *live)
@@ -134,31 +138,22 @@ static void incompatible(bool *tbl,
 }
 
 static void incompatibility_table(const dfa_t &dfa,
-	const size_t *livetags, size_t deftags,
-	bool *incompattbl)
+	const size_t *livetags, bool *incompattbl)
 {
 	const size_t nstates = dfa.states.size();
 	const size_t ntags = dfa.tags.size();
 	for (size_t i = 0; i < nstates; ++i) {
 		const dfa_state_t *s = dfa.states[i];
-		bool fallthru = false;
 		for (size_t c = 0; c < dfa.nchars; ++c) {
 			const size_t j = s->arcs[c];
 			if (j != dfa_t::NIL) {
 				incompatible(incompattbl, dfa.tagpool,
 					livetags[j], s->tags[c]);
-			} else {
-				fallthru = true;
 			}
 		}
-		if (fallthru) {
-			if (s->rule != Rule::NONE) {
-				incompatible(incompattbl, dfa.tagpool,
-					dfa.rules[s->rule].tags, s->rule_tags);
-			} else {
-				incompatible(incompattbl, dfa.tagpool,
-					deftags, s->rule_tags);
-			}
+		if (s->rule != Rule::NONE) {
+			incompatible(incompattbl, dfa.tagpool,
+				dfa.rules[s->rule].tags, s->rule_tags);
 		}
 	}
 
@@ -239,21 +234,6 @@ static void patch_tags(dfa_t &dfa, const size_t *represent)
 	}
 }
 
-// see note [fallback states]
-// fallback tags are all tags that belong to fallback rules
-static size_t fallback_tags(const dfa_t &dfa)
-{
-	const size_t nstates = dfa.states.size();
-	size_t tags = ZERO_TAGS;
-	for (size_t i = 0; i < nstates; ++i) {
-		const dfa_state_t *s = dfa.states[i];
-		if (s->fallback) { // see note [fallback states]
-			tags = dfa.tagpool.orl(tags, dfa.rules[s->rule].tags);
-		}
-	}
-	return tags;
-}
-
 size_t deduplicate_tags(dfa_t &dfa)
 {
 	const size_t ntags = dfa.tags.size();
@@ -261,16 +241,14 @@ size_t deduplicate_tags(dfa_t &dfa)
 		return 0;
 	}
 
-	const size_t fallback = fallback_tags(dfa);
-
 	const size_t nstates = dfa.states.size();
 	size_t *live = new size_t[nstates]();
-	calc_live(dfa, fallback, live);
+	calc_live(dfa, live);
 
 	mask_dead(dfa, live);
 
 	bool *incompattbl = new bool[ntags * ntags]();
-	incompatibility_table(dfa, live, fallback, incompattbl);
+	incompatibility_table(dfa, live, incompattbl);
 
 	size_t *represent = new size_t[ntags]();
 	equivalence_classes(incompattbl, ntags, represent);
