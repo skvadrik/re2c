@@ -1,6 +1,6 @@
 // This test demonstrates that fallback tags should be forward-propagated
 // from final states, and that merging all possible fallback tags and
-// bacward-propagating them from default transitions is too crude,
+// backward-propagating them from default transitions is too crude,
 // inhibits tag interference where there is none and gets in the way
 // of tag deduplication.
 

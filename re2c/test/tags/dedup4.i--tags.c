@@ -132,7 +132,6 @@ yy23:
 	unsigned int yyaccept = 0;
 	long yytag0p;
 	long yytag1;
-	long yytag1p;
 	YYCTXMARKER = YYCURSOR;
 	if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
 	yych = *YYCURSOR;
@@ -148,10 +147,10 @@ yy28:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
 	case 'b':
-		yytag0p = yytag1p = (YYCURSOR - YYCTXMARKER);
+		yytag0p = (YYCURSOR - YYCTXMARKER);
 		goto yy30;
 	case 'c':
-		yytag1 = yytag1p = (YYCURSOR - YYCTXMARKER);
+		yytag0p = yytag1 = (YYCURSOR - YYCTXMARKER);
 		goto yy32;
 	default:
 		yytag0p = (YYCURSOR - YYCTXMARKER);
@@ -199,7 +198,7 @@ yy34:
 	}
 yy35:
 	YYCURSOR = YYCTXMARKER + yytag1;
-	{ (YYCTXMARKER + yytag1p) }
+	{ (YYCTXMARKER + yytag0p) }
 }
 
 

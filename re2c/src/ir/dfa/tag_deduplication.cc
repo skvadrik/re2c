@@ -7,24 +7,24 @@ namespace re2c
 
 struct revarc_t
 {
+	size_t edge;
 	size_t dest;
 	size_t tags;
 	revarc_t *next;
 };
 
-static void backprop(revarc_t **rdfa,
-	Tagpool &tagpool,
-	size_t *live,
-	size_t tags,
-	size_t state)
+static void backprop(revarc_t **rdfa, bool *been, size_t state,
+	size_t *live, size_t tags, Tagpool &tagpool)
 {
-	const size_t l = live[state];
-	live[state] = tagpool.orl(l, tags);
-	if (l == live[state]) return;
+	if (been[state]) return;
+	been[state] = true;
 
 	for (const revarc_t *a = rdfa[state]; a; a = a->next) {
-		backprop(rdfa, tagpool, live,
-			tagpool.andlinv(tags, a->tags), a->dest);
+		live[a->edge] = tagpool.orl(live[a->edge], tags);
+		const size_t l = tagpool.andlinv(tags, a->tags);
+		if (l != ZERO_TAGS) {
+			backprop(rdfa, been, a->dest, live, l, tagpool);
+		}
 	}
 }
 
@@ -34,12 +34,12 @@ static void forwprop(const dfa_t &dfa, bool *been, size_t state,
 	if (been[state]) return;
 	been[state] = true;
 
-	live[state] = dfa.tagpool.orl(live[state], need);
-
 	const dfa_state_t *s = dfa.states[state];
+	size_t *l = &live[state * dfa.nchars];
 	for (size_t c = 0; c < dfa.nchars; ++c) {
 		const size_t dest = s->arcs[c];
 		if (dest != dfa_t::NIL && dfa.states[dest]->fallthru) {
+			l[c] = dfa.tagpool.orl(l[c], need);
 			forwprop(dfa, been, dest, live, need);
 		}
 	}
@@ -57,6 +57,7 @@ static void forwprop(const dfa_t &dfa, bool *been, size_t state,
 static void calc_live(const dfa_t &dfa, size_t *live)
 {
 	const size_t nstates = dfa.states.size();
+	bool *been = new bool[nstates];
 
 	// backward-propagate rule tags
 	revarc_t **rdfa = new revarc_t*[nstates]();
@@ -67,6 +68,7 @@ static void calc_live(const dfa_t &dfa, size_t *live)
 		for (size_t c = 0; c < dfa.nchars; ++c) {
 			const size_t j = s->arcs[c];
 			if (j != dfa_t::NIL) {
+				a->edge = i * dfa.nchars + c;
 				a->dest = i;
 				a->tags = s->tags[c];
 				a->next = rdfa[j];
@@ -79,14 +81,14 @@ static void calc_live(const dfa_t &dfa, size_t *live)
 		if (s->rule != Rule::NONE) {
 			const size_t need = dfa.tagpool.andlinv(
 				dfa.rules[s->rule].tags, s->rule_tags);
-			backprop(rdfa, dfa.tagpool, live, need, i);
+			std::fill(been, been + nstates, false);
+			backprop(rdfa, been, i, live, need, dfa.tagpool);
 		}
 	}
 	delete[] rdfa;
 	delete[] rarcs;
 
 	// forward-propagate fallback tags
-	bool *been = new bool[nstates];
 	for (size_t i = 0; i < nstates; ++i) {
 		dfa_state_t *s = dfa.states[i];
 		if (s->fallback) {
@@ -104,11 +106,11 @@ static void mask_dead(dfa_t &dfa, const size_t *live)
 	const size_t nstates = dfa.states.size();
 	for (size_t i = 0; i < nstates; ++i) {
 		dfa_state_t *s = dfa.states[i];
+		const size_t *l = &live[i * dfa.nchars];
 		for (size_t c = 0; c < dfa.nchars; ++c) {
 			const size_t j = s->arcs[c];
 			if (j != dfa_t::NIL) {
-				s->tags[c] = dfa.tagpool.andl(s->tags[c],
-					live[j]);
+				s->tags[c] = dfa.tagpool.andl(s->tags[c], l[c]);
 			}
 		}
 		if (s->rule != Rule::NONE) {
@@ -144,11 +146,11 @@ static void incompatibility_table(const dfa_t &dfa,
 	const size_t ntags = dfa.tags.size();
 	for (size_t i = 0; i < nstates; ++i) {
 		const dfa_state_t *s = dfa.states[i];
+		const size_t *l = &livetags[i * dfa.nchars];
 		for (size_t c = 0; c < dfa.nchars; ++c) {
 			const size_t j = s->arcs[c];
 			if (j != dfa_t::NIL) {
-				incompatible(incompattbl, dfa.tagpool,
-					livetags[j], s->tags[c]);
+				incompatible(incompattbl, dfa.tagpool, l[c], s->tags[c]);
 			}
 		}
 		if (s->rule != Rule::NONE) {
@@ -241,8 +243,10 @@ size_t deduplicate_tags(dfa_t &dfa)
 		return 0;
 	}
 
-	const size_t nstates = dfa.states.size();
-	size_t *live = new size_t[nstates]();
+	const size_t
+		nstates = dfa.states.size(),
+		nedges = nstates * dfa.nchars;
+	size_t *live = new size_t[nedges]();
 	calc_live(dfa, live);
 
 	mask_dead(dfa, live);
