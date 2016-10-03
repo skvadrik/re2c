@@ -10,34 +10,27 @@ static void closure_one(closure_t &clos, Tagpool &tagpool, nfa_state_t *n, bool 
 static void check_tags(const Tagpool &tagpool, size_t oldidx, size_t newidx, bool *badtags);
 static bool compare_by_rule(const clos_t &c1, const clos_t &c2);
 static void prune_final_items(closure_t &clos, std::valarray<Rule> &rules);
-static void merge_tags_with_mask(bool *oldtags, const bool *newtags, bool *oldmask, const bool *newmask, bool *badtags, size_t ntags);
+static size_t merge_and_check_tags(const closure_t &clos, Tagpool &tagpool, const std::valarray<Rule> &rules, bool *badtags);
 
 size_t closure(const closure_t &clos1, closure_t &clos2,
 	Tagpool &tagpool, std::valarray<Rule> &rules, bool *badtags)
 {
-	const size_t ntags = tagpool.ntags;
-	bool *buf1 = tagpool.buffer1,
-		*buf2 = tagpool.buffer2;
-
+	// build tagged epsilon-closure of the given set of NFA states
 	clos2.clear();
-	std::fill(buf1, buf1 + ntags, false);
+	bool *tags = tagpool.buffer1;
+	std::fill(tags, tags + tagpool.ntags, false);
 	for (cclositer_t c = clos1.begin(); c != clos1.end(); ++c) {
-		closure_one(clos2, tagpool, c->state, buf1, badtags);
+		closure_one(clos2, tagpool, c->state, tags, badtags);
 	}
 
+	// see note [at most one final item per closure]
 	prune_final_items(clos2, rules);
 
-	// sort closure: we need this to compare closures by hash
+	// sort closure, group items by rule
 	std::sort(clos2.begin(), clos2.end(), compare_by_rule);
 
-	// merge tags from different rules
-	std::fill(buf1, buf1 + ntags, false);
-	std::fill(buf2, buf2 + ntags, false);
-	for (cclositer_t c = clos1.begin(); c != clos1.end(); ++c) {
-		merge_tags_with_mask(buf1, tagpool[c->tagidx], buf2,
-			tagpool[rules[c->state->rule].tags], badtags, ntags);
-	}
-	return tagpool.insert(buf1);
+	// merge tags from different rules, find nondeterministic tags
+	return merge_and_check_tags(clos1, tagpool, rules, badtags);
 }
 
 /* note [epsilon-closures in tagged NFA]
@@ -170,19 +163,38 @@ void prune_final_items(closure_t &clos, std::valarray<Rule> &rules)
 	}
 }
 
-void merge_tags_with_mask(bool *oldtags, const bool *newtags,
-	bool *oldmask, const bool *newmask,
-	bool *badtags, size_t ntags)
+// WARNING: this function assumes that closure items are grouped bu rule
+size_t merge_and_check_tags(const closure_t &clos, Tagpool &tagpool,
+	const std::valarray<Rule> &rules, bool *badtags)
 {
-	for (size_t i = 0; i < ntags; ++i) {
-		const bool bad = oldmask[i] & newmask[i] & (oldtags[i] ^ newtags[i]);
-		// don't merge conflicting tags, only note the conflict
-		if (!bad) {
-			oldtags[i] |= newtags[i];
+	bool *tags = tagpool.buffer1;
+	std::fill(tags, tags + tagpool.ntags, false);
+
+	size_t r = 0, lt = 0, ht;
+	for (cclositer_t c = clos.begin(), e = clos.end(); c != e;) {
+		const bool *x = tagpool[c->tagidx];
+
+		// find next rule that occurs in closure
+		for (; r < c->state->rule; lt = rules[r].htag, ++r);
+		ht = rules[r].htag;
+
+		// merge tags of the 1st item belonging to this rule
+		for (size_t t = lt; t < ht; ++t) {
+			tags[t] |= x[t];
 		}
-		badtags[i] |= bad;
-		oldmask[i] |= newmask[i];
+
+		// check the remaining items with this for tag nondeterminism:
+		// if some tag differs from that of the 1st item, then it is
+		// nondeterministic (don't merge it, only note the conflict)
+		for (++c; c != e && c->state->rule == r; ++c) {
+			const bool *y = tagpool[c->tagidx];
+			for (size_t t = lt; t < ht; ++t) {
+				badtags[t] |= y[t] != x[t];
+			}
+		}
 	}
+
+	return tagpool.insert(tags);
 }
 
 } // namespace re2c
