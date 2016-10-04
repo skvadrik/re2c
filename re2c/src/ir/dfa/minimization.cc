@@ -67,11 +67,11 @@ static void minimization_table(
 						{
 							std::swap(oi, oj);
 						}
-						if (oi != oj &&
-							(oi == dfa_t::NIL
-							|| oj == dfa_t::NIL
-							|| tbl[oi][oj]
-							|| memcmp(states[i]->tags, states[j]->tags, nchars * sizeof(size_t)) != 0))
+						if (states[i]->tags[k] != states[j]->tags[k]
+							|| (oi != oj
+								&& (oi == dfa_t::NIL
+								|| oj == dfa_t::NIL
+								|| tbl[oi][oj])))
 						{
 							tbl[i][j] = true;
 							loop = true;
@@ -188,8 +188,10 @@ static void minimization_moore(
 					if (memcmp(&out[j * nchars],
 						&out[k * nchars],
 						nchars * sizeof(size_t)) == 0
-						&& memcmp(states[j]->tags, states[k]->tags, nchars * sizeof(size_t)) == 0)
-					{
+					 && memcmp(states[j]->tags,
+						states[k]->tags,
+						nchars * sizeof(size_t)) == 0
+					 ) {
 						part[j] = k;
 						next[j] = next[k];
 						next[k] = j;
