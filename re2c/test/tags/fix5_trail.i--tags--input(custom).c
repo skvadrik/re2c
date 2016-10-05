@@ -9,8 +9,8 @@ static void lex(const char *YYCURSOR)
     
 {
 	char yych;
-	long yytag0;
-	long yytag0p2;
+	long yyt0;
+	long yyt0p2;
 	YYBACKUPCTX ();
 	yych = YYPEEK ();
 	switch (yych) {
@@ -37,10 +37,10 @@ yy5:
 	yych = YYPEEK ();
 	switch (yych) {
 	case '2':
-		yytag0p2 = YYDIST();
+		yyt0p2 = YYDIST();
 		goto yy10;
 	case '3':
-		yytag0p2 = YYDIST();
+		yyt0p2 = YYDIST();
 		goto yy12;
 	default:	goto yy3;
 	}
@@ -61,10 +61,10 @@ yy9:
 	yych = YYPEEK ();
 	switch (yych) {
 	case '2':
-		yytag0p2 = YYDIST();
+		yyt0p2 = YYDIST();
 		goto yy10;
 	case '3':
-		yytag0p2 = YYDIST();
+		yyt0p2 = YYDIST();
 		goto yy12;
 	default:	goto yy8;
 	}
@@ -78,17 +78,17 @@ yy10:
 	}
 yy12:
 	YYSKIP ();
-	yytag0 = YYDIST();
+	yyt0 = YYDIST();
 	yych = YYPEEK ();
 	goto yy15;
 yy13:
-	YYRESTORECTX (yytag0);
+	YYRESTORECTX (yyt0);
 	{
             printf("'%.*s', '%.*s', '%.*s', '%.*s', '%s'\n",
-                YYTAG((yytag0p2 - 1)) - YYCTXMARKER, YYCTXMARKER,
-                YYTAG(yytag0p2) - YYTAG((yytag0p2 - 1)), YYTAG((yytag0p2 - 1)),
-                YYTAG((yytag0 - 1)) - YYTAG(yytag0p2), YYTAG(yytag0p2),
-                YYCURSOR - YYTAG((yytag0 - 1)), YYTAG((yytag0 - 1)),
+                YYTAG((yyt0p2 - 1)) - YYCTXMARKER, YYCTXMARKER,
+                YYTAG(yyt0p2) - YYTAG((yyt0p2 - 1)), YYTAG((yyt0p2 - 1)),
+                YYTAG((yyt0 - 1)) - YYTAG(yyt0p2), YYTAG(yyt0p2),
+                YYCURSOR - YYTAG((yyt0 - 1)), YYTAG((yyt0 - 1)),
                 YYCURSOR);
                 return;
         }

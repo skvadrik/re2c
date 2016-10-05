@@ -5,13 +5,13 @@
 
 {
 	YYCTYPE yych;
-	long yytag0p;
+	long yyt0p;
 	YYCTXMARKER = YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	switch (yych) {
 	case 'a':
-		yytag0p = (YYCURSOR - YYCTXMARKER);
+		yyt0p = (YYCURSOR - YYCTXMARKER);
 		goto yy4;
 	default:	goto yy2;
 	}
@@ -24,11 +24,11 @@ yy4:
 	yych = *YYCURSOR;
 	switch (yych) {
 	case 'a':
-		yytag0p = (YYCURSOR - YYCTXMARKER);
+		yyt0p = (YYCURSOR - YYCTXMARKER);
 		goto yy4;
 	default:	goto yy6;
 	}
 yy6:
-	{ (YYCTXMARKER + yytag0p) }
+	{ (YYCTXMARKER + yyt0p) }
 }
 

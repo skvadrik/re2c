@@ -15,17 +15,17 @@
 {
 	YYCTYPE yych;
 	unsigned int yyaccept = 0;
-	long yytag1p;
+	long yyt1p;
 	YYCTXMARKER = YYCURSOR;
 	if ((YYLIMIT - YYCURSOR) < 5) YYFILL(5);
 	yych = *YYCURSOR;
-	yytag1p = (YYCURSOR - YYCTXMARKER);
+	yyt1p = (YYCURSOR - YYCTXMARKER);
 	switch (yych) {
 	case 'a':	goto yy3;
 	default:	goto yy2;
 	}
 yy2:
-	{ 3 (YYCTXMARKER + yytag1p) }
+	{ 3 (YYCTXMARKER + yyt1p) }
 yy3:
 	yyaccept = 0;
 	yych = *(YYMARKER = ++YYCURSOR);
@@ -37,7 +37,7 @@ yy4:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'a':
-		yytag1p = (YYCURSOR - YYCTXMARKER);
+		yyt1p = (YYCURSOR - YYCTXMARKER);
 		goto yy6;
 	default:	goto yy5;
 	}
@@ -57,7 +57,7 @@ yy6:
 	default:	goto yy7;
 	}
 yy7:
-	{ 2 (YYCTXMARKER + yytag1p) }
+	{ 2 (YYCTXMARKER + yyt1p) }
 yy8:
 	yych = *++YYCURSOR;
 	switch (yych) {

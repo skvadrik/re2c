@@ -140,8 +140,8 @@ std::string InputAPI::expr_tag(const std::valarray<Tag> &tags, const Tag &tag) c
 		const std::string dist = to_string(tag.fix.dist);
 		if (tag.fix.base == Tag::NONE) {
 			if (type_ == DEFAULT) {
-				// optimize '(YYCTXMARKER + ((YYCURSOR - YCTXMARKER) - yyctx))'
-				// to       '(YYCURSOR - yytag)'
+				// optimize '(YYCTXMARKER + ((YYCURSOR - YCTXMARKER) - tag))'
+				// to       '(YYCURSOR - tag)'
 				return "(" + opts->yycursor + " - " + dist + ")";
 			}
 			expr = opts->tags_yydist + "() - " + dist;

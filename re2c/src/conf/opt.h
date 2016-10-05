@@ -60,7 +60,7 @@ namespace re2c
 	OPT (bool, tags, false) \
 	OPT (std::string, tags_yytag, "YYTAG") \
 	OPT (std::string, tags_yydist, "YYDIST") \
-	OPT (std::string, tags_prefix, "yytag") \
+	OPT (std::string, tags_prefix, "yyt") \
 	OPT (std::string, tags_expr, "@@") \
 	/* reuse */ \
 	OPT (bool, rFlag, false) \

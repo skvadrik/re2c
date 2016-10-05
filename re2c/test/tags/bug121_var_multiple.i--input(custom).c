@@ -5,8 +5,8 @@
 
 {
 	YYCTYPE yych;
-	long yytag0;
-	long yytag1;
+	long yyt0;
+	long yyt1;
 	YYBACKUPCTX ();
 	if (YYLESSTHAN (4)) YYFILL(4);
 	yych = YYPEEK ();
@@ -19,13 +19,13 @@ yy2:
 	{ d }
 yy4:
 	YYSKIP ();
-	yytag1 = YYDIST();
+	yyt1 = YYDIST();
 	switch ((yych = YYPEEK ())) {
 	case 'b':	goto yy6;
 	default:	goto yy5;
 	}
 yy5:
-	YYRESTORECTX (yytag1);
+	YYRESTORECTX (yyt1);
 	{ 1 }
 yy6:
 	YYSKIP ();
@@ -33,7 +33,7 @@ yy6:
 	yych = YYPEEK ();
 	switch (yych) {
 	case 'c':
-		yytag0 = YYDIST();
+		yyt0 = YYDIST();
 		goto yy9;
 	default:	goto yy8;
 	}
@@ -65,7 +65,7 @@ yy11:
 	default:	goto yy13;
 	}
 yy13:
-	YYRESTORECTX (yytag0);
+	YYRESTORECTX (yyt0);
 	{ 0 }
 }
 
