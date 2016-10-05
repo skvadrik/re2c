@@ -25,7 +25,7 @@ void DFA::split(State *s)
 	s->go.span = allocate<Span> (1);
 	s->go.span[0].ub = ubChar;
 	s->go.span[0].to = move;
-	s->go.span[0].tags = ZERO_TAGS;
+	s->go.span[0].tags = tagcmd_t();
 }
 
 static uint32_t merge(Span *x, State *fg, State *bg)
@@ -39,7 +39,7 @@ static uint32_t merge(Span *x, State *fg, State *bg)
 	for (;!(f == fe && b == be);) {
 		if (f->to == b->to && f->tags == b->tags) {
 			x->to = bg;
-			x->tags = ZERO_TAGS;
+			x->tags = tagcmd_t();
 		} else {
 			x->to = f->to;
 			x->tags = f->tags;
@@ -115,7 +115,8 @@ void DFA::prepare ()
 			for (uint32_t i = 0; i < s->go.nSpans; ++i) {
 				if (!s->go.span[i].to) {
 					s->go.span[i].to = rule2state[s->rule];
-					s->go.span[i].tags = s->rule_tags;
+					s->go.span[i].tags.set = s->rule_tags.set;
+					// 'copy' tags are only for fallback paths
 				}
 			}
 		}
@@ -143,7 +144,7 @@ void DFA::prepare ()
 	if (default_state) {
 		for (State *s = head; s; s = s->next) {
 			if (s->fallback) {
-				const std::pair<const State*, size_t> acc(rule2state[s->rule], s->rule_tags);
+				const std::pair<const State*, tagcmd_t> acc(rule2state[s->rule], s->rule_tags);
 				s->action.set_save(accepts.find_or_add(acc));
 			}
 		}
@@ -213,15 +214,15 @@ void DFA::hoist_tags()
 		const size_t nsp = s->go.nSpans;
 		if (nsp > 0) {
 			Span *sp = s->go.span;
-			const size_t tags0 = sp[0].tags;
-			bool common_tags = tags0 != ZERO_TAGS;
+			const tagcmd_t tags0 = sp[0].tags;
+			bool common_tags = !tags0.empty();
 			for (uint32_t i = 1; common_tags && i < nsp; ++i) {
 				common_tags &= sp[i].tags == tags0;
 			}
 			if (common_tags) {
 				s->go.tags = tags0;
 				for (uint32_t i = 0; i < nsp; ++i) {
-					sp[i].tags = ZERO_TAGS;
+					sp[i].tags = tagcmd_t();
 				}
 			}
 		}

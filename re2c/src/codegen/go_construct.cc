@@ -35,7 +35,7 @@ Cases::Cases(const Span *spans, uint32_t nspans)
 	}
 }
 
-void Cases::add(uint32_t lb, uint32_t ub, State *to, size_t tags)
+void Cases::add(uint32_t lb, uint32_t ub, State *to, const tagcmd_t &tags)
 {
 	for (uint32_t i = 0; i < cases_size; ++i) {
 		Case &c = cases[i];
@@ -186,7 +186,7 @@ Dot::Dot (const Span * sp, uint32_t nsp, const State * s)
 Go::Go ()
 	: nSpans (0)
 	, span (NULL)
-	, tags (ZERO_TAGS)
+	, tags ()
 	, type (EMPTY)
 	, info ()
 {}
@@ -213,7 +213,7 @@ void Go::init (const State * from)
 
 	bool low_spans_have_tags = false;
 	for (uint32_t i = 0; i < nSpans - hSpans; ++i) {
-		if (span[i].tags != ZERO_TAGS) {
+		if (!span[i].tags.empty()) {
 			low_spans_have_tags = true;
 			break;
 		}

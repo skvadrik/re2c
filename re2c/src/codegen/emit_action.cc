@@ -140,7 +140,7 @@ void emit_accept_binary(OutputFile &o, uint32_t ind, bool &readCh,
 		o.wind(--ind).ws("}\n");
 	} else {
 		const accept_t &acc = *s->action.info.accepts;
-		gen_goto(o, ind, readCh, acc[l].first, dfa, acc[l].second);
+		gen_goto(o, ind, readCh, acc[l].first, dfa, acc[l].second, true);
 	}
 }
 
@@ -162,13 +162,13 @@ void emit_accept(OutputFile &o, uint32_t ind, bool &readCh,
 
 	// only one possible 'yyaccept' value: unconditional jump
 	if (nacc == 1) {
-		gen_goto(o, ind, readCh, acc[0].first, dfa, acc[0].second);
+		gen_goto(o, ind, readCh, acc[0].first, dfa, acc[0].second, true);
 		return;
 	}
 
 	bool have_tags = false;
 	for (size_t i = 0; i < nacc; ++i) {
-		if (acc[i].second != 0) {
+		if (!acc[i].second.empty()) {
 			have_tags = true;
 			break;
 		}
@@ -202,10 +202,10 @@ void emit_accept(OutputFile &o, uint32_t ind, bool &readCh,
 	o.wind(ind).ws("switch (").wstring(opts->yyaccept).ws(") {\n");
 	for (uint32_t i = 0; i < nacc - 1; ++i) {
 		o.wind(ind).ws("case ").wu32(i).ws(": ");
-		gen_goto_case(o, ind, readCh, acc[i].first, dfa, acc[i].second);
+		gen_goto_case(o, ind, readCh, acc[i].first, dfa, acc[i].second, true);
 	}
 	o.wind(ind).ws("default:");
-	gen_goto_case(o, ind, readCh, acc[nacc - 1].first, dfa, acc[nacc - 1].second);
+	gen_goto_case(o, ind, readCh, acc[nacc - 1].first, dfa, acc[nacc - 1].second, true);
 	o.wind(ind).ws("}\n");
 }
 
@@ -317,36 +317,39 @@ void genSetState(OutputFile &o, uint32_t ind, uint32_t fillIndex)
 }
 
 void gen_goto_case(OutputFile &o, uint32_t ind, bool &readCh,
-	const State *to, const DFA &dfa, size_t tags)
+	const State *to, const DFA &dfa, const tagcmd_t &tags,
+	bool restore_fallback)
 {
-	const bool multiline = readCh || (tags != ZERO_TAGS);
+	const bool multiline = readCh || !tags.empty();
 
 	if (multiline) {
 		o.ws("\n");
-		gen_goto(o, ind + 1, readCh, to, dfa, tags);
+		gen_goto(o, ind + 1, readCh, to, dfa, tags, restore_fallback);
 	} else {
-		gen_goto(o, 1, readCh, to, dfa, tags);
+		gen_goto(o, 1, readCh, to, dfa, tags, restore_fallback);
 	}
 }
 
 void gen_goto_if(OutputFile &o, uint32_t ind, bool &readCh,
-	const State *to, const DFA &dfa, size_t tags)
+	const State *to, const DFA &dfa, const tagcmd_t &tags,
+	bool restore_fallback)
 {
 	const int32_t linecount = (readCh && to != NULL)
-		+ (tags != ZERO_TAGS)
+		+ !tags.empty()
 		+ (to != NULL);
 
 	if (linecount > 1) {
 		o.ws("{\n");
-		gen_goto(o, ind + 1, readCh, to, dfa, tags);
+		gen_goto(o, ind + 1, readCh, to, dfa, tags, restore_fallback);
 		o.wind(ind).ws("}\n");
 	} else {
-		gen_goto(o, 0, readCh, to, dfa, tags);
+		gen_goto(o, 0, readCh, to, dfa, tags, restore_fallback);
 	}
 }
 
 void gen_goto(OutputFile &o, uint32_t ind, bool &readCh,
-	const State *to, const DFA &dfa, size_t tags)
+	const State *to, const DFA &dfa, const tagcmd_t &tags,
+	bool restore_fallback)
 {
 	if (to == NULL) {
 		readCh = false;
@@ -355,22 +358,39 @@ void gen_goto(OutputFile &o, uint32_t ind, bool &readCh,
 		o.wstring(opts->input_api.stmt_peek(ind));
 		readCh = false;
 	}
-	gen_settags(o, ind, dfa, tags);
+	gen_settags(o, ind, dfa, tags, restore_fallback);
 	if (to) {
 		o.wind(ind).ws("goto ").wstring(opts->labelPrefix)
 			.wlabel(to->label).ws(";\n");
 	}
 }
 
-void gen_settags(OutputFile &o, uint32_t ind, const DFA &dfa, size_t tags)
+void gen_settags(OutputFile &o, uint32_t ind, const DFA &dfa,
+	const tagcmd_t &cmd, bool restore_fallback)
 {
-	if (tags != ZERO_TAGS) {
-		if (dfa.basetag) {
-			o.wstring(opts->input_api.stmt_dist(ind,
-				dfa.tagpool[tags], dfa.tags));
-		} else {
-			o.wstring(opts->input_api.stmt_backupctx(ind));
+	if (cmd.empty()) return;
+
+	if (!dfa.basetag) {
+		assert(cmd.copy == ZERO_TAGS);
+		o.wstring(opts->input_api.stmt_backupctx(ind));
+		return;
+	}
+
+	const std::valarray<Tag> &tags = dfa.tags;
+	const size_t ntags = tags.size();
+	const bool *copy = dfa.tagpool[cmd.copy];
+	for (size_t t = 0; t < ntags; ++t) {
+		if (copy[t]) {
+			const Tag &tag = tags[t];
+			std::string
+				x = vartag_expr(tag.name, tag.rule),
+				y = vartag_expr_fallback(tag);
+			if (restore_fallback) std::swap(x, y);
+			o.wind(ind).wstring(y).ws(" = ").wstring(x).ws(";\n");
 		}
+	}
+	if (cmd.set != ZERO_TAGS) {
+		o.wstring(opts->input_api.stmt_dist(ind, dfa.tagpool[cmd.set], tags));
 	}
 }
 

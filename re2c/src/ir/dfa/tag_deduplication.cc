@@ -70,7 +70,7 @@ static void calc_live(const dfa_t &dfa, size_t *live)
 			if (j != dfa_t::NIL) {
 				a->edge = i * dfa.nchars + c;
 				a->dest = i;
-				a->tags = s->tags[c];
+				a->tags = s->tags[c].set;
 				a->next = rdfa[j];
 				rdfa[j] = a++;
 			}
@@ -80,7 +80,7 @@ static void calc_live(const dfa_t &dfa, size_t *live)
 		const dfa_state_t *s = dfa.states[i];
 		if (s->rule != Rule::NONE) {
 			const size_t need = dfa.tagpool.andlinv(
-				dfa.rules[s->rule].tags, s->rule_tags);
+				dfa.rules[s->rule].tags, s->rule_tags.set);
 			std::fill(been, been + nstates, false);
 			backprop(rdfa, been, i, live, need, dfa.tagpool);
 		}
@@ -93,7 +93,7 @@ static void calc_live(const dfa_t &dfa, size_t *live)
 		dfa_state_t *s = dfa.states[i];
 		if (s->fallback) {
 			const size_t need = dfa.tagpool.andlinv(
-				dfa.rules[s->rule].tags, s->rule_tags);
+				dfa.rules[s->rule].tags, s->rule_tags.set);
 			std::fill(been, been + nstates, false);
 			forwprop(dfa, been, i, live, need);
 		}
@@ -110,11 +110,11 @@ static void mask_dead(dfa_t &dfa, const size_t *live)
 		for (size_t c = 0; c < dfa.nchars; ++c) {
 			const size_t j = s->arcs[c];
 			if (j != dfa_t::NIL) {
-				s->tags[c] = dfa.tagpool.andl(s->tags[c], l[c]);
+				s->tags[c].set = dfa.tagpool.andl(s->tags[c].set, l[c]);
 			}
 		}
 		if (s->rule != Rule::NONE) {
-			s->rule_tags = dfa.tagpool.andl(s->rule_tags,
+			s->rule_tags.set = dfa.tagpool.andl(s->rule_tags.set,
 				dfa.rules[s->rule].tags);
 		}
 	}
@@ -150,12 +150,12 @@ static void incompatibility_table(const dfa_t &dfa,
 		for (size_t c = 0; c < dfa.nchars; ++c) {
 			const size_t j = s->arcs[c];
 			if (j != dfa_t::NIL) {
-				incompatible(incompattbl, dfa.tagpool, l[c], s->tags[c]);
+				incompatible(incompattbl, dfa.tagpool, l[c], s->tags[c].set);
 			}
 		}
 		if (s->rule != Rule::NONE) {
 			incompatible(incompattbl, dfa.tagpool,
-				dfa.rules[s->rule].tags, s->rule_tags);
+				dfa.rules[s->rule].tags, s->rule_tags.set);
 		}
 	}
 
@@ -222,10 +222,13 @@ static void patch_tags(dfa_t &dfa, const size_t *represent)
 	for (size_t i = 0; i < nstates; ++i) {
 		dfa_state_t *s = dfa.states[i];
 		for (size_t c = 0; c < dfa.nchars; ++c) {
-			s->tags[c] = dfa.tagpool.subst(s->tags[c], represent);
+			s->tags[c].set = dfa.tagpool.subst(s->tags[c].set, represent);
+			s->tags[c].copy = dfa.tagpool.subst(s->tags[c].copy, represent);
 		}
-		s->rule_tags = dfa.tagpool.subst(s->rule_tags, represent);
+		s->rule_tags.set = dfa.tagpool.subst(s->rule_tags.set, represent);
+		s->rule_tags.copy = dfa.tagpool.subst(s->rule_tags.copy, represent);
 	}
+	dfa.copy_tags = dfa.tagpool.subst(dfa.copy_tags, represent);
 
 	const size_t ntags = dfa.tags.size();
 	for (size_t i = 0; i < ntags; ++i) {

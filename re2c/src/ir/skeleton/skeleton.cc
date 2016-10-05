@@ -87,9 +87,10 @@ Skeleton::Skeleton(
 
 		// in skeleton we are only interested in trailing contexts
 		// which may be attributed to states rather than transitions
-		size_t tags = s->rule_tags;
+		// trailing context also cannot have fallback tag
+		size_t tags = s->rule_tags.set;
 		for (size_t c = 0; c < nc; ++c) {
-			tags = dfa.tagpool.orl(tags, s->tags[c]);
+			tags = dfa.tagpool.orl(tags, s->tags[c].set);
 		}
 
 		nodes[i].init(dfa.tagpool[tags], s->rule, arcs);

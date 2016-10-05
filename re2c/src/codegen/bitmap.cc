@@ -160,8 +160,8 @@ bool matches(const Span * b1, uint32_t n1, const State * s1, const Span * b2, ui
 		// might go to the same state, but have different tag sets
 		if (lb1 != lb2
 			|| b1->ub != b2->ub
-			|| b1->tags != ZERO_TAGS
-			|| b2->tags != ZERO_TAGS)
+			|| !b1->tags.empty()
+			|| !b2->tags.empty())
 		{
 			return false;
 		}

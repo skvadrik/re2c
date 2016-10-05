@@ -37,6 +37,7 @@ DFA::DFA
 	, rules(dfa.rules)
 	, tags(dfa.tags)
 	, tagpool(dfa.tagpool)
+	, copy_tags(dfa.copy_tags)
 
 	// statistics
 	, max_fill (0)
@@ -57,7 +58,9 @@ DFA::DFA
 	//       for all of them)
 	// If generic API is used, fixed-length contexts are forbidden,
 	// which may cause additional overlaps.
-	, basetag (used_tags > 1 || opts->tags)
+	, basetag (used_tags > 1
+		|| dfa.copy_tags != ZERO_TAGS
+		|| opts->tags)
 {
 	const size_t nstates = dfa.states.size();
 	const size_t nchars = dfa.nchars;
@@ -88,7 +91,7 @@ DFA::DFA
 		for (uint32_t c = 0; c < nchars; ++j)
 		{
 			const size_t to = t->arcs[c];
-			const size_t tags = t->tags[c];
+			const tagcmd_t tags = t->tags[c];
 			for (;++c < nchars && t->arcs[c] == to && t->tags[c] == tags;);
 			s->go.span[j].to = to == dfa_t::NIL ? NULL : i2s[to];
 			s->go.span[j].ub = charset[c];

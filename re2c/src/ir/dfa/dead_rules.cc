@@ -164,7 +164,7 @@ static void remove_dead_final_states(dfa_t &dfa, const bool *live)
 		if (s->rule != Rule::NONE
 			&& !live[s->rule * nstates + i]) {
 			s->rule = Rule::NONE;
-			s->rule_tags = 0;
+			s->rule_tags = tagcmd_t();
 		}
 	}
 }

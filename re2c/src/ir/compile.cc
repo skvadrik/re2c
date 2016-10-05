@@ -66,6 +66,8 @@ static smart_ptr<DFA> compile_rules(
 
 	cutoff_dead_rules(dfa, defrule, cond);
 
+	insert_fallback_tags(dfa);
+
 	// try to minimize the number of tag variables
 	const size_t used_tags = deduplicate_tags(dfa);
 

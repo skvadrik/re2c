@@ -6,7 +6,7 @@
 #include <vector>
 
 #include "src/codegen/output.h"
-#include "src/ir/tagpool.h"
+#include "src/ir/tag.h"
 #include "src/util/c99_stdint.h"
 #include "src/util/forbid_copy.h"
 
@@ -22,7 +22,7 @@ struct Span
 {
 	uint32_t ub;
 	State * to;
-	size_t tags;
+	tagcmd_t tags;
 
 	FORBID_COPY (Span);
 };
@@ -31,10 +31,10 @@ struct Case
 {
 	std::vector<std::pair<uint32_t, uint32_t> > ranges;
 	const State *to;
-	size_t tags;
+	tagcmd_t tags;
 
 	void emit(OutputFile &o, uint32_t ind) const;
-	inline Case(): ranges(), to(NULL), tags(ZERO_TAGS) {}
+	inline Case(): ranges(), to(NULL), tags() {}
 	FORBID_COPY(Case);
 };
 
@@ -43,7 +43,7 @@ struct Cases
 	Case *cases;
 	uint32_t cases_size;
 
-	void add(uint32_t lb, uint32_t ub, State *to, size_t tags);
+	void add(uint32_t lb, uint32_t ub, State *to, const tagcmd_t &tags);
 	Cases(const Span *spans, uint32_t nspans);
 	~Cases();
 	void emit(OutputFile &o, uint32_t ind, const DFA &dfa, bool &readCh) const;
@@ -77,10 +77,10 @@ struct Linear
 	{
 		const Cond *cond;
 		const State *to;
-		size_t tags;
+		tagcmd_t tags;
 
-		Branch(): cond(NULL), to(NULL), tags(ZERO_TAGS) {}
-		void init(const Cond *c, const State *s, size_t ts)
+		Branch(): cond(NULL), to(NULL), tags() {}
+		void init(const Cond *c, const State *s, const tagcmd_t &ts)
 		{
 			cond = c;
 			to = s;
@@ -191,7 +191,7 @@ struct Go
 {
 	uint32_t nSpans; // number of spans
 	Span * span;
-	size_t tags;
+	tagcmd_t tags;
 	enum
 	{
 		EMPTY,

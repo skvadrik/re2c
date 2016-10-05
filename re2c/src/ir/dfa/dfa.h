@@ -19,17 +19,17 @@ struct nfa_t;
 struct dfa_state_t
 {
 	size_t *arcs;
-	size_t *tags;
+	tagcmd_t *tags;
 	size_t rule;
-	size_t rule_tags;
+	tagcmd_t rule_tags;
 	bool fallthru;
 	bool fallback;
 
 	explicit dfa_state_t(size_t nchars)
 		: arcs(new size_t[nchars])
-		, tags(new size_t[nchars])
+		, tags(new tagcmd_t[nchars])
 		, rule(Rule::NONE)
-		, rule_tags(ZERO_TAGS)
+		, rule_tags()
 		, fallthru(false)
 		, fallback(false)
 	{}
@@ -51,6 +51,7 @@ struct dfa_t
 	std::valarray<Rule> &rules;
 	std::valarray<Tag> &tags;
 	Tagpool &tagpool;
+	size_t copy_tags;
 
 	dfa_t(const nfa_t &nfa, const charset_t &charset,
 		const std::string &cond);
@@ -68,6 +69,7 @@ enum dfa_minimization_t
 void minimization(dfa_t &dfa);
 void fillpoints(const dfa_t &dfa, std::vector<size_t> &fill);
 void cutoff_dead_rules(dfa_t &dfa, size_t defrule, const std::string &cond);
+void insert_fallback_tags(dfa_t &dfa);
 size_t deduplicate_tags(dfa_t &dfa);
 
 } // namespace re2c

@@ -134,11 +134,11 @@ static void minimization_moore(
 	size_t *next = new size_t[count];
 
 	// see note [distinguish states by tags]
-	std::map<std::pair<size_t, size_t>, size_t> init;
+	std::map<std::pair<size_t, tagcmd_t>, size_t> init;
 	for (size_t i = 0; i < count; ++i)
 	{
 		dfa_state_t *s = states[i];
-		std::pair<size_t, size_t> key(s->rule, s->rule_tags);
+		std::pair<size_t, tagcmd_t> key(s->rule, s->rule_tags);
 		if (init.insert(std::make_pair(key, i)).second)
 		{
 			part[i] = i;
@@ -190,7 +190,7 @@ static void minimization_moore(
 						nchars * sizeof(size_t)) == 0
 					 && memcmp(states[j]->tags,
 						states[k]->tags,
-						nchars * sizeof(size_t)) == 0
+						nchars * sizeof(tagcmd_t)) == 0
 					 ) {
 						part[j] = k;
 						next[j] = next[k];

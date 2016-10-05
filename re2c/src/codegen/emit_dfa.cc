@@ -145,10 +145,17 @@ void DFA::emit(Output & output, uint32_t& ind, bool isLastCond, bool& bPrologBra
 
 	std::set<std::string> tagnames;
 	if (basetag) {
-		for (size_t i = 0; i < tags.size(); ++i) {
+		const size_t ntags = tags.size();
+		for (size_t i = 0; i < ntags; ++i) {
 			const Tag &t = tags[i];
 			if (t.type == Tag::VAR && t.var.orig == i) {
 				tagnames.insert(vartag_name(t.name, t.rule));
+			}
+		}
+		const bool *copy = tagpool[copy_tags];
+		for (size_t i = 0; i < ntags; ++i) {
+			if (copy[i]) {
+				tagnames.insert(vartag_name_fallback(tags[i]));
 			}
 		}
 		ob.tags.insert(tagnames.begin(), tagnames.end());
@@ -382,6 +389,18 @@ std::string vartag_expr(const std::string *name, size_t rule)
 	std::string e = opts->tags_expr;
 	strrreplace(e, "@@", s);
 	return e;
+}
+
+std::string vartag_name_fallback(const Tag &tag)
+{
+	const std::string name = (tag.name == NULL ? "" : *tag.name) + "_";
+	return vartag_name(&name, tag.rule);
+}
+
+std::string vartag_expr_fallback(const Tag &tag)
+{
+	const std::string name = (tag.name == NULL ? "" : *tag.name) + "_";
+	return vartag_expr(&name, tag.rule);
 }
 
 } // end namespace re2c

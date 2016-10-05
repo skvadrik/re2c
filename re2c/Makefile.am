@@ -94,6 +94,7 @@ SRC = \
 	src/ir/dfa/closure.cc \
 	src/ir/dfa/dead_rules.cc \
 	src/ir/dfa/determinization.cc \
+	src/ir/dfa/fallback_tags.cc \
 	src/ir/dfa/fillpoints.cc \
 	src/ir/dfa/find_state.cc \
 	src/ir/dfa/minimization.cc \
