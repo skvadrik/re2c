@@ -117,7 +117,7 @@ void Linear::emit(OutputFile &o, uint32_t ind, const DFA &dfa, bool &readCh)
 			output_if(o, ind, readCh, cond->compare, cond->value);
 			gen_goto_if(o, ind, readCh, b.to, dfa, b.tags, false);
 		} else {
-			gen_goto(o, ind, readCh, b.to, dfa, b.tags, false);
+			gen_goto_plain(o, ind, readCh, b.to, dfa, b.tags, false);
 		}
 	}
 }
@@ -151,7 +151,7 @@ void GoBitmap::emit (OutputFile & o, uint32_t ind, const DFA &dfa, bool & readCh
 		o.wu32(bitmap->m);
 	}
 	o.ws(") {\n");
-	gen_goto(o, ind + 1, readCh, bitmap_state, dfa, tagcmd_t(), false);
+	gen_goto_plain(o, ind + 1, readCh, bitmap_state, dfa, tagcmd_t(), false);
 	o.wind(ind).ws("}\n");
 	if (lgo != NULL)
 	{
@@ -232,7 +232,12 @@ void Dot::emit(OutputFile &o, const DFA &dfa)
 
 void Go::emit (OutputFile & o, uint32_t ind, const DFA &dfa, bool & readCh)
 {
-	gen_settags(o, ind, dfa, tags, false);
+	code_lines_t code;
+	gen_settags(code, dfa, tags, NULL);
+	for (size_t i = 0; i < code.size(); ++i) {
+		o.wind(ind).wstring(code[i]);
+	}
+
 	switch (type) {
 		case EMPTY:
 			break;

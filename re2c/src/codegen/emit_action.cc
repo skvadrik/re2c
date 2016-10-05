@@ -15,6 +15,7 @@
 #include "src/parse/code.h"
 #include "src/parse/loc.h"
 #include "src/util/strrreplace.h"
+#include "src/util/to_string.h"
 
 namespace re2c
 {
@@ -31,6 +32,7 @@ static void emit_rule(OutputFile &o, uint32_t ind, const DFA &dfa, size_t rule_i
 static void genYYFill(OutputFile &o, size_t need);
 static void genSetCondition(OutputFile &o, uint32_t ind, const std::string &cond);
 static void genSetState(OutputFile &o, uint32_t ind, uint32_t fillIndex);
+static void gen_goto(code_lines_t &code, bool &readCh, const State *to, const DFA &dfa, const tagcmd_t &tags, bool restore_fallback);
 
 void emit_action(OutputFile &o, uint32_t ind, bool &readCh,
 	const DFA &dfa, const State *s, const std::set<label_t> &used_labels)
@@ -140,7 +142,7 @@ void emit_accept_binary(OutputFile &o, uint32_t ind, bool &readCh,
 		o.wind(--ind).ws("}\n");
 	} else {
 		const accept_t &acc = *s->action.info.accepts;
-		gen_goto(o, ind, readCh, acc[l].first, dfa, acc[l].second, true);
+		gen_goto_plain(o, ind, readCh, acc[l].first, dfa, acc[l].second, true);
 	}
 }
 
@@ -162,7 +164,7 @@ void emit_accept(OutputFile &o, uint32_t ind, bool &readCh,
 
 	// only one possible 'yyaccept' value: unconditional jump
 	if (nacc == 1) {
-		gen_goto(o, ind, readCh, acc[0].first, dfa, acc[0].second, true);
+		gen_goto_plain(o, ind, readCh, acc[0].first, dfa, acc[0].second, true);
 		return;
 	}
 
@@ -320,13 +322,17 @@ void gen_goto_case(OutputFile &o, uint32_t ind, bool &readCh,
 	const State *to, const DFA &dfa, const tagcmd_t &tags,
 	bool restore_fallback)
 {
-	const bool multiline = readCh || !tags.empty();
+	code_lines_t code;
+	gen_goto(code, readCh, to, dfa, tags, restore_fallback);
+	const size_t lines = code.size();
 
-	if (multiline) {
-		o.ws("\n");
-		gen_goto(o, ind + 1, readCh, to, dfa, tags, restore_fallback);
+	if (lines == 1) {
+		o.wind(1).wstring(code[0]);
 	} else {
-		gen_goto(o, 1, readCh, to, dfa, tags, restore_fallback);
+		o.ws("\n");
+		for (size_t i = 0; i < lines; ++i) {
+			o.wind(ind + 1).wstring(code[i]);
+		}
 	}
 }
 
@@ -334,45 +340,59 @@ void gen_goto_if(OutputFile &o, uint32_t ind, bool &readCh,
 	const State *to, const DFA &dfa, const tagcmd_t &tags,
 	bool restore_fallback)
 {
-	const int32_t linecount = (readCh && to != NULL)
-		+ !tags.empty()
-		+ (to != NULL);
+	code_lines_t code;
+	gen_goto(code, readCh, to, dfa, tags, restore_fallback);
+	const size_t lines = code.size();
 
-	if (linecount > 1) {
-		o.ws("{\n");
-		gen_goto(o, ind + 1, readCh, to, dfa, tags, restore_fallback);
-		o.wind(ind).ws("}\n");
+	if (lines == 1) {
+		o.wstring(code[0]);
 	} else {
-		gen_goto(o, 0, readCh, to, dfa, tags, restore_fallback);
+		o.ws("{\n");
+		for (size_t i = 0; i < lines; ++i) {
+			o.wind(ind + 1).wstring(code[i]);
+		}
+		o.wind(ind).ws("}\n");
 	}
 }
 
-void gen_goto(OutputFile &o, uint32_t ind, bool &readCh,
+void gen_goto_plain(OutputFile &o, uint32_t ind, bool &readCh,
 	const State *to, const DFA &dfa, const tagcmd_t &tags,
 	bool restore_fallback)
+{
+	code_lines_t code;
+	gen_goto(code, readCh, to, dfa, tags, restore_fallback);
+	const size_t lines = code.size();
+
+	for (size_t i = 0; i < lines; ++i) {
+		o.wind(ind).wstring(code[i]);
+	}
+}
+
+void gen_goto(code_lines_t &code, bool &readCh, const State *to,
+	const DFA &dfa, const tagcmd_t &tags, bool restore_fallback)
 {
 	if (to == NULL) {
 		readCh = false;
 	}
 	if (readCh) {
-		o.wstring(opts->input_api.stmt_peek(ind));
+		code.push_back(opts->input_api.stmt_peek(0));
 		readCh = false;
 	}
-	gen_settags(o, ind, dfa, tags, restore_fallback);
+	gen_settags(code, dfa, tags, restore_fallback);
 	if (to) {
-		o.wind(ind).ws("goto ").wstring(opts->labelPrefix)
-			.wlabel(to->label).ws(";\n");
+		code.push_back("goto " + opts->labelPrefix
+			+ to_string(to->label) + ";\n");
 	}
 }
 
-void gen_settags(OutputFile &o, uint32_t ind, const DFA &dfa,
+void gen_settags(code_lines_t &code, const DFA &dfa,
 	const tagcmd_t &cmd, bool restore_fallback)
 {
 	if (cmd.empty()) return;
 
 	if (!dfa.basetag) {
 		assert(cmd.copy == ZERO_TAGS);
-		o.wstring(opts->input_api.stmt_backupctx(ind));
+		code.push_back(opts->input_api.stmt_backupctx(0));
 		return;
 	}
 
@@ -386,11 +406,12 @@ void gen_settags(OutputFile &o, uint32_t ind, const DFA &dfa,
 				x = vartag_expr(tag.name, tag.rule),
 				y = vartag_expr_fallback(tag);
 			if (restore_fallback) std::swap(x, y);
-			o.wind(ind).wstring(y).ws(" = ").wstring(x).ws(";\n");
+			code.push_back(y + " = " + x + ";\n");
 		}
 	}
 	if (cmd.set != ZERO_TAGS) {
-		o.wstring(opts->input_api.stmt_dist(ind, dfa.tagpool[cmd.set], tags));
+		code.push_back(opts->input_api.stmt_dist(0,
+			dfa.tagpool[cmd.set], tags));
 	}
 }
 
