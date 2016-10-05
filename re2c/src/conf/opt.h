@@ -61,7 +61,7 @@ namespace re2c
 	OPT (std::string, tags_yytag, "YYTAG") \
 	OPT (std::string, tags_yydist, "YYDIST") \
 	OPT (std::string, tags_prefix, "yyt") \
-	OPT (std::string, tags_expr, "@@") \
+	OPT (std::string, tags_expression, "@@") \
 	/* reuse */ \
 	OPT (bool, rFlag, false) \
 	/* partial flex syntax support */ \

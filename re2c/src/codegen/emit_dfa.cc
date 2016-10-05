@@ -386,7 +386,7 @@ std::string vartag_name(const std::string *name, size_t rule)
 std::string vartag_expr(const std::string *name, size_t rule)
 {
 	const std::string s = vartag_name(name, rule);
-	std::string e = opts->tags_expr;
+	std::string e = opts->tags_expression;
 	strrreplace(e, "@@", s);
 	return e;
 }

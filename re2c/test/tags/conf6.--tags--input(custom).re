@@ -47,7 +47,7 @@ static void lex(const char *s)
         re2c:define:YYTAG = "ZZ_CTX";
         re2c:define:YYDIST = "ZZ_DIST";
         re2c:tags:prefix = "zz_";
-        re2c:tags:expr = "ctxs.@@";
+        re2c:tags:expression = "ctxs.@@";
 
         oct = [0-9]{1,3};
         d   = ".";

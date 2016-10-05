@@ -29,7 +29,7 @@ static void lex(const char *YYCURSOR)
         re2c:yyfill:enable = 0;
 
         re2c:tags:prefix = "zz_";
-        re2c:tags:expr = "ctxs.@@";
+        re2c:tags:expression = "ctxs.@@";
 
         oct = [0-9]{1,3};
         d   = ".";

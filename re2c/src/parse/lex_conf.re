@@ -127,8 +127,8 @@ void Scanner::lex_conf ()
 	"define:YYTAG"        { opts.set_tags_yytag   (lex_conf_string ()); return; }
 	"define:YYDIST"       { opts.set_tags_yydist  (lex_conf_string ()); return; }
 
-	"tags:prefix" { opts.set_tags_prefix(lex_conf_string ()); return; }
-	"tags:expr"   { opts.set_tags_expr  (lex_conf_string ()); return; }
+	"tags:prefix"     { opts.set_tags_prefix    (lex_conf_string ()); return; }
+	"tags:expression" { opts.set_tags_expression(lex_conf_string ()); return; }
 
 	"indent:string" { opts.set_indString (lex_conf_string ()); return; }
 	"indent:top"

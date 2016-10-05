@@ -79,7 +79,7 @@ void opt_t::fix ()
 			tags_yytag = Opt::baseopt.tags_yytag;
 			tags_yydist = Opt::baseopt.tags_yydist;
 			tags_prefix = Opt::baseopt.tags_prefix;
-			tags_expr = Opt::baseopt.tags_expr;
+			tags_expression = Opt::baseopt.tags_expression;
 			yyfilllabel = Opt::baseopt.yyfilllabel;
 			yynext = Opt::baseopt.yynext;
 			yyaccept = Opt::baseopt.yyaccept;
@@ -159,7 +159,7 @@ void opt_t::fix ()
 		tags_yytag = Opt::baseopt.tags_yytag;
 		tags_yydist = Opt::baseopt.tags_yydist;
 		tags_prefix = Opt::baseopt.tags_prefix;
-		tags_expr = Opt::baseopt.tags_expr;
+		tags_expression = Opt::baseopt.tags_expression;
 	}
 	if (!bFlag)
 	{
