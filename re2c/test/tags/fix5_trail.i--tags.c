@@ -4,8 +4,7 @@
 
 static void lex(const char *YYCURSOR)
 {
-    const char *YYMARKER;
-    const char *YYCTXMARKER;
+    const char *YYMARKER, *YYCTXMARKER, *p1, *p2, *p3;
     
 {
 	char yych;
@@ -78,12 +77,15 @@ yy12:
 	goto yy15;
 yy13:
 	YYCURSOR = YYCTXMARKER + yyt0;
+	p3 = YYCTXMARKER + (yyt0 - 1);
+	p2 = YYCTXMARKER + yyt0p2;
+	p1 = YYCTXMARKER + (yyt0p2 - 1);
 	{
             printf("'%.*s', '%.*s', '%.*s', '%.*s', '%s'\n",
-                (YYCTXMARKER + (yyt0p2 - 1)) - YYCTXMARKER, YYCTXMARKER,
-                (YYCTXMARKER + yyt0p2) - (YYCTXMARKER + (yyt0p2 - 1)), (YYCTXMARKER + (yyt0p2 - 1)),
-                (YYCTXMARKER + (yyt0 - 1)) - (YYCTXMARKER + yyt0p2), (YYCTXMARKER + yyt0p2),
-                YYCURSOR - (YYCTXMARKER + (yyt0 - 1)), (YYCTXMARKER + (yyt0 - 1)),
+                p1 - YYCTXMARKER, YYCTXMARKER,
+                p2 - p1, p1,
+                p3 - p2, p2,
+                YYCURSOR - p3, p3,
                 YYCURSOR);
                 return;
         }

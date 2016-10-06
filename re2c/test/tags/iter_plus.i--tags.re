@@ -2,6 +2,6 @@
 // this is crucial if 'r' contains tags (tag duplication is forbidden)
 
 /*!re2c
-    (@p "a")+ { @p }
+    (@p "a")+ { p }
     *         { d }
 */

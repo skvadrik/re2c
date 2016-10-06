@@ -61,6 +61,7 @@ yy12:
 	}
 yy13:
 	++YYCURSOR;
-	{ (YYCTXMARKER + yyt0p) }
+	p = YYCTXMARKER + yyt0p;
+	{ p }
 }
 

@@ -215,9 +215,13 @@ void emit_rule(OutputFile &o, uint32_t ind, const DFA &dfa, size_t rule_idx)
 {
 	const Rule &rule = dfa.rules[rule_idx];
 	const RuleInfo *info = rule.info;
+	const std::valarray<Tag> &tags = dfa.tags;
 
 	if (rule.trail != Tag::NONE) {
-		o.wstring(opts->input_api.stmt_restorectx(ind, dfa.tags, dfa.tags[rule.trail], dfa.basetag));
+		o.wstring(opts->input_api.stmt_restorectx(ind, tags, tags[rule.trail], dfa.basetag));
+	}
+	for (size_t t = rule.ltag; t < rule.htag; ++t) {
+		o.wstring(opts->input_api.stmt_tag_finalizer(ind, tags, tags[t]));
 	}
 
 	if (opts->target == opt_t::SKELETON) {
@@ -232,9 +236,8 @@ void emit_rule(OutputFile &o, uint32_t ind, const DFA &dfa, size_t rule_idx)
 			if (!yySetupRule.empty()) {
 				o.wind(ind).wstring(yySetupRule).ws("\n");
 			}
-			const std::string action = subst_tags(code->text, dfa.tags, rule.ltag, rule.htag);
 			o.wline_info(code->loc.line, code->loc.filename.c_str())
-				.wind(ind).wstring(action).ws("\n")
+				.wind(ind).wstring(code->text).ws("\n")
 				.wdelay_line_info();
 		} else if (!cond.empty()) {
 			std::string action = opts->condGoto;

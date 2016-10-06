@@ -27,8 +27,7 @@ struct contexts_t
 
 static void lex(const char *YYCURSOR)
 {
-    const char *YYMARKER;
-    const char *YYCTXMARKER;
+    const char *YYMARKER, *YYCTXMARKER, *p1, *p2, *p3;
     contexts_t ctxs;
     /*!re2c
         re2c:define:YYCTYPE = char;
@@ -47,10 +46,10 @@ static void lex(const char *YYCURSOR)
         d oct @p3
         d oct {
             printf("%u.%u.%u.%u\n",
-                parse_oct(YYCTXMARKER, @p1),
-                parse_oct(@p1 + 1, @p2),
-                parse_oct(@p2 + 1, @p3),
-                parse_oct(@p3 + 1, YYCURSOR));
+                parse_oct(YYCTXMARKER, p1),
+                parse_oct(p1 + 1, p2),
+                parse_oct(p2 + 1, p3),
+                parse_oct(p3 + 1, YYCURSOR));
             return;
         }
     */

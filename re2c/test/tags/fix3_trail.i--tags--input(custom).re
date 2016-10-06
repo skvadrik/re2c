@@ -1,10 +1,17 @@
 #include <stddef.h>
 #include <stdio.h>
 
-static void lex(const char *YYCURSOR)
+static void lex(const char *s)
 {
-    const char *YYMARKER;
-    const char *YYCTXMARKER;
+#define YYPEEK()           *s
+#define YYSKIP()           ++s
+#define YYBACKUP()         marker = s
+#define YYRESTORE()        s = marker
+#define YYBACKUPCTX()      base = s
+#define YYRESTORECTX(dist) s = base + dist
+#define YYTAG(tag, dist)   tag = base + dist
+#define YYDIST()           (s - base)
+    const char *marker, *base, *p1, *p2, *p3;
     /*!re2c
         re2c:define:YYCTYPE = char;
         re2c:yyfill:enable = 0;
@@ -16,11 +23,11 @@ static void lex(const char *YYCURSOR)
             @p3 "3"*
             / "4"* {
             printf("'%.*s', '%.*s', '%.*s', '%.*s', '%s'\n",
-                @p1 - YYCTXMARKER, YYCTXMARKER,
-                @p2 - @p1, @p1,
-                @p3 - @p2, @p2,
-                YYCURSOR - @p3, @p3,
-                YYCURSOR);
+                p1 - base, base,
+                p2 - p1, p1,
+                p3 - p2, p2,
+                s - p3, p3,
+                s);
                 return;
         }
     */

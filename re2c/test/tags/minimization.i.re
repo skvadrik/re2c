@@ -9,6 +9,6 @@
 
 /*!re2c
     re2c:flags:tags = 1;
-    "b" @p "a" | "ca" { @p }
+    "b" @p "a" | "ca" { p }
     * {}
 */

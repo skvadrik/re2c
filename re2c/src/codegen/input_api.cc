@@ -129,10 +129,10 @@ std::string InputAPI::stmt_dist (uint32_t ind, const bool *mask,
 	return s + expr_dist() + ";\n";
 }
 
-std::string InputAPI::expr_tag(const std::valarray<Tag> &tags, const Tag &tag) const
+std::string InputAPI::stmt_tag_finalizer(uint32_t ind,
+	const std::valarray<Tag> &tags, const Tag &tag) const
 {
 	std::string expr;
-
 	if (tag.type == Tag::VAR) {
 		const Tag &orig = tags[tag.var.orig];
 		expr = vartag_expr(orig.name, orig.rule);
@@ -142,7 +142,7 @@ std::string InputAPI::expr_tag(const std::valarray<Tag> &tags, const Tag &tag) c
 			if (type_ == DEFAULT) {
 				// optimize '(YYCTXMARKER + ((YYCURSOR - YCTXMARKER) - tag))'
 				// to       '(YYCURSOR - tag)'
-				return "(" + opts->yycursor + " - " + dist + ")";
+				return indent(ind) + *tag.name + " = " + opts->yycursor + " - " + dist + ";\n";
 			}
 			expr = opts->tags_yydist + "() - " + dist;
 		} else {
@@ -151,9 +151,11 @@ std::string InputAPI::expr_tag(const std::valarray<Tag> &tags, const Tag &tag) c
 		}
 	}
 
-	return (type_ == DEFAULT)
-		? "(" + opts->yyctxmarker + " + " + expr + ")"
-		: opts->tags_yytag + "(" + expr + ")";
+	const std::string stmt = type_ == DEFAULT
+		? *tag.name + " = " + opts->yyctxmarker + " + " + expr
+		: opts->tags_yytag + "(" + *tag.name + ", " + expr + ")";
+
+	return indent(ind) + stmt + ";\n";
 }
 
 std::string InputAPI::stmt_restore (uint32_t ind) const

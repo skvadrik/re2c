@@ -2,10 +2,17 @@
 #include <stddef.h>
 #include <stdio.h>
 
-static void lex(const char *YYCURSOR)
+static void lex(const char *s)
 {
-    const char *YYMARKER;
-    const char *YYCTXMARKER;
+#define YYPEEK()           *s
+#define YYSKIP()           ++s
+#define YYBACKUP()         marker = s
+#define YYRESTORE()        s = marker
+#define YYBACKUPCTX()      base = s
+#define YYRESTORECTX(dist) s = base + dist
+#define YYTAG(tag, dist)   tag = base + dist
+#define YYDIST()           (s - base)
+    const char *marker, *base, *p1, *p2, *p3;
     
 {
 	char yych;
@@ -124,13 +131,16 @@ yy18:
 yy19:
 	YYSKIP ();
 	YYRESTORECTX (YYDIST() - 5);
+	YYTAG(p3, YYDIST() - 4);
+	YYTAG(p2, YYDIST() - 7);
+	YYTAG(p1, YYDIST() - 9);
 	{
             printf("'%.*s', '%.*s', '%.*s', '%.*s', '%s'\n",
-                YYTAG(YYDIST() - 9) - YYCTXMARKER, YYCTXMARKER,
-                YYTAG(YYDIST() - 7) - YYTAG(YYDIST() - 9), YYTAG(YYDIST() - 9),
-                YYTAG(YYDIST() - 4) - YYTAG(YYDIST() - 7), YYTAG(YYDIST() - 7),
-                YYCURSOR - YYTAG(YYDIST() - 4), YYTAG(YYDIST() - 4),
-                YYCURSOR);
+                p1 - base, base,
+                p2 - p1, p1,
+                p3 - p2, p2,
+                s - p3, p3,
+                s);
                 return;
         }
 }

@@ -94,7 +94,8 @@ void emit_prolog(OutputFile &o)
 
 void emit_start(const Skeleton &skel, OutputFile &o, size_t maxfill,
 	bool backup, bool backupctx, bool accept, bool basetag,
-	const std::set<std::string> &tagnames)
+	const std::set<std::string> &tagnames,
+	const std::set<std::string> &tagvars)
 {
 	const size_t
 		sizeof_cunit = opts->encoding.szCodeUnit(),
@@ -121,6 +122,7 @@ void emit_start(const Skeleton &skel, OutputFile &o, size_t maxfill,
 		if(basetag) {
 			o.ws("\n#define YYRESTORECTX(dist) cursor = ctxmarker + dist");
 			o.ws("\n#define YYDIST() (cursor - ctxmarker)");
+			o.ws("\n#define YYTAG(tag, dist) tag = ctxmarker + dist");
 		} else {
 			o.ws("\n#define YYRESTORECTX() cursor = ctxmarker");
 		}
@@ -240,6 +242,18 @@ void emit_start(const Skeleton &skel, OutputFile &o, size_t maxfill,
 		output_tags_default(o.stream(), 2, tagnames);
 		o.ws("\n").wstring(opts->input_api.stmt_backupctx(2));
 	}
+
+	std::set<std::string>::const_iterator
+		var1 = tagvars.begin(),
+		var2 = tagvars.end();
+	if (var1 != var2) {
+		o.ws("\n").wind(2).ws("YYCTYPE *").wstring(*var1);
+		for (++var1; var1 != var2; ++var1) {
+			o.ws(", *").wstring(*var1);
+		}
+		o.ws(";");
+	}
+
 	o.ws("\n");
 	if (opts->bFlag && BitMap::first) {
 		BitMap::gen(o, 2, 0, std::min(0x100u, opts->encoding.nCodeUnits()));

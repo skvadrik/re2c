@@ -58,7 +58,8 @@ yy7:
 	default:	goto yy8;
 	}
 yy8:
-	{ (YYCTXMARKER + yyt0p) }
+	p = YYCTXMARKER + yyt0p;
+	{ p }
 yy9:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);

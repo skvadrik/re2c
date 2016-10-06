@@ -21,8 +21,6 @@ std::string vartag_name(const std::string *name, size_t rule);
 std::string vartag_expr(const std::string *name, size_t rule);
 std::string vartag_name_fallback(const Tag &tag);
 std::string vartag_expr_fallback(const Tag &tag);
-std::string subst_tags(const std::string &action,
-	const std::valarray<Tag> &tags, size_t ltag, size_t htag);
 
 } // namespace re2c
 

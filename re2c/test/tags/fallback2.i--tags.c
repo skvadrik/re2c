@@ -26,7 +26,8 @@
 	default:	goto yy2;
 	}
 yy2:
-	{ (YYCTXMARKER + yyt0p) }
+	p = YYCTXMARKER + yyt0p;
+	{ p }
 yy3:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);

@@ -28,8 +28,7 @@ struct contexts_t
 
 static void lex(const char *YYCURSOR)
 {
-    const char *YYMARKER;
-    const char *YYCTXMARKER;
+    const char *YYMARKER, *YYCTXMARKER, *p1, *p2, *p3;
     contexts_t ctxs;
     
 {
@@ -241,12 +240,15 @@ yy16:
 	default:	goto yy17;
 	}
 yy17:
+	p3 = YYCTXMARKER + ctxs.zz_0p3;
+	p2 = YYCTXMARKER + ctxs.zz_0p2;
+	p1 = YYCTXMARKER + ctxs.zz_0p1;
 	{
             printf("%u.%u.%u.%u\n",
-                parse_oct(YYCTXMARKER, (YYCTXMARKER + ctxs.zz_0p1)),
-                parse_oct((YYCTXMARKER + ctxs.zz_0p1) + 1, (YYCTXMARKER + ctxs.zz_0p2)),
-                parse_oct((YYCTXMARKER + ctxs.zz_0p2) + 1, (YYCTXMARKER + ctxs.zz_0p3)),
-                parse_oct((YYCTXMARKER + ctxs.zz_0p3) + 1, YYCURSOR));
+                parse_oct(YYCTXMARKER, p1),
+                parse_oct(p1 + 1, p2),
+                parse_oct(p2 + 1, p3),
+                parse_oct(p3 + 1, YYCURSOR));
             return;
         }
 yy18:

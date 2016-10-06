@@ -29,6 +29,7 @@ yy4:
 	default:	goto yy6;
 	}
 yy6:
-	{ (YYCTXMARKER + yyt0p) }
+	p = YYCTXMARKER + yyt0p;
+	{ p }
 }
 

@@ -12,8 +12,7 @@ static inline unsigned parse_oct(const char *s, const char *e)
 
 static void lex(const char *YYCURSOR)
 {
-    const char *YYMARKER;
-    const char *YYCTXMARKER;
+    const char *YYMARKER, *YYCTXMARKER, *p1, *p2, *p3;
     /*!tags:re2c sep="\n"; line="long @@ = 0;"; line=; sep=; */
     ptrdiff_t /*!tags:re2c sep=", "; line="@@ = 0"; */;
     /*!re2c
@@ -31,10 +30,10 @@ static void lex(const char *YYCURSOR)
         d oct @p3
         d oct {
             printf("%u.%u.%u.%u\n",
-                parse_oct(YYCTXMARKER, @p1),
-                parse_oct(@p1 + 1, @p2),
-                parse_oct(@p2 + 1, @p3),
-                parse_oct(@p3 + 1, YYCURSOR));
+                parse_oct(YYCTXMARKER, p1),
+                parse_oct(p1 + 1, p2),
+                parse_oct(p2 + 1, p3),
+                parse_oct(p3 + 1, YYCURSOR));
             return;
         }
     */

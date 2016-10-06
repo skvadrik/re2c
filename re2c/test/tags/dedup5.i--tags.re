@@ -6,11 +6,11 @@
 // in the other case non-looping transition goes first (and tags are not lost).
 
 /*!re2c
-    (@p "ac")* "b" { @p }
+    (@p "ac")* "b" { p }
     * {}
 */
 
 /*!re2c
-    (@p "bc")* "a" { @p }
+    (@p "bc")* "a" { p }
     * {}
 */

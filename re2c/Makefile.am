@@ -134,7 +134,6 @@ re2c_SOURCES = \
 AUTOGEN_LEX = src/parse/lex.cc
 AUTOGEN_LEX_CONF = src/parse/lex_conf.cc
 AUTOGEN_PARSEOPT = src/conf/parse_opts.cc
-AUTOGEN_SUBSTTAGS = src/codegen/subst_tags.cc
 AUTOGEN_PARSER = src/parse/parser.cc
 AUTOGEN_PARSER_HDR = src/parse/y.tab.h
 AUTOGEN = \
@@ -142,15 +141,13 @@ AUTOGEN = \
 	$(AUTOGEN_LEX_CONF) \
 	$(AUTOGEN_PARSER) \
 	$(AUTOGEN_PARSER_HDR) \
-	$(AUTOGEN_PARSEOPT) \
-	$(AUTOGEN_SUBSTTAGS)
+	$(AUTOGEN_PARSEOPT)
 nodist_re2c_SOURCES = $(AUTOGEN)
 
 # bootstrap sources
 BOOTSTRAP_LEX = bootstrap/src/parse/lex.cc
 BOOTSTRAP_LEX_CONF = bootstrap/src/parse/lex_conf.cc
 BOOTSTRAP_PARSEOPT = bootstrap/src/conf/parse_opts.cc
-BOOTSTRAP_SUBSTTAGS = bootstrap/src/codegen/subst_tags.cc
 BOOTSTRAP_PARSER = bootstrap/src/parse/parser.cc
 BOOTSTRAP_PARSER_HDR = bootstrap/src/parse/y.tab.h
 BOOTSTRAP_DOC = bootstrap/doc/re2c.1
@@ -160,21 +157,18 @@ BOOTSTRAP = \
 	$(BOOTSTRAP_DOC) \
 	$(BOOTSTRAP_PARSER) \
 	$(BOOTSTRAP_PARSER_HDR) \
-	$(BOOTSTRAP_PARSEOPT) \
-	$(BOOTSTRAP_SUBSTTAGS)
+	$(BOOTSTRAP_PARSEOPT)
 
 # custom sources
 CUSTOM_LEX = src/parse/lex.re
 CUSTOM_LEX_CONF = src/parse/lex_conf.re
 CUSTOM_PARSEOPT = src/conf/parse_opts.re
-CUSTOM_SUBSTTAGS = src/codegen/subst_tags.re
 CUSTOM_PARSER = src/parse/parser.ypp
 CUSTOM = \
 	$(CUSTOM_LEX) \
 	$(CUSTOM_LEX_CONF) \
 	$(CUSTOM_PARSER) \
-	$(CUSTOM_PARSEOPT) \
-	$(CUSTOM_SUBSTTAGS)
+	$(CUSTOM_PARSEOPT)
 
 # docs
 SRC_DOC = doc/manpage.rst

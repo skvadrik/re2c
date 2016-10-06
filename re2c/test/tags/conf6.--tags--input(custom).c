@@ -29,13 +29,12 @@ static void lex(const char *s)
 #define YYRESTORE()        s = marker
 #define YYBACKUPCTX()      basectx = s
 #define YYRESTORECTX(dist) s = basectx + dist
-#define ZZ_CTX(dist)       (basectx + dist)
+#define ZZ_CTX(tag, dist)  tag = basectx + dist
 #define ZZ_DIST()          (s - basectx)
-    const char *marker;
-    const char *basectx;
+    const char *marker, *basectx, *p1, *p2, *p3;
     contexts_t ctxs;
     
-#line 39 "tags/conf6.--tags--input(custom).c"
+#line 38 "tags/conf6.--tags--input(custom).c"
 {
 	char yych;
 	YYBACKUPCTX ();
@@ -56,9 +55,9 @@ static void lex(const char *s)
 yy2:
 	YYSKIP ();
 yy3:
-#line 55 "tags/conf6.--tags--input(custom).re"
+#line 54 "tags/conf6.--tags--input(custom).re"
 	{ printf("error\n"); return; }
-#line 62 "tags/conf6.--tags--input(custom).c"
+#line 61 "tags/conf6.--tags--input(custom).c"
 yy4:
 	YYSKIP ();
 	YYBACKUP ();
@@ -259,16 +258,19 @@ yy16:
 	default:	goto yy17;
 	}
 yy17:
-#line 60 "tags/conf6.--tags--input(custom).re"
+	ZZ_CTX(p3, ctxs.zz_0p3);
+	ZZ_CTX(p2, ctxs.zz_0p2);
+	ZZ_CTX(p1, ctxs.zz_0p1);
+#line 59 "tags/conf6.--tags--input(custom).re"
 	{
             printf("%u.%u.%u.%u\n",
-                parse_oct(basectx, ZZ_CTX(ctxs.zz_0p1)),
-                parse_oct(ZZ_CTX(ctxs.zz_0p1) + 1, ZZ_CTX(ctxs.zz_0p2)),
-                parse_oct(ZZ_CTX(ctxs.zz_0p2) + 1, ZZ_CTX(ctxs.zz_0p3)),
-                parse_oct(ZZ_CTX(ctxs.zz_0p3) + 1, s));
+                parse_oct(basectx, p1),
+                parse_oct(p1 + 1, p2),
+                parse_oct(p2 + 1, p3),
+                parse_oct(p3 + 1, s));
             return;
         }
-#line 272 "tags/conf6.--tags--input(custom).c"
+#line 274 "tags/conf6.--tags--input(custom).c"
 yy18:
 	YYSKIP ();
 	yych = YYPEEK ();
@@ -299,7 +301,7 @@ yy20:
 	yych = YYPEEK ();
 	goto yy17;
 }
-#line 68 "tags/conf6.--tags--input(custom).re"
+#line 67 "tags/conf6.--tags--input(custom).re"
 
 }
 

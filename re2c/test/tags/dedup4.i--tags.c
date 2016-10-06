@@ -32,7 +32,8 @@ yy4:
 	}
 yy5:
 	YYCURSOR = YYCTXMARKER + yyt0;
-	{ (YYCTXMARKER + yyt0p) }
+	p = YYCTXMARKER + yyt0p;
+	{ 1 p }
 yy6:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
@@ -59,7 +60,8 @@ yy8:
 	}
 yy10:
 	YYCURSOR = YYCTXMARKER + yyt0;
-	{ (YYCTXMARKER + yyt0p) }
+	p = YYCTXMARKER + yyt0p;
+	{ 2 p }
 yy11:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
@@ -100,7 +102,8 @@ yy17:
 		goto yy18;
 	}
 yy18:
-	{ (YYCTXMARKER + yyt0p) }
+	p = YYCTXMARKER + yyt0p;
+	{ 1 p }
 yy19:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
@@ -122,7 +125,8 @@ yy21:
 	}
 yy23:
 	YYCURSOR = YYCTXMARKER + yyt0p;
-	{ (YYCTXMARKER + yyt1p) }
+	p = YYCTXMARKER + yyt1p;
+	{ 2 p }
 }
 
 
@@ -157,7 +161,8 @@ yy28:
 		goto yy29;
 	}
 yy29:
-	{ (YYCTXMARKER + yyt0p) }
+	p = YYCTXMARKER + yyt0p;
+	{ 1 p }
 yy30:
 	yyaccept = 1;
 	YYMARKER = ++YYCURSOR;
@@ -198,7 +203,8 @@ yy34:
 	}
 yy35:
 	YYCURSOR = YYCTXMARKER + yyt1;
-	{ (YYCTXMARKER + yyt0p) }
+	p = YYCTXMARKER + yyt0p;
+	{ 2 p }
 }
 
 
@@ -240,7 +246,8 @@ yy41:
 	default:	goto yy43;
 	}
 yy43:
-	{ (YYCTXMARKER + yyt0p) }
+	p = YYCTXMARKER + yyt0p;
+	{ 1 p }
 yy44:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
@@ -267,6 +274,7 @@ yy46:
 	}
 yy47:
 	YYCURSOR = YYCTXMARKER + yyt1;
-	{ (YYCTXMARKER + yyt0p) }
+	p = YYCTXMARKER + yyt0p;
+	{ 2 p }
 }
 

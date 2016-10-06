@@ -23,11 +23,10 @@ struct contexts_t
 
 static void lex(const char *YYCURSOR)
 {
-    const char *YYMARKER;
-    const char *YYCTXMARKER;
+    const char *YYMARKER, *YYCTXMARKER, *p1, *p2, *p3;
     contexts_t ctxs;
     
-#line 31 "tags/conf6.--tags.c"
+#line 30 "tags/conf6.--tags.c"
 {
 	char yych;
 	YYCTXMARKER = YYCURSOR;
@@ -48,9 +47,9 @@ static void lex(const char *YYCURSOR)
 yy2:
 	++YYCURSOR;
 yy3:
-#line 45 "tags/conf6.--tags.re"
+#line 44 "tags/conf6.--tags.re"
 	{ printf("error\n"); return; }
-#line 54 "tags/conf6.--tags.c"
+#line 53 "tags/conf6.--tags.c"
 yy4:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -239,16 +238,19 @@ yy16:
 	default:	goto yy17;
 	}
 yy17:
-#line 50 "tags/conf6.--tags.re"
+	p3 = YYCTXMARKER + ctxs.zz_0p3;
+	p2 = YYCTXMARKER + ctxs.zz_0p2;
+	p1 = YYCTXMARKER + ctxs.zz_0p1;
+#line 49 "tags/conf6.--tags.re"
 	{
             printf("%u.%u.%u.%u\n",
-                parse_oct(YYCTXMARKER, (YYCTXMARKER + ctxs.zz_0p1)),
-                parse_oct((YYCTXMARKER + ctxs.zz_0p1) + 1, (YYCTXMARKER + ctxs.zz_0p2)),
-                parse_oct((YYCTXMARKER + ctxs.zz_0p2) + 1, (YYCTXMARKER + ctxs.zz_0p3)),
-                parse_oct((YYCTXMARKER + ctxs.zz_0p3) + 1, YYCURSOR));
+                parse_oct(YYCTXMARKER, p1),
+                parse_oct(p1 + 1, p2),
+                parse_oct(p2 + 1, p3),
+                parse_oct(p3 + 1, YYCURSOR));
             return;
         }
-#line 252 "tags/conf6.--tags.c"
+#line 254 "tags/conf6.--tags.c"
 yy18:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -277,7 +279,7 @@ yy20:
 	yych = *YYCURSOR;
 	goto yy17;
 }
-#line 58 "tags/conf6.--tags.re"
+#line 57 "tags/conf6.--tags.re"
 
 }
 

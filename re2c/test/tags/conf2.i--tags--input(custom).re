@@ -18,10 +18,9 @@ static void lex(const char *s)
 #define YYRESTORE()        s = marker
 #define YYBACKUPCTX()      basectx = s
 #define YYRESTORECTX(dist) s = basectx + dist
-#define ZZ_CTX(dist)       (basectx + dist)
+#define ZZ_CTX(tag, dist)  tag = basectx + dist
 #define ZZ_DIST()          (s - basectx)
-    const char *marker;
-    const char *basectx;
+    const char *marker, *basectx, *p1, *p2, *p3;
     /*!tags:re2c*/
     /*!re2c
         re2c:define:YYCTYPE = char;
@@ -40,10 +39,10 @@ static void lex(const char *s)
         d oct @p3
         d oct {
             printf("%u.%u.%u.%u\n",
-                parse_oct(basectx, @p1),
-                parse_oct(@p1 + 1, @p2),
-                parse_oct(@p2 + 1, @p3),
-                parse_oct(@p3 + 1, s));
+                parse_oct(basectx, p1),
+                parse_oct(p1 + 1, p2),
+                parse_oct(p2 + 1, p3),
+                parse_oct(p3 + 1, s));
             return;
         }
     */

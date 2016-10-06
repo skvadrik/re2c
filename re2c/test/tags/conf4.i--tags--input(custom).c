@@ -34,10 +34,9 @@ static void lex(const char *s)
 #define YYRESTORE()        s = marker
 #define YYBACKUPCTX()      basectx = s
 #define YYRESTORECTX(dist) s = basectx + dist
-#define ZZ_CTX(dist)       (basectx + dist)
+#define ZZ_CTX(tag, dist)  tag = basectx + dist
 #define ZZ_DIST()          (s - basectx)
-    const char *marker;
-    const char *basectx;
+    const char *marker, *basectx, *p1, *p2, *p3;
     contexts_t ctxs;
     
 {
@@ -261,12 +260,15 @@ yy16:
 	default:	goto yy17;
 	}
 yy17:
+	ZZ_CTX(p3, ctxs.zz_0p3);
+	ZZ_CTX(p2, ctxs.zz_0p2);
+	ZZ_CTX(p1, ctxs.zz_0p1);
 	{
             printf("%u.%u.%u.%u\n",
-                parse_oct(basectx, ZZ_CTX(ctxs.zz_0p1)),
-                parse_oct(ZZ_CTX(ctxs.zz_0p1) + 1, ZZ_CTX(ctxs.zz_0p2)),
-                parse_oct(ZZ_CTX(ctxs.zz_0p2) + 1, ZZ_CTX(ctxs.zz_0p3)),
-                parse_oct(ZZ_CTX(ctxs.zz_0p3) + 1, s));
+                parse_oct(basectx, p1),
+                parse_oct(p1 + 1, p2),
+                parse_oct(p2 + 1, p3),
+                parse_oct(p3 + 1, s));
             return;
         }
 yy18:

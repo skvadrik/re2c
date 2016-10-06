@@ -32,7 +32,8 @@ yy4:
 	}
 yy5:
 	++YYCURSOR;
-	{ (YYCTXMARKER + yyt0p) }
+	p = YYCTXMARKER + yyt0p;
+	{ p }
 yy7:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
@@ -78,7 +79,8 @@ yy13:
 	{}
 yy14:
 	++YYCURSOR;
-	{ (YYCTXMARKER + yyt0p) }
+	p = YYCTXMARKER + yyt0p;
+	{ p }
 yy16:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {

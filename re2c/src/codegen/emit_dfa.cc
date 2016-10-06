@@ -143,13 +143,16 @@ void DFA::emit(Output & output, uint32_t& ind, bool isLastCond, bool& bPrologBra
 	OutputFile &o = output.source;
 	OutputBlock &ob = o.block();
 
-	std::set<std::string> tagnames;
+	std::set<std::string> tagnames, tagvars;
 	if (basetag) {
 		const size_t ntags = tags.size();
 		for (size_t i = 0; i < ntags; ++i) {
 			const Tag &t = tags[i];
 			if (t.type == Tag::VAR && t.var.orig == i) {
 				tagnames.insert(vartag_name(t.name, t.rule));
+			}
+			if (t.name != NULL) {
+				tagvars.insert(*t.name);
 			}
 		}
 		const bool *copy = tagpool[copy_tags];
@@ -188,7 +191,7 @@ void DFA::emit(Output & output, uint32_t& ind, bool isLastCond, bool& bPrologBra
 		{
 			emit_data(*skeleton);
 			emit_start(*skeleton, o, max_fill, need_backup, need_backupctx,
-				need_accept, basetag, tagnames);
+				need_accept, basetag, tagnames, tagvars);
 			uint32_t i = 2;
 			emit_body (o, i, used_labels, initial_label);
 			emit_end(*skeleton, o, need_backup, need_backupctx);

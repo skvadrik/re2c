@@ -3,8 +3,7 @@
 
 static void lex(const char *YYCURSOR)
 {
-    const char *YYMARKER;
-    const char *YYCTXMARKER;
+    const char *YYMARKER, *YYCTXMARKER, *p1, *p2, *p3, *p4;
     /*!re2c
         re2c:define:YYCTYPE = char;
         re2c:yyfill:enable = 0;
@@ -16,11 +15,11 @@ static void lex(const char *YYCURSOR)
             @p3 "3"*
             @p4 "4"* {
             printf("'%.*s', '%.*s', '%.*s', '%.*s', '%.*s'\n",
-                @p1 - YYCTXMARKER, YYCTXMARKER,
-                @p2 - @p1, @p1,
-                @p3 - @p2, @p2,
-                @p4 - @p3, @p3,
-                YYCURSOR - @p4, @p4);
+                p1 - YYCTXMARKER, YYCTXMARKER,
+                p2 - p1, p1,
+                p3 - p2, p2,
+                p4 - p3, p3,
+                YYCURSOR - p4, p4);
                 return;
         }
     */

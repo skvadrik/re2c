@@ -25,7 +25,8 @@
 	default:	goto yy2;
 	}
 yy2:
-	{ 3 (YYCTXMARKER + yyt1p) }
+	p = YYCTXMARKER + yyt1p;
+	{ 3 p }
 yy3:
 	yyaccept = 0;
 	yych = *(YYMARKER = ++YYCURSOR);
@@ -57,7 +58,8 @@ yy6:
 	default:	goto yy7;
 	}
 yy7:
-	{ 2 (YYCTXMARKER + yyt1p) }
+	p = YYCTXMARKER + yyt1p;
+	{ 2 p }
 yy8:
 	yych = *++YYCURSOR;
 	switch (yych) {

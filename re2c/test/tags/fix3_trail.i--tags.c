@@ -4,8 +4,7 @@
 
 static void lex(const char *YYCURSOR)
 {
-    const char *YYMARKER;
-    const char *YYCTXMARKER;
+    const char *YYMARKER, *YYCTXMARKER, *p1, *p2, *p3;
     
 {
 	char yych;
@@ -33,12 +32,15 @@ static void lex(const char *YYCURSOR)
 	}
 yy2:
 	YYCURSOR = YYCTXMARKER + yyt0;
+	p3 = YYCTXMARKER + yyt0p3;
+	p2 = YYCTXMARKER + yyt0p2;
+	p1 = YYCTXMARKER + yyt0p1;
 	{
             printf("'%.*s', '%.*s', '%.*s', '%.*s', '%s'\n",
-                (YYCTXMARKER + yyt0p1) - YYCTXMARKER, YYCTXMARKER,
-                (YYCTXMARKER + yyt0p2) - (YYCTXMARKER + yyt0p1), (YYCTXMARKER + yyt0p1),
-                (YYCTXMARKER + yyt0p3) - (YYCTXMARKER + yyt0p2), (YYCTXMARKER + yyt0p2),
-                YYCURSOR - (YYCTXMARKER + yyt0p3), (YYCTXMARKER + yyt0p3),
+                p1 - YYCTXMARKER, YYCTXMARKER,
+                p2 - p1, p1,
+                p3 - p2, p2,
+                YYCURSOR - p3, p3,
                 YYCURSOR);
                 return;
         }
@@ -129,4 +131,4 @@ int main(int argc, char **argv)
     }
     return 0;
 }
-re2c: warning: line 17: rule matches empty string [-Wmatch-empty-string]
+re2c: warning: line 16: rule matches empty string [-Wmatch-empty-string]

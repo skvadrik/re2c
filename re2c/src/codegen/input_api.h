@@ -35,7 +35,8 @@ public:
 	std::string expr_dist () const;
 	std::string stmt_dist (uint32_t ind, const bool *tagmask,
 		const std::valarray<Tag> &tags) const;
-	std::string expr_tag(const std::valarray<Tag> &tags, const Tag &tag) const;
+	std::string stmt_tag_finalizer(uint32_t ind,
+		const std::valarray<Tag> &tags, const Tag &tag) const;
 	std::string stmt_restore (uint32_t ind) const;
 	std::string stmt_restorectx(uint32_t ind,
 		const std::valarray<Tag> &tags, const Tag &tag, bool basetag) const;
