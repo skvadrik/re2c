@@ -390,13 +390,13 @@ void output_tags(std::ostream &o, const ConfTags &conf,
 		tag = tags.begin(),
 		end = tags.end();
 	for (;tag != end;) {
-		std::string line = conf.line;
-		strrreplace(line, "@@", *tag);
-		o << line;
+		std::string fmt = conf.format;
+		strrreplace(fmt, "@@", *tag);
+		o << fmt;
 		if (++tag == end) {
 			break;
 		}
-		o << conf.sep;
+		o << conf.separator;
 	}
 }
 

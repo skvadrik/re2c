@@ -198,10 +198,10 @@ void Scanner::lex_tags()
 {
 	ConfTags conf;
 	for (;;) {/*!re2c
-		*      { fatal("unrecognized configuration"); }
+		* { fatal("unrecognized configuration"); }
 
-		"line" { conf.line = lex_conf_string(); continue; }
-		"sep"  { conf.sep  = lex_conf_string(); continue; }
+		"format"    { conf.format    = lex_conf_string(); continue; }
+		"separator" { conf.separator = lex_conf_string(); continue; }
 
 		space+ { continue; }
 		eol    { ++cline; continue; }

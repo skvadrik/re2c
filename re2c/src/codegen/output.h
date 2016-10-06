@@ -20,9 +20,9 @@ namespace re2c
 
 struct ConfTags
 {
-	std::string line;
-	std::string sep;
-	ConfTags(): line("long @@;"), sep("") {}
+	std::string format;
+	std::string separator;
+	ConfTags(): format("long @@;"), separator("") {}
 };
 
 struct OutputFragment

@@ -11,6 +11,15 @@ static inline unsigned parse_oct(const char *s, const char *e)
     return oct;
 }
 
+struct contexts_t
+{
+    long zz_0p1;long zz_0p2;long zz_0p3;
+
+    contexts_t();
+    void push(long arg_zz_0p1,long arg_zz_0p2,long arg_zz_0p3);
+    void pop(long &arg_zz_0p1,long &arg_zz_0p2,long &arg_zz_0p3);
+};
+
 static void lex(const char *s)
 {
 #define YYPEEK()           *s
@@ -22,8 +31,7 @@ static void lex(const char *s)
 #define ZZ_CTX(tag, dist)  tag = basectx + dist
 #define ZZ_DIST()          (s - basectx)
     const char *marker, *basectx, *p1, *p2, *p3;
-    
-    ptrdiff_t zz_0p1 = 0, zz_0p2 = 0, zz_0p3 = 0;
+    contexts_t ctxs;
     
 {
 	char yych;
@@ -52,7 +60,7 @@ yy4:
 	yych = YYPEEK ();
 	switch (yych) {
 	case '.':
-		zz_0p1 = ZZ_DIST();
+		ctxs.zz_0p1 = ZZ_DIST();
 		goto yy5;
 	case '0':
 	case '1':
@@ -90,7 +98,7 @@ yy7:
 	yych = YYPEEK ();
 	switch (yych) {
 	case '.':
-		zz_0p1 = ZZ_DIST();
+		ctxs.zz_0p1 = ZZ_DIST();
 		goto yy5;
 	case '0':
 	case '1':
@@ -109,7 +117,7 @@ yy8:
 	yych = YYPEEK ();
 	switch (yych) {
 	case '.':
-		zz_0p2 = ZZ_DIST();
+		ctxs.zz_0p2 = ZZ_DIST();
 		goto yy10;
 	case '0':
 	case '1':
@@ -128,7 +136,7 @@ yy9:
 	yych = YYPEEK ();
 	switch (yych) {
 	case '.':
-		zz_0p1 = ZZ_DIST();
+		ctxs.zz_0p1 = ZZ_DIST();
 		goto yy5;
 	default:	goto yy6;
 	}
@@ -153,7 +161,7 @@ yy11:
 	yych = YYPEEK ();
 	switch (yych) {
 	case '.':
-		zz_0p2 = ZZ_DIST();
+		ctxs.zz_0p2 = ZZ_DIST();
 		goto yy10;
 	case '0':
 	case '1':
@@ -172,7 +180,7 @@ yy12:
 	yych = YYPEEK ();
 	switch (yych) {
 	case '.':
-		zz_0p3 = ZZ_DIST();
+		ctxs.zz_0p3 = ZZ_DIST();
 		goto yy14;
 	case '0':
 	case '1':
@@ -191,7 +199,7 @@ yy13:
 	yych = YYPEEK ();
 	switch (yych) {
 	case '.':
-		zz_0p2 = ZZ_DIST();
+		ctxs.zz_0p2 = ZZ_DIST();
 		goto yy10;
 	default:	goto yy6;
 	}
@@ -216,7 +224,7 @@ yy15:
 	yych = YYPEEK ();
 	switch (yych) {
 	case '.':
-		zz_0p3 = ZZ_DIST();
+		ctxs.zz_0p3 = ZZ_DIST();
 		goto yy14;
 	case '0':
 	case '1':
@@ -246,9 +254,9 @@ yy16:
 	default:	goto yy17;
 	}
 yy17:
-	ZZ_CTX(p3, zz_0p3);
-	ZZ_CTX(p2, zz_0p2);
-	ZZ_CTX(p1, zz_0p1);
+	ZZ_CTX(p3, ctxs.zz_0p3);
+	ZZ_CTX(p2, ctxs.zz_0p2);
+	ZZ_CTX(p1, ctxs.zz_0p1);
 	{
             printf("%u.%u.%u.%u\n",
                 parse_oct(basectx, p1),
@@ -262,7 +270,7 @@ yy18:
 	yych = YYPEEK ();
 	switch (yych) {
 	case '.':
-		zz_0p3 = ZZ_DIST();
+		ctxs.zz_0p3 = ZZ_DIST();
 		goto yy14;
 	default:	goto yy6;
 	}
@@ -288,6 +296,18 @@ yy20:
 	goto yy17;
 }
 
+}
+
+contexts_t::contexts_t(): zz_0p1(0),zz_0p2(0),zz_0p3(0) {}
+
+void contexts_t::push(long arg_zz_0p1,long arg_zz_0p2,long arg_zz_0p3)
+{
+    zz_0p1 = arg_zz_0p1;zz_0p2 = arg_zz_0p2;zz_0p3 = arg_zz_0p3;
+}
+
+void contexts_t::pop(long &arg_zz_0p1,long &arg_zz_0p2,long &arg_zz_0p3)
+{
+    arg_zz_0p1 = zz_0p1;arg_zz_0p2 = zz_0p2;arg_zz_0p3 = zz_0p3;
 }
 
 int main(int argc, char **argv)

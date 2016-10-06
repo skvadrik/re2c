@@ -10,15 +10,29 @@ static inline unsigned parse_oct(const char *s, const char *e)
     return oct;
 }
 
+struct contexts_t
+{
+    /*!tags:re2c format = "long @@;"; */
+
+    contexts_t();
+    void push(/*!tags:re2c
+        format = "long arg_@@";
+        separator = ","; */);
+    void pop(/*!tags:re2c
+        format = "long &arg_@@";
+        separator = ","; */);
+};
+
 static void lex(const char *YYCURSOR)
 {
     const char *YYMARKER, *YYCTXMARKER, *p1, *p2, *p3;
-    /*!tags:re2c sep="\n"; line="long @@ = 0;"; line=; sep=; */
-    ptrdiff_t /*!tags:re2c sep=", "; line="@@ = 0"; */;
+    contexts_t ctxs;
     /*!re2c
         re2c:define:YYCTYPE = char;
         re2c:yyfill:enable = 0;
+
         re2c:tags:prefix = "zz_";
+        re2c:tags:expression = "ctxs.@@";
 
         oct = [0-9]{1,3};
         d   = ".";
@@ -37,6 +51,25 @@ static void lex(const char *YYCURSOR)
             return;
         }
     */
+}
+
+contexts_t::contexts_t(): /*!tags:re2c
+    format = "@@(0)";
+    separator = ",";
+*/ {}
+
+void contexts_t::push(/*!tags:re2c
+    format = "long arg_@@";
+    separator = ","; */)
+{
+    /*!tags:re2c format = "@@ = arg_@@;"; */
+}
+
+void contexts_t::pop(/*!tags:re2c
+    format = "long &arg_@@";
+    separator = ","; */)
+{
+    /*!tags:re2c format = "arg_@@ = @@;"; */
 }
 
 int main(int argc, char **argv)

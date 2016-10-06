@@ -22,12 +22,10 @@ static void lex(const char *s)
 #define ZZ_CTX(tag, dist)  tag = basectx + dist
 #define ZZ_DIST()          (s - basectx)
     const char *marker, *basectx, *p1, *p2, *p3;
+    long zz_0p1;long zz_0p2;long zz_0p3;
     
 {
 	char yych;
-	long zz_0p1;
-	long zz_0p2;
-	long zz_0p3;
 	YYBACKUPCTX ();
 	yych = YYPEEK ();
 	switch (yych) {

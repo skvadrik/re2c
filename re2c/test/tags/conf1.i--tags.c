@@ -14,12 +14,10 @@ static inline unsigned parse_oct(const char *s, const char *e)
 static void lex(const char *YYCURSOR)
 {
     const char *YYMARKER, *YYCTXMARKER, *p1, *p2, *p3;
+    long zz_0p1;long zz_0p2;long zz_0p3;
     
 {
 	char yych;
-	long zz_0p1;
-	long zz_0p2;
-	long zz_0p3;
 	YYCTXMARKER = YYCURSOR;
 	yych = *YYCURSOR;
 	switch (yych) {

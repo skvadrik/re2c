@@ -13,6 +13,7 @@ static inline unsigned parse_oct(const char *s, const char *e)
 static void lex(const char *YYCURSOR)
 {
     const char *YYMARKER, *YYCTXMARKER, *p1, *p2, *p3;
+    /*!tags:re2c*/
     /*!re2c
         re2c:define:YYCTYPE = char;
         re2c:yyfill:enable = 0;

@@ -21,6 +21,7 @@ static void lex(const char *s)
 #define ZZ_CTX(tag, dist)  tag = basectx + dist
 #define ZZ_DIST()          (s - basectx)
     const char *marker, *basectx, *p1, *p2, *p3;
+    /*!tags:re2c*/
     /*!re2c
         re2c:define:YYCTYPE = char;
         re2c:yyfill:enable = 0;
