@@ -14,8 +14,7 @@
 #include "src/ir/skeleton/skeleton.h"
 #include "src/parse/code.h"
 #include "src/parse/loc.h"
-#include "src/util/strrreplace.h"
-#include "src/util/to_string.h"
+#include "src/util/string_utils.h"
 
 namespace re2c
 {

@@ -1,5 +1,5 @@
-#ifndef _RE2C_UTIL_STRRREPLACE_
-#define _RE2C_UTIL_STRRREPLACE_
+#ifndef _RE2C_UTIL_STRING_UTILS_
+#define _RE2C_UTIL_STRING_UTILS_
 
 #include <sstream>
 #include <string>
@@ -24,6 +24,14 @@ template<typename type_t> void strrreplace(
 	}
 }
 
+template<typename T>
+static std::string to_string(const T &v)
+{
+	std::ostringstream s;
+	s << v;
+	return s.str();
+}
+
 } // namespace re2c
 
-#endif // _RE2C_UTIL_STRRREPLACE_
+#endif // _RE2C_UTIL_STRING_UTILS_

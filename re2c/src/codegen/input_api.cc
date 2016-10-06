@@ -5,18 +5,11 @@
 #include "src/codegen/input_api.h"
 #include "src/codegen/indent.h"
 #include "src/conf/opt.h"
+#include "src/util/string_utils.h"
 #include "src/globals.h"
 
 namespace re2c
 {
-
-template<typename T>
-static std::string to_string(const T &v)
-{
-	std::ostringstream s;
-	s << v;
-	return s.str();
-}
 
 InputAPI::InputAPI ()
 	: type_ (DEFAULT)

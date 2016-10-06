@@ -17,7 +17,7 @@
 #include "src/ir/adfa/adfa.h"
 #include "src/ir/skeleton/skeleton.h"
 #include "src/util/counter.h"
-#include "src/util/strrreplace.h"
+#include "src/util/string_utils.h"
 
 namespace re2c
 {

@@ -8,7 +8,7 @@
 #include "src/conf/msg.h"
 #include "src/conf/opt.h"
 #include "src/conf/warn.h"
-#include "src/util/strrreplace.h"
+#include "src/util/string_utils.h"
 #include "src/globals.h"
 
 namespace re2c
