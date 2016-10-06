@@ -1,8 +1,8 @@
-// The same rules, fixed length trailing context, with different configurations:
-//     1. default input API, no tags: no warning (no variable, static offset)
-//     2. default input API, tags:    no warning (no variable, static offset)
-//     3. generic input API, no tags: warning (need variable: lack API to to make use of fixed length)
-//     4. generic input API, tags:    no warning (no variable, static offset)
+// Same rules (fixed length trailing context), different configurations:
+//     1. default input API, no tags: no warning (fixed tag => no nondeterminism)
+//     2. default input API, tags:    no warning (fixed tag => no nondeterminism)
+//     3. generic input API, no tags: warning (variable tag => nondeterminism)
+//     4. generic input API, tags:    error (variable tag => nondeterminism)
 
 /*!re2c
     re2c:flags:input = default;

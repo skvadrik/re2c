@@ -85,6 +85,9 @@ static void make_tags_var_fix(size_t nrule,
  * that appear in top-level concatenation, because these
  * are the only tags that are guaranteed to be initialized.
  *
+ * Furthermore, fixed tags are fobidden with generic API
+ * because it cannot express fixed offsets.
+ *
  * One may observe that the same argument can be applied to
  * subregexps: tags on top-level concatenation of a subregexp
  * are either initialized all at once, or none of them is
@@ -97,17 +100,15 @@ static void make_tags_var_fix(size_t nrule,
  */
 void make_tags(const std::vector<const RegExpRule*> &rs, std::valarray<Tag> &tags)
 {
+	const bool generic = opts->input_api.type() == InputAPI::CUSTOM;
 	const size_t nrs = rs.size();
 	for (size_t i = 0, tagidx = 0; i < nrs; ++i) {
 		size_t base = Tag::NONE, dist = 0;
-		// don't optimize fixed-length trailing context with generic API
-		// unless tags are explicitly enabled: generic API needs base tag
-		// to restore fixed-length trailing context, and base existence
-		// is only guaranteed if tags are mandatory
-		if (!opts->tags && opts->input_api.type() == InputAPI::CUSTOM) {
-			dist = VARDIST;
+		if (generic) {
+			make_tags_var(i, tags, tagidx, rs[i]->re, dist);
+		} else {
+			make_tags_var_fix(i, tags, tagidx, rs[i]->re, dist, base);
 		}
-		make_tags_var_fix(i, tags, tagidx, rs[i]->re, dist, base);
 	}
 
 }

@@ -132,29 +132,31 @@ std::string InputAPI::stmt_dist (uint32_t ind, const bool *mask,
 std::string InputAPI::stmt_tag_finalizer(uint32_t ind,
 	const std::valarray<Tag> &tags, const Tag &tag) const
 {
-	std::string expr;
-	if (tag.type == Tag::VAR) {
-		const Tag &orig = tags[tag.var.orig];
-		expr = vartag_expr(orig.name, orig.rule);
-	} else {
+	// fixed tags
+	if (tag.type == Tag::FIX) {
+		assert(type_ == DEFAULT);
 		const std::string dist = to_string(tag.fix.dist);
+		std::string expr;
 		if (tag.fix.base == Tag::NONE) {
-			if (type_ == DEFAULT) {
-				// optimize '(YYCTXMARKER + ((YYCURSOR - YCTXMARKER) - tag))'
-				// to       '(YYCURSOR - tag)'
-				return indent(ind) + *tag.name + " = " + opts->yycursor + " - " + dist + ";\n";
-			}
-			expr = opts->tags_yydist + "() - " + dist;
+			// optimize '(YYCTXMARKER + ((YYCURSOR - YCTXMARKER) - tag))'
+			// to       '(YYCURSOR - tag)'
+			expr = opts->yycursor + " - " + dist;
 		} else {
 			const Tag &orig = tags[tags[tag.fix.base].var.orig];
-			expr = "(" + vartag_expr(orig.name, orig.rule) + " - " + dist + ")";
+			expr = opts->yyctxmarker + " + ("
+				+ vartag_expr(orig.name, orig.rule)
+				+ " - " + dist + ")";
 		}
+		return indent(ind) + *tag.name + " = " + expr + ";\n";
 	}
 
-	const std::string stmt = type_ == DEFAULT
-		? *tag.name + " = " + opts->yyctxmarker + " + " + expr
-		: opts->tags_yytag + "(" + *tag.name + ", " + expr + ")";
-
+	// variable tags
+	const Tag &orig = tags[tag.var.orig];
+	const std::string
+		expr = vartag_expr(orig.name, orig.rule),
+		stmt = type_ == DEFAULT
+			? *tag.name + " = " + opts->yyctxmarker + " + " + expr
+			: opts->tags_yytag + "(" + *tag.name + ", " + expr + ")";
 	return indent(ind) + stmt + ";\n";
 }
 
@@ -179,10 +181,8 @@ std::string InputAPI::stmt_restorectx(uint32_t ind,
 	std::string s;
 
 	if (tag.type == Tag::FIX) {
-		const std::string dist = to_string(tag.fix.dist);
-		s = (type_ == DEFAULT)
-			? opts->yycursor + " -= " + dist
-			: opts->yyrestorectx + " (" + opts->tags_yydist + "() - " + dist + ")";
+		assert(type_ == DEFAULT);
+		s = opts->yycursor + " -= " + to_string(tag.fix.dist);
 	} else if (basetag) {
 		const Tag &orig = tags[tag.var.orig];
 		const std::string expr = vartag_expr(orig.name, orig.rule);
