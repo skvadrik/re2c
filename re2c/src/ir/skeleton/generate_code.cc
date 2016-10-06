@@ -239,7 +239,7 @@ void emit_start(const Skeleton &skel, OutputFile &o, size_t maxfill,
 	}
 	if (!tagnames.empty()) {
 		o.ws("\n");
-		output_tags_default(o.stream(), 2, tagnames);
+		output_tags(o.stream(), ConfTags(), tagnames);
 		o.ws("\n").wstring(opts->input_api.stmt_backupctx(2));
 	}
 

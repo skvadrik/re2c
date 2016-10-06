@@ -5,8 +5,6 @@
 
 {
 	YYCTYPE yych;
-	long yyt0;
-	long yyt1;
 	YYBACKUPCTX ();
 	if (YYLESSTHAN (4)) YYFILL(4);
 	yych = YYPEEK ();

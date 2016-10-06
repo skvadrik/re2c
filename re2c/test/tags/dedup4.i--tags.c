@@ -2,8 +2,6 @@
 
 {
 	YYCTYPE yych;
-	long yyt0;
-	long yyt0p;
 	YYCTXMARKER = YYCURSOR;
 	if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
 	yych = *YYCURSOR;
@@ -76,8 +74,6 @@ yy11:
 
 {
 	YYCTYPE yych;
-	long yyt0p;
-	long yyt1p;
 	YYCTXMARKER = YYCURSOR;
 	if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
 	yych = *YYCURSOR;
@@ -134,8 +130,6 @@ yy23:
 {
 	YYCTYPE yych;
 	unsigned int yyaccept = 0;
-	long yyt0p;
-	long yyt1;
 	YYCTXMARKER = YYCURSOR;
 	if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
 	yych = *YYCURSOR;
@@ -212,8 +206,6 @@ yy35:
 {
 	YYCTYPE yych;
 	unsigned int yyaccept = 0;
-	long yyt0p;
-	long yyt1;
 	YYCTXMARKER = YYCURSOR;
 	if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
 	yych = *YYCURSOR;

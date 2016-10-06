@@ -5,7 +5,6 @@
 
 {
 	YYCTYPE yych;
-	long yyt0p;
 	YYCTXMARKER = YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;

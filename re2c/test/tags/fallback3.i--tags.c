@@ -8,8 +8,6 @@
 {
 	YYCTYPE yych;
 	unsigned int yyaccept = 0;
-	long yyt0p;
-	long yyt0p_;
 	YYCTXMARKER = YYCURSOR;
 	if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
 	yych = *YYCURSOR;

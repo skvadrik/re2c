@@ -73,7 +73,6 @@ class OutputFile
 public:
 	counter_t<label_t> label_counter;
 	bool warn_condition_order;
-	bool default_tags;
 
 	OutputFile();
 	~OutputFile();
@@ -140,10 +139,7 @@ struct Output
 	bool emit();
 };
 
-void output_tags(std::ostream &o, const ConfTags &conf,
-	const std::set<std::string> &tags);
-void output_tags_default(std::ostream &o, uint32_t ind,
-	const std::set<std::string> &tags);
+void output_tags(std::ostream &o, const ConfTags &conf, const std::set<std::string> &tags);
 void output_line_info (std::ostream &, uint32_t, const std::string&);
 void output_state_goto (std::ostream &, uint32_t, uint32_t);
 void output_types(std::ostream &o, uint32_t, const uniq_vector_t<std::string> &types);

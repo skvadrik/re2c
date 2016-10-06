@@ -32,7 +32,6 @@ yy5:
 
 {
 	YYCTYPE yych;
-	long yyt0p;
 	YYCTXMARKER = YYCURSOR;
 	if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
 	yych = *YYCURSOR;

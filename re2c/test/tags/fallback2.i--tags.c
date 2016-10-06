@@ -17,7 +17,6 @@
 {
 	YYCTYPE yych;
 	unsigned int yyaccept = 0;
-	long yyt0p;
 	YYCTXMARKER = YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *(YYMARKER = YYCURSOR);

@@ -16,10 +16,6 @@ static void lex(const char *s)
     
 {
 	char yych;
-	long yyt0;
-	long yyt0p1;
-	long yyt0p2;
-	long yyt0p3;
 	YYBACKUPCTX ();
 	yych = YYPEEK ();
 	switch (yych) {

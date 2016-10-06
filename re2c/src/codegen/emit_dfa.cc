@@ -224,7 +224,6 @@ void DFA::emit(Output & output, uint32_t& ind, bool isLastCond, bool& bPrologBra
 					o.wind(ind).wstring(opts->yyctype).ws(" ").wstring(opts->yych).ws(";\n");
 				}
 				o.wdelay_yyaccept_init (ind);
-				o.wdelay_tags(ind, NULL);
 			}
 			else
 			{

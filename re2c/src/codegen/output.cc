@@ -66,7 +66,6 @@ OutputFile::OutputFile()
 	: blocks ()
 	, label_counter ()
 	, warn_condition_order (!opts->tFlag) // see note [condition order]
-	, default_tags (true)
 {
 	new_block ();
 }
@@ -192,9 +191,6 @@ OutputFile &OutputFile::wdelay_tags(uint32_t ind, const ConfTags *cf)
 {
 	OutputFragment *frag = new OutputFragment(OutputFragment::TAGS, ind);
 	frag->tags = cf;
-	if (cf) {
-		default_tags = false;
-	}
 	blocks.back()->fragments.push_back(frag);
 	insert_code();
 	return *this;
@@ -300,11 +296,7 @@ bool OutputFile::emit(const uniq_vector_t<std::string> &global_types,
 					output_state_goto(f.stream, f.indent, 0);
 					break;
 				case OutputFragment::TAGS:
-					if (f.tags) {
-						output_tags(f.stream, *f.tags, global_tags);
-					} else if (default_tags) {
-						output_tags_default(f.stream, f.indent, b.tags);
-					}
+					output_tags(f.stream, *f.tags, global_tags);
 					break;
 				case OutputFragment::TYPES:
 					output_types(f.stream, f.indent, global_types);
@@ -397,17 +389,6 @@ void output_tags(std::ostream &o, const ConfTags &conf,
 			break;
 		}
 		o << conf.separator;
-	}
-}
-
-void output_tags_default(std::ostream &o, uint32_t ind,
-	const std::set<std::string> &tags)
-{
-	std::set<std::string>::const_iterator
-		tag = tags.begin(),
-		end = tags.end();
-	for (;tag != end; ++tag) {
-		o << indent(ind) << "long " << *tag << ";\n";
 	}
 }
 

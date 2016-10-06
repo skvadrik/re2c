@@ -15,7 +15,6 @@
 {
 	YYCTYPE yych;
 	unsigned int yyaccept = 0;
-	long yyt1p;
 	YYCTXMARKER = YYCURSOR;
 	if ((YYLIMIT - YYCURSOR) < 5) YYFILL(5);
 	yych = *YYCURSOR;
