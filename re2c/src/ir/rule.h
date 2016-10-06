@@ -6,7 +6,6 @@
 #include <vector>
 
 #include "src/ir/tag.h"
-#include "src/ir/tagpool.h"
 #include "src/parse/code.h"
 #include "src/parse/loc.h"
 #include "src/util/forbid_copy.h"

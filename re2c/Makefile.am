@@ -40,7 +40,6 @@ SRC_HDR = \
 	src/ir/compile.h \
 	src/ir/rule.h \
 	src/ir/tag.h \
-	src/ir/tagpool.h \
 	src/ir/skeleton/path.h \
 	src/ir/skeleton/skeleton.h \
 	src/globals.h \
@@ -118,7 +117,6 @@ SRC = \
 	src/ir/skeleton/maxpath.cc \
 	src/ir/skeleton/skeleton.cc \
 	src/ir/tag.cc \
-	src/ir/tagpool.cc \
 	src/main.cc \
 	src/parse/code.cc \
 	src/parse/input.cc \

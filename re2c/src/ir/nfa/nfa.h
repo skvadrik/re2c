@@ -8,7 +8,7 @@
 
 #include "src/ir/regexp/regexp.h"
 #include "src/ir/rule.h"
-#include "src/ir/tagpool.h"
+#include "src/ir/tag.h"
 #include "src/util/forbid_copy.h"
 
 namespace re2c
