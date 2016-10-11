@@ -4,36 +4,39 @@
 
 static void lex(const char *YYCURSOR)
 {
-    const char *YYMARKER, *YYCTXMARKER, *p1, *p2, *p3;
+    const char *YYMARKER, *p0, *p1, *p2, *p3;
+    const char *yyt0;const char *yyt0p0;const char *yyt0p1;const char *yyt0p2;const char *yyt0p3;
     
 {
 	char yych;
-	YYCTXMARKER = YYCURSOR;
 	yych = *YYCURSOR;
 	switch (yych) {
-	case '0':	goto yy5;
+	case '0':
+		yyt0p0 = YYCURSOR;
+		goto yy5;
 	case '1':
-		yyt0p1 = (YYCURSOR - YYCTXMARKER);
+		yyt0p1 = yyt0p0 = YYCURSOR;
 		goto yy7;
 	case '2':
-		yyt0p2 = yyt0p1 = (YYCURSOR - YYCTXMARKER);
+		yyt0p2 = yyt0p1 = yyt0p0 = YYCURSOR;
 		goto yy9;
 	case '3':
-		yyt0p3 = yyt0p2 = yyt0p1 = (YYCURSOR - YYCTXMARKER);
+		yyt0p3 = yyt0p2 = yyt0p1 = yyt0p0 = YYCURSOR;
 		goto yy11;
 	case '4':
-		yyt0 = yyt0p3 = yyt0p2 = yyt0p1 = (YYCURSOR - YYCTXMARKER);
+		yyt0 = yyt0p3 = yyt0p2 = yyt0p1 = yyt0p0 = YYCURSOR;
 		goto yy13;
 	default:	goto yy3;
 	}
 yy2:
-	YYCURSOR = YYCTXMARKER + yyt0;
-	p3 = YYCTXMARKER + yyt0p3;
-	p2 = YYCTXMARKER + yyt0p2;
-	p1 = YYCTXMARKER + yyt0p1;
+	YYCURSOR = yyt0;
+	p3 = yyt0p3;
+	p2 = yyt0p2;
+	p1 = yyt0p1;
+	p0 = yyt0p0;
 	{
             printf("'%.*s', '%.*s', '%.*s', '%.*s', '%s'\n",
-                p1 - YYCTXMARKER, YYCTXMARKER,
+                p1 - p0, p0,
                 p2 - p1, p1,
                 p3 - p2, p2,
                 YYCURSOR - p3, p3,
@@ -49,19 +52,19 @@ yy5:
 	switch (yych) {
 	case '0':	goto yy5;
 	case '1':
-		yyt0p1 = (YYCURSOR - YYCTXMARKER);
+		yyt0p1 = YYCURSOR;
 		goto yy7;
 	case '2':
-		yyt0p2 = yyt0p1 = (YYCURSOR - YYCTXMARKER);
+		yyt0p2 = yyt0p1 = YYCURSOR;
 		goto yy9;
 	case '3':
-		yyt0p3 = yyt0p2 = yyt0p1 = (YYCURSOR - YYCTXMARKER);
+		yyt0p3 = yyt0p2 = yyt0p1 = YYCURSOR;
 		goto yy11;
 	case '4':
-		yyt0 = yyt0p3 = yyt0p2 = yyt0p1 = (YYCURSOR - YYCTXMARKER);
+		yyt0 = yyt0p3 = yyt0p2 = yyt0p1 = YYCURSOR;
 		goto yy13;
 	default:
-		yyt0 = yyt0p3 = yyt0p2 = yyt0p1 = (YYCURSOR - YYCTXMARKER);
+		yyt0 = yyt0p3 = yyt0p2 = yyt0p1 = YYCURSOR;
 		goto yy2;
 	}
 yy7:
@@ -70,16 +73,16 @@ yy7:
 	switch (yych) {
 	case '1':	goto yy7;
 	case '2':
-		yyt0p2 = (YYCURSOR - YYCTXMARKER);
+		yyt0p2 = YYCURSOR;
 		goto yy9;
 	case '3':
-		yyt0p3 = yyt0p2 = (YYCURSOR - YYCTXMARKER);
+		yyt0p3 = yyt0p2 = YYCURSOR;
 		goto yy11;
 	case '4':
-		yyt0 = yyt0p3 = yyt0p2 = (YYCURSOR - YYCTXMARKER);
+		yyt0 = yyt0p3 = yyt0p2 = YYCURSOR;
 		goto yy13;
 	default:
-		yyt0 = yyt0p3 = yyt0p2 = (YYCURSOR - YYCTXMARKER);
+		yyt0 = yyt0p3 = yyt0p2 = YYCURSOR;
 		goto yy2;
 	}
 yy9:
@@ -88,13 +91,13 @@ yy9:
 	switch (yych) {
 	case '2':	goto yy9;
 	case '3':
-		yyt0p3 = (YYCURSOR - YYCTXMARKER);
+		yyt0p3 = YYCURSOR;
 		goto yy11;
 	case '4':
-		yyt0 = yyt0p3 = (YYCURSOR - YYCTXMARKER);
+		yyt0 = yyt0p3 = YYCURSOR;
 		goto yy13;
 	default:
-		yyt0 = yyt0p3 = (YYCURSOR - YYCTXMARKER);
+		yyt0 = yyt0p3 = YYCURSOR;
 		goto yy2;
 	}
 yy11:
@@ -103,10 +106,10 @@ yy11:
 	switch (yych) {
 	case '3':	goto yy11;
 	case '4':
-		yyt0 = (YYCURSOR - YYCTXMARKER);
+		yyt0 = YYCURSOR;
 		goto yy13;
 	default:
-		yyt0 = (YYCURSOR - YYCTXMARKER);
+		yyt0 = YYCURSOR;
 		goto yy2;
 	}
 yy13:
@@ -127,4 +130,4 @@ int main(int argc, char **argv)
     }
     return 0;
 }
-re2c: warning: line 16: rule matches empty string [-Wmatch-empty-string]
+re2c: warning: line 17: rule matches empty string [-Wmatch-empty-string]

@@ -23,7 +23,6 @@ DFA::DFA
 	, const std::string &n
 	, const std::string &c
 	, uint32_t l
-	, size_t used_tags
 	)
 	: accepts ()
 	, skeleton (skel)
@@ -38,29 +37,10 @@ DFA::DFA
 	, tags(dfa.tags)
 	, tagpool(dfa.tagpool)
 	, copy_tags(dfa.copy_tags)
-
-	// statistics
 	, max_fill (0)
 	, need_backup (false)
-
-	// determine if 'YYCTXMARKER' or 'YYBACKUPCTX'/'YYRESTORECTX' pair is used
-	, need_backupctx (used_tags > 0 || opts->tags)
 	, need_accept (false)
-
-	// Tags (except trailing contexts) imply the existence of base marker
-	// that points at the beginning of lexeme. First, it is a feature
-	// of re2c API. Second, it simplifies implementation (otherwise
-	// it would be hard to mix generic API and fixed-length contexts).
-	//
-	// The only case without base marker is when:
-	//     - tags are disabled, only trailing contexts are allowed
-	//     - trailing contexts don't overlap (one marker is enough
-	//       for all of them)
-	// If generic API is used, fixed-length contexts are forbidden,
-	// which may cause additional overlaps.
-	, basetag (used_tags > 1
-		|| dfa.copy_tags != ZERO_TAGS
-		|| opts->tags)
+	, oldstyle_ctxmarker (false)
 {
 	const size_t nstates = dfa.states.size();
 	const size_t nchars = dfa.nchars;

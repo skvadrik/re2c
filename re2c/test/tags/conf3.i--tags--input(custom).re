@@ -10,16 +10,16 @@ static inline unsigned parse_oct(const char *s, const char *e)
     return oct;
 }
 
-struct contexts_t
+struct tags_t
 {
-    /*!tags:re2c format = "long @@;"; */
+    /*!tags:re2c format = "const char *@@;"; */
 
-    contexts_t();
+    tags_t();
     void push(/*!tags:re2c
-        format = "long arg_@@";
+        format = "const char *arg_@@";
         separator = ","; */);
     void pop(/*!tags:re2c
-        format = "long &arg_@@";
+        format = "const char *&arg_@@";
         separator = ","; */);
 };
 
@@ -29,32 +29,28 @@ static void lex(const char *s)
 #define YYSKIP()           ++s
 #define YYBACKUP()         marker = s
 #define YYRESTORE()        s = marker
-#define YYBACKUPCTX()      basectx = s
-#define YYRESTORECTX(dist) s = basectx + dist
-#define ZZ_CTX(tag, dist)  tag = basectx + dist
-#define ZZ_DIST()          (s - basectx)
-    const char *marker, *basectx, *p1, *p2, *p3;
-    contexts_t ctxs;
+#define YYBACKUPTAG(t)     t = s
+#define YYRESTORETAG(t)    s = t
+#define YYCOPYTAG(t1, t2)  t1 = t2
+    const char *marker, *p0, *p1, *p2, *p3;
+    tags_t tags;
     /*!re2c
         re2c:define:YYCTYPE = char;
         re2c:yyfill:enable = 0;
-
-        re2c:define:YYTAG = "ZZ_CTX";
-        re2c:define:YYDIST = "ZZ_DIST";
-        re2c:tags:prefix = "zz_";
-        re2c:tags:expression = "ctxs.@@";
+        re2c:tags:expression = "tags.@@";
 
         oct = [0-9]{1,3};
         d   = ".";
 
         * { printf("error\n"); return; }
 
+        @p0
           oct @p1
         d oct @p2
         d oct @p3
         d oct {
             printf("%u.%u.%u.%u\n",
-                parse_oct(basectx, p1),
+                parse_oct(p0, p1),
                 parse_oct(p1 + 1, p2),
                 parse_oct(p2 + 1, p3),
                 parse_oct(p3 + 1, s));
@@ -63,20 +59,20 @@ static void lex(const char *s)
     */
 }
 
-contexts_t::contexts_t(): /*!tags:re2c
+tags_t::tags_t(): /*!tags:re2c
     format = "@@(0)";
     separator = ",";
 */ {}
 
-void contexts_t::push(/*!tags:re2c
-    format = "long arg_@@";
+void tags_t::push(/*!tags:re2c
+    format = "const char *arg_@@";
     separator = ","; */)
 {
     /*!tags:re2c format = "@@ = arg_@@;"; */
 }
 
-void contexts_t::pop(/*!tags:re2c
-    format = "long &arg_@@";
+void tags_t::pop(/*!tags:re2c
+    format = "const char *&arg_@@";
     separator = ","; */)
 {
     /*!tags:re2c format = "arg_@@ = @@;"; */

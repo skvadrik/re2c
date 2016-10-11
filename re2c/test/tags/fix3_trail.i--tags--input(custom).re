@@ -7,23 +7,23 @@ static void lex(const char *s)
 #define YYSKIP()           ++s
 #define YYBACKUP()         marker = s
 #define YYRESTORE()        s = marker
-#define YYBACKUPCTX()      base = s
-#define YYRESTORECTX(dist) s = base + dist
-#define YYTAG(tag, dist)   tag = base + dist
-#define YYDIST()           (s - base)
-    const char *marker, *base, *p1, *p2, *p3;
+#define YYBACKUPTAG(t)     t = s
+#define YYRESTORETAG(t)    s = t
+#define YYCOPYTAG(t1, t2)  t1 = t2
+    const char *marker, *p0, *p1, *p2, *p3;
+    /*!tags:re2c format = "const char *@@;"; */
     /*!re2c
         re2c:define:YYCTYPE = char;
         re2c:yyfill:enable = 0;
 
         * { printf("error\n"); return; }
-        "0"*
-            @p1 "1"*
-            @p2 "2"*
-            @p3 "3"*
-            / "4"* {
+        @p0 "0"*
+        @p1 "1"*
+        @p2 "2"*
+        @p3 "3"*
+        / "4"* {
             printf("'%.*s', '%.*s', '%.*s', '%.*s', '%s'\n",
-                p1 - base, base,
+                p1 - p0, p0,
                 p2 - p1, p1,
                 p3 - p2, p2,
                 s - p3, p3,

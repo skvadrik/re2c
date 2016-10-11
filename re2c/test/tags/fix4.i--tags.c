@@ -4,11 +4,11 @@
 
 static void lex(const char *YYCURSOR)
 {
-    const char *YYMARKER, *YYCTXMARKER, *p1, *p2, *p3, *p4;
+    const char *YYMARKER, *p0, *p1, *p2, *p3, *p4;
+    const char *yyt0p1;const char *yyt0p3;
     
 {
 	char yych;
-	YYCTXMARKER = YYCURSOR;
 	yych = *YYCURSOR;
 	switch (yych) {
 	case '0':	goto yy4;
@@ -22,10 +22,10 @@ yy4:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
 	case '1':
-		yyt0p1 = (YYCURSOR - YYCTXMARKER);
+		yyt0p1 = YYCURSOR;
 		goto yy5;
 	case '2':
-		yyt0p1 = (YYCURSOR - YYCTXMARKER);
+		yyt0p1 = YYCURSOR;
 		goto yy8;
 	default:	goto yy3;
 	}
@@ -44,10 +44,10 @@ yy8:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case '3':
-		yyt0p3 = (YYCURSOR - YYCTXMARKER);
+		yyt0p3 = YYCURSOR;
 		goto yy9;
 	case '4':
-		yyt0p3 = (YYCURSOR - YYCTXMARKER);
+		yyt0p3 = YYCURSOR;
 		goto yy11;
 	default:	goto yy7;
 	}
@@ -62,12 +62,13 @@ yy9:
 yy11:
 	++YYCURSOR;
 	p4 = YYCURSOR - 1;
-	p3 = YYCTXMARKER + yyt0p3;
-	p2 = YYCTXMARKER + (yyt0p3 - 1);
-	p1 = YYCTXMARKER + yyt0p1;
+	p3 = yyt0p3;
+	p2 = yyt0p3 - 1;
+	p1 = yyt0p1;
+	p0 = yyt0p1 - 1;
 	{
             printf("'%.*s', '%.*s', '%.*s', '%.*s', '%.*s'\n",
-                p1 - YYCTXMARKER, YYCTXMARKER,
+                p1 - p0, p0,
                 p2 - p1, p1,
                 p3 - p2, p2,
                 p4 - p3, p3,

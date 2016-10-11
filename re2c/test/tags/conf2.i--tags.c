@@ -23,7 +23,7 @@ struct input_t {
     char *cur;
     char *mar;
     char *tok;
-    long yyt1p1;long yyt1p2;long yyt1p3;
+    char *yyt1p1;char *yyt1p2;char *yyt1p3;
     bool eof;
 
     input_t()
@@ -51,6 +51,7 @@ struct input_t {
         cur -= free;
         mar -= free;
         tok -= free;
+        yyt1p1 -= free;yyt1p2 -= free;yyt1p3 -= free;
         lim += fread(lim, 1, free, stdin);
         if (lim < buf + SIZE) {
             eof = true;
@@ -69,7 +70,6 @@ loop:
     
 {
 	char yych;
-	in.tok = in.cur;
 	if ((in.lim - in.cur) < 16) if (!in.fill(16)) return false;
 	yych = *in.cur;
 	switch (yych) {
@@ -97,7 +97,7 @@ yy6:
 	yych = *(in.mar = ++in.cur);
 	switch (yych) {
 	case '.':
-		in.yyt1p1 = (in.cur - in.tok);
+		in.yyt1p1 = in.cur;
 		goto yy7;
 	case '0':
 	case '1':
@@ -133,7 +133,7 @@ yy9:
 	yych = *++in.cur;
 	switch (yych) {
 	case '.':
-		in.yyt1p1 = (in.cur - in.tok);
+		in.yyt1p1 = in.cur;
 		goto yy7;
 	case '0':
 	case '1':
@@ -151,7 +151,7 @@ yy10:
 	yych = *++in.cur;
 	switch (yych) {
 	case '.':
-		in.yyt1p2 = (in.cur - in.tok);
+		in.yyt1p2 = in.cur;
 		goto yy12;
 	case '0':
 	case '1':
@@ -169,7 +169,7 @@ yy11:
 	yych = *++in.cur;
 	switch (yych) {
 	case '.':
-		in.yyt1p1 = (in.cur - in.tok);
+		in.yyt1p1 = in.cur;
 		goto yy7;
 	default:	goto yy8;
 	}
@@ -192,7 +192,7 @@ yy13:
 	yych = *++in.cur;
 	switch (yych) {
 	case '.':
-		in.yyt1p2 = (in.cur - in.tok);
+		in.yyt1p2 = in.cur;
 		goto yy12;
 	case '0':
 	case '1':
@@ -210,7 +210,7 @@ yy14:
 	yych = *++in.cur;
 	switch (yych) {
 	case '.':
-		in.yyt1p3 = (in.cur - in.tok);
+		in.yyt1p3 = in.cur;
 		goto yy16;
 	case '0':
 	case '1':
@@ -228,7 +228,7 @@ yy15:
 	yych = *++in.cur;
 	switch (yych) {
 	case '.':
-		in.yyt1p2 = (in.cur - in.tok);
+		in.yyt1p2 = in.cur;
 		goto yy12;
 	default:	goto yy8;
 	}
@@ -251,7 +251,7 @@ yy17:
 	yych = *++in.cur;
 	switch (yych) {
 	case '.':
-		in.yyt1p3 = (in.cur - in.tok);
+		in.yyt1p3 = in.cur;
 		goto yy16;
 	case '0':
 	case '1':
@@ -285,15 +285,15 @@ yy19:
 	yych = *++in.cur;
 	switch (yych) {
 	case '.':
-		in.yyt1p3 = (in.cur - in.tok);
+		in.yyt1p3 = in.cur;
 		goto yy16;
 	default:	goto yy8;
 	}
 yy20:
 	++in.cur;
-	p3 = in.tok + in.yyt1p3;
-	p2 = in.tok + in.yyt1p2;
-	p1 = in.tok + in.yyt1p1;
+	p3 = in.yyt1p3;
+	p2 = in.yyt1p2;
+	p1 = in.yyt1p1;
 	{
             printf("> %u.%u.%u.%u\n",
                 parse_oct(in.tok, p1),

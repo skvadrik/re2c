@@ -13,20 +13,18 @@ static inline unsigned parse_oct(const char *s, const char *e)
 
 static void lex(const char *s)
 {
-#define YYPEEK()           *s
-#define YYSKIP()           ++s
-#define YYBACKUP()         marker = s
-#define YYRESTORE()        s = marker
-#define YYBACKUPCTX()      basectx = s
-#define YYRESTORECTX(dist) s = basectx + dist
-#define ZZ_CTX(tag, dist)  tag = basectx + dist
-#define ZZ_DIST()          (s - basectx)
-    const char *marker, *basectx, *p1, *p2, *p3;
-    long zz_0p1;long zz_0p2;long zz_0p3;
+#define YYPEEK()     *s
+#define YYSKIP()     ++s
+#define YYBACKUP()   marker = s
+#define YYRESTORE()  s = marker
+#define ZZBT(t)      t = s
+#define ZZRT(t)      s = t
+#define ZZCT(t1, t2) t1 = t2
+    const char *marker, *p0, *p1, *p2, *p3;
+    const char *zz_0p0;const char *zz_0p1;const char *zz_0p2;const char *zz_0p3;
     
 {
 	char yych;
-	YYBACKUPCTX ();
 	yych = YYPEEK ();
 	switch (yych) {
 	case '0':
@@ -38,7 +36,9 @@ static void lex(const char *s)
 	case '6':
 	case '7':
 	case '8':
-	case '9':	goto yy4;
+	case '9':
+		ZZBT (zz_0p0);
+		goto yy4;
 	default:	goto yy2;
 	}
 yy2:
@@ -51,7 +51,7 @@ yy4:
 	yych = YYPEEK ();
 	switch (yych) {
 	case '.':
-		zz_0p1 = ZZ_DIST();
+		ZZBT (zz_0p1);
 		goto yy5;
 	case '0':
 	case '1':
@@ -89,7 +89,7 @@ yy7:
 	yych = YYPEEK ();
 	switch (yych) {
 	case '.':
-		zz_0p1 = ZZ_DIST();
+		ZZBT (zz_0p1);
 		goto yy5;
 	case '0':
 	case '1':
@@ -108,7 +108,7 @@ yy8:
 	yych = YYPEEK ();
 	switch (yych) {
 	case '.':
-		zz_0p2 = ZZ_DIST();
+		ZZBT (zz_0p2);
 		goto yy10;
 	case '0':
 	case '1':
@@ -127,7 +127,7 @@ yy9:
 	yych = YYPEEK ();
 	switch (yych) {
 	case '.':
-		zz_0p1 = ZZ_DIST();
+		ZZBT (zz_0p1);
 		goto yy5;
 	default:	goto yy6;
 	}
@@ -152,7 +152,7 @@ yy11:
 	yych = YYPEEK ();
 	switch (yych) {
 	case '.':
-		zz_0p2 = ZZ_DIST();
+		ZZBT (zz_0p2);
 		goto yy10;
 	case '0':
 	case '1':
@@ -171,7 +171,7 @@ yy12:
 	yych = YYPEEK ();
 	switch (yych) {
 	case '.':
-		zz_0p3 = ZZ_DIST();
+		ZZBT (zz_0p3);
 		goto yy14;
 	case '0':
 	case '1':
@@ -190,7 +190,7 @@ yy13:
 	yych = YYPEEK ();
 	switch (yych) {
 	case '.':
-		zz_0p2 = ZZ_DIST();
+		ZZBT (zz_0p2);
 		goto yy10;
 	default:	goto yy6;
 	}
@@ -215,7 +215,7 @@ yy15:
 	yych = YYPEEK ();
 	switch (yych) {
 	case '.':
-		zz_0p3 = ZZ_DIST();
+		ZZBT (zz_0p3);
 		goto yy14;
 	case '0':
 	case '1':
@@ -245,12 +245,13 @@ yy16:
 	default:	goto yy17;
 	}
 yy17:
-	ZZ_CTX(p3, zz_0p3);
-	ZZ_CTX(p2, zz_0p2);
-	ZZ_CTX(p1, zz_0p1);
+	ZZCT (p3, zz_0p3);
+	ZZCT (p2, zz_0p2);
+	ZZCT (p1, zz_0p1);
+	ZZCT (p0, zz_0p0);
 	{
             printf("%u.%u.%u.%u\n",
-                parse_oct(basectx, p1),
+                parse_oct(p0, p1),
                 parse_oct(p1 + 1, p2),
                 parse_oct(p2 + 1, p3),
                 parse_oct(p3 + 1, s));
@@ -261,7 +262,7 @@ yy18:
 	yych = YYPEEK ();
 	switch (yych) {
 	case '.':
-		zz_0p3 = ZZ_DIST();
+		ZZBT (zz_0p3);
 		goto yy14;
 	default:	goto yy6;
 	}

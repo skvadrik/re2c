@@ -72,9 +72,8 @@ struct DFA
 	size_t copy_tags;
 	size_t max_fill;
 	bool need_backup;
-	bool need_backupctx;
 	bool need_accept;
-	bool basetag;
+	bool oldstyle_ctxmarker;
 
 	DFA	( const dfa_t &dfa
 		, const std::vector<size_t> &fill
@@ -83,12 +82,11 @@ struct DFA
 		, const std::string &n
 		, const std::string &c
 		, uint32_t l
-		, size_t used_tags
 		);
 	~DFA ();
 	void reorder();
 	void prepare();
-	void calc_stats();
+	void calc_stats(uint32_t line, size_t used_tags);
 	void emit (Output &, uint32_t &, bool, bool &);
 
 private:

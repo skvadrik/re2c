@@ -121,11 +121,12 @@ void Scanner::lex_conf ()
 	"define:YYSKIP"       { opts.set_yyskip       (lex_conf_string ()); return; }
 	"define:YYBACKUP"     { opts.set_yybackup     (lex_conf_string ()); return; }
 	"define:YYBACKUPCTX"  { opts.set_yybackupctx  (lex_conf_string ()); return; }
+	"define:YYBACKUPTAG"  { opts.set_yybackuptag  (lex_conf_string ()); return; }
 	"define:YYRESTORE"    { opts.set_yyrestore    (lex_conf_string ()); return; }
 	"define:YYRESTORECTX" { opts.set_yyrestorectx (lex_conf_string ()); return; }
+	"define:YYRESTORETAG" { opts.set_yyrestoretag (lex_conf_string ()); return; }
+	"define:YYCOPYTAG"    { opts.set_yycopytag    (lex_conf_string ()); return; }
 	"define:YYLESSTHAN"   { opts.set_yylessthan   (lex_conf_string ()); return; }
-	"define:YYTAG"        { opts.set_tags_yytag   (lex_conf_string ()); return; }
-	"define:YYDIST"       { opts.set_tags_yydist  (lex_conf_string ()); return; }
 
 	"tags:prefix"     { opts.set_tags_prefix    (lex_conf_string ()); return; }
 	"tags:expression" { opts.set_tags_expression(lex_conf_string ()); return; }

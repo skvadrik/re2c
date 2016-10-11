@@ -32,6 +32,7 @@ static void genYYFill(OutputFile &o, size_t need);
 static void genSetCondition(OutputFile &o, uint32_t ind, const std::string &cond);
 static void genSetState(OutputFile &o, uint32_t ind, uint32_t fillIndex);
 static void gen_goto(code_lines_t &code, bool &readCh, const State *to, const DFA &dfa, const tagcmd_t &tags, bool restore_fallback);
+static void gen_fintags(OutputFile &o, uint32_t ind, const DFA &dfa, const Rule &rule);
 
 void emit_action(OutputFile &o, uint32_t ind, bool &readCh,
 	const DFA &dfa, const State *s, const std::set<label_t> &used_labels)
@@ -214,14 +215,8 @@ void emit_rule(OutputFile &o, uint32_t ind, const DFA &dfa, size_t rule_idx)
 {
 	const Rule &rule = dfa.rules[rule_idx];
 	const RuleInfo *info = rule.info;
-	const std::valarray<Tag> &tags = dfa.tags;
 
-	if (rule.trail != Tag::NONE) {
-		o.wstring(opts->input_api.stmt_restorectx(ind, tags, tags[rule.trail], dfa.basetag));
-	}
-	for (size_t t = rule.ltag; t < rule.htag; ++t) {
-		o.wstring(opts->input_api.stmt_tag_finalizer(ind, tags, tags[t]));
-	}
+	gen_fintags(o, ind, dfa, rule);
 
 	if (opts->target == opt_t::SKELETON) {
 		emit_action(*dfa.skeleton, o, ind, rule_idx);
@@ -390,30 +385,124 @@ void gen_goto(code_lines_t &code, bool &readCh, const State *to,
 void gen_settags(code_lines_t &code, const DFA &dfa,
 	const tagcmd_t &cmd, bool restore_fallback)
 {
-	if (cmd.empty()) return;
+	const bool generic = opts->input_api.type() == InputAPI::CUSTOM;
+	const bool
+		*set = dfa.tagpool[cmd.set],
+		*copy = dfa.tagpool[cmd.copy];
+	const std::valarray<Tag> &tags = dfa.tags;
+	const size_t ntags = tags.size();
+	std::string line;
 
-	if (!dfa.basetag) {
+	// single tag YYCTXMARKER, backwards compatibility
+	if (cmd.set != ZERO_TAGS && dfa.oldstyle_ctxmarker) {
 		assert(cmd.copy == ZERO_TAGS);
-		code.push_back(opts->input_api.stmt_backupctx(0));
+		line = generic
+			? opts->yybackupctx + " ();\n"
+			: opts->yyctxmarker + " = " + opts->yycursor + ";\n";
+		code.push_back(line);
 		return;
 	}
 
-	const std::valarray<Tag> &tags = dfa.tags;
-	const size_t ntags = tags.size();
-	const bool *copy = dfa.tagpool[cmd.copy];
-	for (size_t t = 0; t < ntags; ++t) {
-		if (copy[t]) {
-			const Tag &tag = tags[t];
+	// copy
+	for (size_t i = 0; i < ntags; ++i) {
+		if (copy[i]) {
+			const Tag &tag = tags[i];
 			std::string
 				x = vartag_expr(tag.name, tag.rule),
 				y = vartag_expr_fallback(tag);
 			if (restore_fallback) std::swap(x, y);
-			code.push_back(y + " = " + x + ";\n");
+			line = generic
+				? opts->yycopytag + " (" + y + ", " + x + ");\n"
+				: y + " = " + x + ";\n";
+			code.push_back(line);
 		}
 	}
-	if (cmd.set != ZERO_TAGS) {
-		code.push_back(opts->input_api.stmt_dist(0,
-			dfa.tagpool[cmd.set], tags));
+
+	// set
+	if (generic) {
+		for (size_t i = 0; i < ntags; ++i) {
+			if (set[i]) {
+				const Tag &tag = tags[i];
+				line = opts->yybackuptag + " ("
+					+ vartag_expr(tag.name, tag.rule) + ");\n";
+				code.push_back(line);
+			}
+		}
+	} else if (cmd.set != ZERO_TAGS) {
+		line = "";
+		for (size_t i = 0; i < ntags; ++i) {
+			if (set[i]) {
+				const Tag &tag = tags[i];
+				line += vartag_expr(tag.name, tag.rule) + " = ";
+			}
+		}
+		line += opts->yycursor + ";\n";
+		code.push_back(line);
+	}
+}
+
+void gen_fintags(OutputFile &o, uint32_t ind, const DFA &dfa, const Rule &rule)
+{
+	const bool generic = opts->input_api.type() == InputAPI::CUSTOM;
+	const std::valarray<Tag> &tags = dfa.tags;
+
+	// trailing context
+	if (rule.trail != Tag::NONE) {
+		const Tag &tag = tags[rule.trail];
+		o.wind(ind);
+		if (tag.type == Tag::FIX) {
+			assert(!generic);
+			o.wstring(opts->yycursor).ws(" -= ").wu64(tag.fix.dist);
+		} else if (dfa.oldstyle_ctxmarker) {
+			if (generic) {
+				o.wstring(opts->yyrestorectx).ws(" ()");
+			} else {
+				o.wstring(opts->yycursor).ws(" = ").wstring(opts->yyctxmarker);
+			}
+		} else {
+			const Tag &orig = tags[tag.var.orig];
+			const std::string expr = vartag_expr(orig.name, orig.rule);
+			if (generic) {
+				o.wstring(opts->yyrestoretag).ws(" (").wstring(expr).ws(")");
+			} else {
+				o.wstring(opts->yycursor).ws(" = ").wstring(expr);
+			}
+		}
+		o.ws(";\n");
+	}
+
+	// named tags
+	for (size_t t = rule.ltag; t < rule.htag; ++t) {
+		const Tag &tag = tags[t];
+
+		// fixed
+		if (tag.type == Tag::FIX) {
+			assert(!generic);
+			o.wind(ind).wstring(*tag.name).ws(" = ");
+			if (tag.fix.base == Tag::NONE) {
+				// optimize '(YYCTXMARKER + ((YYCURSOR - YCTXMARKER) - tag))'
+				// to       '(YYCURSOR - tag)'
+				o.wstring(opts->yycursor).ws(" - ").wu64(tag.fix.dist);
+			} else {
+				const Tag &orig = tags[tags[tag.fix.base].var.orig];
+				o.wstring(vartag_expr(orig.name, orig.rule))
+					.ws(" - ").wu64(tag.fix.dist);
+			}
+			o.ws(";\n");
+			continue;
+		}
+
+		// variable
+		const Tag &orig = tags[tag.var.orig];
+		const std::string expr = vartag_expr(orig.name, orig.rule);
+		o.wind(ind);
+		if (generic) {
+			o.wstring(opts->yycopytag).ws(" (").wstring(*tag.name)
+				.ws(", ").wstring(expr).ws(")");
+		} else {
+			o.wstring(*tag.name).ws(" = ").wstring(expr);
+		}
+		o.ws(";\n");
 	}
 }
 

@@ -22,7 +22,9 @@ struct ConfTags
 {
 	std::string format;
 	std::string separator;
-	ConfTags(): format("long @@;"), separator("") {}
+
+	ConfTags(const std::string &f, const std::string &s)
+		: format(f), separator(s) {}
 };
 
 struct OutputFragment

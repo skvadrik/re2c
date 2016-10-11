@@ -4,11 +4,11 @@
 
 static void lex(const char *YYCURSOR)
 {
-    const char *YYMARKER, *YYCTXMARKER, *p1, *p2, *p3, *p4;
+    const char *YYMARKER, *p0, *p1, *p2, *p3, *p4;
+    
     
 {
 	char yych;
-	YYCTXMARKER = YYCURSOR;
 	yych = *YYCURSOR;
 	switch (yych) {
 	case '0':	goto yy4;
@@ -111,9 +111,10 @@ yy19:
 	p3 = YYCURSOR - 9;
 	p2 = YYCURSOR - 12;
 	p1 = YYCURSOR - 14;
+	p0 = YYCURSOR - 15;
 	{
             printf("'%.*s', '%.*s', '%.*s', '%.*s', '%.*s'\n",
-                p1 - YYCTXMARKER, YYCTXMARKER,
+                p1 - p0, p0,
                 p2 - p1, p1,
                 p3 - p2, p2,
                 p4 - p3, p3,

@@ -80,79 +80,6 @@ std::string InputAPI::stmt_backup (uint32_t ind) const
 	return indent (ind) + s + ";\n";
 }
 
-std::string InputAPI::stmt_backupctx (uint32_t ind) const
-{
-	std::string s;
-	switch (type_)
-	{
-		case DEFAULT:
-			s = opts->yyctxmarker + " = " + opts->yycursor;
-			break;
-		case CUSTOM:
-			s = opts->yybackupctx + " ()";
-			break;
-	}
-	return indent(ind) + s + ";\n";
-}
-
-std::string InputAPI::expr_dist () const
-{
-	std::string s;
-	switch (type_) {
-		case DEFAULT:
-			s = "(" + opts->yycursor + " - " + opts->yyctxmarker + ")";
-			break;
-		case CUSTOM:
-			s = opts->tags_yydist + "()";
-			break;
-	}
-	return s;
-}
-
-std::string InputAPI::stmt_dist (uint32_t ind, const bool *mask,
-	const std::valarray<Tag> &tags) const
-{
-	std::string s = indent(ind);
-	for (size_t i = 0; i < tags.size(); ++i) {
-		if (mask[i]) {
-			const Tag &t = tags[tags[i].var.orig];
-			s += vartag_expr(t.name, t.rule) + " = ";
-		}
-	}
-	return s + expr_dist() + ";\n";
-}
-
-std::string InputAPI::stmt_tag_finalizer(uint32_t ind,
-	const std::valarray<Tag> &tags, const Tag &tag) const
-{
-	// fixed tags
-	if (tag.type == Tag::FIX) {
-		assert(type_ == DEFAULT);
-		const std::string dist = to_string(tag.fix.dist);
-		std::string expr;
-		if (tag.fix.base == Tag::NONE) {
-			// optimize '(YYCTXMARKER + ((YYCURSOR - YCTXMARKER) - tag))'
-			// to       '(YYCURSOR - tag)'
-			expr = opts->yycursor + " - " + dist;
-		} else {
-			const Tag &orig = tags[tags[tag.fix.base].var.orig];
-			expr = opts->yyctxmarker + " + ("
-				+ vartag_expr(orig.name, orig.rule)
-				+ " - " + dist + ")";
-		}
-		return indent(ind) + *tag.name + " = " + expr + ";\n";
-	}
-
-	// variable tags
-	const Tag &orig = tags[tag.var.orig];
-	const std::string
-		expr = vartag_expr(orig.name, orig.rule),
-		stmt = type_ == DEFAULT
-			? *tag.name + " = " + opts->yyctxmarker + " + " + expr
-			: opts->tags_yytag + "(" + *tag.name + ", " + expr + ")";
-	return indent(ind) + stmt + ";\n";
-}
-
 std::string InputAPI::stmt_restore (uint32_t ind) const
 {
 	std::string s;
@@ -166,29 +93,6 @@ std::string InputAPI::stmt_restore (uint32_t ind) const
 			break;
 	}
 	return indent (ind) + s + ";\n";
-}
-
-std::string InputAPI::stmt_restorectx(uint32_t ind,
-	const std::valarray<Tag> &tags, const Tag &tag, bool basetag) const
-{
-	std::string s;
-
-	if (tag.type == Tag::FIX) {
-		assert(type_ == DEFAULT);
-		s = opts->yycursor + " -= " + to_string(tag.fix.dist);
-	} else if (basetag) {
-		const Tag &orig = tags[tag.var.orig];
-		const std::string expr = vartag_expr(orig.name, orig.rule);
-		s = (type_ == DEFAULT)
-			? opts->yycursor + " = " + opts->yyctxmarker + " + " + expr
-			: opts->yyrestorectx + " (" + expr + ")";
-	} else {
-		s = (type_ == DEFAULT)
-			? opts->yycursor + " = " + opts->yyctxmarker
-			: opts->yyrestorectx + " ()";
-	}
-
-	return indent(ind) + s + ";\n";
 }
 
 std::string InputAPI::stmt_skip_peek (uint32_t ind) const

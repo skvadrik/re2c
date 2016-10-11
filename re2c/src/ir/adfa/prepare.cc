@@ -4,6 +4,7 @@
 
 #include "src/codegen/bitmap.h"
 #include "src/codegen/go.h"
+#include "src/conf/msg.h"
 #include "src/globals.h"
 #include "src/ir/adfa/action.h"
 #include "src/ir/adfa/adfa.h"
@@ -189,7 +190,7 @@ void DFA::prepare ()
 	}
 }
 
-void DFA::calc_stats ()
+void DFA::calc_stats(uint32_t line, size_t used_tags)
 {
 	// calculate 'YYMAXFILL'
 	max_fill = 0;
@@ -206,6 +207,26 @@ void DFA::calc_stats ()
 
 	// determine if 'yyaccept' variable is used
 	need_accept = accepts.size () > 1;
+
+	// determine if 'YYCTXMARKER' or 'YYBACKUPCTX'/'YYRESTORECTX' pair is used
+	// If tags are not enabled explicitely and trailing contexts
+	// don't overlap (single variable is enough for all of them), then
+	// re2c should use old-style YYCTXMARKER for backwards compatibility.
+	// Note that with generic API fixed-length contexts are forbidden,
+	// which may cause additional overlaps.
+	oldstyle_ctxmarker = used_tags == 1
+		&& copy_tags == ZERO_TAGS
+		&& !opts->tags;
+
+	// error if tags are not enabled, but we need them
+	if (!opts->tags
+		&& (used_tags > 1 || copy_tags != ZERO_TAGS)) {
+		error("line %u: overlapping trailing contexts need "
+			"multiple context markers, use '-t, --tags' "
+			"option and '/*!tags:re2c ... */' directive",
+			line);
+		exit(1);
+	}
 }
 
 void DFA::hoist_tags()

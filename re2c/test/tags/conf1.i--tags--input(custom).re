@@ -12,16 +12,15 @@ static inline unsigned parse_oct(const char *s, const char *e)
 
 static void lex(const char *s)
 {
-#define YYPEEK()           *s
-#define YYSKIP()           ++s
-#define YYBACKUP()         marker = s
-#define YYRESTORE()        s = marker
-#define YYBACKUPCTX()      basectx = s
-#define YYRESTORECTX(dist) s = basectx + dist
-#define ZZ_CTX(tag, dist)  tag = basectx + dist
-#define ZZ_DIST()          (s - basectx)
-    const char *marker, *basectx, *p1, *p2, *p3;
-    /*!tags:re2c*/
+#define YYPEEK()     *s
+#define YYSKIP()     ++s
+#define YYBACKUP()   marker = s
+#define YYRESTORE()  s = marker
+#define ZZBT(t)      t = s
+#define ZZRT(t)      s = t
+#define ZZCT(t1, t2) t1 = t2
+    const char *marker, *p0, *p1, *p2, *p3;
+    /*!tags:re2c format = "const char *@@;"; */
     /*!re2c
         re2c:define:YYCTYPE = char;
         re2c:yyfill:enable = 0;
@@ -31,20 +30,22 @@ static void lex(const char *s)
 
         * { printf("error\n"); return; }
 
+        @p0
           oct @p1
         d oct @p2
         d oct @p3
         d oct {
             printf("%u.%u.%u.%u\n",
-                parse_oct(basectx, p1),
+                parse_oct(p0, p1),
                 parse_oct(p1 + 1, p2),
                 parse_oct(p2 + 1, p3),
                 parse_oct(p3 + 1, s));
             return;
         }
 
-        re2c:define:YYTAG = "ZZ_CTX";
-        re2c:define:YYDIST = "ZZ_DIST";
+        re2c:define:YYBACKUPTAG = "ZZBT";
+        re2c:define:YYRESTORETAG = "ZZRT";
+        re2c:define:YYCOPYTAG = "ZZCT";
         re2c:tags:prefix = "zz_";
     */
 }

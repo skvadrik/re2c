@@ -21,7 +21,7 @@ struct input_t {
     char *cur;
     char *mar;
     char *tok;
-    /*!tags:re2c*/
+    /*!tags:re2c format = "char *@@;"; */
     bool eof;
 
     input_t()
@@ -49,6 +49,7 @@ struct input_t {
         cur -= free;
         mar -= free;
         tok -= free;
+        /*!tags:re2c format = "@@ -= free;"; */
         lim += fread(lim, 1, free, stdin);
         if (lim < buf + SIZE) {
             eof = true;
@@ -69,7 +70,6 @@ loop:
         re2c:define:YYCURSOR = in.cur;
         re2c:define:YYLIMIT = in.lim;
         re2c:define:YYMARKER = in.mar;
-        re2c:define:YYCTXMARKER = in.tok;
         re2c:define:YYFILL = "if (!in.fill(@@)) return false;";
         re2c:define:YYFILL:naked = 1;
         re2c:tags:expression = "in.@@";

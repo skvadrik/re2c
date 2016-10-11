@@ -32,7 +32,6 @@ yy5:
 
 {
 	YYCTYPE yych;
-	YYCTXMARKER = YYCURSOR;
 	if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
 	yych = *YYCURSOR;
 	switch (yych) {
@@ -48,7 +47,7 @@ yy11:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'a':
-		yyt0p = (YYCURSOR - YYCTXMARKER);
+		yyt0p = YYCURSOR;
 		goto yy13;
 	default:	goto yy10;
 	}
@@ -60,7 +59,7 @@ yy12:
 	}
 yy13:
 	++YYCURSOR;
-	p = YYCTXMARKER + yyt0p;
+	p = yyt0p;
 	{ p }
 }
 

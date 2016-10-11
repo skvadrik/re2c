@@ -13,12 +13,11 @@ static inline unsigned parse_oct(const char *s, const char *e)
 
 static void lex(const char *YYCURSOR)
 {
-    const char *YYMARKER, *YYCTXMARKER, *p1, *p2, *p3;
-    long zz_0p1;long zz_0p2;long zz_0p3;
+    const char *YYMARKER, *p0, *p1, *p2, *p3;
+    const char *zz_0p0;const char *zz_0p1;const char *zz_0p2;const char *zz_0p3;
     
 {
 	char yych;
-	YYCTXMARKER = YYCURSOR;
 	yych = *YYCURSOR;
 	switch (yych) {
 	case '0':
@@ -30,7 +29,9 @@ static void lex(const char *YYCURSOR)
 	case '6':
 	case '7':
 	case '8':
-	case '9':	goto yy4;
+	case '9':
+		zz_0p0 = YYCURSOR;
+		goto yy4;
 	default:	goto yy2;
 	}
 yy2:
@@ -41,7 +42,7 @@ yy4:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
 	case '.':
-		zz_0p1 = (YYCURSOR - YYCTXMARKER);
+		zz_0p1 = YYCURSOR;
 		goto yy5;
 	case '0':
 	case '1':
@@ -77,7 +78,7 @@ yy7:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case '.':
-		zz_0p1 = (YYCURSOR - YYCTXMARKER);
+		zz_0p1 = YYCURSOR;
 		goto yy5;
 	case '0':
 	case '1':
@@ -95,7 +96,7 @@ yy8:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case '.':
-		zz_0p2 = (YYCURSOR - YYCTXMARKER);
+		zz_0p2 = YYCURSOR;
 		goto yy10;
 	case '0':
 	case '1':
@@ -113,7 +114,7 @@ yy9:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case '.':
-		zz_0p1 = (YYCURSOR - YYCTXMARKER);
+		zz_0p1 = YYCURSOR;
 		goto yy5;
 	default:	goto yy6;
 	}
@@ -136,7 +137,7 @@ yy11:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case '.':
-		zz_0p2 = (YYCURSOR - YYCTXMARKER);
+		zz_0p2 = YYCURSOR;
 		goto yy10;
 	case '0':
 	case '1':
@@ -154,7 +155,7 @@ yy12:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case '.':
-		zz_0p3 = (YYCURSOR - YYCTXMARKER);
+		zz_0p3 = YYCURSOR;
 		goto yy14;
 	case '0':
 	case '1':
@@ -172,7 +173,7 @@ yy13:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case '.':
-		zz_0p2 = (YYCURSOR - YYCTXMARKER);
+		zz_0p2 = YYCURSOR;
 		goto yy10;
 	default:	goto yy6;
 	}
@@ -195,7 +196,7 @@ yy15:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case '.':
-		zz_0p3 = (YYCURSOR - YYCTXMARKER);
+		zz_0p3 = YYCURSOR;
 		goto yy14;
 	case '0':
 	case '1':
@@ -225,12 +226,13 @@ yy16:
 	default:	goto yy17;
 	}
 yy17:
-	p3 = YYCTXMARKER + zz_0p3;
-	p2 = YYCTXMARKER + zz_0p2;
-	p1 = YYCTXMARKER + zz_0p1;
+	p3 = zz_0p3;
+	p2 = zz_0p2;
+	p1 = zz_0p1;
+	p0 = zz_0p0;
 	{
             printf("%u.%u.%u.%u\n",
-                parse_oct(YYCTXMARKER, p1),
+                parse_oct(p0, p1),
                 parse_oct(p1 + 1, p2),
                 parse_oct(p2 + 1, p3),
                 parse_oct(p3 + 1, YYCURSOR));
@@ -240,7 +242,7 @@ yy18:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case '.':
-		zz_0p3 = (YYCURSOR - YYCTXMARKER);
+		zz_0p3 = YYCURSOR;
 		goto yy14;
 	default:	goto yy6;
 	}

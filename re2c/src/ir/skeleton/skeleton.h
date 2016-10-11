@@ -88,10 +88,10 @@ void fprint_default_path(FILE *f, const Skeleton &skel, const path_t &p);
 void emit_data(const Skeleton &skel);
 void emit_prolog(OutputFile & o);
 void emit_start(const Skeleton &skel, OutputFile &o, size_t maxfill,
-	bool backup, bool backupctx, bool accept, bool basetag,
+	bool backup, bool accept, bool oldstyle_ctxmarker,
 	const std::set<std::string> &tagnames,
 	const std::set<std::string> &tagvars);
-void emit_end(const Skeleton &skel, OutputFile &o, bool backup, bool backupctx);
+void emit_end(const Skeleton &skel, OutputFile &o, bool backup, bool oldstyle_ctxmarker);
 void emit_epilog(OutputFile &o, const std::set<std::string> &names);
 void emit_action(const Skeleton &skel, OutputFile &o, uint32_t ind,
 	size_t rule);

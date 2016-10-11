@@ -21,7 +21,7 @@ struct input_t {
     char *cur;
     char *mar;
     char *tok;
-    /*!tags:re2c*/
+    /*!tags:re2c format = "char *@@;"; */
     bool eof;
 
     input_t()
@@ -49,6 +49,7 @@ struct input_t {
         cur -= free;
         mar -= free;
         tok -= free;
+        /*!tags:re2c format = "@@ -= free;"; */
         lim += fread(lim, 1, free, stdin);
         if (lim < buf + SIZE) {
             eof = true;
@@ -65,10 +66,9 @@ static bool lex(input_t & in)
 #define YYSKIP()           ++in.cur
 #define YYBACKUP()         in.mar = in.cur
 #define YYRESTORE()        in.cur = in.mar
-#define YYBACKUPCTX()      in.tok = in.cur
-#define YYRESTORECTX(dist) in.cur = in.tok + dist
-#define YYTAG(tag, dist)   tag = in.tok + dist
-#define YYDIST()           in.cur - in.tok
+#define YYBACKUPTAG(t)     t = in.cur
+#define YYRESTORETAG(t)    in.cur = t
+#define YYCOPYTAG(t1, t2)  t1 = t2
 #define YYLESSTHAN(n)      in.lim - in.cur < n
 loop:
     in.tok = in.cur;

@@ -78,8 +78,7 @@ static smart_ptr<DFA> compile_rules(
 	fillpoints(dfa, fill);
 
 	// ADFA stands for 'DFA with actions'
-	DFA *adfa = new DFA(dfa, fill, skeleton, cs,
-		name, cond, line, used_tags);
+	DFA *adfa = new DFA(dfa, fill, skeleton, cs, name, cond, line);
 
 	// see note [reordering DFA states]
 	adfa->reorder();
@@ -88,7 +87,7 @@ static smart_ptr<DFA> compile_rules(
 	adfa->prepare();
 
 	// finally gather overall DFA statistics
-	adfa->calc_stats();
+	adfa->calc_stats(line, used_tags);
 
 	// accumulate global statistics from this particular DFA
 	output.max_fill = std::max (output.max_fill, adfa->max_fill);

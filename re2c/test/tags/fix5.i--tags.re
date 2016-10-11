@@ -3,19 +3,20 @@
 
 static void lex(const char *YYCURSOR)
 {
-    const char *YYMARKER, *YYCTXMARKER, *p1, *p2, *p3, *p4;
+    const char *YYMARKER, *p0, *p1, *p2, *p3, *p4;
+    /*!tags:re2c format = "const char *@@;"; */
     /*!re2c
         re2c:define:YYCTYPE = char;
         re2c:yyfill:enable = 0;
 
         * { printf("error\n"); return; }
-        "0"*
-            @p1 "1"
-            @p2 "2"*
-            @p3 "3"
-            @p4 "4"* {
+        @p0 "0"*
+        @p1 "1"
+        @p2 "2"*
+        @p3 "3"
+        @p4 "4"* {
             printf("'%.*s', '%.*s', '%.*s', '%.*s', '%.*s'\n",
-                p1 - YYCTXMARKER, YYCTXMARKER,
+                p1 - p0, p0,
                 p2 - p1, p1,
                 p3 - p2, p2,
                 p4 - p3, p3,

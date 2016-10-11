@@ -58,8 +58,6 @@ namespace re2c
 	OPT (bool, bUseStateNext, false) \
 	/* tags */ \
 	OPT (bool, tags, false) \
-	OPT (std::string, tags_yytag, "YYTAG") \
-	OPT (std::string, tags_yydist, "YYDIST") \
 	OPT (std::string, tags_prefix, "yyt") \
 	OPT (std::string, tags_expression, "@@") \
 	/* reuse */ \
@@ -87,8 +85,11 @@ namespace re2c
 	OPT (std::string, yyskip, "YYSKIP") \
 	OPT (std::string, yybackup, "YYBACKUP") \
 	OPT (std::string, yybackupctx, "YYBACKUPCTX") \
+	OPT (std::string, yybackuptag, "YYBACKUPTAG") \
 	OPT (std::string, yyrestore, "YYRESTORE") \
 	OPT (std::string, yyrestorectx, "YYRESTORECTX") \
+	OPT (std::string, yyrestoretag, "YYRESTORETAG") \
+	OPT (std::string, yycopytag, "YYCOPYTAG") \
 	OPT (std::string, yylessthan, "YYLESSTHAN") \
 	/* #line directives */ \
 	OPT (bool, iFlag, false) \

@@ -144,7 +144,7 @@ void DFA::emit(Output & output, uint32_t& ind, bool isLastCond, bool& bPrologBra
 	OutputBlock &ob = o.block();
 
 	std::set<std::string> tagnames, tagvars;
-	if (basetag) {
+	if (!oldstyle_ctxmarker) {
 		const size_t ntags = tags.size();
 		for (size_t i = 0; i < ntags; ++i) {
 			const Tag &t = tags[i];
@@ -190,11 +190,11 @@ void DFA::emit(Output & output, uint32_t& ind, bool isLastCond, bool& bPrologBra
 		if (output.skeletons.insert (name).second)
 		{
 			emit_data(*skeleton);
-			emit_start(*skeleton, o, max_fill, need_backup, need_backupctx,
-				need_accept, basetag, tagnames, tagvars);
+			emit_start(*skeleton, o, max_fill, need_backup,
+				need_accept, oldstyle_ctxmarker, tagnames, tagvars);
 			uint32_t i = 2;
 			emit_body (o, i, used_labels, initial_label);
-			emit_end(*skeleton, o, need_backup, need_backupctx);
+			emit_end(*skeleton, o, need_backup, oldstyle_ctxmarker);
 		}
 	} else if (opts->target == opt_t::DOT) {
 		emit_dot(o, isLastCond, ob.types);
@@ -263,9 +263,6 @@ void DFA::emit(Output & output, uint32_t& ind, bool isLastCond, bool& bPrologBra
 				o.wstring(divider).ws("\n");
 			}
 			o.wstring(opts->condPrefix).wstring(cond).ws(":\n");
-		}
-		if (basetag) {
-			o.wstring(opts->input_api.stmt_backupctx(ind));
 		}
 		if (opts->cFlag && opts->bFlag && BitMap::first)
 		{

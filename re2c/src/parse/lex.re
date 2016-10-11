@@ -196,19 +196,19 @@ void Scanner::lex_end_of_comment()
 
 void Scanner::lex_tags()
 {
-	ConfTags conf;
+	std::string fmt, sep;
 	for (;;) {/*!re2c
 		* { fatal("unrecognized configuration"); }
 
-		"format"    { conf.format    = lex_conf_string(); continue; }
-		"separator" { conf.separator = lex_conf_string(); continue; }
+		"format"    { fmt = lex_conf_string(); continue; }
+		"separator" { sep = lex_conf_string(); continue; }
 
 		space+ { continue; }
 		eol    { ++cline; continue; }
 		eoc    {
 			if (opts->target == opt_t::CODE) {
 				out.wdelay_tags(opts->topIndent,
-					new ConfTags(conf));
+					new ConfTags(fmt, sep));
 			}
 			tok = pos = cur;
 			return;

@@ -76,8 +76,6 @@ void opt_t::fix ()
 			state_set = Opt::baseopt.state_set;
 			state_set_arg = Opt::baseopt.state_set_arg;
 			state_set_naked = Opt::baseopt.state_set_naked;
-			tags_yytag = Opt::baseopt.tags_yytag;
-			tags_yydist = Opt::baseopt.tags_yydist;
 			tags_prefix = Opt::baseopt.tags_prefix;
 			tags_expression = Opt::baseopt.tags_expression;
 			yyfilllabel = Opt::baseopt.yyfilllabel;
@@ -96,8 +94,11 @@ void opt_t::fix ()
 			yyskip = Opt::baseopt.yyskip;
 			yybackup = Opt::baseopt.yybackup;
 			yybackupctx = Opt::baseopt.yybackupctx;
+			yybackuptag = Opt::baseopt.yybackuptag;
 			yyrestore = Opt::baseopt.yyrestore;
 			yyrestorectx = Opt::baseopt.yyrestorectx;
+			yyrestoretag = Opt::baseopt.yyrestoretag;
+			yycopytag = Opt::baseopt.yycopytag;
 			yylessthan = Opt::baseopt.yylessthan;
 			dFlag = Opt::baseopt.dFlag;
 			yydebug = Opt::baseopt.yydebug;
@@ -156,8 +157,6 @@ void opt_t::fix ()
 	}
 	if (!tags)
 	{
-		tags_yytag = Opt::baseopt.tags_yytag;
-		tags_yydist = Opt::baseopt.tags_yydist;
 		tags_prefix = Opt::baseopt.tags_prefix;
 		tags_expression = Opt::baseopt.tags_expression;
 	}
@@ -184,8 +183,11 @@ void opt_t::fix ()
 		yyskip = Opt::baseopt.yyskip;
 		yybackup = Opt::baseopt.yybackup;
 		yybackupctx = Opt::baseopt.yybackupctx;
+		yybackuptag = Opt::baseopt.yybackuptag;
 		yyrestore = Opt::baseopt.yyrestore;
 		yyrestorectx = Opt::baseopt.yyrestorectx;
+		yyrestoretag = Opt::baseopt.yyrestoretag;
+		yycopytag = Opt::baseopt.yycopytag;
 		yylessthan = Opt::baseopt.yylessthan;
 	}
 	if (!dFlag)
@@ -305,6 +307,7 @@ void Opt::reset_mapCodeName ()
 	useropt->state_set = Opt::baseopt.state_set;
 	useropt->yybackup = Opt::baseopt.yybackup;
 	useropt->yybackupctx = Opt::baseopt.yybackupctx;
+	useropt->yybackuptag = Opt::baseopt.yybackuptag;
 	useropt->yycondtype = Opt::baseopt.yycondtype;
 	useropt->yyctxmarker = Opt::baseopt.yyctxmarker;
 	useropt->yyctype = Opt::baseopt.yyctype;
@@ -316,9 +319,9 @@ void Opt::reset_mapCodeName ()
 	useropt->yypeek = Opt::baseopt.yypeek;
 	useropt->yyrestore = Opt::baseopt.yyrestore;
 	useropt->yyrestorectx = Opt::baseopt.yyrestorectx;
+	useropt->yyrestoretag = Opt::baseopt.yyrestoretag;
+	useropt->yycopytag = Opt::baseopt.yycopytag;
 	useropt->yyskip = Opt::baseopt.yyskip;
-	useropt->tags_yytag = Opt::baseopt.tags_yytag;
-	useropt->tags_yydist = Opt::baseopt.tags_yydist;
 	useropt->yyfilllabel = Opt::baseopt.yyfilllabel;
 	useropt->yynext = Opt::baseopt.yynext;
 	useropt->yyaccept = Opt::baseopt.yyaccept;
