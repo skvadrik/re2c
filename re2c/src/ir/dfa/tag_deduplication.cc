@@ -5,29 +5,6 @@
 namespace re2c
 {
 
-struct revarc_t
-{
-	size_t edge;
-	size_t dest;
-	size_t tags;
-	revarc_t *next;
-};
-
-static void backprop(revarc_t **rdfa, bool *been, size_t state,
-	size_t *live, size_t tags, Tagpool &tagpool)
-{
-	if (been[state]) return;
-	been[state] = true;
-
-	for (const revarc_t *a = rdfa[state]; a; a = a->next) {
-		live[a->edge] = tagpool.orl(live[a->edge], tags);
-		const size_t l = tagpool.andlinv(tags, a->tags);
-		if (l != ZERO_TAGS) {
-			backprop(rdfa, been, a->dest, live, l, tagpool);
-		}
-	}
-}
-
 static void forwprop(const dfa_t &dfa, bool *been, size_t state,
 	size_t *live, size_t need)
 {
@@ -45,56 +22,65 @@ static void forwprop(const dfa_t &dfa, bool *been, size_t state,
 	}
 }
 
-/* note [liveness analyses on tags]
- *
- * Liveness of a rule tag is propagated backwards from final
- * state and until we meet transition that updates this tag.
- *
- * Liveness of fallback tag is propagated forward from fallback
- * state (see note [fallback states]) and until there remain
- * any fallthrough paths from current state.
- */
 static void calc_live(const dfa_t &dfa, size_t *live)
 {
-	const size_t nstates = dfa.states.size();
-	bool *been = new bool[nstates];
+	const size_t
+		nstate = dfa.states.size(),
+		nsym = dfa.nchars,
+		narc = nstate * nsym;
 
-	// backward-propagate rule tags
-	revarc_t **rdfa = new revarc_t*[nstates]();
-	revarc_t *rarcs = new revarc_t[nstates * dfa.nchars];
-	revarc_t *a = rarcs;
-	for (size_t i = 0; i < nstates; ++i) {
-		dfa_state_t *s = dfa.states[i];
-		for (size_t c = 0; c < dfa.nchars; ++c) {
-			const size_t j = s->arcs[c];
-			if (j != dfa_t::NIL) {
-				a->edge = i * dfa.nchars + c;
-				a->dest = i;
-				a->tags = s->tags[c].set;
-				a->next = rdfa[j];
-				rdfa[j] = a++;
+	/* note [control flow equations for tag liveness]
+	 *
+	 * Tag liveness in basic block x is given by control-flow equations:
+	 *
+	 *     need-out(x) = use(x) + need-in(y), for all y successors of x
+	 *     need-in(x) = need-out(x) - define(x)
+	 *
+	 * Equations are solved by iteration until fix point.
+	 * Basic blocks are arcs. Successors of arc s1 -> s2 are:
+	 *     - all outgoing arcs from state s2
+	 *     - if state s2 is final, corresponding rule action
+	 */
+	std::fill(live, live + narc, ZERO_TAGS);
+	for (bool loop = true; loop;) {
+		loop = false;
+
+		for (size_t a = 0; a < narc; ++a) {
+			const size_t i = dfa.states[a / nsym]->arcs[a % nsym];
+			if (i == dfa_t::NIL) continue;
+			const dfa_state_t *s = dfa.states[i];
+
+			size_t l = s->rule == Rule::NONE
+				? ZERO_TAGS
+				: dfa.tagpool.andlinv(dfa.rules[s->rule].tags, s->rule_tags.set);
+
+			const size_t *live_i = &live[i * nsym];
+			for (size_t c = 0; c < nsym; ++c) {
+				l = dfa.tagpool.orl(l,
+					dfa.tagpool.andlinv(live_i[c], s->tags[c].set));
+			}
+
+			size_t *pl = &live[a];
+			if (*pl != l) {
+				*pl = l;
+				loop = true;
 			}
 		}
 	}
-	for (size_t i = 0; i < nstates; ++i) {
-		const dfa_state_t *s = dfa.states[i];
-		if (s->rule != Rule::NONE) {
-			const size_t need = dfa.tagpool.andlinv(
-				dfa.rules[s->rule].tags, s->rule_tags.set);
-			std::fill(been, been + nstates, false);
-			backprop(rdfa, been, i, live, need, dfa.tagpool);
-		}
-	}
-	delete[] rdfa;
-	delete[] rarcs;
 
-	// forward-propagate fallback tags
-	for (size_t i = 0; i < nstates; ++i) {
+	/* note [fallback tag liveness]
+	 *
+	 * Liveness of fallback tag is propagated forward from fallback
+	 * state (see note [fallback states]) and until there remain
+	 * any fallthrough paths from current state.
+	 */
+	bool *been = new bool[nstate];
+	for (size_t i = 0; i < nstate; ++i) {
 		dfa_state_t *s = dfa.states[i];
 		if (s->fallback) {
 			const size_t need = dfa.tagpool.andlinv(
 				dfa.rules[s->rule].tags, s->rule_tags.set);
-			std::fill(been, been + nstates, false);
+			std::fill(been, been + nstate, false);
 			forwprop(dfa, been, i, live, need);
 		}
 	}
