@@ -1,4 +1,5 @@
 #include <algorithm>
+#include <string.h>
 
 #include "src/ir/dfa/dfa.h"
 #include "src/ir/skeleton/path.h"
@@ -13,6 +14,11 @@ Node::Node()
 	, rule(Rule::NONE)
 	, tags(NULL)
 {}
+
+Node::~Node()
+{
+	delete[] tags;
+}
 
 void Node::init(const bool *ts, size_t r,
 	const std::vector<std::pair<size_t, uint32_t> > &a)
@@ -88,12 +94,20 @@ Skeleton::Skeleton(
 		// in skeleton we are only interested in trailing contexts
 		// which may be attributed to states rather than transitions
 		// trailing context also cannot have fallback tag
-		size_t tags = s->rule_tags.set;
+		Tagpool &tagpool = dfa.tagpool;
+		const size_t ntag = tagpool.ntags;
+		bool *tags = new bool[ntag];
+		memcpy(tags, tagpool[s->rule_tags.set], ntag * sizeof(bool));
 		for (size_t c = 0; c < nc; ++c) {
-			tags = dfa.tagpool.orl(tags, s->tags[c].set);
+			const size_t x = s->tags[c].set;
+			if (x == ZERO_TAGS) continue;
+			const bool *set = tagpool[x];
+			for (size_t t = 0; t < ntag; ++t) {
+				tags[t] |= set[t];
+			}
 		}
 
-		nodes[i].init(dfa.tagpool[tags], s->rule, arcs);
+		nodes[i].init(tags, s->rule, arcs);
 	}
 
 	// initialize size of key

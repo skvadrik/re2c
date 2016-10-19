@@ -53,10 +53,6 @@ public:
 	explicit Tagpool(size_t n);
 	~Tagpool();
 	size_t insert(const bool *tags);
-	size_t orl(size_t t, size_t o);
-	size_t andl(size_t t, size_t a);
-	size_t andlinv(size_t t, size_t a);
-	size_t subst(size_t t, const size_t *represent);
 	const bool *operator[](size_t idx) const;
 	FORBID_COPY(Tagpool);
 };

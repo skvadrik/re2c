@@ -64,6 +64,8 @@ void insert_fallback_tags(dfa_t &dfa)
 		nstates = dfa.states.size(),
 		ntags = dfa.tags.size();
 	bool *been = new bool[nstates];
+	bool *total = dfa.tagpool.buffer2;
+	std::fill(total, total + ntags, false);
 
 	for (size_t i = 0; i < nstates; ++i) {
 		dfa_state_t *s = dfa.states[i];
@@ -80,6 +82,7 @@ void insert_fallback_tags(dfa_t &dfa)
 			*upd = dfa.tagpool[s->rule_tags.set];
 		for (size_t t = 0; t < ntags; ++t) {
 			owrt[t] &= fin[t] && !upd[t];
+			total[t] |= owrt[t];
 		}
 		const size_t copy = dfa.tagpool.insert(owrt);
 
@@ -91,9 +94,10 @@ void insert_fallback_tags(dfa_t &dfa)
 				}
 			}
 			s->rule_tags.copy = copy;
-			dfa.copy_tags = dfa.tagpool.orl(dfa.copy_tags, copy);
 		}
 	}
+
+	dfa.copy_tags = dfa.tagpool.insert(total);
 
 	delete[] been;
 }
