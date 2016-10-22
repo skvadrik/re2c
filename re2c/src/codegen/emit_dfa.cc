@@ -147,18 +147,19 @@ void DFA::emit(Output & output, uint32_t& ind, bool isLastCond, bool& bPrologBra
 	if (!oldstyle_ctxmarker) {
 		const size_t ntags = tags.size();
 		for (size_t i = 0; i < ntags; ++i) {
-			const Tag &t = tags[i];
-			if (t.type == Tag::VAR && t.var.orig == i) {
-				tagnames.insert(vartag_name(t.name, t.rule));
-			}
-			if (t.name != NULL) {
-				tagvars.insert(*t.name);
+			const std::string *name = tags[i].name;
+			if (name) {
+				tagvars.insert(*name);
 			}
 		}
-		const bool *copy = tagpool[copy_tags];
+		for (tagver_t v = 1; v <= maxtagver; ++v) {
+			tagnames.insert(vartag_name(v));
+		}
+		const tagver_t *copy = tagpool[copy_tags];
 		for (size_t i = 0; i < ntags; ++i) {
-			if (copy[i]) {
-				tagnames.insert(vartag_name_fallback(tags[i]));
+			const tagver_t v = copy[i];
+			if (v != TAGVER_ZERO) {
+				tagnames.insert(vartag_name_fallback(v));
 			}
 		}
 		ob.tags.insert(tagnames.begin(), tagnames.end());
@@ -372,34 +373,32 @@ void genCondGoto(OutputFile & o, uint32_t ind, const std::vector<std::string> & 
 	bWroteCondCheck = true;
 }
 
-std::string vartag_name(const std::string *name, size_t rule)
+std::string vartag_name(tagver_t ver)
 {
 	std::ostringstream s;
-	s << opts->tags_prefix << rule;
-	if (name != NULL) {
-		s << *name;
-	}
+	s << opts->tags_prefix << ver;
 	return s.str();
 }
 
-std::string vartag_expr(const std::string *name, size_t rule)
+std::string vartag_expr(tagver_t ver)
 {
-	const std::string s = vartag_name(name, rule);
+	const std::string s = vartag_name(ver);
 	std::string e = opts->tags_expression;
 	strrreplace(e, "@@", s);
 	return e;
 }
 
-std::string vartag_name_fallback(const Tag &tag)
+std::string vartag_name_fallback(tagver_t ver)
 {
-	const std::string name = (tag.name == NULL ? "" : *tag.name) + "_";
-	return vartag_name(&name, tag.rule);
+	return vartag_name(ver) + "_";
 }
 
-std::string vartag_expr_fallback(const Tag &tag)
+std::string vartag_expr_fallback(tagver_t ver)
 {
-	const std::string name = (tag.name == NULL ? "" : *tag.name) + "_";
-	return vartag_expr(&name, tag.rule);
+	const std::string s = vartag_name_fallback(ver);
+	std::string e = opts->tags_expression;
+	strrreplace(e, "@@", s);
+	return e;
 }
 
 } // end namespace re2c

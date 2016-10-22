@@ -74,6 +74,7 @@ struct DFA
 	bool need_backup;
 	bool need_accept;
 	bool oldstyle_ctxmarker;
+	tagver_t maxtagver;
 
 	DFA	( const dfa_t &dfa
 		, const std::vector<size_t> &fill
@@ -82,11 +83,12 @@ struct DFA
 		, const std::string &n
 		, const std::string &c
 		, uint32_t l
+		, tagver_t maxver
 		);
 	~DFA ();
 	void reorder();
 	void prepare();
-	void calc_stats(uint32_t line, size_t used_tags);
+	void calc_stats(uint32_t line);
 	void emit (Output &, uint32_t &, bool, bool &);
 
 private:

@@ -15,9 +15,9 @@ struct eqtag_t
 	size_t ntags;
 
 	explicit eqtag_t(size_t n): ntags(n) {}
-	inline bool operator()(const bool *x, const bool *y)
+	inline tagver_t operator()(const tagver_t *x, const tagver_t *y)
 	{
-		return memcmp(x, y, ntags * sizeof(bool)) == 0;
+		return memcmp(x, y, ntags * sizeof(tagver_t)) == 0;
 	}
 };
 
@@ -27,14 +27,14 @@ Tag::Tag()
 	: type(VAR)
 	, rule(Rule::NONE)
 	, name(NULL)
+	, fix()
 {}
 
-void init_var_tag(Tag &tag, size_t r, const std::string *n, size_t o)
+void init_var_tag(Tag &tag, size_t r, const std::string *n)
 {
 	tag.type = Tag::VAR;
 	tag.rule = r;
 	tag.name = n;
-	tag.var.orig = o;
 }
 
 void init_fix_tag(Tag &tag, size_t r, const std::string *n, size_t b, size_t d)
@@ -48,13 +48,13 @@ void init_fix_tag(Tag &tag, size_t r, const std::string *n, size_t b, size_t d)
 
 Tagpool::Tagpool(size_t n)
 	: lookup()
-	, buffer(new bool[n * 3])
+	, buffer(new tagver_t[n * 3])
 	, ntags(n)
 	, buffer1(&buffer[n * 1])
 	, buffer2(&buffer[n * 2])
 {
 	// all-zero tag configuration must have static number zero
-	std::fill(buffer, buffer + ntags, false);
+	std::fill(buffer, buffer + ntags, TAGVER_ZERO);
 	assert(ZERO_TAGS == insert(buffer));
 }
 
@@ -63,13 +63,13 @@ Tagpool::~Tagpool()
 	delete[] buffer;
 	const size_t n = lookup.size();
 	for (size_t i = 0; i < n; ++i) {
-		free(const_cast<bool*>(lookup[i]));
+		free(const_cast<tagver_t*>(lookup[i]));
 	}
 }
 
-size_t Tagpool::insert(const bool *tags)
+size_t Tagpool::insert(const tagver_t *tags)
 {
-	const size_t size = ntags * sizeof(bool);
+	const size_t size = ntags * sizeof(tagver_t);
 	const uint32_t hash = hash32(0, tags, size);
 
 	eqtag_t eq(ntags);
@@ -78,12 +78,12 @@ size_t Tagpool::insert(const bool *tags)
 		return idx;
 	}
 
-	bool *copy = static_cast<bool*>(malloc(size));
+	tagver_t *copy = static_cast<tagver_t*>(malloc(size));
 	memcpy(copy, tags, size);
 	return lookup.push(hash, copy);
 }
 
-const bool *Tagpool::operator[](size_t idx) const
+const tagver_t *Tagpool::operator[](size_t idx) const
 {
 	return lookup[idx];
 }

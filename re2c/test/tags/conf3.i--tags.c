@@ -13,11 +13,11 @@ static inline unsigned parse_oct(const char *s, const char *e)
 
 struct tags_t
 {
-    const char *yyt0p0;const char *yyt0p1;const char *yyt0p2;const char *yyt0p3;
+    const char *yyt1;const char *yyt2;const char *yyt3;const char *yyt4;
 
     tags_t();
-    void push(const char *arg_yyt0p0,const char *arg_yyt0p1,const char *arg_yyt0p2,const char *arg_yyt0p3);
-    void pop(const char *&arg_yyt0p0,const char *&arg_yyt0p1,const char *&arg_yyt0p2,const char *&arg_yyt0p3);
+    void push(const char *arg_yyt1,const char *arg_yyt2,const char *arg_yyt3,const char *arg_yyt4);
+    void pop(const char *&arg_yyt1,const char *&arg_yyt2,const char *&arg_yyt3,const char *&arg_yyt4);
 };
 
 static void lex(const char *YYCURSOR)
@@ -39,7 +39,7 @@ static void lex(const char *YYCURSOR)
 	case '7':
 	case '8':
 	case '9':
-		tags.yyt0p0 = YYCURSOR;
+		tags.yyt4 = YYCURSOR;
 		goto yy4;
 	default:	goto yy2;
 	}
@@ -51,7 +51,7 @@ yy4:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
 	case '.':
-		tags.yyt0p1 = YYCURSOR;
+		tags.yyt3 = YYCURSOR;
 		goto yy5;
 	case '0':
 	case '1':
@@ -87,7 +87,7 @@ yy7:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case '.':
-		tags.yyt0p1 = YYCURSOR;
+		tags.yyt3 = YYCURSOR;
 		goto yy5;
 	case '0':
 	case '1':
@@ -105,7 +105,7 @@ yy8:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case '.':
-		tags.yyt0p2 = YYCURSOR;
+		tags.yyt2 = YYCURSOR;
 		goto yy10;
 	case '0':
 	case '1':
@@ -123,7 +123,7 @@ yy9:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case '.':
-		tags.yyt0p1 = YYCURSOR;
+		tags.yyt3 = YYCURSOR;
 		goto yy5;
 	default:	goto yy6;
 	}
@@ -146,7 +146,7 @@ yy11:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case '.':
-		tags.yyt0p2 = YYCURSOR;
+		tags.yyt2 = YYCURSOR;
 		goto yy10;
 	case '0':
 	case '1':
@@ -164,7 +164,7 @@ yy12:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case '.':
-		tags.yyt0p3 = YYCURSOR;
+		tags.yyt1 = YYCURSOR;
 		goto yy14;
 	case '0':
 	case '1':
@@ -182,7 +182,7 @@ yy13:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case '.':
-		tags.yyt0p2 = YYCURSOR;
+		tags.yyt2 = YYCURSOR;
 		goto yy10;
 	default:	goto yy6;
 	}
@@ -205,7 +205,7 @@ yy15:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case '.':
-		tags.yyt0p3 = YYCURSOR;
+		tags.yyt1 = YYCURSOR;
 		goto yy14;
 	case '0':
 	case '1':
@@ -235,10 +235,10 @@ yy16:
 	default:	goto yy17;
 	}
 yy17:
-	p3 = tags.yyt0p3;
-	p2 = tags.yyt0p2;
-	p1 = tags.yyt0p1;
-	p0 = tags.yyt0p0;
+	p3 = tags.yyt1;
+	p2 = tags.yyt2;
+	p1 = tags.yyt3;
+	p0 = tags.yyt4;
 	{
             printf("%u.%u.%u.%u\n",
                 parse_oct(p0, p1),
@@ -251,7 +251,7 @@ yy18:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case '.':
-		tags.yyt0p3 = YYCURSOR;
+		tags.yyt1 = YYCURSOR;
 		goto yy14;
 	default:	goto yy6;
 	}
@@ -278,16 +278,16 @@ yy20:
 
 }
 
-tags_t::tags_t(): yyt0p0(0),yyt0p1(0),yyt0p2(0),yyt0p3(0) {}
+tags_t::tags_t(): yyt1(0),yyt2(0),yyt3(0),yyt4(0) {}
 
-void tags_t::push(const char *arg_yyt0p0,const char *arg_yyt0p1,const char *arg_yyt0p2,const char *arg_yyt0p3)
+void tags_t::push(const char *arg_yyt1,const char *arg_yyt2,const char *arg_yyt3,const char *arg_yyt4)
 {
-    yyt0p0 = arg_yyt0p0;yyt0p1 = arg_yyt0p1;yyt0p2 = arg_yyt0p2;yyt0p3 = arg_yyt0p3;
+    yyt1 = arg_yyt1;yyt2 = arg_yyt2;yyt3 = arg_yyt3;yyt4 = arg_yyt4;
 }
 
-void tags_t::pop(const char *&arg_yyt0p0,const char *&arg_yyt0p1,const char *&arg_yyt0p2,const char *&arg_yyt0p3)
+void tags_t::pop(const char *&arg_yyt1,const char *&arg_yyt2,const char *&arg_yyt3,const char *&arg_yyt4)
 {
-    arg_yyt0p0 = yyt0p0;arg_yyt0p1 = yyt0p1;arg_yyt0p2 = yyt0p2;arg_yyt0p3 = yyt0p3;
+    arg_yyt1 = yyt1;arg_yyt2 = yyt2;arg_yyt3 = yyt3;arg_yyt4 = yyt4;
 }
 
 int main(int argc, char **argv)

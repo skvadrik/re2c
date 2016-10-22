@@ -218,11 +218,11 @@ void Dot::emit(OutputFile &o, const DFA &dfa)
 			for (uint32_t j = 0; j < c.ranges.size(); ++j) {
 				o.wrange(c.ranges[j].first, c.ranges[j].second);
 			}
-			const bool *tags = dfa.tagpool[c.tags.set];
+			const tagver_t *tags = dfa.tagpool[c.tags.set];
 			for (size_t j = 0; j < dfa.tagpool.ntags; ++j) {
-				if (tags[j]) {
-					const Tag &t = dfa.tags[dfa.tags[j].var.orig];
-					o.ws("<").wstring(vartag_name(t.name, t.rule)).ws(">");
+				const tagver_t v = tags[j];
+				if (v != TAGVER_ZERO) {
+					o.ws("<").wstring(vartag_name(v)).ws(">");
 				}
 			}
 			o.ws("\"]\n");

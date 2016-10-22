@@ -14,7 +14,7 @@ static inline unsigned parse_oct(const char *s, const char *e)
 static void lex(const char *YYCURSOR)
 {
     const char *YYMARKER, *p0, *p1, *p2, *p3;
-    const char *zz_0p0;const char *zz_0p1;const char *zz_0p2;const char *zz_0p3;
+    const char *zz_1;const char *zz_2;const char *zz_3;const char *zz_4;
     
 {
 	char yych;
@@ -30,7 +30,7 @@ static void lex(const char *YYCURSOR)
 	case '7':
 	case '8':
 	case '9':
-		zz_0p0 = YYCURSOR;
+		zz_4 = YYCURSOR;
 		goto yy4;
 	default:	goto yy2;
 	}
@@ -42,7 +42,7 @@ yy4:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
 	case '.':
-		zz_0p1 = YYCURSOR;
+		zz_3 = YYCURSOR;
 		goto yy5;
 	case '0':
 	case '1':
@@ -78,7 +78,7 @@ yy7:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case '.':
-		zz_0p1 = YYCURSOR;
+		zz_3 = YYCURSOR;
 		goto yy5;
 	case '0':
 	case '1':
@@ -96,7 +96,7 @@ yy8:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case '.':
-		zz_0p2 = YYCURSOR;
+		zz_2 = YYCURSOR;
 		goto yy10;
 	case '0':
 	case '1':
@@ -114,7 +114,7 @@ yy9:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case '.':
-		zz_0p1 = YYCURSOR;
+		zz_3 = YYCURSOR;
 		goto yy5;
 	default:	goto yy6;
 	}
@@ -137,7 +137,7 @@ yy11:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case '.':
-		zz_0p2 = YYCURSOR;
+		zz_2 = YYCURSOR;
 		goto yy10;
 	case '0':
 	case '1':
@@ -155,7 +155,7 @@ yy12:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case '.':
-		zz_0p3 = YYCURSOR;
+		zz_1 = YYCURSOR;
 		goto yy14;
 	case '0':
 	case '1':
@@ -173,7 +173,7 @@ yy13:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case '.':
-		zz_0p2 = YYCURSOR;
+		zz_2 = YYCURSOR;
 		goto yy10;
 	default:	goto yy6;
 	}
@@ -196,7 +196,7 @@ yy15:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case '.':
-		zz_0p3 = YYCURSOR;
+		zz_1 = YYCURSOR;
 		goto yy14;
 	case '0':
 	case '1':
@@ -226,10 +226,10 @@ yy16:
 	default:	goto yy17;
 	}
 yy17:
-	p3 = zz_0p3;
-	p2 = zz_0p2;
-	p1 = zz_0p1;
-	p0 = zz_0p0;
+	p3 = zz_1;
+	p2 = zz_2;
+	p1 = zz_3;
+	p0 = zz_4;
 	{
             printf("%u.%u.%u.%u\n",
                 parse_oct(p0, p1),
@@ -242,7 +242,7 @@ yy18:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case '.':
-		zz_0p3 = YYCURSOR;
+		zz_1 = YYCURSOR;
 		goto yy14;
 	default:	goto yy6;
 	}

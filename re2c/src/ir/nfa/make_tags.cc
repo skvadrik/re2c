@@ -34,11 +34,9 @@ static void make_tags_var(size_t nrule,
 			dist = VARDIST;
 			make_tags_var(nrule, tags, tagidx, re->iter, dist);
 			break;
-		case RegExp::TAG: {
-			const size_t orig = tagidx;
-			init_var_tag(tags[tagidx++], nrule, re->tag, orig);
+		case RegExp::TAG:
+			init_var_tag(tags[tagidx++], nrule, re->tag);
 			break;
-		}
 	}
 }
 
@@ -61,7 +59,7 @@ static void make_tags_var_fix(size_t nrule,
 			const std::string *name = re->tag;
 			if (dist == VARDIST) {
 				base = tagidx;
-				init_var_tag(tags[tagidx++], nrule, name, base);
+				init_var_tag(tags[tagidx++], nrule, name);
 				dist = 0;
 			} else {
 				init_fix_tag(tags[tagidx++], nrule, name, base, dist);

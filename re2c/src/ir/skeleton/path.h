@@ -45,26 +45,23 @@ public:
 			tail = arcs.rbegin(),
 			head = arcs.rend();
 		for (; tail != head; ++tail) {
-			const size_t rule_idx = skel.nodes[*tail].rule;
-			if (rule_idx == Rule::NONE) {
-				continue;
-			}
+			const Node &node = skel.nodes[*tail];
+			if (node.rule == Rule::NONE) continue;
+
 			size_t len = static_cast<size_t>(head - tail) - 1;
-			const size_t trail = skel.rules[rule_idx].trail;
-			if (trail == Tag::NONE) {
-				return len;
-			}
+			const size_t trail = node.trail;
+			if (trail == Tag::NONE) return len;
+
 			const Tag &tag = skel.tags[trail];
-			switch (tag.type) {
-				case Tag::VAR:
-					for (; tail != head; ++tail) {
-						if (skel.nodes[*tail].tags[trail]) {
-							return static_cast<size_t>(head - tail) - 1;
-						}
+			if (tag.type == Tag::FIX) {
+				return len - tag.fix.dist;
+			} else {
+				for (; tail != head; ++tail) {
+					if (skel.tagpool[skel.nodes[*tail].tags][trail] == node.trver) {
+						return static_cast<size_t>(head - tail) - 1;
 					}
-					assert(false);
-				case Tag::FIX:
-					return len - tag.fix.dist;
+				}
+				assert(false);
 			}
 		}
 		return 0;

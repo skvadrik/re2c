@@ -17,10 +17,10 @@ void gen_goto_case(OutputFile &o, uint32_t ind, bool &readCh,
 void gen_goto_if(OutputFile &o, uint32_t ind, bool &readCh,
 	const State *to, const DFA &dfa, const tagcmd_t &tags, bool restore_fallback);
 void gen_settags(code_lines_t &code, const DFA &dfa, const tagcmd_t &tags, bool restore_fallback);
-std::string vartag_name(const std::string *name, size_t rule);
-std::string vartag_expr(const std::string *name, size_t rule);
-std::string vartag_name_fallback(const Tag &tag);
-std::string vartag_expr_fallback(const Tag &tag);
+std::string vartag_name(tagver_t ver);
+std::string vartag_expr(tagver_t ver);
+std::string vartag_name_fallback(tagver_t ver);
+std::string vartag_expr_fallback(tagver_t ver);
 
 } // namespace re2c
 

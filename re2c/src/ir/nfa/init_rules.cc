@@ -50,12 +50,14 @@ void init_rules(const std::vector<const RegExpRule*> &regexps,
 		rule.htag = t;
 
 		// mark *all* variable tags, including trailing context
-		bool *mask = new bool[nt]();
+		tagver_t *vers = tagpool.buffer1;
+		std::fill(vers, vers + nt, TAGVER_ZERO);
 		for (size_t i = rule.ltag; i < rule.htag; ++i) {
-			mask[i] = tags[i].type == Tag::VAR;
+			if (tags[i].type == Tag::VAR) {
+				vers[i] = static_cast<tagver_t>(i + 1);
+			}
 		}
-		rule.tags = tagpool.insert(mask);
-		delete[] mask;
+		rule.tags = tagpool.insert(vers);
 
 		// tags in trailing context are forbidden (they make no sense),
 		// and since tags are constructed in reversed order, this implies

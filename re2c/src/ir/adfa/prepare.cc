@@ -190,7 +190,7 @@ void DFA::prepare ()
 	}
 }
 
-void DFA::calc_stats(uint32_t line, size_t used_tags)
+void DFA::calc_stats(uint32_t line)
 {
 	// calculate 'YYMAXFILL'
 	max_fill = 0;
@@ -214,13 +214,13 @@ void DFA::calc_stats(uint32_t line, size_t used_tags)
 	// re2c should use old-style YYCTXMARKER for backwards compatibility.
 	// Note that with generic API fixed-length contexts are forbidden,
 	// which may cause additional overlaps.
-	oldstyle_ctxmarker = used_tags == 1
+	oldstyle_ctxmarker = maxtagver == 1
 		&& copy_tags == ZERO_TAGS
 		&& !opts->tags;
 
 	// error if tags are not enabled, but we need them
 	if (!opts->tags
-		&& (used_tags > 1 || copy_tags != ZERO_TAGS)) {
+		&& (maxtagver > 1 || copy_tags != ZERO_TAGS)) {
 		error("line %u: overlapping trailing contexts need "
 			"multiple context markers, use '-t, --tags' "
 			"option and '/*!tags:re2c ... */' directive",

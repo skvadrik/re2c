@@ -47,7 +47,7 @@ yy11:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'a':
-		yyt0p = YYCURSOR;
+		yyt1 = YYCURSOR;
 		goto yy13;
 	default:	goto yy10;
 	}
@@ -59,7 +59,7 @@ yy12:
 	}
 yy13:
 	++YYCURSOR;
-	p = yyt0p;
+	p = yyt1;
 	{ p }
 }
 

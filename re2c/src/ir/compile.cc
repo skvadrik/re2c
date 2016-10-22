@@ -69,7 +69,7 @@ static smart_ptr<DFA> compile_rules(
 	insert_fallback_tags(dfa);
 
 	// try to minimize the number of tag variables
-	const size_t used_tags = deduplicate_tags(dfa);
+	const tagver_t maxtagver = deduplicate_tags(dfa);
 
 	minimization(dfa);
 
@@ -78,7 +78,7 @@ static smart_ptr<DFA> compile_rules(
 	fillpoints(dfa, fill);
 
 	// ADFA stands for 'DFA with actions'
-	DFA *adfa = new DFA(dfa, fill, skeleton, cs, name, cond, line);
+	DFA *adfa = new DFA(dfa, fill, skeleton, cs, name, cond, line, maxtagver);
 
 	// see note [reordering DFA states]
 	adfa->reorder();
@@ -87,7 +87,7 @@ static smart_ptr<DFA> compile_rules(
 	adfa->prepare();
 
 	// finally gather overall DFA statistics
-	adfa->calc_stats(line, used_tags);
+	adfa->calc_stats(line);
 
 	// accumulate global statistics from this particular DFA
 	output.max_fill = std::max (output.max_fill, adfa->max_fill);

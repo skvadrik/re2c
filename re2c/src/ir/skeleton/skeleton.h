@@ -36,11 +36,12 @@ struct Node
 	arcs_t arcs;
 	arcsets_t arcsets;
 	size_t rule;
-	const bool *tags;
+	size_t trail;
+	tagver_t trver;
+	size_t tags;
 
 	Node();
-	~Node();
-	void init(const bool *ts, size_t r,
+	void init(size_t ts, size_t r, size_t tr, tagver_t tv,
 		const std::vector<std::pair<size_t, uint32_t> > &arcs);
 	bool end() const;
 
@@ -57,9 +58,9 @@ struct Skeleton
 	Node *nodes;
 
 	size_t sizeof_key;
-	std::valarray<Rule> &rules;
 	const size_t defrule;
 	const std::valarray<Tag> &tags;
+	Tagpool &tagpool;
 
 	Skeleton(const dfa_t &dfa, const charset_t &cs, size_t def,
 		const std::string &dfa_name, const std::string &dfa_cond,

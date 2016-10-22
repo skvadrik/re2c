@@ -17,13 +17,13 @@
 	unsigned int yyaccept = 0;
 	if ((YYLIMIT - YYCURSOR) < 5) YYFILL(5);
 	yych = *YYCURSOR;
-	yyt1p = YYCURSOR;
+	yyt1 = YYCURSOR;
 	switch (yych) {
 	case 'a':	goto yy3;
 	default:	goto yy2;
 	}
 yy2:
-	p = yyt1p;
+	p = yyt1;
 	{ 3 p }
 yy3:
 	yyaccept = 0;
@@ -36,7 +36,7 @@ yy4:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'a':
-		yyt1p = YYCURSOR;
+		yyt1 = YYCURSOR;
 		goto yy6;
 	default:	goto yy5;
 	}
@@ -56,7 +56,7 @@ yy6:
 	default:	goto yy7;
 	}
 yy7:
-	p = yyt1p;
+	p = yyt1;
 	{ 2 p }
 yy8:
 	yych = *++YYCURSOR;

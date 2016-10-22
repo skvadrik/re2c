@@ -13,11 +13,11 @@ static inline unsigned parse_oct(const char *s, const char *e)
 
 struct tags_t
 {
-    const char *yyt0p0;const char *yyt0p1;const char *yyt0p2;const char *yyt0p3;
+    const char *yyt1;const char *yyt2;const char *yyt3;const char *yyt4;
 
     tags_t();
-    void push(const char *arg_yyt0p0,const char *arg_yyt0p1,const char *arg_yyt0p2,const char *arg_yyt0p3);
-    void pop(const char *&arg_yyt0p0,const char *&arg_yyt0p1,const char *&arg_yyt0p2,const char *&arg_yyt0p3);
+    void push(const char *arg_yyt1,const char *arg_yyt2,const char *arg_yyt3,const char *arg_yyt4);
+    void pop(const char *&arg_yyt1,const char *&arg_yyt2,const char *&arg_yyt3,const char *&arg_yyt4);
 };
 
 static void lex(const char *s)
@@ -46,7 +46,7 @@ static void lex(const char *s)
 	case '7':
 	case '8':
 	case '9':
-		YYBACKUPTAG (tags.yyt0p0);
+		YYBACKUPTAG (tags.yyt4);
 		goto yy4;
 	default:	goto yy2;
 	}
@@ -60,7 +60,7 @@ yy4:
 	yych = YYPEEK ();
 	switch (yych) {
 	case '.':
-		YYBACKUPTAG (tags.yyt0p1);
+		YYBACKUPTAG (tags.yyt3);
 		goto yy5;
 	case '0':
 	case '1':
@@ -98,7 +98,7 @@ yy7:
 	yych = YYPEEK ();
 	switch (yych) {
 	case '.':
-		YYBACKUPTAG (tags.yyt0p1);
+		YYBACKUPTAG (tags.yyt3);
 		goto yy5;
 	case '0':
 	case '1':
@@ -117,7 +117,7 @@ yy8:
 	yych = YYPEEK ();
 	switch (yych) {
 	case '.':
-		YYBACKUPTAG (tags.yyt0p2);
+		YYBACKUPTAG (tags.yyt2);
 		goto yy10;
 	case '0':
 	case '1':
@@ -136,7 +136,7 @@ yy9:
 	yych = YYPEEK ();
 	switch (yych) {
 	case '.':
-		YYBACKUPTAG (tags.yyt0p1);
+		YYBACKUPTAG (tags.yyt3);
 		goto yy5;
 	default:	goto yy6;
 	}
@@ -161,7 +161,7 @@ yy11:
 	yych = YYPEEK ();
 	switch (yych) {
 	case '.':
-		YYBACKUPTAG (tags.yyt0p2);
+		YYBACKUPTAG (tags.yyt2);
 		goto yy10;
 	case '0':
 	case '1':
@@ -180,7 +180,7 @@ yy12:
 	yych = YYPEEK ();
 	switch (yych) {
 	case '.':
-		YYBACKUPTAG (tags.yyt0p3);
+		YYBACKUPTAG (tags.yyt1);
 		goto yy14;
 	case '0':
 	case '1':
@@ -199,7 +199,7 @@ yy13:
 	yych = YYPEEK ();
 	switch (yych) {
 	case '.':
-		YYBACKUPTAG (tags.yyt0p2);
+		YYBACKUPTAG (tags.yyt2);
 		goto yy10;
 	default:	goto yy6;
 	}
@@ -224,7 +224,7 @@ yy15:
 	yych = YYPEEK ();
 	switch (yych) {
 	case '.':
-		YYBACKUPTAG (tags.yyt0p3);
+		YYBACKUPTAG (tags.yyt1);
 		goto yy14;
 	case '0':
 	case '1':
@@ -254,10 +254,10 @@ yy16:
 	default:	goto yy17;
 	}
 yy17:
-	YYCOPYTAG (p3, tags.yyt0p3);
-	YYCOPYTAG (p2, tags.yyt0p2);
-	YYCOPYTAG (p1, tags.yyt0p1);
-	YYCOPYTAG (p0, tags.yyt0p0);
+	YYCOPYTAG (p3, tags.yyt1);
+	YYCOPYTAG (p2, tags.yyt2);
+	YYCOPYTAG (p1, tags.yyt3);
+	YYCOPYTAG (p0, tags.yyt4);
 	{
             printf("%u.%u.%u.%u\n",
                 parse_oct(p0, p1),
@@ -271,7 +271,7 @@ yy18:
 	yych = YYPEEK ();
 	switch (yych) {
 	case '.':
-		YYBACKUPTAG (tags.yyt0p3);
+		YYBACKUPTAG (tags.yyt1);
 		goto yy14;
 	default:	goto yy6;
 	}
@@ -299,16 +299,16 @@ yy20:
 
 }
 
-tags_t::tags_t(): yyt0p0(0),yyt0p1(0),yyt0p2(0),yyt0p3(0) {}
+tags_t::tags_t(): yyt1(0),yyt2(0),yyt3(0),yyt4(0) {}
 
-void tags_t::push(const char *arg_yyt0p0,const char *arg_yyt0p1,const char *arg_yyt0p2,const char *arg_yyt0p3)
+void tags_t::push(const char *arg_yyt1,const char *arg_yyt2,const char *arg_yyt3,const char *arg_yyt4)
 {
-    yyt0p0 = arg_yyt0p0;yyt0p1 = arg_yyt0p1;yyt0p2 = arg_yyt0p2;yyt0p3 = arg_yyt0p3;
+    yyt1 = arg_yyt1;yyt2 = arg_yyt2;yyt3 = arg_yyt3;yyt4 = arg_yyt4;
 }
 
-void tags_t::pop(const char *&arg_yyt0p0,const char *&arg_yyt0p1,const char *&arg_yyt0p2,const char *&arg_yyt0p3)
+void tags_t::pop(const char *&arg_yyt1,const char *&arg_yyt2,const char *&arg_yyt3,const char *&arg_yyt4)
 {
-    arg_yyt0p0 = yyt0p0;arg_yyt0p1 = yyt0p1;arg_yyt0p2 = yyt0p2;arg_yyt0p3 = yyt0p3;
+    arg_yyt1 = yyt1;arg_yyt2 = yyt2;arg_yyt3 = yyt3;arg_yyt4 = yyt4;
 }
 
 int main(int argc, char **argv)

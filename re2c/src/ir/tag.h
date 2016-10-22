@@ -9,6 +9,10 @@
 namespace re2c
 {
 
+typedef int32_t tagver_t;
+
+static const tagver_t TAGVER_ZERO = 0; // absense of tag
+
 struct Tag
 {
 	static const size_t NONE;
@@ -16,24 +20,17 @@ struct Tag
 	enum {VAR, FIX} type;
 	size_t rule;
 	const std::string *name;
-	union
+	struct
 	{
-		struct
-		{
-			size_t orig;
-		} var;
-		struct
-		{
-			size_t base;
-			size_t dist;
-		} fix;
-	};
+		size_t base;
+		size_t dist;
+	} fix;
 
 	Tag();
 	FORBID_COPY(Tag);
 };
 
-void init_var_tag(Tag &tag, size_t r, const std::string *n, size_t o);
+void init_var_tag(Tag &tag, size_t r, const std::string *n);
 void init_fix_tag(Tag &tag, size_t r, const std::string *n, size_t b, size_t d);
 
 static const size_t ZERO_TAGS = 0;
@@ -41,19 +38,19 @@ static const size_t ZERO_TAGS = 0;
 struct Tagpool
 {
 private:
-	typedef lookup_t<const bool*> taglookup_t;
+	typedef lookup_t<const tagver_t*> taglookup_t;
 	taglookup_t lookup;
-	bool *buffer;
+	tagver_t *buffer;
 
 public:
 	const size_t ntags;
-	bool *buffer1;
-	bool *buffer2;
+	tagver_t *buffer1;
+	tagver_t *buffer2;
 
 	explicit Tagpool(size_t n);
 	~Tagpool();
-	size_t insert(const bool *tags);
-	const bool *operator[](size_t idx) const;
+	size_t insert(const tagver_t *tags);
+	const tagver_t *operator[](size_t idx) const;
 	FORBID_COPY(Tagpool);
 };
 

@@ -3,7 +3,7 @@
 namespace re2c
 {
 
-static void find_overwritten_tags(const dfa_t &dfa, size_t state, bool *been, bool *owrt);
+static void find_overwritten_tags(const dfa_t &dfa, size_t state, bool *been, tagver_t *owrt);
 
 /* note [fallback tags]
  *
@@ -34,7 +34,7 @@ static void find_overwritten_tags(const dfa_t &dfa, size_t state, bool *been, bo
  */
 
 void find_overwritten_tags(const dfa_t &dfa, size_t state,
-	bool *been, bool *owrt)
+	bool *been, tagver_t *owrt)
 {
 	if (been[state]) return;
 	been[state] = true;
@@ -43,9 +43,12 @@ void find_overwritten_tags(const dfa_t &dfa, size_t state,
 	const size_t ntags = dfa.tags.size();
 
 	for (size_t c = 0; c < dfa.nchars; ++c) {
-		const bool *tags = dfa.tagpool[s->tags[c].set];
+		const tagver_t *tags = dfa.tagpool[s->tags[c].set];
 		for (size_t t = 0; t < ntags; ++t) {
-			owrt[t] |= tags[t];
+			const tagver_t v = tags[t];
+			if (v != TAGVER_ZERO) {
+				owrt[t] = v;
+			}
 		}
 
 		size_t dest = s->arcs[c];
@@ -64,25 +67,29 @@ void insert_fallback_tags(dfa_t &dfa)
 		nstates = dfa.states.size(),
 		ntags = dfa.tags.size();
 	bool *been = new bool[nstates];
-	bool *total = dfa.tagpool.buffer2;
-	std::fill(total, total + ntags, false);
+	tagver_t *total = dfa.tagpool.buffer2;
+	std::fill(total, total + ntags, TAGVER_ZERO);
 
 	for (size_t i = 0; i < nstates; ++i) {
 		dfa_state_t *s = dfa.states[i];
 
 		if (!s->fallback) continue;
 
-		bool *owrt = dfa.tagpool.buffer1;
-		std::fill(owrt, owrt + ntags, false);
+		tagver_t *owrt = dfa.tagpool.buffer1;
+		std::fill(owrt, owrt + ntags, TAGVER_ZERO);
 		std::fill(been, been + nstates, false);
 		find_overwritten_tags(dfa, i, been, owrt);
 
-		const bool
+		const tagver_t
 			*fin = dfa.tagpool[dfa.rules[s->rule].tags],
 			*upd = dfa.tagpool[s->rule_tags.set];
 		for (size_t t = 0; t < ntags; ++t) {
-			owrt[t] &= fin[t] && !upd[t];
-			total[t] |= owrt[t];
+			if (fin[t] == TAGVER_ZERO || upd[t] != TAGVER_ZERO) {
+				owrt[t] = TAGVER_ZERO;
+			}
+			if (owrt[t] != TAGVER_ZERO) {
+				total[t] = owrt[t];
+			}
 		}
 		const size_t copy = dfa.tagpool.insert(owrt);
 

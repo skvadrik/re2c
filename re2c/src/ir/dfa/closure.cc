@@ -6,7 +6,7 @@
 namespace re2c
 {
 
-static void closure_one(closure_t &clos, Tagpool &tagpool, nfa_state_t *n, bool *tags, bool *badtags);
+static void closure_one(closure_t &clos, Tagpool &tagpool, nfa_state_t *n, tagver_t *tags, bool *badtags);
 static void check_tags(const Tagpool &tagpool, size_t oldidx, size_t newidx, bool *badtags);
 static bool compare_by_rule(const clos_t &c1, const clos_t &c2);
 static void prune_final_items(closure_t &clos, std::valarray<Rule> &rules);
@@ -17,8 +17,8 @@ size_t closure(const closure_t &clos1, closure_t &clos2,
 {
 	// build tagged epsilon-closure of the given set of NFA states
 	clos2.clear();
-	bool *tags = tagpool.buffer1;
-	std::fill(tags, tags + tagpool.ntags, false);
+	tagver_t *tags = tagpool.buffer1;
+	std::fill(tags, tags + tagpool.ntags, TAGVER_ZERO);
 	for (cclositer_t c = clos1.begin(); c != clos1.end(); ++c) {
 		closure_one(clos2, tagpool, c->state, tags, badtags);
 	}
@@ -47,7 +47,7 @@ size_t closure(const closure_t &clos1, closure_t &clos2,
  * ambiguous. All tags are merged together; ambiguity is reported.
  */
 void closure_one(closure_t &clos, Tagpool &tagpool,
-	nfa_state_t *n, bool *tags, bool *badtags)
+	nfa_state_t *n, tagver_t *tags, bool *badtags)
 {
 	// trace the first iteration of each loop:
 	// epsilon-loops may add ney tags and reveal conflicts
@@ -63,8 +63,8 @@ void closure_one(closure_t &clos, Tagpool &tagpool,
 			break;
 		case nfa_state_t::TAG: {
 			const size_t t = n->tag.info;
-			const bool old = tags[t];
-			tags[t] = true;
+			const tagver_t old = tags[t];
+			tags[t] = static_cast<tagver_t>(t + 1);
 			closure_one(clos, tagpool, n->tag.out, tags, badtags);
 			tags[t] = old;
 			break;
@@ -96,11 +96,11 @@ void closure_one(closure_t &clos, Tagpool &tagpool,
  */
 void check_tags(const Tagpool &tagpool, size_t oldidx, size_t newidx, bool *badtags)
 {
-	const bool
+	const tagver_t
 		*oldtags = tagpool[oldidx],
 		*newtags = tagpool[newidx];
 	for (size_t i = 0; i < tagpool.ntags; ++i) {
-		badtags[i] |= oldtags[i] ^ newtags[i];
+		badtags[i] |= oldtags[i] != newtags[i];
 	}
 }
 
@@ -167,12 +167,12 @@ void prune_final_items(closure_t &clos, std::valarray<Rule> &rules)
 size_t merge_and_check_tags(const closure_t &clos, Tagpool &tagpool,
 	const std::valarray<Rule> &rules, bool *badtags)
 {
-	bool *tags = tagpool.buffer1;
-	std::fill(tags, tags + tagpool.ntags, false);
+	tagver_t *tags = tagpool.buffer1;
+	std::fill(tags, tags + tagpool.ntags, TAGVER_ZERO);
 
 	size_t r = 0, lt = 0, ht;
 	for (cclositer_t c = clos.begin(), e = clos.end(); c != e;) {
-		const bool *x = tagpool[c->tagidx];
+		const tagver_t *x = tagpool[c->tagidx];
 
 		// find next rule that occurs in closure
 		for (; r < c->state->rule; lt = rules[r].htag, ++r);
@@ -180,14 +180,14 @@ size_t merge_and_check_tags(const closure_t &clos, Tagpool &tagpool,
 
 		// merge tags of the 1st item belonging to this rule
 		for (size_t t = lt; t < ht; ++t) {
-			tags[t] |= x[t];
+			tags[t] = x[t];
 		}
 
 		// check the remaining items with this for tag nondeterminism:
 		// if some tag differs from that of the 1st item, then it is
 		// nondeterministic (don't merge it, only note the conflict)
 		for (++c; c != e && c->state->rule == r; ++c) {
-			const bool *y = tagpool[c->tagidx];
+			const tagver_t *y = tagpool[c->tagidx];
 			for (size_t t = lt; t < ht; ++t) {
 				badtags[t] |= y[t] != x[t];
 			}

@@ -12,19 +12,18 @@ Node::Node()
 	: arcs()
 	, arcsets()
 	, rule(Rule::NONE)
-	, tags(NULL)
+	, trail(Tag::NONE)
+	, trver(TAGVER_ZERO)
+	, tags(ZERO_TAGS)
 {}
 
-Node::~Node()
-{
-	delete[] tags;
-}
-
-void Node::init(const bool *ts, size_t r,
+void Node::init(size_t ts, size_t r, size_t tr, tagver_t tv,
 	const std::vector<std::pair<size_t, uint32_t> > &a)
 {
 	rule = r;
 	tags = ts;
+	trail = tr;
+	trver = tv;
 
 	uint32_t lb = 0;
 	std::vector<std::pair<size_t, uint32_t> >::const_iterator
@@ -68,9 +67,9 @@ Skeleton::Skeleton(
 	, nodes_count(dfa.states.size() + 1) // +1 for default state
 	, nodes(new Node[nodes_count])
 	, sizeof_key(8)
-	, rules(dfa.rules)
 	, defrule(def)
 	, tags(dfa.tags)
+	, tagpool(dfa.tagpool)
 {
 	const size_t nc = cs.size() - 1;
 
@@ -94,25 +93,36 @@ Skeleton::Skeleton(
 		// in skeleton we are only interested in trailing contexts
 		// which may be attributed to states rather than transitions
 		// trailing context also cannot have fallback tag
-		Tagpool &tagpool = dfa.tagpool;
-		const size_t ntag = tagpool.ntags;
-		bool *tags = new bool[ntag];
-		memcpy(tags, tagpool[s->rule_tags.set], ntag * sizeof(bool));
+		const size_t ntag = tags.size();
+		tagver_t *buf = tagpool.buffer1;
+		memcpy(buf, tagpool[s->rule_tags.set], ntag * sizeof(tagver_t));
 		for (size_t c = 0; c < nc; ++c) {
-			const size_t x = s->tags[c].set;
-			if (x == ZERO_TAGS) continue;
-			const bool *set = tagpool[x];
+			const tagver_t *set = tagpool[s->tags[c].set];
 			for (size_t t = 0; t < ntag; ++t) {
-				tags[t] |= set[t];
+				const tagver_t v = set[t];
+				if (buf[t] == TAGVER_ZERO) {
+					buf[t] = v;
+				} else if (v != TAGVER_ZERO) {
+					assert(buf[t] == v);
+				}
 			}
 		}
 
-		nodes[i].init(tags, s->rule, arcs);
+		size_t trail = Tag::NONE;
+		tagver_t trver = TAGVER_ZERO;
+		if (s->rule != Rule::NONE) {
+			trail = dfa.rules[s->rule].trail;
+			if (trail != Tag::NONE) {
+				trver = tagpool[dfa.rules[s->rule].tags][trail];
+			}
+		}
+
+		nodes[i].init(tagpool.insert(buf), s->rule, trail, trver, arcs);
 	}
 
 	// initialize size of key
 	const size_t maxlen = maxpath(*this);
-	const size_t maxrule = rules.size() + 1; // +1 for none-rule
+	const size_t maxrule = dfa.rules.size() + 1; // +1 for none-rule
 	const size_t max = std::max(maxlen, maxrule);
 	if (max <= std::numeric_limits<uint8_t>::max()) {
 		sizeof_key = 1;

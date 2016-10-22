@@ -23,7 +23,7 @@ struct input_t {
     char *cur;
     char *mar;
     char *tok;
-    char *yyt1p1;char *yyt1p2;char *yyt1p3;
+    char *yyt1;char *yyt2;char *yyt3;
     bool eof;
 
     input_t()
@@ -32,7 +32,7 @@ struct input_t {
         , cur(lim)
         , mar(lim)
         , tok(lim)
-        , yyt1p1(0), yyt1p2(0), yyt1p3(0)
+        , yyt1(0), yyt2(0), yyt3(0)
         , eof(false)
     {}
     bool fill(size_t need)
@@ -51,7 +51,7 @@ struct input_t {
         cur -= free;
         mar -= free;
         tok -= free;
-        yyt1p1 -= free;yyt1p2 -= free;yyt1p3 -= free;
+        yyt1 -= free;yyt2 -= free;yyt3 -= free;
         lim += fread(lim, 1, free, stdin);
         if (lim < buf + SIZE) {
             eof = true;
@@ -107,7 +107,7 @@ yy6:
 	yych = YYPEEK ();
 	switch (yych) {
 	case '.':
-		YYBACKUPTAG (in.yyt1p1);
+		YYBACKUPTAG (in.yyt3);
 		goto yy7;
 	case '0':
 	case '1':
@@ -145,7 +145,7 @@ yy9:
 	yych = YYPEEK ();
 	switch (yych) {
 	case '.':
-		YYBACKUPTAG (in.yyt1p1);
+		YYBACKUPTAG (in.yyt3);
 		goto yy7;
 	case '0':
 	case '1':
@@ -164,7 +164,7 @@ yy10:
 	yych = YYPEEK ();
 	switch (yych) {
 	case '.':
-		YYBACKUPTAG (in.yyt1p2);
+		YYBACKUPTAG (in.yyt2);
 		goto yy12;
 	case '0':
 	case '1':
@@ -183,7 +183,7 @@ yy11:
 	yych = YYPEEK ();
 	switch (yych) {
 	case '.':
-		YYBACKUPTAG (in.yyt1p1);
+		YYBACKUPTAG (in.yyt3);
 		goto yy7;
 	default:	goto yy8;
 	}
@@ -208,7 +208,7 @@ yy13:
 	yych = YYPEEK ();
 	switch (yych) {
 	case '.':
-		YYBACKUPTAG (in.yyt1p2);
+		YYBACKUPTAG (in.yyt2);
 		goto yy12;
 	case '0':
 	case '1':
@@ -227,7 +227,7 @@ yy14:
 	yych = YYPEEK ();
 	switch (yych) {
 	case '.':
-		YYBACKUPTAG (in.yyt1p3);
+		YYBACKUPTAG (in.yyt1);
 		goto yy16;
 	case '0':
 	case '1':
@@ -246,7 +246,7 @@ yy15:
 	yych = YYPEEK ();
 	switch (yych) {
 	case '.':
-		YYBACKUPTAG (in.yyt1p2);
+		YYBACKUPTAG (in.yyt2);
 		goto yy12;
 	default:	goto yy8;
 	}
@@ -271,7 +271,7 @@ yy17:
 	yych = YYPEEK ();
 	switch (yych) {
 	case '.':
-		YYBACKUPTAG (in.yyt1p3);
+		YYBACKUPTAG (in.yyt1);
 		goto yy16;
 	case '0':
 	case '1':
@@ -307,15 +307,15 @@ yy19:
 	yych = YYPEEK ();
 	switch (yych) {
 	case '.':
-		YYBACKUPTAG (in.yyt1p3);
+		YYBACKUPTAG (in.yyt1);
 		goto yy16;
 	default:	goto yy8;
 	}
 yy20:
 	YYSKIP ();
-	YYCOPYTAG (p3, in.yyt1p3);
-	YYCOPYTAG (p2, in.yyt1p2);
-	YYCOPYTAG (p1, in.yyt1p1);
+	YYCOPYTAG (p3, in.yyt1);
+	YYCOPYTAG (p2, in.yyt2);
+	YYCOPYTAG (p1, in.yyt3);
 	{
             printf("> %u.%u.%u.%u\n",
                 parse_oct(in.tok, p1),

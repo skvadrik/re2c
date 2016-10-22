@@ -23,6 +23,7 @@ DFA::DFA
 	, const std::string &n
 	, const std::string &c
 	, uint32_t l
+	, tagver_t maxver
 	)
 	: accepts ()
 	, skeleton (skel)
@@ -41,6 +42,7 @@ DFA::DFA
 	, need_backup (false)
 	, need_accept (false)
 	, oldstyle_ctxmarker (false)
+	, maxtagver (maxver)
 {
 	const size_t nstates = dfa.states.size();
 	const size_t nchars = dfa.nchars;
