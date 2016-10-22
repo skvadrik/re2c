@@ -25,6 +25,7 @@ SRC_HDR = \
 	src/ir/dfa/closure.h \
 	src/ir/dfa/dfa.h \
 	src/ir/dfa/find_state.h \
+	src/ir/dfa/tag_optimize.h \
 	src/ir/nfa/nfa.h \
 	src/ir/regexp/encoding/case.h \
 	src/ir/regexp/encoding/enc.h \
@@ -97,7 +98,12 @@ SRC = \
 	src/ir/dfa/fillpoints.cc \
 	src/ir/dfa/find_state.cc \
 	src/ir/dfa/minimization.cc \
-	src/ir/dfa/tag_deduplication.cc \
+	src/ir/dfa/tag_allocation.cc \
+	src/ir/dfa/tag_dce.cc \
+	src/ir/dfa/tag_interference.cc \
+	src/ir/dfa/tag_liveness.cc \
+	src/ir/dfa/tag_optimize.cc \
+	src/ir/dfa/tag_renaming.cc \
 	src/ir/regexp/encoding/enc.cc \
 	src/ir/regexp/encoding/range_suffix.cc \
 	src/ir/regexp/encoding/utf8/utf8_regexp.cc \

@@ -69,7 +69,7 @@ static smart_ptr<DFA> compile_rules(
 	insert_fallback_tags(dfa);
 
 	// try to minimize the number of tag variables
-	const tagver_t maxtagver = deduplicate_tags(dfa);
+	const tagver_t maxtagver = optimize_tags(dfa);
 
 	minimization(dfa);
 
