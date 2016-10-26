@@ -31,7 +31,7 @@ static void emit_rule(OutputFile &o, uint32_t ind, const DFA &dfa, size_t rule_i
 static void genYYFill(OutputFile &o, size_t need);
 static void genSetCondition(OutputFile &o, uint32_t ind, const std::string &cond);
 static void genSetState(OutputFile &o, uint32_t ind, uint32_t fillIndex);
-static void gen_goto(code_lines_t &code, bool &readCh, const State *to, const DFA &dfa, const tagcmd_t &tags, bool restore_fallback);
+static void gen_goto(code_lines_t &code, bool &readCh, const State *to, const DFA &dfa, const tagcmd_t &cmd);
 static void gen_fintags(OutputFile &o, uint32_t ind, const DFA &dfa, const Rule &rule);
 
 void emit_action(OutputFile &o, uint32_t ind, bool &readCh,
@@ -142,7 +142,7 @@ void emit_accept_binary(OutputFile &o, uint32_t ind, bool &readCh,
 		o.wind(--ind).ws("}\n");
 	} else {
 		const accept_t &acc = *s->action.info.accepts;
-		gen_goto_plain(o, ind, readCh, acc[l].first, dfa, acc[l].second, true);
+		gen_goto_plain(o, ind, readCh, acc[l].first, dfa, acc[l].second);
 	}
 }
 
@@ -164,7 +164,7 @@ void emit_accept(OutputFile &o, uint32_t ind, bool &readCh,
 
 	// only one possible 'yyaccept' value: unconditional jump
 	if (nacc == 1) {
-		gen_goto_plain(o, ind, readCh, acc[0].first, dfa, acc[0].second, true);
+		gen_goto_plain(o, ind, readCh, acc[0].first, dfa, acc[0].second);
 		return;
 	}
 
@@ -204,10 +204,10 @@ void emit_accept(OutputFile &o, uint32_t ind, bool &readCh,
 	o.wind(ind).ws("switch (").wstring(opts->yyaccept).ws(") {\n");
 	for (uint32_t i = 0; i < nacc - 1; ++i) {
 		o.wind(ind).ws("case ").wu32(i).ws(": ");
-		gen_goto_case(o, ind, readCh, acc[i].first, dfa, acc[i].second, true);
+		gen_goto_case(o, ind, readCh, acc[i].first, dfa, acc[i].second);
 	}
 	o.wind(ind).ws("default:");
-	gen_goto_case(o, ind, readCh, acc[nacc - 1].first, dfa, acc[nacc - 1].second, true);
+	gen_goto_case(o, ind, readCh, acc[nacc - 1].first, dfa, acc[nacc - 1].second);
 	o.wind(ind).ws("}\n");
 }
 
@@ -316,11 +316,10 @@ void genSetState(OutputFile &o, uint32_t ind, uint32_t fillIndex)
 }
 
 void gen_goto_case(OutputFile &o, uint32_t ind, bool &readCh,
-	const State *to, const DFA &dfa, const tagcmd_t &tags,
-	bool restore_fallback)
+	const State *to, const DFA &dfa, const tagcmd_t &cmd)
 {
 	code_lines_t code;
-	gen_goto(code, readCh, to, dfa, tags, restore_fallback);
+	gen_goto(code, readCh, to, dfa, cmd);
 	const size_t lines = code.size();
 
 	if (lines == 1) {
@@ -334,11 +333,10 @@ void gen_goto_case(OutputFile &o, uint32_t ind, bool &readCh,
 }
 
 void gen_goto_if(OutputFile &o, uint32_t ind, bool &readCh,
-	const State *to, const DFA &dfa, const tagcmd_t &tags,
-	bool restore_fallback)
+	const State *to, const DFA &dfa, const tagcmd_t &cmd)
 {
 	code_lines_t code;
-	gen_goto(code, readCh, to, dfa, tags, restore_fallback);
+	gen_goto(code, readCh, to, dfa, cmd);
 	const size_t lines = code.size();
 
 	if (lines == 1) {
@@ -353,11 +351,10 @@ void gen_goto_if(OutputFile &o, uint32_t ind, bool &readCh,
 }
 
 void gen_goto_plain(OutputFile &o, uint32_t ind, bool &readCh,
-	const State *to, const DFA &dfa, const tagcmd_t &tags,
-	bool restore_fallback)
+	const State *to, const DFA &dfa, const tagcmd_t &cmd)
 {
 	code_lines_t code;
-	gen_goto(code, readCh, to, dfa, tags, restore_fallback);
+	gen_goto(code, readCh, to, dfa, cmd);
 	const size_t lines = code.size();
 
 	for (size_t i = 0; i < lines; ++i) {
@@ -366,7 +363,7 @@ void gen_goto_plain(OutputFile &o, uint32_t ind, bool &readCh,
 }
 
 void gen_goto(code_lines_t &code, bool &readCh, const State *to,
-	const DFA &dfa, const tagcmd_t &tags, bool restore_fallback)
+	const DFA &dfa, const tagcmd_t &cmd)
 {
 	if (to == NULL) {
 		readCh = false;
@@ -375,27 +372,24 @@ void gen_goto(code_lines_t &code, bool &readCh, const State *to,
 		code.push_back(opts->input_api.stmt_peek(0));
 		readCh = false;
 	}
-	gen_settags(code, dfa, tags, restore_fallback);
+	gen_settags(code, dfa, cmd);
 	if (to) {
 		code.push_back("goto " + opts->labelPrefix
 			+ to_string(to->label) + ";\n");
 	}
 }
 
-void gen_settags(code_lines_t &code, const DFA &dfa,
-	const tagcmd_t &cmd, bool restore_fallback)
+void gen_settags(code_lines_t &code, const DFA &dfa, const tagcmd_t &cmd)
 {
 	const bool generic = opts->input_api.type() == InputAPI::CUSTOM;
-	const tagver_t
-		*set = dfa.tagpool[cmd.set],
-		*copy = dfa.tagpool[cmd.copy];
+	const tagver_t *set = dfa.tagpool[cmd.set];
 	const std::valarray<Tag> &tags = dfa.tags;
 	const size_t ntags = tags.size();
 	std::string line;
 
 	// single tag YYCTXMARKER, backwards compatibility
 	if (cmd.set != ZERO_TAGS && dfa.oldstyle_ctxmarker) {
-		assert(cmd.copy == ZERO_TAGS);
+		assert(cmd.copy == NULL);
 		line = generic
 			? opts->yybackupctx + " ();\n"
 			: opts->yyctxmarker + " = " + opts->yycursor + ";\n";
@@ -404,18 +398,14 @@ void gen_settags(code_lines_t &code, const DFA &dfa,
 	}
 
 	// copy
-	for (size_t i = 0; i < ntags; ++i) {
-		const tagver_t v = copy[i];
-		if (v != TAGVER_ZERO) {
-			std::string
-				x = vartag_expr(v),
-				y = vartag_expr_fallback(v);
-			if (restore_fallback) std::swap(x, y);
-			line = generic
-				? opts->yycopytag + " (" + y + ", " + x + ");\n"
-				: y + " = " + x + ";\n";
-			code.push_back(line);
-		}
+	for (const tagcopy_t *p = cmd.copy; p; p = p->next) {
+		std::string
+			l = vartag_expr(p->lhs),
+			r = vartag_expr(p->rhs);
+		line = generic
+			? opts->yycopytag + " (" + l + ", " + r + ");\n"
+			: l + " = " + r + ";\n";
+		code.push_back(line);
 	}
 
 	// set

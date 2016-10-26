@@ -155,13 +155,6 @@ void DFA::emit(Output & output, uint32_t& ind, bool isLastCond, bool& bPrologBra
 		for (tagver_t v = 1; v <= maxtagver; ++v) {
 			tagnames.insert(vartag_name(v));
 		}
-		const tagver_t *copy = tagpool[copy_tags];
-		for (size_t i = 0; i < ntags; ++i) {
-			const tagver_t v = copy[i];
-			if (v != TAGVER_ZERO) {
-				tagnames.insert(vartag_name_fallback(v));
-			}
-		}
 		ob.tags.insert(tagnames.begin(), tagnames.end());
 	}
 
@@ -383,19 +376,6 @@ std::string vartag_name(tagver_t ver)
 std::string vartag_expr(tagver_t ver)
 {
 	const std::string s = vartag_name(ver);
-	std::string e = opts->tags_expression;
-	strrreplace(e, "@@", s);
-	return e;
-}
-
-std::string vartag_name_fallback(tagver_t ver)
-{
-	return vartag_name(ver) + "_";
-}
-
-std::string vartag_expr_fallback(tagver_t ver)
-{
-	const std::string s = vartag_name_fallback(ver);
 	std::string e = opts->tags_expression;
 	strrreplace(e, "@@", s);
 	return e;

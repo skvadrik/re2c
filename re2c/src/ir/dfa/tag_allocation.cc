@@ -19,51 +19,121 @@ namespace re2c
 tagver_t tag_allocation(const dfa_t &dfa, const bool *interf,
 	tagver_t *ver2new)
 {
+	const tagver_t
+		END = std::numeric_limits<tagver_t>::max(),
+		nver = dfa.maxtagver + 1;
 	const size_t
-		END = std::numeric_limits<size_t>::max(),
-		nver = dfa.tags.size() + 1;
-	size_t *head = new size_t[nver]; // list of class representatives
-	size_t *next = new size_t[nver]; // list of class members
-	size_t h0 = END, h, n;
+		nsym = dfa.nchars,
+		narc = dfa.states.size() * nsym;
+	tagver_t *next = new tagver_t[nver]; // list of class members
+	tagver_t *repr = new tagver_t[nver]; // maps tag to class representative
+	tagver_t rx, ry, x, y, z;
 
-	std::fill(head, head + nver, END);
 	std::fill(next, next + nver, END);
-	for (size_t v = 0; v < nver; ++v) {
-		const bool *interfv = &interf[v * nver];
+	std::fill(repr, repr + nver, END);
+
+	// copy coalescing: for each command X = Y, try to merge X and Y
+	for (size_t a = 0; a < narc; ++a) {
+		const tagcopy_t *p = dfa.states[a / nsym]->tags[a % nsym].copy;
+		for (; p; p = p->next) {
+			x = p->lhs;
+			y = p->rhs;
+			rx = repr[x];
+			ry = repr[y];
+
+			if (rx != END) {
+				if (ry != END) continue;
+				for (z = rx; z != END; z = next[z]) {
+					if (interf[z * nver + y]) break;
+				}
+				if (z == END) {
+					repr[y] = rx;
+					next[y] = next[rx];
+					next[rx] = y;
+				}
+			} else if (ry != END) {
+				for (z = ry; z != END; z = next[z]) {
+					if (interf[z * nver + x]) break;
+				}
+				if (z == END) {
+					repr[x] = ry;
+					next[x] = next[ry];
+					next[ry] = x;
+				}
+			} else if (!interf[x * nver + y]) {
+				repr[x] = repr[y] = x;
+				next[x] = y;
+			}
+		}
+	}
+
+	// try to merge equivalence classes left after copy coalescing
+	for (rx = 0; rx < nver; ++rx) {
+		if (rx != repr[rx]) continue;
+
+		for (ry = rx + 1; ry < nver; ++ry) {
+			if (ry != repr[ry]) continue;
+
+			for (x = rx; x != END; x = next[x]) {
+				for (y = ry; y != END; y = next[y]) {
+					if (interf[x * nver + y]) break;
+				}
+				if (y != END) break;
+			}
+
+			if (x == END) {
+				for (y = ry;; y = next[y]) {
+					repr[y] = rx;
+					if (next[y] == END) {
+						next[y] = next[rx];
+						next[rx] = ry;
+						break;
+					}
+				}
+			}
+		}
+	}
+
+	// push each remaining tag to any non-interfering class
+	for (x = 0; x < nver; ++x) {
+		if (repr[x] != END) continue;
 
 		// try all existing classes
-		for (h = h0; h != END; h = head[h]) {
+		for (rx = nver; --rx >= 0;) {
+			if (rx != repr[rx]) continue;
 
 			// check interference with class members
-			for (n = h; n != END; n = next[n]) {
-				if (interfv[n]) break;
+			for (y = rx; y != END; y = next[y]) {
+				if (interf[x * nver + y]) break;
 			}
 
 			// no interference; add to class
-			if (n == END) {
-				next[v] = next[h];
-				next[h] = v;
+			if (y == END) {
+				repr[x] = rx;
+				next[x] = next[rx];
+				next[rx] = x;
 				break;
 			}
 		}
 
 		// make new equivalence class
-		if (h == END) {
-			head[v] = h0;
-			h0 = v;
+		if (rx < 0) {
+			repr[x] = x;
 		}
 	}
 
 	tagver_t maxver = 0;
-	for (h = h0; h != END; h = head[h]) {
+	for (rx = nver; --rx >= 0;) {
+		if (repr[rx] != rx) continue;
+
 		++maxver;
-		for (n = h; n != END; n = next[n]) {
-			ver2new[n] = maxver;
+		for (x = rx; x != END; x = next[x]) {
+			ver2new[x] = maxver;
 		}
 	}
 
-	delete[] head;
 	delete[] next;
+	delete[] repr;
 
 	return maxver;
 }

@@ -87,13 +87,13 @@ void Cases::emit(OutputFile &o, uint32_t ind, const DFA &dfa, bool &readCh) cons
 	for (uint32_t i = 1; i < cases_size; ++i) {
 		const Case &c = cases[i];
 		c.emit(o, ind);
-		gen_goto_case(o, ind, readCh, c.to, dfa, c.tags, false);
+		gen_goto_case(o, ind, readCh, c.to, dfa, c.tags);
 	}
 
 	// default case must be the last one
 	const Case &c = cases[0];
 	o.wind(ind).ws("default:");
-	gen_goto_case(o, ind, readCh, c.to, dfa, c.tags, false);
+	gen_goto_case(o, ind, readCh, c.to, dfa, c.tags);
 
 	o.wind(ind).ws("}\n");
 }
@@ -115,9 +115,9 @@ void Linear::emit(OutputFile &o, uint32_t ind, const DFA &dfa, bool &readCh)
 		const Cond *cond = b.cond;
 		if (cond) {
 			output_if(o, ind, readCh, cond->compare, cond->value);
-			gen_goto_if(o, ind, readCh, b.to, dfa, b.tags, false);
+			gen_goto_if(o, ind, readCh, b.to, dfa, b.tags);
 		} else {
-			gen_goto_plain(o, ind, readCh, b.to, dfa, b.tags, false);
+			gen_goto_plain(o, ind, readCh, b.to, dfa, b.tags);
 		}
 	}
 }
@@ -151,7 +151,7 @@ void GoBitmap::emit (OutputFile & o, uint32_t ind, const DFA &dfa, bool & readCh
 		o.wu32(bitmap->m);
 	}
 	o.ws(") {\n");
-	gen_goto_plain(o, ind + 1, readCh, bitmap_state, dfa, tagcmd_t(), false);
+	gen_goto_plain(o, ind + 1, readCh, bitmap_state, dfa, tagcmd_t());
 	o.wind(ind).ws("}\n");
 	if (lgo != NULL)
 	{
@@ -233,7 +233,7 @@ void Dot::emit(OutputFile &o, const DFA &dfa)
 void Go::emit (OutputFile & o, uint32_t ind, const DFA &dfa, bool & readCh)
 {
 	code_lines_t code;
-	gen_settags(code, dfa, tags, NULL);
+	gen_settags(code, dfa, tags);
 	for (size_t i = 0; i < code.size(); ++i) {
 		o.wind(ind).wstring(code[i]);
 	}

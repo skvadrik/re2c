@@ -40,7 +40,7 @@ yy6:
 	if (yyaccept == 0) {
 		goto yy3;
 	} else {
-		yyt1 = yyt1_;
+		yyt1 = yyt2;
 		goto yy8;
 	}
 yy7:
@@ -50,7 +50,7 @@ yy7:
 	yych = *YYCURSOR;
 	switch (yych) {
 	case 'a':
-		yyt1_ = yyt1;
+		yyt2 = yyt1;
 		goto yy9;
 	default:	goto yy8;
 	}

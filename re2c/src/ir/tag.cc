@@ -88,4 +88,19 @@ const tagver_t *Tagpool::operator[](size_t idx) const
 	return lookup[idx];
 }
 
+free_list<tagcopy_t*> tagcopy_t::freelist;
+
+tagcopy_t::tagcopy_t(tagcopy_t *n, tagver_t l, tagver_t r)
+	: next(n)
+	, lhs(l)
+	, rhs(r)
+{
+	freelist.insert(this);
+}
+
+tagcopy_t::~tagcopy_t()
+{
+	freelist.erase(this);
+}
+
 } // namespace re2c

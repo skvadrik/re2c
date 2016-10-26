@@ -51,7 +51,7 @@ struct dfa_t
 	std::valarray<Rule> &rules;
 	std::valarray<Tag> &tags;
 	Tagpool &tagpool;
-	size_t copy_tags;
+	tagver_t maxtagver;
 
 	dfa_t(const nfa_t &nfa, const charset_t &charset,
 		const std::string &cond);

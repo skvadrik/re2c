@@ -3,7 +3,7 @@
 namespace re2c
 {
 
-static void find_overwritten_tags(const dfa_t &dfa, size_t state, bool *been, tagver_t *owrt);
+static void find_overwritten_tags(const dfa_t &dfa, size_t state, bool *been, bool *owrt);
 
 /* note [fallback tags]
  *
@@ -34,7 +34,7 @@ static void find_overwritten_tags(const dfa_t &dfa, size_t state, bool *been, ta
  */
 
 void find_overwritten_tags(const dfa_t &dfa, size_t state,
-	bool *been, tagver_t *owrt)
+	bool *been, bool *owrt)
 {
 	if (been[state]) return;
 	been[state] = true;
@@ -47,8 +47,11 @@ void find_overwritten_tags(const dfa_t &dfa, size_t state,
 		for (size_t t = 0; t < ntags; ++t) {
 			const tagver_t v = tags[t];
 			if (v != TAGVER_ZERO) {
-				owrt[t] = v;
+				owrt[v] = true;
 			}
+		}
+		for (const tagcopy_t *p = s->tags[c].copy; p; p = p->next) {
+			owrt[p->lhs] = true;
 		}
 
 		size_t dest = s->arcs[c];
@@ -63,50 +66,53 @@ void find_overwritten_tags(const dfa_t &dfa, size_t state,
 // note [fallback states]
 void insert_fallback_tags(dfa_t &dfa)
 {
+	tagver_t maxver = dfa.maxtagver;
 	const size_t
 		nstates = dfa.states.size(),
-		ntags = dfa.tags.size();
+		nsym = dfa.nchars,
+		ntags = dfa.tags.size(),
+		nver = static_cast<size_t>(maxver) + 1;
 	bool *been = new bool[nstates];
-	tagver_t *total = dfa.tagpool.buffer2;
-	std::fill(total, total + ntags, TAGVER_ZERO);
+	bool *owrt = new bool[nver];
 
 	for (size_t i = 0; i < nstates; ++i) {
 		dfa_state_t *s = dfa.states[i];
 
 		if (!s->fallback) continue;
 
-		tagver_t *owrt = dfa.tagpool.buffer1;
-		std::fill(owrt, owrt + ntags, TAGVER_ZERO);
 		std::fill(been, been + nstates, false);
+		std::fill(owrt, owrt + nver, false);
 		find_overwritten_tags(dfa, i, been, owrt);
 
 		const tagver_t
 			*fin = dfa.tagpool[dfa.rules[s->rule].tags],
 			*upd = dfa.tagpool[s->rule_tags.set];
-		for (size_t t = 0; t < ntags; ++t) {
-			if (fin[t] == TAGVER_ZERO || upd[t] != TAGVER_ZERO) {
-				owrt[t] = TAGVER_ZERO;
-			}
-			if (owrt[t] != TAGVER_ZERO) {
-				total[t] = owrt[t];
-			}
-		}
-		const size_t copy = dfa.tagpool.insert(owrt);
 
-		if (copy != ZERO_TAGS) {
-			for (size_t c = 0; c < dfa.nchars; ++c) {
+		for (size_t t = 0; t < ntags; ++t) {
+			const tagver_t
+				f = fin[t],
+				b = static_cast<tagver_t>(nver + t);
+
+			if (f == TAGVER_ZERO || upd[t] != TAGVER_ZERO || !owrt[f]) continue;
+
+			// patch commands (backups must go first)
+			tagcopy_t **p = &s->rule_tags.copy;
+			*p = new tagcopy_t(*p, f, b);
+			for (size_t c = 0; c < nsym; ++c) {
 				size_t j = s->arcs[c];
 				if (j != dfa_t::NIL && dfa.states[j]->fallthru) {
-					s->tags[c].copy = copy;
+					p = &s->tags[c].copy;
+					*p = new tagcopy_t(*p, b, f);
 				}
 			}
-			s->rule_tags.copy = copy;
+			maxver = std::max(maxver, b);
 		}
 	}
 
-	dfa.copy_tags = dfa.tagpool.insert(total);
-
 	delete[] been;
+	delete[] owrt;
+
+	dfa.maxtagver = maxver;
 }
 
 } // namespace re2c

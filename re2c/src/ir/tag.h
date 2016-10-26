@@ -5,6 +5,7 @@
 
 #include "src/util/lookup.h"
 #include "src/util/forbid_copy.h"
+#include "src/util/free_list.h"
 
 namespace re2c
 {
@@ -54,17 +55,30 @@ public:
 	FORBID_COPY(Tagpool);
 };
 
+struct tagcopy_t
+{
+	static free_list<tagcopy_t*> freelist;
+
+	tagcopy_t *next;
+	tagver_t lhs; // left hand side
+	tagver_t rhs; // right hand side
+
+	tagcopy_t(tagcopy_t *n, tagver_t l, tagver_t r);
+	~tagcopy_t();
+	FORBID_COPY(tagcopy_t);
+};
+
 /* must be packed */
 struct tagcmd_t
 {
 	size_t set;
-	size_t copy;
+	tagcopy_t *copy;
 
-	tagcmd_t(): set(ZERO_TAGS), copy(ZERO_TAGS) {}
-	tagcmd_t(size_t s, size_t c): set(s), copy(c) {}
+	tagcmd_t(): set(ZERO_TAGS), copy(NULL) {}
+	tagcmd_t(size_t s, tagcopy_t *c): set(s), copy(c) {}
 	inline bool empty() const
 	{
-		return set == ZERO_TAGS && copy == ZERO_TAGS;
+		return set == ZERO_TAGS && copy == NULL;
 	}
 };
 

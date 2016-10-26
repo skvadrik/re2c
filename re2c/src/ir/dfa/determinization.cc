@@ -55,7 +55,7 @@ dfa_t::dfa_t(const nfa_t &nfa,
 	, rules(nfa.rules)
 	, tags(*nfa.tags)
 	, tagpool(*nfa.tagpool)
-	, copy_tags(ZERO_TAGS)
+	, maxtagver(static_cast<tagver_t>(tags.size()))
 {
 	clospool_t clospool;
 	closure_t clos1, clos2;

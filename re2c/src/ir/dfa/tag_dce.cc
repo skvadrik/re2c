@@ -10,14 +10,15 @@ void tag_dce(dfa_t &dfa, const bool *live)
 		nsym = dfa.nchars,
 		narc = dfa.states.size() * nsym,
 		ntag = dfa.tags.size(),
-		nver = ntag + 1;
+		nver = static_cast<size_t>(dfa.maxtagver) + 1;
 
 	for (size_t a = 0; a < narc; ++a) {
 		const size_t
 			c = a % nsym,
 			i = a / nsym;
 		const dfa_state_t *s = dfa.states[i];
-		// rule tags can't be dead by construction
+		// rule tags and copy tags can't be dead by construction
+		// (copy tags are only used for fallback tags)
 
 		size_t *p = &s->tags[c].set;
 		if (*p != ZERO_TAGS) {

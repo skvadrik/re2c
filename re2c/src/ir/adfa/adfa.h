@@ -69,7 +69,6 @@ struct DFA
 	std::valarray<Rule> &rules;
 	std::valarray<Tag> &tags;
 	Tagpool &tagpool;
-	size_t copy_tags;
 	size_t max_fill;
 	bool need_backup;
 	bool need_accept;

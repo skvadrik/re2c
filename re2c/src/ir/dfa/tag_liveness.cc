@@ -14,7 +14,7 @@ void tag_liveness(const dfa_t &dfa, bool *live)
 		nsym = dfa.nchars,
 		narc = nstate * nsym,
 		ntag = dfa.tags.size(),
-		nver = ntag + 1;
+		nver = static_cast<size_t>(dfa.maxtagver) + 1;
 	bool *buf1 = new bool[nver];
 	bool *buf2 = new bool[nver];
 	bool *been = new bool[nstate];
@@ -60,6 +60,7 @@ void tag_liveness(const dfa_t &dfa, bool *live)
 				for (size_t v = 0; v < nver; ++v) {
 					buf1[v] |= use[v] && !buf2[v];
 				}
+				// copy tags are only used for fallback tags,
 			}
 
 			bool *liv = &live[a * nver];
@@ -75,23 +76,37 @@ void tag_liveness(const dfa_t &dfa, bool *live)
 	 * Liveness of fallback tag is propagated forward from fallback
 	 * state (see note [fallback states]) and until there remain
 	 * any fallthrough paths from current state.
+	 *
+	 * Fallback version of tag is either backup copy of tag's final
+	 * version, or (if there's no backup) the final version itself.
+	 * Absence of backup means that final version is not overwritten,
+	 * but still we should prevent it from merging with other tags
+	 * (otherwise it may become overwritten).
 	 */
 	for (size_t i = 0; i < nstate; ++i) {
 		const dfa_state_t *s = dfa.states[i];
-		if (s->fallback) {
-			const tagver_t
-				*use = dfa.tagpool[dfa.rules[s->rule].tags],
-				*def = dfa.tagpool[s->rule_tags.set];
-			memset(buf1, 0, nver * sizeof(bool));
-			for (size_t t = 0; t < ntag; ++t) {
-				const tagver_t u = use[t], d = def[t];
-				if (u != TAGVER_ZERO && d == TAGVER_ZERO) {
-					buf1[u] = true;
-				}
+		if (!s->fallback) continue;
+
+		const tagver_t
+			*use = dfa.tagpool[dfa.rules[s->rule].tags],
+			*def = dfa.tagpool[s->rule_tags.set];
+
+		memset(buf1, 0, nver * sizeof(bool));
+		for (size_t t = 0; t < ntag; ++t) {
+			const tagver_t u = use[t], d = def[t];
+			if (u != TAGVER_ZERO && d == TAGVER_ZERO) {
+				buf1[u] = true;
 			}
-			memset(been, 0, nstate * sizeof(bool));
-			forwprop(dfa, been, i, live, buf1);
 		}
+		for (const tagcopy_t *p = s->rule_tags.copy; p; p = p->next) {
+			// in rule tags copies are swapped:
+			// LHS is the origin, RHS is backup
+			buf1[p->lhs] = false;
+			buf1[p->rhs] = true;
+		}
+
+		memset(been, 0, nstate * sizeof(bool));
+		forwprop(dfa, been, i, live, buf1);
 	}
 
 	delete[] buf1;
@@ -107,7 +122,7 @@ void forwprop(const dfa_t &dfa, bool *been, size_t state, bool *live,
 
 	const size_t
 		nsym = dfa.nchars,
-		nver = dfa.tags.size() + 1;
+		nver = static_cast<size_t>(dfa.maxtagver) + 1;
 	const dfa_state_t *s = dfa.states[state];
 
 	for (size_t c = 0; c < nsym; ++c) {

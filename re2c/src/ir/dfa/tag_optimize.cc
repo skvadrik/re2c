@@ -14,7 +14,7 @@ tagver_t optimize_tags(dfa_t &dfa)
 
 	const size_t
 		narc = dfa.states.size() * dfa.nchars,
-		nver = dfa.tags.size() + 1;
+		nver = static_cast<size_t>(dfa.maxtagver) + 1;
 	bool *live = new bool[narc * nver];
 	bool *interf = new bool[nver * nver];
 	tagver_t *ver2new = new tagver_t[nver];

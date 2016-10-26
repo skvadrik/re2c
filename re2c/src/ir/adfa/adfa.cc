@@ -37,7 +37,6 @@ DFA::DFA
 	, rules(dfa.rules)
 	, tags(dfa.tags)
 	, tagpool(dfa.tagpool)
-	, copy_tags(dfa.copy_tags)
 	, max_fill (0)
 	, need_backup (false)
 	, need_accept (false)
