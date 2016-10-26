@@ -22,10 +22,10 @@ yy4:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
 	case '1':
-		yyt1 = YYCURSOR;
+		yyt2 = YYCURSOR;
 		goto yy5;
 	case '2':
-		yyt1 = YYCURSOR;
+		yyt2 = YYCURSOR;
 		goto yy8;
 	default:	goto yy3;
 	}
@@ -44,10 +44,10 @@ yy8:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case '3':
-		yyt2 = YYCURSOR;
+		yyt1 = YYCURSOR;
 		goto yy9;
 	case '4':
-		yyt2 = YYCURSOR;
+		yyt1 = YYCURSOR;
 		goto yy11;
 	default:	goto yy7;
 	}
@@ -62,10 +62,10 @@ yy9:
 yy11:
 	++YYCURSOR;
 	YYCURSOR -= 1;
-	p3 = yyt2;
-	p2 = yyt2 - 1;
-	p1 = yyt1;
-	p0 = yyt1 - 1;
+	p3 = yyt1;
+	p2 = yyt1 - 1;
+	p1 = yyt2;
+	p0 = yyt2 - 1;
 	{
             printf("'%.*s', '%.*s', '%.*s', '%.*s', '%s'\n",
                 p1 - p0, p0,

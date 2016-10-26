@@ -99,7 +99,7 @@ tagver_t tag_allocation(const dfa_t &dfa, const bool *interf,
 		if (repr[x] != END) continue;
 
 		// try all existing classes
-		for (rx = nver; --rx >= 0;) {
+		for (rx = 0; rx < nver; ++rx) {
 			if (rx != repr[rx]) continue;
 
 			// check interference with class members
@@ -117,13 +117,13 @@ tagver_t tag_allocation(const dfa_t &dfa, const bool *interf,
 		}
 
 		// make new equivalence class
-		if (rx < 0) {
+		if (rx == nver) {
 			repr[x] = x;
 		}
 	}
 
 	tagver_t maxver = 0;
-	for (rx = nver; --rx >= 0;) {
+	for (rx = 0; rx < nver; ++rx) {
 		if (repr[rx] != rx) continue;
 
 		++maxver;

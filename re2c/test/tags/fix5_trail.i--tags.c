@@ -12,10 +12,10 @@ static void lex(const char *YYCURSOR)
 	yych = *YYCURSOR;
 	switch (yych) {
 	case '0':
-		yyt1 = YYCURSOR;
+		yyt3 = YYCURSOR;
 		goto yy4;
 	case '1':
-		yyt1 = YYCURSOR;
+		yyt3 = YYCURSOR;
 		goto yy5;
 	default:	goto yy2;
 	}
@@ -74,15 +74,15 @@ yy10:
 	}
 yy12:
 	++YYCURSOR;
-	yyt3 = YYCURSOR;
+	yyt1 = YYCURSOR;
 	yych = *YYCURSOR;
 	goto yy15;
 yy13:
-	YYCURSOR = yyt3;
-	p3 = yyt3 - 1;
+	YYCURSOR = yyt1;
+	p3 = yyt1 - 1;
 	p2 = yyt2;
 	p1 = yyt2 - 1;
-	p0 = yyt1;
+	p0 = yyt3;
 	{
             printf("'%.*s', '%.*s', '%.*s', '%.*s', '%s'\n",
                 p1 - p0, p0,
