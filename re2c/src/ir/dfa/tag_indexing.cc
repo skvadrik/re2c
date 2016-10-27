@@ -8,6 +8,23 @@ namespace re2c
 template<typename cmd_t> struct cmp_t;
 template<typename cmd_t> void doindex(cmd_t **pcmd, lookup_t<cmd_t*> &index);
 
+/* note [indexing tag commands]
+ *
+ * After optimizations different commands may become equal up to
+ * reordering and removing duplicates. We want such commands to have
+ * identical representation and compare as equal: this may enable
+ * further optimizations like minimization, tag hoisting, tunnelling,
+ * etc. These optimizations need fast (constant time) comparison of
+ * two commands (especially Moore's minimization, which compares sets
+ * of transitions at once).
+ *
+ * So we bring each command to some 'normal form' and insert it into
+ * common index. Then we can address and compare commands by index,
+ * which is indeed constant time.
+ *
+ * However, after indexing different commands may share representation
+ * in memory, so they must not be modified.
+ */
 void tag_indexing(dfa_t &dfa)
 {
 	const size_t
@@ -30,13 +47,6 @@ void tag_indexing(dfa_t &dfa)
 		doindex(&cmd.copy, copyindex);
 	}
 }
-
-// After renaming different tags may map to the same version,
-// thus one set of versions may have different representations.
-// Transition tags are treated as sets and should be unified.
-
-// After renaming different lists may become identical
-// up to reordering and deleting duplicates.
 
 template<typename cmd_t>
 void doindex(cmd_t **pcmd, lookup_t<cmd_t*> &index)
