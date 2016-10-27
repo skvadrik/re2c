@@ -116,7 +116,7 @@ void DFA::prepare ()
 			for (uint32_t i = 0; i < s->go.nSpans; ++i) {
 				if (!s->go.span[i].to) {
 					s->go.span[i].to = rule2state[s->rule];
-					s->go.span[i].tags.set = s->rule_tags.set;
+					s->go.span[i].tags.save = s->rule_tags.save;
 					// 'copy' tags are only for fallback paths
 				}
 			}

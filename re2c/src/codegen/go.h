@@ -182,7 +182,7 @@ struct Dot
 	Cases * cases;
 	Dot (const Span * sp, uint32_t nsp, const State * from);
 	~Dot ();
-	void emit (OutputFile & o, const DFA &dfa);
+	void emit (OutputFile & o);
 
 	FORBID_COPY (Dot);
 };

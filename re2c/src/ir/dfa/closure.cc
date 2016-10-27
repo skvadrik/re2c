@@ -10,9 +10,9 @@ static void closure_one(closure_t &clos, Tagpool &tagpool, nfa_state_t *n, tagve
 static void check_tags(const Tagpool &tagpool, size_t oldidx, size_t newidx, bool *badtags);
 static bool compare_by_rule(const clos_t &c1, const clos_t &c2);
 static void prune_final_items(closure_t &clos, std::valarray<Rule> &rules);
-static size_t merge_and_check_tags(const closure_t &clos, Tagpool &tagpool, const std::valarray<Rule> &rules, bool *badtags);
+static tagsave_t *merge_and_check_tags(const closure_t &clos, Tagpool &tagpool, const std::valarray<Rule> &rules, bool *badtags);
 
-size_t closure(const closure_t &clos1, closure_t &clos2,
+tagsave_t *closure(const closure_t &clos1, closure_t &clos2,
 	Tagpool &tagpool, std::valarray<Rule> &rules, bool *badtags)
 {
 	// build tagged epsilon-closure of the given set of NFA states
@@ -164,11 +164,12 @@ void prune_final_items(closure_t &clos, std::valarray<Rule> &rules)
 }
 
 // WARNING: this function assumes that closure items are grouped bu rule
-size_t merge_and_check_tags(const closure_t &clos, Tagpool &tagpool,
+tagsave_t *merge_and_check_tags(const closure_t &clos, Tagpool &tagpool,
 	const std::valarray<Rule> &rules, bool *badtags)
 {
+	const size_t ntag = tagpool.ntags;
 	tagver_t *tags = tagpool.buffer1;
-	std::fill(tags, tags + tagpool.ntags, TAGVER_ZERO);
+	std::fill(tags, tags + ntag, TAGVER_ZERO);
 
 	size_t r = 0, lt = 0, ht;
 	for (cclositer_t c = clos.begin(), e = clos.end(); c != e;) {
@@ -194,7 +195,7 @@ size_t merge_and_check_tags(const closure_t &clos, Tagpool &tagpool,
 		}
 	}
 
-	return tagpool.insert(tags);
+	return tagsave_t::convert(tags, ntag);
 }
 
 } // namespace re2c

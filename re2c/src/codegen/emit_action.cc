@@ -382,14 +382,13 @@ void gen_goto(code_lines_t &code, bool &readCh, const State *to,
 void gen_settags(code_lines_t &code, const DFA &dfa, const tagcmd_t &cmd)
 {
 	const bool generic = opts->input_api.type() == InputAPI::CUSTOM;
-	const tagver_t *set = dfa.tagpool[cmd.set];
-	const std::valarray<Tag> &tags = dfa.tags;
-	const size_t ntags = tags.size();
+	const tagsave_t *tsave = cmd.save;
+	const tagcopy_t *tcopy = cmd.copy;
 	std::string line;
 
 	// single tag YYCTXMARKER, backwards compatibility
-	if (cmd.set != ZERO_TAGS && dfa.oldstyle_ctxmarker) {
-		assert(cmd.copy == NULL);
+	if (tsave && dfa.oldstyle_ctxmarker) {
+		assert(tcopy == NULL);
 		line = generic
 			? opts->yybackupctx + " ();\n"
 			: opts->yyctxmarker + " = " + opts->yycursor + ";\n";
@@ -397,8 +396,8 @@ void gen_settags(code_lines_t &code, const DFA &dfa, const tagcmd_t &cmd)
 		return;
 	}
 
-	// copy
-	for (const tagcopy_t *p = cmd.copy; p; p = p->next) {
+	// copy commands
+	for (const tagcopy_t *p = tcopy; p; p = p->next) {
 		std::string
 			l = vartag_expr(p->lhs),
 			r = vartag_expr(p->rhs);
@@ -408,22 +407,16 @@ void gen_settags(code_lines_t &code, const DFA &dfa, const tagcmd_t &cmd)
 		code.push_back(line);
 	}
 
-	// set
+	// save commands
 	if (generic) {
-		for (size_t i = 0; i < ntags; ++i) {
-			const tagver_t v = set[i];
-			if (v != TAGVER_ZERO) {
-				line = opts->yybackuptag + " (" + vartag_expr(v) + ");\n";
-				code.push_back(line);
-			}
+		for (const tagsave_t *p = tsave; p; p = p->next) {
+			line = opts->yybackuptag + " (" + vartag_expr(p->ver) + ");\n";
+			code.push_back(line);
 		}
-	} else if (cmd.set != ZERO_TAGS) {
+	} else if (tsave) {
 		line = "";
-		for (size_t i = 0; i < ntags; ++i) {
-			const tagver_t v = set[i];
-			if (v != TAGVER_ZERO) {
-				line += vartag_expr(v) + " = ";
-			}
+		for (const tagsave_t *p = tsave; p; p = p->next) {
+			line += vartag_expr(p->ver) + " = ";
 		}
 		line += opts->yycursor + ";\n";
 		code.push_back(line);

@@ -55,6 +55,23 @@ public:
 	FORBID_COPY(Tagpool);
 };
 
+struct tagsave_t
+{
+	static free_list<tagsave_t*> freelist;
+
+	tagsave_t *next;
+	tagver_t ver;
+
+	static tagsave_t *convert(const tagver_t *vers, size_t ntag);
+	static void swap(tagsave_t &x, tagsave_t &y);
+	static bool less(const tagsave_t &x, const tagsave_t &y);
+	static bool equal(const tagsave_t &x, const tagsave_t &y);
+	static uint32_t hash(const tagsave_t *p);
+	tagsave_t(tagsave_t *n, tagver_t v);
+	~tagsave_t();
+	FORBID_COPY(tagsave_t);
+};
+
 struct tagcopy_t
 {
 	static free_list<tagcopy_t*> freelist;
@@ -63,6 +80,10 @@ struct tagcopy_t
 	tagver_t lhs; // left hand side
 	tagver_t rhs; // right hand side
 
+	static bool less(const tagcopy_t &x, const tagcopy_t &y);
+	static void swap(tagcopy_t &x, tagcopy_t &y);
+	static bool equal(const tagcopy_t &x, const tagcopy_t &y);
+	static uint32_t hash(const tagcopy_t *p);
 	tagcopy_t(tagcopy_t *n, tagver_t l, tagver_t r);
 	~tagcopy_t();
 	FORBID_COPY(tagcopy_t);
@@ -71,20 +92,20 @@ struct tagcopy_t
 /* must be packed */
 struct tagcmd_t
 {
-	size_t set;
+	tagsave_t *save;
 	tagcopy_t *copy;
 
-	tagcmd_t(): set(ZERO_TAGS), copy(NULL) {}
-	tagcmd_t(size_t s, tagcopy_t *c): set(s), copy(c) {}
+	tagcmd_t(): save(NULL), copy(NULL) {}
+	tagcmd_t(tagsave_t *s, tagcopy_t *c): save(s), copy(c) {}
 	inline bool empty() const
 	{
-		return set == ZERO_TAGS && copy == NULL;
+		return save == NULL && copy == NULL;
 	}
 };
 
 inline bool operator==(const tagcmd_t &x, const tagcmd_t &y)
 {
-	return x.set == y.set && x.copy == y.copy;
+	return x.save == y.save && x.copy == y.copy;
 }
 
 inline bool operator!=(const tagcmd_t &x, const tagcmd_t &y)
@@ -94,8 +115,8 @@ inline bool operator!=(const tagcmd_t &x, const tagcmd_t &y)
 
 inline bool operator<(const tagcmd_t &x, const tagcmd_t &y)
 {
-	return x.set < y.set
-		|| (x.set == y.set && x.copy < y.copy);
+	return x.save < y.save
+		|| (x.save == y.save && x.copy < y.copy);
 }
 
 } // namespace re2c

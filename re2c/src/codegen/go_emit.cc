@@ -206,7 +206,7 @@ void Cpgoto::emit (OutputFile & o, uint32_t ind, const DFA &dfa, bool & readCh)
 	o.wind(--ind).ws("}\n");
 }
 
-void Dot::emit(OutputFile &o, const DFA &dfa)
+void Dot::emit(OutputFile &o)
 {
 	const uint32_t n = cases->cases_size;
 	if (n == 1) {
@@ -218,12 +218,12 @@ void Dot::emit(OutputFile &o, const DFA &dfa)
 			for (uint32_t j = 0; j < c.ranges.size(); ++j) {
 				o.wrange(c.ranges[j].first, c.ranges[j].second);
 			}
-			const tagver_t *tags = dfa.tagpool[c.tags.set];
-			for (size_t j = 0; j < dfa.tagpool.ntags; ++j) {
-				const tagver_t v = tags[j];
-				if (v != TAGVER_ZERO) {
-					o.ws("<").wstring(vartag_name(v)).ws(">");
-				}
+			for (const tagsave_t *p = c.tags.save; p; p = p->next) {
+				o.ws("<").wstring(vartag_name(p->ver)).ws(">");
+			}
+			for (const tagcopy_t *p = c.tags.copy; p; p = p->next) {
+				o.ws("<").wstring(vartag_name(p->lhs)).ws("~")
+					.wstring(vartag_name(p->rhs)).ws(">");
 			}
 			o.ws("\"]\n");
 		}
@@ -251,7 +251,7 @@ void Go::emit (OutputFile & o, uint32_t ind, const DFA &dfa, bool & readCh)
 			info.cpgoto->emit (o, ind, dfa, readCh);
 			break;
 		case DOT:
-			info.dot->emit (o, dfa);
+			info.dot->emit (o);
 			break;
 	}
 }

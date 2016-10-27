@@ -5,14 +5,13 @@
 namespace re2c
 {
 
-static void interfere(const tagcmd_t &cmd, const Tagpool &pool, bool *interf, bool *live, bool *buf, size_t nver);
+static void interfere(const tagcmd_t &cmd, bool *interf, bool *live, bool *buf, size_t nver);
 
 void tag_interference(const dfa_t &dfa, const bool *live, bool *interf)
 {
-	const Tagpool &pool = dfa.tagpool;
 	const size_t
 		nstate = dfa.states.size(),
-		ntag = pool.ntags,
+		ntag = dfa.tags.size(),
 		nver = static_cast<size_t>(dfa.maxtagver) + 1,
 		nsym = dfa.nchars;
 	bool *buf1 = new bool[nver];
@@ -23,13 +22,20 @@ void tag_interference(const dfa_t &dfa, const bool *live, bool *interf)
 		const dfa_state_t *s = dfa.states[i];
 
 		if (s->rule != Rule::NONE) {
-			unpack(nver, buf1, ntag, pool[dfa.rules[s->rule].tags]);
-			interfere(s->rule_tags, pool, interf, buf1, buf2, nver);
+			const tagver_t *liv = dfa.tagpool[dfa.rules[s->rule].tags];
+			memset(buf1, 0, nver * sizeof(bool));
+			for (size_t t = 0; t < ntag; ++t) {
+				const tagver_t v = liv[t];
+				if (v != TAGVER_ZERO) {
+					buf1[v] = true;
+				}
+			}
+			interfere(s->rule_tags, interf, buf1, buf2, nver);
 		}
 
 		for (size_t c = 0; c < nsym; ++c) {
 			memcpy(buf1, &live[(i * nsym + c) * nver], nver * sizeof(bool));
-			interfere(s->tags[c], pool, interf, buf1, buf2, nver);
+			interfere(s->tags[c], interf, buf1, buf2, nver);
 		}
 	}
 
@@ -37,28 +43,24 @@ void tag_interference(const dfa_t &dfa, const bool *live, bool *interf)
 	delete[] buf2;
 }
 
-void interfere(const tagcmd_t &cmd, const Tagpool &pool,
-	bool *interf, bool *live, bool *buf, size_t nver)
+void interfere(const tagcmd_t &cmd, bool *interf, bool *live, bool *buf,
+	size_t nver)
 {
-	// Each tag updated by set command interferes with all tags
-	// alive after this command, except tags udated by other set
-	// commands (they all have the same value: current position).
-	if (cmd.set != ZERO_TAGS) {
-		// updated by set commands
-		unpack(nver, buf, pool.ntags, pool[cmd.set]);
+	// Each tag updated by save command interferes with all tags
+	// that are alive after this command, except those udated by
+	// other save commands (all saved tags have the same value:
+	// current input position). So the interfering set is exactly
+	// the set of tags alive before the first save command.
 
-		// alive after, but not updated by set commands
-		// (a.k.a. all tags alive before the first set command)
-		for (size_t v = 0; v < nver; ++v) {
-			live[v] &= !buf[v];
-		}
+	for (const tagsave_t *p = cmd.save; p; p = p->next) {
+		live[p->ver] = false;
+	}
 
-		for (size_t i = 0; i < nver; ++i) {
-			if (!buf[i]) continue;
-			for (size_t j = 0; j < nver; ++j) {
-				if (!live[j]) continue;
-				interf[i * nver + j] = interf[j * nver + i] = true;
-			}
+	for (const tagsave_t *p = cmd.save; p; p = p->next) {
+		const size_t x = static_cast<size_t>(p->ver);
+		for (size_t y = 0; y < nver; ++y) {
+			if (!live[y]) continue;
+			interf[x * nver + y] = interf[y * nver + x] = true;
 		}
 	}
 
@@ -71,7 +73,7 @@ void interfere(const tagcmd_t &cmd, const Tagpool &pool,
 		const tagver_t r = p->rhs;
 
 		// alive after this command: tags used by subsequent copy
-		// commands plus all tags alive before the first set command
+		// commands plus all tags alive before the first save command
 		memcpy(buf, live, nver * sizeof(bool));
 		for (const tagcopy_t *q = p->next; q; q = q->next) {
 			if (q->rhs != r) {

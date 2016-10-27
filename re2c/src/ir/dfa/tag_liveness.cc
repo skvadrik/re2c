@@ -43,24 +43,33 @@ void tag_liveness(const dfa_t &dfa, bool *live)
 			memset(buf1, 0, nver * sizeof(bool));
 
 			if (s->rule != Rule::NONE) {
-				const tagver_t
-					*use = dfa.tagpool[dfa.rules[s->rule].tags],
-					*def = dfa.tagpool[s->rule_tags.set];
+				const tagver_t *use = dfa.tagpool[dfa.rules[s->rule].tags];
 				for (size_t t = 0; t < ntag; ++t) {
-					const tagver_t u = use[t], d = def[t];
-					if (u != TAGVER_ZERO && d == TAGVER_ZERO) {
+					const tagver_t u = use[t];
+					if (u != TAGVER_ZERO) {
 						buf1[u] = true;
 					}
+				}
+
+				for (const tagsave_t *p = s->rule_tags.save; p; p = p->next) {
+					buf1[p->ver] = false;
 				}
 			}
 
 			for (size_t c = 0; c < nsym; ++c) {
-				const bool *use = &live[(i * nsym + c) * nver];
-				unpack(nver, buf2, ntag, dfa.tagpool[s->tags[c].set]);
-				for (size_t v = 0; v < nver; ++v) {
-					buf1[v] |= use[v] && !buf2[v];
+				const bool *liv = &live[(i * nsym + c) * nver];
+				memcpy(buf2, liv, nver * sizeof(bool));
+
+				for (const tagsave_t *p = s->tags[c].save; p; p = p->next) {
+					buf2[p->ver] = false;
 				}
+
 				// copy tags are only used for fallback tags,
+				// their liveness is handled in a special way
+
+				for (size_t v = 0; v < nver; ++v) {
+					buf1[v] |= buf2[v];
+				}
 			}
 
 			bool *liv = &live[a * nver];
@@ -87,20 +96,21 @@ void tag_liveness(const dfa_t &dfa, bool *live)
 		const dfa_state_t *s = dfa.states[i];
 		if (!s->fallback) continue;
 
-		const tagver_t
-			*use = dfa.tagpool[dfa.rules[s->rule].tags],
-			*def = dfa.tagpool[s->rule_tags.set];
-
+		const tagver_t *use = dfa.tagpool[dfa.rules[s->rule].tags];
 		memset(buf1, 0, nver * sizeof(bool));
 		for (size_t t = 0; t < ntag; ++t) {
-			const tagver_t u = use[t], d = def[t];
-			if (u != TAGVER_ZERO && d == TAGVER_ZERO) {
+			const tagver_t u = use[t];
+			if (u != TAGVER_ZERO) {
 				buf1[u] = true;
 			}
 		}
+
+		for (const tagsave_t *p = s->rule_tags.save; p; p = p->next) {
+			buf1[p->ver] = false;
+		}
+
+		// in rule tags copies are swapped: LHS is the origin, RHS is backup
 		for (const tagcopy_t *p = s->rule_tags.copy; p; p = p->next) {
-			// in rule tags copies are swapped:
-			// LHS is the origin, RHS is backup
 			buf1[p->lhs] = false;
 			buf1[p->rhs] = true;
 		}

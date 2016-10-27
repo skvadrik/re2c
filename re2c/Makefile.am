@@ -100,6 +100,7 @@ SRC = \
 	src/ir/dfa/minimization.cc \
 	src/ir/dfa/tag_allocation.cc \
 	src/ir/dfa/tag_dce.cc \
+	src/ir/dfa/tag_indexing.cc \
 	src/ir/dfa/tag_interference.cc \
 	src/ir/dfa/tag_liveness.cc \
 	src/ir/dfa/tag_optimize.cc \

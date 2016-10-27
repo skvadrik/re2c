@@ -55,12 +55,14 @@ dfa_t::dfa_t(const nfa_t &nfa,
 	, rules(nfa.rules)
 	, tags(*nfa.tags)
 	, tagpool(*nfa.tagpool)
-	, maxtagver(static_cast<tagver_t>(tags.size()))
+	, maxtagver(0)
 {
+	const size_t ntag = tags.size();
 	clospool_t clospool;
 	closure_t clos1, clos2;
-	bool *badtags = new bool[tags.size()]();
+	bool *badtags = new bool[ntag]();
 
+	maxtagver = static_cast<tagver_t>(ntag);
 	clos1.push_back(clos_t(nfa.root, ZERO_TAGS));
 	closure(clos1, clos2, tagpool, rules, badtags);
 	clospool.insert(clos2);
@@ -79,7 +81,7 @@ dfa_t::dfa_t(const nfa_t &nfa,
 			f = std::find_if(clos0.begin(), e, clos_t::final);
 		if (f != e) {
 			s->rule = f->state->rule;
-			s->rule_tags.set = f->tagidx;
+			s->rule_tags.save = tagsave_t::convert(tagpool[f->tagidx], ntag);
 		}
 
 		// for each alphabet symbol, build tagged epsilon-closure
@@ -87,7 +89,7 @@ dfa_t::dfa_t(const nfa_t &nfa,
 		// find identical closure or add the new one
 		for (size_t c = 0; c < nchars; ++c) {
 			reach(clos0, clos1, charset[c]);
-			s->tags[c].set = closure(clos1, clos2, tagpool, rules, badtags);
+			s->tags[c].save = closure(clos1, clos2, tagpool, rules, badtags);
 			s->arcs[c] = clospool.insert(clos2);
 		}
 	}

@@ -10,7 +10,7 @@ void tag_dce(dfa_t &dfa, const bool *live);
 void tag_interference(const dfa_t &dfa, const bool *live, bool *interf);
 tagver_t tag_allocation(const dfa_t &dfa, const bool *interf, tagver_t *ver2new);
 void tag_renaming(dfa_t &dfa, const tagver_t *ver2new, tagver_t maxver);
-void unpack(size_t nver, bool *vers, size_t ntag, const tagver_t *tags);
+void tag_indexing(dfa_t &dfa);
 
 } // namespace re2c
 

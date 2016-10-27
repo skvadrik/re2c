@@ -17,7 +17,12 @@ Node::Node()
 	, tags(ZERO_TAGS)
 {}
 
-void Node::init(size_t ts, size_t r, size_t tr, tagver_t tv,
+Node::~Node()
+{
+	delete[] tags;
+}
+
+void Node::init(const bool *ts, size_t r, size_t tr, tagver_t tv,
 	const std::vector<std::pair<size_t, uint32_t> > &a)
 {
 	rule = r;
@@ -69,7 +74,6 @@ Skeleton::Skeleton(
 	, sizeof_key(8)
 	, defrule(def)
 	, tags(dfa.tags)
-	, tagpool(dfa.tagpool)
 {
 	const size_t nc = cs.size() - 1;
 
@@ -93,18 +97,13 @@ Skeleton::Skeleton(
 		// in skeleton we are only interested in trailing contexts
 		// which may be attributed to states rather than transitions
 		// trailing context also cannot have fallback tag
-		const size_t ntag = tags.size();
-		tagver_t *buf = tagpool.buffer1;
-		memcpy(buf, tagpool[s->rule_tags.set], ntag * sizeof(tagver_t));
+		bool *tags = new bool[static_cast<size_t>(dfa.maxtagver) + 1]();
+		for (tagsave_t *p = s->rule_tags.save; p; p = p->next) {
+			tags[p->ver] = true;
+		}
 		for (size_t c = 0; c < nc; ++c) {
-			const tagver_t *set = tagpool[s->tags[c].set];
-			for (size_t t = 0; t < ntag; ++t) {
-				const tagver_t v = set[t];
-				if (buf[t] == TAGVER_ZERO) {
-					buf[t] = v;
-				} else if (v != TAGVER_ZERO) {
-					assert(buf[t] == v);
-				}
+			for (tagsave_t *p = s->tags[c].save; p; p = p->next) {
+				tags[p->ver] = true;
 			}
 		}
 
@@ -113,11 +112,11 @@ Skeleton::Skeleton(
 		if (s->rule != Rule::NONE) {
 			trail = dfa.rules[s->rule].trail;
 			if (trail != Tag::NONE) {
-				trver = tagpool[dfa.rules[s->rule].tags][trail];
+				trver = dfa.tagpool[dfa.rules[s->rule].tags][trail];
 			}
 		}
 
-		nodes[i].init(tagpool.insert(buf), s->rule, trail, trver, arcs);
+		nodes[i].init(tags, s->rule, trail, trver, arcs);
 	}
 
 	// initialize size of key

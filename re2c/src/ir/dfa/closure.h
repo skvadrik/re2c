@@ -24,7 +24,7 @@ typedef std::vector<clos_t> closure_t;
 typedef closure_t::iterator clositer_t;
 typedef closure_t::const_iterator cclositer_t;
 
-size_t closure(const closure_t &clos1, closure_t &clos2,
+tagsave_t *closure(const closure_t &clos1, closure_t &clos2,
 	Tagpool &tagpool, std::valarray<Rule> &rules, bool *badtags);
 
 clos_t::clos_t()

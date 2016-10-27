@@ -40,15 +40,9 @@ void find_overwritten_tags(const dfa_t &dfa, size_t state,
 	been[state] = true;
 
 	const dfa_state_t *s = dfa.states[state];
-	const size_t ntags = dfa.tags.size();
-
 	for (size_t c = 0; c < dfa.nchars; ++c) {
-		const tagver_t *tags = dfa.tagpool[s->tags[c].set];
-		for (size_t t = 0; t < ntags; ++t) {
-			const tagver_t v = tags[t];
-			if (v != TAGVER_ZERO) {
-				owrt[v] = true;
-			}
+		for (const tagsave_t *p = s->tags[c].save; p; p = p->next) {
+			owrt[p->ver] = true;
 		}
 		for (const tagcopy_t *p = s->tags[c].copy; p; p = p->next) {
 			owrt[p->lhs] = true;
@@ -84,16 +78,17 @@ void insert_fallback_tags(dfa_t &dfa)
 		std::fill(owrt, owrt + nver, false);
 		find_overwritten_tags(dfa, i, been, owrt);
 
-		const tagver_t
-			*fin = dfa.tagpool[dfa.rules[s->rule].tags],
-			*upd = dfa.tagpool[s->rule_tags.set];
+		const tagver_t *fin = dfa.tagpool[dfa.rules[s->rule].tags];
+		for (const tagsave_t *p = s->rule_tags.save; p; p = p->next) {
+			owrt[p->ver] = false;
+		}
 
 		for (size_t t = 0; t < ntags; ++t) {
 			const tagver_t
 				f = fin[t],
 				b = static_cast<tagver_t>(nver + t);
 
-			if (f == TAGVER_ZERO || upd[t] != TAGVER_ZERO || !owrt[f]) continue;
+			if (f == TAGVER_ZERO || !owrt[f]) continue;
 
 			// patch commands (backups must go first)
 			tagcopy_t **p = &s->rule_tags.copy;

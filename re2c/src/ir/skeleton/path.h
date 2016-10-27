@@ -49,20 +49,18 @@ public:
 			if (node.rule == Rule::NONE) continue;
 
 			size_t len = static_cast<size_t>(head - tail) - 1;
-			const size_t trail = node.trail;
-			if (trail == Tag::NONE) return len;
+			if (node.trail == Tag::NONE) return len;
 
-			const Tag &tag = skel.tags[trail];
+			const Tag &tag = skel.tags[node.trail];
 			if (tag.type == Tag::FIX) {
 				return len - tag.fix.dist;
-			} else {
-				for (; tail != head; ++tail) {
-					if (skel.tagpool[skel.nodes[*tail].tags][trail] == node.trver) {
-						return static_cast<size_t>(head - tail) - 1;
-					}
-				}
-				assert(false);
 			}
+			for (; tail != head; ++tail) {
+				if (skel.nodes[*tail].tags[node.trver]) {
+					return static_cast<size_t>(head - tail) - 1;
+				}
+			}
+			assert(false);
 		}
 		return 0;
 	}

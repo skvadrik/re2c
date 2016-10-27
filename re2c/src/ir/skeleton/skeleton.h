@@ -38,10 +38,11 @@ struct Node
 	size_t rule;
 	size_t trail;
 	tagver_t trver;
-	size_t tags;
+	const bool *tags;
 
 	Node();
-	void init(size_t ts, size_t r, size_t tr, tagver_t tv,
+	~Node();
+	void init(const bool *ts, size_t r, size_t tr, tagver_t tv,
 		const std::vector<std::pair<size_t, uint32_t> > &arcs);
 	bool end() const;
 
@@ -60,7 +61,6 @@ struct Skeleton
 	size_t sizeof_key;
 	const size_t defrule;
 	const std::valarray<Tag> &tags;
-	Tagpool &tagpool;
 
 	Skeleton(const dfa_t &dfa, const charset_t &cs, size_t def,
 		const std::string &dfa_name, const std::string &dfa_cond,
