@@ -15,7 +15,7 @@ struct eqtag_t
 	size_t ntags;
 
 	explicit eqtag_t(size_t n): ntags(n) {}
-	inline tagver_t operator()(const tagver_t *x, const tagver_t *y)
+	inline tagver_t operator()(const tagver_t *x, const tagver_t *y) const
 	{
 		return memcmp(x, y, ntags * sizeof(tagver_t)) == 0;
 	}
@@ -72,8 +72,7 @@ size_t Tagpool::insert(const tagver_t *tags)
 	const size_t size = ntags * sizeof(tagver_t);
 	const uint32_t hash = hash32(0, tags, size);
 
-	eqtag_t eq(ntags);
-	const size_t idx = lookup.find_with(hash, tags, eq);
+	const size_t idx = lookup.find_with(hash, tags, eqtag_t(ntags));
 	if (idx != taglookup_t::NIL) {
 		return idx;
 	}

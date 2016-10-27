@@ -63,8 +63,7 @@ void doindex(cmd_t **pcmd, lookup_t<cmd_t*> &index)
 
 	// find in or add to index
 	const uint32_t hash = cmd_t::hash(cmd);
-	cmp_t<cmd_t> cmp;
-	size_t idx = index.find_with(hash, cmd, cmp);
+	size_t idx = index.find_with(hash, cmd, cmp_t<cmd_t>());
 	if (idx == lookup_t<cmd_t*>::NIL) {
 		idx = index.push(hash, cmd);
 	}
