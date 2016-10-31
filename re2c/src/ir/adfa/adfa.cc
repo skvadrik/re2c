@@ -35,7 +35,6 @@ DFA::DFA
 	, head(NULL)
 	, rules(dfa.rules)
 	, tags(dfa.tags)
-	, tagpool(dfa.tagpool)
 	, max_fill (0)
 	, need_backup (false)
 	, need_accept (false)
@@ -97,7 +96,6 @@ DFA::~DFA()
 	delete skeleton;
 	delete &rules;
 	delete &tags;
-	delete &tagpool;
 }
 
 /* note [reordering DFA states]

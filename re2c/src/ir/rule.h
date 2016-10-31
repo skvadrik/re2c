@@ -38,7 +38,7 @@ struct Rule
 	size_t ltag;
 	size_t htag;
 	size_t trail;
-	size_t tags;
+	tagver_t *tags;
 	std::set<uint32_t> shadow;
 
 	Rule()
@@ -46,9 +46,13 @@ struct Rule
 		, ltag(0)
 		, htag(0)
 		, trail(Tag::NONE)
-		, tags(ZERO_TAGS)
+		, tags(NULL)
 		, shadow()
 	{}
+	~Rule()
+	{
+		delete[] tags;
+	}
 
 	FORBID_COPY(Rule);
 };

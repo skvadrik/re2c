@@ -3,66 +3,41 @@
 namespace re2c
 {
 
-static void rename_rule(Tagpool &tagpool, size_t &tags, const tagver_t *ver2new);
-static void rename_save(tagsave_t **psave, const tagver_t *ver2new);
-static void rename_copy(tagcopy_t **pcopy, const tagver_t *ver2new);
-
 void tag_renaming(cfg_t &cfg, const tagver_t *ver2new, tagver_t maxver)
 {
 	tagver_t &oldmax = cfg.dfa.maxtagver;
-	if (maxver >= oldmax) {
-		assert(maxver == oldmax);
-		return;
-	}
+	if (oldmax == maxver) return;
 	oldmax = maxver;
 
 	cfg_bb_t *b = cfg.bblocks, *e = b + cfg.nbblock;
 	for (; b < e; ++b) {
-		rename_save(&b->cmd->save, ver2new);
-		rename_copy(&b->cmd->copy, ver2new);
+
+		// tag versions in save commands
+		for (tagsave_t *p = b->cmd->save; p; p = p->next) {
+			p->ver = ver2new[p->ver];
+		}
+
+		// tag versions in copy commands
+		for (tagcopy_t *c, **pc = &b->cmd->copy; (c = *pc);) {
+			c->lhs = ver2new[c->lhs];
+			c->rhs = ver2new[c->rhs];
+			if (c->lhs == c->rhs) {
+				*pc = c->next;
+			} else {
+				pc = &c->next;
+			}
+		}
 	}
 
+	// final tag versions in rules
 	std::valarray<Rule> &rules = cfg.dfa.rules;
-	Tagpool &tagpool = cfg.dfa.tagpool;
-	for (size_t i = 0; i < rules.size(); ++i) {
-		rename_rule(tagpool, rules[i].tags, ver2new);
-	}
-}
-
-void rename_rule(Tagpool &tagpool, size_t &tags, const tagver_t *ver2new)
-{
-	if (tags == ZERO_TAGS) return;
-
-	const tagver_t *oldver = tagpool[tags];
-	tagver_t *newver = tagpool.buffer1;
-	const size_t ntag = tagpool.ntags;
-
-	for (size_t t = 0; t < ntag; ++t) {
-		const tagver_t v = oldver[t];
-		newver[t] = v != TAGVER_ZERO
-			? ver2new[v]
-			: v;
-	}
-
-	tags = tagpool.insert(newver);
-}
-
-void rename_save(tagsave_t **psave, const tagver_t *ver2new)
-{
-	for (tagsave_t *p = *psave; p; p = p->next) {
-		p->ver = ver2new[p->ver];
-	}
-}
-
-void rename_copy(tagcopy_t **pcopy, const tagver_t *ver2new)
-{
-	for (tagcopy_t *c, **pc = pcopy; (c = *pc);) {
-		c->lhs = ver2new[c->lhs];
-		c->rhs = ver2new[c->rhs];
-		if (c->lhs == c->rhs) {
-			*pc = c->next;
-		} else {
-			pc = &c->next;
+	for (size_t r = 0, t = 0; r < rules.size(); ++r) {
+		Rule &rule = rules[r];
+		for (; t < rule.htag; ++t) {
+			tagver_t &v = rule.tags[t];
+			if (v != TAGVER_ZERO) {
+				v = ver2new[v];
+			}
 		}
 	}
 }

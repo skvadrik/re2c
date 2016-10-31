@@ -8,7 +8,7 @@ namespace re2c
 
 static cfg_ix_t map_arcs_to_bblocks(const dfa_t &dfa, cfg_ix_t *arc2bb);
 static cfg_bb_t *create_bblocks(const dfa_t &dfa, const cfg_ix_t *arc2bb, cfg_ix_t nbblock);
-static void basic_block(cfg_bb_t *bb, const cfg_ix_t *succb, const cfg_ix_t *succe, const tagcmd_t *cmd, size_t use);
+static void basic_block(cfg_bb_t *bb, const cfg_ix_t *succb, const cfg_ix_t *succe, const tagcmd_t *cmd, tagver_t *use);
 static void successors(const dfa_t &dfa, const cfg_ix_t *arc2bb, bool *been, cfg_ix_t *&succ, size_t x);
 static void fallback(const dfa_t &dfa, const cfg_ix_t *arc2bb, bool *been, cfg_ix_t *&succ, size_t x);
 
@@ -122,7 +122,7 @@ cfg_bb_t *create_bblocks(const dfa_t &dfa, const cfg_ix_t *arc2bb, cfg_ix_t nbbl
 }
 
 void basic_block(cfg_bb_t *bb, const cfg_ix_t *succb,
-	const cfg_ix_t *succe, const tagcmd_t *cmd, size_t use)
+	const cfg_ix_t *succe, const tagcmd_t *cmd, tagver_t *use)
 {
 	const size_t n = static_cast<size_t>(succe - succb);
 	cfg_ix_t *s = new cfg_ix_t[n];

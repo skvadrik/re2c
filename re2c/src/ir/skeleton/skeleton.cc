@@ -112,7 +112,7 @@ Skeleton::Skeleton(
 		if (s->rule != Rule::NONE) {
 			trail = dfa.rules[s->rule].trail;
 			if (trail != Tag::NONE) {
-				trver = dfa.tagpool[dfa.rules[s->rule].tags][trail];
+				trver = dfa.rules[s->rule].tags[trail];
 			}
 		}
 

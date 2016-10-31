@@ -78,7 +78,7 @@ void insert_fallback_tags(dfa_t &dfa)
 		std::fill(owrt, owrt + nver, false);
 		find_overwritten_tags(dfa, i, been, owrt);
 
-		const tagver_t *fin = dfa.tagpool[dfa.rules[s->rule].tags];
+		const tagver_t *fin = dfa.rules[s->rule].tags;
 		for (const tagsave_t *p = s->rule_tags.save; p; p = p->next) {
 			owrt[p->ver] = false;
 		}

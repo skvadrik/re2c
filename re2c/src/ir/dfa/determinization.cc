@@ -55,10 +55,10 @@ dfa_t::dfa_t(const nfa_t &nfa,
 	, nchars(charset.size() - 1) // (n + 1) bounds for n ranges
 	, rules(nfa.rules)
 	, tags(*nfa.tags)
-	, tagpool(*nfa.tagpool)
 	, maxtagver(0)
 {
 	const size_t ntag = tags.size();
+	Tagpool tagpool(ntag);
 	clospool_t clospool;
 	closure_t clos1, clos2;
 	bool *badtags = new bool[ntag]();

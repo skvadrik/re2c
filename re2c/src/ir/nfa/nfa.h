@@ -77,7 +77,6 @@ struct nfa_t
 	nfa_state_t *states;
 	std::valarray<Rule> &rules;
 	std::valarray<Tag> *tags;
-	Tagpool *tagpool;
 	nfa_state_t *root;
 
 	nfa_t(const std::vector<const RegExpRule*> &rs);
@@ -90,10 +89,7 @@ size_t counters(const std::vector<const RegExpRule*> &regexps, size_t &ntags);
 void make_tags(const std::vector<const RegExpRule*> &regexps, std::valarray<Tag> &tags);
 void regexps2nfa(const std::vector<const RegExpRule*> &regexps, nfa_t &nfa);
 bool nullable_rule(const RegExpRule *rule);
-void init_rules(const std::vector<const RegExpRule*> &regexps,
-	std::valarray<Rule> &rules,
-	const std::valarray<Tag> &tags,
-	Tagpool &tagpool);
+void init_rules(const std::vector<const RegExpRule*> &regexps, std::valarray<Rule> &rules, const std::valarray<Tag> &tags);
 
 } // namespace re2c
 

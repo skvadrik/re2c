@@ -7,11 +7,10 @@ namespace re2c
 
 void tag_liveness(const cfg_t &cfg, bool *live)
 {
-	const Tagpool &tagpool = cfg.dfa.tagpool;
 	const size_t
 		nbb = cfg.nbblock,
 		nver = static_cast<size_t>(cfg.dfa.maxtagver) + 1,
-		ntag = tagpool.ntags;
+		ntag = cfg.dfa.tags.size();
 	bool *buf1 = new bool[nver];
 	bool *buf2 = new bool[nver];
 
@@ -32,11 +31,10 @@ void tag_liveness(const cfg_t &cfg, bool *live)
 			const cfg_bb_t *b = cfg.bblocks + i;
 
 			memset(buf1, 0, nver * sizeof(bool));
-			if (b->use != TAGVER_ZERO) {
+			if (b->use) {
 				// final bblock, no successors
-				const tagver_t *use = tagpool[b->use];
 				for (size_t t = 0; t < ntag; ++t) {
-					const tagver_t u = use[t];
+					const tagver_t u = b->use[t];
 					if (u != TAGVER_ZERO) {
 						buf1[u] = true;
 					}
@@ -83,12 +81,11 @@ void tag_liveness(const cfg_t &cfg, bool *live)
 	for (cfg_ix_t i = 0; i < nbb; ++i) {
 		const cfg_bb_t *b = cfg.bblocks + i;
 
-		if (b->use == TAGVER_ZERO) continue;
+		if (!b->use) continue;
 
-		const tagver_t *use = tagpool[b->use];
 		memset(buf1, 0, nver * sizeof(bool));
 		for (size_t t = 0; t < ntag; ++t) {
-			const tagver_t u = use[t];
+			const tagver_t u = b->use[t];
 			if (u != TAGVER_ZERO) {
 				buf1[u] = true;
 			}

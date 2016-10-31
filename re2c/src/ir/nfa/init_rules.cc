@@ -35,8 +35,7 @@ static void assert_tags_used_once(const Rule &rule,
 
 void init_rules(const std::vector<const RegExpRule*> &regexps,
 	std::valarray<Rule> &rules,
-	const std::valarray<Tag> &tags,
-	Tagpool &tagpool)
+	const std::valarray<Tag> &tags)
 {
 	const size_t nr = rules.size();
 	const size_t nt = tags.size();
@@ -50,14 +49,14 @@ void init_rules(const std::vector<const RegExpRule*> &regexps,
 		rule.htag = t;
 
 		// mark *all* variable tags, including trailing context
-		tagver_t *vers = tagpool.buffer1;
+		tagver_t *vers = new tagver_t[nt];
 		std::fill(vers, vers + nt, TAGVER_ZERO);
 		for (size_t i = rule.ltag; i < rule.htag; ++i) {
 			if (tags[i].type == Tag::VAR) {
 				vers[i] = static_cast<tagver_t>(i + 1);
 			}
 		}
-		rule.tags = tagpool.insert(vers);
+		rule.tags = vers;
 
 		// tags in trailing context are forbidden (they make no sense),
 		// and since tags are constructed in reversed order, this implies

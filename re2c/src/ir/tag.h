@@ -3,7 +3,7 @@
 
 #include <string>
 
-#include "src/util/lookup.h"
+#include "src/util/c99_stdint.h"
 #include "src/util/forbid_copy.h"
 #include "src/util/free_list.h"
 
@@ -33,27 +33,6 @@ struct Tag
 
 void init_var_tag(Tag &tag, size_t r, const std::string *n);
 void init_fix_tag(Tag &tag, size_t r, const std::string *n, size_t b, size_t d);
-
-static const size_t ZERO_TAGS = 0;
-
-struct Tagpool
-{
-private:
-	typedef lookup_t<const tagver_t*> taglookup_t;
-	taglookup_t lookup;
-	tagver_t *buffer;
-
-public:
-	const size_t ntags;
-	tagver_t *buffer1;
-	tagver_t *buffer2;
-
-	explicit Tagpool(size_t n);
-	~Tagpool();
-	size_t insert(const tagver_t *tags);
-	const tagver_t *operator[](size_t idx) const;
-	FORBID_COPY(Tagpool);
-};
 
 struct tagsave_t
 {

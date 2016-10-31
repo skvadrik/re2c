@@ -9,6 +9,7 @@
 #include "src/ir/regexp/regexp.h"
 #include "src/ir/rule.h"
 #include "src/ir/tag.h"
+#include "src/ir/dfa/tagpool.h"
 #include "src/util/forbid_copy.h"
 
 namespace re2c
@@ -50,7 +51,6 @@ struct dfa_t
 	const size_t nchars;
 	std::valarray<Rule> &rules;
 	std::valarray<Tag> &tags;
-	Tagpool &tagpool;
 	tagver_t maxtagver;
 
 	dfa_t(const nfa_t &nfa, const charset_t &charset,

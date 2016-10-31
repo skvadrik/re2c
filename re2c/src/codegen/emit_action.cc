@@ -427,7 +427,7 @@ void gen_fintags(OutputFile &o, uint32_t ind, const DFA &dfa, const Rule &rule)
 {
 	const bool generic = opts->input_api.type() == InputAPI::CUSTOM;
 	const std::valarray<Tag> &tags = dfa.tags;
-	const tagver_t *vers = dfa.tagpool[rule.tags];
+	const tagver_t *vers = rule.tags;
 
 	// trailing context
 	if (rule.trail != Tag::NONE) {
