@@ -14,6 +14,7 @@
 namespace re2c
 {
 
+static tagver_t vartag_maxver(const std::valarray<Tag> &tags);
 static nfa_state_t *transition(nfa_state_t *state, uint32_t symbol);
 static void reach(const closure_t &clos1, closure_t &clos2, uint32_t symbol);
 static void warn_bad_tags(const bool *badtags, const std::valarray<Tag> &tags,
@@ -62,7 +63,7 @@ dfa_t::dfa_t(const nfa_t &nfa,
 	closure_t clos1, clos2;
 	bool *badtags = new bool[ntag]();
 
-	maxtagver = static_cast<tagver_t>(ntag);
+	maxtagver = vartag_maxver(tags);
 	clos1.push_back(clos_t(nfa.root, ZERO_TAGS));
 	closure(clos1, clos2, tagpool, rules, badtags);
 	clospool.insert(clos2);
@@ -96,6 +97,16 @@ dfa_t::dfa_t(const nfa_t &nfa,
 
 	warn_bad_tags(badtags, tags, rules, cond);
 	delete[] badtags;
+}
+
+tagver_t vartag_maxver(const std::valarray<Tag> &tags)
+{
+	for (size_t t = tags.size(); t > 0; --t) {
+		if (tags[t - 1].type == Tag::VAR) {
+			return static_cast<tagver_t>(t);
+		}
+	}
+	return 0;
 }
 
 void warn_bad_tags(const bool *badtags,

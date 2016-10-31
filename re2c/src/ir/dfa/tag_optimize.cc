@@ -6,11 +6,9 @@
 namespace re2c
 {
 
-static size_t count_variable_tags(const std::valarray<Tag> &tags);
-
-tagver_t optimize_tags(dfa_t &dfa)
+void optimize_tags(dfa_t &dfa)
 {
-	if (count_variable_tags(dfa.tags) == 0) return 0;
+	if (dfa.maxtagver == 0) return;
 
 	const size_t
 		narc = dfa.states.size() * dfa.nchars,
@@ -29,18 +27,6 @@ tagver_t optimize_tags(dfa_t &dfa)
 	delete[] live;
 	delete[] interf;
 	delete[] ver2new;
-	return maxver;
-}
-
-size_t count_variable_tags(const std::valarray<Tag> &tags)
-{
-	size_t nvar = 0, ntag = tags.size();
-	for (size_t t = 0; t < ntag; ++t) {
-		if (tags[t].type == Tag::VAR) {
-			++nvar;
-		}
-	}
-	return nvar;
 }
 
 } // namespace re2c

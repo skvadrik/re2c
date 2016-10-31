@@ -9,10 +9,12 @@ static void rename_copy(tagcopy_t **pcopy, const tagver_t *ver2new);
 
 void tag_renaming(dfa_t &dfa, const tagver_t *ver2new, tagver_t maxver)
 {
-	if (maxver >= dfa.maxtagver) {
-		assert(maxver == dfa.maxtagver);
+	tagver_t &oldmax = dfa.maxtagver;
+	if (maxver >= oldmax) {
+		assert(maxver == oldmax);
 		return;
 	}
+	oldmax = maxver;
 
 	const size_t
 		nstate = dfa.states.size(),

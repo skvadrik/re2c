@@ -69,7 +69,7 @@ static smart_ptr<DFA> compile_rules(
 	insert_fallback_tags(dfa);
 
 	// try to minimize the number of tag variables
-	const tagver_t maxtagver = optimize_tags(dfa);
+	optimize_tags(dfa);
 
 	minimization(dfa);
 
@@ -78,7 +78,7 @@ static smart_ptr<DFA> compile_rules(
 	fillpoints(dfa, fill);
 
 	// ADFA stands for 'DFA with actions'
-	DFA *adfa = new DFA(dfa, fill, skeleton, cs, name, cond, line, maxtagver);
+	DFA *adfa = new DFA(dfa, fill, skeleton, cs, name, cond, line);
 
 	// see note [reordering DFA states]
 	adfa->reorder();

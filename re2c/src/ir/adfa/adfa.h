@@ -82,7 +82,6 @@ struct DFA
 		, const std::string &n
 		, const std::string &c
 		, uint32_t l
-		, tagver_t maxver
 		);
 	~DFA ();
 	void reorder();
