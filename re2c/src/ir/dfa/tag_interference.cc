@@ -7,36 +7,17 @@ namespace re2c
 
 static void interfere(const tagcmd_t &cmd, bool *interf, bool *live, bool *buf, size_t nver);
 
-void tag_interference(const dfa_t &dfa, const bool *live, bool *interf)
+void tag_interference(const cfg_t &cfg, const bool *live, bool *interf)
 {
-	const size_t
-		nstate = dfa.states.size(),
-		ntag = dfa.tags.size(),
-		nver = static_cast<size_t>(dfa.maxtagver) + 1,
-		nsym = dfa.nchars;
+	const size_t nver = static_cast<size_t>(cfg.dfa.maxtagver) + 1;
 	bool *buf1 = new bool[nver];
 	bool *buf2 = new bool[nver];
+	const cfg_bb_t *b = cfg.bblocks, *e = b + cfg.nbblock;
 
 	memset(interf, 0, nver * nver * sizeof(bool));
-	for (size_t i = 0; i < nstate; ++i) {
-		const dfa_state_t *s = dfa.states[i];
-
-		if (s->rule != Rule::NONE) {
-			const tagver_t *liv = dfa.tagpool[dfa.rules[s->rule].tags];
-			memset(buf1, 0, nver * sizeof(bool));
-			for (size_t t = 0; t < ntag; ++t) {
-				const tagver_t v = liv[t];
-				if (v != TAGVER_ZERO) {
-					buf1[v] = true;
-				}
-			}
-			interfere(s->rule_tags, interf, buf1, buf2, nver);
-		}
-
-		for (size_t c = 0; c < nsym; ++c) {
-			memcpy(buf1, &live[(i * nsym + c) * nver], nver * sizeof(bool));
-			interfere(s->tags[c], interf, buf1, buf2, nver);
-		}
+	for (; b < e; ++b, live += nver) {
+		memcpy(buf1, live, nver * sizeof(bool));
+		interfere(*b->cmd, interf, buf1, buf2, nver);
 	}
 
 	delete[] buf1;

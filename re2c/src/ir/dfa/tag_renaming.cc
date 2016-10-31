@@ -7,36 +7,25 @@ static void rename_rule(Tagpool &tagpool, size_t &tags, const tagver_t *ver2new)
 static void rename_save(tagsave_t **psave, const tagver_t *ver2new);
 static void rename_copy(tagcopy_t **pcopy, const tagver_t *ver2new);
 
-void tag_renaming(dfa_t &dfa, const tagver_t *ver2new, tagver_t maxver)
+void tag_renaming(cfg_t &cfg, const tagver_t *ver2new, tagver_t maxver)
 {
-	tagver_t &oldmax = dfa.maxtagver;
+	tagver_t &oldmax = cfg.dfa.maxtagver;
 	if (maxver >= oldmax) {
 		assert(maxver == oldmax);
 		return;
 	}
 	oldmax = maxver;
 
-	const size_t
-		nstate = dfa.states.size(),
-		nsym = dfa.nchars,
-		nrule = dfa.rules.size();
-
-	for (size_t i = 0; i < nstate; ++i) {
-		dfa_state_t *s = dfa.states[i];
-
-		for (size_t c = 0; c < nsym; ++c) {
-			tagcmd_t &cmd = s->tags[c];
-			rename_save(&cmd.save, ver2new);
-			rename_copy(&cmd.copy, ver2new);
-		}
-
-		tagcmd_t &cmd = s->rule_tags;
-		rename_save(&cmd.save, ver2new);
-		rename_copy(&cmd.copy, ver2new);
+	cfg_bb_t *b = cfg.bblocks, *e = b + cfg.nbblock;
+	for (; b < e; ++b) {
+		rename_save(&b->cmd->save, ver2new);
+		rename_copy(&b->cmd->copy, ver2new);
 	}
 
-	for (size_t i = 0; i < nrule; ++i) {
-		rename_rule(dfa.tagpool, dfa.rules[i].tags, ver2new);
+	std::valarray<Rule> &rules = cfg.dfa.rules;
+	Tagpool &tagpool = cfg.dfa.tagpool;
+	for (size_t i = 0; i < rules.size(); ++i) {
+		rename_rule(tagpool, rules[i].tags, ver2new);
 	}
 }
 

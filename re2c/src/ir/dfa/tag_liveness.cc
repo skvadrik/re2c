@@ -5,19 +5,15 @@
 namespace re2c
 {
 
-static void forwprop(const dfa_t &dfa, bool *been, size_t state, bool *live, const bool *need);
-
-void tag_liveness(const dfa_t &dfa, bool *live)
+void tag_liveness(const cfg_t &cfg, bool *live)
 {
+	const Tagpool &tagpool = cfg.dfa.tagpool;
 	const size_t
-		nstate = dfa.states.size(),
-		nsym = dfa.nchars,
-		narc = nstate * nsym,
-		ntag = dfa.tags.size(),
-		nver = static_cast<size_t>(dfa.maxtagver) + 1;
+		nbb = cfg.nbblock,
+		nver = static_cast<size_t>(cfg.dfa.maxtagver) + 1,
+		ntag = tagpool.ntags;
 	bool *buf1 = new bool[nver];
 	bool *buf2 = new bool[nver];
-	bool *been = new bool[nstate];
 
 	/* note [control flow equations for tag liveness]
 	 *
@@ -27,52 +23,44 @@ void tag_liveness(const dfa_t &dfa, bool *live)
 	 *     need-in(x) = need-out(x) - define(x)
 	 *
 	 * Equations are solved by iteration until fix point.
-	 * Basic blocks are arcs. Successors of arc s1 -> s2 are:
-	 *     - all outgoing arcs from state s2
-	 *     - if state s2 is final, corresponding rule action
 	 */
-	memset(live, 0, narc * nver * sizeof(bool));
+	memset(live, 0, nbb * nver * sizeof(bool));
 	for (bool loop = true; loop;) {
 		loop = false;
 
-		for (size_t a = 0; a < narc; ++a) {
-			const size_t i = dfa.states[a / nsym]->arcs[a % nsym];
-			if (i == dfa_t::NIL) continue;
-			const dfa_state_t *s = dfa.states[i];
+		for (cfg_ix_t i = 0; i < nbb; ++i) {
+			const cfg_bb_t *b = cfg.bblocks + i;
 
 			memset(buf1, 0, nver * sizeof(bool));
-
-			if (s->rule != Rule::NONE) {
-				const tagver_t *use = dfa.tagpool[dfa.rules[s->rule].tags];
+			if (b->use != TAGVER_ZERO) {
+				// final bblock, no successors
+				const tagver_t *use = tagpool[b->use];
 				for (size_t t = 0; t < ntag; ++t) {
 					const tagver_t u = use[t];
 					if (u != TAGVER_ZERO) {
 						buf1[u] = true;
 					}
 				}
+			} else {
+				// transition bblock, no final rule tags
+				for (cfg_ix_t *j = b->succb; j < b->succe; ++j) {
+					const bool *liv = &live[*j * nver];
+					memcpy(buf2, liv, nver * sizeof(bool));
 
-				for (const tagsave_t *p = s->rule_tags.save; p; p = p->next) {
-					buf1[p->ver] = false;
+					for (const tagsave_t *p = cfg.bblocks[*j].cmd->save; p; p = p->next) {
+						buf2[p->ver] = false;
+					}
+
+					// copy tags are only used for fallback tags,
+					// their liveness is handled in a special way
+
+					for (size_t v = 0; v < nver; ++v) {
+						buf1[v] |= buf2[v];
+					}
 				}
 			}
 
-			for (size_t c = 0; c < nsym; ++c) {
-				const bool *liv = &live[(i * nsym + c) * nver];
-				memcpy(buf2, liv, nver * sizeof(bool));
-
-				for (const tagsave_t *p = s->tags[c].save; p; p = p->next) {
-					buf2[p->ver] = false;
-				}
-
-				// copy tags are only used for fallback tags,
-				// their liveness is handled in a special way
-
-				for (size_t v = 0; v < nver; ++v) {
-					buf1[v] |= buf2[v];
-				}
-			}
-
-			bool *liv = &live[a * nver];
+			bool *liv = &live[i * nver];
 			if (memcmp(liv, buf1, nver * sizeof(bool)) != 0) {
 				memcpy(liv, buf1, nver * sizeof(bool));
 				loop = true;
@@ -92,11 +80,12 @@ void tag_liveness(const dfa_t &dfa, bool *live)
 	 * but still we should prevent it from merging with other tags
 	 * (otherwise it may become overwritten).
 	 */
-	for (size_t i = 0; i < nstate; ++i) {
-		const dfa_state_t *s = dfa.states[i];
-		if (!s->fallback) continue;
+	for (cfg_ix_t i = 0; i < nbb; ++i) {
+		const cfg_bb_t *b = cfg.bblocks + i;
 
-		const tagver_t *use = dfa.tagpool[dfa.rules[s->rule].tags];
+		if (b->use == TAGVER_ZERO) continue;
+
+		const tagver_t *use = tagpool[b->use];
 		memset(buf1, 0, nver * sizeof(bool));
 		for (size_t t = 0; t < ntag; ++t) {
 			const tagver_t u = use[t];
@@ -104,47 +93,28 @@ void tag_liveness(const dfa_t &dfa, bool *live)
 				buf1[u] = true;
 			}
 		}
-
-		for (const tagsave_t *p = s->rule_tags.save; p; p = p->next) {
+		for (const tagsave_t *p = b->cmd->save; p; p = p->next) {
 			buf1[p->ver] = false;
 		}
 
 		// in rule tags copies are swapped: LHS is the origin, RHS is backup
-		for (const tagcopy_t *p = s->rule_tags.copy; p; p = p->next) {
+		for (const tagcopy_t *p = b->cmd->copy; p; p = p->next) {
 			buf1[p->lhs] = false;
 			buf1[p->rhs] = true;
 		}
 
-		memset(been, 0, nstate * sizeof(bool));
-		forwprop(dfa, been, i, live, buf1);
+		// final bblock has no successors, instead it has the list
+		// of all bblocks reachable by non-accepting DFA paths
+		for (cfg_ix_t *j = b->succb; j < b->succe; ++j) {
+			bool *liv = &live[*j * nver];
+			for (size_t v = 0; v < nver; ++v) {
+				liv[v] |= buf1[v];
+			}
+		}
 	}
 
 	delete[] buf1;
 	delete[] buf2;
-	delete[] been;
-}
-
-void forwprop(const dfa_t &dfa, bool *been, size_t state, bool *live,
-	const bool *need)
-{
-	if (been[state]) return;
-	been[state] = true;
-
-	const size_t
-		nsym = dfa.nchars,
-		nver = static_cast<size_t>(dfa.maxtagver) + 1;
-	const dfa_state_t *s = dfa.states[state];
-
-	for (size_t c = 0; c < nsym; ++c) {
-		const size_t dest = s->arcs[c];
-		if (dest != dfa_t::NIL && dfa.states[dest]->fallthru) {
-			bool *l = &live[(state * nsym + c) * nver];
-			for (size_t v = 0; v < nver; ++v) {
-				l[v] |= need[v];
-			}
-			forwprop(dfa, been, dest, live, need);
-		}
-	}
 }
 
 } // namespace re2c

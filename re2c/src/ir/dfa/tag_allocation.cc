@@ -16,15 +16,12 @@ namespace re2c
  * We build just some cover (not necessarily minimal).
  * The algorithm takes quadratic (in the number of tags) time.
  */
-tagver_t tag_allocation(const dfa_t &dfa, const bool *interf,
+tagver_t tag_allocation(const cfg_t &cfg, const bool *interf,
 	tagver_t *ver2new)
 {
 	const tagver_t
 		END = std::numeric_limits<tagver_t>::max(),
-		nver = dfa.maxtagver + 1;
-	const size_t
-		nsym = dfa.nchars,
-		narc = dfa.states.size() * nsym;
+		nver = cfg.dfa.maxtagver + 1;
 	tagver_t *next = new tagver_t[nver]; // list of class members
 	tagver_t *repr = new tagver_t[nver]; // maps tag to class representative
 	tagver_t rx, ry, x, y, z;
@@ -33,9 +30,9 @@ tagver_t tag_allocation(const dfa_t &dfa, const bool *interf,
 	std::fill(repr, repr + nver, END);
 
 	// copy coalescing: for each command X = Y, try to merge X and Y
-	for (size_t a = 0; a < narc; ++a) {
-		const tagcopy_t *p = dfa.states[a / nsym]->tags[a % nsym].copy;
-		for (; p; p = p->next) {
+	const cfg_bb_t *b = cfg.bblocks, *e = b + cfg.nbblock;
+	for (; b < e; ++b) {
+		for (const tagcopy_t *p = b->cmd->copy; p; p = p->next) {
 			x = p->lhs;
 			y = p->rhs;
 			rx = repr[x];

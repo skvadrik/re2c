@@ -25,26 +25,15 @@ template<typename cmd_t> void doindex(cmd_t **pcmd, lookup_t<cmd_t*> &index);
  * However, after indexing different commands may share representation
  * in memory, so they must not be modified.
  */
-void tag_indexing(dfa_t &dfa)
+void tag_indexing(const cfg_t &cfg)
 {
-	const size_t
-		nstate = dfa.states.size(),
-		nsym = dfa.nchars;
+	cfg_bb_t *b = cfg.bblocks, *e = b + cfg.nbblock;
 	lookup_t<tagsave_t*> saveindex;
 	lookup_t<tagcopy_t*> copyindex;
 
-	for (size_t i = 0; i < nstate; ++i) {
-		dfa_state_t *s = dfa.states[i];
-
-		for (size_t c = 0; c < nsym; ++c) {
-			tagcmd_t &cmd = s->tags[c];
-			doindex(&cmd.save, saveindex);
-			doindex(&cmd.copy, copyindex);
-		}
-
-		tagcmd_t &cmd = s->rule_tags;
-		doindex(&cmd.save, saveindex);
-		doindex(&cmd.copy, copyindex);
+	for (; b < e; ++b) {
+		doindex(&b->cmd->save, saveindex);
+		doindex(&b->cmd->copy, copyindex);
 	}
 }
 
