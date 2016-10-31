@@ -16,51 +16,59 @@ void tag_liveness(const cfg_t &cfg, bool *live)
 
 	/* note [control flow equations for tag liveness]
 	 *
-	 * Tag liveness in basic block x is given by control-flow equations:
-	 *
-	 *     need-out(x) = use(x) + need-in(y), for all y successors of x
-	 *     need-in(x) = need-out(x) - define(x)
-	 *
+	 * Liveness in bblock B is given by control flow equations:
+	 *     live-out(B) = union of live-in(C), for all successors C
+	 *     live-in(B)  = live-out(B) except defined(B)
 	 * Equations are solved by iteration until fix point.
+	 *
+	 * Live set can only grow on each iteration, it never shrinks.
+	 * Initially all final tag versions used in rules are alive;
+	 * we pre-calculate them and then only update table by adding
+	 * new versions.
 	 */
+
 	memset(live, 0, nbb * nver * sizeof(bool));
+	for (cfg_ix_t i = 0; i < nbb; ++i) {
+		const tagver_t *use = cfg.bblocks[i].use;
+		if (!use) continue;
+
+		bool *l = &live[i * nver];
+		for (size_t t = 0; t < ntag; ++t) {
+			const tagver_t u = use[t];
+			if (u != TAGVER_ZERO) {
+				l[u] = true;
+			}
+		}
+	}
+
 	for (bool loop = true; loop;) {
 		loop = false;
 
 		for (cfg_ix_t i = 0; i < nbb; ++i) {
 			const cfg_bb_t *b = cfg.bblocks + i;
+			if (b->use) continue;
 
-			memset(buf1, 0, nver * sizeof(bool));
-			if (b->use) {
-				// final bblock, no successors
-				for (size_t t = 0; t < ntag; ++t) {
-					const tagver_t u = b->use[t];
-					if (u != TAGVER_ZERO) {
-						buf1[u] = true;
-					}
+			bool *old = &live[i * nver];
+			memcpy(buf1, old, nver * sizeof(bool));
+			for (cfg_ix_t *j = b->succb; j < b->succe; ++j) {
+				const bool *l = &live[*j * nver];
+				memcpy(buf2, l, nver * sizeof(bool));
+
+				const tagsave_t *p = cfg.bblocks[*j].cmd->save;
+				for (; p; p = p->next) {
+					buf2[p->ver] = false;
 				}
-			} else {
-				// transition bblock, no final rule tags
-				for (cfg_ix_t *j = b->succb; j < b->succe; ++j) {
-					const bool *liv = &live[*j * nver];
-					memcpy(buf2, liv, nver * sizeof(bool));
 
-					for (const tagsave_t *p = cfg.bblocks[*j].cmd->save; p; p = p->next) {
-						buf2[p->ver] = false;
-					}
+				// copy tags are only used for fallback tags,
+				// their liveness is handled in a special way
 
-					// copy tags are only used for fallback tags,
-					// their liveness is handled in a special way
-
-					for (size_t v = 0; v < nver; ++v) {
-						buf1[v] |= buf2[v];
-					}
+				for (size_t v = 0; v < nver; ++v) {
+					buf1[v] |= buf2[v];
 				}
 			}
 
-			bool *liv = &live[i * nver];
-			if (memcmp(liv, buf1, nver * sizeof(bool)) != 0) {
-				memcpy(liv, buf1, nver * sizeof(bool));
+			if (memcmp(old, buf1, nver * sizeof(bool)) != 0) {
+				memcpy(old, buf1, nver * sizeof(bool));
 				loop = true;
 			}
 		}
@@ -80,7 +88,6 @@ void tag_liveness(const cfg_t &cfg, bool *live)
 	 */
 	for (cfg_ix_t i = 0; i < nbb; ++i) {
 		const cfg_bb_t *b = cfg.bblocks + i;
-
 		if (!b->use) continue;
 
 		memset(buf1, 0, nver * sizeof(bool));
