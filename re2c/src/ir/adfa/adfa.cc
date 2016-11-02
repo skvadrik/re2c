@@ -20,6 +20,7 @@ DFA::DFA
 	, const std::vector<size_t> &fill
 	, Skeleton *skel
 	, const charset_t &charset
+	, tcpool_t *ptcpool
 	, const std::string &n
 	, const std::string &c
 	, uint32_t l
@@ -35,6 +36,7 @@ DFA::DFA
 	, head(NULL)
 	, rules(dfa.rules)
 	, tags(dfa.tags)
+	, tcpool(*ptcpool)
 	, max_fill (0)
 	, need_backup (false)
 	, need_accept (false)
@@ -61,7 +63,7 @@ DFA::DFA
 		p = &s->next;
 
 		s->rule = t->rule;
-		s->rule_tags = t->rule_tags;
+		s->rule_tags = t->tcid[dfa.nchars];
 		s->fill = fill[i];
 		s->fallback = t->fallback; // see note [fallback states]
 
@@ -70,8 +72,8 @@ DFA::DFA
 		for (uint32_t c = 0; c < nchars; ++j)
 		{
 			const size_t to = t->arcs[c];
-			const tagcmd_t tags = t->tags[c];
-			for (;++c < nchars && t->arcs[c] == to && t->tags[c] == tags;);
+			const tcid_t tags = t->tcid[c];
+			for (;++c < nchars && t->arcs[c] == to && t->tcid[c] == tags;);
 			s->go.span[j].to = to == dfa_t::NIL ? NULL : i2s[to];
 			s->go.span[j].ub = charset[c];
 			s->go.span[j].tags = tags;
@@ -96,6 +98,7 @@ DFA::~DFA()
 	delete skeleton;
 	delete &rules;
 	delete &tags;
+	delete &tcpool;
 }
 
 /* note [reordering DFA states]

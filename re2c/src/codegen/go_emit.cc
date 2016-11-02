@@ -151,7 +151,7 @@ void GoBitmap::emit (OutputFile & o, uint32_t ind, const DFA &dfa, bool & readCh
 		o.wu32(bitmap->m);
 	}
 	o.ws(") {\n");
-	gen_goto_plain(o, ind + 1, readCh, bitmap_state, dfa, tagcmd_t());
+	gen_goto_plain(o, ind + 1, readCh, bitmap_state, dfa, TCID0);
 	o.wind(ind).ws("}\n");
 	if (lgo != NULL)
 	{
@@ -206,7 +206,7 @@ void Cpgoto::emit (OutputFile & o, uint32_t ind, const DFA &dfa, bool & readCh)
 	o.wind(--ind).ws("}\n");
 }
 
-void Dot::emit(OutputFile &o)
+void Dot::emit(OutputFile &o, const DFA &dfa)
 {
 	const uint32_t n = cases->cases_size;
 	if (n == 1) {
@@ -218,10 +218,11 @@ void Dot::emit(OutputFile &o)
 			for (uint32_t j = 0; j < c.ranges.size(); ++j) {
 				o.wrange(c.ranges[j].first, c.ranges[j].second);
 			}
-			for (const tagsave_t *p = c.tags.save; p; p = p->next) {
+			const tccmd_t &cmd = dfa.tcpool[c.tags];
+			for (const tagsave_t *p = cmd.save; p; p = p->next) {
 				o.ws("<").wstring(vartag_name(p->ver)).ws(">");
 			}
-			for (const tagcopy_t *p = c.tags.copy; p; p = p->next) {
+			for (const tagcopy_t *p = cmd.copy; p; p = p->next) {
 				o.ws("<").wstring(vartag_name(p->lhs)).ws("~")
 					.wstring(vartag_name(p->rhs)).ws(">");
 			}
@@ -251,7 +252,7 @@ void Go::emit (OutputFile & o, uint32_t ind, const DFA &dfa, bool & readCh)
 			info.cpgoto->emit (o, ind, dfa, readCh);
 			break;
 		case DOT:
-			info.dot->emit (o);
+			info.dot->emit (o, dfa);
 			break;
 	}
 }

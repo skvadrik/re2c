@@ -12,7 +12,7 @@ struct cfg_bb_t
 {
 	cfg_ix_t *succb;
 	cfg_ix_t *succe;
-	tagcmd_t *cmd;
+	tcmd_t *cmd;
 	tagver_t *use;
 };
 
@@ -33,7 +33,7 @@ void tag_dce(cfg_t &cfg, const bool *live);
 void tag_interference(const cfg_t &cfg, const bool *live, bool *interf);
 tagver_t tag_allocation(const cfg_t &cfg, const bool *interf, tagver_t *ver2new);
 void tag_renaming(cfg_t &cfg, const tagver_t *ver2new, tagver_t maxver);
-void tag_indexing(const cfg_t &cfg);
+void tag_normalization(cfg_t &cfg);
 
 } // namespace re2c
 

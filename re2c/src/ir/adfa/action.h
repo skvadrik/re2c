@@ -24,7 +24,7 @@ struct Initial
 	{}
 };
 
-typedef uniq_vector_t<std::pair<const State*, tagcmd_t> > accept_t;
+typedef uniq_vector_t<std::pair<const State*, tcid_t> > accept_t;
 
 class Action
 {

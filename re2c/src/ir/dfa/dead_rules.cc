@@ -158,13 +158,15 @@ static void warn_dead_rules(const dfa_t &dfa, size_t defrule,
 
 static void remove_dead_final_states(dfa_t &dfa, const bool *live)
 {
-	const size_t nstates = dfa.states.size();
+	const size_t
+		nstates = dfa.states.size(),
+		nsym = dfa.nchars;
 	for (size_t i = 0; i < nstates; ++i) {
 		dfa_state_t *s = dfa.states[i];
 		if (s->rule != Rule::NONE
 			&& !live[s->rule * nstates + i]) {
 			s->rule = Rule::NONE;
-			s->rule_tags = tagcmd_t();
+			s->tcmd[nsym] = tcmd_t();
 		}
 	}
 }

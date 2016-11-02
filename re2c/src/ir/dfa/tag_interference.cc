@@ -5,7 +5,7 @@
 namespace re2c
 {
 
-static void interfere(const tagcmd_t &cmd, bool *interf, bool *live, bool *buf, size_t nver);
+static void interfere(const tcmd_t &cmd, bool *interf, bool *live, bool *buf, size_t nver);
 
 void tag_interference(const cfg_t &cfg, const bool *live, bool *interf)
 {
@@ -24,7 +24,7 @@ void tag_interference(const cfg_t &cfg, const bool *live, bool *interf)
 	delete[] buf2;
 }
 
-void interfere(const tagcmd_t &cmd, bool *interf, bool *live, bool *buf,
+void interfere(const tcmd_t &cmd, bool *interf, bool *live, bool *buf,
 	size_t nver)
 {
 	// Each tag updated by save command interferes with all tags

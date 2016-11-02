@@ -31,7 +31,7 @@ struct State
 	bool fallback;
 
 	size_t rule;
-	tagcmd_t rule_tags;
+	tcid_t rule_tags;
 	bool isBase;
 	Go go;
 	Action action;
@@ -42,7 +42,7 @@ struct State
 		, fill (0)
 		, fallback (false)
 		, rule (Rule::NONE)
-		, rule_tags ()
+		, rule_tags (TCID0)
 		, isBase (false)
 		, go ()
 		, action ()
@@ -68,6 +68,7 @@ struct DFA
 	State * head;
 	std::valarray<Rule> &rules;
 	std::valarray<Tag> &tags;
+	tcpool_t &tcpool;
 	size_t max_fill;
 	bool need_backup;
 	bool need_accept;
@@ -78,6 +79,7 @@ struct DFA
 		, const std::vector<size_t> &fill
 		, Skeleton *skel
 		, const charset_t &charset
+		, tcpool_t *ptcpool
 		, const std::string &n
 		, const std::string &c
 		, uint32_t l

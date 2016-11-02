@@ -98,11 +98,8 @@ Skeleton::Skeleton(
 		// which may be attributed to states rather than transitions
 		// trailing context also cannot have fallback tag
 		bool *tags = new bool[static_cast<size_t>(dfa.maxtagver) + 1]();
-		for (tagsave_t *p = s->rule_tags.save; p; p = p->next) {
-			tags[p->ver] = true;
-		}
-		for (size_t c = 0; c < nc; ++c) {
-			for (tagsave_t *p = s->tags[c].save; p; p = p->next) {
+		for (size_t c = 0; c <= nc; ++c) {
+			for (tagsave_t *p = s->tcmd[c].save; p; p = p->next) {
 				tags[p->ver] = true;
 			}
 		}

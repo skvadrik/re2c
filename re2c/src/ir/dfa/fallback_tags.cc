@@ -41,10 +41,10 @@ void find_overwritten_tags(const dfa_t &dfa, size_t state,
 
 	const dfa_state_t *s = dfa.states[state];
 	for (size_t c = 0; c < dfa.nchars; ++c) {
-		for (const tagsave_t *p = s->tags[c].save; p; p = p->next) {
+		for (const tagsave_t *p = s->tcmd[c].save; p; p = p->next) {
 			owrt[p->ver] = true;
 		}
-		for (const tagcopy_t *p = s->tags[c].copy; p; p = p->next) {
+		for (const tagcopy_t *p = s->tcmd[c].copy; p; p = p->next) {
 			owrt[p->lhs] = true;
 		}
 
@@ -79,7 +79,7 @@ void insert_fallback_tags(dfa_t &dfa)
 		find_overwritten_tags(dfa, i, been, owrt);
 
 		const tagver_t *fin = dfa.rules[s->rule].tags;
-		for (const tagsave_t *p = s->rule_tags.save; p; p = p->next) {
+		for (const tagsave_t *p = s->tcmd[nsym].save; p; p = p->next) {
 			owrt[p->ver] = false;
 		}
 
@@ -91,12 +91,12 @@ void insert_fallback_tags(dfa_t &dfa)
 			if (f == TAGVER_ZERO || !owrt[f]) continue;
 
 			// patch commands (backups must go first)
-			tagcopy_t **p = &s->rule_tags.copy;
+			tagcopy_t **p = &s->tcmd[nsym].copy;
 			*p = new tagcopy_t(*p, f, b);
 			for (size_t c = 0; c < nsym; ++c) {
 				size_t j = s->arcs[c];
 				if (j != dfa_t::NIL && dfa.states[j]->fallthru) {
-					p = &s->tags[c].copy;
+					p = &s->tcmd[c].copy;
 					*p = new tagcopy_t(*p, b, f);
 				}
 			}

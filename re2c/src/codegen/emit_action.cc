@@ -31,7 +31,7 @@ static void emit_rule(OutputFile &o, uint32_t ind, const DFA &dfa, size_t rule_i
 static void genYYFill(OutputFile &o, size_t need);
 static void genSetCondition(OutputFile &o, uint32_t ind, const std::string &cond);
 static void genSetState(OutputFile &o, uint32_t ind, uint32_t fillIndex);
-static void gen_goto(code_lines_t &code, bool &readCh, const State *to, const DFA &dfa, const tagcmd_t &cmd);
+static void gen_goto(code_lines_t &code, bool &readCh, const State *to, const DFA &dfa, tcid_t tcid);
 static void gen_fintags(OutputFile &o, uint32_t ind, const DFA &dfa, const Rule &rule);
 
 void emit_action(OutputFile &o, uint32_t ind, bool &readCh,
@@ -170,7 +170,7 @@ void emit_accept(OutputFile &o, uint32_t ind, bool &readCh,
 
 	bool have_tags = false;
 	for (size_t i = 0; i < nacc; ++i) {
-		if (!acc[i].second.empty()) {
+		if (acc[i].second != TCID0) {
 			have_tags = true;
 			break;
 		}
@@ -316,10 +316,10 @@ void genSetState(OutputFile &o, uint32_t ind, uint32_t fillIndex)
 }
 
 void gen_goto_case(OutputFile &o, uint32_t ind, bool &readCh,
-	const State *to, const DFA &dfa, const tagcmd_t &cmd)
+	const State *to, const DFA &dfa, tcid_t tcid)
 {
 	code_lines_t code;
-	gen_goto(code, readCh, to, dfa, cmd);
+	gen_goto(code, readCh, to, dfa, tcid);
 	const size_t lines = code.size();
 
 	if (lines == 1) {
@@ -333,10 +333,10 @@ void gen_goto_case(OutputFile &o, uint32_t ind, bool &readCh,
 }
 
 void gen_goto_if(OutputFile &o, uint32_t ind, bool &readCh,
-	const State *to, const DFA &dfa, const tagcmd_t &cmd)
+	const State *to, const DFA &dfa, tcid_t tcid)
 {
 	code_lines_t code;
-	gen_goto(code, readCh, to, dfa, cmd);
+	gen_goto(code, readCh, to, dfa, tcid);
 	const size_t lines = code.size();
 
 	if (lines == 1) {
@@ -351,10 +351,10 @@ void gen_goto_if(OutputFile &o, uint32_t ind, bool &readCh,
 }
 
 void gen_goto_plain(OutputFile &o, uint32_t ind, bool &readCh,
-	const State *to, const DFA &dfa, const tagcmd_t &cmd)
+	const State *to, const DFA &dfa, tcid_t tcid)
 {
 	code_lines_t code;
-	gen_goto(code, readCh, to, dfa, cmd);
+	gen_goto(code, readCh, to, dfa, tcid);
 	const size_t lines = code.size();
 
 	for (size_t i = 0; i < lines; ++i) {
@@ -363,7 +363,7 @@ void gen_goto_plain(OutputFile &o, uint32_t ind, bool &readCh,
 }
 
 void gen_goto(code_lines_t &code, bool &readCh, const State *to,
-	const DFA &dfa, const tagcmd_t &cmd)
+	const DFA &dfa, tcid_t tcid)
 {
 	if (to == NULL) {
 		readCh = false;
@@ -372,16 +372,17 @@ void gen_goto(code_lines_t &code, bool &readCh, const State *to,
 		code.push_back(opts->input_api.stmt_peek(0));
 		readCh = false;
 	}
-	gen_settags(code, dfa, cmd);
+	gen_settags(code, dfa, tcid);
 	if (to) {
 		code.push_back("goto " + opts->labelPrefix
 			+ to_string(to->label) + ";\n");
 	}
 }
 
-void gen_settags(code_lines_t &code, const DFA &dfa, const tagcmd_t &cmd)
+void gen_settags(code_lines_t &code, const DFA &dfa, tcid_t tcid)
 {
 	const bool generic = opts->input_api.type() == InputAPI::CUSTOM;
+	const tccmd_t &cmd = dfa.tcpool[tcid];
 	const tagsave_t *tsave = cmd.save;
 	const tagcopy_t *tcopy = cmd.copy;
 	std::string line;

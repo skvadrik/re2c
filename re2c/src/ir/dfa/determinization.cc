@@ -82,7 +82,7 @@ dfa_t::dfa_t(const nfa_t &nfa,
 			f = std::find_if(clos0.begin(), e, clos_t::final);
 		if (f != e) {
 			s->rule = f->state->rule;
-			s->rule_tags.save = tagsave_t::convert(tagpool[f->tagidx], ntag);
+			s->tcmd[nchars].save = tagsave_t::convert(tagpool[f->tagidx], ntag);
 		}
 
 		// for each alphabet symbol, build tagged epsilon-closure
@@ -90,7 +90,7 @@ dfa_t::dfa_t(const nfa_t &nfa,
 		// find identical closure or add the new one
 		for (size_t c = 0; c < nchars; ++c) {
 			reach(clos0, clos1, charset[c]);
-			s->tags[c].save = closure(clos1, clos2, tagpool, rules, badtags);
+			s->tcmd[c].save = closure(clos1, clos2, tagpool, rules, badtags);
 			s->arcs[c] = clospool.insert(clos2);
 		}
 	}

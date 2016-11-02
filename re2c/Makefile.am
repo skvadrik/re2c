@@ -42,6 +42,7 @@ SRC_HDR = \
 	src/ir/compile.h \
 	src/ir/rule.h \
 	src/ir/tag.h \
+	src/ir/tcmd.h \
 	src/ir/skeleton/path.h \
 	src/ir/skeleton/skeleton.h \
 	src/globals.h \
@@ -101,9 +102,9 @@ SRC = \
 	src/ir/dfa/minimization.cc \
 	src/ir/dfa/tag_allocation.cc \
 	src/ir/dfa/tag_dce.cc \
-	src/ir/dfa/tag_indexing.cc \
 	src/ir/dfa/tag_interference.cc \
 	src/ir/dfa/tag_liveness.cc \
+	src/ir/dfa/tag_normalization.cc \
 	src/ir/dfa/tag_optimize.cc \
 	src/ir/dfa/tag_renaming.cc \
 	src/ir/dfa/tagpool.cc \
@@ -126,6 +127,7 @@ SRC = \
 	src/ir/skeleton/maxpath.cc \
 	src/ir/skeleton/skeleton.cc \
 	src/ir/tag.cc \
+	src/ir/tcmd.cc \
 	src/main.cc \
 	src/parse/code.cc \
 	src/parse/input.cc \
