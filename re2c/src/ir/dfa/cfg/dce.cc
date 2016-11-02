@@ -3,7 +3,7 @@
 namespace re2c
 {
 
-void tag_dce(cfg_t &cfg, const bool *live)
+void cfg_t::dead_code_elimination(cfg_t &cfg, const bool *live)
 {
 	const tagver_t nver = cfg.dfa.maxtagver + 1;
 	cfg_bb_t *b = cfg.bblocks, *e = b + cfg.nbblock;

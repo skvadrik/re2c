@@ -14,7 +14,7 @@ template<typename cmd_t> void normalize(cmd_t *cmd);
  * For that reason all commands are normalized.
  */
 
-void tag_normalization(cfg_t &cfg)
+void cfg_t::normalization(cfg_t &cfg)
 {
 	cfg_bb_t *b = cfg.bblocks, *e = b + cfg.nbblock;
 	for (; b < e; ++b) {

@@ -16,7 +16,7 @@ namespace re2c
  * We build just some cover (not necessarily minimal).
  * The algorithm takes quadratic (in the number of tags) time.
  */
-tagver_t tag_allocation(const cfg_t &cfg, const bool *interf,
+tagver_t cfg_t::variable_allocation(const cfg_t &cfg, const bool *interf,
 	tagver_t *ver2new)
 {
 	const tagver_t

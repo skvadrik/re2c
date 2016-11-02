@@ -3,7 +3,7 @@
 namespace re2c
 {
 
-void tag_renaming(cfg_t &cfg, const tagver_t *ver2new, tagver_t maxver)
+void cfg_t::renaming(cfg_t &cfg, const tagver_t *ver2new, tagver_t maxver)
 {
 	tagver_t &oldmax = cfg.dfa.maxtagver;
 	if (oldmax == maxver) return;

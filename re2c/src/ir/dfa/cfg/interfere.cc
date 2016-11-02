@@ -7,7 +7,7 @@ namespace re2c
 
 static void interfere(const tcmd_t &cmd, bool *interf, bool *live, bool *buf, size_t nver);
 
-void tag_interference(const cfg_t &cfg, const bool *live, bool *interf)
+void cfg_t::interference(const cfg_t &cfg, const bool *live, bool *interf)
 {
 	const size_t nver = static_cast<size_t>(cfg.dfa.maxtagver) + 1;
 	bool *buf1 = new bool[nver];

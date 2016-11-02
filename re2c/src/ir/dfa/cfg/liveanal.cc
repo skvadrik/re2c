@@ -5,7 +5,7 @@
 namespace re2c
 {
 
-void tag_liveness(const cfg_t &cfg, bool *live)
+void cfg_t::liveness_analysis(const cfg_t &cfg, bool *live)
 {
 	const size_t
 		nbb = cfg.nbblock,
