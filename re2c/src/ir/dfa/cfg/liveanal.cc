@@ -1,6 +1,6 @@
 #include <string.h>
 
-#include "src/ir/dfa/tag_optimize.h"
+#include "src/ir/dfa/cfg/cfg.h"
 
 namespace re2c
 {

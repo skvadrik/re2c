@@ -1,5 +1,5 @@
-#ifndef _RE2C_IR_DFA_TAG_OPTIMIZE_
-#define _RE2C_IR_DFA_TAG_OPTIMIZE_
+#ifndef _RE2C_IR_DFA_CFG_CFG_
+#define _RE2C_IR_DFA_CFG_CFG_
 
 #include "src/ir/dfa/dfa.h"
 
@@ -37,4 +37,4 @@ void tag_normalization(cfg_t &cfg);
 
 } // namespace re2c
 
-#endif // _RE2C_IR_DFA_TAG_OPTIMIZE_
+#endif // _RE2C_IR_DFA_CFG_CFG_

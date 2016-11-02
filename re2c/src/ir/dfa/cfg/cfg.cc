@@ -1,81 +1,15 @@
 #include <string.h>
 
-#include "src/ir/dfa/dfa.h"
-#include "src/ir/dfa/tag_optimize.h"
+#include "src/ir/dfa/cfg/cfg.h"
 
 namespace re2c
 {
 
-static void freeze_tags(dfa_t &dfa);
 static cfg_ix_t map_arcs_to_bblocks(const dfa_t &dfa, cfg_ix_t *arc2bb);
 static cfg_bb_t *create_bblocks(const dfa_t &dfa, const cfg_ix_t *arc2bb, cfg_ix_t nbblock);
 static void basic_block(cfg_bb_t *bb, const cfg_ix_t *succb, const cfg_ix_t *succe, tcmd_t *cmd, tagver_t *use);
 static void successors(const dfa_t &dfa, const cfg_ix_t *arc2bb, bool *been, cfg_ix_t *&succ, size_t x);
 static void fallback(const dfa_t &dfa, const cfg_ix_t *arc2bb, bool *been, cfg_ix_t *&succ, size_t x);
-
-void optimize_tags(dfa_t &dfa)
-{
-	if (dfa.maxtagver > 0) {
-		cfg_t cfg(dfa);
-
-		const size_t nver = static_cast<size_t>(dfa.maxtagver) + 1;
-		bool *live = new bool[cfg.nbblock * nver];
-		bool *interf = new bool[nver * nver];
-		tagver_t *ver2new = new tagver_t[nver];
-
-		tag_liveness(cfg, live);
-		tag_dce(cfg, live);
-		tag_interference(cfg, live, interf);
-		const tagver_t maxver = tag_allocation(cfg, interf, ver2new);
-		tag_renaming(cfg, ver2new, maxver);
-		tag_normalization(cfg);
-
-		delete[] live;
-		delete[] interf;
-		delete[] ver2new;
-	}
-
-	freeze_tags(dfa);
-}
-
-/* note [tag freezing]
- *
- * Comparison of tag commands should be very fast (constant time):
- * many optimizations rely on this (like tunnelling, hoisting and
- * especially Moore's minimization, which compares whole classes
- * of tagged transition at once). So we bring each command to some
- * 'normal form' and insert it into common index.
- *
- * After that commands can be addressed and compared by index.
- * They also become immutable, because different commands may
- * share representation in memory.
- */
-void freeze_tags(dfa_t &dfa)
-{
-	tcpool_t &pool = dfa.tcpool;
-	const size_t
-		nstate = dfa.states.size(),
-		nsym = dfa.nchars;
-
-	for (size_t i = 0; i < nstate; ++i) {
-		dfa_state_t *s = dfa.states[i];
-		const tcmd_t
-			*cmd = s->tcmd,
-			*const fin = cmd + nsym;
-		tcid_t *id = s->tcid = new tcid_t[nsym + 1];
-
-		// transition commands
-		for(; cmd < fin; ++cmd) {
-			*id++ = pool.insert(cmd->save, cmd->copy);
-		}
-
-		// final epsilon-transition command
-		*id++ = pool.insert(fin->save, fin->copy);
-
-		delete[] s->tcmd;
-		s->tcmd = NULL;
-	}
-}
 
 cfg_t::cfg_t(dfa_t &a)
 	: dfa(a)
