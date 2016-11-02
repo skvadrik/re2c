@@ -8,32 +8,6 @@ namespace re2c
 
 static uint32_t hash_tcmd(const tagsave_t *save, const tagcopy_t *copy);
 
-free_list<tagsave_t*> tagsave_t::freelist;
-
-tagsave_t::tagsave_t(tagsave_t *n, tagver_t v)
-	: next(n)
-	, ver(v)
-{
-	freelist.insert(this);
-}
-
-tagsave_t::~tagsave_t()
-{
-	freelist.erase(this);
-}
-
-tagsave_t *tagsave_t::convert(const tagver_t *vers, size_t ntag)
-{
-	tagsave_t *s = NULL;
-	for (size_t t = ntag; t-- > 0;) {
-		const tagver_t v = vers[t];
-		if (v != TAGVER_ZERO) {
-			s = new tagsave_t(s, v);
-		}
-	}
-	return s;
-}
-
 void tagsave_t::swap(tagsave_t &x, tagsave_t &y)
 {
 	std::swap(x.ver, y.ver);
@@ -47,21 +21,6 @@ bool tagsave_t::less(const tagsave_t &x, const tagsave_t &y)
 bool tagsave_t::equal(const tagsave_t &x, const tagsave_t &y)
 {
 	return x.ver == y.ver;
-}
-
-free_list<tagcopy_t*> tagcopy_t::freelist;
-
-tagcopy_t::tagcopy_t(tagcopy_t *n, tagver_t l, tagver_t r)
-	: next(n)
-	, lhs(l)
-	, rhs(r)
-{
-	freelist.insert(this);
-}
-
-tagcopy_t::~tagcopy_t()
-{
-	freelist.erase(this);
 }
 
 void tagcopy_t::swap(tagcopy_t &x, tagcopy_t &y)
@@ -88,10 +47,40 @@ tcmd_t::tcmd_t(): save(NULL), copy(NULL) {}
 tccmd_t::tccmd_t(const tagsave_t *s, const tagcopy_t *c): save(s), copy(c) {}
 
 tcpool_t::tcpool_t()
-	: index()
+	: alc()
+	, index()
 {
 	// empty command must have static number zero
 	assert(TCID0 == insert(NULL, NULL));
+}
+
+tagsave_t *tcpool_t::make_save(tagsave_t *next, tagver_t ver)
+{
+	tagsave_t *p = alc.alloct<tagsave_t>(1);
+	p->next = next;
+	p->ver = ver;
+	return p;
+}
+
+tagcopy_t *tcpool_t::make_copy(tagcopy_t *next, tagver_t lhs, tagver_t rhs)
+{
+	tagcopy_t *p = alc.alloct<tagcopy_t>(1);
+	p->next = next;
+	p->lhs = lhs;
+	p->rhs = rhs;
+	return p;
+}
+
+tagsave_t *tcpool_t::conv_to_save(const tagver_t *vers, size_t ntag)
+{
+	tagsave_t *s = NULL;
+	for (size_t t = ntag; t-- > 0;) {
+		const tagver_t v = vers[t];
+		if (v != TAGVER_ZERO) {
+			s = make_save(s, v);
+		}
+	}
+	return s;
 }
 
 uint32_t hash_tcmd(const tagsave_t *save, const tagcopy_t *copy)

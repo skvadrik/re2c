@@ -61,6 +61,7 @@ void find_overwritten_tags(const dfa_t &dfa, size_t state,
 void insert_fallback_tags(dfa_t &dfa)
 {
 	tagver_t maxver = dfa.maxtagver;
+	tcpool_t &pool = dfa.tcpool;
 	const size_t
 		nstates = dfa.states.size(),
 		nsym = dfa.nchars,
@@ -92,12 +93,12 @@ void insert_fallback_tags(dfa_t &dfa)
 
 			// patch commands (backups must go first)
 			tagcopy_t **p = &s->tcmd[nsym].copy;
-			*p = new tagcopy_t(*p, f, b);
+			*p = pool.make_copy(*p, f, b);
 			for (size_t c = 0; c < nsym; ++c) {
 				size_t j = s->arcs[c];
 				if (j != dfa_t::NIL && dfa.states[j]->fallthru) {
 					p = &s->tcmd[c].copy;
-					*p = new tagcopy_t(*p, b, f);
+					*p = pool.make_copy(*p, b, f);
 				}
 			}
 			maxver = std::max(maxver, b);

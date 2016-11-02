@@ -20,7 +20,6 @@ DFA::DFA
 	, const std::vector<size_t> &fill
 	, Skeleton *skel
 	, const charset_t &charset
-	, tcpool_t *ptcpool
 	, const std::string &n
 	, const std::string &c
 	, uint32_t l
@@ -36,7 +35,7 @@ DFA::DFA
 	, head(NULL)
 	, rules(dfa.rules)
 	, tags(dfa.tags)
-	, tcpool(*ptcpool)
+	, tcpool(dfa.tcpool)
 	, max_fill (0)
 	, need_backup (false)
 	, need_accept (false)

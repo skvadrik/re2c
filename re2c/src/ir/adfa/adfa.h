@@ -79,7 +79,6 @@ struct DFA
 		, const std::vector<size_t> &fill
 		, Skeleton *skel
 		, const charset_t &charset
-		, tcpool_t *ptcpool
 		, const std::string &n
 		, const std::string &c
 		, uint32_t l

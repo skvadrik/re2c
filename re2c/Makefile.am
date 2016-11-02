@@ -66,6 +66,7 @@ SRC_HDR = \
 	src/util/lookup.h \
 	src/util/range.h \
 	src/util/s_to_n32_unsafe.h \
+	src/util/slab_allocator.h \
 	src/util/smart_ptr.h \
 	src/util/static_assert.h \
 	src/util/string_utils.h \

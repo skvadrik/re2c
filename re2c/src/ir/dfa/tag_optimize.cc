@@ -6,14 +6,14 @@
 namespace re2c
 {
 
-static tcpool_t *freeze_tags(dfa_t &dfa);
+static void freeze_tags(dfa_t &dfa);
 static cfg_ix_t map_arcs_to_bblocks(const dfa_t &dfa, cfg_ix_t *arc2bb);
 static cfg_bb_t *create_bblocks(const dfa_t &dfa, const cfg_ix_t *arc2bb, cfg_ix_t nbblock);
 static void basic_block(cfg_bb_t *bb, const cfg_ix_t *succb, const cfg_ix_t *succe, tcmd_t *cmd, tagver_t *use);
 static void successors(const dfa_t &dfa, const cfg_ix_t *arc2bb, bool *been, cfg_ix_t *&succ, size_t x);
 static void fallback(const dfa_t &dfa, const cfg_ix_t *arc2bb, bool *been, cfg_ix_t *&succ, size_t x);
 
-tcpool_t *optimize_tags(dfa_t &dfa)
+void optimize_tags(dfa_t &dfa)
 {
 	if (dfa.maxtagver > 0) {
 		cfg_t cfg(dfa);
@@ -35,7 +35,7 @@ tcpool_t *optimize_tags(dfa_t &dfa)
 		delete[] ver2new;
 	}
 
-	return freeze_tags(dfa);
+	freeze_tags(dfa);
 }
 
 /* note [tag freezing]
@@ -50,9 +50,9 @@ tcpool_t *optimize_tags(dfa_t &dfa)
  * They also become immutable, because different commands may
  * share representation in memory.
  */
-tcpool_t *freeze_tags(dfa_t &dfa)
+void freeze_tags(dfa_t &dfa)
 {
-	tcpool_t *tcpool = new tcpool_t;
+	tcpool_t &pool = dfa.tcpool;
 	const size_t
 		nstate = dfa.states.size(),
 		nsym = dfa.nchars;
@@ -66,17 +66,15 @@ tcpool_t *freeze_tags(dfa_t &dfa)
 
 		// transition commands
 		for(; cmd < fin; ++cmd) {
-			*id++ = tcpool->insert(cmd->save, cmd->copy);
+			*id++ = pool.insert(cmd->save, cmd->copy);
 		}
 
 		// final epsilon-transition command
-		*id++ = tcpool->insert(fin->save, fin->copy);
+		*id++ = pool.insert(fin->save, fin->copy);
 
 		delete[] s->tcmd;
 		s->tcmd = NULL;
 	}
-
-	return tcpool;
 }
 
 cfg_t::cfg_t(dfa_t &a)

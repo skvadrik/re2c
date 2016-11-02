@@ -25,7 +25,8 @@ typedef closure_t::iterator clositer_t;
 typedef closure_t::const_iterator cclositer_t;
 
 tagsave_t *closure(const closure_t &clos1, closure_t &clos2,
-	Tagpool &tagpool, std::valarray<Rule> &rules, bool *badtags);
+	Tagpool &tagpool, tcpool_t &tcpool, std::valarray<Rule> &rules,
+	bool *badtags);
 
 clos_t::clos_t()
 	: state(NULL)

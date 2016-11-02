@@ -10,10 +10,11 @@ static void closure_one(closure_t &clos, Tagpool &tagpool, nfa_state_t *n, tagve
 static void check_tags(const Tagpool &tagpool, size_t oldidx, size_t newidx, bool *badtags);
 static bool compare_by_rule(const clos_t &c1, const clos_t &c2);
 static void prune_final_items(closure_t &clos, std::valarray<Rule> &rules);
-static tagsave_t *merge_and_check_tags(const closure_t &clos, Tagpool &tagpool, const std::valarray<Rule> &rules, bool *badtags);
+static tagsave_t *merge_and_check_tags(const closure_t &clos, Tagpool &tagpool, tcpool_t &tcpool, const std::valarray<Rule> &rules, bool *badtags);
 
 tagsave_t *closure(const closure_t &clos1, closure_t &clos2,
-	Tagpool &tagpool, std::valarray<Rule> &rules, bool *badtags)
+	Tagpool &tagpool, tcpool_t &tcpool, std::valarray<Rule> &rules,
+	bool *badtags)
 {
 	// build tagged epsilon-closure of the given set of NFA states
 	clos2.clear();
@@ -30,7 +31,7 @@ tagsave_t *closure(const closure_t &clos1, closure_t &clos2,
 	std::sort(clos2.begin(), clos2.end(), compare_by_rule);
 
 	// merge tags from different rules, find nondeterministic tags
-	return merge_and_check_tags(clos1, tagpool, rules, badtags);
+	return merge_and_check_tags(clos1, tagpool, tcpool, rules, badtags);
 }
 
 /* note [epsilon-closures in tagged NFA]
@@ -165,7 +166,7 @@ void prune_final_items(closure_t &clos, std::valarray<Rule> &rules)
 
 // WARNING: this function assumes that closure items are grouped bu rule
 tagsave_t *merge_and_check_tags(const closure_t &clos, Tagpool &tagpool,
-	const std::valarray<Rule> &rules, bool *badtags)
+	tcpool_t &tcpool, const std::valarray<Rule> &rules, bool *badtags)
 {
 	const size_t ntag = tagpool.ntags;
 	tagver_t *tags = tagpool.buffer1;
@@ -195,7 +196,7 @@ tagsave_t *merge_and_check_tags(const closure_t &clos, Tagpool &tagpool,
 		}
 	}
 
-	return tagsave_t::convert(tags, ntag);
+	return tcpool.conv_to_save(tags, ntag);
 }
 
 } // namespace re2c
