@@ -7,30 +7,27 @@ static void find_overwritten_tags(const dfa_t &dfa, size_t state, bool *been, bo
 
 /* note [fallback tags]
  *
- * We need to backup tags in fallback states: these tags may be
- * updated on some non-accepting path from fallback state, and if
- * the attempt to match longer rule fails, there's no way to restore
- * the overwritten tags.
- *
+ * We need to backup tags in fallback states, because they may be
+ * overwritten on some non-accepting path from fallback state.
  * Two different things may cause overwrites:
- *   - self-overlapping rules
- *   - overlapping rules which tags have been merged by deduplication
  *
- * We can prevent deduplication from merging such tags by propagating
- * their liveness on all non-accepting paths from fallback state.
+ * (1) self-overlapping rules: if DFA has tagged cycles, new iteration
+ *     may overwrite tags from previous iteration and then fail
  *
- * Handling self-overlapping rules is not so easy: damage is done by
- * DFA construction, which knows nothing about fallbacks. We have to
- * manually create one backup tag for each potentially overwritten
- * tag and add backup/restore instructions: transitions from fallback
- * state must backup tag, transitions from 'yyaccept' state must
- * restore it.
+ * (2) overlapping rules: intially all rules have different tags, but
+ *     optiizations may merge them; then shorter rule's tags may be
+ *     overwritten by an unsuccessful attempt to match longer rule
  *
- * We take special care not to create redundant backups (trace all
- * non-accepting paths from the given fallback state to find which
- * tags are potentially overwritten). In theory, deduplication
- * could remove redundant backups, but in practice such tags cause
- * artifical interference and confuse coloring heuristic.
+ * In case (2) we can prevent merging by propagating tag liveness on
+ * all non-accepting paths from fallback state.
+ *
+ * Case (1) is not so easy: overwrites are already embedded in DFA.
+ * We have to create backup copies for all potentially overwritten
+ * tags. If tag is overwritten on just one path, it should be backed
+ * up on all non-accepting paths from fallback state (because paths
+ * may join later along the way and they need common tag version).
+ * However, redundant backups cause artificial interference, so we
+ * only create backup if the origin is overwritten on some path.
  */
 
 void find_overwritten_tags(const dfa_t &dfa, size_t state,
