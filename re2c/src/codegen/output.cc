@@ -71,7 +71,7 @@ bool OutputFile::open ()
 	}
 	else
 	{
-		file = fopen (file_name, "wb");
+		file = fopen (file_name, "w");
 	}
 	return file != NULL;
 }
@@ -346,7 +346,7 @@ HeaderFile::HeaderFile (const char * fn)
 
 bool HeaderFile::open ()
 {
-	file = fopen (file_name, "wb");
+	file = fopen (file_name, "w");
 	return file != NULL;
 }
 
