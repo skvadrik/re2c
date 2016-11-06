@@ -10,7 +10,6 @@ namespace re2c
 
 Node::Node()
 	: arcs()
-	, arcsets()
 	, rule(Rule::NONE)
 	, trail(Tag::NONE)
 	, trver(TAGVER_ZERO)
@@ -30,27 +29,13 @@ void Node::init(const bool *ts, size_t r, size_t tr, tagver_t tv,
 	trail = tr;
 	trver = tv;
 
-	uint32_t lb = 0;
 	std::vector<std::pair<size_t, uint32_t> >::const_iterator
 		i = a.begin(),
 		e = a.end();
-	for (; i != e; ++i) {
-		const size_t n = i->first;
-		const uint32_t ub = i->second - 1;
-
-		// pick at most 0x100 unique edges from this range
-		// (for 1-byte code units this covers the whole range: [0 - 0xFF])
-		//   - range bounds must be included
-		//   - values should be evenly distributed
-		//   - values should be deterministic
-		const uint32_t step = 1 + (ub - lb) / 0x100;
-		for (uint32_t c = lb; c < ub; c += step) {
-			arcs[n].push_back(c);
-		}
-		arcs[n].push_back(ub);
-
-		arcsets[n].push_back(std::make_pair(lb, ub));
-		lb = ub + 1;
+	for (uint32_t l = 0; i != e; ++i) {
+		const uint32_t u = i->second;
+		arcs[i->first].push_back(std::make_pair(l, u - 1));
+		l = u;
 	}
 }
 

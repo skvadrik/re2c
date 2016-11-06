@@ -27,14 +27,11 @@ typedef local_increment_t<uint8_t> local_inc;
 
 struct Node
 {
-	typedef std::vector<std::pair<uint32_t, uint32_t> > arcset_t;
-	typedef std::map<size_t, arcset_t> arcsets_t;
-
-	typedef std::vector<uint32_t> arc_t;
+	typedef std::vector<std::pair<uint32_t, uint32_t> > arc_t;
 	typedef std::map<size_t, arc_t> arcs_t;
+	typedef arc_t::const_iterator citer_t;
 
 	arcs_t arcs;
-	arcsets_t arcsets;
 	size_t rule;
 	size_t trail;
 	tagver_t trver;

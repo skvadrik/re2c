@@ -81,10 +81,6 @@ public:
 	{
 		return skel.nodes[arcs[i]].arcs.find(arcs[i + 1])->second;
 	}
-	const Node::arcset_t& arcset(const Skeleton &skel, size_t i) const
-	{
-		return skel.nodes[arcs[i]].arcsets.find(arcs[i + 1])->second;
-	}
 	void push(size_t n)
 	{
 		arcs.push_back(n);

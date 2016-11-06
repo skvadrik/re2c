@@ -88,40 +88,72 @@ template<typename key_t> static void keygen(FILE *f, size_t count,
 	delete[] keys;
 }
 
+// pick at most 0x100 unique edges from this range
+// (for 1-byte code units this covers the whole range: [0 - 0xFF])
+//   - range bounds must be included
+//   - values should be evenly distributed
+//   - values should be deterministic
+static uint32_t step(uint32_t lower, uint32_t upper)
+{
+	return 1 + (upper - lower) / 0x100;
+}
+
 template<typename cunit_t, typename key_t> static cover_size_t cover_one(
 	const Skeleton &skel, cover_t &cover)
 {
 	const path_t &path = cover.prefix;
 	const size_t len = path.len();
 
-	size_t count = 0;
+	size_t width = 0;
 	for (size_t i = 0; i < len; ++i) {
-		count = std::max (count, path.arc(skel, i).size());
+
+		// width of multiarc: total number of characters picked from all ranges
+		size_t w = 0;
+		const Node::arc_t &arc = path.arc(skel, i);
+		for (Node::citer_t a = arc.begin(); a != arc.end(); ++a) {
+			const uint32_t
+				l = a->first,
+				u = a->second;
+			w += 2 + (u - l - 1) / step(l, u);
+		}
+
+		// width of multipath: maximal width of multiarc
+		width = std::max(width, w);
 	}
 
 	const cover_size_t size = cover_size_t::from64(len)
-		* cover_size_t::from64(count);
-	if (!size.overflow()) {
-		// input
-		const size_t buffer_size = size.uint32();
-		cunit_t *buffer = new cunit_t [buffer_size];
-		for (size_t i = 0; i < len; ++i) {
-			const std::vector<uint32_t> &arc = path.arc(skel, i);
-			const size_t width = arc.size();
-			for (size_t j = 0; j < count; ++j) {
-				const size_t k = j % width;
-				buffer[j * len + i] = to_le<cunit_t>(
-					static_cast<cunit_t>(arc[k]));
+		* cover_size_t::from64(width);
+	if (size.overflow()) return size;
+
+	// input
+	const size_t buffer_size = size.uint32();
+	cunit_t *buffer = new cunit_t [buffer_size];
+	for (size_t i = 0; i < len; ++i) {
+
+		// pick some characters from ranges
+		size_t j = 0;
+		const Node::arc_t &arc = path.arc(skel, i);
+		for (Node::citer_t a = arc.begin(); a != arc.end(); ++a) {
+			const uint32_t
+				l = a->first,
+				u = a->second,
+				d = step(l, u);
+			for (uint32_t m = l; m < u + d; m += d, ++j) {
+				buffer[j * len + i] = to_le(static_cast<cunit_t>(std::min(m, u)));
 			}
 		}
-		fwrite (buffer, sizeof(cunit_t), buffer_size, cover.input);
-		delete[] buffer;
 
-		// keys
-		const key_t match = skel.rule2key<key_t>(path.match(skel), skel.defrule);
-		keygen<key_t>(cover.keys, count, len,
-			path.len_matching(skel), match);
+		// fill the rest by rotating picked characters
+		for (const size_t w = j; j < width; ++j) {
+			buffer[j * len + i] = buffer[(j % w) * len + i];
+		}
 	}
+	fwrite (buffer, sizeof(cunit_t), buffer_size, cover.input);
+	delete[] buffer;
+
+	// keys
+	const key_t match = skel.rule2key<key_t>(path.match(skel), skel.defrule);
+	keygen<key_t>(cover.keys, width, len, path.len_matching(skel), match);
 
 	return size;
 }

@@ -48,9 +48,9 @@ static void naked_paths(
 		size = size + ucf_size_t::from64(prefix.len());
 	} else if (!loop) {
 		loop = true;
-		Node::arcsets_t::const_iterator
-			arc = node.arcsets.begin(),
-			end = node.arcsets.end();
+		Node::arcs_t::const_iterator
+			arc = node.arcs.begin(),
+			end = node.arcs.end();
 		for (; arc != end && !size.overflow(); ++arc) {
 			const size_t j = arc->first;
 			prefix.push(j);
@@ -72,7 +72,7 @@ void warn_undefined_control_flow(const Skeleton &skel)
 	}
 }
 
-static void fprint_default_arc(FILE *f, const Node::arcset_t &arc)
+static void fprint_default_arc(FILE *f, const Node::arc_t &arc)
 {
 	const size_t ranges = arc.size();
 	if (ranges == 1 && arc[0].first == arc[0].second) {
@@ -102,7 +102,7 @@ void fprint_default_path(
 		if (i > 0) {
 			fprintf(f, " ");
 		}
-		const Node::arcset_t &arc = p.arcset(skel, i);
+		const Node::arc_t &arc = p.arc(skel, i);
 		fprint_default_arc(stderr, arc);
 	}
 	fprintf(f, "'");
