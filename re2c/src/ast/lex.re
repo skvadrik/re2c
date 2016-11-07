@@ -531,6 +531,7 @@ uint32_t Scanner::lex_cls_chr()
 	const uint32_t l = get_cline(), c = get_column();
 	/*!re2c
 		*          { fatal_lc(l, c, "syntax error"); }
+		esc? eol   { fatal_lc(l, c, "newline in character class"); }
 		esc [xXuU] { fatal_lc(l, c, "syntax error in hexadecimal escape sequence"); }
 		esc [0-7]  { fatal_lc(l, c, "syntax error in octal escape sequence"); }
 		esc        { fatal_lc(l, c, "syntax error in escape sequence"); }
@@ -562,6 +563,7 @@ uint32_t Scanner::lex_str_chr(char quote, bool &end)
 	const uint32_t l = get_cline(), c = get_column();
 	/*!re2c
 		*          { fatal_lc(l, c, "syntax error"); }
+		esc? eol   { fatal_lc(l, c, "newline in character string"); }
 		esc [xXuU] { fatal_lc(l, c, "syntax error in hexadecimal escape sequence"); }
 		esc [0-7]  { fatal_lc(l, c, "syntax error in octal escape sequence"); }
 		esc        { fatal_lc(l, c, "syntax error in escape sequence"); }
