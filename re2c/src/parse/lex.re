@@ -595,6 +595,7 @@ uint32_t Scanner::lex_cls_chr()
 	tok = cur;
 	/*!re2c
 		*          { fatal ((tok - pos) - tchar, "syntax error"); }
+		esc? eol   { fatal ((tok - pos) - tchar, "newline in character class"); }
 		esc [xXuU] { fatal ((tok - pos) - tchar, "syntax error in hexadecimal escape sequence"); }
 		esc [0-7]  { fatal ((tok - pos) - tchar, "syntax error in octal escape sequence"); }
 		esc        { fatal ((tok - pos) - tchar, "syntax error in escape sequence"); }
@@ -625,6 +626,7 @@ uint32_t Scanner::lex_str_chr(char quote, bool &end)
 	tok = cur;
 	/*!re2c
 		*          { fatal ((tok - pos) - tchar, "syntax error"); }
+		esc? eol   { fatal ((tok - pos) - tchar, "newline in character string"); }
 		esc [xXuU] { fatal ((tok - pos) - tchar, "syntax error in hexadecimal escape sequence"); }
 		esc [0-7]  { fatal ((tok - pos) - tchar, "syntax error in octal escape sequence"); }
 		esc        { fatal ((tok - pos) - tchar, "syntax error in escape sequence"); }
