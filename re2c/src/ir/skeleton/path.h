@@ -48,20 +48,28 @@ public:
 			const Node &node = skel.nodes[*tail];
 			if (node.rule == Rule::NONE) continue;
 
-			size_t len = static_cast<size_t>(head - tail) - 1;
-			if (node.trail == Tag::NONE) return len;
+			const Rule &rule = skel.rules[node.rule];
+			const size_t trail = rule.trail;
+			if (trail != Tag::NONE) {
+				assert(skel.tags[trail].type == Tag::VAR);
 
-			const Tag &tag = skel.tags[node.trail];
-			if (tag.type == Tag::FIX) {
-				return len - tag.fix.dist;
-			}
-			for (; tail != head; ++tail) {
-				if (skel.nodes[*tail].tags[node.trver]) {
-					return static_cast<size_t>(head - tail) - 1;
+				const tagver_t ver = rule.tags[trail];
+				const tagsave_t *p;
+
+				for (p = node.cmd->save; p && p->ver != ver; p = p->next);
+				for (; !p && ++tail != head;) {
+					// trailing context is a top-level tag: either all ranges have it
+					// or none of them do, so it is sufficient to check the 1st range
+					const Node::arc_t &arc = skel.nodes[*tail].arcs[*(tail - 1)];
+					for (p = arc[0].cmd->save; p && p->ver != ver; p = p->next);
 				}
+
+				assert(p);
 			}
-			assert(false);
+
+			return static_cast<size_t>(head - tail) - 1;
 		}
+
 		return 0;
 	}
 	size_t match(const Skeleton &skel) const

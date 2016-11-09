@@ -13,6 +13,7 @@
 
 #include "src/ir/regexp/regexp.h"
 #include "src/ir/rule.h"
+#include "src/ir/tcmd.h"
 #include "src/util/local_increment.h"
 #include "src/util/forbid_copy.h"
 
@@ -20,6 +21,7 @@ namespace re2c
 {
 
 struct dfa_t;
+struct dfa_state_t;
 struct OutputFile;
 struct path_t;
 
@@ -27,20 +29,26 @@ typedef local_increment_t<uint8_t> local_inc;
 
 struct Node
 {
-	typedef std::vector<std::pair<uint32_t, uint32_t> > arc_t;
+	struct range_t {
+		uint32_t lower;
+		uint32_t upper;
+		const tcmd_t *cmd;
+
+		range_t(): lower(0), upper(0), cmd(NULL) {}
+		range_t(uint32_t l, uint32_t u, const tcmd_t *c)
+			: lower(l), upper(u), cmd(c) {}
+	};
+
+	typedef std::vector<range_t> arc_t;
 	typedef std::map<size_t, arc_t> arcs_t;
 	typedef arc_t::const_iterator citer_t;
 
 	arcs_t arcs;
 	size_t rule;
-	size_t trail;
-	tagver_t trver;
-	const bool *tags;
+	const tcmd_t *cmd;
 
 	Node();
-	~Node();
-	void init(const bool *ts, size_t r, size_t tr, tagver_t tv,
-		const std::vector<std::pair<size_t, uint32_t> > &arcs);
+	void init(const dfa_state_t *s, const charset_t &cs, size_t nil);
 	bool end() const;
 
 	FORBID_COPY(Node);
@@ -57,6 +65,7 @@ struct Skeleton
 
 	size_t sizeof_key;
 	const size_t defrule;
+	const std::valarray<Rule> &rules;
 	const std::valarray<Tag> &tags;
 
 	Skeleton(const dfa_t &dfa, const charset_t &cs, size_t def,

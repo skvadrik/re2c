@@ -11,32 +11,30 @@ namespace re2c
 Node::Node()
 	: arcs()
 	, rule(Rule::NONE)
-	, trail(Tag::NONE)
-	, trver(TAGVER_ZERO)
-	, tags(ZERO_TAGS)
+	, cmd(NULL)
 {}
 
-Node::~Node()
+void Node::init(const dfa_state_t *s, const charset_t &cs, size_t nil)
 {
-	delete[] tags;
-}
+	const size_t nc = cs.size() - 1;
+	for (uint32_t c = 0, l = 0; c < nc;) {
 
-void Node::init(const bool *ts, size_t r, size_t tr, tagver_t tv,
-	const std::vector<std::pair<size_t, uint32_t> > &a)
-{
-	rule = r;
-	tags = ts;
-	trail = tr;
-	trver = tv;
+		size_t j = s->arcs[c];
+		const tcmd_t &t = s->tcmd[c];
+		for (; ++c < nc && s->arcs[c] == j && !s->tcmd[c].save && !s->tcmd[c].copy;);
+		if (j == dfa_t::NIL) j = nil;
 
-	std::vector<std::pair<size_t, uint32_t> >::const_iterator
-		i = a.begin(),
-		e = a.end();
-	for (uint32_t l = 0; i != e; ++i) {
-		const uint32_t u = i->second;
-		arcs[i->first].push_back(std::make_pair(l, u - 1));
+		// all arcs go to default node => this node is final
+		if (l == 0 && c == nc && j == nil) break;
+
+		const uint32_t u = cs[c];
+		arcs[j].push_back(Node::range_t(l, u - 1, &t));
+
 		l = u;
 	}
+
+	rule = s->rule;
+	cmd = &s->tcmd[nc];
 }
 
 bool Node::end() const
@@ -58,47 +56,13 @@ Skeleton::Skeleton(
 	, nodes(new Node[nodes_count])
 	, sizeof_key(8)
 	, defrule(def)
+	, rules(dfa.rules)
 	, tags(dfa.tags)
 {
-	const size_t nc = cs.size() - 1;
-
-	// initialize skeleton nodes
-	for (size_t i = 0; i < nodes_count - 1; ++i) {
-		dfa_state_t *s = dfa.states[i];
-		std::vector<std::pair<size_t, uint32_t> > arcs;
-		for (size_t c = 0; c < nc;) {
-			const size_t j = s->arcs[c];
-			for (;++c < nc && s->arcs[c] == j;);
-			const size_t to = j == dfa_t::NIL
-				? nodes_count - 1
-				: j;
-			arcs.push_back(std::make_pair(to, cs[c]));
-		}
-		// all arcs go to default node => this node is final, drop arcs
-		if (arcs.size() == 1 && arcs[0].first == nodes_count - 1) {
-			arcs.clear();
-		}
-
-		// in skeleton we are only interested in trailing contexts
-		// which may be attributed to states rather than transitions
-		// trailing context also cannot have fallback tag
-		bool *tags = new bool[static_cast<size_t>(dfa.maxtagver) + 1]();
-		for (size_t c = 0; c <= nc; ++c) {
-			for (tagsave_t *p = s->tcmd[c].save; p; p = p->next) {
-				tags[p->ver] = true;
-			}
-		}
-
-		size_t trail = Tag::NONE;
-		tagver_t trver = TAGVER_ZERO;
-		if (s->rule != Rule::NONE) {
-			trail = dfa.rules[s->rule].trail;
-			if (trail != Tag::NONE) {
-				trver = dfa.rules[s->rule].tags[trail];
-			}
-		}
-
-		nodes[i].init(tags, s->rule, trail, trver, arcs);
+	// initialize nodes
+	const size_t nil = nodes_count - 1;
+	for (size_t i = 0; i < nil; ++i) {
+		nodes[i].init(dfa.states[i], cs, nil);
 	}
 
 	// initialize size of key

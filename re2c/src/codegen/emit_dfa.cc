@@ -183,7 +183,6 @@ void DFA::emit(Output & output, uint32_t& ind, bool isLastCond, bool& bPrologBra
 	if (opts->target == opt_t::SKELETON) {
 		if (output.skeletons.insert (name).second)
 		{
-			emit_data(*skeleton);
 			emit_start(*skeleton, o, max_fill, need_backup,
 				need_accept, oldstyle_ctxmarker, tagnames, tagvars);
 			uint32_t i = 2;

@@ -112,8 +112,8 @@ template<typename cunit_t, typename key_t> static cover_size_t cover_one(
 		const Node::arc_t &arc = path.arc(skel, i);
 		for (Node::citer_t a = arc.begin(); a != arc.end(); ++a) {
 			const uint32_t
-				l = a->first,
-				u = a->second;
+				l = a->lower,
+				u = a->upper;
 			w += 2 + (u - l - 1) / step(l, u);
 		}
 
@@ -135,8 +135,8 @@ template<typename cunit_t, typename key_t> static cover_size_t cover_one(
 		const Node::arc_t &arc = path.arc(skel, i);
 		for (Node::citer_t a = arc.begin(); a != arc.end(); ++a) {
 			const uint32_t
-				l = a->first,
-				u = a->second,
+				l = a->lower,
+				u = a->upper,
 				d = step(l, u);
 			for (uint32_t m = l; m < u + d; m += d, ++j) {
 				buffer[j * len + i] = to_le(static_cast<cunit_t>(std::min(m, u)));

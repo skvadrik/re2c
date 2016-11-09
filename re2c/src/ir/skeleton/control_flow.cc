@@ -75,13 +75,14 @@ void warn_undefined_control_flow(const Skeleton &skel)
 static void fprint_default_arc(FILE *f, const Node::arc_t &arc)
 {
 	const size_t ranges = arc.size();
-	if (ranges == 1 && arc[0].first == arc[0].second) {
-		fprintf(f, "\\x%X", arc[0].first);
+	if (ranges == 1 && arc[0].lower == arc[0].upper) {
+		fprintf(f, "\\x%X", arc[0].lower);
 	} else {
 		fprintf(f, "[");
 		for (size_t i = 0; i < ranges; ++i) {
-			const uint32_t l = arc[i].first;
-			const uint32_t u = arc[i].second;
+			const uint32_t
+				l = arc[i].lower,
+				u = arc[i].upper;
 			fprintf(f, "\\x%X", l);
 			if (l != u) {
 				fprintf(f, "-\\x%X", u);
