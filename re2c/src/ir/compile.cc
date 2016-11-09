@@ -63,6 +63,7 @@ static smart_ptr<DFA> compile_rules(
 	// skeleton must be constructed after DFA construction
 	// but prior to any other DFA transformations
 	Skeleton *skeleton = new Skeleton(dfa, cs, defrule, name, cond, line);
+	warn_undefined_control_flow(*skeleton);
 	if (opts->target == opt_t::SKELETON) {
 		emit_data(*skeleton);
 	}

@@ -193,4 +193,5 @@ yy22:
 }
 
 }
+re2c: warning: line 17: control flow in condition 'r2' is undefined for strings that match '\xA', use default rule '*' [-Wundefined-control-flow]
 re2c: warning: line 32: control flow in condition 'r2' is undefined for strings that match '\xA', use default rule '*' [-Wundefined-control-flow]

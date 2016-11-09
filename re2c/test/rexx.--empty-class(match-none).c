@@ -6885,8 +6885,8 @@ yy445:
 }
 re2c: warning: line 253: rule matches empty string [-Wmatch-empty-string]
 re2c: warning: line 288: empty character class [-Wempty-character-class]
-re2c: warning: line 289: unreachable rule  [-Wunreachable-rules]
 re2c: warning: line 290: control flow is undefined for strings that match 
 	'[\x0-\x8\xA-\xC\xE-\x1F\x21-\x2E\x30-\xFF]'
 	'\x2F [\x0-\x29\x2B-\xFF]'
 , use default rule '*' [-Wundefined-control-flow]
+re2c: warning: line 289: unreachable rule  [-Wunreachable-rules]
