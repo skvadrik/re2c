@@ -65,6 +65,7 @@ struct Skeleton
 
 	size_t sizeof_key;
 	size_t defrule;
+	size_t ntagver;
 	const std::valarray<Rule> &rules;
 	const std::valarray<Tag> &tags;
 

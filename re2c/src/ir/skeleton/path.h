@@ -39,51 +39,9 @@ public:
 	{
 		return arcs.size() - 1;
 	}
-	size_t len_matching(const Skeleton &skel) const
+	const Node& node(const Skeleton &skel, size_t i) const
 	{
-		std::vector<size_t>::const_reverse_iterator
-			tail = arcs.rbegin(),
-			head = arcs.rend();
-		for (; tail != head; ++tail) {
-			const Node &node = skel.nodes[*tail];
-			if (node.rule == Rule::NONE) continue;
-
-			const Rule &rule = skel.rules[node.rule];
-			const size_t trail = rule.trail;
-			if (trail != Tag::NONE) {
-				assert(skel.tags[trail].type == Tag::VAR);
-
-				const tagver_t ver = rule.tags[trail];
-				const tagsave_t *p;
-
-				for (p = node.cmd->save; p && p->ver != ver; p = p->next);
-				for (; !p && ++tail != head;) {
-					// trailing context is a top-level tag: either all ranges have it
-					// or none of them do, so it is sufficient to check the 1st range
-					const Node::arc_t &arc = skel.nodes[*tail].arcs[*(tail - 1)];
-					for (p = arc[0].cmd->save; p && p->ver != ver; p = p->next);
-				}
-
-				assert(p);
-			}
-
-			return static_cast<size_t>(head - tail) - 1;
-		}
-
-		return 0;
-	}
-	size_t match(const Skeleton &skel) const
-	{
-		std::vector<size_t>::const_reverse_iterator
-			tail = arcs.rbegin(),
-			head = arcs.rend();
-		for (; tail != head; ++tail) {
-			const size_t rule = skel.nodes[*tail].rule;
-			if (rule != Rule::NONE) {
-				return rule;
-			}
-		}
-		return Rule::NONE;
+		return skel.nodes[arcs[i]];
 	}
 	const Node::arc_t& arc(const Skeleton &skel, size_t i) const
 	{

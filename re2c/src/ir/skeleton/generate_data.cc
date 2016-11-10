@@ -98,6 +98,17 @@ static uint32_t step(uint32_t lower, uint32_t upper)
 	return 1 + (upper - lower) / 0x100;
 }
 
+static void apply(size_t *tags, const tcmd_t *cmd, size_t pos)
+{
+	if (!cmd) return;
+	for (const tagsave_t *p = cmd->save; p; p = p->next) {
+		tags[p->ver] = pos;
+	}
+	for (const tagcopy_t *p = cmd->copy; p; p = p->next) {
+		tags[p->lhs] = tags[p->rhs];
+	}
+}
+
 template<typename cunit_t, typename key_t> static cover_size_t cover_one(
 	const Skeleton &skel, cover_t &cover)
 {
@@ -125,35 +136,68 @@ template<typename cunit_t, typename key_t> static cover_size_t cover_one(
 		* cover_size_t::from64(width);
 	if (size.overflow()) return size;
 
-	// input
-	const size_t buffer_size = size.uint32();
+	const size_t
+		nver = skel.ntagver,
+		tags_size = width * nver,
+		buffer_size = size.uint32(),
+		NIL = std::numeric_limits<size_t>::max();
 	cunit_t *buffer = new cunit_t [buffer_size];
-	for (size_t i = 0; i < len; ++i) {
+	size_t *tags = new size_t[tags_size];
 
-		// pick some characters from ranges
-		size_t j = 0;
+	// find the last accepting node
+	size_t f = len;
+	for (; f > 0; --f) {
+		if (path.node(skel, f).rule != Rule::NONE) break;
+	}
+	const Node &fin = path.node(skel, f);
+
+	// calculate input characters and tag values
+	std::fill(tags, tags + tags_size, NIL);
+	for (size_t i = 0; i < len; ++i) {
 		const Node::arc_t &arc = path.arc(skel, i);
-		for (Node::citer_t a = arc.begin(); a != arc.end(); ++a) {
+		Node::citer_t a = arc.begin();
+
+		for (size_t j = 0; j < width;) {
 			const uint32_t
 				l = a->lower,
 				u = a->upper,
 				d = step(l, u);
-			for (uint32_t m = l; m < u + d; m += d, ++j) {
-				buffer[j * len + i] = to_le(static_cast<cunit_t>(std::min(m, u)));
-			}
-		}
 
-		// fill the rest by rotating picked characters
-		for (const size_t w = j; j < width; ++j) {
-			buffer[j * len + i] = buffer[(j % w) * len + i];
+			for (uint32_t m = l; m < u + d && j < width; m += d, ++j) {
+				buffer[j * len + i] = to_le(static_cast<cunit_t>(std::min(m, u)));
+				if (i < f) {
+					apply(&tags[j * nver], a->cmd, i);
+				}
+			}
+
+			if (++a == arc.end()) a = arc.begin();
 		}
 	}
-	fwrite (buffer, sizeof(cunit_t), buffer_size, cover.input);
-	delete[] buffer;
+	for (size_t j = 0; j < width; ++j) {
+		apply(&tags[j * nver], fin.cmd, f);
+	}
 
-	// keys
-	const key_t match = rule2key<key_t>(path.match(skel), skel.defrule);
-	keygen<key_t>(cover.keys, width, len, path.len_matching(skel), match);
+	// write input
+	fwrite (buffer, sizeof(cunit_t), buffer_size, cover.input);
+
+	// write keys
+	const key_t match = rule2key<key_t>(fin.rule, skel.defrule);
+	size_t len_match = 0;
+	if (fin.rule != Rule::NONE) {
+		const Rule &rule = skel.rules[fin.rule];
+		const size_t trail = rule.trail;
+		if (trail == Tag::NONE) {
+			len_match = f;
+		} else {
+			assert(skel.tags[trail].type == Tag::VAR);
+			len_match = tags[rule.tags[trail]];
+			assert(len_match != NIL);
+		}
+	}
+	keygen<key_t>(cover.keys, width, len, len_match, match);
+
+	delete[] buffer;
+	delete[] tags;
 
 	return size;
 }

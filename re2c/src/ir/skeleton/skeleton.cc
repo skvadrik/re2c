@@ -56,6 +56,7 @@ Skeleton::Skeleton(
 	, nodes(new Node[nodes_count])
 	, sizeof_key(8)
 	, defrule(def)
+	, ntagver(static_cast<size_t>(dfa.maxtagver) + 1)
 	, rules(dfa.rules)
 	, tags(dfa.tags)
 {
