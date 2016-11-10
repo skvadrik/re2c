@@ -62,10 +62,10 @@ static smart_ptr<DFA> compile_rules(
 
 	// skeleton must be constructed after DFA construction
 	// but prior to any other DFA transformations
-	Skeleton *skeleton = new Skeleton(dfa, cs, defrule, name, cond, line);
-	warn_undefined_control_flow(*skeleton);
+	Skeleton skeleton(dfa, cs, defrule, name, cond, line);
+	warn_undefined_control_flow(skeleton);
 	if (opts->target == opt_t::SKELETON) {
-		emit_data(*skeleton);
+		emit_data(skeleton);
 	}
 
 	cutoff_dead_rules(dfa, defrule, cond);
@@ -82,7 +82,7 @@ static smart_ptr<DFA> compile_rules(
 	fillpoints(dfa, fill);
 
 	// ADFA stands for 'DFA with actions'
-	DFA *adfa = new DFA(dfa, fill, skeleton, cs, name, cond, line);
+	DFA *adfa = new DFA(dfa, fill, defrule, skeleton.sizeof_key, cs, name, cond, line);
 
 	// see note [reordering DFA states]
 	adfa->reorder();

@@ -181,11 +181,11 @@ void DFA::emit(Output & output, uint32_t& ind, bool isLastCond, bool& bPrologBra
 	if (opts->target == opt_t::SKELETON) {
 		if (output.skeletons.insert (name).second)
 		{
-			emit_start(*skeleton, o, max_fill, need_backup,
+			emit_start(o, max_fill, name, key_size, def_rule, need_backup,
 				need_accept, oldstyle_ctxmarker, tagnames, tagvars);
 			uint32_t i = 2;
 			emit_body (o, i, used_labels, initial_label);
-			emit_end(*skeleton, o, need_backup, oldstyle_ctxmarker);
+			emit_end(o, name, need_backup, oldstyle_ctxmarker);
 		}
 	} else if (opts->target == opt_t::DOT) {
 		emit_dot(o, isLastCond, ob.types);

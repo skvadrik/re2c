@@ -18,7 +18,6 @@
 namespace re2c
 {
 
-struct Skeleton;
 struct Output;
 struct OutputFile;
 struct dfa_t;
@@ -58,7 +57,6 @@ struct State
 struct DFA
 {
 	accept_t accepts;
-	Skeleton * skeleton;
 	const std::string name;
 	const std::string cond;
 	const uint32_t line;
@@ -74,10 +72,13 @@ struct DFA
 	bool need_accept;
 	bool oldstyle_ctxmarker;
 	tagver_t maxtagver;
+	const size_t def_rule;
+	const size_t key_size;
 
 	DFA	( const dfa_t &dfa
 		, const std::vector<size_t> &fill
-		, Skeleton *skel
+		, size_t def
+		, size_t key
 		, const charset_t &charset
 		, const std::string &n
 		, const std::string &c

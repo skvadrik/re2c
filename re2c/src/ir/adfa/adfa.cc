@@ -18,14 +18,14 @@ namespace re2c
 DFA::DFA
 	( const dfa_t &dfa
 	, const std::vector<size_t> &fill
-	, Skeleton *skel
+	, size_t def
+	, size_t key
 	, const charset_t &charset
 	, const std::string &n
 	, const std::string &c
 	, uint32_t l
 	)
 	: accepts ()
-	, skeleton (skel)
 	, name (n)
 	, cond (c)
 	, line (l)
@@ -41,6 +41,8 @@ DFA::DFA
 	, need_accept (false)
 	, oldstyle_ctxmarker (false)
 	, maxtagver (dfa.maxtagver)
+	, def_rule (def)
+	, key_size (key)
 {
 	const size_t nstates = dfa.states.size();
 	const size_t nchars = dfa.nchars;
@@ -94,7 +96,6 @@ DFA::~DFA()
 		delete s;
 	}
 
-	delete skeleton;
 	delete &rules;
 	delete &tags;
 	delete &tcpool;

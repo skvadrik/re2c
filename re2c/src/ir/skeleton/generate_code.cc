@@ -93,16 +93,12 @@ void emit_prolog(OutputFile &o)
 	o.ws("\n");
 }
 
-void emit_start(const Skeleton &skel, OutputFile &o, size_t maxfill,
-	bool backup, bool accept, bool oldstyle_ctxmarker,
-	const std::set<std::string> &tagnames,
-	const std::set<std::string> &tagvars)
+void emit_start(OutputFile &o, size_t maxfill, const std::string &name,
+	size_t sizeof_key, size_t def, bool backup, bool accept, bool oldstyle_ctxmarker,
+	const std::set<std::string> &tagnames, const std::set<std::string> &tagvars)
 {
-	const size_t
-		sizeof_cunit = opts->encoding.szCodeUnit(),
-		sizeof_key = skel.sizeof_key;
-	const size_t norule = skel.rule2key(Rule::NONE);
-	const std::string &name = skel.name;
+	const size_t sizeof_cunit = opts->encoding.szCodeUnit();
+	const size_t norule = rule2key(Rule::NONE, sizeof_key, def);
 	std::string filename = opts->output_file;
 	if (filename.empty()) {
 		filename = "<stdout>";
@@ -261,10 +257,8 @@ void emit_start(const Skeleton &skel, OutputFile &o, size_t maxfill,
 	o.ws("\n");
 }
 
-void emit_end(const Skeleton &skel, OutputFile &o, bool backup, bool oldstyle_ctxmarker)
+void emit_end(OutputFile &o, const std::string &name, bool backup, bool oldstyle_ctxmarker)
 {
-	const std::string &name = skel.name;
-
 	o.ws("\n").wind(1).ws("}");
 	o.ws("\n").wind(1).ws("if (status == 0) {");
 	o.ws("\n").wind(2).ws("if (cursor != eof) {");
@@ -323,11 +317,12 @@ void emit_epilog(OutputFile &o, const std::set<std::string> &names)
 	o.ws("\n");
 }
 
-void emit_action(const Skeleton &skel, OutputFile &o, uint32_t ind, size_t rule)
+void emit_action(OutputFile &o, uint32_t ind, const std::string &name,
+	size_t key, size_t def, size_t rule)
 {
-	o.wind(ind).ws("status = action_").wstring(skel.name)
+	o.wind(ind).ws("status = action_").wstring(name)
 		.ws("(i, keys, input, token, &cursor, ")
-		.wu64(skel.rule2key(rule)).ws(");\n");
+		.wu64(rule2key(rule, key, def)).ws(");\n");
 	o.wind(ind).ws("continue;\n");
 }
 

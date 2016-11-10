@@ -152,7 +152,7 @@ template<typename cunit_t, typename key_t> static cover_size_t cover_one(
 	delete[] buffer;
 
 	// keys
-	const key_t match = skel.rule2key<key_t>(path.match(skel), skel.defrule);
+	const key_t match = rule2key<key_t>(path.match(skel), skel.defrule);
 	keygen<key_t>(cover.keys, width, len, path.len_matching(skel), match);
 
 	return size;

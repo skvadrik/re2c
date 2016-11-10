@@ -219,7 +219,7 @@ void emit_rule(OutputFile &o, uint32_t ind, const DFA &dfa, size_t rule_idx)
 	gen_fintags(o, ind, dfa, rule);
 
 	if (opts->target == opt_t::SKELETON) {
-		emit_action(*dfa.skeleton, o, ind, rule_idx);
+		emit_action(o, ind, dfa.name, dfa.key_size, dfa.def_rule, rule_idx);
 	} else {
 		const std::string &cond = info->newcond;
 		if (!cond.empty() && dfa.cond != cond) {
