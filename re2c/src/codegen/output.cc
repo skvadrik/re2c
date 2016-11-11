@@ -95,7 +95,20 @@ std::ostream & OutputFile::stream ()
 
 OutputFile & OutputFile::wraw (const char * s, size_t n)
 {
-	stream ().write (s, static_cast<std::streamsize> (n));
+	std::ostream &o = stream();
+	const char *const e = s + n;
+
+	// convert CR LF to LF
+	for (const char *p = s; p < e; ++p) {
+		if (*p == '\n') continue;
+
+		std::streamsize l = p - s;
+		if (p > s && p[-1] == '\r') --l;
+		o.write(s, l);
+		s = p;
+	}
+	o.write(s, e - s);
+
 	return *this;
 }
 
