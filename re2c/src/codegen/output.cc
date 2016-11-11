@@ -100,14 +100,11 @@ OutputFile & OutputFile::wraw (const char * s, size_t n)
 
 	// convert CR LF to LF
 	for (const char *p = s; p < e; ++p) {
-		if (*p == '\n') continue;
-
-		std::streamsize l = p - s;
-		if (p > s && p[-1] == '\r') --l;
-		o.write(s, l);
-		s = p;
+		if (p[0] == '\r' && p + 1 < e && p[1] == '\n')
+			; // skip CR before LF
+		else
+			o.write(p, 1);
 	}
-	o.write(s, e - s);
 
 	return *this;
 }
