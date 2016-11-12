@@ -10,6 +10,7 @@
 #include "src/conf/opt.h"
 #include "src/globals.h"
 #include "src/ir/regexp/encoding/enc.h"
+#include "src/ir/adfa/adfa.h"
 #include "src/ir/skeleton/skeleton.h"
 
 namespace re2c
@@ -127,7 +128,7 @@ void emit_start(OutputFile &o, size_t maxfill, const std::string &name,
 	o.ws("\n#define YYFILL(n) { break; }");
 	o.ws("\n");
 	o.ws("\nstatic int action_").wstring(name);
-	o.ws("\n").wind(1).ws("( unsigned int i");
+	o.ws("\n").wind(1).ws("( unsigned *pkix");
 	o.ws("\n").wind(1).ws(", const YYKEYTYPE *keys");
 	o.ws("\n").wind(1).ws(", const YYCTYPE *start");
 	o.ws("\n").wind(1).ws(", const YYCTYPE *token");
@@ -135,10 +136,12 @@ void emit_start(OutputFile &o, size_t maxfill, const std::string &name,
 	o.ws("\n").wind(1).ws(", YYKEYTYPE rule_act");
 	o.ws("\n").wind(1).ws(")");
 	o.ws("\n{");
+	o.ws("\n").wind(1).ws("const unsigned kix = *pkix;");
 	o.ws("\n").wind(1).ws("const long pos = token - start;");
 	o.ws("\n").wind(1).ws("const long len_act = *cursor - token;");
-	o.ws("\n").wind(1).ws("const long len_exp = (long) keys [3 * i + 1];");
-	o.ws("\n").wind(1).ws("const YYKEYTYPE rule_exp = keys [3 * i + 2];");
+	o.ws("\n").wind(1).ws("const long len_exp = (long) keys[kix + 1];");
+	o.ws("\n").wind(1).ws("const YYKEYTYPE rule_exp = keys[kix + 2];");
+	o.ws("\n").wind(1).ws("*pkix = kix + 3;");
 	o.ws("\n").wind(1).ws("if (rule_exp == ").wu64(norule).ws(") {");
 	o.ws("\n").wind(2).ws("fprintf");
 	o.ws("\n").wind(3).ws("( stderr");
@@ -148,17 +151,17 @@ void emit_start(OutputFile &o, size_t maxfill, const std::string &name,
 	o.ws("\n").wind(3).ws(");");
 	o.ws("\n").wind(1).ws("}");
 	o.ws("\n").wind(1).ws("if (len_act == len_exp && rule_act == rule_exp) {");
-	o.ws("\n").wind(2).ws("const YYKEYTYPE offset = keys[3 * i];");
+	o.ws("\n").wind(2).ws("const YYKEYTYPE offset = keys[kix];");
 	o.ws("\n").wind(2).ws("*cursor = token + offset;");
 	o.ws("\n").wind(2).ws("return 0;");
 	o.ws("\n").wind(1).ws("} else {");
 	o.ws("\n").wind(2).ws("fprintf");
 	o.ws("\n").wind(3).ws("( stderr");
-	o.ws("\n").wind(3).ws(", \"error: lex_").wstring(name).ws(": at position %ld (iteration %u):\\n\"");
+	o.ws("\n").wind(3).ws(", \"error: lex_").wstring(name).ws(": at position %ld (key %u):\\n\"");
 	o.ws("\n").wind(4).ws("\"\\texpected: match length %ld, rule %u\\n\"");
 	o.ws("\n").wind(4).ws("\"\\tactual:   match length %ld, rule %u\\n\"");
 	o.ws("\n").wind(3).ws(", pos");
-	o.ws("\n").wind(3).ws(", i");
+	o.ws("\n").wind(3).ws(", kix");
 	o.ws("\n").wind(3).ws(", len_exp");
 	o.ws("\n").wind(3).ws(", rule_exp");
 	o.ws("\n").wind(3).ws(", len_act");
@@ -167,7 +170,38 @@ void emit_start(OutputFile &o, size_t maxfill, const std::string &name,
 	o.ws("\n").wind(2).ws("return 1;");
 	o.ws("\n").wind(1).ws("}");
 	o.ws("\n}");
+
+	if (!tagnames.empty()) {
+		o.ws("\n");
+		o.ws("\nstatic int check_tag_").wstring(name)
+			.ws("(unsigned *pkix, YYKEYTYPE *keys, const YYCTYPE *tag,\n")
+			.wind(1).ws("const YYCTYPE *input, const YYCTYPE *token, const char *name)");
+		o.ws("\n{");
+		o.ws("\n").wind(1).ws("const unsigned kix = *pkix;");
+		o.ws("\n").wind(1).ws("const YYKEYTYPE\n")
+			.wind(2).ws("exp = keys[kix],\n")
+			.wind(2).ws("act = (YYKEYTYPE)(tag - token),\n")
+			.wind(2).ws("NIL = (YYKEYTYPE)~0u;");
+		o.ws("\n").wind(1).ws("*pkix = kix + 1;");
+		o.ws("\n");
+		o.ws("\n").wind(1).ws("if (exp == act || (exp == NIL && tag == NULL)) return 0;");
+		o.ws("\n");
+		o.ws("\n").wind(1).ws("fprintf(stderr, \"error: lex_").wstring(name).ws(": at position %ld, key %u: \"")
+			.ws("\n").wind(2).ws("\"wrong value for tag '%s': expected %u, actual %u\\n\",")
+			.ws("\n").wind(2).ws("token - input, kix, name, exp, act);");
+		o.ws("\n").wind(1).ws("return 1;");
+		o.ws("\n}");
+	}
+
 	o.ws("\n");
+	o.ws("\nstatic int check_key_count_").wstring(name).ws("(unsigned have, unsigned used, unsigned need)");
+	o.ws("\n{");
+	o.ws("\n").wind(1).ws("if (used + need <= have) return 0;");
+	o.ws("\n").wind(1).ws("fprintf(stderr, \"error: lex_").wstring(name).ws(": not enough keys\\n\");");
+	o.ws("\n").wind(1).ws("return 1;");
+	o.ws("\n}");
+	o.ws("\n");
+
 	o.ws("\nint lex_").wstring(name).ws("()");
 	o.ws("\n{");
 	o.ws("\n").wind(1).ws("const size_t padding = ").wu64(maxfill).ws("; /* YYMAXFILL */");
@@ -201,7 +235,7 @@ void emit_start(OutputFile &o, size_t maxfill, const std::string &name,
 	}
 	o.ws("\n").wind(1).ws("keys = (YYKEYTYPE *) read_file");
 	o.ws("\n").wind(2).ws("(\"").wstring(filename).ws(".").wstring(name).ws(".keys\"");
-	o.ws("\n").wind(2).ws(", 3 * sizeof (YYKEYTYPE)");
+	o.ws("\n").wind(2).ws(", sizeof (YYKEYTYPE)");
 	o.ws("\n").wind(2).ws(", 0");
 	o.ws("\n").wind(2).ws(", &keys_count");
 	o.ws("\n").wind(2).ws(");");
@@ -212,7 +246,7 @@ void emit_start(OutputFile &o, size_t maxfill, const std::string &name,
 	o.ws("\n");
 	if (sizeof_key > 1)
 	{
-		o.ws("\n").wind(1).ws("for (i = 0; i < 3 * keys_count; ++i) {");
+		o.ws("\n").wind(1).ws("for (i = 0; i < keys_count; ++i) {");
 		from_le(o, 2, sizeof_key, "keys[i]");
 		o.ws("\n").wind(1).ws("}");
 		o.ws("\n");
@@ -221,7 +255,7 @@ void emit_start(OutputFile &o, size_t maxfill, const std::string &name,
 	o.ws("\n").wind(1).ws("limit = input + input_len + padding;");
 	o.ws("\n").wind(1).ws("eof = input + input_len;");
 	o.ws("\n");
-	o.ws("\n").wind(1).ws("for (i = 0; status == 0 && i < keys_count; ++i) {");
+	o.ws("\n").wind(1).ws("for (i = 0; status == 0 && cursor < eof && i < keys_count;) {");
 	o.ws("\n").wind(2).ws("token = cursor;");
 	if (backup) {
 		o.ws("\n").wind(2).ws("const YYCTYPE *marker = NULL;");
@@ -235,7 +269,7 @@ void emit_start(OutputFile &o, size_t maxfill, const std::string &name,
 	}
 
 	// autogenerated tag variables
-	ConfTags conf("\n" + indent(2) + "const YYCTYPE *@@;", "");
+	ConfTags conf("\n" + indent(2) + "const YYCTYPE *@@ = NULL;", "");
 	output_tags(o.stream(), conf, tagnames);
 
 	// user-defined tag variables
@@ -268,7 +302,7 @@ void emit_end(OutputFile &o, const std::string &name, bool backup, bool oldstyle
 	o.ws("\n").wind(2).ws("}");
 	o.ws("\n").wind(2).ws("if (i != keys_count) {");
 	o.ws("\n").wind(3).ws("status = 1;");
-	o.ws("\n").wind(3).ws("fprintf(stderr, \"error: lex_").wstring(name).ws(": unused keys left after %u iterations\\n\", i);");
+	o.ws("\n").wind(3).ws("fprintf(stderr, \"error: lex_").wstring(name).ws(": unused keys left after %u keys\\n\", i);");
 	o.ws("\n").wind(2).ws("}");
 	o.ws("\n").wind(1).ws("}");
 	o.ws("\n");
@@ -317,12 +351,26 @@ void emit_epilog(OutputFile &o, const std::set<std::string> &names)
 	o.ws("\n");
 }
 
-void emit_action(OutputFile &o, uint32_t ind, const std::string &name,
-	size_t key, size_t def, size_t rule)
+void emit_action(OutputFile &o, uint32_t ind, const DFA &dfa, size_t rid)
 {
-	o.wind(ind).ws("status = action_").wstring(name)
-		.ws("(i, keys, input, token, &cursor, ")
-		.wu64(rule2key(rule, key, def)).ws(");\n");
+	const std::string &name = dfa.name;
+	const Rule &rule = dfa.rules[rid];
+	const size_t ltag = rule.ltag, htag = rule.htag,
+		rkey = rule2key(rid, dfa.key_size, dfa.def_rule);
+
+	o.wind(ind).ws("status = check_key_count_").wstring(name)
+		.ws("(keys_count, i, ").wu64(3 + htag - ltag).ws(")\n")
+		.wind(ind + 1).ws(" || action_").wstring(name)
+		.ws("(&i, keys, input, token, &cursor, ").wu64(rkey).ws(")");
+
+	for (size_t t = ltag; t < htag; ++t) {
+		const std::string &tag = *dfa.tags[t].name;
+		o.ws("\n").wind(ind + 1).ws(" || check_tag_").wstring(name)
+			.ws("(&i, keys, ").wstring(tag).ws(", input, token, \"")
+			.wstring(tag).ws("\")");
+	}
+
+	o.ws(";\n");
 	o.wind(ind).ws("continue;\n");
 }
 

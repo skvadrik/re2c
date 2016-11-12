@@ -56,7 +56,7 @@ error:
 #define YYFILL(n) { break; }
 
 static int action_line126_Comment
-    ( unsigned int i
+    ( unsigned *pkix
     , const YYKEYTYPE *keys
     , const YYCTYPE *start
     , const YYCTYPE *token
@@ -64,10 +64,12 @@ static int action_line126_Comment
     , YYKEYTYPE rule_act
     )
 {
+    const unsigned kix = *pkix;
     const long pos = token - start;
     const long len_act = *cursor - token;
-    const long len_exp = (long) keys [3 * i + 1];
-    const YYKEYTYPE rule_exp = keys [3 * i + 2];
+    const long len_exp = (long) keys[kix + 1];
+    const YYKEYTYPE rule_exp = keys[kix + 2];
+    *pkix = kix + 3;
     if (rule_exp == 255) {
         fprintf
             ( stderr
@@ -77,17 +79,17 @@ static int action_line126_Comment
             );
     }
     if (len_act == len_exp && rule_act == rule_exp) {
-        const YYKEYTYPE offset = keys[3 * i];
+        const YYKEYTYPE offset = keys[kix];
         *cursor = token + offset;
         return 0;
     } else {
         fprintf
             ( stderr
-            , "error: lex_line126_Comment: at position %ld (iteration %u):\n"
+            , "error: lex_line126_Comment: at position %ld (key %u):\n"
                 "\texpected: match length %ld, rule %u\n"
                 "\tactual:   match length %ld, rule %u\n"
             , pos
-            , i
+            , kix
             , len_exp
             , rule_exp
             , len_act
@@ -95,6 +97,13 @@ static int action_line126_Comment
             );
         return 1;
     }
+}
+
+static int check_key_count_line126_Comment(unsigned have, unsigned used, unsigned need)
+{
+    if (used + need <= have) return 0;
+    fprintf(stderr, "error: lex_line126_Comment: not enough keys\n");
+    return 1;
 }
 
 int lex_line126_Comment()
@@ -124,7 +133,7 @@ int lex_line126_Comment()
 
     keys = (YYKEYTYPE *) read_file
         ("condition_10.cgif--skeleton.c.line126_Comment.keys"
-        , 3 * sizeof (YYKEYTYPE)
+        , sizeof (YYKEYTYPE)
         , 0
         , &keys_count
         );
@@ -137,7 +146,7 @@ int lex_line126_Comment()
     limit = input + input_len + padding;
     eof = input + input_len;
 
-    for (i = 0; status == 0 && i < keys_count; ++i) {
+    for (i = 0; status == 0 && cursor < eof && i < keys_count;) {
         token = cursor;
         YYCTYPE yych;
 
@@ -146,14 +155,16 @@ int lex_line126_Comment()
         if (yych == '*') goto yy5;
         YYSKIP ();
 yy4:
-        status = action_line126_Comment(i, keys, input, token, &cursor, 1);
+        status = check_key_count_line126_Comment(keys_count, i, 3)
+             || action_line126_Comment(&i, keys, input, token, &cursor, 1);
         continue;
 yy5:
         YYSKIP ();
         yych = YYPEEK ();
         if (yych != '/') goto yy4;
         YYSKIP ();
-        status = action_line126_Comment(i, keys, input, token, &cursor, 0);
+        status = check_key_count_line126_Comment(keys_count, i, 3)
+             || action_line126_Comment(&i, keys, input, token, &cursor, 0);
         continue;
 
     }
@@ -165,7 +176,7 @@ yy5:
         }
         if (i != keys_count) {
             status = 1;
-            fprintf(stderr, "error: lex_line126_Comment: unused keys left after %u iterations\n", i);
+            fprintf(stderr, "error: lex_line126_Comment: unused keys left after %u keys\n", i);
         }
     }
 
@@ -193,7 +204,7 @@ end:
 #define YYFILL(n) { break; }
 
 static int action_line126_Normal
-    ( unsigned int i
+    ( unsigned *pkix
     , const YYKEYTYPE *keys
     , const YYCTYPE *start
     , const YYCTYPE *token
@@ -201,10 +212,12 @@ static int action_line126_Normal
     , YYKEYTYPE rule_act
     )
 {
+    const unsigned kix = *pkix;
     const long pos = token - start;
     const long len_act = *cursor - token;
-    const long len_exp = (long) keys [3 * i + 1];
-    const YYKEYTYPE rule_exp = keys [3 * i + 2];
+    const long len_exp = (long) keys[kix + 1];
+    const YYKEYTYPE rule_exp = keys[kix + 2];
+    *pkix = kix + 3;
     if (rule_exp == 255) {
         fprintf
             ( stderr
@@ -214,17 +227,17 @@ static int action_line126_Normal
             );
     }
     if (len_act == len_exp && rule_act == rule_exp) {
-        const YYKEYTYPE offset = keys[3 * i];
+        const YYKEYTYPE offset = keys[kix];
         *cursor = token + offset;
         return 0;
     } else {
         fprintf
             ( stderr
-            , "error: lex_line126_Normal: at position %ld (iteration %u):\n"
+            , "error: lex_line126_Normal: at position %ld (key %u):\n"
                 "\texpected: match length %ld, rule %u\n"
                 "\tactual:   match length %ld, rule %u\n"
             , pos
-            , i
+            , kix
             , len_exp
             , rule_exp
             , len_act
@@ -232,6 +245,13 @@ static int action_line126_Normal
             );
         return 1;
     }
+}
+
+static int check_key_count_line126_Normal(unsigned have, unsigned used, unsigned need)
+{
+    if (used + need <= have) return 0;
+    fprintf(stderr, "error: lex_line126_Normal: not enough keys\n");
+    return 1;
 }
 
 int lex_line126_Normal()
@@ -261,7 +281,7 @@ int lex_line126_Normal()
 
     keys = (YYKEYTYPE *) read_file
         ("condition_10.cgif--skeleton.c.line126_Normal.keys"
-        , 3 * sizeof (YYKEYTYPE)
+        , sizeof (YYKEYTYPE)
         , 0
         , &keys_count
         );
@@ -274,7 +294,7 @@ int lex_line126_Normal()
     limit = input + input_len + padding;
     eof = input + input_len;
 
-    for (i = 0; status == 0 && i < keys_count; ++i) {
+    for (i = 0; status == 0 && cursor < eof && i < keys_count;) {
         token = cursor;
         const YYCTYPE *marker = NULL;
         YYCTYPE yych;
@@ -321,11 +341,13 @@ int lex_line126_Normal()
 yy11:
         YYSKIP ();
 yy12:
-        status = action_line126_Normal(i, keys, input, token, &cursor, 13);
+        status = check_key_count_line126_Normal(keys_count, i, 3)
+             || action_line126_Normal(&i, keys, input, token, &cursor, 13);
         continue;
 yy13:
         YYSKIP ();
-        status = action_line126_Normal(i, keys, input, token, &cursor, 12);
+        status = check_key_count_line126_Normal(keys_count, i, 3)
+             || action_line126_Normal(&i, keys, input, token, &cursor, 12);
         continue;
 yy15:
         YYSKIP ();
@@ -360,11 +382,13 @@ yy20:
         goto yy19;
 yy21:
         YYSKIP ();
-        status = action_line126_Normal(i, keys, input, token, &cursor, 9);
+        status = check_key_count_line126_Normal(keys_count, i, 3)
+             || action_line126_Normal(&i, keys, input, token, &cursor, 9);
         continue;
 yy23:
         YYSKIP ();
-        status = action_line126_Normal(i, keys, input, token, &cursor, 10);
+        status = check_key_count_line126_Normal(keys_count, i, 3)
+             || action_line126_Normal(&i, keys, input, token, &cursor, 10);
         continue;
 yy25:
         YYSKIP ();
@@ -408,43 +432,53 @@ yy25:
         }
 yy26:
         YYSKIP ();
-        status = action_line126_Normal(i, keys, input, token, &cursor, 11);
+        status = check_key_count_line126_Normal(keys_count, i, 3)
+             || action_line126_Normal(&i, keys, input, token, &cursor, 11);
         continue;
 yy28:
         YYSKIP ();
-        status = action_line126_Normal(i, keys, input, token, &cursor, 7);
+        status = check_key_count_line126_Normal(keys_count, i, 3)
+             || action_line126_Normal(&i, keys, input, token, &cursor, 7);
         continue;
 yy30:
         YYSKIP ();
-        status = action_line126_Normal(i, keys, input, token, &cursor, 6);
+        status = check_key_count_line126_Normal(keys_count, i, 3)
+             || action_line126_Normal(&i, keys, input, token, &cursor, 6);
         continue;
 yy32:
         YYSKIP ();
-        status = action_line126_Normal(i, keys, input, token, &cursor, 0);
+        status = check_key_count_line126_Normal(keys_count, i, 3)
+             || action_line126_Normal(&i, keys, input, token, &cursor, 0);
         continue;
 yy34:
         YYSKIP ();
-        status = action_line126_Normal(i, keys, input, token, &cursor, 1);
+        status = check_key_count_line126_Normal(keys_count, i, 3)
+             || action_line126_Normal(&i, keys, input, token, &cursor, 1);
         continue;
 yy36:
         YYSKIP ();
-        status = action_line126_Normal(i, keys, input, token, &cursor, 8);
+        status = check_key_count_line126_Normal(keys_count, i, 3)
+             || action_line126_Normal(&i, keys, input, token, &cursor, 8);
         continue;
 yy38:
         YYSKIP ();
-        status = action_line126_Normal(i, keys, input, token, &cursor, 5);
+        status = check_key_count_line126_Normal(keys_count, i, 3)
+             || action_line126_Normal(&i, keys, input, token, &cursor, 5);
         continue;
 yy40:
         YYSKIP ();
-        status = action_line126_Normal(i, keys, input, token, &cursor, 2);
+        status = check_key_count_line126_Normal(keys_count, i, 3)
+             || action_line126_Normal(&i, keys, input, token, &cursor, 2);
         continue;
 yy42:
         YYSKIP ();
-        status = action_line126_Normal(i, keys, input, token, &cursor, 4);
+        status = check_key_count_line126_Normal(keys_count, i, 3)
+             || action_line126_Normal(&i, keys, input, token, &cursor, 4);
         continue;
 yy44:
         YYSKIP ();
-        status = action_line126_Normal(i, keys, input, token, &cursor, 3);
+        status = check_key_count_line126_Normal(keys_count, i, 3)
+             || action_line126_Normal(&i, keys, input, token, &cursor, 3);
         continue;
 
     }
@@ -456,7 +490,7 @@ yy44:
         }
         if (i != keys_count) {
             status = 1;
-            fprintf(stderr, "error: lex_line126_Normal: unused keys left after %u iterations\n", i);
+            fprintf(stderr, "error: lex_line126_Normal: unused keys left after %u keys\n", i);
         }
     }
 
@@ -486,7 +520,7 @@ end:
 #define YYFILL(n) { break; }
 
 static int action_line126_Skiptoeol
-    ( unsigned int i
+    ( unsigned *pkix
     , const YYKEYTYPE *keys
     , const YYCTYPE *start
     , const YYCTYPE *token
@@ -494,10 +528,12 @@ static int action_line126_Skiptoeol
     , YYKEYTYPE rule_act
     )
 {
+    const unsigned kix = *pkix;
     const long pos = token - start;
     const long len_act = *cursor - token;
-    const long len_exp = (long) keys [3 * i + 1];
-    const YYKEYTYPE rule_exp = keys [3 * i + 2];
+    const long len_exp = (long) keys[kix + 1];
+    const YYKEYTYPE rule_exp = keys[kix + 2];
+    *pkix = kix + 3;
     if (rule_exp == 255) {
         fprintf
             ( stderr
@@ -507,17 +543,17 @@ static int action_line126_Skiptoeol
             );
     }
     if (len_act == len_exp && rule_act == rule_exp) {
-        const YYKEYTYPE offset = keys[3 * i];
+        const YYKEYTYPE offset = keys[kix];
         *cursor = token + offset;
         return 0;
     } else {
         fprintf
             ( stderr
-            , "error: lex_line126_Skiptoeol: at position %ld (iteration %u):\n"
+            , "error: lex_line126_Skiptoeol: at position %ld (key %u):\n"
                 "\texpected: match length %ld, rule %u\n"
                 "\tactual:   match length %ld, rule %u\n"
             , pos
-            , i
+            , kix
             , len_exp
             , rule_exp
             , len_act
@@ -525,6 +561,13 @@ static int action_line126_Skiptoeol
             );
         return 1;
     }
+}
+
+static int check_key_count_line126_Skiptoeol(unsigned have, unsigned used, unsigned need)
+{
+    if (used + need <= have) return 0;
+    fprintf(stderr, "error: lex_line126_Skiptoeol: not enough keys\n");
+    return 1;
 }
 
 int lex_line126_Skiptoeol()
@@ -554,7 +597,7 @@ int lex_line126_Skiptoeol()
 
     keys = (YYKEYTYPE *) read_file
         ("condition_10.cgif--skeleton.c.line126_Skiptoeol.keys"
-        , 3 * sizeof (YYKEYTYPE)
+        , sizeof (YYKEYTYPE)
         , 0
         , &keys_count
         );
@@ -567,7 +610,7 @@ int lex_line126_Skiptoeol()
     limit = input + input_len + padding;
     eof = input + input_len;
 
-    for (i = 0; status == 0 && i < keys_count; ++i) {
+    for (i = 0; status == 0 && cursor < eof && i < keys_count;) {
         token = cursor;
         const YYCTYPE *marker = NULL;
         YYCTYPE yych;
@@ -614,11 +657,13 @@ int lex_line126_Skiptoeol()
 yy49:
         YYSKIP ();
 yy50:
-        status = action_line126_Skiptoeol(i, keys, input, token, &cursor, 4);
+        status = check_key_count_line126_Skiptoeol(keys_count, i, 3)
+             || action_line126_Skiptoeol(&i, keys, input, token, &cursor, 4);
         continue;
 yy51:
         YYSKIP ();
-        status = action_line126_Skiptoeol(i, keys, input, token, &cursor, 3);
+        status = check_key_count_line126_Skiptoeol(keys_count, i, 3)
+             || action_line126_Skiptoeol(&i, keys, input, token, &cursor, 3);
         continue;
 yy53:
         YYSKIP ();
@@ -640,7 +685,8 @@ yy55:
         goto yy50;
 yy56:
         YYSKIP ();
-        status = action_line126_Skiptoeol(i, keys, input, token, &cursor, 2);
+        status = check_key_count_line126_Skiptoeol(keys_count, i, 3)
+             || action_line126_Skiptoeol(&i, keys, input, token, &cursor, 2);
         continue;
 yy58:
         YYSKIP ();
@@ -651,7 +697,8 @@ yy59:
         goto yy50;
 yy60:
         YYSKIP ();
-        status = action_line126_Skiptoeol(i, keys, input, token, &cursor, 1);
+        status = check_key_count_line126_Skiptoeol(keys_count, i, 3)
+             || action_line126_Skiptoeol(&i, keys, input, token, &cursor, 1);
         continue;
 yy62:
         YYSKIP ();
@@ -666,7 +713,8 @@ yy63:
         goto yy59;
 yy64:
         YYSKIP ();
-        status = action_line126_Skiptoeol(i, keys, input, token, &cursor, 0);
+        status = check_key_count_line126_Skiptoeol(keys_count, i, 3)
+             || action_line126_Skiptoeol(&i, keys, input, token, &cursor, 0);
         continue;
 yy66:
         YYSKIP ();
@@ -682,7 +730,7 @@ yy66:
         }
         if (i != keys_count) {
             status = 1;
-            fprintf(stderr, "error: lex_line126_Skiptoeol: unused keys left after %u iterations\n", i);
+            fprintf(stderr, "error: lex_line126_Skiptoeol: unused keys left after %u keys\n", i);
         }
     }
 
@@ -710,7 +758,7 @@ end:
 #define YYFILL(n) { break; }
 
 static int action_line126_String
-    ( unsigned int i
+    ( unsigned *pkix
     , const YYKEYTYPE *keys
     , const YYCTYPE *start
     , const YYCTYPE *token
@@ -718,10 +766,12 @@ static int action_line126_String
     , YYKEYTYPE rule_act
     )
 {
+    const unsigned kix = *pkix;
     const long pos = token - start;
     const long len_act = *cursor - token;
-    const long len_exp = (long) keys [3 * i + 1];
-    const YYKEYTYPE rule_exp = keys [3 * i + 2];
+    const long len_exp = (long) keys[kix + 1];
+    const YYKEYTYPE rule_exp = keys[kix + 2];
+    *pkix = kix + 3;
     if (rule_exp == 255) {
         fprintf
             ( stderr
@@ -731,17 +781,17 @@ static int action_line126_String
             );
     }
     if (len_act == len_exp && rule_act == rule_exp) {
-        const YYKEYTYPE offset = keys[3 * i];
+        const YYKEYTYPE offset = keys[kix];
         *cursor = token + offset;
         return 0;
     } else {
         fprintf
             ( stderr
-            , "error: lex_line126_String: at position %ld (iteration %u):\n"
+            , "error: lex_line126_String: at position %ld (key %u):\n"
                 "\texpected: match length %ld, rule %u\n"
                 "\tactual:   match length %ld, rule %u\n"
             , pos
-            , i
+            , kix
             , len_exp
             , rule_exp
             , len_act
@@ -749,6 +799,13 @@ static int action_line126_String
             );
         return 1;
     }
+}
+
+static int check_key_count_line126_String(unsigned have, unsigned used, unsigned need)
+{
+    if (used + need <= have) return 0;
+    fprintf(stderr, "error: lex_line126_String: not enough keys\n");
+    return 1;
 }
 
 int lex_line126_String()
@@ -778,7 +835,7 @@ int lex_line126_String()
 
     keys = (YYKEYTYPE *) read_file
         ("condition_10.cgif--skeleton.c.line126_String.keys"
-        , 3 * sizeof (YYKEYTYPE)
+        , sizeof (YYKEYTYPE)
         , 0
         , &keys_count
         );
@@ -791,7 +848,7 @@ int lex_line126_String()
     limit = input + input_len + padding;
     eof = input + input_len;
 
-    for (i = 0; status == 0 && i < keys_count; ++i) {
+    for (i = 0; status == 0 && cursor < eof && i < keys_count;) {
         token = cursor;
         YYCTYPE yych;
 
@@ -801,18 +858,21 @@ int lex_line126_String()
         if (yych == '\\') goto yy74;
         YYSKIP ();
 yy71:
-        status = action_line126_String(i, keys, input, token, &cursor, 2);
+        status = check_key_count_line126_String(keys_count, i, 3)
+             || action_line126_String(&i, keys, input, token, &cursor, 2);
         continue;
 yy72:
         YYSKIP ();
-        status = action_line126_String(i, keys, input, token, &cursor, 1);
+        status = check_key_count_line126_String(keys_count, i, 3)
+             || action_line126_String(&i, keys, input, token, &cursor, 1);
         continue;
 yy74:
         YYSKIP ();
         yych = YYPEEK ();
         if (yych == '\n') goto yy71;
         YYSKIP ();
-        status = action_line126_String(i, keys, input, token, &cursor, 0);
+        status = check_key_count_line126_String(keys_count, i, 3)
+             || action_line126_String(&i, keys, input, token, &cursor, 0);
         continue;
 
     }
@@ -824,7 +884,7 @@ yy74:
         }
         if (i != keys_count) {
             status = 1;
-            fprintf(stderr, "error: lex_line126_String: unused keys left after %u iterations\n", i);
+            fprintf(stderr, "error: lex_line126_String: unused keys left after %u keys\n", i);
         }
     }
 

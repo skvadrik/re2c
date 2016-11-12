@@ -22,6 +22,7 @@ namespace re2c
 
 struct dfa_t;
 struct dfa_state_t;
+struct DFA;
 struct OutputFile;
 struct path_t;
 
@@ -99,7 +100,7 @@ void emit_start(OutputFile &o, size_t maxfill, const std::string &name,
 	const std::set<std::string> &tagnames, const std::set<std::string> &tagvars);
 void emit_end(OutputFile &o, const std::string &name, bool backup, bool oldstyle_ctxmarker);
 void emit_epilog(OutputFile &o, const std::set<std::string> &names);
-void emit_action(OutputFile &o, uint32_t ind, const std::string &name, size_t key, size_t def, size_t rule);
+void emit_action(OutputFile &o, uint32_t ind, const DFA &dfa, size_t rid);
 
 } // namespace re2c
 

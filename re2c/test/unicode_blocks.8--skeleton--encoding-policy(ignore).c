@@ -56,7 +56,7 @@ error:
 #define YYFILL(n) { break; }
 
 static int action_line344
-    ( unsigned int i
+    ( unsigned *pkix
     , const YYKEYTYPE *keys
     , const YYCTYPE *start
     , const YYCTYPE *token
@@ -64,10 +64,12 @@ static int action_line344
     , YYKEYTYPE rule_act
     )
 {
+    const unsigned kix = *pkix;
     const long pos = token - start;
     const long len_act = *cursor - token;
-    const long len_exp = (long) keys [3 * i + 1];
-    const YYKEYTYPE rule_exp = keys [3 * i + 2];
+    const long len_exp = (long) keys[kix + 1];
+    const YYKEYTYPE rule_exp = keys[kix + 2];
+    *pkix = kix + 3;
     if (rule_exp == 255) {
         fprintf
             ( stderr
@@ -77,17 +79,17 @@ static int action_line344
             );
     }
     if (len_act == len_exp && rule_act == rule_exp) {
-        const YYKEYTYPE offset = keys[3 * i];
+        const YYKEYTYPE offset = keys[kix];
         *cursor = token + offset;
         return 0;
     } else {
         fprintf
             ( stderr
-            , "error: lex_line344: at position %ld (iteration %u):\n"
+            , "error: lex_line344: at position %ld (key %u):\n"
                 "\texpected: match length %ld, rule %u\n"
                 "\tactual:   match length %ld, rule %u\n"
             , pos
-            , i
+            , kix
             , len_exp
             , rule_exp
             , len_act
@@ -95,6 +97,13 @@ static int action_line344
             );
         return 1;
     }
+}
+
+static int check_key_count_line344(unsigned have, unsigned used, unsigned need)
+{
+    if (used + need <= have) return 0;
+    fprintf(stderr, "error: lex_line344: not enough keys\n");
+    return 1;
 }
 
 int lex_line344()
@@ -124,7 +133,7 @@ int lex_line344()
 
     keys = (YYKEYTYPE *) read_file
         ("unicode_blocks.8--skeleton--encoding-policy(ignore).c.line344.keys"
-        , 3 * sizeof (YYKEYTYPE)
+        , sizeof (YYKEYTYPE)
         , 0
         , &keys_count
         );
@@ -137,7 +146,7 @@ int lex_line344()
     limit = input + input_len + padding;
     eof = input + input_len;
 
-    for (i = 0; status == 0 && i < keys_count; ++i) {
+    for (i = 0; status == 0 && cursor < eof && i < keys_count;) {
         token = cursor;
         YYCTYPE yych;
 
@@ -145,11 +154,13 @@ int lex_line344()
         yych = YYPEEK ();
         if (yych >= 0x80) goto yy4;
         YYSKIP ();
-        status = action_line344(i, keys, input, token, &cursor, 0);
+        status = check_key_count_line344(keys_count, i, 3)
+             || action_line344(&i, keys, input, token, &cursor, 0);
         continue;
 yy4:
         YYSKIP ();
-        status = action_line344(i, keys, input, token, &cursor, 254);
+        status = check_key_count_line344(keys_count, i, 3)
+             || action_line344(&i, keys, input, token, &cursor, 254);
         continue;
 
     }
@@ -161,7 +172,7 @@ yy4:
         }
         if (i != keys_count) {
             status = 1;
-            fprintf(stderr, "error: lex_line344: unused keys left after %u iterations\n", i);
+            fprintf(stderr, "error: lex_line344: unused keys left after %u keys\n", i);
         }
     }
 
@@ -187,7 +198,7 @@ end:
 #define YYFILL(n) { break; }
 
 static int action_line351
-    ( unsigned int i
+    ( unsigned *pkix
     , const YYKEYTYPE *keys
     , const YYCTYPE *start
     , const YYCTYPE *token
@@ -195,10 +206,12 @@ static int action_line351
     , YYKEYTYPE rule_act
     )
 {
+    const unsigned kix = *pkix;
     const long pos = token - start;
     const long len_act = *cursor - token;
-    const long len_exp = (long) keys [3 * i + 1];
-    const YYKEYTYPE rule_exp = keys [3 * i + 2];
+    const long len_exp = (long) keys[kix + 1];
+    const YYKEYTYPE rule_exp = keys[kix + 2];
+    *pkix = kix + 3;
     if (rule_exp == 255) {
         fprintf
             ( stderr
@@ -208,17 +221,17 @@ static int action_line351
             );
     }
     if (len_act == len_exp && rule_act == rule_exp) {
-        const YYKEYTYPE offset = keys[3 * i];
+        const YYKEYTYPE offset = keys[kix];
         *cursor = token + offset;
         return 0;
     } else {
         fprintf
             ( stderr
-            , "error: lex_line351: at position %ld (iteration %u):\n"
+            , "error: lex_line351: at position %ld (key %u):\n"
                 "\texpected: match length %ld, rule %u\n"
                 "\tactual:   match length %ld, rule %u\n"
             , pos
-            , i
+            , kix
             , len_exp
             , rule_exp
             , len_act
@@ -226,6 +239,13 @@ static int action_line351
             );
         return 1;
     }
+}
+
+static int check_key_count_line351(unsigned have, unsigned used, unsigned need)
+{
+    if (used + need <= have) return 0;
+    fprintf(stderr, "error: lex_line351: not enough keys\n");
+    return 1;
 }
 
 int lex_line351()
@@ -255,7 +275,7 @@ int lex_line351()
 
     keys = (YYKEYTYPE *) read_file
         ("unicode_blocks.8--skeleton--encoding-policy(ignore).c.line351.keys"
-        , 3 * sizeof (YYKEYTYPE)
+        , sizeof (YYKEYTYPE)
         , 0
         , &keys_count
         );
@@ -268,7 +288,7 @@ int lex_line351()
     limit = input + input_len + padding;
     eof = input + input_len;
 
-    for (i = 0; status == 0 && i < keys_count; ++i) {
+    for (i = 0; status == 0 && cursor < eof && i < keys_count;) {
         token = cursor;
         YYCTYPE yych;
 
@@ -282,7 +302,8 @@ int lex_line351()
 yy8:
         YYSKIP ();
 yy9:
-        status = action_line351(i, keys, input, token, &cursor, 254);
+        status = check_key_count_line351(keys_count, i, 3)
+             || action_line351(&i, keys, input, token, &cursor, 254);
         continue;
 yy10:
         YYSKIP ();
@@ -356,7 +377,8 @@ yy10:
         }
 yy11:
         YYSKIP ();
-        status = action_line351(i, keys, input, token, &cursor, 0);
+        status = check_key_count_line351(keys_count, i, 3)
+             || action_line351(&i, keys, input, token, &cursor, 0);
         continue;
 
     }
@@ -368,7 +390,7 @@ yy11:
         }
         if (i != keys_count) {
             status = 1;
-            fprintf(stderr, "error: lex_line351: unused keys left after %u iterations\n", i);
+            fprintf(stderr, "error: lex_line351: unused keys left after %u keys\n", i);
         }
     }
 
@@ -394,7 +416,7 @@ end:
 #define YYFILL(n) { break; }
 
 static int action_line358
-    ( unsigned int i
+    ( unsigned *pkix
     , const YYKEYTYPE *keys
     , const YYCTYPE *start
     , const YYCTYPE *token
@@ -402,10 +424,12 @@ static int action_line358
     , YYKEYTYPE rule_act
     )
 {
+    const unsigned kix = *pkix;
     const long pos = token - start;
     const long len_act = *cursor - token;
-    const long len_exp = (long) keys [3 * i + 1];
-    const YYKEYTYPE rule_exp = keys [3 * i + 2];
+    const long len_exp = (long) keys[kix + 1];
+    const YYKEYTYPE rule_exp = keys[kix + 2];
+    *pkix = kix + 3;
     if (rule_exp == 255) {
         fprintf
             ( stderr
@@ -415,17 +439,17 @@ static int action_line358
             );
     }
     if (len_act == len_exp && rule_act == rule_exp) {
-        const YYKEYTYPE offset = keys[3 * i];
+        const YYKEYTYPE offset = keys[kix];
         *cursor = token + offset;
         return 0;
     } else {
         fprintf
             ( stderr
-            , "error: lex_line358: at position %ld (iteration %u):\n"
+            , "error: lex_line358: at position %ld (key %u):\n"
                 "\texpected: match length %ld, rule %u\n"
                 "\tactual:   match length %ld, rule %u\n"
             , pos
-            , i
+            , kix
             , len_exp
             , rule_exp
             , len_act
@@ -433,6 +457,13 @@ static int action_line358
             );
         return 1;
     }
+}
+
+static int check_key_count_line358(unsigned have, unsigned used, unsigned need)
+{
+    if (used + need <= have) return 0;
+    fprintf(stderr, "error: lex_line358: not enough keys\n");
+    return 1;
 }
 
 int lex_line358()
@@ -462,7 +493,7 @@ int lex_line358()
 
     keys = (YYKEYTYPE *) read_file
         ("unicode_blocks.8--skeleton--encoding-policy(ignore).c.line358.keys"
-        , 3 * sizeof (YYKEYTYPE)
+        , sizeof (YYKEYTYPE)
         , 0
         , &keys_count
         );
@@ -475,7 +506,7 @@ int lex_line358()
     limit = input + input_len + padding;
     eof = input + input_len;
 
-    for (i = 0; status == 0 && i < keys_count; ++i) {
+    for (i = 0; status == 0 && cursor < eof && i < keys_count;) {
         token = cursor;
         YYCTYPE yych;
 
@@ -489,7 +520,8 @@ int lex_line358()
 yy15:
         YYSKIP ();
 yy16:
-        status = action_line358(i, keys, input, token, &cursor, 254);
+        status = check_key_count_line358(keys_count, i, 3)
+             || action_line358(&i, keys, input, token, &cursor, 254);
         continue;
 yy17:
         YYSKIP ();
@@ -563,7 +595,8 @@ yy17:
         }
 yy18:
         YYSKIP ();
-        status = action_line358(i, keys, input, token, &cursor, 0);
+        status = check_key_count_line358(keys_count, i, 3)
+             || action_line358(&i, keys, input, token, &cursor, 0);
         continue;
 
     }
@@ -575,7 +608,7 @@ yy18:
         }
         if (i != keys_count) {
             status = 1;
-            fprintf(stderr, "error: lex_line358: unused keys left after %u iterations\n", i);
+            fprintf(stderr, "error: lex_line358: unused keys left after %u keys\n", i);
         }
     }
 
@@ -601,7 +634,7 @@ end:
 #define YYFILL(n) { break; }
 
 static int action_line365
-    ( unsigned int i
+    ( unsigned *pkix
     , const YYKEYTYPE *keys
     , const YYCTYPE *start
     , const YYCTYPE *token
@@ -609,10 +642,12 @@ static int action_line365
     , YYKEYTYPE rule_act
     )
 {
+    const unsigned kix = *pkix;
     const long pos = token - start;
     const long len_act = *cursor - token;
-    const long len_exp = (long) keys [3 * i + 1];
-    const YYKEYTYPE rule_exp = keys [3 * i + 2];
+    const long len_exp = (long) keys[kix + 1];
+    const YYKEYTYPE rule_exp = keys[kix + 2];
+    *pkix = kix + 3;
     if (rule_exp == 255) {
         fprintf
             ( stderr
@@ -622,17 +657,17 @@ static int action_line365
             );
     }
     if (len_act == len_exp && rule_act == rule_exp) {
-        const YYKEYTYPE offset = keys[3 * i];
+        const YYKEYTYPE offset = keys[kix];
         *cursor = token + offset;
         return 0;
     } else {
         fprintf
             ( stderr
-            , "error: lex_line365: at position %ld (iteration %u):\n"
+            , "error: lex_line365: at position %ld (key %u):\n"
                 "\texpected: match length %ld, rule %u\n"
                 "\tactual:   match length %ld, rule %u\n"
             , pos
-            , i
+            , kix
             , len_exp
             , rule_exp
             , len_act
@@ -640,6 +675,13 @@ static int action_line365
             );
         return 1;
     }
+}
+
+static int check_key_count_line365(unsigned have, unsigned used, unsigned need)
+{
+    if (used + need <= have) return 0;
+    fprintf(stderr, "error: lex_line365: not enough keys\n");
+    return 1;
 }
 
 int lex_line365()
@@ -669,7 +711,7 @@ int lex_line365()
 
     keys = (YYKEYTYPE *) read_file
         ("unicode_blocks.8--skeleton--encoding-policy(ignore).c.line365.keys"
-        , 3 * sizeof (YYKEYTYPE)
+        , sizeof (YYKEYTYPE)
         , 0
         , &keys_count
         );
@@ -682,7 +724,7 @@ int lex_line365()
     limit = input + input_len + padding;
     eof = input + input_len;
 
-    for (i = 0; status == 0 && i < keys_count; ++i) {
+    for (i = 0; status == 0 && cursor < eof && i < keys_count;) {
         token = cursor;
         YYCTYPE yych;
 
@@ -698,7 +740,8 @@ int lex_line365()
 yy22:
         YYSKIP ();
 yy23:
-        status = action_line365(i, keys, input, token, &cursor, 254);
+        status = check_key_count_line365(keys_count, i, 3)
+             || action_line365(&i, keys, input, token, &cursor, 254);
         continue;
 yy24:
         YYSKIP ();
@@ -794,7 +837,8 @@ yy25:
         }
 yy26:
         YYSKIP ();
-        status = action_line365(i, keys, input, token, &cursor, 0);
+        status = check_key_count_line365(keys_count, i, 3)
+             || action_line365(&i, keys, input, token, &cursor, 0);
         continue;
 
     }
@@ -806,7 +850,7 @@ yy26:
         }
         if (i != keys_count) {
             status = 1;
-            fprintf(stderr, "error: lex_line365: unused keys left after %u iterations\n", i);
+            fprintf(stderr, "error: lex_line365: unused keys left after %u keys\n", i);
         }
     }
 
@@ -832,7 +876,7 @@ end:
 #define YYFILL(n) { break; }
 
 static int action_line372
-    ( unsigned int i
+    ( unsigned *pkix
     , const YYKEYTYPE *keys
     , const YYCTYPE *start
     , const YYCTYPE *token
@@ -840,10 +884,12 @@ static int action_line372
     , YYKEYTYPE rule_act
     )
 {
+    const unsigned kix = *pkix;
     const long pos = token - start;
     const long len_act = *cursor - token;
-    const long len_exp = (long) keys [3 * i + 1];
-    const YYKEYTYPE rule_exp = keys [3 * i + 2];
+    const long len_exp = (long) keys[kix + 1];
+    const YYKEYTYPE rule_exp = keys[kix + 2];
+    *pkix = kix + 3;
     if (rule_exp == 255) {
         fprintf
             ( stderr
@@ -853,17 +899,17 @@ static int action_line372
             );
     }
     if (len_act == len_exp && rule_act == rule_exp) {
-        const YYKEYTYPE offset = keys[3 * i];
+        const YYKEYTYPE offset = keys[kix];
         *cursor = token + offset;
         return 0;
     } else {
         fprintf
             ( stderr
-            , "error: lex_line372: at position %ld (iteration %u):\n"
+            , "error: lex_line372: at position %ld (key %u):\n"
                 "\texpected: match length %ld, rule %u\n"
                 "\tactual:   match length %ld, rule %u\n"
             , pos
-            , i
+            , kix
             , len_exp
             , rule_exp
             , len_act
@@ -871,6 +917,13 @@ static int action_line372
             );
         return 1;
     }
+}
+
+static int check_key_count_line372(unsigned have, unsigned used, unsigned need)
+{
+    if (used + need <= have) return 0;
+    fprintf(stderr, "error: lex_line372: not enough keys\n");
+    return 1;
 }
 
 int lex_line372()
@@ -900,7 +953,7 @@ int lex_line372()
 
     keys = (YYKEYTYPE *) read_file
         ("unicode_blocks.8--skeleton--encoding-policy(ignore).c.line372.keys"
-        , 3 * sizeof (YYKEYTYPE)
+        , sizeof (YYKEYTYPE)
         , 0
         , &keys_count
         );
@@ -913,7 +966,7 @@ int lex_line372()
     limit = input + input_len + padding;
     eof = input + input_len;
 
-    for (i = 0; status == 0 && i < keys_count; ++i) {
+    for (i = 0; status == 0 && cursor < eof && i < keys_count;) {
         token = cursor;
         YYCTYPE yych;
 
@@ -927,7 +980,8 @@ int lex_line372()
 yy30:
         YYSKIP ();
 yy31:
-        status = action_line372(i, keys, input, token, &cursor, 254);
+        status = check_key_count_line372(keys_count, i, 3)
+             || action_line372(&i, keys, input, token, &cursor, 254);
         continue;
 yy32:
         YYSKIP ();
@@ -1039,7 +1093,8 @@ yy33:
         }
 yy34:
         YYSKIP ();
-        status = action_line372(i, keys, input, token, &cursor, 0);
+        status = check_key_count_line372(keys_count, i, 3)
+             || action_line372(&i, keys, input, token, &cursor, 0);
         continue;
 
     }
@@ -1051,7 +1106,7 @@ yy34:
         }
         if (i != keys_count) {
             status = 1;
-            fprintf(stderr, "error: lex_line372: unused keys left after %u iterations\n", i);
+            fprintf(stderr, "error: lex_line372: unused keys left after %u keys\n", i);
         }
     }
 
@@ -1077,7 +1132,7 @@ end:
 #define YYFILL(n) { break; }
 
 static int action_line379
-    ( unsigned int i
+    ( unsigned *pkix
     , const YYKEYTYPE *keys
     , const YYCTYPE *start
     , const YYCTYPE *token
@@ -1085,10 +1140,12 @@ static int action_line379
     , YYKEYTYPE rule_act
     )
 {
+    const unsigned kix = *pkix;
     const long pos = token - start;
     const long len_act = *cursor - token;
-    const long len_exp = (long) keys [3 * i + 1];
-    const YYKEYTYPE rule_exp = keys [3 * i + 2];
+    const long len_exp = (long) keys[kix + 1];
+    const YYKEYTYPE rule_exp = keys[kix + 2];
+    *pkix = kix + 3;
     if (rule_exp == 255) {
         fprintf
             ( stderr
@@ -1098,17 +1155,17 @@ static int action_line379
             );
     }
     if (len_act == len_exp && rule_act == rule_exp) {
-        const YYKEYTYPE offset = keys[3 * i];
+        const YYKEYTYPE offset = keys[kix];
         *cursor = token + offset;
         return 0;
     } else {
         fprintf
             ( stderr
-            , "error: lex_line379: at position %ld (iteration %u):\n"
+            , "error: lex_line379: at position %ld (key %u):\n"
                 "\texpected: match length %ld, rule %u\n"
                 "\tactual:   match length %ld, rule %u\n"
             , pos
-            , i
+            , kix
             , len_exp
             , rule_exp
             , len_act
@@ -1116,6 +1173,13 @@ static int action_line379
             );
         return 1;
     }
+}
+
+static int check_key_count_line379(unsigned have, unsigned used, unsigned need)
+{
+    if (used + need <= have) return 0;
+    fprintf(stderr, "error: lex_line379: not enough keys\n");
+    return 1;
 }
 
 int lex_line379()
@@ -1145,7 +1209,7 @@ int lex_line379()
 
     keys = (YYKEYTYPE *) read_file
         ("unicode_blocks.8--skeleton--encoding-policy(ignore).c.line379.keys"
-        , 3 * sizeof (YYKEYTYPE)
+        , sizeof (YYKEYTYPE)
         , 0
         , &keys_count
         );
@@ -1158,7 +1222,7 @@ int lex_line379()
     limit = input + input_len + padding;
     eof = input + input_len;
 
-    for (i = 0; status == 0 && i < keys_count; ++i) {
+    for (i = 0; status == 0 && cursor < eof && i < keys_count;) {
         token = cursor;
         YYCTYPE yych;
 
@@ -1172,7 +1236,8 @@ int lex_line379()
 yy38:
         YYSKIP ();
 yy39:
-        status = action_line379(i, keys, input, token, &cursor, 254);
+        status = check_key_count_line379(keys_count, i, 3)
+             || action_line379(&i, keys, input, token, &cursor, 254);
         continue;
 yy40:
         YYSKIP ();
@@ -1268,7 +1333,8 @@ yy41:
         }
 yy42:
         YYSKIP ();
-        status = action_line379(i, keys, input, token, &cursor, 0);
+        status = check_key_count_line379(keys_count, i, 3)
+             || action_line379(&i, keys, input, token, &cursor, 0);
         continue;
 
     }
@@ -1280,7 +1346,7 @@ yy42:
         }
         if (i != keys_count) {
             status = 1;
-            fprintf(stderr, "error: lex_line379: unused keys left after %u iterations\n", i);
+            fprintf(stderr, "error: lex_line379: unused keys left after %u keys\n", i);
         }
     }
 
@@ -1306,7 +1372,7 @@ end:
 #define YYFILL(n) { break; }
 
 static int action_line386
-    ( unsigned int i
+    ( unsigned *pkix
     , const YYKEYTYPE *keys
     , const YYCTYPE *start
     , const YYCTYPE *token
@@ -1314,10 +1380,12 @@ static int action_line386
     , YYKEYTYPE rule_act
     )
 {
+    const unsigned kix = *pkix;
     const long pos = token - start;
     const long len_act = *cursor - token;
-    const long len_exp = (long) keys [3 * i + 1];
-    const YYKEYTYPE rule_exp = keys [3 * i + 2];
+    const long len_exp = (long) keys[kix + 1];
+    const YYKEYTYPE rule_exp = keys[kix + 2];
+    *pkix = kix + 3;
     if (rule_exp == 255) {
         fprintf
             ( stderr
@@ -1327,17 +1395,17 @@ static int action_line386
             );
     }
     if (len_act == len_exp && rule_act == rule_exp) {
-        const YYKEYTYPE offset = keys[3 * i];
+        const YYKEYTYPE offset = keys[kix];
         *cursor = token + offset;
         return 0;
     } else {
         fprintf
             ( stderr
-            , "error: lex_line386: at position %ld (iteration %u):\n"
+            , "error: lex_line386: at position %ld (key %u):\n"
                 "\texpected: match length %ld, rule %u\n"
                 "\tactual:   match length %ld, rule %u\n"
             , pos
-            , i
+            , kix
             , len_exp
             , rule_exp
             , len_act
@@ -1345,6 +1413,13 @@ static int action_line386
             );
         return 1;
     }
+}
+
+static int check_key_count_line386(unsigned have, unsigned used, unsigned need)
+{
+    if (used + need <= have) return 0;
+    fprintf(stderr, "error: lex_line386: not enough keys\n");
+    return 1;
 }
 
 int lex_line386()
@@ -1374,7 +1449,7 @@ int lex_line386()
 
     keys = (YYKEYTYPE *) read_file
         ("unicode_blocks.8--skeleton--encoding-policy(ignore).c.line386.keys"
-        , 3 * sizeof (YYKEYTYPE)
+        , sizeof (YYKEYTYPE)
         , 0
         , &keys_count
         );
@@ -1387,7 +1462,7 @@ int lex_line386()
     limit = input + input_len + padding;
     eof = input + input_len;
 
-    for (i = 0; status == 0 && i < keys_count; ++i) {
+    for (i = 0; status == 0 && cursor < eof && i < keys_count;) {
         token = cursor;
         YYCTYPE yych;
 
@@ -1401,7 +1476,8 @@ int lex_line386()
 yy46:
         YYSKIP ();
 yy47:
-        status = action_line386(i, keys, input, token, &cursor, 254);
+        status = check_key_count_line386(keys_count, i, 3)
+             || action_line386(&i, keys, input, token, &cursor, 254);
         continue;
 yy48:
         YYSKIP ();
@@ -1529,7 +1605,8 @@ yy49:
         }
 yy50:
         YYSKIP ();
-        status = action_line386(i, keys, input, token, &cursor, 0);
+        status = check_key_count_line386(keys_count, i, 3)
+             || action_line386(&i, keys, input, token, &cursor, 0);
         continue;
 
     }
@@ -1541,7 +1618,7 @@ yy50:
         }
         if (i != keys_count) {
             status = 1;
-            fprintf(stderr, "error: lex_line386: unused keys left after %u iterations\n", i);
+            fprintf(stderr, "error: lex_line386: unused keys left after %u keys\n", i);
         }
     }
 
@@ -1567,7 +1644,7 @@ end:
 #define YYFILL(n) { break; }
 
 static int action_line393
-    ( unsigned int i
+    ( unsigned *pkix
     , const YYKEYTYPE *keys
     , const YYCTYPE *start
     , const YYCTYPE *token
@@ -1575,10 +1652,12 @@ static int action_line393
     , YYKEYTYPE rule_act
     )
 {
+    const unsigned kix = *pkix;
     const long pos = token - start;
     const long len_act = *cursor - token;
-    const long len_exp = (long) keys [3 * i + 1];
-    const YYKEYTYPE rule_exp = keys [3 * i + 2];
+    const long len_exp = (long) keys[kix + 1];
+    const YYKEYTYPE rule_exp = keys[kix + 2];
+    *pkix = kix + 3;
     if (rule_exp == 255) {
         fprintf
             ( stderr
@@ -1588,17 +1667,17 @@ static int action_line393
             );
     }
     if (len_act == len_exp && rule_act == rule_exp) {
-        const YYKEYTYPE offset = keys[3 * i];
+        const YYKEYTYPE offset = keys[kix];
         *cursor = token + offset;
         return 0;
     } else {
         fprintf
             ( stderr
-            , "error: lex_line393: at position %ld (iteration %u):\n"
+            , "error: lex_line393: at position %ld (key %u):\n"
                 "\texpected: match length %ld, rule %u\n"
                 "\tactual:   match length %ld, rule %u\n"
             , pos
-            , i
+            , kix
             , len_exp
             , rule_exp
             , len_act
@@ -1606,6 +1685,13 @@ static int action_line393
             );
         return 1;
     }
+}
+
+static int check_key_count_line393(unsigned have, unsigned used, unsigned need)
+{
+    if (used + need <= have) return 0;
+    fprintf(stderr, "error: lex_line393: not enough keys\n");
+    return 1;
 }
 
 int lex_line393()
@@ -1635,7 +1721,7 @@ int lex_line393()
 
     keys = (YYKEYTYPE *) read_file
         ("unicode_blocks.8--skeleton--encoding-policy(ignore).c.line393.keys"
-        , 3 * sizeof (YYKEYTYPE)
+        , sizeof (YYKEYTYPE)
         , 0
         , &keys_count
         );
@@ -1648,7 +1734,7 @@ int lex_line393()
     limit = input + input_len + padding;
     eof = input + input_len;
 
-    for (i = 0; status == 0 && i < keys_count; ++i) {
+    for (i = 0; status == 0 && cursor < eof && i < keys_count;) {
         token = cursor;
         YYCTYPE yych;
 
@@ -1663,7 +1749,8 @@ int lex_line393()
 yy54:
         YYSKIP ();
 yy55:
-        status = action_line393(i, keys, input, token, &cursor, 254);
+        status = check_key_count_line393(keys_count, i, 3)
+             || action_line393(&i, keys, input, token, &cursor, 254);
         continue;
 yy56:
         YYSKIP ();
@@ -1759,7 +1846,8 @@ yy57:
         }
 yy58:
         YYSKIP ();
-        status = action_line393(i, keys, input, token, &cursor, 0);
+        status = check_key_count_line393(keys_count, i, 3)
+             || action_line393(&i, keys, input, token, &cursor, 0);
         continue;
 
     }
@@ -1771,7 +1859,7 @@ yy58:
         }
         if (i != keys_count) {
             status = 1;
-            fprintf(stderr, "error: lex_line393: unused keys left after %u iterations\n", i);
+            fprintf(stderr, "error: lex_line393: unused keys left after %u keys\n", i);
         }
     }
 
@@ -1797,7 +1885,7 @@ end:
 #define YYFILL(n) { break; }
 
 static int action_line400
-    ( unsigned int i
+    ( unsigned *pkix
     , const YYKEYTYPE *keys
     , const YYCTYPE *start
     , const YYCTYPE *token
@@ -1805,10 +1893,12 @@ static int action_line400
     , YYKEYTYPE rule_act
     )
 {
+    const unsigned kix = *pkix;
     const long pos = token - start;
     const long len_act = *cursor - token;
-    const long len_exp = (long) keys [3 * i + 1];
-    const YYKEYTYPE rule_exp = keys [3 * i + 2];
+    const long len_exp = (long) keys[kix + 1];
+    const YYKEYTYPE rule_exp = keys[kix + 2];
+    *pkix = kix + 3;
     if (rule_exp == 255) {
         fprintf
             ( stderr
@@ -1818,17 +1908,17 @@ static int action_line400
             );
     }
     if (len_act == len_exp && rule_act == rule_exp) {
-        const YYKEYTYPE offset = keys[3 * i];
+        const YYKEYTYPE offset = keys[kix];
         *cursor = token + offset;
         return 0;
     } else {
         fprintf
             ( stderr
-            , "error: lex_line400: at position %ld (iteration %u):\n"
+            , "error: lex_line400: at position %ld (key %u):\n"
                 "\texpected: match length %ld, rule %u\n"
                 "\tactual:   match length %ld, rule %u\n"
             , pos
-            , i
+            , kix
             , len_exp
             , rule_exp
             , len_act
@@ -1836,6 +1926,13 @@ static int action_line400
             );
         return 1;
     }
+}
+
+static int check_key_count_line400(unsigned have, unsigned used, unsigned need)
+{
+    if (used + need <= have) return 0;
+    fprintf(stderr, "error: lex_line400: not enough keys\n");
+    return 1;
 }
 
 int lex_line400()
@@ -1865,7 +1962,7 @@ int lex_line400()
 
     keys = (YYKEYTYPE *) read_file
         ("unicode_blocks.8--skeleton--encoding-policy(ignore).c.line400.keys"
-        , 3 * sizeof (YYKEYTYPE)
+        , sizeof (YYKEYTYPE)
         , 0
         , &keys_count
         );
@@ -1878,7 +1975,7 @@ int lex_line400()
     limit = input + input_len + padding;
     eof = input + input_len;
 
-    for (i = 0; status == 0 && i < keys_count; ++i) {
+    for (i = 0; status == 0 && cursor < eof && i < keys_count;) {
         token = cursor;
         YYCTYPE yych;
 
@@ -1894,7 +1991,8 @@ int lex_line400()
 yy62:
         YYSKIP ();
 yy63:
-        status = action_line400(i, keys, input, token, &cursor, 254);
+        status = check_key_count_line400(keys_count, i, 3)
+             || action_line400(&i, keys, input, token, &cursor, 254);
         continue;
 yy64:
         YYSKIP ();
@@ -1968,7 +2066,8 @@ yy64:
         }
 yy65:
         YYSKIP ();
-        status = action_line400(i, keys, input, token, &cursor, 0);
+        status = check_key_count_line400(keys_count, i, 3)
+             || action_line400(&i, keys, input, token, &cursor, 0);
         continue;
 
     }
@@ -1980,7 +2079,7 @@ yy65:
         }
         if (i != keys_count) {
             status = 1;
-            fprintf(stderr, "error: lex_line400: unused keys left after %u iterations\n", i);
+            fprintf(stderr, "error: lex_line400: unused keys left after %u keys\n", i);
         }
     }
 
@@ -2006,7 +2105,7 @@ end:
 #define YYFILL(n) { break; }
 
 static int action_line407
-    ( unsigned int i
+    ( unsigned *pkix
     , const YYKEYTYPE *keys
     , const YYCTYPE *start
     , const YYCTYPE *token
@@ -2014,10 +2113,12 @@ static int action_line407
     , YYKEYTYPE rule_act
     )
 {
+    const unsigned kix = *pkix;
     const long pos = token - start;
     const long len_act = *cursor - token;
-    const long len_exp = (long) keys [3 * i + 1];
-    const YYKEYTYPE rule_exp = keys [3 * i + 2];
+    const long len_exp = (long) keys[kix + 1];
+    const YYKEYTYPE rule_exp = keys[kix + 2];
+    *pkix = kix + 3;
     if (rule_exp == 255) {
         fprintf
             ( stderr
@@ -2027,17 +2128,17 @@ static int action_line407
             );
     }
     if (len_act == len_exp && rule_act == rule_exp) {
-        const YYKEYTYPE offset = keys[3 * i];
+        const YYKEYTYPE offset = keys[kix];
         *cursor = token + offset;
         return 0;
     } else {
         fprintf
             ( stderr
-            , "error: lex_line407: at position %ld (iteration %u):\n"
+            , "error: lex_line407: at position %ld (key %u):\n"
                 "\texpected: match length %ld, rule %u\n"
                 "\tactual:   match length %ld, rule %u\n"
             , pos
-            , i
+            , kix
             , len_exp
             , rule_exp
             , len_act
@@ -2045,6 +2146,13 @@ static int action_line407
             );
         return 1;
     }
+}
+
+static int check_key_count_line407(unsigned have, unsigned used, unsigned need)
+{
+    if (used + need <= have) return 0;
+    fprintf(stderr, "error: lex_line407: not enough keys\n");
+    return 1;
 }
 
 int lex_line407()
@@ -2074,7 +2182,7 @@ int lex_line407()
 
     keys = (YYKEYTYPE *) read_file
         ("unicode_blocks.8--skeleton--encoding-policy(ignore).c.line407.keys"
-        , 3 * sizeof (YYKEYTYPE)
+        , sizeof (YYKEYTYPE)
         , 0
         , &keys_count
         );
@@ -2087,7 +2195,7 @@ int lex_line407()
     limit = input + input_len + padding;
     eof = input + input_len;
 
-    for (i = 0; status == 0 && i < keys_count; ++i) {
+    for (i = 0; status == 0 && cursor < eof && i < keys_count;) {
         token = cursor;
         YYCTYPE yych;
 
@@ -2100,7 +2208,8 @@ int lex_line407()
 yy69:
         YYSKIP ();
 yy70:
-        status = action_line407(i, keys, input, token, &cursor, 254);
+        status = check_key_count_line407(keys_count, i, 3)
+             || action_line407(&i, keys, input, token, &cursor, 254);
         continue;
 yy71:
         YYSKIP ();
@@ -2158,7 +2267,8 @@ yy71:
         }
 yy72:
         YYSKIP ();
-        status = action_line407(i, keys, input, token, &cursor, 0);
+        status = check_key_count_line407(keys_count, i, 3)
+             || action_line407(&i, keys, input, token, &cursor, 0);
         continue;
 
     }
@@ -2170,7 +2280,7 @@ yy72:
         }
         if (i != keys_count) {
             status = 1;
-            fprintf(stderr, "error: lex_line407: unused keys left after %u iterations\n", i);
+            fprintf(stderr, "error: lex_line407: unused keys left after %u keys\n", i);
         }
     }
 
@@ -2196,7 +2306,7 @@ end:
 #define YYFILL(n) { break; }
 
 static int action_line414
-    ( unsigned int i
+    ( unsigned *pkix
     , const YYKEYTYPE *keys
     , const YYCTYPE *start
     , const YYCTYPE *token
@@ -2204,10 +2314,12 @@ static int action_line414
     , YYKEYTYPE rule_act
     )
 {
+    const unsigned kix = *pkix;
     const long pos = token - start;
     const long len_act = *cursor - token;
-    const long len_exp = (long) keys [3 * i + 1];
-    const YYKEYTYPE rule_exp = keys [3 * i + 2];
+    const long len_exp = (long) keys[kix + 1];
+    const YYKEYTYPE rule_exp = keys[kix + 2];
+    *pkix = kix + 3;
     if (rule_exp == 255) {
         fprintf
             ( stderr
@@ -2217,17 +2329,17 @@ static int action_line414
             );
     }
     if (len_act == len_exp && rule_act == rule_exp) {
-        const YYKEYTYPE offset = keys[3 * i];
+        const YYKEYTYPE offset = keys[kix];
         *cursor = token + offset;
         return 0;
     } else {
         fprintf
             ( stderr
-            , "error: lex_line414: at position %ld (iteration %u):\n"
+            , "error: lex_line414: at position %ld (key %u):\n"
                 "\texpected: match length %ld, rule %u\n"
                 "\tactual:   match length %ld, rule %u\n"
             , pos
-            , i
+            , kix
             , len_exp
             , rule_exp
             , len_act
@@ -2235,6 +2347,13 @@ static int action_line414
             );
         return 1;
     }
+}
+
+static int check_key_count_line414(unsigned have, unsigned used, unsigned need)
+{
+    if (used + need <= have) return 0;
+    fprintf(stderr, "error: lex_line414: not enough keys\n");
+    return 1;
 }
 
 int lex_line414()
@@ -2264,7 +2383,7 @@ int lex_line414()
 
     keys = (YYKEYTYPE *) read_file
         ("unicode_blocks.8--skeleton--encoding-policy(ignore).c.line414.keys"
-        , 3 * sizeof (YYKEYTYPE)
+        , sizeof (YYKEYTYPE)
         , 0
         , &keys_count
         );
@@ -2277,7 +2396,7 @@ int lex_line414()
     limit = input + input_len + padding;
     eof = input + input_len;
 
-    for (i = 0; status == 0 && i < keys_count; ++i) {
+    for (i = 0; status == 0 && cursor < eof && i < keys_count;) {
         token = cursor;
         YYCTYPE yych;
 
@@ -2292,7 +2411,8 @@ int lex_line414()
 yy76:
         YYSKIP ();
 yy77:
-        status = action_line414(i, keys, input, token, &cursor, 254);
+        status = check_key_count_line414(keys_count, i, 3)
+             || action_line414(&i, keys, input, token, &cursor, 254);
         continue;
 yy78:
         YYSKIP ();
@@ -2410,7 +2530,8 @@ yy80:
         }
 yy81:
         YYSKIP ();
-        status = action_line414(i, keys, input, token, &cursor, 0);
+        status = check_key_count_line414(keys_count, i, 3)
+             || action_line414(&i, keys, input, token, &cursor, 0);
         continue;
 
     }
@@ -2422,7 +2543,7 @@ yy81:
         }
         if (i != keys_count) {
             status = 1;
-            fprintf(stderr, "error: lex_line414: unused keys left after %u iterations\n", i);
+            fprintf(stderr, "error: lex_line414: unused keys left after %u keys\n", i);
         }
     }
 
@@ -2448,7 +2569,7 @@ end:
 #define YYFILL(n) { break; }
 
 static int action_line421
-    ( unsigned int i
+    ( unsigned *pkix
     , const YYKEYTYPE *keys
     , const YYCTYPE *start
     , const YYCTYPE *token
@@ -2456,10 +2577,12 @@ static int action_line421
     , YYKEYTYPE rule_act
     )
 {
+    const unsigned kix = *pkix;
     const long pos = token - start;
     const long len_act = *cursor - token;
-    const long len_exp = (long) keys [3 * i + 1];
-    const YYKEYTYPE rule_exp = keys [3 * i + 2];
+    const long len_exp = (long) keys[kix + 1];
+    const YYKEYTYPE rule_exp = keys[kix + 2];
+    *pkix = kix + 3;
     if (rule_exp == 255) {
         fprintf
             ( stderr
@@ -2469,17 +2592,17 @@ static int action_line421
             );
     }
     if (len_act == len_exp && rule_act == rule_exp) {
-        const YYKEYTYPE offset = keys[3 * i];
+        const YYKEYTYPE offset = keys[kix];
         *cursor = token + offset;
         return 0;
     } else {
         fprintf
             ( stderr
-            , "error: lex_line421: at position %ld (iteration %u):\n"
+            , "error: lex_line421: at position %ld (key %u):\n"
                 "\texpected: match length %ld, rule %u\n"
                 "\tactual:   match length %ld, rule %u\n"
             , pos
-            , i
+            , kix
             , len_exp
             , rule_exp
             , len_act
@@ -2487,6 +2610,13 @@ static int action_line421
             );
         return 1;
     }
+}
+
+static int check_key_count_line421(unsigned have, unsigned used, unsigned need)
+{
+    if (used + need <= have) return 0;
+    fprintf(stderr, "error: lex_line421: not enough keys\n");
+    return 1;
 }
 
 int lex_line421()
@@ -2516,7 +2646,7 @@ int lex_line421()
 
     keys = (YYKEYTYPE *) read_file
         ("unicode_blocks.8--skeleton--encoding-policy(ignore).c.line421.keys"
-        , 3 * sizeof (YYKEYTYPE)
+        , sizeof (YYKEYTYPE)
         , 0
         , &keys_count
         );
@@ -2529,7 +2659,7 @@ int lex_line421()
     limit = input + input_len + padding;
     eof = input + input_len;
 
-    for (i = 0; status == 0 && i < keys_count; ++i) {
+    for (i = 0; status == 0 && cursor < eof && i < keys_count;) {
         token = cursor;
         YYCTYPE yych;
 
@@ -2543,7 +2673,8 @@ int lex_line421()
 yy85:
         YYSKIP ();
 yy86:
-        status = action_line421(i, keys, input, token, &cursor, 254);
+        status = check_key_count_line421(keys_count, i, 3)
+             || action_line421(&i, keys, input, token, &cursor, 254);
         continue;
 yy87:
         YYSKIP ();
@@ -2671,7 +2802,8 @@ yy88:
         }
 yy89:
         YYSKIP ();
-        status = action_line421(i, keys, input, token, &cursor, 0);
+        status = check_key_count_line421(keys_count, i, 3)
+             || action_line421(&i, keys, input, token, &cursor, 0);
         continue;
 
     }
@@ -2683,7 +2815,7 @@ yy89:
         }
         if (i != keys_count) {
             status = 1;
-            fprintf(stderr, "error: lex_line421: unused keys left after %u iterations\n", i);
+            fprintf(stderr, "error: lex_line421: unused keys left after %u keys\n", i);
         }
     }
 
@@ -2709,7 +2841,7 @@ end:
 #define YYFILL(n) { break; }
 
 static int action_line428
-    ( unsigned int i
+    ( unsigned *pkix
     , const YYKEYTYPE *keys
     , const YYCTYPE *start
     , const YYCTYPE *token
@@ -2717,10 +2849,12 @@ static int action_line428
     , YYKEYTYPE rule_act
     )
 {
+    const unsigned kix = *pkix;
     const long pos = token - start;
     const long len_act = *cursor - token;
-    const long len_exp = (long) keys [3 * i + 1];
-    const YYKEYTYPE rule_exp = keys [3 * i + 2];
+    const long len_exp = (long) keys[kix + 1];
+    const YYKEYTYPE rule_exp = keys[kix + 2];
+    *pkix = kix + 3;
     if (rule_exp == 255) {
         fprintf
             ( stderr
@@ -2730,17 +2864,17 @@ static int action_line428
             );
     }
     if (len_act == len_exp && rule_act == rule_exp) {
-        const YYKEYTYPE offset = keys[3 * i];
+        const YYKEYTYPE offset = keys[kix];
         *cursor = token + offset;
         return 0;
     } else {
         fprintf
             ( stderr
-            , "error: lex_line428: at position %ld (iteration %u):\n"
+            , "error: lex_line428: at position %ld (key %u):\n"
                 "\texpected: match length %ld, rule %u\n"
                 "\tactual:   match length %ld, rule %u\n"
             , pos
-            , i
+            , kix
             , len_exp
             , rule_exp
             , len_act
@@ -2748,6 +2882,13 @@ static int action_line428
             );
         return 1;
     }
+}
+
+static int check_key_count_line428(unsigned have, unsigned used, unsigned need)
+{
+    if (used + need <= have) return 0;
+    fprintf(stderr, "error: lex_line428: not enough keys\n");
+    return 1;
 }
 
 int lex_line428()
@@ -2777,7 +2918,7 @@ int lex_line428()
 
     keys = (YYKEYTYPE *) read_file
         ("unicode_blocks.8--skeleton--encoding-policy(ignore).c.line428.keys"
-        , 3 * sizeof (YYKEYTYPE)
+        , sizeof (YYKEYTYPE)
         , 0
         , &keys_count
         );
@@ -2790,7 +2931,7 @@ int lex_line428()
     limit = input + input_len + padding;
     eof = input + input_len;
 
-    for (i = 0; status == 0 && i < keys_count; ++i) {
+    for (i = 0; status == 0 && cursor < eof && i < keys_count;) {
         token = cursor;
         YYCTYPE yych;
 
@@ -2806,7 +2947,8 @@ int lex_line428()
 yy93:
         YYSKIP ();
 yy94:
-        status = action_line428(i, keys, input, token, &cursor, 254);
+        status = check_key_count_line428(keys_count, i, 3)
+             || action_line428(&i, keys, input, token, &cursor, 254);
         continue;
 yy95:
         YYSKIP ();
@@ -2880,7 +3022,8 @@ yy95:
         }
 yy96:
         YYSKIP ();
-        status = action_line428(i, keys, input, token, &cursor, 0);
+        status = check_key_count_line428(keys_count, i, 3)
+             || action_line428(&i, keys, input, token, &cursor, 0);
         continue;
 
     }
@@ -2892,7 +3035,7 @@ yy96:
         }
         if (i != keys_count) {
             status = 1;
-            fprintf(stderr, "error: lex_line428: unused keys left after %u iterations\n", i);
+            fprintf(stderr, "error: lex_line428: unused keys left after %u keys\n", i);
         }
     }
 
@@ -2918,7 +3061,7 @@ end:
 #define YYFILL(n) { break; }
 
 static int action_line435
-    ( unsigned int i
+    ( unsigned *pkix
     , const YYKEYTYPE *keys
     , const YYCTYPE *start
     , const YYCTYPE *token
@@ -2926,10 +3069,12 @@ static int action_line435
     , YYKEYTYPE rule_act
     )
 {
+    const unsigned kix = *pkix;
     const long pos = token - start;
     const long len_act = *cursor - token;
-    const long len_exp = (long) keys [3 * i + 1];
-    const YYKEYTYPE rule_exp = keys [3 * i + 2];
+    const long len_exp = (long) keys[kix + 1];
+    const YYKEYTYPE rule_exp = keys[kix + 2];
+    *pkix = kix + 3;
     if (rule_exp == 255) {
         fprintf
             ( stderr
@@ -2939,17 +3084,17 @@ static int action_line435
             );
     }
     if (len_act == len_exp && rule_act == rule_exp) {
-        const YYKEYTYPE offset = keys[3 * i];
+        const YYKEYTYPE offset = keys[kix];
         *cursor = token + offset;
         return 0;
     } else {
         fprintf
             ( stderr
-            , "error: lex_line435: at position %ld (iteration %u):\n"
+            , "error: lex_line435: at position %ld (key %u):\n"
                 "\texpected: match length %ld, rule %u\n"
                 "\tactual:   match length %ld, rule %u\n"
             , pos
-            , i
+            , kix
             , len_exp
             , rule_exp
             , len_act
@@ -2957,6 +3102,13 @@ static int action_line435
             );
         return 1;
     }
+}
+
+static int check_key_count_line435(unsigned have, unsigned used, unsigned need)
+{
+    if (used + need <= have) return 0;
+    fprintf(stderr, "error: lex_line435: not enough keys\n");
+    return 1;
 }
 
 int lex_line435()
@@ -2986,7 +3138,7 @@ int lex_line435()
 
     keys = (YYKEYTYPE *) read_file
         ("unicode_blocks.8--skeleton--encoding-policy(ignore).c.line435.keys"
-        , 3 * sizeof (YYKEYTYPE)
+        , sizeof (YYKEYTYPE)
         , 0
         , &keys_count
         );
@@ -2999,7 +3151,7 @@ int lex_line435()
     limit = input + input_len + padding;
     eof = input + input_len;
 
-    for (i = 0; status == 0 && i < keys_count; ++i) {
+    for (i = 0; status == 0 && cursor < eof && i < keys_count;) {
         token = cursor;
         YYCTYPE yych;
 
@@ -3013,7 +3165,8 @@ int lex_line435()
 yy100:
         YYSKIP ();
 yy101:
-        status = action_line435(i, keys, input, token, &cursor, 254);
+        status = check_key_count_line435(keys_count, i, 3)
+             || action_line435(&i, keys, input, token, &cursor, 254);
         continue;
 yy102:
         YYSKIP ();
@@ -3109,7 +3262,8 @@ yy103:
         }
 yy104:
         YYSKIP ();
-        status = action_line435(i, keys, input, token, &cursor, 0);
+        status = check_key_count_line435(keys_count, i, 3)
+             || action_line435(&i, keys, input, token, &cursor, 0);
         continue;
 
     }
@@ -3121,7 +3275,7 @@ yy104:
         }
         if (i != keys_count) {
             status = 1;
-            fprintf(stderr, "error: lex_line435: unused keys left after %u iterations\n", i);
+            fprintf(stderr, "error: lex_line435: unused keys left after %u keys\n", i);
         }
     }
 
@@ -3147,7 +3301,7 @@ end:
 #define YYFILL(n) { break; }
 
 static int action_line442
-    ( unsigned int i
+    ( unsigned *pkix
     , const YYKEYTYPE *keys
     , const YYCTYPE *start
     , const YYCTYPE *token
@@ -3155,10 +3309,12 @@ static int action_line442
     , YYKEYTYPE rule_act
     )
 {
+    const unsigned kix = *pkix;
     const long pos = token - start;
     const long len_act = *cursor - token;
-    const long len_exp = (long) keys [3 * i + 1];
-    const YYKEYTYPE rule_exp = keys [3 * i + 2];
+    const long len_exp = (long) keys[kix + 1];
+    const YYKEYTYPE rule_exp = keys[kix + 2];
+    *pkix = kix + 3;
     if (rule_exp == 255) {
         fprintf
             ( stderr
@@ -3168,17 +3324,17 @@ static int action_line442
             );
     }
     if (len_act == len_exp && rule_act == rule_exp) {
-        const YYKEYTYPE offset = keys[3 * i];
+        const YYKEYTYPE offset = keys[kix];
         *cursor = token + offset;
         return 0;
     } else {
         fprintf
             ( stderr
-            , "error: lex_line442: at position %ld (iteration %u):\n"
+            , "error: lex_line442: at position %ld (key %u):\n"
                 "\texpected: match length %ld, rule %u\n"
                 "\tactual:   match length %ld, rule %u\n"
             , pos
-            , i
+            , kix
             , len_exp
             , rule_exp
             , len_act
@@ -3186,6 +3342,13 @@ static int action_line442
             );
         return 1;
     }
+}
+
+static int check_key_count_line442(unsigned have, unsigned used, unsigned need)
+{
+    if (used + need <= have) return 0;
+    fprintf(stderr, "error: lex_line442: not enough keys\n");
+    return 1;
 }
 
 int lex_line442()
@@ -3215,7 +3378,7 @@ int lex_line442()
 
     keys = (YYKEYTYPE *) read_file
         ("unicode_blocks.8--skeleton--encoding-policy(ignore).c.line442.keys"
-        , 3 * sizeof (YYKEYTYPE)
+        , sizeof (YYKEYTYPE)
         , 0
         , &keys_count
         );
@@ -3228,7 +3391,7 @@ int lex_line442()
     limit = input + input_len + padding;
     eof = input + input_len;
 
-    for (i = 0; status == 0 && i < keys_count; ++i) {
+    for (i = 0; status == 0 && cursor < eof && i < keys_count;) {
         token = cursor;
         YYCTYPE yych;
 
@@ -3241,7 +3404,8 @@ int lex_line442()
 yy108:
         YYSKIP ();
 yy109:
-        status = action_line442(i, keys, input, token, &cursor, 254);
+        status = check_key_count_line442(keys_count, i, 3)
+             || action_line442(&i, keys, input, token, &cursor, 254);
         continue;
 yy110:
         YYSKIP ();
@@ -3315,7 +3479,8 @@ yy110:
         }
 yy111:
         YYSKIP ();
-        status = action_line442(i, keys, input, token, &cursor, 0);
+        status = check_key_count_line442(keys_count, i, 3)
+             || action_line442(&i, keys, input, token, &cursor, 0);
         continue;
 
     }
@@ -3327,7 +3492,7 @@ yy111:
         }
         if (i != keys_count) {
             status = 1;
-            fprintf(stderr, "error: lex_line442: unused keys left after %u iterations\n", i);
+            fprintf(stderr, "error: lex_line442: unused keys left after %u keys\n", i);
         }
     }
 
@@ -3355,7 +3520,7 @@ end:
 #define YYFILL(n) { break; }
 
 static int action_line449
-    ( unsigned int i
+    ( unsigned *pkix
     , const YYKEYTYPE *keys
     , const YYCTYPE *start
     , const YYCTYPE *token
@@ -3363,10 +3528,12 @@ static int action_line449
     , YYKEYTYPE rule_act
     )
 {
+    const unsigned kix = *pkix;
     const long pos = token - start;
     const long len_act = *cursor - token;
-    const long len_exp = (long) keys [3 * i + 1];
-    const YYKEYTYPE rule_exp = keys [3 * i + 2];
+    const long len_exp = (long) keys[kix + 1];
+    const YYKEYTYPE rule_exp = keys[kix + 2];
+    *pkix = kix + 3;
     if (rule_exp == 255) {
         fprintf
             ( stderr
@@ -3376,17 +3543,17 @@ static int action_line449
             );
     }
     if (len_act == len_exp && rule_act == rule_exp) {
-        const YYKEYTYPE offset = keys[3 * i];
+        const YYKEYTYPE offset = keys[kix];
         *cursor = token + offset;
         return 0;
     } else {
         fprintf
             ( stderr
-            , "error: lex_line449: at position %ld (iteration %u):\n"
+            , "error: lex_line449: at position %ld (key %u):\n"
                 "\texpected: match length %ld, rule %u\n"
                 "\tactual:   match length %ld, rule %u\n"
             , pos
-            , i
+            , kix
             , len_exp
             , rule_exp
             , len_act
@@ -3394,6 +3561,13 @@ static int action_line449
             );
         return 1;
     }
+}
+
+static int check_key_count_line449(unsigned have, unsigned used, unsigned need)
+{
+    if (used + need <= have) return 0;
+    fprintf(stderr, "error: lex_line449: not enough keys\n");
+    return 1;
 }
 
 int lex_line449()
@@ -3423,7 +3597,7 @@ int lex_line449()
 
     keys = (YYKEYTYPE *) read_file
         ("unicode_blocks.8--skeleton--encoding-policy(ignore).c.line449.keys"
-        , 3 * sizeof (YYKEYTYPE)
+        , sizeof (YYKEYTYPE)
         , 0
         , &keys_count
         );
@@ -3436,7 +3610,7 @@ int lex_line449()
     limit = input + input_len + padding;
     eof = input + input_len;
 
-    for (i = 0; status == 0 && i < keys_count; ++i) {
+    for (i = 0; status == 0 && cursor < eof && i < keys_count;) {
         token = cursor;
         const YYCTYPE *marker = NULL;
         YYCTYPE yych;
@@ -3450,7 +3624,8 @@ int lex_line449()
 yy115:
         YYSKIP ();
 yy116:
-        status = action_line449(i, keys, input, token, &cursor, 254);
+        status = check_key_count_line449(keys_count, i, 3)
+             || action_line449(&i, keys, input, token, &cursor, 254);
         continue;
 yy117:
         YYSKIP ();
@@ -3536,7 +3711,8 @@ yy119:
         goto yy116;
 yy120:
         YYSKIP ();
-        status = action_line449(i, keys, input, token, &cursor, 0);
+        status = check_key_count_line449(keys_count, i, 3)
+             || action_line449(&i, keys, input, token, &cursor, 0);
         continue;
 
     }
@@ -3548,7 +3724,7 @@ yy120:
         }
         if (i != keys_count) {
             status = 1;
-            fprintf(stderr, "error: lex_line449: unused keys left after %u iterations\n", i);
+            fprintf(stderr, "error: lex_line449: unused keys left after %u keys\n", i);
         }
     }
 
@@ -3578,7 +3754,7 @@ end:
 #define YYFILL(n) { break; }
 
 static int action_line456
-    ( unsigned int i
+    ( unsigned *pkix
     , const YYKEYTYPE *keys
     , const YYCTYPE *start
     , const YYCTYPE *token
@@ -3586,10 +3762,12 @@ static int action_line456
     , YYKEYTYPE rule_act
     )
 {
+    const unsigned kix = *pkix;
     const long pos = token - start;
     const long len_act = *cursor - token;
-    const long len_exp = (long) keys [3 * i + 1];
-    const YYKEYTYPE rule_exp = keys [3 * i + 2];
+    const long len_exp = (long) keys[kix + 1];
+    const YYKEYTYPE rule_exp = keys[kix + 2];
+    *pkix = kix + 3;
     if (rule_exp == 255) {
         fprintf
             ( stderr
@@ -3599,17 +3777,17 @@ static int action_line456
             );
     }
     if (len_act == len_exp && rule_act == rule_exp) {
-        const YYKEYTYPE offset = keys[3 * i];
+        const YYKEYTYPE offset = keys[kix];
         *cursor = token + offset;
         return 0;
     } else {
         fprintf
             ( stderr
-            , "error: lex_line456: at position %ld (iteration %u):\n"
+            , "error: lex_line456: at position %ld (key %u):\n"
                 "\texpected: match length %ld, rule %u\n"
                 "\tactual:   match length %ld, rule %u\n"
             , pos
-            , i
+            , kix
             , len_exp
             , rule_exp
             , len_act
@@ -3617,6 +3795,13 @@ static int action_line456
             );
         return 1;
     }
+}
+
+static int check_key_count_line456(unsigned have, unsigned used, unsigned need)
+{
+    if (used + need <= have) return 0;
+    fprintf(stderr, "error: lex_line456: not enough keys\n");
+    return 1;
 }
 
 int lex_line456()
@@ -3646,7 +3831,7 @@ int lex_line456()
 
     keys = (YYKEYTYPE *) read_file
         ("unicode_blocks.8--skeleton--encoding-policy(ignore).c.line456.keys"
-        , 3 * sizeof (YYKEYTYPE)
+        , sizeof (YYKEYTYPE)
         , 0
         , &keys_count
         );
@@ -3659,7 +3844,7 @@ int lex_line456()
     limit = input + input_len + padding;
     eof = input + input_len;
 
-    for (i = 0; status == 0 && i < keys_count; ++i) {
+    for (i = 0; status == 0 && cursor < eof && i < keys_count;) {
         token = cursor;
         const YYCTYPE *marker = NULL;
         YYCTYPE yych;
@@ -3673,7 +3858,8 @@ int lex_line456()
 yy124:
         YYSKIP ();
 yy125:
-        status = action_line456(i, keys, input, token, &cursor, 254);
+        status = check_key_count_line456(keys_count, i, 3)
+             || action_line456(&i, keys, input, token, &cursor, 254);
         continue;
 yy126:
         YYSKIP ();
@@ -3759,7 +3945,8 @@ yy128:
         goto yy125;
 yy129:
         YYSKIP ();
-        status = action_line456(i, keys, input, token, &cursor, 0);
+        status = check_key_count_line456(keys_count, i, 3)
+             || action_line456(&i, keys, input, token, &cursor, 0);
         continue;
 
     }
@@ -3771,7 +3958,7 @@ yy129:
         }
         if (i != keys_count) {
             status = 1;
-            fprintf(stderr, "error: lex_line456: unused keys left after %u iterations\n", i);
+            fprintf(stderr, "error: lex_line456: unused keys left after %u keys\n", i);
         }
     }
 
@@ -3801,7 +3988,7 @@ end:
 #define YYFILL(n) { break; }
 
 static int action_line463
-    ( unsigned int i
+    ( unsigned *pkix
     , const YYKEYTYPE *keys
     , const YYCTYPE *start
     , const YYCTYPE *token
@@ -3809,10 +3996,12 @@ static int action_line463
     , YYKEYTYPE rule_act
     )
 {
+    const unsigned kix = *pkix;
     const long pos = token - start;
     const long len_act = *cursor - token;
-    const long len_exp = (long) keys [3 * i + 1];
-    const YYKEYTYPE rule_exp = keys [3 * i + 2];
+    const long len_exp = (long) keys[kix + 1];
+    const YYKEYTYPE rule_exp = keys[kix + 2];
+    *pkix = kix + 3;
     if (rule_exp == 255) {
         fprintf
             ( stderr
@@ -3822,17 +4011,17 @@ static int action_line463
             );
     }
     if (len_act == len_exp && rule_act == rule_exp) {
-        const YYKEYTYPE offset = keys[3 * i];
+        const YYKEYTYPE offset = keys[kix];
         *cursor = token + offset;
         return 0;
     } else {
         fprintf
             ( stderr
-            , "error: lex_line463: at position %ld (iteration %u):\n"
+            , "error: lex_line463: at position %ld (key %u):\n"
                 "\texpected: match length %ld, rule %u\n"
                 "\tactual:   match length %ld, rule %u\n"
             , pos
-            , i
+            , kix
             , len_exp
             , rule_exp
             , len_act
@@ -3840,6 +4029,13 @@ static int action_line463
             );
         return 1;
     }
+}
+
+static int check_key_count_line463(unsigned have, unsigned used, unsigned need)
+{
+    if (used + need <= have) return 0;
+    fprintf(stderr, "error: lex_line463: not enough keys\n");
+    return 1;
 }
 
 int lex_line463()
@@ -3869,7 +4065,7 @@ int lex_line463()
 
     keys = (YYKEYTYPE *) read_file
         ("unicode_blocks.8--skeleton--encoding-policy(ignore).c.line463.keys"
-        , 3 * sizeof (YYKEYTYPE)
+        , sizeof (YYKEYTYPE)
         , 0
         , &keys_count
         );
@@ -3882,7 +4078,7 @@ int lex_line463()
     limit = input + input_len + padding;
     eof = input + input_len;
 
-    for (i = 0; status == 0 && i < keys_count; ++i) {
+    for (i = 0; status == 0 && cursor < eof && i < keys_count;) {
         token = cursor;
         const YYCTYPE *marker = NULL;
         YYCTYPE yych;
@@ -3896,7 +4092,8 @@ int lex_line463()
 yy133:
         YYSKIP ();
 yy134:
-        status = action_line463(i, keys, input, token, &cursor, 254);
+        status = check_key_count_line463(keys_count, i, 3)
+             || action_line463(&i, keys, input, token, &cursor, 254);
         continue;
 yy135:
         YYSKIP ();
@@ -3982,7 +4179,8 @@ yy137:
         goto yy134;
 yy138:
         YYSKIP ();
-        status = action_line463(i, keys, input, token, &cursor, 0);
+        status = check_key_count_line463(keys_count, i, 3)
+             || action_line463(&i, keys, input, token, &cursor, 0);
         continue;
 
     }
@@ -3994,7 +4192,7 @@ yy138:
         }
         if (i != keys_count) {
             status = 1;
-            fprintf(stderr, "error: lex_line463: unused keys left after %u iterations\n", i);
+            fprintf(stderr, "error: lex_line463: unused keys left after %u keys\n", i);
         }
     }
 
@@ -4024,7 +4222,7 @@ end:
 #define YYFILL(n) { break; }
 
 static int action_line470
-    ( unsigned int i
+    ( unsigned *pkix
     , const YYKEYTYPE *keys
     , const YYCTYPE *start
     , const YYCTYPE *token
@@ -4032,10 +4230,12 @@ static int action_line470
     , YYKEYTYPE rule_act
     )
 {
+    const unsigned kix = *pkix;
     const long pos = token - start;
     const long len_act = *cursor - token;
-    const long len_exp = (long) keys [3 * i + 1];
-    const YYKEYTYPE rule_exp = keys [3 * i + 2];
+    const long len_exp = (long) keys[kix + 1];
+    const YYKEYTYPE rule_exp = keys[kix + 2];
+    *pkix = kix + 3;
     if (rule_exp == 255) {
         fprintf
             ( stderr
@@ -4045,17 +4245,17 @@ static int action_line470
             );
     }
     if (len_act == len_exp && rule_act == rule_exp) {
-        const YYKEYTYPE offset = keys[3 * i];
+        const YYKEYTYPE offset = keys[kix];
         *cursor = token + offset;
         return 0;
     } else {
         fprintf
             ( stderr
-            , "error: lex_line470: at position %ld (iteration %u):\n"
+            , "error: lex_line470: at position %ld (key %u):\n"
                 "\texpected: match length %ld, rule %u\n"
                 "\tactual:   match length %ld, rule %u\n"
             , pos
-            , i
+            , kix
             , len_exp
             , rule_exp
             , len_act
@@ -4063,6 +4263,13 @@ static int action_line470
             );
         return 1;
     }
+}
+
+static int check_key_count_line470(unsigned have, unsigned used, unsigned need)
+{
+    if (used + need <= have) return 0;
+    fprintf(stderr, "error: lex_line470: not enough keys\n");
+    return 1;
 }
 
 int lex_line470()
@@ -4092,7 +4299,7 @@ int lex_line470()
 
     keys = (YYKEYTYPE *) read_file
         ("unicode_blocks.8--skeleton--encoding-policy(ignore).c.line470.keys"
-        , 3 * sizeof (YYKEYTYPE)
+        , sizeof (YYKEYTYPE)
         , 0
         , &keys_count
         );
@@ -4105,7 +4312,7 @@ int lex_line470()
     limit = input + input_len + padding;
     eof = input + input_len;
 
-    for (i = 0; status == 0 && i < keys_count; ++i) {
+    for (i = 0; status == 0 && cursor < eof && i < keys_count;) {
         token = cursor;
         const YYCTYPE *marker = NULL;
         YYCTYPE yych;
@@ -4119,7 +4326,8 @@ int lex_line470()
 yy142:
         YYSKIP ();
 yy143:
-        status = action_line470(i, keys, input, token, &cursor, 254);
+        status = check_key_count_line470(keys_count, i, 3)
+             || action_line470(&i, keys, input, token, &cursor, 254);
         continue;
 yy144:
         YYSKIP ();
@@ -4205,7 +4413,8 @@ yy146:
         goto yy143;
 yy147:
         YYSKIP ();
-        status = action_line470(i, keys, input, token, &cursor, 0);
+        status = check_key_count_line470(keys_count, i, 3)
+             || action_line470(&i, keys, input, token, &cursor, 0);
         continue;
 
     }
@@ -4217,7 +4426,7 @@ yy147:
         }
         if (i != keys_count) {
             status = 1;
-            fprintf(stderr, "error: lex_line470: unused keys left after %u iterations\n", i);
+            fprintf(stderr, "error: lex_line470: unused keys left after %u keys\n", i);
         }
     }
 
@@ -4247,7 +4456,7 @@ end:
 #define YYFILL(n) { break; }
 
 static int action_line477
-    ( unsigned int i
+    ( unsigned *pkix
     , const YYKEYTYPE *keys
     , const YYCTYPE *start
     , const YYCTYPE *token
@@ -4255,10 +4464,12 @@ static int action_line477
     , YYKEYTYPE rule_act
     )
 {
+    const unsigned kix = *pkix;
     const long pos = token - start;
     const long len_act = *cursor - token;
-    const long len_exp = (long) keys [3 * i + 1];
-    const YYKEYTYPE rule_exp = keys [3 * i + 2];
+    const long len_exp = (long) keys[kix + 1];
+    const YYKEYTYPE rule_exp = keys[kix + 2];
+    *pkix = kix + 3;
     if (rule_exp == 255) {
         fprintf
             ( stderr
@@ -4268,17 +4479,17 @@ static int action_line477
             );
     }
     if (len_act == len_exp && rule_act == rule_exp) {
-        const YYKEYTYPE offset = keys[3 * i];
+        const YYKEYTYPE offset = keys[kix];
         *cursor = token + offset;
         return 0;
     } else {
         fprintf
             ( stderr
-            , "error: lex_line477: at position %ld (iteration %u):\n"
+            , "error: lex_line477: at position %ld (key %u):\n"
                 "\texpected: match length %ld, rule %u\n"
                 "\tactual:   match length %ld, rule %u\n"
             , pos
-            , i
+            , kix
             , len_exp
             , rule_exp
             , len_act
@@ -4286,6 +4497,13 @@ static int action_line477
             );
         return 1;
     }
+}
+
+static int check_key_count_line477(unsigned have, unsigned used, unsigned need)
+{
+    if (used + need <= have) return 0;
+    fprintf(stderr, "error: lex_line477: not enough keys\n");
+    return 1;
 }
 
 int lex_line477()
@@ -4315,7 +4533,7 @@ int lex_line477()
 
     keys = (YYKEYTYPE *) read_file
         ("unicode_blocks.8--skeleton--encoding-policy(ignore).c.line477.keys"
-        , 3 * sizeof (YYKEYTYPE)
+        , sizeof (YYKEYTYPE)
         , 0
         , &keys_count
         );
@@ -4328,7 +4546,7 @@ int lex_line477()
     limit = input + input_len + padding;
     eof = input + input_len;
 
-    for (i = 0; status == 0 && i < keys_count; ++i) {
+    for (i = 0; status == 0 && cursor < eof && i < keys_count;) {
         token = cursor;
         const YYCTYPE *marker = NULL;
         YYCTYPE yych;
@@ -4342,7 +4560,8 @@ int lex_line477()
 yy151:
         YYSKIP ();
 yy152:
-        status = action_line477(i, keys, input, token, &cursor, 254);
+        status = check_key_count_line477(keys_count, i, 3)
+             || action_line477(&i, keys, input, token, &cursor, 254);
         continue;
 yy153:
         YYSKIP ();
@@ -4428,7 +4647,8 @@ yy155:
         goto yy152;
 yy156:
         YYSKIP ();
-        status = action_line477(i, keys, input, token, &cursor, 0);
+        status = check_key_count_line477(keys_count, i, 3)
+             || action_line477(&i, keys, input, token, &cursor, 0);
         continue;
 
     }
@@ -4440,7 +4660,7 @@ yy156:
         }
         if (i != keys_count) {
             status = 1;
-            fprintf(stderr, "error: lex_line477: unused keys left after %u iterations\n", i);
+            fprintf(stderr, "error: lex_line477: unused keys left after %u keys\n", i);
         }
     }
 
@@ -4470,7 +4690,7 @@ end:
 #define YYFILL(n) { break; }
 
 static int action_line484
-    ( unsigned int i
+    ( unsigned *pkix
     , const YYKEYTYPE *keys
     , const YYCTYPE *start
     , const YYCTYPE *token
@@ -4478,10 +4698,12 @@ static int action_line484
     , YYKEYTYPE rule_act
     )
 {
+    const unsigned kix = *pkix;
     const long pos = token - start;
     const long len_act = *cursor - token;
-    const long len_exp = (long) keys [3 * i + 1];
-    const YYKEYTYPE rule_exp = keys [3 * i + 2];
+    const long len_exp = (long) keys[kix + 1];
+    const YYKEYTYPE rule_exp = keys[kix + 2];
+    *pkix = kix + 3;
     if (rule_exp == 255) {
         fprintf
             ( stderr
@@ -4491,17 +4713,17 @@ static int action_line484
             );
     }
     if (len_act == len_exp && rule_act == rule_exp) {
-        const YYKEYTYPE offset = keys[3 * i];
+        const YYKEYTYPE offset = keys[kix];
         *cursor = token + offset;
         return 0;
     } else {
         fprintf
             ( stderr
-            , "error: lex_line484: at position %ld (iteration %u):\n"
+            , "error: lex_line484: at position %ld (key %u):\n"
                 "\texpected: match length %ld, rule %u\n"
                 "\tactual:   match length %ld, rule %u\n"
             , pos
-            , i
+            , kix
             , len_exp
             , rule_exp
             , len_act
@@ -4509,6 +4731,13 @@ static int action_line484
             );
         return 1;
     }
+}
+
+static int check_key_count_line484(unsigned have, unsigned used, unsigned need)
+{
+    if (used + need <= have) return 0;
+    fprintf(stderr, "error: lex_line484: not enough keys\n");
+    return 1;
 }
 
 int lex_line484()
@@ -4538,7 +4767,7 @@ int lex_line484()
 
     keys = (YYKEYTYPE *) read_file
         ("unicode_blocks.8--skeleton--encoding-policy(ignore).c.line484.keys"
-        , 3 * sizeof (YYKEYTYPE)
+        , sizeof (YYKEYTYPE)
         , 0
         , &keys_count
         );
@@ -4551,7 +4780,7 @@ int lex_line484()
     limit = input + input_len + padding;
     eof = input + input_len;
 
-    for (i = 0; status == 0 && i < keys_count; ++i) {
+    for (i = 0; status == 0 && cursor < eof && i < keys_count;) {
         token = cursor;
         const YYCTYPE *marker = NULL;
         YYCTYPE yych;
@@ -4565,7 +4794,8 @@ int lex_line484()
 yy160:
         YYSKIP ();
 yy161:
-        status = action_line484(i, keys, input, token, &cursor, 254);
+        status = check_key_count_line484(keys_count, i, 3)
+             || action_line484(&i, keys, input, token, &cursor, 254);
         continue;
 yy162:
         YYSKIP ();
@@ -4651,7 +4881,8 @@ yy164:
         goto yy161;
 yy165:
         YYSKIP ();
-        status = action_line484(i, keys, input, token, &cursor, 0);
+        status = check_key_count_line484(keys_count, i, 3)
+             || action_line484(&i, keys, input, token, &cursor, 0);
         continue;
 
     }
@@ -4663,7 +4894,7 @@ yy165:
         }
         if (i != keys_count) {
             status = 1;
-            fprintf(stderr, "error: lex_line484: unused keys left after %u iterations\n", i);
+            fprintf(stderr, "error: lex_line484: unused keys left after %u keys\n", i);
         }
     }
 
@@ -4693,7 +4924,7 @@ end:
 #define YYFILL(n) { break; }
 
 static int action_line491
-    ( unsigned int i
+    ( unsigned *pkix
     , const YYKEYTYPE *keys
     , const YYCTYPE *start
     , const YYCTYPE *token
@@ -4701,10 +4932,12 @@ static int action_line491
     , YYKEYTYPE rule_act
     )
 {
+    const unsigned kix = *pkix;
     const long pos = token - start;
     const long len_act = *cursor - token;
-    const long len_exp = (long) keys [3 * i + 1];
-    const YYKEYTYPE rule_exp = keys [3 * i + 2];
+    const long len_exp = (long) keys[kix + 1];
+    const YYKEYTYPE rule_exp = keys[kix + 2];
+    *pkix = kix + 3;
     if (rule_exp == 255) {
         fprintf
             ( stderr
@@ -4714,17 +4947,17 @@ static int action_line491
             );
     }
     if (len_act == len_exp && rule_act == rule_exp) {
-        const YYKEYTYPE offset = keys[3 * i];
+        const YYKEYTYPE offset = keys[kix];
         *cursor = token + offset;
         return 0;
     } else {
         fprintf
             ( stderr
-            , "error: lex_line491: at position %ld (iteration %u):\n"
+            , "error: lex_line491: at position %ld (key %u):\n"
                 "\texpected: match length %ld, rule %u\n"
                 "\tactual:   match length %ld, rule %u\n"
             , pos
-            , i
+            , kix
             , len_exp
             , rule_exp
             , len_act
@@ -4732,6 +4965,13 @@ static int action_line491
             );
         return 1;
     }
+}
+
+static int check_key_count_line491(unsigned have, unsigned used, unsigned need)
+{
+    if (used + need <= have) return 0;
+    fprintf(stderr, "error: lex_line491: not enough keys\n");
+    return 1;
 }
 
 int lex_line491()
@@ -4761,7 +5001,7 @@ int lex_line491()
 
     keys = (YYKEYTYPE *) read_file
         ("unicode_blocks.8--skeleton--encoding-policy(ignore).c.line491.keys"
-        , 3 * sizeof (YYKEYTYPE)
+        , sizeof (YYKEYTYPE)
         , 0
         , &keys_count
         );
@@ -4774,7 +5014,7 @@ int lex_line491()
     limit = input + input_len + padding;
     eof = input + input_len;
 
-    for (i = 0; status == 0 && i < keys_count; ++i) {
+    for (i = 0; status == 0 && cursor < eof && i < keys_count;) {
         token = cursor;
         const YYCTYPE *marker = NULL;
         YYCTYPE yych;
@@ -4788,7 +5028,8 @@ int lex_line491()
 yy169:
         YYSKIP ();
 yy170:
-        status = action_line491(i, keys, input, token, &cursor, 254);
+        status = check_key_count_line491(keys_count, i, 3)
+             || action_line491(&i, keys, input, token, &cursor, 254);
         continue;
 yy171:
         YYSKIP ();
@@ -4874,7 +5115,8 @@ yy173:
         goto yy170;
 yy174:
         YYSKIP ();
-        status = action_line491(i, keys, input, token, &cursor, 0);
+        status = check_key_count_line491(keys_count, i, 3)
+             || action_line491(&i, keys, input, token, &cursor, 0);
         continue;
 
     }
@@ -4886,7 +5128,7 @@ yy174:
         }
         if (i != keys_count) {
             status = 1;
-            fprintf(stderr, "error: lex_line491: unused keys left after %u iterations\n", i);
+            fprintf(stderr, "error: lex_line491: unused keys left after %u keys\n", i);
         }
     }
 
@@ -4916,7 +5158,7 @@ end:
 #define YYFILL(n) { break; }
 
 static int action_line498
-    ( unsigned int i
+    ( unsigned *pkix
     , const YYKEYTYPE *keys
     , const YYCTYPE *start
     , const YYCTYPE *token
@@ -4924,10 +5166,12 @@ static int action_line498
     , YYKEYTYPE rule_act
     )
 {
+    const unsigned kix = *pkix;
     const long pos = token - start;
     const long len_act = *cursor - token;
-    const long len_exp = (long) keys [3 * i + 1];
-    const YYKEYTYPE rule_exp = keys [3 * i + 2];
+    const long len_exp = (long) keys[kix + 1];
+    const YYKEYTYPE rule_exp = keys[kix + 2];
+    *pkix = kix + 3;
     if (rule_exp == 255) {
         fprintf
             ( stderr
@@ -4937,17 +5181,17 @@ static int action_line498
             );
     }
     if (len_act == len_exp && rule_act == rule_exp) {
-        const YYKEYTYPE offset = keys[3 * i];
+        const YYKEYTYPE offset = keys[kix];
         *cursor = token + offset;
         return 0;
     } else {
         fprintf
             ( stderr
-            , "error: lex_line498: at position %ld (iteration %u):\n"
+            , "error: lex_line498: at position %ld (key %u):\n"
                 "\texpected: match length %ld, rule %u\n"
                 "\tactual:   match length %ld, rule %u\n"
             , pos
-            , i
+            , kix
             , len_exp
             , rule_exp
             , len_act
@@ -4955,6 +5199,13 @@ static int action_line498
             );
         return 1;
     }
+}
+
+static int check_key_count_line498(unsigned have, unsigned used, unsigned need)
+{
+    if (used + need <= have) return 0;
+    fprintf(stderr, "error: lex_line498: not enough keys\n");
+    return 1;
 }
 
 int lex_line498()
@@ -4984,7 +5235,7 @@ int lex_line498()
 
     keys = (YYKEYTYPE *) read_file
         ("unicode_blocks.8--skeleton--encoding-policy(ignore).c.line498.keys"
-        , 3 * sizeof (YYKEYTYPE)
+        , sizeof (YYKEYTYPE)
         , 0
         , &keys_count
         );
@@ -4997,7 +5248,7 @@ int lex_line498()
     limit = input + input_len + padding;
     eof = input + input_len;
 
-    for (i = 0; status == 0 && i < keys_count; ++i) {
+    for (i = 0; status == 0 && cursor < eof && i < keys_count;) {
         token = cursor;
         const YYCTYPE *marker = NULL;
         YYCTYPE yych;
@@ -5011,7 +5262,8 @@ int lex_line498()
 yy178:
         YYSKIP ();
 yy179:
-        status = action_line498(i, keys, input, token, &cursor, 254);
+        status = check_key_count_line498(keys_count, i, 3)
+             || action_line498(&i, keys, input, token, &cursor, 254);
         continue;
 yy180:
         YYSKIP ();
@@ -5097,7 +5349,8 @@ yy182:
         goto yy179;
 yy183:
         YYSKIP ();
-        status = action_line498(i, keys, input, token, &cursor, 0);
+        status = check_key_count_line498(keys_count, i, 3)
+             || action_line498(&i, keys, input, token, &cursor, 0);
         continue;
 
     }
@@ -5109,7 +5362,7 @@ yy183:
         }
         if (i != keys_count) {
             status = 1;
-            fprintf(stderr, "error: lex_line498: unused keys left after %u iterations\n", i);
+            fprintf(stderr, "error: lex_line498: unused keys left after %u keys\n", i);
         }
     }
 
@@ -5139,7 +5392,7 @@ end:
 #define YYFILL(n) { break; }
 
 static int action_line505
-    ( unsigned int i
+    ( unsigned *pkix
     , const YYKEYTYPE *keys
     , const YYCTYPE *start
     , const YYCTYPE *token
@@ -5147,10 +5400,12 @@ static int action_line505
     , YYKEYTYPE rule_act
     )
 {
+    const unsigned kix = *pkix;
     const long pos = token - start;
     const long len_act = *cursor - token;
-    const long len_exp = (long) keys [3 * i + 1];
-    const YYKEYTYPE rule_exp = keys [3 * i + 2];
+    const long len_exp = (long) keys[kix + 1];
+    const YYKEYTYPE rule_exp = keys[kix + 2];
+    *pkix = kix + 3;
     if (rule_exp == 255) {
         fprintf
             ( stderr
@@ -5160,17 +5415,17 @@ static int action_line505
             );
     }
     if (len_act == len_exp && rule_act == rule_exp) {
-        const YYKEYTYPE offset = keys[3 * i];
+        const YYKEYTYPE offset = keys[kix];
         *cursor = token + offset;
         return 0;
     } else {
         fprintf
             ( stderr
-            , "error: lex_line505: at position %ld (iteration %u):\n"
+            , "error: lex_line505: at position %ld (key %u):\n"
                 "\texpected: match length %ld, rule %u\n"
                 "\tactual:   match length %ld, rule %u\n"
             , pos
-            , i
+            , kix
             , len_exp
             , rule_exp
             , len_act
@@ -5178,6 +5433,13 @@ static int action_line505
             );
         return 1;
     }
+}
+
+static int check_key_count_line505(unsigned have, unsigned used, unsigned need)
+{
+    if (used + need <= have) return 0;
+    fprintf(stderr, "error: lex_line505: not enough keys\n");
+    return 1;
 }
 
 int lex_line505()
@@ -5207,7 +5469,7 @@ int lex_line505()
 
     keys = (YYKEYTYPE *) read_file
         ("unicode_blocks.8--skeleton--encoding-policy(ignore).c.line505.keys"
-        , 3 * sizeof (YYKEYTYPE)
+        , sizeof (YYKEYTYPE)
         , 0
         , &keys_count
         );
@@ -5220,7 +5482,7 @@ int lex_line505()
     limit = input + input_len + padding;
     eof = input + input_len;
 
-    for (i = 0; status == 0 && i < keys_count; ++i) {
+    for (i = 0; status == 0 && cursor < eof && i < keys_count;) {
         token = cursor;
         const YYCTYPE *marker = NULL;
         YYCTYPE yych;
@@ -5234,7 +5496,8 @@ int lex_line505()
 yy187:
         YYSKIP ();
 yy188:
-        status = action_line505(i, keys, input, token, &cursor, 254);
+        status = check_key_count_line505(keys_count, i, 3)
+             || action_line505(&i, keys, input, token, &cursor, 254);
         continue;
 yy189:
         YYSKIP ();
@@ -5320,7 +5583,8 @@ yy191:
         goto yy188;
 yy192:
         YYSKIP ();
-        status = action_line505(i, keys, input, token, &cursor, 0);
+        status = check_key_count_line505(keys_count, i, 3)
+             || action_line505(&i, keys, input, token, &cursor, 0);
         continue;
 
     }
@@ -5332,7 +5596,7 @@ yy192:
         }
         if (i != keys_count) {
             status = 1;
-            fprintf(stderr, "error: lex_line505: unused keys left after %u iterations\n", i);
+            fprintf(stderr, "error: lex_line505: unused keys left after %u keys\n", i);
         }
     }
 
@@ -5362,7 +5626,7 @@ end:
 #define YYFILL(n) { break; }
 
 static int action_line512
-    ( unsigned int i
+    ( unsigned *pkix
     , const YYKEYTYPE *keys
     , const YYCTYPE *start
     , const YYCTYPE *token
@@ -5370,10 +5634,12 @@ static int action_line512
     , YYKEYTYPE rule_act
     )
 {
+    const unsigned kix = *pkix;
     const long pos = token - start;
     const long len_act = *cursor - token;
-    const long len_exp = (long) keys [3 * i + 1];
-    const YYKEYTYPE rule_exp = keys [3 * i + 2];
+    const long len_exp = (long) keys[kix + 1];
+    const YYKEYTYPE rule_exp = keys[kix + 2];
+    *pkix = kix + 3;
     if (rule_exp == 255) {
         fprintf
             ( stderr
@@ -5383,17 +5649,17 @@ static int action_line512
             );
     }
     if (len_act == len_exp && rule_act == rule_exp) {
-        const YYKEYTYPE offset = keys[3 * i];
+        const YYKEYTYPE offset = keys[kix];
         *cursor = token + offset;
         return 0;
     } else {
         fprintf
             ( stderr
-            , "error: lex_line512: at position %ld (iteration %u):\n"
+            , "error: lex_line512: at position %ld (key %u):\n"
                 "\texpected: match length %ld, rule %u\n"
                 "\tactual:   match length %ld, rule %u\n"
             , pos
-            , i
+            , kix
             , len_exp
             , rule_exp
             , len_act
@@ -5401,6 +5667,13 @@ static int action_line512
             );
         return 1;
     }
+}
+
+static int check_key_count_line512(unsigned have, unsigned used, unsigned need)
+{
+    if (used + need <= have) return 0;
+    fprintf(stderr, "error: lex_line512: not enough keys\n");
+    return 1;
 }
 
 int lex_line512()
@@ -5430,7 +5703,7 @@ int lex_line512()
 
     keys = (YYKEYTYPE *) read_file
         ("unicode_blocks.8--skeleton--encoding-policy(ignore).c.line512.keys"
-        , 3 * sizeof (YYKEYTYPE)
+        , sizeof (YYKEYTYPE)
         , 0
         , &keys_count
         );
@@ -5443,7 +5716,7 @@ int lex_line512()
     limit = input + input_len + padding;
     eof = input + input_len;
 
-    for (i = 0; status == 0 && i < keys_count; ++i) {
+    for (i = 0; status == 0 && cursor < eof && i < keys_count;) {
         token = cursor;
         const YYCTYPE *marker = NULL;
         YYCTYPE yych;
@@ -5457,7 +5730,8 @@ int lex_line512()
 yy196:
         YYSKIP ();
 yy197:
-        status = action_line512(i, keys, input, token, &cursor, 254);
+        status = check_key_count_line512(keys_count, i, 3)
+             || action_line512(&i, keys, input, token, &cursor, 254);
         continue;
 yy198:
         YYSKIP ();
@@ -5543,7 +5817,8 @@ yy200:
         goto yy197;
 yy201:
         YYSKIP ();
-        status = action_line512(i, keys, input, token, &cursor, 0);
+        status = check_key_count_line512(keys_count, i, 3)
+             || action_line512(&i, keys, input, token, &cursor, 0);
         continue;
 
     }
@@ -5555,7 +5830,7 @@ yy201:
         }
         if (i != keys_count) {
             status = 1;
-            fprintf(stderr, "error: lex_line512: unused keys left after %u iterations\n", i);
+            fprintf(stderr, "error: lex_line512: unused keys left after %u keys\n", i);
         }
     }
 
@@ -5585,7 +5860,7 @@ end:
 #define YYFILL(n) { break; }
 
 static int action_line519
-    ( unsigned int i
+    ( unsigned *pkix
     , const YYKEYTYPE *keys
     , const YYCTYPE *start
     , const YYCTYPE *token
@@ -5593,10 +5868,12 @@ static int action_line519
     , YYKEYTYPE rule_act
     )
 {
+    const unsigned kix = *pkix;
     const long pos = token - start;
     const long len_act = *cursor - token;
-    const long len_exp = (long) keys [3 * i + 1];
-    const YYKEYTYPE rule_exp = keys [3 * i + 2];
+    const long len_exp = (long) keys[kix + 1];
+    const YYKEYTYPE rule_exp = keys[kix + 2];
+    *pkix = kix + 3;
     if (rule_exp == 255) {
         fprintf
             ( stderr
@@ -5606,17 +5883,17 @@ static int action_line519
             );
     }
     if (len_act == len_exp && rule_act == rule_exp) {
-        const YYKEYTYPE offset = keys[3 * i];
+        const YYKEYTYPE offset = keys[kix];
         *cursor = token + offset;
         return 0;
     } else {
         fprintf
             ( stderr
-            , "error: lex_line519: at position %ld (iteration %u):\n"
+            , "error: lex_line519: at position %ld (key %u):\n"
                 "\texpected: match length %ld, rule %u\n"
                 "\tactual:   match length %ld, rule %u\n"
             , pos
-            , i
+            , kix
             , len_exp
             , rule_exp
             , len_act
@@ -5624,6 +5901,13 @@ static int action_line519
             );
         return 1;
     }
+}
+
+static int check_key_count_line519(unsigned have, unsigned used, unsigned need)
+{
+    if (used + need <= have) return 0;
+    fprintf(stderr, "error: lex_line519: not enough keys\n");
+    return 1;
 }
 
 int lex_line519()
@@ -5653,7 +5937,7 @@ int lex_line519()
 
     keys = (YYKEYTYPE *) read_file
         ("unicode_blocks.8--skeleton--encoding-policy(ignore).c.line519.keys"
-        , 3 * sizeof (YYKEYTYPE)
+        , sizeof (YYKEYTYPE)
         , 0
         , &keys_count
         );
@@ -5666,7 +5950,7 @@ int lex_line519()
     limit = input + input_len + padding;
     eof = input + input_len;
 
-    for (i = 0; status == 0 && i < keys_count; ++i) {
+    for (i = 0; status == 0 && cursor < eof && i < keys_count;) {
         token = cursor;
         const YYCTYPE *marker = NULL;
         YYCTYPE yych;
@@ -5680,7 +5964,8 @@ int lex_line519()
 yy205:
         YYSKIP ();
 yy206:
-        status = action_line519(i, keys, input, token, &cursor, 254);
+        status = check_key_count_line519(keys_count, i, 3)
+             || action_line519(&i, keys, input, token, &cursor, 254);
         continue;
 yy207:
         YYSKIP ();
@@ -5766,7 +6051,8 @@ yy209:
         goto yy206;
 yy210:
         YYSKIP ();
-        status = action_line519(i, keys, input, token, &cursor, 0);
+        status = check_key_count_line519(keys_count, i, 3)
+             || action_line519(&i, keys, input, token, &cursor, 0);
         continue;
 
     }
@@ -5778,7 +6064,7 @@ yy210:
         }
         if (i != keys_count) {
             status = 1;
-            fprintf(stderr, "error: lex_line519: unused keys left after %u iterations\n", i);
+            fprintf(stderr, "error: lex_line519: unused keys left after %u keys\n", i);
         }
     }
 
@@ -5808,7 +6094,7 @@ end:
 #define YYFILL(n) { break; }
 
 static int action_line526
-    ( unsigned int i
+    ( unsigned *pkix
     , const YYKEYTYPE *keys
     , const YYCTYPE *start
     , const YYCTYPE *token
@@ -5816,10 +6102,12 @@ static int action_line526
     , YYKEYTYPE rule_act
     )
 {
+    const unsigned kix = *pkix;
     const long pos = token - start;
     const long len_act = *cursor - token;
-    const long len_exp = (long) keys [3 * i + 1];
-    const YYKEYTYPE rule_exp = keys [3 * i + 2];
+    const long len_exp = (long) keys[kix + 1];
+    const YYKEYTYPE rule_exp = keys[kix + 2];
+    *pkix = kix + 3;
     if (rule_exp == 255) {
         fprintf
             ( stderr
@@ -5829,17 +6117,17 @@ static int action_line526
             );
     }
     if (len_act == len_exp && rule_act == rule_exp) {
-        const YYKEYTYPE offset = keys[3 * i];
+        const YYKEYTYPE offset = keys[kix];
         *cursor = token + offset;
         return 0;
     } else {
         fprintf
             ( stderr
-            , "error: lex_line526: at position %ld (iteration %u):\n"
+            , "error: lex_line526: at position %ld (key %u):\n"
                 "\texpected: match length %ld, rule %u\n"
                 "\tactual:   match length %ld, rule %u\n"
             , pos
-            , i
+            , kix
             , len_exp
             , rule_exp
             , len_act
@@ -5847,6 +6135,13 @@ static int action_line526
             );
         return 1;
     }
+}
+
+static int check_key_count_line526(unsigned have, unsigned used, unsigned need)
+{
+    if (used + need <= have) return 0;
+    fprintf(stderr, "error: lex_line526: not enough keys\n");
+    return 1;
 }
 
 int lex_line526()
@@ -5876,7 +6171,7 @@ int lex_line526()
 
     keys = (YYKEYTYPE *) read_file
         ("unicode_blocks.8--skeleton--encoding-policy(ignore).c.line526.keys"
-        , 3 * sizeof (YYKEYTYPE)
+        , sizeof (YYKEYTYPE)
         , 0
         , &keys_count
         );
@@ -5889,7 +6184,7 @@ int lex_line526()
     limit = input + input_len + padding;
     eof = input + input_len;
 
-    for (i = 0; status == 0 && i < keys_count; ++i) {
+    for (i = 0; status == 0 && cursor < eof && i < keys_count;) {
         token = cursor;
         const YYCTYPE *marker = NULL;
         YYCTYPE yych;
@@ -5903,7 +6198,8 @@ int lex_line526()
 yy214:
         YYSKIP ();
 yy215:
-        status = action_line526(i, keys, input, token, &cursor, 254);
+        status = check_key_count_line526(keys_count, i, 3)
+             || action_line526(&i, keys, input, token, &cursor, 254);
         continue;
 yy216:
         YYSKIP ();
@@ -5989,7 +6285,8 @@ yy218:
         goto yy215;
 yy219:
         YYSKIP ();
-        status = action_line526(i, keys, input, token, &cursor, 0);
+        status = check_key_count_line526(keys_count, i, 3)
+             || action_line526(&i, keys, input, token, &cursor, 0);
         continue;
 
     }
@@ -6001,7 +6298,7 @@ yy219:
         }
         if (i != keys_count) {
             status = 1;
-            fprintf(stderr, "error: lex_line526: unused keys left after %u iterations\n", i);
+            fprintf(stderr, "error: lex_line526: unused keys left after %u keys\n", i);
         }
     }
 
@@ -6031,7 +6328,7 @@ end:
 #define YYFILL(n) { break; }
 
 static int action_line533
-    ( unsigned int i
+    ( unsigned *pkix
     , const YYKEYTYPE *keys
     , const YYCTYPE *start
     , const YYCTYPE *token
@@ -6039,10 +6336,12 @@ static int action_line533
     , YYKEYTYPE rule_act
     )
 {
+    const unsigned kix = *pkix;
     const long pos = token - start;
     const long len_act = *cursor - token;
-    const long len_exp = (long) keys [3 * i + 1];
-    const YYKEYTYPE rule_exp = keys [3 * i + 2];
+    const long len_exp = (long) keys[kix + 1];
+    const YYKEYTYPE rule_exp = keys[kix + 2];
+    *pkix = kix + 3;
     if (rule_exp == 255) {
         fprintf
             ( stderr
@@ -6052,17 +6351,17 @@ static int action_line533
             );
     }
     if (len_act == len_exp && rule_act == rule_exp) {
-        const YYKEYTYPE offset = keys[3 * i];
+        const YYKEYTYPE offset = keys[kix];
         *cursor = token + offset;
         return 0;
     } else {
         fprintf
             ( stderr
-            , "error: lex_line533: at position %ld (iteration %u):\n"
+            , "error: lex_line533: at position %ld (key %u):\n"
                 "\texpected: match length %ld, rule %u\n"
                 "\tactual:   match length %ld, rule %u\n"
             , pos
-            , i
+            , kix
             , len_exp
             , rule_exp
             , len_act
@@ -6070,6 +6369,13 @@ static int action_line533
             );
         return 1;
     }
+}
+
+static int check_key_count_line533(unsigned have, unsigned used, unsigned need)
+{
+    if (used + need <= have) return 0;
+    fprintf(stderr, "error: lex_line533: not enough keys\n");
+    return 1;
 }
 
 int lex_line533()
@@ -6099,7 +6405,7 @@ int lex_line533()
 
     keys = (YYKEYTYPE *) read_file
         ("unicode_blocks.8--skeleton--encoding-policy(ignore).c.line533.keys"
-        , 3 * sizeof (YYKEYTYPE)
+        , sizeof (YYKEYTYPE)
         , 0
         , &keys_count
         );
@@ -6112,7 +6418,7 @@ int lex_line533()
     limit = input + input_len + padding;
     eof = input + input_len;
 
-    for (i = 0; status == 0 && i < keys_count; ++i) {
+    for (i = 0; status == 0 && cursor < eof && i < keys_count;) {
         token = cursor;
         const YYCTYPE *marker = NULL;
         YYCTYPE yych;
@@ -6126,7 +6432,8 @@ int lex_line533()
 yy223:
         YYSKIP ();
 yy224:
-        status = action_line533(i, keys, input, token, &cursor, 254);
+        status = check_key_count_line533(keys_count, i, 3)
+             || action_line533(&i, keys, input, token, &cursor, 254);
         continue;
 yy225:
         YYSKIP ();
@@ -6214,7 +6521,8 @@ yy227:
         goto yy224;
 yy228:
         YYSKIP ();
-        status = action_line533(i, keys, input, token, &cursor, 0);
+        status = check_key_count_line533(keys_count, i, 3)
+             || action_line533(&i, keys, input, token, &cursor, 0);
         continue;
 
     }
@@ -6226,7 +6534,7 @@ yy228:
         }
         if (i != keys_count) {
             status = 1;
-            fprintf(stderr, "error: lex_line533: unused keys left after %u iterations\n", i);
+            fprintf(stderr, "error: lex_line533: unused keys left after %u keys\n", i);
         }
     }
 
@@ -6256,7 +6564,7 @@ end:
 #define YYFILL(n) { break; }
 
 static int action_line540
-    ( unsigned int i
+    ( unsigned *pkix
     , const YYKEYTYPE *keys
     , const YYCTYPE *start
     , const YYCTYPE *token
@@ -6264,10 +6572,12 @@ static int action_line540
     , YYKEYTYPE rule_act
     )
 {
+    const unsigned kix = *pkix;
     const long pos = token - start;
     const long len_act = *cursor - token;
-    const long len_exp = (long) keys [3 * i + 1];
-    const YYKEYTYPE rule_exp = keys [3 * i + 2];
+    const long len_exp = (long) keys[kix + 1];
+    const YYKEYTYPE rule_exp = keys[kix + 2];
+    *pkix = kix + 3;
     if (rule_exp == 255) {
         fprintf
             ( stderr
@@ -6277,17 +6587,17 @@ static int action_line540
             );
     }
     if (len_act == len_exp && rule_act == rule_exp) {
-        const YYKEYTYPE offset = keys[3 * i];
+        const YYKEYTYPE offset = keys[kix];
         *cursor = token + offset;
         return 0;
     } else {
         fprintf
             ( stderr
-            , "error: lex_line540: at position %ld (iteration %u):\n"
+            , "error: lex_line540: at position %ld (key %u):\n"
                 "\texpected: match length %ld, rule %u\n"
                 "\tactual:   match length %ld, rule %u\n"
             , pos
-            , i
+            , kix
             , len_exp
             , rule_exp
             , len_act
@@ -6295,6 +6605,13 @@ static int action_line540
             );
         return 1;
     }
+}
+
+static int check_key_count_line540(unsigned have, unsigned used, unsigned need)
+{
+    if (used + need <= have) return 0;
+    fprintf(stderr, "error: lex_line540: not enough keys\n");
+    return 1;
 }
 
 int lex_line540()
@@ -6324,7 +6641,7 @@ int lex_line540()
 
     keys = (YYKEYTYPE *) read_file
         ("unicode_blocks.8--skeleton--encoding-policy(ignore).c.line540.keys"
-        , 3 * sizeof (YYKEYTYPE)
+        , sizeof (YYKEYTYPE)
         , 0
         , &keys_count
         );
@@ -6337,7 +6654,7 @@ int lex_line540()
     limit = input + input_len + padding;
     eof = input + input_len;
 
-    for (i = 0; status == 0 && i < keys_count; ++i) {
+    for (i = 0; status == 0 && cursor < eof && i < keys_count;) {
         token = cursor;
         const YYCTYPE *marker = NULL;
         YYCTYPE yych;
@@ -6351,7 +6668,8 @@ int lex_line540()
 yy232:
         YYSKIP ();
 yy233:
-        status = action_line540(i, keys, input, token, &cursor, 254);
+        status = check_key_count_line540(keys_count, i, 3)
+             || action_line540(&i, keys, input, token, &cursor, 254);
         continue;
 yy234:
         YYSKIP ();
@@ -6476,7 +6794,8 @@ yy237:
         }
 yy238:
         YYSKIP ();
-        status = action_line540(i, keys, input, token, &cursor, 0);
+        status = check_key_count_line540(keys_count, i, 3)
+             || action_line540(&i, keys, input, token, &cursor, 0);
         continue;
 
     }
@@ -6488,7 +6807,7 @@ yy238:
         }
         if (i != keys_count) {
             status = 1;
-            fprintf(stderr, "error: lex_line540: unused keys left after %u iterations\n", i);
+            fprintf(stderr, "error: lex_line540: unused keys left after %u keys\n", i);
         }
     }
 
@@ -6518,7 +6837,7 @@ end:
 #define YYFILL(n) { break; }
 
 static int action_line547
-    ( unsigned int i
+    ( unsigned *pkix
     , const YYKEYTYPE *keys
     , const YYCTYPE *start
     , const YYCTYPE *token
@@ -6526,10 +6845,12 @@ static int action_line547
     , YYKEYTYPE rule_act
     )
 {
+    const unsigned kix = *pkix;
     const long pos = token - start;
     const long len_act = *cursor - token;
-    const long len_exp = (long) keys [3 * i + 1];
-    const YYKEYTYPE rule_exp = keys [3 * i + 2];
+    const long len_exp = (long) keys[kix + 1];
+    const YYKEYTYPE rule_exp = keys[kix + 2];
+    *pkix = kix + 3;
     if (rule_exp == 255) {
         fprintf
             ( stderr
@@ -6539,17 +6860,17 @@ static int action_line547
             );
     }
     if (len_act == len_exp && rule_act == rule_exp) {
-        const YYKEYTYPE offset = keys[3 * i];
+        const YYKEYTYPE offset = keys[kix];
         *cursor = token + offset;
         return 0;
     } else {
         fprintf
             ( stderr
-            , "error: lex_line547: at position %ld (iteration %u):\n"
+            , "error: lex_line547: at position %ld (key %u):\n"
                 "\texpected: match length %ld, rule %u\n"
                 "\tactual:   match length %ld, rule %u\n"
             , pos
-            , i
+            , kix
             , len_exp
             , rule_exp
             , len_act
@@ -6557,6 +6878,13 @@ static int action_line547
             );
         return 1;
     }
+}
+
+static int check_key_count_line547(unsigned have, unsigned used, unsigned need)
+{
+    if (used + need <= have) return 0;
+    fprintf(stderr, "error: lex_line547: not enough keys\n");
+    return 1;
 }
 
 int lex_line547()
@@ -6586,7 +6914,7 @@ int lex_line547()
 
     keys = (YYKEYTYPE *) read_file
         ("unicode_blocks.8--skeleton--encoding-policy(ignore).c.line547.keys"
-        , 3 * sizeof (YYKEYTYPE)
+        , sizeof (YYKEYTYPE)
         , 0
         , &keys_count
         );
@@ -6599,7 +6927,7 @@ int lex_line547()
     limit = input + input_len + padding;
     eof = input + input_len;
 
-    for (i = 0; status == 0 && i < keys_count; ++i) {
+    for (i = 0; status == 0 && cursor < eof && i < keys_count;) {
         token = cursor;
         const YYCTYPE *marker = NULL;
         YYCTYPE yych;
@@ -6613,7 +6941,8 @@ int lex_line547()
 yy242:
         YYSKIP ();
 yy243:
-        status = action_line547(i, keys, input, token, &cursor, 254);
+        status = check_key_count_line547(keys_count, i, 3)
+             || action_line547(&i, keys, input, token, &cursor, 254);
         continue;
 yy244:
         YYSKIP ();
@@ -6737,7 +7066,8 @@ yy247:
         }
 yy248:
         YYSKIP ();
-        status = action_line547(i, keys, input, token, &cursor, 0);
+        status = check_key_count_line547(keys_count, i, 3)
+             || action_line547(&i, keys, input, token, &cursor, 0);
         continue;
 
     }
@@ -6749,7 +7079,7 @@ yy248:
         }
         if (i != keys_count) {
             status = 1;
-            fprintf(stderr, "error: lex_line547: unused keys left after %u iterations\n", i);
+            fprintf(stderr, "error: lex_line547: unused keys left after %u keys\n", i);
         }
     }
 
@@ -6779,7 +7109,7 @@ end:
 #define YYFILL(n) { break; }
 
 static int action_line554
-    ( unsigned int i
+    ( unsigned *pkix
     , const YYKEYTYPE *keys
     , const YYCTYPE *start
     , const YYCTYPE *token
@@ -6787,10 +7117,12 @@ static int action_line554
     , YYKEYTYPE rule_act
     )
 {
+    const unsigned kix = *pkix;
     const long pos = token - start;
     const long len_act = *cursor - token;
-    const long len_exp = (long) keys [3 * i + 1];
-    const YYKEYTYPE rule_exp = keys [3 * i + 2];
+    const long len_exp = (long) keys[kix + 1];
+    const YYKEYTYPE rule_exp = keys[kix + 2];
+    *pkix = kix + 3;
     if (rule_exp == 255) {
         fprintf
             ( stderr
@@ -6800,17 +7132,17 @@ static int action_line554
             );
     }
     if (len_act == len_exp && rule_act == rule_exp) {
-        const YYKEYTYPE offset = keys[3 * i];
+        const YYKEYTYPE offset = keys[kix];
         *cursor = token + offset;
         return 0;
     } else {
         fprintf
             ( stderr
-            , "error: lex_line554: at position %ld (iteration %u):\n"
+            , "error: lex_line554: at position %ld (key %u):\n"
                 "\texpected: match length %ld, rule %u\n"
                 "\tactual:   match length %ld, rule %u\n"
             , pos
-            , i
+            , kix
             , len_exp
             , rule_exp
             , len_act
@@ -6818,6 +7150,13 @@ static int action_line554
             );
         return 1;
     }
+}
+
+static int check_key_count_line554(unsigned have, unsigned used, unsigned need)
+{
+    if (used + need <= have) return 0;
+    fprintf(stderr, "error: lex_line554: not enough keys\n");
+    return 1;
 }
 
 int lex_line554()
@@ -6847,7 +7186,7 @@ int lex_line554()
 
     keys = (YYKEYTYPE *) read_file
         ("unicode_blocks.8--skeleton--encoding-policy(ignore).c.line554.keys"
-        , 3 * sizeof (YYKEYTYPE)
+        , sizeof (YYKEYTYPE)
         , 0
         , &keys_count
         );
@@ -6860,7 +7199,7 @@ int lex_line554()
     limit = input + input_len + padding;
     eof = input + input_len;
 
-    for (i = 0; status == 0 && i < keys_count; ++i) {
+    for (i = 0; status == 0 && cursor < eof && i < keys_count;) {
         token = cursor;
         const YYCTYPE *marker = NULL;
         YYCTYPE yych;
@@ -6874,7 +7213,8 @@ int lex_line554()
 yy252:
         YYSKIP ();
 yy253:
-        status = action_line554(i, keys, input, token, &cursor, 254);
+        status = check_key_count_line554(keys_count, i, 3)
+             || action_line554(&i, keys, input, token, &cursor, 254);
         continue;
 yy254:
         YYSKIP ();
@@ -6962,7 +7302,8 @@ yy256:
         goto yy253;
 yy257:
         YYSKIP ();
-        status = action_line554(i, keys, input, token, &cursor, 0);
+        status = check_key_count_line554(keys_count, i, 3)
+             || action_line554(&i, keys, input, token, &cursor, 0);
         continue;
 
     }
@@ -6974,7 +7315,7 @@ yy257:
         }
         if (i != keys_count) {
             status = 1;
-            fprintf(stderr, "error: lex_line554: unused keys left after %u iterations\n", i);
+            fprintf(stderr, "error: lex_line554: unused keys left after %u keys\n", i);
         }
     }
 
@@ -7004,7 +7345,7 @@ end:
 #define YYFILL(n) { break; }
 
 static int action_line561
-    ( unsigned int i
+    ( unsigned *pkix
     , const YYKEYTYPE *keys
     , const YYCTYPE *start
     , const YYCTYPE *token
@@ -7012,10 +7353,12 @@ static int action_line561
     , YYKEYTYPE rule_act
     )
 {
+    const unsigned kix = *pkix;
     const long pos = token - start;
     const long len_act = *cursor - token;
-    const long len_exp = (long) keys [3 * i + 1];
-    const YYKEYTYPE rule_exp = keys [3 * i + 2];
+    const long len_exp = (long) keys[kix + 1];
+    const YYKEYTYPE rule_exp = keys[kix + 2];
+    *pkix = kix + 3;
     if (rule_exp == 255) {
         fprintf
             ( stderr
@@ -7025,17 +7368,17 @@ static int action_line561
             );
     }
     if (len_act == len_exp && rule_act == rule_exp) {
-        const YYKEYTYPE offset = keys[3 * i];
+        const YYKEYTYPE offset = keys[kix];
         *cursor = token + offset;
         return 0;
     } else {
         fprintf
             ( stderr
-            , "error: lex_line561: at position %ld (iteration %u):\n"
+            , "error: lex_line561: at position %ld (key %u):\n"
                 "\texpected: match length %ld, rule %u\n"
                 "\tactual:   match length %ld, rule %u\n"
             , pos
-            , i
+            , kix
             , len_exp
             , rule_exp
             , len_act
@@ -7043,6 +7386,13 @@ static int action_line561
             );
         return 1;
     }
+}
+
+static int check_key_count_line561(unsigned have, unsigned used, unsigned need)
+{
+    if (used + need <= have) return 0;
+    fprintf(stderr, "error: lex_line561: not enough keys\n");
+    return 1;
 }
 
 int lex_line561()
@@ -7072,7 +7422,7 @@ int lex_line561()
 
     keys = (YYKEYTYPE *) read_file
         ("unicode_blocks.8--skeleton--encoding-policy(ignore).c.line561.keys"
-        , 3 * sizeof (YYKEYTYPE)
+        , sizeof (YYKEYTYPE)
         , 0
         , &keys_count
         );
@@ -7085,7 +7435,7 @@ int lex_line561()
     limit = input + input_len + padding;
     eof = input + input_len;
 
-    for (i = 0; status == 0 && i < keys_count; ++i) {
+    for (i = 0; status == 0 && cursor < eof && i < keys_count;) {
         token = cursor;
         const YYCTYPE *marker = NULL;
         YYCTYPE yych;
@@ -7099,7 +7449,8 @@ int lex_line561()
 yy261:
         YYSKIP ();
 yy262:
-        status = action_line561(i, keys, input, token, &cursor, 254);
+        status = check_key_count_line561(keys_count, i, 3)
+             || action_line561(&i, keys, input, token, &cursor, 254);
         continue;
 yy263:
         YYSKIP ();
@@ -7189,7 +7540,8 @@ yy265:
         goto yy262;
 yy266:
         YYSKIP ();
-        status = action_line561(i, keys, input, token, &cursor, 0);
+        status = check_key_count_line561(keys_count, i, 3)
+             || action_line561(&i, keys, input, token, &cursor, 0);
         continue;
 
     }
@@ -7201,7 +7553,7 @@ yy266:
         }
         if (i != keys_count) {
             status = 1;
-            fprintf(stderr, "error: lex_line561: unused keys left after %u iterations\n", i);
+            fprintf(stderr, "error: lex_line561: unused keys left after %u keys\n", i);
         }
     }
 
@@ -7231,7 +7583,7 @@ end:
 #define YYFILL(n) { break; }
 
 static int action_line568
-    ( unsigned int i
+    ( unsigned *pkix
     , const YYKEYTYPE *keys
     , const YYCTYPE *start
     , const YYCTYPE *token
@@ -7239,10 +7591,12 @@ static int action_line568
     , YYKEYTYPE rule_act
     )
 {
+    const unsigned kix = *pkix;
     const long pos = token - start;
     const long len_act = *cursor - token;
-    const long len_exp = (long) keys [3 * i + 1];
-    const YYKEYTYPE rule_exp = keys [3 * i + 2];
+    const long len_exp = (long) keys[kix + 1];
+    const YYKEYTYPE rule_exp = keys[kix + 2];
+    *pkix = kix + 3;
     if (rule_exp == 255) {
         fprintf
             ( stderr
@@ -7252,17 +7606,17 @@ static int action_line568
             );
     }
     if (len_act == len_exp && rule_act == rule_exp) {
-        const YYKEYTYPE offset = keys[3 * i];
+        const YYKEYTYPE offset = keys[kix];
         *cursor = token + offset;
         return 0;
     } else {
         fprintf
             ( stderr
-            , "error: lex_line568: at position %ld (iteration %u):\n"
+            , "error: lex_line568: at position %ld (key %u):\n"
                 "\texpected: match length %ld, rule %u\n"
                 "\tactual:   match length %ld, rule %u\n"
             , pos
-            , i
+            , kix
             , len_exp
             , rule_exp
             , len_act
@@ -7270,6 +7624,13 @@ static int action_line568
             );
         return 1;
     }
+}
+
+static int check_key_count_line568(unsigned have, unsigned used, unsigned need)
+{
+    if (used + need <= have) return 0;
+    fprintf(stderr, "error: lex_line568: not enough keys\n");
+    return 1;
 }
 
 int lex_line568()
@@ -7299,7 +7660,7 @@ int lex_line568()
 
     keys = (YYKEYTYPE *) read_file
         ("unicode_blocks.8--skeleton--encoding-policy(ignore).c.line568.keys"
-        , 3 * sizeof (YYKEYTYPE)
+        , sizeof (YYKEYTYPE)
         , 0
         , &keys_count
         );
@@ -7312,7 +7673,7 @@ int lex_line568()
     limit = input + input_len + padding;
     eof = input + input_len;
 
-    for (i = 0; status == 0 && i < keys_count; ++i) {
+    for (i = 0; status == 0 && cursor < eof && i < keys_count;) {
         token = cursor;
         const YYCTYPE *marker = NULL;
         YYCTYPE yych;
@@ -7326,7 +7687,8 @@ int lex_line568()
 yy270:
         YYSKIP ();
 yy271:
-        status = action_line568(i, keys, input, token, &cursor, 254);
+        status = check_key_count_line568(keys_count, i, 3)
+             || action_line568(&i, keys, input, token, &cursor, 254);
         continue;
 yy272:
         YYSKIP ();
@@ -7450,7 +7812,8 @@ yy275:
         }
 yy276:
         YYSKIP ();
-        status = action_line568(i, keys, input, token, &cursor, 0);
+        status = check_key_count_line568(keys_count, i, 3)
+             || action_line568(&i, keys, input, token, &cursor, 0);
         continue;
 
     }
@@ -7462,7 +7825,7 @@ yy276:
         }
         if (i != keys_count) {
             status = 1;
-            fprintf(stderr, "error: lex_line568: unused keys left after %u iterations\n", i);
+            fprintf(stderr, "error: lex_line568: unused keys left after %u keys\n", i);
         }
     }
 
@@ -7492,7 +7855,7 @@ end:
 #define YYFILL(n) { break; }
 
 static int action_line575
-    ( unsigned int i
+    ( unsigned *pkix
     , const YYKEYTYPE *keys
     , const YYCTYPE *start
     , const YYCTYPE *token
@@ -7500,10 +7863,12 @@ static int action_line575
     , YYKEYTYPE rule_act
     )
 {
+    const unsigned kix = *pkix;
     const long pos = token - start;
     const long len_act = *cursor - token;
-    const long len_exp = (long) keys [3 * i + 1];
-    const YYKEYTYPE rule_exp = keys [3 * i + 2];
+    const long len_exp = (long) keys[kix + 1];
+    const YYKEYTYPE rule_exp = keys[kix + 2];
+    *pkix = kix + 3;
     if (rule_exp == 255) {
         fprintf
             ( stderr
@@ -7513,17 +7878,17 @@ static int action_line575
             );
     }
     if (len_act == len_exp && rule_act == rule_exp) {
-        const YYKEYTYPE offset = keys[3 * i];
+        const YYKEYTYPE offset = keys[kix];
         *cursor = token + offset;
         return 0;
     } else {
         fprintf
             ( stderr
-            , "error: lex_line575: at position %ld (iteration %u):\n"
+            , "error: lex_line575: at position %ld (key %u):\n"
                 "\texpected: match length %ld, rule %u\n"
                 "\tactual:   match length %ld, rule %u\n"
             , pos
-            , i
+            , kix
             , len_exp
             , rule_exp
             , len_act
@@ -7531,6 +7896,13 @@ static int action_line575
             );
         return 1;
     }
+}
+
+static int check_key_count_line575(unsigned have, unsigned used, unsigned need)
+{
+    if (used + need <= have) return 0;
+    fprintf(stderr, "error: lex_line575: not enough keys\n");
+    return 1;
 }
 
 int lex_line575()
@@ -7560,7 +7932,7 @@ int lex_line575()
 
     keys = (YYKEYTYPE *) read_file
         ("unicode_blocks.8--skeleton--encoding-policy(ignore).c.line575.keys"
-        , 3 * sizeof (YYKEYTYPE)
+        , sizeof (YYKEYTYPE)
         , 0
         , &keys_count
         );
@@ -7573,7 +7945,7 @@ int lex_line575()
     limit = input + input_len + padding;
     eof = input + input_len;
 
-    for (i = 0; status == 0 && i < keys_count; ++i) {
+    for (i = 0; status == 0 && cursor < eof && i < keys_count;) {
         token = cursor;
         const YYCTYPE *marker = NULL;
         YYCTYPE yych;
@@ -7587,7 +7959,8 @@ int lex_line575()
 yy280:
         YYSKIP ();
 yy281:
-        status = action_line575(i, keys, input, token, &cursor, 254);
+        status = check_key_count_line575(keys_count, i, 3)
+             || action_line575(&i, keys, input, token, &cursor, 254);
         continue;
 yy282:
         YYSKIP ();
@@ -7681,7 +8054,8 @@ yy284:
         goto yy281;
 yy285:
         YYSKIP ();
-        status = action_line575(i, keys, input, token, &cursor, 0);
+        status = check_key_count_line575(keys_count, i, 3)
+             || action_line575(&i, keys, input, token, &cursor, 0);
         continue;
 
     }
@@ -7693,7 +8067,7 @@ yy285:
         }
         if (i != keys_count) {
             status = 1;
-            fprintf(stderr, "error: lex_line575: unused keys left after %u iterations\n", i);
+            fprintf(stderr, "error: lex_line575: unused keys left after %u keys\n", i);
         }
     }
 
@@ -7723,7 +8097,7 @@ end:
 #define YYFILL(n) { break; }
 
 static int action_line582
-    ( unsigned int i
+    ( unsigned *pkix
     , const YYKEYTYPE *keys
     , const YYCTYPE *start
     , const YYCTYPE *token
@@ -7731,10 +8105,12 @@ static int action_line582
     , YYKEYTYPE rule_act
     )
 {
+    const unsigned kix = *pkix;
     const long pos = token - start;
     const long len_act = *cursor - token;
-    const long len_exp = (long) keys [3 * i + 1];
-    const YYKEYTYPE rule_exp = keys [3 * i + 2];
+    const long len_exp = (long) keys[kix + 1];
+    const YYKEYTYPE rule_exp = keys[kix + 2];
+    *pkix = kix + 3;
     if (rule_exp == 255) {
         fprintf
             ( stderr
@@ -7744,17 +8120,17 @@ static int action_line582
             );
     }
     if (len_act == len_exp && rule_act == rule_exp) {
-        const YYKEYTYPE offset = keys[3 * i];
+        const YYKEYTYPE offset = keys[kix];
         *cursor = token + offset;
         return 0;
     } else {
         fprintf
             ( stderr
-            , "error: lex_line582: at position %ld (iteration %u):\n"
+            , "error: lex_line582: at position %ld (key %u):\n"
                 "\texpected: match length %ld, rule %u\n"
                 "\tactual:   match length %ld, rule %u\n"
             , pos
-            , i
+            , kix
             , len_exp
             , rule_exp
             , len_act
@@ -7762,6 +8138,13 @@ static int action_line582
             );
         return 1;
     }
+}
+
+static int check_key_count_line582(unsigned have, unsigned used, unsigned need)
+{
+    if (used + need <= have) return 0;
+    fprintf(stderr, "error: lex_line582: not enough keys\n");
+    return 1;
 }
 
 int lex_line582()
@@ -7791,7 +8174,7 @@ int lex_line582()
 
     keys = (YYKEYTYPE *) read_file
         ("unicode_blocks.8--skeleton--encoding-policy(ignore).c.line582.keys"
-        , 3 * sizeof (YYKEYTYPE)
+        , sizeof (YYKEYTYPE)
         , 0
         , &keys_count
         );
@@ -7804,7 +8187,7 @@ int lex_line582()
     limit = input + input_len + padding;
     eof = input + input_len;
 
-    for (i = 0; status == 0 && i < keys_count; ++i) {
+    for (i = 0; status == 0 && cursor < eof && i < keys_count;) {
         token = cursor;
         const YYCTYPE *marker = NULL;
         YYCTYPE yych;
@@ -7818,7 +8201,8 @@ int lex_line582()
 yy289:
         YYSKIP ();
 yy290:
-        status = action_line582(i, keys, input, token, &cursor, 254);
+        status = check_key_count_line582(keys_count, i, 3)
+             || action_line582(&i, keys, input, token, &cursor, 254);
         continue;
 yy291:
         YYSKIP ();
@@ -7871,7 +8255,8 @@ yy293:
         goto yy290;
 yy294:
         YYSKIP ();
-        status = action_line582(i, keys, input, token, &cursor, 0);
+        status = check_key_count_line582(keys_count, i, 3)
+             || action_line582(&i, keys, input, token, &cursor, 0);
         continue;
 
     }
@@ -7883,7 +8268,7 @@ yy294:
         }
         if (i != keys_count) {
             status = 1;
-            fprintf(stderr, "error: lex_line582: unused keys left after %u iterations\n", i);
+            fprintf(stderr, "error: lex_line582: unused keys left after %u keys\n", i);
         }
     }
 
@@ -7913,7 +8298,7 @@ end:
 #define YYFILL(n) { break; }
 
 static int action_line589
-    ( unsigned int i
+    ( unsigned *pkix
     , const YYKEYTYPE *keys
     , const YYCTYPE *start
     , const YYCTYPE *token
@@ -7921,10 +8306,12 @@ static int action_line589
     , YYKEYTYPE rule_act
     )
 {
+    const unsigned kix = *pkix;
     const long pos = token - start;
     const long len_act = *cursor - token;
-    const long len_exp = (long) keys [3 * i + 1];
-    const YYKEYTYPE rule_exp = keys [3 * i + 2];
+    const long len_exp = (long) keys[kix + 1];
+    const YYKEYTYPE rule_exp = keys[kix + 2];
+    *pkix = kix + 3;
     if (rule_exp == 255) {
         fprintf
             ( stderr
@@ -7934,17 +8321,17 @@ static int action_line589
             );
     }
     if (len_act == len_exp && rule_act == rule_exp) {
-        const YYKEYTYPE offset = keys[3 * i];
+        const YYKEYTYPE offset = keys[kix];
         *cursor = token + offset;
         return 0;
     } else {
         fprintf
             ( stderr
-            , "error: lex_line589: at position %ld (iteration %u):\n"
+            , "error: lex_line589: at position %ld (key %u):\n"
                 "\texpected: match length %ld, rule %u\n"
                 "\tactual:   match length %ld, rule %u\n"
             , pos
-            , i
+            , kix
             , len_exp
             , rule_exp
             , len_act
@@ -7952,6 +8339,13 @@ static int action_line589
             );
         return 1;
     }
+}
+
+static int check_key_count_line589(unsigned have, unsigned used, unsigned need)
+{
+    if (used + need <= have) return 0;
+    fprintf(stderr, "error: lex_line589: not enough keys\n");
+    return 1;
 }
 
 int lex_line589()
@@ -7981,7 +8375,7 @@ int lex_line589()
 
     keys = (YYKEYTYPE *) read_file
         ("unicode_blocks.8--skeleton--encoding-policy(ignore).c.line589.keys"
-        , 3 * sizeof (YYKEYTYPE)
+        , sizeof (YYKEYTYPE)
         , 0
         , &keys_count
         );
@@ -7994,7 +8388,7 @@ int lex_line589()
     limit = input + input_len + padding;
     eof = input + input_len;
 
-    for (i = 0; status == 0 && i < keys_count; ++i) {
+    for (i = 0; status == 0 && cursor < eof && i < keys_count;) {
         token = cursor;
         const YYCTYPE *marker = NULL;
         YYCTYPE yych;
@@ -8008,7 +8402,8 @@ int lex_line589()
 yy298:
         YYSKIP ();
 yy299:
-        status = action_line589(i, keys, input, token, &cursor, 254);
+        status = check_key_count_line589(keys_count, i, 3)
+             || action_line589(&i, keys, input, token, &cursor, 254);
         continue;
 yy300:
         YYSKIP ();
@@ -8132,7 +8527,8 @@ yy303:
         }
 yy304:
         YYSKIP ();
-        status = action_line589(i, keys, input, token, &cursor, 0);
+        status = check_key_count_line589(keys_count, i, 3)
+             || action_line589(&i, keys, input, token, &cursor, 0);
         continue;
 
     }
@@ -8144,7 +8540,7 @@ yy304:
         }
         if (i != keys_count) {
             status = 1;
-            fprintf(stderr, "error: lex_line589: unused keys left after %u iterations\n", i);
+            fprintf(stderr, "error: lex_line589: unused keys left after %u keys\n", i);
         }
     }
 
@@ -8174,7 +8570,7 @@ end:
 #define YYFILL(n) { break; }
 
 static int action_line596
-    ( unsigned int i
+    ( unsigned *pkix
     , const YYKEYTYPE *keys
     , const YYCTYPE *start
     , const YYCTYPE *token
@@ -8182,10 +8578,12 @@ static int action_line596
     , YYKEYTYPE rule_act
     )
 {
+    const unsigned kix = *pkix;
     const long pos = token - start;
     const long len_act = *cursor - token;
-    const long len_exp = (long) keys [3 * i + 1];
-    const YYKEYTYPE rule_exp = keys [3 * i + 2];
+    const long len_exp = (long) keys[kix + 1];
+    const YYKEYTYPE rule_exp = keys[kix + 2];
+    *pkix = kix + 3;
     if (rule_exp == 255) {
         fprintf
             ( stderr
@@ -8195,17 +8593,17 @@ static int action_line596
             );
     }
     if (len_act == len_exp && rule_act == rule_exp) {
-        const YYKEYTYPE offset = keys[3 * i];
+        const YYKEYTYPE offset = keys[kix];
         *cursor = token + offset;
         return 0;
     } else {
         fprintf
             ( stderr
-            , "error: lex_line596: at position %ld (iteration %u):\n"
+            , "error: lex_line596: at position %ld (key %u):\n"
                 "\texpected: match length %ld, rule %u\n"
                 "\tactual:   match length %ld, rule %u\n"
             , pos
-            , i
+            , kix
             , len_exp
             , rule_exp
             , len_act
@@ -8213,6 +8611,13 @@ static int action_line596
             );
         return 1;
     }
+}
+
+static int check_key_count_line596(unsigned have, unsigned used, unsigned need)
+{
+    if (used + need <= have) return 0;
+    fprintf(stderr, "error: lex_line596: not enough keys\n");
+    return 1;
 }
 
 int lex_line596()
@@ -8242,7 +8647,7 @@ int lex_line596()
 
     keys = (YYKEYTYPE *) read_file
         ("unicode_blocks.8--skeleton--encoding-policy(ignore).c.line596.keys"
-        , 3 * sizeof (YYKEYTYPE)
+        , sizeof (YYKEYTYPE)
         , 0
         , &keys_count
         );
@@ -8255,7 +8660,7 @@ int lex_line596()
     limit = input + input_len + padding;
     eof = input + input_len;
 
-    for (i = 0; status == 0 && i < keys_count; ++i) {
+    for (i = 0; status == 0 && cursor < eof && i < keys_count;) {
         token = cursor;
         const YYCTYPE *marker = NULL;
         YYCTYPE yych;
@@ -8269,7 +8674,8 @@ int lex_line596()
 yy308:
         YYSKIP ();
 yy309:
-        status = action_line596(i, keys, input, token, &cursor, 254);
+        status = check_key_count_line596(keys_count, i, 3)
+             || action_line596(&i, keys, input, token, &cursor, 254);
         continue;
 yy310:
         YYSKIP ();
@@ -8322,7 +8728,8 @@ yy312:
         goto yy309;
 yy313:
         YYSKIP ();
-        status = action_line596(i, keys, input, token, &cursor, 0);
+        status = check_key_count_line596(keys_count, i, 3)
+             || action_line596(&i, keys, input, token, &cursor, 0);
         continue;
 
     }
@@ -8334,7 +8741,7 @@ yy313:
         }
         if (i != keys_count) {
             status = 1;
-            fprintf(stderr, "error: lex_line596: unused keys left after %u iterations\n", i);
+            fprintf(stderr, "error: lex_line596: unused keys left after %u keys\n", i);
         }
     }
 
@@ -8364,7 +8771,7 @@ end:
 #define YYFILL(n) { break; }
 
 static int action_line603
-    ( unsigned int i
+    ( unsigned *pkix
     , const YYKEYTYPE *keys
     , const YYCTYPE *start
     , const YYCTYPE *token
@@ -8372,10 +8779,12 @@ static int action_line603
     , YYKEYTYPE rule_act
     )
 {
+    const unsigned kix = *pkix;
     const long pos = token - start;
     const long len_act = *cursor - token;
-    const long len_exp = (long) keys [3 * i + 1];
-    const YYKEYTYPE rule_exp = keys [3 * i + 2];
+    const long len_exp = (long) keys[kix + 1];
+    const YYKEYTYPE rule_exp = keys[kix + 2];
+    *pkix = kix + 3;
     if (rule_exp == 255) {
         fprintf
             ( stderr
@@ -8385,17 +8794,17 @@ static int action_line603
             );
     }
     if (len_act == len_exp && rule_act == rule_exp) {
-        const YYKEYTYPE offset = keys[3 * i];
+        const YYKEYTYPE offset = keys[kix];
         *cursor = token + offset;
         return 0;
     } else {
         fprintf
             ( stderr
-            , "error: lex_line603: at position %ld (iteration %u):\n"
+            , "error: lex_line603: at position %ld (key %u):\n"
                 "\texpected: match length %ld, rule %u\n"
                 "\tactual:   match length %ld, rule %u\n"
             , pos
-            , i
+            , kix
             , len_exp
             , rule_exp
             , len_act
@@ -8403,6 +8812,13 @@ static int action_line603
             );
         return 1;
     }
+}
+
+static int check_key_count_line603(unsigned have, unsigned used, unsigned need)
+{
+    if (used + need <= have) return 0;
+    fprintf(stderr, "error: lex_line603: not enough keys\n");
+    return 1;
 }
 
 int lex_line603()
@@ -8432,7 +8848,7 @@ int lex_line603()
 
     keys = (YYKEYTYPE *) read_file
         ("unicode_blocks.8--skeleton--encoding-policy(ignore).c.line603.keys"
-        , 3 * sizeof (YYKEYTYPE)
+        , sizeof (YYKEYTYPE)
         , 0
         , &keys_count
         );
@@ -8445,7 +8861,7 @@ int lex_line603()
     limit = input + input_len + padding;
     eof = input + input_len;
 
-    for (i = 0; status == 0 && i < keys_count; ++i) {
+    for (i = 0; status == 0 && cursor < eof && i < keys_count;) {
         token = cursor;
         const YYCTYPE *marker = NULL;
         YYCTYPE yych;
@@ -8459,7 +8875,8 @@ int lex_line603()
 yy317:
         YYSKIP ();
 yy318:
-        status = action_line603(i, keys, input, token, &cursor, 254);
+        status = check_key_count_line603(keys_count, i, 3)
+             || action_line603(&i, keys, input, token, &cursor, 254);
         continue;
 yy319:
         YYSKIP ();
@@ -8512,7 +8929,8 @@ yy321:
         goto yy318;
 yy322:
         YYSKIP ();
-        status = action_line603(i, keys, input, token, &cursor, 0);
+        status = check_key_count_line603(keys_count, i, 3)
+             || action_line603(&i, keys, input, token, &cursor, 0);
         continue;
 
     }
@@ -8524,7 +8942,7 @@ yy322:
         }
         if (i != keys_count) {
             status = 1;
-            fprintf(stderr, "error: lex_line603: unused keys left after %u iterations\n", i);
+            fprintf(stderr, "error: lex_line603: unused keys left after %u keys\n", i);
         }
     }
 
@@ -8554,7 +8972,7 @@ end:
 #define YYFILL(n) { break; }
 
 static int action_line610
-    ( unsigned int i
+    ( unsigned *pkix
     , const YYKEYTYPE *keys
     , const YYCTYPE *start
     , const YYCTYPE *token
@@ -8562,10 +8980,12 @@ static int action_line610
     , YYKEYTYPE rule_act
     )
 {
+    const unsigned kix = *pkix;
     const long pos = token - start;
     const long len_act = *cursor - token;
-    const long len_exp = (long) keys [3 * i + 1];
-    const YYKEYTYPE rule_exp = keys [3 * i + 2];
+    const long len_exp = (long) keys[kix + 1];
+    const YYKEYTYPE rule_exp = keys[kix + 2];
+    *pkix = kix + 3;
     if (rule_exp == 255) {
         fprintf
             ( stderr
@@ -8575,17 +8995,17 @@ static int action_line610
             );
     }
     if (len_act == len_exp && rule_act == rule_exp) {
-        const YYKEYTYPE offset = keys[3 * i];
+        const YYKEYTYPE offset = keys[kix];
         *cursor = token + offset;
         return 0;
     } else {
         fprintf
             ( stderr
-            , "error: lex_line610: at position %ld (iteration %u):\n"
+            , "error: lex_line610: at position %ld (key %u):\n"
                 "\texpected: match length %ld, rule %u\n"
                 "\tactual:   match length %ld, rule %u\n"
             , pos
-            , i
+            , kix
             , len_exp
             , rule_exp
             , len_act
@@ -8593,6 +9013,13 @@ static int action_line610
             );
         return 1;
     }
+}
+
+static int check_key_count_line610(unsigned have, unsigned used, unsigned need)
+{
+    if (used + need <= have) return 0;
+    fprintf(stderr, "error: lex_line610: not enough keys\n");
+    return 1;
 }
 
 int lex_line610()
@@ -8622,7 +9049,7 @@ int lex_line610()
 
     keys = (YYKEYTYPE *) read_file
         ("unicode_blocks.8--skeleton--encoding-policy(ignore).c.line610.keys"
-        , 3 * sizeof (YYKEYTYPE)
+        , sizeof (YYKEYTYPE)
         , 0
         , &keys_count
         );
@@ -8635,7 +9062,7 @@ int lex_line610()
     limit = input + input_len + padding;
     eof = input + input_len;
 
-    for (i = 0; status == 0 && i < keys_count; ++i) {
+    for (i = 0; status == 0 && cursor < eof && i < keys_count;) {
         token = cursor;
         const YYCTYPE *marker = NULL;
         YYCTYPE yych;
@@ -8649,7 +9076,8 @@ int lex_line610()
 yy326:
         YYSKIP ();
 yy327:
-        status = action_line610(i, keys, input, token, &cursor, 254);
+        status = check_key_count_line610(keys_count, i, 3)
+             || action_line610(&i, keys, input, token, &cursor, 254);
         continue;
 yy328:
         YYSKIP ();
@@ -8702,7 +9130,8 @@ yy330:
         goto yy327;
 yy331:
         YYSKIP ();
-        status = action_line610(i, keys, input, token, &cursor, 0);
+        status = check_key_count_line610(keys_count, i, 3)
+             || action_line610(&i, keys, input, token, &cursor, 0);
         continue;
 
     }
@@ -8714,7 +9143,7 @@ yy331:
         }
         if (i != keys_count) {
             status = 1;
-            fprintf(stderr, "error: lex_line610: unused keys left after %u iterations\n", i);
+            fprintf(stderr, "error: lex_line610: unused keys left after %u keys\n", i);
         }
     }
 
@@ -8744,7 +9173,7 @@ end:
 #define YYFILL(n) { break; }
 
 static int action_line617
-    ( unsigned int i
+    ( unsigned *pkix
     , const YYKEYTYPE *keys
     , const YYCTYPE *start
     , const YYCTYPE *token
@@ -8752,10 +9181,12 @@ static int action_line617
     , YYKEYTYPE rule_act
     )
 {
+    const unsigned kix = *pkix;
     const long pos = token - start;
     const long len_act = *cursor - token;
-    const long len_exp = (long) keys [3 * i + 1];
-    const YYKEYTYPE rule_exp = keys [3 * i + 2];
+    const long len_exp = (long) keys[kix + 1];
+    const YYKEYTYPE rule_exp = keys[kix + 2];
+    *pkix = kix + 3;
     if (rule_exp == 255) {
         fprintf
             ( stderr
@@ -8765,17 +9196,17 @@ static int action_line617
             );
     }
     if (len_act == len_exp && rule_act == rule_exp) {
-        const YYKEYTYPE offset = keys[3 * i];
+        const YYKEYTYPE offset = keys[kix];
         *cursor = token + offset;
         return 0;
     } else {
         fprintf
             ( stderr
-            , "error: lex_line617: at position %ld (iteration %u):\n"
+            , "error: lex_line617: at position %ld (key %u):\n"
                 "\texpected: match length %ld, rule %u\n"
                 "\tactual:   match length %ld, rule %u\n"
             , pos
-            , i
+            , kix
             , len_exp
             , rule_exp
             , len_act
@@ -8783,6 +9214,13 @@ static int action_line617
             );
         return 1;
     }
+}
+
+static int check_key_count_line617(unsigned have, unsigned used, unsigned need)
+{
+    if (used + need <= have) return 0;
+    fprintf(stderr, "error: lex_line617: not enough keys\n");
+    return 1;
 }
 
 int lex_line617()
@@ -8812,7 +9250,7 @@ int lex_line617()
 
     keys = (YYKEYTYPE *) read_file
         ("unicode_blocks.8--skeleton--encoding-policy(ignore).c.line617.keys"
-        , 3 * sizeof (YYKEYTYPE)
+        , sizeof (YYKEYTYPE)
         , 0
         , &keys_count
         );
@@ -8825,7 +9263,7 @@ int lex_line617()
     limit = input + input_len + padding;
     eof = input + input_len;
 
-    for (i = 0; status == 0 && i < keys_count; ++i) {
+    for (i = 0; status == 0 && cursor < eof && i < keys_count;) {
         token = cursor;
         const YYCTYPE *marker = NULL;
         YYCTYPE yych;
@@ -8839,7 +9277,8 @@ int lex_line617()
 yy335:
         YYSKIP ();
 yy336:
-        status = action_line617(i, keys, input, token, &cursor, 254);
+        status = check_key_count_line617(keys_count, i, 3)
+             || action_line617(&i, keys, input, token, &cursor, 254);
         continue;
 yy337:
         YYSKIP ();
@@ -8892,7 +9331,8 @@ yy339:
         goto yy336;
 yy340:
         YYSKIP ();
-        status = action_line617(i, keys, input, token, &cursor, 0);
+        status = check_key_count_line617(keys_count, i, 3)
+             || action_line617(&i, keys, input, token, &cursor, 0);
         continue;
 
     }
@@ -8904,7 +9344,7 @@ yy340:
         }
         if (i != keys_count) {
             status = 1;
-            fprintf(stderr, "error: lex_line617: unused keys left after %u iterations\n", i);
+            fprintf(stderr, "error: lex_line617: unused keys left after %u keys\n", i);
         }
     }
 
@@ -8934,7 +9374,7 @@ end:
 #define YYFILL(n) { break; }
 
 static int action_line624
-    ( unsigned int i
+    ( unsigned *pkix
     , const YYKEYTYPE *keys
     , const YYCTYPE *start
     , const YYCTYPE *token
@@ -8942,10 +9382,12 @@ static int action_line624
     , YYKEYTYPE rule_act
     )
 {
+    const unsigned kix = *pkix;
     const long pos = token - start;
     const long len_act = *cursor - token;
-    const long len_exp = (long) keys [3 * i + 1];
-    const YYKEYTYPE rule_exp = keys [3 * i + 2];
+    const long len_exp = (long) keys[kix + 1];
+    const YYKEYTYPE rule_exp = keys[kix + 2];
+    *pkix = kix + 3;
     if (rule_exp == 255) {
         fprintf
             ( stderr
@@ -8955,17 +9397,17 @@ static int action_line624
             );
     }
     if (len_act == len_exp && rule_act == rule_exp) {
-        const YYKEYTYPE offset = keys[3 * i];
+        const YYKEYTYPE offset = keys[kix];
         *cursor = token + offset;
         return 0;
     } else {
         fprintf
             ( stderr
-            , "error: lex_line624: at position %ld (iteration %u):\n"
+            , "error: lex_line624: at position %ld (key %u):\n"
                 "\texpected: match length %ld, rule %u\n"
                 "\tactual:   match length %ld, rule %u\n"
             , pos
-            , i
+            , kix
             , len_exp
             , rule_exp
             , len_act
@@ -8973,6 +9415,13 @@ static int action_line624
             );
         return 1;
     }
+}
+
+static int check_key_count_line624(unsigned have, unsigned used, unsigned need)
+{
+    if (used + need <= have) return 0;
+    fprintf(stderr, "error: lex_line624: not enough keys\n");
+    return 1;
 }
 
 int lex_line624()
@@ -9002,7 +9451,7 @@ int lex_line624()
 
     keys = (YYKEYTYPE *) read_file
         ("unicode_blocks.8--skeleton--encoding-policy(ignore).c.line624.keys"
-        , 3 * sizeof (YYKEYTYPE)
+        , sizeof (YYKEYTYPE)
         , 0
         , &keys_count
         );
@@ -9015,7 +9464,7 @@ int lex_line624()
     limit = input + input_len + padding;
     eof = input + input_len;
 
-    for (i = 0; status == 0 && i < keys_count; ++i) {
+    for (i = 0; status == 0 && cursor < eof && i < keys_count;) {
         token = cursor;
         const YYCTYPE *marker = NULL;
         YYCTYPE yych;
@@ -9029,7 +9478,8 @@ int lex_line624()
 yy344:
         YYSKIP ();
 yy345:
-        status = action_line624(i, keys, input, token, &cursor, 254);
+        status = check_key_count_line624(keys_count, i, 3)
+             || action_line624(&i, keys, input, token, &cursor, 254);
         continue;
 yy346:
         YYSKIP ();
@@ -9115,7 +9565,8 @@ yy348:
         goto yy345;
 yy349:
         YYSKIP ();
-        status = action_line624(i, keys, input, token, &cursor, 0);
+        status = check_key_count_line624(keys_count, i, 3)
+             || action_line624(&i, keys, input, token, &cursor, 0);
         continue;
 
     }
@@ -9127,7 +9578,7 @@ yy349:
         }
         if (i != keys_count) {
             status = 1;
-            fprintf(stderr, "error: lex_line624: unused keys left after %u iterations\n", i);
+            fprintf(stderr, "error: lex_line624: unused keys left after %u keys\n", i);
         }
     }
 
@@ -9157,7 +9608,7 @@ end:
 #define YYFILL(n) { break; }
 
 static int action_line631
-    ( unsigned int i
+    ( unsigned *pkix
     , const YYKEYTYPE *keys
     , const YYCTYPE *start
     , const YYCTYPE *token
@@ -9165,10 +9616,12 @@ static int action_line631
     , YYKEYTYPE rule_act
     )
 {
+    const unsigned kix = *pkix;
     const long pos = token - start;
     const long len_act = *cursor - token;
-    const long len_exp = (long) keys [3 * i + 1];
-    const YYKEYTYPE rule_exp = keys [3 * i + 2];
+    const long len_exp = (long) keys[kix + 1];
+    const YYKEYTYPE rule_exp = keys[kix + 2];
+    *pkix = kix + 3;
     if (rule_exp == 255) {
         fprintf
             ( stderr
@@ -9178,17 +9631,17 @@ static int action_line631
             );
     }
     if (len_act == len_exp && rule_act == rule_exp) {
-        const YYKEYTYPE offset = keys[3 * i];
+        const YYKEYTYPE offset = keys[kix];
         *cursor = token + offset;
         return 0;
     } else {
         fprintf
             ( stderr
-            , "error: lex_line631: at position %ld (iteration %u):\n"
+            , "error: lex_line631: at position %ld (key %u):\n"
                 "\texpected: match length %ld, rule %u\n"
                 "\tactual:   match length %ld, rule %u\n"
             , pos
-            , i
+            , kix
             , len_exp
             , rule_exp
             , len_act
@@ -9196,6 +9649,13 @@ static int action_line631
             );
         return 1;
     }
+}
+
+static int check_key_count_line631(unsigned have, unsigned used, unsigned need)
+{
+    if (used + need <= have) return 0;
+    fprintf(stderr, "error: lex_line631: not enough keys\n");
+    return 1;
 }
 
 int lex_line631()
@@ -9225,7 +9685,7 @@ int lex_line631()
 
     keys = (YYKEYTYPE *) read_file
         ("unicode_blocks.8--skeleton--encoding-policy(ignore).c.line631.keys"
-        , 3 * sizeof (YYKEYTYPE)
+        , sizeof (YYKEYTYPE)
         , 0
         , &keys_count
         );
@@ -9238,7 +9698,7 @@ int lex_line631()
     limit = input + input_len + padding;
     eof = input + input_len;
 
-    for (i = 0; status == 0 && i < keys_count; ++i) {
+    for (i = 0; status == 0 && cursor < eof && i < keys_count;) {
         token = cursor;
         const YYCTYPE *marker = NULL;
         YYCTYPE yych;
@@ -9252,7 +9712,8 @@ int lex_line631()
 yy353:
         YYSKIP ();
 yy354:
-        status = action_line631(i, keys, input, token, &cursor, 254);
+        status = check_key_count_line631(keys_count, i, 3)
+             || action_line631(&i, keys, input, token, &cursor, 254);
         continue;
 yy355:
         YYSKIP ();
@@ -9393,7 +9854,8 @@ yy358:
         }
 yy359:
         YYSKIP ();
-        status = action_line631(i, keys, input, token, &cursor, 0);
+        status = check_key_count_line631(keys_count, i, 3)
+             || action_line631(&i, keys, input, token, &cursor, 0);
         continue;
 
     }
@@ -9405,7 +9867,7 @@ yy359:
         }
         if (i != keys_count) {
             status = 1;
-            fprintf(stderr, "error: lex_line631: unused keys left after %u iterations\n", i);
+            fprintf(stderr, "error: lex_line631: unused keys left after %u keys\n", i);
         }
     }
 
@@ -9435,7 +9897,7 @@ end:
 #define YYFILL(n) { break; }
 
 static int action_line638
-    ( unsigned int i
+    ( unsigned *pkix
     , const YYKEYTYPE *keys
     , const YYCTYPE *start
     , const YYCTYPE *token
@@ -9443,10 +9905,12 @@ static int action_line638
     , YYKEYTYPE rule_act
     )
 {
+    const unsigned kix = *pkix;
     const long pos = token - start;
     const long len_act = *cursor - token;
-    const long len_exp = (long) keys [3 * i + 1];
-    const YYKEYTYPE rule_exp = keys [3 * i + 2];
+    const long len_exp = (long) keys[kix + 1];
+    const YYKEYTYPE rule_exp = keys[kix + 2];
+    *pkix = kix + 3;
     if (rule_exp == 255) {
         fprintf
             ( stderr
@@ -9456,17 +9920,17 @@ static int action_line638
             );
     }
     if (len_act == len_exp && rule_act == rule_exp) {
-        const YYKEYTYPE offset = keys[3 * i];
+        const YYKEYTYPE offset = keys[kix];
         *cursor = token + offset;
         return 0;
     } else {
         fprintf
             ( stderr
-            , "error: lex_line638: at position %ld (iteration %u):\n"
+            , "error: lex_line638: at position %ld (key %u):\n"
                 "\texpected: match length %ld, rule %u\n"
                 "\tactual:   match length %ld, rule %u\n"
             , pos
-            , i
+            , kix
             , len_exp
             , rule_exp
             , len_act
@@ -9474,6 +9938,13 @@ static int action_line638
             );
         return 1;
     }
+}
+
+static int check_key_count_line638(unsigned have, unsigned used, unsigned need)
+{
+    if (used + need <= have) return 0;
+    fprintf(stderr, "error: lex_line638: not enough keys\n");
+    return 1;
 }
 
 int lex_line638()
@@ -9503,7 +9974,7 @@ int lex_line638()
 
     keys = (YYKEYTYPE *) read_file
         ("unicode_blocks.8--skeleton--encoding-policy(ignore).c.line638.keys"
-        , 3 * sizeof (YYKEYTYPE)
+        , sizeof (YYKEYTYPE)
         , 0
         , &keys_count
         );
@@ -9516,7 +9987,7 @@ int lex_line638()
     limit = input + input_len + padding;
     eof = input + input_len;
 
-    for (i = 0; status == 0 && i < keys_count; ++i) {
+    for (i = 0; status == 0 && cursor < eof && i < keys_count;) {
         token = cursor;
         const YYCTYPE *marker = NULL;
         YYCTYPE yych;
@@ -9530,7 +10001,8 @@ int lex_line638()
 yy363:
         YYSKIP ();
 yy364:
-        status = action_line638(i, keys, input, token, &cursor, 254);
+        status = check_key_count_line638(keys_count, i, 3)
+             || action_line638(&i, keys, input, token, &cursor, 254);
         continue;
 yy365:
         YYSKIP ();
@@ -9638,7 +10110,8 @@ yy368:
         }
 yy369:
         YYSKIP ();
-        status = action_line638(i, keys, input, token, &cursor, 0);
+        status = check_key_count_line638(keys_count, i, 3)
+             || action_line638(&i, keys, input, token, &cursor, 0);
         continue;
 
     }
@@ -9650,7 +10123,7 @@ yy369:
         }
         if (i != keys_count) {
             status = 1;
-            fprintf(stderr, "error: lex_line638: unused keys left after %u iterations\n", i);
+            fprintf(stderr, "error: lex_line638: unused keys left after %u keys\n", i);
         }
     }
 
@@ -9680,7 +10153,7 @@ end:
 #define YYFILL(n) { break; }
 
 static int action_line645
-    ( unsigned int i
+    ( unsigned *pkix
     , const YYKEYTYPE *keys
     , const YYCTYPE *start
     , const YYCTYPE *token
@@ -9688,10 +10161,12 @@ static int action_line645
     , YYKEYTYPE rule_act
     )
 {
+    const unsigned kix = *pkix;
     const long pos = token - start;
     const long len_act = *cursor - token;
-    const long len_exp = (long) keys [3 * i + 1];
-    const YYKEYTYPE rule_exp = keys [3 * i + 2];
+    const long len_exp = (long) keys[kix + 1];
+    const YYKEYTYPE rule_exp = keys[kix + 2];
+    *pkix = kix + 3;
     if (rule_exp == 255) {
         fprintf
             ( stderr
@@ -9701,17 +10176,17 @@ static int action_line645
             );
     }
     if (len_act == len_exp && rule_act == rule_exp) {
-        const YYKEYTYPE offset = keys[3 * i];
+        const YYKEYTYPE offset = keys[kix];
         *cursor = token + offset;
         return 0;
     } else {
         fprintf
             ( stderr
-            , "error: lex_line645: at position %ld (iteration %u):\n"
+            , "error: lex_line645: at position %ld (key %u):\n"
                 "\texpected: match length %ld, rule %u\n"
                 "\tactual:   match length %ld, rule %u\n"
             , pos
-            , i
+            , kix
             , len_exp
             , rule_exp
             , len_act
@@ -9719,6 +10194,13 @@ static int action_line645
             );
         return 1;
     }
+}
+
+static int check_key_count_line645(unsigned have, unsigned used, unsigned need)
+{
+    if (used + need <= have) return 0;
+    fprintf(stderr, "error: lex_line645: not enough keys\n");
+    return 1;
 }
 
 int lex_line645()
@@ -9748,7 +10230,7 @@ int lex_line645()
 
     keys = (YYKEYTYPE *) read_file
         ("unicode_blocks.8--skeleton--encoding-policy(ignore).c.line645.keys"
-        , 3 * sizeof (YYKEYTYPE)
+        , sizeof (YYKEYTYPE)
         , 0
         , &keys_count
         );
@@ -9761,7 +10243,7 @@ int lex_line645()
     limit = input + input_len + padding;
     eof = input + input_len;
 
-    for (i = 0; status == 0 && i < keys_count; ++i) {
+    for (i = 0; status == 0 && cursor < eof && i < keys_count;) {
         token = cursor;
         const YYCTYPE *marker = NULL;
         YYCTYPE yych;
@@ -9775,7 +10257,8 @@ int lex_line645()
 yy373:
         YYSKIP ();
 yy374:
-        status = action_line645(i, keys, input, token, &cursor, 254);
+        status = check_key_count_line645(keys_count, i, 3)
+             || action_line645(&i, keys, input, token, &cursor, 254);
         continue;
 yy375:
         YYSKIP ();
@@ -9844,7 +10327,8 @@ yy377:
         goto yy374;
 yy378:
         YYSKIP ();
-        status = action_line645(i, keys, input, token, &cursor, 0);
+        status = check_key_count_line645(keys_count, i, 3)
+             || action_line645(&i, keys, input, token, &cursor, 0);
         continue;
 
     }
@@ -9856,7 +10340,7 @@ yy378:
         }
         if (i != keys_count) {
             status = 1;
-            fprintf(stderr, "error: lex_line645: unused keys left after %u iterations\n", i);
+            fprintf(stderr, "error: lex_line645: unused keys left after %u keys\n", i);
         }
     }
 
@@ -9886,7 +10370,7 @@ end:
 #define YYFILL(n) { break; }
 
 static int action_line652
-    ( unsigned int i
+    ( unsigned *pkix
     , const YYKEYTYPE *keys
     , const YYCTYPE *start
     , const YYCTYPE *token
@@ -9894,10 +10378,12 @@ static int action_line652
     , YYKEYTYPE rule_act
     )
 {
+    const unsigned kix = *pkix;
     const long pos = token - start;
     const long len_act = *cursor - token;
-    const long len_exp = (long) keys [3 * i + 1];
-    const YYKEYTYPE rule_exp = keys [3 * i + 2];
+    const long len_exp = (long) keys[kix + 1];
+    const YYKEYTYPE rule_exp = keys[kix + 2];
+    *pkix = kix + 3;
     if (rule_exp == 255) {
         fprintf
             ( stderr
@@ -9907,17 +10393,17 @@ static int action_line652
             );
     }
     if (len_act == len_exp && rule_act == rule_exp) {
-        const YYKEYTYPE offset = keys[3 * i];
+        const YYKEYTYPE offset = keys[kix];
         *cursor = token + offset;
         return 0;
     } else {
         fprintf
             ( stderr
-            , "error: lex_line652: at position %ld (iteration %u):\n"
+            , "error: lex_line652: at position %ld (key %u):\n"
                 "\texpected: match length %ld, rule %u\n"
                 "\tactual:   match length %ld, rule %u\n"
             , pos
-            , i
+            , kix
             , len_exp
             , rule_exp
             , len_act
@@ -9925,6 +10411,13 @@ static int action_line652
             );
         return 1;
     }
+}
+
+static int check_key_count_line652(unsigned have, unsigned used, unsigned need)
+{
+    if (used + need <= have) return 0;
+    fprintf(stderr, "error: lex_line652: not enough keys\n");
+    return 1;
 }
 
 int lex_line652()
@@ -9954,7 +10447,7 @@ int lex_line652()
 
     keys = (YYKEYTYPE *) read_file
         ("unicode_blocks.8--skeleton--encoding-policy(ignore).c.line652.keys"
-        , 3 * sizeof (YYKEYTYPE)
+        , sizeof (YYKEYTYPE)
         , 0
         , &keys_count
         );
@@ -9967,7 +10460,7 @@ int lex_line652()
     limit = input + input_len + padding;
     eof = input + input_len;
 
-    for (i = 0; status == 0 && i < keys_count; ++i) {
+    for (i = 0; status == 0 && cursor < eof && i < keys_count;) {
         token = cursor;
         const YYCTYPE *marker = NULL;
         YYCTYPE yych;
@@ -9981,7 +10474,8 @@ int lex_line652()
 yy382:
         YYSKIP ();
 yy383:
-        status = action_line652(i, keys, input, token, &cursor, 254);
+        status = check_key_count_line652(keys_count, i, 3)
+             || action_line652(&i, keys, input, token, &cursor, 254);
         continue;
 yy384:
         YYSKIP ();
@@ -10034,7 +10528,8 @@ yy386:
         goto yy383;
 yy387:
         YYSKIP ();
-        status = action_line652(i, keys, input, token, &cursor, 0);
+        status = check_key_count_line652(keys_count, i, 3)
+             || action_line652(&i, keys, input, token, &cursor, 0);
         continue;
 
     }
@@ -10046,7 +10541,7 @@ yy387:
         }
         if (i != keys_count) {
             status = 1;
-            fprintf(stderr, "error: lex_line652: unused keys left after %u iterations\n", i);
+            fprintf(stderr, "error: lex_line652: unused keys left after %u keys\n", i);
         }
     }
 
@@ -10076,7 +10571,7 @@ end:
 #define YYFILL(n) { break; }
 
 static int action_line659
-    ( unsigned int i
+    ( unsigned *pkix
     , const YYKEYTYPE *keys
     , const YYCTYPE *start
     , const YYCTYPE *token
@@ -10084,10 +10579,12 @@ static int action_line659
     , YYKEYTYPE rule_act
     )
 {
+    const unsigned kix = *pkix;
     const long pos = token - start;
     const long len_act = *cursor - token;
-    const long len_exp = (long) keys [3 * i + 1];
-    const YYKEYTYPE rule_exp = keys [3 * i + 2];
+    const long len_exp = (long) keys[kix + 1];
+    const YYKEYTYPE rule_exp = keys[kix + 2];
+    *pkix = kix + 3;
     if (rule_exp == 255) {
         fprintf
             ( stderr
@@ -10097,17 +10594,17 @@ static int action_line659
             );
     }
     if (len_act == len_exp && rule_act == rule_exp) {
-        const YYKEYTYPE offset = keys[3 * i];
+        const YYKEYTYPE offset = keys[kix];
         *cursor = token + offset;
         return 0;
     } else {
         fprintf
             ( stderr
-            , "error: lex_line659: at position %ld (iteration %u):\n"
+            , "error: lex_line659: at position %ld (key %u):\n"
                 "\texpected: match length %ld, rule %u\n"
                 "\tactual:   match length %ld, rule %u\n"
             , pos
-            , i
+            , kix
             , len_exp
             , rule_exp
             , len_act
@@ -10115,6 +10612,13 @@ static int action_line659
             );
         return 1;
     }
+}
+
+static int check_key_count_line659(unsigned have, unsigned used, unsigned need)
+{
+    if (used + need <= have) return 0;
+    fprintf(stderr, "error: lex_line659: not enough keys\n");
+    return 1;
 }
 
 int lex_line659()
@@ -10144,7 +10648,7 @@ int lex_line659()
 
     keys = (YYKEYTYPE *) read_file
         ("unicode_blocks.8--skeleton--encoding-policy(ignore).c.line659.keys"
-        , 3 * sizeof (YYKEYTYPE)
+        , sizeof (YYKEYTYPE)
         , 0
         , &keys_count
         );
@@ -10157,7 +10661,7 @@ int lex_line659()
     limit = input + input_len + padding;
     eof = input + input_len;
 
-    for (i = 0; status == 0 && i < keys_count; ++i) {
+    for (i = 0; status == 0 && cursor < eof && i < keys_count;) {
         token = cursor;
         const YYCTYPE *marker = NULL;
         YYCTYPE yych;
@@ -10171,7 +10675,8 @@ int lex_line659()
 yy391:
         YYSKIP ();
 yy392:
-        status = action_line659(i, keys, input, token, &cursor, 254);
+        status = check_key_count_line659(keys_count, i, 3)
+             || action_line659(&i, keys, input, token, &cursor, 254);
         continue;
 yy393:
         YYSKIP ();
@@ -10257,7 +10762,8 @@ yy395:
         goto yy392;
 yy396:
         YYSKIP ();
-        status = action_line659(i, keys, input, token, &cursor, 0);
+        status = check_key_count_line659(keys_count, i, 3)
+             || action_line659(&i, keys, input, token, &cursor, 0);
         continue;
 
     }
@@ -10269,7 +10775,7 @@ yy396:
         }
         if (i != keys_count) {
             status = 1;
-            fprintf(stderr, "error: lex_line659: unused keys left after %u iterations\n", i);
+            fprintf(stderr, "error: lex_line659: unused keys left after %u keys\n", i);
         }
     }
 
@@ -10299,7 +10805,7 @@ end:
 #define YYFILL(n) { break; }
 
 static int action_line666
-    ( unsigned int i
+    ( unsigned *pkix
     , const YYKEYTYPE *keys
     , const YYCTYPE *start
     , const YYCTYPE *token
@@ -10307,10 +10813,12 @@ static int action_line666
     , YYKEYTYPE rule_act
     )
 {
+    const unsigned kix = *pkix;
     const long pos = token - start;
     const long len_act = *cursor - token;
-    const long len_exp = (long) keys [3 * i + 1];
-    const YYKEYTYPE rule_exp = keys [3 * i + 2];
+    const long len_exp = (long) keys[kix + 1];
+    const YYKEYTYPE rule_exp = keys[kix + 2];
+    *pkix = kix + 3;
     if (rule_exp == 255) {
         fprintf
             ( stderr
@@ -10320,17 +10828,17 @@ static int action_line666
             );
     }
     if (len_act == len_exp && rule_act == rule_exp) {
-        const YYKEYTYPE offset = keys[3 * i];
+        const YYKEYTYPE offset = keys[kix];
         *cursor = token + offset;
         return 0;
     } else {
         fprintf
             ( stderr
-            , "error: lex_line666: at position %ld (iteration %u):\n"
+            , "error: lex_line666: at position %ld (key %u):\n"
                 "\texpected: match length %ld, rule %u\n"
                 "\tactual:   match length %ld, rule %u\n"
             , pos
-            , i
+            , kix
             , len_exp
             , rule_exp
             , len_act
@@ -10338,6 +10846,13 @@ static int action_line666
             );
         return 1;
     }
+}
+
+static int check_key_count_line666(unsigned have, unsigned used, unsigned need)
+{
+    if (used + need <= have) return 0;
+    fprintf(stderr, "error: lex_line666: not enough keys\n");
+    return 1;
 }
 
 int lex_line666()
@@ -10367,7 +10882,7 @@ int lex_line666()
 
     keys = (YYKEYTYPE *) read_file
         ("unicode_blocks.8--skeleton--encoding-policy(ignore).c.line666.keys"
-        , 3 * sizeof (YYKEYTYPE)
+        , sizeof (YYKEYTYPE)
         , 0
         , &keys_count
         );
@@ -10380,7 +10895,7 @@ int lex_line666()
     limit = input + input_len + padding;
     eof = input + input_len;
 
-    for (i = 0; status == 0 && i < keys_count; ++i) {
+    for (i = 0; status == 0 && cursor < eof && i < keys_count;) {
         token = cursor;
         const YYCTYPE *marker = NULL;
         YYCTYPE yych;
@@ -10394,7 +10909,8 @@ int lex_line666()
 yy400:
         YYSKIP ();
 yy401:
-        status = action_line666(i, keys, input, token, &cursor, 254);
+        status = check_key_count_line666(keys_count, i, 3)
+             || action_line666(&i, keys, input, token, &cursor, 254);
         continue;
 yy402:
         YYSKIP ();
@@ -10482,7 +10998,8 @@ yy404:
         goto yy401;
 yy405:
         YYSKIP ();
-        status = action_line666(i, keys, input, token, &cursor, 0);
+        status = check_key_count_line666(keys_count, i, 3)
+             || action_line666(&i, keys, input, token, &cursor, 0);
         continue;
 
     }
@@ -10494,7 +11011,7 @@ yy405:
         }
         if (i != keys_count) {
             status = 1;
-            fprintf(stderr, "error: lex_line666: unused keys left after %u iterations\n", i);
+            fprintf(stderr, "error: lex_line666: unused keys left after %u keys\n", i);
         }
     }
 
@@ -10524,7 +11041,7 @@ end:
 #define YYFILL(n) { break; }
 
 static int action_line673
-    ( unsigned int i
+    ( unsigned *pkix
     , const YYKEYTYPE *keys
     , const YYCTYPE *start
     , const YYCTYPE *token
@@ -10532,10 +11049,12 @@ static int action_line673
     , YYKEYTYPE rule_act
     )
 {
+    const unsigned kix = *pkix;
     const long pos = token - start;
     const long len_act = *cursor - token;
-    const long len_exp = (long) keys [3 * i + 1];
-    const YYKEYTYPE rule_exp = keys [3 * i + 2];
+    const long len_exp = (long) keys[kix + 1];
+    const YYKEYTYPE rule_exp = keys[kix + 2];
+    *pkix = kix + 3;
     if (rule_exp == 255) {
         fprintf
             ( stderr
@@ -10545,17 +11064,17 @@ static int action_line673
             );
     }
     if (len_act == len_exp && rule_act == rule_exp) {
-        const YYKEYTYPE offset = keys[3 * i];
+        const YYKEYTYPE offset = keys[kix];
         *cursor = token + offset;
         return 0;
     } else {
         fprintf
             ( stderr
-            , "error: lex_line673: at position %ld (iteration %u):\n"
+            , "error: lex_line673: at position %ld (key %u):\n"
                 "\texpected: match length %ld, rule %u\n"
                 "\tactual:   match length %ld, rule %u\n"
             , pos
-            , i
+            , kix
             , len_exp
             , rule_exp
             , len_act
@@ -10563,6 +11082,13 @@ static int action_line673
             );
         return 1;
     }
+}
+
+static int check_key_count_line673(unsigned have, unsigned used, unsigned need)
+{
+    if (used + need <= have) return 0;
+    fprintf(stderr, "error: lex_line673: not enough keys\n");
+    return 1;
 }
 
 int lex_line673()
@@ -10592,7 +11118,7 @@ int lex_line673()
 
     keys = (YYKEYTYPE *) read_file
         ("unicode_blocks.8--skeleton--encoding-policy(ignore).c.line673.keys"
-        , 3 * sizeof (YYKEYTYPE)
+        , sizeof (YYKEYTYPE)
         , 0
         , &keys_count
         );
@@ -10605,7 +11131,7 @@ int lex_line673()
     limit = input + input_len + padding;
     eof = input + input_len;
 
-    for (i = 0; status == 0 && i < keys_count; ++i) {
+    for (i = 0; status == 0 && cursor < eof && i < keys_count;) {
         token = cursor;
         const YYCTYPE *marker = NULL;
         YYCTYPE yych;
@@ -10619,7 +11145,8 @@ int lex_line673()
 yy409:
         YYSKIP ();
 yy410:
-        status = action_line673(i, keys, input, token, &cursor, 254);
+        status = check_key_count_line673(keys_count, i, 3)
+             || action_line673(&i, keys, input, token, &cursor, 254);
         continue;
 yy411:
         YYSKIP ();
@@ -10707,7 +11234,8 @@ yy413:
         goto yy410;
 yy414:
         YYSKIP ();
-        status = action_line673(i, keys, input, token, &cursor, 0);
+        status = check_key_count_line673(keys_count, i, 3)
+             || action_line673(&i, keys, input, token, &cursor, 0);
         continue;
 
     }
@@ -10719,7 +11247,7 @@ yy414:
         }
         if (i != keys_count) {
             status = 1;
-            fprintf(stderr, "error: lex_line673: unused keys left after %u iterations\n", i);
+            fprintf(stderr, "error: lex_line673: unused keys left after %u keys\n", i);
         }
     }
 
@@ -10749,7 +11277,7 @@ end:
 #define YYFILL(n) { break; }
 
 static int action_line680
-    ( unsigned int i
+    ( unsigned *pkix
     , const YYKEYTYPE *keys
     , const YYCTYPE *start
     , const YYCTYPE *token
@@ -10757,10 +11285,12 @@ static int action_line680
     , YYKEYTYPE rule_act
     )
 {
+    const unsigned kix = *pkix;
     const long pos = token - start;
     const long len_act = *cursor - token;
-    const long len_exp = (long) keys [3 * i + 1];
-    const YYKEYTYPE rule_exp = keys [3 * i + 2];
+    const long len_exp = (long) keys[kix + 1];
+    const YYKEYTYPE rule_exp = keys[kix + 2];
+    *pkix = kix + 3;
     if (rule_exp == 255) {
         fprintf
             ( stderr
@@ -10770,17 +11300,17 @@ static int action_line680
             );
     }
     if (len_act == len_exp && rule_act == rule_exp) {
-        const YYKEYTYPE offset = keys[3 * i];
+        const YYKEYTYPE offset = keys[kix];
         *cursor = token + offset;
         return 0;
     } else {
         fprintf
             ( stderr
-            , "error: lex_line680: at position %ld (iteration %u):\n"
+            , "error: lex_line680: at position %ld (key %u):\n"
                 "\texpected: match length %ld, rule %u\n"
                 "\tactual:   match length %ld, rule %u\n"
             , pos
-            , i
+            , kix
             , len_exp
             , rule_exp
             , len_act
@@ -10788,6 +11318,13 @@ static int action_line680
             );
         return 1;
     }
+}
+
+static int check_key_count_line680(unsigned have, unsigned used, unsigned need)
+{
+    if (used + need <= have) return 0;
+    fprintf(stderr, "error: lex_line680: not enough keys\n");
+    return 1;
 }
 
 int lex_line680()
@@ -10817,7 +11354,7 @@ int lex_line680()
 
     keys = (YYKEYTYPE *) read_file
         ("unicode_blocks.8--skeleton--encoding-policy(ignore).c.line680.keys"
-        , 3 * sizeof (YYKEYTYPE)
+        , sizeof (YYKEYTYPE)
         , 0
         , &keys_count
         );
@@ -10830,7 +11367,7 @@ int lex_line680()
     limit = input + input_len + padding;
     eof = input + input_len;
 
-    for (i = 0; status == 0 && i < keys_count; ++i) {
+    for (i = 0; status == 0 && cursor < eof && i < keys_count;) {
         token = cursor;
         const YYCTYPE *marker = NULL;
         YYCTYPE yych;
@@ -10844,7 +11381,8 @@ int lex_line680()
 yy418:
         YYSKIP ();
 yy419:
-        status = action_line680(i, keys, input, token, &cursor, 254);
+        status = check_key_count_line680(keys_count, i, 3)
+             || action_line680(&i, keys, input, token, &cursor, 254);
         continue;
 yy420:
         YYSKIP ();
@@ -10984,7 +11522,8 @@ yy423:
         }
 yy424:
         YYSKIP ();
-        status = action_line680(i, keys, input, token, &cursor, 0);
+        status = check_key_count_line680(keys_count, i, 3)
+             || action_line680(&i, keys, input, token, &cursor, 0);
         continue;
 
     }
@@ -10996,7 +11535,7 @@ yy424:
         }
         if (i != keys_count) {
             status = 1;
-            fprintf(stderr, "error: lex_line680: unused keys left after %u iterations\n", i);
+            fprintf(stderr, "error: lex_line680: unused keys left after %u keys\n", i);
         }
     }
 
@@ -11026,7 +11565,7 @@ end:
 #define YYFILL(n) { break; }
 
 static int action_line687
-    ( unsigned int i
+    ( unsigned *pkix
     , const YYKEYTYPE *keys
     , const YYCTYPE *start
     , const YYCTYPE *token
@@ -11034,10 +11573,12 @@ static int action_line687
     , YYKEYTYPE rule_act
     )
 {
+    const unsigned kix = *pkix;
     const long pos = token - start;
     const long len_act = *cursor - token;
-    const long len_exp = (long) keys [3 * i + 1];
-    const YYKEYTYPE rule_exp = keys [3 * i + 2];
+    const long len_exp = (long) keys[kix + 1];
+    const YYKEYTYPE rule_exp = keys[kix + 2];
+    *pkix = kix + 3;
     if (rule_exp == 255) {
         fprintf
             ( stderr
@@ -11047,17 +11588,17 @@ static int action_line687
             );
     }
     if (len_act == len_exp && rule_act == rule_exp) {
-        const YYKEYTYPE offset = keys[3 * i];
+        const YYKEYTYPE offset = keys[kix];
         *cursor = token + offset;
         return 0;
     } else {
         fprintf
             ( stderr
-            , "error: lex_line687: at position %ld (iteration %u):\n"
+            , "error: lex_line687: at position %ld (key %u):\n"
                 "\texpected: match length %ld, rule %u\n"
                 "\tactual:   match length %ld, rule %u\n"
             , pos
-            , i
+            , kix
             , len_exp
             , rule_exp
             , len_act
@@ -11065,6 +11606,13 @@ static int action_line687
             );
         return 1;
     }
+}
+
+static int check_key_count_line687(unsigned have, unsigned used, unsigned need)
+{
+    if (used + need <= have) return 0;
+    fprintf(stderr, "error: lex_line687: not enough keys\n");
+    return 1;
 }
 
 int lex_line687()
@@ -11094,7 +11642,7 @@ int lex_line687()
 
     keys = (YYKEYTYPE *) read_file
         ("unicode_blocks.8--skeleton--encoding-policy(ignore).c.line687.keys"
-        , 3 * sizeof (YYKEYTYPE)
+        , sizeof (YYKEYTYPE)
         , 0
         , &keys_count
         );
@@ -11107,7 +11655,7 @@ int lex_line687()
     limit = input + input_len + padding;
     eof = input + input_len;
 
-    for (i = 0; status == 0 && i < keys_count; ++i) {
+    for (i = 0; status == 0 && cursor < eof && i < keys_count;) {
         token = cursor;
         const YYCTYPE *marker = NULL;
         YYCTYPE yych;
@@ -11121,7 +11669,8 @@ int lex_line687()
 yy428:
         YYSKIP ();
 yy429:
-        status = action_line687(i, keys, input, token, &cursor, 254);
+        status = check_key_count_line687(keys_count, i, 3)
+             || action_line687(&i, keys, input, token, &cursor, 254);
         continue;
 yy430:
         YYSKIP ();
@@ -11197,7 +11746,8 @@ yy433:
         }
 yy434:
         YYSKIP ();
-        status = action_line687(i, keys, input, token, &cursor, 0);
+        status = check_key_count_line687(keys_count, i, 3)
+             || action_line687(&i, keys, input, token, &cursor, 0);
         continue;
 
     }
@@ -11209,7 +11759,7 @@ yy434:
         }
         if (i != keys_count) {
             status = 1;
-            fprintf(stderr, "error: lex_line687: unused keys left after %u iterations\n", i);
+            fprintf(stderr, "error: lex_line687: unused keys left after %u keys\n", i);
         }
     }
 
@@ -11239,7 +11789,7 @@ end:
 #define YYFILL(n) { break; }
 
 static int action_line694
-    ( unsigned int i
+    ( unsigned *pkix
     , const YYKEYTYPE *keys
     , const YYCTYPE *start
     , const YYCTYPE *token
@@ -11247,10 +11797,12 @@ static int action_line694
     , YYKEYTYPE rule_act
     )
 {
+    const unsigned kix = *pkix;
     const long pos = token - start;
     const long len_act = *cursor - token;
-    const long len_exp = (long) keys [3 * i + 1];
-    const YYKEYTYPE rule_exp = keys [3 * i + 2];
+    const long len_exp = (long) keys[kix + 1];
+    const YYKEYTYPE rule_exp = keys[kix + 2];
+    *pkix = kix + 3;
     if (rule_exp == 255) {
         fprintf
             ( stderr
@@ -11260,17 +11812,17 @@ static int action_line694
             );
     }
     if (len_act == len_exp && rule_act == rule_exp) {
-        const YYKEYTYPE offset = keys[3 * i];
+        const YYKEYTYPE offset = keys[kix];
         *cursor = token + offset;
         return 0;
     } else {
         fprintf
             ( stderr
-            , "error: lex_line694: at position %ld (iteration %u):\n"
+            , "error: lex_line694: at position %ld (key %u):\n"
                 "\texpected: match length %ld, rule %u\n"
                 "\tactual:   match length %ld, rule %u\n"
             , pos
-            , i
+            , kix
             , len_exp
             , rule_exp
             , len_act
@@ -11278,6 +11830,13 @@ static int action_line694
             );
         return 1;
     }
+}
+
+static int check_key_count_line694(unsigned have, unsigned used, unsigned need)
+{
+    if (used + need <= have) return 0;
+    fprintf(stderr, "error: lex_line694: not enough keys\n");
+    return 1;
 }
 
 int lex_line694()
@@ -11307,7 +11866,7 @@ int lex_line694()
 
     keys = (YYKEYTYPE *) read_file
         ("unicode_blocks.8--skeleton--encoding-policy(ignore).c.line694.keys"
-        , 3 * sizeof (YYKEYTYPE)
+        , sizeof (YYKEYTYPE)
         , 0
         , &keys_count
         );
@@ -11320,7 +11879,7 @@ int lex_line694()
     limit = input + input_len + padding;
     eof = input + input_len;
 
-    for (i = 0; status == 0 && i < keys_count; ++i) {
+    for (i = 0; status == 0 && cursor < eof && i < keys_count;) {
         token = cursor;
         const YYCTYPE *marker = NULL;
         YYCTYPE yych;
@@ -11334,7 +11893,8 @@ int lex_line694()
 yy438:
         YYSKIP ();
 yy439:
-        status = action_line694(i, keys, input, token, &cursor, 254);
+        status = check_key_count_line694(keys_count, i, 3)
+             || action_line694(&i, keys, input, token, &cursor, 254);
         continue;
 yy440:
         YYSKIP ();
@@ -11410,7 +11970,8 @@ yy443:
         }
 yy444:
         YYSKIP ();
-        status = action_line694(i, keys, input, token, &cursor, 0);
+        status = check_key_count_line694(keys_count, i, 3)
+             || action_line694(&i, keys, input, token, &cursor, 0);
         continue;
 
     }
@@ -11422,7 +11983,7 @@ yy444:
         }
         if (i != keys_count) {
             status = 1;
-            fprintf(stderr, "error: lex_line694: unused keys left after %u iterations\n", i);
+            fprintf(stderr, "error: lex_line694: unused keys left after %u keys\n", i);
         }
     }
 
@@ -11452,7 +12013,7 @@ end:
 #define YYFILL(n) { break; }
 
 static int action_line701
-    ( unsigned int i
+    ( unsigned *pkix
     , const YYKEYTYPE *keys
     , const YYCTYPE *start
     , const YYCTYPE *token
@@ -11460,10 +12021,12 @@ static int action_line701
     , YYKEYTYPE rule_act
     )
 {
+    const unsigned kix = *pkix;
     const long pos = token - start;
     const long len_act = *cursor - token;
-    const long len_exp = (long) keys [3 * i + 1];
-    const YYKEYTYPE rule_exp = keys [3 * i + 2];
+    const long len_exp = (long) keys[kix + 1];
+    const YYKEYTYPE rule_exp = keys[kix + 2];
+    *pkix = kix + 3;
     if (rule_exp == 255) {
         fprintf
             ( stderr
@@ -11473,17 +12036,17 @@ static int action_line701
             );
     }
     if (len_act == len_exp && rule_act == rule_exp) {
-        const YYKEYTYPE offset = keys[3 * i];
+        const YYKEYTYPE offset = keys[kix];
         *cursor = token + offset;
         return 0;
     } else {
         fprintf
             ( stderr
-            , "error: lex_line701: at position %ld (iteration %u):\n"
+            , "error: lex_line701: at position %ld (key %u):\n"
                 "\texpected: match length %ld, rule %u\n"
                 "\tactual:   match length %ld, rule %u\n"
             , pos
-            , i
+            , kix
             , len_exp
             , rule_exp
             , len_act
@@ -11491,6 +12054,13 @@ static int action_line701
             );
         return 1;
     }
+}
+
+static int check_key_count_line701(unsigned have, unsigned used, unsigned need)
+{
+    if (used + need <= have) return 0;
+    fprintf(stderr, "error: lex_line701: not enough keys\n");
+    return 1;
 }
 
 int lex_line701()
@@ -11520,7 +12090,7 @@ int lex_line701()
 
     keys = (YYKEYTYPE *) read_file
         ("unicode_blocks.8--skeleton--encoding-policy(ignore).c.line701.keys"
-        , 3 * sizeof (YYKEYTYPE)
+        , sizeof (YYKEYTYPE)
         , 0
         , &keys_count
         );
@@ -11533,7 +12103,7 @@ int lex_line701()
     limit = input + input_len + padding;
     eof = input + input_len;
 
-    for (i = 0; status == 0 && i < keys_count; ++i) {
+    for (i = 0; status == 0 && cursor < eof && i < keys_count;) {
         token = cursor;
         const YYCTYPE *marker = NULL;
         YYCTYPE yych;
@@ -11547,7 +12117,8 @@ int lex_line701()
 yy448:
         YYSKIP ();
 yy449:
-        status = action_line701(i, keys, input, token, &cursor, 254);
+        status = check_key_count_line701(keys_count, i, 3)
+             || action_line701(&i, keys, input, token, &cursor, 254);
         continue;
 yy450:
         YYSKIP ();
@@ -11616,7 +12187,8 @@ yy452:
         goto yy449;
 yy453:
         YYSKIP ();
-        status = action_line701(i, keys, input, token, &cursor, 0);
+        status = check_key_count_line701(keys_count, i, 3)
+             || action_line701(&i, keys, input, token, &cursor, 0);
         continue;
 
     }
@@ -11628,7 +12200,7 @@ yy453:
         }
         if (i != keys_count) {
             status = 1;
-            fprintf(stderr, "error: lex_line701: unused keys left after %u iterations\n", i);
+            fprintf(stderr, "error: lex_line701: unused keys left after %u keys\n", i);
         }
     }
 
@@ -11658,7 +12230,7 @@ end:
 #define YYFILL(n) { break; }
 
 static int action_line708
-    ( unsigned int i
+    ( unsigned *pkix
     , const YYKEYTYPE *keys
     , const YYCTYPE *start
     , const YYCTYPE *token
@@ -11666,10 +12238,12 @@ static int action_line708
     , YYKEYTYPE rule_act
     )
 {
+    const unsigned kix = *pkix;
     const long pos = token - start;
     const long len_act = *cursor - token;
-    const long len_exp = (long) keys [3 * i + 1];
-    const YYKEYTYPE rule_exp = keys [3 * i + 2];
+    const long len_exp = (long) keys[kix + 1];
+    const YYKEYTYPE rule_exp = keys[kix + 2];
+    *pkix = kix + 3;
     if (rule_exp == 255) {
         fprintf
             ( stderr
@@ -11679,17 +12253,17 @@ static int action_line708
             );
     }
     if (len_act == len_exp && rule_act == rule_exp) {
-        const YYKEYTYPE offset = keys[3 * i];
+        const YYKEYTYPE offset = keys[kix];
         *cursor = token + offset;
         return 0;
     } else {
         fprintf
             ( stderr
-            , "error: lex_line708: at position %ld (iteration %u):\n"
+            , "error: lex_line708: at position %ld (key %u):\n"
                 "\texpected: match length %ld, rule %u\n"
                 "\tactual:   match length %ld, rule %u\n"
             , pos
-            , i
+            , kix
             , len_exp
             , rule_exp
             , len_act
@@ -11697,6 +12271,13 @@ static int action_line708
             );
         return 1;
     }
+}
+
+static int check_key_count_line708(unsigned have, unsigned used, unsigned need)
+{
+    if (used + need <= have) return 0;
+    fprintf(stderr, "error: lex_line708: not enough keys\n");
+    return 1;
 }
 
 int lex_line708()
@@ -11726,7 +12307,7 @@ int lex_line708()
 
     keys = (YYKEYTYPE *) read_file
         ("unicode_blocks.8--skeleton--encoding-policy(ignore).c.line708.keys"
-        , 3 * sizeof (YYKEYTYPE)
+        , sizeof (YYKEYTYPE)
         , 0
         , &keys_count
         );
@@ -11739,7 +12320,7 @@ int lex_line708()
     limit = input + input_len + padding;
     eof = input + input_len;
 
-    for (i = 0; status == 0 && i < keys_count; ++i) {
+    for (i = 0; status == 0 && cursor < eof && i < keys_count;) {
         token = cursor;
         const YYCTYPE *marker = NULL;
         YYCTYPE yych;
@@ -11753,7 +12334,8 @@ int lex_line708()
 yy457:
         YYSKIP ();
 yy458:
-        status = action_line708(i, keys, input, token, &cursor, 254);
+        status = check_key_count_line708(keys_count, i, 3)
+             || action_line708(&i, keys, input, token, &cursor, 254);
         continue;
 yy459:
         YYSKIP ();
@@ -11861,7 +12443,8 @@ yy462:
         }
 yy463:
         YYSKIP ();
-        status = action_line708(i, keys, input, token, &cursor, 0);
+        status = check_key_count_line708(keys_count, i, 3)
+             || action_line708(&i, keys, input, token, &cursor, 0);
         continue;
 
     }
@@ -11873,7 +12456,7 @@ yy463:
         }
         if (i != keys_count) {
             status = 1;
-            fprintf(stderr, "error: lex_line708: unused keys left after %u iterations\n", i);
+            fprintf(stderr, "error: lex_line708: unused keys left after %u keys\n", i);
         }
     }
 
@@ -11903,7 +12486,7 @@ end:
 #define YYFILL(n) { break; }
 
 static int action_line715
-    ( unsigned int i
+    ( unsigned *pkix
     , const YYKEYTYPE *keys
     , const YYCTYPE *start
     , const YYCTYPE *token
@@ -11911,10 +12494,12 @@ static int action_line715
     , YYKEYTYPE rule_act
     )
 {
+    const unsigned kix = *pkix;
     const long pos = token - start;
     const long len_act = *cursor - token;
-    const long len_exp = (long) keys [3 * i + 1];
-    const YYKEYTYPE rule_exp = keys [3 * i + 2];
+    const long len_exp = (long) keys[kix + 1];
+    const YYKEYTYPE rule_exp = keys[kix + 2];
+    *pkix = kix + 3;
     if (rule_exp == 255) {
         fprintf
             ( stderr
@@ -11924,17 +12509,17 @@ static int action_line715
             );
     }
     if (len_act == len_exp && rule_act == rule_exp) {
-        const YYKEYTYPE offset = keys[3 * i];
+        const YYKEYTYPE offset = keys[kix];
         *cursor = token + offset;
         return 0;
     } else {
         fprintf
             ( stderr
-            , "error: lex_line715: at position %ld (iteration %u):\n"
+            , "error: lex_line715: at position %ld (key %u):\n"
                 "\texpected: match length %ld, rule %u\n"
                 "\tactual:   match length %ld, rule %u\n"
             , pos
-            , i
+            , kix
             , len_exp
             , rule_exp
             , len_act
@@ -11942,6 +12527,13 @@ static int action_line715
             );
         return 1;
     }
+}
+
+static int check_key_count_line715(unsigned have, unsigned used, unsigned need)
+{
+    if (used + need <= have) return 0;
+    fprintf(stderr, "error: lex_line715: not enough keys\n");
+    return 1;
 }
 
 int lex_line715()
@@ -11971,7 +12563,7 @@ int lex_line715()
 
     keys = (YYKEYTYPE *) read_file
         ("unicode_blocks.8--skeleton--encoding-policy(ignore).c.line715.keys"
-        , 3 * sizeof (YYKEYTYPE)
+        , sizeof (YYKEYTYPE)
         , 0
         , &keys_count
         );
@@ -11984,7 +12576,7 @@ int lex_line715()
     limit = input + input_len + padding;
     eof = input + input_len;
 
-    for (i = 0; status == 0 && i < keys_count; ++i) {
+    for (i = 0; status == 0 && cursor < eof && i < keys_count;) {
         token = cursor;
         const YYCTYPE *marker = NULL;
         YYCTYPE yych;
@@ -11998,7 +12590,8 @@ int lex_line715()
 yy467:
         YYSKIP ();
 yy468:
-        status = action_line715(i, keys, input, token, &cursor, 254);
+        status = check_key_count_line715(keys_count, i, 3)
+             || action_line715(&i, keys, input, token, &cursor, 254);
         continue;
 yy469:
         YYSKIP ();
@@ -12090,7 +12683,8 @@ yy472:
         }
 yy473:
         YYSKIP ();
-        status = action_line715(i, keys, input, token, &cursor, 0);
+        status = check_key_count_line715(keys_count, i, 3)
+             || action_line715(&i, keys, input, token, &cursor, 0);
         continue;
 
     }
@@ -12102,7 +12696,7 @@ yy473:
         }
         if (i != keys_count) {
             status = 1;
-            fprintf(stderr, "error: lex_line715: unused keys left after %u iterations\n", i);
+            fprintf(stderr, "error: lex_line715: unused keys left after %u keys\n", i);
         }
     }
 
@@ -12132,7 +12726,7 @@ end:
 #define YYFILL(n) { break; }
 
 static int action_line722
-    ( unsigned int i
+    ( unsigned *pkix
     , const YYKEYTYPE *keys
     , const YYCTYPE *start
     , const YYCTYPE *token
@@ -12140,10 +12734,12 @@ static int action_line722
     , YYKEYTYPE rule_act
     )
 {
+    const unsigned kix = *pkix;
     const long pos = token - start;
     const long len_act = *cursor - token;
-    const long len_exp = (long) keys [3 * i + 1];
-    const YYKEYTYPE rule_exp = keys [3 * i + 2];
+    const long len_exp = (long) keys[kix + 1];
+    const YYKEYTYPE rule_exp = keys[kix + 2];
+    *pkix = kix + 3;
     if (rule_exp == 255) {
         fprintf
             ( stderr
@@ -12153,17 +12749,17 @@ static int action_line722
             );
     }
     if (len_act == len_exp && rule_act == rule_exp) {
-        const YYKEYTYPE offset = keys[3 * i];
+        const YYKEYTYPE offset = keys[kix];
         *cursor = token + offset;
         return 0;
     } else {
         fprintf
             ( stderr
-            , "error: lex_line722: at position %ld (iteration %u):\n"
+            , "error: lex_line722: at position %ld (key %u):\n"
                 "\texpected: match length %ld, rule %u\n"
                 "\tactual:   match length %ld, rule %u\n"
             , pos
-            , i
+            , kix
             , len_exp
             , rule_exp
             , len_act
@@ -12171,6 +12767,13 @@ static int action_line722
             );
         return 1;
     }
+}
+
+static int check_key_count_line722(unsigned have, unsigned used, unsigned need)
+{
+    if (used + need <= have) return 0;
+    fprintf(stderr, "error: lex_line722: not enough keys\n");
+    return 1;
 }
 
 int lex_line722()
@@ -12200,7 +12803,7 @@ int lex_line722()
 
     keys = (YYKEYTYPE *) read_file
         ("unicode_blocks.8--skeleton--encoding-policy(ignore).c.line722.keys"
-        , 3 * sizeof (YYKEYTYPE)
+        , sizeof (YYKEYTYPE)
         , 0
         , &keys_count
         );
@@ -12213,7 +12816,7 @@ int lex_line722()
     limit = input + input_len + padding;
     eof = input + input_len;
 
-    for (i = 0; status == 0 && i < keys_count; ++i) {
+    for (i = 0; status == 0 && cursor < eof && i < keys_count;) {
         token = cursor;
         const YYCTYPE *marker = NULL;
         YYCTYPE yych;
@@ -12227,7 +12830,8 @@ int lex_line722()
 yy477:
         YYSKIP ();
 yy478:
-        status = action_line722(i, keys, input, token, &cursor, 254);
+        status = check_key_count_line722(keys_count, i, 3)
+             || action_line722(&i, keys, input, token, &cursor, 254);
         continue;
 yy479:
         YYSKIP ();
@@ -12367,7 +12971,8 @@ yy482:
         }
 yy483:
         YYSKIP ();
-        status = action_line722(i, keys, input, token, &cursor, 0);
+        status = check_key_count_line722(keys_count, i, 3)
+             || action_line722(&i, keys, input, token, &cursor, 0);
         continue;
 
     }
@@ -12379,7 +12984,7 @@ yy483:
         }
         if (i != keys_count) {
             status = 1;
-            fprintf(stderr, "error: lex_line722: unused keys left after %u iterations\n", i);
+            fprintf(stderr, "error: lex_line722: unused keys left after %u keys\n", i);
         }
     }
 
@@ -12409,7 +13014,7 @@ end:
 #define YYFILL(n) { break; }
 
 static int action_line729
-    ( unsigned int i
+    ( unsigned *pkix
     , const YYKEYTYPE *keys
     , const YYCTYPE *start
     , const YYCTYPE *token
@@ -12417,10 +13022,12 @@ static int action_line729
     , YYKEYTYPE rule_act
     )
 {
+    const unsigned kix = *pkix;
     const long pos = token - start;
     const long len_act = *cursor - token;
-    const long len_exp = (long) keys [3 * i + 1];
-    const YYKEYTYPE rule_exp = keys [3 * i + 2];
+    const long len_exp = (long) keys[kix + 1];
+    const YYKEYTYPE rule_exp = keys[kix + 2];
+    *pkix = kix + 3;
     if (rule_exp == 255) {
         fprintf
             ( stderr
@@ -12430,17 +13037,17 @@ static int action_line729
             );
     }
     if (len_act == len_exp && rule_act == rule_exp) {
-        const YYKEYTYPE offset = keys[3 * i];
+        const YYKEYTYPE offset = keys[kix];
         *cursor = token + offset;
         return 0;
     } else {
         fprintf
             ( stderr
-            , "error: lex_line729: at position %ld (iteration %u):\n"
+            , "error: lex_line729: at position %ld (key %u):\n"
                 "\texpected: match length %ld, rule %u\n"
                 "\tactual:   match length %ld, rule %u\n"
             , pos
-            , i
+            , kix
             , len_exp
             , rule_exp
             , len_act
@@ -12448,6 +13055,13 @@ static int action_line729
             );
         return 1;
     }
+}
+
+static int check_key_count_line729(unsigned have, unsigned used, unsigned need)
+{
+    if (used + need <= have) return 0;
+    fprintf(stderr, "error: lex_line729: not enough keys\n");
+    return 1;
 }
 
 int lex_line729()
@@ -12477,7 +13091,7 @@ int lex_line729()
 
     keys = (YYKEYTYPE *) read_file
         ("unicode_blocks.8--skeleton--encoding-policy(ignore).c.line729.keys"
-        , 3 * sizeof (YYKEYTYPE)
+        , sizeof (YYKEYTYPE)
         , 0
         , &keys_count
         );
@@ -12490,7 +13104,7 @@ int lex_line729()
     limit = input + input_len + padding;
     eof = input + input_len;
 
-    for (i = 0; status == 0 && i < keys_count; ++i) {
+    for (i = 0; status == 0 && cursor < eof && i < keys_count;) {
         token = cursor;
         const YYCTYPE *marker = NULL;
         YYCTYPE yych;
@@ -12504,7 +13118,8 @@ int lex_line729()
 yy487:
         YYSKIP ();
 yy488:
-        status = action_line729(i, keys, input, token, &cursor, 254);
+        status = check_key_count_line729(keys_count, i, 3)
+             || action_line729(&i, keys, input, token, &cursor, 254);
         continue;
 yy489:
         YYSKIP ();
@@ -12592,7 +13207,8 @@ yy491:
         goto yy488;
 yy492:
         YYSKIP ();
-        status = action_line729(i, keys, input, token, &cursor, 0);
+        status = check_key_count_line729(keys_count, i, 3)
+             || action_line729(&i, keys, input, token, &cursor, 0);
         continue;
 
     }
@@ -12604,7 +13220,7 @@ yy492:
         }
         if (i != keys_count) {
             status = 1;
-            fprintf(stderr, "error: lex_line729: unused keys left after %u iterations\n", i);
+            fprintf(stderr, "error: lex_line729: unused keys left after %u keys\n", i);
         }
     }
 
@@ -12634,7 +13250,7 @@ end:
 #define YYFILL(n) { break; }
 
 static int action_line736
-    ( unsigned int i
+    ( unsigned *pkix
     , const YYKEYTYPE *keys
     , const YYCTYPE *start
     , const YYCTYPE *token
@@ -12642,10 +13258,12 @@ static int action_line736
     , YYKEYTYPE rule_act
     )
 {
+    const unsigned kix = *pkix;
     const long pos = token - start;
     const long len_act = *cursor - token;
-    const long len_exp = (long) keys [3 * i + 1];
-    const YYKEYTYPE rule_exp = keys [3 * i + 2];
+    const long len_exp = (long) keys[kix + 1];
+    const YYKEYTYPE rule_exp = keys[kix + 2];
+    *pkix = kix + 3;
     if (rule_exp == 255) {
         fprintf
             ( stderr
@@ -12655,17 +13273,17 @@ static int action_line736
             );
     }
     if (len_act == len_exp && rule_act == rule_exp) {
-        const YYKEYTYPE offset = keys[3 * i];
+        const YYKEYTYPE offset = keys[kix];
         *cursor = token + offset;
         return 0;
     } else {
         fprintf
             ( stderr
-            , "error: lex_line736: at position %ld (iteration %u):\n"
+            , "error: lex_line736: at position %ld (key %u):\n"
                 "\texpected: match length %ld, rule %u\n"
                 "\tactual:   match length %ld, rule %u\n"
             , pos
-            , i
+            , kix
             , len_exp
             , rule_exp
             , len_act
@@ -12673,6 +13291,13 @@ static int action_line736
             );
         return 1;
     }
+}
+
+static int check_key_count_line736(unsigned have, unsigned used, unsigned need)
+{
+    if (used + need <= have) return 0;
+    fprintf(stderr, "error: lex_line736: not enough keys\n");
+    return 1;
 }
 
 int lex_line736()
@@ -12702,7 +13327,7 @@ int lex_line736()
 
     keys = (YYKEYTYPE *) read_file
         ("unicode_blocks.8--skeleton--encoding-policy(ignore).c.line736.keys"
-        , 3 * sizeof (YYKEYTYPE)
+        , sizeof (YYKEYTYPE)
         , 0
         , &keys_count
         );
@@ -12715,7 +13340,7 @@ int lex_line736()
     limit = input + input_len + padding;
     eof = input + input_len;
 
-    for (i = 0; status == 0 && i < keys_count; ++i) {
+    for (i = 0; status == 0 && cursor < eof && i < keys_count;) {
         token = cursor;
         const YYCTYPE *marker = NULL;
         YYCTYPE yych;
@@ -12729,7 +13354,8 @@ int lex_line736()
 yy496:
         YYSKIP ();
 yy497:
-        status = action_line736(i, keys, input, token, &cursor, 254);
+        status = check_key_count_line736(keys_count, i, 3)
+             || action_line736(&i, keys, input, token, &cursor, 254);
         continue;
 yy498:
         YYSKIP ();
@@ -12817,7 +13443,8 @@ yy500:
         goto yy497;
 yy501:
         YYSKIP ();
-        status = action_line736(i, keys, input, token, &cursor, 0);
+        status = check_key_count_line736(keys_count, i, 3)
+             || action_line736(&i, keys, input, token, &cursor, 0);
         continue;
 
     }
@@ -12829,7 +13456,7 @@ yy501:
         }
         if (i != keys_count) {
             status = 1;
-            fprintf(stderr, "error: lex_line736: unused keys left after %u iterations\n", i);
+            fprintf(stderr, "error: lex_line736: unused keys left after %u keys\n", i);
         }
     }
 
@@ -12859,7 +13486,7 @@ end:
 #define YYFILL(n) { break; }
 
 static int action_line743
-    ( unsigned int i
+    ( unsigned *pkix
     , const YYKEYTYPE *keys
     , const YYCTYPE *start
     , const YYCTYPE *token
@@ -12867,10 +13494,12 @@ static int action_line743
     , YYKEYTYPE rule_act
     )
 {
+    const unsigned kix = *pkix;
     const long pos = token - start;
     const long len_act = *cursor - token;
-    const long len_exp = (long) keys [3 * i + 1];
-    const YYKEYTYPE rule_exp = keys [3 * i + 2];
+    const long len_exp = (long) keys[kix + 1];
+    const YYKEYTYPE rule_exp = keys[kix + 2];
+    *pkix = kix + 3;
     if (rule_exp == 255) {
         fprintf
             ( stderr
@@ -12880,17 +13509,17 @@ static int action_line743
             );
     }
     if (len_act == len_exp && rule_act == rule_exp) {
-        const YYKEYTYPE offset = keys[3 * i];
+        const YYKEYTYPE offset = keys[kix];
         *cursor = token + offset;
         return 0;
     } else {
         fprintf
             ( stderr
-            , "error: lex_line743: at position %ld (iteration %u):\n"
+            , "error: lex_line743: at position %ld (key %u):\n"
                 "\texpected: match length %ld, rule %u\n"
                 "\tactual:   match length %ld, rule %u\n"
             , pos
-            , i
+            , kix
             , len_exp
             , rule_exp
             , len_act
@@ -12898,6 +13527,13 @@ static int action_line743
             );
         return 1;
     }
+}
+
+static int check_key_count_line743(unsigned have, unsigned used, unsigned need)
+{
+    if (used + need <= have) return 0;
+    fprintf(stderr, "error: lex_line743: not enough keys\n");
+    return 1;
 }
 
 int lex_line743()
@@ -12927,7 +13563,7 @@ int lex_line743()
 
     keys = (YYKEYTYPE *) read_file
         ("unicode_blocks.8--skeleton--encoding-policy(ignore).c.line743.keys"
-        , 3 * sizeof (YYKEYTYPE)
+        , sizeof (YYKEYTYPE)
         , 0
         , &keys_count
         );
@@ -12940,7 +13576,7 @@ int lex_line743()
     limit = input + input_len + padding;
     eof = input + input_len;
 
-    for (i = 0; status == 0 && i < keys_count; ++i) {
+    for (i = 0; status == 0 && cursor < eof && i < keys_count;) {
         token = cursor;
         const YYCTYPE *marker = NULL;
         YYCTYPE yych;
@@ -12954,7 +13590,8 @@ int lex_line743()
 yy505:
         YYSKIP ();
 yy506:
-        status = action_line743(i, keys, input, token, &cursor, 254);
+        status = check_key_count_line743(keys_count, i, 3)
+             || action_line743(&i, keys, input, token, &cursor, 254);
         continue;
 yy507:
         YYSKIP ();
@@ -13039,7 +13676,8 @@ yy509:
         goto yy506;
 yy510:
         YYSKIP ();
-        status = action_line743(i, keys, input, token, &cursor, 0);
+        status = check_key_count_line743(keys_count, i, 3)
+             || action_line743(&i, keys, input, token, &cursor, 0);
         continue;
 
     }
@@ -13051,7 +13689,7 @@ yy510:
         }
         if (i != keys_count) {
             status = 1;
-            fprintf(stderr, "error: lex_line743: unused keys left after %u iterations\n", i);
+            fprintf(stderr, "error: lex_line743: unused keys left after %u keys\n", i);
         }
     }
 
@@ -13081,7 +13719,7 @@ end:
 #define YYFILL(n) { break; }
 
 static int action_line750
-    ( unsigned int i
+    ( unsigned *pkix
     , const YYKEYTYPE *keys
     , const YYCTYPE *start
     , const YYCTYPE *token
@@ -13089,10 +13727,12 @@ static int action_line750
     , YYKEYTYPE rule_act
     )
 {
+    const unsigned kix = *pkix;
     const long pos = token - start;
     const long len_act = *cursor - token;
-    const long len_exp = (long) keys [3 * i + 1];
-    const YYKEYTYPE rule_exp = keys [3 * i + 2];
+    const long len_exp = (long) keys[kix + 1];
+    const YYKEYTYPE rule_exp = keys[kix + 2];
+    *pkix = kix + 3;
     if (rule_exp == 255) {
         fprintf
             ( stderr
@@ -13102,17 +13742,17 @@ static int action_line750
             );
     }
     if (len_act == len_exp && rule_act == rule_exp) {
-        const YYKEYTYPE offset = keys[3 * i];
+        const YYKEYTYPE offset = keys[kix];
         *cursor = token + offset;
         return 0;
     } else {
         fprintf
             ( stderr
-            , "error: lex_line750: at position %ld (iteration %u):\n"
+            , "error: lex_line750: at position %ld (key %u):\n"
                 "\texpected: match length %ld, rule %u\n"
                 "\tactual:   match length %ld, rule %u\n"
             , pos
-            , i
+            , kix
             , len_exp
             , rule_exp
             , len_act
@@ -13120,6 +13760,13 @@ static int action_line750
             );
         return 1;
     }
+}
+
+static int check_key_count_line750(unsigned have, unsigned used, unsigned need)
+{
+    if (used + need <= have) return 0;
+    fprintf(stderr, "error: lex_line750: not enough keys\n");
+    return 1;
 }
 
 int lex_line750()
@@ -13149,7 +13796,7 @@ int lex_line750()
 
     keys = (YYKEYTYPE *) read_file
         ("unicode_blocks.8--skeleton--encoding-policy(ignore).c.line750.keys"
-        , 3 * sizeof (YYKEYTYPE)
+        , sizeof (YYKEYTYPE)
         , 0
         , &keys_count
         );
@@ -13162,7 +13809,7 @@ int lex_line750()
     limit = input + input_len + padding;
     eof = input + input_len;
 
-    for (i = 0; status == 0 && i < keys_count; ++i) {
+    for (i = 0; status == 0 && cursor < eof && i < keys_count;) {
         token = cursor;
         const YYCTYPE *marker = NULL;
         YYCTYPE yych;
@@ -13176,7 +13823,8 @@ int lex_line750()
 yy514:
         YYSKIP ();
 yy515:
-        status = action_line750(i, keys, input, token, &cursor, 254);
+        status = check_key_count_line750(keys_count, i, 3)
+             || action_line750(&i, keys, input, token, &cursor, 254);
         continue;
 yy516:
         YYSKIP ();
@@ -13229,7 +13877,8 @@ yy518:
         goto yy515;
 yy519:
         YYSKIP ();
-        status = action_line750(i, keys, input, token, &cursor, 0);
+        status = check_key_count_line750(keys_count, i, 3)
+             || action_line750(&i, keys, input, token, &cursor, 0);
         continue;
 
     }
@@ -13241,7 +13890,7 @@ yy519:
         }
         if (i != keys_count) {
             status = 1;
-            fprintf(stderr, "error: lex_line750: unused keys left after %u iterations\n", i);
+            fprintf(stderr, "error: lex_line750: unused keys left after %u keys\n", i);
         }
     }
 
@@ -13271,7 +13920,7 @@ end:
 #define YYFILL(n) { break; }
 
 static int action_line757
-    ( unsigned int i
+    ( unsigned *pkix
     , const YYKEYTYPE *keys
     , const YYCTYPE *start
     , const YYCTYPE *token
@@ -13279,10 +13928,12 @@ static int action_line757
     , YYKEYTYPE rule_act
     )
 {
+    const unsigned kix = *pkix;
     const long pos = token - start;
     const long len_act = *cursor - token;
-    const long len_exp = (long) keys [3 * i + 1];
-    const YYKEYTYPE rule_exp = keys [3 * i + 2];
+    const long len_exp = (long) keys[kix + 1];
+    const YYKEYTYPE rule_exp = keys[kix + 2];
+    *pkix = kix + 3;
     if (rule_exp == 255) {
         fprintf
             ( stderr
@@ -13292,17 +13943,17 @@ static int action_line757
             );
     }
     if (len_act == len_exp && rule_act == rule_exp) {
-        const YYKEYTYPE offset = keys[3 * i];
+        const YYKEYTYPE offset = keys[kix];
         *cursor = token + offset;
         return 0;
     } else {
         fprintf
             ( stderr
-            , "error: lex_line757: at position %ld (iteration %u):\n"
+            , "error: lex_line757: at position %ld (key %u):\n"
                 "\texpected: match length %ld, rule %u\n"
                 "\tactual:   match length %ld, rule %u\n"
             , pos
-            , i
+            , kix
             , len_exp
             , rule_exp
             , len_act
@@ -13310,6 +13961,13 @@ static int action_line757
             );
         return 1;
     }
+}
+
+static int check_key_count_line757(unsigned have, unsigned used, unsigned need)
+{
+    if (used + need <= have) return 0;
+    fprintf(stderr, "error: lex_line757: not enough keys\n");
+    return 1;
 }
 
 int lex_line757()
@@ -13339,7 +13997,7 @@ int lex_line757()
 
     keys = (YYKEYTYPE *) read_file
         ("unicode_blocks.8--skeleton--encoding-policy(ignore).c.line757.keys"
-        , 3 * sizeof (YYKEYTYPE)
+        , sizeof (YYKEYTYPE)
         , 0
         , &keys_count
         );
@@ -13352,7 +14010,7 @@ int lex_line757()
     limit = input + input_len + padding;
     eof = input + input_len;
 
-    for (i = 0; status == 0 && i < keys_count; ++i) {
+    for (i = 0; status == 0 && cursor < eof && i < keys_count;) {
         token = cursor;
         const YYCTYPE *marker = NULL;
         YYCTYPE yych;
@@ -13366,7 +14024,8 @@ int lex_line757()
 yy523:
         YYSKIP ();
 yy524:
-        status = action_line757(i, keys, input, token, &cursor, 254);
+        status = check_key_count_line757(keys_count, i, 3)
+             || action_line757(&i, keys, input, token, &cursor, 254);
         continue;
 yy525:
         YYSKIP ();
@@ -13491,7 +14150,8 @@ yy528:
         }
 yy529:
         YYSKIP ();
-        status = action_line757(i, keys, input, token, &cursor, 0);
+        status = check_key_count_line757(keys_count, i, 3)
+             || action_line757(&i, keys, input, token, &cursor, 0);
         continue;
 
     }
@@ -13503,7 +14163,7 @@ yy529:
         }
         if (i != keys_count) {
             status = 1;
-            fprintf(stderr, "error: lex_line757: unused keys left after %u iterations\n", i);
+            fprintf(stderr, "error: lex_line757: unused keys left after %u keys\n", i);
         }
     }
 
@@ -13533,7 +14193,7 @@ end:
 #define YYFILL(n) { break; }
 
 static int action_line764
-    ( unsigned int i
+    ( unsigned *pkix
     , const YYKEYTYPE *keys
     , const YYCTYPE *start
     , const YYCTYPE *token
@@ -13541,10 +14201,12 @@ static int action_line764
     , YYKEYTYPE rule_act
     )
 {
+    const unsigned kix = *pkix;
     const long pos = token - start;
     const long len_act = *cursor - token;
-    const long len_exp = (long) keys [3 * i + 1];
-    const YYKEYTYPE rule_exp = keys [3 * i + 2];
+    const long len_exp = (long) keys[kix + 1];
+    const YYKEYTYPE rule_exp = keys[kix + 2];
+    *pkix = kix + 3;
     if (rule_exp == 255) {
         fprintf
             ( stderr
@@ -13554,17 +14216,17 @@ static int action_line764
             );
     }
     if (len_act == len_exp && rule_act == rule_exp) {
-        const YYKEYTYPE offset = keys[3 * i];
+        const YYKEYTYPE offset = keys[kix];
         *cursor = token + offset;
         return 0;
     } else {
         fprintf
             ( stderr
-            , "error: lex_line764: at position %ld (iteration %u):\n"
+            , "error: lex_line764: at position %ld (key %u):\n"
                 "\texpected: match length %ld, rule %u\n"
                 "\tactual:   match length %ld, rule %u\n"
             , pos
-            , i
+            , kix
             , len_exp
             , rule_exp
             , len_act
@@ -13572,6 +14234,13 @@ static int action_line764
             );
         return 1;
     }
+}
+
+static int check_key_count_line764(unsigned have, unsigned used, unsigned need)
+{
+    if (used + need <= have) return 0;
+    fprintf(stderr, "error: lex_line764: not enough keys\n");
+    return 1;
 }
 
 int lex_line764()
@@ -13601,7 +14270,7 @@ int lex_line764()
 
     keys = (YYKEYTYPE *) read_file
         ("unicode_blocks.8--skeleton--encoding-policy(ignore).c.line764.keys"
-        , 3 * sizeof (YYKEYTYPE)
+        , sizeof (YYKEYTYPE)
         , 0
         , &keys_count
         );
@@ -13614,7 +14283,7 @@ int lex_line764()
     limit = input + input_len + padding;
     eof = input + input_len;
 
-    for (i = 0; status == 0 && i < keys_count; ++i) {
+    for (i = 0; status == 0 && cursor < eof && i < keys_count;) {
         token = cursor;
         const YYCTYPE *marker = NULL;
         YYCTYPE yych;
@@ -13628,7 +14297,8 @@ int lex_line764()
 yy533:
         YYSKIP ();
 yy534:
-        status = action_line764(i, keys, input, token, &cursor, 254);
+        status = check_key_count_line764(keys_count, i, 3)
+             || action_line764(&i, keys, input, token, &cursor, 254);
         continue;
 yy535:
         YYSKIP ();
@@ -13714,7 +14384,8 @@ yy537:
         goto yy534;
 yy538:
         YYSKIP ();
-        status = action_line764(i, keys, input, token, &cursor, 0);
+        status = check_key_count_line764(keys_count, i, 3)
+             || action_line764(&i, keys, input, token, &cursor, 0);
         continue;
 
     }
@@ -13726,7 +14397,7 @@ yy538:
         }
         if (i != keys_count) {
             status = 1;
-            fprintf(stderr, "error: lex_line764: unused keys left after %u iterations\n", i);
+            fprintf(stderr, "error: lex_line764: unused keys left after %u keys\n", i);
         }
     }
 
@@ -13756,7 +14427,7 @@ end:
 #define YYFILL(n) { break; }
 
 static int action_line771
-    ( unsigned int i
+    ( unsigned *pkix
     , const YYKEYTYPE *keys
     , const YYCTYPE *start
     , const YYCTYPE *token
@@ -13764,10 +14435,12 @@ static int action_line771
     , YYKEYTYPE rule_act
     )
 {
+    const unsigned kix = *pkix;
     const long pos = token - start;
     const long len_act = *cursor - token;
-    const long len_exp = (long) keys [3 * i + 1];
-    const YYKEYTYPE rule_exp = keys [3 * i + 2];
+    const long len_exp = (long) keys[kix + 1];
+    const YYKEYTYPE rule_exp = keys[kix + 2];
+    *pkix = kix + 3;
     if (rule_exp == 255) {
         fprintf
             ( stderr
@@ -13777,17 +14450,17 @@ static int action_line771
             );
     }
     if (len_act == len_exp && rule_act == rule_exp) {
-        const YYKEYTYPE offset = keys[3 * i];
+        const YYKEYTYPE offset = keys[kix];
         *cursor = token + offset;
         return 0;
     } else {
         fprintf
             ( stderr
-            , "error: lex_line771: at position %ld (iteration %u):\n"
+            , "error: lex_line771: at position %ld (key %u):\n"
                 "\texpected: match length %ld, rule %u\n"
                 "\tactual:   match length %ld, rule %u\n"
             , pos
-            , i
+            , kix
             , len_exp
             , rule_exp
             , len_act
@@ -13795,6 +14468,13 @@ static int action_line771
             );
         return 1;
     }
+}
+
+static int check_key_count_line771(unsigned have, unsigned used, unsigned need)
+{
+    if (used + need <= have) return 0;
+    fprintf(stderr, "error: lex_line771: not enough keys\n");
+    return 1;
 }
 
 int lex_line771()
@@ -13824,7 +14504,7 @@ int lex_line771()
 
     keys = (YYKEYTYPE *) read_file
         ("unicode_blocks.8--skeleton--encoding-policy(ignore).c.line771.keys"
-        , 3 * sizeof (YYKEYTYPE)
+        , sizeof (YYKEYTYPE)
         , 0
         , &keys_count
         );
@@ -13837,7 +14517,7 @@ int lex_line771()
     limit = input + input_len + padding;
     eof = input + input_len;
 
-    for (i = 0; status == 0 && i < keys_count; ++i) {
+    for (i = 0; status == 0 && cursor < eof && i < keys_count;) {
         token = cursor;
         const YYCTYPE *marker = NULL;
         YYCTYPE yych;
@@ -13851,7 +14531,8 @@ int lex_line771()
 yy542:
         YYSKIP ();
 yy543:
-        status = action_line771(i, keys, input, token, &cursor, 254);
+        status = check_key_count_line771(keys_count, i, 3)
+             || action_line771(&i, keys, input, token, &cursor, 254);
         continue;
 yy544:
         YYSKIP ();
@@ -13904,7 +14585,8 @@ yy546:
         goto yy543;
 yy547:
         YYSKIP ();
-        status = action_line771(i, keys, input, token, &cursor, 0);
+        status = check_key_count_line771(keys_count, i, 3)
+             || action_line771(&i, keys, input, token, &cursor, 0);
         continue;
 
     }
@@ -13916,7 +14598,7 @@ yy547:
         }
         if (i != keys_count) {
             status = 1;
-            fprintf(stderr, "error: lex_line771: unused keys left after %u iterations\n", i);
+            fprintf(stderr, "error: lex_line771: unused keys left after %u keys\n", i);
         }
     }
 
@@ -13946,7 +14628,7 @@ end:
 #define YYFILL(n) { break; }
 
 static int action_line778
-    ( unsigned int i
+    ( unsigned *pkix
     , const YYKEYTYPE *keys
     , const YYCTYPE *start
     , const YYCTYPE *token
@@ -13954,10 +14636,12 @@ static int action_line778
     , YYKEYTYPE rule_act
     )
 {
+    const unsigned kix = *pkix;
     const long pos = token - start;
     const long len_act = *cursor - token;
-    const long len_exp = (long) keys [3 * i + 1];
-    const YYKEYTYPE rule_exp = keys [3 * i + 2];
+    const long len_exp = (long) keys[kix + 1];
+    const YYKEYTYPE rule_exp = keys[kix + 2];
+    *pkix = kix + 3;
     if (rule_exp == 255) {
         fprintf
             ( stderr
@@ -13967,17 +14651,17 @@ static int action_line778
             );
     }
     if (len_act == len_exp && rule_act == rule_exp) {
-        const YYKEYTYPE offset = keys[3 * i];
+        const YYKEYTYPE offset = keys[kix];
         *cursor = token + offset;
         return 0;
     } else {
         fprintf
             ( stderr
-            , "error: lex_line778: at position %ld (iteration %u):\n"
+            , "error: lex_line778: at position %ld (key %u):\n"
                 "\texpected: match length %ld, rule %u\n"
                 "\tactual:   match length %ld, rule %u\n"
             , pos
-            , i
+            , kix
             , len_exp
             , rule_exp
             , len_act
@@ -13985,6 +14669,13 @@ static int action_line778
             );
         return 1;
     }
+}
+
+static int check_key_count_line778(unsigned have, unsigned used, unsigned need)
+{
+    if (used + need <= have) return 0;
+    fprintf(stderr, "error: lex_line778: not enough keys\n");
+    return 1;
 }
 
 int lex_line778()
@@ -14014,7 +14705,7 @@ int lex_line778()
 
     keys = (YYKEYTYPE *) read_file
         ("unicode_blocks.8--skeleton--encoding-policy(ignore).c.line778.keys"
-        , 3 * sizeof (YYKEYTYPE)
+        , sizeof (YYKEYTYPE)
         , 0
         , &keys_count
         );
@@ -14027,7 +14718,7 @@ int lex_line778()
     limit = input + input_len + padding;
     eof = input + input_len;
 
-    for (i = 0; status == 0 && i < keys_count; ++i) {
+    for (i = 0; status == 0 && cursor < eof && i < keys_count;) {
         token = cursor;
         const YYCTYPE *marker = NULL;
         YYCTYPE yych;
@@ -14041,7 +14732,8 @@ int lex_line778()
 yy551:
         YYSKIP ();
 yy552:
-        status = action_line778(i, keys, input, token, &cursor, 254);
+        status = check_key_count_line778(keys_count, i, 3)
+             || action_line778(&i, keys, input, token, &cursor, 254);
         continue;
 yy553:
         YYSKIP ();
@@ -14165,7 +14857,8 @@ yy556:
         }
 yy557:
         YYSKIP ();
-        status = action_line778(i, keys, input, token, &cursor, 0);
+        status = check_key_count_line778(keys_count, i, 3)
+             || action_line778(&i, keys, input, token, &cursor, 0);
         continue;
 
     }
@@ -14177,7 +14870,7 @@ yy557:
         }
         if (i != keys_count) {
             status = 1;
-            fprintf(stderr, "error: lex_line778: unused keys left after %u iterations\n", i);
+            fprintf(stderr, "error: lex_line778: unused keys left after %u keys\n", i);
         }
     }
 
@@ -14207,7 +14900,7 @@ end:
 #define YYFILL(n) { break; }
 
 static int action_line785
-    ( unsigned int i
+    ( unsigned *pkix
     , const YYKEYTYPE *keys
     , const YYCTYPE *start
     , const YYCTYPE *token
@@ -14215,10 +14908,12 @@ static int action_line785
     , YYKEYTYPE rule_act
     )
 {
+    const unsigned kix = *pkix;
     const long pos = token - start;
     const long len_act = *cursor - token;
-    const long len_exp = (long) keys [3 * i + 1];
-    const YYKEYTYPE rule_exp = keys [3 * i + 2];
+    const long len_exp = (long) keys[kix + 1];
+    const YYKEYTYPE rule_exp = keys[kix + 2];
+    *pkix = kix + 3;
     if (rule_exp == 255) {
         fprintf
             ( stderr
@@ -14228,17 +14923,17 @@ static int action_line785
             );
     }
     if (len_act == len_exp && rule_act == rule_exp) {
-        const YYKEYTYPE offset = keys[3 * i];
+        const YYKEYTYPE offset = keys[kix];
         *cursor = token + offset;
         return 0;
     } else {
         fprintf
             ( stderr
-            , "error: lex_line785: at position %ld (iteration %u):\n"
+            , "error: lex_line785: at position %ld (key %u):\n"
                 "\texpected: match length %ld, rule %u\n"
                 "\tactual:   match length %ld, rule %u\n"
             , pos
-            , i
+            , kix
             , len_exp
             , rule_exp
             , len_act
@@ -14246,6 +14941,13 @@ static int action_line785
             );
         return 1;
     }
+}
+
+static int check_key_count_line785(unsigned have, unsigned used, unsigned need)
+{
+    if (used + need <= have) return 0;
+    fprintf(stderr, "error: lex_line785: not enough keys\n");
+    return 1;
 }
 
 int lex_line785()
@@ -14275,7 +14977,7 @@ int lex_line785()
 
     keys = (YYKEYTYPE *) read_file
         ("unicode_blocks.8--skeleton--encoding-policy(ignore).c.line785.keys"
-        , 3 * sizeof (YYKEYTYPE)
+        , sizeof (YYKEYTYPE)
         , 0
         , &keys_count
         );
@@ -14288,7 +14990,7 @@ int lex_line785()
     limit = input + input_len + padding;
     eof = input + input_len;
 
-    for (i = 0; status == 0 && i < keys_count; ++i) {
+    for (i = 0; status == 0 && cursor < eof && i < keys_count;) {
         token = cursor;
         const YYCTYPE *marker = NULL;
         YYCTYPE yych;
@@ -14302,7 +15004,8 @@ int lex_line785()
 yy561:
         YYSKIP ();
 yy562:
-        status = action_line785(i, keys, input, token, &cursor, 254);
+        status = check_key_count_line785(keys_count, i, 3)
+             || action_line785(&i, keys, input, token, &cursor, 254);
         continue;
 yy563:
         YYSKIP ();
@@ -14390,7 +15093,8 @@ yy565:
         goto yy562;
 yy566:
         YYSKIP ();
-        status = action_line785(i, keys, input, token, &cursor, 0);
+        status = check_key_count_line785(keys_count, i, 3)
+             || action_line785(&i, keys, input, token, &cursor, 0);
         continue;
 
     }
@@ -14402,7 +15106,7 @@ yy566:
         }
         if (i != keys_count) {
             status = 1;
-            fprintf(stderr, "error: lex_line785: unused keys left after %u iterations\n", i);
+            fprintf(stderr, "error: lex_line785: unused keys left after %u keys\n", i);
         }
     }
 
@@ -14432,7 +15136,7 @@ end:
 #define YYFILL(n) { break; }
 
 static int action_line792
-    ( unsigned int i
+    ( unsigned *pkix
     , const YYKEYTYPE *keys
     , const YYCTYPE *start
     , const YYCTYPE *token
@@ -14440,10 +15144,12 @@ static int action_line792
     , YYKEYTYPE rule_act
     )
 {
+    const unsigned kix = *pkix;
     const long pos = token - start;
     const long len_act = *cursor - token;
-    const long len_exp = (long) keys [3 * i + 1];
-    const YYKEYTYPE rule_exp = keys [3 * i + 2];
+    const long len_exp = (long) keys[kix + 1];
+    const YYKEYTYPE rule_exp = keys[kix + 2];
+    *pkix = kix + 3;
     if (rule_exp == 255) {
         fprintf
             ( stderr
@@ -14453,17 +15159,17 @@ static int action_line792
             );
     }
     if (len_act == len_exp && rule_act == rule_exp) {
-        const YYKEYTYPE offset = keys[3 * i];
+        const YYKEYTYPE offset = keys[kix];
         *cursor = token + offset;
         return 0;
     } else {
         fprintf
             ( stderr
-            , "error: lex_line792: at position %ld (iteration %u):\n"
+            , "error: lex_line792: at position %ld (key %u):\n"
                 "\texpected: match length %ld, rule %u\n"
                 "\tactual:   match length %ld, rule %u\n"
             , pos
-            , i
+            , kix
             , len_exp
             , rule_exp
             , len_act
@@ -14471,6 +15177,13 @@ static int action_line792
             );
         return 1;
     }
+}
+
+static int check_key_count_line792(unsigned have, unsigned used, unsigned need)
+{
+    if (used + need <= have) return 0;
+    fprintf(stderr, "error: lex_line792: not enough keys\n");
+    return 1;
 }
 
 int lex_line792()
@@ -14500,7 +15213,7 @@ int lex_line792()
 
     keys = (YYKEYTYPE *) read_file
         ("unicode_blocks.8--skeleton--encoding-policy(ignore).c.line792.keys"
-        , 3 * sizeof (YYKEYTYPE)
+        , sizeof (YYKEYTYPE)
         , 0
         , &keys_count
         );
@@ -14513,7 +15226,7 @@ int lex_line792()
     limit = input + input_len + padding;
     eof = input + input_len;
 
-    for (i = 0; status == 0 && i < keys_count; ++i) {
+    for (i = 0; status == 0 && cursor < eof && i < keys_count;) {
         token = cursor;
         const YYCTYPE *marker = NULL;
         YYCTYPE yych;
@@ -14527,7 +15240,8 @@ int lex_line792()
 yy570:
         YYSKIP ();
 yy571:
-        status = action_line792(i, keys, input, token, &cursor, 254);
+        status = check_key_count_line792(keys_count, i, 3)
+             || action_line792(&i, keys, input, token, &cursor, 254);
         continue;
 yy572:
         YYSKIP ();
@@ -14614,7 +15328,8 @@ yy574:
         goto yy571;
 yy575:
         YYSKIP ();
-        status = action_line792(i, keys, input, token, &cursor, 0);
+        status = check_key_count_line792(keys_count, i, 3)
+             || action_line792(&i, keys, input, token, &cursor, 0);
         continue;
 
     }
@@ -14626,7 +15341,7 @@ yy575:
         }
         if (i != keys_count) {
             status = 1;
-            fprintf(stderr, "error: lex_line792: unused keys left after %u iterations\n", i);
+            fprintf(stderr, "error: lex_line792: unused keys left after %u keys\n", i);
         }
     }
 
@@ -14656,7 +15371,7 @@ end:
 #define YYFILL(n) { break; }
 
 static int action_line799
-    ( unsigned int i
+    ( unsigned *pkix
     , const YYKEYTYPE *keys
     , const YYCTYPE *start
     , const YYCTYPE *token
@@ -14664,10 +15379,12 @@ static int action_line799
     , YYKEYTYPE rule_act
     )
 {
+    const unsigned kix = *pkix;
     const long pos = token - start;
     const long len_act = *cursor - token;
-    const long len_exp = (long) keys [3 * i + 1];
-    const YYKEYTYPE rule_exp = keys [3 * i + 2];
+    const long len_exp = (long) keys[kix + 1];
+    const YYKEYTYPE rule_exp = keys[kix + 2];
+    *pkix = kix + 3;
     if (rule_exp == 255) {
         fprintf
             ( stderr
@@ -14677,17 +15394,17 @@ static int action_line799
             );
     }
     if (len_act == len_exp && rule_act == rule_exp) {
-        const YYKEYTYPE offset = keys[3 * i];
+        const YYKEYTYPE offset = keys[kix];
         *cursor = token + offset;
         return 0;
     } else {
         fprintf
             ( stderr
-            , "error: lex_line799: at position %ld (iteration %u):\n"
+            , "error: lex_line799: at position %ld (key %u):\n"
                 "\texpected: match length %ld, rule %u\n"
                 "\tactual:   match length %ld, rule %u\n"
             , pos
-            , i
+            , kix
             , len_exp
             , rule_exp
             , len_act
@@ -14695,6 +15412,13 @@ static int action_line799
             );
         return 1;
     }
+}
+
+static int check_key_count_line799(unsigned have, unsigned used, unsigned need)
+{
+    if (used + need <= have) return 0;
+    fprintf(stderr, "error: lex_line799: not enough keys\n");
+    return 1;
 }
 
 int lex_line799()
@@ -14724,7 +15448,7 @@ int lex_line799()
 
     keys = (YYKEYTYPE *) read_file
         ("unicode_blocks.8--skeleton--encoding-policy(ignore).c.line799.keys"
-        , 3 * sizeof (YYKEYTYPE)
+        , sizeof (YYKEYTYPE)
         , 0
         , &keys_count
         );
@@ -14737,7 +15461,7 @@ int lex_line799()
     limit = input + input_len + padding;
     eof = input + input_len;
 
-    for (i = 0; status == 0 && i < keys_count; ++i) {
+    for (i = 0; status == 0 && cursor < eof && i < keys_count;) {
         token = cursor;
         const YYCTYPE *marker = NULL;
         YYCTYPE yych;
@@ -14751,7 +15475,8 @@ int lex_line799()
 yy579:
         YYSKIP ();
 yy580:
-        status = action_line799(i, keys, input, token, &cursor, 254);
+        status = check_key_count_line799(keys_count, i, 3)
+             || action_line799(&i, keys, input, token, &cursor, 254);
         continue;
 yy581:
         YYSKIP ();
@@ -14820,7 +15545,8 @@ yy583:
         goto yy580;
 yy584:
         YYSKIP ();
-        status = action_line799(i, keys, input, token, &cursor, 0);
+        status = check_key_count_line799(keys_count, i, 3)
+             || action_line799(&i, keys, input, token, &cursor, 0);
         continue;
 
     }
@@ -14832,7 +15558,7 @@ yy584:
         }
         if (i != keys_count) {
             status = 1;
-            fprintf(stderr, "error: lex_line799: unused keys left after %u iterations\n", i);
+            fprintf(stderr, "error: lex_line799: unused keys left after %u keys\n", i);
         }
     }
 
@@ -14862,7 +15588,7 @@ end:
 #define YYFILL(n) { break; }
 
 static int action_line806
-    ( unsigned int i
+    ( unsigned *pkix
     , const YYKEYTYPE *keys
     , const YYCTYPE *start
     , const YYCTYPE *token
@@ -14870,10 +15596,12 @@ static int action_line806
     , YYKEYTYPE rule_act
     )
 {
+    const unsigned kix = *pkix;
     const long pos = token - start;
     const long len_act = *cursor - token;
-    const long len_exp = (long) keys [3 * i + 1];
-    const YYKEYTYPE rule_exp = keys [3 * i + 2];
+    const long len_exp = (long) keys[kix + 1];
+    const YYKEYTYPE rule_exp = keys[kix + 2];
+    *pkix = kix + 3;
     if (rule_exp == 255) {
         fprintf
             ( stderr
@@ -14883,17 +15611,17 @@ static int action_line806
             );
     }
     if (len_act == len_exp && rule_act == rule_exp) {
-        const YYKEYTYPE offset = keys[3 * i];
+        const YYKEYTYPE offset = keys[kix];
         *cursor = token + offset;
         return 0;
     } else {
         fprintf
             ( stderr
-            , "error: lex_line806: at position %ld (iteration %u):\n"
+            , "error: lex_line806: at position %ld (key %u):\n"
                 "\texpected: match length %ld, rule %u\n"
                 "\tactual:   match length %ld, rule %u\n"
             , pos
-            , i
+            , kix
             , len_exp
             , rule_exp
             , len_act
@@ -14901,6 +15629,13 @@ static int action_line806
             );
         return 1;
     }
+}
+
+static int check_key_count_line806(unsigned have, unsigned used, unsigned need)
+{
+    if (used + need <= have) return 0;
+    fprintf(stderr, "error: lex_line806: not enough keys\n");
+    return 1;
 }
 
 int lex_line806()
@@ -14930,7 +15665,7 @@ int lex_line806()
 
     keys = (YYKEYTYPE *) read_file
         ("unicode_blocks.8--skeleton--encoding-policy(ignore).c.line806.keys"
-        , 3 * sizeof (YYKEYTYPE)
+        , sizeof (YYKEYTYPE)
         , 0
         , &keys_count
         );
@@ -14943,7 +15678,7 @@ int lex_line806()
     limit = input + input_len + padding;
     eof = input + input_len;
 
-    for (i = 0; status == 0 && i < keys_count; ++i) {
+    for (i = 0; status == 0 && cursor < eof && i < keys_count;) {
         token = cursor;
         const YYCTYPE *marker = NULL;
         YYCTYPE yych;
@@ -14957,7 +15692,8 @@ int lex_line806()
 yy588:
         YYSKIP ();
 yy589:
-        status = action_line806(i, keys, input, token, &cursor, 254);
+        status = check_key_count_line806(keys_count, i, 3)
+             || action_line806(&i, keys, input, token, &cursor, 254);
         continue;
 yy590:
         YYSKIP ();
@@ -14994,7 +15730,8 @@ yy592:
         goto yy589;
 yy593:
         YYSKIP ();
-        status = action_line806(i, keys, input, token, &cursor, 0);
+        status = check_key_count_line806(keys_count, i, 3)
+             || action_line806(&i, keys, input, token, &cursor, 0);
         continue;
 
     }
@@ -15006,7 +15743,7 @@ yy593:
         }
         if (i != keys_count) {
             status = 1;
-            fprintf(stderr, "error: lex_line806: unused keys left after %u iterations\n", i);
+            fprintf(stderr, "error: lex_line806: unused keys left after %u keys\n", i);
         }
     }
 
@@ -15036,7 +15773,7 @@ end:
 #define YYFILL(n) { break; }
 
 static int action_line813
-    ( unsigned int i
+    ( unsigned *pkix
     , const YYKEYTYPE *keys
     , const YYCTYPE *start
     , const YYCTYPE *token
@@ -15044,10 +15781,12 @@ static int action_line813
     , YYKEYTYPE rule_act
     )
 {
+    const unsigned kix = *pkix;
     const long pos = token - start;
     const long len_act = *cursor - token;
-    const long len_exp = (long) keys [3 * i + 1];
-    const YYKEYTYPE rule_exp = keys [3 * i + 2];
+    const long len_exp = (long) keys[kix + 1];
+    const YYKEYTYPE rule_exp = keys[kix + 2];
+    *pkix = kix + 3;
     if (rule_exp == 255) {
         fprintf
             ( stderr
@@ -15057,17 +15796,17 @@ static int action_line813
             );
     }
     if (len_act == len_exp && rule_act == rule_exp) {
-        const YYKEYTYPE offset = keys[3 * i];
+        const YYKEYTYPE offset = keys[kix];
         *cursor = token + offset;
         return 0;
     } else {
         fprintf
             ( stderr
-            , "error: lex_line813: at position %ld (iteration %u):\n"
+            , "error: lex_line813: at position %ld (key %u):\n"
                 "\texpected: match length %ld, rule %u\n"
                 "\tactual:   match length %ld, rule %u\n"
             , pos
-            , i
+            , kix
             , len_exp
             , rule_exp
             , len_act
@@ -15075,6 +15814,13 @@ static int action_line813
             );
         return 1;
     }
+}
+
+static int check_key_count_line813(unsigned have, unsigned used, unsigned need)
+{
+    if (used + need <= have) return 0;
+    fprintf(stderr, "error: lex_line813: not enough keys\n");
+    return 1;
 }
 
 int lex_line813()
@@ -15104,7 +15850,7 @@ int lex_line813()
 
     keys = (YYKEYTYPE *) read_file
         ("unicode_blocks.8--skeleton--encoding-policy(ignore).c.line813.keys"
-        , 3 * sizeof (YYKEYTYPE)
+        , sizeof (YYKEYTYPE)
         , 0
         , &keys_count
         );
@@ -15117,7 +15863,7 @@ int lex_line813()
     limit = input + input_len + padding;
     eof = input + input_len;
 
-    for (i = 0; status == 0 && i < keys_count; ++i) {
+    for (i = 0; status == 0 && cursor < eof && i < keys_count;) {
         token = cursor;
         const YYCTYPE *marker = NULL;
         YYCTYPE yych;
@@ -15131,7 +15877,8 @@ int lex_line813()
 yy597:
         YYSKIP ();
 yy598:
-        status = action_line813(i, keys, input, token, &cursor, 254);
+        status = check_key_count_line813(keys_count, i, 3)
+             || action_line813(&i, keys, input, token, &cursor, 254);
         continue;
 yy599:
         YYSKIP ();
@@ -15219,7 +15966,8 @@ yy601:
         goto yy598;
 yy602:
         YYSKIP ();
-        status = action_line813(i, keys, input, token, &cursor, 0);
+        status = check_key_count_line813(keys_count, i, 3)
+             || action_line813(&i, keys, input, token, &cursor, 0);
         continue;
 
     }
@@ -15231,7 +15979,7 @@ yy602:
         }
         if (i != keys_count) {
             status = 1;
-            fprintf(stderr, "error: lex_line813: unused keys left after %u iterations\n", i);
+            fprintf(stderr, "error: lex_line813: unused keys left after %u keys\n", i);
         }
     }
 
@@ -15261,7 +16009,7 @@ end:
 #define YYFILL(n) { break; }
 
 static int action_line820
-    ( unsigned int i
+    ( unsigned *pkix
     , const YYKEYTYPE *keys
     , const YYCTYPE *start
     , const YYCTYPE *token
@@ -15269,10 +16017,12 @@ static int action_line820
     , YYKEYTYPE rule_act
     )
 {
+    const unsigned kix = *pkix;
     const long pos = token - start;
     const long len_act = *cursor - token;
-    const long len_exp = (long) keys [3 * i + 1];
-    const YYKEYTYPE rule_exp = keys [3 * i + 2];
+    const long len_exp = (long) keys[kix + 1];
+    const YYKEYTYPE rule_exp = keys[kix + 2];
+    *pkix = kix + 3;
     if (rule_exp == 255) {
         fprintf
             ( stderr
@@ -15282,17 +16032,17 @@ static int action_line820
             );
     }
     if (len_act == len_exp && rule_act == rule_exp) {
-        const YYKEYTYPE offset = keys[3 * i];
+        const YYKEYTYPE offset = keys[kix];
         *cursor = token + offset;
         return 0;
     } else {
         fprintf
             ( stderr
-            , "error: lex_line820: at position %ld (iteration %u):\n"
+            , "error: lex_line820: at position %ld (key %u):\n"
                 "\texpected: match length %ld, rule %u\n"
                 "\tactual:   match length %ld, rule %u\n"
             , pos
-            , i
+            , kix
             , len_exp
             , rule_exp
             , len_act
@@ -15300,6 +16050,13 @@ static int action_line820
             );
         return 1;
     }
+}
+
+static int check_key_count_line820(unsigned have, unsigned used, unsigned need)
+{
+    if (used + need <= have) return 0;
+    fprintf(stderr, "error: lex_line820: not enough keys\n");
+    return 1;
 }
 
 int lex_line820()
@@ -15329,7 +16086,7 @@ int lex_line820()
 
     keys = (YYKEYTYPE *) read_file
         ("unicode_blocks.8--skeleton--encoding-policy(ignore).c.line820.keys"
-        , 3 * sizeof (YYKEYTYPE)
+        , sizeof (YYKEYTYPE)
         , 0
         , &keys_count
         );
@@ -15342,7 +16099,7 @@ int lex_line820()
     limit = input + input_len + padding;
     eof = input + input_len;
 
-    for (i = 0; status == 0 && i < keys_count; ++i) {
+    for (i = 0; status == 0 && cursor < eof && i < keys_count;) {
         token = cursor;
         const YYCTYPE *marker = NULL;
         YYCTYPE yych;
@@ -15356,7 +16113,8 @@ int lex_line820()
 yy606:
         YYSKIP ();
 yy607:
-        status = action_line820(i, keys, input, token, &cursor, 254);
+        status = check_key_count_line820(keys_count, i, 3)
+             || action_line820(&i, keys, input, token, &cursor, 254);
         continue;
 yy608:
         YYSKIP ();
@@ -15442,7 +16200,8 @@ yy610:
         goto yy607;
 yy611:
         YYSKIP ();
-        status = action_line820(i, keys, input, token, &cursor, 0);
+        status = check_key_count_line820(keys_count, i, 3)
+             || action_line820(&i, keys, input, token, &cursor, 0);
         continue;
 
     }
@@ -15454,7 +16213,7 @@ yy611:
         }
         if (i != keys_count) {
             status = 1;
-            fprintf(stderr, "error: lex_line820: unused keys left after %u iterations\n", i);
+            fprintf(stderr, "error: lex_line820: unused keys left after %u keys\n", i);
         }
     }
 
@@ -15484,7 +16243,7 @@ end:
 #define YYFILL(n) { break; }
 
 static int action_line827
-    ( unsigned int i
+    ( unsigned *pkix
     , const YYKEYTYPE *keys
     , const YYCTYPE *start
     , const YYCTYPE *token
@@ -15492,10 +16251,12 @@ static int action_line827
     , YYKEYTYPE rule_act
     )
 {
+    const unsigned kix = *pkix;
     const long pos = token - start;
     const long len_act = *cursor - token;
-    const long len_exp = (long) keys [3 * i + 1];
-    const YYKEYTYPE rule_exp = keys [3 * i + 2];
+    const long len_exp = (long) keys[kix + 1];
+    const YYKEYTYPE rule_exp = keys[kix + 2];
+    *pkix = kix + 3;
     if (rule_exp == 255) {
         fprintf
             ( stderr
@@ -15505,17 +16266,17 @@ static int action_line827
             );
     }
     if (len_act == len_exp && rule_act == rule_exp) {
-        const YYKEYTYPE offset = keys[3 * i];
+        const YYKEYTYPE offset = keys[kix];
         *cursor = token + offset;
         return 0;
     } else {
         fprintf
             ( stderr
-            , "error: lex_line827: at position %ld (iteration %u):\n"
+            , "error: lex_line827: at position %ld (key %u):\n"
                 "\texpected: match length %ld, rule %u\n"
                 "\tactual:   match length %ld, rule %u\n"
             , pos
-            , i
+            , kix
             , len_exp
             , rule_exp
             , len_act
@@ -15523,6 +16284,13 @@ static int action_line827
             );
         return 1;
     }
+}
+
+static int check_key_count_line827(unsigned have, unsigned used, unsigned need)
+{
+    if (used + need <= have) return 0;
+    fprintf(stderr, "error: lex_line827: not enough keys\n");
+    return 1;
 }
 
 int lex_line827()
@@ -15552,7 +16320,7 @@ int lex_line827()
 
     keys = (YYKEYTYPE *) read_file
         ("unicode_blocks.8--skeleton--encoding-policy(ignore).c.line827.keys"
-        , 3 * sizeof (YYKEYTYPE)
+        , sizeof (YYKEYTYPE)
         , 0
         , &keys_count
         );
@@ -15565,7 +16333,7 @@ int lex_line827()
     limit = input + input_len + padding;
     eof = input + input_len;
 
-    for (i = 0; status == 0 && i < keys_count; ++i) {
+    for (i = 0; status == 0 && cursor < eof && i < keys_count;) {
         token = cursor;
         const YYCTYPE *marker = NULL;
         YYCTYPE yych;
@@ -15579,7 +16347,8 @@ int lex_line827()
 yy615:
         YYSKIP ();
 yy616:
-        status = action_line827(i, keys, input, token, &cursor, 254);
+        status = check_key_count_line827(keys_count, i, 3)
+             || action_line827(&i, keys, input, token, &cursor, 254);
         continue;
 yy617:
         YYSKIP ();
@@ -15665,7 +16434,8 @@ yy619:
         goto yy616;
 yy620:
         YYSKIP ();
-        status = action_line827(i, keys, input, token, &cursor, 0);
+        status = check_key_count_line827(keys_count, i, 3)
+             || action_line827(&i, keys, input, token, &cursor, 0);
         continue;
 
     }
@@ -15677,7 +16447,7 @@ yy620:
         }
         if (i != keys_count) {
             status = 1;
-            fprintf(stderr, "error: lex_line827: unused keys left after %u iterations\n", i);
+            fprintf(stderr, "error: lex_line827: unused keys left after %u keys\n", i);
         }
     }
 
@@ -15707,7 +16477,7 @@ end:
 #define YYFILL(n) { break; }
 
 static int action_line834
-    ( unsigned int i
+    ( unsigned *pkix
     , const YYKEYTYPE *keys
     , const YYCTYPE *start
     , const YYCTYPE *token
@@ -15715,10 +16485,12 @@ static int action_line834
     , YYKEYTYPE rule_act
     )
 {
+    const unsigned kix = *pkix;
     const long pos = token - start;
     const long len_act = *cursor - token;
-    const long len_exp = (long) keys [3 * i + 1];
-    const YYKEYTYPE rule_exp = keys [3 * i + 2];
+    const long len_exp = (long) keys[kix + 1];
+    const YYKEYTYPE rule_exp = keys[kix + 2];
+    *pkix = kix + 3;
     if (rule_exp == 255) {
         fprintf
             ( stderr
@@ -15728,17 +16500,17 @@ static int action_line834
             );
     }
     if (len_act == len_exp && rule_act == rule_exp) {
-        const YYKEYTYPE offset = keys[3 * i];
+        const YYKEYTYPE offset = keys[kix];
         *cursor = token + offset;
         return 0;
     } else {
         fprintf
             ( stderr
-            , "error: lex_line834: at position %ld (iteration %u):\n"
+            , "error: lex_line834: at position %ld (key %u):\n"
                 "\texpected: match length %ld, rule %u\n"
                 "\tactual:   match length %ld, rule %u\n"
             , pos
-            , i
+            , kix
             , len_exp
             , rule_exp
             , len_act
@@ -15746,6 +16518,13 @@ static int action_line834
             );
         return 1;
     }
+}
+
+static int check_key_count_line834(unsigned have, unsigned used, unsigned need)
+{
+    if (used + need <= have) return 0;
+    fprintf(stderr, "error: lex_line834: not enough keys\n");
+    return 1;
 }
 
 int lex_line834()
@@ -15775,7 +16554,7 @@ int lex_line834()
 
     keys = (YYKEYTYPE *) read_file
         ("unicode_blocks.8--skeleton--encoding-policy(ignore).c.line834.keys"
-        , 3 * sizeof (YYKEYTYPE)
+        , sizeof (YYKEYTYPE)
         , 0
         , &keys_count
         );
@@ -15788,7 +16567,7 @@ int lex_line834()
     limit = input + input_len + padding;
     eof = input + input_len;
 
-    for (i = 0; status == 0 && i < keys_count; ++i) {
+    for (i = 0; status == 0 && cursor < eof && i < keys_count;) {
         token = cursor;
         const YYCTYPE *marker = NULL;
         YYCTYPE yych;
@@ -15802,7 +16581,8 @@ int lex_line834()
 yy624:
         YYSKIP ();
 yy625:
-        status = action_line834(i, keys, input, token, &cursor, 254);
+        status = check_key_count_line834(keys_count, i, 3)
+             || action_line834(&i, keys, input, token, &cursor, 254);
         continue;
 yy626:
         YYSKIP ();
@@ -15890,7 +16670,8 @@ yy628:
         goto yy625;
 yy629:
         YYSKIP ();
-        status = action_line834(i, keys, input, token, &cursor, 0);
+        status = check_key_count_line834(keys_count, i, 3)
+             || action_line834(&i, keys, input, token, &cursor, 0);
         continue;
 
     }
@@ -15902,7 +16683,7 @@ yy629:
         }
         if (i != keys_count) {
             status = 1;
-            fprintf(stderr, "error: lex_line834: unused keys left after %u iterations\n", i);
+            fprintf(stderr, "error: lex_line834: unused keys left after %u keys\n", i);
         }
     }
 
@@ -15932,7 +16713,7 @@ end:
 #define YYFILL(n) { break; }
 
 static int action_line841
-    ( unsigned int i
+    ( unsigned *pkix
     , const YYKEYTYPE *keys
     , const YYCTYPE *start
     , const YYCTYPE *token
@@ -15940,10 +16721,12 @@ static int action_line841
     , YYKEYTYPE rule_act
     )
 {
+    const unsigned kix = *pkix;
     const long pos = token - start;
     const long len_act = *cursor - token;
-    const long len_exp = (long) keys [3 * i + 1];
-    const YYKEYTYPE rule_exp = keys [3 * i + 2];
+    const long len_exp = (long) keys[kix + 1];
+    const YYKEYTYPE rule_exp = keys[kix + 2];
+    *pkix = kix + 3;
     if (rule_exp == 255) {
         fprintf
             ( stderr
@@ -15953,17 +16736,17 @@ static int action_line841
             );
     }
     if (len_act == len_exp && rule_act == rule_exp) {
-        const YYKEYTYPE offset = keys[3 * i];
+        const YYKEYTYPE offset = keys[kix];
         *cursor = token + offset;
         return 0;
     } else {
         fprintf
             ( stderr
-            , "error: lex_line841: at position %ld (iteration %u):\n"
+            , "error: lex_line841: at position %ld (key %u):\n"
                 "\texpected: match length %ld, rule %u\n"
                 "\tactual:   match length %ld, rule %u\n"
             , pos
-            , i
+            , kix
             , len_exp
             , rule_exp
             , len_act
@@ -15971,6 +16754,13 @@ static int action_line841
             );
         return 1;
     }
+}
+
+static int check_key_count_line841(unsigned have, unsigned used, unsigned need)
+{
+    if (used + need <= have) return 0;
+    fprintf(stderr, "error: lex_line841: not enough keys\n");
+    return 1;
 }
 
 int lex_line841()
@@ -16000,7 +16790,7 @@ int lex_line841()
 
     keys = (YYKEYTYPE *) read_file
         ("unicode_blocks.8--skeleton--encoding-policy(ignore).c.line841.keys"
-        , 3 * sizeof (YYKEYTYPE)
+        , sizeof (YYKEYTYPE)
         , 0
         , &keys_count
         );
@@ -16013,7 +16803,7 @@ int lex_line841()
     limit = input + input_len + padding;
     eof = input + input_len;
 
-    for (i = 0; status == 0 && i < keys_count; ++i) {
+    for (i = 0; status == 0 && cursor < eof && i < keys_count;) {
         token = cursor;
         const YYCTYPE *marker = NULL;
         YYCTYPE yych;
@@ -16027,7 +16817,8 @@ int lex_line841()
 yy633:
         YYSKIP ();
 yy634:
-        status = action_line841(i, keys, input, token, &cursor, 254);
+        status = check_key_count_line841(keys_count, i, 3)
+             || action_line841(&i, keys, input, token, &cursor, 254);
         continue;
 yy635:
         YYSKIP ();
@@ -16115,7 +16906,8 @@ yy637:
         goto yy634;
 yy638:
         YYSKIP ();
-        status = action_line841(i, keys, input, token, &cursor, 0);
+        status = check_key_count_line841(keys_count, i, 3)
+             || action_line841(&i, keys, input, token, &cursor, 0);
         continue;
 
     }
@@ -16127,7 +16919,7 @@ yy638:
         }
         if (i != keys_count) {
             status = 1;
-            fprintf(stderr, "error: lex_line841: unused keys left after %u iterations\n", i);
+            fprintf(stderr, "error: lex_line841: unused keys left after %u keys\n", i);
         }
     }
 
@@ -16157,7 +16949,7 @@ end:
 #define YYFILL(n) { break; }
 
 static int action_line848
-    ( unsigned int i
+    ( unsigned *pkix
     , const YYKEYTYPE *keys
     , const YYCTYPE *start
     , const YYCTYPE *token
@@ -16165,10 +16957,12 @@ static int action_line848
     , YYKEYTYPE rule_act
     )
 {
+    const unsigned kix = *pkix;
     const long pos = token - start;
     const long len_act = *cursor - token;
-    const long len_exp = (long) keys [3 * i + 1];
-    const YYKEYTYPE rule_exp = keys [3 * i + 2];
+    const long len_exp = (long) keys[kix + 1];
+    const YYKEYTYPE rule_exp = keys[kix + 2];
+    *pkix = kix + 3;
     if (rule_exp == 255) {
         fprintf
             ( stderr
@@ -16178,17 +16972,17 @@ static int action_line848
             );
     }
     if (len_act == len_exp && rule_act == rule_exp) {
-        const YYKEYTYPE offset = keys[3 * i];
+        const YYKEYTYPE offset = keys[kix];
         *cursor = token + offset;
         return 0;
     } else {
         fprintf
             ( stderr
-            , "error: lex_line848: at position %ld (iteration %u):\n"
+            , "error: lex_line848: at position %ld (key %u):\n"
                 "\texpected: match length %ld, rule %u\n"
                 "\tactual:   match length %ld, rule %u\n"
             , pos
-            , i
+            , kix
             , len_exp
             , rule_exp
             , len_act
@@ -16196,6 +16990,13 @@ static int action_line848
             );
         return 1;
     }
+}
+
+static int check_key_count_line848(unsigned have, unsigned used, unsigned need)
+{
+    if (used + need <= have) return 0;
+    fprintf(stderr, "error: lex_line848: not enough keys\n");
+    return 1;
 }
 
 int lex_line848()
@@ -16225,7 +17026,7 @@ int lex_line848()
 
     keys = (YYKEYTYPE *) read_file
         ("unicode_blocks.8--skeleton--encoding-policy(ignore).c.line848.keys"
-        , 3 * sizeof (YYKEYTYPE)
+        , sizeof (YYKEYTYPE)
         , 0
         , &keys_count
         );
@@ -16238,7 +17039,7 @@ int lex_line848()
     limit = input + input_len + padding;
     eof = input + input_len;
 
-    for (i = 0; status == 0 && i < keys_count; ++i) {
+    for (i = 0; status == 0 && cursor < eof && i < keys_count;) {
         token = cursor;
         const YYCTYPE *marker = NULL;
         YYCTYPE yych;
@@ -16252,7 +17053,8 @@ int lex_line848()
 yy642:
         YYSKIP ();
 yy643:
-        status = action_line848(i, keys, input, token, &cursor, 254);
+        status = check_key_count_line848(keys_count, i, 3)
+             || action_line848(&i, keys, input, token, &cursor, 254);
         continue;
 yy644:
         YYSKIP ();
@@ -16338,7 +17140,8 @@ yy646:
         goto yy643;
 yy647:
         YYSKIP ();
-        status = action_line848(i, keys, input, token, &cursor, 0);
+        status = check_key_count_line848(keys_count, i, 3)
+             || action_line848(&i, keys, input, token, &cursor, 0);
         continue;
 
     }
@@ -16350,7 +17153,7 @@ yy647:
         }
         if (i != keys_count) {
             status = 1;
-            fprintf(stderr, "error: lex_line848: unused keys left after %u iterations\n", i);
+            fprintf(stderr, "error: lex_line848: unused keys left after %u keys\n", i);
         }
     }
 
@@ -16380,7 +17183,7 @@ end:
 #define YYFILL(n) { break; }
 
 static int action_line855
-    ( unsigned int i
+    ( unsigned *pkix
     , const YYKEYTYPE *keys
     , const YYCTYPE *start
     , const YYCTYPE *token
@@ -16388,10 +17191,12 @@ static int action_line855
     , YYKEYTYPE rule_act
     )
 {
+    const unsigned kix = *pkix;
     const long pos = token - start;
     const long len_act = *cursor - token;
-    const long len_exp = (long) keys [3 * i + 1];
-    const YYKEYTYPE rule_exp = keys [3 * i + 2];
+    const long len_exp = (long) keys[kix + 1];
+    const YYKEYTYPE rule_exp = keys[kix + 2];
+    *pkix = kix + 3;
     if (rule_exp == 255) {
         fprintf
             ( stderr
@@ -16401,17 +17206,17 @@ static int action_line855
             );
     }
     if (len_act == len_exp && rule_act == rule_exp) {
-        const YYKEYTYPE offset = keys[3 * i];
+        const YYKEYTYPE offset = keys[kix];
         *cursor = token + offset;
         return 0;
     } else {
         fprintf
             ( stderr
-            , "error: lex_line855: at position %ld (iteration %u):\n"
+            , "error: lex_line855: at position %ld (key %u):\n"
                 "\texpected: match length %ld, rule %u\n"
                 "\tactual:   match length %ld, rule %u\n"
             , pos
-            , i
+            , kix
             , len_exp
             , rule_exp
             , len_act
@@ -16419,6 +17224,13 @@ static int action_line855
             );
         return 1;
     }
+}
+
+static int check_key_count_line855(unsigned have, unsigned used, unsigned need)
+{
+    if (used + need <= have) return 0;
+    fprintf(stderr, "error: lex_line855: not enough keys\n");
+    return 1;
 }
 
 int lex_line855()
@@ -16448,7 +17260,7 @@ int lex_line855()
 
     keys = (YYKEYTYPE *) read_file
         ("unicode_blocks.8--skeleton--encoding-policy(ignore).c.line855.keys"
-        , 3 * sizeof (YYKEYTYPE)
+        , sizeof (YYKEYTYPE)
         , 0
         , &keys_count
         );
@@ -16461,7 +17273,7 @@ int lex_line855()
     limit = input + input_len + padding;
     eof = input + input_len;
 
-    for (i = 0; status == 0 && i < keys_count; ++i) {
+    for (i = 0; status == 0 && cursor < eof && i < keys_count;) {
         token = cursor;
         const YYCTYPE *marker = NULL;
         YYCTYPE yych;
@@ -16475,7 +17287,8 @@ int lex_line855()
 yy651:
         YYSKIP ();
 yy652:
-        status = action_line855(i, keys, input, token, &cursor, 254);
+        status = check_key_count_line855(keys_count, i, 3)
+             || action_line855(&i, keys, input, token, &cursor, 254);
         continue;
 yy653:
         YYSKIP ();
@@ -16601,7 +17414,8 @@ yy656:
         }
 yy657:
         YYSKIP ();
-        status = action_line855(i, keys, input, token, &cursor, 0);
+        status = check_key_count_line855(keys_count, i, 3)
+             || action_line855(&i, keys, input, token, &cursor, 0);
         continue;
 
     }
@@ -16613,7 +17427,7 @@ yy657:
         }
         if (i != keys_count) {
             status = 1;
-            fprintf(stderr, "error: lex_line855: unused keys left after %u iterations\n", i);
+            fprintf(stderr, "error: lex_line855: unused keys left after %u keys\n", i);
         }
     }
 
@@ -16643,7 +17457,7 @@ end:
 #define YYFILL(n) { break; }
 
 static int action_line862
-    ( unsigned int i
+    ( unsigned *pkix
     , const YYKEYTYPE *keys
     , const YYCTYPE *start
     , const YYCTYPE *token
@@ -16651,10 +17465,12 @@ static int action_line862
     , YYKEYTYPE rule_act
     )
 {
+    const unsigned kix = *pkix;
     const long pos = token - start;
     const long len_act = *cursor - token;
-    const long len_exp = (long) keys [3 * i + 1];
-    const YYKEYTYPE rule_exp = keys [3 * i + 2];
+    const long len_exp = (long) keys[kix + 1];
+    const YYKEYTYPE rule_exp = keys[kix + 2];
+    *pkix = kix + 3;
     if (rule_exp == 255) {
         fprintf
             ( stderr
@@ -16664,17 +17480,17 @@ static int action_line862
             );
     }
     if (len_act == len_exp && rule_act == rule_exp) {
-        const YYKEYTYPE offset = keys[3 * i];
+        const YYKEYTYPE offset = keys[kix];
         *cursor = token + offset;
         return 0;
     } else {
         fprintf
             ( stderr
-            , "error: lex_line862: at position %ld (iteration %u):\n"
+            , "error: lex_line862: at position %ld (key %u):\n"
                 "\texpected: match length %ld, rule %u\n"
                 "\tactual:   match length %ld, rule %u\n"
             , pos
-            , i
+            , kix
             , len_exp
             , rule_exp
             , len_act
@@ -16682,6 +17498,13 @@ static int action_line862
             );
         return 1;
     }
+}
+
+static int check_key_count_line862(unsigned have, unsigned used, unsigned need)
+{
+    if (used + need <= have) return 0;
+    fprintf(stderr, "error: lex_line862: not enough keys\n");
+    return 1;
 }
 
 int lex_line862()
@@ -16711,7 +17534,7 @@ int lex_line862()
 
     keys = (YYKEYTYPE *) read_file
         ("unicode_blocks.8--skeleton--encoding-policy(ignore).c.line862.keys"
-        , 3 * sizeof (YYKEYTYPE)
+        , sizeof (YYKEYTYPE)
         , 0
         , &keys_count
         );
@@ -16724,7 +17547,7 @@ int lex_line862()
     limit = input + input_len + padding;
     eof = input + input_len;
 
-    for (i = 0; status == 0 && i < keys_count; ++i) {
+    for (i = 0; status == 0 && cursor < eof && i < keys_count;) {
         token = cursor;
         const YYCTYPE *marker = NULL;
         YYCTYPE yych;
@@ -16738,7 +17561,8 @@ int lex_line862()
 yy661:
         YYSKIP ();
 yy662:
-        status = action_line862(i, keys, input, token, &cursor, 254);
+        status = check_key_count_line862(keys_count, i, 3)
+             || action_line862(&i, keys, input, token, &cursor, 254);
         continue;
 yy663:
         YYSKIP ();
@@ -16775,7 +17599,8 @@ yy665:
         goto yy662;
 yy666:
         YYSKIP ();
-        status = action_line862(i, keys, input, token, &cursor, 0);
+        status = check_key_count_line862(keys_count, i, 3)
+             || action_line862(&i, keys, input, token, &cursor, 0);
         continue;
 
     }
@@ -16787,7 +17612,7 @@ yy666:
         }
         if (i != keys_count) {
             status = 1;
-            fprintf(stderr, "error: lex_line862: unused keys left after %u iterations\n", i);
+            fprintf(stderr, "error: lex_line862: unused keys left after %u keys\n", i);
         }
     }
 
@@ -16817,7 +17642,7 @@ end:
 #define YYFILL(n) { break; }
 
 static int action_line869
-    ( unsigned int i
+    ( unsigned *pkix
     , const YYKEYTYPE *keys
     , const YYCTYPE *start
     , const YYCTYPE *token
@@ -16825,10 +17650,12 @@ static int action_line869
     , YYKEYTYPE rule_act
     )
 {
+    const unsigned kix = *pkix;
     const long pos = token - start;
     const long len_act = *cursor - token;
-    const long len_exp = (long) keys [3 * i + 1];
-    const YYKEYTYPE rule_exp = keys [3 * i + 2];
+    const long len_exp = (long) keys[kix + 1];
+    const YYKEYTYPE rule_exp = keys[kix + 2];
+    *pkix = kix + 3;
     if (rule_exp == 255) {
         fprintf
             ( stderr
@@ -16838,17 +17665,17 @@ static int action_line869
             );
     }
     if (len_act == len_exp && rule_act == rule_exp) {
-        const YYKEYTYPE offset = keys[3 * i];
+        const YYKEYTYPE offset = keys[kix];
         *cursor = token + offset;
         return 0;
     } else {
         fprintf
             ( stderr
-            , "error: lex_line869: at position %ld (iteration %u):\n"
+            , "error: lex_line869: at position %ld (key %u):\n"
                 "\texpected: match length %ld, rule %u\n"
                 "\tactual:   match length %ld, rule %u\n"
             , pos
-            , i
+            , kix
             , len_exp
             , rule_exp
             , len_act
@@ -16856,6 +17683,13 @@ static int action_line869
             );
         return 1;
     }
+}
+
+static int check_key_count_line869(unsigned have, unsigned used, unsigned need)
+{
+    if (used + need <= have) return 0;
+    fprintf(stderr, "error: lex_line869: not enough keys\n");
+    return 1;
 }
 
 int lex_line869()
@@ -16885,7 +17719,7 @@ int lex_line869()
 
     keys = (YYKEYTYPE *) read_file
         ("unicode_blocks.8--skeleton--encoding-policy(ignore).c.line869.keys"
-        , 3 * sizeof (YYKEYTYPE)
+        , sizeof (YYKEYTYPE)
         , 0
         , &keys_count
         );
@@ -16898,7 +17732,7 @@ int lex_line869()
     limit = input + input_len + padding;
     eof = input + input_len;
 
-    for (i = 0; status == 0 && i < keys_count; ++i) {
+    for (i = 0; status == 0 && cursor < eof && i < keys_count;) {
         token = cursor;
         const YYCTYPE *marker = NULL;
         YYCTYPE yych;
@@ -16912,7 +17746,8 @@ int lex_line869()
 yy670:
         YYSKIP ();
 yy671:
-        status = action_line869(i, keys, input, token, &cursor, 254);
+        status = check_key_count_line869(keys_count, i, 3)
+             || action_line869(&i, keys, input, token, &cursor, 254);
         continue;
 yy672:
         YYSKIP ();
@@ -16997,7 +17832,8 @@ yy674:
         goto yy671;
 yy675:
         YYSKIP ();
-        status = action_line869(i, keys, input, token, &cursor, 0);
+        status = check_key_count_line869(keys_count, i, 3)
+             || action_line869(&i, keys, input, token, &cursor, 0);
         continue;
 
     }
@@ -17009,7 +17845,7 @@ yy675:
         }
         if (i != keys_count) {
             status = 1;
-            fprintf(stderr, "error: lex_line869: unused keys left after %u iterations\n", i);
+            fprintf(stderr, "error: lex_line869: unused keys left after %u keys\n", i);
         }
     }
 
@@ -17039,7 +17875,7 @@ end:
 #define YYFILL(n) { break; }
 
 static int action_line876
-    ( unsigned int i
+    ( unsigned *pkix
     , const YYKEYTYPE *keys
     , const YYCTYPE *start
     , const YYCTYPE *token
@@ -17047,10 +17883,12 @@ static int action_line876
     , YYKEYTYPE rule_act
     )
 {
+    const unsigned kix = *pkix;
     const long pos = token - start;
     const long len_act = *cursor - token;
-    const long len_exp = (long) keys [3 * i + 1];
-    const YYKEYTYPE rule_exp = keys [3 * i + 2];
+    const long len_exp = (long) keys[kix + 1];
+    const YYKEYTYPE rule_exp = keys[kix + 2];
+    *pkix = kix + 3;
     if (rule_exp == 255) {
         fprintf
             ( stderr
@@ -17060,17 +17898,17 @@ static int action_line876
             );
     }
     if (len_act == len_exp && rule_act == rule_exp) {
-        const YYKEYTYPE offset = keys[3 * i];
+        const YYKEYTYPE offset = keys[kix];
         *cursor = token + offset;
         return 0;
     } else {
         fprintf
             ( stderr
-            , "error: lex_line876: at position %ld (iteration %u):\n"
+            , "error: lex_line876: at position %ld (key %u):\n"
                 "\texpected: match length %ld, rule %u\n"
                 "\tactual:   match length %ld, rule %u\n"
             , pos
-            , i
+            , kix
             , len_exp
             , rule_exp
             , len_act
@@ -17078,6 +17916,13 @@ static int action_line876
             );
         return 1;
     }
+}
+
+static int check_key_count_line876(unsigned have, unsigned used, unsigned need)
+{
+    if (used + need <= have) return 0;
+    fprintf(stderr, "error: lex_line876: not enough keys\n");
+    return 1;
 }
 
 int lex_line876()
@@ -17107,7 +17952,7 @@ int lex_line876()
 
     keys = (YYKEYTYPE *) read_file
         ("unicode_blocks.8--skeleton--encoding-policy(ignore).c.line876.keys"
-        , 3 * sizeof (YYKEYTYPE)
+        , sizeof (YYKEYTYPE)
         , 0
         , &keys_count
         );
@@ -17120,7 +17965,7 @@ int lex_line876()
     limit = input + input_len + padding;
     eof = input + input_len;
 
-    for (i = 0; status == 0 && i < keys_count; ++i) {
+    for (i = 0; status == 0 && cursor < eof && i < keys_count;) {
         token = cursor;
         const YYCTYPE *marker = NULL;
         YYCTYPE yych;
@@ -17134,7 +17979,8 @@ int lex_line876()
 yy679:
         YYSKIP ();
 yy680:
-        status = action_line876(i, keys, input, token, &cursor, 254);
+        status = check_key_count_line876(keys_count, i, 3)
+             || action_line876(&i, keys, input, token, &cursor, 254);
         continue;
 yy681:
         YYSKIP ();
@@ -17258,7 +18104,8 @@ yy684:
         }
 yy685:
         YYSKIP ();
-        status = action_line876(i, keys, input, token, &cursor, 0);
+        status = check_key_count_line876(keys_count, i, 3)
+             || action_line876(&i, keys, input, token, &cursor, 0);
         continue;
 
     }
@@ -17270,7 +18117,7 @@ yy685:
         }
         if (i != keys_count) {
             status = 1;
-            fprintf(stderr, "error: lex_line876: unused keys left after %u iterations\n", i);
+            fprintf(stderr, "error: lex_line876: unused keys left after %u keys\n", i);
         }
     }
 
@@ -17300,7 +18147,7 @@ end:
 #define YYFILL(n) { break; }
 
 static int action_line883
-    ( unsigned int i
+    ( unsigned *pkix
     , const YYKEYTYPE *keys
     , const YYCTYPE *start
     , const YYCTYPE *token
@@ -17308,10 +18155,12 @@ static int action_line883
     , YYKEYTYPE rule_act
     )
 {
+    const unsigned kix = *pkix;
     const long pos = token - start;
     const long len_act = *cursor - token;
-    const long len_exp = (long) keys [3 * i + 1];
-    const YYKEYTYPE rule_exp = keys [3 * i + 2];
+    const long len_exp = (long) keys[kix + 1];
+    const YYKEYTYPE rule_exp = keys[kix + 2];
+    *pkix = kix + 3;
     if (rule_exp == 255) {
         fprintf
             ( stderr
@@ -17321,17 +18170,17 @@ static int action_line883
             );
     }
     if (len_act == len_exp && rule_act == rule_exp) {
-        const YYKEYTYPE offset = keys[3 * i];
+        const YYKEYTYPE offset = keys[kix];
         *cursor = token + offset;
         return 0;
     } else {
         fprintf
             ( stderr
-            , "error: lex_line883: at position %ld (iteration %u):\n"
+            , "error: lex_line883: at position %ld (key %u):\n"
                 "\texpected: match length %ld, rule %u\n"
                 "\tactual:   match length %ld, rule %u\n"
             , pos
-            , i
+            , kix
             , len_exp
             , rule_exp
             , len_act
@@ -17339,6 +18188,13 @@ static int action_line883
             );
         return 1;
     }
+}
+
+static int check_key_count_line883(unsigned have, unsigned used, unsigned need)
+{
+    if (used + need <= have) return 0;
+    fprintf(stderr, "error: lex_line883: not enough keys\n");
+    return 1;
 }
 
 int lex_line883()
@@ -17368,7 +18224,7 @@ int lex_line883()
 
     keys = (YYKEYTYPE *) read_file
         ("unicode_blocks.8--skeleton--encoding-policy(ignore).c.line883.keys"
-        , 3 * sizeof (YYKEYTYPE)
+        , sizeof (YYKEYTYPE)
         , 0
         , &keys_count
         );
@@ -17381,7 +18237,7 @@ int lex_line883()
     limit = input + input_len + padding;
     eof = input + input_len;
 
-    for (i = 0; status == 0 && i < keys_count; ++i) {
+    for (i = 0; status == 0 && cursor < eof && i < keys_count;) {
         token = cursor;
         const YYCTYPE *marker = NULL;
         YYCTYPE yych;
@@ -17395,7 +18251,8 @@ int lex_line883()
 yy689:
         YYSKIP ();
 yy690:
-        status = action_line883(i, keys, input, token, &cursor, 254);
+        status = check_key_count_line883(keys_count, i, 3)
+             || action_line883(&i, keys, input, token, &cursor, 254);
         continue;
 yy691:
         YYSKIP ();
@@ -17519,7 +18376,8 @@ yy694:
         }
 yy695:
         YYSKIP ();
-        status = action_line883(i, keys, input, token, &cursor, 0);
+        status = check_key_count_line883(keys_count, i, 3)
+             || action_line883(&i, keys, input, token, &cursor, 0);
         continue;
 
     }
@@ -17531,7 +18389,7 @@ yy695:
         }
         if (i != keys_count) {
             status = 1;
-            fprintf(stderr, "error: lex_line883: unused keys left after %u iterations\n", i);
+            fprintf(stderr, "error: lex_line883: unused keys left after %u keys\n", i);
         }
     }
 
@@ -17561,7 +18419,7 @@ end:
 #define YYFILL(n) { break; }
 
 static int action_line890
-    ( unsigned int i
+    ( unsigned *pkix
     , const YYKEYTYPE *keys
     , const YYCTYPE *start
     , const YYCTYPE *token
@@ -17569,10 +18427,12 @@ static int action_line890
     , YYKEYTYPE rule_act
     )
 {
+    const unsigned kix = *pkix;
     const long pos = token - start;
     const long len_act = *cursor - token;
-    const long len_exp = (long) keys [3 * i + 1];
-    const YYKEYTYPE rule_exp = keys [3 * i + 2];
+    const long len_exp = (long) keys[kix + 1];
+    const YYKEYTYPE rule_exp = keys[kix + 2];
+    *pkix = kix + 3;
     if (rule_exp == 255) {
         fprintf
             ( stderr
@@ -17582,17 +18442,17 @@ static int action_line890
             );
     }
     if (len_act == len_exp && rule_act == rule_exp) {
-        const YYKEYTYPE offset = keys[3 * i];
+        const YYKEYTYPE offset = keys[kix];
         *cursor = token + offset;
         return 0;
     } else {
         fprintf
             ( stderr
-            , "error: lex_line890: at position %ld (iteration %u):\n"
+            , "error: lex_line890: at position %ld (key %u):\n"
                 "\texpected: match length %ld, rule %u\n"
                 "\tactual:   match length %ld, rule %u\n"
             , pos
-            , i
+            , kix
             , len_exp
             , rule_exp
             , len_act
@@ -17600,6 +18460,13 @@ static int action_line890
             );
         return 1;
     }
+}
+
+static int check_key_count_line890(unsigned have, unsigned used, unsigned need)
+{
+    if (used + need <= have) return 0;
+    fprintf(stderr, "error: lex_line890: not enough keys\n");
+    return 1;
 }
 
 int lex_line890()
@@ -17629,7 +18496,7 @@ int lex_line890()
 
     keys = (YYKEYTYPE *) read_file
         ("unicode_blocks.8--skeleton--encoding-policy(ignore).c.line890.keys"
-        , 3 * sizeof (YYKEYTYPE)
+        , sizeof (YYKEYTYPE)
         , 0
         , &keys_count
         );
@@ -17642,7 +18509,7 @@ int lex_line890()
     limit = input + input_len + padding;
     eof = input + input_len;
 
-    for (i = 0; status == 0 && i < keys_count; ++i) {
+    for (i = 0; status == 0 && cursor < eof && i < keys_count;) {
         token = cursor;
         const YYCTYPE *marker = NULL;
         YYCTYPE yych;
@@ -17656,7 +18523,8 @@ int lex_line890()
 yy699:
         YYSKIP ();
 yy700:
-        status = action_line890(i, keys, input, token, &cursor, 254);
+        status = check_key_count_line890(keys_count, i, 3)
+             || action_line890(&i, keys, input, token, &cursor, 254);
         continue;
 yy701:
         YYSKIP ();
@@ -17725,7 +18593,8 @@ yy703:
         goto yy700;
 yy704:
         YYSKIP ();
-        status = action_line890(i, keys, input, token, &cursor, 0);
+        status = check_key_count_line890(keys_count, i, 3)
+             || action_line890(&i, keys, input, token, &cursor, 0);
         continue;
 
     }
@@ -17737,7 +18606,7 @@ yy704:
         }
         if (i != keys_count) {
             status = 1;
-            fprintf(stderr, "error: lex_line890: unused keys left after %u iterations\n", i);
+            fprintf(stderr, "error: lex_line890: unused keys left after %u keys\n", i);
         }
     }
 
@@ -17767,7 +18636,7 @@ end:
 #define YYFILL(n) { break; }
 
 static int action_line897
-    ( unsigned int i
+    ( unsigned *pkix
     , const YYKEYTYPE *keys
     , const YYCTYPE *start
     , const YYCTYPE *token
@@ -17775,10 +18644,12 @@ static int action_line897
     , YYKEYTYPE rule_act
     )
 {
+    const unsigned kix = *pkix;
     const long pos = token - start;
     const long len_act = *cursor - token;
-    const long len_exp = (long) keys [3 * i + 1];
-    const YYKEYTYPE rule_exp = keys [3 * i + 2];
+    const long len_exp = (long) keys[kix + 1];
+    const YYKEYTYPE rule_exp = keys[kix + 2];
+    *pkix = kix + 3;
     if (rule_exp == 255) {
         fprintf
             ( stderr
@@ -17788,17 +18659,17 @@ static int action_line897
             );
     }
     if (len_act == len_exp && rule_act == rule_exp) {
-        const YYKEYTYPE offset = keys[3 * i];
+        const YYKEYTYPE offset = keys[kix];
         *cursor = token + offset;
         return 0;
     } else {
         fprintf
             ( stderr
-            , "error: lex_line897: at position %ld (iteration %u):\n"
+            , "error: lex_line897: at position %ld (key %u):\n"
                 "\texpected: match length %ld, rule %u\n"
                 "\tactual:   match length %ld, rule %u\n"
             , pos
-            , i
+            , kix
             , len_exp
             , rule_exp
             , len_act
@@ -17806,6 +18677,13 @@ static int action_line897
             );
         return 1;
     }
+}
+
+static int check_key_count_line897(unsigned have, unsigned used, unsigned need)
+{
+    if (used + need <= have) return 0;
+    fprintf(stderr, "error: lex_line897: not enough keys\n");
+    return 1;
 }
 
 int lex_line897()
@@ -17835,7 +18713,7 @@ int lex_line897()
 
     keys = (YYKEYTYPE *) read_file
         ("unicode_blocks.8--skeleton--encoding-policy(ignore).c.line897.keys"
-        , 3 * sizeof (YYKEYTYPE)
+        , sizeof (YYKEYTYPE)
         , 0
         , &keys_count
         );
@@ -17848,7 +18726,7 @@ int lex_line897()
     limit = input + input_len + padding;
     eof = input + input_len;
 
-    for (i = 0; status == 0 && i < keys_count; ++i) {
+    for (i = 0; status == 0 && cursor < eof && i < keys_count;) {
         token = cursor;
         const YYCTYPE *marker = NULL;
         YYCTYPE yych;
@@ -17862,7 +18740,8 @@ int lex_line897()
 yy708:
         YYSKIP ();
 yy709:
-        status = action_line897(i, keys, input, token, &cursor, 254);
+        status = check_key_count_line897(keys_count, i, 3)
+             || action_line897(&i, keys, input, token, &cursor, 254);
         continue;
 yy710:
         YYSKIP ();
@@ -17993,7 +18872,8 @@ yy714:
         }
 yy715:
         YYSKIP ();
-        status = action_line897(i, keys, input, token, &cursor, 0);
+        status = check_key_count_line897(keys_count, i, 3)
+             || action_line897(&i, keys, input, token, &cursor, 0);
         continue;
 
     }
@@ -18005,7 +18885,7 @@ yy715:
         }
         if (i != keys_count) {
             status = 1;
-            fprintf(stderr, "error: lex_line897: unused keys left after %u iterations\n", i);
+            fprintf(stderr, "error: lex_line897: unused keys left after %u keys\n", i);
         }
     }
 
@@ -18035,7 +18915,7 @@ end:
 #define YYFILL(n) { break; }
 
 static int action_line904
-    ( unsigned int i
+    ( unsigned *pkix
     , const YYKEYTYPE *keys
     , const YYCTYPE *start
     , const YYCTYPE *token
@@ -18043,10 +18923,12 @@ static int action_line904
     , YYKEYTYPE rule_act
     )
 {
+    const unsigned kix = *pkix;
     const long pos = token - start;
     const long len_act = *cursor - token;
-    const long len_exp = (long) keys [3 * i + 1];
-    const YYKEYTYPE rule_exp = keys [3 * i + 2];
+    const long len_exp = (long) keys[kix + 1];
+    const YYKEYTYPE rule_exp = keys[kix + 2];
+    *pkix = kix + 3;
     if (rule_exp == 255) {
         fprintf
             ( stderr
@@ -18056,17 +18938,17 @@ static int action_line904
             );
     }
     if (len_act == len_exp && rule_act == rule_exp) {
-        const YYKEYTYPE offset = keys[3 * i];
+        const YYKEYTYPE offset = keys[kix];
         *cursor = token + offset;
         return 0;
     } else {
         fprintf
             ( stderr
-            , "error: lex_line904: at position %ld (iteration %u):\n"
+            , "error: lex_line904: at position %ld (key %u):\n"
                 "\texpected: match length %ld, rule %u\n"
                 "\tactual:   match length %ld, rule %u\n"
             , pos
-            , i
+            , kix
             , len_exp
             , rule_exp
             , len_act
@@ -18074,6 +18956,13 @@ static int action_line904
             );
         return 1;
     }
+}
+
+static int check_key_count_line904(unsigned have, unsigned used, unsigned need)
+{
+    if (used + need <= have) return 0;
+    fprintf(stderr, "error: lex_line904: not enough keys\n");
+    return 1;
 }
 
 int lex_line904()
@@ -18103,7 +18992,7 @@ int lex_line904()
 
     keys = (YYKEYTYPE *) read_file
         ("unicode_blocks.8--skeleton--encoding-policy(ignore).c.line904.keys"
-        , 3 * sizeof (YYKEYTYPE)
+        , sizeof (YYKEYTYPE)
         , 0
         , &keys_count
         );
@@ -18116,7 +19005,7 @@ int lex_line904()
     limit = input + input_len + padding;
     eof = input + input_len;
 
-    for (i = 0; status == 0 && i < keys_count; ++i) {
+    for (i = 0; status == 0 && cursor < eof && i < keys_count;) {
         token = cursor;
         const YYCTYPE *marker = NULL;
         YYCTYPE yych;
@@ -18130,7 +19019,8 @@ int lex_line904()
 yy719:
         YYSKIP ();
 yy720:
-        status = action_line904(i, keys, input, token, &cursor, 254);
+        status = check_key_count_line904(keys_count, i, 3)
+             || action_line904(&i, keys, input, token, &cursor, 254);
         continue;
 yy721:
         YYSKIP ();
@@ -18167,7 +19057,8 @@ yy723:
         goto yy720;
 yy724:
         YYSKIP ();
-        status = action_line904(i, keys, input, token, &cursor, 0);
+        status = check_key_count_line904(keys_count, i, 3)
+             || action_line904(&i, keys, input, token, &cursor, 0);
         continue;
 
     }
@@ -18179,7 +19070,7 @@ yy724:
         }
         if (i != keys_count) {
             status = 1;
-            fprintf(stderr, "error: lex_line904: unused keys left after %u iterations\n", i);
+            fprintf(stderr, "error: lex_line904: unused keys left after %u keys\n", i);
         }
     }
 
@@ -18209,7 +19100,7 @@ end:
 #define YYFILL(n) { break; }
 
 static int action_line911
-    ( unsigned int i
+    ( unsigned *pkix
     , const YYKEYTYPE *keys
     , const YYCTYPE *start
     , const YYCTYPE *token
@@ -18217,10 +19108,12 @@ static int action_line911
     , YYKEYTYPE rule_act
     )
 {
+    const unsigned kix = *pkix;
     const long pos = token - start;
     const long len_act = *cursor - token;
-    const long len_exp = (long) keys [3 * i + 1];
-    const YYKEYTYPE rule_exp = keys [3 * i + 2];
+    const long len_exp = (long) keys[kix + 1];
+    const YYKEYTYPE rule_exp = keys[kix + 2];
+    *pkix = kix + 3;
     if (rule_exp == 255) {
         fprintf
             ( stderr
@@ -18230,17 +19123,17 @@ static int action_line911
             );
     }
     if (len_act == len_exp && rule_act == rule_exp) {
-        const YYKEYTYPE offset = keys[3 * i];
+        const YYKEYTYPE offset = keys[kix];
         *cursor = token + offset;
         return 0;
     } else {
         fprintf
             ( stderr
-            , "error: lex_line911: at position %ld (iteration %u):\n"
+            , "error: lex_line911: at position %ld (key %u):\n"
                 "\texpected: match length %ld, rule %u\n"
                 "\tactual:   match length %ld, rule %u\n"
             , pos
-            , i
+            , kix
             , len_exp
             , rule_exp
             , len_act
@@ -18248,6 +19141,13 @@ static int action_line911
             );
         return 1;
     }
+}
+
+static int check_key_count_line911(unsigned have, unsigned used, unsigned need)
+{
+    if (used + need <= have) return 0;
+    fprintf(stderr, "error: lex_line911: not enough keys\n");
+    return 1;
 }
 
 int lex_line911()
@@ -18277,7 +19177,7 @@ int lex_line911()
 
     keys = (YYKEYTYPE *) read_file
         ("unicode_blocks.8--skeleton--encoding-policy(ignore).c.line911.keys"
-        , 3 * sizeof (YYKEYTYPE)
+        , sizeof (YYKEYTYPE)
         , 0
         , &keys_count
         );
@@ -18290,7 +19190,7 @@ int lex_line911()
     limit = input + input_len + padding;
     eof = input + input_len;
 
-    for (i = 0; status == 0 && i < keys_count; ++i) {
+    for (i = 0; status == 0 && cursor < eof && i < keys_count;) {
         token = cursor;
         const YYCTYPE *marker = NULL;
         YYCTYPE yych;
@@ -18304,7 +19204,8 @@ int lex_line911()
 yy728:
         YYSKIP ();
 yy729:
-        status = action_line911(i, keys, input, token, &cursor, 254);
+        status = check_key_count_line911(keys_count, i, 3)
+             || action_line911(&i, keys, input, token, &cursor, 254);
         continue;
 yy730:
         YYSKIP ();
@@ -18357,7 +19258,8 @@ yy732:
         goto yy729;
 yy733:
         YYSKIP ();
-        status = action_line911(i, keys, input, token, &cursor, 0);
+        status = check_key_count_line911(keys_count, i, 3)
+             || action_line911(&i, keys, input, token, &cursor, 0);
         continue;
 
     }
@@ -18369,7 +19271,7 @@ yy733:
         }
         if (i != keys_count) {
             status = 1;
-            fprintf(stderr, "error: lex_line911: unused keys left after %u iterations\n", i);
+            fprintf(stderr, "error: lex_line911: unused keys left after %u keys\n", i);
         }
     }
 
@@ -18399,7 +19301,7 @@ end:
 #define YYFILL(n) { break; }
 
 static int action_line918
-    ( unsigned int i
+    ( unsigned *pkix
     , const YYKEYTYPE *keys
     , const YYCTYPE *start
     , const YYCTYPE *token
@@ -18407,10 +19309,12 @@ static int action_line918
     , YYKEYTYPE rule_act
     )
 {
+    const unsigned kix = *pkix;
     const long pos = token - start;
     const long len_act = *cursor - token;
-    const long len_exp = (long) keys [3 * i + 1];
-    const YYKEYTYPE rule_exp = keys [3 * i + 2];
+    const long len_exp = (long) keys[kix + 1];
+    const YYKEYTYPE rule_exp = keys[kix + 2];
+    *pkix = kix + 3;
     if (rule_exp == 255) {
         fprintf
             ( stderr
@@ -18420,17 +19324,17 @@ static int action_line918
             );
     }
     if (len_act == len_exp && rule_act == rule_exp) {
-        const YYKEYTYPE offset = keys[3 * i];
+        const YYKEYTYPE offset = keys[kix];
         *cursor = token + offset;
         return 0;
     } else {
         fprintf
             ( stderr
-            , "error: lex_line918: at position %ld (iteration %u):\n"
+            , "error: lex_line918: at position %ld (key %u):\n"
                 "\texpected: match length %ld, rule %u\n"
                 "\tactual:   match length %ld, rule %u\n"
             , pos
-            , i
+            , kix
             , len_exp
             , rule_exp
             , len_act
@@ -18438,6 +19342,13 @@ static int action_line918
             );
         return 1;
     }
+}
+
+static int check_key_count_line918(unsigned have, unsigned used, unsigned need)
+{
+    if (used + need <= have) return 0;
+    fprintf(stderr, "error: lex_line918: not enough keys\n");
+    return 1;
 }
 
 int lex_line918()
@@ -18467,7 +19378,7 @@ int lex_line918()
 
     keys = (YYKEYTYPE *) read_file
         ("unicode_blocks.8--skeleton--encoding-policy(ignore).c.line918.keys"
-        , 3 * sizeof (YYKEYTYPE)
+        , sizeof (YYKEYTYPE)
         , 0
         , &keys_count
         );
@@ -18480,7 +19391,7 @@ int lex_line918()
     limit = input + input_len + padding;
     eof = input + input_len;
 
-    for (i = 0; status == 0 && i < keys_count; ++i) {
+    for (i = 0; status == 0 && cursor < eof && i < keys_count;) {
         token = cursor;
         const YYCTYPE *marker = NULL;
         YYCTYPE yych;
@@ -18494,7 +19405,8 @@ int lex_line918()
 yy737:
         YYSKIP ();
 yy738:
-        status = action_line918(i, keys, input, token, &cursor, 254);
+        status = check_key_count_line918(keys_count, i, 3)
+             || action_line918(&i, keys, input, token, &cursor, 254);
         continue;
 yy739:
         YYSKIP ();
@@ -18531,7 +19443,8 @@ yy741:
         goto yy738;
 yy742:
         YYSKIP ();
-        status = action_line918(i, keys, input, token, &cursor, 0);
+        status = check_key_count_line918(keys_count, i, 3)
+             || action_line918(&i, keys, input, token, &cursor, 0);
         continue;
 
     }
@@ -18543,7 +19456,7 @@ yy742:
         }
         if (i != keys_count) {
             status = 1;
-            fprintf(stderr, "error: lex_line918: unused keys left after %u iterations\n", i);
+            fprintf(stderr, "error: lex_line918: unused keys left after %u keys\n", i);
         }
     }
 
@@ -18573,7 +19486,7 @@ end:
 #define YYFILL(n) { break; }
 
 static int action_line925
-    ( unsigned int i
+    ( unsigned *pkix
     , const YYKEYTYPE *keys
     , const YYCTYPE *start
     , const YYCTYPE *token
@@ -18581,10 +19494,12 @@ static int action_line925
     , YYKEYTYPE rule_act
     )
 {
+    const unsigned kix = *pkix;
     const long pos = token - start;
     const long len_act = *cursor - token;
-    const long len_exp = (long) keys [3 * i + 1];
-    const YYKEYTYPE rule_exp = keys [3 * i + 2];
+    const long len_exp = (long) keys[kix + 1];
+    const YYKEYTYPE rule_exp = keys[kix + 2];
+    *pkix = kix + 3;
     if (rule_exp == 255) {
         fprintf
             ( stderr
@@ -18594,17 +19509,17 @@ static int action_line925
             );
     }
     if (len_act == len_exp && rule_act == rule_exp) {
-        const YYKEYTYPE offset = keys[3 * i];
+        const YYKEYTYPE offset = keys[kix];
         *cursor = token + offset;
         return 0;
     } else {
         fprintf
             ( stderr
-            , "error: lex_line925: at position %ld (iteration %u):\n"
+            , "error: lex_line925: at position %ld (key %u):\n"
                 "\texpected: match length %ld, rule %u\n"
                 "\tactual:   match length %ld, rule %u\n"
             , pos
-            , i
+            , kix
             , len_exp
             , rule_exp
             , len_act
@@ -18612,6 +19527,13 @@ static int action_line925
             );
         return 1;
     }
+}
+
+static int check_key_count_line925(unsigned have, unsigned used, unsigned need)
+{
+    if (used + need <= have) return 0;
+    fprintf(stderr, "error: lex_line925: not enough keys\n");
+    return 1;
 }
 
 int lex_line925()
@@ -18641,7 +19563,7 @@ int lex_line925()
 
     keys = (YYKEYTYPE *) read_file
         ("unicode_blocks.8--skeleton--encoding-policy(ignore).c.line925.keys"
-        , 3 * sizeof (YYKEYTYPE)
+        , sizeof (YYKEYTYPE)
         , 0
         , &keys_count
         );
@@ -18654,7 +19576,7 @@ int lex_line925()
     limit = input + input_len + padding;
     eof = input + input_len;
 
-    for (i = 0; status == 0 && i < keys_count; ++i) {
+    for (i = 0; status == 0 && cursor < eof && i < keys_count;) {
         token = cursor;
         const YYCTYPE *marker = NULL;
         YYCTYPE yych;
@@ -18668,7 +19590,8 @@ int lex_line925()
 yy746:
         YYSKIP ();
 yy747:
-        status = action_line925(i, keys, input, token, &cursor, 254);
+        status = check_key_count_line925(keys_count, i, 3)
+             || action_line925(&i, keys, input, token, &cursor, 254);
         continue;
 yy748:
         YYSKIP ();
@@ -18756,7 +19679,8 @@ yy750:
         goto yy747;
 yy751:
         YYSKIP ();
-        status = action_line925(i, keys, input, token, &cursor, 0);
+        status = check_key_count_line925(keys_count, i, 3)
+             || action_line925(&i, keys, input, token, &cursor, 0);
         continue;
 
     }
@@ -18768,7 +19692,7 @@ yy751:
         }
         if (i != keys_count) {
             status = 1;
-            fprintf(stderr, "error: lex_line925: unused keys left after %u iterations\n", i);
+            fprintf(stderr, "error: lex_line925: unused keys left after %u keys\n", i);
         }
     }
 
@@ -18798,7 +19722,7 @@ end:
 #define YYFILL(n) { break; }
 
 static int action_line932
-    ( unsigned int i
+    ( unsigned *pkix
     , const YYKEYTYPE *keys
     , const YYCTYPE *start
     , const YYCTYPE *token
@@ -18806,10 +19730,12 @@ static int action_line932
     , YYKEYTYPE rule_act
     )
 {
+    const unsigned kix = *pkix;
     const long pos = token - start;
     const long len_act = *cursor - token;
-    const long len_exp = (long) keys [3 * i + 1];
-    const YYKEYTYPE rule_exp = keys [3 * i + 2];
+    const long len_exp = (long) keys[kix + 1];
+    const YYKEYTYPE rule_exp = keys[kix + 2];
+    *pkix = kix + 3;
     if (rule_exp == 255) {
         fprintf
             ( stderr
@@ -18819,17 +19745,17 @@ static int action_line932
             );
     }
     if (len_act == len_exp && rule_act == rule_exp) {
-        const YYKEYTYPE offset = keys[3 * i];
+        const YYKEYTYPE offset = keys[kix];
         *cursor = token + offset;
         return 0;
     } else {
         fprintf
             ( stderr
-            , "error: lex_line932: at position %ld (iteration %u):\n"
+            , "error: lex_line932: at position %ld (key %u):\n"
                 "\texpected: match length %ld, rule %u\n"
                 "\tactual:   match length %ld, rule %u\n"
             , pos
-            , i
+            , kix
             , len_exp
             , rule_exp
             , len_act
@@ -18837,6 +19763,13 @@ static int action_line932
             );
         return 1;
     }
+}
+
+static int check_key_count_line932(unsigned have, unsigned used, unsigned need)
+{
+    if (used + need <= have) return 0;
+    fprintf(stderr, "error: lex_line932: not enough keys\n");
+    return 1;
 }
 
 int lex_line932()
@@ -18866,7 +19799,7 @@ int lex_line932()
 
     keys = (YYKEYTYPE *) read_file
         ("unicode_blocks.8--skeleton--encoding-policy(ignore).c.line932.keys"
-        , 3 * sizeof (YYKEYTYPE)
+        , sizeof (YYKEYTYPE)
         , 0
         , &keys_count
         );
@@ -18879,7 +19812,7 @@ int lex_line932()
     limit = input + input_len + padding;
     eof = input + input_len;
 
-    for (i = 0; status == 0 && i < keys_count; ++i) {
+    for (i = 0; status == 0 && cursor < eof && i < keys_count;) {
         token = cursor;
         const YYCTYPE *marker = NULL;
         YYCTYPE yych;
@@ -18893,7 +19826,8 @@ int lex_line932()
 yy755:
         YYSKIP ();
 yy756:
-        status = action_line932(i, keys, input, token, &cursor, 254);
+        status = check_key_count_line932(keys_count, i, 3)
+             || action_line932(&i, keys, input, token, &cursor, 254);
         continue;
 yy757:
         YYSKIP ();
@@ -18981,7 +19915,8 @@ yy759:
         goto yy756;
 yy760:
         YYSKIP ();
-        status = action_line932(i, keys, input, token, &cursor, 0);
+        status = check_key_count_line932(keys_count, i, 3)
+             || action_line932(&i, keys, input, token, &cursor, 0);
         continue;
 
     }
@@ -18993,7 +19928,7 @@ yy760:
         }
         if (i != keys_count) {
             status = 1;
-            fprintf(stderr, "error: lex_line932: unused keys left after %u iterations\n", i);
+            fprintf(stderr, "error: lex_line932: unused keys left after %u keys\n", i);
         }
     }
 
@@ -19023,7 +19958,7 @@ end:
 #define YYFILL(n) { break; }
 
 static int action_line939
-    ( unsigned int i
+    ( unsigned *pkix
     , const YYKEYTYPE *keys
     , const YYCTYPE *start
     , const YYCTYPE *token
@@ -19031,10 +19966,12 @@ static int action_line939
     , YYKEYTYPE rule_act
     )
 {
+    const unsigned kix = *pkix;
     const long pos = token - start;
     const long len_act = *cursor - token;
-    const long len_exp = (long) keys [3 * i + 1];
-    const YYKEYTYPE rule_exp = keys [3 * i + 2];
+    const long len_exp = (long) keys[kix + 1];
+    const YYKEYTYPE rule_exp = keys[kix + 2];
+    *pkix = kix + 3;
     if (rule_exp == 255) {
         fprintf
             ( stderr
@@ -19044,17 +19981,17 @@ static int action_line939
             );
     }
     if (len_act == len_exp && rule_act == rule_exp) {
-        const YYKEYTYPE offset = keys[3 * i];
+        const YYKEYTYPE offset = keys[kix];
         *cursor = token + offset;
         return 0;
     } else {
         fprintf
             ( stderr
-            , "error: lex_line939: at position %ld (iteration %u):\n"
+            , "error: lex_line939: at position %ld (key %u):\n"
                 "\texpected: match length %ld, rule %u\n"
                 "\tactual:   match length %ld, rule %u\n"
             , pos
-            , i
+            , kix
             , len_exp
             , rule_exp
             , len_act
@@ -19062,6 +19999,13 @@ static int action_line939
             );
         return 1;
     }
+}
+
+static int check_key_count_line939(unsigned have, unsigned used, unsigned need)
+{
+    if (used + need <= have) return 0;
+    fprintf(stderr, "error: lex_line939: not enough keys\n");
+    return 1;
 }
 
 int lex_line939()
@@ -19091,7 +20035,7 @@ int lex_line939()
 
     keys = (YYKEYTYPE *) read_file
         ("unicode_blocks.8--skeleton--encoding-policy(ignore).c.line939.keys"
-        , 3 * sizeof (YYKEYTYPE)
+        , sizeof (YYKEYTYPE)
         , 0
         , &keys_count
         );
@@ -19104,7 +20048,7 @@ int lex_line939()
     limit = input + input_len + padding;
     eof = input + input_len;
 
-    for (i = 0; status == 0 && i < keys_count; ++i) {
+    for (i = 0; status == 0 && cursor < eof && i < keys_count;) {
         token = cursor;
         const YYCTYPE *marker = NULL;
         YYCTYPE yych;
@@ -19119,7 +20063,8 @@ int lex_line939()
 yy764:
         YYSKIP ();
 yy765:
-        status = action_line939(i, keys, input, token, &cursor, 254);
+        status = check_key_count_line939(keys_count, i, 3)
+             || action_line939(&i, keys, input, token, &cursor, 254);
         continue;
 yy766:
         YYSKIP ();
@@ -19313,7 +20258,8 @@ yy769:
         goto yy765;
 yy770:
         YYSKIP ();
-        status = action_line939(i, keys, input, token, &cursor, 0);
+        status = check_key_count_line939(keys_count, i, 3)
+             || action_line939(&i, keys, input, token, &cursor, 0);
         continue;
 
     }
@@ -19325,7 +20271,7 @@ yy770:
         }
         if (i != keys_count) {
             status = 1;
-            fprintf(stderr, "error: lex_line939: unused keys left after %u iterations\n", i);
+            fprintf(stderr, "error: lex_line939: unused keys left after %u keys\n", i);
         }
     }
 
@@ -19355,7 +20301,7 @@ end:
 #define YYFILL(n) { break; }
 
 static int action_line946
-    ( unsigned int i
+    ( unsigned *pkix
     , const YYKEYTYPE *keys
     , const YYCTYPE *start
     , const YYCTYPE *token
@@ -19363,10 +20309,12 @@ static int action_line946
     , YYKEYTYPE rule_act
     )
 {
+    const unsigned kix = *pkix;
     const long pos = token - start;
     const long len_act = *cursor - token;
-    const long len_exp = (long) keys [3 * i + 1];
-    const YYKEYTYPE rule_exp = keys [3 * i + 2];
+    const long len_exp = (long) keys[kix + 1];
+    const YYKEYTYPE rule_exp = keys[kix + 2];
+    *pkix = kix + 3;
     if (rule_exp == 255) {
         fprintf
             ( stderr
@@ -19376,17 +20324,17 @@ static int action_line946
             );
     }
     if (len_act == len_exp && rule_act == rule_exp) {
-        const YYKEYTYPE offset = keys[3 * i];
+        const YYKEYTYPE offset = keys[kix];
         *cursor = token + offset;
         return 0;
     } else {
         fprintf
             ( stderr
-            , "error: lex_line946: at position %ld (iteration %u):\n"
+            , "error: lex_line946: at position %ld (key %u):\n"
                 "\texpected: match length %ld, rule %u\n"
                 "\tactual:   match length %ld, rule %u\n"
             , pos
-            , i
+            , kix
             , len_exp
             , rule_exp
             , len_act
@@ -19394,6 +20342,13 @@ static int action_line946
             );
         return 1;
     }
+}
+
+static int check_key_count_line946(unsigned have, unsigned used, unsigned need)
+{
+    if (used + need <= have) return 0;
+    fprintf(stderr, "error: lex_line946: not enough keys\n");
+    return 1;
 }
 
 int lex_line946()
@@ -19423,7 +20378,7 @@ int lex_line946()
 
     keys = (YYKEYTYPE *) read_file
         ("unicode_blocks.8--skeleton--encoding-policy(ignore).c.line946.keys"
-        , 3 * sizeof (YYKEYTYPE)
+        , sizeof (YYKEYTYPE)
         , 0
         , &keys_count
         );
@@ -19436,7 +20391,7 @@ int lex_line946()
     limit = input + input_len + padding;
     eof = input + input_len;
 
-    for (i = 0; status == 0 && i < keys_count; ++i) {
+    for (i = 0; status == 0 && cursor < eof && i < keys_count;) {
         token = cursor;
         const YYCTYPE *marker = NULL;
         YYCTYPE yych;
@@ -19450,7 +20405,8 @@ int lex_line946()
 yy774:
         YYSKIP ();
 yy775:
-        status = action_line946(i, keys, input, token, &cursor, 254);
+        status = check_key_count_line946(keys_count, i, 3)
+             || action_line946(&i, keys, input, token, &cursor, 254);
         continue;
 yy776:
         YYSKIP ();
@@ -19535,7 +20491,8 @@ yy778:
         goto yy775;
 yy779:
         YYSKIP ();
-        status = action_line946(i, keys, input, token, &cursor, 0);
+        status = check_key_count_line946(keys_count, i, 3)
+             || action_line946(&i, keys, input, token, &cursor, 0);
         continue;
 
     }
@@ -19547,7 +20504,7 @@ yy779:
         }
         if (i != keys_count) {
             status = 1;
-            fprintf(stderr, "error: lex_line946: unused keys left after %u iterations\n", i);
+            fprintf(stderr, "error: lex_line946: unused keys left after %u keys\n", i);
         }
     }
 
@@ -19577,7 +20534,7 @@ end:
 #define YYFILL(n) { break; }
 
 static int action_line953
-    ( unsigned int i
+    ( unsigned *pkix
     , const YYKEYTYPE *keys
     , const YYCTYPE *start
     , const YYCTYPE *token
@@ -19585,10 +20542,12 @@ static int action_line953
     , YYKEYTYPE rule_act
     )
 {
+    const unsigned kix = *pkix;
     const long pos = token - start;
     const long len_act = *cursor - token;
-    const long len_exp = (long) keys [3 * i + 1];
-    const YYKEYTYPE rule_exp = keys [3 * i + 2];
+    const long len_exp = (long) keys[kix + 1];
+    const YYKEYTYPE rule_exp = keys[kix + 2];
+    *pkix = kix + 3;
     if (rule_exp == 255) {
         fprintf
             ( stderr
@@ -19598,17 +20557,17 @@ static int action_line953
             );
     }
     if (len_act == len_exp && rule_act == rule_exp) {
-        const YYKEYTYPE offset = keys[3 * i];
+        const YYKEYTYPE offset = keys[kix];
         *cursor = token + offset;
         return 0;
     } else {
         fprintf
             ( stderr
-            , "error: lex_line953: at position %ld (iteration %u):\n"
+            , "error: lex_line953: at position %ld (key %u):\n"
                 "\texpected: match length %ld, rule %u\n"
                 "\tactual:   match length %ld, rule %u\n"
             , pos
-            , i
+            , kix
             , len_exp
             , rule_exp
             , len_act
@@ -19616,6 +20575,13 @@ static int action_line953
             );
         return 1;
     }
+}
+
+static int check_key_count_line953(unsigned have, unsigned used, unsigned need)
+{
+    if (used + need <= have) return 0;
+    fprintf(stderr, "error: lex_line953: not enough keys\n");
+    return 1;
 }
 
 int lex_line953()
@@ -19645,7 +20611,7 @@ int lex_line953()
 
     keys = (YYKEYTYPE *) read_file
         ("unicode_blocks.8--skeleton--encoding-policy(ignore).c.line953.keys"
-        , 3 * sizeof (YYKEYTYPE)
+        , sizeof (YYKEYTYPE)
         , 0
         , &keys_count
         );
@@ -19658,7 +20624,7 @@ int lex_line953()
     limit = input + input_len + padding;
     eof = input + input_len;
 
-    for (i = 0; status == 0 && i < keys_count; ++i) {
+    for (i = 0; status == 0 && cursor < eof && i < keys_count;) {
         token = cursor;
         const YYCTYPE *marker = NULL;
         YYCTYPE yych;
@@ -19677,7 +20643,8 @@ int lex_line953()
 yy783:
         YYSKIP ();
 yy784:
-        status = action_line953(i, keys, input, token, &cursor, 254);
+        status = check_key_count_line953(keys_count, i, 3)
+             || action_line953(&i, keys, input, token, &cursor, 254);
         continue;
 yy785:
         YYSKIP ();
@@ -19840,7 +20807,8 @@ yy788:
         goto yy784;
 yy789:
         YYSKIP ();
-        status = action_line953(i, keys, input, token, &cursor, 0);
+        status = check_key_count_line953(keys_count, i, 3)
+             || action_line953(&i, keys, input, token, &cursor, 0);
         continue;
 
     }
@@ -19852,7 +20820,7 @@ yy789:
         }
         if (i != keys_count) {
             status = 1;
-            fprintf(stderr, "error: lex_line953: unused keys left after %u iterations\n", i);
+            fprintf(stderr, "error: lex_line953: unused keys left after %u keys\n", i);
         }
     }
 
@@ -19882,7 +20850,7 @@ end:
 #define YYFILL(n) { break; }
 
 static int action_line960
-    ( unsigned int i
+    ( unsigned *pkix
     , const YYKEYTYPE *keys
     , const YYCTYPE *start
     , const YYCTYPE *token
@@ -19890,10 +20858,12 @@ static int action_line960
     , YYKEYTYPE rule_act
     )
 {
+    const unsigned kix = *pkix;
     const long pos = token - start;
     const long len_act = *cursor - token;
-    const long len_exp = (long) keys [3 * i + 1];
-    const YYKEYTYPE rule_exp = keys [3 * i + 2];
+    const long len_exp = (long) keys[kix + 1];
+    const YYKEYTYPE rule_exp = keys[kix + 2];
+    *pkix = kix + 3;
     if (rule_exp == 255) {
         fprintf
             ( stderr
@@ -19903,17 +20873,17 @@ static int action_line960
             );
     }
     if (len_act == len_exp && rule_act == rule_exp) {
-        const YYKEYTYPE offset = keys[3 * i];
+        const YYKEYTYPE offset = keys[kix];
         *cursor = token + offset;
         return 0;
     } else {
         fprintf
             ( stderr
-            , "error: lex_line960: at position %ld (iteration %u):\n"
+            , "error: lex_line960: at position %ld (key %u):\n"
                 "\texpected: match length %ld, rule %u\n"
                 "\tactual:   match length %ld, rule %u\n"
             , pos
-            , i
+            , kix
             , len_exp
             , rule_exp
             , len_act
@@ -19921,6 +20891,13 @@ static int action_line960
             );
         return 1;
     }
+}
+
+static int check_key_count_line960(unsigned have, unsigned used, unsigned need)
+{
+    if (used + need <= have) return 0;
+    fprintf(stderr, "error: lex_line960: not enough keys\n");
+    return 1;
 }
 
 int lex_line960()
@@ -19950,7 +20927,7 @@ int lex_line960()
 
     keys = (YYKEYTYPE *) read_file
         ("unicode_blocks.8--skeleton--encoding-policy(ignore).c.line960.keys"
-        , 3 * sizeof (YYKEYTYPE)
+        , sizeof (YYKEYTYPE)
         , 0
         , &keys_count
         );
@@ -19963,7 +20940,7 @@ int lex_line960()
     limit = input + input_len + padding;
     eof = input + input_len;
 
-    for (i = 0; status == 0 && i < keys_count; ++i) {
+    for (i = 0; status == 0 && cursor < eof && i < keys_count;) {
         token = cursor;
         const YYCTYPE *marker = NULL;
         YYCTYPE yych;
@@ -19977,7 +20954,8 @@ int lex_line960()
 yy793:
         YYSKIP ();
 yy794:
-        status = action_line960(i, keys, input, token, &cursor, 254);
+        status = check_key_count_line960(keys_count, i, 3)
+             || action_line960(&i, keys, input, token, &cursor, 254);
         continue;
 yy795:
         YYSKIP ();
@@ -20102,7 +21080,8 @@ yy798:
         }
 yy799:
         YYSKIP ();
-        status = action_line960(i, keys, input, token, &cursor, 0);
+        status = check_key_count_line960(keys_count, i, 3)
+             || action_line960(&i, keys, input, token, &cursor, 0);
         continue;
 
     }
@@ -20114,7 +21093,7 @@ yy799:
         }
         if (i != keys_count) {
             status = 1;
-            fprintf(stderr, "error: lex_line960: unused keys left after %u iterations\n", i);
+            fprintf(stderr, "error: lex_line960: unused keys left after %u keys\n", i);
         }
     }
 
@@ -20144,7 +21123,7 @@ end:
 #define YYFILL(n) { break; }
 
 static int action_line967
-    ( unsigned int i
+    ( unsigned *pkix
     , const YYKEYTYPE *keys
     , const YYCTYPE *start
     , const YYCTYPE *token
@@ -20152,10 +21131,12 @@ static int action_line967
     , YYKEYTYPE rule_act
     )
 {
+    const unsigned kix = *pkix;
     const long pos = token - start;
     const long len_act = *cursor - token;
-    const long len_exp = (long) keys [3 * i + 1];
-    const YYKEYTYPE rule_exp = keys [3 * i + 2];
+    const long len_exp = (long) keys[kix + 1];
+    const YYKEYTYPE rule_exp = keys[kix + 2];
+    *pkix = kix + 3;
     if (rule_exp == 255) {
         fprintf
             ( stderr
@@ -20165,17 +21146,17 @@ static int action_line967
             );
     }
     if (len_act == len_exp && rule_act == rule_exp) {
-        const YYKEYTYPE offset = keys[3 * i];
+        const YYKEYTYPE offset = keys[kix];
         *cursor = token + offset;
         return 0;
     } else {
         fprintf
             ( stderr
-            , "error: lex_line967: at position %ld (iteration %u):\n"
+            , "error: lex_line967: at position %ld (key %u):\n"
                 "\texpected: match length %ld, rule %u\n"
                 "\tactual:   match length %ld, rule %u\n"
             , pos
-            , i
+            , kix
             , len_exp
             , rule_exp
             , len_act
@@ -20183,6 +21164,13 @@ static int action_line967
             );
         return 1;
     }
+}
+
+static int check_key_count_line967(unsigned have, unsigned used, unsigned need)
+{
+    if (used + need <= have) return 0;
+    fprintf(stderr, "error: lex_line967: not enough keys\n");
+    return 1;
 }
 
 int lex_line967()
@@ -20212,7 +21200,7 @@ int lex_line967()
 
     keys = (YYKEYTYPE *) read_file
         ("unicode_blocks.8--skeleton--encoding-policy(ignore).c.line967.keys"
-        , 3 * sizeof (YYKEYTYPE)
+        , sizeof (YYKEYTYPE)
         , 0
         , &keys_count
         );
@@ -20225,7 +21213,7 @@ int lex_line967()
     limit = input + input_len + padding;
     eof = input + input_len;
 
-    for (i = 0; status == 0 && i < keys_count; ++i) {
+    for (i = 0; status == 0 && cursor < eof && i < keys_count;) {
         token = cursor;
         const YYCTYPE *marker = NULL;
         YYCTYPE yych;
@@ -20239,7 +21227,8 @@ int lex_line967()
 yy803:
         YYSKIP ();
 yy804:
-        status = action_line967(i, keys, input, token, &cursor, 254);
+        status = check_key_count_line967(keys_count, i, 3)
+             || action_line967(&i, keys, input, token, &cursor, 254);
         continue;
 yy805:
         YYSKIP ();
@@ -20331,7 +21320,8 @@ yy808:
         }
 yy809:
         YYSKIP ();
-        status = action_line967(i, keys, input, token, &cursor, 0);
+        status = check_key_count_line967(keys_count, i, 3)
+             || action_line967(&i, keys, input, token, &cursor, 0);
         continue;
 
     }
@@ -20343,7 +21333,7 @@ yy809:
         }
         if (i != keys_count) {
             status = 1;
-            fprintf(stderr, "error: lex_line967: unused keys left after %u iterations\n", i);
+            fprintf(stderr, "error: lex_line967: unused keys left after %u keys\n", i);
         }
     }
 
@@ -20373,7 +21363,7 @@ end:
 #define YYFILL(n) { break; }
 
 static int action_line974
-    ( unsigned int i
+    ( unsigned *pkix
     , const YYKEYTYPE *keys
     , const YYCTYPE *start
     , const YYCTYPE *token
@@ -20381,10 +21371,12 @@ static int action_line974
     , YYKEYTYPE rule_act
     )
 {
+    const unsigned kix = *pkix;
     const long pos = token - start;
     const long len_act = *cursor - token;
-    const long len_exp = (long) keys [3 * i + 1];
-    const YYKEYTYPE rule_exp = keys [3 * i + 2];
+    const long len_exp = (long) keys[kix + 1];
+    const YYKEYTYPE rule_exp = keys[kix + 2];
+    *pkix = kix + 3;
     if (rule_exp == 255) {
         fprintf
             ( stderr
@@ -20394,17 +21386,17 @@ static int action_line974
             );
     }
     if (len_act == len_exp && rule_act == rule_exp) {
-        const YYKEYTYPE offset = keys[3 * i];
+        const YYKEYTYPE offset = keys[kix];
         *cursor = token + offset;
         return 0;
     } else {
         fprintf
             ( stderr
-            , "error: lex_line974: at position %ld (iteration %u):\n"
+            , "error: lex_line974: at position %ld (key %u):\n"
                 "\texpected: match length %ld, rule %u\n"
                 "\tactual:   match length %ld, rule %u\n"
             , pos
-            , i
+            , kix
             , len_exp
             , rule_exp
             , len_act
@@ -20412,6 +21404,13 @@ static int action_line974
             );
         return 1;
     }
+}
+
+static int check_key_count_line974(unsigned have, unsigned used, unsigned need)
+{
+    if (used + need <= have) return 0;
+    fprintf(stderr, "error: lex_line974: not enough keys\n");
+    return 1;
 }
 
 int lex_line974()
@@ -20441,7 +21440,7 @@ int lex_line974()
 
     keys = (YYKEYTYPE *) read_file
         ("unicode_blocks.8--skeleton--encoding-policy(ignore).c.line974.keys"
-        , 3 * sizeof (YYKEYTYPE)
+        , sizeof (YYKEYTYPE)
         , 0
         , &keys_count
         );
@@ -20454,7 +21453,7 @@ int lex_line974()
     limit = input + input_len + padding;
     eof = input + input_len;
 
-    for (i = 0; status == 0 && i < keys_count; ++i) {
+    for (i = 0; status == 0 && cursor < eof && i < keys_count;) {
         token = cursor;
         const YYCTYPE *marker = NULL;
         YYCTYPE yych;
@@ -20471,7 +21470,8 @@ int lex_line974()
 yy813:
         YYSKIP ();
 yy814:
-        status = action_line974(i, keys, input, token, &cursor, 254);
+        status = check_key_count_line974(keys_count, i, 3)
+             || action_line974(&i, keys, input, token, &cursor, 254);
         continue;
 yy815:
         YYSKIP ();
@@ -20734,7 +21734,8 @@ yy820:
         }
 yy821:
         YYSKIP ();
-        status = action_line974(i, keys, input, token, &cursor, 0);
+        status = check_key_count_line974(keys_count, i, 3)
+             || action_line974(&i, keys, input, token, &cursor, 0);
         continue;
 
     }
@@ -20746,7 +21747,7 @@ yy821:
         }
         if (i != keys_count) {
             status = 1;
-            fprintf(stderr, "error: lex_line974: unused keys left after %u iterations\n", i);
+            fprintf(stderr, "error: lex_line974: unused keys left after %u keys\n", i);
         }
     }
 
@@ -20776,7 +21777,7 @@ end:
 #define YYFILL(n) { break; }
 
 static int action_line981
-    ( unsigned int i
+    ( unsigned *pkix
     , const YYKEYTYPE *keys
     , const YYCTYPE *start
     , const YYCTYPE *token
@@ -20784,10 +21785,12 @@ static int action_line981
     , YYKEYTYPE rule_act
     )
 {
+    const unsigned kix = *pkix;
     const long pos = token - start;
     const long len_act = *cursor - token;
-    const long len_exp = (long) keys [3 * i + 1];
-    const YYKEYTYPE rule_exp = keys [3 * i + 2];
+    const long len_exp = (long) keys[kix + 1];
+    const YYKEYTYPE rule_exp = keys[kix + 2];
+    *pkix = kix + 3;
     if (rule_exp == 255) {
         fprintf
             ( stderr
@@ -20797,17 +21800,17 @@ static int action_line981
             );
     }
     if (len_act == len_exp && rule_act == rule_exp) {
-        const YYKEYTYPE offset = keys[3 * i];
+        const YYKEYTYPE offset = keys[kix];
         *cursor = token + offset;
         return 0;
     } else {
         fprintf
             ( stderr
-            , "error: lex_line981: at position %ld (iteration %u):\n"
+            , "error: lex_line981: at position %ld (key %u):\n"
                 "\texpected: match length %ld, rule %u\n"
                 "\tactual:   match length %ld, rule %u\n"
             , pos
-            , i
+            , kix
             , len_exp
             , rule_exp
             , len_act
@@ -20815,6 +21818,13 @@ static int action_line981
             );
         return 1;
     }
+}
+
+static int check_key_count_line981(unsigned have, unsigned used, unsigned need)
+{
+    if (used + need <= have) return 0;
+    fprintf(stderr, "error: lex_line981: not enough keys\n");
+    return 1;
 }
 
 int lex_line981()
@@ -20844,7 +21854,7 @@ int lex_line981()
 
     keys = (YYKEYTYPE *) read_file
         ("unicode_blocks.8--skeleton--encoding-policy(ignore).c.line981.keys"
-        , 3 * sizeof (YYKEYTYPE)
+        , sizeof (YYKEYTYPE)
         , 0
         , &keys_count
         );
@@ -20857,7 +21867,7 @@ int lex_line981()
     limit = input + input_len + padding;
     eof = input + input_len;
 
-    for (i = 0; status == 0 && i < keys_count; ++i) {
+    for (i = 0; status == 0 && cursor < eof && i < keys_count;) {
         token = cursor;
         const YYCTYPE *marker = NULL;
         YYCTYPE yych;
@@ -20871,7 +21881,8 @@ int lex_line981()
 yy825:
         YYSKIP ();
 yy826:
-        status = action_line981(i, keys, input, token, &cursor, 254);
+        status = check_key_count_line981(keys_count, i, 3)
+             || action_line981(&i, keys, input, token, &cursor, 254);
         continue;
 yy827:
         YYSKIP ();
@@ -20969,7 +21980,8 @@ yy829:
         goto yy826;
 yy830:
         YYSKIP ();
-        status = action_line981(i, keys, input, token, &cursor, 0);
+        status = check_key_count_line981(keys_count, i, 3)
+             || action_line981(&i, keys, input, token, &cursor, 0);
         continue;
 
     }
@@ -20981,7 +21993,7 @@ yy830:
         }
         if (i != keys_count) {
             status = 1;
-            fprintf(stderr, "error: lex_line981: unused keys left after %u iterations\n", i);
+            fprintf(stderr, "error: lex_line981: unused keys left after %u keys\n", i);
         }
     }
 
@@ -21011,7 +22023,7 @@ end:
 #define YYFILL(n) { break; }
 
 static int action_line988
-    ( unsigned int i
+    ( unsigned *pkix
     , const YYKEYTYPE *keys
     , const YYCTYPE *start
     , const YYCTYPE *token
@@ -21019,10 +22031,12 @@ static int action_line988
     , YYKEYTYPE rule_act
     )
 {
+    const unsigned kix = *pkix;
     const long pos = token - start;
     const long len_act = *cursor - token;
-    const long len_exp = (long) keys [3 * i + 1];
-    const YYKEYTYPE rule_exp = keys [3 * i + 2];
+    const long len_exp = (long) keys[kix + 1];
+    const YYKEYTYPE rule_exp = keys[kix + 2];
+    *pkix = kix + 3;
     if (rule_exp == 255) {
         fprintf
             ( stderr
@@ -21032,17 +22046,17 @@ static int action_line988
             );
     }
     if (len_act == len_exp && rule_act == rule_exp) {
-        const YYKEYTYPE offset = keys[3 * i];
+        const YYKEYTYPE offset = keys[kix];
         *cursor = token + offset;
         return 0;
     } else {
         fprintf
             ( stderr
-            , "error: lex_line988: at position %ld (iteration %u):\n"
+            , "error: lex_line988: at position %ld (key %u):\n"
                 "\texpected: match length %ld, rule %u\n"
                 "\tactual:   match length %ld, rule %u\n"
             , pos
-            , i
+            , kix
             , len_exp
             , rule_exp
             , len_act
@@ -21050,6 +22064,13 @@ static int action_line988
             );
         return 1;
     }
+}
+
+static int check_key_count_line988(unsigned have, unsigned used, unsigned need)
+{
+    if (used + need <= have) return 0;
+    fprintf(stderr, "error: lex_line988: not enough keys\n");
+    return 1;
 }
 
 int lex_line988()
@@ -21079,7 +22100,7 @@ int lex_line988()
 
     keys = (YYKEYTYPE *) read_file
         ("unicode_blocks.8--skeleton--encoding-policy(ignore).c.line988.keys"
-        , 3 * sizeof (YYKEYTYPE)
+        , sizeof (YYKEYTYPE)
         , 0
         , &keys_count
         );
@@ -21092,7 +22113,7 @@ int lex_line988()
     limit = input + input_len + padding;
     eof = input + input_len;
 
-    for (i = 0; status == 0 && i < keys_count; ++i) {
+    for (i = 0; status == 0 && cursor < eof && i < keys_count;) {
         token = cursor;
         const YYCTYPE *marker = NULL;
         YYCTYPE yych;
@@ -21106,7 +22127,8 @@ int lex_line988()
 yy834:
         YYSKIP ();
 yy835:
-        status = action_line988(i, keys, input, token, &cursor, 254);
+        status = check_key_count_line988(keys_count, i, 3)
+             || action_line988(&i, keys, input, token, &cursor, 254);
         continue;
 yy836:
         YYSKIP ();
@@ -21192,7 +22214,8 @@ yy838:
         goto yy835;
 yy839:
         YYSKIP ();
-        status = action_line988(i, keys, input, token, &cursor, 0);
+        status = check_key_count_line988(keys_count, i, 3)
+             || action_line988(&i, keys, input, token, &cursor, 0);
         continue;
 
     }
@@ -21204,7 +22227,7 @@ yy839:
         }
         if (i != keys_count) {
             status = 1;
-            fprintf(stderr, "error: lex_line988: unused keys left after %u iterations\n", i);
+            fprintf(stderr, "error: lex_line988: unused keys left after %u keys\n", i);
         }
     }
 
@@ -21234,7 +22257,7 @@ end:
 #define YYFILL(n) { break; }
 
 static int action_line995
-    ( unsigned int i
+    ( unsigned *pkix
     , const YYKEYTYPE *keys
     , const YYCTYPE *start
     , const YYCTYPE *token
@@ -21242,10 +22265,12 @@ static int action_line995
     , YYKEYTYPE rule_act
     )
 {
+    const unsigned kix = *pkix;
     const long pos = token - start;
     const long len_act = *cursor - token;
-    const long len_exp = (long) keys [3 * i + 1];
-    const YYKEYTYPE rule_exp = keys [3 * i + 2];
+    const long len_exp = (long) keys[kix + 1];
+    const YYKEYTYPE rule_exp = keys[kix + 2];
+    *pkix = kix + 3;
     if (rule_exp == 255) {
         fprintf
             ( stderr
@@ -21255,17 +22280,17 @@ static int action_line995
             );
     }
     if (len_act == len_exp && rule_act == rule_exp) {
-        const YYKEYTYPE offset = keys[3 * i];
+        const YYKEYTYPE offset = keys[kix];
         *cursor = token + offset;
         return 0;
     } else {
         fprintf
             ( stderr
-            , "error: lex_line995: at position %ld (iteration %u):\n"
+            , "error: lex_line995: at position %ld (key %u):\n"
                 "\texpected: match length %ld, rule %u\n"
                 "\tactual:   match length %ld, rule %u\n"
             , pos
-            , i
+            , kix
             , len_exp
             , rule_exp
             , len_act
@@ -21273,6 +22298,13 @@ static int action_line995
             );
         return 1;
     }
+}
+
+static int check_key_count_line995(unsigned have, unsigned used, unsigned need)
+{
+    if (used + need <= have) return 0;
+    fprintf(stderr, "error: lex_line995: not enough keys\n");
+    return 1;
 }
 
 int lex_line995()
@@ -21302,7 +22334,7 @@ int lex_line995()
 
     keys = (YYKEYTYPE *) read_file
         ("unicode_blocks.8--skeleton--encoding-policy(ignore).c.line995.keys"
-        , 3 * sizeof (YYKEYTYPE)
+        , sizeof (YYKEYTYPE)
         , 0
         , &keys_count
         );
@@ -21315,7 +22347,7 @@ int lex_line995()
     limit = input + input_len + padding;
     eof = input + input_len;
 
-    for (i = 0; status == 0 && i < keys_count; ++i) {
+    for (i = 0; status == 0 && cursor < eof && i < keys_count;) {
         token = cursor;
         const YYCTYPE *marker = NULL;
         YYCTYPE yych;
@@ -21329,7 +22361,8 @@ int lex_line995()
 yy843:
         YYSKIP ();
 yy844:
-        status = action_line995(i, keys, input, token, &cursor, 254);
+        status = check_key_count_line995(keys_count, i, 3)
+             || action_line995(&i, keys, input, token, &cursor, 254);
         continue;
 yy845:
         YYSKIP ();
@@ -21429,7 +22462,8 @@ yy847:
         goto yy844;
 yy848:
         YYSKIP ();
-        status = action_line995(i, keys, input, token, &cursor, 0);
+        status = check_key_count_line995(keys_count, i, 3)
+             || action_line995(&i, keys, input, token, &cursor, 0);
         continue;
 
     }
@@ -21441,7 +22475,7 @@ yy848:
         }
         if (i != keys_count) {
             status = 1;
-            fprintf(stderr, "error: lex_line995: unused keys left after %u iterations\n", i);
+            fprintf(stderr, "error: lex_line995: unused keys left after %u keys\n", i);
         }
     }
 
@@ -21471,7 +22505,7 @@ end:
 #define YYFILL(n) { break; }
 
 static int action_line1002
-    ( unsigned int i
+    ( unsigned *pkix
     , const YYKEYTYPE *keys
     , const YYCTYPE *start
     , const YYCTYPE *token
@@ -21479,10 +22513,12 @@ static int action_line1002
     , YYKEYTYPE rule_act
     )
 {
+    const unsigned kix = *pkix;
     const long pos = token - start;
     const long len_act = *cursor - token;
-    const long len_exp = (long) keys [3 * i + 1];
-    const YYKEYTYPE rule_exp = keys [3 * i + 2];
+    const long len_exp = (long) keys[kix + 1];
+    const YYKEYTYPE rule_exp = keys[kix + 2];
+    *pkix = kix + 3;
     if (rule_exp == 255) {
         fprintf
             ( stderr
@@ -21492,17 +22528,17 @@ static int action_line1002
             );
     }
     if (len_act == len_exp && rule_act == rule_exp) {
-        const YYKEYTYPE offset = keys[3 * i];
+        const YYKEYTYPE offset = keys[kix];
         *cursor = token + offset;
         return 0;
     } else {
         fprintf
             ( stderr
-            , "error: lex_line1002: at position %ld (iteration %u):\n"
+            , "error: lex_line1002: at position %ld (key %u):\n"
                 "\texpected: match length %ld, rule %u\n"
                 "\tactual:   match length %ld, rule %u\n"
             , pos
-            , i
+            , kix
             , len_exp
             , rule_exp
             , len_act
@@ -21510,6 +22546,13 @@ static int action_line1002
             );
         return 1;
     }
+}
+
+static int check_key_count_line1002(unsigned have, unsigned used, unsigned need)
+{
+    if (used + need <= have) return 0;
+    fprintf(stderr, "error: lex_line1002: not enough keys\n");
+    return 1;
 }
 
 int lex_line1002()
@@ -21539,7 +22582,7 @@ int lex_line1002()
 
     keys = (YYKEYTYPE *) read_file
         ("unicode_blocks.8--skeleton--encoding-policy(ignore).c.line1002.keys"
-        , 3 * sizeof (YYKEYTYPE)
+        , sizeof (YYKEYTYPE)
         , 0
         , &keys_count
         );
@@ -21552,7 +22595,7 @@ int lex_line1002()
     limit = input + input_len + padding;
     eof = input + input_len;
 
-    for (i = 0; status == 0 && i < keys_count; ++i) {
+    for (i = 0; status == 0 && cursor < eof && i < keys_count;) {
         token = cursor;
         const YYCTYPE *marker = NULL;
         YYCTYPE yych;
@@ -21567,7 +22610,8 @@ int lex_line1002()
 yy852:
         YYSKIP ();
 yy853:
-        status = action_line1002(i, keys, input, token, &cursor, 254);
+        status = check_key_count_line1002(keys_count, i, 3)
+             || action_line1002(&i, keys, input, token, &cursor, 254);
         continue;
 yy854:
         YYSKIP ();
@@ -21758,7 +22802,8 @@ yy857:
         goto yy853;
 yy858:
         YYSKIP ();
-        status = action_line1002(i, keys, input, token, &cursor, 0);
+        status = check_key_count_line1002(keys_count, i, 3)
+             || action_line1002(&i, keys, input, token, &cursor, 0);
         continue;
 
     }
@@ -21770,7 +22815,7 @@ yy858:
         }
         if (i != keys_count) {
             status = 1;
-            fprintf(stderr, "error: lex_line1002: unused keys left after %u iterations\n", i);
+            fprintf(stderr, "error: lex_line1002: unused keys left after %u keys\n", i);
         }
     }
 
@@ -21800,7 +22845,7 @@ end:
 #define YYFILL(n) { break; }
 
 static int action_line1009
-    ( unsigned int i
+    ( unsigned *pkix
     , const YYKEYTYPE *keys
     , const YYCTYPE *start
     , const YYCTYPE *token
@@ -21808,10 +22853,12 @@ static int action_line1009
     , YYKEYTYPE rule_act
     )
 {
+    const unsigned kix = *pkix;
     const long pos = token - start;
     const long len_act = *cursor - token;
-    const long len_exp = (long) keys [3 * i + 1];
-    const YYKEYTYPE rule_exp = keys [3 * i + 2];
+    const long len_exp = (long) keys[kix + 1];
+    const YYKEYTYPE rule_exp = keys[kix + 2];
+    *pkix = kix + 3;
     if (rule_exp == 255) {
         fprintf
             ( stderr
@@ -21821,17 +22868,17 @@ static int action_line1009
             );
     }
     if (len_act == len_exp && rule_act == rule_exp) {
-        const YYKEYTYPE offset = keys[3 * i];
+        const YYKEYTYPE offset = keys[kix];
         *cursor = token + offset;
         return 0;
     } else {
         fprintf
             ( stderr
-            , "error: lex_line1009: at position %ld (iteration %u):\n"
+            , "error: lex_line1009: at position %ld (key %u):\n"
                 "\texpected: match length %ld, rule %u\n"
                 "\tactual:   match length %ld, rule %u\n"
             , pos
-            , i
+            , kix
             , len_exp
             , rule_exp
             , len_act
@@ -21839,6 +22886,13 @@ static int action_line1009
             );
         return 1;
     }
+}
+
+static int check_key_count_line1009(unsigned have, unsigned used, unsigned need)
+{
+    if (used + need <= have) return 0;
+    fprintf(stderr, "error: lex_line1009: not enough keys\n");
+    return 1;
 }
 
 int lex_line1009()
@@ -21868,7 +22922,7 @@ int lex_line1009()
 
     keys = (YYKEYTYPE *) read_file
         ("unicode_blocks.8--skeleton--encoding-policy(ignore).c.line1009.keys"
-        , 3 * sizeof (YYKEYTYPE)
+        , sizeof (YYKEYTYPE)
         , 0
         , &keys_count
         );
@@ -21881,7 +22935,7 @@ int lex_line1009()
     limit = input + input_len + padding;
     eof = input + input_len;
 
-    for (i = 0; status == 0 && i < keys_count; ++i) {
+    for (i = 0; status == 0 && cursor < eof && i < keys_count;) {
         token = cursor;
         const YYCTYPE *marker = NULL;
         YYCTYPE yych;
@@ -21895,7 +22949,8 @@ int lex_line1009()
 yy862:
         YYSKIP ();
 yy863:
-        status = action_line1009(i, keys, input, token, &cursor, 254);
+        status = check_key_count_line1009(keys_count, i, 3)
+             || action_line1009(&i, keys, input, token, &cursor, 254);
         continue;
 yy864:
         YYSKIP ();
@@ -21987,7 +23042,8 @@ yy866:
         goto yy863;
 yy867:
         YYSKIP ();
-        status = action_line1009(i, keys, input, token, &cursor, 0);
+        status = check_key_count_line1009(keys_count, i, 3)
+             || action_line1009(&i, keys, input, token, &cursor, 0);
         continue;
 
     }
@@ -21999,7 +23055,7 @@ yy867:
         }
         if (i != keys_count) {
             status = 1;
-            fprintf(stderr, "error: lex_line1009: unused keys left after %u iterations\n", i);
+            fprintf(stderr, "error: lex_line1009: unused keys left after %u keys\n", i);
         }
     }
 
@@ -22029,7 +23085,7 @@ end:
 #define YYFILL(n) { break; }
 
 static int action_line1016
-    ( unsigned int i
+    ( unsigned *pkix
     , const YYKEYTYPE *keys
     , const YYCTYPE *start
     , const YYCTYPE *token
@@ -22037,10 +23093,12 @@ static int action_line1016
     , YYKEYTYPE rule_act
     )
 {
+    const unsigned kix = *pkix;
     const long pos = token - start;
     const long len_act = *cursor - token;
-    const long len_exp = (long) keys [3 * i + 1];
-    const YYKEYTYPE rule_exp = keys [3 * i + 2];
+    const long len_exp = (long) keys[kix + 1];
+    const YYKEYTYPE rule_exp = keys[kix + 2];
+    *pkix = kix + 3;
     if (rule_exp == 255) {
         fprintf
             ( stderr
@@ -22050,17 +23108,17 @@ static int action_line1016
             );
     }
     if (len_act == len_exp && rule_act == rule_exp) {
-        const YYKEYTYPE offset = keys[3 * i];
+        const YYKEYTYPE offset = keys[kix];
         *cursor = token + offset;
         return 0;
     } else {
         fprintf
             ( stderr
-            , "error: lex_line1016: at position %ld (iteration %u):\n"
+            , "error: lex_line1016: at position %ld (key %u):\n"
                 "\texpected: match length %ld, rule %u\n"
                 "\tactual:   match length %ld, rule %u\n"
             , pos
-            , i
+            , kix
             , len_exp
             , rule_exp
             , len_act
@@ -22068,6 +23126,13 @@ static int action_line1016
             );
         return 1;
     }
+}
+
+static int check_key_count_line1016(unsigned have, unsigned used, unsigned need)
+{
+    if (used + need <= have) return 0;
+    fprintf(stderr, "error: lex_line1016: not enough keys\n");
+    return 1;
 }
 
 int lex_line1016()
@@ -22097,7 +23162,7 @@ int lex_line1016()
 
     keys = (YYKEYTYPE *) read_file
         ("unicode_blocks.8--skeleton--encoding-policy(ignore).c.line1016.keys"
-        , 3 * sizeof (YYKEYTYPE)
+        , sizeof (YYKEYTYPE)
         , 0
         , &keys_count
         );
@@ -22110,7 +23175,7 @@ int lex_line1016()
     limit = input + input_len + padding;
     eof = input + input_len;
 
-    for (i = 0; status == 0 && i < keys_count; ++i) {
+    for (i = 0; status == 0 && cursor < eof && i < keys_count;) {
         token = cursor;
         const YYCTYPE *marker = NULL;
         YYCTYPE yych;
@@ -22124,7 +23189,8 @@ int lex_line1016()
 yy871:
         YYSKIP ();
 yy872:
-        status = action_line1016(i, keys, input, token, &cursor, 254);
+        status = check_key_count_line1016(keys_count, i, 3)
+             || action_line1016(&i, keys, input, token, &cursor, 254);
         continue;
 yy873:
         YYSKIP ();
@@ -22232,7 +23298,8 @@ yy876:
         }
 yy877:
         YYSKIP ();
-        status = action_line1016(i, keys, input, token, &cursor, 0);
+        status = check_key_count_line1016(keys_count, i, 3)
+             || action_line1016(&i, keys, input, token, &cursor, 0);
         continue;
 
     }
@@ -22244,7 +23311,7 @@ yy877:
         }
         if (i != keys_count) {
             status = 1;
-            fprintf(stderr, "error: lex_line1016: unused keys left after %u iterations\n", i);
+            fprintf(stderr, "error: lex_line1016: unused keys left after %u keys\n", i);
         }
     }
 
@@ -22274,7 +23341,7 @@ end:
 #define YYFILL(n) { break; }
 
 static int action_line1023
-    ( unsigned int i
+    ( unsigned *pkix
     , const YYKEYTYPE *keys
     , const YYCTYPE *start
     , const YYCTYPE *token
@@ -22282,10 +23349,12 @@ static int action_line1023
     , YYKEYTYPE rule_act
     )
 {
+    const unsigned kix = *pkix;
     const long pos = token - start;
     const long len_act = *cursor - token;
-    const long len_exp = (long) keys [3 * i + 1];
-    const YYKEYTYPE rule_exp = keys [3 * i + 2];
+    const long len_exp = (long) keys[kix + 1];
+    const YYKEYTYPE rule_exp = keys[kix + 2];
+    *pkix = kix + 3;
     if (rule_exp == 255) {
         fprintf
             ( stderr
@@ -22295,17 +23364,17 @@ static int action_line1023
             );
     }
     if (len_act == len_exp && rule_act == rule_exp) {
-        const YYKEYTYPE offset = keys[3 * i];
+        const YYKEYTYPE offset = keys[kix];
         *cursor = token + offset;
         return 0;
     } else {
         fprintf
             ( stderr
-            , "error: lex_line1023: at position %ld (iteration %u):\n"
+            , "error: lex_line1023: at position %ld (key %u):\n"
                 "\texpected: match length %ld, rule %u\n"
                 "\tactual:   match length %ld, rule %u\n"
             , pos
-            , i
+            , kix
             , len_exp
             , rule_exp
             , len_act
@@ -22313,6 +23382,13 @@ static int action_line1023
             );
         return 1;
     }
+}
+
+static int check_key_count_line1023(unsigned have, unsigned used, unsigned need)
+{
+    if (used + need <= have) return 0;
+    fprintf(stderr, "error: lex_line1023: not enough keys\n");
+    return 1;
 }
 
 int lex_line1023()
@@ -22342,7 +23418,7 @@ int lex_line1023()
 
     keys = (YYKEYTYPE *) read_file
         ("unicode_blocks.8--skeleton--encoding-policy(ignore).c.line1023.keys"
-        , 3 * sizeof (YYKEYTYPE)
+        , sizeof (YYKEYTYPE)
         , 0
         , &keys_count
         );
@@ -22355,7 +23431,7 @@ int lex_line1023()
     limit = input + input_len + padding;
     eof = input + input_len;
 
-    for (i = 0; status == 0 && i < keys_count; ++i) {
+    for (i = 0; status == 0 && cursor < eof && i < keys_count;) {
         token = cursor;
         const YYCTYPE *marker = NULL;
         YYCTYPE yych;
@@ -22369,7 +23445,8 @@ int lex_line1023()
 yy881:
         YYSKIP ();
 yy882:
-        status = action_line1023(i, keys, input, token, &cursor, 254);
+        status = check_key_count_line1023(keys_count, i, 3)
+             || action_line1023(&i, keys, input, token, &cursor, 254);
         continue;
 yy883:
         YYSKIP ();
@@ -22518,7 +23595,8 @@ yy886:
         }
 yy887:
         YYSKIP ();
-        status = action_line1023(i, keys, input, token, &cursor, 0);
+        status = check_key_count_line1023(keys_count, i, 3)
+             || action_line1023(&i, keys, input, token, &cursor, 0);
         continue;
 
     }
@@ -22530,7 +23608,7 @@ yy887:
         }
         if (i != keys_count) {
             status = 1;
-            fprintf(stderr, "error: lex_line1023: unused keys left after %u iterations\n", i);
+            fprintf(stderr, "error: lex_line1023: unused keys left after %u keys\n", i);
         }
     }
 
@@ -22560,7 +23638,7 @@ end:
 #define YYFILL(n) { break; }
 
 static int action_line1030
-    ( unsigned int i
+    ( unsigned *pkix
     , const YYKEYTYPE *keys
     , const YYCTYPE *start
     , const YYCTYPE *token
@@ -22568,10 +23646,12 @@ static int action_line1030
     , YYKEYTYPE rule_act
     )
 {
+    const unsigned kix = *pkix;
     const long pos = token - start;
     const long len_act = *cursor - token;
-    const long len_exp = (long) keys [3 * i + 1];
-    const YYKEYTYPE rule_exp = keys [3 * i + 2];
+    const long len_exp = (long) keys[kix + 1];
+    const YYKEYTYPE rule_exp = keys[kix + 2];
+    *pkix = kix + 3;
     if (rule_exp == 255) {
         fprintf
             ( stderr
@@ -22581,17 +23661,17 @@ static int action_line1030
             );
     }
     if (len_act == len_exp && rule_act == rule_exp) {
-        const YYKEYTYPE offset = keys[3 * i];
+        const YYKEYTYPE offset = keys[kix];
         *cursor = token + offset;
         return 0;
     } else {
         fprintf
             ( stderr
-            , "error: lex_line1030: at position %ld (iteration %u):\n"
+            , "error: lex_line1030: at position %ld (key %u):\n"
                 "\texpected: match length %ld, rule %u\n"
                 "\tactual:   match length %ld, rule %u\n"
             , pos
-            , i
+            , kix
             , len_exp
             , rule_exp
             , len_act
@@ -22599,6 +23679,13 @@ static int action_line1030
             );
         return 1;
     }
+}
+
+static int check_key_count_line1030(unsigned have, unsigned used, unsigned need)
+{
+    if (used + need <= have) return 0;
+    fprintf(stderr, "error: lex_line1030: not enough keys\n");
+    return 1;
 }
 
 int lex_line1030()
@@ -22628,7 +23715,7 @@ int lex_line1030()
 
     keys = (YYKEYTYPE *) read_file
         ("unicode_blocks.8--skeleton--encoding-policy(ignore).c.line1030.keys"
-        , 3 * sizeof (YYKEYTYPE)
+        , sizeof (YYKEYTYPE)
         , 0
         , &keys_count
         );
@@ -22641,7 +23728,7 @@ int lex_line1030()
     limit = input + input_len + padding;
     eof = input + input_len;
 
-    for (i = 0; status == 0 && i < keys_count; ++i) {
+    for (i = 0; status == 0 && cursor < eof && i < keys_count;) {
         token = cursor;
         const YYCTYPE *marker = NULL;
         YYCTYPE yych;
@@ -22655,7 +23742,8 @@ int lex_line1030()
 yy891:
         YYSKIP ();
 yy892:
-        status = action_line1030(i, keys, input, token, &cursor, 254);
+        status = check_key_count_line1030(keys_count, i, 3)
+             || action_line1030(&i, keys, input, token, &cursor, 254);
         continue;
 yy893:
         YYSKIP ();
@@ -22692,7 +23780,8 @@ yy895:
         goto yy892;
 yy896:
         YYSKIP ();
-        status = action_line1030(i, keys, input, token, &cursor, 0);
+        status = check_key_count_line1030(keys_count, i, 3)
+             || action_line1030(&i, keys, input, token, &cursor, 0);
         continue;
 
     }
@@ -22704,7 +23793,7 @@ yy896:
         }
         if (i != keys_count) {
             status = 1;
-            fprintf(stderr, "error: lex_line1030: unused keys left after %u iterations\n", i);
+            fprintf(stderr, "error: lex_line1030: unused keys left after %u keys\n", i);
         }
     }
 
@@ -22734,7 +23823,7 @@ end:
 #define YYFILL(n) { break; }
 
 static int action_line1037
-    ( unsigned int i
+    ( unsigned *pkix
     , const YYKEYTYPE *keys
     , const YYCTYPE *start
     , const YYCTYPE *token
@@ -22742,10 +23831,12 @@ static int action_line1037
     , YYKEYTYPE rule_act
     )
 {
+    const unsigned kix = *pkix;
     const long pos = token - start;
     const long len_act = *cursor - token;
-    const long len_exp = (long) keys [3 * i + 1];
-    const YYKEYTYPE rule_exp = keys [3 * i + 2];
+    const long len_exp = (long) keys[kix + 1];
+    const YYKEYTYPE rule_exp = keys[kix + 2];
+    *pkix = kix + 3;
     if (rule_exp == 255) {
         fprintf
             ( stderr
@@ -22755,17 +23846,17 @@ static int action_line1037
             );
     }
     if (len_act == len_exp && rule_act == rule_exp) {
-        const YYKEYTYPE offset = keys[3 * i];
+        const YYKEYTYPE offset = keys[kix];
         *cursor = token + offset;
         return 0;
     } else {
         fprintf
             ( stderr
-            , "error: lex_line1037: at position %ld (iteration %u):\n"
+            , "error: lex_line1037: at position %ld (key %u):\n"
                 "\texpected: match length %ld, rule %u\n"
                 "\tactual:   match length %ld, rule %u\n"
             , pos
-            , i
+            , kix
             , len_exp
             , rule_exp
             , len_act
@@ -22773,6 +23864,13 @@ static int action_line1037
             );
         return 1;
     }
+}
+
+static int check_key_count_line1037(unsigned have, unsigned used, unsigned need)
+{
+    if (used + need <= have) return 0;
+    fprintf(stderr, "error: lex_line1037: not enough keys\n");
+    return 1;
 }
 
 int lex_line1037()
@@ -22802,7 +23900,7 @@ int lex_line1037()
 
     keys = (YYKEYTYPE *) read_file
         ("unicode_blocks.8--skeleton--encoding-policy(ignore).c.line1037.keys"
-        , 3 * sizeof (YYKEYTYPE)
+        , sizeof (YYKEYTYPE)
         , 0
         , &keys_count
         );
@@ -22815,7 +23913,7 @@ int lex_line1037()
     limit = input + input_len + padding;
     eof = input + input_len;
 
-    for (i = 0; status == 0 && i < keys_count; ++i) {
+    for (i = 0; status == 0 && cursor < eof && i < keys_count;) {
         token = cursor;
         const YYCTYPE *marker = NULL;
         YYCTYPE yych;
@@ -22829,7 +23927,8 @@ int lex_line1037()
 yy900:
         YYSKIP ();
 yy901:
-        status = action_line1037(i, keys, input, token, &cursor, 254);
+        status = check_key_count_line1037(keys_count, i, 3)
+             || action_line1037(&i, keys, input, token, &cursor, 254);
         continue;
 yy902:
         YYSKIP ();
@@ -22866,7 +23965,8 @@ yy904:
         goto yy901;
 yy905:
         YYSKIP ();
-        status = action_line1037(i, keys, input, token, &cursor, 0);
+        status = check_key_count_line1037(keys_count, i, 3)
+             || action_line1037(&i, keys, input, token, &cursor, 0);
         continue;
 
     }
@@ -22878,7 +23978,7 @@ yy905:
         }
         if (i != keys_count) {
             status = 1;
-            fprintf(stderr, "error: lex_line1037: unused keys left after %u iterations\n", i);
+            fprintf(stderr, "error: lex_line1037: unused keys left after %u keys\n", i);
         }
     }
 
@@ -22908,7 +24008,7 @@ end:
 #define YYFILL(n) { break; }
 
 static int action_line1044
-    ( unsigned int i
+    ( unsigned *pkix
     , const YYKEYTYPE *keys
     , const YYCTYPE *start
     , const YYCTYPE *token
@@ -22916,10 +24016,12 @@ static int action_line1044
     , YYKEYTYPE rule_act
     )
 {
+    const unsigned kix = *pkix;
     const long pos = token - start;
     const long len_act = *cursor - token;
-    const long len_exp = (long) keys [3 * i + 1];
-    const YYKEYTYPE rule_exp = keys [3 * i + 2];
+    const long len_exp = (long) keys[kix + 1];
+    const YYKEYTYPE rule_exp = keys[kix + 2];
+    *pkix = kix + 3;
     if (rule_exp == 255) {
         fprintf
             ( stderr
@@ -22929,17 +24031,17 @@ static int action_line1044
             );
     }
     if (len_act == len_exp && rule_act == rule_exp) {
-        const YYKEYTYPE offset = keys[3 * i];
+        const YYKEYTYPE offset = keys[kix];
         *cursor = token + offset;
         return 0;
     } else {
         fprintf
             ( stderr
-            , "error: lex_line1044: at position %ld (iteration %u):\n"
+            , "error: lex_line1044: at position %ld (key %u):\n"
                 "\texpected: match length %ld, rule %u\n"
                 "\tactual:   match length %ld, rule %u\n"
             , pos
-            , i
+            , kix
             , len_exp
             , rule_exp
             , len_act
@@ -22947,6 +24049,13 @@ static int action_line1044
             );
         return 1;
     }
+}
+
+static int check_key_count_line1044(unsigned have, unsigned used, unsigned need)
+{
+    if (used + need <= have) return 0;
+    fprintf(stderr, "error: lex_line1044: not enough keys\n");
+    return 1;
 }
 
 int lex_line1044()
@@ -22976,7 +24085,7 @@ int lex_line1044()
 
     keys = (YYKEYTYPE *) read_file
         ("unicode_blocks.8--skeleton--encoding-policy(ignore).c.line1044.keys"
-        , 3 * sizeof (YYKEYTYPE)
+        , sizeof (YYKEYTYPE)
         , 0
         , &keys_count
         );
@@ -22989,7 +24098,7 @@ int lex_line1044()
     limit = input + input_len + padding;
     eof = input + input_len;
 
-    for (i = 0; status == 0 && i < keys_count; ++i) {
+    for (i = 0; status == 0 && cursor < eof && i < keys_count;) {
         token = cursor;
         const YYCTYPE *marker = NULL;
         YYCTYPE yych;
@@ -23003,7 +24112,8 @@ int lex_line1044()
 yy909:
         YYSKIP ();
 yy910:
-        status = action_line1044(i, keys, input, token, &cursor, 254);
+        status = check_key_count_line1044(keys_count, i, 3)
+             || action_line1044(&i, keys, input, token, &cursor, 254);
         continue;
 yy911:
         YYSKIP ();
@@ -23063,7 +24173,8 @@ yy914:
         }
 yy915:
         YYSKIP ();
-        status = action_line1044(i, keys, input, token, &cursor, 0);
+        status = check_key_count_line1044(keys_count, i, 3)
+             || action_line1044(&i, keys, input, token, &cursor, 0);
         continue;
 
     }
@@ -23075,7 +24186,7 @@ yy915:
         }
         if (i != keys_count) {
             status = 1;
-            fprintf(stderr, "error: lex_line1044: unused keys left after %u iterations\n", i);
+            fprintf(stderr, "error: lex_line1044: unused keys left after %u keys\n", i);
         }
     }
 
@@ -23105,7 +24216,7 @@ end:
 #define YYFILL(n) { break; }
 
 static int action_line1051
-    ( unsigned int i
+    ( unsigned *pkix
     , const YYKEYTYPE *keys
     , const YYCTYPE *start
     , const YYCTYPE *token
@@ -23113,10 +24224,12 @@ static int action_line1051
     , YYKEYTYPE rule_act
     )
 {
+    const unsigned kix = *pkix;
     const long pos = token - start;
     const long len_act = *cursor - token;
-    const long len_exp = (long) keys [3 * i + 1];
-    const YYKEYTYPE rule_exp = keys [3 * i + 2];
+    const long len_exp = (long) keys[kix + 1];
+    const YYKEYTYPE rule_exp = keys[kix + 2];
+    *pkix = kix + 3;
     if (rule_exp == 255) {
         fprintf
             ( stderr
@@ -23126,17 +24239,17 @@ static int action_line1051
             );
     }
     if (len_act == len_exp && rule_act == rule_exp) {
-        const YYKEYTYPE offset = keys[3 * i];
+        const YYKEYTYPE offset = keys[kix];
         *cursor = token + offset;
         return 0;
     } else {
         fprintf
             ( stderr
-            , "error: lex_line1051: at position %ld (iteration %u):\n"
+            , "error: lex_line1051: at position %ld (key %u):\n"
                 "\texpected: match length %ld, rule %u\n"
                 "\tactual:   match length %ld, rule %u\n"
             , pos
-            , i
+            , kix
             , len_exp
             , rule_exp
             , len_act
@@ -23144,6 +24257,13 @@ static int action_line1051
             );
         return 1;
     }
+}
+
+static int check_key_count_line1051(unsigned have, unsigned used, unsigned need)
+{
+    if (used + need <= have) return 0;
+    fprintf(stderr, "error: lex_line1051: not enough keys\n");
+    return 1;
 }
 
 int lex_line1051()
@@ -23173,7 +24293,7 @@ int lex_line1051()
 
     keys = (YYKEYTYPE *) read_file
         ("unicode_blocks.8--skeleton--encoding-policy(ignore).c.line1051.keys"
-        , 3 * sizeof (YYKEYTYPE)
+        , sizeof (YYKEYTYPE)
         , 0
         , &keys_count
         );
@@ -23186,7 +24306,7 @@ int lex_line1051()
     limit = input + input_len + padding;
     eof = input + input_len;
 
-    for (i = 0; status == 0 && i < keys_count; ++i) {
+    for (i = 0; status == 0 && cursor < eof && i < keys_count;) {
         token = cursor;
         const YYCTYPE *marker = NULL;
         YYCTYPE yych;
@@ -23200,7 +24320,8 @@ int lex_line1051()
 yy919:
         YYSKIP ();
 yy920:
-        status = action_line1051(i, keys, input, token, &cursor, 254);
+        status = check_key_count_line1051(keys_count, i, 3)
+             || action_line1051(&i, keys, input, token, &cursor, 254);
         continue;
 yy921:
         YYSKIP ();
@@ -23253,7 +24374,8 @@ yy923:
         goto yy920;
 yy924:
         YYSKIP ();
-        status = action_line1051(i, keys, input, token, &cursor, 0);
+        status = check_key_count_line1051(keys_count, i, 3)
+             || action_line1051(&i, keys, input, token, &cursor, 0);
         continue;
 
     }
@@ -23265,7 +24387,7 @@ yy924:
         }
         if (i != keys_count) {
             status = 1;
-            fprintf(stderr, "error: lex_line1051: unused keys left after %u iterations\n", i);
+            fprintf(stderr, "error: lex_line1051: unused keys left after %u keys\n", i);
         }
     }
 
@@ -23295,7 +24417,7 @@ end:
 #define YYFILL(n) { break; }
 
 static int action_line1058
-    ( unsigned int i
+    ( unsigned *pkix
     , const YYKEYTYPE *keys
     , const YYCTYPE *start
     , const YYCTYPE *token
@@ -23303,10 +24425,12 @@ static int action_line1058
     , YYKEYTYPE rule_act
     )
 {
+    const unsigned kix = *pkix;
     const long pos = token - start;
     const long len_act = *cursor - token;
-    const long len_exp = (long) keys [3 * i + 1];
-    const YYKEYTYPE rule_exp = keys [3 * i + 2];
+    const long len_exp = (long) keys[kix + 1];
+    const YYKEYTYPE rule_exp = keys[kix + 2];
+    *pkix = kix + 3;
     if (rule_exp == 255) {
         fprintf
             ( stderr
@@ -23316,17 +24440,17 @@ static int action_line1058
             );
     }
     if (len_act == len_exp && rule_act == rule_exp) {
-        const YYKEYTYPE offset = keys[3 * i];
+        const YYKEYTYPE offset = keys[kix];
         *cursor = token + offset;
         return 0;
     } else {
         fprintf
             ( stderr
-            , "error: lex_line1058: at position %ld (iteration %u):\n"
+            , "error: lex_line1058: at position %ld (key %u):\n"
                 "\texpected: match length %ld, rule %u\n"
                 "\tactual:   match length %ld, rule %u\n"
             , pos
-            , i
+            , kix
             , len_exp
             , rule_exp
             , len_act
@@ -23334,6 +24458,13 @@ static int action_line1058
             );
         return 1;
     }
+}
+
+static int check_key_count_line1058(unsigned have, unsigned used, unsigned need)
+{
+    if (used + need <= have) return 0;
+    fprintf(stderr, "error: lex_line1058: not enough keys\n");
+    return 1;
 }
 
 int lex_line1058()
@@ -23363,7 +24494,7 @@ int lex_line1058()
 
     keys = (YYKEYTYPE *) read_file
         ("unicode_blocks.8--skeleton--encoding-policy(ignore).c.line1058.keys"
-        , 3 * sizeof (YYKEYTYPE)
+        , sizeof (YYKEYTYPE)
         , 0
         , &keys_count
         );
@@ -23376,7 +24507,7 @@ int lex_line1058()
     limit = input + input_len + padding;
     eof = input + input_len;
 
-    for (i = 0; status == 0 && i < keys_count; ++i) {
+    for (i = 0; status == 0 && cursor < eof && i < keys_count;) {
         token = cursor;
         const YYCTYPE *marker = NULL;
         YYCTYPE yych;
@@ -23390,7 +24521,8 @@ int lex_line1058()
 yy928:
         YYSKIP ();
 yy929:
-        status = action_line1058(i, keys, input, token, &cursor, 254);
+        status = check_key_count_line1058(keys_count, i, 3)
+             || action_line1058(&i, keys, input, token, &cursor, 254);
         continue;
 yy930:
         YYSKIP ();
@@ -23499,7 +24631,8 @@ yy933:
         }
 yy934:
         YYSKIP ();
-        status = action_line1058(i, keys, input, token, &cursor, 0);
+        status = check_key_count_line1058(keys_count, i, 3)
+             || action_line1058(&i, keys, input, token, &cursor, 0);
         continue;
 
     }
@@ -23511,7 +24644,7 @@ yy934:
         }
         if (i != keys_count) {
             status = 1;
-            fprintf(stderr, "error: lex_line1058: unused keys left after %u iterations\n", i);
+            fprintf(stderr, "error: lex_line1058: unused keys left after %u keys\n", i);
         }
     }
 
@@ -23541,7 +24674,7 @@ end:
 #define YYFILL(n) { break; }
 
 static int action_line1065
-    ( unsigned int i
+    ( unsigned *pkix
     , const YYKEYTYPE *keys
     , const YYCTYPE *start
     , const YYCTYPE *token
@@ -23549,10 +24682,12 @@ static int action_line1065
     , YYKEYTYPE rule_act
     )
 {
+    const unsigned kix = *pkix;
     const long pos = token - start;
     const long len_act = *cursor - token;
-    const long len_exp = (long) keys [3 * i + 1];
-    const YYKEYTYPE rule_exp = keys [3 * i + 2];
+    const long len_exp = (long) keys[kix + 1];
+    const YYKEYTYPE rule_exp = keys[kix + 2];
+    *pkix = kix + 3;
     if (rule_exp == 255) {
         fprintf
             ( stderr
@@ -23562,17 +24697,17 @@ static int action_line1065
             );
     }
     if (len_act == len_exp && rule_act == rule_exp) {
-        const YYKEYTYPE offset = keys[3 * i];
+        const YYKEYTYPE offset = keys[kix];
         *cursor = token + offset;
         return 0;
     } else {
         fprintf
             ( stderr
-            , "error: lex_line1065: at position %ld (iteration %u):\n"
+            , "error: lex_line1065: at position %ld (key %u):\n"
                 "\texpected: match length %ld, rule %u\n"
                 "\tactual:   match length %ld, rule %u\n"
             , pos
-            , i
+            , kix
             , len_exp
             , rule_exp
             , len_act
@@ -23580,6 +24715,13 @@ static int action_line1065
             );
         return 1;
     }
+}
+
+static int check_key_count_line1065(unsigned have, unsigned used, unsigned need)
+{
+    if (used + need <= have) return 0;
+    fprintf(stderr, "error: lex_line1065: not enough keys\n");
+    return 1;
 }
 
 int lex_line1065()
@@ -23609,7 +24751,7 @@ int lex_line1065()
 
     keys = (YYKEYTYPE *) read_file
         ("unicode_blocks.8--skeleton--encoding-policy(ignore).c.line1065.keys"
-        , 3 * sizeof (YYKEYTYPE)
+        , sizeof (YYKEYTYPE)
         , 0
         , &keys_count
         );
@@ -23622,7 +24764,7 @@ int lex_line1065()
     limit = input + input_len + padding;
     eof = input + input_len;
 
-    for (i = 0; status == 0 && i < keys_count; ++i) {
+    for (i = 0; status == 0 && cursor < eof && i < keys_count;) {
         token = cursor;
         const YYCTYPE *marker = NULL;
         YYCTYPE yych;
@@ -23636,7 +24778,8 @@ int lex_line1065()
 yy938:
         YYSKIP ();
 yy939:
-        status = action_line1065(i, keys, input, token, &cursor, 254);
+        status = check_key_count_line1065(keys_count, i, 3)
+             || action_line1065(&i, keys, input, token, &cursor, 254);
         continue;
 yy940:
         YYSKIP ();
@@ -23778,7 +24921,8 @@ yy943:
         }
 yy944:
         YYSKIP ();
-        status = action_line1065(i, keys, input, token, &cursor, 0);
+        status = check_key_count_line1065(keys_count, i, 3)
+             || action_line1065(&i, keys, input, token, &cursor, 0);
         continue;
 
     }
@@ -23790,7 +24934,7 @@ yy944:
         }
         if (i != keys_count) {
             status = 1;
-            fprintf(stderr, "error: lex_line1065: unused keys left after %u iterations\n", i);
+            fprintf(stderr, "error: lex_line1065: unused keys left after %u keys\n", i);
         }
     }
 
@@ -23820,7 +24964,7 @@ end:
 #define YYFILL(n) { break; }
 
 static int action_line1072
-    ( unsigned int i
+    ( unsigned *pkix
     , const YYKEYTYPE *keys
     , const YYCTYPE *start
     , const YYCTYPE *token
@@ -23828,10 +24972,12 @@ static int action_line1072
     , YYKEYTYPE rule_act
     )
 {
+    const unsigned kix = *pkix;
     const long pos = token - start;
     const long len_act = *cursor - token;
-    const long len_exp = (long) keys [3 * i + 1];
-    const YYKEYTYPE rule_exp = keys [3 * i + 2];
+    const long len_exp = (long) keys[kix + 1];
+    const YYKEYTYPE rule_exp = keys[kix + 2];
+    *pkix = kix + 3;
     if (rule_exp == 255) {
         fprintf
             ( stderr
@@ -23841,17 +24987,17 @@ static int action_line1072
             );
     }
     if (len_act == len_exp && rule_act == rule_exp) {
-        const YYKEYTYPE offset = keys[3 * i];
+        const YYKEYTYPE offset = keys[kix];
         *cursor = token + offset;
         return 0;
     } else {
         fprintf
             ( stderr
-            , "error: lex_line1072: at position %ld (iteration %u):\n"
+            , "error: lex_line1072: at position %ld (key %u):\n"
                 "\texpected: match length %ld, rule %u\n"
                 "\tactual:   match length %ld, rule %u\n"
             , pos
-            , i
+            , kix
             , len_exp
             , rule_exp
             , len_act
@@ -23859,6 +25005,13 @@ static int action_line1072
             );
         return 1;
     }
+}
+
+static int check_key_count_line1072(unsigned have, unsigned used, unsigned need)
+{
+    if (used + need <= have) return 0;
+    fprintf(stderr, "error: lex_line1072: not enough keys\n");
+    return 1;
 }
 
 int lex_line1072()
@@ -23888,7 +25041,7 @@ int lex_line1072()
 
     keys = (YYKEYTYPE *) read_file
         ("unicode_blocks.8--skeleton--encoding-policy(ignore).c.line1072.keys"
-        , 3 * sizeof (YYKEYTYPE)
+        , sizeof (YYKEYTYPE)
         , 0
         , &keys_count
         );
@@ -23901,7 +25054,7 @@ int lex_line1072()
     limit = input + input_len + padding;
     eof = input + input_len;
 
-    for (i = 0; status == 0 && i < keys_count; ++i) {
+    for (i = 0; status == 0 && cursor < eof && i < keys_count;) {
         token = cursor;
         const YYCTYPE *marker = NULL;
         YYCTYPE yych;
@@ -23915,7 +25068,8 @@ int lex_line1072()
 yy948:
         YYSKIP ();
 yy949:
-        status = action_line1072(i, keys, input, token, &cursor, 254);
+        status = check_key_count_line1072(keys_count, i, 3)
+             || action_line1072(&i, keys, input, token, &cursor, 254);
         continue;
 yy950:
         YYSKIP ();
@@ -23952,7 +25106,8 @@ yy952:
         goto yy949;
 yy953:
         YYSKIP ();
-        status = action_line1072(i, keys, input, token, &cursor, 0);
+        status = check_key_count_line1072(keys_count, i, 3)
+             || action_line1072(&i, keys, input, token, &cursor, 0);
         continue;
 
     }
@@ -23964,7 +25119,7 @@ yy953:
         }
         if (i != keys_count) {
             status = 1;
-            fprintf(stderr, "error: lex_line1072: unused keys left after %u iterations\n", i);
+            fprintf(stderr, "error: lex_line1072: unused keys left after %u keys\n", i);
         }
     }
 
@@ -23994,7 +25149,7 @@ end:
 #define YYFILL(n) { break; }
 
 static int action_line1079
-    ( unsigned int i
+    ( unsigned *pkix
     , const YYKEYTYPE *keys
     , const YYCTYPE *start
     , const YYCTYPE *token
@@ -24002,10 +25157,12 @@ static int action_line1079
     , YYKEYTYPE rule_act
     )
 {
+    const unsigned kix = *pkix;
     const long pos = token - start;
     const long len_act = *cursor - token;
-    const long len_exp = (long) keys [3 * i + 1];
-    const YYKEYTYPE rule_exp = keys [3 * i + 2];
+    const long len_exp = (long) keys[kix + 1];
+    const YYKEYTYPE rule_exp = keys[kix + 2];
+    *pkix = kix + 3;
     if (rule_exp == 255) {
         fprintf
             ( stderr
@@ -24015,17 +25172,17 @@ static int action_line1079
             );
     }
     if (len_act == len_exp && rule_act == rule_exp) {
-        const YYKEYTYPE offset = keys[3 * i];
+        const YYKEYTYPE offset = keys[kix];
         *cursor = token + offset;
         return 0;
     } else {
         fprintf
             ( stderr
-            , "error: lex_line1079: at position %ld (iteration %u):\n"
+            , "error: lex_line1079: at position %ld (key %u):\n"
                 "\texpected: match length %ld, rule %u\n"
                 "\tactual:   match length %ld, rule %u\n"
             , pos
-            , i
+            , kix
             , len_exp
             , rule_exp
             , len_act
@@ -24033,6 +25190,13 @@ static int action_line1079
             );
         return 1;
     }
+}
+
+static int check_key_count_line1079(unsigned have, unsigned used, unsigned need)
+{
+    if (used + need <= have) return 0;
+    fprintf(stderr, "error: lex_line1079: not enough keys\n");
+    return 1;
 }
 
 int lex_line1079()
@@ -24062,7 +25226,7 @@ int lex_line1079()
 
     keys = (YYKEYTYPE *) read_file
         ("unicode_blocks.8--skeleton--encoding-policy(ignore).c.line1079.keys"
-        , 3 * sizeof (YYKEYTYPE)
+        , sizeof (YYKEYTYPE)
         , 0
         , &keys_count
         );
@@ -24075,7 +25239,7 @@ int lex_line1079()
     limit = input + input_len + padding;
     eof = input + input_len;
 
-    for (i = 0; status == 0 && i < keys_count; ++i) {
+    for (i = 0; status == 0 && cursor < eof && i < keys_count;) {
         token = cursor;
         const YYCTYPE *marker = NULL;
         YYCTYPE yych;
@@ -24260,12 +25424,14 @@ int lex_line1079()
         }
 yy957:
         YYSKIP ();
-        status = action_line1079(i, keys, input, token, &cursor, 0);
+        status = check_key_count_line1079(keys_count, i, 3)
+             || action_line1079(&i, keys, input, token, &cursor, 0);
         continue;
 yy959:
         YYSKIP ();
 yy960:
-        status = action_line1079(i, keys, input, token, &cursor, 254);
+        status = check_key_count_line1079(keys_count, i, 3)
+             || action_line1079(&i, keys, input, token, &cursor, 254);
         continue;
 yy961:
         YYSKIP ();
@@ -25162,7 +26328,7 @@ yy978:
         }
         if (i != keys_count) {
             status = 1;
-            fprintf(stderr, "error: lex_line1079: unused keys left after %u iterations\n", i);
+            fprintf(stderr, "error: lex_line1079: unused keys left after %u keys\n", i);
         }
     }
 

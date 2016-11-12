@@ -60,7 +60,7 @@ error:
 #define YYFILL(n) { break; }
 
 static int action_line265
-    ( unsigned int i
+    ( unsigned *pkix
     , const YYKEYTYPE *keys
     , const YYCTYPE *start
     , const YYCTYPE *token
@@ -68,10 +68,12 @@ static int action_line265
     , YYKEYTYPE rule_act
     )
 {
+    const unsigned kix = *pkix;
     const long pos = token - start;
     const long len_act = *cursor - token;
-    const long len_exp = (long) keys [3 * i + 1];
-    const YYKEYTYPE rule_exp = keys [3 * i + 2];
+    const long len_exp = (long) keys[kix + 1];
+    const YYKEYTYPE rule_exp = keys[kix + 2];
+    *pkix = kix + 3;
     if (rule_exp == 255) {
         fprintf
             ( stderr
@@ -81,17 +83,17 @@ static int action_line265
             );
     }
     if (len_act == len_exp && rule_act == rule_exp) {
-        const YYKEYTYPE offset = keys[3 * i];
+        const YYKEYTYPE offset = keys[kix];
         *cursor = token + offset;
         return 0;
     } else {
         fprintf
             ( stderr
-            , "error: lex_line265: at position %ld (iteration %u):\n"
+            , "error: lex_line265: at position %ld (key %u):\n"
                 "\texpected: match length %ld, rule %u\n"
                 "\tactual:   match length %ld, rule %u\n"
             , pos
-            , i
+            , kix
             , len_exp
             , rule_exp
             , len_act
@@ -99,6 +101,13 @@ static int action_line265
             );
         return 1;
     }
+}
+
+static int check_key_count_line265(unsigned have, unsigned used, unsigned need)
+{
+    if (used + need <= have) return 0;
+    fprintf(stderr, "error: lex_line265: not enough keys\n");
+    return 1;
 }
 
 int lex_line265()
@@ -128,7 +137,7 @@ int lex_line265()
 
     keys = (YYKEYTYPE *) read_file
         ("rexx.--skeleton.c.line265.keys"
-        , 3 * sizeof (YYKEYTYPE)
+        , sizeof (YYKEYTYPE)
         , 0
         , &keys_count
         );
@@ -141,7 +150,7 @@ int lex_line265()
     limit = input + input_len + padding;
     eof = input + input_len;
 
-    for (i = 0; status == 0 && i < keys_count; ++i) {
+    for (i = 0; status == 0 && cursor < eof && i < keys_count;) {
         token = cursor;
         const YYCTYPE *marker = NULL;
         const YYCTYPE *ctxmarker = NULL;
@@ -241,20 +250,24 @@ int lex_line265()
         default:    goto yy5;
         }
 yy2:
-        status = action_line265(i, keys, input, token, &cursor, 89);
+        status = check_key_count_line265(keys_count, i, 3)
+             || action_line265(&i, keys, input, token, &cursor, 89);
         continue;
 yy3:
         YYSKIP ();
-        status = action_line265(i, keys, input, token, &cursor, 93);
+        status = check_key_count_line265(keys_count, i, 3)
+             || action_line265(&i, keys, input, token, &cursor, 93);
         continue;
 yy5:
         YYSKIP ();
 yy6:
-        status = action_line265(i, keys, input, token, &cursor, 94);
+        status = check_key_count_line265(keys_count, i, 3)
+             || action_line265(&i, keys, input, token, &cursor, 94);
         continue;
 yy7:
         YYSKIP ();
-        status = action_line265(i, keys, input, token, &cursor, 0);
+        status = check_key_count_line265(keys_count, i, 3)
+             || action_line265(&i, keys, input, token, &cursor, 0);
         continue;
 yy9:
         YYSKIP ();
@@ -331,7 +344,8 @@ yy10:
         default:    goto yy11;
         }
 yy11:
-        status = action_line265(i, keys, input, token, &cursor, 87);
+        status = check_key_count_line265(keys_count, i, 3)
+             || action_line265(&i, keys, input, token, &cursor, 87);
         continue;
 yy12:
         yyaccept = 0;
@@ -345,7 +359,8 @@ yy12:
         }
 yy13:
         YYSKIP ();
-        status = action_line265(i, keys, input, token, &cursor, 6);
+        status = check_key_count_line265(keys_count, i, 3)
+             || action_line265(&i, keys, input, token, &cursor, 6);
         continue;
 yy15:
         yyaccept = 1;
@@ -359,7 +374,8 @@ yy15:
         default:    goto yy16;
         }
 yy16:
-        status = action_line265(i, keys, input, token, &cursor, 21);
+        status = check_key_count_line265(keys_count, i, 3)
+             || action_line265(&i, keys, input, token, &cursor, 21);
         continue;
 yy17:
         yyaccept = 0;
@@ -373,11 +389,13 @@ yy17:
         }
 yy18:
         YYSKIP ();
-        status = action_line265(i, keys, input, token, &cursor, 27);
+        status = check_key_count_line265(keys_count, i, 3)
+             || action_line265(&i, keys, input, token, &cursor, 27);
         continue;
 yy20:
         YYSKIP ();
-        status = action_line265(i, keys, input, token, &cursor, 28);
+        status = check_key_count_line265(keys_count, i, 3)
+             || action_line265(&i, keys, input, token, &cursor, 28);
         continue;
 yy22:
         yyaccept = 2;
@@ -391,19 +409,23 @@ yy22:
         default:    goto yy23;
         }
 yy23:
-        status = action_line265(i, keys, input, token, &cursor, 4);
+        status = check_key_count_line265(keys_count, i, 3)
+             || action_line265(&i, keys, input, token, &cursor, 4);
         continue;
 yy24:
         YYSKIP ();
-        status = action_line265(i, keys, input, token, &cursor, 2);
+        status = check_key_count_line265(keys_count, i, 3)
+             || action_line265(&i, keys, input, token, &cursor, 2);
         continue;
 yy26:
         YYSKIP ();
-        status = action_line265(i, keys, input, token, &cursor, 26);
+        status = check_key_count_line265(keys_count, i, 3)
+             || action_line265(&i, keys, input, token, &cursor, 26);
         continue;
 yy28:
         YYSKIP ();
-        status = action_line265(i, keys, input, token, &cursor, 3);
+        status = check_key_count_line265(keys_count, i, 3)
+             || action_line265(&i, keys, input, token, &cursor, 3);
         continue;
 yy30:
         YYSKIP ();
@@ -479,7 +501,8 @@ yy30:
         default:    goto yy32;
         }
 yy32:
-        status = action_line265(i, keys, input, token, &cursor, 86);
+        status = check_key_count_line265(keys_count, i, 3)
+             || action_line265(&i, keys, input, token, &cursor, 86);
         continue;
 yy33:
         yyaccept = 3;
@@ -493,15 +516,18 @@ yy33:
         default:    goto yy34;
         }
 yy34:
-        status = action_line265(i, keys, input, token, &cursor, 5);
+        status = check_key_count_line265(keys_count, i, 3)
+             || action_line265(&i, keys, input, token, &cursor, 5);
         continue;
 yy35:
         YYSKIP ();
-        status = action_line265(i, keys, input, token, &cursor, 25);
+        status = check_key_count_line265(keys_count, i, 3)
+             || action_line265(&i, keys, input, token, &cursor, 25);
         continue;
 yy37:
         YYSKIP ();
-        status = action_line265(i, keys, input, token, &cursor, 29);
+        status = check_key_count_line265(keys_count, i, 3)
+             || action_line265(&i, keys, input, token, &cursor, 29);
         continue;
 yy39:
         yyaccept = 4;
@@ -517,7 +543,8 @@ yy39:
         default:    goto yy40;
         }
 yy40:
-        status = action_line265(i, keys, input, token, &cursor, 12);
+        status = check_key_count_line265(keys_count, i, 3)
+             || action_line265(&i, keys, input, token, &cursor, 12);
         continue;
 yy41:
         yyaccept = 5;
@@ -531,7 +558,8 @@ yy41:
         default:    goto yy42;
         }
 yy42:
-        status = action_line265(i, keys, input, token, &cursor, 9);
+        status = check_key_count_line265(keys_count, i, 3)
+             || action_line265(&i, keys, input, token, &cursor, 9);
         continue;
 yy43:
         yyaccept = 6;
@@ -547,7 +575,8 @@ yy43:
         default:    goto yy44;
         }
 yy44:
-        status = action_line265(i, keys, input, token, &cursor, 11);
+        status = check_key_count_line265(keys_count, i, 3)
+             || action_line265(&i, keys, input, token, &cursor, 11);
         continue;
 yy45:
         YYSKIP ();
@@ -771,7 +800,8 @@ yy64:
         default:    goto yy65;
         }
 yy65:
-        status = action_line265(i, keys, input, token, &cursor, 24);
+        status = check_key_count_line265(keys_count, i, 3)
+             || action_line265(&i, keys, input, token, &cursor, 24);
         continue;
 yy66:
         yyaccept = 8;
@@ -785,7 +815,8 @@ yy66:
         default:    goto yy67;
         }
 yy67:
-        status = action_line265(i, keys, input, token, &cursor, 22);
+        status = check_key_count_line265(keys_count, i, 3)
+             || action_line265(&i, keys, input, token, &cursor, 22);
         continue;
 yy68:
         YYSKIP ();
@@ -859,7 +890,8 @@ yy68:
         default:    goto yy69;
         }
 yy69:
-        status = action_line265(i, keys, input, token, &cursor, 88);
+        status = check_key_count_line265(keys_count, i, 3)
+             || action_line265(&i, keys, input, token, &cursor, 88);
         continue;
 yy70:
         YYSKIP ();
@@ -907,7 +939,8 @@ yy73:
         default:    goto yy74;
         }
 yy74:
-        status = action_line265(i, keys, input, token, &cursor, 90);
+        status = check_key_count_line265(keys_count, i, 3)
+             || action_line265(&i, keys, input, token, &cursor, 90);
         continue;
 yy75:
         YYSKIP ();
@@ -921,7 +954,8 @@ yy75:
         }
 yy77:
         YYSKIP ();
-        status = action_line265(i, keys, input, token, &cursor, 23);
+        status = check_key_count_line265(keys_count, i, 3)
+             || action_line265(&i, keys, input, token, &cursor, 23);
         continue;
 yy79:
         YYSKIP ();
@@ -960,7 +994,8 @@ yy82:
         }
 yy84:
         YYSKIP ();
-        status = action_line265(i, keys, input, token, &cursor, 8);
+        status = check_key_count_line265(keys_count, i, 3)
+             || action_line265(&i, keys, input, token, &cursor, 8);
         continue;
 yy86:
         yyaccept = 10;
@@ -1051,7 +1086,8 @@ yy88:
         }
 yy90:
         YYSKIP ();
-        status = action_line265(i, keys, input, token, &cursor, 7);
+        status = check_key_count_line265(keys_count, i, 3)
+             || action_line265(&i, keys, input, token, &cursor, 7);
         continue;
 yy92:
         YYSKIP ();
@@ -1078,17 +1114,20 @@ yy94:
         default:    goto yy95;
         }
 yy95:
-        status = action_line265(i, keys, input, token, &cursor, 18);
+        status = check_key_count_line265(keys_count, i, 3)
+             || action_line265(&i, keys, input, token, &cursor, 18);
         continue;
 yy96:
         YYSKIP ();
 yy97:
-        status = action_line265(i, keys, input, token, &cursor, 14);
+        status = check_key_count_line265(keys_count, i, 3)
+             || action_line265(&i, keys, input, token, &cursor, 14);
         continue;
 yy98:
         YYSKIP ();
 yy99:
-        status = action_line265(i, keys, input, token, &cursor, 10);
+        status = check_key_count_line265(keys_count, i, 3)
+             || action_line265(&i, keys, input, token, &cursor, 10);
         continue;
 yy100:
         YYSKIP ();
@@ -1102,7 +1141,8 @@ yy100:
         }
 yy102:
         YYSKIP ();
-        status = action_line265(i, keys, input, token, &cursor, 15);
+        status = check_key_count_line265(keys_count, i, 3)
+             || action_line265(&i, keys, input, token, &cursor, 15);
         continue;
 yy104:
         YYSKIP ();
@@ -1120,7 +1160,8 @@ yy105:
 yy106:
         YYSKIP ();
 yy107:
-        status = action_line265(i, keys, input, token, &cursor, 13);
+        status = check_key_count_line265(keys_count, i, 3)
+             || action_line265(&i, keys, input, token, &cursor, 13);
         continue;
 yy108:
         yyaccept = 12;
@@ -1134,7 +1175,8 @@ yy108:
         default:    goto yy109;
         }
 yy109:
-        status = action_line265(i, keys, input, token, &cursor, 17);
+        status = check_key_count_line265(keys_count, i, 3)
+             || action_line265(&i, keys, input, token, &cursor, 17);
         continue;
 yy110:
         YYSKIP ();
@@ -1224,7 +1266,8 @@ yy112:
         default:    goto yy113;
         }
 yy113:
-        status = action_line265(i, keys, input, token, &cursor, 60);
+        status = check_key_count_line265(keys_count, i, 3)
+             || action_line265(&i, keys, input, token, &cursor, 60);
         continue;
 yy114:
         YYSKIP ();
@@ -1314,7 +1357,8 @@ yy116:
         default:    goto yy117;
         }
 yy117:
-        status = action_line265(i, keys, input, token, &cursor, 33);
+        status = check_key_count_line265(keys_count, i, 3)
+             || action_line265(&i, keys, input, token, &cursor, 33);
         continue;
 yy118:
         YYSKIP ();
@@ -1464,7 +1508,8 @@ yy127:
         default:    goto yy128;
         }
 yy128:
-        status = action_line265(i, keys, input, token, &cursor, 38);
+        status = check_key_count_line265(keys_count, i, 3)
+             || action_line265(&i, keys, input, token, &cursor, 38);
         continue;
 yy129:
         YYSKIP ();
@@ -1606,7 +1651,8 @@ yy137:
         default:    goto yy138;
         }
 yy138:
-        status = action_line265(i, keys, input, token, &cursor, 59);
+        status = check_key_count_line265(keys_count, i, 3)
+             || action_line265(&i, keys, input, token, &cursor, 59);
         continue;
 yy139:
         YYSKIP ();
@@ -1794,7 +1840,8 @@ yy153:
         default:    goto yy154;
         }
 yy154:
-        status = action_line265(i, keys, input, token, &cursor, 78);
+        status = check_key_count_line265(keys_count, i, 3)
+             || action_line265(&i, keys, input, token, &cursor, 78);
         continue;
 yy155:
         YYSKIP ();
@@ -1914,7 +1961,8 @@ yy167:
         }
 yy169:
         YYSKIP ();
-        status = action_line265(i, keys, input, token, &cursor, 1);
+        status = check_key_count_line265(keys_count, i, 3)
+             || action_line265(&i, keys, input, token, &cursor, 1);
         continue;
 yy171:
         YYSKIP ();
@@ -2165,7 +2213,8 @@ yy176:
         }
 yy178:
         YYSKIP ();
-        status = action_line265(i, keys, input, token, &cursor, 20);
+        status = check_key_count_line265(keys_count, i, 3)
+             || action_line265(&i, keys, input, token, &cursor, 20);
         continue;
 yy180:
         YYSKIP ();
@@ -2179,7 +2228,8 @@ yy180:
         }
 yy182:
         YYSKIP ();
-        status = action_line265(i, keys, input, token, &cursor, 19);
+        status = check_key_count_line265(keys_count, i, 3)
+             || action_line265(&i, keys, input, token, &cursor, 19);
         continue;
 yy184:
         YYSKIP ();
@@ -2261,7 +2311,8 @@ yy185:
         default:    goto yy186;
         }
 yy186:
-        status = action_line265(i, keys, input, token, &cursor, 31);
+        status = check_key_count_line265(keys_count, i, 3)
+             || action_line265(&i, keys, input, token, &cursor, 31);
         continue;
 yy187:
         YYSKIP ();
@@ -2367,7 +2418,8 @@ yy191:
         default:    goto yy192;
         }
 yy192:
-        status = action_line265(i, keys, input, token, &cursor, 36);
+        status = check_key_count_line265(keys_count, i, 3)
+             || action_line265(&i, keys, input, token, &cursor, 36);
         continue;
 yy193:
         YYSKIP ();
@@ -2481,7 +2533,8 @@ yy198:
         default:    goto yy199;
         }
 yy199:
-        status = action_line265(i, keys, input, token, &cursor, 66);
+        status = check_key_count_line265(keys_count, i, 3)
+             || action_line265(&i, keys, input, token, &cursor, 66);
         continue;
 yy200:
         YYSKIP ();
@@ -2611,7 +2664,8 @@ yy207:
         default:    goto yy208;
         }
 yy208:
-        status = action_line265(i, keys, input, token, &cursor, 42);
+        status = check_key_count_line265(keys_count, i, 3)
+             || action_line265(&i, keys, input, token, &cursor, 42);
         continue;
 yy209:
         YYSKIP ();
@@ -2709,7 +2763,8 @@ yy212:
         default:    goto yy213;
         }
 yy213:
-        status = action_line265(i, keys, input, token, &cursor, 58);
+        status = check_key_count_line265(keys_count, i, 3)
+             || action_line265(&i, keys, input, token, &cursor, 58);
         continue;
 yy214:
         YYSKIP ();
@@ -2847,7 +2902,8 @@ yy222:
         default:    goto yy223;
         }
 yy223:
-        status = action_line265(i, keys, input, token, &cursor, 52);
+        status = check_key_count_line265(keys_count, i, 3)
+             || action_line265(&i, keys, input, token, &cursor, 52);
         continue;
 yy224:
         YYSKIP ();
@@ -3001,7 +3057,8 @@ yy234:
         default:    goto yy235;
         }
 yy235:
-        status = action_line265(i, keys, input, token, &cursor, 82);
+        status = check_key_count_line265(keys_count, i, 3)
+             || action_line265(&i, keys, input, token, &cursor, 82);
         continue;
 yy236:
         YYSKIP ();
@@ -3057,7 +3114,8 @@ yy242:
         }
 yy244:
         YYSKIP ();
-        status = action_line265(i, keys, input, token, &cursor, 16);
+        status = check_key_count_line265(keys_count, i, 3)
+             || action_line265(&i, keys, input, token, &cursor, 16);
         continue;
 yy246:
         YYSKIP ();
@@ -3072,12 +3130,14 @@ yy246:
 yy248:
         YYSKIP ();
         YYRESTORECTX ();
-        status = action_line265(i, keys, input, token, &cursor, 91);
+        status = check_key_count_line265(keys_count, i, 3)
+             || action_line265(&i, keys, input, token, &cursor, 91);
         continue;
 yy250:
         YYSKIP ();
         YYRESTORECTX ();
-        status = action_line265(i, keys, input, token, &cursor, 92);
+        status = check_key_count_line265(keys_count, i, 3)
+             || action_line265(&i, keys, input, token, &cursor, 92);
         continue;
 yy252:
         YYSKIP ();
@@ -3176,7 +3236,8 @@ yy255:
         default:    goto yy256;
         }
 yy256:
-        status = action_line265(i, keys, input, token, &cursor, 32);
+        status = check_key_count_line265(keys_count, i, 3)
+             || action_line265(&i, keys, input, token, &cursor, 32);
         continue;
 yy257:
         YYSKIP ();
@@ -3258,7 +3319,8 @@ yy258:
         default:    goto yy259;
         }
 yy259:
-        status = action_line265(i, keys, input, token, &cursor, 34);
+        status = check_key_count_line265(keys_count, i, 3)
+             || action_line265(&i, keys, input, token, &cursor, 34);
         continue;
 yy260:
         YYSKIP ();
@@ -3332,7 +3394,8 @@ yy260:
         default:    goto yy261;
         }
 yy261:
-        status = action_line265(i, keys, input, token, &cursor, 35);
+        status = check_key_count_line265(keys_count, i, 3)
+             || action_line265(&i, keys, input, token, &cursor, 35);
         continue;
 yy262:
         YYSKIP ();
@@ -3422,7 +3485,8 @@ yy264:
         default:    goto yy265;
         }
 yy265:
-        status = action_line265(i, keys, input, token, &cursor, 37);
+        status = check_key_count_line265(keys_count, i, 3)
+             || action_line265(&i, keys, input, token, &cursor, 37);
         continue;
 yy266:
         YYSKIP ();
@@ -3520,7 +3584,8 @@ yy269:
         default:    goto yy270;
         }
 yy270:
-        status = action_line265(i, keys, input, token, &cursor, 68);
+        status = check_key_count_line265(keys_count, i, 3)
+             || action_line265(&i, keys, input, token, &cursor, 68);
         continue;
 yy271:
         YYSKIP ();
@@ -3594,7 +3659,8 @@ yy271:
         default:    goto yy272;
         }
 yy272:
-        status = action_line265(i, keys, input, token, &cursor, 69);
+        status = check_key_count_line265(keys_count, i, 3)
+             || action_line265(&i, keys, input, token, &cursor, 69);
         continue;
 yy273:
         YYSKIP ();
@@ -3668,7 +3734,8 @@ yy273:
         default:    goto yy274;
         }
 yy274:
-        status = action_line265(i, keys, input, token, &cursor, 70);
+        status = check_key_count_line265(keys_count, i, 3)
+             || action_line265(&i, keys, input, token, &cursor, 70);
         continue;
 yy275:
         YYSKIP ();
@@ -3774,7 +3841,8 @@ yy279:
         default:    goto yy280;
         }
 yy280:
-        status = action_line265(i, keys, input, token, &cursor, 72);
+        status = check_key_count_line265(keys_count, i, 3)
+             || action_line265(&i, keys, input, token, &cursor, 72);
         continue;
 yy281:
         YYSKIP ();
@@ -3904,7 +3972,8 @@ yy288:
         default:    goto yy289;
         }
 yy289:
-        status = action_line265(i, keys, input, token, &cursor, 48);
+        status = check_key_count_line265(keys_count, i, 3)
+             || action_line265(&i, keys, input, token, &cursor, 48);
         continue;
 yy290:
         YYSKIP ();
@@ -3978,7 +4047,8 @@ yy290:
         default:    goto yy291;
         }
 yy291:
-        status = action_line265(i, keys, input, token, &cursor, 49);
+        status = check_key_count_line265(keys_count, i, 3)
+             || action_line265(&i, keys, input, token, &cursor, 49);
         continue;
 yy292:
         YYSKIP ();
@@ -4108,7 +4178,8 @@ yy299:
         default:    goto yy300;
         }
 yy300:
-        status = action_line265(i, keys, input, token, &cursor, 55);
+        status = check_key_count_line265(keys_count, i, 3)
+             || action_line265(&i, keys, input, token, &cursor, 55);
         continue;
 yy301:
         YYSKIP ();
@@ -4222,7 +4293,8 @@ yy306:
         default:    goto yy307;
         }
 yy307:
-        status = action_line265(i, keys, input, token, &cursor, 57);
+        status = check_key_count_line265(keys_count, i, 3)
+             || action_line265(&i, keys, input, token, &cursor, 57);
         continue;
 yy308:
         YYSKIP ();
@@ -4304,7 +4376,8 @@ yy309:
         default:    goto yy310;
         }
 yy310:
-        status = action_line265(i, keys, input, token, &cursor, 85);
+        status = check_key_count_line265(keys_count, i, 3)
+             || action_line265(&i, keys, input, token, &cursor, 85);
         continue;
 yy311:
         YYSKIP ();
@@ -4402,7 +4475,8 @@ yy314:
         default:    goto yy315;
         }
 yy315:
-        status = action_line265(i, keys, input, token, &cursor, 63);
+        status = check_key_count_line265(keys_count, i, 3)
+             || action_line265(&i, keys, input, token, &cursor, 63);
         continue;
 yy316:
         YYSKIP ();
@@ -4516,7 +4590,8 @@ yy321:
         default:    goto yy322;
         }
 yy322:
-        status = action_line265(i, keys, input, token, &cursor, 41);
+        status = check_key_count_line265(keys_count, i, 3)
+             || action_line265(&i, keys, input, token, &cursor, 41);
         continue;
 yy323:
         YYSKIP ();
@@ -4638,7 +4713,8 @@ yy329:
         default:    goto yy330;
         }
 yy330:
-        status = action_line265(i, keys, input, token, &cursor, 46);
+        status = check_key_count_line265(keys_count, i, 3)
+             || action_line265(&i, keys, input, token, &cursor, 46);
         continue;
 yy331:
         YYSKIP ();
@@ -4720,7 +4796,8 @@ yy332:
         default:    goto yy333;
         }
 yy333:
-        status = action_line265(i, keys, input, token, &cursor, 50);
+        status = check_key_count_line265(keys_count, i, 3)
+             || action_line265(&i, keys, input, token, &cursor, 50);
         continue;
 yy334:
         YYSKIP ();
@@ -4842,7 +4919,8 @@ yy340:
         default:    goto yy341;
         }
 yy341:
-        status = action_line265(i, keys, input, token, &cursor, 56);
+        status = check_key_count_line265(keys_count, i, 3)
+             || action_line265(&i, keys, input, token, &cursor, 56);
         continue;
 yy342:
         YYSKIP ();
@@ -4916,7 +4994,8 @@ yy342:
         default:    goto yy343;
         }
 yy343:
-        status = action_line265(i, keys, input, token, &cursor, 79);
+        status = check_key_count_line265(keys_count, i, 3)
+             || action_line265(&i, keys, input, token, &cursor, 79);
         continue;
 yy344:
         YYSKIP ();
@@ -4990,7 +5069,8 @@ yy344:
         default:    goto yy345;
         }
 yy345:
-        status = action_line265(i, keys, input, token, &cursor, 80);
+        status = check_key_count_line265(keys_count, i, 3)
+             || action_line265(&i, keys, input, token, &cursor, 80);
         continue;
 yy346:
         YYSKIP ();
@@ -5064,7 +5144,8 @@ yy346:
         default:    goto yy347;
         }
 yy347:
-        status = action_line265(i, keys, input, token, &cursor, 81);
+        status = check_key_count_line265(keys_count, i, 3)
+             || action_line265(&i, keys, input, token, &cursor, 81);
         continue;
 yy348:
         YYSKIP ();
@@ -5146,7 +5227,8 @@ yy349:
         default:    goto yy350;
         }
 yy350:
-        status = action_line265(i, keys, input, token, &cursor, 84);
+        status = check_key_count_line265(keys_count, i, 3)
+             || action_line265(&i, keys, input, token, &cursor, 84);
         continue;
 yy351:
         YYSKIP ();
@@ -5228,7 +5310,8 @@ yy352:
         default:    goto yy353;
         }
 yy353:
-        status = action_line265(i, keys, input, token, &cursor, 61);
+        status = check_key_count_line265(keys_count, i, 3)
+             || action_line265(&i, keys, input, token, &cursor, 61);
         continue;
 yy354:
         YYSKIP ();
@@ -5310,7 +5393,8 @@ yy355:
         default:    goto yy356;
         }
 yy356:
-        status = action_line265(i, keys, input, token, &cursor, 64);
+        status = check_key_count_line265(keys_count, i, 3)
+             || action_line265(&i, keys, input, token, &cursor, 64);
         continue;
 yy357:
         YYSKIP ();
@@ -5416,7 +5500,8 @@ yy361:
         default:    goto yy362;
         }
 yy362:
-        status = action_line265(i, keys, input, token, &cursor, 71);
+        status = check_key_count_line265(keys_count, i, 3)
+             || action_line265(&i, keys, input, token, &cursor, 71);
         continue;
 yy363:
         YYSKIP ();
@@ -5538,7 +5623,8 @@ yy369:
         default:    goto yy370;
         }
 yy370:
-        status = action_line265(i, keys, input, token, &cursor, 51);
+        status = check_key_count_line265(keys_count, i, 3)
+             || action_line265(&i, keys, input, token, &cursor, 51);
         continue;
 yy371:
         YYSKIP ();
@@ -5620,7 +5706,8 @@ yy372:
         default:    goto yy373;
         }
 yy373:
-        status = action_line265(i, keys, input, token, &cursor, 53);
+        status = check_key_count_line265(keys_count, i, 3)
+             || action_line265(&i, keys, input, token, &cursor, 53);
         continue;
 yy374:
         YYSKIP ();
@@ -5694,7 +5781,8 @@ yy374:
         default:    goto yy375;
         }
 yy375:
-        status = action_line265(i, keys, input, token, &cursor, 54);
+        status = check_key_count_line265(keys_count, i, 3)
+             || action_line265(&i, keys, input, token, &cursor, 54);
         continue;
 yy376:
         YYSKIP ();
@@ -5768,7 +5856,8 @@ yy376:
         default:    goto yy377;
         }
 yy377:
-        status = action_line265(i, keys, input, token, &cursor, 76);
+        status = check_key_count_line265(keys_count, i, 3)
+             || action_line265(&i, keys, input, token, &cursor, 76);
         continue;
 yy378:
         YYSKIP ();
@@ -5842,7 +5931,8 @@ yy378:
         default:    goto yy379;
         }
 yy379:
-        status = action_line265(i, keys, input, token, &cursor, 77);
+        status = check_key_count_line265(keys_count, i, 3)
+             || action_line265(&i, keys, input, token, &cursor, 77);
         continue;
 yy380:
         YYSKIP ();
@@ -5924,7 +6014,8 @@ yy381:
         default:    goto yy382;
         }
 yy382:
-        status = action_line265(i, keys, input, token, &cursor, 30);
+        status = check_key_count_line265(keys_count, i, 3)
+             || action_line265(&i, keys, input, token, &cursor, 30);
         continue;
 yy383:
         YYSKIP ();
@@ -6006,7 +6097,8 @@ yy384:
         default:    goto yy385;
         }
 yy385:
-        status = action_line265(i, keys, input, token, &cursor, 65);
+        status = check_key_count_line265(keys_count, i, 3)
+             || action_line265(&i, keys, input, token, &cursor, 65);
         continue;
 yy386:
         YYSKIP ();
@@ -6080,7 +6172,8 @@ yy386:
         default:    goto yy387;
         }
 yy387:
-        status = action_line265(i, keys, input, token, &cursor, 67);
+        status = check_key_count_line265(keys_count, i, 3)
+             || action_line265(&i, keys, input, token, &cursor, 67);
         continue;
 yy388:
         YYSKIP ();
@@ -6162,7 +6255,8 @@ yy389:
         default:    goto yy390;
         }
 yy390:
-        status = action_line265(i, keys, input, token, &cursor, 40);
+        status = check_key_count_line265(keys_count, i, 3)
+             || action_line265(&i, keys, input, token, &cursor, 40);
         continue;
 yy391:
         YYSKIP ();
@@ -6244,7 +6338,8 @@ yy392:
         default:    goto yy393;
         }
 yy393:
-        status = action_line265(i, keys, input, token, &cursor, 74);
+        status = check_key_count_line265(keys_count, i, 3)
+             || action_line265(&i, keys, input, token, &cursor, 74);
         continue;
 yy394:
         YYSKIP ();
@@ -6318,7 +6413,8 @@ yy394:
         default:    goto yy395;
         }
 yy395:
-        status = action_line265(i, keys, input, token, &cursor, 43);
+        status = check_key_count_line265(keys_count, i, 3)
+             || action_line265(&i, keys, input, token, &cursor, 43);
         continue;
 yy396:
         YYSKIP ();
@@ -6392,7 +6488,8 @@ yy396:
         default:    goto yy397;
         }
 yy397:
-        status = action_line265(i, keys, input, token, &cursor, 44);
+        status = check_key_count_line265(keys_count, i, 3)
+             || action_line265(&i, keys, input, token, &cursor, 44);
         continue;
 yy398:
         YYSKIP ();
@@ -6490,7 +6587,8 @@ yy401:
         default:    goto yy402;
         }
 yy402:
-        status = action_line265(i, keys, input, token, &cursor, 83);
+        status = check_key_count_line265(keys_count, i, 3)
+             || action_line265(&i, keys, input, token, &cursor, 83);
         continue;
 yy403:
         YYSKIP ();
@@ -6580,7 +6678,8 @@ yy405:
         default:    goto yy406;
         }
 yy406:
-        status = action_line265(i, keys, input, token, &cursor, 73);
+        status = check_key_count_line265(keys_count, i, 3)
+             || action_line265(&i, keys, input, token, &cursor, 73);
         continue;
 yy407:
         YYSKIP ();
@@ -6686,7 +6785,8 @@ yy411:
         default:    goto yy412;
         }
 yy412:
-        status = action_line265(i, keys, input, token, &cursor, 39);
+        status = check_key_count_line265(keys_count, i, 3)
+             || action_line265(&i, keys, input, token, &cursor, 39);
         continue;
 yy413:
         YYSKIP ();
@@ -6760,7 +6860,8 @@ yy413:
         default:    goto yy414;
         }
 yy414:
-        status = action_line265(i, keys, input, token, &cursor, 45);
+        status = check_key_count_line265(keys_count, i, 3)
+             || action_line265(&i, keys, input, token, &cursor, 45);
         continue;
 yy415:
         YYSKIP ();
@@ -6834,7 +6935,8 @@ yy415:
         default:    goto yy416;
         }
 yy416:
-        status = action_line265(i, keys, input, token, &cursor, 47);
+        status = check_key_count_line265(keys_count, i, 3)
+             || action_line265(&i, keys, input, token, &cursor, 47);
         continue;
 yy417:
         YYSKIP ();
@@ -6924,7 +7026,8 @@ yy419:
         default:    goto yy420;
         }
 yy420:
-        status = action_line265(i, keys, input, token, &cursor, 75);
+        status = check_key_count_line265(keys_count, i, 3)
+             || action_line265(&i, keys, input, token, &cursor, 75);
         continue;
 yy421:
         YYSKIP ();
@@ -6998,7 +7101,8 @@ yy421:
         default:    goto yy422;
         }
 yy422:
-        status = action_line265(i, keys, input, token, &cursor, 62);
+        status = check_key_count_line265(keys_count, i, 3)
+             || action_line265(&i, keys, input, token, &cursor, 62);
         continue;
 
     }
@@ -7010,7 +7114,7 @@ yy422:
         }
         if (i != keys_count) {
             status = 1;
-            fprintf(stderr, "error: lex_line265: unused keys left after %u iterations\n", i);
+            fprintf(stderr, "error: lex_line265: unused keys left after %u keys\n", i);
         }
     }
 
@@ -7042,7 +7146,7 @@ end:
 #define YYFILL(n) { break; }
 
 static int action_line290
-    ( unsigned int i
+    ( unsigned *pkix
     , const YYKEYTYPE *keys
     , const YYCTYPE *start
     , const YYCTYPE *token
@@ -7050,10 +7154,12 @@ static int action_line290
     , YYKEYTYPE rule_act
     )
 {
+    const unsigned kix = *pkix;
     const long pos = token - start;
     const long len_act = *cursor - token;
-    const long len_exp = (long) keys [3 * i + 1];
-    const YYKEYTYPE rule_exp = keys [3 * i + 2];
+    const long len_exp = (long) keys[kix + 1];
+    const YYKEYTYPE rule_exp = keys[kix + 2];
+    *pkix = kix + 3;
     if (rule_exp == 255) {
         fprintf
             ( stderr
@@ -7063,17 +7169,17 @@ static int action_line290
             );
     }
     if (len_act == len_exp && rule_act == rule_exp) {
-        const YYKEYTYPE offset = keys[3 * i];
+        const YYKEYTYPE offset = keys[kix];
         *cursor = token + offset;
         return 0;
     } else {
         fprintf
             ( stderr
-            , "error: lex_line290: at position %ld (iteration %u):\n"
+            , "error: lex_line290: at position %ld (key %u):\n"
                 "\texpected: match length %ld, rule %u\n"
                 "\tactual:   match length %ld, rule %u\n"
             , pos
-            , i
+            , kix
             , len_exp
             , rule_exp
             , len_act
@@ -7081,6 +7187,13 @@ static int action_line290
             );
         return 1;
     }
+}
+
+static int check_key_count_line290(unsigned have, unsigned used, unsigned need)
+{
+    if (used + need <= have) return 0;
+    fprintf(stderr, "error: lex_line290: not enough keys\n");
+    return 1;
 }
 
 int lex_line290()
@@ -7110,7 +7223,7 @@ int lex_line290()
 
     keys = (YYKEYTYPE *) read_file
         ("rexx.--skeleton.c.line290.keys"
-        , 3 * sizeof (YYKEYTYPE)
+        , sizeof (YYKEYTYPE)
         , 0
         , &keys_count
         );
@@ -7123,7 +7236,7 @@ int lex_line290()
     limit = input + input_len + padding;
     eof = input + input_len;
 
-    for (i = 0; status == 0 && i < keys_count; ++i) {
+    for (i = 0; status == 0 && cursor < eof && i < keys_count;) {
         token = cursor;
         const YYCTYPE *ctxmarker = NULL;
         YYCTYPE yych;
@@ -7145,15 +7258,18 @@ yy425:
         YYSKIP ();
 yy426:
         YYRESTORECTX ();
-        status = action_line290(i, keys, input, token, &cursor, 3);
+        status = check_key_count_line290(keys_count, i, 3)
+             || action_line290(&i, keys, input, token, &cursor, 3);
         continue;
 yy427:
         YYSKIP ();
-        status = action_line290(i, keys, input, token, &cursor, 2);
+        status = check_key_count_line290(keys_count, i, 3)
+             || action_line290(&i, keys, input, token, &cursor, 2);
         continue;
 yy429:
         YYSKIP ();
-        status = action_line290(i, keys, input, token, &cursor, 1);
+        status = check_key_count_line290(keys_count, i, 3)
+             || action_line290(&i, keys, input, token, &cursor, 1);
         continue;
 yy431:
         YYSKIP ();
@@ -7164,7 +7280,8 @@ yy431:
         }
 yy432:
         YYSKIP ();
-        status = action_line290(i, keys, input, token, &cursor, 0);
+        status = check_key_count_line290(keys_count, i, 3)
+             || action_line290(&i, keys, input, token, &cursor, 0);
         continue;
 
     }
@@ -7176,7 +7293,7 @@ yy432:
         }
         if (i != keys_count) {
             status = 1;
-            fprintf(stderr, "error: lex_line290: unused keys left after %u iterations\n", i);
+            fprintf(stderr, "error: lex_line290: unused keys left after %u keys\n", i);
         }
     }
 
@@ -7204,7 +7321,7 @@ end:
 #define YYFILL(n) { break; }
 
 static int action_line318
-    ( unsigned int i
+    ( unsigned *pkix
     , const YYKEYTYPE *keys
     , const YYCTYPE *start
     , const YYCTYPE *token
@@ -7212,10 +7329,12 @@ static int action_line318
     , YYKEYTYPE rule_act
     )
 {
+    const unsigned kix = *pkix;
     const long pos = token - start;
     const long len_act = *cursor - token;
-    const long len_exp = (long) keys [3 * i + 1];
-    const YYKEYTYPE rule_exp = keys [3 * i + 2];
+    const long len_exp = (long) keys[kix + 1];
+    const YYKEYTYPE rule_exp = keys[kix + 2];
+    *pkix = kix + 3;
     if (rule_exp == 255) {
         fprintf
             ( stderr
@@ -7225,17 +7344,17 @@ static int action_line318
             );
     }
     if (len_act == len_exp && rule_act == rule_exp) {
-        const YYKEYTYPE offset = keys[3 * i];
+        const YYKEYTYPE offset = keys[kix];
         *cursor = token + offset;
         return 0;
     } else {
         fprintf
             ( stderr
-            , "error: lex_line318: at position %ld (iteration %u):\n"
+            , "error: lex_line318: at position %ld (key %u):\n"
                 "\texpected: match length %ld, rule %u\n"
                 "\tactual:   match length %ld, rule %u\n"
             , pos
-            , i
+            , kix
             , len_exp
             , rule_exp
             , len_act
@@ -7243,6 +7362,13 @@ static int action_line318
             );
         return 1;
     }
+}
+
+static int check_key_count_line318(unsigned have, unsigned used, unsigned need)
+{
+    if (used + need <= have) return 0;
+    fprintf(stderr, "error: lex_line318: not enough keys\n");
+    return 1;
 }
 
 int lex_line318()
@@ -7272,7 +7398,7 @@ int lex_line318()
 
     keys = (YYKEYTYPE *) read_file
         ("rexx.--skeleton.c.line318.keys"
-        , 3 * sizeof (YYKEYTYPE)
+        , sizeof (YYKEYTYPE)
         , 0
         , &keys_count
         );
@@ -7285,7 +7411,7 @@ int lex_line318()
     limit = input + input_len + padding;
     eof = input + input_len;
 
-    for (i = 0; status == 0 && i < keys_count; ++i) {
+    for (i = 0; status == 0 && cursor < eof && i < keys_count;) {
         token = cursor;
         YYCTYPE yych;
 
@@ -7300,16 +7426,19 @@ int lex_line318()
         }
 yy436:
         YYSKIP ();
-        status = action_line318(i, keys, input, token, &cursor, 3);
+        status = check_key_count_line318(keys_count, i, 3)
+             || action_line318(&i, keys, input, token, &cursor, 3);
         continue;
 yy438:
         YYSKIP ();
 yy439:
-        status = action_line318(i, keys, input, token, &cursor, 4);
+        status = check_key_count_line318(keys_count, i, 3)
+             || action_line318(&i, keys, input, token, &cursor, 4);
         continue;
 yy440:
         YYSKIP ();
-        status = action_line318(i, keys, input, token, &cursor, 1);
+        status = check_key_count_line318(keys_count, i, 3)
+             || action_line318(&i, keys, input, token, &cursor, 1);
         continue;
 yy442:
         YYSKIP ();
@@ -7327,11 +7456,13 @@ yy443:
         }
 yy444:
         YYSKIP ();
-        status = action_line318(i, keys, input, token, &cursor, 0);
+        status = check_key_count_line318(keys_count, i, 3)
+             || action_line318(&i, keys, input, token, &cursor, 0);
         continue;
 yy446:
         YYSKIP ();
-        status = action_line318(i, keys, input, token, &cursor, 2);
+        status = check_key_count_line318(keys_count, i, 3)
+             || action_line318(&i, keys, input, token, &cursor, 2);
         continue;
 
     }
@@ -7343,7 +7474,7 @@ yy446:
         }
         if (i != keys_count) {
             status = 1;
-            fprintf(stderr, "error: lex_line318: unused keys left after %u iterations\n", i);
+            fprintf(stderr, "error: lex_line318: unused keys left after %u keys\n", i);
         }
     }
 

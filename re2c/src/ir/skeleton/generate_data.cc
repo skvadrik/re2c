@@ -74,20 +74,6 @@ template<typename uintn_t> static uintn_t to_le(uintn_t n)
 	return m;
 }
 
-template<typename key_t> static void keygen(FILE *f, size_t count,
-	size_t len, size_t len_match, key_t match)
-{
-	const size_t keys_size = 3 * count;
-	key_t * keys = new key_t[keys_size];
-	for (uint32_t i = 0; i < keys_size;) {
-		keys[i++] = to_le<key_t>(static_cast<key_t>(len));
-		keys[i++] = to_le<key_t>(static_cast<key_t>(len_match));
-		keys[i++] = to_le<key_t>(match);
-	}
-	fwrite(keys, sizeof(key_t), keys_size, f);
-	delete[] keys;
-}
-
 // pick at most 0x100 unique edges from this range
 // (for 1-byte code units this covers the whole range: [0 - 0xFF])
 //   - range bounds must be included
@@ -182,19 +168,34 @@ template<typename cunit_t, typename key_t> static cover_size_t cover_one(
 
 	// write keys
 	const key_t match = rule2key<key_t>(fin.rule, skel.defrule);
-	size_t len_match = 0;
+	size_t len_match = 0, ltag = 0, htag = 0;
+	const tagver_t *vers = NULL;
 	if (fin.rule != Rule::NONE) {
 		const Rule &rule = skel.rules[fin.rule];
+		ltag = rule.ltag;
+		htag = rule.htag;
+		vers = rule.tags;
 		const size_t trail = rule.trail;
 		if (trail == Tag::NONE) {
 			len_match = f;
 		} else {
 			assert(skel.tags[trail].type == Tag::VAR);
-			len_match = tags[rule.tags[trail]];
+			len_match = tags[vers[trail]];
 			assert(len_match != NIL);
 		}
 	}
-	keygen<key_t>(cover.keys, width, len, len_match, match);
+	const size_t keys_size = (3 + htag - ltag) * width;
+	key_t *keys = new key_t[keys_size], *p = keys;
+	for (size_t j = 0; j < width; ++j) {
+		*p++ = to_le<key_t>(static_cast<key_t>(len));
+		*p++ = to_le<key_t>(static_cast<key_t>(len_match));
+		*p++ = to_le<key_t>(match);
+		for (size_t t = ltag; t < htag; ++t) {
+			*p++ = to_le<key_t>(static_cast<key_t>(tags[vers[t]]));
+		}
+	}
+	fwrite(keys, sizeof(key_t), keys_size, cover.keys);
+	delete[] keys;
 
 	delete[] buffer;
 	delete[] tags;
