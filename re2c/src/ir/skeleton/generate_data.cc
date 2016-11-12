@@ -2,6 +2,7 @@
 #include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <algorithm>
 #include <map>
 #include <string>
@@ -84,6 +85,11 @@ static uint32_t step(uint32_t lower, uint32_t upper)
 	return 1 + (upper - lower) / 0x100;
 }
 
+static uint32_t nsteps(uint32_t lower, uint32_t upper)
+{
+	return 2 + (upper - lower - 1) / step(lower, upper);
+}
+
 static void apply(size_t *tags, const tcmd_t *cmd, size_t pos)
 {
 	if (!cmd) return;
@@ -95,110 +101,138 @@ static void apply(size_t *tags, const tcmd_t *cmd, size_t pos)
 	}
 }
 
-template<typename cunit_t, typename key_t> static cover_size_t cover_one(
-	const Skeleton &skel, cover_t &cover)
+static size_t path_width(const path_t &path, const Skeleton &skel)
 {
-	const path_t &path = cover.prefix;
-	const size_t len = path.len();
-
 	size_t width = 0;
-	for (size_t i = 0; i < len; ++i) {
+	for (size_t i = 0; i < path.len(); ++i) {
 
 		// width of multiarc: total number of characters picked from all ranges
 		size_t w = 0;
 		const Node::arc_t &arc = path.arc(skel, i);
 		for (Node::citer_t a = arc.begin(); a != arc.end(); ++a) {
-			const uint32_t
-				l = a->lower,
-				u = a->upper;
-			w += 2 + (u - l - 1) / step(l, u);
+			w += nsteps(a->lower, a->upper);
 		}
 
 		// width of multipath: maximal width of multiarc
 		width = std::max(width, w);
 	}
+	return width;
+}
 
-	const cover_size_t size = cover_size_t::from64(len)
-		* cover_size_t::from64(width);
-	if (size.overflow()) return size;
-
+template<typename cunit_t>
+static void write_input(const path_t &path, const Skeleton &skel,
+	size_t width, FILE *file)
+{
 	const size_t
-		nver = skel.ntagver,
-		tags_size = width * nver,
-		buffer_size = size.uint32(),
-		NIL = std::numeric_limits<size_t>::max();
-	cunit_t *buffer = new cunit_t [buffer_size];
-	size_t *tags = new size_t[tags_size];
+		len = path.len(),
+		size = len * width;
+	cunit_t *buffer = new cunit_t[size];
 
-	// find the last accepting node
-	size_t f = len;
-	for (; f > 0; --f) {
-		if (path.node(skel, f).rule != Rule::NONE) break;
-	}
-	const Node &fin = path.node(skel, f);
-
-	// calculate input characters and tag values
-	std::fill(tags, tags + tags_size, NIL);
+	// pick characters from ranges
 	for (size_t i = 0; i < len; ++i) {
-		const Node::arc_t &arc = path.arc(skel, i);
-		Node::citer_t a = arc.begin();
-
-		for (size_t j = 0; j < width;) {
+		Node::wciter_t a(path.arc(skel, i));
+		for (size_t w = 0; w < width; ++a) {
 			const uint32_t
 				l = a->lower,
 				u = a->upper,
 				d = step(l, u);
-
-			for (uint32_t m = l; m < u + d && j < width; m += d, ++j) {
-				buffer[j * len + i] = to_le(static_cast<cunit_t>(std::min(m, u)));
-				if (i < f) {
-					apply(&tags[j * nver], a->cmd, i);
-				}
+			for (uint32_t m = l; m < u + d && w < width; m += d, ++w) {
+				buffer[w * len + i] = to_le(static_cast<cunit_t>(std::min(m, u)));
 			}
-
-			if (++a == arc.end()) a = arc.begin();
 		}
 	}
-	for (size_t j = 0; j < width; ++j) {
-		apply(&tags[j * nver], fin.cmd, f);
-	}
 
-	// write input
-	fwrite (buffer, sizeof(cunit_t), buffer_size, cover.input);
-
-	// write keys
-	const key_t match = rule2key<key_t>(fin.rule, skel.defrule);
-	size_t len_match = 0, ltag = 0, htag = 0;
-	const tagver_t *vers = NULL;
-	if (fin.rule != Rule::NONE) {
-		const Rule &rule = skel.rules[fin.rule];
-		ltag = rule.ltag;
-		htag = rule.htag;
-		vers = rule.tags;
-		const size_t trail = rule.trail;
-		if (trail == Tag::NONE) {
-			len_match = f;
-		} else {
-			assert(skel.tags[trail].type == Tag::VAR);
-			len_match = tags[vers[trail]];
-			assert(len_match != NIL);
-		}
-	}
-	const size_t keys_size = (3 + htag - ltag) * width;
-	key_t *keys = new key_t[keys_size], *p = keys;
-	for (size_t j = 0; j < width; ++j) {
-		*p++ = to_le<key_t>(static_cast<key_t>(len));
-		*p++ = to_le<key_t>(static_cast<key_t>(len_match));
-		*p++ = to_le<key_t>(match);
-		for (size_t t = ltag; t < htag; ++t) {
-			*p++ = to_le<key_t>(static_cast<key_t>(tags[vers[t]]));
-		}
-	}
-	fwrite(keys, sizeof(key_t), keys_size, cover.keys);
-	delete[] keys;
+	fwrite(buffer, sizeof(cunit_t), size, file);
 
 	delete[] buffer;
+}
+
+template<typename key_t>
+static void write_keys(const path_t &path, const Skeleton &skel,
+	size_t width, FILE *file)
+{
+	// find last accepting node
+	size_t f;
+	for (f = path.len(); f > 0 && path.node(skel, f).rule == Rule::NONE; --f);
+
+	// calculate tags: start with default and apply commands step by step
+	const size_t
+		nver = skel.ntagver,
+		ntag = width * nver,
+		NIL = std::numeric_limits<size_t>::max();
+	size_t *tags = new size_t[ntag];
+	std::fill(tags, tags + ntag, NIL);
+	for (size_t i = 0; i < f; ++i) {
+		Node::wciter_t a(path.arc(skel, i));
+		for (size_t w = 0; w < width; ++a) {
+			uint32_t n = nsteps(a->lower, a->upper);
+			for (; n --> 0 && w < width; ++w) {
+				apply(&tags[w * nver], a->cmd, i);
+			}
+		}
+	}
+	const tcmd_t *fcmd = path.node(skel, f).cmd;
+	for (size_t w = 0; w < width; ++w) {
+		apply(&tags[w * nver], fcmd, f);
+	}
+
+	const size_t rule = path.node(skel, f).rule;
+	size_t matched = 0, ltag = 0, htag = 0;
+	const tagver_t *vers = NULL;
+	if (rule != Rule::NONE) {
+
+		const Rule &r = skel.rules[rule];
+		ltag = r.ltag;
+		htag = r.htag;
+		vers = r.tags;
+
+		// matched length might depend on tag values
+		const size_t t = r.trail;
+		if (t == Tag::NONE) {
+			matched = f;
+		} else {
+			assert(skel.tags[t].type == Tag::VAR);
+			matched = tags[vers[t]];
+			assert(matched != NIL);
+		}
+	}
+
+	// keys: 1 - scanned length, 2 - matched length, 3 - matched rule, the rest - tags
+	const size_t nkey = 3 + htag - ltag;
+	key_t *keys = new key_t[nkey * width], *k = keys;
+	// 1st path
+	*k++ = to_le(static_cast<key_t>(path.len()));
+	*k++ = to_le(static_cast<key_t>(matched));
+	*k++ = to_le(rule2key<key_t>(rule, skel.defrule));
+	for (size_t t = ltag; t < htag; ++t) {
+		*k++ = to_le(static_cast<key_t>(tags[vers[t]]));
+	}
+	// remaining paths: copy-paste keys from 1st path
+	for (size_t w = 1; w < width; ++w, k += nkey) {
+		memcpy(k, keys, nkey * sizeof(key_t));
+	}
+	// dump to file
+	fwrite(keys, sizeof(key_t), nkey * width, file);
+
 	delete[] tags;
+	delete[] keys;
+}
+
+template<typename cunit_t, typename key_t>
+static cover_size_t cover_one(const Skeleton &skel, cover_t &cover)
+{
+	const path_t &path = cover.prefix;
+
+	const size_t width = path_width(path, skel);
+
+	const cover_size_t size
+		= cover_size_t::from64(path.len())
+		* cover_size_t::from64(width);
+
+	if (!size.overflow()) {
+		write_input<cunit_t>(path, skel, width, cover.input);
+		write_keys<key_t>(path, skel, width, cover.keys);
+	}
 
 	return size;
 }

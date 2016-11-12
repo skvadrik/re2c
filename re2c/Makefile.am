@@ -71,7 +71,8 @@ SRC_HDR = \
 	src/util/static_assert.h \
 	src/util/string_utils.h \
 	src/util/u32lim.h \
-	src/util/uniq_vector.h
+	src/util/uniq_vector.h \
+	src/util/wrap_iter.h
 SRC = \
 	src/codegen/bitmap.cc \
 	src/codegen/emit_action.cc \

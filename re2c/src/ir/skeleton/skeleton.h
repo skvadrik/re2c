@@ -16,6 +16,7 @@
 #include "src/ir/tcmd.h"
 #include "src/util/local_increment.h"
 #include "src/util/forbid_copy.h"
+#include "src/util/wrap_iter.h"
 
 namespace re2c
 {
@@ -43,6 +44,7 @@ struct Node
 	typedef std::vector<range_t> arc_t;
 	typedef std::map<size_t, arc_t> arcs_t;
 	typedef arc_t::const_iterator citer_t;
+	typedef wrap_citer_t<arc_t> wciter_t;
 
 	arcs_t arcs;
 	size_t rule;
