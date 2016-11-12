@@ -142,8 +142,8 @@ run_pack() {
 
 			local switches="$switches --skeleton -Werror-undefined-control-flow"
 
-			local status=0
-			${valgrind} ${wine} ../${re2c} $switches "../$x" 2>"$outc.stderr" || status=1
+			${valgrind} ${wine} ../${re2c} $switches "../$x" 2>"$outc.stderr"
+			local status=$(echo $?)
 			[ $status -eq 0 ] && { @CC@ -Wall -Wextra -o "$outc.out" "$outc" 2>>"$outc.stderr" || status=2; }
 			[ $status -eq 0 ] && { ./"$outc.out" 2>>"$outc.stderr" || status=3; }
 
@@ -152,6 +152,7 @@ run_pack() {
 				1 ) local msg="OK (expected re2c error)" ;;
 				2 ) local msg="FAIL (compilation error)" ;;
 				3 ) local msg="FAIL (runtime error)" ;;
+				* ) local msg="FAIL (unknown error)" ;;
 			esac
 			printf "%-25s $outx\n" "$msg"
 
