@@ -83,7 +83,7 @@ dfa_t::dfa_t(const nfa_t &nfa,
 			f = std::find_if(clos0.begin(), e, clos_t::final);
 		if (f != e) {
 			s->rule = f->state->rule;
-			s->tcmd[nchars].save = tcpool.conv_to_save(tagpool[f->tagidx], ntag);
+			s->tcmd[nchars] = tcpool.conv_to_tcmd(tagpool[f->tagidx], rules[s->rule].tags, ntag);
 		}
 
 		// for each alphabet symbol, build tagged epsilon-closure
@@ -102,9 +102,10 @@ dfa_t::dfa_t(const nfa_t &nfa,
 
 tagver_t vartag_maxver(const std::valarray<Tag> &tags)
 {
-	for (size_t t = tags.size(); t > 0; --t) {
+	const size_t ntag = tags.size();
+	for (size_t t = ntag; t > 0; --t) {
 		if (tags[t - 1].type == Tag::VAR) {
-			return static_cast<tagver_t>(t);
+			return static_cast<tagver_t>(ntag + t);
 		}
 	}
 	return 0;

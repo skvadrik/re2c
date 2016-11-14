@@ -31,6 +31,7 @@ struct State
 
 	size_t rule;
 	tcid_t rule_tags;
+	tcid_t fall_tags;
 	bool isBase;
 	Go go;
 	Action action;
@@ -42,6 +43,7 @@ struct State
 		, fallback (false)
 		, rule (Rule::NONE)
 		, rule_tags (TCID0)
+		, fall_tags (TCID0)
 		, isBase (false)
 		, go ()
 		, action ()

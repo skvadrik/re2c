@@ -43,6 +43,8 @@ bool tagcopy_t::equal(const tagcopy_t &x, const tagcopy_t &y)
 }
 
 tcmd_t::tcmd_t(): save(NULL), copy(NULL) {}
+tcmd_t::tcmd_t(tagsave_t *s, tagcopy_t *c): save(s), copy(c) {}
+bool tcmd_t::empty() const { return save == NULL && copy == NULL; }
 
 tccmd_t::tccmd_t(const tagsave_t *s, const tagcopy_t *c): save(s), copy(c) {}
 
@@ -81,6 +83,23 @@ tagsave_t *tcpool_t::conv_to_save(const tagver_t *vers, size_t ntag)
 		}
 	}
 	return s;
+}
+
+tcmd_t tcpool_t::conv_to_tcmd(const tagver_t *vers, const tagver_t *fins, size_t ntag)
+{
+	tagsave_t *s = NULL;
+	tagcopy_t *c = NULL;
+	for (size_t t = ntag; t-- > 0;) {
+		const tagver_t f = fins[t];
+		if (f == TAGVER_ZERO) continue;
+
+		if (vers[t] != TAGVER_ZERO) {
+			s = make_save(s, f);
+		} else {
+			c = make_copy(c, f, f + ntag);
+		}
+	}
+	return tcmd_t(s, c);
 }
 
 uint32_t hash_tcmd(const tagsave_t *save, const tagcopy_t *copy)

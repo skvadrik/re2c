@@ -6,7 +6,8 @@ namespace re2c
 void cfg_t::dead_code_elimination(cfg_t &cfg, const bool *live)
 {
 	const tagver_t nver = cfg.dfa.maxtagver + 1;
-	cfg_bb_t *b = cfg.bblocks, *e = b + cfg.nbblock;
+	// final and fallback tags can't be dead by construction
+	cfg_bb_t *b = cfg.bblocks, *e = b + cfg.nbbarc;
 
 	for (; b < e; ++b, live += nver) {
 		for (tagsave_t *s, **ps = &b->cmd->save; (s = *ps);) {
@@ -16,8 +17,6 @@ void cfg_t::dead_code_elimination(cfg_t &cfg, const bool *live)
 				ps = &s->next;
 			}
 		}
-		// rule tags and copy tags can't be dead by construction
-		// (copy tags are only used for fallback tags)
 	}
 }
 

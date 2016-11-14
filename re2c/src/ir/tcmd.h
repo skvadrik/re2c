@@ -39,6 +39,8 @@ struct tcmd_t
 	tagcopy_t *copy;
 
 	tcmd_t();
+	tcmd_t(tagsave_t *s, tagcopy_t *c);
+	bool empty() const;
 };
 
 struct tccmd_t
@@ -67,6 +69,7 @@ public:
 	tagsave_t *make_save(tagsave_t *next, tagver_t ver);
 	tagcopy_t *make_copy(tagcopy_t *next, tagver_t lhs, tagver_t rhs);
 	tagsave_t *conv_to_save(const tagver_t *vers, size_t ntag);
+	tcmd_t conv_to_tcmd(const tagver_t *vers, const tagver_t *fins, size_t ntag);
 
 	tcid_t insert(const tagsave_t *save, const tagcopy_t *copy);
 	const tccmd_t &operator[](tcid_t id) const;

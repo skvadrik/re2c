@@ -12,7 +12,7 @@ void optimize_tags(dfa_t &dfa)
 		cfg_t cfg(dfa);
 
 		const size_t nver = static_cast<size_t>(dfa.maxtagver) + 1;
-		bool *live = new bool[cfg.nbblock * nver];
+		bool *live = new bool[cfg.nbbfin * nver];
 		bool *interf = new bool[nver * nver];
 		tagver_t *ver2new = new tagver_t[nver];
 
@@ -54,8 +54,9 @@ void freeze_tags(dfa_t &dfa)
 		dfa_state_t *s = dfa.states[i];
 		const tcmd_t
 			*cmd = s->tcmd,
-			*const fin = cmd + nsym;
-		tcid_t *id = s->tcid = new tcid_t[nsym + 1];
+			*const fin = cmd + nsym,
+			*const fall = fin + 1;
+		tcid_t *id = s->tcid = new tcid_t[nsym + 2];
 
 		// transition commands
 		for(; cmd < fin; ++cmd) {
@@ -64,6 +65,9 @@ void freeze_tags(dfa_t &dfa)
 
 		// final epsilon-transition command
 		*id++ = pool.insert(fin->save, fin->copy);
+
+		// fallback epsilon-transition command
+		*id++ = pool.insert(fall->save, fall->copy);
 
 		delete[] s->tcmd;
 		s->tcmd = NULL;

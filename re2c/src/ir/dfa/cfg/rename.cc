@@ -9,7 +9,7 @@ void cfg_t::renaming(cfg_t &cfg, const tagver_t *ver2new, tagver_t maxver)
 	if (oldmax == maxver) return;
 	oldmax = maxver;
 
-	cfg_bb_t *b = cfg.bblocks, *e = b + cfg.nbblock;
+	cfg_bb_t *b = cfg.bblocks, *e = b + cfg.nbbfall;
 	for (; b < e; ++b) {
 
 		// tag versions in save commands

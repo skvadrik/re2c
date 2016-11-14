@@ -12,7 +12,7 @@ void cfg_t::interference(const cfg_t &cfg, const bool *live, bool *interf)
 	const size_t nver = static_cast<size_t>(cfg.dfa.maxtagver) + 1;
 	bool *buf1 = new bool[nver];
 	bool *buf2 = new bool[nver];
-	const cfg_bb_t *b = cfg.bblocks, *e = b + cfg.nbblock;
+	const cfg_bb_t *b = cfg.bblocks, *e = b + cfg.nbbfin;
 
 	memset(interf, 0, nver * nver * sizeof(bool));
 	for (; b < e; ++b, live += nver) {

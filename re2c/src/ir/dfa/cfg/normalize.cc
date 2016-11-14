@@ -16,7 +16,7 @@ template<typename cmd_t> void normalize(cmd_t *cmd);
 
 void cfg_t::normalization(cfg_t &cfg)
 {
-	cfg_bb_t *b = cfg.bblocks, *e = b + cfg.nbblock;
+	cfg_bb_t *b = cfg.bblocks, *e = b + cfg.nbbfall;
 	for (; b < e; ++b) {
 		normalize(b->cmd->save);
 		normalize(b->cmd->copy);

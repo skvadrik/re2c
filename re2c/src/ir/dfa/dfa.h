@@ -29,7 +29,7 @@ struct dfa_state_t
 
 	explicit dfa_state_t(size_t nchars)
 		: arcs(new size_t[nchars])
-		, tcmd(new tcmd_t[nchars + 1]) // +1 for final epsilon-transition
+		, tcmd(new tcmd_t[nchars + 2]) // +2 for final and fallback epsilon-transitions
 		, tcid(NULL)
 		, rule(Rule::NONE)
 		, fallthru(false)

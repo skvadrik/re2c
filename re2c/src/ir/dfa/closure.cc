@@ -65,7 +65,7 @@ void closure_one(closure_t &clos, Tagpool &tagpool,
 		case nfa_state_t::TAG: {
 			const size_t t = n->tag.info;
 			const tagver_t old = tags[t];
-			tags[t] = static_cast<tagver_t>(t + 1);
+			tags[t] = static_cast<tagver_t>(t + 1 + tagpool.ntags);
 			closure_one(clos, tagpool, n->tag.out, tags, badtags);
 			tags[t] = old;
 			break;

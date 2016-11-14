@@ -57,55 +57,50 @@ void find_overwritten_tags(const dfa_t &dfa, size_t state,
 // note [fallback states]
 void insert_fallback_tags(dfa_t &dfa)
 {
-	tagver_t maxver = dfa.maxtagver;
 	tcpool_t &pool = dfa.tcpool;
 	const size_t
 		nstates = dfa.states.size(),
 		nsym = dfa.nchars,
-		ntags = dfa.tags.size(),
-		nver = static_cast<size_t>(maxver) + 1;
+		nver = static_cast<size_t>(dfa.maxtagver) + 1;
 	bool *been = new bool[nstates];
 	bool *owrt = new bool[nver];
 
 	for (size_t i = 0; i < nstates; ++i) {
 		dfa_state_t *s = dfa.states[i];
-
 		if (!s->fallback) continue;
+		tcmd_t *f = &s->tcmd[nsym], *b = f + 1;
 
+		// 'save' commands are the same as for final transition
+		for (tagsave_t *p = f->save; p; p = p->next) {
+			b->save = pool.make_save(b->save, p->ver);
+		}
+
+		// 'copy' commands are split
 		std::fill(been, been + nstates, false);
 		std::fill(owrt, owrt + nver, false);
 		find_overwritten_tags(dfa, i, been, owrt);
+		for (tagcopy_t *p = f->copy; p; p = p->next) {
 
-		const tagver_t *fin = dfa.rules[s->rule].tags;
-		for (const tagsave_t *p = s->tcmd[nsym].save; p; p = p->next) {
-			owrt[p->ver] = false;
-		}
+			// non-overwritten tags need 'copy' on fallback transition
+			if (!owrt[p->rhs]) {
+				b->copy = pool.make_copy(b->copy, p->lhs, p->rhs);
+				continue;
+			}
 
-		for (size_t t = 0; t < ntags; ++t) {
-			const tagver_t
-				f = fin[t],
-				b = static_cast<tagver_t>(nver + t);
-
-			if (f == TAGVER_ZERO || !owrt[f]) continue;
-
-			// patch commands (backups must go first)
-			tagcopy_t **p = &s->tcmd[nsym].copy;
-			*p = pool.make_copy(*p, f, b);
+			// overwritten tags need 'copy' on all outgoing non-accepting paths
+			// ('copy' commands must go first, before potential overwrites)
 			for (size_t c = 0; c < nsym; ++c) {
 				size_t j = s->arcs[c];
 				if (j != dfa_t::NIL && dfa.states[j]->fallthru) {
-					p = &s->tcmd[c].copy;
-					*p = pool.make_copy(*p, b, f);
+					tagcopy_t *&q = s->tcmd[c].copy;
+					q = pool.make_copy(q, p->lhs, p->rhs);
 				}
 			}
-			maxver = std::max(maxver, b);
 		}
 	}
 
 	delete[] been;
 	delete[] owrt;
-
-	dfa.maxtagver = maxver;
 }
 
 } // namespace re2c

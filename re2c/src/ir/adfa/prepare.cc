@@ -21,6 +21,7 @@ void DFA::split(State *s)
 	move->fill = s->fill;
 	move->go = s->go;
 	move->rule_tags = s->rule_tags;
+	move->fall_tags = s->fall_tags;
 	s->rule = Rule::NONE;
 	s->go.nSpans = 1;
 	s->go.span = allocate<Span> (1);
@@ -113,14 +114,10 @@ void DFA::prepare ()
 				rule2state[s->rule] = n;
 				addState(n, s);
 			}
-
-			// exclude 'copy' commands, they are for fallback paths only
-			const tcid_t id = tcpool.insert(tcpool[s->rule_tags].save, NULL);
-
 			for (uint32_t i = 0; i < s->go.nSpans; ++i) {
 				if (!s->go.span[i].to) {
 					s->go.span[i].to = rule2state[s->rule];
-					s->go.span[i].tags = id;
+					s->go.span[i].tags = s->rule_tags;
 				}
 			}
 		}
@@ -148,7 +145,7 @@ void DFA::prepare ()
 	if (default_state) {
 		for (State *s = head; s; s = s->next) {
 			if (s->fallback) {
-				const std::pair<const State*, tcid_t> acc(rule2state[s->rule], s->rule_tags);
+				const std::pair<const State*, tcid_t> acc(rule2state[s->rule], s->fall_tags);
 				s->action.set_save(accepts.find_or_add(acc));
 			}
 		}

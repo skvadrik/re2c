@@ -5,8 +5,8 @@
 namespace re2c
 {
 
-static cfg_ix_t map_arcs_to_bblocks(const dfa_t &dfa, cfg_ix_t *arc2bb);
-static cfg_bb_t *create_bblocks(const dfa_t &dfa, const cfg_ix_t *arc2bb, cfg_ix_t nbblock);
+static void map_arcs_to_bblocks(const dfa_t &dfa, cfg_ix_t *arc2bb, cfg_ix_t &nbbarc, cfg_ix_t &nbbfin, cfg_ix_t &nbbfall);
+static cfg_bb_t *create_bblocks(const dfa_t &dfa, const cfg_ix_t *arc2bb, cfg_ix_t nbbfin, cfg_ix_t nbbfall);
 static void basic_block(cfg_bb_t *bb, const cfg_ix_t *succb, const cfg_ix_t *succe, tcmd_t *cmd, tagver_t *use);
 static void successors(const dfa_t &dfa, const cfg_ix_t *arc2bb, bool *been, cfg_ix_t *&succ, size_t x);
 static void fallback(const dfa_t &dfa, const cfg_ix_t *arc2bb, bool *been, cfg_ix_t *&succ, size_t x);
@@ -14,79 +14,100 @@ static void fallback(const dfa_t &dfa, const cfg_ix_t *arc2bb, bool *been, cfg_i
 cfg_t::cfg_t(dfa_t &a)
 	: dfa(a)
 	, bblocks(NULL)
-	, nbblock(0)
+	, nbbarc(0)
+	, nbbfin(0)
+	, nbbfall(0)
 {
 	const size_t
 		nstate = dfa.states.size(),
-		narc = nstate * dfa.nchars;
-	cfg_ix_t *arc2bb = new cfg_ix_t[narc + nstate];
+		nsym = dfa.nchars;
+	cfg_ix_t *arc2bb = new cfg_ix_t[nstate * (nsym + 2)];
 
-	nbblock = map_arcs_to_bblocks(dfa, arc2bb);
-	bblocks = create_bblocks(dfa, arc2bb, nbblock);
+	map_arcs_to_bblocks(dfa, arc2bb, nbbarc, nbbfin, nbbfall);
+	bblocks = create_bblocks(dfa, arc2bb, nbbfin, nbbfall);
 
 	delete[] arc2bb;
 }
 
-cfg_ix_t map_arcs_to_bblocks(const dfa_t &dfa, cfg_ix_t *arc2bb)
+void map_arcs_to_bblocks(const dfa_t &dfa, cfg_ix_t *arc2bb,
+	cfg_ix_t &nbbarc, cfg_ix_t &nbbfin, cfg_ix_t &nbbfall)
 {
 	const size_t
 		nstate = dfa.states.size(),
 		nsym = dfa.nchars;
 
 	// first bblock is CFG root: it has no counterpart in DFA
-	cfg_ix_t nbblock = 1;
+	cfg_ix_t nbb = 1;
 
+	// bblocks for tagged transitions
+	for (size_t i = 0; i < nstate; ++i) {
+		const tcmd_t *c = dfa.states[i]->tcmd, *f = c + nsym;
+		for (; c < f; ++c) {
+			*arc2bb++ = c->empty() ? 0 : nbb++;
+		}
+	}
+	nbbarc = nbb;
+
+	// bblock for final tagged epsilon-transition
+	for (size_t i = 0; i < nstate; ++i) {
+		const tcmd_t &f = dfa.states[i]->tcmd[nsym];
+		*arc2bb++ = f.empty() ? 0 : nbb++;
+	}
+	nbbfin = nbb;
+
+	// bblock for fallback tagged epsilon-transition
 	for (size_t i = 0; i < nstate; ++i) {
 		const dfa_state_t *s = dfa.states[i];
-
-		// bblocks for tagged transitions in DFA
-		for (size_t c = 0; c < nsym; ++c) {
-			const tcmd_t &cmd = s->tcmd[c];
-			*arc2bb++ = cmd.save || cmd.copy ? nbblock++ : 0;
-		}
-
-		// bblocks for final DFA states with rules that have tags
-		*arc2bb++ = s->rule != Rule::NONE
-			&& dfa.rules[s->rule].tags != ZERO_TAGS
-			? nbblock++ : 0;
+		// (check final tags: fallback tags may be empty)
+		*arc2bb++ = s->fallback && !s->tcmd[nsym].empty() ? nbb++ : 0;
 	}
-
-	return nbblock;
+	nbbfall = nbb;
 }
 
-cfg_bb_t *create_bblocks(const dfa_t &dfa, const cfg_ix_t *arc2bb, cfg_ix_t nbblock)
+cfg_bb_t *create_bblocks(const dfa_t &dfa, const cfg_ix_t *arc2bb,
+	cfg_ix_t nbbfin, cfg_ix_t nbbfall)
 {
 	const size_t
 		nstate = dfa.states.size(),
 		nsym = dfa.nchars;
 	const cfg_ix_t *a2b = arc2bb;
-	cfg_ix_t *succb = new cfg_ix_t[nbblock], *succe;
+	cfg_ix_t *succb = new cfg_ix_t[nbbfin], *succe;
 	bool *been = new bool[nstate];
 
-	cfg_bb_t *bblocks = new cfg_bb_t[nbblock], *b = bblocks;
+	cfg_bb_t *bblocks = new cfg_bb_t[nbbfall], *b = bblocks;
 
 	// root bblock
 	std::fill(been, been + nstate, false);
 	successors(dfa, arc2bb, been, succe = succb, 0);
-	basic_block(b++, succb, succe, new tcmd_t, TAGVER_ZERO);
+	basic_block(b++, succb, succe, new tcmd_t, NULL);
 
+	// transition bblocks
 	for (size_t i = 0; i < nstate; ++i) {
 		const dfa_state_t *s = dfa.states[i];
-
-		// transition bblocks
 		for (size_t c = 0; c < nsym; ++c) {
 			if (*a2b++ != 0) {
 				std::fill(been, been + nstate, false);
 				successors(dfa, arc2bb, been, succe = succb, s->arcs[c]);
-				basic_block(b++, succb, succe, &s->tcmd[c], TAGVER_ZERO);
+				basic_block(b++, succb, succe, &s->tcmd[c], NULL);
 			}
 		}
+	}
 
-		// final bblocks
+	// final bblocks
+	for (size_t i = 0; i < nstate; ++i) {
 		if (*a2b++ != 0) {
+			const dfa_state_t *s = dfa.states[i];
+			basic_block(b++, NULL, NULL, &s->tcmd[nsym], dfa.rules[s->rule].tags);
+		}
+	}
+
+	// fallback bblocks
+	for (size_t i = 0; i < nstate; ++i) {
+		if (*a2b++ != 0) {
+			const dfa_state_t *s = dfa.states[i];
 			std::fill(been, been + nstate, false);
 			fallback(dfa, arc2bb, been, succe = succb, i);
-			basic_block(b++, succb, succe, &s->tcmd[nsym], dfa.rules[s->rule].tags);
+			basic_block(b++, succb, succe, &s->tcmd[nsym + 1], dfa.rules[s->rule].tags);
 		}
 	}
 
@@ -116,9 +137,10 @@ void successors(const dfa_t &dfa, const cfg_ix_t *arc2bb, bool *been,
 	been[x] = true;
 
 	const size_t
+		nstate = dfa.states.size(),
 		nsym = dfa.nchars,
 		*a = dfa.states[x]->arcs;
-	const cfg_ix_t *a2b = &arc2bb[x * (nsym + 1)];
+	const cfg_ix_t *a2b = &arc2bb[x * nsym];
 
 	for (size_t c = 0; c < nsym; ++c) {
 		const cfg_ix_t b = a2b[c];
@@ -129,9 +151,9 @@ void successors(const dfa_t &dfa, const cfg_ix_t *arc2bb, bool *been,
 		}
 	}
 
-	const cfg_ix_t b = a2b[nsym];
-	if (b != 0) {
-		*succ++ = b;
+	const cfg_ix_t f = arc2bb[nstate * nsym + x];
+	if (f != 0) {
+		*succ++ = f;
 	}
 }
 
@@ -147,7 +169,7 @@ void fallback(const dfa_t &dfa, const cfg_ix_t *arc2bb, bool *been,
 	const size_t
 		nsym = dfa.nchars,
 		*a = dfa.states[x]->arcs;
-	const cfg_ix_t *a2b = &arc2bb[x * (nsym + 1)];
+	const cfg_ix_t *a2b = &arc2bb[x * nsym];
 
 	for (size_t c = 0; c < nsym; ++c) {
 		const size_t y = a[c];
@@ -163,7 +185,7 @@ void fallback(const dfa_t &dfa, const cfg_ix_t *arc2bb, bool *been,
 
 cfg_t::~cfg_t()
 {
-	cfg_bb_t *b = bblocks, *e = b + nbblock;
+	cfg_bb_t *b = bblocks, *e = b + nbbfall;
 
 	delete b->cmd;
 

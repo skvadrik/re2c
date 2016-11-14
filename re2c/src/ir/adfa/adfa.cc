@@ -65,6 +65,7 @@ DFA::DFA
 
 		s->rule = t->rule;
 		s->rule_tags = t->tcid[dfa.nchars];
+		s->fall_tags = t->tcid[dfa.nchars + 1];
 		s->fill = fill[i];
 		s->fallback = t->fallback; // see note [fallback states]
 

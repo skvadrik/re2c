@@ -21,7 +21,9 @@ struct cfg_t
 {
 	dfa_t &dfa;
 	cfg_bb_t *bblocks;
-	cfg_ix_t nbblock;
+	cfg_ix_t nbbarc;
+	cfg_ix_t nbbfin;
+	cfg_ix_t nbbfall;
 
 	explicit cfg_t(dfa_t &a);
 	~cfg_t();
