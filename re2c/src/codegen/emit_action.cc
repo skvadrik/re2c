@@ -23,7 +23,7 @@ class label_t;
 
 static void need(OutputFile &o, uint32_t ind, bool &readCh, size_t n, bool bSetMarker);
 static void emit_match(OutputFile &o, uint32_t ind, bool &readCh, const State *s);
-static void emit_initial(OutputFile &o, uint32_t ind, bool &readCh, const State *s, const std::set<label_t> &used_labels);
+static void emit_initial(OutputFile &o, uint32_t ind, bool &readCh, const State *s, const std::set<label_t> &used_labels, bool save_yyaccept);
 static void emit_save(OutputFile &o, uint32_t ind, bool &readCh, const State *s, bool save_yyaccept);
 static void emit_accept_binary(OutputFile &o, uint32_t ind, bool &readCh, const DFA &dfa, const State *s, size_t l, size_t r);
 static void emit_accept(OutputFile &o, uint32_t ind, bool &readCh, const DFA &dfa, const State *s);
@@ -37,15 +37,16 @@ static void gen_fintags(OutputFile &o, uint32_t ind, const DFA &dfa, const Rule 
 void emit_action(OutputFile &o, uint32_t ind, bool &readCh,
 	const DFA &dfa, const State *s, const std::set<label_t> &used_labels)
 {
+	const bool save_yyaccept = dfa.accepts.size() > 1;
 	switch (s->action.type) {
 		case Action::MATCH:
 			emit_match(o, ind, readCh, s);
 			break;
 		case Action::INITIAL:
-			emit_initial(o, ind, readCh, s, used_labels);
+			emit_initial(o, ind, readCh, s, used_labels, save_yyaccept);
 			break;
 		case Action::SAVE:
-			emit_save(o, ind, readCh, s, dfa.accepts.size() > 1);
+			emit_save(o, ind, readCh, s, save_yyaccept);
 			break;
 		case Action::MOVE:
 			break;
@@ -81,9 +82,17 @@ void emit_match(OutputFile &o, uint32_t ind, bool &readCh, const State *s)
 }
 
 void emit_initial(OutputFile &o, uint32_t ind, bool &readCh,
-	const State *s, const std::set<label_t> &used_labels)
+	const State *s, const std::set<label_t> &used_labels, bool save_yyaccept)
 {
+	const Initial &initial = *s->action.info.initial;
+
 	if (used_labels.count(s->label)) {
+		const size_t save = initial.save;
+		if (save_yyaccept && save != Initial::NOSAVE) {
+			o.wind(ind).wstring(opts->yyaccept).ws(" = ")
+				.wu64(save).ws(";\n");
+		}
+
 		if (s->fill != 0) {
 			o.wstring(opts->input_api.stmt_skip(ind));
 		} else {
@@ -91,7 +100,6 @@ void emit_initial(OutputFile &o, uint32_t ind, bool &readCh,
 		}
 	}
 
-	const Initial &initial = *s->action.info.initial;
 	if (used_labels.count(initial.label)) {
 		o.wstring(opts->labelPrefix).wlabel(initial.label).ws(":\n");
 	}

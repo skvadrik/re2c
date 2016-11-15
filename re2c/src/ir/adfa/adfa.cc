@@ -15,6 +15,8 @@
 namespace re2c
 {
 
+const size_t Initial::NOSAVE = std::numeric_limits<size_t>::max();
+
 DFA::DFA
 	( const dfa_t &dfa
 	, const std::vector<size_t> &fill

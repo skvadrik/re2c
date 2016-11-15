@@ -1,6 +1,7 @@
 #ifndef _RE2C_IR_ADFA_ACTION_
 #define _RE2C_IR_ADFA_ACTION_
 
+#include <assert.h>
 #include <vector>
 
 #include "src/codegen/label.h"
@@ -15,12 +16,16 @@ class State;
 
 struct Initial
 {
+	static const size_t NOSAVE;
+
 	label_t label;
 	bool setMarker;
+	size_t save;
 
-	inline Initial (label_t l, bool b)
+	inline Initial (label_t l, bool b, size_t s)
 		: label (l)
 		, setMarker (b)
+		, save (s)
 	{}
 };
 
@@ -53,53 +58,50 @@ public:
 	{}
 	~Action ()
 	{
-		clear ();
+		if (type == INITIAL) {
+			delete info.initial;
+		}
 	}
 	void set_initial (label_t label, bool used_marker)
 	{
-		clear ();
-		type = INITIAL;
-		info.initial = new Initial (label, used_marker);
+		if (type == MATCH) {
+			// ordinary state with no special action
+			type = INITIAL;
+			info.initial = new Initial(label, used_marker, Initial::NOSAVE);
+		} else if (type == SAVE) {
+			// fallback state: do not loose 'yyaccept'
+			type = INITIAL;
+			info.initial = new Initial(label, used_marker, info.save);
+		} else if (type == INITIAL) {
+			// already marked as initial, probably reuse mode
+			info.initial->label = label;
+			info.initial->setMarker = used_marker;
+		} else {
+			assert(false);
+		}
 	}
 	void set_save (size_t save)
 	{
-		clear ();
+		assert(type == MATCH);
 		type = SAVE;
 		info.save = save;
 	}
 	void set_move ()
 	{
-		clear ();
+		assert(type == MATCH);
 		type = MOVE;
 	}
 	void set_accept (const accept_t * accepts)
 	{
-		clear ();
+		assert(type == MATCH);
 		type = ACCEPT;
 		info.accepts = accepts;
 	}
 	void set_rule (size_t rule)
 	{
-		clear ();
+		assert(type == MATCH);
 		type = RULE;
 		info.rule = rule;
-	}
-
-private:
-	void clear ()
-	{
-		switch (type)
-		{
-			case INITIAL:
-				delete info.initial;
-				break;
-			case MATCH:
-			case SAVE:
-			case MOVE:
-			case ACCEPT:
-			case RULE:
-				break;
-		}
 	}
 };
 
