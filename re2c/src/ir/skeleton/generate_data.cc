@@ -199,16 +199,14 @@ static void write_keys(const path_t &path, const Skeleton &skel,
 	// keys: 1 - scanned length, 2 - matched length, 3 - matched rule, the rest - tags
 	const size_t nkey = 3 + htag - ltag;
 	key_t *keys = new key_t[nkey * width], *k = keys;
-	// 1st path
-	*k++ = to_le(static_cast<key_t>(path.len()));
-	*k++ = to_le(static_cast<key_t>(matched));
-	*k++ = to_le(rule2key<key_t>(rule, skel.defrule));
-	for (size_t t = ltag; t < htag; ++t) {
-		*k++ = to_le(static_cast<key_t>(tags[vers[t]]));
-	}
-	// remaining paths: copy-paste keys from 1st path
-	for (size_t w = 1; w < width; ++w, k += nkey) {
-		memcpy(k, keys, nkey * sizeof(key_t));
+	for (size_t w = 0; w < width; ++w) {
+		*k++ = to_le(static_cast<key_t>(path.len()));
+		*k++ = to_le(static_cast<key_t>(matched));
+		*k++ = to_le(rule2key<key_t>(rule, skel.defrule));
+		const size_t *ts = &tags[w * nver];
+		for (size_t t = ltag; t < htag; ++t) {
+			*k++ = to_le(static_cast<key_t>(ts[vers[t]]));
+		}
 	}
 	// dump to file
 	fwrite(keys, sizeof(key_t), nkey * width, file);
