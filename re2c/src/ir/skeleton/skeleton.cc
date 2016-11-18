@@ -14,6 +14,11 @@ Node::Node()
 	, cmd(NULL)
 {}
 
+static bool same(const tcmd_t &x, const tcmd_t &y)
+{
+	return x.save == y.save && x.copy == y.copy;
+}
+
 void Node::init(const dfa_state_t *s, const charset_t &cs, size_t nil)
 {
 	const size_t nc = cs.size() - 1;
@@ -21,7 +26,7 @@ void Node::init(const dfa_state_t *s, const charset_t &cs, size_t nil)
 
 		size_t j = s->arcs[c];
 		const tcmd_t &t = s->tcmd[c];
-		for (; ++c < nc && s->arcs[c] == j && !s->tcmd[c].save && !s->tcmd[c].copy;);
+		for (; ++c < nc && s->arcs[c] == j && same(s->tcmd[c], t););
 		if (j == dfa_t::NIL) j = nil;
 
 		// all arcs go to default node => this node is final
