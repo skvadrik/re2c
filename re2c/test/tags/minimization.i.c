@@ -54,12 +54,18 @@ yy11:
 yy12:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case 'a':	goto yy13;
+	case 'a':	goto yy15;
 	default:	goto yy10;
 	}
 yy13:
 	++YYCURSOR;
+yy14:
 	p = yyt1;
 	{ p }
+yy15:
+	++YYCURSOR;
+	yyt1 = NULL;
+	yych = *YYCURSOR;
+	goto yy14;
 }
 

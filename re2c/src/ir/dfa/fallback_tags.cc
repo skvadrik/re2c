@@ -72,7 +72,7 @@ void insert_fallback_tags(dfa_t &dfa)
 
 		// 'save' commands are the same as for final transition
 		for (tagsave_t *p = f->save; p; p = p->next) {
-			b->save = pool.make_save(b->save, p->ver);
+			b->save = pool.make_save(b->save, p->ver, p->bottom);
 		}
 
 		// 'copy' commands are split

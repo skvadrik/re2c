@@ -393,42 +393,56 @@ void gen_settags(code_lines_t &code, const DFA &dfa, tcid_t tcid)
 	const tccmd_t &cmd = dfa.tcpool[tcid];
 	const tagsave_t *tsave = cmd.save;
 	const tagcopy_t *tcopy = cmd.copy;
-	std::string line;
 
 	// single tag YYCTXMARKER, backwards compatibility
 	if (tsave && dfa.oldstyle_ctxmarker) {
 		assert(tcopy == NULL);
-		line = generic
+		const std::string s = generic
 			? opts->yybackupctx + " ();\n"
 			: opts->yyctxmarker + " = " + opts->yycursor + ";\n";
-		code.push_back(line);
+		code.push_back(s);
 		return;
 	}
 
 	// copy commands
 	for (const tagcopy_t *p = tcopy; p; p = p->next) {
-		std::string
+		const std::string
 			l = vartag_expr(p->lhs),
-			r = vartag_expr(p->rhs);
-		line = generic
-			? opts->yycopytag + " (" + l + ", " + r + ");\n"
-			: l + " = " + r + ";\n";
-		code.push_back(line);
+			r = vartag_expr(p->rhs),
+			s = generic
+				? opts->yycopytag + " (" + l + ", " + r + ");\n"
+				: l + " = " + r + ";\n";
+		code.push_back(s);
 	}
 
 	// save commands
 	if (generic) {
 		for (const tagsave_t *p = tsave; p; p = p->next) {
-			line = opts->yybackuptag + " (" + vartag_expr(p->ver) + ");\n";
-			code.push_back(line);
+			const std::string
+				v = vartag_expr(p->ver),
+				s = p->bottom
+					? opts->yycopytag + " (" + v + ", " + opts->tags_default + ");\n"
+					: opts->yybackuptag + " (" + v + ");\n";
+			code.push_back(s);
 		}
 	} else if (tsave) {
-		line = "";
+		std::string s1 = "", s2 = "";
 		for (const tagsave_t *p = tsave; p; p = p->next) {
-			line += vartag_expr(p->ver) + " = ";
+			const std::string v = vartag_expr(p->ver);
+			if (p->bottom) {
+				s1 += v + " = ";
+			} else {
+				s2 += v + " = ";
+			}
 		}
-		line += opts->yycursor + ";\n";
-		code.push_back(line);
+		if (!s1.empty()) {
+			s1 += opts->tags_default + ";\n";
+			code.push_back(s1);
+		}
+		if (!s2.empty()) {
+			s2 += opts->yycursor + ";\n";
+			code.push_back(s2);
+		}
 	}
 }
 

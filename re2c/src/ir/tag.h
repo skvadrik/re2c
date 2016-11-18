@@ -11,6 +11,7 @@ namespace re2c
 
 typedef int32_t tagver_t;
 
+static const tagver_t TAGVER_BOTTOM = -1; // default value for tag
 static const tagver_t TAGVER_ZERO = 0; // absense of tag
 
 struct Tag

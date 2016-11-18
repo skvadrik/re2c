@@ -11,16 +11,18 @@ static uint32_t hash_tcmd(const tagsave_t *save, const tagcopy_t *copy);
 void tagsave_t::swap(tagsave_t &x, tagsave_t &y)
 {
 	std::swap(x.ver, y.ver);
+	std::swap(x.bottom, y.bottom);
 }
 
 bool tagsave_t::less(const tagsave_t &x, const tagsave_t &y)
 {
-	return x.ver < y.ver;
+	const tagver_t xv = x.ver, yv = y.ver;
+	return xv < yv || (xv == yv && x.bottom < y.bottom);
 }
 
 bool tagsave_t::equal(const tagsave_t &x, const tagsave_t &y)
 {
-	return x.ver == y.ver;
+	return x.ver == y.ver && x.bottom == y.bottom;
 }
 
 void tagcopy_t::swap(tagcopy_t &x, tagcopy_t &y)
@@ -56,11 +58,12 @@ tcpool_t::tcpool_t()
 	assert(TCID0 == insert(NULL, NULL));
 }
 
-tagsave_t *tcpool_t::make_save(tagsave_t *next, tagver_t ver)
+tagsave_t *tcpool_t::make_save(tagsave_t *next, tagver_t ver, bool bottom)
 {
 	tagsave_t *p = alc.alloct<tagsave_t>(1);
 	p->next = next;
 	p->ver = ver;
+	p->bottom = bottom;
 	return p;
 }
 
@@ -78,8 +81,10 @@ tagsave_t *tcpool_t::conv_to_save(const tagver_t *vers, size_t ntag)
 	tagsave_t *s = NULL;
 	for (size_t t = ntag; t-- > 0;) {
 		const tagver_t v = vers[t];
-		if (v != TAGVER_ZERO) {
-			s = make_save(s, v);
+		if (v == TAGVER_BOTTOM) {
+			s = make_save(s, static_cast<tagver_t>(ntag + t + 1), true);
+		} else if (v != TAGVER_ZERO) {
+			s = make_save(s, v, false);
 		}
 	}
 	return s;
@@ -90,13 +95,13 @@ tcmd_t tcpool_t::conv_to_tcmd(const tagver_t *vers, const tagver_t *fins, size_t
 	tagsave_t *s = NULL;
 	tagcopy_t *c = NULL;
 	for (size_t t = ntag; t-- > 0;) {
-		const tagver_t f = fins[t];
+		const tagver_t v = vers[t], f = fins[t];
 		if (f == TAGVER_ZERO) continue;
 
-		if (vers[t] != TAGVER_ZERO) {
-			s = make_save(s, f);
+		if (v != TAGVER_ZERO) {
+			s = make_save(s, f, v == TAGVER_BOTTOM);
 		} else {
-			c = make_copy(c, f, f + ntag);
+			c = make_copy(c, f, f + static_cast<tagver_t>(ntag));
 		}
 	}
 	return tcmd_t(s, c);
@@ -107,6 +112,7 @@ uint32_t hash_tcmd(const tagsave_t *save, const tagcopy_t *copy)
 	uint32_t h = 0;
 	for (const tagsave_t *p = save; p; p = p->next) {
 		h = hash32(h, &p->ver, sizeof(p->ver));
+		h = hash32(h, &p->bottom, sizeof(p->bottom));
 	}
 	for (const tagcopy_t *p = copy; p; p = p->next) {
 		h = hash32(h, &p->lhs, sizeof(p->lhs));

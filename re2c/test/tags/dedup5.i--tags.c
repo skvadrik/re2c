@@ -15,7 +15,9 @@
 	case 'a':
 		yyt1 = YYCURSOR;
 		goto yy4;
-	case 'b':	goto yy5;
+	case 'b':
+		yyt1 = NULL;
+		goto yy5;
 	default:	goto yy2;
 	}
 yy2:
@@ -63,7 +65,9 @@ yy9:
 	if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 'a':	goto yy14;
+	case 'a':
+		yyt1 = NULL;
+		goto yy14;
 	case 'b':
 		yyt1 = YYCURSOR;
 		goto yy16;

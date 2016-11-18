@@ -14,6 +14,7 @@ struct tagsave_t
 {
 	tagsave_t *next;
 	tagver_t ver;
+	bool bottom;
 
 	static void swap(tagsave_t &x, tagsave_t &y);
 	static bool less(const tagsave_t &x, const tagsave_t &y);
@@ -66,7 +67,7 @@ class tcpool_t
 public:
 	tcpool_t();
 
-	tagsave_t *make_save(tagsave_t *next, tagver_t ver);
+	tagsave_t *make_save(tagsave_t *next, tagver_t ver, bool bottom);
 	tagcopy_t *make_copy(tagcopy_t *next, tagver_t lhs, tagver_t rhs);
 	tagsave_t *conv_to_save(const tagver_t *vers, size_t ntag);
 	tcmd_t conv_to_tcmd(const tagver_t *vers, const tagver_t *fins, size_t ntag);

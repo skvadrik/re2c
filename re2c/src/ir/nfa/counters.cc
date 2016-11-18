@@ -9,10 +9,13 @@ static size_t count(const RegExp *re, size_t &ntags)
 			return 0;
 		case RegExp::SYM:
 			return 1;
-		case RegExp::ALT:
+		case RegExp::ALT: {
+			const size_t n = ntags;
 			return count(re->alt.re1, ntags)
 				+ count(re->alt.re2, ntags)
-				+ 1;
+				+ 1 /* alternative */
+				+ (ntags - n + 1); /* default tags */
+		}
 		case RegExp::CAT:
 			return count(re->cat.re1, ntags)
 				+ count(re->cat.re2, ntags);

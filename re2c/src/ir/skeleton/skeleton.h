@@ -59,6 +59,8 @@ struct Node
 
 struct Skeleton
 {
+	static const size_t DEFTAG;
+
 	const std::string name;
 	const std::string cond;
 	const uint32_t line;

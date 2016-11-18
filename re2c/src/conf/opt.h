@@ -58,6 +58,7 @@ namespace re2c
 	OPT (bool, bUseStateNext, false) \
 	/* tags */ \
 	OPT (bool, tags, false) \
+	OPT (std::string, tags_default, "NULL") \
 	OPT (std::string, tags_prefix, "yyt") \
 	OPT (std::string, tags_expression, "@@") \
 	/* reuse */ \

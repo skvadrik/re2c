@@ -58,6 +58,9 @@ void closure_one(closure_t &clos, Tagpool &tagpool,
 
 	++n->loop;
 	switch (n->type) {
+		case nfa_state_t::NIL:
+			closure_one(clos, tagpool, n->nil.out, tags, badtags);
+			break;
 		case nfa_state_t::ALT:
 			closure_one(clos, tagpool, n->alt.out1, tags, badtags);
 			closure_one(clos, tagpool, n->alt.out2, tags, badtags);
@@ -65,7 +68,9 @@ void closure_one(closure_t &clos, Tagpool &tagpool,
 		case nfa_state_t::TAG: {
 			const size_t t = n->tag.info;
 			const tagver_t old = tags[t];
-			tags[t] = static_cast<tagver_t>(t + 1 + tagpool.ntags);
+			tags[t] = n->tag.bottom
+				? TAGVER_BOTTOM
+				: static_cast<tagver_t>(tagpool.ntags + t + 1);
 			closure_one(clos, tagpool, n->tag.out, tags, badtags);
 			tags[t] = old;
 			break;

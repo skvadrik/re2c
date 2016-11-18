@@ -76,6 +76,7 @@ void opt_t::fix ()
 			state_set = Opt::baseopt.state_set;
 			state_set_arg = Opt::baseopt.state_set_arg;
 			state_set_naked = Opt::baseopt.state_set_naked;
+			tags_default = Opt::baseopt.tags_default;
 			tags_prefix = Opt::baseopt.tags_prefix;
 			tags_expression = Opt::baseopt.tags_expression;
 			yyfilllabel = Opt::baseopt.yyfilllabel;
@@ -157,6 +158,7 @@ void opt_t::fix ()
 	}
 	if (!tags)
 	{
+		tags_default = Opt::baseopt.tags_default;
 		tags_prefix = Opt::baseopt.tags_prefix;
 		tags_expression = Opt::baseopt.tags_expression;
 	}

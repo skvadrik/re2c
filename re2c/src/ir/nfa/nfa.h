@@ -16,7 +16,7 @@ namespace re2c
 
 struct nfa_state_t
 {
-	enum type_t {ALT, RAN, TAG, FIN} type;
+	enum type_t {ALT, RAN, TAG, FIN, NIL} type;
 	union
 	{
 		struct
@@ -33,7 +33,12 @@ struct nfa_state_t
 		{
 			nfa_state_t *out;
 			size_t info;
+			bool bottom;
 		} tag;
+		struct
+		{
+			nfa_state_t *out;
+		} nil;
 	};
 	size_t rule;
 	uint8_t loop;
@@ -54,17 +59,25 @@ struct nfa_state_t
 		rule = r;
 		loop = 0;
 	}
-	void make_tag(size_t r, nfa_state_t *s, size_t i)
+	void make_tag(size_t r, nfa_state_t *s, size_t i, bool bottom)
 	{
 		type = TAG;
 		tag.out = s;
 		tag.info = i;
+		tag.bottom = bottom;
 		rule = r;
 		loop = 0;
 	}
 	void make_fin(size_t r)
 	{
 		type = FIN;
+		rule = r;
+		loop = 0;
+	}
+	void make_nil(size_t r, nfa_state_t *s)
+	{
+		type = NIL;
+		nil.out = s;
 		rule = r;
 		loop = 0;
 	}

@@ -94,7 +94,7 @@ static void apply(size_t *tags, const tcmd_t *cmd, size_t pos)
 {
 	if (!cmd) return;
 	for (const tagsave_t *p = cmd->save; p; p = p->next) {
-		tags[p->ver] = pos;
+		tags[p->ver] = p->bottom ? Skeleton::DEFTAG : pos;
 	}
 	for (const tagcopy_t *p = cmd->copy; p; p = p->next) {
 		tags[p->lhs] = tags[p->rhs];
@@ -158,10 +158,9 @@ static void write_keys(const path_t &path, const Skeleton &skel,
 	// calculate tags: start with default and apply commands step by step
 	const size_t
 		nver = skel.ntagver,
-		ntag = width * nver,
-		NIL = std::numeric_limits<size_t>::max();
+		ntag = width * nver;
 	size_t *tags = new size_t[ntag];
-	std::fill(tags, tags + ntag, NIL);
+	std::fill(tags, tags + ntag, Skeleton::DEFTAG);
 	for (size_t i = 0; i < f; ++i) {
 		Node::wciter_t a(path.arc(skel, i));
 		for (size_t w = 0; w < width; ++a) {
@@ -193,7 +192,7 @@ static void write_keys(const path_t &path, const Skeleton &skel,
 		} else {
 			assert(skel.tags[t].type == Tag::VAR);
 			matched = tags[vers[t]];
-			assert(matched != NIL);
+			assert(matched != Skeleton::DEFTAG);
 		}
 	}
 
