@@ -10,6 +10,7 @@ static void closure_one(closure_t &clos, Tagpool &tagpool, nfa_state_t *n, tagve
 static void check_tags(const Tagpool &tagpool, size_t oldidx, size_t newidx, bool *badtags);
 static bool compare_by_rule(const clos_t &c1, const clos_t &c2);
 static void prune_final_items(closure_t &clos, std::valarray<Rule> &rules);
+static bool not_fin(const clos_t &c);
 static tagsave_t *merge_and_check_tags(const closure_t &clos, Tagpool &tagpool, tcpool_t &tcpool, const std::valarray<Rule> &rules, bool *badtags);
 
 tagsave_t *closure(const closure_t &clos1, closure_t &clos2,
@@ -156,7 +157,7 @@ void prune_final_items(closure_t &clos, std::valarray<Rule> &rules)
 	clositer_t
 		b = clos.begin(),
 		e = clos.end(),
-		f = std::partition(b, e, clos_t::not_final);
+		f = std::partition(b, e, not_fin);
 	if (f != e) {
 		std::partial_sort(f, f, e, compare_by_rule);
 		// mark all rules except the first one as shadowed
@@ -167,6 +168,11 @@ void prune_final_items(closure_t &clos, std::valarray<Rule> &rules)
 		// remove shadowed final items from closure
 		clos.resize(static_cast<size_t>(f - b) + 1);
 	}
+}
+
+bool not_fin(const clos_t &c)
+{
+	return c.state->type != nfa_state_t::FIN;
 }
 
 // WARNING: this function assumes that closure items are grouped bu rule

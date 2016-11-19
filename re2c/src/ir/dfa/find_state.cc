@@ -6,71 +6,96 @@
 namespace re2c
 {
 
-static uint32_t hashclos(const closure_t &clos);
-static bool eqclos(const closure_t *clos1, const closure_t *clos2);
+kernel_t::kernel_t(size_t n)
+	: size(n)
+	, state(new nfa_state_t*[size])
+	, tlook(new size_t[size])
+{}
 
-uint32_t hashclos(const closure_t &clos)
+kernel_t *kernel_t::copy(const kernel_t &k)
 {
-	uint32_t h = static_cast<uint32_t>(clos.size()); // seed
-	for (cclositer_t c = clos.begin(); c != clos.end(); ++c) {
-		h = hash32(h, &c->state, sizeof(c->state));
-		h = hash32(h, &c->tagidx, sizeof(c->tagidx));
-	}
-	return h;
+	const size_t n = k.size;
+	kernel_t *kcopy = new kernel_t(n);
+	memcpy(kcopy->state, k.state, n * sizeof(void*));
+	memcpy(kcopy->tlook, k.tlook, n * sizeof(size_t));
+	return kcopy;
 }
 
-bool eqclos(const closure_t *clos1, const closure_t *clos2)
+kernel_t::~kernel_t()
 {
-	if (clos1->size() != clos2->size()) {
-		return false;
-	}
-	for (cclositer_t c1 = clos1->begin(), c2 = clos2->begin();
-		c1 != clos1->end(); ++c1, ++c2) {
-		if (c1->state != c2->state
-			|| c1->tagidx != c2->tagidx) {
-			return false;
-		}
-	}
-	return true;
+	delete[] state;
+	delete[] tlook;
 }
 
-clospool_t::clospool_t(): lookup() {}
-
-clospool_t::~clospool_t()
+struct kernel_eq_t
 {
+	bool operator()(const kernel_t *x, const kernel_t *y) const
+	{
+		return x->size == y->size
+			&& memcmp(x->state, y->state, x->size * sizeof(void*)) == 0
+			&& memcmp(x->tlook, y->tlook, x->size * sizeof(size_t)) == 0;
+	}
+};
+
+kernels_t::kernels_t()
+	: lookup()
+	, maxsize(256) // usually ranges from one to some twenty
+	, buffer(new kernel_t(maxsize))
+{}
+
+kernels_t::~kernels_t()
+{
+	delete buffer;
+
 	const size_t n = lookup.size();
 	for (size_t i = 0; i < n; ++i) {
 		delete lookup[i];
 	}
 }
 
-size_t clospool_t::size() const
+size_t kernels_t::size() const
 {
 	return lookup.size();
 }
 
-const closure_t& clospool_t::operator[](size_t idx) const
+const kernel_t *kernels_t::operator[](size_t idx) const
 {
-	return *lookup[idx];
+	return lookup[idx];
 }
 
-size_t clospool_t::insert(const closure_t &clos)
+size_t kernels_t::insert(const closure_t &clos)
 {
+	const size_t nkern = clos.size();
+
 	// empty closure corresponds to default state
-	if (clos.empty()) {
-		return dfa_t::NIL;
+	if (nkern == 0) return dfa_t::NIL;
+
+	// resize buffer if closure is too large
+	if (maxsize < nkern) {
+		maxsize = nkern * 2; // in advance
+		delete buffer;
+		buffer = new kernel_t(maxsize);
 	}
 
-	const uint32_t hash = hashclos(clos);
-
-	// try to find an identical DFA state
-	size_t idx = lookup.find_with(hash, &clos, eqclos);
-	if (idx != closlookup_t::NIL) {
-		return idx;
+	// copy closure to buffer kernel
+	buffer->size = nkern;
+	for (size_t i = 0; i < nkern; ++i) {
+		const clos_t &c = clos[i];
+		buffer->state[i] = c.state;
+		buffer->tlook[i] = c.tagidx;
 	}
 
-	// otherwise add a new state
-	return lookup.push(hash, new closure_t(clos));
+	// get kernel hash
+	uint32_t hash = static_cast<uint32_t>(nkern); // seed
+	hash = hash32(hash, buffer->state, nkern * sizeof(void*));
+	hash = hash32(hash, buffer->tlook, nkern * sizeof(size_t));
+
+	// try to find identical kernel
+	size_t idx = lookup.find_with(hash, buffer, kernel_eq_t());
+	if (idx != index_t::NIL) return idx;
+
+	// otherwise add new kernel
+	return lookup.push(hash, kernel_t::copy(*buffer));
 }
 
 } // namespace re2c

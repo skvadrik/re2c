@@ -16,8 +16,6 @@ struct clos_t
 
 	inline clos_t();
 	inline clos_t(nfa_state_t *s, size_t i);
-	static inline bool final(const clos_t &c);
-	static inline bool not_final(const clos_t &c);
 };
 
 typedef std::vector<clos_t> closure_t;
@@ -37,16 +35,6 @@ clos_t::clos_t(nfa_state_t *s, size_t i)
 	: state(s)
 	, tagidx(i)
 {}
-
-bool clos_t::final(const clos_t &c)
-{
-	return c.state->type == nfa_state_t::FIN;
-}
-
-bool clos_t::not_final(const clos_t &c)
-{
-	return !clos_t::final(c);
-}
 
 } // namespace re2c
 

@@ -1,4 +1,3 @@
-#include <algorithm>
 #include <limits>
 #include <vector>
 
@@ -16,7 +15,7 @@ namespace re2c
 
 static tagver_t vartag_maxver(const std::valarray<Tag> &tags);
 static nfa_state_t *transition(nfa_state_t *state, uint32_t symbol);
-static void reach(const closure_t &clos1, closure_t &clos2, uint32_t symbol);
+static void reach(const kernel_t *kernel, closure_t &clos, uint32_t symbol);
 static void warn_bad_tags(const bool *badtags, const std::valarray<Tag> &tags,
 	const std::valarray<Rule> &rules, const std::string &cond);
 
@@ -35,15 +34,13 @@ nfa_state_t *transition(nfa_state_t *state, uint32_t symbol)
 	return NULL;
 }
 
-void reach(const closure_t &clos1, closure_t &clos2, uint32_t symbol)
+void reach(const kernel_t *kernel, closure_t &clos, uint32_t symbol)
 {
-	clos2.clear();
-	for (cclositer_t c = clos1.begin(); c != clos1.end(); ++c) {
-		nfa_state_t
-			*s1 = c->state,
-			*s2 = transition(s1, symbol);
-		if (s2) {
-			clos2.push_back(clos_t(s2, c->tagidx));
+	clos.clear();
+	for (size_t i = 0; i < kernel->size; ++i) {
+		nfa_state_t *s = transition(kernel->state[i], symbol);
+		if (s) {
+			clos.push_back(clos_t(s, kernel->tlook[i]));
 		}
 	}
 }
@@ -60,18 +57,18 @@ dfa_t::dfa_t(const nfa_t &nfa,
 {
 	const size_t ntag = tags.size();
 	Tagpool tagpool(ntag);
-	clospool_t clospool;
+	kernels_t kernels;
 	closure_t clos1, clos2;
 	bool *badtags = new bool[ntag]();
 
 	maxtagver = vartag_maxver(tags);
 	clos1.push_back(clos_t(nfa.root, ZERO_TAGS));
 	closure(clos1, clos2, tagpool, tcpool, rules, badtags);
-	clospool.insert(clos2);
+	kernels.insert(clos2);
 
-	// closures are in sync with DFA states
-	for (size_t i = 0; i < clospool.size(); ++i) {
-		const closure_t &clos0 = clospool[i];
+	// closure kernels are in sync with DFA states
+	for (size_t i = 0; i < kernels.size(); ++i) {
+		const kernel_t *kernel = kernels[i];
 
 		// create new DFA state
 		dfa_state_t *s = new dfa_state_t(nchars);
@@ -79,20 +76,22 @@ dfa_t::dfa_t(const nfa_t &nfa,
 
 		// check if the new state is final
 		// see note [at most one final item per closure]
-		cclositer_t e = clos0.end(),
-			f = std::find_if(clos0.begin(), e, clos_t::final);
-		if (f != e) {
-			s->rule = f->state->rule;
-			s->tcmd[nchars] = tcpool.conv_to_tcmd(tagpool[f->tagidx], rules[s->rule].tags, ntag);
+		for (size_t i = 0; i < kernel->size; ++i) {
+			const nfa_state_t *f = kernel->state[i];
+			if (f->type == nfa_state_t::FIN) {
+				s->rule = f->rule;
+				s->tcmd[nchars] = tcpool.conv_to_tcmd(tagpool[kernel->tlook[i]], rules[s->rule].tags, ntag);
+				break;
+			}
 		}
 
 		// for each alphabet symbol, build tagged epsilon-closure
 		// of all NFA states reachable on that symbol, then try to
 		// find identical closure or add the new one
 		for (size_t c = 0; c < nchars; ++c) {
-			reach(clos0, clos1, charset[c]);
+			reach(kernel, clos1, charset[c]);
 			s->tcmd[c].save = closure(clos1, clos2, tagpool, tcpool, rules, badtags);
-			s->arcs[c] = clospool.insert(clos2);
+			s->arcs[c] = kernels.insert(clos2);
 		}
 	}
 
