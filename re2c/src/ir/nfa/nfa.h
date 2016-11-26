@@ -99,7 +99,6 @@ struct nfa_t
 };
 
 size_t counters(const std::vector<const RegExpRule*> &regexps, size_t &ntags);
-void make_tags(const std::vector<const RegExpRule*> &regexps, std::valarray<Tag> &tags);
 void regexps2nfa(const std::vector<const RegExpRule*> &regexps, nfa_t &nfa);
 bool nullable_rule(const RegExpRule *rule);
 void init_rules(const std::vector<const RegExpRule*> &regexps, std::valarray<Rule> &rules, const std::valarray<Tag> &tags);

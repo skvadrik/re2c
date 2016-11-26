@@ -90,7 +90,6 @@ SRC = \
 	src/conf/warn.cc \
 	src/ir/nfa/counters.cc \
 	src/ir/nfa/init_rules.cc \
-	src/ir/nfa/make_tags.cc \
 	src/ir/nfa/nfa.cc \
 	src/ir/nfa/regexps2nfa.cc \
 	src/ir/adfa/adfa.cc \

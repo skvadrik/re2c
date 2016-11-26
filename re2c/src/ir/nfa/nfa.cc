@@ -13,10 +13,8 @@ nfa_t::nfa_t(const std::vector<const RegExpRule*> &regexps)
 	size_t ntags = 0;
 	max_size = counters(regexps, ntags);
 
-	tags = new std::valarray<Tag>(ntags);
-	make_tags(regexps, *tags);
-
 	states = new nfa_state_t[max_size];
+	tags = new std::valarray<Tag>(ntags);
 	regexps2nfa(regexps, *this);
 
 	init_rules(regexps, rules, *tags);
