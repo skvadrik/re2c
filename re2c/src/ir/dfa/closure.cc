@@ -183,25 +183,25 @@ tagsave_t *merge_and_check_tags(const closure_t &clos, Tagpool &tagpool,
 	tagver_t *tags = tagpool.buffer1;
 	std::fill(tags, tags + ntag, TAGVER_ZERO);
 
-	size_t r = 0, lt = 0, ht;
+	size_t r = 0;
 	for (cclositer_t c = clos.begin(), e = clos.end(); c != e;) {
 		const tagver_t *x = tagpool[c->tagidx];
 
 		// find next rule that occurs in closure
-		for (; r < c->state->rule; lt = rules[r].htag, ++r);
-		ht = rules[r].htag;
+		for (; r < c->state->rule; ++r);
+		const Rule &rule = rules[r];
 
 		// merge tags of the 1st item belonging to this rule
-		for (size_t t = lt; t < ht; ++t) {
+		for (size_t t = rule.lvar; t < rule.hvar; ++t) {
 			tags[t] = x[t];
 		}
 
-		// check the remaining items with this for tag nondeterminism:
+		// check the remaining items for tag nondeterminism:
 		// if some tag differs from that of the 1st item, then it is
 		// nondeterministic (don't merge it, only note the conflict)
 		for (++c; c != e && c->state->rule == r; ++c) {
 			const tagver_t *y = tagpool[c->tagidx];
-			for (size_t t = lt; t < ht; ++t) {
+			for (size_t t = rule.lvar; t < rule.hvar; ++t) {
 				badtags[t] |= y[t] != x[t];
 			}
 		}

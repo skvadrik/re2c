@@ -72,7 +72,8 @@ struct Skeleton
 	size_t defrule;
 	size_t ntagver;
 	const std::valarray<Rule> &rules;
-	const std::valarray<Tag> &tags;
+	const std::vector<VarTag> &vartags;
+	const tagver_t *finvers;
 
 	Skeleton(const dfa_t &dfa, const charset_t &cs, size_t def,
 		const std::string &dfa_name, const std::string &dfa_cond,

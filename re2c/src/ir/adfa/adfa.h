@@ -67,7 +67,9 @@ struct DFA
 	uint32_t nStates;
 	State * head;
 	std::valarray<Rule> &rules;
-	std::valarray<Tag> &tags;
+	std::vector<VarTag> &vartags;
+	std::vector<FixTag> &fixtags;
+	const tagver_t *finvers;
 	tcpool_t &tcpool;
 	size_t max_fill;
 	bool need_backup;

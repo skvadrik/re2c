@@ -1,34 +1,10 @@
 #include <limits>
 
-#include "src/ir/rule.h"
 #include "src/ir/tag.h"
 
 namespace re2c
 {
 
-const size_t Tag::NONE = std::numeric_limits<size_t>::max();
-
-Tag::Tag()
-	: type(VAR)
-	, rule(Rule::NONE)
-	, name(NULL)
-	, fix()
-{}
-
-void init_var_tag(Tag &tag, size_t r, const std::string *n)
-{
-	tag.type = Tag::VAR;
-	tag.rule = r;
-	tag.name = n;
-}
-
-void init_fix_tag(Tag &tag, size_t r, const std::string *n, size_t b, size_t d)
-{
-	tag.type = Tag::FIX;
-	tag.rule = r;
-	tag.name = n;
-	tag.fix.base = b;
-	tag.fix.dist = d;
-}
+const size_t FixTag::RIGHTMOST = std::numeric_limits<size_t>::max();
 
 } // namespace re2c

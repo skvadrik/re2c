@@ -354,17 +354,18 @@ void emit_epilog(OutputFile &o, const std::set<std::string> &names)
 void emit_action(OutputFile &o, uint32_t ind, const DFA &dfa, size_t rid)
 {
 	const std::string &name = dfa.name;
-	const Rule &rule = dfa.rules[rid];
-	const size_t ltag = rule.ltag, htag = rule.htag,
+	const Rule &r = dfa.rules[rid];
+	const size_t
+		ntag = 3 + r.hvar - r.lvar - (r.tvar != r.hvar),
 		rkey = rule2key(rid, dfa.key_size, dfa.def_rule);
 
-	o.wind(ind).ws("status = check_key_count_").wstring(name)
-		.ws("(keys_count, i, ").wu64(3 + htag - ltag).ws(")\n")
-		.wind(ind + 1).ws(" || action_").wstring(name)
+	o.wind(ind).ws("status = check_key_count_").wstring(name).ws("(keys_count, i, ")
+		.wu64(ntag).ws(")\n").wind(ind + 1).ws(" || action_").wstring(name)
 		.ws("(&i, keys, input, token, &cursor, ").wu64(rkey).ws(")");
 
-	for (size_t t = ltag; t < htag; ++t) {
-		const std::string &tag = *dfa.tags[t].name;
+	for (size_t t = r.lvar; t < r.hvar; ++t) {
+		if (t == r.tvar) continue;
+		const std::string &tag = *dfa.vartags[t].name;
 		o.ws("\n").wind(ind + 1).ws(" || check_tag_").wstring(name)
 			.ws("(&i, keys, ").wstring(tag).ws(", input, token, \"")
 			.wstring(tag).ws("\")");

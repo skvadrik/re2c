@@ -7,9 +7,8 @@ namespace re2c
 
 void cfg_t::liveness_analysis(const cfg_t &cfg, bool *live)
 {
-	const size_t
-		nver = static_cast<size_t>(cfg.dfa.maxtagver) + 1,
-		ntag = cfg.dfa.tags.size();
+	const size_t nver = static_cast<size_t>(cfg.dfa.maxtagver) + 1;
+	const tagver_t *fins = cfg.dfa.finvers;
 	bool *buf1 = new bool[nver];
 	bool *buf2 = new bool[nver];
 
@@ -29,16 +28,14 @@ void cfg_t::liveness_analysis(const cfg_t &cfg, bool *live)
 	memset(live, 0, cfg.nbbfin * nver * sizeof(bool));
 	for (cfg_ix_t i = cfg.nbbarc; i < cfg.nbbfin; ++i) {
 		const cfg_bb_t *b = cfg.bblocks + i;
+		const Rule *r = b->rule;
 		bool *l = &live[i * nver];
 
 		// all final bblocks have USE tags, but no successors
-		assert(b->use && b->succb == b->succe);
+		assert(r && b->succb == b->succe);
 
-		for (size_t t = 0; t < ntag; ++t) {
-			const tagver_t u = b->use[t];
-			if (u != TAGVER_ZERO) {
-				l[u] = true;
-			}
+		for (size_t t = r->lvar; t < r->hvar; ++t) {
+			l[fins[t]] = true;
 		}
 	}
 
@@ -50,7 +47,7 @@ void cfg_t::liveness_analysis(const cfg_t &cfg, bool *live)
 			bool *old = &live[i * nver];
 
 			// transition bblocks have no USE tags
-			assert(!b->use);
+			assert(!b->rule);
 
 			memcpy(buf1, old, nver * sizeof(bool));
 			for (cfg_ix_t *j = b->succb; j < b->succe; ++j) {
@@ -98,16 +95,14 @@ void cfg_t::liveness_analysis(const cfg_t &cfg, bool *live)
 	 */
 	for (cfg_ix_t i = cfg.nbbfin; i < cfg.nbbfall; ++i) {
 		const cfg_bb_t *b = cfg.bblocks + i;
+		const Rule *r = b->rule;
 
 		// all fallback bblocks have USE tags
-		assert(b->use);
+		assert(r);
 
 		memset(buf1, 0, nver * sizeof(bool));
-		for (size_t t = 0; t < ntag; ++t) {
-			const tagver_t u = b->use[t];
-			if (u != TAGVER_ZERO) {
-				buf1[u] = true;
-			}
+		for (size_t t = r->lvar; t < r->hvar; ++t) {
+			buf1[fins[t]] = true;
 		}
 		for (const tagsave_t *p = b->cmd->save; p; p = p->next) {
 			buf1[p->ver] = false;

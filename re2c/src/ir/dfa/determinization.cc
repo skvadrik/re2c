@@ -13,10 +13,9 @@
 namespace re2c
 {
 
-static tagver_t vartag_maxver(const std::valarray<Tag> &tags);
 static nfa_state_t *transition(nfa_state_t *state, uint32_t symbol);
 static void reach(const kernel_t *kernel, closure_t &clos, uint32_t symbol);
-static void warn_bad_tags(const bool *badtags, const std::valarray<Tag> &tags,
+static void warn_bad_tags(const bool *badtags, const std::vector<VarTag> &tags,
 	const std::valarray<Rule> &rules, const std::string &cond);
 
 const size_t dfa_t::NIL = std::numeric_limits<size_t>::max();
@@ -51,17 +50,23 @@ dfa_t::dfa_t(const nfa_t &nfa,
 	: states()
 	, nchars(charset.size() - 1) // (n + 1) bounds for n ranges
 	, rules(nfa.rules)
-	, tags(*nfa.tags)
+	, vartags(nfa.vartags)
+	, fixtags(nfa.fixtags)
+	, finvers(NULL)
 	, tcpool(*new tcpool_t)
 	, maxtagver(0)
 {
-	const size_t ntag = tags.size();
+	const size_t ntag = vartags.size();
 	Tagpool tagpool(ntag);
 	kernels_t kernels;
 	closure_t clos1, clos2;
 	bool *badtags = new bool[ntag]();
 
-	maxtagver = vartag_maxver(tags);
+	finvers = new tagver_t[ntag];
+	for (size_t t = 0; t < ntag; ++t) {
+		finvers[t] = ++maxtagver;
+	}
+	maxtagver *= 2;
 	clos1.push_back(clos_t(nfa.root, ZERO_TAGS));
 	closure(clos1, clos2, tagpool, tcpool, rules, badtags);
 	kernels.insert(clos2);
@@ -80,7 +85,9 @@ dfa_t::dfa_t(const nfa_t &nfa,
 			const nfa_state_t *f = kernel->state[i];
 			if (f->type == nfa_state_t::FIN) {
 				s->rule = f->rule;
-				s->tcmd[nchars] = tcpool.conv_to_tcmd(tagpool[kernel->tlook[i]], rules[s->rule].tags, ntag);
+				const Rule &rule = rules[s->rule];
+				s->tcmd[nchars] = tcpool.conv_to_tcmd(tagpool[kernel->tlook[i]],
+					finvers, rule.lvar, rule.hvar, ntag);
 				break;
 			}
 		}
@@ -95,30 +102,19 @@ dfa_t::dfa_t(const nfa_t &nfa,
 		}
 	}
 
-	warn_bad_tags(badtags, tags, rules, cond);
+	warn_bad_tags(badtags, vartags, rules, cond);
 	delete[] badtags;
 }
 
-tagver_t vartag_maxver(const std::valarray<Tag> &tags)
-{
-	const size_t ntag = tags.size();
-	for (size_t t = ntag; t > 0; --t) {
-		if (tags[t - 1].type == Tag::VAR) {
-			return static_cast<tagver_t>(ntag + t);
-		}
-	}
-	return 0;
-}
-
 void warn_bad_tags(const bool *badtags,
-	const std::valarray<Tag> &tags,
+	const std::vector<VarTag> &tags,
 	const std::valarray<Rule> &rules,
 	const std::string &cond)
 {
 	const size_t ntags = tags.size();
 	for (size_t i = 0; i < ntags; ++i) {
 		if (badtags[i]) {
-			const Tag &tag = tags[i];
+			const VarTag &tag = tags[i];
 			const uint32_t line = rules[tag.rule].info->loc.line;
 			warn.nondeterministic_tags(line, cond, tag.name);
 		}

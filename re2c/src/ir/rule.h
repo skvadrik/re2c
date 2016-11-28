@@ -34,26 +34,22 @@ struct Rule
 	static const size_t NONE;
 
 	const RuleInfo *info;
-
-	size_t ltag;
-	size_t htag;
-	size_t trail;
-	tagver_t *tags;
 	std::set<uint32_t> shadow;
 
-	Rule()
-		: info(NULL)
-		, ltag(0)
-		, htag(0)
-		, trail(Tag::NONE)
-		, tags(NULL)
-		, shadow()
-	{}
-	~Rule()
-	{
-		delete[] tags;
-	}
+	// variable tags
+	size_t lvar; // first
+	size_t hvar; // next to last
+	size_t tvar; // trailing context
 
+	// fixed tags
+	size_t lfix; // first
+	size_t hfix; // next to last
+	size_t tfix; // trailing context
+
+	Rule(): info(NULL), shadow(),
+		lvar(0), hvar(0), tvar(0),
+		lfix(0), hfix(0), tfix(0)
+	{}
 	FORBID_COPY(Rule);
 };
 

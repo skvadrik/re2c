@@ -65,7 +65,8 @@ Skeleton::Skeleton(
 	, defrule(def)
 	, ntagver(static_cast<size_t>(dfa.maxtagver) + 1)
 	, rules(dfa.rules)
-	, tags(dfa.tags)
+	, vartags(dfa.vartags)
+	, finvers(dfa.finvers)
 {
 	// initialize nodes
 	const size_t nil = nodes_count - 1;

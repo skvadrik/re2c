@@ -79,10 +79,10 @@ yy12:
 	goto yy15;
 yy13:
 	YYCURSOR = yyt1;
-	p3 = yyt1 - 1;
 	p2 = yyt2;
-	p1 = yyt2 - 1;
 	p0 = yyt3;
+	p3 = yyt1 - 1;
+	p1 = yyt2 - 1;
 	{
             printf("'%.*s', '%.*s', '%.*s', '%.*s', '%s'\n",
                 p1 - p0, p0,

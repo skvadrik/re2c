@@ -449,16 +449,24 @@ void gen_settags(code_lines_t &code, const DFA &dfa, tcid_t tcid)
 void gen_fintags(OutputFile &o, uint32_t ind, const DFA &dfa, const Rule &rule)
 {
 	const bool generic = opts->input_api.type() == InputAPI::CUSTOM;
-	const std::valarray<Tag> &tags = dfa.tags;
-	const tagver_t *vers = rule.tags;
+	const std::vector<VarTag> &vartags = dfa.vartags;
+	const std::vector<FixTag> &fixtags = dfa.fixtags;
+	const tagver_t *fins = dfa.finvers;
 
-	// trailing context
-	if (rule.trail != Tag::NONE) {
-		const Tag &tag = tags[rule.trail];
+	// variable tags
+	for (size_t t = rule.lvar; t < rule.hvar; ++t) {
+		const VarTag &tag = vartags[t];
 		o.wind(ind);
-		if (tag.type == Tag::FIX) {
-			assert(!generic);
-			o.wstring(opts->yycursor).ws(" -= ").wu64(tag.fix.dist);
+		if (tag.name) {
+			const std::string
+				name = *tag.name,
+				expr = vartag_expr(fins[t]);
+			if (generic) {
+				o.wstring(opts->yycopytag).ws(" (").wstring(name)
+					.ws(", ").wstring(expr).ws(")");
+			} else {
+				o.wstring(name).ws(" = ").wstring(expr);
+			}
 		} else if (dfa.oldstyle_ctxmarker) {
 			if (generic) {
 				o.wstring(opts->yyrestorectx).ws(" ()");
@@ -466,7 +474,7 @@ void gen_fintags(OutputFile &o, uint32_t ind, const DFA &dfa, const Rule &rule)
 				o.wstring(opts->yycursor).ws(" = ").wstring(opts->yyctxmarker);
 			}
 		} else {
-			const std::string expr = vartag_expr(vers[rule.trail]);
+			const std::string expr = vartag_expr(fins[t]);
 			if (generic) {
 				o.wstring(opts->yyrestoretag).ws(" (").wstring(expr).ws(")");
 			} else {
@@ -476,34 +484,22 @@ void gen_fintags(OutputFile &o, uint32_t ind, const DFA &dfa, const Rule &rule)
 		o.ws(";\n");
 	}
 
-	// named tags
-	for (size_t t = rule.ltag; t < rule.htag; ++t) {
-		const Tag &tag = tags[t];
-
-		// fixed
-		if (tag.type == Tag::FIX) {
-			assert(!generic);
-			o.wind(ind).wstring(*tag.name).ws(" = ");
-			if (tag.fix.base == Tag::NONE) {
+	// fixed tags
+	for (size_t t = rule.lfix; t < rule.hfix; ++t) {
+		assert(!generic);
+		const FixTag &tag = fixtags[t];
+		o.wind(ind);
+		if (tag.name) {
+			o.wstring(*tag.name).ws(" = ");
+			if (tag.base == FixTag::RIGHTMOST) {
 				// optimize '(YYCTXMARKER + ((YYCURSOR - YCTXMARKER) - tag))'
 				// to       '(YYCURSOR - tag)'
-				o.wstring(opts->yycursor).ws(" - ").wu64(tag.fix.dist);
+				o.wstring(opts->yycursor).ws(" - ").wu64(tag.dist);
 			} else {
-				const tagver_t v = vers[tag.fix.base];
-				o.wstring(vartag_expr(v)).ws(" - ").wu64(tag.fix.dist);
+				o.wstring(vartag_expr(fins[tag.base])).ws(" - ").wu64(tag.dist);
 			}
-			o.ws(";\n");
-			continue;
-		}
-
-		// variable
-		const std::string expr = vartag_expr(vers[t]);
-		o.wind(ind);
-		if (generic) {
-			o.wstring(opts->yycopytag).ws(" (").wstring(*tag.name)
-				.ws(", ").wstring(expr).ws(")");
 		} else {
-			o.wstring(*tag.name).ws(" = ").wstring(expr);
+			o.wstring(opts->yycursor).ws(" -= ").wu64(tag.dist);
 		}
 		o.ws(";\n");
 	}

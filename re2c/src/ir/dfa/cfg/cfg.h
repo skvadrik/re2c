@@ -13,7 +13,7 @@ struct cfg_bb_t
 	cfg_ix_t *succb;
 	cfg_ix_t *succe;
 	tcmd_t *cmd;
-	tagver_t *use;
+	const Rule *rule;
 };
 
 // control flow graph

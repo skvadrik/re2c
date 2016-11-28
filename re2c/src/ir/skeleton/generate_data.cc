@@ -176,28 +176,26 @@ static void write_keys(const path_t &path, const Skeleton &skel,
 	}
 
 	const size_t rule = path.node(skel, f).rule;
-	size_t matched = 0, ltag = 0, htag = 0;
-	const tagver_t *vers = NULL;
+	size_t matched = 0, ltag = 0, htag = 0, trail = 0;
 	if (rule != Rule::NONE) {
 
 		const Rule &r = skel.rules[rule];
-		ltag = r.ltag;
-		htag = r.htag;
-		vers = r.tags;
+		ltag = r.lvar;
+		htag = r.hvar;
+		trail = r.tvar;
 
 		// matched length might depend on tag values
-		const size_t t = r.trail;
-		if (t == Tag::NONE) {
+		if (trail == htag) {
 			matched = f;
 		} else {
-			assert(skel.tags[t].type == Tag::VAR);
-			matched = tags[vers[t]];
+			assert(r.tfix == r.hfix); // no fixed trailing context
+			matched = tags[skel.finvers[trail]];
 			assert(matched != Skeleton::DEFTAG);
 		}
 	}
 
 	// keys: 1 - scanned length, 2 - matched length, 3 - matched rule, the rest - tags
-	const size_t nkey = 3 + htag - ltag;
+	const size_t nkey = 3 + htag - ltag - (trail != htag);
 	key_t *keys = new key_t[nkey * width], *k = keys;
 	for (size_t w = 0; w < width; ++w) {
 		*k++ = to_le(static_cast<key_t>(path.len()));
@@ -205,7 +203,8 @@ static void write_keys(const path_t &path, const Skeleton &skel,
 		*k++ = to_le(rule2key<key_t>(rule, skel.defrule));
 		const size_t *ts = &tags[w * nver];
 		for (size_t t = ltag; t < htag; ++t) {
-			*k++ = to_le(static_cast<key_t>(ts[vers[t]]));
+			if (t == trail) continue;
+			*k++ = to_le(static_cast<key_t>(ts[skel.finvers[t]]));
 		}
 	}
 	// dump to file

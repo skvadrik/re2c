@@ -9,8 +9,8 @@ void cfg_t::renaming(cfg_t &cfg, const tagver_t *ver2new, tagver_t maxver)
 	if (oldmax == maxver) return;
 	oldmax = maxver;
 
-	cfg_bb_t *b = cfg.bblocks, *e = b + cfg.nbbfall;
-	for (; b < e; ++b) {
+	cfg_bb_t *b = cfg.bblocks, *be = b + cfg.nbbfall;
+	for (; b < be; ++b) {
 
 		// tag versions in save commands
 		for (tagsave_t *p = b->cmd->save; p; p = p->next) {
@@ -29,16 +29,10 @@ void cfg_t::renaming(cfg_t &cfg, const tagver_t *ver2new, tagver_t maxver)
 		}
 	}
 
-	// final tag versions in rules
-	std::valarray<Rule> &rules = cfg.dfa.rules;
-	for (size_t r = 0, t = 0; r < rules.size(); ++r) {
-		Rule &rule = rules[r];
-		for (; t < rule.htag; ++t) {
-			tagver_t &v = rule.tags[t];
-			if (v != TAGVER_ZERO) {
-				v = ver2new[v];
-			}
-		}
+	// final tag versions
+	tagver_t *f = cfg.dfa.finvers, *fe = f + cfg.dfa.vartags.size();
+	for (; f < fe; ++f) {
+		*f = ver2new[*f];
 	}
 }
 

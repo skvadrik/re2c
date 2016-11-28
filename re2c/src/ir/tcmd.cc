@@ -90,14 +90,13 @@ tagsave_t *tcpool_t::conv_to_save(const tagver_t *vers, size_t ntag)
 	return s;
 }
 
-tcmd_t tcpool_t::conv_to_tcmd(const tagver_t *vers, const tagver_t *fins, size_t ntag)
+tcmd_t tcpool_t::conv_to_tcmd(const tagver_t *vers, const tagver_t *fins,
+	size_t ltag, size_t htag, size_t ntag)
 {
 	tagsave_t *s = NULL;
 	tagcopy_t *c = NULL;
-	for (size_t t = ntag; t-- > 0;) {
+	for (size_t t = ltag; t < htag; ++t) {
 		const tagver_t v = vers[t], f = fins[t];
-		if (f == TAGVER_ZERO) continue;
-
 		if (v != TAGVER_ZERO) {
 			s = make_save(s, f, v == TAGVER_BOTTOM);
 		} else {

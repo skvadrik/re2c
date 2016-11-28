@@ -36,7 +36,9 @@ DFA::DFA
 	, nStates(0)
 	, head(NULL)
 	, rules(dfa.rules)
-	, tags(dfa.tags)
+	, vartags(dfa.vartags)
+	, fixtags(dfa.fixtags)
+	, finvers(dfa.finvers)
 	, tcpool(dfa.tcpool)
 	, max_fill (0)
 	, need_backup (false)
@@ -100,7 +102,9 @@ DFA::~DFA()
 	}
 
 	delete &rules;
-	delete &tags;
+	delete &vartags;
+	delete &fixtags;
+	delete[] finvers;
 	delete &tcpool;
 }
 

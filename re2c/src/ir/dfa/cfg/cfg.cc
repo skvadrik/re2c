@@ -7,7 +7,7 @@ namespace re2c
 
 static void map_arcs_to_bblocks(const dfa_t &dfa, cfg_ix_t *arc2bb, cfg_ix_t &nbbarc, cfg_ix_t &nbbfin, cfg_ix_t &nbbfall);
 static cfg_bb_t *create_bblocks(const dfa_t &dfa, const cfg_ix_t *arc2bb, cfg_ix_t nbbfin, cfg_ix_t nbbfall);
-static void basic_block(cfg_bb_t *bb, const cfg_ix_t *succb, const cfg_ix_t *succe, tcmd_t *cmd, tagver_t *use);
+static void basic_block(cfg_bb_t *bb, const cfg_ix_t *succb, const cfg_ix_t *succe, tcmd_t *cmd, const Rule *rule);
 static void successors(const dfa_t &dfa, const cfg_ix_t *arc2bb, bool *been, cfg_ix_t *&succ, size_t x);
 static void fallback(const dfa_t &dfa, const cfg_ix_t *arc2bb, bool *been, cfg_ix_t *&succ, size_t x);
 
@@ -97,7 +97,7 @@ cfg_bb_t *create_bblocks(const dfa_t &dfa, const cfg_ix_t *arc2bb,
 	for (size_t i = 0; i < nstate; ++i) {
 		if (*a2b++ != 0) {
 			const dfa_state_t *s = dfa.states[i];
-			basic_block(b++, NULL, NULL, &s->tcmd[nsym], dfa.rules[s->rule].tags);
+			basic_block(b++, NULL, NULL, &s->tcmd[nsym], &dfa.rules[s->rule]);
 		}
 	}
 
@@ -107,7 +107,7 @@ cfg_bb_t *create_bblocks(const dfa_t &dfa, const cfg_ix_t *arc2bb,
 			const dfa_state_t *s = dfa.states[i];
 			std::fill(been, been + nstate, false);
 			fallback(dfa, arc2bb, been, succe = succb, i);
-			basic_block(b++, succb, succe, &s->tcmd[nsym + 1], dfa.rules[s->rule].tags);
+			basic_block(b++, succb, succe, &s->tcmd[nsym + 1], &dfa.rules[s->rule]);
 		}
 	}
 
@@ -117,7 +117,7 @@ cfg_bb_t *create_bblocks(const dfa_t &dfa, const cfg_ix_t *arc2bb,
 }
 
 void basic_block(cfg_bb_t *bb, const cfg_ix_t *succb,
-	const cfg_ix_t *succe, tcmd_t *cmd, tagver_t *use)
+	const cfg_ix_t *succe, tcmd_t *cmd, const Rule *rule)
 {
 	const size_t n = static_cast<size_t>(succe - succb);
 	cfg_ix_t *s = new cfg_ix_t[n];
@@ -126,7 +126,7 @@ void basic_block(cfg_bb_t *bb, const cfg_ix_t *succb,
 	bb->succb = s;
 	bb->succe = s + n;
 	bb->cmd = cmd;
-	bb->use = use;
+	bb->rule = rule;
 }
 
 // find immediate successors of the given bblock

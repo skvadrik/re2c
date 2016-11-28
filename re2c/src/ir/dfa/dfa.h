@@ -51,7 +51,9 @@ struct dfa_t
 	std::vector<dfa_state_t*> states;
 	const size_t nchars;
 	std::valarray<Rule> &rules;
-	std::valarray<Tag> &tags;
+	std::vector<VarTag> &vartags;
+	std::vector<FixTag> &fixtags;
+	tagver_t *finvers;
 	tcpool_t &tcpool;
 	tagver_t maxtagver;
 
