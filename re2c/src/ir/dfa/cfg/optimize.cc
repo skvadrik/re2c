@@ -16,12 +16,15 @@ void optimize_tags(dfa_t &dfa)
 		bool *interf = new bool[nver * nver];
 		tagver_t *ver2new = new tagver_t[nver];
 
-		cfg_t::liveness_analysis(cfg, live);
-		cfg_t::dead_code_elimination(cfg, live);
-		cfg_t::interference(cfg, live, interf);
-		const tagver_t maxver = cfg_t::variable_allocation(cfg, interf, ver2new);
-		cfg_t::renaming(cfg, ver2new, maxver);
-		cfg_t::normalization(cfg);
+		static const uint32_t NPASS = 2;
+		for (uint32_t n = 0; n < NPASS; ++n) {
+			cfg_t::liveness_analysis(cfg, live);
+			cfg_t::dead_code_elimination(cfg, live);
+			cfg_t::interference(cfg, live, interf);
+			const tagver_t maxver = cfg_t::variable_allocation(cfg, interf, ver2new);
+			cfg_t::renaming(cfg, ver2new, maxver);
+			cfg_t::normalization(cfg);
+		}
 
 		delete[] live;
 		delete[] interf;

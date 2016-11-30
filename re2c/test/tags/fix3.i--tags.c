@@ -12,13 +12,13 @@ static void lex(const char *YYCURSOR)
 	yych = *YYCURSOR;
 	switch (yych) {
 	case '0':
-		yyt5 = YYCURSOR;
+		yyt2 = YYCURSOR;
 		goto yy5;
 	case '1':
-		yyt4 = yyt5 = YYCURSOR;
+		yyt2 = yyt3 = YYCURSOR;
 		goto yy7;
 	case '2':
-		yyt3 = yyt4 = yyt5 = YYCURSOR;
+		yyt2 = yyt3 = yyt4 = YYCURSOR;
 		goto yy9;
 	case '3':
 		yyt2 = yyt3 = yyt4 = yyt5 = YYCURSOR;
@@ -30,10 +30,10 @@ static void lex(const char *YYCURSOR)
 	}
 yy2:
 	p4 = yyt1;
-	p3 = yyt2;
-	p2 = yyt3;
-	p1 = yyt4;
-	p0 = yyt5;
+	p3 = yyt5;
+	p2 = yyt4;
+	p1 = yyt3;
+	p0 = yyt2;
 	{
             printf("'%.*s', '%.*s', '%.*s', '%.*s', '%.*s'\n",
                 p1 - p0, p0,
@@ -52,19 +52,19 @@ yy5:
 	switch (yych) {
 	case '0':	goto yy5;
 	case '1':
-		yyt4 = YYCURSOR;
+		yyt3 = YYCURSOR;
 		goto yy7;
 	case '2':
 		yyt3 = yyt4 = YYCURSOR;
 		goto yy9;
 	case '3':
-		yyt2 = yyt3 = yyt4 = YYCURSOR;
+		yyt3 = yyt4 = yyt5 = YYCURSOR;
 		goto yy11;
 	case '4':
-		yyt1 = yyt2 = yyt3 = yyt4 = YYCURSOR;
+		yyt1 = yyt3 = yyt4 = yyt5 = YYCURSOR;
 		goto yy13;
 	default:
-		yyt1 = yyt2 = yyt3 = yyt4 = YYCURSOR;
+		yyt1 = yyt3 = yyt4 = yyt5 = YYCURSOR;
 		goto yy2;
 	}
 yy7:
@@ -73,16 +73,16 @@ yy7:
 	switch (yych) {
 	case '1':	goto yy7;
 	case '2':
-		yyt3 = YYCURSOR;
+		yyt4 = YYCURSOR;
 		goto yy9;
 	case '3':
-		yyt2 = yyt3 = YYCURSOR;
+		yyt4 = yyt5 = YYCURSOR;
 		goto yy11;
 	case '4':
-		yyt1 = yyt2 = yyt3 = YYCURSOR;
+		yyt1 = yyt4 = yyt5 = YYCURSOR;
 		goto yy13;
 	default:
-		yyt1 = yyt2 = yyt3 = YYCURSOR;
+		yyt1 = yyt4 = yyt5 = YYCURSOR;
 		goto yy2;
 	}
 yy9:
@@ -91,13 +91,13 @@ yy9:
 	switch (yych) {
 	case '2':	goto yy9;
 	case '3':
-		yyt2 = YYCURSOR;
+		yyt5 = YYCURSOR;
 		goto yy11;
 	case '4':
-		yyt1 = yyt2 = YYCURSOR;
+		yyt1 = yyt5 = YYCURSOR;
 		goto yy13;
 	default:
-		yyt1 = yyt2 = YYCURSOR;
+		yyt1 = yyt5 = YYCURSOR;
 		goto yy2;
 	}
 yy11:

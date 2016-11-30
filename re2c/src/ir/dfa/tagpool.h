@@ -21,9 +21,12 @@ public:
 	const size_t ntags;
 	tagver_t *buffer1;
 	tagver_t *buffer2;
+	tagver_t *buffer3;
 
 	explicit Tagpool(size_t n);
 	~Tagpool();
+	size_t insert_const(tagver_t ver);
+	size_t insert_succ(tagver_t fst);
 	size_t insert(const tagver_t *tags);
 	const tagver_t *operator[](size_t idx) const;
 	FORBID_COPY(Tagpool);

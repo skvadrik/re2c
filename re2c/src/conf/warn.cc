@@ -120,21 +120,10 @@ void Warn::match_empty_string (uint32_t line, const std::string &cond)
 	}
 }
 
-void Warn::nondeterministic_tags(
-	uint32_t line,
-	const std::string &cond,
+void Warn::nondeterministic_tags(uint32_t line, const std::string &cond,
 	const std::string *tagname)
 {
-	if (opts->tags) {
-		error_accuml = true;
-		if (tagname == NULL) {
-			re2c::error("line %u: trailing context %sis nondeterministic",
-				line, incond(cond).c_str());
-		} else {
-			re2c::error("line %u: tag '%s' %sis nondeterministic",
-				line, tagname->c_str(), incond(cond).c_str());
-		}
-	} else if (mask[NONDETERMINISTIC_TAGS] & WARNING) {
+	if (mask[NONDETERMINISTIC_TAGS] & WARNING) {
 		bool e = mask[NONDETERMINISTIC_TAGS] & ERROR;
 		error_accuml |= e;
 		if (tagname == NULL) {

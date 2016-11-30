@@ -1,4 +1,5 @@
 #include <limits>
+#include <string.h>
 #include <vector>
 
 #include "src/conf/warn.h"
@@ -39,7 +40,8 @@ void reach(const kernel_t *kernel, closure_t &clos, uint32_t symbol)
 	for (size_t i = 0; i < kernel->size; ++i) {
 		nfa_state_t *s = transition(kernel->state[i], symbol);
 		if (s) {
-			clos.push_back(clos_t(s, kernel->tlook[i]));
+			clos_t c = {s, kernel->tvers[i], kernel->tlook[i], ZERO_TAGS};
+			clos.push_back(c);
 		}
 	}
 }
@@ -58,18 +60,25 @@ dfa_t::dfa_t(const nfa_t &nfa,
 {
 	const size_t ntag = vartags.size();
 	Tagpool tagpool(ntag);
-	kernels_t kernels;
+	kernels_t kernels(tagpool, tcpool);
 	closure_t clos1, clos2;
 	bool *badtags = new bool[ntag]();
 
+	// all-zero tag configuration must have static number zero
+	assert(ZERO_TAGS == tagpool.insert_const(TAGVER_ZERO));
+	// final tag versions: [1 .. N], also used for fallback tags
+	const size_t FINAL_TAGS = tagpool.insert_succ(1);
 	finvers = new tagver_t[ntag];
-	for (size_t t = 0; t < ntag; ++t) {
-		finvers[t] = ++maxtagver;
-	}
-	maxtagver *= 2;
-	clos1.push_back(clos_t(nfa.root, ZERO_TAGS));
-	closure(clos1, clos2, tagpool, tcpool, rules, badtags);
-	kernels.insert(clos2);
+	memcpy(finvers, tagpool[FINAL_TAGS], ntag * sizeof(tagver_t));
+	// initial tag versions: [N+1 .. 2*N]
+	const size_t INITIAL_TAGS = tagpool.insert_succ(static_cast<tagver_t>(ntag) + 1);
+	// other versions: [ .. -(2*N+1)] and [2*N+1 .. ]
+	maxtagver = static_cast<tagver_t>(ntag) * 2;
+
+	clos_t c0 = {nfa.root, INITIAL_TAGS, ZERO_TAGS, ZERO_TAGS};
+	clos1.push_back(c0);
+	closure(clos1, clos2, tagpool, tcpool, rules, badtags, maxtagver);
+	kernels.insert(clos2, NULL, maxtagver);
 
 	// closure kernels are in sync with DFA states
 	for (size_t i = 0; i < kernels.size(); ++i) {
@@ -86,8 +95,8 @@ dfa_t::dfa_t(const nfa_t &nfa,
 			if (f->type == nfa_state_t::FIN) {
 				s->rule = f->rule;
 				const Rule &rule = rules[s->rule];
-				s->tcmd[nchars] = tcpool.conv_to_tcmd(tagpool[kernel->tlook[i]],
-					finvers, rule.lvar, rule.hvar, ntag);
+				s->tcmd[nchars] = tcpool.conv_to_tcmd(tagpool[kernel->tvers[i]],
+					tagpool[kernel->tlook[i]], finvers, rule.lvar, rule.hvar);
 				break;
 			}
 		}
@@ -97,8 +106,8 @@ dfa_t::dfa_t(const nfa_t &nfa,
 		// find identical closure or add the new one
 		for (size_t c = 0; c < nchars; ++c) {
 			reach(kernel, clos1, charset[c]);
-			s->tcmd[c].save = closure(clos1, clos2, tagpool, tcpool, rules, badtags);
-			s->arcs[c] = kernels.insert(clos2);
+			s->tcmd[c].save = closure(clos1, clos2, tagpool, tcpool, rules, badtags, maxtagver);
+			s->arcs[c] = kernels.insert(clos2, &s->tcmd[c], maxtagver);
 		}
 	}
 

@@ -12,6 +12,7 @@ typedef int32_t tagver_t;
 
 static const tagver_t TAGVER_BOTTOM = -1; // default value for tag
 static const tagver_t TAGVER_ZERO = 0; // absense of tag
+static const tagver_t TAGVER_CURSOR = 1; // current position
 
 struct VarTag
 {

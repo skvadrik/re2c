@@ -1,4 +1,3 @@
-#include <assert.h>
 #include <stdlib.h> // malloc
 #include <string.h> // memcpy, memcmp
 
@@ -21,15 +20,12 @@ struct eqtag_t
 
 Tagpool::Tagpool(size_t n)
 	: lookup()
-	, buffer(new tagver_t[n * 3])
+	, buffer(new tagver_t[n * 4])
 	, ntags(n)
 	, buffer1(&buffer[n * 1])
 	, buffer2(&buffer[n * 2])
-{
-	// all-zero tag configuration must have static number zero
-	std::fill(buffer, buffer + ntags, TAGVER_ZERO);
-	assert(ZERO_TAGS == insert(buffer));
-}
+	, buffer3(&buffer[n * 3])
+{}
 
 Tagpool::~Tagpool()
 {
@@ -40,12 +36,27 @@ Tagpool::~Tagpool()
 	}
 }
 
+size_t Tagpool::insert_const(tagver_t ver)
+{
+	std::fill(buffer, buffer + ntags, ver);
+	return insert(buffer);
+}
+
+size_t Tagpool::insert_succ(tagver_t fst)
+{
+	for (size_t i = 0; i < ntags; ++i) {
+		buffer[i] = fst++;
+	}
+	return insert(buffer);
+}
+
 size_t Tagpool::insert(const tagver_t *tags)
 {
 	const size_t size = ntags * sizeof(tagver_t);
 	const uint32_t hash = hash32(0, tags, size);
 
-	const size_t idx = lookup.find_with(hash, tags, eqtag_t(ntags));
+	eqtag_t eq(ntags);
+	const size_t idx = lookup.find_with(hash, tags, eq);
 	if (idx != taglookup_t::NIL) {
 		return idx;
 	}

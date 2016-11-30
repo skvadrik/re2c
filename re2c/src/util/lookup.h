@@ -39,7 +39,7 @@ public:
 	const data_t& operator[](size_t idx) const;
 	size_t push(hash_t h, const data_t &data);
 	template<typename pred_t>
-		size_t find_with(hash_t h, const data_t &data, const pred_t &pred) const;
+		size_t find_with(hash_t h, const data_t &data, pred_t &pred) const;
 
 private:
 	size_t head(hash_t) const;
@@ -90,7 +90,7 @@ size_t lookup_t<data_t, hash_t>::push(hash_t h, const data_t &data)
 
 template<typename data_t, typename hash_t>
 template<typename pred_t>
-size_t lookup_t<data_t, hash_t>::find_with(hash_t h, const data_t &data, const pred_t &pred) const
+size_t lookup_t<data_t, hash_t>::find_with(hash_t h, const data_t &data, pred_t &pred) const
 {
 	for (size_t i = head(h); i != NIL;) {
 		const elem_t &e = elems[i];

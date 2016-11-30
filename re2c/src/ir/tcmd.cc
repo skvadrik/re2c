@@ -76,31 +76,32 @@ tagcopy_t *tcpool_t::make_copy(tagcopy_t *next, tagver_t lhs, tagver_t rhs)
 	return p;
 }
 
-tagsave_t *tcpool_t::conv_to_save(const tagver_t *vers, size_t ntag)
+tagsave_t *tcpool_t::conv_to_save(const tagver_t *bottom, const tagver_t *cursor, size_t ntag)
 {
 	tagsave_t *s = NULL;
 	for (size_t t = ntag; t-- > 0;) {
-		const tagver_t v = vers[t];
-		if (v == TAGVER_BOTTOM) {
-			s = make_save(s, static_cast<tagver_t>(ntag + t + 1), true);
-		} else if (v != TAGVER_ZERO) {
-			s = make_save(s, v, false);
+		const tagver_t b = abs(bottom[t]), c = abs(cursor[t]);
+		if (b != TAGVER_ZERO) {
+			s = make_save(s, b, true);
+		}
+		if (c != TAGVER_ZERO) {
+			s = make_save(s, c, false);
 		}
 	}
 	return s;
 }
 
-tcmd_t tcpool_t::conv_to_tcmd(const tagver_t *vers, const tagver_t *fins,
-	size_t ltag, size_t htag, size_t ntag)
+tcmd_t tcpool_t::conv_to_tcmd(const tagver_t *vers, const tagver_t *tran,
+	const tagver_t *fins, size_t ltag, size_t htag)
 {
 	tagsave_t *s = NULL;
 	tagcopy_t *c = NULL;
 	for (size_t t = ltag; t < htag; ++t) {
-		const tagver_t v = vers[t], f = fins[t];
-		if (v != TAGVER_ZERO) {
-			s = make_save(s, f, v == TAGVER_BOTTOM);
+		const tagver_t u = tran[t], v = abs(vers[t]), f = fins[t];
+		if (u != TAGVER_ZERO) {
+			s = make_save(s, f, u == TAGVER_BOTTOM);
 		} else {
-			c = make_copy(c, f, f + static_cast<tagver_t>(ntag));
+			c = make_copy(c, f, v);
 		}
 	}
 	return tcmd_t(s, c);
@@ -146,7 +147,8 @@ tcid_t tcpool_t::insert(const tagsave_t *save, const tagcopy_t *copy)
 	const uint32_t h = hash_tcmd(save, copy);
 
 	const tccmd_t ccmd(save, copy);
-	size_t id = index.find_with(h, ccmd, tccmd_eq_t());
+	tccmd_eq_t eq;
+	size_t id = index.find_with(h, ccmd, eq);
 	if (id == index_t::NIL) {
 		id = index.push(h, ccmd);
 	}
