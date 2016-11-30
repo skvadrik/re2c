@@ -112,7 +112,11 @@ namespace re2c
 	/* labels */ \
 	OPT (std::string, labelPrefix, "yy") \
 	/* internals */ \
-	OPT (dfa_minimization_t, dfa_minimization, DFA_MINIMIZATION_MOORE)
+	OPT (dfa_minimization_t, dfa_minimization, DFA_MINIMIZATION_MOORE) \
+	/* dump */ \
+	OPT (bool, dump_dfa_det, false) \
+	OPT (bool, dump_dfa_tagopt, false) \
+	OPT (bool, dump_dfa_min, false)
 
 struct opt_t
 {

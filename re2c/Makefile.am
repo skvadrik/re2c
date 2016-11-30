@@ -25,6 +25,7 @@ SRC_HDR = \
 	src/ir/dfa/cfg/cfg.h \
 	src/ir/dfa/closure.h \
 	src/ir/dfa/dfa.h \
+	src/ir/dfa/dump.h \
 	src/ir/dfa/find_state.h \
 	src/ir/dfa/tagpool.h \
 	src/ir/nfa/nfa.h \
@@ -105,6 +106,7 @@ SRC = \
 	src/ir/dfa/closure.cc \
 	src/ir/dfa/dead_rules.cc \
 	src/ir/dfa/determinization.cc \
+	src/ir/dfa/dump.cc \
 	src/ir/dfa/fallback_tags.cc \
 	src/ir/dfa/fillpoints.cc \
 	src/ir/dfa/find_state.cc \

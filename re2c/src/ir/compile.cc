@@ -7,6 +7,7 @@
 #include "src/ir/compile.h"
 #include "src/ir/adfa/adfa.h"
 #include "src/ir/dfa/dfa.h"
+#include "src/ir/dfa/dump.h"
 #include "src/ir/nfa/nfa.h"
 #include "src/ir/regexp/regexp.h"
 #include "src/ir/skeleton/skeleton.h"
@@ -59,6 +60,7 @@ static smart_ptr<DFA> compile_rules(
 	nfa_t nfa(rules);
 
 	dfa_t dfa(nfa, cs, cond);
+	if (opts->dump_dfa_det) dump_dfa(dfa);
 
 	// skeleton must be constructed after DFA construction
 	// but prior to any other DFA transformations
@@ -74,8 +76,10 @@ static smart_ptr<DFA> compile_rules(
 
 	// try to minimize the number of tag variables
 	optimize_tags(dfa);
+	if (opts->dump_dfa_tagopt) dump_dfa(dfa);
 
 	minimization(dfa);
+	if (opts->dump_dfa_min) dump_dfa(dfa);
 
 	// find YYFILL states and calculate argument to YYFILL
 	std::vector<size_t> fill;

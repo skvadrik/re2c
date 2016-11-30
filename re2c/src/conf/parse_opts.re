@@ -161,6 +161,10 @@ opt_long:
 	"empty-class"        end { goto opt_empty_class; }
 	"dfa-minimization"   end { goto opt_dfa_minimization; }
 	"single-pass"        end { goto opt; } // deprecated
+
+	"dump-dfa-det"       end { opts.set_dump_dfa_det(true);    goto opt; }
+	"dump-dfa-tagopt"    end { opts.set_dump_dfa_tagopt(true); goto opt; }
+	"dump-dfa-min"       end { opts.set_dump_dfa_min(true);    goto opt; }
 */
 
 opt_output:
