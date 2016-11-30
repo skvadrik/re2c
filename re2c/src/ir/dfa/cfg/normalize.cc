@@ -1,3 +1,5 @@
+#include <string.h>
+
 #include "src/ir/dfa/cfg/cfg.h"
 
 namespace re2c
@@ -16,11 +18,18 @@ template<typename cmd_t> void normalize(cmd_t *cmd);
 
 void cfg_t::normalization(cfg_t &cfg)
 {
+	const size_t nver = static_cast<size_t>(cfg.dfa.maxtagver) + 1;
+	uint32_t *indeg = new uint32_t[nver];
+	memset(indeg, 0, nver * sizeof(uint32_t));
+
 	cfg_bb_t *b = cfg.bblocks, *e = b + cfg.nbbfall;
 	for (; b < e; ++b) {
 		normalize(b->cmd->save);
 		normalize(b->cmd->copy);
+		tagcopy_t::topsort(&b->cmd->copy, indeg);
 	}
+
+	delete[] indeg;
 }
 
 template<typename cmd_t>

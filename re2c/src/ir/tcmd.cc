@@ -44,6 +44,56 @@ bool tagcopy_t::equal(const tagcopy_t &x, const tagcopy_t &y)
 	return x.lhs == y.lhs && x.rhs == y.rhs;
 }
 
+/* note [topological ordering of copy commands]
+ *
+ * The order in which copy commands are executed is important:
+ * 'x = y; y = z;' is not the same as 'y = z; x = y;' (the latter
+ * overwrites 'y' before its precious value is copied to 'x').
+ *
+ * To avoid overwrites, commands should be topologically sorted.
+ * This is always possible because there's no cyclic dependencies
+ * by construction.
+ *
+ * For the purpose of topsort, we treat commands as arcs of directed
+ * acyclic graph: command 'x = y' yields arc X -> Y. Topsort works
+ * by iteratively removing arcs X -> Y such that X has zero in-degree
+ * (they correspond to commands with no dependencies).
+ * Commands in the order of removal are topologically sorted.
+ *
+ * The algorithm iterates the list of commands twice. First time it
+ * counts initial in-degree of nodes. Second time it examines each
+ * arc X -> Y: if X has zero in-degree, the algoritm reduces Y's
+ * in-degree by one and goes to the next arc. Otherwise, the arc is
+ * misplaced: the algorithm moves it to the end of the list (next
+ * time this arc will be examined, it will have smaller in-degree).
+ *
+ * The algorithm starts and ends with all-zero in-degree buffer.
+ */
+void tagcopy_t::topsort(tagcopy_t **phead, uint32_t *indeg)
+{
+	tagcopy_t *head = *phead;
+	if (!head) return;
+
+	tagcopy_t *tail = head;
+	for (;;) {
+		++indeg[tail->rhs];
+		if (!tail->next) break;
+		tail = tail->next;
+	}
+
+	for (; head; head = *phead) {
+		if (indeg[head->lhs] == 0) {
+			phead = &head->next;
+			--indeg[head->rhs];
+		} else {
+			*phead = head->next;
+			tail->next = head;
+			tail = tail->next;
+			tail->next = NULL;
+		}
+	}
+}
+
 tcmd_t::tcmd_t(): save(NULL), copy(NULL) {}
 tcmd_t::tcmd_t(tagsave_t *s, tagcopy_t *c): save(s), copy(c) {}
 bool tcmd_t::empty() const { return save == NULL && copy == NULL; }

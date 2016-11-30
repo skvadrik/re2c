@@ -52,6 +52,7 @@ mapping_t::mapping_t(Tagpool &tagp, tcpool_t &tcp, bool injective)
 	, x2t(NULL)
 	, x2y(NULL)
 	, y2x(NULL)
+	, indeg(NULL)
 {}
 
 mapping_t::~mapping_t()
@@ -69,18 +70,22 @@ void mapping_t::init(tagver_t v, tcmd_t *c)
 		cap = max * 2; // in advance
 
 		const size_t
-			sz = static_cast<size_t>(cap) * 2 + 1, // negatives, positives and zero
-			sz_x2t = sz * sizeof(size_t),
-			sz_x2y = sz * sizeof(tagver_t),
-			sz_y2x = sz_x2y;
+			sz = static_cast<size_t>(cap),
+			sz_x2t = (2 * sz + 1) * sizeof(size_t),
+			sz_x2y = (2 * sz + 1) * sizeof(tagver_t),
+			sz_indeg = sz * sizeof(uint32_t);
 		delete[] mem;
-		mem = new char[sz_x2t + sz_x2y + sz_y2x];
+		mem = new char[sz_x2t + 2 * sz_x2y + sz_indeg];
 
 		// point to the center (zero index) of each buffer
 		// indexes in range [-N .. N] must be valid, where N is capacity
 		x2t = cap + reinterpret_cast<size_t*>(mem);
 		x2y = cap + reinterpret_cast<tagver_t*>(mem + sz_x2t);
 		y2x = cap + reinterpret_cast<tagver_t*>(mem + sz_x2t + sz_x2y);
+		indeg = reinterpret_cast<uint32_t*>(mem + sz_x2t + 2 * sz_x2y);
+
+		// see note [topological ordering of copy commands]
+		memset(indeg, 0, sz_indeg);
 	}
 }
 
@@ -194,6 +199,7 @@ bool mapping_t::operator()(const kernel_t *k1, const kernel_t *k2)
 			cmd->copy = tcpool.make_copy(cmd->copy, abs(x), abs(y));
 		}
 	}
+	tagcopy_t::topsort(&cmd->copy, indeg);
 	return true;
 }
 

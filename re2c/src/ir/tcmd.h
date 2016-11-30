@@ -31,6 +31,7 @@ struct tagcopy_t
 	static bool less(const tagcopy_t &x, const tagcopy_t &y);
 	static void swap(tagcopy_t &x, tagcopy_t &y);
 	static bool equal(const tagcopy_t &x, const tagcopy_t &y);
+	static void topsort(tagcopy_t **phead, uint32_t *indeg);
 	FORBID_COPY(tagcopy_t);
 };
 

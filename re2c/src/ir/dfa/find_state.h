@@ -37,6 +37,7 @@ private:
 	size_t *x2t;
 	tagver_t *x2y;
 	tagver_t *y2x;
+	uint32_t *indeg;
 
 public:
 	mapping_t(Tagpool &tagp, tcpool_t &tcp, bool injective);
