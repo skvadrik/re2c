@@ -6,6 +6,7 @@
 #include "src/conf/opt.h"
 #include "src/ir/compile.h"
 #include "src/ir/adfa/adfa.h"
+#include "src/ir/adfa/dump.h"
 #include "src/ir/dfa/dfa.h"
 #include "src/ir/dfa/dump.h"
 #include "src/ir/nfa/nfa.h"
@@ -93,6 +94,7 @@ static smart_ptr<DFA> compile_rules(
 
 	// skeleton is constructed, do further DFA transformations
 	adfa->prepare();
+	if (opts->dump_adfa) dump_adfa(*adfa);
 
 	// finally gather overall DFA statistics
 	adfa->calc_stats(line);

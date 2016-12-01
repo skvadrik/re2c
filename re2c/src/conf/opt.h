@@ -116,7 +116,8 @@ namespace re2c
 	/* dump */ \
 	OPT (bool, dump_dfa_det, false) \
 	OPT (bool, dump_dfa_tagopt, false) \
-	OPT (bool, dump_dfa_min, false)
+	OPT (bool, dump_dfa_min, false) \
+	OPT (bool, dump_adfa, false)
 
 struct opt_t
 {

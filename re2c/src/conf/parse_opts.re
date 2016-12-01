@@ -165,6 +165,7 @@ opt_long:
 	"dump-dfa-det"       end { opts.set_dump_dfa_det(true);    goto opt; }
 	"dump-dfa-tagopt"    end { opts.set_dump_dfa_tagopt(true); goto opt; }
 	"dump-dfa-min"       end { opts.set_dump_dfa_min(true);    goto opt; }
+	"dump-adfa"          end { opts.set_dump_adfa(true);       goto opt; }
 */
 
 opt_output:

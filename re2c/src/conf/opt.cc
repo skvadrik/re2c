@@ -117,6 +117,7 @@ void opt_t::fix ()
 			dump_dfa_det = Opt::baseopt.dump_dfa_det;
 			dump_dfa_tagopt = Opt::baseopt.dump_dfa_tagopt;
 			dump_dfa_min = Opt::baseopt.dump_dfa_min;
+			dump_adfa = Opt::baseopt.dump_adfa;
 			break;
 		default:
 			break;

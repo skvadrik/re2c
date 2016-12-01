@@ -22,6 +22,7 @@ SRC_HDR = \
 	src/conf/warn.h \
 	src/ir/adfa/action.h \
 	src/ir/adfa/adfa.h \
+	src/ir/adfa/dump.h \
 	src/ir/dfa/cfg/cfg.h \
 	src/ir/dfa/closure.h \
 	src/ir/dfa/dfa.h \
@@ -94,6 +95,7 @@ SRC = \
 	src/ir/nfa/nfa.cc \
 	src/ir/nfa/regexps2nfa.cc \
 	src/ir/adfa/adfa.cc \
+	src/ir/adfa/dump.cc \
 	src/ir/adfa/prepare.cc \
 	src/ir/dfa/cfg/cfg.cc \
 	src/ir/dfa/cfg/dce.cc \
