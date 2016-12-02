@@ -71,15 +71,12 @@ yy13:
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 'a':	goto yy17;
+	case 'a':	goto yy16;
 	default:	goto yy14;
 	}
 yy16:
-	{ 0 }
-yy17:
 	++YYCURSOR;
-	yych = *YYCURSOR;
-	goto yy16;
+	{ 0 }
 }
 
 

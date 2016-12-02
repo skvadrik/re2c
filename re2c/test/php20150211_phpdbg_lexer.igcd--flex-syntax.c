@@ -1472,68 +1472,73 @@ yy139:
 yyc_RAW:
 	{
 		static const unsigned char yybm[] = {
-			  0,  32,  32,  32,  32,  32,  32,  32, 
-			 32,  96, 128,  32,  32,  96,  32,  32, 
-			 32,  32,  32,  32,  32,  32,  32,  32, 
-			 32,  32,  32,  32,  32,  32,  32,  32, 
-			 96,  32,  32,  32,  32,  32,  32,  32, 
-			 32,  32,  32,  32,  32,  32,  32,  32, 
-			 32,  32,  32,  32,  32,  32,  32,  32, 
-			 32,  32,  32,  32,  32,  32,  32,  32, 
-			 32,  32,  32,  32,  32,  32,  32,  32, 
-			 32,  32,  32,  32,  32,  32,  32,  32, 
-			 32,  32,  32,  32,  32,  32,  32,  32, 
-			 32,  32,  32,  32,  32,  32,  32,  32, 
-			 32,  32,  32,  32,  32,  32,  32,  32, 
-			 32,  32,  32,  32,  32,  32,  32,  32, 
-			 32,  32,  32,  32,  32,  32,  32,  32, 
-			 32,  32,  32,  32,  32,  32,  32,  32, 
-			 32,  32,  32,  32,  32,  32,  32,  32, 
-			 32,  32,  32,  32,  32,  32,  32,  32, 
-			 32,  32,  32,  32,  32,  32,  32,  32, 
-			 32,  32,  32,  32,  32,  32,  32,  32, 
-			 32,  32,  32,  32,  32,  32,  32,  32, 
-			 32,  32,  32,  32,  32,  32,  32,  32, 
-			 32,  32,  32,  32,  32,  32,  32,  32, 
-			 32,  32,  32,  32,  32,  32,  32,  32, 
-			 32,  32,  32,  32,  32,  32,  32,  32, 
-			 32,  32,  32,  32,  32,  32,  32,  32, 
-			 32,  32,  32,  32,  32,  32,  32,  32, 
-			 32,  32,  32,  32,  32,  32,  32,  32, 
-			 32,  32,  32,  32,  32,  32,  32,  32, 
-			 32,  32,  32,  32,  32,  32,  32,  32, 
-			 32,  32,  32,  32,  32,  32,  32,  32, 
-			 32,  32,  32,  32,  32,  32,  32,  32, 
+			  0,  64,  64,  64,  64,  64,  64,  64, 
+			 64,  96, 128,  64,  64,  96,  64,  64, 
+			 64,  64,  64,  64,  64,  64,  64,  64, 
+			 64,  64,  64,  64,  64,  64,  64,  64, 
+			 96,  64,  64,  64,  64,  64,  64,  64, 
+			 64,  64,  64,  64,  64,  64,  64,  64, 
+			 64,  64,  64,  64,  64,  64,  64,  64, 
+			 64,  64,  64,  64,  64,  64,  64,  64, 
+			 64,  64,  64,  64,  64,  64,  64,  64, 
+			 64,  64,  64,  64,  64,  64,  64,  64, 
+			 64,  64,  64,  64,  64,  64,  64,  64, 
+			 64,  64,  64,  64,  64,  64,  64,  64, 
+			 64,  64,  64,  64,  64,  64,  64,  64, 
+			 64,  64,  64,  64,  64,  64,  64,  64, 
+			 64,  64,  64,  64,  64,  64,  64,  64, 
+			 64,  64,  64,  64,  64,  64,  64,  64, 
+			 64,  64,  64,  64,  64,  64,  64,  64, 
+			 64,  64,  64,  64,  64,  64,  64,  64, 
+			 64,  64,  64,  64,  64,  64,  64,  64, 
+			 64,  64,  64,  64,  64,  64,  64,  64, 
+			 64,  64,  64,  64,  64,  64,  64,  64, 
+			 64,  64,  64,  64,  64,  64,  64,  64, 
+			 64,  64,  64,  64,  64,  64,  64,  64, 
+			 64,  64,  64,  64,  64,  64,  64,  64, 
+			 64,  64,  64,  64,  64,  64,  64,  64, 
+			 64,  64,  64,  64,  64,  64,  64,  64, 
+			 64,  64,  64,  64,  64,  64,  64,  64, 
+			 64,  64,  64,  64,  64,  64,  64,  64, 
+			 64,  64,  64,  64,  64,  64,  64,  64, 
+			 64,  64,  64,  64,  64,  64,  64,  64, 
+			 64,  64,  64,  64,  64,  64,  64,  64, 
+			 64,  64,  64,  64,  64,  64,  64,  64, 
 		};
+		goto yy142;
+yy143:
+		++YYCURSOR;
+yy142:
 		YYDEBUG(142, *YYCURSOR);
 		YYFILL(1);
 		yych = *YYCURSOR;
-		if (yybm[0+yych] & 64) {
-			goto yy149;
-		}
-		if (yych <= 0x00) goto yy144;
-		if (yych <= 0x08) goto yy146;
-		if (yych <= '\n') goto yy151;
-		goto yy146;
-yy144:
 		YYDEBUG(144, *YYCURSOR);
-		++YYCURSOR;
+		if (yybm[0+yych] & 32) {
+			goto yy143;
+		}
+		if (yych <= 0x00) goto yy145;
+		if (yych <= 0x08) goto yy147;
+		if (yych <= '\n') goto yy150;
+		goto yy147;
 yy145:
 		YYDEBUG(145, *YYCURSOR);
+		++YYCURSOR;
+yy146:
+		YYDEBUG(146, *YYCURSOR);
 		yyleng = (size_t) YYCURSOR - (size_t) yytext;
 		{
 	return 0;
 }
-yy146:
-		YYDEBUG(146, *YYCURSOR);
+yy147:
+		YYDEBUG(147, *YYCURSOR);
 		++YYCURSOR;
 		YYFILL(1);
 		yych = *YYCURSOR;
-		YYDEBUG(147, *YYCURSOR);
-		if (yybm[0+yych] & 32) {
-			goto yy146;
-		}
 		YYDEBUG(148, *YYCURSOR);
+		if (yybm[0+yych] & 64) {
+			goto yy147;
+		}
+		YYDEBUG(149, *YYCURSOR);
 		yyleng = (size_t) YYCURSOR - (size_t) yytext;
 		{
 	phpdbg_init_param(yylval, STR_PARAM);
@@ -1541,51 +1546,39 @@ yy146:
 	yylval->len = yyleng;
 	return T_INPUT;
 }
-yy149:
-		YYDEBUG(149, *YYCURSOR);
-		++YYCURSOR;
-		YYFILL(1);
-		yych = *YYCURSOR;
+yy150:
 		YYDEBUG(150, *YYCURSOR);
-		if (yybm[0+yych] & 64) {
-			goto yy149;
-		}
-		if (yych <= 0x00) goto yy144;
-		if (yych <= 0x08) goto yy146;
-		if (yych >= '\v') goto yy146;
-yy151:
+		++YYCURSOR;
+		YYFILL(1);
+		yych = *YYCURSOR;
 		YYDEBUG(151, *YYCURSOR);
-		++YYCURSOR;
-		YYFILL(1);
-		yych = *YYCURSOR;
+		if (yybm[0+yych] & 128) {
+			goto yy150;
+		}
+		if (yych <= '\f') {
+			if (yych <= 0x00) goto yy145;
+			if (yych != '\t') goto yy146;
+		} else {
+			if (yych <= '\r') goto yy152;
+			if (yych != ' ') goto yy146;
+		}
+yy152:
 		YYDEBUG(152, *YYCURSOR);
-		if (yybm[0+yych] & 128) {
-			goto yy151;
-		}
-		if (yych <= '\f') {
-			if (yych <= 0x00) goto yy144;
-			if (yych != '\t') goto yy145;
-		} else {
-			if (yych <= '\r') goto yy153;
-			if (yych != ' ') goto yy145;
-		}
-yy153:
-		YYDEBUG(153, *YYCURSOR);
 		++YYCURSOR;
 		YYFILL(1);
 		yych = *YYCURSOR;
-		YYDEBUG(154, *YYCURSOR);
+		YYDEBUG(153, *YYCURSOR);
 		if (yybm[0+yych] & 128) {
-			goto yy151;
+			goto yy150;
 		}
 		if (yych <= '\f') {
-			if (yych <= 0x00) goto yy144;
-			if (yych == '\t') goto yy153;
+			if (yych <= 0x00) goto yy145;
+			if (yych == '\t') goto yy152;
 		} else {
-			if (yych <= '\r') goto yy153;
-			if (yych == ' ') goto yy153;
+			if (yych <= '\r') goto yy152;
+			if (yych == ' ') goto yy152;
 		}
-		YYDEBUG(155, *YYCURSOR);
+		YYDEBUG(154, *YYCURSOR);
 		yyleng = (size_t) YYCURSOR - (size_t) yytext;
 		{
 	/* ignore whitespace */

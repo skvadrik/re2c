@@ -1,3 +1,5 @@
+#include <string.h>
+
 #include "src/conf/opt.h"
 #include "src/ir/dfa/dfa.h"
 #include "src/util/forbid_copy.h"
@@ -156,15 +158,28 @@ static void warn_dead_rules(const dfa_t &dfa, size_t defrule,
 	}
 }
 
-static void remove_dead_final_states(dfa_t &dfa, const bool *live)
+static void remove_dead_final_states(dfa_t &dfa, const bool *fallthru)
 {
 	const size_t
 		nstates = dfa.states.size(),
 		nsym = dfa.nchars;
+
 	for (size_t i = 0; i < nstates; ++i) {
 		dfa_state_t *s = dfa.states[i];
-		if (s->rule != Rule::NONE
-			&& !live[s->rule * nstates + i]) {
+		if (s->rule == Rule::NONE) continue;
+
+		// final state is useful iff there is at least one
+		// non-accepting path from this state
+		bool shadowed = true;
+		for (size_t c = 0; c < nsym; ++c) {
+			const size_t j = s->arcs[c];
+			if (j == dfa_t::NIL || fallthru[j]) {
+				shadowed = false;
+				break;
+			}
+		}
+
+		if (shadowed) {
 			s->rule = Rule::NONE;
 			s->tcmd[nsym] = tcmd_t();
 		}
@@ -186,18 +201,19 @@ static void remove_dead_final_states(dfa_t &dfa, const bool *live)
  * are not affected by these transformations, so we can calculate
  * them here and save for future use.
  */
-static void find_fallback_states(dfa_t &dfa, const bool *live)
+static void find_fallback_states(dfa_t &dfa, const bool *fallthru)
 {
-	const size_t nstates = dfa.states.size();
-	const size_t nrules = dfa.rules.size();
-	const bool *fallthru = &live[nrules * nstates];
-	for (size_t i = 0; i < nstates; ++i) {
+	const size_t
+		nstate = dfa.states.size(),
+		nsym = dfa.nchars;
+
+	for (size_t i = 0; i < nstate; ++i) {
 		dfa_state_t *s = dfa.states[i];
-		if (fallthru[i]) {
-			s->fallthru = true;
-		}
+
+		s->fallthru = fallthru[i];
+
 		if (s->rule != Rule::NONE) {
-			for (size_t c = 0; c < dfa.nchars; ++c) {
+			for (size_t c = 0; c < nsym; ++c) {
 				const size_t j = s->arcs[c];
 				if (j != dfa_t::NIL && fallthru[j]) {
 					s->fallback = true;
@@ -211,12 +227,17 @@ static void find_fallback_states(dfa_t &dfa, const bool *live)
 void cutoff_dead_rules(dfa_t &dfa, size_t defrule, const std::string &cond)
 {
 	const rdfa_t rdfa(dfa);
-	bool *live = new bool[(rdfa.nrules + 1) * rdfa.nstates]();
+	const size_t
+		ns = rdfa.nstates,
+		nl = (rdfa.nrules + 1) * ns;
+	bool *live = new bool[nl],
+		*fallthru = live + nl - ns;
+	memset(live, 0, nl * sizeof(bool));
 
 	liveness_analyses(rdfa, live);
 	warn_dead_rules(dfa, defrule, cond, live);
-	remove_dead_final_states(dfa, live);
-	find_fallback_states(dfa, live);
+	remove_dead_final_states(dfa, fallthru);
+	find_fallback_states(dfa, fallthru);
 
 	delete[] live;
 }
