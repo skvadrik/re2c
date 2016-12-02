@@ -58,6 +58,8 @@ void cfg_t::liveness_analysis(const cfg_t &cfg, bool *live)
 				for (const tagsave_t *p = cmd->save; p; p = p->next) {
 					buf2[p->ver] = false;
 				}
+
+				// need two passes: same version may occur as both LHS and RHS
 				for (const tagcopy_t *p = cmd->copy; p; p = p->next) {
 					if (l[p->lhs]) {
 						buf2[p->lhs] = false;
@@ -107,10 +109,15 @@ void cfg_t::liveness_analysis(const cfg_t &cfg, bool *live)
 		for (const tagsave_t *p = b->cmd->save; p; p = p->next) {
 			buf1[p->ver] = false;
 		}
+
+		// need two passes: same version may occur as both LHS and RHS
 		for (const tagcopy_t *p = b->cmd->copy; p; p = p->next) {
 			buf1[p->lhs] = false;
+		}
+		for (const tagcopy_t *p = b->cmd->copy; p; p = p->next) {
 			buf1[p->rhs] = true;
 		}
+
 		for (cfg_ix_t *j = b->succb; j < b->succe; ++j) {
 			bool *liv = &live[*j * nver];
 			for (size_t v = 0; v < nver; ++v) {
