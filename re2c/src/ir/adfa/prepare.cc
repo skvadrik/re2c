@@ -18,7 +18,7 @@ void DFA::split(State *s)
 	addState(move, s);
 	move->action.set_move ();
 	move->rule = s->rule;
-	move->fill = s->fill;
+	move->fill = s->fill; /* used by tunneling, ignored by codegen */
 	move->go = s->go;
 	move->rule_tags = s->rule_tags;
 	move->fall_tags = s->fall_tags;
@@ -89,9 +89,8 @@ void DFA::findBaseState()
 						s->go.nSpans = nSpans;
 						s->go.span = allocate<Span> (nSpans);
 						memcpy(s->go.span, span, nSpans*sizeof(Span));
+						break;
 					}
-
-					break;
 				}
 			}
 		}

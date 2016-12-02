@@ -374,36 +374,20 @@ yy33:
 	yyaccept = 2;
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
-	case '.':	goto yy112;
-	case '0':
-	case '1':
-	case '2':
-	case '3':
-	case '4':
-	case '5':
-	case '6':
-	case '7':
-	case '8':
-	case '9':	goto yy35;
-	case 'E':
-	case 'e':	goto yy119;
-	case 'L':
-	case 'U':
-	case 'l':
-	case 'u':	goto yy120;
 	case 'X':
 	case 'x':	goto yy122;
-	default:	goto yy34;
+	default:	goto yy36;
 	}
 yy34:
 #line 158 "cmmap.re"
 	{ RET(ICON); }
-#line 402 "cmmap.c"
+#line 385 "cmmap.c"
 yy35:
 	yyaccept = 2;
 	YYMARKER = ++YYCURSOR;
 	if ((YYLIMIT - YYCURSOR) < 3) YYFILL(3);
 	yych = *YYCURSOR;
+yy36:
 	switch (yych) {
 	case '.':	goto yy112;
 	case '0':
@@ -428,12 +412,12 @@ yy37:
 	++YYCURSOR;
 #line 192 "cmmap.re"
 	{ RET(':'); }
-#line 432 "cmmap.c"
+#line 416 "cmmap.c"
 yy39:
 	++YYCURSOR;
 #line 188 "cmmap.re"
 	{ RET(';'); }
-#line 437 "cmmap.c"
+#line 421 "cmmap.c"
 yy41:
 	++YYCURSOR;
 	switch ((yych = *YYCURSOR)) {
@@ -444,7 +428,7 @@ yy41:
 yy42:
 #line 207 "cmmap.re"
 	{ RET('<'); }
-#line 448 "cmmap.c"
+#line 432 "cmmap.c"
 yy43:
 	++YYCURSOR;
 	switch ((yych = *YYCURSOR)) {
@@ -454,7 +438,7 @@ yy43:
 yy44:
 #line 193 "cmmap.re"
 	{ RET('='); }
-#line 458 "cmmap.c"
+#line 442 "cmmap.c"
 yy45:
 	++YYCURSOR;
 	switch ((yych = *YYCURSOR)) {
@@ -465,12 +449,12 @@ yy45:
 yy46:
 #line 208 "cmmap.re"
 	{ RET('>'); }
-#line 469 "cmmap.c"
+#line 453 "cmmap.c"
 yy47:
 	++YYCURSOR;
 #line 211 "cmmap.re"
 	{ RET('?'); }
-#line 474 "cmmap.c"
+#line 458 "cmmap.c"
 yy49:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
@@ -545,17 +529,17 @@ yy50:
 yy51:
 #line 154 "cmmap.re"
 	{ RET(ID); }
-#line 549 "cmmap.c"
+#line 533 "cmmap.c"
 yy52:
 	++YYCURSOR;
 #line 196 "cmmap.re"
 	{ RET('['); }
-#line 554 "cmmap.c"
+#line 538 "cmmap.c"
 yy54:
 	++YYCURSOR;
 #line 197 "cmmap.re"
 	{ RET(']'); }
-#line 559 "cmmap.c"
+#line 543 "cmmap.c"
 yy56:
 	++YYCURSOR;
 	switch ((yych = *YYCURSOR)) {
@@ -565,7 +549,7 @@ yy56:
 yy57:
 #line 209 "cmmap.re"
 	{ RET('^'); }
-#line 569 "cmmap.c"
+#line 553 "cmmap.c"
 yy58:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -670,7 +654,7 @@ yy73:
 	++YYCURSOR;
 #line 189 "cmmap.re"
 	{ RET('{'); }
-#line 674 "cmmap.c"
+#line 658 "cmmap.c"
 yy75:
 	++YYCURSOR;
 	switch ((yych = *YYCURSOR)) {
@@ -681,22 +665,22 @@ yy75:
 yy76:
 #line 210 "cmmap.re"
 	{ RET('|'); }
-#line 685 "cmmap.c"
+#line 669 "cmmap.c"
 yy77:
 	++YYCURSOR;
 #line 190 "cmmap.re"
 	{ RET('}'); }
-#line 690 "cmmap.c"
+#line 674 "cmmap.c"
 yy79:
 	++YYCURSOR;
 #line 201 "cmmap.re"
 	{ RET('~'); }
-#line 695 "cmmap.c"
+#line 679 "cmmap.c"
 yy81:
 	++YYCURSOR;
 #line 187 "cmmap.re"
 	{ RET(NEQ); }
-#line 700 "cmmap.c"
+#line 684 "cmmap.c"
 yy83:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
@@ -720,7 +704,7 @@ yy86:
 	++YYCURSOR;
 #line 164 "cmmap.re"
 	{ RET(SCON); }
-#line 724 "cmmap.c"
+#line 708 "cmmap.c"
 yy88:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
@@ -752,17 +736,17 @@ yy89:
 	++YYCURSOR;
 #line 173 "cmmap.re"
 	{ RET(MODEQ); }
-#line 756 "cmmap.c"
+#line 740 "cmmap.c"
 yy91:
 	++YYCURSOR;
 #line 182 "cmmap.re"
 	{ RET(ANDAND); }
-#line 761 "cmmap.c"
+#line 745 "cmmap.c"
 yy93:
 	++YYCURSOR;
 #line 174 "cmmap.re"
 	{ RET(ANDEQ); }
-#line 766 "cmmap.c"
+#line 750 "cmmap.c"
 yy95:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
@@ -808,32 +792,32 @@ yy99:
 	++YYCURSOR;
 #line 171 "cmmap.re"
 	{ RET(MULEQ); }
-#line 812 "cmmap.c"
+#line 796 "cmmap.c"
 yy101:
 	++YYCURSOR;
 #line 179 "cmmap.re"
 	{ RET(INCR); }
-#line 817 "cmmap.c"
+#line 801 "cmmap.c"
 yy103:
 	++YYCURSOR;
 #line 169 "cmmap.re"
 	{ RET(ADDEQ); }
-#line 822 "cmmap.c"
+#line 806 "cmmap.c"
 yy105:
 	++YYCURSOR;
 #line 180 "cmmap.re"
 	{ RET(DECR); }
-#line 827 "cmmap.c"
+#line 811 "cmmap.c"
 yy107:
 	++YYCURSOR;
 #line 170 "cmmap.re"
 	{ RET(SUBEQ); }
-#line 832 "cmmap.c"
+#line 816 "cmmap.c"
 yy109:
 	++YYCURSOR;
 #line 181 "cmmap.re"
 	{ RET(DEREF); }
-#line 837 "cmmap.c"
+#line 821 "cmmap.c"
 yy111:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -867,17 +851,17 @@ yy112:
 yy114:
 #line 161 "cmmap.re"
 	{ RET(FCON); }
-#line 871 "cmmap.c"
+#line 855 "cmmap.c"
 yy115:
 	++YYCURSOR;
 #line 119 "cmmap.re"
 	{ goto comment; }
-#line 876 "cmmap.c"
+#line 860 "cmmap.c"
 yy117:
 	++YYCURSOR;
 #line 172 "cmmap.re"
 	{ RET(DIVEQ); }
-#line 881 "cmmap.c"
+#line 865 "cmmap.c"
 yy119:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -942,22 +926,22 @@ yy123:
 yy124:
 #line 178 "cmmap.re"
 	{ RET(LSHIFT); }
-#line 946 "cmmap.c"
+#line 930 "cmmap.c"
 yy125:
 	++YYCURSOR;
 #line 184 "cmmap.re"
 	{ RET(LEQ); }
-#line 951 "cmmap.c"
+#line 935 "cmmap.c"
 yy127:
 	++YYCURSOR;
 #line 186 "cmmap.re"
 	{ RET(EQL); }
-#line 956 "cmmap.c"
+#line 940 "cmmap.c"
 yy129:
 	++YYCURSOR;
 #line 185 "cmmap.re"
 	{ RET(GEQ); }
-#line 961 "cmmap.c"
+#line 945 "cmmap.c"
 yy131:
 	++YYCURSOR;
 	switch ((yych = *YYCURSOR)) {
@@ -967,12 +951,12 @@ yy131:
 yy132:
 #line 177 "cmmap.re"
 	{ RET(RSHIFT); }
-#line 971 "cmmap.c"
+#line 955 "cmmap.c"
 yy133:
 	++YYCURSOR;
 #line 175 "cmmap.re"
 	{ RET(XOREQ); }
-#line 976 "cmmap.c"
+#line 960 "cmmap.c"
 yy135:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -1080,7 +1064,7 @@ yy141:
 yy142:
 #line 128 "cmmap.re"
 	{ RET(DO); }
-#line 1084 "cmmap.c"
+#line 1068 "cmmap.c"
 yy143:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -1188,7 +1172,7 @@ yy149:
 yy150:
 #line 136 "cmmap.re"
 	{ RET(IF); }
-#line 1192 "cmmap.c"
+#line 1176 "cmmap.c"
 yy151:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -1264,12 +1248,12 @@ yy162:
 	++YYCURSOR;
 #line 176 "cmmap.re"
 	{ RET(OREQ); }
-#line 1268 "cmmap.c"
+#line 1252 "cmmap.c"
 yy164:
 	++YYCURSOR;
 #line 183 "cmmap.re"
 	{ RET(OROR); }
-#line 1273 "cmmap.c"
+#line 1257 "cmmap.c"
 yy166:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
@@ -1332,7 +1316,7 @@ yy168:
 	++YYCURSOR;
 #line 166 "cmmap.re"
 	{ RET(ELLIPSIS); }
-#line 1336 "cmmap.c"
+#line 1320 "cmmap.c"
 yy170:
 	yych = *++YYCURSOR;
 	goto yy114;
@@ -1409,12 +1393,12 @@ yy176:
 	++YYCURSOR;
 #line 168 "cmmap.re"
 	{ RET(LSHIFTEQ); }
-#line 1413 "cmmap.c"
+#line 1397 "cmmap.c"
 yy178:
 	++YYCURSOR;
 #line 167 "cmmap.re"
 	{ RET(RSHIFTEQ); }
-#line 1418 "cmmap.c"
+#line 1402 "cmmap.c"
 yy180:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -1553,7 +1537,7 @@ yy191:
 yy192:
 #line 134 "cmmap.re"
 	{ RET(FOR); }
-#line 1557 "cmmap.c"
+#line 1541 "cmmap.c"
 yy193:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -1631,7 +1615,7 @@ yy194:
 yy195:
 #line 137 "cmmap.re"
 	{ RET(INT); }
-#line 1635 "cmmap.c"
+#line 1619 "cmmap.c"
 yy196:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -1793,7 +1777,7 @@ yy211:
 yy212:
 #line 121 "cmmap.re"
 	{ RET(AUTO); }
-#line 1797 "cmmap.c"
+#line 1781 "cmmap.c"
 yy213:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -1871,7 +1855,7 @@ yy214:
 yy215:
 #line 123 "cmmap.re"
 	{ RET(CASE); }
-#line 1875 "cmmap.c"
+#line 1859 "cmmap.c"
 yy216:
 	++YYCURSOR;
 	switch ((yych = *YYCURSOR)) {
@@ -1943,7 +1927,7 @@ yy216:
 yy217:
 #line 124 "cmmap.re"
 	{ RET(CHAR); }
-#line 1947 "cmmap.c"
+#line 1931 "cmmap.c"
 yy218:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -2039,7 +2023,7 @@ yy222:
 yy223:
 #line 130 "cmmap.re"
 	{ RET(ELSE); }
-#line 2043 "cmmap.c"
+#line 2027 "cmmap.c"
 yy224:
 	++YYCURSOR;
 	switch ((yych = *YYCURSOR)) {
@@ -2111,7 +2095,7 @@ yy224:
 yy225:
 #line 131 "cmmap.re"
 	{ RET(ENUM); }
-#line 2115 "cmmap.c"
+#line 2099 "cmmap.c"
 yy226:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -2195,7 +2179,7 @@ yy228:
 yy229:
 #line 135 "cmmap.re"
 	{ RET(GOTO); }
-#line 2199 "cmmap.c"
+#line 2183 "cmmap.c"
 yy230:
 	++YYCURSOR;
 	switch ((yych = *YYCURSOR)) {
@@ -2267,7 +2251,7 @@ yy230:
 yy231:
 #line 138 "cmmap.re"
 	{ RET(LONG); }
-#line 2271 "cmmap.c"
+#line 2255 "cmmap.c"
 yy232:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -2405,7 +2389,7 @@ yy243:
 yy244:
 #line 150 "cmmap.re"
 	{ RET(VOID); }
-#line 2409 "cmmap.c"
+#line 2393 "cmmap.c"
 yy245:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -2489,7 +2473,7 @@ yy247:
 yy248:
 #line 122 "cmmap.re"
 	{ RET(BREAK); }
-#line 2493 "cmmap.c"
+#line 2477 "cmmap.c"
 yy249:
 	++YYCURSOR;
 	switch ((yych = *YYCURSOR)) {
@@ -2561,7 +2545,7 @@ yy249:
 yy250:
 #line 125 "cmmap.re"
 	{ RET(CONST); }
-#line 2565 "cmmap.c"
+#line 2549 "cmmap.c"
 yy251:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -2657,7 +2641,7 @@ yy255:
 yy256:
 #line 133 "cmmap.re"
 	{ RET(FLOAT); }
-#line 2661 "cmmap.c"
+#line 2645 "cmmap.c"
 yy257:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -2741,7 +2725,7 @@ yy259:
 yy260:
 #line 141 "cmmap.re"
 	{ RET(SHORT); }
-#line 2745 "cmmap.c"
+#line 2729 "cmmap.c"
 yy261:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -2849,7 +2833,7 @@ yy267:
 yy268:
 #line 148 "cmmap.re"
 	{ RET(UNION); }
-#line 2853 "cmmap.c"
+#line 2837 "cmmap.c"
 yy269:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -2933,7 +2917,7 @@ yy271:
 yy272:
 #line 152 "cmmap.re"
 	{ RET(WHILE); }
-#line 2937 "cmmap.c"
+#line 2921 "cmmap.c"
 yy273:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -3017,7 +3001,7 @@ yy275:
 yy276:
 #line 129 "cmmap.re"
 	{ RET(DOUBLE); }
-#line 3021 "cmmap.c"
+#line 3005 "cmmap.c"
 yy277:
 	++YYCURSOR;
 	switch ((yych = *YYCURSOR)) {
@@ -3089,7 +3073,7 @@ yy277:
 yy278:
 #line 132 "cmmap.re"
 	{ RET(EXTERN); }
-#line 3093 "cmmap.c"
+#line 3077 "cmmap.c"
 yy279:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -3167,7 +3151,7 @@ yy280:
 yy281:
 #line 140 "cmmap.re"
 	{ RET(RETURN); }
-#line 3171 "cmmap.c"
+#line 3155 "cmmap.c"
 yy282:
 	++YYCURSOR;
 	switch ((yych = *YYCURSOR)) {
@@ -3239,7 +3223,7 @@ yy282:
 yy283:
 #line 142 "cmmap.re"
 	{ RET(SIGNED); }
-#line 3243 "cmmap.c"
+#line 3227 "cmmap.c"
 yy284:
 	++YYCURSOR;
 	switch ((yych = *YYCURSOR)) {
@@ -3311,7 +3295,7 @@ yy284:
 yy285:
 #line 143 "cmmap.re"
 	{ RET(SIZEOF); }
-#line 3315 "cmmap.c"
+#line 3299 "cmmap.c"
 yy286:
 	++YYCURSOR;
 	switch ((yych = *YYCURSOR)) {
@@ -3383,7 +3367,7 @@ yy286:
 yy287:
 #line 144 "cmmap.re"
 	{ RET(STATIC); }
-#line 3387 "cmmap.c"
+#line 3371 "cmmap.c"
 yy288:
 	++YYCURSOR;
 	switch ((yych = *YYCURSOR)) {
@@ -3455,7 +3439,7 @@ yy288:
 yy289:
 #line 145 "cmmap.re"
 	{ RET(STRUCT); }
-#line 3459 "cmmap.c"
+#line 3443 "cmmap.c"
 yy290:
 	++YYCURSOR;
 	switch ((yych = *YYCURSOR)) {
@@ -3527,7 +3511,7 @@ yy290:
 yy291:
 #line 146 "cmmap.re"
 	{ RET(SWITCH); }
-#line 3531 "cmmap.c"
+#line 3515 "cmmap.c"
 yy292:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -3623,7 +3607,7 @@ yy296:
 yy297:
 #line 127 "cmmap.re"
 	{ RET(DEFAULT); }
-#line 3627 "cmmap.c"
+#line 3611 "cmmap.c"
 yy298:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -3701,7 +3685,7 @@ yy299:
 yy300:
 #line 147 "cmmap.re"
 	{ RET(TYPEDEF); }
-#line 3705 "cmmap.c"
+#line 3689 "cmmap.c"
 yy301:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -3785,7 +3769,7 @@ yy303:
 yy304:
 #line 126 "cmmap.re"
 	{ RET(CONTINUE); }
-#line 3789 "cmmap.c"
+#line 3773 "cmmap.c"
 yy305:
 	++YYCURSOR;
 	switch ((yych = *YYCURSOR)) {
@@ -3857,7 +3841,7 @@ yy305:
 yy306:
 #line 139 "cmmap.re"
 	{ RET(REGISTER); }
-#line 3861 "cmmap.c"
+#line 3845 "cmmap.c"
 yy307:
 	++YYCURSOR;
 	switch ((yych = *YYCURSOR)) {
@@ -3929,7 +3913,7 @@ yy307:
 yy308:
 #line 149 "cmmap.re"
 	{ RET(UNSIGNED); }
-#line 3933 "cmmap.c"
+#line 3917 "cmmap.c"
 yy309:
 	++YYCURSOR;
 	switch ((yych = *YYCURSOR)) {
@@ -4001,14 +3985,14 @@ yy309:
 yy310:
 #line 151 "cmmap.re"
 	{ RET(VOLATILE); }
-#line 4005 "cmmap.c"
+#line 3989 "cmmap.c"
 }
 #line 228 "cmmap.re"
 
 
 comment:
 
-#line 4012 "cmmap.c"
+#line 3996 "cmmap.c"
 {
 	YYCTYPE yych;
 	if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
@@ -4023,7 +4007,7 @@ yy313:
 yy314:
 #line 239 "cmmap.re"
 	{ goto comment; }
-#line 4027 "cmmap.c"
+#line 4011 "cmmap.c"
 yy315:
 	++YYCURSOR;
 #line 234 "cmmap.re"
@@ -4032,7 +4016,7 @@ yy315:
 		s->tok = s->pos = cursor; s->line++;
 		goto comment;
 	    }
-#line 4036 "cmmap.c"
+#line 4020 "cmmap.c"
 yy317:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -4043,7 +4027,7 @@ yy318:
 	++YYCURSOR;
 #line 232 "cmmap.re"
 	{ goto std; }
-#line 4047 "cmmap.c"
+#line 4031 "cmmap.c"
 }
 #line 240 "cmmap.re"
 

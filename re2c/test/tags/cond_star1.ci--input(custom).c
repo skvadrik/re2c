@@ -73,8 +73,7 @@ yy17:
 	YYBACKUPCTX ();
 	switch ((yych = YYPEEK ())) {
 	case 'b':	goto yy19;
-	case 'c':	goto yy22;
-	default:	goto yy18;
+	default:	goto yy23;
 	}
 yy18:
 	YYRESTORECTX ();
@@ -94,6 +93,7 @@ yy22:
 	YYSKIP ();
 	if (YYLESSTHAN (1)) YYFILL(1);
 	yych = YYPEEK ();
+yy23:
 	switch (yych) {
 	case 'c':	goto yy22;
 	default:	goto yy18;

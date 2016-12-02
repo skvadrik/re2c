@@ -325,7 +325,7 @@ yy14:
 yy15:
         YYSKIP ();
         switch ((yych = YYPEEK ())) {
-        case '.':    goto yy47;
+        case '.':
         case '0':
         case '1':
         case '2':
@@ -333,13 +333,14 @@ yy15:
         case '4':
         case '5':
         case '6':
-        case '7':    goto yy54;
+        case '7':
         case '8':
-        case '9':    goto yy57;
+        case '9':
         case 'A':
         case 'B':
         case 'C':
         case 'D':
+        case 'E':
         case 'F':
         case 'G':
         case 'H':
@@ -365,6 +366,7 @@ yy15:
         case 'b':
         case 'c':
         case 'd':
+        case 'e':
         case 'f':
         case 'g':
         case 'h':
@@ -384,9 +386,7 @@ yy15:
         case 'v':
         case 'w':
         case 'y':
-        case 'z':    goto yy60;
-        case 'E':
-        case 'e':    goto yy62;
+        case 'z':    goto yy55;
         case 'X':
         case 'x':    goto yy63;
         default:    goto yy16;
@@ -739,6 +739,7 @@ yy54:
         YYSKIP ();
         if (YYLESSTHAN (3)) YYFILL(3);
         yych = YYPEEK ();
+yy55:
         switch (yych) {
         case '.':    goto yy47;
         case '0':
@@ -889,6 +890,7 @@ yy60:
         YYSKIP ();
         if (YYLESSTHAN (1)) YYFILL(1);
         yych = YYPEEK ();
+yy61:
         switch (yych) {
         case '0':
         case '1':
@@ -973,60 +975,7 @@ yy62:
         case '7':
         case '8':
         case '9':    goto yy77;
-        case 'A':
-        case 'B':
-        case 'C':
-        case 'D':
-        case 'E':
-        case 'F':
-        case 'G':
-        case 'H':
-        case 'I':
-        case 'J':
-        case 'K':
-        case 'L':
-        case 'M':
-        case 'N':
-        case 'O':
-        case 'P':
-        case 'Q':
-        case 'R':
-        case 'S':
-        case 'T':
-        case 'U':
-        case 'V':
-        case 'W':
-        case 'X':
-        case 'Y':
-        case 'Z':
-        case '_':
-        case 'a':
-        case 'b':
-        case 'c':
-        case 'd':
-        case 'e':
-        case 'f':
-        case 'g':
-        case 'h':
-        case 'i':
-        case 'j':
-        case 'k':
-        case 'l':
-        case 'm':
-        case 'n':
-        case 'o':
-        case 'p':
-        case 'q':
-        case 'r':
-        case 's':
-        case 't':
-        case 'u':
-        case 'v':
-        case 'w':
-        case 'x':
-        case 'y':
-        case 'z':    goto yy60;
-        default:    goto yy59;
+        default:    goto yy61;
         }
 yy63:
         YYSKIP ();

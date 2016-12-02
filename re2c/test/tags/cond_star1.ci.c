@@ -73,8 +73,7 @@ yy17:
 	YYCTXMARKER = YYCURSOR;
 	switch ((yych = *YYCURSOR)) {
 	case 'b':	goto yy19;
-	case 'c':	goto yy22;
-	default:	goto yy18;
+	default:	goto yy23;
 	}
 yy18:
 	YYCURSOR = YYCTXMARKER;
@@ -94,6 +93,7 @@ yy22:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
+yy23:
 	switch (yych) {
 	case 'c':	goto yy22;
 	default:	goto yy18;

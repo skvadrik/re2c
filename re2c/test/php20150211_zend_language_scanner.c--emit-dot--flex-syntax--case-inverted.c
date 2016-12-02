@@ -230,11 +230,8 @@ ST_IN_SCRIPTING -> 86
 109 -> 196 [label="[*]"]
 109 -> 96 [label="[/]"]
 109 -> 198 [label="[=]"]
-110 -> 111 [label="[0x00--][/][:-A][C-D][F-W][Y-a][c-d][f-w][y-0xFF]"]
-110 -> 191 [label="[.]"]
-110 -> 112 [label="[0-9]"]
+110 -> 113 [label="[0x00-A][C-W][Y-a][c-w][y-0xFF]"]
 110 -> 200 [label="[B][b]"]
-110 -> 201 [label="[E][e]"]
 110 -> 202 [label="[X][x]"]
 111 [label="php20150211_zend_language_scanner.c--emit-dot--flex-syntax--case-inverted.re:1614"]
 112 -> 113

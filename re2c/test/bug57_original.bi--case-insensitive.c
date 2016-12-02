@@ -5168,25 +5168,24 @@ yy488:
 	goto yy498;
 yy489:
 	yych = *(marker = ++p);
-	if (yybm[0+yych] & 1) {
-		goto yy500;
-	}
-	if (yych <= '>') {
-		if (yych <= '/') {
-			if (yych <= '.') goto yy484;
-			goto yy502;
+	if (yych <= '9') {
+		if (yych <= 0x1F) {
+			if (yych <= 0x08) goto yy484;
+			if (yych <= '\r') goto yy504;
+			goto yy484;
 		} else {
-			if (yych <= '9') goto yy503;
-			if (yych <= '=') goto yy484;
-			goto yy505;
+			if (yych <= ' ') goto yy504;
+			if (yych <= '.') goto yy484;
+			goto yy504;
 		}
 	} else {
-		if (yych <= 'Z') {
-			if (yych <= '@') goto yy484;
-			goto yy503;
+		if (yych <= '@') {
+			if (yych == '>') goto yy504;
+			goto yy484;
 		} else {
+			if (yych <= 'Z') goto yy504;
 			if (yych <= '`') goto yy484;
-			if (yych <= 'z') goto yy503;
+			if (yych <= 'z') goto yy504;
 			goto yy484;
 		}
 	}
@@ -5271,6 +5270,7 @@ yy502:
 yy503:
 	++p;
 	yych = *p;
+yy504:
 	if (yybm[0+yych] & 1) {
 		goto yy500;
 	}
