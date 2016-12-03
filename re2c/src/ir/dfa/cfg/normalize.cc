@@ -45,10 +45,12 @@ void normalize(cmd_t *cmd)
 	}
 
 	// delete duplicates
-	for (cmd_t *p = cmd; p; p = p->next) {
+	for (cmd_t *p = cmd; p;) {
 		cmd_t *q = p->next;
 		if (q && cmd_t::equal(*p, *q)) {
 			p->next = q->next;
+		} else {
+			p = q;
 		}
 	}
 }
