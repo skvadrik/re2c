@@ -72,7 +72,7 @@ void dump_adfa(const DFA &dfa)
 		}
 
 		const Span *x = s->go.span, *e = x + s->go.nSpans;
-		for (uint32_t lb = 0; x < e; ++x) {
+		for (uint32_t lb = 0; x < e; lb = x->ub, ++x) {
 			if (!x->to) continue;
 
 			bool eat = true;
@@ -90,8 +90,6 @@ void dump_adfa(const DFA &dfa)
 			if (eat) dump_adfa_range(lb, x->ub);
 			dump_adfa_tcmd(dfa.tcpool[x->tags]);
 			fprintf(stderr, "\" %s]\n", attr);
-
-			lb = x->ub;
 		}
 	}
 
