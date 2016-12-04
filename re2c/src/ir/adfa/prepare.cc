@@ -20,6 +20,7 @@ void DFA::split(State *s)
 	move->rule = s->rule;
 	move->fill = s->fill; /* used by tunneling, ignored by codegen */
 	move->go = s->go;
+	move->go.tags = TCID0; /* drop hoisted tags */
 	move->rule_tags = s->rule_tags;
 	move->fall_tags = s->fall_tags;
 	s->rule = Rule::NONE;
