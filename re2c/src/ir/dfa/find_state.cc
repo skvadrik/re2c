@@ -1,7 +1,9 @@
 #include <string.h>
 
+#include "src/conf/opt.h"
 #include "src/ir/dfa/find_state.h"
 #include "src/util/hash32.h"
+#include "src/globals.h"
 
 namespace re2c
 {
@@ -41,9 +43,9 @@ struct kernel_eq_t
 	}
 };
 
-mapping_t::mapping_t(Tagpool &tagp, tcpool_t &tcp, bool injective)
+mapping_t::mapping_t(Tagpool &tagp, tcpool_t &tcp)
 	: cmd(NULL)
-	, INJECTIVE(injective)
+	, type(opts->dfa_mapping)
 	, tagpool(tagp)
 	, tcpool(tcp)
 	, max(0)
@@ -163,7 +165,7 @@ bool mapping_t::operator()(const kernel_t *k1, const kernel_t *k2)
 				x2y[x] = y;
 				y2x[y] = x;
 			} else if (!(y == y0
-				&& (INJECTIVE || x == x0))) return false;
+				&& (type == INJECTIVE || x == x0))) return false;
 		}
 	}
 
@@ -205,7 +207,7 @@ bool mapping_t::operator()(const kernel_t *k1, const kernel_t *k2)
 
 kernels_t::kernels_t(Tagpool &tagpool, tcpool_t &tcpool)
 	: lookup()
-	, mapping(tagpool, tcpool, false)
+	, mapping(tagpool, tcpool)
 	, maxsize(256) // usually ranges from one to some twenty
 	, buffer(new kernel_t(maxsize))
 {}

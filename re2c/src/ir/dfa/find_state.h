@@ -23,10 +23,12 @@ struct kernel_t
 
 struct mapping_t
 {
+	enum type_t {BIJECTIVE, INJECTIVE};
+
 	tcmd_t *cmd;
 
 private:
-	const bool INJECTIVE;
+	const type_t type;
 
 	Tagpool &tagpool;
 	tcpool_t &tcpool;
@@ -40,7 +42,7 @@ private:
 	uint32_t *indeg;
 
 public:
-	mapping_t(Tagpool &tagp, tcpool_t &tcp, bool injective);
+	mapping_t(Tagpool &tagp, tcpool_t &tcp);
 	~mapping_t();
 	void init(tagver_t v, tcmd_t *c);
 	bool operator()(const kernel_t *k1, const kernel_t *k2);

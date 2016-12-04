@@ -72,6 +72,7 @@ void Scanner::lex_conf ()
 	"flags:input"            { lex_conf_input();            return; }
 	"flags:empty-class"      { lex_conf_empty_class();      return; }
 	"flags:dfa-minimization" { lex_conf_dfa_minimization(); return; }
+	"flags:dfa-mapping"      { lex_conf_dfa_mapping();      return; }
 
 	"define:YYCONDTYPE"           { opts.set_yycondtype       (lex_conf_string ()); return; }
 	"define:YYGETCONDITION"       { opts.set_cond_get         (lex_conf_string ()); return; }
@@ -218,6 +219,19 @@ void Scanner::lex_conf_dfa_minimization()
 		" (expected: 'table', 'moore')"); }
 	"table" { opts.set_dfa_minimization(DFA_MINIMIZATION_TABLE); goto end; }
 	"moore" { opts.set_dfa_minimization(DFA_MINIMIZATION_MOORE); goto end; }
+*/
+end:
+	lex_conf_semicolon();
+}
+
+void Scanner::lex_conf_dfa_mapping()
+{
+	lex_conf_assign ();
+/*!re2c
+	* { fatal("bad configuration value"
+		" (expected: 'bijective', 'injective')"); }
+	"bijective" { opts.set_dfa_mapping(mapping_t::BIJECTIVE); goto end; }
+	"injective" { opts.set_dfa_mapping(mapping_t::INJECTIVE); goto end; }
 */
 end:
 	lex_conf_semicolon();

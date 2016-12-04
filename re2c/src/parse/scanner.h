@@ -75,6 +75,7 @@ private:
 	void lex_conf_input();
 	void lex_conf_empty_class();
 	void lex_conf_dfa_minimization();
+	void lex_conf_dfa_mapping();
 	void lex_conf_enc(Enc::type_t enc);
 	void lex_conf_assign();
 	void lex_conf_semicolon();

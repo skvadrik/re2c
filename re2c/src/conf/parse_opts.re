@@ -160,6 +160,7 @@ opt_long:
 	"input"              end { goto opt_input; }
 	"empty-class"        end { goto opt_empty_class; }
 	"dfa-minimization"   end { goto opt_dfa_minimization; }
+	"dfa-mapping"        end { goto opt_dfa_mapping; }
 	"single-pass"        end { goto opt; } // deprecated
 
 	"dump-dfa-det"       end { opts.set_dump_dfa_det(true);    goto opt; }
@@ -252,6 +253,20 @@ opt_dfa_minimization:
 	}
 	"table" end { opts.set_dfa_minimization (DFA_MINIMIZATION_TABLE); goto opt; }
 	"moore" end { opts.set_dfa_minimization (DFA_MINIMIZATION_MOORE); goto opt; }
+*/
+
+opt_dfa_mapping:
+	if (!next(YYCURSOR, argv)) {
+		error_arg("--mapping");
+		return EXIT_FAIL;
+	}
+/*!re2c
+	* {
+		error("bad argument to option --dfa-mapping (expected: bijective | injective): %s", *argv);
+		return EXIT_FAIL;
+	}
+	"bijective" end { opts.set_dfa_mapping(mapping_t::BIJECTIVE); goto opt; }
+	"injective" end { opts.set_dfa_mapping(mapping_t::INJECTIVE); goto opt; }
 */
 
 end:

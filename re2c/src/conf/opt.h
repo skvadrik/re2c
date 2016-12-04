@@ -7,6 +7,7 @@
 
 #include "src/codegen/input_api.h"
 #include "src/ir/dfa/dfa.h"
+#include "src/ir/dfa/find_state.h"
 #include "src/ir/regexp/empty_class_policy.h"
 #include "src/ir/regexp/encoding/enc.h"
 #include "src/util/forbid_copy.h"
@@ -113,6 +114,7 @@ namespace re2c
 	OPT (std::string, labelPrefix, "yy") \
 	/* internals */ \
 	OPT (dfa_minimization_t, dfa_minimization, DFA_MINIMIZATION_MOORE) \
+	OPT (mapping_t::type_t, dfa_mapping, mapping_t::BIJECTIVE) \
 	/* dump */ \
 	OPT (bool, dump_dfa_det, false) \
 	OPT (bool, dump_dfa_tagopt, false) \
