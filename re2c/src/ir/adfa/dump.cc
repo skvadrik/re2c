@@ -46,7 +46,7 @@ void dump_adfa(const DFA &dfa)
 			default:             attr = ""; break;
 		}
 		fprintf(stderr, "  n%p [height=0.2 width=0.2 label=\"", (void*)s);
-		if (s->fill) {
+		if (s->fill && action != Action::MOVE) {
 			fprintf(stderr, "F(%u) ", (uint32_t)s->fill);
 		}
 		if (action == Action::RULE) {
