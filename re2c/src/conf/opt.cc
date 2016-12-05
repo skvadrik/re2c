@@ -114,6 +114,7 @@ void opt_t::fix ()
 			fill_arg_use = Opt::baseopt.fill_arg_use;
 			fill_naked = Opt::baseopt.fill_naked;
 			labelPrefix = Opt::baseopt.labelPrefix;
+			dump_dfa_raw = Opt::baseopt.dump_dfa_raw;
 			dump_dfa_det = Opt::baseopt.dump_dfa_det;
 			dump_dfa_tagopt = Opt::baseopt.dump_dfa_tagopt;
 			dump_dfa_min = Opt::baseopt.dump_dfa_min;

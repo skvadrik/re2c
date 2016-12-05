@@ -11,6 +11,7 @@ namespace re2c
 
 struct clos_t
 {
+	nfa_state_t *origin; // for debug only
 	nfa_state_t *state;
 	size_t tvers; // tag versions
 	size_t ttran; // transition tags (lookahead tags of parent closure)

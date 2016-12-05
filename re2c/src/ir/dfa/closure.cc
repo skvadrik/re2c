@@ -157,7 +157,8 @@ bool compare_by_rule(const clos_t &c1, const clos_t &c2)
 	if (s1 > s2) return false;
 
 	// each closure item has unique state
-	assert(c1.tvers == c2.tvers
+	assert(c1.origin == c2.origin
+		&& c1.tvers == c2.tvers
 		&& c1.ttran == c2.ttran
 		&& c1.tlook == c2.tlook);
 	return false;

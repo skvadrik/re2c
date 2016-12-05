@@ -3,8 +3,9 @@
 #include <vector>
 
 #include "src/conf/warn.h"
-#include "src/ir/dfa/dfa.h"
 #include "src/ir/dfa/closure.h"
+#include "src/ir/dfa/dfa.h"
+#include "src/ir/dfa/dump.h"
 #include "src/ir/dfa/find_state.h"
 #include "src/ir/nfa/nfa.h"
 #include "src/ir/regexp/regexp.h"
@@ -38,9 +39,10 @@ void reach(const kernel_t *kernel, closure_t &clos, uint32_t symbol)
 {
 	clos.clear();
 	for (size_t i = 0; i < kernel->size; ++i) {
-		nfa_state_t *s = transition(kernel->state[i], symbol);
-		if (s) {
-			clos_t c = {s, kernel->tvers[i], kernel->tlook[i], ZERO_TAGS};
+		nfa_state_t *s1 = kernel->state[i],
+			*s2 = transition(s1, symbol);
+		if (s2) {
+			clos_t c = {s1, s2, kernel->tvers[i], kernel->tlook[i], ZERO_TAGS};
 			clos.push_back(c);
 		}
 	}
@@ -63,6 +65,7 @@ dfa_t::dfa_t(const nfa_t &nfa,
 	kernels_t kernels(tagpool, tcpool);
 	closure_t clos1, clos2;
 	bool *badtags = new bool[ntag]();
+	dump_dfa_t dump(*this, tagpool, nfa);
 
 	// all-zero tag configuration must have static number zero
 	assert(ZERO_TAGS == tagpool.insert_const(TAGVER_ZERO));
@@ -75,10 +78,11 @@ dfa_t::dfa_t(const nfa_t &nfa,
 	// other versions: [ .. -(2*N+1)] and [2*N+1 .. ]
 	maxtagver = static_cast<tagver_t>(ntag) * 2;
 
-	clos_t c0 = {nfa.root, INITIAL_TAGS, ZERO_TAGS, ZERO_TAGS};
+	clos_t c0 = {NULL, nfa.root, INITIAL_TAGS, ZERO_TAGS, ZERO_TAGS};
 	clos1.push_back(c0);
 	closure(clos1, clos2, tagpool, tcpool, rules, badtags, maxtagver);
 	kernels.insert(clos2, NULL, maxtagver);
+	dump.state0(clos2);
 
 	// closure kernels are in sync with DFA states
 	for (size_t i = 0; i < kernels.size(); ++i) {
@@ -90,13 +94,14 @@ dfa_t::dfa_t(const nfa_t &nfa,
 
 		// check if the new state is final
 		// see note [at most one final item per closure]
-		for (size_t i = 0; i < kernel->size; ++i) {
-			const nfa_state_t *f = kernel->state[i];
+		for (size_t j = 0; j < kernel->size; ++j) {
+			const nfa_state_t *f = kernel->state[j];
 			if (f->type == nfa_state_t::FIN) {
 				s->rule = f->rule;
 				const Rule &rule = rules[s->rule];
-				s->tcmd[nchars] = tcpool.conv_to_tcmd(tagpool[kernel->tvers[i]],
-					tagpool[kernel->tlook[i]], finvers, rule.lvar, rule.hvar);
+				s->tcmd[nchars] = tcpool.conv_to_tcmd(tagpool[kernel->tvers[j]],
+					tagpool[kernel->tlook[j]], finvers, rule.lvar, rule.hvar);
+				dump.final(i, f);
 				break;
 			}
 		}
@@ -108,6 +113,7 @@ dfa_t::dfa_t(const nfa_t &nfa,
 			reach(kernel, clos1, charset[c]);
 			s->tcmd[c].save = closure(clos1, clos2, tagpool, tcpool, rules, badtags, maxtagver);
 			s->arcs[c] = kernels.insert(clos2, &s->tcmd[c], maxtagver);
+			dump.state(clos2, i, c);
 		}
 	}
 

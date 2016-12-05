@@ -163,6 +163,7 @@ opt_long:
 	"dfa-mapping"        end { goto opt_dfa_mapping; }
 	"single-pass"        end { goto opt; } // deprecated
 
+	"dump-dfa-raw"       end { opts.set_dump_dfa_raw(true);    goto opt; }
 	"dump-dfa-det"       end { opts.set_dump_dfa_det(true);    goto opt; }
 	"dump-dfa-tagopt"    end { opts.set_dump_dfa_tagopt(true); goto opt; }
 	"dump-dfa-min"       end { opts.set_dump_dfa_min(true);    goto opt; }

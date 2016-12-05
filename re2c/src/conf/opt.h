@@ -116,6 +116,7 @@ namespace re2c
 	OPT (dfa_minimization_t, dfa_minimization, DFA_MINIMIZATION_MOORE) \
 	OPT (mapping_t::type_t, dfa_mapping, mapping_t::BIJECTIVE) \
 	/* dump */ \
+	OPT (bool, dump_dfa_raw, false) \
 	OPT (bool, dump_dfa_det, false) \
 	OPT (bool, dump_dfa_tagopt, false) \
 	OPT (bool, dump_dfa_min, false) \
