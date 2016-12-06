@@ -11,12 +11,10 @@ bool is_better(const clos_t &c1, const clos_t &c2, Tagpool &tagpool);
 static bool compare_by_rule(const clos_t &c1, const clos_t &c2);
 static void prune_final_items(closure_t &clos, std::valarray<Rule> &rules);
 static bool not_fin(const clos_t &c);
-static void check_nondeterminism(const closure_t &clos, Tagpool &tagpool, const std::valarray<Rule> &rules, bool *badtags);
 static tagsave_t *merge_transition_tags(closure_t &clos, Tagpool &tagpool, tcpool_t &tcpool, tagver_t &maxver);
 
 tagsave_t *closure(closure_t &clos1, closure_t &clos2, Tagpool &tagpool,
-	tcpool_t &tcpool, std::valarray<Rule> &rules, bool *badtags,
-	tagver_t &maxver)
+	tcpool_t &tcpool, std::valarray<Rule> &rules, tagver_t &maxver)
 {
 	// build tagged epsilon-closure of the given set of NFA states
 	clos2.clear();
@@ -31,9 +29,6 @@ tagsave_t *closure(closure_t &clos1, closure_t &clos2, Tagpool &tagpool,
 
 	// sort closure, group items by rule
 	std::sort(clos2.begin(), clos2.end(), compare_by_rule);
-
-	// find nondeterministic tags
-	check_nondeterminism(clos2, tagpool, rules, badtags);
 
 	// merge tags from different rules, find nondeterministic tags
 	return merge_transition_tags(clos2, tagpool, tcpool, maxver);
@@ -203,29 +198,6 @@ void prune_final_items(closure_t &clos, std::valarray<Rule> &rules)
 bool not_fin(const clos_t &c)
 {
 	return c.state->type != nfa_state_t::FIN;
-}
-
-// WARNING: this function assumes that closure items are grouped bu rule
-void check_nondeterminism(const closure_t &clos, Tagpool &tagpool,
-	const std::valarray<Rule> &rules, bool *badtags)
-{
-	size_t r = 0;
-	for (cclositer_t c = clos.begin(), e = clos.end(); c != e;) {
-		const tagver_t *x = tagpool[c->ttran];
-
-		// find next rule that occurs in closure
-		for (; r < c->state->rule; ++r);
-		const Rule &rule = rules[r];
-
-		// compare the 1st item with the rest of items: if some tag
-		// differs from that of the 1st item, then it is nondeterministic
-		for (++c; c != e && c->state->rule == r; ++c) {
-			const tagver_t *y = tagpool[c->ttran];
-			for (size_t t = rule.lvar; t < rule.hvar; ++t) {
-				badtags[t] |= y[t] != x[t];
-			}
-		}
-	}
 }
 
 tagsave_t *merge_transition_tags(closure_t &clos, Tagpool &tagpool,

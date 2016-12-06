@@ -144,5 +144,5 @@ yy31:
 	{}
 }
 
-re2c: warning: line 21: trailing context is nondeterministic [-Wnondeterministic-tags]
-re2c: warning: line 29: trailing context is nondeterministic [-Wnondeterministic-tags]
+re2c: warning: line 21: trailing context is non-deterministic and induces 2 parallel instances [-Wnondeterministic-tags]
+re2c: warning: line 29: trailing context is non-deterministic and induces 2 parallel instances [-Wnondeterministic-tags]

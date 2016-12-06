@@ -121,20 +121,22 @@ void Warn::match_empty_string (uint32_t line, const std::string &cond)
 }
 
 void Warn::nondeterministic_tags(uint32_t line, const std::string &cond,
-	const std::string *tagname)
+	const std::string *tagname, size_t nver)
 {
 	if (mask[NONDETERMINISTIC_TAGS] & WARNING) {
 		bool e = mask[NONDETERMINISTIC_TAGS] & ERROR;
 		error_accuml |= e;
+
+		warning_start(line, e);
 		if (tagname == NULL) {
-			warning(names[NONDETERMINISTIC_TAGS], line, e,
-				"trailing context %sis nondeterministic",
-				incond(cond).c_str());
+			fprintf(stderr, "trailing context");
 		} else {
-			warning(names[NONDETERMINISTIC_TAGS], line, e,
-				"tag '%s' %sis nondeterministic",
-				tagname->c_str(), incond(cond).c_str());
+			fprintf(stderr, "tag '%s'", tagname->c_str());
 		}
+		fprintf(stderr,
+			" %sis non-deterministic and induces %u parallel instances",
+			incond(cond).c_str(), static_cast<uint32_t>(nver));
+		warning_end(names[NONDETERMINISTIC_TAGS], e);
 	}
 }
 

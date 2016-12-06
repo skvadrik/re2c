@@ -42,4 +42,4 @@ yy7:
 }
 #line 4 "tags/nondet_cat1.--tags.re"
 
-re2c: warning: line 2: tag 'p' is nondeterministic [-Wnondeterministic-tags]
+re2c: warning: line 2: tag 'p' is non-deterministic and induces 2 parallel instances [-Wnondeterministic-tags]

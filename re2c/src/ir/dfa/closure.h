@@ -23,8 +23,7 @@ typedef closure_t::iterator clositer_t;
 typedef closure_t::const_iterator cclositer_t;
 
 tagsave_t *closure(closure_t &clos1, closure_t &clos2, Tagpool &tagpool,
-	tcpool_t &tcpool, std::valarray<Rule> &rules, bool *badtags,
-	tagver_t &maxver);
+	tcpool_t &tcpool, std::valarray<Rule> &rules, tagver_t &maxver);
 
 } // namespace re2c
 
