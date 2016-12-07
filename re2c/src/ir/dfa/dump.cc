@@ -18,7 +18,6 @@ dump_dfa_t::dump_dfa_t(const dfa_t &d, const Tagpool &pool, const nfa_t &n)
 	, tagpool(pool)
 	, uniqidx(0)
 	, base(n.states)
-	, done()
 {
 	if (!debug) return;
 
@@ -83,10 +82,7 @@ void dump_dfa_t::state0(const closure_t &clos)
 {
 	if (!debug) return;
 
-	done.insert(0);
-
 	closure(clos, 0, true);
-
 	fprintf(stderr, "  void [shape=point]\n");
 	for (cclositer_t c = clos.begin(); c != clos.end(); ++c) {
 		fprintf(stderr, "  void -> 0:%u:w [style=dotted label=\"", index(c->state));
@@ -95,7 +91,7 @@ void dump_dfa_t::state0(const closure_t &clos)
 	}
 }
 
-void dump_dfa_t::state(const closure_t &clos, size_t state, size_t symbol)
+void dump_dfa_t::state(const closure_t &clos, size_t state, size_t symbol, bool isnew)
 {
 	if (!debug) return;
 
@@ -104,7 +100,6 @@ void dump_dfa_t::state(const closure_t &clos, size_t state, size_t symbol)
 
 	if (state2 == dfa_t::NIL) return;
 
-	const bool isnew = done.insert(state2).second;
 	const tagcopy_t *copy = s->tcmd[symbol].copy;
 	const uint32_t
 		a = static_cast<uint32_t>(symbol),
@@ -114,7 +109,6 @@ void dump_dfa_t::state(const closure_t &clos, size_t state, size_t symbol)
 	const char *prefix = isnew ? "" : "i";
 
 	closure(clos, z, isnew);
-
 	if (!isnew) {
 		fprintf(stderr, "  i%u [style=dotted]\n"
 			"  i%u -> %u [style=dotted label=\"", z, z, y);
@@ -123,7 +117,6 @@ void dump_dfa_t::state(const closure_t &clos, size_t state, size_t symbol)
 		}
 		fprintf(stderr, "\"]\n");
 	}
-
 	for (cclositer_t c = clos.begin(); c != clos.end(); ++c) {
 		fprintf(stderr, "  %u:%u -> %s%u:%u [label=\"%u",
 			x, index(c->origin), prefix, z, index(c->state), a);

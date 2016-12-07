@@ -63,7 +63,7 @@ dfa_t::dfa_t(const nfa_t &nfa,
 {
 	const size_t ntag = vartags.size();
 	Tagpool tagpool(ntag);
-	kernels_t kernels(tagpool, tcpool);
+	kernels_t kernels(tagpool);
 	closure_t clos1, clos2;
 	dump_dfa_t dump(*this, tagpool, nfa);
 
@@ -78,42 +78,20 @@ dfa_t::dfa_t(const nfa_t &nfa,
 	// other versions: [ .. -(2*N+1)] and [2*N+1 .. ]
 	maxtagver = static_cast<tagver_t>(ntag) * 2;
 
+	// iterate while new kernels are added: for each alphabet symbol,
+	// build tagged epsilon-closure of all reachable NFA states,
+	// then find identical or mappable DFA state or add a new one
+
 	clos_t c0 = {NULL, nfa.root, INITIAL_TAGS, ZERO_TAGS, ZERO_TAGS};
 	clos1.push_back(c0);
-	closure(clos1, clos2, tagpool, tcpool, rules, maxtagver);
-	kernels.insert(clos2, NULL, maxtagver);
-	dump.state0(clos2);
+	closure(clos1, clos2, tagpool, rules, maxtagver);
+	find_state(*this, dfa_t::NIL, 0/* any */, tagpool, kernels, clos2, dump);
 
-	// closure kernels are in sync with DFA states
 	for (size_t i = 0; i < kernels.size(); ++i) {
-		const kernel_t *kernel = kernels[i];
-
-		// create new DFA state
-		dfa_state_t *s = new dfa_state_t(nchars);
-		states.push_back(s);
-
-		// check if the new state is final
-		// see note [at most one final item per closure]
-		for (size_t j = 0; j < kernel->size; ++j) {
-			const nfa_state_t *f = kernel->state[j];
-			if (f->type == nfa_state_t::FIN) {
-				s->rule = f->rule;
-				const Rule &rule = rules[s->rule];
-				s->tcmd[nchars] = tcpool.conv_to_tcmd(tagpool[kernel->tvers[j]],
-					tagpool[kernel->tlook[j]], finvers, rule.lvar, rule.hvar);
-				dump.final(i, f);
-				break;
-			}
-		}
-
-		// for each alphabet symbol, build tagged epsilon-closure
-		// of all NFA states reachable on that symbol, then try to
-		// find identical closure or add the new one
 		for (size_t c = 0; c < nchars; ++c) {
-			reach(kernel, clos1, charset[c]);
-			s->tcmd[c].save = closure(clos1, clos2, tagpool, tcpool, rules, maxtagver);
-			s->arcs[c] = kernels.insert(clos2, &s->tcmd[c], maxtagver);
-			dump.state(clos2, i, c);
+			reach(kernels[i], clos1, charset[c]);
+			closure(clos1, clos2, tagpool, rules, maxtagver);
+			find_state(*this, i, c, tagpool, kernels, clos2, dump);
 		}
 	}
 

@@ -10,11 +10,10 @@ static void closure_one(closure_t &clos, Tagpool &tagpool, clos_t &c0, nfa_state
 bool is_better(const clos_t &c1, const clos_t &c2, Tagpool &tagpool);
 static bool compare_by_rule(const clos_t &c1, const clos_t &c2);
 static void prune_final_items(closure_t &clos, std::valarray<Rule> &rules);
-static bool not_fin(const clos_t &c);
-static tagsave_t *merge_transition_tags(closure_t &clos, Tagpool &tagpool, tcpool_t &tcpool, tagver_t &maxver);
+static void update_versions(closure_t &clos, Tagpool &tagpool, tagver_t &maxver);
 
-tagsave_t *closure(closure_t &clos1, closure_t &clos2, Tagpool &tagpool,
-	tcpool_t &tcpool, std::valarray<Rule> &rules, tagver_t &maxver)
+void closure(closure_t &clos1, closure_t &clos2, Tagpool &tagpool,
+	std::valarray<Rule> &rules, tagver_t &maxver)
 {
 	// build tagged epsilon-closure of the given set of NFA states
 	clos2.clear();
@@ -31,7 +30,7 @@ tagsave_t *closure(closure_t &clos1, closure_t &clos2, Tagpool &tagpool,
 	std::sort(clos2.begin(), clos2.end(), compare_by_rule);
 
 	// merge tags from different rules, find nondeterministic tags
-	return merge_transition_tags(clos2, tagpool, tcpool, maxver);
+	update_versions(clos2, tagpool, maxver);
 }
 
 /* note [epsilon-closures in tagged NFA]
@@ -182,7 +181,7 @@ void prune_final_items(closure_t &clos, std::valarray<Rule> &rules)
 	clositer_t
 		b = clos.begin(),
 		e = clos.end(),
-		f = std::partition(b, e, not_fin);
+		f = std::partition(b, e, clos_t::not_fin);
 	if (f != e) {
 		std::partial_sort(f, f, e, compare_by_rule);
 		// mark all rules except the first one as shadowed
@@ -195,13 +194,7 @@ void prune_final_items(closure_t &clos, std::valarray<Rule> &rules)
 	}
 }
 
-bool not_fin(const clos_t &c)
-{
-	return c.state->type != nfa_state_t::FIN;
-}
-
-tagsave_t *merge_transition_tags(closure_t &clos, Tagpool &tagpool,
-	tcpool_t &tcpool, tagver_t &maxver)
+void update_versions(closure_t &clos, Tagpool &tagpool, tagver_t &maxver)
 {
 	const size_t ntag = tagpool.ntags;
 	tagver_t *cur = tagpool.buffer1,
@@ -249,8 +242,6 @@ tagsave_t *merge_transition_tags(closure_t &clos, Tagpool &tagpool,
 
 		c->tvers = tagpool.insert(ver);
 	}
-
-	return tcpool.conv_to_save(bot, cur, ntag);
 }
 
 } // namespace re2c

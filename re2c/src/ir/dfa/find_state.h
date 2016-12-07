@@ -2,6 +2,7 @@
 #define _RE2C_IR_DFA_FIND_STATE_
 
 #include "src/ir/dfa/closure.h"
+#include "src/ir/dfa/dump.h"
 #include "src/util/forbid_copy.h"
 #include "src/util/lookup.h"
 
@@ -25,32 +26,41 @@ struct mapping_t
 {
 	enum type_t {BIJECTIVE, INJECTIVE};
 
-	tcmd_t *cmd;
-
 private:
 	const type_t type;
-
-	Tagpool &tagpool;
-	tcpool_t &tcpool;
-
-	tagver_t max; // maximal tag version
 	tagver_t cap; // capacity (greater or equal to max)
 	char *mem;
+	Tagpool &tagpool;
+
+public:
+	tagver_t max; // maximal tag version
 	size_t *x2t;
 	tagver_t *x2y;
 	tagver_t *y2x;
 	uint32_t *indeg;
 
-public:
-	mapping_t(Tagpool &tagp, tcpool_t &tcp);
+	explicit mapping_t(Tagpool &pool);
 	~mapping_t();
-	void init(tagver_t v, tcmd_t *c);
+	void init(tagver_t v);
 	bool operator()(const kernel_t *k1, const kernel_t *k2);
 	FORBID_COPY(mapping_t);
 };
 
 struct kernels_t
 {
+	struct result_t
+	{
+		size_t state;
+		mapping_t *mapping;
+		bool isnew;
+
+		result_t(size_t s, mapping_t *m, bool n)
+			: state(s)
+			, mapping(m)
+			, isnew(n)
+		{}
+	};
+
 private:
 	typedef lookup_t<const kernel_t*> index_t;
 
@@ -60,13 +70,17 @@ private:
 	kernel_t *buffer;
 
 public:
-	kernels_t(Tagpool &tagpool, tcpool_t &tcpool);
+	explicit kernels_t(Tagpool &tagpool);
 	~kernels_t();
 	size_t size() const;
 	const kernel_t* operator[](size_t idx) const;
-	size_t insert(const closure_t &clos, tcmd_t *cmd, tagver_t maxver);
+	result_t insert(const closure_t &clos, tagver_t maxver);
 	FORBID_COPY(kernels_t);
 };
+
+void find_state(dfa_t &dfa, size_t state, size_t symbol,
+	const Tagpool &tagpool, kernels_t &kernels,
+	const closure_t &closure, dump_dfa_t &dump);
 
 } // namespace re2c
 

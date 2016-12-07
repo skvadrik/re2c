@@ -43,14 +43,12 @@ struct kernel_eq_t
 	}
 };
 
-mapping_t::mapping_t(Tagpool &tagp, tcpool_t &tcp)
-	: cmd(NULL)
-	, type(opts->dfa_mapping)
-	, tagpool(tagp)
-	, tcpool(tcp)
-	, max(0)
+mapping_t::mapping_t(Tagpool &pool)
+	: type(opts->dfa_mapping)
 	, cap(0)
 	, mem(NULL)
+	, tagpool(pool)
+	, max(0)
 	, x2t(NULL)
 	, x2y(NULL)
 	, y2x(NULL)
@@ -62,11 +60,10 @@ mapping_t::~mapping_t()
 	delete[] mem;
 }
 
-void mapping_t::init(tagver_t v, tcmd_t *c)
+void mapping_t::init(tagver_t v)
 {
 	// +1 to ensure max tag version is not forgotten in loops
 	max = v + 1;
-	cmd = c;
 
 	if (cap < max) {
 		cap = max * 2; // in advance
@@ -117,18 +114,6 @@ void mapping_t::init(tagver_t v, tcmd_t *c)
  * automatically sorted by X, it suffices to ensure that Y
  * subsequence for the given tag is monotonically increasing.
  */
-
-/* note [save(X), copy(Y,X) optimization]
- *
- * 'Save' command 'X <- ...' followed by a 'copy' command 'Y <- X'
- * can be optimized to 'save' command 'Y <- ...'. This way we end
- * up with less commands ans less tag versions (new version X is
- * gone), but more importantly, we can safely put 'copy' commands
- * in front of 'save' commands. This order is necessary when it
- * comes to fallback commands.
- * This optimization is applied after checking priorities, so it
- * cannot affect them.
-*/
 
 static bool compatible_kernels(const kernel_t *x, const kernel_t *y)
 {
@@ -181,33 +166,12 @@ bool mapping_t::operator()(const kernel_t *k1, const kernel_t *k2)
 		if (y <= pred[t]) return false;
 		pred[t] = y;
 	}
-
-	// all good; finally convert mapping to commands
-	// see note [save(X), copy(Y,X) optimization]
-	for (tagsave_t *s = cmd->save; s; s = s->next) {
-		tagver_t y = s->ver, x = y2x[y];
-		if (x == TAGVER_ZERO) {
-			y = -y;
-			x = y2x[y];
-		}
-		if (x != TAGVER_ZERO) {
-			y2x[y] = x2y[x] = TAGVER_ZERO;
-			s->ver = abs(x);
-		}
-	}
-	for (tagver_t x = -max; x < max; ++x) {
-		const tagver_t y = x2y[x];
-		if (y != TAGVER_ZERO && y != x) {
-			cmd->copy = tcpool.make_copy(cmd->copy, abs(x), abs(y));
-		}
-	}
-	tagcopy_t::topsort(&cmd->copy, indeg);
 	return true;
 }
 
-kernels_t::kernels_t(Tagpool &tagpool, tcpool_t &tcpool)
+kernels_t::kernels_t(Tagpool &tagpool)
 	: lookup()
-	, mapping(tagpool, tcpool)
+	, mapping(tagpool)
 	, maxsize(256) // usually ranges from one to some twenty
 	, buffer(new kernel_t(maxsize))
 {}
@@ -232,12 +196,13 @@ const kernel_t *kernels_t::operator[](size_t idx) const
 	return lookup[idx];
 }
 
-size_t kernels_t::insert(const closure_t &clos, tcmd_t *cmd, tagver_t maxver)
+kernels_t::result_t kernels_t::insert(const closure_t &clos, tagver_t maxver)
 {
 	const size_t nkern = clos.size();
+	size_t x = dfa_t::NIL;
 
 	// empty closure corresponds to default state
-	if (nkern == 0) return dfa_t::NIL;
+	if (nkern == 0) return result_t(x, NULL, false);
 
 	// resize buffer if closure is too large
 	if (maxsize < nkern) {
@@ -262,16 +227,132 @@ size_t kernels_t::insert(const closure_t &clos, tcmd_t *cmd, tagver_t maxver)
 
 	// try to find identical kernel
 	kernel_eq_t eq;
-	size_t idx = lookup.find_with(hash, buffer, eq);
-	if (idx != index_t::NIL) return idx;
+	x = lookup.find_with(hash, buffer, eq);
+	if (x != index_t::NIL) return result_t(x, NULL, false);
 
 	// else try to find mappable kernel
-	mapping.init(maxver, cmd);
-	idx = lookup.find_with(hash, buffer, mapping);
-	if (idx != index_t::NIL) return idx;
+	mapping.init(maxver);
+	x = lookup.find_with(hash, buffer, mapping);
+	if (x != index_t::NIL) return result_t(x, &mapping, false);
 
 	// otherwise add new kernel
-	return lookup.push(hash, kernel_t::copy(*buffer));
+	x = lookup.push(hash, kernel_t::copy(*buffer));
+	return result_t(x, NULL, true);
+}
+
+/* note [save(X), copy(Y,X) optimization]
+ *
+ * 'Save' command 'X <- ...' followed by a 'copy' command 'Y <- X'
+ * can be optimized to 'save' command 'Y <- ...'. This way we end
+ * up with less commands ans less tag versions (new version X is
+ * gone), but more importantly, we can safely put 'copy' commands
+ * in front of 'save' commands. This order is necessary when it
+ * comes to fallback commands.
+ * This optimization is applied after checking priorities, so it
+ * cannot affect them.
+*/
+
+static tcmd_t commands(const closure_t &closure, const Tagpool &tagpool,
+	tcpool_t &tcpool, mapping_t *mapping)
+{
+	tagsave_t *save = NULL;
+	tagcopy_t *copy = NULL;
+	cclositer_t c1 = closure.begin(), c2 = closure.end(), c;
+
+	for (size_t t = 0; t < tagpool.ntags; ++t) {
+		for (c = c1; c != c2 && tagpool[c->ttran][t] != TAGVER_CURSOR; ++c);
+		if (c != c2) save = tcpool.make_save(save, tagpool[c->tvers][t], false);
+
+		for (c = c1; c != c2 && tagpool[c->ttran][t] != TAGVER_BOTTOM; ++c);
+		if (c != c2) save = tcpool.make_save(save, -tagpool[c->tvers][t], true);
+	}
+
+	if (mapping) {
+		tagver_t max = mapping->max,
+			*x2y = mapping->x2y,
+			*y2x = mapping->y2x;
+
+		// see note [save(X), copy(Y,X) optimization]
+		for (tagsave_t *s = save; s; s = s->next) {
+			const tagver_t
+				y = s->bottom ? -s->ver : s->ver,
+				x = y2x[y];
+			if (x != TAGVER_ZERO) {
+				y2x[y] = x2y[x] = TAGVER_ZERO;
+				s->ver = abs(x);
+			}
+		}
+		for (tagver_t x = -max; x < max; ++x) {
+			const tagver_t y = x2y[x];
+			if (y != TAGVER_ZERO && y != x) {
+				copy = tcpool.make_copy(copy, abs(x), abs(y));
+			}
+		}
+		// see note [topological ordering of copy commands]
+		tagcopy_t::topsort(&copy, mapping->indeg);
+	}
+
+	return tcmd_t(save, copy);
+}
+
+static tcmd_t finalizer(const clos_t &clos, const Rule &rule,
+	const tagver_t *fins, const Tagpool &tagpool, tcpool_t &tcpool)
+{
+	const tagver_t
+		*vers = tagpool[clos.tvers],
+		*tran = tagpool[clos.tlook];
+	tagsave_t *save = NULL;
+	tagcopy_t *copy = NULL;
+
+	for (size_t t = rule.lvar; t < rule.hvar; ++t) {
+		const tagver_t
+			u = tran[t],
+			v = abs(vers[t]),
+			f = fins[t];
+
+		if (u != TAGVER_ZERO) {
+			save = tcpool.make_save(save, f, u == TAGVER_BOTTOM);
+		} else {
+			copy = tcpool.make_copy(copy, f, v);
+		}
+	}
+
+	return tcmd_t(save, copy);
+}
+
+void find_state(dfa_t &dfa, size_t state, size_t symbol,
+	const Tagpool &tagpool, kernels_t &kernels,
+	const closure_t &closure, dump_dfa_t &dump)
+{
+	const kernels_t::result_t result = kernels.insert(closure, dfa.maxtagver);
+
+	if (result.isnew) {
+		// create new DFA state
+		dfa_state_t *t = new dfa_state_t(dfa.nchars);
+		dfa.states.push_back(t);
+
+		// check if the new state is final
+		// see note [at most one final item per closure]
+		cclositer_t c1 = closure.begin(), c2 = closure.end(),
+			c = std::find_if(c1, c2, clos_t::fin);
+		if (c != c2) {
+			t->rule = c->state->rule;
+			t->tcmd[dfa.nchars] = finalizer(*c, dfa.rules[t->rule],
+				dfa.finvers, tagpool, dfa.tcpool);
+			dump.final(result.state, c->state);
+		}
+	}
+
+	// initial state
+	if (state == dfa_t::NIL) {
+		dump.state0(closure);
+		return;
+	}
+
+	dfa_state_t *s = dfa.states[state];
+	s->arcs[symbol] = result.state;
+	s->tcmd[symbol] = commands(closure, tagpool, dfa.tcpool, result.mapping);
+	dump.state(closure, state, symbol, result.isnew);
 }
 
 } // namespace re2c

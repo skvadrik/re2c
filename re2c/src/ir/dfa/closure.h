@@ -16,14 +16,17 @@ struct clos_t
 	size_t tvers; // tag versions
 	size_t ttran; // transition tags (lookahead tags of parent closure)
 	size_t tlook; // lookahead tags (transition tags of child closures)
+
+	static inline bool fin(const clos_t &c) { return c.state->type == nfa_state_t::FIN; }
+	static inline bool not_fin(const clos_t &c) { return !fin(c); }
 };
 
 typedef std::vector<clos_t> closure_t;
 typedef closure_t::iterator clositer_t;
 typedef closure_t::const_iterator cclositer_t;
 
-tagsave_t *closure(closure_t &clos1, closure_t &clos2, Tagpool &tagpool,
-	tcpool_t &tcpool, std::valarray<Rule> &rules, tagver_t &maxver);
+void closure(closure_t &clos1, closure_t &clos2, Tagpool &tagpool,
+	std::valarray<Rule> &rules, tagver_t &maxver);
 
 } // namespace re2c
 
