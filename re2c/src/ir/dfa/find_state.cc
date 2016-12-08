@@ -112,7 +112,7 @@ void mapping_t::init(tagver_t v)
  * X-component; all tags are merged together. However, priorities
  * should be checked individually for each tag. Since mapping is
  * automatically sorted by X, it suffices to ensure that Y
- * subsequence for the given tag is monotonically increasing.
+ * subsequence for the given tag is monotonically non-decreasing.
  */
 
 static bool compatible_kernels(const kernel_t *x, const kernel_t *y)
@@ -163,7 +163,7 @@ bool mapping_t::operator()(const kernel_t *k1, const kernel_t *k2)
 		const size_t t = x2t[x];
 
 		if (y == TAGVER_ZERO) continue;
-		if (y <= pred[t]) return false;
+		if (y < pred[t]) return false;
 		pred[t] = y;
 	}
 	return true;
