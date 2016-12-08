@@ -145,7 +145,7 @@ bool mapping_t::operator()(const kernel_t *k1, const kernel_t *k2)
 			const tagver_t x = xv[t], y = yv[t],
 				x0 = y2x[y], y0 = x2y[x];
 			if (y0 == TAGVER_ZERO
-				&& (INJECTIVE || x0 == TAGVER_ZERO)) {
+				&& (type == INJECTIVE || x0 == TAGVER_ZERO)) {
 				x2t[x] = t;
 				x2y[x] = y;
 				y2x[y] = x;
