@@ -14,6 +14,7 @@ yy2:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
+yy3:
 	switch (yych) {
 	case 'b':	goto yy4;
 	default:	goto yy2;
@@ -23,15 +24,9 @@ yy4:
 	{}
 yy5:
 	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
-	case 'a':	goto yy2;
-	case 'b':
-		yyt1 = NULL;
-		goto yy4;
-	default:
-		yyt1 = NULL;
-		goto yy2;
-	}
+	yyt1 = NULL;
+	yych = *YYCURSOR;
+	goto yy3;
 }
 
 re2c: warning: line 3: rule matches empty string [-Wmatch-empty-string]

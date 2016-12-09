@@ -242,54 +242,68 @@ kernels_t::result_t kernels_t::insert(const closure_t &clos, tagver_t maxver)
 
 /* note [save(X), copy(Y,X) optimization]
  *
- * 'Save' command 'X <- ...' followed by a 'copy' command 'Y <- X'
- * can be optimized to 'save' command 'Y <- ...'. This way we end
- * up with less commands ans less tag versions (new version X is
- * gone), but more importantly, we can safely put 'copy' commands
- * in front of 'save' commands. This order is necessary when it
- * comes to fallback commands.
- * This optimization is applied after checking priorities, so it
- * cannot affect them.
+ * save(X) command followed by a copy(Y,X) command can be optimized to
+ * save(Y). This helps reduce the number commands and versions (new version
+ * X is gone), but what is more important, it allows to put copy commands
+ * in front of save commands. This order is necessary when it comes to
+ * fallback commands.
+ *
+ * Note that in case of injective mapping there may be more than one copy
+ * command matching the same save command: save(X), copy(Y,X), copy(Z,X).
+ * In this case save command must be replicated for each copy command:
+ * save(Y), save(Z).
+ *
+ * For each save(X) command there must be at least one copy(Y,X) command
+ * (exactly one case of bijective mapping). This is because X version in
+ * save(X) command must be a new version which cannot occur in the older
+ * DFA state. Thus all save commands are transformed (maybe replicated) by
+ * copy commands, and some copy commands are erased by save commands.
+ *
+ * This optimization is applied after checking priority violation, so it
+ * cannot affect the check.
 */
 
 static tcmd_t commands(const closure_t &closure, const Tagpool &tagpool,
-	tcpool_t &tcpool, mapping_t *mapping)
+	tcpool_t &tcpool, mapping_t *map)
 {
 	tagsave_t *save = NULL;
 	tagcopy_t *copy = NULL;
+	tagver_t *cur = tagpool.buffer1, *bot = tagpool.buffer2;
 	cclositer_t c1 = closure.begin(), c2 = closure.end(), c;
 
+	// at most one new cursor and one new bottom version per tag
 	for (size_t t = 0; t < tagpool.ntags; ++t) {
 		for (c = c1; c != c2 && tagpool[c->ttran][t] != TAGVER_CURSOR; ++c);
-		if (c != c2) save = tcpool.make_save(save, tagpool[c->tvers][t], false);
+		cur[t] = c == c2 ? TAGVER_ZERO : tagpool[c->tvers][t];
 
 		for (c = c1; c != c2 && tagpool[c->ttran][t] != TAGVER_BOTTOM; ++c);
-		if (c != c2) save = tcpool.make_save(save, -tagpool[c->tvers][t], true);
+		bot[t] = c == c2 ? TAGVER_ZERO : tagpool[c->tvers][t];
 	}
 
-	if (mapping) {
-		tagver_t max = mapping->max,
-			*x2y = mapping->x2y,
-			*y2x = mapping->y2x;
-
-		// see note [save(X), copy(Y,X) optimization]
-		for (tagsave_t *s = save; s; s = s->next) {
-			const tagver_t
-				y = s->bottom ? -s->ver : s->ver,
-				x = y2x[y];
-			if (x != TAGVER_ZERO) {
-				y2x[y] = x2y[x] = TAGVER_ZERO;
-				s->ver = abs(x);
-			}
+	if (!map) {
+		// no mapping => only save commands, no copy commands
+		for (size_t t = 0; t < tagpool.ntags; ++t) {
+			const tagver_t x = cur[t], y = bot[t];
+			if (x != TAGVER_ZERO) save = tcpool.make_save(save, x, false);
+			if (y != TAGVER_ZERO) save = tcpool.make_save(save, -y, true);
 		}
-		for (tagver_t x = -max; x < max; ++x) {
-			const tagver_t y = x2y[x];
-			if (y != TAGVER_ZERO && y != x) {
+	} else {
+		// mapping: see note [save(X), copy(Y,X) optimization]
+		for (tagver_t x = -map->max; x < map->max; ++x) {
+			const tagver_t y = map->x2y[x];
+			if (y == TAGVER_ZERO || y == x) continue;
+
+			const size_t t = map->x2t[x];
+			if (cur[t] == y) {
+				save = tcpool.make_save(save, abs(x), false);
+			} else if (bot[t] == y) {
+				save = tcpool.make_save(save, abs(x), true);
+			} else {
 				copy = tcpool.make_copy(copy, abs(x), abs(y));
 			}
 		}
 		// see note [topological ordering of copy commands]
-		tagcopy_t::topsort(&copy, mapping->indeg);
+		tagcopy_t::topsort(&copy, map->indeg);
 	}
 
 	return tcmd_t(save, copy);
