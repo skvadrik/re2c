@@ -50,8 +50,7 @@ mapping_t::mapping_t(Tagpool &pool)
 	, x2t(NULL)
 	, x2y(NULL)
 	, y2x(NULL)
-
-	, type(opts->dfa_mapping)
+	, bijective(opts->bijective_mapping)
 	, max(0)
 	, x2t_backup(NULL)
 	, x2y_backup(NULL)
@@ -172,12 +171,12 @@ bool mapping_t::operator()(const kernel_t *k1, const kernel_t *k2)
 			const tagver_t x = xv[t], y = yv[t],
 				x0 = y2x[y], y0 = x2y[x];
 			if (y0 == TAGVER_ZERO
-				&& (type == INJECTIVE || x0 == TAGVER_ZERO)) {
+				&& (!bijective || x0 == TAGVER_ZERO)) {
 				x2t[x] = t;
 				x2y[x] = y;
 				y2x[y] = x;
 			} else if (!(y == y0
-				&& (type == INJECTIVE || x == x0))) return false;
+				&& (!bijective || x == x0))) return false;
 		}
 	}
 
@@ -299,9 +298,9 @@ kernels_t::result_t kernels_t::insert(const closure_t &clos, tagver_t maxver)
 	mapping.init(maxver);
 	x = lookup.find_with(hash, buffer, mapping);
 	if (x != index_t::NIL) {
-		// see note [bijective vs surjective mappings]
 		mapping.backup();
-		if (mapping.type == mapping_t::INJECTIVE) {
+		// see note [bijective vs surjective mappings]
+		if (!mapping.bijective) {
 			for (size_t y = x;;) {
 				y = lookup.find_next_with(y, buffer, mapping);
 				if (y == index_t::NIL) break;

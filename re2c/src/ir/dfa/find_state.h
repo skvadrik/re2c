@@ -33,8 +33,7 @@ private:
 	tagver_t *y2x;
 
 public:
-	enum type_t {BIJECTIVE, INJECTIVE};
-	const type_t type;
+	const bool bijective;
 	tagver_t max; // maximal tag version
 	size_t *x2t_backup;
 	tagver_t *x2y_backup;

@@ -44,20 +44,21 @@ void Scanner::lex_conf ()
 	"flags:" ("D" | "emit-dot") { opts.set_target(opt_t::DOT);      lex_conf_semicolon(); return; }
 	"flags:" ("S" | "skeleton") { opts.set_target(opt_t::SKELETON); lex_conf_semicolon(); return; }
 
-	"flags:" ("b" | "bit-vectors")       { opts.set_bFlag(lex_conf_bool());             return; }
-	"flags:" ("c" | "start-conditions")  { opts.set_cFlag(lex_conf_bool());             return; }
-	"flags:" ("d" | "debug-output")      { opts.set_dFlag(lex_conf_bool());             return; }
-	"flags:" ("f" | "storable-state")    { opts.set_fFlag(lex_conf_bool());             return; }
-	"flags:" ("F" | "flex-syntax")       { opts.set_FFlag(lex_conf_bool());             return; }
-	"flags:" ("g" | "computed-gotos")    { opts.set_gFlag(lex_conf_bool());             return; }
-	"flags:" ("i" | "no-debug-info")     { opts.set_iFlag(lex_conf_bool());             return; }
-	"flags:" ("r" | "reusable")          { opts.set_rFlag(lex_conf_bool());             return; }
-	"flags:" ("s" | "nested-ifs")        { opts.set_sFlag(lex_conf_bool());             return; }
-	"flags:" ("T" | "tags")              { opts.set_tags(lex_conf_bool());              return; }
-	"flags:no-generation-date"           { opts.set_bNoGenerationDate(lex_conf_bool()); return; }
-	"flags:no-version"                   { opts.set_version(!lex_conf_bool());          return; }
-	"flags:case-insensitive"             { opts.set_bCaseInsensitive(lex_conf_bool());  return; }
-	"flags:case-inverted"                { opts.set_bCaseInverted(lex_conf_bool());     return; }
+	"flags:" ("b" | "bit-vectors")       { opts.set_bFlag(lex_conf_bool());              return; }
+	"flags:" ("c" | "start-conditions")  { opts.set_cFlag(lex_conf_bool());              return; }
+	"flags:" ("d" | "debug-output")      { opts.set_dFlag(lex_conf_bool());              return; }
+	"flags:" ("f" | "storable-state")    { opts.set_fFlag(lex_conf_bool());              return; }
+	"flags:" ("F" | "flex-syntax")       { opts.set_FFlag(lex_conf_bool());              return; }
+	"flags:" ("g" | "computed-gotos")    { opts.set_gFlag(lex_conf_bool());              return; }
+	"flags:" ("i" | "no-debug-info")     { opts.set_iFlag(lex_conf_bool());              return; }
+	"flags:" ("r" | "reusable")          { opts.set_rFlag(lex_conf_bool());              return; }
+	"flags:" ("s" | "nested-ifs")        { opts.set_sFlag(lex_conf_bool());              return; }
+	"flags:" ("T" | "tags")              { opts.set_tags(lex_conf_bool());               return; }
+	"flags:no-generation-date"           { opts.set_bNoGenerationDate(lex_conf_bool());  return; }
+	"flags:no-version"                   { opts.set_version(!lex_conf_bool());           return; }
+	"flags:case-insensitive"             { opts.set_bCaseInsensitive(lex_conf_bool());   return; }
+	"flags:case-inverted"                { opts.set_bCaseInverted(lex_conf_bool());      return; }
+	"flags:non-bijective-mapping"        { opts.set_bijective_mapping(!lex_conf_bool()); return; }
 
 	"flags:" ("e" | "ecb")        { lex_conf_enc(Enc::EBCDIC); return; }
 	"flags:" ("u" | "unicode")    { lex_conf_enc(Enc::UTF32);  return; }
@@ -72,7 +73,6 @@ void Scanner::lex_conf ()
 	"flags:input"            { lex_conf_input();            return; }
 	"flags:empty-class"      { lex_conf_empty_class();      return; }
 	"flags:dfa-minimization" { lex_conf_dfa_minimization(); return; }
-	"flags:dfa-mapping"      { lex_conf_dfa_mapping();      return; }
 
 	"define:YYCONDTYPE"           { opts.set_yycondtype       (lex_conf_string ()); return; }
 	"define:YYGETCONDITION"       { opts.set_cond_get         (lex_conf_string ()); return; }
@@ -219,19 +219,6 @@ void Scanner::lex_conf_dfa_minimization()
 		" (expected: 'table', 'moore')"); }
 	"table" { opts.set_dfa_minimization(DFA_MINIMIZATION_TABLE); goto end; }
 	"moore" { opts.set_dfa_minimization(DFA_MINIMIZATION_MOORE); goto end; }
-*/
-end:
-	lex_conf_semicolon();
-}
-
-void Scanner::lex_conf_dfa_mapping()
-{
-	lex_conf_assign ();
-/*!re2c
-	* { fatal("bad configuration value"
-		" (expected: 'bijective', 'injective')"); }
-	"bijective" { opts.set_dfa_mapping(mapping_t::BIJECTIVE); goto end; }
-	"injective" { opts.set_dfa_mapping(mapping_t::INJECTIVE); goto end; }
 */
 end:
 	lex_conf_semicolon();

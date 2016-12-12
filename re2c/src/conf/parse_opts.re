@@ -130,44 +130,44 @@ opt_long:
 		error ("bad long option: %s", *argv);
 		return EXIT_FAIL;
 	}
-	"help"               end { usage ();   return EXIT_OK; }
-	"version"            end { version (); return EXIT_OK; }
-	"vernum"             end { vernum ();  return EXIT_OK; }
-	"bit-vectors"        end { opts.set_bFlag (true);             goto opt; }
-	"start-conditions"   end { opts.set_cFlag (true);             goto opt; }
-	"debug-output"       end { opts.set_dFlag (true);             goto opt; }
-	"emit-dot"           end { opts.set_target (opt_t::DOT);      goto opt; }
-	"storable-state"     end { opts.set_fFlag (true);             goto opt; }
-	"flex-syntax"        end { opts.set_FFlag (true);             goto opt; }
-	"computed-gotos"     end { opts.set_gFlag (true);             goto opt; }
-	"no-debug-info"      end { opts.set_iFlag (true);             goto opt; }
-	"reusable"           end { opts.set_rFlag (true);             goto opt; }
-	"nested-ifs"         end { opts.set_sFlag (true);             goto opt; }
-	"no-generation-date" end { opts.set_bNoGenerationDate (true); goto opt; }
-	"no-version"         end { opts.set_version (false);          goto opt; }
-	"case-insensitive"   end { opts.set_bCaseInsensitive (true);  goto opt; }
-	"case-inverted"      end { opts.set_bCaseInverted (true);     goto opt; }
-	"skeleton"           end { opts.set_target (opt_t::SKELETON); goto opt; }
-	"tags"               end { opts.set_tags (true);              goto opt; }
-	"ecb"                end { if (!opts.set_encoding (Enc::EBCDIC)) { error_encoding (); return EXIT_FAIL; } goto opt; }
-	"unicode"            end { if (!opts.set_encoding (Enc::UTF32))  { error_encoding (); return EXIT_FAIL; } goto opt; }
-	"wide-chars"         end { if (!opts.set_encoding (Enc::UCS2))   { error_encoding (); return EXIT_FAIL; } goto opt; }
-	"utf-16"             end { if (!opts.set_encoding (Enc::UTF16))  { error_encoding (); return EXIT_FAIL; } goto opt; }
-	"utf-8"              end { if (!opts.set_encoding (Enc::UTF8))   { error_encoding (); return EXIT_FAIL; } goto opt; }
-	"output"             end { if (!next (YYCURSOR, argv)) { error_arg ("-o, --output"); return EXIT_FAIL; } goto opt_output; }
-	"type-header"        end { if (!next (YYCURSOR, argv)) { error_arg ("-t, --type-header"); return EXIT_FAIL; } goto opt_header; }
-	"encoding-policy"    end { goto opt_encoding_policy; }
-	"input"              end { goto opt_input; }
-	"empty-class"        end { goto opt_empty_class; }
-	"dfa-minimization"   end { goto opt_dfa_minimization; }
-	"dfa-mapping"        end { goto opt_dfa_mapping; }
-	"single-pass"        end { goto opt; } // deprecated
+	"help"                  end { usage ();   return EXIT_OK; }
+	"version"               end { version (); return EXIT_OK; }
+	"vernum"                end { vernum ();  return EXIT_OK; }
+	"bit-vectors"           end { opts.set_bFlag (true);             goto opt; }
+	"start-conditions"      end { opts.set_cFlag (true);             goto opt; }
+	"debug-output"          end { opts.set_dFlag (true);             goto opt; }
+	"emit-dot"              end { opts.set_target (opt_t::DOT);      goto opt; }
+	"storable-state"        end { opts.set_fFlag (true);             goto opt; }
+	"flex-syntax"           end { opts.set_FFlag (true);             goto opt; }
+	"computed-gotos"        end { opts.set_gFlag (true);             goto opt; }
+	"no-debug-info"         end { opts.set_iFlag (true);             goto opt; }
+	"reusable"              end { opts.set_rFlag (true);             goto opt; }
+	"nested-ifs"            end { opts.set_sFlag (true);             goto opt; }
+	"no-generation-date"    end { opts.set_bNoGenerationDate (true); goto opt; }
+	"no-version"            end { opts.set_version (false);          goto opt; }
+	"case-insensitive"      end { opts.set_bCaseInsensitive (true);  goto opt; }
+	"case-inverted"         end { opts.set_bCaseInverted (true);     goto opt; }
+	"skeleton"              end { opts.set_target (opt_t::SKELETON); goto opt; }
+	"tags"                  end { opts.set_tags (true);              goto opt; }
+	"non-bijective-mapping" end { opts.set_bijective_mapping(false); goto opt; }
+	"ecb"                   end { if (!opts.set_encoding (Enc::EBCDIC)) { error_encoding (); return EXIT_FAIL; } goto opt; }
+	"unicode"               end { if (!opts.set_encoding (Enc::UTF32))  { error_encoding (); return EXIT_FAIL; } goto opt; }
+	"wide-chars"            end { if (!opts.set_encoding (Enc::UCS2))   { error_encoding (); return EXIT_FAIL; } goto opt; }
+	"utf-16"                end { if (!opts.set_encoding (Enc::UTF16))  { error_encoding (); return EXIT_FAIL; } goto opt; }
+	"utf-8"                 end { if (!opts.set_encoding (Enc::UTF8))   { error_encoding (); return EXIT_FAIL; } goto opt; }
+	"output"                end { if (!next (YYCURSOR, argv)) { error_arg ("-o, --output"); return EXIT_FAIL; } goto opt_output; }
+	"type-header"           end { if (!next (YYCURSOR, argv)) { error_arg ("-t, --type-header"); return EXIT_FAIL; } goto opt_header; }
+	"encoding-policy"       end { goto opt_encoding_policy; }
+	"input"                 end { goto opt_input; }
+	"empty-class"           end { goto opt_empty_class; }
+	"dfa-minimization"      end { goto opt_dfa_minimization; }
+	"single-pass"           end { goto opt; } // deprecated
 
-	"dump-dfa-raw"       end { opts.set_dump_dfa_raw(true);    goto opt; }
-	"dump-dfa-det"       end { opts.set_dump_dfa_det(true);    goto opt; }
-	"dump-dfa-tagopt"    end { opts.set_dump_dfa_tagopt(true); goto opt; }
-	"dump-dfa-min"       end { opts.set_dump_dfa_min(true);    goto opt; }
-	"dump-adfa"          end { opts.set_dump_adfa(true);       goto opt; }
+	"dump-dfa-raw"          end { opts.set_dump_dfa_raw(true);    goto opt; }
+	"dump-dfa-det"          end { opts.set_dump_dfa_det(true);    goto opt; }
+	"dump-dfa-tagopt"       end { opts.set_dump_dfa_tagopt(true); goto opt; }
+	"dump-dfa-min"          end { opts.set_dump_dfa_min(true);    goto opt; }
+	"dump-adfa"             end { opts.set_dump_adfa(true);       goto opt; }
 */
 
 opt_output:
@@ -254,20 +254,6 @@ opt_dfa_minimization:
 	}
 	"table" end { opts.set_dfa_minimization (DFA_MINIMIZATION_TABLE); goto opt; }
 	"moore" end { opts.set_dfa_minimization (DFA_MINIMIZATION_MOORE); goto opt; }
-*/
-
-opt_dfa_mapping:
-	if (!next(YYCURSOR, argv)) {
-		error_arg("--mapping");
-		return EXIT_FAIL;
-	}
-/*!re2c
-	* {
-		error("bad argument to option --dfa-mapping (expected: bijective | injective): %s", *argv);
-		return EXIT_FAIL;
-	}
-	"bijective" end { opts.set_dfa_mapping(mapping_t::BIJECTIVE); goto opt; }
-	"injective" end { opts.set_dfa_mapping(mapping_t::INJECTIVE); goto opt; }
 */
 
 end:
