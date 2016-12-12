@@ -42,8 +42,8 @@ yy7:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'a':
-		yyt1 = yyt2 = NULL;
-		goto yy9;
+		yyt2 = NULL;
+		goto yy5;
 	case 'b':	goto yy4;
 	default:
 		yyt2 = NULL;
