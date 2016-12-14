@@ -759,7 +759,7 @@ yy96:
 	default:	goto yy95;
 	}
 yy97:
-	yych = *++YYCURSOR;
+	++YYCURSOR;
 	goto yy34;
 yy98:
 	++YYCURSOR;
@@ -1318,7 +1318,7 @@ yy168:
 	{ RET(ELLIPSIS); }
 #line 1320 "cmmap.c"
 yy170:
-	yych = *++YYCURSOR;
+	++YYCURSOR;
 	goto yy114;
 yy171:
 	yych = *++YYCURSOR;

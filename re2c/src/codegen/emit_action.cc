@@ -61,14 +61,18 @@ void emit_action(OutputFile &o, uint32_t ind, bool &readCh,
 
 void emit_match(OutputFile &o, uint32_t ind, bool &readCh, const State *s)
 {
-	const bool read_ahead = s
-		&& s->next
-		&& s->next->action.type != Action::RULE;
+	const bool
+		end = s->go.nSpans == 1 && s->go.span[0].to->action.type == Action::RULE,
+		read_ahead = s->next && s->next->action.type != Action::RULE;
 
 	if (s->fill != 0) {
 		o.wstring(opts->input_api.stmt_skip(ind));
+	} else if (end) {
+		// do not read next char if all transitions go to rule state
+		o.wstring(opts->input_api.stmt_skip(ind));
+		readCh = false;
 	} else if (!read_ahead) {
-		/* do not read next char if match */
+		// delay reading next char
 		o.wstring(opts->input_api.stmt_skip(ind));
 		readCh = true;
 	} else {

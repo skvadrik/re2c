@@ -43,7 +43,6 @@ yy6:
 #line 44 "bug46_infinite_loop.c"
 yy7:
 	++YYCURSOR;
-	yych = *YYCURSOR;
 	goto yy6;
 }
 #line 19 "bug46_infinite_loop.re"

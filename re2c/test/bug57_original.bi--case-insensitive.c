@@ -120,7 +120,7 @@ int _scan_autolink_uri(const unsigned char *p)
 yy2:
 	{ return 0; }
 yy3:
-	yych = *++p;
+	++p;
 	goto yy2;
 yy4:
 	yych = *(marker = ++p);
@@ -2527,7 +2527,7 @@ int _scan_autolink_email(const unsigned char *p)
 yy349:
 	{ return 0; }
 yy350:
-	yych = *++p;
+	++p;
 	goto yy349;
 yy351:
 	yych = *(marker = ++p);
@@ -5144,7 +5144,7 @@ int _scan_html_tag(const unsigned char *p)
 yy484:
 	{ return 0; }
 yy485:
-	yych = *++p;
+	++p;
 	goto yy484;
 yy486:
 	yych = *(marker = ++p);
@@ -5705,7 +5705,7 @@ int _scan_html_block_tag(const unsigned char *p)
 yy548:
 	{ return 0; }
 yy549:
-	yych = *++p;
+	++p;
 	goto yy548;
 yy550:
 	yych = *(marker = ++p);
@@ -7583,7 +7583,7 @@ yy791:
 		}
 	}
 yy792:
-	yych = *++p;
+	++p;
 	goto yy790;
 yy793:
 	++p;
@@ -7798,7 +7798,7 @@ int _scan_link_title(const unsigned char *p)
 yy804:
 	{ return 0; }
 yy805:
-	yych = *++p;
+	++p;
 	goto yy804;
 yy806:
 	yyaccept = 0;
@@ -8038,7 +8038,7 @@ int _scan_atx_header_start(const unsigned char *p)
 yy840:
 	{ return 0; }
 yy841:
-	yych = *++p;
+	++p;
 	goto yy840;
 yy842:
 	yych = *(marker = ++p);
@@ -8151,7 +8151,7 @@ int _scan_setext_header_line(const unsigned char *p)
 yy855:
 	{ return 0; }
 yy856:
-	yych = *++p;
+	++p;
 	goto yy855;
 yy857:
 	yych = *(marker = ++p);
@@ -8274,7 +8274,7 @@ int _scan_hrule(const unsigned char *p)
 yy874:
 	{ return 0; }
 yy875:
-	yych = *++p;
+	++p;
 	goto yy874;
 yy876:
 	yych = *(marker = ++p);
@@ -8455,7 +8455,7 @@ int _scan_open_code_fence(const unsigned char *p)
 yy912:
 	{ return 0; }
 yy913:
-	yych = *++p;
+	++p;
 	goto yy912;
 yy914:
 	yych = *(marker = ++p);
@@ -8586,7 +8586,7 @@ int _scan_close_code_fence(const unsigned char *p)
 yy933:
 	{ return 0; }
 yy934:
-	yych = *++p;
+	++p;
 	goto yy933;
 yy935:
 	yych = *(marker = ++p);
@@ -8698,7 +8698,7 @@ int _scan_entity(const unsigned char *p)
 yy954:
 	{ return 0; }
 yy955:
-	yych = *++p;
+	++p;
 	goto yy954;
 yy956:
 	yych = *(marker = ++p);

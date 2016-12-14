@@ -24,7 +24,6 @@ yy5:
 #line 25 "default_full.x--encoding-policy(fail).c"
 yy6:
 	++YYCURSOR;
-	yych = *YYCURSOR;
 	goto yy5;
 }
 #line 4 "default_full.x--encoding-policy(fail).re"

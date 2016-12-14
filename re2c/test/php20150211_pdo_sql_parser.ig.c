@@ -355,7 +355,6 @@ yy45:
 	goto yy38;
 yy46:
 	++YYCURSOR;
-	yych = *YYCURSOR;
 	goto yy38;
 }
 

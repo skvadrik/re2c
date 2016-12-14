@@ -869,7 +869,7 @@ yy9:
 		goto yy5;
 	}
 yy10:
-	yych = *++YYCURSOR;
+	++YYCURSOR;
 	goto yy7;
 yy11:
 	yyaccept = 1;
@@ -3002,7 +3002,7 @@ yy101:
 	}
 #line 3004 "parse_date.s.c"
 yy102:
-	yych = *++YYCURSOR;
+	++YYCURSOR;
 	goto yy18;
 yy103:
 	yych = *++YYCURSOR;
@@ -8050,7 +8050,7 @@ yy387:
 		}
 	}
 yy388:
-	yych = *++YYCURSOR;
+	++YYCURSOR;
 	goto yy251;
 yy389:
 	yych = *++YYCURSOR;
@@ -9775,7 +9775,7 @@ yy519:
 	if (yych == 's') goto yy689;
 	goto yy53;
 yy520:
-	yych = *++YYCURSOR;
+	++YYCURSOR;
 	goto yy363;
 yy521:
 	yych = *++YYCURSOR;
@@ -11032,7 +11032,7 @@ yy674:
 	yych = *++YYCURSOR;
 	if (yych != 'I') goto yy505;
 yy675:
-	yych = *++YYCURSOR;
+	++YYCURSOR;
 	goto yy505;
 yy676:
 	yych = *++YYCURSOR;
@@ -11157,7 +11157,7 @@ yy692:
 	if (yych == 'y') goto yy520;
 	goto yy53;
 yy693:
-	yych = *++YYCURSOR;
+	++YYCURSOR;
 	goto yy223;
 yy694:
 	yych = *++YYCURSOR;
@@ -11264,7 +11264,7 @@ yy703:
 	default:	goto yy282;
 	}
 yy704:
-	yych = *++YYCURSOR;
+	++YYCURSOR;
 	goto yy275;
 yy705:
 	yyaccept = 7;
@@ -11318,7 +11318,7 @@ yy710:
 	if (yych <= '9') goto yy801;
 	goto yy53;
 yy711:
-	yych = *++YYCURSOR;
+	++YYCURSOR;
 	goto yy129;
 yy712:
 	yych = *++YYCURSOR;
@@ -11525,7 +11525,7 @@ yy749:
 	if (yych == 'd') goto yy834;
 	goto yy560;
 yy750:
-	yych = *++YYCURSOR;
+	++YYCURSOR;
 	goto yy474;
 yy751:
 	++YYCURSOR;
@@ -11951,7 +11951,7 @@ yy800:
 	if (yych == '0') goto yy878;
 	goto yy586;
 yy801:
-	yych = *++YYCURSOR;
+	++YYCURSOR;
 	goto yy586;
 yy802:
 	++YYCURSOR;
@@ -12328,10 +12328,10 @@ yy834:
 	if (yych == 'a') goto yy903;
 	goto yy560;
 yy835:
-	yych = *++YYCURSOR;
+	++YYCURSOR;
 	goto yy638;
 yy836:
-	yych = *++YYCURSOR;
+	++YYCURSOR;
 	goto yy197;
 yy837:
 	yych = *++YYCURSOR;
@@ -12525,7 +12525,7 @@ yy852:
 		goto yy505;
 	}
 yy853:
-	yych = *++YYCURSOR;
+	++YYCURSOR;
 	goto yy775;
 yy854:
 	yyaccept = 22;
@@ -12791,7 +12791,7 @@ yy878:
 		}
 	}
 yy879:
-	yych = *++YYCURSOR;
+	++YYCURSOR;
 	goto yy803;
 yy880:
 	yych = *++YYCURSOR;
@@ -13388,7 +13388,7 @@ yy954:
 		}
 	}
 yy955:
-	yych = *++YYCURSOR;
+	++YYCURSOR;
 	goto yy855;
 yy956:
 	yyaccept = 22;
@@ -13580,7 +13580,7 @@ yy981:
 	if (yych <= '2') goto yy1000;
 	goto yy53;
 yy982:
-	yych = *++YYCURSOR;
+	++YYCURSOR;
 	goto yy876;
 yy983:
 	yych = *++YYCURSOR;
@@ -13844,7 +13844,7 @@ yy1021:
 	yych = *++YYCURSOR;
 	if (yych != '0') goto yy1020;
 yy1022:
-	yych = *++YYCURSOR;
+	++YYCURSOR;
 	goto yy1020;
 yy1023:
 	yych = *++YYCURSOR;
@@ -14009,7 +14009,7 @@ yy1048:
 	if (yych <= '/') goto yy1043;
 	if (yych >= ':') goto yy1043;
 yy1049:
-	yych = *++YYCURSOR;
+	++YYCURSOR;
 	goto yy1043;
 yy1050:
 	yych = *++YYCURSOR;

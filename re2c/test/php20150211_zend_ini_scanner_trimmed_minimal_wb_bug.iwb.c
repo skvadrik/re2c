@@ -46,7 +46,7 @@
 yy3:
 	{ default action }
 yy4:
-	yych = *++YYCURSOR;
+	++YYCURSOR;
 	goto yy3;
 yy5:
 	++YYCURSOR;

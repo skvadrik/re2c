@@ -272,7 +272,6 @@ yy19:
 	}
 yy20:
 	++YYCURSOR;
-	yych = *YYCURSOR;
 	goto yy17;
 }
 

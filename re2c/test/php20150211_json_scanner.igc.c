@@ -209,7 +209,7 @@ yy8:
 yy9:
 			{ goto std; }
 yy10:
-			yych = *++YYCURSOR;
+			++YYCURSOR;
 			goto yy9;
 yy11:
 			yych = *++YYCURSOR;

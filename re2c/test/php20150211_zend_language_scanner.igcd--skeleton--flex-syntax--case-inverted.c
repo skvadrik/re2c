@@ -1516,7 +1516,6 @@ yy108:
         }
 yy109:
         YYSKIP ();
-        yych = YYPEEK ();
         goto yy98;
 yy110:
         YYSKIP ();
@@ -2623,7 +2622,6 @@ yy212:
         continue;
 yy214:
         YYSKIP ();
-        yych = YYPEEK ();
         goto yy159;
 yy215:
         YYSKIP ();
@@ -3435,7 +3433,6 @@ yy314:
         continue;
 yy316:
         YYSKIP ();
-        yych = YYPEEK ();
         goto yy224;
 yy317:
         YYSKIP ();

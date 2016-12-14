@@ -2592,7 +2592,7 @@ yy140:
 		}
 yy141:
 		YYDEBUG(141, *YYCURSOR);
-		yych = *++YYCURSOR;
+		++YYCURSOR;
 		goto yy130;
 yy142:
 		YYDEBUG(142, *YYCURSOR);
@@ -3415,7 +3415,7 @@ yy245:
 }
 yy247:
 		YYDEBUG(247, *YYCURSOR);
-		yych = *++YYCURSOR;
+		++YYCURSOR;
 		goto yy192;
 yy248:
 		YYDEBUG(248, *YYCURSOR);
@@ -3802,7 +3802,7 @@ yy313:
 }
 yy315:
 		YYDEBUG(315, *YYCURSOR);
-		yych = *++YYCURSOR;
+		++YYCURSOR;
 		goto yy199;
 yy316:
 		YYDEBUG(316, *YYCURSOR);
@@ -4029,7 +4029,7 @@ yy344:
 }
 yy346:
 		YYDEBUG(346, *YYCURSOR);
-		yych = *++YYCURSOR;
+		++YYCURSOR;
 		goto yy257;
 yy347:
 		YYDEBUG(347, *YYCURSOR);

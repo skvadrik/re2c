@@ -1758,7 +1758,7 @@ yy259:
 					goto code;
 				}
 yy260:
-	yych = *++YYCURSOR;
+	++YYCURSOR;
 	goto yy259;
 yy261:
 	++YYCURSOR;
@@ -2440,7 +2440,7 @@ yy361:
 		}
 	}
 yy362:
-	yych = *++YYCURSOR;
+	++YYCURSOR;
 	goto yy343;
 yy363:
 	++YYCURSOR;

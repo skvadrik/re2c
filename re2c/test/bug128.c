@@ -959,7 +959,6 @@ yy138:
 	}
 yy139:
 	++YYCURSOR;
-	yych = *YYCURSOR;
 	goto yy5;
 }
 #line 7 "bug128.re"

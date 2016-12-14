@@ -935,7 +935,7 @@ yy9:
 	default:	goto yy5;
 	}
 yy10:
-	yych = *++YYCURSOR;
+	++YYCURSOR;
 	goto yy7;
 yy11:
 	yyaccept = 1;
@@ -4136,7 +4136,7 @@ yy101:
 	}
 #line 4138 "parse_date.c"
 yy102:
-	yych = *++YYCURSOR;
+	++YYCURSOR;
 	goto yy18;
 yy103:
 	yych = *++YYCURSOR;
@@ -15051,7 +15051,7 @@ yy387:
 	default:	goto yy192;
 	}
 yy388:
-	yych = *++YYCURSOR;
+	++YYCURSOR;
 	goto yy251;
 yy389:
 	yych = *++YYCURSOR;
@@ -17442,7 +17442,7 @@ yy519:
 	default:	goto yy53;
 	}
 yy520:
-	yych = *++YYCURSOR;
+	++YYCURSOR;
 	goto yy363;
 yy521:
 	yych = *++YYCURSOR;
@@ -19122,7 +19122,7 @@ yy674:
 	default:	goto yy505;
 	}
 yy675:
-	yych = *++YYCURSOR;
+	++YYCURSOR;
 	goto yy505;
 yy676:
 	yych = *++YYCURSOR;
@@ -19299,7 +19299,7 @@ yy692:
 	default:	goto yy53;
 	}
 yy693:
-	yych = *++YYCURSOR;
+	++YYCURSOR;
 	goto yy223;
 yy694:
 	yych = *++YYCURSOR;
@@ -19412,7 +19412,7 @@ yy703:
 	default:	goto yy282;
 	}
 yy704:
-	yych = *++YYCURSOR;
+	++YYCURSOR;
 	goto yy275;
 yy705:
 	yyaccept = 7;
@@ -19530,7 +19530,7 @@ yy710:
 	default:	goto yy53;
 	}
 yy711:
-	yych = *++YYCURSOR;
+	++YYCURSOR;
 	goto yy129;
 yy712:
 	yych = *++YYCURSOR;
@@ -19803,7 +19803,7 @@ yy749:
 	default:	goto yy560;
 	}
 yy750:
-	yych = *++YYCURSOR;
+	++YYCURSOR;
 	goto yy474;
 yy751:
 	++YYCURSOR;
@@ -20387,7 +20387,7 @@ yy800:
 	default:	goto yy586;
 	}
 yy801:
-	yych = *++YYCURSOR;
+	++YYCURSOR;
 	goto yy586;
 yy802:
 	++YYCURSOR;
@@ -20901,10 +20901,10 @@ yy834:
 	default:	goto yy560;
 	}
 yy835:
-	yych = *++YYCURSOR;
+	++YYCURSOR;
 	goto yy638;
 yy836:
-	yych = *++YYCURSOR;
+	++YYCURSOR;
 	goto yy197;
 yy837:
 	yych = *++YYCURSOR;
@@ -21079,7 +21079,7 @@ yy852:
 	default:	goto yy505;
 	}
 yy853:
-	yych = *++YYCURSOR;
+	++YYCURSOR;
 	goto yy775;
 yy854:
 	yyaccept = 22;
@@ -21475,7 +21475,7 @@ yy878:
 	default:	goto yy586;
 	}
 yy879:
-	yych = *++YYCURSOR;
+	++YYCURSOR;
 	goto yy803;
 yy880:
 	yych = *++YYCURSOR;
@@ -22436,7 +22436,7 @@ yy954:
 	default:	goto yy855;
 	}
 yy955:
-	yych = *++YYCURSOR;
+	++YYCURSOR;
 	goto yy855;
 yy956:
 	yyaccept = 22;
@@ -22846,7 +22846,7 @@ yy981:
 	default:	goto yy53;
 	}
 yy982:
-	yych = *++YYCURSOR;
+	++YYCURSOR;
 	goto yy876;
 yy983:
 	yych = *++YYCURSOR;
@@ -23471,7 +23471,7 @@ yy1021:
 	default:	goto yy1020;
 	}
 yy1022:
-	yych = *++YYCURSOR;
+	++YYCURSOR;
 	goto yy1020;
 yy1023:
 	yych = *++YYCURSOR;
@@ -23787,7 +23787,7 @@ yy1048:
 	default:	goto yy1043;
 	}
 yy1049:
-	yych = *++YYCURSOR;
+	++YYCURSOR;
 	goto yy1043;
 yy1050:
 	yych = *++YYCURSOR;

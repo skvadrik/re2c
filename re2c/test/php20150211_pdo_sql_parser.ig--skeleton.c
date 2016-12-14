@@ -481,7 +481,6 @@ yy45:
         goto yy38;
 yy46:
         YYSKIP ();
-        yych = YYPEEK ();
         goto yy38;
 
     }

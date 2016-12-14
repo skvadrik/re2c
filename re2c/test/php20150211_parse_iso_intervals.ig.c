@@ -709,7 +709,7 @@ yy36:
 	if (yych <= '9') goto yy44;
 	goto yy10;
 yy37:
-	yych = *++YYCURSOR;
+	++YYCURSOR;
 	goto yy10;
 yy38:
 	yych = *++YYCURSOR;

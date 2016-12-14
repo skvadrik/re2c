@@ -934,7 +934,7 @@ yy9:
 	goto yy5;
 yy10:
 	YYDEBUG(10, *YYCURSOR);
-	yych = *++YYCURSOR;
+	++YYCURSOR;
 	goto yy7;
 yy11:
 	YYDEBUG(11, *YYCURSOR);
@@ -3295,7 +3295,7 @@ yy101:
 #line 3296 "parse_date.db.c"
 yy102:
 	YYDEBUG(102, *YYCURSOR);
-	yych = *++YYCURSOR;
+	++YYCURSOR;
 	goto yy18;
 yy103:
 	YYDEBUG(103, *YYCURSOR);
@@ -11467,7 +11467,7 @@ yy534:
 	goto yy53;
 yy535:
 	YYDEBUG(535, *YYCURSOR);
-	yych = *++YYCURSOR;
+	++YYCURSOR;
 	goto yy372;
 yy536:
 	YYDEBUG(536, *YYCURSOR);
@@ -14180,7 +14180,7 @@ yy694:
 	if (yych != 'I') goto yy520;
 yy695:
 	YYDEBUG(695, *YYCURSOR);
-	yych = *++YYCURSOR;
+	++YYCURSOR;
 	goto yy520;
 yy696:
 	YYDEBUG(696, *YYCURSOR);
@@ -14323,7 +14323,7 @@ yy712:
 	goto yy53;
 yy713:
 	YYDEBUG(713, *YYCURSOR);
-	yych = *++YYCURSOR;
+	++YYCURSOR;
 	goto yy230;
 yy714:
 	YYDEBUG(714, *YYCURSOR);
@@ -15206,7 +15206,7 @@ yy760:
 	goto yy53;
 yy761:
 	YYDEBUG(761, *YYCURSOR);
-	yych = *++YYCURSOR;
+	++YYCURSOR;
 	goto yy128;
 yy762:
 	YYDEBUG(762, *YYCURSOR);
@@ -16160,7 +16160,7 @@ yy820:
 	goto yy489;
 yy821:
 	YYDEBUG(821, *YYCURSOR);
-	yych = *++YYCURSOR;
+	++YYCURSOR;
 	goto yy491;
 yy822:
 	YYDEBUG(822, *YYCURSOR);
@@ -17056,7 +17056,7 @@ yy912:
 	goto yy601;
 yy913:
 	YYDEBUG(913, *YYCURSOR);
-	yych = *++YYCURSOR;
+	++YYCURSOR;
 	goto yy601;
 yy914:
 	YYDEBUG(914, *YYCURSOR);
@@ -17522,7 +17522,7 @@ yy948:
 	}
 yy949:
 	YYDEBUG(949, *YYCURSOR);
-	yych = *++YYCURSOR;
+	++YYCURSOR;
 	goto yy683;
 yy950:
 	YYDEBUG(950, *YYCURSOR);
@@ -17532,7 +17532,7 @@ yy950:
 	goto yy53;
 yy951:
 	YYDEBUG(951, *YYCURSOR);
-	yych = *++YYCURSOR;
+	++YYCURSOR;
 	goto yy281;
 yy952:
 	YYDEBUG(952, *YYCURSOR);
@@ -17579,11 +17579,11 @@ yy957:
 	goto yy868;
 yy958:
 	YYDEBUG(958, *YYCURSOR);
-	yych = *++YYCURSOR;
+	++YYCURSOR;
 	goto yy489;
 yy959:
 	YYDEBUG(959, *YYCURSOR);
-	yych = *++YYCURSOR;
+	++YYCURSOR;
 	goto yy204;
 yy960:
 	YYDEBUG(960, *YYCURSOR);
@@ -17794,7 +17794,7 @@ yy975:
 	}
 yy976:
 	YYDEBUG(976, *YYCURSOR);
-	yych = *++YYCURSOR;
+	++YYCURSOR;
 	goto yy845;
 yy977:
 	YYDEBUG(977, *YYCURSOR);
@@ -18118,7 +18118,7 @@ yy1001:
 	}
 yy1002:
 	YYDEBUG(1002, *YYCURSOR);
-	yych = *++YYCURSOR;
+	++YYCURSOR;
 	goto yy916;
 yy1003:
 	YYDEBUG(1003, *YYCURSOR);
@@ -18261,7 +18261,7 @@ yy1021:
 	goto yy868;
 yy1022:
 	YYDEBUG(1022, *YYCURSOR);
-	yych = *++YYCURSOR;
+	++YYCURSOR;
 	goto yy640;
 yy1023:
 	YYDEBUG(1023, *YYCURSOR);
@@ -18808,7 +18808,7 @@ yy1079:
 	}
 yy1080:
 	YYDEBUG(1080, *YYCURSOR);
-	yych = *++YYCURSOR;
+	++YYCURSOR;
 	goto yy978;
 yy1081:
 	YYDEBUG(1081, *YYCURSOR);
@@ -19027,7 +19027,7 @@ yy1106:
 	goto yy53;
 yy1107:
 	YYDEBUG(1107, *YYCURSOR);
-	yych = *++YYCURSOR;
+	++YYCURSOR;
 	goto yy999;
 yy1108:
 	YYDEBUG(1108, *YYCURSOR);
@@ -19365,7 +19365,7 @@ yy1146:
 	if (yych != '0') goto yy1145;
 yy1147:
 	YYDEBUG(1147, *YYCURSOR);
-	yych = *++YYCURSOR;
+	++YYCURSOR;
 	goto yy1145;
 yy1148:
 	YYDEBUG(1148, *YYCURSOR);
@@ -19603,7 +19603,7 @@ yy1177:
 	if (yych >= ':') goto yy1172;
 yy1178:
 	YYDEBUG(1178, *YYCURSOR);
-	yych = *++YYCURSOR;
+	++YYCURSOR;
 	goto yy1172;
 yy1179:
 	YYDEBUG(1179, *YYCURSOR);

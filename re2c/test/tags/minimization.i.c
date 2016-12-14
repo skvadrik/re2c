@@ -65,7 +65,6 @@ yy14:
 yy15:
 	++YYCURSOR;
 	yyt1 = NULL;
-	yych = *YYCURSOR;
 	goto yy14;
 }
 

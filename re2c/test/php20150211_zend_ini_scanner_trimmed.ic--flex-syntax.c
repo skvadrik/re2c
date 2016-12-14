@@ -870,7 +870,7 @@ yy129:
 yy131:
 	{}
 yy132:
-	yych = *++YYCURSOR;
+	++YYCURSOR;
 	goto yy131;
 yy133:
 	++YYCURSOR;
@@ -1226,7 +1226,7 @@ yy166:
 	default:	goto yy136;
 	}
 yy168:
-	yych = *++YYCURSOR;
+	++YYCURSOR;
 	goto yy157;
 yy169:
 	yych = *++YYCURSOR;

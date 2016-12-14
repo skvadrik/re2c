@@ -53,7 +53,6 @@ yy4:
 yy5:
 	++YYCURSOR;
 	yyt1 = NULL;
-	yych = *YYCURSOR;
 	goto yy2;
 }
 

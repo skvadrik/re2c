@@ -675,7 +675,7 @@ yy81:
 	default:	goto yy80;
 	}
 yy82:
-	yych = *++YYCURSOR;
+	++YYCURSOR;
 	goto yy34;
 yy83:
 	++YYCURSOR;
@@ -947,7 +947,7 @@ yy126:
 	{ RET(ELLIPSIS); }
 #line 949 "cnokw.c"
 yy128:
-	yych = *++YYCURSOR;
+	++YYCURSOR;
 	goto yy99;
 yy129:
 	yych = *++YYCURSOR;

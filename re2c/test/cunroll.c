@@ -673,7 +673,7 @@ yy80:
 	default:	goto yy79;
 	}
 yy81:
-	yych = *++YYCURSOR;
+	++YYCURSOR;
 	goto yy34;
 yy82:
 	++YYCURSOR;
@@ -1017,7 +1017,7 @@ yy127:
 	{ RET(ELLIPSIS); }
 #line 1019 "cunroll.c"
 yy129:
-	yych = *++YYCURSOR;
+	++YYCURSOR;
 	goto yy98;
 yy130:
 	yych = *++YYCURSOR;
@@ -1658,7 +1658,7 @@ yy161:
 	{ goto comment; }
 #line 1660 "cunroll.c"
 yy162:
-	yych = *++YYCURSOR;
+	++YYCURSOR;
 	goto yy161;
 yy163:
 	++YYCURSOR;

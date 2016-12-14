@@ -65,7 +65,6 @@ yy9:
 	}
 yy10:
 	++YYCURSOR;
-	yych = *YYCURSOR;
 	goto yy6;
 }
 

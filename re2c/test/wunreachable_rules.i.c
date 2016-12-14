@@ -22,7 +22,6 @@ yy4:
 	{ 0 }
 yy5:
 	++YYCURSOR;
-	yych = *YYCURSOR;
 	goto yy4;
 }
 
@@ -56,7 +55,6 @@ yy11:
 	}
 yy12:
 	++YYCURSOR;
-	yych = *YYCURSOR;
 	goto yy10;
 }
 

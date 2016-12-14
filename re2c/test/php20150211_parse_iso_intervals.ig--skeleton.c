@@ -590,7 +590,6 @@ yy36:
         goto yy10;
 yy37:
         YYSKIP ();
-        yych = YYPEEK ();
         goto yy10;
 yy38:
         YYSKIP ();

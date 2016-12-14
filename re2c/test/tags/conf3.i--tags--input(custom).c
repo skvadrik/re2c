@@ -293,7 +293,6 @@ yy19:
 	}
 yy20:
 	YYSKIP ();
-	yych = YYPEEK ();
 	goto yy17;
 }
 

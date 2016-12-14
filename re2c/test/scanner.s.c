@@ -363,7 +363,7 @@ yy46:
 				  RETURN(CLOSE); }
 #line 365 "scanner.s.c"
 yy47:
-	yych = *++YYCURSOR;
+	++YYCURSOR;
 	goto yy46;
 yy48:
 	++YYCURSOR;
@@ -1118,7 +1118,7 @@ yy169:
 		}
 	}
 yy170:
-	yych = *++YYCURSOR;
+	++YYCURSOR;
 	goto yy151;
 yy171:
 	++YYCURSOR;

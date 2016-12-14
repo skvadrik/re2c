@@ -50,7 +50,6 @@ yy11:
 	if (yych >= 0x01) goto yy9;
 yy12:
 	++YYCURSOR;
-	yych = *YYCURSOR;
 	goto yy7;
 }
 #line 9 "input8.g.re"
