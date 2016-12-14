@@ -5,7 +5,6 @@
 #include "src/codegen/input_api.h"
 #include "src/codegen/indent.h"
 #include "src/conf/opt.h"
-#include "src/util/string_utils.h"
 #include "src/globals.h"
 
 namespace re2c
@@ -119,24 +118,15 @@ std::string InputAPI::stmt_skip_backup_peek (uint32_t ind) const
 		: stmt_skip (ind) + stmt_backup (ind) + stmt_peek (ind);
 }
 
-std::string InputAPI::expr_lessthan_one () const
-{
-	return type_ == DEFAULT
-		? opts->yylimit + " <= " + opts->yycursor
-		: expr_lessthan (1);
-}
-
-std::string InputAPI::expr_lessthan (size_t n) const
+std::string InputAPI::expr_lessthan(size_t n) const
 {
 	std::ostringstream s;
-	switch (type_)
-	{
-		case DEFAULT:
-			s << "(" << opts->yylimit << " - " << opts->yycursor << ") < " << n;
-			break;
-		case CUSTOM:
-			s << opts->yylessthan << " (" << n << ")";
-			break;
+	if (type_ == CUSTOM) {
+		s << opts->yylessthan << " (" << n << ")";
+	} else if (n == 1) {
+		s << opts->yylimit << " <= " << opts->yycursor;
+	} else {
+		s << "(" << opts->yylimit << " - " << opts->yycursor << ") < " << n;
 	}
 	return s.str ();
 }

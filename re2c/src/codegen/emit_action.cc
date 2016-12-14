@@ -21,16 +21,13 @@ namespace re2c
 
 class label_t;
 
-static void need(OutputFile &o, uint32_t ind, size_t n, bool bSetMarker);
+static void need(OutputFile &o, uint32_t ind, size_t some);
 static void emit_match(OutputFile &o, uint32_t ind, const State *s);
 static void emit_initial(OutputFile &o, uint32_t ind, const State *s, const std::set<label_t> &used_labels, bool save_yyaccept);
 static void emit_save(OutputFile &o, uint32_t ind, const State *s, bool save_yyaccept);
 static void emit_accept_binary(OutputFile &o, uint32_t ind, const DFA &dfa, const State *s, size_t l, size_t r);
 static void emit_accept(OutputFile &o, uint32_t ind, const DFA &dfa, const State *s);
 static void emit_rule(OutputFile &o, uint32_t ind, const DFA &dfa, size_t rule_idx);
-static void genYYFill(OutputFile &o, size_t need);
-static void genSetCondition(OutputFile &o, uint32_t ind, const std::string &cond);
-static void genSetState(OutputFile &o, uint32_t ind, uint32_t fillIndex);
 static void gen_goto(code_lines_t &code, const State *to, const DFA &dfa, tcid_t tcid);
 static void gen_fintags(OutputFile &o, uint32_t ind, const DFA &dfa, const Rule &rule);
 
@@ -66,7 +63,8 @@ void emit_match(OutputFile &o, uint32_t ind, const State *s)
 
 	if (s->fill != 0) {
 		o.wstring(opts->input_api.stmt_skip(ind));
-		need(o, ind, s->fill, false);
+		need(o, ind, s->fill);
+		o.wstring(opts->input_api.stmt_peek(ind));
 	} else if (end) {
 		// do not read next char if all transitions go to rule state
 		o.wstring(opts->input_api.stmt_skip(ind));
@@ -105,7 +103,12 @@ void emit_initial(OutputFile &o, uint32_t ind, const State *s,
 	}
 
 	if (s->fill != 0) {
-		need(o, ind, s->fill, initial.setMarker);
+		need(o, ind, s->fill);
+		if (initial.setMarker) {
+			o.wstring(opts->input_api.stmt_backup_peek(ind));
+		} else {
+			o.wstring(opts->input_api.stmt_peek(ind));
+		}
 	} else {
 		if (initial.setMarker) {
 			o.wstring(opts->input_api.stmt_backup(ind));
@@ -123,7 +126,8 @@ void emit_save(OutputFile &o, uint32_t ind, const State *const s,
 
 	if (s->fill != 0) {
 		o.wstring(opts->input_api.stmt_skip_backup(ind));
-		need(o, ind, s->fill, false);
+		need(o, ind, s->fill);
+		o.wstring(opts->input_api.stmt_peek(ind));
 	} else {
 		o.wstring(opts->input_api.stmt_skip_backup_peek(ind));
 	}
@@ -209,104 +213,73 @@ void emit_accept(OutputFile &o, uint32_t ind, const DFA &dfa, const State *s)
 void emit_rule(OutputFile &o, uint32_t ind, const DFA &dfa, size_t rule_idx)
 {
 	const Rule &rule = dfa.rules[rule_idx];
-	const RuleInfo *info = rule.info;
+	const std::string &cond = rule.info->newcond;
+	const Code *code = rule.info->code;
+	std::string s;
 
 	gen_fintags(o, ind, dfa, rule);
 
 	if (opts->target == opt_t::SKELETON) {
 		emit_action(o, ind, dfa, rule_idx);
-	} else {
-		const std::string &cond = info->newcond;
-		if (!cond.empty() && dfa.cond != cond) {
-			genSetCondition(o, ind, cond);
+		return;
+	}
+
+	if (!cond.empty() && dfa.cond != cond) {
+		strrreplace(s = opts->cond_set, opts->cond_set_arg, opts->condEnumPrefix + cond);
+		o.wind(ind).wstring(s);
+		if (!opts->cond_set_naked) {
+			o.ws("(").wstring(opts->condEnumPrefix).wstring(cond).ws(");");
 		}
-		const Code *code = info->code;
-		if (code) {
-			if (!yySetupRule.empty()) {
-				o.wind(ind).wstring(yySetupRule).ws("\n");
-			}
-			o.wline_info(code->loc.line, code->loc.filename.c_str())
-				.wind(ind).wstring(code->text).ws("\n")
-				.wdelay_line_info();
-		} else if (!cond.empty()) {
-			std::string action = opts->condGoto;
-			strrreplace(action, opts->condGotoParam, opts->condPrefix + cond);
-			o.wind(ind).wstring(action).ws("\n");
+		o.ws("\n");
+	}
+	if (code) {
+		if (!yySetupRule.empty()) {
+			o.wind(ind).wstring(yySetupRule).ws("\n");
 		}
+		o.wline_info(code->loc.line, code->loc.filename.c_str())
+			.wind(ind).wstring(code->text).ws("\n")
+			.wdelay_line_info();
+	} else if (!cond.empty()) {
+		strrreplace(s = opts->condGoto, opts->condGotoParam, opts->condPrefix + cond);
+		o.wind(ind).wstring(s).ws("\n");
 	}
 }
 
-void need(OutputFile &o, uint32_t ind, size_t n, bool bSetMarker)
+void need(OutputFile &o, uint32_t ind, size_t some)
 {
-	uint32_t fillIndex = last_fill_index;
+	assert(some > 0);
+
+	std::string s;
 
 	if (opts->fFlag) {
-		last_fill_index++;
-		genSetState(o, ind, fillIndex);
+		strrreplace(s = opts->state_set, opts->state_set_arg, last_fill_index);
+		o.wind(ind).wstring(s);
+		if (!opts->state_set_naked) {
+			o.ws("(").wu32(last_fill_index).ws(");");
+		}
+		o.ws("\n");
 	}
 
-	if (opts->fill_use && n > 0) {
+	if (opts->fill_use) {
 		o.wind(ind);
-		if (n == 1) {
-			if (opts->fill_check) {
-				o.ws("if (").wstring(opts->input_api.expr_lessthan_one()).ws(") ");
-			}
-			genYYFill(o, n);
-		} else {
-			if (opts->fill_check) {
-				o.ws("if (").wstring(opts->input_api.expr_lessthan(n)).ws(") ");
-			}
-			genYYFill(o, n);
+		if (opts->fill_check) {
+			o.ws("if (").wstring(opts->input_api.expr_lessthan(some)).ws(") ");
 		}
+		strrreplace(s = opts->fill, opts->fill_arg, some);
+		o.wstring(s);
+		if (!opts->fill_naked) {
+			if (opts->fill_arg_use) {
+				o.ws("(").wu64(some).ws(")");
+			}
+			o.ws(";");
+		}
+		o.ws("\n");
 	}
 
 	if (opts->fFlag) {
-		o.wstring(opts->yyfilllabel).wu32(fillIndex).ws(":\n");
+		o.wstring(opts->yyfilllabel).wu32(last_fill_index).ws(":\n");
+		++last_fill_index;
 	}
-
-	if (n > 0) {
-		if (bSetMarker) {
-			o.wstring(opts->input_api.stmt_backup_peek(ind));
-		} else {
-			o.wstring(opts->input_api.stmt_peek(ind));
-		}
-	}
-}
-
-void genYYFill(OutputFile &o, size_t need)
-{
-	std::string fill = opts->fill;
-	strrreplace(fill, opts->fill_arg, need);
-	o.wstring(fill);
-	if (!opts->fill_naked) {
-		if (opts->fill_arg_use) {
-			o.ws("(").wu64(need).ws(")");
-		}
-		o.ws(";");
-	}
-	o.ws("\n");
-}
-
-void genSetCondition(OutputFile &o, uint32_t ind, const std::string &cond)
-{
-	std::string cond_set = opts->cond_set;
-	strrreplace(cond_set, opts->cond_set_arg, opts->condEnumPrefix + cond);
-	o.wind(ind).wstring(cond_set);
-	if (!opts->cond_set_naked) {
-		o.ws("(").wstring(opts->condEnumPrefix).wstring(cond).ws(");");
-	}
-	o.ws("\n");
-}
-
-void genSetState(OutputFile &o, uint32_t ind, uint32_t fillIndex)
-{
-	std::string state_set = opts->state_set;
-	strrreplace(state_set, opts->state_set_arg, fillIndex);
-	o.wind(ind).wstring(state_set);
-	if (!opts->state_set_naked) {
-		o.ws("(").wu32(fillIndex).ws(");");
-	}
-	o.ws("\n");
 }
 
 void gen_goto_case(OutputFile &o, uint32_t ind, const State *to,

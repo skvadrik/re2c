@@ -35,7 +35,6 @@ public:
 	std::string stmt_skip_backup (uint32_t ind) const;
 	std::string stmt_backup_peek (uint32_t ind) const;
 	std::string stmt_skip_backup_peek (uint32_t ind) const;
-	std::string expr_lessthan_one () const;
 	std::string expr_lessthan (size_t n) const;
 };
 
