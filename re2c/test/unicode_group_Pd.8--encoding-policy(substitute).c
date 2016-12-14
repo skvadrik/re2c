@@ -130,8 +130,8 @@ yy19:
 	default:	goto yy12;
 	}
 yy20:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case 0x8D:	goto yy4;
 	default:	goto yy12;
 	}

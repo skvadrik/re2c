@@ -206,8 +206,8 @@ yy34:
 	default:	goto yy4;
 	}
 yy35:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '\t':	goto yy45;
 	case '\n':
 	case '\r':
@@ -826,8 +826,8 @@ yy119:
 yy120:
 	{}
 yy121:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '\n':	goto yy119;
 	default:	goto yy120;
 	}
@@ -873,8 +873,8 @@ yy132:
 	++YYCURSOR;
 	goto yy131;
 yy133:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '\n':	goto yy132;
 	default:	goto yy131;
 	}

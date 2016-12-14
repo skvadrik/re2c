@@ -7,8 +7,8 @@
 	if ((YYLIMIT - YYCURSOR) < 3) YYFILL(3);
 	yych = *YYCURSOR;
 	yych = *++YYCURSOR;
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case 'a':	goto yy5;
 	default:	goto yy4;
 	}

@@ -246,8 +246,8 @@ yy7:
 	    }
 #line 248 "cmmap.c"
 yy9:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '=':	goto yy81;
 	default:	goto yy10;
 	}
@@ -263,8 +263,8 @@ yy11:
 	default:	goto yy84;
 	}
 yy12:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '=':	goto yy89;
 	default:	goto yy13;
 	}
@@ -273,8 +273,8 @@ yy13:
 	{ RET('%'); }
 #line 275 "cmmap.c"
 yy14:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '&':	goto yy91;
 	case '=':	goto yy93;
 	default:	goto yy15;
@@ -301,8 +301,8 @@ yy19:
 	{ RET(')'); }
 #line 303 "cmmap.c"
 yy21:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '=':	goto yy99;
 	default:	goto yy22;
 	}
@@ -311,8 +311,8 @@ yy22:
 	{ RET('*'); }
 #line 313 "cmmap.c"
 yy23:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '+':	goto yy101;
 	case '=':	goto yy103;
 	default:	goto yy24;
@@ -327,8 +327,8 @@ yy25:
 	{ RET(','); }
 #line 329 "cmmap.c"
 yy27:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '-':	goto yy105;
 	case '=':	goto yy107;
 	case '>':	goto yy109;
@@ -360,8 +360,8 @@ yy30:
 	{ RET('.'); }
 #line 362 "cmmap.c"
 yy31:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '*':	goto yy115;
 	case '=':	goto yy117;
 	default:	goto yy32;
@@ -419,8 +419,8 @@ yy39:
 	{ RET(';'); }
 #line 421 "cmmap.c"
 yy41:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '<':	goto yy123;
 	case '=':	goto yy125;
 	default:	goto yy42;
@@ -430,8 +430,8 @@ yy42:
 	{ RET('<'); }
 #line 432 "cmmap.c"
 yy43:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '=':	goto yy127;
 	default:	goto yy44;
 	}
@@ -440,8 +440,8 @@ yy44:
 	{ RET('='); }
 #line 442 "cmmap.c"
 yy45:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '=':	goto yy129;
 	case '>':	goto yy131;
 	default:	goto yy46;
@@ -541,8 +541,8 @@ yy54:
 	{ RET(']'); }
 #line 543 "cmmap.c"
 yy56:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '=':	goto yy133;
 	default:	goto yy57;
 	}
@@ -656,8 +656,8 @@ yy73:
 	{ RET('{'); }
 #line 658 "cmmap.c"
 yy75:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '=':	goto yy162;
 	case '|':	goto yy164;
 	default:	goto yy76;
@@ -918,8 +918,8 @@ yy122:
 	default:	goto yy85;
 	}
 yy123:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '=':	goto yy176;
 	default:	goto yy124;
 	}
@@ -943,8 +943,8 @@ yy129:
 	{ RET(GEQ); }
 #line 945 "cmmap.c"
 yy131:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '=':	goto yy178;
 	default:	goto yy132;
 	}
@@ -994,8 +994,8 @@ yy140:
 	default:	goto yy50;
 	}
 yy141:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '0':
 	case '1':
 	case '2':
@@ -1102,8 +1102,8 @@ yy148:
 	default:	goto yy50;
 	}
 yy149:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '0':
 	case '1':
 	case '2':
@@ -1467,8 +1467,8 @@ yy190:
 	default:	goto yy50;
 	}
 yy191:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '0':
 	case '1':
 	case '2':
@@ -1545,8 +1545,8 @@ yy193:
 	default:	goto yy50;
 	}
 yy194:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '0':
 	case '1':
 	case '2':
@@ -1707,8 +1707,8 @@ yy210:
 	default:	goto yy50;
 	}
 yy211:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '0':
 	case '1':
 	case '2':
@@ -1785,8 +1785,8 @@ yy213:
 	default:	goto yy50;
 	}
 yy214:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '0':
 	case '1':
 	case '2':
@@ -1857,8 +1857,8 @@ yy215:
 	{ RET(CASE); }
 #line 1859 "cmmap.c"
 yy216:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '0':
 	case '1':
 	case '2':
@@ -1953,8 +1953,8 @@ yy221:
 	default:	goto yy50;
 	}
 yy222:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '0':
 	case '1':
 	case '2':
@@ -2025,8 +2025,8 @@ yy223:
 	{ RET(ELSE); }
 #line 2027 "cmmap.c"
 yy224:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '0':
 	case '1':
 	case '2':
@@ -2109,8 +2109,8 @@ yy227:
 	default:	goto yy50;
 	}
 yy228:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '0':
 	case '1':
 	case '2':
@@ -2181,8 +2181,8 @@ yy229:
 	{ RET(GOTO); }
 #line 2183 "cmmap.c"
 yy230:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '0':
 	case '1':
 	case '2':
@@ -2319,8 +2319,8 @@ yy242:
 	default:	goto yy50;
 	}
 yy243:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '0':
 	case '1':
 	case '2':
@@ -2403,8 +2403,8 @@ yy246:
 	default:	goto yy50;
 	}
 yy247:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '0':
 	case '1':
 	case '2':
@@ -2475,8 +2475,8 @@ yy248:
 	{ RET(BREAK); }
 #line 2477 "cmmap.c"
 yy249:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '0':
 	case '1':
 	case '2':
@@ -2571,8 +2571,8 @@ yy254:
 	default:	goto yy50;
 	}
 yy255:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '0':
 	case '1':
 	case '2':
@@ -2655,8 +2655,8 @@ yy258:
 	default:	goto yy50;
 	}
 yy259:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '0':
 	case '1':
 	case '2':
@@ -2763,8 +2763,8 @@ yy266:
 	default:	goto yy50;
 	}
 yy267:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '0':
 	case '1':
 	case '2':
@@ -2847,8 +2847,8 @@ yy270:
 	default:	goto yy50;
 	}
 yy271:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '0':
 	case '1':
 	case '2':
@@ -2931,8 +2931,8 @@ yy274:
 	default:	goto yy50;
 	}
 yy275:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '0':
 	case '1':
 	case '2':
@@ -3003,8 +3003,8 @@ yy276:
 	{ RET(DOUBLE); }
 #line 3005 "cmmap.c"
 yy277:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '0':
 	case '1':
 	case '2':
@@ -3081,8 +3081,8 @@ yy279:
 	default:	goto yy50;
 	}
 yy280:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '0':
 	case '1':
 	case '2':
@@ -3153,8 +3153,8 @@ yy281:
 	{ RET(RETURN); }
 #line 3155 "cmmap.c"
 yy282:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '0':
 	case '1':
 	case '2':
@@ -3225,8 +3225,8 @@ yy283:
 	{ RET(SIGNED); }
 #line 3227 "cmmap.c"
 yy284:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '0':
 	case '1':
 	case '2':
@@ -3297,8 +3297,8 @@ yy285:
 	{ RET(SIZEOF); }
 #line 3299 "cmmap.c"
 yy286:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '0':
 	case '1':
 	case '2':
@@ -3369,8 +3369,8 @@ yy287:
 	{ RET(STATIC); }
 #line 3371 "cmmap.c"
 yy288:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '0':
 	case '1':
 	case '2':
@@ -3441,8 +3441,8 @@ yy289:
 	{ RET(STRUCT); }
 #line 3443 "cmmap.c"
 yy290:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '0':
 	case '1':
 	case '2':
@@ -3537,8 +3537,8 @@ yy295:
 	default:	goto yy50;
 	}
 yy296:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '0':
 	case '1':
 	case '2':
@@ -3615,8 +3615,8 @@ yy298:
 	default:	goto yy50;
 	}
 yy299:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '0':
 	case '1':
 	case '2':
@@ -3699,8 +3699,8 @@ yy302:
 	default:	goto yy50;
 	}
 yy303:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '0':
 	case '1':
 	case '2':
@@ -3771,8 +3771,8 @@ yy304:
 	{ RET(CONTINUE); }
 #line 3773 "cmmap.c"
 yy305:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '0':
 	case '1':
 	case '2':
@@ -3843,8 +3843,8 @@ yy306:
 	{ RET(REGISTER); }
 #line 3845 "cmmap.c"
 yy307:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '0':
 	case '1':
 	case '2':
@@ -3915,8 +3915,8 @@ yy308:
 	{ RET(UNSIGNED); }
 #line 3917 "cmmap.c"
 yy309:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '0':
 	case '1':
 	case '2':

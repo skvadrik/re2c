@@ -520,6 +520,7 @@ yy34:
         goto yy4;
 yy35:
         YYSKIP ();
+        yych = YYPEEK ();
         {
             static void *yytarget[256] = {
                 &&yy4,  &&yy4,  &&yy4,  &&yy4,  &&yy4,  &&yy4,  &&yy4,  &&yy4,
@@ -555,7 +556,7 @@ yy35:
                 &&yy4,  &&yy4,  &&yy4,  &&yy4,  &&yy4,  &&yy4,  &&yy4,  &&yy4,
                 &&yy4,  &&yy4,  &&yy4,  &&yy4,  &&yy4,  &&yy4,  &&yy4,  &&yy4
             };
-            goto *yytarget[(yych = YYPEEK ())];
+            goto *yytarget[yych];
         }
 yy36:
         status = check_key_count_line652_INITIAL(keys_count, i, 3)
@@ -1755,7 +1756,8 @@ yy123:
         continue;
 yy124:
         YYSKIP ();
-        if ((yych = YYPEEK ()) == '\n') goto yy122;
+        yych = YYPEEK ();
+        if (yych == '\n') goto yy122;
         goto yy123;
 
     }
@@ -1962,7 +1964,8 @@ yy136:
         goto yy135;
 yy137:
         YYSKIP ();
-        if ((yych = YYPEEK ()) == '\n') goto yy136;
+        yych = YYPEEK ();
+        if (yych == '\n') goto yy136;
         goto yy135;
 
     }

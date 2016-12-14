@@ -19,35 +19,21 @@
 namespace re2c
 {
 
-static void output_if (OutputFile & o, uint32_t ind, bool & readCh, const std::string & compare, uint32_t value);
-static std::string output_yych (bool & readCh);
-static std::string output_hgo (OutputFile & o, uint32_t ind, const DFA &dfa, bool & readCh, SwitchIf * hgo);
+static void output_if (OutputFile & o, uint32_t ind, const std::string & compare, uint32_t value);
+static std::string output_hgo (OutputFile & o, uint32_t ind, const DFA &dfa, SwitchIf * hgo);
 
-std::string output_yych (bool & readCh)
+void output_if (OutputFile & o, uint32_t ind, const std::string & compare, uint32_t value)
 {
-	if (readCh)
-	{
-		readCh = false;
-		return "(" + opts->input_api.expr_peek_save () + ")";
-	}
-	else
-	{
-		return opts->yych;
-	}
+	o.wind(ind).ws("if (").wstring(opts->yych).ws(" ").wstring(compare).ws(" ").wc_hex (value).ws(") ");
 }
 
-void output_if (OutputFile & o, uint32_t ind, bool & readCh, const std::string & compare, uint32_t value)
+std::string output_hgo (OutputFile & o, uint32_t ind, const DFA &dfa, SwitchIf * hgo)
 {
-	o.wind(ind).ws("if (").wstring(output_yych (readCh)).ws(" ").wstring(compare).ws(" ").wc_hex (value).ws(") ");
-}
-
-std::string output_hgo (OutputFile & o, uint32_t ind, const DFA &dfa, bool & readCh, SwitchIf * hgo)
-{
-	std::string yych = output_yych (readCh);
+	std::string yych = opts->yych;
 	if (hgo != NULL)
 	{
 		o.wind(ind).ws("if (").wstring(yych).ws(" & ~0xFF) {\n");
-		hgo->emit (o, ind + 1, dfa, readCh);
+		hgo->emit (o, ind + 1, dfa);
 		o.wind(ind).ws("} else ");
 		yych = opts->yych;
 	}
@@ -80,67 +66,67 @@ void Case::emit (OutputFile & o, uint32_t ind) const
 	}
 }
 
-void Cases::emit(OutputFile &o, uint32_t ind, const DFA &dfa, bool &readCh) const
+void Cases::emit(OutputFile &o, uint32_t ind, const DFA &dfa) const
 {
-	o.wind(ind).ws("switch (").wstring(output_yych(readCh)).ws(") {\n");
+	o.wind(ind).ws("switch (").wstring(opts->yych).ws(") {\n");
 
 	for (uint32_t i = 1; i < cases_size; ++i) {
 		const Case &c = cases[i];
 		c.emit(o, ind);
-		gen_goto_case(o, ind, readCh, c.to, dfa, c.tags);
+		gen_goto_case(o, ind, c.to, dfa, c.tags);
 	}
 
 	// default case must be the last one
 	const Case &c = cases[0];
 	o.wind(ind).ws("default:");
-	gen_goto_case(o, ind, readCh, c.to, dfa, c.tags);
+	gen_goto_case(o, ind, c.to, dfa, c.tags);
 
 	o.wind(ind).ws("}\n");
 }
 
-void Binary::emit(OutputFile &o, uint32_t ind, const DFA &dfa, bool &readCh)
+void Binary::emit(OutputFile &o, uint32_t ind, const DFA &dfa)
 {
-	output_if(o, ind, readCh, cond->compare, cond->value);
+	output_if(o, ind, cond->compare, cond->value);
 	o.ws("{\n");
-	thn->emit(o, ind + 1, dfa, readCh);
+	thn->emit(o, ind + 1, dfa);
 	o.wind(ind).ws("} else {\n");
-	els->emit(o, ind + 1, dfa, readCh);
+	els->emit(o, ind + 1, dfa);
 	o.wind(ind).ws("}\n");
 }
 
-void Linear::emit(OutputFile &o, uint32_t ind, const DFA &dfa, bool &readCh)
+void Linear::emit(OutputFile &o, uint32_t ind, const DFA &dfa)
 {
 	for (uint32_t i = 0; i < nbranches; ++i) {
 		const Branch &b = branches[i];
 		const Cond *cond = b.cond;
 		if (cond) {
-			output_if(o, ind, readCh, cond->compare, cond->value);
-			gen_goto_if(o, ind, readCh, b.to, dfa, b.tags);
+			output_if(o, ind, cond->compare, cond->value);
+			gen_goto_if(o, ind, b.to, dfa, b.tags);
 		} else {
-			gen_goto_plain(o, ind, readCh, b.to, dfa, b.tags);
+			gen_goto_plain(o, ind, b.to, dfa, b.tags);
 		}
 	}
 }
 
-void If::emit(OutputFile &o, uint32_t ind, const DFA &dfa, bool &readCh)
+void If::emit(OutputFile &o, uint32_t ind, const DFA &dfa)
 {
 	switch (type) {
-		case BINARY: info.binary->emit(o, ind, dfa, readCh); break;
-		case LINEAR: info.linear->emit(o, ind, dfa, readCh); break;
+		case BINARY: info.binary->emit(o, ind, dfa); break;
+		case LINEAR: info.linear->emit(o, ind, dfa); break;
 	}
 }
 
-void SwitchIf::emit(OutputFile &o, uint32_t ind, const DFA &dfa, bool &readCh)
+void SwitchIf::emit(OutputFile &o, uint32_t ind, const DFA &dfa)
 {
 	switch (type) {
-		case SWITCH: info.cases->emit(o, ind, dfa, readCh); break;
-		case IF:     info.ifs->emit(o, ind, dfa, readCh); break;
+		case SWITCH: info.cases->emit(o, ind, dfa); break;
+		case IF:     info.ifs->emit(o, ind, dfa); break;
 	}
 }
 
-void GoBitmap::emit (OutputFile & o, uint32_t ind, const DFA &dfa, bool & readCh)
+void GoBitmap::emit (OutputFile & o, uint32_t ind, const DFA &dfa)
 {
-	std::string yych = output_hgo (o, ind, dfa, readCh, hgo);
+	std::string yych = output_hgo (o, ind, dfa, hgo);
 	o.ws("if (").wstring(opts->yybm).ws("[").wu32(bitmap->i).ws("+").wstring(yych).ws("] & ");
 	if (opts->yybmHexTable)
 	{
@@ -151,11 +137,11 @@ void GoBitmap::emit (OutputFile & o, uint32_t ind, const DFA &dfa, bool & readCh
 		o.wu32(bitmap->m);
 	}
 	o.ws(") {\n");
-	gen_goto_plain(o, ind + 1, readCh, bitmap_state, dfa, TCID0);
+	gen_goto_plain(o, ind + 1, bitmap_state, dfa, TCID0);
 	o.wind(ind).ws("}\n");
 	if (lgo != NULL)
 	{
-		lgo->emit (o, ind, dfa, readCh);
+		lgo->emit (o, ind, dfa);
 	}
 }
 
@@ -197,9 +183,9 @@ void CpgotoTable::emit (OutputFile & o, uint32_t ind)
 	o.wind(--ind).ws("};\n");
 }
 
-void Cpgoto::emit (OutputFile & o, uint32_t ind, const DFA &dfa, bool & readCh)
+void Cpgoto::emit (OutputFile & o, uint32_t ind, const DFA &dfa)
 {
-	std::string yych = output_hgo (o, ind, dfa, readCh, hgo);
+	std::string yych = output_hgo (o, ind, dfa, hgo);
 	o.ws("{\n");
 	table->emit (o, ++ind);
 	o.wind(ind).ws("goto *").wstring(opts->yytarget).ws("[").wstring(yych).ws("];\n");
@@ -231,7 +217,7 @@ void Dot::emit(OutputFile &o, const DFA &dfa)
 	}
 }
 
-void Go::emit (OutputFile & o, uint32_t ind, const DFA &dfa, bool & readCh)
+void Go::emit (OutputFile & o, uint32_t ind, const DFA &dfa)
 {
 	code_lines_t code;
 	gen_settags(code, dfa, tags);
@@ -243,13 +229,13 @@ void Go::emit (OutputFile & o, uint32_t ind, const DFA &dfa, bool & readCh)
 		case EMPTY:
 			break;
 		case SWITCH_IF:
-			info.switchif->emit (o, ind, dfa, readCh);
+			info.switchif->emit (o, ind, dfa);
 			break;
 		case BITMAP:
-			info.bitmap->emit (o, ind, dfa, readCh);
+			info.bitmap->emit (o, ind, dfa);
 			break;
 		case CPGOTO:
-			info.cpgoto->emit (o, ind, dfa, readCh);
+			info.cpgoto->emit (o, ind, dfa);
 			break;
 		case DOT:
 			info.dot->emit (o, dfa);

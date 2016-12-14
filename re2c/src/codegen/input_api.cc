@@ -40,14 +40,10 @@ std::string InputAPI::expr_peek () const
 	return s;
 }
 
-std::string InputAPI::expr_peek_save () const
-{
-	return opts->yych + " = " + opts.yychConversion () + expr_peek ();
-}
-
 std::string InputAPI::stmt_peek (uint32_t ind) const
 {
-	return indent (ind) + expr_peek_save () + ";\n";
+	return indent(ind) + opts->yych + " = " + opts.yychConversion()
+		+ expr_peek() + ";\n";
 }
 
 std::string InputAPI::stmt_skip (uint32_t ind) const

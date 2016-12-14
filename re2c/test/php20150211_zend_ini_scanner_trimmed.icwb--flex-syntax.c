@@ -280,8 +280,8 @@ yy34:
 		if (yych == 'l') goto yy44;
 		goto yy4;
 yy35:
-		++YYCURSOR;
-		if ((yych = *YYCURSOR) <= '&') {
+		yych = *++YYCURSOR;
+		if (yych <= '&') {
 			if (yych <= 0x001F) {
 				if (yych <= '\n') {
 					if (yych <= 0x0008) goto yy4;
@@ -1006,8 +1006,8 @@ yy119:
 yy120:
 		{}
 yy121:
-		++YYCURSOR;
-		if ((yych = *YYCURSOR) == '\n') goto yy119;
+		yych = *++YYCURSOR;
+		if (yych == '\n') goto yy119;
 		goto yy120;
 	}
 /* *********************************** */
@@ -1087,8 +1087,8 @@ yy132:
 		++YYCURSOR;
 		goto yy131;
 yy133:
-		++YYCURSOR;
-		if ((yych = *YYCURSOR) == '\n') goto yy132;
+		yych = *++YYCURSOR;
+		if (yych == '\n') goto yy132;
 		goto yy131;
 	}
 /* *********************************** */

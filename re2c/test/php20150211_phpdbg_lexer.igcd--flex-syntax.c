@@ -575,8 +575,8 @@ yy49:
 		}
 yy50:
 		YYDEBUG(50, *YYCURSOR);
-		++YYCURSOR;
-		if ((yych = *YYCURSOR) == ':') goto yy66;
+		yych = *++YYCURSOR;
+		if (yych == ':') goto yy66;
 		YYDEBUG(51, *YYCURSOR);
 		yyleng = (size_t) YYCURSOR - (size_t) yytext;
 		{

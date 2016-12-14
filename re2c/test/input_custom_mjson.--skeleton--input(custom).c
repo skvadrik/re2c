@@ -324,7 +324,8 @@ yy14:
         }
 yy15:
         YYSKIP ();
-        switch ((yych = YYPEEK ())) {
+        yych = YYPEEK ();
+        switch (yych) {
         case '.':
         case '0':
         case '1':
@@ -1417,7 +1418,8 @@ yy94:
         }
 yy95:
         YYSKIP ();
-        switch ((yych = YYPEEK ())) {
+        yych = YYPEEK ();
+        switch (yych) {
         case '0':
         case '1':
         case '2':
@@ -1489,7 +1491,8 @@ yy96:
         continue;
 yy97:
         YYSKIP ();
-        switch ((yych = YYPEEK ())) {
+        yych = YYPEEK ();
+        switch (yych) {
         case '0':
         case '1':
         case '2':
@@ -1601,7 +1604,8 @@ yy100:
         }
 yy101:
         YYSKIP ();
-        switch ((yych = YYPEEK ())) {
+        yych = YYPEEK ();
+        switch (yych) {
         case '0':
         case '1':
         case '2':

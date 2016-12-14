@@ -1225,8 +1225,8 @@ yy15:
 }
 yy16:
 	YYDEBUG(16, *YYCURSOR);
-	++YYCURSOR;
-	if ((yych = *YYCURSOR) == '\n') goto yy14;
+	yych = *++YYCURSOR;
+	if (yych == '\n') goto yy14;
 	goto yy15;
 /* *********************************** */
 yyc_ST_BACKQUOTE:
@@ -2064,8 +2064,8 @@ yy89:
 }
 yy92:
 		YYDEBUG(92, *YYCURSOR);
-		++YYCURSOR;
-		if ((yych = *YYCURSOR) == '=') goto yy153;
+		yych = *++YYCURSOR;
+		if (yych == '=') goto yy153;
 yy93:
 		YYDEBUG(93, *YYCURSOR);
 		yyleng = YYCURSOR - SCNG(yy_text);
@@ -2475,7 +2475,7 @@ yy118:
 		goto yy93;
 yy119:
 		YYDEBUG(119, *YYCURSOR);
-		++YYCURSOR;
+		yych = *++YYCURSOR;
 		{
 			static void *yytarget[256] = {
 				&&yy128, &&yy128, &&yy128, &&yy128, &&yy128, &&yy128, &&yy128, &&yy128,
@@ -2511,7 +2511,7 @@ yy119:
 				&&yy128, &&yy128, &&yy128, &&yy128, &&yy128, &&yy128, &&yy128, &&yy128,
 				&&yy128, &&yy128, &&yy128, &&yy128, &&yy128, &&yy128, &&yy128, &&yy128
 			};
-			goto *yytarget[(yych = *YYCURSOR)];
+			goto *yytarget[yych];
 		}
 yy120:
 		YYDEBUG(120, *YYCURSOR);
@@ -3110,8 +3110,8 @@ yy151:
 }
 yy153:
 		YYDEBUG(153, *YYCURSOR);
-		++YYCURSOR;
-		if ((yych = *YYCURSOR) == '=') goto yy277;
+		yych = *++YYCURSOR;
+		if (yych == '=') goto yy277;
 yy154:
 		YYDEBUG(154, *YYCURSOR);
 		yyleng = YYCURSOR - SCNG(yy_text);
@@ -3350,8 +3350,8 @@ yy175:
 		goto yy166;
 yy176:
 		YYDEBUG(176, *YYCURSOR);
-		++YYCURSOR;
-		if ((yych = *YYCURSOR) == '=') goto yy289;
+		yych = *++YYCURSOR;
+		if (yych == '=') goto yy289;
 		YYDEBUG(177, *YYCURSOR);
 		yyleng = YYCURSOR - SCNG(yy_text);
 		{
@@ -3553,8 +3553,8 @@ yy209:
 		goto yy154;
 yy210:
 		YYDEBUG(210, *YYCURSOR);
-		++YYCURSOR;
-		if ((yych = *YYCURSOR) == '=') goto yy307;
+		yych = *++YYCURSOR;
+		if (yych == '=') goto yy307;
 		YYDEBUG(211, *YYCURSOR);
 		yyleng = YYCURSOR - SCNG(yy_text);
 		{
@@ -3578,8 +3578,8 @@ yy214:
 }
 yy216:
 		YYDEBUG(216, *YYCURSOR);
-		++YYCURSOR;
-		if ((yych = *YYCURSOR) == '=') goto yy309;
+		yych = *++YYCURSOR;
+		if (yych == '=') goto yy309;
 		YYDEBUG(217, *YYCURSOR);
 		yyleng = YYCURSOR - SCNG(yy_text);
 		{
@@ -3587,8 +3587,8 @@ yy216:
 }
 yy218:
 		YYDEBUG(218, *YYCURSOR);
-		++YYCURSOR;
-		if ((yych = *YYCURSOR) == '\n') goto yy311;
+		yych = *++YYCURSOR;
+		if (yych == '\n') goto yy311;
 		if (yych == '\r') goto yy312;
 yy219:
 		YYDEBUG(219, *YYCURSOR);
@@ -3625,8 +3625,8 @@ yy224:
 		goto yy128;
 yy225:
 		YYDEBUG(225, *YYCURSOR);
-		++YYCURSOR;
-		if (yybm[0+(yych = *YYCURSOR)] & 16) {
+		yych = *++YYCURSOR;
+		if (yybm[0+yych] & 16) {
 			goto yy127;
 		}
 		YYDEBUG(226, *YYCURSOR);
@@ -3779,8 +3779,8 @@ yy233:
 		goto yy128;
 yy234:
 		YYDEBUG(234, *YYCURSOR);
-		++YYCURSOR;
-		if (yybm[0+(yych = *YYCURSOR)] & 16) {
+		yych = *++YYCURSOR;
+		if (yybm[0+yych] & 16) {
 			goto yy127;
 		}
 		YYDEBUG(235, *YYCURSOR);
@@ -3890,8 +3890,8 @@ yy246:
 		goto yy128;
 yy247:
 		YYDEBUG(247, *YYCURSOR);
-		++YYCURSOR;
-		if (yybm[0+(yych = *YYCURSOR)] & 16) {
+		yych = *++YYCURSOR;
+		if (yybm[0+yych] & 16) {
 			goto yy127;
 		}
 		YYDEBUG(248, *YYCURSOR);
@@ -3971,8 +3971,8 @@ yy254:
 		goto yy128;
 yy255:
 		YYDEBUG(255, *YYCURSOR);
-		++YYCURSOR;
-		if (yybm[0+(yych = *YYCURSOR)] & 16) {
+		yych = *++YYCURSOR;
+		if (yybm[0+yych] & 16) {
 			goto yy127;
 		}
 		YYDEBUG(256, *YYCURSOR);
@@ -4494,8 +4494,8 @@ yy313:
 		goto yy128;
 yy314:
 		YYDEBUG(314, *YYCURSOR);
-		++YYCURSOR;
-		if (yybm[0+(yych = *YYCURSOR)] & 16) {
+		yych = *++YYCURSOR;
+		if (yybm[0+yych] & 16) {
 			goto yy127;
 		}
 		YYDEBUG(315, *YYCURSOR);
@@ -4577,8 +4577,8 @@ yy326:
 		goto yy128;
 yy327:
 		YYDEBUG(327, *YYCURSOR);
-		++YYCURSOR;
-		if (yybm[0+(yych = *YYCURSOR)] & 16) {
+		yych = *++YYCURSOR;
+		if (yybm[0+yych] & 16) {
 			goto yy127;
 		}
 		YYDEBUG(328, *YYCURSOR);
@@ -4670,7 +4670,7 @@ yy336:
 		goto yy128;
 yy337:
 		YYDEBUG(337, *YYCURSOR);
-		++YYCURSOR;
+		yych = *++YYCURSOR;
 		{
 			static void *yytarget[256] = {
 				&&yy338, &&yy338, &&yy338, &&yy338, &&yy338, &&yy338, &&yy338, &&yy338,
@@ -4706,7 +4706,7 @@ yy337:
 				&&yy127, &&yy127, &&yy127, &&yy127, &&yy127, &&yy127, &&yy127, &&yy127,
 				&&yy127, &&yy127, &&yy127, &&yy127, &&yy127, &&yy127, &&yy127, &&yy127
 			};
-			goto *yytarget[(yych = *YYCURSOR)];
+			goto *yytarget[yych];
 		}
 yy338:
 		YYDEBUG(338, *YYCURSOR);
@@ -4776,8 +4776,8 @@ yy348:
 		goto yy128;
 yy349:
 		YYDEBUG(349, *YYCURSOR);
-		++YYCURSOR;
-		if (yybm[0+(yych = *YYCURSOR)] & 16) {
+		yych = *++YYCURSOR;
+		if (yybm[0+yych] & 16) {
 			goto yy127;
 		}
 		YYDEBUG(350, *YYCURSOR);
@@ -4875,8 +4875,8 @@ yy359:
 		goto yy128;
 yy360:
 		YYDEBUG(360, *YYCURSOR);
-		++YYCURSOR;
-		if (yybm[0+(yych = *YYCURSOR)] & 16) {
+		yych = *++YYCURSOR;
+		if (yybm[0+yych] & 16) {
 			goto yy127;
 		}
 		YYDEBUG(361, *YYCURSOR);
@@ -4892,8 +4892,8 @@ yy362:
 		goto yy128;
 yy363:
 		YYDEBUG(363, *YYCURSOR);
-		++YYCURSOR;
-		if (yybm[0+(yych = *YYCURSOR)] & 16) {
+		yych = *++YYCURSOR;
+		if (yybm[0+yych] & 16) {
 			goto yy127;
 		}
 		YYDEBUG(364, *YYCURSOR);
@@ -4903,8 +4903,8 @@ yy363:
 }
 yy365:
 		YYDEBUG(365, *YYCURSOR);
-		++YYCURSOR;
-		if (yybm[0+(yych = *YYCURSOR)] & 16) {
+		yych = *++YYCURSOR;
+		if (yybm[0+yych] & 16) {
 			goto yy127;
 		}
 		YYDEBUG(366, *YYCURSOR);
@@ -4920,8 +4920,8 @@ yy367:
 		goto yy128;
 yy368:
 		YYDEBUG(368, *YYCURSOR);
-		++YYCURSOR;
-		if (yybm[0+(yych = *YYCURSOR)] & 16) {
+		yych = *++YYCURSOR;
+		if (yybm[0+yych] & 16) {
 			goto yy127;
 		}
 		YYDEBUG(369, *YYCURSOR);
@@ -5175,8 +5175,8 @@ yy398:
 		goto yy128;
 yy399:
 		YYDEBUG(399, *YYCURSOR);
-		++YYCURSOR;
-		if (yybm[0+(yych = *YYCURSOR)] & 16) {
+		yych = *++YYCURSOR;
+		if (yybm[0+yych] & 16) {
 			goto yy127;
 		}
 		YYDEBUG(400, *YYCURSOR);
@@ -5228,8 +5228,8 @@ yy407:
 		goto yy128;
 yy408:
 		YYDEBUG(408, *YYCURSOR);
-		++YYCURSOR;
-		if (yybm[0+(yych = *YYCURSOR)] & 16) {
+		yych = *++YYCURSOR;
+		if (yybm[0+yych] & 16) {
 			goto yy127;
 		}
 		YYDEBUG(409, *YYCURSOR);
@@ -5239,7 +5239,7 @@ yy408:
 }
 yy410:
 		YYDEBUG(410, *YYCURSOR);
-		++YYCURSOR;
+		yych = *++YYCURSOR;
 		{
 			static void *yytarget[256] = {
 				&&yy411, &&yy411, &&yy411, &&yy411, &&yy411, &&yy411, &&yy411, &&yy411,
@@ -5275,7 +5275,7 @@ yy410:
 				&&yy127, &&yy127, &&yy127, &&yy127, &&yy127, &&yy127, &&yy127, &&yy127,
 				&&yy127, &&yy127, &&yy127, &&yy127, &&yy127, &&yy127, &&yy127, &&yy127
 			};
-			goto *yytarget[(yych = *YYCURSOR)];
+			goto *yytarget[yych];
 		}
 yy411:
 		YYDEBUG(411, *YYCURSOR);
@@ -5321,8 +5321,8 @@ yy417:
 		goto yy128;
 yy418:
 		YYDEBUG(418, *YYCURSOR);
-		++YYCURSOR;
-		if (yybm[0+(yych = *YYCURSOR)] & 16) {
+		yych = *++YYCURSOR;
+		if (yybm[0+yych] & 16) {
 			goto yy127;
 		}
 		YYDEBUG(419, *YYCURSOR);
@@ -5332,8 +5332,8 @@ yy418:
 }
 yy420:
 		YYDEBUG(420, *YYCURSOR);
-		++YYCURSOR;
-		if (yybm[0+(yych = *YYCURSOR)] & 16) {
+		yych = *++YYCURSOR;
+		if (yybm[0+yych] & 16) {
 			goto yy127;
 		}
 		YYDEBUG(421, *YYCURSOR);
@@ -5373,8 +5373,8 @@ yy426:
 		goto yy128;
 yy427:
 		YYDEBUG(427, *YYCURSOR);
-		++YYCURSOR;
-		if (yybm[0+(yych = *YYCURSOR)] & 16) {
+		yych = *++YYCURSOR;
+		if (yybm[0+yych] & 16) {
 			goto yy127;
 		}
 		YYDEBUG(428, *YYCURSOR);
@@ -5448,8 +5448,8 @@ yy433:
 		goto yy128;
 yy434:
 		YYDEBUG(434, *YYCURSOR);
-		++YYCURSOR;
-		if (yybm[0+(yych = *YYCURSOR)] & 16) {
+		yych = *++YYCURSOR;
+		if (yybm[0+yych] & 16) {
 			goto yy127;
 		}
 		YYDEBUG(435, *YYCURSOR);
@@ -5837,8 +5837,8 @@ yy481:
 		goto yy128;
 yy482:
 		YYDEBUG(482, *YYCURSOR);
-		++YYCURSOR;
-		if (yybm[0+(yych = *YYCURSOR)] & 16) {
+		yych = *++YYCURSOR;
+		if (yybm[0+yych] & 16) {
 			goto yy127;
 		}
 		YYDEBUG(483, *YYCURSOR);
@@ -5848,8 +5848,8 @@ yy482:
 }
 yy484:
 		YYDEBUG(484, *YYCURSOR);
-		++YYCURSOR;
-		if (yybm[0+(yych = *YYCURSOR)] & 16) {
+		yych = *++YYCURSOR;
+		if (yybm[0+yych] & 16) {
 			goto yy127;
 		}
 		YYDEBUG(485, *YYCURSOR);
@@ -5865,8 +5865,8 @@ yy486:
 		goto yy128;
 yy487:
 		YYDEBUG(487, *YYCURSOR);
-		++YYCURSOR;
-		if (yybm[0+(yych = *YYCURSOR)] & 16) {
+		yych = *++YYCURSOR;
+		if (yybm[0+yych] & 16) {
 			goto yy127;
 		}
 		YYDEBUG(488, *YYCURSOR);
@@ -5876,8 +5876,8 @@ yy487:
 }
 yy489:
 		YYDEBUG(489, *YYCURSOR);
-		++YYCURSOR;
-		if (yybm[0+(yych = *YYCURSOR)] & 16) {
+		yych = *++YYCURSOR;
+		if (yybm[0+yych] & 16) {
 			goto yy127;
 		}
 		YYDEBUG(490, *YYCURSOR);
@@ -5887,8 +5887,8 @@ yy489:
 }
 yy491:
 		YYDEBUG(491, *YYCURSOR);
-		++YYCURSOR;
-		if (yybm[0+(yych = *YYCURSOR)] & 16) {
+		yych = *++YYCURSOR;
+		if (yybm[0+yych] & 16) {
 			goto yy127;
 		}
 		YYDEBUG(492, *YYCURSOR);
@@ -5898,8 +5898,8 @@ yy491:
 }
 yy493:
 		YYDEBUG(493, *YYCURSOR);
-		++YYCURSOR;
-		if (yybm[0+(yych = *YYCURSOR)] & 16) {
+		yych = *++YYCURSOR;
+		if (yybm[0+yych] & 16) {
 			goto yy127;
 		}
 		YYDEBUG(494, *YYCURSOR);
@@ -5933,8 +5933,8 @@ yy498:
 		goto yy128;
 yy499:
 		YYDEBUG(499, *YYCURSOR);
-		++YYCURSOR;
-		if (yybm[0+(yych = *YYCURSOR)] & 16) {
+		yych = *++YYCURSOR;
+		if (yybm[0+yych] & 16) {
 			goto yy127;
 		}
 		YYDEBUG(500, *YYCURSOR);
@@ -5956,8 +5956,8 @@ yy502:
 		goto yy128;
 yy503:
 		YYDEBUG(503, *YYCURSOR);
-		++YYCURSOR;
-		if (yybm[0+(yych = *YYCURSOR)] & 16) {
+		yych = *++YYCURSOR;
+		if (yybm[0+yych] & 16) {
 			goto yy127;
 		}
 		YYDEBUG(504, *YYCURSOR);
@@ -5985,7 +5985,7 @@ yy507:
 		goto yy128;
 yy508:
 		YYDEBUG(508, *YYCURSOR);
-		++YYCURSOR;
+		yych = *++YYCURSOR;
 		{
 			static void *yytarget[256] = {
 				&&yy509, &&yy509, &&yy509, &&yy509, &&yy509, &&yy509, &&yy509, &&yy509,
@@ -6021,7 +6021,7 @@ yy508:
 				&&yy127, &&yy127, &&yy127, &&yy127, &&yy127, &&yy127, &&yy127, &&yy127,
 				&&yy127, &&yy127, &&yy127, &&yy127, &&yy127, &&yy127, &&yy127, &&yy127
 			};
-			goto *yytarget[(yych = *YYCURSOR)];
+			goto *yytarget[yych];
 		}
 yy509:
 		YYDEBUG(509, *YYCURSOR);
@@ -6079,8 +6079,8 @@ yy517:
 		goto yy128;
 yy518:
 		YYDEBUG(518, *YYCURSOR);
-		++YYCURSOR;
-		if (yybm[0+(yych = *YYCURSOR)] & 16) {
+		yych = *++YYCURSOR;
+		if (yybm[0+yych] & 16) {
 			goto yy127;
 		}
 		YYDEBUG(519, *YYCURSOR);
@@ -6096,8 +6096,8 @@ yy520:
 		goto yy128;
 yy521:
 		YYDEBUG(521, *YYCURSOR);
-		++YYCURSOR;
-		if (yybm[0+(yych = *YYCURSOR)] & 16) {
+		yych = *++YYCURSOR;
+		if (yybm[0+yych] & 16) {
 			goto yy127;
 		}
 		YYDEBUG(522, *YYCURSOR);
@@ -6149,8 +6149,8 @@ yy529:
 		goto yy128;
 yy530:
 		YYDEBUG(530, *YYCURSOR);
-		++YYCURSOR;
-		if (yybm[0+(yych = *YYCURSOR)] & 16) {
+		yych = *++YYCURSOR;
+		if (yybm[0+yych] & 16) {
 			goto yy127;
 		}
 		YYDEBUG(531, *YYCURSOR);
@@ -6160,8 +6160,8 @@ yy530:
 }
 yy532:
 		YYDEBUG(532, *YYCURSOR);
-		++YYCURSOR;
-		if (yybm[0+(yych = *YYCURSOR)] & 16) {
+		yych = *++YYCURSOR;
+		if (yybm[0+yych] & 16) {
 			goto yy127;
 		}
 		YYDEBUG(533, *YYCURSOR);
@@ -6171,8 +6171,8 @@ yy532:
 }
 yy534:
 		YYDEBUG(534, *YYCURSOR);
-		++YYCURSOR;
-		if (yybm[0+(yych = *YYCURSOR)] & 16) {
+		yych = *++YYCURSOR;
+		if (yybm[0+yych] & 16) {
 			goto yy127;
 		}
 		YYDEBUG(535, *YYCURSOR);
@@ -6182,8 +6182,8 @@ yy534:
 }
 yy536:
 		YYDEBUG(536, *YYCURSOR);
-		++YYCURSOR;
-		if (yybm[0+(yych = *YYCURSOR)] & 16) {
+		yych = *++YYCURSOR;
+		if (yybm[0+yych] & 16) {
 			goto yy127;
 		}
 		YYDEBUG(537, *YYCURSOR);
@@ -6193,8 +6193,8 @@ yy536:
 }
 yy538:
 		YYDEBUG(538, *YYCURSOR);
-		++YYCURSOR;
-		if (yybm[0+(yych = *YYCURSOR)] & 16) {
+		yych = *++YYCURSOR;
+		if (yybm[0+yych] & 16) {
 			goto yy127;
 		}
 		YYDEBUG(539, *YYCURSOR);
@@ -6386,8 +6386,8 @@ yy570:
 		goto yy128;
 yy571:
 		YYDEBUG(571, *YYCURSOR);
-		++YYCURSOR;
-		if (yybm[0+(yych = *YYCURSOR)] & 16) {
+		yych = *++YYCURSOR;
+		if (yybm[0+yych] & 16) {
 			goto yy127;
 		}
 		YYDEBUG(572, *YYCURSOR);
@@ -6403,7 +6403,7 @@ yy573:
 		goto yy128;
 yy574:
 		YYDEBUG(574, *YYCURSOR);
-		++YYCURSOR;
+		yych = *++YYCURSOR;
 		{
 			static void *yytarget[256] = {
 				&&yy575, &&yy575, &&yy575, &&yy575, &&yy575, &&yy575, &&yy575, &&yy575,
@@ -6439,7 +6439,7 @@ yy574:
 				&&yy127, &&yy127, &&yy127, &&yy127, &&yy127, &&yy127, &&yy127, &&yy127,
 				&&yy127, &&yy127, &&yy127, &&yy127, &&yy127, &&yy127, &&yy127, &&yy127
 			};
-			goto *yytarget[(yych = *YYCURSOR)];
+			goto *yytarget[yych];
 		}
 yy575:
 		YYDEBUG(575, *YYCURSOR);
@@ -6485,8 +6485,8 @@ yy581:
 		goto yy128;
 yy582:
 		YYDEBUG(582, *YYCURSOR);
-		++YYCURSOR;
-		if (yybm[0+(yych = *YYCURSOR)] & 16) {
+		yych = *++YYCURSOR;
+		if (yybm[0+yych] & 16) {
 			goto yy127;
 		}
 		YYDEBUG(583, *YYCURSOR);
@@ -6544,8 +6544,8 @@ yy591:
 		goto yy128;
 yy592:
 		YYDEBUG(592, *YYCURSOR);
-		++YYCURSOR;
-		if (yybm[0+(yych = *YYCURSOR)] & 16) {
+		yych = *++YYCURSOR;
+		if (yybm[0+yych] & 16) {
 			goto yy127;
 		}
 		YYDEBUG(593, *YYCURSOR);
@@ -6561,8 +6561,8 @@ yy594:
 		goto yy128;
 yy595:
 		YYDEBUG(595, *YYCURSOR);
-		++YYCURSOR;
-		if (yybm[0+(yych = *YYCURSOR)] & 16) {
+		yych = *++YYCURSOR;
+		if (yybm[0+yych] & 16) {
 			goto yy127;
 		}
 		YYDEBUG(596, *YYCURSOR);
@@ -6572,8 +6572,8 @@ yy595:
 }
 yy597:
 		YYDEBUG(597, *YYCURSOR);
-		++YYCURSOR;
-		if (yybm[0+(yych = *YYCURSOR)] & 16) {
+		yych = *++YYCURSOR;
+		if (yybm[0+yych] & 16) {
 			goto yy127;
 		}
 		YYDEBUG(598, *YYCURSOR);
@@ -6583,8 +6583,8 @@ yy597:
 }
 yy599:
 		YYDEBUG(599, *YYCURSOR);
-		++YYCURSOR;
-		if (yybm[0+(yych = *YYCURSOR)] & 16) {
+		yych = *++YYCURSOR;
+		if (yybm[0+yych] & 16) {
 			goto yy127;
 		}
 		YYDEBUG(600, *YYCURSOR);
@@ -6718,8 +6718,8 @@ yy622:
 		goto yy128;
 yy623:
 		YYDEBUG(623, *YYCURSOR);
-		++YYCURSOR;
-		if (yybm[0+(yych = *YYCURSOR)] & 16) {
+		yych = *++YYCURSOR;
+		if (yybm[0+yych] & 16) {
 			goto yy127;
 		}
 		YYDEBUG(624, *YYCURSOR);
@@ -6729,8 +6729,8 @@ yy623:
 }
 yy625:
 		YYDEBUG(625, *YYCURSOR);
-		++YYCURSOR;
-		if (yybm[0+(yych = *YYCURSOR)] & 16) {
+		yych = *++YYCURSOR;
+		if (yybm[0+yych] & 16) {
 			goto yy127;
 		}
 		YYDEBUG(626, *YYCURSOR);
@@ -6764,8 +6764,8 @@ yy630:
 		goto yy128;
 yy631:
 		YYDEBUG(631, *YYCURSOR);
-		++YYCURSOR;
-		if (yybm[0+(yych = *YYCURSOR)] & 16) {
+		yych = *++YYCURSOR;
+		if (yybm[0+yych] & 16) {
 			goto yy127;
 		}
 		YYDEBUG(632, *YYCURSOR);
@@ -6775,8 +6775,8 @@ yy631:
 }
 yy633:
 		YYDEBUG(633, *YYCURSOR);
-		++YYCURSOR;
-		if (yybm[0+(yych = *YYCURSOR)] & 16) {
+		yych = *++YYCURSOR;
+		if (yybm[0+yych] & 16) {
 			goto yy127;
 		}
 		YYDEBUG(634, *YYCURSOR);
@@ -6786,8 +6786,8 @@ yy633:
 }
 yy635:
 		YYDEBUG(635, *YYCURSOR);
-		++YYCURSOR;
-		if (yybm[0+(yych = *YYCURSOR)] & 16) {
+		yych = *++YYCURSOR;
+		if (yybm[0+yych] & 16) {
 			goto yy127;
 		}
 		YYDEBUG(636, *YYCURSOR);
@@ -6809,7 +6809,7 @@ yy638:
 		goto yy128;
 yy639:
 		YYDEBUG(639, *YYCURSOR);
-		++YYCURSOR;
+		yych = *++YYCURSOR;
 		{
 			static void *yytarget[256] = {
 				&&yy640, &&yy640, &&yy640, &&yy640, &&yy640, &&yy640, &&yy640, &&yy640,
@@ -6845,7 +6845,7 @@ yy639:
 				&&yy127, &&yy127, &&yy127, &&yy127, &&yy127, &&yy127, &&yy127, &&yy127,
 				&&yy127, &&yy127, &&yy127, &&yy127, &&yy127, &&yy127, &&yy127, &&yy127
 			};
-			goto *yytarget[(yych = *YYCURSOR)];
+			goto *yytarget[yych];
 		}
 yy640:
 		YYDEBUG(640, *YYCURSOR);
@@ -6879,8 +6879,8 @@ yy644:
 		goto yy128;
 yy645:
 		YYDEBUG(645, *YYCURSOR);
-		++YYCURSOR;
-		if (yybm[0+(yych = *YYCURSOR)] & 16) {
+		yych = *++YYCURSOR;
+		if (yybm[0+yych] & 16) {
 			goto yy127;
 		}
 		YYDEBUG(646, *YYCURSOR);
@@ -6896,7 +6896,7 @@ yy647:
 		goto yy128;
 yy648:
 		YYDEBUG(648, *YYCURSOR);
-		++YYCURSOR;
+		yych = *++YYCURSOR;
 		{
 			static void *yytarget[256] = {
 				&&yy649, &&yy649, &&yy649, &&yy649, &&yy649, &&yy649, &&yy649, &&yy649,
@@ -6932,7 +6932,7 @@ yy648:
 				&&yy127, &&yy127, &&yy127, &&yy127, &&yy127, &&yy127, &&yy127, &&yy127,
 				&&yy127, &&yy127, &&yy127, &&yy127, &&yy127, &&yy127, &&yy127, &&yy127
 			};
-			goto *yytarget[(yych = *YYCURSOR)];
+			goto *yytarget[yych];
 		}
 yy649:
 		YYDEBUG(649, *YYCURSOR);
@@ -6947,8 +6947,8 @@ yy650:
 		goto yy128;
 yy651:
 		YYDEBUG(651, *YYCURSOR);
-		++YYCURSOR;
-		if (yybm[0+(yych = *YYCURSOR)] & 16) {
+		yych = *++YYCURSOR;
+		if (yybm[0+yych] & 16) {
 			goto yy127;
 		}
 		YYDEBUG(652, *YYCURSOR);
@@ -7013,8 +7013,8 @@ yy662:
 }
 yy664:
 		YYDEBUG(664, *YYCURSOR);
-		++YYCURSOR;
-		if (yybm[0+(yych = *YYCURSOR)] & 16) {
+		yych = *++YYCURSOR;
+		if (yybm[0+yych] & 16) {
 			goto yy127;
 		}
 		YYDEBUG(665, *YYCURSOR);
@@ -7024,8 +7024,8 @@ yy664:
 }
 yy666:
 		YYDEBUG(666, *YYCURSOR);
-		++YYCURSOR;
-		if (yybm[0+(yych = *YYCURSOR)] & 16) {
+		yych = *++YYCURSOR;
+		if (yybm[0+yych] & 16) {
 			goto yy127;
 		}
 		YYDEBUG(667, *YYCURSOR);
@@ -7035,8 +7035,8 @@ yy666:
 }
 yy668:
 		YYDEBUG(668, *YYCURSOR);
-		++YYCURSOR;
-		if (yybm[0+(yych = *YYCURSOR)] & 16) {
+		yych = *++YYCURSOR;
+		if (yybm[0+yych] & 16) {
 			goto yy127;
 		}
 		YYDEBUG(669, *YYCURSOR);
@@ -7064,8 +7064,8 @@ yy672:
 		goto yy128;
 yy673:
 		YYDEBUG(673, *YYCURSOR);
-		++YYCURSOR;
-		if (yybm[0+(yych = *YYCURSOR)] & 16) {
+		yych = *++YYCURSOR;
+		if (yybm[0+yych] & 16) {
 			goto yy127;
 		}
 		YYDEBUG(674, *YYCURSOR);
@@ -7075,8 +7075,8 @@ yy673:
 }
 yy675:
 		YYDEBUG(675, *YYCURSOR);
-		++YYCURSOR;
-		if (yybm[0+(yych = *YYCURSOR)] & 16) {
+		yych = *++YYCURSOR;
+		if (yybm[0+yych] & 16) {
 			goto yy127;
 		}
 		YYDEBUG(676, *YYCURSOR);
@@ -7139,8 +7139,8 @@ yy685:
 		goto yy128;
 yy686:
 		YYDEBUG(686, *YYCURSOR);
-		++YYCURSOR;
-		if (yybm[0+(yych = *YYCURSOR)] & 16) {
+		yych = *++YYCURSOR;
+		if (yybm[0+yych] & 16) {
 			goto yy127;
 		}
 		YYDEBUG(687, *YYCURSOR);
@@ -7162,8 +7162,8 @@ yy689:
 		goto yy128;
 yy690:
 		YYDEBUG(690, *YYCURSOR);
-		++YYCURSOR;
-		if (yybm[0+(yych = *YYCURSOR)] & 16) {
+		yych = *++YYCURSOR;
+		if (yybm[0+yych] & 16) {
 			goto yy127;
 		}
 		YYDEBUG(691, *YYCURSOR);
@@ -7201,8 +7201,8 @@ yy696:
 		goto yy128;
 yy697:
 		YYDEBUG(697, *YYCURSOR);
-		++YYCURSOR;
-		if (yybm[0+(yych = *YYCURSOR)] & 16) {
+		yych = *++YYCURSOR;
+		if (yybm[0+yych] & 16) {
 			goto yy127;
 		}
 		YYDEBUG(698, *YYCURSOR);
@@ -7230,8 +7230,8 @@ yy701:
 		goto yy128;
 yy702:
 		YYDEBUG(702, *YYCURSOR);
-		++YYCURSOR;
-		if (yybm[0+(yych = *YYCURSOR)] & 16) {
+		yych = *++YYCURSOR;
+		if (yybm[0+yych] & 16) {
 			goto yy127;
 		}
 		YYDEBUG(703, *YYCURSOR);
@@ -7241,8 +7241,8 @@ yy702:
 }
 yy704:
 		YYDEBUG(704, *YYCURSOR);
-		++YYCURSOR;
-		if (yybm[0+(yych = *YYCURSOR)] & 16) {
+		yych = *++YYCURSOR;
+		if (yybm[0+yych] & 16) {
 			goto yy127;
 		}
 		YYDEBUG(705, *YYCURSOR);
@@ -7252,8 +7252,8 @@ yy704:
 }
 yy706:
 		YYDEBUG(706, *YYCURSOR);
-		++YYCURSOR;
-		if (yybm[0+(yych = *YYCURSOR)] & 16) {
+		yych = *++YYCURSOR;
+		if (yybm[0+yych] & 16) {
 			goto yy127;
 		}
 		YYDEBUG(707, *YYCURSOR);
@@ -7263,8 +7263,8 @@ yy706:
 }
 yy708:
 		YYDEBUG(708, *YYCURSOR);
-		++YYCURSOR;
-		if (yybm[0+(yych = *YYCURSOR)] & 16) {
+		yych = *++YYCURSOR;
+		if (yybm[0+yych] & 16) {
 			goto yy127;
 		}
 		YYDEBUG(709, *YYCURSOR);
@@ -7280,8 +7280,8 @@ yy710:
 		goto yy128;
 yy711:
 		YYDEBUG(711, *YYCURSOR);
-		++YYCURSOR;
-		if (yybm[0+(yych = *YYCURSOR)] & 16) {
+		yych = *++YYCURSOR;
+		if (yybm[0+yych] & 16) {
 			goto yy127;
 		}
 		YYDEBUG(712, *YYCURSOR);
@@ -7314,8 +7314,8 @@ yy716:
 		goto yy128;
 yy717:
 		YYDEBUG(717, *YYCURSOR);
-		++YYCURSOR;
-		if (yybm[0+(yych = *YYCURSOR)] & 16) {
+		yych = *++YYCURSOR;
+		if (yybm[0+yych] & 16) {
 			goto yy127;
 		}
 		YYDEBUG(718, *YYCURSOR);
@@ -7325,8 +7325,8 @@ yy717:
 }
 yy719:
 		YYDEBUG(719, *YYCURSOR);
-		++YYCURSOR;
-		if (yybm[0+(yych = *YYCURSOR)] & 16) {
+		yych = *++YYCURSOR;
+		if (yybm[0+yych] & 16) {
 			goto yy127;
 		}
 		YYDEBUG(720, *YYCURSOR);
@@ -7336,8 +7336,8 @@ yy719:
 }
 yy721:
 		YYDEBUG(721, *YYCURSOR);
-		++YYCURSOR;
-		if (yybm[0+(yych = *YYCURSOR)] & 16) {
+		yych = *++YYCURSOR;
+		if (yybm[0+yych] & 16) {
 			goto yy127;
 		}
 		YYDEBUG(722, *YYCURSOR);
@@ -7347,8 +7347,8 @@ yy721:
 }
 yy723:
 		YYDEBUG(723, *YYCURSOR);
-		++YYCURSOR;
-		if (yybm[0+(yych = *YYCURSOR)] & 16) {
+		yych = *++YYCURSOR;
+		if (yybm[0+yych] & 16) {
 			goto yy127;
 		}
 		YYDEBUG(724, *YYCURSOR);
@@ -7364,8 +7364,8 @@ yy725:
 		goto yy128;
 yy726:
 		YYDEBUG(726, *YYCURSOR);
-		++YYCURSOR;
-		if (yybm[0+(yych = *YYCURSOR)] & 16) {
+		yych = *++YYCURSOR;
+		if (yybm[0+yych] & 16) {
 			goto yy127;
 		}
 		YYDEBUG(727, *YYCURSOR);
@@ -7392,8 +7392,8 @@ yy730:
 		goto yy128;
 yy731:
 		YYDEBUG(731, *YYCURSOR);
-		++YYCURSOR;
-		if (yybm[0+(yych = *YYCURSOR)] & 16) {
+		yych = *++YYCURSOR;
+		if (yybm[0+yych] & 16) {
 			goto yy127;
 		}
 		YYDEBUG(732, *YYCURSOR);
@@ -7437,8 +7437,8 @@ yy738:
 		goto yy128;
 yy739:
 		YYDEBUG(739, *YYCURSOR);
-		++YYCURSOR;
-		if (yybm[0+(yych = *YYCURSOR)] & 16) {
+		yych = *++YYCURSOR;
+		if (yybm[0+yych] & 16) {
 			goto yy127;
 		}
 		YYDEBUG(740, *YYCURSOR);
@@ -7448,8 +7448,8 @@ yy739:
 }
 yy741:
 		YYDEBUG(741, *YYCURSOR);
-		++YYCURSOR;
-		if (yybm[0+(yych = *YYCURSOR)] & 16) {
+		yych = *++YYCURSOR;
+		if (yybm[0+yych] & 16) {
 			goto yy127;
 		}
 		YYDEBUG(742, *YYCURSOR);
@@ -7459,8 +7459,8 @@ yy741:
 }
 yy743:
 		YYDEBUG(743, *YYCURSOR);
-		++YYCURSOR;
-		if (yybm[0+(yych = *YYCURSOR)] & 16) {
+		yych = *++YYCURSOR;
+		if (yybm[0+yych] & 16) {
 			goto yy127;
 		}
 		YYDEBUG(744, *YYCURSOR);
@@ -7487,8 +7487,8 @@ yy747:
 		goto yy128;
 yy748:
 		YYDEBUG(748, *YYCURSOR);
-		++YYCURSOR;
-		if (yybm[0+(yych = *YYCURSOR)] & 16) {
+		yych = *++YYCURSOR;
+		if (yybm[0+yych] & 16) {
 			goto yy127;
 		}
 		YYDEBUG(749, *YYCURSOR);
@@ -7503,8 +7503,8 @@ yy750:
 		if (yych != 'r') goto yy128;
 yy751:
 		YYDEBUG(751, *YYCURSOR);
-		++YYCURSOR;
-		if (yybm[0+(yych = *YYCURSOR)] & 16) {
+		yych = *++YYCURSOR;
+		if (yybm[0+yych] & 16) {
 			goto yy127;
 		}
 		YYDEBUG(752, *YYCURSOR);

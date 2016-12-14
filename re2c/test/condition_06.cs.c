@@ -312,8 +312,8 @@ yy54:
 			}
 #line 314 "condition_06.cs.c"
 yy56:
-			++s->cur;
-			if ((yych = *s->cur) == '\n') goto yy54;
+			yych = *++s->cur;
+			if (yych == '\n') goto yy54;
 			goto yy49;
 /* *********************************** */
 yyc_String:

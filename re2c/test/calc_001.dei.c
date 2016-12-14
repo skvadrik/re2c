@@ -63,8 +63,8 @@ yy8:
 			{ printf("-\n");	continue; }
 yy10:
 			YYDEBUG(10, *YYCURSOR);
-			++YYCURSOR;
-			switch ((yych = *YYCURSOR)) {
+			yych = *++YYCURSOR;
+			switch (yych) {
 			case 0xF0: /* 0 */
 			case 0xF1: /* 1 */
 			case 0xF2: /* 2 */

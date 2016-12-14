@@ -141,8 +141,8 @@ xx12:
 	{ return KEYWORD; }
 #line 143 "config9.b.c"
 xx13:
-	++s.cur;
-	if ((curr = (unsigned char)*s.cur) <= '/') goto xx14;
+	curr = (unsigned char)*++s.cur;
+	if (curr <= '/') goto xx14;
 	if (curr <= '9') goto xx10;
 xx14:
 	s.cur -= 1;

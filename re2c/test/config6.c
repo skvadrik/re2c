@@ -55,8 +55,8 @@ yy8:
 			{ printf("-\n");	continue; }
 #line 57 "config6.c"
 yy10:
-			++YYCURSOR;
-			switch ((yych = *YYCURSOR)) {
+			yych = *++YYCURSOR;
+			switch (yych) {
 			case '0':
 			case '1':
 			case '2':

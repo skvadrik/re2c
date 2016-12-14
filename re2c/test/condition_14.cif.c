@@ -317,8 +317,8 @@ yy62:
 		++s->cur;
 		continue;
 yy64:
-		++s->cur;
-		switch ((s->yych = *s->cur)) {
+		s->yych = *++s->cur;
+		switch (s->yych) {
 		case '\n':	goto yy62;
 		default:	goto yy57;
 		}

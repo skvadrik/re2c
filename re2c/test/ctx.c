@@ -150,8 +150,8 @@ yy12:
 	{ return KEYWORD; }
 #line 152 "ctx.c"
 yy13:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '0':
 	case '1':
 	case '2':

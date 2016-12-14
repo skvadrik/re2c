@@ -18,8 +18,9 @@ yy2:
 	{ d }
 yy4:
 	YYSKIP ();
+	yych = YYPEEK ();
 	YYBACKUPCTX ();
-	switch ((yych = YYPEEK ())) {
+	switch (yych) {
 	case 'b':	goto yy6;
 	default:	goto yy5;
 	}
@@ -28,7 +29,8 @@ yy5:
 	{ 1 }
 yy6:
 	YYSKIP ();
-	switch ((yych = YYPEEK ())) {
+	yych = YYPEEK ();
+	switch (yych) {
 	case 'b':	goto yy8;
 	case 'c':
 		YYBACKUPCTX ();

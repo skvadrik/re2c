@@ -718,7 +718,8 @@ yy64:
         continue;
 yy66:
         YYSKIP ();
-        if ((yych = YYPEEK ()) == '\n') goto yy64;
+        yych = YYPEEK ();
+        if (yych == '\n') goto yy64;
         goto yy59;
 
     }

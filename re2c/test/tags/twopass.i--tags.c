@@ -192,8 +192,8 @@ yy20:
 	default:	goto yy5;
 	}
 yy21:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case 'a':	goto yy5;
 	case 'b':
 		yyt3 = NULL;

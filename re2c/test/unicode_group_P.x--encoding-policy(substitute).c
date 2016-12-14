@@ -418,8 +418,8 @@ yy8:
 		goto yy3;
 	}
 yy9:
-	++YYCURSOR;
-	if ((yych = *YYCURSOR) <= 0xDC6F) goto yy3;
+	yych = *++YYCURSOR;
+	if (yych <= 0xDC6F) goto yy3;
 	if (yych <= 0xDC73) goto yy4;
 	goto yy3;
 }

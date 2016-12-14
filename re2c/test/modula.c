@@ -218,8 +218,8 @@ yy14:
 	default:	goto yy88;
 	}
 yy15:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '*':	goto yy89;
 	default:	goto yy16;
 	}
@@ -253,8 +253,8 @@ yy25:
 	{RETURN(14);}
 #line 255 "modula.c"
 yy27:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '.':	goto yy91;
 	default:	goto yy28;
 	}
@@ -324,8 +324,8 @@ yy34:
 	default:	goto yy33;
 	}
 yy36:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '=':	goto yy103;
 	default:	goto yy37;
 	}
@@ -339,8 +339,8 @@ yy38:
 	{RETURN(20);}
 #line 341 "modula.c"
 yy40:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '=':	goto yy105;
 	case '>':	goto yy107;
 	default:	goto yy41;
@@ -355,8 +355,8 @@ yy42:
 	{RETURN(24);}
 #line 357 "modula.c"
 yy44:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '=':	goto yy109;
 	default:	goto yy45;
 	}
@@ -365,8 +365,8 @@ yy45:
 	{RETURN(25);}
 #line 367 "modula.c"
 yy46:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case 'N':	goto yy111;
 	case 'R':	goto yy112;
 	default:	goto yy54;
@@ -779,8 +779,8 @@ yy113:
 	default:	goto yy54;
 	}
 yy114:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '0':
 	case '1':
 	case '2':
@@ -874,8 +874,8 @@ yy119:
 	default:	goto yy54;
 	}
 yy120:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '0':
 	case '1':
 	case '2':
@@ -976,8 +976,8 @@ yy126:
 	default:	goto yy54;
 	}
 yy127:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '0':
 	case '1':
 	case '2':
@@ -1053,8 +1053,8 @@ yy129:
 	default:	goto yy54;
 	}
 yy130:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '0':
 	case '1':
 	case '2':
@@ -1142,8 +1142,8 @@ yy134:
 	default:	goto yy54;
 	}
 yy135:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '0':
 	case '1':
 	case '2':
@@ -1213,8 +1213,8 @@ yy136:
 	{RETURN(58);}
 #line 1215 "modula.c"
 yy137:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '0':
 	case '1':
 	case '2':
@@ -1322,8 +1322,8 @@ yy144:
 	default:	goto yy54;
 	}
 yy145:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '0':
 	case '1':
 	case '2':
@@ -1466,8 +1466,8 @@ yy156:
 	default:	goto yy84;
 	}
 yy157:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '0':
 	case '1':
 	case '2':
@@ -1567,8 +1567,8 @@ yy163:
 	default:	goto yy54;
 	}
 yy164:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '0':
 	case '1':
 	case '2':
@@ -1645,8 +1645,8 @@ yy166:
 	default:	goto yy54;
 	}
 yy167:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '0':
 	case '1':
 	case '2':
@@ -1728,8 +1728,8 @@ yy170:
 	default:	goto yy54;
 	}
 yy171:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '0':
 	case '1':
 	case '2':
@@ -1818,8 +1818,8 @@ yy175:
 	default:	goto yy54;
 	}
 yy176:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '0':
 	case '1':
 	case '2':
@@ -1889,8 +1889,8 @@ yy177:
 	{RETURN(55);}
 #line 1891 "modula.c"
 yy178:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '0':
 	case '1':
 	case '2':
@@ -1996,8 +1996,8 @@ yy185:
 	default:	goto yy54;
 	}
 yy186:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '0':
 	case '1':
 	case '2':
@@ -2085,8 +2085,8 @@ yy190:
 	default:	goto yy54;
 	}
 yy191:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '0':
 	case '1':
 	case '2':
@@ -2212,8 +2212,8 @@ yy199:
 	default:	goto yy54;
 	}
 yy200:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '0':
 	case '1':
 	case '2':
@@ -2295,8 +2295,8 @@ yy203:
 	default:	goto yy54;
 	}
 yy204:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '0':
 	case '1':
 	case '2':
@@ -2372,8 +2372,8 @@ yy206:
 	default:	goto yy54;
 	}
 yy207:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '0':
 	case '1':
 	case '2':
@@ -2449,8 +2449,8 @@ yy209:
 	default:	goto yy54;
 	}
 yy210:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '0':
 	case '1':
 	case '2':
@@ -2532,8 +2532,8 @@ yy213:
 	default:	goto yy54;
 	}
 yy214:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '0':
 	case '1':
 	case '2':
@@ -2645,8 +2645,8 @@ yy222:
 	default:	goto yy54;
 	}
 yy223:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '0':
 	case '1':
 	case '2':
@@ -2716,8 +2716,8 @@ yy224:
 	{RETURN(67);}
 #line 2718 "modula.c"
 yy225:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '0':
 	case '1':
 	case '2':
@@ -2799,8 +2799,8 @@ yy228:
 	default:	goto yy54;
 	}
 yy229:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '0':
 	case '1':
 	case '2':
@@ -2870,8 +2870,8 @@ yy230:
 	{RETURN(73);}
 #line 2872 "modula.c"
 yy231:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '0':
 	case '1':
 	case '2':
@@ -2941,8 +2941,8 @@ yy232:
 	{RETURN(35);}
 #line 2943 "modula.c"
 yy233:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '0':
 	case '1':
 	case '2':
@@ -3012,8 +3012,8 @@ yy234:
 	{RETURN(36);}
 #line 3014 "modula.c"
 yy235:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '0':
 	case '1':
 	case '2':
@@ -3089,8 +3089,8 @@ yy237:
 	default:	goto yy54;
 	}
 yy238:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '0':
 	case '1':
 	case '2':
@@ -3220,8 +3220,8 @@ yy249:
 	default:	goto yy54;
 	}
 yy250:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '0':
 	case '1':
 	case '2':
@@ -3291,8 +3291,8 @@ yy251:
 	{RETURN(70);}
 #line 3293 "modula.c"
 yy252:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '0':
 	case '1':
 	case '2':
@@ -3368,8 +3368,8 @@ yy254:
 	default:	goto yy54;
 	}
 yy255:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '0':
 	case '1':
 	case '2':
@@ -3445,8 +3445,8 @@ yy257:
 	default:	goto yy54;
 	}
 yy258:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '0':
 	case '1':
 	case '2':
@@ -3516,8 +3516,8 @@ yy259:
 	{RETURN(52);}
 #line 3518 "modula.c"
 yy260:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '0':
 	case '1':
 	case '2':
@@ -3605,8 +3605,8 @@ yy264:
 	default:	goto yy54;
 	}
 yy265:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '0':
 	case '1':
 	case '2':
@@ -3676,8 +3676,8 @@ yy266:
 	{RETURN(63);}
 #line 3678 "modula.c"
 yy267:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '0':
 	case '1':
 	case '2':
@@ -3747,8 +3747,8 @@ yy268:
 	{RETURN(64);}
 #line 3749 "modula.c"
 yy269:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '0':
 	case '1':
 	case '2':
@@ -3830,8 +3830,8 @@ yy272:
 	default:	goto yy54;
 	}
 yy273:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '0':
 	case '1':
 	case '2':
@@ -3949,8 +3949,8 @@ yy282:
 	default:	goto yy54;
 	}
 yy283:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '0':
 	case '1':
 	case '2':
@@ -4020,8 +4020,8 @@ yy284:
 	{RETURN(61);}
 #line 4022 "modula.c"
 yy285:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '0':
 	case '1':
 	case '2':
@@ -4091,8 +4091,8 @@ yy286:
 	{RETURN(62);}
 #line 4093 "modula.c"
 yy287:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '0':
 	case '1':
 	case '2':
@@ -4186,8 +4186,8 @@ yy292:
 	default:	goto yy54;
 	}
 yy293:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '0':
 	case '1':
 	case '2':

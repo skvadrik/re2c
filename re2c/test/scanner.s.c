@@ -355,8 +355,8 @@ yy44:
 	{ RETURN(*tok); }
 #line 357 "scanner.s.c"
 yy45:
-	++YYCURSOR;
-	if ((yych = *YYCURSOR) == '/') goto yy70;
+	yych = *++YYCURSOR;
+	if (yych == '/') goto yy70;
 yy46:
 #line 198 "scanner.s.re"
 	{ yylval.op = *tok;
@@ -1005,8 +1005,8 @@ yy158:
 	if (yych <= '9') goto yy161;
 	goto yy153;
 yy159:
-	++YYCURSOR;
-	if ((yych = *YYCURSOR) <= '\r') {
+	yych = *++YYCURSOR;
+	if (yych <= '\r') {
 		if (yych <= 0x08) goto yy152;
 		if (yych <= '\n') goto yy160;
 		if (yych <= '\f') goto yy152;

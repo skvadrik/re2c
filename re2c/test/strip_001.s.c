@@ -153,8 +153,8 @@ yy20:
 			{ fwrite(s.tok, 1, s.cur - s.tok, stdout); continue; }
 #line 155 "strip_001.s.c"
 yy22:
-			++YYCURSOR;
-			if ((yych = *YYCURSOR) == '\n') goto yy20;
+			yych = *++YYCURSOR;
+			if (yych == '\n') goto yy20;
 			goto yy19;
 		}
 #line 126 "strip_001.s.re"

@@ -319,8 +319,8 @@ yy22:
 	default:	goto yy8;
 	}
 yy23:
-	++in.cur;
-	switch ((yych = *in.cur)) {
+	yych = *++in.cur;
+	switch (yych) {
 	case '\n':	goto yy20;
 	default:	goto yy8;
 	}

@@ -1803,8 +1803,8 @@ yy25:
 		}
 	}
 yy26:
-	++YYCURSOR;
-	if ((yych = *YYCURSOR) <= 0xDFFD) goto yy3;
+	yych = *++YYCURSOR;
+	if (yych <= 0xDFFD) goto yy3;
 	if (yych <= 0xDFFF) goto yy4;
 	goto yy3;
 }

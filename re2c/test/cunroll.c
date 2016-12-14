@@ -263,8 +263,8 @@ yy7:
 	    }
 #line 265 "cunroll.c"
 yy9:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '=':	goto yy65;
 	default:	goto yy10;
 	}
@@ -280,8 +280,8 @@ yy11:
 	default:	goto yy68;
 	}
 yy12:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '=':	goto yy73;
 	default:	goto yy13;
 	}
@@ -290,8 +290,8 @@ yy13:
 	{ RET('%'); }
 #line 292 "cunroll.c"
 yy14:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '&':	goto yy75;
 	case '=':	goto yy77;
 	default:	goto yy15;
@@ -318,8 +318,8 @@ yy19:
 	{ RET(')'); }
 #line 320 "cunroll.c"
 yy21:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '=':	goto yy83;
 	default:	goto yy22;
 	}
@@ -328,8 +328,8 @@ yy22:
 	{ RET('*'); }
 #line 330 "cunroll.c"
 yy23:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '+':	goto yy85;
 	case '=':	goto yy87;
 	default:	goto yy24;
@@ -344,8 +344,8 @@ yy25:
 	{ RET(','); }
 #line 346 "cunroll.c"
 yy27:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '-':	goto yy89;
 	case '=':	goto yy91;
 	case '>':	goto yy93;
@@ -377,8 +377,8 @@ yy30:
 	{ RET('.'); }
 #line 379 "cunroll.c"
 yy31:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '*':	goto yy99;
 	case '=':	goto yy101;
 	default:	goto yy32;
@@ -436,8 +436,8 @@ yy39:
 	{ RET(';'); }
 #line 438 "cunroll.c"
 yy41:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '<':	goto yy107;
 	case '=':	goto yy109;
 	default:	goto yy42;
@@ -447,8 +447,8 @@ yy42:
 	{ RET('<'); }
 #line 449 "cunroll.c"
 yy43:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '=':	goto yy111;
 	default:	goto yy44;
 	}
@@ -457,8 +457,8 @@ yy44:
 	{ RET('='); }
 #line 459 "cunroll.c"
 yy45:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '=':	goto yy113;
 	case '>':	goto yy115;
 	default:	goto yy46;
@@ -473,8 +473,8 @@ yy47:
 	{ RET('?'); }
 #line 475 "cunroll.c"
 yy49:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '0':
 	case '1':
 	case '2':
@@ -555,8 +555,8 @@ yy53:
 	{ RET(']'); }
 #line 557 "cunroll.c"
 yy55:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '=':	goto yy119;
 	default:	goto yy56;
 	}
@@ -570,8 +570,8 @@ yy57:
 	{ RET('{'); }
 #line 572 "cunroll.c"
 yy59:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '=':	goto yy121;
 	case '|':	goto yy123;
 	default:	goto yy60;
@@ -832,8 +832,8 @@ yy106:
 	default:	goto yy69;
 	}
 yy107:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '=':	goto yy135;
 	default:	goto yy108;
 	}
@@ -857,8 +857,8 @@ yy113:
 	{ RET(GEQ); }
 #line 859 "cunroll.c"
 yy115:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '=':	goto yy137;
 	default:	goto yy116;
 	}
@@ -867,8 +867,8 @@ yy116:
 	{ RET(RSHIFT); }
 #line 869 "cunroll.c"
 yy117:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '0':
 	case '1':
 	case '2':
@@ -1099,8 +1099,8 @@ yy137:
 	{ RET(RSHIFTEQ); }
 #line 1101 "cunroll.c"
 yy139:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '0':
 	case '1':
 	case '2':
@@ -1171,8 +1171,8 @@ yy140:
 	{ RET(ID); }
 #line 1173 "cunroll.c"
 yy141:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '0':
 	case '1':
 	case '2':
@@ -1243,8 +1243,8 @@ yy142:
 	{ RET(ID); }
 #line 1245 "cunroll.c"
 yy143:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '0':
 	case '1':
 	case '2':
@@ -1315,8 +1315,8 @@ yy144:
 	{ RET(ID); }
 #line 1317 "cunroll.c"
 yy145:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '0':
 	case '1':
 	case '2':
@@ -1387,8 +1387,8 @@ yy146:
 	{ RET(ID); }
 #line 1389 "cunroll.c"
 yy147:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '0':
 	case '1':
 	case '2':
@@ -1459,8 +1459,8 @@ yy148:
 	{ RET(ID); }
 #line 1461 "cunroll.c"
 yy149:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '0':
 	case '1':
 	case '2':
@@ -1622,8 +1622,8 @@ comment:
 	default:	goto yy156;
 	}
 yy156:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '*':
 	case '/':	goto yy157;
 	default:	goto yy163;
@@ -1633,8 +1633,8 @@ yy157:
 	{ goto comment; }
 #line 1635 "cunroll.c"
 yy158:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '*':
 	case '/':	goto yy159;
 	default:	goto yy163;
@@ -1648,8 +1648,8 @@ yy159:
 	    }
 #line 1650 "cunroll.c"
 yy160:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '/':	goto yy165;
 	default:	goto yy161;
 	}
@@ -1661,8 +1661,8 @@ yy162:
 	++YYCURSOR;
 	goto yy161;
 yy163:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '*':
 	case '/':	goto yy164;
 	default:	goto yy167;
@@ -1677,8 +1677,8 @@ yy165:
 	{ goto std; }
 #line 1679 "cunroll.c"
 yy167:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '*':
 	case '/':	goto yy168;
 	default:	goto yy169;
@@ -1688,8 +1688,8 @@ yy168:
 	{ goto comment; }
 #line 1690 "cunroll.c"
 yy169:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '*':
 	case '/':	goto yy170;
 	default:	goto yy171;
@@ -1699,8 +1699,8 @@ yy170:
 	{ goto comment; }
 #line 1701 "cunroll.c"
 yy171:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '*':
 	case '/':	goto yy172;
 	default:	goto yy173;
@@ -1710,8 +1710,8 @@ yy172:
 	{ goto comment; }
 #line 1712 "cunroll.c"
 yy173:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '*':
 	case '/':	goto yy174;
 	default:	goto yy175;
@@ -1721,8 +1721,8 @@ yy174:
 	{ goto comment; }
 #line 1723 "cunroll.c"
 yy175:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '*':
 	case '/':	goto yy176;
 	default:	goto yy177;

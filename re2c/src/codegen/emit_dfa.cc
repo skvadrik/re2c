@@ -85,10 +85,9 @@ void DFA::emit_body(OutputFile &o, uint32_t& ind,
 	}
 
 	for (State * s = head; s; s = s->next) {
-		bool readCh = false;
 		emit_state(o, ind, s, used_labels.count(s->label));
-		emit_action(o, ind, readCh, *this, s, used_labels);
-		s->go.emit(o, ind, *this, readCh);
+		emit_action(o, ind, *this, s, used_labels);
+		s->go.emit(o, ind, *this);
 	}
 }
 
@@ -130,8 +129,7 @@ void DFA::emit_dot(
 					.ws("\"]").ws("\n");
 			}
 		}
-		bool readCh = false;
-		s->go.emit(o, 0, *this, readCh);
+		s->go.emit(o, 0, *this);
 	}
 	if (!opts->cFlag || last_cond) {
 		o.ws("}\n");

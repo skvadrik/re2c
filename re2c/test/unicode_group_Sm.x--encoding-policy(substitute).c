@@ -188,8 +188,8 @@ yy4:
 	{ goto Sm; }
 #line 190 "unicode_group_Sm.x--encoding-policy(substitute).c"
 yy6:
-	++YYCURSOR;
-	if ((yych = *YYCURSOR) <= 0xDF35) {
+	yych = *++YYCURSOR;
+	if (yych <= 0xDF35) {
 		if (yych <= 0xDEFA) {
 			if (yych <= 0xDEC1) {
 				if (yych <= 0xDEC0) goto yy3;

@@ -1077,7 +1077,7 @@ yy16:
 	if (yych <= '9') goto yy99;
 	goto yy5;
 yy17:
-	++YYCURSOR;
+	yych = *++YYCURSOR;
 	{
 		static void *yytarget[256] = {
 			&&yy18,  &&yy18,  &&yy18,  &&yy18,  &&yy18,  &&yy18,  &&yy18,  &&yy18,
@@ -1113,7 +1113,7 @@ yy17:
 			&&yy18,  &&yy18,  &&yy18,  &&yy18,  &&yy18,  &&yy18,  &&yy18,  &&yy18,
 			&&yy18,  &&yy18,  &&yy18,  &&yy18,  &&yy18,  &&yy18,  &&yy18,  &&yy18
 		};
-		goto *yytarget[(yych = *YYCURSOR)];
+		goto *yytarget[yych];
 	}
 yy18:
 #line 1340 "parse_date.g.re"
@@ -3377,8 +3377,8 @@ yy127:
 	if (yych <= '9') goto yy126;
 	goto yy18;
 yy128:
-	++YYCURSOR;
-	if ((yych = *YYCURSOR) <= '/') goto yy282;
+	yych = *++YYCURSOR;
+	if (yych <= '/') goto yy282;
 	if (yych <= '9') goto yy283;
 	goto yy282;
 yy129:
@@ -5027,8 +5027,8 @@ yy220:
 	if (yych <= '/') goto yy53;
 	if (yych >= ':') goto yy53;
 yy222:
-	++YYCURSOR;
-	if ((yych = *YYCURSOR) <= '/') goto yy223;
+	yych = *++YYCURSOR;
+	if (yych <= '/') goto yy223;
 	if (yych <= '9') goto yy369;
 yy223:
 #line 1073 "parse_date.g.re"
@@ -5290,8 +5290,8 @@ yy249:
 	if (yych == 'M') goto yy250;
 	if (yych != 'm') goto yy53;
 yy250:
-	++YYCURSOR;
-	if ((yych = *YYCURSOR) == '.') goto yy388;
+	yych = *++YYCURSOR;
+	if (yych == '.') goto yy388;
 yy251:
 #line 929 "parse_date.g.re"
 	{
@@ -5368,8 +5368,8 @@ yy254:
 		goto yy18;
 	}
 yy255:
-	++YYCURSOR;
-	if ((yych = *YYCURSOR) <= '@') {
+	yych = *++YYCURSOR;
+	if (yych <= '@') {
 		if (yych == ')') goto yy102;
 	} else {
 		if (yych <= 'Z') goto yy400;
@@ -5882,8 +5882,8 @@ yy273:
 		}
 	}
 yy274:
-	++YYCURSOR;
-	if ((yych = *YYCURSOR) <= 'D') {
+	yych = *++YYCURSOR;
+	if (yych <= 'D') {
 		if (yych <= ')') {
 			if (yych >= ')') goto yy102;
 		} else {
@@ -6621,8 +6621,8 @@ yy302:
 		}
 	}
 yy303:
-	++YYCURSOR;
-	if ((yych = *YYCURSOR) <= '@') {
+	yych = *++YYCURSOR;
+	if (yych <= '@') {
 		if (yych == ')') goto yy102;
 	} else {
 		if (yych <= 'Z') goto yy400;
@@ -7703,8 +7703,8 @@ yy361:
 		}
 	}
 yy362:
-	++YYCURSOR;
-	if ((yych = *YYCURSOR) == 'S') goto yy520;
+	yych = *++YYCURSOR;
+	if (yych == 'S') goto yy520;
 	if (yych == 's') goto yy520;
 yy363:
 #line 1379 "parse_date.g.re"
@@ -8741,8 +8741,8 @@ yy441:
 		}
 	}
 yy442:
-	++YYCURSOR;
-	if ((yych = *YYCURSOR) == ')') goto yy102;
+	yych = *++YYCURSOR;
+	if (yych == ')') goto yy102;
 yy443:
 #line 871 "parse_date.g.re"
 	{
@@ -9619,8 +9619,8 @@ yy503:
 		}
 	}
 yy504:
-	++YYCURSOR;
-	if ((yych = *YYCURSOR) <= 'U') {
+	yych = *++YYCURSOR;
+	if (yych <= 'U') {
 		if (yych == 'I') goto yy674;
 	} else {
 		if (yych == 'W') goto yy505;
@@ -10655,8 +10655,8 @@ yy636:
 	if (yych <= '9') goto yy753;
 	goto yy192;
 yy637:
-	++YYCURSOR;
-	if ((yych = *YYCURSOR) <= '/') goto yy638;
+	yych = *++YYCURSOR;
+	if (yych <= '/') goto yy638;
 	if (yych <= '9') goto yy753;
 yy638:
 #line 1087 "parse_date.g.re"
@@ -11934,8 +11934,8 @@ yy789:
 	if (yych == 't') goto yy782;
 	goto yy505;
 yy790:
-	++YYCURSOR;
-	if ((yych = *YYCURSOR) <= '/') goto yy791;
+	yych = *++YYCURSOR;
+	if (yych <= '/') goto yy791;
 	if (yych <= '7') goto yy869;
 yy791:
 #line 1219 "parse_date.g.re"
@@ -12019,8 +12019,8 @@ yy801:
 	++YYCURSOR;
 	goto yy586;
 yy802:
-	++YYCURSOR;
-	if ((yych = *YYCURSOR) == 'S') goto yy879;
+	yych = *++YYCURSOR;
+	if (yych == 'S') goto yy879;
 	if (yych == 's') goto yy879;
 yy803:
 #line 1323 "parse_date.g.re"
@@ -12797,8 +12797,8 @@ yy874:
 	if (yych <= '1') goto yy927;
 	goto yy53;
 yy875:
-	++YYCURSOR;
-	if ((yych = *YYCURSOR) <= '/') goto yy876;
+	yych = *++YYCURSOR;
+	if (yych <= '/') goto yy876;
 	if (yych <= '9') goto yy929;
 yy876:
 #line 1238 "parse_date.g.re"
@@ -13899,8 +13899,8 @@ yy1018:
 	if (yych <= '5') goto yy1024;
 	goto yy53;
 yy1019:
-	++YYCURSOR;
-	if ((yych = *YYCURSOR) <= '/') goto yy1020;
+	yych = *++YYCURSOR;
+	if (yych <= '/') goto yy1020;
 	if (yych <= '9') goto yy1022;
 yy1020:
 #line 1163 "parse_date.g.re"
@@ -14037,8 +14037,8 @@ yy1040:
 		goto yy1020;
 	}
 yy1042:
-	++YYCURSOR;
-	if ((yych = *YYCURSOR) <= '/') goto yy1043;
+	yych = *++YYCURSOR;
+	if (yych <= '/') goto yy1043;
 	if (yych <= '9') goto yy1045;
 	if (yych <= ':') goto yy1047;
 yy1043:
@@ -14121,8 +14121,8 @@ yy1052:
 	if (yych <= '9') goto yy1022;
 	if (yych >= ';') goto yy1020;
 yy1053:
-	++YYCURSOR;
-	if ((yych = *YYCURSOR) <= '/') goto yy1020;
+	yych = *++YYCURSOR;
+	if (yych <= '/') goto yy1020;
 	if (yych <= '5') goto yy1019;
 	if (yych <= '9') goto yy1022;
 	goto yy1020;

@@ -9,9 +9,8 @@
 	default:	goto yy2;
 	}
 yy2:
-	++YYCURSOR;
+	yych = *++YYCURSOR;
 	YYCTXMARKER = YYCURSOR;
-	yych = *YYCURSOR;
 	goto yy7;
 yy3:
 	YYCURSOR = YYCTXMARKER;

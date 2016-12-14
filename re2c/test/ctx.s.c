@@ -112,8 +112,8 @@ yy12:
 	{ return KEYWORD; }
 #line 114 "ctx.s.c"
 yy13:
-	++YYCURSOR;
-	if ((yych = *YYCURSOR) <= '/') goto yy14;
+	yych = *++YYCURSOR;
+	if (yych <= '/') goto yy14;
 	if (yych <= '9') goto yy10;
 yy14:
 	YYCURSOR -= 1;

@@ -338,8 +338,8 @@ yy62:
 				goto yyc_Skiptoeol;
 			}
 yy64:
-		++s->cur;
-		if ((s->yych = *s->cur) == '\n') goto yy62;
+		s->yych = *++s->cur;
+		if (s->yych == '\n') goto yy62;
 		goto yy57;
 /* *********************************** */
 yyc_String:

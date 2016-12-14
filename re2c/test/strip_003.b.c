@@ -260,8 +260,8 @@ yy41:
 			{ echo(&s); continue; }
 #line 262 "strip_003.b.c"
 yy43:
-			++YYCURSOR;
-			if ((yych = *YYCURSOR) == '\n') goto yy41;
+			yych = *++YYCURSOR;
+			if (yych == '\n') goto yy41;
 			goto yy40;
 		}
 #line 158 "strip_003.b.re"

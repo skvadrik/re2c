@@ -1806,8 +1806,8 @@ yy24:
 	if (yych <= 0xDFFF) goto yy2;
 	goto yy3;
 yy25:
-	++YYCURSOR;
-	if ((yych = *YYCURSOR) <= 0xDBFF) goto yy3;
+	yych = *++YYCURSOR;
+	if (yych <= 0xDBFF) goto yy3;
 	if (yych <= 0xDCFF) goto yy2;
 	if (yych <= 0xDDEF) goto yy3;
 	if (yych <= 0xDFFF) goto yy2;

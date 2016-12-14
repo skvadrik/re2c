@@ -295,8 +295,8 @@ yy59:
 				goto yyc_Skiptoeol;
 			}
 yy61:
-		++s->cur;
-		if ((s->yych = *s->cur) == '\n') goto yy59;
+		s->yych = *++s->cur;
+		if (s->yych == '\n') goto yy59;
 		goto yy54;
 /* *********************************** */
 yyc_String:

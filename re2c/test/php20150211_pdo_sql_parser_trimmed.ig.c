@@ -147,8 +147,8 @@ yy12:
 	if (yych <= ':') goto yy33;
 	goto yy8;
 yy13:
-	++YYCURSOR;
-	if (yybm[0+(yych = *YYCURSOR)] & 16) {
+	yych = *++YYCURSOR;
+	if (yybm[0+yych] & 16) {
 		goto yy36;
 	}
 	{ RET(PDO_PARSER_BIND_POS); }

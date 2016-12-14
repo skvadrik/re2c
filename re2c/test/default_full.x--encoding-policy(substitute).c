@@ -15,8 +15,8 @@ yy2:
 	{ return FULL; }
 #line 17 "default_full.x--encoding-policy(substitute).c"
 yy4:
-	++YYCURSOR;
-	if ((yych = *YYCURSOR) <= 0xDBFF) goto yy5;
+	yych = *++YYCURSOR;
+	if (yych <= 0xDBFF) goto yy5;
 	if (yych <= 0xDFFF) goto yy2;
 yy5:
 #line 2 "default_full.x--encoding-policy(substitute).re"

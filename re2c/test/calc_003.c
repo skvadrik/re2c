@@ -64,8 +64,8 @@ yy8:
 			{ printf("+\n");	continue; }
 #line 66 "calc_003.c"
 yy10:
-			++YYCURSOR;
-			switch ((yych = *YYCURSOR)) {
+			yych = *++YYCURSOR;
+			switch (yych) {
 			case '0':
 			case '1':
 			case '2':

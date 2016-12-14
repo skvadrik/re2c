@@ -30,8 +30,8 @@ yy4:
 	YYCURSOR = YYMARKER;
 	goto yy2;
 yy5:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case 'a':	goto yy10;
 	default:	goto yy6;
 	}

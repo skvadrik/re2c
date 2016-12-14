@@ -831,7 +831,7 @@ yy34:
 		goto yy4;
 yy35:
 		YYDEBUG(35, *YYCURSOR);
-		++YYCURSOR;
+		yych = *++YYCURSOR;
 		{
 			static void *yytarget[256] = {
 				&&yy4,  &&yy4,  &&yy4,  &&yy4,  &&yy4,  &&yy4,  &&yy4,  &&yy4,
@@ -867,7 +867,7 @@ yy35:
 				&&yy4,  &&yy4,  &&yy4,  &&yy4,  &&yy4,  &&yy4,  &&yy4,  &&yy4,
 				&&yy4,  &&yy4,  &&yy4,  &&yy4,  &&yy4,  &&yy4,  &&yy4,  &&yy4
 			};
-			goto *yytarget[(yych = *YYCURSOR)];
+			goto *yytarget[yych];
 		}
 yy36:
 		YYDEBUG(36, *YYCURSOR);
@@ -1845,8 +1845,8 @@ yy120:
 }
 yy121:
 		YYDEBUG(121, *YYCURSOR);
-		++YYCURSOR;
-		if ((yych = *YYCURSOR) == '\n') goto yy119;
+		yych = *++YYCURSOR;
+		if (yych == '\n') goto yy119;
 		goto yy120;
 	}
 /* *********************************** */
@@ -1942,8 +1942,8 @@ yy132:
 		goto yy131;
 yy133:
 		YYDEBUG(133, *YYCURSOR);
-		++YYCURSOR;
-		if ((yych = *YYCURSOR) == '\n') goto yy132;
+		yych = *++YYCURSOR;
+		if (yych == '\n') goto yy132;
 		goto yy131;
 	}
 /* *********************************** */

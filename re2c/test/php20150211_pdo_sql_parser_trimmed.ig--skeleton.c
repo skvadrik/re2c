@@ -312,7 +312,8 @@ yy12:
         goto yy8;
 yy13:
         YYSKIP ();
-        if (yybm[0+(yych = YYPEEK ())] & 16) {
+        yych = YYPEEK ();
+        if (yybm[0+yych] & 16) {
             goto yy36;
         }
         status = check_key_count_line20(keys_count, i, 3)

@@ -231,7 +231,8 @@ yy15:
 	}
 yy16:
 	YYSKIP ();
-	switch ((yych = YYPEEK ())) {
+	yych = YYPEEK ();
+	switch (yych) {
 	case '0':
 	case '1':
 	case '2':

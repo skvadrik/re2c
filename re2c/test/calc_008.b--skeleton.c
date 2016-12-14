@@ -236,7 +236,8 @@ yy11:
         continue;
 yy13:
         YYSKIP ();
-        if ((yych = YYPEEK ()) <= '/') goto yy14;
+        yych = YYPEEK ();
+        if (yych <= '/') goto yy14;
         if (yych <= '9') goto yy17;
 yy14:
         status = check_key_count_line110(keys_count, i, 3)

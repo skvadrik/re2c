@@ -21,37 +21,37 @@ namespace re2c
 
 class label_t;
 
-static void need(OutputFile &o, uint32_t ind, bool &readCh, size_t n, bool bSetMarker);
-static void emit_match(OutputFile &o, uint32_t ind, bool &readCh, const State *s);
-static void emit_initial(OutputFile &o, uint32_t ind, bool &readCh, const State *s, const std::set<label_t> &used_labels, bool save_yyaccept);
-static void emit_save(OutputFile &o, uint32_t ind, bool &readCh, const State *s, bool save_yyaccept);
-static void emit_accept_binary(OutputFile &o, uint32_t ind, bool &readCh, const DFA &dfa, const State *s, size_t l, size_t r);
-static void emit_accept(OutputFile &o, uint32_t ind, bool &readCh, const DFA &dfa, const State *s);
+static void need(OutputFile &o, uint32_t ind, size_t n, bool bSetMarker);
+static void emit_match(OutputFile &o, uint32_t ind, const State *s);
+static void emit_initial(OutputFile &o, uint32_t ind, const State *s, const std::set<label_t> &used_labels, bool save_yyaccept);
+static void emit_save(OutputFile &o, uint32_t ind, const State *s, bool save_yyaccept);
+static void emit_accept_binary(OutputFile &o, uint32_t ind, const DFA &dfa, const State *s, size_t l, size_t r);
+static void emit_accept(OutputFile &o, uint32_t ind, const DFA &dfa, const State *s);
 static void emit_rule(OutputFile &o, uint32_t ind, const DFA &dfa, size_t rule_idx);
 static void genYYFill(OutputFile &o, size_t need);
 static void genSetCondition(OutputFile &o, uint32_t ind, const std::string &cond);
 static void genSetState(OutputFile &o, uint32_t ind, uint32_t fillIndex);
-static void gen_goto(code_lines_t &code, bool &readCh, const State *to, const DFA &dfa, tcid_t tcid);
+static void gen_goto(code_lines_t &code, const State *to, const DFA &dfa, tcid_t tcid);
 static void gen_fintags(OutputFile &o, uint32_t ind, const DFA &dfa, const Rule &rule);
 
-void emit_action(OutputFile &o, uint32_t ind, bool &readCh,
-	const DFA &dfa, const State *s, const std::set<label_t> &used_labels)
+void emit_action(OutputFile &o, uint32_t ind, const DFA &dfa,
+	const State *s, const std::set<label_t> &used_labels)
 {
 	const bool save_yyaccept = dfa.accepts.size() > 1;
 	switch (s->action.type) {
 		case Action::MATCH:
-			emit_match(o, ind, readCh, s);
+			emit_match(o, ind, s);
 			break;
 		case Action::INITIAL:
-			emit_initial(o, ind, readCh, s, used_labels, save_yyaccept);
+			emit_initial(o, ind, s, used_labels, save_yyaccept);
 			break;
 		case Action::SAVE:
-			emit_save(o, ind, readCh, s, save_yyaccept);
+			emit_save(o, ind, s, save_yyaccept);
 			break;
 		case Action::MOVE:
 			break;
 		case Action::ACCEPT:
-			emit_accept(o, ind, readCh, dfa, s);
+			emit_accept(o, ind, dfa, s);
 			break;
 		case Action::RULE:
 			emit_rule(o, ind, dfa, s->action.info.rule);
@@ -59,34 +59,24 @@ void emit_action(OutputFile &o, uint32_t ind, bool &readCh,
 	}
 }
 
-void emit_match(OutputFile &o, uint32_t ind, bool &readCh, const State *s)
+void emit_match(OutputFile &o, uint32_t ind, const State *s)
 {
-	const bool
-		end = s->go.nSpans == 1 && s->go.span[0].to->action.type == Action::RULE,
-		read_ahead = s->next && s->next->action.type != Action::RULE;
+	const bool end = s->go.nSpans == 1
+		&& s->go.span[0].to->action.type == Action::RULE;
 
 	if (s->fill != 0) {
 		o.wstring(opts->input_api.stmt_skip(ind));
+		need(o, ind, s->fill, false);
 	} else if (end) {
 		// do not read next char if all transitions go to rule state
 		o.wstring(opts->input_api.stmt_skip(ind));
-		readCh = false;
-	} else if (!read_ahead) {
-		// delay reading next char
-		o.wstring(opts->input_api.stmt_skip(ind));
-		readCh = true;
 	} else {
 		o.wstring(opts->input_api.stmt_skip_peek(ind));
-		readCh = false;
-	}
-
-	if (s->fill != 0) {
-		need(o, ind, readCh, s->fill, false);
 	}
 }
 
-void emit_initial(OutputFile &o, uint32_t ind, bool &readCh,
-	const State *s, const std::set<label_t> &used_labels, bool save_yyaccept)
+void emit_initial(OutputFile &o, uint32_t ind, const State *s,
+	const std::set<label_t> &used_labels, bool save_yyaccept)
 {
 	const Initial &initial = *s->action.info.initial;
 
@@ -115,17 +105,16 @@ void emit_initial(OutputFile &o, uint32_t ind, bool &readCh,
 	}
 
 	if (s->fill != 0) {
-		need(o, ind, readCh, s->fill, initial.setMarker);
+		need(o, ind, s->fill, initial.setMarker);
 	} else {
 		if (initial.setMarker) {
 			o.wstring(opts->input_api.stmt_backup(ind));
 		}
-		readCh = false;
 	}
 }
 
-void emit_save(OutputFile &o, uint32_t ind, bool &readCh,
-	const State *const s, bool save_yyaccept)
+void emit_save(OutputFile &o, uint32_t ind, const State *const s,
+	bool save_yyaccept)
 {
 	if (save_yyaccept) {
 		o.wind(ind).wstring(opts->yyaccept).ws(" = ")
@@ -134,32 +123,30 @@ void emit_save(OutputFile &o, uint32_t ind, bool &readCh,
 
 	if (s->fill != 0) {
 		o.wstring(opts->input_api.stmt_skip_backup(ind));
-		need(o, ind, readCh, s->fill, false);
+		need(o, ind, s->fill, false);
 	} else {
 		o.wstring(opts->input_api.stmt_skip_backup_peek(ind));
-		readCh = false;
 	}
 }
 
-void emit_accept_binary(OutputFile &o, uint32_t ind, bool &readCh,
-	const DFA &dfa, const State *s, size_t l, size_t r)
+void emit_accept_binary(OutputFile &o, uint32_t ind, const DFA &dfa,
+	const State *s, size_t l, size_t r)
 {
 	if (l < r) {
 		const size_t m = (l + r) >> 1;
 		o.wind(ind).ws("if (").wstring(opts->yyaccept)
 			.ws(r == l+1 ? " == " : " <= ").wu64(m).ws(") {\n");
-		emit_accept_binary (o, ++ind, readCh, dfa, s, l, m);
+		emit_accept_binary (o, ++ind, dfa, s, l, m);
 		o.wind(--ind).ws("} else {\n");
-		emit_accept_binary (o, ++ind, readCh, dfa, s, m + 1, r);
+		emit_accept_binary (o, ++ind, dfa, s, m + 1, r);
 		o.wind(--ind).ws("}\n");
 	} else {
 		const accept_t &acc = *s->action.info.accepts;
-		gen_goto_plain(o, ind, readCh, acc[l].first, dfa, acc[l].second);
+		gen_goto_plain(o, ind, acc[l].first, dfa, acc[l].second);
 	}
 }
 
-void emit_accept(OutputFile &o, uint32_t ind, bool &readCh,
-	const DFA &dfa, const State *s)
+void emit_accept(OutputFile &o, uint32_t ind, const DFA &dfa, const State *s)
 {
 	const accept_t &acc = *s->action.info.accepts;
 	const size_t nacc = acc.size();
@@ -169,14 +156,10 @@ void emit_accept(OutputFile &o, uint32_t ind, bool &readCh,
 	}
 
 	o.wstring(opts->input_api.stmt_restore(ind));
-	if (readCh) {
-		o.wstring(opts->input_api.stmt_peek(ind));
-		readCh = false;
-	}
 
 	// only one possible 'yyaccept' value: unconditional jump
 	if (nacc == 1) {
-		gen_goto_plain(o, ind, readCh, acc[0].first, dfa, acc[0].second);
+		gen_goto_plain(o, ind, acc[0].first, dfa, acc[0].second);
 		return;
 	}
 
@@ -208,7 +191,7 @@ void emit_accept(OutputFile &o, uint32_t ind, bool &readCh,
 
 	// nested ifs
 	if (opts->sFlag || nacc == 2) {
-		emit_accept_binary(o, ind, readCh, dfa, s, 0, nacc - 1);
+		emit_accept_binary(o, ind, dfa, s, 0, nacc - 1);
 		return;
 	}
 
@@ -216,10 +199,10 @@ void emit_accept(OutputFile &o, uint32_t ind, bool &readCh,
 	o.wind(ind).ws("switch (").wstring(opts->yyaccept).ws(") {\n");
 	for (uint32_t i = 0; i < nacc - 1; ++i) {
 		o.wind(ind).ws("case ").wu32(i).ws(": ");
-		gen_goto_case(o, ind, readCh, acc[i].first, dfa, acc[i].second);
+		gen_goto_case(o, ind, acc[i].first, dfa, acc[i].second);
 	}
 	o.wind(ind).ws("default:");
-	gen_goto_case(o, ind, readCh, acc[nacc - 1].first, dfa, acc[nacc - 1].second);
+	gen_goto_case(o, ind, acc[nacc - 1].first, dfa, acc[nacc - 1].second);
 	o.wind(ind).ws("}\n");
 }
 
@@ -253,7 +236,7 @@ void emit_rule(OutputFile &o, uint32_t ind, const DFA &dfa, size_t rule_idx)
 	}
 }
 
-void need(OutputFile &o, uint32_t ind, bool &readCh, size_t n, bool bSetMarker)
+void need(OutputFile &o, uint32_t ind, size_t n, bool bSetMarker)
 {
 	uint32_t fillIndex = last_fill_index;
 
@@ -287,7 +270,6 @@ void need(OutputFile &o, uint32_t ind, bool &readCh, size_t n, bool bSetMarker)
 		} else {
 			o.wstring(opts->input_api.stmt_peek(ind));
 		}
-		readCh = false;
 	}
 }
 
@@ -327,11 +309,11 @@ void genSetState(OutputFile &o, uint32_t ind, uint32_t fillIndex)
 	o.ws("\n");
 }
 
-void gen_goto_case(OutputFile &o, uint32_t ind, bool &readCh,
-	const State *to, const DFA &dfa, tcid_t tcid)
+void gen_goto_case(OutputFile &o, uint32_t ind, const State *to,
+	const DFA &dfa, tcid_t tcid)
 {
 	code_lines_t code;
-	gen_goto(code, readCh, to, dfa, tcid);
+	gen_goto(code, to, dfa, tcid);
 	const size_t lines = code.size();
 
 	if (lines == 1) {
@@ -344,11 +326,11 @@ void gen_goto_case(OutputFile &o, uint32_t ind, bool &readCh,
 	}
 }
 
-void gen_goto_if(OutputFile &o, uint32_t ind, bool &readCh,
-	const State *to, const DFA &dfa, tcid_t tcid)
+void gen_goto_if(OutputFile &o, uint32_t ind, const State *to,
+	const DFA &dfa, tcid_t tcid)
 {
 	code_lines_t code;
-	gen_goto(code, readCh, to, dfa, tcid);
+	gen_goto(code, to, dfa, tcid);
 	const size_t lines = code.size();
 
 	if (lines == 1) {
@@ -362,11 +344,11 @@ void gen_goto_if(OutputFile &o, uint32_t ind, bool &readCh,
 	}
 }
 
-void gen_goto_plain(OutputFile &o, uint32_t ind, bool &readCh,
-	const State *to, const DFA &dfa, tcid_t tcid)
+void gen_goto_plain(OutputFile &o, uint32_t ind, const State *to,
+	const DFA &dfa, tcid_t tcid)
 {
 	code_lines_t code;
-	gen_goto(code, readCh, to, dfa, tcid);
+	gen_goto(code, to, dfa, tcid);
 	const size_t lines = code.size();
 
 	for (size_t i = 0; i < lines; ++i) {
@@ -374,16 +356,9 @@ void gen_goto_plain(OutputFile &o, uint32_t ind, bool &readCh,
 	}
 }
 
-void gen_goto(code_lines_t &code, bool &readCh, const State *to,
-	const DFA &dfa, tcid_t tcid)
+void gen_goto(code_lines_t &code, const State *to, const DFA &dfa,
+	tcid_t tcid)
 {
-	if (to == NULL) {
-		readCh = false;
-	}
-	if (readCh) {
-		code.push_back(opts->input_api.stmt_peek(0));
-		readCh = false;
-	}
 	gen_settags(code, dfa, tcid);
 	if (to) {
 		code.push_back("goto " + opts->labelPrefix

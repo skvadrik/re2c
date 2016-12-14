@@ -72,8 +72,8 @@ yy7:
 	if (yych <= 0xDD7A) goto yy4;
 	goto yy3;
 yy8:
-	++YYCURSOR;
-	if ((yych = *YYCURSOR) == 0xDC01) goto yy4;
+	yych = *++YYCURSOR;
+	if (yych == 0xDC01) goto yy4;
 	if (yych <= 0xDC1F) goto yy3;
 	if (yych <= 0xDC7F) goto yy4;
 	goto yy3;

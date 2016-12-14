@@ -148,8 +148,8 @@ scan11:
 			{ res = stack_sub();		continue; }
 #line 150 "calc_008.b.c"
 scan13:
-			++p;
-			if ((curr = (unsigned char)*p) <= '/') goto scan14;
+			curr = (unsigned char)*++p;
+			if (curr <= '/') goto scan14;
 			if (curr <= '9') goto scan17;
 scan14:
 #line 105 "calc_008.b.re"

@@ -62,8 +62,8 @@ yy5:
 	{ return YYCURSOR == limit; }
 #line 64 "unicode_group_Cc.8--encoding-policy(fail).c"
 yy6:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case 0x80:
 	case 0x81:
 	case 0x82:

@@ -573,7 +573,8 @@ yy44:
         continue;
 yy45:
         YYSKIP ();
-        switch ((yych = YYPEEK ())) {
+        yych = YYPEEK ();
+        switch (yych) {
         case '/':    goto yy70;
         default:    goto yy46;
         }
@@ -1885,7 +1886,8 @@ yy158:
         }
 yy159:
         YYSKIP ();
-        switch ((yych = YYPEEK ())) {
+        yych = YYPEEK ();
+        switch (yych) {
         case '\t':
         case '\n':
         case '\r':

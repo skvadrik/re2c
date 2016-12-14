@@ -10,8 +10,8 @@
 	}
 yy2:
 	YYSKIP ();
-	YYBACKUPCTX ();
 	yych = YYPEEK ();
+	YYBACKUPCTX ();
 	goto yy7;
 yy3:
 	YYRESTORECTX ();

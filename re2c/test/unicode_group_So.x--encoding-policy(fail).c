@@ -505,8 +505,8 @@ yy8:
 		}
 	}
 yy9:
-	++YYCURSOR;
-	if ((yych = *YYCURSOR) <= 0xDE17) {
+	yych = *++YYCURSOR;
+	if (yych <= 0xDE17) {
 		if (yych <= 0xDD3D) {
 			if (yych <= 0xDC41) {
 				if (yych <= 0xDC3E) {

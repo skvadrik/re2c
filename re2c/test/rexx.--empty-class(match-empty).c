@@ -652,8 +652,8 @@ yy66:
 	{ RETURN(OP_OR); }
 #line 654 "rexx.--empty-class(match-empty).c"
 yy67:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '!':
 	case '.':
 	case '0':
@@ -1019,8 +1019,8 @@ yy110:
 	default:	goto yy9;
 	}
 yy111:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '!':
 	case '0':
 	case '1':
@@ -1108,8 +1108,8 @@ yy114:
 	default:	goto yy9;
 	}
 yy115:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '!':
 	case '0':
 	case '1':
@@ -1250,8 +1250,8 @@ yy125:
 	default:	goto yy9;
 	}
 yy126:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '!':
 	case '0':
 	case '1':
@@ -1385,8 +1385,8 @@ yy135:
 	default:	goto yy9;
 	}
 yy136:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '!':
 	case '0':
 	case '1':
@@ -1560,8 +1560,8 @@ yy151:
 	default:	goto yy9;
 	}
 yy152:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '!':
 	case '0':
 	case '1':
@@ -2014,8 +2014,8 @@ yy184:
 	default:	goto yy9;
 	}
 yy185:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '!':
 	case '0':
 	case '1':
@@ -2117,8 +2117,8 @@ yy190:
 	default:	goto yy9;
 	}
 yy191:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '!':
 	case '0':
 	case '1':
@@ -2227,8 +2227,8 @@ yy197:
 	default:	goto yy9;
 	}
 yy198:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '!':
 	case '0':
 	case '1':
@@ -2351,8 +2351,8 @@ yy206:
 	default:	goto yy9;
 	}
 yy207:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '!':
 	case '0':
 	case '1':
@@ -2447,8 +2447,8 @@ yy211:
 	default:	goto yy9;
 	}
 yy212:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '!':
 	case '0':
 	case '1':
@@ -2578,8 +2578,8 @@ yy221:
 	default:	goto yy9;
 	}
 yy222:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '!':
 	case '0':
 	case '1':
@@ -2723,8 +2723,8 @@ yy233:
 	default:	goto yy9;
 	}
 yy234:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '!':
 	case '0':
 	case '1':
@@ -2897,8 +2897,8 @@ yy254:
 	default:	goto yy9;
 	}
 yy255:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '!':
 	case '0':
 	case '1':
@@ -2979,8 +2979,8 @@ yy257:
 	default:	goto yy9;
 	}
 yy258:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '!':
 	case '0':
 	case '1':
@@ -3054,8 +3054,8 @@ yy259:
 	{ RETURN(RX_DROP); }
 #line 3056 "rexx.--empty-class(match-empty).c"
 yy260:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '!':
 	case '0':
 	case '1':
@@ -3143,8 +3143,8 @@ yy263:
 	default:	goto yy9;
 	}
 yy264:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '!':
 	case '0':
 	case '1':
@@ -3239,8 +3239,8 @@ yy268:
 	default:	goto yy9;
 	}
 yy269:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '!':
 	case '0':
 	case '1':
@@ -3314,8 +3314,8 @@ yy270:
 	{ RETURN(RXS_FORM); }
 #line 3316 "rexx.--empty-class(match-empty).c"
 yy271:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '!':
 	case '0':
 	case '1':
@@ -3389,8 +3389,8 @@ yy272:
 	{ RETURN(RXS_FUZZ); }
 #line 3391 "rexx.--empty-class(match-empty).c"
 yy273:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '!':
 	case '0':
 	case '1':
@@ -3492,8 +3492,8 @@ yy278:
 	default:	goto yy9;
 	}
 yy279:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '!':
 	case '0':
 	case '1':
@@ -3616,8 +3616,8 @@ yy287:
 	default:	goto yy9;
 	}
 yy288:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '!':
 	case '0':
 	case '1':
@@ -3691,8 +3691,8 @@ yy289:
 	{ RETURN(RX_PULL); }
 #line 3693 "rexx.--empty-class(match-empty).c"
 yy290:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '!':
 	case '0':
 	case '1':
@@ -3815,8 +3815,8 @@ yy298:
 	default:	goto yy9;
 	}
 yy299:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '!':
 	case '0':
 	case '1':
@@ -3925,8 +3925,8 @@ yy305:
 	default:	goto yy9;
 	}
 yy306:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '!':
 	case '0':
 	case '1':
@@ -4007,8 +4007,8 @@ yy308:
 	default:	goto yy9;
 	}
 yy309:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '!':
 	case '0':
 	case '1':
@@ -4103,8 +4103,8 @@ yy313:
 	default:	goto yy9;
 	}
 yy314:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '!':
 	case '0':
 	case '1':
@@ -4213,8 +4213,8 @@ yy320:
 	default:	goto yy9;
 	}
 yy321:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '!':
 	case '0':
 	case '1':
@@ -4330,8 +4330,8 @@ yy328:
 	default:	goto yy9;
 	}
 yy329:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '!':
 	case '0':
 	case '1':
@@ -4412,8 +4412,8 @@ yy331:
 	default:	goto yy9;
 	}
 yy332:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '!':
 	case '0':
 	case '1':
@@ -4529,8 +4529,8 @@ yy339:
 	default:	goto yy9;
 	}
 yy340:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '!':
 	case '0':
 	case '1':
@@ -4604,8 +4604,8 @@ yy341:
 	{ RETURN(RX_TRACE); }
 #line 4606 "rexx.--empty-class(match-empty).c"
 yy342:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '!':
 	case '0':
 	case '1':
@@ -4679,8 +4679,8 @@ yy343:
 	{ RETURN(RXS_UNTIL); }
 #line 4681 "rexx.--empty-class(match-empty).c"
 yy344:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '!':
 	case '0':
 	case '1':
@@ -4754,8 +4754,8 @@ yy345:
 	{ RETURN(RXS_UPPER); }
 #line 4756 "rexx.--empty-class(match-empty).c"
 yy346:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '!':
 	case '0':
 	case '1':
@@ -4836,8 +4836,8 @@ yy348:
 	default:	goto yy9;
 	}
 yy349:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '!':
 	case '0':
 	case '1':
@@ -4918,8 +4918,8 @@ yy351:
 	default:	goto yy9;
 	}
 yy352:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '!':
 	case '0':
 	case '1':
@@ -5000,8 +5000,8 @@ yy354:
 	default:	goto yy9;
 	}
 yy355:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '!':
 	case '0':
 	case '1':
@@ -5103,8 +5103,8 @@ yy360:
 	default:	goto yy9;
 	}
 yy361:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '!':
 	case '0':
 	case '1':
@@ -5220,8 +5220,8 @@ yy368:
 	default:	goto yy9;
 	}
 yy369:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '!':
 	case '0':
 	case '1':
@@ -5302,8 +5302,8 @@ yy371:
 	default:	goto yy9;
 	}
 yy372:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '!':
 	case '0':
 	case '1':
@@ -5377,8 +5377,8 @@ yy373:
 	{ RETURN(RX_SELECT); }
 #line 5379 "rexx.--empty-class(match-empty).c"
 yy374:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '!':
 	case '0':
 	case '1':
@@ -5452,8 +5452,8 @@ yy375:
 	{ RETURN(RX_SIGNAL); }
 #line 5454 "rexx.--empty-class(match-empty).c"
 yy376:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '!':
 	case '0':
 	case '1':
@@ -5527,8 +5527,8 @@ yy377:
 	{ RETURN(RXS_SOURCE); }
 #line 5529 "rexx.--empty-class(match-empty).c"
 yy378:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '!':
 	case '0':
 	case '1':
@@ -5609,8 +5609,8 @@ yy380:
 	default:	goto yy9;
 	}
 yy381:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '!':
 	case '0':
 	case '1':
@@ -5691,8 +5691,8 @@ yy383:
 	default:	goto yy9;
 	}
 yy384:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '!':
 	case '0':
 	case '1':
@@ -5766,8 +5766,8 @@ yy385:
 	{ RETURN(RXS_FAILURE); }
 #line 5768 "rexx.--empty-class(match-empty).c"
 yy386:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '!':
 	case '0':
 	case '1':
@@ -5848,8 +5848,8 @@ yy388:
 	default:	goto yy9;
 	}
 yy389:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '!':
 	case '0':
 	case '1':
@@ -5930,8 +5930,8 @@ yy391:
 	default:	goto yy9;
 	}
 yy392:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '!':
 	case '0':
 	case '1':
@@ -6005,8 +6005,8 @@ yy393:
 	{ RETURN(RXS_NOVALUE); }
 #line 6007 "rexx.--empty-class(match-empty).c"
 yy394:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '!':
 	case '0':
 	case '1':
@@ -6080,8 +6080,8 @@ yy395:
 	{ RETURN(RX_NUMERIC); }
 #line 6082 "rexx.--empty-class(match-empty).c"
 yy396:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '!':
 	case '0':
 	case '1':
@@ -6176,8 +6176,8 @@ yy400:
 	default:	goto yy9;
 	}
 yy401:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '!':
 	case '0':
 	case '1':
@@ -6265,8 +6265,8 @@ yy404:
 	default:	goto yy9;
 	}
 yy405:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '!':
 	case '0':
 	case '1':
@@ -6368,8 +6368,8 @@ yy410:
 	default:	goto yy9;
 	}
 yy411:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '!':
 	case '0':
 	case '1':
@@ -6443,8 +6443,8 @@ yy412:
 	{ RETURN(RX_INTERPRET); }
 #line 6445 "rexx.--empty-class(match-empty).c"
 yy413:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '!':
 	case '0':
 	case '1':
@@ -6518,8 +6518,8 @@ yy414:
 	{ RETURN(RX_OTHERWISE); }
 #line 6520 "rexx.--empty-class(match-empty).c"
 yy415:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '!':
 	case '0':
 	case '1':
@@ -6607,8 +6607,8 @@ yy418:
 	default:	goto yy9;
 	}
 yy419:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '!':
 	case '0':
 	case '1':
@@ -6682,8 +6682,8 @@ yy420:
 	{ RETURN(RXS_SCIENTIFIC); }
 #line 6684 "rexx.--empty-class(match-empty).c"
 yy421:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '!':
 	case '0':
 	case '1':

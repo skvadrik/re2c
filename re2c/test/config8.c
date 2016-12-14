@@ -146,8 +146,8 @@ xx12:
 	{ return KEYWORD; }
 #line 148 "config8.c"
 xx13:
-	++s.cur;
-	switch ((curr = *s.cur)) {
+	curr = *++s.cur;
+	switch (curr) {
 	case '0':
 	case '1':
 	case '2':

@@ -26267,7 +26267,8 @@ yy977:
         }
 yy978:
         YYSKIP ();
-        switch ((yych = YYPEEK ())) {
+        yych = YYPEEK ();
+        switch (yych) {
         case 0x80:
         case 0x81:
         case 0x82:

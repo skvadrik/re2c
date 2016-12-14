@@ -343,7 +343,8 @@ yy22:
 	}
 yy23:
 	YYSKIP ();
-	switch ((yych = YYPEEK ())) {
+	yych = YYPEEK ();
+	switch (yych) {
 	case '\n':	goto yy20;
 	default:	goto yy8;
 	}

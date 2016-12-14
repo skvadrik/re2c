@@ -86,8 +86,8 @@ yy4:
 	}
 #line 88 "bug1297658.c"
 yy6:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case 'L':	goto yy9;
 	case 'e':	goto yy10;
 	default:	goto yy7;

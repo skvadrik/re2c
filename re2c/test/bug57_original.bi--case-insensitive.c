@@ -2438,8 +2438,8 @@ yy345:
 	if (yych == 'D') goto yy346;
 	if (yych != 'd') goto yy31;
 yy346:
-	++p;
-	if ((yych = *p) == 'E') goto yy137;
+	yych = *++p;
+	if (yych == 'E') goto yy137;
 	if (yych == 'e') goto yy137;
 	goto yy31;
 }
@@ -7303,8 +7303,8 @@ yy765:
 	if (yych == 't') goto yy698;
 	goto yy554;
 yy766:
-	++p;
-	if ((yych = *p) == 'T') goto yy718;
+	yych = *++p;
+	if (yych == 'T') goto yy718;
 	if (yych == 't') goto yy718;
 	goto yy554;
 }
@@ -8088,8 +8088,8 @@ yy849:
 	}
 	if (yych == '\n') goto yy843;
 	if (yych != '#') goto yy848;
-	++p;
-	if (yybm[0+(yych = *p)] & 128) {
+	yych = *++p;
+	if (yybm[0+yych] & 128) {
 		goto yy845;
 	}
 	if (yych == '\n') goto yy843;
@@ -9362,8 +9362,8 @@ yy1006:
 		}
 	}
 yy1007:
-	++p;
-	if ((yych = *p) <= ';') {
+	yych = *++p;
+	if (yych <= ';') {
 		if (yych <= '/') goto yy958;
 		if (yych <= '9') goto yy983;
 		if (yych <= ':') goto yy958;

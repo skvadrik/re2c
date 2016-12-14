@@ -816,7 +816,8 @@ yy66:
         continue;
 yy67:
         YYSKIP ();
-        switch ((yych = YYPEEK ())) {
+        yych = YYPEEK ();
+        switch (yych) {
         case '!':
         case '.':
         case '0':
@@ -1192,7 +1193,8 @@ yy110:
         }
 yy111:
         YYSKIP ();
-        switch ((yych = YYPEEK ())) {
+        yych = YYPEEK ();
+        switch (yych) {
         case '!':
         case '0':
         case '1':
@@ -1283,7 +1285,8 @@ yy114:
         }
 yy115:
         YYSKIP ();
-        switch ((yych = YYPEEK ())) {
+        yych = YYPEEK ();
+        switch (yych) {
         case '!':
         case '0':
         case '1':
@@ -1434,7 +1437,8 @@ yy125:
         }
 yy126:
         YYSKIP ();
-        switch ((yych = YYPEEK ())) {
+        yych = YYPEEK ();
+        switch (yych) {
         case '!':
         case '0':
         case '1':
@@ -1577,7 +1581,8 @@ yy135:
         }
 yy136:
         YYSKIP ();
-        switch ((yych = YYPEEK ())) {
+        yych = YYPEEK ();
+        switch (yych) {
         case '!':
         case '0':
         case '1':
@@ -1766,7 +1771,8 @@ yy151:
         }
 yy152:
         YYSKIP ();
-        switch ((yych = YYPEEK ())) {
+        yych = YYPEEK ();
+        switch (yych) {
         case '!':
         case '0':
         case '1':
@@ -2241,7 +2247,8 @@ yy184:
         }
 yy185:
         YYSKIP ();
-        switch ((yych = YYPEEK ())) {
+        yych = YYPEEK ();
+        switch (yych) {
         case '!':
         case '0':
         case '1':
@@ -2348,7 +2355,8 @@ yy190:
         }
 yy191:
         YYSKIP ();
-        switch ((yych = YYPEEK ())) {
+        yych = YYPEEK ();
+        switch (yych) {
         case '!':
         case '0':
         case '1':
@@ -2463,7 +2471,8 @@ yy197:
         }
 yy198:
         YYSKIP ();
-        switch ((yych = YYPEEK ())) {
+        yych = YYPEEK ();
+        switch (yych) {
         case '!':
         case '0':
         case '1':
@@ -2594,7 +2603,8 @@ yy206:
         }
 yy207:
         YYSKIP ();
-        switch ((yych = YYPEEK ())) {
+        yych = YYPEEK ();
+        switch (yych) {
         case '!':
         case '0':
         case '1':
@@ -2693,7 +2703,8 @@ yy211:
         }
 yy212:
         YYSKIP ();
-        switch ((yych = YYPEEK ())) {
+        yych = YYPEEK ();
+        switch (yych) {
         case '!':
         case '0':
         case '1':
@@ -2832,7 +2843,8 @@ yy221:
         }
 yy222:
         YYSKIP ();
-        switch ((yych = YYPEEK ())) {
+        yych = YYPEEK ();
+        switch (yych) {
         case '!':
         case '0':
         case '1':
@@ -2987,7 +2999,8 @@ yy233:
         }
 yy234:
         YYSKIP ();
-        switch ((yych = YYPEEK ())) {
+        yych = YYPEEK ();
+        switch (yych) {
         case '!':
         case '0':
         case '1':
@@ -3166,7 +3179,8 @@ yy254:
         }
 yy255:
         YYSKIP ();
-        switch ((yych = YYPEEK ())) {
+        yych = YYPEEK ();
+        switch (yych) {
         case '!':
         case '0':
         case '1':
@@ -3249,7 +3263,8 @@ yy257:
         }
 yy258:
         YYSKIP ();
-        switch ((yych = YYPEEK ())) {
+        yych = YYPEEK ();
+        switch (yych) {
         case '!':
         case '0':
         case '1':
@@ -3324,7 +3339,8 @@ yy259:
         continue;
 yy260:
         YYSKIP ();
-        switch ((yych = YYPEEK ())) {
+        yych = YYPEEK ();
+        switch (yych) {
         case '!':
         case '0':
         case '1':
@@ -3415,7 +3431,8 @@ yy263:
         }
 yy264:
         YYSKIP ();
-        switch ((yych = YYPEEK ())) {
+        yych = YYPEEK ();
+        switch (yych) {
         case '!':
         case '0':
         case '1':
@@ -3514,7 +3531,8 @@ yy268:
         }
 yy269:
         YYSKIP ();
-        switch ((yych = YYPEEK ())) {
+        yych = YYPEEK ();
+        switch (yych) {
         case '!':
         case '0':
         case '1':
@@ -3589,7 +3607,8 @@ yy270:
         continue;
 yy271:
         YYSKIP ();
-        switch ((yych = YYPEEK ())) {
+        yych = YYPEEK ();
+        switch (yych) {
         case '!':
         case '0':
         case '1':
@@ -3664,7 +3683,8 @@ yy272:
         continue;
 yy273:
         YYSKIP ();
-        switch ((yych = YYPEEK ())) {
+        yych = YYPEEK ();
+        switch (yych) {
         case '!':
         case '0':
         case '1':
@@ -3771,7 +3791,8 @@ yy278:
         }
 yy279:
         YYSKIP ();
-        switch ((yych = YYPEEK ())) {
+        yych = YYPEEK ();
+        switch (yych) {
         case '!':
         case '0':
         case '1':
@@ -3902,7 +3923,8 @@ yy287:
         }
 yy288:
         YYSKIP ();
-        switch ((yych = YYPEEK ())) {
+        yych = YYPEEK ();
+        switch (yych) {
         case '!':
         case '0':
         case '1':
@@ -3977,7 +3999,8 @@ yy289:
         continue;
 yy290:
         YYSKIP ();
-        switch ((yych = YYPEEK ())) {
+        yych = YYPEEK ();
+        switch (yych) {
         case '!':
         case '0':
         case '1':
@@ -4108,7 +4131,8 @@ yy298:
         }
 yy299:
         YYSKIP ();
-        switch ((yych = YYPEEK ())) {
+        yych = YYPEEK ();
+        switch (yych) {
         case '!':
         case '0':
         case '1':
@@ -4223,7 +4247,8 @@ yy305:
         }
 yy306:
         YYSKIP ();
-        switch ((yych = YYPEEK ())) {
+        yych = YYPEEK ();
+        switch (yych) {
         case '!':
         case '0':
         case '1':
@@ -4306,7 +4331,8 @@ yy308:
         }
 yy309:
         YYSKIP ();
-        switch ((yych = YYPEEK ())) {
+        yych = YYPEEK ();
+        switch (yych) {
         case '!':
         case '0':
         case '1':
@@ -4405,7 +4431,8 @@ yy313:
         }
 yy314:
         YYSKIP ();
-        switch ((yych = YYPEEK ())) {
+        yych = YYPEEK ();
+        switch (yych) {
         case '!':
         case '0':
         case '1':
@@ -4520,7 +4547,8 @@ yy320:
         }
 yy321:
         YYSKIP ();
-        switch ((yych = YYPEEK ())) {
+        yych = YYPEEK ();
+        switch (yych) {
         case '!':
         case '0':
         case '1':
@@ -4643,7 +4671,8 @@ yy328:
         }
 yy329:
         YYSKIP ();
-        switch ((yych = YYPEEK ())) {
+        yych = YYPEEK ();
+        switch (yych) {
         case '!':
         case '0':
         case '1':
@@ -4726,7 +4755,8 @@ yy331:
         }
 yy332:
         YYSKIP ();
-        switch ((yych = YYPEEK ())) {
+        yych = YYPEEK ();
+        switch (yych) {
         case '!':
         case '0':
         case '1':
@@ -4849,7 +4879,8 @@ yy339:
         }
 yy340:
         YYSKIP ();
-        switch ((yych = YYPEEK ())) {
+        yych = YYPEEK ();
+        switch (yych) {
         case '!':
         case '0':
         case '1':
@@ -4924,7 +4955,8 @@ yy341:
         continue;
 yy342:
         YYSKIP ();
-        switch ((yych = YYPEEK ())) {
+        yych = YYPEEK ();
+        switch (yych) {
         case '!':
         case '0':
         case '1':
@@ -4999,7 +5031,8 @@ yy343:
         continue;
 yy344:
         YYSKIP ();
-        switch ((yych = YYPEEK ())) {
+        yych = YYPEEK ();
+        switch (yych) {
         case '!':
         case '0':
         case '1':
@@ -5074,7 +5107,8 @@ yy345:
         continue;
 yy346:
         YYSKIP ();
-        switch ((yych = YYPEEK ())) {
+        yych = YYPEEK ();
+        switch (yych) {
         case '!':
         case '0':
         case '1':
@@ -5157,7 +5191,8 @@ yy348:
         }
 yy349:
         YYSKIP ();
-        switch ((yych = YYPEEK ())) {
+        yych = YYPEEK ();
+        switch (yych) {
         case '!':
         case '0':
         case '1':
@@ -5240,7 +5275,8 @@ yy351:
         }
 yy352:
         YYSKIP ();
-        switch ((yych = YYPEEK ())) {
+        yych = YYPEEK ();
+        switch (yych) {
         case '!':
         case '0':
         case '1':
@@ -5323,7 +5359,8 @@ yy354:
         }
 yy355:
         YYSKIP ();
-        switch ((yych = YYPEEK ())) {
+        yych = YYPEEK ();
+        switch (yych) {
         case '!':
         case '0':
         case '1':
@@ -5430,7 +5467,8 @@ yy360:
         }
 yy361:
         YYSKIP ();
-        switch ((yych = YYPEEK ())) {
+        yych = YYPEEK ();
+        switch (yych) {
         case '!':
         case '0':
         case '1':
@@ -5553,7 +5591,8 @@ yy368:
         }
 yy369:
         YYSKIP ();
-        switch ((yych = YYPEEK ())) {
+        yych = YYPEEK ();
+        switch (yych) {
         case '!':
         case '0':
         case '1':
@@ -5636,7 +5675,8 @@ yy371:
         }
 yy372:
         YYSKIP ();
-        switch ((yych = YYPEEK ())) {
+        yych = YYPEEK ();
+        switch (yych) {
         case '!':
         case '0':
         case '1':
@@ -5711,7 +5751,8 @@ yy373:
         continue;
 yy374:
         YYSKIP ();
-        switch ((yych = YYPEEK ())) {
+        yych = YYPEEK ();
+        switch (yych) {
         case '!':
         case '0':
         case '1':
@@ -5786,7 +5827,8 @@ yy375:
         continue;
 yy376:
         YYSKIP ();
-        switch ((yych = YYPEEK ())) {
+        yych = YYPEEK ();
+        switch (yych) {
         case '!':
         case '0':
         case '1':
@@ -5861,7 +5903,8 @@ yy377:
         continue;
 yy378:
         YYSKIP ();
-        switch ((yych = YYPEEK ())) {
+        yych = YYPEEK ();
+        switch (yych) {
         case '!':
         case '0':
         case '1':
@@ -5944,7 +5987,8 @@ yy380:
         }
 yy381:
         YYSKIP ();
-        switch ((yych = YYPEEK ())) {
+        yych = YYPEEK ();
+        switch (yych) {
         case '!':
         case '0':
         case '1':
@@ -6027,7 +6071,8 @@ yy383:
         }
 yy384:
         YYSKIP ();
-        switch ((yych = YYPEEK ())) {
+        yych = YYPEEK ();
+        switch (yych) {
         case '!':
         case '0':
         case '1':
@@ -6102,7 +6147,8 @@ yy385:
         continue;
 yy386:
         YYSKIP ();
-        switch ((yych = YYPEEK ())) {
+        yych = YYPEEK ();
+        switch (yych) {
         case '!':
         case '0':
         case '1':
@@ -6185,7 +6231,8 @@ yy388:
         }
 yy389:
         YYSKIP ();
-        switch ((yych = YYPEEK ())) {
+        yych = YYPEEK ();
+        switch (yych) {
         case '!':
         case '0':
         case '1':
@@ -6268,7 +6315,8 @@ yy391:
         }
 yy392:
         YYSKIP ();
-        switch ((yych = YYPEEK ())) {
+        yych = YYPEEK ();
+        switch (yych) {
         case '!':
         case '0':
         case '1':
@@ -6343,7 +6391,8 @@ yy393:
         continue;
 yy394:
         YYSKIP ();
-        switch ((yych = YYPEEK ())) {
+        yych = YYPEEK ();
+        switch (yych) {
         case '!':
         case '0':
         case '1':
@@ -6418,7 +6467,8 @@ yy395:
         continue;
 yy396:
         YYSKIP ();
-        switch ((yych = YYPEEK ())) {
+        yych = YYPEEK ();
+        switch (yych) {
         case '!':
         case '0':
         case '1':
@@ -6517,7 +6567,8 @@ yy400:
         }
 yy401:
         YYSKIP ();
-        switch ((yych = YYPEEK ())) {
+        yych = YYPEEK ();
+        switch (yych) {
         case '!':
         case '0':
         case '1':
@@ -6608,7 +6659,8 @@ yy404:
         }
 yy405:
         YYSKIP ();
-        switch ((yych = YYPEEK ())) {
+        yych = YYPEEK ();
+        switch (yych) {
         case '!':
         case '0':
         case '1':
@@ -6715,7 +6767,8 @@ yy410:
         }
 yy411:
         YYSKIP ();
-        switch ((yych = YYPEEK ())) {
+        yych = YYPEEK ();
+        switch (yych) {
         case '!':
         case '0':
         case '1':
@@ -6790,7 +6843,8 @@ yy412:
         continue;
 yy413:
         YYSKIP ();
-        switch ((yych = YYPEEK ())) {
+        yych = YYPEEK ();
+        switch (yych) {
         case '!':
         case '0':
         case '1':
@@ -6865,7 +6919,8 @@ yy414:
         continue;
 yy415:
         YYSKIP ();
-        switch ((yych = YYPEEK ())) {
+        yych = YYPEEK ();
+        switch (yych) {
         case '!':
         case '0':
         case '1':
@@ -6956,7 +7011,8 @@ yy418:
         }
 yy419:
         YYSKIP ();
-        switch ((yych = YYPEEK ())) {
+        yych = YYPEEK ();
+        switch (yych) {
         case '!':
         case '0':
         case '1':
@@ -7031,7 +7087,8 @@ yy420:
         continue;
 yy421:
         YYSKIP ();
-        switch ((yych = YYPEEK ())) {
+        yych = YYPEEK ();
+        switch (yych) {
         case '!':
         case '0':
         case '1':

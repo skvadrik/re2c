@@ -121,8 +121,8 @@ yy11:
 			{ res = stack_sub();		continue; }
 #line 123 "calc_006.s.c"
 yy13:
-			++YYCURSOR;
-			if ((yych = *YYCURSOR) <= '/') goto yy14;
+			yych = *++YYCURSOR;
+			if (yych <= '/') goto yy14;
 			if (yych <= '9') goto yy17;
 yy14:
 #line 109 "calc_006.s.re"

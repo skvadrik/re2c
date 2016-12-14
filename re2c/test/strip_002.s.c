@@ -172,8 +172,8 @@ yy22:
 			{ echo(&s); continue; }
 #line 174 "strip_002.s.c"
 yy24:
-			++YYCURSOR;
-			if ((yych = *YYCURSOR) == '\n') goto yy22;
+			yych = *++YYCURSOR;
+			if (yych == '\n') goto yy22;
 			goto yy21;
 		}
 #line 135 "strip_002.s.re"
@@ -199,8 +199,8 @@ yy29:
 			{ echo(&s); continue; }
 #line 201 "strip_002.s.c"
 yy31:
-			++YYCURSOR;
-			if ((yych = *YYCURSOR) == '\n') goto yy29;
+			yych = *++YYCURSOR;
+			if (yych == '\n') goto yy29;
 			goto yy28;
 		}
 #line 141 "strip_002.s.re"

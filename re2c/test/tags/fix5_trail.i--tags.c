@@ -73,9 +73,8 @@ yy10:
 	default:	goto yy8;
 	}
 yy12:
-	++YYCURSOR;
+	yych = *++YYCURSOR;
 	yyt1 = YYCURSOR;
-	yych = *YYCURSOR;
 	goto yy15;
 yy13:
 	YYCURSOR = yyt1;

@@ -27,7 +27,6 @@ public:
 	type_t type () const;
 	void set (type_t t);
 	std::string expr_peek () const;
-	std::string expr_peek_save () const;
 	std::string stmt_peek (uint32_t ind) const;
 	std::string stmt_skip (uint32_t ind) const;
 	std::string stmt_backup (uint32_t ind) const;

@@ -263,8 +263,8 @@ yy7:
 	    }
 #line 265 "cnokw.c"
 yy9:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '=':	goto yy66;
 	default:	goto yy10;
 	}
@@ -280,8 +280,8 @@ yy11:
 	default:	goto yy69;
 	}
 yy12:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '=':	goto yy74;
 	default:	goto yy13;
 	}
@@ -290,8 +290,8 @@ yy13:
 	{ RET('%'); }
 #line 292 "cnokw.c"
 yy14:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '&':	goto yy76;
 	case '=':	goto yy78;
 	default:	goto yy15;
@@ -318,8 +318,8 @@ yy19:
 	{ RET(')'); }
 #line 320 "cnokw.c"
 yy21:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '=':	goto yy84;
 	default:	goto yy22;
 	}
@@ -328,8 +328,8 @@ yy22:
 	{ RET('*'); }
 #line 330 "cnokw.c"
 yy23:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '+':	goto yy86;
 	case '=':	goto yy88;
 	default:	goto yy24;
@@ -344,8 +344,8 @@ yy25:
 	{ RET(','); }
 #line 346 "cnokw.c"
 yy27:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '-':	goto yy90;
 	case '=':	goto yy92;
 	case '>':	goto yy94;
@@ -377,8 +377,8 @@ yy30:
 	{ RET('.'); }
 #line 379 "cnokw.c"
 yy31:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '*':	goto yy100;
 	case '=':	goto yy102;
 	default:	goto yy32;
@@ -436,8 +436,8 @@ yy39:
 	{ RET(';'); }
 #line 438 "cnokw.c"
 yy41:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '<':	goto yy108;
 	case '=':	goto yy110;
 	default:	goto yy42;
@@ -447,8 +447,8 @@ yy42:
 	{ RET('<'); }
 #line 449 "cnokw.c"
 yy43:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '=':	goto yy112;
 	default:	goto yy44;
 	}
@@ -457,8 +457,8 @@ yy44:
 	{ RET('='); }
 #line 459 "cnokw.c"
 yy45:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '=':	goto yy114;
 	case '>':	goto yy116;
 	default:	goto yy46;
@@ -557,8 +557,8 @@ yy54:
 	{ RET(']'); }
 #line 559 "cnokw.c"
 yy56:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '=':	goto yy118;
 	default:	goto yy57;
 	}
@@ -572,8 +572,8 @@ yy58:
 	{ RET('{'); }
 #line 574 "cnokw.c"
 yy60:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '=':	goto yy120;
 	case '|':	goto yy122;
 	default:	goto yy61;
@@ -834,8 +834,8 @@ yy107:
 	default:	goto yy70;
 	}
 yy108:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '=':	goto yy134;
 	default:	goto yy109;
 	}
@@ -859,8 +859,8 @@ yy114:
 	{ RET(GEQ); }
 #line 861 "cnokw.c"
 yy116:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '=':	goto yy136;
 	default:	goto yy117;
 	}

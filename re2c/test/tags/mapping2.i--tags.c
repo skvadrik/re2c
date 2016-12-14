@@ -23,9 +23,8 @@ yy4:
 	p = yyt1;
 	{}
 yy5:
-	++YYCURSOR;
+	yych = *++YYCURSOR;
 	yyt1 = NULL;
-	yych = *YYCURSOR;
 	goto yy3;
 }
 

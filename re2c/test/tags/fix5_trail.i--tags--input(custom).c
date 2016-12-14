@@ -93,8 +93,8 @@ yy10:
 	}
 yy12:
 	YYSKIP ();
-	YYBACKUPTAG (yyt1);
 	yych = YYPEEK ();
+	YYBACKUPTAG (yyt1);
 	goto yy15;
 yy13:
 	YYRESTORETAG (yyt1);

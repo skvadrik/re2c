@@ -857,8 +857,8 @@ yy126:
 					RETURN(*tok);
 				}
 yy127:
-	++YYCURSOR;
-	if ((yych = *YYCURSOR) == '/') goto yy153;
+	yych = *++YYCURSOR;
+	if (yych == '/') goto yy153;
 	{
 					yylval.op = *tok;
 					RETURN(STAR);
@@ -1088,8 +1088,8 @@ yy162:
 				goto nextLine;
 			}
 yy164:
-	++YYCURSOR;
-	if ((yych = *YYCURSOR) == '>') goto yy191;
+	yych = *++YYCURSOR;
+	if (yych == '>') goto yy191;
 	{
 					cur = cursor;
 					tok += 2; /* skip ":=" */
@@ -2340,8 +2340,8 @@ yy350:
 	if (yych <= '9') goto yy353;
 	goto yy345;
 yy351:
-	++YYCURSOR;
-	if (yybm[0+(yych = *YYCURSOR)] & 4) {
+	yych = *++YYCURSOR;
+	if (yybm[0+yych] & 4) {
 		goto yy344;
 	}
 yy352:

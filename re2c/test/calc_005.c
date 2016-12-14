@@ -120,8 +120,8 @@ yy9:
 			{ res = stack_sub();		continue; }
 #line 122 "calc_005.c"
 yy11:
-			++YYCURSOR;
-			switch ((yych = *YYCURSOR)) {
+			yych = *++YYCURSOR;
+			switch (yych) {
 			case '0':
 			case '1':
 			case '2':
