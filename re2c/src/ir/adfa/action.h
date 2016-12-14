@@ -19,12 +19,10 @@ struct Initial
 	static const size_t NOSAVE;
 
 	label_t label;
-	bool setMarker;
 	size_t save;
 
-	inline Initial (label_t l, bool b, size_t s)
+	inline Initial (label_t l, size_t s)
 		: label (l)
-		, setMarker (b)
 		, save (s)
 	{}
 };
@@ -62,20 +60,19 @@ public:
 			delete info.initial;
 		}
 	}
-	void set_initial (label_t label, bool used_marker)
+	void set_initial (label_t label)
 	{
 		if (type == MATCH) {
 			// ordinary state with no special action
 			type = INITIAL;
-			info.initial = new Initial(label, used_marker, Initial::NOSAVE);
+			info.initial = new Initial(label, Initial::NOSAVE);
 		} else if (type == SAVE) {
 			// fallback state: do not loose 'yyaccept'
 			type = INITIAL;
-			info.initial = new Initial(label, used_marker, info.save);
+			info.initial = new Initial(label, info.save);
 		} else if (type == INITIAL) {
 			// already marked as initial, probably reuse mode
 			info.initial->label = label;
-			info.initial->setMarker = used_marker;
 		} else {
 			assert(false);
 		}

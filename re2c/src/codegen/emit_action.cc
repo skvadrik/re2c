@@ -30,6 +30,7 @@ static void emit_accept(OutputFile &o, uint32_t ind, const DFA &dfa, const State
 static void emit_rule(OutputFile &o, uint32_t ind, const DFA &dfa, size_t rule_idx);
 static void gen_goto(code_lines_t &code, const State *to, const DFA &dfa, tcid_t tcid);
 static void gen_fintags(OutputFile &o, uint32_t ind, const DFA &dfa, const Rule &rule);
+static bool endstate(const State *s);
 
 void emit_action(OutputFile &o, uint32_t ind, const DFA &dfa,
 	const State *s, const std::set<label_t> &used_labels)
@@ -58,15 +59,11 @@ void emit_action(OutputFile &o, uint32_t ind, const DFA &dfa,
 
 void emit_match(OutputFile &o, uint32_t ind, const State *s)
 {
-	const bool end = s->go.nSpans == 1
-		&& s->go.span[0].to->action.type == Action::RULE;
-
 	if (s->fill != 0) {
 		o.wstring(opts->input_api.stmt_skip(ind));
 		need(o, ind, s->fill);
 		o.wstring(opts->input_api.stmt_peek(ind));
-	} else if (end) {
-		// do not read next char if all transitions go to rule state
+	} else if (endstate(s)) {
 		o.wstring(opts->input_api.stmt_skip(ind));
 	} else {
 		o.wstring(opts->input_api.stmt_skip_peek(ind));
@@ -76,43 +73,36 @@ void emit_match(OutputFile &o, uint32_t ind, const State *s)
 void emit_initial(OutputFile &o, uint32_t ind, const State *s,
 	const std::set<label_t> &used_labels, bool save_yyaccept)
 {
-	const Initial &initial = *s->action.info.initial;
+	const Initial &init = *s->action.info.initial;
+	const label_t label = init.label;
+	const size_t save = init.save;
+	const bool backup = save != Initial::NOSAVE;
 
 	if (used_labels.count(s->label)) {
-		const size_t save = initial.save;
-		if (save_yyaccept && save != Initial::NOSAVE) {
+		if (save_yyaccept && backup) {
 			o.wind(ind).wstring(opts->yyaccept).ws(" = ")
 				.wu64(save).ws(";\n");
 		}
-
-		if (s->fill != 0) {
-			o.wstring(opts->input_api.stmt_skip(ind));
-		} else {
-			o.wstring(opts->input_api.stmt_skip_peek(ind));
-		}
+		o.wstring(opts->input_api.stmt_skip(ind));
 	}
 
-	if (used_labels.count(initial.label)) {
-		o.wstring(opts->labelPrefix).wlabel(initial.label).ws(":\n");
+	if (used_labels.count(label)) {
+		o.wstring(opts->labelPrefix).wlabel(label).ws(":\n");
 	}
 
 	if (opts->dFlag) {
 		o.wind(ind).wstring(opts->yydebug).ws("(")
-			.wlabel(initial.label).ws(", *")
+			.wlabel(label).ws(", *")
 			.wstring(opts->yycursor).ws(");\n");
 	}
 
-	if (s->fill != 0) {
-		need(o, ind, s->fill);
-		if (initial.setMarker) {
-			o.wstring(opts->input_api.stmt_backup_peek(ind));
-		} else {
-			o.wstring(opts->input_api.stmt_peek(ind));
-		}
+	if (endstate(s)) return;
+
+	need(o, ind, s->fill);
+	if (backup) {
+		o.wstring(opts->input_api.stmt_backup_peek(ind));
 	} else {
-		if (initial.setMarker) {
-			o.wstring(opts->input_api.stmt_backup(ind));
-		}
+		o.wstring(opts->input_api.stmt_peek(ind));
 	}
 }
 
@@ -455,6 +445,19 @@ void gen_fintags(OutputFile &o, uint32_t ind, const DFA &dfa, const Rule &rule)
 		}
 		o.ws(";\n");
 	}
+}
+
+bool endstate(const State *s)
+{
+	if (s->go.nSpans > 1) return false;
+
+	// 'end' state is a state which has no outgoing transitions on symbols
+	// usually 'end' states are final states (not all final states are 'end'
+	// states), but sometimes 'end' state happens to be initial non-accepting
+	// state, e.g. in case of rule '[]'
+	const Action::type_t &a = s->go.span[0].to->action.type;
+	return a == Action::RULE
+		|| a == Action::ACCEPT;
 }
 
 } // namespace re2c

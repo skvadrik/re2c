@@ -179,7 +179,7 @@ void DFA::emit(Output & output, uint32_t& ind, bool isLastCond, bool& bPrologBra
 	std::set<label_t> used_labels;
 	count_used_labels (used_labels, start_label, initial_label, ob.force_start_label);
 
-	head->action.set_initial (initial_label, head->action.type == Action::SAVE);
+	head->action.set_initial(initial_label);
 
 	if (opts->target == opt_t::SKELETON) {
 		if (output.skeletons.insert (name).second)
