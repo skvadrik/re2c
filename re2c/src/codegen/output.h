@@ -77,6 +77,7 @@ class OutputFile
 
 public:
 	counter_t<label_t> label_counter;
+	uint32_t fill_index;
 	bool warn_condition_order;
 	Opt &opts;
 	Warn &warn;
@@ -146,13 +147,13 @@ struct Output
 	bool emit();
 };
 
-void output_tags(std::ostream &o, const ConfTags &conf, const std::set<std::string> &tags);
-void output_line_info (std::ostream &, uint32_t, const std::string&, Opt &opts);
-void output_state_goto (std::ostream &, uint32_t, uint32_t, Opt &opts);
-void output_types(std::ostream &o, uint32_t, const uniq_vector_t<std::string> &types, Opt &opts);
-void output_version_time (std::ostream &, Opt &opts);
-void output_yyaccept_init (std::ostream &, uint32_t, bool, Opt &opts);
-void output_yymaxfill (std::ostream &, size_t);
+void output_tags          (std::ostream &o, const ConfTags &conf, const std::set<std::string> &tags);
+void output_line_info     (std::ostream &o, uint32_t ind, const std::string &file_name, Opt &opts);
+void output_state_goto    (std::ostream &o, uint32_t ind, uint32_t start_label, uint32_t fill_index, Opt &opts);
+void output_types         (std::ostream &o, uint32_t ind, const uniq_vector_t<std::string> &types, Opt &opts);
+void output_version_time  (std::ostream &o, Opt &opts);
+void output_yyaccept_init (std::ostream &o, uint32_t ind, bool, Opt &opts);
+void output_yymaxfill     (std::ostream &o, size_t max_fill);
 
 // helpers
 std::string output_get_state (Opt &opts);

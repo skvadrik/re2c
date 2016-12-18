@@ -64,6 +64,7 @@ OutputBlock::~OutputBlock ()
 OutputFile::OutputFile(Opt &o, Warn &w)
 	: blocks ()
 	, label_counter ()
+	, fill_index(0)
 	, warn_condition_order (!o->tFlag) // see note [condition order]
 	, opts(o)
 	, warn(w)
@@ -296,7 +297,7 @@ bool OutputFile::emit(const uniq_vector_t<std::string> &global_types,
 					output_line_info(f.stream, line_count + 1, filename, opts);
 					break;
 				case OutputFragment::STATE_GOTO:
-					output_state_goto(f.stream, f.indent, 0, opts);
+					output_state_goto(f.stream, f.indent, 0, fill_index, opts);
 					break;
 				case OutputFragment::TAGS:
 					output_tags(f.stream, *f.tags, global_tags);
@@ -395,7 +396,8 @@ void output_tags(std::ostream &o, const ConfTags &conf,
 	}
 }
 
-void output_state_goto (std::ostream & o, uint32_t ind, uint32_t start_label, Opt &opts)
+void output_state_goto(std::ostream & o, uint32_t ind,
+	uint32_t start_label, uint32_t fill_index, Opt &opts)
 {
 	const std::string indstr = indent(ind, opts->indString);
 	o << indstr << "switch (" << output_get_state(opts) << ") {\n";
@@ -408,7 +410,7 @@ void output_state_goto (std::ostream & o, uint32_t ind, uint32_t start_label, Op
 	{
 		o << indstr << "default: goto " << opts->labelPrefix << start_label << ";\n";
 	}
-	for (uint32_t i = 0; i < last_fill_index; ++i)
+	for (uint32_t i = 0; i < fill_index; ++i)
 	{
 		o << indstr << "case " << i << ": goto " << opts->yyfilllabel << i << ";\n";
 	}

@@ -250,10 +250,10 @@ void need(OutputFile &o, uint32_t ind, size_t some)
 	std::string s;
 
 	if (opts->fFlag) {
-		strrreplace(s = opts->state_set, opts->state_set_arg, last_fill_index);
+		strrreplace(s = opts->state_set, opts->state_set_arg, o.fill_index);
 		o.wind(ind).wstring(s);
 		if (!opts->state_set_naked) {
-			o.ws("(").wu32(last_fill_index).ws(");");
+			o.ws("(").wu32(o.fill_index).ws(");");
 		}
 		o.ws("\n");
 	}
@@ -275,8 +275,8 @@ void need(OutputFile &o, uint32_t ind, size_t some)
 	}
 
 	if (opts->fFlag) {
-		o.wstring(opts->yyfilllabel).wu32(last_fill_index).ws(":\n");
-		++last_fill_index;
+		o.wstring(opts->yyfilllabel).wu32(o.fill_index).ws(":\n");
+		++o.fill_index;
 	}
 }
 

@@ -181,7 +181,7 @@ Scanner::~Scanner()
 void Scanner::reuse()
 {
 	out.label_counter.reset ();
-	last_fill_index = 0;
+	out.fill_index = 0;
 	bWroteGetState = false;
 	bWroteCondCheck = false;
 	opts.reset_mapCodeName ();

@@ -16,7 +16,6 @@ namespace re2c
 bool bUsedYYBitmap  = false;
 bool bWroteGetState = false;
 bool bWroteCondCheck = false;
-uint32_t last_fill_index = 0;
 
 } // end namespace re2c
 
