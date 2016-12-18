@@ -1,7 +1,6 @@
 #include <limits>
 #include <stddef.h>
 
-#include "src/conf/opt.h"
 #include "src/conf/warn.h"
 #include "src/globals.h"
 #include "src/ir/regexp/empty_class_policy.h"

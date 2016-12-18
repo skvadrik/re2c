@@ -3,9 +3,6 @@
 
 #include "src/codegen/emit.h"
 #include "src/codegen/input_api.h"
-#include "src/codegen/indent.h"
-#include "src/conf/opt.h"
-#include "src/globals.h"
 
 namespace re2c
 {
@@ -24,7 +21,7 @@ void InputAPI::set (type_t t)
 	type_ = t;
 }
 
-std::string InputAPI::expr_peek () const
+std::string InputAPI::expr_peek(Opt &opts) const
 {
 	std::string s;
 	switch (type_)
@@ -39,13 +36,13 @@ std::string InputAPI::expr_peek () const
 	return s;
 }
 
-std::string InputAPI::stmt_peek (uint32_t ind) const
+std::string InputAPI::stmt_peek(uint32_t ind, Opt &opts) const
 {
-	return indent(ind) + opts->yych + " = " + opts.yychConversion()
-		+ expr_peek() + ";\n";
+	return indent(ind, opts->indString) + opts->yych + " = " + opts.yychConversion()
+		+ expr_peek(opts) + ";\n";
 }
 
-std::string InputAPI::stmt_skip (uint32_t ind) const
+std::string InputAPI::stmt_skip(uint32_t ind, Opt &opts) const
 {
 	std::string s;
 	switch (type_)
@@ -57,10 +54,10 @@ std::string InputAPI::stmt_skip (uint32_t ind) const
 			s = opts->yyskip + " ()";
 			break;
 	}
-	return indent (ind) + s + ";\n";
+	return indent(ind, opts->indString) + s + ";\n";
 }
 
-std::string InputAPI::stmt_backup (uint32_t ind) const
+std::string InputAPI::stmt_backup(uint32_t ind, Opt &opts) const
 {
 	std::string s;
 	switch (type_)
@@ -72,10 +69,10 @@ std::string InputAPI::stmt_backup (uint32_t ind) const
 			s = opts->yybackup + " ()";
 			break;
 	}
-	return indent (ind) + s + ";\n";
+	return indent(ind, opts->indString) + s + ";\n";
 }
 
-std::string InputAPI::stmt_restore (uint32_t ind) const
+std::string InputAPI::stmt_restore(uint32_t ind, Opt &opts) const
 {
 	std::string s;
 	switch (type_)
@@ -87,38 +84,38 @@ std::string InputAPI::stmt_restore (uint32_t ind) const
 			s = opts->yyrestore + " ()";
 			break;
 	}
-	return indent (ind) + s + ";\n";
+	return indent(ind, opts->indString) + s + ";\n";
 }
 
-std::string InputAPI::stmt_skip_peek (uint32_t ind) const
+std::string InputAPI::stmt_skip_peek(uint32_t ind, Opt &opts) const
 {
 	return type_ == DEFAULT
-		? indent (ind) + opts->yych + " = " + opts.yychConversion () + "*++" + opts->yycursor + ";\n"
-		: stmt_skip (ind) + stmt_peek (ind);
+		? indent(ind, opts->indString) + opts->yych + " = " + opts.yychConversion() + "*++" + opts->yycursor + ";\n"
+		: stmt_skip(ind, opts) + stmt_peek(ind, opts);
 }
 
-std::string InputAPI::stmt_skip_backup (uint32_t ind) const
+std::string InputAPI::stmt_skip_backup(uint32_t ind, Opt &opts) const
 {
 	return type_ == DEFAULT
-		? indent (ind) + opts->yymarker + " = ++" + opts->yycursor + ";\n"
-		: stmt_skip (ind) + stmt_backup (ind);
+		? indent(ind, opts->indString) + opts->yymarker + " = ++" + opts->yycursor + ";\n"
+		: stmt_skip(ind, opts) + stmt_backup(ind, opts);
 }
 
-std::string InputAPI::stmt_backup_peek (uint32_t ind) const
+std::string InputAPI::stmt_backup_peek(uint32_t ind, Opt &opts) const
 {
 	return type_ == DEFAULT
-		? indent (ind) + opts->yych + " = " + opts.yychConversion () + "*(" + opts->yymarker + " = " + opts->yycursor + ");\n"
-		: stmt_backup (ind) + stmt_peek (ind);
+		? indent(ind, opts->indString) + opts->yych + " = " + opts.yychConversion() + "*(" + opts->yymarker + " = " + opts->yycursor + ");\n"
+		: stmt_backup(ind, opts) + stmt_peek(ind, opts);
 }
 
-std::string InputAPI::stmt_skip_backup_peek (uint32_t ind) const
+std::string InputAPI::stmt_skip_backup_peek(uint32_t ind, Opt &opts) const
 {
 	return type_ == DEFAULT
-		? indent (ind) + opts->yych + " = " + opts.yychConversion () + "*(" + opts->yymarker + " = ++" + opts->yycursor + ");\n"
-		: stmt_skip (ind) + stmt_backup (ind) + stmt_peek (ind);
+		? indent(ind, opts->indString) + opts->yych + " = " + opts.yychConversion() + "*(" + opts->yymarker + " = ++" + opts->yycursor + ");\n"
+		: stmt_skip(ind, opts) + stmt_backup(ind, opts) + stmt_peek(ind, opts);
 }
 
-std::string InputAPI::expr_lessthan(size_t n) const
+std::string InputAPI::expr_lessthan(size_t n, Opt &opts) const
 {
 	std::ostringstream s;
 	if (type_ == CUSTOM) {

@@ -6,7 +6,6 @@
 #include <string>
 
 #include "src/codegen/output.h"
-#include "src/conf/opt.h"
 #include "src/conf/warn.h"
 #include "src/globals.h"
 #include "src/ir/regexp/encoding/enc.h"

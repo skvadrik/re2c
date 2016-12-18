@@ -5,8 +5,6 @@
 namespace re2c
 {
 
-Opt opts;
-
 opt_t::opt_t ()
 #define OPT1(type, name, value) : name (value)
 #define OPT(type, name, value)  , name (value)

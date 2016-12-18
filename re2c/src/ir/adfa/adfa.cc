@@ -4,13 +4,11 @@
 #include <vector>
 #include <utility>
 
-#include "src/conf/opt.h"
 #include "src/codegen/go.h"
 #include "src/ir/adfa/adfa.h"
 #include "src/ir/dfa/dfa.h"
 #include "src/ir/skeleton/skeleton.h"
 #include "src/util/allocate.h"
-#include "src/globals.h"
 
 namespace re2c
 {

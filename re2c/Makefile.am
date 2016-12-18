@@ -12,7 +12,6 @@ SRC_HDR = \
 	src/codegen/bitmap.h \
 	src/codegen/emit.h \
 	src/codegen/go.h \
-	src/codegen/indent.h \
 	src/codegen/input_api.h \
 	src/codegen/label.h \
 	src/codegen/output.h \

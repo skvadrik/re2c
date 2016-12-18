@@ -1,6 +1,5 @@
 #include <string.h>
 
-#include "src/conf/opt.h"
 #include "src/ir/dfa/dfa.h"
 #include "src/util/forbid_copy.h"
 #include "src/globals.h"

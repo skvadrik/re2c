@@ -100,7 +100,7 @@ void DFA::findBaseState()
 	operator delete (span);
 }
 
-void DFA::prepare ()
+void DFA::prepare (Opt &opts)
 {
 	bUsedYYBitmap = false;
 
@@ -186,11 +186,11 @@ void DFA::prepare ()
 
 	for (State * s = head; s; s = s->next)
 	{
-		s->go.init (s);
+		s->go.init (s, opts);
 	}
 }
 
-void DFA::calc_stats(uint32_t line)
+void DFA::calc_stats(uint32_t line, bool explicit_tags)
 {
 	// calculate 'YYMAXFILL'
 	max_fill = 0;
@@ -214,10 +214,10 @@ void DFA::calc_stats(uint32_t line)
 	// re2c should use old-style YYCTXMARKER for backwards compatibility.
 	// Note that with generic API fixed-length contexts are forbidden,
 	// which may cause additional overlaps.
-	oldstyle_ctxmarker = maxtagver == 1 && !opts->tags;
+	oldstyle_ctxmarker = !explicit_tags && maxtagver == 1;
 
 	// error if tags are not enabled, but we need them
-	if (!opts->tags && maxtagver > 1) {
+	if (!explicit_tags && maxtagver > 1) {
 		error("line %u: overlapping trailing contexts need "
 			"multiple context markers, use '-t, --tags' "
 			"option and '/*!tags:re2c ... */' directive",

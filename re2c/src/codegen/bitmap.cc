@@ -4,7 +4,6 @@
 #include "src/codegen/bitmap.h"
 #include "src/codegen/go.h"
 #include "src/codegen/output.h"
-#include "src/conf/opt.h"
 #include "src/globals.h"
 
 namespace re2c
@@ -74,6 +73,7 @@ static void doGen(const Go *g, const State *s, uint32_t *bm, uint32_t f, uint32_
 
 void BitMap::gen(OutputFile & o, uint32_t ind, uint32_t lb, uint32_t ub)
 {
+	Opt &opts = o.opts;
 	if (first && bUsedYYBitmap)
 	{
 		o.wind(ind).ws("static const unsigned char ").wstring(opts->yybm).ws("[] = {");

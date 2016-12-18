@@ -6,7 +6,6 @@
 #include "src/codegen/emit.h"
 #include "src/codegen/input_api.h"
 #include "src/codegen/output.h"
-#include "src/conf/opt.h"
 #include "src/globals.h"
 #include "src/ir/adfa/action.h"
 #include "src/ir/adfa/adfa.h"
@@ -28,7 +27,7 @@ static void emit_save(OutputFile &o, uint32_t ind, const State *s, bool save_yya
 static void emit_accept_binary(OutputFile &o, uint32_t ind, const DFA &dfa, const State *s, size_t l, size_t r);
 static void emit_accept(OutputFile &o, uint32_t ind, const DFA &dfa, const State *s);
 static void emit_rule(OutputFile &o, uint32_t ind, const DFA &dfa, size_t rule_idx);
-static void gen_goto(code_lines_t &code, const State *to, const DFA &dfa, tcid_t tcid);
+static void gen_goto(code_lines_t &code, const State *to, const DFA &dfa, tcid_t tcid, Opt &opts);
 static void gen_fintags(OutputFile &o, uint32_t ind, const DFA &dfa, const Rule &rule);
 static bool endstate(const State *s);
 
@@ -59,20 +58,22 @@ void emit_action(OutputFile &o, uint32_t ind, const DFA &dfa,
 
 void emit_match(OutputFile &o, uint32_t ind, const State *s)
 {
+	Opt &opts = o.opts;
 	if (s->fill != 0) {
-		o.wstring(opts->input_api.stmt_skip(ind));
+		o.wstring(opts->input_api.stmt_skip(ind, opts));
 		need(o, ind, s->fill);
-		o.wstring(opts->input_api.stmt_peek(ind));
+		o.wstring(opts->input_api.stmt_peek(ind, opts));
 	} else if (endstate(s)) {
-		o.wstring(opts->input_api.stmt_skip(ind));
+		o.wstring(opts->input_api.stmt_skip(ind, opts));
 	} else {
-		o.wstring(opts->input_api.stmt_skip_peek(ind));
+		o.wstring(opts->input_api.stmt_skip_peek(ind, opts));
 	}
 }
 
 void emit_initial(OutputFile &o, uint32_t ind, const State *s,
 	const std::set<label_t> &used_labels, bool save_yyaccept)
 {
+	Opt &opts = o.opts;
 	const Initial &init = *s->action.info.initial;
 	const label_t label = init.label;
 	const size_t save = init.save;
@@ -83,7 +84,7 @@ void emit_initial(OutputFile &o, uint32_t ind, const State *s,
 			o.wind(ind).wstring(opts->yyaccept).ws(" = ")
 				.wu64(save).ws(";\n");
 		}
-		o.wstring(opts->input_api.stmt_skip(ind));
+		o.wstring(opts->input_api.stmt_skip(ind, opts));
 	}
 
 	if (used_labels.count(label)) {
@@ -100,32 +101,35 @@ void emit_initial(OutputFile &o, uint32_t ind, const State *s,
 
 	need(o, ind, s->fill);
 	if (backup) {
-		o.wstring(opts->input_api.stmt_backup_peek(ind));
+		o.wstring(opts->input_api.stmt_backup_peek(ind, opts));
 	} else {
-		o.wstring(opts->input_api.stmt_peek(ind));
+		o.wstring(opts->input_api.stmt_peek(ind, opts));
 	}
 }
 
 void emit_save(OutputFile &o, uint32_t ind, const State *const s,
 	bool save_yyaccept)
 {
+	Opt &opts = o.opts;
+
 	if (save_yyaccept) {
 		o.wind(ind).wstring(opts->yyaccept).ws(" = ")
 			.wu64(s->action.info.save).ws(";\n");
 	}
 
 	if (s->fill != 0) {
-		o.wstring(opts->input_api.stmt_skip_backup(ind));
+		o.wstring(opts->input_api.stmt_skip_backup(ind, opts));
 		need(o, ind, s->fill);
-		o.wstring(opts->input_api.stmt_peek(ind));
+		o.wstring(opts->input_api.stmt_peek(ind, opts));
 	} else {
-		o.wstring(opts->input_api.stmt_skip_backup_peek(ind));
+		o.wstring(opts->input_api.stmt_skip_backup_peek(ind, opts));
 	}
 }
 
 void emit_accept_binary(OutputFile &o, uint32_t ind, const DFA &dfa,
 	const State *s, size_t l, size_t r)
 {
+	Opt &opts = o.opts;
 	if (l < r) {
 		const size_t m = (l + r) >> 1;
 		o.wind(ind).ws("if (").wstring(opts->yyaccept)
@@ -142,6 +146,7 @@ void emit_accept_binary(OutputFile &o, uint32_t ind, const DFA &dfa,
 
 void emit_accept(OutputFile &o, uint32_t ind, const DFA &dfa, const State *s)
 {
+	Opt &opts = o.opts;
 	const accept_t &acc = *s->action.info.accepts;
 	const size_t nacc = acc.size();
 
@@ -149,7 +154,7 @@ void emit_accept(OutputFile &o, uint32_t ind, const DFA &dfa, const State *s)
 		return;
 	}
 
-	o.wstring(opts->input_api.stmt_restore(ind));
+	o.wstring(opts->input_api.stmt_restore(ind, opts));
 
 	// only one possible 'yyaccept' value: unconditional jump
 	if (nacc == 1) {
@@ -202,6 +207,7 @@ void emit_accept(OutputFile &o, uint32_t ind, const DFA &dfa, const State *s)
 
 void emit_rule(OutputFile &o, uint32_t ind, const DFA &dfa, size_t rule_idx)
 {
+	Opt &opts = o.opts;
 	const Rule &rule = dfa.rules[rule_idx];
 	const std::string &cond = rule.info->newcond;
 	const Code *code = rule.info->code;
@@ -239,6 +245,7 @@ void need(OutputFile &o, uint32_t ind, size_t some)
 {
 	assert(some > 0);
 
+	Opt &opts = o.opts;
 	std::string s;
 
 	if (opts->fFlag) {
@@ -253,7 +260,7 @@ void need(OutputFile &o, uint32_t ind, size_t some)
 	if (opts->fill_use) {
 		o.wind(ind);
 		if (opts->fill_check) {
-			o.ws("if (").wstring(opts->input_api.expr_lessthan(some)).ws(") ");
+			o.ws("if (").wstring(opts->input_api.expr_lessthan(some, opts)).ws(") ");
 		}
 		strrreplace(s = opts->fill, opts->fill_arg, some);
 		o.wstring(s);
@@ -276,7 +283,7 @@ void gen_goto_case(OutputFile &o, uint32_t ind, const State *to,
 	const DFA &dfa, tcid_t tcid)
 {
 	code_lines_t code;
-	gen_goto(code, to, dfa, tcid);
+	gen_goto(code, to, dfa, tcid, o.opts);
 	const size_t lines = code.size();
 
 	if (lines == 1) {
@@ -293,7 +300,7 @@ void gen_goto_if(OutputFile &o, uint32_t ind, const State *to,
 	const DFA &dfa, tcid_t tcid)
 {
 	code_lines_t code;
-	gen_goto(code, to, dfa, tcid);
+	gen_goto(code, to, dfa, tcid, o.opts);
 	const size_t lines = code.size();
 
 	if (lines == 1) {
@@ -311,7 +318,7 @@ void gen_goto_plain(OutputFile &o, uint32_t ind, const State *to,
 	const DFA &dfa, tcid_t tcid)
 {
 	code_lines_t code;
-	gen_goto(code, to, dfa, tcid);
+	gen_goto(code, to, dfa, tcid, o.opts);
 	const size_t lines = code.size();
 
 	for (size_t i = 0; i < lines; ++i) {
@@ -320,18 +327,21 @@ void gen_goto_plain(OutputFile &o, uint32_t ind, const State *to,
 }
 
 void gen_goto(code_lines_t &code, const State *to, const DFA &dfa,
-	tcid_t tcid)
+	tcid_t tcid, Opt &opts)
 {
-	gen_settags(code, dfa, tcid);
+	gen_settags(code, dfa, tcid, opts);
 	if (to) {
 		code.push_back("goto " + opts->labelPrefix
 			+ to_string(to->label) + ";\n");
 	}
 }
 
-void gen_settags(code_lines_t &code, const DFA &dfa, tcid_t tcid)
+void gen_settags(code_lines_t &code, const DFA &dfa, tcid_t tcid, Opt &opts)
 {
 	const bool generic = opts->input_api.type() == InputAPI::CUSTOM;
+	const std::string
+		&prefix = opts->tags_prefix,
+		&expression = opts->tags_expression;
 	const tccmd_t &cmd = dfa.tcpool[tcid];
 	const tagsave_t *tsave = cmd.save;
 	const tagcopy_t *tcopy = cmd.copy;
@@ -349,8 +359,8 @@ void gen_settags(code_lines_t &code, const DFA &dfa, tcid_t tcid)
 	// copy commands
 	for (const tagcopy_t *p = tcopy; p; p = p->next) {
 		const std::string
-			l = vartag_expr(p->lhs),
-			r = vartag_expr(p->rhs),
+			l = vartag_expr(p->lhs, prefix, expression),
+			r = vartag_expr(p->rhs, prefix, expression),
 			s = generic
 				? opts->yycopytag + " (" + l + ", " + r + ");\n"
 				: l + " = " + r + ";\n";
@@ -361,7 +371,7 @@ void gen_settags(code_lines_t &code, const DFA &dfa, tcid_t tcid)
 	if (generic) {
 		for (const tagsave_t *p = tsave; p; p = p->next) {
 			const std::string
-				v = vartag_expr(p->ver),
+				v = vartag_expr(p->ver, prefix, expression),
 				s = p->bottom
 					? opts->yycopytag + " (" + v + ", " + opts->tags_default + ");\n"
 					: opts->yybackuptag + " (" + v + ");\n";
@@ -370,7 +380,7 @@ void gen_settags(code_lines_t &code, const DFA &dfa, tcid_t tcid)
 	} else if (tsave) {
 		std::string s1 = "", s2 = "";
 		for (const tagsave_t *p = tsave; p; p = p->next) {
-			const std::string v = vartag_expr(p->ver);
+			const std::string v = vartag_expr(p->ver, prefix, expression);
 			if (p->bottom) {
 				s1 += v + " = ";
 			} else {
@@ -390,7 +400,11 @@ void gen_settags(code_lines_t &code, const DFA &dfa, tcid_t tcid)
 
 void gen_fintags(OutputFile &o, uint32_t ind, const DFA &dfa, const Rule &rule)
 {
+	Opt &opts = o.opts;
 	const bool generic = opts->input_api.type() == InputAPI::CUSTOM;
+	const std::string
+		&prefix = opts->tags_prefix,
+		&expression = opts->tags_expression;
 	const std::vector<VarTag> &vartags = dfa.vartags;
 	const std::vector<FixTag> &fixtags = dfa.fixtags;
 	const tagver_t *fins = dfa.finvers;
@@ -402,7 +416,7 @@ void gen_fintags(OutputFile &o, uint32_t ind, const DFA &dfa, const Rule &rule)
 		if (tag.name) {
 			const std::string
 				name = *tag.name,
-				expr = vartag_expr(fins[t]);
+				expr = vartag_expr(fins[t], prefix, expression);
 			if (generic) {
 				o.wstring(opts->yycopytag).ws(" (").wstring(name)
 					.ws(", ").wstring(expr).ws(")");
@@ -416,7 +430,7 @@ void gen_fintags(OutputFile &o, uint32_t ind, const DFA &dfa, const Rule &rule)
 				o.wstring(opts->yycursor).ws(" = ").wstring(opts->yyctxmarker);
 			}
 		} else {
-			const std::string expr = vartag_expr(fins[t]);
+			const std::string expr = vartag_expr(fins[t], prefix, expression);
 			if (generic) {
 				o.wstring(opts->yyrestoretag).ws(" (").wstring(expr).ws(")");
 			} else {
@@ -438,7 +452,8 @@ void gen_fintags(OutputFile &o, uint32_t ind, const DFA &dfa, const Rule &rule)
 				// to       '(YYCURSOR - tag)'
 				o.wstring(opts->yycursor).ws(" - ").wu64(tag.dist);
 			} else {
-				o.wstring(vartag_expr(fins[tag.base])).ws(" - ").wu64(tag.dist);
+				o.wstring(vartag_expr(fins[tag.base], prefix, expression))
+					.ws(" - ").wu64(tag.dist);
 			}
 		} else {
 			o.wstring(opts->yycursor).ws(" -= ").wu64(tag.dist);

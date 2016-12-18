@@ -129,7 +129,7 @@ struct SwitchIf
 		Cases * cases;
 		If * ifs;
 	} info;
-	SwitchIf (const Span * sp, uint32_t nsp, const State * next);
+	SwitchIf (const Span * sp, uint32_t nsp, const State * next, bool sflag);
 	~SwitchIf ();
 	void emit (OutputFile & o, uint32_t ind, const DFA &dfa);
 	void used_labels (std::set<label_t> & used);
@@ -141,7 +141,9 @@ struct GoBitmap
 	const State * bitmap_state;
 	SwitchIf * hgo;
 	SwitchIf * lgo;
-	GoBitmap (const Span * span, uint32_t nSpans, const Span * hspan, uint32_t hSpans, const BitMap * bm, const State * bm_state, const State * next);
+	GoBitmap (const Span * span, uint32_t nSpans, const Span * hspan,
+		uint32_t hSpans, const BitMap * bm, const State * bm_state,
+		const State * next, bool sflag);
 	~GoBitmap ();
 	void emit (OutputFile & o, uint32_t ind, const DFA &dfa);
 	void used_labels (std::set<label_t> & used);
@@ -168,7 +170,8 @@ struct Cpgoto
 {
 	SwitchIf * hgo;
 	CpgotoTable * table;
-	Cpgoto (const Span * span, uint32_t nSpans, const Span * hspan, uint32_t hSpans, const State * next);
+	Cpgoto (const Span * span, uint32_t nSpans, const Span * hspan,
+		uint32_t hSpans, const State * next, bool sflag);
 	~Cpgoto ();
 	void emit (OutputFile & o, uint32_t ind, const DFA &dfa);
 	void used_labels (std::set<label_t> & used);
@@ -210,7 +213,7 @@ struct Go
 
 	Go ();
 	~Go ();
-	void init (const State * from);
+	void init (const State * from, Opt &opts);
 	void emit (OutputFile & o, uint32_t ind, const DFA &dfa);
 	void used_labels (std::set<label_t> & used);
 

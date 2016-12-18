@@ -3,7 +3,6 @@
 #include <set>
 
 #include "src/codegen/output.h"
-#include "src/conf/opt.h"
 #include "src/ir/compile.h"
 #include "src/ir/adfa/adfa.h"
 #include "src/ir/adfa/dump.h"
@@ -13,7 +12,6 @@
 #include "src/ir/regexp/regexp.h"
 #include "src/ir/skeleton/skeleton.h"
 #include "src/parse/spec.h"
-#include "src/globals.h"
 
 namespace re2c {
 
@@ -39,6 +37,7 @@ static smart_ptr<DFA> compile_rules(
 {
 	const uint32_t line = output.source.block().line;
 	const std::string name = make_name(cond, line);
+	Opt &opts = output.source.opts;
 
 	warn_nullable(rules, cond);
 
@@ -58,9 +57,9 @@ static smart_ptr<DFA> compile_rules(
 		cs.push_back(*i);
 	}
 
-	nfa_t nfa(rules);
+	nfa_t nfa(rules, opts->input_api.type());
 
-	dfa_t dfa(nfa, cs, cond);
+	dfa_t dfa(nfa, cs, cond, opts->bijective_mapping, opts->dump_dfa_raw);
 	if (opts->dump_dfa_det) dump_dfa(dfa);
 
 	// skeleton must be constructed after DFA construction
@@ -68,7 +67,7 @@ static smart_ptr<DFA> compile_rules(
 	Skeleton skeleton(dfa, cs, defrule, name, cond, line);
 	warn_undefined_control_flow(skeleton);
 	if (opts->target == opt_t::SKELETON) {
-		emit_data(skeleton);
+		emit_data(skeleton, opts->output_file, opts->encoding.szCodeUnit());
 	}
 
 	cutoff_dead_rules(dfa, defrule, cond);
@@ -79,7 +78,7 @@ static smart_ptr<DFA> compile_rules(
 	optimize_tags(dfa);
 	if (opts->dump_dfa_tagopt) dump_dfa(dfa);
 
-	minimization(dfa);
+	minimization(dfa, opts->dfa_minimization);
 	if (opts->dump_dfa_min) dump_dfa(dfa);
 
 	// find YYFILL states and calculate argument to YYFILL
@@ -93,11 +92,11 @@ static smart_ptr<DFA> compile_rules(
 	adfa->reorder();
 
 	// skeleton is constructed, do further DFA transformations
-	adfa->prepare();
+	adfa->prepare(opts);
 	if (opts->dump_adfa) dump_adfa(*adfa);
 
 	// finally gather overall DFA statistics
-	adfa->calc_stats(line);
+	adfa->calc_stats(line, opts->tags);
 
 	// accumulate global statistics from this particular DFA
 	output.max_fill = std::max (output.max_fill, adfa->max_fill);

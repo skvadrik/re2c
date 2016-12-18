@@ -81,7 +81,6 @@
 #include <vector>
 
 #include "src/codegen/output.h"
-#include "src/conf/opt.h"
 #include "src/globals.h"
 #include "src/ir/compile.h"
 #include "src/ir/adfa/adfa.h"
@@ -130,7 +129,7 @@ static symbol_table_t symbol_table;
 
 void context_check(CondList *clist)
 {
-	if (!opts->cFlag)
+	if (!in->opts->cFlag)
 	{
 		delete clist;
 		in->fatal("conditions are only allowed when using -c switch");
@@ -555,11 +554,11 @@ static const yytype_int8 yyrhs[] =
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint16 yyrline[] =
 {
-       0,   157,   157,   159,   160,   161,   166,   173,   178,   181,
-     185,   185,   188,   197,   208,   212,   218,   224,   231,   240,
-     248,   258,   269,   275,   281,   284,   291,   297,   307,   310,
-     317,   321,   327,   331,   338,   342,   349,   353,   360,   364,
-     381,   400,   404,   408,   412,   419,   429,   433
+       0,   156,   156,   158,   159,   160,   165,   172,   177,   180,
+     184,   184,   187,   196,   207,   211,   217,   223,   230,   239,
+     247,   257,   268,   274,   280,   283,   290,   296,   306,   309,
+     316,   320,   326,   330,   337,   341,   348,   352,   359,   363,
+     380,   399,   403,   407,   411,   418,   428,   432
 };
 #endif
 
@@ -1556,7 +1555,7 @@ yyreduce:
   case 12:
 
     {
-		if (opts->cFlag) {
+		if (in->opts->cFlag) {
 			in->fatal("condition or '<*>' required when using -c switch");
 		}
 		(yyvsp[(1) - (2)].rule)->info = new RuleInfo((yyvsp[(2) - (2)].code)->loc, (yyvsp[(2) - (2)].code), NULL);
@@ -1567,7 +1566,7 @@ yyreduce:
   case 13:
 
     {
-		if (opts->cFlag) {
+		if (in->opts->cFlag) {
 			in->fatal("condition or '<*>' required when using -c switch");
 		}
 		RegExpRule *def = new RegExpRule(in->mkDefault());
@@ -2113,6 +2112,7 @@ void parse(Scanner& i, Output & o)
 {
 	std::map<std::string, smart_ptr<DFA> >  dfa_map;
 	ScannerState rules_state;
+	Opt &opts = i.opts;
 
 	in = &i;
 

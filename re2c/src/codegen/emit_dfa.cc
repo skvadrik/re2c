@@ -11,7 +11,6 @@
 #include "src/codegen/input_api.h"
 #include "src/codegen/label.h"
 #include "src/codegen/output.h"
-#include "src/conf/opt.h"
 #include "src/globals.h"
 #include "src/ir/adfa/action.h"
 #include "src/ir/adfa/adfa.h"
@@ -22,13 +21,13 @@
 namespace re2c
 {
 
-static std::string genGetCondition ();
+static std::string genGetCondition (Opt &opts);
 static void genCondGotoSub (OutputFile & o, uint32_t ind, const std::vector<std::string> & condnames, uint32_t cMin, uint32_t cMax);
 static void genCondTable   (OutputFile & o, uint32_t ind, const std::vector<std::string> & condnames);
 static void genCondGoto    (OutputFile & o, uint32_t ind, const std::vector<std::string> & condnames);
 static void emit_state     (OutputFile & o, uint32_t ind, const State * s, bool used_label);
 
-std::string genGetCondition()
+std::string genGetCondition(Opt &opts)
 {
 	return opts->cond_get_naked
 		? opts->cond_get
@@ -37,20 +36,22 @@ std::string genGetCondition()
 
 void emit_state (OutputFile & o, uint32_t ind, const State * s, bool used_label)
 {
+	Opt &opts = o.opts;
 	if (used_label)
 	{
 		o.wstring(opts->labelPrefix).wlabel(s->label).ws(":\n");
 	}
 	if (opts->dFlag && (s->action.type != Action::INITIAL))
 	{
-		o.wind(ind).wstring(opts->yydebug).ws("(").wlabel(s->label).ws(", ").wstring(opts->input_api.expr_peek ()).ws(");\n");
+		o.wind(ind).wstring(opts->yydebug).ws("(").wlabel(s->label).ws(", ").wstring(opts->input_api.expr_peek(opts)).ws(");\n");
 	}
 }
 
-void DFA::count_used_labels (std::set<label_t> & used, label_t start, label_t initial, bool force_start) const
+void DFA::count_used_labels (std::set<label_t> & used, label_t start,
+	label_t initial, bool force_start, bool fFlag) const
 {
 	// In '-f' mode, default state is always state 0
-	if (opts->fFlag)
+	if (fFlag)
 	{
 		used.insert (label_t::first ());
 	}
@@ -80,7 +81,7 @@ void DFA::emit_body(OutputFile &o, uint32_t& ind,
 	// has a piece of code that advances input position. Wee must
 	// skip it when entering DFA.
 	if (used_labels.count(head->label)) {
-		o.wind(ind).ws("goto ").wstring(opts->labelPrefix)
+		o.wind(ind).ws("goto ").wstring(o.opts->labelPrefix)
 			.wlabel(initial).ws(";\n");
 	}
 
@@ -96,6 +97,7 @@ void DFA::emit_dot(
 	bool last_cond,
 	const std::vector<std::string> &conds) const
 {
+	Opt &opts = o.opts;
 	if (!opts->cFlag || !bWroteCondCheck) {
 		o.ws("digraph re2c {\n");
 	}
@@ -140,7 +142,7 @@ void DFA::emit(Output & output, uint32_t& ind, bool isLastCond, bool& bPrologBra
 {
 	OutputFile &o = output.source;
 	OutputBlock &ob = o.block();
-
+	Opt &opts = o.opts;
 	std::set<std::string> tagnames, tagvars;
 	if (!oldstyle_ctxmarker) {
 		for (size_t i = 0; i < vartags.size(); ++i) {
@@ -156,7 +158,7 @@ void DFA::emit(Output & output, uint32_t& ind, bool isLastCond, bool& bPrologBra
 			}
 		}
 		for (tagver_t v = 1; v <= maxtagver; ++v) {
-			tagnames.insert(vartag_name(v));
+			tagnames.insert(vartag_name(v, opts->tags_prefix));
 		}
 		ob.tags.insert(tagnames.begin(), tagnames.end());
 	}
@@ -177,7 +179,7 @@ void DFA::emit(Output & output, uint32_t& ind, bool isLastCond, bool& bPrologBra
 		s->label = o.label_counter.next ();
 	}
 	std::set<label_t> used_labels;
-	count_used_labels (used_labels, start_label, initial_label, ob.force_start_label);
+	count_used_labels (used_labels, start_label, initial_label, ob.force_start_label, opts->fFlag);
 
 	head->action.set_initial(initial_label);
 
@@ -286,6 +288,7 @@ void DFA::emit(Output & output, uint32_t& ind, bool isLastCond, bool& bPrologBra
 
 void genCondTable(OutputFile & o, uint32_t ind, const std::vector<std::string> & condnames)
 {
+	Opt &opts = o.opts;
 	const size_t conds = condnames.size ();
 	o.wind(ind++).ws("static void *").wstring(opts->yyctable).ws("[").wu64(conds).ws("] = {\n");
 	for (size_t i = 0; i < conds; ++i)
@@ -297,6 +300,7 @@ void genCondTable(OutputFile & o, uint32_t ind, const std::vector<std::string> &
 
 void genCondGotoSub(OutputFile & o, uint32_t ind, const std::vector<std::string> & condnames, uint32_t cMin, uint32_t cMax)
 {
+	Opt &opts = o.opts;
 	if (cMin == cMax)
 	{
 		o.wind(ind).ws("goto ").wstring(opts->condPrefix).wstring(condnames[cMin]).ws(";\n");
@@ -305,7 +309,7 @@ void genCondGotoSub(OutputFile & o, uint32_t ind, const std::vector<std::string>
 	{
 		uint32_t cMid = cMin + ((cMax - cMin + 1) / 2);
 
-		o.wind(ind).ws("if (").wstring(genGetCondition()).ws(" < ").wu32(cMid).ws(") {\n");
+		o.wind(ind).ws("if (").wstring(genGetCondition(opts)).ws(" < ").wu32(cMid).ws(") {\n");
 		genCondGotoSub(o, ind + 1, condnames, cMin, cMid - 1);
 		o.wind(ind).ws("} else {\n");
 		genCondGotoSub(o, ind + 1, condnames, cMid, cMax);
@@ -338,10 +342,11 @@ void genCondGotoSub(OutputFile & o, uint32_t ind, const std::vector<std::string>
  */
 void genCondGoto(OutputFile & o, uint32_t ind, const std::vector<std::string> & condnames)
 {
+	Opt &opts = o.opts;
 	const size_t conds = condnames.size ();
 	if (opts->gFlag)
 	{
-		o.wind(ind).ws("goto *").wstring(opts->yyctable).ws("[").wstring(genGetCondition()).ws("];\n");
+		o.wind(ind).ws("goto *").wstring(opts->yyctable).ws("[").wstring(genGetCondition(opts)).ws("];\n");
 	}
 	else if (opts->sFlag)
 	{
@@ -354,7 +359,7 @@ void genCondGoto(OutputFile & o, uint32_t ind, const std::vector<std::string> & 
 	else
 	{
 		o.warn_condition_order = false; // see note [condition order]
-		o.wind(ind).ws("switch (").wstring(genGetCondition()).ws(") {\n");
+		o.wind(ind).ws("switch (").wstring(genGetCondition(opts)).ws(") {\n");
 		for (size_t i = 0; i < conds; ++i)
 		{
 			const std::string & cond = condnames[i];
@@ -366,17 +371,17 @@ void genCondGoto(OutputFile & o, uint32_t ind, const std::vector<std::string> & 
 	bWroteCondCheck = true;
 }
 
-std::string vartag_name(tagver_t ver)
+std::string vartag_name(tagver_t ver, const std::string &prefix)
 {
 	std::ostringstream s;
-	s << opts->tags_prefix << ver;
+	s << prefix << ver;
 	return s.str();
 }
 
-std::string vartag_expr(tagver_t ver)
+std::string vartag_expr(tagver_t ver, const std::string &prefix, const std::string &expression)
 {
-	const std::string s = vartag_name(ver);
-	std::string e = opts->tags_expression;
+	const std::string s = vartag_name(ver, prefix);
+	std::string e = expression;
 	strrreplace(e, "@@", s);
 	return e;
 }

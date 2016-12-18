@@ -6,7 +6,6 @@
 
 #include "src/codegen/bitmap.h"
 #include "src/codegen/go.h"
-#include "src/conf/opt.h"
 #include "src/globals.h"
 #include "src/ir/adfa/adfa.h"
 #include "src/util/allocate.h"
@@ -120,11 +119,11 @@ If::If (type_t t, const Span * sp, uint32_t nsp, const State * next)
 	}
 }
 
-SwitchIf::SwitchIf (const Span * sp, uint32_t nsp, const State * next)
+SwitchIf::SwitchIf (const Span * sp, uint32_t nsp, const State * next, bool sflag)
 	: type (IF)
 	, info ()
 {
-	if ((!opts->sFlag && nsp > 2) || (nsp > 8 && (sp[nsp - 2].ub - sp[0].ub <= 3 * (nsp - 2))))
+	if ((!sflag && nsp > 2) || (nsp > 8 && (sp[nsp - 2].ub - sp[0].ub <= 3 * (nsp - 2))))
 	{
 		type = SWITCH;
 		info.cases = new Cases (sp, nsp);
@@ -139,7 +138,9 @@ SwitchIf::SwitchIf (const Span * sp, uint32_t nsp, const State * next)
 	}
 }
 
-GoBitmap::GoBitmap (const Span * span, uint32_t nSpans, const Span * hspan, uint32_t hSpans, const BitMap * bm, const State * bm_state, const State * next)
+GoBitmap::GoBitmap (const Span * span, uint32_t nSpans, const Span * hspan,
+	uint32_t hSpans, const BitMap * bm, const State * bm_state,
+	const State * next, bool sflag)
 	: bitmap (bm)
 	, bitmap_state (bm_state)
 	, hgo (NULL)
@@ -149,12 +150,12 @@ GoBitmap::GoBitmap (const Span * span, uint32_t nSpans, const Span * hspan, uint
 	uint32_t bSpans = unmap (bspan, span, nSpans, bm_state);
 	lgo = bSpans == 0
 		? NULL
-		:  new SwitchIf (bspan, bSpans, next);
+		: new SwitchIf (bspan, bSpans, next, sflag);
 	// if there are any low spans, then next state for high spans
 	// must be NULL to trigger explicit goto generation in linear 'if'
 	hgo = hSpans == 0
 		? NULL
-		: new SwitchIf (hspan, hSpans, lgo ? NULL : next);
+		: new SwitchIf (hspan, hSpans, lgo ? NULL : next, sflag);
 	operator delete (bspan);
 }
 
@@ -173,8 +174,9 @@ CpgotoTable::CpgotoTable (const Span * span, uint32_t nSpans)
 	}
 }
 
-Cpgoto::Cpgoto (const Span * span, uint32_t nSpans, const Span * hspan, uint32_t hSpans, const State * next)
-	: hgo (hSpans == 0 ? NULL : new SwitchIf (hspan, hSpans, next))
+Cpgoto::Cpgoto (const Span * span, uint32_t nSpans, const Span * hspan,
+	uint32_t hSpans, const State * next, bool sflag)
+	: hgo (hSpans == 0 ? NULL : new SwitchIf (hspan, hSpans, next, sflag))
 	, table (new CpgotoTable (span, nSpans))
 {}
 
@@ -191,7 +193,7 @@ Go::Go ()
 	, info ()
 {}
 
-void Go::init (const State * from)
+void Go::init (const State * from, Opt &opts)
 {
 	if (nSpans == 0)
 	{
@@ -249,18 +251,18 @@ void Go::init (const State * from)
 	else if (opts->gFlag && (dSpans >= opts->cGotoThreshold) && !low_spans_have_tags)
 	{
 		type = CPGOTO;
-		info.cpgoto = new Cpgoto (span, nSpans, hspan, hSpans, from->next);
+		info.cpgoto = new Cpgoto (span, nSpans, hspan, hSpans, from->next, opts->sFlag);
 	}
 	else if (opts->bFlag && (nBitmaps > 0))
 	{
 		type = BITMAP;
-		info.bitmap = new GoBitmap (span, nSpans, hspan, hSpans, bitmap, bitmap_state, from->next);
+		info.bitmap = new GoBitmap (span, nSpans, hspan, hSpans, bitmap, bitmap_state, from->next, opts->sFlag);
 		bUsedYYBitmap = true;
 	}
 	else
 	{
 		type = SWITCH_IF;
-		info.switchif = new SwitchIf (span, nSpans, from->next);
+		info.switchif = new SwitchIf (span, nSpans, from->next, opts->sFlag);
 	}
 }
 

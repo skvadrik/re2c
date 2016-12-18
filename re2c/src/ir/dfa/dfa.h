@@ -58,7 +58,7 @@ struct dfa_t
 	tagver_t maxtagver;
 
 	dfa_t(const nfa_t &nfa, const charset_t &charset,
-		const std::string &cond);
+		const std::string &cond, bool bijection, bool debug);
 	~dfa_t();
 
 	FORBID_COPY(dfa_t);
@@ -70,7 +70,7 @@ enum dfa_minimization_t
 	DFA_MINIMIZATION_MOORE
 };
 
-void minimization(dfa_t &dfa);
+void minimization(dfa_t &dfa, dfa_minimization_t type);
 void fillpoints(const dfa_t &dfa, std::vector<size_t> &fill);
 void cutoff_dead_rules(dfa_t &dfa, size_t defrule, const std::string &cond);
 void insert_fallback_tags(dfa_t &dfa);

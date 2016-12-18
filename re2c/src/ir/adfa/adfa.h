@@ -90,8 +90,8 @@ struct DFA
 		);
 	~DFA ();
 	void reorder();
-	void prepare();
-	void calc_stats(uint32_t line);
+	void prepare(Opt &opts);
+	void calc_stats(uint32_t line, bool explicit_tags);
 	void emit (Output &, uint32_t &, bool, bool &);
 
 private:
@@ -99,7 +99,7 @@ private:
 	void split (State *);
 	void findBaseState ();
 	void hoist_tags();
-	void count_used_labels (std::set<label_t> & used, label_t prolog, label_t start, bool force_start) const;
+	void count_used_labels (std::set<label_t> & used, label_t prolog, label_t start, bool force_start, bool fFlag) const;
 	void emit_body (OutputFile &, uint32_t &, const std::set<label_t> & used_labels, label_t initial) const;
 	void emit_dot(OutputFile &o, bool last_cond, const std::vector<std::string> &conds) const;
 

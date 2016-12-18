@@ -7,7 +7,6 @@
 
 #include "src/codegen/label.h"
 #include "src/codegen/output.h"
-#include "src/conf/opt.h"
 #include "src/globals.h"
 #include "src/parse/scanner.h"
 #include "src/util/counter.h"
@@ -66,6 +65,7 @@ Scanner::Scanner (Input & i, OutputFile & o)
 	: ScannerState ()
 	, in (i)
 	, out (o)
+	, opts (o.opts)
 {}
 
 void Scanner::fill (uint32_t need)

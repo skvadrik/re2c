@@ -2,14 +2,12 @@
 #define _RE2C_CODEGEN_INPUT_API_
 
 #include "src/util/c99_stdint.h"
-#include <set>
 #include <string>
-#include <valarray>
-
-#include "src/ir/tag.h"
 
 namespace re2c
 {
+
+struct Opt;
 
 class InputAPI
 {
@@ -26,16 +24,16 @@ public:
 	InputAPI ();
 	type_t type () const;
 	void set (type_t t);
-	std::string expr_peek () const;
-	std::string stmt_peek (uint32_t ind) const;
-	std::string stmt_skip (uint32_t ind) const;
-	std::string stmt_backup (uint32_t ind) const;
-	std::string stmt_restore (uint32_t ind) const;
-	std::string stmt_skip_peek (uint32_t ind) const;
-	std::string stmt_skip_backup (uint32_t ind) const;
-	std::string stmt_backup_peek (uint32_t ind) const;
-	std::string stmt_skip_backup_peek (uint32_t ind) const;
-	std::string expr_lessthan (size_t n) const;
+	std::string expr_peek             (Opt &opts) const;
+	std::string stmt_peek             (uint32_t ind, Opt &opts) const;
+	std::string stmt_skip             (uint32_t ind, Opt &opts) const;
+	std::string stmt_backup           (uint32_t ind, Opt &opts) const;
+	std::string stmt_restore          (uint32_t ind, Opt &opts) const;
+	std::string stmt_skip_peek        (uint32_t ind, Opt &opts) const;
+	std::string stmt_skip_backup      (uint32_t ind, Opt &opts) const;
+	std::string stmt_backup_peek      (uint32_t ind, Opt &opts) const;
+	std::string stmt_skip_backup_peek (uint32_t ind, Opt &opts) const;
+	std::string expr_lessthan         (size_t n, Opt &opts) const;
 };
 
 } // end namespace re2c

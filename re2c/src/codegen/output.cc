@@ -2,11 +2,10 @@
 #include <time.h>
 #include <iomanip>
 
-#include "src/codegen/indent.h"
+#include "src/codegen/emit.h"
 #include "src/codegen/output.h"
 #include "src/codegen/print.h"
 #include "src/conf/msg.h"
-#include "src/conf/opt.h"
 #include "src/conf/warn.h"
 #include "src/util/string_utils.h"
 #include "src/globals.h"
@@ -62,10 +61,11 @@ OutputBlock::~OutputBlock ()
 	}
 }
 
-OutputFile::OutputFile()
+OutputFile::OutputFile(Opt &o)
 	: blocks ()
 	, label_counter ()
-	, warn_condition_order (!opts->tFlag) // see note [condition order]
+	, warn_condition_order (!o->tFlag) // see note [condition order]
+	, opts(o)
 {
 	new_block ();
 }
@@ -95,19 +95,21 @@ OutputFile &OutputFile::wraw(const char *s, const char *e)
 
 OutputFile & OutputFile::wu32_hex (uint32_t n)
 {
-	prtHex (stream (), n);
+	prtHex(stream(), n, opts->encoding.szCodeUnit());
 	return *this;
 }
 
 OutputFile & OutputFile::wc_hex (uint32_t n)
 {
-	prtChOrHex (stream (), n);
+	const Enc &e = opts->encoding;
+	prtChOrHex(stream(), n, e.szCodeUnit(), e.type() == Enc::EBCDIC, opts->target == opt_t::DOT);
 	return *this;
 }
 
 OutputFile & OutputFile::wrange (uint32_t l, uint32_t u)
 {
-	printSpan (stream (), l, u);
+	const Enc &e = opts->encoding;
+	printSpan(stream(), l, u, e.szCodeUnit(), e.type() == Enc::EBCDIC, opts->target == opt_t::DOT);
 	return *this;
 }
 
@@ -120,13 +122,13 @@ OutputFile & OutputFile::wu32_width (uint32_t n, int w)
 
 OutputFile & OutputFile::wline_info (uint32_t l, const char * fn)
 {
-	output_line_info (stream (), l, fn);
+	output_line_info (stream (), l, fn, opts);
 	return *this;
 }
 
 OutputFile & OutputFile::wversion_time ()
 {
-	output_version_time (stream ());
+	output_version_time (stream (), opts);
 	return *this;
 }
 
@@ -178,7 +180,7 @@ OutputFile & OutputFile::wlabel (label_t l)
 
 OutputFile & OutputFile::wind (uint32_t ind)
 {
-	stream () << indent(ind);
+	stream () << indent(ind, opts->indString);
 	return *this;
 }
 
@@ -290,16 +292,16 @@ bool OutputFile::emit(const uniq_vector_t<std::string> &global_types,
 			switch (f.type) {
 				case OutputFragment::CODE: break;
 				case OutputFragment::LINE_INFO:
-					output_line_info(f.stream, line_count + 1, filename);
+					output_line_info(f.stream, line_count + 1, filename, opts);
 					break;
 				case OutputFragment::STATE_GOTO:
-					output_state_goto(f.stream, f.indent, 0);
+					output_state_goto(f.stream, f.indent, 0, opts);
 					break;
 				case OutputFragment::TAGS:
 					output_tags(f.stream, *f.tags, global_tags);
 					break;
 				case OutputFragment::TYPES:
-					output_types(f.stream, f.indent, global_types);
+					output_types(f.stream, f.indent, global_types, opts);
 					break;
 				case OutputFragment::WARN_CONDITION_ORDER:
 					if (warn_condition_order) {// see note [condition order]
@@ -307,7 +309,7 @@ bool OutputFile::emit(const uniq_vector_t<std::string> &global_types,
 					}
 					break;
 				case OutputFragment::YYACCEPT_INIT:
-					output_yyaccept_init(f.stream, f.indent, b.used_yyaccept);
+					output_yyaccept_init(f.stream, f.indent, b.used_yyaccept, opts);
 					break;
 				case OutputFragment::YYMAXFILL:
 					output_yymaxfill(f.stream, max_fill);
@@ -323,7 +325,7 @@ bool OutputFile::emit(const uniq_vector_t<std::string> &global_types,
 	return true;
 }
 
-bool HeaderFile::emit(const uniq_vector_t<std::string> &types)
+bool HeaderFile::emit(const uniq_vector_t<std::string> &types, Opt &opts)
 {
 	if (!opts->tFlag) {
 		return true;
@@ -342,10 +344,10 @@ bool HeaderFile::emit(const uniq_vector_t<std::string> &types)
 		}
 	}
 
-	output_version_time(stream);
-	output_line_info(stream, 3, filename);
+	output_version_time(stream, opts);
+	output_line_info(stream, 3, filename, opts);
 	stream << "\n";
-	output_types(stream, 0, types);
+	output_types(stream, 0, types, opts);
 
 	std::string content = stream.str();
 	fwrite(content.c_str(), 1, content.size(), file);
@@ -354,8 +356,8 @@ bool HeaderFile::emit(const uniq_vector_t<std::string> &types)
 	return true;
 }
 
-Output::Output()
-	: source()
+Output::Output(Opt &o)
+	: source(o)
 	, header()
 	, skeletons()
 	, max_fill(1)
@@ -372,7 +374,7 @@ bool Output::emit()
 	source.global_lists(types, tags);
 
 	return source.emit(types, tags, max_fill)
-		&& header.emit(types);
+		&& header.emit(types, source.opts);
 }
 
 void output_tags(std::ostream &o, const ConfTags &conf,
@@ -392,34 +394,35 @@ void output_tags(std::ostream &o, const ConfTags &conf,
 	}
 }
 
-void output_state_goto (std::ostream & o, uint32_t ind, uint32_t start_label)
+void output_state_goto (std::ostream & o, uint32_t ind, uint32_t start_label, Opt &opts)
 {
-	o << indent(ind) << "switch (" << output_get_state() << ") {\n";
+	const std::string indstr = indent(ind, opts->indString);
+	o << indstr << "switch (" << output_get_state(opts) << ") {\n";
 	if (opts->bUseStateAbort)
 	{
-		o << indent(ind) << "default: abort();\n";
-		o << indent(ind) << "case -1: goto " << opts->labelPrefix << start_label << ";\n";
+		o << indstr << "default: abort();\n";
+		o << indstr << "case -1: goto " << opts->labelPrefix << start_label << ";\n";
 	}
 	else
 	{
-		o << indent(ind) << "default: goto " << opts->labelPrefix << start_label << ";\n";
+		o << indstr << "default: goto " << opts->labelPrefix << start_label << ";\n";
 	}
 	for (uint32_t i = 0; i < last_fill_index; ++i)
 	{
-		o << indent(ind) << "case " << i << ": goto " << opts->yyfilllabel << i << ";\n";
+		o << indstr << "case " << i << ": goto " << opts->yyfilllabel << i << ";\n";
 	}
-	o << indent(ind) << "}\n";
+	o << indstr << "}\n";
 	if (opts->bUseStateNext)
 	{
 		o << opts->yynext << ":\n";
 	}
 }
 
-void output_yyaccept_init (std::ostream & o, uint32_t ind, bool used_yyaccept)
+void output_yyaccept_init (std::ostream & o, uint32_t ind, bool used_yyaccept, Opt &opts)
 {
 	if (used_yyaccept)
 	{
-		o << indent (ind) << "unsigned int " << opts->yyaccept << " = 0;\n";
+		o << indent(ind, opts->indString) << "unsigned int " << opts->yyaccept << " = 0;\n";
 	}
 }
 
@@ -428,7 +431,7 @@ void output_yymaxfill (std::ostream & o, size_t max_fill)
 	o << "#define YYMAXFILL " << max_fill << "\n";
 }
 
-void output_line_info (std::ostream & o, uint32_t line_number, const std::string &file_name)
+void output_line_info (std::ostream & o, uint32_t line_number, const std::string &file_name, Opt &opts)
 {
 	if (!opts->iFlag)
 	{
@@ -439,16 +442,17 @@ void output_line_info (std::ostream & o, uint32_t line_number, const std::string
 void output_types(
 	std::ostream &o,
 	uint32_t ind,
-	const uniq_vector_t<std::string> &types)
+	const uniq_vector_t<std::string> &types, Opt &opts)
 {
-	o << indent(ind++) << "enum " << opts->yycondtype << " {\n";
+	const std::string indstr = opts->indString;
+	o << indent(ind++, indstr) << "enum " << opts->yycondtype << " {\n";
 	for (size_t i = 0; i < types.size(); ++i) {
-		o << indent(ind) << opts->condEnumPrefix << types[i] << ",\n";
+		o << indent(ind, indstr) << opts->condEnumPrefix << types[i] << ",\n";
 	}
-	o << indent(--ind) << "};\n";
+	o << indent(--ind, indstr) << "};\n";
 }
 
-void output_version_time (std::ostream & o)
+void output_version_time (std::ostream & o, Opt &opts)
 {
 	o << "/* Generated by re2c";
 	if (opts->version)
@@ -464,7 +468,7 @@ void output_version_time (std::ostream & o)
 	o << " */" << "\n";
 }
 
-std::string output_get_state ()
+std::string output_get_state (Opt &opts)
 {
 	return opts->state_get_naked
 		? opts->state_get

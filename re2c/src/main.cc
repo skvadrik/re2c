@@ -25,6 +25,8 @@ using namespace re2c;
 
 int main(int, char *argv[])
 {
+	Opt opts;
+
 	switch (parse_opts (argv, opts))
 	{
 		case OK:        break;
@@ -41,7 +43,7 @@ int main(int, char *argv[])
 	}
 
 	// set up the output streams
-	re2c::Output output;
+	re2c::Output output(opts);
 
 	Scanner scanner (input, output.source);
 	parse (scanner, output);

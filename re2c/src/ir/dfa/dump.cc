@@ -1,8 +1,6 @@
 #include <stdio.h>
 
-#include "src/conf/opt.h"
 #include "src/ir/dfa/dump.h"
-#include "src/globals.h"
 
 namespace re2c
 {
@@ -12,8 +10,8 @@ static void dump_tcmd(const tagsave_t *s, const tagcopy_t *c);
 static const char *tagname(const VarTag &t);
 static void dump_tags(const Tagpool &tagpool, size_t ttran, size_t tvers);
 
-dump_dfa_t::dump_dfa_t(const dfa_t &d, const Tagpool &pool, const nfa_t &n)
-	: debug(opts->dump_dfa_raw)
+dump_dfa_t::dump_dfa_t(const dfa_t &d, const Tagpool &pool, const nfa_t &n, bool dbg)
+	: debug(dbg)
 	, dfa(d)
 	, tagpool(pool)
 	, uniqidx(0)

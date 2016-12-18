@@ -3,9 +3,7 @@
 #include <utility>
 #include <vector>
 
-#include "src/conf/opt.h"
 #include "src/ir/dfa/dfa.h"
-#include "src/globals.h"
 
 namespace re2c
 {
@@ -226,20 +224,17 @@ static void minimization_moore(
  * Tail "c" can be deduplicated in the 1st case, but not in the 2nd.
  */
 
-void minimization(dfa_t &dfa)
+void minimization(dfa_t &dfa, dfa_minimization_t type)
 {
 	const size_t count = dfa.states.size();
 
 	size_t *part = new size_t[count];
 
-	switch (opts->dfa_minimization)
-	{
-		case DFA_MINIMIZATION_TABLE:
-			minimization_table(part, dfa.states, dfa.nchars);
-			break;
-		case DFA_MINIMIZATION_MOORE:
-			minimization_moore(part, dfa.states, dfa.nchars);
-			break;
+	switch (type) {
+	case DFA_MINIMIZATION_TABLE:
+		minimization_table(part, dfa.states, dfa.nchars); break;
+	case DFA_MINIMIZATION_MOORE:
+		minimization_moore(part, dfa.states, dfa.nchars); break;
 	}
 
 	size_t *compact = new size_t[count];

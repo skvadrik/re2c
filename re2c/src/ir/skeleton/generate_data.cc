@@ -10,8 +10,6 @@
 #include <vector>
 
 #include "src/conf/msg.h"
-#include "src/conf/opt.h"
-#include "src/globals.h"
 #include "src/ir/regexp/encoding/enc.h"
 #include "src/ir/skeleton/path.h"
 #include "src/ir/skeleton/skeleton.h"
@@ -326,18 +324,17 @@ template<typename cunit_t>
 	}
 }
 
-static void generate_paths(const Skeleton &skel, cover_t &cover)
+static void generate_paths(const Skeleton &skel, cover_t &cover, size_t cunit_size)
 {
-	switch (opts->encoding.szCodeUnit()) {
+	switch (cunit_size) {
 		case 4: generate_paths_cunit<uint32_t>(skel, cover); break;
 		case 2: generate_paths_cunit<uint16_t>(skel, cover); break;
 		case 1: generate_paths_cunit<uint8_t>(skel, cover); break;
 	}
 }
 
-void emit_data(const Skeleton &skel)
+void emit_data(const Skeleton &skel, std::string fname, size_t cunit_size)
 {
-	std::string fname = opts->output_file;
 	if (fname.empty()) {
 		fname = "<stdout>";
 	}
@@ -356,7 +353,7 @@ void emit_data(const Skeleton &skel)
 	}
 
 	cover_t cover(input, keys, skel.nodes_count);
-	generate_paths(skel, cover);
+	generate_paths(skel, cover, cunit_size);
 
 	fclose(input);
 	fclose(keys);

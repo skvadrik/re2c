@@ -39,7 +39,7 @@ public:
 	tagver_t *x2y_backup;
 	uint32_t *indeg;
 
-	explicit mapping_t(Tagpool &pool);
+	mapping_t(Tagpool &pool, bool bijection);
 	~mapping_t();
 	void init(tagver_t v);
 	bool better() const;
@@ -72,7 +72,7 @@ private:
 	kernel_t *buffer;
 
 public:
-	explicit kernels_t(Tagpool &tagpool);
+	kernels_t(Tagpool &tagpool, bool bijection);
 	~kernels_t();
 	size_t size() const;
 	const kernel_t* operator[](size_t idx) const;

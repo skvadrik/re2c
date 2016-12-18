@@ -1,9 +1,7 @@
 #include <string.h>
 
-#include "src/conf/opt.h"
 #include "src/ir/dfa/find_state.h"
 #include "src/util/hash32.h"
-#include "src/globals.h"
 
 namespace re2c
 {
@@ -43,14 +41,14 @@ struct kernel_eq_t
 	}
 };
 
-mapping_t::mapping_t(Tagpool &pool)
+mapping_t::mapping_t(Tagpool &pool, bool bijection)
 	: tagpool(pool)
 	, cap(0)
 	, mem(NULL)
 	, x2t(NULL)
 	, x2y(NULL)
 	, y2x(NULL)
-	, bijective(opts->bijective_mapping)
+	, bijective(bijection)
 	, max(0)
 	, x2t_backup(NULL)
 	, x2y_backup(NULL)
@@ -195,9 +193,9 @@ bool mapping_t::operator()(const kernel_t *k1, const kernel_t *k2)
 	return true;
 }
 
-kernels_t::kernels_t(Tagpool &tagpool)
+kernels_t::kernels_t(Tagpool &tagpool, bool bijection)
 	: lookup()
-	, mapping(tagpool)
+	, mapping(tagpool, bijection)
 	, maxsize(256) // usually ranges from one to some twenty
 	, buffer(new kernel_t(maxsize))
 {}

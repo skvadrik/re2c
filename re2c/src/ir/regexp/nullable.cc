@@ -1,4 +1,3 @@
-#include "src/conf/opt.h"
 #include "src/ir/regexp/regexp.h"
 #include "src/globals.h"
 

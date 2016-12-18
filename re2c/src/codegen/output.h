@@ -11,6 +11,7 @@
 #include <vector>
 
 #include "src/codegen/label.h"
+#include "src/conf/opt.h"
 #include "src/util/counter.h"
 #include "src/util/forbid_copy.h"
 #include "src/util/uniq_vector.h"
@@ -75,8 +76,9 @@ class OutputFile
 public:
 	counter_t<label_t> label_counter;
 	bool warn_condition_order;
+	Opt &opts;
 
-	OutputFile();
+	explicit OutputFile(Opt &o);
 	~OutputFile();
 
 	std::ostream & stream ();
@@ -126,7 +128,7 @@ class HeaderFile
 
 public:
 	HeaderFile(): stream() {}
-	bool emit(const uniq_vector_t<std::string> &types);
+	bool emit(const uniq_vector_t<std::string> &types, Opt &opts);
 	FORBID_COPY (HeaderFile);
 };
 
@@ -137,20 +139,20 @@ struct Output
 	std::set<std::string> skeletons;
 	size_t max_fill;
 
-	Output();
+	explicit Output(Opt &o);
 	bool emit();
 };
 
 void output_tags(std::ostream &o, const ConfTags &conf, const std::set<std::string> &tags);
-void output_line_info (std::ostream &, uint32_t, const std::string&);
-void output_state_goto (std::ostream &, uint32_t, uint32_t);
-void output_types(std::ostream &o, uint32_t, const uniq_vector_t<std::string> &types);
-void output_version_time (std::ostream &);
-void output_yyaccept_init (std::ostream &, uint32_t, bool);
+void output_line_info (std::ostream &, uint32_t, const std::string&, Opt &opts);
+void output_state_goto (std::ostream &, uint32_t, uint32_t, Opt &opts);
+void output_types(std::ostream &o, uint32_t, const uniq_vector_t<std::string> &types, Opt &opts);
+void output_version_time (std::ostream &, Opt &opts);
+void output_yyaccept_init (std::ostream &, uint32_t, bool, Opt &opts);
 void output_yymaxfill (std::ostream &, size_t);
 
 // helpers
-std::string output_get_state ();
+std::string output_get_state (Opt &opts);
 
 } // namespace re2c
 

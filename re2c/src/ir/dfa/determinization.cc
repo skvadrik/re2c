@@ -49,9 +49,8 @@ void reach(const kernel_t *kernel, closure_t &clos, uint32_t symbol)
 	}
 }
 
-dfa_t::dfa_t(const nfa_t &nfa,
-	const charset_t &charset,
-	const std::string &cond)
+dfa_t::dfa_t(const nfa_t &nfa, const charset_t &charset,
+	const std::string &cond, bool bijection, bool debug)
 	: states()
 	, nchars(charset.size() - 1) // (n + 1) bounds for n ranges
 	, rules(nfa.rules)
@@ -63,9 +62,9 @@ dfa_t::dfa_t(const nfa_t &nfa,
 {
 	const size_t ntag = vartags.size();
 	Tagpool tagpool(ntag);
-	kernels_t kernels(tagpool);
+	kernels_t kernels(tagpool, bijection);
 	closure_t clos1, clos2;
-	dump_dfa_t dump(*this, tagpool, nfa);
+	dump_dfa_t dump(*this, tagpool, nfa, debug);
 
 	// all-zero tag configuration must have static number zero
 	assert(ZERO_TAGS == tagpool.insert_const(TAGVER_ZERO));
