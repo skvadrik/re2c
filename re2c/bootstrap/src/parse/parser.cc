@@ -185,6 +185,19 @@ void default_rule(CondList *clist, RegExpRule *rule)
 	delete clist;
 }
 
+static std::string find_setup_rule(const SetupMap &map, const std::string &key)
+{
+	SetupMap::const_iterator e = map.end(), i;
+
+	i = map.find(key);
+	if (i != e) return i->second.second;
+
+	i = map.find("*");
+	if (i != e) return i->second.second;
+
+	return "";
+}
+
 
 
 
@@ -554,11 +567,11 @@ static const yytype_int8 yyrhs[] =
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint16 yyrline[] =
 {
-       0,   156,   156,   158,   159,   160,   165,   172,   177,   180,
-     184,   184,   187,   196,   207,   211,   217,   223,   230,   239,
-     247,   257,   268,   274,   280,   283,   290,   296,   306,   309,
-     316,   320,   326,   330,   337,   341,   348,   352,   359,   363,
-     380,   399,   403,   407,   411,   418,   428,   432
+       0,   169,   169,   171,   172,   173,   178,   185,   190,   193,
+     197,   197,   200,   209,   220,   224,   230,   236,   243,   252,
+     260,   270,   281,   287,   293,   296,   303,   309,   319,   322,
+     329,   333,   339,   343,   350,   354,   361,   365,   372,   376,
+     393,   412,   416,   420,   424,   431,   441,   445
 };
 #endif
 
@@ -2186,7 +2199,6 @@ void parse(Scanner& i, Output & o)
 		if (opts->cFlag)
 		{
 			SpecMap::iterator it;
-			SetupMap::const_iterator itRuleSetup;
 
 			if (parseMode != Scanner::Reuse)
 			{
@@ -2217,24 +2229,7 @@ void parse(Scanner& i, Output & o)
 			{
 				if (parseMode != Scanner::Reuse)
 				{
-					itRuleSetup = ruleSetupMap.find(it->first);				
-					if (itRuleSetup != ruleSetupMap.end())
-					{
-						yySetupRule = itRuleSetup->second.second;
-					}
-					else
-					{
-						itRuleSetup = ruleSetupMap.find("*");
-						if (itRuleSetup != ruleSetupMap.end())
-						{
-							yySetupRule = itRuleSetup->second.second;
-						}
-						else
-						{
-							yySetupRule = "";
-						}
-					}
-
+					o.source.block().setup_rule = find_setup_rule(ruleSetupMap, it->first);
 					dfa_map[it->first] = compile(it->second, o, it->first, opts->encoding.nCodeUnits ());
 				}
 				if (parseMode != Scanner::Rules && dfa_map.find(it->first) != dfa_map.end())

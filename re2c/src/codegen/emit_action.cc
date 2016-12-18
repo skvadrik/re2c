@@ -229,8 +229,9 @@ void emit_rule(OutputFile &o, uint32_t ind, const DFA &dfa, size_t rule_idx)
 		o.ws("\n");
 	}
 	if (code) {
-		if (!yySetupRule.empty()) {
-			o.wind(ind).wstring(yySetupRule).ws("\n");
+		const std::string setup = o.block().setup_rule;
+		if (!setup.empty()) {
+			o.wind(ind).wstring(setup).ws("\n");
 		}
 		o.wline_info(code->loc.line, code->loc.filename.c_str())
 			.wind(ind).wstring(code->text).ws("\n")

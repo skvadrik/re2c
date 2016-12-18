@@ -117,6 +117,19 @@ void default_rule(CondList *clist, RegExpRule *rule)
 	delete clist;
 }
 
+static std::string find_setup_rule(const SetupMap &map, const std::string &key)
+{
+	SetupMap::const_iterator e = map.end(), i;
+
+	i = map.find(key);
+	if (i != e) return i->second.second;
+
+	i = map.find("*");
+	if (i != e) return i->second.second;
+
+	return "";
+}
+
 %}
 
 %start	spec
@@ -529,7 +542,6 @@ void parse(Scanner& i, Output & o)
 		if (opts->cFlag)
 		{
 			SpecMap::iterator it;
-			SetupMap::const_iterator itRuleSetup;
 
 			if (parseMode != Scanner::Reuse)
 			{
@@ -560,24 +572,7 @@ void parse(Scanner& i, Output & o)
 			{
 				if (parseMode != Scanner::Reuse)
 				{
-					itRuleSetup = ruleSetupMap.find(it->first);				
-					if (itRuleSetup != ruleSetupMap.end())
-					{
-						yySetupRule = itRuleSetup->second.second;
-					}
-					else
-					{
-						itRuleSetup = ruleSetupMap.find("*");
-						if (itRuleSetup != ruleSetupMap.end())
-						{
-							yySetupRule = itRuleSetup->second.second;
-						}
-						else
-						{
-							yySetupRule = "";
-						}
-					}
-
+					o.source.block().setup_rule = find_setup_rule(ruleSetupMap, it->first);
 					dfa_map[it->first] = compile(it->second, o, it->first, opts->encoding.nCodeUnits ());
 				}
 				if (parseMode != Scanner::Rules && dfa_map.find(it->first) != dfa_map.end())

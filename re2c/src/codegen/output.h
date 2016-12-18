@@ -62,6 +62,7 @@ struct OutputBlock
 	bool used_yyaccept;
 	bool force_start_label;
 	std::string user_start_label;
+	std::string setup_rule;
 	uint32_t line;
 	std::vector<std::string> types;
 	std::set<std::string> tags;
