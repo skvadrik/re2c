@@ -66,6 +66,7 @@ Scanner::Scanner (Input & i, OutputFile & o)
 	, in (i)
 	, out (o)
 	, opts (o.opts)
+	, warn (o.warn)
 {}
 
 void Scanner::fill (uint32_t need)

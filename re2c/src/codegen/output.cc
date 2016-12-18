@@ -6,7 +6,6 @@
 #include "src/codegen/output.h"
 #include "src/codegen/print.h"
 #include "src/conf/msg.h"
-#include "src/conf/warn.h"
 #include "src/util/string_utils.h"
 #include "src/globals.h"
 
@@ -61,11 +60,12 @@ OutputBlock::~OutputBlock ()
 	}
 }
 
-OutputFile::OutputFile(Opt &o)
+OutputFile::OutputFile(Opt &o, Warn &w)
 	: blocks ()
 	, label_counter ()
 	, warn_condition_order (!o->tFlag) // see note [condition order]
 	, opts(o)
+	, warn(w)
 {
 	new_block ();
 }
@@ -356,8 +356,8 @@ bool HeaderFile::emit(const uniq_vector_t<std::string> &types, Opt &opts)
 	return true;
 }
 
-Output::Output(Opt &o)
-	: source(o)
+Output::Output(Opt &o, Warn &w)
+	: source(o, w)
 	, header()
 	, skeletons()
 	, max_fill(1)
@@ -365,7 +365,7 @@ Output::Output(Opt &o)
 
 bool Output::emit()
 {
-	if (warn.error()) {
+	if (source.warn.error()) {
 		return false;
 	}
 

@@ -6,6 +6,7 @@
 #include <string>
 
 #include "src/codegen/input_api.h"
+#include "src/conf/warn.h"
 #include "src/ir/dfa/dfa.h"
 #include "src/ir/regexp/empty_class_policy.h"
 #include "src/ir/regexp/encoding/enc.h"
@@ -225,7 +226,7 @@ enum parse_opts_t
 	EXIT_FAIL
 };
 
-parse_opts_t parse_opts (char ** argv, Opt & opts);
+parse_opts_t parse_opts(char **argv, Opt &opts, Warn &warn);
 
 } // namespace re2c
 

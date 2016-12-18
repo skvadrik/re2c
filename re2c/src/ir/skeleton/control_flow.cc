@@ -1,8 +1,6 @@
 #include <valarray>
 #include <vector>
 
-#include "src/conf/warn.h"
-#include "src/globals.h"
 #include "src/ir/skeleton/path.h"
 #include "src/ir/skeleton/skeleton.h"
 #include "src/util/u32lim.h"
@@ -60,7 +58,7 @@ static void naked_paths(
 	}
 }
 
-void warn_undefined_control_flow(const Skeleton &skel)
+void warn_undefined_control_flow(const Skeleton &skel, Warn &warn)
 {
 	ucf_t ucf(skel.nodes_count);
 	naked_paths(skel, ucf, 0);

@@ -3,7 +3,6 @@
 
 #include <string>
 
-#include "src/conf/warn.h"
 #include "src/util/c99_stdint.h"
 
 namespace re2c
@@ -14,8 +13,6 @@ extern bool bWroteGetState;
 extern bool bWroteCondCheck;
 extern uint32_t last_fill_index;
 extern std::string yySetupRule;
-
-extern Warn warn;
 
 } // end namespace re2c
 

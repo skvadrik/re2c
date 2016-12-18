@@ -1,8 +1,6 @@
 #include <limits>
 #include <stddef.h>
 
-#include "src/conf/warn.h"
-#include "src/globals.h"
 #include "src/ir/regexp/empty_class_policy.h"
 #include "src/ir/regexp/encoding/case.h"
 #include "src/ir/regexp/encoding/enc.h"

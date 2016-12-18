@@ -38,8 +38,9 @@ static smart_ptr<DFA> compile_rules(
 	const uint32_t line = output.source.block().line;
 	const std::string name = make_name(cond, line);
 	Opt &opts = output.source.opts;
+	Warn &warn = output.source.warn;
 
-	warn_nullable(rules, cond);
+	warn_nullable(rules, cond, warn);
 
 	// The original set of code units (charset) might be very large.
 	// A common trick it is to split charset into disjoint character ranges
@@ -59,18 +60,18 @@ static smart_ptr<DFA> compile_rules(
 
 	nfa_t nfa(rules, opts->input_api.type());
 
-	dfa_t dfa(nfa, cs, cond, opts->bijective_mapping, opts->dump_dfa_raw);
+	dfa_t dfa(nfa, cs, cond, opts->bijective_mapping, opts->dump_dfa_raw, warn);
 	if (opts->dump_dfa_det) dump_dfa(dfa);
 
 	// skeleton must be constructed after DFA construction
 	// but prior to any other DFA transformations
 	Skeleton skeleton(dfa, cs, defrule, name, cond, line);
-	warn_undefined_control_flow(skeleton);
+	warn_undefined_control_flow(skeleton, warn);
 	if (opts->target == opt_t::SKELETON) {
 		emit_data(skeleton, opts->output_file, opts->encoding.szCodeUnit());
 	}
 
-	cutoff_dead_rules(dfa, defrule, cond);
+	cutoff_dead_rules(dfa, defrule, cond, warn);
 
 	insert_fallback_tags(dfa);
 

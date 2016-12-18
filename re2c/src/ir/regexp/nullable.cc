@@ -33,7 +33,7 @@ static bool nullable(const RegExp *re, bool &trail)
  * false positives on partially self-shadowed rules like [^]?
  */
 void warn_nullable(const std::vector<const RegExpRule*> &regexps,
-	const std::string &cond)
+	const std::string &cond, Warn &warn)
 {
 	const size_t nregexps = regexps.size();
 	for (size_t i = 0; i < nregexps; ++i) {

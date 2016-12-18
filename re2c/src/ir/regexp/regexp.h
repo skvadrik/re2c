@@ -6,6 +6,7 @@
 #include <string>
 #include <vector>
 
+#include "src/conf/warn.h"
 #include "src/ir/rule.h"
 #include "src/util/free_list.h"
 #include "src/util/range.h"
@@ -129,7 +130,7 @@ const RegExp *repeat(const RegExp *re, uint32_t n);
 const RegExp *repeat_from_to(const RegExp *re, uint32_t n, uint32_t m);
 const RegExp *repeat_from(const RegExp *re, uint32_t n);
 void warn_nullable(const std::vector<const RegExpRule*> &regexps,
-	const std::string &cond);
+	const std::string &cond, Warn &warn);
 
 } // end namespace re2c
 

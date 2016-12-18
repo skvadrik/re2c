@@ -1,8 +1,6 @@
 #include "src/codegen/input_api.h"
 #include "src/conf/msg.h"
 #include "src/conf/opt.h"
-#include "src/conf/warn.h"
-#include "src/globals.h"
 #include "src/ir/regexp/empty_class_policy.h"
 #include "src/ir/regexp/encoding/enc.h"
 
@@ -15,7 +13,7 @@ static inline bool next (char * & arg, char ** & argv)
 	return arg != NULL;
 }
 
-parse_opts_t parse_opts (char ** argv, Opt & opts)
+parse_opts_t parse_opts (char **argv, Opt &opts, Warn &warn)
 {
 #define YYCTYPE unsigned char
 	char * YYCURSOR;

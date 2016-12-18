@@ -7,11 +7,8 @@
 #include "src/conf/warn.h"
 #include "src/ir/skeleton/path.h"
 #include "src/ir/skeleton/skeleton.h"
-#include "src/globals.h"
 
 namespace re2c {
-
-Warn warn;
 
 const uint32_t Warn::SILENT  = 0;
 const uint32_t Warn::WARNING = 1u << 0;

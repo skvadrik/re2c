@@ -12,6 +12,7 @@
 
 #include "src/codegen/label.h"
 #include "src/conf/opt.h"
+#include "src/conf/warn.h"
 #include "src/util/counter.h"
 #include "src/util/forbid_copy.h"
 #include "src/util/uniq_vector.h"
@@ -77,8 +78,9 @@ public:
 	counter_t<label_t> label_counter;
 	bool warn_condition_order;
 	Opt &opts;
+	Warn &warn;
 
-	explicit OutputFile(Opt &o);
+	OutputFile(Opt &o, Warn &w);
 	~OutputFile();
 
 	std::ostream & stream ();
@@ -139,7 +141,7 @@ struct Output
 	std::set<std::string> skeletons;
 	size_t max_fill;
 
-	explicit Output(Opt &o);
+	Output(Opt &o, Warn &w);
 	bool emit();
 };
 

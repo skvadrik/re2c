@@ -132,7 +132,7 @@ static void liveness_analyses(const rdfa_t &rdfa, bool *live)
 }
 
 static void warn_dead_rules(const dfa_t &dfa, size_t defrule,
-	const std::string &cond, const bool *live)
+	const std::string &cond, const bool *live, Warn &warn)
 {
 	const size_t nstates = dfa.states.size();
 	const size_t nrules = dfa.rules.size();
@@ -223,7 +223,7 @@ static void find_fallback_states(dfa_t &dfa, const bool *fallthru)
 	}
 }
 
-void cutoff_dead_rules(dfa_t &dfa, size_t defrule, const std::string &cond)
+void cutoff_dead_rules(dfa_t &dfa, size_t defrule, const std::string &cond, Warn &warn)
 {
 	const rdfa_t rdfa(dfa);
 	const size_t
@@ -234,7 +234,7 @@ void cutoff_dead_rules(dfa_t &dfa, size_t defrule, const std::string &cond)
 	memset(live, 0, nl * sizeof(bool));
 
 	liveness_analyses(rdfa, live);
-	warn_dead_rules(dfa, defrule, cond, live);
+	warn_dead_rules(dfa, defrule, cond, live, warn);
 	remove_dead_final_states(dfa, fallthru);
 	find_fallback_states(dfa, fallthru);
 

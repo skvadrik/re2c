@@ -6,6 +6,7 @@
 #include <string>
 
 #include "src/conf/opt.h"
+#include "src/conf/warn.h"
 #include "src/parse/input.h"
 #include "src/util/attribute.h"
 #include "src/util/forbid_copy.h"
@@ -58,6 +59,7 @@ class Scanner: private ScannerState
 public:
 	OutputFile & out;
 	Opt &opts;
+	Warn &warn;
 
 private:
 	void fill (uint32_t);

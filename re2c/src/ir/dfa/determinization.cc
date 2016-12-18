@@ -2,7 +2,6 @@
 #include <string.h>
 #include <vector>
 
-#include "src/conf/warn.h"
 #include "src/ir/dfa/closure.h"
 #include "src/ir/dfa/dfa.h"
 #include "src/ir/dfa/dump.h"
@@ -10,7 +9,6 @@
 #include "src/ir/nfa/nfa.h"
 #include "src/ir/regexp/regexp.h"
 #include "src/util/range.h"
-#include "src/globals.h"
 
 namespace re2c
 {
@@ -19,7 +17,7 @@ static nfa_state_t *transition(nfa_state_t *state, uint32_t symbol);
 static void reach(const kernel_t *kernel, closure_t &clos, uint32_t symbol);
 static void warn_nondeterministic_tags(const kernels_t &kernels,
 	const Tagpool &tagpool, const std::vector<VarTag> &tags,
-	const std::valarray<Rule> &rules, const std::string &cond);
+	const std::valarray<Rule> &rules, const std::string &cond, Warn &warn);
 
 const size_t dfa_t::NIL = std::numeric_limits<size_t>::max();
 
@@ -50,7 +48,7 @@ void reach(const kernel_t *kernel, closure_t &clos, uint32_t symbol)
 }
 
 dfa_t::dfa_t(const nfa_t &nfa, const charset_t &charset,
-	const std::string &cond, bool bijection, bool debug)
+	const std::string &cond, bool bijection, bool debug, Warn &warn)
 	: states()
 	, nchars(charset.size() - 1) // (n + 1) bounds for n ranges
 	, rules(nfa.rules)
@@ -94,7 +92,7 @@ dfa_t::dfa_t(const nfa_t &nfa, const charset_t &charset,
 		}
 	}
 
-	warn_nondeterministic_tags(kernels, tagpool, vartags, rules, cond);
+	warn_nondeterministic_tags(kernels, tagpool, vartags, rules, cond, warn);
 }
 
 /*
@@ -106,7 +104,7 @@ dfa_t::dfa_t(const nfa_t &nfa, const charset_t &charset,
  */
 void warn_nondeterministic_tags(const kernels_t &kernels,
 	const Tagpool &tagpool, const std::vector<VarTag> &tags,
-	const std::valarray<Rule> &rules, const std::string &cond)
+	const std::valarray<Rule> &rules, const std::string &cond, Warn &warn)
 {
 	const size_t
 		ntag = tagpool.ntags,
