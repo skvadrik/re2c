@@ -9,50 +9,83 @@
 namespace re2c
 {
 
-BitMap *BitMap::first = NULL;
+static bool matches(const Go *go1, const State *s1, const Go *go2, const State *s2);
+static void doGen(const Go *g, const State *s, uint32_t *bm, uint32_t f, uint32_t m);
 
-BitMap::BitMap(const Go *g, const State *x)
-	: go(g)
-	, on(x)
-	, next(first)
-	, i(0)
-	, m(0)
+bitmaps_t::bitmaps_t(uint32_t n)
+	: maps()
+	, ncunit(n)
+	, buffer(new uint32_t[ncunit])
+	, used(false)
+{}
+
+bitmaps_t::~bitmaps_t()
 {
-	first = this;
+	delete[] buffer;
 }
 
-BitMap::~BitMap()
+void bitmaps_t::insert(const Go *go, const State *s)
 {
-	delete next;
-}
-
-const BitMap *BitMap::find(const Go *g, const State *x)
-{
-	for (const BitMap *b = first; b; b = b->next)
-	{
-		if (matches(b->go->span, b->go->nSpans, b->on, g->span, g->nSpans, x))
-		{
-			return b;
-		}
+	for (rciter_t i = maps.rbegin(); i != maps.rend(); ++i) {
+		if (matches(i->go, i->on, go, s)) return;
 	}
 
-	return new BitMap(g, x);
+	bitmap_t b = {go, s, 0, 0};
+	maps.push_back(b);
 }
 
-const BitMap *BitMap::find(const State *x)
+const bitmap_t *bitmaps_t::find(const Go *go, const State *s) const
 {
-	for (const BitMap *b = first; b; b = b->next)
-	{
-		if (b->on == x)
-		{
-			return b;
-		}
+	for (rciter_t i = maps.rbegin(); i != maps.rend(); ++i) {
+		if (i->on == s && matches(i->go, i->on, go, s)) return &(*i);
 	}
-
 	return NULL;
 }
 
-static void doGen(const Go *g, const State *s, uint32_t *bm, uint32_t f, uint32_t m)
+bool bitmaps_t::empty() const { return maps.empty(); }
+
+void bitmaps_t::gen(OutputFile &o, uint32_t ind)
+{
+	if (empty() || !used) return;
+
+	Opt &opts = o.opts;
+	const uint32_t nmap = static_cast<uint32_t>(maps.size());
+	riter_t b = maps.rbegin(), e = maps.rend();
+
+	o.wind(ind).ws("static const unsigned char ")
+		.wstring(opts->yybm).ws("[] = {");
+
+	for (uint32_t i = 0, t = 1; b != e; i += ncunit, t += 8) {
+		memset(buffer, 0, ncunit * sizeof(uint32_t));
+
+		for (uint32_t m = 0x80; b != e && m; m >>= 1, ++b) {
+			b->i = i;
+			b->m = m;
+			doGen(b->go, b->on, buffer, 0, m);
+		}
+
+		if (nmap > 8) {
+			o.ws("\n").wind(ind + 1).ws("/* table ").wu32(t).ws(" .. ")
+				.wu32(std::min(nmap, t + 7)).ws(": ").wu32(i).ws(" */");
+		}
+
+		for (uint32_t c = 0; c < ncunit; ++c) {
+			if (c % 8 == 0) {
+				o.ws("\n").wind(ind + 1);
+			}
+			if (opts->yybmHexTable) {
+				o.wu32_hex(buffer[c]);
+			} else {
+				o.wu32_width(buffer[c], 3);
+			}
+			o.ws(", ");
+		}
+	}
+
+	o.ws("\n").wind(ind).ws("};\n");
+}
+
+void doGen(const Go *g, const State *s, uint32_t *bm, uint32_t f, uint32_t m)
 {
 	Span *b = g->span, *e = &b[g->nSpans];
 	uint32_t lb = 0;
@@ -71,72 +104,13 @@ static void doGen(const Go *g, const State *s, uint32_t *bm, uint32_t f, uint32_
 	}
 }
 
-void BitMap::gen(OutputFile & o, uint32_t ind, uint32_t lb, uint32_t ub)
-{
-	Opt &opts = o.opts;
-	if (first && bUsedYYBitmap)
-	{
-		o.wind(ind).ws("static const unsigned char ").wstring(opts->yybm).ws("[] = {");
-
-		uint32_t c = 1, n = ub - lb;
-		const BitMap *cb = first;
-
-		while((cb = cb->next) != NULL) {
-			++c;
-		}
-		BitMap *b = first;
-
-		uint32_t *bm = new uint32_t[n];
-		
-		for (uint32_t i = 0, t = 1; b; i += n, t += 8)
-		{
-			memset(bm, 0, n * sizeof(uint32_t));
-
-			for (uint32_t m = 0x80; b && m; m >>= 1)
-			{
-				b->i = i;
-				b->m = m;
-				doGen(b->go, b->on, bm, lb, m);
-				b = const_cast<BitMap*>(b->next);
-			}
-
-			if (c > 8)
-			{
-				o.ws("\n").wind(ind+1).ws("/* table ").wu32(t).ws(" .. ").wu32(std::min(c, t+7)).ws(": ").wu32(i).ws(" */");
-			}
-
-			for (uint32_t j = 0; j < n; ++j)
-			{
-				if (j % 8 == 0)
-				{
-					o.ws("\n").wind(ind+1);
-				}
-
-				if (opts->yybmHexTable)
-				{
-					o.wu32_hex(bm[j]);
-				}
-				else
-				{
-					o.wu32_width(bm[j], 3);
-				}
-				o.ws(", ");
-			}
-		}
-
-		o.ws("\n").wind(ind).ws("};\n");
-		
-		delete[] bm;
-	}
-}
-
 // All spans in b1 that lead to s1 are pairwise equal to that in b2 leading to s2
-bool matches(const Span * b1, uint32_t n1, const State * s1, const Span * b2, uint32_t n2, const State * s2)
+bool matches(const Go *go1, const State *s1, const Go *go2, const State *s2)
 {
-	const Span * e1 = &b1[n1];
-	uint32_t lb1 = 0;
-	const Span * e2 = &b2[n2];
-	uint32_t lb2 = 0;
+	const Span
+		*b1 = go1->span, *e1 = &b1[go1->nSpans],
+		*b2 = go2->span, *e2 = &b2[go2->nSpans];
+	uint32_t lb1 = 0, lb2 = 0;
 
 	for (;;)
 	{

@@ -14,7 +14,8 @@ namespace re2c
 {
 
 struct DFA;
-class BitMap;
+class bitmap_t;
+class bitmaps_t;
 class State;
 struct If;
 
@@ -137,12 +138,12 @@ struct SwitchIf
 
 struct GoBitmap
 {
-	const BitMap * bitmap;
+	const bitmap_t * bitmap;
 	const State * bitmap_state;
 	SwitchIf * hgo;
 	SwitchIf * lgo;
 	GoBitmap (const Span * span, uint32_t nSpans, const Span * hspan,
-		uint32_t hSpans, const BitMap * bm, const State * bm_state,
+		uint32_t hSpans, const bitmap_t * bm, const State * bm_state,
 		const State * next, bool sflag);
 	~GoBitmap ();
 	void emit (OutputFile & o, uint32_t ind, const DFA &dfa);
@@ -213,7 +214,7 @@ struct Go
 
 	Go ();
 	~Go ();
-	void init (const State * from, Opt &opts);
+	void init(const State* from, Opt &opts, bitmaps_t &bitmaps);
 	void emit (OutputFile & o, uint32_t ind, const DFA &dfa);
 	void used_labels (std::set<label_t> & used);
 

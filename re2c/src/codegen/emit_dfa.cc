@@ -187,7 +187,7 @@ void DFA::emit(Output & output, uint32_t& ind, bool isLastCond, bool& bPrologBra
 		if (output.skeletons.insert (name).second)
 		{
 			emit_start(o, max_fill, name, key_size, def_rule, need_backup,
-				need_accept, oldstyle_ctxmarker, tagnames, tagvars);
+				need_accept, oldstyle_ctxmarker, tagnames, tagvars, bitmaps);
 			uint32_t i = 2;
 			emit_body (o, i, used_labels, initial_label);
 			emit_end(o, name, need_backup, oldstyle_ctxmarker);
@@ -201,7 +201,7 @@ void DFA::emit(Output & output, uint32_t& ind, bool isLastCond, bool& bPrologBra
 			o.ws("\n").wdelay_line_info ();
 			if ((!opts->fFlag && ob.used_yyaccept)
 			||  (!opts->fFlag && opts->bEmitYYCh)
-			||  (opts->bFlag && !opts->cFlag && BitMap::first)
+			||  (opts->bFlag && !opts->cFlag && !bitmaps.empty())
 			||  (opts->cFlag && !bWroteCondCheck && opts->gFlag)
 			||  (opts->fFlag && !bWroteGetState && opts->gFlag)
 			)
@@ -226,9 +226,9 @@ void DFA::emit(Output & output, uint32_t& ind, bool isLastCond, bool& bPrologBra
 				o.ws("\n");
 			}
 		}
-		if (opts->bFlag && !opts->cFlag && BitMap::first)
+		if (opts->bFlag && !opts->cFlag)
 		{
-			BitMap::gen(o, ind, lbChar, ubChar <= 256 ? ubChar : 256);
+			bitmaps.gen(o, ind);
 		}
 		if (bProlog)
 		{
@@ -260,14 +260,14 @@ void DFA::emit(Output & output, uint32_t& ind, bool isLastCond, bool& bPrologBra
 			}
 			o.wstring(opts->condPrefix).wstring(cond).ws(":\n");
 		}
-		if (opts->cFlag && opts->bFlag && BitMap::first)
+		if (opts->cFlag && opts->bFlag && !bitmaps.empty())
 		{
 			o.wind(ind++).ws("{\n");
-			BitMap::gen(o, ind, lbChar, ubChar <= 256 ? ubChar : 256);
+			bitmaps.gen(o, ind);
 		}
 		// Generate code
 		emit_body (o, ind, used_labels, initial_label);
-		if (opts->cFlag && opts->bFlag && BitMap::first)
+		if (opts->cFlag && opts->bFlag && !bitmaps.empty())
 		{
 			o.wind(--ind).ws("}\n");
 		}
@@ -276,13 +276,6 @@ void DFA::emit(Output & output, uint32_t& ind, bool isLastCond, bool& bPrologBra
 		{
 			o.wind(--ind).ws("}\n");
 		}
-	}
-
-	// Cleanup
-	if (BitMap::first)
-	{
-		delete BitMap::first;
-		BitMap::first = NULL;
 	}
 }
 

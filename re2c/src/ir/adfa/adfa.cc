@@ -45,6 +45,7 @@ DFA::DFA
 	, maxtagver (dfa.maxtagver)
 	, def_rule (def)
 	, key_size (key)
+	, bitmaps (std::min(ubChar, 256u))
 {
 	const size_t nstates = dfa.states.size();
 	const size_t nchars = dfa.nchars;

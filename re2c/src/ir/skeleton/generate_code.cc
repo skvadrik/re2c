@@ -94,7 +94,8 @@ void emit_prolog(OutputFile &o)
 
 void emit_start(OutputFile &o, size_t maxfill, const std::string &name,
 	size_t sizeof_key, size_t def, bool backup, bool accept, bool oldstyle_ctxmarker,
-	const std::set<std::string> &tagnames, const std::set<std::string> &tagvars)
+	const std::set<std::string> &tagnames, const std::set<std::string> &tagvars,
+	bitmaps_t &bitmaps)
 {
 	Opt &opts = o.opts;
 	const size_t sizeof_cunit = opts->encoding.szCodeUnit();
@@ -284,8 +285,8 @@ void emit_start(OutputFile &o, size_t maxfill, const std::string &name,
 	}
 
 	o.ws("\n");
-	if (opts->bFlag && BitMap::first) {
-		BitMap::gen(o, 2, 0, std::min(0x100u, opts->encoding.nCodeUnits()));
+	if (opts->bFlag) {
+		bitmaps.gen(o, 2);
 	}
 	o.ws("\n");
 }

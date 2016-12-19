@@ -7,6 +7,7 @@
 #include <string>
 #include <valarray>
 
+#include "src/codegen/bitmap.h"
 #include "src/codegen/go.h"
 #include "src/codegen/label.h"
 #include "src/ir/adfa/action.h"
@@ -78,6 +79,7 @@ struct DFA
 	tagver_t maxtagver;
 	const size_t def_rule;
 	const size_t key_size;
+	bitmaps_t bitmaps;
 
 	DFA	( const dfa_t &dfa
 		, const std::vector<size_t> &fill

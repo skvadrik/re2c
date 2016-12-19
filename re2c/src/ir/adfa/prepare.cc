@@ -102,8 +102,6 @@ void DFA::findBaseState()
 
 void DFA::prepare (Opt &opts)
 {
-	bUsedYYBitmap = false;
-
 	// create rule states
 	std::vector<State*> rule2state(rules.size());
 	for (State *s = head; s; s = s->next) {
@@ -170,9 +168,8 @@ void DFA::prepare (Opt &opts)
 					s->isBase = true;
 					split(s);
 
-					if (opts->bFlag)
-					{
-						BitMap::find(&s->next->go, s);
+					if (opts->bFlag) {
+						bitmaps.insert(&s->next->go, s);
 					}
 
 					s = s->next;
@@ -184,9 +181,8 @@ void DFA::prepare (Opt &opts)
 	// find ``base'' state, if possible
 	findBaseState();
 
-	for (State * s = head; s; s = s->next)
-	{
-		s->go.init (s, opts);
+	for (State *s = head; s; s = s->next) {
+		s->go.init(s, opts, bitmaps);
 	}
 }
 

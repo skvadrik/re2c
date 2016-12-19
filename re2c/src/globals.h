@@ -4,7 +4,6 @@
 namespace re2c
 {
 
-extern bool bUsedYYBitmap;
 extern bool bWroteGetState;
 extern bool bWroteCondCheck;
 

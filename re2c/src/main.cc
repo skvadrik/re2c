@@ -13,7 +13,6 @@
 namespace re2c
 {
 
-bool bUsedYYBitmap  = false;
 bool bWroteGetState = false;
 bool bWroteCondCheck = false;
 

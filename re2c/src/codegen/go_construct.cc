@@ -139,7 +139,7 @@ SwitchIf::SwitchIf (const Span * sp, uint32_t nsp, const State * next, bool sfla
 }
 
 GoBitmap::GoBitmap (const Span * span, uint32_t nSpans, const Span * hspan,
-	uint32_t hSpans, const BitMap * bm, const State * bm_state,
+	uint32_t hSpans, const bitmap_t * bm, const State * bm_state,
 	const State * next, bool sflag)
 	: bitmap (bm)
 	, bitmap_state (bm_state)
@@ -193,7 +193,7 @@ Go::Go ()
 	, info ()
 {}
 
-void Go::init (const State * from, Opt &opts)
+void Go::init (const State * from, Opt &opts, bitmaps_t &bitmaps)
 {
 	if (nSpans == 0)
 	{
@@ -223,22 +223,20 @@ void Go::init (const State * from, Opt &opts)
 
 	// initialize bitmaps
 	uint32_t nBitmaps = 0;
-	const BitMap * bitmap = NULL;
-	const State * bitmap_state = NULL;
-	for (uint32_t i = 0; i < nSpans; ++i)
-	{
-		if (span[i].to->isBase)
-		{
-			const BitMap *b = BitMap::find (span[i].to);
-			if (b && matches(b->go->span, b->go->nSpans, b->on, span, nSpans, span[i].to))
-			{
-				if (bitmap == NULL)
-				{
-					bitmap = b;
-					bitmap_state = span[i].to;
-				}
-				nBitmaps++;
+	const bitmap_t *bm = NULL;
+	const State *bms = NULL;
+
+	for (uint32_t i = 0; i < nSpans; ++i) {
+		const State *s = span[i].to;
+		if (!s->isBase) continue;
+
+		const bitmap_t *b = bitmaps.find(this, s);
+		if (b) {
+			if (bm == NULL) {
+				bm = b;
+				bms = s;
 			}
+			++nBitmaps;
 		}
 	}
 
@@ -256,8 +254,8 @@ void Go::init (const State * from, Opt &opts)
 	else if (opts->bFlag && (nBitmaps > 0))
 	{
 		type = BITMAP;
-		info.bitmap = new GoBitmap (span, nSpans, hspan, hSpans, bitmap, bitmap_state, from->next, opts->sFlag);
-		bUsedYYBitmap = true;
+		info.bitmap = new GoBitmap (span, nSpans, hspan, hSpans, bm, bms, from->next, opts->sFlag);
+		bitmaps.used = true;
 	}
 	else
 	{

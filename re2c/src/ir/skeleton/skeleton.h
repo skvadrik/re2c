@@ -11,6 +11,7 @@
 #include <vector>
 #include <utility>
 
+#include "src/codegen/bitmap.h"
 #include "src/ir/regexp/regexp.h"
 #include "src/ir/rule.h"
 #include "src/ir/tcmd.h"
@@ -102,7 +103,8 @@ void emit_data(const Skeleton &skel, std::string fname, size_t cunit_size);
 void emit_prolog(OutputFile & o);
 void emit_start(OutputFile &o, size_t maxfill, const std::string &name,
 	size_t sizeof_key, size_t def, bool backup, bool accept, bool oldstyle_ctxmarker,
-	const std::set<std::string> &tagnames, const std::set<std::string> &tagvars);
+	const std::set<std::string> &tagnames, const std::set<std::string> &tagvars,
+	bitmaps_t &bitmaps);
 void emit_end(OutputFile &o, const std::string &name, bool backup, bool oldstyle_ctxmarker);
 void emit_epilog(OutputFile &o, const std::set<std::string> &names);
 void emit_action(OutputFile &o, uint32_t ind, const DFA &dfa, size_t rid);
