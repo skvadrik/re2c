@@ -182,7 +182,7 @@ void Scanner::reuse()
 {
 	out.label_counter.reset ();
 	out.fill_index = 0;
-	bWroteGetState = false;
+	out.state_goto = false;
 	bWroteCondCheck = false;
 	opts.reset_mapCodeName ();
 }

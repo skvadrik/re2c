@@ -65,6 +65,7 @@ OutputFile::OutputFile(Opt &o, Warn &w)
 	: blocks ()
 	, label_counter ()
 	, fill_index(0)
+	, state_goto(false)
 	, warn_condition_order (!o->tFlag) // see note [condition order]
 	, opts(o)
 	, warn(w)
@@ -209,11 +210,10 @@ OutputFile & OutputFile::wdelay_line_info ()
 
 OutputFile & OutputFile::wdelay_state_goto (uint32_t ind)
 {
-	if (opts->fFlag && !bWroteGetState)
-	{
+	if (opts->fFlag && !state_goto) {
 		block().fragments.push_back (new OutputFragment (OutputFragment::STATE_GOTO, ind));
 		insert_code ();
-		bWroteGetState = true;
+		state_goto = true;
 	}
 	return *this;
 }

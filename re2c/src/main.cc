@@ -13,7 +13,6 @@
 namespace re2c
 {
 
-bool bWroteGetState = false;
 bool bWroteCondCheck = false;
 
 } // end namespace re2c

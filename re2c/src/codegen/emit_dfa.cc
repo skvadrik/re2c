@@ -203,7 +203,7 @@ void DFA::emit(Output & output, uint32_t& ind, bool isLastCond, bool& bPrologBra
 			||  (!opts->fFlag && opts->bEmitYYCh)
 			||  (opts->bFlag && !opts->cFlag && !bitmaps.empty())
 			||  (opts->cFlag && !bWroteCondCheck && opts->gFlag)
-			||  (opts->fFlag && !bWroteGetState && opts->gFlag)
+			||  (opts->fFlag && !o.state_goto && opts->gFlag)
 			)
 			{
 				bPrologBrace = true;

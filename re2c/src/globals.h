@@ -4,7 +4,6 @@
 namespace re2c
 {
 
-extern bool bWroteGetState;
 extern bool bWroteCondCheck;
 
 } // end namespace re2c
