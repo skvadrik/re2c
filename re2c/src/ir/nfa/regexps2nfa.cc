@@ -1,7 +1,6 @@
 #include <limits>
 
 #include "src/ir/nfa/nfa.h"
-#include "src/globals.h"
 
 namespace re2c {
 

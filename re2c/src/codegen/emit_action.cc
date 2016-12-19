@@ -6,7 +6,6 @@
 #include "src/codegen/emit.h"
 #include "src/codegen/input_api.h"
 #include "src/codegen/output.h"
-#include "src/globals.h"
 #include "src/ir/adfa/action.h"
 #include "src/ir/adfa/adfa.h"
 #include "src/ir/regexp/regexp.h"

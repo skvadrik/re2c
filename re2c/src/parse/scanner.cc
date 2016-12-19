@@ -7,7 +7,6 @@
 
 #include "src/codegen/label.h"
 #include "src/codegen/output.h"
-#include "src/globals.h"
 #include "src/parse/scanner.h"
 #include "src/util/counter.h"
 

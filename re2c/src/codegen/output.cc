@@ -7,7 +7,6 @@
 #include "src/codegen/print.h"
 #include "src/conf/msg.h"
 #include "src/util/string_utils.h"
-#include "src/globals.h"
 
 namespace re2c
 {

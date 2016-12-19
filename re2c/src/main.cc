@@ -5,7 +5,6 @@
 #include "src/conf/msg.h"
 #include "src/conf/opt.h"
 #include "src/conf/warn.h"
-#include "src/globals.h"
 #include "src/parse/input.h"
 #include "src/parse/parser.h"
 #include "src/parse/scanner.h"

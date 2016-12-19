@@ -13,7 +13,6 @@
 #include <vector>
 
 #include "src/codegen/output.h"
-#include "src/globals.h"
 #include "src/ir/compile.h"
 #include "src/ir/adfa/adfa.h"
 #include "src/ir/regexp/encoding/enc.h"

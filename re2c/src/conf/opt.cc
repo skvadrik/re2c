@@ -1,6 +1,5 @@
 #include "src/conf/msg.h"
 #include "src/conf/opt.h"
-#include "src/globals.h"
 
 namespace re2c
 {

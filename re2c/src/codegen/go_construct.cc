@@ -6,7 +6,6 @@
 
 #include "src/codegen/bitmap.h"
 #include "src/codegen/go.h"
-#include "src/globals.h"
 #include "src/ir/adfa/adfa.h"
 #include "src/util/allocate.h"
 

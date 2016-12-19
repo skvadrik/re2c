@@ -1,9 +1,0 @@
-#ifndef _RE2C_GLOBALS_
-#define _RE2C_GLOBALS_
-
-namespace re2c
-{
-
-} // end namespace re2c
-
-#endif // _RE2C_GLOBALS_

@@ -6,7 +6,6 @@
 #include <string>
 
 #include "src/codegen/output.h"
-#include "src/globals.h"
 #include "src/ir/regexp/encoding/enc.h"
 #include "src/ir/regexp/regexp.h"
 #include "src/parse/code.h"

@@ -81,7 +81,6 @@
 #include <vector>
 
 #include "src/codegen/output.h"
-#include "src/globals.h"
 #include "src/ir/compile.h"
 #include "src/ir/adfa/adfa.h"
 #include "src/ir/regexp/encoding/enc.h"
@@ -567,11 +566,11 @@ static const yytype_int8 yyrhs[] =
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint16 yyrline[] =
 {
-       0,   169,   169,   171,   172,   173,   178,   185,   190,   193,
-     197,   197,   200,   209,   220,   224,   230,   236,   243,   252,
-     260,   270,   281,   287,   293,   296,   303,   309,   319,   322,
-     329,   333,   339,   343,   350,   354,   361,   365,   372,   376,
-     393,   412,   416,   420,   424,   431,   441,   445
+       0,   168,   168,   170,   171,   172,   177,   184,   189,   192,
+     196,   196,   199,   208,   219,   223,   229,   235,   242,   251,
+     259,   269,   280,   286,   292,   295,   302,   308,   318,   321,
+     328,   332,   338,   342,   349,   353,   360,   364,   371,   375,
+     392,   411,   415,   419,   423,   430,   440,   444
 };
 #endif
 

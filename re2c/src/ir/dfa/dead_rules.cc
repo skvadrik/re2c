@@ -2,7 +2,6 @@
 
 #include "src/ir/dfa/dfa.h"
 #include "src/util/forbid_copy.h"
-#include "src/globals.h"
 
 namespace re2c
 {

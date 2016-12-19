@@ -4,7 +4,6 @@
 #include "src/codegen/bitmap.h"
 #include "src/codegen/go.h"
 #include "src/codegen/output.h"
-#include "src/globals.h"
 
 namespace re2c
 {

@@ -1,5 +1,4 @@
 #include "src/ir/regexp/regexp.h"
-#include "src/globals.h"
 
 namespace re2c {
 
