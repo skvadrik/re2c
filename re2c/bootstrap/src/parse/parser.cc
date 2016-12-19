@@ -102,18 +102,18 @@
 
 using namespace re2c;
 
-extern "C"
-{
-int yylex();
-void yyerror(const char*);
-}
+extern "C" {
+
+int yylex(Scanner &in);
+void yyerror(Scanner &in, const char*);
+
+} // extern "C"
 
 static std::vector<std::string> condnames;
 static re2c::SpecMap  specMap;
 static Spec spec;
 static RegExpRule *specNone = NULL;
 static Spec specStar;
-static Scanner          *in = NULL;
 static Scanner::ParseMode  parseMode;
 static SetupMap            ruleSetupMap;
 static bool                foundRules;
@@ -126,23 +126,19 @@ static symbol_table_t symbol_table;
 #define __attribute__(x)
 #endif
 
-void context_check(CondList *clist)
+void context_check(Scanner &in, CondList *clist)
 {
-	if (!in->opts->cFlag)
+	if (!in.opts->cFlag)
 	{
 		delete clist;
-		in->fatal("conditions are only allowed when using -c switch");
+		in.fatal("conditions are only allowed when using -c switch");
 	}
 }
 
-void context_rule(
-	CondList *clist,
-	const Loc &loc,
-	RegExpRule *rule,
-	const Code *code,
-	const std::string *newcond)
+void context_rule(Scanner &in, CondList *clist, const Loc &loc,
+	RegExpRule *rule, const Code *code, const std::string *newcond)
 {
-	context_check(clist);
+	context_check(in, clist);
 	rule->info = new RuleInfo(loc, code, newcond);
 	for(CondList::const_iterator i = clist->begin(); i != clist->end(); ++i) {
 		const std::string &cond = *i;
@@ -155,28 +151,28 @@ void context_rule(
 	delete newcond;
 }
 
-void setup_rule(CondList *clist, const Code * code)
+void setup_rule(Scanner &in, CondList *clist, const Code * code)
 {
 	assert(clist);
 	assert(code);
-	context_check(clist);
+	context_check(in, clist);
 	for(CondList::const_iterator it = clist->begin(); it != clist->end(); ++it)
 	{
 		if (ruleSetupMap.find(*it) != ruleSetupMap.end())
 		{
-			in->fatalf_at(code->loc.line, "code to setup rule '%s' is already defined", it->c_str());
+			in.fatalf_at(code->loc.line, "code to setup rule '%s' is already defined", it->c_str());
 		}
 		ruleSetupMap[*it] = std::make_pair(code->loc.line, code->text);
 	}
 	delete clist;
 }
 
-void default_rule(CondList *clist, RegExpRule *rule)
+void default_rule(Scanner &in, CondList *clist, RegExpRule *rule)
 {
-	context_check(clist);
+	context_check(in, clist);
 	for (CondList::const_iterator i = clist->begin(); i != clist->end(); ++i) {
 		if (!specMap[*i].add_def(rule)) {
-			in->fatalf_at(rule->info->loc.line,
+			in.fatalf_at(rule->info->loc.line,
 				"code to default rule '%s' is already defined",
 				i->c_str());
 		}
@@ -566,11 +562,11 @@ static const yytype_int8 yyrhs[] =
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint16 yyrline[] =
 {
-       0,   168,   168,   170,   171,   172,   177,   184,   189,   192,
-     196,   196,   199,   208,   219,   223,   229,   235,   242,   251,
-     259,   269,   280,   286,   292,   295,   302,   308,   318,   321,
-     328,   332,   338,   342,   349,   353,   360,   364,   371,   375,
-     392,   411,   415,   419,   423,   430,   440,   444
+       0,   167,   167,   169,   170,   171,   176,   183,   188,   191,
+     195,   195,   198,   207,   218,   222,   228,   234,   241,   250,
+     258,   268,   279,   285,   291,   294,   301,   307,   317,   320,
+     327,   331,   337,   341,   348,   352,   359,   363,   370,   374,
+     391,   410,   414,   418,   422,   429,   439,   443
 };
 #endif
 
@@ -748,7 +744,7 @@ do								\
     }								\
   else								\
     {								\
-      yyerror (YY_("syntax error: cannot back up")); \
+      yyerror (in, YY_("syntax error: cannot back up")); \
       YYERROR;							\
     }								\
 while (YYID (0))
@@ -805,7 +801,7 @@ while (YYID (0))
 #ifdef YYLEX_PARAM
 # define YYLEX yylex (YYLEX_PARAM)
 #else
-# define YYLEX yylex ()
+# define YYLEX yylex (in)
 #endif
 
 /* Enable debugging if requested.  */
@@ -828,7 +824,7 @@ do {									  \
     {									  \
       YYFPRINTF (stderr, "%s ", Title);					  \
       yy_symbol_print (stderr,						  \
-		  Type, Value); \
+		  Type, Value, in); \
       YYFPRINTF (stderr, "\n");						  \
     }									  \
 } while (YYID (0))
@@ -842,17 +838,19 @@ do {									  \
 #if (defined __STDC__ || defined __C99__FUNC__ \
      || defined __cplusplus || defined _MSC_VER)
 static void
-yy_symbol_value_print (FILE *yyoutput, int yytype, YYSTYPE const * const yyvaluep)
+yy_symbol_value_print (FILE *yyoutput, int yytype, YYSTYPE const * const yyvaluep, Scanner &in)
 #else
 static void
-yy_symbol_value_print (yyoutput, yytype, yyvaluep)
+yy_symbol_value_print (yyoutput, yytype, yyvaluep, in)
     FILE *yyoutput;
     int yytype;
     YYSTYPE const * const yyvaluep;
+    Scanner &in;
 #endif
 {
   if (!yyvaluep)
     return;
+  YYUSE (in);
 # ifdef YYPRINT
   if (yytype < YYNTOKENS)
     YYPRINT (yyoutput, yytoknum[yytype], *yyvaluep);
@@ -874,13 +872,14 @@ yy_symbol_value_print (yyoutput, yytype, yyvaluep)
 #if (defined __STDC__ || defined __C99__FUNC__ \
      || defined __cplusplus || defined _MSC_VER)
 static void
-yy_symbol_print (FILE *yyoutput, int yytype, YYSTYPE const * const yyvaluep)
+yy_symbol_print (FILE *yyoutput, int yytype, YYSTYPE const * const yyvaluep, Scanner &in)
 #else
 static void
-yy_symbol_print (yyoutput, yytype, yyvaluep)
+yy_symbol_print (yyoutput, yytype, yyvaluep, in)
     FILE *yyoutput;
     int yytype;
     YYSTYPE const * const yyvaluep;
+    Scanner &in;
 #endif
 {
   if (yytype < YYNTOKENS)
@@ -888,7 +887,7 @@ yy_symbol_print (yyoutput, yytype, yyvaluep)
   else
     YYFPRINTF (yyoutput, "nterm %s (", yytname[yytype]);
 
-  yy_symbol_value_print (yyoutput, yytype, yyvaluep);
+  yy_symbol_value_print (yyoutput, yytype, yyvaluep, in);
   YYFPRINTF (yyoutput, ")");
 }
 
@@ -931,12 +930,13 @@ do {								\
 #if (defined __STDC__ || defined __C99__FUNC__ \
      || defined __cplusplus || defined _MSC_VER)
 static void
-yy_reduce_print (YYSTYPE *yyvsp, int yyrule)
+yy_reduce_print (YYSTYPE *yyvsp, int yyrule, Scanner &in)
 #else
 static void
-yy_reduce_print (yyvsp, yyrule)
+yy_reduce_print (yyvsp, yyrule, in)
     YYSTYPE *yyvsp;
     int yyrule;
+    Scanner &in;
 #endif
 {
   int yynrhs = yyr2[yyrule];
@@ -950,7 +950,7 @@ yy_reduce_print (yyvsp, yyrule)
       YYFPRINTF (stderr, "   $%d = ", yyi + 1);
       yy_symbol_print (stderr, yyrhs[yyprhs[yyrule] + yyi],
 		       &(yyvsp[(yyi + 1) - (yynrhs)])
-		       		       );
+		       		       , in);
       YYFPRINTF (stderr, "\n");
     }
 }
@@ -958,7 +958,7 @@ yy_reduce_print (yyvsp, yyrule)
 # define YY_REDUCE_PRINT(Rule)		\
 do {					\
   if (yydebug)				\
-    yy_reduce_print (yyvsp, Rule); \
+    yy_reduce_print (yyvsp, Rule, in); \
 } while (YYID (0))
 
 /* Nonzero means print parse trace.  It is left uninitialized so that
@@ -1209,16 +1209,18 @@ yysyntax_error (char *yyresult, int yystate, int yychar)
 #if (defined __STDC__ || defined __C99__FUNC__ \
      || defined __cplusplus || defined _MSC_VER)
 static void
-yydestruct (const char *yymsg, int yytype, YYSTYPE *yyvaluep)
+yydestruct (const char *yymsg, int yytype, YYSTYPE *yyvaluep, Scanner &in)
 #else
 static void
-yydestruct (yymsg, yytype, yyvaluep)
+yydestruct (yymsg, yytype, yyvaluep, in)
     const char *yymsg;
     int yytype;
     YYSTYPE *yyvaluep;
+    Scanner &in;
 #endif
 {
   YYUSE (yyvaluep);
+  YYUSE (in);
 
   if (!yymsg)
     yymsg = "Deleting";
@@ -1241,7 +1243,7 @@ int yyparse ();
 #endif
 #else /* ! YYPARSE_PARAM */
 #if defined __STDC__ || defined __cplusplus
-int yyparse (void);
+int yyparse (Scanner &in);
 #else
 int yyparse ();
 #endif
@@ -1277,11 +1279,11 @@ yyparse (YYPARSE_PARAM)
 #if (defined __STDC__ || defined __C99__FUNC__ \
      || defined __cplusplus || defined _MSC_VER)
 int
-yyparse (void)
+yyparse (Scanner &in)
 #else
 int
-yyparse ()
-
+yyparse (in)
+    Scanner &in;
 #endif
 #endif
 {
@@ -1537,7 +1539,7 @@ yyreduce:
 
     {
 		if (!symbol_table.insert(std::make_pair(*(yyvsp[(1) - (3)].str), (yyvsp[(2) - (3)].regexp))).second) {
-			in->fatal("sym already defined");
+			in.fatal("sym already defined");
 		}
 		delete (yyvsp[(1) - (3)].str);
 	;}
@@ -1546,7 +1548,7 @@ yyreduce:
   case 7:
 
     {
-		in->fatal("trailing contexts are not allowed in named definitions");
+		in.fatal("trailing contexts are not allowed in named definitions");
 	;}
     break;
 
@@ -1567,8 +1569,8 @@ yyreduce:
   case 12:
 
     {
-		if (in->opts->cFlag) {
-			in->fatal("condition or '<*>' required when using -c switch");
+		if (in.opts->cFlag) {
+			in.fatal("condition or '<*>' required when using -c switch");
 		}
 		(yyvsp[(1) - (2)].rule)->info = new RuleInfo((yyvsp[(2) - (2)].code)->loc, (yyvsp[(2) - (2)].code), NULL);
 		spec.add((yyvsp[(1) - (2)].rule));
@@ -1578,13 +1580,13 @@ yyreduce:
   case 13:
 
     {
-		if (in->opts->cFlag) {
-			in->fatal("condition or '<*>' required when using -c switch");
+		if (in.opts->cFlag) {
+			in.fatal("condition or '<*>' required when using -c switch");
 		}
-		RegExpRule *def = new RegExpRule(in->mkDefault());
+		RegExpRule *def = new RegExpRule(in.mkDefault());
 		def->info = new RuleInfo((yyvsp[(2) - (2)].code)->loc, (yyvsp[(2) - (2)].code), NULL);
 		if (!spec.add_def(def)) {
-			in->fatal("code to default rule is already defined");
+			in.fatal("code to default rule is already defined");
 		}
 	;}
     break;
@@ -1592,31 +1594,31 @@ yyreduce:
   case 14:
 
     {
-		context_rule((yyvsp[(2) - (6)].clist), (yyvsp[(6) - (6)].code)->loc, (yyvsp[(4) - (6)].rule), (yyvsp[(6) - (6)].code), (yyvsp[(5) - (6)].str));
+		context_rule(in, (yyvsp[(2) - (6)].clist), (yyvsp[(6) - (6)].code)->loc, (yyvsp[(4) - (6)].rule), (yyvsp[(6) - (6)].code), (yyvsp[(5) - (6)].str));
 	;}
     break;
 
   case 15:
 
     {
-		Loc loc(in->get_fname(), in->get_cline());
-		context_rule((yyvsp[(2) - (6)].clist), loc, (yyvsp[(4) - (6)].rule), NULL, (yyvsp[(6) - (6)].str));
+		Loc loc(in.get_fname(), in.get_cline());
+		context_rule(in, (yyvsp[(2) - (6)].clist), loc, (yyvsp[(4) - (6)].rule), NULL, (yyvsp[(6) - (6)].str));
 	;}
     break;
 
   case 16:
 
     {
-		RegExpRule *def = new RegExpRule(in->mkDefault());
+		RegExpRule *def = new RegExpRule(in.mkDefault());
 		def->info = new RuleInfo((yyvsp[(5) - (5)].code)->loc, (yyvsp[(5) - (5)].code), NULL);
-		default_rule((yyvsp[(2) - (5)].clist), def);
+		default_rule(in, (yyvsp[(2) - (5)].clist), def);
 	;}
     break;
 
   case 17:
 
     {
-		context_check(NULL);
+		context_check(in, NULL);
 		(yyvsp[(4) - (6)].rule)->info = new RuleInfo((yyvsp[(6) - (6)].code)->loc, (yyvsp[(6) - (6)].code), (yyvsp[(5) - (6)].str));
 		specStar.add((yyvsp[(4) - (6)].rule));
 		delete (yyvsp[(5) - (6)].str);
@@ -1626,8 +1628,8 @@ yyreduce:
   case 18:
 
     {
-		context_check(NULL);
-		Loc loc(in->get_fname(), in->get_cline());
+		context_check(in, NULL);
+		Loc loc(in.get_fname(), in.get_cline());
 		(yyvsp[(4) - (6)].rule)->info = new RuleInfo(loc, NULL, (yyvsp[(6) - (6)].str));
 		specStar.add((yyvsp[(4) - (6)].rule));
 		delete (yyvsp[(6) - (6)].str);
@@ -1637,10 +1639,10 @@ yyreduce:
   case 19:
 
     {
-		RegExpRule *def = new RegExpRule(in->mkDefault());
+		RegExpRule *def = new RegExpRule(in.mkDefault());
 		def->info = new RuleInfo((yyvsp[(5) - (5)].code)->loc, (yyvsp[(5) - (5)].code), NULL);
 		if (!specStar.add_def(def)) {
-			in->fatal("code to default rule '*' is already defined");
+			in.fatal("code to default rule '*' is already defined");
 		}
 	;}
     break;
@@ -1648,9 +1650,9 @@ yyreduce:
   case 20:
 
     {
-		context_check(NULL);
+		context_check(in, NULL);
 		if (specNone) {
-			in->fatal("code to handle illegal condition already defined");
+			in.fatal("code to handle illegal condition already defined");
 		}
 		specNone = new RegExpRule(RegExp::make_nil());
 		specNone->info = new RuleInfo((yyvsp[(3) - (3)].code)->loc, (yyvsp[(3) - (3)].code), (yyvsp[(2) - (3)].str));
@@ -1661,11 +1663,11 @@ yyreduce:
   case 21:
 
     {
-		context_check(NULL);
+		context_check(in, NULL);
 		if (specNone) {
-			in->fatal("code to handle illegal condition already defined");
+			in.fatal("code to handle illegal condition already defined");
 		}
-		Loc loc(in->get_fname(), in->get_cline());
+		Loc loc(in.get_fname(), in.get_cline());
 		specNone = new RegExpRule(RegExp::make_nil());
 		specNone->info = new RuleInfo(loc, NULL, (yyvsp[(3) - (3)].str));
 		delete (yyvsp[(3) - (3)].str);
@@ -1677,21 +1679,21 @@ yyreduce:
     {
 		CondList *clist = new CondList;
 		clist->insert("*");
-		setup_rule(clist, (yyvsp[(4) - (4)].code));
+		setup_rule(in, clist, (yyvsp[(4) - (4)].code));
 	;}
     break;
 
   case 23:
 
     {
-		setup_rule((yyvsp[(2) - (4)].clist), (yyvsp[(4) - (4)].code));
+		setup_rule(in, (yyvsp[(2) - (4)].clist), (yyvsp[(4) - (4)].code));
 	;}
     break;
 
   case 24:
 
     {
-			in->fatal("unnamed condition not supported");
+			in.fatal("unnamed condition not supported");
 		;}
     break;
 
@@ -1773,7 +1775,7 @@ yyreduce:
   case 35:
 
     {
-			(yyval.regexp) = in->mkDiff((yyvsp[(1) - (3)].regexp), (yyvsp[(3) - (3)].regexp));
+			(yyval.regexp) = in.mkDiff((yyvsp[(1) - (3)].regexp), (yyvsp[(3) - (3)].regexp));
 		;}
     break;
 
@@ -1872,7 +1874,7 @@ yyreduce:
 			delete (yyvsp[(1) - (1)].str);
 			if (i == symbol_table.end ())
 			{
-				in->fatal("can't find symbol");
+				in.fatal("can't find symbol");
 			}
 			(yyval.regexp) = i->second;
 		;}
@@ -1928,7 +1930,7 @@ yyerrlab:
     {
       ++yynerrs;
 #if ! YYERROR_VERBOSE
-      yyerror (YY_("syntax error"));
+      yyerror (in, YY_("syntax error"));
 #else
       {
 	YYSIZE_T yysize = yysyntax_error (0, yystate, yychar);
@@ -1952,11 +1954,11 @@ yyerrlab:
 	if (0 < yysize && yysize <= yymsg_alloc)
 	  {
 	    (void) yysyntax_error (yymsg, yystate, yychar);
-	    yyerror (yymsg);
+	    yyerror (in, yymsg);
 	  }
 	else
 	  {
-	    yyerror (YY_("syntax error"));
+	    yyerror (in, YY_("syntax error"));
 	    if (yysize != 0)
 	      goto yyexhaustedlab;
 	  }
@@ -1980,7 +1982,7 @@ yyerrlab:
       else
 	{
 	  yydestruct ("Error: discarding",
-		      yytoken, &yylval);
+		      yytoken, &yylval, in);
 	  yychar = YYEMPTY;
 	}
     }
@@ -2036,7 +2038,7 @@ yyerrlab1:
 
 
       yydestruct ("Error: popping",
-		  yystos[yystate], yyvsp);
+		  yystos[yystate], yyvsp, in);
       YYPOPSTACK (1);
       yystate = *yyssp;
       YY_STACK_PRINT (yyss, yyssp);
@@ -2071,7 +2073,7 @@ yyabortlab:
 | yyexhaustedlab -- memory exhaustion comes here.  |
 `-------------------------------------------------*/
 yyexhaustedlab:
-  yyerror (YY_("memory exhausted"));
+  yyerror (in, YY_("memory exhausted"));
   yyresult = 2;
   /* Fall through.  */
 #endif
@@ -2079,7 +2081,7 @@ yyexhaustedlab:
 yyreturn:
   if (yychar != YYEMPTY)
      yydestruct ("Cleanup: discarding lookahead",
-		 yytoken, &yylval);
+		 yytoken, &yylval, in);
   /* Do not reclaim the symbols of the rule which action triggered
      this YYABORT or YYACCEPT.  */
   YYPOPSTACK (yylen);
@@ -2087,7 +2089,7 @@ yyreturn:
   while (yyssp != yyss)
     {
       yydestruct ("Cleanup: popping",
-		  yystos[*yyssp], yyvsp);
+		  yystos[*yyssp], yyvsp, in);
       YYPOPSTACK (1);
     }
 #ifndef yyoverflow
@@ -2107,29 +2109,30 @@ yyreturn:
 
 
 extern "C" {
-void yyerror(const char* s)
+
+void yyerror(Scanner &in, const char* s)
 {
-	in->fatal(s);
+	in.fatal(s);
 }
 
-int yylex(){
-	return in ? in->scan() : 0;
+int yylex(Scanner &in)
+{
+	return in.scan();
 }
-} // end extern "C"
+
+} // extern "C"
 
 namespace re2c
 {
 
-void parse(Scanner& i, Output & o)
+void parse(Scanner &in, Output & o)
 {
 	std::map<std::string, smart_ptr<DFA> >  dfa_map;
 	ScannerState rules_state;
-	Opt &opts = i.opts;
-
-	in = &i;
+	Opt &opts = in.opts;
 
 	o.source.wversion_time ()
-		.wline_info (in->get_cline (), in->get_fname ().c_str ());
+		.wline_info (in.get_cline (), in.get_fname ().c_str ());
 	if (opts->target == opt_t::SKELETON)
 	{
 		emit_prolog (o.source);
@@ -2137,63 +2140,63 @@ void parse(Scanner& i, Output & o)
 
 	Enc encodingOld = opts->encoding;
 	
-	while ((parseMode = i.echo()) != Scanner::Stop)
+	while ((parseMode = in.echo()) != Scanner::Stop)
 	{
 		o.source.new_block ();
 		bool bPrologBrace = false;
 		ScannerState curr_state;
 
-		i.save_state(curr_state);
+		in.save_state(curr_state);
 		foundRules = false;
 
 		if (opts->rFlag && parseMode == Scanner::Rules && dfa_map.size())
 		{
-			in->fatal("cannot have a second 'rules:re2c' block");
+			in.fatal("cannot have a second 'rules:re2c' block");
 		}
 		if (parseMode == Scanner::Reuse)
 		{
 			if (dfa_map.empty())
 			{
-				in->fatal("got 'use:re2c' without 'rules:re2c'");
+				in.fatal("got 'use:re2c' without 'rules:re2c'");
 			}
 		}
 		else if (parseMode == Scanner::Rules)
 		{
-			i.save_state(rules_state);
+			in.save_state(rules_state);
 		}
 		else
 		{
 			dfa_map.clear();
 		}
 		spec.clear ();
-		in->set_in_parse(true);
-		yyparse();
-		in->set_in_parse(false);
+		in.set_in_parse(true);
+		yyparse(in);
+		in.set_in_parse(false);
 		if (opts->rFlag && parseMode == Scanner::Reuse)
 		{
 			if (foundRules || opts->encoding != encodingOld)
 			{
 				// Re-parse rules
 				parseMode = Scanner::Parse;
-				i.restore_state(rules_state);
-				i.reuse();
+				in.restore_state(rules_state);
+				in.reuse();
 				dfa_map.clear();
 				parse_cleanup();
 				spec.clear ();
-				in->set_in_parse(true);
-				yyparse();
-				in->set_in_parse(false);
+				in.set_in_parse(true);
+				yyparse(in);
+				in.set_in_parse(false);
 
 				// Now append potential new rules
-				i.restore_state(curr_state);
+				in.restore_state(curr_state);
 				parseMode = Scanner::Parse;
-				in->set_in_parse(true);
-				yyparse();
-				in->set_in_parse(false);
+				in.set_in_parse(true);
+				yyparse(in);
+				in.set_in_parse(false);
 			}
 			encodingOld = opts->encoding;
 		}
-		o.source.block().line = in->get_cline();
+		o.source.block().line = in.get_cline();
 		uint32_t ind = opts->topIndent;
 		if (opts->cFlag)
 		{
@@ -2251,7 +2254,7 @@ void parse(Scanner& i, Output & o)
 				}
 			}
 		}
-		o.source.wline_info (in->get_cline (), in->get_fname ().c_str ());
+		o.source.wline_info (in.get_cline (), in.get_fname ().c_str ());
 		/* restore original char handling mode*/
 		opts.reset_encoding (encodingOld);
 	}
@@ -2263,18 +2266,18 @@ void parse(Scanner& i, Output & o)
 		{
 			if (itRuleSetup->first != "*" && specMap.find(itRuleSetup->first) == specMap.end())
 			{
-				in->fatalf_at(itRuleSetup->second.first, "setup for non existing rule '%s' found", itRuleSetup->first.c_str());
+				in.fatalf_at(itRuleSetup->second.first, "setup for non existing rule '%s' found", itRuleSetup->first.c_str());
 			}
 		}
 		if (specMap.size() < ruleSetupMap.size())
 		{
-			uint32_t line = in->get_cline();
+			uint32_t line = in.get_cline();
 			itRuleSetup = ruleSetupMap.find("*");
 			if (itRuleSetup != ruleSetupMap.end())
 			{
 				line = itRuleSetup->second.first;
 			}
-			in->fatalf_at(line, "setup for all rules with '*' not possible when all rules are setup explicitly");
+			in.fatalf_at(line, "setup for all rules with '*' not possible when all rules are setup explicitly");
 		}
 	}
 
@@ -2284,7 +2287,6 @@ void parse(Scanner& i, Output & o)
 	}
 
 	parse_cleanup();
-	in = NULL;
 }
 
 void parse_cleanup()
