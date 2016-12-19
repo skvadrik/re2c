@@ -10,13 +10,6 @@
 #include "src/parse/parser.h"
 #include "src/parse/scanner.h"
 
-namespace re2c
-{
-
-bool bWroteCondCheck = false;
-
-} // end namespace re2c
-
 using namespace re2c;
 
 int main(int, char *argv[])

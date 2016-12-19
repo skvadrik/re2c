@@ -66,6 +66,7 @@ OutputFile::OutputFile(Opt &o, Warn &w)
 	, label_counter ()
 	, fill_index(0)
 	, state_goto(false)
+	, cond_goto(false)
 	, warn_condition_order (!o->tFlag) // see note [condition order]
 	, opts(o)
 	, warn(w)

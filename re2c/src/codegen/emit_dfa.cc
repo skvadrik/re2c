@@ -98,18 +98,18 @@ void DFA::emit_dot(
 	const std::vector<std::string> &conds) const
 {
 	Opt &opts = o.opts;
-	if (!opts->cFlag || !bWroteCondCheck) {
+	if (!opts->cFlag || !o.cond_goto) {
 		o.ws("digraph re2c {\n");
 	}
 	if (opts->cFlag) {
-		if (!bWroteCondCheck) {
+		if (!o.cond_goto) {
 			for (size_t i = 0; i < conds.size(); ++i) {
 				const std::string &cond = conds[i];
 				o.ws("0 -> ").wstring(cond)
 					.ws(" [label=\"state=")
 					.wstring(cond).ws("\"]\n");
 			}
-			bWroteCondCheck = true;
+			o.cond_goto = true;
 		}
 		o.wstring(cond).ws(" -> ").wlabel(head->label).ws("\n");
 	}
@@ -163,7 +163,7 @@ void DFA::emit(Output & output, uint32_t& ind, bool isLastCond, bool& bPrologBra
 		ob.tags.insert(tagnames.begin(), tagnames.end());
 	}
 
-	bool bProlog = (!opts->cFlag || !bWroteCondCheck);
+	bool bProlog = (!opts->cFlag || !o.cond_goto);
 
 	// start_label points to the beginning of current re2c block
 	// (prior to condition dispatch in '-c' mode)
@@ -202,7 +202,7 @@ void DFA::emit(Output & output, uint32_t& ind, bool isLastCond, bool& bPrologBra
 			if ((!opts->fFlag && ob.used_yyaccept)
 			||  (!opts->fFlag && opts->bEmitYYCh)
 			||  (opts->bFlag && !opts->cFlag && !bitmaps.empty())
-			||  (opts->cFlag && !bWroteCondCheck && opts->gFlag)
+			||  (opts->cFlag && !o.cond_goto && opts->gFlag)
 			||  (opts->fFlag && !o.state_goto && opts->gFlag)
 			)
 			{
@@ -232,7 +232,7 @@ void DFA::emit(Output & output, uint32_t& ind, bool isLastCond, bool& bPrologBra
 		}
 		if (bProlog)
 		{
-			if (opts->cFlag && !bWroteCondCheck && opts->gFlag)
+			if (opts->cFlag && !o.cond_goto && opts->gFlag)
 			{
 				genCondTable(o, ind, ob.types);
 			}
@@ -245,7 +245,7 @@ void DFA::emit(Output & output, uint32_t& ind, bool isLastCond, bool& bPrologBra
 				}
 			}
 			o.wuser_start_label ();
-			if (opts->cFlag && !bWroteCondCheck)
+			if (opts->cFlag && !o.cond_goto)
 			{
 				genCondGoto(o, ind, ob.types);
 			}
@@ -361,7 +361,7 @@ void genCondGoto(OutputFile & o, uint32_t ind, const std::vector<std::string> & 
 		o.wind(ind).ws("}\n");
 	}
 	o.wdelay_warn_condition_order ();
-	bWroteCondCheck = true;
+	o.cond_goto = true;
 }
 
 std::string vartag_name(tagver_t ver, const std::string &prefix)

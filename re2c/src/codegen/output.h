@@ -79,6 +79,7 @@ public:
 	counter_t<label_t> label_counter;
 	uint32_t fill_index;
 	bool state_goto;
+	bool cond_goto;
 	bool warn_condition_order;
 	Opt &opts;
 	Warn &warn;
