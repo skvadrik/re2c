@@ -114,7 +114,6 @@ static re2c::SpecMap  specMap;
 static Spec spec;
 static RegExpRule *specNone = NULL;
 static Spec specStar;
-static Scanner::ParseMode  parseMode;
 static SetupMap            ruleSetupMap;
 static bool                foundRules;
 static symbol_table_t symbol_table;
@@ -562,11 +561,11 @@ static const yytype_int8 yyrhs[] =
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint16 yyrline[] =
 {
-       0,   167,   167,   169,   170,   171,   176,   183,   188,   191,
-     195,   195,   198,   207,   218,   222,   228,   234,   241,   250,
-     258,   268,   279,   285,   291,   294,   301,   307,   317,   320,
-     327,   331,   337,   341,   348,   352,   359,   363,   370,   374,
-     391,   410,   414,   418,   422,   429,   439,   443
+       0,   166,   166,   168,   169,   170,   175,   182,   187,   190,
+     194,   194,   197,   206,   217,   221,   227,   233,   240,   249,
+     257,   267,   278,   284,   290,   293,   300,   306,   316,   319,
+     326,   330,   336,   340,   347,   351,   358,   362,   369,   373,
+     390,   409,   413,   417,   421,   428,   438,   442
 };
 #endif
 
@@ -2139,9 +2138,7 @@ void parse(Scanner &in, Output & o)
 	}
 
 	Enc encodingOld = opts->encoding;
-	
-	while ((parseMode = in.echo()) != Scanner::Stop)
-	{
+	for (Scanner::ParseMode mode; (mode = in.echo()) != Scanner::Stop;) {
 		o.source.new_block ();
 		bool bPrologBrace = false;
 		ScannerState curr_state;
@@ -2149,18 +2146,18 @@ void parse(Scanner &in, Output & o)
 		in.save_state(curr_state);
 		foundRules = false;
 
-		if (opts->rFlag && parseMode == Scanner::Rules && dfa_map.size())
+		if (opts->rFlag && mode == Scanner::Rules && dfa_map.size())
 		{
 			in.fatal("cannot have a second 'rules:re2c' block");
 		}
-		if (parseMode == Scanner::Reuse)
+		if (mode == Scanner::Reuse)
 		{
 			if (dfa_map.empty())
 			{
 				in.fatal("got 'use:re2c' without 'rules:re2c'");
 			}
 		}
-		else if (parseMode == Scanner::Rules)
+		else if (mode == Scanner::Rules)
 		{
 			in.save_state(rules_state);
 		}
@@ -2172,12 +2169,12 @@ void parse(Scanner &in, Output & o)
 		in.set_in_parse(true);
 		yyparse(in);
 		in.set_in_parse(false);
-		if (opts->rFlag && parseMode == Scanner::Reuse)
+		if (opts->rFlag && mode == Scanner::Reuse)
 		{
 			if (foundRules || opts->encoding != encodingOld)
 			{
 				// Re-parse rules
-				parseMode = Scanner::Parse;
+				mode = Scanner::Parse;
 				in.restore_state(rules_state);
 				in.reuse();
 				dfa_map.clear();
@@ -2189,7 +2186,7 @@ void parse(Scanner &in, Output & o)
 
 				// Now append potential new rules
 				in.restore_state(curr_state);
-				parseMode = Scanner::Parse;
+				mode = Scanner::Parse;
 				in.set_in_parse(true);
 				yyparse(in);
 				in.set_in_parse(false);
@@ -2202,7 +2199,7 @@ void parse(Scanner &in, Output & o)
 		{
 			SpecMap::iterator it;
 
-			if (parseMode != Scanner::Reuse)
+			if (mode != Scanner::Reuse)
 			{
 				// merge <*> rules to all conditions with lowest priority
 				for (it = specMap.begin(); it != specMap.end(); ++it)
@@ -2229,12 +2226,12 @@ void parse(Scanner &in, Output & o)
 
 			for (it = specMap.begin(); it != specMap.end(); ++it)
 			{
-				if (parseMode != Scanner::Reuse)
+				if (mode != Scanner::Reuse)
 				{
 					o.source.block().setup_rule = find_setup_rule(ruleSetupMap, it->first);
 					dfa_map[it->first] = compile(it->second, o, it->first, opts->encoding.nCodeUnits ());
 				}
-				if (parseMode != Scanner::Rules && dfa_map.find(it->first) != dfa_map.end())
+				if (mode != Scanner::Rules && dfa_map.find(it->first) != dfa_map.end())
 				{
 					dfa_map[it->first]->emit(o, ind, !--nCount, bPrologBrace);
 				}
@@ -2244,11 +2241,11 @@ void parse(Scanner &in, Output & o)
 		{
 			if (!spec.res.empty() || spec.def || !dfa_map.empty())
 			{
-				if (parseMode != Scanner::Reuse)
+				if (mode != Scanner::Reuse)
 				{
 					dfa_map[""] = compile(spec, o, "", opts->encoding.nCodeUnits ());
 				}
-				if (parseMode != Scanner::Rules && dfa_map.find("") != dfa_map.end())
+				if (mode != Scanner::Rules && dfa_map.find("") != dfa_map.end())
 				{
 					dfa_map[""]->emit(o, ind, 0, bPrologBrace);
 				}
