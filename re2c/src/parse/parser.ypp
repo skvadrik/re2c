@@ -45,7 +45,6 @@ static std::vector<std::string> condnames;
 static re2c::SpecMap  specMap;
 static Spec spec;
 static RegExpRule *specNone = NULL;
-static Spec specStar;
 static SetupMap            ruleSetupMap;
 static bool                foundRules;
 static symbol_table_t symbol_table;
@@ -73,7 +72,7 @@ void context_rule(Scanner &in, CondList *clist, const Loc &loc,
 	rule->info = new RuleInfo(loc, code, newcond);
 	for(CondList::const_iterator i = clist->begin(); i != clist->end(); ++i) {
 		const std::string &cond = *i;
-		if (specMap.find(cond) == specMap.end()) {
+		if (cond != "*" && specMap.find(cond) == specMap.end()) {
 			condnames.push_back(cond);
 		}
 		specMap[cond].add(rule);
@@ -157,8 +156,8 @@ static std::string find_setup_rule(const SetupMap &map, const std::string &key)
 %type <extop>   TOKEN_CLOSESIZE
 %type <code>    TOKEN_CODE
 %type <regexp>  TOKEN_REGEXP rule expr diff term factor primary
-%type <str>     TOKEN_ID TOKEN_FID newcond name
-%type <clist>   cond clist
+%type <str>     TOKEN_ID TOKEN_FID newcond name cname
+%type <clist>   clist
 %type <rule>    trailexpr
 
 %%
@@ -214,44 +213,20 @@ rule
 		}
 	}
 
-	| '<' cond '>' trailexpr newcond TOKEN_CODE {
+	| '<' clist '>' trailexpr newcond TOKEN_CODE {
 		context_rule(in, $2, $6->loc, $4, $6, $5);
 	}
 
-	| '<' cond '>' trailexpr ':' newcond {
+	| '<' clist '>' trailexpr ':' newcond {
 		Loc loc(in.get_fname(), in.get_cline());
 		context_rule(in, $2, loc, $4, NULL, $6);
 	}
 
 	/* default rule for conditions */
-	| '<' cond '>' TOKEN_STAR TOKEN_CODE {
+	| '<' clist '>' TOKEN_STAR TOKEN_CODE {
 		RegExpRule *def = new RegExpRule(in.mkDefault());
 		def->info = new RuleInfo($5->loc, $5, NULL);
 		default_rule(in, $2, def);
-	}
-
-	| '<' TOKEN_STAR '>' trailexpr newcond TOKEN_CODE {
-		context_check(in, NULL);
-		$4->info = new RuleInfo($6->loc, $6, $5);
-		specStar.add($4);
-		delete $5;
-	}
-
-	| '<' TOKEN_STAR '>' trailexpr ':' newcond {
-		context_check(in, NULL);
-		Loc loc(in.get_fname(), in.get_cline());
-		$4->info = new RuleInfo(loc, NULL, $6);
-		specStar.add($4);
-		delete $6;
-	}
-
-	/* default rule for all conditions */
-	| '<' TOKEN_STAR '>' TOKEN_STAR TOKEN_CODE {
-		RegExpRule *def = new RegExpRule(in.mkDefault());
-		def->info = new RuleInfo($5->loc, $5, NULL);
-		if (!specStar.add_def(def)) {
-			in.fatal("code to default rule '*' is already defined");
-		}
 	}
 
 	| TOKEN_NOCOND newcond TOKEN_CODE {
@@ -275,41 +250,27 @@ rule
 		delete $3;
 	}
 
-	| TOKEN_SETUP TOKEN_STAR '>' TOKEN_CODE {
-		CondList *clist = new CondList;
-		clist->insert("*");
-		setup_rule(in, clist, $4);
-	}
-
-	| TOKEN_SETUP cond '>' TOKEN_CODE {
+	| TOKEN_SETUP clist '>' TOKEN_CODE {
 		setup_rule(in, $2, $4);
 	};
 
-cond:
-		/* empty */
-		{
-			in.fatal("unnamed condition not supported");
-		}
-	|	clist
-		{
-			$$ = $1;
-		}
-	;
+clist
+	: cname {
+		$$ = new CondList;
+		$$->insert(*$1);
+		delete $1;
+	}
 
-clist:
-		TOKEN_ID
-		{
-			$$ = new CondList();
-			$$->insert(* $1);
-			delete $1;
-		}
-	|	clist ',' TOKEN_ID
-		{
-			$1->insert(* $3);
-			delete $3;
-			$$ = $1;
-		}
-;
+	| clist ',' cname {
+		$1->insert(*$3);
+		delete $3;
+		$$ = $1;
+	};
+
+cname
+	: TOKEN_ID
+	| TOKEN_STAR { $$ = new std::string("*"); }
+	;
 
 newcond:
 		/* empty */
@@ -539,17 +500,22 @@ void parse(Scanner &in, Output & o)
 		{
 			SpecMap::iterator it;
 
+			Spec star;
+			if ((it = specMap.find("*")) != specMap.end()) {
+				star = it->second;
+				specMap.erase(it);
+			}
+
 			if (mode != Scanner::Reuse)
 			{
 				// merge <*> rules to all conditions with lowest priority
-				for (it = specMap.begin(); it != specMap.end(); ++it)
-				{
-					for (size_t j = 0; j < specStar.res.size(); ++j) {
-						it->second.add(specStar.res[j]);
+				for (it = specMap.begin(); it != specMap.end(); ++it) {
+					for (size_t j = 0; j < star.res.size(); ++j) {
+						it->second.add(star.res[j]);
 					}
-					if (specStar.def) {
+					if (star.def) {
 						// ignore possible failure
-						it->second.add_def(specStar.def);
+						it->second.add_def(star.def);
 					}
 				}
 
@@ -635,7 +601,6 @@ void parse_cleanup()
 	symbol_table.clear ();
 	condnames.clear ();
 	specMap.clear();
-	specStar.clear();
 	specNone = NULL;
 }
 

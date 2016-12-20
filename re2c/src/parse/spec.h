@@ -12,7 +12,16 @@ struct Spec
 	std::vector<const RegExpRule*> res;
 
 	Spec(): def(NULL), res() {}
-	Spec(const Spec &spec): def(spec.def), res(spec.res) {}
+	Spec(const Spec &spec)
+		: def(spec.def)
+		, res(spec.res)
+	{}
+	Spec& operator=(const Spec &spec)
+	{
+		def = spec.def;
+		res = spec.res;
+		return *this;
+	}
 	bool add_def(const RegExpRule *r)
 	{
 		if (def) {
@@ -31,9 +40,6 @@ struct Spec
 		def = NULL;
 		res.clear();
 	}
-
-private:
-	Spec& operator=(const Spec&);
 };
 
 } // namespace re2c
