@@ -112,7 +112,6 @@ void yyerror(Scanner &in, const char*);
 static std::vector<std::string> condnames;
 static re2c::SpecMap  specMap;
 static Spec spec;
-static RegExpRule *specNone = NULL;
 static SetupMap            ruleSetupMap;
 static bool                foundRules;
 static symbol_table_t symbol_table;
@@ -124,19 +123,31 @@ static symbol_table_t symbol_table;
 #define __attribute__(x)
 #endif
 
-static void check_default(const Spec &spec, const std::string &cond)
+static void check(const Spec &spec, const std::string &cond)
 {
-	Spec::const_iterator
-		b = spec.begin(),
-		e = spec.end(),
-		i = std::find_if(b, e, RegExpRule::is_def),
-		j = std::find_if(i + 1, e, RegExpRule::is_def);
+	Spec::const_iterator b = spec.begin(), e = spec.end(), i, j;
+
+	// no multiple default rules per condition
+	i = std::find_if(b, e, RegExpRule::is_def);
+	j = std::find_if(i + 1, e, RegExpRule::is_def);
 	if (j != e) {
 		const uint32_t
 			l1 = (*i)->info->loc.line,
 			l2 = (*j)->info->loc.line;
 		error("line %u: code to default rule %sis already defined at line %u",
 			l2, incond(cond).c_str(), l1);
+		exit(1);
+	}
+
+	// no multiple startup code definitions
+	if (cond == "0" && e - b > 1) {
+		fprintf(stderr, "re2c: error: multiple definitions of startup code (lines ");
+		for (i = b;;) {
+			fprintf(stderr, "%u", (*i)->info->loc.line);
+			if (++i == e) break;
+			fprintf(stderr, ", ");
+		}
+		fprintf(stderr, ")\n");
 		exit(1);
 	}
 }
@@ -571,11 +582,11 @@ static const yytype_int8 yyrhs[] =
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint16 yyrline[] =
 {
-       0,   179,   179,   181,   182,   183,   188,   195,   200,   203,
-     207,   207,   210,   218,   222,   227,   237,   248,   253,   259,
-     266,   267,   272,   275,   282,   286,   291,   296,   300,   307,
-     311,   318,   322,   329,   333,   350,   369,   373,   377,   381,
-     388,   398,   402
+       0,   190,   190,   192,   193,   194,   199,   206,   211,   214,
+     218,   218,   221,   229,   233,   238,   245,   253,   258,   264,
+     271,   272,   277,   280,   287,   291,   296,   301,   305,   312,
+     316,   323,   327,   334,   338,   355,   374,   378,   382,   386,
+     393,   403,   407
 };
 #endif
 
@@ -1598,27 +1609,21 @@ yyreduce:
   case 15:
 
     {
-		context_check(in, NULL);
-		if (specNone) {
-			in.fatal("code to handle illegal condition already defined");
-		}
-		specNone = new RegExpRule(RegExp::make_nil(), false);
-		specNone->info = new RuleInfo((yyvsp[(4) - (4)].code)->loc, (yyvsp[(4) - (4)].code), (yyvsp[(3) - (4)].str));
-		delete (yyvsp[(3) - (4)].str);
+		CondList *cl = new CondList;
+		cl->insert("0");
+		RegExpRule *r = new RegExpRule(RegExp::make_nil(), false);
+		context_rule(in, cl, (yyvsp[(4) - (4)].code)->loc, r, (yyvsp[(4) - (4)].code), (yyvsp[(3) - (4)].str));
 	;}
     break;
 
   case 16:
 
     {
-		context_check(in, NULL);
-		if (specNone) {
-			in.fatal("code to handle illegal condition already defined");
-		}
+		CondList *cl = new CondList;
+		cl->insert("0");
+		RegExpRule *r = new RegExpRule(RegExp::make_nil(), false);
 		Loc loc(in.get_fname(), in.get_cline());
-		specNone = new RegExpRule(RegExp::make_nil(), false);
-		specNone->info = new RuleInfo(loc, NULL, (yyvsp[(4) - (4)].str));
-		delete (yyvsp[(4) - (4)].str);
+		context_rule(in, cl, loc, r, NULL, (yyvsp[(4) - (4)].str));
 	;}
     break;
 
@@ -2138,7 +2143,7 @@ void parse(Scanner &in, Output & o)
 			SpecMap::iterator it;
 
 			for (it = specMap.begin(); it != specMap.end(); ++it) {
-				check_default(it->second, it->first);
+				check(it->second, it->first);
 			}
 
 			Spec star;
@@ -2149,18 +2154,12 @@ void parse(Scanner &in, Output & o)
 
 			if (mode != Scanner::Reuse)
 			{
-				// merge <*> rules to all conditions with lowest priority
+				// merge <*> rules to all conditions except "0" with lowest priority
 				for (it = specMap.begin(); it != specMap.end(); ++it) {
+					if (it->first == "0") continue;
 					for (size_t j = 0; j < star.size(); ++j) {
 						it->second.push_back(star[j]);
 					}
-				}
-
-				if (specNone)
-				{
-					specMap["0"].push_back(specNone);
-					// Note that "0" inserts first, which is important.
-					condnames.insert (condnames.begin (), "0");
 				}
 			}
 			o.source.block().types = condnames;
@@ -2183,7 +2182,7 @@ void parse(Scanner &in, Output & o)
 		}
 		else
 		{
-			check_default(spec, "");
+			check(spec, "");
 			delay_default(spec);
 			if (!spec.empty() || !dfa_map.empty())
 			{
@@ -2241,7 +2240,6 @@ void parse_cleanup()
 	symbol_table.clear ();
 	condnames.clear ();
 	specMap.clear();
-	specNone = NULL;
 }
 
 } // end namespace re2c
