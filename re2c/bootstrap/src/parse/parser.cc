@@ -133,6 +133,14 @@ void context_check(Scanner &in, CondList *clist)
 	}
 }
 
+static void add_cond(std::vector<std::string> &names,
+	const std::string &name, re2c::SpecMap &specs)
+{
+	if (name != "*" && specs.find(name) == specs.end()) {
+		names.push_back(name);
+	}
+}
+
 void context_rule(Scanner &in, CondList *clist, const Loc &loc,
 	RegExpRule *rule, const Code *code, const std::string *newcond)
 {
@@ -140,9 +148,7 @@ void context_rule(Scanner &in, CondList *clist, const Loc &loc,
 	rule->info = new RuleInfo(loc, code, newcond);
 	for(CondList::const_iterator i = clist->begin(); i != clist->end(); ++i) {
 		const std::string &cond = *i;
-		if (cond != "*" && specMap.find(cond) == specMap.end()) {
-			condnames.push_back(cond);
-		}
+		add_cond(condnames, cond, specMap);
 		specMap[cond].add(rule);
 	}
 	delete clist;
@@ -169,10 +175,12 @@ void default_rule(Scanner &in, CondList *clist, RegExpRule *rule)
 {
 	context_check(in, clist);
 	for (CondList::const_iterator i = clist->begin(); i != clist->end(); ++i) {
-		if (!specMap[*i].add_def(rule)) {
+		const std::string &cond = *i;
+		add_cond(condnames, cond, specMap);
+		if (!specMap[cond].add_def(rule)) {
 			in.fatalf_at(rule->info->loc.line,
 				"code to default rule '%s' is already defined",
-				i->c_str());
+				cond.c_str());
 		}
 	}
 	delete clist;
@@ -558,11 +566,11 @@ static const yytype_int8 yyrhs[] =
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint16 yyrline[] =
 {
-       0,   165,   165,   167,   168,   169,   174,   181,   186,   189,
-     193,   193,   196,   205,   216,   220,   226,   232,   242,   253,
-     258,   264,   271,   272,   277,   280,   287,   291,   297,   301,
-     308,   312,   319,   323,   330,   334,   351,   370,   374,   378,
-     382,   389,   399,   403
+       0,   173,   173,   175,   176,   177,   182,   189,   194,   197,
+     201,   201,   204,   213,   224,   228,   234,   240,   250,   261,
+     266,   272,   279,   280,   285,   288,   295,   299,   305,   309,
+     316,   320,   327,   331,   338,   342,   359,   378,   382,   386,
+     390,   397,   407,   411
 };
 #endif
 
