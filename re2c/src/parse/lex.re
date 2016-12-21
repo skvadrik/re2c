@@ -263,13 +263,6 @@ start:
 	"["  { yylval.regexp = lex_cls(false); return TOKEN_REGEXP; }
 	"[^" { yylval.regexp = lex_cls(true);  return TOKEN_REGEXP; }
 
-	"<>" / (space* ("{" | "=>" | ":=")) {
-					return TOKEN_NOCOND;
-				}
-	"<!"		{
-					return TOKEN_SETUP;
-				}
-
 	"@" name {
 		if (!opts->tags) {
 			fatal("tags are only allowed with '-T, --tags' option");
@@ -279,7 +272,7 @@ start:
 		return TOKEN_REGEXP;
 	}
 
-	[<>,()|=;/\\]	{
+	[<>!,()|=;/\\]	{
 					return *tok;
 				}
 

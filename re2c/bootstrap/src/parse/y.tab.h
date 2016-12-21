@@ -45,10 +45,8 @@
      TOKEN_ID = 262,
      TOKEN_FID = 263,
      TOKEN_FID_END = 264,
-     TOKEN_NOCOND = 265,
-     TOKEN_REGEXP = 266,
-     TOKEN_SETUP = 267,
-     TOKEN_STAR = 268
+     TOKEN_REGEXP = 265,
+     TOKEN_STAR = 266
    };
 #endif
 

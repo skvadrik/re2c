@@ -163,12 +163,10 @@ static std::string find_setup_rule(const SetupMap &map, const std::string &key)
 %token TOKEN_ID
 %token TOKEN_FID
 %token TOKEN_FID_END
-%token TOKEN_NOCOND
 %token TOKEN_REGEXP
-%token TOKEN_SETUP
 %token TOKEN_STAR
 
-%type <op>      TOKEN_CLOSE TOKEN_STAR TOKEN_SETUP close
+%type <op>      TOKEN_CLOSE TOKEN_STAR close
 %type <extop>   TOKEN_CLOSESIZE
 %type <code>    TOKEN_CODE
 %type <regexp>  TOKEN_REGEXP rule expr diff term factor primary
@@ -226,29 +224,29 @@ rule
 		context_rule(in, $2, loc, $4, NULL, $6);
 	}
 
-	| TOKEN_NOCOND newcond TOKEN_CODE {
+	| '<' '>' newcond TOKEN_CODE {
 		context_check(in, NULL);
 		if (specNone) {
 			in.fatal("code to handle illegal condition already defined");
 		}
 		specNone = new RegExpRule(RegExp::make_nil(), false);
-		specNone->info = new RuleInfo($3->loc, $3, $2);
-		delete $2;
+		specNone->info = new RuleInfo($4->loc, $4, $3);
+		delete $3;
 	}
 
-	| TOKEN_NOCOND ':' newcond {
+	| '<' '>' ':' newcond {
 		context_check(in, NULL);
 		if (specNone) {
 			in.fatal("code to handle illegal condition already defined");
 		}
 		Loc loc(in.get_fname(), in.get_cline());
 		specNone = new RegExpRule(RegExp::make_nil(), false);
-		specNone->info = new RuleInfo(loc, NULL, $3);
-		delete $3;
+		specNone->info = new RuleInfo(loc, NULL, $4);
+		delete $4;
 	}
 
-	| TOKEN_SETUP clist '>' TOKEN_CODE {
-		setup_rule(in, $2, $4);
+	| '<' '!' clist '>' TOKEN_CODE {
+		setup_rule(in, $3, $5);
 	};
 
 clist
