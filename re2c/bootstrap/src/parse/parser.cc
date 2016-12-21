@@ -111,7 +111,6 @@ void yyerror(Scanner &in, const char*);
 
 static std::vector<std::string> condnames;
 static re2c::SpecMap  specMap;
-static Spec spec;
 static SetupMap            ruleSetupMap;
 static bool                foundRules;
 static symbol_table_t symbol_table;
@@ -160,8 +159,11 @@ static void delay_default(Spec &spec)
 
 void context_check(Scanner &in, CondList *clist)
 {
-	if (!in.opts->cFlag)
-	{
+	if (clist && clist->size() == 1 && clist->begin()->empty()) {
+		if (in.opts->cFlag) {
+			in.fatal("condition or '<*>' required when using -c switch");
+		}
+	} else if (!in.opts->cFlag) {
 		delete clist;
 		in.fatal("conditions are only allowed when using -c switch");
 	}
@@ -170,7 +172,7 @@ void context_check(Scanner &in, CondList *clist)
 static void add_cond(std::vector<std::string> &names,
 	const std::string &name, re2c::SpecMap &specs)
 {
-	if (name != "*" && specs.find(name) == specs.end()) {
+	if (name != "" && name != "*" && specs.find(name) == specs.end()) {
 		names.push_back(name);
 	}
 }
@@ -582,8 +584,8 @@ static const yytype_int8 yyrhs[] =
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint16 yyrline[] =
 {
-       0,   190,   190,   192,   193,   194,   199,   206,   211,   214,
-     218,   218,   221,   229,   233,   238,   245,   253,   258,   264,
+       0,   192,   192,   194,   195,   196,   201,   208,   213,   216,
+     220,   220,   223,   229,   233,   238,   245,   253,   258,   264,
      271,   272,   277,   280,   287,   291,   296,   301,   305,   312,
      316,   323,   327,   334,   338,   355,   374,   378,   382,   386,
      393,   403,   407
@@ -1583,11 +1585,9 @@ yyreduce:
   case 12:
 
     {
-		if (in.opts->cFlag) {
-			in.fatal("condition or '<*>' required when using -c switch");
-		}
-		(yyvsp[(1) - (2)].rule)->info = new RuleInfo((yyvsp[(2) - (2)].code)->loc, (yyvsp[(2) - (2)].code), NULL);
-		spec.push_back((yyvsp[(1) - (2)].rule));
+		CondList *cl = new CondList;
+		cl->insert("");
+		context_rule(in, cl, (yyvsp[(2) - (2)].code)->loc, (yyvsp[(1) - (2)].rule), (yyvsp[(2) - (2)].code), NULL);
 	;}
     break;
 
@@ -2106,9 +2106,9 @@ void parse(Scanner &in, Output & o)
 		}
 		else
 		{
+			specMap.clear();
 			dfa_map.clear();
 		}
-		spec.clear ();
 		in.set_in_parse(true);
 		yyparse(in);
 		in.set_in_parse(false);
@@ -2122,7 +2122,7 @@ void parse(Scanner &in, Output & o)
 				in.reuse();
 				dfa_map.clear();
 				parse_cleanup();
-				spec.clear ();
+				specMap.clear();
 				in.set_in_parse(true);
 				yyparse(in);
 				in.set_in_parse(false);
@@ -2138,89 +2138,60 @@ void parse(Scanner &in, Output & o)
 		}
 		o.source.block().line = in.get_cline();
 		uint32_t ind = opts->topIndent;
-		if (opts->cFlag)
-		{
-			SpecMap::iterator it;
 
+		SpecMap::iterator it;
+
+		for (it = specMap.begin(); it != specMap.end(); ++it) {
+			check(it->second, it->first);
+		}
+
+		Spec star;
+		if ((it = specMap.find("*")) != specMap.end()) {
+			star = it->second;
+			specMap.erase(it);
+		}
+
+		if (mode != Scanner::Reuse) {
+			// merge <*> rules to all conditions except "0" with lowest priority
 			for (it = specMap.begin(); it != specMap.end(); ++it) {
-				check(it->second, it->first);
-			}
-
-			Spec star;
-			if ((it = specMap.find("*")) != specMap.end()) {
-				star = it->second;
-				specMap.erase(it);
-			}
-
-			if (mode != Scanner::Reuse)
-			{
-				// merge <*> rules to all conditions except "0" with lowest priority
-				for (it = specMap.begin(); it != specMap.end(); ++it) {
-					if (it->first == "0") continue;
-					for (size_t j = 0; j < star.size(); ++j) {
-						it->second.push_back(star[j]);
-					}
-				}
-			}
-			o.source.block().types = condnames;
-
-			size_t nCount = specMap.size();
-
-			for (it = specMap.begin(); it != specMap.end(); ++it)
-			{
-				delay_default(it->second);
-				if (mode != Scanner::Reuse)
-				{
-					o.source.block().setup_rule = find_setup_rule(ruleSetupMap, it->first);
-					dfa_map[it->first] = compile(it->second, o, it->first, opts->encoding.nCodeUnits ());
-				}
-				if (mode != Scanner::Rules && dfa_map.find(it->first) != dfa_map.end())
-				{
-					dfa_map[it->first]->emit(o, ind, !--nCount, bPrologBrace);
+				if (it->first == "0") continue;
+				for (size_t j = 0; j < star.size(); ++j) {
+					it->second.push_back(star[j]);
 				}
 			}
 		}
-		else
-		{
-			check(spec, "");
-			delay_default(spec);
-			if (!spec.empty() || !dfa_map.empty())
-			{
-				if (mode != Scanner::Reuse)
-				{
-					dfa_map[""] = compile(spec, o, "", opts->encoding.nCodeUnits ());
-				}
-				if (mode != Scanner::Rules && dfa_map.find("") != dfa_map.end())
-				{
-					dfa_map[""]->emit(o, ind, 0, bPrologBrace);
-				}
+		o.source.block().types = condnames;
+
+		size_t nCount = specMap.size();
+		for (it = specMap.begin(); it != specMap.end(); ++it) {
+			delay_default(it->second);
+			if (mode != Scanner::Reuse) {
+				o.source.block().setup_rule = find_setup_rule(ruleSetupMap, it->first);
+				dfa_map[it->first] = compile(it->second, o, it->first, opts->encoding.nCodeUnits ());
+			}
+			if (mode != Scanner::Rules && dfa_map.find(it->first) != dfa_map.end()) {
+				dfa_map[it->first]->emit(o, ind, !--nCount, bPrologBrace);
 			}
 		}
+
 		o.source.wline_info (in.get_cline (), in.get_fname ().c_str ());
 		/* restore original char handling mode*/
 		opts.reset_encoding (encodingOld);
 	}
 
-	if (opts->cFlag)
-	{
-		SetupMap::const_iterator itRuleSetup;
-		for (itRuleSetup = ruleSetupMap.begin(); itRuleSetup != ruleSetupMap.end(); ++itRuleSetup)
-		{
-			if (itRuleSetup->first != "*" && specMap.find(itRuleSetup->first) == specMap.end())
-			{
-				in.fatalf_at(itRuleSetup->second.first, "setup for non existing rule '%s' found", itRuleSetup->first.c_str());
-			}
+	SetupMap::const_iterator itRuleSetup;
+	for (itRuleSetup = ruleSetupMap.begin(); itRuleSetup != ruleSetupMap.end(); ++itRuleSetup) {
+		if (itRuleSetup->first != "*" && specMap.find(itRuleSetup->first) == specMap.end()) {
+			in.fatalf_at(itRuleSetup->second.first, "setup for non existing rule '%s' found", itRuleSetup->first.c_str());
 		}
-		if (specMap.size() < ruleSetupMap.size())
-		{
-			uint32_t line = in.get_cline();
-			itRuleSetup = ruleSetupMap.find("*");
-			if (itRuleSetup != ruleSetupMap.end())
-			{
-				line = itRuleSetup->second.first;
-			}
-			in.fatalf_at(line, "setup for all rules with '*' not possible when all rules are setup explicitly");
+	}
+	if (specMap.size() < ruleSetupMap.size()) {
+		uint32_t line = in.get_cline();
+		itRuleSetup = ruleSetupMap.find("*");
+		if (itRuleSetup != ruleSetupMap.end()) {
+			line = itRuleSetup->second.first;
 		}
+		in.fatalf_at(line, "setup for all rules with '*' not possible when all rules are setup explicitly");
 	}
 
 	if (opts->target == opt_t::SKELETON)
