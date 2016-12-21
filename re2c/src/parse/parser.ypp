@@ -126,17 +126,6 @@ void setup_rule(Scanner &in, CondList *clist, const Code * code)
 	delete clist;
 }
 
-void default_rule(Scanner &in, CondList *clist, RegExpRule *rule)
-{
-	context_check(in, clist);
-	for (CondList::const_iterator i = clist->begin(); i != clist->end(); ++i) {
-		const std::string &cond = *i;
-		add_cond(condnames, cond, specMap);
-		specMap[cond].push_back(rule);
-	}
-	delete clist;
-}
-
 static std::string find_setup_rule(const SetupMap &map, const std::string &key)
 {
 	SetupMap::const_iterator e = map.end(), i;
@@ -228,16 +217,6 @@ rule
 		spec.push_back($1);
 	}
 
-	/* default rule */
-	| TOKEN_STAR TOKEN_CODE {
-		if (in.opts->cFlag) {
-			in.fatal("condition or '<*>' required when using -c switch");
-		}
-		RegExpRule *def = new RegExpRule(in.mkDefault(), true);
-		def->info = new RuleInfo($2->loc, $2, NULL);
-		spec.push_back(def);
-	}
-
 	| '<' clist '>' trailexpr newcond TOKEN_CODE {
 		context_rule(in, $2, $6->loc, $4, $6, $5);
 	}
@@ -245,13 +224,6 @@ rule
 	| '<' clist '>' trailexpr ':' newcond {
 		Loc loc(in.get_fname(), in.get_cline());
 		context_rule(in, $2, loc, $4, NULL, $6);
-	}
-
-	/* default rule for conditions */
-	| '<' clist '>' TOKEN_STAR TOKEN_CODE {
-		RegExpRule *def = new RegExpRule(in.mkDefault(), true);
-		def->info = new RuleInfo($5->loc, $5, NULL);
-		default_rule(in, $2, def);
 	}
 
 	| TOKEN_NOCOND newcond TOKEN_CODE {
@@ -316,6 +288,10 @@ trailexpr
 	| expr '/' expr {
 		$$ = new RegExpRule(RegExp::make_cat($1,
 			RegExp::make_cat(RegExp::make_tag(NULL), $3)), false);
+	}
+
+	| TOKEN_STAR { /* default rule */
+		$$ = new RegExpRule(in.mkDefault(), true);
 	};
 
 expr:
