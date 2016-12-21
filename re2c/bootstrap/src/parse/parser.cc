@@ -80,6 +80,7 @@
 #include <utility>
 #include <vector>
 
+#include "src/conf/msg.h"
 #include "src/codegen/output.h"
 #include "src/ir/compile.h"
 #include "src/ir/adfa/adfa.h"
@@ -92,7 +93,6 @@
 #include "src/parse/loc.h"
 #include "src/parse/parser.h"
 #include "src/parse/scanner.h"
-#include "src/parse/spec.h"
 #include "src/util/free_list.h"
 #include "src/util/range.h"
 #include "src/util/smart_ptr.h"
@@ -124,6 +124,29 @@ static symbol_table_t symbol_table;
 #define __attribute__(x)
 #endif
 
+static void check_default(const Spec &spec, const std::string &cond)
+{
+	Spec::const_iterator
+		b = spec.begin(),
+		e = spec.end(),
+		i = std::find_if(b, e, RegExpRule::is_def),
+		j = std::find_if(i + 1, e, RegExpRule::is_def);
+	if (j != e) {
+		const uint32_t
+			l1 = (*i)->info->loc.line,
+			l2 = (*j)->info->loc.line;
+		error("line %u: code to default rule %sis already defined at line %u",
+			l2, incond(cond).c_str(), l1);
+		exit(1);
+	}
+}
+
+static void delay_default(Spec &spec)
+{
+	// default rule(s) should go last
+	std::stable_partition(spec.begin(), spec.end(), RegExpRule::isnt_def);
+}
+
 void context_check(Scanner &in, CondList *clist)
 {
 	if (!in.opts->cFlag)
@@ -149,7 +172,7 @@ void context_rule(Scanner &in, CondList *clist, const Loc &loc,
 	for(CondList::const_iterator i = clist->begin(); i != clist->end(); ++i) {
 		const std::string &cond = *i;
 		add_cond(condnames, cond, specMap);
-		specMap[cond].add(rule);
+		specMap[cond].push_back(rule);
 	}
 	delete clist;
 	delete newcond;
@@ -177,11 +200,7 @@ void default_rule(Scanner &in, CondList *clist, RegExpRule *rule)
 	for (CondList::const_iterator i = clist->begin(); i != clist->end(); ++i) {
 		const std::string &cond = *i;
 		add_cond(condnames, cond, specMap);
-		if (!specMap[cond].add_def(rule)) {
-			in.fatalf_at(rule->info->loc.line,
-				"code to default rule '%s' is already defined",
-				cond.c_str());
-		}
+		specMap[cond].push_back(rule);
 	}
 	delete clist;
 }
@@ -566,11 +585,11 @@ static const yytype_int8 yyrhs[] =
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint16 yyrline[] =
 {
-       0,   173,   173,   175,   176,   177,   182,   189,   194,   197,
-     201,   201,   204,   213,   224,   228,   234,   240,   250,   261,
-     266,   272,   279,   280,   285,   288,   295,   299,   305,   309,
-     316,   320,   327,   331,   338,   342,   359,   378,   382,   386,
-     390,   397,   407,   411
+       0,   192,   192,   194,   195,   196,   201,   208,   213,   216,
+     220,   220,   223,   232,   241,   245,   251,   257,   267,   278,
+     283,   289,   296,   297,   302,   305,   312,   316,   322,   326,
+     333,   337,   344,   348,   355,   359,   376,   395,   399,   403,
+     407,   414,   424,   428
 };
 #endif
 
@@ -1570,7 +1589,7 @@ yyreduce:
 			in.fatal("condition or '<*>' required when using -c switch");
 		}
 		(yyvsp[(1) - (2)].rule)->info = new RuleInfo((yyvsp[(2) - (2)].code)->loc, (yyvsp[(2) - (2)].code), NULL);
-		spec.add((yyvsp[(1) - (2)].rule));
+		spec.push_back((yyvsp[(1) - (2)].rule));
 	;}
     break;
 
@@ -1580,11 +1599,9 @@ yyreduce:
 		if (in.opts->cFlag) {
 			in.fatal("condition or '<*>' required when using -c switch");
 		}
-		RegExpRule *def = new RegExpRule(in.mkDefault());
+		RegExpRule *def = new RegExpRule(in.mkDefault(), true);
 		def->info = new RuleInfo((yyvsp[(2) - (2)].code)->loc, (yyvsp[(2) - (2)].code), NULL);
-		if (!spec.add_def(def)) {
-			in.fatal("code to default rule is already defined");
-		}
+		spec.push_back(def);
 	;}
     break;
 
@@ -1606,7 +1623,7 @@ yyreduce:
   case 16:
 
     {
-		RegExpRule *def = new RegExpRule(in.mkDefault());
+		RegExpRule *def = new RegExpRule(in.mkDefault(), true);
 		def->info = new RuleInfo((yyvsp[(5) - (5)].code)->loc, (yyvsp[(5) - (5)].code), NULL);
 		default_rule(in, (yyvsp[(2) - (5)].clist), def);
 	;}
@@ -1619,7 +1636,7 @@ yyreduce:
 		if (specNone) {
 			in.fatal("code to handle illegal condition already defined");
 		}
-		specNone = new RegExpRule(RegExp::make_nil());
+		specNone = new RegExpRule(RegExp::make_nil(), false);
 		specNone->info = new RuleInfo((yyvsp[(3) - (3)].code)->loc, (yyvsp[(3) - (3)].code), (yyvsp[(2) - (3)].str));
 		delete (yyvsp[(2) - (3)].str);
 	;}
@@ -1633,7 +1650,7 @@ yyreduce:
 			in.fatal("code to handle illegal condition already defined");
 		}
 		Loc loc(in.get_fname(), in.get_cline());
-		specNone = new RegExpRule(RegExp::make_nil());
+		specNone = new RegExpRule(RegExp::make_nil(), false);
 		specNone->info = new RuleInfo(loc, NULL, (yyvsp[(3) - (3)].str));
 		delete (yyvsp[(3) - (3)].str);
 	;}
@@ -1686,7 +1703,7 @@ yyreduce:
   case 26:
 
     {
-		(yyval.rule) = new RegExpRule((yyvsp[(1) - (1)].regexp));
+		(yyval.rule) = new RegExpRule((yyvsp[(1) - (1)].regexp), false);
 	;}
     break;
 
@@ -1694,7 +1711,7 @@ yyreduce:
 
     {
 		(yyval.rule) = new RegExpRule(RegExp::make_cat((yyvsp[(1) - (3)].regexp),
-			RegExp::make_cat(RegExp::make_tag(NULL), (yyvsp[(3) - (3)].regexp))));
+			RegExp::make_cat(RegExp::make_tag(NULL), (yyvsp[(3) - (3)].regexp))), false);
 	;}
     break;
 
@@ -2147,6 +2164,10 @@ void parse(Scanner &in, Output & o)
 		{
 			SpecMap::iterator it;
 
+			for (it = specMap.begin(); it != specMap.end(); ++it) {
+				check_default(it->second, it->first);
+			}
+
 			Spec star;
 			if ((it = specMap.find("*")) != specMap.end()) {
 				star = it->second;
@@ -2157,18 +2178,14 @@ void parse(Scanner &in, Output & o)
 			{
 				// merge <*> rules to all conditions with lowest priority
 				for (it = specMap.begin(); it != specMap.end(); ++it) {
-					for (size_t j = 0; j < star.res.size(); ++j) {
-						it->second.add(star.res[j]);
-					}
-					if (star.def) {
-						// ignore possible failure
-						it->second.add_def(star.def);
+					for (size_t j = 0; j < star.size(); ++j) {
+						it->second.push_back(star[j]);
 					}
 				}
 
 				if (specNone)
 				{
-					specMap["0"].add (specNone);
+					specMap["0"].push_back(specNone);
 					// Note that "0" inserts first, which is important.
 					condnames.insert (condnames.begin (), "0");
 				}
@@ -2179,6 +2196,7 @@ void parse(Scanner &in, Output & o)
 
 			for (it = specMap.begin(); it != specMap.end(); ++it)
 			{
+				delay_default(it->second);
 				if (mode != Scanner::Reuse)
 				{
 					o.source.block().setup_rule = find_setup_rule(ruleSetupMap, it->first);
@@ -2192,7 +2210,9 @@ void parse(Scanner &in, Output & o)
 		}
 		else
 		{
-			if (!spec.res.empty() || spec.def || !dfa_map.empty())
+			check_default(spec, "");
+			delay_default(spec);
+			if (!spec.empty() || !dfa_map.empty())
 			{
 				if (mode != Scanner::Reuse)
 				{

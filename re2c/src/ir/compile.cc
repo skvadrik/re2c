@@ -11,7 +11,6 @@
 #include "src/ir/nfa/nfa.h"
 #include "src/ir/regexp/regexp.h"
 #include "src/ir/skeleton/skeleton.h"
-#include "src/parse/spec.h"
 
 namespace re2c {
 
@@ -28,13 +27,11 @@ static std::string make_name(const std::string &cond, uint32_t line)
 	return name;
 }
 
-static smart_ptr<DFA> compile_rules(
-	const std::vector<const RegExpRule*> &rules,
-	size_t defrule,
-	Output &output,
-	const std::string &cond,
-	uint32_t cunits)
+smart_ptr<DFA> compile(const Spec &rules, Output &output,
+	const std::string &cond, uint32_t cunits)
 {
+	const size_t defrule = !rules.empty() && RegExpRule::is_def(*rules.rbegin())
+			? rules.size() - 1 : Rule::NONE;
 	const uint32_t line = output.source.block().line;
 	const std::string name = make_name(cond, line);
 	Opt &opts = output.source.opts;
@@ -107,22 +104,6 @@ static smart_ptr<DFA> compile_rules(
 	}
 
 	return make_smart_ptr(adfa);
-}
-
-// small wrapper that makes sure default rule is not forgotten
-smart_ptr<DFA> compile(
-	const Spec &spec,
-	Output &output,
-	const std::string &cond,
-	uint32_t cunits)
-{
-	size_t defrule = Rule::NONE;
-	std::vector<const RegExpRule*> rules(spec.res);
-	if (spec.def) {
-		defrule = spec.res.size();
-		rules.push_back(spec.def);
-	}
-	return compile_rules(rules, defrule, output, cond, cunits);
 }
 
 } // namespace re2c

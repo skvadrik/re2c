@@ -4,6 +4,7 @@
 #include "src/util/c99_stdint.h"
 #include <string>
 
+#include "src/parse/parser.h"
 #include "src/util/smart_ptr.h"
 
 namespace re2c
@@ -11,7 +12,6 @@ namespace re2c
 
 class DFA;
 struct Output;
-struct Spec;
 
 smart_ptr<DFA> compile(const Spec &spec, Output &output,
 	const std::string &cond, uint32_t cunits);

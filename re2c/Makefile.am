@@ -53,7 +53,6 @@ SRC_HDR = \
 	src/parse/parser.h \
 	src/parse/rules.h \
 	src/parse/scanner.h \
-	src/parse/spec.h \
 	src/parse/unescape.h \
 	src/util/allocate.h \
 	src/util/attribute.h \

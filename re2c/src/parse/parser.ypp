@@ -12,6 +12,7 @@
 #include <utility>
 #include <vector>
 
+#include "src/conf/msg.h"
 #include "src/codegen/output.h"
 #include "src/ir/compile.h"
 #include "src/ir/adfa/adfa.h"
@@ -24,7 +25,6 @@
 #include "src/parse/loc.h"
 #include "src/parse/parser.h"
 #include "src/parse/scanner.h"
-#include "src/parse/spec.h"
 #include "src/util/free_list.h"
 #include "src/util/range.h"
 #include "src/util/smart_ptr.h"
@@ -56,6 +56,29 @@ static symbol_table_t symbol_table;
 #define __attribute__(x)
 #endif
 
+static void check_default(const Spec &spec, const std::string &cond)
+{
+	Spec::const_iterator
+		b = spec.begin(),
+		e = spec.end(),
+		i = std::find_if(b, e, RegExpRule::is_def),
+		j = std::find_if(i + 1, e, RegExpRule::is_def);
+	if (j != e) {
+		const uint32_t
+			l1 = (*i)->info->loc.line,
+			l2 = (*j)->info->loc.line;
+		error("line %u: code to default rule %sis already defined at line %u",
+			l2, incond(cond).c_str(), l1);
+		exit(1);
+	}
+}
+
+static void delay_default(Spec &spec)
+{
+	// default rule(s) should go last
+	std::stable_partition(spec.begin(), spec.end(), RegExpRule::isnt_def);
+}
+
 void context_check(Scanner &in, CondList *clist)
 {
 	if (!in.opts->cFlag)
@@ -81,7 +104,7 @@ void context_rule(Scanner &in, CondList *clist, const Loc &loc,
 	for(CondList::const_iterator i = clist->begin(); i != clist->end(); ++i) {
 		const std::string &cond = *i;
 		add_cond(condnames, cond, specMap);
-		specMap[cond].add(rule);
+		specMap[cond].push_back(rule);
 	}
 	delete clist;
 	delete newcond;
@@ -109,11 +132,7 @@ void default_rule(Scanner &in, CondList *clist, RegExpRule *rule)
 	for (CondList::const_iterator i = clist->begin(); i != clist->end(); ++i) {
 		const std::string &cond = *i;
 		add_cond(condnames, cond, specMap);
-		if (!specMap[cond].add_def(rule)) {
-			in.fatalf_at(rule->info->loc.line,
-				"code to default rule '%s' is already defined",
-				cond.c_str());
-		}
+		specMap[cond].push_back(rule);
 	}
 	delete clist;
 }
@@ -206,7 +225,7 @@ rule
 			in.fatal("condition or '<*>' required when using -c switch");
 		}
 		$1->info = new RuleInfo($2->loc, $2, NULL);
-		spec.add($1);
+		spec.push_back($1);
 	}
 
 	/* default rule */
@@ -214,11 +233,9 @@ rule
 		if (in.opts->cFlag) {
 			in.fatal("condition or '<*>' required when using -c switch");
 		}
-		RegExpRule *def = new RegExpRule(in.mkDefault());
+		RegExpRule *def = new RegExpRule(in.mkDefault(), true);
 		def->info = new RuleInfo($2->loc, $2, NULL);
-		if (!spec.add_def(def)) {
-			in.fatal("code to default rule is already defined");
-		}
+		spec.push_back(def);
 	}
 
 	| '<' clist '>' trailexpr newcond TOKEN_CODE {
@@ -232,7 +249,7 @@ rule
 
 	/* default rule for conditions */
 	| '<' clist '>' TOKEN_STAR TOKEN_CODE {
-		RegExpRule *def = new RegExpRule(in.mkDefault());
+		RegExpRule *def = new RegExpRule(in.mkDefault(), true);
 		def->info = new RuleInfo($5->loc, $5, NULL);
 		default_rule(in, $2, def);
 	}
@@ -242,7 +259,7 @@ rule
 		if (specNone) {
 			in.fatal("code to handle illegal condition already defined");
 		}
-		specNone = new RegExpRule(RegExp::make_nil());
+		specNone = new RegExpRule(RegExp::make_nil(), false);
 		specNone->info = new RuleInfo($3->loc, $3, $2);
 		delete $2;
 	}
@@ -253,7 +270,7 @@ rule
 			in.fatal("code to handle illegal condition already defined");
 		}
 		Loc loc(in.get_fname(), in.get_cline());
-		specNone = new RegExpRule(RegExp::make_nil());
+		specNone = new RegExpRule(RegExp::make_nil(), false);
 		specNone->info = new RuleInfo(loc, NULL, $3);
 		delete $3;
 	}
@@ -293,12 +310,12 @@ newcond:
 
 trailexpr
 	: expr {
-		$$ = new RegExpRule($1);
+		$$ = new RegExpRule($1, false);
 	}
 
 	| expr '/' expr {
 		$$ = new RegExpRule(RegExp::make_cat($1,
-			RegExp::make_cat(RegExp::make_tag(NULL), $3)));
+			RegExp::make_cat(RegExp::make_tag(NULL), $3)), false);
 	};
 
 expr:
@@ -508,6 +525,10 @@ void parse(Scanner &in, Output & o)
 		{
 			SpecMap::iterator it;
 
+			for (it = specMap.begin(); it != specMap.end(); ++it) {
+				check_default(it->second, it->first);
+			}
+
 			Spec star;
 			if ((it = specMap.find("*")) != specMap.end()) {
 				star = it->second;
@@ -518,18 +539,14 @@ void parse(Scanner &in, Output & o)
 			{
 				// merge <*> rules to all conditions with lowest priority
 				for (it = specMap.begin(); it != specMap.end(); ++it) {
-					for (size_t j = 0; j < star.res.size(); ++j) {
-						it->second.add(star.res[j]);
-					}
-					if (star.def) {
-						// ignore possible failure
-						it->second.add_def(star.def);
+					for (size_t j = 0; j < star.size(); ++j) {
+						it->second.push_back(star[j]);
 					}
 				}
 
 				if (specNone)
 				{
-					specMap["0"].add (specNone);
+					specMap["0"].push_back(specNone);
 					// Note that "0" inserts first, which is important.
 					condnames.insert (condnames.begin (), "0");
 				}
@@ -540,6 +557,7 @@ void parse(Scanner &in, Output & o)
 
 			for (it = specMap.begin(); it != specMap.end(); ++it)
 			{
+				delay_default(it->second);
 				if (mode != Scanner::Reuse)
 				{
 					o.source.block().setup_rule = find_setup_rule(ruleSetupMap, it->first);
@@ -553,7 +571,9 @@ void parse(Scanner &in, Output & o)
 		}
 		else
 		{
-			if (!spec.res.empty() || spec.def || !dfa_map.empty())
+			check_default(spec, "");
+			delay_default(spec);
+			if (!spec.empty() || !dfa_map.empty())
 			{
 				if (mode != Scanner::Reuse)
 				{

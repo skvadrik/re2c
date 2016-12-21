@@ -109,8 +109,12 @@ struct RegExpRule
 
 	const RegExp *re;
 	RuleInfo *info;
+	bool def;
 
-	explicit RegExpRule(const RegExp *r): re(r), info(NULL)
+	RegExpRule(const RegExp *r, bool d)
+		: re(r)
+		, info(NULL)
+		, def(d)
 	{
 		flist.insert(this);
 	}
@@ -119,6 +123,8 @@ struct RegExpRule
 		delete info;
 		flist.erase(this);
 	}
+	static bool is_def(const RegExpRule *r) { return r->def; }
+	static bool isnt_def(const RegExpRule *r) { return !r->def; }
 	FORBID_COPY(RegExpRule);
 };
 
