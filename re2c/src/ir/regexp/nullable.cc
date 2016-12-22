@@ -39,7 +39,7 @@ void warn_nullable(const std::vector<const RegExpRule*> &regexps,
 		const RegExpRule *r = regexps[i];
 		bool trail = false;
 		if (nullable(r->re, trail)) {
-			warn.match_empty_string(r->info->loc.line, cond);
+			warn.match_empty_string(r->code->fline, cond);
 		}
 	}
 }

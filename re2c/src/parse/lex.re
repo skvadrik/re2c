@@ -8,7 +8,6 @@
 #include "src/codegen/output.h"
 #include "src/ir/regexp/encoding/enc.h"
 #include "src/ir/regexp/regexp.h"
-#include "src/parse/code.h"
 #include "src/parse/extop.h"
 #include "src/parse/input.h"
 #include "src/parse/scanner.h"
@@ -415,7 +414,7 @@ code:
 					}
 					else if (--depth == 0)
 					{
-						yylval.code = new Code (tok, tok_len (), get_fname (), code_line);
+						yylval.code = new Code(get_fname (), code_line, tok, tok_len ());
 						return TOKEN_CODE;
 					}
 					goto code;
@@ -456,7 +455,7 @@ code:
 						{
 							--cur;
 						}
-						yylval.code = new Code (tok, tok_len (), get_fname (), code_line);
+						yylval.code = new Code(get_fname (), code_line, tok, tok_len ());
 						return TOKEN_CODE;
 					}
 					else if (cur == eof)

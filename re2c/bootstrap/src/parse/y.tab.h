@@ -58,7 +58,7 @@ typedef union YYSTYPE
 
 
 	const re2c::RegExp * regexp;
-	const re2c::Code * code;
+	re2c::Code * code;
 	char op;
 	re2c::ExtOp extop;
 	std::string * str;

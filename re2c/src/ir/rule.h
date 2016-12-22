@@ -1,39 +1,45 @@
 #ifndef _RE2C_IR_RULE_
 #define _RE2C_IR_RULE_
 
+#include "src/util/c99_stdint.h"
 #include <set>
 #include <string>
-#include <vector>
 
 #include "src/ir/tag.h"
-#include "src/parse/code.h"
-#include "src/parse/loc.h"
 #include "src/util/forbid_copy.h"
 
 namespace re2c
 {
 
-struct RuleInfo
+struct Code
 {
-	const Loc loc;
-	const Code *code;
-	const std::string newcond;
+	std::string fname;
+	uint32_t fline;
+	bool autogen;
+	const std::string text;
+	std::string cond;
 
-	RuleInfo(const Loc &l, const Code *c,
-		const std::string *cond)
-		: loc(l)
-		, code(c)
-		, newcond(cond ? *cond : "")
+	Code(const std::string &file, uint32_t line)
+		: fname(file)
+		, fline(line)
+		, autogen(true)
+		, text("")
+		, cond("")
 	{}
-
-	FORBID_COPY(RuleInfo);
+	Code(const std::string &file, uint32_t line, const char *s, size_t slen)
+		: fname(file)
+		, fline(line)
+		, autogen(false)
+		, text(s, slen)
+		, cond("")
+	{}
 };
 
 struct Rule
 {
 	static const size_t NONE;
 
-	const RuleInfo *info;
+	const Code *code;
 	std::set<uint32_t> shadow;
 
 	// variable tags
@@ -46,7 +52,7 @@ struct Rule
 	size_t hfix; // next to last
 	size_t tfix; // trailing context
 
-	Rule(): info(NULL), shadow(),
+	Rule(): code(NULL), shadow(),
 		lvar(0), hvar(0), tvar(0),
 		lfix(0), hfix(0), tfix(0)
 	{}

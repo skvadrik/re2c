@@ -25,7 +25,7 @@ static void assert_tags_used_once(const Rule &rule,
 
 error:
 	error("line %u: tag '%s' is used multiple times in the same rule",
-		rule.info->loc.line, name->c_str());
+		rule.code->fline, name->c_str());
 	exit(1);
 }
 
@@ -40,7 +40,7 @@ void init_rules(const std::vector<const RegExpRule*> &regexps,
 
 	for (size_t r = 0, v = 0, f = 0, t; r < nr; ++r) {
 		Rule &rule = rules[r];
-		rule.info = regexps[r]->info;
+		rule.code = regexps[r]->code;
 
 		rule.lvar = v;
 		for (; v < nv && vartags[v].rule == r; ++v);

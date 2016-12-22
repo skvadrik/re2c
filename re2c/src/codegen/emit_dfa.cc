@@ -122,11 +122,11 @@ void DFA::emit_dot(
 					.wu32(i).ws("\"]").ws("\n");
 			}
 		} else if (s->action.type == Action::RULE) {
-			const Code *code = rules[s->action.info.rule].info->code;
-			if (code) {
+			const Code *code = rules[s->action.info.rule].code;
+			if (!code->autogen) {
 				o.wlabel(s->label).ws(" [label=\"")
-					.wstring(code->loc.filename)
-					.ws(":").wu32(code->loc.line)
+					.wstring(code->fname)
+					.ws(":").wu32(code->fline)
 					.ws("\"]").ws("\n");
 			}
 		}

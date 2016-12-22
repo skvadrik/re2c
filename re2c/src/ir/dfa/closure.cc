@@ -185,7 +185,7 @@ void prune_final_items(closure_t &clos, std::valarray<Rule> &rules)
 	if (f != e) {
 		std::partial_sort(f, f, e, compare_by_rule);
 		// mark all rules except the first one as shadowed
-		const uint32_t line = rules[f->state->rule].info->loc.line;
+		const uint32_t line = rules[f->state->rule].code->fline;
 		for (cclositer_t c = f + 1; c != e; ++c) {
 			rules[c->state->rule].shadow.insert(line);
 		}

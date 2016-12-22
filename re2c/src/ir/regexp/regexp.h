@@ -108,19 +108,19 @@ struct RegExpRule
 	static free_list<RegExpRule*> flist;
 
 	const RegExp *re;
-	RuleInfo *info;
+	Code *code;
 	bool def;
 
 	RegExpRule(const RegExp *r, bool d)
 		: re(r)
-		, info(NULL)
+		, code(NULL)
 		, def(d)
 	{
 		flist.insert(this);
 	}
 	~RegExpRule()
 	{
-		delete info;
+		delete code;
 		flist.erase(this);
 	}
 	static bool is_def(const RegExpRule *r) { return r->def; }

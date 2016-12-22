@@ -46,10 +46,8 @@ SRC_HDR = \
 	src/ir/tcmd.h \
 	src/ir/skeleton/path.h \
 	src/ir/skeleton/skeleton.h \
-	src/parse/code.h \
 	src/parse/extop.h \
 	src/parse/input.h \
-	src/parse/loc.h \
 	src/parse/parser.h \
 	src/parse/rules.h \
 	src/parse/scanner.h \
@@ -132,7 +130,6 @@ SRC = \
 	src/ir/tag.cc \
 	src/ir/tcmd.cc \
 	src/main.cc \
-	src/parse/code.cc \
 	src/parse/input.cc \
 	src/parse/scanner.cc \
 	src/parse/unescape.cc \

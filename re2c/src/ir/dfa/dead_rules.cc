@@ -142,7 +142,7 @@ static void warn_dead_rules(const dfa_t &dfa, size_t defrule,
 			// skip last rule (it's the NONE-rule)
 			for (size_t j = 0; j < nrules; ++j) {
 				if (live[j * nstates + i]) {
-					dfa.rules[r].shadow.insert(dfa.rules[j].info->loc.line);
+					dfa.rules[r].shadow.insert(dfa.rules[j].code->fline);
 				}
 			}
 		}

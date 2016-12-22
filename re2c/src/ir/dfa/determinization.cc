@@ -138,7 +138,7 @@ void warn_nondeterministic_tags(const kernels_t &kernels,
 		const size_t m = maxv[t];
 		if (m > 1) {
 			const VarTag &tag = tags[t];
-			const uint32_t line = rules[tag.rule].info->loc.line;
+			const uint32_t line = rules[tag.rule].code->fline;
 			warn.nondeterministic_tags(line, cond, tag.name, m);
 		}
 	}

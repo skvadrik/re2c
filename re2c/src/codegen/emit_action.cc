@@ -10,8 +10,6 @@
 #include "src/ir/adfa/adfa.h"
 #include "src/ir/regexp/regexp.h"
 #include "src/ir/skeleton/skeleton.h"
-#include "src/parse/code.h"
-#include "src/parse/loc.h"
 #include "src/util/string_utils.h"
 
 namespace re2c
@@ -208,8 +206,8 @@ void emit_rule(OutputFile &o, uint32_t ind, const DFA &dfa, size_t rule_idx)
 {
 	Opt &opts = o.opts;
 	const Rule &rule = dfa.rules[rule_idx];
-	const std::string &cond = rule.info->newcond;
-	const Code *code = rule.info->code;
+	const Code *code = rule.code;
+	const std::string &cond = code->cond;
 	std::string s;
 
 	gen_fintags(o, ind, dfa, rule);
@@ -227,12 +225,13 @@ void emit_rule(OutputFile &o, uint32_t ind, const DFA &dfa, size_t rule_idx)
 		}
 		o.ws("\n");
 	}
-	if (code) {
+
+	if (!code->autogen) {
 		const std::string setup = o.block().setup_rule;
 		if (!setup.empty()) {
 			o.wind(ind).wstring(setup).ws("\n");
 		}
-		o.wline_info(code->loc.line, code->loc.filename.c_str())
+		o.wline_info(code->fline, code->fname.c_str())
 			.wind(ind).wstring(code->text).ws("\n")
 			.wdelay_line_info();
 	} else if (!cond.empty()) {

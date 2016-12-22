@@ -188,7 +188,7 @@ void Warn::unreachable_rule(const std::string &cond, const Rule &rule)
 		const bool e = mask[UNREACHABLE_RULES] & ERROR;
 		error_accuml |= e;
 
-		warning_start(rule.info->loc.line, e);
+		warning_start(rule.code->fline, e);
 		fprintf(stderr, "unreachable rule %s", incond(cond).c_str());
 		const size_t shadows = rule.shadow.size();
 		if (shadows > 0) {
