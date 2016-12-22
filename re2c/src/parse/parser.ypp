@@ -101,22 +101,13 @@ static void context_check(Scanner &in, CondList *clist)
 }
 
 static void make_rule(Scanner &in, context_t &context, CondList *clist,
-	RegExpRule *rule, Code *code, const std::string *newcond)
+	RegExpRule *rule, Code *code)
 {
 	if (!clist) {
 		clist = new CondList;
 		clist->insert(rule ? "" : "0");
 	}
 	context_check(in, clist);
-
-	if (!code) {
-		code = new Code(in.get_fname(), in.get_cline());
-	}
-
-	if (newcond) {
-		code->cond = *newcond;
-		delete newcond;
-	}
 
 	if (!rule) {
 		rule = new RegExpRule(RegExp::make_nil(), false);
@@ -193,7 +184,7 @@ static std::string find_setup_rule(const SetupMap &map, const std::string &key)
 
 %type <op>      TOKEN_CLOSE TOKEN_STAR close
 %type <extop>   TOKEN_CLOSESIZE
-%type <code>    TOKEN_CODE
+%type <code>    TOKEN_CODE ccode
 %type <regexp>  TOKEN_REGEXP rule expr diff term factor primary
 %type <str>     TOKEN_ID TOKEN_FID name cname
 %type <clist>   clist
@@ -232,35 +223,34 @@ enddef: ';' | TOKEN_FID_END;
 
 rule
 	: trailexpr TOKEN_CODE {
-		make_rule(in, context, NULL, $1, $2, NULL);
+		make_rule(in, context, NULL, $1, $2);
 	}
 
-	| '<' clist '>' trailexpr TOKEN_CODE {
-		make_rule(in, context, $2, $4, $5, NULL);
+	| '<' clist '>' trailexpr ccode {
+		make_rule(in, context, $2, $4, $5);
 	}
 
-	| '<' clist '>' trailexpr '=' '>' TOKEN_ID TOKEN_CODE {
-		make_rule(in, context, $2, $4, $8, $7);
-	}
-
-	| '<' clist '>' trailexpr ':' '=' '>' TOKEN_ID {
-		make_rule(in, context, $2, $4, NULL, $8);
-	}
-
-	| '<' '>' TOKEN_CODE {
-		make_rule(in, context, NULL, NULL, $3, NULL);
-	}
-
-	| '<' '>' '=' '>' TOKEN_ID TOKEN_CODE {
-		make_rule(in, context, NULL, NULL, $6, $5);
-	}
-
-	| '<' '>' ':' '=' '>' TOKEN_ID {
-		make_rule(in, context, NULL, NULL, NULL, $6);
+	| '<' '>' ccode {
+		make_rule(in, context, NULL, NULL, $3);
 	}
 
 	| '<' '!' clist '>' TOKEN_CODE {
 		make_setup(in, context.ruleSetupMap, $3, $5);
+	};
+
+ccode
+	: TOKEN_CODE
+
+	| '=' '>' TOKEN_ID TOKEN_CODE {
+		$$ = $4;
+		$$->cond = *$3;
+		delete $3;
+	}
+
+	| ':' '=' '>' TOKEN_ID {
+		$$ = new Code(in.get_fname(), in.get_cline());
+		$$->cond = *$4;
+		delete $4;
 	};
 
 clist
