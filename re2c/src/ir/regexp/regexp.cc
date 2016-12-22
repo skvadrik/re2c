@@ -107,10 +107,10 @@ const RegExp *Scanner::cls(const Range *r) const
 	if (!r) {
 		switch (opts->empty_class_policy) {
 			case EMPTY_CLASS_MATCH_EMPTY:
-				warn.empty_class(get_line());
+				warn.empty_class(cline);
 				return RegExp::make_nil();
 			case EMPTY_CLASS_MATCH_NONE:
-				warn.empty_class(get_line());
+				warn.empty_class(cline);
 				break;
 			case EMPTY_CLASS_ERROR:
 				fatal("empty character class");

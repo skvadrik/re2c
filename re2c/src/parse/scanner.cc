@@ -30,9 +30,7 @@ ScannerState::ScannerState ()
 	, top (NULL)
 	, eof (NULL)
 	, tchar (0)
-	, tline (0)
 	, cline (1)
-	, in_parse (false)
 	, lexer_state (LEX_NORMAL)
 {}
 
@@ -47,9 +45,7 @@ ScannerState::ScannerState (const ScannerState & s)
 	, top (s.top)
 	, eof (s.eof)
 	, tchar (s.tchar)
-	, tline (s.tline)
 	, cline (s.cline)
-	, in_parse (s.in_parse)
 	, lexer_state (s.lexer_state)
 {}
 
@@ -124,11 +120,6 @@ void Scanner::fill (uint32_t need)
 	}
 }
 
-void Scanner::set_in_parse(bool new_in_parse)
-{
-	in_parse = new_in_parse;
-}
-
 void Scanner::fatal_at(uint32_t line, ptrdiff_t ofs, const char *msg) const
 {
 	std::cerr << "re2c: error: "
@@ -139,7 +130,7 @@ void Scanner::fatal_at(uint32_t line, ptrdiff_t ofs, const char *msg) const
 
 void Scanner::fatal(ptrdiff_t ofs, const char *msg) const
 {
-	fatal_at(in_parse ? tline : cline, ofs, msg);
+	fatal_at(cline, ofs, msg);
 }
 
 void Scanner::fatalf_at(uint32_t line, const char* fmt, ...) const

@@ -465,9 +465,7 @@ void parse(Scanner &in, Output & o)
 			dfa_map.clear();
 		}
 		specMap.clear();
-		in.set_in_parse(true);
 		yyparse(in);
-		in.set_in_parse(false);
 		if (opts->rFlag && mode == Scanner::Reuse) {
 			if (!specMap.empty() || opts->encoding != encodingOld) {
 				// Re-parse rules
@@ -477,16 +475,12 @@ void parse(Scanner &in, Output & o)
 				dfa_map.clear();
 				parse_cleanup();
 				specMap.clear();
-				in.set_in_parse(true);
 				yyparse(in);
-				in.set_in_parse(false);
 
 				// Now append potential new rules
 				in.restore_state(curr_state);
 				mode = Scanner::Parse;
-				in.set_in_parse(true);
 				yyparse(in);
-				in.set_in_parse(false);
 			}
 			encodingOld = opts->encoding;
 		}

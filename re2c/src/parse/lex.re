@@ -215,11 +215,9 @@ void Scanner::lex_tags()
 
 int Scanner::scan()
 {
-	uint32_t depth;
-
+	uint32_t depth, code_line;
 scan:
 	tchar = cur - pos;
-	tline = cline;
 	tok = cur;
 	switch (lexer_state)
 	{
@@ -231,6 +229,7 @@ start:
 /*!re2c
 	"{"			{
 					depth = 1;
+					code_line = cline;
 					goto code;
 				}
 
@@ -241,6 +240,7 @@ start:
 	":="		{
 					tok += 2; /* skip ":=" */
 					depth = 0;
+					code_line = cline;
 					goto code;
 				}
 
@@ -415,7 +415,7 @@ code:
 					}
 					else if (--depth == 0)
 					{
-						yylval.code = new Code (tok, tok_len (), get_fname (), tline);
+						yylval.code = new Code (tok, tok_len (), get_fname (), code_line);
 						return TOKEN_CODE;
 					}
 					goto code;
@@ -456,7 +456,7 @@ code:
 						{
 							--cur;
 						}
-						yylval.code = new Code (tok, tok_len (), get_fname (), tline);
+						yylval.code = new Code (tok, tok_len (), get_fname (), code_line);
 						return TOKEN_CODE;
 					}
 					else if (cur == eof)
@@ -571,7 +571,7 @@ snd:
 		"-" / [^\]] {
 			u = lex_cls_chr();
 			if (l > u) {
-				warn.swapped_range(get_line(), l, u);
+				warn.swapped_range(cline, l, u);
 				std::swap(l, u);
 			}
 			goto add;
@@ -613,7 +613,7 @@ uint32_t Scanner::lex_cls_chr()
 		esc "-"    { return static_cast<uint8_t>('-'); }
 		esc "]"    { return static_cast<uint8_t>(']'); }
 		esc .      {
-			warn.useless_escape(tline, tok - pos, tok[1]);
+			warn.useless_escape(cline, tok - pos, tok[1]);
 			return static_cast<uint8_t>(tok[1]);
 		}
 	*/
@@ -645,7 +645,7 @@ uint32_t Scanner::lex_str_chr(char quote, bool &end)
 		esc "\\"   { return static_cast<uint8_t>('\\'); }
 		esc .      {
 			if (tok[1] != quote) {
-				warn.useless_escape(tline, tok - pos, tok[1]);
+				warn.useless_escape(cline, tok - pos, tok[1]);
 			}
 			return static_cast<uint8_t>(tok[1]);
 		}
