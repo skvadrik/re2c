@@ -130,19 +130,18 @@ static void make_rule(Scanner &in, CondList *clist, RegExpRule *rule,
 	delete clist;
 }
 
-static void make_setup(Scanner &in, CondList *clist, const Code * code)
+static void make_setup(Scanner &in, CondList *clist, const Code *code)
 {
 	assert(clist);
 	assert(code);
 	context_check(in, clist);
-	for(CondList::const_iterator it = clist->begin(); it != clist->end(); ++it)
-	{
-		if (ruleSetupMap.find(*it) != ruleSetupMap.end())
-		{
-			in.fatalf_at(code->fline, "code to setup rule '%s' is already defined", it->c_str());
+	for (CondList::const_iterator i = clist->begin(); i != clist->end(); ++i) {
+		if (ruleSetupMap.find(*i) != ruleSetupMap.end()) {
+			in.fatalf_at(code->fline, "code to setup rule '%s' is already defined", i->c_str());
 		}
-		ruleSetupMap[*it] = std::make_pair(code->fline, code->text);
+		ruleSetupMap[*i] = std::make_pair(code->fline, code->text);
 	}
+	delete code;
 	delete clist;
 }
 

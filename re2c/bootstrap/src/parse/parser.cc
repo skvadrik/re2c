@@ -198,19 +198,18 @@ static void make_rule(Scanner &in, CondList *clist, RegExpRule *rule,
 	delete clist;
 }
 
-static void make_setup(Scanner &in, CondList *clist, const Code * code)
+static void make_setup(Scanner &in, CondList *clist, const Code *code)
 {
 	assert(clist);
 	assert(code);
 	context_check(in, clist);
-	for(CondList::const_iterator it = clist->begin(); it != clist->end(); ++it)
-	{
-		if (ruleSetupMap.find(*it) != ruleSetupMap.end())
-		{
-			in.fatalf_at(code->fline, "code to setup rule '%s' is already defined", it->c_str());
+	for (CondList::const_iterator i = clist->begin(); i != clist->end(); ++i) {
+		if (ruleSetupMap.find(*i) != ruleSetupMap.end()) {
+			in.fatalf_at(code->fline, "code to setup rule '%s' is already defined", i->c_str());
 		}
-		ruleSetupMap[*it] = std::make_pair(code->fline, code->text);
+		ruleSetupMap[*i] = std::make_pair(code->fline, code->text);
 	}
+	delete code;
 	delete clist;
 }
 
@@ -593,11 +592,11 @@ static const yytype_int8 yyrhs[] =
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint16 yyrline[] =
 {
-       0,   199,   199,   201,   202,   203,   207,   214,   219,   222,
-     226,   226,   229,   233,   237,   241,   245,   249,   253,   257,
-     262,   268,   275,   276,   280,   284,   289,   294,   298,   305,
-     309,   316,   320,   327,   331,   348,   367,   371,   375,   379,
-     386,   396,   400
+       0,   198,   198,   200,   201,   202,   206,   213,   218,   221,
+     225,   225,   228,   232,   236,   240,   244,   248,   252,   256,
+     261,   267,   274,   275,   279,   283,   288,   293,   297,   304,
+     308,   315,   319,   326,   330,   347,   366,   370,   374,   378,
+     385,   395,   399
 };
 #endif
 
