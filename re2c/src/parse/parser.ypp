@@ -33,15 +33,10 @@ using namespace re2c;
 
 extern "C" {
 
-int yylex(Scanner &in);
-void yyerror(Scanner &in, const char*);
+int yylex(Scanner &in, context_t&);
+void yyerror(Scanner &in, context_t&, const char*);
 
 } // extern "C"
-
-static std::vector<std::string> condnames;
-static re2c::SpecMap  specMap;
-static SetupMap            ruleSetupMap;
-static symbol_table_t symbol_table;
 
 /* Bison version 1.875 emits a definition that is not working
  * with several g++ version. Hence we disable it here.
@@ -49,6 +44,14 @@ static symbol_table_t symbol_table;
 #if defined(__GNUC__)
 #define __attribute__(x)
 #endif
+
+static void parse_cleanup(re2c::context_t &context)
+{
+	RegExp::flist.clear();
+	Range::vFreeList.clear();
+	RangeSuffix::freeList.clear();
+	context.clear();
+}
 
 static void check(const Spec &spec, const std::string &cond)
 {
@@ -97,8 +100,8 @@ static void context_check(Scanner &in, CondList *clist)
 	}
 }
 
-static void make_rule(Scanner &in, CondList *clist, RegExpRule *rule,
-	Code *code, const std::string *newcond)
+static void make_rule(Scanner &in, context_t &context, CondList *clist,
+	RegExpRule *rule, Code *code, const std::string *newcond)
 {
 	if (!clist) {
 		clist = new CondList;
@@ -122,15 +125,16 @@ static void make_rule(Scanner &in, CondList *clist, RegExpRule *rule,
 
 	for(CondList::const_iterator i = clist->begin(); i != clist->end(); ++i) {
 		const std::string &cond = *i;
-		if (cond != "" && cond != "*" && specMap.find(cond) == specMap.end()) {
-			condnames.push_back(cond);
+		if (cond != "" && cond != "*" && context.specMap.find(cond) == context.specMap.end()) {
+			context.condnames.push_back(cond);
 		}
-		specMap[cond].push_back(rule);
+		context.specMap[cond].push_back(rule);
 	}
 	delete clist;
 }
 
-static void make_setup(Scanner &in, CondList *clist, const Code *code)
+static void make_setup(Scanner &in, SetupMap &ruleSetupMap,
+	CondList *clist, const Code *code)
 {
 	assert(clist);
 	assert(code);
@@ -164,6 +168,8 @@ static std::string find_setup_rule(const SetupMap &map, const std::string &key)
 
 %lex-param   {Scanner &in}
 %parse-param {Scanner &in}
+%lex-param   {context_t &context}
+%parse-param {context_t &context}
 
 %union {
 	const re2c::RegExp * regexp;
@@ -204,7 +210,7 @@ spec
 
 def
 	: name expr enddef {
-		if (!symbol_table.insert(std::make_pair(*$1, $2)).second) {
+		if (!context.symbol_table.insert(std::make_pair(*$1, $2)).second) {
 			in.fatal("sym already defined");
 		}
 		delete $1;
@@ -226,35 +232,35 @@ enddef: ';' | TOKEN_FID_END;
 
 rule
 	: trailexpr TOKEN_CODE {
-		make_rule(in, NULL, $1, $2, NULL);
+		make_rule(in, context, NULL, $1, $2, NULL);
 	}
 
 	| '<' clist '>' trailexpr TOKEN_CODE {
-		make_rule(in, $2, $4, $5, NULL);
+		make_rule(in, context, $2, $4, $5, NULL);
 	}
 
 	| '<' clist '>' trailexpr '=' '>' TOKEN_ID TOKEN_CODE {
-		make_rule(in, $2, $4, $8, $7);
+		make_rule(in, context, $2, $4, $8, $7);
 	}
 
 	| '<' clist '>' trailexpr ':' '=' '>' TOKEN_ID {
-		make_rule(in, $2, $4, NULL, $8);
+		make_rule(in, context, $2, $4, NULL, $8);
 	}
 
 	| '<' '>' TOKEN_CODE {
-		make_rule(in, NULL, NULL, $3, NULL);
+		make_rule(in, context, NULL, NULL, $3, NULL);
 	}
 
 	| '<' '>' '=' '>' TOKEN_ID TOKEN_CODE {
-		make_rule(in, NULL, NULL, $6, $5);
+		make_rule(in, context, NULL, NULL, $6, $5);
 	}
 
 	| '<' '>' ':' '=' '>' TOKEN_ID {
-		make_rule(in, NULL, NULL, NULL, $6);
+		make_rule(in, context, NULL, NULL, NULL, $6);
 	}
 
 	| '<' '!' clist '>' TOKEN_CODE {
-		make_setup(in, $3, $5);
+		make_setup(in, context.ruleSetupMap, $3, $5);
 	};
 
 clist
@@ -384,9 +390,9 @@ close:
 primary:
 		TOKEN_ID
 		{
-			symbol_table_t::iterator i = symbol_table.find (* $1);
+			symbol_table_t::iterator i = context.symbol_table.find (* $1);
 			delete $1;
-			if (i == symbol_table.end ())
+			if (i == context.symbol_table.end ())
 			{
 				in.fatal("can't find symbol");
 			}
@@ -406,12 +412,12 @@ primary:
 
 extern "C" {
 
-void yyerror(Scanner &in, const char* s)
+void yyerror(Scanner &in, context_t&, const char* s)
 {
 	in.fatal(s);
 }
 
-int yylex(Scanner &in)
+int yylex(Scanner &in, context_t&)
 {
 	return in.scan();
 }
@@ -424,6 +430,7 @@ namespace re2c
 void parse(Scanner &in, Output & o)
 {
 	dfa_map_t dfa_map;
+	context_t context;
 	ScannerState rules_state, curr_state;
 	Opt &opts = in.opts;
 
@@ -459,51 +466,51 @@ void parse(Scanner &in, Output & o)
 		{
 			dfa_map.clear();
 		}
-		specMap.clear();
-		yyparse(in);
+		context.specMap.clear();
+		yyparse(in, context);
 		if (opts->rFlag && mode == Scanner::Reuse) {
-			if (!specMap.empty() || opts->encoding != encodingOld) {
+			if (!context.specMap.empty() || opts->encoding != encodingOld) {
 				// Re-parse rules
 				mode = Scanner::Parse;
 				in.restore_state(rules_state);
 				in.reuse();
 				dfa_map.clear();
-				parse_cleanup();
-				specMap.clear();
-				yyparse(in);
+				parse_cleanup(context);
+				context.specMap.clear();
+				yyparse(in, context);
 
 				// Now append potential new rules
 				in.restore_state(curr_state);
 				mode = Scanner::Parse;
-				yyparse(in);
+				yyparse(in, context);
 			}
 			encodingOld = opts->encoding;
 		}
 
 		o.source.block().line = in.get_cline();
-		o.source.block().types = condnames;
+		o.source.block().types = context.condnames;
 
 		// compile regular expressions to automata
 		if (mode != Scanner::Reuse) {
 			SpecMap::iterator it;
-			for (it = specMap.begin(); it != specMap.end(); ++it) {
+			for (it = context.specMap.begin(); it != context.specMap.end(); ++it) {
 				check(it->second, it->first);
 			}
 
 			// merge <*> rules to all conditions except "0" with lowest priority
 			Spec star;
-			if ((it = specMap.find("*")) != specMap.end()) {
+			if ((it = context.specMap.find("*")) != context.specMap.end()) {
 				star = it->second;
-				specMap.erase(it);
+				context.specMap.erase(it);
 			}
-			for (it = specMap.begin(); it != specMap.end(); ++it) {
+			for (it = context.specMap.begin(); it != context.specMap.end(); ++it) {
 				if (it->first == "0") continue;
 				for (size_t j = 0; j < star.size(); ++j) {
 					it->second.push_back(star[j]);
 				}
 			}
 
-			for (it = specMap.begin(); it != specMap.end(); ++it) {
+			for (it = context.specMap.begin(); it != context.specMap.end(); ++it) {
 				delay_default(it->second);
 				dfa_map[it->first] = compile(it->second, o, it->first, opts->encoding.nCodeUnits ());
 			}
@@ -514,7 +521,7 @@ void parse(Scanner &in, Output & o)
 			uint32_t ind = opts->topIndent;
 			size_t nCount = dfa_map.size();
 			for (dfa_map_t::const_iterator i = dfa_map.begin(); i != dfa_map.end(); ++i) {
-				o.source.block().setup_rule = find_setup_rule(ruleSetupMap, i->first);
+				o.source.block().setup_rule = find_setup_rule(context.ruleSetupMap, i->first);
 				i->second->emit(o, ind, !--nCount, bPrologBrace);
 			}
 		}
@@ -525,15 +532,15 @@ void parse(Scanner &in, Output & o)
 	}
 
 	SetupMap::const_iterator itRuleSetup;
-	for (itRuleSetup = ruleSetupMap.begin(); itRuleSetup != ruleSetupMap.end(); ++itRuleSetup) {
-		if (itRuleSetup->first != "*" && specMap.find(itRuleSetup->first) == specMap.end()) {
+	for (itRuleSetup = context.ruleSetupMap.begin(); itRuleSetup != context.ruleSetupMap.end(); ++itRuleSetup) {
+		if (itRuleSetup->first != "*" && context.specMap.find(itRuleSetup->first) == context.specMap.end()) {
 			in.fatalf_at(itRuleSetup->second.first, "setup for non existing rule '%s' found", itRuleSetup->first.c_str());
 		}
 	}
-	if (specMap.size() < ruleSetupMap.size()) {
+	if (context.specMap.size() < context.ruleSetupMap.size()) {
 		uint32_t line = in.get_cline();
-		itRuleSetup = ruleSetupMap.find("*");
-		if (itRuleSetup != ruleSetupMap.end()) {
+		itRuleSetup = context.ruleSetupMap.find("*");
+		if (itRuleSetup != context.ruleSetupMap.end()) {
 			line = itRuleSetup->second.first;
 		}
 		in.fatalf_at(line, "setup for all rules with '*' not possible when all rules are setup explicitly");
@@ -544,17 +551,7 @@ void parse(Scanner &in, Output & o)
 		emit_epilog (o.source, o.skeletons);
 	}
 
-	parse_cleanup();
-}
-
-void parse_cleanup()
-{
-	RegExp::flist.clear();
-	Range::vFreeList.clear();
-	RangeSuffix::freeList.clear();
-	symbol_table.clear ();
-	condnames.clear ();
-	specMap.clear();
+	parse_cleanup(context);
 }
 
 } // end namespace re2c
