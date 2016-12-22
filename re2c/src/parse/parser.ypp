@@ -99,14 +99,6 @@ void context_check(Scanner &in, CondList *clist)
 	}
 }
 
-static void add_cond(std::vector<std::string> &names,
-	const std::string &name, re2c::SpecMap &specs)
-{
-	if (name != "" && name != "*" && specs.find(name) == specs.end()) {
-		names.push_back(name);
-	}
-}
-
 void context_rule(Scanner &in, CondList *clist, const Loc &loc,
 	RegExpRule *rule, const Code *code, const std::string *newcond)
 {
@@ -114,7 +106,9 @@ void context_rule(Scanner &in, CondList *clist, const Loc &loc,
 	rule->info = new RuleInfo(loc, code, newcond);
 	for(CondList::const_iterator i = clist->begin(); i != clist->end(); ++i) {
 		const std::string &cond = *i;
-		add_cond(condnames, cond, specMap);
+		if (cond != "" && cond != "*" && specMap.find(cond) == specMap.end()) {
+			condnames.push_back(cond);
+		}
 		specMap[cond].push_back(rule);
 	}
 	delete clist;

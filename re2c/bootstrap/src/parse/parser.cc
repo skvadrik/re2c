@@ -167,14 +167,6 @@ void context_check(Scanner &in, CondList *clist)
 	}
 }
 
-static void add_cond(std::vector<std::string> &names,
-	const std::string &name, re2c::SpecMap &specs)
-{
-	if (name != "" && name != "*" && specs.find(name) == specs.end()) {
-		names.push_back(name);
-	}
-}
-
 void context_rule(Scanner &in, CondList *clist, const Loc &loc,
 	RegExpRule *rule, const Code *code, const std::string *newcond)
 {
@@ -182,7 +174,9 @@ void context_rule(Scanner &in, CondList *clist, const Loc &loc,
 	rule->info = new RuleInfo(loc, code, newcond);
 	for(CondList::const_iterator i = clist->begin(); i != clist->end(); ++i) {
 		const std::string &cond = *i;
-		add_cond(condnames, cond, specMap);
+		if (cond != "" && cond != "*" && specMap.find(cond) == specMap.end()) {
+			condnames.push_back(cond);
+		}
 		specMap[cond].push_back(rule);
 	}
 	delete clist;
@@ -582,11 +576,11 @@ static const yytype_int8 yyrhs[] =
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint16 yyrline[] =
 {
-       0,   190,   190,   192,   193,   194,   198,   205,   210,   213,
-     217,   217,   220,   226,   230,   235,   242,   250,   255,   261,
-     268,   269,   274,   277,   284,   288,   293,   298,   302,   309,
-     313,   320,   324,   331,   335,   352,   371,   375,   379,   383,
-     390,   400,   404
+       0,   184,   184,   186,   187,   188,   192,   199,   204,   207,
+     211,   211,   214,   220,   224,   229,   236,   244,   249,   255,
+     262,   263,   268,   271,   278,   282,   287,   292,   296,   303,
+     307,   314,   318,   325,   329,   346,   365,   369,   373,   377,
+     384,   394,   398
 };
 #endif
 
@@ -2097,9 +2091,7 @@ void parse(Scanner &in, Output & o)
 			dfa_map.clear();
 		}
 		specMap.clear();
-		in.set_in_parse(true);
 		yyparse(in);
-		in.set_in_parse(false);
 		if (opts->rFlag && mode == Scanner::Reuse) {
 			if (!specMap.empty() || opts->encoding != encodingOld) {
 				// Re-parse rules
@@ -2109,16 +2101,12 @@ void parse(Scanner &in, Output & o)
 				dfa_map.clear();
 				parse_cleanup();
 				specMap.clear();
-				in.set_in_parse(true);
 				yyparse(in);
-				in.set_in_parse(false);
 
 				// Now append potential new rules
 				in.restore_state(curr_state);
 				mode = Scanner::Parse;
-				in.set_in_parse(true);
 				yyparse(in);
-				in.set_in_parse(false);
 			}
 			encodingOld = opts->encoding;
 		}
