@@ -95,7 +95,6 @@
 #include "src/parse/scanner.h"
 #include "src/util/free_list.h"
 #include "src/util/range.h"
-#include "src/util/smart_ptr.h"
 
 #define YYMALLOC malloc
 #define YYFREE free
@@ -112,7 +111,6 @@ void yyerror(Scanner &in, const char*);
 static std::vector<std::string> condnames;
 static re2c::SpecMap  specMap;
 static SetupMap            ruleSetupMap;
-static bool                foundRules;
 static symbol_table_t symbol_table;
 
 /* Bison version 1.875 emits a definition that is not working
@@ -584,11 +582,11 @@ static const yytype_int8 yyrhs[] =
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint16 yyrline[] =
 {
-       0,   192,   192,   194,   195,   196,   201,   208,   213,   216,
-     220,   220,   223,   229,   233,   238,   245,   253,   258,   264,
-     271,   272,   277,   280,   287,   291,   296,   301,   305,   312,
-     316,   323,   327,   334,   338,   355,   374,   378,   382,   386,
-     393,   403,   407
+       0,   190,   190,   192,   193,   194,   198,   205,   210,   213,
+     217,   217,   220,   226,   230,   235,   242,   250,   255,   261,
+     268,   269,   274,   277,   284,   288,   293,   298,   302,   309,
+     313,   320,   324,   331,   335,   352,   371,   375,   379,   383,
+     390,   400,   404
 };
 #endif
 
@@ -1544,14 +1542,7 @@ yyreduce:
   YY_REDUCE_PRINT (yyn);
   switch (yyn)
     {
-        case 5:
-
-    {
-		foundRules = true;
-	;}
-    break;
-
-  case 6:
+        case 6:
 
     {
 		if (!symbol_table.insert(std::make_pair(*(yyvsp[(1) - (3)].str), (yyvsp[(2) - (3)].regexp))).second) {
@@ -2069,8 +2060,8 @@ namespace re2c
 
 void parse(Scanner &in, Output & o)
 {
-	std::map<std::string, smart_ptr<DFA> >  dfa_map;
-	ScannerState rules_state;
+	dfa_map_t dfa_map;
+	ScannerState rules_state, curr_state;
 	Opt &opts = in.opts;
 
 	o.source.wversion_time ()
@@ -2084,11 +2075,8 @@ void parse(Scanner &in, Output & o)
 	for (Scanner::ParseMode mode; (mode = in.echo()) != Scanner::Stop;) {
 		o.source.new_block ();
 		bool bPrologBrace = false;
-		ScannerState curr_state;
 
 		in.save_state(curr_state);
-		foundRules = false;
-
 		if (opts->rFlag && mode == Scanner::Rules && dfa_map.size())
 		{
 			in.fatal("cannot have a second 'rules:re2c' block");
@@ -2106,16 +2094,14 @@ void parse(Scanner &in, Output & o)
 		}
 		else
 		{
-			specMap.clear();
 			dfa_map.clear();
 		}
+		specMap.clear();
 		in.set_in_parse(true);
 		yyparse(in);
 		in.set_in_parse(false);
-		if (opts->rFlag && mode == Scanner::Reuse)
-		{
-			if (foundRules || opts->encoding != encodingOld)
-			{
+		if (opts->rFlag && mode == Scanner::Reuse) {
+			if (!specMap.empty() || opts->encoding != encodingOld) {
 				// Re-parse rules
 				mode = Scanner::Parse;
 				in.restore_state(rules_state);
@@ -2136,41 +2122,43 @@ void parse(Scanner &in, Output & o)
 			}
 			encodingOld = opts->encoding;
 		}
+
 		o.source.block().line = in.get_cline();
-		uint32_t ind = opts->topIndent;
+		o.source.block().types = condnames;
 
-		SpecMap::iterator it;
-
-		for (it = specMap.begin(); it != specMap.end(); ++it) {
-			check(it->second, it->first);
-		}
-
-		Spec star;
-		if ((it = specMap.find("*")) != specMap.end()) {
-			star = it->second;
-			specMap.erase(it);
-		}
-
+		// compile regular expressions to automata
 		if (mode != Scanner::Reuse) {
+			SpecMap::iterator it;
+			for (it = specMap.begin(); it != specMap.end(); ++it) {
+				check(it->second, it->first);
+			}
+
 			// merge <*> rules to all conditions except "0" with lowest priority
+			Spec star;
+			if ((it = specMap.find("*")) != specMap.end()) {
+				star = it->second;
+				specMap.erase(it);
+			}
 			for (it = specMap.begin(); it != specMap.end(); ++it) {
 				if (it->first == "0") continue;
 				for (size_t j = 0; j < star.size(); ++j) {
 					it->second.push_back(star[j]);
 				}
 			}
-		}
-		o.source.block().types = condnames;
 
-		size_t nCount = specMap.size();
-		for (it = specMap.begin(); it != specMap.end(); ++it) {
-			delay_default(it->second);
-			if (mode != Scanner::Reuse) {
-				o.source.block().setup_rule = find_setup_rule(ruleSetupMap, it->first);
+			for (it = specMap.begin(); it != specMap.end(); ++it) {
+				delay_default(it->second);
 				dfa_map[it->first] = compile(it->second, o, it->first, opts->encoding.nCodeUnits ());
 			}
-			if (mode != Scanner::Rules && dfa_map.find(it->first) != dfa_map.end()) {
-				dfa_map[it->first]->emit(o, ind, !--nCount, bPrologBrace);
+		}
+
+		// generate code
+		if (mode != Scanner::Rules) {
+			uint32_t ind = opts->topIndent;
+			size_t nCount = dfa_map.size();
+			for (dfa_map_t::const_iterator i = dfa_map.begin(); i != dfa_map.end(); ++i) {
+				o.source.block().setup_rule = find_setup_rule(ruleSetupMap, i->first);
+				i->second->emit(o, ind, !--nCount, bPrologBrace);
 			}
 		}
 
