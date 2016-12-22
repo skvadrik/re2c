@@ -153,7 +153,7 @@ static void delay_default(Spec &spec)
 	std::stable_partition(spec.begin(), spec.end(), RegExpRule::isnt_def);
 }
 
-void context_check(Scanner &in, CondList *clist)
+static void context_check(Scanner &in, CondList *clist)
 {
 	if (clist && clist->size() == 1 && clist->begin()->empty()) {
 		if (in.opts->cFlag) {
@@ -165,10 +165,29 @@ void context_check(Scanner &in, CondList *clist)
 	}
 }
 
-void context_rule(Scanner &in, CondList *clist, RegExpRule *rule, const std::string *newcond)
+static void make_rule(Scanner &in, CondList *clist, RegExpRule *rule,
+	Code *code, const std::string *newcond)
 {
+	if (!clist) {
+		clist = new CondList;
+		clist->insert(rule ? "" : "0");
+	}
 	context_check(in, clist);
-	if (newcond) rule->code->cond = *newcond;
+
+	if (!code) {
+		code = new Code(in.get_fname(), in.get_cline());
+	}
+
+	if (newcond) {
+		code->cond = *newcond;
+		delete newcond;
+	}
+
+	if (!rule) {
+		rule = new RegExpRule(RegExp::make_nil(), false);
+	}
+	rule->code = code;
+
 	for(CondList::const_iterator i = clist->begin(); i != clist->end(); ++i) {
 		const std::string &cond = *i;
 		if (cond != "" && cond != "*" && specMap.find(cond) == specMap.end()) {
@@ -177,10 +196,9 @@ void context_rule(Scanner &in, CondList *clist, RegExpRule *rule, const std::str
 		specMap[cond].push_back(rule);
 	}
 	delete clist;
-	delete newcond;
 }
 
-void setup_rule(Scanner &in, CondList *clist, const Code * code)
+static void make_setup(Scanner &in, CondList *clist, const Code * code)
 {
 	assert(clist);
 	assert(code);
@@ -575,8 +593,8 @@ static const yytype_int8 yyrhs[] =
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint16 yyrline[] =
 {
-       0,   181,   181,   183,   184,   185,   189,   196,   201,   204,
-     208,   208,   211,   218,   223,   228,   233,   241,   249,   257,
+       0,   199,   199,   201,   202,   203,   207,   214,   219,   222,
+     226,   226,   229,   233,   237,   241,   245,   249,   253,   257,
      262,   268,   275,   276,   280,   284,   289,   294,   298,   305,
      309,   316,   320,   327,   331,   348,   367,   371,   375,   379,
      386,   396,   400
@@ -1572,74 +1590,56 @@ yyreduce:
   case 12:
 
     {
-		CondList *cl = new CondList;
-		cl->insert("");
-		(yyvsp[(1) - (2)].rule)->code = (yyvsp[(2) - (2)].code);
-		context_rule(in, cl, (yyvsp[(1) - (2)].rule), NULL);
+		make_rule(in, NULL, (yyvsp[(1) - (2)].rule), (yyvsp[(2) - (2)].code), NULL);
 	;}
     break;
 
   case 13:
 
     {
-		(yyvsp[(4) - (5)].rule)->code = (yyvsp[(5) - (5)].code);
-		context_rule(in, (yyvsp[(2) - (5)].clist), (yyvsp[(4) - (5)].rule), NULL);
+		make_rule(in, (yyvsp[(2) - (5)].clist), (yyvsp[(4) - (5)].rule), (yyvsp[(5) - (5)].code), NULL);
 	;}
     break;
 
   case 14:
 
     {
-		(yyvsp[(4) - (8)].rule)->code = (yyvsp[(8) - (8)].code);
-		context_rule(in, (yyvsp[(2) - (8)].clist), (yyvsp[(4) - (8)].rule), (yyvsp[(7) - (8)].str));
+		make_rule(in, (yyvsp[(2) - (8)].clist), (yyvsp[(4) - (8)].rule), (yyvsp[(8) - (8)].code), (yyvsp[(7) - (8)].str));
 	;}
     break;
 
   case 15:
 
     {
-		(yyvsp[(4) - (8)].rule)->code = new Code(in.get_fname(), in.get_cline());
-		context_rule(in, (yyvsp[(2) - (8)].clist), (yyvsp[(4) - (8)].rule), (yyvsp[(8) - (8)].str));
+		make_rule(in, (yyvsp[(2) - (8)].clist), (yyvsp[(4) - (8)].rule), NULL, (yyvsp[(8) - (8)].str));
 	;}
     break;
 
   case 16:
 
     {
-		CondList *cl = new CondList;
-		cl->insert("0");
-		RegExpRule *r = new RegExpRule(RegExp::make_nil(), false);
-		r->code = (yyvsp[(3) - (3)].code);
-		context_rule(in, cl, r, NULL);
+		make_rule(in, NULL, NULL, (yyvsp[(3) - (3)].code), NULL);
 	;}
     break;
 
   case 17:
 
     {
-		CondList *cl = new CondList;
-		cl->insert("0");
-		RegExpRule *r = new RegExpRule(RegExp::make_nil(), false);
-		r->code = (yyvsp[(6) - (6)].code);
-		context_rule(in, cl, r, (yyvsp[(5) - (6)].str));
+		make_rule(in, NULL, NULL, (yyvsp[(6) - (6)].code), (yyvsp[(5) - (6)].str));
 	;}
     break;
 
   case 18:
 
     {
-		CondList *cl = new CondList;
-		cl->insert("0");
-		RegExpRule *r = new RegExpRule(RegExp::make_nil(), false);
-		r->code = new Code(in.get_fname(), in.get_cline());
-		context_rule(in, cl, r, (yyvsp[(6) - (6)].str));
+		make_rule(in, NULL, NULL, NULL, (yyvsp[(6) - (6)].str));
 	;}
     break;
 
   case 19:
 
     {
-		setup_rule(in, (yyvsp[(3) - (5)].clist), (yyvsp[(5) - (5)].code));
+		make_setup(in, (yyvsp[(3) - (5)].clist), (yyvsp[(5) - (5)].code));
 	;}
     break;
 

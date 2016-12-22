@@ -85,7 +85,7 @@ static void delay_default(Spec &spec)
 	std::stable_partition(spec.begin(), spec.end(), RegExpRule::isnt_def);
 }
 
-void context_check(Scanner &in, CondList *clist)
+static void context_check(Scanner &in, CondList *clist)
 {
 	if (clist && clist->size() == 1 && clist->begin()->empty()) {
 		if (in.opts->cFlag) {
@@ -97,10 +97,29 @@ void context_check(Scanner &in, CondList *clist)
 	}
 }
 
-void context_rule(Scanner &in, CondList *clist, RegExpRule *rule, const std::string *newcond)
+static void make_rule(Scanner &in, CondList *clist, RegExpRule *rule,
+	Code *code, const std::string *newcond)
 {
+	if (!clist) {
+		clist = new CondList;
+		clist->insert(rule ? "" : "0");
+	}
 	context_check(in, clist);
-	if (newcond) rule->code->cond = *newcond;
+
+	if (!code) {
+		code = new Code(in.get_fname(), in.get_cline());
+	}
+
+	if (newcond) {
+		code->cond = *newcond;
+		delete newcond;
+	}
+
+	if (!rule) {
+		rule = new RegExpRule(RegExp::make_nil(), false);
+	}
+	rule->code = code;
+
 	for(CondList::const_iterator i = clist->begin(); i != clist->end(); ++i) {
 		const std::string &cond = *i;
 		if (cond != "" && cond != "*" && specMap.find(cond) == specMap.end()) {
@@ -109,10 +128,9 @@ void context_rule(Scanner &in, CondList *clist, RegExpRule *rule, const std::str
 		specMap[cond].push_back(rule);
 	}
 	delete clist;
-	delete newcond;
 }
 
-void setup_rule(Scanner &in, CondList *clist, const Code * code)
+static void make_setup(Scanner &in, CondList *clist, const Code * code)
 {
 	assert(clist);
 	assert(code);
@@ -209,53 +227,35 @@ enddef: ';' | TOKEN_FID_END;
 
 rule
 	: trailexpr TOKEN_CODE {
-		CondList *cl = new CondList;
-		cl->insert("");
-		$1->code = $2;
-		context_rule(in, cl, $1, NULL);
+		make_rule(in, NULL, $1, $2, NULL);
 	}
 
 	| '<' clist '>' trailexpr TOKEN_CODE {
-		$4->code = $5;
-		context_rule(in, $2, $4, NULL);
+		make_rule(in, $2, $4, $5, NULL);
 	}
 
 	| '<' clist '>' trailexpr '=' '>' TOKEN_ID TOKEN_CODE {
-		$4->code = $8;
-		context_rule(in, $2, $4, $7);
+		make_rule(in, $2, $4, $8, $7);
 	}
 
 	| '<' clist '>' trailexpr ':' '=' '>' TOKEN_ID {
-		$4->code = new Code(in.get_fname(), in.get_cline());
-		context_rule(in, $2, $4, $8);
+		make_rule(in, $2, $4, NULL, $8);
 	}
 
 	| '<' '>' TOKEN_CODE {
-		CondList *cl = new CondList;
-		cl->insert("0");
-		RegExpRule *r = new RegExpRule(RegExp::make_nil(), false);
-		r->code = $3;
-		context_rule(in, cl, r, NULL);
+		make_rule(in, NULL, NULL, $3, NULL);
 	}
 
 	| '<' '>' '=' '>' TOKEN_ID TOKEN_CODE {
-		CondList *cl = new CondList;
-		cl->insert("0");
-		RegExpRule *r = new RegExpRule(RegExp::make_nil(), false);
-		r->code = $6;
-		context_rule(in, cl, r, $5);
+		make_rule(in, NULL, NULL, $6, $5);
 	}
 
 	| '<' '>' ':' '=' '>' TOKEN_ID {
-		CondList *cl = new CondList;
-		cl->insert("0");
-		RegExpRule *r = new RegExpRule(RegExp::make_nil(), false);
-		r->code = new Code(in.get_fname(), in.get_cline());
-		context_rule(in, cl, r, $6);
+		make_rule(in, NULL, NULL, NULL, $6);
 	}
 
 	| '<' '!' clist '>' TOKEN_CODE {
-		setup_rule(in, $3, $5);
+		make_setup(in, $3, $5);
 	};
 
 clist
