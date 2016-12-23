@@ -28,7 +28,7 @@ static std::string make_name(const std::string &cond, uint32_t line)
 }
 
 smart_ptr<DFA> compile(const Spec &rules, Output &output,
-	const std::string &cond, uint32_t cunits)
+	const std::string &cond, uint32_t cunits, const std::string &setup)
 {
 	const size_t defrule = !rules.empty() && RegExpRule::is_def(*rules.rbegin())
 			? rules.size() - 1 : Rule::NONE;
@@ -84,7 +84,8 @@ smart_ptr<DFA> compile(const Spec &rules, Output &output,
 	fillpoints(dfa, fill);
 
 	// ADFA stands for 'DFA with actions'
-	DFA *adfa = new DFA(dfa, fill, defrule, skeleton.sizeof_key, cs, name, cond, line);
+	DFA *adfa = new DFA(dfa, fill, defrule, skeleton.sizeof_key,
+		cs, name, cond, line, setup);
 
 	// see note [reordering DFA states]
 	adfa->reorder();

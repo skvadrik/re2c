@@ -510,7 +510,8 @@ void parse(Scanner &in, Output & o)
 
 			for (it = context.specMap.begin(); it != context.specMap.end(); ++it) {
 				delay_default(it->second);
-				dfa_map[it->first] = compile(it->second, o, it->first, opts->encoding.nCodeUnits ());
+				const std::string &setup = find_setup_rule(context.ruleSetupMap, it->first);
+				dfa_map[it->first] = compile(it->second, o, it->first, opts->encoding.nCodeUnits (), setup);
 			}
 		}
 
@@ -519,7 +520,6 @@ void parse(Scanner &in, Output & o)
 			uint32_t ind = opts->topIndent;
 			size_t nCount = dfa_map.size();
 			for (dfa_map_t::const_iterator i = dfa_map.begin(); i != dfa_map.end(); ++i) {
-				o.source.block().setup_rule = find_setup_rule(context.ruleSetupMap, i->first);
 				i->second->emit(o, ind, !--nCount, bPrologBrace);
 			}
 		}

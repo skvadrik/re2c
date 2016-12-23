@@ -80,6 +80,7 @@ struct DFA
 	const size_t def_rule;
 	const size_t key_size;
 	bitmaps_t bitmaps;
+	std::string setup;
 
 	DFA	( const dfa_t &dfa
 		, const std::vector<size_t> &fill
@@ -89,6 +90,7 @@ struct DFA
 		, const std::string &n
 		, const std::string &c
 		, uint32_t l
+		, const std::string &s
 		);
 	~DFA ();
 	void reorder();

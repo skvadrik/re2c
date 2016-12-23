@@ -24,6 +24,7 @@ DFA::DFA
 	, const std::string &n
 	, const std::string &c
 	, uint32_t l
+	, const std::string &s
 	)
 	: accepts ()
 	, name (n)
@@ -46,6 +47,7 @@ DFA::DFA
 	, def_rule (def)
 	, key_size (key)
 	, bitmaps (std::min(ubChar, 256u))
+	, setup(s)
 {
 	const size_t nstates = dfa.states.size();
 	const size_t nchars = dfa.nchars;

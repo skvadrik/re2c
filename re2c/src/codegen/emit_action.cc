@@ -227,9 +227,8 @@ void emit_rule(OutputFile &o, uint32_t ind, const DFA &dfa, size_t rule_idx)
 	}
 
 	if (!code->autogen) {
-		const std::string setup = o.block().setup_rule;
-		if (!setup.empty()) {
-			o.wind(ind).wstring(setup).ws("\n");
+		if (!dfa.setup.empty()) {
+			o.wind(ind).wstring(dfa.setup).ws("\n");
 		}
 		o.wline_info(code->fline, code->fname.c_str())
 			.wind(ind).wstring(code->text).ws("\n")
