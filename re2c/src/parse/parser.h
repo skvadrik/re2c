@@ -27,12 +27,14 @@ struct context_t
 {
 	std::vector<std::string> condnames;
 	SpecMap specMap;
+	Spec spec_all;
 	SetupMap ruleSetupMap;
 	symbol_table_t symbol_table;
 
 	context_t()
 		: condnames()
 		, specMap()
+		, spec_all()
 		, ruleSetupMap()
 		, symbol_table()
 	{}
@@ -40,6 +42,7 @@ struct context_t
 	{
 		condnames.clear();
 		specMap.clear();
+		spec_all.clear();
 		ruleSetupMap.clear();
 		symbol_table.clear();
 	}

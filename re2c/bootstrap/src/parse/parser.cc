@@ -179,7 +179,7 @@ static void make_star(Scanner &in, context_t &context, RegExpRule *rule, Code *c
 	check_cflag(in);
 
 	rule->code = code;
-	context.specMap["*"].push_back(rule);
+	context.spec_all.push_back(rule);
 }
 
 static void make_zero(Scanner &in, context_t &context, Code *code)
@@ -2135,18 +2135,12 @@ void parse(Scanner &in, Output & o)
 			for (it = context.specMap.begin(); it != context.specMap.end(); ++it) {
 				check_default(it->second, it->first);
 			}
+			check_default(context.spec_all, "*");
 
 			// merge <*> rules to all conditions except "0" with lowest priority
-			Spec star;
-			if ((it = context.specMap.find("*")) != context.specMap.end()) {
-				star = it->second;
-				context.specMap.erase(it);
-			}
 			for (it = context.specMap.begin(); it != context.specMap.end(); ++it) {
 				if (it->first == "0") continue;
-				for (size_t j = 0; j < star.size(); ++j) {
-					it->second.push_back(star[j]);
-				}
+				it->second.insert(it->second.end(), context.spec_all.begin(), context.spec_all.end());
 			}
 
 			for (it = context.specMap.begin(); it != context.specMap.end(); ++it) {
