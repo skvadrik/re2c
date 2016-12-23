@@ -1,1 +1,1 @@
-re2c: error: multiple definitions of startup code (lines 3, 4)
+re2c: error: line 4: startup code is already defined at line 3

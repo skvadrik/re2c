@@ -271,18 +271,7 @@ start:
 		return TOKEN_REGEXP;
 	}
 
-	[<>!,()|=;/\\]	{
-					return *tok;
-				}
-
-	"*"			{
-					yylval.op = *tok;
-					return TOKEN_STAR;
-				}
-	[+?]		{
-					yylval.op = *tok;
-					return TOKEN_CLOSE;
-				}
+	[*+?<>!,()|=;/\\] { return *tok; }
 
 	"{" [0-9]+ "}"	{
 					if (!s_to_u32_unsafe (tok + 1, cur - 1, yylval.extop.min))

@@ -53,31 +53,15 @@ static void parse_cleanup(re2c::context_t &context)
 	context.clear();
 }
 
-static void check(const Spec &spec, const std::string &cond)
+static void check_default(const Spec &spec, const std::string &cond)
 {
-	Spec::const_iterator b = spec.begin(), e = spec.end(), i, j;
-
-	// no multiple default rules per condition
-	i = std::find_if(b, e, RegExpRule::is_def);
-	j = std::find_if(i + 1, e, RegExpRule::is_def);
+	Spec::const_iterator
+		e = spec.end(),
+		i = std::find_if(spec.begin(), e, RegExpRule::is_def),
+		j = std::find_if(i + 1, e, RegExpRule::is_def);
 	if (j != e) {
-		const uint32_t
-			l1 = (*i)->code->fline,
-			l2 = (*j)->code->fline;
 		error("line %u: code to default rule %sis already defined at line %u",
-			l2, incond(cond).c_str(), l1);
-		exit(1);
-	}
-
-	// no multiple startup code definitions
-	if (cond == "0" && e - b > 1) {
-		fprintf(stderr, "re2c: error: multiple definitions of startup code (lines ");
-		for (i = b;;) {
-			fprintf(stderr, "%u", (*i)->code->fline);
-			if (++i == e) break;
-			fprintf(stderr, ", ");
-		}
-		fprintf(stderr, ")\n");
+			(*j)->code->fline, incond(cond).c_str(), (*i)->code->fline);
 		exit(1);
 	}
 }
@@ -88,35 +72,33 @@ static void delay_default(Spec &spec)
 	std::stable_partition(spec.begin(), spec.end(), RegExpRule::isnt_def);
 }
 
-static void context_check(Scanner &in, CondList *clist)
+static void check_cflag(Scanner &in)
 {
-	if (clist && clist->size() == 1 && clist->begin()->empty()) {
-		if (in.opts->cFlag) {
-			in.fatal("condition or '<*>' required when using -c switch");
-		}
-	} else if (!in.opts->cFlag) {
-		delete clist;
+	if (!in.opts->cFlag) {
 		in.fatal("conditions are only allowed when using -c switch");
 	}
 }
 
-static void make_rule(Scanner &in, context_t &context, CondList *clist,
+static void make_rule(Scanner &in, context_t &context,
 	RegExpRule *rule, Code *code)
 {
-	if (!clist) {
-		clist = new CondList;
-		clist->insert(rule ? "" : "0");
+	if (in.opts->cFlag) {
+		in.fatal("condition or '<*>' required when using -c switch");
 	}
-	context_check(in, clist);
 
-	if (!rule) {
-		rule = new RegExpRule(RegExp::make_nil(), false);
-	}
 	rule->code = code;
+	context.specMap[""].push_back(rule);
+}
 
+static void make_cond(Scanner &in, context_t &context, CondList *clist,
+	RegExpRule *rule, Code *code)
+{
+	check_cflag(in);
+
+	rule->code = code;
 	for(CondList::const_iterator i = clist->begin(); i != clist->end(); ++i) {
 		const std::string &cond = *i;
-		if (cond != "" && cond != "*" && context.specMap.find(cond) == context.specMap.end()) {
+		if (context.specMap.find(cond) == context.specMap.end()) {
 			context.condnames.push_back(cond);
 		}
 		context.specMap[cond].push_back(rule);
@@ -124,12 +106,45 @@ static void make_rule(Scanner &in, context_t &context, CondList *clist,
 	delete clist;
 }
 
+static void make_star(Scanner &in, context_t &context, RegExpRule *rule, Code *code)
+{
+	check_cflag(in);
+
+	rule->code = code;
+	context.specMap["*"].push_back(rule);
+}
+
+static void make_zero(Scanner &in, context_t &context, Code *code)
+{
+	const std::string zero = "0";
+
+	check_cflag(in);
+
+	SpecMap::const_iterator
+		i = context.specMap.find(zero),
+		e = context.specMap.end();
+	if (i != e) {
+		error("line %u: startup code is already defined at line %u",
+			code->fline, i->second[0]->code->fline);
+		exit(1);
+	}
+
+	RegExpRule *rule = new RegExpRule(RegExp::make_nil(), false);
+	rule->code = code;
+	context.condnames.push_back(zero);
+	context.specMap[zero].push_back(rule);
+}
+
 static void make_setup(Scanner &in, SetupMap &ruleSetupMap,
 	CondList *clist, const Code *code)
 {
-	assert(clist);
+	check_cflag(in);
+
+	if (!clist) {
+		clist = new CondList;
+		clist->insert("*");
+	}
 	assert(code);
-	context_check(in, clist);
 	for (CondList::const_iterator i = clist->begin(); i != clist->end(); ++i) {
 		if (ruleSetupMap.find(*i) != ruleSetupMap.end()) {
 			in.fatalf_at(code->fline, "code to setup rule '%s' is already defined", i->c_str());
@@ -172,7 +187,6 @@ static std::string find_setup_rule(const SetupMap &map, const std::string &key)
 	re2c::RegExpRule *rule;
 };
 
-%token TOKEN_CLOSE
 %token TOKEN_CLOSESIZE
 %token TOKEN_CODE
 %token TOKEN_CONF
@@ -180,13 +194,12 @@ static std::string find_setup_rule(const SetupMap &map, const std::string &key)
 %token TOKEN_FID
 %token TOKEN_FID_END
 %token TOKEN_REGEXP
-%token TOKEN_STAR
 
-%type <op>      TOKEN_CLOSE TOKEN_STAR close
+%type <op>      close closes
 %type <extop>   TOKEN_CLOSESIZE
 %type <code>    TOKEN_CODE ccode
 %type <regexp>  TOKEN_REGEXP rule expr diff term factor primary
-%type <str>     TOKEN_ID TOKEN_FID name cname
+%type <str>     TOKEN_ID TOKEN_FID name
 %type <clist>   clist
 %type <rule>    trailexpr
 
@@ -223,19 +236,27 @@ enddef: ';' | TOKEN_FID_END;
 
 rule
 	: trailexpr TOKEN_CODE {
-		make_rule(in, context, NULL, $1, $2);
+		make_rule(in, context, $1, $2);
 	}
 
 	| '<' clist '>' trailexpr ccode {
-		make_rule(in, context, $2, $4, $5);
+		make_cond(in, context, $2, $4, $5);
+	}
+
+	| '<' '*' '>' trailexpr ccode {
+		make_star(in, context, $4, $5);
 	}
 
 	| '<' '>' ccode {
-		make_rule(in, context, NULL, NULL, $3);
+		make_zero(in, context, $3);
 	}
 
 	| '<' '!' clist '>' TOKEN_CODE {
 		make_setup(in, context.ruleSetupMap, $3, $5);
+	}
+
+	| '<' '!' '*' '>' TOKEN_CODE {
+		make_setup(in, context.ruleSetupMap, NULL, $5);
 	};
 
 ccode
@@ -254,22 +275,17 @@ ccode
 	};
 
 clist
-	: cname {
+	: TOKEN_ID {
 		$$ = new CondList;
 		$$->insert(*$1);
 		delete $1;
 	}
 
-	| clist ',' cname {
+	| clist ',' TOKEN_ID {
 		$1->insert(*$3);
 		delete $3;
 		$$ = $1;
 	};
-
-cname
-	: TOKEN_ID
-	| TOKEN_STAR { $$ = new std::string("*"); }
-	;
 
 trailexpr
 	: expr {
@@ -281,7 +297,7 @@ trailexpr
 			RegExp::make_cat(RegExp::make_tag(NULL), $3)), false);
 	}
 
-	| TOKEN_STAR { /* default rule */
+	| '*' { /* default rule */
 		$$ = new RegExpRule(in.mkDefault(), true);
 	};
 
@@ -323,7 +339,7 @@ factor:
 		{
 			$$ = $1;
 		}
-	|	primary close
+	|	primary closes
 		{
 			// see note [Kleene star is expressed in terms of plus]
 			switch($2)
@@ -358,24 +374,16 @@ factor:
 		}
 ;
 
-close:
-		TOKEN_CLOSE
-		{
-			$$ = $1;
-		}
-	|	TOKEN_STAR
-		{
-			$$ = $1;
-		}
-	|	close TOKEN_CLOSE
-		{
-			$$ = ($1 == $2) ? $1 : '*';
-		}
-	|	close TOKEN_STAR
-		{
-			$$ = ($1 == $2) ? $1 : '*';
-		}
-;
+closes
+	: close
+	| closes close { $$ = ($1 == $2) ? $1 : '*'; }
+	;
+
+close
+	: '*' { $$ = '*'; }
+	| '+' { $$ = '+'; }
+	| '?' { $$ = '?'; }
+	;
 
 primary:
 		TOKEN_ID
@@ -484,7 +492,7 @@ void parse(Scanner &in, Output & o)
 		if (mode != Scanner::Reuse) {
 			SpecMap::iterator it;
 			for (it = context.specMap.begin(); it != context.specMap.end(); ++it) {
-				check(it->second, it->first);
+				check_default(it->second, it->first);
 			}
 
 			// merge <*> rules to all conditions except "0" with lowest priority
