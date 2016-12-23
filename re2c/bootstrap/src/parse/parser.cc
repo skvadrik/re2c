@@ -184,23 +184,13 @@ static void make_star(Scanner &in, context_t &context, RegExpRule *rule, Code *c
 
 static void make_zero(Scanner &in, context_t &context, Code *code)
 {
-	const std::string zero = "0";
-
 	check_cflag(in);
-
-	SpecMap::const_iterator
-		i = context.specMap.find(zero),
-		e = context.specMap.end();
-	if (i != e) {
+	if (context.startup) {
 		error("line %u: startup code is already defined at line %u",
-			code->fline, i->second[0]->code->fline);
+			code->fline, context.startup->fline);
 		exit(1);
 	}
-
-	RegExpRule *rule = new RegExpRule(RegExp::make_nil(), false);
-	rule->code = code;
-	context.condnames.push_back(zero);
-	context.specMap[zero].push_back(rule);
+	context.startup = code;
 }
 
 static void make_setup(Scanner &in, SetupMap &ruleSetupMap,
@@ -599,11 +589,11 @@ static const yytype_int8 yyrhs[] =
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint16 yyrline[] =
 {
-       0,   208,   208,   210,   211,   212,   216,   223,   228,   231,
-     235,   235,   238,   242,   246,   250,   254,   258,   263,   265,
-     271,   278,   284,   291,   295,   300,   305,   309,   316,   320,
-     327,   331,   338,   342,   359,   378,   379,   383,   384,   385,
-     389,   399,   403
+       0,   198,   198,   200,   201,   202,   206,   213,   218,   221,
+     225,   225,   228,   232,   236,   240,   244,   248,   253,   255,
+     261,   268,   274,   281,   285,   290,   295,   299,   306,   310,
+     317,   321,   328,   332,   349,   368,   369,   373,   374,   375,
+     379,   389,   393
 };
 #endif
 
@@ -2127,7 +2117,6 @@ void parse(Scanner &in, Output & o)
 		}
 
 		o.source.block().line = in.get_cline();
-		o.source.block().types = context.condnames;
 
 		// compile regular expressions to automata
 		if (mode != Scanner::Reuse) {
@@ -2139,8 +2128,15 @@ void parse(Scanner &in, Output & o)
 
 			// merge <*> rules to all conditions except "0" with lowest priority
 			for (it = context.specMap.begin(); it != context.specMap.end(); ++it) {
-				if (it->first == "0") continue;
 				it->second.insert(it->second.end(), context.spec_all.begin(), context.spec_all.end());
+			}
+
+			// insert "0" condition
+			if (context.startup) {
+				RegExpRule *zero = new RegExpRule(RegExp::make_nil(), false);
+				zero->code = context.startup;
+				context.condnames.insert(context.condnames.begin(), "0"); // first
+				context.specMap["0"].push_back(zero);
 			}
 
 			for (it = context.specMap.begin(); it != context.specMap.end(); ++it) {
@@ -2149,6 +2145,8 @@ void parse(Scanner &in, Output & o)
 				dfa_map[it->first] = compile(it->second, o, it->first, opts->encoding.nCodeUnits (), setup);
 			}
 		}
+
+		o.source.block().types = context.condnames;
 
 		// generate code
 		if (mode != Scanner::Rules) {

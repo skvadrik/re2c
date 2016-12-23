@@ -7,6 +7,7 @@
 #include "src/codegen/output.h"
 #include "src/ir/regexp/regexp.h"
 #include "src/parse/scanner.h"
+#include "src/util/forbid_copy.h"
 #include "src/util/smart_ptr.h"
 
 namespace re2c
@@ -29,6 +30,7 @@ struct context_t
 	SpecMap specMap;
 	Spec spec_all;
 	SetupMap ruleSetupMap;
+	Code *startup;
 	symbol_table_t symbol_table;
 
 	context_t()
@@ -36,6 +38,7 @@ struct context_t
 		, specMap()
 		, spec_all()
 		, ruleSetupMap()
+		, startup(NULL)
 		, symbol_table()
 	{}
 	void clear()
@@ -43,9 +46,11 @@ struct context_t
 		condnames.clear();
 		specMap.clear();
 		spec_all.clear();
+		startup = NULL;
 		ruleSetupMap.clear();
 		symbol_table.clear();
 	}
+	FORBID_COPY(context_t);
 };
 
 } // namespace re2c
