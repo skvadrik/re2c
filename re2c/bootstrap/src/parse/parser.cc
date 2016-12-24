@@ -116,6 +116,7 @@ void yyerror(Scanner &in, context_t&, const char*);
 static void parse_cleanup(re2c::context_t &context)
 {
 	RegExp::flist.clear();
+	Code::flist.clear();
 	Range::vFreeList.clear();
 	RangeSuffix::freeList.clear();
 	context.clear();
@@ -157,7 +158,7 @@ static void check(const context_t &context, bool cflag)
 			l = std::min(l, context.spec_all[0]->code->fline);
 		}
 		if (!setups.empty()) {
-			l = std::min(l, setups.begin()->second.first);
+			l = std::min(l, setups.begin()->second->fline);
 		}
 		if (context.startup) {
 			l = std::min(l, context.startup->fline);
@@ -177,7 +178,7 @@ static void check(const context_t &context, bool cflag)
 			const std::string c = i->first;
 			if (c != "*" && specs.find(c) == specs.end()) {
 				error("line %u: setup for non existing condition '%s' found",
-					i->second.first, c.c_str());
+					i->second->fline, c.c_str());
 				exit(1);
 			}
 		}
@@ -186,7 +187,7 @@ static void check(const context_t &context, bool cflag)
 			if (i != setups.end()) {
 				error("line %u: setup for all conditions '<!*>' is illegal "
 					"if setup for each condition is defined explicitly",
-					i->second.first);
+					i->second->fline);
 				exit(1);
 			}
 		}
@@ -199,14 +200,14 @@ static void delay_default(Spec &spec)
 	std::stable_partition(spec.begin(), spec.end(), RegExpRule::isnt_def);
 }
 
-static void make_rule(context_t &context, RegExpRule *rule, Code *code)
+static void make_rule(context_t &context, RegExpRule *rule, const Code *code)
 {
 	rule->code = code;
 	context.specMap[""].push_back(rule);
 }
 
 static void make_cond(context_t &context, CondList *clist,
-	RegExpRule *rule, Code *code)
+	RegExpRule *rule, const Code *code)
 {
 	rule->code = code;
 	for(CondList::const_iterator i = clist->begin(); i != clist->end(); ++i) {
@@ -219,13 +220,13 @@ static void make_cond(context_t &context, CondList *clist,
 	delete clist;
 }
 
-static void make_star(context_t &context, RegExpRule *rule, Code *code)
+static void make_star(context_t &context, RegExpRule *rule, const Code *code)
 {
 	rule->code = code;
 	context.spec_all.push_back(rule);
 }
 
-static void make_zero(context_t &context, Code *code)
+static void make_zero(context_t &context, const Code *code)
 {
 	if (context.startup) {
 		error("line %u: startup code is already defined at line %u",
@@ -247,9 +248,8 @@ static void make_setup(Scanner &in, SetupMap &ruleSetupMap,
 		if (ruleSetupMap.find(*i) != ruleSetupMap.end()) {
 			in.fatalf_at(code->fline, "code to setup rule '%s' is already defined", i->c_str());
 		}
-		ruleSetupMap[*i] = std::make_pair(code->fline, code->text);
+		ruleSetupMap[*i] = code;
 	}
-	delete code;
 	delete clist;
 }
 
@@ -258,10 +258,10 @@ static std::string find_setup_rule(const SetupMap &map, const std::string &key)
 	SetupMap::const_iterator e = map.end(), i;
 
 	i = map.find(key);
-	if (i != e) return i->second.second;
+	if (i != e) return i->second->text;
 
 	i = map.find("*");
-	if (i != e) return i->second.second;
+	if (i != e) return i->second->text;
 
 	return "";
 }

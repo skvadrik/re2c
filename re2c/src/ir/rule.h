@@ -6,6 +6,7 @@
 #include <string>
 
 #include "src/ir/tag.h"
+#include "src/util/free_list.h"
 #include "src/util/forbid_copy.h"
 
 namespace re2c
@@ -13,6 +14,8 @@ namespace re2c
 
 struct Code
 {
+	static free_list<Code*> flist;
+
 	std::string fname;
 	uint32_t fline;
 	bool autogen;
@@ -25,14 +28,22 @@ struct Code
 		, autogen(true)
 		, text("")
 		, cond("")
-	{}
+	{
+		flist.insert(this);
+	}
 	Code(const std::string &file, uint32_t line, const char *s, size_t slen)
 		: fname(file)
 		, fline(line)
 		, autogen(false)
 		, text(s, slen)
 		, cond("")
-	{}
+	{
+		flist.insert(this);
+	}
+	~Code()
+	{
+		flist.erase(this);
+	}
 };
 
 struct Rule
