@@ -537,7 +537,7 @@ void parse(Scanner &in, Output & o)
 			for (SpecMap::iterator it = context.specMap.begin(); it != context.specMap.end(); ++it) {
 				delay_default(it->second);
 				const std::string &setup = find_setup_rule(context.ruleSetupMap, it->first);
-				dfa_map[it->first] = compile(it->second, o, it->first, opts->encoding.nCodeUnits (), setup);
+				dfa_map[it->first] = compile(it->second, o, it->first, setup);
 			}
 		}
 

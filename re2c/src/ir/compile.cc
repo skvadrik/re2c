@@ -28,7 +28,7 @@ static std::string make_name(const std::string &cond, uint32_t line)
 }
 
 smart_ptr<DFA> compile(const Spec &rules, Output &output,
-	const std::string &cond, uint32_t cunits, const std::string &setup)
+	const std::string &cond, const std::string &setup)
 {
 	const size_t defrule = !rules.empty() && RegExpRule::is_def(*rules.rbegin())
 			? rules.size() - 1 : Rule::NONE;
@@ -36,6 +36,7 @@ smart_ptr<DFA> compile(const Spec &rules, Output &output,
 	const std::string name = make_name(cond, line);
 	Opt &opts = output.source.opts;
 	Warn &warn = output.source.warn;
+	const uint32_t cunits = opts->encoding.nCodeUnits();
 
 	warn_nullable(rules, cond, warn);
 
