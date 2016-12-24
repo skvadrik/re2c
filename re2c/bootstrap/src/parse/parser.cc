@@ -134,35 +134,80 @@ static void check_default(const Spec &spec, const std::string &cond)
 	}
 }
 
+static void check(const context_t &context, bool cflag)
+{
+	const SpecMap &specs = context.specMap;
+	const SetupMap &setups = context.ruleSetupMap;
+	const size_t nspec = specs.size();
+
+	for (SpecMap::const_iterator i = specs.begin(); i != specs.end(); ++i) {
+		check_default(i->second, i->first);
+	}
+	check_default(context.spec_all, "*");
+
+	if (!cflag) {
+		static const uint32_t NOL = ~0u;
+		uint32_t l = NOL;
+		for (SpecMap::const_iterator i = specs.begin(); i != specs.end(); ++i) {
+			if (i->first != "") {
+				l = std::min(l, i->second[0]->code->fline);
+			}
+		}
+		if (!context.spec_all.empty()) {
+			l = std::min(l, context.spec_all[0]->code->fline);
+		}
+		if (!setups.empty()) {
+			l = std::min(l, setups.begin()->second.first);
+		}
+		if (context.startup) {
+			l = std::min(l, context.startup->fline);
+		}
+		if (l != NOL) {
+			error("line %u: conditions are only allowed with '-c', '--conditions' option", l);
+			exit(1);
+		}
+	} else {
+		SpecMap::const_iterator i = specs.find("");
+		if (i != specs.end()) {
+			error("line %u: non-conditional rules are not allowed with '-c', '--conditions' option",
+				i->second[0]->code->fline);
+			exit(1);
+		}
+		for (SetupMap::const_iterator i = setups.begin(); i != setups.end(); ++i) {
+			const std::string c = i->first;
+			if (c != "*" && specs.find(c) == specs.end()) {
+				error("line %u: setup for non existing condition '%s' found",
+					i->second.first, c.c_str());
+				exit(1);
+			}
+		}
+		if (setups.size() > nspec) {
+			SetupMap::const_iterator i = setups.find("*");
+			if (i != setups.end()) {
+				error("line %u: setup for all conditions '<!*>' is illegal "
+					"if setup for each condition is defined explicitly",
+					i->second.first);
+				exit(1);
+			}
+		}
+	}
+}
+
 static void delay_default(Spec &spec)
 {
 	// default rule(s) should go last
 	std::stable_partition(spec.begin(), spec.end(), RegExpRule::isnt_def);
 }
 
-static void check_cflag(Scanner &in)
+static void make_rule(context_t &context, RegExpRule *rule, Code *code)
 {
-	if (!in.opts->cFlag) {
-		in.fatal("conditions are only allowed when using -c switch");
-	}
-}
-
-static void make_rule(Scanner &in, context_t &context,
-	RegExpRule *rule, Code *code)
-{
-	if (in.opts->cFlag) {
-		in.fatal("condition or '<*>' required when using -c switch");
-	}
-
 	rule->code = code;
 	context.specMap[""].push_back(rule);
 }
 
-static void make_cond(Scanner &in, context_t &context, CondList *clist,
+static void make_cond(context_t &context, CondList *clist,
 	RegExpRule *rule, Code *code)
 {
-	check_cflag(in);
-
 	rule->code = code;
 	for(CondList::const_iterator i = clist->begin(); i != clist->end(); ++i) {
 		const std::string &cond = *i;
@@ -174,17 +219,14 @@ static void make_cond(Scanner &in, context_t &context, CondList *clist,
 	delete clist;
 }
 
-static void make_star(Scanner &in, context_t &context, RegExpRule *rule, Code *code)
+static void make_star(context_t &context, RegExpRule *rule, Code *code)
 {
-	check_cflag(in);
-
 	rule->code = code;
 	context.spec_all.push_back(rule);
 }
 
-static void make_zero(Scanner &in, context_t &context, Code *code)
+static void make_zero(context_t &context, Code *code)
 {
-	check_cflag(in);
 	if (context.startup) {
 		error("line %u: startup code is already defined at line %u",
 			code->fline, context.startup->fline);
@@ -196,8 +238,6 @@ static void make_zero(Scanner &in, context_t &context, Code *code)
 static void make_setup(Scanner &in, SetupMap &ruleSetupMap,
 	CondList *clist, const Code *code)
 {
-	check_cflag(in);
-
 	if (!clist) {
 		clist = new CondList;
 		clist->insert("*");
@@ -589,11 +629,11 @@ static const yytype_int8 yyrhs[] =
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint16 yyrline[] =
 {
-       0,   198,   198,   200,   201,   202,   206,   213,   218,   221,
-     225,   225,   228,   232,   236,   240,   244,   248,   253,   255,
-     261,   268,   274,   281,   285,   290,   295,   299,   306,   310,
-     317,   321,   328,   332,   349,   368,   369,   373,   374,   375,
-     379,   389,   393
+       0,   238,   238,   240,   241,   242,   246,   253,   258,   261,
+     265,   265,   268,   272,   276,   280,   284,   288,   293,   295,
+     301,   308,   314,   321,   325,   330,   335,   339,   346,   350,
+     357,   361,   368,   372,   389,   408,   409,   413,   414,   415,
+     419,   429,   433
 };
 #endif
 
@@ -1593,28 +1633,28 @@ yyreduce:
   case 12:
 
     {
-		make_rule(in, context, (yyvsp[(1) - (2)].rule), (yyvsp[(2) - (2)].code));
+		make_rule(context, (yyvsp[(1) - (2)].rule), (yyvsp[(2) - (2)].code));
 	;}
     break;
 
   case 13:
 
     {
-		make_cond(in, context, (yyvsp[(2) - (5)].clist), (yyvsp[(4) - (5)].rule), (yyvsp[(5) - (5)].code));
+		make_cond(context, (yyvsp[(2) - (5)].clist), (yyvsp[(4) - (5)].rule), (yyvsp[(5) - (5)].code));
 	;}
     break;
 
   case 14:
 
     {
-		make_star(in, context, (yyvsp[(4) - (5)].rule), (yyvsp[(5) - (5)].code));
+		make_star(context, (yyvsp[(4) - (5)].rule), (yyvsp[(5) - (5)].code));
 	;}
     break;
 
   case 15:
 
     {
-		make_zero(in, context, (yyvsp[(3) - (3)].code));
+		make_zero(context, (yyvsp[(3) - (3)].code));
 	;}
     break;
 
@@ -2120,14 +2160,10 @@ void parse(Scanner &in, Output & o)
 
 		// compile regular expressions to automata
 		if (mode != Scanner::Reuse) {
-			SpecMap::iterator it;
-			for (it = context.specMap.begin(); it != context.specMap.end(); ++it) {
-				check_default(it->second, it->first);
-			}
-			check_default(context.spec_all, "*");
+			check(context, opts->cFlag);
 
 			// merge <*> rules to all conditions except "0" with lowest priority
-			for (it = context.specMap.begin(); it != context.specMap.end(); ++it) {
+			for (SpecMap::iterator it = context.specMap.begin(); it != context.specMap.end(); ++it) {
 				it->second.insert(it->second.end(), context.spec_all.begin(), context.spec_all.end());
 			}
 
@@ -2139,7 +2175,7 @@ void parse(Scanner &in, Output & o)
 				context.specMap["0"].push_back(zero);
 			}
 
-			for (it = context.specMap.begin(); it != context.specMap.end(); ++it) {
+			for (SpecMap::iterator it = context.specMap.begin(); it != context.specMap.end(); ++it) {
 				delay_default(it->second);
 				const std::string &setup = find_setup_rule(context.ruleSetupMap, it->first);
 				dfa_map[it->first] = compile(it->second, o, it->first, opts->encoding.nCodeUnits (), setup);
@@ -2160,21 +2196,6 @@ void parse(Scanner &in, Output & o)
 		o.source.wline_info (in.get_cline (), in.get_fname ().c_str ());
 		/* restore original char handling mode*/
 		opts.reset_encoding (encodingOld);
-	}
-
-	SetupMap::const_iterator itRuleSetup;
-	for (itRuleSetup = context.ruleSetupMap.begin(); itRuleSetup != context.ruleSetupMap.end(); ++itRuleSetup) {
-		if (itRuleSetup->first != "*" && context.specMap.find(itRuleSetup->first) == context.specMap.end()) {
-			in.fatalf_at(itRuleSetup->second.first, "setup for non existing rule '%s' found", itRuleSetup->first.c_str());
-		}
-	}
-	if (context.specMap.size() < context.ruleSetupMap.size()) {
-		uint32_t line = in.get_cline();
-		itRuleSetup = context.ruleSetupMap.find("*");
-		if (itRuleSetup != context.ruleSetupMap.end()) {
-			line = itRuleSetup->second.first;
-		}
-		in.fatalf_at(line, "setup for all rules with '*' not possible when all rules are setup explicitly");
 	}
 
 	if (opts->target == opt_t::SKELETON)
