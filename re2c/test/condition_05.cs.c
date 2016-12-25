@@ -64,46 +64,46 @@ char scan(Scanner *s)
 				goto yyc_comment;
 			}
 /* *********************************** */
-yyc_comment:
-			if ((s->lim - s->cur) < 2) { if(fill(s, 2) >= 0) break; }
-			yych = *s->cur;
-			if (yych == '*') goto yy5;
-			++s->cur;
-yy4:
-#line 83 "condition_05.cs.re"
-			{
-				goto yyc_comment;
-			}
-#line 78 "condition_05.cs.c"
-yy5:
-			yych = *++s->cur;
-			if (yych != '/') goto yy4;
-			++s->cur;
-#line 79 "condition_05.cs.re"
-			{
-				continue;
-			}
-#line 87 "condition_05.cs.c"
-/* *********************************** */
 yyc_normal:
 			if ((s->lim - s->cur) < 2) { if(fill(s, 2) >= 0) break; }
 			yych = *s->cur;
-			if (yych == '/') goto yy12;
+			if (yych == '/') goto yy5;
 			++s->cur;
-yy11:
+yy4:
 #line 74 "condition_05.cs.re"
 			{
 				fputc(*s->tok, stdout);
 				continue;
 			}
-#line 100 "condition_05.cs.c"
-yy12:
+#line 79 "condition_05.cs.c"
+yy5:
 			yych = *++s->cur;
-			if (yych != '*') goto yy11;
+			if (yych != '*') goto yy4;
 			++s->cur;
 #line 70 "condition_05.cs.re"
 			{
 				goto yyc_comment;
+			}
+#line 88 "condition_05.cs.c"
+/* *********************************** */
+yyc_comment:
+			if ((s->lim - s->cur) < 2) { if(fill(s, 2) >= 0) break; }
+			yych = *s->cur;
+			if (yych == '*') goto yy12;
+			++s->cur;
+yy11:
+#line 83 "condition_05.cs.re"
+			{
+				goto yyc_comment;
+			}
+#line 100 "condition_05.cs.c"
+yy12:
+			yych = *++s->cur;
+			if (yych != '/') goto yy11;
+			++s->cur;
+#line 79 "condition_05.cs.re"
+			{
+				continue;
 			}
 #line 109 "condition_05.cs.c"
 		}

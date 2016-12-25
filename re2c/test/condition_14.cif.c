@@ -98,148 +98,148 @@ yy0:
 		case EStateString: goto yyc_String;
 		}
 /* *********************************** */
-yyc_Comment:
+yyc_Normal:
 		s->state = 0;(0);
-		if ((s->lim - s->cur) < 2) if (fill(s, 2) == ~0) break;
+		if ((s->lim - s->cur) < 4) if (fill(s, 4) == ~0) break;
 yyFillLabel0:
 		s->yych = *s->cur;
 		switch (s->yych) {
-		case '*':	goto yy5;
+		case '"':	goto yy5;
+		case '\'':	goto yy7;
+		case '/':	goto yy8;
+		case '?':	goto yy9;
 		default:	goto yy3;
 		}
 yy3:
 		++s->cur;
 yy4:
-		continue;
-yy5:
-		s->yych = *++s->cur;
-		switch (s->yych) {
-		case '/':	goto yy6;
-		default:	goto yy4;
-		}
-yy6:
-		++s->cur;
-		s->cond = EStateNormal;(EStateNormal);
-		continue;
-/* *********************************** */
-yyc_Normal:
-		s->state = 1;(1);
-		if ((s->lim - s->cur) < 4) if (fill(s, 4) == ~0) break;
-yyFillLabel1:
-		s->yych = *s->cur;
-		switch (s->yych) {
-		case '"':	goto yy12;
-		case '\'':	goto yy14;
-		case '/':	goto yy15;
-		case '?':	goto yy16;
-		default:	goto yy10;
-		}
-yy10:
-		++s->cur;
-yy11:
 		fputc(s->cur[-1], stdout);
 		continue;
-yy12:
+yy5:
 		++s->cur;
 		s->cond = EStateString;(EStateString);
 		fputc(s->cur[-1], stdout);
 		continue;
-yy14:
+yy7:
 		s->yych = *(s->tok = ++s->cur);
 		switch (s->yych) {
-		case '"':	goto yy17;
-		case '\\':	goto yy19;
-		default:	goto yy11;
+		case '"':	goto yy10;
+		case '\\':	goto yy12;
+		default:	goto yy4;
 		}
-yy15:
+yy8:
 		s->yych = *++s->cur;
 		switch (s->yych) {
-		case '*':	goto yy20;
-		case '/':	goto yy22;
-		default:	goto yy11;
+		case '*':	goto yy13;
+		case '/':	goto yy15;
+		default:	goto yy4;
 		}
-yy16:
+yy9:
 		s->yych = *(s->tok = ++s->cur);
 		switch (s->yych) {
-		case '?':	goto yy24;
-		default:	goto yy11;
+		case '?':	goto yy17;
+		default:	goto yy4;
 		}
-yy17:
+yy10:
 		s->yych = *++s->cur;
 		switch (s->yych) {
-		case '\'':	goto yy25;
-		default:	goto yy18;
+		case '\'':	goto yy18;
+		default:	goto yy11;
 		}
-yy18:
+yy11:
 		s->cur = s->tok;
-		goto yy11;
-yy19:
+		goto yy4;
+yy12:
 		s->yych = *++s->cur;
 		switch (s->yych) {
-		case '"':	goto yy17;
-		default:	goto yy18;
+		case '"':	goto yy10;
+		default:	goto yy11;
 		}
-yy20:
+yy13:
 		++s->cur;
 		s->cond = EStateComment;(EStateComment);
 		continue;
-yy22:
+yy15:
 		++s->cur;
 		s->cond = EStateSkiptoeol;(EStateSkiptoeol);
 		continue;
-yy24:
+yy17:
 		s->yych = *++s->cur;
 		switch (s->yych) {
-		case '!':	goto yy27;
-		case '\'':	goto yy29;
-		case '(':	goto yy31;
-		case ')':	goto yy33;
-		case '-':	goto yy35;
-		case '/':	goto yy37;
-		case '<':	goto yy39;
-		case '=':	goto yy41;
-		case '>':	goto yy43;
-		default:	goto yy18;
+		case '!':	goto yy20;
+		case '\'':	goto yy22;
+		case '(':	goto yy24;
+		case ')':	goto yy26;
+		case '-':	goto yy28;
+		case '/':	goto yy30;
+		case '<':	goto yy32;
+		case '=':	goto yy34;
+		case '>':	goto yy36;
+		default:	goto yy11;
 		}
-yy25:
+yy18:
 		++s->cur;
 		fputl("'\"'", 3, stdout);
 		continue;
-yy27:
+yy20:
 		++s->cur;
 		fputc('|', stdout);
 		continue;
-yy29:
+yy22:
 		++s->cur;
 		fputc('^', stdout);
 		continue;
-yy31:
+yy24:
 		++s->cur;
 		fputc('[', stdout);
 		continue;
-yy33:
+yy26:
 		++s->cur;
 		fputc(']', stdout);
 		continue;
-yy35:
+yy28:
 		++s->cur;
 		fputc('~', stdout);
 		continue;
-yy37:
+yy30:
 		++s->cur;
 		fputc('\\', stdout);
 		continue;
-yy39:
+yy32:
 		++s->cur;
 		fputc('{', stdout);
 		continue;
-yy41:
+yy34:
 		++s->cur;
 		fputc('#', stdout);
 		continue;
-yy43:
+yy36:
 		++s->cur;
 		fputc('}', stdout);
+		continue;
+/* *********************************** */
+yyc_Comment:
+		s->state = 1;(1);
+		if ((s->lim - s->cur) < 2) if (fill(s, 2) == ~0) break;
+yyFillLabel1:
+		s->yych = *s->cur;
+		switch (s->yych) {
+		case '*':	goto yy42;
+		default:	goto yy40;
+		}
+yy40:
+		++s->cur;
+yy41:
+		continue;
+yy42:
+		s->yych = *++s->cur;
+		switch (s->yych) {
+		case '/':	goto yy43;
+		default:	goto yy41;
+		}
+yy43:
+		++s->cur;
+		s->cond = EStateNormal;(EStateNormal);
 		continue;
 /* *********************************** */
 yyc_Skiptoeol:

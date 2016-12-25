@@ -2188,8 +2188,15 @@ void parse(Scanner &in, Output & o)
 		if (mode != Scanner::Rules) {
 			uint32_t ind = opts->topIndent;
 			size_t nCount = dfa_map.size();
-			for (dfa_map_t::const_iterator i = dfa_map.begin(); i != dfa_map.end(); ++i) {
-				i->second->emit(o, ind, !--nCount, bPrologBrace);
+			if (dfa_map.find("") != dfa_map.end()) {
+				dfa_map[""]->emit(o, ind, !--nCount, bPrologBrace);
+			} else {
+				std::vector<std::string>::const_iterator
+					i = context.condnames.begin(),
+					e = context.condnames.end();
+				for (; i != e; ++i) {
+					dfa_map[*i]->emit(o, ind, !--nCount, bPrologBrace);
+				}
 			}
 		}
 
