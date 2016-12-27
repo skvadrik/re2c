@@ -1,20 +1,14 @@
 #ifndef _RE2C_IR_COMPILE_
 #define _RE2C_IR_COMPILE_
 
-#include "src/util/c99_stdint.h"
-#include <string>
-
 #include "src/parse/parser.h"
-#include "src/util/smart_ptr.h"
 
 namespace re2c
 {
 
-class DFA;
 struct Output;
 
-smart_ptr<DFA> compile(const Spec &spec, Output &output,
-	const std::string &cond, const std::string &setup);
+smart_ptr<DFA> compile(const spec_t &spec, Output &output);
 
 } // namespace re2c
 

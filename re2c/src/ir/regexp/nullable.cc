@@ -31,15 +31,15 @@ static bool nullable(const RegExp *re, bool &trail)
  * (including rules with nonempty trailing context)
  * false positives on partially self-shadowed rules like [^]?
  */
-void warn_nullable(const std::vector<const RegExpRule*> &regexps,
+void warn_nullable(const std::vector<RegExpRule> &regexps,
 	const std::string &cond, Warn &warn)
 {
 	const size_t nregexps = regexps.size();
 	for (size_t i = 0; i < nregexps; ++i) {
-		const RegExpRule *r = regexps[i];
+		const RegExpRule &r = regexps[i];
 		bool trail = false;
-		if (nullable(r->re, trail)) {
-			warn.match_empty_string(r->code->fline, cond);
+		if (nullable(r.re, trail)) {
+			warn.match_empty_string(r.code->fline, cond);
 		}
 	}
 }

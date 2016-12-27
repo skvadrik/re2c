@@ -14,7 +14,6 @@ namespace re2c
 {
 
 free_list<RegExp*> RegExp::flist;
-free_list<RegExpRule*> RegExpRule::flist;
 
 const RegExp *doAlt(const RegExp *re1, const RegExp *re2)
 {

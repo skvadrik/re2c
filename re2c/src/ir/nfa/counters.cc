@@ -30,12 +30,12 @@ static size_t count(const RegExp *re, size_t &ntags)
 	}
 }
 
-size_t counters(const std::vector<const RegExpRule*> &regexps, size_t &ntags)
+size_t counters(const std::vector<RegExpRule> &regexps, size_t &ntags)
 {
 	const size_t nregexps = regexps.size();
 	size_t size = nregexps - 1;
 	for (size_t i = 0; i < nregexps; ++i) {
-		size += count(regexps[i]->re, ntags) + 1;
+		size += count(regexps[i].re, ntags) + 1;
 	}
 	return size;
 }

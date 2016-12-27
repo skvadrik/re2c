@@ -7,7 +7,6 @@
 #include "src/codegen/output.h"
 #include "src/ir/regexp/regexp.h"
 #include "src/parse/scanner.h"
-#include "src/util/forbid_copy.h"
 #include "src/util/smart_ptr.h"
 
 namespace re2c
@@ -15,42 +14,29 @@ namespace re2c
 
 struct DFA;
 
-void parse(Scanner &, Output &);
+void parse(Scanner &input, Output &output);
 
+struct spec_t
+{
+	std::string name;
+	std::vector<RegExpRule> rules;
+	std::vector<const Code*> defs;
+	std::vector<const Code*> setup;
+
+	explicit spec_t(const std::string &n):
+		name(n), rules(), defs(), setup() {}
+};
+
+typedef std::vector<spec_t> specs_t;
 typedef std::set<std::string> CondList;
-typedef std::vector<const RegExpRule*> Spec;
-typedef std::map<std::string, Spec> SpecMap;
-typedef std::map<std::string, const Code*> SetupMap;
-typedef std::map<std::string, const RegExp *> symbol_table_t;
-typedef std::map<std::string, smart_ptr<DFA> > dfa_map_t;
+typedef std::map<std::string, const RegExp *> symtab_t;
+typedef std::vector<smart_ptr<DFA> > dfas_t;
 
 struct context_t
 {
-	std::vector<std::string> condnames;
-	SpecMap specMap;
-	Spec spec_all;
-	SetupMap ruleSetupMap;
-	const Code *startup;
-	symbol_table_t symbol_table;
-
-	context_t()
-		: condnames()
-		, specMap()
-		, spec_all()
-		, ruleSetupMap()
-		, startup(NULL)
-		, symbol_table()
-	{}
-	void clear()
-	{
-		condnames.clear();
-		specMap.clear();
-		spec_all.clear();
-		startup = NULL;
-		ruleSetupMap.clear();
-		symbol_table.clear();
-	}
-	FORBID_COPY(context_t);
+	Scanner &input;
+	specs_t &specs;
+	symtab_t &symtab;
 };
 
 } // namespace re2c

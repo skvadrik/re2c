@@ -105,36 +105,23 @@ private:
 
 struct RegExpRule
 {
-	static free_list<RegExpRule*> flist;
-
 	const RegExp *re;
 	const Code *code;
-	bool def;
 
-	RegExpRule(const RegExp *r, bool d)
+	RegExpRule(const RegExp *r, const Code *c)
 		: re(r)
-		, code(NULL)
-		, def(d)
-	{
-		flist.insert(this);
-	}
-	~RegExpRule()
-	{
-		flist.erase(this);
-	}
-	static bool is_def(const RegExpRule *r) { return r->def; }
-	static bool isnt_def(const RegExpRule *r) { return !r->def; }
-	FORBID_COPY(RegExpRule);
+		, code(c)
+	{}
 };
 
-void split(const std::vector<const RegExpRule*> &rs, std::set<uint32_t> &cs);
+void split(const std::vector<RegExpRule> &rs, std::set<uint32_t> &cs);
 const RegExp *mkAlt(const RegExp *re1, const RegExp *re2);
 const RegExp *doAlt(const RegExp *re1, const RegExp *re2);
 const RegExp *doCat(const RegExp *re1, const RegExp *re2);
 const RegExp *repeat(const RegExp *re, uint32_t n);
 const RegExp *repeat_from_to(const RegExp *re, uint32_t n, uint32_t m);
 const RegExp *repeat_from(const RegExp *re, uint32_t n);
-void warn_nullable(const std::vector<const RegExpRule*> &regexps,
+void warn_nullable(const std::vector<RegExpRule> &regexps,
 	const std::string &cond, Warn &warn);
 
 } // end namespace re2c

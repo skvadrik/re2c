@@ -101,8 +101,8 @@ using namespace re2c;
 
 extern "C" {
 
-int yylex(Scanner &in, context_t&);
-void yyerror(Scanner &in, context_t&, const char*);
+int yylex(context_t &context);
+void yyerror(context_t &context, const char*);
 
 } // extern "C"
 
@@ -113,157 +113,122 @@ void yyerror(Scanner &in, context_t&, const char*);
 #define __attribute__(x)
 #endif
 
-static void parse_cleanup(re2c::context_t &context)
+static void check(const specs_t &specs, bool cflag)
 {
-	RegExp::flist.clear();
-	Code::flist.clear();
-	Range::vFreeList.clear();
-	RangeSuffix::freeList.clear();
-	context.clear();
-}
+	specs_t::const_iterator i,
+		b = specs.begin(),
+		e = specs.end();
 
-static void check_default(const Spec &spec, const std::string &cond)
-{
-	Spec::const_iterator
-		e = spec.end(),
-		i = std::find_if(spec.begin(), e, RegExpRule::is_def),
-		j = std::find_if(i + 1, e, RegExpRule::is_def);
-	if (j != e) {
-		error("line %u: code to default rule %sis already defined at line %u",
-			(*j)->code->fline, incond(cond).c_str(), (*i)->code->fline);
-		exit(1);
+	for (i = b; i != e; ++i) {
+		if (i->defs.size() > 1) {
+			error("line %u: code to default rule %sis already defined at line %u",
+				i->defs[1]->fline, incond(i->name).c_str(), i->defs[0]->fline);
+			exit(1);
+		}
 	}
-}
-
-static void check(const context_t &context, bool cflag)
-{
-	const SpecMap &specs = context.specMap;
-	const SetupMap &setups = context.ruleSetupMap;
-	const size_t nspec = specs.size();
-
-	for (SpecMap::const_iterator i = specs.begin(); i != specs.end(); ++i) {
-		check_default(i->second, i->first);
-	}
-	check_default(context.spec_all, "*");
 
 	if (!cflag) {
-		static const uint32_t NOL = ~0u;
-		uint32_t l = NOL;
-		for (SpecMap::const_iterator i = specs.begin(); i != specs.end(); ++i) {
-			if (i->first != "") {
-				l = std::min(l, i->second[0]->code->fline);
+		for (i = b; i != e; ++i) {
+			if (i->name != "") {
+				error("line %u: conditions are only allowed"
+					" with '-c', '--conditions' option",
+					i->rules[0].code->fline);
+				exit(1);
 			}
-		}
-		if (!context.spec_all.empty()) {
-			l = std::min(l, context.spec_all[0]->code->fline);
-		}
-		if (!setups.empty()) {
-			l = std::min(l, setups.begin()->second->fline);
-		}
-		if (context.startup) {
-			l = std::min(l, context.startup->fline);
-		}
-		if (l != NOL) {
-			error("line %u: conditions are only allowed with '-c', '--conditions' option", l);
-			exit(1);
 		}
 	} else {
-		SpecMap::const_iterator i = specs.find("");
-		if (i != specs.end()) {
-			error("line %u: non-conditional rules are not allowed with '-c', '--conditions' option",
-				i->second[0]->code->fline);
-			exit(1);
+		for (i = b; i != e; ++i) {
+			if (i->name == "") {
+				error("line %u: non-conditional rules are not allowed"
+					" with '-c', '--conditions' option",
+					i->rules[0].code->fline);
+				exit(1);
+			}
 		}
-		for (SetupMap::const_iterator i = setups.begin(); i != setups.end(); ++i) {
-			const std::string c = i->first;
-			if (c != "*" && specs.find(c) == specs.end()) {
+
+		for (i = b; i != e; ++i) {
+			if (i->setup.size() > 1) {
+				error("line %u: code to setup rule '%s' is already defined at line %u",
+					i->setup[1]->fline, i->name.c_str(), i->setup[0]->fline);
+				exit(1);
+			}
+		}
+
+		for (i = b; i != e; ++i) {
+			if (i->name != "*" && !i->setup.empty() && i->rules.empty()) {
 				error("line %u: setup for non existing condition '%s' found",
-					i->second->fline, c.c_str());
+					i->setup[0]->fline, i->name.c_str());
 				exit(1);
 			}
 		}
-		if (setups.size() > nspec) {
-			SetupMap::const_iterator i = setups.find("*");
-			if (i != setups.end()) {
-				error("line %u: setup for all conditions '<!*>' is illegal "
-					"if setup for each condition is defined explicitly",
-					i->second->fline);
+
+		for (i = b; i != e && !i->setup.empty(); ++i);
+		if (i == e) {
+			for (i = b; i != e; ++i) {
+				if (i->name == "*") {
+					error("line %u: setup for all conditions '<!*>' is illegal "
+						"if setup for each condition is defined explicitly",
+						i->setup[0]->fline);
+					exit(1);
+				}
+			}
+		}
+
+		for (i = b; i != e; ++i) {
+			if (i->name == "0" && i->rules.size() > 1) {
+				error("line %u: startup code is already defined at line %u",
+					i->rules[1].code->fline, i->rules[0].code->fline);
 				exit(1);
 			}
 		}
 	}
 }
 
-static void delay_default(Spec &spec)
+static void prepare(specs_t &specs, const Scanner &in)
 {
-	// default rule(s) should go last
-	std::stable_partition(spec.begin(), spec.end(), RegExpRule::isnt_def);
-}
+	specs_t::iterator i, b = specs.begin(), e = specs.end();
 
-static void make_rule(context_t &context, RegExpRule *rule, const Code *code)
-{
-	rule->code = code;
-	context.specMap[""].push_back(rule);
-}
+	// merge <*> rules and <!*> setup to all conditions except "0"
+	// star rules must have lower priority than normal rules
+	for (i = b; i != e && i->name != "*"; ++i);
+	if (i != e) {
+		const specs_t::iterator star = i;
 
-static void make_cond(context_t &context, CondList *clist,
-	RegExpRule *rule, const Code *code)
-{
-	rule->code = code;
-	for(CondList::const_iterator i = clist->begin(); i != clist->end(); ++i) {
-		const std::string &cond = *i;
-		if (context.specMap.find(cond) == context.specMap.end()) {
-			context.condnames.push_back(cond);
+		for (i = b; i != e; ++i) {
+			if (i == star || i->name == "0") continue;
+
+			i->rules.insert(i->rules.end(), star->rules.begin(), star->rules.end());
+			i->defs.insert(i->defs.end(), star->defs.begin(), star->defs.end());
+			i->setup.insert(i->setup.end(), star->setup.begin(), star->setup.end());
 		}
-		context.specMap[cond].push_back(rule);
-	}
-	delete clist;
-}
 
-static void make_star(context_t &context, RegExpRule *rule, const Code *code)
-{
-	rule->code = code;
-	context.spec_all.push_back(rule);
-}
-
-static void make_zero(context_t &context, const Code *code)
-{
-	if (context.startup) {
-		error("line %u: startup code is already defined at line %u",
-			code->fline, context.startup->fline);
-		exit(1);
+		specs.erase(star);
+		e = specs.end();
 	}
-	context.startup = code;
-}
 
-static void make_setup(Scanner &in, SetupMap &ruleSetupMap,
-	CondList *clist, const Code *code)
-{
-	if (!clist) {
-		clist = new CondList;
-		clist->insert("*");
-	}
-	assert(code);
-	for (CondList::const_iterator i = clist->begin(); i != clist->end(); ++i) {
-		if (ruleSetupMap.find(*i) != ruleSetupMap.end()) {
-			in.fatalf_at(code->fline, "code to setup rule '%s' is already defined", i->c_str());
+	// merge default rule with the lowest priority
+	for (i = b; i != e; ++i) {
+		if (!i->defs.empty()) {
+			i->rules.push_back(RegExpRule(in.mkDefault(), i->defs[0]));
 		}
-		ruleSetupMap[*i] = code;
 	}
-	delete clist;
+
+	// "0" condition must be the first one
+	for (i = b; i != e && i->name != "0"; ++i);
+	if (i != e && i != b) {
+		const spec_t zero = *i;
+		specs.erase(i);
+		specs.insert(specs.begin(), zero);
+	}
 }
 
-static std::string find_setup_rule(const SetupMap &map, const std::string &key)
+static spec_t &find(specs_t &specs, const std::string &name)
 {
-	SetupMap::const_iterator e = map.end(), i;
-
-	i = map.find(key);
-	if (i != e) return i->second->text;
-
-	i = map.find("*");
-	if (i != e) return i->second->text;
-
-	return "";
+	for (specs_t::iterator i = specs.begin(); i != specs.end(); ++i) {
+		if (i->name == name) return *i;
+	}
+	specs.push_back(spec_t(name));
+	return specs.back();
 }
 
 
@@ -317,7 +282,6 @@ typedef union YYSTYPE
 	re2c::ExtOp extop;
 	std::string * str;
 	re2c::CondList * clist;
-	re2c::RegExpRule *rule;
 
 
 
@@ -545,16 +509,16 @@ union yyalloc
 /* YYFINAL -- State number of the termination state.  */
 #define YYFINAL  2
 /* YYLAST -- Last index in YYTABLE.  */
-#define YYLAST   71
+#define YYLAST   66
 
 /* YYNTOKENS -- Number of terminals.  */
 #define YYNTOKENS  25
 /* YYNNTS -- Number of nonterminals.  */
-#define YYNNTS  16
+#define YYNNTS  17
 /* YYNRULES -- Number of rules.  */
-#define YYNRULES  42
+#define YYNRULES  43
 /* YYNRULES -- Number of states.  */
-#define YYNSTATES  72
+#define YYNSTATES  70
 
 /* YYTRANSLATE(YYLEX) -- Bison symbol number corresponding to YYLEX.  */
 #define YYUNDEFTOK  2
@@ -570,9 +534,9 @@ static const yytype_uint8 yytranslate[] =
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,    16,     2,     2,     2,     2,     2,     2,
-      23,    24,    15,    21,    18,     2,     2,    10,     2,     2,
+      23,    24,    13,    21,    18,     2,     2,    10,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,    17,    12,
-      13,    11,    14,    22,     2,     2,     2,     2,     2,     2,
+      14,    11,    15,    22,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,    20,     2,     2,     2,     2,     2,     2,     2,
@@ -601,39 +565,38 @@ static const yytype_uint8 yytranslate[] =
 static const yytype_uint8 yyprhs[] =
 {
        0,     0,     3,     4,     7,    10,    13,    17,    21,    24,
-      26,    28,    30,    33,    39,    45,    49,    55,    61,    63,
-      68,    73,    75,    79,    81,    85,    87,    89,    93,    95,
-      99,   101,   104,   106,   109,   112,   114,   117,   119,   121,
-     123,   125,   127
+      26,    28,    30,    33,    36,    42,    48,    54,    58,    60,
+      65,    70,    72,    74,    76,    80,    82,    86,    88,    92,
+      94,    98,   100,   103,   105,   108,   111,   113,   116,   118,
+     120,   122,   124,   126
 };
 
 /* YYRHS -- A `-1'-separated list of the rules' RHS.  */
 static const yytype_int8 yyrhs[] =
 {
       26,     0,    -1,    -1,    26,     5,    -1,    26,    27,    -1,
-      26,    30,    -1,    28,    34,    29,    -1,    28,    34,    10,
+      26,    30,    -1,    28,    35,    29,    -1,    28,    35,    10,
       -1,     6,    11,    -1,     7,    -1,    12,    -1,     8,    -1,
-      33,     4,    -1,    13,    32,    14,    33,    31,    -1,    13,
-      15,    14,    33,    31,    -1,    13,    14,    31,    -1,    13,
-      16,    32,    14,     4,    -1,    13,    16,    15,    14,     4,
-      -1,     4,    -1,    11,    14,     6,     4,    -1,    17,    11,
-      14,     6,    -1,     6,    -1,    32,    18,     6,    -1,    34,
-      -1,    34,    10,    34,    -1,    15,    -1,    35,    -1,    34,
-      19,    35,    -1,    36,    -1,    35,    20,    36,    -1,    37,
-      -1,    36,    37,    -1,    40,    -1,    40,    38,    -1,    40,
-       3,    -1,    39,    -1,    38,    39,    -1,    15,    -1,    21,
-      -1,    22,    -1,     6,    -1,     9,    -1,    23,    34,    24,
-      -1
+      34,     4,    -1,    13,     4,    -1,    14,    32,    15,    34,
+      31,    -1,    14,    32,    15,    13,    31,    -1,    14,    16,
+      32,    15,     4,    -1,    14,    15,    31,    -1,     4,    -1,
+      11,    15,     6,     4,    -1,    17,    11,    15,     6,    -1,
+      33,    -1,    13,    -1,     6,    -1,    33,    18,     6,    -1,
+      35,    -1,    35,    10,    35,    -1,    36,    -1,    35,    19,
+      36,    -1,    37,    -1,    36,    20,    37,    -1,    38,    -1,
+      37,    38,    -1,    41,    -1,    41,    39,    -1,    41,     3,
+      -1,    40,    -1,    39,    40,    -1,    13,    -1,    21,    -1,
+      22,    -1,     6,    -1,     9,    -1,    23,    35,    24,    -1
 };
 
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint16 yyrline[] =
 {
-       0,   238,   238,   240,   241,   242,   246,   253,   258,   261,
-     265,   265,   268,   272,   276,   280,   284,   288,   293,   295,
-     301,   308,   314,   321,   325,   330,   335,   339,   346,   350,
-     357,   361,   368,   372,   389,   408,   409,   413,   414,   415,
-     419,   429,   433
+       0,   199,   199,   201,   202,   203,   207,   214,   219,   222,
+     226,   226,   229,   233,   237,   244,   251,   258,   263,   265,
+     271,   278,   279,   285,   291,   298,   299,   304,   308,   315,
+     319,   326,   330,   337,   341,   358,   377,   378,   382,   383,
+     384,   388,   397,   401
 };
 #endif
 
@@ -644,10 +607,10 @@ static const char *const yytname[] =
 {
   "$end", "error", "$undefined", "TOKEN_CLOSESIZE", "TOKEN_CODE",
   "TOKEN_CONF", "TOKEN_ID", "TOKEN_FID", "TOKEN_FID_END", "TOKEN_REGEXP",
-  "'/'", "'='", "';'", "'<'", "'>'", "'*'", "'!'", "':'", "','", "'|'",
+  "'/'", "'='", "';'", "'*'", "'<'", "'>'", "'!'", "':'", "','", "'|'",
   "'\\\\'", "'+'", "'?'", "'('", "')'", "$accept", "spec", "def", "name",
-  "enddef", "rule", "ccode", "clist", "trailexpr", "expr", "diff", "term",
-  "factor", "closes", "close", "primary", 0
+  "enddef", "rule", "ccode", "clist", "conds", "trailexpr", "expr", "diff",
+  "term", "factor", "closes", "close", "primary", 0
 };
 #endif
 
@@ -657,7 +620,7 @@ static const char *const yytname[] =
 static const yytype_uint16 yytoknum[] =
 {
        0,   256,   257,   258,   259,   260,   261,   262,   263,   264,
-      47,    61,    59,    60,    62,    42,    33,    58,    44,   124,
+      47,    61,    59,    42,    60,    62,    33,    58,    44,   124,
       92,    43,    63,    40,    41
 };
 # endif
@@ -667,19 +630,19 @@ static const yytype_uint8 yyr1[] =
 {
        0,    25,    26,    26,    26,    26,    27,    27,    28,    28,
       29,    29,    30,    30,    30,    30,    30,    30,    31,    31,
-      31,    32,    32,    33,    33,    33,    34,    34,    35,    35,
-      36,    36,    37,    37,    37,    38,    38,    39,    39,    39,
-      40,    40,    40
+      31,    32,    32,    33,    33,    34,    34,    35,    35,    36,
+      36,    37,    37,    38,    38,    38,    39,    39,    40,    40,
+      40,    41,    41,    41
 };
 
 /* YYR2[YYN] -- Number of symbols composing right hand side of rule YYN.  */
 static const yytype_uint8 yyr2[] =
 {
        0,     2,     0,     2,     2,     2,     3,     3,     2,     1,
-       1,     1,     2,     5,     5,     3,     5,     5,     1,     4,
-       4,     1,     3,     1,     3,     1,     1,     3,     1,     3,
-       1,     2,     1,     2,     2,     1,     2,     1,     1,     1,
-       1,     1,     3
+       1,     1,     2,     2,     5,     5,     5,     3,     1,     4,
+       4,     1,     1,     1,     3,     1,     3,     1,     3,     1,
+       3,     1,     2,     1,     2,     2,     1,     2,     1,     1,
+       1,     1,     1,     3
 };
 
 /* YYDEFACT[STATE-NAME] -- Default rule to reduce with in state
@@ -687,21 +650,20 @@ static const yytype_uint8 yyr2[] =
    means the default is an error.  */
 static const yytype_uint8 yydefact[] =
 {
-       2,     0,     1,     3,    40,     9,    41,     0,    25,     0,
-       4,     0,     5,     0,    23,    26,    28,    30,    32,     8,
-      21,     0,     0,     0,     0,    40,     0,     0,    12,     0,
-       0,     0,    31,    34,    37,    38,    39,    33,    35,    18,
-       0,     0,    15,     0,     0,     0,     0,     0,    42,    11,
-       7,    10,     6,    24,    27,    29,    36,     0,     0,     0,
-       0,     0,     0,    22,     0,     0,    14,    17,    16,    13,
-      19,    20
+       2,     0,     1,     3,    41,     9,    42,     0,     0,     0,
+       4,     0,     5,     0,    25,    27,    29,    31,    33,     8,
+      13,    23,    22,     0,     0,     0,    21,    41,     0,     0,
+      12,     0,     0,     0,    32,    35,    38,    39,    40,    34,
+      36,    18,     0,     0,    17,     0,     0,     0,    43,    11,
+       7,    10,     6,    26,    28,    30,    37,     0,     0,     0,
+       0,     0,    24,     0,     0,    16,    15,    14,    19,    20
 };
 
 /* YYDEFGOTO[NTERM-NUM].  */
 static const yytype_int8 yydefgoto[] =
 {
-      -1,     1,    10,    11,    52,    12,    42,    24,    13,    14,
-      15,    16,    17,    37,    38,    18
+      -1,     1,    10,    11,    52,    12,    44,    25,    26,    13,
+      14,    15,    16,    17,    39,    40,    18
 };
 
 /* YYPACT[STATE-NUM] -- Index in YYTABLE of the portion describing
@@ -709,21 +671,20 @@ static const yytype_int8 yydefgoto[] =
 #define YYPACT_NINF -17
 static const yytype_int8 yypact[] =
 {
-     -17,     1,   -17,   -17,    -8,   -17,   -17,    29,   -17,     9,
-     -17,     9,   -17,     7,    27,   -15,     9,   -17,     6,   -17,
-     -17,     8,    -1,    32,    35,   -17,    17,    21,   -17,     9,
-       9,     9,   -17,   -17,   -17,   -17,   -17,    33,   -17,   -17,
-      16,    12,   -17,    11,    28,    38,    11,    44,   -17,   -17,
-     -17,   -17,   -17,    40,   -15,     9,   -17,    45,    48,     8,
-      59,    60,     8,   -17,    61,    62,   -17,   -17,   -17,   -17,
-     -17,   -17
+     -17,     1,   -17,   -17,    -2,   -17,   -17,    14,    29,    20,
+     -17,    20,   -17,    23,     3,    30,    20,   -17,    -1,   -17,
+     -17,   -17,   -17,     0,    25,    34,    35,   -17,    27,    22,
+     -17,    20,    20,    20,   -17,   -17,   -17,   -17,   -17,    15,
+     -17,   -17,    37,    43,   -17,    40,    10,    50,   -17,   -17,
+     -17,   -17,   -17,    21,    30,    20,   -17,    51,    44,    54,
+       0,     0,   -17,    56,    55,   -17,   -17,   -17,   -17,   -17
 };
 
 /* YYPGOTO[NTERM-NUM].  */
 static const yytype_int8 yypgoto[] =
 {
-     -17,   -17,   -17,   -17,   -17,   -17,    -2,    43,    15,    -7,
-      37,    39,   -16,   -17,    34,   -17
+     -17,   -17,   -17,   -17,   -17,   -17,   -13,    38,   -17,    17,
+      -6,    32,    33,   -16,   -17,    26,   -17
 };
 
 /* YYTABLE[YYPACT[STATE-NUM]].  What to do in state STATE-NUM.  If
@@ -733,40 +694,37 @@ static const yytype_int8 yypgoto[] =
 #define YYTABLE_NINF -1
 static const yytype_uint8 yytable[] =
 {
-      32,     2,    26,    19,    27,    31,     3,     4,     5,    33,
-       6,    28,    39,    43,     7,    25,     8,    25,     6,    40,
-       6,    34,    53,    58,     9,    41,     8,    35,    36,    49,
-      57,    50,     9,    51,     9,    20,    30,    29,    20,    32,
-      30,    48,    60,    21,    22,    23,    30,    44,    34,    46,
-      63,    64,    61,    47,    35,    36,    47,    66,    59,    30,
-      69,    62,    65,    67,    68,    70,    45,    54,    71,     0,
-      55,    56
+      34,     2,    35,    28,    41,    29,     3,     4,     5,    19,
+       6,    42,    36,    31,     7,     8,    27,    43,    20,     6,
+      37,    38,    32,    60,     9,    53,    27,    30,    36,     6,
+      49,    21,    50,     9,    51,    21,    37,    38,    22,    34,
+      32,    32,    22,     9,    23,    24,    32,    66,    67,    46,
+      33,    48,    57,    47,    58,    59,    62,    63,    65,    64,
+      68,    69,    45,    61,    54,    56,    55
 };
 
-static const yytype_int8 yycheck[] =
+static const yytype_uint8 yycheck[] =
 {
-      16,     0,     9,    11,    11,    20,     5,     6,     7,     3,
-       9,     4,     4,    14,    13,     6,    15,     6,     9,    11,
-       9,    15,    29,    11,    23,    17,    15,    21,    22,     8,
-      14,    10,    23,    12,    23,     6,    19,    10,     6,    55,
-      19,    24,    14,    14,    15,    16,    19,    15,    15,    14,
-       6,     6,    14,    18,    21,    22,    18,    59,    43,    19,
-      62,    46,    14,     4,     4,     4,    23,    30,     6,    -1,
-      31,    37
+      16,     0,     3,     9,     4,    11,     5,     6,     7,    11,
+       9,    11,    13,    10,    13,    14,     6,    17,     4,     9,
+      21,    22,    19,    13,    23,    31,     6,     4,    13,     9,
+       8,     6,    10,    23,    12,     6,    21,    22,    13,    55,
+      19,    19,    13,    23,    15,    16,    19,    60,    61,    15,
+      20,    24,    15,    18,    11,    15,     6,     6,     4,    15,
+       4,     6,    24,    46,    32,    39,    33
 };
 
 /* YYSTOS[STATE-NUM] -- The (internal number of the) accessing
    symbol of state STATE-NUM.  */
 static const yytype_uint8 yystos[] =
 {
-       0,    26,     0,     5,     6,     7,     9,    13,    15,    23,
-      27,    28,    30,    33,    34,    35,    36,    37,    40,    11,
-       6,    14,    15,    16,    32,     6,    34,    34,     4,    10,
-      19,    20,    37,     3,    15,    21,    22,    38,    39,     4,
-      11,    17,    31,    14,    15,    32,    14,    18,    24,     8,
-      10,    12,    29,    34,    35,    36,    39,    14,    11,    33,
-      14,    14,    33,     6,     6,    14,    31,     4,     4,    31,
-       4,     6
+       0,    26,     0,     5,     6,     7,     9,    13,    14,    23,
+      27,    28,    30,    34,    35,    36,    37,    38,    41,    11,
+       4,     6,    13,    15,    16,    32,    33,     6,    35,    35,
+       4,    10,    19,    20,    38,     3,    13,    21,    22,    39,
+      40,     4,    11,    17,    31,    32,    15,    18,    24,     8,
+      10,    12,    29,    35,    36,    37,    40,    15,    11,    15,
+      13,    34,     6,     6,    15,     4,    31,    31,     4,     6
 };
 
 #define yyerrok		(yyerrstatus = 0)
@@ -808,7 +766,7 @@ do								\
     }								\
   else								\
     {								\
-      yyerror (in, context, YY_("syntax error: cannot back up")); \
+      yyerror (context, YY_("syntax error: cannot back up")); \
       YYERROR;							\
     }								\
 while (YYID (0))
@@ -865,7 +823,7 @@ while (YYID (0))
 #ifdef YYLEX_PARAM
 # define YYLEX yylex (YYLEX_PARAM)
 #else
-# define YYLEX yylex (in, context)
+# define YYLEX yylex (context)
 #endif
 
 /* Enable debugging if requested.  */
@@ -888,7 +846,7 @@ do {									  \
     {									  \
       YYFPRINTF (stderr, "%s ", Title);					  \
       yy_symbol_print (stderr,						  \
-		  Type, Value, in, context); \
+		  Type, Value, context); \
       YYFPRINTF (stderr, "\n");						  \
     }									  \
 } while (YYID (0))
@@ -902,20 +860,18 @@ do {									  \
 #if (defined __STDC__ || defined __C99__FUNC__ \
      || defined __cplusplus || defined _MSC_VER)
 static void
-yy_symbol_value_print (FILE *yyoutput, int yytype, YYSTYPE const * const yyvaluep, Scanner &in, context_t &context)
+yy_symbol_value_print (FILE *yyoutput, int yytype, YYSTYPE const * const yyvaluep, context_t &context)
 #else
 static void
-yy_symbol_value_print (yyoutput, yytype, yyvaluep, in, context)
+yy_symbol_value_print (yyoutput, yytype, yyvaluep, context)
     FILE *yyoutput;
     int yytype;
     YYSTYPE const * const yyvaluep;
-    Scanner &in;
     context_t &context;
 #endif
 {
   if (!yyvaluep)
     return;
-  YYUSE (in);
   YYUSE (context);
 # ifdef YYPRINT
   if (yytype < YYNTOKENS)
@@ -938,14 +894,13 @@ yy_symbol_value_print (yyoutput, yytype, yyvaluep, in, context)
 #if (defined __STDC__ || defined __C99__FUNC__ \
      || defined __cplusplus || defined _MSC_VER)
 static void
-yy_symbol_print (FILE *yyoutput, int yytype, YYSTYPE const * const yyvaluep, Scanner &in, context_t &context)
+yy_symbol_print (FILE *yyoutput, int yytype, YYSTYPE const * const yyvaluep, context_t &context)
 #else
 static void
-yy_symbol_print (yyoutput, yytype, yyvaluep, in, context)
+yy_symbol_print (yyoutput, yytype, yyvaluep, context)
     FILE *yyoutput;
     int yytype;
     YYSTYPE const * const yyvaluep;
-    Scanner &in;
     context_t &context;
 #endif
 {
@@ -954,7 +909,7 @@ yy_symbol_print (yyoutput, yytype, yyvaluep, in, context)
   else
     YYFPRINTF (yyoutput, "nterm %s (", yytname[yytype]);
 
-  yy_symbol_value_print (yyoutput, yytype, yyvaluep, in, context);
+  yy_symbol_value_print (yyoutput, yytype, yyvaluep, context);
   YYFPRINTF (yyoutput, ")");
 }
 
@@ -997,13 +952,12 @@ do {								\
 #if (defined __STDC__ || defined __C99__FUNC__ \
      || defined __cplusplus || defined _MSC_VER)
 static void
-yy_reduce_print (YYSTYPE *yyvsp, int yyrule, Scanner &in, context_t &context)
+yy_reduce_print (YYSTYPE *yyvsp, int yyrule, context_t &context)
 #else
 static void
-yy_reduce_print (yyvsp, yyrule, in, context)
+yy_reduce_print (yyvsp, yyrule, context)
     YYSTYPE *yyvsp;
     int yyrule;
-    Scanner &in;
     context_t &context;
 #endif
 {
@@ -1018,7 +972,7 @@ yy_reduce_print (yyvsp, yyrule, in, context)
       YYFPRINTF (stderr, "   $%d = ", yyi + 1);
       yy_symbol_print (stderr, yyrhs[yyprhs[yyrule] + yyi],
 		       &(yyvsp[(yyi + 1) - (yynrhs)])
-		       		       , in, context);
+		       		       , context);
       YYFPRINTF (stderr, "\n");
     }
 }
@@ -1026,7 +980,7 @@ yy_reduce_print (yyvsp, yyrule, in, context)
 # define YY_REDUCE_PRINT(Rule)		\
 do {					\
   if (yydebug)				\
-    yy_reduce_print (yyvsp, Rule, in, context); \
+    yy_reduce_print (yyvsp, Rule, context); \
 } while (YYID (0))
 
 /* Nonzero means print parse trace.  It is left uninitialized so that
@@ -1277,19 +1231,17 @@ yysyntax_error (char *yyresult, int yystate, int yychar)
 #if (defined __STDC__ || defined __C99__FUNC__ \
      || defined __cplusplus || defined _MSC_VER)
 static void
-yydestruct (const char *yymsg, int yytype, YYSTYPE *yyvaluep, Scanner &in, context_t &context)
+yydestruct (const char *yymsg, int yytype, YYSTYPE *yyvaluep, context_t &context)
 #else
 static void
-yydestruct (yymsg, yytype, yyvaluep, in, context)
+yydestruct (yymsg, yytype, yyvaluep, context)
     const char *yymsg;
     int yytype;
     YYSTYPE *yyvaluep;
-    Scanner &in;
     context_t &context;
 #endif
 {
   YYUSE (yyvaluep);
-  YYUSE (in);
   YYUSE (context);
 
   if (!yymsg)
@@ -1313,7 +1265,7 @@ int yyparse ();
 #endif
 #else /* ! YYPARSE_PARAM */
 #if defined __STDC__ || defined __cplusplus
-int yyparse (Scanner &in, context_t &context);
+int yyparse (context_t &context);
 #else
 int yyparse ();
 #endif
@@ -1349,11 +1301,10 @@ yyparse (YYPARSE_PARAM)
 #if (defined __STDC__ || defined __C99__FUNC__ \
      || defined __cplusplus || defined _MSC_VER)
 int
-yyparse (Scanner &in, context_t &context)
+yyparse (context_t &context)
 #else
 int
-yyparse (in, context)
-    Scanner &in;
+yyparse (context)
     context_t &context;
 #endif
 #endif
@@ -1602,8 +1553,8 @@ yyreduce:
         case 6:
 
     {
-		if (!context.symbol_table.insert(std::make_pair(*(yyvsp[(1) - (3)].str), (yyvsp[(2) - (3)].regexp))).second) {
-			in.fatal("sym already defined");
+		if (!context.symtab.insert(std::make_pair(*(yyvsp[(1) - (3)].str), (yyvsp[(2) - (3)].regexp))).second) {
+			context.input.fatal("sym already defined");
 		}
 		delete (yyvsp[(1) - (3)].str);
 	;}
@@ -1612,7 +1563,7 @@ yyreduce:
   case 7:
 
     {
-		in.fatal("trailing contexts are not allowed in named definitions");
+		context.input.fatal("trailing contexts are not allowed in named definitions");
 	;}
     break;
 
@@ -1633,42 +1584,51 @@ yyreduce:
   case 12:
 
     {
-		make_rule(context, (yyvsp[(1) - (2)].rule), (yyvsp[(2) - (2)].code));
+		find(context.specs, "").rules.push_back(RegExpRule((yyvsp[(1) - (2)].regexp), (yyvsp[(2) - (2)].code)));
 	;}
     break;
 
   case 13:
 
     {
-		make_cond(context, (yyvsp[(2) - (5)].clist), (yyvsp[(4) - (5)].rule), (yyvsp[(5) - (5)].code));
+		find(context.specs, "").defs.push_back((yyvsp[(2) - (2)].code));
 	;}
     break;
 
   case 14:
 
     {
-		make_star(context, (yyvsp[(4) - (5)].rule), (yyvsp[(5) - (5)].code));
+		for(CondList::const_iterator i = (yyvsp[(2) - (5)].clist)->begin(); i != (yyvsp[(2) - (5)].clist)->end(); ++i) {
+			find(context.specs, *i).rules.push_back(RegExpRule((yyvsp[(4) - (5)].regexp), (yyvsp[(5) - (5)].code)));
+		}
+		delete (yyvsp[(2) - (5)].clist);
 	;}
     break;
 
   case 15:
 
     {
-		make_zero(context, (yyvsp[(3) - (3)].code));
+		for(CondList::const_iterator i = (yyvsp[(2) - (5)].clist)->begin(); i != (yyvsp[(2) - (5)].clist)->end(); ++i) {
+			find(context.specs, *i).defs.push_back((yyvsp[(5) - (5)].code));
+		}
+		delete (yyvsp[(2) - (5)].clist);
 	;}
     break;
 
   case 16:
 
     {
-		make_setup(in, context.ruleSetupMap, (yyvsp[(3) - (5)].clist), (yyvsp[(5) - (5)].code));
+		for (CondList::const_iterator i = (yyvsp[(3) - (5)].clist)->begin(); i != (yyvsp[(3) - (5)].clist)->end(); ++i) {
+			find(context.specs, *i).setup.push_back((yyvsp[(5) - (5)].code));
+		}
+		delete (yyvsp[(3) - (5)].clist);
 	;}
     break;
 
   case 17:
 
     {
-		make_setup(in, context.ruleSetupMap, NULL, (yyvsp[(5) - (5)].code));
+		find(context.specs, "0").rules.push_back(RegExpRule(RegExp::make_nil(), (yyvsp[(3) - (3)].code)));
 	;}
     break;
 
@@ -1684,13 +1644,21 @@ yyreduce:
   case 20:
 
     {
-		(yyval.code) = new Code(in.get_fname(), in.get_cline());
+		(yyval.code) = new Code(context.input.get_fname(), context.input.get_cline());
 		(yyval.code)->cond = *(yyvsp[(4) - (4)].str);
 		delete (yyvsp[(4) - (4)].str);
 	;}
     break;
 
-  case 21:
+  case 22:
+
+    {
+		(yyval.clist) = new CondList;
+		(yyval.clist)->insert("*");
+	;}
+    break;
+
+  case 23:
 
     {
 		(yyval.clist) = new CondList;
@@ -1699,7 +1667,7 @@ yyreduce:
 	;}
     break;
 
-  case 22:
+  case 24:
 
     {
 		(yyvsp[(1) - (3)].clist)->insert(*(yyvsp[(3) - (3)].str));
@@ -1708,78 +1676,63 @@ yyreduce:
 	;}
     break;
 
-  case 23:
-
-    {
-		(yyval.rule) = new RegExpRule((yyvsp[(1) - (1)].regexp), false);
-	;}
-    break;
-
-  case 24:
-
-    {
-		(yyval.rule) = new RegExpRule(RegExp::make_cat((yyvsp[(1) - (3)].regexp),
-			RegExp::make_cat(RegExp::make_tag(NULL), (yyvsp[(3) - (3)].regexp))), false);
-	;}
-    break;
-
-  case 25:
-
-    { /* default rule */
-		(yyval.rule) = new RegExpRule(in.mkDefault(), true);
-	;}
-    break;
-
   case 26:
 
     {
-			(yyval.regexp) = (yyvsp[(1) - (1)].regexp);
-		;}
+		(yyval.regexp) = RegExp::make_cat((yyvsp[(1) - (3)].regexp), RegExp::make_cat(RegExp::make_tag(NULL), (yyvsp[(3) - (3)].regexp)));
+	;}
     break;
 
   case 27:
 
     {
-			(yyval.regexp) = mkAlt((yyvsp[(1) - (3)].regexp), (yyvsp[(3) - (3)].regexp));
+			(yyval.regexp) = (yyvsp[(1) - (1)].regexp);
 		;}
     break;
 
   case 28:
 
     {
-			(yyval.regexp) = (yyvsp[(1) - (1)].regexp);
+			(yyval.regexp) = mkAlt((yyvsp[(1) - (3)].regexp), (yyvsp[(3) - (3)].regexp));
 		;}
     break;
 
   case 29:
 
     {
-			(yyval.regexp) = in.mkDiff((yyvsp[(1) - (3)].regexp), (yyvsp[(3) - (3)].regexp));
+			(yyval.regexp) = (yyvsp[(1) - (1)].regexp);
 		;}
     break;
 
   case 30:
 
     {
-			(yyval.regexp) = (yyvsp[(1) - (1)].regexp);
+			(yyval.regexp) = context.input.mkDiff((yyvsp[(1) - (3)].regexp), (yyvsp[(3) - (3)].regexp));
 		;}
     break;
 
   case 31:
 
     {
-			(yyval.regexp) = RegExp::make_cat((yyvsp[(1) - (2)].regexp), (yyvsp[(2) - (2)].regexp));
+			(yyval.regexp) = (yyvsp[(1) - (1)].regexp);
 		;}
     break;
 
   case 32:
 
     {
-			(yyval.regexp) = (yyvsp[(1) - (1)].regexp);
+			(yyval.regexp) = RegExp::make_cat((yyvsp[(1) - (2)].regexp), (yyvsp[(2) - (2)].regexp));
 		;}
     break;
 
   case 33:
+
+    {
+			(yyval.regexp) = (yyvsp[(1) - (1)].regexp);
+		;}
+    break;
+
+  case 34:
 
     {
 			// see note [Kleene star is expressed in terms of plus]
@@ -1799,7 +1752,7 @@ yyreduce:
 		;}
     break;
 
-  case 34:
+  case 35:
 
     {
 			if ((yyvsp[(2) - (2)].extop).max == std::numeric_limits<uint32_t>::max())
@@ -1818,47 +1771,46 @@ yyreduce:
 		;}
     break;
 
-  case 36:
+  case 37:
 
     { (yyval.op) = ((yyvsp[(1) - (2)].op) == (yyvsp[(2) - (2)].op)) ? (yyvsp[(1) - (2)].op) : '*'; ;}
     break;
 
-  case 37:
+  case 38:
 
     { (yyval.op) = '*'; ;}
     break;
 
-  case 38:
+  case 39:
 
     { (yyval.op) = '+'; ;}
     break;
 
-  case 39:
+  case 40:
 
     { (yyval.op) = '?'; ;}
     break;
 
-  case 40:
+  case 41:
 
     {
-			symbol_table_t::iterator i = context.symbol_table.find (* (yyvsp[(1) - (1)].str));
+			symtab_t::iterator i = context.symtab.find(*(yyvsp[(1) - (1)].str));
 			delete (yyvsp[(1) - (1)].str);
-			if (i == context.symbol_table.end ())
-			{
-				in.fatal("can't find symbol");
+			if (i == context.symtab.end()) {
+				context.input.fatal("can't find symbol");
 			}
 			(yyval.regexp) = i->second;
 		;}
     break;
 
-  case 41:
+  case 42:
 
     {
 			(yyval.regexp) = (yyvsp[(1) - (1)].regexp);
 		;}
     break;
 
-  case 42:
+  case 43:
 
     {
 			(yyval.regexp) = (yyvsp[(2) - (3)].regexp);
@@ -1901,7 +1853,7 @@ yyerrlab:
     {
       ++yynerrs;
 #if ! YYERROR_VERBOSE
-      yyerror (in, context, YY_("syntax error"));
+      yyerror (context, YY_("syntax error"));
 #else
       {
 	YYSIZE_T yysize = yysyntax_error (0, yystate, yychar);
@@ -1925,11 +1877,11 @@ yyerrlab:
 	if (0 < yysize && yysize <= yymsg_alloc)
 	  {
 	    (void) yysyntax_error (yymsg, yystate, yychar);
-	    yyerror (in, context, yymsg);
+	    yyerror (context, yymsg);
 	  }
 	else
 	  {
-	    yyerror (in, context, YY_("syntax error"));
+	    yyerror (context, YY_("syntax error"));
 	    if (yysize != 0)
 	      goto yyexhaustedlab;
 	  }
@@ -1953,7 +1905,7 @@ yyerrlab:
       else
 	{
 	  yydestruct ("Error: discarding",
-		      yytoken, &yylval, in, context);
+		      yytoken, &yylval, context);
 	  yychar = YYEMPTY;
 	}
     }
@@ -2009,7 +1961,7 @@ yyerrlab1:
 
 
       yydestruct ("Error: popping",
-		  yystos[yystate], yyvsp, in, context);
+		  yystos[yystate], yyvsp, context);
       YYPOPSTACK (1);
       yystate = *yyssp;
       YY_STACK_PRINT (yyss, yyssp);
@@ -2044,7 +1996,7 @@ yyabortlab:
 | yyexhaustedlab -- memory exhaustion comes here.  |
 `-------------------------------------------------*/
 yyexhaustedlab:
-  yyerror (in, context, YY_("memory exhausted"));
+  yyerror (context, YY_("memory exhausted"));
   yyresult = 2;
   /* Fall through.  */
 #endif
@@ -2052,7 +2004,7 @@ yyexhaustedlab:
 yyreturn:
   if (yychar != YYEMPTY)
      yydestruct ("Cleanup: discarding lookahead",
-		 yytoken, &yylval, in, context);
+		 yytoken, &yylval, context);
   /* Do not reclaim the symbols of the rule which action triggered
      this YYABORT or YYACCEPT.  */
   YYPOPSTACK (yylen);
@@ -2060,7 +2012,7 @@ yyreturn:
   while (yyssp != yyss)
     {
       yydestruct ("Cleanup: popping",
-		  yystos[*yyssp], yyvsp, in, context);
+		  yystos[*yyssp], yyvsp, context);
       YYPOPSTACK (1);
     }
 #ifndef yyoverflow
@@ -2081,14 +2033,14 @@ yyreturn:
 
 extern "C" {
 
-void yyerror(Scanner &in, context_t&, const char* s)
+void yyerror(context_t &context, const char* s)
 {
-	in.fatal(s);
+	context.input.fatal(s);
 }
 
-int yylex(Scanner &in, context_t&)
+int yylex(context_t &context)
 {
-	return in.scan();
+	return context.input.scan();
 }
 
 } // extern "C"
@@ -2096,111 +2048,97 @@ int yylex(Scanner &in, context_t&)
 namespace re2c
 {
 
-void parse(Scanner &in, Output & o)
+void parse(Scanner &input, Output & o)
 {
-	dfa_map_t dfa_map;
-	context_t context;
+	specs_t specs;
+	symtab_t symtab;
+	dfas_t dfas;
 	ScannerState rules_state, curr_state;
-	Opt &opts = in.opts;
+	Opt &opts = input.opts;
 
 	o.source.wversion_time ()
-		.wline_info (in.get_cline (), in.get_fname ().c_str ());
+		.wline_info (input.get_cline (), input.get_fname ().c_str ());
 	if (opts->target == opt_t::SKELETON)
 	{
 		emit_prolog (o.source);
 	}
 
 	Enc encodingOld = opts->encoding;
-	for (Scanner::ParseMode mode; (mode = in.echo()) != Scanner::Stop;) {
+	for (Scanner::ParseMode mode; (mode = input.echo()) != Scanner::Stop;) {
 		o.source.new_block ();
 		bool bPrologBrace = false;
 
-		in.save_state(curr_state);
-		if (opts->rFlag && mode == Scanner::Rules && dfa_map.size())
+		input.save_state(curr_state);
+		if (opts->rFlag && mode == Scanner::Rules && !dfas.empty())
 		{
-			in.fatal("cannot have a second 'rules:re2c' block");
+			input.fatal("cannot have a second 'rules:re2c' block");
 		}
 		if (mode == Scanner::Reuse)
 		{
-			if (dfa_map.empty())
+			if (dfas.empty())
 			{
-				in.fatal("got 'use:re2c' without 'rules:re2c'");
+				input.fatal("got 'use:re2c' without 'rules:re2c'");
 			}
 		}
 		else if (mode == Scanner::Rules)
 		{
-			in.save_state(rules_state);
+			input.save_state(rules_state);
 		}
 		else
 		{
-			dfa_map.clear();
+			dfas.clear();
 		}
-		context.specMap.clear();
-		yyparse(in, context);
+
+		// parse next re2c block
+		context_t context = {input, specs, symtab};
+		specs.clear();
+		yyparse(context);
 		if (opts->rFlag && mode == Scanner::Reuse) {
-			if (!context.specMap.empty() || opts->encoding != encodingOld) {
+			if (!specs.empty() || opts->encoding != encodingOld) {
 				// Re-parse rules
 				mode = Scanner::Parse;
-				in.restore_state(rules_state);
-				in.reuse();
-				dfa_map.clear();
-				parse_cleanup(context);
-				context.specMap.clear();
-				yyparse(in, context);
+				input.restore_state(rules_state);
+				input.reuse();
+				dfas.clear();
+				specs.clear();
+				symtab.clear();
+				yyparse(context);
 
 				// Now append potential new rules
-				in.restore_state(curr_state);
+				input.restore_state(curr_state);
 				mode = Scanner::Parse;
-				yyparse(in, context);
+				yyparse(context);
 			}
 			encodingOld = opts->encoding;
 		}
 
-		o.source.block().line = in.get_cline();
-
 		// compile regular expressions to automata
 		if (mode != Scanner::Reuse) {
-			check(context, opts->cFlag);
-
-			// merge <*> rules to all conditions except "0" with lowest priority
-			for (SpecMap::iterator it = context.specMap.begin(); it != context.specMap.end(); ++it) {
-				it->second.insert(it->second.end(), context.spec_all.begin(), context.spec_all.end());
-			}
-
-			// insert "0" condition
-			if (context.startup) {
-				RegExpRule *zero = new RegExpRule(RegExp::make_nil(), false);
-				zero->code = context.startup;
-				context.condnames.insert(context.condnames.begin(), "0"); // first
-				context.specMap["0"].push_back(zero);
-			}
-
-			for (SpecMap::iterator it = context.specMap.begin(); it != context.specMap.end(); ++it) {
-				delay_default(it->second);
-				const std::string &setup = find_setup_rule(context.ruleSetupMap, it->first);
-				dfa_map[it->first] = compile(it->second, o, it->first, setup);
+			check(specs, opts->cFlag);
+			prepare(specs, input);
+			o.source.block().line = input.get_cline();
+			for (specs_t::const_iterator i = specs.begin(); i != specs.end(); ++i) {
+				dfas.push_back(compile(*i, o));
 			}
 		}
 
-		o.source.block().types = context.condnames;
+		for (dfas_t::const_iterator i = dfas.begin(); i != dfas.end(); ++i) {
+			const std::string &c = (*i)->cond;
+			if (c != "") {
+				o.source.block().types.push_back(c);
+			}
+		}
 
 		// generate code
 		if (mode != Scanner::Rules) {
 			uint32_t ind = opts->topIndent;
-			size_t nCount = dfa_map.size();
-			if (dfa_map.find("") != dfa_map.end()) {
-				dfa_map[""]->emit(o, ind, !--nCount, bPrologBrace);
-			} else {
-				std::vector<std::string>::const_iterator
-					i = context.condnames.begin(),
-					e = context.condnames.end();
-				for (; i != e; ++i) {
-					dfa_map[*i]->emit(o, ind, !--nCount, bPrologBrace);
-				}
+			size_t nCount = dfas.size();
+			for (dfas_t::const_iterator i = dfas.begin(); i != dfas.end(); ++i) {
+				(*i)->emit(o, ind, !--nCount, bPrologBrace);
 			}
 		}
 
-		o.source.wline_info (in.get_cline (), in.get_fname ().c_str ());
+		o.source.wline_info (input.get_cline (), input.get_fname ().c_str ());
 		/* restore original char handling mode*/
 		opts.reset_encoding (encodingOld);
 	}
@@ -2210,7 +2148,10 @@ void parse(Scanner &in, Output & o)
 		emit_epilog (o.source, o.skeletons);
 	}
 
-	parse_cleanup(context);
+	RegExp::flist.clear();
+	Code::flist.clear();
+	Range::vFreeList.clear();
+	RangeSuffix::freeList.clear();
 }
 
 } // end namespace re2c

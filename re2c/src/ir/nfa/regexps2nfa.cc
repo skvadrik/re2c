@@ -106,7 +106,7 @@ static nfa_state_t *regexp2nfa(nfa_t &nfa, size_t nrule, size_t &dist,
 }
 
 static nfa_state_t *regexp2nfa_rule(nfa_t &nfa, size_t nrule,
-	const RegExpRule *rule, InputAPI::type_t input)
+	const RegExp *re, InputAPI::type_t input)
 {
 	const bool generic = input == InputAPI::CUSTOM;
 	size_t base = FixTag::RIGHTMOST, dist = 0;
@@ -114,10 +114,10 @@ static nfa_state_t *regexp2nfa_rule(nfa_t &nfa, size_t nrule,
 	nfa_state_t *s = &nfa.states[nfa.size++];
 	s->make_fin(nrule);
 
-	return regexp2nfa(nfa, nrule, dist, base, !generic, rule->re, s);
+	return regexp2nfa(nfa, nrule, dist, base, !generic, re, s);
 }
 
-void regexps2nfa(const std::vector<const RegExpRule*> &regexps,
+void regexps2nfa(const std::vector<RegExpRule> &regexps,
 	nfa_t &nfa, InputAPI::type_t input)
 {
 	const size_t nregexps = regexps.size();
@@ -126,10 +126,10 @@ void regexps2nfa(const std::vector<const RegExpRule*> &regexps,
 		return;
 	}
 
-	nfa_state_t *s = regexp2nfa_rule(nfa, 0, regexps[0], input);
+	nfa_state_t *s = regexp2nfa_rule(nfa, 0, regexps[0].re, input);
 	for (size_t i = 1; i < nregexps; ++i) {
 		nfa_state_t *t = &nfa.states[nfa.size++];
-		t->make_alt(i, s, regexp2nfa_rule(nfa, i, regexps[i], input));
+		t->make_alt(i, s, regexp2nfa_rule(nfa, i, regexps[i].re, input));
 		s = t;
 	}
 	nfa.root = s;

@@ -32,11 +32,11 @@ static void split(const RegExp* re, std::set<uint32_t> &cs)
 	}
 }
 
-void split(const std::vector<const RegExpRule*> &rs, std::set<uint32_t> &cs)
+void split(const std::vector<RegExpRule> &rs, std::set<uint32_t> &cs)
 {
 	const size_t nrs = rs.size();
 	for (size_t i = 0; i < nrs; ++i) {
-		split(rs[i]->re, cs);
+		split(rs[i].re, cs);
 	}
 }
 

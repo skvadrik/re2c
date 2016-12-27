@@ -27,16 +27,21 @@ static std::string make_name(const std::string &cond, uint32_t line)
 	return name;
 }
 
-smart_ptr<DFA> compile(const Spec &rules, Output &output,
-	const std::string &cond, const std::string &setup)
+smart_ptr<DFA> compile(const spec_t &spec, Output &output)
 {
-	const size_t defrule = !rules.empty() && RegExpRule::is_def(*rules.rbegin())
-			? rules.size() - 1 : Rule::NONE;
-	const uint32_t line = output.source.block().line;
-	const std::string name = make_name(cond, line);
 	Opt &opts = output.source.opts;
 	Warn &warn = output.source.warn;
-	const uint32_t cunits = opts->encoding.nCodeUnits();
+	const std::vector<RegExpRule> &rules = spec.rules;
+	const size_t defrule = spec.defs.empty()
+		? Rule::NONE
+		: rules.size() - 1;
+	const uint32_t
+		line = output.source.block().line,
+		cunits = opts->encoding.nCodeUnits();
+	const std::string
+		&cond = spec.name,
+		name = make_name(cond, line),
+		&setup = spec.setup.empty() ? "" : spec.setup[0]->text;
 
 	warn_nullable(rules, cond, warn);
 

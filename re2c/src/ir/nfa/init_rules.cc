@@ -29,7 +29,7 @@ error:
 	exit(1);
 }
 
-void init_rules(const std::vector<const RegExpRule*> &regexps,
+void init_rules(const std::vector<RegExpRule> &regexps,
 	std::valarray<Rule> &rules, const std::vector<VarTag> &vartags,
 	const std::vector<FixTag> &fixtags)
 {
@@ -40,7 +40,7 @@ void init_rules(const std::vector<const RegExpRule*> &regexps,
 
 	for (size_t r = 0, v = 0, f = 0, t; r < nr; ++r) {
 		Rule &rule = rules[r];
-		rule.code = regexps[r]->code;
+		rule.code = regexps[r].code;
 
 		rule.lvar = v;
 		for (; v < nv && vartags[v].rule == r; ++v);

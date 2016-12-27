@@ -94,16 +94,16 @@ struct nfa_t
 	std::vector<FixTag> &fixtags;
 	nfa_state_t *root;
 
-	nfa_t(const std::vector<const RegExpRule*> &rs, InputAPI::type_t input);
+	nfa_t(const std::vector<RegExpRule> &rs, InputAPI::type_t input);
 	~nfa_t();
 
 	FORBID_COPY(nfa_t);
 };
 
-size_t counters(const std::vector<const RegExpRule*> &regexps, size_t &ntags);
-void regexps2nfa(const std::vector<const RegExpRule*> &regexps, nfa_t &nfa, InputAPI::type_t input);
-bool nullable_rule(const RegExpRule *rule);
-void init_rules(const std::vector<const RegExpRule*> &regexps, std::valarray<Rule> &rules,
+size_t counters(const std::vector<RegExpRule> &regexps, size_t &ntags);
+void regexps2nfa(const std::vector<RegExpRule> &regexps, nfa_t &nfa, InputAPI::type_t input);
+bool nullable_rule(const RegExpRule &rule);
+void init_rules(const std::vector<RegExpRule> &regexps, std::valarray<Rule> &rules,
 	const std::vector<VarTag> &vartags, const std::vector<FixTag> &fixtags);
 
 } // namespace re2c
