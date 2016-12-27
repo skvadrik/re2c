@@ -2066,7 +2066,6 @@ void parse(Scanner &input, Output & o)
 	Enc encodingOld = opts->encoding;
 	for (Scanner::ParseMode mode; (mode = input.echo()) != Scanner::Stop;) {
 		o.source.new_block ();
-		bool bPrologBrace = false;
 
 		input.save_state(curr_state);
 		if (opts->rFlag && mode == Scanner::Rules && !dfas.empty())
@@ -2122,19 +2121,12 @@ void parse(Scanner &input, Output & o)
 			}
 		}
 
-		for (dfas_t::const_iterator i = dfas.begin(); i != dfas.end(); ++i) {
-			const std::string &c = (*i)->cond;
-			if (c != "") {
-				o.source.block().types.push_back(c);
-			}
-		}
-
 		// generate code
 		if (mode != Scanner::Rules) {
+			bool prolog = false;
 			uint32_t ind = opts->topIndent;
-			size_t nCount = dfas.size();
 			for (dfas_t::const_iterator i = dfas.begin(); i != dfas.end(); ++i) {
-				(*i)->emit(o, ind, !--nCount, bPrologBrace);
+				(*i)->emit(o, ind, (i + 1) == dfas.end(), prolog);
 			}
 		}
 

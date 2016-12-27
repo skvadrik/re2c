@@ -20,18 +20,7 @@
 namespace re2c
 {
 
-static std::string genGetCondition (Opt &opts);
-static void genCondGotoSub (OutputFile & o, uint32_t ind, const std::vector<std::string> & condnames, uint32_t cMin, uint32_t cMax);
-static void genCondTable   (OutputFile & o, uint32_t ind, const std::vector<std::string> & condnames);
-static void genCondGoto    (OutputFile & o, uint32_t ind, const std::vector<std::string> & condnames);
-static void emit_state     (OutputFile & o, uint32_t ind, const State * s, bool used_label);
-
-std::string genGetCondition(Opt &opts)
-{
-	return opts->cond_get_naked
-		? opts->cond_get
-		: opts->cond_get + "()";
-}
+static void emit_state(OutputFile & o, uint32_t ind, const State * s, bool used_label);
 
 void emit_state (OutputFile & o, uint32_t ind, const State * s, bool used_label)
 {
@@ -91,25 +80,14 @@ void DFA::emit_body(OutputFile &o, uint32_t& ind,
 	}
 }
 
-void DFA::emit_dot(
-	OutputFile &o,
-	bool last_cond,
-	const std::vector<std::string> &conds) const
+void DFA::emit_dot(OutputFile &o, bool last_cond) const
 {
 	Opt &opts = o.opts;
 	if (!opts->cFlag || !o.cond_goto) {
 		o.ws("digraph re2c {\n");
 	}
+	o.wdelay_cond_goto(0);
 	if (opts->cFlag) {
-		if (!o.cond_goto) {
-			for (size_t i = 0; i < conds.size(); ++i) {
-				const std::string &cond = conds[i];
-				o.ws("0 -> ").wstring(cond)
-					.ws(" [label=\"state=")
-					.wstring(cond).ws("\"]\n");
-			}
-			o.cond_goto = true;
-		}
 		o.wstring(cond).ws(" -> ").wlabel(head->label).ws("\n");
 	}
 	for (State *s = head; s; s = s->next) {
@@ -142,6 +120,7 @@ void DFA::emit(Output & output, uint32_t& ind, bool isLastCond, bool& bPrologBra
 	OutputFile &o = output.source;
 	OutputBlock &ob = o.block();
 	Opt &opts = o.opts;
+
 	std::set<std::string> tagnames, tagvars;
 	if (!oldstyle_ctxmarker) {
 		for (size_t i = 0; i < vartags.size(); ++i) {
@@ -161,6 +140,7 @@ void DFA::emit(Output & output, uint32_t& ind, bool isLastCond, bool& bPrologBra
 		}
 		ob.tags.insert(tagnames.begin(), tagnames.end());
 	}
+	if (!cond.empty()) o.block().types.push_back(cond);
 
 	bool bProlog = (!opts->cFlag || !o.cond_goto);
 
@@ -192,7 +172,7 @@ void DFA::emit(Output & output, uint32_t& ind, bool isLastCond, bool& bPrologBra
 			emit_end(o, name, need_backup, oldstyle_ctxmarker);
 		}
 	} else if (opts->target == opt_t::DOT) {
-		emit_dot(o, isLastCond, ob.types);
+		emit_dot(o, isLastCond);
 	} else {
 		// Generate prolog
 		if (bProlog)
@@ -231,10 +211,7 @@ void DFA::emit(Output & output, uint32_t& ind, bool isLastCond, bool& bPrologBra
 		}
 		if (bProlog)
 		{
-			if (opts->cFlag && !o.cond_goto && opts->gFlag)
-			{
-				genCondTable(o, ind, ob.types);
-			}
+			o.wdelay_cond_table(ind);
 			o.wdelay_state_goto (ind);
 			if (opts->cFlag)
 			{
@@ -244,10 +221,7 @@ void DFA::emit(Output & output, uint32_t& ind, bool isLastCond, bool& bPrologBra
 				}
 			}
 			o.wuser_start_label ();
-			if (opts->cFlag && !o.cond_goto)
-			{
-				genCondGoto(o, ind, ob.types);
-			}
+			o.wdelay_cond_goto(ind);
 		}
 		if (opts->cFlag && !cond.empty())
 		{
@@ -276,91 +250,6 @@ void DFA::emit(Output & output, uint32_t& ind, bool isLastCond, bool& bPrologBra
 			o.wind(--ind).ws("}\n");
 		}
 	}
-}
-
-void genCondTable(OutputFile & o, uint32_t ind, const std::vector<std::string> & condnames)
-{
-	Opt &opts = o.opts;
-	const size_t conds = condnames.size ();
-	o.wind(ind++).ws("static void *").wstring(opts->yyctable).ws("[").wu64(conds).ws("] = {\n");
-	for (size_t i = 0; i < conds; ++i)
-	{
-		o.wind(ind).ws("&&").wstring(opts->condPrefix).wstring(condnames[i]).ws(",\n");
-	}
-	o.wind(--ind).ws("};\n");
-}
-
-void genCondGotoSub(OutputFile & o, uint32_t ind, const std::vector<std::string> & condnames, uint32_t cMin, uint32_t cMax)
-{
-	Opt &opts = o.opts;
-	if (cMin == cMax)
-	{
-		o.wind(ind).ws("goto ").wstring(opts->condPrefix).wstring(condnames[cMin]).ws(";\n");
-	}
-	else
-	{
-		uint32_t cMid = cMin + ((cMax - cMin + 1) / 2);
-
-		o.wind(ind).ws("if (").wstring(genGetCondition(opts)).ws(" < ").wu32(cMid).ws(") {\n");
-		genCondGotoSub(o, ind + 1, condnames, cMin, cMid - 1);
-		o.wind(ind).ws("} else {\n");
-		genCondGotoSub(o, ind + 1, condnames, cMid, cMax);
-		o.wind(ind).ws("}\n");
-	}
-}
-
-/*
- * note [condition order]
- *
- * In theory re2c makes no guarantee about the order of conditions in
- * the generated lexer. Users should define condition type 'YYCONDTYPE'
- * and use values of this type with 'YYGETCONDITION' and 'YYSETCONDITION'.
- * This way code is independent of internal re2c condition numbering.
- *
- * However, it is possible to manually hardcode condition numbers and make
- * re2c generate condition dispatch without explicit use of condition names
- * (nested 'if' statements with '-b' or computed 'goto' table with '-g').
- * This code is syntactically valid (compiles), but unsafe:
- *     - change of re2c options may break compilation
- *     - change of internal re2c condition numbering may break runtime
- *
- * re2c has to preserve the existing numbering scheme.
- *
- * re2c warns about implicit assumptions about condition order, unless:
- *     - condition type is defined with 'types:re2c' or '-t, --type-header'
- *     - dispatch is independent of condition order: either it uses
- *       explicit condition names or there's only one condition and
- *       dispatch shrinks to unconditional jump
- */
-void genCondGoto(OutputFile & o, uint32_t ind, const std::vector<std::string> & condnames)
-{
-	Opt &opts = o.opts;
-	const size_t conds = condnames.size ();
-	if (opts->gFlag)
-	{
-		o.wind(ind).ws("goto *").wstring(opts->yyctable).ws("[").wstring(genGetCondition(opts)).ws("];\n");
-	}
-	else if (opts->sFlag)
-	{
-		if (conds == 1)
-		{
-			o.warn_condition_order = false; // see note [condition order]
-		}
-		genCondGotoSub(o, ind, condnames, 0, static_cast<uint32_t> (conds) - 1);
-	}
-	else
-	{
-		o.warn_condition_order = false; // see note [condition order]
-		o.wind(ind).ws("switch (").wstring(genGetCondition(opts)).ws(") {\n");
-		for (size_t i = 0; i < conds; ++i)
-		{
-			const std::string & cond = condnames[i];
-			o.wind(ind).ws("case ").wstring(opts->condEnumPrefix).wstring(cond).ws(": goto ").wstring(opts->condPrefix).wstring(cond).ws(";\n");
-		}
-		o.wind(ind).ws("}\n");
-	}
-	o.wdelay_warn_condition_order ();
-	o.cond_goto = true;
 }
 
 std::string vartag_name(tagver_t ver, const std::string &prefix)

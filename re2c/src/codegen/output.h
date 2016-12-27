@@ -34,11 +34,12 @@ struct OutputFragment
 	enum type_t
 		{ CODE
 //		, CONFIG
+		, COND_GOTO
+		, COND_TABLE
 		, LINE_INFO
 		, STATE_GOTO
 		, TAGS
 		, TYPES
-		, WARN_CONDITION_ORDER
 		, YYACCEPT_INIT
 		, YYMAXFILL
 		};
@@ -112,9 +113,10 @@ public:
 	// delayed output
 	OutputFile & wdelay_tags(uint32_t ind, const ConfTags *cf);
 	OutputFile & wdelay_line_info ();
+	OutputFile & wdelay_cond_goto(uint32_t ind);
+	OutputFile & wdelay_cond_table(uint32_t ind);
 	OutputFile & wdelay_state_goto (uint32_t ind);
 	OutputFile & wdelay_types ();
-	OutputFile & wdelay_warn_condition_order ();
 	OutputFile & wdelay_yyaccept_init (uint32_t ind);
 	OutputFile & wdelay_yymaxfill ();
 
@@ -150,6 +152,8 @@ struct Output
 
 void output_tags          (std::ostream &o, const ConfTags &conf, const std::set<std::string> &tags);
 void output_line_info     (std::ostream &o, uint32_t ind, const std::string &file_name, Opt &opts);
+void output_cond_goto     (std::ostream &o, uint32_t ind, const std::vector<std::string> &conds, Opt &opts, Warn &warn, bool warn_cond_order, uint32_t line);
+void output_cond_table    (std::ostream &o, uint32_t ind, const std::vector<std::string> &conds, Opt &opts);
 void output_state_goto    (std::ostream &o, uint32_t ind, uint32_t start_label, uint32_t fill_index, Opt &opts);
 void output_types         (std::ostream &o, uint32_t ind, const uniq_vector_t<std::string> &types, Opt &opts);
 void output_version_time  (std::ostream &o, Opt &opts);

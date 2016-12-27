@@ -207,6 +207,25 @@ OutputFile & OutputFile::wdelay_line_info ()
 	return *this;
 }
 
+OutputFile & OutputFile::wdelay_cond_goto(uint32_t ind)
+{
+	if (opts->cFlag && !cond_goto) {
+		block().fragments.push_back(new OutputFragment(OutputFragment::COND_GOTO, ind));
+		insert_code ();
+		cond_goto = true;
+	}
+	return *this;
+}
+
+OutputFile & OutputFile::wdelay_cond_table(uint32_t ind)
+{
+	if (opts->gFlag && opts->cFlag && !cond_goto) {
+		block().fragments.push_back(new OutputFragment(OutputFragment::COND_TABLE, ind));
+		insert_code ();
+	}
+	return *this;
+}
+
 OutputFile & OutputFile::wdelay_state_goto (uint32_t ind)
 {
 	if (opts->fFlag && !state_goto) {
@@ -221,13 +240,6 @@ OutputFile & OutputFile::wdelay_types ()
 {
 	warn_condition_order = false; // see note [condition order]
 	block().fragments.push_back (new OutputFragment (OutputFragment::TYPES, 0));
-	insert_code ();
-	return *this;
-}
-
-OutputFile & OutputFile::wdelay_warn_condition_order ()
-{
-	block().fragments.push_back (new OutputFragment (OutputFragment::WARN_CONDITION_ORDER, 0));
 	insert_code ();
 	return *this;
 }
@@ -295,6 +307,13 @@ bool OutputFile::emit(const uniq_vector_t<std::string> &global_types,
 				case OutputFragment::LINE_INFO:
 					output_line_info(f.stream, line_count + 1, filename, opts);
 					break;
+				case OutputFragment::COND_GOTO:
+					output_cond_goto(f.stream, f.indent, b.types,
+						opts, warn, warn_condition_order, b.line);
+					break;
+				case OutputFragment::COND_TABLE:
+					output_cond_table(f.stream, f.indent, b.types, opts);
+					break;
 				case OutputFragment::STATE_GOTO:
 					output_state_goto(f.stream, f.indent, 0, fill_index, opts);
 					break;
@@ -303,11 +322,6 @@ bool OutputFile::emit(const uniq_vector_t<std::string> &global_types,
 					break;
 				case OutputFragment::TYPES:
 					output_types(f.stream, f.indent, global_types, opts);
-					break;
-				case OutputFragment::WARN_CONDITION_ORDER:
-					if (warn_condition_order) {// see note [condition order]
-						warn.condition_order (b.line);
-					}
 					break;
 				case OutputFragment::YYACCEPT_INIT:
 					output_yyaccept_init(f.stream, f.indent, b.used_yyaccept, opts);
@@ -475,6 +489,102 @@ std::string output_get_state (Opt &opts)
 	return opts->state_get_naked
 		? opts->state_get
 		: opts->state_get + "()";
+}
+
+/*
+ * note [condition order]
+ *
+ * In theory re2c makes no guarantee about the order of conditions in
+ * the generated lexer. Users should define condition type 'YYCONDTYPE'
+ * and use values of this type with 'YYGETCONDITION' and 'YYSETCONDITION'.
+ * This way code is independent of internal re2c condition numbering.
+ *
+ * However, it is possible to manually hardcode condition numbers and make
+ * re2c generate condition dispatch without explicit use of condition names
+ * (nested 'if' statements with '-b' or computed 'goto' table with '-g').
+ * This code is syntactically valid (compiles), but unsafe:
+ *     - change of re2c options may break compilation
+ *     - change of internal re2c condition numbering may break runtime
+ *
+ * re2c has to preserve the existing numbering scheme.
+ *
+ * re2c warns about implicit assumptions about condition order, unless:
+ *     - condition type is defined with 'types:re2c' or '-t, --type-header'
+ *     - dispatch is independent of condition order: either it uses
+ *       explicit condition names or there's only one condition and
+ *       dispatch shrinks to unconditional jump
+ */
+
+static std::string output_cond_get(Opt &opts)
+{
+	return opts->cond_get + (opts->cond_get_naked ? "" : "()");
+}
+
+static void output_cond_goto_binary(std::ostream &o, uint32_t ind,
+	const std::vector<std::string> &conds, Opt &opts,
+	size_t lower, size_t upper)
+{
+	const std::string indstr = indent(ind, opts->indString);
+
+	if (lower == upper) {
+		o << indstr << "goto " << opts->condPrefix << conds[lower] << ";\n";
+	} else {
+		const size_t middle = lower + (upper - lower + 1) / 2;
+		o << indstr << "if (" << output_cond_get(opts) << " < " << middle << ") {\n";
+		output_cond_goto_binary(o, ind + 1, conds, opts, lower, middle - 1);
+		o << indstr << "} else {\n";
+		output_cond_goto_binary(o, ind + 1, conds, opts, middle, upper);
+		o << indstr << "}\n";
+	}
+}
+
+void output_cond_goto(std::ostream &o, uint32_t ind,
+	const std::vector<std::string> &conds, Opt &opts,
+	Warn &warn, bool warn_cond_order, uint32_t line)
+{
+	const size_t ncond = conds.size();
+	const std::string indstr = indent(ind, opts->indString);
+
+	if (opts->target == opt_t::DOT) {
+		for (size_t i = 0; i < ncond; ++i) {
+			const std::string &cond = conds[i];
+			o << "0 -> " << cond << " [label=\"state=" << cond << "\"]\n";
+		}
+		return;
+	}
+
+	if (opts->gFlag) {
+		o << indstr << "goto *" << opts->yyctable
+			<< "[" << output_cond_get(opts) << "];\n";
+	} else if (opts->sFlag) {
+		if (ncond == 1) warn_cond_order = false;
+		output_cond_goto_binary(o, ind, conds, opts, 0, ncond - 1);
+	} else {
+		warn_cond_order = false;
+		o << indstr << "switch (" << output_cond_get(opts) << ") {\n";
+		for (size_t i = 0; i < ncond; ++i) {
+			const std::string &cond = conds[i];
+			o << indstr << "case " << opts->condEnumPrefix << cond
+				<<": goto " << opts->condPrefix << cond << ";\n";
+		}
+		o << indstr << "}\n";
+	}
+
+	// see note [condition order]
+	if (warn_cond_order) warn.condition_order(line);
+}
+
+void output_cond_table(std::ostream &o, uint32_t ind,
+	const std::vector<std::string> &conds, Opt &opts)
+{
+	const size_t ncond = conds.size();
+	const std::string indstr = opts->indString;
+
+	o << indent(ind++, indstr) << "static void *" << opts->yyctable << "[" << ncond << "] = {\n";
+	for (size_t i = 0; i < ncond; ++i) {
+		o << indent(ind, indstr) << "&&" << opts->condPrefix << conds[i] << ",\n";
+	}
+	o << indent(--ind, indstr) << "};\n";
 }
 
 } // namespace re2c
