@@ -152,6 +152,7 @@ public:
 	realopt_t (useropt_t & opt);
 	const opt_t * operator -> ();
 	void sync ();
+	const opt_t *snapshot() const { return new opt_t(real); }
 };
 
 class useropt_t
@@ -180,6 +181,8 @@ public:
 		, useropt ()
 		, realopt (useropt)
 	{}
+
+	const opt_t *snapshot() const { return realopt.snapshot(); }
 
 	// read-only access, forces options syncronization
 	const opt_t * operator -> ()

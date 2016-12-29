@@ -66,9 +66,11 @@ struct OutputBlock
 	uint32_t line;
 	std::vector<std::string> types;
 	std::set<std::string> tags;
+	const opt_t *opts;
 
 	OutputBlock ();
 	~OutputBlock ();
+	FORBID_COPY(OutputBlock);
 };
 
 class OutputFile
@@ -151,17 +153,14 @@ struct Output
 };
 
 void output_tags          (std::ostream &o, const ConfTags &conf, const std::set<std::string> &tags);
-void output_line_info     (std::ostream &o, uint32_t ind, const std::string &file_name, Opt &opts);
-void output_cond_goto     (std::ostream &o, uint32_t ind, const std::vector<std::string> &conds, Opt &opts, Warn &warn, bool warn_cond_order, uint32_t line);
-void output_cond_table    (std::ostream &o, uint32_t ind, const std::vector<std::string> &conds, Opt &opts);
-void output_state_goto    (std::ostream &o, uint32_t ind, uint32_t start_label, uint32_t fill_index, Opt &opts);
+void output_line_info     (std::ostream &o, uint32_t line, const std::string &fname, bool iflag);
+void output_cond_goto     (std::ostream &o, uint32_t ind, const std::vector<std::string> &conds, const opt_t *opts, Warn &warn, bool warn_cond_order, uint32_t line);
+void output_cond_table    (std::ostream &o, uint32_t ind, const std::vector<std::string> &conds, const opt_t *opts);
+void output_state_goto    (std::ostream &o, uint32_t ind, uint32_t start_label, uint32_t fill_index, const opt_t *opts);
 void output_types         (std::ostream &o, uint32_t ind, const uniq_vector_t<std::string> &types, Opt &opts);
 void output_version_time  (std::ostream &o, Opt &opts);
-void output_yyaccept_init (std::ostream &o, uint32_t ind, bool, Opt &opts);
+void output_yyaccept_init (std::ostream &o, uint32_t ind, bool, const opt_t *opts);
 void output_yymaxfill     (std::ostream &o, size_t max_fill);
-
-// helpers
-std::string output_get_state (Opt &opts);
 
 } // namespace re2c
 

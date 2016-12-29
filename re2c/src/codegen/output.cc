@@ -47,6 +47,7 @@ OutputBlock::OutputBlock ()
 	, line (0)
 	, types ()
 	, tags ()
+	, opts(NULL)
 {
 	fragments.push_back (new OutputFragment (OutputFragment::CODE, 0));
 }
@@ -57,6 +58,7 @@ OutputBlock::~OutputBlock ()
 	{
 		delete fragments[i];
 	}
+	delete opts;
 }
 
 OutputFile::OutputFile(Opt &o, Warn &w)
@@ -68,9 +70,7 @@ OutputFile::OutputFile(Opt &o, Warn &w)
 	, warn_condition_order (!o->tFlag) // see note [condition order]
 	, opts(o)
 	, warn(w)
-{
-	new_block ();
-}
+{}
 
 OutputFile::~OutputFile ()
 {
@@ -124,7 +124,7 @@ OutputFile & OutputFile::wu32_width (uint32_t n, int w)
 
 OutputFile & OutputFile::wline_info (uint32_t l, const char * fn)
 {
-	output_line_info (stream (), l, fn, opts);
+	output_line_info (stream (), l, fn, opts->iFlag);
 	return *this;
 }
 
@@ -305,17 +305,17 @@ bool OutputFile::emit(const uniq_vector_t<std::string> &global_types,
 			switch (f.type) {
 				case OutputFragment::CODE: break;
 				case OutputFragment::LINE_INFO:
-					output_line_info(f.stream, line_count + 1, filename, opts);
+					output_line_info(f.stream, line_count + 1, filename, b.opts->iFlag);
 					break;
 				case OutputFragment::COND_GOTO:
 					output_cond_goto(f.stream, f.indent, b.types,
-						opts, warn, warn_condition_order, b.line);
+						b.opts, warn, warn_condition_order, b.line);
 					break;
 				case OutputFragment::COND_TABLE:
-					output_cond_table(f.stream, f.indent, b.types, opts);
+					output_cond_table(f.stream, f.indent, b.types, b.opts);
 					break;
 				case OutputFragment::STATE_GOTO:
-					output_state_goto(f.stream, f.indent, 0, fill_index, opts);
+					output_state_goto(f.stream, f.indent, 0, fill_index, b.opts);
 					break;
 				case OutputFragment::TAGS:
 					output_tags(f.stream, *f.tags, global_tags);
@@ -324,7 +324,7 @@ bool OutputFile::emit(const uniq_vector_t<std::string> &global_types,
 					output_types(f.stream, f.indent, global_types, opts);
 					break;
 				case OutputFragment::YYACCEPT_INIT:
-					output_yyaccept_init(f.stream, f.indent, b.used_yyaccept, opts);
+					output_yyaccept_init(f.stream, f.indent, b.used_yyaccept, b.opts);
 					break;
 				case OutputFragment::YYMAXFILL:
 					output_yymaxfill(f.stream, max_fill);
@@ -360,7 +360,7 @@ bool HeaderFile::emit(const uniq_vector_t<std::string> &types, Opt &opts)
 	}
 
 	output_version_time(stream, opts);
-	output_line_info(stream, 3, filename, opts);
+	output_line_info(stream, 3, filename, opts->iFlag);
 	stream << "\n";
 	output_types(stream, 0, types, opts);
 
@@ -410,10 +410,15 @@ void output_tags(std::ostream &o, const ConfTags &conf,
 }
 
 void output_state_goto(std::ostream & o, uint32_t ind,
-	uint32_t start_label, uint32_t fill_index, Opt &opts)
+	uint32_t start_label, uint32_t fill_index, const opt_t *opts)
 {
-	const std::string indstr = indent(ind, opts->indString);
-	o << indstr << "switch (" << output_get_state(opts) << ") {\n";
+	const std::string
+		indstr = indent(ind, opts->indString),
+		getstate = opts->state_get_naked
+			? opts->state_get
+			: opts->state_get + "()";
+
+	o << indstr << "switch (" << getstate << ") {\n";
 	if (opts->bUseStateAbort)
 	{
 		o << indstr << "default: abort();\n";
@@ -434,7 +439,7 @@ void output_state_goto(std::ostream & o, uint32_t ind,
 	}
 }
 
-void output_yyaccept_init (std::ostream & o, uint32_t ind, bool used_yyaccept, Opt &opts)
+void output_yyaccept_init (std::ostream & o, uint32_t ind, bool used_yyaccept, const opt_t *opts)
 {
 	if (used_yyaccept)
 	{
@@ -447,11 +452,11 @@ void output_yymaxfill (std::ostream & o, size_t max_fill)
 	o << "#define YYMAXFILL " << max_fill << "\n";
 }
 
-void output_line_info (std::ostream & o, uint32_t line_number, const std::string &file_name, Opt &opts)
+void output_line_info(std::ostream &o, uint32_t line,
+	const std::string &fname, bool iflag)
 {
-	if (!opts->iFlag)
-	{
-		o << "#line " << line_number << " \"" << file_name << "\"\n";
+	if (!iflag) {
+		o << "#line " << line << " \"" << fname << "\"\n";
 	}
 }
 
@@ -484,13 +489,6 @@ void output_version_time (std::ostream & o, Opt &opts)
 	o << " */" << "\n";
 }
 
-std::string output_get_state (Opt &opts)
-{
-	return opts->state_get_naked
-		? opts->state_get
-		: opts->state_get + "()";
-}
-
 /*
  * note [condition order]
  *
@@ -515,13 +513,13 @@ std::string output_get_state (Opt &opts)
  *       dispatch shrinks to unconditional jump
  */
 
-static std::string output_cond_get(Opt &opts)
+static std::string output_cond_get(const opt_t *opts)
 {
 	return opts->cond_get + (opts->cond_get_naked ? "" : "()");
 }
 
 static void output_cond_goto_binary(std::ostream &o, uint32_t ind,
-	const std::vector<std::string> &conds, Opt &opts,
+	const std::vector<std::string> &conds, const opt_t *opts,
 	size_t lower, size_t upper)
 {
 	const std::string indstr = indent(ind, opts->indString);
@@ -539,7 +537,7 @@ static void output_cond_goto_binary(std::ostream &o, uint32_t ind,
 }
 
 void output_cond_goto(std::ostream &o, uint32_t ind,
-	const std::vector<std::string> &conds, Opt &opts,
+	const std::vector<std::string> &conds, const opt_t *opts,
 	Warn &warn, bool warn_cond_order, uint32_t line)
 {
 	const size_t ncond = conds.size();
@@ -575,7 +573,7 @@ void output_cond_goto(std::ostream &o, uint32_t ind,
 }
 
 void output_cond_table(std::ostream &o, uint32_t ind,
-	const std::vector<std::string> &conds, Opt &opts)
+	const std::vector<std::string> &conds, const opt_t *opts)
 {
 	const size_t ncond = conds.size();
 	const std::string indstr = opts->indString;
