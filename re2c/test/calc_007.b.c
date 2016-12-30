@@ -133,24 +133,23 @@ yy4:
 			{ res = 1; 					continue; }
 #line 135 "calc_007.b.c"
 yy6:
-			++YYCURSOR;
-			yych = *YYCURSOR;
+			yych = *++YYCURSOR;
 			if (yybm[0+yych] & 64) {
 				goto yy6;
 			}
 #line 80 "calc_007.b.re"
 			{ continue; }
-#line 144 "calc_007.b.c"
+#line 143 "calc_007.b.c"
 yy9:
 			++YYCURSOR;
 #line 83 "calc_007.b.re"
 			{ res = stack_add();		continue; }
-#line 149 "calc_007.b.c"
+#line 148 "calc_007.b.c"
 yy11:
 			++YYCURSOR;
 #line 84 "calc_007.b.re"
 			{ res = stack_sub();		continue; }
-#line 154 "calc_007.b.c"
+#line 153 "calc_007.b.c"
 yy13:
 			yych = *++YYCURSOR;
 			if (yych <= '/') goto yy14;
@@ -158,23 +157,21 @@ yy13:
 yy14:
 #line 82 "calc_007.b.re"
 			{ res = push_num(t, p, 10); continue; }
-#line 162 "calc_007.b.c"
+#line 161 "calc_007.b.c"
 yy15:
-			++YYCURSOR;
-			yych = *YYCURSOR;
+			yych = *++YYCURSOR;
 			if (yybm[0+yych] & 128) {
 				goto yy15;
 			}
 			goto yy14;
 yy17:
-			++YYCURSOR;
-			yych = *YYCURSOR;
+			yych = *++YYCURSOR;
 			if (yych <= '/') goto yy19;
 			if (yych <= '9') goto yy17;
 yy19:
 #line 81 "calc_007.b.re"
 			{ res = push_num(t, p, 8);	continue; }
-#line 178 "calc_007.b.c"
+#line 175 "calc_007.b.c"
 		}
 #line 87 "calc_007.b.re"
 

@@ -32,8 +32,7 @@ yy2:
 	++YYCURSOR;
 	{ printf("error\n"); return; }
 yy4:
-	++YYCURSOR;
-	yych = *YYCURSOR;
+	yych = *++YYCURSOR;
 	switch (yych) {
 	case '0':	goto yy4;
 	case '1':
@@ -68,8 +67,7 @@ yy6:
                 return;
         }
 yy7:
-	++YYCURSOR;
-	yych = *YYCURSOR;
+	yych = *++YYCURSOR;
 	switch (yych) {
 	case '1':	goto yy7;
 	case '2':
@@ -86,8 +84,7 @@ yy7:
 		goto yy6;
 	}
 yy9:
-	++YYCURSOR;
-	yych = *YYCURSOR;
+	yych = *++YYCURSOR;
 	switch (yych) {
 	case '2':	goto yy9;
 	case '3':
@@ -101,8 +98,7 @@ yy9:
 		goto yy6;
 	}
 yy11:
-	++YYCURSOR;
-	yych = *YYCURSOR;
+	yych = *++YYCURSOR;
 	switch (yych) {
 	case '3':	goto yy11;
 	case '4':
@@ -113,8 +109,7 @@ yy11:
 		goto yy6;
 	}
 yy13:
-	++YYCURSOR;
-	yych = *YYCURSOR;
+	yych = *++YYCURSOR;
 	switch (yych) {
 	case '4':	goto yy13;
 	default:	goto yy6;

@@ -91,18 +91,21 @@ std::ostream & OutputFile::stream ()
 
 OutputFile &OutputFile::wraw(const char *s, const char *e)
 {
+	insert_code();
 	stream().write(s, static_cast<std::streamsize>(e - s));
 	return *this;
 }
 
 OutputFile & OutputFile::wu32_hex (uint32_t n)
 {
+	insert_code();
 	prtHex(stream(), n, opts->encoding.szCodeUnit());
 	return *this;
 }
 
 OutputFile & OutputFile::wc_hex (uint32_t n)
 {
+	insert_code();
 	const Enc &e = opts->encoding;
 	prtChOrHex(stream(), n, e.szCodeUnit(), e.type() == Enc::EBCDIC, opts->target == opt_t::DOT);
 	return *this;
@@ -110,6 +113,7 @@ OutputFile & OutputFile::wc_hex (uint32_t n)
 
 OutputFile & OutputFile::wrange (uint32_t l, uint32_t u)
 {
+	insert_code();
 	const Enc &e = opts->encoding;
 	printSpan(stream(), l, u, e.szCodeUnit(), e.type() == Enc::EBCDIC, opts->target == opt_t::DOT);
 	return *this;
@@ -117,6 +121,7 @@ OutputFile & OutputFile::wrange (uint32_t l, uint32_t u)
 
 OutputFile & OutputFile::wu32_width (uint32_t n, int w)
 {
+	insert_code();
 	stream () << std::setw (w);
 	stream () << n;
 	return *this;
@@ -124,18 +129,21 @@ OutputFile & OutputFile::wu32_width (uint32_t n, int w)
 
 OutputFile & OutputFile::wline_info (uint32_t l, const char * fn)
 {
+	insert_code();
 	output_line_info (stream (), l, fn, opts->iFlag);
 	return *this;
 }
 
 OutputFile & OutputFile::wversion_time ()
 {
+	insert_code();
 	output_version_time (stream (), opts);
 	return *this;
 }
 
 OutputFile & OutputFile::wuser_start_label ()
 {
+	insert_code();
 	const std::string label = block().user_start_label;
 	if (!label.empty ())
 	{
@@ -146,49 +154,58 @@ OutputFile & OutputFile::wuser_start_label ()
 
 OutputFile & OutputFile::wc (char c)
 {
+	insert_code();
 	stream () << c;
 	return *this;
 }
 
 OutputFile & OutputFile::wu32 (uint32_t n)
 {
+	insert_code();
 	stream () << n;
 	return *this;
 }
 
 OutputFile & OutputFile::wu64 (uint64_t n)
 {
+	insert_code();
 	stream () << n;
 	return *this;
 }
 
 OutputFile & OutputFile::wstring (const std::string & s)
 {
+	insert_code();
 	stream () << s;
 	return *this;
 }
 
 OutputFile & OutputFile::ws (const char * s)
 {
+	insert_code();
 	stream () << s;
 	return *this;
 }
 
 OutputFile & OutputFile::wlabel (label_t l)
 {
+	insert_code();
 	stream () << l;
 	return *this;
 }
 
 OutputFile & OutputFile::wind (uint32_t ind)
 {
+	insert_code();
 	stream () << indent(ind, opts->indString);
 	return *this;
 }
 
 void OutputFile::insert_code ()
 {
-	block().fragments.push_back (new OutputFragment (OutputFragment::CODE, 0));
+	if (block().fragments.back()->type != OutputFragment::CODE) {
+		block().fragments.push_back(new OutputFragment(OutputFragment::CODE, 0));
+	}
 }
 
 OutputFile &OutputFile::wdelay_tags(uint32_t ind, const ConfTags *cf)
@@ -196,14 +213,12 @@ OutputFile &OutputFile::wdelay_tags(uint32_t ind, const ConfTags *cf)
 	OutputFragment *frag = new OutputFragment(OutputFragment::TAGS, ind);
 	frag->tags = cf;
 	blocks.back()->fragments.push_back(frag);
-	insert_code();
 	return *this;
 }
 
 OutputFile & OutputFile::wdelay_line_info ()
 {
 	block().fragments.push_back (new OutputFragment (OutputFragment::LINE_INFO, 0));
-	insert_code ();
 	return *this;
 }
 
@@ -211,7 +226,6 @@ OutputFile & OutputFile::wdelay_cond_goto(uint32_t ind)
 {
 	if (opts->cFlag && !cond_goto) {
 		block().fragments.push_back(new OutputFragment(OutputFragment::COND_GOTO, ind));
-		insert_code ();
 		cond_goto = true;
 	}
 	return *this;
@@ -221,7 +235,6 @@ OutputFile & OutputFile::wdelay_cond_table(uint32_t ind)
 {
 	if (opts->gFlag && opts->cFlag && !cond_goto) {
 		block().fragments.push_back(new OutputFragment(OutputFragment::COND_TABLE, ind));
-		insert_code ();
 	}
 	return *this;
 }
@@ -230,7 +243,6 @@ OutputFile & OutputFile::wdelay_state_goto (uint32_t ind)
 {
 	if (opts->fFlag && !state_goto) {
 		block().fragments.push_back (new OutputFragment (OutputFragment::STATE_GOTO, ind));
-		insert_code ();
 		state_goto = true;
 	}
 	return *this;
@@ -240,28 +252,51 @@ OutputFile & OutputFile::wdelay_types ()
 {
 	warn_condition_order = false; // see note [condition order]
 	block().fragments.push_back (new OutputFragment (OutputFragment::TYPES, 0));
-	insert_code ();
 	return *this;
 }
 
 OutputFile & OutputFile::wdelay_yyaccept_init (uint32_t ind)
 {
 	block().fragments.push_back (new OutputFragment (OutputFragment::YYACCEPT_INIT, ind));
-	insert_code ();
 	return *this;
 }
 
 OutputFile & OutputFile::wdelay_yymaxfill ()
 {
 	block().fragments.push_back (new OutputFragment (OutputFragment::YYMAXFILL, 0));
-	insert_code ();
+	return *this;
+}
+
+OutputFile& OutputFile::wdelay_skip(uint32_t ind, bool skip)
+{
+	if (skip) {
+		OutputFragment *f = new OutputFragment(OutputFragment::SKIP, ind);
+		block().fragments.push_back(f);
+	}
+	return *this;
+}
+
+OutputFile& OutputFile::wdelay_peek(uint32_t ind, bool peek)
+{
+	if (peek) {
+		OutputFragment *f = new OutputFragment(OutputFragment::PEEK, ind);
+		block().fragments.push_back(f);
+	}
+	return *this;
+}
+
+OutputFile& OutputFile::wdelay_backup(uint32_t ind, bool backup)
+{
+	if (backup) {
+		OutputFragment *f = new OutputFragment(OutputFragment::BACKUP, ind);
+		block().fragments.push_back(f);
+	}
 	return *this;
 }
 
 void OutputFile::new_block ()
 {
 	blocks.push_back (new OutputBlock ());
-	insert_code ();
 }
 
 void OutputFile::global_lists(
@@ -277,6 +312,65 @@ void OutputFile::global_lists(
 
 		const std::set<std::string> &cs = blocks[i]->tags;
 		tags.insert(cs.begin(), cs.end());
+	}
+}
+
+static void foldexpr(std::vector<OutputFragment*> &frags)
+{
+	const size_t n = frags.size();
+	for (size_t i = 0; i < n;) {
+
+		if (i + 2 < n) {
+			OutputFragment::type_t
+				&x = frags[i]->type,
+				&y = frags[i + 1]->type,
+				&z = frags[i + 2]->type;
+			if (x == OutputFragment::BACKUP && y == OutputFragment::PEEK && z == OutputFragment::SKIP) {
+				x = OutputFragment::BACKUP_PEEK_SKIP;
+				y = z = OutputFragment::EMPTY;
+				i += 3;
+				continue;
+			} else if (x == OutputFragment::SKIP && y == OutputFragment::BACKUP && z == OutputFragment::PEEK) {
+				x = OutputFragment::SKIP_BACKUP_PEEK;
+				y = z = OutputFragment::EMPTY;
+				i += 3;
+				continue;
+			}
+		}
+
+		if (i + 1 < n) {
+			OutputFragment::type_t
+				&x = frags[i]->type,
+				&y = frags[i + 1]->type;
+			if (x == OutputFragment::PEEK && y == OutputFragment::SKIP) {
+				x = OutputFragment::PEEK_SKIP;
+				y = OutputFragment::EMPTY;
+				i += 2;
+				continue;
+			} else if (x == OutputFragment::SKIP && y == OutputFragment::PEEK) {
+				x = OutputFragment::SKIP_PEEK;
+				y = OutputFragment::EMPTY;
+				i += 2;
+				continue;
+			} else if (x == OutputFragment::SKIP && y == OutputFragment::BACKUP) {
+				x = OutputFragment::SKIP_BACKUP;
+				y = OutputFragment::EMPTY;
+				i += 2;
+				continue;
+			} else if (x == OutputFragment::BACKUP && y == OutputFragment::PEEK) {
+				x = OutputFragment::BACKUP_PEEK;
+				y = OutputFragment::EMPTY;
+				i += 2;
+				continue;
+			} else if (x == OutputFragment::BACKUP && y == OutputFragment::SKIP) {
+				x = OutputFragment::BACKUP_SKIP;
+				y = OutputFragment::EMPTY;
+				i += 2;
+				continue;
+			}
+		}
+
+		++i;
 	}
 }
 
@@ -300,37 +394,79 @@ bool OutputFile::emit(const uniq_vector_t<std::string> &global_types,
 	unsigned int line_count = 1;
 	for (unsigned int j = 0; j < blocks.size(); ++j) {
 		OutputBlock & b = * blocks[j];
-		for (unsigned int i = 0; i < b.fragments.size(); ++i) {
+		const opt_t *bopt = b.opts;
+
+		if (bopt->input_api == INPUT_DEFAULT) {
+			foldexpr(b.fragments);
+		}
+
+		const size_t n = b.fragments.size();
+		for (size_t i = 0; i < n; ++i) {
 			OutputFragment & f = * b.fragments[i];
+			std::ostringstream &o = f.stream;
+			const uint32_t ind = f.indent;
+
 			switch (f.type) {
-				case OutputFragment::CODE: break;
-				case OutputFragment::LINE_INFO:
-					output_line_info(f.stream, line_count + 1, filename, b.opts->iFlag);
-					break;
-				case OutputFragment::COND_GOTO:
-					output_cond_goto(f.stream, f.indent, b.types,
-						b.opts, warn, warn_condition_order, b.line);
-					break;
-				case OutputFragment::COND_TABLE:
-					output_cond_table(f.stream, f.indent, b.types, b.opts);
-					break;
-				case OutputFragment::STATE_GOTO:
-					output_state_goto(f.stream, f.indent, 0, fill_index, b.opts);
-					break;
-				case OutputFragment::TAGS:
-					output_tags(f.stream, *f.tags, global_tags);
-					break;
-				case OutputFragment::TYPES:
-					output_types(f.stream, f.indent, global_types, opts);
-					break;
-				case OutputFragment::YYACCEPT_INIT:
-					output_yyaccept_init(f.stream, f.indent, b.used_yyaccept, b.opts);
-					break;
-				case OutputFragment::YYMAXFILL:
-					output_yymaxfill(f.stream, max_fill);
-					break;
+			case OutputFragment::EMPTY:
+			case OutputFragment::CODE: break;
+			case OutputFragment::LINE_INFO:
+				output_line_info(o, line_count + 1, filename, bopt->iFlag);
+				break;
+			case OutputFragment::COND_GOTO:
+				output_cond_goto(o, ind, b.types,
+					bopt, warn, warn_condition_order, b.line);
+				break;
+			case OutputFragment::COND_TABLE:
+				output_cond_table(o, ind, b.types, bopt);
+				break;
+			case OutputFragment::STATE_GOTO:
+				output_state_goto(o, ind, 0, fill_index, bopt);
+				break;
+			case OutputFragment::TAGS:
+				output_tags(o, *f.tags, global_tags);
+				break;
+			case OutputFragment::TYPES:
+				output_types(o, ind, global_types, opts);
+				break;
+			case OutputFragment::YYACCEPT_INIT:
+				output_yyaccept_init(o, ind, b.used_yyaccept, bopt);
+				break;
+			case OutputFragment::YYMAXFILL:
+				output_yymaxfill(o, max_fill);
+				break;
+			case OutputFragment::SKIP:
+				output_skip(o, ind, bopt);
+				break;
+			case OutputFragment::PEEK:
+				output_peek(o, ind, bopt);
+				break;
+			case OutputFragment::BACKUP:
+				output_backup(o, ind, bopt);
+				break;
+			case OutputFragment::PEEK_SKIP:
+				output_peek_skip(o, ind, bopt);
+				break;
+			case OutputFragment::SKIP_PEEK:
+				output_skip_peek(o, ind, bopt);
+				break;
+			case OutputFragment::SKIP_BACKUP:
+				output_skip_backup(o, ind, bopt);
+				break;
+			case OutputFragment::BACKUP_SKIP:
+				output_backup_skip(o, ind, bopt);
+				break;
+			case OutputFragment::BACKUP_PEEK:
+				output_backup_peek(o, ind, bopt);
+				break;
+			case OutputFragment::BACKUP_PEEK_SKIP:
+				output_backup_peek_skip(o, ind, bopt);
+				break;
+			case OutputFragment::SKIP_BACKUP_PEEK:
+				output_skip_backup_peek(o, ind, bopt);
+				break;
 			}
-			std::string content = f.stream.str();
+
+			std::string content = o.str();
 			fwrite(content.c_str(), 1, content.size(), file);
 			line_count += f.count_lines();
 		}

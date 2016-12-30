@@ -17,141 +17,90 @@ namespace re2c
 
 class label_t;
 
-static void need(OutputFile &o, uint32_t ind, size_t some);
-static void emit_match(OutputFile &o, uint32_t ind, const State *s);
-static void emit_initial(OutputFile &o, uint32_t ind, const State *s, const std::set<label_t> &used_labels, bool save_yyaccept);
-static void emit_save(OutputFile &o, uint32_t ind, const State *s, bool save_yyaccept);
-static void emit_accept_binary(OutputFile &o, uint32_t ind, const DFA &dfa, const State *s, size_t l, size_t r);
-static void emit_accept(OutputFile &o, uint32_t ind, const DFA &dfa, const State *s);
-static void emit_rule(OutputFile &o, uint32_t ind, const DFA &dfa, size_t rule_idx);
-static void gen_goto(code_lines_t &code, const State *to, const DFA &dfa, tcid_t tcid, Opt &opts);
-static void gen_fintags(OutputFile &o, uint32_t ind, const DFA &dfa, const Rule &rule);
-static bool endstate(const State *s);
+static void need               (OutputFile &o, uint32_t ind, size_t some);
+static void emit_accept_binary (OutputFile &o, uint32_t ind, const DFA &dfa, const accept_t &acc, size_t l, size_t r);
+static void emit_accept        (OutputFile &o, uint32_t ind, const DFA &dfa, const accept_t &acc);
+static void emit_rule          (OutputFile &o, uint32_t ind, const DFA &dfa, size_t rule_idx);
+static void gen_fintags        (OutputFile &o, uint32_t ind, const DFA &dfa, const Rule &rule);
+static void gen_goto           (code_lines_t &code, const State *to, const DFA &dfa, tcid_t tcid, Opt &opts);
+static bool endstate           (const State *s);
 
 void emit_action(OutputFile &o, uint32_t ind, const DFA &dfa,
 	const State *s, const std::set<label_t> &used_labels)
 {
-	const bool save_yyaccept = dfa.accepts.size() > 1;
+	Opt &opts = o.opts;
 	switch (s->action.type) {
-		case Action::MATCH:
-			emit_match(o, ind, s);
-			break;
-		case Action::INITIAL:
-			emit_initial(o, ind, s, used_labels, save_yyaccept);
-			break;
-		case Action::SAVE:
-			emit_save(o, ind, s, save_yyaccept);
-			break;
-		case Action::MOVE:
-			break;
-		case Action::ACCEPT:
-			emit_accept(o, ind, dfa, s);
-			break;
-		case Action::RULE:
-			emit_rule(o, ind, dfa, s->action.info.rule);
-			break;
-	}
-}
-
-void emit_match(OutputFile &o, uint32_t ind, const State *s)
-{
-	Opt &opts = o.opts;
-	if (s->fill != 0) {
-		o.wstring(opts->input_api.stmt_skip(ind, opts));
+	case Action::MATCH:
+		o.wdelay_skip(ind, true);
 		need(o, ind, s->fill);
-		o.wstring(opts->input_api.stmt_peek(ind, opts));
-	} else if (endstate(s)) {
-		o.wstring(opts->input_api.stmt_skip(ind, opts));
-	} else {
-		o.wstring(opts->input_api.stmt_skip_peek(ind, opts));
-	}
-}
-
-void emit_initial(OutputFile &o, uint32_t ind, const State *s,
-	const std::set<label_t> &used_labels, bool save_yyaccept)
-{
-	Opt &opts = o.opts;
-	const Initial &init = *s->action.info.initial;
-	const label_t label = init.label;
-	const size_t save = init.save;
-	const bool backup = save != Initial::NOSAVE;
-
-	if (used_labels.count(s->label)) {
-		if (save_yyaccept && backup) {
-			o.wind(ind).wstring(opts->yyaccept).ws(" = ")
-				.wu64(save).ws(";\n");
+		o.wdelay_peek(ind, !endstate(s));
+		break;
+	case Action::INITIAL: {
+		const Initial &init = *s->action.info.initial;
+		const bool
+			backup = init.save != Initial::NOSAVE,
+			ul1 = used_labels.count(s->label);
+		if (ul1 && dfa.accepts.size() > 1 && backup) {
+			o.wind(ind).wstring(opts->yyaccept).ws(" = ").wu64(init.save).ws(";\n");
 		}
-		o.wstring(opts->input_api.stmt_skip(ind, opts));
-	}
-
-	if (used_labels.count(label)) {
-		o.wstring(opts->labelPrefix).wlabel(label).ws(":\n");
-	}
-
-	if (opts->dFlag) {
-		o.wind(ind).wstring(opts->yydebug).ws("(")
-			.wlabel(label).ws(", *")
-			.wstring(opts->yycursor).ws(");\n");
-	}
-
-	if (endstate(s)) return;
-
-	need(o, ind, s->fill);
-	if (backup) {
-		o.wstring(opts->input_api.stmt_backup_peek(ind, opts));
-	} else {
-		o.wstring(opts->input_api.stmt_peek(ind, opts));
-	}
-}
-
-void emit_save(OutputFile &o, uint32_t ind, const State *const s,
-	bool save_yyaccept)
-{
-	Opt &opts = o.opts;
-
-	if (save_yyaccept) {
-		o.wind(ind).wstring(opts->yyaccept).ws(" = ")
-			.wu64(s->action.info.save).ws(";\n");
-	}
-
-	if (s->fill != 0) {
-		o.wstring(opts->input_api.stmt_skip_backup(ind, opts));
+		o.wdelay_skip(ind, ul1);
+		if (used_labels.count(init.label)) {
+			o.wstring(opts->labelPrefix).wlabel(init.label).wstring(":\n");
+		}
+		if (opts->dFlag) {
+			o.wind(ind).wstring(opts->yydebug).ws("(").wlabel(init.label)
+				.ws(", *").wstring(opts->yycursor).ws(");\n");
+		}
 		need(o, ind, s->fill);
-		o.wstring(opts->input_api.stmt_peek(ind, opts));
-	} else {
-		o.wstring(opts->input_api.stmt_skip_backup_peek(ind, opts));
+		o.wdelay_backup(ind, backup);
+		o.wdelay_peek(ind, !endstate(s));
+		break;
+	}
+	case Action::SAVE:
+		if (dfa.accepts.size() > 1) {
+			o.wind(ind).wstring(opts->yyaccept).ws(" = ").wu64(s->action.info.save).ws(";\n");
+		}
+		o.wdelay_skip(ind, true);
+		o.wdelay_backup(ind, true);
+		need(o, ind, s->fill);
+		o.wdelay_peek(ind, true);
+		break;
+	case Action::MOVE:
+		break;
+	case Action::ACCEPT:
+		emit_accept(o, ind, dfa, *s->action.info.accepts);
+		break;
+	case Action::RULE:
+		emit_rule(o, ind, dfa, s->action.info.rule);
+		break;
 	}
 }
 
 void emit_accept_binary(OutputFile &o, uint32_t ind, const DFA &dfa,
-	const State *s, size_t l, size_t r)
+	const accept_t &acc, size_t l, size_t r)
 {
 	Opt &opts = o.opts;
 	if (l < r) {
 		const size_t m = (l + r) >> 1;
 		o.wind(ind).ws("if (").wstring(opts->yyaccept)
 			.ws(r == l+1 ? " == " : " <= ").wu64(m).ws(") {\n");
-		emit_accept_binary (o, ++ind, dfa, s, l, m);
+		emit_accept_binary (o, ++ind, dfa, acc, l, m);
 		o.wind(--ind).ws("} else {\n");
-		emit_accept_binary (o, ++ind, dfa, s, m + 1, r);
+		emit_accept_binary (o, ++ind, dfa, acc, m + 1, r);
 		o.wind(--ind).ws("}\n");
 	} else {
-		const accept_t &acc = *s->action.info.accepts;
 		gen_goto_plain(o, ind, acc[l].first, dfa, acc[l].second);
 	}
 }
 
-void emit_accept(OutputFile &o, uint32_t ind, const DFA &dfa, const State *s)
+void emit_accept(OutputFile &o, uint32_t ind, const DFA &dfa, const accept_t &acc)
 {
 	Opt &opts = o.opts;
-	const accept_t &acc = *s->action.info.accepts;
 	const size_t nacc = acc.size();
 
-	if (nacc == 0) {
-		return;
-	}
+	if (nacc == 0) return;
 
-	o.wstring(opts->input_api.stmt_restore(ind, opts));
+	o.wstring(output_restore(ind, opts));
 
 	// only one possible 'yyaccept' value: unconditional jump
 	if (nacc == 1) {
@@ -187,7 +136,7 @@ void emit_accept(OutputFile &o, uint32_t ind, const DFA &dfa, const State *s)
 
 	// nested ifs
 	if (opts->sFlag || nacc == 2) {
-		emit_accept_binary(o, ind, dfa, s, 0, nacc - 1);
+		emit_accept_binary(o, ind, dfa, acc, 0, nacc - 1);
 		return;
 	}
 
@@ -241,7 +190,7 @@ void emit_rule(OutputFile &o, uint32_t ind, const DFA &dfa, size_t rule_idx)
 
 void need(OutputFile &o, uint32_t ind, size_t some)
 {
-	assert(some > 0);
+	if (some == 0) return;
 
 	Opt &opts = o.opts;
 	std::string s;
@@ -258,7 +207,7 @@ void need(OutputFile &o, uint32_t ind, size_t some)
 	if (opts->fill_use) {
 		o.wind(ind);
 		if (opts->fill_check) {
-			o.ws("if (").wstring(opts->input_api.expr_lessthan(some, opts)).ws(") ");
+			o.ws("if (").wstring(output_expr_lessthan(some, opts)).ws(") ");
 		}
 		strrreplace(s = opts->fill, opts->fill_arg, some);
 		o.wstring(s);
@@ -336,7 +285,7 @@ void gen_goto(code_lines_t &code, const State *to, const DFA &dfa,
 
 void gen_settags(code_lines_t &code, const DFA &dfa, tcid_t tcid, Opt &opts)
 {
-	const bool generic = opts->input_api.type() == InputAPI::CUSTOM;
+	const bool generic = opts->input_api == INPUT_CUSTOM;
 	const std::string
 		&prefix = opts->tags_prefix,
 		&expression = opts->tags_expression;
@@ -399,7 +348,7 @@ void gen_settags(code_lines_t &code, const DFA &dfa, tcid_t tcid, Opt &opts)
 void gen_fintags(OutputFile &o, uint32_t ind, const DFA &dfa, const Rule &rule)
 {
 	Opt &opts = o.opts;
-	const bool generic = opts->input_api.type() == InputAPI::CUSTOM;
+	const bool generic = opts->input_api == INPUT_CUSTOM;
 	const std::string
 		&prefix = opts->tags_prefix,
 		&expression = opts->tags_expression;

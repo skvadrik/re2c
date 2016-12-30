@@ -5,8 +5,8 @@
 {
 	YYCTYPE yych;
 	if ((YYLIMIT - YYCURSOR) < 4) YYFILL(4);
+	yych = *YYCURSOR++;
 	yych = *YYCURSOR;
-	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'a':	goto yy5;
 	default:	goto yy3;

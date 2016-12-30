@@ -5,11 +5,10 @@
 {
 	YYCTYPE yych;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
-	yych = *YYCURSOR;
-	++YYCURSOR;
+	yych = *YYCURSOR++;
 #line 3 "default_full.w.re"
 	{ return FULL; }
-#line 13 "default_full.w.c"
+#line 12 "default_full.w.c"
 }
 #line 4 "default_full.w.re"
 

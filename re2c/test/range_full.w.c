@@ -5,11 +5,10 @@
 {
 	YYCTYPE yych;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
-	yych = *YYCURSOR;
-	++YYCURSOR;
+	yych = *YYCURSOR++;
 #line 2 "range_full.w.re"
 	{return 0;}
-#line 13 "range_full.w.c"
+#line 12 "range_full.w.c"
 }
 #line 3 "range_full.w.re"
 

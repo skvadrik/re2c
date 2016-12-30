@@ -42,6 +42,17 @@ struct OutputFragment
 		, TYPES
 		, YYACCEPT_INIT
 		, YYMAXFILL
+		, SKIP
+		, PEEK
+		, BACKUP
+		, PEEK_SKIP
+		, SKIP_PEEK
+		, SKIP_BACKUP
+		, BACKUP_SKIP
+		, BACKUP_PEEK
+		, BACKUP_PEEK_SKIP
+		, SKIP_BACKUP_PEEK
+		, EMPTY
 		};
 
 	type_t type;
@@ -121,6 +132,9 @@ public:
 	OutputFile & wdelay_types ();
 	OutputFile & wdelay_yyaccept_init (uint32_t ind);
 	OutputFile & wdelay_yymaxfill ();
+	OutputFile& wdelay_skip(uint32_t ind, bool skip);
+	OutputFile& wdelay_peek(uint32_t ind, bool peek);
+	OutputFile& wdelay_backup(uint32_t ind, bool backup);
 
 	void global_lists(uniq_vector_t<std::string> &types,
 		std::set<std::string> &tags) const;

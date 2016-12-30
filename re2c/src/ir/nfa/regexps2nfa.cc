@@ -106,9 +106,9 @@ static nfa_state_t *regexp2nfa(nfa_t &nfa, size_t nrule, size_t &dist,
 }
 
 static nfa_state_t *regexp2nfa_rule(nfa_t &nfa, size_t nrule,
-	const RegExp *re, InputAPI::type_t input)
+	const RegExp *re, input_api_t input)
 {
-	const bool generic = input == InputAPI::CUSTOM;
+	const bool generic = input == INPUT_CUSTOM;
 	size_t base = FixTag::RIGHTMOST, dist = 0;
 
 	nfa_state_t *s = &nfa.states[nfa.size++];
@@ -118,7 +118,7 @@ static nfa_state_t *regexp2nfa_rule(nfa_t &nfa, size_t nrule,
 }
 
 void regexps2nfa(const std::vector<RegExpRule> &regexps,
-	nfa_t &nfa, InputAPI::type_t input)
+	nfa_t &nfa, input_api_t input)
 {
 	const size_t nregexps = regexps.size();
 

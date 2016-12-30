@@ -174,14 +174,14 @@ void opt_t::fix ()
 		cGotoThreshold = Opt::baseopt.cGotoThreshold;
 		yytarget = Opt::baseopt.yytarget;
 	}
-	if (input_api.type () != InputAPI::DEFAULT)
+	if (input_api != INPUT_DEFAULT)
 	{
 		yycursor = Opt::baseopt.yycursor;
 		yymarker = Opt::baseopt.yymarker;
 		yyctxmarker = Opt::baseopt.yyctxmarker;
 		yylimit = Opt::baseopt.yylimit;
 	}
-	if (input_api.type () != InputAPI::CUSTOM)
+	if (input_api != INPUT_CUSTOM)
 	{
 		yypeek = Opt::baseopt.yypeek;
 		yyskip = Opt::baseopt.yyskip;
@@ -215,7 +215,7 @@ void opt_t::fix ()
 			break;
 		case SKELETON:
 			iFlag = true;
-			input_api.set (InputAPI::CUSTOM);
+			input_api = INPUT_CUSTOM;
 			indString = "    ";
 			topIndent = 2;
 			break;

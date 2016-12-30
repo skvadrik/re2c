@@ -31,7 +31,7 @@ void emit_state (OutputFile & o, uint32_t ind, const State * s, bool used_label)
 	}
 	if (opts->dFlag && (s->action.type != Action::INITIAL))
 	{
-		o.wind(ind).wstring(opts->yydebug).ws("(").wlabel(s->label).ws(", ").wstring(opts->input_api.expr_peek(opts)).ws(");\n");
+		o.wind(ind).wstring(opts->yydebug).ws("(").wlabel(s->label).ws(", ").wstring(output_expr_peek(opts)).ws(");\n");
 	}
 }
 

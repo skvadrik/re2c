@@ -5,11 +5,10 @@
 {
 	YYCTYPE yych;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
-	yych = *YYCURSOR;
-	++YYCURSOR;
+	yych = *YYCURSOR++;
 #line 2 "default.8.re"
 	{ return DEFAULT; }
-#line 13 "default.8.c"
+#line 12 "default.8.c"
 }
 #line 3 "default.8.re"
 

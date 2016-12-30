@@ -30,11 +30,10 @@ int main ()
 	}
 /* *********************************** */
 yyc_b:
-	yych = *YYCURSOR;
-	++YYCURSOR;
+	yych = *YYCURSOR++;
 #line 24 "condtype_yysetcondition.cs.re"
 	{ printf ("b\n"); break; }
-#line 38 "condtype_yysetcondition.cs.c"
+#line 37 "condtype_yysetcondition.cs.c"
 /* *********************************** */
 yyc_a:
 	yych = *YYCURSOR;
@@ -43,12 +42,12 @@ yyc_a:
 	YYSETCONDITION(yycb);
 #line 27 "condtype_yysetcondition.cs.re"
 	{ printf ("a => b\n"); continue; }
-#line 47 "condtype_yysetcondition.cs.c"
+#line 46 "condtype_yysetcondition.cs.c"
 yy9:
 	++YYCURSOR;
 #line 26 "condtype_yysetcondition.cs.re"
 	{ printf ("a\n");      continue; }
-#line 52 "condtype_yysetcondition.cs.c"
+#line 51 "condtype_yysetcondition.cs.c"
 }
 #line 28 "condtype_yysetcondition.cs.re"
 

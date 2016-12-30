@@ -5,11 +5,10 @@
 {
 	YYCTYPE yych;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
-	yych = *YYCURSOR;
-	++YYCURSOR;
+	yych = *YYCURSOR++;
 #line 4 "input4.--empty-class(match-none).re"
 	{ return 1; }
-#line 13 "input4.--empty-class(match-none).c"
+#line 12 "input4.--empty-class(match-none).c"
 }
 #line 7 "input4.--empty-class(match-none).re"
 

@@ -78,7 +78,7 @@ namespace re2c
 	OPT (uint32_t, topIndent, 0) \
 	OPT (std::string, indString, "\t") \
 	/* input API */ \
-	OPT (InputAPI, input_api, InputAPI ()) \
+	OPT (input_api_t, input_api, INPUT_DEFAULT) \
 	OPT (std::string, yycursor, "YYCURSOR") \
 	OPT (std::string, yymarker, "YYMARKER") \
 	OPT (std::string, yyctxmarker, "YYCTXMARKER") \
@@ -200,20 +200,11 @@ public:
 	bool set_encoding (Enc::type_t t)                    { return useropt->encoding.set (t); }
 	void unset_encoding (Enc::type_t t)                  { useropt->encoding.unset (t); }
 	void set_encoding_policy (Enc::policy_t p)           { useropt->encoding.setPolicy (p); }
-	void set_input_api (InputAPI::type_t t)              { useropt->input_api.set (t); }
 #define OPT1 OPT
 #define OPT(type, name, value) void set_##name (type arg) { useropt->name = arg; }
 	RE2C_OPTS
 #undef OPT1
 #undef OPT
-
-	// helpers
-	std::string yychConversion ()
-	{
-		return realopt->yychConversion
-			? "(" + realopt->yyctype + ")"
-			: "";
-	}
 
 	// bad temporary hacks, should be fixed by proper scoping of config (parts).
 	void reset_encoding (const Enc & enc);

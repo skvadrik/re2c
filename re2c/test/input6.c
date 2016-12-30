@@ -5,11 +5,10 @@
 {
 	YYCTYPE yych;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
-	yych = *YYCURSOR;
-	++YYCURSOR;
+	yych = *YYCURSOR++;
 #line 4 "input6.re"
 	{ return 1; }
-#line 13 "input6.c"
+#line 12 "input6.c"
 }
 #line 6 "input6.re"
 

@@ -200,8 +200,7 @@ yy6:
 		return PHP_JSON_T_ERROR;
 	}
 yy7:
-			++YYCURSOR;
-			yych = *YYCURSOR;
+			yych = *++YYCURSOR;
 yy8:
 			if (yybm[0+yych] & 64) {
 				goto yy7;
@@ -268,8 +267,7 @@ yy18:
 	}
 yy19:
 			yyaccept = 0;
-			YYMARKER = ++YYCURSOR;
-			yych = *YYCURSOR;
+			yych = *(YYMARKER = ++YYCURSOR);
 			if (yybm[0+yych] & 128) {
 				goto yy19;
 			}
@@ -351,8 +349,7 @@ yy39:
 			goto yy35;
 yy40:
 			yyaccept = 2;
-			YYMARKER = ++YYCURSOR;
-			yych = *YYCURSOR;
+			yych = *(YYMARKER = ++YYCURSOR);
 			if (yych <= 'D') {
 				if (yych <= '/') goto yy42;
 				if (yych <= '9') goto yy40;
@@ -370,8 +367,7 @@ yy43:
 			if (yych <= '/') goto yy35;
 			if (yych >= ':') goto yy35;
 yy44:
-			++YYCURSOR;
-			yych = *YYCURSOR;
+			yych = *++YYCURSOR;
 			if (yych <= '/') goto yy42;
 			if (yych <= '9') goto yy44;
 			goto yy42;

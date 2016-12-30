@@ -7,118 +7,25 @@
 namespace re2c
 {
 
-InputAPI::InputAPI ()
-	: type_ (DEFAULT)
-{}
-
-InputAPI::type_t InputAPI::type () const
+std::string output_expr_peek(Opt &opts)
 {
-	return type_;
+	return opts->input_api == INPUT_DEFAULT
+		? "*" + opts->yycursor
+		: opts->yypeek + " ()";
 }
 
-void InputAPI::set (type_t t)
+std::string output_restore(uint32_t ind, Opt &opts)
 {
-	type_ = t;
-}
-
-std::string InputAPI::expr_peek(Opt &opts) const
-{
-	std::string s;
-	switch (type_)
-	{
-		case DEFAULT:
-			s = "*" + opts->yycursor;
-			break;
-		case CUSTOM:
-			s = opts->yypeek + " ()";
-			break;
-	}
-	return s;
-}
-
-std::string InputAPI::stmt_peek(uint32_t ind, Opt &opts) const
-{
-	return indent(ind, opts->indString) + opts->yych + " = " + opts.yychConversion()
-		+ expr_peek(opts) + ";\n";
-}
-
-std::string InputAPI::stmt_skip(uint32_t ind, Opt &opts) const
-{
-	std::string s;
-	switch (type_)
-	{
-		case DEFAULT:
-			s = "++" + opts->yycursor;
-			break;
-		case CUSTOM:
-			s = opts->yyskip + " ()";
-			break;
-	}
+	std::string s = opts->input_api == INPUT_DEFAULT
+		? opts->yycursor + " = " + opts->yymarker
+		: opts->yyrestore + " ()";
 	return indent(ind, opts->indString) + s + ";\n";
 }
 
-std::string InputAPI::stmt_backup(uint32_t ind, Opt &opts) const
-{
-	std::string s;
-	switch (type_)
-	{
-		case DEFAULT:
-			s = opts->yymarker + " = " + opts->yycursor;
-			break;
-		case CUSTOM:
-			s = opts->yybackup + " ()";
-			break;
-	}
-	return indent(ind, opts->indString) + s + ";\n";
-}
-
-std::string InputAPI::stmt_restore(uint32_t ind, Opt &opts) const
-{
-	std::string s;
-	switch (type_)
-	{
-		case DEFAULT:
-			s = opts->yycursor + " = " + opts->yymarker;
-			break;
-		case CUSTOM:
-			s = opts->yyrestore + " ()";
-			break;
-	}
-	return indent(ind, opts->indString) + s + ";\n";
-}
-
-std::string InputAPI::stmt_skip_peek(uint32_t ind, Opt &opts) const
-{
-	return type_ == DEFAULT
-		? indent(ind, opts->indString) + opts->yych + " = " + opts.yychConversion() + "*++" + opts->yycursor + ";\n"
-		: stmt_skip(ind, opts) + stmt_peek(ind, opts);
-}
-
-std::string InputAPI::stmt_skip_backup(uint32_t ind, Opt &opts) const
-{
-	return type_ == DEFAULT
-		? indent(ind, opts->indString) + opts->yymarker + " = ++" + opts->yycursor + ";\n"
-		: stmt_skip(ind, opts) + stmt_backup(ind, opts);
-}
-
-std::string InputAPI::stmt_backup_peek(uint32_t ind, Opt &opts) const
-{
-	return type_ == DEFAULT
-		? indent(ind, opts->indString) + opts->yych + " = " + opts.yychConversion() + "*(" + opts->yymarker + " = " + opts->yycursor + ");\n"
-		: stmt_backup(ind, opts) + stmt_peek(ind, opts);
-}
-
-std::string InputAPI::stmt_skip_backup_peek(uint32_t ind, Opt &opts) const
-{
-	return type_ == DEFAULT
-		? indent(ind, opts->indString) + opts->yych + " = " + opts.yychConversion() + "*(" + opts->yymarker + " = ++" + opts->yycursor + ");\n"
-		: stmt_skip(ind, opts) + stmt_backup(ind, opts) + stmt_peek(ind, opts);
-}
-
-std::string InputAPI::expr_lessthan(size_t n, Opt &opts) const
+std::string output_expr_lessthan(size_t n, Opt &opts)
 {
 	std::ostringstream s;
-	if (type_ == CUSTOM) {
+	if (opts->input_api == INPUT_CUSTOM) {
 		s << opts->yylessthan << " (" << n << ")";
 	} else if (n == 1) {
 		s << opts->yylimit << " <= " << opts->yycursor;
@@ -126,6 +33,98 @@ std::string InputAPI::expr_lessthan(size_t n, Opt &opts) const
 		s << "(" << opts->yylimit << " - " << opts->yycursor << ") < " << n;
 	}
 	return s.str ();
+}
+
+static std::string yych_conv(const opt_t *opts)
+{
+	return opts->yychConversion
+		? "(" + opts->yyctype + ")"
+		: "";
+}
+
+void output_peek(std::ostream &o, uint32_t ind, const opt_t *opts)
+{
+	o << indent(ind, opts->indString) << opts->yych << " = " << yych_conv(opts);
+	if (opts->input_api == INPUT_CUSTOM) {
+		o << opts->yypeek << " ()";
+	} else {
+		o << "*" << opts->yycursor;
+	}
+	o << ";\n";
+}
+
+void output_skip(std::ostream &o, uint32_t ind, const opt_t *opts)
+{
+	o << indent(ind, opts->indString);
+	if (opts->input_api == INPUT_CUSTOM) {
+		o << opts->yyskip << " ()";
+	} else {
+		o << "++" << opts->yycursor;
+	}
+	o << ";\n";
+}
+
+void output_backup(std::ostream &o, uint32_t ind, const opt_t *opts)
+{
+	o << indent(ind, opts->indString);
+	if (opts->input_api == INPUT_CUSTOM) {
+		o << opts->yybackup << " ()";
+	} else {
+		o << opts->yymarker << " = " << opts->yycursor;
+	}
+	o << ";\n";
+}
+
+void output_skip_peek(std::ostream &o, uint32_t ind, const opt_t *opts)
+{
+	assert(opts->input_api == INPUT_DEFAULT);
+	o << indent(ind, opts->indString) << opts->yych << " = "
+		<< yych_conv(opts) << "*++" << opts->yycursor << ";\n";
+}
+
+void output_peek_skip(std::ostream &o, uint32_t ind, const opt_t *opts)
+{
+	assert(opts->input_api == INPUT_DEFAULT);
+	o << indent(ind, opts->indString) << opts->yych << " = "
+		<< yych_conv(opts) << "*" << opts->yycursor << "++;\n";
+}
+
+void output_skip_backup(std::ostream &o, uint32_t ind, const opt_t *opts)
+{
+	assert(opts->input_api == INPUT_DEFAULT);
+	o << indent(ind, opts->indString) << opts->yymarker << " = ++"
+		<< opts->yycursor << ";\n";
+}
+
+void output_backup_skip(std::ostream &o, uint32_t ind, const opt_t *opts)
+{
+	assert(opts->input_api == INPUT_DEFAULT);
+	o << indent(ind, opts->indString) << opts->yymarker << " = "
+		<< opts->yycursor << "++;\n";
+}
+
+void output_backup_peek(std::ostream &o, uint32_t ind, const opt_t *opts)
+{
+	assert(opts->input_api == INPUT_DEFAULT);
+	o << indent(ind, opts->indString) << opts->yych << " = "
+		<< yych_conv(opts) << "*(" << opts->yymarker << " = "
+		<< opts->yycursor << ");\n";
+}
+
+void output_skip_backup_peek(std::ostream &o, uint32_t ind, const opt_t *opts)
+{
+	assert(opts->input_api == INPUT_DEFAULT);
+	o << indent(ind, opts->indString) << opts->yych << " = "
+		<< yych_conv(opts) << "*(" << opts->yymarker << " = ++"
+		<< opts->yycursor << ");\n";
+}
+
+void output_backup_peek_skip(std::ostream &o, uint32_t ind, const opt_t *opts)
+{
+	assert(opts->input_api == INPUT_DEFAULT);
+	o << indent(ind, opts->indString) << opts->yych << " = "
+		<< yych_conv(opts) << "*(" << opts->yymarker << " = "
+		<< opts->yycursor << "++);\n";
 }
 
 } // end namespace re2c

@@ -6,8 +6,8 @@
 	YYCTYPE yych;
 	unsigned int yyaccept = 0;
 	if ((YYLIMIT - YYCURSOR) < 6) YYFILL(6);
+	yych = *YYCURSOR++;
 	yych = *YYCURSOR;
-	yych = *++YYCURSOR;
 	yyaccept = 0;
 	yych = *(YYMARKER = ++YYCURSOR);
 	goto yy5;

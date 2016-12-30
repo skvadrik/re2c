@@ -61,7 +61,7 @@ smart_ptr<DFA> compile(const spec_t &spec, Output &output)
 		cs.push_back(*i);
 	}
 
-	nfa_t nfa(rules, opts->input_api.type());
+	nfa_t nfa(rules, opts->input_api);
 
 	dfa_t dfa(nfa, cs, cond, opts->bijective_mapping, opts->dump_dfa_raw, warn);
 	if (opts->dump_dfa_det) dump_dfa(dfa);

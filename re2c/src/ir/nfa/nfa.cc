@@ -2,7 +2,7 @@
 
 namespace re2c {
 
-nfa_t::nfa_t(const std::vector<RegExpRule> &regexps, InputAPI::type_t input)
+nfa_t::nfa_t(const std::vector<RegExpRule> &regexps, input_api_t input)
 	: max_size(0)
 	, size(0)
 	, states(NULL)

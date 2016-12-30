@@ -5,11 +5,10 @@
 {
 	YYCTYPE yych;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
-	yych = *YYCURSOR;
-	++YYCURSOR;
+	yych = *YYCURSOR++;
 #line 2 "default.x.re"
 	{ return DEFAULT; }
-#line 13 "default.x.c"
+#line 12 "default.x.c"
 }
 #line 3 "default.x.re"
 

@@ -188,8 +188,8 @@ void Scanner::lex_conf_input()
 /*!re2c
 	* { fatal("bad configuration value"
 		" (expected: 'default', 'custom')"); }
-	"default" { opts.set_input_api(InputAPI::DEFAULT); goto end; }
-	"custom"  { opts.set_input_api(InputAPI::CUSTOM);  goto end; }
+	"default" { opts.set_input_api(INPUT_DEFAULT); goto end; }
+	"custom"  { opts.set_input_api(INPUT_CUSTOM);  goto end; }
 */
 end:
 	lex_conf_semicolon();

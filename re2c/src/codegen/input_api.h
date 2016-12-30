@@ -8,33 +8,28 @@ namespace re2c
 {
 
 struct Opt;
+struct opt_t;
 
-class InputAPI
+enum input_api_t
 {
-public:
-	enum type_t
-		{ DEFAULT
-		, CUSTOM
-		};
-
-private:
-	type_t type_;
-
-public:
-	InputAPI ();
-	type_t type () const;
-	void set (type_t t);
-	std::string expr_peek             (Opt &opts) const;
-	std::string stmt_peek             (uint32_t ind, Opt &opts) const;
-	std::string stmt_skip             (uint32_t ind, Opt &opts) const;
-	std::string stmt_backup           (uint32_t ind, Opt &opts) const;
-	std::string stmt_restore          (uint32_t ind, Opt &opts) const;
-	std::string stmt_skip_peek        (uint32_t ind, Opt &opts) const;
-	std::string stmt_skip_backup      (uint32_t ind, Opt &opts) const;
-	std::string stmt_backup_peek      (uint32_t ind, Opt &opts) const;
-	std::string stmt_skip_backup_peek (uint32_t ind, Opt &opts) const;
-	std::string expr_lessthan         (size_t n, Opt &opts) const;
+	INPUT_DEFAULT,
+	INPUT_CUSTOM
 };
+
+std::string output_expr_peek     (Opt &opts);
+std::string output_restore       (uint32_t ind, Opt &opts);
+std::string output_expr_lessthan (size_t n, Opt &opts);
+
+void output_peek             (std::ostream &o, uint32_t ind, const opt_t *opts);
+void output_skip             (std::ostream &o, uint32_t ind, const opt_t *opts);
+void output_backup           (std::ostream &o, uint32_t ind, const opt_t *opts);
+void output_skip_peek        (std::ostream &o, uint32_t ind, const opt_t *opts);
+void output_peek_skip        (std::ostream &o, uint32_t ind, const opt_t *opts);
+void output_skip_backup      (std::ostream &o, uint32_t ind, const opt_t *opts);
+void output_backup_skip      (std::ostream &o, uint32_t ind, const opt_t *opts);
+void output_backup_peek      (std::ostream &o, uint32_t ind, const opt_t *opts);
+void output_skip_backup_peek (std::ostream &o, uint32_t ind, const opt_t *opts);
+void output_backup_peek_skip (std::ostream &o, uint32_t ind, const opt_t *opts);
 
 } // end namespace re2c
 

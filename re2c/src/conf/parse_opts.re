@@ -217,8 +217,8 @@ opt_input:
 		error ("bad argument to option --input (expected: default | custom): %s", *argv);
 		return EXIT_FAIL;
 	}
-	"default" end { opts.set_input_api (InputAPI::DEFAULT); goto opt; }
-	"custom"  end { opts.set_input_api (InputAPI::CUSTOM);  goto opt; }
+	"default" end { opts.set_input_api(INPUT_DEFAULT); goto opt; }
+	"custom"  end { opts.set_input_api(INPUT_CUSTOM);  goto opt; }
 */
 
 opt_empty_class:
