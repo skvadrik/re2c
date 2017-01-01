@@ -29,7 +29,7 @@ static std::string make_name(const std::string &cond, uint32_t line)
 
 smart_ptr<DFA> compile(const spec_t &spec, Output &output)
 {
-	Opt &opts = output.source.opts;
+	const opt_t *opts = output.source.block().opts;
 	Warn &warn = output.source.warn;
 	const std::vector<RegExpRule> &rules = spec.rules;
 	const size_t defrule = spec.defs.empty()

@@ -47,7 +47,7 @@ void bitmaps_t::gen(OutputFile &o, uint32_t ind)
 {
 	if (empty() || !used) return;
 
-	Opt &opts = o.opts;
+	const opt_t *opts = o.block().opts;
 	const uint32_t nmap = static_cast<uint32_t>(maps.size());
 	riter_t b = maps.rbegin(), e = maps.rend();
 

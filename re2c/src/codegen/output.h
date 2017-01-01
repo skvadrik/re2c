@@ -72,8 +72,6 @@ struct OutputBlock
 {
 	std::vector<OutputFragment *> fragments;
 	bool used_yyaccept;
-	bool force_start_label;
-	std::string user_start_label;
 	uint32_t line;
 	std::vector<std::string> types;
 	std::set<std::string> tags;
@@ -94,17 +92,16 @@ public:
 	bool state_goto;
 	bool cond_goto;
 	bool warn_condition_order;
-	Opt &opts;
 	Warn &warn;
 
-	OutputFile(Opt &o, Warn &w);
+	OutputFile(bool tflag, Warn &w);
 	~OutputFile();
 
 	std::ostream & stream ();
 	OutputBlock &block();
 	void insert_code ();
 	bool open ();
-	void new_block ();
+	void new_block(Opt &opts);
 
 	// immediate output
 	OutputFile & wraw (const char *s, const char *e);
@@ -151,7 +148,7 @@ class HeaderFile
 
 public:
 	HeaderFile(): stream() {}
-	bool emit(const uniq_vector_t<std::string> &types, Opt &opts);
+	bool emit(const opt_t *opts, const uniq_vector_t<std::string> &types);
 	FORBID_COPY (HeaderFile);
 };
 
@@ -162,7 +159,7 @@ struct Output
 	std::set<std::string> skeletons;
 	size_t max_fill;
 
-	Output(Opt &o, Warn &w);
+	Output(bool tflag, Warn &w);
 	bool emit();
 };
 
@@ -171,8 +168,8 @@ void output_line_info     (std::ostream &o, uint32_t line, const std::string &fn
 void output_cond_goto     (std::ostream &o, uint32_t ind, const std::vector<std::string> &conds, const opt_t *opts, Warn &warn, bool warn_cond_order, uint32_t line);
 void output_cond_table    (std::ostream &o, uint32_t ind, const std::vector<std::string> &conds, const opt_t *opts);
 void output_state_goto    (std::ostream &o, uint32_t ind, uint32_t start_label, uint32_t fill_index, const opt_t *opts);
-void output_types         (std::ostream &o, uint32_t ind, const uniq_vector_t<std::string> &types, Opt &opts);
-void output_version_time  (std::ostream &o, Opt &opts);
+void output_types         (std::ostream &o, uint32_t ind, const opt_t *opts, const uniq_vector_t<std::string> &types);
+void output_version_time  (std::ostream &o, bool version, bool date);
 void output_yyaccept_init (std::ostream &o, uint32_t ind, bool, const opt_t *opts);
 void output_yymaxfill     (std::ostream &o, size_t max_fill);
 

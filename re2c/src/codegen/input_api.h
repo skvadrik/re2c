@@ -7,7 +7,6 @@
 namespace re2c
 {
 
-struct Opt;
 struct opt_t;
 
 enum input_api_t
@@ -16,9 +15,9 @@ enum input_api_t
 	INPUT_CUSTOM
 };
 
-std::string output_expr_peek     (Opt &opts);
-std::string output_restore       (uint32_t ind, Opt &opts);
-std::string output_expr_lessthan (size_t n, Opt &opts);
+std::string output_expr_peek     (const opt_t *opts);
+std::string output_restore       (uint32_t ind, const opt_t *opts);
+std::string output_expr_lessthan (size_t n, const opt_t *opts);
 
 void output_peek             (std::ostream &o, uint32_t ind, const opt_t *opts);
 void output_skip             (std::ostream &o, uint32_t ind, const opt_t *opts);

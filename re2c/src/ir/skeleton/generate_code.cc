@@ -97,7 +97,7 @@ void emit_start(OutputFile &o, size_t maxfill, const std::string &name,
 	const std::set<std::string> &tagnames, const std::set<std::string> &tagvars,
 	bitmaps_t &bitmaps)
 {
-	Opt &opts = o.opts;
+	const opt_t *opts = o.block().opts;
 	const size_t sizeof_cunit = opts->encoding.szCodeUnit();
 	const size_t norule = rule2key(Rule::NONE, sizeof_key, def);
 	std::string filename = opts->output_file;
@@ -325,7 +325,7 @@ void emit_end(OutputFile &o, const std::string &name, bool backup, bool oldstyle
 		o.ws("\n#undef YYBACKUPCTX");
 		o.ws("\n#undef YYRESTORECTX");
 	}
-	if (o.opts->tags) {
+	if (o.block().opts->tags) {
 		o.ws("\n#undef YYBACKUPTAG");
 		o.ws("\n#undef YYRESTORETAG");
 		o.ws("\n#undef YYCOPYTAG");

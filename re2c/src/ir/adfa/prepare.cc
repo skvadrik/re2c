@@ -99,7 +99,7 @@ void DFA::findBaseState()
 	operator delete (span);
 }
 
-void DFA::prepare (Opt &opts)
+void DFA::prepare(const opt_t *opts)
 {
 	// create rule states
 	std::vector<State*> rule2state(rules.size());

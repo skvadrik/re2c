@@ -56,11 +56,11 @@ ScannerState & ScannerState::operator = (const ScannerState & s)
 	return * this;
 }
 
-Scanner::Scanner (Input & i, OutputFile & o)
+Scanner::Scanner (Input & i, OutputFile & o, Opt &p)
 	: ScannerState ()
 	, in (i)
 	, out (o)
-	, opts (o.opts)
+	, opts (p)
 	, warn (o.warn)
 {}
 

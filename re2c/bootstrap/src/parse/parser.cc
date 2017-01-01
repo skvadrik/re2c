@@ -2056,9 +2056,10 @@ void parse(Scanner &input, Output & o)
 	ScannerState rules_state, curr_state;
 	Opt &opts = input.opts;
 
-	o.source.new_block();
-	o.source.wversion_time ()
-		.wline_info (input.get_cline (), input.get_fname ().c_str ());
+	o.source.new_block(opts);
+
+	o.source.wversion_time()
+		.wline_info(input.get_cline(), input.get_fname().c_str());
 	if (opts->target == opt_t::SKELETON)
 	{
 		emit_prolog (o.source);
@@ -2066,9 +2067,6 @@ void parse(Scanner &input, Output & o)
 
 	Enc encodingOld = opts->encoding;
 	for (Scanner::ParseMode mode; (mode = input.echo()) != Scanner::Stop;) {
-
-		o.source.block().opts = opts.snapshot();
-		o.source.new_block();
 
 		input.save_state(curr_state);
 		if (opts->rFlag && mode == Scanner::Rules && !dfas.empty())
@@ -2114,6 +2112,9 @@ void parse(Scanner &input, Output & o)
 			encodingOld = opts->encoding;
 		}
 
+		// start new output block with accumulated options
+		o.source.new_block(opts);
+
 		// compile regular expressions to automata
 		if (mode != Scanner::Reuse) {
 			check(specs, opts->cFlag);
@@ -2142,7 +2143,6 @@ void parse(Scanner &input, Output & o)
 	{
 		emit_epilog (o.source, o.skeletons);
 	}
-	o.source.block().opts = opts.snapshot();
 
 	RegExp::flist.clear();
 	Code::flist.clear();

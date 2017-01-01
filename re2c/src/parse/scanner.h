@@ -87,7 +87,7 @@ private:
 	size_t tok_len () const;
 
 public:
-	Scanner(Input &, OutputFile &);
+	Scanner(Input &, OutputFile &, Opt &);
 	~Scanner();
 
 	enum ParseMode {

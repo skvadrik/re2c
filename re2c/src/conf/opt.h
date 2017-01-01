@@ -112,6 +112,8 @@ namespace re2c
 	OPT (bool, fill_naked, false) \
 	/* labels */ \
 	OPT (std::string, labelPrefix, "yy") \
+	OPT (std::string, startlabel, "") \
+	OPT (bool, startlabel_force, false) \
 	/* internals */ \
 	OPT (dfa_minimization_t, dfa_minimization, DFA_MINIMIZATION_MOORE) \
 	OPT (bool, bijective_mapping, true) \
@@ -208,6 +210,7 @@ public:
 
 	// bad temporary hacks, should be fixed by proper scoping of config (parts).
 	void reset_encoding (const Enc & enc);
+	void reset_startlabel();
 	void reset_mapCodeName ();
 
 	FORBID_COPY (Opt);

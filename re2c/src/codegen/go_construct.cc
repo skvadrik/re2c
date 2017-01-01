@@ -192,7 +192,7 @@ Go::Go ()
 	, info ()
 {}
 
-void Go::init (const State * from, Opt &opts, bitmaps_t &bitmaps)
+void Go::init(const State *from, const opt_t *opts, bitmaps_t &bitmaps)
 {
 	if (nSpans == 0)
 	{

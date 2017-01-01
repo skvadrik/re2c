@@ -22,13 +22,13 @@ static void emit_accept_binary (OutputFile &o, uint32_t ind, const DFA &dfa, con
 static void emit_accept        (OutputFile &o, uint32_t ind, const DFA &dfa, const accept_t &acc);
 static void emit_rule          (OutputFile &o, uint32_t ind, const DFA &dfa, size_t rule_idx);
 static void gen_fintags        (OutputFile &o, uint32_t ind, const DFA &dfa, const Rule &rule);
-static void gen_goto           (code_lines_t &code, const State *to, const DFA &dfa, tcid_t tcid, Opt &opts);
+static void gen_goto           (code_lines_t &code, const State *to, const DFA &dfa, tcid_t tcid, const opt_t *opts);
 static bool endstate           (const State *s);
 
 void emit_action(OutputFile &o, uint32_t ind, const DFA &dfa,
 	const State *s, const std::set<label_t> &used_labels)
 {
-	Opt &opts = o.opts;
+	const opt_t *opts = o.block().opts;
 	switch (s->action.type) {
 	case Action::MATCH:
 		o.wdelay_skip(ind, true);
@@ -79,7 +79,7 @@ void emit_action(OutputFile &o, uint32_t ind, const DFA &dfa,
 void emit_accept_binary(OutputFile &o, uint32_t ind, const DFA &dfa,
 	const accept_t &acc, size_t l, size_t r)
 {
-	Opt &opts = o.opts;
+	const opt_t *opts = o.block().opts;
 	if (l < r) {
 		const size_t m = (l + r) >> 1;
 		o.wind(ind).ws("if (").wstring(opts->yyaccept)
@@ -95,7 +95,7 @@ void emit_accept_binary(OutputFile &o, uint32_t ind, const DFA &dfa,
 
 void emit_accept(OutputFile &o, uint32_t ind, const DFA &dfa, const accept_t &acc)
 {
-	Opt &opts = o.opts;
+	const opt_t *opts = o.block().opts;
 	const size_t nacc = acc.size();
 
 	if (nacc == 0) return;
@@ -153,7 +153,7 @@ void emit_accept(OutputFile &o, uint32_t ind, const DFA &dfa, const accept_t &ac
 
 void emit_rule(OutputFile &o, uint32_t ind, const DFA &dfa, size_t rule_idx)
 {
-	Opt &opts = o.opts;
+	const opt_t *opts = o.block().opts;
 	const Rule &rule = dfa.rules[rule_idx];
 	const Code *code = rule.code;
 	const std::string &cond = code->cond;
@@ -192,7 +192,7 @@ void need(OutputFile &o, uint32_t ind, size_t some)
 {
 	if (some == 0) return;
 
-	Opt &opts = o.opts;
+	const opt_t *opts = o.block().opts;
 	std::string s;
 
 	if (opts->fFlag) {
@@ -230,7 +230,7 @@ void gen_goto_case(OutputFile &o, uint32_t ind, const State *to,
 	const DFA &dfa, tcid_t tcid)
 {
 	code_lines_t code;
-	gen_goto(code, to, dfa, tcid, o.opts);
+	gen_goto(code, to, dfa, tcid, o.block().opts);
 	const size_t lines = code.size();
 
 	if (lines == 1) {
@@ -247,7 +247,7 @@ void gen_goto_if(OutputFile &o, uint32_t ind, const State *to,
 	const DFA &dfa, tcid_t tcid)
 {
 	code_lines_t code;
-	gen_goto(code, to, dfa, tcid, o.opts);
+	gen_goto(code, to, dfa, tcid, o.block().opts);
 	const size_t lines = code.size();
 
 	if (lines == 1) {
@@ -265,7 +265,7 @@ void gen_goto_plain(OutputFile &o, uint32_t ind, const State *to,
 	const DFA &dfa, tcid_t tcid)
 {
 	code_lines_t code;
-	gen_goto(code, to, dfa, tcid, o.opts);
+	gen_goto(code, to, dfa, tcid, o.block().opts);
 	const size_t lines = code.size();
 
 	for (size_t i = 0; i < lines; ++i) {
@@ -274,7 +274,7 @@ void gen_goto_plain(OutputFile &o, uint32_t ind, const State *to,
 }
 
 void gen_goto(code_lines_t &code, const State *to, const DFA &dfa,
-	tcid_t tcid, Opt &opts)
+	tcid_t tcid, const opt_t *opts)
 {
 	gen_settags(code, dfa, tcid, opts);
 	if (to) {
@@ -283,7 +283,7 @@ void gen_goto(code_lines_t &code, const State *to, const DFA &dfa,
 	}
 }
 
-void gen_settags(code_lines_t &code, const DFA &dfa, tcid_t tcid, Opt &opts)
+void gen_settags(code_lines_t &code, const DFA &dfa, tcid_t tcid, const opt_t *opts)
 {
 	const bool generic = opts->input_api == INPUT_CUSTOM;
 	const std::string
@@ -347,7 +347,7 @@ void gen_settags(code_lines_t &code, const DFA &dfa, tcid_t tcid, Opt &opts)
 
 void gen_fintags(OutputFile &o, uint32_t ind, const DFA &dfa, const Rule &rule)
 {
-	Opt &opts = o.opts;
+	const opt_t *opts = o.block().opts;
 	const bool generic = opts->input_api == INPUT_CUSTOM;
 	const std::string
 		&prefix = opts->tags_prefix,

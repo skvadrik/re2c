@@ -42,8 +42,6 @@ uint32_t OutputFragment::count_lines ()
 OutputBlock::OutputBlock ()
 	: fragments ()
 	, used_yyaccept (false)
-	, force_start_label (false)
-	, user_start_label ()
 	, line (0)
 	, types ()
 	, tags ()
@@ -61,14 +59,13 @@ OutputBlock::~OutputBlock ()
 	delete opts;
 }
 
-OutputFile::OutputFile(Opt &o, Warn &w)
+OutputFile::OutputFile(bool tflag, Warn &w)
 	: blocks ()
 	, label_counter ()
 	, fill_index(0)
 	, state_goto(false)
 	, cond_goto(false)
-	, warn_condition_order (!o->tFlag) // see note [condition order]
-	, opts(o)
+	, warn_condition_order (!tflag) // see note [condition order]
 	, warn(w)
 {}
 
@@ -99,13 +96,14 @@ OutputFile &OutputFile::wraw(const char *s, const char *e)
 OutputFile & OutputFile::wu32_hex (uint32_t n)
 {
 	insert_code();
-	prtHex(stream(), n, opts->encoding.szCodeUnit());
+	prtHex(stream(), n, block().opts->encoding.szCodeUnit());
 	return *this;
 }
 
 OutputFile & OutputFile::wc_hex (uint32_t n)
 {
 	insert_code();
+	const opt_t *opts = block().opts;
 	const Enc &e = opts->encoding;
 	prtChOrHex(stream(), n, e.szCodeUnit(), e.type() == Enc::EBCDIC, opts->target == opt_t::DOT);
 	return *this;
@@ -114,6 +112,7 @@ OutputFile & OutputFile::wc_hex (uint32_t n)
 OutputFile & OutputFile::wrange (uint32_t l, uint32_t u)
 {
 	insert_code();
+	const opt_t *opts = block().opts;
 	const Enc &e = opts->encoding;
 	printSpan(stream(), l, u, e.szCodeUnit(), e.type() == Enc::EBCDIC, opts->target == opt_t::DOT);
 	return *this;
@@ -130,22 +129,22 @@ OutputFile & OutputFile::wu32_width (uint32_t n, int w)
 OutputFile & OutputFile::wline_info (uint32_t l, const char * fn)
 {
 	insert_code();
-	output_line_info (stream (), l, fn, opts->iFlag);
+	output_line_info (stream (), l, fn, block().opts->iFlag);
 	return *this;
 }
 
 OutputFile & OutputFile::wversion_time ()
 {
 	insert_code();
-	output_version_time (stream (), opts);
+	output_version_time(stream(), block().opts->version, !block().opts->bNoGenerationDate);
 	return *this;
 }
 
 OutputFile & OutputFile::wuser_start_label ()
 {
 	insert_code();
-	const std::string label = block().user_start_label;
-	if (!label.empty ())
+	const std::string label = block().opts->startlabel;
+	if (!label.empty())
 	{
 		wstring(label).ws(":\n");
 	}
@@ -197,7 +196,7 @@ OutputFile & OutputFile::wlabel (label_t l)
 OutputFile & OutputFile::wind (uint32_t ind)
 {
 	insert_code();
-	stream () << indent(ind, opts->indString);
+	stream () << indent(ind, block().opts->indString);
 	return *this;
 }
 
@@ -224,7 +223,7 @@ OutputFile & OutputFile::wdelay_line_info ()
 
 OutputFile & OutputFile::wdelay_cond_goto(uint32_t ind)
 {
-	if (opts->cFlag && !cond_goto) {
+	if (block().opts->cFlag && !cond_goto) {
 		block().fragments.push_back(new OutputFragment(OutputFragment::COND_GOTO, ind));
 		cond_goto = true;
 	}
@@ -233,7 +232,7 @@ OutputFile & OutputFile::wdelay_cond_goto(uint32_t ind)
 
 OutputFile & OutputFile::wdelay_cond_table(uint32_t ind)
 {
-	if (opts->gFlag && opts->cFlag && !cond_goto) {
+	if (block().opts->gFlag && block().opts->cFlag && !cond_goto) {
 		block().fragments.push_back(new OutputFragment(OutputFragment::COND_TABLE, ind));
 	}
 	return *this;
@@ -241,7 +240,7 @@ OutputFile & OutputFile::wdelay_cond_table(uint32_t ind)
 
 OutputFile & OutputFile::wdelay_state_goto (uint32_t ind)
 {
-	if (opts->fFlag && !state_goto) {
+	if (block().opts->fFlag && !state_goto) {
 		block().fragments.push_back (new OutputFragment (OutputFragment::STATE_GOTO, ind));
 		state_goto = true;
 	}
@@ -294,9 +293,15 @@ OutputFile& OutputFile::wdelay_backup(uint32_t ind, bool backup)
 	return *this;
 }
 
-void OutputFile::new_block ()
+void OutputFile::new_block(Opt &opts)
 {
-	blocks.push_back (new OutputBlock ());
+	OutputBlock *b = new OutputBlock;
+	b->opts = opts.snapshot();
+	blocks.push_back(b);
+
+	// start label hapens to be the only option
+	// that must be reset for each new block
+	opts.reset_startlabel();
 }
 
 void OutputFile::global_lists(
@@ -379,7 +384,7 @@ bool OutputFile::emit(const uniq_vector_t<std::string> &global_types,
 	size_t max_fill)
 {
 	FILE *file = NULL;
-	std::string filename = opts->output_file;
+	std::string filename = block().opts->output_file;
 	if (filename.empty()) {
 		filename = "<stdout>";
 		file = stdout;
@@ -426,7 +431,7 @@ bool OutputFile::emit(const uniq_vector_t<std::string> &global_types,
 				output_tags(o, *f.tags, global_tags);
 				break;
 			case OutputFragment::TYPES:
-				output_types(o, ind, global_types, opts);
+				output_types(o, ind, block().opts, global_types);
 				break;
 			case OutputFragment::YYACCEPT_INIT:
 				output_yyaccept_init(o, ind, b.used_yyaccept, bopt);
@@ -476,7 +481,7 @@ bool OutputFile::emit(const uniq_vector_t<std::string> &global_types,
 	return true;
 }
 
-bool HeaderFile::emit(const uniq_vector_t<std::string> &types, Opt &opts)
+bool HeaderFile::emit(const opt_t *opts, const uniq_vector_t<std::string> &types)
 {
 	if (!opts->tFlag) {
 		return true;
@@ -495,10 +500,10 @@ bool HeaderFile::emit(const uniq_vector_t<std::string> &types, Opt &opts)
 		}
 	}
 
-	output_version_time(stream, opts);
+	output_version_time(stream, opts->version, !opts->bNoGenerationDate);
 	output_line_info(stream, 3, filename, opts->iFlag);
 	stream << "\n";
-	output_types(stream, 0, types, opts);
+	output_types(stream, 0, opts, types);
 
 	std::string content = stream.str();
 	fwrite(content.c_str(), 1, content.size(), file);
@@ -507,8 +512,8 @@ bool HeaderFile::emit(const uniq_vector_t<std::string> &types, Opt &opts)
 	return true;
 }
 
-Output::Output(Opt &o, Warn &w)
-	: source(o, w)
+Output::Output(bool tflag, Warn &w)
+	: source(tflag, w)
 	, header()
 	, skeletons()
 	, max_fill(1)
@@ -524,8 +529,11 @@ bool Output::emit()
 	std::set<std::string> tags;
 	source.global_lists(types, tags);
 
+	// global options are last block's options
+	const opt_t *opts = source.block().opts;
+
 	return source.emit(types, tags, max_fill)
-		&& header.emit(types, source.opts);
+		&& header.emit(opts, types);
 }
 
 void output_tags(std::ostream &o, const ConfTags &conf,
@@ -596,10 +604,8 @@ void output_line_info(std::ostream &o, uint32_t line,
 	}
 }
 
-void output_types(
-	std::ostream &o,
-	uint32_t ind,
-	const uniq_vector_t<std::string> &types, Opt &opts)
+void output_types(std::ostream &o, uint32_t ind, const opt_t *opts,
+	const uniq_vector_t<std::string> &types)
 {
 	const std::string indstr = opts->indString;
 	o << indent(ind++, indstr) << "enum " << opts->yycondtype << " {\n";
@@ -609,15 +615,13 @@ void output_types(
 	o << indent(--ind, indstr) << "};\n";
 }
 
-void output_version_time (std::ostream & o, Opt &opts)
+void output_version_time(std::ostream &o, bool version, bool date)
 {
 	o << "/* Generated by re2c";
-	if (opts->version)
-	{
+	if (version) {
 		o << " " << PACKAGE_VERSION;
 	}
-	if (!opts->bNoGenerationDate)
-	{
+	if (date) {
 		o << " on ";
 		time_t now = time (NULL);
 		o.write (ctime (&now), 24);

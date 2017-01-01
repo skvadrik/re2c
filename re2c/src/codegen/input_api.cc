@@ -7,14 +7,14 @@
 namespace re2c
 {
 
-std::string output_expr_peek(Opt &opts)
+std::string output_expr_peek(const opt_t *opts)
 {
 	return opts->input_api == INPUT_DEFAULT
 		? "*" + opts->yycursor
 		: opts->yypeek + " ()";
 }
 
-std::string output_restore(uint32_t ind, Opt &opts)
+std::string output_restore(uint32_t ind, const opt_t *opts)
 {
 	std::string s = opts->input_api == INPUT_DEFAULT
 		? opts->yycursor + " = " + opts->yymarker
@@ -22,7 +22,7 @@ std::string output_restore(uint32_t ind, Opt &opts)
 	return indent(ind, opts->indString) + s + ";\n";
 }
 
-std::string output_expr_lessthan(size_t n, Opt &opts)
+std::string output_expr_lessthan(size_t n, const opt_t *opts)
 {
 	std::ostringstream s;
 	if (opts->input_api == INPUT_CUSTOM) {

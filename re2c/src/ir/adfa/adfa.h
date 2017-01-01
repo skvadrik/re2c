@@ -94,7 +94,7 @@ struct DFA
 		);
 	~DFA ();
 	void reorder();
-	void prepare(Opt &opts);
+	void prepare(const opt_t *opts);
 	void calc_stats(uint32_t line, bool explicit_tags);
 	void emit (Output &, uint32_t &, bool, bool &);
 

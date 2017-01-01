@@ -150,7 +150,6 @@ int lex_line261()
         token = cursor;
         YYCTYPE yych;
 
-yy0:
         if (YYLESSTHAN (7)) YYFILL(7);
         yych = YYPEEK ();
         switch (yych) {

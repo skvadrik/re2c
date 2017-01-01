@@ -22,12 +22,12 @@ static std::string output_hgo (OutputFile & o, uint32_t ind, const DFA &dfa, Swi
 
 void output_if (OutputFile & o, uint32_t ind, const std::string & compare, uint32_t value)
 {
-	o.wind(ind).ws("if (").wstring(o.opts->yych).ws(" ").wstring(compare).ws(" ").wc_hex (value).ws(") ");
+	o.wind(ind).ws("if (").wstring(o.block().opts->yych).ws(" ").wstring(compare).ws(" ").wc_hex (value).ws(") ");
 }
 
 std::string output_hgo (OutputFile & o, uint32_t ind, const DFA &dfa, SwitchIf * hgo)
 {
-	Opt &opts = o.opts;
+	const opt_t *opts = o.block().opts;
 	std::string yych = opts->yych;
 	if (hgo != NULL)
 	{
@@ -45,7 +45,7 @@ std::string output_hgo (OutputFile & o, uint32_t ind, const DFA &dfa, SwitchIf *
 
 void Case::emit (OutputFile & o, uint32_t ind) const
 {
-	Opt &opts = o.opts;
+	const opt_t *opts = o.block().opts;
 	for (uint32_t i = 0; i < ranges.size (); ++i)
 	{
 		for (uint32_t b = ranges[i].first; b < ranges[i].second; ++b)
@@ -68,7 +68,7 @@ void Case::emit (OutputFile & o, uint32_t ind) const
 
 void Cases::emit(OutputFile &o, uint32_t ind, const DFA &dfa) const
 {
-	o.wind(ind).ws("switch (").wstring(o.opts->yych).ws(") {\n");
+	o.wind(ind).ws("switch (").wstring(o.block().opts->yych).ws(") {\n");
 
 	for (uint32_t i = 1; i < cases_size; ++i) {
 		const Case &c = cases[i];
@@ -126,7 +126,7 @@ void SwitchIf::emit(OutputFile &o, uint32_t ind, const DFA &dfa)
 
 void GoBitmap::emit (OutputFile & o, uint32_t ind, const DFA &dfa)
 {
-	Opt &opts = o.opts;
+	const opt_t *opts = o.block().opts;
 	std::string yych = output_hgo (o, ind, dfa, hgo);
 	o.ws("if (").wstring(opts->yybm).ws("[").wu32(bitmap->i).ws("+").wstring(yych).ws("] & ");
 	if (opts->yybmHexTable)
@@ -161,7 +161,7 @@ label_t CpgotoTable::max_label () const
 
 void CpgotoTable::emit (OutputFile & o, uint32_t ind)
 {
-	Opt &opts = o.opts;
+	const opt_t *opts = o.block().opts;
 	o.wind(ind).ws("static void *").wstring(opts->yytarget).ws("[256] = {\n");
 	o.wind(++ind);
 	const uint32_t max_digits = max_label ().width ();
@@ -190,13 +190,13 @@ void Cpgoto::emit (OutputFile & o, uint32_t ind, const DFA &dfa)
 	std::string yych = output_hgo (o, ind, dfa, hgo);
 	o.ws("{\n");
 	table->emit (o, ++ind);
-	o.wind(ind).ws("goto *").wstring(o.opts->yytarget).ws("[").wstring(yych).ws("];\n");
+	o.wind(ind).ws("goto *").wstring(o.block().opts->yytarget).ws("[").wstring(yych).ws("];\n");
 	o.wind(--ind).ws("}\n");
 }
 
 void Dot::emit(OutputFile &o, const DFA &dfa)
 {
-	const std::string &prefix = o.opts->tags_prefix;
+	const std::string &prefix = o.block().opts->tags_prefix;
 	const uint32_t n = cases->cases_size;
 	if (n == 1) {
 		o.wlabel(from->label).ws(" -> ").wlabel(cases->cases[0].to->label).ws("\n");
@@ -223,7 +223,7 @@ void Dot::emit(OutputFile &o, const DFA &dfa)
 void Go::emit (OutputFile & o, uint32_t ind, const DFA &dfa)
 {
 	code_lines_t code;
-	gen_settags(code, dfa, tags, o.opts);
+	gen_settags(code, dfa, tags, o.block().opts);
 	for (size_t i = 0; i < code.size(); ++i) {
 		o.wind(ind).wstring(code[i]);
 	}

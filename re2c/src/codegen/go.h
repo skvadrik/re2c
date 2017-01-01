@@ -214,7 +214,7 @@ struct Go
 
 	Go ();
 	~Go ();
-	void init(const State* from, Opt &opts, bitmaps_t &bitmaps);
+	void init(const State* from, const opt_t *opts, bitmaps_t &bitmaps);
 	void emit (OutputFile & o, uint32_t ind, const DFA &dfa);
 	void used_labels (std::set<label_t> & used);
 

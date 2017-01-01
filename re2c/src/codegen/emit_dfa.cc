@@ -24,7 +24,7 @@ static void emit_state(OutputFile & o, uint32_t ind, const State * s, bool used_
 
 void emit_state (OutputFile & o, uint32_t ind, const State * s, bool used_label)
 {
-	Opt &opts = o.opts;
+	const opt_t *opts = o.block().opts;
 	if (used_label)
 	{
 		o.wstring(opts->labelPrefix).wlabel(s->label).ws(":\n");
@@ -69,7 +69,7 @@ void DFA::emit_body(OutputFile &o, uint32_t& ind,
 	// has a piece of code that advances input position. Wee must
 	// skip it when entering DFA.
 	if (used_labels.count(head->label)) {
-		o.wind(ind).ws("goto ").wstring(o.opts->labelPrefix)
+		o.wind(ind).ws("goto ").wstring(o.block().opts->labelPrefix)
 			.wlabel(initial).ws(";\n");
 	}
 
@@ -82,7 +82,7 @@ void DFA::emit_body(OutputFile &o, uint32_t& ind,
 
 void DFA::emit_dot(OutputFile &o, bool last_cond) const
 {
-	Opt &opts = o.opts;
+	const opt_t *opts = o.block().opts;
 	if (!opts->cFlag || !o.cond_goto) {
 		o.ws("digraph re2c {\n");
 	}
@@ -119,7 +119,7 @@ void DFA::emit(Output & output, uint32_t& ind, bool isLastCond, bool& bPrologBra
 {
 	OutputFile &o = output.source;
 	OutputBlock &ob = o.block();
-	Opt &opts = o.opts;
+	const opt_t *opts = ob.opts;
 
 	std::set<std::string> tagnames, tagvars;
 	if (!oldstyle_ctxmarker) {
@@ -158,7 +158,8 @@ void DFA::emit(Output & output, uint32_t& ind, bool isLastCond, bool& bPrologBra
 		s->label = o.label_counter.next ();
 	}
 	std::set<label_t> used_labels;
-	count_used_labels (used_labels, start_label, initial_label, ob.force_start_label, opts->fFlag);
+	count_used_labels (used_labels, start_label, initial_label,
+		opts->startlabel_force && opts->startlabel.empty(), opts->fFlag);
 
 	head->action.set_initial(initial_label);
 
