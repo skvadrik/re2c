@@ -2055,6 +2055,7 @@ void parse(Scanner &input, Output & o)
 	dfas_t dfas;
 	ScannerState rules_state, curr_state;
 	Opt &opts = input.opts;
+	const opt_t *rules_opts = NULL;
 
 	o.source.new_block(opts);
 
@@ -2068,49 +2069,33 @@ void parse(Scanner &input, Output & o)
 	Enc encodingOld = opts->encoding;
 	for (Scanner::ParseMode mode; (mode = input.echo()) != Scanner::Stop;) {
 
-		input.save_state(curr_state);
-		if (opts->rFlag && mode == Scanner::Rules && !dfas.empty())
-		{
-			input.fatal("cannot have a second 'rules:re2c' block");
-		}
-		if (mode == Scanner::Reuse)
-		{
-			if (dfas.empty())
-			{
-				input.fatal("got 'use:re2c' without 'rules:re2c'");
-			}
-		}
-		else if (mode == Scanner::Rules)
-		{
+		if (mode == Scanner::Reuse) {
+			if (!rules_opts) input.fatal("got 'use:re2c' without 'rules:re2c'");
+		} else if (mode == Scanner::Rules) {
+			if (rules_opts) input.fatal("cannot have a second 'rules:re2c' block");
 			input.save_state(rules_state);
-		}
-		else
-		{
+			rules_opts = opts.snapshot();
+		} else {
 			dfas.clear();
 		}
 
 		// parse next re2c block
 		context_t context = {input, specs, symtab};
 		specs.clear();
-		yyparse(context);
-		if (opts->rFlag && mode == Scanner::Reuse) {
-			if (!specs.empty() || opts->encoding != encodingOld) {
-				// Re-parse rules
-				mode = Scanner::Parse;
-				input.restore_state(rules_state);
-				input.reuse();
-				dfas.clear();
-				specs.clear();
-				symtab.clear();
-				yyparse(context);
-
-				// Now append potential new rules
-				input.restore_state(curr_state);
-				mode = Scanner::Parse;
-				yyparse(context);
-			}
-			encodingOld = opts->encoding;
+		if (mode == Scanner::Reuse) {
+			// re-parse rules block
+			input.save_state(curr_state);
+			mode = Scanner::Parse;
+			input.reuse();
+			dfas.clear();
+			symtab.clear();
+			input.restore_state(rules_state);
+			opts.restore(rules_opts);
+			yyparse(context);
+			input.restore_state(curr_state);
+			mode = Scanner::Parse;
 		}
+		yyparse(context);
 
 		// start new output block with accumulated options
 		o.source.new_block(opts);
@@ -2144,6 +2129,7 @@ void parse(Scanner &input, Output & o)
 		emit_epilog (o.source, o.skeletons);
 	}
 
+	delete rules_opts;
 	RegExp::flist.clear();
 	Code::flist.clear();
 	Range::vFreeList.clear();

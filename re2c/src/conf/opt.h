@@ -154,7 +154,7 @@ public:
 	realopt_t (useropt_t & opt);
 	const opt_t * operator -> ();
 	void sync ();
-	const opt_t *snapshot() const { return new opt_t(real); }
+	friend struct Opt;
 };
 
 class useropt_t
@@ -165,6 +165,7 @@ public:
 	useropt_t ();
 	opt_t * operator -> ();
 	friend void realopt_t::sync ();
+	friend struct Opt;
 };
 
 struct Opt
@@ -184,7 +185,17 @@ public:
 		, realopt (useropt)
 	{}
 
-	const opt_t *snapshot() const { return realopt.snapshot(); }
+	const opt_t *snapshot()
+	{
+		realopt.sync();
+		return new opt_t(realopt.real);
+	}
+
+	void restore(const opt_t *opts)
+	{
+		useropt.opt = *opts;
+		realopt.sync();
+	}
 
 	// read-only access, forces options syncronization
 	const opt_t * operator -> ()
