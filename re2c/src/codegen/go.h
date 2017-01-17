@@ -33,9 +33,10 @@ struct Case
 	std::vector<std::pair<uint32_t, uint32_t> > ranges;
 	const State *to;
 	tcid_t tags;
+	bool skip;
 
 	void emit(OutputFile &o, uint32_t ind) const;
-	inline Case(): ranges(), to(NULL), tags(TCID0) {}
+	inline Case(): ranges(), to(NULL), tags(TCID0), skip(false) {}
 	FORBID_COPY(Case);
 };
 
@@ -44,8 +45,8 @@ struct Cases
 	Case *cases;
 	uint32_t cases_size;
 
-	void add(uint32_t lb, uint32_t ub, State *to, tcid_t tags);
-	Cases(const Span *spans, uint32_t nspans);
+	void add(uint32_t lb, uint32_t ub, State *to, tcid_t tags, bool skip);
+	Cases(const Span *spans, uint32_t nspans, bool skip);
 	~Cases();
 	void emit(OutputFile &o, uint32_t ind, const DFA &dfa) const;
 	void used_labels(std::set<label_t> &used);
@@ -64,7 +65,7 @@ struct Binary
 	Cond * cond;
 	If * thn;
 	If * els;
-	Binary (const Span * s, uint32_t n, const State * next);
+	Binary (const Span * s, uint32_t n, const State * next, bool skip);
 	~Binary ();
 	void emit (OutputFile &o, uint32_t ind, const DFA &dfa);
 	void used_labels (std::set<label_t> & used);
@@ -79,22 +80,15 @@ struct Linear
 		const Cond *cond;
 		const State *to;
 		tcid_t tags;
-
-		Branch(): cond(NULL), to(NULL), tags(TCID0) {}
-		void init(const Cond *c, const State *s, tcid_t ts)
-		{
-			cond = c;
-			to = s;
-			tags = ts;
-		}
-		FORBID_COPY(Branch);
+		bool skip;
 	};
 
 	size_t nbranches;
 	Branch *branches;
 
-	Linear(const Span *s, uint32_t n, const State *next);
+	Linear(const Span *s, uint32_t n, const State *next, bool skip);
 	~Linear();
+	void add_branch(const Cond *cond, const State *to, tcid_t tags, bool skip);
 	void emit(OutputFile &o, uint32_t ind, const DFA &dfa);
 	void used_labels(std::set<label_t> &used);
 	FORBID_COPY(Linear);
@@ -112,7 +106,7 @@ struct If
 		Binary * binary;
 		Linear * linear;
 	} info;
-	If (type_t t, const Span * sp, uint32_t nsp, const State * next);
+	If (type_t t, const Span * sp, uint32_t nsp, const State * next, bool skip);
 	~If ();
 	void emit (OutputFile & o, uint32_t ind, const DFA &dfa);
 	void used_labels (std::set<label_t> & used);
@@ -130,7 +124,7 @@ struct SwitchIf
 		Cases * cases;
 		If * ifs;
 	} info;
-	SwitchIf (const Span * sp, uint32_t nsp, const State * next, bool sflag);
+	SwitchIf (const Span * sp, uint32_t nsp, const State * next, bool sflag, bool skip);
 	~SwitchIf ();
 	void emit (OutputFile & o, uint32_t ind, const DFA &dfa);
 	void used_labels (std::set<label_t> & used);
@@ -196,6 +190,7 @@ struct Go
 	uint32_t nSpans; // number of spans
 	Span * span;
 	tcid_t tags;
+	bool skip;
 	enum
 	{
 		EMPTY,
@@ -222,6 +217,7 @@ struct Go
 		: nSpans (g.nSpans)
 		, span (g.span)
 		, tags (g.tags)
+		, skip (g.skip)
 		, type (g.type)
 		, info (g.info)
 	{}
@@ -230,6 +226,7 @@ struct Go
 		nSpans = g.nSpans;
 		span = g.span;
 		tags = g.tags;
+		skip = g.skip;
 		type = g.type;
 		info = g.info;
 		return * this;

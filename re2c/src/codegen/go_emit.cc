@@ -73,13 +73,13 @@ void Cases::emit(OutputFile &o, uint32_t ind, const DFA &dfa) const
 	for (uint32_t i = 1; i < cases_size; ++i) {
 		const Case &c = cases[i];
 		c.emit(o, ind);
-		gen_goto_case(o, ind, c.to, dfa, c.tags);
+		gen_goto_case(o, ind, c.to, dfa, c.tags, c.skip);
 	}
 
 	// default case must be the last one
 	const Case &c = cases[0];
 	o.wind(ind).ws("default:");
-	gen_goto_case(o, ind, c.to, dfa, c.tags);
+	gen_goto_case(o, ind, c.to, dfa, c.tags, c.skip);
 
 	o.wind(ind).ws("}\n");
 }
@@ -101,9 +101,9 @@ void Linear::emit(OutputFile &o, uint32_t ind, const DFA &dfa)
 		const Cond *cond = b.cond;
 		if (cond) {
 			output_if(o, ind, cond->compare, cond->value);
-			gen_goto_if(o, ind, b.to, dfa, b.tags);
+			gen_goto_if(o, ind, b.to, dfa, b.tags, b.skip);
 		} else {
-			gen_goto_plain(o, ind, b.to, dfa, b.tags);
+			gen_goto_plain(o, ind, b.to, dfa, b.tags, b.skip);
 		}
 	}
 }
@@ -138,7 +138,7 @@ void GoBitmap::emit (OutputFile & o, uint32_t ind, const DFA &dfa)
 		o.wu32(bitmap->m);
 	}
 	o.ws(") {\n");
-	gen_goto_plain(o, ind + 1, bitmap_state, dfa, TCID0);
+	gen_goto_plain(o, ind + 1, bitmap_state, dfa, TCID0, false);
 	o.wind(ind).ws("}\n");
 	if (lgo != NULL)
 	{
@@ -222,27 +222,24 @@ void Dot::emit(OutputFile &o, const DFA &dfa)
 
 void Go::emit (OutputFile & o, uint32_t ind, const DFA &dfa)
 {
+	if (type == DOT) {
+		info.dot->emit (o, dfa);
+		return;
+	}
+
 	code_lines_t code;
 	gen_settags(code, dfa, tags, o.block().opts);
 	for (size_t i = 0; i < code.size(); ++i) {
 		o.wind(ind).wstring(code[i]);
 	}
+	o.wdelay_skip(ind, skip);
 
-	switch (type) {
-		case EMPTY:
-			break;
-		case SWITCH_IF:
-			info.switchif->emit (o, ind, dfa);
-			break;
-		case BITMAP:
-			info.bitmap->emit (o, ind, dfa);
-			break;
-		case CPGOTO:
-			info.cpgoto->emit (o, ind, dfa);
-			break;
-		case DOT:
-			info.dot->emit (o, dfa);
-			break;
+	if (type == SWITCH_IF) {
+		info.switchif->emit (o, ind, dfa);
+	} else if (type == BITMAP) {
+		info.bitmap->emit (o, ind, dfa);
+	} else if (type == CPGOTO) {
+		info.cpgoto->emit (o, ind, dfa);
 	}
 }
 

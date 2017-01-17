@@ -14,7 +14,17 @@ namespace re2c
 
 static uint32_t unmap (Span * new_span, const Span * old_span, uint32_t old_nspans, const State * x);
 
-Cases::Cases(const Span *spans, uint32_t nspans)
+static bool consume(const State *s)
+{
+	switch (s->action.type) {
+		default: return true;
+		case Action::RULE:
+		case Action::MOVE: 
+		case Action::ACCEPT: return false;
+	}
+}
+
+Cases::Cases(const Span *spans, uint32_t nspans, bool skip)
 	: cases(new Case[nspans])
 	, cases_size(0)
 {
@@ -25,15 +35,16 @@ Cases::Cases(const Span *spans, uint32_t nspans)
 	const Span &s = spans[nspans - 1];
 	c.to = s.to;
 	c.tags = s.tags;
+	c.skip = skip && consume(s.to);
 
 	for (uint32_t i = 0, lb = 0; i < nspans; ++i) {
 		const Span &s = spans[i];
-		add(lb, s.ub, s.to, s.tags);
+		add(lb, s.ub, s.to, s.tags, skip && consume(s.to));
 		lb = s.ub;
 	}
 }
 
-void Cases::add(uint32_t lb, uint32_t ub, State *to, tcid_t tags)
+void Cases::add(uint32_t lb, uint32_t ub, State *to, tcid_t tags, bool skip)
 {
 	for (uint32_t i = 0; i < cases_size; ++i) {
 		Case &c = cases[i];
@@ -46,6 +57,7 @@ void Cases::add(uint32_t lb, uint32_t ub, State *to, tcid_t tags)
 	c.ranges.push_back(std::make_pair(lb, ub));
 	c.to = to;
 	c.tags = tags;
+	c.skip = skip;
 }
 
 Cond::Cond (const std::string & cmp, uint32_t val)
@@ -53,7 +65,7 @@ Cond::Cond (const std::string & cmp, uint32_t val)
 	, value (val)
 {}
 
-Binary::Binary (const Span * s, uint32_t n, const State * next)
+Binary::Binary (const Span * s, uint32_t n, const State * next, bool skip)
 	: cond (NULL)
 	, thn (NULL)
 	, els (NULL)
@@ -61,79 +73,88 @@ Binary::Binary (const Span * s, uint32_t n, const State * next)
 	const uint32_t l = n / 2;
 	const uint32_t h = n - l;
 	cond = new Cond ("<=", s[l - 1].ub - 1);
-	thn = new If (l > 4 ? If::BINARY : If::LINEAR, &s[0], l, next);
-	els = new If (h > 4 ? If::BINARY : If::LINEAR, &s[l], h, next);
+	thn = new If (l > 4 ? If::BINARY : If::LINEAR, &s[0], l, next, skip);
+	els = new If (h > 4 ? If::BINARY : If::LINEAR, &s[l], h, next, skip);
 }
 
-Linear::Linear(const Span *s, uint32_t n, const State *next)
+void Linear::add_branch(const Cond *cond, const State *to, tcid_t tags, bool skip)
+{
+	Branch &b = branches[nbranches++];
+	b.cond = cond;
+	b.to = to;
+	b.tags = tags;
+	b.skip = skip;
+}
+
+Linear::Linear(const Span *s, uint32_t n, const State *next, bool skip)
 	: nbranches(0)
 	, branches(new Branch[n])
 {
 	for (;;) {
 		if (n == 1 && s[0].to == next) {
-			branches[nbranches++].init(NULL, NULL, s[0].tags);
+			add_branch(NULL, NULL, s[0].tags, skip && consume(s[0].to));
 			return;
 		} else if (n == 1) {
-			branches[nbranches++].init(NULL, s[0].to, s[0].tags);
+			add_branch(NULL, s[0].to, s[0].tags, skip && consume(s[0].to));
 			return;
 		} else if (n == 2 && s[0].to == next) {
-			branches[nbranches++].init(new Cond(">=", s[0].ub), s[1].to, s[1].tags);
-			branches[nbranches++].init(NULL, NULL, s[0].tags);
+			add_branch(new Cond(">=", s[0].ub), s[1].to, s[1].tags, skip && consume(s[1].to));
+			add_branch(NULL, NULL, s[0].tags, skip && consume(s[0].to));
 			return;
 		} else if (n == 3
 			&& s[1].to == next
 			&& s[1].ub - s[0].ub == 1
 			&& s[2].to == s[0].to
 			&& s[2].tags == s[0].tags) {
-			branches[nbranches++].init(new Cond("!=", s[0].ub), s[0].to, s[0].tags);
-			branches[nbranches++].init(NULL, NULL, s[1].tags);
+			add_branch(new Cond("!=", s[0].ub), s[0].to, s[0].tags, skip && consume(s[0].to));
+			add_branch(NULL, NULL, s[1].tags, skip && consume(s[1].to));
 			return;
 		} else if (n >= 3
 			&& s[1].ub - s[0].ub == 1
 			&& s[2].to == s[0].to
 			&& s[2].tags == s[0].tags) {
-			branches[nbranches++].init(new Cond("==", s[0].ub), s[1].to, s[1].tags);
+			add_branch(new Cond("==", s[0].ub), s[1].to, s[1].tags, skip && consume(s[1].to));
 			n -= 2;
 			s += 2;
 		} else {
-			branches[nbranches++].init(new Cond("<=", s[0].ub - 1), s[0].to, s[0].tags);
+			add_branch(new Cond("<=", s[0].ub - 1), s[0].to, s[0].tags, skip && consume(s[0].to));
 			n -= 1;
 			s += 1;
 		}
 	}
 }
 
-If::If (type_t t, const Span * sp, uint32_t nsp, const State * next)
+If::If (type_t t, const Span * sp, uint32_t nsp, const State * next, bool skip)
 	: type (t)
 	, info ()
 {
 	switch (type)
 	{
 		case BINARY:
-			info.binary = new Binary (sp, nsp, next);
+			info.binary = new Binary (sp, nsp, next, skip);
 			break;
 		case LINEAR:
-			info.linear = new Linear (sp, nsp, next);
+			info.linear = new Linear (sp, nsp, next, skip);
 			break;
 	}
 }
 
-SwitchIf::SwitchIf (const Span * sp, uint32_t nsp, const State * next, bool sflag)
+SwitchIf::SwitchIf (const Span * sp, uint32_t nsp, const State * next, bool sflag, bool skip)
 	: type (IF)
 	, info ()
 {
 	if ((!sflag && nsp > 2) || (nsp > 8 && (sp[nsp - 2].ub - sp[0].ub <= 3 * (nsp - 2))))
 	{
 		type = SWITCH;
-		info.cases = new Cases (sp, nsp);
+		info.cases = new Cases (sp, nsp, skip);
 	}
 	else if (nsp > 5)
 	{
-		info.ifs = new If (If::BINARY, sp, nsp, next);
+		info.ifs = new If (If::BINARY, sp, nsp, next, skip);
 	}
 	else
 	{
-		info.ifs = new If (If::LINEAR, sp, nsp, next);
+		info.ifs = new If (If::LINEAR, sp, nsp, next, skip);
 	}
 }
 
@@ -149,12 +170,12 @@ GoBitmap::GoBitmap (const Span * span, uint32_t nSpans, const Span * hspan,
 	uint32_t bSpans = unmap (bspan, span, nSpans, bm_state);
 	lgo = bSpans == 0
 		? NULL
-		: new SwitchIf (bspan, bSpans, next, sflag);
+		: new SwitchIf (bspan, bSpans, next, sflag, false);
 	// if there are any low spans, then next state for high spans
 	// must be NULL to trigger explicit goto generation in linear 'if'
 	hgo = hSpans == 0
 		? NULL
-		: new SwitchIf (hspan, hSpans, lgo ? NULL : next, sflag);
+		: new SwitchIf (hspan, hSpans, lgo ? NULL : next, sflag, false);
 	operator delete (bspan);
 }
 
@@ -175,19 +196,20 @@ CpgotoTable::CpgotoTable (const Span * span, uint32_t nSpans)
 
 Cpgoto::Cpgoto (const Span * span, uint32_t nSpans, const Span * hspan,
 	uint32_t hSpans, const State * next, bool sflag)
-	: hgo (hSpans == 0 ? NULL : new SwitchIf (hspan, hSpans, next, sflag))
+	: hgo (hSpans == 0 ? NULL : new SwitchIf (hspan, hSpans, next, sflag, false))
 	, table (new CpgotoTable (span, nSpans))
 {}
 
 Dot::Dot (const Span * sp, uint32_t nsp, const State * s)
 	: from (s)
-	, cases (new Cases (sp, nsp))
+	, cases (new Cases (sp, nsp, false))
 {}
 
 Go::Go ()
 	: nSpans (0)
 	, span (NULL)
 	, tags (TCID0)
+	, skip (false)
 	, type (EMPTY)
 	, info ()
 {}
@@ -197,6 +219,16 @@ void Go::init(const State *from, const opt_t *opts, bitmaps_t &bitmaps)
 	if (nSpans == 0)
 	{
 		return;
+	}
+
+	const Action::type_t a = from->action.type;
+	const bool need_skip = opts->eager_skip
+		&& a != Action::RULE
+		&& a != Action::ACCEPT;
+
+	skip = need_skip;
+	for (uint32_t i = 0; skip && i < nSpans; ++i) {
+		skip = consume(span[i].to) && span[i].tags == TCID0;
 	}
 
 	// initialize high (wide) spans
@@ -240,17 +272,18 @@ void Go::init(const State *from, const opt_t *opts, bitmaps_t &bitmaps)
 	}
 
 	const uint32_t dSpans = nSpans - hSpans - nBitmaps;
+	const bool part_skip = need_skip && !skip;
 	if (opts->target == opt_t::DOT)
 	{
 		type = DOT;
 		info.dot = new Dot (span, nSpans, from);
 	}
-	else if (opts->gFlag && (dSpans >= opts->cGotoThreshold) && !low_spans_have_tags)
+	else if (opts->gFlag && !part_skip && (dSpans >= opts->cGotoThreshold) && !low_spans_have_tags)
 	{
 		type = CPGOTO;
 		info.cpgoto = new Cpgoto (span, nSpans, hspan, hSpans, from->next, opts->sFlag);
 	}
-	else if (opts->bFlag && (nBitmaps > 0))
+	else if (opts->bFlag && !part_skip && (nBitmaps > 0))
 	{
 		type = BITMAP;
 		info.bitmap = new GoBitmap (span, nSpans, hspan, hSpans, bm, bms, from->next, opts->sFlag);
@@ -259,7 +292,7 @@ void Go::init(const State *from, const opt_t *opts, bitmaps_t &bitmaps)
 	else
 	{
 		type = SWITCH_IF;
-		info.switchif = new SwitchIf (span, nSpans, from->next, opts->sFlag);
+		info.switchif = new SwitchIf (span, nSpans, from->next, opts->sFlag, part_skip);
 	}
 }
 

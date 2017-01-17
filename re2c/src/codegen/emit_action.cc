@@ -22,7 +22,7 @@ static void emit_accept_binary (OutputFile &o, uint32_t ind, const DFA &dfa, con
 static void emit_accept        (OutputFile &o, uint32_t ind, const DFA &dfa, const accept_t &acc);
 static void emit_rule          (OutputFile &o, uint32_t ind, const DFA &dfa, size_t rule_idx);
 static void gen_fintags        (OutputFile &o, uint32_t ind, const DFA &dfa, const Rule &rule);
-static void gen_goto           (code_lines_t &code, const State *to, const DFA &dfa, tcid_t tcid, const opt_t *opts);
+static void gen_goto           (code_lines_t &code, const State *to, const DFA &dfa, tcid_t tcid, const opt_t *opts, bool skip);
 static bool endstate           (const State *s);
 
 void emit_action(OutputFile &o, uint32_t ind, const DFA &dfa,
@@ -31,7 +31,7 @@ void emit_action(OutputFile &o, uint32_t ind, const DFA &dfa,
 	const opt_t *opts = o.block().opts;
 	switch (s->action.type) {
 	case Action::MATCH:
-		o.wdelay_skip(ind, true);
+		o.wdelay_skip(ind, !opts->eager_skip);
 		need(o, ind, s->fill);
 		o.wdelay_peek(ind, !endstate(s));
 		break;
@@ -43,7 +43,7 @@ void emit_action(OutputFile &o, uint32_t ind, const DFA &dfa,
 		if (ul1 && dfa.accepts.size() > 1 && backup) {
 			o.wind(ind).wstring(opts->yyaccept).ws(" = ").wu64(init.save).ws(";\n");
 		}
-		o.wdelay_skip(ind, ul1);
+		o.wdelay_skip(ind, ul1 && !opts->eager_skip);
 		if (used_labels.count(init.label)) {
 			o.wstring(opts->labelPrefix).wlabel(init.label).wstring(":\n");
 		}
@@ -60,7 +60,7 @@ void emit_action(OutputFile &o, uint32_t ind, const DFA &dfa,
 		if (dfa.accepts.size() > 1) {
 			o.wind(ind).wstring(opts->yyaccept).ws(" = ").wu64(s->action.info.save).ws(";\n");
 		}
-		o.wdelay_skip(ind, true);
+		o.wdelay_skip(ind, !opts->eager_skip);
 		o.wdelay_backup(ind, true);
 		need(o, ind, s->fill);
 		o.wdelay_peek(ind, true);
@@ -89,7 +89,7 @@ void emit_accept_binary(OutputFile &o, uint32_t ind, const DFA &dfa,
 		emit_accept_binary (o, ++ind, dfa, acc, m + 1, r);
 		o.wind(--ind).ws("}\n");
 	} else {
-		gen_goto_plain(o, ind, acc[l].first, dfa, acc[l].second);
+		gen_goto_plain(o, ind, acc[l].first, dfa, acc[l].second, false);
 	}
 }
 
@@ -104,7 +104,7 @@ void emit_accept(OutputFile &o, uint32_t ind, const DFA &dfa, const accept_t &ac
 
 	// only one possible 'yyaccept' value: unconditional jump
 	if (nacc == 1) {
-		gen_goto_plain(o, ind, acc[0].first, dfa, acc[0].second);
+		gen_goto_plain(o, ind, acc[0].first, dfa, acc[0].second, false);
 		return;
 	}
 
@@ -144,10 +144,10 @@ void emit_accept(OutputFile &o, uint32_t ind, const DFA &dfa, const accept_t &ac
 	o.wind(ind).ws("switch (").wstring(opts->yyaccept).ws(") {\n");
 	for (uint32_t i = 0; i < nacc - 1; ++i) {
 		o.wind(ind).ws("case ").wu32(i).ws(": ");
-		gen_goto_case(o, ind, acc[i].first, dfa, acc[i].second);
+		gen_goto_case(o, ind, acc[i].first, dfa, acc[i].second, false);
 	}
 	o.wind(ind).ws("default:");
-	gen_goto_case(o, ind, acc[nacc - 1].first, dfa, acc[nacc - 1].second);
+	gen_goto_case(o, ind, acc[nacc - 1].first, dfa, acc[nacc - 1].second, false);
 	o.wind(ind).ws("}\n");
 }
 
@@ -227,10 +227,10 @@ void need(OutputFile &o, uint32_t ind, size_t some)
 }
 
 void gen_goto_case(OutputFile &o, uint32_t ind, const State *to,
-	const DFA &dfa, tcid_t tcid)
+	const DFA &dfa, tcid_t tcid, bool skip)
 {
 	code_lines_t code;
-	gen_goto(code, to, dfa, tcid, o.block().opts);
+	gen_goto(code, to, dfa, tcid, o.block().opts, skip);
 	const size_t lines = code.size();
 
 	if (lines == 1) {
@@ -244,10 +244,10 @@ void gen_goto_case(OutputFile &o, uint32_t ind, const State *to,
 }
 
 void gen_goto_if(OutputFile &o, uint32_t ind, const State *to,
-	const DFA &dfa, tcid_t tcid)
+	const DFA &dfa, tcid_t tcid, bool skip)
 {
 	code_lines_t code;
-	gen_goto(code, to, dfa, tcid, o.block().opts);
+	gen_goto(code, to, dfa, tcid, o.block().opts, skip);
 	const size_t lines = code.size();
 
 	if (lines == 1) {
@@ -262,10 +262,10 @@ void gen_goto_if(OutputFile &o, uint32_t ind, const State *to,
 }
 
 void gen_goto_plain(OutputFile &o, uint32_t ind, const State *to,
-	const DFA &dfa, tcid_t tcid)
+	const DFA &dfa, tcid_t tcid, bool skip)
 {
 	code_lines_t code;
-	gen_goto(code, to, dfa, tcid, o.block().opts);
+	gen_goto(code, to, dfa, tcid, o.block().opts, skip);
 	const size_t lines = code.size();
 
 	for (size_t i = 0; i < lines; ++i) {
@@ -274,9 +274,14 @@ void gen_goto_plain(OutputFile &o, uint32_t ind, const State *to,
 }
 
 void gen_goto(code_lines_t &code, const State *to, const DFA &dfa,
-	tcid_t tcid, const opt_t *opts)
+	tcid_t tcid, const opt_t *opts, bool skip)
 {
 	gen_settags(code, dfa, tcid, opts);
+	if (skip) {
+		std::ostringstream s;
+		output_skip(s, 0, opts);
+		code.push_back(s.str());
+	}
 	if (to) {
 		code.push_back("goto " + opts->labelPrefix
 			+ to_string(to->label) + ";\n");
@@ -411,15 +416,13 @@ void gen_fintags(OutputFile &o, uint32_t ind, const DFA &dfa, const Rule &rule)
 
 bool endstate(const State *s)
 {
-	if (s->go.nSpans > 1) return false;
-
 	// 'end' state is a state which has no outgoing transitions on symbols
 	// usually 'end' states are final states (not all final states are 'end'
 	// states), but sometimes 'end' state happens to be initial non-accepting
 	// state, e.g. in case of rule '[]'
 	const Action::type_t &a = s->go.span[0].to->action.type;
-	return a == Action::RULE
-		|| a == Action::ACCEPT;
+	return s->go.nSpans == 1
+		&& (a == Action::RULE || a == Action::ACCEPT);
 }
 
 } // namespace re2c

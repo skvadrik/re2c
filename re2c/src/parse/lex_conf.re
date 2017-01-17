@@ -57,6 +57,7 @@ void Scanner::lex_conf ()
 	"flags:case-insensitive"             { opts.set_bCaseInsensitive(lex_conf_bool());   return; }
 	"flags:case-inverted"                { opts.set_bCaseInverted(lex_conf_bool());      return; }
 	"flags:non-bijective-mapping"        { opts.set_bijective_mapping(!lex_conf_bool()); return; }
+	"flags:eager-skip"                   { opts.set_eager_skip(lex_conf_bool());         return; }
 
 	"flags:" ("e" | "ecb")        { lex_conf_enc(Enc::EBCDIC); return; }
 	"flags:" ("u" | "unicode")    { lex_conf_enc(Enc::UTF32);  return; }

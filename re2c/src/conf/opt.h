@@ -117,6 +117,7 @@ namespace re2c
 	/* internals */ \
 	OPT (dfa_minimization_t, dfa_minimization, DFA_MINIMIZATION_MOORE) \
 	OPT (bool, bijective_mapping, true) \
+	OPT (bool, eager_skip, false) \
 	/* dump */ \
 	OPT (bool, dump_dfa_raw, false) \
 	OPT (bool, dump_dfa_det, false) \
