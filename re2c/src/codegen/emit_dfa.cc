@@ -65,6 +65,12 @@ void DFA::count_used_labels (std::set<label_t> & used, label_t start,
 void DFA::emit_body(OutputFile &o, uint32_t& ind,
 	const std::set<label_t> &used_labels, label_t initial) const
 {
+	code_lines_t code;
+	gen_settags(code, *this, tags0, o.block().opts);
+	for (size_t i = 0; i < code.size(); ++i) {
+		o.wind(ind).wstring(code[i]);
+	}
+
 	// If DFA has transitions to initial state, then initial state
 	// has a piece of code that advances input position. Wee must
 	// skip it when entering DFA.

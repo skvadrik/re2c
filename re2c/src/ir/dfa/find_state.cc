@@ -415,6 +415,7 @@ void find_state(dfa_t &dfa, size_t state, size_t symbol,
 	const closure_t &closure, dump_dfa_t &dump)
 {
 	const kernels_t::result_t result = kernels.insert(closure, dfa.maxtagver);
+	const tcmd_t cmd = commands(closure, tagpool, dfa.tcpool, result.mapping);
 
 	if (result.isnew) {
 		// create new DFA state
@@ -433,16 +434,15 @@ void find_state(dfa_t &dfa, size_t state, size_t symbol,
 		}
 	}
 
-	// initial state
-	if (state == dfa_t::NIL) {
+	if (state == dfa_t::NIL) { // initial state
+		*dfa.tcmd0 = cmd;
 		dump.state0(closure);
-		return;
+	} else {
+		dfa_state_t *s = dfa.states[state];
+		s->arcs[symbol] = result.state;
+		s->tcmd[symbol] = cmd;
+		dump.state(closure, state, symbol, result.isnew);
 	}
-
-	dfa_state_t *s = dfa.states[state];
-	s->arcs[symbol] = result.state;
-	s->tcmd[symbol] = commands(closure, tagpool, dfa.tcpool, result.mapping);
-	dump.state(closure, state, symbol, result.isnew);
 }
 
 } // namespace re2c

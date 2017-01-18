@@ -53,6 +53,10 @@ void freeze_tags(dfa_t &dfa)
 		nstate = dfa.states.size(),
 		nsym = dfa.nchars;
 
+	dfa.tcid0 = new tcid_t(pool.insert(dfa.tcmd0->save, dfa.tcmd0->copy));
+	delete dfa.tcmd0;
+	dfa.tcmd0 = NULL;
+
 	for (size_t i = 0; i < nstate; ++i) {
 		dfa_state_t *s = dfa.states[i];
 		const tcmd_t

@@ -36,6 +36,12 @@ void dump_adfa(const DFA &dfa)
 		"  node[shape=Mrecord fontname=fixed]\n"
 		"  edge[arrowhead=vee fontname=fixed]\n\n");
 
+	fprintf(stderr,
+		"  n [shape=point]"
+		"  n -> n%p [style=dotted label=\"", (void*)dfa.head);
+	dump_adfa_tcmd(dfa.tcpool[dfa.tags0]);
+	fprintf(stderr, "\"]\n");
+
 	for (const State *s = dfa.head; s; s = s->next) {
 		const char *attr;
 		Action::type_t action = s->action.type;

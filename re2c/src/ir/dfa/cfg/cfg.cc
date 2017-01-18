@@ -36,7 +36,7 @@ void map_arcs_to_bblocks(const dfa_t &dfa, cfg_ix_t *arc2bb,
 		nstate = dfa.states.size(),
 		nsym = dfa.nchars;
 
-	// first bblock is CFG root: it has no counterpart in DFA
+	// root bblock for initial tagged epsilon-transition
 	cfg_ix_t nbb = 1;
 
 	// bblocks for tagged transitions
@@ -79,7 +79,7 @@ cfg_bb_t *create_bblocks(const dfa_t &dfa, const cfg_ix_t *arc2bb,
 	// root bblock
 	std::fill(been, been + nstate, false);
 	successors(dfa, arc2bb, been, succe = succb, 0);
-	basic_block(b++, succb, succe, new tcmd_t, NULL);
+	basic_block(b++, succb, succe, dfa.tcmd0, NULL);
 
 	// transition bblocks
 	for (size_t i = 0; i < nstate; ++i) {
@@ -186,9 +186,6 @@ void fallback(const dfa_t &dfa, const cfg_ix_t *arc2bb, bool *been,
 cfg_t::~cfg_t()
 {
 	cfg_bb_t *b = bblocks, *e = b + nbbfall;
-
-	delete b->cmd;
-
 	for (; b < e; ++b) {
 		delete[] b->succb;
 	}

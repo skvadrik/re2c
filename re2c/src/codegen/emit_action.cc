@@ -276,10 +276,14 @@ void gen_goto_plain(OutputFile &o, uint32_t ind, const State *to,
 void gen_goto(code_lines_t &code, const State *to, const DFA &dfa,
 	tcid_t tcid, const opt_t *opts, bool skip)
 {
+	std::ostringstream s;
+	output_skip(s, 0, opts);
+
+	if (skip && !opts->lookahead) {
+		code.push_back(s.str());
+	}
 	gen_settags(code, dfa, tcid, opts);
-	if (skip) {
-		std::ostringstream s;
-		output_skip(s, 0, opts);
+	if (skip && opts->lookahead) {
 		code.push_back(s.str());
 	}
 	if (to) {

@@ -13,7 +13,7 @@ static void prune_final_items(closure_t &clos, std::valarray<Rule> &rules);
 static void update_versions(closure_t &clos, Tagpool &tagpool, tagver_t &maxver);
 
 void closure(closure_t &clos1, closure_t &clos2, Tagpool &tagpool,
-	std::valarray<Rule> &rules, tagver_t &maxver)
+	std::valarray<Rule> &rules, tagver_t &maxver, bool lookahead)
 {
 	// build tagged epsilon-closure of the given set of NFA states
 	clos2.clear();
@@ -21,6 +21,18 @@ void closure(closure_t &clos1, closure_t &clos2, Tagpool &tagpool,
 	std::fill(tags, tags + tagpool.ntags, TAGVER_ZERO);
 	for (clositer_t c = clos1.begin(); c != clos1.end(); ++c) {
 		closure_one(clos2, tagpool, *c, c->state, tags);
+	}
+
+	// The only difference between TDFA and LATDFA is here:
+	// TDFA backups tags after current transition, while LATDFA delays this
+	// till the next transition. This allows LATDFA to use lookahead symbol
+	// and backup tags only in case of matching lookahead, while TDFA cannot
+	// exploit lookahead and has to backup tags anyway.
+	if (!lookahead) {
+		for (clositer_t c = clos2.begin(); c != clos2.end(); ++c) {
+			c->ttran = c->tlook;
+			c->tlook = ZERO_TAGS;
+		}
 	}
 
 	// see note [at most one final item per closure]

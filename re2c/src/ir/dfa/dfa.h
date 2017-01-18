@@ -18,6 +18,7 @@ namespace re2c
 {
 
 struct nfa_t;
+struct opt_t;
 
 struct dfa_state_t
 {
@@ -57,9 +58,11 @@ struct dfa_t
 	tagver_t *finvers;
 	tcpool_t &tcpool;
 	tagver_t maxtagver;
+	tcmd_t *tcmd0;
+	tcid_t *tcid0;
 
-	dfa_t(const nfa_t &nfa, const charset_t &charset,
-		const std::string &cond, bool bijection, bool debug, Warn &warn);
+	dfa_t(const nfa_t &nfa, const charset_t &charset, const opt_t *opts,
+		const std::string &cond, Warn &warn);
 	~dfa_t();
 
 	FORBID_COPY(dfa_t);

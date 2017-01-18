@@ -63,15 +63,15 @@ smart_ptr<DFA> compile(const spec_t &spec, Output &output)
 
 	nfa_t nfa(rules, opts->input_api);
 
-	dfa_t dfa(nfa, cs, cond, opts->bijective_mapping, opts->dump_dfa_raw, warn);
+	dfa_t dfa(nfa, cs, opts, cond, warn);
 	if (opts->dump_dfa_det) dump_dfa(dfa);
 
 	// skeleton must be constructed after DFA construction
 	// but prior to any other DFA transformations
-	Skeleton skeleton(dfa, cs, defrule, name, cond, line);
+	Skeleton skeleton(dfa, cs, opts, defrule, name, cond, line);
 	warn_undefined_control_flow(skeleton, warn);
 	if (opts->target == opt_t::SKELETON) {
-		emit_data(skeleton, opts->output_file, opts->encoding.szCodeUnit());
+		emit_data(skeleton);
 	}
 
 	cutoff_dead_rules(dfa, defrule, cond, warn);

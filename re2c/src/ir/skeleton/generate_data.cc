@@ -156,21 +156,25 @@ static void write_keys(const path_t &path, const Skeleton &skel,
 	// calculate tags: start with default and apply commands step by step
 	const size_t
 		nver = skel.ntagver,
-		ntag = width * nver;
+		ntag = width * nver,
+		offby = skel.opts->lookahead ? 0 : 1;
 	size_t *tags = new size_t[ntag];
 	std::fill(tags, tags + ntag, Skeleton::DEFTAG);
+	for (size_t w = 0; w < width; ++w) {
+		apply(&tags[w * nver], skel.cmd0, 0); // absent in LATDFA
+	}
 	for (size_t i = 0; i < f; ++i) {
 		Node::wciter_t a(path.arc(skel, i));
 		for (size_t w = 0; w < width; ++a) {
 			uint32_t n = nsteps(a->lower, a->upper);
 			for (; n --> 0 && w < width; ++w) {
-				apply(&tags[w * nver], a->cmd, i);
+				apply(&tags[w * nver], a->cmd, i + offby);
 			}
 		}
 	}
 	const tcmd_t *fcmd = path.node(skel, f).cmd;
 	for (size_t w = 0; w < width; ++w) {
-		apply(&tags[w * nver], fcmd, f);
+		apply(&tags[w * nver], fcmd, f); // only present in LATDFA
 	}
 
 	const size_t rule = path.node(skel, f).rule;
@@ -324,17 +328,18 @@ template<typename cunit_t>
 	}
 }
 
-static void generate_paths(const Skeleton &skel, cover_t &cover, size_t cunit_size)
+static void generate_paths(const Skeleton &skel, cover_t &cover)
 {
-	switch (cunit_size) {
+	switch (skel.opts->encoding.szCodeUnit()) {
 		case 4: generate_paths_cunit<uint32_t>(skel, cover); break;
 		case 2: generate_paths_cunit<uint16_t>(skel, cover); break;
 		case 1: generate_paths_cunit<uint8_t>(skel, cover); break;
 	}
 }
 
-void emit_data(const Skeleton &skel, std::string fname, size_t cunit_size)
+void emit_data(const Skeleton &skel)
 {
+	std::string fname = skel.opts->output_file;
 	if (fname.empty()) {
 		fname = "<stdout>";
 	}
@@ -353,7 +358,7 @@ void emit_data(const Skeleton &skel, std::string fname, size_t cunit_size)
 	}
 
 	cover_t cover(input, keys, skel.nodes_count);
-	generate_paths(skel, cover, cunit_size);
+	generate_paths(skel, cover);
 
 	fclose(input);
 	fclose(keys);

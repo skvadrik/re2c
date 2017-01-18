@@ -34,6 +34,7 @@ DFA::DFA
 	, ubChar(charset.back())
 	, nStates(0)
 	, head(NULL)
+	, tags0(*dfa.tcid0)
 	, rules(dfa.rules)
 	, vartags(dfa.vartags)
 	, fixtags(dfa.fixtags)

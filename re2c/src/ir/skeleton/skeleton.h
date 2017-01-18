@@ -12,6 +12,7 @@
 #include <utility>
 
 #include "src/codegen/bitmap.h"
+#include "src/conf/opt.h"
 #include "src/ir/regexp/regexp.h"
 #include "src/ir/rule.h"
 #include "src/ir/tcmd.h"
@@ -62,12 +63,14 @@ struct Skeleton
 {
 	static const size_t DEFTAG;
 
+	const opt_t *opts;
 	const std::string name;
 	const std::string cond;
 	const uint32_t line;
 
 	const size_t nodes_count;
 	Node *nodes;
+	const tcmd_t *cmd0;
 
 	size_t sizeof_key;
 	size_t defrule;
@@ -76,8 +79,8 @@ struct Skeleton
 	const std::vector<VarTag> &vartags;
 	const tagver_t *finvers;
 
-	Skeleton(const dfa_t &dfa, const charset_t &cs, size_t def,
-		const std::string &dfa_name, const std::string &dfa_cond,
+	Skeleton(const dfa_t &dfa, const charset_t &cs, const opt_t *opts,
+		size_t def, const std::string &dfa_name, const std::string &dfa_cond,
 		uint32_t dfa_line);
 	~Skeleton ();
 	FORBID_COPY(Skeleton);
@@ -99,7 +102,7 @@ size_t rule2key(size_t rule, size_t key, size_t def);
 uint32_t maxpath(const Skeleton &skel);
 void warn_undefined_control_flow(const Skeleton &skel, Warn &warn);
 void fprint_default_path(FILE *f, const Skeleton &skel, const path_t &p);
-void emit_data(const Skeleton &skel, std::string fname, size_t cunit_size);
+void emit_data(const Skeleton &skel);
 void emit_prolog(OutputFile & o);
 void emit_start(OutputFile &o, size_t maxfill, const std::string &name,
 	size_t sizeof_key, size_t def, bool backup, bool accept, bool oldstyle_ctxmarker,

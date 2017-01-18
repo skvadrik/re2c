@@ -2,6 +2,7 @@
 #include <string.h>
 #include <vector>
 
+#include "src/conf/opt.h"
 #include "src/ir/dfa/closure.h"
 #include "src/ir/dfa/dfa.h"
 #include "src/ir/dfa/dump.h"
@@ -47,8 +48,8 @@ void reach(const kernel_t *kernel, closure_t &clos, uint32_t symbol)
 	}
 }
 
-dfa_t::dfa_t(const nfa_t &nfa, const charset_t &charset,
-	const std::string &cond, bool bijection, bool debug, Warn &warn)
+dfa_t::dfa_t(const nfa_t &nfa, const charset_t &charset, const opt_t *opts,
+	const std::string &cond, Warn &warn)
 	: states()
 	, nchars(charset.size() - 1) // (n + 1) bounds for n ranges
 	, rules(nfa.rules)
@@ -57,12 +58,15 @@ dfa_t::dfa_t(const nfa_t &nfa, const charset_t &charset,
 	, finvers(NULL)
 	, tcpool(*new tcpool_t)
 	, maxtagver(0)
+	, tcmd0(new tcmd_t)
+	, tcid0(NULL)
 {
+	const bool lookahead = opts->lookahead;
 	const size_t ntag = vartags.size();
 	Tagpool tagpool(ntag);
-	kernels_t kernels(tagpool, bijection);
+	kernels_t kernels(tagpool, opts->bijective_mapping);
 	closure_t clos1, clos2;
-	dump_dfa_t dump(*this, tagpool, nfa, debug);
+	dump_dfa_t dump(*this, tagpool, nfa, opts->dump_dfa_raw);
 
 	// all-zero tag configuration must have static number zero
 	assert(ZERO_TAGS == tagpool.insert_const(TAGVER_ZERO));
@@ -81,13 +85,13 @@ dfa_t::dfa_t(const nfa_t &nfa, const charset_t &charset,
 
 	clos_t c0 = {NULL, nfa.root, INITIAL_TAGS, ZERO_TAGS, ZERO_TAGS};
 	clos1.push_back(c0);
-	closure(clos1, clos2, tagpool, rules, maxtagver);
+	closure(clos1, clos2, tagpool, rules, maxtagver, lookahead);
 	find_state(*this, dfa_t::NIL, 0/* any */, tagpool, kernels, clos2, dump);
 
 	for (size_t i = 0; i < kernels.size(); ++i) {
 		for (size_t c = 0; c < nchars; ++c) {
 			reach(kernels[i], clos1, charset[c]);
-			closure(clos1, clos2, tagpool, rules, maxtagver);
+			closure(clos1, clos2, tagpool, rules, maxtagver, lookahead);
 			find_state(*this, i, c, tagpool, kernels, clos2, dump);
 		}
 	}
@@ -153,6 +157,8 @@ dfa_t::~dfa_t()
 	{
 		delete *i;
 	}
+	delete tcmd0;
+	delete tcid0;
 }
 
 } // namespace re2c

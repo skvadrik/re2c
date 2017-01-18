@@ -247,6 +247,9 @@ void opt_t::fix ()
 	{
 		tFlag = true;
 	}
+	if (!lookahead) {
+		eager_skip = true;
+	}
 }
 
 realopt_t::realopt_t (useropt_t & opt)

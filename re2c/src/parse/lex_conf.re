@@ -56,6 +56,7 @@ void Scanner::lex_conf ()
 	"flags:no-version"                   { opts.set_version(!lex_conf_bool());           return; }
 	"flags:case-insensitive"             { opts.set_bCaseInsensitive(lex_conf_bool());   return; }
 	"flags:case-inverted"                { opts.set_bCaseInverted(lex_conf_bool());      return; }
+	"flags:no-lookahead"                 { opts.set_lookahead(!lex_conf_bool());         return; }
 	"flags:non-bijective-mapping"        { opts.set_bijective_mapping(!lex_conf_bool()); return; }
 	"flags:eager-skip"                   { opts.set_eager_skip(lex_conf_bool());         return; }
 

@@ -67,6 +67,7 @@ struct DFA
 	uint32_t ubChar;
 	uint32_t nStates;
 	State * head;
+	const tcid_t tags0;
 	std::valarray<Rule> &rules;
 	std::vector<VarTag> &vartags;
 	std::vector<FixTag> &fixtags;

@@ -228,7 +228,10 @@ void Go::init(const State *from, const opt_t *opts, bitmaps_t &bitmaps)
 
 	skip = need_skip;
 	for (uint32_t i = 0; skip && i < nSpans; ++i) {
-		skip = consume(span[i].to) && span[i].tags == TCID0;
+		// in non-lookahead TDFA cursor is incremented before setting tags,
+		// so tags don't affect hoisting skip statement out of conditional branches
+		skip = consume(span[i].to)
+			&& (!opts->lookahead || span[i].tags == TCID0);
 	}
 
 	// initialize high (wide) spans

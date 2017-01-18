@@ -5,7 +5,7 @@
 namespace re2c
 {
 
-static void dump_tcmd_or_tcid(const dfa_state_t *state, size_t sym, const tcpool_t &tcpool);
+static void dump_tcmd_or_tcid(const tcmd_t *tcmd, const tcid_t *tcid, size_t sym, const tcpool_t &tcpool);
 static void dump_tcmd(const tagsave_t *s, const tagcopy_t *c);
 static const char *tagname(const VarTag &t);
 static void dump_tags(const Tagpool &tagpool, size_t ttran, size_t tvers);
@@ -156,6 +156,13 @@ void dump_dfa(const dfa_t &dfa)
 		"  node[shape=Mrecord fontname=fixed]\n"
 		"  edge[arrowhead=vee fontname=fixed]\n\n");
 
+	// initializer
+	fprintf(stderr,
+		"  n [shape=point]"
+		"  n -> n0 [style=dotted label=\"");
+	dump_tcmd_or_tcid(dfa.tcmd0, dfa.tcid0, 0, dfa.tcpool);
+	fprintf(stderr, "\"]\n");
+
 	for (uint32_t i = 0; i < nstate; ++i) {
 		const dfa_state_t *s = dfa.states[i];
 
@@ -171,7 +178,7 @@ void dump_dfa(const dfa_t &dfa)
 				" n%u [style=filled fillcolor=lightgray]"
 				" dr%u [shape=none label=\"",
 				i, i);
-			dump_tcmd_or_tcid(s, nsym, dfa.tcpool);
+			dump_tcmd_or_tcid(s->tcmd, s->tcid, nsym, dfa.tcpool);
 
 			fprintf(stderr, "(");
 			for (size_t t = r.lvar; t < r.hvar; ++t) {
@@ -191,7 +198,7 @@ void dump_dfa(const dfa_t &dfa)
 			if (j != dfa_t::NIL) {
 				fprintf(stderr, "  n%u -> n%u [label=\"%u",
 					i, static_cast<uint32_t>(j), c);
-				dump_tcmd_or_tcid(s, c, dfa.tcpool);
+				dump_tcmd_or_tcid(s->tcmd, s->tcid, c, dfa.tcpool);
 				fprintf(stderr, "\"]\n");
 			}
 		}
@@ -200,13 +207,14 @@ void dump_dfa(const dfa_t &dfa)
 	fprintf(stderr, "}\n");
 }
 
-void dump_tcmd_or_tcid(const dfa_state_t *state, size_t sym, const tcpool_t &tcpool)
+void dump_tcmd_or_tcid(const tcmd_t *tcmd, const tcid_t *tcid,
+	size_t sym, const tcpool_t &tcpool)
 {
-	if (state->tcmd) {
-		const tcmd_t &cmd = state->tcmd[sym];
+	if (tcmd) {
+		const tcmd_t &cmd = tcmd[sym];
 		dump_tcmd(cmd.save, cmd.copy);
 	} else {
-		const tccmd_t &cmd = tcpool[state->tcid[sym]];
+		const tccmd_t &cmd = tcpool[tcid[sym]];
 		dump_tcmd(cmd.save, cmd.copy);
 	}
 }

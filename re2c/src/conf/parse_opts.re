@@ -147,6 +147,7 @@ opt_long:
 	"case-inverted"         end { opts.set_bCaseInverted (true);     goto opt; }
 	"skeleton"              end { opts.set_target (opt_t::SKELETON); goto opt; }
 	"tags"                  end { opts.set_tags (true);              goto opt; }
+	"no-lookahead"          end { opts.set_lookahead(false);         goto opt; }
 	"non-bijective-mapping" end { opts.set_bijective_mapping(false); goto opt; }
 	"eager-skip"            end { opts.set_eager_skip(true);         goto opt; }
 	"ecb"                   end { if (!opts.set_encoding (Enc::EBCDIC)) { error_encoding (); return EXIT_FAIL; } goto opt; }
