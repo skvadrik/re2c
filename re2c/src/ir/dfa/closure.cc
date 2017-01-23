@@ -10,10 +10,11 @@ static void closure_one(closure_t &clos, Tagpool &tagpool, clos_t &c0, nfa_state
 bool is_better(const clos_t &c1, const clos_t &c2, Tagpool &tagpool);
 static bool compare_by_rule(const clos_t &c1, const clos_t &c2);
 static void prune_final_items(closure_t &clos, std::valarray<Rule> &rules);
-static void update_versions(closure_t &clos, Tagpool &tagpool, tagver_t &maxver);
+static void update_versions(closure_t &clos, Tagpool &tagpool, tagver_t &maxver, tagver_t *newvers);
 
 void closure(closure_t &clos1, closure_t &clos2, Tagpool &tagpool,
-	std::valarray<Rule> &rules, tagver_t &maxver, bool lookahead)
+	std::valarray<Rule> &rules, tagver_t &maxver, tagver_t *newvers,
+	bool lookahead)
 {
 	// build tagged epsilon-closure of the given set of NFA states
 	clos2.clear();
@@ -42,7 +43,7 @@ void closure(closure_t &clos1, closure_t &clos2, Tagpool &tagpool,
 	std::sort(clos2.begin(), clos2.end(), compare_by_rule);
 
 	// merge tags from different rules, find nondeterministic tags
-	update_versions(clos2, tagpool, maxver);
+	update_versions(clos2, tagpool, maxver, newvers);
 }
 
 /* note [epsilon-closures in tagged NFA]
@@ -206,7 +207,8 @@ void prune_final_items(closure_t &clos, std::valarray<Rule> &rules)
 	}
 }
 
-void update_versions(closure_t &clos, Tagpool &tagpool, tagver_t &maxver)
+void update_versions(closure_t &clos, Tagpool &tagpool,
+	tagver_t &maxver, tagver_t *newvers)
 {
 	const size_t ntag = tagpool.ntags;
 	tagver_t *cur = tagpool.buffer1,
@@ -219,18 +221,26 @@ void update_versions(closure_t &clos, Tagpool &tagpool, tagver_t &maxver)
 	// normal transition, however absolute value should be unique
 	// among all versions of all tags)
 	for (size_t t = 0; t < ntag; ++t) {
+		tagver_t &newcur = newvers[t],
+			&newbot = newvers[ntag + t];
 		cur[t] = bot[t] = TAGVER_ZERO;
 
 		for (c = b; c != e; ++c) {
 			if (tagpool[c->ttran][t] == TAGVER_CURSOR) {
-				cur[t] = ++maxver;
+				if (newcur == TAGVER_ZERO) {
+					newcur = ++maxver;
+				}
+				cur[t] = newcur;
 				break;
 			}
 		}
 
 		for (c = b; c != e; ++c) {
 			if (tagpool[c->ttran][t] == TAGVER_BOTTOM) {
-				bot[t] = -(++maxver);
+				if (newbot == TAGVER_ZERO) {
+					newbot = -(++maxver);
+				}
+				bot[t] = newbot;
 				break;
 			}
 		}
