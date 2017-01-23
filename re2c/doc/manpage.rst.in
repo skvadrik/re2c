@@ -333,7 +333,7 @@ depends on a particular use case.
     ``YYSETSTATE`` is a signed integer that uniquely identifies the specific
     instance of ``YYFILL (n)`` that is about to be called. Should the user
     wish to save the state of the scanner and have ``YYFILL (n)`` return to
-    the caller, all he has to do is store that unique identifer in a
+    the caller, all he has to do is store that unique identifier in a
     variable. Later, when the scannered is called again, it will call
     ``YYGETSTATE ()`` and resume execution right where it left off. The
     generated code will contain both ``YYSETSTATE (s)`` and ``YYGETSTATE`` even
@@ -542,12 +542,12 @@ INPLACE CONFIGURATIONS
 
 ``re2c:yyfill:parameter = 1;``
     Controls argument in braces after
-    ``YYFILL``. If zero, agrument is omitted. If non-zero, argument is
+    ``YYFILL``. If zero, argument is omitted. If non-zero, argument is
     generated unless ``re2c:define:YYFILL:naked`` is set to non-zero.
 
 ``re2c:define:YYFILL:naked = 0;``
     Controls argument in braces and
-    semicolon after ``YYFILL``. If zero, both agrument and semicolon are
+    semicolon after ``YYFILL``. If zero, both argument and semicolon are
     omitted. If non-zero, argument is generated unless
     ``re2c:yyfill:parameter`` is set to zero and semicolon is generated
     unconditionally.
@@ -650,7 +650,7 @@ INPLACE CONFIGURATIONS
 
 ``re2c:define:YYSETCONDITION:naked = 0;``
     Controls argument in braces
-    and semicolon after ``YYSETCONDITION``. If zero, both agrument and
+    and semicolon after ``YYSETCONDITION``. If zero, both argument and
     semicolon are omitted. If non-zero, both argument and semicolon are
     generated.
 
@@ -680,7 +680,7 @@ INPLACE CONFIGURATIONS
 
 ``re2c:define:YYSETSTATE:naked = 0;``
     Controls argument in braces and
-    semicolon after ``YYSETSTATE``. If zero, both agrument and semicolon are
+    semicolon after ``YYSETSTATE``. If zero, both argument and semicolon are
     omitted. If non-zero, both argument and semicolon are generated.
 
 ``re2c:define:YYLIMIT = "YYLIMIT";``
@@ -857,7 +857,7 @@ and ``state:nextlabel``.
 SCANNER WITH CONDITION SUPPORT
 ------------------------------
 
-You can preceed regular expressions with a list of condition names when
+You can precede regular expressions with a list of condition names when
 using the ``-c`` switch. In this case ``re2c`` generates scanner blocks for
 each conditon. Where each of the generated blocks has its own
 precondition. The precondition is given by the interface define
