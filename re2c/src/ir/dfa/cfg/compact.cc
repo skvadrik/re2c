@@ -34,6 +34,7 @@ tagver_t cfg_t::compact(const cfg_t &cfg, tagver_t *ver2new)
 		}
 	}
 
+	delete[] used;
 	return maxver;
 }
 
