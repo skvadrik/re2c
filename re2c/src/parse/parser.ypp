@@ -167,8 +167,8 @@ static spec_t &find(specs_t &specs, const std::string &name)
 
 %start	spec
 
-%lex-param   {context_t &context}
-%parse-param {context_t &context}
+%lex-param   {re2c::context_t &context}
+%parse-param {re2c::context_t &context}
 
 %union {
 	const re2c::RegExp * regexp;
