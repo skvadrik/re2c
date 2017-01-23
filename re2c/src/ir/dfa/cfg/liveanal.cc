@@ -5,12 +5,34 @@
 namespace re2c
 {
 
+// calculates deep-first search postorder of transition nodes,
+// skips final and fallback nodes (they have no successors anyway)
+static cfg_ix_t *postorder(const cfg_t &cfg, bool *done,
+	cfg_ix_t *ord, cfg_ix_t i)
+{
+	if (i >= cfg.nbbarc || done[i]) return ord;
+	done[i] = true;
+
+	const cfg_bb_t *b = cfg.bblocks + i;
+	for (cfg_ix_t *j = b->succb; j < b->succe; ++j) {
+		ord = postorder(cfg, done, ord, *j);
+	}
+
+	*ord = i;
+	return ++ord;
+}
+
 void cfg_t::liveness_analysis(const cfg_t &cfg, bool *live)
 {
 	const size_t nver = static_cast<size_t>(cfg.dfa.maxtagver) + 1;
+	const cfg_ix_t
+		narc = cfg.nbbarc,
+		nfin = cfg.nbbfin;
 	const tagver_t *fins = cfg.dfa.finvers;
 	bool *buf1 = new bool[nver];
 	bool *buf2 = new bool[nver];
+	bool *done = new bool[narc];
+	cfg_ix_t *pord = new cfg_ix_t[narc];
 
 	/* note [control flow equations for tag liveness]
 	 *
@@ -25,8 +47,8 @@ void cfg_t::liveness_analysis(const cfg_t &cfg, bool *live)
 	 * new versions.
 	 */
 
-	memset(live, 0, cfg.nbbfin * nver * sizeof(bool));
-	for (cfg_ix_t i = cfg.nbbarc; i < cfg.nbbfin; ++i) {
+	memset(live, 0, nfin * nver * sizeof(bool));
+	for (cfg_ix_t i = narc; i < nfin; ++i) {
 		const cfg_bb_t *b = cfg.bblocks + i;
 		const Rule *r = b->rule;
 		bool *l = &live[i * nver];
@@ -39,10 +61,15 @@ void cfg_t::liveness_analysis(const cfg_t &cfg, bool *live)
 		}
 	}
 
+	memset(done, 0, narc * sizeof(bool));
+	postorder(cfg, done, pord, 0);
+
 	for (bool loop = true; loop;) {
 		loop = false;
 
-		for (cfg_ix_t i = 0; i < cfg.nbbarc; ++i) {
+		// iterate nodes in postorder
+		for (cfg_ix_t a = 0; a < narc; ++a) {
+			const cfg_ix_t i = pord[a];
 			const cfg_bb_t *b = cfg.bblocks + i;
 			bool *old = &live[i * nver];
 
@@ -95,7 +122,7 @@ void cfg_t::liveness_analysis(const cfg_t &cfg, bool *live)
 	 * but still we should prevent it from merging with other tags
 	 * (otherwise it may become overwritten).
 	 */
-	for (cfg_ix_t i = cfg.nbbfin; i < cfg.nbbfall; ++i) {
+	for (cfg_ix_t i = nfin; i < cfg.nbbfall; ++i) {
 		const cfg_bb_t *b = cfg.bblocks + i;
 		const Rule *r = b->rule;
 
@@ -128,6 +155,8 @@ void cfg_t::liveness_analysis(const cfg_t &cfg, bool *live)
 
 	delete[] buf1;
 	delete[] buf2;
+	delete[] done;
+	delete[] pord;
 }
 
 } // namespace re2c
