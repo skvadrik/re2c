@@ -227,12 +227,14 @@ void Go::emit (OutputFile & o, uint32_t ind, const DFA &dfa)
 		return;
 	}
 
+	const bool lookahead = o.block().opts->lookahead;
+	o.wdelay_skip(ind, skip && !lookahead);
 	code_lines_t code;
 	gen_settags(code, dfa, tags, o.block().opts);
 	for (size_t i = 0; i < code.size(); ++i) {
 		o.wind(ind).wstring(code[i]);
 	}
-	o.wdelay_skip(ind, skip);
+	o.wdelay_skip(ind, skip && lookahead);
 
 	if (type == SWITCH_IF) {
 		info.switchif->emit (o, ind, dfa);
