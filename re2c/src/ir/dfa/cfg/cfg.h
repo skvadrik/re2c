@@ -27,6 +27,7 @@ struct cfg_t
 
 	explicit cfg_t(dfa_t &a);
 	~cfg_t();
+	static tagver_t compact(const cfg_t &cfg, tagver_t *ver2new);
 	static void liveness_analysis(const cfg_t &cfg, bool *live);
 	static void dead_code_elimination(cfg_t &cfg, const bool *live);
 	static void interference(const cfg_t &cfg, const bool *live, bool *interf);

@@ -8,20 +8,26 @@ static void freeze_tags(dfa_t &dfa);
 
 void optimize_tags(dfa_t &dfa)
 {
-	if (dfa.maxtagver > 0) {
+	tagver_t maxver = dfa.maxtagver;
+	if (maxver > 0) {
 		cfg_t cfg(dfa);
 
-		const size_t nver = static_cast<size_t>(dfa.maxtagver) + 1;
+		size_t nver = static_cast<size_t>(maxver) + 1;
+		tagver_t *ver2new = new tagver_t[nver];
+
+		maxver = cfg_t::compact(cfg, ver2new);
+		cfg_t::renaming(cfg, ver2new, maxver);
+
+		nver = static_cast<size_t>(maxver) + 1;
 		bool *live = new bool[cfg.nbbfin * nver];
 		bool *interf = new bool[nver * nver];
-		tagver_t *ver2new = new tagver_t[nver];
 
 		static const uint32_t NPASS = 2;
 		for (uint32_t n = 0; n < NPASS; ++n) {
 			cfg_t::liveness_analysis(cfg, live);
 			cfg_t::dead_code_elimination(cfg, live);
 			cfg_t::interference(cfg, live, interf);
-			const tagver_t maxver = cfg_t::variable_allocation(cfg, interf, ver2new);
+			maxver = cfg_t::variable_allocation(cfg, interf, ver2new);
 			cfg_t::renaming(cfg, ver2new, maxver);
 			cfg_t::normalization(cfg);
 		}

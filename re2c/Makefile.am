@@ -93,6 +93,7 @@ SRC = \
 	src/ir/adfa/dump.cc \
 	src/ir/adfa/prepare.cc \
 	src/ir/dfa/cfg/cfg.cc \
+	src/ir/dfa/cfg/compact.cc \
 	src/ir/dfa/cfg/dce.cc \
 	src/ir/dfa/cfg/interfere.cc \
 	src/ir/dfa/cfg/liveanal.cc \
