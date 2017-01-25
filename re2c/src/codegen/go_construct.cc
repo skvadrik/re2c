@@ -14,7 +14,7 @@ namespace re2c
 
 static uint32_t unmap (Span * new_span, const Span * old_span, uint32_t old_nspans, const State * x);
 
-static bool consume(const State *s)
+bool consume(const State *s)
 {
 	switch (s->action.type) {
 		default: return true;
@@ -221,19 +221,6 @@ void Go::init(const State *from, const opt_t *opts, bitmaps_t &bitmaps)
 		return;
 	}
 
-	const Action::type_t a = from->action.type;
-	const bool need_skip = opts->eager_skip
-		&& a != Action::RULE
-		&& a != Action::ACCEPT;
-
-	skip = need_skip;
-	for (uint32_t i = 0; skip && i < nSpans; ++i) {
-		// in non-lookahead TDFA cursor is incremented before setting tags,
-		// so tags don't affect hoisting skip statement out of conditional branches
-		skip = consume(span[i].to)
-			&& (!opts->lookahead || span[i].tags == TCID0);
-	}
-
 	// initialize high (wide) spans
 	uint32_t hSpans = 0;
 	const Span * hspan = NULL;
@@ -275,7 +262,7 @@ void Go::init(const State *from, const opt_t *opts, bitmaps_t &bitmaps)
 	}
 
 	const uint32_t dSpans = nSpans - hSpans - nBitmaps;
-	const bool part_skip = need_skip && !skip;
+	const bool part_skip = opts->eager_skip && !skip;
 	if (opts->target == opt_t::DOT)
 	{
 		type = DOT;

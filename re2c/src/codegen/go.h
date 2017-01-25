@@ -233,6 +233,8 @@ struct Go
 	}
 };
 
+bool consume(const State *s);
+
 } // namespace re2c
 
 #endif // _RE2C_CODEGEN_GO_

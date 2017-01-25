@@ -104,6 +104,7 @@ private:
 	void split (State *);
 	void findBaseState ();
 	void hoist_tags();
+	void hoist_tags_and_skip(const opt_t *opts);
 	void count_used_labels (std::set<label_t> & used, label_t prolog, label_t start, bool force_start, bool fFlag) const;
 	void emit_body (OutputFile &, uint32_t &, const std::set<label_t> & used_labels, label_t initial) const;
 	void emit_dot(OutputFile &o, bool last_cond) const;

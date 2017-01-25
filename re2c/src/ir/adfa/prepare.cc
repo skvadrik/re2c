@@ -99,6 +99,39 @@ void DFA::findBaseState()
 	operator delete (span);
 }
 
+/* note [tag hoisting, skip hoisting and tunneling]
+ *
+ * Tag hoisting is simple: if all transitions have the same commands,
+ * they can be hoisted out of conditional branches.
+ *
+ * Skip hoisting is only relevant with '--eager-skip' option.
+ * Normally this option is off and skip is lazy: it happens after
+ * transition to the next state, if this state is consuming.
+ * However, with '--eager-skip' skip happens before transition to the next
+ * state. Different transitions may disagree: some of them go to consuming
+ * states, others don't. If they agree, skip can be hoisted (just like tags).
+ *
+ * '--eager-skip' makes tag hoisting more complicated, because now we have
+ * to care about the type of automaton: lookahead TDFAs must skip after
+ * writing tags, while non-lookahead TDFAs must skip before writing tags.
+ * Therefore skip hoising cannot be done without tag hoisting in lookahead
+ * TDFAs, and vice versa with non-lookahead TDFAs.
+ * (Note that '--eager-skip' is implied by '--no-lookahead').
+ *
+ * Tunneling splits base states in two parts: head and body. Body has all
+ * the conditional branches (transitions on symbols), while head has just
+ * one unconditional jump to body.
+ *
+ * Normally tag hoisting should go before tunneling: hoisting may add new
+ * candidates to be merged by tunneling. However, with '--eager-skip' tag
+ * hoisting is interwined with skip hoisting, and the latter needs to know
+ * which states are consuming. This is not possible if tunneling is still
+ * to be done, because it may turn consuming states into non-consuming ones.
+ * Another option is to disallow splitting states with non-hoisted skip
+ * in the presence of '--eager-skip' (this way skip hoisting wouldn't need
+ * to know tunneling results), but it's much worse for tunneling.
+ */
+
 void DFA::prepare(const opt_t *opts)
 {
 	// create rule states
@@ -149,9 +182,12 @@ void DFA::prepare(const opt_t *opts)
 		default_state->action.set_accept(&accepts);
 	}
 
-	// tag hoisting should be done before tunneling, but after
-	// binding default arcs (which may introduce new tags)
-	hoist_tags();
+	// tag hoisting should be done after binding default arcs:
+	// (which may introduce new tags)
+	// see note [tag hoisting, skip hoisting and tunneling]
+	if (!opts->eager_skip) {
+		hoist_tags();
+	}
 
 	// split ``base'' states into two parts
 	for (State * s = head; s; s = s->next)
@@ -179,6 +215,11 @@ void DFA::prepare(const opt_t *opts)
 	}
 	// find ``base'' state, if possible
 	findBaseState();
+
+	// see note [tag hoisting, skip hoisting and tunneling]
+	if (opts->eager_skip) {
+		hoist_tags_and_skip(opts);
+	}
 
 	for (State *s = head; s; s = s->next) {
 		s->go.init(s, opts, bitmaps);
@@ -224,21 +265,71 @@ void DFA::calc_stats(uint32_t line, bool explicit_tags)
 void DFA::hoist_tags()
 {
 	for (State * s = head; s; s = s->next) {
-		const size_t nsp = s->go.nSpans;
-		if (nsp > 0) {
-			Span *sp = s->go.span;
-			const tcid_t tags0 = sp[0].tags;
-			bool common_tags = tags0 != TCID0;
-			for (uint32_t i = 1; common_tags && i < nsp; ++i) {
-				common_tags &= sp[i].tags == tags0;
-			}
-			if (common_tags) {
-				s->go.tags = tags0;
-				for (uint32_t i = 0; i < nsp; ++i) {
-					sp[i].tags = TCID0;
-				}
+		Span *span = s->go.span;
+		const size_t nspan = s->go.nSpans;
+		if (nspan == 0) continue;
+
+		tcid_t tags = span[0].tags;
+		for (uint32_t i = 1; i < nspan; ++i) {
+			if (span[i].tags != tags) {
+				tags = TCID0;
+				break;
 			}
 		}
+		if (tags != TCID0) {
+			s->go.tags = tags;
+			for (uint32_t i = 0; i < nspan; ++i) {
+				span[i].tags = TCID0;
+			}
+		}
+	}
+}
+
+void DFA::hoist_tags_and_skip(const opt_t *opts)
+{
+	assert(opts->eager_skip);
+
+	for (State * s = head; s; s = s->next) {
+		Span *span = s->go.span;
+		const size_t nspan = s->go.nSpans;
+		if (nspan == 0) continue;
+
+		bool hoist_tags = true, hoist_skip = true;
+
+		// do all spans agree on tags?
+		for (uint32_t i = 1; i < nspan; ++i) {
+			if (span[i].tags != span[0].tags) {
+				hoist_tags = false;
+				break;
+			}
+		}
+
+		// do all spans agree on skip?
+		for (uint32_t i = 0; i < nspan; ++i) {
+			if (consume(span[i].to) != consume(span[0].to)) {
+				hoist_skip = false;
+				break;
+			}
+		}
+
+		if (opts->lookahead) {
+			// skip must go after tags
+			hoist_skip &= hoist_tags;
+		} else {
+			// skip must go before tags
+			hoist_tags &= hoist_skip;
+		}
+
+		// hoisting tags is possible
+		if (hoist_tags) {
+			s->go.tags = span[0].tags;
+			for (uint32_t i = 0; i < nspan; ++i) {
+				span[i].tags = TCID0;
+			}
+		}
+
+		// hoisting skip is possible
+		s->go.skip = hoist_skip && consume(span[0].to);
 	}
 }
 
