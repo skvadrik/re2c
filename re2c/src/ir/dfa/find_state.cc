@@ -385,9 +385,11 @@ static tcmd_t commands(const closure_t &closure, const Tagpool &tagpool,
 	return tcmd_t(save, copy);
 }
 
-static tcmd_t finalizer(const clos_t &clos, const Rule &rule,
-	const tagver_t *fins, const Tagpool &tagpool, tcpool_t &tcpool)
+static tcmd_t finalizer(const clos_t &clos, size_t ridx,
+	dfa_t &dfa, const Tagpool &tagpool)
 {
+	tcpool_t &tcpool = dfa.tcpool;
+	const Rule &rule = dfa.rules[ridx];
 	const tagver_t
 		*vers = tagpool[clos.tvers],
 		*tran = tagpool[clos.tlook];
@@ -395,10 +397,13 @@ static tcmd_t finalizer(const clos_t &clos, const Rule &rule,
 	tagcopy_t *copy = NULL;
 
 	for (size_t t = rule.lvar; t < rule.hvar; ++t) {
-		const tagver_t
-			u = tran[t],
-			v = abs(vers[t]),
-			f = fins[t];
+		const tagver_t u = tran[t], v = abs(vers[t]);
+		tagver_t &f = dfa.finvers[t];
+
+		// pick a fresh version: final version is also used as fallback one
+		if (f == TAGVER_ZERO) {
+			f = ++dfa.maxtagver;
+		}
 
 		if (u != TAGVER_ZERO) {
 			save = tcpool.make_save(save, f, u == TAGVER_BOTTOM);
@@ -428,8 +433,7 @@ void find_state(dfa_t &dfa, size_t state, size_t symbol,
 			c = std::find_if(c1, c2, clos_t::fin);
 		if (c != c2) {
 			t->rule = c->state->rule;
-			t->tcmd[dfa.nchars] = finalizer(*c, dfa.rules[t->rule],
-				dfa.finvers, tagpool, dfa.tcpool);
+			t->tcmd[dfa.nchars] = finalizer(*c, t->rule, dfa, tagpool);
 			dump.final(result.state, c->state);
 		}
 	}

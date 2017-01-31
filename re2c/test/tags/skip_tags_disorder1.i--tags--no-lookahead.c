@@ -2,8 +2,8 @@
 
 {
 	YYCTYPE yych;
-	yyt1 = NULL;
-	yyt2 = YYCURSOR;
+	yyt2 = NULL;
+	yyt1 = YYCURSOR;
 	goto yy0;
 yy1:
 yy0:
@@ -16,13 +16,13 @@ yy0:
 	default:	goto yy2;
 	}
 yy2:
-	a = yyt1;
+	a = yyt2;
 	{}
 yy3:
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR++;
-	yyt1 = yyt2;
-	yyt2 = YYCURSOR;
+	yyt2 = yyt1;
+	yyt1 = YYCURSOR;
 	goto yy1;
 }
 

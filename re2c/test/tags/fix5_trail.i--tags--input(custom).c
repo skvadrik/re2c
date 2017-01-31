@@ -19,10 +19,10 @@ static void lex(const char *s)
 	yych = YYPEEK ();
 	switch (yych) {
 	case '0':
-		YYBACKUPTAG (yyt4);
+		YYBACKUPTAG (yyt5);
 		goto yy4;
 	case '1':
-		YYBACKUPTAG (yyt4);
+		YYBACKUPTAG (yyt1);
 		YYBACKUPTAG (yyt5);
 		goto yy5;
 	default:	goto yy2;
@@ -46,11 +46,11 @@ yy5:
 	yych = YYPEEK ();
 	switch (yych) {
 	case '2':
-		YYBACKUPTAG (yyt3);
+		YYBACKUPTAG (yyt4);
 		goto yy10;
 	case '3':
-		YYBACKUPTAG (yyt2);
 		YYBACKUPTAG (yyt3);
+		YYBACKUPTAG (yyt4);
 		goto yy12;
 	default:	goto yy3;
 	}
@@ -61,7 +61,7 @@ yy7:
 	switch (yych) {
 	case '0':	goto yy6;
 	case '1':
-		YYBACKUPTAG (yyt5);
+		YYBACKUPTAG (yyt1);
 		goto yy9;
 	default:	goto yy8;
 	}
@@ -73,11 +73,11 @@ yy9:
 	yych = YYPEEK ();
 	switch (yych) {
 	case '2':
-		YYBACKUPTAG (yyt3);
+		YYBACKUPTAG (yyt4);
 		goto yy10;
 	case '3':
-		YYBACKUPTAG (yyt2);
 		YYBACKUPTAG (yyt3);
+		YYBACKUPTAG (yyt4);
 		goto yy12;
 	default:	goto yy8;
 	}
@@ -87,21 +87,21 @@ yy10:
 	switch (yych) {
 	case '2':	goto yy10;
 	case '3':
-		YYBACKUPTAG (yyt2);
+		YYBACKUPTAG (yyt3);
 		goto yy12;
 	default:	goto yy8;
 	}
 yy12:
 	YYSKIP ();
 	yych = YYPEEK ();
-	YYBACKUPTAG (yyt1);
+	YYBACKUPTAG (yyt2);
 	goto yy15;
 yy13:
-	YYRESTORETAG (yyt1);
-	YYCOPYTAG (p3, yyt2);
-	YYCOPYTAG (p2, yyt3);
-	YYCOPYTAG (p1, yyt5);
-	YYCOPYTAG (p0, yyt4);
+	YYRESTORETAG (yyt2);
+	YYCOPYTAG (p3, yyt3);
+	YYCOPYTAG (p2, yyt4);
+	YYCOPYTAG (p1, yyt1);
+	YYCOPYTAG (p0, yyt5);
 	{
             printf("'%.*s', '%.*s', '%.*s', '%.*s', '%s'\n",
                 p1 - p0, p0,

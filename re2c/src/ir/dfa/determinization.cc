@@ -71,14 +71,14 @@ dfa_t::dfa_t(const nfa_t &nfa, const charset_t &charset, const opt_t *opts,
 
 	// all-zero tag configuration must have static number zero
 	assert(ZERO_TAGS == tagpool.insert_const(TAGVER_ZERO));
-	// final tag versions: [1 .. N], also used for fallback tags
-	const size_t FINAL_TAGS = tagpool.insert_succ(1);
+	// initial tag versions: [1 .. N]
+	const size_t INITIAL_TAGS = tagpool.insert_succ(1);
+	// other versions: [ .. -(N + 1)] and [N + 1 .. ]
+	maxtagver = static_cast<tagver_t>(ntag);
+
+	// final/fallback versions will be assigned on the go
 	finvers = new tagver_t[ntag];
-	memcpy(finvers, tagpool[FINAL_TAGS], ntag * sizeof(tagver_t));
-	// initial tag versions: [N+1 .. 2*N]
-	const size_t INITIAL_TAGS = tagpool.insert_succ(static_cast<tagver_t>(ntag) + 1);
-	// other versions: [ .. -(2*N+1)] and [2*N+1 .. ]
-	maxtagver = static_cast<tagver_t>(ntag) * 2;
+	std::fill(finvers, finvers + ntag, TAGVER_ZERO);
 
 	// iterate while new kernels are added: for each alphabet symbol,
 	// build tagged epsilon-closure of all reachable NFA states,

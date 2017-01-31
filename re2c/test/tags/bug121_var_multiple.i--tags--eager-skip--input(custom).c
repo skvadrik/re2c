@@ -16,7 +16,7 @@ yy2:
 	{ d }
 yy4:
 	yych = YYPEEK ();
-	YYBACKUPTAG (yyt2);
+	YYBACKUPTAG (yyt1);
 	switch (yych) {
 	case 'b':
 		YYSKIP ();
@@ -24,14 +24,14 @@ yy4:
 	default:	goto yy5;
 	}
 yy5:
-	YYRESTORETAG (yyt2);
+	YYRESTORETAG (yyt1);
 	{ 1 }
 yy6:
 	YYBACKUP ();
 	yych = YYPEEK ();
 	switch (yych) {
 	case 'c':
-		YYBACKUPTAG (yyt1);
+		YYBACKUPTAG (yyt2);
 		YYSKIP ();
 		goto yy9;
 	default:	goto yy8;
@@ -67,7 +67,7 @@ yy11:
 	default:	goto yy13;
 	}
 yy13:
-	YYRESTORETAG (yyt1);
+	YYRESTORETAG (yyt2);
 	{ 0 }
 }
 
