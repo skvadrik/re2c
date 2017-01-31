@@ -6,7 +6,7 @@
 namespace re2c
 {
 
-static void closure_one(closure_t &clos, Tagpool &tagpool, clos_t &c0, nfa_state_t *n, tagver_t *tags);
+static void closure_one(closure_t &clos, Tagpool &tagpool, clos_t &c0, nfa_state_t *n, tagver_t *tags, closure_t *shadow);
 bool is_better(const clos_t &c1, const clos_t &c2, Tagpool &tagpool);
 static bool compare_by_rule(const clos_t &c1, const clos_t &c2);
 static void prune_final_items(closure_t &clos, std::valarray<Rule> &rules);
@@ -14,14 +14,15 @@ static void update_versions(closure_t &clos, Tagpool &tagpool, tagver_t &maxver,
 
 void closure(closure_t &clos1, closure_t &clos2, Tagpool &tagpool,
 	std::valarray<Rule> &rules, tagver_t &maxver, tagver_t *newvers,
-	bool lookahead)
+	bool lookahead, closure_t *shadow)
 {
 	// build tagged epsilon-closure of the given set of NFA states
 	clos2.clear();
+	if (shadow) shadow->clear();
 	tagver_t *tags = tagpool.buffer1;
 	std::fill(tags, tags + tagpool.ntags, TAGVER_ZERO);
 	for (clositer_t c = clos1.begin(); c != clos1.end(); ++c) {
-		closure_one(clos2, tagpool, *c, c->state, tags);
+		closure_one(clos2, tagpool, *c, c->state, tags, shadow);
 	}
 
 	// The only difference between TDFA and LATDFA is here:
@@ -60,7 +61,7 @@ void closure(closure_t &clos1, closure_t &clos2, Tagpool &tagpool,
  * ambiguous. All tags are merged together; ambiguity is reported.
  */
 void closure_one(closure_t &clos, Tagpool &tagpool, clos_t &c0,
-	nfa_state_t *n, tagver_t *tags)
+	nfa_state_t *n, tagver_t *tags, closure_t *shadow)
 {
 	// trace the first iteration of each loop:
 	// epsilon-loops may add ney tags and reveal conflicts
@@ -71,17 +72,17 @@ void closure_one(closure_t &clos, Tagpool &tagpool, clos_t &c0,
 	++n->loop;
 	switch (n->type) {
 		case nfa_state_t::NIL:
-			closure_one(clos, tagpool, c0, n->nil.out, tags);
+			closure_one(clos, tagpool, c0, n->nil.out, tags, shadow);
 			break;
 		case nfa_state_t::ALT:
-			closure_one(clos, tagpool, c0, n->alt.out1, tags);
-			closure_one(clos, tagpool, c0, n->alt.out2, tags);
+			closure_one(clos, tagpool, c0, n->alt.out1, tags, shadow);
+			closure_one(clos, tagpool, c0, n->alt.out2, tags, shadow);
 			break;
 		case nfa_state_t::TAG: {
 			const size_t t = n->tag.info;
 			const tagver_t old = tags[t];
 			tags[t] = n->tag.bottom ? TAGVER_BOTTOM : TAGVER_CURSOR;
-			closure_one(clos, tagpool, c0, n->tag.out, tags);
+			closure_one(clos, tagpool, c0, n->tag.out, tags, shadow);
 			tags[t] = old;
 			break;
 		}
@@ -95,8 +96,9 @@ void closure_one(closure_t &clos, Tagpool &tagpool, clos_t &c0,
 			for (; c != e && c->state != n; ++c);
 			if (c == e) {
 				clos.push_back(c0);
-			} else if (is_better(*c, c0, tagpool)) {
-				*c = c0;
+			} else {
+				if (shadow) shadow->push_back(*c);
+				if (is_better(*c, c0, tagpool)) *c = c0;
 			}
 			break;
 		}

@@ -27,7 +27,7 @@ typedef closure_t::const_iterator cclositer_t;
 
 void closure(closure_t &clos1, closure_t &clos2, Tagpool &tagpool,
 	std::valarray<Rule> &rules, tagver_t &maxver, tagver_t *newvers,
-	bool lookahead);
+	bool lookahead, closure_t *shadow);
 
 } // namespace re2c
 

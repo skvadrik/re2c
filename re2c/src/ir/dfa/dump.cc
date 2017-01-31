@@ -16,12 +16,14 @@ dump_dfa_t::dump_dfa_t(const dfa_t &d, const Tagpool &pool, const nfa_t &n, bool
 	, tagpool(pool)
 	, uniqidx(0)
 	, base(n.states)
+	, shadow(NULL)
 {
 	if (!debug) return;
 
+	shadow = new closure_t;
 	fprintf(stderr, "digraph DFA {\n"
 		"  rankdir=LR\n"
-		"  node[shape=Mrecord fontname=fixed]\n"
+		"  node[shape=plaintext fontname=fixed]\n"
 		"  edge[arrowhead=vee fontname=fixed]\n\n");
 }
 
@@ -29,6 +31,7 @@ dump_dfa_t::~dump_dfa_t()
 {
 	if (!debug) return;
 
+	delete shadow;
 	fprintf(stderr, "}\n");
 }
 
@@ -37,43 +40,66 @@ uint32_t dump_dfa_t::index(const nfa_state_t *s)
 	return static_cast<uint32_t>(s - base);
 }
 
+void dump_dfa_t::closure_tags(cclositer_t c)
+{
+	if (!debug) return;
+
+	const size_t ntag = tagpool.ntags;
+
+	if (c->tvers != ZERO_TAGS) {
+		fprintf(stderr, "/");
+		const tagver_t *vers = tagpool[c->tvers];
+		for (size_t t = 0; t < ntag; ++t) {
+			if (t > 0) fprintf(stderr, " ");
+			fprintf(stderr, "%s%d", tagname(dfa.vartags[t]), abs(vers[t]));
+		}
+	}
+
+	if (c->tlook != ZERO_TAGS) {
+		fprintf(stderr, "/");
+		const tagver_t *look = tagpool[c->tlook];
+		for (size_t t = 0; t < ntag; ++t) {
+			const char *name = tagname(dfa.vartags[t]);
+			switch (look[t]) {
+				case TAGVER_ZERO: break;
+				case TAGVER_CURSOR: fprintf(stderr, "%s ", name); break;
+				case TAGVER_BOTTOM: fprintf(stderr, "%s? ", name); break;
+			}
+		}
+	}
+}
+
 void dump_dfa_t::closure(const closure_t &clos, uint32_t state, bool isnew)
 {
 	if (!debug) return;
 
-	fprintf(stderr, "  %s%u [label=\"", isnew ? "" : "i", state);
+	const char
+		*style = isnew ? "" : " STYLE=\"dotted\"",
+		*color = " COLOR=\"lightgray\"";
 
-	const size_t ntag = tagpool.ntags;
-	cclositer_t b = clos.begin(), e = clos.end(), c;
-	for (c = b; c != e; ++c) {
+	fprintf(stderr, "  %s%u [label=<<TABLE"
+		" BORDER=\"0\""
+		" CELLBORDER=\"1\""
+		" CELLSPACING=\"0\""
+		" CELLPADDING=\"4\""
+		">", isnew ? "" : "i", state);
 
-		if (c != b) fprintf(stderr, "|");
-		fprintf(stderr, "<%u> %u", index(c->state), index(c->state));
-
-		if (c->tvers != ZERO_TAGS) {
-			fprintf(stderr, "/");
-			const tagver_t *vers = tagpool[c->tvers];
-			for (size_t t = 0; t < ntag; ++t) {
-				if (t > 0) fprintf(stderr, " ");
-				fprintf(stderr, "%s%d", tagname(dfa.vartags[t]), abs(vers[t]));
-			}
-		}
-
-		if (c->tlook != ZERO_TAGS) {
-			fprintf(stderr, "/");
-			const tagver_t *look = tagpool[c->tlook];
-			for (size_t t = 0; t < ntag; ++t) {
-				const char *name = tagname(dfa.vartags[t]);
-				switch (look[t]) {
-					case TAGVER_ZERO: break;
-					case TAGVER_CURSOR: fprintf(stderr, "%s ", name); break;
-					case TAGVER_BOTTOM: fprintf(stderr, "%s? ", name); break;
-				}
-			}
-		}
+	for (cclositer_t b = shadow->begin(), c = b; c != shadow->end(); ++c) {
+		fprintf(stderr, "<TR><TD PORT=\"_%u_%ld\"%s%s><FONT%s>%u",
+			index(c->state), c - b, color, style, color, index(c->state));
+		closure_tags(c);
+		fprintf(stderr, "</FONT></TD></TR>");
 	}
-
-	fprintf(stderr, "\"]\n");
+	if (!shadow->empty()) {
+		fprintf(stderr, "<TR><TD BORDER=\"0\"></TD></TR>");
+	}
+	for (cclositer_t c = clos.begin(); c != clos.end(); ++c) {
+		fprintf(stderr, "<TR><TD PORT=\"%u\"%s>%u",
+			index(c->state), style, index(c->state));
+		closure_tags(c);
+		fprintf(stderr, "</TD></TR>");
+	}
+	fprintf(stderr, "</TABLE>>]\n");
 }
 
 void dump_dfa_t::state0(const closure_t &clos)
@@ -82,6 +108,11 @@ void dump_dfa_t::state0(const closure_t &clos)
 
 	closure(clos, 0, true);
 	fprintf(stderr, "  void [shape=point]\n");
+	for (cclositer_t c = shadow->begin(); c != shadow->end(); ++c) {
+		fprintf(stderr, "  void -> 0:_%u_%ld:w [style=dotted color=lightgray label=\"", index(c->state), c - shadow->begin());
+		dump_tags(tagpool, c->ttran, c->tvers);
+		fprintf(stderr, "\"]\n");
+	}
 	for (cclositer_t c = clos.begin(); c != clos.end(); ++c) {
 		fprintf(stderr, "  void -> 0:%u:w [style=dotted label=\"", index(c->state));
 		dump_tags(tagpool, c->ttran, c->tvers);
@@ -109,10 +140,16 @@ void dump_dfa_t::state(const closure_t &clos, size_t state, size_t symbol, bool 
 	closure(clos, z, isnew);
 	if (!isnew) {
 		fprintf(stderr, "  i%u [style=dotted]\n"
-			"  i%u -> %u [style=dotted label=\"", z, z, y);
+			"  i%u:s -> %u:s [style=dotted label=\"", z, z, y);
 		for (const tagcopy_t *p = copy; p; p = p->next) {
 			fprintf(stderr, "%d=%d ", p->lhs, p->rhs);
 		}
+		fprintf(stderr, "\"]\n");
+	}
+	for (cclositer_t b = shadow->begin(), c = b; c != shadow->end(); ++c) {
+		fprintf(stderr, "  %u:%u -> %s%u:_%u_%ld [color=lightgray fontcolor=lightgray label=\"%u",
+			x, index(c->origin), prefix, z, index(c->state), c - b, a);
+		dump_tags(tagpool, c->ttran, c->tvers);
 		fprintf(stderr, "\"]\n");
 	}
 	for (cclositer_t c = clos.begin(); c != clos.end(); ++c) {

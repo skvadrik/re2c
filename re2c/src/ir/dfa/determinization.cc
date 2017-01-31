@@ -87,14 +87,14 @@ dfa_t::dfa_t(const nfa_t &nfa, const charset_t &charset, const opt_t *opts,
 	clos_t c0 = {NULL, nfa.root, INITIAL_TAGS, ZERO_TAGS, ZERO_TAGS};
 	clos1.push_back(c0);
 	std::fill(newvers, newvers + ntag * 2, TAGVER_ZERO);
-	closure(clos1, clos2, tagpool, rules, maxtagver, newvers, lookahead);
+	closure(clos1, clos2, tagpool, rules, maxtagver, newvers, lookahead, dump.shadow);
 	find_state(*this, dfa_t::NIL, 0/* any */, tagpool, kernels, clos2, dump);
 
 	for (size_t i = 0; i < kernels.size(); ++i) {
 		std::fill(newvers, newvers + ntag * 2, TAGVER_ZERO);
 		for (size_t c = 0; c < nchars; ++c) {
 			reach(kernels[i], clos1, charset[c]);
-			closure(clos1, clos2, tagpool, rules, maxtagver, newvers, lookahead);
+			closure(clos1, clos2, tagpool, rules, maxtagver, newvers, lookahead, dump.shadow);
 			find_state(*this, i, c, tagpool, kernels, clos2, dump);
 		}
 	}
