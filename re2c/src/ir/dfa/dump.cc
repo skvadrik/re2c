@@ -109,7 +109,7 @@ void dump_dfa_t::state0(const closure_t &clos)
 	closure(clos, 0, true);
 	fprintf(stderr, "  void [shape=point]\n");
 	for (cclositer_t c = shadow->begin(); c != shadow->end(); ++c) {
-		fprintf(stderr, "  void -> 0:_%u_%ld:w [style=dotted color=lightgray label=\"", index(c->state), c - shadow->begin());
+		fprintf(stderr, "  void -> 0:_%u_%ld:w [style=dotted color=lightgray fontcolor=lightgray label=\"", index(c->state), c - shadow->begin());
 		dump_tags(tagpool, c->ttran, c->tvers);
 		fprintf(stderr, "\"]\n");
 	}

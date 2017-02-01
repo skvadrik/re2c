@@ -7,8 +7,9 @@ namespace re2c
 {
 
 static void closure_one(closure_t &clos, Tagpool &tagpool, clos_t &c0, nfa_state_t *n, tagver_t *tags, closure_t *shadow);
-bool is_better(const clos_t &c1, const clos_t &c2, Tagpool &tagpool);
+static int compare(const clos_t &c1, const clos_t &c2, Tagpool &tagpool);
 static bool compare_by_rule(const clos_t &c1, const clos_t &c2);
+static void lower_lookahead_to_transition(closure_t &clos);
 static void prune_final_items(closure_t &clos, std::valarray<Rule> &rules);
 static void update_versions(closure_t &clos, Tagpool &tagpool, tagver_t &maxver, tagver_t *newvers);
 
@@ -25,16 +26,10 @@ void closure(closure_t &clos1, closure_t &clos2, Tagpool &tagpool,
 		closure_one(clos2, tagpool, *c, c->state, tags, shadow);
 	}
 
-	// The only difference between TDFA and LATDFA is here:
-	// TDFA backups tags after current transition, while LATDFA delays this
-	// till the next transition. This allows LATDFA to use lookahead symbol
-	// and backup tags only in case of matching lookahead, while TDFA cannot
-	// exploit lookahead and has to backup tags anyway.
+	// see note [the difference between TDFA(0) and TDFA(1)]
 	if (!lookahead) {
-		for (clositer_t c = clos2.begin(); c != clos2.end(); ++c) {
-			c->ttran = c->tlook;
-			c->tlook = ZERO_TAGS;
-		}
+		lower_lookahead_to_transition(clos2);
+		if (shadow) lower_lookahead_to_transition(*shadow);
 	}
 
 	// see note [at most one final item per closure]
@@ -45,6 +40,7 @@ void closure(closure_t &clos1, closure_t &clos2, Tagpool &tagpool,
 
 	// merge tags from different rules, find nondeterministic tags
 	update_versions(clos2, tagpool, maxver, newvers);
+	if (shadow) update_versions(*shadow, tagpool, maxver, newvers);
 }
 
 /* note [epsilon-closures in tagged NFA]
@@ -97,8 +93,12 @@ void closure_one(closure_t &clos, Tagpool &tagpool, clos_t &c0,
 			if (c == e) {
 				clos.push_back(c0);
 			} else {
-				if (shadow) shadow->push_back(*c);
-				if (is_better(*c, c0, tagpool)) *c = c0;
+				const int r = compare(*c, c0, tagpool);
+				if (shadow) {
+					if (r < 0) shadow->push_back(*c);
+					if (r > 0) shadow->push_back(c0);
+				}
+				if (r < 0) *c = c0;
 			}
 			break;
 		}
@@ -112,11 +112,11 @@ void closure_one(closure_t &clos, Tagpool &tagpool, clos_t &c0,
  * rules, and it is impossible to reach the same NFA state from
  * different rules (hence no need to mess with masks here).
  */
-bool is_better(const clos_t &c1, const clos_t &c2, Tagpool &tagpool)
+int compare(const clos_t &c1, const clos_t &c2, Tagpool &tagpool)
 {
 	if (c1.tlook == c2.tlook
 		&& c1.ttran == c2.ttran
-		&& c1.tvers == c2.tvers) return false;
+		&& c1.tvers == c2.tvers) return 0;
 
 	const tagver_t
 		*l1 = tagpool[c1.tlook], *l2 = tagpool[c2.tlook],
@@ -130,21 +130,22 @@ bool is_better(const clos_t &c1, const clos_t &c2, Tagpool &tagpool)
 
 		// lookahead tags gathered by epsilon-closure
 		x = l1[t]; y = l2[t];
-		if (x > y) return false;
-		if (x < y) return true;
+		if (x > y) return 1;
+		if (x < y) return -1;
 
 		// tags set on transition that is being constructed
 		x = t1[t]; y = t2[t];
-		if (x > y) return false;
-		if (x < y) return true;
+		if (x > y) return 1;
+		if (x < y) return -1;
 
 		// tag versions before the constructed transition
 		x = v1[t]; y = v2[t];
-		if (x > y) return false;
-		if (x < y) return true;
+		if (x > y) return 1;
+		if (x < y) return -1;
 	}
 
-	return false;
+	assert(false);
+	return 0;
 }
 
 // The first comparison criterion is rule.
@@ -171,6 +172,22 @@ bool compare_by_rule(const clos_t &c1, const clos_t &c2)
 		&& c1.ttran == c2.ttran
 		&& c1.tlook == c2.tlook);
 	return false;
+}
+
+/* note [the difference between TDFA(0) and TDFA(1)]
+ *
+ * The only difference between TDFA(0) and TDFA(1) is here:
+ * TDFA(0) backups tags after current transition, while TDFA(1) delays
+ * this until the next transition. This allows TDFA(1) to use backup
+ * tags only in case of matching lookahead, while TDFA(0) must backup
+ * them anyway, which raises more conflicts.
+ */
+void lower_lookahead_to_transition(closure_t &clos)
+{
+	for (clositer_t c = clos.begin(); c != clos.end(); ++c) {
+		c->ttran = c->tlook;
+		c->tlook = ZERO_TAGS;
+	}
 }
 
 /* note [at most one final item per closure]
