@@ -47,25 +47,27 @@ void dump_dfa_t::closure_tags(cclositer_t c)
 	const size_t ntag = tagpool.ntags;
 
 	if (c->tvers != ZERO_TAGS) {
-		fprintf(stderr, "/");
+		fprintf(stderr, " (");
 		const tagver_t *vers = tagpool[c->tvers];
 		for (size_t t = 0; t < ntag; ++t) {
 			if (t > 0) fprintf(stderr, " ");
 			fprintf(stderr, "%s%d", tagname(dfa.vartags[t]), abs(vers[t]));
 		}
+		fprintf(stderr, ")");
 	}
 
 	if (c->tlook != ZERO_TAGS) {
-		fprintf(stderr, "/");
+		fprintf(stderr, " {");
 		const tagver_t *look = tagpool[c->tlook];
-		for (size_t t = 0; t < ntag; ++t) {
-			const char *name = tagname(dfa.vartags[t]);
-			switch (look[t]) {
-				case TAGVER_ZERO: break;
-				case TAGVER_CURSOR: fprintf(stderr, "%s ", name); break;
-				case TAGVER_BOTTOM: fprintf(stderr, "%s? ", name); break;
+		for (size_t t = 0, n = 0; t < ntag; ++t) {
+			const tagver_t v = look[t];
+			if (v != TAGVER_ZERO) {
+				if (n++ > 0) fprintf(stderr, " ");
+				fprintf(stderr, "%s", tagname(dfa.vartags[t]));
+				if (v == TAGVER_BOTTOM) fprintf(stderr, "?");
 			}
 		}
+		fprintf(stderr, "}");
 	}
 }
 
@@ -80,12 +82,10 @@ void dump_dfa_t::closure(const closure_t &clos, uint32_t state, bool isnew)
 	fprintf(stderr, "  %s%u [label=<<TABLE"
 		" BORDER=\"0\""
 		" CELLBORDER=\"1\""
-		" CELLSPACING=\"0\""
-		" CELLPADDING=\"4\""
 		">", isnew ? "" : "i", state);
 
 	for (cclositer_t b = shadow->begin(), c = b; c != shadow->end(); ++c) {
-		fprintf(stderr, "<TR><TD PORT=\"_%u_%ld\"%s%s><FONT%s>%u",
+		fprintf(stderr, "<TR><TD ALIGN=\"left\" PORT=\"_%u_%ld\"%s%s><FONT%s>%u",
 			index(c->state), c - b, color, style, color, index(c->state));
 		closure_tags(c);
 		fprintf(stderr, "</FONT></TD></TR>");
@@ -94,7 +94,7 @@ void dump_dfa_t::closure(const closure_t &clos, uint32_t state, bool isnew)
 		fprintf(stderr, "<TR><TD BORDER=\"0\"></TD></TR>");
 	}
 	for (cclositer_t c = clos.begin(); c != clos.end(); ++c) {
-		fprintf(stderr, "<TR><TD PORT=\"%u\"%s>%u",
+		fprintf(stderr, "<TR><TD ALIGN=\"left\" PORT=\"%u\"%s>%u",
 			index(c->state), style, index(c->state));
 		closure_tags(c);
 		fprintf(stderr, "</TD></TR>");
@@ -147,13 +147,13 @@ void dump_dfa_t::state(const closure_t &clos, size_t state, size_t symbol, bool 
 		fprintf(stderr, "\"]\n");
 	}
 	for (cclositer_t b = shadow->begin(), c = b; c != shadow->end(); ++c) {
-		fprintf(stderr, "  %u:%u -> %s%u:_%u_%ld [color=lightgray fontcolor=lightgray label=\"%u",
+		fprintf(stderr, "  %u:%u:e -> %s%u:_%u_%ld:w [color=lightgray fontcolor=lightgray label=\"%u",
 			x, index(c->origin), prefix, z, index(c->state), c - b, a);
 		dump_tags(tagpool, c->ttran, c->tvers);
 		fprintf(stderr, "\"]\n");
 	}
 	for (cclositer_t c = clos.begin(); c != clos.end(); ++c) {
-		fprintf(stderr, "  %u:%u -> %s%u:%u [label=\"%u",
+		fprintf(stderr, "  %u:%u:e -> %s%u:%u:w [label=\"%u",
 			x, index(c->origin), prefix, z, index(c->state), a);
 		dump_tags(tagpool, c->ttran, c->tvers);
 		fprintf(stderr, "\"]\n");
@@ -176,7 +176,7 @@ void dump_dfa_t::final(size_t state, const nfa_state_t *port)
 	}
 	fprintf(stderr, ")\"]\n");
 
-	fprintf(stderr, "  %u:%u -> r%u [style=dotted label=\"", x, index(port), x);
+	fprintf(stderr, "  %u:%u:e -> r%u [style=dotted label=\"", x, index(port), x);
 	dump_tcmd(cmd.save, cmd.copy);
 	fprintf(stderr, "\"]\n");
 }
