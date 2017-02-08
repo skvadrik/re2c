@@ -366,16 +366,20 @@ static tcmd_t commands(const closure_t &closure, const Tagpool &tagpool,
 	} else {
 		// mapping: see note [save(X), copy(Y,X) optimization]
 		for (tagver_t x = -map->max; x < map->max; ++x) {
-			const tagver_t y = map->x2y_backup[x];
+			const tagver_t
+				y = map->x2y_backup[x],
+				ax = abs(x),
+				ay = abs(y);
 			const size_t t = map->x2t_backup[x];
 			if (y == TAGVER_ZERO) {
 				continue;
 			} else if (cur[t] == y) {
-				save = tcpool.make_save(save, abs(x), false);
+				save = tcpool.make_save(save, ax, false);
 			} else if (bot[t] == y) {
-				save = tcpool.make_save(save, abs(x), true);
+				save = tcpool.make_save(save, ax, true);
 			} else if (x != y) {
-				copy = tcpool.make_copy(copy, abs(x), abs(y));
+				assert(ax != ay);
+				copy = tcpool.make_copy(copy, ax, ay);
 			}
 		}
 		// see note [topological ordering of copy commands]
