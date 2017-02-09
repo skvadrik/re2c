@@ -28,22 +28,17 @@ private:
 	Tagpool &tagpool;
 	tagver_t cap; // capacity (greater or equal to max)
 	char *mem;
+
+public:
+	tagver_t max; // maximal tag version
 	size_t *x2t;
 	tagver_t *x2y;
 	tagver_t *y2x;
-
-public:
-	const bool bijective;
-	tagver_t max; // maximal tag version
-	size_t *x2t_backup;
-	tagver_t *x2y_backup;
 	uint32_t *indeg;
 
-	mapping_t(Tagpool &pool, bool bijection);
+	explicit mapping_t(Tagpool &pool);
 	~mapping_t();
 	void init(tagver_t v);
-	bool better() const;
-	void backup();
 	bool operator()(const kernel_t *k1, const kernel_t *k2);
 	FORBID_COPY(mapping_t);
 };
@@ -72,7 +67,7 @@ private:
 	kernel_t *buffer;
 
 public:
-	kernels_t(Tagpool &tagpool, bool bijection);
+	explicit kernels_t(Tagpool &tagpool);
 	~kernels_t();
 	size_t size() const;
 	const kernel_t* operator[](size_t idx) const;

@@ -41,17 +41,14 @@ struct kernel_eq_t
 	}
 };
 
-mapping_t::mapping_t(Tagpool &pool, bool bijection)
+mapping_t::mapping_t(Tagpool &pool)
 	: tagpool(pool)
 	, cap(0)
 	, mem(NULL)
+	, max(0)
 	, x2t(NULL)
 	, x2y(NULL)
 	, y2x(NULL)
-	, bijective(bijection)
-	, max(0)
-	, x2t_backup(NULL)
-	, x2y_backup(NULL)
 	, indeg(NULL)
 {}
 
@@ -71,8 +68,8 @@ void mapping_t::init(tagver_t v)
 		const size_t
 			n = static_cast<size_t>(cap),
 			n2 = 2 * n + 1,
-			sz_x2t = 2 * n2 * sizeof(size_t),
-			sz_x2y = 3 * n2 * sizeof(tagver_t),
+			sz_x2t = n2 * sizeof(size_t),
+			sz_x2y = 2 * n2 * sizeof(tagver_t),
 			sz_indeg = n * sizeof(uint32_t);
 		delete[] mem;
 		mem = new char[sz_x2t + sz_x2y + sz_indeg];
@@ -80,36 +77,13 @@ void mapping_t::init(tagver_t v)
 		// point to the center (zero index) of each buffer
 		// indexes in range [-N .. N] must be valid, where N is capacity
 		x2t        = reinterpret_cast<size_t*>(mem) + cap;
-		x2t_backup = x2t + n2;
 		x2y        = reinterpret_cast<tagver_t*>(mem + sz_x2t) + cap;
-		x2y_backup = x2y + n2;
-		y2x        = x2y + n2 * 2;
+		y2x        = x2y + n2;
 		indeg      = reinterpret_cast<uint32_t*>(mem + sz_x2t + sz_x2y);
 
 		// see note [topological ordering of copy commands]
 		memset(indeg, 0, sz_indeg);
 	}
-}
-
-bool mapping_t::better() const
-{
-	size_t n1 = 0, n2 = 0;
-
-	for (tagver_t x = -max; x < max; ++x) {
-		const tagver_t
-			y1 = x2y[x],
-			y2 = x2y_backup[x];
-		if (y1 != TAGVER_ZERO && y1 != x) ++n1;
-		if (y2 != TAGVER_ZERO && y2 != x) ++n2;
-	}
-
-	return n1 < n2;
-}
-
-void mapping_t::backup()
-{
-	std::swap(x2t, x2t_backup);
-	std::swap(x2y, x2y_backup);
 }
 
 /* note [mapping ignores items with lookahead tags]
@@ -168,13 +142,11 @@ bool mapping_t::operator()(const kernel_t *k1, const kernel_t *k2)
 
 			const tagver_t x = xv[t], y = yv[t],
 				x0 = y2x[y], y0 = x2y[x];
-			if (y0 == TAGVER_ZERO
-				&& (!bijective || x0 == TAGVER_ZERO)) {
+			if (y0 == TAGVER_ZERO && x0 == TAGVER_ZERO) {
 				x2t[x] = t;
 				x2y[x] = y;
 				y2x[y] = x;
-			} else if (!(y == y0
-				&& (!bijective || x == x0))) return false;
+			} else if (!(y == y0 && x == x0)) return false;
 		}
 	}
 
@@ -193,9 +165,9 @@ bool mapping_t::operator()(const kernel_t *k1, const kernel_t *k2)
 	return true;
 }
 
-kernels_t::kernels_t(Tagpool &tagpool, bool bijection)
+kernels_t::kernels_t(Tagpool &tagpool)
 	: lookup()
-	, mapping(tagpool, bijection)
+	, mapping(tagpool)
 	, maxsize(256) // usually ranges from one to some twenty
 	, buffer(new kernel_t(maxsize))
 {}
@@ -220,30 +192,13 @@ const kernel_t *kernels_t::operator[](size_t idx) const
 	return lookup[idx];
 }
 
-/* note [bijective vs surjective mappings]
+/* note [bijective mappings]
  *
- * Suppose we have just constructed a new DFA state Y and want to map it to
- * an existing DFA state X. States must have identical sets of NFA substates
- * and identical sets of lookahead tags for each substate. The difference is
- * in tag versions: we need to map version of each tag in each substate of Y
- * to the corresponging version of this tag in this substate of X.
- *
- * This imposes a binary relation between the set of versions {x1, ..., xN}
- * used in X and the set of versions {y1, ... yM} used in Y, subject to the
- * following constraints:
- *
- * (1) Different versions in Y must correspond to different versions in X,
- *     otherwise information will be lost: if (x1, y1) and (x2, y2) belong
- *     to the relation and y1 != y2, then x1 != x2. The inverse is not true:
- *     different versions in X may correspond to the same version in Y (in
- *     which case mapping adds redundant information to Y). Therefore this
- *     relation must be a surjection from {x1, ..., xN} to {y1, ... yM} and
- *     may, but doesn't have to be a bijection.
- *
- * (2) The order of versions with respect to priorities must be preserved:
- *     if y1 < y2, then x1 < x2 for all (x1, y1) and (x2, y2) that belong to
- *     relation. The inverse is less strict: if x1 < x2, then y1 <= y2, since
- *     different X versions are allowed to map to the same Y version.
+ * Suppose we have just constructed a new DFA state Y and want to map it
+ * to an existing DFA state X. States must have identical sets of NFA
+ * substates and identical sets of lookahead tags for each substate.
+ * Furtermore, there must be bijective mapping between versions of X and Y
+ * and this mapping must preserve version order (respect priorities).
  *
  * Bijective mappings have a nice property: there is only one possible state
  * X to which Y can be mapped. Indeed, if there was another state Z that
@@ -251,13 +206,11 @@ const kernel_t *kernels_t::operator[](size_t idx) const
  * be mapped to X: both (1) and (2) are symmetrical in case of bijection
  * and the relation is transitive. So the existence of Z is a contradiction.
  *
- * Non-bijective mappings do not have this property: for example, any state
- * can be mapped to a state with only one tag version in all substates, but
- * that does not mean that any state can be mapped to any other state.
- * Therefore for non-bijective mappings it makes sense to search for the
- * best mapping candidate.
+ * In principle, non-bijective mappings are also possible if the new state
+ * is less versatile than the old one (surjection from X to Y). However,
+ * non-bijective mappings lack the 'unique counterpart' property and need
+ * more complex analysis (and are not so useful after all), so we drop them.
  */
-
 kernels_t::result_t kernels_t::insert(const closure_t &clos, tagver_t maxver)
 {
 	const size_t nkern = clos.size();
@@ -293,23 +246,10 @@ kernels_t::result_t kernels_t::insert(const closure_t &clos, tagver_t maxver)
 	if (x != index_t::NIL) return result_t(x, NULL, false);
 
 	// else try to find mappable kernel
+	// see note [bijective mappings]
 	mapping.init(maxver);
 	x = lookup.find_with(hash, buffer, mapping);
-	if (x != index_t::NIL) {
-		mapping.backup();
-		// see note [bijective vs surjective mappings]
-		if (!mapping.bijective) {
-			for (size_t y = x;;) {
-				y = lookup.find_next_with(y, buffer, mapping);
-				if (y == index_t::NIL) break;
-				if (mapping.better()) {
-					mapping.backup();
-					x = y;
-				}
-			}
-		}
-		return result_t(x, &mapping, false);
-	}
+	if (x != index_t::NIL) return result_t(x, &mapping, false);
 
 	// otherwise add new kernel
 	x = lookup.push(hash, kernel_t::copy(*buffer));
@@ -367,10 +307,10 @@ static tcmd_t commands(const closure_t &closure, const Tagpool &tagpool,
 		// mapping: see note [save(X), copy(Y,X) optimization]
 		for (tagver_t x = -map->max; x < map->max; ++x) {
 			const tagver_t
-				y = map->x2y_backup[x],
+				y = map->x2y[x],
 				ax = abs(x),
 				ay = abs(y);
-			const size_t t = map->x2t_backup[x];
+			const size_t t = map->x2t[x];
 			if (y == TAGVER_ZERO) {
 				continue;
 			} else if (cur[t] == y) {

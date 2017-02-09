@@ -64,7 +64,7 @@ dfa_t::dfa_t(const nfa_t &nfa, const charset_t &charset, const opt_t *opts,
 	const bool lookahead = opts->lookahead;
 	const size_t ntag = vartags.size();
 	Tagpool tagpool(ntag);
-	kernels_t kernels(tagpool, opts->bijective_mapping);
+	kernels_t kernels(tagpool);
 	closure_t clos1, clos2;
 	tagver_t *newvers = new tagver_t[ntag * 2];
 	dump_dfa_t dump(*this, tagpool, nfa, opts->dump_dfa_raw);
