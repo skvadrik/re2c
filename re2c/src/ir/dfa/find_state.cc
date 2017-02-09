@@ -10,6 +10,7 @@ kernel_t::kernel_t(size_t n)
 	: size(n)
 	, state(new nfa_state_t*[size])
 	, tvers(new size_t[size])
+	, tnorm(new size_t[size])
 	, tlook(new size_t[size])
 {}
 
@@ -19,6 +20,7 @@ kernel_t *kernel_t::copy(const kernel_t &k)
 	kernel_t *kcopy = new kernel_t(n);
 	memcpy(kcopy->state, k.state, n * sizeof(void*));
 	memcpy(kcopy->tvers, k.tvers, n * sizeof(size_t));
+	memcpy(kcopy->tnorm, k.tnorm, n * sizeof(size_t));
 	memcpy(kcopy->tlook, k.tlook, n * sizeof(size_t));
 	return kcopy;
 }
@@ -27,6 +29,7 @@ kernel_t::~kernel_t()
 {
 	delete[] state;
 	delete[] tvers;
+	delete[] tnorm;
 	delete[] tlook;
 }
 
@@ -41,144 +44,75 @@ struct kernel_eq_t
 	}
 };
 
-mapping_t::mapping_t(Tagpool &pool)
-	: tagpool(pool)
+struct kernel_map_t
+{
+	bool operator()(const kernel_t *x, const kernel_t *y) const
+	{
+		return x->size == y->size
+			&& memcmp(x->state, y->state, x->size * sizeof(void*)) == 0
+			&& memcmp(x->tnorm, y->tnorm, x->size * sizeof(size_t)) == 0;
+	}
+};
+
+kernels_t::kernels_t(Tagpool &tagp, tcpool_t &tcp)
+	: lookup()
+	, tagpool(tagp)
+	, tcpool(tcp)
+
+	, maxsize(0) // usually ranges from one to some twenty
+	, buffer(new kernel_t(maxsize))
+	, nform(NULL)
+
 	, cap(0)
-	, mem(NULL)
 	, max(0)
-	, x2t(NULL)
+	, mem(NULL)
 	, x2y(NULL)
 	, y2x(NULL)
 	, indeg(NULL)
 {}
 
-mapping_t::~mapping_t()
+kernels_t::~kernels_t()
 {
+	delete buffer;
 	delete[] mem;
+
+	const size_t n = lookup.size();
+	for (size_t i = 0; i < n; ++i) {
+		delete lookup[i];
+	}
 }
 
-void mapping_t::init(tagver_t v)
+void kernels_t::init(tagver_t v, size_t nkern)
 {
+	if (maxsize < nkern) {
+		maxsize = nkern * 2; // in advance
+		delete buffer;
+		delete[] nform;
+		buffer = new kernel_t(maxsize);
+		nform = new tagver_t[tagpool.ntags * maxsize];
+	}
+
 	// +1 to ensure max tag version is not forgotten in loops
 	max = v + 1;
-
 	if (cap < max) {
 		cap = max * 2; // in advance
 
 		const size_t
 			n = static_cast<size_t>(cap),
-			n2 = 2 * n + 1,
-			sz_x2t = n2 * sizeof(size_t),
-			sz_x2y = 2 * n2 * sizeof(tagver_t),
+			m = 2 * n + 1,
+			sz_x2y = 2 * m * sizeof(tagver_t),
 			sz_indeg = n * sizeof(uint32_t);
 		delete[] mem;
-		mem = new char[sz_x2t + sz_x2y + sz_indeg];
+		mem = new char[sz_x2y + sz_indeg];
 
 		// point to the center (zero index) of each buffer
 		// indexes in range [-N .. N] must be valid, where N is capacity
-		x2t        = reinterpret_cast<size_t*>(mem) + cap;
-		x2y        = reinterpret_cast<tagver_t*>(mem + sz_x2t) + cap;
-		y2x        = x2y + n2;
-		indeg      = reinterpret_cast<uint32_t*>(mem + sz_x2t + sz_x2y);
+		x2y   = reinterpret_cast<tagver_t*>(mem) + cap;
+		y2x   = x2y + m;
+		indeg = reinterpret_cast<uint32_t*>(mem + sz_x2y);
 
 		// see note [topological ordering of copy commands]
 		memset(indeg, 0, sz_indeg);
-	}
-}
-
-/* note [mapping ignores items with lookahead tags]
- *
- * Consider two items X and Y being mapped.
- *
- * If tag T belongs to lookahead tags of item X, then all
- * outgoing transitions from item X update T. Which means
- * that it doesn't matter what particular version T has in X:
- * whatever version it has, it will be overwritten by any
- * outgoing transition.
- *
- * Note that lookahead tags are identical for both items
- * X and Y, because we only try to map DFA states with
- * identical lookahead tags.
- */
-
-/* note [mapping should not violate tag priorities]
- *
- * If tag X1 is mapped to Y1, X2 to Y2 and X1 has lower priority
- * than X2, then Y1 must have lower priority than Y2.
- *
- * We represent mapping as array of Y-components indexed by
- * X-component; all tags are merged together. However, priorities
- * should be checked individually for each tag. Since mapping is
- * automatically sorted by X, it suffices to ensure that Y
- * subsequence for the given tag is monotonically non-decreasing.
- */
-
-static bool compatible_kernels(const kernel_t *x, const kernel_t *y)
-{
-	return x->size == y->size
-		&& memcmp(x->state, y->state, x->size * sizeof(void*)) == 0
-		&& memcmp(x->tlook, y->tlook, x->size * sizeof(size_t)) == 0;
-}
-
-bool mapping_t::operator()(const kernel_t *k1, const kernel_t *k2)
-{
-	// check that kernel sizes, NFA states and lookahead tags coincide
-	if (!compatible_kernels(k1, k2)) return false;
-
-	const size_t ntag = tagpool.ntags;
-
-	// map tag versions of one kenel to that of another
-	std::fill(x2y - max, x2y + max, TAGVER_ZERO);
-	std::fill(y2x - max, y2x + max, TAGVER_ZERO);
-	for (size_t i = 0; i < k1->size; ++i) {
-		const tagver_t
-			*xl = tagpool[k1->tlook[i]],
-			*xv = tagpool[k1->tvers[i]],
-			*yv = tagpool[k2->tvers[i]];
-
-		for (size_t t = 0; t < ntag; ++t) {
-			// see note [mapping ignores items with lookahead tags]
-			if (xl[t] != TAGVER_ZERO) continue;
-
-			const tagver_t x = xv[t], y = yv[t],
-				x0 = y2x[y], y0 = x2y[x];
-			if (y0 == TAGVER_ZERO && x0 == TAGVER_ZERO) {
-				x2t[x] = t;
-				x2y[x] = y;
-				y2x[y] = x;
-			} else if (!(y == y0 && x == x0)) return false;
-		}
-	}
-
-	// mapping is possible; check that it is correct
-	// see note [mapping should not violate tag priorities]
-	tagver_t *pred = tagpool.buffer1;
-	std::fill(pred, pred + ntag, -max);
-	for (tagver_t x = -max; x < max; ++x) {
-		const tagver_t y = x2y[x];
-		const size_t t = x2t[x];
-
-		if (y == TAGVER_ZERO) continue;
-		if (y < pred[t]) return false;
-		pred[t] = y;
-	}
-	return true;
-}
-
-kernels_t::kernels_t(Tagpool &tagpool)
-	: lookup()
-	, mapping(tagpool)
-	, maxsize(256) // usually ranges from one to some twenty
-	, buffer(new kernel_t(maxsize))
-{}
-
-kernels_t::~kernels_t()
-{
-	delete buffer;
-
-	const size_t n = lookup.size();
-	for (size_t i = 0; i < n; ++i) {
-		delete lookup[i];
 	}
 }
 
@@ -190,6 +124,46 @@ size_t kernels_t::size() const
 const kernel_t *kernels_t::operator[](size_t idx) const
 {
 	return lookup[idx];
+}
+
+/* note [kernel normal form]
+ *
+ * 'Normal form' of the version matrix of the given kernel: versions are
+ * renumbered to have consequent natural numbers starting from one; exceptions
+ * are 'cursor' and 'bottom' versions which are not normalized (they must
+ * coinside for mappable kernels). Order of versions is preserved.
+ *
+ * The normalized matrix is cut into rows: rows fit nicely into tagpool
+ * and we need to index the normal form anyway to perform fast comparison of
+ * two normal forms.
+ */
+void kernels_t::normal_form()
+{
+	kernel_t *kernel = buffer;
+	size_t ntag = tagpool.ntags;
+	std::set<tagver_t> used;
+	std::set<tagver_t>::const_iterator u;
+
+	for (size_t t = 0; t < ntag; ++t) {
+		used.clear();
+		for (size_t i = 0; i < kernel->size; ++i) {
+			// see note [mapping ignores items with lookahead tags]
+			if (tagpool[kernel->tlook[i]][t] == TAGVER_ZERO) {
+				used.insert(tagpool[kernel->tvers[i]][t]);
+			}
+		}
+		tagver_t maxv = 0;
+		for (u = used.begin(); u != used.end(); ++u) {
+			x2y[*u] = ++maxv;
+		}
+		for (size_t i = 0; i < kernel->size; ++i) {
+			nform[ntag * i + t] = tagpool[kernel->tlook[i]][t] == TAGVER_ZERO
+				? x2y[tagpool[kernel->tvers[i]][t]] : TAGVER_ZERO;
+		}
+	}
+	for (size_t i = 0; i < kernel->size; ++i) {
+		kernel->tnorm[i] = tagpool.insert(nform + ntag * i);
+	}
 }
 
 /* note [bijective mappings]
@@ -211,20 +185,17 @@ const kernel_t *kernels_t::operator[](size_t idx) const
  * non-bijective mappings lack the 'unique counterpart' property and need
  * more complex analysis (and are not so useful after all), so we drop them.
  */
+
 kernels_t::result_t kernels_t::insert(const closure_t &clos, tagver_t maxver)
 {
 	const size_t nkern = clos.size();
 	size_t x = dfa_t::NIL;
 
 	// empty closure corresponds to default state
-	if (nkern == 0) return result_t(x, NULL, false);
+	if (nkern == 0) return result_t(x, tcmd_t(), false);
 
 	// resize buffer if closure is too large
-	if (maxsize < nkern) {
-		maxsize = nkern * 2; // in advance
-		delete buffer;
-		buffer = new kernel_t(maxsize);
-	}
+	init(maxver, nkern);
 
 	// copy closure to buffer kernel
 	buffer->size = nkern;
@@ -243,18 +214,56 @@ kernels_t::result_t kernels_t::insert(const closure_t &clos, tagver_t maxver)
 	// try to find identical kernel
 	kernel_eq_t eq;
 	x = lookup.find_with(hash, buffer, eq);
-	if (x != index_t::NIL) return result_t(x, NULL, false);
+	if (x != index_t::NIL) return result_t(x, commands1(clos), false);
+
+	normal_form();
 
 	// else try to find mappable kernel
 	// see note [bijective mappings]
-	mapping.init(maxver);
-	x = lookup.find_with(hash, buffer, mapping);
-	if (x != index_t::NIL) return result_t(x, &mapping, false);
+	kernel_map_t map;
+	x = lookup.find_with(hash, buffer, map);
+	if (x != index_t::NIL) return result_t(x, commands2(clos, x), false);
 
 	// otherwise add new kernel
 	x = lookup.push(hash, kernel_t::copy(*buffer));
-	return result_t(x, NULL, true);
+	return result_t(x, commands1(clos), true);
 }
+
+tcmd_t kernels_t::commands1(const closure_t &closure)
+{
+	tagsave_t *save = NULL;
+	cclositer_t c1 = closure.begin(), c2 = closure.end(), c;
+
+	// at most one new cursor and one new bottom version per tag
+	// no mapping => only save commands, no copy commands
+	for (size_t t = 0; t < tagpool.ntags; ++t) {
+		for (c = c1; c != c2 && tagpool[c->ttran][t] != TAGVER_CURSOR; ++c);
+		if (c != c2) {
+			save = tcpool.make_save(save, tagpool[c->tvers][t], false);
+		}
+
+		for (c = c1; c != c2 && tagpool[c->ttran][t] != TAGVER_BOTTOM; ++c);
+		if (c != c2) {
+			save = tcpool.make_save(save, -tagpool[c->tvers][t], true);
+		}
+	}
+	return tcmd_t(save, NULL);
+}
+
+/* note [mapping ignores items with lookahead tags]
+ *
+ * Consider two items X and Y being mapped.
+ *
+ * If tag T belongs to lookahead tags of item X, then all
+ * outgoing transitions from item X update T. Which means
+ * that it doesn't matter what particular version T has in X:
+ * whatever version it has, it will be overwritten by any
+ * outgoing transition.
+ *
+ * Note that lookahead tags are identical for both items
+ * X and Y, because we only try to map DFA states with
+ * identical lookahead tags.
+ */
 
 /* note [save(X), copy(Y,X) optimization]
  *
@@ -279,52 +288,57 @@ kernels_t::result_t kernels_t::insert(const closure_t &clos, tagver_t maxver)
  * cannot affect the check.
 */
 
-static tcmd_t commands(const closure_t &closure, const Tagpool &tagpool,
-	tcpool_t &tcpool, mapping_t *map)
+tcmd_t kernels_t::commands2(const closure_t &closure, size_t idx)
 {
+	// 'buffer' has the kernel corresponding to closure
+	cclositer_t c = closure.begin();
+	const kernel_t *k = (*this)[idx];
+	const size_t ntag = tagpool.ntags;
 	tagsave_t *save = NULL;
 	tagcopy_t *copy = NULL;
-	tagver_t *cur = tagpool.buffer1, *bot = tagpool.buffer2;
-	cclositer_t c1 = closure.begin(), c2 = closure.end(), c;
 
-	// at most one new cursor and one new bottom version per tag
-	for (size_t t = 0; t < tagpool.ntags; ++t) {
-		for (c = c1; c != c2 && tagpool[c->ttran][t] != TAGVER_CURSOR; ++c);
-		cur[t] = c == c2 ? TAGVER_ZERO : tagpool[c->tvers][t];
+	// map versions of the old kernel to versions of the new one
+	std::fill(x2y - max, x2y + max, TAGVER_ZERO);
+	std::fill(y2x - max, y2x + max, TAGVER_ZERO);
+	for (size_t i = 0; i < k->size; ++i, ++c) {
+		const tagver_t
+			*xl = tagpool[k->tlook[i]],
+			*xv = tagpool[k->tvers[i]],
+			*yv = tagpool[c->tvers],
+			*yt = tagpool[c->ttran];
 
-		for (c = c1; c != c2 && tagpool[c->ttran][t] != TAGVER_BOTTOM; ++c);
-		bot[t] = c == c2 ? TAGVER_ZERO : tagpool[c->tvers][t];
-	}
+		for (size_t t = 0; t < ntag; ++t) {
+			// see note [mapping ignores items with lookahead tags]
+			if (xl[t] != TAGVER_ZERO) continue;
 
-	if (!map) {
-		// no mapping => only save commands, no copy commands
-		for (size_t t = 0; t < tagpool.ntags; ++t) {
-			const tagver_t x = cur[t], y = bot[t];
-			if (x != TAGVER_ZERO) save = tcpool.make_save(save, x, false);
-			if (y != TAGVER_ZERO) save = tcpool.make_save(save, -y, true);
-		}
-	} else {
-		// mapping: see note [save(X), copy(Y,X) optimization]
-		for (tagver_t x = -map->max; x < map->max; ++x) {
-			const tagver_t
-				y = map->x2y[x],
-				ax = abs(x),
-				ay = abs(y);
-			const size_t t = map->x2t[x];
-			if (y == TAGVER_ZERO) {
+			const tagver_t x = xv[t], y = yv[t];
+			tagver_t &x0 = y2x[y], &y0 = x2y[x];
+
+			// paranoid checks; normal form should take care of that
+			// see note [kernel normal form]
+			if (y0 != TAGVER_ZERO || x0 != TAGVER_ZERO) {
+				assert(y == y0 && x == x0);
 				continue;
-			} else if (cur[t] == y) {
+			}
+
+			y0 = y; x0 = x;
+
+			const tagver_t z = yt[t],
+				ax = abs(x), ay = abs(y);
+			// see note [save(X), copy(Y,X) optimization]
+			if (z == TAGVER_CURSOR) {
 				save = tcpool.make_save(save, ax, false);
-			} else if (bot[t] == y) {
+			} else if (z == TAGVER_BOTTOM) {
 				save = tcpool.make_save(save, ax, true);
 			} else if (x != y) {
-				assert(ax != ay);
+				assert(ax != ay); // stay paranoid
 				copy = tcpool.make_copy(copy, ax, ay);
 			}
 		}
-		// see note [topological ordering of copy commands]
-		tagcopy_t::topsort(&copy, map->indeg);
 	}
+
+	// see note [topological ordering of copy commands]
+	tagcopy_t::topsort(&copy, indeg);
 
 	return tcmd_t(save, copy);
 }
@@ -360,11 +374,10 @@ static tcmd_t finalizer(const clos_t &clos, size_t ridx,
 }
 
 void find_state(dfa_t &dfa, size_t state, size_t symbol,
-	const Tagpool &tagpool, kernels_t &kernels,
-	const closure_t &closure, dump_dfa_t &dump)
+	kernels_t &kernels, const closure_t &closure, dump_dfa_t &dump)
 {
-	const kernels_t::result_t result = kernels.insert(closure, dfa.maxtagver);
-	const tcmd_t cmd = commands(closure, tagpool, dfa.tcpool, result.mapping);
+	const kernels_t::result_t
+		result = kernels.insert(closure, dfa.maxtagver);
 
 	if (result.isnew) {
 		// create new DFA state
@@ -377,18 +390,18 @@ void find_state(dfa_t &dfa, size_t state, size_t symbol,
 			c = std::find_if(c1, c2, clos_t::fin);
 		if (c != c2) {
 			t->rule = c->state->rule;
-			t->tcmd[dfa.nchars] = finalizer(*c, t->rule, dfa, tagpool);
+			t->tcmd[dfa.nchars] = finalizer(*c, t->rule, dfa, kernels.tagpool);
 			dump.final(result.state, c->state);
 		}
 	}
 
 	if (state == dfa_t::NIL) { // initial state
-		*dfa.tcmd0 = cmd;
+		*dfa.tcmd0 = result.cmd;
 		dump.state0(closure);
 	} else {
 		dfa_state_t *s = dfa.states[state];
 		s->arcs[symbol] = result.state;
-		s->tcmd[symbol] = cmd;
+		s->tcmd[symbol] = result.cmd;
 		dump.state(closure, state, symbol, result.isnew);
 	}
 }
