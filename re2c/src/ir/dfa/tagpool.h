@@ -22,6 +22,7 @@ public:
 	tagver_t *buffer1;
 	tagver_t *buffer2;
 	tagver_t *buffer3;
+	tagver_t *buffer4;
 
 	explicit Tagpool(size_t n);
 	~Tagpool();

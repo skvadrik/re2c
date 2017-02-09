@@ -11,7 +11,6 @@ kernel_t::kernel_t(size_t n)
 	, state(new nfa_state_t*[size])
 	, tvers(new size_t[size])
 	, tnorm(new size_t[size])
-	, tlook(new size_t[size])
 {}
 
 kernel_t *kernel_t::copy(const kernel_t &k)
@@ -21,7 +20,6 @@ kernel_t *kernel_t::copy(const kernel_t &k)
 	memcpy(kcopy->state, k.state, n * sizeof(void*));
 	memcpy(kcopy->tvers, k.tvers, n * sizeof(size_t));
 	memcpy(kcopy->tnorm, k.tnorm, n * sizeof(size_t));
-	memcpy(kcopy->tlook, k.tlook, n * sizeof(size_t));
 	return kcopy;
 }
 
@@ -30,7 +28,6 @@ kernel_t::~kernel_t()
 	delete[] state;
 	delete[] tvers;
 	delete[] tnorm;
-	delete[] tlook;
 }
 
 struct kernel_eq_t
@@ -39,8 +36,7 @@ struct kernel_eq_t
 	{
 		return x->size == y->size
 			&& memcmp(x->state, y->state, x->size * sizeof(void*)) == 0
-			&& memcmp(x->tvers, y->tvers, x->size * sizeof(size_t)) == 0
-			&& memcmp(x->tlook, y->tlook, x->size * sizeof(size_t)) == 0;
+			&& memcmp(x->tvers, y->tvers, x->size * sizeof(size_t)) == 0;
 	}
 };
 
@@ -75,6 +71,7 @@ kernels_t::~kernels_t()
 {
 	delete buffer;
 	delete[] mem;
+	delete[] nform;
 
 	const size_t n = lookup.size();
 	for (size_t i = 0; i < n; ++i) {
@@ -148,8 +145,9 @@ void kernels_t::normal_form()
 		used.clear();
 		for (size_t i = 0; i < kernel->size; ++i) {
 			// see note [mapping ignores items with lookahead tags]
-			if (tagpool[kernel->tlook[i]][t] == TAGVER_ZERO) {
-				used.insert(tagpool[kernel->tvers[i]][t]);
+			const tagver_t v = tagpool[kernel->tvers[i]][t];
+			if (v != TAGVER_CURSOR && v != TAGVER_BOTTOM) {
+				used.insert(v);
 			}
 		}
 		tagver_t maxv = 0;
@@ -157,8 +155,9 @@ void kernels_t::normal_form()
 			x2y[*u] = ++maxv;
 		}
 		for (size_t i = 0; i < kernel->size; ++i) {
-			nform[ntag * i + t] = tagpool[kernel->tlook[i]][t] == TAGVER_ZERO
-				? x2y[tagpool[kernel->tvers[i]][t]] : TAGVER_ZERO;
+			const tagver_t v = tagpool[kernel->tvers[i]][t];
+			nform[ntag * i + t] = v == TAGVER_CURSOR || v == TAGVER_BOTTOM
+				? v : x2y[v];
 		}
 	}
 	for (size_t i = 0; i < kernel->size; ++i) {
@@ -197,26 +196,24 @@ kernels_t::result_t kernels_t::insert(const closure_t &clos, tagver_t maxver)
 	// resize buffer if closure is too large
 	init(maxver, nkern);
 
-	// copy closure to buffer kernel
+	// copy closure to buffer kernel and find its normal form
 	buffer->size = nkern;
 	for (size_t i = 0; i < nkern; ++i) {
 		const clos_t &c = clos[i];
 		buffer->state[i] = c.state;
 		buffer->tvers[i] = c.tvers;
-		buffer->tlook[i] = c.tlook;
 	}
+	normal_form();
 
 	// get kernel hash
 	uint32_t hash = static_cast<uint32_t>(nkern); // seed
 	hash = hash32(hash, buffer->state, nkern * sizeof(void*));
-	hash = hash32(hash, buffer->tlook, nkern * sizeof(size_t));
+	hash = hash32(hash, buffer->tnorm, nkern * sizeof(size_t));
 
 	// try to find identical kernel
 	kernel_eq_t eq;
 	x = lookup.find_with(hash, buffer, eq);
 	if (x != index_t::NIL) return result_t(x, commands1(clos), false);
-
-	normal_form();
 
 	// else try to find mappable kernel
 	// see note [bijective mappings]
@@ -233,19 +230,16 @@ tcmd_t kernels_t::commands1(const closure_t &closure)
 {
 	tagsave_t *save = NULL;
 	cclositer_t c1 = closure.begin(), c2 = closure.end(), c;
+	tagver_t v;
 
 	// at most one new cursor and one new bottom version per tag
 	// no mapping => only save commands, no copy commands
 	for (size_t t = 0; t < tagpool.ntags; ++t) {
-		for (c = c1; c != c2 && tagpool[c->ttran][t] != TAGVER_CURSOR; ++c);
-		if (c != c2) {
-			save = tcpool.make_save(save, tagpool[c->tvers][t], false);
-		}
+		for (c = c1; c != c2 && (v = tagpool[c->ttran][t]) <= TAGVER_ZERO; ++c);
+		if (c != c2) save = tcpool.make_save(save, v, false);
 
-		for (c = c1; c != c2 && tagpool[c->ttran][t] != TAGVER_BOTTOM; ++c);
-		if (c != c2) {
-			save = tcpool.make_save(save, -tagpool[c->tvers][t], true);
-		}
+		for (c = c1; c != c2 && (v = tagpool[c->ttran][t]) >= TAGVER_ZERO; ++c);
+		if (c != c2) save = tcpool.make_save(save, -v, true);
 	}
 	return tcmd_t(save, NULL);
 }
@@ -302,16 +296,16 @@ tcmd_t kernels_t::commands2(const closure_t &closure, size_t idx)
 	std::fill(y2x - max, y2x + max, TAGVER_ZERO);
 	for (size_t i = 0; i < k->size; ++i, ++c) {
 		const tagver_t
-			*xl = tagpool[k->tlook[i]],
 			*xv = tagpool[k->tvers[i]],
 			*yv = tagpool[c->tvers],
 			*yt = tagpool[c->ttran];
 
 		for (size_t t = 0; t < ntag; ++t) {
-			// see note [mapping ignores items with lookahead tags]
-			if (xl[t] != TAGVER_ZERO) continue;
-
 			const tagver_t x = xv[t], y = yv[t];
+
+			// see note [mapping ignores items with lookahead tags]
+			if (x == TAGVER_CURSOR || x == TAGVER_BOTTOM) continue;
+
 			tagver_t &x0 = y2x[y], &y0 = x2y[x];
 
 			// paranoid checks; normal form should take care of that
@@ -326,10 +320,8 @@ tcmd_t kernels_t::commands2(const closure_t &closure, size_t idx)
 			const tagver_t z = yt[t],
 				ax = abs(x), ay = abs(y);
 			// see note [save(X), copy(Y,X) optimization]
-			if (z == TAGVER_CURSOR) {
-				save = tcpool.make_save(save, ax, false);
-			} else if (z == TAGVER_BOTTOM) {
-				save = tcpool.make_save(save, ax, true);
+			if (z == y) {
+				save = tcpool.make_save(save, ax, z < 0);
 			} else if (x != y) {
 				assert(ax != ay); // stay paranoid
 				copy = tcpool.make_copy(copy, ax, ay);
@@ -348,14 +340,12 @@ static tcmd_t finalizer(const clos_t &clos, size_t ridx,
 {
 	tcpool_t &tcpool = dfa.tcpool;
 	const Rule &rule = dfa.rules[ridx];
-	const tagver_t
-		*vers = tagpool[clos.tvers],
-		*tran = tagpool[clos.tlook];
+	const tagver_t *vers = tagpool[clos.tvers];
 	tagsave_t *save = NULL;
 	tagcopy_t *copy = NULL;
 
 	for (size_t t = rule.lvar; t < rule.hvar; ++t) {
-		const tagver_t u = tran[t], v = abs(vers[t]);
+		const tagver_t v = vers[t];
 		tagver_t &f = dfa.finvers[t];
 
 		// pick a fresh version: final version is also used as fallback one
@@ -363,10 +353,12 @@ static tcmd_t finalizer(const clos_t &clos, size_t ridx,
 			f = ++dfa.maxtagver;
 		}
 
-		if (u != TAGVER_ZERO) {
-			save = tcpool.make_save(save, f, u == TAGVER_BOTTOM);
+		if (v == TAGVER_CURSOR) {
+			save = tcpool.make_save(save, f, false);
+		} else if (v == TAGVER_BOTTOM) {
+			save = tcpool.make_save(save, f, true);
 		} else {
-			copy = tcpool.make_copy(copy, f, v);
+			copy = tcpool.make_copy(copy, f, abs(v));
 		}
 	}
 

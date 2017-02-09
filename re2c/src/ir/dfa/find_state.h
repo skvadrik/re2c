@@ -15,7 +15,6 @@ struct kernel_t
 	nfa_state_t **state;
 	size_t *tvers; // tag versions
 	size_t *tnorm; // 'normalized' tag versions (coincide for mappable kernels)
-	size_t *tlook; // lookahead tags
 
 	explicit kernel_t(size_t n);
 	~kernel_t();

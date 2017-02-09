@@ -13,9 +13,8 @@ struct clos_t
 {
 	nfa_state_t *origin; // for debug only
 	nfa_state_t *state;
-	size_t tvers; // tag versions
-	size_t ttran; // transition tags (lookahead tags of parent closure)
-	size_t tlook; // lookahead tags (transition tags of child closures)
+	size_t tvers; // tag versions (including lookahead tags)
+	size_t ttran; // transition tags
 
 	static inline bool fin(const clos_t &c) { return c.state->type == nfa_state_t::FIN; }
 	static inline bool not_fin(const clos_t &c) { return !fin(c); }
@@ -27,7 +26,7 @@ typedef closure_t::const_iterator cclositer_t;
 
 void closure(closure_t &clos1, closure_t &clos2, Tagpool &tagpool,
 	std::valarray<Rule> &rules, tagver_t &maxver, tagver_t *newvers,
-	bool lookahead, closure_t *shadow);
+	size_t *nondet, bool lookahead, closure_t *shadow);
 
 } // namespace re2c
 
