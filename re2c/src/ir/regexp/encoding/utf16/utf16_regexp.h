@@ -6,7 +6,7 @@
 namespace re2c {
 
 class Range;
-class RegExp;
+struct RegExp;
 
 const RegExp * UTF16Symbol(utf16::rune r);
 const RegExp * UTF16Range(const Range * r);

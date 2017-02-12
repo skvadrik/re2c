@@ -72,7 +72,7 @@ void prtChOrHex(std::ostream& o, uint32_t c, uint32_t szcunit, bool ebcdic, bool
 	}
 }
 
-void prtChOrHexForSpan(std::ostream& o, uint32_t c, uint32_t szcunit, bool ebcdic, bool dot)
+static void prtChOrHexForSpan(std::ostream& o, uint32_t c, uint32_t szcunit, bool ebcdic, bool dot)
 {
 	if (!ebcdic && c != ']' && is_print(c)) {
 		prtCh(o, c, dot);

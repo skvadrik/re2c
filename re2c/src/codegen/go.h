@@ -14,9 +14,9 @@ namespace re2c
 {
 
 struct DFA;
-class bitmap_t;
+struct bitmap_t;
 class bitmaps_t;
-class State;
+struct State;
 struct If;
 
 struct Span

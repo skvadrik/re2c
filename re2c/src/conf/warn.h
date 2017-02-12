@@ -9,7 +9,7 @@
 
 namespace re2c {
 
-struct path_t;
+class path_t;
 struct Skeleton;
 
 #define RE2C_WARNING_TYPES \

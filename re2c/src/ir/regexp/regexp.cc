@@ -113,7 +113,6 @@ const RegExp *Scanner::cls(const Range *r) const
 				break;
 			case EMPTY_CLASS_ERROR:
 				fatal("empty character class");
-				break;
 		}
 	}
 

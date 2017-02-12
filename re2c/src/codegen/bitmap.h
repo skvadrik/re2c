@@ -10,7 +10,7 @@ namespace re2c {
 
 struct Go;
 struct Span;
-class State;
+struct State;
 class OutputFile;
 
 struct bitmap_t

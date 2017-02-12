@@ -15,8 +15,8 @@ namespace re2c
 {
 
 class Range;
-class RegExp;
-struct OutputFile;
+struct RegExp;
+class OutputFile;
 
 struct ScannerState
 {
@@ -106,11 +106,11 @@ public:
 
 	uint32_t get_cline() const;
 	const std::string & get_fname () const;
-	void fatal_at(uint32_t line, ptrdiff_t ofs, const char *msg) const;
-	void fatalf_at(uint32_t line, const char*, ...) const RE2C_GXX_ATTRIBUTE ((format (printf, 3, 4)));
-	void fatalf(const char*, ...) const RE2C_GXX_ATTRIBUTE ((format (printf, 2, 3)));
-	void fatal(const char*) const;
-	void fatal(ptrdiff_t, const char*) const;
+	void fatal_at(uint32_t line, ptrdiff_t ofs, const char *msg) const RE2C_GXX_ATTRIBUTE ((noreturn));
+	void fatalf_at(uint32_t line, const char*, ...) const RE2C_GXX_ATTRIBUTE ((format (printf, 3, 4))) RE2C_GXX_ATTRIBUTE ((noreturn));
+	void fatalf(const char*, ...) const RE2C_GXX_ATTRIBUTE ((format (printf, 2, 3))) RE2C_GXX_ATTRIBUTE ((noreturn));
+	void fatal(const char*) const RE2C_GXX_ATTRIBUTE ((noreturn));
+	void fatal(ptrdiff_t, const char*) const RE2C_GXX_ATTRIBUTE ((noreturn));
 
 	const RegExp * mkDiff (const RegExp * e1, const RegExp * e2) const;
 	const RegExp * mkDot () const;

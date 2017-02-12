@@ -9,7 +9,7 @@
 
 namespace re2c {
 
-class RegExp;
+struct RegExp;
 
 struct RangeSuffix
 {
