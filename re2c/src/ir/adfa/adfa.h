@@ -20,7 +20,7 @@ namespace re2c
 {
 
 struct Output;
-struct OutputFile;
+class OutputFile;
 struct dfa_t;
 
 struct State

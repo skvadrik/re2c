@@ -11,8 +11,8 @@
 namespace re2c
 {
 
-struct OutputFile;
-class State;
+class OutputFile;
+struct State;
 
 struct Initial
 {

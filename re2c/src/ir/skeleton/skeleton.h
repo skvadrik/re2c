@@ -26,8 +26,8 @@ namespace re2c
 struct dfa_t;
 struct dfa_state_t;
 struct DFA;
-struct OutputFile;
-struct path_t;
+class OutputFile;
+class path_t;
 
 typedef local_increment_t<uint8_t> local_inc;
 
