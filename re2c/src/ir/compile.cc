@@ -62,6 +62,7 @@ smart_ptr<DFA> compile(const spec_t &spec, Output &output)
 	}
 
 	nfa_t nfa(rules, opts->input_api);
+	if (opts->dump_nfa) dump_nfa(nfa);
 
 	dfa_t dfa(nfa, cs, opts, cond, warn);
 	if (opts->dump_dfa_det) dump_dfa(dfa);

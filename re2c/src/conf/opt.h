@@ -119,6 +119,7 @@ namespace re2c
 	OPT (bool, lookahead, true) \
 	OPT (bool, eager_skip, false) \
 	/* dump */ \
+	OPT (bool, dump_nfa, false) \
 	OPT (bool, dump_dfa_raw, false) \
 	OPT (bool, dump_dfa_det, false) \
 	OPT (bool, dump_dfa_tagopt, false) \

@@ -86,6 +86,7 @@ SRC = \
 	src/conf/opt.cc \
 	src/conf/warn.cc \
 	src/ir/nfa/counters.cc \
+	src/ir/nfa/dump.cc \
 	src/ir/nfa/init_rules.cc \
 	src/ir/nfa/nfa.cc \
 	src/ir/nfa/regexps2nfa.cc \

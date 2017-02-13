@@ -105,6 +105,7 @@ void regexps2nfa(const std::vector<RegExpRule> &regexps, nfa_t &nfa, input_api_t
 bool nullable_rule(const RegExpRule &rule);
 void init_rules(const std::vector<RegExpRule> &regexps, std::valarray<Rule> &rules,
 	const std::vector<VarTag> &vartags, const std::vector<FixTag> &fixtags);
+void dump_nfa(const nfa_t &nfa);
 
 } // namespace re2c
 

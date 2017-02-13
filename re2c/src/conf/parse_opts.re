@@ -162,6 +162,7 @@ opt_long:
 	"dfa-minimization"      end { goto opt_dfa_minimization; }
 	"single-pass"           end { goto opt; } // deprecated
 
+	"dump-nfa"              end { opts.set_dump_nfa(true);        goto opt; }
 	"dump-dfa-raw"          end { opts.set_dump_dfa_raw(true);    goto opt; }
 	"dump-dfa-det"          end { opts.set_dump_dfa_det(true);    goto opt; }
 	"dump-dfa-tagopt"       end { opts.set_dump_dfa_tagopt(true); goto opt; }

@@ -113,6 +113,7 @@ void opt_t::fix ()
 			labelPrefix = Opt::baseopt.labelPrefix;
 			startlabel = Opt::baseopt.startlabel;
 			startlabel_force = Opt::baseopt.startlabel_force;
+			dump_nfa = Opt::baseopt.dump_nfa;
 			dump_dfa_raw = Opt::baseopt.dump_dfa_raw;
 			dump_dfa_det = Opt::baseopt.dump_dfa_det;
 			dump_dfa_tagopt = Opt::baseopt.dump_dfa_tagopt;
