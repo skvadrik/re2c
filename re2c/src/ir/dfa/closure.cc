@@ -127,7 +127,7 @@ int compare(const clos_t &c1, const clos_t &c2, Tagpool &tagpool)
 
 	// compare configurations tag by tag
 	// (tags with greater numbers have lower priority)
-	for (size_t t = tagpool.ntags; t --> 0;) {
+	for (size_t t = 0; t < tagpool.ntags; ++t) {
 
 		// lookahead tags gathered by epsilon-closure
 		x = t1[t]; y = t2[t];
