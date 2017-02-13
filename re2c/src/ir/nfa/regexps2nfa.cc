@@ -76,7 +76,7 @@ static nfa_state_t *regexp2nfa(nfa_t &nfa, size_t nrule, size_t &dist,
 			// see note [Kleene star is expressed in terms of plus]
 			nfa_state_t *q = &nfa.states[nfa.size++];
 			s = regexp2nfa(nfa, nrule, dist, base, false, re->iter, q);
-			q->make_alt(nrule, t, s);
+			q->make_alt(nrule, s, t);
 
 			dist = VARDIST;
 			break;

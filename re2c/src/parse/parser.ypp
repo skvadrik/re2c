@@ -344,8 +344,8 @@ factor:
 			switch($2)
 			{
 			case '*':
-				$$ = RegExp::make_alt(RegExp::make_nil(),
-					RegExp::make_iter($1));
+				$$ = RegExp::make_alt(RegExp::make_iter($1),
+					RegExp::make_nil());
 				break;
 			case '+':
 				$$ = RegExp::make_iter($1);

@@ -1632,8 +1632,8 @@ yyreduce:
 			switch((yyvsp[0].op))
 			{
 			case '*':
-				(yyval.regexp) = RegExp::make_alt(RegExp::make_nil(),
-					RegExp::make_iter((yyvsp[-1].regexp)));
+				(yyval.regexp) = RegExp::make_alt(RegExp::make_iter((yyvsp[-1].regexp)),
+					RegExp::make_nil());
 				break;
 			case '+':
 				(yyval.regexp) = RegExp::make_iter((yyvsp[-1].regexp));

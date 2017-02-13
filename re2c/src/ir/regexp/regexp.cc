@@ -26,45 +26,14 @@ const RegExp *doAlt(const RegExp *re1, const RegExp *re2)
 	return RegExp::make_alt(re1, re2);
 }
 
-static const RegExp *merge(const RegExp *sym1, const RegExp *sym2)
-{
-	if (!sym1) {
-		return sym2;
-	}
-	if (!sym2) {
-		return sym1;
-	}
-	return RegExp::make_sym(Range::add(sym1->sym, sym2->sym));
-}
-
-static const RegExp *lift_sym(const RegExp *&re)
-{
-	if (!re) {
-		return NULL;
-	}
-	if (re->type == RegExp::SYM) {
-		const RegExp *sym = re;
-		re = NULL;
-		return sym;
-	}
-	if (re->type == RegExp::ALT) {
-		// second alternative cannot be SYM by construction
-		const RegExp *alt1 = re->alt.re1;
-		if (alt1 && alt1->type == RegExp::SYM) {
-			re = re->alt.re2;
-			return alt1;
-		}
-	}
-	return NULL;
-}
-
 const RegExp *mkAlt(const RegExp *re1, const RegExp *re2)
 {
-	const RegExp *sym1 = lift_sym(re1);
-	const RegExp *sym2 = lift_sym(re2);
-	return doAlt(
-		merge(sym1, sym2),
-		doAlt(re1, re2));
+	if (!re1) return re2;
+	if (!re2) return re1;
+	if (re1->type == RegExp::SYM && re2->type == RegExp::SYM) {
+		return RegExp::make_sym(Range::add(re1->sym, re2->sym));
+	}
+	return RegExp::make_alt(re1, re2);
 }
 
 const RegExp *doCat(const RegExp *re1, const RegExp *re2)
@@ -185,8 +154,7 @@ const RegExp *repeat_from_to(const RegExp *re, uint32_t n, uint32_t m)
 	const RegExp *r1 = repeat(re, n);
 	const RegExp *r2 = NULL;
 	for (uint32_t i = n; i < m; ++i) {
-		r2 = mkAlt(RegExp::make_nil(),
-			doCat(re, r2));
+		r2 = mkAlt(doCat(re, r2), RegExp::make_nil());
 	}
 	return doCat(r1, r2);
 }
@@ -196,7 +164,7 @@ const RegExp *repeat_from(const RegExp *re, uint32_t n)
 {
 	// see note [Kleene star is expressed in terms of plus]
 	return doCat(repeat(re, n),
-		RegExp::make_alt(RegExp::make_nil(), RegExp::make_iter(re)));
+		RegExp::make_alt(RegExp::make_iter(re), RegExp::make_nil()));
 }
 
 } // namespace re2c
