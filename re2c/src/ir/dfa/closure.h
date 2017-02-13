@@ -17,7 +17,6 @@ struct clos_t
 	size_t ttran; // transition tags
 
 	static inline bool fin(const clos_t &c) { return c.state->type == nfa_state_t::FIN; }
-	static inline bool not_fin(const clos_t &c) { return !fin(c); }
 };
 
 typedef std::vector<clos_t> closure_t;

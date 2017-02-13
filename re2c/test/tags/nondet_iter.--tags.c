@@ -43,31 +43,27 @@ yy5:
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 'b':
-		yyt1 = YYCURSOR;
-		goto yy5;
+	case 'b':	goto yy5;
 	default:	goto yy7;
 	}
 yy7:
 	b = yyt1;
 #line 5 "tags/nondet_iter.--tags.re"
 	{ @b }
-#line 56 "tags/nondet_iter.--tags.c"
+#line 54 "tags/nondet_iter.--tags.c"
 yy8:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 'c':
-		yyt1 = YYCURSOR;
-		goto yy8;
+	case 'c':	goto yy8;
 	default:	goto yy10;
 	}
 yy10:
 	c = yyt1;
 #line 8 "tags/nondet_iter.--tags.re"
 	{ @c }
-#line 71 "tags/nondet_iter.--tags.c"
+#line 67 "tags/nondet_iter.--tags.c"
 yy11:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
@@ -82,7 +78,7 @@ yy13:
 	d = yyt1;
 #line 3 "tags/nondet_iter.--tags.re"
 	{ @d }
-#line 86 "tags/nondet_iter.--tags.c"
+#line 82 "tags/nondet_iter.--tags.c"
 yy14:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
@@ -97,7 +93,7 @@ yy16:
 	e = yyt1;
 #line 6 "tags/nondet_iter.--tags.re"
 	{ @e }
-#line 101 "tags/nondet_iter.--tags.c"
+#line 97 "tags/nondet_iter.--tags.c"
 yy17:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
@@ -112,7 +108,7 @@ yy19:
 	f = yyt1;
 #line 9 "tags/nondet_iter.--tags.re"
 	{ @f }
-#line 116 "tags/nondet_iter.--tags.c"
+#line 112 "tags/nondet_iter.--tags.c"
 }
 #line 10 "tags/nondet_iter.--tags.re"
 
