@@ -62,13 +62,9 @@ void closure(closure_t &clos1, closure_t &clos2, Tagpool &tagpool,
 void closure_one(closure_t &clos, Tagpool &tagpool, clos_t &c0,
 	nfa_state_t *n, tagver_t *tags, closure_t *shadow)
 {
-	// trace the first iteration of each loop:
-	// epsilon-loops may add ney tags and reveal conflicts
-	if (n->loop > 1) {
-		return;
-	}
+	if (n->loop) return;
 
-	++n->loop;
+	n->loop = true;
 	switch (n->type) {
 		case nfa_state_t::NIL:
 			closure_one(clos, tagpool, c0, n->nil.out, tags, shadow);
@@ -106,7 +102,7 @@ void closure_one(closure_t &clos, Tagpool &tagpool, clos_t &c0,
 			break;
 		}
 	}
-	--n->loop;
+	n->loop = false;
 }
 
 /*
