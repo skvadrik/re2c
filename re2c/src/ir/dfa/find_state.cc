@@ -10,7 +10,6 @@ kernel_t::kernel_t(size_t n)
 	: size(n)
 	, state(new nfa_state_t*[size])
 	, tvers(new size_t[size])
-	, tnorm(new size_t[size])
 {}
 
 kernel_t *kernel_t::copy(const kernel_t &k)
@@ -19,7 +18,6 @@ kernel_t *kernel_t::copy(const kernel_t &k)
 	kernel_t *kcopy = new kernel_t(n);
 	memcpy(kcopy->state, k.state, n * sizeof(void*));
 	memcpy(kcopy->tvers, k.tvers, n * sizeof(size_t));
-	memcpy(kcopy->tnorm, k.tnorm, n * sizeof(size_t));
 	return kcopy;
 }
 
@@ -27,7 +25,6 @@ kernel_t::~kernel_t()
 {
 	delete[] state;
 	delete[] tvers;
-	delete[] tnorm;
 }
 
 struct kernel_eq_t
@@ -40,15 +37,60 @@ struct kernel_eq_t
 	}
 };
 
-struct kernel_map_t
+/* note [mapping ignores items with lookahead tags]
+ *
+ * Consider two items X and Y being mapped.
+ *
+ * If tag T belongs to lookahead tags of item X, then all
+ * outgoing transitions from item X update T. Which means
+ * that it doesn't matter what particular version T has in X:
+ * whatever version it has, it will be overwritten by any
+ * outgoing transition.
+ *
+ * Note that lookahead tags are identical for both items
+ * X and Y, because we only try to map DFA states with
+ * identical lookahead tags.
+ */
+
+bool kernels_t::operator()(const kernel_t *k1, const kernel_t *k2)
 {
-	bool operator()(const kernel_t *x, const kernel_t *y) const
-	{
-		return x->size == y->size
-			&& memcmp(x->state, y->state, x->size * sizeof(void*)) == 0
-			&& memcmp(x->tnorm, y->tnorm, x->size * sizeof(size_t)) == 0;
+	// check that kernel sizes and NFA states coincide
+	const bool compatible = k1->size == k2->size
+		&& memcmp(k1->state, k2->state, k1->size * sizeof(void*)) == 0;
+	if (!compatible) return false;
+
+	// map tag versions of one kernel to that of another
+	// and check that lookahead versions (if any) coincide
+	const size_t ntag = tagpool.ntags;
+	std::fill(x2y - max, x2y + max, TAGVER_ZERO);
+	std::fill(y2x - max, y2x + max, TAGVER_ZERO);
+	for (size_t i = 0; i < k1->size; ++i) {
+		const tagver_t
+			*xv = tagpool[k1->tvers[i]],
+			*yv = tagpool[k2->tvers[i]];
+
+		for (size_t t = 0; t < ntag; ++t) {
+			const tagver_t x = xv[t], y = yv[t];
+
+			// see note [mapping ignores items with lookahead tags]
+			if (x == TAGVER_CURSOR || x == TAGVER_BOTTOM
+				|| y == TAGVER_CURSOR || y == TAGVER_BOTTOM) {
+				if (x == y) continue;
+				return false;
+			}
+
+			tagver_t &x0 = y2x[y], &y0 = x2y[x];
+			if (y0 == TAGVER_ZERO && x0 == TAGVER_ZERO) {
+				x0 = x;
+				y0 = y;
+				x2t[x] = t;
+			} else if (y != y0 || x != x0) {
+				return false;
+			}
+		}
 	}
-};
+	return true;
+}
 
 kernels_t::kernels_t(Tagpool &tagp, tcpool_t &tcp)
 	: lookup()
@@ -57,13 +99,13 @@ kernels_t::kernels_t(Tagpool &tagp, tcpool_t &tcp)
 
 	, maxsize(0) // usually ranges from one to some twenty
 	, buffer(new kernel_t(maxsize))
-	, nform(NULL)
 
 	, cap(0)
 	, max(0)
 	, mem(NULL)
 	, x2y(NULL)
 	, y2x(NULL)
+	, x2t(NULL)
 	, indeg(NULL)
 {}
 
@@ -71,7 +113,6 @@ kernels_t::~kernels_t()
 {
 	delete buffer;
 	delete[] mem;
-	delete[] nform;
 
 	const size_t n = lookup.size();
 	for (size_t i = 0; i < n; ++i) {
@@ -84,9 +125,7 @@ void kernels_t::init(tagver_t v, size_t nkern)
 	if (maxsize < nkern) {
 		maxsize = nkern * 2; // in advance
 		delete buffer;
-		delete[] nform;
 		buffer = new kernel_t(maxsize);
-		nform = new tagver_t[tagpool.ntags * maxsize];
 	}
 
 	// +1 to ensure max tag version is not forgotten in loops
@@ -98,15 +137,17 @@ void kernels_t::init(tagver_t v, size_t nkern)
 			n = static_cast<size_t>(cap),
 			m = 2 * n + 1,
 			sz_x2y = 2 * m * sizeof(tagver_t),
+			sz_x2t = m * sizeof(size_t),
 			sz_indeg = n * sizeof(uint32_t);
 		delete[] mem;
-		mem = new char[sz_x2y + sz_indeg];
+		mem = new char[sz_x2y + sz_x2t + sz_indeg];
 
 		// point to the center (zero index) of each buffer
 		// indexes in range [-N .. N] must be valid, where N is capacity
 		x2y   = reinterpret_cast<tagver_t*>(mem) + cap;
 		y2x   = x2y + m;
-		indeg = reinterpret_cast<uint32_t*>(mem + sz_x2y);
+		x2t   = reinterpret_cast<size_t*>(mem + sz_x2y) + cap;
+		indeg = reinterpret_cast<uint32_t*>(mem + sz_x2y + sz_x2t);
 
 		// see note [topological ordering of copy commands]
 		memset(indeg, 0, sz_indeg);
@@ -121,48 +162,6 @@ size_t kernels_t::size() const
 const kernel_t *kernels_t::operator[](size_t idx) const
 {
 	return lookup[idx];
-}
-
-/* note [kernel normal form]
- *
- * 'Normal form' of the version matrix of the given kernel: versions are
- * renumbered to have consequent natural numbers starting from one; exceptions
- * are 'cursor' and 'bottom' versions which are not normalized (they must
- * coinside for mappable kernels). Order of versions is preserved.
- *
- * The normalized matrix is cut into rows: rows fit nicely into tagpool
- * and we need to index the normal form anyway to perform fast comparison of
- * two normal forms.
- */
-void kernels_t::normal_form()
-{
-	kernel_t *kernel = buffer;
-	size_t ntag = tagpool.ntags;
-	std::set<tagver_t> used;
-	std::set<tagver_t>::const_iterator u;
-
-	for (size_t t = 0; t < ntag; ++t) {
-		used.clear();
-		for (size_t i = 0; i < kernel->size; ++i) {
-			// see note [mapping ignores items with lookahead tags]
-			const tagver_t v = tagpool[kernel->tvers[i]][t];
-			if (v != TAGVER_CURSOR && v != TAGVER_BOTTOM) {
-				used.insert(v);
-			}
-		}
-		tagver_t maxv = 0;
-		for (u = used.begin(); u != used.end(); ++u) {
-			x2y[*u] = ++maxv;
-		}
-		for (size_t i = 0; i < kernel->size; ++i) {
-			const tagver_t v = tagpool[kernel->tvers[i]][t];
-			nform[ntag * i + t] = v == TAGVER_CURSOR || v == TAGVER_BOTTOM
-				? v : x2y[v];
-		}
-	}
-	for (size_t i = 0; i < kernel->size; ++i) {
-		kernel->tnorm[i] = tagpool.insert(nform + ntag * i);
-	}
 }
 
 /* note [bijective mappings]
@@ -203,12 +202,10 @@ kernels_t::result_t kernels_t::insert(const closure_t &clos, tagver_t maxver)
 		buffer->state[i] = c.state;
 		buffer->tvers[i] = c.tvers;
 	}
-	normal_form();
 
 	// get kernel hash
 	uint32_t hash = static_cast<uint32_t>(nkern); // seed
 	hash = hash32(hash, buffer->state, nkern * sizeof(void*));
-	hash = hash32(hash, buffer->tnorm, nkern * sizeof(size_t));
 
 	// try to find identical kernel
 	kernel_eq_t eq;
@@ -217,9 +214,8 @@ kernels_t::result_t kernels_t::insert(const closure_t &clos, tagver_t maxver)
 
 	// else try to find mappable kernel
 	// see note [bijective mappings]
-	kernel_map_t map;
-	x = lookup.find_with(hash, buffer, map);
-	if (x != index_t::NIL) return result_t(x, commands2(clos, x), false);
+	x = lookup.find_with(hash, buffer, *this);
+	if (x != index_t::NIL) return result_t(x, commands2(clos), false);
 
 	// otherwise add new kernel
 	x = lookup.push(hash, kernel_t::copy(*buffer));
@@ -244,21 +240,6 @@ tcmd_t kernels_t::commands1(const closure_t &closure)
 	return tcmd_t(save, NULL);
 }
 
-/* note [mapping ignores items with lookahead tags]
- *
- * Consider two items X and Y being mapped.
- *
- * If tag T belongs to lookahead tags of item X, then all
- * outgoing transitions from item X update T. Which means
- * that it doesn't matter what particular version T has in X:
- * whatever version it has, it will be overwritten by any
- * outgoing transition.
- *
- * Note that lookahead tags are identical for both items
- * X and Y, because we only try to map DFA states with
- * identical lookahead tags.
- */
-
 /* note [save(X), copy(Y,X) optimization]
  *
  * save(X) command followed by a copy(Y,X) command can be optimized to
@@ -282,50 +263,26 @@ tcmd_t kernels_t::commands1(const closure_t &closure)
  * cannot affect the check.
 */
 
-tcmd_t kernels_t::commands2(const closure_t &closure, size_t idx)
+tcmd_t kernels_t::commands2(const closure_t &closure)
 {
-	// 'buffer' has the kernel corresponding to closure
-	cclositer_t c = closure.begin();
-	const kernel_t *k = (*this)[idx];
-	const size_t ntag = tagpool.ntags;
 	tagsave_t *save = NULL;
 	tagcopy_t *copy = NULL;
+	cclositer_t c1 = closure.begin(), c2 = closure.end(), c;
 
-	// map versions of the old kernel to versions of the new one
-	std::fill(x2y - max, x2y + max, TAGVER_ZERO);
-	std::fill(y2x - max, y2x + max, TAGVER_ZERO);
-	for (size_t i = 0; i < k->size; ++i, ++c) {
-		const tagver_t
-			*xv = tagpool[k->tvers[i]],
-			*yv = tagpool[c->tvers],
-			*yt = tagpool[c->ttran];
+	// see note [save(X), copy(Y,X) optimization]
+	for (tagver_t x = -max; x < max; ++x) {
+		const tagver_t y = x2y[x];
+		if (y == TAGVER_ZERO) continue;
 
-		for (size_t t = 0; t < ntag; ++t) {
-			const tagver_t x = xv[t], y = yv[t];
-
-			// see note [mapping ignores items with lookahead tags]
-			if (x == TAGVER_CURSOR || x == TAGVER_BOTTOM) continue;
-
-			tagver_t &x0 = y2x[y], &y0 = x2y[x];
-
-			// paranoid checks; normal form should take care of that
-			// see note [kernel normal form]
-			if (y0 != TAGVER_ZERO || x0 != TAGVER_ZERO) {
-				assert(y == y0 && x == x0);
-				continue;
-			}
-
-			y0 = y; x0 = x;
-
-			const tagver_t z = yt[t],
-				ax = abs(x), ay = abs(y);
-			// see note [save(X), copy(Y,X) optimization]
-			if (z == y) {
-				save = tcpool.make_save(save, ax, z < 0);
-			} else if (x != y) {
-				assert(ax != ay); // stay paranoid
-				copy = tcpool.make_copy(copy, ax, ay);
-			}
+		// at most one new cursor and one new bottom version per tag
+		const size_t t = x2t[x];
+		const tagver_t ax = abs(x), ay = abs(y);
+		for (c = c1; c != c2 && tagpool[c->ttran][t] != y; ++c);
+		if (c != c2) {
+			save = tcpool.make_save(save, ax, y < TAGVER_ZERO);
+		} else if (x != y) {
+			assert(ax != ay);
+			copy = tcpool.make_copy(copy, ax, ay);
 		}
 	}
 

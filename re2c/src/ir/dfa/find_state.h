@@ -14,7 +14,6 @@ struct kernel_t
 	size_t size;
 	nfa_state_t **state;
 	size_t *tvers; // tag versions
-	size_t *tnorm; // 'normalized' tag versions (coincide for mappable kernels)
 
 	explicit kernel_t(size_t n);
 	~kernel_t();
@@ -48,13 +47,13 @@ public:
 private:
 	size_t maxsize;
 	kernel_t *buffer;
-	tagver_t *nform;
 
 	tagver_t cap; // capacity (greater or equal to max)
 	tagver_t max; // maximal tag version
 	char *mem;
 	tagver_t *x2y;
 	tagver_t *y2x;
+	size_t *x2t;
 	uint32_t *indeg;
 
 public:
@@ -64,9 +63,9 @@ public:
 	size_t size() const;
 	const kernel_t* operator[](size_t idx) const;
 	result_t insert(const closure_t &clos, tagver_t maxver);
+	bool operator()(const kernel_t *k1, const kernel_t *k2);
 	tcmd_t commands1(const closure_t &closure);
-	tcmd_t commands2(const closure_t &closure, size_t idx);
-	void normal_form();
+	tcmd_t commands2(const closure_t &closure);
 	FORBID_COPY(kernels_t);
 };
 
