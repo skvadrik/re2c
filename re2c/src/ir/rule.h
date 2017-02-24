@@ -53,20 +53,13 @@ struct Rule
 	const Code *code;
 	std::set<uint32_t> shadow;
 
-	// variable tags
-	size_t lvar; // first
-	size_t hvar; // next to last
-	size_t tvar; // trailing context
-
-	// fixed tags
-	size_t lfix; // first
-	size_t hfix; // next to last
-	size_t tfix; // trailing context
+	// tags
+	size_t ltag; // first
+	size_t htag; // next to last
+	size_t ttag; // trailing context
 
 	Rule(): code(NULL), shadow(),
-		lvar(0), hvar(0), tvar(0),
-		lfix(0), hfix(0), tfix(0)
-	{}
+		ltag(0), htag(0), ttag(0) {}
 	FORBID_COPY(Rule);
 };
 

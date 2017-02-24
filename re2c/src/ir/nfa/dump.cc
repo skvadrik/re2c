@@ -44,7 +44,7 @@ void dump_nfa(const nfa_t &nfa)
 				break;
 			}
 			case nfa_state_t::TAG: {
-				const std::string *name = nfa.vartags[n->tag.info].name;
+				const std::string *name = nfa.tags[n->tag.info].name;
 				fprintf(stderr, "  n%u -> n%u [label=\"/", i, index(nfa, n->tag.out));
 				if (name) {
 					fprintf(stderr, "%s", name->c_str());

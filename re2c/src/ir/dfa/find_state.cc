@@ -301,9 +301,12 @@ static tcmd_t finalizer(const clos_t &clos, size_t ridx,
 	tagsave_t *save = NULL;
 	tagcopy_t *copy = NULL;
 
-	for (size_t t = rule.lvar; t < rule.hvar; ++t) {
+	for (size_t t = rule.ltag; t < rule.htag; ++t) {
 		const tagver_t v = vers[t];
 		tagver_t &f = dfa.finvers[t];
+
+		// don't waste versions on fixed tags
+		if (fixed(dfa.tags[t])) continue;
 
 		// pick a fresh version: final version is also used as fallback one
 		if (f == TAGVER_ZERO) {

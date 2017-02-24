@@ -17,7 +17,7 @@ namespace re2c
 static nfa_state_t *transition(nfa_state_t *state, uint32_t symbol);
 static void reach(const kernel_t *kernel, closure_t &clos, uint32_t symbol);
 static void warn_nondeterministic_tags(const size_t *nondet,
-	const std::vector<VarTag> &tags, const std::valarray<Rule> &rules,
+	const std::vector<Tag> &tags, const std::valarray<Rule> &rules,
 	const std::string &cond, Warn &warn);
 
 const size_t dfa_t::NIL = std::numeric_limits<size_t>::max();
@@ -53,8 +53,7 @@ dfa_t::dfa_t(const nfa_t &nfa, const charset_t &charset, const opt_t *opts,
 	: states()
 	, nchars(charset.size() - 1) // (n + 1) bounds for n ranges
 	, rules(nfa.rules)
-	, vartags(nfa.vartags)
-	, fixtags(nfa.fixtags)
+	, tags(nfa.tags)
 	, finvers(NULL)
 	, tcpool(*new tcpool_t)
 	, maxtagver(0)
@@ -62,7 +61,7 @@ dfa_t::dfa_t(const nfa_t &nfa, const charset_t &charset, const opt_t *opts,
 	, tcid0(NULL)
 {
 	const bool lookahead = opts->lookahead;
-	const size_t ntag = vartags.size();
+	const size_t ntag = tags.size();
 	Tagpool tagpool(ntag);
 	kernels_t kernels(tagpool, tcpool);
 	closure_t clos1, clos2;
@@ -100,21 +99,21 @@ dfa_t::dfa_t(const nfa_t &nfa, const charset_t &charset, const opt_t *opts,
 		}
 	}
 
-	warn_nondeterministic_tags(nondet, vartags, rules, cond, warn);
+	warn_nondeterministic_tags(nondet, tags, rules, cond, warn);
 
 	delete[] newvers;
 	delete[] nondet;
 }
 
 void warn_nondeterministic_tags(const size_t *nondet,
-	const std::vector<VarTag> &tags, const std::valarray<Rule> &rules,
+	const std::vector<Tag> &tags, const std::valarray<Rule> &rules,
 	const std::string &cond, Warn &warn)
 {
 	const size_t ntag = tags.size();
 	for (size_t t = 0; t < ntag; ++t) {
 		const size_t m = nondet[t];
 		if (m > 1) {
-			const VarTag &tag = tags[t];
+			const Tag &tag = tags[t];
 			const uint32_t line = rules[tag.rule].code->fline;
 			warn.nondeterministic_tags(line, cond, tag.name, m);
 		}

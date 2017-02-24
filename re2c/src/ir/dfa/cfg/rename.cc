@@ -30,9 +30,12 @@ void cfg_t::renaming(cfg_t &cfg, const tagver_t *ver2new, tagver_t maxver)
 	}
 
 	// final tag versions
-	tagver_t *f = cfg.dfa.finvers, *fe = f + cfg.dfa.vartags.size();
-	for (; f < fe; ++f) {
-		*f = ver2new[*f];
+	tagver_t *fins = cfg.dfa.finvers;
+	const std::vector<Tag> &tags = cfg.dfa.tags;
+	for (size_t t = 0; t < tags.size(); ++t) {
+		if (!fixed(tags[t])) {
+			fins[t] = ver2new[fins[t]];
+		}
 	}
 }
 

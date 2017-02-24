@@ -289,7 +289,7 @@ void find_nondet(const closure_t &clos, size_t *nondet,
 
 		for (x0 = c; ++c != e && c->state->rule == r;);
 
-		for (size_t t = rule.lvar; t < rule.hvar; ++t) {
+		for (size_t t = rule.ltag; t < rule.htag; ++t) {
 			uniq.clear();
 			for (x = x0; x != c; ++x) {
 				uniq.insert(tagpool[x->tvers][t]);

@@ -7,7 +7,7 @@ namespace re2c
 
 static void dump_tcmd_or_tcid(const tcmd_t *tcmd, const tcid_t *tcid, size_t sym, const tcpool_t &tcpool);
 static void dump_tcmd(const tagsave_t *s, const tagcopy_t *c);
-static const char *tagname(const VarTag &t);
+static const char *tagname(const Tag &t);
 static void dump_tags(const Tagpool &tagpool, size_t ttran);
 
 dump_dfa_t::dump_dfa_t(const dfa_t &d, const Tagpool &pool, const nfa_t &n, bool dbg)
@@ -48,7 +48,7 @@ void dump_dfa_t::closure_tags(cclositer_t c)
 	const tagver_t *vers = tagpool[c->tvers];
 	const size_t ntag = tagpool.ntags;
 	for (size_t t = 0; t < ntag; ++t) {
-		fprintf(stderr, " %s", tagname(dfa.vartags[t]));
+		fprintf(stderr, " %s", tagname(dfa.tags[t]));
 
 		const tagver_t v = vers[t];
 		if (v == TAGVER_BOTTOM) {
@@ -158,9 +158,9 @@ void dump_dfa_t::final(size_t state, const nfa_state_t *port)
 	const uint32_t x = static_cast<uint32_t>(state);
 
 	fprintf(stderr, "  r%u [shape=none label=\"(", x);
-	for (size_t t = r.lvar; t < r.hvar; ++t) {
-		if (t > r.lvar) fprintf(stderr, " ");
-		fprintf(stderr, "%s%d", tagname(dfa.vartags[t]), abs(dfa.finvers[t]));
+	for (size_t t = r.ltag; t < r.htag; ++t) {
+		if (t > r.ltag) fprintf(stderr, " ");
+		fprintf(stderr, "%s%d", tagname(dfa.tags[t]), abs(dfa.finvers[t]));
 	}
 	fprintf(stderr, ")\"]\n");
 
@@ -206,8 +206,8 @@ void dump_dfa(const dfa_t &dfa)
 			dump_tcmd_or_tcid(s->tcmd, s->tcid, nsym, dfa.tcpool);
 
 			fprintf(stderr, "(");
-			for (size_t t = r.lvar; t < r.hvar; ++t) {
-				if (t > r.lvar) fprintf(stderr, " ");
+			for (size_t t = r.ltag; t < r.htag; ++t) {
+				if (t > r.ltag) fprintf(stderr, " ");
 				fprintf(stderr, "%d", dfa.finvers[t]);
 			}
 			fprintf(stderr, ")");
@@ -257,7 +257,7 @@ void dump_tcmd(const tagsave_t *s, const tagcopy_t *c)
 	}
 }
 
-const char *tagname(const VarTag &t)
+const char *tagname(const Tag &t)
 {
 	return t.name ? t.name->c_str() : "";
 }

@@ -7,8 +7,7 @@ nfa_t::nfa_t(const std::vector<RegExpRule> &regexps, input_api_t input)
 	, size(0)
 	, states(NULL)
 	, rules(*new std::valarray<Rule>(regexps.size()))
-	, vartags(*new std::vector<VarTag>())
-	, fixtags(*new std::vector<FixTag>())
+	, tags(*new std::vector<Tag>())
 	, root(NULL)
 {
 	size_t ntags = 0;
@@ -17,7 +16,7 @@ nfa_t::nfa_t(const std::vector<RegExpRule> &regexps, input_api_t input)
 	states = new nfa_state_t[max_size];
 	regexps2nfa(regexps, *this, input);
 
-	init_rules(regexps, rules, vartags, fixtags);
+	init_rules(regexps, rules, tags);
 }
 
 nfa_t::~nfa_t()

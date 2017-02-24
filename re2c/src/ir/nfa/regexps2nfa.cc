@@ -18,8 +18,6 @@ namespace re2c {
  * express fixed offsets.
  */
 
-static const size_t VARDIST = std::numeric_limits<size_t>::max();
-
 // We have to insert default tags during NFA construction: before it,
 // we have AST and which is immutable (it may be shared by different
 // regexps); after it, we have NFA where join points of alternatives
@@ -40,22 +38,22 @@ static nfa_state_t *regexp2nfa(nfa_t &nfa, size_t nrule, size_t &dist,
 			s = &nfa.states[nfa.size++];
 			s->make_ran(nrule, t, re->sym);
 
-			if (dist != VARDIST) ++dist;
+			if (dist != Tag::VARDIST) ++dist;
 			break;
 		case RegExp::ALT: {
 			nfa_state_t *s1, *s2, *t0, *t1, *t2, *q;
-			size_t d1 = dist, d2 = dist, i = nfa.vartags.size();
+			size_t d1 = dist, d2 = dist, i = nfa.tags.size();
 
 			t0 = &nfa.states[nfa.size++];
 			s1 = regexp2nfa(nfa, nrule, d1, base, false, re->alt.re1, t0);
-			for (t2 = t; i < nfa.vartags.size(); ++i) {
+			for (t2 = t; i < nfa.tags.size(); ++i) {
 				q = &nfa.states[nfa.size++];
 				q->make_tag(nrule, t2, i, true);
 				t2 = q;
 			}
 
 			s2 = regexp2nfa(nfa, nrule, d2, base, false, re->alt.re2, t2);
-			for (t1 = t; i < nfa.vartags.size(); ++i) {
+			for (t1 = t; i < nfa.tags.size(); ++i) {
 				q = &nfa.states[nfa.size++];
 				q->make_tag(nrule, t1, i, true);
 				t1 = q;
@@ -65,7 +63,7 @@ static nfa_state_t *regexp2nfa(nfa_t &nfa, size_t nrule, size_t &dist,
 			s = &nfa.states[nfa.size++];
 			s->make_alt(nrule, s1, s2);
 
-			dist = (d1 == d2) ? d1 : VARDIST;
+			dist = (d1 == d2) ? d1 : Tag::VARDIST;
 			break;
 		}
 		case RegExp::CAT:
@@ -78,19 +76,19 @@ static nfa_state_t *regexp2nfa(nfa_t &nfa, size_t nrule, size_t &dist,
 			s = regexp2nfa(nfa, nrule, dist, base, false, re->iter, q);
 			q->make_alt(nrule, s, t);
 
-			dist = VARDIST;
+			dist = Tag::VARDIST;
 			break;
 		}
 		case RegExp::TAG: {
 			const std::string *name = re->tag;
-			if (toplevel && dist != VARDIST) {
-				FixTag fix = {name, nrule, base, dist};
-				nfa.fixtags.push_back(fix);
+			if (toplevel && dist != Tag::VARDIST) {
+				Tag fix = {name, nrule, base, dist};
+				nfa.tags.push_back(fix);
 				s = t;
 			} else {
-				const size_t ntag = nfa.vartags.size();
-				VarTag var = {name, nrule};
-				nfa.vartags.push_back(var);
+				const size_t ntag = nfa.tags.size();
+				Tag var = {name, nrule, ntag, Tag::VARDIST};
+				nfa.tags.push_back(var);
 				if (toplevel) {
 					base = ntag;
 					dist = 0;
@@ -109,7 +107,7 @@ static nfa_state_t *regexp2nfa_rule(nfa_t &nfa, size_t nrule,
 	const RegExp *re, input_api_t input)
 {
 	const bool generic = input == INPUT_CUSTOM;
-	size_t base = FixTag::RIGHTMOST, dist = 0;
+	size_t base = Tag::RIGHTMOST, dist = 0;
 
 	nfa_state_t *s = &nfa.states[nfa.size++];
 	s->make_fin(nrule);

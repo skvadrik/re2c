@@ -5,15 +5,16 @@ namespace re2c
 
 tagver_t cfg_t::compact(const cfg_t &cfg, tagver_t *ver2new)
 {
+	const std::vector<Tag> &tags = cfg.dfa.tags;
 	const size_t
 		nver = static_cast<size_t>(cfg.dfa.maxtagver) + 1,
-		ntag = cfg.dfa.vartags.size();
+		ntag = tags.size();
 	const tagver_t *fins = cfg.dfa.finvers;
 	bool *used = new bool[nver];
 
 	std::fill(used, used + nver, false);
 	for (size_t t = 0; t < ntag; ++t) {
-		used[fins[t]] = true;
+		used[fins[t]] = !fixed(tags[t]);
 	}
 	for (size_t i = 0; i < cfg.nbbfall; ++i) {
 		const cfg_bb_t &b = cfg.bblocks[i];

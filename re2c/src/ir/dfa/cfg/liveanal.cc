@@ -24,6 +24,7 @@ static cfg_ix_t *postorder(const cfg_t &cfg, bool *done,
 
 void cfg_t::liveness_analysis(const cfg_t &cfg, bool *live)
 {
+	const std::vector<Tag> &tags = cfg.dfa.tags;
 	const size_t nver = static_cast<size_t>(cfg.dfa.maxtagver) + 1;
 	const cfg_ix_t
 		narc = cfg.nbbarc,
@@ -56,8 +57,8 @@ void cfg_t::liveness_analysis(const cfg_t &cfg, bool *live)
 		// all final bblocks have USE tags, but no successors
 		assert(r && b->succb == b->succe);
 
-		for (size_t t = r->lvar; t < r->hvar; ++t) {
-			l[fins[t]] = true;
+		for (size_t t = r->ltag; t < r->htag; ++t) {
+			l[fins[t]] = !fixed(tags[t]);
 		}
 	}
 
@@ -130,8 +131,8 @@ void cfg_t::liveness_analysis(const cfg_t &cfg, bool *live)
 		assert(r);
 
 		memset(buf1, 0, nver * sizeof(bool));
-		for (size_t t = r->lvar; t < r->hvar; ++t) {
-			buf1[fins[t]] = true;
+		for (size_t t = r->ltag; t < r->htag; ++t) {
+			buf1[fins[t]] = !fixed(tags[t]);
 		}
 		for (const tagsave_t *p = b->cmd->save; p; p = p->next) {
 			buf1[p->ver] = false;

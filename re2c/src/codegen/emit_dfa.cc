@@ -129,17 +129,9 @@ void DFA::emit(Output & output, uint32_t& ind, bool isLastCond, bool& bPrologBra
 
 	std::set<std::string> tagnames, tagvars;
 	if (!oldstyle_ctxmarker) {
-		for (size_t i = 0; i < vartags.size(); ++i) {
-			const std::string *name = vartags[i].name;
-			if (name) {
-				tagvars.insert(*name);
-			}
-		}
-		for (size_t i = 0; i < fixtags.size(); ++i) {
-			const std::string *name = fixtags[i].name;
-			if (name) {
-				tagvars.insert(*name);
-			}
+		for (size_t i = 0; i < tags.size(); ++i) {
+			const std::string *name = tags[i].name;
+			if (name) tagvars.insert(*name);
 		}
 		for (tagver_t v = 1; v <= maxtagver; ++v) {
 			tagnames.insert(vartag_name(v, opts->tags_prefix));

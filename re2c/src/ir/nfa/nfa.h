@@ -90,8 +90,7 @@ struct nfa_t
 	size_t size;
 	nfa_state_t *states;
 	std::valarray<Rule> &rules;
-	std::vector<VarTag> &vartags;
-	std::vector<FixTag> &fixtags;
+	std::vector<Tag> &tags;
 	nfa_state_t *root;
 
 	nfa_t(const std::vector<RegExpRule> &rs, input_api_t input);
@@ -104,7 +103,7 @@ size_t counters(const std::vector<RegExpRule> &regexps, size_t &ntags);
 void regexps2nfa(const std::vector<RegExpRule> &regexps, nfa_t &nfa, input_api_t input);
 bool nullable_rule(const RegExpRule &rule);
 void init_rules(const std::vector<RegExpRule> &regexps, std::valarray<Rule> &rules,
-	const std::vector<VarTag> &vartags, const std::vector<FixTag> &fixtags);
+	const std::vector<Tag> &tags);
 void dump_nfa(const nfa_t &nfa);
 
 } // namespace re2c

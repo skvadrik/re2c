@@ -361,13 +361,14 @@ void gen_fintags(OutputFile &o, uint32_t ind, const DFA &dfa, const Rule &rule)
 	const std::string
 		&prefix = opts->tags_prefix,
 		&expression = opts->tags_expression;
-	const std::vector<VarTag> &vartags = dfa.vartags;
-	const std::vector<FixTag> &fixtags = dfa.fixtags;
+	const std::vector<Tag> &tags = dfa.tags;
 	const tagver_t *fins = dfa.finvers;
 
 	// variable tags
-	for (size_t t = rule.lvar; t < rule.hvar; ++t) {
-		const VarTag &tag = vartags[t];
+	for (size_t t = rule.ltag; t < rule.htag; ++t) {
+		const Tag &tag = tags[t];
+		if (fixed(tag)) continue;
+
 		o.wind(ind);
 		if (tag.name) {
 			const std::string
@@ -397,13 +398,15 @@ void gen_fintags(OutputFile &o, uint32_t ind, const DFA &dfa, const Rule &rule)
 	}
 
 	// fixed tags
-	for (size_t t = rule.lfix; t < rule.hfix; ++t) {
+	for (size_t t = rule.ltag; t < rule.htag; ++t) {
+		const Tag &tag = tags[t];
+		if (!fixed(tag)) continue;
 		assert(!generic);
-		const FixTag &tag = fixtags[t];
+
 		o.wind(ind);
 		if (tag.name) {
 			o.wstring(*tag.name).ws(" = ");
-			if (tag.base == FixTag::RIGHTMOST) {
+			if (tag.base == Tag::RIGHTMOST) {
 				// optimize '(YYCTXMARKER + ((YYCURSOR - YCTXMARKER) - tag))'
 				// to       '(YYCURSOR - tag)'
 				o.wstring(opts->yycursor).ws(" - ").wu64(tag.dist);
