@@ -33,12 +33,14 @@ void dump_nfa(const nfa_t &nfa)
 				fprintf(stderr, "  n%u -> n%u [color=lightgray]\n", i, index(nfa, n->alt.out2));
 				break;
 			case nfa_state_t::RAN: {
-				const uint32_t
-					l = n->ran.ran->lower(),
-					u = n->ran.ran->upper() - 1;
-				fprintf(stderr, "  n%u -> n%u [label=\"%u", i, index(nfa, n->ran.out), l);
-				if (u > l) {
-					fprintf(stderr, "-%u", u);
+				fprintf(stderr, "  n%u -> n%u [label=\"", i, index(nfa, n->ran.out));
+				for (const Range *r = n->ran.ran; r; r = r->next()) {
+					const uint32_t
+						l = r->lower(),
+						u = r->upper() - 1;
+					fprintf(stderr, "%u", l);
+					if (u > l) fprintf(stderr, "-%u", u);
+					if (r->next()) fprintf(stderr, ",");
 				}
 				fprintf(stderr, "\"]\n");
 				break;
