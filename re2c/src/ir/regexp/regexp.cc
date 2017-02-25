@@ -15,6 +15,8 @@ namespace re2c
 
 free_list<RegExp*> RegExp::flist;
 
+const uint32_t RegExp::MANY = std::numeric_limits<uint32_t>::max();
+
 const RegExp *doAlt(const RegExp *re1, const RegExp *re2)
 {
 	if (!re1) {
@@ -127,44 +129,6 @@ const RegExp *Scanner::mkDefault() const
 {
 	return RegExp::make_sym(Range::ran(0,
 		opts->encoding.nCodeUnits()));
-}
-
-/*
- * note [counted repetition expansion]
- *
- * r{0} ;;= <empty regexp>
- * r{n} ::= r{n-1} r
- * r{n,m} ::= r{n} (r{0} | ... | r{m-n})
- * r{n,} ::= r{n} r*
- */
-
-// see note [counted repetition expansion]
-const RegExp *repeat(const RegExp *re, uint32_t n)
-{
-	const RegExp *r = NULL;
-	for (uint32_t i = 0; i < n; ++i) {
-		r = doCat(r, re);
-	}
-	return r;
-}
-
-// see note [counted repetition expansion]
-const RegExp *repeat_from_to(const RegExp *re, uint32_t n, uint32_t m)
-{
-	const RegExp *r1 = repeat(re, n);
-	const RegExp *r2 = NULL;
-	for (uint32_t i = n; i < m; ++i) {
-		r2 = mkAlt(doCat(re, r2), RegExp::make_nil());
-	}
-	return doCat(r1, r2);
-}
-
-// see note [counted repetition expansion]
-const RegExp *repeat_from(const RegExp *re, uint32_t n)
-{
-	// see note [Kleene star is expressed in terms of plus]
-	return doCat(repeat(re, n),
-		RegExp::make_alt(RegExp::make_iter(re), RegExp::make_nil()));
 }
 
 } // namespace re2c

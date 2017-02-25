@@ -97,7 +97,7 @@ yy6:
 	yych = *(in.mar = ++in.cur);
 	switch (yych) {
 	case '.':
-		in.yyt3 = in.cur;
+		in.yyt1 = in.cur;
 		goto yy7;
 	case '0':
 	case '1':
@@ -133,7 +133,7 @@ yy9:
 	yych = *++in.cur;
 	switch (yych) {
 	case '.':
-		in.yyt3 = in.cur;
+		in.yyt1 = in.cur;
 		goto yy7;
 	case '0':
 	case '1':
@@ -169,7 +169,7 @@ yy11:
 	yych = *++in.cur;
 	switch (yych) {
 	case '.':
-		in.yyt3 = in.cur;
+		in.yyt1 = in.cur;
 		goto yy7;
 	default:	goto yy8;
 	}
@@ -210,7 +210,7 @@ yy14:
 	yych = *++in.cur;
 	switch (yych) {
 	case '.':
-		in.yyt1 = in.cur;
+		in.yyt3 = in.cur;
 		goto yy16;
 	case '0':
 	case '1':
@@ -251,7 +251,7 @@ yy17:
 	yych = *++in.cur;
 	switch (yych) {
 	case '.':
-		in.yyt1 = in.cur;
+		in.yyt3 = in.cur;
 		goto yy16;
 	case '0':
 	case '1':
@@ -285,15 +285,15 @@ yy19:
 	yych = *++in.cur;
 	switch (yych) {
 	case '.':
-		in.yyt1 = in.cur;
+		in.yyt3 = in.cur;
 		goto yy16;
 	default:	goto yy8;
 	}
 yy20:
 	++in.cur;
-	p3 = in.yyt1;
+	p1 = in.yyt1;
 	p2 = in.yyt2;
-	p1 = in.yyt3;
+	p3 = in.yyt3;
 	{
             printf("> %u.%u.%u.%u\n",
                 parse_oct(in.tok, p1),

@@ -32,7 +32,7 @@ typedef std::vector<uint32_t> charset_t;
 struct RegExp
 {
 	static free_list<RegExp*> flist;
-	static const size_t NO_TAG;
+	static const uint32_t MANY;
 
 	enum type_t {NIL, SYM, ALT, CAT, ITER, TAG} type;
 	union
@@ -48,7 +48,12 @@ struct RegExp
 			const RegExp *re1;
 			const RegExp *re2;
 		} cat;
-		const RegExp *iter;
+		struct
+		{
+			const RegExp *re;
+			uint32_t min;
+			uint32_t max;
+		} iter;
 		const std::string *tag;
 	};
 
@@ -76,10 +81,12 @@ struct RegExp
 		re->cat.re2 = r2;
 		return re;
 	}
-	static const RegExp *make_iter(const RegExp *r)
+	static const RegExp *make_iter(const RegExp *r, uint32_t n, uint32_t m)
 	{
 		RegExp *re = new RegExp(ITER);
-		re->iter = r;
+		re->iter.re = r;
+		re->iter.min = n;
+		re->iter.max = m;
 		return re;
 	}
 	static const RegExp *make_tag(const std::string *t)
@@ -118,9 +125,6 @@ void split(const std::vector<RegExpRule> &rs, std::set<uint32_t> &cs);
 const RegExp *mkAlt(const RegExp *re1, const RegExp *re2);
 const RegExp *doAlt(const RegExp *re1, const RegExp *re2);
 const RegExp *doCat(const RegExp *re1, const RegExp *re2);
-const RegExp *repeat(const RegExp *re, uint32_t n);
-const RegExp *repeat_from_to(const RegExp *re, uint32_t n, uint32_t m);
-const RegExp *repeat_from(const RegExp *re, uint32_t n);
 void warn_nullable(const std::vector<RegExpRule> &regexps,
 	const std::string &cond, Warn &warn);
 

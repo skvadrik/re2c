@@ -61,7 +61,11 @@ smart_ptr<DFA> compile(const spec_t &spec, Output &output)
 		cs.push_back(*i);
 	}
 
-	nfa_t nfa(rules, opts->input_api);
+	RESpec re(rules);
+	find_fixed_tags(re, opts);
+	insert_default_tags(re);
+
+	nfa_t nfa(re);
 	if (opts->dump_nfa) dump_nfa(nfa);
 
 	dfa_t dfa(nfa, cs, opts, cond, warn);

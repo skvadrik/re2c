@@ -25,12 +25,12 @@ yy3:
 	default:	goto yy4;
 	}
 yy4:
-	z = yyt1;
-	y = yyt1;
-	x = yyt1;
-	w = yyt1;
-	v = yyt1;
 	u = yyt1;
+	v = yyt1;
+	w = yyt1;
+	x = yyt1;
+	y = yyt1;
+	z = yyt1;
 	{}
 yy5:
 	++YYCURSOR;
@@ -48,9 +48,9 @@ yy6:
 }
 
 re2c: warning: line 6: rule matches empty string [-Wmatch-empty-string]
-re2c: warning: line 5: tag 'z' is non-deterministic and induces 2 parallel instances [-Wnondeterministic-tags]
-re2c: warning: line 5: tag 'y' is non-deterministic and induces 2 parallel instances [-Wnondeterministic-tags]
-re2c: warning: line 5: tag 'x' is non-deterministic and induces 2 parallel instances [-Wnondeterministic-tags]
-re2c: warning: line 5: tag 'w' is non-deterministic and induces 2 parallel instances [-Wnondeterministic-tags]
-re2c: warning: line 5: tag 'v' is non-deterministic and induces 2 parallel instances [-Wnondeterministic-tags]
 re2c: warning: line 5: tag 'u' is non-deterministic and induces 2 parallel instances [-Wnondeterministic-tags]
+re2c: warning: line 5: tag 'v' is non-deterministic and induces 2 parallel instances [-Wnondeterministic-tags]
+re2c: warning: line 5: tag 'w' is non-deterministic and induces 2 parallel instances [-Wnondeterministic-tags]
+re2c: warning: line 5: tag 'x' is non-deterministic and induces 2 parallel instances [-Wnondeterministic-tags]
+re2c: warning: line 5: tag 'y' is non-deterministic and induces 2 parallel instances [-Wnondeterministic-tags]
+re2c: warning: line 5: tag 'z' is non-deterministic and induces 2 parallel instances [-Wnondeterministic-tags]

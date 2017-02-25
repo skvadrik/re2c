@@ -21,7 +21,6 @@ struct Tag
 	static const size_t VARDIST;
 
 	const std::string *name;
-	size_t rule;
 	size_t base;
 	size_t dist;
 };

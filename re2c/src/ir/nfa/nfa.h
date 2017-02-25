@@ -7,6 +7,7 @@
 #include <vector>
 
 #include "src/codegen/input_api.h"
+#include "src/ir/re/re.h"
 #include "src/ir/regexp/regexp.h"
 #include "src/ir/rule.h"
 #include "src/ir/tag.h"
@@ -93,17 +94,13 @@ struct nfa_t
 	std::vector<Tag> &tags;
 	nfa_state_t *root;
 
-	nfa_t(const std::vector<RegExpRule> &rs, input_api_t input);
+	nfa_t(const RESpec &spec);
 	~nfa_t();
 
 	FORBID_COPY(nfa_t);
 };
 
-size_t counters(const std::vector<RegExpRule> &regexps, size_t &ntags);
-void regexps2nfa(const std::vector<RegExpRule> &regexps, nfa_t &nfa, input_api_t input);
-bool nullable_rule(const RegExpRule &rule);
-void init_rules(const std::vector<RegExpRule> &regexps, std::valarray<Rule> &rules,
-	const std::vector<Tag> &tags);
+size_t estimate_size(const std::vector<RE*> &res);
 void dump_nfa(const nfa_t &nfa);
 
 } // namespace re2c

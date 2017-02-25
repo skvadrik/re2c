@@ -19,7 +19,7 @@ static void lex(const char *s)
 	yych = YYPEEK ();
 	switch (yych) {
 	case '0':
-		YYBACKUPTAG (yyt5);
+		YYBACKUPTAG (yyt1);
 		goto yy4;
 	default:	goto yy2;
 	}
@@ -33,7 +33,7 @@ yy4:
 	yych = YYPEEK ();
 	switch (yych) {
 	case '1':
-		YYBACKUPTAG (yyt4);
+		YYBACKUPTAG (yyt2);
 		goto yy5;
 	default:	goto yy3;
 	}
@@ -75,7 +75,7 @@ yy10:
 	yych = YYPEEK ();
 	switch (yych) {
 	case '3':
-		YYBACKUPTAG (yyt2);
+		YYBACKUPTAG (yyt4);
 		goto yy11;
 	default:	goto yy6;
 	}
@@ -105,7 +105,7 @@ yy14:
 	yych = YYPEEK ();
 	switch (yych) {
 	case '4':
-		YYBACKUPTAG (yyt1);
+		YYBACKUPTAG (yyt5);
 		goto yy15;
 	default:	goto yy6;
 	}
@@ -139,11 +139,11 @@ yy18:
 	}
 yy19:
 	YYSKIP ();
-	YYRESTORETAG (yyt1);
-	YYCOPYTAG (p3, yyt2);
+	YYCOPYTAG (p0, yyt1);
+	YYCOPYTAG (p1, yyt2);
 	YYCOPYTAG (p2, yyt3);
-	YYCOPYTAG (p1, yyt4);
-	YYCOPYTAG (p0, yyt5);
+	YYCOPYTAG (p3, yyt4);
+	YYRESTORETAG (yyt5);
 	{
             printf("'%.*s', '%.*s', '%.*s', '%.*s', '%s'\n",
                 p1 - p0, p0,

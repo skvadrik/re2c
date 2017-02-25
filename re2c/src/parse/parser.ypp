@@ -333,45 +333,17 @@ term:
 		}
 ;
 
-factor:
-		primary
-		{
-			$$ = $1;
+factor
+	: primary
+	| primary closes {
+		switch($2) {
+			case '*': $$ = RegExp::make_iter($1, 0, RegExp::MANY); break;
+			case '+': $$ = RegExp::make_iter($1, 1, RegExp::MANY); break;
+			case '?': $$ = RegExp::make_iter($1, 0, 1); break;
 		}
-	|	primary closes
-		{
-			// see note [Kleene star is expressed in terms of plus]
-			switch($2)
-			{
-			case '*':
-				$$ = RegExp::make_alt(RegExp::make_iter($1),
-					RegExp::make_nil());
-				break;
-			case '+':
-				$$ = RegExp::make_iter($1);
-				break;
-			case '?':
-				$$ = mkAlt($1, RegExp::make_nil());
-				break;
-			}
-		}
-	|	primary TOKEN_CLOSESIZE
-		{
-			if ($2.max == std::numeric_limits<uint32_t>::max())
-			{
-				$$ = repeat_from ($1, $2.min);
-			}
-			else if ($2.min == $2.max)
-			{
-				$$ = repeat ($1, $2.min);
-			}
-			else
-			{
-				$$ = repeat_from_to ($1, $2.min, $2.max);
-			}
-			$$ = $$ ? $$ : RegExp::make_nil();
-		}
-;
+	} | primary TOKEN_CLOSESIZE {
+		$$ = RegExp::make_iter($1, $2.min, $2.max);
+	};
 
 closes
 	: close

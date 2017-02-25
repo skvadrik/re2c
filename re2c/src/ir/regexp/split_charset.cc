@@ -27,7 +27,7 @@ static void split(const RegExp* re, std::set<uint32_t> &cs)
 			split(re->cat.re2, cs);
 			break;
 		case RegExp::ITER:
-			split(re->iter, cs);
+			split(re->iter.re, cs);
 			break;
 	}
 }

@@ -37,7 +37,7 @@ static void lex(const char *s)
 	case '7':
 	case '8':
 	case '9':
-		ZZBT (zz_4);
+		ZZBT (zz_1);
 		goto yy4;
 	default:	goto yy2;
 	}
@@ -51,7 +51,7 @@ yy4:
 	yych = YYPEEK ();
 	switch (yych) {
 	case '.':
-		ZZBT (zz_3);
+		ZZBT (zz_2);
 		goto yy5;
 	case '0':
 	case '1':
@@ -89,7 +89,7 @@ yy7:
 	yych = YYPEEK ();
 	switch (yych) {
 	case '.':
-		ZZBT (zz_3);
+		ZZBT (zz_2);
 		goto yy5;
 	case '0':
 	case '1':
@@ -108,7 +108,7 @@ yy8:
 	yych = YYPEEK ();
 	switch (yych) {
 	case '.':
-		ZZBT (zz_2);
+		ZZBT (zz_3);
 		goto yy10;
 	case '0':
 	case '1':
@@ -127,7 +127,7 @@ yy9:
 	yych = YYPEEK ();
 	switch (yych) {
 	case '.':
-		ZZBT (zz_3);
+		ZZBT (zz_2);
 		goto yy5;
 	default:	goto yy6;
 	}
@@ -152,7 +152,7 @@ yy11:
 	yych = YYPEEK ();
 	switch (yych) {
 	case '.':
-		ZZBT (zz_2);
+		ZZBT (zz_3);
 		goto yy10;
 	case '0':
 	case '1':
@@ -171,7 +171,7 @@ yy12:
 	yych = YYPEEK ();
 	switch (yych) {
 	case '.':
-		ZZBT (zz_1);
+		ZZBT (zz_4);
 		goto yy14;
 	case '0':
 	case '1':
@@ -190,7 +190,7 @@ yy13:
 	yych = YYPEEK ();
 	switch (yych) {
 	case '.':
-		ZZBT (zz_2);
+		ZZBT (zz_3);
 		goto yy10;
 	default:	goto yy6;
 	}
@@ -215,7 +215,7 @@ yy15:
 	yych = YYPEEK ();
 	switch (yych) {
 	case '.':
-		ZZBT (zz_1);
+		ZZBT (zz_4);
 		goto yy14;
 	case '0':
 	case '1':
@@ -246,10 +246,10 @@ yy16:
 	default:	goto yy17;
 	}
 yy17:
-	ZZCT (p3, zz_1);
-	ZZCT (p2, zz_2);
-	ZZCT (p1, zz_3);
-	ZZCT (p0, zz_4);
+	ZZCT (p0, zz_1);
+	ZZCT (p1, zz_2);
+	ZZCT (p2, zz_3);
+	ZZCT (p3, zz_4);
 	{
             printf("%u.%u.%u.%u\n",
                 parse_oct(p0, p1),
@@ -263,7 +263,7 @@ yy18:
 	yych = YYPEEK ();
 	switch (yych) {
 	case '.':
-		ZZBT (zz_1);
+		ZZBT (zz_4);
 		goto yy14;
 	default:	goto yy6;
 	}

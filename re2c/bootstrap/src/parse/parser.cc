@@ -606,8 +606,8 @@ static const yytype_uint16 yyrline[] =
        0,   199,   199,   201,   202,   203,   207,   214,   219,   222,
      226,   226,   229,   233,   237,   244,   251,   258,   263,   265,
      271,   278,   279,   285,   291,   298,   299,   304,   308,   315,
-     319,   326,   330,   337,   341,   358,   377,   378,   382,   383,
-     384,   388,   397,   401
+     319,   326,   330,   337,   338,   344,   349,   350,   354,   355,
+     356,   360,   369,   373
 };
 #endif
 
@@ -1617,52 +1617,23 @@ yyreduce:
 
     break;
 
-  case 33:
-
-    {
-			(yyval.regexp) = (yyvsp[0].regexp);
-		}
-
-    break;
-
   case 34:
 
     {
-			// see note [Kleene star is expressed in terms of plus]
-			switch((yyvsp[0].op))
-			{
-			case '*':
-				(yyval.regexp) = RegExp::make_alt(RegExp::make_iter((yyvsp[-1].regexp)),
-					RegExp::make_nil());
-				break;
-			case '+':
-				(yyval.regexp) = RegExp::make_iter((yyvsp[-1].regexp));
-				break;
-			case '?':
-				(yyval.regexp) = mkAlt((yyvsp[-1].regexp), RegExp::make_nil());
-				break;
-			}
+		switch((yyvsp[0].op)) {
+			case '*': (yyval.regexp) = RegExp::make_iter((yyvsp[-1].regexp), 0, RegExp::MANY); break;
+			case '+': (yyval.regexp) = RegExp::make_iter((yyvsp[-1].regexp), 1, RegExp::MANY); break;
+			case '?': (yyval.regexp) = RegExp::make_iter((yyvsp[-1].regexp), 0, 1); break;
 		}
+	}
 
     break;
 
   case 35:
 
     {
-			if ((yyvsp[0].extop).max == std::numeric_limits<uint32_t>::max())
-			{
-				(yyval.regexp) = repeat_from ((yyvsp[-1].regexp), (yyvsp[0].extop).min);
-			}
-			else if ((yyvsp[0].extop).min == (yyvsp[0].extop).max)
-			{
-				(yyval.regexp) = repeat ((yyvsp[-1].regexp), (yyvsp[0].extop).min);
-			}
-			else
-			{
-				(yyval.regexp) = repeat_from_to ((yyvsp[-1].regexp), (yyvsp[0].extop).min, (yyvsp[0].extop).max);
-			}
-			(yyval.regexp) = (yyval.regexp) ? (yyval.regexp) : RegExp::make_nil();
-		}
+		(yyval.regexp) = RegExp::make_iter((yyvsp[-1].regexp), (yyvsp[0].extop).min, (yyvsp[0].extop).max);
+	}
 
     break;
 

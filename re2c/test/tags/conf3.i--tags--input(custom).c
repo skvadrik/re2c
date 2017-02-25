@@ -46,7 +46,7 @@ static void lex(const char *s)
 	case '7':
 	case '8':
 	case '9':
-		YYBACKUPTAG (tags.yyt4);
+		YYBACKUPTAG (tags.yyt1);
 		goto yy4;
 	default:	goto yy2;
 	}
@@ -60,7 +60,7 @@ yy4:
 	yych = YYPEEK ();
 	switch (yych) {
 	case '.':
-		YYBACKUPTAG (tags.yyt3);
+		YYBACKUPTAG (tags.yyt2);
 		goto yy5;
 	case '0':
 	case '1':
@@ -98,7 +98,7 @@ yy7:
 	yych = YYPEEK ();
 	switch (yych) {
 	case '.':
-		YYBACKUPTAG (tags.yyt3);
+		YYBACKUPTAG (tags.yyt2);
 		goto yy5;
 	case '0':
 	case '1':
@@ -117,7 +117,7 @@ yy8:
 	yych = YYPEEK ();
 	switch (yych) {
 	case '.':
-		YYBACKUPTAG (tags.yyt2);
+		YYBACKUPTAG (tags.yyt3);
 		goto yy10;
 	case '0':
 	case '1':
@@ -136,7 +136,7 @@ yy9:
 	yych = YYPEEK ();
 	switch (yych) {
 	case '.':
-		YYBACKUPTAG (tags.yyt3);
+		YYBACKUPTAG (tags.yyt2);
 		goto yy5;
 	default:	goto yy6;
 	}
@@ -161,7 +161,7 @@ yy11:
 	yych = YYPEEK ();
 	switch (yych) {
 	case '.':
-		YYBACKUPTAG (tags.yyt2);
+		YYBACKUPTAG (tags.yyt3);
 		goto yy10;
 	case '0':
 	case '1':
@@ -180,7 +180,7 @@ yy12:
 	yych = YYPEEK ();
 	switch (yych) {
 	case '.':
-		YYBACKUPTAG (tags.yyt1);
+		YYBACKUPTAG (tags.yyt4);
 		goto yy14;
 	case '0':
 	case '1':
@@ -199,7 +199,7 @@ yy13:
 	yych = YYPEEK ();
 	switch (yych) {
 	case '.':
-		YYBACKUPTAG (tags.yyt2);
+		YYBACKUPTAG (tags.yyt3);
 		goto yy10;
 	default:	goto yy6;
 	}
@@ -224,7 +224,7 @@ yy15:
 	yych = YYPEEK ();
 	switch (yych) {
 	case '.':
-		YYBACKUPTAG (tags.yyt1);
+		YYBACKUPTAG (tags.yyt4);
 		goto yy14;
 	case '0':
 	case '1':
@@ -255,10 +255,10 @@ yy16:
 	default:	goto yy17;
 	}
 yy17:
-	YYCOPYTAG (p3, tags.yyt1);
-	YYCOPYTAG (p2, tags.yyt2);
-	YYCOPYTAG (p1, tags.yyt3);
-	YYCOPYTAG (p0, tags.yyt4);
+	YYCOPYTAG (p0, tags.yyt1);
+	YYCOPYTAG (p1, tags.yyt2);
+	YYCOPYTAG (p2, tags.yyt3);
+	YYCOPYTAG (p3, tags.yyt4);
 	{
             printf("%u.%u.%u.%u\n",
                 parse_oct(p0, p1),
@@ -272,7 +272,7 @@ yy18:
 	yych = YYPEEK ();
 	switch (yych) {
 	case '.':
-		YYBACKUPTAG (tags.yyt1);
+		YYBACKUPTAG (tags.yyt4);
 		goto yy14;
 	default:	goto yy6;
 	}

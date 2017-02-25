@@ -10,8 +10,10 @@ static bool nullable(const RegExp *re, bool &trail)
 	switch (re->type) {
 		default: assert(false);
 		case RegExp::NIL: return true;
-		case RegExp::SYM:
-		case RegExp::ITER: return false;
+		case RegExp::SYM: return false;
+		case RegExp::ITER:
+			return re->iter.min == 0
+				|| nullable(re->iter.re, trail);
 		case RegExp::TAG:
 			if (re->tag == NULL) {
 				trail = true;

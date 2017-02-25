@@ -16,8 +16,8 @@
 		goto yy2;
 	}
 yy2:
-	YYCOPYTAG (b, yyt2);
 	YYCOPYTAG (a, yyt1);
+	YYCOPYTAG (b, yyt2);
 	{}
 }
 

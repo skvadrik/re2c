@@ -29,6 +29,7 @@ SRC_HDR = \
 	src/ir/dfa/find_state.h \
 	src/ir/dfa/tagpool.h \
 	src/ir/nfa/nfa.h \
+	src/ir/re/re.h \
 	src/ir/regexp/encoding/case.h \
 	src/ir/regexp/encoding/enc.h \
 	src/ir/regexp/encoding/range_suffix.h \
@@ -85,11 +86,12 @@ SRC = \
 	src/conf/msg.cc \
 	src/conf/opt.cc \
 	src/conf/warn.cc \
-	src/ir/nfa/counters.cc \
 	src/ir/nfa/dump.cc \
-	src/ir/nfa/init_rules.cc \
-	src/ir/nfa/nfa.cc \
-	src/ir/nfa/regexps2nfa.cc \
+	src/ir/nfa/estimate_size.cc \
+	src/ir/nfa/re_to_nfa.cc \
+	src/ir/re/ast_to_re.cc \
+	src/ir/re/default_tags.cc \
+	src/ir/re/fixed_tags.cc \
 	src/ir/adfa/adfa.cc \
 	src/ir/adfa/dump.cc \
 	src/ir/adfa/prepare.cc \

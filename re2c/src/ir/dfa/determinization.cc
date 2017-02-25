@@ -109,13 +109,16 @@ void warn_nondeterministic_tags(const size_t *nondet,
 	const std::vector<Tag> &tags, const std::valarray<Rule> &rules,
 	const std::string &cond, Warn &warn)
 {
-	const size_t ntag = tags.size();
-	for (size_t t = 0; t < ntag; ++t) {
-		const size_t m = nondet[t];
-		if (m > 1) {
-			const Tag &tag = tags[t];
-			const uint32_t line = rules[tag.rule].code->fline;
-			warn.nondeterministic_tags(line, cond, tag.name, m);
+	const size_t nrule = rules.size();
+	for (size_t r = 0; r < nrule; ++r) {
+		const Rule &rule = rules[r];
+		for (size_t t = rule.ltag; t < rule.htag; ++t) {
+			const size_t m = nondet[t];
+			if (m > 1) {
+				const Tag &tag = tags[t];
+				const uint32_t line = rule.code->fline;
+				warn.nondeterministic_tags(line, cond, tag.name, m);
+			}
 		}
 	}
 }

@@ -39,7 +39,7 @@ static void lex(const char *YYCURSOR)
 	case '7':
 	case '8':
 	case '9':
-		tags.yyt4 = YYCURSOR;
+		tags.yyt1 = YYCURSOR;
 		goto yy4;
 	default:	goto yy2;
 	}
@@ -51,7 +51,7 @@ yy4:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
 	case '.':
-		tags.yyt3 = YYCURSOR;
+		tags.yyt2 = YYCURSOR;
 		goto yy5;
 	case '0':
 	case '1':
@@ -87,7 +87,7 @@ yy7:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case '.':
-		tags.yyt3 = YYCURSOR;
+		tags.yyt2 = YYCURSOR;
 		goto yy5;
 	case '0':
 	case '1':
@@ -105,7 +105,7 @@ yy8:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case '.':
-		tags.yyt2 = YYCURSOR;
+		tags.yyt3 = YYCURSOR;
 		goto yy10;
 	case '0':
 	case '1':
@@ -123,7 +123,7 @@ yy9:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case '.':
-		tags.yyt3 = YYCURSOR;
+		tags.yyt2 = YYCURSOR;
 		goto yy5;
 	default:	goto yy6;
 	}
@@ -146,7 +146,7 @@ yy11:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case '.':
-		tags.yyt2 = YYCURSOR;
+		tags.yyt3 = YYCURSOR;
 		goto yy10;
 	case '0':
 	case '1':
@@ -164,7 +164,7 @@ yy12:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case '.':
-		tags.yyt1 = YYCURSOR;
+		tags.yyt4 = YYCURSOR;
 		goto yy14;
 	case '0':
 	case '1':
@@ -182,7 +182,7 @@ yy13:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case '.':
-		tags.yyt2 = YYCURSOR;
+		tags.yyt3 = YYCURSOR;
 		goto yy10;
 	default:	goto yy6;
 	}
@@ -205,7 +205,7 @@ yy15:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case '.':
-		tags.yyt1 = YYCURSOR;
+		tags.yyt4 = YYCURSOR;
 		goto yy14;
 	case '0':
 	case '1':
@@ -235,10 +235,10 @@ yy16:
 	default:	goto yy17;
 	}
 yy17:
-	p3 = tags.yyt1;
-	p2 = tags.yyt2;
-	p1 = tags.yyt3;
-	p0 = tags.yyt4;
+	p0 = tags.yyt1;
+	p1 = tags.yyt2;
+	p2 = tags.yyt3;
+	p3 = tags.yyt4;
 	{
             printf("%u.%u.%u.%u\n",
                 parse_oct(p0, p1),
@@ -251,7 +251,7 @@ yy18:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case '.':
-		tags.yyt1 = YYCURSOR;
+		tags.yyt4 = YYCURSOR;
 		goto yy14;
 	default:	goto yy6;
 	}

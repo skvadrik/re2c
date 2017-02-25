@@ -107,11 +107,11 @@ yy18:
 	}
 yy19:
 	++YYCURSOR;
-	YYCURSOR -= 5;
-	p3 = YYCURSOR - 4;
-	p2 = YYCURSOR - 7;
-	p1 = YYCURSOR - 9;
 	p0 = YYCURSOR - 10;
+	p1 = YYCURSOR - 9;
+	p2 = YYCURSOR - 7;
+	p3 = YYCURSOR - 4;
+	YYCURSOR -= 5;
 	{
             printf("'%.*s', '%.*s', '%.*s', '%.*s', '%s'\n",
                 p1 - p0, p0,
