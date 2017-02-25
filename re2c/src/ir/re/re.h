@@ -42,14 +42,17 @@ struct RESpec
 {
 	RE::alc_t alc;
 	std::vector<RE*> res;
+	std::vector<uint32_t> &charset;
 	std::vector<Tag> &tags;
 	std::valarray<Rule> &rules;
 
 	explicit RESpec(const std::vector<RegExpRule> &ast);
 };
 
+void split_charset(RESpec &spec, const opt_t *opts);
 void find_fixed_tags(RESpec &spec, const opt_t *opts);
 void insert_default_tags(RESpec &spec);
+void warn_nullable(const RESpec &spec, const std::string &cond, Warn &warn);
 
 inline RE *re_nil(RE::alc_t &alc)
 {

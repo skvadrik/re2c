@@ -53,7 +53,8 @@ struct Node
 	const tcmd_t *cmd;
 
 	Node();
-	void init(const dfa_state_t *s, const charset_t &cs, size_t nil);
+	void init(const dfa_state_t *s,
+		const std::vector<uint32_t> &charset, size_t nil);
 	bool end() const;
 
 	FORBID_COPY(Node);
@@ -75,12 +76,13 @@ struct Skeleton
 	size_t sizeof_key;
 	size_t defrule;
 	size_t ntagver;
+	const std::vector<uint32_t> &charset;
 	const std::valarray<Rule> &rules;
 	const std::vector<Tag> &tags;
 	const tagver_t *finvers;
 
-	Skeleton(const dfa_t &dfa, const charset_t &cs, const opt_t *opts,
-		size_t def, const std::string &dfa_name, const std::string &dfa_cond,
+	Skeleton(const dfa_t &dfa, const opt_t *opts, size_t def,
+		const std::string &dfa_name, const std::string &dfa_cond,
 		uint32_t dfa_line);
 	~Skeleton ();
 	FORBID_COPY(Skeleton);

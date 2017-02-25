@@ -68,6 +68,7 @@ struct DFA
 	uint32_t nStates;
 	State * head;
 	const tcid_t tags0;
+	std::vector<uint32_t> &charset;
 	std::valarray<Rule> &rules;
 	std::vector<Tag> &tags;
 	const tagver_t *finvers;
@@ -86,7 +87,6 @@ struct DFA
 		, const std::vector<size_t> &fill
 		, size_t def
 		, size_t key
-		, const charset_t &charset
 		, const std::string &n
 		, const std::string &c
 		, uint32_t l

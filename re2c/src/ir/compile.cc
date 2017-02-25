@@ -35,45 +35,27 @@ smart_ptr<DFA> compile(const spec_t &spec, Output &output)
 	const size_t defrule = spec.defs.empty()
 		? Rule::NONE
 		: rules.size() - 1;
-	const uint32_t
-		line = output.source.block().line,
-		cunits = opts->encoding.nCodeUnits();
+	const uint32_t line = output.source.block().line;
 	const std::string
 		&cond = spec.name,
 		name = make_name(cond, line),
 		&setup = spec.setup.empty() ? "" : spec.setup[0]->text;
 
-	warn_nullable(rules, cond, warn);
-
-	// The original set of code units (charset) might be very large.
-	// A common trick it is to split charset into disjoint character ranges
-	// and choose a representative of each range (we choose lower bound).
-	// The set of all representatives is the new (compacted) charset.
-	// Don't forget to include zero and upper bound, even if they
-	// do not explicitely apper in ranges.
-	std::set<uint32_t> bounds;
-	split(rules, bounds);
-	bounds.insert(0);
-	bounds.insert(cunits);
-	charset_t cs;
-	for (std::set<uint32_t>::const_iterator i = bounds.begin(); i != bounds.end(); ++i)
-	{
-		cs.push_back(*i);
-	}
-
 	RESpec re(rules);
+	split_charset(re, opts);
 	find_fixed_tags(re, opts);
 	insert_default_tags(re);
+	warn_nullable(re, cond, warn);
 
 	nfa_t nfa(re);
 	if (opts->dump_nfa) dump_nfa(nfa);
 
-	dfa_t dfa(nfa, cs, opts, cond, warn);
+	dfa_t dfa(nfa, opts, cond, warn);
 	if (opts->dump_dfa_det) dump_dfa(dfa);
 
 	// skeleton must be constructed after DFA construction
 	// but prior to any other DFA transformations
-	Skeleton skeleton(dfa, cs, opts, defrule, name, cond, line);
+	Skeleton skeleton(dfa, opts, defrule, name, cond, line);
 	warn_undefined_control_flow(skeleton, warn);
 	if (opts->target == opt_t::SKELETON) {
 		emit_data(skeleton);
@@ -96,7 +78,7 @@ smart_ptr<DFA> compile(const spec_t &spec, Output &output)
 
 	// ADFA stands for 'DFA with actions'
 	DFA *adfa = new DFA(dfa, fill, defrule, skeleton.sizeof_key,
-		cs, name, cond, line, setup);
+		name, cond, line, setup);
 
 	// see note [reordering DFA states]
 	adfa->reorder();

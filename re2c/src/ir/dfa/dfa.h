@@ -52,6 +52,7 @@ struct dfa_t
 
 	std::vector<dfa_state_t*> states;
 	const size_t nchars;
+	std::vector<uint32_t> &charset;
 	std::valarray<Rule> &rules;
 	std::vector<Tag> &tags;
 	tagver_t *finvers;
@@ -60,7 +61,7 @@ struct dfa_t
 	tcmd_t *tcmd0;
 	tcid_t *tcid0;
 
-	dfa_t(const nfa_t &nfa, const charset_t &charset, const opt_t *opts,
+	dfa_t(const nfa_t &nfa, const opt_t *opts,
 		const std::string &cond, Warn &warn);
 	~dfa_t();
 

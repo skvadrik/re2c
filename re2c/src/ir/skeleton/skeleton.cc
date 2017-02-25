@@ -19,9 +19,10 @@ static bool same(const tcmd_t &x, const tcmd_t &y)
 	return x.save == y.save && x.copy == y.copy;
 }
 
-void Node::init(const dfa_state_t *s, const charset_t &cs, size_t nil)
+void Node::init(const dfa_state_t *s,
+	const std::vector<uint32_t> &charset, size_t nil)
 {
-	const size_t nc = cs.size() - 1;
+	const size_t nc = charset.size() - 1;
 	for (uint32_t c = 0, l = 0; c < nc;) {
 
 		size_t j = s->arcs[c];
@@ -32,7 +33,7 @@ void Node::init(const dfa_state_t *s, const charset_t &cs, size_t nil)
 		// all arcs go to default node => this node is final
 		if (l == 0 && c == nc && j == nil) break;
 
-		const uint32_t u = cs[c];
+		const uint32_t u = charset[c];
 		arcs[j].push_back(Node::range_t(l, u - 1, &t));
 
 		l = u;
@@ -51,7 +52,6 @@ const size_t Skeleton::DEFTAG = std::numeric_limits<size_t>::max();
 
 Skeleton::Skeleton(
 	const dfa_t &dfa,
-	const charset_t &cs,
 	const opt_t *op,
 	size_t def,
 	const std::string &dfa_name,
@@ -67,6 +67,7 @@ Skeleton::Skeleton(
 	, sizeof_key(8)
 	, defrule(def)
 	, ntagver(static_cast<size_t>(dfa.maxtagver) + 1)
+	, charset(dfa.charset)
 	, rules(dfa.rules)
 	, tags(dfa.tags)
 	, finvers(dfa.finvers)
@@ -74,7 +75,7 @@ Skeleton::Skeleton(
 	// initialize nodes
 	const size_t nil = nodes_count - 1;
 	for (size_t i = 0; i < nil; ++i) {
-		nodes[i].init(dfa.states[i], cs, nil);
+		nodes[i].init(dfa.states[i], charset, nil);
 	}
 
 	// initialize size of key

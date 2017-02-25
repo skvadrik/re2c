@@ -48,10 +48,11 @@ void reach(const kernel_t *kernel, closure_t &clos, uint32_t symbol)
 	}
 }
 
-dfa_t::dfa_t(const nfa_t &nfa, const charset_t &charset, const opt_t *opts,
+dfa_t::dfa_t(const nfa_t &nfa, const opt_t *opts,
 	const std::string &cond, Warn &warn)
 	: states()
-	, nchars(charset.size() - 1) // (n + 1) bounds for n ranges
+	, nchars(nfa.charset.size() - 1) // (n + 1) bounds for n ranges
+	, charset(nfa.charset)
 	, rules(nfa.rules)
 	, tags(nfa.tags)
 	, finvers(NULL)

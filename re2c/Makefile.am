@@ -92,6 +92,8 @@ SRC = \
 	src/ir/re/ast_to_re.cc \
 	src/ir/re/default_tags.cc \
 	src/ir/re/fixed_tags.cc \
+	src/ir/re/nullable.cc \
+	src/ir/re/split_charset.cc \
 	src/ir/adfa/adfa.cc \
 	src/ir/adfa/dump.cc \
 	src/ir/adfa/prepare.cc \
@@ -121,9 +123,7 @@ SRC = \
 	src/ir/regexp/encoding/utf16/utf16_regexp.cc \
 	src/ir/regexp/encoding/utf16/utf16.cc \
 	src/ir/regexp/encoding/utf16/utf16_range.cc \
-	src/ir/regexp/nullable.cc \
 	src/ir/regexp/regexp.cc \
-	src/ir/regexp/split_charset.cc \
 	src/ir/compile.cc \
 	src/ir/rule.cc \
 	src/ir/skeleton/control_flow.cc \

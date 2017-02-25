@@ -104,6 +104,7 @@ static void init_rule(Rule &rule, const Code *code, const std::vector<Tag> &tags
 RESpec::RESpec(const std::vector<RegExpRule> &ast)
 	: alc()
 	, res()
+	, charset(*new std::vector<uint32_t>)
 	, tags(*new std::vector<Tag>)
 	, rules(*new std::valarray<Rule>(ast.size()))
 {

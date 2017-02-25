@@ -90,6 +90,7 @@ struct nfa_t
 	size_t max_size;
 	size_t size;
 	nfa_state_t *states;
+	std::vector<uint32_t> &charset;
 	std::valarray<Rule> &rules;
 	std::vector<Tag> &tags;
 	nfa_state_t *root;

@@ -20,7 +20,6 @@ DFA::DFA
 	, const std::vector<size_t> &fill
 	, size_t def
 	, size_t key
-	, const charset_t &charset
 	, const std::string &n
 	, const std::string &c
 	, uint32_t l
@@ -31,10 +30,11 @@ DFA::DFA
 	, cond (c)
 	, line (l)
 	, lbChar(0)
-	, ubChar(charset.back())
+	, ubChar(dfa.charset.back())
 	, nStates(0)
 	, head(NULL)
 	, tags0(*dfa.tcid0)
+	, charset(dfa.charset)
 	, rules(dfa.rules)
 	, tags(dfa.tags)
 	, finvers(dfa.finvers)
@@ -102,6 +102,7 @@ DFA::~DFA()
 		delete s;
 	}
 
+	delete &charset;
 	delete &rules;
 	delete &tags;
 	delete[] finvers;
