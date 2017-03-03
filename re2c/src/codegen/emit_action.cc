@@ -23,7 +23,6 @@ static void emit_accept        (OutputFile &o, uint32_t ind, const DFA &dfa, con
 static void emit_rule          (OutputFile &o, uint32_t ind, const DFA &dfa, size_t rule_idx);
 static void gen_fintags        (OutputFile &o, uint32_t ind, const DFA &dfa, const Rule &rule);
 static void gen_goto           (code_lines_t &code, const State *to, const DFA &dfa, tcid_t tcid, const opt_t *opts, bool skip);
-static std::string tagname     (const Tag &tag);
 static bool endstate           (const State *s);
 
 void emit_action(OutputFile &o, uint32_t ind, const DFA &dfa,
@@ -167,28 +166,26 @@ void emit_rule(OutputFile &o, uint32_t ind, const DFA &dfa, size_t rule_idx)
 
 	if (opts->target == opt_t::SKELETON) {
 		emit_action(o, ind, dfa, rule_idx);
-		return;
-	}
-
-	if (!cond.empty() && dfa.cond != cond) {
-		strrreplace(s = opts->cond_set, opts->cond_set_arg, opts->condEnumPrefix + cond);
-		o.wind(ind).wstring(s);
-		if (!opts->cond_set_naked) {
-			o.ws("(").wstring(opts->condEnumPrefix).wstring(cond).ws(");");
+	} else {
+		if (!cond.empty() && dfa.cond != cond) {
+			strrreplace(s = opts->cond_set, opts->cond_set_arg, opts->condEnumPrefix + cond);
+			o.wind(ind).wstring(s);
+			if (!opts->cond_set_naked) {
+				o.ws("(").wstring(opts->condEnumPrefix).wstring(cond).ws(");");
+			}
+			o.ws("\n");
 		}
-		o.ws("\n");
-	}
-
-	if (!code->autogen) {
-		if (!dfa.setup.empty()) {
-			o.wind(ind).wstring(dfa.setup).ws("\n");
+		if (!code->autogen) {
+			if (!dfa.setup.empty()) {
+				o.wind(ind).wstring(dfa.setup).ws("\n");
+			}
+			o.wline_info(code->fline, code->fname.c_str())
+				.wind(ind).wstring(code->text).ws("\n")
+				.wdelay_line_info();
+		} else if (!cond.empty()) {
+			strrreplace(s = opts->condGoto, opts->condGotoParam, opts->condPrefix + cond);
+			o.wind(ind).wstring(s).ws("\n");
 		}
-		o.wline_info(code->fline, code->fname.c_str())
-			.wind(ind).wstring(code->text).ws("\n")
-			.wdelay_line_info();
-	} else if (!cond.empty()) {
-		strrreplace(s = opts->condGoto, opts->condGotoParam, opts->condPrefix + cond);
-		o.wind(ind).wstring(s).ws("\n");
 	}
 
 	if (wrap) o.wind(--ind).ws("}\n");

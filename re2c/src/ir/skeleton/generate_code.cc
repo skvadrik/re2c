@@ -366,11 +366,12 @@ void emit_action(OutputFile &o, uint32_t ind, const DFA &dfa, size_t rid)
 		.ws("(&i, keys, input, token, &cursor, ").wu64(rkey).ws(")");
 
 	for (size_t t = r.ltag; t < r.htag; ++t) {
-		if (t == r.ttag || fixed(dfa.tags[t])) continue;
-		const std::string &tag = *dfa.tags[t].name;
+		const Tag &tag = dfa.tags[t];
+		if (t == r.ttag || fixed(tag)) continue;
+		const std::string tname = tagname(tag);
 		o.ws("\n").wind(ind + 1).ws(" || check_tag_").wstring(name)
-			.ws("(&i, keys, ").wstring(tag).ws(", input, token, \"")
-			.wstring(tag).ws("\")");
+			.ws("(&i, keys, ").wstring(tname).ws(", input, token, \"")
+			.wstring(tname).ws("\")");
 	}
 
 	o.ws(";\n");
