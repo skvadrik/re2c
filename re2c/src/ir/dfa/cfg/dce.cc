@@ -17,6 +17,13 @@ void cfg_t::dead_code_elimination(cfg_t &cfg, const bool *live)
 				ps = &s->next;
 			}
 		}
+		for (tagcopy_t *c, **pc = &b->cmd->copy; (c = *pc);) {
+			if (!live[c->lhs]) {
+				*pc = c->next;
+			} else {
+				pc = &c->next;
+			}
+		}
 	}
 }
 
