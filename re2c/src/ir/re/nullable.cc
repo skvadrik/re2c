@@ -13,7 +13,7 @@ static bool nullable(const RESpec &spec, const RE *re, bool &trail)
 		case RE::ITER:
 			return nullable(spec, re->iter.re, trail);
 		case RE::TAG:
-			trail |= spec.tags[re->tag.idx].name == NULL;
+			trail |= trailing(spec.tags[re->tag.idx]);
 			return true;
 		case RE::ALT:
 			return nullable(spec, re->alt.re1, trail)

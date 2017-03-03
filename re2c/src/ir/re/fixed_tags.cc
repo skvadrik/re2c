@@ -39,9 +39,9 @@ static void find_fixed_tags(RE *re, std::vector<Tag> &tags,
 			find_fixed_tags(re->iter.re, tags, dist, base, false);
 			dist = Tag::VARDIST;
 			break;
-		case RE::TAG:
+		case RE::TAG: {
+			Tag &tag = tags[re->tag.idx];
 			if (toplevel && dist != Tag::VARDIST) {
-				Tag &tag = tags[re->tag.idx];
 				tag.base = base;
 				tag.dist = dist;
 			} else {
@@ -50,8 +50,9 @@ static void find_fixed_tags(RE *re, std::vector<Tag> &tags,
 					dist = 0;
 				}
 			}
-			if (tags[re->tag.idx].name == NULL) dist = 0;
+			if (trailing(tag)) dist = 0;
 			break;
+		}
 	}
 }
 

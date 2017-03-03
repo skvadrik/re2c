@@ -30,6 +30,11 @@ inline bool fixed(const Tag &tag)
 	return tag.dist != Tag::VARDIST;
 }
 
+inline bool trailing(const Tag &tag)
+{
+	return tag.name == NULL;
+}
+
 } // namespace re2c
 
 #endif // _RE2C_IR_TAG_

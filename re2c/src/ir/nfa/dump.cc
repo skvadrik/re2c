@@ -46,12 +46,12 @@ void dump_nfa(const nfa_t &nfa)
 				break;
 			}
 			case nfa_state_t::TAG: {
-				const std::string *name = nfa.tags[n->tag.info].name;
+				const Tag &tag = nfa.tags[n->tag.info];
 				fprintf(stderr, "  n%u -> n%u [label=\"/", i, index(nfa, n->tag.out));
-				if (name) {
-					fprintf(stderr, "%s", name->c_str());
-				} else {
+				if (trailing(tag)) {
 					fprintf(stderr, "%u", (uint32_t)n->rule);
+				} else {
+					fprintf(stderr, "%s", tag.name->c_str());
 				}
 				if (n->tag.bottom) {
 					fprintf(stderr, "&darr;");
