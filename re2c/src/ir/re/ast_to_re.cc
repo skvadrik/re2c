@@ -3,25 +3,6 @@
 
 namespace re2c {
 
-/* note [Kleene star is expressed in terms of plus]
- *
- * In literature Kleene star 'r*' (zero or more repetitions of 'r')
- * is the basic operation. In practice it is more convenient to use
- * 'r+' (one or more repetitions of 'r'), because expansion 'r+ ::= r r*'
- * duplicates 'r', while expansion 'r* = r+ | <empty>' allows to
- * avoid duplication. This is more efficient in general and crucial
- * in cases when duplication of 'r' is forbidden (e.g. if 'r' has tags).
- */
-
-/*
- * note [counted repetition expansion]
- *
- * r{0} ;;= <empty regexp>
- * r{n} ::= r{n-1} r
- * r{n,m} ::= r{n} (r{0} | ... | r{m-n})
- * r{n,} ::= r{n} r*
- */
-
 static RE *ast_to_re(RESpec &spec, const RegExp *ast)
 {
 	RE::alc_t &alc = spec.alc;
@@ -50,27 +31,17 @@ static RE *ast_to_re(RESpec &spec, const RegExp *ast)
 		case RegExp::ITER: {
 			const uint32_t
 				n = ast->iter.min,
-				m = ast->iter.max;
+				n1 = std::max(n, 1u),
+				m = std::max(n, ast->iter.max);
 			const RegExp *x = ast->iter.re;
 
-			if (n == 0 && m == 0) {
-				return re_nil(alc);
-			}
-
-			RE *y = ast_to_re(spec, x);
-			if (m == RegExp::MANY) {
-				y = re_iter(alc, y);
-			} else if (n == 0) {
-				y = re_repeat(alc, y, m - 1);
-			} else if (m > n) {
-				y = re_repeat(alc, y, m - n);
+			RE *y = NULL;
+			if (m > 0) {
+				y = ast_to_re(spec, x);
+				y = re_iter(alc, y, n1, m);
 			}
 			if (n == 0) {
 				y = re_alt(alc, y, re_nil(alc));
-			} else {
-				for (uint32_t i = 1; i < n; ++i) {
-					y = re_cat(alc, ast_to_re(spec, x), y);
-				}
 			}
 			return y;
 		}

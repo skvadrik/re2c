@@ -15,7 +15,7 @@ namespace re2c
 struct RE
 {
 	typedef slab_allocator_t<~0u, 4096> alc_t;
-	enum type_t {NIL, SYM, ALT, CAT, ITER, REPEAT, TAG} type;
+	enum type_t {NIL, SYM, ALT, CAT, ITER, TAG} type;
 	union {
 		const Range *sym;
 		struct {
@@ -26,11 +26,11 @@ struct RE
 			RE *re1;
 			RE *re2;
 		} cat;
-		RE *iter;
 		struct {
 			RE *re;
-			uint32_t upto;
-		} repeat;
+			uint32_t min;
+			uint32_t max;
+		} iter;
 		struct {
 			size_t idx;
 			bool bottom;
@@ -71,6 +71,9 @@ inline RE *re_sym(RE::alc_t &alc, const Range *r)
 
 inline RE *re_alt(RE::alc_t &alc, RE *x, RE *y)
 {
+	if (!x) return y;
+	if (!y) return x;
+
 	RE *z = alc.alloct<RE>(1);
 	z->type = RE::ALT;
 	z->alt.re1 = x;
@@ -80,6 +83,9 @@ inline RE *re_alt(RE::alc_t &alc, RE *x, RE *y)
 
 inline RE *re_cat(RE::alc_t &alc, RE *x, RE *y)
 {
+	if (!x) return y;
+	if (!y) return x;
+
 	RE *z = alc.alloct<RE>(1);
 	z->type = RE::CAT;
 	z->cat.re1 = x;
@@ -87,20 +93,13 @@ inline RE *re_cat(RE::alc_t &alc, RE *x, RE *y)
 	return z;
 }
 
-inline RE *re_iter(RE::alc_t &alc, RE *x)
+inline RE *re_iter(RE::alc_t &alc, RE *x, uint32_t n, uint32_t m)
 {
 	RE *y = alc.alloct<RE>(1);
 	y->type = RE::ITER;
-	y->iter = x;
-	return y;
-}
-
-inline RE *re_repeat(RE::alc_t &alc, RE *x, uint32_t n)
-{
-	RE *y = alc.alloct<RE>(1);
-	y->type = RE::REPEAT;
-	y->repeat.re = x;
-	y->repeat.upto = n;
+	y->iter.re = x;
+	y->iter.min = n;
+	y->iter.max = m;
 	return y;
 }
 

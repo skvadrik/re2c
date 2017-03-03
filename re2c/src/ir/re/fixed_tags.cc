@@ -36,11 +36,7 @@ static void find_fixed_tags(RE *re, std::vector<Tag> &tags,
 			find_fixed_tags(re->cat.re1, tags, dist, base, toplevel);
 			break;
 		case RE::ITER:
-			find_fixed_tags(re->iter, tags, dist, base, false);
-			dist = Tag::VARDIST;
-			break;
-		case RE::REPEAT:
-			find_fixed_tags(re->repeat.re, tags, dist, base, false);
+			find_fixed_tags(re->iter.re, tags, dist, base, false);
 			dist = Tag::VARDIST;
 			break;
 		case RE::TAG:

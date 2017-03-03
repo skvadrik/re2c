@@ -16,12 +16,15 @@ static size_t estimate(const RE *re)
 		case RE::CAT:
 			return estimate(re->cat.re1)
 				+ estimate(re->cat.re2);
-		case RE::ITER:
-			return estimate(re->iter)
-				+ 1;
-		case RE::REPEAT:
-			return estimate(re->repeat.re) * (re->repeat.upto + 1)
-				+ re->repeat.upto;
+		case RE::ITER: {
+			const size_t
+				iter = estimate(re->iter.re),
+				min = re->iter.min,
+				max = re->iter.max;
+			return max == RegExp::MANY
+				? iter * min + 1
+				: iter * max + (max - min);
+		}
 	}
 }
 

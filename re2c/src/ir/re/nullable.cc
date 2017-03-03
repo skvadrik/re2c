@@ -11,9 +11,7 @@ static bool nullable(const RESpec &spec, const RE *re, bool &trail)
 		case RE::NIL: return true;
 		case RE::SYM: return false;
 		case RE::ITER:
-			return nullable(spec, re->iter, trail);
-		case RE::REPEAT:
-			return nullable(spec, re->repeat.re, trail);
+			return nullable(spec, re->iter.re, trail);
 		case RE::TAG:
 			trail |= spec.tags[re->tag.idx].name == NULL;
 			return true;

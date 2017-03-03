@@ -26,10 +26,7 @@ static void split(const RE* re, std::set<uint32_t> &cs)
 			split(re->cat.re2, cs);
 			break;
 		case RE::ITER:
-			split(re->iter, cs);
-			break;
-		case RE::REPEAT:
-			split(re->repeat.re, cs);
+			split(re->iter.re, cs);
 			break;
 	}
 }

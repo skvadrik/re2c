@@ -2,6 +2,26 @@
 
 namespace re2c {
 
+/*
+ * note [counted repetition and iteration expansion]
+ *
+ * It is more convenient to express zero-or-more iterations in terms of
+ * one-or-more iterations than vice versa, because the expansion 'r+ ::= r r*'
+ * duplicates 'r', while 'r* = r+ | <empty>' allows to avoid duplication.
+ *
+ * Sometimes duplcation is unavoidable, like 'r{n}' for 'n' > 1 and 'r{n,m}'
+ * for 'n' < 'm'. In such cases we duplicate 'r' together with all tags;
+ * this may cause multiple (non-bottom) occurences of the same tag in the NFA.
+ * Determinization must be careful to track multiple occurences of the same
+ * tag while building epsilon-closure (this matters for POSIX disambiguation
+ * strategy).
+ *
+ * We allow tags to apper only once in the original regular expression.
+ * This is not strictly necessary (putting the same tag in non-overlapping
+ * alternative branches may be handy), but it would allow to create very
+ * confusing regexps and the disambiguation strategy would behave strangely.
+ */
+
 static nfa_state_t *re_to_nfa(nfa_t &nfa, size_t nrule, const RE *re, nfa_state_t *t)
 {
 	nfa_state_t *s = NULL;
@@ -26,20 +46,28 @@ static nfa_state_t *re_to_nfa(nfa_t &nfa, size_t nrule, const RE *re, nfa_state_
 			s = re_to_nfa(nfa, nrule, re->cat.re1, s);
 			break;
 		case RE::ITER: {
-			// see note [Kleene star is expressed in terms of plus]
-			nfa_state_t *q = &nfa.states[nfa.size++];
-			s = re_to_nfa(nfa, nrule, re->iter, q);
-			q->make_alt(nrule, s, t);
-			break;
-		}
-		case RE::REPEAT:
-			s = re_to_nfa(nfa, nrule, re->repeat.re, t);
-			for (uint32_t i = 0; i < re->repeat.upto; ++i) {
+			const uint32_t
+				min = re->iter.min,
+				max = re->iter.max;
+			const RE *iter = re->iter.re;
+			// see note [counted repetition and iteration expansion]
+			if (max == RegExp::MANY) {
 				nfa_state_t *q = &nfa.states[nfa.size++];
+				s = re_to_nfa(nfa, nrule, iter, q);
 				q->make_alt(nrule, s, t);
-				s = re_to_nfa(nfa, nrule, re->repeat.re, q);
+			} else {
+				s = re_to_nfa(nfa, nrule, iter, t);
+				for (uint32_t i = min; i < max; ++i) {
+					nfa_state_t *q = &nfa.states[nfa.size++];
+					q->make_alt(nrule, s, t);
+					s = re_to_nfa(nfa, nrule, iter, q);
+				}
+			}
+			for (uint32_t i = 1; i < min; ++i) {
+				s = re_to_nfa(nfa, nrule, iter, s);
 			}
 			break;
+		}
 		case RE::TAG:
 			if (fixed(nfa.tags[re->tag.idx])) {
 				s = t;

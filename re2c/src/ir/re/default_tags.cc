@@ -28,10 +28,7 @@ static void insert_default_tags(RESpec &spec, RE *re, size_t &tidx)
 			insert_default_tags(spec, re->cat.re2, tidx);
 			break;
 		case RE::ITER:
-			insert_default_tags(spec, re->iter, tidx);
-			break;
-		case RE::REPEAT:
-			insert_default_tags(spec, re->repeat.re, tidx);
+			insert_default_tags(spec, re->iter.re, tidx);
 			break;
 		case RE::TAG:
 			assert(re->tag.idx == tidx);
