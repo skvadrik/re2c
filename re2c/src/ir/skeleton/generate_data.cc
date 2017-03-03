@@ -199,7 +199,7 @@ static void write_keys(const path_t &path, const Skeleton &skel,
 	// keys: 1 - scanned length, 2 - matched length, 3 - matched rule, the rest - tags
 	size_t nkey = 3;
 	for (size_t t = ltag; t < htag; ++t) {
-		if (t != trail && !fixed(skel.tags[t])) ++nkey;
+		if (t != trail && !orbit(skel.tags[t])) ++nkey;
 	}
 	key_t *keys = new key_t[nkey * width], *k = keys;
 	for (size_t w = 0; w < width; ++w) {
@@ -208,8 +208,10 @@ static void write_keys(const path_t &path, const Skeleton &skel,
 		*k++ = to_le(rule2key<key_t>(rule, skel.defrule));
 		const size_t *ts = &tags[w * nver];
 		for (size_t t = ltag; t < htag; ++t) {
-			if (t != trail && !fixed(skel.tags[t])) {
-				*k++ = to_le(static_cast<key_t>(ts[skel.finvers[t]]));
+			const Tag &tag = skel.tags[t];
+			if (t != trail && !orbit(tag)) {
+				const size_t base = fixed(tag) ? tag.base : t;
+				*k++ = to_le(static_cast<key_t>(ts[skel.finvers[base]]));
 			}
 		}
 	}

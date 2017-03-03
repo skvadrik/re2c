@@ -358,7 +358,7 @@ void emit_action(OutputFile &o, uint32_t ind, const DFA &dfa, size_t rid)
 	const size_t rkey = rule2key(rid, dfa.key_size, dfa.def_rule);
 	size_t ntag = 3;
 	for (size_t t = r.ltag; t < r.htag; ++t) {
-		if (t != r.ttag && !fixed(dfa.tags[t])) ++ntag;
+		if (t != r.ttag && !orbit(dfa.tags[t])) ++ntag;
 	}
 
 	o.wind(ind).ws("status = check_key_count_").wstring(name).ws("(keys_count, i, ")
@@ -367,7 +367,7 @@ void emit_action(OutputFile &o, uint32_t ind, const DFA &dfa, size_t rid)
 
 	for (size_t t = r.ltag; t < r.htag; ++t) {
 		const Tag &tag = dfa.tags[t];
-		if (t == r.ttag || fixed(tag)) continue;
+		if (t == r.ttag || orbit(tag)) continue;
 		const std::string tname = tagname(tag);
 		o.ws("\n").wind(ind + 1).ws(" || check_tag_").wstring(name)
 			.ws("(&i, keys, ").wstring(tname).ws(", input, token, \"")
