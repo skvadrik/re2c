@@ -24,6 +24,9 @@ public:
 	tagver_t *buffer3;
 	tagver_t *buffer4;
 
+	size_t maxclos;
+	tagver_t *orders;
+
 	explicit Tagpool(size_t n);
 	~Tagpool();
 	size_t insert_const(tagver_t ver);

@@ -58,8 +58,10 @@ struct Rule
 	size_t htag; // next to last
 	size_t ttag; // trailing context
 
+	size_t ncap; // number of POSIX captures
+
 	Rule(): code(NULL), shadow(),
-		ltag(0), htag(0), ttag(0) {}
+		ltag(0), htag(0), ttag(0), ncap(0) {}
 	FORBID_COPY(Rule);
 };
 

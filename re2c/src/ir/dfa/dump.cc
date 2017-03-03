@@ -48,7 +48,9 @@ void dump_dfa_t::closure_tags(cclositer_t c)
 	const tagver_t *vers = tagpool[c->tvers];
 	const size_t ntag = tagpool.ntags;
 	for (size_t t = 0; t < ntag; ++t) {
-		fprintf(stderr, " %s", tagname(dfa.tags[t]));
+		const Tag &tag = dfa.tags[t];
+
+		fprintf(stderr, " %s", tagname(tag));
 
 		const tagver_t v = vers[t];
 		if (v == TAGVER_BOTTOM) {
@@ -57,6 +59,10 @@ void dump_dfa_t::closure_tags(cclositer_t c)
 			fprintf(stderr, "&uarr;");
 		} else {
 			fprintf(stderr, "%d", abs(v));
+		}
+
+		if (orbit(tag)) {
+			fprintf(stderr, "[%d]", tagpool[c->order][t]);
 		}
 	}
 }

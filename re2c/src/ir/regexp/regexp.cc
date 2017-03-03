@@ -131,4 +131,21 @@ const RegExp *Scanner::mkDefault() const
 		opts->encoding.nCodeUnits()));
 }
 
+bool need_wrap(const RegExp *re)
+{
+	switch (re->type) {
+		case RegExp::ITER:
+		case RegExp::NIL:
+		case RegExp::SYM:
+		case RegExp::TAG:
+		case RegExp::CAP:
+			return false;
+		case RegExp::ALT:
+		case RegExp::CAT:
+		case RegExp::REF:
+		default:
+			return true;
+	}
+}
+
 } // namespace re2c

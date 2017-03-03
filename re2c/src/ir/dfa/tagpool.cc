@@ -26,6 +26,8 @@ Tagpool::Tagpool(size_t n)
 	, buffer2(&buffer[n * 2])
 	, buffer3(&buffer[n * 3])
 	, buffer4(&buffer[n * 4])
+	, maxclos(0)
+	, orders(NULL)
 {}
 
 Tagpool::~Tagpool()
@@ -35,6 +37,7 @@ Tagpool::~Tagpool()
 	for (size_t i = 0; i < n; ++i) {
 		free(const_cast<tagver_t*>(lookup[i]));
 	}
+	delete[] orders;
 }
 
 size_t Tagpool::insert_const(tagver_t ver)

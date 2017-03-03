@@ -23,6 +23,7 @@ static void emit_accept        (OutputFile &o, uint32_t ind, const DFA &dfa, con
 static void emit_rule          (OutputFile &o, uint32_t ind, const DFA &dfa, size_t rule_idx);
 static void gen_fintags        (OutputFile &o, uint32_t ind, const DFA &dfa, const Rule &rule);
 static void gen_goto           (code_lines_t &code, const State *to, const DFA &dfa, tcid_t tcid, const opt_t *opts, bool skip);
+static std::string tagname     (const Tag &tag);
 static bool endstate           (const State *s);
 
 void emit_action(OutputFile &o, uint32_t ind, const DFA &dfa,
@@ -157,7 +158,10 @@ void emit_rule(OutputFile &o, uint32_t ind, const DFA &dfa, size_t rule_idx)
 	const Rule &rule = dfa.rules[rule_idx];
 	const Code *code = rule.code;
 	const std::string &cond = code->cond;
+	const bool wrap = rule.ncap > 0;
 	std::string s;
+
+	if (wrap) o.wind(ind++).ws("{\n");
 
 	gen_fintags(o, ind, dfa, rule);
 
@@ -186,6 +190,8 @@ void emit_rule(OutputFile &o, uint32_t ind, const DFA &dfa, size_t rule_idx)
 		strrreplace(s = opts->condGoto, opts->condGotoParam, opts->condPrefix + cond);
 		o.wind(ind).wstring(s).ws("\n");
 	}
+
+	if (wrap) o.wind(--ind).ws("}\n");
 }
 
 void need(OutputFile &o, uint32_t ind, size_t some)
@@ -365,17 +371,24 @@ void gen_fintags(OutputFile &o, uint32_t ind, const DFA &dfa, const Rule &rule)
 	const std::vector<Tag> &tags = dfa.tags;
 	const tagver_t *fins = dfa.finvers;
 
+	if (rule.ncap > 0) {
+		o.wind(ind).ws("const size_t yynmatch = ").wu64(rule.ncap).ws(";\n");
+		o.wind(ind).ws("const ").wstring(opts->yyctype).ws(" *yypmatch[yynmatch * 2];\n");
+	}
+
 	// variable tags
 	for (size_t t = rule.ltag; t < rule.htag; ++t) {
 		const Tag &tag = tags[t];
-		if (fixed(tag)) continue;
+
+		// see note [fixed and variable tags]
+		if (orbit(tag) || fixed(tag)) continue;
 
 		expr = vartag_expr(fins[t], prefix, expression);
 
 		o.wind(ind);
 		if (generic) {
 			if (!trailing(tag)) {
-				o.wstring(opts->yycopytag).ws(" (").wstring(*tag.name)
+				o.wstring(opts->yycopytag).ws(" (").wstring(tagname(tag))
 					.ws(", ").wstring(expr).ws(")");
 			} else if (dfa.oldstyle_ctxmarker) {
 				o.wstring(opts->yyrestorectx).ws(" ()");
@@ -384,7 +397,7 @@ void gen_fintags(OutputFile &o, uint32_t ind, const DFA &dfa, const Rule &rule)
 			}
 		} else {
 			if (!trailing(tag)) {
-				o.wstring(*tag.name).ws(" = ").wstring(expr);
+				o.wstring(tagname(tag)).ws(" = ").wstring(expr);
 			} else if (dfa.oldstyle_ctxmarker) {
 				o.wstring(opts->yycursor).ws(" = ").wstring(opts->yyctxmarker);
 			} else {
@@ -397,7 +410,9 @@ void gen_fintags(OutputFile &o, uint32_t ind, const DFA &dfa, const Rule &rule)
 	// fixed tags
 	for (size_t t = rule.ltag; t < rule.htag; ++t) {
 		const Tag &tag = tags[t];
-		if (!fixed(tag)) continue;
+
+		// see note [fixed and variable tags]
+		if (orbit(tag) || !fixed(tag)) continue;
 
 		const size_t dist = tag.dist;
 		const bool fixed_on_cursor = tag.base == Tag::RIGHTMOST;
@@ -408,7 +423,7 @@ void gen_fintags(OutputFile &o, uint32_t ind, const DFA &dfa, const Rule &rule)
 		if (generic) {
 			assert(dist == 0);
 			if (!trailing(tag)) {
-				o.wstring(opts->yycopytag).ws(" (").wstring(*tag.name)
+				o.wstring(opts->yycopytag).ws(" (").wstring(tagname(tag))
 					.ws(", ").wstring(expr).ws(")");
 			} else if (!fixed_on_cursor) {
 				assert(!dfa.oldstyle_ctxmarker);
@@ -416,7 +431,7 @@ void gen_fintags(OutputFile &o, uint32_t ind, const DFA &dfa, const Rule &rule)
 			}
 		} else {
 			if (!trailing(tag)) {
-				o.wstring(*tag.name).ws(" = ").wstring(expr);
+				o.wstring(tagname(tag)).ws(" = ").wstring(expr);
 				if (dist > 0) o.ws(" - ").wu64(dist);
 			} else if (!fixed_on_cursor) {
 				o.wstring(opts->yycursor).ws(" = ").wstring(expr);
@@ -427,6 +442,14 @@ void gen_fintags(OutputFile &o, uint32_t ind, const DFA &dfa, const Rule &rule)
 		}
 		o.ws(";\n");
 	}
+}
+
+std::string tagname(const Tag &tag)
+{
+	assert(!trailing(tag));
+	return capture(tag)
+		? "yypmatch[" + to_string(2 * (tag.ncap / 3) + (tag.ncap % 3)) + "]"
+		: *tag.name;
 }
 
 bool endstate(const State *s)

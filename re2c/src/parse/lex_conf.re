@@ -52,6 +52,7 @@ void Scanner::lex_conf ()
 	"flags:" ("r" | "reusable")          { opts.set_rFlag(lex_conf_bool());              return; }
 	"flags:" ("s" | "nested-ifs")        { opts.set_sFlag(lex_conf_bool());              return; }
 	"flags:" ("T" | "tags")              { opts.set_tags(lex_conf_bool());               return; }
+	"flags:" ("posix-captures")          { opts.set_posix_captures(lex_conf_bool());     return; }
 	"flags:no-generation-date"           { opts.set_bNoGenerationDate(lex_conf_bool());  return; }
 	"flags:no-version"                   { opts.set_version(!lex_conf_bool());           return; }
 	"flags:case-insensitive"             { opts.set_bCaseInsensitive(lex_conf_bool());   return; }

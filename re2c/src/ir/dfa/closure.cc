@@ -1,4 +1,4 @@
-#include <algorithm>
+#include <string.h>
 
 #include "src/ir/dfa/closure.h"
 #include "src/ir/nfa/nfa.h"
@@ -8,25 +8,31 @@ namespace re2c
 {
 
 static void closure_one(closure_t &clos, Tagpool &tagpool, tagtree_t &tagtree,
-	clos_t &c0, nfa_state_t *n, closure_t *shadow, std::valarray<Rule> &rules);
+	clos_t &c0, nfa_state_t *n, const std::vector<Tag> &tags, closure_t *shadow, std::valarray<Rule> &rules);
+static bool better(const clos_t &c1, const clos_t &c2, Tagpool &tagpool, tagtree_t &tagtree, const std::vector<Tag> &tags);
 static void assert_items_are_grouped_by_rule(const closure_t &clos);
 static void lower_lookahead_to_transition(closure_t &clos, Tagpool &tagpool, tagtree_t &tagtree);
 static void update_versions(closure_t &clos, Tagpool &tagpool, tagtree_t &tagtree, tagver_t &maxver, tagver_t *newvers);
+static void orbit_order(closure_t &clos, Tagpool &tagpool, tagtree_t &tagtree, const std::vector<Tag> &tags);
 static void find_nondet(const closure_t &clos, size_t *nondet, const Tagpool &tagpool, const std::valarray<Rule> &rules);
 
 void closure(closure_t &clos1, closure_t &clos2, Tagpool &tagpool, tagtree_t &tagtree,
 	std::valarray<Rule> &rules, tagver_t &maxver, tagver_t *newvers,
-	size_t *nondet, bool lookahead, closure_t *shadow)
+	size_t *nondet, bool lookahead, closure_t *shadow, const std::vector<Tag> &tags)
 {
 	// build tagged epsilon-closure of the given set of NFA states
 	clos2.clear();
 	if (shadow) shadow->clear();
 	tagtree.init();
 	for (clositer_t c = clos1.begin(); c != clos1.end(); ++c) {
-		closure_one(clos2, tagpool, tagtree, *c, c->state, shadow, rules);
+		closure_one(clos2, tagpool, tagtree, *c, c->state, tags, shadow, rules);
 	}
 
 	assert_items_are_grouped_by_rule(clos2);
+
+	// see note [orbit order of closure items]
+	orbit_order(clos2, tagpool, tagtree, tags);
+	if (shadow) orbit_order(*shadow, tagpool, tagtree, tags);
 
 	// see note [the difference between TDFA(0) and TDFA(1)]
 	if (!lookahead) {
@@ -73,15 +79,16 @@ void assert_items_are_grouped_by_rule(const closure_t &clos)
  *
  * Each closure state might be reachable by multiple epsilon-paths with
  * different tags: this means that the regular expression is ambiguous
- * and can be parsed in different ways. We resolve ambiguity by always
- * choosing the leftmost epsilon-path through the NFA.
- *
- * Compilation of regular expression into NFA takes into account semantics
- * of individual subexpressions: e.g., greedy iteration is compiled so that
- * the leftmost path re-iterates rather than leaves the subexpression..
+ * and can be parsed in different ways. Disambiguation strategy depends
+ * on the type of the first (most prioritized) ambiguous tag: for simple
+ * tags we always choose the leftmost epsilon-path through the NFA, for
+ * POSIX captures the rules are more complex (opening and closing tags
+ * are maximized unless one of them is bottom, in which case we fallback
+ * to leftmost strategy; orbit tags are compared by order and by tagged
+ * epsilon-paths so that earlier iterations are maximized).
  */
 void closure_one(closure_t &clos, Tagpool &tagpool, tagtree_t &tagtree, clos_t &c0,
-	nfa_state_t *n, closure_t *shadow,
+	nfa_state_t *n, const std::vector<Tag> &tags, closure_t *shadow,
 	std::valarray<Rule> &rules)
 {
 	if (n->loop) return;
@@ -90,15 +97,15 @@ void closure_one(closure_t &clos, Tagpool &tagpool, tagtree_t &tagtree, clos_t &
 	clositer_t c = clos.begin(), e = clos.end();
 	switch (n->type) {
 		case nfa_state_t::NIL:
-			closure_one(clos, tagpool, tagtree, c0, n->nil.out, shadow, rules);
+			closure_one(clos, tagpool, tagtree, c0, n->nil.out, tags, shadow, rules);
 			return;
 		case nfa_state_t::ALT:
-			closure_one(clos, tagpool, tagtree, c0, n->alt.out1, shadow, rules);
-			closure_one(clos, tagpool, tagtree, c0, n->alt.out2, shadow, rules);
+			closure_one(clos, tagpool, tagtree, c0, n->alt.out1, tags, shadow, rules);
+			closure_one(clos, tagpool, tagtree, c0, n->alt.out2, tags, shadow, rules);
 			return;
 		case nfa_state_t::TAG:
 			tagtree.push(n->tag.info, n->tag.bottom ? TAGVER_BOTTOM : TAGVER_CURSOR);
-			closure_one(clos, tagpool, tagtree, c0, n->tag.out, shadow, rules);
+			closure_one(clos, tagpool, tagtree, c0, n->tag.out, tags, shadow, rules);
 			tagtree.pop(n->tag.info);
 			return;
 		case nfa_state_t::RAN:
@@ -110,11 +117,12 @@ void closure_one(closure_t &clos, Tagpool &tagpool, tagtree_t &tagtree, clos_t &
 			break;
 	}
 
-	clos_t c2 = {c0.origin, n, c0.tvers, tagpool.insert(tagtree.leaves())};
+	clos_t c2 = {c0.origin, n, c0.tvers, tagpool.insert(tagtree.leaves()), c0.order};
 	if (c == e) {
 		clos.push_back(c2);
 	} else {
 		clos_t &c1 = *c;
+		if (better(c1, c2, tagpool, tagtree, tags)) std::swap(c1, c2);
 		if (shadow) shadow->push_back(c2);
 		const size_t
 			r1 = c1.state->rule,
@@ -140,6 +148,56 @@ void closure_one(closure_t &clos, Tagpool &tagpool, tagtree_t &tagtree, clos_t &
  * Note that the first final item reached by the epsilon-closure it the one
  * with the highest priority (see note [closure items are sorted by rule]).
  */
+
+bool better(const clos_t &c1, const clos_t &c2,
+	Tagpool &tagpool, tagtree_t &tagtree, const std::vector<Tag> &tags)
+{
+	if (c1.ttran == c2.ttran
+		&& c1.tvers == c2.tvers
+		&& c1.order == c2.order) return false;
+
+	const tagver_t
+		*l1 = tagpool[c1.ttran], *l2 = tagpool[c2.ttran],
+		*v1 = tagpool[c1.tvers], *v2 = tagpool[c2.tvers],
+		*o1 = tagpool[c1.order], *o2 = tagpool[c2.order];
+	tagver_t x, y;
+
+	for (size_t t = 0; t < tagpool.ntags; ++t) {
+
+		// simple tag: always prefer leftmost
+		if (!capture(tags[t])) {
+			return false;
+
+		// orbit capture tag: compare by order and tagged epsilon-paths
+		} else if (orbit(tags[t])) {
+			x = o1[t]; y = o2[t];
+			if (x < y) return false;
+			if (x > y) return true;
+
+			const int cmp = tagtree.compare_paths(l1[t], l2[t]);
+			if (cmp < 0) return false;
+			if (cmp > 0) return true;
+
+			assert(v1[t] == v2[t]);
+
+		// open/close capture tag: if either one is bottom,
+		// prefer leftmost; otherwise, maximize
+		} else {
+			assert(o1[t] == o2[t]);
+
+			x = tagtree.elem(l1[t]);
+			y = tagtree.elem(l2[t]);
+			if (x < 0 || y < 0 || x > y) return false;
+			if (x < y) return true;
+
+			x = v1[t]; y = v2[t];
+			if (x < 0 || y < 0 || x > y) return false;
+			if (x < y) return true;
+		}
+	}
+
+	return false;
+}
 
 /* note [the difference between TDFA(0) and TDFA(1)]
  *
@@ -252,6 +310,96 @@ void update_versions(closure_t &clos, Tagpool &tagpool, tagtree_t &tagtree,
 
 		c->tvers = tagpool.insert(vers);
 		c->ttran = tagpool.insert(tran);
+	}
+}
+
+/* note [orbit order of closure items]
+ *
+ * POSIX disambiguation rules demand that earlier subexpressions match
+ * the longest possible prefix of the input string (without violating the
+ * whole match). To accommodate these rules, we resolve conflicts on orbit
+ * tags by lexicographic comparison of tag offsets on the way to conflicting
+ * NFA states.
+ *
+ * By lexicographic comparison we mean that if one history is a proper prefix
+ * of another history, it is lexicographically less; otherwise for the first
+ * pair of different offsets, if one offset is greater than the other, then
+ * the corresponding history is lexicographically less.
+ *
+ * For the given input string, it is possible to define lexicographical order
+ * on tag histories corresponding to all matching paths through NFA, because
+ * the length of histories is bounded by the length of input (epsilon-cycles
+ * are forbidden) and the set of all possible offsets is finite (also bounded
+ * by input length).
+ *
+ * Moreover, for a given prefix of the input string, lexicographic order on
+ * histories of the whole string is an extension of order on prefix histories:
+ * once comparison of two prefix histories X and Y establishes that X < Y,
+ * all further comarisons of X's descendants to Y's descendants will yield
+ * the same result. This is obvious unless X is a proper prefix of Y;
+ * otherwise, this is true because any offset appended to X will be greater
+ * than any offset in Y (it corresponds to further position in the input
+ * string) and therefore all descendants of X will be less than Y.
+ *
+ * Therefore, at any point of ambiguity we can choose lexicographically least
+ * history and claim that it corresponds to lexicographically least history
+ * for the whole input.
+ *
+ * For the same reason, keeping the whole history of offsets is not necessary:
+ * it is sufficient to remember only the relative order of any pair of
+ * histories and use it as the first component in lexicographic comparison.
+ *
+ * This part of the algorithm was invented by Christopher Kuklewicz.
+ */
+
+typedef std::pair<tagver_t, tagver_t> key_t;
+struct cmp_t
+{
+	tagtree_t &tree;
+	bool operator()(const key_t &x, const key_t &y)
+	{
+		if (x.first < y.first) return true;
+		if (x.first > y.first) return false;
+		return tree.compare_paths(x.second, y.second) < 0;
+	}
+};
+
+void orbit_order(closure_t &clos, Tagpool &tagpool,
+	tagtree_t &tagtree, const std::vector<Tag> &tags)
+{
+	const size_t
+		ntag = tagpool.ntags,
+		nclos = clos.size();
+
+	const cmp_t cmp = {tagtree};
+	std::set<key_t, cmp_t> keys(cmp);
+
+	size_t &maxclos = tagpool.maxclos;
+	tagver_t *&orders = tagpool.orders;
+	if (maxclos < nclos) {
+		maxclos = nclos * 2; // in advance
+		delete[] orders;
+		orders = new tagver_t[ntag * maxclos];
+	}
+
+	memset(orders, TAGVER_ZERO, ntag * nclos * sizeof(tagver_t));
+	for (size_t t = 0; t < ntag; ++t) {
+		if (!orbit(tags[t])) continue;
+
+		keys.clear();
+		for (size_t i = 0; i < nclos; ++i) {
+			const key_t key(tagpool[clos[i].order][t], tagpool[clos[i].ttran][t]);
+			keys.insert(key);
+		}
+
+		for (size_t i = 0; i < nclos; ++i) {
+			const key_t key(tagpool[clos[i].order][t], tagpool[clos[i].ttran][t]);
+			const ptrdiff_t d = std::distance(keys.begin(), keys.find(key));
+			orders[ntag * i + t] = static_cast<tagver_t>(d);
+		}
+	}
+	for (size_t i = 0; i < nclos; ++i) {
+		clos[i].order = tagpool.insert(orders + ntag * i);
 	}
 }
 

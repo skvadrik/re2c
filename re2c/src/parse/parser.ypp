@@ -190,7 +190,7 @@ static spec_t &find(specs_t &specs, const std::string &name)
 %type <op>      close closes
 %type <extop>   TOKEN_CLOSESIZE
 %type <code>    TOKEN_CODE ccode
-%type <regexp>  TOKEN_REGEXP trailexpr rule expr diff term factor primary
+%type <regexp>  TOKEN_REGEXP trailexpr capexpr rule expr diff term factor primary
 %type <str>     TOKEN_ID TOKEN_FID name
 %type <clist>   conds clist
 
@@ -295,9 +295,17 @@ conds
 	};
 
 trailexpr
-	: expr
-	| expr '/' expr {
+	: capexpr
+	| capexpr '/' expr {
 		$$ = RegExp::make_cat($1, RegExp::make_cat(RegExp::make_tag(NULL), $3));
+	};
+
+capexpr
+	: expr {
+		if (context.input.opts->posix_captures) {
+			$1 = RegExp::make_cap($1);
+		}
+		$$ = $1;
 	};
 
 expr:
@@ -356,25 +364,24 @@ close
 	| '?' { $$ = '?'; }
 	;
 
-primary:
-		TOKEN_ID
-		{
-			symtab_t::iterator i = context.symtab.find(*$1);
-			delete $1;
-			if (i == context.symtab.end()) {
-				context.input.fatal("can't find symbol");
-			}
-			$$ = i->second;
+primary
+	: TOKEN_REGEXP
+	| TOKEN_ID {
+		symtab_t::iterator i = context.symtab.find(*$1);
+		if (i == context.symtab.end()) {
+			context.input.fatal("can't find symbol");
 		}
-	|	TOKEN_REGEXP
-		{
-			$$ = $1;
+		$$ = i->second;
+		if (context.input.opts->posix_captures && need_wrap($$)) {
+			$$ = RegExp::make_ref($$, *$1);
 		}
-	|	'(' expr ')'
-		{
-			$$ = $2;
+		delete $1;
+	} | '(' expr ')' {
+		$$ = $2;
+		if (context.input.opts->posix_captures) {
+			$$ = RegExp::make_cap($$);
 		}
-;
+	};
 
 %%
 

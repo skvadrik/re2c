@@ -161,6 +161,9 @@ void opt_t::fix ()
 		bUseStateAbort = Opt::baseopt.bUseStateAbort;
 		bUseStateNext = Opt::baseopt.bUseStateNext;
 	}
+	if (posix_captures) {
+		tags = true;
+	}
 	if (!tags)
 	{
 		tags_default = Opt::baseopt.tags_default;

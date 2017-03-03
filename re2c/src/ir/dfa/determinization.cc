@@ -42,7 +42,7 @@ void reach(const kernel_t *kernel, closure_t &clos, uint32_t symbol)
 		nfa_state_t *s1 = kernel->state[i],
 			*s2 = transition(s1, symbol);
 		if (s2) {
-			clos_t c = {s1, s2, kernel->tvers[i], ZERO_TAGS};
+			clos_t c = {s1, s2, kernel->tvers[i], ZERO_TAGS, kernel->order[i]};
 			clos.push_back(c);
 		}
 	}
@@ -65,7 +65,7 @@ dfa_t::dfa_t(const nfa_t &nfa, const opt_t *opts,
 	const size_t ntag = tags.size();
 	Tagpool tagpool(ntag);
 	tagtree_t tagtree(ntag);
-	kernels_t kernels(tagpool, tcpool);
+	kernels_t kernels(tagpool, tcpool, tags);
 	closure_t clos1, clos2;
 	tagver_t *newvers = new tagver_t[ntag * 2];
 	size_t *nondet = new size_t[ntag]();
@@ -86,17 +86,17 @@ dfa_t::dfa_t(const nfa_t &nfa, const opt_t *opts,
 	// build tagged epsilon-closure of all reachable NFA states,
 	// then find identical or mappable DFA state or add a new one
 
-	clos_t c0 = {NULL, nfa.root, INITIAL_TAGS, ZERO_TAGS};
+	clos_t c0 = {NULL, nfa.root, INITIAL_TAGS, ZERO_TAGS, ZERO_TAGS};
 	clos1.push_back(c0);
 	std::fill(newvers, newvers + ntag * 2, TAGVER_ZERO);
-	closure(clos1, clos2, tagpool, tagtree, rules, maxtagver, newvers, nondet, lookahead, dump.shadow);
+	closure(clos1, clos2, tagpool, tagtree, rules, maxtagver, newvers, nondet, lookahead, dump.shadow, tags);
 	find_state(*this, dfa_t::NIL, 0/* any */, kernels, clos2, dump);
 
 	for (size_t i = 0; i < kernels.size(); ++i) {
 		std::fill(newvers, newvers + ntag * 2, TAGVER_ZERO);
 		for (size_t c = 0; c < nchars; ++c) {
 			reach(kernels[i], clos1, charset[c]);
-			closure(clos1, clos2, tagpool, tagtree, rules, maxtagver, newvers, nondet, lookahead, dump.shadow);
+			closure(clos1, clos2, tagpool, tagtree, rules, maxtagver, newvers, nondet, lookahead, dump.shadow, tags);
 			find_state(*this, i, c, kernels, clos2, dump);
 		}
 	}

@@ -19,7 +19,7 @@ struct RegExp
 	static free_list<RegExp*> flist;
 	static const uint32_t MANY;
 
-	enum type_t {NIL, SYM, ALT, CAT, ITER, TAG} type;
+	enum type_t {NIL, SYM, ALT, CAT, ITER, TAG, CAP, REF} type;
 	union
 	{
 		const Range *sym;
@@ -40,6 +40,12 @@ struct RegExp
 			uint32_t max;
 		} iter;
 		const std::string *tag;
+		const RegExp *cap;
+		struct
+		{
+			const RegExp *re;
+			const std::string *name;
+		} ref;
 	};
 
 	static const RegExp *make_nil()
@@ -80,11 +86,26 @@ struct RegExp
 		re->tag = t;
 		return re;
 	}
+	static const RegExp *make_cap(const RegExp *r)
+	{
+		RegExp *re = new RegExp(CAP);
+		re->cap = r;
+		return re;
+	}
+	static const RegExp *make_ref(const RegExp *r, const std::string &n)
+	{
+		RegExp *re = new RegExp(REF);
+		re->ref.re = r;
+		re->ref.name = new std::string(n);
+		return re;
+	}
 	inline ~RegExp()
 	{
 		flist.erase(this);
 		if (type == TAG) {
 			delete tag;
+		} else if (type == REF) {
+			delete ref.name;
 		}
 	}
 
@@ -109,6 +130,7 @@ struct RegExpRule
 const RegExp *mkAlt(const RegExp *re1, const RegExp *re2);
 const RegExp *doAlt(const RegExp *re1, const RegExp *re2);
 const RegExp *doCat(const RegExp *re1, const RegExp *re2);
+bool need_wrap(const RegExp *re);
 
 } // end namespace re2c
 

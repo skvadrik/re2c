@@ -14,6 +14,7 @@ struct kernel_t
 	size_t size;
 	nfa_state_t **state;
 	size_t *tvers; // tag versions
+	size_t *order; // see note [orbit order of closure items]
 
 	explicit kernel_t(size_t n);
 	~kernel_t();
@@ -43,6 +44,7 @@ private:
 public:
 	Tagpool &tagpool;
 	tcpool_t &tcpool;
+	const std::vector<Tag> &tags;
 
 private:
 	size_t maxsize;
@@ -57,7 +59,7 @@ private:
 	uint32_t *indeg;
 
 public:
-	kernels_t(Tagpool &tagpool, tcpool_t &tcpool);
+	kernels_t(Tagpool &tagpool, tcpool_t &tcpool, const std::vector<Tag> &tags);
 	~kernels_t();
 	void init(tagver_t v, size_t k);
 	size_t size() const;

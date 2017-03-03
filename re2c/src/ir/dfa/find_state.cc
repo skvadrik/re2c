@@ -10,6 +10,7 @@ kernel_t::kernel_t(size_t n)
 	: size(n)
 	, state(new nfa_state_t*[size])
 	, tvers(new size_t[size])
+	, order(new size_t[size])
 {}
 
 kernel_t *kernel_t::copy(const kernel_t &k)
@@ -18,6 +19,7 @@ kernel_t *kernel_t::copy(const kernel_t &k)
 	kernel_t *kcopy = new kernel_t(n);
 	memcpy(kcopy->state, k.state, n * sizeof(void*));
 	memcpy(kcopy->tvers, k.tvers, n * sizeof(size_t));
+	memcpy(kcopy->order, k.order, n * sizeof(size_t));
 	return kcopy;
 }
 
@@ -25,6 +27,7 @@ kernel_t::~kernel_t()
 {
 	delete[] state;
 	delete[] tvers;
+	delete[] order;
 }
 
 struct kernel_eq_t
@@ -34,6 +37,7 @@ struct kernel_eq_t
 		return x->size == y->size
 			&& memcmp(x->state, y->state, x->size * sizeof(void*)) == 0
 			&& memcmp(x->tvers, y->tvers, x->size * sizeof(size_t)) == 0;
+		// no need to compare orders: if versions coincide, so do orders
 	}
 };
 
@@ -54,9 +58,10 @@ struct kernel_eq_t
 
 bool kernels_t::operator()(const kernel_t *k1, const kernel_t *k2)
 {
-	// check that kernel sizes and NFA states coincide
+	// check that kernel sizes, NFA states and orders coincide
 	const bool compatible = k1->size == k2->size
-		&& memcmp(k1->state, k2->state, k1->size * sizeof(void*)) == 0;
+		&& memcmp(k1->state, k2->state, k1->size * sizeof(void*)) == 0
+		&& memcmp(k1->order, k2->order, k1->size * sizeof(size_t)) == 0;
 	if (!compatible) return false;
 
 	// map tag versions of one kernel to that of another
@@ -92,10 +97,11 @@ bool kernels_t::operator()(const kernel_t *k1, const kernel_t *k2)
 	return true;
 }
 
-kernels_t::kernels_t(Tagpool &tagp, tcpool_t &tcp)
+kernels_t::kernels_t(Tagpool &tagp, tcpool_t &tcp, const std::vector<Tag> &ts)
 	: lookup()
 	, tagpool(tagp)
 	, tcpool(tcp)
+	, tags(ts)
 
 	, maxsize(0) // usually ranges from one to some twenty
 	, buffer(new kernel_t(maxsize))
@@ -201,11 +207,13 @@ kernels_t::result_t kernels_t::insert(const closure_t &clos, tagver_t maxver)
 		const clos_t &c = clos[i];
 		buffer->state[i] = c.state;
 		buffer->tvers[i] = c.tvers;
+		buffer->order[i] = c.order;
 	}
 
 	// get kernel hash
 	uint32_t hash = static_cast<uint32_t>(nkern); // seed
 	hash = hash32(hash, buffer->state, nkern * sizeof(void*));
+	hash = hash32(hash, buffer->order, nkern * sizeof(size_t));
 
 	// try to find identical kernel
 	kernel_eq_t eq;
@@ -231,6 +239,8 @@ tcmd_t kernels_t::commands1(const closure_t &closure)
 	// at most one new cursor and one new bottom version per tag
 	// no mapping => only save commands, no copy commands
 	for (size_t t = 0; t < tagpool.ntags; ++t) {
+		if (fixed(tags[t])) continue;
+
 		for (c = c1; c != c2 && (v = tagpool[c->ttran][t]) <= TAGVER_ZERO; ++c);
 		if (c != c2) save = tcpool.make_save(save, v, false);
 
@@ -276,6 +286,8 @@ tcmd_t kernels_t::commands2(const closure_t &closure)
 
 		// at most one new cursor and one new bottom version per tag
 		const size_t t = x2t[x];
+		if (fixed(tags[t])) continue;
+
 		const tagver_t ax = abs(x), ay = abs(y);
 		for (c = c1; c != c2 && tagpool[c->ttran][t] != y; ++c);
 		if (c != c2) {
