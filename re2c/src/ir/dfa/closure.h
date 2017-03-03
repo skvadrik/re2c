@@ -4,6 +4,7 @@
 #include "src/util/c99_stdint.h"
 
 #include "src/ir/dfa/dfa.h"
+#include "src/ir/dfa/tagtree.h"
 #include "src/ir/nfa/nfa.h"
 
 namespace re2c
@@ -23,7 +24,7 @@ typedef std::vector<clos_t> closure_t;
 typedef closure_t::iterator clositer_t;
 typedef closure_t::const_iterator cclositer_t;
 
-void closure(closure_t &clos1, closure_t &clos2, Tagpool &tagpool,
+void closure(closure_t &clos1, closure_t &clos2, Tagpool &tagpool, tagtree_t &tagtree,
 	std::valarray<Rule> &rules, tagver_t &maxver, tagver_t *newvers,
 	size_t *nondet, bool lookahead, closure_t *shadow);
 

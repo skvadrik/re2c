@@ -2,42 +2,43 @@
 
 #include "src/ir/dfa/closure.h"
 #include "src/ir/nfa/nfa.h"
+#include "src/util/local_increment.h"
 
 namespace re2c
 {
 
-static void closure_one(closure_t &clos, Tagpool &tagpool, clos_t &c0, nfa_state_t *n, tagver_t *tags, closure_t *shadow, std::valarray<Rule> &rules);
+static void closure_one(closure_t &clos, Tagpool &tagpool, tagtree_t &tagtree,
+	clos_t &c0, nfa_state_t *n, closure_t *shadow, std::valarray<Rule> &rules);
 static void assert_items_are_grouped_by_rule(const closure_t &clos);
-static void lower_lookahead_to_transition(closure_t &clos, Tagpool &tagpool);
-static void update_versions(closure_t &clos, Tagpool &tagpool, tagver_t &maxver, tagver_t *newvers);
+static void lower_lookahead_to_transition(closure_t &clos, Tagpool &tagpool, tagtree_t &tagtree);
+static void update_versions(closure_t &clos, Tagpool &tagpool, tagtree_t &tagtree, tagver_t &maxver, tagver_t *newvers);
 static void find_nondet(const closure_t &clos, size_t *nondet, const Tagpool &tagpool, const std::valarray<Rule> &rules);
 
-void closure(closure_t &clos1, closure_t &clos2, Tagpool &tagpool,
+void closure(closure_t &clos1, closure_t &clos2, Tagpool &tagpool, tagtree_t &tagtree,
 	std::valarray<Rule> &rules, tagver_t &maxver, tagver_t *newvers,
 	size_t *nondet, bool lookahead, closure_t *shadow)
 {
 	// build tagged epsilon-closure of the given set of NFA states
 	clos2.clear();
 	if (shadow) shadow->clear();
-	tagver_t *tags = tagpool.buffer1;
-	std::fill(tags, tags + tagpool.ntags, TAGVER_ZERO);
+	tagtree.init();
 	for (clositer_t c = clos1.begin(); c != clos1.end(); ++c) {
-		closure_one(clos2, tagpool, *c, c->state, tags, shadow, rules);
+		closure_one(clos2, tagpool, tagtree, *c, c->state, shadow, rules);
 	}
 
 	assert_items_are_grouped_by_rule(clos2);
 
 	// see note [the difference between TDFA(0) and TDFA(1)]
 	if (!lookahead) {
-		lower_lookahead_to_transition(clos2, tagpool);
-		if (shadow) lower_lookahead_to_transition(*shadow, tagpool);
+		lower_lookahead_to_transition(clos2, tagpool, tagtree);
+		if (shadow) lower_lookahead_to_transition(*shadow, tagpool, tagtree);
 	}
 
 	find_nondet(clos2, nondet, tagpool, rules);
 
 	// merge tags from different rules, find nondeterministic tags
-	update_versions(clos2, tagpool, maxver, newvers);
-	if (shadow) update_versions(*shadow, tagpool, maxver, newvers);
+	update_versions(clos2, tagpool, tagtree, maxver, newvers);
+	if (shadow) update_versions(*shadow, tagpool, tagtree, maxver, newvers);
 }
 
 /* note [closure items are sorted by rule]
@@ -79,65 +80,47 @@ void assert_items_are_grouped_by_rule(const closure_t &clos)
  * of individual subexpressions: e.g., greedy iteration is compiled so that
  * the leftmost path re-iterates rather than leaves the subexpression..
  */
-void closure_one(closure_t &clos, Tagpool &tagpool, clos_t &c0,
-	nfa_state_t *n, tagver_t *tags, closure_t *shadow,
+void closure_one(closure_t &clos, Tagpool &tagpool, tagtree_t &tagtree, clos_t &c0,
+	nfa_state_t *n, closure_t *shadow,
 	std::valarray<Rule> &rules)
 {
 	if (n->loop) return;
+	local_increment_t<uint8_t> _(n->loop);
 
-	n->loop = true;
+	clositer_t c = clos.begin(), e = clos.end();
 	switch (n->type) {
 		case nfa_state_t::NIL:
-			closure_one(clos, tagpool, c0, n->nil.out, tags, shadow, rules);
-			break;
+			closure_one(clos, tagpool, tagtree, c0, n->nil.out, shadow, rules);
+			return;
 		case nfa_state_t::ALT:
-			closure_one(clos, tagpool, c0, n->alt.out1, tags, shadow, rules);
-			closure_one(clos, tagpool, c0, n->alt.out2, tags, shadow, rules);
-			break;
-		case nfa_state_t::TAG: {
-			const size_t t = n->tag.info;
-			const tagver_t old = tags[t];
-			tags[t] = n->tag.bottom ? TAGVER_BOTTOM : TAGVER_CURSOR;
-			closure_one(clos, tagpool, c0, n->tag.out, tags, shadow, rules);
-			tags[t] = old;
-			break;
-		}
-		case nfa_state_t::RAN: {
-			c0.state = n;
-			c0.ttran = tagpool.insert(tags);
-			clositer_t
-				c = clos.begin(),
-				e = clos.end();
+			closure_one(clos, tagpool, tagtree, c0, n->alt.out1, shadow, rules);
+			closure_one(clos, tagpool, tagtree, c0, n->alt.out2, shadow, rules);
+			return;
+		case nfa_state_t::TAG:
+			tagtree.push(n->tag.info, n->tag.bottom ? TAGVER_BOTTOM : TAGVER_CURSOR);
+			closure_one(clos, tagpool, tagtree, c0, n->tag.out, shadow, rules);
+			tagtree.pop(n->tag.info);
+			return;
+		case nfa_state_t::RAN:
 			for (; c != e && c->state != n; ++c);
-			if (c == e) {
-				clos.push_back(c0);
-			} else if (shadow) {
-				shadow->push_back(c0);
-			}
 			break;
-		}
-		case nfa_state_t::FIN: {
+		case nfa_state_t::FIN:
 			// see note [at most one final item per closure]
-			c0.state = n;
-			c0.ttran = tagpool.insert(tags);
-			clositer_t
-				c = clos.begin(),
-				e = clos.end();
 			for (; c != e && c->state->type != nfa_state_t::FIN; ++c);
-			if (c == e) {
-				clos.push_back(c0);
-			} else {
-				if (c->state != n) {
-					rules[n->rule].shadow.insert(rules[c->state->rule].code->fline);
-				}
-				if (shadow) {
-					shadow->push_back(c0);
-				}
-			}
 			break;
-		}
 	}
-	n->loop = false;
+
+	clos_t c2 = {c0.origin, n, c0.tvers, tagpool.insert(tagtree.leaves())};
+	if (c == e) {
+		clos.push_back(c2);
+	} else {
+		clos_t &c1 = *c;
+		if (shadow) shadow->push_back(c2);
+		const size_t
+			r1 = c1.state->rule,
+			r2 = c2.state->rule;
+		if (r1 != r2) rules[r2].shadow.insert(rules[r1].code->fline);
+	}
 }
 
 /* note [at most one final item per closure]
@@ -184,7 +167,7 @@ void closure_one(closure_t &clos, Tagpool &tagpool, clos_t &c0,
 // and 'lowering' is just a waste for TDFA(0). However, supporting two
 // different handlers for TDFA(0) and TDFA(1) is unmaintainable, and since
 // TDFA(1) is default, it has the fast path.
-void lower_lookahead_to_transition(closure_t &clos, Tagpool &tagpool)
+void lower_lookahead_to_transition(closure_t &clos, Tagpool &tagpool, tagtree_t &tagtree)
 {
 	const size_t ntag = tagpool.ntags;
 	tagver_t *vers = tagpool.buffer1;
@@ -196,7 +179,7 @@ void lower_lookahead_to_transition(closure_t &clos, Tagpool &tagpool)
 			*look = tagpool[c->ttran],
 			*oldv = tagpool[c->tvers];
 		for (size_t t = 0; t < ntag; ++t) {
-			const tagver_t l = look[t];
+			const tagver_t l = tagtree.elem(look[t]);
 			vers[t] = l == TAGVER_ZERO ? oldv[t] : l;
 		}
 		c->tvers = tagpool.insert(vers);
@@ -204,7 +187,7 @@ void lower_lookahead_to_transition(closure_t &clos, Tagpool &tagpool)
 	}
 }
 
-void update_versions(closure_t &clos, Tagpool &tagpool,
+void update_versions(closure_t &clos, Tagpool &tagpool, tagtree_t &tagtree,
 	tagver_t &maxver, tagver_t *newvers)
 {
 	const size_t ntag = tagpool.ntags;
@@ -251,7 +234,7 @@ void update_versions(closure_t &clos, Tagpool &tagpool,
 			*oldv = tagpool[c->tvers];
 
 		for (size_t i = 0; i < ntag; ++i) {
-			const tagver_t o = oldv[i], l = look[i];
+			const tagver_t o = oldv[i], l = tagtree.elem(look[i]);
 			tagver_t &v = vers[i], &t = tran[i];
 
 			if (l != TAGVER_ZERO) {
