@@ -5,7 +5,7 @@
 #include <string>
 #include <vector>
 
-#include "src/ir/rule.h"
+#include "src/rule.h"
 
 namespace re2c {
 

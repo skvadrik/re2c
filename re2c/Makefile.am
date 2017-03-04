@@ -9,51 +9,51 @@ RE2C = re2c$(EXEEXT)
 
 # sources
 SRC_HDR = \
-	src/codegen/bitmap.h \
-	src/codegen/emit.h \
-	src/codegen/go.h \
-	src/codegen/input_api.h \
-	src/codegen/label.h \
-	src/codegen/output.h \
-	src/codegen/print.h \
+	src/code/bitmap.h \
+	src/code/emit.h \
+	src/code/go.h \
+	src/code/input_api.h \
+	src/code/label.h \
+	src/code/output.h \
+	src/code/print.h \
 	src/conf/msg.h \
 	src/conf/opt.h \
 	src/conf/warn.h \
-	src/ir/adfa/action.h \
-	src/ir/adfa/adfa.h \
-	src/ir/adfa/dump.h \
-	src/ir/dfa/cfg/cfg.h \
-	src/ir/dfa/closure.h \
-	src/ir/dfa/dfa.h \
-	src/ir/dfa/dump.h \
-	src/ir/dfa/find_state.h \
-	src/ir/dfa/tagpool.h \
-	src/ir/dfa/tagtree.h \
-	src/ir/nfa/nfa.h \
-	src/ir/re/encoding/case.h \
-	src/ir/re/encoding/enc.h \
-	src/ir/re/encoding/range_suffix.h \
-	src/ir/re/encoding/utf8/utf8.h \
-	src/ir/re/encoding/utf8/utf8_regexp.h \
-	src/ir/re/encoding/utf8/utf8_range.h \
-	src/ir/re/encoding/utf16/utf16_range.h \
-	src/ir/re/encoding/utf16/utf16_regexp.h \
-	src/ir/re/encoding/utf16/utf16.h \
-	src/ir/re/empty_class_policy.h \
-	src/ir/re/re.h \
-	src/ir/compile.h \
-	src/ir/rule.h \
-	src/ir/tag.h \
-	src/ir/tcmd.h \
-	src/ir/skeleton/path.h \
-	src/ir/skeleton/skeleton.h \
-	src/parse/extop.h \
-	src/parse/input.h \
-	src/parse/parser.h \
-	src/parse/regexp.h \
-	src/parse/rules.h \
-	src/parse/scanner.h \
-	src/parse/unescape.h \
+	src/adfa/action.h \
+	src/adfa/adfa.h \
+	src/adfa/dump.h \
+	src/dfa/cfg/cfg.h \
+	src/dfa/closure.h \
+	src/dfa/dfa.h \
+	src/dfa/dump.h \
+	src/dfa/find_state.h \
+	src/dfa/tagpool.h \
+	src/dfa/tagtree.h \
+	src/nfa/nfa.h \
+	src/re/encoding/case.h \
+	src/re/encoding/enc.h \
+	src/re/encoding/range_suffix.h \
+	src/re/encoding/utf8/utf8.h \
+	src/re/encoding/utf8/utf8_regexp.h \
+	src/re/encoding/utf8/utf8_range.h \
+	src/re/encoding/utf16/utf16_range.h \
+	src/re/encoding/utf16/utf16_regexp.h \
+	src/re/encoding/utf16/utf16.h \
+	src/re/empty_class_policy.h \
+	src/re/re.h \
+	src/compile.h \
+	src/rule.h \
+	src/tag.h \
+	src/tcmd.h \
+	src/skeleton/path.h \
+	src/skeleton/skeleton.h \
+	src/ast/extop.h \
+	src/ast/input.h \
+	src/ast/parser.h \
+	src/ast/regexp.h \
+	src/ast/rules.h \
+	src/ast/scanner.h \
+	src/ast/unescape.h \
 	src/util/allocate.h \
 	src/util/attribute.h \
 	src/util/c99_stdint.h \
@@ -73,72 +73,72 @@ SRC_HDR = \
 	src/util/uniq_vector.h \
 	src/util/wrap_iter.h
 SRC = \
-	src/codegen/bitmap.cc \
-	src/codegen/emit_action.cc \
-	src/codegen/emit_dfa.cc \
-	src/codegen/label.cc \
-	src/codegen/go_construct.cc \
-	src/codegen/go_destruct.cc \
-	src/codegen/go_emit.cc \
-	src/codegen/go_used_labels.cc \
-	src/codegen/input_api.cc \
-	src/codegen/output.cc \
-	src/codegen/print.cc \
+	src/code/bitmap.cc \
+	src/code/emit_action.cc \
+	src/code/emit_dfa.cc \
+	src/code/label.cc \
+	src/code/go_construct.cc \
+	src/code/go_destruct.cc \
+	src/code/go_emit.cc \
+	src/code/go_used_labels.cc \
+	src/code/input_api.cc \
+	src/code/output.cc \
+	src/code/print.cc \
 	src/conf/msg.cc \
 	src/conf/opt.cc \
 	src/conf/warn.cc \
-	src/ir/nfa/dump.cc \
-	src/ir/nfa/estimate_size.cc \
-	src/ir/nfa/re_to_nfa.cc \
-	src/ir/adfa/adfa.cc \
-	src/ir/adfa/dump.cc \
-	src/ir/adfa/prepare.cc \
-	src/ir/dfa/cfg/cfg.cc \
-	src/ir/dfa/cfg/compact.cc \
-	src/ir/dfa/cfg/dce.cc \
-	src/ir/dfa/cfg/interfere.cc \
-	src/ir/dfa/cfg/liveanal.cc \
-	src/ir/dfa/cfg/normalize.cc \
-	src/ir/dfa/cfg/optimize.cc \
-	src/ir/dfa/cfg/rename.cc \
-	src/ir/dfa/cfg/varalloc.cc \
-	src/ir/dfa/closure.cc \
-	src/ir/dfa/dead_rules.cc \
-	src/ir/dfa/determinization.cc \
-	src/ir/dfa/dump.cc \
-	src/ir/dfa/fallback_tags.cc \
-	src/ir/dfa/fillpoints.cc \
-	src/ir/dfa/find_state.cc \
-	src/ir/dfa/minimization.cc \
-	src/ir/dfa/tagpool.cc \
-	src/ir/dfa/tagtree.cc \
-	src/ir/re/encoding/enc.cc \
-	src/ir/re/encoding/range_suffix.cc \
-	src/ir/re/encoding/utf8/utf8_regexp.cc \
-	src/ir/re/encoding/utf8/utf8_range.cc \
-	src/ir/re/encoding/utf8/utf8.cc \
-	src/ir/re/encoding/utf16/utf16_regexp.cc \
-	src/ir/re/encoding/utf16/utf16.cc \
-	src/ir/re/encoding/utf16/utf16_range.cc \
-	src/ir/re/ast_to_re.cc \
-	src/ir/re/default_tags.cc \
-	src/ir/re/fixed_tags.cc \
-	src/ir/re/nullable.cc \
-	src/ir/re/split_charset.cc \
-	src/ir/compile.cc \
-	src/ir/rule.cc \
-	src/ir/skeleton/control_flow.cc \
-	src/ir/skeleton/generate_code.cc \
-	src/ir/skeleton/generate_data.cc \
-	src/ir/skeleton/maxpath.cc \
-	src/ir/skeleton/skeleton.cc \
-	src/ir/tag.cc \
-	src/ir/tcmd.cc \
+	src/nfa/dump.cc \
+	src/nfa/estimate_size.cc \
+	src/nfa/re_to_nfa.cc \
+	src/adfa/adfa.cc \
+	src/adfa/dump.cc \
+	src/adfa/prepare.cc \
+	src/dfa/cfg/cfg.cc \
+	src/dfa/cfg/compact.cc \
+	src/dfa/cfg/dce.cc \
+	src/dfa/cfg/interfere.cc \
+	src/dfa/cfg/liveanal.cc \
+	src/dfa/cfg/normalize.cc \
+	src/dfa/cfg/optimize.cc \
+	src/dfa/cfg/rename.cc \
+	src/dfa/cfg/varalloc.cc \
+	src/dfa/closure.cc \
+	src/dfa/dead_rules.cc \
+	src/dfa/determinization.cc \
+	src/dfa/dump.cc \
+	src/dfa/fallback_tags.cc \
+	src/dfa/fillpoints.cc \
+	src/dfa/find_state.cc \
+	src/dfa/minimization.cc \
+	src/dfa/tagpool.cc \
+	src/dfa/tagtree.cc \
+	src/re/encoding/enc.cc \
+	src/re/encoding/range_suffix.cc \
+	src/re/encoding/utf8/utf8_regexp.cc \
+	src/re/encoding/utf8/utf8_range.cc \
+	src/re/encoding/utf8/utf8.cc \
+	src/re/encoding/utf16/utf16_regexp.cc \
+	src/re/encoding/utf16/utf16.cc \
+	src/re/encoding/utf16/utf16_range.cc \
+	src/re/ast_to_re.cc \
+	src/re/default_tags.cc \
+	src/re/fixed_tags.cc \
+	src/re/nullable.cc \
+	src/re/split_charset.cc \
+	src/compile.cc \
+	src/rule.cc \
+	src/skeleton/control_flow.cc \
+	src/skeleton/generate_code.cc \
+	src/skeleton/generate_data.cc \
+	src/skeleton/maxpath.cc \
+	src/skeleton/skeleton.cc \
+	src/tag.cc \
+	src/tcmd.cc \
 	src/main.cc \
-	src/parse/input.cc \
-	src/parse/regexp.cc \
-	src/parse/scanner.cc \
-	src/parse/unescape.cc \
+	src/ast/input.cc \
+	src/ast/regexp.cc \
+	src/ast/scanner.cc \
+	src/ast/unescape.cc \
 	src/util/s_to_n32_unsafe.cc \
 	src/util/range.cc
 re2c_SOURCES = \
@@ -146,11 +146,11 @@ re2c_SOURCES = \
 	$(SRC)
 
 # autogenerated sources
-AUTOGEN_LEX = src/parse/lex.cc
-AUTOGEN_LEX_CONF = src/parse/lex_conf.cc
+AUTOGEN_LEX = src/ast/lex.cc
+AUTOGEN_LEX_CONF = src/ast/lex_conf.cc
 AUTOGEN_PARSEOPT = src/conf/parse_opts.cc
-AUTOGEN_PARSER = src/parse/parser.cc
-AUTOGEN_PARSER_HDR = src/parse/y.tab.h
+AUTOGEN_PARSER = src/ast/parser.cc
+AUTOGEN_PARSER_HDR = src/ast/y.tab.h
 AUTOGEN = \
 	$(AUTOGEN_LEX) \
 	$(AUTOGEN_LEX_CONF) \
@@ -160,11 +160,11 @@ AUTOGEN = \
 nodist_re2c_SOURCES = $(AUTOGEN)
 
 # bootstrap sources
-BOOTSTRAP_LEX = bootstrap/src/parse/lex.cc
-BOOTSTRAP_LEX_CONF = bootstrap/src/parse/lex_conf.cc
+BOOTSTRAP_LEX = bootstrap/src/ast/lex.cc
+BOOTSTRAP_LEX_CONF = bootstrap/src/ast/lex_conf.cc
 BOOTSTRAP_PARSEOPT = bootstrap/src/conf/parse_opts.cc
-BOOTSTRAP_PARSER = bootstrap/src/parse/parser.cc
-BOOTSTRAP_PARSER_HDR = bootstrap/src/parse/y.tab.h
+BOOTSTRAP_PARSER = bootstrap/src/ast/parser.cc
+BOOTSTRAP_PARSER_HDR = bootstrap/src/ast/y.tab.h
 BOOTSTRAP_DOC = bootstrap/doc/re2c.1
 BOOTSTRAP = \
 	$(BOOTSTRAP_LEX) \
@@ -175,10 +175,10 @@ BOOTSTRAP = \
 	$(BOOTSTRAP_PARSEOPT)
 
 # custom sources
-CUSTOM_LEX = src/parse/lex.re
-CUSTOM_LEX_CONF = src/parse/lex_conf.re
+CUSTOM_LEX = src/ast/lex.re
+CUSTOM_LEX_CONF = src/ast/lex_conf.re
 CUSTOM_PARSEOPT = src/conf/parse_opts.re
-CUSTOM_PARSER = src/parse/parser.ypp
+CUSTOM_PARSER = src/ast/parser.ypp
 CUSTOM = \
 	$(CUSTOM_LEX) \
 	$(CUSTOM_LEX_CONF) \

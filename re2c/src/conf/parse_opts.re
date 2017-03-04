@@ -1,8 +1,8 @@
-#include "src/codegen/input_api.h"
+#include "src/code/input_api.h"
 #include "src/conf/msg.h"
 #include "src/conf/opt.h"
-#include "src/ir/re/empty_class_policy.h"
-#include "src/ir/re/encoding/enc.h"
+#include "src/re/empty_class_policy.h"
+#include "src/re/encoding/enc.h"
 
 namespace re2c
 {

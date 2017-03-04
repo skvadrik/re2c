@@ -5,11 +5,11 @@
 #include <stddef.h>
 #include <string>
 
-#include "src/codegen/input_api.h"
+#include "src/code/input_api.h"
 #include "src/conf/warn.h"
-#include "src/ir/dfa/dfa.h"
-#include "src/ir/re/empty_class_policy.h"
-#include "src/ir/re/encoding/enc.h"
+#include "src/dfa/dfa.h"
+#include "src/re/empty_class_policy.h"
+#include "src/re/encoding/enc.h"
 #include "src/util/forbid_copy.h"
 
 namespace re2c

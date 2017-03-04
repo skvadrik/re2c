@@ -5,8 +5,8 @@
 
 #include "src/conf/msg.h"
 #include "src/conf/warn.h"
-#include "src/ir/skeleton/path.h"
-#include "src/ir/skeleton/skeleton.h"
+#include "src/skeleton/path.h"
+#include "src/skeleton/skeleton.h"
 
 namespace re2c {
 
