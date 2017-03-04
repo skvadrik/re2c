@@ -1,5 +1,5 @@
-#include "src/ir/regexp/encoding/utf16/utf16_range.h"
-#include "src/ir/regexp/encoding/range_suffix.h"
+#include "src/ir/re/encoding/utf16/utf16_range.h"
+#include "src/ir/re/encoding/range_suffix.h"
 
 namespace re2c {
 

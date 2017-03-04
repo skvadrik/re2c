@@ -38,7 +38,7 @@ static void split(const RE* re, std::set<uint32_t> &cs)
  * Don't forget to include zero and upper bound, even if they
  * do not explicitely apper in ranges.
  */
-void split_charset(RESpec &spec, const opt_t *opts)
+void split_charset(RESpec &spec)
 {
 	std::set<uint32_t> cs;
 
@@ -49,7 +49,7 @@ void split_charset(RESpec &spec, const opt_t *opts)
 		split(*i, cs);
 	}
 	cs.insert(0);
-	cs.insert(opts->encoding.nCodeUnits());
+	cs.insert(spec.opts->encoding.nCodeUnits());
 
 	spec.charset.insert(spec.charset.end(), cs.begin(), cs.end());
 }

@@ -8,8 +8,8 @@
 #include "src/codegen/output.h"
 #include "src/ir/adfa/action.h"
 #include "src/ir/adfa/adfa.h"
-#include "src/ir/regexp/regexp.h"
 #include "src/ir/skeleton/skeleton.h"
+#include "src/parse/regexp.h"
 #include "src/util/string_utils.h"
 
 namespace re2c

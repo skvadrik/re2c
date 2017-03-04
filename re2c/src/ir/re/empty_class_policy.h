@@ -1,5 +1,5 @@
-#ifndef _RE2C_IR_REGEXP_EMPTY_CLASS_POLICY_
-#define _RE2C_IR_REGEXP_EMPTY_CLASS_POLICY_
+#ifndef _RE2C_IR_RE_EMPTY_CLASS_POLICY_
+#define _RE2C_IR_RE_EMPTY_CLASS_POLICY_
 
 namespace re2c {
 
@@ -12,4 +12,4 @@ enum empty_class_policy_t
 
 } // namespace re2c
 
-#endif // _RE2C_IR_REGEXP_EMPTY_CLASS_POLICY_
+#endif // _RE2C_IR_RE_EMPTY_CLASS_POLICY_

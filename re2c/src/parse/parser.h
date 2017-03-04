@@ -5,7 +5,7 @@
 #include <string>
 
 #include "src/codegen/output.h"
-#include "src/ir/regexp/regexp.h"
+#include "src/parse/regexp.h"
 #include "src/parse/scanner.h"
 #include "src/util/smart_ptr.h"
 

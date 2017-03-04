@@ -30,18 +30,17 @@ SRC_HDR = \
 	src/ir/dfa/tagpool.h \
 	src/ir/dfa/tagtree.h \
 	src/ir/nfa/nfa.h \
+	src/ir/re/encoding/case.h \
+	src/ir/re/encoding/enc.h \
+	src/ir/re/encoding/range_suffix.h \
+	src/ir/re/encoding/utf8/utf8.h \
+	src/ir/re/encoding/utf8/utf8_regexp.h \
+	src/ir/re/encoding/utf8/utf8_range.h \
+	src/ir/re/encoding/utf16/utf16_range.h \
+	src/ir/re/encoding/utf16/utf16_regexp.h \
+	src/ir/re/encoding/utf16/utf16.h \
+	src/ir/re/empty_class_policy.h \
 	src/ir/re/re.h \
-	src/ir/regexp/encoding/case.h \
-	src/ir/regexp/encoding/enc.h \
-	src/ir/regexp/encoding/range_suffix.h \
-	src/ir/regexp/encoding/utf8/utf8.h \
-	src/ir/regexp/encoding/utf8/utf8_regexp.h \
-	src/ir/regexp/encoding/utf8/utf8_range.h \
-	src/ir/regexp/encoding/utf16/utf16_range.h \
-	src/ir/regexp/encoding/utf16/utf16_regexp.h \
-	src/ir/regexp/encoding/utf16/utf16.h \
-	src/ir/regexp/empty_class_policy.h \
-	src/ir/regexp/regexp.h \
 	src/ir/compile.h \
 	src/ir/rule.h \
 	src/ir/tag.h \
@@ -51,6 +50,7 @@ SRC_HDR = \
 	src/parse/extop.h \
 	src/parse/input.h \
 	src/parse/parser.h \
+	src/parse/regexp.h \
 	src/parse/rules.h \
 	src/parse/scanner.h \
 	src/parse/unescape.h \
@@ -90,11 +90,6 @@ SRC = \
 	src/ir/nfa/dump.cc \
 	src/ir/nfa/estimate_size.cc \
 	src/ir/nfa/re_to_nfa.cc \
-	src/ir/re/ast_to_re.cc \
-	src/ir/re/default_tags.cc \
-	src/ir/re/fixed_tags.cc \
-	src/ir/re/nullable.cc \
-	src/ir/re/split_charset.cc \
 	src/ir/adfa/adfa.cc \
 	src/ir/adfa/dump.cc \
 	src/ir/adfa/prepare.cc \
@@ -117,15 +112,19 @@ SRC = \
 	src/ir/dfa/minimization.cc \
 	src/ir/dfa/tagpool.cc \
 	src/ir/dfa/tagtree.cc \
-	src/ir/regexp/encoding/enc.cc \
-	src/ir/regexp/encoding/range_suffix.cc \
-	src/ir/regexp/encoding/utf8/utf8_regexp.cc \
-	src/ir/regexp/encoding/utf8/utf8_range.cc \
-	src/ir/regexp/encoding/utf8/utf8.cc \
-	src/ir/regexp/encoding/utf16/utf16_regexp.cc \
-	src/ir/regexp/encoding/utf16/utf16.cc \
-	src/ir/regexp/encoding/utf16/utf16_range.cc \
-	src/ir/regexp/regexp.cc \
+	src/ir/re/encoding/enc.cc \
+	src/ir/re/encoding/range_suffix.cc \
+	src/ir/re/encoding/utf8/utf8_regexp.cc \
+	src/ir/re/encoding/utf8/utf8_range.cc \
+	src/ir/re/encoding/utf8/utf8.cc \
+	src/ir/re/encoding/utf16/utf16_regexp.cc \
+	src/ir/re/encoding/utf16/utf16.cc \
+	src/ir/re/encoding/utf16/utf16_range.cc \
+	src/ir/re/ast_to_re.cc \
+	src/ir/re/default_tags.cc \
+	src/ir/re/fixed_tags.cc \
+	src/ir/re/nullable.cc \
+	src/ir/re/split_charset.cc \
 	src/ir/compile.cc \
 	src/ir/rule.cc \
 	src/ir/skeleton/control_flow.cc \
@@ -137,6 +136,7 @@ SRC = \
 	src/ir/tcmd.cc \
 	src/main.cc \
 	src/parse/input.cc \
+	src/parse/regexp.cc \
 	src/parse/scanner.cc \
 	src/parse/unescape.cc \
 	src/util/s_to_n32_unsafe.cc \

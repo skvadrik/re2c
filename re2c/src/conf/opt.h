@@ -8,8 +8,8 @@
 #include "src/codegen/input_api.h"
 #include "src/conf/warn.h"
 #include "src/ir/dfa/dfa.h"
-#include "src/ir/regexp/empty_class_policy.h"
-#include "src/ir/regexp/encoding/enc.h"
+#include "src/ir/re/empty_class_policy.h"
+#include "src/ir/re/encoding/enc.h"
 #include "src/util/forbid_copy.h"
 
 namespace re2c

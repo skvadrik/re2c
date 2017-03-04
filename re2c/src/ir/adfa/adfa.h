@@ -11,7 +11,6 @@
 #include "src/codegen/go.h"
 #include "src/codegen/label.h"
 #include "src/ir/adfa/action.h"
-#include "src/ir/regexp/regexp.h"
 #include "src/ir/rule.h"
 #include "src/ir/tag.h"
 #include "src/util/forbid_copy.h"

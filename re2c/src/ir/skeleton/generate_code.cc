@@ -7,7 +7,7 @@
 #include "src/codegen/bitmap.h"
 #include "src/codegen/emit.h"
 #include "src/codegen/output.h"
-#include "src/ir/regexp/encoding/enc.h"
+#include "src/ir/re/encoding/enc.h"
 #include "src/ir/adfa/adfa.h"
 #include "src/ir/skeleton/skeleton.h"
 

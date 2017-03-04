@@ -1,5 +1,5 @@
-#ifndef _RE2C_IR_REGEXP_ENCODING_UTF16_UTF16_
-#define _RE2C_IR_REGEXP_ENCODING_UTF16_UTF16_
+#ifndef _RE2C_IR_RE_ENCODING_UTF16_UTF16_
+#define _RE2C_IR_RE_ENCODING_UTF16_UTF16_
 
 #include "src/util/c99_stdint.h"
 
@@ -34,4 +34,4 @@ inline uint32_t utf16::trail_surr(rune r)
 
 }  // namespace re2c
 
-#endif // _RE2C_IR_REGEXP_ENCODING_UTF16_UTF16_
+#endif // _RE2C_IR_RE_ENCODING_UTF16_UTF16_

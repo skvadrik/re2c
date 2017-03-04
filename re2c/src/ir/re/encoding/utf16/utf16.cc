@@ -1,4 +1,4 @@
-#include "src/ir/regexp/encoding/utf16/utf16.h"
+#include "src/ir/re/encoding/utf16/utf16.h"
 
 namespace re2c {
 

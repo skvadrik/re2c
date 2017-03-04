@@ -7,11 +7,11 @@
 #include <set>
 
 #include "src/conf/warn.h"
-#include "src/ir/regexp/regexp.h"
 #include "src/ir/rule.h"
 #include "src/ir/tag.h"
 #include "src/ir/tcmd.h"
 #include "src/ir/dfa/tagpool.h"
+#include "src/parse/regexp.h"
 #include "src/util/forbid_copy.h"
 
 namespace re2c

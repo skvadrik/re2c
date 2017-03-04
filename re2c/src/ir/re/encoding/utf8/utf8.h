@@ -1,5 +1,5 @@
-#ifndef _RE2C_IR_REGEXP_ENCODING_UTF8_UTF8_
-#define _RE2C_IR_REGEXP_ENCODING_UTF8_UTF8_
+#ifndef _RE2C_IR_RE_ENCODING_UTF8_UTF8_
+#define _RE2C_IR_RE_ENCODING_UTF8_UTF8_
 
 #include "src/util/c99_stdint.h"
 
@@ -45,4 +45,4 @@ public:
 
 }  // namespace re2c
 
-#endif // _RE2C_IR_REGEXP_ENCODING_UTF8_UTF8_
+#endif // _RE2C_IR_RE_ENCODING_UTF8_UTF8_

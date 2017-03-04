@@ -1,15 +1,14 @@
-#ifndef _RE2C_IR_REGEXP_ENCODING_RANGE_SUFFIX_
-#define _RE2C_IR_REGEXP_ENCODING_RANGE_SUFFIX_
+#ifndef _RE2C_IR_RE_ENCODING_RANGE_SUFFIX_
+#define _RE2C_IR_RE_ENCODING_RANGE_SUFFIX_
 
 #include "src/util/c99_stdint.h"
 #include <stddef.h> // NULL
 
+#include "src/ir/re/re.h"
 #include "src/util/forbid_copy.h"
 #include "src/util/free_list.h"
 
 namespace re2c {
-
-struct RegExp;
 
 struct RangeSuffix
 {
@@ -32,8 +31,8 @@ struct RangeSuffix
 	FORBID_COPY (RangeSuffix);
 };
 
-const RegExp *to_regexp(uint32_t l, uint32_t c, RangeSuffix * p);
+RE *to_regexp(RE::alc_t &alc, RangeSuffix *p);
 
 } // namespace re2c
 
-#endif // _RE2C_IR_REGEXP_ENCODING_RANGE_SUFFIX_
+#endif // _RE2C_IR_RE_ENCODING_RANGE_SUFFIX_

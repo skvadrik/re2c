@@ -1,5 +1,5 @@
-#ifndef _RE2C_IR_REGEXP_REGEXP_
-#define _RE2C_IR_REGEXP_REGEXP_
+#ifndef _RE2C_PARSE_REGEXP_
+#define _RE2C_PARSE_REGEXP_
 
 #include "src/util/c99_stdint.h"
 #include <set>
@@ -21,10 +21,12 @@ struct RegExp
 	static free_list<RegExp*> flist;
 	static const uint32_t MANY;
 
-	enum type_t {NIL, SYM, ALT, CAT, ITER, TAG, CAP, REF} type;
+	enum type_t {NIL, SCHAR, ICHAR, CLASS, DOT, DEFAULT, ALT, CAT, ITER, DIFF, TAG, CAP, REF} type;
 	union
 	{
-		const Range *sym;
+		uint32_t schar;
+		uint32_t ichar;
+		const Range *cls;
 		struct
 		{
 			const RegExp *re1;
@@ -41,6 +43,11 @@ struct RegExp
 			uint32_t min;
 			uint32_t max;
 		} iter;
+		struct
+		{
+			const RegExp *re1;
+			const RegExp *re2;
+		} diff;
 		const std::string *tag;
 		const RegExp *cap;
 		struct
@@ -56,20 +63,36 @@ struct RegExp
 	{
 		return new RegExp(l, c, NIL);
 	}
-	static const RegExp *make_sym(uint32_t l, uint32_t c, const Range *r)
+	static const RegExp *make_schar(uint32_t l, uint32_t c, uint32_t x)
 	{
-		RegExp *re = new RegExp(l, c, SYM);
-		re->sym = r;
+		RegExp *re = new RegExp(l, c, SCHAR);
+		re->schar = x;
 		return re;
+	}
+	static const RegExp *make_ichar(uint32_t l, uint32_t c, uint32_t x)
+	{
+		RegExp *re = new RegExp(l, c, ICHAR);
+		re->ichar = x;
+		return re;
+	}
+	static const RegExp *make_class(uint32_t l, uint32_t c, const Range *r)
+	{
+		RegExp *re = new RegExp(l, c, CLASS);
+		re->cls = r;
+		return re;
+	}
+	static const RegExp *make_dot(uint32_t l, uint32_t c)
+	{
+		return new RegExp(l, c, DOT);
+	}
+	static const RegExp *make_default(uint32_t l, uint32_t c)
+	{
+		return new RegExp(l, c, DEFAULT);
 	}
 	static const RegExp *make_alt(const RegExp *r1, const RegExp *r2)
 	{
 		if (!r1) return r2;
 		if (!r2) return r1;
-		if (r1->type == RegExp::SYM && r2->type == RegExp::SYM) {
-			return RegExp::make_sym(r1->line, r1->column,
-				Range::add(r1->sym, r2->sym));
-		}
 		RegExp *re = new RegExp(r1->line, r1->column, ALT);
 		re->alt.re1 = r1;
 		re->alt.re2 = r2;
@@ -90,6 +113,13 @@ struct RegExp
 		re->iter.re = r;
 		re->iter.min = n;
 		re->iter.max = m;
+		return re;
+	}
+	static const RegExp *make_diff(const RegExp *r1, const RegExp *r2)
+	{
+		RegExp *re = new RegExp(r1->line, r1->column, DIFF);
+		re->cat.re1 = r1;
+		re->cat.re2 = r2;
 		return re;
 	}
 	static const RegExp *make_tag(uint32_t l, uint32_t c, const std::string *t)
@@ -120,12 +150,6 @@ struct RegExp
 			delete ref.name;
 		}
 	}
-	static const RegExp *make_schar(uint32_t line, uint32_t column, uint32_t c, Opt &opts);
-	static const RegExp *make_ichar(uint32_t line, uint32_t column, uint32_t c, Opt &opts);
-	static const RegExp *make_class(uint32_t line, uint32_t column, const Range *r, Opt &opts, Warn &warn);
-	static const RegExp *make_diff(const RegExp * e1, const RegExp * e2, Opt &opts, Warn &warn);
-	static const RegExp *make_dot(uint32_t line, uint32_t column, Opt &opts, Warn &warn);
-	static const RegExp *make_default(uint32_t line, uint32_t column, Opt &opts);
 	static bool need_wrap(const RegExp *re);
 
 private:
@@ -149,4 +173,4 @@ struct RegExpRule
 
 } // end namespace re2c
 
-#endif // _RE2C_IR_REGEXP_REGEXP_
+#endif // _RE2C_PARSE_REGEXP_

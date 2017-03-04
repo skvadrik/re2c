@@ -13,7 +13,6 @@
 
 #include "src/codegen/bitmap.h"
 #include "src/conf/opt.h"
-#include "src/ir/regexp/regexp.h"
 #include "src/ir/rule.h"
 #include "src/ir/tcmd.h"
 #include "src/util/local_increment.h"

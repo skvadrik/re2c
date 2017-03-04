@@ -2,7 +2,7 @@
 #include <string>
 
 #include "src/codegen/output.h"
-#include "src/ir/regexp/encoding/enc.h"
+#include "src/ir/re/encoding/enc.h"
 #include "src/parse/scanner.h"
 #include "src/util/s_to_n32_unsafe.h"
 

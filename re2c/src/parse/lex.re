@@ -6,10 +6,10 @@
 #include <string>
 
 #include "src/codegen/output.h"
-#include "src/ir/regexp/encoding/enc.h"
-#include "src/ir/regexp/regexp.h"
+#include "src/ir/re/encoding/enc.h"
 #include "src/parse/extop.h"
 #include "src/parse/input.h"
+#include "src/parse/regexp.h"
 #include "src/parse/scanner.h"
 #include "src/parse/parser.h" // needed by "y.tab.h"
 #include "src/parse/unescape.h"
@@ -348,8 +348,8 @@ start:
 								c = static_cast<uint8_t>(*s),
 								column = static_cast<uint32_t>(s - pos);
 							r = RegExp::make_cat(r, casing
-								? RegExp::make_ichar(cline, column, c, opts)
-								: RegExp::make_schar(cline, column, c, opts));
+								? RegExp::make_ichar(cline, column, c)
+								: RegExp::make_schar(cline, column, c));
 						}
 						yylval.regexp = r ? r : RegExp::make_nil(cline, get_column());
 						return TOKEN_REGEXP;
@@ -357,7 +357,7 @@ start:
 				}
 
 	"."			{
-					yylval.regexp = RegExp::make_dot(cline, get_column(), opts, warn);
+					yylval.regexp = RegExp::make_dot(cline, get_column());
 					return TOKEN_REGEXP;
 				}
 
@@ -580,7 +580,7 @@ end:
 	if (neg) {
 		r = Range::sub(opts->encoding.fullRange(), r);
 	}
-	return RegExp::make_class(cline, column, r, opts, warn);
+	return RegExp::make_class(cline, column, r);
 }
 
 uint32_t Scanner::lex_cls_chr()
@@ -654,8 +654,8 @@ const RegExp *Scanner::lex_str(char quote, bool casing)
 			return r ? r : RegExp::make_nil(cline, get_column());
 		}
 		r = RegExp::make_cat(r, casing
-			? RegExp::make_ichar(cline, get_column(), c, opts)
-			: RegExp::make_schar(cline, get_column(), c, opts));
+			? RegExp::make_ichar(cline, get_column(), c)
+			: RegExp::make_schar(cline, get_column(), c));
 	}
 }
 

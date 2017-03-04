@@ -12,7 +12,7 @@
 #include "src/codegen/output.h"
 #include "src/codegen/print.h"
 #include "src/ir/adfa/adfa.h"
-#include "src/ir/regexp/encoding/enc.h"
+#include "src/ir/re/encoding/enc.h"
 
 namespace re2c
 {

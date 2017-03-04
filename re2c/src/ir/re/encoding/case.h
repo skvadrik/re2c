@@ -1,5 +1,5 @@
-#ifndef _RE2C_IR_REGEXP_ENCODING_CASE_
-#define _RE2C_IR_REGEXP_ENCODING_CASE_
+#ifndef _RE2C_IR_RE_ENCODING_CASE_
+#define _RE2C_IR_RE_ENCODING_CASE_
 
 #include "src/util/c99_stdint.h"
 
@@ -28,4 +28,4 @@ inline uint32_t to_upper_unsafe (uint32_t c)
 
 }
 
-#endif // _RE2C_IR_REGEXP_ENCODING_CASE_
+#endif // _RE2C_IR_RE_ENCODING_CASE_

@@ -10,7 +10,7 @@
 #include <vector>
 
 #include "src/conf/msg.h"
-#include "src/ir/regexp/encoding/enc.h"
+#include "src/ir/re/encoding/enc.h"
 #include "src/ir/skeleton/path.h"
 #include "src/ir/skeleton/skeleton.h"
 #include "src/util/u32lim.h"

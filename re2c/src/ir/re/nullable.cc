@@ -29,13 +29,13 @@ static bool nullable(const RESpec &spec, const RE *re, bool &trail)
  * (including rules with nonempty trailing context)
  * false positives on partially self-shadowed rules like [^]?
  */
-void warn_nullable(const RESpec &spec, const std::string &cond, Warn &warn)
+void warn_nullable(const RESpec &spec, const std::string &cond)
 {
 	const size_t nre = spec.res.size();
 	for (size_t i = 0; i < nre; ++i) {
 		bool trail = false;
 		if (nullable(spec, spec.res[i], trail)) {
-			warn.match_empty_string(spec.rules[i].code->fline, cond);
+			spec.warn.match_empty_string(spec.rules[i].code->fline, cond);
 		}
 	}
 }

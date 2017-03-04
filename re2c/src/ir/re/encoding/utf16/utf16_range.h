@@ -1,9 +1,9 @@
-#ifndef _RE2C_IR_REGEXP_ENCODING_UTF16_RANGE_
-#define _RE2C_IR_REGEXP_ENCODING_UTF16_RANGE_
+#ifndef _RE2C_IR_RE_ENCODING_UTF16_RANGE_
+#define _RE2C_IR_RE_ENCODING_UTF16_RANGE_
 
 #include "src/util/c99_stdint.h"
 
-#include "src/ir/regexp/encoding/utf16/utf16.h"
+#include "src/ir/re/encoding/utf16/utf16.h"
 
 namespace re2c {
 
@@ -16,4 +16,4 @@ void UTF16splitByRuneLength(RangeSuffix * & root, utf16::rune l, utf16::rune h);
 
 } // namespace re2c
 
-#endif // _RE2C_IR_REGEXP_ENCODING_UTF16_RANGE_
+#endif // _RE2C_IR_RE_ENCODING_UTF16_RANGE_

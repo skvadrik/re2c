@@ -8,7 +8,7 @@
 #include "src/ir/dfa/dump.h"
 #include "src/ir/dfa/find_state.h"
 #include "src/ir/nfa/nfa.h"
-#include "src/ir/regexp/regexp.h"
+#include "src/parse/regexp.h"
 #include "src/util/range.h"
 
 namespace re2c

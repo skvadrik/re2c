@@ -1,5 +1,5 @@
-#ifndef _RE2C_IR_REGEXP_ENCODING_ENC_
-#define _RE2C_IR_REGEXP_ENCODING_ENC_
+#ifndef _RE2C_IR_RE_ENCODING_ENC_
+#define _RE2C_IR_RE_ENCODING_ENC_
 
 #include "src/util/c99_stdint.h"
 
@@ -194,4 +194,4 @@ inline void Enc::setPolicy(policy_t t)
 
 } // namespace re2c
 
-#endif // _RE2C_IR_REGEXP_ENCODING_ENC_
+#endif // _RE2C_IR_RE_ENCODING_ENC_

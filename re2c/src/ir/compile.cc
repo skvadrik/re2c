@@ -9,8 +9,8 @@
 #include "src/ir/dfa/dfa.h"
 #include "src/ir/dfa/dump.h"
 #include "src/ir/nfa/nfa.h"
-#include "src/ir/regexp/regexp.h"
 #include "src/ir/skeleton/skeleton.h"
+#include "src/parse/regexp.h"
 
 namespace re2c {
 
@@ -41,11 +41,11 @@ smart_ptr<DFA> compile(const spec_t &spec, Output &output)
 		name = make_name(cond, line),
 		&setup = spec.setup.empty() ? "" : spec.setup[0]->text;
 
-	RESpec re(rules);
-	split_charset(re, opts);
-	find_fixed_tags(re, opts);
+	RESpec re(rules, opts, warn);
+	split_charset(re);
+	find_fixed_tags(re);
 	insert_default_tags(re);
-	warn_nullable(re, cond, warn);
+	warn_nullable(re, cond);
 
 	nfa_t nfa(re);
 	if (opts->dump_nfa) dump_nfa(nfa);

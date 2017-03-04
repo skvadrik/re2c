@@ -68,9 +68,9 @@ static void find_fixed_tags(RE *re, std::vector<Tag> &tags,
 	}
 }
 
-void find_fixed_tags(RESpec &spec, const opt_t *opts)
+void find_fixed_tags(RESpec &spec)
 {
-	const bool generic = opts->input_api == INPUT_CUSTOM;
+	const bool generic = spec.opts->input_api == INPUT_CUSTOM;
 	std::vector<RE*>::iterator
 		i = spec.res.begin(),
 		e = spec.res.end();

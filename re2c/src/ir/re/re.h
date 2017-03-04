@@ -5,7 +5,8 @@
 
 #include "src/conf/opt.h"
 #include "src/ir/rule.h"
-#include "src/ir/regexp/regexp.h"
+#include "src/parse/regexp.h"
+#include "src/util/forbid_copy.h"
 #include "src/util/range.h"
 #include "src/util/slab_allocator.h"
 
@@ -45,14 +46,17 @@ struct RESpec
 	std::vector<uint32_t> &charset;
 	std::vector<Tag> &tags;
 	std::valarray<Rule> &rules;
+	const opt_t *opts;
+	Warn &warn;
 
-	explicit RESpec(const std::vector<RegExpRule> &ast);
+	explicit RESpec(const std::vector<RegExpRule> &ast, const opt_t *o, Warn &w);
+	FORBID_COPY(RESpec);
 };
 
-void split_charset(RESpec &spec, const opt_t *opts);
-void find_fixed_tags(RESpec &spec, const opt_t *opts);
+void split_charset(RESpec &spec);
+void find_fixed_tags(RESpec &spec);
 void insert_default_tags(RESpec &spec);
-void warn_nullable(const RESpec &spec, const std::string &cond, Warn &warn);
+void warn_nullable(const RESpec &spec, const std::string &cond);
 
 inline RE *re_nil(RE::alc_t &alc)
 {
@@ -73,6 +77,9 @@ inline RE *re_alt(RE::alc_t &alc, RE *x, RE *y)
 {
 	if (!x) return y;
 	if (!y) return x;
+	if (x->type == RE::SYM && y->type == RE::SYM) {
+		return re_sym(alc, Range::add(x->sym, y->sym));
+	}
 
 	RE *z = alc.alloct<RE>(1);
 	z->type = RE::ALT;
@@ -111,6 +118,10 @@ inline RE *re_tag(RE::alc_t &alc, size_t i, bool b)
 	x->tag.bottom = b;
 	return x;
 }
+
+RE *re_schar(RE::alc_t &alc, uint32_t line, uint32_t column, uint32_t c, const opt_t *opts);
+RE *re_ichar(RE::alc_t &alc, uint32_t line, uint32_t column, uint32_t c, const opt_t *opts);
+RE *re_class(RE::alc_t &alc, uint32_t line, uint32_t column, const Range *r, const opt_t *opts, Warn &warn);
 
 } // namespace re2c
 

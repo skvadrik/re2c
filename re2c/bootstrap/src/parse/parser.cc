@@ -81,12 +81,12 @@
 #include "src/codegen/output.h"
 #include "src/ir/compile.h"
 #include "src/ir/adfa/adfa.h"
-#include "src/ir/regexp/encoding/enc.h"
-#include "src/ir/regexp/encoding/range_suffix.h"
-#include "src/ir/regexp/regexp.h"
+#include "src/ir/re/encoding/enc.h"
+#include "src/ir/re/encoding/range_suffix.h"
 #include "src/ir/skeleton/skeleton.h"
 #include "src/parse/extop.h"
 #include "src/parse/parser.h"
+#include "src/parse/regexp.h"
 #include "src/parse/scanner.h"
 #include "src/util/free_list.h"
 #include "src/util/range.h"
@@ -181,7 +181,7 @@ static void check(const specs_t &specs, bool cflag)
 	}
 }
 
-static void prepare(specs_t &specs, const Scanner &in)
+static void prepare(specs_t &specs)
 {
 	specs_t::iterator i, b = specs.begin(), e = specs.end();
 
@@ -207,7 +207,7 @@ static void prepare(specs_t &specs, const Scanner &in)
 	for (i = b; i != e; ++i) {
 		if (!i->defs.empty()) {
 			const Code *c = i->defs[0];
-			const RegExp *r = RegExp::make_default(c->fline, 0, in.opts);
+			const RegExp *r = RegExp::make_default(c->fline, 0);
 			i->rules.push_back(RegExpRule(r, c));
 		}
 	}
@@ -1613,7 +1613,7 @@ yyreduce:
   case 31:
 
     {
-			(yyval.regexp) = RegExp::make_diff((yyvsp[-2].regexp), (yyvsp[0].regexp), context.input.opts, context.input.warn);
+			(yyval.regexp) = RegExp::make_diff((yyvsp[-2].regexp), (yyvsp[0].regexp));
 		}
 
     break;
@@ -2009,7 +2009,7 @@ void parse(Scanner &input, Output & o)
 		// compile regular expressions to automata
 		if (mode != Scanner::Reuse) {
 			check(specs, opts->cFlag);
-			prepare(specs, input);
+			prepare(specs);
 			o.source.block().line = input.get_cline();
 			for (specs_t::const_iterator i = specs.begin(); i != specs.end(); ++i) {
 				dfas.push_back(compile(*i, o));
