@@ -1,6 +1,8 @@
 #include <limits>
 #include <stddef.h>
 
+#include "src/conf/msg.h"
+#include "src/conf/opt.h"
 #include "src/ir/regexp/empty_class_policy.h"
 #include "src/ir/regexp/encoding/case.h"
 #include "src/ir/regexp/encoding/enc.h"
@@ -17,102 +19,72 @@ free_list<RegExp*> RegExp::flist;
 
 const uint32_t RegExp::MANY = std::numeric_limits<uint32_t>::max();
 
-const RegExp *doAlt(const RegExp *re1, const RegExp *re2)
-{
-	if (!re1) {
-		return re2;
-	}
-	if (!re2) {
-		return re1;
-	}
-	return RegExp::make_alt(re1, re2);
-}
-
-const RegExp *mkAlt(const RegExp *re1, const RegExp *re2)
-{
-	if (!re1) return re2;
-	if (!re2) return re1;
-	if (re1->type == RegExp::SYM && re2->type == RegExp::SYM) {
-		return RegExp::make_sym(Range::add(re1->sym, re2->sym));
-	}
-	return RegExp::make_alt(re1, re2);
-}
-
-const RegExp *doCat(const RegExp *re1, const RegExp *re2)
-{
-	if (!re1) {
-		return re2;
-	}
-	if (!re2) {
-		return re1;
-	}
-	return RegExp::make_cat(re1, re2);
-}
-
-const RegExp *Scanner::schr(uint32_t c) const
+const RegExp *RegExp::make_schar(uint32_t line, uint32_t column, uint32_t c, Opt &opts)
 {
 	if (!opts->encoding.encode(c)) {
-		fatalf("Bad code point: '0x%X'", c);
+		fatal_error(line, column, "bad code point: '0x%X'", c);
 	}
 	switch (opts->encoding.type ()) {
-		case Enc::UTF16: return UTF16Symbol(c);
-		case Enc::UTF8:  return UTF8Symbol(c);
-		default:         return RegExp::make_sym(Range::sym(c));
+		case Enc::UTF16: return UTF16Symbol(line, column, c);
+		case Enc::UTF8:  return UTF8Symbol(line, column, c);
+		default:         return RegExp::make_sym(line, column, Range::sym(c));
 	}
 }
 
-const RegExp *Scanner::ichr(uint32_t c) const
+const RegExp *RegExp::make_ichar(uint32_t line, uint32_t column, uint32_t c, Opt &opts)
 {
 	if (is_alpha(c)) {
-		const RegExp *l = schr(to_lower_unsafe(c));
-		const RegExp *u = schr(to_upper_unsafe(c));
-		return mkAlt(l, u);
+		const RegExp *l = RegExp::make_schar(line, column, to_lower_unsafe(c), opts);
+		const RegExp *u = RegExp::make_schar(line, column, to_upper_unsafe(c), opts);
+		return RegExp::make_alt(l, u);
 	} else {
-		return schr(c);
+		return RegExp::make_schar(line, column, c, opts);
 	}
 }
 
-const RegExp *Scanner::cls(const Range *r) const
+const RegExp *RegExp::make_class(uint32_t line, uint32_t column, const Range *r, Opt &opts, Warn &warn)
 {
 	if (!r) {
 		switch (opts->empty_class_policy) {
 			case EMPTY_CLASS_MATCH_EMPTY:
-				warn.empty_class(cline);
-				return RegExp::make_nil();
+				warn.empty_class(line);
+				return RegExp::make_nil(line, column);
 			case EMPTY_CLASS_MATCH_NONE:
-				warn.empty_class(cline);
+				warn.empty_class(line);
 				break;
 			case EMPTY_CLASS_ERROR:
-				fatal("empty character class");
+				fatal_error(line, column, "empty character class");
+				break;
 		}
 	}
 
 	switch (opts->encoding.type()) {
-		case Enc::UTF16: return UTF16Range(r);
-		case Enc::UTF8:  return UTF8Range(r);
-		default:         return RegExp::make_sym(r);
+		case Enc::UTF16: return UTF16Range(line, column, r);
+		case Enc::UTF8:  return UTF8Range(line, column, r);
+		default:         return RegExp::make_sym(line, column, r);
 	}
 }
 
-const RegExp *Scanner::mkDiff(const RegExp *re1, const RegExp *re2) const
+const RegExp *RegExp::make_diff(const RegExp *re1, const RegExp *re2, Opt &opts, Warn &warn)
 {
 	if (re1 && re2
 		&& re1->type == RegExp::SYM
 		&& re2->type == RegExp::SYM) {
-		return cls(Range::sub(re1->sym, re2->sym));
+		return RegExp::make_class(re1->line, re1->column,
+			Range::sub(re1->sym, re2->sym), opts, warn);
 	}
-	fatal("can only difference char sets");
+	fatal_error(re1->line, re1->column, "can only difference char sets");
 	return NULL;
 }
 
-const RegExp *Scanner::mkDot() const
+const RegExp *RegExp::make_dot(uint32_t line, uint32_t column, Opt &opts, Warn &warn)
 {
 	uint32_t c = '\n';
 	if (!opts->encoding.encode(c)) {
-		fatalf("Bad code point: '0x%X'", c);
+		fatal_error(line, column, "bad code point: '0x%X'", c);
 	}
-	return cls(Range::sub(opts->encoding.fullRange(),
-		Range::sym(c)));
+	return RegExp::make_class(line, column,
+		Range::sub(opts->encoding.fullRange(), Range::sym(c)), opts, warn);
 }
 
 /*
@@ -125,13 +97,13 @@ const RegExp *Scanner::mkDot() const
  * Also note that default range doesn't respect encoding policy
  * (the way invalid code points are treated).
  */
-const RegExp *Scanner::mkDefault() const
+const RegExp *RegExp::make_default(uint32_t line, uint32_t column, Opt &opts)
 {
-	return RegExp::make_sym(Range::ran(0,
+	return RegExp::make_sym(line, column, Range::ran(0,
 		opts->encoding.nCodeUnits()));
 }
 
-bool need_wrap(const RegExp *re)
+bool RegExp::need_wrap(const RegExp *re)
 {
 	switch (re->type) {
 		case RegExp::ITER:

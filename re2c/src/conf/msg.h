@@ -9,6 +9,7 @@
 namespace re2c {
 
 void error (const char * fmt, ...) RE2C_GXX_ATTRIBUTE ((format (printf, 1, 2)));
+void fatal_error(uint32_t line, uint32_t column, const char *fmt, ...) RE2C_GXX_ATTRIBUTE ((format (printf, 3, 4)));
 void error_encoding ();
 void error_arg (const char * option);
 void warning_start (uint32_t line, bool error);

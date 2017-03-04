@@ -14,6 +14,8 @@
 namespace re2c
 {
 
+struct Opt;
+
 struct RegExp
 {
 	static free_list<RegExp*> flist;
@@ -47,54 +49,64 @@ struct RegExp
 			const std::string *name;
 		} ref;
 	};
+	uint32_t line;
+	uint32_t column;
 
-	static const RegExp *make_nil()
+	static const RegExp *make_nil(uint32_t l, uint32_t c)
 	{
-		return new RegExp(NIL);
+		return new RegExp(l, c, NIL);
 	}
-	static const RegExp *make_sym(const Range *r)
+	static const RegExp *make_sym(uint32_t l, uint32_t c, const Range *r)
 	{
-		RegExp *re = new RegExp(SYM);
+		RegExp *re = new RegExp(l, c, SYM);
 		re->sym = r;
 		return re;
 	}
 	static const RegExp *make_alt(const RegExp *r1, const RegExp *r2)
 	{
-		RegExp *re = new RegExp(ALT);
+		if (!r1) return r2;
+		if (!r2) return r1;
+		if (r1->type == RegExp::SYM && r2->type == RegExp::SYM) {
+			return RegExp::make_sym(r1->line, r1->column,
+				Range::add(r1->sym, r2->sym));
+		}
+		RegExp *re = new RegExp(r1->line, r1->column, ALT);
 		re->alt.re1 = r1;
 		re->alt.re2 = r2;
 		return re;
 	}
 	static const RegExp *make_cat(const RegExp *r1, const RegExp *r2)
 	{
-		RegExp *re = new RegExp(CAT);
+		if (!r1) return r2;
+		if (!r2) return r1;
+		RegExp *re = new RegExp(r1->line, r1->column, CAT);
 		re->cat.re1 = r1;
 		re->cat.re2 = r2;
 		return re;
 	}
 	static const RegExp *make_iter(const RegExp *r, uint32_t n, uint32_t m)
 	{
-		RegExp *re = new RegExp(ITER);
+		RegExp *re = new RegExp(r->line, r->column, ITER);
 		re->iter.re = r;
 		re->iter.min = n;
 		re->iter.max = m;
 		return re;
 	}
-	static const RegExp *make_tag(const std::string *t)
+	static const RegExp *make_tag(uint32_t l, uint32_t c, const std::string *t)
 	{
-		RegExp *re = new RegExp(TAG);
+		RegExp *re = new RegExp(l, c, TAG);
 		re->tag = t;
 		return re;
 	}
 	static const RegExp *make_cap(const RegExp *r)
 	{
-		RegExp *re = new RegExp(CAP);
+		RegExp *re = new RegExp(r->line, r->column, CAP);
 		re->cap = r;
 		return re;
 	}
 	static const RegExp *make_ref(const RegExp *r, const std::string &n)
 	{
-		RegExp *re = new RegExp(REF);
+		RegExp *re = new RegExp(r->line, r->column, REF);
 		re->ref.re = r;
 		re->ref.name = new std::string(n);
 		return re;
@@ -108,9 +120,17 @@ struct RegExp
 			delete ref.name;
 		}
 	}
+	static const RegExp *make_schar(uint32_t line, uint32_t column, uint32_t c, Opt &opts);
+	static const RegExp *make_ichar(uint32_t line, uint32_t column, uint32_t c, Opt &opts);
+	static const RegExp *make_class(uint32_t line, uint32_t column, const Range *r, Opt &opts, Warn &warn);
+	static const RegExp *make_diff(const RegExp * e1, const RegExp * e2, Opt &opts, Warn &warn);
+	static const RegExp *make_dot(uint32_t line, uint32_t column, Opt &opts, Warn &warn);
+	static const RegExp *make_default(uint32_t line, uint32_t column, Opt &opts);
+	static bool need_wrap(const RegExp *re);
 
 private:
-	inline RegExp(type_t t) : type(t)
+	inline RegExp(uint32_t l, uint32_t c, type_t t)
+		: type(t), line(l), column(c)
 	{
 		flist.insert(this);
 	}
@@ -126,11 +146,6 @@ struct RegExpRule
 		, code(c)
 	{}
 };
-
-const RegExp *mkAlt(const RegExp *re1, const RegExp *re2);
-const RegExp *doAlt(const RegExp *re1, const RegExp *re2);
-const RegExp *doCat(const RegExp *re1, const RegExp *re2);
-bool need_wrap(const RegExp *re);
 
 } // end namespace re2c
 

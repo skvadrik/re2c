@@ -1,1 +1,1 @@
-re2c: error: line 2, column 1: Bad code point: '0x10FFFF'
+re2c: error: line 2, column 11: bad code point: '0x10FFFF'

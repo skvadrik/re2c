@@ -141,7 +141,9 @@ static void prepare(specs_t &specs, const Scanner &in)
 	// merge default rule with the lowest priority
 	for (i = b; i != e; ++i) {
 		if (!i->defs.empty()) {
-			i->rules.push_back(RegExpRule(in.mkDefault(), i->defs[0]));
+			const Code *c = i->defs[0];
+			const RegExp *r = RegExp::make_default(c->fline, 0, in.opts);
+			i->rules.push_back(RegExpRule(r, c));
 		}
 	}
 
@@ -256,7 +258,8 @@ rule
 	}
 
 	| '<' '>' ccode {
-		find(context.specs, "0").rules.push_back(RegExpRule(RegExp::make_nil(), $3));
+		const RegExp *r = RegExp::make_nil(context.input.get_cline(), 0);
+		find(context.specs, "0").rules.push_back(RegExpRule(r, $3));
 	};
 
 ccode
@@ -297,7 +300,7 @@ conds
 trailexpr
 	: capexpr
 	| capexpr '/' expr {
-		$$ = RegExp::make_cat($1, RegExp::make_cat(RegExp::make_tag(NULL), $3));
+		$$ = RegExp::make_cat($1, RegExp::make_cat(RegExp::make_tag(context.input.get_cline(), 0, NULL), $3));
 	};
 
 capexpr
@@ -315,7 +318,7 @@ expr:
 		}
 	|	expr '|' diff
 		{
-			$$ = mkAlt($1, $3);
+			$$ = RegExp::make_alt($1, $3);
 		}
 ;
 
@@ -326,7 +329,7 @@ diff:
 		}
 	|	diff '\\' term
 		{
-			$$ = context.input.mkDiff($1, $3);
+			$$ = RegExp::make_diff($1, $3, context.input.opts, context.input.warn);
 		}
 ;
 
@@ -372,7 +375,7 @@ primary
 			context.input.fatal("can't find symbol");
 		}
 		$$ = i->second;
-		if (context.input.opts->posix_captures && need_wrap($$)) {
+		if (context.input.opts->posix_captures && RegExp::need_wrap($$)) {
 			$$ = RegExp::make_ref($$, *$1);
 		}
 		delete $1;

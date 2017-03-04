@@ -267,7 +267,7 @@ start:
 			fatal("tags are only allowed with '-T, --tags' option");
 		}
 		const std::string *name = new std::string(tok + 1, tok_len() - 1);
-		yylval.regexp = RegExp::make_tag(name);
+		yylval.regexp = RegExp::make_tag(cline, get_column(), name);
 		return TOKEN_REGEXP;
 	}
 
@@ -344,16 +344,20 @@ start:
 						const RegExp *r = NULL;
 						const bool casing = opts->bCaseInsensitive || opts->bCaseInverted;
 						for (char *s = tok; s < cur; ++s) {
-							const uint32_t c = static_cast<uint8_t>(*s);
-							r = doCat(r, casing ? ichr(c) : schr(c));
+							const uint32_t
+								c = static_cast<uint8_t>(*s),
+								column = static_cast<uint32_t>(s - pos);
+							r = RegExp::make_cat(r, casing
+								? RegExp::make_ichar(cline, column, c, opts)
+								: RegExp::make_schar(cline, column, c, opts));
 						}
-						yylval.regexp = r ? r : RegExp::make_nil();
+						yylval.regexp = r ? r : RegExp::make_nil(cline, get_column());
 						return TOKEN_REGEXP;
 					}
 				}
 
 	"."			{
-					yylval.regexp = mkDot();
+					yylval.regexp = RegExp::make_dot(cline, get_column(), opts, warn);
 					return TOKEN_REGEXP;
 				}
 
@@ -546,6 +550,7 @@ static void escape (std::string & dest, const std::string & src)
 
 const RegExp *Scanner::lex_cls(bool neg)
 {
+	const uint32_t column = get_column();
 	Range *r = NULL, *s;
 	uint32_t u, l;
 fst:
@@ -575,17 +580,17 @@ end:
 	if (neg) {
 		r = Range::sub(opts->encoding.fullRange(), r);
 	}
-	return cls(r);
+	return RegExp::make_class(cline, column, r, opts, warn);
 }
 
 uint32_t Scanner::lex_cls_chr()
 {
 	tok = cur;
 	/*!re2c
-		*          { fatal ((tok - pos) - tchar, "syntax error"); }
-		esc [xXuU] { fatal ((tok - pos) - tchar, "syntax error in hexadecimal escape sequence"); }
-		esc [0-7]  { fatal ((tok - pos) - tchar, "syntax error in octal escape sequence"); }
-		esc        { fatal ((tok - pos) - tchar, "syntax error in escape sequence"); }
+		*          { fatal (get_column() - tchar, "syntax error"); }
+		esc [xXuU] { fatal (get_column() - tchar, "syntax error in hexadecimal escape sequence"); }
+		esc [0-7]  { fatal (get_column() - tchar, "syntax error in octal escape sequence"); }
+		esc        { fatal (get_column() - tchar, "syntax error in escape sequence"); }
 
 		. \ esc    { return static_cast<uint8_t>(tok[0]); }
 		esc_hex    { return unesc_hex(tok, cur); }
@@ -601,7 +606,7 @@ uint32_t Scanner::lex_cls_chr()
 		esc "-"    { return static_cast<uint8_t>('-'); }
 		esc "]"    { return static_cast<uint8_t>(']'); }
 		esc .      {
-			warn.useless_escape(cline, tok - pos, tok[1]);
+			warn.useless_escape(cline, get_column(), tok[1]);
 			return static_cast<uint8_t>(tok[1]);
 		}
 	*/
@@ -612,10 +617,10 @@ uint32_t Scanner::lex_str_chr(char quote, bool &end)
 	end = false;
 	tok = cur;
 	/*!re2c
-		*          { fatal ((tok - pos) - tchar, "syntax error"); }
-		esc [xXuU] { fatal ((tok - pos) - tchar, "syntax error in hexadecimal escape sequence"); }
-		esc [0-7]  { fatal ((tok - pos) - tchar, "syntax error in octal escape sequence"); }
-		esc        { fatal ((tok - pos) - tchar, "syntax error in escape sequence"); }
+		*          { fatal (get_column() - tchar, "syntax error"); }
+		esc [xXuU] { fatal (get_column() - tchar, "syntax error in hexadecimal escape sequence"); }
+		esc [0-7]  { fatal (get_column() - tchar, "syntax error in octal escape sequence"); }
+		esc        { fatal (get_column() - tchar, "syntax error in escape sequence"); }
 
 		. \ esc    {
 			end = tok[0] == quote;
@@ -633,7 +638,7 @@ uint32_t Scanner::lex_str_chr(char quote, bool &end)
 		esc "\\"   { return static_cast<uint8_t>('\\'); }
 		esc .      {
 			if (tok[1] != quote) {
-				warn.useless_escape(cline, tok - pos, tok[1]);
+				warn.useless_escape(cline, get_column(), tok[1]);
 			}
 			return static_cast<uint8_t>(tok[1]);
 		}
@@ -646,9 +651,11 @@ const RegExp *Scanner::lex_str(char quote, bool casing)
 	for (bool end;;) {
 		const uint32_t c = lex_str_chr(quote, end);
 		if (end) {
-			return r ? r : RegExp::make_nil();
+			return r ? r : RegExp::make_nil(cline, get_column());
 		}
-		r = doCat(r, casing ? ichr(c) : schr(c));
+		r = RegExp::make_cat(r, casing
+			? RegExp::make_ichar(cline, get_column(), c, opts)
+			: RegExp::make_schar(cline, get_column(), c, opts));
 	}
 }
 

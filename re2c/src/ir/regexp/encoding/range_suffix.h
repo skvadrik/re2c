@@ -32,7 +32,7 @@ struct RangeSuffix
 	FORBID_COPY (RangeSuffix);
 };
 
-const RegExp * to_regexp (RangeSuffix * p);
+const RegExp *to_regexp(uint32_t l, uint32_t c, RangeSuffix * p);
 
 } // namespace re2c
 

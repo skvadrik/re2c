@@ -1,5 +1,6 @@
 #include <stdarg.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string>
 
 #include "config.h"
@@ -17,6 +18,19 @@ void error (const char * fmt, ...)
 	va_end (args);
 
 	fprintf (stderr, "\n");
+}
+
+void fatal_error(uint32_t line, uint32_t column, const char *fmt, ...)
+{
+	fprintf (stderr, "re2c: error: line %u, column %u: ", line, column);
+
+	va_list args;
+	va_start (args, fmt);
+	vfprintf (stderr, fmt, args);
+	va_end (args);
+
+	fprintf (stderr, "\n");
+	exit(1);
 }
 
 void error_encoding ()

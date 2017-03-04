@@ -68,10 +68,6 @@ private:
 	uint32_t lex_str_chr(char quote, bool &end);
 	const RegExp *lex_cls(bool neg);
 	const RegExp *lex_str(char quote, bool casing);
-	const RegExp *schr(uint32_t c) const;
-	const RegExp *ichr(uint32_t c) const;
-	const RegExp *cls(const Range *r) const;
-
 	void lex_conf ();
 	void lex_conf_encoding_policy();
 	void lex_conf_input();
@@ -105,17 +101,13 @@ public:
 	void restore_state(const ScannerState&);
 
 	uint32_t get_cline() const;
+	uint32_t get_column() const;
 	const std::string & get_fname () const;
 	void fatal_at(uint32_t line, ptrdiff_t ofs, const char *msg) const RE2C_GXX_ATTRIBUTE ((noreturn));
 	void fatalf_at(uint32_t line, const char*, ...) const RE2C_GXX_ATTRIBUTE ((format (printf, 3, 4))) RE2C_GXX_ATTRIBUTE ((noreturn));
 	void fatalf(const char*, ...) const RE2C_GXX_ATTRIBUTE ((format (printf, 2, 3))) RE2C_GXX_ATTRIBUTE ((noreturn));
 	void fatal(const char*) const RE2C_GXX_ATTRIBUTE ((noreturn));
 	void fatal(ptrdiff_t, const char*) const RE2C_GXX_ATTRIBUTE ((noreturn));
-
-	const RegExp * mkDiff (const RegExp * e1, const RegExp * e2) const;
-	const RegExp * mkDot () const;
-	const RegExp * mkDefault () const;
-
 	FORBID_COPY (Scanner);
 };
 
@@ -133,6 +125,11 @@ inline const std::string & Scanner::get_fname () const
 inline uint32_t Scanner::get_cline() const
 {
 	return cline;
+}
+
+inline uint32_t Scanner::get_column() const
+{
+	return static_cast<uint32_t>(tok - pos);
 }
 
 inline void Scanner::save_state(ScannerState& state) const

@@ -8,15 +8,15 @@
 
 namespace re2c {
 
-const RegExp * UTF16Symbol(utf16::rune r)
+const RegExp *UTF16Symbol(uint32_t l, uint32_t c, utf16::rune r)
 {
 	if (r <= utf16::MAX_1WORD_RUNE) {
-		return RegExp::make_sym(Range::sym(r));
+		return RegExp::make_sym(l, c, Range::sym(r));
 	} else {
 		const uint32_t ld = utf16::lead_surr(r);
 		const uint32_t tr = utf16::trail_surr(r);
-		return RegExp::make_cat(RegExp::make_sym(Range::sym(ld)),
-			RegExp::make_sym(Range::sym(tr)));
+		return RegExp::make_cat(RegExp::make_sym(l, c, Range::sym(ld)),
+			RegExp::make_sym(l, c, Range::sym(tr)));
 	}
 }
 
@@ -26,12 +26,12 @@ const RegExp * UTF16Symbol(utf16::rune r)
  * them. We store partially built range in suffix tree, which
  * allows to eliminate common suffixes while building.
  */
-const RegExp * UTF16Range(const Range * r)
+const RegExp *UTF16Range(uint32_t l, uint32_t c, const Range * r)
 {
 	RangeSuffix * root = NULL;
 	for (; r != NULL; r = r->next ())
 		UTF16splitByRuneLength(root, r->lower (), r->upper () - 1);
-	return to_regexp (root);
+	return to_regexp(l, c, root);
 }
 
 } // namespace re2c

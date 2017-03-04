@@ -37,7 +37,7 @@ void Scanner::lex_conf ()
 {
 	tok = cur;
 /*!re2c
-	* { fatal ((tok - pos) - tchar, "unrecognized configuration"); }
+	* { fatal(get_column() - tchar, "unrecognized configuration"); }
 
 	"flags:" ("D" | "emit-dot") { opts.set_target(opt_t::DOT);      lex_conf_semicolon(); return; }
 	"flags:" ("S" | "skeleton") { opts.set_target(opt_t::SKELETON); lex_conf_semicolon(); return; }

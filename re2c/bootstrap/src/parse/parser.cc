@@ -206,7 +206,9 @@ static void prepare(specs_t &specs, const Scanner &in)
 	// merge default rule with the lowest priority
 	for (i = b; i != e; ++i) {
 		if (!i->defs.empty()) {
-			i->rules.push_back(RegExpRule(in.mkDefault(), i->defs[0]));
+			const Code *c = i->defs[0];
+			const RegExp *r = RegExp::make_default(c->fline, 0, in.opts);
+			i->rules.push_back(RegExpRule(r, c));
 		}
 	}
 
@@ -603,11 +605,11 @@ static const yytype_uint8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint16 yyrline[] =
 {
-       0,   199,   199,   201,   202,   203,   207,   214,   219,   222,
-     226,   226,   229,   233,   237,   244,   251,   258,   263,   265,
-     271,   278,   279,   285,   291,   298,   299,   304,   312,   316,
-     323,   327,   334,   338,   345,   346,   352,   357,   358,   362,
-     363,   364,   368,   369,   379
+       0,   201,   201,   203,   204,   205,   209,   216,   221,   224,
+     228,   228,   231,   235,   239,   246,   253,   260,   266,   268,
+     274,   281,   282,   288,   294,   301,   302,   307,   315,   319,
+     326,   330,   337,   341,   348,   349,   355,   360,   361,   365,
+     366,   367,   371,   372,   382
 };
 #endif
 
@@ -1510,7 +1512,8 @@ yyreduce:
   case 17:
 
     {
-		find(context.specs, "0").rules.push_back(RegExpRule(RegExp::make_nil(), (yyvsp[0].code)));
+		const RegExp *r = RegExp::make_nil(context.input.get_cline(), 0);
+		find(context.specs, "0").rules.push_back(RegExpRule(r, (yyvsp[0].code)));
 	}
 
     break;
@@ -1567,7 +1570,7 @@ yyreduce:
   case 26:
 
     {
-		(yyval.regexp) = RegExp::make_cat((yyvsp[-2].regexp), RegExp::make_cat(RegExp::make_tag(NULL), (yyvsp[0].regexp)));
+		(yyval.regexp) = RegExp::make_cat((yyvsp[-2].regexp), RegExp::make_cat(RegExp::make_tag(context.input.get_cline(), 0, NULL), (yyvsp[0].regexp)));
 	}
 
     break;
@@ -1594,7 +1597,7 @@ yyreduce:
   case 29:
 
     {
-			(yyval.regexp) = mkAlt((yyvsp[-2].regexp), (yyvsp[0].regexp));
+			(yyval.regexp) = RegExp::make_alt((yyvsp[-2].regexp), (yyvsp[0].regexp));
 		}
 
     break;
@@ -1610,7 +1613,7 @@ yyreduce:
   case 31:
 
     {
-			(yyval.regexp) = context.input.mkDiff((yyvsp[-2].regexp), (yyvsp[0].regexp));
+			(yyval.regexp) = RegExp::make_diff((yyvsp[-2].regexp), (yyvsp[0].regexp), context.input.opts, context.input.warn);
 		}
 
     break;
@@ -1683,7 +1686,7 @@ yyreduce:
 			context.input.fatal("can't find symbol");
 		}
 		(yyval.regexp) = i->second;
-		if (context.input.opts->posix_captures && need_wrap((yyval.regexp))) {
+		if (context.input.opts->posix_captures && RegExp::need_wrap((yyval.regexp))) {
 			(yyval.regexp) = RegExp::make_ref((yyval.regexp), *(yyvsp[0].str));
 		}
 		delete (yyvsp[0].str);
