@@ -1,3 +1,4 @@
+#include <assert.h>
 #include <string.h>
 
 #include "src/dfa/cfg/cfg.h"

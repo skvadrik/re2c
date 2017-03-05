@@ -11,7 +11,6 @@
 #include "src/tag.h"
 #include "src/tcmd.h"
 #include "src/dfa/tagpool.h"
-#include "src/ast/regexp.h"
 #include "src/util/forbid_copy.h"
 
 namespace re2c

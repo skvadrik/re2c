@@ -62,7 +62,7 @@ union YYSTYPE
 {
 
 
-	const re2c::RegExp * regexp;
+	const re2c::AST * regexp;
 	re2c::Code * code;
 	char op;
 	re2c::ExtOp extop;

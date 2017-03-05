@@ -9,7 +9,7 @@
 #include "src/re/encoding/enc.h"
 #include "src/ast/extop.h"
 #include "src/ast/input.h"
-#include "src/ast/regexp.h"
+#include "src/ast/ast.h"
 #include "src/ast/scanner.h"
 #include "src/ast/parser.h" // needed by "y.tab.h"
 #include "src/ast/unescape.h"
@@ -266,7 +266,7 @@ start:
 			fatal("tags are only allowed with '-T, --tags' option");
 		}
 		const std::string *name = new std::string(tok + 1, tok_len() - 1);
-		yylval.regexp = RegExp::make_tag(cline, get_column(), name);
+		yylval.regexp = ast_tag(cline, get_column(), name);
 		return TOKEN_REGEXP;
 	}
 
@@ -340,23 +340,23 @@ start:
 						yylval.str = new std::string (tok, tok_len());
 						return TOKEN_ID;
 					} else {
-						const RegExp *r = NULL;
+						const AST *r = NULL;
 						const bool casing = opts->bCaseInsensitive || opts->bCaseInverted;
 						for (char *s = tok; s < cur; ++s) {
 							const uint32_t
 								c = static_cast<uint8_t>(*s),
 								column = static_cast<uint32_t>(s - pos);
-							r = RegExp::make_cat(r, casing
-								? RegExp::make_ichar(cline, column, c)
-								: RegExp::make_schar(cline, column, c));
+							r = ast_cat(r, casing
+								? ast_ichar(cline, column, c)
+								: ast_schar(cline, column, c));
 						}
-						yylval.regexp = r ? r : RegExp::make_nil(cline, get_column());
+						yylval.regexp = r ? r : ast_nil(cline, get_column());
 						return TOKEN_REGEXP;
 					}
 				}
 
 	"."			{
-					yylval.regexp = RegExp::make_dot(cline, get_column());
+					yylval.regexp = ast_dot(cline, get_column());
 					return TOKEN_REGEXP;
 				}
 
@@ -547,7 +547,7 @@ static void escape (std::string & dest, const std::string & src)
 	}
 }
 
-const RegExp *Scanner::lex_cls(bool neg)
+const AST *Scanner::lex_cls(bool neg)
 {
 	const uint32_t column = get_column();
 	Range *r = NULL, *s;
@@ -579,7 +579,7 @@ end:
 	if (neg) {
 		r = Range::sub(opts->encoding.fullRange(), r);
 	}
-	return RegExp::make_class(cline, column, r);
+	return ast_class(cline, column, r);
 }
 
 uint32_t Scanner::lex_cls_chr()
@@ -644,17 +644,17 @@ uint32_t Scanner::lex_str_chr(char quote, bool &end)
 	*/
 }
 
-const RegExp *Scanner::lex_str(char quote, bool casing)
+const AST *Scanner::lex_str(char quote, bool casing)
 {
-	const RegExp *r = NULL;
+	const AST *r = NULL;
 	for (bool end;;) {
 		const uint32_t c = lex_str_chr(quote, end);
 		if (end) {
-			return r ? r : RegExp::make_nil(cline, get_column());
+			return r ? r : ast_nil(cline, get_column());
 		}
-		r = RegExp::make_cat(r, casing
-			? RegExp::make_ichar(cline, get_column(), c)
-			: RegExp::make_schar(cline, get_column(), c));
+		r = ast_cat(r, casing
+			? ast_ichar(cline, get_column(), c)
+			: ast_schar(cline, get_column(), c));
 	}
 }
 

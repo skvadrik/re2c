@@ -20,7 +20,7 @@ namespace re2c {
  * (the way invalid code points are treated).
  */
 
-static RE *ast_to_re(RESpec &spec, const RegExp *ast, size_t &ncap)
+static RE *ast_to_re(RESpec &spec, const AST *ast, size_t &ncap)
 {
 	RE::alc_t &alc = spec.alc;
 	std::vector<Tag> &tags = spec.tags;
@@ -29,26 +29,26 @@ static RE *ast_to_re(RESpec &spec, const RegExp *ast, size_t &ncap)
 
 	switch (ast->type) {
 		default: assert(false);
-		case RegExp::NIL:
+		case AST::NIL:
 			return re_nil(alc);
-		case RegExp::ALT: {
-			RE *x = ast_to_re(spec, ast->alt.re1, ncap);
-			RE *y = ast_to_re(spec, ast->alt.re2, ncap);
+		case AST::ALT: {
+			RE *x = ast_to_re(spec, ast->alt.ast1, ncap);
+			RE *y = ast_to_re(spec, ast->alt.ast2, ncap);
 			return re_alt(alc, x, y);
 		}
-		case RegExp::CAT: {
-			RE *x = ast_to_re(spec, ast->cat.re1, ncap);
-			RE *y = ast_to_re(spec, ast->cat.re2, ncap);
+		case AST::CAT: {
+			RE *x = ast_to_re(spec, ast->cat.ast1, ncap);
+			RE *y = ast_to_re(spec, ast->cat.ast2, ncap);
 			return re_cat(alc, x, y);
 		}
-		case RegExp::TAG: {
+		case AST::TAG: {
 			RE *t = re_tag(alc, tags.size(), false);
 			tags.push_back(Tag(ast->tag));
 			return t;
 		}
-		case RegExp::CAP: {
-			const RegExp *x = ast->cap;
-			if (x->type == RegExp::REF) x = x->ref.re;
+		case AST::CAP: {
+			const AST *x = ast->cap;
+			if (x->type == AST::REF) x = x->ref.ast;
 
 			RE *t1 = re_tag(alc, tags.size(), false);
 			tags.push_back(Tag(3 * ncap));
@@ -59,22 +59,22 @@ static RE *ast_to_re(RESpec &spec, const RegExp *ast, size_t &ncap)
 			++ncap;
 			return re_cat(alc, t1, re_cat(alc, ast_to_re(spec, x, ncap), t2));
 		}
-		case RegExp::REF:
+		case AST::REF:
 			error("implicit grouping is forbidden with '--posix-captures'"
 				" option, please wrap '%s' in capturing parenthesis",
 				ast->ref.name->c_str());
 			exit(1);
-		case RegExp::ITER: {
+		case AST::ITER: {
 			const uint32_t
 				n = ast->iter.min,
 				n1 = std::max(n, 1u),
 				m = std::max(n, ast->iter.max);
-			const RegExp *x = ast->iter.re;
+			const AST *x = ast->iter.ast;
 
 			RE *t1 = NULL, *t2 = NULL, *t3 = NULL;
-			if (x->type == RegExp::CAP) {
+			if (x->type == AST::CAP) {
 				x = x->cap;
-				if (x->type == RegExp::REF) x = x->ref.re;
+				if (x->type == AST::REF) x = x->ref.ast;
 
 				t1 = re_tag(alc, tags.size(), false);
 				tags.push_back(Tag(3 * ncap));
@@ -102,21 +102,21 @@ static RE *ast_to_re(RESpec &spec, const RegExp *ast, size_t &ncap)
 			}
 			return y;
 		}
-		case RegExp::SCHAR:
+		case AST::SCHAR:
 			return re_schar(alc, ast->line, ast->column, ast->schar, opts);
-		case RegExp::ICHAR:
+		case AST::ICHAR:
 			return re_ichar(alc, ast->line, ast->column, ast->ichar, opts);
-		case RegExp::CLASS:
+		case AST::CLASS:
 			return re_class(alc, ast->line, ast->column, ast->cls, opts, warn);
-		case RegExp::DIFF: {
-			RE *x = ast_to_re(spec, ast->diff.re1, ncap);
-			RE *y = ast_to_re(spec, ast->diff.re2, ncap);
+		case AST::DIFF: {
+			RE *x = ast_to_re(spec, ast->diff.ast1, ncap);
+			RE *y = ast_to_re(spec, ast->diff.ast2, ncap);
 			if (x->type != RE::SYM || y->type != RE::SYM) {
 				fatal_error(ast->line, ast->column, "can only difference char sets");
 			}
 			return re_class(alc, ast->line, ast->column, Range::sub(x->sym, y->sym), opts, warn);
 		}
-		case RegExp::DOT: {
+		case AST::DOT: {
 			uint32_t c = '\n';
 			if (!opts->encoding.encode(c)) {
 				fatal_error(ast->line, ast->column, "bad code point: '0x%X'", c);
@@ -124,7 +124,7 @@ static RE *ast_to_re(RESpec &spec, const RegExp *ast, size_t &ncap)
 			return re_class(alc, ast->line, ast->column,
 				Range::sub(opts->encoding.fullRange(), Range::sym(c)), opts, warn);
 		}
-		case RegExp::DEFAULT:
+		case AST::DEFAULT:
 			// see note [default regexp]
 			return re_sym(alc, Range::ran(0, opts->encoding.nCodeUnits()));
 	}
@@ -201,7 +201,7 @@ static void init_rule(Rule &rule, const Code *code, const std::vector<Tag> &tags
 	assert_tags_used_once(rule, tags);
 }
 
-RESpec::RESpec(const std::vector<RegExpRule> &ast, const opt_t *o, Warn &w)
+RESpec::RESpec(const std::vector<ASTRule> &ast, const opt_t *o, Warn &w)
 	: alc()
 	, res()
 	, charset(*new std::vector<uint32_t>)
@@ -212,7 +212,7 @@ RESpec::RESpec(const std::vector<RegExpRule> &ast, const opt_t *o, Warn &w)
 {
 	for (size_t i = 0; i < ast.size(); ++i) {
 		size_t ltag = tags.size(), ncap = 0;
-		res.push_back(ast_to_re(*this, ast[i].re, ncap));
+		res.push_back(ast_to_re(*this, ast[i].ast, ncap));
 		init_rule(rules[i], ast[i].code, tags, ltag, ncap);
 	}
 }

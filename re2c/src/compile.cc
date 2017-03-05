@@ -10,7 +10,7 @@
 #include "src/dfa/dump.h"
 #include "src/nfa/nfa.h"
 #include "src/skeleton/skeleton.h"
-#include "src/ast/regexp.h"
+#include "src/ast/ast.h"
 
 namespace re2c {
 
@@ -31,7 +31,7 @@ smart_ptr<DFA> compile(const spec_t &spec, Output &output)
 {
 	const opt_t *opts = output.source.block().opts;
 	Warn &warn = output.source.warn;
-	const std::vector<RegExpRule> &rules = spec.rules;
+	const std::vector<ASTRule> &rules = spec.rules;
 	const size_t defrule = spec.defs.empty()
 		? Rule::NONE
 		: rules.size() - 1;

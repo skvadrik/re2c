@@ -86,7 +86,7 @@
 #include "src/skeleton/skeleton.h"
 #include "src/ast/extop.h"
 #include "src/ast/parser.h"
-#include "src/ast/regexp.h"
+#include "src/ast/ast.h"
 #include "src/ast/scanner.h"
 #include "src/util/free_list.h"
 #include "src/util/range.h"
@@ -207,8 +207,8 @@ static void prepare(specs_t &specs)
 	for (i = b; i != e; ++i) {
 		if (!i->defs.empty()) {
 			const Code *c = i->defs[0];
-			const RegExp *r = RegExp::make_default(c->fline, 0);
-			i->rules.push_back(RegExpRule(r, c));
+			const AST *r = ast_default(c->fline, 0);
+			i->rules.push_back(ASTRule(r, c));
 		}
 	}
 
@@ -283,7 +283,7 @@ union YYSTYPE
 {
 
 
-	const re2c::RegExp * regexp;
+	const re2c::AST * regexp;
 	re2c::Code * code;
 	char op;
 	re2c::ExtOp extop;
@@ -1463,7 +1463,7 @@ yyreduce:
   case 12:
 
     {
-		find(context.specs, "").rules.push_back(RegExpRule((yyvsp[-1].regexp), (yyvsp[0].code)));
+		find(context.specs, "").rules.push_back(ASTRule((yyvsp[-1].regexp), (yyvsp[0].code)));
 	}
 
     break;
@@ -1480,7 +1480,7 @@ yyreduce:
 
     {
 		for(CondList::const_iterator i = (yyvsp[-3].clist)->begin(); i != (yyvsp[-3].clist)->end(); ++i) {
-			find(context.specs, *i).rules.push_back(RegExpRule((yyvsp[-1].regexp), (yyvsp[0].code)));
+			find(context.specs, *i).rules.push_back(ASTRule((yyvsp[-1].regexp), (yyvsp[0].code)));
 		}
 		delete (yyvsp[-3].clist);
 	}
@@ -1512,8 +1512,8 @@ yyreduce:
   case 17:
 
     {
-		const RegExp *r = RegExp::make_nil(context.input.get_cline(), 0);
-		find(context.specs, "0").rules.push_back(RegExpRule(r, (yyvsp[0].code)));
+		const AST *r = ast_nil(context.input.get_cline(), 0);
+		find(context.specs, "0").rules.push_back(ASTRule(r, (yyvsp[0].code)));
 	}
 
     break;
@@ -1570,7 +1570,7 @@ yyreduce:
   case 26:
 
     {
-		(yyval.regexp) = RegExp::make_cat((yyvsp[-2].regexp), RegExp::make_cat(RegExp::make_tag(context.input.get_cline(), 0, NULL), (yyvsp[0].regexp)));
+		(yyval.regexp) = ast_cat((yyvsp[-2].regexp), ast_cat(ast_tag(context.input.get_cline(), 0, NULL), (yyvsp[0].regexp)));
 	}
 
     break;
@@ -1579,7 +1579,7 @@ yyreduce:
 
     {
 		if (context.input.opts->posix_captures) {
-			(yyvsp[0].regexp) = RegExp::make_cap((yyvsp[0].regexp));
+			(yyvsp[0].regexp) = ast_cap((yyvsp[0].regexp));
 		}
 		(yyval.regexp) = (yyvsp[0].regexp);
 	}
@@ -1597,7 +1597,7 @@ yyreduce:
   case 29:
 
     {
-			(yyval.regexp) = RegExp::make_alt((yyvsp[-2].regexp), (yyvsp[0].regexp));
+			(yyval.regexp) = ast_alt((yyvsp[-2].regexp), (yyvsp[0].regexp));
 		}
 
     break;
@@ -1613,7 +1613,7 @@ yyreduce:
   case 31:
 
     {
-			(yyval.regexp) = RegExp::make_diff((yyvsp[-2].regexp), (yyvsp[0].regexp));
+			(yyval.regexp) = ast_diff((yyvsp[-2].regexp), (yyvsp[0].regexp));
 		}
 
     break;
@@ -1629,7 +1629,7 @@ yyreduce:
   case 33:
 
     {
-			(yyval.regexp) = RegExp::make_cat((yyvsp[-1].regexp), (yyvsp[0].regexp));
+			(yyval.regexp) = ast_cat((yyvsp[-1].regexp), (yyvsp[0].regexp));
 		}
 
     break;
@@ -1638,9 +1638,9 @@ yyreduce:
 
     {
 		switch((yyvsp[0].op)) {
-			case '*': (yyval.regexp) = RegExp::make_iter((yyvsp[-1].regexp), 0, RegExp::MANY); break;
-			case '+': (yyval.regexp) = RegExp::make_iter((yyvsp[-1].regexp), 1, RegExp::MANY); break;
-			case '?': (yyval.regexp) = RegExp::make_iter((yyvsp[-1].regexp), 0, 1); break;
+			case '*': (yyval.regexp) = ast_iter((yyvsp[-1].regexp), 0, AST::MANY); break;
+			case '+': (yyval.regexp) = ast_iter((yyvsp[-1].regexp), 1, AST::MANY); break;
+			case '?': (yyval.regexp) = ast_iter((yyvsp[-1].regexp), 0, 1); break;
 		}
 	}
 
@@ -1649,7 +1649,7 @@ yyreduce:
   case 36:
 
     {
-		(yyval.regexp) = RegExp::make_iter((yyvsp[-1].regexp), (yyvsp[0].extop).min, (yyvsp[0].extop).max);
+		(yyval.regexp) = ast_iter((yyvsp[-1].regexp), (yyvsp[0].extop).min, (yyvsp[0].extop).max);
 	}
 
     break;
@@ -1686,8 +1686,8 @@ yyreduce:
 			context.input.fatal("can't find symbol");
 		}
 		(yyval.regexp) = i->second;
-		if (context.input.opts->posix_captures && RegExp::need_wrap((yyval.regexp))) {
-			(yyval.regexp) = RegExp::make_ref((yyval.regexp), *(yyvsp[0].str));
+		if (context.input.opts->posix_captures && ast_need_wrap((yyval.regexp))) {
+			(yyval.regexp) = ast_ref((yyval.regexp), *(yyvsp[0].str));
 		}
 		delete (yyvsp[0].str);
 	}
@@ -1699,7 +1699,7 @@ yyreduce:
     {
 		(yyval.regexp) = (yyvsp[-1].regexp);
 		if (context.input.opts->posix_captures) {
-			(yyval.regexp) = RegExp::make_cap((yyval.regexp));
+			(yyval.regexp) = ast_cap((yyval.regexp));
 		}
 	}
 
@@ -2025,7 +2025,7 @@ void parse(Scanner &input, Output &output)
 		emit_epilog (o, output.skeletons);
 	}
 
-	RegExp::flist.clear();
+	AST::flist.clear();
 	Code::flist.clear();
 	Range::vFreeList.clear();
 	RangeSuffix::freeList.clear();

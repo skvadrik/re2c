@@ -21,7 +21,7 @@
 #include "src/skeleton/skeleton.h"
 #include "src/ast/extop.h"
 #include "src/ast/parser.h"
-#include "src/ast/regexp.h"
+#include "src/ast/ast.h"
 #include "src/ast/scanner.h"
 #include "src/util/free_list.h"
 #include "src/util/range.h"
@@ -142,8 +142,8 @@ static void prepare(specs_t &specs)
 	for (i = b; i != e; ++i) {
 		if (!i->defs.empty()) {
 			const Code *c = i->defs[0];
-			const RegExp *r = RegExp::make_default(c->fline, 0);
-			i->rules.push_back(RegExpRule(r, c));
+			const AST *r = ast_default(c->fline, 0);
+			i->rules.push_back(ASTRule(r, c));
 		}
 	}
 
@@ -173,7 +173,7 @@ static spec_t &find(specs_t &specs, const std::string &name)
 %parse-param {re2c::context_t &context}
 
 %union {
-	const re2c::RegExp * regexp;
+	const re2c::AST * regexp;
 	re2c::Code * code;
 	char op;
 	re2c::ExtOp extop;
@@ -229,7 +229,7 @@ enddef: ';' | TOKEN_FID_END;
 
 rule
 	: trailexpr TOKEN_CODE {
-		find(context.specs, "").rules.push_back(RegExpRule($1, $2));
+		find(context.specs, "").rules.push_back(ASTRule($1, $2));
 	}
 
 	| '*' TOKEN_CODE {
@@ -238,7 +238,7 @@ rule
 
 	| '<' clist '>' trailexpr ccode {
 		for(CondList::const_iterator i = $2->begin(); i != $2->end(); ++i) {
-			find(context.specs, *i).rules.push_back(RegExpRule($4, $5));
+			find(context.specs, *i).rules.push_back(ASTRule($4, $5));
 		}
 		delete $2;
 	}
@@ -258,8 +258,8 @@ rule
 	}
 
 	| '<' '>' ccode {
-		const RegExp *r = RegExp::make_nil(context.input.get_cline(), 0);
-		find(context.specs, "0").rules.push_back(RegExpRule(r, $3));
+		const AST *r = ast_nil(context.input.get_cline(), 0);
+		find(context.specs, "0").rules.push_back(ASTRule(r, $3));
 	};
 
 ccode
@@ -300,13 +300,13 @@ conds
 trailexpr
 	: capexpr
 	| capexpr '/' expr {
-		$$ = RegExp::make_cat($1, RegExp::make_cat(RegExp::make_tag(context.input.get_cline(), 0, NULL), $3));
+		$$ = ast_cat($1, ast_cat(ast_tag(context.input.get_cline(), 0, NULL), $3));
 	};
 
 capexpr
 	: expr {
 		if (context.input.opts->posix_captures) {
-			$1 = RegExp::make_cap($1);
+			$1 = ast_cap($1);
 		}
 		$$ = $1;
 	};
@@ -318,7 +318,7 @@ expr:
 		}
 	|	expr '|' diff
 		{
-			$$ = RegExp::make_alt($1, $3);
+			$$ = ast_alt($1, $3);
 		}
 ;
 
@@ -329,7 +329,7 @@ diff:
 		}
 	|	diff '\\' term
 		{
-			$$ = RegExp::make_diff($1, $3);
+			$$ = ast_diff($1, $3);
 		}
 ;
 
@@ -340,7 +340,7 @@ term:
 		}
 	|	term factor
 		{
-			$$ = RegExp::make_cat($1, $2);
+			$$ = ast_cat($1, $2);
 		}
 ;
 
@@ -348,12 +348,12 @@ factor
 	: primary
 	| primary closes {
 		switch($2) {
-			case '*': $$ = RegExp::make_iter($1, 0, RegExp::MANY); break;
-			case '+': $$ = RegExp::make_iter($1, 1, RegExp::MANY); break;
-			case '?': $$ = RegExp::make_iter($1, 0, 1); break;
+			case '*': $$ = ast_iter($1, 0, AST::MANY); break;
+			case '+': $$ = ast_iter($1, 1, AST::MANY); break;
+			case '?': $$ = ast_iter($1, 0, 1); break;
 		}
 	} | primary TOKEN_CLOSESIZE {
-		$$ = RegExp::make_iter($1, $2.min, $2.max);
+		$$ = ast_iter($1, $2.min, $2.max);
 	};
 
 closes
@@ -375,14 +375,14 @@ primary
 			context.input.fatal("can't find symbol");
 		}
 		$$ = i->second;
-		if (context.input.opts->posix_captures && RegExp::need_wrap($$)) {
-			$$ = RegExp::make_ref($$, *$1);
+		if (context.input.opts->posix_captures && ast_need_wrap($$)) {
+			$$ = ast_ref($$, *$1);
 		}
 		delete $1;
 	} | '(' expr ')' {
 		$$ = $2;
 		if (context.input.opts->posix_captures) {
-			$$ = RegExp::make_cap($$);
+			$$ = ast_cap($$);
 		}
 	};
 
@@ -476,7 +476,7 @@ void parse(Scanner &input, Output &output)
 		emit_epilog (o, output.skeletons);
 	}
 
-	RegExp::flist.clear();
+	AST::flist.clear();
 	Code::flist.clear();
 	Range::vFreeList.clear();
 	RangeSuffix::freeList.clear();

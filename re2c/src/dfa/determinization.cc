@@ -8,7 +8,6 @@
 #include "src/dfa/dump.h"
 #include "src/dfa/find_state.h"
 #include "src/nfa/nfa.h"
-#include "src/ast/regexp.h"
 #include "src/util/range.h"
 
 namespace re2c

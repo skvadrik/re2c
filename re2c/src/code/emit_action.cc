@@ -9,7 +9,6 @@
 #include "src/adfa/action.h"
 #include "src/adfa/adfa.h"
 #include "src/skeleton/skeleton.h"
-#include "src/ast/regexp.h"
 #include "src/util/string_utils.h"
 
 namespace re2c

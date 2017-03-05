@@ -21,7 +21,7 @@ static size_t estimate(const RE *re)
 				iter = estimate(re->iter.re),
 				min = re->iter.min,
 				max = re->iter.max;
-			return max == RegExp::MANY
+			return max == AST::MANY
 				? iter * min + 1
 				: iter * max + (max - min);
 		}

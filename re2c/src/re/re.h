@@ -5,7 +5,7 @@
 
 #include "src/conf/opt.h"
 #include "src/rule.h"
-#include "src/ast/regexp.h"
+#include "src/ast/ast.h"
 #include "src/util/forbid_copy.h"
 #include "src/util/range.h"
 #include "src/util/slab_allocator.h"
@@ -49,7 +49,7 @@ struct RESpec
 	const opt_t *opts;
 	Warn &warn;
 
-	explicit RESpec(const std::vector<RegExpRule> &ast, const opt_t *o, Warn &w);
+	explicit RESpec(const std::vector<ASTRule> &ast, const opt_t *o, Warn &w);
 	FORBID_COPY(RESpec);
 };
 

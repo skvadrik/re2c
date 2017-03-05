@@ -51,7 +51,7 @@ static nfa_state_t *re_to_nfa(nfa_t &nfa, size_t nrule, const RE *re, nfa_state_
 				max = re->iter.max;
 			const RE *iter = re->iter.re;
 			// see note [counted repetition and iteration expansion]
-			if (max == RegExp::MANY) {
+			if (max == AST::MANY) {
 				nfa_state_t *q = &nfa.states[nfa.size++];
 				s = re_to_nfa(nfa, nrule, iter, q);
 				q->make_alt(nrule, s, t);
