@@ -48,7 +48,6 @@ SRC_HDR = \
 	src/skeleton/path.h \
 	src/skeleton/skeleton.h \
 	src/ast/ast.h \
-	src/ast/extop.h \
 	src/ast/input.h \
 	src/ast/parser.h \
 	src/ast/rules.h \

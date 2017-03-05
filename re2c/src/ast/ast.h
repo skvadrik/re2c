@@ -68,6 +68,12 @@ struct ASTRule
 	{}
 };
 
+struct ASTBounds
+{
+	uint32_t min;
+	uint32_t max;
+};
+
 const AST *ast_nil(uint32_t l, uint32_t c);
 const AST *ast_schar(uint32_t l, uint32_t c, uint32_t x);
 const AST *ast_ichar(uint32_t l, uint32_t c, uint32_t x);

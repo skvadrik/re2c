@@ -19,7 +19,6 @@
 #include "src/re/encoding/enc.h"
 #include "src/re/encoding/range_suffix.h"
 #include "src/skeleton/skeleton.h"
-#include "src/ast/extop.h"
 #include "src/ast/parser.h"
 #include "src/ast/ast.h"
 #include "src/ast/scanner.h"
@@ -176,7 +175,7 @@ static spec_t &find(specs_t &specs, const std::string &name)
 	const re2c::AST * regexp;
 	re2c::Code * code;
 	char op;
-	re2c::ExtOp extop;
+	re2c::ASTBounds bounds;
 	std::string * str;
 	re2c::CondList * clist;
 };
@@ -190,7 +189,7 @@ static spec_t &find(specs_t &specs, const std::string &name)
 %token TOKEN_REGEXP
 
 %type <op>      close closes
-%type <extop>   TOKEN_CLOSESIZE
+%type <bounds>  TOKEN_CLOSESIZE
 %type <code>    TOKEN_CODE ccode
 %type <regexp>  TOKEN_REGEXP trailexpr capexpr rule expr diff term factor primary
 %type <str>     TOKEN_ID TOKEN_FID name

@@ -7,7 +7,6 @@
 
 #include "src/code/output.h"
 #include "src/re/encoding/enc.h"
-#include "src/ast/extop.h"
 #include "src/ast/input.h"
 #include "src/ast/ast.h"
 #include "src/ast/scanner.h"
@@ -273,21 +272,21 @@ start:
 	[*+?<>!,()|=;/\\] { return *tok; }
 
 	"{" [0-9]+ "}"	{
-					if (!s_to_u32_unsafe (tok + 1, cur - 1, yylval.extop.min))
+					if (!s_to_u32_unsafe (tok + 1, cur - 1, yylval.bounds.min))
 					{
 						fatal ("repetition count overflow");
 					}
-					yylval.extop.max = yylval.extop.min;
+					yylval.bounds.max = yylval.bounds.min;
 					return TOKEN_CLOSESIZE;
 				}
 
 	"{" [0-9]+ "," [0-9]+ "}"	{
 					const char * p = strchr (tok, ',');
-					if (!s_to_u32_unsafe (tok + 1, p, yylval.extop.min))
+					if (!s_to_u32_unsafe (tok + 1, p, yylval.bounds.min))
 					{
 						fatal ("repetition lower bound overflow");
 					}
-					if (!s_to_u32_unsafe (p + 1, cur - 1, yylval.extop.max))
+					if (!s_to_u32_unsafe (p + 1, cur - 1, yylval.bounds.max))
 					{
 						fatal ("repetition upper bound overflow");
 					}
@@ -295,11 +294,11 @@ start:
 				}
 
 	"{" [0-9]+ ",}"		{
-					if (!s_to_u32_unsafe (tok + 1, cur - 2, yylval.extop.min))
+					if (!s_to_u32_unsafe (tok + 1, cur - 2, yylval.bounds.min))
 					{
 						fatal ("repetition lower bound overflow");
 					}
-					yylval.extop.max = std::numeric_limits<uint32_t>::max();
+					yylval.bounds.max = std::numeric_limits<uint32_t>::max();
 					return TOKEN_CLOSESIZE;
 				}
 

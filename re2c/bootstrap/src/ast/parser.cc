@@ -84,7 +84,6 @@
 #include "src/re/encoding/enc.h"
 #include "src/re/encoding/range_suffix.h"
 #include "src/skeleton/skeleton.h"
-#include "src/ast/extop.h"
 #include "src/ast/parser.h"
 #include "src/ast/ast.h"
 #include "src/ast/scanner.h"
@@ -286,7 +285,7 @@ union YYSTYPE
 	const re2c::AST * regexp;
 	re2c::Code * code;
 	char op;
-	re2c::ExtOp extop;
+	re2c::ASTBounds bounds;
 	std::string * str;
 	re2c::CondList * clist;
 
@@ -605,11 +604,11 @@ static const yytype_uint8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint16 yyrline[] =
 {
-       0,   201,   201,   203,   204,   205,   209,   216,   221,   224,
-     228,   228,   231,   235,   239,   246,   253,   260,   266,   268,
-     274,   281,   282,   288,   294,   301,   302,   307,   315,   319,
-     326,   330,   337,   341,   348,   349,   355,   360,   361,   365,
-     366,   367,   371,   372,   382
+       0,   200,   200,   202,   203,   204,   208,   215,   220,   223,
+     227,   227,   230,   234,   238,   245,   252,   259,   265,   267,
+     273,   280,   281,   287,   293,   300,   301,   306,   314,   318,
+     325,   329,   336,   340,   347,   348,   354,   359,   360,   364,
+     365,   366,   370,   371,   381
 };
 #endif
 
@@ -1649,7 +1648,7 @@ yyreduce:
   case 36:
 
     {
-		(yyval.regexp) = ast_iter((yyvsp[-1].regexp), (yyvsp[0].extop).min, (yyvsp[0].extop).max);
+		(yyval.regexp) = ast_iter((yyvsp[-1].regexp), (yyvsp[0].bounds).min, (yyvsp[0].bounds).max);
 	}
 
     break;

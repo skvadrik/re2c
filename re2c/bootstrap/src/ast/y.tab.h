@@ -65,7 +65,7 @@ union YYSTYPE
 	const re2c::AST * regexp;
 	re2c::Code * code;
 	char op;
-	re2c::ExtOp extop;
+	re2c::ASTBounds bounds;
 	std::string * str;
 	re2c::CondList * clist;
 
