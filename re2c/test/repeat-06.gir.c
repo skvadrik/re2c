@@ -201,7 +201,6 @@ yy13:
 	}
 
 }
-re2c: warning: line 14: control flow is undefined for strings that match '[\x0-\x60\x65-\xFF]', use default rule '*' [-Wundefined-control-flow]
 re2c: warning: line 24: control flow is undefined for strings that match '\xA', use default rule '*' [-Wundefined-control-flow]
 re2c: warning: line 39: control flow is undefined for strings that match '\xA', use default rule '*' [-Wundefined-control-flow]
 re2c: warning: line 54: control flow is undefined for strings that match '\xA', use default rule '*' [-Wundefined-control-flow]

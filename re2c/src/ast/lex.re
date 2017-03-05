@@ -97,7 +97,6 @@ echo:
 		if (opts->target == opt_t::CODE) {
 			out.wraw(tok, start);
 		}
-		reuse();
 		return Reuse;
 	}
 

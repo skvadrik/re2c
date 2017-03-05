@@ -405,88 +405,77 @@ int yylex(context_t &context)
 namespace re2c
 {
 
-void parse(Scanner &input, Output & o)
+void parse(Scanner &input, Output &output)
 {
-	specs_t specs;
+	specs_t rspecs;
 	symtab_t symtab;
-	dfas_t dfas;
-	ScannerState rules_state, curr_state;
 	Opt &opts = input.opts;
-	const opt_t *rules_opts = NULL;
+	const opt_t *ropts = NULL;
+	OutputFile &o = output.source;
 
-	o.source.new_block(opts);
-
-	o.source.wversion_time()
-		.wline_info(input.get_cline(), input.get_fname().c_str());
-	if (opts->target == opt_t::SKELETON)
-	{
-		emit_prolog (o.source);
+	o.new_block(opts);
+	o.wversion_time().wline_info(input.get_cline(), input.get_fname().c_str());
+	if (opts->target == opt_t::SKELETON) {
+		emit_prolog(o);
 	}
 
-	Enc encodingOld = opts->encoding;
 	for (Scanner::ParseMode mode; (mode = input.echo()) != Scanner::Stop;) {
 
-		if (mode == Scanner::Reuse) {
-			if (!rules_opts) input.fatal("got 'use:re2c' without 'rules:re2c'");
-		} else if (mode == Scanner::Rules) {
-			if (rules_opts) input.fatal("cannot have a second 'rules:re2c' block");
-			input.save_state(rules_state);
-			rules_opts = opts.snapshot();
-		} else {
-			dfas.clear();
+		if (mode == Scanner::Rules && ropts) {
+			input.fatal("cannot have a second 'rules:re2c' block");
+		}
+		if (mode == Scanner::Reuse && !ropts) {
+			input.fatal("got 'use:re2c' without 'rules:re2c'");
 		}
 
 		// parse next re2c block
+		specs_t specs;
 		context_t context = {input, specs, symtab};
-		specs.clear();
 		if (mode == Scanner::Reuse) {
-			// re-parse rules block
-			input.save_state(curr_state);
-			mode = Scanner::Parse;
-			input.reuse();
-			dfas.clear();
-			symtab.clear();
-			input.restore_state(rules_state);
-			opts.restore(rules_opts);
-			yyparse(context);
-			input.restore_state(curr_state);
-			mode = Scanner::Parse;
+			specs = rspecs;
+			opts.restore(ropts);
+			opts.reset_mapCodeName();
+			o.label_counter.reset();
+			o.fill_index = 0;
+			o.state_goto = false;
+			o.cond_goto = false;
 		}
 		yyparse(context);
 
 		// start new output block with accumulated options
-		o.source.new_block(opts);
+		o.new_block(opts);
 
-		// compile regular expressions to automata
-		if (mode != Scanner::Reuse) {
+		if (mode == Scanner::Rules) {
+			// save AST and options for future use
+			rspecs = specs;
+			ropts = o.block().opts;
+		} else {
+			// validate and normalize AST
 			check(specs, opts->cFlag);
 			prepare(specs);
-			o.source.block().line = input.get_cline();
-			for (specs_t::const_iterator i = specs.begin(); i != specs.end(); ++i) {
-				dfas.push_back(compile(*i, o));
-			}
-		}
 
-		// generate code
-		if (mode != Scanner::Rules) {
+			// compile AST to DFA
+			o.block().line = input.get_cline();
+			dfas_t dfas;
+			for (specs_t::const_iterator i = specs.begin(); i != specs.end(); ++i) {
+				dfas.push_back(compile(*i, output));
+			}
+
+			// compile DFA to code
 			bool prolog = false;
 			uint32_t ind = opts->topIndent;
 			for (dfas_t::const_iterator i = dfas.begin(); i != dfas.end(); ++i) {
-				(*i)->emit(o, ind, (i + 1) == dfas.end(), prolog);
+				(*i)->emit(output, ind, (i + 1) == dfas.end(), prolog);
 			}
 		}
 
-		o.source.wline_info (input.get_cline (), input.get_fname ().c_str ());
-		/* restore original char handling mode*/
-		opts.reset_encoding (encodingOld);
+		o.wline_info (input.get_cline (), input.get_fname ().c_str ());
 	}
 
-	if (opts->target == opt_t::SKELETON)
-	{
-		emit_epilog (o.source, o.skeletons);
+	if (opts->target == opt_t::SKELETON) {
+		emit_epilog (o, output.skeletons);
 	}
 
-	delete rules_opts;
 	RegExp::flist.clear();
 	Code::flist.clear();
 	Range::vFreeList.clear();

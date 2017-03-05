@@ -44,9 +44,8 @@ struct ScannerState
 
 	lexer_state_t lexer_state;
 
-	ScannerState ();
-	ScannerState (const ScannerState &);
-	ScannerState & operator = (const ScannerState &);
+	ScannerState();
+	FORBID_COPY(ScannerState);
 };
 
 class Scanner: private ScannerState
@@ -95,11 +94,6 @@ public:
 
 	ParseMode echo();
 	int scan();
-	void reuse();
-
-	void save_state(ScannerState&) const;
-	void restore_state(const ScannerState&);
-
 	uint32_t get_cline() const;
 	uint32_t get_column() const;
 	const std::string & get_fname () const;
@@ -130,11 +124,6 @@ inline uint32_t Scanner::get_cline() const
 inline uint32_t Scanner::get_column() const
 {
 	return static_cast<uint32_t>(tok - pos);
-}
-
-inline void Scanner::save_state(ScannerState& state) const
-{
-	state = *this;
 }
 
 inline void Scanner::fatal(const char *msg) const

@@ -34,28 +34,6 @@ ScannerState::ScannerState ()
 	, lexer_state (LEX_NORMAL)
 {}
 
-ScannerState::ScannerState (const ScannerState & s)
-	: tok (s.tok)
-	, ptr (s.ptr)
-	, cur (s.cur)
-	, pos (s.pos)
-	, ctx (s.ctx)
-	, bot (s.bot)
-	, lim (s.lim)
-	, top (s.top)
-	, eof (s.eof)
-	, tchar (s.tchar)
-	, cline (s.cline)
-	, lexer_state (s.lexer_state)
-{}
-
-ScannerState & ScannerState::operator = (const ScannerState & s)
-{
-	this->~ScannerState ();
-	new (this) ScannerState (s);
-	return * this;
-}
-
 Scanner::Scanner (Input & i, OutputFile & o, Opt &p)
 	: ScannerState ()
 	, in (i)
@@ -166,37 +144,6 @@ void Scanner::fatalf(const char *fmt, ...) const
 Scanner::~Scanner()
 {
 	delete [] bot;
-}
-
-void Scanner::reuse()
-{
-	out.label_counter.reset ();
-	out.fill_index = 0;
-	out.state_goto = false;
-	out.cond_goto = false;
-	opts.reset_mapCodeName ();
-}
-
-void Scanner::restore_state(const ScannerState& state)
-{
-	ptrdiff_t diff = bot - state.bot;
-	char *old_bot = bot;
-	char *old_lim = lim;
-	char *old_top = top;
-	char *old_eof = eof;
-	*(ScannerState*)this = state;
-	if (diff)
-	{
-		tok -= diff;
-		ptr -= diff;
-		cur -= diff;
-		pos -= diff;
-		ctx -= diff;		
-		bot = old_bot;
-		lim = old_lim;
-		top = old_top;
-		eof = old_eof;
-	}
 }
 
 } // namespace re2c
