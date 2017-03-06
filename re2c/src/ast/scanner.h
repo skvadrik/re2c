@@ -66,7 +66,7 @@ private:
 	uint32_t lex_cls_chr();
 	uint32_t lex_str_chr(char quote, bool &end);
 	const AST *lex_cls(bool neg);
-	const AST *lex_str(char quote, bool casing);
+	const AST *lex_str(char quote);
 	void lex_conf ();
 	void lex_conf_encoding_policy();
 	void lex_conf_input();

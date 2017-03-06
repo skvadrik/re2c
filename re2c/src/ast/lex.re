@@ -255,8 +255,8 @@ start:
 					return 0;
 				}
 
-	"'"  { yylval.regexp = lex_str('\'', opts->bCaseInsensitive || !opts->bCaseInverted); return TOKEN_REGEXP; }
-	"\"" { yylval.regexp = lex_str('"',  opts->bCaseInsensitive ||  opts->bCaseInverted); return TOKEN_REGEXP; }
+	"'"  { yylval.regexp = lex_str('\''); return TOKEN_REGEXP; }
+	"\"" { yylval.regexp = lex_str('"'); return TOKEN_REGEXP; }
 	"["  { yylval.regexp = lex_cls(false); return TOKEN_REGEXP; }
 	"[^" { yylval.regexp = lex_cls(true);  return TOKEN_REGEXP; }
 
@@ -339,17 +339,14 @@ start:
 						yylval.str = new std::string (tok, tok_len());
 						return TOKEN_ID;
 					} else {
-						const AST *r = NULL;
-						const bool casing = opts->bCaseInsensitive || opts->bCaseInverted;
+						std::vector<ASTChar> *str = new std::vector<ASTChar>;
 						for (char *s = tok; s < cur; ++s) {
 							const uint32_t
-								c = static_cast<uint8_t>(*s),
-								column = static_cast<uint32_t>(s - pos);
-							r = ast_cat(r, casing
-								? ast_ichar(cline, column, c)
-								: ast_schar(cline, column, c));
+								chr = static_cast<uint8_t>(*s),
+								col = static_cast<uint32_t>(s - ptr);
+							str->push_back(ASTChar(chr, col));
 						}
-						yylval.regexp = r ? r : ast_nil(cline, get_column());
+						yylval.regexp = ast_str(cline, get_column(), str, false);
 						return TOKEN_REGEXP;
 					}
 				}
@@ -548,12 +545,13 @@ static void escape (std::string & dest, const std::string & src)
 
 const AST *Scanner::lex_cls(bool neg)
 {
-	const uint32_t column = get_column();
-	Range *r = NULL, *s;
-	uint32_t u, l;
+	std::vector<ASTRange> *cls = new std::vector<ASTRange>;
+	uint32_t u, l, c, c0 = get_column();
 fst:
+	tok = cur;
+	c = get_column();
 	/*!re2c
-		"]" { goto end; }
+		"]" { return ast_cls(cline, c0, cls, neg); }
 		""  { l = lex_cls_chr(); goto snd; }
 	*/
 snd:
@@ -569,16 +567,8 @@ snd:
 		}
 	*/
 add:
-	if (!(s = opts->encoding.encodeRange(l, u))) {
-		fatalf ("Bad code point range: '0x%X - 0x%X'", l, u);
-	}
-	r = Range::add(r, s);
+	cls->push_back(ASTRange(l, u, c));
 	goto fst;
-end:
-	if (neg) {
-		r = Range::sub(opts->encoding.fullRange(), r);
-	}
-	return ast_class(cline, column, r);
 }
 
 uint32_t Scanner::lex_cls_chr()
@@ -643,17 +633,14 @@ uint32_t Scanner::lex_str_chr(char quote, bool &end)
 	*/
 }
 
-const AST *Scanner::lex_str(char quote, bool casing)
+const AST *Scanner::lex_str(char quote)
 {
-	const AST *r = NULL;
+	const uint32_t column = get_column();
+	std::vector<ASTChar> *str = new std::vector<ASTChar>;
 	for (bool end;;) {
 		const uint32_t c = lex_str_chr(quote, end);
-		if (end) {
-			return r ? r : ast_nil(cline, get_column());
-		}
-		r = ast_cat(r, casing
-			? ast_ichar(cline, get_column(), c)
-			: ast_schar(cline, get_column(), c));
+		if (end) return ast_str(cline, column, str, quote == '\'');
+		str->push_back(ASTChar(c, get_column()));
 	}
 }
 

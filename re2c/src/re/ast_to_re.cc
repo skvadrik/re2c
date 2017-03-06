@@ -31,10 +31,59 @@ static RE *ast_to_re(RESpec &spec, const AST *ast, size_t &ncap)
 		default: assert(false);
 		case AST::NIL:
 			return re_nil(alc);
+		case AST::STR: {
+			const bool icase = opts->bCaseInsensitive
+				|| (ast->str.icase != opts->bCaseInverted);
+			RE *x = NULL;
+			std::vector<ASTChar>::const_iterator
+				i = ast->str.chars->begin(),
+				e = ast->str.chars->end();
+			for (; i != e; ++i) {
+				x = re_cat(alc, x, icase
+					? re_ichar(alc, ast->line, i->column, i->chr, opts)
+					: re_schar(alc, ast->line, i->column, i->chr, opts));
+			}
+			return x ? x : re_nil(alc);
+		}
+		case AST::CLS: {
+			Range *r = NULL;
+			std::vector<ASTRange>::const_iterator
+				i = ast->cls.ranges->begin(),
+				e = ast->cls.ranges->end();
+			for (; i != e; ++i) {
+				Range *s = opts->encoding.encodeRange(i->lower, i->upper);
+				if (!s) fatal_error(ast->line, i->column,
+					"bad code point range: '0x%X - 0x%X'", i->lower, i->upper);
+				r = Range::add(r, s);
+			}
+			if (ast->cls.negated) {
+				r = Range::sub(opts->encoding.fullRange(), r);
+			}
+			return re_class(alc, ast->line, ast->column, r, opts, warn);
+		}
+		case AST::DOT: {
+			uint32_t c = '\n';
+			if (!opts->encoding.encode(c)) {
+				fatal_error(ast->line, ast->column, "bad code point: '0x%X'", c);
+			}
+			return re_class(alc, ast->line, ast->column,
+				Range::sub(opts->encoding.fullRange(), Range::sym(c)), opts, warn);
+		}
+		case AST::DEFAULT:
+			// see note [default regexp]
+			return re_sym(alc, Range::ran(0, opts->encoding.nCodeUnits()));
 		case AST::ALT: {
 			RE *x = ast_to_re(spec, ast->alt.ast1, ncap);
 			RE *y = ast_to_re(spec, ast->alt.ast2, ncap);
 			return re_alt(alc, x, y);
+		}
+		case AST::DIFF: {
+			RE *x = ast_to_re(spec, ast->diff.ast1, ncap);
+			RE *y = ast_to_re(spec, ast->diff.ast2, ncap);
+			if (x->type != RE::SYM || y->type != RE::SYM) {
+				fatal_error(ast->line, ast->column, "can only difference char sets");
+			}
+			return re_class(alc, ast->line, ast->column, Range::sub(x->sym, y->sym), opts, warn);
 		}
 		case AST::CAT: {
 			RE *x = ast_to_re(spec, ast->cat.ast1, ncap);
@@ -102,31 +151,6 @@ static RE *ast_to_re(RESpec &spec, const AST *ast, size_t &ncap)
 			}
 			return y;
 		}
-		case AST::SCHAR:
-			return re_schar(alc, ast->line, ast->column, ast->schar, opts);
-		case AST::ICHAR:
-			return re_ichar(alc, ast->line, ast->column, ast->ichar, opts);
-		case AST::CLASS:
-			return re_class(alc, ast->line, ast->column, ast->cls, opts, warn);
-		case AST::DIFF: {
-			RE *x = ast_to_re(spec, ast->diff.ast1, ncap);
-			RE *y = ast_to_re(spec, ast->diff.ast2, ncap);
-			if (x->type != RE::SYM || y->type != RE::SYM) {
-				fatal_error(ast->line, ast->column, "can only difference char sets");
-			}
-			return re_class(alc, ast->line, ast->column, Range::sub(x->sym, y->sym), opts, warn);
-		}
-		case AST::DOT: {
-			uint32_t c = '\n';
-			if (!opts->encoding.encode(c)) {
-				fatal_error(ast->line, ast->column, "bad code point: '0x%X'", c);
-			}
-			return re_class(alc, ast->line, ast->column,
-				Range::sub(opts->encoding.fullRange(), Range::sym(c)), opts, warn);
-		}
-		case AST::DEFAULT:
-			// see note [default regexp]
-			return re_sym(alc, Range::ran(0, opts->encoding.nCodeUnits()));
 	}
 }
 

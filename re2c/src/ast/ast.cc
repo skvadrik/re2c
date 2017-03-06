@@ -22,6 +22,10 @@ AST::~AST()
 		delete tag;
 	} else if (type == REF) {
 		delete ref.name;
+	} else if (type == STR) {
+		delete str.chars;
+	} else if (type == CLS) {
+		delete cls.ranges;
 	}
 }
 
@@ -30,24 +34,19 @@ const AST *ast_nil(uint32_t l, uint32_t c)
 	return new AST(l, c, AST::NIL);
 }
 
-const AST *ast_schar(uint32_t l, uint32_t c, uint32_t x)
+const AST *ast_str(uint32_t l, uint32_t c, std::vector<ASTChar> *chars, bool icase)
 {
-	AST *ast = new AST(l, c, AST::SCHAR);
-	ast->schar = x;
+	AST *ast = new AST(l, c, AST::STR);
+	ast->str.chars = chars;
+	ast->str.icase = icase;
 	return ast;
 }
 
-const AST *ast_ichar(uint32_t l, uint32_t c, uint32_t x)
+const AST *ast_cls(uint32_t l, uint32_t c, std::vector<ASTRange> *ranges, bool negated)
 {
-	AST *ast = new AST(l, c, AST::ICHAR);
-	ast->ichar = x;
-	return ast;
-}
-
-const AST *ast_class(uint32_t l, uint32_t c, const Range *r)
-{
-	AST *ast = new AST(l, c, AST::CLASS);
-	ast->cls = r;
+	AST *ast = new AST(l, c, AST::CLS);
+	ast->cls.ranges = ranges;
+	ast->cls.negated = negated;
 	return ast;
 }
 
@@ -125,9 +124,8 @@ bool ast_need_wrap(const AST *ast)
 	switch (ast->type) {
 		case AST::ITER:
 		case AST::NIL:
-		case AST::SCHAR:
-		case AST::ICHAR:
-		case AST::CLASS:
+		case AST::STR:
+		case AST::CLS:
 		case AST::DOT:
 		case AST::DEFAULT:
 		case AST::TAG:

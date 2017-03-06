@@ -12,6 +12,23 @@
 namespace re2c
 {
 
+struct ASTChar
+{
+	uint32_t chr;
+	uint32_t column;
+	ASTChar(uint32_t x, uint32_t c)
+		: chr(x), column(c) {}
+};
+
+struct ASTRange
+{
+	uint32_t lower;
+	uint32_t upper;
+	uint32_t column;
+	ASTRange(uint32_t l, uint32_t u, uint32_t c)
+		: lower(l), upper(u), column(c) {}
+};
+
 /* AST must be immutable and independent of options */
 struct AST
 {
@@ -19,13 +36,17 @@ struct AST
 	static const uint32_t MANY;
 
 	enum type_t
-		{ NIL, SCHAR, ICHAR, CLASS, DOT, DEFAULT
-		, ALT, CAT,   ITER,  DIFF,  TAG, CAP
-		, REF } type;
+		{ NIL, STR,  CLS,  DOT,  DEFAULT, ALT
+		, CAT, ITER, DIFF, TAG,  CAP,     REF } type;
 	union {
-		uint32_t schar;
-		uint32_t ichar;
-		const Range *cls;
+		struct {
+			const std::vector<ASTChar> *chars;
+			bool icase;
+		} str;
+		struct {
+			const std::vector<ASTRange> *ranges;
+			bool negated;
+		} cls;
 		struct {
 			const AST *ast1;
 			const AST *ast2;
@@ -75,9 +96,8 @@ struct ASTBounds
 };
 
 const AST *ast_nil(uint32_t l, uint32_t c);
-const AST *ast_schar(uint32_t l, uint32_t c, uint32_t x);
-const AST *ast_ichar(uint32_t l, uint32_t c, uint32_t x);
-const AST *ast_class(uint32_t l, uint32_t c, const Range *r);
+const AST *ast_str(uint32_t l, uint32_t c, std::vector<ASTChar> *chars, bool icase);
+const AST *ast_cls(uint32_t l, uint32_t c, std::vector<ASTRange> *ranges, bool negated);
 const AST *ast_dot(uint32_t l, uint32_t c);
 const AST *ast_default(uint32_t l, uint32_t c);
 const AST *ast_alt(const AST *r1, const AST *r2);
