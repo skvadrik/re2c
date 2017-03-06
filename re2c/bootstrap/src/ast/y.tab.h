@@ -51,7 +51,8 @@ extern int yydebug;
     TOKEN_ID = 261,
     TOKEN_FID = 262,
     TOKEN_FID_END = 263,
-    TOKEN_REGEXP = 264
+    TOKEN_LINE_INFO = 264,
+    TOKEN_REGEXP = 265
   };
 #endif
 

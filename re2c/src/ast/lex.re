@@ -183,13 +183,6 @@ int Scanner::scan()
 scan:
 	tchar = cur - pos;
 	tok = cur;
-	switch (lexer_state)
-	{
-		case LEX_NORMAL:    goto start;
-		case LEX_FLEX_NAME: goto flex_name;
-	}
-
-start:
 /*!re2c
 	"{"			{
 					depth = 1;
@@ -328,36 +321,26 @@ start:
 				}
 
 	eol space* "#" space* "line" space+ / lineinf {
-					set_sourceline ();
-					goto scan;
-				}
+		set_sourceline ();
+		return TOKEN_LINE_INFO;
+	}
 
-	eol			{
-					if (cur == eof) return 0;
-					pos = cur;
-					cline++;
-					goto scan;
-				}
+	eol {
+		if (cur == eof) return 0;
+		pos = cur;
+		cline++;
+		if (lexer_state == LEX_FLEX_NAME) {
+			lexer_state = LEX_NORMAL;
+			return TOKEN_FID_END;
+		} else {
+			goto scan;
+		}
+	}
 
 	*			{
 					fatalf("unexpected character: '%c'", *tok);
 					goto scan;
 				}
-*/
-
-flex_name:
-/*!re2c
-	eol
-	{
-		YYCURSOR = tok;
-		lexer_state = LEX_NORMAL;
-		return TOKEN_FID_END;
-	}
-	*
-	{
-		YYCURSOR = tok;
-		goto start;
-	}
 */
 
 code:

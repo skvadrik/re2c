@@ -205,6 +205,7 @@ static spec_t &find(specs_t &specs, const std::string &name)
 %token TOKEN_ID
 %token TOKEN_FID
 %token TOKEN_FID_END
+%token TOKEN_LINE_INFO
 %token TOKEN_REGEXP
 
 %type <op>      close closes
@@ -221,6 +222,7 @@ spec
 	| spec TOKEN_CONF
 	| spec def
 	| spec rule
+	| spec TOKEN_LINE_INFO
 	;
 
 def
