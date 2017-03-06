@@ -88,8 +88,10 @@ std::ostream & OutputFile::stream ()
 
 OutputFile &OutputFile::wraw(const char *s, const char *e)
 {
-	insert_code();
-	stream().write(s, static_cast<std::streamsize>(e - s));
+	if (block().opts->target == opt_t::CODE) {
+		insert_code();
+		stream().write(s, static_cast<std::streamsize>(e - s));
+	}
 	return *this;
 }
 
@@ -207,11 +209,13 @@ void OutputFile::insert_code ()
 	}
 }
 
-OutputFile &OutputFile::wdelay_tags(uint32_t ind, const ConfTags *cf)
+OutputFile &OutputFile::wdelay_tags(const ConfTags *cf)
 {
-	OutputFragment *frag = new OutputFragment(OutputFragment::TAGS, ind);
-	frag->tags = cf;
-	blocks.back()->fragments.push_back(frag);
+	if (block().opts->target == opt_t::CODE) {
+		OutputFragment *frag = new OutputFragment(OutputFragment::TAGS, 0);
+		frag->tags = cf;
+		blocks.back()->fragments.push_back(frag);
+	}
 	return *this;
 }
 
@@ -240,7 +244,8 @@ OutputFile & OutputFile::wdelay_cond_table(uint32_t ind)
 
 OutputFile & OutputFile::wdelay_state_goto (uint32_t ind)
 {
-	if (block().opts->fFlag && !state_goto) {
+	if (block().opts->target == opt_t::CODE
+		&& block().opts->fFlag && !state_goto) {
 		block().fragments.push_back (new OutputFragment (OutputFragment::STATE_GOTO, ind));
 		state_goto = true;
 	}
@@ -249,8 +254,10 @@ OutputFile & OutputFile::wdelay_state_goto (uint32_t ind)
 
 OutputFile & OutputFile::wdelay_types ()
 {
-	warn_condition_order = false; // see note [condition order]
-	block().fragments.push_back (new OutputFragment (OutputFragment::TYPES, 0));
+	if (block().opts->target == opt_t::CODE) {
+		warn_condition_order = false; // see note [condition order]
+		block().fragments.push_back (new OutputFragment (OutputFragment::TYPES, 0));
+	}
 	return *this;
 }
 
@@ -262,7 +269,9 @@ OutputFile & OutputFile::wdelay_yyaccept_init (uint32_t ind)
 
 OutputFile & OutputFile::wdelay_yymaxfill ()
 {
-	block().fragments.push_back (new OutputFragment (OutputFragment::YYMAXFILL, 0));
+	if (block().opts->target == opt_t::CODE) {
+		block().fragments.push_back (new OutputFragment (OutputFragment::YYMAXFILL, 0));
+	}
 	return *this;
 }
 
@@ -409,7 +418,7 @@ bool OutputFile::emit(const uniq_vector_t<std::string> &global_types,
 		for (size_t i = 0; i < n; ++i) {
 			OutputFragment & f = * b.fragments[i];
 			std::ostringstream &o = f.stream;
-			const uint32_t ind = f.indent;
+			const uint32_t ind = f.indent ? f.indent : bopt->topIndent;
 
 			switch (f.type) {
 			case OutputFragment::EMPTY:
@@ -428,7 +437,7 @@ bool OutputFile::emit(const uniq_vector_t<std::string> &global_types,
 				output_state_goto(o, ind, 0, fill_index, bopt);
 				break;
 			case OutputFragment::TAGS:
-				output_tags(o, *f.tags, global_tags);
+				output_tags(o, ind, *f.tags, global_tags, bopt);
 				break;
 			case OutputFragment::TYPES:
 				output_types(o, ind, block().opts, global_types);
@@ -437,7 +446,7 @@ bool OutputFile::emit(const uniq_vector_t<std::string> &global_types,
 				output_yyaccept_init(o, ind, b.used_yyaccept, bopt);
 				break;
 			case OutputFragment::YYMAXFILL:
-				output_yymaxfill(o, max_fill);
+				output_yymaxfill(o, ind, max_fill, bopt);
 				break;
 			case OutputFragment::SKIP:
 				output_skip(o, ind, bopt);
@@ -536,12 +545,13 @@ bool Output::emit()
 		&& header.emit(opts, types);
 }
 
-void output_tags(std::ostream &o, const ConfTags &conf,
-	const std::set<std::string> &tags)
+void output_tags(std::ostream &o, uint32_t ind, const ConfTags &conf,
+	const std::set<std::string> &tags, const opt_t *opts)
 {
 	std::set<std::string>::const_iterator
 		tag = tags.begin(),
 		end = tags.end();
+	o << indent(ind, opts->indString);
 	for (;tag != end;) {
 		std::string fmt = conf.format;
 		strrreplace(fmt, "@@", *tag);
@@ -591,9 +601,10 @@ void output_yyaccept_init (std::ostream & o, uint32_t ind, bool used_yyaccept, c
 	}
 }
 
-void output_yymaxfill (std::ostream & o, size_t max_fill)
+void output_yymaxfill(std::ostream &o, uint32_t ind,
+	size_t max_fill, const opt_t *opts)
 {
-	o << "#define YYMAXFILL " << max_fill << "\n";
+	o << indent(ind, opts->indString) << "#define YYMAXFILL " << max_fill << "\n";
 }
 
 void output_line_info(std::ostream &o, uint32_t line,

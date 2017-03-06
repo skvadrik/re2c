@@ -14,7 +14,7 @@ namespace re2c
 	re2c:define:YYCTYPE     = "unsigned char";
 	re2c:define:YYCURSOR    = cur;
 	re2c:define:YYLIMIT     = lim;
-	re2c:define:YYMARKER    = ptr;
+	re2c:define:YYMARKER    = mar;
 	re2c:define:YYCTXMARKER = ctx;
 	re2c:define:YYFILL      = fill;
 

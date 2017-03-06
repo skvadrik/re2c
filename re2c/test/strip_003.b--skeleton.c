@@ -48,7 +48,6 @@ error:
     return NULL;
 }
 
-
 #define YYCTYPE unsigned char
 #define YYKEYTYPE unsigned char
 #define YYPEEK() *cursor

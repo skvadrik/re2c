@@ -30,6 +30,7 @@ struct ScannerState
 	char * tok;
 	char * ptr;
 	char * cur;
+	char * mar;
 	char * pos;
 	char * ctx;
 

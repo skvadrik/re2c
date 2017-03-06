@@ -21,7 +21,7 @@ extern YYSTYPE yylval;
 #define	YYCTYPE		unsigned char
 #define	YYCURSOR	cur
 #define	YYLIMIT		lim
-#define	YYMARKER	ptr
+#define	YYMARKER	mar
 #define	YYCTXMARKER ctx
 #define	YYFILL(n)	{ fill (n); }
 
@@ -65,83 +65,63 @@ Scanner::ParseMode Scanner::echo()
 
 	tok = cur;
 echo:
-	const char *start = cur;
+	ptr = cur;
 
 /*!re2c
 	"%{" | "/*!re2c" {
-		if (opts->target == opt_t::CODE) {
-			out.wraw(tok, start);
-		}
+		out.wraw(tok, ptr);
 		return Parse;
 	}
 
 	"/*!rules:re2c" {
-		if (opts->target == opt_t::CODE) {
-			out.wraw(tok, start);
-		}
+		out.wraw(tok, ptr);
 		return Rules;
 	}
 
 	"/*!use:re2c" {
-		if (opts->target == opt_t::CODE) {
-			out.wraw(tok, start);
-		}
+		out.wraw(tok, ptr);
 		return Reuse;
 	}
 
 	"/*!ignore:re2c" {
-		if (opts->target == opt_t::CODE) {
-			out.wraw(tok, start);
-		}
+		out.wraw(tok, ptr);
 		lex_end_of_comment();
 		goto echo;
 	}
 
 	"/*!max:re2c" {
-		if (opts->target == opt_t::CODE) {
-			out.wraw(tok, start)
-				.wdelay_yymaxfill();
-		}
+		out.wraw(tok, ptr);
+		out.wdelay_yymaxfill();
 		lex_end_of_comment();
 		goto echo;
 	}
 
 	"/*!getstate:re2c" {
-		if (opts->target == opt_t::CODE) {
-			out.wraw(tok, start)
-				.wdelay_state_goto(opts->topIndent);
-		}
+		out.wraw(tok, ptr);
+		out.wdelay_state_goto(0);
 		lex_end_of_comment();
 		goto echo;
 	}
 
 	"/*!types:re2c" {
-		if (opts->target == opt_t::CODE) {
-			out.wraw(tok, start)
-				.wdelay_line_info()
-				.wdelay_types()
-				.wline_info(cline, get_fname().c_str());
-		}
+		out.wraw(tok, ptr);
+		out.wdelay_line_info();
+		out.wdelay_types();
+		out.wline_info(cline, get_fname().c_str());
 		lex_end_of_comment();
 		goto echo;
 	}
 
 	"/*!tags:re2c" {
-		if (opts->target == opt_t::CODE) {
-			out.wraw(tok, start);
-		}
+		out.wraw(tok, ptr);
 		lex_tags();
 		goto echo;
 	}
 
 	zero {
-		if (cur == eof) {
-			if (opts->target == opt_t::CODE) {
-				out.wraw(tok, start);
-			}
-			return Stop;
-		}
-		goto echo;
+		if (cur != eof) goto echo;
+		out.wraw(tok, ptr);
+		return Stop;
 	}
 
 	eol space* "#" space* "line" space+ / lineinf {
@@ -170,7 +150,7 @@ void Scanner::lex_end_of_comment()
 		eoc  {
 			if (ignored > 0) {
 				cline += ignored;
-				out.ws("\n").wline_info(cline, get_fname().c_str());
+				out.wline_info(cline, get_fname().c_str());
 			}
 			tok = pos = cur;
 			return;
@@ -190,10 +170,7 @@ void Scanner::lex_tags()
 		space+ { continue; }
 		eol    { ++cline; continue; }
 		eoc    {
-			if (opts->target == opt_t::CODE) {
-				out.wdelay_tags(opts->topIndent,
-					new ConfTags(fmt, sep));
-			}
+			out.wdelay_tags(new ConfTags(fmt, sep));
 			tok = pos = cur;
 			return;
 		}
@@ -333,7 +310,7 @@ start:
 						for (char *s = tok; s < cur; ++s) {
 							const uint32_t
 								chr = static_cast<uint8_t>(*s),
-								col = static_cast<uint32_t>(s - ptr);
+								col = static_cast<uint32_t>(s - tok);
 							str->push_back(ASTChar(chr, col));
 						}
 						yylval.regexp = ast_str(cline, get_column(), str, false);

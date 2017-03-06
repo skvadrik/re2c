@@ -23,6 +23,7 @@ ScannerState::ScannerState ()
 	: tok (NULL)
 	, ptr (NULL)
 	, cur (NULL)
+	, mar (NULL)
 	, pos (NULL)
 	, ctx (NULL)
 	, bot (NULL)
@@ -56,6 +57,7 @@ void Scanner::fill (uint32_t need)
 				const size_t move = static_cast<size_t> (top - tok);
 				memmove (bot, tok, move);
 				tok -= diff;
+				mar -= diff;
 				ptr -= diff;
 				cur -= diff;
 				pos -= diff;
@@ -78,6 +80,7 @@ void Scanner::fill (uint32_t need)
 			}
 			memcpy (buf, bot, copy);
 			tok = &buf[tok - bot];
+			mar = &buf[mar - bot];
 			ptr = &buf[ptr - bot];
 			cur = &buf[cur - bot];
 			pos = &buf[pos - bot];

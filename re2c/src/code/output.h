@@ -121,7 +121,7 @@ public:
 	OutputFile & wind (uint32_t ind);
 
 	// delayed output
-	OutputFile & wdelay_tags(uint32_t ind, const ConfTags *cf);
+	OutputFile & wdelay_tags(const ConfTags *cf);
 	OutputFile & wdelay_line_info ();
 	OutputFile & wdelay_cond_goto(uint32_t ind);
 	OutputFile & wdelay_cond_table(uint32_t ind);
@@ -163,7 +163,7 @@ struct Output
 	bool emit();
 };
 
-void output_tags          (std::ostream &o, const ConfTags &conf, const std::set<std::string> &tags);
+void output_tags          (std::ostream &o, uint32_t ind, const ConfTags &conf, const std::set<std::string> &tags, const opt_t *opts);
 void output_line_info     (std::ostream &o, uint32_t line, const std::string &fname, bool iflag);
 void output_cond_goto     (std::ostream &o, uint32_t ind, const std::vector<std::string> &conds, const opt_t *opts, Warn &warn, bool warn_cond_order, uint32_t line);
 void output_cond_table    (std::ostream &o, uint32_t ind, const std::vector<std::string> &conds, const opt_t *opts);
@@ -171,7 +171,7 @@ void output_state_goto    (std::ostream &o, uint32_t ind, uint32_t start_label, 
 void output_types         (std::ostream &o, uint32_t ind, const opt_t *opts, const uniq_vector_t<std::string> &types);
 void output_version_time  (std::ostream &o, bool version, bool date);
 void output_yyaccept_init (std::ostream &o, uint32_t ind, bool, const opt_t *opts);
-void output_yymaxfill     (std::ostream &o, size_t max_fill);
+void output_yymaxfill     (std::ostream &o, uint32_t ind, size_t max_fill, const opt_t *opts);
 
 } // namespace re2c
 
