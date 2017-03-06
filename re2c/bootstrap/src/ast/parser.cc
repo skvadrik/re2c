@@ -109,7 +109,26 @@ void yyerror(context_t &context, const char*);
 #define __attribute__(x)
 #endif
 
-static void check(const specs_t &specs, bool cflag)
+static void check_mode(Scanner::ParseMode mode, bool rflag, bool rules, Scanner &input)
+{
+	if (mode == Scanner::Rules) {
+		if (!rflag) {
+			input.fatal("found 'rules:re2c' block without -r flag");
+		} else if (rules) {
+			input.fatal("cannot have a second 'rules:re2c' block");
+		}
+	} else if (mode == Scanner::Reuse) {
+		if (!rflag) {
+			input.fatal("found 'use:re2c' block without -r flag");
+		} else if (!rules) {
+			input.fatal("got 'use:re2c' without 'rules:re2c'");
+		}
+	} else if (rflag) {
+		input.fatal("found standard 're2c' block while using -r flag");
+	}
+}
+
+static void check_specs(const specs_t &specs, bool cflag)
 {
 	specs_t::const_iterator i,
 		b = specs.begin(),
@@ -180,7 +199,7 @@ static void check(const specs_t &specs, bool cflag)
 	}
 }
 
-static void prepare(specs_t &specs)
+static void prepare_specs(specs_t &specs)
 {
 	specs_t::iterator i, b = specs.begin(), e = specs.end();
 
@@ -604,11 +623,11 @@ static const yytype_uint8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint16 yyrline[] =
 {
-       0,   200,   200,   202,   203,   204,   208,   215,   220,   223,
-     227,   227,   230,   234,   238,   245,   252,   259,   265,   267,
-     273,   280,   281,   287,   293,   300,   301,   306,   314,   318,
-     325,   329,   336,   340,   347,   348,   354,   359,   360,   364,
-     365,   366,   370,   371,   381
+       0,   219,   219,   221,   222,   223,   227,   234,   239,   242,
+     246,   246,   249,   253,   257,   264,   271,   278,   284,   286,
+     292,   299,   300,   306,   312,   319,   320,   325,   333,   337,
+     344,   348,   355,   359,   366,   367,   373,   378,   379,   383,
+     384,   385,   389,   390,   400
 };
 #endif
 
@@ -1969,12 +1988,7 @@ void parse(Scanner &input, Output &output)
 
 	for (Scanner::ParseMode mode; (mode = input.echo()) != Scanner::Stop;) {
 
-		if (mode == Scanner::Rules && ropts) {
-			input.fatal("cannot have a second 'rules:re2c' block");
-		}
-		if (mode == Scanner::Reuse && !ropts) {
-			input.fatal("got 'use:re2c' without 'rules:re2c'");
-		}
+		check_mode(mode, opts->rFlag, ropts, input);
 
 		// parse next re2c block
 		specs_t specs;
@@ -1999,8 +2013,8 @@ void parse(Scanner &input, Output &output)
 			ropts = o.block().opts;
 		} else {
 			// validate and normalize AST
-			check(specs, opts->cFlag);
-			prepare(specs);
+			check_specs(specs, opts->cFlag);
+			prepare_specs(specs);
 
 			// compile AST to DFA
 			o.block().line = input.get_cline();
