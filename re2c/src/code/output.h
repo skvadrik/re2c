@@ -94,7 +94,7 @@ public:
 	bool warn_condition_order;
 	Warn &warn;
 
-	OutputFile(bool tflag, Warn &w);
+	explicit OutputFile(Warn &w);
 	~OutputFile();
 
 	std::ostream & stream ();
@@ -159,7 +159,7 @@ struct Output
 	std::set<std::string> skeletons;
 	size_t max_fill;
 
-	Output(bool tflag, Warn &w);
+	explicit Output(Warn &w);
 	bool emit();
 };
 

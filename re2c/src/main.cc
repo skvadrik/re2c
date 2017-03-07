@@ -32,7 +32,7 @@ int main(int, char *argv[])
 	}
 
 	// set up the output streams
-	re2c::Output output(opts->tFlag, warn);
+	re2c::Output output(warn);
 
 	Scanner scanner(input, output.source, opts);
 	parse(scanner, output);

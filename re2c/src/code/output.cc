@@ -59,13 +59,13 @@ OutputBlock::~OutputBlock ()
 	delete opts;
 }
 
-OutputFile::OutputFile(bool tflag, Warn &w)
+OutputFile::OutputFile(Warn &w)
 	: blocks ()
 	, label_counter ()
 	, fill_index(0)
 	, state_goto(false)
 	, cond_goto(false)
-	, warn_condition_order (!tflag) // see note [condition order]
+	, warn_condition_order(true)
 	, warn(w)
 {}
 
@@ -521,8 +521,8 @@ bool HeaderFile::emit(const opt_t *opts, const uniq_vector_t<std::string> &types
 	return true;
 }
 
-Output::Output(bool tflag, Warn &w)
-	: source(tflag, w)
+Output::Output(Warn &w)
+	: source(w)
 	, header()
 	, skeletons()
 	, max_fill(1)
@@ -718,6 +718,8 @@ void output_cond_goto(std::ostream &o, uint32_t ind,
 		}
 		o << indstr << "}\n";
 	}
+
+	warn_cond_order &= opts->header_file.empty();
 
 	// see note [condition order]
 	if (warn_cond_order) warn.condition_order(line);
