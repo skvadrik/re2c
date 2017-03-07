@@ -47,25 +47,21 @@ void Scanner::fill (uint32_t need)
 {
 	if(!eof)
 	{
-		/* Do not get rid of anything when rFlag is active. Otherwise
-		 * get rid of everything that was already handedout. */
-		if (!opts->rFlag)
+		/* Get rid of everything that was already parsed. */
+		const ptrdiff_t diff = tok - bot;
+		if (diff > 0)
 		{
-			const ptrdiff_t diff = tok - bot;
-			if (diff > 0)
-			{
-				const size_t move = static_cast<size_t> (top - tok);
-				memmove (bot, tok, move);
-				tok -= diff;
-				mar -= diff;
-				ptr -= diff;
-				cur -= diff;
-				pos -= diff;
-				lim -= diff;
-				ctx -= diff;
-			}
+			const size_t move = static_cast<size_t> (top - tok);
+			memmove (bot, tok, move);
+			tok -= diff;
+			mar -= diff;
+			ptr -= diff;
+			cur -= diff;
+			pos -= diff;
+			lim -= diff;
+			ctx -= diff;
 		}
-		/* In crease buffer size. */
+		/* Increase buffer size. */
 		if (BSIZE > need)
 		{
 			need = BSIZE;
