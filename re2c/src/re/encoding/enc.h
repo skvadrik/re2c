@@ -80,7 +80,7 @@ public:
 	inline uint32_t szCodePoint() const;
 	inline uint32_t szCodeUnit() const;
 
-	inline bool set(type_t t);
+	inline void set(type_t t);
 	inline void unset(type_t);
 	inline type_t type () const;
 
@@ -163,17 +163,9 @@ inline uint32_t Enc::szCodeUnit() const
 	}
 }
 
-inline bool Enc::set(type_t t)
+inline void Enc::set(type_t t)
 {
-	if (type_ == t)
-		return true;
-	else if (type_ != ASCII)
-		return false;
-	else
-	{
-		type_ = t;
-		return true;
-	}
+	type_ = t;
 }
 
 inline void Enc::unset(type_t t)

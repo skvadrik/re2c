@@ -213,9 +213,9 @@ public:
 	// of the block; second, config is resynced too often (every
 	// attempt to read config that has been updated results in
 	// automatic resync). It is much better to set all options at once.
-	bool set_encoding (Enc::type_t t)                    { return useropt->encoding.set (t); }
-	void unset_encoding (Enc::type_t t)                  { useropt->encoding.unset (t); }
-	void set_encoding_policy (Enc::policy_t p)           { useropt->encoding.setPolicy (p); }
+	void set_encoding(Enc::type_t t)          { useropt->encoding.set(t); }
+	void unset_encoding(Enc::type_t t)        { useropt->encoding.unset(t); }
+	void set_encoding_policy(Enc::policy_t p) { useropt->encoding.setPolicy(p); }
 #define OPT1 OPT
 #define OPT(type, name, value) void set_##name (type arg) { useropt->name = arg; }
 	RE2C_OPTS
@@ -223,7 +223,6 @@ public:
 #undef OPT
 
 	// bad temporary hacks, should be fixed by proper scoping of config (parts).
-	void reset_encoding (const Enc & enc);
 	void reset_startlabel();
 	void reset_mapCodeName ();
 

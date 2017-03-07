@@ -226,13 +226,10 @@ end:
 
 void Scanner::lex_conf_enc(Enc::type_t enc)
 {
-	const bool off = !lex_conf_bool();
-	if (off) {
+	if (lex_conf_bool()) {
+		opts.set_encoding(enc);
+	} else {
 		opts.unset_encoding(enc);
-	} else if (!opts.set_encoding(enc)) {
-		fatalf ("Cannot set %s encoding: please reset %s encoding first"
-			, Enc::name(enc)
-			, Enc::name(opts->encoding.type()));
 	}
 }
 

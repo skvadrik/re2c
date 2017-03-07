@@ -109,11 +109,11 @@ opt_short:
 	"s" { opts.set_sFlag (true);             goto opt_short; }
 	"S" { opts.set_target (opt_t::SKELETON); goto opt_short; }
 	"T" { opts.set_tags (true);              goto opt_short; }
-	"e" { if (!opts.set_encoding (Enc::EBCDIC)) { error_encoding (); return EXIT_FAIL; } goto opt_short; }
-	"u" { if (!opts.set_encoding (Enc::UTF32))  { error_encoding (); return EXIT_FAIL; } goto opt_short; }
-	"w" { if (!opts.set_encoding (Enc::UCS2))   { error_encoding (); return EXIT_FAIL; } goto opt_short; }
-	"x" { if (!opts.set_encoding (Enc::UTF16))  { error_encoding (); return EXIT_FAIL; } goto opt_short; }
-	"8" { if (!opts.set_encoding (Enc::UTF8))   { error_encoding (); return EXIT_FAIL; } goto opt_short; }
+	"e" { opts.set_encoding(Enc::EBCDIC); goto opt_short; }
+	"u" { opts.set_encoding(Enc::UTF32);  goto opt_short; }
+	"w" { opts.set_encoding(Enc::UCS2);   goto opt_short; }
+	"x" { opts.set_encoding(Enc::UTF16);  goto opt_short; }
+	"8" { opts.set_encoding(Enc::UTF8);   goto opt_short; }
 	"o" end { if (!next (YYCURSOR, argv)) { error_arg ("-o, --output"); return EXIT_FAIL; } goto opt_output; }
 	"o"     { *argv = YYCURSOR;                                                             goto opt_output; }
 	"t" end { if (!next (YYCURSOR, argv)) { error_arg ("-t, --type-header"); return EXIT_FAIL; } goto opt_header; }
@@ -150,11 +150,11 @@ opt_long:
 	"posix-captures"        end { opts.set_posix_captures (true);    goto opt; }
 	"no-lookahead"          end { opts.set_lookahead(false);         goto opt; }
 	"eager-skip"            end { opts.set_eager_skip(true);         goto opt; }
-	"ecb"                   end { if (!opts.set_encoding (Enc::EBCDIC)) { error_encoding (); return EXIT_FAIL; } goto opt; }
-	"unicode"               end { if (!opts.set_encoding (Enc::UTF32))  { error_encoding (); return EXIT_FAIL; } goto opt; }
-	"wide-chars"            end { if (!opts.set_encoding (Enc::UCS2))   { error_encoding (); return EXIT_FAIL; } goto opt; }
-	"utf-16"                end { if (!opts.set_encoding (Enc::UTF16))  { error_encoding (); return EXIT_FAIL; } goto opt; }
-	"utf-8"                 end { if (!opts.set_encoding (Enc::UTF8))   { error_encoding (); return EXIT_FAIL; } goto opt; }
+	"ecb"                   end { opts.set_encoding(Enc::EBCDIC); goto opt; }
+	"unicode"               end { opts.set_encoding(Enc::UTF32);  goto opt; }
+	"wide-chars"            end { opts.set_encoding(Enc::UCS2);   goto opt; }
+	"utf-16"                end { opts.set_encoding(Enc::UTF16);  goto opt; }
+	"utf-8"                 end { opts.set_encoding(Enc::UTF8);   goto opt; }
 	"output"                end { if (!next (YYCURSOR, argv)) { error_arg ("-o, --output"); return EXIT_FAIL; } goto opt_output; }
 	"type-header"           end { if (!next (YYCURSOR, argv)) { error_arg ("-t, --type-header"); return EXIT_FAIL; } goto opt_header; }
 	"encoding-policy"       end { goto opt_encoding_policy; }

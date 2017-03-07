@@ -304,11 +304,6 @@ bool Opt::source (const char *s)
 	}
 }
 
-void Opt::reset_encoding (const Enc & enc)
-{
-	useropt->encoding = enc;
-}
-
 void Opt::reset_startlabel()
 {
 	useropt->startlabel       = Opt::baseopt.startlabel;
