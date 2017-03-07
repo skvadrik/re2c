@@ -14,7 +14,7 @@ namespace re2c
 
 struct DFA;
 
-void parse(Scanner &input, Output &output);
+void parse(Scanner &input, Output &output, Opt &opts);
 
 struct spec_t
 {
@@ -37,6 +37,7 @@ struct context_t
 	Scanner &input;
 	specs_t &specs;
 	symtab_t &symtab;
+	Opt &opts;
 };
 
 } // namespace re2c

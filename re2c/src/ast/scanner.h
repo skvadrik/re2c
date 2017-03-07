@@ -52,49 +52,37 @@ struct ScannerState
 class Scanner: private ScannerState
 {
 	static const uint32_t BSIZE;
-
 	Input & in;
-public:
-	OutputFile & out;
-	Opt &opts;
 	Warn &warn;
 
-private:
 	void fill (uint32_t);
-	void lex_end_of_comment();
-	void lex_tags();
+	void lex_end_of_comment(OutputFile &out);
+	void lex_tags(OutputFile &out);
 	void set_sourceline ();
 	uint32_t lex_cls_chr();
 	uint32_t lex_str_chr(char quote, bool &end);
 	const AST *lex_cls(bool neg);
 	const AST *lex_str(char quote);
-	void lex_conf ();
-	void lex_conf_encoding_policy();
-	void lex_conf_input();
-	void lex_conf_empty_class();
-	void lex_conf_dfa_minimization();
-	void lex_conf_enc(Enc::type_t enc);
+	void lex_conf_encoding_policy(Opt &opts);
+	void lex_conf_input(Opt &opts);
+	void lex_conf_empty_class(Opt &opts);
+	void lex_conf_dfa_minimization(Opt &opts);
+	void lex_conf_enc(Enc::type_t enc, Opt &opts);
 	void lex_conf_assign();
 	void lex_conf_semicolon();
 	int32_t lex_conf_number();
 	bool lex_conf_bool();
 	std::string lex_conf_string();
-
 	size_t tok_len () const;
 
 public:
-	Scanner(Input &, OutputFile &, Opt &);
+	enum ParseMode {Stop, Parse, Reuse, Rules};
+
+	Scanner(Input&, Warn &w);
 	~Scanner();
-
-	enum ParseMode {
-		Stop,
-		Parse,
-		Reuse,
-		Rules
-	};
-
-	ParseMode echo();
-	int scan();
+	ParseMode echo(OutputFile &out);
+	int scan(const conopt_t *globopts);
+	void lex_conf(Opt &opts);
 	uint32_t get_cline() const;
 	uint32_t get_column() const;
 	const std::string & get_fname () const;

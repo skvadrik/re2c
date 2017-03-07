@@ -13,7 +13,7 @@ static inline bool next (char * & arg, char ** & argv)
 	return arg != NULL;
 }
 
-parse_opts_t parse_opts (char **argv, Opt &opts, Warn &warn)
+parse_opts_t parse_opts(char **argv, conopt_t &globopts, Opt &opts, Warn &warn)
 {
 #define YYCTYPE unsigned char
 	char * YYCURSOR;
@@ -97,18 +97,20 @@ opt_short:
 	[?h] { usage ();   return EXIT_OK; }
 	"v"  { version (); return EXIT_OK; }
 	"V"  { vernum ();  return EXIT_OK; }
-	"b" { opts.set_bFlag (true);             goto opt_short; }
-	"c" { opts.set_cFlag (true);             goto opt_short; }
-	"d" { opts.set_dFlag (true);             goto opt_short; }
-	"D" { opts.set_target (TARGET_DOT);      goto opt_short; }
-	"f" { opts.set_fFlag (true);             goto opt_short; }
-	"F" { opts.set_FFlag (true);             goto opt_short; }
-	"g" { opts.set_gFlag (true);             goto opt_short; }
-	"i" { opts.set_iFlag (true);             goto opt_short; }
-	"r" { opts.set_rFlag (true);             goto opt_short; }
-	"s" { opts.set_sFlag (true);             goto opt_short; }
-	"S" { opts.set_target (TARGET_SKELETON); goto opt_short; }
-	"T" { opts.set_tags (true);              goto opt_short; }
+
+	"c" { globopts.cFlag = true;             goto opt_short; }
+	"D" { globopts.target = TARGET_DOT;      goto opt_short; }
+	"f" { globopts.fFlag = true;             goto opt_short; }
+	"F" { globopts.FFlag = true;             goto opt_short; }
+	"r" { globopts.rFlag = true;             goto opt_short; }
+	"S" { globopts.target = TARGET_SKELETON; goto opt_short; }
+
+	"b" { opts.set_bFlag(true);           goto opt_short; }
+	"d" { opts.set_dFlag(true);           goto opt_short; }
+	"g" { opts.set_gFlag(true);           goto opt_short; }
+	"i" { opts.set_iFlag(true);           goto opt_short; }
+	"s" { opts.set_sFlag(true);           goto opt_short; }
+	"T" { opts.set_tags(true);            goto opt_short; }
 	"e" { opts.set_encoding(Enc::EBCDIC); goto opt_short; }
 	"u" { opts.set_encoding(Enc::UTF32);  goto opt_short; }
 	"w" { opts.set_encoding(Enc::UCS2);   goto opt_short; }
@@ -131,30 +133,32 @@ opt_long:
 	"help"                  end { usage ();   return EXIT_OK; }
 	"version"               end { version (); return EXIT_OK; }
 	"vernum"                end { vernum ();  return EXIT_OK; }
+
+	"start-conditions"      end { globopts.cFlag = true;             goto opt; }
+	"emit-dot"              end { globopts.target = TARGET_DOT;      goto opt; }
+	"storable-state"        end { globopts.fFlag = true;             goto opt; }
+	"flex-syntax"           end { globopts.FFlag = true;             goto opt; }
+	"reusable"              end { globopts.rFlag = true;             goto opt; }
+	"no-generation-date"    end { globopts.bNoGenerationDate = true; goto opt; }
+	"no-version"            end { globopts.version = false;          goto opt; }
+	"skeleton"              end { globopts.target = TARGET_SKELETON; goto opt; }
+
 	"bit-vectors"           end { opts.set_bFlag (true);             goto opt; }
-	"start-conditions"      end { opts.set_cFlag (true);             goto opt; }
 	"debug-output"          end { opts.set_dFlag (true);             goto opt; }
-	"emit-dot"              end { opts.set_target (TARGET_DOT);      goto opt; }
-	"storable-state"        end { opts.set_fFlag (true);             goto opt; }
-	"flex-syntax"           end { opts.set_FFlag (true);             goto opt; }
 	"computed-gotos"        end { opts.set_gFlag (true);             goto opt; }
 	"no-debug-info"         end { opts.set_iFlag (true);             goto opt; }
-	"reusable"              end { opts.set_rFlag (true);             goto opt; }
 	"nested-ifs"            end { opts.set_sFlag (true);             goto opt; }
-	"no-generation-date"    end { opts.set_bNoGenerationDate (true); goto opt; }
-	"no-version"            end { opts.set_version (false);          goto opt; }
 	"case-insensitive"      end { opts.set_bCaseInsensitive (true);  goto opt; }
 	"case-inverted"         end { opts.set_bCaseInverted (true);     goto opt; }
-	"skeleton"              end { opts.set_target (TARGET_SKELETON); goto opt; }
 	"tags"                  end { opts.set_tags (true);              goto opt; }
-	"posix-captures"        end { opts.set_posix_captures (true);    goto opt; }
+	"posix-captures"        end { opts.set_posix_captures(true);     goto opt; }
 	"no-lookahead"          end { opts.set_lookahead(false);         goto opt; }
 	"eager-skip"            end { opts.set_eager_skip(true);         goto opt; }
-	"ecb"                   end { opts.set_encoding(Enc::EBCDIC); goto opt; }
-	"unicode"               end { opts.set_encoding(Enc::UTF32);  goto opt; }
-	"wide-chars"            end { opts.set_encoding(Enc::UCS2);   goto opt; }
-	"utf-16"                end { opts.set_encoding(Enc::UTF16);  goto opt; }
-	"utf-8"                 end { opts.set_encoding(Enc::UTF8);   goto opt; }
+	"ecb"                   end { opts.set_encoding(Enc::EBCDIC);    goto opt; }
+	"unicode"               end { opts.set_encoding(Enc::UTF32);     goto opt; }
+	"wide-chars"            end { opts.set_encoding(Enc::UCS2);      goto opt; }
+	"utf-16"                end { opts.set_encoding(Enc::UTF16);     goto opt; }
+	"utf-8"                 end { opts.set_encoding(Enc::UTF8);      goto opt; }
 	"output"                end { if (!next (YYCURSOR, argv)) { error_arg ("-o, --output"); return EXIT_FAIL; } goto opt_output; }
 	"type-header"           end { if (!next (YYCURSOR, argv)) { error_arg ("-t, --type-header"); return EXIT_FAIL; } goto opt_header; }
 	"encoding-policy"       end { goto opt_encoding_policy; }
@@ -163,12 +167,12 @@ opt_long:
 	"dfa-minimization"      end { goto opt_dfa_minimization; }
 	"single-pass"           end { goto opt; } // deprecated
 
-	"dump-nfa"              end { opts.set_dump_nfa(true);        goto opt; }
-	"dump-dfa-raw"          end { opts.set_dump_dfa_raw(true);    goto opt; }
-	"dump-dfa-det"          end { opts.set_dump_dfa_det(true);    goto opt; }
-	"dump-dfa-tagopt"       end { opts.set_dump_dfa_tagopt(true); goto opt; }
-	"dump-dfa-min"          end { opts.set_dump_dfa_min(true);    goto opt; }
-	"dump-adfa"             end { opts.set_dump_adfa(true);       goto opt; }
+	"dump-nfa"              end { globopts.dump_nfa = true;        goto opt; }
+	"dump-dfa-raw"          end { globopts.dump_dfa_raw = true;    goto opt; }
+	"dump-dfa-det"          end { globopts.dump_dfa_det = true;    goto opt; }
+	"dump-dfa-tagopt"       end { globopts.dump_dfa_tagopt = true; goto opt; }
+	"dump-dfa-min"          end { globopts.dump_dfa_min = true;    goto opt; }
+	"dump-adfa"             end { globopts.dump_adfa = true;       goto opt; }
 */
 
 opt_output:
@@ -178,7 +182,7 @@ opt_output:
 		error ("bad argument to option -o, --output: %s", *argv);
 		return EXIT_FAIL;
 	}
-	filename end { opts.set_output_file(*argv); goto opt; }
+	filename end { globopts.output_file = *argv; goto opt; }
 */
 
 opt_header:
@@ -188,7 +192,7 @@ opt_header:
 		error ("bad argument to option -t, --type-header: %s", *argv);
 		return EXIT_FAIL;
 	}
-	filename end { opts.set_header_file (*argv); goto opt; }
+	filename end { globopts.header_file = *argv; goto opt; }
 */
 
 opt_encoding_policy:
@@ -263,6 +267,7 @@ end:
 		error ("no source file");
 		return EXIT_FAIL;
 	}
+	globopts.fix();
 
 	return OK;
 

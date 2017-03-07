@@ -492,21 +492,13 @@ bool OutputFile::emit(const uniq_vector_t<std::string> &global_types,
 
 bool HeaderFile::emit(const opt_t *opts, const uniq_vector_t<std::string> &types)
 {
-	if (!opts->tFlag) {
-		return true;
-	}
+	const std::string &filename = opts->header_file;
+	if (filename.empty()) return true;
 
-	FILE *file = NULL;
-	std::string filename = opts->header_file;
-	if (filename.empty()) {
-		filename = "<stdout>.h";
-		file = stdout;
-	} else {
-		file = fopen(filename.c_str(), "wb");
-		if (!file) {
-			error("cannot open header file: %s", filename.c_str());
-			return false;
-		}
+	FILE *file = fopen(filename.c_str(), "wb");
+	if (!file) {
+		error("cannot open header file: %s", filename.c_str());
+		return false;
 	}
 
 	output_version_time(stream, opts->version, !opts->bNoGenerationDate);

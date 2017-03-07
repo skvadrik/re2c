@@ -56,7 +56,7 @@ lineinf = lineno (space+ dstring)? eol;
 	esc_simple = esc [abfnrtv\\];
 */
 
-Scanner::ParseMode Scanner::echo()
+Scanner::ParseMode Scanner::echo(OutputFile &out)
 {
 	if (eof && cur == eof) // Catch EOF
 	{
@@ -85,21 +85,21 @@ echo:
 
 	"/*!ignore:re2c" {
 		out.wraw(tok, ptr);
-		lex_end_of_comment();
+		lex_end_of_comment(out);
 		goto echo;
 	}
 
 	"/*!max:re2c" {
 		out.wraw(tok, ptr);
 		out.wdelay_yymaxfill();
-		lex_end_of_comment();
+		lex_end_of_comment(out);
 		goto echo;
 	}
 
 	"/*!getstate:re2c" {
 		out.wraw(tok, ptr);
 		out.wdelay_state_goto(0);
-		lex_end_of_comment();
+		lex_end_of_comment(out);
 		goto echo;
 	}
 
@@ -108,13 +108,13 @@ echo:
 		out.wdelay_line_info();
 		out.wdelay_types();
 		out.wline_info(cline, get_fname().c_str());
-		lex_end_of_comment();
+		lex_end_of_comment(out);
 		goto echo;
 	}
 
 	"/*!tags:re2c" {
 		out.wraw(tok, ptr);
-		lex_tags();
+		lex_tags(out);
 		goto echo;
 	}
 
@@ -139,7 +139,7 @@ echo:
 */
 }
 
-void Scanner::lex_end_of_comment()
+void Scanner::lex_end_of_comment(OutputFile &out)
 {
 	uint32_t ignored = 0;
 	for (;;) {/*!re2c
@@ -158,7 +158,7 @@ void Scanner::lex_end_of_comment()
 	*/}
 }
 
-void Scanner::lex_tags()
+void Scanner::lex_tags(OutputFile &out)
 {
 	std::string fmt, sep;
 	for (;;) {/*!re2c
@@ -177,7 +177,7 @@ void Scanner::lex_tags()
 	*/}
 }
 
-int Scanner::scan()
+int Scanner::scan(const conopt_t *globopts)
 {
 	uint32_t depth, code_line;
 scan:
@@ -264,18 +264,18 @@ scan:
 				}
 
 	"{" name "}"	{
-					if (!opts->FFlag) {
+					if (!globopts->FFlag) {
 						fatal("curly braces for names only allowed with -F switch");
 					}
 					yylval.str = new std::string (tok + 1, tok_len () - 2); // -2 to omit braces
 					return TOKEN_ID;
 				}
 
-	"re2c:" { lex_conf (); return TOKEN_CONF; }
+	"re2c:" { return TOKEN_CONF; }
 
 	name / (space+ [^=>,])	{
 					yylval.str = new std::string (tok, tok_len ());
-					if (opts->FFlag)
+					if (globopts->FFlag)
 					{
 						lexer_state = LEX_FLEX_NAME;
 						return TOKEN_FID;
@@ -292,7 +292,7 @@ scan:
 				}
 
 	name / [^]	{
-					if (!opts->FFlag) {
+					if (!globopts->FFlag) {
 						yylval.str = new std::string (tok, tok_len());
 						return TOKEN_ID;
 					} else {

@@ -35,13 +35,8 @@ ScannerState::ScannerState ()
 	, lexer_state (LEX_NORMAL)
 {}
 
-Scanner::Scanner (Input & i, OutputFile & o, Opt &p)
-	: ScannerState ()
-	, in (i)
-	, out (o)
-	, opts (p)
-	, warn (o.warn)
-{}
+Scanner::Scanner(Input &i, Warn &w)
+	: ScannerState(), in(i), warn(w) {}
 
 void Scanner::fill (uint32_t need)
 {

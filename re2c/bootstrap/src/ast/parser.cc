@@ -1447,7 +1447,13 @@ yyreduce:
   YY_REDUCE_PRINT (yyn);
   switch (yyn)
     {
-        case 7:
+        case 3:
+
+    { context.input.lex_conf(context.opts); }
+
+    break;
+
+  case 7:
 
     {
 		if (!context.symtab.insert(std::make_pair(*(yyvsp[-2].str), (yyvsp[-1].regexp))).second) {
@@ -1963,7 +1969,7 @@ void yyerror(context_t &context, const char* s)
 
 int yylex(context_t &context)
 {
-	return context.input.scan();
+	return context.input.scan(&context.opts.glob);
 }
 
 } // extern "C"
@@ -1971,27 +1977,27 @@ int yylex(context_t &context)
 namespace re2c
 {
 
-void parse(Scanner &input, Output &output)
+void parse(Scanner &input, Output &output, Opt &opts)
 {
 	specs_t rspecs;
 	symtab_t symtab;
-	Opt &opts = input.opts;
+	const conopt_t *globopts = &opts.glob;
 	const opt_t *ropts = NULL;
 	OutputFile &o = output.source;
 
 	o.new_block(opts);
 	o.wversion_time().wline_info(input.get_cline(), input.get_fname().c_str());
-	if (opts->target == TARGET_SKELETON) {
+	if (globopts->target == TARGET_SKELETON) {
 		emit_prolog(o);
 	}
 
-	for (Scanner::ParseMode mode; (mode = input.echo()) != Scanner::Stop;) {
+	for (Scanner::ParseMode mode; (mode = input.echo(o)) != Scanner::Stop;) {
 
-		check_mode(mode, opts->rFlag, ropts, input);
+		check_mode(mode, globopts->rFlag, ropts, input);
 
 		// parse next re2c block
 		specs_t specs;
-		context_t context = {input, specs, symtab};
+		context_t context = {input, specs, symtab, opts};
 		if (mode == Scanner::Reuse) {
 			specs = rspecs;
 			opts.restore(ropts);
@@ -2012,7 +2018,7 @@ void parse(Scanner &input, Output &output)
 			ropts = o.block().opts;
 		} else {
 			// validate and normalize AST
-			check_specs(specs, opts->cFlag);
+			check_specs(specs, globopts->cFlag);
 			prepare_specs(specs);
 
 			// compile AST to DFA
@@ -2024,7 +2030,7 @@ void parse(Scanner &input, Output &output)
 
 			// compile DFA to code
 			bool prolog = false;
-			uint32_t ind = opts->topIndent;
+			uint32_t ind = o.block().opts->topIndent;
 			for (dfas_t::const_iterator i = dfas.begin(); i != dfas.end(); ++i) {
 				(*i)->emit(output, ind, (i + 1) == dfas.end(), prolog);
 			}
@@ -2033,7 +2039,7 @@ void parse(Scanner &input, Output &output)
 		o.wline_info (input.get_cline (), input.get_fname ().c_str ());
 	}
 
-	if (opts->target == TARGET_SKELETON) {
+	if (globopts->target == TARGET_SKELETON) {
 		emit_epilog (o, output.skeletons);
 	}
 

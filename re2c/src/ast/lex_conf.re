@@ -34,7 +34,7 @@ namespace re2c
 	number = "0" | ("-"? [1-9] [0-9]*);
 */
 
-void Scanner::lex_conf ()
+void Scanner::lex_conf(Opt &opts)
 {
 	tok = cur;
 /*!re2c
@@ -50,16 +50,16 @@ void Scanner::lex_conf ()
 	"flags:no-lookahead"                 { opts.set_lookahead(!lex_conf_bool());         return; }
 	"flags:eager-skip"                   { opts.set_eager_skip(lex_conf_bool());         return; }
 
-	"flags:" ("e" | "ecb")        { lex_conf_enc(Enc::EBCDIC); return; }
-	"flags:" ("u" | "unicode")    { lex_conf_enc(Enc::UTF32);  return; }
-	"flags:" ("w" | "wide-chars") { lex_conf_enc(Enc::UCS2);   return; }
-	"flags:" ("x" | "utf-16")     { lex_conf_enc(Enc::UTF16);  return; }
-	"flags:" ("8" | "utf-8")      { lex_conf_enc(Enc::UTF8);   return; }
+	"flags:" ("e" | "ecb")        { lex_conf_enc(Enc::EBCDIC, opts); return; }
+	"flags:" ("u" | "unicode")    { lex_conf_enc(Enc::UTF32, opts);  return; }
+	"flags:" ("w" | "wide-chars") { lex_conf_enc(Enc::UCS2, opts);   return; }
+	"flags:" ("x" | "utf-16")     { lex_conf_enc(Enc::UTF16, opts);  return; }
+	"flags:" ("8" | "utf-8")      { lex_conf_enc(Enc::UTF8, opts);   return; }
 
-	"flags:encoding-policy"  { lex_conf_encoding_policy();  return; }
-	"flags:input"            { lex_conf_input();            return; }
-	"flags:empty-class"      { lex_conf_empty_class();      return; }
-	"flags:dfa-minimization" { lex_conf_dfa_minimization(); return; }
+	"flags:encoding-policy"  { lex_conf_encoding_policy(opts);  return; }
+	"flags:input"            { lex_conf_input(opts);            return; }
+	"flags:empty-class"      { lex_conf_empty_class(opts);      return; }
+	"flags:dfa-minimization" { lex_conf_dfa_minimization(opts); return; }
 
 	"define:YYCONDTYPE"           { opts.set_yycondtype       (lex_conf_string ()); return; }
 	"define:YYGETCONDITION"       { opts.set_cond_get         (lex_conf_string ()); return; }
@@ -163,7 +163,7 @@ void Scanner::lex_conf ()
 */
 }
 
-void Scanner::lex_conf_encoding_policy()
+void Scanner::lex_conf_encoding_policy(Opt &opts)
 {
 	lex_conf_assign ();
 /*!re2c
@@ -177,7 +177,7 @@ end:
 	lex_conf_semicolon();
 }
 
-void Scanner::lex_conf_input()
+void Scanner::lex_conf_input(Opt &opts)
 {
 	lex_conf_assign ();
 /*!re2c
@@ -190,7 +190,7 @@ end:
 	lex_conf_semicolon();
 }
 
-void Scanner::lex_conf_empty_class()
+void Scanner::lex_conf_empty_class(Opt &opts)
 {
 	lex_conf_assign ();
 /*!re2c
@@ -204,7 +204,7 @@ end:
 	lex_conf_semicolon();
 }
 
-void Scanner::lex_conf_dfa_minimization()
+void Scanner::lex_conf_dfa_minimization(Opt &opts)
 {
 	lex_conf_assign ();
 /*!re2c
@@ -217,7 +217,7 @@ end:
 	lex_conf_semicolon();
 }
 
-void Scanner::lex_conf_enc(Enc::type_t enc)
+void Scanner::lex_conf_enc(Enc::type_t enc, Opt &opts)
 {
 	if (lex_conf_bool()) {
 		opts.set_encoding(enc);
