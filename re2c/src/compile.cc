@@ -57,7 +57,7 @@ smart_ptr<DFA> compile(const spec_t &spec, Output &output)
 	// but prior to any other DFA transformations
 	Skeleton skeleton(dfa, opts, defrule, name, cond, line);
 	warn_undefined_control_flow(skeleton, warn);
-	if (opts->target == opt_t::SKELETON) {
+	if (opts->target == TARGET_SKELETON) {
 		emit_data(skeleton);
 	}
 

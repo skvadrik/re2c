@@ -163,7 +163,7 @@ void emit_rule(OutputFile &o, uint32_t ind, const DFA &dfa, size_t rule_idx)
 
 	gen_fintags(o, ind, dfa, rule);
 
-	if (opts->target == opt_t::SKELETON) {
+	if (opts->target == TARGET_SKELETON) {
 		emit_action(o, ind, dfa, rule_idx);
 	} else {
 		if (!cond.empty() && dfa.cond != cond) {

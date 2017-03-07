@@ -161,7 +161,7 @@ void DFA::emit(Output & output, uint32_t& ind, bool isLastCond, bool& bPrologBra
 
 	head->action.set_initial(initial_label);
 
-	if (opts->target == opt_t::SKELETON) {
+	if (opts->target == TARGET_SKELETON) {
 		if (output.skeletons.insert (name).second)
 		{
 			emit_start(o, max_fill, name, key_size, def_rule, need_backup,
@@ -170,7 +170,7 @@ void DFA::emit(Output & output, uint32_t& ind, bool isLastCond, bool& bPrologBra
 			emit_body (o, i, used_labels, initial_label);
 			emit_end(o, name, need_backup, oldstyle_ctxmarker);
 		}
-	} else if (opts->target == opt_t::DOT) {
+	} else if (opts->target == TARGET_DOT) {
 		emit_dot(o, isLastCond);
 	} else {
 		// Generate prolog

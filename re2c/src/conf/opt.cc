@@ -36,7 +36,7 @@ void opt_t::fix ()
 	// with current target: reset them to default
 	switch (target)
 	{
-		case DOT:
+		case TARGET_DOT:
 			// default code generation options
 			sFlag = Opt::baseopt.sFlag;
 			bFlag = Opt::baseopt.bFlag;
@@ -45,7 +45,7 @@ void opt_t::fix ()
 			// default environment-insensitive formatting
 			yybmHexTable = Opt::baseopt.yybmHexTable;
 			// fallthrough
-		case SKELETON:
+		case TARGET_SKELETON:
 			// default line information
 			iFlag = Opt::baseopt.iFlag;
 			// default environment-sensitive formatting
@@ -216,10 +216,10 @@ void opt_t::fix ()
 	// force individual options
 	switch (target)
 	{
-		case DOT:
+		case TARGET_DOT:
 			iFlag = true;
 			break;
-		case SKELETON:
+		case TARGET_SKELETON:
 			iFlag = true;
 			input_api = INPUT_CUSTOM;
 			indString = "    ";

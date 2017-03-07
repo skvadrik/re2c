@@ -1981,7 +1981,7 @@ void parse(Scanner &input, Output &output)
 
 	o.new_block(opts);
 	o.wversion_time().wline_info(input.get_cline(), input.get_fname().c_str());
-	if (opts->target == opt_t::SKELETON) {
+	if (opts->target == TARGET_SKELETON) {
 		emit_prolog(o);
 	}
 
@@ -2033,7 +2033,7 @@ void parse(Scanner &input, Output &output)
 		o.wline_info (input.get_cline (), input.get_fname ().c_str ());
 	}
 
-	if (opts->target == opt_t::SKELETON) {
+	if (opts->target == TARGET_SKELETON) {
 		emit_epilog (o, output.skeletons);
 	}
 

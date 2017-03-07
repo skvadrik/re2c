@@ -88,7 +88,7 @@ std::ostream & OutputFile::stream ()
 
 OutputFile &OutputFile::wraw(const char *s, const char *e)
 {
-	if (block().opts->target == opt_t::CODE) {
+	if (block().opts->target == TARGET_CODE) {
 		insert_code();
 		stream().write(s, static_cast<std::streamsize>(e - s));
 	}
@@ -107,7 +107,7 @@ OutputFile & OutputFile::wc_hex (uint32_t n)
 	insert_code();
 	const opt_t *opts = block().opts;
 	const Enc &e = opts->encoding;
-	prtChOrHex(stream(), n, e.szCodeUnit(), e.type() == Enc::EBCDIC, opts->target == opt_t::DOT);
+	prtChOrHex(stream(), n, e.szCodeUnit(), e.type() == Enc::EBCDIC, opts->target == TARGET_DOT);
 	return *this;
 }
 
@@ -116,7 +116,7 @@ OutputFile & OutputFile::wrange (uint32_t l, uint32_t u)
 	insert_code();
 	const opt_t *opts = block().opts;
 	const Enc &e = opts->encoding;
-	printSpan(stream(), l, u, e.szCodeUnit(), e.type() == Enc::EBCDIC, opts->target == opt_t::DOT);
+	printSpan(stream(), l, u, e.szCodeUnit(), e.type() == Enc::EBCDIC, opts->target == TARGET_DOT);
 	return *this;
 }
 
@@ -211,7 +211,7 @@ void OutputFile::insert_code ()
 
 OutputFile &OutputFile::wdelay_tags(const ConfTags *cf)
 {
-	if (block().opts->target == opt_t::CODE) {
+	if (block().opts->target == TARGET_CODE) {
 		OutputFragment *frag = new OutputFragment(OutputFragment::TAGS, 0);
 		frag->tags = cf;
 		blocks.back()->fragments.push_back(frag);
@@ -244,7 +244,7 @@ OutputFile & OutputFile::wdelay_cond_table(uint32_t ind)
 
 OutputFile & OutputFile::wdelay_state_goto (uint32_t ind)
 {
-	if (block().opts->target == opt_t::CODE
+	if (block().opts->target == TARGET_CODE
 		&& block().opts->fFlag && !state_goto) {
 		block().fragments.push_back (new OutputFragment (OutputFragment::STATE_GOTO, ind));
 		state_goto = true;
@@ -254,7 +254,7 @@ OutputFile & OutputFile::wdelay_state_goto (uint32_t ind)
 
 OutputFile & OutputFile::wdelay_types ()
 {
-	if (block().opts->target == opt_t::CODE) {
+	if (block().opts->target == TARGET_CODE) {
 		warn_condition_order = false; // see note [condition order]
 		block().fragments.push_back (new OutputFragment (OutputFragment::TYPES, 0));
 	}
@@ -269,7 +269,7 @@ OutputFile & OutputFile::wdelay_yyaccept_init (uint32_t ind)
 
 OutputFile & OutputFile::wdelay_yymaxfill ()
 {
-	if (block().opts->target == opt_t::CODE) {
+	if (block().opts->target == TARGET_CODE) {
 		block().fragments.push_back (new OutputFragment (OutputFragment::YYMAXFILL, 0));
 	}
 	return *this;
@@ -694,7 +694,7 @@ void output_cond_goto(std::ostream &o, uint32_t ind,
 	const size_t ncond = conds.size();
 	const std::string indstr = indent(ind, opts->indString);
 
-	if (opts->target == opt_t::DOT) {
+	if (opts->target == TARGET_DOT) {
 		for (size_t i = 0; i < ncond; ++i) {
 			const std::string &cond = conds[i];
 			o << "0 -> " << cond << " [label=\"state=" << cond << "\"]\n";

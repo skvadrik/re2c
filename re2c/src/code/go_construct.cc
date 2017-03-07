@@ -263,7 +263,7 @@ void Go::init(const State *from, const opt_t *opts, bitmaps_t &bitmaps)
 
 	const uint32_t dSpans = nSpans - hSpans - nBitmaps;
 	const bool part_skip = opts->eager_skip && !skip;
-	if (opts->target == opt_t::DOT)
+	if (opts->target == TARGET_DOT)
 	{
 		type = DOT;
 		info.dot = new Dot (span, nSpans, from);

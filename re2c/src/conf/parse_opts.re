@@ -100,14 +100,14 @@ opt_short:
 	"b" { opts.set_bFlag (true);             goto opt_short; }
 	"c" { opts.set_cFlag (true);             goto opt_short; }
 	"d" { opts.set_dFlag (true);             goto opt_short; }
-	"D" { opts.set_target (opt_t::DOT);      goto opt_short; }
+	"D" { opts.set_target (TARGET_DOT);      goto opt_short; }
 	"f" { opts.set_fFlag (true);             goto opt_short; }
 	"F" { opts.set_FFlag (true);             goto opt_short; }
 	"g" { opts.set_gFlag (true);             goto opt_short; }
 	"i" { opts.set_iFlag (true);             goto opt_short; }
 	"r" { opts.set_rFlag (true);             goto opt_short; }
 	"s" { opts.set_sFlag (true);             goto opt_short; }
-	"S" { opts.set_target (opt_t::SKELETON); goto opt_short; }
+	"S" { opts.set_target (TARGET_SKELETON); goto opt_short; }
 	"T" { opts.set_tags (true);              goto opt_short; }
 	"e" { opts.set_encoding(Enc::EBCDIC); goto opt_short; }
 	"u" { opts.set_encoding(Enc::UTF32);  goto opt_short; }
@@ -134,7 +134,7 @@ opt_long:
 	"bit-vectors"           end { opts.set_bFlag (true);             goto opt; }
 	"start-conditions"      end { opts.set_cFlag (true);             goto opt; }
 	"debug-output"          end { opts.set_dFlag (true);             goto opt; }
-	"emit-dot"              end { opts.set_target (opt_t::DOT);      goto opt; }
+	"emit-dot"              end { opts.set_target (TARGET_DOT);      goto opt; }
 	"storable-state"        end { opts.set_fFlag (true);             goto opt; }
 	"flex-syntax"           end { opts.set_FFlag (true);             goto opt; }
 	"computed-gotos"        end { opts.set_gFlag (true);             goto opt; }
@@ -145,7 +145,7 @@ opt_long:
 	"no-version"            end { opts.set_version (false);          goto opt; }
 	"case-insensitive"      end { opts.set_bCaseInsensitive (true);  goto opt; }
 	"case-inverted"         end { opts.set_bCaseInverted (true);     goto opt; }
-	"skeleton"              end { opts.set_target (opt_t::SKELETON); goto opt; }
+	"skeleton"              end { opts.set_target (TARGET_SKELETON); goto opt; }
 	"tags"                  end { opts.set_tags (true);              goto opt; }
 	"posix-captures"        end { opts.set_posix_captures (true);    goto opt; }
 	"no-lookahead"          end { opts.set_lookahead(false);         goto opt; }

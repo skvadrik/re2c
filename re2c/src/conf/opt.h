@@ -15,9 +15,16 @@
 namespace re2c
 {
 
+enum target_t
+{
+	TARGET_CODE,
+	TARGET_DOT,
+	TARGET_SKELETON
+};
+
 #define RE2C_OPTS \
 	/* target */ \
-	OPT1 (opt_t::target_t, target, CODE) \
+	OPT1 (target_t, target, TARGET_CODE) \
 	/* output file */ \
 	OPT (std::string, output_file, "") \
 	/* fingerprint */ \
@@ -129,13 +136,6 @@ namespace re2c
 
 struct opt_t
 {
-	enum target_t
-	{
-		CODE,
-		DOT,
-		SKELETON
-	};
-
 #define OPT1 OPT
 #define OPT(type, name, value) type name;
 	RE2C_OPTS

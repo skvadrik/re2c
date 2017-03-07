@@ -39,8 +39,8 @@ void Scanner::lex_conf ()
 /*!re2c
 	* { fatal(get_column() - tchar, "unrecognized configuration"); }
 
-	"flags:" ("D" | "emit-dot") { opts.set_target(opt_t::DOT);      lex_conf_semicolon(); return; }
-	"flags:" ("S" | "skeleton") { opts.set_target(opt_t::SKELETON); lex_conf_semicolon(); return; }
+	"flags:" ("D" | "emit-dot") { opts.set_target(TARGET_DOT);      lex_conf_semicolon(); return; }
+	"flags:" ("S" | "skeleton") { opts.set_target(TARGET_SKELETON); lex_conf_semicolon(); return; }
 
 	"flags:" ("b" | "bit-vectors")       { opts.set_bFlag(lex_conf_bool());              return; }
 	"flags:" ("c" | "start-conditions")  { opts.set_cFlag(lex_conf_bool());              return; }
