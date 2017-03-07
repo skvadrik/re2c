@@ -2,6 +2,7 @@
 #include <string>
 
 #include "src/code/output.h"
+#include "src/conf/msg.h"
 #include "src/re/encoding/enc.h"
 #include "src/ast/scanner.h"
 #include "src/util/s_to_n32_unsafe.h"
@@ -37,24 +38,13 @@ void Scanner::lex_conf ()
 {
 	tok = cur;
 /*!re2c
-	* { fatal(get_column() - tchar, "unrecognized configuration"); }
-
-	"flags:" ("D" | "emit-dot") { opts.set_target(TARGET_DOT);      lex_conf_semicolon(); return; }
-	"flags:" ("S" | "skeleton") { opts.set_target(TARGET_SKELETON); lex_conf_semicolon(); return; }
-
 	"flags:" ("b" | "bit-vectors")       { opts.set_bFlag(lex_conf_bool());              return; }
-	"flags:" ("c" | "start-conditions")  { opts.set_cFlag(lex_conf_bool());              return; }
 	"flags:" ("d" | "debug-output")      { opts.set_dFlag(lex_conf_bool());              return; }
-	"flags:" ("f" | "storable-state")    { opts.set_fFlag(lex_conf_bool());              return; }
-	"flags:" ("F" | "flex-syntax")       { opts.set_FFlag(lex_conf_bool());              return; }
 	"flags:" ("g" | "computed-gotos")    { opts.set_gFlag(lex_conf_bool());              return; }
 	"flags:" ("i" | "no-debug-info")     { opts.set_iFlag(lex_conf_bool());              return; }
-	"flags:" ("r" | "reusable")          { opts.set_rFlag(lex_conf_bool());              return; }
 	"flags:" ("s" | "nested-ifs")        { opts.set_sFlag(lex_conf_bool());              return; }
 	"flags:" ("T" | "tags")              { opts.set_tags(lex_conf_bool());               return; }
 	"flags:" ("posix-captures")          { opts.set_posix_captures(lex_conf_bool());     return; }
-	"flags:no-generation-date"           { opts.set_bNoGenerationDate(lex_conf_bool());  return; }
-	"flags:no-version"                   { opts.set_version(!lex_conf_bool());           return; }
 	"flags:case-insensitive"             { opts.set_bCaseInsensitive(lex_conf_bool());   return; }
 	"flags:case-inverted"                { opts.set_bCaseInverted(lex_conf_bool());      return; }
 	"flags:no-lookahead"                 { opts.set_lookahead(!lex_conf_bool());         return; }
@@ -65,9 +55,6 @@ void Scanner::lex_conf ()
 	"flags:" ("w" | "wide-chars") { lex_conf_enc(Enc::UCS2);   return; }
 	"flags:" ("x" | "utf-16")     { lex_conf_enc(Enc::UTF16);  return; }
 	"flags:" ("8" | "utf-8")      { lex_conf_enc(Enc::UTF8);   return; }
-
-	"flags:" ("o" | "output")      { opts.set_output_file(lex_conf_string()); return; }
-	"flags:" ("t" | "type-header") { opts.set_header_file(lex_conf_string()); return; }
 
 	"flags:encoding-policy"  { lex_conf_encoding_policy();  return; }
 	"flags:input"            { lex_conf_input();            return; }
@@ -167,6 +154,12 @@ void Scanner::lex_conf ()
 
 	// deprecated
 	"variable:yystable" { lex_conf_string (); return; }
+
+	[a-zA-Z0-9_:-]* {
+		fatal_error(cline, get_column(),
+			"unrecognized configuration '%.*s'",
+			static_cast<int>(cur - tok), tok);
+	}
 */
 }
 
