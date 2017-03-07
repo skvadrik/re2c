@@ -1,7 +1,7 @@
 /*!re2c
     re2c:flags:posix-captures = 1;
 
-    <<<<REGEXP>>>>
+    (y[y]?){3}
     {}
     "" {}
 */

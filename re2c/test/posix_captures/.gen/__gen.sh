@@ -12,7 +12,7 @@ for f in ../.dat/*.dat; do
         [ "$1" == SAME ] && continue
 
         i=$((i + 1))
-        x=`printf '%02d' $i`.i.re
+        x=`printf '%02d' $i`.i--flex-syntax.re
         regexp=`printf "%s" "$1" | sed \
             -e 's/\[^/[^\\\\x00/g' \
             -e 's/\./[^\\\\x00]/g' \
