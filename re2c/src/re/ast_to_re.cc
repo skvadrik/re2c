@@ -91,11 +91,18 @@ static RE *ast_to_re(RESpec &spec, const AST *ast, size_t &ncap)
 			return re_cat(alc, x, y);
 		}
 		case AST::TAG: {
+			if (ast->tag && !opts->tags) {
+				fatal_error(ast->line, ast->column,
+					"tags are only allowed with '-T, --tags' option");
+			}
 			RE *t = re_tag(alc, tags.size(), false);
 			tags.push_back(Tag(ast->tag));
 			return t;
 		}
 		case AST::CAP: {
+			if (!opts->posix_captures) {
+				return ast_to_re(spec, ast->cap, ncap);
+			}
 			const AST *x = ast->cap;
 			if (x->type == AST::REF) x = x->ref.ast;
 
@@ -109,6 +116,9 @@ static RE *ast_to_re(RESpec &spec, const AST *ast, size_t &ncap)
 			return re_cat(alc, t1, re_cat(alc, ast_to_re(spec, x, ncap), t2));
 		}
 		case AST::REF:
+			if (!opts->posix_captures) {
+				return ast_to_re(spec, ast->ref.ast, ncap);
+			}
 			error("implicit grouping is forbidden with '--posix-captures'"
 				" option, please wrap '%s' in capturing parenthesis",
 				ast->ref.name->c_str());
@@ -121,7 +131,7 @@ static RE *ast_to_re(RESpec &spec, const AST *ast, size_t &ncap)
 			const AST *x = ast->iter.ast;
 
 			RE *t1 = NULL, *t2 = NULL, *t3 = NULL;
-			if (x->type == AST::CAP) {
+			if (opts->posix_captures && x->type == AST::CAP) {
 				x = x->cap;
 				if (x->type == AST::REF) x = x->ref.ast;
 

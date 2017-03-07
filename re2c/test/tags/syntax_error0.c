@@ -1,1 +1,1 @@
-re2c: error: line 2, column 13: tags are only allowed with '-T, --tags' option
+re2c: error: line 3, column 8: tags are only allowed with '-T, --tags' option

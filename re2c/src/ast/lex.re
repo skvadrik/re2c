@@ -221,9 +221,6 @@ scan:
 	"[^" { yylval.regexp = lex_cls(true);  return TOKEN_REGEXP; }
 
 	"@" name {
-		if (!opts->tags) {
-			fatal("tags are only allowed with '-T, --tags' option");
-		}
 		const std::string *name = new std::string(tok + 1, tok_len() - 1);
 		yylval.regexp = ast_tag(cline, get_column(), name);
 		return TOKEN_REGEXP;

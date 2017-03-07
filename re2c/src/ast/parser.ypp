@@ -211,7 +211,7 @@ static spec_t &find(specs_t &specs, const std::string &name)
 %type <op>      close closes
 %type <bounds>  TOKEN_CLOSESIZE
 %type <code>    TOKEN_CODE ccode
-%type <regexp>  TOKEN_REGEXP trailexpr capexpr rule expr diff term factor primary
+%type <regexp>  TOKEN_REGEXP trailexpr rule expr diff term factor primary
 %type <str>     TOKEN_ID TOKEN_FID name
 %type <clist>   conds clist
 
@@ -318,17 +318,11 @@ conds
 	};
 
 trailexpr
-	: capexpr
-	| capexpr '/' expr {
-		$$ = ast_cat($1, ast_cat(ast_tag(context.input.get_cline(), 0, NULL), $3));
-	};
-
-capexpr
 	: expr {
-		if (context.input.opts->posix_captures) {
-			$1 = ast_cap($1);
-		}
-		$$ = $1;
+		$$ = ast_cap($1);
+	} | expr '/' expr {
+		$$ = ast_cat(ast_cap($1),
+			ast_cat(ast_tag(context.input.get_cline(), 0, NULL), $3));
 	};
 
 expr:
@@ -395,15 +389,12 @@ primary
 			context.input.fatal("can't find symbol");
 		}
 		$$ = i->second;
-		if (context.input.opts->posix_captures && ast_need_wrap($$)) {
+		if (ast_need_wrap($$)) {
 			$$ = ast_ref($$, *$1);
 		}
 		delete $1;
 	} | '(' expr ')' {
-		$$ = $2;
-		if (context.input.opts->posix_captures) {
-			$$ = ast_cap($$);
-		}
+		$$ = ast_cap($2);
 	};
 
 %%
