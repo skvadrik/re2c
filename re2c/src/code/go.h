@@ -6,7 +6,7 @@
 #include <vector>
 
 #include "src/code/output.h"
-#include "src/tcmd.h"
+#include "src/dfa/tcmd.h"
 #include "src/util/c99_stdint.h"
 #include "src/util/forbid_copy.h"
 

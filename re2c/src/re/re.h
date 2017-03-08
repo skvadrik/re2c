@@ -4,8 +4,8 @@
 #include "src/util/c99_stdint.h"
 
 #include "src/conf/opt.h"
-#include "src/rule.h"
 #include "src/ast/ast.h"
+#include "src/re/rule.h"
 #include "src/util/forbid_copy.h"
 #include "src/util/range.h"
 #include "src/util/slab_allocator.h"

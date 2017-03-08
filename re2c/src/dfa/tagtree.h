@@ -3,7 +3,7 @@
 
 #include <vector>
 
-#include "src/tag.h"
+#include "src/re/tag.h"
 #include "src/util/forbid_copy.h"
 
 namespace re2c

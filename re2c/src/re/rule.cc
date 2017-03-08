@@ -1,6 +1,6 @@
 #include <limits>
 
-#include "src/rule.h"
+#include "src/re/rule.h"
 
 namespace re2c
 {

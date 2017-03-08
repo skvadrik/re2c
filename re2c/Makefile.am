@@ -29,6 +29,7 @@ SRC_HDR = \
 	src/dfa/find_state.h \
 	src/dfa/tagpool.h \
 	src/dfa/tagtree.h \
+	src/dfa/tcmd.h \
 	src/nfa/nfa.h \
 	src/re/encoding/case.h \
 	src/re/encoding/enc.h \
@@ -41,10 +42,9 @@ SRC_HDR = \
 	src/re/encoding/utf16/utf16.h \
 	src/re/empty_class_policy.h \
 	src/re/re.h \
+	src/re/rule.h \
+	src/re/tag.h \
 	src/compile.h \
-	src/rule.h \
-	src/tag.h \
-	src/tcmd.h \
 	src/skeleton/path.h \
 	src/skeleton/skeleton.h \
 	src/ast/ast.h \
@@ -111,6 +111,7 @@ SRC = \
 	src/dfa/minimization.cc \
 	src/dfa/tagpool.cc \
 	src/dfa/tagtree.cc \
+	src/dfa/tcmd.cc \
 	src/re/encoding/enc.cc \
 	src/re/encoding/range_suffix.cc \
 	src/re/encoding/utf8/utf8_regexp.cc \
@@ -123,16 +124,15 @@ SRC = \
 	src/re/default_tags.cc \
 	src/re/fixed_tags.cc \
 	src/re/nullable.cc \
+	src/re/rule.cc \
 	src/re/split_charset.cc \
+	src/re/tag.cc \
 	src/compile.cc \
-	src/rule.cc \
 	src/skeleton/control_flow.cc \
 	src/skeleton/generate_code.cc \
 	src/skeleton/generate_data.cc \
 	src/skeleton/maxpath.cc \
 	src/skeleton/skeleton.cc \
-	src/tag.cc \
-	src/tcmd.cc \
 	src/main.cc \
 	src/ast/ast.cc \
 	src/ast/input.cc \

@@ -13,8 +13,8 @@
 
 #include "src/code/bitmap.h"
 #include "src/conf/opt.h"
-#include "src/rule.h"
-#include "src/tcmd.h"
+#include "src/dfa/tcmd.h"
+#include "src/re/rule.h"
 #include "src/util/local_increment.h"
 #include "src/util/forbid_copy.h"
 #include "src/util/wrap_iter.h"

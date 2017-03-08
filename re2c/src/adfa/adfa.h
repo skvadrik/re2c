@@ -11,8 +11,8 @@
 #include "src/code/go.h"
 #include "src/code/label.h"
 #include "src/adfa/action.h"
-#include "src/rule.h"
-#include "src/tag.h"
+#include "src/re/rule.h"
+#include "src/re/tag.h"
 #include "src/util/forbid_copy.h"
 
 namespace re2c

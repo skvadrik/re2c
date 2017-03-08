@@ -1,6 +1,6 @@
 #include <assert.h>
 
-#include "src/tcmd.h"
+#include "src/dfa/tcmd.h"
 #include "src/util/hash32.h"
 
 namespace re2c

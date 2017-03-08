@@ -1,5 +1,5 @@
-#ifndef _RE2C_TAG_
-#define _RE2C_TAG_
+#ifndef _RE2C_RE_TAG_
+#define _RE2C_RE_TAG_
 
 #include <limits>
 #include <string>
@@ -70,4 +70,4 @@ inline bool preorbit(const std::vector<Tag> &tags, size_t idx)
 
 } // namespace re2c
 
-#endif // _RE2C_TAG_
+#endif // _RE2C_RE_TAG_

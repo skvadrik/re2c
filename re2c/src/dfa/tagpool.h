@@ -1,7 +1,7 @@
 #ifndef _RE2C_DFA_TAGPOOL_
 #define _RE2C_DFA_TAGPOOL_
 
-#include "src/tag.h"
+#include "src/re/tag.h"
 #include "src/util/lookup.h"
 #include "src/util/forbid_copy.h"
 

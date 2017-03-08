@@ -1,11 +1,11 @@
-#ifndef _RE2C_RULE_
-#define _RE2C_RULE_
+#ifndef _RE2C_RE_RULE_
+#define _RE2C_RE_RULE_
 
 #include "src/util/c99_stdint.h"
 #include <set>
 #include <string>
 
-#include "src/tag.h"
+#include "src/re/tag.h"
 #include "src/util/free_list.h"
 #include "src/util/forbid_copy.h"
 
@@ -67,4 +67,4 @@ struct Rule
 
 } // namespace re2c
 
-#endif // _RE2C_RULE_
+#endif // _RE2C_RE_RULE_

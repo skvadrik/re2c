@@ -1,7 +1,7 @@
-#ifndef _RE2C_TCMD_
-#define _RE2C_TCMD_
+#ifndef _RE2C_DFA_TCMD_
+#define _RE2C_DFA_TCMD_
 
-#include "src/tag.h"
+#include "src/re/tag.h"
 #include "src/util/c99_stdint.h"
 #include "src/util/forbid_copy.h"
 #include "src/util/lookup.h"
@@ -75,4 +75,4 @@ public:
 
 } // namespace re2c
 
-#endif // _RE2C_TCMD_
+#endif // _RE2C_DFA_TCMD_

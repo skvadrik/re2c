@@ -1,6 +1,6 @@
 #include <limits>
 
-#include "src/tag.h"
+#include "src/re/tag.h"
 
 namespace re2c
 {

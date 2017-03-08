@@ -7,7 +7,7 @@
 #include <vector>
 
 #include "src/ast/scanner.h"
-#include "src/rule.h"
+#include "src/re/rule.h"
 #include "src/util/free_list.h"
 #include "src/util/range.h"
 
