@@ -1,12 +1,11 @@
 #include "src/util/c99_stdint.h"
 #include <string>
 
-#include "src/code/output.h"
+#include "src/compile.h"
 #include "src/conf/msg.h"
 #include "src/conf/opt.h"
 #include "src/conf/warn.h"
 #include "src/ast/input.h"
-#include "src/ast/parser.h"
 #include "src/ast/scanner.h"
 
 using namespace re2c;
@@ -31,7 +30,7 @@ int main(int, char *argv[])
 	Scanner scanner(input, warn);
 	Output output(warn);
 
-	parse(scanner, output, opts);
+	compile(scanner, output, opts);
 	if (!output.emit()) return 1;
 
 	return warn.error() ? 1 : 0;

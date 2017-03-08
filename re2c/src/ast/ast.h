@@ -2,9 +2,11 @@
 #define _RE2C_AST_AST_
 
 #include "src/util/c99_stdint.h"
+#include <map>
 #include <string>
 #include <vector>
 
+#include "src/ast/scanner.h"
 #include "src/rule.h"
 #include "src/util/free_list.h"
 #include "src/util/range.h"
@@ -95,6 +97,20 @@ struct ASTBounds
 	uint32_t max;
 };
 
+struct spec_t
+{
+	std::string name;
+	std::vector<ASTRule> rules;
+	std::vector<const Code*> defs;
+	std::vector<const Code*> setup;
+
+	explicit spec_t(const std::string &n):
+		name(n), rules(), defs(), setup() {}
+};
+
+typedef std::vector<spec_t> specs_t;
+typedef std::map<std::string, const AST*> symtab_t;
+
 const AST *ast_nil(uint32_t l, uint32_t c);
 const AST *ast_str(uint32_t l, uint32_t c, std::vector<ASTChar> *chars, bool icase);
 const AST *ast_cls(uint32_t l, uint32_t c, std::vector<ASTRange> *ranges, bool negated);
@@ -108,6 +124,10 @@ const AST *ast_tag(uint32_t l, uint32_t c, const std::string *t);
 const AST *ast_cap(const AST *r);
 const AST *ast_ref(const AST *r, const std::string &n);
 bool ast_need_wrap(const AST *ast);
+
+void validate_mode(Scanner::ParseMode mode, bool rflag, bool rules, Scanner &input);
+void validate_ast(const specs_t &specs, bool cflag);
+void normalize_ast(specs_t &specs);
 
 } // namespace re2c
 

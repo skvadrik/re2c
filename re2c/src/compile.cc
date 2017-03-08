@@ -3,14 +3,18 @@
 #include <set>
 
 #include "src/code/output.h"
+#include "src/conf/msg.h"
 #include "src/compile.h"
 #include "src/adfa/adfa.h"
 #include "src/adfa/dump.h"
+#include "src/ast/parser.h"
 #include "src/dfa/dfa.h"
 #include "src/dfa/dump.h"
 #include "src/nfa/nfa.h"
+#include "src/re/encoding/range_suffix.h"
 #include "src/skeleton/skeleton.h"
 #include "src/ast/ast.h"
+#include "src/util/smart_ptr.h"
 
 namespace re2c {
 
@@ -27,7 +31,7 @@ static std::string make_name(const std::string &cond, uint32_t line)
 	return name;
 }
 
-smart_ptr<DFA> compile(const spec_t &spec, Output &output)
+static smart_ptr<DFA> ast_to_dfa(const spec_t &spec, Output &output)
 {
 	const opt_t *opts = output.source.block().opts;
 	Warn &warn = output.source.warn;
@@ -98,6 +102,77 @@ smart_ptr<DFA> compile(const spec_t &spec, Output &output)
 	}
 
 	return make_smart_ptr(adfa);
+}
+
+void compile(Scanner &input, Output &output, Opt &opts)
+{
+	specs_t rspecs;
+	symtab_t symtab;
+	const conopt_t *globopts = &opts.glob;
+	const opt_t *ropts = NULL;
+	OutputFile &o = output.source;
+	typedef std::vector<smart_ptr<DFA> > dfas_t;
+
+	o.new_block(opts);
+	o.wversion_time().wline_info(input.get_cline(), input.get_fname().c_str());
+	if (globopts->target == TARGET_SKELETON) {
+		emit_prolog(o);
+	}
+
+	for (Scanner::ParseMode mode; (mode = input.echo(o)) != Scanner::Stop;) {
+
+		validate_mode(mode, globopts->rFlag, ropts, input);
+
+		// parse next re2c block
+		specs_t specs;
+		if (mode == Scanner::Reuse) {
+			specs = rspecs;
+			opts.restore(ropts);
+			opts.reset_mapCodeName();
+			o.label_counter.reset();
+			o.fill_index = 0;
+			o.state_goto = false;
+			o.cond_goto = false;
+		}
+		parse(input, specs, symtab, opts);
+
+		// start new output block with accumulated options
+		o.new_block(opts);
+
+		if (mode == Scanner::Rules) {
+			// save AST and options for future use
+			rspecs = specs;
+			ropts = o.block().opts;
+		} else {
+			validate_ast(specs, globopts->cFlag);
+			normalize_ast(specs);
+
+			// compile AST to DFA
+			o.block().line = input.get_cline();
+			dfas_t dfas;
+			for (specs_t::const_iterator i = specs.begin(); i != specs.end(); ++i) {
+				dfas.push_back(ast_to_dfa(*i, output));
+			}
+
+			// compile DFA to code
+			bool prolog = false;
+			uint32_t ind = o.block().opts->topIndent;
+			for (dfas_t::const_iterator i = dfas.begin(); i != dfas.end(); ++i) {
+				(*i)->emit(output, ind, (i + 1) == dfas.end(), prolog);
+			}
+		}
+
+		o.wline_info (input.get_cline (), input.get_fname ().c_str ());
+	}
+
+	if (globopts->target == TARGET_SKELETON) {
+		emit_epilog (o, output.skeletons);
+	}
+
+	AST::flist.clear();
+	Code::flist.clear();
+	Range::vFreeList.clear();
+	RangeSuffix::freeList.clear();
 }
 
 } // namespace re2c

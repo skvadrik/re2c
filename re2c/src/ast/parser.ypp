@@ -1,29 +1,6 @@
 %{
 
-#include "src/util/c99_stdint.h"
-#include <assert.h>
-#include <stddef.h>
-#include <stdlib.h>
-#include <limits>
-#include <list>
-#include <map>
-#include <set>
-#include <string>
-#include <utility>
-#include <vector>
-
-#include "src/conf/msg.h"
-#include "src/code/output.h"
-#include "src/compile.h"
-#include "src/adfa/adfa.h"
-#include "src/re/encoding/enc.h"
-#include "src/re/encoding/range_suffix.h"
-#include "src/skeleton/skeleton.h"
 #include "src/ast/parser.h"
-#include "src/ast/ast.h"
-#include "src/ast/scanner.h"
-#include "src/util/free_list.h"
-#include "src/util/range.h"
 
 #define YYMALLOC malloc
 #define YYFREE free
@@ -43,136 +20,6 @@ void yyerror(context_t &context, const char*);
 #if defined(__GNUC__)
 #define __attribute__(x)
 #endif
-
-static void check_mode(Scanner::ParseMode mode, bool rflag, bool rules, Scanner &input)
-{
-	if (mode == Scanner::Rules) {
-		if (!rflag) {
-			input.fatal("found 'rules:re2c' block without -r flag");
-		} else if (rules) {
-			input.fatal("cannot have a second 'rules:re2c' block");
-		}
-	} else if (mode == Scanner::Reuse) {
-		if (!rflag) {
-			input.fatal("found 'use:re2c' block without -r flag");
-		} else if (!rules) {
-			input.fatal("got 'use:re2c' without 'rules:re2c'");
-		}
-	} else if (rflag) {
-		input.fatal("found standard 're2c' block while using -r flag");
-	}
-}
-
-static void check_specs(const specs_t &specs, bool cflag)
-{
-	specs_t::const_iterator i,
-		b = specs.begin(),
-		e = specs.end();
-
-	for (i = b; i != e; ++i) {
-		if (i->defs.size() > 1) {
-			error("line %u: code to default rule %sis already defined at line %u",
-				i->defs[1]->fline, incond(i->name).c_str(), i->defs[0]->fline);
-			exit(1);
-		}
-	}
-
-	if (!cflag) {
-		for (i = b; i != e; ++i) {
-			if (i->name != "") {
-				error("line %u: conditions are only allowed"
-					" with '-c', '--conditions' option",
-					i->rules[0].code->fline);
-				exit(1);
-			}
-		}
-	} else {
-		for (i = b; i != e; ++i) {
-			if (i->name == "") {
-				error("line %u: non-conditional rules are not allowed"
-					" with '-c', '--conditions' option",
-					i->rules[0].code->fline);
-				exit(1);
-			}
-		}
-
-		for (i = b; i != e; ++i) {
-			if (i->setup.size() > 1) {
-				error("line %u: code to setup rule '%s' is already defined at line %u",
-					i->setup[1]->fline, i->name.c_str(), i->setup[0]->fline);
-				exit(1);
-			}
-		}
-
-		for (i = b; i != e; ++i) {
-			if (i->name != "*" && !i->setup.empty() && i->rules.empty()) {
-				error("line %u: setup for non existing condition '%s' found",
-					i->setup[0]->fline, i->name.c_str());
-				exit(1);
-			}
-		}
-
-		for (i = b; i != e && !i->setup.empty(); ++i);
-		if (i == e) {
-			for (i = b; i != e; ++i) {
-				if (i->name == "*") {
-					error("line %u: setup for all conditions '<!*>' is illegal "
-						"if setup for each condition is defined explicitly",
-						i->setup[0]->fline);
-					exit(1);
-				}
-			}
-		}
-
-		for (i = b; i != e; ++i) {
-			if (i->name == "0" && i->rules.size() > 1) {
-				error("line %u: startup code is already defined at line %u",
-					i->rules[1].code->fline, i->rules[0].code->fline);
-				exit(1);
-			}
-		}
-	}
-}
-
-static void prepare_specs(specs_t &specs)
-{
-	specs_t::iterator i, b = specs.begin(), e = specs.end();
-
-	// merge <*> rules and <!*> setup to all conditions except "0"
-	// star rules must have lower priority than normal rules
-	for (i = b; i != e && i->name != "*"; ++i);
-	if (i != e) {
-		const specs_t::iterator star = i;
-
-		for (i = b; i != e; ++i) {
-			if (i == star || i->name == "0") continue;
-
-			i->rules.insert(i->rules.end(), star->rules.begin(), star->rules.end());
-			i->defs.insert(i->defs.end(), star->defs.begin(), star->defs.end());
-			i->setup.insert(i->setup.end(), star->setup.begin(), star->setup.end());
-		}
-
-		specs.erase(star);
-		e = specs.end();
-	}
-
-	// merge default rule with the lowest priority
-	for (i = b; i != e; ++i) {
-		if (!i->defs.empty()) {
-			const Code *c = i->defs[0];
-			const AST *r = ast_default(c->fline, 0);
-			i->rules.push_back(ASTRule(r, c));
-		}
-	}
-
-	// "0" condition must be the first one
-	for (i = b; i != e && i->name != "0"; ++i);
-	if (i != e && i != b) {
-		const spec_t zero = *i;
-		specs.erase(i);
-		specs.insert(specs.begin(), zero);
-	}
-}
 
 static spec_t &find(specs_t &specs, const std::string &name)
 {
@@ -416,76 +263,10 @@ int yylex(context_t &context)
 namespace re2c
 {
 
-void parse(Scanner &input, Output &output, Opt &opts)
+void parse(Scanner &input, specs_t &specs, symtab_t &symtab, Opt &opts)
 {
-	specs_t rspecs;
-	symtab_t symtab;
-	const conopt_t *globopts = &opts.glob;
-	const opt_t *ropts = NULL;
-	OutputFile &o = output.source;
-
-	o.new_block(opts);
-	o.wversion_time().wline_info(input.get_cline(), input.get_fname().c_str());
-	if (globopts->target == TARGET_SKELETON) {
-		emit_prolog(o);
-	}
-
-	for (Scanner::ParseMode mode; (mode = input.echo(o)) != Scanner::Stop;) {
-
-		check_mode(mode, globopts->rFlag, ropts, input);
-
-		// parse next re2c block
-		specs_t specs;
-		context_t context = {input, specs, symtab, opts};
-		if (mode == Scanner::Reuse) {
-			specs = rspecs;
-			opts.restore(ropts);
-			opts.reset_mapCodeName();
-			o.label_counter.reset();
-			o.fill_index = 0;
-			o.state_goto = false;
-			o.cond_goto = false;
-		}
-		yyparse(context);
-
-		// start new output block with accumulated options
-		o.new_block(opts);
-
-		if (mode == Scanner::Rules) {
-			// save AST and options for future use
-			rspecs = specs;
-			ropts = o.block().opts;
-		} else {
-			// validate and normalize AST
-			check_specs(specs, globopts->cFlag);
-			prepare_specs(specs);
-
-			// compile AST to DFA
-			o.block().line = input.get_cline();
-			dfas_t dfas;
-			for (specs_t::const_iterator i = specs.begin(); i != specs.end(); ++i) {
-				dfas.push_back(compile(*i, output));
-			}
-
-			// compile DFA to code
-			bool prolog = false;
-			uint32_t ind = o.block().opts->topIndent;
-			for (dfas_t::const_iterator i = dfas.begin(); i != dfas.end(); ++i) {
-				(*i)->emit(output, ind, (i + 1) == dfas.end(), prolog);
-			}
-		}
-
-		o.wline_info (input.get_cline (), input.get_fname ().c_str ());
-	}
-
-	if (globopts->target == TARGET_SKELETON) {
-		emit_epilog (o, output.skeletons);
-	}
-
-	AST::flist.clear();
-	Code::flist.clear();
-	Range::vFreeList.clear();
-	RangeSuffix::freeList.clear();
+    context_t context = {input, specs, symtab, opts};
+    yyparse(context);
 }
 
-} // end namespace re2c
+} // namespace re2c

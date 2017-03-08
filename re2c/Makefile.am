@@ -136,8 +136,10 @@ SRC = \
 	src/main.cc \
 	src/ast/ast.cc \
 	src/ast/input.cc \
+	src/ast/normalize.cc \
 	src/ast/scanner.cc \
 	src/ast/unescape.cc \
+	src/ast/validate.cc \
 	src/util/s_to_n32_unsafe.cc \
 	src/util/range.cc
 re2c_SOURCES = \
