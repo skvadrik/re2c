@@ -94,6 +94,13 @@ bool kernels_t::operator()(const kernel_t *k1, const kernel_t *k2)
 			}
 		}
 	}
+
+	// forbid 2-cycles 'x = y; y = x;': to avoid temporary variables
+	for (tagver_t x = -max; x < max; ++x) {
+		const tagver_t y = x2y[x];
+		if (x != y && x2y[y] == x) return false;
+	}
+
 	return true;
 }
 

@@ -51,8 +51,8 @@ bool tagcopy_t::equal(const tagcopy_t &x, const tagcopy_t &y)
  * overwrites 'y' before its precious value is copied to 'x').
  *
  * To avoid overwrites, commands should be topologically sorted.
- * This is always possible because there's no cyclic dependencies
- * by construction.
+ * Cycles of length 2 are not allowed by construction; cycles of
+ * length 3 or more are left as is.
  *
  * For the purpose of topsort, we treat commands as arcs of directed
  * acyclic graph: command 'x = y' yields arc X -> Y. Topsort works
@@ -60,38 +60,48 @@ bool tagcopy_t::equal(const tagcopy_t &x, const tagcopy_t &y)
  * (they correspond to commands with no dependencies).
  * Commands in the order of removal are topologically sorted.
  *
- * The algorithm iterates the list of commands twice. First time it
- * counts initial in-degree of nodes. Second time it examines each
- * arc X -> Y: if X has zero in-degree, the algoritm reduces Y's
- * in-degree by one and goes to the next arc. Otherwise, the arc is
- * misplaced: the algorithm moves it to the end of the list (next
- * time this arc will be examined, it will have smaller in-degree).
+ * The algorithm iterates graph and removes arcs with zero in-degree
+ * until either the graph is empty or all remaining arcs belong to
+ * cycles.
  *
  * The algorithm starts and ends with all-zero in-degree buffer.
  */
+
 void tagcopy_t::topsort(tagcopy_t **phead, uint32_t *indeg)
 {
-	tagcopy_t *head = *phead;
-	if (!head) return;
+	tagcopy_t
+		*x0 = *phead, **px, *x,
+		*y0 = NULL,   **py, **py1;
 
-	tagcopy_t *tail = head;
-	for (;;) {
-		++indeg[tail->rhs];
-		if (!tail->next) break;
-		tail = tail->next;
+	// initialize in-degree
+	for (x = x0; x; x = x->next) {
+		++indeg[x->rhs];
 	}
 
-	for (; head; head = *phead) {
-		if (indeg[head->lhs] == 0) {
-			phead = &head->next;
-			--indeg[head->rhs];
-		} else {
-			*phead = head->next;
-			tail->next = head;
-			tail = tail->next;
-			tail->next = NULL;
+	for (py = &y0;;) {
+		// reached end of list
+		if (!x0) break;
+
+		px = &x0;
+		py1 = py;
+		for (x = x0; x; x = x->next) {
+			if (indeg[x->lhs] == 0) {
+				--indeg[x->rhs];
+				*py = x;
+				py = &x->next;
+			} else {
+				*px = x;
+				px = &x->next;
+			}
 		}
+		*px = NULL;
+
+		// only cycles left
+		if (py == py1) break;
 	}
+	*py = x0;
+
+	*phead = y0;
 }
 
 tcmd_t::tcmd_t(): save(NULL), copy(NULL) {}
