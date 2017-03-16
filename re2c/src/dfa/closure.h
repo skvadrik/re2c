@@ -14,9 +14,10 @@ struct clos_t
 {
 	nfa_state_t *origin; // for debug only
 	nfa_state_t *state;
-	size_t tvers; // tag versions (including lookahead tags)
-	size_t ttran; // transition tags
-	size_t order; // see note [orbit order of closure items]
+	size_t tvers; // vector of tag versions (including lookahead tags)
+	size_t ttran; // vector of transition tags
+	size_t order; // vector of orders
+	size_t index; // leftmost order in NFA traversal
 
 	static inline bool fin(const clos_t &c) { return c.state->type == nfa_state_t::FIN; }
 };

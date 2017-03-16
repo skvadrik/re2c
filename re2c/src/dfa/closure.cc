@@ -10,11 +10,11 @@ namespace re2c
 static void closure_one(closure_t &clos, Tagpool &tagpool, tagtree_t &tagtree,
 	clos_t &c0, nfa_state_t *n, const std::vector<Tag> &tags, closure_t *shadow, std::valarray<Rule> &rules);
 static bool better(const clos_t &c1, const clos_t &c2, Tagpool &tagpool, tagtree_t &tagtree, const std::vector<Tag> &tags);
-static void assert_items_are_grouped_by_rule(const closure_t &clos);
 static void lower_lookahead_to_transition(closure_t &clos, Tagpool &tagpool, tagtree_t &tagtree);
 static void update_versions(closure_t &clos, Tagpool &tagpool, tagtree_t &tagtree, tagver_t &maxver, tagver_t *newvers);
-static void orbit_order(closure_t &clos, Tagpool &tagpool, tagtree_t &tagtree, const std::vector<Tag> &tags);
+static void orders(closure_t &clos, Tagpool &tagpool, tagtree_t &tagtree, const std::vector<Tag> &tags);
 static void find_nondet(const closure_t &clos, size_t *nondet, const Tagpool &tagpool, const std::valarray<Rule> &rules);
+static bool cmpby_rule_state(const clos_t &x, const clos_t &y);
 
 void closure(closure_t &clos1, closure_t &clos2, Tagpool &tagpool, tagtree_t &tagtree,
 	std::valarray<Rule> &rules, tagver_t &maxver, tagver_t *newvers,
@@ -28,11 +28,9 @@ void closure(closure_t &clos1, closure_t &clos2, Tagpool &tagpool, tagtree_t &ta
 		closure_one(clos2, tagpool, tagtree, *c, c->state, tags, shadow, rules);
 	}
 
-	assert_items_are_grouped_by_rule(clos2);
+	orders(clos2, tagpool, tagtree, tags);
 
-	// see note [orbit order of closure items]
-	orbit_order(clos2, tagpool, tagtree, tags);
-	if (shadow) orbit_order(*shadow, tagpool, tagtree, tags);
+	std::sort(clos2.begin(), clos2.end(), cmpby_rule_state);
 
 	// see note [the difference between TDFA(0) and TDFA(1)]
 	if (!lookahead) {
@@ -47,27 +45,15 @@ void closure(closure_t &clos1, closure_t &clos2, Tagpool &tagpool, tagtree_t &ta
 	if (shadow) update_versions(*shadow, tagpool, tagtree, maxver, newvers);
 }
 
-/* note [closure items are sorted by rule]
- *
- * By NFA construction NFA rules with higher priority correspond to the left
- * alternative of the branching NFA states.
- *
- * The initial epsilon-closure explores each rule in turn: all states of the
- * high-priority rule are explored before any states of the low-priority rule.
- * Thus in the initial closure items are sorted by rule.
- *
- * Subsequent closures preserve this invariant: they explore states in the
- * exact same order as they are listed in the parent closure, so if states
- * were sorted by rule, they remain so in the new closure.
- */
-void assert_items_are_grouped_by_rule(const closure_t &clos)
+bool cmpby_rule_state(const clos_t &x, const clos_t &y)
 {
-	size_t r1 = 0, r2;
-	for (cclositer_t c = clos.begin(); c != clos.end(); ++c) {
-		r2 = c->state->rule;
-		assert(r2 >= r1);
-		r1 = r2;
-	}
+	const nfa_state_t *sx = x.state, *sy = y.state;
+	const size_t rx = sx->rule, ry = sy->rule;
+	if (rx < ry) return true;
+	if (rx > ry) return false;
+	if (sx < sy) return true;
+	if (sx > sy) return false;
+	assert(false);
 }
 
 /* note [epsilon-closures in tagged NFA]
@@ -114,20 +100,21 @@ void closure_one(closure_t &clos, Tagpool &tagpool, tagtree_t &tagtree, clos_t &
 		case nfa_state_t::FIN:
 			// see note [at most one final item per closure]
 			for (; c != e && c->state->type != nfa_state_t::FIN; ++c);
+			if (c != e && c->state != n) {
+				rules[n->rule].shadow.insert(rules[c->state->rule].code->fline);
+				return;
+			}
 			break;
 	}
 
-	clos_t c2 = {c0.origin, n, c0.tvers, tagpool.insert(tagtree.leaves()), c0.order};
+	clos_t c2 = {c0.origin, n, c0.tvers,
+		tagpool.insert(tagtree.leaves()), c0.order, c0.index++};
 	if (c == e) {
 		clos.push_back(c2);
 	} else {
 		clos_t &c1 = *c;
 		if (better(c1, c2, tagpool, tagtree, tags)) std::swap(c1, c2);
 		if (shadow) shadow->push_back(c2);
-		const size_t
-			r1 = c1.state->rule,
-			r2 = c2.state->rule;
-		if (r1 != r2) rules[r2].shadow.insert(rules[r1].code->fline);
 	}
 }
 
@@ -154,7 +141,8 @@ bool better(const clos_t &c1, const clos_t &c2,
 {
 	if (c1.ttran == c2.ttran
 		&& c1.tvers == c2.tvers
-		&& c1.order == c2.order) return false;
+		&& c1.order == c2.order
+		&& c1.index == c2.index) return false;
 
 	const tagver_t
 		*l1 = tagpool[c1.ttran], *l2 = tagpool[c2.ttran],
@@ -163,13 +151,10 @@ bool better(const clos_t &c1, const clos_t &c2,
 	tagver_t x, y;
 
 	for (size_t t = 0; t < tagpool.ntags; ++t) {
-
-		// simple tag: always prefer leftmost
-		if (!capture(tags[t])) {
-			return false;
+		const Tag &tag = tags[t];
 
 		// orbit capture tag: compare by order and tagged epsilon-paths
-		} else if (orbit(tags[t])) {
+		if (orbit(tag)) {
 			x = o1[t]; y = o2[t];
 			if (x < y) return false;
 			if (x > y) return true;
@@ -180,19 +165,31 @@ bool better(const clos_t &c1, const clos_t &c2,
 
 			assert(v1[t] == v2[t]);
 
-		// open/close capture tag: if either one is bottom,
-		// prefer leftmost; otherwise, maximize
-		} else {
-			assert(o1[t] == o2[t]);
-
+		// open/close capture tag: maximize (on lookahead and versions);
+		// if either one is bottom, fallback to leftmost disambiguation
+		} else if (capture(tag)) {
 			x = tagtree.elem(l1[t]);
 			y = tagtree.elem(l2[t]);
-			if (x < 0 || y < 0 || x > y) return false;
+			if (x < 0 || y < 0) goto leftmost;
+			if (x > y) return false;
 			if (x < y) return true;
 
 			x = v1[t]; y = v2[t];
-			if (x < 0 || y < 0 || x > y) return false;
+			if (x < 0 || y < 0) goto leftmost;
+			if (x > y) return false;
 			if (x < y) return true;
+
+		// simple tag: always prefer leftmost
+		} else {
+		leftmost:
+			x = o1[t]; y = o2[t];
+			if (x < y) return false;
+			if (x > y) return true;
+
+			size_t i = c1.index, j = c2.index;
+			if (i < j) return false;
+			if (i > j) return true;
+			assert(false); // all indexes are different
 		}
 	}
 
@@ -313,7 +310,7 @@ void update_versions(closure_t &clos, Tagpool &tagpool, tagtree_t &tagtree,
 	}
 }
 
-/* note [orbit order of closure items]
+/* note [POSIX disambiguation]
  *
  * POSIX disambiguation rules demand that earlier subexpressions match
  * the longest possible prefix of the input string (without violating the
@@ -352,11 +349,11 @@ void update_versions(closure_t &clos, Tagpool &tagpool, tagtree_t &tagtree,
  * This part of the algorithm was invented by Christopher Kuklewicz.
  */
 
-typedef std::pair<tagver_t, tagver_t> key_t;
+typedef std::pair<tagver_t, tagver_t> key1_t;
 struct cmp_t
 {
 	tagtree_t &tree;
-	bool operator()(const key_t &x, const key_t &y)
+	bool operator()(const key1_t &x, const key1_t &y)
 	{
 		if (x.first < y.first) return true;
 		if (x.first > y.first) return false;
@@ -364,42 +361,61 @@ struct cmp_t
 	}
 };
 
-void orbit_order(closure_t &clos, Tagpool &tagpool,
+void orders(closure_t &clos, Tagpool &tagpool,
 	tagtree_t &tagtree, const std::vector<Tag> &tags)
 {
+	clositer_t b = clos.begin(), e = clos.end(), c;
 	const size_t
 		ntag = tagpool.ntags,
 		nclos = clos.size();
 
 	const cmp_t cmp = {tagtree};
-	std::set<key_t, cmp_t> keys(cmp);
+	std::set<key1_t, cmp_t> keys1(cmp);
+
+	typedef std::pair<tagver_t, size_t> key2_t;
+	std::set<key2_t> keys2;
 
 	size_t &maxclos = tagpool.maxclos;
-	tagver_t *&orders = tagpool.orders;
+	tagver_t *&orders = tagpool.orders, *o;
 	if (maxclos < nclos) {
 		maxclos = nclos * 2; // in advance
 		delete[] orders;
 		orders = new tagver_t[ntag * maxclos];
 	}
 
-	memset(orders, TAGVER_ZERO, ntag * nclos * sizeof(tagver_t));
 	for (size_t t = 0; t < ntag; ++t) {
-		if (!orbit(tags[t])) continue;
+		o = orders;
 
-		keys.clear();
-		for (size_t i = 0; i < nclos; ++i) {
-			const key_t key(tagpool[clos[i].order][t], tagpool[clos[i].ttran][t]);
-			keys.insert(key);
-		}
+		// see note [POSIX disambiguation]
+		if (orbit(tags[t])) {
+			keys1.clear();
+			for (c = b; c != e; ++c) {
+				keys1.insert(key1_t(tagpool[c->order][t], tagpool[c->ttran][t]));
+			}
+			for (c = b; c != e; ++c, o += ntag) {
+				const ptrdiff_t d = std::distance(keys1.begin(),
+					keys1.find(key1_t(tagpool[c->order][t], tagpool[c->ttran][t])));
+				o[t] = static_cast<tagver_t>(d);
+			}
 
-		for (size_t i = 0; i < nclos; ++i) {
-			const key_t key(tagpool[clos[i].order][t], tagpool[clos[i].ttran][t]);
-			const ptrdiff_t d = std::distance(keys.begin(), keys.find(key));
-			orders[ntag * i + t] = static_cast<tagver_t>(d);
+		// for simple tags and non-orbit capture tags item's order
+		// equals position of this item in leftmost NFA traversal
+		// (it's the same for all tags)
+		} else {
+			for (c = b; c != e; ++c) {
+				keys2.insert(key2_t(tagpool[c->order][t], c->index));
+			}
+			for (c = b; c != e; ++c, o += ntag) {
+				const ptrdiff_t d = std::distance(keys2.begin(),
+					keys2.find(key2_t(tagpool[c->order][t], c->index)));
+				o[t] = static_cast<tagver_t>(d);
+			}
 		}
 	}
-	for (size_t i = 0; i < nclos; ++i) {
-		clos[i].order = tagpool.insert(orders + ntag * i);
+
+	o = orders;
+	for (c = b; c != e; ++c, o += ntag) {
+		c->order = tagpool.insert(o);
 	}
 }
 
@@ -413,10 +429,13 @@ void find_nondet(const closure_t &clos, size_t *nondet,
 	std::set<tagver_t> uniq;
 	cclositer_t b = clos.begin(), e = clos.end(), c, x0, x;
 
-	// see note [closure items are sorted by rule]
+	size_t r0 = 0;
 	for (c = b; c != e;) {
 		const size_t r = c->state->rule;
 		const Rule &rule = rules[r];
+
+		// closure items must be grouped by rule
+		assert(r >= r0); r0 = r;
 
 		for (x0 = c; ++c != e && c->state->rule == r;);
 

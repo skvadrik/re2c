@@ -40,7 +40,7 @@ uint32_t dump_dfa_t::index(const nfa_state_t *s)
 	return static_cast<uint32_t>(s - base);
 }
 
-void dump_dfa_t::closure_tags(cclositer_t c)
+void dump_dfa_t::closure_tags(cclositer_t c, bool shadowed)
 {
 	if (!debug) return;
 	if (c->tvers == ZERO_TAGS) return;
@@ -61,7 +61,7 @@ void dump_dfa_t::closure_tags(cclositer_t c)
 			fprintf(stderr, "%d", abs(v));
 		}
 
-		if (orbit(tag)) {
+		if (!shadowed && capture(tag)) {
 			fprintf(stderr, "[%d]", tagpool[c->order][t]);
 		}
 	}
@@ -80,20 +80,20 @@ void dump_dfa_t::closure(const closure_t &clos, uint32_t state, bool isnew)
 		" CELLBORDER=\"1\""
 		">", isnew ? "" : "i", state);
 
-	for (cclositer_t c = clos.begin(); c != clos.end(); ++c) {
-		fprintf(stderr, "<TR><TD ALIGN=\"left\" PORT=\"%u\"%s>%u",
-			index(c->state), style, index(c->state));
-		closure_tags(c);
-		fprintf(stderr, "</TD></TR>");
+	for (cclositer_t b = shadow->begin(), c = b; c != shadow->end(); ++c) {
+		fprintf(stderr, "<TR><TD ALIGN=\"left\" PORT=\"_%u_%ld\"%s%s><FONT%s>%u",
+			index(c->state), c - b, color, style, color, index(c->state));
+		closure_tags(c, true);
+		fprintf(stderr, "</FONT></TD></TR>");
 	}
 	if (!shadow->empty()) {
 		fprintf(stderr, "<TR><TD BORDER=\"0\"></TD></TR>");
 	}
-	for (cclositer_t b = shadow->begin(), c = b; c != shadow->end(); ++c) {
-		fprintf(stderr, "<TR><TD ALIGN=\"left\" PORT=\"_%u_%ld\"%s%s><FONT%s>%u",
-			index(c->state), c - b, color, style, color, index(c->state));
-		closure_tags(c);
-		fprintf(stderr, "</FONT></TD></TR>");
+	for (cclositer_t c = clos.begin(); c != clos.end(); ++c) {
+		fprintf(stderr, "<TR><TD ALIGN=\"left\" PORT=\"%u\"%s>%u",
+			index(c->state), style, index(c->state));
+		closure_tags(c, true);
+		fprintf(stderr, "</TD></TR>");
 	}
 	fprintf(stderr, "</TABLE>>]\n");
 }
@@ -136,7 +136,7 @@ void dump_dfa_t::state(const closure_t &clos, size_t state, size_t symbol, bool 
 	closure(clos, z, isnew);
 	if (!isnew) {
 		fprintf(stderr, "  i%u [style=dotted]\n"
-			"  i%u:n -> %u:n [style=dotted label=\"", z, z, y);
+			"  i%u:s -> %u:s [style=dotted label=\"", z, z, y);
 		dump_tcmd(cmd.save, cmd.copy);
 		fprintf(stderr, "\"]\n");
 	}
