@@ -176,10 +176,10 @@ Configurations
 ``re2c:yyfill:enable = 1;``
     Set this to zero to suppress generation of ``YYFILL (n)``. When using this be sure to verify that the generated
     scanner does not read behind input. Allowing this behavior might
-    introduce sever security issues to you programs.
+    introduce several security issues to your programs.
 
 ``re2c:yyfill:check = 1;``
-    This can be set 0 to suppress output of the
+    This can be set to 0 to suppress output of the
     pre condition using ``YYCURSOR`` and ``YYLIMIT`` which becomes usefull when
     ``YYLIMIT + YYMAXFILL`` is always accessible.
 
