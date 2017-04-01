@@ -11,7 +11,7 @@
     character class makes no sense: it should always fail. However, for
     backwards compatibility reasons ``re2c`` allows empty character class and
     treats it as empty string. Use ``--empty-class`` option to change default
-    behaviour.
+    behavior.
 
 ``-Wmatch-empty-string``
     Warn if regular expression in a rule is
@@ -21,7 +21,7 @@
 
 ``-Wswapped-range``
     Warn if range lower bound is greater that upper
-    bound. Default ``re2c`` behaviour is to silently swap range bounds.
+    bound. Default ``re2c`` behavior is to silently swap range bounds.
 
 ``-Wundefined-control-flow``
     Warn if some input strings cause undefined

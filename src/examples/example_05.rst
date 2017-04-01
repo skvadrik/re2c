@@ -1,7 +1,7 @@
 Parsing integers (conditions)
 -----------------------------
 
-This example does exactly the same as `Parsing integers (multiple re2c blocks) <example_04.html>`_ example,
+This example does exactly the same thing as the `Parsing integers (multiple re2c blocks) <example_04.html>`_ example,
 but in a slightly different manner: it uses re2c conditions instead of blocks.
 Conditions allow to encode multiple interconnected lexers within a single re2c block.
 
@@ -13,31 +13,31 @@ Conditions allow to encode multiple interconnected lexers within a single re2c b
 
 Notes:
 
-* Conditions are enabled with ``-c`` option.
+* Conditions are enabled with the ``-c`` option.
 
-* Conditions are only syntactic sugar, they can be translated into multiple blocks.
+* Conditions are only syntactic sugar; they can be translated into multiple blocks.
 
 * Each condition is a standalone lexer (DFA).
 
 * Each condition has a unique identifier: ``/*!types:re2c*/`` tells re2c to generate
-  enumeration of all identifiers (names are prefixed with ``yyc`` by default).
-  Lexer uses ``YYGETCONDITION`` to get the identifier of current condition
+  an enumeration of all identifiers (names are prefixed with ``yyc`` by default).
+  The lexer uses ``YYGETCONDITION`` to get the identifier of the current condition
   and ``YYSETCONDITION`` to set it.
 
 * Each condition has a unique label (prefixed with ``yyc_`` by default).
 
-* Conditions are connected: transitions are allowed between final states of one condition
-  and start state of another condition (but not between inner states of different conditions).
+* Conditions are connected: transitions are allowed between the final states of one condition
+  and the start state of another condition (but not between inner states of different conditions).
   The generated code starts with dispatch.
   Actions can either jump to the initial dispatch or jump directly to any condition.
 
-* Rule ``<*>`` is merged to all conditions (low priority).
+* The ``<*>`` rule is merged to all conditions (low priority).
 
 * Rules with multiple conditions are merged to each listed condition (normal priority).
 
 * ``:=>`` jumps directly to the next condition (bypassing the initial dispatch).
 
-Generate, compile and run:
+Generate, compile, and run:
 
 .. code-block:: bash
 

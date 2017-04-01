@@ -7,7 +7,7 @@ That is, to accept zero or more repetitions instead of one or more.
 Typos in definitions
 ....................
 
-Here is the skeleton of REXX lexer (the very lexer which motivated Peter to write re2c ``:)``).
+Here is a skeleton of a REXX lexer (the very lexer that motivated Peter to write re2c ``:)``).
 
 .. code-block:: cpp
     :linenos:
@@ -160,18 +160,18 @@ Here is the skeleton of REXX lexer (the very lexer which motivated Peter to writ
 
 The faulty rule is ``symbol``.
 It is defined as ``symchr*`` and clearly is nullable.
-In this particular example (assuming ASCII encoding) empty match is shadowed by other rules:
-together ``eof`` and ``any`` cover all possible code units.
-So in this case there is no chance of hitting eternal loop.
+In this particular example (assuming ASCII encoding), the empty match is shadowed by other rules:
+together ``eof`` and ``any`` cover all possible code units,
+so in this case, there is no chance of hitting an infinite loop.
 
-However, by no means ``symbol`` should be nullable: it makes no sense.
-Sure, it's just a typo and the author meant ``symchr+``.
+However, by no means should ``symbol`` be nullable: it makes no sense.
+Surely, it is just a typo and the author meant ``symchr+``.
 
 
 Skipping uninteresting stuff
 ............................
 
-One often needs to skip variable number of, say, spaces:
+One often needs to skip a variable number of, say, spaces:
 
 .. code-block:: cpp
 
@@ -188,7 +188,7 @@ This definition is ok when used inside of another (non-nullable) rule:
         "(" TABS_AND_SPACES ("int" | "integer") TABS_AND_SPACES ")" {}
     */
 
-However, as a standalone rule it may cause eternal loop on ill-formed input.
+However, as a standalone rule, it may cause an infinite loop on ill-formed input.
 And it's very common to reuse one rule for multiple purposes.
 
 

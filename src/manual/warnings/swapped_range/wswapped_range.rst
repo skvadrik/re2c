@@ -5,9 +5,9 @@
     :hidden:
 
 This warning is very simple.
-It warns you in cases when character class contains a range which lower bound is greater than upper bound.
-For some strange reason re2c never considered it an error:
-it simply swaps range bounds and goes on.
+It warns you in cases when a character class contains a range whose lower bound is greater than its upper bound.
+For some strange reason, re2c never considered this an error:
+it simply swapped range bounds and went on.
 
 .. code-block:: cpp
     :linenos:
@@ -47,7 +47,7 @@ Given this code, ```re2c -i -Wswapped-range``` generates the following:
             { return "is it what you want?"; }
     }
 
-And reports a warning:
+and it reports a warning:
 
 .. code-block:: none
 

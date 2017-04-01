@@ -70,10 +70,10 @@ BSD
 Build
 =====
 
-You only need C++98 compier to build re2c from tarball.
+You only need a C++98 compiler to build re2c from the tarball.
 If you have bison, re2c will use it (otherwise it will use precompiled files).
 
-If you are building re2c from source (not from tarball), you will also need autotools:
+If you are building re2c from source (not from a tarball), you will also need autotools:
 
 .. code-block:: bash
 
@@ -90,11 +90,11 @@ This will install re2c (binary and manpage) to ``prefix`` (``/usr/local`` by def
     $ make
     $ make install
 
-Bootstrap
----------
+Bootstrapping
+-------------
 
 Some parts of re2c (lexers and parser of command-line options) are written in re2c.
-These files are precompiled and packaged into re2c distribution (so that re2c can be built without re2c).
+These files are precompiled and packaged into the re2c distribution (so that re2c can be built without re2c).
 However, one can fully bootstrap re2c:
 
 .. code-block:: bash
@@ -143,7 +143,7 @@ Or run only the main test suite (and watch progress dumped to ``stdout``):
 
     $ make tests
 
-Run test suite under `valgrind <http://valgrind.org/>`_ (takes a long time):
+Run the test suite under `valgrind <http://valgrind.org/>`_ (takes a long time):
 
 .. code-block:: bash
 

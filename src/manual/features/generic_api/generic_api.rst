@@ -4,21 +4,21 @@ Generic API
 .. toctree::
     :hidden:
 
-``re2c`` usually operates on input using pointer-like primitives
-``YYCURSOR``, ``YYMARKER``, ``YYCTXMARKER`` and ``YYLIMIT``.
+``re2c`` usually operates on input with pointer-like primitives
+``YYCURSOR``, ``YYMARKER``, ``YYCTXMARKER``, and ``YYLIMIT``.
 
-Generic input API (enabled with ``--input custom`` switch) allows to
-customize input operations. In this mode, ``re2c`` will express all
+The generic input API (enabled with the ``--input custom`` switch) allows 
+customizing input operations. In this mode, ``re2c`` will express all
 operations on input in terms of the following primitives:
 
     +---------------------+-----------------------------------------------------+
     | ``YYPEEK ()``       | get current input character                         |
     +---------------------+-----------------------------------------------------+
-    | ``YYSKIP ()``       | advance to the next character                       |
+    | ``YYSKIP ()``       | advance to next character                           |
     +---------------------+-----------------------------------------------------+
-    | ``YYBACKUP ()``     | backup current input position                       |
+    | ``YYBACKUP ()``     | back up current input position                      |
     +---------------------+-----------------------------------------------------+
-    | ``YYBACKUPCTX ()``  | backup current input position for trailing context  |
+    | ``YYBACKUPCTX ()``  | back up current input position for trailing context |
     +---------------------+-----------------------------------------------------+
     | ``YYRESTORE ()``    | restore current input position                      |
     +---------------------+-----------------------------------------------------+

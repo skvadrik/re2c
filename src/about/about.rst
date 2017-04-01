@@ -37,7 +37,7 @@ they can obtain for re2c. If you do make use of re2c, or incorporate it into a l
 acknowledgement somewhere (documentation, research report, etc.) would
 be appreciated.
 
-re2c is distributed with no warranty whatever.
+re2c is distributed with no warranty whatsoever.
 The code is certain to contain errors.
 Neither the author nor any contributor takes responsibility for any consequences of its use.
 

@@ -1,11 +1,11 @@
 Real-world examples
 ~~~~~~~~~~~~~~~~~~~
 
-The  best real-world example is a story of how ``[-Wcondition-order]`` was added to re2c.
+The  best real-world example is the story of how ``[-Wcondition-order]`` was added to re2c.
 
-One day I decided to change condition numbering scheme.
-It was only natural: re2c assigns numbers to conditions in the order they appear in code.
-This is not very convenient, because elsewhere in the code condition names (not numbers) are used as unique identifiers.
+One day I decided to change the condition numbering scheme.
+It was only natural: re2c assigns numbers to conditions in the order they appear in the code.
+This is not very convenient, because elsewhere in the code, condition names (not numbers) are used as unique identifiers.
 Names are sorted lexicographically, so the original condition order is not preserved.
 It takes extra care to remember the mapping of names to numbers.
 So why not just drop numbers and sort conditions by their names?

@@ -1,27 +1,27 @@
 ``-? -h --help``
-    Invoke a short help.
+    Show a short help screen:
 
 ``-b --bit-vectors``
-    Implies ``-s``. Use bit vectors as well in the
-    attempt to coax better code out of the compiler. Most useful for
-    specifications with more than a few keywords (e.g. for most programming
+    Implies ``-s``. Use bit vectors as well to try to 
+    coax better code out of the compiler. Most useful for
+    specifications with more than a few keywords (e.g., for most programming
     languages).
 
 ``-c --conditions``
-    Used to support (f)lex-like condition support.
+    Used for (f)lex-like condition support.
 
 ``-d --debug-output``
     Creates a parser that dumps information about
-    the current position and in which state the parser is while parsing the
-    input. This is useful to debug parser issues and states. If you use this
-    switch you need to define a macro ``YYDEBUG`` that is called like a
+    the current position and the state the parser is in. 
+    This is useful to debug parser issues and states. If you use this
+    switch, you need to define a ``YYDEBUG`` macro, which will be called like a
     function with two parameters: ``void YYDEBUG (int state, char current)``.
     The first parameter receives the state or ``-1`` and the second parameter
     receives the input at the current cursor.
 
 ``-D --emit-dot``
-    Emit Graphviz dot data. It can then be processed
-    with e.g. ``dot -Tpng input.dot > output.png``. Please note that
+    Emit Graphviz dot data, which can then be processed
+    with e.g., ``dot -Tpng input.dot > output.png``. Please note that
     scanners with many states may crash dot.
 
 ``-e --ecb``
@@ -34,23 +34,21 @@
     Generate a scanner with support for storable state.
 
 ``-F --flex-syntax``
-    Partial support for flex syntax. When this flag
-    is active then named definitions must be surrounded by curly braces and
+    Partial support for the flex syntax. When this flag
+    is active, named definitions must be surrounded by curly braces and
     can be defined without an equal sign and the terminating semi colon.
     Instead names are treated as direct double quoted strings.
 
 ``-g --computed-gotos``
     Generate a scanner that utilizes GCC's
-    computed goto feature. That is ``re2c`` generates jump tables whenever a
-    decision is of a certain complexity (e.g. a lot of if conditions are
-    otherwise necessary). This is only useable with GCC and produces output
-    that cannot be compiled with any other compiler. Note that this implies
-    ``-b`` and that the complexity threshold can be configured using the
-    inplace configuration ``cgoto:threshold``.
+    computed goto feature. That is, ``re2c`` generates jump tables whenever a
+    decision is of a certain complexity (e.g., a lot of if conditions are
+    otherwise necessary). This is only usable with compilers that support this feature.
+    Note that this implies ``-b`` and that the complexity threshold can be configured using the inplace configuration ``cgoto:threshold``.
 
 ``-i --no-debug-info``
     Do not output ``#line`` information. This is
-    usefull when you want use a CMS tool with the ``re2c`` output which you
+    useful when you want use a CMS tool with the ``re2c`` output which you
     might want if you do not require your users to have ``re2c`` themselves
     when building from your source.
 
@@ -59,8 +57,8 @@
 
 ``-r --reusable``
     Allows reuse of scanner definitions with ``/*!use:re2c */`` after ``/*!rules:re2c */``.
-    In this mode no ``/*!re2c */`` block and exactly one ``/*!rules:re2c */`` must be present.
-    The rules are being saved and used by every ``/*!use:re2c */`` block that follows.
+    In this mode, no ``/*!re2c */`` block and exactly one ``/*!rules:re2c */`` must be present.
+    The rules are saved and used by every ``/*!use:re2c */`` block that follows.
     These blocks can contain inplace configurations, especially ``re2c:flags:e``,
     ``re2c:flags:w``, ``re2c:flags:x``, ``re2c:flags:u`` and ``re2c:flags:8``.
     That way it is possible to create the same scanner multiple times for

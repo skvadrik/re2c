@@ -1,8 +1,8 @@
 A simple example
 ~~~~~~~~~~~~~~~~
 
-``[-Wmatch-empty-string]`` warns when a rule is nullable (matches empty string).
-It was intended to prevent hitting eternal loop in cases like this:
+``[-Wmatch-empty-string]`` warns when a rule is nullable (matches an empty string).
+It was intended to prevent infinite looping in cases such as this:
 
 :download:`[wmatch_empty_string.re] <wmatch_empty_string.re.txt>`
 
@@ -36,10 +36,10 @@ Generate, compile and run:
 The program hangs forever if one of the arguments is ill-formed.
 
 Note that `[-Wundefined-control-flow] <../undefined_control_flow/wundefined_control_flow.html>`_
-has no complaints about this particular case: all input patterns are covered by rules.
-Yet if we add default rule ``*``, lexer won't hang anymore: it will match default rule
-instead of nullable rule.
+has no complaints about this particular case: all input patterns are covered by the rules.
+Yet if we add the default rule (``*``), the lexer won't hang anymore: it will match the default rule
+instead of the nullable rule.
 
-The fix is easy: make the rule non-nullable (say, ``[a-z]+``) and add default rule ``*``.
+The fix is easy: make the rule non-nullable (say, ``[a-z]+``) and add the default rule (``*``).
 
 

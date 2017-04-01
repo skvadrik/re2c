@@ -4,22 +4,22 @@
 .. toctree::
     :hidden:
 
-This warning is complementary to ``--empty-class`` option.
-The option expects a single argument, one of the following:
+This warning is complementary to the ``--empty-class`` option.
+The option expects a single argument, which should be one of the following:
 
-* ``match-empty`` (default): empty character class matches empty string
-  (that is, always matches and consumes no code units).
+* ``match-empty`` (default): an empty character class matches an empty string
+  (that is, it always matches and consumes no code units).
   This attitude is strange; however, some real-world programs rely on it.
 
-* ``match-none``: empty character class never matches.
+* ``match-none``: an empty character class never matches.
   This is what logic suggests.
 
-* ``error``: empty character class is an error.
+* ``error``: an empty character class is an error.
 
-The ``[-Wempty-character-class]`` warning is a reminder for those
-who are not aware of ``--empty-class`` option.
+The ``[-Wempty-character-class]`` warning is a reminder to those
+who are not aware of the ``--empty-class`` option.
 
-Note that empty character class can be constructed in many ways:
+Note that an empty character class can be constructed in many ways:
 
 .. code-block:: cpp
     :linenos:

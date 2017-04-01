@@ -1,8 +1,8 @@
 Parsing integers (multiple re2c blocks)
 ---------------------------------------
 
-This example is based on `Recognizing integers: the sentinel method <example_01.html>`_ example,
-only now integer literals are parsed rather than simply recognized.
+This example is based on the `Recognizing integers: the sentinel method <example_01.html>`_ example,
+only now the integer literals are parsed rather than simply recognized.
 Parsing integers is simple: one can easily do it by hand.
 However, re2c-generated code *does* look like a simple handwritten parser:
 a couple of dereferences and conditional jumps. No overhead. ``:)``
@@ -16,11 +16,11 @@ a couple of dereferences and conditional jumps. No overhead. ``:)``
 Notes:
 
 * Configurations and definitions (lines 20 - 26) are not scoped to a single re2c block — they are global.
-  Each block may override configurations, but this affects global scope.
+  Each block may override configurations, but this affects the global scope.
 * Blocks don't have to be in the same function: they can be in separate functions or elsewhere
-  as long as the exposed interface fits into lexical scope.
+  as long as the exposed interface fits into the lexical scope.
 
-Generate, compile and run:
+Generate, compile, and run:
 
 .. code-block:: bash
 

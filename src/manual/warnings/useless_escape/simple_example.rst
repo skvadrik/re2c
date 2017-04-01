@@ -30,9 +30,9 @@ Given this code, ```re2c -Wuseless-escape``` reports a bunch of warnings:
     re2c: warning: line 5: column 15: escape has no effect: '\'' [-Wuseless-escape]
     re2c: warning: line 5: column 17: escape has no effect: '\[' [-Wuseless-escape]
 
-It says that ``\A`` and ``\[`` escapes are meaningless in all rules,
-``\-`` makes sense only in character class
-and each type of closing quotes (``"``, ``'`` and ``]``) should only be escaped inside of same-quoted string.
+This is because the ``\A`` and ``\[`` escapes are meaningless in all rules,
+``\-`` makes sense only in a character class, 
+and each type of closing quotes (``"``, ``'`` and ``]``) should only be escaped inside of a string delimited with the same quotes.
 Useless escapes are ignored: the escaped symbol is treated as not escaped (``\A`` becomes ``A``, etc.).
 The above example should be fixed as follows:
 

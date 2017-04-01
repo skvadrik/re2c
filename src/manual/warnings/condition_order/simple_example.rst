@@ -3,10 +3,10 @@ A simple example
 
 The following lexer consists of two conditions: ``a`` and ``b``.
 It starts in condition ``a``, which expects a sequence of letters ``'a'`` followed by a comma.
-Comma causes transition to condition ``b``, which expects a sequence of letters ``'b'`` followed by an exclamation.
+The comma causes transition to condition ``b``, which expects a sequence of letters ``'b'`` followed by an exclamation mark.
 Anything else is an error.
-Nothing special, except that instead of generating condition names with ``/*!types:re2c*/`` directive
-or ``-t, --type-header`` option we hardcoded them manually:
+Nothing special, except that instead of generating condition names with the ``/*!types:re2c*/`` directive
+or the ``-t, --type-header`` option, we've hardcoded them manually:
 
 :download:`[wcondition_order.re] <wcondition_order.re.txt>`
 
@@ -14,7 +14,7 @@ or ``-t, --type-header`` option we hardcoded them manually:
     :language: cpp
     :linenos:
 
-Condition order is controlled by ``REVERSED_CONDITION_ORDER`` define.
+Condition order is controlled by the ``REVERSED_CONDITION_ORDER`` define.
 Let's compile and run it:
 
 .. code-block:: none
@@ -30,7 +30,7 @@ Let's compile and run it:
     aaaa,bbb!
 
 Everything works fine: we get ``aaaa,bbb!`` in both cases.
-However, if we use ``-s`` re2c option, lexer becomes sensitive to condition order:
+However, if we use the ``-s`` re2c option, the lexer becomes sensitive to condition order:
 
 .. code-block:: none
 
@@ -47,11 +47,11 @@ However, if we use ``-s`` re2c option, lexer becomes sensitive to condition orde
     error
 
 And we also get a warning from re2c.
-The same behaviour (re2c warning and error with ``-DREVERSED_CONDITION_ORDER``) remains if we use ``-g`` option
+The same behavior (re2c warning and error with ``-DREVERSED_CONDITION_ORDER``) remains if we use the ``-g`` option
 (or any option that implies ``-s`` or ``-g``).
 Why is that?
 A look at the generated code explains everything.
-Normally the inital dispatch on conditions is a ``switch`` statement:
+Normally the initial dispatch on conditions is a ``switch`` statement:
 
 .. code-block:: cpp
 
@@ -61,7 +61,7 @@ Normally the inital dispatch on conditions is a ``switch`` statement:
 	}
 
 Dispatch uses explicit condition names and works no matter what numbers are assigned to them.
-However, with ``-s`` option re2c generates an ``if`` statement instead of a ``switch``:
+However, with the ``-s`` option, re2c generates an ``if`` statement instead of a ``switch``:
 
 .. code-block:: cpp
 
@@ -71,7 +71,7 @@ However, with ``-s`` option re2c generates an ``if`` statement instead of a ``sw
 		goto yyc_b;
 	}
 
-And with ``-g`` option it uses jump table (computed ``goto``):
+And with the ``-g`` option, it uses a jump table (computed ``goto``):
 
 .. code-block:: cpp
 
@@ -81,6 +81,6 @@ And with ``-g`` option it uses jump table (computed ``goto``):
 	};
 	goto *yyctable[c];
 
-Clearly, the last two cases are sensitive to condition order.
-The fix is easy: as the warning suggests, use ``/*!types:re2c*/`` directive or ``-t, --type-header`` option.
+Clearly, the last two cases are condition order sensitive .
+The fix is easy: as the warning suggests, use the ``/*!types:re2c*/`` directive or the ``-t, --type-header`` option.
 

@@ -32,11 +32,11 @@ Say, we want to match ``'a'``:
     }
 
 Clearly this is not what we want: this code matches any letter, not only ``'a'``.
-re2c grumbles something about undefined control flow and says that default ``*`` rule won't hurt:
+re2c grumbles something about undefined control flow and says that the default ``*`` rule won't hurt:
 
 .. code-block:: none
 
-    re2c: warning: line 3: control flow is undefined for strings that match '[\x0-\x60\x62-\xFF]', use default rule '*' [-Wundefined-control-flow]
+    re2c: warning: line 3: control flow is undefined for strings that match '[\x0-\x60\x62-\xFF]', use the default '*' rule  [-Wundefined-control-flow]
 
 Let's add it:
 
@@ -71,5 +71,5 @@ Now that's better:
             { return 'a'; }
     }
 
-Note that default rule brings no overhead: it simply binds code to default label.
+Note that the default rule brings no overhead: it simply binds code to the default label.
 
