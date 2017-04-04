@@ -14,7 +14,7 @@ Any other character cannot be used for the same reason
 
 By default, re2c-generated lexers use the following approach to check for the end of the input buffer:
 they assume that ``YYLIMIT`` is a pointer to the end of the input buffer, and they check by simply comparing ``YYCURSOR`` and ``YYLIMIT``.
-The obvious to accomplish this is by checking on each input character (before advancing to the next character), but that's very slow.
+The obvious way to accomplish this is by checking on each input character (before advancing to the next character), but that's very slow.
 Instead, re2c inserts checks only at certain points in the generated program.
 Each check ensures that there is enough input to proceed until the next check.
 If the check fails, the lexer calls ``YYFILL(n)``, which may either supply at least ``n`` characters or stop:
