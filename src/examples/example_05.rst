@@ -20,7 +20,7 @@ Notes:
 * Each condition is a standalone lexer (DFA).
 
 * Each condition has a unique identifier: ``/*!types:re2c*/`` tells re2c to generate
-  an enumeration of all identifiers (names are prefixed with ``yyc`` by default).
+  an enumeration of all the identifiers (the names are prefixed with ``yyc`` by default).
   The lexer uses ``YYGETCONDITION`` to get the identifier of the current condition
   and ``YYSETCONDITION`` to set it.
 
@@ -29,7 +29,7 @@ Notes:
 * Conditions are connected: transitions are allowed between the final states of one condition
   and the start state of another condition (but not between inner states of different conditions).
   The generated code starts with dispatch.
-  Actions can either jump to the initial dispatch or jump directly to any condition.
+  Actions can either jump to the initial dispatch or jump directly to a condition.
 
 * The ``<*>`` rule is merged to all conditions (low priority).
 

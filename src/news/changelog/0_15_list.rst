@@ -13,7 +13,7 @@
     + ``-Wno-<warning>``
     + ``-Werror-<warning>``
     + ``-Wno-error-<warning>``
-- Added individual warnings:
+- Added specific warnings:
     + ``-Wundefined-control-flow``
     + ``-Wunreachable-rules``
     + ``-Wcondition-order``
@@ -24,7 +24,7 @@
 - Fixed options:
     + ``--`` (interpret remaining arguments as non-options)
 - Deprecated options:
-    + ``-1 --single-pass`` (single pass is by default now)
+    + ``-1 --single-pass`` (single pass is the default now)
 - Reduced size of the generated ``.dot`` files.
 - Fixed bugs:
     + #27 re2c crashes reading files containing ``%{ %}`` (patch by Rui)
@@ -44,7 +44,7 @@
 - Updated build system:
     + support out of source builds
     + support ```make distcheck```
-    + added ```make bootstrap``` (rebuild re2c after building with precomplied ``.re`` files)
+    + added ```make bootstrap``` (rebuild re2c after building with precompiled ``.re`` files)
     + added ```make tests``` (run tests with ``-j``)
     + added ```make vtests``` (run tests with ``--valgrind -j``)
     + added ```make wtests``` (run tests with ``--wine -j 1``)

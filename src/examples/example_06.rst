@@ -3,9 +3,9 @@ Braille patterns (encodings)
 
 This example is about encoding support in re2c.
 It's a partial decoder from Grade-1 (uncontracted) Unicode English Braille to plain English.
-The input may be encoded in UTF-8, UTF-16, UTF-32 or UCS-2:
+The input may be encoded in UTF-8, UTF-16, UTF-32, or UCS-2:
 all of these encodings are capable of representing Braille patterns (code points ``[0x2800 - 0x28ff]``).
-We use ``-r`` option to reuse the same block of re2c rules with different encodings.
+We use the ``-r`` option to reuse the same block of re2c rules with different encodings.
 
 So. The hardest part is to get some input.
 Here is a message out of the void:
@@ -13,7 +13,7 @@ Here is a message out of the void:
 .. include:: 06_braille.utf8.txt
 
 It appears to be UTF-8 encoded :download:`[06_braille.utf8.txt] <06_braille.utf8.txt>`.
-Convert it into UTF-16, UTF-32 or UCS-2:
+Let's convert it into UTF-16, UTF-32, and UCS-2:
 
 .. code-block:: bash
 
@@ -24,10 +24,10 @@ Convert it into UTF-16, UTF-32 or UCS-2:
 And the input is ready.
 
 Grade-1 Braille is quite simple (compared to Grade-2 Braille).
-Patterns map directly to symbols (letters, digits and punctuators) except for a couple of special patterns:
-numeric mode indicator (⠼), letter mode indicator (⠰), capital letter (⠠)
-and some other, which we omit for simplicity (as well as a few ambiguous punctuation patterns).
-Grade-2 Braille allows contractions; they obey complex rules (like those of a natural language)
+Patterns map directly to symbols (letters, digits, and punctuators) except for a couple of special patterns:
+the numeric mode indicator (⠼), the letter mode indicator (⠰), the capital letter indicator (⠠) 
+and some others, which we omit here for the sake of simplicity (as well as a few ambiguous punctuation patterns).
+Grade-2 Braille allows contractions; those obey some rather complex rules (like those of a natural language)
 and are much harder to implement.
 
 :download:`[06_braille.re] <06_braille.re.txt>`
@@ -38,15 +38,15 @@ and are much harder to implement.
 
 Notes:
 
-* Reuse mode is enabled with ``-r`` option.
-* In reuse mode re2c expects a single ``/*!rules:re2c ... */`` block
+* The reuse mode is enabled with the ``-r`` option.
+* In the reuse mode, re2c expects a single ``/*!rules:re2c ... */`` block
   followed by multiple ``/*!use:re2c ... */`` blocks.
-  All blocks can have their own configurations, definitions and rules.
-* Encoding can be enabled either with command-line option or with configuration.
-* Each encoding needs an appropriate code unit type (``YYCTYPE``).
+  All blocks can have their own configurations, definitions, and rules.
+* Encoding can be enabled either with a command-line option or a configuration.
+* Each encoding needs the appropriate code unit type (``YYCTYPE``).
 * We use conditions to switch between numeric and normal modes.
 
-Generate, compile and run:
+Generate, compile,  and run:
 
 .. code-block:: bash
 

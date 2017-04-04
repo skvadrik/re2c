@@ -10,11 +10,11 @@ and may contain any character in range ``[0 - 0xFF]`` except quotes of the appro
 This time we cannot use ``\0`` as a sentinel: input strings such as ``"aha\0ha"`` are perfectly valid,
 but ill-formed strings such as ``"aha\0`` are also possible and shouldn't crash the lexer.
 Any other character cannot be used for the same reason
-(including quotes: each type of strings can contain quotes of the opposite type).
+(including quotes: each type of string may contain quotes of the opposite type).
 
 By default, re2c-generated lexers use the following approach to check for the end of the input buffer:
 they assume that ``YYLIMIT`` is a pointer to the end of the input buffer, and they check by simply comparing ``YYCURSOR`` and ``YYLIMIT``.
-The obvious way is to check on each input character (before advancing to the next character), but that's very slow.
+The obvious to accomplish this is by checking on each input character (before advancing to the next character), but that's very slow.
 Instead, re2c inserts checks only at certain points in the generated program.
 Each check ensures that there is enough input to proceed until the next check.
 If the check fails, the lexer calls ``YYFILL(n)``, which may either supply at least ``n`` characters or stop:
@@ -22,9 +22,9 @@ If the check fails, the lexer calls ``YYFILL(n)``, which may either supply at le
     ``if ((YYLIMIT - YYCURSOR) < n) YYFILL(n);``
 
 For those interested in the internal re2c algorithm used to determine checkpoints,
-here is a quote from the original paper
+here is a quotation from the original paper
 :download:`"RE2C: a more versatile scanner generator" <../about/1994_bumbulis_cowan_re2c_a_more_versatile_scanner_generator.pdf>`
-by Peter Bumbulis, Donald D. Cowan, 1994, ACM Letters on Programming Languages and Systems (LOPLAS):
+*by Peter Bumbulis, Donald D. Cowan, 1994, ACM Letters on Programming Languages and Systems (LOPLAS)*:
 
     *A set of key states can be determined by discovering the strongly-connected components (SCCs) of the
     DFA. An SCC is a maximal subset of states such that there exists a path from any state in the subset to any

@@ -45,14 +45,14 @@ of code units.
 
 * UTF-8 is a variable-length encoding. Its code space includes all
   Unicode code points, from 0 to 0xD7FF and from 0xE000 to 0x10FFFF. One
-  code point is represented with sequence of one, two, three, or four
-  1-byte code units. Size of ``YYCTYPE`` must be 1 byte.
+  code point is represented with a sequence of one, two, three, or four
+  1-byte code units. The size of ``YYCTYPE`` must be 1 byte.
 
 In Unicode, values from range 0xD800 to 0xDFFF (surrogates) are not
 valid Unicode code points. Any encoded sequence of code units that
 would map to Unicode code points in the range 0xD800-0xDFFF, is
 ill-formed. The user can control how ``re2c`` treats such ill-formed
-sequences with the ``--encoding-policy <policy>`` flag.
+sequences with the ``--encoding-policy <policy>`` switch.
 
 For some encodings, there are code units that never occur in a valid
 encoded stream (e.g., 0xFF byte in UTF-8). If the generated scanner must

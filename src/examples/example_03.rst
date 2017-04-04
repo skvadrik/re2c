@@ -39,7 +39,7 @@ except ``YYLIMIT`` (it must point at the end of buffer):
 
 The end of input is a special case: as explained in the `Recognizing strings: the need for YYMAXFILL <example_02.html>`_ example,
 the input must be padded with ``YYMAXFILL`` fake characters.
-In this case ``YYLIMIT`` must point at the end of the padding:
+In this case, ``YYLIMIT`` must point at the end of the padding:
 
 .. code-block:: bash
 
@@ -83,12 +83,12 @@ Notes:
 
 * There is only one successful way out (line 60): the lexer must recognize a standalone
   "end of input" lexeme (``NULL``) exactly at the beginning of the padding.
-  ``YYFILL`` failure is an error: if the input was correct, the lexer should have already stopped.
+  A ``YYFILL`` failure is an error: if the input was correct, the lexer should have already stopped.
 
 * ``YYFILL`` may fail for two reasons:
   either there is no more input (line 23),
   or the lexeme is too long: it occupies the whole buffer and nothing can be discarded (line 27).
-  We treat both cases in the same way (as error), but a real-world program might handle them differently
+  We treat both cases in the same way (as an error), but a real-world program might handle them differently
   (resize the buffer, cut the long lexeme in two, etc.).
 
 * ``@@`` in the ``YYFILL`` definition (line 52) is a formal parameter: re2c substitutes it with the actual argument to ``YYFILL``.

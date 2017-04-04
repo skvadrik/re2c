@@ -3,10 +3,10 @@ Recognizing integers: the sentinel method
 
 This example is very simple, yet practical.
 We assume that the input is small (fits in one continuous block of memory).
-We also assume that some characters never occur in well-formed input (but may occur in ill-formed input).
+We also assume that some characters never occur in well-formed input (but may occur in input that's ill-formed).
 This is often the case in simple real-world tasks such as parsing program options,
-converting strings to numbers, determining binary file type based on magic in the first few bytes,
-efficiently switching on a string, and many others.
+converting strings to numbers, determining binary file types based on some magic in the first few bytes, or
+efficiently switching on a string.
 Our example program simply loops over its command-line arguments
 and tries to match each argument against one of four patterns:
 binary, octal, decimal, and hexadecimal integer literals.
@@ -21,7 +21,7 @@ The numbers are not *parsed* (their numeric value is not retrieved), they are me
 A couple of things should be noted:
 
 * The default case (when none of the rules matched) is handled properly with the ``*`` rule (line 16).
-  **Never forget to handle the default case, otherwise control flow in the lexer will be undefined for some input strings.**
+  **Never forget to handle the default case, otherwise control flow in the lexer for some input strings will be undefined .**
   Use the `[-Wundefined-control-flow] <../manual/warnings/undefined_control_flow/wundefined_control_flow.html>`_ re2c warning:
   it will warn you about the unhandled default case and show the input patterns that are not covered by the rules.
 
@@ -35,8 +35,8 @@ A couple of things should be noted:
 
 * ``YYMARKER`` (line 5) is needed because rules overlap:
   it backs up the input position of the longest successful match.
-  Say, we have overlapping rules ``"a"`` and ``"abc"`` and input string ``"abd"``:
-  by the time ``"a"`` matches there's still a chance to match ``"abc"``,
+  Imagine we have overlapping rules ``"a"`` and ``"abc"`` and input string ``"abd"``:
+  by the time ``"a"`` matches, there's still a chance to match ``"abc"``,
   but when the lexer sees ``'d'``, it must roll back.
   (You might wonder why ``YYMARKER`` is exposed at all: why not make it a local variable like ``yych``?
   The reason is, all input pointers must be updated by ``YYFILL``

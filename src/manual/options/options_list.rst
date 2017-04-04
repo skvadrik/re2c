@@ -13,7 +13,7 @@
 ``-d --debug-output``
     Creates a parser that dumps information about
     the current position and the state the parser is in. 
-    This is useful to debug parser issues and states. If you use this
+    This is useful for debugging parser issues and states. If you use this
     switch, you need to define a ``YYDEBUG`` macro, which will be called like a
     function with two parameters: ``void YYDEBUG (int state, char current)``.
     The first parameter receives the state or ``-1`` and the second parameter
@@ -26,31 +26,32 @@
 
 ``-e --ecb``
     Generate a parser that supports EBCDIC. The generated
-    code can deal with any character up to 0xFF. In this mode ``re2c`` assumes
-    that input character size is 1 byte. This switch is incompatible with
-    ``-w``, ``-x``, ``-u`` and ``-8``.
+    code can deal with any character up to 0xFF. In this mode, ``re2c`` assumes
+    an input character size of 1 byte. This switch is incompatible with
+    ``-w``, ``-x``, ``-u``, and ``-8``.
 
 ``-f --storable-state``
     Generate a scanner with support for storable state.
 
 ``-F --flex-syntax``
-    Partial support for the flex syntax. When this flag
+    Partial support for flex syntax. When this flag
     is active, named definitions must be surrounded by curly braces and
-    can be defined without an equal sign and the terminating semi colon.
-    Instead names are treated as direct double quoted strings.
+    can be defined without an equal sign and the terminating semicolon.
+    Instead, names are treated as direct double quoted strings.
 
 ``-g --computed-gotos``
     Generate a scanner that utilizes GCC's
-    computed goto feature. That is, ``re2c`` generates jump tables whenever a
-    decision is of a certain complexity (e.g., a lot of if conditions are
+    computed-goto feature. That is, ``re2c`` generates jump tables whenever a
+    decision is of certain complexity (e.g., a lot of if conditions would be
     otherwise necessary). This is only usable with compilers that support this feature.
-    Note that this implies ``-b`` and that the complexity threshold can be configured using the inplace configuration ``cgoto:threshold``.
+    Note that this implies ``-b`` and that the complexity threshold can be configured 
+    using the ``cgoto:threshold`` inplace configuration.
 
 ``-i --no-debug-info``
     Do not output ``#line`` information. This is
-    useful when you want use a CMS tool with the ``re2c`` output which you
-    might want if you do not require your users to have ``re2c`` themselves
-    when building from your source.
+    useful when you want use a CMS tool with ``re2c``'s output. You might
+    want to do this if you do not want to impose re2c as a build requirement
+    for your source.
 
 ``-o OUTPUT --output=OUTPUT``
     Specify the ``OUTPUT`` file.
@@ -60,9 +61,9 @@
     In this mode, no ``/*!re2c */`` block and exactly one ``/*!rules:re2c */`` must be present.
     The rules are saved and used by every ``/*!use:re2c */`` block that follows.
     These blocks can contain inplace configurations, especially ``re2c:flags:e``,
-    ``re2c:flags:w``, ``re2c:flags:x``, ``re2c:flags:u`` and ``re2c:flags:8``.
+    ``re2c:flags:w``, ``re2c:flags:x``, ``re2c:flags:u``, and ``re2c:flags:8``.
     That way it is possible to create the same scanner multiple times for
-    different character types, different input mechanisms or different output mechanisms.
+    different character types, different input mechanisms, or different output mechanisms.
     The ``/*!use:re2c */`` blocks can also contain additional rules that will be appended
     to the set of rules in ``/*!rules:re2c */``.
 
@@ -78,41 +79,41 @@
 ``-u --unicode``
     Generate a parser that supports UTF-32. The generated
     code can deal with any valid Unicode character up to 0x10FFFF. In this
-    mode ``re2c`` assumes that input character size is 4 bytes. This switch is
-    incompatible with ``-e``, ``-w``, ``-x`` and ``-8``. This implies ``-s``.
+    mode, ``re2c`` assumes an input character size of 4 bytes. This switch is
+    incompatible with ``-e``, ``-w``, ``-x``, and ``-8``. This implies ``-s``.
 
 ``-v --version``
     Show version information.
 
 ``-V --vernum``
-    Show the version as a number XXYYZZ.
+    Show the version as a number in the MMmmpp (Majorm, minor, patch) format.
 
 ``-w --wide-chars``
     Generate a parser that supports UCS-2. The
     generated code can deal with any valid Unicode character up to 0xFFFF.
-    In this mode ``re2c`` assumes that input character size is 2 bytes. This
-    switch is incompatible with ``-e``, ``-x``, ``-u`` and ``-8``. This implies
+    In this mode, ``re2c`` assumes an input character size of 2 bytes. This
+    switch is incompatible with ``-e``, ``-x``, ``-u``, and ``-8``. This implies
     ``-s``.
 
 ``-x --utf-16``
     Generate a parser that supports UTF-16. The generated
     code can deal with any valid Unicode character up to 0x10FFFF. In this
-    mode ``re2c`` assumes that input character size is 2 bytes. This switch is
-    incompatible with ``-e``, ``-w``, ``-u`` and ``-8``. This implies ``-s``.
+    mode, ``re2c`` assumes an input character size of 2 bytes. This switch is
+    incompatible with ``-e``, ``-w``, ``-u``, and ``-8``. This implies ``-s``.
 
 ``-8 --utf-8``
     Generate a parser that supports UTF-8. The generated
     code can deal with any valid Unicode character up to 0x10FFFF. In this
-    mode ``re2c`` assumes that input character size is 1 byte. This switch is
-    incompatible with ``-e``, ``-w``, ``-x`` and ``-u``.
+    mode, ``re2c`` assumes an input character size of 1 byte. This switch is
+    incompatible with ``-e``, ``-w``, ``-x``, and ``-u``.
 
 ``--case-insensitive``
-    All strings are case insensitive, so all
-    "-expressions are treated in the same way '-expressions are.
+    Makes all strings case insensitive. This makes
+    "-quoted expressions behave as '-quoted expressions.
 
 ``--case-inverted``
     Invert the meaning of single and double quoted
-    strings. With this switch single quotes are case sensitive and double
+    strings. With this switch, single quotes are case sensitive and double
     quotes are case insensitive.
 
 ``--no-generation-date``
@@ -121,19 +122,21 @@
 ``--no-version``
     Suppress version output in the generated file.
 
+``--no-generation-date``
+    Suppress version output in the generated file.
+
 ``--encoding-policy POLICY``
     Specify how ``re2c`` must treat Unicode
     surrogates. ``POLICY`` can be one of the following: ``fail`` (abort with
-    error when surrogate encountered), ``substitute`` (silently substitute
-    surrogate with error code point 0xFFFD), ``ignore`` (treat surrogates as
-    normal code points). By default ``re2c`` ignores surrogates (for backward
-    compatibility). Unicode standard says that standalone surrogates are
+    an error when a surrogate is encountered), ``substitute`` (silently replace
+    surrogates with the error code point 0xFFFD), ``ignore`` (treat surrogates as
+    normal code points). By default, ``re2c`` ignores surrogates (for backward
+    compatibility). The Unicode standard says that standalone surrogates are
     invalid code points, but different libraries and programs treat them
     differently.
 
 ``--input INPUT``
-    Specify re2c input API. ``INPUT`` can be one of the
-    following: ``default``, ``custom``.
+    Specify re2c's input API. ``INPUT`` can be either ``default`` or ``custom``.
 
 ``-S --skeleton``
     Instead of embedding re2c-generated code into C/C++
@@ -141,13 +144,18 @@
     for correctness and performance testing.
 
 ``--empty-class POLICY``
-    What to do if user inputs empty character
+    What to do if the user uses an empty character
     class. ``POLICY`` can be one of the following: ``match-empty`` (match empty
     input: pretty illogical, but this is the default for backwards
-    compatibility reason), ``match-none`` (fail to match on any input),
+    compatibility reasons), ``match-none`` (fail to match on any input),
     ``error`` (compilation error). Note that there are various ways to
-    construct empty class, e.g: [], [^\\x00-\\xFF],
+    construct an empty class, e.g., [], [^\\x00-\\xFF],
     [\\x00-\\xFF][\\x00-\\xFF].
 
+``--dfa-minimization <table | moore>``
+    The internal algorithm used by re2c to minimize the DFA (defaults to ``moore``).
+    Both the table filling algorithm and the Moore algorithm should produce the same DFA (up to states relabeling).
+    The table filling algorithm is much simpler and slower; it serves as a reference implementation.
+
 ``-1 --single-pass``
-    Deprecated and does nothing (single pass is by default now).
+    Deprecated. Does nothing (single pass is the default now).

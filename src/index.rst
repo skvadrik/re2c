@@ -16,7 +16,7 @@ re2c is a lexer generator for C/C++.
 Its key features are:
 
 *   Very fast lexers: the generated code is as good as a carefully tuned, hand-crafted C/C++ lexer.
-    It's because re2c generates minimalistic, hard-coded state machines
+    This is because re2c generates minimalistic, hard-coded state machines
     (as opposed to full-featured table-based lexers).
 
 *   Flexible API: one can `configure <manual/syntax/syntax.html#configurations>`_
@@ -25,7 +25,7 @@ Its key features are:
     Programmers can adjust their lexer to a particular input model,
     avoid unnecessary overhead (drop useless runtime checks, do in-place lexing, etc.),
     and make all sorts of hacks.
-    `Examples <examples/examples.html>`_ cover many real-world cases and shed some light on the dark corners of the re2c API.
+    The `examples <examples/examples.html>`_ cover many real-world cases and shed some light on the dark corners of the re2c API.
 
 *   Efficient `Unicode support <manual/features/encodings/encodings.html>`_
     (code points are compiled into executable finite-state machines).
@@ -69,14 +69,14 @@ Projects that use re2c
 ----------------------
 
 * `PHP <http://php.net/>`_ (general-purpose scripting language)
-* `ninja <https://ninja-build.org/>`_ (a small build system with a focus on speed)
+* `ninja <https://ninja-build.org/>`_ (small build system with a focus on speed)
 * `yasm <http://yasm.tortall.net/>`_ (assembler)
 * `spamasassin <https://spamassassin.apache.org/>`_ (anti-spam platform)
 * `BRL-CAD <http://brlcad.org/>`_ (cross-platform solid modeling system)
 * ... last but not least, `re2c <http://re2c.org>`_
 
-This list is by no means complete;
-these are only the best-known and open source projects.
+This list is by no means complete.
+These are only the best-known and open source projects.
 
 
 

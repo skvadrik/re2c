@@ -165,11 +165,11 @@ Configurations
 
 ``re2c:yych:conversion = 0;``
     When this setting is non zero, ``re2c`` automatically generates
-    conversion code whenever yych gets read. In this case the type must be
+    conversion code whenever yych gets read. In this case, the type must be
     defined using ``re2c:define:YYCTYPE``.
 
 ``re2c:yych:emit = 1;``
-    The generation of *yych* can be suppressed by setting this to 0.
+    Set this to zero to suppress the generation of *yych*.
 
 ``re2c:yybm:hex = 0;``
     If set to zero, a decimal table will be used. Otherwise, a hexadecimal table will be generated.
@@ -427,12 +427,12 @@ Regular expressions
 Character classes and string literals may contain octal or hexadecimal
 character definitions and the following set of escape sequences:
 ``\a``, ``\b``, ``\f``, ``\n``, ``\r``, ``\t``, ``\v``, ``\\``. An octal character is defined by a backslash
-followed by its three octal digits (e.g. ``\377``).
-Hexadecimal characters from 0 to 0xFF are defined by backslash, a lower
-cased ``x`` and two hexadecimal digits (e.g. ``\x12``). Hexadecimal characters from 0x100 to 0xFFFF are defined by backslash, a lower cased
-``\u`` or an upper cased ``\X`` and four hexadecimal digits (e.g. ``\u1234``).
-Hexadecimal characters from 0x10000 to 0xFFFFffff are defined by backslash, an upper cased ``\U``
-and eight hexadecimal digits (e.g. ``\U12345678``).
+followed by its three octal digits (e.g., ``\377``).
+Hexadecimal characters from 0 to 0xFF are defined by a backslash, a lower
+case ``x`` and two hexadecimal digits (e.g., ``\x12``). Hexadecimal characters from 0x100 to 0xFFFF are defined by a backslash, a lower case
+``\u``or an upper case ``\X``, and four hexadecimal digits (e.g., ``\u1234``).
+Hexadecimal characters from 0x10000 to 0xFFFFffff are defined by a backslash, an upper case ``\U``,
+and eight hexadecimal digits (e.g., ``\U12345678``).
 
 The only portable "any" rule is the default rule, ``*``.
 
@@ -469,7 +469,7 @@ depends on the particular use case.
 
 ``YYDEBUG (state, current)``
     This is only needed if the ``-d`` flag was
-    specified. It allows to easily debug the generated parser by calling a
+    specified. It allows easy debugging of the generated parser by calling a
     user defined function for every state. The function should have the
     following signature: ``void YYDEBUG (int state, char current)``. The first
     parameter receives the state or -1 and the second parameter receives the
@@ -481,13 +481,13 @@ depends on the particular use case.
     provided. ``YYFILL (n)`` should adjust ``YYCURSOR``, ``YYLIMIT``, ``YYMARKER``,
     and ``YYCTXMARKER`` as needed. Note that for typical programming languages
     ``n`` will be the length of the longest keyword plus one. The user can
-    place a comment of the form ``/*!max:re2c*/`` to insert ``YYMAXFILL`` definition that is set to the maximum
+    place a comment of the form ``/*!max:re2c*/`` to insert a ``YYMAXFILL`` define set to the maximum
     length value.
 
 ``YYGETCONDITION ()``
     This define is used to get the condition prior to
     entering the scanner code when using the ``-c`` switch. The value must be
-    initialized with a value from the enumeration ``YYCONDTYPE`` type.
+    initialized with a value from the ``YYCONDTYPE`` enumeration type.
 
 ``YYGETSTATE ()``
     The user only needs to define this macro if the ``-f``
@@ -500,15 +500,15 @@ depends on the particular use case.
     ``YYFILL (n)`` was called.
 
 ``YYLIMIT``
-    Expression of type ``YYCTYPE *`` that marks the end of the buffer ``YYLIMIT[-1]``
+    An expression of type ``YYCTYPE *`` that marks the end of the buffer ``YYLIMIT[-1]``
     is the last character in the buffer). The generated code repeatedly
     compares ``YYCURSOR`` to ``YYLIMIT`` to determine when the buffer needs
     (re)filling.
 
 ``YYMARKER``
-    l-value of type ``YYCTYPE *``.
+    An l-value of type ``YYCTYPE *``.
     The generated code saves backtracking information in ``YYMARKER``. Some
-    easy scanners might not use this.
+    simple scanners might not use this.
 
 ``YYMAXFILL``
     This will be automatically defined by ``/*!max:re2c*/`` blocks as explained above.
