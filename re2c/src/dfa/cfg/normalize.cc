@@ -16,6 +16,8 @@ template<typename cmd_t> void normalize(cmd_t *cmd);
  * For that reason all commands are normalized.
  */
 
+static void normalize(tcmd_t *s, tcmd_t *e);
+
 void cfg_t::normalization(cfg_t &cfg)
 {
 	const size_t nver = static_cast<size_t>(cfg.dfa.maxtagver) + 1;
@@ -24,30 +26,35 @@ void cfg_t::normalization(cfg_t &cfg)
 
 	cfg_bb_t *b = cfg.bblocks, *e = b + cfg.nbbfall;
 	for (; b < e; ++b) {
-		normalize(b->cmd->save);
-		normalize(b->cmd->copy);
-		tagcopy_t::topsort(&b->cmd->copy, indeg);
+
+		for (tcmd_t *x = b->cmd, *y; x;) {
+			for (y = x; x && !tcmd_t::iscopy(x->rhs); x = x->next);
+			normalize(y, x);
+			for (y = x; x && tcmd_t::iscopy(x->rhs); x = x->next);
+			normalize(y, x);
+		}
+
+		tcmd_t::topsort(&b->cmd, indeg);
 	}
 
 	delete[] indeg;
 }
 
-template<typename cmd_t>
-void normalize(cmd_t *cmd)
+void normalize(tcmd_t *s, tcmd_t *e)
 {
 	// sort lexicographically
-	for (cmd_t *p = cmd; p; p = p->next) {
-		for (cmd_t *q = p->next; q; q = q->next) {
-			if (cmd_t::less(*q, *p)) {
-				cmd_t::swap(*p, *q);
+	for (tcmd_t *p = s; p != e; p = p->next) {
+		for (tcmd_t *q = p->next; q != e; q = q->next) {
+			if (tcmd_t::less(*q, *p)) {
+				tcmd_t::swap(*p, *q);
 			}
 		}
 	}
 
 	// delete duplicates
-	for (cmd_t *p = cmd; p;) {
-		cmd_t *q = p->next;
-		if (q && cmd_t::equal(*p, *q)) {
+	for (tcmd_t *p = s; p != e;) {
+		tcmd_t *q = p->next;
+		if (q != e && tcmd_t::equal(*p, *q)) {
 			p->next = q->next;
 		} else {
 			p = q;

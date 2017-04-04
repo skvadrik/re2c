@@ -38,10 +38,7 @@ void find_overwritten_tags(const dfa_t &dfa, size_t state,
 
 	const dfa_state_t *s = dfa.states[state];
 	for (size_t c = 0; c < dfa.nchars; ++c) {
-		for (const tagsave_t *p = s->tcmd[c].save; p; p = p->next) {
-			owrt[p->ver] = true;
-		}
-		for (const tagcopy_t *p = s->tcmd[c].copy; p; p = p->next) {
+		for (const tcmd_t *p = s->tcmd[c]; p; p = p->next) {
 			owrt[p->lhs] = true;
 		}
 
@@ -68,22 +65,19 @@ void insert_fallback_tags(dfa_t &dfa)
 	for (size_t i = 0; i < nstates; ++i) {
 		dfa_state_t *s = dfa.states[i];
 		if (!s->fallback) continue;
-		tcmd_t *f = &s->tcmd[nsym], *b = f + 1;
 
-		// 'save' commands are the same as for final transition
-		for (tagsave_t *p = f->save; p; p = p->next) {
-			b->save = pool.make_save(b->save, p->ver, p->bottom);
-		}
-
-		// 'copy' commands are split
 		std::fill(been, been + nstates, false);
 		std::fill(owrt, owrt + nver, false);
 		find_overwritten_tags(dfa, i, been, owrt);
-		for (tagcopy_t *p = f->copy; p; p = p->next) {
 
+		tcmd_t *p = s->tcmd[nsym], *&f = s->tcmd[nsym + 1];
+		for (; p; p = p->next) {
+			const tagver_t l = p->lhs, r = p->rhs;
+
+			// 'save' commands are the same as for final transition
 			// non-overwritten tags need 'copy' on fallback transition
-			if (!owrt[p->rhs]) {
-				b->copy = pool.make_copy(b->copy, p->lhs, p->rhs);
+			if (!tcmd_t::iscopy(r) || !owrt[r]) {
+				f = pool.make_tcmd(f, l, r);
 				continue;
 			}
 
@@ -92,8 +86,8 @@ void insert_fallback_tags(dfa_t &dfa)
 			for (size_t c = 0; c < nsym; ++c) {
 				size_t j = s->arcs[c];
 				if (j != dfa_t::NIL && dfa.states[j]->fallthru) {
-					tagcopy_t *&q = s->tcmd[c].copy;
-					q = pool.make_copy(q, p->lhs, p->rhs);
+					tcmd_t *&q = s->tcmd[c];
+					q = pool.make_tcmd(q, l, r);
 				}
 			}
 		}

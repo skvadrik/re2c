@@ -15,11 +15,6 @@ Node::Node()
 	, cmd(NULL)
 {}
 
-static bool same(const tcmd_t &x, const tcmd_t &y)
-{
-	return x.save == y.save && x.copy == y.copy;
-}
-
 void Node::init(const dfa_state_t *s,
 	const std::vector<uint32_t> &charset, size_t nil)
 {
@@ -27,21 +22,21 @@ void Node::init(const dfa_state_t *s,
 	for (uint32_t c = 0, l = 0; c < nc;) {
 
 		size_t j = s->arcs[c];
-		const tcmd_t &t = s->tcmd[c];
-		for (; ++c < nc && s->arcs[c] == j && same(s->tcmd[c], t););
+		const tcmd_t *t = s->tcmd[c];
+		for (; ++c < nc && s->arcs[c] == j && s->tcmd[c] == t;);
 		if (j == dfa_t::NIL) j = nil;
 
 		// all arcs go to default node => this node is final
 		if (l == 0 && c == nc && j == nil) break;
 
 		const uint32_t u = charset[c];
-		arcs[j].push_back(Node::range_t(l, u - 1, &t));
+		arcs[j].push_back(Node::range_t(l, u - 1, t));
 
 		l = u;
 	}
 
 	rule = s->rule;
-	cmd = &s->tcmd[nc];
+	cmd = s->tcmd[nc];
 }
 
 bool Node::end() const

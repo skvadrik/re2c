@@ -18,13 +18,12 @@ tagver_t cfg_t::compact(const cfg_t &cfg, tagver_t *ver2new)
 	}
 	for (size_t i = 0; i < cfg.nbbfall; ++i) {
 		const cfg_bb_t &b = cfg.bblocks[i];
-
-		for (const tagsave_t *p = b.cmd->save; p; p = p->next) {
-			used[p->ver] = true;
-		}
-
-		for (const tagcopy_t *p = b.cmd->copy; p; p = p->next) {
-			used[p->lhs] = used[p->rhs] = true;
+		for (const tcmd_t *p = b.cmd; p; p = p->next) {
+			const tagver_t r = p->rhs;
+			if (tcmd_t::iscopy(r)) {
+				used[r] = true;
+			}
+			used[p->lhs] = true;
 		}
 	}
 

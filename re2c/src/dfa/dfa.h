@@ -22,7 +22,7 @@ struct opt_t;
 struct dfa_state_t
 {
 	size_t *arcs;
-	tcmd_t *tcmd;
+	tcmd_t **tcmd;
 	tcid_t *tcid;
 	size_t rule;
 	bool fallthru;
@@ -30,7 +30,7 @@ struct dfa_state_t
 
 	explicit dfa_state_t(size_t nchars)
 		: arcs(new size_t[nchars])
-		, tcmd(new tcmd_t[nchars + 2]) // +2 for final and fallback epsilon-transitions
+		, tcmd(new tcmd_t*[nchars + 2]()) // +2 for final and fallback epsilon-transitions
 		, tcid(NULL)
 		, rule(Rule::NONE)
 		, fallthru(false)
@@ -58,7 +58,7 @@ struct dfa_t
 	tcpool_t &tcpool;
 	tagver_t maxtagver;
 	tcmd_t *tcmd0;
-	tcid_t *tcid0;
+	tcid_t tcid0;
 
 	dfa_t(const nfa_t &nfa, const opt_t *opts,
 		const std::string &cond, Warn &warn);

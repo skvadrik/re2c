@@ -5,18 +5,19 @@
 namespace re2c
 {
 
-static void dump_adfa_tcmd(const tccmd_t &cmd)
+static void dump_adfa_tcmd(const tcmd_t *cmd)
 {
-	const tagsave_t *s = cmd.save;
-	const tagcopy_t *c = cmd.copy;
-	if (!s && !c) return;
-
+	if (!cmd) return;
 	fprintf(stderr, "/");
-	for (; c; c = c->next) {
-		fprintf(stderr, "%d=%d ", c->lhs, c->rhs);
-	}
-	for (; s; s = s->next) {
-		fprintf(stderr, "%d%s ", s->ver, s->bottom ? "?" : "");
+	for (const tcmd_t *p = cmd; p; p = p->next) {
+		const tagver_t l = p->lhs, r = p->rhs;
+		if (r == TAGVER_BOTTOM) {
+			fprintf(stderr, "%d%s ", l, "&darr;");
+		} else if (r == TAGVER_CURSOR) {
+			fprintf(stderr, "%d%s ", l, "&uarr;");
+		} else {
+			fprintf(stderr, "%d=%d ", l, r);
+		}
 	}
 }
 

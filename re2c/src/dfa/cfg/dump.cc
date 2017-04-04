@@ -19,11 +19,13 @@ void cfg_t::dump(const cfg_t &cfg, const bool *live)
 		const cfg_bb_t *b = cfg.bblocks + i;
 
 		fprintf(stderr, "  n%u [label=\"%u\\n", i, i);
-		for (const tagsave_t *p = b->cmd->save; p; p = p->next) {
-			fprintf(stderr, "%i ", p->ver);
-		}
-		for (const tagcopy_t *p = b->cmd->copy; p; p = p->next) {
-			fprintf(stderr, "%i~%i ", p->lhs, p->rhs);
+		for (const tcmd_t *p = b->cmd; p; p = p->next) {
+			const tagver_t v = p->rhs;
+			if (tcmd_t::iscopy(v)) {
+				fprintf(stderr, "%i~%i ", p->lhs, v);
+			} else {
+				fprintf(stderr, "%i ", p->lhs);
+			}
 		}
 		fprintf(stderr, "/");
 		if (b->use) {

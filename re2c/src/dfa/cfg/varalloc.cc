@@ -32,9 +32,11 @@ tagver_t cfg_t::variable_allocation(const cfg_t &cfg, const bool *interf,
 	// copy coalescing: for each command X = Y, try to merge X and Y
 	const cfg_bb_t *b = cfg.bblocks, *e = b + cfg.nbbfall;
 	for (; b < e; ++b) {
-		for (const tagcopy_t *p = b->cmd->copy; p; p = p->next) {
+		for (const tcmd_t *p = b->cmd; p; p = p->next) {
 			x = p->lhs;
 			y = p->rhs;
+			if (!tcmd_t::iscopy(y)) continue;
+
 			rx = repr[x];
 			ry = repr[y];
 

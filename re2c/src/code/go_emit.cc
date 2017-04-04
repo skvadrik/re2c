@@ -207,13 +207,14 @@ void Dot::emit(OutputFile &o, const DFA &dfa)
 			for (uint32_t j = 0; j < c.ranges.size(); ++j) {
 				o.wrange(c.ranges[j].first, c.ranges[j].second);
 			}
-			const tccmd_t &cmd = dfa.tcpool[c.tags];
-			for (const tagsave_t *p = cmd.save; p; p = p->next) {
-				o.ws("<").wstring(vartag_name(p->ver, prefix)).ws(">");
-			}
-			for (const tagcopy_t *p = cmd.copy; p; p = p->next) {
-				o.ws("<").wstring(vartag_name(p->lhs, prefix)).ws("~")
-					.wstring(vartag_name(p->rhs, prefix)).ws(">");
+			const tcmd_t *cmd = dfa.tcpool[c.tags];
+			for (const tcmd_t *p = cmd; p; p = p->next) {
+				const tagver_t r = p->rhs;
+				o.ws("<").wstring(vartag_name(p->lhs, prefix));
+				if (tcmd_t::iscopy(r)) {
+					o.ws("~").wstring(vartag_name(r, prefix));
+				}
+				o.ws(">");
 			}
 			o.ws("\"]\n");
 		}

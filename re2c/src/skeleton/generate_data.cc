@@ -91,12 +91,16 @@ static uint32_t nsteps(uint32_t lower, uint32_t upper)
 
 static void apply(size_t *tags, const tcmd_t *cmd, size_t pos)
 {
-	if (!cmd) return;
-	for (const tagcopy_t *p = cmd->copy; p; p = p->next) {
-		tags[p->lhs] = tags[p->rhs];
-	}
-	for (const tagsave_t *p = cmd->save; p; p = p->next) {
-		tags[p->ver] = p->bottom ? Skeleton::DEFTAG : pos;
+	for (const tcmd_t *p = cmd; p; p = p->next) {
+		const tagver_t l = p->lhs, r = p->rhs;
+		size_t &t = tags[l];
+		if (r == TAGVER_BOTTOM) {
+			t = Skeleton::DEFTAG;
+		} else if (r == TAGVER_CURSOR) {
+			t = pos;
+		} else {
+			t = tags[r];
+		}
 	}
 }
 

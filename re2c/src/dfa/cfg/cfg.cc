@@ -1,13 +1,13 @@
 #include <string.h>
 
 #include "src/dfa/cfg/cfg.h"
+#include "src/util/allocate.h"
 
 namespace re2c
 {
 
 static void map_arcs_to_bblocks(const dfa_t &dfa, cfg_ix_t *arc2bb, cfg_ix_t &nbbarc, cfg_ix_t &nbbfin, cfg_ix_t &nbbfall);
-static cfg_bb_t *create_bblocks(const dfa_t &dfa, const cfg_ix_t *arc2bb, cfg_ix_t nbbfin, cfg_ix_t nbbfall);
-static void basic_block(cfg_bb_t *bb, const cfg_ix_t *succb, const cfg_ix_t *succe, tcmd_t *cmd, const Rule *rule);
+static cfg_bb_t *create_bblocks(dfa_t &dfa, const cfg_ix_t *arc2bb, cfg_ix_t nbbfin, cfg_ix_t nbbfall);
 static void successors(const dfa_t &dfa, const cfg_ix_t *arc2bb, bool *been, cfg_ix_t *&succ, size_t x);
 static void fallback(const dfa_t &dfa, const cfg_ix_t *arc2bb, bool *been, cfg_ix_t *&succ, size_t x);
 
@@ -41,17 +41,17 @@ void map_arcs_to_bblocks(const dfa_t &dfa, cfg_ix_t *arc2bb,
 
 	// bblocks for tagged transitions
 	for (size_t i = 0; i < nstate; ++i) {
-		const tcmd_t *c = dfa.states[i]->tcmd, *f = c + nsym;
+		tcmd_t **c = dfa.states[i]->tcmd, **f = c + nsym;
 		for (; c < f; ++c) {
-			*arc2bb++ = c->empty() ? 0 : nbb++;
+			*arc2bb++ = *c == NULL ? 0 : nbb++;
 		}
 	}
 	nbbarc = nbb;
 
 	// bblock for final tagged epsilon-transition
 	for (size_t i = 0; i < nstate; ++i) {
-		const tcmd_t &f = dfa.states[i]->tcmd[nsym];
-		*arc2bb++ = f.empty() ? 0 : nbb++;
+		tcmd_t *f = dfa.states[i]->tcmd[nsym];
+		*arc2bb++ = f == NULL ? 0 : nbb++;
 	}
 	nbbfin = nbb;
 
@@ -59,12 +59,12 @@ void map_arcs_to_bblocks(const dfa_t &dfa, cfg_ix_t *arc2bb,
 	for (size_t i = 0; i < nstate; ++i) {
 		const dfa_state_t *s = dfa.states[i];
 		// (check final tags: fallback tags may be empty)
-		*arc2bb++ = s->fallback && !s->tcmd[nsym].empty() ? nbb++ : 0;
+		*arc2bb++ = s->fallback && s->tcmd[nsym] ? nbb++ : 0;
 	}
 	nbbfall = nbb;
 }
 
-cfg_bb_t *create_bblocks(const dfa_t &dfa, const cfg_ix_t *arc2bb,
+cfg_bb_t *create_bblocks(dfa_t &dfa, const cfg_ix_t *arc2bb,
 	cfg_ix_t nbbfin, cfg_ix_t nbbfall)
 {
 	const size_t
@@ -74,12 +74,12 @@ cfg_bb_t *create_bblocks(const dfa_t &dfa, const cfg_ix_t *arc2bb,
 	cfg_ix_t *succb = new cfg_ix_t[nbbfin], *succe;
 	bool *been = new bool[nstate];
 
-	cfg_bb_t *bblocks = new cfg_bb_t[nbbfall], *b = bblocks;
+	cfg_bb_t *bblocks = allocate<cfg_bb_t>(nbbfall), *b = bblocks;
 
 	// root bblock
 	std::fill(been, been + nstate, false);
 	successors(dfa, arc2bb, been, succe = succb, 0);
-	basic_block(b++, succb, succe, dfa.tcmd0, NULL);
+	new(b++) cfg_bb_t(succb, succe, dfa.tcmd0, NULL);
 
 	// transition bblocks
 	for (size_t i = 0; i < nstate; ++i) {
@@ -88,7 +88,7 @@ cfg_bb_t *create_bblocks(const dfa_t &dfa, const cfg_ix_t *arc2bb,
 			if (*a2b++ != 0) {
 				std::fill(been, been + nstate, false);
 				successors(dfa, arc2bb, been, succe = succb, s->arcs[c]);
-				basic_block(b++, succb, succe, &s->tcmd[c], NULL);
+				new(b++) cfg_bb_t(succb, succe, s->tcmd[c], NULL);
 			}
 		}
 	}
@@ -97,7 +97,7 @@ cfg_bb_t *create_bblocks(const dfa_t &dfa, const cfg_ix_t *arc2bb,
 	for (size_t i = 0; i < nstate; ++i) {
 		if (*a2b++ != 0) {
 			const dfa_state_t *s = dfa.states[i];
-			basic_block(b++, NULL, NULL, &s->tcmd[nsym], &dfa.rules[s->rule]);
+			new(b++) cfg_bb_t(NULL, NULL, s->tcmd[nsym], &dfa.rules[s->rule]);
 		}
 	}
 
@@ -107,7 +107,7 @@ cfg_bb_t *create_bblocks(const dfa_t &dfa, const cfg_ix_t *arc2bb,
 			const dfa_state_t *s = dfa.states[i];
 			std::fill(been, been + nstate, false);
 			fallback(dfa, arc2bb, been, succe = succb, i);
-			basic_block(b++, succb, succe, &s->tcmd[nsym + 1], &dfa.rules[s->rule]);
+			new(b++) cfg_bb_t(succb, succe, s->tcmd[nsym + 1], &dfa.rules[s->rule]);
 		}
 	}
 
@@ -116,17 +116,17 @@ cfg_bb_t *create_bblocks(const dfa_t &dfa, const cfg_ix_t *arc2bb,
 	return bblocks;
 }
 
-void basic_block(cfg_bb_t *bb, const cfg_ix_t *succb,
-	const cfg_ix_t *succe, tcmd_t *cmd, const Rule *rule)
+cfg_bb_t::cfg_bb_t(const cfg_ix_t *sb, const cfg_ix_t *se,
+	tcmd_t *&c, const Rule *r)
+	: succb(NULL)
+	, succe(NULL)
+	, cmd(c)
+	, rule(r)
 {
-	const size_t n = static_cast<size_t>(succe - succb);
-	cfg_ix_t *s = new cfg_ix_t[n];
-	memcpy(s, succb, n * sizeof(cfg_ix_t));
-
-	bb->succb = s;
-	bb->succe = s + n;
-	bb->cmd = cmd;
-	bb->rule = rule;
+	const size_t n = static_cast<size_t>(se - sb);
+	succb = new cfg_ix_t[n];
+	memcpy(succb, sb, n * sizeof(cfg_ix_t));
+	succe = succb + n;
 }
 
 // find immediate successors of the given bblock
@@ -190,7 +190,7 @@ cfg_t::~cfg_t()
 		delete[] b->succb;
 	}
 
-	delete[] bblocks;
+	operator delete(bblocks);
 }
 
 } // namespace re2c

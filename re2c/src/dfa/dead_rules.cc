@@ -179,7 +179,7 @@ static void remove_dead_final_states(dfa_t &dfa, const bool *fallthru)
 
 		if (shadowed) {
 			s->rule = Rule::NONE;
-			s->tcmd[nsym] = tcmd_t();
+			s->tcmd[nsym] = NULL;
 		}
 	}
 }

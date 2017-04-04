@@ -300,13 +300,10 @@ void gen_settags(code_lines_t &code, const DFA &dfa, tcid_t tcid, const opt_t *o
 	const std::string
 		&prefix = opts->tags_prefix,
 		&expression = opts->tags_expression;
-	const tccmd_t &cmd = dfa.tcpool[tcid];
-	const tagsave_t *tsave = cmd.save;
-	const tagcopy_t *tcopy = cmd.copy;
+	const tcmd_t *cmd = dfa.tcpool[tcid];
 
 	// single tag YYCTXMARKER, backwards compatibility
-	if (tsave && dfa.oldstyle_ctxmarker) {
-		assert(tcopy == NULL);
+	if (cmd && dfa.oldstyle_ctxmarker) {
 		const std::string s = generic
 			? opts->yybackupctx + " ();\n"
 			: opts->yyctxmarker + " = " + opts->yycursor + ";\n";
@@ -315,31 +312,41 @@ void gen_settags(code_lines_t &code, const DFA &dfa, tcid_t tcid, const opt_t *o
 	}
 
 	// copy commands
-	for (const tagcopy_t *p = tcopy; p; p = p->next) {
+	for (const tcmd_t *p = cmd; p; p = p->next) {
+		const tagver_t l = p->lhs, r = p->rhs;
+		if (!tcmd_t::iscopy(r)) continue;
+
 		const std::string
-			l = vartag_expr(p->lhs, prefix, expression),
-			r = vartag_expr(p->rhs, prefix, expression),
+			le = vartag_expr(l, prefix, expression),
+			re = vartag_expr(r, prefix, expression),
 			s = generic
-				? opts->yycopytag + " (" + l + ", " + r + ");\n"
-				: l + " = " + r + ";\n";
+				? opts->yycopytag + " (" + le + ", " + re + ");\n"
+				: le + " = " + re + ";\n";
 		code.push_back(s);
 	}
 
 	// save commands
 	if (generic) {
-		for (const tagsave_t *p = tsave; p; p = p->next) {
+		for (const tcmd_t *p = cmd; p; p = p->next) {
+			const tagver_t l = p->lhs, r = p->rhs;
+			if (tcmd_t::iscopy(r)) continue;
+
 			const std::string
-				v = vartag_expr(p->ver, prefix, expression),
-				s = p->bottom
+				v = vartag_expr(l, prefix, expression),
+				s = r == TAGVER_BOTTOM
 					? opts->yycopytag + " (" + v + ", " + opts->tags_default + ");\n"
 					: opts->yybackuptag + " (" + v + ");\n";
 			code.push_back(s);
 		}
-	} else if (tsave) {
+	} else if (cmd) {
 		std::string s1 = "", s2 = "";
-		for (const tagsave_t *p = tsave; p; p = p->next) {
-			const std::string v = vartag_expr(p->ver, prefix, expression);
-			if (p->bottom) {
+
+		for (const tcmd_t *p = cmd; p; p = p->next) {
+			const tagver_t l = p->lhs, r = p->rhs;
+			if (tcmd_t::iscopy(r)) continue;
+
+			const std::string v = vartag_expr(l, prefix, expression);
+			if (r == TAGVER_BOTTOM) {
 				s1 += v + " = ";
 			} else {
 				s2 += v + " = ";

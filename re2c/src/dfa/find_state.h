@@ -27,12 +27,12 @@ struct kernels_t
 	struct result_t
 	{
 		size_t state;
-		const tcmd_t cmd;
+		tcmd_t *cmd;
 		bool isnew;
 
-		result_t(size_t s, tcmd_t c, bool n)
+		result_t(size_t s, tcmd_t *p, bool n)
 			: state(s)
-			, cmd(c)
+			, cmd(p)
 			, isnew(n)
 		{}
 	};
@@ -66,8 +66,8 @@ public:
 	const kernel_t* operator[](size_t idx) const;
 	result_t insert(const closure_t &clos, tagver_t maxver);
 	bool operator()(const kernel_t *k1, const kernel_t *k2);
-	tcmd_t commands1(const closure_t &closure);
-	tcmd_t commands2(const closure_t &closure);
+	tcmd_t *commands1(const closure_t &closure);
+	tcmd_t *commands2(const closure_t &closure);
 	FORBID_COPY(kernels_t);
 };
 

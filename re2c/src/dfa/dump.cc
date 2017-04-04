@@ -5,8 +5,8 @@
 namespace re2c
 {
 
-static void dump_tcmd_or_tcid(const tcmd_t *tcmd, const tcid_t *tcid, size_t sym, const tcpool_t &tcpool);
-static void dump_tcmd(const tagsave_t *s, const tagcopy_t *c);
+static void dump_tcmd_or_tcid(tcmd_t *const *tcmd, const tcid_t *tcid, size_t sym, const tcpool_t &tcpool);
+static void dump_tcmd(const tcmd_t *p);
 static const char *tagname(const Tag &t);
 static void dump_tags(const Tagpool &tagpool, size_t ttran);
 
@@ -125,7 +125,7 @@ void dump_dfa_t::state(const closure_t &clos, size_t state, size_t symbol, bool 
 
 	if (state2 == dfa_t::NIL) return;
 
-	const tcmd_t &cmd = s->tcmd[symbol];
+	const tcmd_t *cmd = s->tcmd[symbol];
 	const uint32_t
 		a = static_cast<uint32_t>(symbol),
 		x = static_cast<uint32_t>(state),
@@ -137,7 +137,7 @@ void dump_dfa_t::state(const closure_t &clos, size_t state, size_t symbol, bool 
 	if (!isnew) {
 		fprintf(stderr, "  i%u [style=dotted]\n"
 			"  i%u:s -> %u:s [style=dotted label=\"", z, z, y);
-		dump_tcmd(cmd.save, cmd.copy);
+		dump_tcmd(cmd);
 		fprintf(stderr, "\"]\n");
 	}
 	for (cclositer_t b = shadow->begin(), c = b; c != shadow->end(); ++c) {
@@ -160,7 +160,7 @@ void dump_dfa_t::final(size_t state, const nfa_state_t *port)
 
 	const dfa_state_t *s = dfa.states[state];
 	const Rule &r = dfa.rules[s->rule];
-	const tcmd_t &cmd = s->tcmd[dfa.nchars];
+	const tcmd_t *cmd = s->tcmd[dfa.nchars];
 	const uint32_t x = static_cast<uint32_t>(state);
 
 	fprintf(stderr, "  r%u [shape=none label=\"(", x);
@@ -171,7 +171,7 @@ void dump_dfa_t::final(size_t state, const nfa_state_t *port)
 	fprintf(stderr, ")\"]\n");
 
 	fprintf(stderr, "  %u:%u:e -> r%u [style=dotted label=\"", x, index(port), x);
-	dump_tcmd(cmd.save, cmd.copy);
+	dump_tcmd(cmd);
 	fprintf(stderr, "\"]\n");
 }
 
@@ -191,7 +191,7 @@ void dump_dfa(const dfa_t &dfa)
 	fprintf(stderr,
 		"  n [shape=point]"
 		"  n -> n0 [style=dotted label=\"");
-	dump_tcmd_or_tcid(dfa.tcmd0, dfa.tcid0, 0, dfa.tcpool);
+	dump_tcmd_or_tcid(&dfa.tcmd0, &dfa.tcid0, 0, dfa.tcpool);
 	fprintf(stderr, "\"]\n");
 
 	for (uint32_t i = 0; i < nstate; ++i) {
@@ -238,28 +238,32 @@ void dump_dfa(const dfa_t &dfa)
 	fprintf(stderr, "}\n");
 }
 
-void dump_tcmd_or_tcid(const tcmd_t *tcmd, const tcid_t *tcid,
+void dump_tcmd_or_tcid(tcmd_t *const *tcmd, const tcid_t *tcid,
 	size_t sym, const tcpool_t &tcpool)
 {
 	if (tcmd) {
-		const tcmd_t &cmd = tcmd[sym];
-		dump_tcmd(cmd.save, cmd.copy);
+		const tcmd_t *cmd = tcmd[sym];
+		dump_tcmd(cmd);
 	} else {
-		const tccmd_t &cmd = tcpool[tcid[sym]];
-		dump_tcmd(cmd.save, cmd.copy);
+		const tcmd_t *cmd = tcpool[tcid[sym]];
+		dump_tcmd(cmd);
 	}
 }
 
-void dump_tcmd(const tagsave_t *s, const tagcopy_t *c)
+void dump_tcmd(const tcmd_t *p)
 {
-	if (!s && !c) return;
+	if (!p) return;
 
 	fprintf(stderr, "/");
-	for (; c; c = c->next) {
-		fprintf(stderr, "%d=%d ", c->lhs, c->rhs);
-	}
-	for (; s; s = s->next) {
-		fprintf(stderr, "%d%s ", s->ver, s->bottom ? "&darr;" : "&uarr;");
+	for (; p; p = p->next) {
+		const tagver_t l = p->lhs, r = p->rhs;
+		if (r == TAGVER_BOTTOM) {
+			fprintf(stderr, "%d%s ", l, "&darr;");
+		} else if (r == TAGVER_CURSOR) {
+			fprintf(stderr, "%d%s ", l, "&uarr;");
+		} else {
+			fprintf(stderr, "%d=%d ", l, r);
+		}
 	}
 }
 

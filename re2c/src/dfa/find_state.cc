@@ -203,7 +203,7 @@ kernels_t::result_t kernels_t::insert(const closure_t &clos, tagver_t maxver)
 	size_t x = dfa_t::NIL;
 
 	// empty closure corresponds to default state
-	if (nkern == 0) return result_t(x, tcmd_t(), false);
+	if (nkern == 0) return result_t(x, NULL, false);
 
 	// resize buffer if closure is too large
 	init(maxver, nkern);
@@ -237,9 +237,9 @@ kernels_t::result_t kernels_t::insert(const closure_t &clos, tagver_t maxver)
 	return result_t(x, commands1(clos), true);
 }
 
-tcmd_t kernels_t::commands1(const closure_t &closure)
+tcmd_t *kernels_t::commands1(const closure_t &closure)
 {
-	tagsave_t *save = NULL;
+	tcmd_t *cmd = NULL;
 	cclositer_t c1 = closure.begin(), c2 = closure.end(), c;
 	tagver_t v;
 
@@ -249,12 +249,12 @@ tcmd_t kernels_t::commands1(const closure_t &closure)
 		if (fixed(tags[t])) continue;
 
 		for (c = c1; c != c2 && (v = tagpool[c->ttran][t]) <= TAGVER_ZERO; ++c);
-		if (c != c2) save = tcpool.make_save(save, v, false);
+		if (c != c2) cmd = tcpool.make_tcmd(cmd, v, TAGVER_CURSOR);
 
 		for (c = c1; c != c2 && (v = tagpool[c->ttran][t]) >= TAGVER_ZERO; ++c);
-		if (c != c2) save = tcpool.make_save(save, -v, true);
+		if (c != c2) cmd = tcpool.make_tcmd(cmd, -v, TAGVER_BOTTOM);
 	}
-	return tcmd_t(save, NULL);
+	return cmd;
 }
 
 /* note [save(X), copy(Y,X) optimization]
@@ -280,10 +280,9 @@ tcmd_t kernels_t::commands1(const closure_t &closure)
  * cannot affect the check.
 */
 
-tcmd_t kernels_t::commands2(const closure_t &closure)
+tcmd_t *kernels_t::commands2(const closure_t &closure)
 {
-	tagsave_t *save = NULL;
-	tagcopy_t *copy = NULL;
+	tcmd_t *copy = NULL, *save = NULL, **p;
 	cclositer_t c1 = closure.begin(), c2 = closure.end(), c;
 
 	// see note [save(X), copy(Y,X) optimization]
@@ -298,27 +297,30 @@ tcmd_t kernels_t::commands2(const closure_t &closure)
 		const tagver_t ax = abs(x), ay = abs(y);
 		for (c = c1; c != c2 && tagpool[c->ttran][t] != y; ++c);
 		if (c != c2) {
-			save = tcpool.make_save(save, ax, y < TAGVER_ZERO);
+			save = tcpool.make_tcmd(save, ax, y < TAGVER_ZERO ? TAGVER_BOTTOM : TAGVER_CURSOR);
 		} else if (x != y) {
 			assert(ax != ay);
-			copy = tcpool.make_copy(copy, ax, ay);
+			copy = tcpool.make_tcmd(copy, ax, ay);
 		}
 	}
 
-	// see note [topological ordering of copy commands]
-	tagcopy_t::topsort(&copy, indeg);
+	// join 'copy' and 'save' commands
+	for (p = &copy; *p; p = &(*p)->next);
+	*p = save;
 
-	return tcmd_t(save, copy);
+	// see note [topological ordering of copy commands]
+	tcmd_t::topsort(&copy, indeg);
+
+	return copy;
 }
 
-static tcmd_t finalizer(const clos_t &clos, size_t ridx,
+static tcmd_t *finalizer(const clos_t &clos, size_t ridx,
 	dfa_t &dfa, const Tagpool &tagpool)
 {
 	tcpool_t &tcpool = dfa.tcpool;
 	const Rule &rule = dfa.rules[ridx];
 	const tagver_t *vers = tagpool[clos.tvers];
-	tagsave_t *save = NULL;
-	tagcopy_t *copy = NULL;
+	tcmd_t *copy = NULL, *save = NULL, **p;
 
 	for (size_t t = rule.ltag; t < rule.htag; ++t) {
 		const tagver_t v = vers[t];
@@ -332,16 +334,18 @@ static tcmd_t finalizer(const clos_t &clos, size_t ridx,
 			f = ++dfa.maxtagver;
 		}
 
-		if (v == TAGVER_CURSOR) {
-			save = tcpool.make_save(save, f, false);
-		} else if (v == TAGVER_BOTTOM) {
-			save = tcpool.make_save(save, f, true);
+		if (tcmd_t::iscopy(v)) {
+			copy = tcpool.make_tcmd(copy, f, abs(v));
 		} else {
-			copy = tcpool.make_copy(copy, f, abs(v));
+			save = tcpool.make_tcmd(save, f, v);
 		}
 	}
 
-	return tcmd_t(save, copy);
+	// join 'copy' and 'save' commands
+	for (p = &copy; *p; p = &(*p)->next);
+	*p = save;
+
+	return copy;
 }
 
 void find_state(dfa_t &dfa, size_t state, size_t symbol,
@@ -367,7 +371,7 @@ void find_state(dfa_t &dfa, size_t state, size_t symbol,
 	}
 
 	if (state == dfa_t::NIL) { // initial state
-		*dfa.tcmd0 = result.cmd;
+		dfa.tcmd0 = result.cmd;
 		dump.state0(closure);
 	} else {
 		dfa_state_t *s = dfa.states[state];

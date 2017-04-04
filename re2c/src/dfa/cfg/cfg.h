@@ -12,8 +12,10 @@ struct cfg_bb_t
 {
 	cfg_ix_t *succb;
 	cfg_ix_t *succe;
-	tcmd_t *cmd;
+	tcmd_t *&cmd;
 	const Rule *rule;
+
+	cfg_bb_t(const cfg_ix_t *sb, const cfg_ix_t *se, tcmd_t *&c, const Rule *r);
 };
 
 // control flow graph

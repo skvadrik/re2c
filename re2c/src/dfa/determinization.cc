@@ -57,8 +57,8 @@ dfa_t::dfa_t(const nfa_t &nfa, const opt_t *opts,
 	, finvers(NULL)
 	, tcpool(*new tcpool_t)
 	, maxtagver(0)
-	, tcmd0(new tcmd_t)
-	, tcid0(NULL)
+	, tcmd0(NULL)
+	, tcid0(TCID0)
 {
 	const bool lookahead = opts->lookahead;
 	const size_t ntag = tags.size();
@@ -133,8 +133,6 @@ dfa_t::~dfa_t()
 	{
 		delete *i;
 	}
-	delete tcmd0;
-	delete tcid0;
 }
 
 } // namespace re2c

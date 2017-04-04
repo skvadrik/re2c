@@ -62,28 +62,26 @@ void freeze_tags(dfa_t &dfa)
 		nstate = dfa.states.size(),
 		nsym = dfa.nchars;
 
-	dfa.tcid0 = new tcid_t(pool.insert(dfa.tcmd0->save, dfa.tcmd0->copy));
-	delete dfa.tcmd0;
+	dfa.tcid0 = pool.insert(dfa.tcmd0);
 	dfa.tcmd0 = NULL;
 
 	for (size_t i = 0; i < nstate; ++i) {
 		dfa_state_t *s = dfa.states[i];
-		const tcmd_t
-			*cmd = s->tcmd,
-			*const fin = cmd + nsym,
-			*const fall = fin + 1;
+		tcmd_t **cmd = s->tcmd,
+			**const fin = cmd + nsym,
+			**const fall = fin + 1;
 		tcid_t *id = s->tcid = new tcid_t[nsym + 2];
 
 		// transition commands
 		for(; cmd < fin; ++cmd) {
-			*id++ = pool.insert(cmd->save, cmd->copy);
+			*id++ = pool.insert(*cmd);
 		}
 
 		// final epsilon-transition command
-		*id++ = pool.insert(fin->save, fin->copy);
+		*id++ = pool.insert(*fin);
 
 		// fallback epsilon-transition command
-		*id++ = pool.insert(fall->save, fall->copy);
+		*id++ = pool.insert(*fall);
 
 		delete[] s->tcmd;
 		s->tcmd = NULL;

@@ -84,18 +84,12 @@ void cfg_t::liveness_analysis(const cfg_t &cfg, bool *live)
 				const tcmd_t *cmd = cfg.bblocks[*j].cmd;
 				memcpy(buf2, l, nver * sizeof(bool));
 
-				for (const tagsave_t *p = cmd->save; p; p = p->next) {
-					buf2[p->ver] = false;
-				}
-
 				// need two passes: same version may occur as both LHS and RHS
-				for (const tagcopy_t *p = cmd->copy; p; p = p->next) {
-					if (l[p->lhs]) {
-						buf2[p->lhs] = false;
-					}
+				for (const tcmd_t *p = cmd; p; p = p->next) {
+					buf2[p->lhs] = false;
 				}
-				for (const tagcopy_t *p = cmd->copy; p; p = p->next) {
-					if (l[p->lhs]) {
+				for (const tcmd_t *p = cmd; p; p = p->next) {
+					if (l[p->lhs] && tcmd_t::iscopy(p->rhs)) {
 						buf2[p->rhs] = true;
 					}
 				}
@@ -135,16 +129,15 @@ void cfg_t::liveness_analysis(const cfg_t &cfg, bool *live)
 		for (size_t t = r->ltag; t < r->htag; ++t) {
 			buf1[fins[t]] = !fixed(tags[t]);
 		}
-		for (const tagsave_t *p = b->cmd->save; p; p = p->next) {
-			buf1[p->ver] = false;
-		}
 
 		// need two passes: same version may occur as both LHS and RHS
-		for (const tagcopy_t *p = b->cmd->copy; p; p = p->next) {
+		for (const tcmd_t *p = b->cmd; p; p = p->next) {
 			buf1[p->lhs] = false;
 		}
-		for (const tagcopy_t *p = b->cmd->copy; p; p = p->next) {
-			buf1[p->rhs] = true;
+		for (const tcmd_t *p = b->cmd; p; p = p->next) {
+			if (tcmd_t::iscopy(p->rhs)) {
+				buf1[p->rhs] = true;
+			}
 		}
 
 		for (cfg_ix_t *j = b->succb; j < b->succe; ++j) {

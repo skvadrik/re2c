@@ -33,7 +33,7 @@ DFA::DFA
 	, ubChar(dfa.charset.back())
 	, nStates(0)
 	, head(NULL)
-	, tags0(*dfa.tcid0)
+	, tags0(dfa.tcid0)
 	, charset(dfa.charset)
 	, rules(dfa.rules)
 	, tags(dfa.tags)

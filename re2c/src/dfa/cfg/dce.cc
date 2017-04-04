@@ -10,18 +10,11 @@ void cfg_t::dead_code_elimination(cfg_t &cfg, const bool *live)
 	cfg_bb_t *b = cfg.bblocks, *e = b + cfg.nbbarc;
 
 	for (; b < e; ++b, live += nver) {
-		for (tagsave_t *s, **ps = &b->cmd->save; (s = *ps);) {
-			if (!live[s->ver]) {
-				*ps = s->next;
+		for (tcmd_t *p, **pp = &b->cmd; (p = *pp);) {
+			if (!live[p->lhs]) {
+				*pp = p->next;
 			} else {
-				ps = &s->next;
-			}
-		}
-		for (tagcopy_t *c, **pc = &b->cmd->copy; (c = *pc);) {
-			if (!live[c->lhs]) {
-				*pc = c->next;
-			} else {
-				pc = &c->next;
+				pp = &p->next;
 			}
 		}
 	}
