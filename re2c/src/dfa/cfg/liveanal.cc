@@ -23,6 +23,19 @@ static cfg_ix_t *postorder(const cfg_t &cfg, bool *done,
 	return ++ord;
 }
 
+void cfg_t::live_through_bblock(const tcmd_t *cmd, bool *live)
+{
+	if (!cmd) return;
+
+	live_through_bblock(cmd->next, live);
+
+	const tagver_t l = cmd->lhs, r = cmd->rhs;
+	if (live[l] && tcmd_t::iscopy(r)) {
+		live[r] = true;
+	}
+	live[l] = false;
+}
+
 void cfg_t::liveness_analysis(const cfg_t &cfg, bool *live)
 {
 	const std::vector<Tag> &tags = cfg.dfa.tags;
@@ -84,15 +97,7 @@ void cfg_t::liveness_analysis(const cfg_t &cfg, bool *live)
 				const tcmd_t *cmd = cfg.bblocks[*j].cmd;
 				memcpy(buf2, l, nver * sizeof(bool));
 
-				// need two passes: same version may occur as both LHS and RHS
-				for (const tcmd_t *p = cmd; p; p = p->next) {
-					buf2[p->lhs] = false;
-				}
-				for (const tcmd_t *p = cmd; p; p = p->next) {
-					if (l[p->lhs] && tcmd_t::iscopy(p->rhs)) {
-						buf2[p->rhs] = true;
-					}
-				}
+				cfg_t::live_through_bblock(cmd, buf2);
 
 				for (size_t v = 0; v < nver; ++v) {
 					buf1[v] |= buf2[v];
@@ -131,12 +136,14 @@ void cfg_t::liveness_analysis(const cfg_t &cfg, bool *live)
 		}
 
 		// need two passes: same version may occur as both LHS and RHS
+		// not the same as backward propagation of liveness through bblock
 		for (const tcmd_t *p = b->cmd; p; p = p->next) {
 			buf1[p->lhs] = false;
 		}
 		for (const tcmd_t *p = b->cmd; p; p = p->next) {
-			if (tcmd_t::iscopy(p->rhs)) {
-				buf1[p->rhs] = true;
+			const tagver_t v = p->rhs;
+			if (tcmd_t::iscopy(v)) {
+				buf1[v] = true;
 			}
 		}
 
