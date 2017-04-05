@@ -2,6 +2,7 @@
 #define _RE2C_DFA_CLOSURE_
 
 #include "src/util/c99_stdint.h"
+#include <map>
 
 #include "src/dfa/dfa.h"
 #include "src/dfa/tagtree.h"
@@ -27,9 +28,33 @@ typedef std::vector<clos_t> closure_t;
 typedef closure_t::iterator clositer_t;
 typedef closure_t::const_iterator cclositer_t;
 
-void closure(closure_t &clos1, closure_t &clos2, Tagpool &tagpool, tagtree_t &tagtree,
-	std::valarray<Rule> &rules, tagver_t &maxver, tagver_t *newvers,
-	bool lookahead, closure_t *shadow, const std::vector<Tag> &tags);
+struct newver_t
+{
+	size_t tag;
+	tagver_t ver;
+	tagver_t act;
+};
+
+inline bool operator<(const newver_t &x, const newver_t &y)
+{
+	if (x.tag < y.tag) return true;
+	if (x.tag > y.tag) return false;
+
+	if (x.ver < y.ver) return true;
+	if (x.ver > y.ver) return false;
+
+	if (x.act < y.act) return true;
+	if (x.act > y.act) return false;
+
+	return false;
+}
+
+typedef std::map<newver_t, tagver_t> newvers_t;
+
+tcmd_t *closure(closure_t &clos1, closure_t &clos2, Tagpool &tagpool,
+	tcpool_t &tcpool, tagtree_t &tagtree, std::valarray<Rule> &rules,
+	tagver_t &maxver, newvers_t &newvers, bool lookahead, closure_t *shadow,
+	const std::vector<Tag> &tags);
 
 } // namespace re2c
 

@@ -8,7 +8,7 @@ namespace re2c
 static void dump_tcmd_or_tcid(tcmd_t *const *tcmd, const tcid_t *tcid, size_t sym, const tcpool_t &tcpool);
 static void dump_tcmd(const tcmd_t *p);
 static const char *tagname(const Tag &t);
-static void dump_tags(const Tagpool &tagpool, size_t ttran);
+static void dump_tags(const Tagpool &tagpool, size_t ttran, size_t tvers);
 
 dump_dfa_t::dump_dfa_t(const dfa_t &d, const Tagpool &pool, const nfa_t &n, bool dbg)
 	: debug(dbg)
@@ -87,7 +87,7 @@ void dump_dfa_t::closure(const closure_t &clos, uint32_t state, bool isnew)
 		" CELLBORDER=\"1\""
 		">", isnew ? "" : "i", state);
 
-	tagver_t *look = tagpool.buffer1;
+	tagver_t *look = tagpool.buffer;
 	for (size_t t = 0; t < tagpool.ntags; ++t) {
 		for (c = c1; c != c2 && tagpool[c->tlook][t] == TAGVER_ZERO; ++c);
 		for (s = s1; s != s2 && tagpool[s->tlook][t] == TAGVER_ZERO; ++s);
@@ -120,12 +120,12 @@ void dump_dfa_t::state0(const closure_t &clos)
 	fprintf(stderr, "  void [shape=point]\n");
 	for (cclositer_t c = shadow->begin(); c != shadow->end(); ++c) {
 		fprintf(stderr, "  void -> 0:_%u_%ld:w [style=dotted color=lightgray fontcolor=lightgray label=\"", index(c->state), c - shadow->begin());
-		dump_tags(tagpool, c->ttran);
+		dump_tags(tagpool, c->ttran, c->tvers);
 		fprintf(stderr, "\"]\n");
 	}
 	for (cclositer_t c = clos.begin(); c != clos.end(); ++c) {
 		fprintf(stderr, "  void -> 0:%u:w [style=dotted label=\"", index(c->state));
-		dump_tags(tagpool, c->ttran);
+		dump_tags(tagpool, c->ttran, c->tvers);
 		fprintf(stderr, "\"]\n");
 	}
 }
@@ -157,13 +157,13 @@ void dump_dfa_t::state(const closure_t &clos, size_t state, size_t symbol, bool 
 	for (cclositer_t b = shadow->begin(), c = b; c != shadow->end(); ++c) {
 		fprintf(stderr, "  %u:%u:e -> %s%u:_%u_%ld:w [color=lightgray fontcolor=lightgray label=\"%u",
 			x, index(c->origin), prefix, z, index(c->state), c - b, a);
-		dump_tags(tagpool, c->ttran);
+		dump_tags(tagpool, c->ttran, c->tvers);
 		fprintf(stderr, "\"]\n");
 	}
 	for (cclositer_t c = clos.begin(); c != clos.end(); ++c) {
 		fprintf(stderr, "  %u:%u:e -> %s%u:%u:w [label=\"%u",
 			x, index(c->origin), prefix, z, index(c->state), a);
-		dump_tags(tagpool, c->ttran);
+		dump_tags(tagpool, c->ttran, c->tvers);
 		fprintf(stderr, "\"]\n");
 	}
 }
@@ -205,7 +205,7 @@ void dump_dfa(const dfa_t &dfa)
 	fprintf(stderr,
 		"  n [shape=point]"
 		"  n -> n0 [style=dotted label=\"");
-	dump_tcmd_or_tcid(&dfa.tcmd0, &dfa.tcid0, 0, dfa.tcpool);
+	dump_tcmd_or_tcid(dfa.tcmd0 ? &dfa.tcmd0 : NULL, &dfa.tcid0, 0, dfa.tcpool);
 	fprintf(stderr, "\"]\n");
 
 	for (uint32_t i = 0; i < nstate; ++i) {
@@ -255,13 +255,8 @@ void dump_dfa(const dfa_t &dfa)
 void dump_tcmd_or_tcid(tcmd_t *const *tcmd, const tcid_t *tcid,
 	size_t sym, const tcpool_t &tcpool)
 {
-	if (tcmd) {
-		const tcmd_t *cmd = tcmd[sym];
-		dump_tcmd(cmd);
-	} else {
-		const tcmd_t *cmd = tcpool[tcid[sym]];
-		dump_tcmd(cmd);
-	}
+	const tcmd_t *cmd = tcmd ? tcmd[sym] : tcpool[tcid[sym]];
+	dump_tcmd(cmd);
 }
 
 void dump_tcmd(const tcmd_t *p)
@@ -270,13 +265,15 @@ void dump_tcmd(const tcmd_t *p)
 
 	fprintf(stderr, "/");
 	for (; p; p = p->next) {
-		const tagver_t l = p->lhs, r = p->rhs;
-		if (r == TAGVER_BOTTOM) {
-			fprintf(stderr, "%d%s ", l, "&darr;");
-		} else if (r == TAGVER_CURSOR) {
-			fprintf(stderr, "%d%s ", l, "&uarr;");
-		} else {
+		const tagver_t l = p->lhs, r = p->rhs, v = p->pred;
+		if (tcmd_t::iscopy(r)) {
 			fprintf(stderr, "%d=%d ", l, r);
+		} else {
+			fprintf(stderr, "%d", l);
+			if (v != TAGVER_ZERO) {
+				fprintf(stderr, "=%d", v);
+			}
+			fprintf(stderr, "%s ", r == TAGVER_BOTTOM ? "&darr;" : "&uarr;");
 		}
 	}
 }
@@ -286,17 +283,19 @@ const char *tagname(const Tag &t)
 	return t.name ? t.name->c_str() : "";
 }
 
-void dump_tags(const Tagpool &tagpool, size_t ttran)
+void dump_tags(const Tagpool &tagpool, size_t ttran, size_t tvers)
 {
 	if (ttran == ZERO_TAGS) return;
 
 	fprintf(stderr, "/");
-	const tagver_t *tran = tagpool[ttran];
-	for (size_t t = 0; t < tagpool.ntags; ++t) {
-		const tagver_t v = tran[t];
-		if (v < TAGVER_ZERO) {
+	const tagver_t
+		*tran = tagpool[ttran],
+		*vers = tagpool[tvers];
+	for (size_t i = 0; i < tagpool.ntags; ++i) {
+		const tagver_t t = tran[i], v = vers[i];
+		if (t < TAGVER_ZERO) {
 			fprintf(stderr, "%d&darr; ", -v);
-		} else if (v > TAGVER_ZERO) {
+		} else if (t > TAGVER_ZERO) {
 			fprintf(stderr, "%d&uarr; ", v);
 		}
 	}

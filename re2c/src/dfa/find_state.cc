@@ -82,7 +82,7 @@ bool kernels_t::operator()(const kernel_t *k1, const kernel_t *k2)
 
 		for (size_t t = 0; t < ntag; ++t) {
 			// see note [mapping ignores items with lookahead tags]
-			if (xl[t] != TAGVER_ZERO) continue;
+			if (xl[t] != TAGVER_ZERO && !history(tags[t])) continue;
 
 			const tagver_t x = xv[t], y = yv[t];
 			tagver_t &x0 = y2x[y], &y0 = x2y[x];
@@ -199,7 +199,8 @@ const kernel_t *kernels_t::operator[](size_t idx) const
  * more complex analysis (and are not so useful after all), so we drop them.
  */
 
-kernels_t::result_t kernels_t::insert(const closure_t &clos, tagver_t maxver)
+kernels_t::result_t kernels_t::insert(const closure_t &clos,
+	tcmd_t *acts, tagver_t maxver)
 {
 	const size_t nkern = clos.size();
 	size_t x = dfa_t::NIL;
@@ -229,36 +230,16 @@ kernels_t::result_t kernels_t::insert(const closure_t &clos, tagver_t maxver)
 	// try to find identical kernel
 	kernel_eq_t eq;
 	x = lookup.find_with(hash, buffer, eq);
-	if (x != index_t::NIL) return result_t(x, commands1(clos), false);
+	if (x != index_t::NIL) return result_t(x, acts, false);
 
 	// else try to find mappable kernel
 	// see note [bijective mappings]
 	x = lookup.find_with(hash, buffer, *this);
-	if (x != index_t::NIL) return result_t(x, commands2(clos), false);
+	if (x != index_t::NIL) return result_t(x, actions(acts), false);
 
 	// otherwise add new kernel
 	x = lookup.push(hash, kernel_t::copy(*buffer));
-	return result_t(x, commands1(clos), true);
-}
-
-tcmd_t *kernels_t::commands1(const closure_t &closure)
-{
-	tcmd_t *cmd = NULL;
-	cclositer_t c1 = closure.begin(), c2 = closure.end(), c;
-	tagver_t v;
-
-	// at most one new cursor and one new bottom version per tag
-	// no mapping => only save commands, no copy commands
-	for (size_t t = 0; t < tagpool.ntags; ++t) {
-		if (fixed(tags[t])) continue;
-
-		for (c = c1; c != c2 && (v = tagpool[c->ttran][t]) <= TAGVER_ZERO; ++c);
-		if (c != c2) cmd = tcpool.make_tcmd(cmd, v, TAGVER_CURSOR);
-
-		for (c = c1; c != c2 && (v = tagpool[c->ttran][t]) >= TAGVER_ZERO; ++c);
-		if (c != c2) cmd = tcpool.make_tcmd(cmd, -v, TAGVER_BOTTOM);
-	}
-	return cmd;
+	return result_t(x, acts, true);
 }
 
 /* note [save(X), copy(Y,X) optimization]
@@ -284,9 +265,9 @@ tcmd_t *kernels_t::commands1(const closure_t &closure)
  * cannot affect the check.
 */
 
-tcmd_t *kernels_t::commands2(const closure_t &closure)
+tcmd_t *kernels_t::actions(tcmd_t *save)
 {
-	tcmd_t *save = commands1(closure), *copy = NULL, *s, **p;
+	tcmd_t *copy = NULL, *s, **p;
 
 	// see note [save(X), copy(Y,X) optimization]
 	for (tagver_t x = -max; x < max; ++x) {
@@ -303,7 +284,7 @@ tcmd_t *kernels_t::commands2(const closure_t &closure)
 			s->lhs = ax;
 		} else if (x != y) {
 			assert(ax != ay);
-			copy = tcpool.make_tcmd(copy, ax, ay);
+			copy = tcpool.make_tcmd(copy, ax, ay, 0);
 		}
 	}
 
@@ -318,7 +299,7 @@ tcmd_t *kernels_t::commands2(const closure_t &closure)
 }
 
 static tcmd_t *finalizer(const clos_t &clos, size_t ridx,
-	dfa_t &dfa, const Tagpool &tagpool)
+	dfa_t &dfa, const Tagpool &tagpool, const std::vector<Tag> &tags)
 {
 	tcpool_t &tcpool = dfa.tcpool;
 	const Rule &rule = dfa.rules[ridx];
@@ -328,7 +309,8 @@ static tcmd_t *finalizer(const clos_t &clos, size_t ridx,
 	tcmd_t *copy = NULL, *save = NULL, **p;
 
 	for (size_t t = rule.ltag; t < rule.htag; ++t) {
-		const tagver_t l = look[t], v = abs(vers[t]);
+		const tagver_t l = look[t], v = abs(vers[t]),
+			h = history(tags[t]) ? v : TAGVER_ZERO;
 		tagver_t &f = dfa.finvers[t];
 
 		// don't waste versions on fixed tags
@@ -340,9 +322,9 @@ static tcmd_t *finalizer(const clos_t &clos, size_t ridx,
 		}
 
 		if (l == TAGVER_ZERO) {
-			copy = tcpool.make_tcmd(copy, f, abs(v));
+			copy = tcpool.make_tcmd(copy, f, v, TAGVER_ZERO);
 		} else {
-			save = tcpool.make_tcmd(save, f, l);
+			save = tcpool.make_tcmd(save, f, l, h);
 		}
 	}
 
@@ -353,11 +335,11 @@ static tcmd_t *finalizer(const clos_t &clos, size_t ridx,
 	return copy;
 }
 
-void find_state(dfa_t &dfa, size_t state, size_t symbol,
-	kernels_t &kernels, const closure_t &closure, dump_dfa_t &dump)
+void find_state(dfa_t &dfa, size_t state, size_t symbol, kernels_t &kernels,
+	const closure_t &closure, tcmd_t *acts, dump_dfa_t &dump)
 {
 	const kernels_t::result_t
-		result = kernels.insert(closure, dfa.maxtagver);
+		result = kernels.insert(closure, acts, dfa.maxtagver);
 
 	if (result.isnew) {
 		// create new DFA state
@@ -370,7 +352,8 @@ void find_state(dfa_t &dfa, size_t state, size_t symbol,
 			c = std::find_if(c1, c2, clos_t::fin);
 		if (c != c2) {
 			t->rule = c->state->rule;
-			t->tcmd[dfa.nchars] = finalizer(*c, t->rule, dfa, kernels.tagpool);
+			t->tcmd[dfa.nchars] = finalizer(*c, t->rule, dfa,
+				kernels.tagpool, kernels.tags);
 			dump.final(result.state, c->state);
 		}
 	}

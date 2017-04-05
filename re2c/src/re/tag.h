@@ -68,6 +68,11 @@ inline bool preorbit(const std::vector<Tag> &tags, size_t idx)
 		&& tags[idx + 2].ncap == ncap + 2;
 }
 
+inline bool history(const Tag &/*tag*/)
+{
+	return false;
+}
+
 } // namespace re2c
 
 #endif // _RE2C_RE_TAG_

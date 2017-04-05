@@ -20,12 +20,8 @@ struct eqtag_t
 
 Tagpool::Tagpool(size_t n)
 	: lookup()
-	, buffer(new tagver_t[n * 5])
 	, ntags(n)
-	, buffer1(&buffer[n * 1])
-	, buffer2(&buffer[n * 2])
-	, buffer3(&buffer[n * 3])
-	, buffer4(&buffer[n * 4])
+	, buffer(new tagver_t[n])
 	, maxclos(0)
 	, orders(NULL)
 {}

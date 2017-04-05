@@ -15,6 +15,7 @@ struct tcmd_t
 	tcmd_t *next;
 	tagver_t lhs; // left hand side
 	tagver_t rhs; // right hand side
+	tagver_t pred; // history
 
 	static bool less(const tcmd_t &x, const tcmd_t &y);
 	static void swap(tcmd_t &x, tcmd_t &y);
@@ -38,7 +39,7 @@ class tcpool_t
 
 public:
 	tcpool_t();
-	tcmd_t *make_tcmd(tcmd_t *next, tagver_t lhs, tagver_t rhs);
+	tcmd_t *make_tcmd(tcmd_t *next, tagver_t lhs, tagver_t rhs, tagver_t pred);
 	tcid_t insert(const tcmd_t *tcmd);
 	const tcmd_t *operator[](tcid_t id) const;
 };

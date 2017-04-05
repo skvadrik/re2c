@@ -12,19 +12,26 @@ void tcmd_t::swap(tcmd_t &x, tcmd_t &y)
 {
 	std::swap(x.lhs, y.lhs);
 	std::swap(x.rhs, y.rhs);
+	std::swap(x.pred, y.pred);
 }
 
 bool tcmd_t::less(const tcmd_t &x, const tcmd_t &y)
 {
-	const tagver_t
-		lx = x.lhs, ly = y.lhs,
-		rx = x.rhs, ry = y.rhs;
-	return (lx < ly) || (lx == ly && rx < ry);
+	if (x.lhs < y.lhs) return true;
+	if (x.lhs > y.lhs) return false;
+
+	if (x.rhs < y.rhs) return true;
+	if (x.rhs > y.rhs) return false;
+
+	if (x.pred < y.pred) return true;
+	if (x.pred > y.pred) return false;
+
+	return false;
 }
 
 bool tcmd_t::equal(const tcmd_t &x, const tcmd_t &y)
 {
-	return x.lhs == y.lhs && x.rhs == y.rhs;
+	return x.lhs == y.lhs && x.rhs == y.rhs && x.pred == y.pred;
 }
 
 /* note [topological ordering of copy commands]
@@ -125,12 +132,13 @@ tcpool_t::tcpool_t()
 	assert(TCID0 == insert(NULL));
 }
 
-tcmd_t *tcpool_t::make_tcmd(tcmd_t *next, tagver_t lhs, tagver_t rhs)
+tcmd_t *tcpool_t::make_tcmd(tcmd_t *next, tagver_t lhs, tagver_t rhs, tagver_t pred)
 {
 	tcmd_t *p = alc.alloct<tcmd_t>(1);
 	p->next = next;
 	p->lhs = lhs;
 	p->rhs = rhs;
+	p->pred = pred;
 	return p;
 }
 

@@ -67,7 +67,8 @@ dfa_t::dfa_t(const nfa_t &nfa, const opt_t *opts,
 	tagtree_t tagtree(ntag);
 	kernels_t kernels(tagpool, tcpool, tags);
 	closure_t clos1, clos2;
-	tagver_t *newvers = new tagver_t[ntag * 2];
+	newvers_t newvers;
+	tcmd_t *acts;
 	dump_dfa_t dump(*this, tagpool, nfa, opts->dump_dfa_raw);
 
 	// all-zero tag configuration must have static number zero
@@ -87,22 +88,19 @@ dfa_t::dfa_t(const nfa_t &nfa, const opt_t *opts,
 
 	clos_t c0 = {NULL, nfa.root, INITIAL_TAGS, ZERO_TAGS, ZERO_TAGS, ZERO_TAGS, 0};
 	clos1.push_back(c0);
-	std::fill(newvers, newvers + ntag * 2, TAGVER_ZERO);
-	closure(clos1, clos2, tagpool, tagtree, rules, maxtagver, newvers, lookahead, dump.shadow, tags);
-	find_state(*this, dfa_t::NIL, 0/* any */, kernels, clos2, dump);
+	acts = closure(clos1, clos2, tagpool, tcpool, tagtree, rules, maxtagver, newvers, lookahead, dump.shadow, tags);
+	find_state(*this, dfa_t::NIL, 0/* any */, kernels, clos2, acts, dump);
 
 	for (size_t i = 0; i < kernels.size(); ++i) {
-		std::fill(newvers, newvers + ntag * 2, TAGVER_ZERO);
+		newvers.clear();
 		for (size_t c = 0; c < nchars; ++c) {
 			reach(kernels[i], clos1, charset[c]);
-			closure(clos1, clos2, tagpool, tagtree, rules, maxtagver, newvers, lookahead, dump.shadow, tags);
-			find_state(*this, i, c, kernels, clos2, dump);
+			acts = closure(clos1, clos2, tagpool, tcpool, tagtree, rules, maxtagver, newvers, lookahead, dump.shadow, tags);
+			find_state(*this, i, c, kernels, clos2, acts, dump);
 		}
 	}
 
 	warn_nondeterministic_tags(kernels, tagpool, tags, rules, cond, warn);
-
-	delete[] newvers;
 }
 
 /*

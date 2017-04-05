@@ -11,13 +11,14 @@ static void closure_one(closure_t &clos, Tagpool &tagpool, tagtree_t &tagtree,
 	clos_t &c0, nfa_state_t *n, const std::vector<Tag> &tags, closure_t *shadow, std::valarray<Rule> &rules);
 static bool better(const clos_t &c1, const clos_t &c2, Tagpool &tagpool, tagtree_t &tagtree, const std::vector<Tag> &tags);
 static void lower_lookahead_to_transition(closure_t &clos);
-static void update_versions(closure_t &clos, Tagpool &tagpool, tagver_t &maxver, tagver_t *newvers);
+static tcmd_t *generate_versions(closure_t &clos, const std::vector<Tag> &tags, Tagpool &tagpool, tcpool_t &tcpool, tagver_t &maxver, newvers_t &newvers);
 static void orders(closure_t &clos, Tagpool &tagpool, tagtree_t &tagtree, const std::vector<Tag> &tags);
 static bool cmpby_rule_state(const clos_t &x, const clos_t &y);
 
-void closure(closure_t &clos1, closure_t &clos2, Tagpool &tagpool, tagtree_t &tagtree,
-	std::valarray<Rule> &rules, tagver_t &maxver, tagver_t *newvers,
-	bool lookahead, closure_t *shadow, const std::vector<Tag> &tags)
+tcmd_t *closure(closure_t &clos1, closure_t &clos2, Tagpool &tagpool,
+	tcpool_t &tcpool, tagtree_t &tagtree, std::valarray<Rule> &rules,
+	tagver_t &maxver, newvers_t &newvers, bool lookahead, closure_t *shadow,
+	const std::vector<Tag> &tags)
 {
 	// build tagged epsilon-closure of the given set of NFA states
 	clos2.clear();
@@ -38,8 +39,10 @@ void closure(closure_t &clos1, closure_t &clos2, Tagpool &tagpool, tagtree_t &ta
 	}
 
 	// merge tags from different rules, find nondeterministic tags
-	update_versions(clos2, tagpool, maxver, newvers);
-	if (shadow) update_versions(*shadow, tagpool, maxver, newvers);
+	tcmd_t *cmd = generate_versions(clos2, tags, tagpool, tcpool, maxver, newvers);
+	if (shadow) generate_versions(*shadow, tags, tagpool, tcpool, maxver, newvers);
+
+	return cmd;
 }
 
 bool cmpby_rule_state(const clos_t &x, const clos_t &y)
@@ -227,71 +230,64 @@ void lower_lookahead_to_transition(closure_t &clos)
 	}
 }
 
-void update_versions(closure_t &clos, Tagpool &tagpool,
-	tagver_t &maxver, tagver_t *newvers)
+tcmd_t *generate_versions(closure_t &clos, const std::vector<Tag> &tags,
+	Tagpool &tagpool, tcpool_t &tcpool, tagver_t &maxver, newvers_t &newvers)
 {
+	tcmd_t *cmd = NULL, *p;
 	const size_t ntag = tagpool.ntags;
-	tagver_t *cur = tagpool.buffer1,
-		*bot = tagpool.buffer2,
-		*vers = tagpool.buffer3,
-		*tran = tagpool.buffer4;
+	tagver_t *vers = tagpool.buffer;
 	clositer_t b = clos.begin(), e = clos.end(), c;
 
 	// for each tag, if there is at least one tagged transition,
 	// allocate new version (negative for bottom and positive for
 	// normal transition, however absolute value should be unique
 	// among all versions of all tags)
-	for (size_t t = 0; t < ntag; ++t) {
-		tagver_t &newcur = newvers[t],
-			&newbot = newvers[ntag + t];
-		cur[t] = bot[t] = TAGVER_ZERO;
+	for (c = b; c != e; ++c) {
+		const tagver_t
+			*ls = tagpool[c->tlook],
+			*us = tagpool[c->ttran],
+			*vs = tagpool[c->tvers];
+		for (size_t t = 0; t < ntag; ++t) {
+			const Tag &tag = tags[t];
+			const tagver_t u = us[t];
+			if (u == TAGVER_ZERO) continue;
 
-		for (c = b; c != e; ++c) {
-			if (tagpool[c->ttran][t] == TAGVER_CURSOR) {
-				if (newcur == TAGVER_ZERO) {
-					newcur = ++maxver;
-				}
-				cur[t] = newcur;
-				break;
-			}
-		}
+			const tagver_t h = history(tag) ? vs[t] : TAGVER_ZERO;
+			newver_t x = {t, h, u};
+			const tagver_t
+				n = (maxver + 1) * (u == TAGVER_BOTTOM ? -1 : 1),
+				m = newvers.insert(std::make_pair(x, n)).first->second;
+			if (n == m) ++maxver;
 
-		for (c = b; c != e; ++c) {
-			if (tagpool[c->ttran][t] == TAGVER_BOTTOM) {
-				if (newbot == TAGVER_ZERO) {
-					newbot = -(++maxver);
-				}
-				bot[t] = newbot;
-				break;
+			// add action unless already have an identical one
+			if (fixed(tag) || (ls[t] && !history(tag))) continue;
+			for (p = cmd; p; p = p->next) {
+				if (p->lhs == abs(m) && p->rhs == u && p->pred == h) break;
 			}
+			if (!p) cmd = tcpool.make_tcmd(cmd, abs(m), u, h);
 		}
 	}
 
-	// set transition tags and update versions
+	// update tag versions in closure
 	for (c = b; c != e; ++c) {
 		if (c->ttran == ZERO_TAGS) continue;
-
 		const tagver_t
-			*oldt = tagpool[c->ttran],
-			*oldv = tagpool[c->tvers];
-
-		for (size_t i = 0; i < ntag; ++i) {
-			const tagver_t ov = oldv[i], ot = oldt[i];
-			tagver_t &v = vers[i], &t = tran[i];
-
-			if (ot == TAGVER_CURSOR) {
-				v = t = cur[i];
-			} else if (ot == TAGVER_BOTTOM) {
-				v = t = bot[i];
+			*us = tagpool[c->ttran],
+			*vs = tagpool[c->tvers];
+		for (size_t t = 0; t < ntag; ++t) {
+			const tagver_t u = us[t], v = vs[t],
+				h = history(tags[t]) ? v : TAGVER_ZERO;
+			if (u == TAGVER_ZERO) {
+				vers[t] = v;
 			} else {
-				v = ov;
-				t = TAGVER_ZERO;
+				newver_t x = {t, h, u};
+				vers[t] = newvers[x];
 			}
 		}
-
 		c->tvers = tagpool.insert(vers);
-		c->ttran = tagpool.insert(tran);
 	}
+
+	return cmd;
 }
 
 /* note [POSIX disambiguation]
@@ -403,7 +399,7 @@ void orders(closure_t &clos, Tagpool &tagpool,
 	}
 
 	// flatten lookahead tags (take the last on each path)
-	tagver_t *look = tagpool.buffer1;
+	tagver_t *look = tagpool.buffer;
 	for (clositer_t c = clos.begin(); c != clos.end(); ++c) {
 		if (c->tlook == ZERO_TAGS) continue;
 		const tagver_t *oldl = tagpool[c->tlook];

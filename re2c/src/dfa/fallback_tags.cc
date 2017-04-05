@@ -72,12 +72,12 @@ void insert_fallback_tags(dfa_t &dfa)
 
 		tcmd_t *p = s->tcmd[nsym], *&f = s->tcmd[nsym + 1];
 		for (; p; p = p->next) {
-			const tagver_t l = p->lhs, r = p->rhs;
+			const tagver_t l = p->lhs, r = p->rhs, v = p->pred;
 
 			// 'save' commands are the same as for final transition
 			// non-overwritten tags need 'copy' on fallback transition
 			if (!tcmd_t::iscopy(r) || !owrt[r]) {
-				f = pool.make_tcmd(f, l, r);
+				f = pool.make_tcmd(f, l, r, v);
 				continue;
 			}
 
@@ -87,7 +87,7 @@ void insert_fallback_tags(dfa_t &dfa)
 				size_t j = s->arcs[c];
 				if (j != dfa_t::NIL && dfa.states[j]->fallthru) {
 					tcmd_t *&q = s->tcmd[c];
-					q = pool.make_tcmd(q, l, r);
+					q = pool.make_tcmd(q, l, r, v);
 				}
 			}
 		}

@@ -65,15 +65,14 @@ public:
 	void init(tagver_t v, size_t k);
 	size_t size() const;
 	const kernel_t* operator[](size_t idx) const;
-	result_t insert(const closure_t &clos, tagver_t maxver);
+	result_t insert(const closure_t &clos, tcmd_t *acts, tagver_t maxver);
 	bool operator()(const kernel_t *k1, const kernel_t *k2);
-	tcmd_t *commands1(const closure_t &closure);
-	tcmd_t *commands2(const closure_t &closure);
+	tcmd_t *actions(tcmd_t *save);
 	FORBID_COPY(kernels_t);
 };
 
-void find_state(dfa_t &dfa, size_t state, size_t symbol,
-	kernels_t &kernels, const closure_t &closure, dump_dfa_t &dump);
+void find_state(dfa_t &dfa, size_t state, size_t symbol, kernels_t &kernels,
+	const closure_t &closure, tcmd_t *acts, dump_dfa_t &dump);
 
 } // namespace re2c
 

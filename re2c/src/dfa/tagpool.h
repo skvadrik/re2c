@@ -15,14 +15,10 @@ struct Tagpool
 private:
 	typedef lookup_t<const tagver_t*> taglookup_t;
 	taglookup_t lookup;
-	tagver_t *buffer;
 
 public:
 	const size_t ntags;
-	tagver_t *buffer1;
-	tagver_t *buffer2;
-	tagver_t *buffer3;
-	tagver_t *buffer4;
+	tagver_t *buffer;
 
 	size_t maxclos;
 	tagver_t *orders;
