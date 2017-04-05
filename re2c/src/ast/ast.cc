@@ -19,7 +19,7 @@ AST::~AST()
 {
 	flist.erase(this);
 	if (type == TAG) {
-		delete tag;
+		delete tag.name;
 	} else if (type == REF) {
 		delete ref.name;
 	} else if (type == STR) {
@@ -97,10 +97,11 @@ const AST *ast_diff(const AST *a1, const AST *a2)
 	return ast;
 }
 
-const AST *ast_tag(uint32_t l, uint32_t c, const std::string *t)
+const AST *ast_tag(uint32_t l, uint32_t c, const std::string *n, bool h)
 {
 	AST *ast = new AST(l, c, AST::TAG);
-	ast->tag = t;
+	ast->tag.name = n;
+	ast->tag.history = h;
 	return ast;
 }
 

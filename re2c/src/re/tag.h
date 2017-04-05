@@ -25,18 +25,21 @@ struct Tag
 	size_t ncap;
 	size_t base;
 	size_t dist;
+	bool history;
 
-	explicit Tag(const std::string *n)
+	Tag(const std::string *n, bool h)
 		: name(n)
 		, ncap(Tag::RIGHTMOST)
 		, base(Tag::RIGHTMOST)
 		, dist(Tag::VARDIST)
+		, history(h)
 	{}
 	explicit Tag(size_t c)
 		: name(NULL)
 		, ncap(c)
 		, base(Tag::RIGHTMOST)
 		, dist(Tag::VARDIST)
+		, history(false)
 	{}
 };
 
@@ -68,9 +71,9 @@ inline bool preorbit(const std::vector<Tag> &tags, size_t idx)
 		&& tags[idx + 2].ncap == ncap + 2;
 }
 
-inline bool history(const Tag &/*tag*/)
+inline bool history(const Tag &tag)
 {
-	return false;
+	return tag.history;
 }
 
 } // namespace re2c

@@ -91,12 +91,12 @@ static RE *ast_to_re(RESpec &spec, const AST *ast, size_t &ncap)
 			return re_cat(alc, x, y);
 		}
 		case AST::TAG: {
-			if (ast->tag && !opts->tags) {
+			if (ast->tag.name && !opts->tags) {
 				fatal_error(ast->line, ast->column,
 					"tags are only allowed with '-T, --tags' option");
 			}
 			RE *t = re_tag(alc, tags.size(), false);
-			tags.push_back(Tag(ast->tag));
+			tags.push_back(Tag(ast->tag.name, ast->tag.history));
 			return t;
 		}
 		case AST::CAP: {

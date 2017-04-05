@@ -220,9 +220,9 @@ scan:
 	"["  { yylval.regexp = lex_cls(false); return TOKEN_REGEXP; }
 	"[^" { yylval.regexp = lex_cls(true);  return TOKEN_REGEXP; }
 
-	"@" name {
+	[@#] name {
 		const std::string *name = new std::string(tok + 1, tok_len() - 1);
-		yylval.regexp = ast_tag(cline, get_column(), name);
+		yylval.regexp = ast_tag(cline, get_column(), name, tok[0] == '#');
 		return TOKEN_REGEXP;
 	}
 

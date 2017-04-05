@@ -66,7 +66,10 @@ struct AST
 			const AST *ast1;
 			const AST *ast2;
 		} diff;
-		const std::string *tag;
+		struct {
+			const std::string *name;
+			bool history;
+		} tag;
 		const AST *cap;
 		struct {
 			const AST *ast;
@@ -120,7 +123,7 @@ const AST *ast_alt(const AST *r1, const AST *r2);
 const AST *ast_cat(const AST *r1, const AST *r2);
 const AST *ast_iter(const AST *r, uint32_t n, uint32_t m);
 const AST *ast_diff(const AST *r1, const AST *r2);
-const AST *ast_tag(uint32_t l, uint32_t c, const std::string *t);
+const AST *ast_tag(uint32_t l, uint32_t c, const std::string *n, bool h);
 const AST *ast_cap(const AST *r);
 const AST *ast_ref(const AST *r, const std::string &n);
 bool ast_need_wrap(const AST *ast);

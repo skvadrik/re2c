@@ -169,7 +169,7 @@ trailexpr
 		$$ = ast_cap($1);
 	} | expr '/' expr {
 		$$ = ast_cat(ast_cap($1),
-			ast_cat(ast_tag(context.input.get_cline(), 0, NULL), $3));
+			ast_cat(ast_tag(context.input.get_cline(), 0, NULL, false), $3));
 	};
 
 expr:

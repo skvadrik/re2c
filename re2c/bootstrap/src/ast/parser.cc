@@ -1454,7 +1454,7 @@ yyreduce:
 
     {
 		(yyval.regexp) = ast_cat(ast_cap((yyvsp[-2].regexp)),
-			ast_cat(ast_tag(context.input.get_cline(), 0, NULL), (yyvsp[0].regexp)));
+			ast_cat(ast_tag(context.input.get_cline(), 0, NULL, false), (yyvsp[0].regexp)));
 	}
 
     break;
