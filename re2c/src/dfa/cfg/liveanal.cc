@@ -29,11 +29,17 @@ void cfg_t::live_through_bblock(const tcmd_t *cmd, bool *live)
 
 	live_through_bblock(cmd->next, live);
 
-	const tagver_t l = cmd->lhs, r = cmd->rhs;
-	if (live[l] && tcmd_t::iscopy(r)) {
-		live[r] = true;
+	const tagver_t l = cmd->lhs, r = cmd->rhs, p = cmd->pred;
+	if (live[l]) {
+		// first reset, than set: LHS might be equal to history
+		live[l] = false;
+		if (tcmd_t::iscopy(r)) {
+			live[r] = true;
+		}
+		if (p != TAGVER_ZERO) {
+			live[p] = true;
+		}
 	}
-	live[l] = false;
 }
 
 void cfg_t::liveness_analysis(const cfg_t &cfg, bool *live)

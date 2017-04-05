@@ -38,15 +38,11 @@ void interfere(const tcmd_t *cmd, const bool *live, bool *interf,
 		cfg_t::live_through_bblock(p->next, buf2);
 
 		// exclude RHS
-		if (tcmd_t::iscopy(r)) {
-			buf2[r] = false;
-		}
+		if (tcmd_t::iscopy(r)) buf2[r] = false;
 
 		// exclude tags assigned to the same RHS
 		for (const tcmd_t *q = cmd; q; q = q->next) {
-			if (q->rhs == r) {
-				buf2[q->lhs] = false;
-			}
+			if (q->rhs == r) buf2[q->lhs] = false;
 		}
 
 		const size_t l = static_cast<size_t>(p->lhs);

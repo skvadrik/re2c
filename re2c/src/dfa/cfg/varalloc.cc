@@ -35,7 +35,8 @@ tagver_t cfg_t::variable_allocation(const cfg_t &cfg, const bool *interf,
 		for (const tcmd_t *p = b->cmd; p; p = p->next) {
 			x = p->lhs;
 			y = p->rhs;
-			if (!tcmd_t::iscopy(y)) continue;
+			if (!tcmd_t::iscopy(y)) y = p->pred;
+			if (y == TAGVER_ZERO || y == x) continue;
 
 			rx = repr[x];
 			ry = repr[y];
