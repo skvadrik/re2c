@@ -10,6 +10,7 @@ kernel_t::kernel_t(size_t n)
 	: size(n)
 	, state(new nfa_state_t*[size])
 	, tvers(new size_t[size])
+	, tlook(new size_t[size])
 	, order(new size_t[size])
 {}
 
@@ -19,6 +20,7 @@ kernel_t *kernel_t::copy(const kernel_t &k)
 	kernel_t *kcopy = new kernel_t(n);
 	memcpy(kcopy->state, k.state, n * sizeof(void*));
 	memcpy(kcopy->tvers, k.tvers, n * sizeof(size_t));
+	memcpy(kcopy->tlook, k.tlook, n * sizeof(size_t));
 	memcpy(kcopy->order, k.order, n * sizeof(size_t));
 	return kcopy;
 }
@@ -27,6 +29,7 @@ kernel_t::~kernel_t()
 {
 	delete[] state;
 	delete[] tvers;
+	delete[] tlook;
 	delete[] order;
 }
 
@@ -36,8 +39,9 @@ struct kernel_eq_t
 	{
 		return x->size == y->size
 			&& memcmp(x->state, y->state, x->size * sizeof(void*)) == 0
-			&& memcmp(x->tvers, y->tvers, x->size * sizeof(size_t)) == 0;
-		// no need to compare orders: if versions coincide, so do orders
+			&& memcmp(x->tvers, y->tvers, x->size * sizeof(size_t)) == 0
+			&& memcmp(x->tlook, y->tlook, x->size * sizeof(size_t)) == 0;
+		// no need to compare orders: if versions and lookahead coincide, so do orders
 	}
 };
 
@@ -61,6 +65,7 @@ bool kernels_t::operator()(const kernel_t *k1, const kernel_t *k2)
 	// check that kernel sizes, NFA states and orders coincide
 	const bool compatible = k1->size == k2->size
 		&& memcmp(k1->state, k2->state, k1->size * sizeof(void*)) == 0
+		&& memcmp(k1->tlook, k2->tlook, k1->size * sizeof(size_t)) == 0
 		&& memcmp(k1->order, k2->order, k1->size * sizeof(size_t)) == 0;
 	if (!compatible) return false;
 
@@ -72,19 +77,16 @@ bool kernels_t::operator()(const kernel_t *k1, const kernel_t *k2)
 	for (size_t i = 0; i < k1->size; ++i) {
 		const tagver_t
 			*xv = tagpool[k1->tvers[i]],
-			*yv = tagpool[k2->tvers[i]];
+			*yv = tagpool[k2->tvers[i]],
+			*xl = tagpool[k2->tlook[i]];
 
 		for (size_t t = 0; t < ntag; ++t) {
-			const tagver_t x = xv[t], y = yv[t];
-
 			// see note [mapping ignores items with lookahead tags]
-			if (x == TAGVER_CURSOR || x == TAGVER_BOTTOM
-				|| y == TAGVER_CURSOR || y == TAGVER_BOTTOM) {
-				if (x == y) continue;
-				return false;
-			}
+			if (xl[t] != TAGVER_ZERO) continue;
 
+			const tagver_t x = xv[t], y = yv[t];
 			tagver_t &x0 = y2x[y], &y0 = x2y[x];
+
 			if (y0 == TAGVER_ZERO && x0 == TAGVER_ZERO) {
 				x0 = x;
 				y0 = y;
@@ -214,12 +216,14 @@ kernels_t::result_t kernels_t::insert(const closure_t &clos, tagver_t maxver)
 		const clos_t &c = clos[i];
 		buffer->state[i] = c.state;
 		buffer->tvers[i] = c.tvers;
+		buffer->tlook[i] = c.tlook;
 		buffer->order[i] = c.order;
 	}
 
 	// get kernel hash
 	uint32_t hash = static_cast<uint32_t>(nkern); // seed
 	hash = hash32(hash, buffer->state, nkern * sizeof(void*));
+	hash = hash32(hash, buffer->tlook, nkern * sizeof(size_t));
 	hash = hash32(hash, buffer->order, nkern * sizeof(size_t));
 
 	// try to find identical kernel
@@ -282,8 +286,7 @@ tcmd_t *kernels_t::commands1(const closure_t &closure)
 
 tcmd_t *kernels_t::commands2(const closure_t &closure)
 {
-	tcmd_t *copy = NULL, *save = NULL, **p;
-	cclositer_t c1 = closure.begin(), c2 = closure.end(), c;
+	tcmd_t *save = commands1(closure), *copy = NULL, *s, **p;
 
 	// see note [save(X), copy(Y,X) optimization]
 	for (tagver_t x = -max; x < max; ++x) {
@@ -295,9 +298,9 @@ tcmd_t *kernels_t::commands2(const closure_t &closure)
 		if (fixed(tags[t])) continue;
 
 		const tagver_t ax = abs(x), ay = abs(y);
-		for (c = c1; c != c2 && tagpool[c->ttran][t] != y; ++c);
-		if (c != c2) {
-			save = tcpool.make_tcmd(save, ax, y < TAGVER_ZERO ? TAGVER_BOTTOM : TAGVER_CURSOR);
+		for (s = save; s && s->lhs != ay; s = s->next);
+		if (s) {
+			s->lhs = ax;
 		} else if (x != y) {
 			assert(ax != ay);
 			copy = tcpool.make_tcmd(copy, ax, ay);
@@ -319,11 +322,13 @@ static tcmd_t *finalizer(const clos_t &clos, size_t ridx,
 {
 	tcpool_t &tcpool = dfa.tcpool;
 	const Rule &rule = dfa.rules[ridx];
-	const tagver_t *vers = tagpool[clos.tvers];
+	const tagver_t
+		*look = tagpool[clos.tlook],
+		*vers = tagpool[clos.tvers];
 	tcmd_t *copy = NULL, *save = NULL, **p;
 
 	for (size_t t = rule.ltag; t < rule.htag; ++t) {
-		const tagver_t v = vers[t];
+		const tagver_t l = look[t], v = abs(vers[t]);
 		tagver_t &f = dfa.finvers[t];
 
 		// don't waste versions on fixed tags
@@ -334,10 +339,10 @@ static tcmd_t *finalizer(const clos_t &clos, size_t ridx,
 			f = ++dfa.maxtagver;
 		}
 
-		if (tcmd_t::iscopy(v)) {
+		if (l == TAGVER_ZERO) {
 			copy = tcpool.make_tcmd(copy, f, abs(v));
 		} else {
-			save = tcpool.make_tcmd(save, f, v);
+			save = tcpool.make_tcmd(save, f, l);
 		}
 	}
 

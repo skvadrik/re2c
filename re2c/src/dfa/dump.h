@@ -18,7 +18,7 @@ struct dump_dfa_t
 
 	dump_dfa_t(const dfa_t &d, const Tagpool &pool, const nfa_t &n, bool dbg);
 	~dump_dfa_t();
-	void closure_tags(cclositer_t c, bool shadowed);
+	void closure_tags(cclositer_t c, const tagver_t *lookahead, bool shadowed);
 	void closure(const closure_t &clos, uint32_t state, bool isnew);
 	void state0(const closure_t &clos);
 	void state(const closure_t &clos, size_t state, size_t symbol, bool isnew);

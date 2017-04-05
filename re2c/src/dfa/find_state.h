@@ -14,6 +14,7 @@ struct kernel_t
 	size_t size;
 	nfa_state_t **state;
 	size_t *tvers; // tag versions
+	size_t *tlook; // lookahead tags
 	size_t *order; // see note [orbit order of closure items]
 
 	explicit kernel_t(size_t n);

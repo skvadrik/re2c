@@ -40,29 +40,34 @@ uint32_t dump_dfa_t::index(const nfa_state_t *s)
 	return static_cast<uint32_t>(s - base);
 }
 
-void dump_dfa_t::closure_tags(cclositer_t c, bool shadowed)
+void dump_dfa_t::closure_tags(cclositer_t c,
+	const tagver_t *lookahead, bool shadowed)
 {
 	if (!debug) return;
 	if (c->tvers == ZERO_TAGS) return;
 
-	const tagver_t *vers = tagpool[c->tvers];
+	const tagver_t
+		*look = tagpool[c->tlook],
+		*vers = tagpool[c->tvers],
+		*ord =  tagpool[c->order];
 	const size_t ntag = tagpool.ntags;
 	for (size_t t = 0; t < ntag; ++t) {
 		const Tag &tag = dfa.tags[t];
 
 		fprintf(stderr, " %s", tagname(tag));
-
-		const tagver_t v = vers[t];
-		if (v == TAGVER_BOTTOM) {
-			fprintf(stderr, "&darr;");
-		} else if (v == TAGVER_CURSOR) {
-			fprintf(stderr, "&uarr;");
-		} else {
-			fprintf(stderr, "%d", abs(v));
+		fprintf(stderr, "%d", abs(vers[t]));
+		if (lookahead[t]) {
+			const tagver_t l = look[t];
+			if (l == TAGVER_BOTTOM) {
+				fprintf(stderr, " &darr;");
+			} else if (l == TAGVER_CURSOR) {
+				fprintf(stderr, " &uarr;");
+			} else {
+				fprintf(stderr, "  ");
+			}
 		}
-
 		if (!shadowed && capture(tag)) {
-			fprintf(stderr, "[%d]", tagpool[c->order][t]);
+			fprintf(stderr, "[%d]", ord[t]);
 		}
 	}
 }
@@ -71,6 +76,8 @@ void dump_dfa_t::closure(const closure_t &clos, uint32_t state, bool isnew)
 {
 	if (!debug) return;
 
+	cclositer_t c1 = clos.begin(), c2 = clos.end(), c,
+		s1 = shadow->begin(), s2 = shadow->end(), s;
 	const char
 		*style = isnew ? "" : " STYLE=\"dotted\"",
 		*color = " COLOR=\"lightgray\"";
@@ -80,19 +87,26 @@ void dump_dfa_t::closure(const closure_t &clos, uint32_t state, bool isnew)
 		" CELLBORDER=\"1\""
 		">", isnew ? "" : "i", state);
 
-	for (cclositer_t b = shadow->begin(), c = b; c != shadow->end(); ++c) {
+	tagver_t *look = tagpool.buffer1;
+	for (size_t t = 0; t < tagpool.ntags; ++t) {
+		for (c = c1; c != c2 && tagpool[c->tlook][t] == TAGVER_ZERO; ++c);
+		for (s = s1; s != s2 && tagpool[s->tlook][t] == TAGVER_ZERO; ++s);
+		look[t] = c != c2 || s != s2;
+	}
+
+	for (s = s1; s != s2; ++s) {
 		fprintf(stderr, "<TR><TD ALIGN=\"left\" PORT=\"_%u_%ld\"%s%s><FONT%s>%u",
-			index(c->state), c - b, color, style, color, index(c->state));
-		closure_tags(c, true);
+			index(s->state), s - s1, color, style, color, index(s->state));
+		closure_tags(s, look, true);
 		fprintf(stderr, "</FONT></TD></TR>");
 	}
 	if (!shadow->empty()) {
 		fprintf(stderr, "<TR><TD BORDER=\"0\"></TD></TR>");
 	}
-	for (cclositer_t c = clos.begin(); c != clos.end(); ++c) {
+	for (c = c1; c != c2; ++c) {
 		fprintf(stderr, "<TR><TD ALIGN=\"left\" PORT=\"%u\"%s>%u",
 			index(c->state), style, index(c->state));
-		closure_tags(c, true);
+		closure_tags(c, look, true);
 		fprintf(stderr, "</TD></TR>");
 	}
 	fprintf(stderr, "</TABLE>>]\n");

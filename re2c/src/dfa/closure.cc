@@ -10,15 +10,14 @@ namespace re2c
 static void closure_one(closure_t &clos, Tagpool &tagpool, tagtree_t &tagtree,
 	clos_t &c0, nfa_state_t *n, const std::vector<Tag> &tags, closure_t *shadow, std::valarray<Rule> &rules);
 static bool better(const clos_t &c1, const clos_t &c2, Tagpool &tagpool, tagtree_t &tagtree, const std::vector<Tag> &tags);
-static void lower_lookahead_to_transition(closure_t &clos, Tagpool &tagpool, tagtree_t &tagtree);
-static void update_versions(closure_t &clos, Tagpool &tagpool, tagtree_t &tagtree, tagver_t &maxver, tagver_t *newvers);
+static void lower_lookahead_to_transition(closure_t &clos);
+static void update_versions(closure_t &clos, Tagpool &tagpool, tagver_t &maxver, tagver_t *newvers);
 static void orders(closure_t &clos, Tagpool &tagpool, tagtree_t &tagtree, const std::vector<Tag> &tags);
-static void find_nondet(const closure_t &clos, size_t *nondet, const Tagpool &tagpool, const std::valarray<Rule> &rules);
 static bool cmpby_rule_state(const clos_t &x, const clos_t &y);
 
 void closure(closure_t &clos1, closure_t &clos2, Tagpool &tagpool, tagtree_t &tagtree,
 	std::valarray<Rule> &rules, tagver_t &maxver, tagver_t *newvers,
-	size_t *nondet, bool lookahead, closure_t *shadow, const std::vector<Tag> &tags)
+	bool lookahead, closure_t *shadow, const std::vector<Tag> &tags)
 {
 	// build tagged epsilon-closure of the given set of NFA states
 	clos2.clear();
@@ -34,15 +33,13 @@ void closure(closure_t &clos1, closure_t &clos2, Tagpool &tagpool, tagtree_t &ta
 
 	// see note [the difference between TDFA(0) and TDFA(1)]
 	if (!lookahead) {
-		lower_lookahead_to_transition(clos2, tagpool, tagtree);
-		if (shadow) lower_lookahead_to_transition(*shadow, tagpool, tagtree);
+		lower_lookahead_to_transition(clos2);
+		if (shadow) lower_lookahead_to_transition(*shadow);
 	}
 
-	find_nondet(clos2, nondet, tagpool, rules);
-
 	// merge tags from different rules, find nondeterministic tags
-	update_versions(clos2, tagpool, tagtree, maxver, newvers);
-	if (shadow) update_versions(*shadow, tagpool, tagtree, maxver, newvers);
+	update_versions(clos2, tagpool, maxver, newvers);
+	if (shadow) update_versions(*shadow, tagpool, maxver, newvers);
 }
 
 bool cmpby_rule_state(const clos_t &x, const clos_t &y)
@@ -107,7 +104,7 @@ void closure_one(closure_t &clos, Tagpool &tagpool, tagtree_t &tagtree, clos_t &
 			break;
 	}
 
-	clos_t c2 = {c0.origin, n, c0.tvers,
+	clos_t c2 = {c0.origin, n, c0.tvers, c0.ttran,
 		tagpool.insert(tagtree.leaves()), c0.order, c0.index++};
 	if (c == e) {
 		clos.push_back(c2);
@@ -141,11 +138,13 @@ bool better(const clos_t &c1, const clos_t &c2,
 {
 	if (c1.ttran == c2.ttran
 		&& c1.tvers == c2.tvers
+		&& c1.tlook == c2.tlook
 		&& c1.order == c2.order
 		&& c1.index == c2.index) return false;
 
 	const tagver_t
-		*l1 = tagpool[c1.ttran], *l2 = tagpool[c2.ttran],
+		*l1 = tagpool[c1.tlook], *l2 = tagpool[c2.tlook],
+		*t1 = tagpool[c1.ttran], *t2 = tagpool[c2.ttran],
 		*v1 = tagpool[c1.tvers], *v2 = tagpool[c2.tvers],
 		*o1 = tagpool[c1.order], *o2 = tagpool[c2.order];
 	tagver_t x, y;
@@ -170,6 +169,11 @@ bool better(const clos_t &c1, const clos_t &c2,
 		} else if (capture(tag)) {
 			x = tagtree.elem(l1[t]);
 			y = tagtree.elem(l2[t]);
+			if (x < 0 || y < 0) goto leftmost;
+			if (x > y) return false;
+			if (x < y) return true;
+
+			x = t1[t]; y = t2[t];
 			if (x < 0 || y < 0) goto leftmost;
 			if (x > y) return false;
 			if (x < y) return true;
@@ -215,34 +219,15 @@ bool better(const clos_t &c1, const clos_t &c2,
  * Thus in general TDFA(1) raises less conflicts than TDFA(0).
  */
 
-// Make TDFA(0) look like TDFA(1), which expects that after epsilon-closure
-// lookahead tags occupy the place of future transition tags, while
-// transition tags are scattered across tag versions inherited from the
-// previous kernel. TDFA(0)'s representation is simpler and more logical,
-// and 'lowering' is just a waste for TDFA(0). However, supporting two
-// different handlers for TDFA(0) and TDFA(1) is unmaintainable, and since
-// TDFA(1) is default, it has the fast path.
-void lower_lookahead_to_transition(closure_t &clos, Tagpool &tagpool, tagtree_t &tagtree)
+void lower_lookahead_to_transition(closure_t &clos)
 {
-	const size_t ntag = tagpool.ntags;
-	tagver_t *vers = tagpool.buffer1;
-
 	for (clositer_t c = clos.begin(); c != clos.end(); ++c) {
-		if (c->ttran == ZERO_TAGS) continue;
-
-		const tagver_t
-			*look = tagpool[c->ttran],
-			*oldv = tagpool[c->tvers];
-		for (size_t t = 0; t < ntag; ++t) {
-			const tagver_t l = tagtree.elem(look[t]);
-			vers[t] = l == TAGVER_ZERO ? oldv[t] : l;
-		}
-		c->tvers = tagpool.insert(vers);
-		c->ttran = ZERO_TAGS;
+		c->ttran = c->tlook;
+		c->tlook = ZERO_TAGS;
 	}
 }
 
-void update_versions(closure_t &clos, Tagpool &tagpool, tagtree_t &tagtree,
+void update_versions(closure_t &clos, Tagpool &tagpool,
 	tagver_t &maxver, tagver_t *newvers)
 {
 	const size_t ntag = tagpool.ntags;
@@ -262,7 +247,7 @@ void update_versions(closure_t &clos, Tagpool &tagpool, tagtree_t &tagtree,
 		cur[t] = bot[t] = TAGVER_ZERO;
 
 		for (c = b; c != e; ++c) {
-			if (tagpool[c->tvers][t] == TAGVER_CURSOR) {
+			if (tagpool[c->ttran][t] == TAGVER_CURSOR) {
 				if (newcur == TAGVER_ZERO) {
 					newcur = ++maxver;
 				}
@@ -272,7 +257,7 @@ void update_versions(closure_t &clos, Tagpool &tagpool, tagtree_t &tagtree,
 		}
 
 		for (c = b; c != e; ++c) {
-			if (tagpool[c->tvers][t] == TAGVER_BOTTOM) {
+			if (tagpool[c->ttran][t] == TAGVER_BOTTOM) {
 				if (newbot == TAGVER_ZERO) {
 					newbot = -(++maxver);
 				}
@@ -284,23 +269,22 @@ void update_versions(closure_t &clos, Tagpool &tagpool, tagtree_t &tagtree,
 
 	// set transition tags and update versions
 	for (c = b; c != e; ++c) {
+		if (c->ttran == ZERO_TAGS) continue;
+
 		const tagver_t
-			*look = tagpool[c->ttran],
+			*oldt = tagpool[c->ttran],
 			*oldv = tagpool[c->tvers];
 
 		for (size_t i = 0; i < ntag; ++i) {
-			const tagver_t o = oldv[i], l = tagtree.elem(look[i]);
+			const tagver_t ov = oldv[i], ot = oldt[i];
 			tagver_t &v = vers[i], &t = tran[i];
 
-			if (l != TAGVER_ZERO) {
-				v = l;
-				t = TAGVER_ZERO;
-			} else if (o == TAGVER_CURSOR) {
+			if (ot == TAGVER_CURSOR) {
 				v = t = cur[i];
-			} else if (o == TAGVER_BOTTOM) {
+			} else if (ot == TAGVER_BOTTOM) {
 				v = t = bot[i];
 			} else {
-				v = o;
+				v = ov;
 				t = TAGVER_ZERO;
 			}
 		}
@@ -390,11 +374,11 @@ void orders(closure_t &clos, Tagpool &tagpool,
 		if (orbit(tags[t])) {
 			keys1.clear();
 			for (c = b; c != e; ++c) {
-				keys1.insert(key1_t(tagpool[c->order][t], tagpool[c->ttran][t]));
+				keys1.insert(key1_t(tagpool[c->order][t], tagpool[c->tlook][t]));
 			}
 			for (c = b; c != e; ++c, o += ntag) {
 				const ptrdiff_t d = std::distance(keys1.begin(),
-					keys1.find(key1_t(tagpool[c->order][t], tagpool[c->ttran][t])));
+					keys1.find(key1_t(tagpool[c->order][t], tagpool[c->tlook][t])));
 				o[t] = static_cast<tagver_t>(d);
 			}
 
@@ -417,35 +401,16 @@ void orders(closure_t &clos, Tagpool &tagpool,
 	for (c = b; c != e; ++c, o += ntag) {
 		c->order = tagpool.insert(o);
 	}
-}
 
-/*
- * For each tag, find the number of parallel versions of this tag
- * used in this closure (degree of non-determinism).
- */
-void find_nondet(const closure_t &clos, size_t *nondet,
-	const Tagpool &tagpool, const std::valarray<Rule> &rules)
-{
-	std::set<tagver_t> uniq;
-	cclositer_t b = clos.begin(), e = clos.end(), c, x0, x;
-
-	size_t r0 = 0;
-	for (c = b; c != e;) {
-		const size_t r = c->state->rule;
-		const Rule &rule = rules[r];
-
-		// closure items must be grouped by rule
-		assert(r >= r0); r0 = r;
-
-		for (x0 = c; ++c != e && c->state->rule == r;);
-
-		for (size_t t = rule.ltag; t < rule.htag; ++t) {
-			uniq.clear();
-			for (x = x0; x != c; ++x) {
-				uniq.insert(tagpool[x->tvers][t]);
-			}
-			nondet[t] = std::max(nondet[t], uniq.size());
+	// flatten lookahead tags (take the last on each path)
+	tagver_t *look = tagpool.buffer1;
+	for (clositer_t c = clos.begin(); c != clos.end(); ++c) {
+		if (c->tlook == ZERO_TAGS) continue;
+		const tagver_t *oldl = tagpool[c->tlook];
+		for (size_t t = 0; t < ntag; ++t) {
+			look[t] = tagtree.elem(oldl[t]);
 		}
+		c->tlook = tagpool.insert(look);
 	}
 }
 

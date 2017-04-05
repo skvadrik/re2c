@@ -16,6 +16,7 @@ struct clos_t
 	nfa_state_t *state;
 	size_t tvers; // vector of tag versions (including lookahead tags)
 	size_t ttran; // vector of transition tags
+	size_t tlook; // vector of lookahead tags
 	size_t order; // vector of orders
 	size_t index; // leftmost order in NFA traversal
 
@@ -28,7 +29,7 @@ typedef closure_t::const_iterator cclositer_t;
 
 void closure(closure_t &clos1, closure_t &clos2, Tagpool &tagpool, tagtree_t &tagtree,
 	std::valarray<Rule> &rules, tagver_t &maxver, tagver_t *newvers,
-	size_t *nondet, bool lookahead, closure_t *shadow, const std::vector<Tag> &tags);
+	bool lookahead, closure_t *shadow, const std::vector<Tag> &tags);
 
 } // namespace re2c
 
