@@ -70,13 +70,18 @@ void insert_fallback_tags(dfa_t &dfa)
 		std::fill(owrt, owrt + nver, false);
 		find_overwritten_tags(dfa, i, been, owrt);
 
-		tcmd_t *p = s->tcmd[nsym], *&f = s->tcmd[nsym + 1];
+		tcmd_t *p = s->tcmd[nsym], *f = NULL, *t = NULL, **pf;
 		for (; p; p = p->next) {
 			const tagver_t l = p->lhs, r = p->rhs, v = p->pred;
 
 			// 'save' commands are the same as for final transition
+			if (!tcmd_t::iscopy(r)) {
+				t = pool.make_tcmd(t, l, r, v);
+				continue;
+			}
+
 			// non-overwritten tags need 'copy' on fallback transition
-			if (!tcmd_t::iscopy(r) || !owrt[r]) {
+			if (!owrt[r]) {
 				f = pool.make_tcmd(f, l, r, v);
 				continue;
 			}
@@ -91,6 +96,10 @@ void insert_fallback_tags(dfa_t &dfa)
 				}
 			}
 		}
+		// join 'copy' (fallback) and 'save' commands
+		for (pf = &f; *pf; pf = &(*pf)->next);
+		*pf = t;
+		s->tcmd[nsym + 1] = f;
 	}
 
 	delete[] been;

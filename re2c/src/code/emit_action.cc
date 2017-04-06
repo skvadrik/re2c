@@ -311,7 +311,6 @@ void gen_settags(code_lines_t &code, const DFA &dfa, tcid_t tcid, const opt_t *o
 		return;
 	}
 
-	std::string s1 = "", s2 = "";
 	for (const tcmd_t *p = cmd; p; p = p->next) {
 		const tagver_t l = p->lhs, r = p->rhs, h = p->pred;
 
@@ -348,21 +347,22 @@ void gen_settags(code_lines_t &code, const DFA &dfa, tcid_t tcid, const opt_t *o
 
 		// save command; no history; default API
 		} else {
-			const std::string v = vartag_expr(l, prefix, expression);
-			if (r == TAGVER_BOTTOM) {
-				s1 += v + " = ";
-			} else {
-				s2 += v + " = ";
+			std::string s1 = "", s2 = "";
+			for (const tcmd_t *q = p
+				; q && !tcmd_t::iscopy(q->rhs) && q->pred == TAGVER_ZERO
+				; p = q, q = q->next) {
+				std::string &s = q->rhs == TAGVER_BOTTOM ? s1 : s2;
+				s += vartag_expr(q->lhs, prefix, expression) + " = ";
+			}
+			if (!s1.empty()) {
+				s1 += "NULL;\n";
+				code.push_back(s1);
+			}
+			if (!s2.empty()) {
+				s2 += opts->yycursor + ";\n";
+				code.push_back(s2);
 			}
 		}
-	}
-	if (!s1.empty()) {
-		s1 += "NULL;\n";
-		code.push_back(s1);
-	}
-	if (!s2.empty()) {
-		s2 += opts->yycursor + ";\n";
-		code.push_back(s2);
 	}
 }
 
