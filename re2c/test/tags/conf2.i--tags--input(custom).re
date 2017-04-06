@@ -66,9 +66,9 @@ static bool lex(input_t & in)
 #define YYSKIP()           ++in.cur
 #define YYBACKUP()         in.mar = in.cur
 #define YYRESTORE()        in.cur = in.mar
-#define YYBACKUPTAG(t)     t = in.cur
+#define YYTAGP(t)          t = in.cur
+#define YYTAGN(t)          t = NULL
 #define YYRESTORETAG(t)    in.cur = t
-#define YYCOPYTAG(t1, t2)  t1 = t2
 #define YYLESSTHAN(n)      in.lim - in.cur < n
 loop:
     in.tok = in.cur;

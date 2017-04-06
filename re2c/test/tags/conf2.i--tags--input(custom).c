@@ -68,9 +68,9 @@ static bool lex(input_t & in)
 #define YYSKIP()           ++in.cur
 #define YYBACKUP()         in.mar = in.cur
 #define YYRESTORE()        in.cur = in.mar
-#define YYBACKUPTAG(t)     t = in.cur
+#define YYTAGP(t)          t = in.cur
+#define YYTAGN(t)          t = NULL
 #define YYRESTORETAG(t)    in.cur = t
-#define YYCOPYTAG(t1, t2)  t1 = t2
 #define YYLESSTHAN(n)      in.lim - in.cur < n
 loop:
     in.tok = in.cur;
@@ -107,7 +107,7 @@ yy6:
 	yych = YYPEEK ();
 	switch (yych) {
 	case '.':
-		YYBACKUPTAG (in.yyt1);
+		YYTAGP (in.yyt1);
 		goto yy7;
 	case '0':
 	case '1':
@@ -145,7 +145,7 @@ yy9:
 	yych = YYPEEK ();
 	switch (yych) {
 	case '.':
-		YYBACKUPTAG (in.yyt1);
+		YYTAGP (in.yyt1);
 		goto yy7;
 	case '0':
 	case '1':
@@ -164,7 +164,7 @@ yy10:
 	yych = YYPEEK ();
 	switch (yych) {
 	case '.':
-		YYBACKUPTAG (in.yyt2);
+		YYTAGP (in.yyt2);
 		goto yy12;
 	case '0':
 	case '1':
@@ -183,7 +183,7 @@ yy11:
 	yych = YYPEEK ();
 	switch (yych) {
 	case '.':
-		YYBACKUPTAG (in.yyt1);
+		YYTAGP (in.yyt1);
 		goto yy7;
 	default:	goto yy8;
 	}
@@ -208,7 +208,7 @@ yy13:
 	yych = YYPEEK ();
 	switch (yych) {
 	case '.':
-		YYBACKUPTAG (in.yyt2);
+		YYTAGP (in.yyt2);
 		goto yy12;
 	case '0':
 	case '1':
@@ -227,7 +227,7 @@ yy14:
 	yych = YYPEEK ();
 	switch (yych) {
 	case '.':
-		YYBACKUPTAG (in.yyt3);
+		YYTAGP (in.yyt3);
 		goto yy16;
 	case '0':
 	case '1':
@@ -246,7 +246,7 @@ yy15:
 	yych = YYPEEK ();
 	switch (yych) {
 	case '.':
-		YYBACKUPTAG (in.yyt2);
+		YYTAGP (in.yyt2);
 		goto yy12;
 	default:	goto yy8;
 	}
@@ -271,7 +271,7 @@ yy17:
 	yych = YYPEEK ();
 	switch (yych) {
 	case '.':
-		YYBACKUPTAG (in.yyt3);
+		YYTAGP (in.yyt3);
 		goto yy16;
 	case '0':
 	case '1':
@@ -307,15 +307,15 @@ yy19:
 	yych = YYPEEK ();
 	switch (yych) {
 	case '.':
-		YYBACKUPTAG (in.yyt3);
+		YYTAGP (in.yyt3);
 		goto yy16;
 	default:	goto yy8;
 	}
 yy20:
 	YYSKIP ();
-	YYCOPYTAG (p1, in.yyt1);
-	YYCOPYTAG (p2, in.yyt2);
-	YYCOPYTAG (p3, in.yyt3);
+	p1 = in.yyt1;
+	p2 = in.yyt2;
+	p3 = in.yyt3;
 	{
             printf("> %u.%u.%u.%u\n",
                 parse_oct(in.tok, p1),

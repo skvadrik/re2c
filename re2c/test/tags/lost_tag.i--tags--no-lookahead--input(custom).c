@@ -2,22 +2,22 @@
 
 {
 	YYCTYPE yych;
-	YYBACKUPTAG (yyt1);
+	YYTAGP (yyt1);
 	if (YYLESSTHAN (1)) YYFILL(1);
 	yych = YYPEEK ();
 	YYSKIP ();
 	switch (yych) {
 	case 'a':
-		YYBACKUPTAG (yyt2);
+		YYTAGP (yyt2);
 		goto yy2;
 	default:
-		YYCOPYTAG (yyt1, NULL);
-		YYBACKUPTAG (yyt2);
+		YYTAGN (yyt1);
+		YYTAGP (yyt2);
 		goto yy2;
 	}
 yy2:
-	YYCOPYTAG (a, yyt1);
-	YYCOPYTAG (b, yyt2);
+	a = yyt1;
+	b = yyt2;
 	{}
 }
 

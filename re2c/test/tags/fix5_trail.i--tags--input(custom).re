@@ -7,9 +7,9 @@ static void lex(const char *s)
 #define YYSKIP()           ++s
 #define YYBACKUP()         marker = s
 #define YYRESTORE()        s = marker
-#define YYBACKUPTAG(t)     t = s
+#define YYTAGP(t)          t = s
+#define YYTAGN(t)          t = NULL
 #define YYRESTORETAG(t)    s = t
-#define YYCOPYTAG(t1, t2)  t1 = t2
     const char *marker, *p0, *p1, *p2, *p3;
     /*!tags:re2c format = "const char *@@;"; */
     /*!re2c

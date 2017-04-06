@@ -89,7 +89,6 @@ enum target_t
 	MUTOPT (bool, bUseStateNext, false) \
 	/* tags */ \
 	MUTOPT (bool, tags, false) \
-	MUTOPT (std::string, tags_default, "NULL") \
 	MUTOPT (std::string, tags_prefix, "yyt") \
 	MUTOPT (std::string, tags_expression, "@@") \
 	MUTOPT (bool, posix_captures, false) \
@@ -114,14 +113,14 @@ enum target_t
 	MUTOPT (std::string, yyskip, "YYSKIP") \
 	MUTOPT (std::string, yybackup, "YYBACKUP") \
 	MUTOPT (std::string, yybackupctx, "YYBACKUPCTX") \
-	MUTOPT (std::string, yybackuptag, "YYBACKUPTAG") \
 	MUTOPT (std::string, yyrestore, "YYRESTORE") \
 	MUTOPT (std::string, yyrestorectx, "YYRESTORECTX") \
 	MUTOPT (std::string, yyrestoretag, "YYRESTORETAG") \
-	MUTOPT (std::string, yycopytag, "YYCOPYTAG") \
-	MUTOPT (std::string, yypushntag, "YYPUSHNTAG") \
-	MUTOPT (std::string, yypushptag, "YYPUSHPTAG") \
 	MUTOPT (std::string, yylessthan, "YYLESSTHAN") \
+	MUTOPT (std::string, yytagn, "YYTAGN") \
+	MUTOPT (std::string, yytagp, "YYTAGP") \
+	MUTOPT (std::string, yytaglistn, "YYTAGLISTN") \
+	MUTOPT (std::string, yytaglistp, "YYTAGLISTP") \
 	/* #line directives */ \
 	MUTOPT (bool, iFlag, false) \
 	/* debug */ \

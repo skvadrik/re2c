@@ -120,9 +120,9 @@ void emit_start(OutputFile &o, size_t maxfill, const std::string &name,
 		o.ws("\n#define YYRESTORECTX() cursor = ctxmarker");
 	}
 	if (opts->tags) {
-		o.ws("\n#define YYBACKUPTAG(tag) tag = cursor");
+		o.ws("\n#define YYTAGP(tag) tag = cursor");
+		o.ws("\n#define YYTAGN(tag) tag = NULL");
 		o.ws("\n#define YYRESTORETAG(tag) cursor = tag");
-		o.ws("\n#define YYCOPYTAG(tag1, tag2) tag1 = tag2");
 	}
 	o.ws("\n#define YYLESSTHAN(n) (limit - cursor) < n");
 	o.ws("\n#define YYFILL(n) { break; }");

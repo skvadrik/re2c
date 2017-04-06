@@ -16,9 +16,9 @@ static void lex(const char *s)
 #define YYSKIP()     ++s
 #define YYBACKUP()   marker = s
 #define YYRESTORE()  s = marker
-#define ZZBT(t)      t = s
+#define ZZTP(t)      t = s
+#define ZZTN(t)      t = NULL
 #define ZZRT(t)      s = t
-#define ZZCT(t1, t2) t1 = t2
     const char *marker, *p0, *p1, *p2, *p3;
     /*!tags:re2c format = "const char *@@;"; */
     /*!re2c
@@ -43,9 +43,9 @@ static void lex(const char *s)
             return;
         }
 
-        re2c:define:YYBACKUPTAG = "ZZBT";
+        re2c:define:YYTAGP = "ZZTP";
+        re2c:define:YYTAGN = "ZZTN";
         re2c:define:YYRESTORETAG = "ZZRT";
-        re2c:define:YYCOPYTAG = "ZZCT";
         re2c:tags:prefix = "zz_";
     */
 }

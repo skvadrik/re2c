@@ -320,9 +320,7 @@ void gen_settags(code_lines_t &code, const DFA &dfa, tcid_t tcid, const opt_t *o
 			const std::string
 				le = vartag_expr(l, prefix, expression),
 				re = vartag_expr(r, prefix, expression),
-				s = generic
-					? opts->yycopytag + " (" + le + ", " + re + ");\n"
-					: le + " = " + re + ";\n";
+				s = le + " = " + re + ";\n";
 			code.push_back(s);
 
 		// save command; history
@@ -331,12 +329,12 @@ void gen_settags(code_lines_t &code, const DFA &dfa, tcid_t tcid, const opt_t *o
 				le = vartag_expr(l, prefix, expression),
 				he = vartag_expr(h, prefix, expression);
 			if (l != h) {
-				const std::string s = opts->yycopytag + " (" + le + ", " + he + ");\n";
+				const std::string s = le + " = " + he + ";\n";
 				code.push_back(s);
 			}
 			const std::string s = r == TAGVER_BOTTOM
-				? opts->yypushntag + " (" + le + ");\n"
-				: opts->yypushptag + " (" + le + ");\n";
+				? opts->yytaglistn + " (" + le + ");\n"
+				: opts->yytaglistp + " (" + le + ");\n";
 			code.push_back(s);
 
 		// save command; no history; generic API
@@ -344,8 +342,8 @@ void gen_settags(code_lines_t &code, const DFA &dfa, tcid_t tcid, const opt_t *o
 			const std::string
 				v = vartag_expr(l, prefix, expression),
 				s = r == TAGVER_BOTTOM
-					? opts->yycopytag + " (" + v + ", " + opts->tags_default + ");\n"
-					: opts->yybackuptag + " (" + v + ");\n";
+					? opts->yytagn + " (" + v + ");\n"
+					: opts->yytagp + " (" + v + ");\n";
 			code.push_back(s);
 
 		// save command; no history; default API
@@ -359,7 +357,7 @@ void gen_settags(code_lines_t &code, const DFA &dfa, tcid_t tcid, const opt_t *o
 		}
 	}
 	if (!s1.empty()) {
-		s1 += opts->tags_default + ";\n";
+		s1 += "NULL;\n";
 		code.push_back(s1);
 	}
 	if (!s2.empty()) {
@@ -394,19 +392,16 @@ void gen_fintags(OutputFile &o, uint32_t ind, const DFA &dfa, const Rule &rule)
 		expr = vartag_expr(fins[t], prefix, expression);
 
 		o.wind(ind);
-		if (generic) {
-			if (!trailing(tag)) {
-				o.wstring(opts->yycopytag).ws(" (").wstring(tagname(tag))
-					.ws(", ").wstring(expr).ws(")");
-			} else if (dfa.oldstyle_ctxmarker) {
+		if (!trailing(tag)) {
+			o.wstring(tagname(tag)).ws(" = ").wstring(expr);
+		} else if (generic) {
+			if (dfa.oldstyle_ctxmarker) {
 				o.wstring(opts->yyrestorectx).ws(" ()");
 			} else {
 				o.wstring(opts->yyrestoretag).ws(" (").wstring(expr).ws(")");
 			}
 		} else {
-			if (!trailing(tag)) {
-				o.wstring(tagname(tag)).ws(" = ").wstring(expr);
-			} else if (dfa.oldstyle_ctxmarker) {
+			if (dfa.oldstyle_ctxmarker) {
 				o.wstring(opts->yycursor).ws(" = ").wstring(opts->yyctxmarker);
 			} else {
 				o.wstring(opts->yycursor).ws(" = ").wstring(expr);
@@ -431,8 +426,7 @@ void gen_fintags(OutputFile &o, uint32_t ind, const DFA &dfa, const Rule &rule)
 		if (generic) {
 			assert(dist == 0);
 			if (!trailing(tag)) {
-				o.wstring(opts->yycopytag).ws(" (").wstring(tagname(tag))
-					.ws(", ").wstring(expr).ws(")");
+				o.wstring(tagname(tag)).ws(" = ").wstring(expr);
 			} else if (!fixed_on_cursor) {
 				assert(!dfa.oldstyle_ctxmarker);
 				o.wstring(opts->yyrestoretag).ws(" (").wstring(expr).ws(")");
