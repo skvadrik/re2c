@@ -114,6 +114,8 @@ void Scanner::lex_conf(Opt &opts)
 	"define:YYRESTORECTX" { opts.set_yyrestorectx (lex_conf_string ()); return; }
 	"define:YYRESTORETAG" { opts.set_yyrestoretag (lex_conf_string ()); return; }
 	"define:YYCOPYTAG"    { opts.set_yycopytag    (lex_conf_string ()); return; }
+	"define:YYPUSHNTAG"   { opts.set_yypushntag   (lex_conf_string ()); return; }
+	"define:YYPUSHPTAG"   { opts.set_yypushptag   (lex_conf_string ()); return; }
 	"define:YYLESSTHAN"   { opts.set_yylessthan   (lex_conf_string ()); return; }
 
 	"tags:default"    { opts.set_tags_default   (lex_conf_string ()); return; }

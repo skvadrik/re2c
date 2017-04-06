@@ -311,40 +311,45 @@ void gen_settags(code_lines_t &code, const DFA &dfa, tcid_t tcid, const opt_t *o
 		return;
 	}
 
-	// copy commands
+	std::string s1 = "", s2 = "";
 	for (const tcmd_t *p = cmd; p; p = p->next) {
-		const tagver_t l = p->lhs, r = p->rhs;
-		if (!tcmd_t::iscopy(r)) continue;
+		const tagver_t l = p->lhs, r = p->rhs, h = p->pred;
 
-		const std::string
-			le = vartag_expr(l, prefix, expression),
-			re = vartag_expr(r, prefix, expression),
-			s = generic
-				? opts->yycopytag + " (" + le + ", " + re + ");\n"
-				: le + " = " + re + ";\n";
-		code.push_back(s);
-	}
+		// copy command
+		if (tcmd_t::iscopy(r)) {
+			const std::string
+				le = vartag_expr(l, prefix, expression),
+				re = vartag_expr(r, prefix, expression),
+				s = generic
+					? opts->yycopytag + " (" + le + ", " + re + ");\n"
+					: le + " = " + re + ";\n";
+			code.push_back(s);
 
-	// save commands
-	if (generic) {
-		for (const tcmd_t *p = cmd; p; p = p->next) {
-			const tagver_t l = p->lhs, r = p->rhs;
-			if (tcmd_t::iscopy(r)) continue;
+		// save command; history
+		} else if (h != TAGVER_ZERO) {
+			const std::string
+				le = vartag_expr(l, prefix, expression),
+				he = vartag_expr(h, prefix, expression);
+			if (l != h) {
+				const std::string s = opts->yycopytag + " (" + le + ", " + he + ");\n";
+				code.push_back(s);
+			}
+			const std::string s = r == TAGVER_BOTTOM
+				? opts->yypushntag + " (" + le + ");\n"
+				: opts->yypushptag + " (" + le + ");\n";
+			code.push_back(s);
 
+		// save command; no history; generic API
+		} else if (generic) {
 			const std::string
 				v = vartag_expr(l, prefix, expression),
 				s = r == TAGVER_BOTTOM
 					? opts->yycopytag + " (" + v + ", " + opts->tags_default + ");\n"
 					: opts->yybackuptag + " (" + v + ");\n";
 			code.push_back(s);
-		}
-	} else if (cmd) {
-		std::string s1 = "", s2 = "";
 
-		for (const tcmd_t *p = cmd; p; p = p->next) {
-			const tagver_t l = p->lhs, r = p->rhs;
-			if (tcmd_t::iscopy(r)) continue;
-
+		// save command; no history; default API
+		} else {
 			const std::string v = vartag_expr(l, prefix, expression);
 			if (r == TAGVER_BOTTOM) {
 				s1 += v + " = ";
@@ -352,14 +357,14 @@ void gen_settags(code_lines_t &code, const DFA &dfa, tcid_t tcid, const opt_t *o
 				s2 += v + " = ";
 			}
 		}
-		if (!s1.empty()) {
-			s1 += opts->tags_default + ";\n";
-			code.push_back(s1);
-		}
-		if (!s2.empty()) {
-			s2 += opts->yycursor + ";\n";
-			code.push_back(s2);
-		}
+	}
+	if (!s1.empty()) {
+		s1 += opts->tags_default + ";\n";
+		code.push_back(s1);
+	}
+	if (!s2.empty()) {
+		s2 += opts->yycursor + ";\n";
+		code.push_back(s2);
 	}
 }
 
