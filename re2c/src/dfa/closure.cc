@@ -264,7 +264,7 @@ tcmd_t *generate_versions(closure_t &clos, const std::vector<Tag> &tags,
 			for (p = cmd; p; p = p->next) {
 				if (p->lhs == abs(m) && p->rhs == u && p->pred == h) break;
 			}
-			if (!p) cmd = tcpool.make_tcmd(cmd, abs(m), u, h);
+			if (!p) cmd = tcpool.make_tcmd(cmd, abs(m), u, abs(h));
 		}
 	}
 
