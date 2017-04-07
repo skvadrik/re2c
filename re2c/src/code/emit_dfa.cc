@@ -144,6 +144,7 @@ static void prop_list_tags_cmd(const tcmd_t *p, bool *list)
 
 static void find_list_tags(const DFA &dfa, bool *list)
 {
+	find_list_tags_cmd(dfa.tcpool[dfa.tags0], list);
 	for (State *s = dfa.head; s; s = s->next) {
 		const Go &go = s->go;
 		find_list_tags_cmd(dfa.tcpool[go.tags], list);
@@ -151,6 +152,7 @@ static void find_list_tags(const DFA &dfa, bool *list)
 			find_list_tags_cmd(dfa.tcpool[go.span[i].tags], list);
 		}
 	}
+	prop_list_tags_cmd(dfa.tcpool[dfa.tags0], list);
 	for (State *s = dfa.head; s; s = s->next) {
 		const Go &go = s->go;
 		prop_list_tags_cmd(dfa.tcpool[go.tags], list);
