@@ -262,7 +262,7 @@ tcmd_t *generate_versions(closure_t &clos, const std::vector<Tag> &tags,
 			// add action unless already have an identical one
 			if (fixed(tag) || (ls[t] && !history(tag))) continue;
 			for (p = cmd; p; p = p->next) {
-				if (p->lhs == abs(m) && p->rhs == u && p->pred == h) break;
+				if (p->lhs == abs(m) && p->rhs == u && p->pred == abs(h)) break;
 			}
 			if (!p) cmd = tcpool.make_tcmd(cmd, abs(m), u, abs(h));
 		}
