@@ -49,6 +49,19 @@ void find_overwritten_tags(const dfa_t &dfa, size_t state,
 	}
 }
 
+// overwritten tags need 'copy' on all outgoing non-accepting paths
+// ('copy' commands must go first, before potential overwrites)
+static void backup(dfa_t &dfa, dfa_state_t *s, tagver_t l, tagver_t r)
+{
+	for (size_t c = 0; c < dfa.nchars; ++c) {
+		size_t i = s->arcs[c];
+		if (i != dfa_t::NIL && dfa.states[i]->fallthru) {
+			tcmd_t *&p = s->tcmd[c];
+			p = dfa.tcpool.make_tcmd(p, l, r, TAGVER_ZERO);
+		}
+	}
+}
+
 // WARNING: this function assumes that falthrough and fallback
 // attributes of DFA states have already been calculated, see
 // note [fallback states]
@@ -74,28 +87,25 @@ void insert_fallback_tags(dfa_t &dfa)
 		for (; p; p = p->next) {
 			const tagver_t l = p->lhs, r = p->rhs, v = p->pred;
 
-			// 'save' commands are the same as for final transition
-			if (!tcmd_t::iscopy(r)) {
-				t = pool.make_tcmd(t, l, r, v);
-				continue;
-			}
+			// 'copy' commands
+			if (tcmd_t::iscopy(r)) {
+				if (!owrt[r]) {
+					f = pool.make_tcmd(f, l, r, v);
+				} else {
+					backup(dfa, s, l, r);
+				}
 
-			// non-overwritten tags need 'copy' on fallback transition
-			if (!owrt[r]) {
-				f = pool.make_tcmd(f, l, r, v);
-				continue;
-			}
-
-			// overwritten tags need 'copy' on all outgoing non-accepting paths
-			// ('copy' commands must go first, before potential overwrites)
-			for (size_t c = 0; c < nsym; ++c) {
-				size_t j = s->arcs[c];
-				if (j != dfa_t::NIL && dfa.states[j]->fallthru) {
-					tcmd_t *&q = s->tcmd[c];
-					q = pool.make_tcmd(q, l, r, v);
+			// 'save' commands
+			} else {
+				if (v == TAGVER_ZERO || !owrt[v]) {
+					t = pool.make_tcmd(t, l, r, v);
+				} else {
+					t = pool.make_tcmd(t, l, r, l);
+					backup(dfa, s, l, v);
 				}
 			}
 		}
+
 		// join 'copy' (fallback) and 'save' commands
 		for (pf = &f; *pf; pf = &(*pf)->next);
 		*pf = t;
