@@ -62,6 +62,16 @@ bool tcmd_t::iscopy(tagver_t rhs)
 	return rhs != TAGVER_BOTTOM && rhs != TAGVER_CURSOR;
 }
 
+bool tcmd_t::isset(const tcmd_t *cmd)
+{
+	return !tcmd_t::iscopy(cmd->rhs) && cmd->pred == TAGVER_ZERO;
+}
+
+bool tcmd_t::isadd(const tcmd_t *cmd)
+{
+	return !tcmd_t::iscopy(cmd->rhs) && cmd->pred != TAGVER_ZERO;
+}
+
 static tcmd_t **topsort_(tcmd_t **phead, uint32_t *indeg);
 
 void tcmd_t::topsort(tcmd_t **phead, uint32_t *indeg)

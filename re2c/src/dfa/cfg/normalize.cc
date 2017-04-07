@@ -28,10 +28,16 @@ void cfg_t::normalization(cfg_t &cfg)
 	for (; b < e; ++b) {
 
 		for (tcmd_t *x = b->cmd, *y; x;) {
-			for (y = x; x && !tcmd_t::iscopy(x->rhs); x = x->next);
-			normalize(y, x);
-			for (y = x; x && tcmd_t::iscopy(x->rhs); x = x->next);
-			normalize(y, x);
+			if (tcmd_t::iscopy(x->rhs)) {
+				for (y = x; x && tcmd_t::iscopy(x->rhs); x = x->next);
+				normalize(y, x);
+			} else if (tcmd_t::isset(x)) {
+				for (y = x; x && tcmd_t::isset(x); x = x->next);
+				normalize(y, x);
+			} else {
+				for (y = x; x && tcmd_t::isadd(x); x = x->next);
+				// don't normalize, histories may have complex dependencies
+			}
 		}
 
 		tcmd_t::topsort(&b->cmd, indeg);
