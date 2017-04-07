@@ -89,15 +89,20 @@ static uint32_t nsteps(uint32_t lower, uint32_t upper)
 	return 2 + (upper - lower - 1) / step(lower, upper);
 }
 
-static void apply(size_t *tags, const tcmd_t *cmd, size_t pos)
+static void apply(std::vector<size_t> *tags, const tcmd_t *cmd, size_t pos)
 {
 	for (const tcmd_t *p = cmd; p; p = p->next) {
-		const tagver_t l = p->lhs, r = p->rhs;
-		size_t &t = tags[l];
+		const tagver_t l = p->lhs, r = p->rhs, h = p->pred;
+		std::vector<size_t> &t = tags[l];
+		if (h == TAGVER_ZERO) {
+			t.clear();
+		} else if (l != h) {
+			t = tags[h];
+		}
 		if (r == TAGVER_BOTTOM) {
-			t = Skeleton::DEFTAG;
+			t.push_back(Skeleton::DEFTAG);
 		} else if (r == TAGVER_CURSOR) {
-			t = pos;
+			t.push_back(pos);
 		} else {
 			t = tags[r];
 		}
@@ -163,8 +168,7 @@ static void write_keys(const path_t &path, const Skeleton &skel,
 		nver = skel.ntagver,
 		ntag = width * nver,
 		offby = skel.opts->lookahead ? 0 : 1;
-	size_t *tags = new size_t[ntag];
-	std::fill(tags, tags + ntag, Skeleton::DEFTAG);
+	std::vector<size_t> *tags = new std::vector<size_t>[ntag];
 	for (size_t w = 0; w < width; ++w) {
 		apply(&tags[w * nver], skel.cmd0, 0); // absent in LATDFA
 	}
@@ -196,32 +200,55 @@ static void write_keys(const path_t &path, const Skeleton &skel,
 			matched = f;
 		} else {
 			assert(!fixed(skel.tags[trail])); // no fixed trailing context
-			matched = tags[skel.finvers[trail]];
+			matched = tags[skel.finvers[trail]].back();
 			assert(matched != Skeleton::DEFTAG);
 		}
 	}
 
-	// keys: 1 - scanned length, 2 - matched length, 3 - matched rule, the rest - tags
-	size_t nkey = 3;
-	for (size_t t = ltag; t < htag; ++t) {
-		if (t != trail && !orbit(skel.tags[t])) ++nkey;
+	// count keys
+	size_t nkey = 0;
+	for (size_t w = 0; w < width; ++w) {
+		nkey += 3;
+		for (size_t t = ltag; t < htag; ++t) {
+			const Tag &tag = skel.tags[t];
+			if (t == trail || orbit(tag)) continue;
+			const size_t
+				base = fixed(tag) ? tag.base : t,
+				bver = static_cast<size_t>(skel.finvers[base]);
+			if (history(tag)) nkey += tags[w * nver + bver].size();
+			++nkey;
+		}
 	}
-	key_t *keys = new key_t[nkey * width], *k = keys;
+
+	// keys: 1 - scanned length, 2 - matched length, 3 - matched rule, the rest - tags
+	key_t *keys = new key_t[nkey], *k = keys;
 	for (size_t w = 0; w < width; ++w) {
 		*k++ = to_le(static_cast<key_t>(path.len()));
 		*k++ = to_le(static_cast<key_t>(matched));
 		*k++ = to_le(rule2key<key_t>(rule, skel.defrule));
-		const size_t *ts = &tags[w * nver];
+
 		for (size_t t = ltag; t < htag; ++t) {
 			const Tag &tag = skel.tags[t];
-			if (t != trail && !orbit(tag)) {
-				const size_t base = fixed(tag) ? tag.base : t;
-				*k++ = to_le(static_cast<key_t>(ts[skel.finvers[base]]));
+			if (t == trail || orbit(tag)) continue;
+
+			const size_t
+				base = fixed(tag) ? tag.base : t,
+				bver = static_cast<size_t>(skel.finvers[base]);
+			const std::vector<size_t> &h = tags[w * nver + bver];
+			if (history(tag)) {
+				const size_t hlen = h.size();
+				*k++ = to_le(static_cast<key_t>(hlen));
+				for (size_t i = 0; i < hlen; ++i) {
+					*k++ = to_le(static_cast<key_t>(h[i]));
+				}
+			} else {
+				*k++ = to_le(static_cast<key_t>(h.back()));
 			}
 		}
 	}
+
 	// dump to file
-	fwrite(keys, sizeof(key_t), nkey * width, file);
+	fwrite(keys, sizeof(key_t), nkey, file);
 
 	delete[] tags;
 	delete[] keys;

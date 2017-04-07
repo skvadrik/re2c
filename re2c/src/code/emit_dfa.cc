@@ -121,21 +121,72 @@ void DFA::emit_dot(OutputFile &o, bool last_cond) const
 	}
 }
 
+static void find_list_tags_cmd(const tcmd_t *p, bool *list)
+{
+	for (; p; p = p->next) {
+		const tagver_t l = p->lhs, h = p->pred;
+		if (h != TAGVER_ZERO) {
+			list[l] = list[h] = true;
+		}
+	}
+}
+
+static void prop_list_tags_cmd(const tcmd_t *p, bool *list)
+{
+	for (; p; p = p->next) {
+		const tagver_t l = p->lhs, r = p->rhs;
+		if (tcmd_t::iscopy(r)) {
+			if (list[l]) list[r] = true;
+			if (list[r]) list[l] = true;
+		}
+	}
+}
+
+static void find_list_tags(const DFA &dfa, bool *list)
+{
+	for (State *s = dfa.head; s; s = s->next) {
+		const Go &go = s->go;
+		find_list_tags_cmd(dfa.tcpool[go.tags], list);
+		for (uint32_t i = 0; i < go.nSpans; ++i) {
+			find_list_tags_cmd(dfa.tcpool[go.span[i].tags], list);
+		}
+	}
+	for (State *s = dfa.head; s; s = s->next) {
+		const Go &go = s->go;
+		prop_list_tags_cmd(dfa.tcpool[go.tags], list);
+		for (uint32_t i = 0; i < go.nSpans; ++i) {
+			prop_list_tags_cmd(dfa.tcpool[go.span[i].tags], list);
+		}
+	}
+}
+
 void DFA::emit(Output & output, uint32_t& ind, bool isLastCond, bool& bPrologBrace)
 {
 	OutputFile &o = output.source;
 	OutputBlock &ob = o.block();
 	const opt_t *opts = ob.opts;
 
-	std::set<std::string> tagnames, tagvars;
+	std::set<std::string> tagnames, tagvars, taglistnames, taglistvars;
 	if (!oldstyle_ctxmarker) {
 		for (size_t i = 0; i < tags.size(); ++i) {
-			const std::string *name = tags[i].name;
-			if (name) tagvars.insert(*name);
+			const Tag &tag = tags[i];
+			if (history(tag)) {
+				taglistvars.insert(*tag.name);
+			} else if (tag.name) {
+				tagvars.insert(*tag.name);
+			}
 		}
+		bool *list = new bool[maxtagver + 1]();
+		find_list_tags(*this, list);
 		for (tagver_t v = 1; v <= maxtagver; ++v) {
-			tagnames.insert(vartag_name(v, opts->tags_prefix));
+			const std::string name = vartag_name(v, opts->tags_prefix);
+			if (list[v]) {
+				taglistnames.insert(name);
+			} else {
+				tagnames.insert(name);
+			}
 		}
+		delete[] list;
 		ob.tags.insert(tagnames.begin(), tagnames.end());
 	}
 	if (!cond.empty()) o.block().types.push_back(cond);
@@ -165,10 +216,11 @@ void DFA::emit(Output & output, uint32_t& ind, bool isLastCond, bool& bPrologBra
 		if (output.skeletons.insert (name).second)
 		{
 			emit_start(o, max_fill, name, key_size, def_rule, need_backup,
-				need_accept, oldstyle_ctxmarker, tagnames, tagvars, bitmaps);
+				need_accept, oldstyle_ctxmarker, tagnames, tagvars,
+				taglistnames, taglistvars, bitmaps);
 			uint32_t i = 2;
 			emit_body (o, i, used_labels, initial_label);
-			emit_end(o, name, need_backup, oldstyle_ctxmarker);
+			emit_end(o, name, need_backup, oldstyle_ctxmarker, taglistnames);
 		}
 	} else if (opts->target == TARGET_DOT) {
 		emit_dot(o, isLastCond);
