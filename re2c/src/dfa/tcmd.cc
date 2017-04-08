@@ -86,6 +86,9 @@ void tcmd_t::topsort(tcmd_t **phead, uint32_t *indeg)
 
 	// initialize in-degree
 	for (x = x0; x; x = x->next) {
+		indeg[x->lhs] = indeg[depend(x)] = 0;
+	}
+	for (x = x0; x; x = x->next) {
 		++indeg[depend(x)];
 	}
 
