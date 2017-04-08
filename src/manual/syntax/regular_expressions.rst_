@@ -1,0 +1,76 @@
+Regular expressions
+-------------------
+
+``"foo"``
+    literal string ``"foo"``. ANSI-C escape sequences can be used.
+
+``'foo'``
+    literal string ``"foo"`` (case insensitive for characters [a-zA-Z]). 
+    ANSI-C escape sequences can be used.
+
+``[xyz]``
+    character class; in this case, the regular expression matches ``x``, ``y``, or ``z``.
+
+``[abj-oZ]``
+    character class with a range in it; matches ``a``, ``b``, any letter from ``j`` through ``o``, or ``Z``.
+
+``[^class]``
+    inverted character class.
+
+``r \ s``
+   match any ``r`` which isn't ``s``. ``r`` and ``s`` must be regular expressions
+   which can be expressed as character classes.
+
+``r*``
+    zero or more occurrences of ``r``.
+
+``r+``
+    one or more occurrences of ``r``.
+
+``r?``
+    optional ``r``.
+
+``(r)``
+    ``r``; parentheses are used to override precedence.
+
+``r s``
+    ``r`` followed by ``s`` (concatenation).
+
+``r | s``
+    ``r`` or ``s`` (alternative).
+
+``r`` / ``s``
+    ``r`` but only if it is followed by ``s``. Note that ``s`` is not
+    part of the matched text. This type of regular expression is called
+    "trailing context". Trailing context can only be at the end of a rule
+    and cannot be part of a named definition.
+
+``r{n}``
+    matches ``r`` exactly ``n`` times.
+
+``r{n,}``
+    matches ``r`` at least ``n`` times.
+
+``r{n,m}``
+    matches ``r`` at least ``n`` times, but not more than ``m`` times.
+
+``.``
+    match any character except newline.
+
+``name``
+    matches a named definition as specified by ``name`` only if ``-F`` is
+    off. If ``-F`` is active then this behaves like it was enclosed in double
+    quotes and matches the string "name".
+
+Character classes and string literals may contain octal or hexadecimal
+character definitions and the following set of escape sequences:
+``\a``, ``\b``, ``\f``, ``\n``, ``\r``, ``\t``, ``\v``, ``\\``. An octal character is defined by a backslash
+followed by its three octal digits (e.g., ``\377``).
+Hexadecimal characters from 0 to 0xFF are defined by a backslash, a lower
+case ``x`` and two hexadecimal digits (e.g., ``\x12``). Hexadecimal characters from 0x100 to 0xFFFF are defined by a backslash, a lower case
+``\u``or an upper case ``\X``, and four hexadecimal digits (e.g., ``\u1234``).
+Hexadecimal characters from 0x10000 to 0xFFFFffff are defined by a backslash, an upper case ``\U``,
+and eight hexadecimal digits (e.g., ``\U12345678``).
+
+The only portable "any" rule is the default rule, ``*``.
+

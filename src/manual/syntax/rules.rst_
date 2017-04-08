@@ -1,0 +1,101 @@
+Rules
+-----
+
+Each rule consist of a `regular expression`_ accompanied with a block of C/C++ code
+which is to be executed when the associated regular expression is
+matched. You can either start the code with an opening curly brace or
+the sequence ``:=``. If you use an opening curly brace, ``re2c`` will count brace depth
+and stop looking for code automatically. Otherwise, curly braces are not
+allowed and ``re2c`` stops looking for code at the first line that does
+not begin with whitespace. If two or more rules overlap, the first rule
+is preferred.
+
+    ``regular-expression { C/C++ code }``
+
+    ``regular-expression := C/C++ code``
+
+There is one special rule: the default rule (``*``)
+
+    ``* { C/C++ code }``
+
+    ``* := C/C++ code``
+
+Note that the default rule (``*``) differs from ``[^]``: the default rule has the lowest priority,
+matches any code unit (either valid or invalid) and always consumes exactly one character.
+``[^]``, on the other hand, matches any valid code point (not the same as a code unit) and can consume multiple
+code units. In fact, when a variable-length encoding is used, ``*``
+is the only possible way to match an invalid input character.
+
+If ``-c`` is active, then each regular expression is preceded by a list
+of comma-separated condition names. Besides the normal naming rules, there
+are two special cases: ``<*>`` (these rules are merged to all conditions)
+and ``<>`` (these rules cannot have an associated regular expression;
+their code is merged to all actions). Non-empty rules may furthermore specify the new
+condition. In that case, ``re2c`` will generate the necessary code to
+change the condition automatically. Rules can use ``:=>`` as a shortcut
+to automatically generate code that not only sets the
+new condition state but also continues execution with the new state. A
+shortcut rule should not be used in a loop where there is code between
+the start of the loop and the ``re2c`` block unless ``re2c:cond:goto``
+is changed to ``continue``. If some code is needed before all rules (though not before simple jumps),  you
+can insert it with ``<!>`` pseudo-rules.
+
+    ``<condition-list> regular-expression { C/C++ code }``
+
+    ``<condition-list> regular-expression := C/C++ code``
+
+    ``<condition-list> * { C/C++ code }``
+
+    ``<condition-list> * := C/C++ code``
+
+    ``<condition-list> regular-expression => condition { C/C++ code }``
+
+    ``<condition-list> regular-expression => condition := C/C++ code``
+
+    ``<condition-list> * => condition { C/C++ code }``
+
+    ``<condition-list> * => condition := C/C++ code``
+
+    ``<condition-list> regular-expression :=> condition``
+
+
+    ``<*> regular-expression { C/C++ code }``
+
+    ``<*> regular-expression := C/C++ code``
+
+    ``<*> * { C/C++ code }``
+
+    ``<*> * := C/C++ code``
+
+    ``<*> regular-expression => condition { C/C++ code }``
+
+    ``<*> regular-expression => condition := C/C++ code``
+
+    ``<*> * => condition { C/C++ code }``
+
+    ``<*> * => condition := C/C++ code``
+
+    ``<*> regular-expression :=> condition``
+
+
+    ``<> { C/C++ code }``
+
+    ``<> := C/C++ code``
+
+    ``<> => condition { C/C++ code }``
+
+    ``<> => condition := C/C++ code``
+
+    ``<> :=> condition``
+
+    ``<> :=> condition``
+
+
+    ``<! condition-list> { C/C++ code }``
+
+    ``<! condition-list> := C/C++ code``
+
+    ``<!> { C/C++ code }``
+
+    ``<!> := C/C++ code``
+
