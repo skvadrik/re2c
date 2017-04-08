@@ -265,32 +265,31 @@ kernels_t::result_t kernels_t::insert(const closure_t &clos,
  * cannot affect the check.
 */
 
-tcmd_t *kernels_t::actions(tcmd_t *save)
+tcmd_t *kernels_t::actions(tcmd_t *acts)
 {
-	tcmd_t *copy = NULL, *s, **p;
+	tcmd_t *copy = NULL, *a, **pa;
 
+	// fix LHS of 'save' commands to reuse old version
 	// see note [save(X), copy(Y,X) optimization]
+	for (a = acts; a; a = a->next) {
+		const tagver_t
+			y = a->lhs * (a->rhs == TAGVER_BOTTOM ? -1 : 1),
+			x = y2x[y];
+		a->lhs = abs(x);
+		y2x[y] = x2y[x] = TAGVER_ZERO;
+	}
+
 	for (tagver_t x = -max; x < max; ++x) {
-		const tagver_t y = x2y[x];
-		if (y == TAGVER_ZERO) continue;
-
-		// at most one new cursor and one new bottom version per tag
-		const size_t t = x2t[x];
-		if (fixed(tags[t])) continue;
-
-		const tagver_t ax = abs(x), ay = abs(y);
-		for (s = save; s && s->lhs != ay; s = s->next);
-		if (s) {
-			s->lhs = ax;
-		} else if (x != y) {
+		const tagver_t y = x2y[x], ax = abs(x), ay = abs(y);
+		if (y != TAGVER_ZERO && x != y && !fixed(tags[x2t[x]])) {
 			assert(ax != ay);
 			copy = tcpool.make_tcmd(copy, ax, ay, 0);
 		}
 	}
 
 	// join 'copy' and 'save' commands
-	for (p = &copy; *p; p = &(*p)->next);
-	*p = save;
+	for (pa = &copy; *pa; pa = &(*pa)->next);
+	*pa = acts;
 
 	// see note [topological ordering of copy commands]
 	tcmd_t::topsort(&copy, indeg);
