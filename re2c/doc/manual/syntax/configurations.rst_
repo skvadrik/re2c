@@ -1,0 +1,237 @@
+``re2c:condprefix = yyc;``
+    Allows to specify the prefix used for
+    condition labels. That is, the text to be prepended to condition labels
+    in the generated output file.
+
+
+``re2c:condenumprefix = yyc;``
+    Allows to specify the prefix used for
+    condition values. That is, the text to be prepended to condition enum
+    values in the generated output file.
+
+``re2c:cond:divider = "/* *********************************** */";``
+    Allows to customize the divider for condition blocks. You can use ``@@``
+    to put the name of the condition or customize the placeholder using
+    ``re2c:cond:divider@cond``.
+
+``re2c:cond:divider@cond = @@;``
+    Specifies the placeholder that will be
+    replaced with the condition name in ``re2c:cond:divider``.
+
+``re2c:cond:goto = "goto @@;";``
+    Allows to customize the condition goto statements used with ``:=>`` style rules. You can use ``@@``
+    to put the name of the condition or customize the placeholder using
+    ``re2c:cond:goto@cond``. You can also change this to ``continue;``, which
+    would allow you to continue with the next loop cycle including any code
+    between your loop start and your re2c block.
+
+``re2c:cond:goto@cond = @@;``
+    Specifies the placeholder that will be replaced with the condition label in ``re2c:cond:goto``.
+
+``re2c:indent:top = 0;``
+    Specifies the minimum amount of indentation to
+    use. Requires a numeric value greater than or equal to zero.
+
+``re2c:indent:string = "\t";``
+    Specifies the string to use for indentation. Requires a string that should
+    contain only whitespace unless you need something else for external tools. The easiest
+    way to specify spaces is to enclose them in single or double quotes.
+    If you do  not want any indentation at all, you can simply set this to "".
+
+``re2c:yych:conversion = 0;``
+    When this setting is non zero, ``re2c`` automatically generates
+    conversion code whenever yych gets read. In this case, the type must be
+    defined using ``re2c:define:YYCTYPE``.
+
+``re2c:yych:emit = 1;``
+    Set this to zero to suppress the generation of *yych*.
+
+``re2c:yybm:hex = 0;``
+    If set to zero, a decimal table will be used. Otherwise, a hexadecimal table will be generated.
+
+``re2c:yyfill:enable = 1;``
+    Set this to zero to suppress the generation of ``YYFILL (n)``. When using this, be sure to verify that the generated
+    scanner does not read behind the end of your input, allowing such behavior might
+    introduce several security issues to your program.
+
+``re2c:yyfill:check = 1;``
+    This can be set to 0 to suppress the generations of 
+    ``YYCURSOR`` and ``YYLIMIT`` based precondition checks. This option is useful when
+    ``YYLIMIT + YYMAXFILL`` is always accessible.
+
+``re2c:define:YYFILL = "YYFILL";``
+    Define a substitution for ``YYFILL``. Note that by default,
+    ``re2c`` generates an argument in parentheses and a semicolon after
+    ``YYFILL``. If you need to make ``YYFILL`` an arbitrary statement rather
+    than a call, set ``re2c:define:YYFILL:naked`` to a non-zero value and use
+    ``re2c:define:YYFILL@len`` to set a placeholder for the formal parameter inside of your ``YYFILL``
+    body.
+
+``re2c:define:YYFILL@len = "@@";``
+    Any occurrence of this text
+    inside of a ``YYFILL`` call will be replaced with the actual argument.
+
+``re2c:yyfill:parameter = 1;``
+    Controls the argument in the parentheses that follow ``YYFILL``. If zero, the argument is omitted. 
+    If non-zero, the argument is generated unless ``re2c:define:YYFILL:naked`` is set to non-zero.
+
+``re2c:define:YYFILL:naked = 0;``
+    Controls the argument in the parentheses after ``YYFILL`` and 
+    the following semicolon. If zero, both the argument and the semicolon are
+    omitted. If non-zero, the argument is generated unless
+    ``re2c:yyfill:parameter`` is set to zero; the semicolon is generated
+    unconditionally.
+
+``re2c:startlabel = 0;``
+    If set to a non zero integer, then the start
+    label of the next scanner block will be generated even if it isn't used by
+    the scanner itself. Otherwise, the normal ``yy0``-like start label is only
+    generated if needed. If set to a text value, then a label with that
+    text will be generated regardless of whether the normal start label is
+    used or not. This setting is reset to 0 after a start label has been generated.
+
+``re2c:labelprefix = "yy";``
+    Allows to change the prefix of numbered
+    labels. The default is ``yy``. Can be set any string that is valid in
+    a label name.
+
+``re2c:state:abort = 0;``
+    When not zero and the ``-f`` switch is active, then
+    the ``YYGETSTATE`` block will contain a default case that aborts and a -1
+    case will be used for initialization.
+
+``re2c:state:nextlabel = 0;``
+    Used when ``-f`` is active to control
+    whether the ``YYGETSTATE`` block is followed by a ``yyNext:`` label line.
+    Instead of using ``yyNext``, you can usually also use configuration
+    ``startlabel`` to force a specific start label or default to ``yy0`` as
+    a start label. Instead of using a dedicated label, it is often better to
+    separate the ``YYGETSTATE`` code from the actual scanner code by placing a
+    ``/*!getstate:re2c*/`` comment.
+
+``re2c:cgoto:threshold = 9;``
+    When ``-g`` is active, this value specifies
+    the complexity threshold that triggers the generation of jump tables rather
+    than nested ifs and decision bitfields. The threshold is compared
+    against a calculated estimation of ifs needed where every used bitmap
+    divides the threshold by 2.
+
+``re2c:yych:conversion = 0;``
+    When input uses signed characters and the
+    ``-s`` or ``-b`` switches are in effect, re2c allows automatic conversion
+    to the unsigned character type that is then necessary for its internal
+    single character. When this setting is zero or an empty string, the
+    conversion is disabled. If a non zero number is used, the conversion is taken
+    from ``YYCTYPE``. If ``YYCTYPE`` is overridden by an inplace configuration setting, that setting is
+    is used instead of a ``YYCTYPE`` cast. Otherwise, it will be ``(YYCTYPE)`` and changes to that
+    configuration are no longer possible. When this setting is a string, it must contain the casting
+    parentheses. Now assuming your input is a ``char *`` buffer and you are using the above mentioned switches, you can set
+    ``YYCTYPE`` to ``unsigned char`` and this setting to either 1 or ``(unsigned char)``.
+
+``re2c:define:YYCONDTYPE = "YYCONDTYPE";``
+    Enumeration used for condition support with ``-c`` mode.
+
+``re2c:define:YYCTXMARKER = "YYCTXMARKER";``
+    Replaces the ``YYCTXMARKER`` placeholder with the specified identifier.
+
+``re2c:define:YYCTYPE = "YYCTYPE";``
+    Replaces the ``YYCTYPE`` placeholder with the specified type.
+
+``re2c:define:YYCURSOR = "YYCURSOR";``
+    Replaces the ``YYCURSOR`` placeholder with the specified identifier.
+
+``re2c:define:YYDEBUG = "YYDEBUG";``
+    Replaces the ``YYDEBUG`` placeholder with the specified identifier.
+
+``re2c:define:YYGETCONDITION = "YYGETCONDITION";``
+    Substitution for
+    ``YYGETCONDITION``. Note that by default, ``re2c`` generates parentheses after
+    ``YYGETCONDITION``. Set ``re2c:define:YYGETCONDITION:naked`` to non-zero to
+    omit the parentheses.
+
+``re2c:define:YYGETCONDITION:naked = 0;``
+    Controls the parentheses after
+    ``YYGETCONDITION``. If zero, the parentheses are omitted. If non-zero, the parentheses are
+    generated.
+
+``re2c:define:YYSETCONDITION = "YYSETCONDITION";``
+    Substitution for
+    ``YYSETCONDITION``. Note that by default, ``re2c`` generates an argument in
+    parentheses followed by semicolon after ``YYSETCONDITION``. If you need to make
+    ``YYSETCONDITION`` an arbitrary statement rather than a call, set
+    ``re2c:define:YYSETCONDITION:naked`` to non-zero and use
+    ``re2c:define:YYSETCONDITION@cond`` to denote the formal parameter inside of the
+    ``YYSETCONDITION`` body.
+
+``re2c:define:YYSETCONDITION@cond = "@@";``
+    Any occurrence of this
+    text inside of ``YYSETCONDITION`` will be replaced with the actual
+    argument.
+
+``re2c:define:YYSETCONDITION:naked = 0;``
+    Controls the argument in parentheses
+    and the semicolon after ``YYSETCONDITION``. If zero, both the argument and
+    the semicolon are omitted. If non-zero, both the argument and the semicolon are
+    generated.
+
+``re2c:define:YYGETSTATE = "YYGETSTATE";``
+    Substitution for
+    ``YYGETSTATE``. Note that by default, ``re2c`` generates parentheses after
+    ``YYGETSTATE``. Set ``re2c:define:YYGETSTATE:naked`` to non-zero to omit
+    the parentheses.
+
+``re2c:define:YYGETSTATE:naked = 0;``
+    Controls the parentheses that follow
+    ``YYGETSTATE``. If zero, the parentheses are omitted. If non-zero, they are
+    generated.
+
+``re2c:define:YYSETSTATE = "YYSETSTATE";``
+    Substitution for
+    ``YYSETSTATE``. Note that by default, ``re2c`` generates an argument in parentheses
+    followed by a semicolon after ``YYSETSTATE``. If you need to make ``YYSETSTATE`` an
+    arbitrary statement rather than a call, set
+    ``re2c:define:YYSETSTATE:naked`` to non-zero and use
+    ``re2c:define:YYSETSTATE@cond`` to denote formal parameter inside of
+    your ``YYSETSTATE`` body.
+
+``re2c:define:YYSETSTATE@state = "@@";``
+    Any occurrence of this text
+    inside of ``YYSETSTATE`` will be replaced with the actual argument.
+
+``re2c:define:YYSETSTATE:naked = 0;``
+    Controls the argument in parentheses and the
+    semicolon after ``YYSETSTATE``. If zero, both argument and the semicolon are
+    omitted. If non-zero, both the argument and the semicolon are generated.
+
+``re2c:define:YYLIMIT = "YYLIMIT";``
+    Replaces the ``YYLIMIT`` placeholder with the specified identifier.
+    needed.
+
+``re2c:define:YYMARKER = "YYMARKER";``
+    Replaces the ``YYMARKER`` placeholder with the specified identifier.
+
+``re2c:label:yyFillLabel = "yyFillLabel";``
+    Overrides the name of the ``yyFillLabel`` label.
+
+``re2c:label:yyNext = "yyNext";``
+    Overrides the name of the ``yyNext`` label.
+
+``re2c:variable:yyaccept = yyaccept;``
+    Overrides the name of the ``yyaccept`` variable.
+
+``re2c:variable:yybm = "yybm";``
+    Overrides the name of the ``yybm`` variable.
+
+``re2c:variable:yych = "yych";``
+    Overrides the name of the ``yych`` variable.
+
+``re2c:variable:yyctable = "yyctable";``
+    When both ``-c`` and ``-g`` are active, ``re2c`` will use this variable to generate a static jump table
+    for ``YYGETCONDITION``.
+
+``re2c:variable:yystable = "yystable";``
+    Deprecated.
+
+``re2c:variable:yytarget = "yytarget";``
+    Overrides the name of the ``yytarget`` variable.
+
