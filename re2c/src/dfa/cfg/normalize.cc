@@ -27,20 +27,28 @@ void cfg_t::normalization(cfg_t &cfg)
 	cfg_bb_t *b = cfg.bblocks, *e = b + cfg.nbbfall;
 	for (; b < e; ++b) {
 
-		for (tcmd_t *x = b->cmd, *y; x;) {
+		// We cannot normalize the list of commands as a whole: the
+		// relative order of some commands might be significant.
+		// Therefore we split the list in continuous sublists of
+		// 'copy', 'save without history' and 'save with history'
+		// commands and normalize each sublist in a proper way.
+		tcmd_t **px, **py, *x;
+		for (px = &b->cmd; (x = *px);) {
 			if (tcmd_t::iscopy(x->rhs)) {
-				for (y = x; x && tcmd_t::iscopy(x->rhs); x = x->next);
-				normalize(y, x);
+				for (py = px; (x = *px) && tcmd_t::iscopy(x->rhs); px = &x->next);
+				*px = NULL;
+				normalize(*py, NULL);
+				tcmd_t::topsort(py, indeg);
+				for (px = py; *px; px = &(*px)->next);
+				*px = x;
 			} else if (tcmd_t::isset(x)) {
-				for (y = x; x && tcmd_t::isset(x); x = x->next);
-				normalize(y, x);
+				for (py = px; (x = *px) && tcmd_t::isset(x); px = &x->next);
+				normalize(*py, x);
 			} else {
-				for (y = x; x && tcmd_t::isadd(x); x = x->next);
+				for (py = px; (x = *px) && tcmd_t::isadd(x); px = &x->next);
 				// don't normalize, histories may have complex dependencies
 			}
 		}
-
-		tcmd_t::topsort(&b->cmd, indeg);
 	}
 
 	delete[] indeg;

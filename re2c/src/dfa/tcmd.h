@@ -21,7 +21,6 @@ struct tcmd_t
 	static void swap(tcmd_t &x, tcmd_t &y);
 	static bool equal(const tcmd_t &x, const tcmd_t &y);
 	static void topsort(tcmd_t **phead, uint32_t *indeg);
-	static void topsort1(tcmd_t **phead, uint32_t *indeg);
 	static bool iscopy(tagver_t rhs);
 	static bool isset(const tcmd_t *cmd);
 	static bool isadd(const tcmd_t *cmd);

@@ -72,75 +72,13 @@ bool tcmd_t::isadd(const tcmd_t *cmd)
 	return !tcmd_t::iscopy(cmd->rhs) && cmd->pred != TAGVER_ZERO;
 }
 
-static tcmd_t **topsort_(tcmd_t **phead, uint32_t *indeg);
-
-void tcmd_t::topsort(tcmd_t **phead, uint32_t *indeg)
-{
-	tcmd_t *x = *phead, **py = phead, **py0;
-
-	for (x = *phead; x;) {
-
-		*py = x;
-		for (; x && !tcmd_t::iscopy(x->rhs); x = x->next) {
-			py = &x->next;
-		}
-
-		py0 = py;
-		for (; x && tcmd_t::iscopy(x->rhs); x = x->next) {
-			py = &x->next;
-		}
-		*py = NULL;
-
-		py = topsort_(py0, indeg);
-	}
-}
-
-tcmd_t **topsort_(tcmd_t **phead, uint32_t *indeg)
-{
-	tcmd_t
-		*x0 = *phead, **px, *x,
-		*y0 = NULL, **py, **py1;
-
-	// initialize in-degree
-	for (x = x0; x; x = x->next) {
-		++indeg[x->rhs];
-	}
-
-	for (py = &y0;;) {
-		// reached end of list
-		if (!x0) break;
-
-		px = &x0;
-		py1 = py;
-		for (x = x0; x; x = x->next) {
-			if (indeg[x->lhs] == 0) {
-				--indeg[x->rhs];
-				*py = x;
-				py = &x->next;
-			} else {
-				*px = x;
-				px = &x->next;
-			}
-		}
-		*px = NULL;
-
-		// only cycles left
-		if (py == py1) break;
-	}
-	*py = x0;
-
-	*phead = y0;
-	for (; *py; py = &(*py)->next);
-	return py;
-}
-
 static tagver_t depend(const tcmd_t *x)
 {
 	const tagver_t r = x->rhs, h = x->pred;
 	return tcmd_t::iscopy(r) ? r : h;
 }
 
-void tcmd_t::topsort1(tcmd_t **phead, uint32_t *indeg)
+void tcmd_t::topsort(tcmd_t **phead, uint32_t *indeg)
 {
 	tcmd_t
 		*x0 = *phead, **px, *x,
