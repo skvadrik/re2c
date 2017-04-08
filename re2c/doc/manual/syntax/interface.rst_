@@ -1,0 +1,87 @@
+``YYCONDTYPE``
+    In ``-c`` mode, you can use ``-t`` to generate a file that
+    contains the enumeration used as conditions. Each of the values refers
+    to a condition of a rule set.
+
+``YYCTXMARKER``
+    l-value of type ``YYCTYPE *``.
+    The generated code saves trailing context backtracking information in
+    ``YYCTXMARKER``. The user only needs to define this macro if a scanner
+    specification uses trailing context in one or more of its regular
+    expressions.
+
+``YYCTYPE``
+    Type used to hold an input symbol (code unit). Usually
+    ``char`` or ``unsigned char`` for ASCII, EBCDIC  or UTF-8, or *unsigned short*
+    for UTF-16 or UCS-2, or ``unsigned int`` for UTF-32.
+
+``YYCURSOR``
+    l-value of type ``YYCTYPE *`` that points to the current input symbol. The generated code advances
+    ``YYCURSOR`` as symbols are matched. On entry, ``YYCURSOR`` is assumed to
+    point to the first character of the current token. On exit, ``YYCURSOR``
+    will point to the first character of the following token.
+
+``YYDEBUG (state, current)``
+    This is only needed if the ``-d`` flag was
+    specified. It allows easy debugging of the generated parser by calling a
+    user defined function for every state. The function should have the
+    following signature: ``void YYDEBUG (int state, char current)``. The first
+    parameter receives the state or -1 and the second parameter receives the
+    input at the current cursor.
+
+``YYFILL (n)``
+    The generated code "calls"" ``YYFILL (n)`` when the
+    buffer needs (re)filling: at least ``n`` additional characters should be
+    provided. ``YYFILL (n)`` should adjust ``YYCURSOR``, ``YYLIMIT``, ``YYMARKER``,
+    and ``YYCTXMARKER`` as needed. Note that for typical programming languages
+    ``n`` will be the length of the longest keyword plus one. The user can
+    place a comment of the form ``/*!max:re2c*/`` to insert a ``YYMAXFILL`` define set to the maximum
+    length value.
+
+``YYGETCONDITION ()``
+    This define is used to get the condition prior to
+    entering the scanner code when using the ``-c`` switch. The value must be
+    initialized with a value from the ``YYCONDTYPE`` enumeration type.
+
+``YYGETSTATE ()``
+    The user only needs to define this macro if the ``-f``
+    flag was specified. In that case, the generated code "calls"
+    ``YYGETSTATE ()`` at the very beginning of the scanner in order to obtain
+    the saved state. ``YYGETSTATE ()`` must return a signed integer. The value
+    must be either -1, indicating that the scanner is entered for the first
+    time, or a value previously saved by ``YYSETSTATE (s)``. In the second
+    case, the scanner will resume operations right after where the last
+    ``YYFILL (n)`` was called.
+
+``YYLIMIT``
+    An expression of type ``YYCTYPE *`` that marks the end of the buffer ``YYLIMIT[-1]``
+    is the last character in the buffer). The generated code repeatedly
+    compares ``YYCURSOR`` to ``YYLIMIT`` to determine when the buffer needs
+    (re)filling.
+
+``YYMARKER``
+    An l-value of type ``YYCTYPE *``.
+    The generated code saves backtracking information in ``YYMARKER``. Some
+    simple scanners might not use this.
+
+``YYMAXFILL``
+    This will be automatically defined by ``/*!max:re2c*/`` blocks as explained above.
+
+``YYSETCONDITION (c)``
+    This define is used to set the condition in
+    transition rules. This is only being used when ``-c`` is active and
+    transition rules are being used.
+
+``YYSETSTATE (s)``
+    The user only needs to define this macro if the ``-f``
+    flag was specified. In that case, the generated code "calls"
+    ``YYSETSTATE`` just before calling ``YYFILL (n)``. The parameter to
+    ``YYSETSTATE`` is a signed integer that uniquely identifies the specific
+    instance of ``YYFILL (n)`` that is about to be called. Should the user
+    wish to save the state of the scanner and have ``YYFILL (n)`` return to
+    the caller, all he has to do is store that unique identifier in a
+    variable. Later, when the scanner is called again, it will call
+    ``YYGETSTATE ()`` and resume execution right where it left off. The
+    generated code will contain both ``YYSETSTATE (s)`` and ``YYGETSTATE`` even
+    if ``YYFILL (n)`` is disabled.
+
