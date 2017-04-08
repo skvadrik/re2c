@@ -151,6 +151,8 @@ static void find_list_tags(const DFA &dfa, bool *list)
 		for (uint32_t i = 0; i < go.nSpans; ++i) {
 			find_list_tags_cmd(dfa.tcpool[go.span[i].tags], list);
 		}
+		find_list_tags_cmd(dfa.tcpool[s->rule_tags], list);
+		find_list_tags_cmd(dfa.tcpool[s->fall_tags], list);
 	}
 	prop_list_tags_cmd(dfa.tcpool[dfa.tags0], list);
 	for (State *s = dfa.head; s; s = s->next) {
@@ -159,6 +161,8 @@ static void find_list_tags(const DFA &dfa, bool *list)
 		for (uint32_t i = 0; i < go.nSpans; ++i) {
 			prop_list_tags_cmd(dfa.tcpool[go.span[i].tags], list);
 		}
+		prop_list_tags_cmd(dfa.tcpool[s->rule_tags], list);
+		prop_list_tags_cmd(dfa.tcpool[s->fall_tags], list);
 	}
 }
 
