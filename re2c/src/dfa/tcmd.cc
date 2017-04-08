@@ -134,6 +134,49 @@ tcmd_t **topsort_(tcmd_t **phead, uint32_t *indeg)
 	return py;
 }
 
+static tagver_t depend(const tcmd_t *x)
+{
+	const tagver_t r = x->rhs, h = x->pred;
+	return tcmd_t::iscopy(r) ? r : h;
+}
+
+void tcmd_t::topsort1(tcmd_t **phead, uint32_t *indeg)
+{
+	tcmd_t
+		*x0 = *phead, **px, *x,
+		*y0 = NULL, **py, **py1;
+
+	// initialize in-degree
+	for (x = x0; x; x = x->next) {
+		++indeg[depend(x)];
+	}
+
+	for (py = &y0;;) {
+		// reached end of list
+		if (!x0) break;
+
+		px = &x0;
+		py1 = py;
+		for (x = x0; x; x = x->next) {
+			if (indeg[x->lhs] == 0) {
+				--indeg[depend(x)];
+				*py = x;
+				py = &x->next;
+			} else {
+				*px = x;
+				px = &x->next;
+			}
+		}
+		*px = NULL;
+
+		// only cycles left
+		if (py == py1) break;
+	}
+	*py = x0;
+
+	*phead = y0;
+}
+
 tcpool_t::tcpool_t()
 	: alc()
 	, index()

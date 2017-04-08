@@ -292,7 +292,7 @@ tcmd_t *kernels_t::actions(tcmd_t *acts)
 	*pa = acts;
 
 	// see note [topological ordering of copy commands]
-	tcmd_t::topsort(&copy, indeg);
+	tcmd_t::topsort1(&copy, indeg);
 
 	return copy;
 }
