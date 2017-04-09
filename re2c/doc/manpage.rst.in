@@ -25,13 +25,13 @@ control and customize the generated DFA.
 OPTIONS
 -------
 
-.. include:: manual/options/options_list.rst 
+.. include:: @top_srcdir@/doc/manual/options/options_list.rst 
 
-.. include:: manual/warnings/warnings_general.rst 
+.. include:: @top_srcdir@/doc/manual/warnings/warnings_general.rst 
 
-.. include:: manual/warnings/warnings_general.rst 
+.. include:: @top_srcdir@/doc/manual/warnings/warnings_general.rst 
 
-.. include:: manual/warnings/warnings_list.rst 
+.. include:: @top_srcdir@/doc/manual/warnings/warnings_list.rst 
 
 
 INTERFACE CODE
@@ -42,7 +42,7 @@ The user must supply interface code either in the form of C/C++ code
 Which symbols must be defined and which are optional
 depends on the particular use case.
 
-.. include:: manual/syntax/interface.rst_
+.. include:: @top_srcdir@/doc/manual/syntax/interface.rst_
 
 
 SYNTAX
@@ -66,7 +66,7 @@ allowed and ``re2c`` stops looking for code at the first line that does
 not begin with whitespace. If two or more rules overlap, the first rule
 is preferred.
 
-.. include:: manual/syntax/rules.rst_
+.. include:: @top_srcdir@/doc/manual/syntax/rules.rst_
 
 
 NAMED DEFINITIONS
@@ -85,38 +85,38 @@ If ``-F`` is active, then named definitions are also of the form:
 INPLACE CONFIGURATIONS
 ~~~~~~~~~~~~~~~~~~~~~~
 
-.. include:: manual/syntax/configurations.rst_
+.. include:: @top_srcdir@/doc/manual/syntax/configurations.rst_
 
 
 REGULAR EXPRESSIONS
 ~~~~~~~~~~~~~~~~~~~
 
-.. include:: manual/syntax/regular_expressions.rst_
+.. include:: @top_srcdir@/doc/manual/syntax/regular_expressions.rst_
 
 
 SCANNER WITH STORABLE STATES
 ----------------------------
 
-.. include:: manual/features/state/state.rst_
+.. include:: @top_srcdir@/doc/manual/features/state/state.rst_
 
 
 
 SCANNER WITH CONDITION SUPPORT
 ------------------------------
 
-.. include:: manual/features/conditions/conditions.rst_
+.. include:: @top_srcdir@/doc/manual/features/conditions/conditions.rst_
 
 
 ENCODINGS
 ---------
 
-.. include:: manual/features/encodings/encodings.rst_
+.. include:: @top_srcdir@/doc/manual/features/encodings/encodings.rst_
 
 
 GENERIC INPUT API
 -----------------
 
-.. include:: manual/features/generic_api/generic_api.rst_
+.. include:: @top_srcdir@/doc/manual/features/generic_api/generic_api.rst_
 
 A couple of useful links that provide some examples:
 
