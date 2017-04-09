@@ -58,16 +58,13 @@ test_blddir="test_"`date +%y%m%d%H%M%S`
 rm -rf $test_blddir && mkdir $test_blddir
 
 # preserve directory structure unless given explicit args
-if [ ${#tests[@]} -eq 0 ]
-then
+if [ ${#tests[@]} -eq 0 ]; then
     cp -R "@top_srcdir@/test"/* $test_blddir
-    find $test_blddir -type f ! -name '*.re' -a ! -name '*.c' -exec rm {} \;
 else
-    for f in ${tests[@]}
-    do
-        cp $f ${f%.re}.c $test_blddir
-    done
+    for f in ${tests[@]}; do cp $f ${f%.re}.c $test_blddir; done
 fi
+chmod -R u+w $test_blddir
+find $test_blddir -type f ! -name '*.re' -a ! -name '*.c' -exec rm {} \;
 tests=(`find $test_blddir -name '*.re' | sort`)
 
 tests_per_thread=$((${#tests[@]} / threads + 1))
