@@ -1,11 +1,10 @@
 #!/bin/sh
 
-[ -d master ] || { 
-    git worktree prune
-    git worktree add master master
-}
-[ -e src/manual/options/options.rst_  ] ||  #merge manual tree from master
-     (cd master/re2c/doc/; tar cf - manual/) | (cd src/; tar xfp -) 
+# sync with master (pull manpage files)
+remote=`git config branch.master.remote` \
+    && git fetch $remote \
+    && git archive --remote=. remotes/$remote/master re2c/doc/manual \
+    | tar -C src/ --strip-components=2 -xpf -
 
 sphinx-build -b html src obj
 
