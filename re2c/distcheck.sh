@@ -17,8 +17,8 @@ do
     rm -rf $builddir
     mkdir $builddir
     cd $builddir
-        ../configure --enable-docs && \
-        $make_prog bootstrap -j5
-        $make_prog distcheck -j5
+        ../configure --enable-docs \
+        && $make_prog bootstrap docs -j5 \
+        && $make_prog distcheck -j5
     cd ..
 done
