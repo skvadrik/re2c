@@ -96,6 +96,7 @@ AC_CHECK_SIZEOF([0i8],       [], [[]])
 AC_CONFIG_FILES([\
     Makefile \
     doc/manpage.rst \
+    doc/help.rst \
 ])
 AC_CONFIG_FILES([run_tests.sh], [chmod +x run_tests.sh])
 
