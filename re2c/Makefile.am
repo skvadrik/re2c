@@ -131,12 +131,14 @@ AUTOGEN_LEX_CONF = src/parse/lex_conf.cc
 AUTOGEN_PARSEOPT = src/conf/parse_opts.cc
 AUTOGEN_PARSER = src/parse/parser.cc
 AUTOGEN_PARSER_HDR = src/parse/y.tab.h
+AUTOGEN_HELP = src/conf/help.cc
 AUTOGEN = \
 	$(AUTOGEN_LEX) \
 	$(AUTOGEN_LEX_CONF) \
 	$(AUTOGEN_PARSER) \
 	$(AUTOGEN_PARSER_HDR) \
-	$(AUTOGEN_PARSEOPT)
+	$(AUTOGEN_PARSEOPT)\
+	$(AUTOGEN_HELP)
 nodist_re2c_SOURCES = $(AUTOGEN)
 
 # bootstrap sources
@@ -146,10 +148,12 @@ BOOTSTRAP_PARSEOPT = bootstrap/src/conf/parse_opts.cc
 BOOTSTRAP_PARSER = bootstrap/src/parse/parser.cc
 BOOTSTRAP_PARSER_HDR = bootstrap/src/parse/y.tab.h
 BOOTSTRAP_DOC = bootstrap/doc/re2c.1
+BOOTSTRAP_HELP = bootstrap/src/conf/help.cc
 BOOTSTRAP = \
 	$(BOOTSTRAP_LEX) \
 	$(BOOTSTRAP_LEX_CONF) \
 	$(BOOTSTRAP_DOC) \
+	$(BOOTSTRAP_HELP) \
 	$(BOOTSTRAP_PARSER) \
 	$(BOOTSTRAP_PARSER_HDR) \
 	$(BOOTSTRAP_PARSEOPT)
@@ -159,11 +163,13 @@ CUSTOM_LEX = src/parse/lex.re
 CUSTOM_LEX_CONF = src/parse/lex_conf.re
 CUSTOM_PARSEOPT = src/conf/parse_opts.re
 CUSTOM_PARSER = src/parse/parser.ypp
+CUSTOM_HELP = doc/help.rst
 CUSTOM = \
 	$(CUSTOM_LEX) \
 	$(CUSTOM_LEX_CONF) \
 	$(CUSTOM_PARSER) \
-	$(CUSTOM_PARSEOPT)
+	$(CUSTOM_PARSEOPT) \
+	$(CUSTOM_HELP)
 
 # docs
 SRC_DOC = doc/manpage.rst
@@ -242,15 +248,21 @@ bootstrap: all
 
 .PHONY: docs
 if REBUILD_DOCS
-docs: $(DOC)
+docs: $(DOC) $(AUTOGEN_HELP)
 $(DOC): $(SRC_DOC)
 	$(RST2MAN) $(top_builddir)/$(SRC_DOC) > $@
 	cp $@ $(top_srcdir)/$(BOOTSTRAP_DOC)
+$(AUTOGEN_HELP): $(CUSTOM_HELP)
+	$(RST2MAN) $(top_builddir)/$(CUSTOM_HELP) > $@.1
+	$(top_srcdir)/genhelp.sh $@.1 $@
+	cp $@ $(top_srcdir)/$(BOOTSTRAP_HELP)
 else
-docs: $(DOC)
+docs: $(DOC) $(AUTOGEN_HELP)
 	@echo "Reconfigure to rebuild docs: ./configure --enable-docs"
 $(DOC): $(BOOTSTRAP_DOC)
 	cp $(top_srcdir)/$(BOOTSTRAP_DOC) $@
+$(AUTOGEN_HELP): $(BOOTSTRAP_HELP)
+	cp $(top_srcdir)/$(BOOTSTRAP_HELP) $@
 endif
 
 all-local: docs $(BOOTSTRAP_PARSER)
