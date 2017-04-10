@@ -29,8 +29,6 @@ OPTIONS
 
 .. include:: @top_srcdir@/doc/manual/warnings/warnings_general.rst 
 
-.. include:: @top_srcdir@/doc/manual/warnings/warnings_general.rst 
-
 .. include:: @top_srcdir@/doc/manual/warnings/warnings_list.rst 
 
 
