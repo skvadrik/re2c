@@ -64,7 +64,6 @@ dfa_t::dfa_t(const nfa_t &nfa, const opt_t *opts,
 	const bool lookahead = opts->lookahead;
 	const size_t ntag = tags.size();
 	Tagpool tagpool(ntag);
-	tagtree_t tagtree(ntag);
 	kernels_t kernels(tagpool, tcpool, tags);
 	closure_t clos1, clos2;
 	newvers_t newvers;
@@ -88,14 +87,14 @@ dfa_t::dfa_t(const nfa_t &nfa, const opt_t *opts,
 
 	clos_t c0 = {NULL, nfa.root, INITIAL_TAGS, ZERO_TAGS, ZERO_TAGS, ZERO_TAGS, 0};
 	clos1.push_back(c0);
-	acts = closure(clos1, clos2, tagpool, tcpool, tagtree, rules, maxtagver, newvers, lookahead, dump.shadow, tags);
+	acts = closure(clos1, clos2, tagpool, tcpool, rules, maxtagver, newvers, lookahead, dump.shadow, tags);
 	find_state(*this, dfa_t::NIL, 0/* any */, kernels, clos2, acts, dump);
 
 	for (size_t i = 0; i < kernels.size(); ++i) {
 		newvers.clear();
 		for (size_t c = 0; c < nchars; ++c) {
 			reach(kernels[i], clos1, charset[c]);
-			acts = closure(clos1, clos2, tagpool, tcpool, tagtree, rules, maxtagver, newvers, lookahead, dump.shadow, tags);
+			acts = closure(clos1, clos2, tagpool, tcpool, rules, maxtagver, newvers, lookahead, dump.shadow, tags);
 			find_state(*this, i, c, kernels, clos2, acts, dump);
 		}
 	}

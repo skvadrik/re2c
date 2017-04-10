@@ -1,6 +1,7 @@
 #ifndef _RE2C_DFA_TAGPOOL_
 #define _RE2C_DFA_TAGPOOL_
 
+#include "src/dfa/tagtree.h"
 #include "src/re/tag.h"
 #include "src/util/lookup.h"
 #include "src/util/forbid_copy.h"
@@ -22,6 +23,8 @@ public:
 
 	size_t maxclos;
 	tagver_t *orders;
+
+	tagtree_t history;
 
 	explicit Tagpool(size_t n);
 	~Tagpool();

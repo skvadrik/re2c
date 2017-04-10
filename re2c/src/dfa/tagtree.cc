@@ -13,6 +13,8 @@ tagtree_t::tagtree_t(size_t n)
 	, ntag(n)
 	, tags(new tagver_t[ntag])
 {
+	node_t x = {-1, TAGVER_ZERO};
+	nodes.push_back(x);
 	init();
 }
 
@@ -23,9 +25,6 @@ tagtree_t::~tagtree_t()
 
 void tagtree_t::init()
 {
-	nodes.clear();
-	node_t x = {-1, TAGVER_ZERO};
-	nodes.push_back(x);
 	memset(tags, 0, ntag * sizeof(tagver_t));
 }
 

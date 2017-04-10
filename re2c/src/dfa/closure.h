@@ -5,7 +5,6 @@
 #include <map>
 
 #include "src/dfa/dfa.h"
-#include "src/dfa/tagtree.h"
 #include "src/nfa/nfa.h"
 
 namespace re2c
@@ -52,9 +51,8 @@ inline bool operator<(const newver_t &x, const newver_t &y)
 typedef std::map<newver_t, tagver_t> newvers_t;
 
 tcmd_t *closure(closure_t &clos1, closure_t &clos2, Tagpool &tagpool,
-	tcpool_t &tcpool, tagtree_t &tagtree, std::valarray<Rule> &rules,
-	tagver_t &maxver, newvers_t &newvers, bool lookahead, closure_t *shadow,
-	const std::vector<Tag> &tags);
+	tcpool_t &tcpool, std::valarray<Rule> &rules, tagver_t &maxver,
+	newvers_t &newvers, bool lookahead, closure_t *shadow, const std::vector<Tag> &tags);
 
 } // namespace re2c
 

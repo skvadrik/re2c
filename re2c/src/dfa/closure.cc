@@ -7,28 +7,29 @@
 namespace re2c
 {
 
-static void closure_one(closure_t &clos, Tagpool &tagpool, tagtree_t &tagtree,
-	clos_t &c0, nfa_state_t *n, const std::vector<Tag> &tags, closure_t *shadow, std::valarray<Rule> &rules);
-static bool better(const clos_t &c1, const clos_t &c2, Tagpool &tagpool, tagtree_t &tagtree, const std::vector<Tag> &tags);
+static void closure_one(closure_t &clos, Tagpool &tagpool, clos_t &c0,
+	nfa_state_t *n, const std::vector<Tag> &tags, closure_t *shadow, std::valarray<Rule> &rules);
+static bool better(const clos_t &c1, const clos_t &c2, Tagpool &tagpool, const std::vector<Tag> &tags);
 static void lower_lookahead_to_transition(closure_t &clos);
-static tcmd_t *generate_versions(closure_t &clos, const std::vector<Tag> &tags, Tagpool &tagpool, tcpool_t &tcpool, tagver_t &maxver, newvers_t &newvers);
-static void orders(closure_t &clos, Tagpool &tagpool, tagtree_t &tagtree, const std::vector<Tag> &tags);
+static tcmd_t *generate_versions(closure_t &clos, const std::vector<Tag> &tags,
+	Tagpool &tagpool, tcpool_t &tcpool, tagver_t &maxver, newvers_t &newvers);
+static void orders(closure_t &clos, Tagpool &tagpool, const std::vector<Tag> &tags);
 static bool cmpby_rule_state(const clos_t &x, const clos_t &y);
 
 tcmd_t *closure(closure_t &clos1, closure_t &clos2, Tagpool &tagpool,
-	tcpool_t &tcpool, tagtree_t &tagtree, std::valarray<Rule> &rules,
-	tagver_t &maxver, newvers_t &newvers, bool lookahead, closure_t *shadow,
+	tcpool_t &tcpool, std::valarray<Rule> &rules, tagver_t &maxver,
+	newvers_t &newvers, bool lookahead, closure_t *shadow,
 	const std::vector<Tag> &tags)
 {
 	// build tagged epsilon-closure of the given set of NFA states
 	clos2.clear();
 	if (shadow) shadow->clear();
-	tagtree.init();
+	tagpool.history.init();
 	for (clositer_t c = clos1.begin(); c != clos1.end(); ++c) {
-		closure_one(clos2, tagpool, tagtree, *c, c->state, tags, shadow, rules);
+		closure_one(clos2, tagpool, *c, c->state, tags, shadow, rules);
 	}
 
-	orders(clos2, tagpool, tagtree, tags);
+	orders(clos2, tagpool, tags);
 
 	std::sort(clos2.begin(), clos2.end(), cmpby_rule_state);
 
@@ -73,25 +74,26 @@ bool cmpby_rule_state(const clos_t &x, const clos_t &y)
  * to leftmost strategy; orbit tags are compared by order and by tagged
  * epsilon-paths so that earlier iterations are maximized).
  */
-void closure_one(closure_t &clos, Tagpool &tagpool, tagtree_t &tagtree, clos_t &c0,
+void closure_one(closure_t &clos, Tagpool &tagpool, clos_t &c0,
 	nfa_state_t *n, const std::vector<Tag> &tags, closure_t *shadow,
 	std::valarray<Rule> &rules)
 {
 	if (n->loop) return;
 	local_increment_t<uint8_t> _(n->loop);
 
+	tagtree_t &tagtree = tagpool.history;
 	clositer_t c = clos.begin(), e = clos.end();
 	switch (n->type) {
 		case nfa_state_t::NIL:
-			closure_one(clos, tagpool, tagtree, c0, n->nil.out, tags, shadow, rules);
+			closure_one(clos, tagpool, c0, n->nil.out, tags, shadow, rules);
 			return;
 		case nfa_state_t::ALT:
-			closure_one(clos, tagpool, tagtree, c0, n->alt.out1, tags, shadow, rules);
-			closure_one(clos, tagpool, tagtree, c0, n->alt.out2, tags, shadow, rules);
+			closure_one(clos, tagpool, c0, n->alt.out1, tags, shadow, rules);
+			closure_one(clos, tagpool, c0, n->alt.out2, tags, shadow, rules);
 			return;
 		case nfa_state_t::TAG:
 			tagtree.push(n->tag.info, n->tag.bottom ? TAGVER_BOTTOM : TAGVER_CURSOR);
-			closure_one(clos, tagpool, tagtree, c0, n->tag.out, tags, shadow, rules);
+			closure_one(clos, tagpool, c0, n->tag.out, tags, shadow, rules);
 			tagtree.pop(n->tag.info);
 			return;
 		case nfa_state_t::RAN:
@@ -113,7 +115,7 @@ void closure_one(closure_t &clos, Tagpool &tagpool, tagtree_t &tagtree, clos_t &
 		clos.push_back(c2);
 	} else {
 		clos_t &c1 = *c;
-		if (better(c1, c2, tagpool, tagtree, tags)) std::swap(c1, c2);
+		if (better(c1, c2, tagpool, tags)) std::swap(c1, c2);
 		if (shadow) shadow->push_back(c2);
 	}
 }
@@ -137,7 +139,7 @@ void closure_one(closure_t &clos, Tagpool &tagpool, tagtree_t &tagtree, clos_t &
  */
 
 bool better(const clos_t &c1, const clos_t &c2,
-	Tagpool &tagpool, tagtree_t &tagtree, const std::vector<Tag> &tags)
+	Tagpool &tagpool, const std::vector<Tag> &tags)
 {
 	if (c1.ttran == c2.ttran
 		&& c1.tvers == c2.tvers
@@ -151,6 +153,7 @@ bool better(const clos_t &c1, const clos_t &c2,
 		*v1 = tagpool[c1.tvers], *v2 = tagpool[c2.tvers],
 		*o1 = tagpool[c1.order], *o2 = tagpool[c2.order];
 	tagver_t x, y;
+	tagtree_t &tagtree = tagpool.history;
 
 	for (size_t t = 0; t < tagpool.ntags; ++t) {
 		const Tag &tag = tags[t];
@@ -176,7 +179,8 @@ bool better(const clos_t &c1, const clos_t &c2,
 			if (x > y) return false;
 			if (x < y) return true;
 
-			x = t1[t]; y = t2[t];
+			x = tagtree.elem(t1[t]);
+			y = tagtree.elem(t2[t]);
 			if (x < 0 || y < 0) goto leftmost;
 			if (x > y) return false;
 			if (x < y) return true;
@@ -236,6 +240,7 @@ tcmd_t *generate_versions(closure_t &clos, const std::vector<Tag> &tags,
 	tcmd_t *cmd = NULL, *p;
 	const size_t ntag = tagpool.ntags;
 	tagver_t *vers = tagpool.buffer;
+	tagtree_t &tagtree = tagpool.history;
 	clositer_t b = clos.begin(), e = clos.end(), c;
 
 	// for each tag, if there is at least one tagged transition,
@@ -249,7 +254,9 @@ tcmd_t *generate_versions(closure_t &clos, const std::vector<Tag> &tags,
 			*vs = tagpool[c->tvers];
 		for (size_t t = 0; t < ntag; ++t) {
 			const Tag &tag = tags[t];
-			const tagver_t u = us[t];
+			const tagver_t
+				u = tagtree.elem(us[t]),
+				l = tagtree.elem(ls[t]);
 			if (u == TAGVER_ZERO) continue;
 
 			const tagver_t h = history(tag) ? vs[t] : TAGVER_ZERO;
@@ -260,7 +267,7 @@ tcmd_t *generate_versions(closure_t &clos, const std::vector<Tag> &tags,
 			if (n == m) ++maxver;
 
 			// add action unless already have an identical one
-			if (fixed(tag) || (ls[t] && !history(tag))) continue;
+			if (fixed(tag) || (l && !history(tag))) continue;
 			for (p = cmd; p; p = p->next) {
 				if (p->lhs == abs(m) && p->rhs == u && p->pred == abs(h)) break;
 			}
@@ -275,7 +282,8 @@ tcmd_t *generate_versions(closure_t &clos, const std::vector<Tag> &tags,
 			*us = tagpool[c->ttran],
 			*vs = tagpool[c->tvers];
 		for (size_t t = 0; t < ntag; ++t) {
-			const tagver_t u = us[t], v = vs[t],
+			const tagver_t v = vs[t],
+				u = tagtree.elem(us[t]),
 				h = history(tags[t]) ? v : TAGVER_ZERO;
 			if (u == TAGVER_ZERO) {
 				vers[t] = v;
@@ -341,9 +349,9 @@ struct cmp_t
 	}
 };
 
-void orders(closure_t &clos, Tagpool &tagpool,
-	tagtree_t &tagtree, const std::vector<Tag> &tags)
+void orders(closure_t &clos, Tagpool &tagpool, const std::vector<Tag> &tags)
 {
+	tagtree_t &tagtree = tagpool.history;
 	clositer_t b = clos.begin(), e = clos.end(), c;
 	const size_t
 		ntag = tagpool.ntags,
@@ -396,17 +404,6 @@ void orders(closure_t &clos, Tagpool &tagpool,
 	o = orders;
 	for (c = b; c != e; ++c, o += ntag) {
 		c->order = tagpool.insert(o);
-	}
-
-	// flatten lookahead tags (take the last on each path)
-	tagver_t *look = tagpool.buffer;
-	for (clositer_t c = clos.begin(); c != clos.end(); ++c) {
-		if (c->tlook == ZERO_TAGS) continue;
-		const tagver_t *oldl = tagpool[c->tlook];
-		for (size_t t = 0; t < ntag; ++t) {
-			look[t] = tagtree.elem(oldl[t]);
-		}
-		c->tlook = tagpool.insert(look);
 	}
 }
 

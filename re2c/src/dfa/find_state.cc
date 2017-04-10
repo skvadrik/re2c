@@ -33,15 +33,37 @@ kernel_t::~kernel_t()
 	delete[] order;
 }
 
+static bool equal_lookahead_tags(const kernel_t *x, const kernel_t *y,
+	const Tagpool &tagpool)
+{
+	if (memcmp(x->tlook, y->tlook, x->size * sizeof(size_t)) == 0) {
+		return true;
+	}
+	for (size_t i = 0; i < x->size; ++i) {
+		const tagver_t
+			*xls = tagpool[x->tlook[i]],
+			*yls = tagpool[y->tlook[i]];
+		for (size_t t = 0; t < tagpool.ntags; ++t) {
+			// compare only the last tags
+			const tagver_t
+				xl = tagpool.history.elem(xls[t]),
+				yl = tagpool.history.elem(yls[t]);
+			if (xl != yl) return false;
+		}
+	}
+	return true;
+}
+
 struct kernel_eq_t
 {
+	Tagpool &tagpool;
 	bool operator()(const kernel_t *x, const kernel_t *y) const
 	{
 		return x->size == y->size
 			&& memcmp(x->state, y->state, x->size * sizeof(void*)) == 0
 			&& memcmp(x->tvers, y->tvers, x->size * sizeof(size_t)) == 0
-			&& memcmp(x->tlook, y->tlook, x->size * sizeof(size_t)) == 0;
-		// no need to compare orders: if versions and lookahead coincide, so do orders
+			&& equal_lookahead_tags(x, y, tagpool);
+		// if versions and lookahead coincide, so do orders
 	}
 };
 
@@ -65,8 +87,8 @@ bool kernels_t::operator()(const kernel_t *k1, const kernel_t *k2)
 	// check that kernel sizes, NFA states and orders coincide
 	const bool compatible = k1->size == k2->size
 		&& memcmp(k1->state, k2->state, k1->size * sizeof(void*)) == 0
-		&& memcmp(k1->tlook, k2->tlook, k1->size * sizeof(size_t)) == 0
-		&& memcmp(k1->order, k2->order, k1->size * sizeof(size_t)) == 0;
+		&& memcmp(k1->order, k2->order, k1->size * sizeof(size_t)) == 0
+		&& equal_lookahead_tags(k1, k2, tagpool);
 	if (!compatible) return false;
 
 	// map tag versions of one kernel to that of another
@@ -78,11 +100,12 @@ bool kernels_t::operator()(const kernel_t *k1, const kernel_t *k2)
 		const tagver_t
 			*xv = tagpool[k1->tvers[i]],
 			*yv = tagpool[k2->tvers[i]],
-			*xl = tagpool[k2->tlook[i]];
+			*xl = tagpool[k1->tlook[i]];
 
 		for (size_t t = 0; t < ntag; ++t) {
 			// see note [mapping ignores items with lookahead tags]
-			if (xl[t] != TAGVER_ZERO && !history(tags[t])) continue;
+			if (tagpool.history.elem(xl[t]) != TAGVER_ZERO
+				&& !history(tags[t])) continue;
 
 			const tagver_t x = xv[t], y = yv[t];
 			tagver_t &x0 = y2x[y], &y0 = x2y[x];
@@ -224,11 +247,10 @@ kernels_t::result_t kernels_t::insert(const closure_t &clos,
 	// get kernel hash
 	uint32_t hash = static_cast<uint32_t>(nkern); // seed
 	hash = hash32(hash, buffer->state, nkern * sizeof(void*));
-	hash = hash32(hash, buffer->tlook, nkern * sizeof(size_t));
 	hash = hash32(hash, buffer->order, nkern * sizeof(size_t));
 
 	// try to find identical kernel
-	kernel_eq_t eq;
+	kernel_eq_t eq = {tagpool};
 	x = lookup.find_with(hash, buffer, eq);
 	if (x != index_t::NIL) return result_t(x, acts, false);
 
@@ -308,7 +330,8 @@ static tcmd_t *finalizer(const clos_t &clos, size_t ridx,
 	tcmd_t *copy = NULL, *save = NULL, **p;
 
 	for (size_t t = rule.ltag; t < rule.htag; ++t) {
-		const tagver_t l = look[t], v = abs(vers[t]),
+		const tagver_t v = abs(vers[t]),
+			l = tagpool.history.elem(look[t]),
 			h = history(tags[t]) ? v : TAGVER_ZERO;
 		tagver_t &f = dfa.finvers[t];
 

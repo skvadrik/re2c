@@ -24,6 +24,7 @@ Tagpool::Tagpool(size_t n)
 	, buffer(new tagver_t[n])
 	, maxclos(0)
 	, orders(NULL)
+	, history(n)
 {}
 
 Tagpool::~Tagpool()

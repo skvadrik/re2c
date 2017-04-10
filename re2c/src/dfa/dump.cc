@@ -57,7 +57,7 @@ void dump_dfa_t::closure_tags(cclositer_t c,
 		fprintf(stderr, " %s", tagname(tag));
 		fprintf(stderr, "%d", abs(vers[t]));
 		if (lookahead[t]) {
-			const tagver_t l = look[t];
+			const tagver_t l = tagpool.history.elem(look[t]);
 			if (l == TAGVER_BOTTOM) {
 				fprintf(stderr, " &darr;");
 			} else if (l == TAGVER_CURSOR) {
@@ -89,8 +89,8 @@ void dump_dfa_t::closure(const closure_t &clos, uint32_t state, bool isnew)
 
 	tagver_t *look = tagpool.buffer;
 	for (size_t t = 0; t < tagpool.ntags; ++t) {
-		for (c = c1; c != c2 && tagpool[c->tlook][t] == TAGVER_ZERO; ++c);
-		for (s = s1; s != s2 && tagpool[s->tlook][t] == TAGVER_ZERO; ++s);
+		for (c = c1; c != c2 && tagpool.history.elem(tagpool[c->tlook][t]) == TAGVER_ZERO; ++c);
+		for (s = s1; s != s2 && tagpool.history.elem(tagpool[s->tlook][t]) == TAGVER_ZERO; ++s);
 		look[t] = c != c2 || s != s2;
 	}
 
@@ -292,7 +292,8 @@ void dump_tags(const Tagpool &tagpool, size_t ttran, size_t tvers)
 		*tran = tagpool[ttran],
 		*vers = tagpool[tvers];
 	for (size_t i = 0; i < tagpool.ntags; ++i) {
-		const tagver_t t = tran[i], v = vers[i];
+		const tagver_t v = vers[i],
+			t = tagpool.history.elem(tran[i]);
 		if (t < TAGVER_ZERO) {
 			fprintf(stderr, "%d&darr; ", -v);
 		} else if (t > TAGVER_ZERO) {
