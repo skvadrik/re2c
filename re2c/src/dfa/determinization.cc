@@ -66,7 +66,8 @@ dfa_t::dfa_t(const nfa_t &nfa, const opt_t *opts,
 	Tagpool tagpool(ntag);
 	kernels_t kernels(tagpool, tcpool, tags);
 	closure_t clos1, clos2;
-	newvers_t newvers;
+	newver_cmp_t newvers_cmp = {tagpool.history};
+	newvers_t newvers(newvers_cmp);
 	tcmd_t *acts;
 	dump_dfa_t dump(*this, tagpool, nfa, opts->dump_dfa_raw);
 

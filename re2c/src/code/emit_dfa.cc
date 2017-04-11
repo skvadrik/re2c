@@ -124,9 +124,8 @@ void DFA::emit_dot(OutputFile &o, bool last_cond) const
 static void find_list_tags_cmd(const tcmd_t *p, bool *list)
 {
 	for (; p; p = p->next) {
-		const tagver_t l = p->lhs, h = p->pred;
-		if (h != TAGVER_ZERO) {
-			list[l] = list[h] = true;
+		if (tcmd_t::isadd(p)) {
+			list[p->lhs] = list[p->rhs] = true;
 		}
 	}
 }
@@ -134,8 +133,8 @@ static void find_list_tags_cmd(const tcmd_t *p, bool *list)
 static void prop_list_tags_cmd(const tcmd_t *p, bool *list)
 {
 	for (; p; p = p->next) {
-		const tagver_t l = p->lhs, r = p->rhs;
-		if (tcmd_t::iscopy(r)) {
+		if (tcmd_t::iscopy(p)) {
+			const tagver_t l = p->lhs, r = p->rhs;
 			if (list[l]) list[r] = true;
 			if (list[r]) list[l] = true;
 		}

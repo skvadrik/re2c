@@ -237,11 +237,13 @@ void lower_lookahead_to_transition(closure_t &clos)
 tcmd_t *generate_versions(closure_t &clos, const std::vector<Tag> &tags,
 	Tagpool &tagpool, tcpool_t &tcpool, tagver_t &maxver, newvers_t &newvers)
 {
-	tcmd_t *cmd = NULL, *p;
+	tcmd_t *cmd = NULL;
 	const size_t ntag = tagpool.ntags;
 	tagver_t *vers = tagpool.buffer;
 	tagtree_t &tagtree = tagpool.history;
 	clositer_t b = clos.begin(), e = clos.end(), c;
+	newver_cmp_t cmp = {tagtree};
+	newvers_t newacts(cmp);
 
 	// for each tag, if there is at least one tagged transition,
 	// allocate new version (negative for bottom and positive for
@@ -254,24 +256,34 @@ tcmd_t *generate_versions(closure_t &clos, const std::vector<Tag> &tags,
 			*vs = tagpool[c->tvers];
 		for (size_t t = 0; t < ntag; ++t) {
 			const Tag &tag = tags[t];
-			const tagver_t
-				u = tagtree.elem(us[t]),
+			const tagver_t u = us[t],
+				u0 = tagtree.elem(u),
 				l = tagtree.elem(ls[t]);
-			if (u == TAGVER_ZERO) continue;
+			if (u0 == TAGVER_ZERO) continue;
 
 			const tagver_t h = history(tag) ? vs[t] : TAGVER_ZERO;
 			newver_t x = {t, h, u};
 			const tagver_t
-				n = (maxver + 1) * (u == TAGVER_BOTTOM ? -1 : 1),
+				n = (maxver + 1) * (u0 == TAGVER_BOTTOM ? -1 : 1),
 				m = newvers.insert(std::make_pair(x, n)).first->second;
 			if (n == m) ++maxver;
 
-			// add action unless already have an identical one
-			if (fixed(tag) || (l && !history(tag))) continue;
-			for (p = cmd; p; p = p->next) {
-				if (p->lhs == abs(m) && p->rhs == u && p->pred == abs(h)) break;
+			if (!fixed(tag) && (l == TAGVER_ZERO || history(tag))) {
+				newacts.insert(std::make_pair(x, m));
 			}
-			if (!p) cmd = tcpool.make_tcmd(cmd, abs(m), u, abs(h));
+		}
+	}
+
+	// actions
+	for (newvers_t::iterator i = newacts.begin(); i != newacts.end(); ++i) {
+		const tagver_t
+			m = i->second,
+			h = i->first.ver,
+			u = i->first.act;
+		if (history(tags[i->first.tag])) {
+			cmd = tcpool.make_add(cmd, abs(m), abs(h), u, tagtree);
+		} else {
+			cmd = tcpool.make_set(cmd, abs(m), tagtree.elem(u));
 		}
 	}
 
@@ -282,10 +294,11 @@ tcmd_t *generate_versions(closure_t &clos, const std::vector<Tag> &tags,
 			*us = tagpool[c->ttran],
 			*vs = tagpool[c->tvers];
 		for (size_t t = 0; t < ntag; ++t) {
-			const tagver_t v = vs[t],
-				u = tagtree.elem(us[t]),
-				h = history(tags[t]) ? v : TAGVER_ZERO;
-			if (u == TAGVER_ZERO) {
+			const bool historic = history(tags[t]);
+			const tagver_t v = vs[t], u = us[t],
+				u0 = tagtree.elem(u),
+				h = historic ? v : TAGVER_ZERO;
+			if (u0 == TAGVER_ZERO) {
 				vers[t] = v;
 			} else {
 				newver_t x = {t, h, u};

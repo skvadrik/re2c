@@ -12,16 +12,13 @@ void cfg_t::renaming(cfg_t &cfg, const tagver_t *ver2new, tagver_t maxver)
 	cfg_bb_t *b = cfg.bblocks, *be = b + cfg.nbbfall;
 	for (; b < be; ++b) {
 		for (tcmd_t *p, **pp = &b->cmd; (p = *pp);) {
-			tagver_t &l = p->lhs, &r = p->rhs, &h = p->pred;
+			tagver_t &l = p->lhs, &r = p->rhs, h = p->history[0];
 
 			l = ver2new[l];
-			if (tcmd_t::iscopy(r)) {
+			if (r != TAGVER_ZERO) {
 				r = ver2new[r];
 			}
-			if (h != TAGVER_ZERO) {
-				h = ver2new[h];
-			}
-			if (l == r) {
+			if (l == r && h == TAGVER_ZERO) {
 				*pp = p->next;
 			} else {
 				pp = &p->next;

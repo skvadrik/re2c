@@ -34,21 +34,25 @@ kernel_t::~kernel_t()
 }
 
 static bool equal_lookahead_tags(const kernel_t *x, const kernel_t *y,
-	const Tagpool &tagpool)
+	Tagpool &tagpool, const std::vector<Tag> &tags)
 {
 	if (memcmp(x->tlook, y->tlook, x->size * sizeof(size_t)) == 0) {
 		return true;
 	}
+	tagtree_t &h = tagpool.history;
 	for (size_t i = 0; i < x->size; ++i) {
 		const tagver_t
 			*xls = tagpool[x->tlook[i]],
 			*yls = tagpool[y->tlook[i]];
 		for (size_t t = 0; t < tagpool.ntags; ++t) {
-			// compare only the last tags
-			const tagver_t
-				xl = tagpool.history.elem(xls[t]),
-				yl = tagpool.history.elem(yls[t]);
-			if (xl != yl) return false;
+			const tagver_t xl = xls[t], yl = yls[t];
+			if (history(tags[t])) {
+				// compare whole histories
+				if (h.compare_paths(xl, yl) != 0) return false;
+			} else {
+				// compare only the last tags
+				if (h.elem(xl) != h.elem(yl)) return false;
+			}
 		}
 	}
 	return true;
@@ -57,12 +61,13 @@ static bool equal_lookahead_tags(const kernel_t *x, const kernel_t *y,
 struct kernel_eq_t
 {
 	Tagpool &tagpool;
+	const std::vector<Tag> &tags;
 	bool operator()(const kernel_t *x, const kernel_t *y) const
 	{
 		return x->size == y->size
 			&& memcmp(x->state, y->state, x->size * sizeof(void*)) == 0
 			&& memcmp(x->tvers, y->tvers, x->size * sizeof(size_t)) == 0
-			&& equal_lookahead_tags(x, y, tagpool);
+			&& equal_lookahead_tags(x, y, tagpool, tags);
 		// if versions and lookahead coincide, so do orders
 	}
 };
@@ -88,7 +93,7 @@ bool kernels_t::operator()(const kernel_t *k1, const kernel_t *k2)
 	const bool compatible = k1->size == k2->size
 		&& memcmp(k1->state, k2->state, k1->size * sizeof(void*)) == 0
 		&& memcmp(k1->order, k2->order, k1->size * sizeof(size_t)) == 0
-		&& equal_lookahead_tags(k1, k2, tagpool);
+		&& equal_lookahead_tags(k1, k2, tagpool, tags);
 	if (!compatible) return false;
 
 	// map tag versions of one kernel to that of another
@@ -250,7 +255,7 @@ kernels_t::result_t kernels_t::insert(const closure_t &clos,
 	hash = hash32(hash, buffer->order, nkern * sizeof(size_t));
 
 	// try to find identical kernel
-	kernel_eq_t eq = {tagpool};
+	kernel_eq_t eq = {tagpool, tags};
 	x = lookup.find_with(hash, buffer, eq);
 	if (x != index_t::NIL) return result_t(x, acts, false);
 
@@ -295,7 +300,7 @@ tcmd_t *kernels_t::actions(tcmd_t *acts)
 	// see note [save(X), copy(Y,X) optimization]
 	for (a = acts; a; a = a->next) {
 		const tagver_t
-			y = a->lhs * (a->rhs == TAGVER_BOTTOM ? -1 : 1),
+			y = a->lhs * (a->history[0] == TAGVER_BOTTOM ? -1 : 1),
 			x = y2x[y];
 		a->lhs = abs(x);
 		y2x[y] = x2y[x] = TAGVER_ZERO;
@@ -305,7 +310,7 @@ tcmd_t *kernels_t::actions(tcmd_t *acts)
 		const tagver_t y = x2y[x], ax = abs(x), ay = abs(y);
 		if (y != TAGVER_ZERO && x != y && !fixed(tags[x2t[x]])) {
 			assert(ax != ay);
-			copy = tcpool.make_tcmd(copy, ax, ay, 0);
+			copy = tcpool.make_copy(copy, ax, ay);
 		}
 	}
 
@@ -330,9 +335,9 @@ static tcmd_t *finalizer(const clos_t &clos, size_t ridx,
 	tcmd_t *copy = NULL, *save = NULL, **p;
 
 	for (size_t t = rule.ltag; t < rule.htag; ++t) {
+		const bool historic = history(tags[t]);
 		const tagver_t v = abs(vers[t]),
-			l = tagpool.history.elem(look[t]),
-			h = history(tags[t]) ? v : TAGVER_ZERO;
+			l = tagpool.history.elem(look[t]);
 		tagver_t &f = dfa.finvers[t];
 
 		// don't waste versions on fixed tags
@@ -344,9 +349,11 @@ static tcmd_t *finalizer(const clos_t &clos, size_t ridx,
 		}
 
 		if (l == TAGVER_ZERO) {
-			copy = tcpool.make_tcmd(copy, f, v, TAGVER_ZERO);
+			copy = tcpool.make_copy(copy, f, v);
+		} else if (historic) {
+			save = tcpool.make_add(save, f, v, look[t], tagpool.history);
 		} else {
-			save = tcpool.make_tcmd(save, f, l, h);
+			save = tcpool.make_set(save, f, l);
 		}
 	}
 

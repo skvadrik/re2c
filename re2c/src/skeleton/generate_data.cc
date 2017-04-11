@@ -92,19 +92,20 @@ static uint32_t nsteps(uint32_t lower, uint32_t upper)
 static void apply(std::vector<size_t> *tags, const tcmd_t *cmd, size_t pos)
 {
 	for (const tcmd_t *p = cmd; p; p = p->next) {
-		const tagver_t l = p->lhs, r = p->rhs, h = p->pred;
+		const tagver_t l = p->lhs, r = p->rhs, *h = p->history;
 		std::vector<size_t> &t = tags[l];
-		if (h == TAGVER_ZERO) {
-			t.clear();
-		} else if (l != h) {
-			t = tags[h];
-		}
-		if (r == TAGVER_BOTTOM) {
-			t.push_back(Skeleton::DEFTAG);
-		} else if (r == TAGVER_CURSOR) {
-			t.push_back(pos);
-		} else {
+		if (tcmd_t::iscopy(p)) {
 			t = tags[r];
+		} else if (tcmd_t::isset(p)) {
+			t.clear();
+			t.push_back(*h == TAGVER_BOTTOM ? Skeleton::DEFTAG : pos);
+		} else {
+			if (l != r) t = tags[r];
+			std::vector<size_t> x;
+			for (; *h != TAGVER_ZERO; ++h) {
+				x.push_back(*h == TAGVER_BOTTOM ? Skeleton::DEFTAG : pos);
+			}
+			t.insert(t.end(), x.rbegin(), x.rend());
 		}
 	}
 }

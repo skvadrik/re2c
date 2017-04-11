@@ -209,10 +209,9 @@ void Dot::emit(OutputFile &o, const DFA &dfa)
 			}
 			const tcmd_t *cmd = dfa.tcpool[c.tags];
 			for (const tcmd_t *p = cmd; p; p = p->next) {
-				const tagver_t r = p->rhs;
 				o.ws("<").wstring(vartag_name(p->lhs, prefix));
-				if (tcmd_t::iscopy(r)) {
-					o.ws("~").wstring(vartag_name(r, prefix));
+				if (tcmd_t::iscopy(p)) {
+					o.ws("~").wstring(vartag_name(p->rhs, prefix));
 				}
 				o.ws(">");
 			}

@@ -19,12 +19,9 @@ tagver_t cfg_t::compact(const cfg_t &cfg, tagver_t *ver2new)
 	for (size_t i = 0; i < cfg.nbbfall; ++i) {
 		const cfg_bb_t &b = cfg.bblocks[i];
 		for (const tcmd_t *p = b.cmd; p; p = p->next) {
-			const tagver_t r = p->rhs, h = p->pred;
-			if (tcmd_t::iscopy(r)) {
+			const tagver_t r = p->rhs;
+			if (r != TAGVER_ZERO) {
 				used[r] = true;
-			}
-			if (h != TAGVER_ZERO) {
-				used[h] = true;
 			}
 			used[p->lhs] = true;
 		}

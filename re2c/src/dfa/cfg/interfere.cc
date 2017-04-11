@@ -28,18 +28,18 @@ void interfere(const tcmd_t *cmd, const bool *live, bool *interf,
 	// this command except its RHS and tags that are are assigned to
 	// the same RHS by other commands in this block.
 	for (const tcmd_t *p = cmd; p; p = p->next) {
-		const tagver_t r = p->rhs, h = p->pred;
+		const tagver_t r = p->rhs, *h = p->history;
 
 		// alive after this command
 		memcpy(buf, live, nver * sizeof(bool));
 		cfg_t::live_through_bblock(p->next, buf);
 
 		// exclude RHS
-		if (tcmd_t::iscopy(r)) buf[r] = false;
+		if (tcmd_t::iscopy(p)) buf[r] = false;
 
 		// exclude tags assigned to the same RHS
 		for (const tcmd_t *q = cmd; q; q = q->next) {
-			if (q->rhs == r && q->pred == h) {
+			if (q->rhs == r && tcmd_t::equal_history(h, q->history)) {
 				buf[q->lhs] = false;
 			}
 		}

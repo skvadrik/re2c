@@ -1,3 +1,4 @@
+#include <assert.h>
 #include <string.h>
 
 #include "src/dfa/cfg/cfg.h"
@@ -34,8 +35,8 @@ void cfg_t::normalization(cfg_t &cfg)
 		// commands and normalize each sublist in a proper way.
 		tcmd_t **px, **py, *x;
 		for (px = &b->cmd; (x = *px);) {
-			if (tcmd_t::iscopy(x->rhs)) {
-				for (py = px; (x = *px) && tcmd_t::iscopy(x->rhs); px = &x->next);
+			if (tcmd_t::iscopy(x)) {
+				for (py = px; (x = *px) && tcmd_t::iscopy(x); px = &x->next);
 				*px = NULL;
 				normalize(*py, NULL);
 				tcmd_t::topsort(py, indeg);
@@ -54,13 +55,41 @@ void cfg_t::normalization(cfg_t &cfg)
 	delete[] indeg;
 }
 
+static void swap(tcmd_t &x, tcmd_t &y)
+{
+	assert(!tcmd_t::isadd(&x) && !tcmd_t::isadd(&y));
+	std::swap(x.lhs, y.lhs);
+	std::swap(x.rhs, y.rhs);
+	std::swap(x.history[0], y.history[0]);
+}
+
+static bool less(const tcmd_t &x, const tcmd_t &y)
+{
+	assert(!tcmd_t::isadd(&x) && !tcmd_t::isadd(&y));
+	tagver_t u, v;
+
+	u = x.lhs; v = y.lhs;
+	if (u < v) return true;
+	if (u > v) return false;
+
+	u = x.rhs; v = y.rhs;
+	if (u < v) return true;
+	if (u > v) return false;
+
+	u = x.history[0]; v = y.history[0];
+	if (u < v) return true;
+	if (u > v) return false;
+
+	return false;
+}
+
 void normalize(tcmd_t *s, tcmd_t *e)
 {
 	// sort lexicographically
 	for (tcmd_t *p = s; p != e; p = p->next) {
 		for (tcmd_t *q = p->next; q != e; q = q->next) {
-			if (tcmd_t::less(*q, *p)) {
-				tcmd_t::swap(*p, *q);
+			if (less(*q, *p)) {
+				swap(*p, *q);
 			}
 		}
 	}

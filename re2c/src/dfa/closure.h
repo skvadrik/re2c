@@ -34,21 +34,22 @@ struct newver_t
 	tagver_t act;
 };
 
-inline bool operator<(const newver_t &x, const newver_t &y)
+struct newver_cmp_t
 {
-	if (x.tag < y.tag) return true;
-	if (x.tag > y.tag) return false;
+	tagtree_t &history;
+	bool operator()(const newver_t &x, const newver_t &y)
+	{
+		if (x.tag < y.tag) return true;
+		if (x.tag > y.tag) return false;
 
-	if (x.ver < y.ver) return true;
-	if (x.ver > y.ver) return false;
+		if (x.ver < y.ver) return true;
+		if (x.ver > y.ver) return false;
 
-	if (x.act < y.act) return true;
-	if (x.act > y.act) return false;
+		return history.compare_paths(x.act, y.act) < 0;
+	}
+};
 
-	return false;
-}
-
-typedef std::map<newver_t, tagver_t> newvers_t;
+typedef std::map<newver_t, tagver_t, newver_cmp_t> newvers_t;
 
 tcmd_t *closure(closure_t &clos1, closure_t &clos2, Tagpool &tagpool,
 	tcpool_t &tcpool, std::valarray<Rule> &rules, tagver_t &maxver,

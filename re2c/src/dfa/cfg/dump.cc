@@ -20,11 +20,17 @@ void cfg_t::dump(const cfg_t &cfg, const bool *live)
 
 		fprintf(stderr, "  n%u [label=\"%u\\n", i, i);
 		for (const tcmd_t *p = b->cmd; p; p = p->next) {
-			const tagver_t v = p->rhs;
-			if (tcmd_t::iscopy(v)) {
-				fprintf(stderr, "%i~%i ", p->lhs, v);
+			const tagver_t l = p->lhs, r = p->rhs, *h = p->history;
+			if (tcmd_t::iscopy(p)) {
+				fprintf(stderr, "%d=%d ", l, r);
 			} else {
-				fprintf(stderr, "%i ", p->lhs);
+				fprintf(stderr, "%d", l);
+				if (r != TAGVER_ZERO) {
+					fprintf(stderr, "=%d", r);
+				}
+				for (; *h != TAGVER_ZERO; ++h) {
+					fprintf(stderr, "%s ", *h == TAGVER_BOTTOM ? "&darr;" : "&uarr;");
+				}
 			}
 		}
 		fprintf(stderr, "/");

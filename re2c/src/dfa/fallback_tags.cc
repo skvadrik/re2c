@@ -57,7 +57,7 @@ static void backup(dfa_t &dfa, dfa_state_t *s, tagver_t l, tagver_t r)
 		size_t i = s->arcs[c];
 		if (i != dfa_t::NIL && dfa.states[i]->fallthru) {
 			tcmd_t *&p = s->tcmd[c];
-			p = dfa.tcpool.make_tcmd(p, l, r, TAGVER_ZERO);
+			p = dfa.tcpool.make_copy(p, l, r);
 		}
 	}
 }
@@ -85,23 +85,27 @@ void insert_fallback_tags(dfa_t &dfa)
 
 		tcmd_t *p = s->tcmd[nsym], *f = NULL, *t = NULL, **pf;
 		for (; p; p = p->next) {
-			const tagver_t l = p->lhs, r = p->rhs, v = p->pred;
+			const tagver_t l = p->lhs, r = p->rhs, *h = p->history;
 
 			// 'copy' commands
-			if (tcmd_t::iscopy(r)) {
+			if (tcmd_t::iscopy(p)) {
 				if (!owrt[r]) {
-					f = pool.make_tcmd(f, l, r, v);
+					f = pool.make_copy(f, l, r);
 				} else {
 					backup(dfa, s, l, r);
 				}
 
-			// 'save' commands
+			// 'save without history' commands
+			} else if (tcmd_t::isset(p)) {
+				t = pool.make_set(t, l, h[0]);
+
+			// 'save with history' commands
 			} else {
-				if (v == TAGVER_ZERO || !owrt[v]) {
-					t = pool.make_tcmd(t, l, r, v);
+				if (!owrt[r]) {
+					t = pool.copy_add(t, l, r, h);
 				} else {
-					t = pool.make_tcmd(t, l, r, l);
-					backup(dfa, s, l, v);
+					t = pool.copy_add(t, l, l, h);
+					backup(dfa, s, l, r);
 				}
 			}
 		}

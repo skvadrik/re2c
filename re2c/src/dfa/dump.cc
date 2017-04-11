@@ -265,15 +265,18 @@ void dump_tcmd(const tcmd_t *p)
 
 	fprintf(stderr, "/");
 	for (; p; p = p->next) {
-		const tagver_t l = p->lhs, r = p->rhs, v = p->pred;
-		if (tcmd_t::iscopy(r)) {
+		const tagver_t l = p->lhs, r = p->rhs, *h = p->history;
+		if (tcmd_t::iscopy(p)) {
 			fprintf(stderr, "%d=%d ", l, r);
 		} else {
 			fprintf(stderr, "%d", l);
-			if (v != TAGVER_ZERO) {
-				fprintf(stderr, "=%d", v);
+			if (r != TAGVER_ZERO) {
+				fprintf(stderr, "=%d", r);
 			}
-			fprintf(stderr, "%s ", r == TAGVER_BOTTOM ? "&darr;" : "&uarr;");
+			for (; *h != TAGVER_ZERO; ++h) {
+				fprintf(stderr, "%s", *h == TAGVER_BOTTOM ? "&darr;" : "&uarr;");
+			}
+			fprintf(stderr, " ");
 		}
 	}
 }
@@ -292,13 +295,17 @@ void dump_tags(const Tagpool &tagpool, size_t ttran, size_t tvers)
 		*tran = tagpool[ttran],
 		*vers = tagpool[tvers];
 	for (size_t i = 0; i < tagpool.ntags; ++i) {
-		const tagver_t v = vers[i],
-			t = tagpool.history.elem(tran[i]);
-		if (t < TAGVER_ZERO) {
-			fprintf(stderr, "%d&darr; ", -v);
-		} else if (t > TAGVER_ZERO) {
-			fprintf(stderr, "%d&uarr; ", v);
+		tagver_t v = vers[i], t = tran[i];
+		if (tagpool.history.elem(t) == TAGVER_ZERO) continue;
+		fprintf(stderr, "%d", abs(v));
+		for (; t != -1; t = tagpool.history.pred(t)) {
+			if (tagpool.history.elem(t) < TAGVER_ZERO) {
+				fprintf(stderr, "&darr;");
+			} else if (t > TAGVER_ZERO) {
+				fprintf(stderr, "&uarr;");
+			}
 		}
+		fprintf(stderr, " ");
 	}
 }
 

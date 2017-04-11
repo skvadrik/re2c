@@ -312,10 +312,10 @@ void gen_settags(code_lines_t &code, const DFA &dfa, tcid_t tcid, const opt_t *o
 	}
 
 	for (const tcmd_t *p = cmd; p; p = p->next) {
-		const tagver_t l = p->lhs, r = p->rhs, h = p->pred;
+		const tagver_t l = p->lhs, r = p->rhs, *h = p->history;
 
 		// copy command
-		if (tcmd_t::iscopy(r)) {
+		if (tcmd_t::iscopy(p)) {
 			const std::string
 				le = vartag_expr(l, prefix, expression),
 				re = vartag_expr(r, prefix, expression),
@@ -323,24 +323,28 @@ void gen_settags(code_lines_t &code, const DFA &dfa, tcid_t tcid, const opt_t *o
 			code.push_back(s);
 
 		// save command; history
-		} else if (h != TAGVER_ZERO) {
+		} else if (tcmd_t::isadd(p)) {
 			const std::string
 				le = vartag_expr(l, prefix, expression),
-				he = vartag_expr(h, prefix, expression);
-			if (l != h) {
-				const std::string s = le + " = " + he + ";\n";
+				re = vartag_expr(r, prefix, expression);
+			if (l != r) {
+				const std::string s = le + " = " + re + ";\n";
 				code.push_back(s);
 			}
-			const std::string s = r == TAGVER_BOTTOM
-				? opts->yytaglistn + " (" + le + ");\n"
-				: opts->yytaglistp + " (" + le + ");\n";
-			code.push_back(s);
+			code_lines_t code1;
+			for (; *h != TAGVER_ZERO; ++h) {
+				const std::string s = *h == TAGVER_BOTTOM
+					? opts->yytaglistn + " (" + le + ");\n"
+					: opts->yytaglistp + " (" + le + ");\n";
+				code1.push_back(s);
+			}
+			code.insert(code.end(), code1.rbegin(), code1.rend());
 
 		// save command; no history; generic API
 		} else if (generic) {
 			const std::string
 				v = vartag_expr(l, prefix, expression),
-				s = r == TAGVER_BOTTOM
+				s = *h == TAGVER_BOTTOM
 					? opts->yytagn + " (" + v + ");\n"
 					: opts->yytagp + " (" + v + ");\n";
 			code.push_back(s);
@@ -348,10 +352,8 @@ void gen_settags(code_lines_t &code, const DFA &dfa, tcid_t tcid, const opt_t *o
 		// save command; no history; default API
 		} else {
 			std::string s1 = "", s2 = "";
-			for (const tcmd_t *q = p
-				; q && !tcmd_t::iscopy(q->rhs) && q->pred == TAGVER_ZERO
-				; p = q, q = q->next) {
-				std::string &s = q->rhs == TAGVER_BOTTOM ? s1 : s2;
+			for (const tcmd_t *q = p; q && tcmd_t::isset(q); p = q, q = q->next) {
+				std::string &s = q->history[0] == TAGVER_BOTTOM ? s1 : s2;
 				s += vartag_expr(q->lhs, prefix, expression) + " = ";
 			}
 			if (!s1.empty()) {

@@ -1,4 +1,5 @@
 #include <assert.h>
+#include <string.h>
 
 #include "src/dfa/tcmd.h"
 #include "src/util/hash32.h"
@@ -8,30 +9,20 @@ namespace re2c
 
 static uint32_t hash_tcmd(const tcmd_t *tcmd);
 
-void tcmd_t::swap(tcmd_t &x, tcmd_t &y)
-{
-	std::swap(x.lhs, y.lhs);
-	std::swap(x.rhs, y.rhs);
-	std::swap(x.pred, y.pred);
-}
-
-bool tcmd_t::less(const tcmd_t &x, const tcmd_t &y)
-{
-	if (x.lhs < y.lhs) return true;
-	if (x.lhs > y.lhs) return false;
-
-	if (x.rhs < y.rhs) return true;
-	if (x.rhs > y.rhs) return false;
-
-	if (x.pred < y.pred) return true;
-	if (x.pred > y.pred) return false;
-
-	return false;
-}
-
 bool tcmd_t::equal(const tcmd_t &x, const tcmd_t &y)
 {
-	return x.lhs == y.lhs && x.rhs == y.rhs && x.pred == y.pred;
+	return x.lhs == y.lhs
+		&& x.rhs == y.rhs
+		&& equal_history(x.history, y.history);
+}
+
+bool tcmd_t::equal_history(const tagver_t *h, const tagver_t *g)
+{
+	for (;;) {
+		if (*h != *g) return false;
+		if (*h == TAGVER_ZERO) return true;
+		++h; ++g;
+	}
 }
 
 /* note [topological ordering of copy commands]
@@ -57,25 +48,23 @@ bool tcmd_t::equal(const tcmd_t &x, const tcmd_t &y)
  * The algorithm starts and ends with all-zero in-degree buffer.
  */
 
-bool tcmd_t::iscopy(tagver_t rhs)
+bool tcmd_t::iscopy(const tcmd_t *x)
 {
-	return rhs != TAGVER_BOTTOM && rhs != TAGVER_CURSOR;
+	return x->rhs != TAGVER_ZERO && x->history[0] == TAGVER_ZERO;
 }
 
-bool tcmd_t::isset(const tcmd_t *cmd)
+bool tcmd_t::isset(const tcmd_t *x)
 {
-	return !tcmd_t::iscopy(cmd->rhs) && cmd->pred == TAGVER_ZERO;
+	if (x->rhs == TAGVER_ZERO) {
+		assert(x->history[0] != TAGVER_ZERO);
+		return true;
+	}
+	return false;
 }
 
-bool tcmd_t::isadd(const tcmd_t *cmd)
+bool tcmd_t::isadd(const tcmd_t *x)
 {
-	return !tcmd_t::iscopy(cmd->rhs) && cmd->pred != TAGVER_ZERO;
-}
-
-static tagver_t depend(const tcmd_t *x)
-{
-	const tagver_t r = x->rhs, h = x->pred;
-	return tcmd_t::iscopy(r) ? r : h;
+	return x->rhs != TAGVER_ZERO && x->history[0] != TAGVER_ZERO;
 }
 
 void tcmd_t::topsort(tcmd_t **phead, uint32_t *indeg)
@@ -86,10 +75,10 @@ void tcmd_t::topsort(tcmd_t **phead, uint32_t *indeg)
 
 	// initialize in-degree
 	for (x = x0; x; x = x->next) {
-		indeg[x->lhs] = indeg[depend(x)] = 0;
+		indeg[x->lhs] = indeg[x->rhs] = 0;
 	}
 	for (x = x0; x; x = x->next) {
-		++indeg[depend(x)];
+		++indeg[x->rhs];
 	}
 
 	for (py = &y0;;) {
@@ -100,7 +89,7 @@ void tcmd_t::topsort(tcmd_t **phead, uint32_t *indeg)
 		py1 = py;
 		for (x = x0; x; x = x->next) {
 			if (indeg[x->lhs] == 0) {
-				--indeg[depend(x)];
+				--indeg[x->rhs];
 				*py = x;
 				py = &x->next;
 			} else {
@@ -126,13 +115,57 @@ tcpool_t::tcpool_t()
 	assert(TCID0 == insert(NULL));
 }
 
-tcmd_t *tcpool_t::make_tcmd(tcmd_t *next, tagver_t lhs, tagver_t rhs, tagver_t pred)
+tcmd_t *tcpool_t::make_copy(tcmd_t *next, tagver_t lhs, tagver_t rhs)
 {
 	tcmd_t *p = alc.alloct<tcmd_t>(1);
 	p->next = next;
 	p->lhs = lhs;
 	p->rhs = rhs;
-	p->pred = pred;
+	p->history[0] = TAGVER_ZERO;
+	return p;
+}
+
+tcmd_t *tcpool_t::make_set(tcmd_t *next, tagver_t lhs, tagver_t set)
+{
+	const size_t size = sizeof(tcmd_t) + sizeof(tagver_t);
+	tcmd_t *p = static_cast<tcmd_t*>(alc.alloc(size));
+	p->next = next;
+	p->lhs = lhs;
+	p->rhs = TAGVER_ZERO;
+	p->history[0] = set;
+	p->history[1] = TAGVER_ZERO;
+	return p;
+}
+
+tcmd_t *tcpool_t::make_add(tcmd_t *next, tagver_t lhs, tagver_t rhs,
+	tagver_t hidx, const tagtree_t &history)
+{
+	size_t hlen = 0;
+	for (tagver_t i = hidx; i != -1; i = history.pred(i)) ++hlen;
+
+	const size_t size = sizeof(tcmd_t) + (hlen - 1) * sizeof(tagver_t);
+	tcmd_t *p = static_cast<tcmd_t*>(alc.alloc(size));
+	p->next = next;
+	p->lhs = lhs;
+	p->rhs = rhs;
+	for (tagver_t i = hidx, *h = p->history; i != -1; i = history.pred(i)) {
+		*h++ = history.elem(i);
+	}
+	return p;
+}
+
+tcmd_t *tcpool_t::copy_add(tcmd_t *next, tagver_t lhs, tagver_t rhs,
+	const tagver_t *history)
+{
+	size_t hlen = 0;
+	for (const tagver_t *h = history; *h != TAGVER_ZERO; ++h) ++hlen;
+
+	const size_t size = sizeof(tcmd_t) + hlen * sizeof(tagver_t);
+	tcmd_t *p = static_cast<tcmd_t*>(alc.alloc(size));
+	p->next = next;
+	p->lhs = lhs;
+	p->rhs = rhs;
+	memcpy(p->history, history, (hlen + 1) * sizeof(tagver_t));
 	return p;
 }
 
@@ -142,6 +175,7 @@ uint32_t hash_tcmd(const tcmd_t *tcmd)
 	for (const tcmd_t *p = tcmd; p; p = p->next) {
 		h = hash32(h, &p->lhs, sizeof(p->lhs));
 		h = hash32(h, &p->rhs, sizeof(p->rhs));
+		h = hash32(h, &p->history[0], sizeof(p->history[0]));
 	}
 	return h;
 }
