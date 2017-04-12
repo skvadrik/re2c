@@ -30,8 +30,9 @@ void cfg_t::renaming(cfg_t &cfg, const tagver_t *ver2new, tagver_t maxver)
 	tagver_t *fins = cfg.dfa.finvers;
 	const std::vector<Tag> &tags = cfg.dfa.tags;
 	for (size_t t = 0; t < tags.size(); ++t) {
-		if (!fixed(tags[t])) {
-			fins[t] = ver2new[fins[t]];
+		tagver_t &f = fins[t];
+		if (f != TAGVER_ZERO) { // fixed tag or unreachable rule
+			f = ver2new[f];
 		}
 	}
 }

@@ -15,6 +15,8 @@ namespace re2c {
  * Furthermore, fixed tags are fobidden with generic API because it cannot
  * express fixed offsets.
  *
+ * Tags with history also cannot be fixed.
+ *
  * One special case is pre-orbit tags: tags that correspond to the opening
  * of capturing group under iteration. We don't need to know the value of
  * such tags: we only need the last iteration which is captured by the
@@ -52,7 +54,7 @@ static void find_fixed_tags(RE *re, std::vector<Tag> &tags,
 		case RE::TAG: {
 			// see note [fixed and variable tags]
 			Tag &tag = tags[re->tag.idx];
-			if (toplevel && dist != Tag::VARDIST) {
+			if (toplevel && dist != Tag::VARDIST && !history(tag)) {
 				tag.base = base;
 				tag.dist = dist;
 			} else if (preorbit(tags, re->tag.idx)) {

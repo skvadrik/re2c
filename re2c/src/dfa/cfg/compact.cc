@@ -14,7 +14,8 @@ tagver_t cfg_t::compact(const cfg_t &cfg, tagver_t *ver2new)
 
 	std::fill(used, used + nver, false);
 	for (size_t t = 0; t < ntag; ++t) {
-		used[fins[t]] = !fixed(tags[t]);
+		const tagver_t f = fins[t];
+		used[f] = f != TAGVER_ZERO; // fixed tag or unreachable rule
 	}
 	for (size_t i = 0; i < cfg.nbbfall; ++i) {
 		const cfg_bb_t &b = cfg.bblocks[i];
@@ -29,9 +30,7 @@ tagver_t cfg_t::compact(const cfg_t &cfg, tagver_t *ver2new)
 
 	tagver_t maxver = 0;
 	for (size_t v = 0; v < nver; ++v) {
-		if (used[v]) {
-			ver2new[v] = ++maxver;
-		}
+		ver2new[v] = used[v] ? ++maxver : TAGVER_ZERO;
 	}
 
 	delete[] used;
