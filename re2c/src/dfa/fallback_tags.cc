@@ -83,37 +83,40 @@ void insert_fallback_tags(dfa_t &dfa)
 		std::fill(owrt, owrt + nver, false);
 		find_overwritten_tags(dfa, i, been, owrt);
 
-		tcmd_t *p = s->tcmd[nsym], *f = NULL, *t = NULL, **pf;
+		tcmd_t *p = s->tcmd[nsym],
+			*save = NULL, **ps = &save,
+			**pc = &s->tcmd[nsym + 1];
 		for (; p; p = p->next) {
 			const tagver_t l = p->lhs, r = p->rhs, *h = p->history;
 
 			// 'copy' commands
 			if (tcmd_t::iscopy(p)) {
 				if (!owrt[r]) {
-					f = pool.make_copy(f, l, r);
+					*pc = pool.make_copy(NULL, l, r);
+					pc = &(*pc)->next;
 				} else {
 					backup(dfa, s, l, r);
 				}
 
 			// 'save without history' commands
 			} else if (tcmd_t::isset(p)) {
-				t = pool.make_set(t, l, h[0]);
+				*ps = pool.make_set(*ps, l, h[0]);
+				ps = &(*ps)->next;
 
 			// 'save with history' commands
 			} else {
 				if (!owrt[r]) {
-					t = pool.copy_add(t, l, r, h);
+					*ps = pool.copy_add(NULL, l, r, h);
 				} else {
-					t = pool.copy_add(t, l, l, h);
+					*ps = pool.copy_add(NULL, l, l, h);
 					backup(dfa, s, l, r);
 				}
+				ps = &(*ps)->next;
 			}
 		}
 
 		// join 'copy' (fallback) and 'save' commands
-		for (pf = &f; *pf; pf = &(*pf)->next);
-		*pf = t;
-		s->tcmd[nsym + 1] = f;
+		*pc = save;
 	}
 
 	delete[] been;
