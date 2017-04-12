@@ -95,6 +95,7 @@ SRC = \
 	src/dfa/cfg/cfg.cc \
 	src/dfa/cfg/compact.cc \
 	src/dfa/cfg/dce.cc \
+	src/dfa/cfg/dump.cc \
 	src/dfa/cfg/interfere.cc \
 	src/dfa/cfg/liveanal.cc \
 	src/dfa/cfg/normalize.cc \

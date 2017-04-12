@@ -5,10 +5,9 @@
 namespace re2c
 {
 
-void cfg_t::dump(const cfg_t &cfg, const bool *live)
+void dump_cfg(const cfg_t &cfg, const bool *live)
 {
 	const tagver_t nver = cfg.dfa.maxtagver + 1;
-	const size_t ntag = cfg.dfa.tags.size();
 
 	fprintf(stderr, "digraph CFG {\n"
 		"  rankdir=LR\n"
@@ -34,33 +33,48 @@ void cfg_t::dump(const cfg_t &cfg, const bool *live)
 			}
 		}
 		fprintf(stderr, "/");
-		if (b->use) {
-			for (size_t t = 0; t < ntag; ++t) {
-				const tagver_t v = b->use[t];
+		if (b->rule) {
+			for (size_t t = b->rule->ltag; t < b->rule->htag; ++t) {
+				const tagver_t v = cfg.dfa.finvers[t];
 				if (v != TAGVER_ZERO) {
 					fprintf(stderr, "%i ", v);
 				}
 			}
 		}
 
-if (i < cfg.nbbfin) {
-		fprintf(stderr, "\\nneed:");
-		for (tagver_t v = 0; v < nver; ++v) {
-			if (live[v]) {
-				fprintf(stderr, " %i", v);
+		if (i < cfg.nbbfin) {
+			fprintf(stderr, "\\nneed:");
+			for (tagver_t v = 0; v < nver; ++v) {
+				if (live[v]) {
+					fprintf(stderr, " %i", v);
+				}
 			}
 		}
-}
 
 		fprintf(stderr, "\"]\n");
 
-		const char *style = b->use ? "dotted" : "solid";
+		const char *style = b->rule ? "dotted" : "solid";
 		for (cfg_ix_t *j = b->succb; j < b->succe; ++j) {
 			fprintf(stderr, "  n%u -> n%u [style=%s]\n", i, *j, style);
 		}
 	}
 
 	fprintf(stderr, "}\n");
+}
+
+void dump_interf(const cfg_t &cfg, const bool *interf)
+{
+	const tagver_t nver = cfg.dfa.maxtagver + 1;
+	for (tagver_t y = 1; y < nver; ++y) {
+		fprintf(stderr, "%2d ", y);
+	}
+	fprintf(stderr, "\n");
+	for (tagver_t x = 1; x < nver; ++x) {
+		for (tagver_t y = 1; y < nver; ++y) {
+			fprintf(stderr, "%2c ", interf[x * nver + y] ? '*' : '.');
+		}
+		fprintf(stderr, "\n");
+	}
 }
 
 } // namespace re2c
