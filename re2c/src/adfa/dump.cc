@@ -1,25 +1,10 @@
 #include <stdio.h>
 
+#include "src/dfa/dump.h"
 #include "src/adfa/dump.h"
 
 namespace re2c
 {
-
-static void dump_adfa_tcmd(const tcmd_t *cmd)
-{
-	if (!cmd) return;
-	fprintf(stderr, "/");
-	for (const tcmd_t *p = cmd; p; p = p->next) {
-		const tagver_t l = p->lhs, r = p->rhs;
-		if (r == TAGVER_BOTTOM) {
-			fprintf(stderr, "%d%s ", l, "&darr;");
-		} else if (r == TAGVER_CURSOR) {
-			fprintf(stderr, "%d%s ", l, "&uarr;");
-		} else {
-			fprintf(stderr, "%d=%d ", l, r);
-		}
-	}
-}
 
 static void dump_adfa_range(uint32_t lower, uint32_t upper)
 {
@@ -40,7 +25,7 @@ void dump_adfa(const DFA &dfa)
 	fprintf(stderr,
 		"  n [shape=point]"
 		"  n -> n%p [style=dotted label=\"", (void*)dfa.head);
-	dump_adfa_tcmd(dfa.tcpool[dfa.tags0]);
+	dump_tcmd(dfa.tcpool[dfa.tags0]);
 	fprintf(stderr, "\"]\n");
 
 	for (const State *s = dfa.head; s; s = s->next) {
@@ -65,7 +50,7 @@ void dump_adfa(const DFA &dfa)
 					name ? name->c_str() : "/", dfa.finvers[t]);
 			}
 		}
-		dump_adfa_tcmd(dfa.tcpool[s->go.tags]);
+		dump_tcmd(dfa.tcpool[s->go.tags]);
 		fprintf(stderr, "\" %s]\n", attr);
 
 		if (action == Action::ACCEPT) {
@@ -73,7 +58,7 @@ void dump_adfa(const DFA &dfa)
 			for (uint32_t i = 0; i < accept.size(); ++i) {
 				fprintf(stderr, "  n%p -> n%p [label=\"",
 					(void*)s, (void*)accept[i].first);
-				dump_adfa_tcmd(dfa.tcpool[accept[i].second]);
+				dump_tcmd(dfa.tcpool[accept[i].second]);
 				fprintf(stderr, "\" style=dotted]\n");
 			}
 		}
@@ -95,7 +80,7 @@ void dump_adfa(const DFA &dfa)
 			}
 			fprintf(stderr, "  n%p -> n%p [label=\"", (void*)s, (void*)x->to);
 			if (eat) dump_adfa_range(lb, x->ub);
-			dump_adfa_tcmd(dfa.tcpool[x->tags]);
+			dump_tcmd(dfa.tcpool[x->tags]);
 			fprintf(stderr, "\" %s]\n", attr);
 		}
 	}

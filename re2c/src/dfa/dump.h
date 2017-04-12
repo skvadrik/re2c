@@ -28,6 +28,7 @@ struct dump_dfa_t
 };
 
 void dump_dfa(const dfa_t &dfa);
+void dump_tcmd(const tcmd_t *p);
 
 } // namespace re2c
 

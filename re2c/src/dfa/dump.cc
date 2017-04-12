@@ -6,7 +6,6 @@ namespace re2c
 {
 
 static void dump_tcmd_or_tcid(tcmd_t *const *tcmd, const tcid_t *tcid, size_t sym, const tcpool_t &tcpool);
-static void dump_tcmd(const tcmd_t *p);
 static const char *tagname(const Tag &t);
 static void dump_tags(const Tagpool &tagpool, size_t ttran, size_t tvers);
 
