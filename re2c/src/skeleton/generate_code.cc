@@ -285,6 +285,7 @@ void emit_start(OutputFile &o, size_t maxfill, const std::string &name,
 		o.ws("\n").wind(3).ws("fprintf(stderr, \"error: lex_").wstring(name).ws(": at position %ld, key %u: \"")
 			.ws("\n").wind(4).ws("\"wrong value for tag '%s': expected %u, actual %u\\n\",")
 			.ws("\n").wind(4).ws("token - input, kix + n, name, exp, act);");
+		o.ws("\n").wind(3).ws("return 1;");
 		o.ws("\n").wind(2).ws("}");
 		o.ws("\n").wind(1).ws("}");
 		o.ws("\n").wind(1).ws("if (list != NULL) {");
