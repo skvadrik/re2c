@@ -64,7 +64,7 @@ yy9:
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	if (yych <= 0x00) {
-		yyt3 = yyt2;
+		yyt3 = yyt5;
 		yyt4 = yyt5 = NULL;
 		yyt2 = YYCURSOR;
 		goto yy2;
@@ -78,9 +78,9 @@ yy9:
 		yyt4 = YYCURSOR;
 		goto yy2;
 	}
-	yyt4 = yyt2;
-	yyt5 = yyt3;
 	yyt2 = yyt3;
+	yyt4 = yyt5;
+	yyt5 = yyt3;
 	goto yy9;
 }
 
