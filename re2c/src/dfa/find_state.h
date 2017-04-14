@@ -59,6 +59,10 @@ private:
 	size_t *x2t;
 	uint32_t *indeg;
 
+	tcmd_t **pacts;
+	tcmd_t **actnext;
+	tagver_t *actlhs;
+
 public:
 	kernels_t(Tagpool &tagpool, tcpool_t &tcpool, const std::vector<Tag> &tags);
 	~kernels_t();
@@ -67,7 +71,6 @@ public:
 	const kernel_t* operator[](size_t idx) const;
 	result_t insert(const closure_t &clos, tcmd_t *acts, tagver_t maxver);
 	bool operator()(const kernel_t *k1, const kernel_t *k2);
-	tcmd_t *actions(tcmd_t *save);
 	FORBID_COPY(kernels_t);
 };
 

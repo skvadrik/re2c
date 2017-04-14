@@ -87,6 +87,29 @@ struct kernel_eq_t
  * identical lookahead tags.
  */
 
+/* note [save(X), copy(Y,X) optimization]
+ *
+ * save(X) command followed by a copy(Y,X) command can be optimized to
+ * save(Y). This helps reduce the number commands and versions (new version
+ * X is gone), but what is more important, it allows to put copy commands
+ * in front of save commands. This order is necessary when it comes to
+ * fallback commands.
+ *
+ * Note that in case of injective mapping there may be more than one copy
+ * command matching the same save command: save(X), copy(Y,X), copy(Z,X).
+ * In this case save command must be replicated for each copy command:
+ * save(Y), save(Z).
+ *
+ * For each save(X) command there must be at least one copy(Y,X) command
+ * (exactly one case of bijective mapping). This is because X version in
+ * save(X) command must be a new version which cannot occur in the older
+ * DFA state. Thus all save commands are transformed (maybe replicated) by
+ * copy commands, and some copy commands are erased by save commands.
+ *
+ * This optimization is applied after checking priority violation, so it
+ * cannot affect the check.
+*/
+
 bool kernels_t::operator()(const kernel_t *k1, const kernel_t *k2)
 {
 	// check that kernel sizes, NFA states and orders coincide
@@ -125,13 +148,57 @@ bool kernels_t::operator()(const kernel_t *k1, const kernel_t *k2)
 		}
 	}
 
-	// forbid 2-cycles 'x = y; y = x;': to avoid temporary variables
-	for (tagver_t x = -max; x < max; ++x) {
-		const tagver_t y = x2y[x];
-		if (x != y && x2y[y] == x) return false;
+	// we have bijective mapping; now try to create list of commands
+	tcmd_t *a, **pa, *copy = NULL;
+
+	// backup 'save' commands: if topsort finds cycles, this mapping
+	// will be rejected and we'll have to revert all changes
+	size_t nact = 0;
+	for (a = *pacts; a; a = a->next) {
+		actnext[nact] = a;
+		actlhs[nact] = a->lhs;
+		++nact;
 	}
 
-	return true;
+	// fix LHS of 'save' commands to reuse old version
+	// see note [save(X), copy(Y,X) optimization]
+	for (a = *pacts; a; a = a->next) {
+		const tagver_t
+			y = a->lhs * (a->history[0] == TAGVER_BOTTOM ? -1 : 1),
+			x = y2x[y];
+		a->lhs = abs(x);
+		y2x[y] = x2y[x] = TAGVER_ZERO;
+	}
+
+	// create 'copy' commands
+	for (tagver_t x = -max; x < max; ++x) {
+		const tagver_t y = x2y[x], ax = abs(x), ay = abs(y);
+		if (y != TAGVER_ZERO && x != y && !fixed(tags[x2t[x]])) {
+			assert(ax != ay);
+			copy = tcpool.make_copy(copy, ax, ay);
+		}
+	}
+
+	// join 'copy' and 'save' commands
+	for (pa = &copy; (a = *pa); pa = &a->next);
+	*pa = *pacts;
+	*pacts = copy;
+
+	// see note [topological ordering of copy commands]
+	const bool acyclic = tcmd_t::topsort(pacts, indeg);
+
+	// in case of cycles restore 'save' commands and fail
+	if (!acyclic) {
+		pa = pacts;
+		for (size_t i = 0; i < nact; ++i) {
+			*pa = a = actnext[i];
+			a->lhs = actlhs[i];
+			pa = &a->next;
+		}
+		*pa = NULL;
+	}
+
+	return acyclic;
 }
 
 kernels_t::kernels_t(Tagpool &tagp, tcpool_t &tcp, const std::vector<Tag> &ts)
@@ -150,6 +217,10 @@ kernels_t::kernels_t(Tagpool &tagp, tcpool_t &tcp, const std::vector<Tag> &ts)
 	, y2x(NULL)
 	, x2t(NULL)
 	, indeg(NULL)
+
+	, pacts(NULL)
+	, actnext(NULL)
+	, actlhs(NULL)
 {}
 
 kernels_t::~kernels_t()
@@ -181,19 +252,20 @@ void kernels_t::init(tagver_t v, size_t nkern)
 			m = 2 * n + 1,
 			sz_x2y = 2 * m * sizeof(tagver_t),
 			sz_x2t = m * sizeof(size_t),
+			sz_actnext = n * sizeof(tcmd_t*),
+			sz_actlhs = n * sizeof(tagver_t),
 			sz_indeg = n * sizeof(uint32_t);
 		delete[] mem;
-		mem = new char[sz_x2y + sz_x2t + sz_indeg];
+		mem = new char[sz_x2y + sz_x2t + sz_actnext + sz_actlhs + sz_indeg];
 
 		// point to the center (zero index) of each buffer
 		// indexes in range [-N .. N] must be valid, where N is capacity
-		x2y   = reinterpret_cast<tagver_t*>(mem) + cap;
-		y2x   = x2y + m;
-		x2t   = reinterpret_cast<size_t*>(mem + sz_x2y) + cap;
-		indeg = reinterpret_cast<uint32_t*>(mem + sz_x2y + sz_x2t);
-
-		// see note [topological ordering of copy commands]
-		memset(indeg, 0, sz_indeg);
+		x2y     = reinterpret_cast<tagver_t*>(mem) + cap;
+		y2x     = x2y + m;
+		x2t     = reinterpret_cast<size_t*>(mem + sz_x2y) + cap;
+		actnext = reinterpret_cast<tcmd_t**>(mem + sz_x2y + sz_x2t);
+		actlhs  = reinterpret_cast<tagver_t*>(mem + sz_x2y + sz_x2t + sz_actnext);
+		indeg   = reinterpret_cast<uint32_t*>(mem + sz_x2y + sz_x2t + sz_actnext + sz_actlhs);
 	}
 }
 
@@ -261,67 +333,13 @@ kernels_t::result_t kernels_t::insert(const closure_t &clos,
 
 	// else try to find mappable kernel
 	// see note [bijective mappings]
+	this->pacts = &acts;
 	x = lookup.find_with(hash, buffer, *this);
-	if (x != index_t::NIL) return result_t(x, actions(acts), false);
+	if (x != index_t::NIL) return result_t(x, acts, false);
 
 	// otherwise add new kernel
 	x = lookup.push(hash, kernel_t::copy(*buffer));
 	return result_t(x, acts, true);
-}
-
-/* note [save(X), copy(Y,X) optimization]
- *
- * save(X) command followed by a copy(Y,X) command can be optimized to
- * save(Y). This helps reduce the number commands and versions (new version
- * X is gone), but what is more important, it allows to put copy commands
- * in front of save commands. This order is necessary when it comes to
- * fallback commands.
- *
- * Note that in case of injective mapping there may be more than one copy
- * command matching the same save command: save(X), copy(Y,X), copy(Z,X).
- * In this case save command must be replicated for each copy command:
- * save(Y), save(Z).
- *
- * For each save(X) command there must be at least one copy(Y,X) command
- * (exactly one case of bijective mapping). This is because X version in
- * save(X) command must be a new version which cannot occur in the older
- * DFA state. Thus all save commands are transformed (maybe replicated) by
- * copy commands, and some copy commands are erased by save commands.
- *
- * This optimization is applied after checking priority violation, so it
- * cannot affect the check.
-*/
-
-tcmd_t *kernels_t::actions(tcmd_t *acts)
-{
-	tcmd_t *copy = NULL, *a, **pa;
-
-	// fix LHS of 'save' commands to reuse old version
-	// see note [save(X), copy(Y,X) optimization]
-	for (a = acts; a; a = a->next) {
-		const tagver_t
-			y = a->lhs * (a->history[0] == TAGVER_BOTTOM ? -1 : 1),
-			x = y2x[y];
-		a->lhs = abs(x);
-		y2x[y] = x2y[x] = TAGVER_ZERO;
-	}
-
-	for (tagver_t x = -max; x < max; ++x) {
-		const tagver_t y = x2y[x], ax = abs(x), ay = abs(y);
-		if (y != TAGVER_ZERO && x != y && !fixed(tags[x2t[x]])) {
-			assert(ax != ay);
-			copy = tcpool.make_copy(copy, ax, ay);
-		}
-	}
-
-	// join 'copy' and 'save' commands
-	for (pa = &copy; *pa; pa = &(*pa)->next);
-	*pa = acts;
-
-	// see note [topological ordering of copy commands]
-	tcmd_t::topsort(&copy, indeg);
-
-	return copy;
 }
 
 static tcmd_t *finalizer(const clos_t &clos, size_t ridx,

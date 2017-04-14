@@ -67,11 +67,12 @@ bool tcmd_t::isadd(const tcmd_t *x)
 	return x->rhs != TAGVER_ZERO && x->history[0] != TAGVER_ZERO;
 }
 
-void tcmd_t::topsort(tcmd_t **phead, uint32_t *indeg)
+bool tcmd_t::topsort(tcmd_t **phead, uint32_t *indeg)
 {
 	tcmd_t
 		*x0 = *phead, **px, *x,
 		*y0 = NULL, **py, **py1;
+	bool acyclic = true;
 
 	// initialize in-degree
 	for (x = x0; x; x = x->next) {
@@ -100,11 +101,15 @@ void tcmd_t::topsort(tcmd_t **phead, uint32_t *indeg)
 		*px = NULL;
 
 		// only cycles left
-		if (py == py1) break;
+		if (py == py1) {
+			acyclic = false;
+			break;
+		}
 	}
 	*py = x0;
 
 	*phead = y0;
+	return acyclic;
 }
 
 tcpool_t::tcpool_t()
