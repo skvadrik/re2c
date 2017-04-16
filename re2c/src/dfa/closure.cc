@@ -172,6 +172,8 @@ bool better(const clos_t &c1, const clos_t &c2,
 
 		// open/close capture tag: maximize (on lookahead and versions);
 		// if either one is bottom, fallback to leftmost disambiguation
+		// we don't use orders for minimize/maximize, because they are
+		// already used for leftmost
 		} else if (capture(tag)) {
 			x = tagtree.elem(l1[t]);
 			y = tagtree.elem(l2[t]);
