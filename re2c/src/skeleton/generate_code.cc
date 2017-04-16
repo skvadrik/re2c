@@ -386,7 +386,7 @@ void emit_start(OutputFile &o, size_t maxfill, const std::string &name,
 		var1 = tagvars.begin(),
 		var2 = tagvars.end();
 	if (var1 != var2) {
-		o.ws("\n").wind(2).ws("YYCTYPE *").wstring(*var1);
+		o.ws("\n").wind(2).ws("const YYCTYPE *").wstring(*var1);
 		for (++var1; var1 != var2; ++var1) {
 			o.ws(", *").wstring(*var1);
 		}
