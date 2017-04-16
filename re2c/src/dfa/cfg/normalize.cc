@@ -17,7 +17,7 @@ template<typename cmd_t> void normalize(cmd_t *cmd);
  * For that reason all commands are normalized.
  */
 
-static void normalize(tcmd_t *s, tcmd_t *e);
+static tcmd_t **normalize(tcmd_t **ps, tcmd_t *e);
 
 void cfg_t::normalization(cfg_t &cfg)
 {
@@ -33,20 +33,19 @@ void cfg_t::normalization(cfg_t &cfg)
 		// Therefore we split the list in continuous sublists of
 		// 'copy', 'save without history' and 'save with history'
 		// commands and normalize each sublist in a proper way.
-		tcmd_t **px, **py, *x;
+		tcmd_t **px, *x;
 		for (px = &b->cmd; (x = *px);) {
 			if (tcmd_t::iscopy(x)) {
-				for (py = px; (x = *px) && tcmd_t::iscopy(x); px = &x->next);
-				*px = NULL;
-				normalize(*py, NULL);
-				tcmd_t::topsort(py, indeg);
-				for (px = py; *px; px = &(*px)->next);
-				*px = x;
+				for (x = *px; x && tcmd_t::iscopy(x); x = x->next);
+				*normalize(px, x) = NULL; // topsort expects NULL terminator
+				tcmd_t::topsort(px, indeg);
+				for (; *px; px = &(*px)->next); // find tail
+				*px = x; // restore tail
 			} else if (tcmd_t::isset(x)) {
-				for (py = px; (x = *px) && tcmd_t::isset(x); px = &x->next);
-				normalize(*py, x);
+				for (x = *px; x && tcmd_t::isset(x); x = x->next);
+				px = normalize(px, x);
 			} else {
-				for (py = px; (x = *px) && tcmd_t::isadd(x); px = &x->next);
+				for (; (x = *px) && tcmd_t::isadd(x); px = &x->next);
 				// don't normalize, histories may have complex dependencies
 			}
 		}
@@ -83,10 +82,10 @@ static bool less(const tcmd_t &x, const tcmd_t &y)
 	return false;
 }
 
-void normalize(tcmd_t *s, tcmd_t *e)
+tcmd_t **normalize(tcmd_t **ps, tcmd_t *e)
 {
 	// sort lexicographically
-	for (tcmd_t *p = s; p != e; p = p->next) {
+	for (tcmd_t *p = *ps; p != e; p = p->next) {
 		for (tcmd_t *q = p->next; q != e; q = q->next) {
 			if (less(*q, *p)) {
 				swap(*p, *q);
@@ -95,7 +94,7 @@ void normalize(tcmd_t *s, tcmd_t *e)
 	}
 
 	// delete duplicates
-	for (tcmd_t *p = s; p != e;) {
+	for (tcmd_t *p = *ps; p != e;) {
 		tcmd_t *q = p->next;
 		if (q != e && tcmd_t::equal(*p, *q)) {
 			p->next = q->next;
@@ -103,6 +102,9 @@ void normalize(tcmd_t *s, tcmd_t *e)
 			p = q;
 		}
 	}
+
+	for (; *ps != e; ps = &(*ps)->next);
+	return ps;
 }
 
 } // namespace re2c
