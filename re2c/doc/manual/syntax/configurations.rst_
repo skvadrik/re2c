@@ -51,8 +51,8 @@
 
 ``re2c:yyfill:enable = 1;``
     Set this to zero to suppress the generation of ``YYFILL (n)``. When using this, be sure to verify that the generated
-    scanner does not read behind the end of your input, allowing such behavior might
-    introduce several security issues to your program.
+    scanner does not read beyond the available input, as allowing such behavior might
+    introduce severe security issues to your programs.
 
 ``re2c:yyfill:check = 1;``
     This can be set to 0 to suppress the generations of 
