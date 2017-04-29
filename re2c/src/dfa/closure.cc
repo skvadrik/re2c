@@ -24,7 +24,6 @@ tcmd_t *closure(closure_t &clos1, closure_t &clos2, Tagpool &tagpool,
 	// build tagged epsilon-closure of the given set of NFA states
 	clos2.clear();
 	if (shadow) shadow->clear();
-	tagpool.history.init();
 	for (clositer_t c = clos1.begin(); c != clos1.end(); ++c) {
 		closure_one(clos2, tagpool, *c, c->state, tags, shadow, rules);
 	}
@@ -94,7 +93,7 @@ void closure_one(closure_t &clos, Tagpool &tagpool, clos_t &c0,
 		case nfa_state_t::TAG:
 			tagtree.push(n->tag.info, n->tag.bottom ? TAGVER_BOTTOM : TAGVER_CURSOR);
 			closure_one(clos, tagpool, c0, n->tag.out, tags, shadow, rules);
-			tagtree.pop(n->tag.info);
+			tagtree.pop();
 			return;
 		case nfa_state_t::RAN:
 			for (; c != e && c->state != n; ++c);
@@ -110,7 +109,7 @@ void closure_one(closure_t &clos, Tagpool &tagpool, clos_t &c0,
 	}
 
 	clos_t c2 = {c0.origin, n, c0.tvers, c0.ttran,
-		tagpool.insert(tagtree.leaves()), c0.order, c0.index++};
+		tagtree.tail, c0.order, c0.index++};
 	if (c == e) {
 		clos.push_back(c2);
 	} else {
@@ -147,9 +146,10 @@ bool better(const clos_t &c1, const clos_t &c2,
 		&& c1.order == c2.order
 		&& c1.index == c2.index) return false;
 
+	const hidx_t
+		l1 = c1.tlook, l2 = c2.tlook,
+		t1 = c1.ttran, t2 = c2.ttran;
 	const tagver_t
-		*l1 = tagpool[c1.tlook], *l2 = tagpool[c2.tlook],
-		*t1 = tagpool[c1.ttran], *t2 = tagpool[c2.ttran],
 		*v1 = tagpool[c1.tvers], *v2 = tagpool[c2.tvers],
 		*o1 = tagpool[c1.order], *o2 = tagpool[c2.order];
 	tagver_t x, y;
@@ -164,7 +164,7 @@ bool better(const clos_t &c1, const clos_t &c2,
 			if (x < y) return false;
 			if (x > y) return true;
 
-			const int cmp = tagtree.compare_paths(l1[t], l2[t]);
+			const int cmp = tagtree.compare_orbits(l1, l2, t);
 			if (cmp < 0) return false;
 			if (cmp > 0) return true;
 
@@ -175,14 +175,14 @@ bool better(const clos_t &c1, const clos_t &c2,
 		// we don't use orders for minimize/maximize, because they are
 		// already used for leftmost
 		} else if (capture(tag)) {
-			x = tagtree.elem(l1[t]);
-			y = tagtree.elem(l2[t]);
+			x = tagtree.last(l1, t);
+			y = tagtree.last(l2, t);
 			if (x < 0 || y < 0) goto leftmost;
 			if (x > y) return false;
 			if (x < y) return true;
 
-			x = tagtree.elem(t1[t]);
-			y = tagtree.elem(t2[t]);
+			x = tagtree.last(t1, t);
+			y = tagtree.last(t2, t);
 			if (x < 0 || y < 0) goto leftmost;
 			if (x > y) return false;
 			if (x < y) return true;
@@ -232,7 +232,7 @@ void lower_lookahead_to_transition(closure_t &clos)
 {
 	for (clositer_t c = clos.begin(); c != clos.end(); ++c) {
 		c->ttran = c->tlook;
-		c->tlook = ZERO_TAGS;
+		c->tlook = HROOT;
 	}
 }
 
@@ -252,25 +252,26 @@ tcmd_t *generate_versions(closure_t &clos, const std::vector<Tag> &tags,
 	// normal transition, however absolute value should be unique
 	// among all versions of all tags)
 	for (c = b; c != e; ++c) {
-		const tagver_t
-			*ls = tagpool[c->tlook],
-			*us = tagpool[c->ttran],
-			*vs = tagpool[c->tvers];
+		const hidx_t l = c->tlook, h = c->ttran;
+		if (h == HROOT) continue;
+
+		const tagver_t *vs = tagpool[c->tvers];
 		for (size_t t = 0; t < ntag; ++t) {
 			const Tag &tag = tags[t];
-			const tagver_t u = us[t],
-				u0 = tagtree.elem(u),
-				l = tagtree.elem(ls[t]);
-			if (u0 == TAGVER_ZERO) continue;
-
-			const tagver_t h = history(tag) ? vs[t] : TAGVER_ZERO;
-			newver_t x = {t, h, u};
 			const tagver_t
-				n = (maxver + 1) * (u0 == TAGVER_BOTTOM ? -1 : 1),
+				h0 = tagtree.last(h, t),
+				l0 = tagtree.last(l, t);
+
+			if (h0 == TAGVER_ZERO) continue;
+
+			const tagver_t v = history(tag) ? vs[t] : TAGVER_ZERO;
+			newver_t x = {t, v, h};
+			const tagver_t
+				n = (maxver + 1) * (h0 == TAGVER_BOTTOM ? -1 : 1),
 				m = newvers.insert(std::make_pair(x, n)).first->second;
 			if (n == m) ++maxver;
 
-			if (!fixed(tag) && (l == TAGVER_ZERO || history(tag))) {
+			if (!fixed(tag) && (l0 == TAGVER_ZERO || history(tag))) {
 				newacts.insert(std::make_pair(x, m));
 			}
 		}
@@ -278,32 +279,31 @@ tcmd_t *generate_versions(closure_t &clos, const std::vector<Tag> &tags,
 
 	// actions
 	for (newvers_t::iterator i = newacts.begin(); i != newacts.end(); ++i) {
-		const tagver_t
-			m = i->second,
-			h = i->first.ver,
-			u = i->first.act;
-		if (history(tags[i->first.tag])) {
-			cmd = tcpool.make_add(cmd, abs(m), abs(h), u, tagtree);
+		const tagver_t m = i->second, v = i->first.base;
+		const hidx_t h = i->first.history;
+		const size_t t = i->first.tag;
+		if (history(tags[t])) {
+			cmd = tcpool.make_add(cmd, abs(m), abs(v), tagtree, h, t);
 		} else {
-			cmd = tcpool.make_set(cmd, abs(m), tagtree.elem(u));
+			cmd = tcpool.make_set(cmd, abs(m), tagtree.last(h, t));
 		}
 	}
 
 	// update tag versions in closure
 	for (c = b; c != e; ++c) {
-		if (c->ttran == ZERO_TAGS) continue;
-		const tagver_t
-			*us = tagpool[c->ttran],
-			*vs = tagpool[c->tvers];
+		const hidx_t h = c->ttran;
+		if (h == HROOT) continue;
+
+		const tagver_t *vs = tagpool[c->tvers];
 		for (size_t t = 0; t < ntag; ++t) {
-			const bool historic = history(tags[t]);
-			const tagver_t v = vs[t], u = us[t],
-				u0 = tagtree.elem(u),
-				h = historic ? v : TAGVER_ZERO;
-			if (u0 == TAGVER_ZERO) {
-				vers[t] = v;
+			const tagver_t
+				v0 = vs[t],
+				h0 = tagtree.last(h, t),
+				v = history(tags[t]) ? v : TAGVER_ZERO;
+			if (h0 == TAGVER_ZERO) {
+				vers[t] = v0;
 			} else {
-				newver_t x = {t, h, u};
+				newver_t x = {t, v, h};
 				vers[t] = newvers[x];
 			}
 		}
@@ -352,15 +352,16 @@ tcmd_t *generate_versions(closure_t &clos, const std::vector<Tag> &tags,
  * This part of the algorithm was invented by Christopher Kuklewicz.
  */
 
-typedef std::pair<tagver_t, tagver_t> key1_t;
+typedef std::pair<tagver_t, hidx_t> key1_t;
 struct cmp_t
 {
 	tagtree_t &tree;
+	size_t tag;
 	bool operator()(const key1_t &x, const key1_t &y)
 	{
 		if (x.first < y.first) return true;
 		if (x.first > y.first) return false;
-		return tree.compare_paths(x.second, y.second) < 0;
+		return tree.compare_orbits(x.second, y.second, tag) < 0;
 	}
 };
 
@@ -371,12 +372,6 @@ void orders(closure_t &clos, Tagpool &tagpool, const std::vector<Tag> &tags)
 	const size_t
 		ntag = tagpool.ntags,
 		nclos = clos.size();
-
-	const cmp_t cmp = {tagtree};
-	std::set<key1_t, cmp_t> keys1(cmp);
-
-	typedef std::pair<tagver_t, size_t> key2_t;
-	std::set<key2_t> keys2;
 
 	size_t &maxclos = tagpool.maxclos;
 	tagver_t *&orders = tagpool.orders, *o;
@@ -391,13 +386,14 @@ void orders(closure_t &clos, Tagpool &tagpool, const std::vector<Tag> &tags)
 
 		// see note [POSIX disambiguation]
 		if (orbit(tags[t])) {
-			keys1.clear();
+			const cmp_t cmp = {tagtree, t};
+			std::set<key1_t, cmp_t> keys1(cmp);
 			for (c = b; c != e; ++c) {
-				keys1.insert(key1_t(tagpool[c->order][t], tagpool[c->tlook][t]));
+				keys1.insert(key1_t(tagpool[c->order][t], c->tlook));
 			}
 			for (c = b; c != e; ++c, o += ntag) {
 				const ptrdiff_t d = std::distance(keys1.begin(),
-					keys1.find(key1_t(tagpool[c->order][t], tagpool[c->tlook][t])));
+					keys1.find(key1_t(tagpool[c->order][t], c->tlook)));
 				o[t] = static_cast<tagver_t>(d);
 			}
 
@@ -405,6 +401,8 @@ void orders(closure_t &clos, Tagpool &tagpool, const std::vector<Tag> &tags)
 		// equals position of this item in leftmost NFA traversal
 		// (it's the same for all tags)
 		} else {
+			typedef std::pair<tagver_t, size_t> key2_t;
+			std::set<key2_t> keys2;
 			for (c = b; c != e; ++c) {
 				keys2.insert(key2_t(tagpool[c->order][t], c->index));
 			}

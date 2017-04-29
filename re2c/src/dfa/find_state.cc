@@ -10,7 +10,7 @@ kernel_t::kernel_t(size_t n)
 	: size(n)
 	, state(new nfa_state_t*[size])
 	, tvers(new size_t[size])
-	, tlook(new size_t[size])
+	, tlook(new hidx_t[size])
 	, order(new size_t[size])
 {}
 
@@ -20,7 +20,7 @@ kernel_t *kernel_t::copy(const kernel_t &k)
 	kernel_t *kcopy = new kernel_t(n);
 	memcpy(kcopy->state, k.state, n * sizeof(void*));
 	memcpy(kcopy->tvers, k.tvers, n * sizeof(size_t));
-	memcpy(kcopy->tlook, k.tlook, n * sizeof(size_t));
+	memcpy(kcopy->tlook, k.tlook, n * sizeof(hidx_t));
 	memcpy(kcopy->order, k.order, n * sizeof(size_t));
 	return kcopy;
 }
@@ -36,22 +36,19 @@ kernel_t::~kernel_t()
 static bool equal_lookahead_tags(const kernel_t *x, const kernel_t *y,
 	Tagpool &tagpool, const std::vector<Tag> &tags)
 {
-	if (memcmp(x->tlook, y->tlook, x->size * sizeof(size_t)) == 0) {
+	if (memcmp(x->tlook, y->tlook, x->size * sizeof(hidx_t)) == 0) {
 		return true;
 	}
 	tagtree_t &h = tagpool.history;
 	for (size_t i = 0; i < x->size; ++i) {
-		const tagver_t
-			*xls = tagpool[x->tlook[i]],
-			*yls = tagpool[y->tlook[i]];
+		const hidx_t xl = x->tlook[i], yl = y->tlook[i];
 		for (size_t t = 0; t < tagpool.ntags; ++t) {
-			const tagver_t xl = xls[t], yl = yls[t];
 			if (history(tags[t])) {
-				// compare whole histories
-				if (h.compare_paths(xl, yl) != 0) return false;
+				// compare subhistories
+				if (h.compare_actions(xl, yl, t) != 0) return false;
 			} else {
 				// compare only the last tags
-				if (h.elem(xl) != h.elem(yl)) return false;
+				if (h.last(xl, t) != h.last(yl, t)) return false;
 			}
 		}
 	}
@@ -127,12 +124,12 @@ bool kernels_t::operator()(const kernel_t *k1, const kernel_t *k2)
 	for (size_t i = 0; i < k1->size; ++i) {
 		const tagver_t
 			*xv = tagpool[k1->tvers[i]],
-			*yv = tagpool[k2->tvers[i]],
-			*xl = tagpool[k1->tlook[i]];
+			*yv = tagpool[k2->tvers[i]];
+		const hidx_t xl = k1->tlook[i];
 
 		for (size_t t = 0; t < ntag; ++t) {
 			// see note [mapping ignores items with lookahead tags]
-			if (tagpool.history.elem(xl[t]) != TAGVER_ZERO
+			if (tagpool.history.last(xl, t) != TAGVER_ZERO
 				&& !history(tags[t])) continue;
 
 			const tagver_t x = xv[t], y = yv[t];
@@ -347,19 +344,18 @@ static tcmd_t *finalizer(const clos_t &clos, size_t ridx,
 {
 	tcpool_t &tcpool = dfa.tcpool;
 	const Rule &rule = dfa.rules[ridx];
-	const tagver_t
-		*look = tagpool[clos.tlook],
-		*vers = tagpool[clos.tvers];
+	const tagver_t *vers = tagpool[clos.tvers];
+	const tagtree_t &hist = tagpool.history;
+	const hidx_t look = clos.tlook;
 	tcmd_t *copy = NULL, *save = NULL, **p;
 
 	for (size_t t = rule.ltag; t < rule.htag; ++t) {
-		const bool historic = history(tags[t]);
-		const tagver_t v = abs(vers[t]),
-			l = tagpool.history.elem(look[t]);
+		const Tag &tag = tags[t];
+		const tagver_t v = abs(vers[t]), l = hist.last(look, t);
 		tagver_t &f = dfa.finvers[t];
 
 		// don't waste versions on fixed tags
-		if (fixed(dfa.tags[t])) continue;
+		if (fixed(tag)) continue;
 
 		// pick a fresh version: final version is also used as fallback one
 		if (f == TAGVER_ZERO) {
@@ -368,8 +364,8 @@ static tcmd_t *finalizer(const clos_t &clos, size_t ridx,
 
 		if (l == TAGVER_ZERO) {
 			copy = tcpool.make_copy(copy, f, v);
-		} else if (historic) {
-			save = tcpool.make_add(save, f, v, look[t], tagpool.history);
+		} else if (history(tag)) {
+			save = tcpool.make_add(save, f, v, hist, look, t);
 		} else {
 			save = tcpool.make_set(save, f, l);
 		}

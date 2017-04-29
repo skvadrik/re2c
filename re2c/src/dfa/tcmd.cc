@@ -143,19 +143,25 @@ tcmd_t *tcpool_t::make_set(tcmd_t *next, tagver_t lhs, tagver_t set)
 }
 
 tcmd_t *tcpool_t::make_add(tcmd_t *next, tagver_t lhs, tagver_t rhs,
-	tagver_t hidx, const tagtree_t &history)
+	const tagtree_t &history, hidx_t hidx, size_t tag)
 {
 	size_t hlen = 0;
-	for (tagver_t i = hidx; i != -1; i = history.pred(i)) ++hlen;
+	for (hidx_t i = hidx; i != HROOT; i = history.pred(i)) {
+		if (history.tag(i) == tag) ++hlen;
+	}
 
-	const size_t size = sizeof(tcmd_t) + (hlen - 1) * sizeof(tagver_t);
+	const size_t size = sizeof(tcmd_t) + hlen * sizeof(tagver_t);
 	tcmd_t *p = static_cast<tcmd_t*>(alc.alloc(size));
 	p->next = next;
 	p->lhs = lhs;
 	p->rhs = rhs;
-	for (tagver_t i = hidx, *h = p->history; i != -1; i = history.pred(i)) {
-		*h++ = history.elem(i);
+	tagver_t *h = p->history;
+	for (hidx_t i = hidx; i != HROOT; i = history.pred(i)) {
+		if (history.tag(i) == tag) {
+			*h++ = history.elem(i);
+		}
 	}
+	*h++ = TAGVER_ZERO;
 	return p;
 }
 

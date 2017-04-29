@@ -9,35 +9,35 @@
 namespace re2c
 {
 
-class tagtree_t
+typedef uint32_t hidx_t;
+
+static const hidx_t HROOT = ~0u;
+
+struct tagtree_t
 {
 	// the whole tree of tags found by the epsilon-closure
 	// (a bunch of separate subtrees for each tag with common root)
 	struct node_t {
-		tagver_t pred;
+		hidx_t pred;
 		tagver_t elem;
+		size_t tag;
 	};
 	std::vector<node_t> nodes;
+	hidx_t tail;
 
 	// reconstruct paths for comparison
 	std::vector<tagver_t> path1;
 	std::vector<tagver_t> path2;
 
-	// set of leaves (one leaf per tag) corresponding to
-	// current deep-first search path in the epsilon-closure
-	size_t ntag;
-	tagver_t *tags;
-
-public:
-	explicit tagtree_t(size_t n);
-	~tagtree_t();
-	void init();
-	tagver_t pred(tagver_t i) const;
-	tagver_t elem(tagver_t i) const;
-	const tagver_t *leaves() const;
+	tagtree_t();
+	hidx_t pred(hidx_t i) const;
+	tagver_t elem(hidx_t i) const;
+	size_t tag(hidx_t i) const;
 	void push(size_t t, tagver_t v);
-	void pop(size_t t);
-	int32_t compare_paths(tagver_t x, tagver_t y);
+	void pop();
+	int32_t compare_actions(hidx_t x, hidx_t y, size_t t);
+	int32_t compare_orbits(hidx_t x, hidx_t y, size_t t);
+	tagver_t last(hidx_t i, size_t t) const;
 	FORBID_COPY(tagtree_t);
 };
 

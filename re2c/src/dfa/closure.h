@@ -15,8 +15,8 @@ struct clos_t
 	nfa_state_t *origin; // for debug only
 	nfa_state_t *state;
 	size_t tvers; // vector of tag versions (including lookahead tags)
-	size_t ttran; // vector of transition tags
-	size_t tlook; // vector of lookahead tags
+	hidx_t ttran; // history of transition tags
+	hidx_t tlook; // history of lookahead tags
 	size_t order; // vector of orders
 	size_t index; // leftmost order in NFA traversal
 
@@ -30,8 +30,8 @@ typedef closure_t::const_iterator cclositer_t;
 struct newver_t
 {
 	size_t tag;
-	tagver_t ver;
-	tagver_t act;
+	tagver_t base;
+	hidx_t history;
 };
 
 struct newver_cmp_t
@@ -42,10 +42,10 @@ struct newver_cmp_t
 		if (x.tag < y.tag) return true;
 		if (x.tag > y.tag) return false;
 
-		if (x.ver < y.ver) return true;
-		if (x.ver > y.ver) return false;
+		if (x.base < y.base) return true;
+		if (x.base > y.base) return false;
 
-		return history.compare_paths(x.act, y.act) < 0;
+		return history.compare_actions(x.history, y.history, x.tag) < 0;
 	}
 };
 
