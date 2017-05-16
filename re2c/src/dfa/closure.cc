@@ -268,23 +268,27 @@ bool better(const clos_t &c1, const clos_t &c2,
 			assert(v1[t] == v2[t]);
 
 		// open/close capture tag: maximize (on lookahead and versions);
-		// if either one is bottom, fallback to leftmost disambiguation
+		// if one is bottom and the other is not, fallback to leftmost
+		// if both are bottoms, relay comparison to less prioritized tags
 		// we don't use orders for minimize/maximize, because they are
 		// already used for leftmost
 		} else if (capture(tag)) {
 			x = tagtree.last(l1, t);
 			y = tagtree.last(l2, t);
-			if (x < 0 || y < 0) goto leftmost;
+			if (x == TAGVER_BOTTOM && y == TAGVER_BOTTOM) continue;
+			if (x == TAGVER_BOTTOM || y == TAGVER_BOTTOM) goto leftmost;
 			if (x > y) return false;
 			if (x < y) return true;
 
 			x = tagtree.last(t1, t);
 			y = tagtree.last(t2, t);
-			if (x < 0 || y < 0) goto leftmost;
+			if (x == TAGVER_BOTTOM && y == TAGVER_BOTTOM) continue;
+			if (x == TAGVER_BOTTOM || y == TAGVER_BOTTOM) goto leftmost;
 			if (x > y) return false;
 			if (x < y) return true;
 
 			x = v1[t]; y = v2[t];
+			if (x < 0 && y < 0) continue;
 			if (x < 0 || y < 0) goto leftmost;
 			if (x > y) return false;
 			if (x < y) return true;
