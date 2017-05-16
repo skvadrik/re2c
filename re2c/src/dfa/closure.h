@@ -14,13 +14,14 @@ struct clos_t
 {
 	nfa_state_t *origin; // for debug only
 	nfa_state_t *state;
+	size_t order; // vector of orders
 	size_t tvers; // vector of tag versions (including lookahead tags)
 	hidx_t ttran; // history of transition tags
 	hidx_t tlook; // history of lookahead tags
-	size_t order; // vector of orders
-	size_t index; // leftmost order in NFA traversal
+	hidx_t index; // history of left/right alternatives in NFA traversal
 
 	static inline bool fin(const clos_t &c) { return c.state->type == nfa_state_t::FIN; }
+	static inline bool ran(const clos_t &c) { return c.state->type == nfa_state_t::RAN; }
 };
 
 typedef std::vector<clos_t> closure_t;
@@ -45,7 +46,7 @@ struct newver_cmp_t
 		if (x.base < y.base) return true;
 		if (x.base > y.base) return false;
 
-		return history.compare_actions(x.history, y.history, x.tag) < 0;
+		return history.compare_full(x.history, y.history, x.tag) < 0;
 	}
 };
 

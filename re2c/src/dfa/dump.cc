@@ -50,7 +50,7 @@ static void dump_history(const dfa_t &dfa, const tagtree_t &h, hidx_t i)
 
 	const Tag &t = dfa.tags[h.tag(i)];
 	const tagver_t v = h.elem(i);
-	if (v == TAGVER_BOTTOM) fprintf(stderr, "<O>");
+	if (v == TAGVER_BOTTOM) fprintf(stderr, "-");
 	if (capture(t)) {
 		fprintf(stderr, "%u_", (uint32_t)t.ncap);
 	} else if (trailing(t)) {
@@ -58,7 +58,6 @@ static void dump_history(const dfa_t &dfa, const tagtree_t &h, hidx_t i)
 	} else {
 		fprintf(stderr, "%s", t.name->c_str());
 	}
-	if (v == TAGVER_BOTTOM) fprintf(stderr, "</O>");
 	fprintf(stderr, " ");
 }
 
@@ -73,6 +72,7 @@ void dump_dfa_t::closure_tags(cclositer_t c)
 
 	for (size_t t = 0; t < ntag; ++t) {
 		fprintf(stderr, " %s%d", tagname(dfa.tags[t]), abs(vers[t]));
+		fprintf(stderr, "[%d]", tagpool[c->order][t]);
 	}
 
 	if (l != HROOT) {

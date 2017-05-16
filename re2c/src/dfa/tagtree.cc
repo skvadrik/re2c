@@ -6,7 +6,7 @@
 namespace re2c
 {
 
-tagtree_t::tagtree_t(): nodes(), tail(HROOT), path1(), path2() {}
+tagtree_t::tagtree_t(): nodes(), path1(), path2() {}
 
 tagver_t tagtree_t::elem(hidx_t i) const { return nodes[i].elem; }
 
@@ -14,22 +14,15 @@ hidx_t tagtree_t::pred(hidx_t i) const { return nodes[i].pred; }
 
 size_t tagtree_t::tag(hidx_t i) const { return nodes[i].tag; }
 
-void tagtree_t::push(size_t t, tagver_t v)
+hidx_t tagtree_t::push(hidx_t i, size_t t, tagver_t v)
 {
-	node_t x = {tail, v, t};
+	node_t x = {i, v, t};
 	nodes.push_back(x);
-	tail = static_cast<hidx_t>(nodes.size() - 1);
-}
-
-void tagtree_t::pop()
-{
-	// don't destroy the leaf itself, just update pointer to current leaf
-	// (pointer to the the old leaf is stored in one of the closure items)
-	tail = pred(tail);
+	return static_cast<hidx_t>(nodes.size() - 1);
 }
 
 // cut out subhistory of this tag (just skip all other tags)
-static void subhistory(const tagtree_t &history,
+static void full_subhistory(const tagtree_t &history,
 	std::vector<tagver_t> &path, hidx_t idx, size_t tag)
 {
 	path.clear();
@@ -40,27 +33,18 @@ static void subhistory(const tagtree_t &history,
 	}
 }
 
-// cut out a list of subhistories of this tag separated by tags
-// with higher priority (in POSIX they correspond to outer captures)
-static void subhistories(const tagtree_t &history,
+// the last subhistory of this tag: it begins at the first occurence
+// and ends at the next occurence of tag with higher priority (in POSIX
+// they correspond to outer captures) or when the whole history ends
+static void last_subhistory(const tagtree_t &history,
 	std::vector<tagver_t> &path, hidx_t idx, size_t tag)
 {
-	// 0 -- bottom, 1 -- cursor, 2 -- subhistory delimiter, so that
-	// short history which is a prefix of a longer history dominates
 	path.clear();
-	for (hidx_t i = idx;;) {
-
-		// subhistory begins at the next occurence of this tag
-		for (; i != HROOT && history.tag(i) != tag; i = history.pred(i));
-		if (i == HROOT) break;
-		path.push_back(2);
-
-		// subhistory ends at the next occurence of tag with
-		// higher priority or when the whole history ends
-		for (; i != HROOT && history.tag(i) >= tag; i = history.pred(i)) {
-			// skip tags with lower priority
-			if (history.tag(i) > tag) continue;
-			path.push_back(history.elem(i) == TAGVER_CURSOR ? 1 : 0);
+	hidx_t i = idx;
+	for (; i != HROOT && history.tag(i) != tag; i = history.pred(i));
+	for (; i != HROOT && history.tag(i) >= tag; i = history.pred(i)) {
+		if (history.tag(i) == tag) {
+			path.push_back(history.elem(i));
 		}
 	}
 }
@@ -85,17 +69,17 @@ static int32_t compare_reversed(
 	return 0;
 }
 
-int32_t tagtree_t::compare_actions(hidx_t x, hidx_t y, size_t t)
+int32_t tagtree_t::compare_full(hidx_t x, hidx_t y, size_t t)
 {
-	subhistory(*this, path1, x, t);
-	subhistory(*this, path2, y, t);
+	full_subhistory(*this, path1, x, t);
+	full_subhistory(*this, path2, y, t);
 	return compare_reversed(path1, path2);
 }
 
-int32_t tagtree_t::compare_orbits(hidx_t x, hidx_t y, size_t t)
+int32_t tagtree_t::compare_last(hidx_t x, hidx_t y, size_t t)
 {
-	subhistories(*this, path1, x, t);
-	subhistories(*this, path2, y, t);
+	last_subhistory(*this, path1, x, t);
+	last_subhistory(*this, path2, y, t);
 	return compare_reversed(path1, path2);
 }
 

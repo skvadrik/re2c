@@ -7,8 +7,8 @@
 namespace re2c
 {
 
-static void closure_one(closure_t &clos, Tagpool &tagpool, clos_t &c0,
-	nfa_state_t *n, const std::vector<Tag> &tags, closure_t *shadow, std::valarray<Rule> &rules);
+static void raw_closure(const closure_t &clos1, closure_t &clos, closure_t *shadow,
+	Tagpool &tagpool, const std::vector<Tag> &tags, std::valarray<Rule> &rules);
 static bool better(const clos_t &c1, const clos_t &c2, Tagpool &tagpool, const std::vector<Tag> &tags);
 static void lower_lookahead_to_transition(closure_t &clos);
 static tcmd_t *generate_versions(closure_t &clos, const std::vector<Tag> &tags,
@@ -22,11 +22,7 @@ tcmd_t *closure(closure_t &clos1, closure_t &clos2, Tagpool &tagpool,
 	const std::vector<Tag> &tags)
 {
 	// build tagged epsilon-closure of the given set of NFA states
-	clos2.clear();
-	if (shadow) shadow->clear();
-	for (clositer_t c = clos1.begin(); c != clos1.end(); ++c) {
-		closure_one(clos2, tagpool, *c, c->state, tags, shadow, rules);
-	}
+	raw_closure(clos1, clos2, shadow, tagpool, tags, rules);
 
 	orders(clos2, tagpool, tags);
 
@@ -73,49 +69,150 @@ bool cmpby_rule_state(const clos_t &x, const clos_t &y)
  * to leftmost strategy; orbit tags are compared by order and by tagged
  * epsilon-paths so that earlier iterations are maximized).
  */
-void closure_one(closure_t &clos, Tagpool &tagpool, clos_t &c0,
-	nfa_state_t *n, const std::vector<Tag> &tags, closure_t *shadow,
-	std::valarray<Rule> &rules)
-{
-	if (n->loop) return;
-	local_increment_t<uint8_t> _(n->loop);
 
-	tagtree_t &tagtree = tagpool.history;
-	clositer_t c = clos.begin(), e = clos.end();
-	switch (n->type) {
+static void indegree(nfa_state_t *s)
+{
+	++s->indeg;
+	++s->indeg_backup;
+	if (s->indeg > 1) return;
+	switch (s->type) {
 		case nfa_state_t::NIL:
-			closure_one(clos, tagpool, c0, n->nil.out, tags, shadow, rules);
-			return;
-		case nfa_state_t::ALT:
-			closure_one(clos, tagpool, c0, n->alt.out1, tags, shadow, rules);
-			closure_one(clos, tagpool, c0, n->alt.out2, tags, shadow, rules);
-			return;
-		case nfa_state_t::TAG:
-			tagtree.push(n->tag.info, n->tag.bottom ? TAGVER_BOTTOM : TAGVER_CURSOR);
-			closure_one(clos, tagpool, c0, n->tag.out, tags, shadow, rules);
-			tagtree.pop();
-			return;
-		case nfa_state_t::RAN:
-			for (; c != e && c->state != n; ++c);
+			indegree(s->nil.out);
 			break;
-		case nfa_state_t::FIN:
-			// see note [at most one final item per closure]
-			for (; c != e && c->state->type != nfa_state_t::FIN; ++c);
-			if (c != e && c->state != n) {
-				rules[n->rule].shadow.insert(rules[c->state->rule].code->fline);
-				return;
-			}
+		case nfa_state_t::ALT:
+			indegree(s->alt.out1);
+			indegree(s->alt.out2);
+			break;
+		case nfa_state_t::TAG:
+			indegree(s->tag.out);
+			break;
+		default:
 			break;
 	}
+}
 
-	clos_t c2 = {c0.origin, n, c0.tvers, c0.ttran,
-		tagtree.tail, c0.order, c0.index++};
+/*
+ * If there is an epsilon-loop through initial closure states X and Y,
+ * then in-degree of both X and Y in queue is non-zero; whichever of them
+ * is popped out of queue first (say, X) may lead to an epsilon-loop through
+ * Y back to X, reducing Y's in-degree before epsilon-path starting in Y is
+ * inspected. In such unfortunate cases we have to reinstate Y's original
+ * in-degree and repeat all the work.
+ *
+ * Paths with epsilon-loops will be terminated: by the time they are added
+ * to queue, the resulting closure must already contain a non-looping path
+ * for the same state, so the looping path must be compared to the old one.
+ * This comparison will favour non-looping path with both POSIX and leftmost
+ * policies. With leftmost non-looping history will dominate, since it is a
+ * prefix of looping history. With POSIX either histories are equal for all
+ * tags and there's no point in adding identical path to queue, or histories
+ * of some orbit tag are not equal and shorter orbit history dominates.
+ */
+static void enqueue(closure_t &todo, closure_t &done, closure_t *shadow,
+	clos_t x, Tagpool &tagpool, const std::vector<Tag> &tags)
+{
+	nfa_state_t *n = x.state;
+	clositer_t e, c;
+
+	if (n->indeg == 0) n->indeg = n->indeg_backup;
+	--n->indeg;
+
+	c = done.begin(); e = done.end();
+	for(; c != e && c->state != n; ++c);
 	if (c == e) {
-		clos.push_back(c2);
+		done.push_back(x);
+	} else if (better(*c, x, tagpool, tags)) {
+		if (shadow) shadow->push_back(*c);
+		*c = x;
 	} else {
-		clos_t &c1 = *c;
-		if (better(c1, c2, tagpool, tags)) std::swap(c1, c2);
-		if (shadow) shadow->push_back(c2);
+		if (shadow) shadow->push_back(x);
+		return;
+	}
+
+	c = todo.begin(); e = todo.end();
+	for(; c != e && c->state != n; ++c);
+	if (c == e) {
+		todo.push_back(x);
+	} else if (better(*c, x, tagpool, tags)) {
+		std::swap(*c, x);
+	}
+}
+
+void raw_closure(const closure_t &clos1, closure_t &done, closure_t *shadow,
+	Tagpool &tagpool, const std::vector<Tag> &tags, std::valarray<Rule> &rules)
+{
+	closure_t todo;
+	tagtree_t &history = tagpool.history;
+
+	// initialize in-degree of NFA states in this epsilon-closure
+	// (outer NFA transitions do not contribute to in-degree)
+	for (cclositer_t c = clos1.begin(); c != clos1.end(); ++c) {
+		indegree(c->state);
+	}
+
+	// enqueue all initial states
+	done.clear();
+	if (shadow) shadow->clear();
+	for (cclositer_t c = clos1.begin(); c != clos1.end(); ++c) {
+		enqueue(todo, done, shadow, *c, tagpool, tags);
+	}
+
+	while (!todo.empty()) {
+
+		// find state with the least in-degree and remove it from queue
+		clositer_t c = todo.begin(), e = todo.end(), c0 = c;
+		for (; c != e; ++c) {
+			if (c0->state->indeg == 0) break;
+			if (c0->state->indeg > c->state->indeg) c0 = c;
+		}
+		clos_t x = *c0;
+		*c0 = todo.back(); todo.pop_back(); // "quick" removal
+
+		// enqueue child NFA states
+		nfa_state_t *n = x.state;
+		switch (n->type) {
+			default: break;
+			case nfa_state_t::NIL:
+				x.state = n->nil.out;
+				enqueue(todo, done, shadow, x, tagpool, tags);
+				break;
+			case nfa_state_t::ALT:
+				x.state = n->alt.out1;
+				x.index = history.push(x.index, Tag::RIGHTMOST, 1);
+				enqueue(todo, done, shadow, x, tagpool, tags);
+				x.state = n->alt.out2;
+				x.index = history.push(x.index, Tag::RIGHTMOST, 0);
+				enqueue(todo, done, shadow, x, tagpool, tags);
+				break;
+			case nfa_state_t::TAG:
+				x.state = n->tag.out;
+				x.tlook = history.push(x.tlook, n->tag.info,
+					n->tag.bottom ? TAGVER_BOTTOM : TAGVER_CURSOR);
+				enqueue(todo, done, shadow, x, tagpool, tags);
+				break;
+		}
+	}
+
+	// reset in-degree to zero (before removing any states from closure)
+	for (clositer_t c = done.begin(); c != done.end(); ++c) {
+		c->state->indeg = c->state->indeg_backup = 0;
+	}
+
+	// drop "inner" states (non-final without outgoing non-epsilon transitions)
+	clositer_t b = done.begin(), e = done.end(), f;
+	f = std::partition(b, e, clos_t::ran);
+	e = std::partition(f, e, clos_t::fin);
+	done.resize(static_cast<size_t>(e - b));
+
+	// drop all final states except one; mark dropped rules as shadowed
+	// see note [at most one final item per closure]
+	if (e != f) {
+		std::sort(f, e, cmpby_rule_state);
+		const uint32_t l = rules[f->state->rule].code->fline;
+		for (clositer_t c = f; ++c < e;) {
+			rules[c->state->rule].shadow.insert(l);
+		}
+		done.resize(static_cast<size_t>(f - b) + 1);
 	}
 }
 
@@ -164,7 +261,7 @@ bool better(const clos_t &c1, const clos_t &c2,
 			if (x < y) return false;
 			if (x > y) return true;
 
-			const int cmp = tagtree.compare_orbits(l1, l2, t);
+			const int cmp = tagtree.compare_last(l1, l2, t);
 			if (cmp < 0) return false;
 			if (cmp > 0) return true;
 
@@ -199,9 +296,10 @@ bool better(const clos_t &c1, const clos_t &c2,
 			if (x < y) return false;
 			if (x > y) return true;
 
-			size_t i = c1.index, j = c2.index;
-			if (i < j) return false;
-			if (i > j) return true;
+			const int cmp = tagtree.compare_full(c1.index, c2.index, Tag::RIGHTMOST);
+			if (cmp < 0) return false;
+			if (cmp > 0) return true;
+
 			assert(false); // all indexes are different
 		}
 	}
@@ -352,16 +450,26 @@ tcmd_t *generate_versions(closure_t &clos, const std::vector<Tag> &tags,
  * This part of the algorithm was invented by Christopher Kuklewicz.
  */
 
-typedef std::pair<tagver_t, hidx_t> key1_t;
-struct cmp_t
+typedef std::pair<tagver_t, hidx_t> key_t;
+struct cmp_orbit_t
 {
 	tagtree_t &tree;
 	size_t tag;
-	bool operator()(const key1_t &x, const key1_t &y)
+	bool operator()(const key_t &x, const key_t &y)
 	{
 		if (x.first < y.first) return true;
 		if (x.first > y.first) return false;
-		return tree.compare_orbits(x.second, y.second, tag) < 0;
+		return tree.compare_last(x.second, y.second, tag) < 0;
+	}
+};
+struct cmp_leftmost_t
+{
+	tagtree_t &tree;
+	bool operator()(const key_t &x, const key_t &y)
+	{
+		if (x.first < y.first) return true;
+		if (x.first > y.first) return false;
+		return tree.compare_full(x.second, y.second, Tag::RIGHTMOST) < 0;
 	}
 };
 
@@ -386,14 +494,14 @@ void orders(closure_t &clos, Tagpool &tagpool, const std::vector<Tag> &tags)
 
 		// see note [POSIX disambiguation]
 		if (orbit(tags[t])) {
-			const cmp_t cmp = {tagtree, t};
-			std::set<key1_t, cmp_t> keys1(cmp);
+			const cmp_orbit_t cmp = {tagtree, t};
+			std::set<key_t, cmp_orbit_t> keys(cmp);
 			for (c = b; c != e; ++c) {
-				keys1.insert(key1_t(tagpool[c->order][t], c->tlook));
+				keys.insert(key_t(tagpool[c->order][t], c->tlook));
 			}
 			for (c = b; c != e; ++c, o += ntag) {
-				const ptrdiff_t d = std::distance(keys1.begin(),
-					keys1.find(key1_t(tagpool[c->order][t], c->tlook)));
+				const ptrdiff_t d = std::distance(keys.begin(),
+					keys.find(key_t(tagpool[c->order][t], c->tlook)));
 				o[t] = static_cast<tagver_t>(d);
 			}
 
@@ -401,14 +509,14 @@ void orders(closure_t &clos, Tagpool &tagpool, const std::vector<Tag> &tags)
 		// equals position of this item in leftmost NFA traversal
 		// (it's the same for all tags)
 		} else {
-			typedef std::pair<tagver_t, size_t> key2_t;
-			std::set<key2_t> keys2;
+			const cmp_leftmost_t cmp = {tagtree};
+			std::set<key_t, cmp_leftmost_t> keys(cmp);
 			for (c = b; c != e; ++c) {
-				keys2.insert(key2_t(tagpool[c->order][t], c->index));
+				keys.insert(key_t(tagpool[c->order][t], c->index));
 			}
 			for (c = b; c != e; ++c, o += ntag) {
-				const ptrdiff_t d = std::distance(keys2.begin(),
-					keys2.find(key2_t(tagpool[c->order][t], c->index)));
+				const ptrdiff_t d = std::distance(keys.begin(),
+					keys.find(key_t(tagpool[c->order][t], c->index)));
 				o[t] = static_cast<tagver_t>(d);
 			}
 		}
