@@ -54,7 +54,7 @@ typedef std::map<newver_t, tagver_t, newver_cmp_t> newvers_t;
 
 tcmd_t *closure(closure_t &clos1, closure_t &clos2, Tagpool &tagpool,
 	tcpool_t &tcpool, std::valarray<Rule> &rules, tagver_t &maxver,
-	newvers_t &newvers, bool lookahead, closure_t *shadow, const std::vector<Tag> &tags);
+	newvers_t &newvers, closure_t *shadow, const std::vector<Tag> &tags);
 
 } // namespace re2c
 

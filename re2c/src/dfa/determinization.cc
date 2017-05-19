@@ -61,15 +61,14 @@ dfa_t::dfa_t(const nfa_t &nfa, const opt_t *opts,
 	, tcmd0(NULL)
 	, tcid0(TCID0)
 {
-	const bool lookahead = opts->lookahead;
 	const size_t ntag = tags.size();
-	Tagpool tagpool(ntag);
+	Tagpool tagpool(opts, ntag);
 	kernels_t kernels(tagpool, tcpool, tags);
 	closure_t clos1, clos2;
 	newver_cmp_t newvers_cmp = {tagpool.history};
 	newvers_t newvers(newvers_cmp);
 	tcmd_t *acts;
-	dump_dfa_t dump(*this, tagpool, nfa, opts->dump_dfa_raw);
+	dump_dfa_t dump(*this, tagpool, nfa);
 
 	// all-zero tag configuration must have static number zero
 	assert(ZERO_TAGS == tagpool.insert_const(TAGVER_ZERO));
@@ -88,14 +87,14 @@ dfa_t::dfa_t(const nfa_t &nfa, const opt_t *opts,
 
 	clos_t c0 = {NULL, nfa.root, ZERO_TAGS, INITIAL_TAGS, HROOT, HROOT, HROOT};
 	clos1.push_back(c0);
-	acts = closure(clos1, clos2, tagpool, tcpool, rules, maxtagver, newvers, lookahead, dump.shadow, tags);
+	acts = closure(clos1, clos2, tagpool, tcpool, rules, maxtagver, newvers, dump.shadow, tags);
 	find_state(*this, dfa_t::NIL, 0/* any */, kernels, clos2, acts, dump);
 
 	for (size_t i = 0; i < kernels.size(); ++i) {
 		newvers.clear();
 		for (size_t c = 0; c < nchars; ++c) {
 			reach(kernels[i], clos1, charset[c]);
-			acts = closure(clos1, clos2, tagpool, tcpool, rules, maxtagver, newvers, lookahead, dump.shadow, tags);
+			acts = closure(clos1, clos2, tagpool, tcpool, rules, maxtagver, newvers, dump.shadow, tags);
 			find_state(*this, i, c, kernels, clos2, acts, dump);
 		}
 	}

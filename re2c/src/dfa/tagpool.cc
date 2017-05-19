@@ -18,8 +18,9 @@ struct eqtag_t
 	}
 };
 
-Tagpool::Tagpool(size_t n)
+Tagpool::Tagpool(const opt_t *o, size_t n)
 	: lookup()
+	, opts(o)
 	, ntags(n)
 	, buffer(new tagver_t[n])
 	, maxclos(0)

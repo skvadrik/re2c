@@ -9,6 +9,8 @@
 namespace re2c
 {
 
+struct opt_t;
+
 static const size_t ZERO_TAGS = 0;
 
 struct Tagpool
@@ -18,6 +20,7 @@ private:
 	taglookup_t lookup;
 
 public:
+	const opt_t *opts;
 	const size_t ntags;
 	tagver_t *buffer;
 
@@ -26,7 +29,7 @@ public:
 
 	tagtree_t history;
 
-	explicit Tagpool(size_t n);
+	Tagpool(const opt_t *o, size_t n);
 	~Tagpool();
 	size_t insert_const(tagver_t ver);
 	size_t insert_succ(tagver_t fst);

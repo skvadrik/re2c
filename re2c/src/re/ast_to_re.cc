@@ -191,6 +191,10 @@ static RE *ast_to_re(RESpec &spec, const AST *ast, size_t &ncap)
 				fatal_error(ast->line, ast->column,
 					"tags are only allowed with '-T, --tags' option");
 			}
+			if (opts->posix_captures) {
+				fatal_error(ast->line, ast->column,
+					"simple tags are not allowed with '--posix-captures' option");
+			}
 			RE *t = re_tag(alc, tags.size(), false);
 			tags.push_back(Tag(ast->tag.name, ast->tag.history));
 			return t;

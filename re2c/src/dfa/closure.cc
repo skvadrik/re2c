@@ -18,8 +18,7 @@ static bool cmpby_rule_state(const clos_t &x, const clos_t &y);
 
 tcmd_t *closure(closure_t &clos1, closure_t &clos2, Tagpool &tagpool,
 	tcpool_t &tcpool, std::valarray<Rule> &rules, tagver_t &maxver,
-	newvers_t &newvers, bool lookahead, closure_t *shadow,
-	const std::vector<Tag> &tags)
+	newvers_t &newvers, closure_t *shadow, const std::vector<Tag> &tags)
 {
 	// build tagged epsilon-closure of the given set of NFA states
 	raw_closure(clos1, clos2, shadow, tagpool, tags, rules);
@@ -29,7 +28,7 @@ tcmd_t *closure(closure_t &clos1, closure_t &clos2, Tagpool &tagpool,
 	std::sort(clos2.begin(), clos2.end(), cmpby_rule_state);
 
 	// see note [the difference between TDFA(0) and TDFA(1)]
-	if (!lookahead) {
+	if (!tagpool.opts->lookahead) {
 		lower_lookahead_to_transition(clos2);
 		if (shadow) lower_lookahead_to_transition(*shadow);
 	}
@@ -237,54 +236,51 @@ void raw_closure(const closure_t &clos1, closure_t &done, closure_t *shadow,
 bool better(const clos_t &c1, const clos_t &c2,
 	Tagpool &tagpool, const std::vector<Tag> &tags)
 {
-	if (c1.ttran == c2.ttran
-		&& c1.tvers == c2.tvers
+	if (tagpool.ntags == 0
+		|| (c1.order == c2.order
 		&& c1.tlook == c2.tlook
-		&& c1.order == c2.order
-		&& c1.index == c2.index) return false;
+		&& c1.index == c2.index)) return false;
 
-	const hidx_t l1 = c1.tlook, l2 = c2.tlook;
 	const tagver_t *o1 = tagpool[c1.order], *o2 = tagpool[c2.order];
-	tagver_t x, y;
-	tagtree_t &tagtree = tagpool.history;
+	tagtree_t &history = tagpool.history;
 
+	// leftmost greedy disambiguation
+	if (!tagpool.opts->posix_captures) {
+		const tagver_t x = o1[0], y = o2[0];
+		if (x < y) return false;
+		if (x > y) return true;
+
+		const int32_t cmp = history.compare_full(c1.index, c2.index, Tag::RIGHTMOST);
+		if (cmp < 0) return false;
+		if (cmp > 0) return true;
+
+		assert(false); // all paths have different indices
+	}
+
+	// POSIX disambiguation
 	for (size_t t = 0; t < tagpool.ntags; ++t) {
-		const Tag &tag = tags[t];
 
-		// orbit capture tag: compare by orders and tag histories
-		if (orbit(tag)) {
-			x = o1[t]; y = o2[t];
+		// orbit tag: compare by orders and tag histories
+		if (orbit(tags[t])) {
+			const tagver_t x = o1[t], y = o2[t];
 			if (x < y) return false;
 			if (x > y) return true;
 
-			const int cmp = tagtree.compare_last(l1, l2, t);
+			const int32_t cmp = history.compare_last(c1.tlook, c2.tlook, t);
 			if (cmp < 0) return false;
 			if (cmp > 0) return true;
 
-		// open/close capture tag: maximize (first, lookahead, then orders)
-		} else if (capture(tag)) {
-			x = tagtree.last(l1, t);
-			y = tagtree.last(l2, t);
+		// open/close tag: maximize (first lookahead, then orders)
+		} else {
+			tagver_t x = history.last(c1.tlook, t),
+				y = history.last(c2.tlook, t);
 			if (x == TAGVER_ZERO && y == TAGVER_ZERO) {
 				x = o1[t]; y = o2[t];
 			}
 			if (x > y) return false;
 			if (x < y) return true;
-
-		// simple tag: always prefer leftmost
-		} else {
-			x = o1[t]; y = o2[t];
-			if (x < y) return false;
-			if (x > y) return true;
-
-			const int cmp = tagtree.compare_full(c1.index, c2.index, Tag::RIGHTMOST);
-			if (cmp < 0) return false;
-			if (cmp > 0) return true;
-
-			assert(false); // all indexes are different
 		}
 	}
-
 	return false;
 }
 
@@ -462,6 +458,8 @@ void orders(closure_t &clos, Tagpool &tagpool, const std::vector<Tag> &tags)
 		ntag = tagpool.ntags,
 		nclos = clos.size();
 
+	if (ntag == 0) return;
+
 	size_t &maxclos = tagpool.maxclos;
 	tagver_t *&orders = tagpool.orders, *o;
 	if (maxclos < nclos) {
@@ -470,23 +468,44 @@ void orders(closure_t &clos, Tagpool &tagpool, const std::vector<Tag> &tags)
 		orders = new tagver_t[ntag * maxclos];
 	}
 
-	for (size_t t = 0; t < ntag; ++t) {
+	// leftmost greedy disambiguation: order equals item's position
+	// in leftmost NFA traversal (it's the same for all tags)
+	if (!tagpool.opts->posix_captures) {
+		const cmp_leftmost_t cmp = {tagtree};
+		std::set<key_t, cmp_leftmost_t> keys(cmp);
+		for (c = b; c != e; ++c) {
+			keys.insert(key_t(tagpool[c->order][0], c->index));
+		}
 		o = orders;
+		for (c = b; c != e; ++c, o += ntag) {
+			const ptrdiff_t d = std::distance(keys.begin(),
+				keys.find(key_t(tagpool[c->order][0], c->index)));
+			std::fill(o, o + ntag, static_cast<tagver_t>(d));
+		}
+		o = orders;
+		for (c = b; c != e; ++c, o += ntag) {
+			c->order = tagpool.insert(o);
+		}
+		return;
+	}
 
-		// see note [POSIX disambiguation]
+	// see note [POSIX disambiguation]
+	for (size_t t = 0; t < ntag; ++t) {
+
 		if (orbit(tags[t])) {
 			const cmp_orbit_t cmp = {tagtree, t};
 			std::set<key_t, cmp_orbit_t> keys(cmp);
 			for (c = b; c != e; ++c) {
 				keys.insert(key_t(tagpool[c->order][t], c->tlook));
 			}
+			o = orders;
 			for (c = b; c != e; ++c, o += ntag) {
 				const ptrdiff_t d = std::distance(keys.begin(),
 					keys.find(key_t(tagpool[c->order][t], c->tlook)));
 				o[t] = static_cast<tagver_t>(d);
 			}
 
-		} else if (capture(tags[t])) {
+		} else {
 			std::set<tagver_t> keys;
 			for (c = b; c != e; ++c) {
 				tagver_t u = tagtree.last(c->tlook, t);
@@ -495,27 +514,13 @@ void orders(closure_t &clos, Tagpool &tagpool, const std::vector<Tag> &tags)
 				}
 				keys.insert(u);
 			}
+			o = orders;
 			for (c = b; c != e; ++c, o += ntag) {
 				tagver_t u = tagtree.last(c->tlook, t);
 				if (u == TAGVER_ZERO) {
 					u = tagpool[c->order][t];
 				}
 				const ptrdiff_t d = std::distance(keys.begin(), keys.find(u));
-				o[t] = static_cast<tagver_t>(d);
-			}
-
-		// for simple tags and non-orbit capture tags item's order
-		// equals position of this item in leftmost NFA traversal
-		// (it's the same for all tags)
-		} else {
-			const cmp_leftmost_t cmp = {tagtree};
-			std::set<key_t, cmp_leftmost_t> keys(cmp);
-			for (c = b; c != e; ++c) {
-				keys.insert(key_t(tagpool[c->order][t], c->index));
-			}
-			for (c = b; c != e; ++c, o += ntag) {
-				const ptrdiff_t d = std::distance(keys.begin(),
-					keys.find(key_t(tagpool[c->order][t], c->index)));
 				o[t] = static_cast<tagver_t>(d);
 			}
 		}

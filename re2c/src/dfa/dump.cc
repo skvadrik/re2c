@@ -9,8 +9,8 @@ static void dump_tcmd_or_tcid(tcmd_t *const *tcmd, const tcid_t *tcid, size_t sy
 static const char *tagname(const Tag &t);
 static void dump_tags(const Tagpool &tagpool, hidx_t ttran, size_t tvers);
 
-dump_dfa_t::dump_dfa_t(const dfa_t &d, const Tagpool &pool, const nfa_t &n, bool dbg)
-	: debug(dbg)
+dump_dfa_t::dump_dfa_t(const dfa_t &d, const Tagpool &pool, const nfa_t &n)
+	: debug(pool.opts->dump_dfa_raw)
 	, dfa(d)
 	, tagpool(pool)
 	, uniqidx(0)
