@@ -212,7 +212,7 @@ static void write_keys(const path_t &path, const Skeleton &skel,
 		nkey += 3;
 		for (size_t t = ltag; t < htag; ++t) {
 			const Tag &tag = skel.tags[t];
-			if (t == trail || orbit(tag)) continue;
+			if (t == trail || orbit(tag) || fictive(tag)) continue;
 			const size_t
 				base = fixed(tag) ? tag.base : t,
 				bver = static_cast<size_t>(skel.finvers[base]);
@@ -230,7 +230,7 @@ static void write_keys(const path_t &path, const Skeleton &skel,
 
 		for (size_t t = ltag; t < htag; ++t) {
 			const Tag &tag = skel.tags[t];
-			if (t == trail || orbit(tag)) continue;
+			if (t == trail || orbit(tag) || fictive(tag)) continue;
 
 			const size_t
 				base = fixed(tag) ? tag.base : t,
