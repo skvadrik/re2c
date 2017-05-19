@@ -20,6 +20,8 @@ struct Tag
 {
 	static const size_t RIGHTMOST;
 	static const size_t VARDIST;
+	static const size_t FICTIVE1;
+	static const size_t FICTIVE2;
 
 	const std::string *name;
 	size_t ncap;
@@ -46,6 +48,11 @@ struct Tag
 inline bool fixed(const Tag &tag)
 {
 	return tag.dist != Tag::VARDIST;
+}
+
+inline bool fictive(const Tag &tag)
+{
+	return tag.ncap == Tag::FICTIVE1 || tag.ncap == Tag::FICTIVE2;
 }
 
 inline bool capture(const Tag &tag)

@@ -20,6 +20,82 @@ namespace re2c {
  * (the way invalid code points are treated).
  */
 
+/* note [POSIX subexpression hierarchy]
+ *
+ * POSIX treats subexpressions with and without captures as equal,
+ * therefore we have to insert missing captures in subexpressions
+ * that influence disambiguation of existing captures. Such cases
+ * are: left alternative in union, if right alternative has captures;
+ * first operand in concatenation, if second operand has captures
+ * (unless all strings accepted by the first operand have the same
+ * length).
+ */
+
+static bool has_tags(const AST *ast)
+{
+	switch (ast->type) {
+		default: assert(false);
+		case AST::NIL:
+		case AST::STR:
+		case AST::CLS:
+		case AST::DOT:
+		case AST::DEFAULT:
+		case AST::DIFF: return false;
+		case AST::TAG:
+		case AST::CAP: return true;
+		case AST::ALT: return has_tags(ast->alt.ast1) || has_tags(ast->alt.ast2);
+		case AST::CAT: return has_tags(ast->cat.ast1) || has_tags(ast->cat.ast2);
+		case AST::REF: return has_tags(ast->ref.ast);
+		case AST::ITER: return has_tags(ast->iter.ast);
+	}
+}
+
+static size_t fixlen(const AST *ast)
+{
+	switch (ast->type) {
+		default: assert(false);
+		case AST::NIL:
+		case AST::TAG: return 0;
+		case AST::CLS:
+		case AST::DOT:
+		case AST::DEFAULT:
+		case AST::DIFF: return 1;
+		case AST::STR: return ast->str.chars->size();
+		case AST::ALT: {
+			const size_t
+				l1 = fixlen(ast->alt.ast1),
+				l2 = fixlen(ast->alt.ast2);
+			return l1 == l2 ? l1 : Tag::VARDIST;
+		}
+		case AST::CAT: {
+			const size_t
+				l1 = fixlen(ast->cat.ast1),
+				l2 = fixlen(ast->cat.ast2);
+			return l1 == Tag::VARDIST || l2 == Tag::VARDIST
+				? Tag::VARDIST : l1 + l2;
+		}
+		case AST::REF: return fixlen(ast->ref.ast);
+		case AST::ITER: {
+			const size_t l = fixlen(ast->iter.ast);
+			const uint32_t m = ast->iter.min, n = ast->iter.max;
+			return l == Tag::VARDIST || m != n
+				? Tag::VARDIST : l * (n - m);
+		}
+		case AST::CAP: return fixlen(ast->cap);
+	}
+}
+
+static bool is_capture(const AST *ast)
+{
+	return ast->type == AST::CAP
+		|| (ast->type == AST::ITER && ast->iter.ast->type == AST::CAP);
+}
+
+static bool is_capture_or_fixlen(const AST *ast)
+{
+	return is_capture(ast) || fixlen(ast) != Tag::VARDIST;
+}
+
 static RE *ast_to_re(RESpec &spec, const AST *ast, size_t &ncap)
 {
 	RE::alc_t &alc = spec.alc;
@@ -73,8 +149,18 @@ static RE *ast_to_re(RESpec &spec, const AST *ast, size_t &ncap)
 			// see note [default regexp]
 			return re_sym(alc, Range::ran(0, opts->encoding.nCodeUnits()));
 		case AST::ALT: {
-			RE *x = ast_to_re(spec, ast->alt.ast1, ncap);
-			RE *y = ast_to_re(spec, ast->alt.ast2, ncap);
+			RE *t1 = NULL, *t2 = NULL, *x, *y;
+			// see note [POSIX subexpression hierarchy]
+			if (opts->posix_captures && has_tags(ast->alt.ast2)
+				&& !is_capture(ast->alt.ast1)) {
+				t1 = re_tag(alc, tags.size(), false);
+				tags.push_back(Tag(Tag::FICTIVE1));
+				t2 = re_tag(alc, tags.size(), false);
+				tags.push_back(Tag(Tag::FICTIVE2));
+			}
+			x = ast_to_re(spec, ast->alt.ast1, ncap);
+			x = re_cat(alc, t1, re_cat(alc, x, t2));
+			y = ast_to_re(spec, ast->alt.ast2, ncap);
 			return re_alt(alc, x, y);
 		}
 		case AST::DIFF: {
@@ -86,8 +172,18 @@ static RE *ast_to_re(RESpec &spec, const AST *ast, size_t &ncap)
 			return re_class(alc, ast->line, ast->column, Range::sub(x->sym, y->sym), opts, warn);
 		}
 		case AST::CAT: {
-			RE *x = ast_to_re(spec, ast->cat.ast1, ncap);
-			RE *y = ast_to_re(spec, ast->cat.ast2, ncap);
+			RE *t1 = NULL, *t2 = NULL, *x, *y;
+			// see note [POSIX subexpression hierarchy]
+			if (opts->posix_captures && has_tags(ast->cat.ast2)
+				&& !is_capture_or_fixlen(ast->cat.ast1)) {
+				t1 = re_tag(alc, tags.size(), false);
+				tags.push_back(Tag(Tag::FICTIVE1));
+				t2 = re_tag(alc, tags.size(), false);
+				tags.push_back(Tag(Tag::FICTIVE2));
+			}
+			x = ast_to_re(spec, ast->cat.ast1, ncap);
+			x = re_cat(alc, t1, re_cat(alc, x, t2));
+			y = ast_to_re(spec, ast->cat.ast2, ncap);
 			return re_cat(alc, x, y);
 		}
 		case AST::TAG: {

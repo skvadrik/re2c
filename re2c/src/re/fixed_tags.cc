@@ -26,6 +26,10 @@ namespace re2c {
  * but this way pre-orbit tags will always have the same value as their orbit
  * tags (even if uninitialized, because of the zero offset) and we'll reduce
  * the amount of tag variables.
+ *
+ * Another special case is fictive tags (those that exist only to impose
+ * hierarchical laws of POSIX disambiguation). We treat them as fixed
+ * in order to suppress code generation.
  */
 
 static void find_fixed_tags(RE *re, std::vector<Tag> &tags,
@@ -54,7 +58,9 @@ static void find_fixed_tags(RE *re, std::vector<Tag> &tags,
 		case RE::TAG: {
 			// see note [fixed and variable tags]
 			Tag &tag = tags[re->tag.idx];
-			if (toplevel && dist != Tag::VARDIST && !history(tag)) {
+			if (fictive(tag)) {
+				tag.base = tag.dist = 0;
+			} else if (toplevel && dist != Tag::VARDIST && !history(tag)) {
 				tag.base = base;
 				tag.dist = dist;
 			} else if (preorbit(tags, re->tag.idx)) {

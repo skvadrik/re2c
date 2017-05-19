@@ -64,8 +64,8 @@ struct kernel_eq_t
 		return x->size == y->size
 			&& memcmp(x->state, y->state, x->size * sizeof(void*)) == 0
 			&& memcmp(x->tvers, y->tvers, x->size * sizeof(size_t)) == 0
+			&& memcmp(x->order, y->order, x->size * sizeof(size_t)) == 0
 			&& equal_lookahead_tags(x, y, tagpool, tags);
-		// if versions and lookahead coincide, so do orders
 	}
 };
 

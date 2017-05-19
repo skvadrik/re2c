@@ -243,19 +243,15 @@ bool better(const clos_t &c1, const clos_t &c2,
 		&& c1.order == c2.order
 		&& c1.index == c2.index) return false;
 
-	const hidx_t
-		l1 = c1.tlook, l2 = c2.tlook,
-		t1 = c1.ttran, t2 = c2.ttran;
-	const tagver_t
-		*v1 = tagpool[c1.tvers], *v2 = tagpool[c2.tvers],
-		*o1 = tagpool[c1.order], *o2 = tagpool[c2.order];
+	const hidx_t l1 = c1.tlook, l2 = c2.tlook;
+	const tagver_t *o1 = tagpool[c1.order], *o2 = tagpool[c2.order];
 	tagver_t x, y;
 	tagtree_t &tagtree = tagpool.history;
 
 	for (size_t t = 0; t < tagpool.ntags; ++t) {
 		const Tag &tag = tags[t];
 
-		// orbit capture tag: compare by order and tagged epsilon-paths
+		// orbit capture tag: compare by orders and tag histories
 		if (orbit(tag)) {
 			x = o1[t]; y = o2[t];
 			if (x < y) return false;
@@ -265,37 +261,18 @@ bool better(const clos_t &c1, const clos_t &c2,
 			if (cmp < 0) return false;
 			if (cmp > 0) return true;
 
-			assert(v1[t] == v2[t]);
-
-		// open/close capture tag: maximize (on lookahead and versions);
-		// if one is bottom and the other is not, fallback to leftmost
-		// if both are bottoms, relay comparison to less prioritized tags
-		// we don't use orders for minimize/maximize, because they are
-		// already used for leftmost
+		// open/close capture tag: maximize (first, lookahead, then orders)
 		} else if (capture(tag)) {
 			x = tagtree.last(l1, t);
 			y = tagtree.last(l2, t);
-			if (x == TAGVER_BOTTOM && y == TAGVER_BOTTOM) continue;
-			if (x == TAGVER_BOTTOM || y == TAGVER_BOTTOM) goto leftmost;
-			if (x > y) return false;
-			if (x < y) return true;
-
-			x = tagtree.last(t1, t);
-			y = tagtree.last(t2, t);
-			if (x == TAGVER_BOTTOM && y == TAGVER_BOTTOM) continue;
-			if (x == TAGVER_BOTTOM || y == TAGVER_BOTTOM) goto leftmost;
-			if (x > y) return false;
-			if (x < y) return true;
-
-			x = v1[t]; y = v2[t];
-			if (x < 0 && y < 0) continue;
-			if (x < 0 || y < 0) goto leftmost;
+			if (x == TAGVER_ZERO && y == TAGVER_ZERO) {
+				x = o1[t]; y = o2[t];
+			}
 			if (x > y) return false;
 			if (x < y) return true;
 
 		// simple tag: always prefer leftmost
 		} else {
-		leftmost:
 			x = o1[t]; y = o2[t];
 			if (x < y) return false;
 			if (x > y) return true;
@@ -506,6 +483,24 @@ void orders(closure_t &clos, Tagpool &tagpool, const std::vector<Tag> &tags)
 			for (c = b; c != e; ++c, o += ntag) {
 				const ptrdiff_t d = std::distance(keys.begin(),
 					keys.find(key_t(tagpool[c->order][t], c->tlook)));
+				o[t] = static_cast<tagver_t>(d);
+			}
+
+		} else if (capture(tags[t])) {
+			std::set<tagver_t> keys;
+			for (c = b; c != e; ++c) {
+				tagver_t u = tagtree.last(c->tlook, t);
+				if (u == TAGVER_ZERO) {
+					u = tagpool[c->order][t];
+				}
+				keys.insert(u);
+			}
+			for (c = b; c != e; ++c, o += ntag) {
+				tagver_t u = tagtree.last(c->tlook, t);
+				if (u == TAGVER_ZERO) {
+					u = tagpool[c->order][t];
+				}
+				const ptrdiff_t d = std::distance(keys.begin(), keys.find(u));
 				o[t] = static_cast<tagver_t>(d);
 			}
 

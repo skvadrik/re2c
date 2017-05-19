@@ -389,7 +389,7 @@ void gen_fintags(OutputFile &o, uint32_t ind, const DFA &dfa, const Rule &rule)
 		const Tag &tag = tags[t];
 
 		// see note [fixed and variable tags]
-		if (orbit(tag) || fixed(tag)) continue;
+		if (fictive(tag) || orbit(tag) || fixed(tag)) continue;
 
 		expr = vartag_expr(fins[t], prefix, expression);
 
@@ -417,7 +417,7 @@ void gen_fintags(OutputFile &o, uint32_t ind, const DFA &dfa, const Rule &rule)
 		const Tag &tag = tags[t];
 
 		// see note [fixed and variable tags]
-		if (orbit(tag) || !fixed(tag)) continue;
+		if (fictive(tag) || orbit(tag) || !fixed(tag)) continue;
 
 		const size_t dist = tag.dist;
 		const bool fixed_on_cursor = tag.base == Tag::RIGHTMOST;
