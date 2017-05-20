@@ -99,7 +99,9 @@ dfa_t::dfa_t(const nfa_t &nfa, const opt_t *opts,
 		}
 	}
 
-	warn_nondeterministic_tags(kernels, tagpool, tags, rules, cond, warn);
+	if (!opts->posix_captures) {
+		warn_nondeterministic_tags(kernels, tagpool, tags, rules, cond, warn);
+	}
 }
 
 /*
@@ -144,12 +146,10 @@ void warn_nondeterministic_tags(const kernels_t &kernels,
 	for (size_t r = 0; r < nrule; ++r) {
 		const Rule &rule = rules[r];
 		for (size_t t = rule.ltag; t < rule.htag; ++t) {
-			const Tag &tag = tags[t];
-			if (fictive(tag)) continue;
 			const size_t m = maxv[t];
 			if (m > 1) {
 				const uint32_t line = rule.code->fline;
-				warn.nondeterministic_tags(line, cond, tag.name, m);
+				warn.nondeterministic_tags(line, cond, tags[t].name, m);
 			}
 		}
 	}

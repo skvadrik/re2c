@@ -99,5 +99,4 @@ yy10:
 
 re2c: warning: line 5: rule matches empty string [-Wmatch-empty-string]
 re2c: warning: line 6: rule matches empty string [-Wmatch-empty-string]
-re2c: warning: line 5: trailing context is non-deterministic and induces 4 parallel instances [-Wnondeterministic-tags]
 re2c: warning: line 6: unreachable rule (shadowed by rule at line 5) [-Wunreachable-rules]

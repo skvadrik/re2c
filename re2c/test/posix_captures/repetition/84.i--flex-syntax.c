@@ -304,4 +304,3 @@ yy31:
 }
 
 re2c: warning: line 6: rule matches empty string [-Wmatch-empty-string]
-re2c: warning: line 5: trailing context is non-deterministic and induces 2 parallel instances [-Wnondeterministic-tags]
