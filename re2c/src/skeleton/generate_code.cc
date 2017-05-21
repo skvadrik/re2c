@@ -488,7 +488,7 @@ void emit_action(OutputFile &o, uint32_t ind, const DFA &dfa, size_t rid)
 	size_t ntag = 3;
 	for (size_t t = r.ltag; t < r.htag; ++t) {
 		const Tag &tag = dfa.tags[t];
-		if (t != r.ttag && !orbit(tag) && !fictive(tag)) ++ntag;
+		if (t != r.ttag && !fictive(tag)) ++ntag;
 	}
 
 	o.wind(ind).ws("status = check_key_count_").wstring(name).ws("(keys_count, i, ")
@@ -497,7 +497,7 @@ void emit_action(OutputFile &o, uint32_t ind, const DFA &dfa, size_t rid)
 
 	for (size_t t = r.ltag; t < r.htag; ++t) {
 		const Tag &tag = dfa.tags[t];
-		if (t == r.ttag || orbit(tag) || fictive(tag)) continue;
+		if (t == r.ttag || fictive(tag)) continue;
 		const std::string tname = tagname(tag),
 			list = history(tag) ? "list" : "";
 		o.ws("\n").wind(ind + 1).ws(" || check_tag").wstring(list).ws("_").wstring(name)

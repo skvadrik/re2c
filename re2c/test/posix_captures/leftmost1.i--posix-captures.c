@@ -5,22 +5,25 @@
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 0x00:
 	case 'a':
-	case 'b':
+		yyt1 = yyt3 = YYCURSOR;
+		goto yy3;
+	default:
+		yyt3 = yyt4 = yyt5 = NULL;
 		yyt1 = yyt2 = YYCURSOR;
 		goto yy2;
-	default:
-		yyt1 = YYCURSOR;
-		goto yy3;
 	}
 yy2:
 	{
-		const size_t yynmatch = 2;
+		const size_t yynmatch = 4;
 		const YYCTYPE *yypmatch[yynmatch * 2];
 		yypmatch[0] = yyt1;
 		yypmatch[2] = yyt1;
 		yypmatch[3] = yyt2;
+		yypmatch[4] = yyt3;
+		yypmatch[5] = yyt4;
+		yypmatch[6] = yyt5;
+		yypmatch[7] = yyt5;
 		yypmatch[1] = YYCURSOR;
 		{}
 	}
@@ -29,15 +32,14 @@ yy3:
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 0x00:
 	case 'a':
-	case 'b':
-		yyt2 = YYCURSOR;
+		yyt3 = YYCURSOR;
+		goto yy3;
+	default:
+		yyt5 = NULL;
+		yyt2 = yyt4 = YYCURSOR;
 		goto yy2;
-	default:	goto yy3;
 	}
 }
 
-re2c: warning: line 5: rule matches empty string [-Wmatch-empty-string]
-re2c: warning: line 6: rule matches empty string [-Wmatch-empty-string]
-re2c: warning: line 6: unreachable rule (shadowed by rule at line 5) [-Wunreachable-rules]
+re2c: warning: line 2: rule matches empty string [-Wmatch-empty-string]

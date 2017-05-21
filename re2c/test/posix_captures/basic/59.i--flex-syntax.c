@@ -63,9 +63,9 @@ yy10:
 		const size_t yynmatch = 2;
 		const YYCTYPE *yypmatch[yynmatch * 2];
 		yypmatch[0] = yyt2;
+		yypmatch[2] = yyt1;
 		yypmatch[3] = yyt3;
 		yypmatch[1] = YYCURSOR;
-		yypmatch[2] = yyt1;
 		{}
 	}
 }

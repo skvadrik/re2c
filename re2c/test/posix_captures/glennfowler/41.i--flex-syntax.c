@@ -7,10 +7,10 @@
 	yych = *(YYMARKER = YYCURSOR);
 	switch (yych) {
 	case 'a':
-		yyt1 = yyt3 = YYCURSOR;
+		yyt1 = yyt2 = YYCURSOR;
 		goto yy3;
 	case 'b':
-		yyt1 = yyt3 = YYCURSOR;
+		yyt1 = yyt2 = YYCURSOR;
 		goto yy6;
 	default:
 		yyt2 = yyt3 = NULL;
@@ -22,9 +22,9 @@ yy2:
 		const size_t yynmatch = 2;
 		const YYCTYPE *yypmatch[yynmatch * 2];
 		yypmatch[0] = yyt1;
-		yypmatch[3] = yyt2;
+		yypmatch[2] = yyt2;
+		yypmatch[3] = yyt3;
 		yypmatch[1] = YYCURSOR;
-		yypmatch[2] = yyt3;
 		{}
 	}
 yy3:
@@ -44,11 +44,11 @@ yy5:
 		yyt1 = YYCURSOR;
 		goto yy2;
 	case 1: 
-		yyt2 = YYCURSOR;
+		yyt3 = YYCURSOR;
 		goto yy2;
 	default:
-		yyt3 = yyt2;
-		yyt2 = YYCURSOR;
+		yyt2 = yyt3;
+		yyt3 = YYCURSOR;
 		goto yy2;
 	}
 yy6:
@@ -67,10 +67,10 @@ yy8:
 	yych = *YYCURSOR;
 	switch (yych) {
 	case 0x00:
-		yyt2 = YYCURSOR;
+		yyt3 = YYCURSOR;
 		goto yy2;
 	case 'b':
-		yyt2 = YYCURSOR;
+		yyt3 = YYCURSOR;
 		goto yy12;
 	case 'z':	goto yy8;
 	default:	goto yy3;
@@ -82,10 +82,10 @@ yy10:
 	yych = *YYCURSOR;
 	switch (yych) {
 	case 0x00:
-		yyt2 = YYCURSOR;
+		yyt3 = YYCURSOR;
 		goto yy2;
 	case 'a':
-		yyt2 = YYCURSOR;
+		yyt3 = YYCURSOR;
 		goto yy14;
 	case 'y':	goto yy10;
 	default:	goto yy6;
@@ -117,8 +117,8 @@ yy16:
 	yych = *YYCURSOR;
 	switch (yych) {
 	case 0x00:
-		yyt3 = yyt2;
-		yyt2 = YYCURSOR;
+		yyt2 = yyt3;
+		yyt3 = YYCURSOR;
 		goto yy2;
 	case 'y':	goto yy16;
 	case 'z':	goto yy18;
@@ -131,10 +131,10 @@ yy18:
 	yych = *YYCURSOR;
 	switch (yych) {
 	case 0x00:
-		yyt2 = YYCURSOR;
+		yyt3 = YYCURSOR;
 		goto yy2;
 	case 'b':
-		yyt2 = YYCURSOR;
+		yyt3 = YYCURSOR;
 		goto yy12;
 	case 'y':	goto yy16;
 	case 'z':	goto yy18;
@@ -147,10 +147,10 @@ yy20:
 	yych = *YYCURSOR;
 	switch (yych) {
 	case 0x00:
-		yyt2 = YYCURSOR;
+		yyt3 = YYCURSOR;
 		goto yy2;
 	case 'a':
-		yyt2 = YYCURSOR;
+		yyt3 = YYCURSOR;
 		goto yy14;
 	case 'y':	goto yy20;
 	case 'z':	goto yy22;
@@ -163,8 +163,8 @@ yy22:
 	yych = *YYCURSOR;
 	switch (yych) {
 	case 0x00:
-		yyt3 = yyt2;
-		yyt2 = YYCURSOR;
+		yyt2 = yyt3;
+		yyt3 = YYCURSOR;
 		goto yy2;
 	case 'y':	goto yy20;
 	case 'z':	goto yy22;

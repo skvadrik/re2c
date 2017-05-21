@@ -5,7 +5,7 @@
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	if (yych >= 0x01) {
-		yyt1 = yyt3 = YYCURSOR;
+		yyt1 = yyt2 = YYCURSOR;
 		goto yy3;
 	}
 	yyt1 = yyt2 = yyt3 = YYCURSOR;
@@ -14,9 +14,9 @@ yy2:
 		const size_t yynmatch = 2;
 		const YYCTYPE *yypmatch[yynmatch * 2];
 		yypmatch[0] = yyt1;
-		yypmatch[3] = yyt2;
+		yypmatch[2] = yyt2;
+		yypmatch[3] = yyt3;
 		yypmatch[1] = YYCURSOR;
-		yypmatch[2] = yyt3;
 		{}
 	}
 yy3:
@@ -24,17 +24,17 @@ yy3:
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	if (yych <= 0x00) {
-		yyt2 = YYCURSOR;
+		yyt3 = YYCURSOR;
 		goto yy2;
 	}
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	if (yych <= 0x00) {
-		yyt2 = YYCURSOR;
+		yyt3 = YYCURSOR;
 		goto yy2;
 	}
-	yyt3 = YYCURSOR;
+	yyt2 = YYCURSOR;
 	goto yy3;
 }
 

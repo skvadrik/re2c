@@ -10,11 +10,11 @@
 		const size_t yynmatch = 3;
 		const YYCTYPE *yypmatch[yynmatch * 2];
 		yypmatch[0] = yyt1;
+		yypmatch[2] = yyt1;
 		yypmatch[3] = yyt1;
+		yypmatch[4] = yyt1;
 		yypmatch[5] = yyt1;
 		yypmatch[1] = YYCURSOR;
-		yypmatch[2] = yyt1;
-		yypmatch[4] = yyt1;
 		{}
 	}
 }

@@ -2,6 +2,10 @@
 
 namespace re2c {
 
+// Fictive tags do not really need default counterparts:
+// maximization can work without them based on version numbers.
+// For now it does not seem like a useful optimization, but some day
+// in future it might change.
 static void insert_default_tags(RESpec &spec, RE *re, size_t *&tidx)
 {
 	RE::alc_t &alc = spec.alc;

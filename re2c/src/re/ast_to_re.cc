@@ -24,11 +24,11 @@ namespace re2c {
  *
  * POSIX treats subexpressions with and without captures as equal,
  * therefore we have to insert missing captures in subexpressions
- * that influence disambiguation of existing captures. Such cases
- * are: left alternative in union, if right alternative has captures;
- * first operand in concatenation, if second operand has captures
- * (unless all strings accepted by the first operand have the same
- * length).
+ * that influence disambiguation of existing captures. Such cases are:
+ * left alternative in union (unless it is already a capture) and first
+ * operand in concatenation (unless it is a capture or the length of
+ * strings accepted by it is fixed). Of course, this insertion only
+ * applies to subexpressions that have nested captures.
  */
 
 static bool has_tags(const AST *ast)
@@ -85,17 +85,6 @@ static size_t fixlen(const AST *ast)
 	}
 }
 
-static bool is_capture(const AST *ast)
-{
-	return ast->type == AST::CAP
-		|| (ast->type == AST::ITER && ast->iter.ast->type == AST::CAP);
-}
-
-static bool is_capture_or_fixlen(const AST *ast)
-{
-	return is_capture(ast) || fixlen(ast) != Tag::VARDIST;
-}
-
 static RE *ast_to_re(RESpec &spec, const AST *ast, size_t &ncap)
 {
 	RE::alc_t &alc = spec.alc;
@@ -150,13 +139,13 @@ static RE *ast_to_re(RESpec &spec, const AST *ast, size_t &ncap)
 			return re_sym(alc, Range::ran(0, opts->encoding.nCodeUnits()));
 		case AST::ALT: {
 			RE *t1 = NULL, *t2 = NULL, *x, *y;
-			// see note [POSIX subexpression hierarchy]
-			if (opts->posix_captures && has_tags(ast->alt.ast2)
-				&& !is_capture(ast->alt.ast1)) {
+			if (opts->posix_captures && has_tags(ast)
+				&& ast->alt.ast1->type != AST::CAP) {
+				// see note [POSIX subexpression hierarchy]
 				t1 = re_tag(alc, tags.size(), false);
-				tags.push_back(Tag(Tag::FICTIVE1));
+				tags.push_back(Tag(Tag::FICTIVE, false));
 				t2 = re_tag(alc, tags.size(), false);
-				tags.push_back(Tag(Tag::FICTIVE2));
+				tags.push_back(Tag(Tag::FICTIVE, false));
 			}
 			x = ast_to_re(spec, ast->alt.ast1, ncap);
 			x = re_cat(alc, t1, re_cat(alc, x, t2));
@@ -173,13 +162,14 @@ static RE *ast_to_re(RESpec &spec, const AST *ast, size_t &ncap)
 		}
 		case AST::CAT: {
 			RE *t1 = NULL, *t2 = NULL, *x, *y;
-			// see note [POSIX subexpression hierarchy]
-			if (opts->posix_captures && has_tags(ast->cat.ast2)
-				&& !is_capture_or_fixlen(ast->cat.ast1)) {
+			const AST *a1 = ast->alt.ast1;
+			if (opts->posix_captures && has_tags(ast)
+				&& a1->type != AST::CAP && fixlen(a1) == Tag::VARDIST) {
+				// see note [POSIX subexpression hierarchy]
 				t1 = re_tag(alc, tags.size(), false);
-				tags.push_back(Tag(Tag::FICTIVE1));
+				tags.push_back(Tag(Tag::FICTIVE, false));
 				t2 = re_tag(alc, tags.size(), false);
-				tags.push_back(Tag(Tag::FICTIVE2));
+				tags.push_back(Tag(Tag::FICTIVE, false));
 			}
 			x = ast_to_re(spec, ast->cat.ast1, ncap);
 			x = re_cat(alc, t1, re_cat(alc, x, t2));
@@ -207,10 +197,10 @@ static RE *ast_to_re(RESpec &spec, const AST *ast, size_t &ncap)
 			if (x->type == AST::REF) x = x->ref.ast;
 
 			RE *t1 = re_tag(alc, tags.size(), false);
-			tags.push_back(Tag(3 * ncap));
+			tags.push_back(Tag(2 * ncap, false));
 
 			RE *t2 = re_tag(alc, tags.size(), false);
-			tags.push_back(Tag(3 * ncap + 1));
+			tags.push_back(Tag(2 * ncap + 1, false));
 
 			++ncap;
 			return re_cat(alc, t1, re_cat(alc, ast_to_re(spec, x, ncap), t2));
@@ -230,32 +220,32 @@ static RE *ast_to_re(RESpec &spec, const AST *ast, size_t &ncap)
 				m = std::max(n, ast->iter.max);
 			const AST *x = ast->iter.ast;
 
-			RE *t1 = NULL, *t2 = NULL, *t3 = NULL;
+			RE *t1 = NULL, *t2 = NULL;
 			if (opts->posix_captures && x->type == AST::CAP) {
 				x = x->cap;
 				if (x->type == AST::REF) x = x->ref.ast;
 
 				t1 = re_tag(alc, tags.size(), false);
-				tags.push_back(Tag(3 * ncap));
+				tags.push_back(Tag(2 * ncap, m > 1));
 
 				t2 = re_tag(alc, tags.size(), false);
-				tags.push_back(Tag(3 * ncap + 1));
-
-				if (m > 1) {
-					t3 = re_tag(alc, tags.size(), false);
-					tags.push_back(Tag(3 * ncap + 2));
-				}
+				tags.push_back(Tag(2 * ncap + 1, false));
 
 				++ncap;
 			}
 
 			RE *y = NULL;
-			if (m > 0) {
+			if (m == 0) {
+				y = re_cat(alc, t1, t2);
+			} else if (m == 1) {
 				y = ast_to_re(spec, x, ncap);
-				y = re_cat(alc, t3, y);
+				y = re_cat(alc, t1, re_cat(alc, y, t2));
+			} else  {
+				y = ast_to_re(spec, x, ncap);
+				y = re_cat(alc, t1, y);
 				y = re_iter(alc, y, n1, m);
+				y = re_cat(alc, y, t2);
 			}
-			y = re_cat(alc, t1, re_cat(alc, y, t2));
 			if (n == 0) {
 				y = re_alt(alc, y, re_nil(alc));
 			}

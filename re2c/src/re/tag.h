@@ -20,14 +20,14 @@ struct Tag
 {
 	static const size_t RIGHTMOST;
 	static const size_t VARDIST;
-	static const size_t FICTIVE1;
-	static const size_t FICTIVE2;
+	static const size_t FICTIVE;
 
 	const std::string *name;
 	size_t ncap;
 	size_t base;
 	size_t dist;
 	bool history;
+	bool orbit;
 
 	Tag(const std::string *n, bool h)
 		: name(n)
@@ -35,13 +35,15 @@ struct Tag
 		, base(Tag::RIGHTMOST)
 		, dist(Tag::VARDIST)
 		, history(h)
+		, orbit(false)
 	{}
-	explicit Tag(size_t c)
+	Tag(size_t c, bool o)
 		: name(NULL)
 		, ncap(c)
 		, base(Tag::RIGHTMOST)
 		, dist(Tag::VARDIST)
 		, history(false)
+		, orbit(o)
 	{}
 };
 
@@ -52,7 +54,7 @@ inline bool fixed(const Tag &tag)
 
 inline bool fictive(const Tag &tag)
 {
-	return tag.ncap == Tag::FICTIVE1 || tag.ncap == Tag::FICTIVE2;
+	return tag.ncap == Tag::FICTIVE;
 }
 
 inline bool capture(const Tag &tag)
@@ -62,20 +64,12 @@ inline bool capture(const Tag &tag)
 
 inline bool orbit(const Tag &tag)
 {
-	return capture(tag) && tag.ncap % 3 == 2;
+	return tag.orbit;
 }
 
 inline bool trailing(const Tag &tag)
 {
 	return !capture(tag) && tag.name == NULL;
-}
-
-inline bool preorbit(const std::vector<Tag> &tags, size_t idx)
-{
-	const size_t ncap = tags[idx].ncap;
-	return ncap % 3 == 0
-		&& idx + 2 < tags.size()
-		&& tags[idx + 2].ncap == ncap + 2;
 }
 
 inline bool history(const Tag &tag)

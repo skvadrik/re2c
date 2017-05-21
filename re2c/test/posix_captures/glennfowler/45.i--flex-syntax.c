@@ -5,8 +5,8 @@
 	if ((YYLIMIT - YYCURSOR) < 6) YYFILL(6);
 	yych = *(YYMARKER = YYCURSOR);
 	if (yych >= 0x01) {
-		yyt2 = yyt3 = NULL;
-		yyt1 = yyt4 = yyt6 = YYCURSOR;
+		yyt2 = yyt4 = NULL;
+		yyt1 = yyt3 = yyt5 = YYCURSOR;
 		goto yy3;
 	}
 	yyt3 = yyt4 = yyt5 = yyt6 = NULL;
@@ -16,13 +16,13 @@ yy2:
 		const size_t yynmatch = 4;
 		const YYCTYPE *yypmatch[yynmatch * 2];
 		yypmatch[0] = yyt1;
-		yypmatch[3] = yyt2;
-		yypmatch[5] = yyt3;
-		yypmatch[7] = yyt5;
-		yypmatch[1] = YYCURSOR;
 		yypmatch[2] = yyt1;
-		yypmatch[4] = yyt4;
-		yypmatch[6] = yyt6;
+		yypmatch[3] = yyt2;
+		yypmatch[4] = yyt3;
+		yypmatch[5] = yyt4;
+		yypmatch[6] = yyt5;
+		yypmatch[7] = yyt6;
+		yypmatch[1] = YYCURSOR;
 		{}
 	}
 yy3:
@@ -36,29 +36,29 @@ yy5:
 	yych = *++YYCURSOR;
 	if (yych <= 0x00) {
 		yyt5 = yyt6 = NULL;
-		yyt2 = yyt3 = YYCURSOR;
+		yyt2 = yyt4 = YYCURSOR;
 		goto yy2;
 	}
-	yyt5 = YYCURSOR;
+	yyt6 = YYCURSOR;
 	yych = *++YYCURSOR;
 	if (yych <= 0x00) {
-		yyt4 = yyt2;
-		yyt2 = yyt5 = YYCURSOR;
+		yyt3 = yyt2;
+		yyt2 = yyt6 = YYCURSOR;
 		goto yy2;
 	}
 	yych = *++YYCURSOR;
 	if (yych <= 0x00) {
-		yyt4 = yyt5;
+		yyt3 = yyt6;
 		yyt5 = yyt6 = NULL;
-		yyt2 = yyt3 = YYCURSOR;
+		yyt2 = yyt4 = YYCURSOR;
 		goto yy2;
 	}
-	yyt2 = yyt3 = yyt6 = YYCURSOR;
+	yyt2 = yyt4 = yyt5 = YYCURSOR;
 	yych = *++YYCURSOR;
 	if (yych <= 0x00) {
-		yyt3 = yyt5;
-		yyt6 = yyt5;
-		yyt2 = yyt5 = YYCURSOR;
+		yyt4 = yyt6;
+		yyt5 = yyt6;
+		yyt2 = yyt6 = YYCURSOR;
 		goto yy2;
 	}
 yy9:
@@ -66,24 +66,24 @@ yy9:
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	if (yych <= 0x00) {
-		yyt4 = yyt2;
+		yyt3 = yyt2;
 		yyt5 = yyt6 = NULL;
-		yyt2 = yyt3 = YYCURSOR;
+		yyt2 = yyt4 = YYCURSOR;
 		goto yy2;
 	}
-	yyt4 = YYCURSOR;
+	yyt3 = YYCURSOR;
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	if (yych <= 0x00) {
-		yyt4 = yyt5;
-		yyt2 = yyt5 = YYCURSOR;
+		yyt3 = yyt6;
+		yyt2 = yyt6 = YYCURSOR;
 		goto yy2;
 	}
-	yyt3 = yyt4;
-	yyt5 = yyt2;
-	yyt6 = yyt4;
-	yyt2 = yyt4;
+	yyt4 = yyt3;
+	yyt5 = yyt3;
+	yyt6 = yyt2;
+	yyt2 = yyt3;
 	goto yy9;
 }
 

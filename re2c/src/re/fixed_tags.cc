@@ -17,16 +17,6 @@ namespace re2c {
  *
  * Tags with history also cannot be fixed.
  *
- * One special case is pre-orbit tags: tags that correspond to the opening
- * of capturing group under iteration. We don't need to know the value of
- * such tags: we only need the last iteration which is captured by the
- * orbit tag. Pre-orbit tags are used for disambiguation only (they have
- * higher priority than orbit and closing tags). So we make pre-orbit tags
- * fixed on orbit tags with zero offset: this has no affect on disambiguation,
- * but this way pre-orbit tags will always have the same value as their orbit
- * tags (even if uninitialized, because of the zero offset) and we'll reduce
- * the amount of tag variables.
- *
  * Another special case is fictive tags (those that exist only to impose
  * hierarchical laws of POSIX disambiguation). We treat them as fixed
  * in order to suppress code generation.
@@ -63,9 +53,6 @@ static void find_fixed_tags(RE *re, std::vector<Tag> &tags,
 			} else if (toplevel && dist != Tag::VARDIST && !history(tag)) {
 				tag.base = base;
 				tag.dist = dist;
-			} else if (preorbit(tags, re->tag.idx)) {
-				tag.base = re->tag.idx + 2;
-				tag.dist = 0;
 			} else if (toplevel) {
 				base = re->tag.idx;
 				dist = 0;

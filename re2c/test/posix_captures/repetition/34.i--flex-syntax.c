@@ -38,12 +38,12 @@ yy7:
 		const size_t yynmatch = 4;
 		const YYCTYPE *yypmatch[yynmatch * 2];
 		yypmatch[0] = yyt1;
+		yypmatch[2] = yyt2;
 		yypmatch[4] = yyt3;
 		yypmatch[5] = yyt4;
 		yypmatch[6] = yyt5;
 		yypmatch[7] = yyt6;
 		yypmatch[1] = YYCURSOR;
-		yypmatch[2] = yyt2;
 		yypmatch[3] = YYCURSOR;
 		{}
 	}

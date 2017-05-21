@@ -389,7 +389,7 @@ void gen_fintags(OutputFile &o, uint32_t ind, const DFA &dfa, const Rule &rule)
 		const Tag &tag = tags[t];
 
 		// see note [fixed and variable tags]
-		if (fictive(tag) || orbit(tag) || fixed(tag)) continue;
+		if (fictive(tag) || fixed(tag)) continue;
 
 		expr = vartag_expr(fins[t], prefix, expression);
 
@@ -417,7 +417,7 @@ void gen_fintags(OutputFile &o, uint32_t ind, const DFA &dfa, const Rule &rule)
 		const Tag &tag = tags[t];
 
 		// see note [fixed and variable tags]
-		if (fictive(tag) || orbit(tag) || !fixed(tag)) continue;
+		if (fictive(tag) || !fixed(tag)) continue;
 
 		const size_t dist = tag.dist;
 		const bool fixed_on_cursor = tag.base == Tag::RIGHTMOST;
@@ -452,7 +452,7 @@ std::string tagname(const Tag &tag)
 {
 	assert(!trailing(tag));
 	return capture(tag)
-		? "yypmatch[" + to_string(2 * (tag.ncap / 3) + (tag.ncap % 3)) + "]"
+		? "yypmatch[" + to_string(tag.ncap) + "]"
 		: *tag.name;
 }
 
