@@ -8,7 +8,6 @@
 
 #include "src/conf/warn.h"
 #include "src/dfa/tcmd.h"
-#include "src/dfa/tagpool.h"
 #include "src/re/rule.h"
 #include "src/re/tag.h"
 #include "src/util/forbid_copy.h"
@@ -18,6 +17,7 @@ namespace re2c
 
 struct nfa_t;
 struct opt_t;
+struct Tagpool;
 
 struct dfa_state_t
 {

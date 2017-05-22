@@ -1,6 +1,7 @@
 #include <stdio.h>
 
 #include "src/dfa/dump.h"
+#include "src/dfa/tagpool.h"
 
 namespace re2c
 {

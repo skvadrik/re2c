@@ -1,6 +1,7 @@
 #ifndef _RE2C_DFA_TAGPOOL_
 #define _RE2C_DFA_TAGPOOL_
 
+#include "src/dfa/closure.h"
 #include "src/dfa/tagtree.h"
 #include "src/re/tag.h"
 #include "src/util/lookup.h"
@@ -26,6 +27,7 @@ public:
 
 	size_t maxclos;
 	tagver_t *orders;
+	cclositer_t *closes;
 
 	tagtree_t history;
 

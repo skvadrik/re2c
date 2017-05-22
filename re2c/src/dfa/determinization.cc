@@ -7,6 +7,7 @@
 #include "src/dfa/dfa.h"
 #include "src/dfa/dump.h"
 #include "src/dfa/find_state.h"
+#include "src/dfa/tagpool.h"
 #include "src/nfa/nfa.h"
 #include "src/util/range.h"
 

@@ -1,6 +1,7 @@
 #include <string.h>
 
 #include "src/dfa/closure.h"
+#include "src/dfa/tagpool.h"
 #include "src/nfa/nfa.h"
 #include "src/util/local_increment.h"
 
@@ -49,6 +50,44 @@ bool cmpby_rule_state(const clos_t &x, const clos_t &y)
 	if (sx < sy) return true;
 	if (sx > sy) return false;
 	assert(false);
+}
+
+// POSIX disambiguation for orbit tags: compare by orders
+// and tag histories, see note [POSIX orbit tags]
+static int32_t cmp_orbit(const clos_t &x, const clos_t &y, size_t t, Tagpool &tagpool)
+{
+	const tagver_t
+		ox = tagpool[x.order][t],
+		oy = tagpool[y.order][t];
+	if (ox < oy) return -1;
+	if (ox > oy) return 1;
+	return tagpool.history.compare_last(x.tlook, y.tlook, t);
+}
+
+// POSIX disambiguation for opening/closing tags: maximize
+// (first lookahead, then orders)
+static int32_t cmp_max(const clos_t &x, const clos_t &y, size_t t, Tagpool &tagpool)
+{
+	tagver_t
+		vx = tagpool.history.last(x.tlook, t),
+		vy = tagpool.history.last(y.tlook, t);
+	if (vx == TAGVER_ZERO) vx = -tagpool[x.order][t];
+	if (vy == TAGVER_ZERO) vy = -tagpool[y.order][t];
+	if (vx > vy) return -1;
+	if (vx < vy) return 1;
+	return 0;
+}
+
+// leftmost greedy disambiguation: order equals item's position
+// in leftmost NFA traversal (it's the same for all tags)
+static int32_t cmp_leftmost(const clos_t &x, const clos_t &y, Tagpool &tagpool)
+{
+	const tagver_t
+		ox = tagpool[x.order][0],
+		oy = tagpool[y.order][0];
+	if (ox < oy) return -1;
+	if (ox > oy) return 1;
+	return tagpool.history.compare_full(x.index, y.index, Tag::RIGHTMOST);
 }
 
 /* note [epsilon-closures in tagged NFA]
@@ -241,47 +280,21 @@ bool better(const clos_t &c1, const clos_t &c2,
 		&& c1.tlook == c2.tlook
 		&& c1.index == c2.index)) return false;
 
-	const tagver_t *o1 = tagpool[c1.order], *o2 = tagpool[c2.order];
-	tagtree_t &history = tagpool.history;
-
-	// leftmost greedy disambiguation
 	if (!tagpool.opts->posix_captures) {
-		const tagver_t x = o1[0], y = o2[0];
-		if (x < y) return false;
-		if (x > y) return true;
-
-		const int32_t cmp = history.compare_full(c1.index, c2.index, Tag::RIGHTMOST);
+		const int32_t cmp = cmp_leftmost(c1, c2, tagpool);
 		if (cmp < 0) return false;
 		if (cmp > 0) return true;
-
-		assert(false); // all paths have different indices
-	}
-
-	// POSIX disambiguation
-	for (size_t t = 0; t < tagpool.ntags; ++t) {
-
-		// orbit tag: compare by orders and tag histories
-		if (orbit(tags[t])) {
-			const tagver_t x = o1[t], y = o2[t];
-			if (x < y) return false;
-			if (x > y) return true;
-
-			const int32_t cmp = history.compare_last(c1.tlook, c2.tlook, t);
+		assert(false); // all paths are different
+	} else {
+		for (size_t t = 0; t < tagpool.ntags; ++t) {
+			const int32_t cmp = orbit(tags[t])
+				? cmp_orbit(c1, c2, t, tagpool)
+				: cmp_max(c1, c2, t, tagpool);
 			if (cmp < 0) return false;
 			if (cmp > 0) return true;
-
-		// open/close tag: maximize (first lookahead, then orders)
-		} else {
-			tagver_t x = history.last(c1.tlook, t),
-				y = history.last(c2.tlook, t);
-			if (x == TAGVER_ZERO && y == TAGVER_ZERO) {
-				x = o1[t]; y = o2[t];
-			}
-			if (x > y) return false;
-			if (x < y) return true;
 		}
+		return false;
 	}
-	return false;
 }
 
 /* note [the difference between TDFA(0) and TDFA(1)]
@@ -388,145 +401,115 @@ tcmd_t *generate_versions(closure_t &clos, const std::vector<Tag> &tags,
 	return cmd;
 }
 
-/* note [POSIX disambiguation]
+/* note [POSIX orbit tags]
  *
  * POSIX disambiguation rules demand that earlier subexpressions match
  * the longest possible prefix of the input string (without violating the
  * whole match). To accommodate these rules, we resolve conflicts on orbit
- * tags by lexicographic comparison of tag offsets on the way to conflicting
- * NFA states.
+ * tags by comparison of tag subhistories on conflicting NFA paths.
  *
- * By lexicographic comparison we mean that if one history is a proper prefix
- * of another history, it is lexicographically less; otherwise for the first
- * pair of different offsets, if one offset is greater than the other, then
- * the corresponding history is lexicographically less.
+ * If one subhistory is a proper prefix of another subhistory, it is less;
+ * otherwise for the first pair of different offsets, if one offset is greater
+ * than the other, then the corresponding subhistory is less.
  *
- * For the given input string, it is possible to define lexicographical order
- * on tag histories corresponding to all matching paths through NFA, because
- * the length of histories is bounded by the length of input (epsilon-cycles
- * are forbidden) and the set of all possible offsets is finite (also bounded
- * by input length).
+ * It is possible to pre-compare two NFA paths corresponding to the same
+ * input string prefix and ending in the same NFA state; if paths are not
+ * equal, the result of this comparison will hold for any common suffix.
  *
- * Moreover, for a given prefix of the input string, lexicographic order on
- * histories of the whole string is an extension of order on prefix histories:
- * once comparison of two prefix histories X and Y establishes that X < Y,
- * all further comarisons of X's descendants to Y's descendants will yield
- * the same result. This is obvious unless X is a proper prefix of Y;
- * otherwise, this is true because any offset appended to X will be greater
- * than any offset in Y (it corresponds to further position in the input
- * string) and therefore all descendants of X will be less than Y.
+ * It is also possible to pre-compare NFA paths that correspond to the same
+ * input prefix, but end in different NFA states. Such comparison is incorrect
+ * unless subhistories start at the same offset; but if it is incorrect, we
+ * will never use its result (tags with higher priority will also disagree).
  *
- * Therefore, at any point of ambiguity we can choose lexicographically least
- * history and claim that it corresponds to lexicographically least history
- * for the whole input.
- *
- * For the same reason, keeping the whole history of offsets is not necessary:
- * it is sufficient to remember only the relative order of any pair of
- * histories and use it as the first component in lexicographic comparison.
+ * Therefore instead of keeping the whole history of offsets we calculate
+ * the relative order of any pair of subhistories on each step.
  *
  * This part of the algorithm was invented by Christopher Kuklewicz.
  */
 
-typedef std::pair<tagver_t, hidx_t> key_t;
 struct cmp_orbit_t
 {
-	tagtree_t &tree;
+	Tagpool &tagpool;
 	size_t tag;
-	bool operator()(const key_t &x, const key_t &y)
-	{
-		if (x.first < y.first) return true;
-		if (x.first > y.first) return false;
-		return tree.compare_last(x.second, y.second, tag) < 0;
-	}
+	bool operator()(cclositer_t x, cclositer_t y)
+		{ return cmp_orbit(*x, *y, tag, tagpool) < 0; }
 };
+
+struct cmp_max_t
+{
+	Tagpool &tagpool;
+	size_t tag;
+	bool operator()(cclositer_t x, cclositer_t y)
+		{ return cmp_max(*x, *y, tag, tagpool) < 0; }
+};
+
 struct cmp_leftmost_t
 {
-	tagtree_t &tree;
-	bool operator()(const key_t &x, const key_t &y)
-	{
-		if (x.first < y.first) return true;
-		if (x.first > y.first) return false;
-		return tree.compare_full(x.second, y.second, Tag::RIGHTMOST) < 0;
-	}
+	Tagpool &tagpool;
+	bool operator()(cclositer_t x, cclositer_t y)
+		{ return cmp_leftmost(*x, *y, tagpool) < 0; }
 };
+
+template<typename cmp_t>
+static void assign_orders(cclositer_t *xs, cclositer_t *xe, tagver_t *os, cmp_t &cmp)
+{
+	std::sort(xs, xe, cmp);
+	tagver_t o = 0;
+	for (cclositer_t *x = xs; x < xe; ++o) {
+		*os++ = o;
+		for (; ++x < xe && !cmp(x[-1], x[0]);) *os++ = o;
+	}
+}
 
 void orders(closure_t &clos, Tagpool &tagpool, const std::vector<Tag> &tags)
 {
-	tagtree_t &tagtree = tagpool.history;
 	clositer_t b = clos.begin(), e = clos.end(), c;
 	const size_t
 		ntag = tagpool.ntags,
 		nclos = clos.size();
+	size_t &maxclos = tagpool.maxclos;
+	tagver_t *&os = tagpool.orders, *o, *os0;
+	cclositer_t *&ps = tagpool.closes, *pe;
 
 	if (ntag == 0) return;
 
-	size_t &maxclos = tagpool.maxclos;
-	tagver_t *&orders = tagpool.orders, *o;
+	// reallocate buffers if necessary
 	if (maxclos < nclos) {
 		maxclos = nclos * 2; // in advance
-		delete[] orders;
-		orders = new tagver_t[ntag * maxclos];
+		delete[] os;
+		delete[] ps;
+		os = new tagver_t[(ntag + 1) * maxclos];
+		ps = new cclositer_t[maxclos];
 	}
 
-	// leftmost greedy disambiguation: order equals item's position
-	// in leftmost NFA traversal (it's the same for all tags)
+	os0 = os + ntag * maxclos;
+	pe = ps;
+	for (c = b; c != e; ++c) *pe++ = c;
+
 	if (!tagpool.opts->posix_captures) {
-		const cmp_leftmost_t cmp = {tagtree};
-		std::set<key_t, cmp_leftmost_t> keys(cmp);
-		for (c = b; c != e; ++c) {
-			keys.insert(key_t(tagpool[c->order][0], c->index));
-		}
-		o = orders;
+		cmp_leftmost_t cmp = {tagpool};
+		assign_orders(ps, pe, os0, cmp);
+		o = os;
 		for (c = b; c != e; ++c, o += ntag) {
-			const ptrdiff_t d = std::distance(keys.begin(),
-				keys.find(key_t(tagpool[c->order][0], c->index)));
-			std::fill(o, o + ntag, static_cast<tagver_t>(d));
+			std::fill(o, o + ntag, os0[std::find(ps, pe, c) - ps]);
 		}
-		o = orders;
-		for (c = b; c != e; ++c, o += ntag) {
-			c->order = tagpool.insert(o);
-		}
-		return;
-	}
-
-	// see note [POSIX disambiguation]
-	for (size_t t = 0; t < ntag; ++t) {
-
-		if (orbit(tags[t])) {
-			const cmp_orbit_t cmp = {tagtree, t};
-			std::set<key_t, cmp_orbit_t> keys(cmp);
-			for (c = b; c != e; ++c) {
-				keys.insert(key_t(tagpool[c->order][t], c->tlook));
+	} else {
+		for (size_t t = 0; t < ntag; ++t) {
+			if (orbit(tags[t])) {
+				cmp_orbit_t cmp = {tagpool, t};
+				assign_orders(ps, pe, os0, cmp);
+			} else {
+				cmp_max_t cmp = {tagpool, t};
+				assign_orders(ps, pe, os0, cmp);
 			}
-			o = orders;
+			o = os;
 			for (c = b; c != e; ++c, o += ntag) {
-				const ptrdiff_t d = std::distance(keys.begin(),
-					keys.find(key_t(tagpool[c->order][t], c->tlook)));
-				o[t] = static_cast<tagver_t>(d);
-			}
-
-		} else {
-			std::set<tagver_t> keys;
-			for (c = b; c != e; ++c) {
-				tagver_t u = tagtree.last(c->tlook, t);
-				if (u == TAGVER_ZERO) {
-					u = tagpool[c->order][t];
-				}
-				keys.insert(u);
-			}
-			o = orders;
-			for (c = b; c != e; ++c, o += ntag) {
-				tagver_t u = tagtree.last(c->tlook, t);
-				if (u == TAGVER_ZERO) {
-					u = tagpool[c->order][t];
-				}
-				const ptrdiff_t d = std::distance(keys.begin(), keys.find(u));
-				o[t] = static_cast<tagver_t>(d);
+				o[t] = os0[std::find(ps, pe, c) - ps];
 			}
 		}
 	}
 
-	o = orders;
+	o = os;
 	for (c = b; c != e; ++c, o += ntag) {
 		c->order = tagpool.insert(o);
 	}

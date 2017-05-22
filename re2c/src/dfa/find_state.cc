@@ -1,6 +1,7 @@
 #include <string.h>
 
 #include "src/dfa/find_state.h"
+#include "src/dfa/tagpool.h"
 #include "src/util/hash32.h"
 
 namespace re2c
