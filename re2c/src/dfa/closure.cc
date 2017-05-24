@@ -146,7 +146,7 @@ static void indegree(nfa_state_t *s)
  * tags and there's no point in adding identical path to queue, or histories
  * of some orbit tag are not equal and shorter orbit history dominates.
  */
-static void enqueue(closure_t &todo, closure_t &done, closure_t *shadow,
+static void enqueue(closure_t &done, closure_t *shadow,
 	clos_t x, Tagpool &tagpool, const std::vector<Tag> &tags)
 {
 	nfa_state_t *n = x.state;
@@ -166,91 +166,86 @@ static void enqueue(closure_t &todo, closure_t &done, closure_t *shadow,
 		if (shadow) shadow->push_back(x);
 		return;
 	}
-
-	c = todo.begin(); e = todo.end();
-	for(; c != e && c->state != n; ++c);
-	if (c == e) {
-		todo.push_back(x);
-	} else if (better(*c, x, tagpool, tags)) {
-		std::swap(*c, x);
-	}
+	n->onqueue = true;
 }
 
-void raw_closure(const closure_t &clos1, closure_t &done, closure_t *shadow,
+void raw_closure(const closure_t &init, closure_t &done, closure_t *shadow,
 	Tagpool &tagpool, const std::vector<Tag> &tags, std::valarray<Rule> &rules)
 {
-	closure_t todo;
 	tagtree_t &history = tagpool.history;
+	clositer_t b, e, i, j;
 
 	// initialize in-degree of NFA states in this epsilon-closure
 	// (outer NFA transitions do not contribute to in-degree)
-	for (cclositer_t c = clos1.begin(); c != clos1.end(); ++c) {
+	for (cclositer_t c = init.begin(); c != init.end(); ++c) {
 		indegree(c->state);
 	}
 
 	// enqueue all initial states
 	done.clear();
 	if (shadow) shadow->clear();
-	for (cclositer_t c = clos1.begin(); c != clos1.end(); ++c) {
-		enqueue(todo, done, shadow, *c, tagpool, tags);
+	for (cclositer_t c = init.begin(); c != init.end(); ++c) {
+		enqueue(done, shadow, *c, tagpool, tags);
 	}
 
-	while (!todo.empty()) {
-
+	for (;;) {
 		// find state with the least in-degree and remove it from queue
-		clositer_t c = todo.begin(), e = todo.end(), c0 = c;
-		for (; c != e; ++c) {
-			if (c0->state->indeg == 0) break;
-			if (c0->state->indeg > c->state->indeg) c0 = c;
+		b = done.begin(); e = done.end();
+		for (i = b, j = e; i != e; ++i) {
+			if (!i->state->onqueue) continue;
+			if (j == e || j->state->indeg > i->state->indeg) j = i;
+			if (j != e && j->state->indeg == 0) break;
 		}
-		clos_t x = *c0;
-		*c0 = todo.back(); todo.pop_back(); // "quick" removal
+		if (j == e) break;
+		clos_t x = *j;
+		nfa_state_t *n = x.state;
+		n->onqueue = false;
 
 		// enqueue child NFA states
-		nfa_state_t *n = x.state;
 		switch (n->type) {
 			default: break;
 			case nfa_state_t::NIL:
 				x.state = n->nil.out;
-				enqueue(todo, done, shadow, x, tagpool, tags);
+				enqueue(done, shadow, x, tagpool, tags);
 				break;
 			case nfa_state_t::ALT:
 				x.state = n->alt.out1;
 				x.index = history.push(x.index, Tag::RIGHTMOST, 1);
-				enqueue(todo, done, shadow, x, tagpool, tags);
+				enqueue(done, shadow, x, tagpool, tags);
 				x.state = n->alt.out2;
 				x.index = history.push(x.index, Tag::RIGHTMOST, 0);
-				enqueue(todo, done, shadow, x, tagpool, tags);
+				enqueue(done, shadow, x, tagpool, tags);
 				break;
 			case nfa_state_t::TAG:
 				x.state = n->tag.out;
 				x.tlook = history.push(x.tlook, n->tag.info,
 					n->tag.bottom ? TAGVER_BOTTOM : TAGVER_CURSOR);
-				enqueue(todo, done, shadow, x, tagpool, tags);
+				enqueue(done, shadow, x, tagpool, tags);
 				break;
 		}
 	}
 
+	b = done.begin(); e = done.end();
+
 	// reset in-degree to zero (before removing any states from closure)
-	for (clositer_t c = done.begin(); c != done.end(); ++c) {
-		c->state->indeg = c->state->indeg_backup = 0;
+	for (i = b; i != e; ++i) {
+		i->state->indeg = i->state->indeg_backup = 0;
 	}
 
 	// drop "inner" states (non-final without outgoing non-epsilon transitions)
-	clositer_t b = done.begin(), e = done.end(), f;
-	f = std::partition(b, e, clos_t::ran);
-	e = std::partition(f, e, clos_t::fin);
+	j = std::partition(b, e, clos_t::ran);
+	e = std::partition(j, e, clos_t::fin);
 	done.resize(static_cast<size_t>(e - b));
 
 	// drop all final states except one; mark dropped rules as shadowed
 	// see note [at most one final item per closure]
-	if (e != f) {
-		std::sort(f, e, cmpby_rule_state);
-		const uint32_t l = rules[f->state->rule].code->fline;
-		for (clositer_t c = f; ++c < e;) {
-			rules[c->state->rule].shadow.insert(l);
+	if (j != e) {
+		std::sort(j, e, cmpby_rule_state);
+		const uint32_t l = rules[j->state->rule].code->fline;
+		for (i = j; ++i < e;) {
+			rules[i->state->rule].shadow.insert(l);
 		}
-		done.resize(static_cast<size_t>(f - b) + 1);
+		done.resize(static_cast<size_t>(j - b) + 1);
 	}
 }
 

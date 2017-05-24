@@ -44,6 +44,7 @@ struct nfa_state_t
 	size_t rule;
 	uint16_t indeg;
 	uint16_t indeg_backup;
+	bool onqueue;
 
 	void make_alt(size_t r, nfa_state_t *s1, nfa_state_t *s2)
 	{
@@ -52,6 +53,7 @@ struct nfa_state_t
 		alt.out2 = s2;
 		rule = r;
 		indeg = indeg_backup = 0;
+		onqueue = false;
 	}
 	void make_ran(size_t r, nfa_state_t *s, const Range *p)
 	{
@@ -60,6 +62,7 @@ struct nfa_state_t
 		ran.ran = p;
 		rule = r;
 		indeg = indeg_backup = 0;
+		onqueue = false;
 	}
 	void make_tag(size_t r, nfa_state_t *s, size_t i, bool bottom)
 	{
@@ -69,12 +72,14 @@ struct nfa_state_t
 		tag.bottom = bottom;
 		rule = r;
 		indeg = indeg_backup = 0;
+		onqueue = false;
 	}
 	void make_fin(size_t r)
 	{
 		type = FIN;
 		rule = r;
 		indeg = indeg_backup = 0;
+		onqueue = false;
 	}
 	void make_nil(size_t r, nfa_state_t *s)
 	{
@@ -82,6 +87,7 @@ struct nfa_state_t
 		nil.out = s;
 		rule = r;
 		indeg = indeg_backup = 0;
+		onqueue = false;
 	}
 };
 
