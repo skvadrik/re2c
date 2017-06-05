@@ -46,7 +46,7 @@ struct newver_cmp_t
 		if (x.base < y.base) return true;
 		if (x.base > y.base) return false;
 
-		return history.compare_full(x.history, y.history, x.tag) < 0;
+		return history.compare_plain(x.history, y.history, x.tag) < 0;
 	}
 };
 

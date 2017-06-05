@@ -22,7 +22,7 @@ hidx_t tagtree_t::push(hidx_t i, size_t t, tagver_t v)
 }
 
 // cut out subhistory of this tag (just skip all other tags)
-static void full_subhistory(const tagtree_t &history,
+static void subhistory(const tagtree_t &history,
 	std::vector<tagver_t> &path, hidx_t idx, size_t tag)
 {
 	path.clear();
@@ -33,18 +33,23 @@ static void full_subhistory(const tagtree_t &history,
 	}
 }
 
-// the last subhistory of this tag: it begins at the first occurence
-// and ends at the next occurence of tag with higher priority (in POSIX
-// they correspond to outer captures) or when the whole history ends
-static void last_subhistory(const tagtree_t &history,
+// cut out a list of subhistories of this tag separated by occurences
+// of higher-priority tags (separator has the highest value: 2, elements
+// have lower values: 1 for cursor and 0 for bottom --- this way comparison
+// will stop at separator and shorter subhistory will dominate).
+static void subhistory_list(const tagtree_t &history,
 	std::vector<tagver_t> &path, hidx_t idx, size_t tag)
 {
 	path.clear();
 	hidx_t i = idx;
-	for (; i != HROOT && history.tag(i) != tag; i = history.pred(i));
-	for (; i != HROOT && history.tag(i) >= tag; i = history.pred(i)) {
-		if (history.tag(i) == tag) {
-			path.push_back(history.elem(i));
+	for (;;) {
+		for (; i != HROOT && history.tag(i) != tag; i = history.pred(i));
+		if (i == HROOT) break;
+		path.push_back(2);
+		for (; i != HROOT && history.tag(i) >= tag; i = history.pred(i)) {
+			if (history.tag(i) == tag) {
+				path.push_back(history.elem(i) == TAGVER_CURSOR ? 1 : 0);
+			}
 		}
 	}
 }
@@ -69,18 +74,36 @@ static int32_t compare_reversed(
 	return 0;
 }
 
-int32_t tagtree_t::compare_full(hidx_t x, hidx_t y, size_t t)
+int32_t tagtree_t::compare_plain(hidx_t x, hidx_t y, size_t t)
 {
-	full_subhistory(*this, path1, x, t);
-	full_subhistory(*this, path2, y, t);
+	subhistory(*this, path1, x, t);
+	subhistory(*this, path2, y, t);
 	return compare_reversed(path1, path2);
 }
 
-int32_t tagtree_t::compare_last(hidx_t x, hidx_t y, size_t t)
+int32_t tagtree_t::compare_orbit(hidx_t x, hidx_t y, size_t t)
 {
-	last_subhistory(*this, path1, x, t);
-	last_subhistory(*this, path2, y, t);
+	subhistory_list(*this, path1, x, t);
+	subhistory_list(*this, path2, y, t);
 	return compare_reversed(path1, path2);
+}
+
+int32_t tagtree_t::compare_max(hidx_t x, hidx_t y, size_t t)
+{
+	// compare starting from tail: at the first mismatch maximal value
+	// wins; if one subhistory is shorter, it's last value is assumed
+	// to be zero, so that comparison depends on the next value of the
+	// longer subgistory
+	for (;;) {
+		for (; x != HROOT && tag(x) != t; x = pred(x));
+		for (; y != HROOT && tag(y) != t; y = pred(y));
+		if (x == HROOT && y == HROOT) return 0;
+		if (x == HROOT) return (elem(y) == TAGVER_BOTTOM ? -1 : 1);
+		if (y == HROOT) return (elem(x) == TAGVER_BOTTOM ? 1 : -1);
+		if (elem(x) > elem(y)) return -1;
+		if (elem(x) < elem(y)) return 1;
+		x = pred(x); y = pred(y);
+	}
 }
 
 tagver_t tagtree_t::last(hidx_t i, size_t t) const

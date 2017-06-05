@@ -53,7 +53,12 @@ bool cmpby_rule_state(const clos_t &x, const clos_t &y)
 }
 
 // POSIX disambiguation for orbit tags: compare by orders
-// and tag histories, see note [POSIX orbit tags]
+// and tag histories. Lookahead may consist of multiple orbit subhistories
+// (each containing either a single bottom value, or one or many cursor
+// values); because of the shortest-path algorithm earlier subhistories
+// do not necessarily coincide, so we cannot just compare the last pair
+// of subhistories.
+// see note [POSIX orbit tags]
 static int32_t cmp_orbit(const clos_t &x, const clos_t &y, size_t t, Tagpool &tagpool)
 {
 	const tagver_t
@@ -61,18 +66,20 @@ static int32_t cmp_orbit(const clos_t &x, const clos_t &y, size_t t, Tagpool &ta
 		oy = tagpool[y.order][t];
 	if (ox < oy) return -1;
 	if (ox > oy) return 1;
-	return tagpool.history.compare_last(x.tlook, y.tlook, t);
+	return tagpool.history.compare_orbit(x.tlook, y.tlook, t);
 }
 
-// POSIX disambiguation for opening/closing tags: maximize
-// (first lookahead, then orders)
+// POSIX disambiguation for opening/closing tags: maximize (first lookahead,
+// then orders). Lookahead may consist of multiple subhistories (each
+// containing exactly one lookahead item: cursor or bottom).
+// Comparing the last values is not enough: because of the shortest-path
+// algorithm mismatch may occur at some earlier point (not at the last pair
+// of subhistories), in which case we still need to re-run the search.
 static int32_t cmp_max(const clos_t &x, const clos_t &y, size_t t, Tagpool &tagpool)
 {
-	tagver_t
-		vx = tagpool.history.last(x.tlook, t),
-		vy = tagpool.history.last(y.tlook, t);
-	if (vx == TAGVER_ZERO) vx = -tagpool[x.order][t];
-	if (vy == TAGVER_ZERO) vy = -tagpool[y.order][t];
+	int32_t cmp = tagpool.history.compare_max(x.tlook, y.tlook, t);
+	if (cmp != 0) return cmp;
+	tagver_t vx = -tagpool[x.order][t], vy = -tagpool[y.order][t];
 	if (vx > vy) return -1;
 	if (vx < vy) return 1;
 	return 0;
@@ -87,7 +94,7 @@ static int32_t cmp_leftmost(const clos_t &x, const clos_t &y, Tagpool &tagpool)
 		oy = tagpool[y.order][0];
 	if (ox < oy) return -1;
 	if (ox > oy) return 1;
-	return tagpool.history.compare_full(x.index, y.index, Tag::RIGHTMOST);
+	return tagpool.history.compare_plain(x.index, y.index, Tag::RIGHTMOST);
 }
 
 /* note [epsilon-closures in tagged NFA]

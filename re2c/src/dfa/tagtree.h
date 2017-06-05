@@ -33,8 +33,9 @@ struct tagtree_t
 	tagver_t elem(hidx_t i) const;
 	size_t tag(hidx_t i) const;
 	hidx_t push(hidx_t i, size_t t, tagver_t v);
-	int32_t compare_full(hidx_t x, hidx_t y, size_t t);
-	int32_t compare_last(hidx_t x, hidx_t y, size_t t);
+	int32_t compare_plain(hidx_t x, hidx_t y, size_t t);
+	int32_t compare_orbit(hidx_t x, hidx_t y, size_t t);
+	int32_t compare_max(hidx_t x, hidx_t y, size_t t);
 	tagver_t last(hidx_t i, size_t t) const;
 	FORBID_COPY(tagtree_t);
 };

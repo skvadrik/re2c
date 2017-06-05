@@ -46,7 +46,7 @@ static bool equal_lookahead_tags(const kernel_t *x, const kernel_t *y,
 		for (size_t t = 0; t < tagpool.ntags; ++t) {
 			if (history(tags[t])) {
 				// compare subhistories
-				if (h.compare_full(xl, yl, t) != 0) return false;
+				if (h.compare_plain(xl, yl, t) != 0) return false;
 			} else {
 				// compare only the last tags
 				if (h.last(xl, t) != h.last(yl, t)) return false;
