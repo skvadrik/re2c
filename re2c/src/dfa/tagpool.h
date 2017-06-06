@@ -1,6 +1,8 @@
 #ifndef _RE2C_DFA_TAGPOOL_
 #define _RE2C_DFA_TAGPOOL_
 
+#include <stack>
+
 #include "src/dfa/closure.h"
 #include "src/dfa/tagtree.h"
 #include "src/re/tag.h"
@@ -30,6 +32,8 @@ public:
 	cclositer_t *closes;
 
 	tagtree_t history;
+	std::stack<nfa_state_t*> astack;
+	std::stack<nfa_state_t*> bstack;
 
 	Tagpool(const opt_t *o, size_t n);
 	~Tagpool();

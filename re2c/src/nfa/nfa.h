@@ -15,6 +15,13 @@
 namespace re2c
 {
 
+struct clos_t;
+
+// Goldberg-Radzik 'shortest path' algorithm
+enum gor_status_t {GOR_OFFSTACK, GOR_NEWPASS, GOR_TOPSORT};
+
+static const uint32_t NOCLOS = ~0u;
+
 struct nfa_state_t
 {
 	enum type_t {ALT, RAN, TAG, FIN, NIL} type;
@@ -42,9 +49,8 @@ struct nfa_state_t
 		} nil;
 	};
 	size_t rule;
-	uint16_t indeg;
-	uint16_t indeg_backup;
-	bool onqueue;
+	uint32_t clos;
+	gor_status_t status;
 
 	void make_alt(size_t r, nfa_state_t *s1, nfa_state_t *s2)
 	{
@@ -52,8 +58,8 @@ struct nfa_state_t
 		alt.out1 = s1;
 		alt.out2 = s2;
 		rule = r;
-		indeg = indeg_backup = 0;
-		onqueue = false;
+		clos = NOCLOS;
+		status = GOR_OFFSTACK;
 	}
 	void make_ran(size_t r, nfa_state_t *s, const Range *p)
 	{
@@ -61,8 +67,8 @@ struct nfa_state_t
 		ran.out = s;
 		ran.ran = p;
 		rule = r;
-		indeg = indeg_backup = 0;
-		onqueue = false;
+		clos = NOCLOS;
+		status = GOR_OFFSTACK;
 	}
 	void make_tag(size_t r, nfa_state_t *s, size_t i, bool bottom)
 	{
@@ -71,23 +77,23 @@ struct nfa_state_t
 		tag.info = i;
 		tag.bottom = bottom;
 		rule = r;
-		indeg = indeg_backup = 0;
-		onqueue = false;
+		clos = NOCLOS;
+		status = GOR_OFFSTACK;
 	}
 	void make_fin(size_t r)
 	{
 		type = FIN;
 		rule = r;
-		indeg = indeg_backup = 0;
-		onqueue = false;
+		clos = NOCLOS;
+		status = GOR_OFFSTACK;
 	}
 	void make_nil(size_t r, nfa_state_t *s)
 	{
 		type = NIL;
 		nil.out = s;
 		rule = r;
-		indeg = indeg_backup = 0;
-		onqueue = false;
+		clos = NOCLOS;
+		status = GOR_OFFSTACK;
 	}
 };
 

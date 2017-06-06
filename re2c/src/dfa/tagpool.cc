@@ -27,6 +27,8 @@ Tagpool::Tagpool(const opt_t *o, size_t n)
 	, orders(NULL)
 	, closes(NULL)
 	, history()
+	, astack()
+	, bstack()
 {}
 
 Tagpool::~Tagpool()

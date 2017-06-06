@@ -106,137 +106,122 @@ static int32_t cmp_leftmost(const clos_t &x, const clos_t &y, Tagpool &tagpool)
  *
  * Each closure state might be reachable by multiple epsilon-paths with
  * different tags: this means that the regular expression is ambiguous
- * and can be parsed in different ways. Disambiguation strategy depends
- * on the type of the first (most prioritized) ambiguous tag: for simple
- * tags we always choose the leftmost epsilon-path through the NFA, for
- * POSIX captures the rules are more complex (opening and closing tags
- * are maximized unless one of them is bottom, in which case we fallback
- * to leftmost strategy; orbit tags are compared by order and by tagged
- * epsilon-paths so that earlier iterations are maximized).
- */
-
-static void indegree(nfa_state_t *s)
-{
-	++s->indeg;
-	++s->indeg_backup;
-	if (s->indeg > 1) return;
-	switch (s->type) {
-		case nfa_state_t::NIL:
-			indegree(s->nil.out);
-			break;
-		case nfa_state_t::ALT:
-			indegree(s->alt.out1);
-			indegree(s->alt.out2);
-			break;
-		case nfa_state_t::TAG:
-			indegree(s->tag.out);
-			break;
-		default:
-			break;
-	}
-}
-
-/*
- * If there is an epsilon-loop through initial closure states X and Y,
- * then in-degree of both X and Y in queue is non-zero; whichever of them
- * is popped out of queue first (say, X) may lead to an epsilon-loop through
- * Y back to X, reducing Y's in-degree before epsilon-path starting in Y is
- * inspected. In such unfortunate cases we have to reinstate Y's original
- * in-degree and repeat all the work.
+ * and can be parsed in different ways. Which parse to choose depends on the
+ * disambiguation policy. RE2C supports two policies: leftmost greedy and
+ * POSIX.
  *
- * Paths with epsilon-loops will be terminated: by the time they are added
- * to queue, the resulting closure must already contain a non-looping path
- * for the same state, so the looping path must be compared to the old one.
- * This comparison will favour non-looping path with both POSIX and leftmost
- * policies. With leftmost non-looping history will dominate, since it is a
- * prefix of looping history. With POSIX either histories are equal for all
- * tags and there's no point in adding identical path to queue, or histories
- * of some orbit tag are not equal and shorter orbit history dominates.
+ * We use Goldber-Radzik algorithm to find the "shortest path".
+ * Both disambiguation policies forbid epsilon-cycles with negative weight.
  */
-static void enqueue(closure_t &done, closure_t *shadow,
-	clos_t x, Tagpool &tagpool, const std::vector<Tag> &tags)
+
+static void enqueue(clos_t x, std::stack<nfa_state_t*> &bstack, closure_t &done,
+	closure_t *shadow, Tagpool &tagpool, const std::vector<Tag> &tags)
 {
 	nfa_state_t *n = x.state;
-	clositer_t e, c;
+	uint32_t &i = n->clos;
 
-	if (n->indeg == 0) n->indeg = n->indeg_backup;
-	--n->indeg;
-
-	c = done.begin(); e = done.end();
-	for(; c != e && c->state != n; ++c);
-	if (c == e) {
+	if (i == NOCLOS) {
+		i = static_cast<uint32_t>(done.size());
 		done.push_back(x);
-	} else if (better(*c, x, tagpool, tags)) {
-		if (shadow) shadow->push_back(*c);
-		*c = x;
+	} else if (better(done[i], x, tagpool, tags)) {
+		if (shadow) shadow->push_back(done[i]);
+		done[i] = x;
 	} else {
 		if (shadow) shadow->push_back(x);
 		return;
 	}
-	n->onqueue = true;
+
+	if (n->status != GOR_TOPSORT) {
+		bstack.push(n);
+		n->status = GOR_NEWPASS;
+	}
+}
+
+static void scan(nfa_state_t *n, std::stack<nfa_state_t*> &bstack, closure_t &done,
+	closure_t *shadow, Tagpool &tagpool, const std::vector<Tag> &tags)
+{
+	tagtree_t &history = tagpool.history;
+	clos_t x = done[n->clos];
+	switch (n->type) {
+		default: break;
+		case nfa_state_t::NIL:
+			x.state = n->nil.out;
+			enqueue(x, bstack, done, shadow, tagpool, tags);
+			break;
+		case nfa_state_t::ALT: {
+			hidx_t idx = x.index;
+			x.state = n->alt.out2;
+			x.index = history.push(idx, Tag::RIGHTMOST, 0);
+			enqueue(x, bstack, done, shadow, tagpool, tags);
+			x.state = n->alt.out1;
+			x.index = history.push(idx, Tag::RIGHTMOST, 1);
+			enqueue(x, bstack, done, shadow, tagpool, tags);
+			break;
+		}
+		case nfa_state_t::TAG:
+			x.state = n->tag.out;
+			x.tlook = history.push(x.tlook, n->tag.info,
+				n->tag.bottom ? TAGVER_BOTTOM : TAGVER_CURSOR);
+			enqueue(x, bstack, done, shadow, tagpool, tags);
+			break;
+	}
 }
 
 void raw_closure(const closure_t &init, closure_t &done, closure_t *shadow,
 	Tagpool &tagpool, const std::vector<Tag> &tags, std::valarray<Rule> &rules)
 {
-	tagtree_t &history = tagpool.history;
-	clositer_t b, e, i, j;
-
-	// initialize in-degree of NFA states in this epsilon-closure
-	// (outer NFA transitions do not contribute to in-degree)
-	for (cclositer_t c = init.begin(); c != init.end(); ++c) {
-		indegree(c->state);
-	}
+	std::stack<nfa_state_t*>
+		&astack = tagpool.astack,
+		&bstack = tagpool.bstack;
 
 	// enqueue all initial states
 	done.clear();
 	if (shadow) shadow->clear();
 	for (cclositer_t c = init.begin(); c != init.end(); ++c) {
-		enqueue(done, shadow, *c, tagpool, tags);
+		enqueue(*c, bstack, done, shadow, tagpool, tags);
 	}
 
-	for (;;) {
-		// find state with the least in-degree and remove it from queue
-		b = done.begin(); e = done.end();
-		for (i = b, j = e; i != e; ++i) {
-			if (!i->state->onqueue) continue;
-			if (j == e || j->state->indeg > i->state->indeg) j = i;
-			if (j != e && j->state->indeg == 0) break;
-		}
-		if (j == e) break;
-		clos_t x = *j;
-		nfa_state_t *n = x.state;
-		n->onqueue = false;
+	// Gordberg-Radzik 'shortest path' algorithm.
+	// Papers: 1993, "A heuristic improvement of the Bellman-Ford
+	// algorithm" by Goldberg, Radzik and 1996, Shortest paths algorithms:
+	// Theory andexperimental evaluation" by Cherkassky, Goldberg, Radzik.
+	// Complexity for digraph G=(V,E) is O(|V|*|E|).
+	for (; !bstack.empty(); ) {
 
-		// enqueue child NFA states
-		switch (n->type) {
-			default: break;
-			case nfa_state_t::NIL:
-				x.state = n->nil.out;
-				enqueue(done, shadow, x, tagpool, tags);
-				break;
-			case nfa_state_t::ALT:
-				x.state = n->alt.out1;
-				x.index = history.push(x.index, Tag::RIGHTMOST, 1);
-				enqueue(done, shadow, x, tagpool, tags);
-				x.state = n->alt.out2;
-				x.index = history.push(x.index, Tag::RIGHTMOST, 0);
-				enqueue(done, shadow, x, tagpool, tags);
-				break;
-			case nfa_state_t::TAG:
-				x.state = n->tag.out;
-				x.tlook = history.push(x.tlook, n->tag.info,
-					n->tag.bottom ? TAGVER_BOTTOM : TAGVER_CURSOR);
-				enqueue(done, shadow, x, tagpool, tags);
-				break;
+		// 1st step: find admissible subgraph reachable from B-stack
+		// and topologically sort it (this can be done by a single
+		// depth-first search that scans each state and pushes traversed
+		// states to A-stack in postorder)
+		for (; !bstack.empty(); ) {
+			nfa_state_t *n = bstack.top();
+			if (n->status == GOR_NEWPASS) {
+				n->status = GOR_TOPSORT;
+				scan(n, bstack, done, shadow, tagpool, tags);
+			} else if (n->status == GOR_TOPSORT) {
+				bstack.pop();
+				astack.push(n);
+			} else { // GOR_OFFSTACK
+				bstack.pop();
+			}
+		}
+
+		// 2nd step: scan topologically ordered states from A-stack
+		// and push head states of relaxed transitions to B-stack
+		for (; !astack.empty(); ) {
+			nfa_state_t *n = astack.top();
+			astack.pop();
+			scan(n, bstack, done, shadow, tagpool, tags);
+			n->status = GOR_OFFSTACK;
 		}
 	}
 
-	b = done.begin(); e = done.end();
+	clositer_t b = done.begin(), e = done.end(), i, j;
 
-	// reset in-degree to zero (before removing any states from closure)
+	// reset associated closure items and check status
+	// (do this before removing any states from closure)
 	for (i = b; i != e; ++i) {
-		i->state->indeg = i->state->indeg_backup = 0;
+		i->state->clos = NOCLOS;
+		assert(i->state->status == GOR_OFFSTACK);
 	}
 
 	// drop "inner" states (non-final without outgoing non-epsilon transitions)
@@ -286,7 +271,7 @@ bool better(const clos_t &c1, const clos_t &c2,
 		const int32_t cmp = cmp_leftmost(c1, c2, tagpool);
 		if (cmp < 0) return false;
 		if (cmp > 0) return true;
-		assert(false); // all paths are different
+		return false;
 	} else {
 		for (size_t t = 0; t < tagpool.ntags; ++t) {
 			const int32_t cmp = orbit(tags[t])
