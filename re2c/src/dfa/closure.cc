@@ -353,7 +353,7 @@ tcmd_t *generate_versions(closure_t &clos, const std::vector<Tag> &tags,
 			const tagver_t
 				v0 = vs[t],
 				h0 = tagtree.last(h, t),
-				v = history(tags[t]) ? v : TAGVER_ZERO;
+				v = history(tags[t]) ? v0 : TAGVER_ZERO;
 			if (h0 == TAGVER_ZERO) {
 				vers[t] = v0;
 			} else {
