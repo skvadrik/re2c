@@ -253,8 +253,8 @@ bool better(const clos_t &c1, const clos_t &c2,
 			if (redundant(t, tags)) continue;
 			const hidx_t i1 = c1.tlook, i2 = c2.tlook;
 			const tagver_t
-				o1 = -tagpool[c1.order][t],
-				o2 = -tagpool[c2.order][t];
+				o1 = tagpool[c1.order][t],
+				o2 = tagpool[c2.order][t];
 			const int32_t cmp = h.compare_histories(i1, i2, o1, o2, t, orbit(tags[t]));
 			if (cmp < 0) return false;
 			if (cmp > 0) return true;
@@ -402,9 +402,10 @@ struct cmp_posix_t
 	{
 		const hidx_t i1 = x->tlook, i2 = y->tlook;
 		const tagver_t
-			o1 = -tagpool[x->order][tag],
-			o2 = -tagpool[y->order][tag];
-		return tagpool.history.compare_last_subhistories(i1, i2, o1, o2, tag, orbit) < 0;
+			o1 = tagpool[x->order][tag],
+			o2 = tagpool[y->order][tag];
+		// comparison result is inverted, because orders are used as offsets
+		return tagpool.history.compare_last_subhistories(i1, i2, o1, o2, tag, orbit) > 0;
 	}
 };
 
