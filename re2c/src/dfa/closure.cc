@@ -64,6 +64,14 @@ static int32_t cmp_leftmost(const clos_t &x, const clos_t &y, Tagpool &tagpool)
 	return tagpool.history.compare_plain(x.index, y.index, Tag::RIGHTMOST);
 }
 
+// Skip non-orbit start tags: their position is fixed on some higher-priority
+// tag (except the very first tag, but in RE2C match is always anchored).
+// We cannot skip orbit start tag because the corresponding orbit end tag is
+// hoisted out of loop (by construction) and is, in fact, non-orbit.
+static bool redundant(size_t t, const std::vector<Tag> &tags) {
+	return (t % 2 == 0) != orbit(tags[t]);
+}
+
 /* note [epsilon-closures in tagged NFA]
  *
  * The closure includes all NFA states that are reachable by epsilon-paths
@@ -242,6 +250,7 @@ bool better(const clos_t &c1, const clos_t &c2,
 	} else {
 		tagtree_t &h = tagpool.history;
 		for (size_t t = 0; t < tagpool.ntags; ++t) {
+			if (redundant(t, tags)) continue;
 			const hidx_t i1 = c1.tlook, i2 = c2.tlook;
 			const tagver_t
 				o1 = -tagpool[c1.order][t],
@@ -442,15 +451,17 @@ void orders(closure_t &clos, Tagpool &tagpool, const std::vector<Tag> &tags)
 	pe = ps;
 	for (c = b; c != e; ++c) *pe++ = c;
 
+	memset(os, 0, ntag * nclos * sizeof(tagver_t));
 	if (!tagpool.opts->posix_captures) {
 		cmp_leftmost_t cmp = {tagpool};
 		assign_orders(ps, pe, os0, cmp);
 		o = os;
 		for (c = b; c != e; ++c, o += ntag) {
-			std::fill(o, o + ntag, os0[std::find(ps, pe, c) - ps]);
+			o[0] = os0[std::find(ps, pe, c) - ps];
 		}
 	} else {
 		for (size_t t = 0; t < ntag; ++t) {
+			if (redundant(t, tags)) continue;
 			cmp_posix_t cmp = {tagpool, t, orbit(tags[t])};
 			assign_orders(ps, pe, os0, cmp);
 			o = os;
