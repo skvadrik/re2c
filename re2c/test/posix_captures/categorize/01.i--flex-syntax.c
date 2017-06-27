@@ -3,7 +3,7 @@
 {
 	YYCTYPE yych;
 	unsigned int yyaccept = 0;
-	if (YYLIMIT <= YYCURSOR) YYFILL(1);
+	if ((YYLIMIT - YYCURSOR) < 3) YYFILL(3);
 	yych = *YYCURSOR;
 	switch (yych) {
 	case 'a':
@@ -12,7 +12,7 @@
 	case 'b':
 		yyt3 = yyt4 = NULL;
 		yyt1 = yyt2 = yyt5 = YYCURSOR;
-		goto yy5;
+		goto yy4;
 	default:
 		yyt3 = yyt4 = NULL;
 		yyt1 = yyt2 = yyt5 = YYCURSOR;
@@ -33,53 +33,64 @@ yy2:
 		{}
 	}
 yy3:
-	++YYCURSOR;
-	if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
-	yych = *YYCURSOR;
+	yych = *++YYCURSOR;
 	switch (yych) {
-	case 'a':
-		yyt2 = YYCURSOR;
-		goto yy3;
 	case 'b':
 		yyt3 = yyt4 = NULL;
 		yyt5 = YYCURSOR;
-		goto yy7;
+		goto yy8;
+	default:	goto yy7;
+	}
+yy4:
+	++YYCURSOR;
+	if (YYLIMIT <= YYCURSOR) YYFILL(1);
+	yych = *YYCURSOR;
+	switch (yych) {
+	case 'b':	goto yy4;
+	default:	goto yy2;
+	}
+yy6:
+	++YYCURSOR;
+	if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
+	yych = *YYCURSOR;
+yy7:
+	switch (yych) {
+	case 'a':
+		yyt5 = YYCURSOR;
+		goto yy6;
+	case 'b':
+		yyt2 = yyt5;
+		yyt3 = yyt4 = NULL;
+		yyt5 = YYCURSOR;
+		goto yy8;
 	default:
 		yyt3 = yyt4 = NULL;
 		yyt2 = yyt5 = YYCURSOR;
 		goto yy2;
 	}
-yy5:
-	++YYCURSOR;
-	if (YYLIMIT <= YYCURSOR) YYFILL(1);
-	yych = *YYCURSOR;
-	switch (yych) {
-	case 'b':	goto yy5;
-	default:	goto yy2;
-	}
-yy7:
+yy8:
 	yyaccept = 0;
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
 	case 'a':
 		yyt6 = YYCURSOR;
-		goto yy8;
+		goto yy9;
 	case 'b':
 		yyt2 = yyt5;
-		goto yy5;
+		goto yy4;
 	default:
 		yyt2 = yyt5;
 		goto yy2;
 	}
-yy8:
+yy9:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 'b':	goto yy10;
-	default:	goto yy9;
+	case 'b':	goto yy11;
+	default:	goto yy10;
 	}
-yy9:
+yy10:
 	YYCURSOR = YYMARKER;
 	if (yyaccept == 0) {
 		yyt2 = yyt5;
@@ -88,7 +99,7 @@ yy9:
 		yyt4 = yyt5 = YYCURSOR;
 		goto yy2;
 	}
-yy10:
+yy11:
 	yyaccept = 1;
 	YYMARKER = ++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
@@ -97,11 +108,11 @@ yy10:
 	case 'a':
 		yyt3 = yyt6;
 		yyt6 = YYCURSOR;
-		goto yy8;
+		goto yy9;
 	case 'b':
 		yyt3 = yyt6;
 		yyt4 = yyt5 = YYCURSOR;
-		goto yy5;
+		goto yy4;
 	default:
 		yyt3 = yyt6;
 		yyt4 = yyt5 = YYCURSOR;

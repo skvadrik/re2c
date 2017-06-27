@@ -1,10 +1,13 @@
 #include <assert.h>
+#include <stdlib.h>
 #include <string.h>
 
 #include "src/dfa/tagtree.h"
 
 namespace re2c
 {
+
+static const tagver_t DELIM = TAGVER_CURSOR - 1;
 
 tagtree_t::tagtree_t(): nodes(), path1(), path2() {}
 
@@ -29,27 +32,6 @@ static void subhistory(const tagtree_t &history,
 	for (hidx_t i = idx; i != HROOT; i = history.pred(i)) {
 		if (history.tag(i) == tag) {
 			path.push_back(history.elem(i));
-		}
-	}
-}
-
-// cut out a list of subhistories of this tag separated by occurences
-// of higher-priority tags (separator has the highest value: 2, elements
-// have lower values: 1 for cursor and 0 for bottom --- this way comparison
-// will stop at separator and shorter subhistory will dominate).
-static void subhistory_list(const tagtree_t &history,
-	std::vector<tagver_t> &path, hidx_t idx, size_t tag)
-{
-	path.clear();
-	hidx_t i = idx;
-	for (;;) {
-		for (; i != HROOT && history.tag(i) != tag; i = history.pred(i));
-		if (i == HROOT) break;
-		path.push_back(2);
-		for (; i != HROOT && history.tag(i) >= tag; i = history.pred(i)) {
-			if (history.tag(i) == tag) {
-				path.push_back(history.elem(i) == TAGVER_CURSOR ? 1 : 0);
-			}
 		}
 	}
 }
@@ -81,29 +63,98 @@ int32_t tagtree_t::compare_plain(hidx_t x, hidx_t y, size_t t)
 	return compare_reversed(path1, path2);
 }
 
-int32_t tagtree_t::compare_orbit(hidx_t x, hidx_t y, size_t t)
+static size_t boundary_tag(size_t tag)
 {
-	subhistory_list(*this, path1, x, t);
-	subhistory_list(*this, path2, y, t);
-	return compare_reversed(path1, path2);
+	// for start tags, return itself; for end tags, return start tag
+	// (start tags have even numbers, end tags have odd numbers)
+	return tag & ~1u;
 }
 
-int32_t tagtree_t::compare_max(hidx_t x, hidx_t y, size_t t)
+// returns all subhistories of the given tag as one list (individual
+// subhistories are separated by delimiter)
+static int32_t subhistory_list(const tagtree_t &history,
+	std::vector<tagver_t> &path, hidx_t idx, size_t tag)
 {
-	// compare starting from tail: at the first mismatch maximal value
-	// wins; if one subhistory is shorter, it's last value is assumed
-	// to be zero, so that comparison depends on the next value of the
-	// longer subgistory
+	path.clear();
+	int32_t nsub = 0;
+	hidx_t i = idx;
+
+	const size_t bound = boundary_tag(tag);
+	path.push_back(DELIM);
 	for (;;) {
-		for (; x != HROOT && tag(x) != t; x = pred(x));
-		for (; y != HROOT && tag(y) != t; y = pred(y));
-		if (x == HROOT && y == HROOT) return 0;
-		if (x == HROOT) return (elem(y) == TAGVER_BOTTOM ? -1 : 1);
-		if (y == HROOT) return (elem(x) == TAGVER_BOTTOM ? 1 : -1);
-		if (elem(x) > elem(y)) return -1;
-		if (elem(x) < elem(y)) return 1;
-		x = pred(x); y = pred(y);
+		for (; i != HROOT && history.tag(i) >= bound; i = history.pred(i)) {
+			if (history.tag(i) == tag) {
+				path.push_back(history.elem(i));
+			}
+		}
+		if (i == HROOT) break;
+		++nsub;
+		path.push_back(DELIM);
+		for (; i != HROOT && history.tag(i) != tag; i = history.pred(i));
 	}
+
+	return nsub;
+}
+
+// Lookahead may consist of multiple subhistories (each containing either
+// a single bottom value, or one or more cursor values (exactly one for
+// non-orbit subhistories). Because of the shortest-path algorithm earlier
+// subhistories do not necessarily coincide, so comparing only the last
+// pair of subhistories is not enough.
+// see note [POSIX orbit tags]
+int32_t tagtree_t::compare_histories(hidx_t x, hidx_t y,
+	tagver_t ox, tagver_t oy, size_t t, bool orbit)
+{
+	const int32_t
+		n1 = subhistory_list(*this, path1, x, t),
+		n2 = subhistory_list(*this, path2, y, t);
+
+	assert(n1 == n2);
+	if (orbit) {
+		path1.push_back(ox);
+		path2.push_back(oy);
+	} else {
+		if (path1.back() == DELIM) path1.push_back(ox);
+		if (path2.back() == DELIM) path2.push_back(oy);
+	}
+
+	std::vector<tagver_t>::const_reverse_iterator
+		i1 = path1.rbegin(), e1 = path1.rend(),
+		i2 = path2.rbegin(), e2 = path2.rend();
+	for (;;) {
+		if (i1 == e1 && i2 == e2) return 0;
+		assert(i1 != e1 && i2 != e2);
+		const tagver_t v1 = *i1++, v2 = *i2++;
+		if (v1 == DELIM && v2 == DELIM) continue;
+		if (v1 == DELIM) return -1;
+		if (v2 == DELIM) return 1;
+		if (v1 > v2) return -1;
+		if (v1 < v2) return 1;
+	}
+}
+
+static void last_subhistory(const tagtree_t &history, std::vector<tagver_t> &path,
+	hidx_t idx, tagver_t order, size_t tag, bool orbit)
+{
+	path.clear();
+	hidx_t i = idx;
+	const size_t bound = boundary_tag(tag);
+	for (; i != HROOT && history.tag(i) >= bound; i = history.pred(i)) {
+		if (history.tag(i) == tag) {
+			path.push_back(history.elem(i));
+		}
+	}
+	if (i == HROOT && (orbit || path.empty())) {
+		path.push_back(order);
+	}
+}
+
+int32_t tagtree_t::compare_last_subhistories(hidx_t x, hidx_t y,
+	tagver_t ox, tagver_t oy, size_t t, bool orbit)
+{
+	last_subhistory(*this, path1, x, ox, t, orbit);
+	last_subhistory(*this, path2, y, oy, t, orbit);
+	return compare_reversed(path1, path2);
 }
 
 tagver_t tagtree_t::last(hidx_t i, size_t t) const
