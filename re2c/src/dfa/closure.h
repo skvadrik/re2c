@@ -38,7 +38,7 @@ struct newver_t
 struct newver_cmp_t
 {
 	tagtree_t &history;
-	bool operator()(const newver_t &x, const newver_t &y)
+	bool operator()(const newver_t &x, const newver_t &y) const
 	{
 		if (x.tag < y.tag) return true;
 		if (x.tag > y.tag) return false;
