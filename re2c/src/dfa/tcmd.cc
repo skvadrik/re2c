@@ -32,8 +32,12 @@ bool tcmd_t::equal_history(const tagver_t *h, const tagver_t *g)
  * overwrites 'y' before its precious value is copied to 'x').
  *
  * To avoid overwrites, commands should be topologically sorted.
- * Cycles of length 2 are not allowed by construction; cycles of
- * length 3 or more are left as is.
+ * The algorithm detects cycles and terminates; non-trivial cycles
+ * (induced by 2 or more nodes) are reported. We don't care about
+ * trivial cycles (loopbacks), because they can be implemented without
+ * temporary variable. Non-trivial cycles need a new temporary variable
+ * local to the given basic block, which makes liveness analysis more
+ * complex (so we simply forbid such mappings).
  *
  * For the purpose of topsort, we treat commands as arcs of directed
  * acyclic graph: command 'x = y' yields arc X -> Y. Topsort works
@@ -72,7 +76,7 @@ bool tcmd_t::topsort(tcmd_t **phead, uint32_t *indeg)
 	tcmd_t
 		*x0 = *phead, **px, *x,
 		*y0 = NULL, **py, **py1;
-	bool acyclic = true;
+	bool nontrivial_cycles = false;
 
 	// initialize in-degree
 	for (x = x0; x; x = x->next) {
@@ -102,14 +106,16 @@ bool tcmd_t::topsort(tcmd_t **phead, uint32_t *indeg)
 
 		// only cycles left
 		if (py == py1) {
-			acyclic = false;
+			// look for cycles of length 2 or more
+			for (x = x0; x && x->lhs == x->rhs; x = x->next);
+			nontrivial_cycles = x != NULL;
 			break;
 		}
 	}
 	*py = x0;
 
 	*phead = y0;
-	return acyclic;
+	return nontrivial_cycles;
 }
 
 tcpool_t::tcpool_t()
