@@ -183,10 +183,10 @@ bool kernels_t::operator()(const kernel_t *k1, const kernel_t *k2)
 	*pacts = copy;
 
 	// see note [topological ordering of copy commands]
-	const bool acyclic = tcmd_t::topsort(pacts, indeg);
+	const bool nontrivial_cycles = tcmd_t::topsort(pacts, indeg);
 
 	// in case of cycles restore 'save' commands and fail
-	if (!acyclic) {
+	if (nontrivial_cycles) {
 		pa = pacts;
 		for (size_t i = 0; i < nact; ++i) {
 			*pa = a = actnext[i];
@@ -196,7 +196,7 @@ bool kernels_t::operator()(const kernel_t *k1, const kernel_t *k2)
 		*pa = NULL;
 	}
 
-	return acyclic;
+	return !nontrivial_cycles;
 }
 
 kernels_t::kernels_t(Tagpool &tagp, tcpool_t &tcp, const std::vector<Tag> &ts)
