@@ -202,7 +202,7 @@ void raw_closure(const closure_t &init, closure_t &done, closure_t *shadow,
 	// drop "inner" states (non-final without outgoing non-epsilon transitions)
 	j = std::partition(b, e, clos_t::ran);
 	e = std::partition(j, e, clos_t::fin);
-	done.resize(static_cast<size_t>(e - b));
+	size_t n = static_cast<size_t>(e - b);
 
 	// drop all final states except one; mark dropped rules as shadowed
 	// see note [at most one final item per closure]
@@ -212,8 +212,10 @@ void raw_closure(const closure_t &init, closure_t &done, closure_t *shadow,
 		for (i = j; ++i < e;) {
 			rules[i->state->rule].shadow.insert(l);
 		}
-		done.resize(static_cast<size_t>(j - b) + 1);
+		n = static_cast<size_t>(j - b) + 1;
 	}
+
+	done.resize(n);
 }
 
 /* note [at most one final item per closure]
