@@ -206,6 +206,8 @@ configure_file(config.h.cmake.in ${CMAKE_SOURCE_DIR}/config.h)
 include_directories(${CMAKE_SOURCE_DIR} ${CMAKE_BINARY_DIR})
 
 add_executable(re2c_bootstrap ${re2c_SRCS} ${re2c_HDRS} ${bootstrap_SRCS} ${bootstrap_HDRS})
+target_compile_definitions(re2c_bootstrap PRIVATE $<$<CXX_COMPILER_ID:MSVC>:_ITERATOR_DEBUG_LEVEL=0>)
+
 
 # Use the bootstrapped re2c to regenerate .re files and create a new version
 add_custom_command(OUTPUT ${CMAKE_BINARY_DIR}/src/ast/lex.cc
@@ -236,6 +238,7 @@ set(autogen_SRCS
 )
 
 add_executable(re2c ${re2c_SRCS} ${re2c_HDRS} ${autogen_SRCS})
+target_compile_definitions(re2c PRIVATE $<$<CXX_COMPILER_ID:MSVC>:_ITERATOR_DEBUG_LEVEL=0>)
 
 # TODO: generate doc/readme if appropriate tool is available, install (to share/man folder); different install structure for Windows
 
