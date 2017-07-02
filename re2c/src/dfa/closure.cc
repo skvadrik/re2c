@@ -202,7 +202,6 @@ void raw_closure(const closure_t &init, closure_t &done, closure_t *shadow,
 	// drop "inner" states (non-final without outgoing non-epsilon transitions)
 	j = std::partition(b, e, clos_t::ran);
 	e = std::partition(j, e, clos_t::fin);
-	done.resize(static_cast<size_t>(e - b));
 
 	// drop all final states except one; mark dropped rules as shadowed
 	// see note [at most one final item per closure]
@@ -213,6 +212,9 @@ void raw_closure(const closure_t &init, closure_t &done, closure_t *shadow,
 			rules[i->state->rule].shadow.insert(l);
 		}
 		done.resize(static_cast<size_t>(j - b) + 1);
+	} else {
+		// if there were no final states, only drop "inner" states
+		done.resize(static_cast<size_t>(e - b));
 	}
 }
 
