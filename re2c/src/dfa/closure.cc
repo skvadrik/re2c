@@ -12,7 +12,7 @@ static void closure_posix(const closure_t &clos1, closure_t &clos,
 	closure_t *shadow, Tagpool &tagpool, const std::vector<Tag> &tags);
 static void closure_leftmost(const closure_t &clos1, closure_t &clos,
 	closure_t *shadow, Tagpool &tagpool);
-static bool better(const clos_t &c1, const clos_t &c2, Tagpool &tagpool, const std::vector<Tag> &tags);
+static int32_t compare_posix(const clos_t &c1, const clos_t &c2, Tagpool &tagpool, const std::vector<Tag> &tags);
 static void prune(closure_t &clos, std::valarray<Rule> &rules);
 static void lower_lookahead_to_transition(closure_t &clos);
 static tcmd_t *generate_versions(closure_t &clos, const std::vector<Tag> &tags,
@@ -93,12 +93,11 @@ static void enqueue(clos_t x, std::stack<nfa_state_t*> &bstack, closure_t &done,
 	if (i == NOCLOS) {
 		i = static_cast<uint32_t>(done.size());
 		done.push_back(x);
-	} else if (better(done[i], x, tagpool, tags)) {
-		if (shadow) shadow->push_back(done[i]);
-		done[i] = x;
 	} else {
-		if (shadow) shadow->push_back(x);
-		return;
+		const int32_t cmp = compare_posix(x, done[i], tagpool, tags);
+		if (cmp < 0) std::swap(x, done[i]);
+		if (shadow && cmp != 0) shadow->push_back(x);
+		if (cmp >= 0) return;
 	}
 
 	if (n->status != GOR_TOPSORT) {
@@ -207,11 +206,11 @@ void closure_posix(const closure_t &init, closure_t &done,
  * with the highest priority (see note [closure items are sorted by rule]).
  */
 
-bool better(const clos_t &c1, const clos_t &c2,
+int32_t compare_posix(const clos_t &c1, const clos_t &c2,
 	Tagpool &tagpool, const std::vector<Tag> &tags)
 {
 	if (tagpool.ntags == 0
-		|| (c1.order == c2.order && c1.tlook == c2.tlook)) return false;
+		|| (c1.order == c2.order && c1.tlook == c2.tlook)) return 0;
 
 	tagtree_t &h = tagpool.history;
 	for (size_t t = 0; t < tagpool.ntags; ++t) {
@@ -221,10 +220,9 @@ bool better(const clos_t &c1, const clos_t &c2,
 			o1 = tagpool[c1.order][t],
 			o2 = tagpool[c2.order][t];
 		const int32_t cmp = h.compare_histories(i1, i2, o1, o2, t, orbit(tags[t]));
-		if (cmp < 0) return false;
-		if (cmp > 0) return true;
+		if (cmp != 0) return cmp;
 	}
-	return false;
+	return 0;
 }
 
 void closure_leftmost(const closure_t &init, closure_t &done,

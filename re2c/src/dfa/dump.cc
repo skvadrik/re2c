@@ -69,19 +69,14 @@ void dump_dfa_t::closure_tags(cclositer_t c)
 
 	const hidx_t l = c->tlook;
 	const tagver_t *vers = tagpool[c->tvers];
-	const tagver_t *ords = tagpool[c->order];
+//	const tagver_t *ords = tagpool[c->order];
 	const size_t ntag = tagpool.ntags;
 
 	for (size_t t = 0; t < ntag; ++t) {
 		fprintf(stderr, " %s%d", tagname(dfa.tags[t]), abs(vers[t]));
-		if (tagpool.opts->posix_captures) {
-			const tagver_t o = ords[t];
-			if (o == TAGVER_BOTTOM) {
-				fprintf(stderr, "[?]");
-			} else {
-				fprintf(stderr, "[%d]", o);
-			}
-		}
+//		if (tagpool.opts->posix_captures) {
+//			fprintf(stderr, "[%d]", ords[t]);
+//		}
 	}
 
 	if (l != HROOT) {
