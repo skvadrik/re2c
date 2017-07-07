@@ -18,7 +18,6 @@ struct clos_t
 	size_t tvers; // vector of tag versions (including lookahead tags)
 	hidx_t ttran; // history of transition tags
 	hidx_t tlook; // history of lookahead tags
-	hidx_t index; // history of left/right alternatives in NFA traversal
 
 	static inline bool fin(const clos_t &c) { return c.state->type == nfa_state_t::FIN; }
 	static inline bool ran(const clos_t &c) { return c.state->type == nfa_state_t::RAN; }
@@ -27,6 +26,8 @@ struct clos_t
 typedef std::vector<clos_t> closure_t;
 typedef closure_t::iterator clositer_t;
 typedef closure_t::const_iterator cclositer_t;
+typedef closure_t::reverse_iterator rclositer_t;
+typedef closure_t::const_reverse_iterator rcclositer_t;
 
 struct newver_t
 {

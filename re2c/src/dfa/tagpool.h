@@ -34,6 +34,7 @@ public:
 	tagtree_t history;
 	std::stack<nfa_state_t*> astack;
 	std::stack<nfa_state_t*> bstack;
+	std::stack<clos_t> cstack;
 
 	Tagpool(const opt_t *o, size_t n);
 	~Tagpool();

@@ -43,7 +43,7 @@ void reach(const kernel_t *kernel, closure_t &clos, uint32_t symbol)
 			*s2 = transition(s1, symbol);
 		if (s2) {
 			clos_t c = {s1, s2, kernel->order[i], kernel->tvers[i],
-				kernel->tlook[i], HROOT, HROOT};
+				kernel->tlook[i], HROOT};
 			clos.push_back(c);
 		}
 	}
@@ -86,7 +86,7 @@ dfa_t::dfa_t(const nfa_t &nfa, const opt_t *opts,
 	// build tagged epsilon-closure of all reachable NFA states,
 	// then find identical or mappable DFA state or add a new one
 
-	clos_t c0 = {NULL, nfa.root, ZERO_TAGS, INITIAL_TAGS, HROOT, HROOT, HROOT};
+	clos_t c0 = {NULL, nfa.root, ZERO_TAGS, INITIAL_TAGS, HROOT, HROOT};
 	clos1.push_back(c0);
 	acts = closure(clos1, clos2, tagpool, tcpool, rules, maxtagver, newvers, dump.shadow, tags);
 	find_state(*this, dfa_t::NIL, 0/* any */, kernels, clos2, acts, dump);

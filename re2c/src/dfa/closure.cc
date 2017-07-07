@@ -8,9 +8,12 @@
 namespace re2c
 {
 
-static void raw_closure(const closure_t &clos1, closure_t &clos, closure_t *shadow,
-	Tagpool &tagpool, const std::vector<Tag> &tags, std::valarray<Rule> &rules);
+static void closure_posix(const closure_t &clos1, closure_t &clos,
+	closure_t *shadow, Tagpool &tagpool, const std::vector<Tag> &tags);
+static void closure_leftmost(const closure_t &clos1, closure_t &clos,
+	closure_t *shadow, Tagpool &tagpool);
 static bool better(const clos_t &c1, const clos_t &c2, Tagpool &tagpool, const std::vector<Tag> &tags);
+static void prune(closure_t &clos, std::valarray<Rule> &rules);
 static void lower_lookahead_to_transition(closure_t &clos);
 static tcmd_t *generate_versions(closure_t &clos, const std::vector<Tag> &tags,
 	Tagpool &tagpool, tcpool_t &tcpool, tagver_t &maxver, newvers_t &newvers);
@@ -22,11 +25,15 @@ tcmd_t *closure(closure_t &clos1, closure_t &clos2, Tagpool &tagpool,
 	newvers_t &newvers, closure_t *shadow, const std::vector<Tag> &tags)
 {
 	// build tagged epsilon-closure of the given set of NFA states
-	raw_closure(clos1, clos2, shadow, tagpool, tags, rules);
-
-	orders(clos2, tagpool, tags);
-
-	std::sort(clos2.begin(), clos2.end(), cmpby_rule_state);
+	if (tagpool.opts->posix_captures) {
+		closure_posix(clos1, clos2, shadow, tagpool, tags);
+		prune(clos2, rules);
+		orders(clos2, tagpool, tags);
+		std::sort(clos2.begin(), clos2.end(), cmpby_rule_state);
+	} else {
+		closure_leftmost(clos1, clos2, shadow, tagpool);
+		prune(clos2, rules);
+	}
 
 	// see note [the difference between TDFA(0) and TDFA(1)]
 	if (!tagpool.opts->lookahead) {
@@ -50,18 +57,6 @@ bool cmpby_rule_state(const clos_t &x, const clos_t &y)
 	if (sx < sy) return true;
 	if (sx > sy) return false;
 	assert(false);
-}
-
-// leftmost greedy disambiguation: order equals item's position
-// in leftmost NFA traversal (it's the same for all tags)
-static int32_t cmp_leftmost(const clos_t &x, const clos_t &y, Tagpool &tagpool)
-{
-	const tagver_t
-		ox = tagpool[x.order][0],
-		oy = tagpool[y.order][0];
-	if (ox < oy) return -1;
-	if (ox > oy) return 1;
-	return tagpool.history.compare_plain(x.index, y.index, Tag::RIGHTMOST);
 }
 
 // Skip non-orbit start tags: their position is fixed on some higher-priority
@@ -123,16 +118,12 @@ static void scan(nfa_state_t *n, std::stack<nfa_state_t*> &bstack, closure_t &do
 			x.state = n->nil.out;
 			enqueue(x, bstack, done, shadow, tagpool, tags);
 			break;
-		case nfa_state_t::ALT: {
-			hidx_t idx = x.index;
+		case nfa_state_t::ALT:
 			x.state = n->alt.out2;
-			x.index = history.push(idx, Tag::RIGHTMOST, 0);
 			enqueue(x, bstack, done, shadow, tagpool, tags);
 			x.state = n->alt.out1;
-			x.index = history.push(idx, Tag::RIGHTMOST, 1);
 			enqueue(x, bstack, done, shadow, tagpool, tags);
 			break;
-		}
 		case nfa_state_t::TAG:
 			x.state = n->tag.out;
 			x.tlook = history.push(x.tlook, n->tag.info,
@@ -142,8 +133,8 @@ static void scan(nfa_state_t *n, std::stack<nfa_state_t*> &bstack, closure_t &do
 	}
 }
 
-void raw_closure(const closure_t &init, closure_t &done, closure_t *shadow,
-	Tagpool &tagpool, const std::vector<Tag> &tags, std::valarray<Rule> &rules)
+void closure_posix(const closure_t &init, closure_t &done,
+	closure_t *shadow, Tagpool &tagpool, const std::vector<Tag> &tags)
 {
 	std::stack<nfa_state_t*>
 		&astack = tagpool.astack,
@@ -190,32 +181,12 @@ void raw_closure(const closure_t &init, closure_t &done, closure_t *shadow,
 		}
 	}
 
-	clositer_t b = done.begin(), e = done.end(), i, j;
-
 	// reset associated closure items and check status
 	// (do this before removing any states from closure)
-	for (i = b; i != e; ++i) {
+	for (clositer_t i = done.begin(); i != done.end(); ++i) {
 		i->state->clos = NOCLOS;
 		assert(i->state->status == GOR_OFFSTACK);
 	}
-
-	// drop "inner" states (non-final without outgoing non-epsilon transitions)
-	j = std::partition(b, e, clos_t::ran);
-	e = std::partition(j, e, clos_t::fin);
-	size_t n = static_cast<size_t>(e - b);
-
-	// drop all final states except one; mark dropped rules as shadowed
-	// see note [at most one final item per closure]
-	if (j != e) {
-		std::sort(j, e, cmpby_rule_state);
-		const uint32_t l = rules[j->state->rule].code->fline;
-		for (i = j; ++i < e;) {
-			rules[i->state->rule].shadow.insert(l);
-		}
-		n = static_cast<size_t>(j - b) + 1;
-	}
-
-	done.resize(n);
 }
 
 /* note [at most one final item per closure]
@@ -240,29 +211,97 @@ bool better(const clos_t &c1, const clos_t &c2,
 	Tagpool &tagpool, const std::vector<Tag> &tags)
 {
 	if (tagpool.ntags == 0
-		|| (c1.order == c2.order
-		&& c1.tlook == c2.tlook
-		&& c1.index == c2.index)) return false;
+		|| (c1.order == c2.order && c1.tlook == c2.tlook)) return false;
 
-	if (!tagpool.opts->posix_captures) {
-		const int32_t cmp = cmp_leftmost(c1, c2, tagpool);
+	tagtree_t &h = tagpool.history;
+	for (size_t t = 0; t < tagpool.ntags; ++t) {
+		if (redundant(t, tags)) continue;
+		const hidx_t i1 = c1.tlook, i2 = c2.tlook;
+		const tagver_t
+			o1 = tagpool[c1.order][t],
+			o2 = tagpool[c2.order][t];
+		const int32_t cmp = h.compare_histories(i1, i2, o1, o2, t, orbit(tags[t]));
 		if (cmp < 0) return false;
 		if (cmp > 0) return true;
-		return false;
-	} else {
-		tagtree_t &h = tagpool.history;
-		for (size_t t = 0; t < tagpool.ntags; ++t) {
-			if (redundant(t, tags)) continue;
-			const hidx_t i1 = c1.tlook, i2 = c2.tlook;
-			const tagver_t
-				o1 = tagpool[c1.order][t],
-				o2 = tagpool[c2.order][t];
-			const int32_t cmp = h.compare_histories(i1, i2, o1, o2, t, orbit(tags[t]));
-			if (cmp < 0) return false;
-			if (cmp > 0) return true;
-		}
-		return false;
 	}
+	return false;
+}
+
+void closure_leftmost(const closure_t &init, closure_t &done,
+	closure_t *shadow, Tagpool &tagpool)
+{
+	std::stack<clos_t> &todo = tagpool.cstack;
+
+	// enqueue all initial states
+	done.clear();
+	if (shadow) shadow->clear();
+	for (rcclositer_t c = init.rbegin(); c != init.rend(); ++c) {
+		todo.push(*c);
+	}
+
+	// DFS; linear complexity
+	for (; !todo.empty(); ) {
+		clos_t x = todo.top();
+		todo.pop();
+		nfa_state_t *n = x.state;
+
+		if (n->clos == NOCLOS) {
+			n->clos = static_cast<uint32_t>(done.size());
+			done.push_back(x);
+		} else {
+			if (shadow) shadow->push_back(x);
+			continue;
+		}
+
+		switch (n->type) {
+			default: break;
+			case nfa_state_t::NIL:
+				x.state = n->nil.out;
+				todo.push(x);
+				break;
+			case nfa_state_t::ALT:
+				x.state = n->alt.out2;
+				todo.push(x);
+				x.state = n->alt.out1;
+				todo.push(x);
+				break;
+			case nfa_state_t::TAG:
+				x.state = n->tag.out;
+				x.tlook = tagpool.history.push(x.tlook, n->tag.info,
+					n->tag.bottom ? TAGVER_BOTTOM : TAGVER_CURSOR);
+				todo.push(x);
+				break;
+		}
+	}
+
+	// reset associated closure items 
+	// (do this before removing any states from closure)
+	for (clositer_t i = done.begin(); i != done.end(); ++i) {
+		i->state->clos = NOCLOS;
+	}
+}
+
+void prune(closure_t &clos, std::valarray<Rule> &rules)
+{
+	clositer_t b = clos.begin(), e = clos.end(), i, j;
+
+	// drop "inner" states (non-final without outgoing non-epsilon transitions)
+	j = std::stable_partition(b, e, clos_t::ran);
+	e = std::stable_partition(j, e, clos_t::fin);
+	size_t n = static_cast<size_t>(e - b);
+
+	// drop all final states except one; mark dropped rules as shadowed
+	// see note [at most one final item per closure]
+	if (j != e) {
+		std::sort(j, e, cmpby_rule_state);
+		const uint32_t l = rules[j->state->rule].code->fline;
+		for (i = j; ++i < e;) {
+			rules[i->state->rule].shadow.insert(l);
+		}
+		n = static_cast<size_t>(j - b) + 1;
+	}
+
+	clos.resize(n);
 }
 
 /* note [the difference between TDFA(0) and TDFA(1)]
@@ -411,24 +450,6 @@ struct cmp_posix_t
 	}
 };
 
-struct cmp_leftmost_t
-{
-	Tagpool &tagpool;
-	bool operator()(cclositer_t x, cclositer_t y)
-		{ return cmp_leftmost(*x, *y, tagpool) < 0; }
-};
-
-template<typename cmp_t>
-static void assign_orders(cclositer_t *xs, cclositer_t *xe, tagver_t *os, cmp_t &cmp)
-{
-	std::sort(xs, xe, cmp);
-	tagver_t o = 0;
-	for (cclositer_t *x = xs; x < xe; ++o) {
-		*os++ = o;
-		for (; ++x < xe && !cmp(x[-1], x[0]);) *os++ = o;
-	}
-}
-
 void orders(closure_t &clos, Tagpool &tagpool, const std::vector<Tag> &tags)
 {
 	clositer_t b = clos.begin(), e = clos.end(), c;
@@ -437,7 +458,7 @@ void orders(closure_t &clos, Tagpool &tagpool, const std::vector<Tag> &tags)
 		nclos = clos.size();
 	size_t &maxclos = tagpool.maxclos;
 	tagver_t *&os = tagpool.orders, *o, *os0;
-	cclositer_t *&ps = tagpool.closes, *pe;
+	cclositer_t *&ps = tagpool.closes, *pe, *p;
 
 	if (ntag == 0) return;
 
@@ -454,23 +475,22 @@ void orders(closure_t &clos, Tagpool &tagpool, const std::vector<Tag> &tags)
 	pe = ps;
 	for (c = b; c != e; ++c) *pe++ = c;
 
-	memset(os, 0, ntag * nclos * sizeof(tagver_t));
-	if (!tagpool.opts->posix_captures) {
-		cmp_leftmost_t cmp = {tagpool};
-		assign_orders(ps, pe, os0, cmp);
+	memset(os, 0, ntag * nclos * sizeof(tagver_t)); //some tags are skipped
+	for (size_t t = 0; t < ntag; ++t) {
+		if (redundant(t, tags)) continue;
+
+		cmp_posix_t cmp = {tagpool, t, orbit(tags[t])};
+		std::sort(ps, pe, cmp);
+		tagver_t m = 0;
+		o = os0;
+		for (p = ps; p < pe; ++m) {
+			*o++ = m;
+			for (; ++p < pe && !cmp(p[-1], p[0]);) *o++ = m;
+		}
+
 		o = os;
 		for (c = b; c != e; ++c, o += ntag) {
-			o[0] = os0[std::find(ps, pe, c) - ps];
-		}
-	} else {
-		for (size_t t = 0; t < ntag; ++t) {
-			if (redundant(t, tags)) continue;
-			cmp_posix_t cmp = {tagpool, t, orbit(tags[t])};
-			assign_orders(ps, pe, os0, cmp);
-			o = os;
-			for (c = b; c != e; ++c, o += ntag) {
-				o[t] = os0[std::find(ps, pe, c) - ps];
-			}
+			o[t] = os0[std::find(ps, pe, c) - ps];
 		}
 	}
 
