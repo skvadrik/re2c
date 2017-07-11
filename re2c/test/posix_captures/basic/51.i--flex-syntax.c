@@ -20,7 +20,7 @@ yy3:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'b':
-		yyt2 = YYCURSOR;
+		yyt1 = YYCURSOR;
 		goto yy5;
 	case 'c':
 		yyt1 = yyt2 = YYCURSOR;
@@ -37,7 +37,7 @@ yy5:
 	switch (yych) {
 	case 'b':	goto yy5;
 	case 'c':
-		yyt1 = YYCURSOR;
+		yyt2 = YYCURSOR;
 		goto yy7;
 	default:	goto yy4;
 	}
@@ -48,7 +48,7 @@ yy7:
 	switch (yych) {
 	case 'b':	goto yy5;
 	case 'c':
-		yyt1 = YYCURSOR;
+		yyt2 = YYCURSOR;
 		goto yy7;
 	case 'd':	goto yy9;
 	default:	goto yy4;
@@ -58,11 +58,11 @@ yy9:
 	{
 		const size_t yynmatch = 3;
 		const YYCTYPE *yypmatch[yynmatch * 2];
-		yypmatch[2] = yyt2;
-		yypmatch[4] = yyt1;
-		yypmatch[0] = yyt2 - 1;
+		yypmatch[2] = yyt1;
+		yypmatch[4] = yyt2;
+		yypmatch[0] = yyt1 - 1;
 		yypmatch[1] = YYCURSOR;
-		yypmatch[3] = yyt1;
+		yypmatch[3] = yyt2;
 		yypmatch[5] = YYCURSOR;
 		{}
 	}

@@ -2,10 +2,10 @@
 
 {
 	YYCTYPE yych;
-	yyt1 = YYCURSOR;
+	yyt2 = YYCURSOR;
 	if ((YYLIMIT - YYCURSOR) < 3) YYFILL(3);
 	yych = *(YYMARKER = YYCURSOR++);
-	yyt2 = NULL;
+	yyt1 = NULL;
 	switch (yych) {
 	case 'a':	goto yy4;
 	case 'b':	goto yy6;
@@ -40,21 +40,21 @@ yy6:
 		goto yy9;
 	}
 yy7:
-	c = yyt2;
+	c = yyt1;
 	{}
 yy8:
 	yych = *YYCURSOR;
 	switch (yych) {
 	case 'b':
-		yyt2 = yyt1;
+		yyt1 = yyt2;
 		goto yy7;
 	default:
 		++YYCURSOR;
-		yyt1 = yyt2;
+		yyt2 = yyt1;
 		goto yy9;
 	}
 yy9:
-	yyt2 = yyt1;
+	yyt1 = yyt2;
 	goto yy7;
 yy10:
 	yych = *YYCURSOR;
@@ -62,7 +62,7 @@ yy10:
 	case 'b':	goto yy5;
 	default:
 		++YYCURSOR;
-		yyt1 = yyt2;
+		yyt2 = yyt1;
 		goto yy9;
 	}
 }

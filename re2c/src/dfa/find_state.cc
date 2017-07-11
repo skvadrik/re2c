@@ -352,17 +352,10 @@ static tcmd_t *finalizer(const clos_t &clos, size_t ridx,
 
 	for (size_t t = rule.ltag; t < rule.htag; ++t) {
 		const Tag &tag = tags[t];
-		const tagver_t v = abs(vers[t]), l = hist.last(look, t);
-		tagver_t &f = dfa.finvers[t];
-
-		// don't waste versions on fixed tags
 		if (fixed(tag)) continue;
 
-		// pick a fresh version: final version is also used as fallback one
-		if (f == TAGVER_ZERO) {
-			f = ++dfa.maxtagver;
-		}
-
+		const tagver_t v = abs(vers[t]), l = hist.last(look, t);
+		tagver_t &f = dfa.finvers[t];
 		if (l == TAGVER_ZERO) {
 			copy = tcpool.make_copy(copy, f, v);
 		} else if (history(tag)) {

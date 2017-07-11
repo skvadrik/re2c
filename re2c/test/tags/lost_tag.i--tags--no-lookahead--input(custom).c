@@ -2,22 +2,22 @@
 
 {
 	YYCTYPE yych;
-	YYTAGP (yyt1);
+	YYTAGP (yyt2);
 	if (YYLESSTHAN (1)) YYFILL(1);
 	yych = YYPEEK ();
 	YYSKIP ();
 	switch (yych) {
 	case 'a':
-		YYTAGP (yyt2);
+		YYTAGP (yyt1);
 		goto yy2;
 	default:
-		YYTAGN (yyt1);
-		YYTAGP (yyt2);
+		YYTAGP (yyt1);
+		YYTAGN (yyt2);
 		goto yy2;
 	}
 yy2:
-	a = yyt1;
-	b = yyt2;
+	a = yyt2;
+	b = yyt1;
 	{}
 }
 

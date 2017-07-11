@@ -80,7 +80,9 @@ dfa_t::dfa_t(const nfa_t &nfa, const opt_t *opts,
 
 	// final/fallback versions will be assigned on the go
 	finvers = new tagver_t[ntag];
-	std::fill(finvers, finvers + ntag, TAGVER_ZERO);
+	for (size_t i = 0; i < ntag; ++i) {
+		finvers[i] = fixed(tags[i]) ? TAGVER_ZERO : ++maxtagver;
+	}
 
 	// iterate while new kernels are added: for each alphabet symbol,
 	// build tagged epsilon-closure of all reachable NFA states,

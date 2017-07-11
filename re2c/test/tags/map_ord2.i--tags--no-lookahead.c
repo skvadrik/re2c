@@ -3,8 +3,8 @@
 
 {
 	YYCTYPE yych;
-	yyt2 = NULL;
-	yyt1 = YYCURSOR;
+	yyt1 = NULL;
+	yyt2 = YYCURSOR;
 	if ((YYLIMIT - YYCURSOR) < 8) YYFILL(8);
 	yych = *(YYMARKER = YYCURSOR);
 	switch (yych) {
@@ -14,7 +14,7 @@
 	default:	goto yy2;
 	}
 yy2:
-	t = yyt2;
+	t = yyt1;
 	{}
 yy3:
 	yych = *YYCURSOR;
@@ -34,7 +34,7 @@ yy5:
 		++YYCURSOR;
 		goto yy6;
 	default:
-		yyt2 = yyt1;
+		yyt1 = yyt2;
 		goto yy2;
 	}
 yy6:
@@ -60,7 +60,7 @@ yy8:
 		++YYCURSOR;
 		goto yy9;
 	default:
-		yyt2 = yyt1;
+		yyt1 = yyt2;
 		goto yy2;
 	}
 yy9:
@@ -70,7 +70,7 @@ yy9:
 		++YYCURSOR;
 		goto yy10;
 	default:
-		yyt2 = yyt1;
+		yyt1 = yyt2;
 		goto yy2;
 	}
 yy10:
@@ -89,7 +89,7 @@ yy11:
 		++YYCURSOR;
 		goto yy11;
 	default:
-		yyt2 = yyt1;
+		yyt1 = yyt2;
 		goto yy2;
 	}
 }
