@@ -193,8 +193,8 @@ and in section \ref{section_closure} study various algorithms for closure constr
 Section \ref{section_disambiguation} is about disambiguation;
 we discuss leftmost greedy and POSIX policies and the necessary properties that disambiguation policy should have in order to allow efficient submatch extraction.
 Section \ref{section_determinization} is the main part of this paper: it presents determinization algorithm.
-Section \ref{section_optimizations} highlihgts some practical implementation details and optimizations.
-Section \ref{section_evaluation} concerns correctness testing and benchmarks.
+Section \ref{section_implementation} highlihgts some practical implementation details and optimizations.
+Section \ref{section_tests_and_benchmarks} concerns correctness testing and benchmarks.
 Finally, section \ref{section_future_work} points directions for future work.
 
 \section{Regular expressions}\label{section_regular_expressions}
@@ -708,7 +708,9 @@ the input language of $\XN$ is the S-language of $e$:
 $\XI(\XN) \Xeq \XS \Xlb e \Xrb$ and
 the output language of $\XN$ is the T-language of $e$:
 $\XO(\XN) \Xeq \XT \Xlb e \Xrb$.
-\\ \\
+
+\smallskip
+
 Proof.
 First, we give an algorithm for FST construction (derived from Thompson NFA construction).
 Let $\XN(e) \Xeq (\Sigma, T, \{0, 1\}, Q, \{ y \}, x, \Delta)$, such that $(Q, x, y, \Delta) \Xeq \XF(\XX(e))$, where:
@@ -1164,15 +1166,13 @@ LAU is non-linear and significantly slower,
 while LAU1 and GOR1 are both linear and LAU1 scans each node exactly once:
 
 \begin{center}
-\includegraphics[width=\linewidth]{img/plot_acyc_neg.png}
-\nolinebreak[4]
-\\\footnotesize{Behavior of LAU, LAU1 and GOR1 on Acyc-Neg family.}
+\includegraphics[width=\linewidth]{img/plot_acyc_neg.png}\\*
+\footnotesize{Behavior of LAU, LAU1 and GOR1 on Acyc-Neg family.}
 \end{center}
 
 \begin{center}
-\includegraphics[width=\linewidth]{img/plot_acyc_neg_logscale.png}
-\nolinebreak[4]
-\\\footnotesize{Behavior of LAU, LAU1 and GOR1 on Acyc-Neg family (logarithmic scale on both axes).}
+\includegraphics[width=\linewidth]{img/plot_acyc_neg_logscale.png}\\*
+\footnotesize{Behavior of LAU, LAU1 and GOR1 on Acyc-Neg family (logarithmic scale on both axes).}
 \end{center}
 
 On Grid-NHard and Grid-PHard families (graphs with cycles designed to be hard for algorithms that exploit graph structure)
@@ -1180,15 +1180,13 @@ both LAU and LAU1 are very slow (though approximation suggests polynomial, not e
 while GOR1 is fast:
 
 \begin{center}
-\includegraphics[width=\linewidth]{img/plot_grid_nhard.png}
-\nolinebreak[4]
-\\\footnotesize{Behavior of LAU, LAU1 and GOR1 on Grid-NHard family.}
+\includegraphics[width=\linewidth]{img/plot_grid_nhard.png}\\*
+\footnotesize{Behavior of LAU, LAU1 and GOR1 on Grid-NHard family.}
 \end{center}
 
 \begin{center}
-\includegraphics[width=\linewidth]{img/plot_grid_nhard_logscale.png}
-\nolinebreak[4]
-\\\footnotesize{Behavior of LAU, LAU1 and GOR1 on Grid-NHard family (logarithmic scale on both axes).}
+\includegraphics[width=\linewidth]{img/plot_grid_nhard_logscale.png}\\*
+\footnotesize{Behavior of LAU, LAU1 and GOR1 on Grid-NHard family (logarithmic scale on both axes).}
 \end{center}
 
 On other graph families all three algorithms behave quite well;
@@ -1265,7 +1263,7 @@ If disambiguation policy can be defined in this way, we call it \emph{foldable}.
 In subsequent sections we will formally define both policies in terms of comparison of ambiguous T-strings
 and show that each policy is prefix-based and foldable.
 
-\subsection{Leftmost greedy}
+\subsection*{Leftmost greedy}
 
 Leftmost greedy policy was extensively studied by many authors; we will refer to [Gra15], as their setting is very close to ours.
 We can define it as lexicographic order on the set of all bitcodes corresponding to ambiguous paths
@@ -1302,7 +1300,7 @@ Let $\Pi$ be a set of TNFA paths that have common start state, induce the same S
 Then the set of bitcodes induced by paths in $\Pi$ is prefix-free
 (compare with [Gra15], lemma 3.1).
 
-\medskip
+\smallskip
 
 Proof.
 Consider paths $\pi_1$ and $\pi_2$ in $\Pi$,
@@ -1382,7 +1380,7 @@ This approach is taken in e.g. [Karper].
 Since tags are not engaged in disambiguation,
 we can use paired tags that represent capturing parenthesis, or just standalone tags --- this makes no difference with leftmost greedy policy.
 
-\subsection{POSIX}
+\subsection*{POSIX}
 
 POSIX policy is defined in [??]; [Fow] gives a comprehensible interpretation of it.
 We will give a formal interpretation in terms of tags;
@@ -1390,7 +1388,7 @@ it was first described by Laurikari in [Lau01], but the key idea must be absolut
 He never fully formalized his algorithm, and our version slightly deviates from the informal description,
 so all errors should be attributed to the author of this paper.
 Fuzz-testing RE2C against Regex-TDFA revealed no difference in submatch extraction
-(see section ?? for details).
+(see section \ref{section_tests_and_benchmarks} for details).
 \\
 
 Consider an arbitrary RE without tags,
@@ -1615,8 +1613,9 @@ and $history(x, t) \Xeq A_1 \dots A_n$, $history(y, t) \Xeq B_1 \dots B_n$,
 then $a$, $b$ can be decomposed into path segments $a_1 \dots a_n$, $b_1 \dots b_n$,
 such that for all $i \!\leq\! n$ paths $a_1 \dots a_i$, $b_1 \dots b_i$ are ambiguous
 and $history(\XT(a_1 \dots a_i), t) \Xeq A_1 \dots A_i$, $history(\XT(b_1 \dots b_i), t) \Xeq B_1 \dots B_i$.
-\\
-\\
+
+\smallskip
+
 Proof is by induction on $t$ and relies on the construction of TNFA given in Theorem \ref{theorem_tnfa}.
 Induction basis is $t \Xeq 1$ and $t \Xeq 2$ (start and end tags of the topmost subexpression): let $n \Xeq 1$, $a_1 \Xeq a$, $b_1 \Xeq b$.
 Induction step: suppose that lemma is true for all $u \!<\! t$,
@@ -1883,8 +1882,8 @@ which brings us to the following definition of TDFA:
     $\square$
     \end{Xdef}
 
-Operations on registers have the form $r_1 \Xeq r_2 \cdot x$, where $x$ is a (possibly empty) boolean string
-and $1$, $0$ denote \emph{current position} and \emph{default value}.
+Operations on registers have the form $r_1 \Xeq r_2 b_1 \dots b_n$, where $b_1 \dots b_n$ are booleans 
+$1$, $0$ denoting \emph{current position} and \emph{default value}.
 For example, $r_1 \Xeq 0$ means ``set $r_1$ to default value'',
 $r_1 \Xeq r_2$ means ``copy $r_2$ to $r_1$'' and
 $r_1 \Xeq r_1 1 1$ means ``append current position to $r_1$ twice''.
@@ -1897,9 +1896,7 @@ However, their semantics is different: TDFA operates on tag values, while DSST o
 What is more important, DSST is \emph{copyless}:
 its registers can be only \emph{moved}, not \emph{copied}.
 TDFA violates this restriction, but this doesn't affect its performance as long as registers hold scalar values.
-Fortunately, it is always possible to represent tag values as scalars
-(single offsets are obviously scalar, and offset lists form a \emph{prefix tree} that can be stored as an array of pointers to parent,
-as suggested in [Karper]).
+Fortunately, as we shall see, it is always possible to represent tag values as scalars.
 \\
 
 TDFA can be constructed in two slightly different ways
@@ -1922,7 +1919,8 @@ The two ways of constructing TDFA resemble slightly of LR(0) and LR(1) automata;
 Indeed, we can define \emph{conflict} as a situation when tag has at least two different values in the given state.
 Tags that induce no conflicts are \emph{deterministic};
 the maximal number of different values per state is the tag's \emph{degree of nondeterminism}.
-Accordingly, \emph{tag-deterministic} RE are those for which it is possible to build TDFA without conflicts.
+Accordingly, \emph{tag-deterministic} RE are those for which it is possible to build TDFA without conflicts
+(also called \emph{one-pass} in [Cox10]).
 As with LR(0) and LR(1), many RE are tag-deterministic with respesct to TDFA(1), but not TDFA(0).
 Unlike LR automata, TDFA with conflicts are correct, but they can be very inefficient:
 %tags with high degree of nondeterminizm induce a lot of register operations.
@@ -1944,9 +1942,10 @@ but TDFA(1) applies $x$ and delays $y$ until the next step.
 Registers are allocated for all new operations:
 the same register may be used on multiple outgoing transitions for operations of the same tag,
 but different tags never share registers.
-Unlike Laurikari, we assume an infinite number of vacant registers and allocate them freely, not trying to reuse old ones;
-this results in a more optimization-friendly automaton
-which has a lot of short-lived registers with independent lifetimes.
+We assume an infinite number of vacant registers and allocate them freely, not trying to reuse old ones;
+this results in a more optimization-friendly automaton.
+Note also that the same set of \emph{final registers} is reused by all final states:
+this simplifies tracking of final tag values.
 Mapping of a newly constructed state $X$ to an existing state $Y$ checks coincidence of TNFA states, orders, delayed operations,
 and constructs bijection between registers of $X$ and $Y$.
 If $r_1$ in $X$ corresponds to $r_2$ in $Y$ (and they are not equal), then $r_1$ must be copied to $r_2$ on the transition to $X$
@@ -1964,8 +1963,8 @@ but in the latter case it can be simplified to avoid explicit calculation of ord
     \hrule
     \begin{itemize}[leftmargin=0in]
         \smallskip
-        \item[] $v(t) \Xeq 2t\!-\!1,
-            \; f(t) \Xeq 2t,
+        \item[] $v(t) \Xeq t,
+            \; f(t) \Xeq |T| \!+\! t,
             \; o(t) \Xeq 0$
         \item[] $maxreg \Xset 2|T|$, $newreg(o) \Xeq \bot$
         \item[] $(Q_0, \iota, maxreg, newreg) \\
@@ -2081,7 +2080,31 @@ Functions $reach'$ and $closure'$ are exactly as
 $reach$ and $closure \Xund goldberg \Xund radzik$ from section \ref{section_closure},
 except for the trivial adjustments to carry around ordinals and pass them into disambiguation procedure.
 We use $h_t(x)$ to denote $H(t)$, where $H$ is decomposition of T-string $x$ into tag value function (definition \ref{tagvalfun}).
-\\
+
+
+\begin{XThe}
+Determinization algorithm terminates.
+
+\smallskip
+
+Proof.
+We will show that for arbitrary TNFA with $t$ tags and $n$ states the number of unmappable TDFA states is finite.
+Each TDFA state with $m$ configurations (where $m \!\leq\! n$) is a combination of the following components:
+a set of $m$ TNFA states,
+$t$ $m$-vectors of registers,
+$k$ $m$-vectors of ordinals ($k \Xeq 1$ for leftmost greedy policy and $k \Xeq t$ for POSIX policy),
+and an $m$-vector of T-strings.
+Consider each component in turn.
+First, a set TNFA states: the number of different subsets of $n$ states is finite.
+Second, a vector of registers: we assume an infinite number of registers during determinization,
+but there is only a finite number of $m$-element vectors different up to bijection.
+Third, a vector of ordinals: the number of different weak orderings of $m$ elements is finite.
+Finally, a vector of T-strings: each T-string is induced by an $\epsilon$-path without loops,
+therefore its length is bounded by the number of TNFA states,
+and the number of different T-strings of length $n$ over finite alphabet of $t$ tags is finite.
+$\square$
+\end{XThe}
+
 
 Now let's see the difference between TDFA(0) and TDFA(1) on a series of small examples.
 Each example contains a short description followed by five pictures:
@@ -2097,9 +2120,9 @@ Initializer and finalizers are also dotted.
 Discarded ambiguous paths (if any) are shown in light grey.
 Compact form shows the resulting unoptimized TDFA: many registers can be merged and assiciated operations reduced.
 Alphabet symbols are shown as ASCII codes.
-Operations take two forms: normal form $r_1 \Xeq r_2 x$
-and short form $r x$, which means ``set $r$ to $x$'' (it allows to skip register initialization).
-Symbols $\uparrow$ and $\downarrow$ mean ``current position'' and ``default value''.
+Operations take two forms: normal form $r_1 \Xeq r_2 b_1 \dots b_n$
+and short form $r b$, which means ``set $r$ to $b$''.
+Symbols $\uparrow$ and $\downarrow$ are used instead of 1 and 0 to denote \emph{current position} and \emph{default value}.
 All graphs in this section are autogenerated with RE2C, so they reflect exactly the constructed automata.
 By default we use leftmost greedy disambiguation, as it allows to study standalone tags and generate smaller pictures.
 \\
@@ -2113,24 +2136,24 @@ As the pictures show, TDFA(0) behaves much worse than TDFA(1):
 it pulls the operation inside of loop and repeatedly rewrites tag value on each iteration,
 while TDFA(1) saves it only once, when the lookahead symbol changes from \texttt{a} to \texttt{b}.
 \begin{center}
-\includegraphics[width=\linewidth]{img/example1/tnfa.png}\\
+\includegraphics[width=\linewidth]{img/example1/tnfa.png}\\*
 \footnotesize{TNFA for $a^* 1 b^*$.} \\
 \end{center}
 \begin{center}
-\includegraphics[width=0.8\linewidth]{img/example1/tdfa0_raw.png}\\
+\includegraphics[width=0.8\linewidth]{img/example1/tdfa0_raw.png}\\*
 \footnotesize{Construction of TDFA(0) for $a^* 1 b^*$.} \\
 \end{center}
 \begin{center}
-\includegraphics[width=0.6\linewidth]{img/example1/tdfa0.png}\\
-\footnotesize{Unoptimized TDFA(0) for $a^* 1 b^*$.} \\
+\includegraphics[width=0.6\linewidth]{img/example1/tdfa0.png}\\*
+\footnotesize{TDFA(0) for $a^* 1 b^*$.} \\
 \end{center}
 \begin{center}
-\includegraphics[width=0.8\linewidth]{img/example1/tdfa1_raw.png}\\
+\includegraphics[width=0.8\linewidth]{img/example1/tdfa1_raw.png}\\*
 \footnotesize{Construction of TDFA(1) for $a^* 1 b^*$.} \\
 \end{center}
 \begin{center}
-\includegraphics[width=0.6\linewidth]{img/example1/tdfa1.png}\\
-\footnotesize{Unoptimized TDFA(1) for $a^* 1 b^*$.} \\
+\includegraphics[width=0.6\linewidth]{img/example1/tdfa1.png}\\*
+\footnotesize{TDFA(1) for $a^* 1 b^*$.} \\
 \end{center}
 
 The next example is $a^* 1 a^* a$ --- the same TRE that Lauriakri used to explain his algorithm.
@@ -2138,24 +2161,24 @@ It has a modest degree of nondeterminism: 2 for TDFA(1) and 3 for TDFA(0).
 Compare TDFA(0) with figure 3 from [Lau00]: it the same automaton up to a minor notational diffence
 (in this case leftmost greedy policy agrees with POSIX).
 \begin{center}
-\includegraphics[width=\linewidth]{img/example2/tnfa.png}\\
+\includegraphics[width=\linewidth]{img/example2/tnfa.png}\\*
 \footnotesize{TNFA for $a^* 1 a^* a$.} \\
 \end{center}
 \begin{center}
-\includegraphics[width=0.8\linewidth]{img/example2/tdfa0_raw.png}\\
+\includegraphics[width=0.8\linewidth]{img/example2/tdfa0_raw.png}\\*
 \footnotesize{Construction of TDFA(0) for $a^* 1 a^* a$.} \\
 \end{center}
 \begin{center}
-\includegraphics[width=0.6\linewidth]{img/example2/tdfa0.png}\\
-\footnotesize{Unoptimized TDFA(0) for $a^* 1 a^* a$.} \\
+\includegraphics[width=0.55\linewidth]{img/example2/tdfa0.png}\\*
+\footnotesize{TDFA(0) for $a^* 1 a^* a$.} \\
 \end{center}
 \begin{center}
-\includegraphics[width=0.8\linewidth]{img/example2/tdfa1_raw.png}\\
+\includegraphics[width=0.8\linewidth]{img/example2/tdfa1_raw.png}\\*
 \footnotesize{Construction of TDFA(1) for $a^* 1 a^* a$.} \\
 \end{center}
 \begin{center}
-\includegraphics[width=0.5\linewidth]{img/example2/tdfa1.png}\\
-\footnotesize{Unoptimized TDFA(1) for $a^* 1 a^* a$.} \\
+\includegraphics[width=0.5\linewidth]{img/example2/tdfa1.png}\\*
+\footnotesize{TDFA(1) for $a^* 1 a^* a$.} \\
 \end{center}
 
 The next example is $(1 a)^*$.
@@ -2164,24 +2187,24 @@ TDFA(0) has less states, but more operations; its operations are more clustered 
 Both automata record the full history of tag on all iterations.
 TRE has 2nd degree nondeterminism for TDFA(0) and is deterministic for TDFA(1).
 \begin{center}
-\includegraphics[width=0.6\linewidth]{img/example6/tnfa.png}\\
+\includegraphics[width=0.6\linewidth]{img/example6/tnfa.png}\\*
 \footnotesize{TNFA for $(1 a)^*$.} \\
 \end{center}
 \begin{center}
-\includegraphics[width=0.6\linewidth]{img/example6/tdfa0_raw.png}\\
+\includegraphics[width=0.6\linewidth]{img/example6/tdfa0_raw.png}\\*
 \footnotesize{Construction of TDFA(0) for $(1 a)^*$.} \\
 \end{center}
 \begin{center}
-\includegraphics[width=0.5\linewidth]{img/example6/tdfa0.png}\\
-\footnotesize{Unoptimized TDFA(0) for $(1 a)^*$.} \\
+\includegraphics[width=0.4\linewidth]{img/example6/tdfa0.png}\\*
+\footnotesize{TDFA(0) for $(1 a)^*$.} \\
 \end{center}
 \begin{center}
-\includegraphics[width=0.9\linewidth]{img/example6/tdfa1_raw.png}\\
+\includegraphics[width=0.9\linewidth]{img/example6/tdfa1_raw.png}\\*
 \footnotesize{Construction of TDFA(1) for $(1 a)^*$.} \\
 \end{center}
 \begin{center}
-\includegraphics[width=0.6\linewidth]{img/example6/tdfa1.png}\\
-\footnotesize{Unoptimized TDFA(1) for $(1 a)^*$.} \\
+\includegraphics[width=0.6\linewidth]{img/example6/tdfa1.png}\\*
+\footnotesize{TDFA(1) for $(1 a)^*$.} \\
 \end{center}
 
 The next example is $(1 a^+ 2 b^+)^+$.
@@ -2191,24 +2214,24 @@ and behaves much worse than hypothetical hand-written code
 If $a^+$ and $b^+$ match multiple iterations (which is likely in practice for TRE of such form), then the difference is considerable.
 Both tags have 2nd degree of nondeterminism for TDFA(0), and both are deterministic for TDFA(1).
 \begin{center}
-\includegraphics[width=\linewidth]{img/example5/tnfa.png}\\
+\includegraphics[width=\linewidth]{img/example5/tnfa.png}\\*
 \footnotesize{TNFA for $(1 a^+ 2 b^+)^+$.} \\
 \end{center}
 \begin{center}
-\includegraphics[width=\linewidth]{img/example5/tdfa0_raw.png}\\
+\includegraphics[width=\linewidth]{img/example5/tdfa0_raw.png}\\*
 \footnotesize{Construction of TDFA(0) for $(1 a^+ 2 b^+)^+$.} \\
 \end{center}
 \begin{center}
-\includegraphics[width=\linewidth]{img/example5/tdfa0.png}\\
-\footnotesize{Unoptimized TDFA(0) for $(1 a^+ 2 b^+)^+$.} \\
+\includegraphics[width=\linewidth]{img/example5/tdfa0.png}\\*
+\footnotesize{TDFA(0) for $(1 a^+ 2 b^+)^+$.} \\
 \end{center}
 \begin{center}
-\includegraphics[width=\linewidth]{img/example5/tdfa1_raw.png}\\
+\includegraphics[width=\linewidth]{img/example5/tdfa1_raw.png}\\*
 \footnotesize{Construction of TDFA(1) for $(1 a^+ 2 b^+)^+$.} \\
 \end{center}
 \begin{center}
-\includegraphics[width=0.8\linewidth]{img/example5/tdfa1.png}\\
-\footnotesize{Unoptimized TDFA(1) for $(1 a^+ 2 b^+)^+$.} \\
+\includegraphics[width=0.8\linewidth]{img/example5/tdfa1.png}\\*
+\footnotesize{TDFA(1) for $(1 a^+ 2 b^+)^+$.} \\
 \end{center}
 
 The next example is $a^* 1 a^{3}$,
@@ -2222,24 +2245,24 @@ relatively small repetition numbers dramatically increase the size of automaton.
 If bounded repetition is necessary, more powerful methods should be used:
 e.g. automata with \emph{counters} described in [??].
 \begin{center}
-\includegraphics[width=\linewidth]{img/example3/tnfa.png}\\
+\includegraphics[width=\linewidth]{img/example3/tnfa.png}\\*
 \footnotesize{TNFA for $a^* 1 a^{3}$.} \\
 \end{center}
 \begin{center}
-\includegraphics[width=\linewidth]{img/example3/tdfa0_raw.png}\\
+\includegraphics[width=\linewidth]{img/example3/tdfa0_raw.png}\\*
 \footnotesize{Construction of TDFA(0) for $a^* 1 a^{3}$.} \\
 \end{center}
 \begin{center}
-\includegraphics[width=0.8\linewidth]{img/example3/tdfa0.png}\\
-\footnotesize{Unoptimized TDFA(0) for $a^* 1 a^{3}$.} \\
+\includegraphics[width=0.8\linewidth]{img/example3/tdfa0.png}\\*
+\footnotesize{TDFA(0) for $a^* 1 a^{3}$.} \\
 \end{center}
 \begin{center}
-\includegraphics[width=\linewidth]{img/example3/tdfa1_raw.png}\\
+\includegraphics[width=\linewidth]{img/example3/tdfa1_raw.png}\\*
 \footnotesize{Construction of TDFA(1) for $a^* 1 a^{3}$.} \\
 \end{center}
 \begin{center}
-\includegraphics[width=0.8\linewidth]{img/example3/tdfa1.png}\\
-\footnotesize{Unoptimized TDFA(1) for $a^* 1 a^{3}$.} \\
+\includegraphics[width=0.8\linewidth]{img/example3/tdfa1.png}\\*
+\footnotesize{TDFA(1) for $a^* 1 a^{3}$.} \\
 \end{center}
 
 Finally, the last example is POSIX RE \texttt{(a|aa)+}, which is represented with TRE $1 (3 (a | aa) 4)^* 2$.
@@ -2252,25 +2275,31 @@ Tag $3$ has maximal degree of nondeterminism: $3$ for TDFA(0) and $2$ for TDFA(1
 Tags $2$ and $4$ are deterministic for TDFA(1) and have degree $2$ for TDFA(0).
 Tag $1$ is deterministic for both automata.
 \begin{center}
-\includegraphics[width=\linewidth]{img/example4/tnfa.png}\\
+\includegraphics[width=\linewidth]{img/example4/tnfa.png}\\*
 \footnotesize{TNFA for $1 (3 (a | aa) )^* 4 \, 2$.} \\
 \end{center}
 \begin{center}
-\includegraphics[width=\linewidth]{img/example4/tdfa0_raw.png}\\
+\includegraphics[width=\linewidth]{img/example4/tdfa0_raw.png}\\*
 \footnotesize{Construction of TDFA(0) for $1 (3 (a | aa) )^* 4 \, 2$.} \\
 \end{center}
 \begin{center}
-\includegraphics[width=\linewidth]{img/example4/tdfa0.png}\\
-\footnotesize{Unoptimized TDFA(0) for $1 (3 (a | aa) )^* 4 \, 2$.} \\
+\includegraphics[width=\linewidth]{img/example4/tdfa0.png}\\*
+\footnotesize{TDFA(0) for $1 (3 (a | aa) )^* 4 \, 2$.} \\
 \end{center}
 \begin{center}
-\includegraphics[width=\linewidth]{img/example4/tdfa1_raw.png}\\
+\includegraphics[width=\linewidth]{img/example4/tdfa1_raw.png}\\*
 \footnotesize{Construction of TDFA(1) for $1 (3 (a | aa) )^* 4 \, 2$.} \\
 \end{center}
 \begin{center}
-\includegraphics[width=\linewidth]{img/example4/tdfa1.png}\\
-\footnotesize{Unoptimized TDFA(1) for $1 (3 (a | aa) )^* 4 \, 2$.} \\
+\includegraphics[width=0.85\linewidth]{img/example4/tdfa1.png}\\*
+\footnotesize{TDFA(1) for $1 (3 (a | aa) )^* 4 \, 2$.} \\
 \end{center}
+
+From these examples we can draw the following conclusions.
+First, TDFA(1) are generally better than TDFA(0): delaying register operations allows to get rid of many conflicts.
+Second, both kinds of automata are only suitable for RE with modest levels of ambiguity
+and low submatch detalisation: TDFA can be applied to full parsing, but other methods would probably outperform them.
+However, RE of such form are very common in practice and for them TDFA can be very efficient.
 
 %\vfill\null\pagebreak
 
@@ -2284,11 +2313,239 @@ Tag $1$ is deterministic for both automata.
 %\begin{center}\includegraphics[width=0.5\linewidth]{img/x1.png}\end{center}
 %\begin{center}\includegraphics[width=0.5\linewidth]{img/x2.png}\end{center}
 
-\section{Optimizations}\label{section_optimizations}
+\section{Implementation}\label{section_implementation}
+
+In this section we discuss some practical details that should be taken into account when implementing the above algorithm.
+The proposed way of doing things is neither general, nor necessarily the best;
+it simply reflects RE2C implementation.
+
+\subsection*{Register reuse}
+
+There are many possible ways to allocate registers during TDFA construction.
+One reasonable way (used by Laurikari) is to pick the first register not already used in the given state:
+since the number of simultaneously used registers is limited,
+it is likely that some of the old ones are not occupied and can be reused.
+We use a different strategy: allocate a new register for each distinct operation of each tag on all outgoing transitions from the given state.
+It results in a more optimization-friendly automaton
+which has a lot of short-lived registers with independent lifetimes.
+The resulting program form is close to \emph{static single assignment} [SSA],
+and therefore amenable to canonical opimizations like liveness analysis, interference analysis, dead code elimination, etc.
+Of course, it is not exactly SSA, and we cannot use efficient SSA-specific algorithms;
+but SSA construction and deconstruction is rather complex and its usefulness on our (rather simple) programs is not so evident.
+\\
+
+It may happen that mutiple outgoing transitions from the same state have operations with identical right-hand sides.
+If these operations are induced by the same tag, then one register is allocated for all such transitions.
+If, however, operations are induced by different tags, they do not share registers.
+But why use different registers, if we know that the same value is written to both of them?
+The reason for this is the way we do mapping: if different tags were allowed to share registers,
+it would result in a plenty of ``too specialized'' states that do not map to each other.
+For example, TDFA for TRE of the form $(1 | \alpha_1) (2 | \alpha_2) \dots (n | \alpha_n)$
+would have exponentially many unmappable final states
+corresponding to various permutations of default value and current position.
+After TDFA is constructed, such registers will likely be merged into one by subsequent optimizations.
+
+\subsection*{Fallback registers}
+
+So far we have avoided one small, yet important complication.
+Suppose that TRE matches two strings, such that one is a proper prefix of the other:
+$\alpha_1 \dots \alpha_n$ and $\alpha_1 \dots \alpha_n \beta_1 \dots \beta_m$,
+and the difference between them is more than one character: $m \!>\! 1$.
+Consider automaton behaviour on input string $\alpha_1 \dots \alpha_n \beta_1$:
+it will consume all charachers up to $\alpha_n$ and arrive at the final state.
+Then, however, it will continue matching: since the next character is $\beta_1$, it may be possible to match longer string.
+At the next step it will see mismatch and stop.
+At that point automaton must backtrack to the latest final state,
+restoring input position and all relevant registers that might have been overwritten.
+TRE $(a 1 bc)^+$ exhibits this problem for both TDFA(0) and TDFA(1):
+\begin{center}
+\includegraphics[width=0.8\linewidth]{img/fallback/tnfa.png}\\*
+\footnotesize{TNFA for $(a 1 bc)^+$.} \\
+\end{center}
+\begin{center}
+\includegraphics[width=\linewidth]{img/fallback/tdfa0_raw.png}\\*
+\footnotesize{Construction of TDFA(0) for $(a 1 bc)^+$.} \\
+\end{center}
+\begin{center}
+\includegraphics[width=0.8\linewidth]{img/fallback/tdfa0.png}\\*
+\footnotesize{TDFA(0) for $(a 1 bc)^+$.} \\
+\end{center}
+\begin{center}
+\includegraphics[width=\linewidth]{img/fallback/tdfa1_raw.png}\\*
+\footnotesize{Construction of TDFA(1) for $(a 1 bc)^+$.} \\
+\end{center}
+\begin{center}
+\includegraphics[width=0.8\linewidth]{img/fallback/tdfa1.png}\\*
+\footnotesize{TDFA(1) for $(a 1 bc)^+$.} \\
+\end{center}
+Consider execution of TDFA(0) on input string $abca$: after matching $abc$ in state 3 it will consume $a$ and transition to state 1,
+overwtiring register 3; then it will fail to match $b$ and backtrack.
+Likewise, TDFA(1) will backtrack on input string $abcab$.
+Clearly, we must backup register 3 when leaving state 3.
+\\
+
+We call registers that need backup \emph{fallback registers}.
+Not all overlapping TRE create fallback registers:
+it may be that longer match is unconditional (always matches),
+or no registers are overwritten between the two matches,
+or the overwritten registers are not used in the final state.
+In general, fallback registers can be found by a simple depth-first search from all final states of TDFA.
+Each of them needs a \emph{backup register};
+all transitions from final state must backup it, and all fallback transitions must restore it.
+For the above example the ``repaired'' automata look as follows
+(register 3 is renamed to 2, register 1 is backup, fallback transitions are not shown):
+\begin{center}
+\includegraphics[width=0.85\linewidth]{img/fallback/tdfa0_fallback.png}\\*
+\footnotesize{TDFA(0) with backup registers for $(a 1 bc)^+$.} \\
+\end{center}
+\begin{center}
+\includegraphics[width=0.8\linewidth]{img/fallback/tdfa1_fallback.png}\\*
+\footnotesize{TDFA(1) with backup registers for $(a 1 bc)^+$.} \\
+\end{center}
+Note that the total number of backup registers cannot exceed the number of tags:
+only the latest final state needs to be backuped,
+and each final TDFA state has only one configuration with final TNFA state,
+and this configuration has exactly one register per tag.
+As we already allocate distinct final register for each tag,
+and this register is not used anywhere else in the program,
+we can also use it for backup.
+
+\subsection*{Fixed tags}
+
+It may happen that two tags in TRE are bound: separated by a fixed number of characters, so that
+each offset of one tag is equal to the corresponding offset of the other tag plus some static offset.
+%the value of one tag is always equal to the value of the other plus some static offset.
+In this case we can track only one of the tags; we say that the second tag is \emph{fixed} on the first one.
+For example, in TRE $a^* 1 b 2 c^*$ tag 1 is always one character behind of tag 2,
+therefore it is fixed on tag 2 with offset -1.
+Fixed tags are ubiquitous in TRE that correspond to POSIX RE, because they contain a lot of adjacent tags.
+For example, POSIX RE \texttt{(a*)(b*)} is represented with TRE $1 \, 3 \, a^* \, 4 \, 5 \, b^* \, 6 \, 2$,
+in which tag 1 is fixed on 3, 4 on 5 and 6 on 2
+(additionaly, 1 and 3 are always zero and 6, 2 are always equal to the length of matching string).
+\\
+
+Fixity relation is transitive, symmetric and reflexive,
+and therefore all tags can be partitioned into fixity classes.
+For each class we need to track only one representative.
+Since fixed tags cannot belong to different alternatives of TRE,
+it is possible to find all classes in one traversal of TRE structure
+by tracking \emph{distance} to each tag from the nearest non-fixed tag on the same branch of TRE.
+Distance is measured as the length of all possible strings that match the part of TRE between two tags:
+if this length is variable, distance is infinity and the new tag belongs to a new class.
+\\
+
+When optimizing out fixed tags, one should be careful in two respects.
+First, negative submatches: if the value of representative is $\varnothing$,
+then all fixed tags are also $\varnothing$ and their offsets should be ignored.
+%if tag $t_1$ is fixed on tag $t_2$ with offset $n$
+Second, fixed tags may be used by disambiguation policy:
+in this case they should be kept until disambiguation is finished;
+then they can be removed from TDFA with all associated operations.
+\\
+
+This optimization is also described in [Lau01], section 4.3.
+
+\subsection*{Simple tags}
+
+In practice we often need only the last value of some tag:
+either because it is not enclosed in repetition and only has one value, or because of POSIX policy, or for any other reason.
+We call such tags \emph{simple};
+for them determinization algorithm admits a number of simplifications
+that result in smaller automata with less register operations.
+\\
+
+First, the mapping procedure $map$ from section \ref{section_determinization}
+needs not to check bijection between registers if the lookahead history is not empty:
+in this case register values will be overwritten on the next step
+(for non-simple tags registers would be augmented, not overwritten).
+Condition $(v_t, \widetilde{v}_t) \Xin m_t \wedge h_t(x) \Xeq h_t(\widetilde{x})$
+can be changed to $h_t(x) \Xeq h_t(\widetilde{x}) \wedge (h_t(x) \!\neq\! \epsilon \vee (v_t, \widetilde{v}_t) \Xin m_t)$,
+which results in better mapping.
+This optimization applies only to TDFA(1), since lookahead history is always $\epsilon$ for TDFA(0),
+and it reduces the gap in the number of states between TDFA(0) and TDFA(1).
+\\
+
+Second, operations on simple tags are reduced from normal form $r_1 \Xeq r_2 \cdot b_1 \dots b_n$
+to one of the forms $r_1 \Xeq b_n$ (set) and $r_1 \Xeq r_2$ (copy).
+It has many positive consequences:
+initialization of registers is not necessary;
+register values are less versatile and there are less dependencies between registers, therefore more registers can be merged;
+operations can be hoisted out of loops.
+What is most important, copy operations are cheap for simple tags.
+
+\subsection*{Scalar representation of histories}
+
+For non-simple tags we need to track their full history.
+The most naive representation of history is a list of offsets;
+however, copy operations on lists are very inefficient.
+Fortunately, a better representation is possible: as observed by [Kar], histories form a \emph{prefix tree}:
+each new history is a fork of some old history of the same tag.
+Prefix tree can be represented as an array of nodes $(p, o)$,
+where $p$ is the index of parent node and $o$ is the offset.
+Then each register can hold an index of some leaf node in the prefix tree,
+and copy operations are reduced to simple copying of indices.
+Append operations are somewhat more complex: they require a new slot (or a couple of slots) in the prefix tree;
+however, if array is allocated in large chunks of memory,
+then the amortized complexity of each operation is constant.
+One inconvenience of this representation is that histories are obtained in reversed form.
+
+\subsection*{Relative vs. absolute values}
+
+If the input is a string in memory, it might be convenient to use \emph{pointers} instead of \emph{offsets}
+(especially in C, where all operations with memory are defined in terms of pointers).
+However, compared to offsets, pointers have several disadvantages.
+First, offsets are usually smaller: often they can be represented with 1-2 bytes, while pointers need 4-8 bytes.
+Second, offsets are portable: unlike pointers, they are not tied to a particular environment
+and will not loose their meaning if we save submatch results to file or engrave them on stone.
+Even put aside storage, pointers are sensitive to input buffering:
+their values are invalidated on each buffer refill and need special adjustment.
+Nevertheless, RE2C uses pointers as default representation of tag values:
+this approach is more direct and efficient for simple programs.
+RE2C users can redefine default reprsentation to whatever they need.
+
+\subsection*{Optimization pipeline}
+
+Right after TDFA construction and prior to any further optimizations
+RE2C performs analysis of unreachable final states
+(shadowed by final states that correspond to longer match).
+Such states are marked as non-final and all their registers are marked as dead.
+\\
+
+After that RE2C performs analysis of fallback registers and adds backup operations as necessary.
+\\
+
+Then it applies register optimizations;
+they are aimed at reducing the number of registers and copy operations.
+This is done by the usual means:
+liveness analysis, followed by dead code elimination,
+followed by interference analysis and finally register allocation.
+The full cycle is run twice (first iteration is enough in most cases,
+but subsequent iterations are cheap as they run on an already optimized program and reuse the same infrastructure).
+Prior to the first iteration RE2C renames registers so that they occupy consequent numbers;
+this allows to save some space on liveness and interference tables.
+\\
+
+Then RE2C performs TDFA minimization:
+it is exactly like ordinary DFA minimization, except that
+equivalence must take into account register operations:
+final states with different finalizers cannot be merged, as well as transitions with different operations.
+Thus it is crucial that minimization is applied after register optimizations.
+\\
+
+Then RE2C examines TDFA states and, if all outgoing transitions have the same operation,
+this operation is hoisted out of transitions into the state itself.
+\\
+
+Finally, RE2C converts TDFA to a tunnel automaton [??].
+\\
+
+All these optimizations are basic and some are even primitive, yet they result in great reduction of registers, operations and TDFA states.
+Furthermore, experiments show that optimizing C compilers (such as GCC or Clang) are not a substitution for RE2C optimizations;
+they don't have the special knowledge of the program that RE2C has.
+
+\section{Tests and benchmarks}\label{section_tests_and_benchmarks}
 
 (1.5x - 2x speedup on in case of RFC-3986 compliant URI parser).
-
-\section{Evaluation}\label{section_evaluation}
 
 \section{Future work}\label{section_future_work}
 
@@ -2310,6 +2567,9 @@ which originates in LR parsing invented by Knuth [Knu65]
 \item Laurikari 2001
 \item Karper
 \item Kuklewicz
+
+    \item [Cox10] Russ Cox, "Regular Expression Matching in the Wild", March 2010, https://swtch.com/~rsc/regexp/regexp3.html
+
 \end{enumerate}
 
 \end{document}
