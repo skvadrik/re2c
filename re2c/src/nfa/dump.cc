@@ -49,10 +49,8 @@ void dump_nfa(const nfa_t &nfa)
 				const Tag &tag = nfa.tags[n->tag.info];
 				fprintf(stderr, "  n%u -> n%u [label=\"/", i, index(nfa, n->tag.out));
 				if (capture(tag)) {
-					fprintf(stderr, "%u_", (uint32_t)tag.ncap);
-				} else if (trailing(tag)) {
-					fprintf(stderr, "%u", (uint32_t)n->rule);
-				} else {
+					fprintf(stderr, "%u", (uint32_t)tag.ncap);
+				} else if (!trailing(tag)) {
 					fprintf(stderr, "%s", tag.name->c_str());
 				}
 				if (n->tag.bottom) {

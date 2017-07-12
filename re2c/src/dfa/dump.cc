@@ -51,14 +51,12 @@ static void dump_history(const dfa_t &dfa, const tagtree_t &h, hidx_t i)
 
 	const Tag &t = dfa.tags[h.tag(i)];
 	const tagver_t v = h.elem(i);
-	if (v == TAGVER_BOTTOM) fprintf(stderr, "-");
 	if (capture(t)) {
-		fprintf(stderr, "%u_", (uint32_t)t.ncap);
-	} else if (trailing(t)) {
-		fprintf(stderr, "*");
-	} else {
+		fprintf(stderr, "%u", (uint32_t)t.ncap);
+	} else if (!trailing(t)) {
 		fprintf(stderr, "%s", t.name->c_str());
 	}
+	fprintf(stderr, v == TAGVER_BOTTOM ? "&darr;" : "&uarr;");
 	fprintf(stderr, " ");
 }
 
