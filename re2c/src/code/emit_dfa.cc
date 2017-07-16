@@ -193,6 +193,7 @@ void DFA::emit(Output & output, uint32_t& ind, bool isLastCond, bool& bPrologBra
 		}
 		delete[] list;
 		ob.tags.insert(tagnames.begin(), tagnames.end());
+		ob.taglists.insert(taglistnames.begin(), taglistnames.end());
 	}
 	if (!cond.empty()) o.block().types.push_back(cond);
 

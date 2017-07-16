@@ -39,6 +39,7 @@ struct OutputFragment
 		, LINE_INFO
 		, STATE_GOTO
 		, TAGS
+		, TAGLISTS
 		, TYPES
 		, YYACCEPT_INIT
 		, YYMAXFILL
@@ -75,6 +76,7 @@ struct OutputBlock
 	uint32_t line;
 	std::vector<std::string> types;
 	std::set<std::string> tags;
+	std::set<std::string> taglists;
 	const opt_t *opts;
 
 	OutputBlock ();
@@ -121,7 +123,7 @@ public:
 	OutputFile & wind (uint32_t ind);
 
 	// delayed output
-	OutputFile & wdelay_tags(const ConfTags *cf);
+	OutputFile & wdelay_tags(const ConfTags *cf, bool lists);
 	OutputFile & wdelay_line_info ();
 	OutputFile & wdelay_cond_goto(uint32_t ind);
 	OutputFile & wdelay_cond_table(uint32_t ind);
@@ -134,10 +136,11 @@ public:
 	OutputFile& wdelay_backup(uint32_t ind, bool backup);
 
 	void global_lists(uniq_vector_t<std::string> &types,
-		std::set<std::string> &tags) const;
+		std::set<std::string> &tags, std::set<std::string> &taglists) const;
 
 	bool emit(const uniq_vector_t<std::string> &global_types,
-		const std::set<std::string> &global_tags, size_t max_fill);
+		const std::set<std::string> &global_tags,
+		const std::set<std::string> &global_taglists, size_t max_fill);
 
 	FORBID_COPY (OutputFile);
 };

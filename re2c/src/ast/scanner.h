@@ -57,7 +57,7 @@ class Scanner: private ScannerState
 
 	void fill (uint32_t);
 	void lex_end_of_comment(OutputFile &out);
-	void lex_tags(OutputFile &out);
+	void lex_tags(OutputFile &out, bool lists);
 	void set_sourceline ();
 	uint32_t lex_cls_chr();
 	uint32_t lex_str_chr(char quote, bool &end);
