@@ -13,7 +13,8 @@
     re2c:flags:tags = 1;
     re2c:flags:case-insensitive = 0;
     re2c:flags:case-inverted = 1;
-    re2c:flags:no-lookahead = 1;
+    re2c:flags:lookahead = 0;
+    re2c:flags:optimize-tags = 0;
     re2c:flags:eager-skip = 1;
 
     re2c:flags:e = 1;
