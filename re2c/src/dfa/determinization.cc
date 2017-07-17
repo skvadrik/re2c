@@ -56,6 +56,7 @@ dfa_t::dfa_t(const nfa_t &nfa, const opt_t *opts,
 	, charset(nfa.charset)
 	, rules(nfa.rules)
 	, tags(nfa.tags)
+	, listvers(*new std::set<tagver_t>)
 	, finvers(NULL)
 	, tcpool(*new tcpool_t)
 	, maxtagver(0)
@@ -84,6 +85,15 @@ dfa_t::dfa_t(const nfa_t &nfa, const opt_t *opts,
 		finvers[i] = fixed(tags[i]) ? TAGVER_ZERO : ++maxtagver;
 	}
 
+	// mark tags with history (initial and final)
+	for (size_t i = 0; i < ntag; ++i) {
+		if (history(tags[i])) {
+			tagver_t v = static_cast<tagver_t>(i) + 1, f = finvers[i];
+			if (f != TAGVER_ZERO) listvers.insert(f);
+			listvers.insert(v);
+		}
+	}
+
 	// iterate while new kernels are added: for each alphabet symbol,
 	// build tagged epsilon-closure of all reachable NFA states,
 	// then find identical or mappable DFA state or add a new one
@@ -99,6 +109,10 @@ dfa_t::dfa_t(const nfa_t &nfa, const opt_t *opts,
 			reach(kernels[i], clos1, charset[c]);
 			acts = closure(clos1, clos2, tagpool, tcpool, rules, maxtagver, newvers, dump.shadow, tags);
 			find_state(*this, i, c, kernels, clos2, acts, dump);
+		}
+		// mark tags with history
+		for (newvers_t::iterator j = newvers.begin(); j != newvers.end(); ++j) {
+			if (history(tags[j->first.tag])) listvers.insert(abs(j->second));
 		}
 	}
 

@@ -10,7 +10,8 @@ static void interfere(const tcmd_t *cmd, const bool *live, bool *interf, bool *b
 
 void cfg_t::interference(const cfg_t &cfg, const bool *live, bool *interf)
 {
-	const size_t nver = static_cast<size_t>(cfg.dfa.maxtagver) + 1;
+	const tagver_t maxver = cfg.dfa.maxtagver + 1;
+	const size_t nver = static_cast<size_t>(maxver);
 	bool *buf = new bool[nver];
 	vals_t *vals = new vals_t[nver]();
 	const cfg_bb_t *b = cfg.bblocks, *e = b + cfg.nbbfin;
@@ -18,6 +19,16 @@ void cfg_t::interference(const cfg_t &cfg, const bool *live, bool *interf)
 	memset(interf, 0, nver * nver * sizeof(bool));
 	for (; b < e; ++b, live += nver) {
 		interfere(b->cmd, live, interf, buf, vals, nver);
+	}
+
+	// versions of tags with/without history interfere
+	std::set<tagver_t> &lvs = cfg.dfa.listvers;
+	for (std::set<tagver_t>::iterator i = lvs.begin(); i != lvs.end(); ++i) {
+		for (tagver_t u = *i, v = 0; v < maxver; ++v) {
+			if (lvs.find(v) == lvs.end()) {
+				interf[v * maxver + u] = interf[u * maxver + v] = true;
+			}
+		}
 	}
 
 	delete[] buf;

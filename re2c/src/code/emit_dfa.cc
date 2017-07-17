@@ -121,50 +121,6 @@ void DFA::emit_dot(OutputFile &o, bool last_cond) const
 	}
 }
 
-static void find_list_tags_cmd(const tcmd_t *p, bool *list)
-{
-	for (; p; p = p->next) {
-		if (tcmd_t::isadd(p)) {
-			list[p->lhs] = list[p->rhs] = true;
-		}
-	}
-}
-
-static void prop_list_tags_cmd(const tcmd_t *p, bool *list)
-{
-	for (; p; p = p->next) {
-		if (tcmd_t::iscopy(p)) {
-			const tagver_t l = p->lhs, r = p->rhs;
-			if (list[l]) list[r] = true;
-			if (list[r]) list[l] = true;
-		}
-	}
-}
-
-static void find_list_tags(const DFA &dfa, bool *list)
-{
-	find_list_tags_cmd(dfa.tcpool[dfa.tags0], list);
-	for (State *s = dfa.head; s; s = s->next) {
-		const Go &go = s->go;
-		find_list_tags_cmd(dfa.tcpool[go.tags], list);
-		for (uint32_t i = 0; i < go.nSpans; ++i) {
-			find_list_tags_cmd(dfa.tcpool[go.span[i].tags], list);
-		}
-		find_list_tags_cmd(dfa.tcpool[s->rule_tags], list);
-		find_list_tags_cmd(dfa.tcpool[s->fall_tags], list);
-	}
-	prop_list_tags_cmd(dfa.tcpool[dfa.tags0], list);
-	for (State *s = dfa.head; s; s = s->next) {
-		const Go &go = s->go;
-		prop_list_tags_cmd(dfa.tcpool[go.tags], list);
-		for (uint32_t i = 0; i < go.nSpans; ++i) {
-			prop_list_tags_cmd(dfa.tcpool[go.span[i].tags], list);
-		}
-		prop_list_tags_cmd(dfa.tcpool[s->rule_tags], list);
-		prop_list_tags_cmd(dfa.tcpool[s->fall_tags], list);
-	}
-}
-
 void DFA::emit(Output & output, uint32_t& ind, bool isLastCond, bool& bPrologBrace)
 {
 	OutputFile &o = output.source;
@@ -181,17 +137,14 @@ void DFA::emit(Output & output, uint32_t& ind, bool isLastCond, bool& bPrologBra
 				tagvars.insert(*tag.name);
 			}
 		}
-		bool *list = new bool[maxtagver + 1]();
-		find_list_tags(*this, list);
 		for (tagver_t v = 1; v <= maxtagver; ++v) {
 			const std::string name = vartag_name(v, opts->tags_prefix);
-			if (list[v]) {
+			if (listvers.find(v) != listvers.end()) {
 				taglistnames.insert(name);
 			} else {
 				tagnames.insert(name);
 			}
 		}
-		delete[] list;
 		ob.tags.insert(tagnames.begin(), tagnames.end());
 		ob.taglists.insert(taglistnames.begin(), taglistnames.end());
 	}
