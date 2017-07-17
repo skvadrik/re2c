@@ -56,6 +56,7 @@ void mutopt_t::fix(const conopt_t *globopts)
 			state_set_naked = Opt::baseopt.state_set_naked;
 			tags_prefix = Opt::baseopt.tags_prefix;
 			tags_expression = Opt::baseopt.tags_expression;
+			optimize_tags = Opt::baseopt.optimize_tags;
 			yyfilllabel = Opt::baseopt.yyfilllabel;
 			yynext = Opt::baseopt.yynext;
 			yyaccept = Opt::baseopt.yyaccept;
@@ -140,6 +141,7 @@ void mutopt_t::fix(const conopt_t *globopts)
 	{
 		tags_prefix = Opt::baseopt.tags_prefix;
 		tags_expression = Opt::baseopt.tags_expression;
+		optimize_tags = Opt::baseopt.optimize_tags;
 	}
 	if (!bFlag)
 	{

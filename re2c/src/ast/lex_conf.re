@@ -48,6 +48,7 @@ void Scanner::lex_conf(Opt &opts)
 	"flags:case-insensitive"             { opts.set_bCaseInsensitive(lex_conf_bool());   return; }
 	"flags:case-inverted"                { opts.set_bCaseInverted(lex_conf_bool());      return; }
 	"flags:no-lookahead"                 { opts.set_lookahead(!lex_conf_bool());         return; }
+	"flags:optimize-tags"                { opts.set_optimize_tags(lex_conf_bool());      return; }
 	"flags:eager-skip"                   { opts.set_eager_skip(lex_conf_bool());         return; }
 
 	"flags:" ("e" | "ecb")        { lex_conf_enc(Enc::EBCDIC, opts); return; }

@@ -92,6 +92,7 @@ enum target_t
 	MUTOPT (std::string, tags_prefix, "yyt") \
 	MUTOPT (std::string, tags_expression, "@@") \
 	MUTOPT (bool, posix_captures, false) \
+	MUTOPT (bool, optimize_tags, true) \
 	/* code generation */ \
 	MUTOPT (bool, sFlag, false) \
 	MUTOPT (bool, bFlag, false) \

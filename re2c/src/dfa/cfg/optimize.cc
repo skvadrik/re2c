@@ -4,8 +4,6 @@
 namespace re2c
 {
 
-static void freeze_tags(dfa_t &dfa);
-
 void optimize_tags(dfa_t &dfa)
 {
 	tagver_t maxver = dfa.maxtagver;
@@ -39,8 +37,6 @@ void optimize_tags(dfa_t &dfa)
 
 		delete[] ver2new;
 	}
-
-	freeze_tags(dfa);
 }
 
 /* note [tag freezing]

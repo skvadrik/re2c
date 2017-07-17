@@ -153,6 +153,7 @@ opt_long:
 	"tags"                  end { opts.set_tags (true);              goto opt; }
 	"posix-captures"        end { opts.set_posix_captures(true);     goto opt; }
 	"no-lookahead"          end { opts.set_lookahead(false);         goto opt; }
+	"no-optimize-tags"      end { opts.set_optimize_tags(false);     goto opt; }
 	"eager-skip"            end { opts.set_eager_skip(true);         goto opt; }
 	"ecb"                   end { opts.set_encoding(Enc::EBCDIC);    goto opt; }
 	"unicode"               end { opts.set_encoding(Enc::UTF32);     goto opt; }

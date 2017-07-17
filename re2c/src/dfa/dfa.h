@@ -79,6 +79,7 @@ void fillpoints(const dfa_t &dfa, std::vector<size_t> &fill);
 void cutoff_dead_rules(dfa_t &dfa, size_t defrule, const std::string &cond, Warn &warn);
 void insert_fallback_tags(dfa_t &dfa);
 void optimize_tags(dfa_t &dfa);
+void freeze_tags(dfa_t &dfa);
 
 } // namespace re2c
 
