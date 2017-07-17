@@ -19,7 +19,7 @@ OutputFragment::OutputFragment (type_t t, uint32_t i)
 
 OutputFragment::~OutputFragment()
 {
-	if (type == TAGS) {
+	if (type == TAGS || type == TAGLISTS) {
 		delete tags;
 	}
 }
