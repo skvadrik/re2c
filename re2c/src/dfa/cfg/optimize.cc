@@ -4,7 +4,7 @@
 namespace re2c
 {
 
-void optimize_tags(dfa_t &dfa)
+void compact_and_optimize_tags(dfa_t &dfa, bool optimize)
 {
 	tagver_t maxver = dfa.maxtagver;
 	if (maxver > 0) {
@@ -16,7 +16,7 @@ void optimize_tags(dfa_t &dfa)
 		maxver = cfg_t::compact(cfg, ver2new);
 		cfg_t::renaming(cfg, ver2new, maxver);
 
-		if (maxver > 0) {
+		if (optimize && maxver > 0) {
 			nver = static_cast<size_t>(maxver) + 1;
 			bool *live = new bool[cfg.nbbfin * nver];
 			bool *interf = new bool[nver * nver];
