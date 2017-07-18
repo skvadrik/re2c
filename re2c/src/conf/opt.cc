@@ -141,6 +141,7 @@ void mutopt_t::fix(const conopt_t *globopts)
 	{
 		tags_prefix = Opt::baseopt.tags_prefix;
 		tags_expression = Opt::baseopt.tags_expression;
+		lookahead = Opt::baseopt.lookahead;
 		optimize_tags = Opt::baseopt.optimize_tags;
 	}
 	if (!bFlag)
