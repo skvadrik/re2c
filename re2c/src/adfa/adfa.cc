@@ -37,7 +37,7 @@ DFA::DFA
 	, charset(dfa.charset)
 	, rules(dfa.rules)
 	, tags(dfa.tags)
-	, listvers(dfa.listvers)
+	, mtagvers(dfa.mtagvers)
 	, finvers(dfa.finvers)
 	, tcpool(dfa.tcpool)
 	, max_fill (0)
@@ -106,7 +106,7 @@ DFA::~DFA()
 	delete &charset;
 	delete &rules;
 	delete &tags;
-	delete &listvers;
+	delete &mtagvers;
 	delete[] finvers;
 	delete &tcpool;
 }

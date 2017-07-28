@@ -38,8 +38,8 @@ struct OutputFragment
 		, COND_TABLE
 		, LINE_INFO
 		, STATE_GOTO
-		, TAGS
-		, TAGLISTS
+		, STAGS
+		, MTAGS
 		, TYPES
 		, YYACCEPT_INIT
 		, YYMAXFILL
@@ -75,8 +75,8 @@ struct OutputBlock
 	bool used_yyaccept;
 	uint32_t line;
 	std::vector<std::string> types;
-	std::set<std::string> tags;
-	std::set<std::string> taglists;
+	std::set<std::string> stags;
+	std::set<std::string> mtags;
 	const opt_t *opts;
 
 	OutputBlock ();
@@ -123,7 +123,7 @@ public:
 	OutputFile & wind (uint32_t ind);
 
 	// delayed output
-	OutputFile & wdelay_tags(const ConfTags *cf, bool lists);
+	OutputFile & wdelay_tags(const ConfTags *cf, bool mtags);
 	OutputFile & wdelay_line_info ();
 	OutputFile & wdelay_cond_goto(uint32_t ind);
 	OutputFile & wdelay_cond_table(uint32_t ind);
@@ -136,11 +136,11 @@ public:
 	OutputFile& wdelay_backup(uint32_t ind, bool backup);
 
 	void global_lists(uniq_vector_t<std::string> &types,
-		std::set<std::string> &tags, std::set<std::string> &taglists) const;
+		std::set<std::string> &stags, std::set<std::string> &mtags) const;
 
 	bool emit(const uniq_vector_t<std::string> &global_types,
-		const std::set<std::string> &global_tags,
-		const std::set<std::string> &global_taglists, size_t max_fill);
+		const std::set<std::string> &global_stags,
+		const std::set<std::string> &global_mtags, size_t max_fill);
 
 	FORBID_COPY (OutputFile);
 };

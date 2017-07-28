@@ -8,8 +8,8 @@ static void lex(const char *s)
 #define YYSKIP()           ++s
 #define YYBACKUP()         marker = s
 #define YYRESTORE()        s = marker
-#define YYTAGP(t)          t = s
-#define YYTAGN(t)          t = NULL
+#define YYSTAGP(t)         t = s
+#define YYSTAGN(t)         t = NULL
 #define YYRESTORETAG(t)    s = t
     const char *marker, *p0, *p1, *p2, *p3;
     const char *yyt1;const char *yyt2;const char *yyt3;const char *yyt4;const char *yyt5;
@@ -19,29 +19,29 @@ static void lex(const char *s)
 	yych = YYPEEK ();
 	switch (yych) {
 	case '0':
-		YYTAGP (yyt1);
+		YYSTAGP (yyt1);
 		goto yy4;
 	case '1':
-		YYTAGP (yyt1);
-		YYTAGP (yyt2);
+		YYSTAGP (yyt1);
+		YYSTAGP (yyt2);
 		goto yy7;
 	case '2':
-		YYTAGP (yyt1);
-		YYTAGP (yyt2);
-		YYTAGP (yyt3);
+		YYSTAGP (yyt1);
+		YYSTAGP (yyt2);
+		YYSTAGP (yyt3);
 		goto yy9;
 	case '3':
-		YYTAGP (yyt1);
-		YYTAGP (yyt2);
-		YYTAGP (yyt3);
-		YYTAGP (yyt4);
+		YYSTAGP (yyt1);
+		YYSTAGP (yyt2);
+		YYSTAGP (yyt3);
+		YYSTAGP (yyt4);
 		goto yy11;
 	case '4':
-		YYTAGP (yyt1);
-		YYTAGP (yyt2);
-		YYTAGP (yyt3);
-		YYTAGP (yyt4);
-		YYTAGP (yyt5);
+		YYSTAGP (yyt1);
+		YYSTAGP (yyt2);
+		YYSTAGP (yyt3);
+		YYSTAGP (yyt4);
+		YYSTAGP (yyt5);
 		goto yy13;
 	default:	goto yy2;
 	}
@@ -54,28 +54,28 @@ yy4:
 	switch (yych) {
 	case '0':	goto yy4;
 	case '1':
-		YYTAGP (yyt2);
+		YYSTAGP (yyt2);
 		goto yy7;
 	case '2':
-		YYTAGP (yyt2);
-		YYTAGP (yyt3);
+		YYSTAGP (yyt2);
+		YYSTAGP (yyt3);
 		goto yy9;
 	case '3':
-		YYTAGP (yyt2);
-		YYTAGP (yyt3);
-		YYTAGP (yyt4);
+		YYSTAGP (yyt2);
+		YYSTAGP (yyt3);
+		YYSTAGP (yyt4);
 		goto yy11;
 	case '4':
-		YYTAGP (yyt2);
-		YYTAGP (yyt3);
-		YYTAGP (yyt4);
-		YYTAGP (yyt5);
+		YYSTAGP (yyt2);
+		YYSTAGP (yyt3);
+		YYSTAGP (yyt4);
+		YYSTAGP (yyt5);
 		goto yy13;
 	default:
-		YYTAGP (yyt2);
-		YYTAGP (yyt3);
-		YYTAGP (yyt4);
-		YYTAGP (yyt5);
+		YYSTAGP (yyt2);
+		YYSTAGP (yyt3);
+		YYSTAGP (yyt4);
+		YYSTAGP (yyt5);
 		goto yy6;
 	}
 yy6:
@@ -99,21 +99,21 @@ yy7:
 	switch (yych) {
 	case '1':	goto yy7;
 	case '2':
-		YYTAGP (yyt3);
+		YYSTAGP (yyt3);
 		goto yy9;
 	case '3':
-		YYTAGP (yyt3);
-		YYTAGP (yyt4);
+		YYSTAGP (yyt3);
+		YYSTAGP (yyt4);
 		goto yy11;
 	case '4':
-		YYTAGP (yyt3);
-		YYTAGP (yyt4);
-		YYTAGP (yyt5);
+		YYSTAGP (yyt3);
+		YYSTAGP (yyt4);
+		YYSTAGP (yyt5);
 		goto yy13;
 	default:
-		YYTAGP (yyt3);
-		YYTAGP (yyt4);
-		YYTAGP (yyt5);
+		YYSTAGP (yyt3);
+		YYSTAGP (yyt4);
+		YYSTAGP (yyt5);
 		goto yy6;
 	}
 yy9:
@@ -122,15 +122,15 @@ yy9:
 	switch (yych) {
 	case '2':	goto yy9;
 	case '3':
-		YYTAGP (yyt4);
+		YYSTAGP (yyt4);
 		goto yy11;
 	case '4':
-		YYTAGP (yyt4);
-		YYTAGP (yyt5);
+		YYSTAGP (yyt4);
+		YYSTAGP (yyt5);
 		goto yy13;
 	default:
-		YYTAGP (yyt4);
-		YYTAGP (yyt5);
+		YYSTAGP (yyt4);
+		YYSTAGP (yyt5);
 		goto yy6;
 	}
 yy11:
@@ -139,10 +139,10 @@ yy11:
 	switch (yych) {
 	case '3':	goto yy11;
 	case '4':
-		YYTAGP (yyt5);
+		YYSTAGP (yyt5);
 		goto yy13;
 	default:
-		YYTAGP (yyt5);
+		YYSTAGP (yyt5);
 		goto yy6;
 	}
 yy13:

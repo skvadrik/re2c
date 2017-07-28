@@ -13,7 +13,7 @@ typedef struct {
     char *cur;
     char *mar;
     char *tok;
-    /*!tags:re2c format = "char *@@;\n"; */
+    /*!stags:re2c format = "char *@@;\n"; */
     int eof;
 } input_t;
 
@@ -25,7 +25,7 @@ static void init_input(input_t *in, const char *fname)
     in->cur = in->lim;
     in->mar = in->lim;
     in->tok = in->lim;
-    /*!tags:re2c format = "in->@@ = 0;\n"; */
+    /*!stags:re2c format = "in->@@ = 0;\n"; */
     in->eof = 0;
 }
 
@@ -49,7 +49,7 @@ static int fill(input_t *in, size_t need)
     in->cur -= free;
     in->mar -= free;
     in->tok -= free;
-    /*!tags:re2c format = "if (in->@@) in->@@ -= free;\n"; */
+    /*!stags:re2c format = "if (in->@@) in->@@ -= free;\n"; */
     in->lim += fread(in->lim, 1, free, in->file);
     if (in->lim < in->buf + SIZE) {
         in->eof = 1;

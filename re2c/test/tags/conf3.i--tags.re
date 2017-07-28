@@ -12,13 +12,13 @@ static inline unsigned parse_oct(const char *s, const char *e)
 
 struct tags_t
 {
-    /*!tags:re2c format = "const char *@@;"; */
+    /*!stags:re2c format = "const char *@@;"; */
 
     tags_t();
-    void push(/*!tags:re2c
+    void push(/*!stags:re2c
         format = "const char *arg_@@";
         separator = ","; */);
-    void pop(/*!tags:re2c
+    void pop(/*!stags:re2c
         format = "const char *&arg_@@";
         separator = ","; */);
 };
@@ -52,23 +52,23 @@ static void lex(const char *YYCURSOR)
     */
 }
 
-tags_t::tags_t(): /*!tags:re2c
+tags_t::tags_t(): /*!stags:re2c
     format = "@@(0)";
     separator = ",";
 */ {}
 
-void tags_t::push(/*!tags:re2c
+void tags_t::push(/*!stags:re2c
     format = "const char *arg_@@";
     separator = ","; */)
 {
-    /*!tags:re2c format = "@@ = arg_@@;"; */
+    /*!stags:re2c format = "@@ = arg_@@;"; */
 }
 
-void tags_t::pop(/*!tags:re2c
+void tags_t::pop(/*!stags:re2c
     format = "const char *&arg_@@";
     separator = ","; */)
 {
-    /*!tags:re2c format = "arg_@@ = @@;"; */
+    /*!stags:re2c format = "arg_@@ = @@;"; */
 }
 
 int main(int argc, char **argv)

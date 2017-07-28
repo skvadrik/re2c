@@ -125,7 +125,7 @@ yy28:
 	yych = YYPEEK ();
 	switch (yych) {
 	case 'a':
-		YYTAGP (yyt1);
+		YYSTAGP (yyt1);
 		goto yy29;
 	default:	goto yy27;
 	}
@@ -135,7 +135,7 @@ yy29:
 	yych = YYPEEK ();
 	switch (yych) {
 	case 'a':
-		YYTAGP (yyt1);
+		YYSTAGP (yyt1);
 		goto yy29;
 	default:	goto yy31;
 	}
@@ -144,5 +144,5 @@ yy31:
 	{}
 }
 
-re2c: warning: line 21: trailing context is non-deterministic and induces 2 parallel instances [-Wnondeterministic-tags]
-re2c: warning: line 29: trailing context is non-deterministic and induces 2 parallel instances [-Wnondeterministic-tags]
+re2c: warning: line 21: trailing context has 2nd degree of nondeterminism [-Wnondeterministic-tags]
+re2c: warning: line 29: trailing context has 2nd degree of nondeterminism [-Wnondeterministic-tags]

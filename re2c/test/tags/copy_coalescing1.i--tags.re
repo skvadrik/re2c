@@ -7,7 +7,7 @@
 // Coalescing adds bias to this choice: we first try to merge
 // copy operands, then examine the rest of tags.
 
-/*!tags:re2c format = "@@\n"; */
+/*!stags:re2c format = "@@\n"; */
 /*!re2c
     ("a" @p "c" @q)* { p q }
     ("a" @r "d" @s)* { r s }

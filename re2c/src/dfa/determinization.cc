@@ -56,7 +56,7 @@ dfa_t::dfa_t(const nfa_t &nfa, const opt_t *opts,
 	, charset(nfa.charset)
 	, rules(nfa.rules)
 	, tags(nfa.tags)
-	, listvers(*new std::set<tagver_t>)
+	, mtagvers(*new std::set<tagver_t>)
 	, finvers(NULL)
 	, tcpool(*new tcpool_t)
 	, maxtagver(0)
@@ -89,8 +89,8 @@ dfa_t::dfa_t(const nfa_t &nfa, const opt_t *opts,
 	for (size_t i = 0; i < ntag; ++i) {
 		if (history(tags[i])) {
 			tagver_t v = static_cast<tagver_t>(i) + 1, f = finvers[i];
-			if (f != TAGVER_ZERO) listvers.insert(f);
-			listvers.insert(v);
+			if (f != TAGVER_ZERO) mtagvers.insert(f);
+			mtagvers.insert(v);
 		}
 	}
 
@@ -112,7 +112,7 @@ dfa_t::dfa_t(const nfa_t &nfa, const opt_t *opts,
 		}
 		// mark tags with history
 		for (newvers_t::iterator j = newvers.begin(); j != newvers.end(); ++j) {
-			if (history(tags[j->first.tag])) listvers.insert(abs(j->second));
+			if (history(tags[j->first.tag])) mtagvers.insert(abs(j->second));
 		}
 	}
 

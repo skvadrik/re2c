@@ -112,13 +112,13 @@ echo:
 		goto echo;
 	}
 
-	"/*!tags:re2c" {
+	"/*!stags:re2c" {
 		out.wraw(tok, ptr);
 		lex_tags(out, false);
 		goto echo;
 	}
 
-	"/*!taglists:re2c" {
+	"/*!mtags:re2c" {
 		out.wraw(tok, ptr);
 		lex_tags(out, true);
 		goto echo;
@@ -164,7 +164,7 @@ void Scanner::lex_end_of_comment(OutputFile &out)
 	*/}
 }
 
-void Scanner::lex_tags(OutputFile &out, bool lists)
+void Scanner::lex_tags(OutputFile &out, bool mtags)
 {
 	std::string fmt, sep;
 	for (;;) {/*!re2c
@@ -176,7 +176,7 @@ void Scanner::lex_tags(OutputFile &out, bool lists)
 		space+ { continue; }
 		eol    { ++cline; continue; }
 		eoc    {
-			out.wdelay_tags(new ConfTags(fmt, sep), lists);
+			out.wdelay_tags(new ConfTags(fmt, sep), mtags);
 			tok = pos = cur;
 			return;
 		}

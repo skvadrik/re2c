@@ -22,10 +22,10 @@ void cfg_t::interference(const cfg_t &cfg, const bool *live, bool *interf)
 	}
 
 	// versions of tags with/without history interfere
-	std::set<tagver_t> &lvs = cfg.dfa.listvers;
-	for (std::set<tagver_t>::iterator i = lvs.begin(); i != lvs.end(); ++i) {
+	std::set<tagver_t> &mt = cfg.dfa.mtagvers;
+	for (std::set<tagver_t>::iterator i = mt.begin(); i != mt.end(); ++i) {
 		for (tagver_t u = *i, v = 0; v < maxver; ++v) {
-			if (lvs.find(v) == lvs.end()) {
+			if (mt.find(v) == mt.end()) {
 				interf[v * maxver + u] = interf[u * maxver + v] = true;
 			}
 		}

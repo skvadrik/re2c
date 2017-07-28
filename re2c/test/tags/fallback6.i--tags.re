@@ -1,4 +1,4 @@
-/*!tags:re2c format = "@@\n"; */
+/*!stags:re2c format = "@@\n"; */
 /*!re2c
 
     (@p "ab" | "c"    "d")*     { p }

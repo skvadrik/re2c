@@ -334,8 +334,8 @@ void gen_settags(code_lines_t &code, const DFA &dfa, tcid_t tcid, const opt_t *o
 			code_lines_t code1;
 			for (; *h != TAGVER_ZERO; ++h) {
 				const std::string s = *h == TAGVER_BOTTOM
-					? opts->yytaglistn + " (" + le + ");\n"
-					: opts->yytaglistp + " (" + le + ");\n";
+					? opts->yymtagn + " (" + le + ");\n"
+					: opts->yymtagp + " (" + le + ");\n";
 				code1.push_back(s);
 			}
 			code.insert(code.end(), code1.rbegin(), code1.rend());
@@ -345,8 +345,8 @@ void gen_settags(code_lines_t &code, const DFA &dfa, tcid_t tcid, const opt_t *o
 			const std::string
 				v = vartag_expr(l, prefix, expression),
 				s = *h == TAGVER_BOTTOM
-					? opts->yytagn + " (" + v + ");\n"
-					: opts->yytagp + " (" + v + ");\n";
+					? opts->yystagn + " (" + v + ");\n"
+					: opts->yystagp + " (" + v + ");\n";
 			code.push_back(s);
 
 		// save command; no history; default API

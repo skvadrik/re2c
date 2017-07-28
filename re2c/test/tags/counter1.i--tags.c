@@ -115,4 +115,4 @@ yy16:
 	{}
 }
 
-re2c: warning: line 3: tag 'z' is non-deterministic and induces 11 parallel instances [-Wnondeterministic-tags]
+re2c: warning: line 3: tag 'z' has 11th degree of nondeterminism [-Wnondeterministic-tags]

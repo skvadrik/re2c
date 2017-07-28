@@ -131,8 +131,9 @@ void Warn::nondeterministic_tags(uint32_t line, const std::string &cond,
 			fprintf(stderr, "tag '%s'", tagname->c_str());
 		}
 		fprintf(stderr,
-			" %sis non-deterministic and induces %u parallel instances",
-			incond(cond).c_str(), static_cast<uint32_t>(nver));
+			" %shas %u%s degree of nondeterminism",
+			incond(cond).c_str(), static_cast<uint32_t>(nver),
+			nver == 2 ? "nd" : nver == 3 ? "rd" : "th");
 		warning_end(names[NONDETERMINISTIC_TAGS], e);
 	}
 }

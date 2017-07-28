@@ -8,8 +8,8 @@ static void lex(const char *s)
 #define YYSKIP()           ++s
 #define YYBACKUP()         marker = s
 #define YYRESTORE()        s = marker
-#define YYTAGP(t)          t = s
-#define YYTAGN(t)          t = NULL
+#define YYSTAGP(t)         t = s
+#define YYSTAGN(t)         t = NULL
 #define YYRESTORETAG(t)    s = t
     const char *marker, *p0, *p1, *p2, *p3;
     const char *yyt1;const char *yyt2;const char *yyt3;const char *yyt4;const char *yyt5;
@@ -19,7 +19,7 @@ static void lex(const char *s)
 	yych = YYPEEK ();
 	switch (yych) {
 	case '0':
-		YYTAGP (yyt1);
+		YYSTAGP (yyt1);
 		goto yy4;
 	default:	goto yy2;
 	}
@@ -33,11 +33,11 @@ yy4:
 	yych = YYPEEK ();
 	switch (yych) {
 	case '1':
-		YYTAGP (yyt2);
+		YYSTAGP (yyt2);
 		goto yy5;
 	case '2':
-		YYTAGP (yyt2);
-		YYTAGP (yyt3);
+		YYSTAGP (yyt2);
+		YYSTAGP (yyt3);
 		goto yy8;
 	default:	goto yy3;
 	}
@@ -47,7 +47,7 @@ yy5:
 	switch (yych) {
 	case '1':	goto yy5;
 	case '2':
-		YYTAGP (yyt3);
+		YYSTAGP (yyt3);
 		goto yy8;
 	default:	goto yy7;
 	}
@@ -59,11 +59,11 @@ yy8:
 	yych = YYPEEK ();
 	switch (yych) {
 	case '3':
-		YYTAGP (yyt4);
+		YYSTAGP (yyt4);
 		goto yy9;
 	case '4':
-		YYTAGP (yyt4);
-		YYTAGP (yyt5);
+		YYSTAGP (yyt4);
+		YYSTAGP (yyt5);
 		goto yy11;
 	default:	goto yy7;
 	}
@@ -73,7 +73,7 @@ yy9:
 	switch (yych) {
 	case '3':	goto yy9;
 	case '4':
-		YYTAGP (yyt5);
+		YYSTAGP (yyt5);
 		goto yy11;
 	default:	goto yy7;
 	}

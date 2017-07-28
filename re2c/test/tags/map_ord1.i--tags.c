@@ -42,4 +42,4 @@ yy5:
 }
 
 re2c: warning: line 4: rule matches empty string [-Wmatch-empty-string]
-re2c: warning: line 4: tag 't' is non-deterministic and induces 2 parallel instances [-Wnondeterministic-tags]
+re2c: warning: line 4: tag 't' has 2nd degree of nondeterminism [-Wnondeterministic-tags]

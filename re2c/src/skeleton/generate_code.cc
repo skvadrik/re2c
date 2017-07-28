@@ -95,8 +95,8 @@ void emit_prolog(OutputFile &o)
 
 void emit_start(OutputFile &o, size_t maxfill, const std::string &name,
 	size_t sizeof_key, size_t def, bool backup, bool accept, bool oldstyle_ctxmarker,
-	const std::set<std::string> &tagnames, const std::set<std::string> &tagvars,
-	const std::set<std::string> &taglistnames, const std::set<std::string> &taglistvars,
+	const std::set<std::string> &stagnames, const std::set<std::string> &stagvars,
+	const std::set<std::string> &mtagnames, const std::set<std::string> &mtagvars,
 	bitmaps_t &bitmaps)
 {
 	const opt_t *opts = o.block().opts;
@@ -122,11 +122,11 @@ void emit_start(OutputFile &o, size_t maxfill, const std::string &name,
 		o.ws("\n#define YYRESTORECTX() cursor = ctxmarker");
 	}
 	if (opts->tags) {
-		o.ws("\n#define YYTAGP(t) t = cursor");
-		o.ws("\n#define YYTAGN(t) t = NULL");
-		o.ws("\n#define YYTAGLISTP(tl) yytaglist(&tl, cursor, &yytlp)");
-		o.ws("\n#define YYTAGLISTN(tl) yytaglist(&tl, NULL, &yytlp)");
-		o.ws("\n#define YYRESTORETAG(tag) cursor = tag");
+		o.ws("\n#define YYSTAGP(t) t = cursor");
+		o.ws("\n#define YYSTAGN(t) t = NULL");
+		o.ws("\n#define YYMTAGP(t) yymtag(&t, cursor, &yytp)");
+		o.ws("\n#define YYMTAGN(t) yymtag(&t, NULL, &yytp)");
+		o.ws("\n#define YYRESTORETAG(t) cursor = t");
 	}
 	o.ws("\n#define YYLESSTHAN(n) (limit - cursor) < n");
 	o.ws("\n#define YYFILL(n) { break; }");
@@ -176,9 +176,9 @@ void emit_start(OutputFile &o, size_t maxfill, const std::string &name,
 	o.ws("\n").wind(1).ws("}");
 	o.ws("\n}");
 
-	if (!tagnames.empty()) {
+	if (!stagnames.empty()) {
 		o.ws("\n");
-		o.ws("\nstatic int check_tag_").wstring(name)
+		o.ws("\nstatic int check_stag_").wstring(name)
 			.ws("(unsigned *pkix, YYKEYTYPE *keys, const YYCTYPE *tag,\n")
 			.wind(1).ws("const YYCTYPE *input, const YYCTYPE *token, const char *name)");
 		o.ws("\n{");
@@ -198,69 +198,69 @@ void emit_start(OutputFile &o, size_t maxfill, const std::string &name,
 		o.ws("\n}");
 	}
 
-	if (!taglistnames.empty()) {
+	if (!mtagnames.empty()) {
 		o.ws("\n");
-		o.ws("\ntypedef struct yytaglist_t {");
-		o.ws("\n").wind(1).ws("struct yytaglist_t *list;");
+		o.ws("\ntypedef struct yymtag_t {");
+		o.ws("\n").wind(1).ws("struct yymtag_t *pred;");
 		o.ws("\n").wind(1).ws("const YYCTYPE *tag;");
-		o.ws("\n} yytaglist_t;");
+		o.ws("\n} yymtag_t;");
 
 		o.ws("\n");
-		o.ws("\ntypedef struct yytaglistpool_t {");
-		o.ws("\n").wind(1).ws("yytaglist_t *head;");
-		o.ws("\n").wind(1).ws("yytaglist_t *next;");
-		o.ws("\n").wind(1).ws("yytaglist_t *last;");
-		o.ws("\n} yytaglistpool_t;");
+		o.ws("\ntypedef struct yymtagpool_t {");
+		o.ws("\n").wind(1).ws("yymtag_t *head;");
+		o.ws("\n").wind(1).ws("yymtag_t *next;");
+		o.ws("\n").wind(1).ws("yymtag_t *last;");
+		o.ws("\n} yymtagpool_t;");
 
 		o.ws("\n");
-		o.ws("\nstatic void yytaglistpool_clear(yytaglistpool_t *tlp)");
+		o.ws("\nstatic void yymtagpool_clear(yymtagpool_t *tp)");
 		o.ws("\n{");
-		o.ws("\n").wind(1).ws("tlp->next = tlp->head;");
+		o.ws("\n").wind(1).ws("tp->next = tp->head;");
 		o.ws("\n}");
 
 		o.ws("\n");
-		o.ws("\nstatic void yytaglistpool_init(yytaglistpool_t *tlp)");
+		o.ws("\nstatic void yymtagpool_init(yymtagpool_t *tp)");
 		o.ws("\n{");
 		o.ws("\n").wind(1).ws("static const unsigned size = 256;");
-		o.ws("\n").wind(1).ws("tlp->head = (yytaglist_t*)malloc(size * sizeof(yytaglist_t));");
-		o.ws("\n").wind(1).ws("tlp->next = tlp->head;");
-		o.ws("\n").wind(1).ws("tlp->last = tlp->head + size;");
+		o.ws("\n").wind(1).ws("tp->head = (yymtag_t*)malloc(size * sizeof(yymtag_t));");
+		o.ws("\n").wind(1).ws("tp->next = tp->head;");
+		o.ws("\n").wind(1).ws("tp->last = tp->head + size;");
 		o.ws("\n}");
 
 		o.ws("\n");
-		o.ws("\nstatic void yytaglistpool_free(yytaglistpool_t *tlp)");
+		o.ws("\nstatic void yymtagpool_free(yymtagpool_t *tp)");
 		o.ws("\n{");
-		o.ws("\n").wind(1).ws("free(tlp->head);");
-		o.ws("\n").wind(1).ws("tlp->head = tlp->next = tlp->last = NULL;");
+		o.ws("\n").wind(1).ws("free(tp->head);");
+		o.ws("\n").wind(1).ws("tp->head = tp->next = tp->last = NULL;");
 		o.ws("\n}");
 
 		o.ws("\n");
-		o.ws("\nstatic yytaglist_t *yytaglistpool_next(yytaglistpool_t *tlp)");
+		o.ws("\nstatic yymtag_t *yymtagpool_next(yymtagpool_t *tp)");
 		o.ws("\n{");
-		o.ws("\n").wind(1).ws("if (tlp->next == tlp->last) {");
-		o.ws("\n").wind(2).ws("const unsigned size = tlp->last - tlp->head;");
-		o.ws("\n").wind(2).ws("yytaglist_t *head = (yytaglist_t*)malloc(2 * size * sizeof(yytaglist_t));");
-		o.ws("\n").wind(2).ws("memcpy(head, tlp->head, size * sizeof(yytaglist_t));");
-		o.ws("\n").wind(2).ws("free(tlp->head);");
-		o.ws("\n").wind(2).ws("tlp->head = head;");
-		o.ws("\n").wind(2).ws("tlp->next = head + size;");
-		o.ws("\n").wind(2).ws("tlp->last = head + size * 2;");
+		o.ws("\n").wind(1).ws("if (tp->next == tp->last) {");
+		o.ws("\n").wind(2).ws("const unsigned size = tp->last - tp->head;");
+		o.ws("\n").wind(2).ws("yymtag_t *head = (yymtag_t*)malloc(2 * size * sizeof(yymtag_t));");
+		o.ws("\n").wind(2).ws("memcpy(head, tp->head, size * sizeof(yymtag_t));");
+		o.ws("\n").wind(2).ws("free(tp->head);");
+		o.ws("\n").wind(2).ws("tp->head = head;");
+		o.ws("\n").wind(2).ws("tp->next = head + size;");
+		o.ws("\n").wind(2).ws("tp->last = head + size * 2;");
 		o.ws("\n").wind(1).ws("}");
-		o.ws("\n").wind(1).ws("return tlp->next++;");
+		o.ws("\n").wind(1).ws("return tp->next++;");
 		o.ws("\n}");
 
 		o.ws("\n");
-		o.ws("\nstatic void yytaglist(yytaglist_t **ptl, const YYCTYPE *t, yytaglistpool_t *tlp)");
+		o.ws("\nstatic void yymtag(yymtag_t **pt, const YYCTYPE *t, yymtagpool_t *tp)");
 		o.ws("\n{");
-		o.ws("\n").wind(1).ws("yytaglist_t *tl = yytaglistpool_next(tlp);");
-		o.ws("\n").wind(1).ws("tl->list = *ptl;");
-		o.ws("\n").wind(1).ws("tl->tag = t;");
-		o.ws("\n").wind(1).ws("*ptl = tl;");
+		o.ws("\n").wind(1).ws("yymtag_t *t = yymtagpool_next(tp);");
+		o.ws("\n").wind(1).ws("t->pred = *pt;");
+		o.ws("\n").wind(1).ws("t->tag = t;");
+		o.ws("\n").wind(1).ws("*pt = t;");
 		o.ws("\n}");
 
 		o.ws("\n");
-		o.ws("\nstatic int check_taglist_").wstring(name)
-			.ws("(unsigned *pkix, YYKEYTYPE *keys, const yytaglist_t *list,\n")
+		o.ws("\nstatic int check_mtag_").wstring(name)
+			.ws("(unsigned *pkix, YYKEYTYPE *keys, const yymtag_t *tag,\n")
 			.wind(1).ws("const YYCTYPE *input, const YYCTYPE *token, const char *name)");
 		o.ws("\n{");
 //		o.ws("\n").wind(1).ws("check_key_count_").wstring(name).ws("(1) && return 1;");
@@ -269,14 +269,14 @@ void emit_start(OutputFile &o, size_t maxfill, const std::string &name,
 		o.ws("\n").wind(1).ws("*pkix = kix + n + 1;");
 //		o.ws("\n").wind(1).ws("check_key_count_").wstring(name).ws("(n) && return 1;");
 		o.ws("\n").wind(1).ws("for (; n > 0; --n) {");
-		o.ws("\n").wind(2).ws("if (list == NULL) {");
+		o.ws("\n").wind(2).ws("if (tag == NULL) {");
 		o.ws("\n").wind(3).ws("fprintf(stderr, \"error: lex_").wstring(name).ws(": at position %ld, key %u: \"")
 			.ws("\n").wind(4).ws("\"history for tag '%s' is too short\\n\",")
 			.ws("\n").wind(4).ws("token - input, kix + n, name);");
 		o.ws("\n").wind(3).ws("return 1;");
 		o.ws("\n").wind(2).ws("}");
-		o.ws("\n").wind(2).ws("const YYCTYPE *tag = list->tag;");
-		o.ws("\n").wind(2).ws("list = list->list;");
+		o.ws("\n").wind(2).ws("const YYCTYPE *tag = tag->offs;");
+		o.ws("\n").wind(2).ws("tag = tag->pred;");
 		o.ws("\n").wind(2).ws("const YYKEYTYPE\n")
 			.wind(3).ws("exp = keys[kix + n],\n")
 			.wind(3).ws("act = (YYKEYTYPE)(tag - token),\n")
@@ -288,7 +288,7 @@ void emit_start(OutputFile &o, size_t maxfill, const std::string &name,
 		o.ws("\n").wind(3).ws("return 1;");
 		o.ws("\n").wind(2).ws("}");
 		o.ws("\n").wind(1).ws("}");
-		o.ws("\n").wind(1).ws("if (list != NULL) {");
+		o.ws("\n").wind(1).ws("if (tag != NULL) {");
 		o.ws("\n").wind(2).ws("fprintf(stderr, \"error: lex_").wstring(name).ws(": at position %ld, key %u: \"")
 			.ws("\n").wind(3).ws("\"history for tag '%s' is too long\\n\",")
 			.ws("\n").wind(3).ws("token - input, kix, name);");
@@ -320,10 +320,10 @@ void emit_start(OutputFile &o, size_t maxfill, const std::string &name,
 	o.ws("\n").wind(1).ws("const YYCTYPE *token = NULL;");
 	o.ws("\n").wind(1).ws("const YYCTYPE *eof = NULL;");
 	o.ws("\n").wind(1).ws("unsigned int i = 0;");
-	if (!taglistnames.empty()) {
+	if (!mtagnames.empty()) {
 		o.ws("\n");
-		o.ws("\n").wind(1).ws("yytaglistpool_t yytlp;");
-		o.ws("\n").wind(1).ws("yytaglistpool_init(&yytlp);");
+		o.ws("\n").wind(1).ws("yymtagpool_t yytp;");
+		o.ws("\n").wind(1).ws("yymtagpool_init(&yytp);");
 	}
 	o.ws("\n");
 	o.ws("\n").wind(1).ws("input = (YYCTYPE *) read_file");
@@ -378,13 +378,13 @@ void emit_start(OutputFile &o, size_t maxfill, const std::string &name,
 		o.ws("\n").wind(2).ws("unsigned int yyaccept = 0;");
 	}
 
-	// autogenerated tag variables
+	// autogenerated stag variables
 	ConfTags conf("\n" + indent(2, opts->indString) + "const YYCTYPE *@@ = NULL;", "");
-	output_tags(o.stream(), 0, conf, tagnames, opts);
-	// user-defined tag variables
+	output_tags(o.stream(), 0, conf, stagnames, opts);
+	// user-defined stag variables
 	std::set<std::string>::const_iterator
-		var1 = tagvars.begin(),
-		var2 = tagvars.end();
+		var1 = stagvars.begin(),
+		var2 = stagvars.end();
 	if (var1 != var2) {
 		o.ws("\n").wind(2).ws("const YYCTYPE *").wstring(*var1);
 		for (++var1; var1 != var2; ++var1) {
@@ -392,16 +392,16 @@ void emit_start(OutputFile &o, size_t maxfill, const std::string &name,
 		}
 		o.ws(";");
 	}
-	if (!taglistnames.empty()) {
-		o.ws("\n").wind(2).ws("yytaglistpool_clear(&yytlp);");
-		// autogenerated tag list variables
-		conf.format = "yytaglist_t *@@ = NULL;";
-		output_tags(o.stream(), 0, conf, taglistnames, opts);
-		// user-defined tag list variables
-		var1 = taglistvars.begin();
-		var2 = taglistvars.end();
+	if (!mtagnames.empty()) {
+		o.ws("\n").wind(2).ws("yymtagpool_clear(&yytp);");
+		// autogenerated mtag variables
+		conf.format = "yymtag_t *@@ = NULL;";
+		output_tags(o.stream(), 0, conf, mtagnames, opts);
+		// user-defined mtag variables
+		var1 = mtagvars.begin();
+		var2 = mtagvars.end();
 		if (var1 != var2) {
-			o.ws("\n").wind(2).ws("yytaglist_t *").wstring(*var1);
+			o.ws("\n").wind(2).ws("yymtag_t *").wstring(*var1);
 			for (++var1; var1 != var2; ++var1) {
 				o.ws(", *").wstring(*var1);
 			}
@@ -417,7 +417,7 @@ void emit_start(OutputFile &o, size_t maxfill, const std::string &name,
 }
 
 void emit_end(OutputFile &o, const std::string &name, bool backup, bool oldstyle_ctxmarker,
-	const std::set<std::string> &taglistnames)
+	const std::set<std::string> &mtagnames)
 {
 	o.ws("\n").wind(1).ws("}");
 	o.ws("\n").wind(1).ws("if (status == 0) {");
@@ -435,8 +435,8 @@ void emit_end(OutputFile &o, const std::string &name, bool backup, bool oldstyle
 	o.ws("\nend:");
 	o.ws("\n").wind(1).ws("free(input);");
 	o.ws("\n").wind(1).ws("free(keys);");
-	if (!taglistnames.empty()) {
-		o.ws("\n").wind(1).ws("yytaglistpool_free(&yytlp);");
+	if (!mtagnames.empty()) {
+		o.ws("\n").wind(1).ws("yymtagpool_free(&yytp);");
 	}
 	o.ws("\n");
 	o.ws("\n").wind(1).ws("return status;");
@@ -499,8 +499,8 @@ void emit_action(OutputFile &o, uint32_t ind, const DFA &dfa, size_t rid)
 		const Tag &tag = dfa.tags[t];
 		if (t == r.ttag || fictive(tag)) continue;
 		const std::string tname = tagname(tag),
-			list = history(tag) ? "list" : "";
-		o.ws("\n").wind(ind + 1).ws(" || check_tag").wstring(list).ws("_").wstring(name)
+			prefix = history(tag) ? "m" : "s";
+		o.ws("\n").wind(ind + 1).ws(" || check_").wstring(prefix).ws("tag").ws("_").wstring(name)
 			.ws("(&i, keys, ").wstring(tname).ws(", input, token, \"")
 			.wstring(tname).ws("\")");
 	}

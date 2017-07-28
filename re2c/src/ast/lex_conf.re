@@ -114,10 +114,10 @@ void Scanner::lex_conf(Opt &opts)
 	"define:YYRESTORECTX" { opts.set_yyrestorectx (lex_conf_string ()); return; }
 	"define:YYRESTORETAG" { opts.set_yyrestoretag (lex_conf_string ()); return; }
 	"define:YYLESSTHAN"   { opts.set_yylessthan   (lex_conf_string ()); return; }
-	"define:YYTAGN"       { opts.set_yytagn       (lex_conf_string ()); return; }
-	"define:YYTAGP"       { opts.set_yytagp       (lex_conf_string ()); return; }
-	"define:YYTAGLISTN"   { opts.set_yytaglistn   (lex_conf_string ()); return; }
-	"define:YYTAGLISTP"   { opts.set_yytaglistp   (lex_conf_string ()); return; }
+	"define:YYSTAGN"      { opts.set_yystagn      (lex_conf_string ()); return; }
+	"define:YYSTAGP"      { opts.set_yystagp      (lex_conf_string ()); return; }
+	"define:YYMTAGN"      { opts.set_yymtagn      (lex_conf_string ()); return; }
+	"define:YYMTAGP"      { opts.set_yymtagp      (lex_conf_string ()); return; }
 
 	"tags:prefix"     { opts.set_tags_prefix    (lex_conf_string ()); return; }
 	"tags:expression" { opts.set_tags_expression(lex_conf_string ()); return; }

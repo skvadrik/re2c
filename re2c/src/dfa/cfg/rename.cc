@@ -37,11 +37,11 @@ void cfg_t::renaming(cfg_t &cfg, const tagver_t *ver2new, tagver_t maxver)
 	}
 
 	// versions of tags with history
-	std::set<tagver_t> newlvs, &oldlvs = cfg.dfa.listvers;
-	for (std::set<tagver_t>::iterator i = oldlvs.begin(); i != oldlvs.end(); ++i) {
-		newlvs.insert(ver2new[*i]);
+	std::set<tagver_t> newmt, &oldmt = cfg.dfa.mtagvers;
+	for (std::set<tagver_t>::iterator i = oldmt.begin(); i != oldmt.end(); ++i) {
+		newmt.insert(ver2new[*i]);
 	}
-	oldlvs.swap(newlvs);
+	oldmt.swap(newmt);
 }
 
 } // namespace re2c

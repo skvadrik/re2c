@@ -2,17 +2,17 @@
 
 {
 	YYCTYPE yych;
-	YYTAGP (yyt2);
+	YYSTAGP (yyt2);
 	if (YYLESSTHAN (1)) YYFILL(1);
 	yych = YYPEEK ();
 	YYSKIP ();
 	switch (yych) {
 	case 'a':
-		YYTAGP (yyt1);
+		YYSTAGP (yyt1);
 		goto yy2;
 	default:
-		YYTAGP (yyt1);
-		YYTAGN (yyt2);
+		YYSTAGP (yyt1);
+		YYSTAGN (yyt2);
 		goto yy2;
 	}
 yy2:
@@ -21,4 +21,4 @@ yy2:
 	{}
 }
 
-re2c: warning: line 3: tag 'a' is non-deterministic and induces 2 parallel instances [-Wnondeterministic-tags]
+re2c: warning: line 3: tag 'a' has 2nd degree of nondeterminism [-Wnondeterministic-tags]

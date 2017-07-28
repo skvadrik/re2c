@@ -127,26 +127,26 @@ void DFA::emit(Output & output, uint32_t& ind, bool isLastCond, bool& bPrologBra
 	OutputBlock &ob = o.block();
 	const opt_t *opts = ob.opts;
 
-	std::set<std::string> tagnames, tagvars, taglistnames, taglistvars;
+	std::set<std::string> stagnames, stagvars, mtagnames, mtagvars;
 	if (!oldstyle_ctxmarker) {
 		for (size_t i = 0; i < tags.size(); ++i) {
 			const Tag &tag = tags[i];
 			if (history(tag)) {
-				taglistvars.insert(*tag.name);
+				mtagvars.insert(*tag.name);
 			} else if (tag.name) {
-				tagvars.insert(*tag.name);
+				stagvars.insert(*tag.name);
 			}
 		}
 		for (tagver_t v = 1; v <= maxtagver; ++v) {
 			const std::string name = vartag_name(v, opts->tags_prefix);
-			if (listvers.find(v) != listvers.end()) {
-				taglistnames.insert(name);
+			if (mtagvers.find(v) != mtagvers.end()) {
+				mtagnames.insert(name);
 			} else {
-				tagnames.insert(name);
+				stagnames.insert(name);
 			}
 		}
-		ob.tags.insert(tagnames.begin(), tagnames.end());
-		ob.taglists.insert(taglistnames.begin(), taglistnames.end());
+		ob.stags.insert(stagnames.begin(), stagnames.end());
+		ob.mtags.insert(mtagnames.begin(), mtagnames.end());
 	}
 	if (!cond.empty()) o.block().types.push_back(cond);
 
@@ -175,11 +175,11 @@ void DFA::emit(Output & output, uint32_t& ind, bool isLastCond, bool& bPrologBra
 		if (output.skeletons.insert (name).second)
 		{
 			emit_start(o, max_fill, name, key_size, def_rule, need_backup,
-				need_accept, oldstyle_ctxmarker, tagnames, tagvars,
-				taglistnames, taglistvars, bitmaps);
+				need_accept, oldstyle_ctxmarker, stagnames, stagvars,
+				mtagnames, mtagvars, bitmaps);
 			uint32_t i = 2;
 			emit_body (o, i, used_labels, initial_label);
-			emit_end(o, name, need_backup, oldstyle_ctxmarker, taglistnames);
+			emit_end(o, name, need_backup, oldstyle_ctxmarker, mtagnames);
 		}
 	} else if (opts->target == TARGET_DOT) {
 		emit_dot(o, isLastCond);

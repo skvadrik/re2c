@@ -22,8 +22,8 @@ typedef struct {
     char *cur;
     char *mar;
     char *tok;
-    /*!tags:re2c format = "char *@@;\n"; */
-    /*!taglists:re2c format = "taglist_t *@@;\n"; */
+    /*!stags:re2c format = "char *@@;\n"; */
+    /*!mtags:re2c format = "taglist_t *@@;\n"; */
     taglistpool_t tlp;
     int eof;
 } input_t;
@@ -31,7 +31,7 @@ typedef struct {
 static void taglistpool_clear(taglistpool_t *tlp, input_t *in)
 {
     tlp->next = tlp->head;
-    /*!taglists:re2c format = "in->@@ = 0;\n"; */
+    /*!mtags:re2c format = "in->@@ = 0;\n"; */
 }
 
 static void taglistpool_init(taglistpool_t *tlp)
@@ -83,8 +83,8 @@ static void init_input(input_t *in, const char *fname)
     in->cur = in->lim;
     in->mar = in->lim;
     in->tok = in->lim;
-    /*!tags:re2c format = "in->@@ = 0;\n"; */
-    /*!taglists:re2c format = "in->@@ = 0;\n"; */
+    /*!stags:re2c format = "in->@@ = 0;\n"; */
+    /*!mtags:re2c format = "in->@@ = 0;\n"; */
     taglistpool_init(&in->tlp);
     in->eof = 0;
 }
@@ -110,7 +110,7 @@ static int fill(input_t *in, size_t need)
     in->cur -= free;
     in->mar -= free;
     in->tok -= free;
-    /*!tags:re2c format = "if (in->@@) in->@@ -= free;\n"; */
+    /*!stags:re2c format = "if (in->@@) in->@@ -= free;\n"; */
     in->lim += fread(in->lim, 1, free, in->file);
     if (in->lim < in->buf + SIZE) {
         in->eof = 1;
@@ -133,13 +133,13 @@ static void print_headers(const char *tok,
         (int)(h3->dist - h2->dist), tok + h2->dist);
 }
 
-#define YYCTYPE            char
-#define YYCURSOR           in->cur
-#define YYMARKER           in->mar
-#define YYLIMIT            in->lim
-#define YYTAGLISTP(tl)     taglist(&tl, in->tok, in->cur, &in->tlp)
-#define YYTAGLISTN(tl)     taglist(&tl, in->tok, NULL, &in->tlp)
-#define YYFILL(n)          if (fill(in, n) != 0) return 2;
+#define YYCTYPE        char
+#define YYCURSOR       in->cur
+#define YYMARKER       in->mar
+#define YYLIMIT        in->lim
+#define YYMTAGP(tl)    taglist(&tl, in->tok, in->cur, &in->tlp)
+#define YYMTAGN(tl)    taglist(&tl, in->tok, NULL, &in->tlp)
+#define YYFILL(n)      if (fill(in, n) != 0) return 2;
 
 static int lex(input_t *in, long *count, long *total)
 {

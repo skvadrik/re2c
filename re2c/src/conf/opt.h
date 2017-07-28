@@ -118,10 +118,10 @@ enum target_t
 	MUTOPT (std::string, yyrestorectx, "YYRESTORECTX") \
 	MUTOPT (std::string, yyrestoretag, "YYRESTORETAG") \
 	MUTOPT (std::string, yylessthan, "YYLESSTHAN") \
-	MUTOPT (std::string, yytagn, "YYTAGN") \
-	MUTOPT (std::string, yytagp, "YYTAGP") \
-	MUTOPT (std::string, yytaglistn, "YYTAGLISTN") \
-	MUTOPT (std::string, yytaglistp, "YYTAGLISTP") \
+	MUTOPT (std::string, yystagn, "YYSTAGN") \
+	MUTOPT (std::string, yystagp, "YYSTAGP") \
+	MUTOPT (std::string, yymtagn, "YYMTAGN") \
+	MUTOPT (std::string, yymtagp, "YYMTAGP") \
 	/* #line directives */ \
 	MUTOPT (bool, iFlag, false) \
 	/* debug */ \

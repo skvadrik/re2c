@@ -19,9 +19,7 @@ OutputFragment::OutputFragment (type_t t, uint32_t i)
 
 OutputFragment::~OutputFragment()
 {
-	if (type == TAGS || type == TAGLISTS) {
-		delete tags;
-	}
+	if (type == STAGS || type == MTAGS) delete tags;
 }
 
 uint32_t OutputFragment::count_lines ()
@@ -44,8 +42,8 @@ OutputBlock::OutputBlock ()
 	, used_yyaccept (false)
 	, line (0)
 	, types ()
-	, tags ()
-	, taglists ()
+	, stags ()
+	, mtags ()
 	, opts(NULL)
 {
 	fragments.push_back (new OutputFragment (OutputFragment::CODE, 0));
@@ -210,11 +208,11 @@ void OutputFile::insert_code ()
 	}
 }
 
-OutputFile &OutputFile::wdelay_tags(const ConfTags *cf, bool lists)
+OutputFile &OutputFile::wdelay_tags(const ConfTags *cf, bool mtags)
 {
 	if (block().opts->target == TARGET_CODE) {
 		OutputFragment *frag = new OutputFragment(
-			lists ? OutputFragment::TAGLISTS : OutputFragment::TAGS, 0);
+			mtags ? OutputFragment::MTAGS : OutputFragment::STAGS, 0);
 		frag->tags = cf;
 		blocks.back()->fragments.push_back(frag);
 	}
@@ -316,20 +314,19 @@ void OutputFile::new_block(Opt &opts)
 }
 
 void OutputFile::global_lists(uniq_vector_t<std::string> &types,
-	std::set<std::string> &tags, std::set<std::string> &taglists) const
+	std::set<std::string> &stags, std::set<std::string> &mtags) const
 {
 	for (unsigned int i = 0; i < blocks.size(); ++i) {
-
 		const std::vector<std::string> &cs = blocks[i]->types;
 		for (size_t j = 0; j < cs.size(); ++j) {
 			types.find_or_add(cs[j]);
 		}
 
-		const std::set<std::string> &ts = blocks[i]->tags;
-		tags.insert(ts.begin(), ts.end());
-
-		const std::set<std::string> &tls = blocks[i]->taglists;
-		taglists.insert(tls.begin(), tls.end());
+		const std::set<std::string>
+			&st = blocks[i]->stags,
+			&mt = blocks[i]->mtags;
+		stags.insert(st.begin(), st.end());
+		mtags.insert(mt.begin(), mt.end());
 	}
 }
 
@@ -393,8 +390,8 @@ static void foldexpr(std::vector<OutputFragment*> &frags)
 }
 
 bool OutputFile::emit(const uniq_vector_t<std::string> &global_types,
-	const std::set<std::string> &global_tags,
-	const std::set<std::string> &global_taglists,
+	const std::set<std::string> &global_stags,
+	const std::set<std::string> &global_mtags,
 	size_t max_fill)
 {
 	FILE *file = NULL;
@@ -441,11 +438,11 @@ bool OutputFile::emit(const uniq_vector_t<std::string> &global_types,
 			case OutputFragment::STATE_GOTO:
 				output_state_goto(o, ind, 0, fill_index, bopt);
 				break;
-			case OutputFragment::TAGS:
-				output_tags(o, ind, *f.tags, global_tags, bopt);
+			case OutputFragment::STAGS:
+				output_tags(o, ind, *f.tags, global_stags, bopt);
 				break;
-			case OutputFragment::TAGLISTS:
-				output_tags(o, ind, *f.tags, global_taglists, bopt);
+			case OutputFragment::MTAGS:
+				output_tags(o, ind, *f.tags, global_mtags, bopt);
 				break;
 			case OutputFragment::TYPES:
 				output_types(o, ind, block().opts, global_types);
@@ -535,13 +532,13 @@ bool Output::emit()
 	}
 
 	uniq_vector_t<std::string> types;
-	std::set<std::string> tags, taglists;
-	source.global_lists(types, tags, taglists);
+	std::set<std::string> stags, mtags;
+	source.global_lists(types, stags, mtags);
 
 	// global options are last block's options
 	const opt_t *opts = source.block().opts;
 
-	return source.emit(types, tags, taglists, max_fill)
+	return source.emit(types, stags, mtags, max_fill)
 		&& header.emit(opts, types);
 }
 

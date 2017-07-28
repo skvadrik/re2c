@@ -51,5 +51,5 @@ yy8:
 
 re2c: warning: line 3: rule matches empty string [-Wmatch-empty-string]
 re2c: warning: line 4: rule matches empty string [-Wmatch-empty-string]
-re2c: warning: line 3: tag 'a' is non-deterministic and induces 2 parallel instances [-Wnondeterministic-tags]
-re2c: warning: line 4: tag 'b' is non-deterministic and induces 2 parallel instances [-Wnondeterministic-tags]
+re2c: warning: line 3: tag 'a' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
+re2c: warning: line 4: tag 'b' has 2nd degree of nondeterminism [-Wnondeterministic-tags]

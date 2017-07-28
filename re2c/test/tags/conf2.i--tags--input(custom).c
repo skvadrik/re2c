@@ -68,8 +68,8 @@ static bool lex(input_t & in)
 #define YYSKIP()           ++in.cur
 #define YYBACKUP()         in.mar = in.cur
 #define YYRESTORE()        in.cur = in.mar
-#define YYTAGP(t)          t = in.cur
-#define YYTAGN(t)          t = NULL
+#define YYSTAGP(t)         t = in.cur
+#define YYSTAGN(t)         t = NULL
 #define YYRESTORETAG(t)    in.cur = t
 #define YYLESSTHAN(n)      in.lim - in.cur < n
 loop:
@@ -107,7 +107,7 @@ yy6:
 	yych = YYPEEK ();
 	switch (yych) {
 	case '.':
-		YYTAGP (in.yyt1);
+		YYSTAGP (in.yyt1);
 		goto yy7;
 	case '0':
 	case '1':
@@ -145,7 +145,7 @@ yy9:
 	yych = YYPEEK ();
 	switch (yych) {
 	case '.':
-		YYTAGP (in.yyt1);
+		YYSTAGP (in.yyt1);
 		goto yy7;
 	case '0':
 	case '1':
@@ -164,7 +164,7 @@ yy10:
 	yych = YYPEEK ();
 	switch (yych) {
 	case '.':
-		YYTAGP (in.yyt2);
+		YYSTAGP (in.yyt2);
 		goto yy12;
 	case '0':
 	case '1':
@@ -183,7 +183,7 @@ yy11:
 	yych = YYPEEK ();
 	switch (yych) {
 	case '.':
-		YYTAGP (in.yyt1);
+		YYSTAGP (in.yyt1);
 		goto yy7;
 	default:	goto yy8;
 	}
@@ -208,7 +208,7 @@ yy13:
 	yych = YYPEEK ();
 	switch (yych) {
 	case '.':
-		YYTAGP (in.yyt2);
+		YYSTAGP (in.yyt2);
 		goto yy12;
 	case '0':
 	case '1':
@@ -227,7 +227,7 @@ yy14:
 	yych = YYPEEK ();
 	switch (yych) {
 	case '.':
-		YYTAGP (in.yyt3);
+		YYSTAGP (in.yyt3);
 		goto yy16;
 	case '0':
 	case '1':
@@ -246,7 +246,7 @@ yy15:
 	yych = YYPEEK ();
 	switch (yych) {
 	case '.':
-		YYTAGP (in.yyt2);
+		YYSTAGP (in.yyt2);
 		goto yy12;
 	default:	goto yy8;
 	}
@@ -271,7 +271,7 @@ yy17:
 	yych = YYPEEK ();
 	switch (yych) {
 	case '.':
-		YYTAGP (in.yyt3);
+		YYSTAGP (in.yyt3);
 		goto yy16;
 	case '0':
 	case '1':
@@ -307,7 +307,7 @@ yy19:
 	yych = YYPEEK ();
 	switch (yych) {
 	case '.':
-		YYTAGP (in.yyt3);
+		YYSTAGP (in.yyt3);
 		goto yy16;
 	default:	goto yy8;
 	}

@@ -20,7 +20,7 @@ static void lex(const char *s)
 #define ZZTN(t)      t = NULL
 #define ZZRT(t)      s = t
     const char *marker, *p0, *p1, *p2, *p3;
-    /*!tags:re2c format = "const char *@@;"; */
+    /*!stags:re2c format = "const char *@@;"; */
     /*!re2c
         re2c:define:YYCTYPE = char;
         re2c:yyfill:enable = 0;
@@ -43,8 +43,8 @@ static void lex(const char *s)
             return;
         }
 
-        re2c:define:YYTAGP = "ZZTP";
-        re2c:define:YYTAGN = "ZZTN";
+        re2c:define:YYSTAGP = "ZZTP";
+        re2c:define:YYSTAGN = "ZZTN";
         re2c:define:YYRESTORETAG = "ZZRT";
         re2c:tags:prefix = "zz_";
     */

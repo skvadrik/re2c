@@ -21,7 +21,7 @@ struct input_t {
     char *cur;
     char *mar;
     char *tok;
-    /*!tags:re2c format = "char *@@;"; */
+    /*!stags:re2c format = "char *@@;"; */
     bool eof;
 
     input_t()
@@ -30,7 +30,7 @@ struct input_t {
         , cur(lim)
         , mar(lim)
         , tok(lim)
-        /*!tags:re2c format = ", @@(0)"; */
+        /*!stags:re2c format = ", @@(0)"; */
         , eof(false)
     {}
     bool fill(size_t need)
@@ -49,7 +49,7 @@ struct input_t {
         cur -= free;
         mar -= free;
         tok -= free;
-        /*!tags:re2c format = "@@ -= free;"; */
+        /*!stags:re2c format = "@@ -= free;"; */
         lim += fread(lim, 1, free, stdin);
         if (lim < buf + SIZE) {
             eof = true;

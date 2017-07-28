@@ -2,7 +2,7 @@
 // in tag optimization: there is a chance that they will be
 // merged with other tags.
 
-/*!tags:re2c format = "@@\n"; */
+/*!stags:re2c format = "@@\n"; */
 /*!re2c
 
     ("a" @p "bc")+ { p } // needs fallback tag for @p

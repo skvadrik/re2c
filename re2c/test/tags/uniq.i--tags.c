@@ -48,9 +48,9 @@ yy6:
 }
 
 re2c: warning: line 6: rule matches empty string [-Wmatch-empty-string]
-re2c: warning: line 5: tag 'u' is non-deterministic and induces 2 parallel instances [-Wnondeterministic-tags]
-re2c: warning: line 5: tag 'v' is non-deterministic and induces 2 parallel instances [-Wnondeterministic-tags]
-re2c: warning: line 5: tag 'w' is non-deterministic and induces 2 parallel instances [-Wnondeterministic-tags]
-re2c: warning: line 5: tag 'x' is non-deterministic and induces 2 parallel instances [-Wnondeterministic-tags]
-re2c: warning: line 5: tag 'y' is non-deterministic and induces 2 parallel instances [-Wnondeterministic-tags]
-re2c: warning: line 5: tag 'z' is non-deterministic and induces 2 parallel instances [-Wnondeterministic-tags]
+re2c: warning: line 5: tag 'u' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
+re2c: warning: line 5: tag 'v' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
+re2c: warning: line 5: tag 'w' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
+re2c: warning: line 5: tag 'x' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
+re2c: warning: line 5: tag 'y' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
+re2c: warning: line 5: tag 'z' has 2nd degree of nondeterminism [-Wnondeterministic-tags]

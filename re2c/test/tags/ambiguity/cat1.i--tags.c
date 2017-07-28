@@ -35,4 +35,4 @@ yy7:
 	{ @p }
 }
 
-re2c: warning: line 2: tag 'p' is non-deterministic and induces 2 parallel instances [-Wnondeterministic-tags]
+re2c: warning: line 2: tag 'p' has 2nd degree of nondeterminism [-Wnondeterministic-tags]

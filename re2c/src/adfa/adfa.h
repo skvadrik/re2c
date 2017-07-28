@@ -70,7 +70,7 @@ struct DFA
 	std::vector<uint32_t> &charset;
 	std::valarray<Rule> &rules;
 	std::vector<Tag> &tags;
-	std::set<tagver_t> &listvers;
+	std::set<tagver_t> &mtagvers;
 	const tagver_t *finvers;
 	tcpool_t &tcpool;
 	size_t max_fill;
