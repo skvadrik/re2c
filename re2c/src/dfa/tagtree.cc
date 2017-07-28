@@ -100,23 +100,17 @@ static int32_t subhistory_list(const tagtree_t &history,
 // a single bottom value, or one or more cursor values (exactly one for
 // non-orbit subhistories). Because of the shortest-path algorithm earlier
 // subhistories do not necessarily coincide, so comparing only the last
-// pair of subhistories is not enough.
-// see note [POSIX orbit tags]
+// pair of subhistories is not enough. See note [POSIX orbit tags].
 int32_t tagtree_t::compare_histories(hidx_t x, hidx_t y,
-	tagver_t ox, tagver_t oy, size_t t, bool orbit)
+	tagver_t ox, tagver_t oy, size_t t)
 {
 	const int32_t
 		n1 = subhistory_list(*this, path1, x, t),
 		n2 = subhistory_list(*this, path2, y, t);
 
 	assert(n1 == n2);
-	if (orbit) {
-		path1.push_back(ox);
-		path2.push_back(oy);
-	} else {
-		if (path1.back() == DELIM) path1.push_back(ox);
-		if (path2.back() == DELIM) path2.push_back(oy);
-	}
+	path1.push_back(ox);
+	path2.push_back(oy);
 
 	std::vector<tagver_t>::const_reverse_iterator
 		i1 = path1.rbegin(), e1 = path1.rend(),
@@ -134,7 +128,7 @@ int32_t tagtree_t::compare_histories(hidx_t x, hidx_t y,
 }
 
 static void last_subhistory(const tagtree_t &history, std::vector<tagver_t> &path,
-	hidx_t idx, tagver_t order, size_t tag, bool orbit)
+	hidx_t idx, tagver_t order, size_t tag)
 {
 	path.clear();
 	hidx_t i = idx;
@@ -144,16 +138,14 @@ static void last_subhistory(const tagtree_t &history, std::vector<tagver_t> &pat
 			path.push_back(history.elem(i));
 		}
 	}
-	if (i == HROOT && (orbit || path.empty())) {
-		path.push_back(order);
-	}
+	if (i == HROOT) path.push_back(order);
 }
 
 int32_t tagtree_t::compare_last_subhistories(hidx_t x, hidx_t y,
-	tagver_t ox, tagver_t oy, size_t t, bool orbit)
+	tagver_t ox, tagver_t oy, size_t t)
 {
-	last_subhistory(*this, path1, x, ox, t, orbit);
-	last_subhistory(*this, path2, y, oy, t, orbit);
+	last_subhistory(*this, path1, x, ox, t);
+	last_subhistory(*this, path2, y, oy, t);
 	return compare_reversed(path1, path2);
 }
 

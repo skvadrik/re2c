@@ -62,7 +62,12 @@ bool cmpby_rule_state(const clos_t &x, const clos_t &y)
 // Skip non-orbit start tags: their position is fixed on some higher-priority
 // tag (except the very first tag, but in RE2C match is always anchored).
 // We cannot skip orbit start tag because the corresponding orbit end tag is
-// hoisted out of loop (by construction) and is, in fact, non-orbit.
+// hoisted out of loop (by construction) and is, in fact, non-orbit; but we can
+// skip orbit end tag instead.
+// Skipping non-orbit start tags allows us to compare all subhistories in the
+// same way (incrementally). Subhistories of non-orbit start tags cannot be
+// compared incrementally, because default value may be added on a later step
+// than non-default value.
 static bool redundant(size_t t, const std::vector<Tag> &tags) {
 	return (t % 2 == 0) != orbit(tags[t]);
 }
@@ -219,7 +224,7 @@ int32_t compare_posix(const clos_t &c1, const clos_t &c2,
 		const tagver_t
 			o1 = tagpool[c1.order][t],
 			o2 = tagpool[c2.order][t];
-		const int32_t cmp = h.compare_histories(i1, i2, o1, o2, t, orbit(tags[t]));
+		const int32_t cmp = h.compare_histories(i1, i2, o1, o2, t);
 		if (cmp != 0) return cmp;
 	}
 	return 0;
@@ -436,7 +441,6 @@ struct cmp_posix_t
 {
 	Tagpool &tagpool;
 	size_t tag;
-	bool orbit;
 	bool operator()(cclositer_t x, cclositer_t y)
 	{
 		const hidx_t i1 = x->tlook, i2 = y->tlook;
@@ -444,7 +448,7 @@ struct cmp_posix_t
 			o1 = tagpool[x->order][tag],
 			o2 = tagpool[y->order][tag];
 		// comparison result is inverted, because orders are used as offsets
-		return tagpool.history.compare_last_subhistories(i1, i2, o1, o2, tag, orbit) > 0;
+		return tagpool.history.compare_last_subhistories(i1, i2, o1, o2, tag) > 0;
 	}
 };
 
@@ -477,7 +481,7 @@ void orders(closure_t &clos, Tagpool &tagpool, const std::vector<Tag> &tags)
 	for (size_t t = 0; t < ntag; ++t) {
 		if (redundant(t, tags)) continue;
 
-		cmp_posix_t cmp = {tagpool, t, orbit(tags[t])};
+		cmp_posix_t cmp = {tagpool, t};
 		std::sort(ps, pe, cmp);
 		tagver_t m = 0;
 		o = os0;
