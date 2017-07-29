@@ -1,1 +1,1 @@
-re2c: error: line 18, column 5: unexpected character: ']'
+re2c: error: line 18, column 4: unexpected character: ']'

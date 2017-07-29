@@ -5,20 +5,21 @@ namespace re2c {
 
 void validate_mode(Scanner::ParseMode mode, bool rflag, bool rules, Scanner &input)
 {
+	const uint32_t l = input.get_cline();
 	if (mode == Scanner::Rules) {
 		if (!rflag) {
-			input.fatal("found 'rules:re2c' block without -r flag");
+			fatal_l(l, "found 'rules:re2c' block without -r flag");
 		} else if (rules) {
-			input.fatal("cannot have a second 'rules:re2c' block");
+			fatal_l(l, "cannot have a second 'rules:re2c' block");
 		}
 	} else if (mode == Scanner::Reuse) {
 		if (!rflag) {
-			input.fatal("found 'use:re2c' block without -r flag");
+			fatal_l(l, "found 'use:re2c' block without -r flag");
 		} else if (!rules) {
-			input.fatal("got 'use:re2c' without 'rules:re2c'");
+			fatal_l(l, "got 'use:re2c' without 'rules:re2c'");
 		}
 	} else if (rflag) {
-		input.fatal("found standard 're2c' block while using -r flag");
+		fatal_l(l, "found standard 're2c' block while using -r flag");
 	}
 }
 
@@ -30,44 +31,41 @@ void validate_ast(const specs_t &specs, bool cflag)
 
 	for (i = b; i != e; ++i) {
 		if (i->defs.size() > 1) {
-			error("line %u: code to default rule %sis already defined at line %u",
-				i->defs[1]->fline, incond(i->name).c_str(), i->defs[0]->fline);
-			exit(1);
+			fatal_l(i->defs[1]->fline,
+				"code to default rule %sis already defined at line %u",
+				incond(i->name).c_str(), i->defs[0]->fline);
 		}
 	}
 
 	if (!cflag) {
 		for (i = b; i != e; ++i) {
 			if (i->name != "") {
-				error("line %u: conditions are only allowed"
-					" with '-c', '--conditions' option",
-					i->rules[0].code->fline);
-				exit(1);
+				fatal_l(i->rules[0].code->fline,
+					"conditions are only allowed with '-c', '--conditions' option");
 			}
 		}
 	} else {
 		for (i = b; i != e; ++i) {
 			if (i->name == "") {
-				error("line %u: non-conditional rules are not allowed"
-					" with '-c', '--conditions' option",
-					i->rules[0].code->fline);
-				exit(1);
+				fatal_l(i->rules[0].code->fline,
+					"non-conditional rules are not allowed"
+					" with '-c', '--conditions' option");
 			}
 		}
 
 		for (i = b; i != e; ++i) {
 			if (i->setup.size() > 1) {
-				error("line %u: code to setup rule '%s' is already defined at line %u",
-					i->setup[1]->fline, i->name.c_str(), i->setup[0]->fline);
-				exit(1);
+				fatal_l(i->setup[1]->fline,
+					"code to setup rule '%s' is already defined at line %u",
+					i->name.c_str(), i->setup[0]->fline);
 			}
 		}
 
 		for (i = b; i != e; ++i) {
 			if (i->name != "*" && !i->setup.empty() && i->rules.empty()) {
-				error("line %u: setup for non existing condition '%s' found",
-					i->setup[0]->fline, i->name.c_str());
-				exit(1);
+				fatal_l(i->setup[0]->fline,
+					"setup for non existing condition '%s' found",
+					i->name.c_str());
 			}
 		}
 
@@ -75,19 +73,18 @@ void validate_ast(const specs_t &specs, bool cflag)
 		if (i == e) {
 			for (i = b; i != e; ++i) {
 				if (i->name == "*") {
-					error("line %u: setup for all conditions '<!*>' is illegal "
-						"if setup for each condition is defined explicitly",
-						i->setup[0]->fline);
-					exit(1);
+					fatal_l(i->setup[0]->fline,
+						"setup for all conditions '<!*>' is illegal "
+						"if setup for each condition is defined explicitly");
 				}
 			}
 		}
 
 		for (i = b; i != e; ++i) {
 			if (i->name == "0" && i->rules.size() > 1) {
-				error("line %u: startup code is already defined at line %u",
-					i->rules[1].code->fline, i->rules[0].code->fline);
-				exit(1);
+				fatal_l(i->rules[1].code->fline,
+					"startup code is already defined at line %u",
+					i->rules[0].code->fline);
 			}
 		}
 	}

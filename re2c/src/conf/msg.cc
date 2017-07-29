@@ -20,7 +20,33 @@ void error (const char * fmt, ...)
 	fprintf (stderr, "\n");
 }
 
-void fatal_error(uint32_t line, uint32_t column, const char *fmt, ...)
+void fatal(const char *fmt, ...)
+{
+	fprintf (stderr, "re2c: error: ");
+
+	va_list args;
+	va_start (args, fmt);
+	vfprintf (stderr, fmt, args);
+	va_end (args);
+
+	fprintf (stderr, "\n");
+	exit(1);
+}
+
+void fatal_l(uint32_t line, const char *fmt, ...)
+{
+	fprintf (stderr, "re2c: error: line %u: ", line);
+
+	va_list args;
+	va_start (args, fmt);
+	vfprintf (stderr, fmt, args);
+	va_end (args);
+
+	fprintf (stderr, "\n");
+	exit(1);
+}
+
+void fatal_lc(uint32_t line, uint32_t column, const char *fmt, ...)
 {
 	fprintf (stderr, "re2c: error: line %u, column %u: ", line, column);
 

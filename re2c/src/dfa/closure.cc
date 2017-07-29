@@ -57,6 +57,7 @@ bool cmpby_rule_state(const clos_t &x, const clos_t &y)
 	if (sx < sy) return true;
 	if (sx > sy) return false;
 	assert(false);
+	return false;
 }
 
 // Skip non-orbit start tags: their position is fixed on some higher-priority

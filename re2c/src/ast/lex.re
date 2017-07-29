@@ -5,6 +5,7 @@
 #include <limits>
 #include <string>
 
+#include "src/conf/msg.h"
 #include "src/code/output.h"
 #include "src/re/encoding/enc.h"
 #include "src/ast/input.h"
@@ -149,7 +150,7 @@ void Scanner::lex_end_of_comment(OutputFile &out)
 {
 	uint32_t ignored = 0;
 	for (;;) {/*!re2c
-		zero { fatal("expected end of block"); }
+		zero { fatal_lc(get_cline(), get_column(), "expected end of block"); }
 
 		*    { continue; }
 		eol  { ++ignored; continue; }
@@ -168,7 +169,7 @@ void Scanner::lex_tags(OutputFile &out, bool mtags)
 {
 	std::string fmt, sep;
 	for (;;) {/*!re2c
-		* { fatal("unrecognized configuration"); }
+		* { fatal_lc(get_cline(), get_column(), "unrecognized configuration"); }
 
 		"format"    { fmt = lex_conf_string(); continue; }
 		"separator" { sep = lex_conf_string(); continue; }
@@ -237,7 +238,7 @@ scan:
 	"{" [0-9]+ "}"	{
 					if (!s_to_u32_unsafe (tok + 1, cur - 1, yylval.bounds.min))
 					{
-						fatal ("repetition count overflow");
+						fatal_lc(get_cline(), get_column(), "repetition count overflow");
 					}
 					yylval.bounds.max = yylval.bounds.min;
 					return TOKEN_CLOSESIZE;
@@ -247,11 +248,11 @@ scan:
 					const char * p = strchr (tok, ',');
 					if (!s_to_u32_unsafe (tok + 1, p, yylval.bounds.min))
 					{
-						fatal ("repetition lower bound overflow");
+						fatal_lc(get_cline(), get_column(), "repetition lower bound overflow");
 					}
 					if (!s_to_u32_unsafe (p + 1, cur - 1, yylval.bounds.max))
 					{
-						fatal ("repetition upper bound overflow");
+						fatal_lc(get_cline(), get_column(), "repetition upper bound overflow");
 					}
 					return TOKEN_CLOSESIZE;
 				}
@@ -259,19 +260,19 @@ scan:
 	"{" [0-9]+ ",}"		{
 					if (!s_to_u32_unsafe (tok + 1, cur - 2, yylval.bounds.min))
 					{
-						fatal ("repetition lower bound overflow");
+						fatal_lc(get_cline(), get_column(), "repetition lower bound overflow");
 					}
 					yylval.bounds.max = std::numeric_limits<uint32_t>::max();
 					return TOKEN_CLOSESIZE;
 				}
 
 	"{" [0-9]* ","		{
-					fatal("illegal closure form, use '{n}', '{n,}', '{n,m}' where n and m are numbers");
+					fatal_lc(get_cline(), get_column(), "illegal closure form, use '{n}', '{n,}', '{n,m}' where n and m are numbers");
 				}
 
 	"{" name "}"	{
 					if (!globopts->FFlag) {
-						fatal("curly braces for names only allowed with -F switch");
+						fatal_lc(get_cline(), get_column(), "curly braces for names only allowed with -F switch");
 					}
 					yylval.str = new std::string (tok + 1, tok_len () - 2); // -2 to omit braces
 					return TOKEN_ID;
@@ -341,7 +342,7 @@ scan:
 	}
 
 	*			{
-					fatalf("unexpected character: '%c'", *tok);
+					fatal_lc(get_cline(), get_column(), "unexpected character: '%c'", *tok);
 					goto scan;
 				}
 */
@@ -351,7 +352,7 @@ code:
 	"}"			{
 					if (depth == 0)
 					{
-						fatal("Curly braces are not allowed after ':='");
+						fatal_l(get_cline(), "Curly braces are not allowed after ':='");
 					}
 					else if (--depth == 0)
 					{
@@ -363,7 +364,7 @@ code:
 	"{"			{
 					if (depth == 0)
 					{
-						fatal("Curly braces are not allowed after ':='");
+						fatal_l(get_cline(), "Curly braces are not allowed after ':='");
 					}
 					else
 					{
@@ -382,7 +383,7 @@ code:
 					}
 					else if (cur == eof)
 					{
-						fatal("missing '}'");
+						fatal_l(get_cline(), "missing '}'");
 					}
 					pos = cur;
 					cline++;
@@ -401,7 +402,7 @@ code:
 					}
 					else if (cur == eof)
 					{
-						fatal("missing '}'");
+						fatal_l(get_cline(), "missing '}'");
 					}
 					pos = cur;
 					cline++;
@@ -412,7 +413,7 @@ code:
 					{
 						if (depth)
 						{
-							fatal("missing '}'");
+							fatal_l(get_cline(), "missing '}'");
 						}
 						return 0;
 					}
@@ -428,7 +429,7 @@ code:
 
 comment:
 /*!re2c
-	"*/"		{
+	"*" "/"		{
 					if (--depth == 0)
 					{
 						goto scan;
@@ -438,9 +439,9 @@ comment:
 						goto comment;
 					}
 				}
-	"/*"		{
+	"/" "*"		{
 					++depth;
-					fatal("ambiguous /* found");
+					fatal_lc(get_cline(), get_column(), "ambiguous /* found");
 					goto comment;
 				}
 	"\n" space* "#" space* "line" space+ / lineinf {
@@ -527,11 +528,12 @@ add:
 uint32_t Scanner::lex_cls_chr()
 {
 	tok = cur;
+	const uint32_t l = get_cline(), c = get_column();
 	/*!re2c
-		*          { fatal (get_column() - tchar, "syntax error"); }
-		esc [xXuU] { fatal (get_column() - tchar, "syntax error in hexadecimal escape sequence"); }
-		esc [0-7]  { fatal (get_column() - tchar, "syntax error in octal escape sequence"); }
-		esc        { fatal (get_column() - tchar, "syntax error in escape sequence"); }
+		*          { fatal_lc(l, c, "syntax error"); }
+		esc [xXuU] { fatal_lc(l, c, "syntax error in hexadecimal escape sequence"); }
+		esc [0-7]  { fatal_lc(l, c, "syntax error in octal escape sequence"); }
+		esc        { fatal_lc(l, c, "syntax error in escape sequence"); }
 
 		. \ esc    { return static_cast<uint8_t>(tok[0]); }
 		esc_hex    { return unesc_hex(tok, cur); }
@@ -557,11 +559,12 @@ uint32_t Scanner::lex_str_chr(char quote, bool &end)
 {
 	end = false;
 	tok = cur;
+	const uint32_t l = get_cline(), c = get_column();
 	/*!re2c
-		*          { fatal (get_column() - tchar, "syntax error"); }
-		esc [xXuU] { fatal (get_column() - tchar, "syntax error in hexadecimal escape sequence"); }
-		esc [0-7]  { fatal (get_column() - tchar, "syntax error in octal escape sequence"); }
-		esc        { fatal (get_column() - tchar, "syntax error in escape sequence"); }
+		*          { fatal_lc(l, c, "syntax error"); }
+		esc [xXuU] { fatal_lc(l, c, "syntax error in hexadecimal escape sequence"); }
+		esc [0-7]  { fatal_lc(l, c, "syntax error in octal escape sequence"); }
+		esc        { fatal_lc(l, c, "syntax error in escape sequence"); }
 
 		. \ esc    {
 			end = tok[0] == quote;
@@ -605,7 +608,7 @@ sourceline:
 	lineno		{
 					if (!s_to_u32_unsafe (tok, cur, cline))
 					{
-						fatal ("line number overflow");
+						fatal_lc(get_cline(), get_column(), "line number overflow");
 					}
 					goto sourceline; 
 				}

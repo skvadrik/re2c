@@ -86,11 +86,6 @@ public:
 	uint32_t get_cline() const;
 	uint32_t get_column() const;
 	const std::string & get_fname () const;
-	void fatal_at(uint32_t line, ptrdiff_t ofs, const char *msg) const RE2C_GXX_ATTRIBUTE ((noreturn));
-	void fatalf_at(uint32_t line, const char*, ...) const RE2C_GXX_ATTRIBUTE ((format (printf, 3, 4))) RE2C_GXX_ATTRIBUTE ((noreturn));
-	void fatalf(const char*, ...) const RE2C_GXX_ATTRIBUTE ((format (printf, 2, 3))) RE2C_GXX_ATTRIBUTE ((noreturn));
-	void fatal(const char*) const RE2C_GXX_ATTRIBUTE ((noreturn));
-	void fatal(ptrdiff_t, const char*) const RE2C_GXX_ATTRIBUTE ((noreturn));
 	FORBID_COPY (Scanner);
 };
 
@@ -113,11 +108,6 @@ inline uint32_t Scanner::get_cline() const
 inline uint32_t Scanner::get_column() const
 {
 	return static_cast<uint32_t>(tok - pos);
-}
-
-inline void Scanner::fatal(const char *msg) const
-{
-	fatal(0, msg);
 }
 
 } // end namespace re2c

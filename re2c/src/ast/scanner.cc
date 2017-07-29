@@ -1,10 +1,9 @@
-#include <stdarg.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <iostream>
 #include <new>
 
+#include "src/conf/msg.h"
 #include "src/code/label.h"
 #include "src/code/output.h"
 #include "src/ast/scanner.h"
@@ -90,49 +89,6 @@ void Scanner::fill (uint32_t need)
 		}
 		lim += have;
 	}
-}
-
-void Scanner::fatal_at(uint32_t line, ptrdiff_t ofs, const char *msg) const
-{
-	std::cerr << "re2c: error: "
-		<< "line " << line << ", column " << (tchar + ofs + 1) << ": "
-		<< msg << std::endl;
-	exit(1);
-}
-
-void Scanner::fatal(ptrdiff_t ofs, const char *msg) const
-{
-	fatal_at(cline, ofs, msg);
-}
-
-void Scanner::fatalf_at(uint32_t line, const char* fmt, ...) const
-{
-	char szBuf[4096];
-
-	va_list args;
-	
-	va_start(args, fmt);
-	vsnprintf(szBuf, sizeof(szBuf), fmt, args);
-	va_end(args);
-	
-	szBuf[sizeof(szBuf)-1] = '0';
-	
-	fatal_at(line, 0, szBuf);
-}
-
-void Scanner::fatalf(const char *fmt, ...) const
-{
-	char szBuf[4096];
-
-	va_list args;
-	
-	va_start(args, fmt);
-	vsnprintf(szBuf, sizeof(szBuf), fmt, args);
-	va_end(args);
-	
-	szBuf[sizeof(szBuf)-1] = '0';
-	
-	fatal(szBuf);
 }
 
 Scanner::~Scanner()

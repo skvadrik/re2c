@@ -117,7 +117,7 @@ static RE *ast_to_re(RESpec &spec, const AST *ast, size_t &ncap)
 				e = ast->cls.ranges->end();
 			for (; i != e; ++i) {
 				Range *s = opts->encoding.encodeRange(i->lower, i->upper);
-				if (!s) fatal_error(ast->line, i->column,
+				if (!s) fatal_lc(ast->line, i->column,
 					"bad code point range: '0x%X - 0x%X'", i->lower, i->upper);
 				r = Range::add(r, s);
 			}
@@ -129,7 +129,7 @@ static RE *ast_to_re(RESpec &spec, const AST *ast, size_t &ncap)
 		case AST::DOT: {
 			uint32_t c = '\n';
 			if (!opts->encoding.encode(c)) {
-				fatal_error(ast->line, ast->column, "bad code point: '0x%X'", c);
+				fatal_lc(ast->line, ast->column, "bad code point: '0x%X'", c);
 			}
 			return re_class(alc, ast->line, ast->column,
 				Range::sub(opts->encoding.fullRange(), Range::sym(c)), opts, warn);
@@ -156,7 +156,7 @@ static RE *ast_to_re(RESpec &spec, const AST *ast, size_t &ncap)
 			RE *x = ast_to_re(spec, ast->diff.ast1, ncap);
 			RE *y = ast_to_re(spec, ast->diff.ast2, ncap);
 			if (x->type != RE::SYM || y->type != RE::SYM) {
-				fatal_error(ast->line, ast->column, "can only difference char sets");
+				fatal_lc(ast->line, ast->column, "can only difference char sets");
 			}
 			return re_class(alc, ast->line, ast->column, Range::sub(x->sym, y->sym), opts, warn);
 		}
@@ -178,11 +178,11 @@ static RE *ast_to_re(RESpec &spec, const AST *ast, size_t &ncap)
 		}
 		case AST::TAG: {
 			if (ast->tag.name && !opts->tags) {
-				fatal_error(ast->line, ast->column,
+				fatal_lc(ast->line, ast->column,
 					"tags are only allowed with '-T, --tags' option");
 			}
 			if (opts->posix_captures) {
-				fatal_error(ast->line, ast->column,
+				fatal_lc(ast->line, ast->column,
 					"simple tags are not allowed with '--posix-captures' option");
 			}
 			RE *t = re_tag(alc, tags.size(), false);
@@ -209,10 +209,11 @@ static RE *ast_to_re(RESpec &spec, const AST *ast, size_t &ncap)
 			if (!opts->posix_captures) {
 				return ast_to_re(spec, ast->ref.ast, ncap);
 			}
-			error("implicit grouping is forbidden with '--posix-captures'"
+			fatal_l(ast->line,
+				"implicit grouping is forbidden with '--posix-captures'"
 				" option, please wrap '%s' in capturing parenthesis",
 				ast->ref.name->c_str());
-			exit(1);
+			return NULL;
 		case AST::ITER: {
 			const uint32_t
 				n = ast->iter.min,
@@ -257,7 +258,7 @@ static RE *ast_to_re(RESpec &spec, const AST *ast, size_t &ncap)
 RE *re_schar(RE::alc_t &alc, uint32_t line, uint32_t column, uint32_t c, const opt_t *opts)
 {
 	if (!opts->encoding.encode(c)) {
-		fatal_error(line, column, "bad code point: '0x%X'", c);
+		fatal_lc(line, column, "bad code point: '0x%X'", c);
 	}
 	switch (opts->encoding.type ()) {
 		case Enc::UTF16: return UTF16Symbol(alc, c);
@@ -288,7 +289,7 @@ RE *re_class(RE::alc_t &alc, uint32_t line, uint32_t column, const Range *r, con
 				warn.empty_class(line);
 				break;
 			case EMPTY_CLASS_ERROR:
-				fatal_error(line, column, "empty character class");
+				fatal_lc(line, column, "empty character class");
 				break;
 		}
 	}
@@ -307,9 +308,9 @@ static void assert_tags_used_once(const Rule &rule, const std::vector<Tag> &tags
 	for (size_t t = rule.ltag; t < rule.htag; ++t) {
 		name = tags[t].name;
 		if (name && !names.insert(*name).second) {
-			error("line %u: tag '%s' is used multiple times in the same rule",
-				rule.code->fline, name->c_str());
-			exit(1);
+			fatal_l(rule.code->fline,
+				"tag '%s' is used multiple times in the same rule",
+				name->c_str());
 		}
 	}
 }

@@ -254,11 +254,9 @@ void DFA::calc_stats(uint32_t line, bool explicit_tags)
 
 	// error if tags are not enabled, but we need them
 	if (!explicit_tags && maxtagver > 1) {
-		error("line %u: overlapping trailing contexts need "
+		fatal_l(line, "overlapping trailing contexts need "
 			"multiple context markers, use '-t, --tags' "
-			"option and '/*!stags:re2c ... */' directive",
-			line);
-		exit(1);
+			"option and '/*!stags:re2c ... */' directive");
 	}
 }
 

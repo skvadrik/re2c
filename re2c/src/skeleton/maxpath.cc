@@ -58,8 +58,7 @@ uint32_t maxpath(const Skeleton &skel)
 	calc_dist(skel, loops, dists, 0);
 	const uint32_t maxlen = dists[0];
 	if (maxlen == DIST_MAX) {
-		error("DFA path %sis too long", incond(skel.cond).c_str());
-		exit(1);
+		fatal("DFA path %sis too long", incond(skel.cond).c_str());
 	}
 	return maxlen;
 }

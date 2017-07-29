@@ -471,11 +471,11 @@ static const yytype_uint8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    67,    67,    69,    70,    71,    72,    76,    83,    88,
-      91,    95,    95,    98,   102,   106,   113,   120,   127,   133,
-     135,   141,   148,   149,   155,   161,   168,   170,   176,   180,
-     187,   191,   198,   202,   209,   210,   216,   221,   222,   226,
-     227,   228,   232,   233,   243
+       0,    67,    67,    69,    70,    71,    72,    76,    83,    89,
+      92,    96,    96,    99,   103,   107,   114,   121,   128,   134,
+     136,   142,   149,   150,   156,   162,   169,   171,   177,   181,
+     188,   192,   199,   203,   210,   211,   217,   222,   223,   227,
+     228,   229,   233,   234,   244
 };
 #endif
 
@@ -1304,7 +1304,7 @@ yyreduce:
 
     {
 		if (!context.symtab.insert(std::make_pair(*(yyvsp[-2].str), (yyvsp[-1].regexp))).second) {
-			context.input.fatal("sym already defined");
+			fatal_l(context.input.get_cline(), "sym already defined");
 		}
 		delete (yyvsp[-2].str);
 	}
@@ -1314,7 +1314,8 @@ yyreduce:
   case 8:
 
     {
-		context.input.fatal("trailing contexts are not allowed in named definitions");
+		fatal_l(context.input.get_cline(),
+			"trailing contexts are not allowed in named definitions");
 	}
 
     break;
@@ -1556,7 +1557,7 @@ yyreduce:
     {
 		symtab_t::iterator i = context.symtab.find(*(yyvsp[0].str));
 		if (i == context.symtab.end()) {
-			context.input.fatal("can't find symbol");
+			fatal_l(context.input.get_cline(), "can't find symbol");
 		}
 		(yyval.regexp) = i->second;
 		if (ast_need_wrap((yyval.regexp))) {
@@ -1811,7 +1812,7 @@ extern "C" {
 
 void yyerror(context_t &context, const char* s)
 {
-	context.input.fatal(s);
+	fatal_l(context.input.get_cline(), "%s", s);
 }
 
 int yylex(context_t &context)
