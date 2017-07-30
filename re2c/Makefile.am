@@ -50,7 +50,6 @@ SRC_HDR = \
 	src/ast/ast.h \
 	src/ast/input.h \
 	src/ast/parser.h \
-	src/ast/rules.h \
 	src/ast/scanner.h \
 	src/ast/unescape.h \
 	src/util/allocate.h \
