@@ -5,19 +5,22 @@
 #include <string>
 #include <vector>
 
-#include "src/ir/skeleton/way.h"
-#include "src/parse/rules.h"
+#include "src/re/rule.h"
 
 namespace re2c {
 
+class path_t;
+struct Skeleton;
+
 #define RE2C_WARNING_TYPES \
-	W (CONDITION_ORDER,        "condition-order"), \
-	W (EMPTY_CHARACTER_CLASS,  "empty-character-class"), \
-	W (MATCH_EMPTY_STRING,     "match-empty-string"), \
-	W (SWAPPED_RANGE,          "swapped-range"), \
-	W (UNDEFINED_CONTROL_FLOW, "undefined-control-flow"), \
-	W (UNREACHABLE_RULES,      "unreachable-rules"), \
-	W (USELESS_ESCAPE,         "useless-escape"),
+	W (CONDITION_ORDER,          "condition-order"), \
+	W (EMPTY_CHARACTER_CLASS,    "empty-character-class"), \
+	W (MATCH_EMPTY_STRING,       "match-empty-string"), \
+	W (NONDETERMINISTIC_TAGS,    "nondeterministic-tags"), \
+	W (SWAPPED_RANGE,            "swapped-range"), \
+	W (UNDEFINED_CONTROL_FLOW,   "undefined-control-flow"), \
+	W (UNREACHABLE_RULES,        "unreachable-rules"), \
+	W (USELESS_ESCAPE,           "useless-escape"),
 
 class Warn
 {
@@ -55,10 +58,11 @@ public:
 
 	void condition_order (uint32_t line);
 	void empty_class (uint32_t line);
-	void match_empty_string (uint32_t line);
+	void match_empty_string (uint32_t line, const std::string &cond);
+	void nondeterministic_tags(uint32_t line, const std::string &cond, const std::string *tagname, size_t nver);
 	void swapped_range (uint32_t line, uint32_t l, uint32_t u);
-	void undefined_control_flow (uint32_t line, const std::string & cond, std::vector<way_t> & ways, bool overflow);
-	void unreachable_rule (const std::string & cond, const rule_info_t & rule, const rules_t & rules);
+	void undefined_control_flow (const Skeleton &skel, std::vector<path_t> & paths, bool overflow);
+	void unreachable_rule (const std::string & cond, const Rule &rule);
 	void useless_escape (uint32_t line, uint32_t col, char c);
 };
 

@@ -15,8 +15,8 @@ yy2:
 	{ return FULL; }
 #line 17 "default_full.x--encoding-policy(fail).c"
 yy4:
-	++YYCURSOR;
-	if ((yych = *YYCURSOR) <= 0xDBFF) goto yy5;
+	yych = *++YYCURSOR;
+	if (yych <= 0xDBFF) goto yy5;
 	if (yych <= 0xDFFF) goto yy2;
 yy5:
 #line 2 "default_full.x--encoding-policy(fail).re"
@@ -24,7 +24,6 @@ yy5:
 #line 25 "default_full.x--encoding-policy(fail).c"
 yy6:
 	++YYCURSOR;
-	yych = *YYCURSOR;
 	goto yy5;
 }
 #line 4 "default_full.x--encoding-policy(fail).re"

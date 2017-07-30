@@ -242,8 +242,8 @@ yy40:
 	if (yych == 't') goto yy49;
 	goto yy28;
 yy41:
-	++YYCURSOR;
-	if ((yych = *YYCURSOR) <= 'Z') {
+	yych = *++YYCURSOR;
+	if (yych <= 'Z') {
 		if (yych <= '/') goto yy42;
 		if (yych <= '9') goto yy27;
 		if (yych >= 'A') goto yy27;
@@ -276,8 +276,8 @@ yy46:
 	if (yych == 'e') goto yy53;
 	goto yy28;
 yy47:
-	++YYCURSOR;
-	if ((yych = *YYCURSOR) <= 'Z') {
+	yych = *++YYCURSOR;
+	if (yych <= 'Z') {
 		if (yych <= '/') goto yy48;
 		if (yych <= '9') goto yy27;
 		if (yych >= 'A') goto yy27;
@@ -310,8 +310,8 @@ yy52:
 	if (yych == 'k') goto yy59;
 	goto yy28;
 yy53:
-	++YYCURSOR;
-	if ((yych = *YYCURSOR) <= 'Z') {
+	yych = *++YYCURSOR;
+	if (yych <= 'Z') {
 		if (yych <= '/') goto yy54;
 		if (yych <= '9') goto yy27;
 		if (yych >= 'A') goto yy27;
@@ -328,8 +328,8 @@ yy54:
 	{ SEND(kElse);           }
 #line 330 "push.fs.c"
 yy55:
-	++YYCURSOR;
-	if ((yych = *YYCURSOR) <= 'Z') {
+	yych = *++YYCURSOR;
+	if (yych <= 'Z') {
 		if (yych <= '/') goto yy56;
 		if (yych <= '9') goto yy27;
 		if (yych >= 'A') goto yy27;
@@ -354,8 +354,8 @@ yy58:
 	if (yych == 'e') goto yy62;
 	goto yy28;
 yy59:
-	++YYCURSOR;
-	if ((yych = *YYCURSOR) <= 'Z') {
+	yych = *++YYCURSOR;
+	if (yych <= 'Z') {
 		if (yych <= '/') goto yy60;
 		if (yych <= '9') goto yy27;
 		if (yych >= 'A') goto yy27;
@@ -376,8 +376,8 @@ yy61:
 	if (yych == 'n') goto yy64;
 	goto yy28;
 yy62:
-	++YYCURSOR;
-	if ((yych = *YYCURSOR) <= 'Z') {
+	yych = *++YYCURSOR;
+	if (yych <= 'Z') {
 		if (yych <= '/') goto yy63;
 		if (yych <= '9') goto yy27;
 		if (yych >= 'A') goto yy27;
@@ -394,8 +394,8 @@ yy63:
 	{ SEND(kWhile);          }
 #line 396 "push.fs.c"
 yy64:
-	++YYCURSOR;
-	if ((yych = *YYCURSOR) <= 'Z') {
+	yych = *++YYCURSOR;
+	if (yych <= 'Z') {
 		if (yych <= '/') goto yy65;
 		if (yych <= '9') goto yy27;
 		if (yych >= 'A') goto yy27;

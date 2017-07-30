@@ -1728,8 +1728,8 @@ yy65:
 	default:	goto yy28;
 	}
 yy66:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case 0x8A:	goto yy4;
 	default:	goto yy28;
 	}

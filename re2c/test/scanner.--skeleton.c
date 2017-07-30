@@ -2,6 +2,7 @@
 
 #include <stdio.h>
 #include <stdlib.h> /* malloc, free */
+#include <string.h> /* memcpy */
 
 static void *read_file
     ( const char *fname
@@ -58,7 +59,7 @@ error:
 #define YYFILL(n) { break; }
 
 static int action_line144
-    ( unsigned int i
+    ( unsigned *pkix
     , const YYKEYTYPE *keys
     , const YYCTYPE *start
     , const YYCTYPE *token
@@ -66,10 +67,12 @@ static int action_line144
     , YYKEYTYPE rule_act
     )
 {
+    const unsigned kix = *pkix;
     const long pos = token - start;
     const long len_act = *cursor - token;
-    const long len_exp = (long) keys [3 * i + 1];
-    const YYKEYTYPE rule_exp = keys [3 * i + 2];
+    const long len_exp = (long) keys[kix + 1];
+    const YYKEYTYPE rule_exp = keys[kix + 2];
+    *pkix = kix + 3;
     if (rule_exp == 255) {
         fprintf
             ( stderr
@@ -79,17 +82,17 @@ static int action_line144
             );
     }
     if (len_act == len_exp && rule_act == rule_exp) {
-        const YYKEYTYPE offset = keys[3 * i];
+        const YYKEYTYPE offset = keys[kix];
         *cursor = token + offset;
         return 0;
     } else {
         fprintf
             ( stderr
-            , "error: lex_line144: at position %ld (iteration %u):\n"
+            , "error: lex_line144: at position %ld (key %u):\n"
                 "\texpected: match length %ld, rule %u\n"
                 "\tactual:   match length %ld, rule %u\n"
             , pos
-            , i
+            , kix
             , len_exp
             , rule_exp
             , len_act
@@ -97,6 +100,13 @@ static int action_line144
             );
         return 1;
     }
+}
+
+static int check_key_count_line144(unsigned have, unsigned used, unsigned need)
+{
+    if (used + need <= have) return 0;
+    fprintf(stderr, "error: lex_line144: not enough keys\n");
+    return 1;
 }
 
 int lex_line144()
@@ -126,7 +136,7 @@ int lex_line144()
 
     keys = (YYKEYTYPE *) read_file
         ("scanner.--skeleton.c.line144.keys"
-        , 3 * sizeof (YYKEYTYPE)
+        , sizeof (YYKEYTYPE)
         , 0
         , &keys_count
         );
@@ -139,7 +149,7 @@ int lex_line144()
     limit = input + input_len + padding;
     eof = input + input_len;
 
-    for (i = 0; status == 0 && i < keys_count; ++i) {
+    for (i = 0; status == 0 && cursor < eof && i < keys_count;) {
         token = cursor;
         const YYCTYPE *marker = NULL;
         YYCTYPE yych;
@@ -155,16 +165,19 @@ int lex_line144()
         }
 yy2:
         YYSKIP ();
-        status = action_line144(i, keys, input, token, &cursor, 4);
+        status = check_key_count_line144(keys_count, i, 3)
+             || action_line144(&i, keys, input, token, &cursor, 4);
         continue;
 yy4:
         YYSKIP ();
 yy5:
-        status = action_line144(i, keys, input, token, &cursor, 5);
+        status = check_key_count_line144(keys_count, i, 3)
+             || action_line144(&i, keys, input, token, &cursor, 5);
         continue;
 yy6:
         YYSKIP ();
-        status = action_line144(i, keys, input, token, &cursor, 3);
+        status = check_key_count_line144(keys_count, i, 3)
+             || action_line144(&i, keys, input, token, &cursor, 3);
         continue;
 yy8:
         YYSKIP ();
@@ -183,7 +196,8 @@ yy9:
         }
 yy10:
         YYSKIP ();
-        status = action_line144(i, keys, input, token, &cursor, 2);
+        status = check_key_count_line144(keys_count, i, 3)
+             || action_line144(&i, keys, input, token, &cursor, 2);
         continue;
 yy12:
         YYSKIP ();
@@ -254,7 +268,8 @@ yy21:
         }
 yy22:
         YYSKIP ();
-        status = action_line144(i, keys, input, token, &cursor, 0);
+        status = check_key_count_line144(keys_count, i, 3)
+             || action_line144(&i, keys, input, token, &cursor, 0);
         continue;
 yy24:
         YYSKIP ();
@@ -279,7 +294,8 @@ yy26:
         }
 yy27:
         YYSKIP ();
-        status = action_line144(i, keys, input, token, &cursor, 1);
+        status = check_key_count_line144(keys_count, i, 3)
+             || action_line144(&i, keys, input, token, &cursor, 1);
         continue;
 
     }
@@ -291,7 +307,7 @@ yy27:
         }
         if (i != keys_count) {
             status = 1;
-            fprintf(stderr, "error: lex_line144: unused keys left after %u iterations\n", i);
+            fprintf(stderr, "error: lex_line144: unused keys left after %u keys\n", i);
         }
     }
 
@@ -321,7 +337,7 @@ end:
 #define YYFILL(n) { break; }
 
 static int action_line247
-    ( unsigned int i
+    ( unsigned *pkix
     , const YYKEYTYPE *keys
     , const YYCTYPE *start
     , const YYCTYPE *token
@@ -329,10 +345,12 @@ static int action_line247
     , YYKEYTYPE rule_act
     )
 {
+    const unsigned kix = *pkix;
     const long pos = token - start;
     const long len_act = *cursor - token;
-    const long len_exp = (long) keys [3 * i + 1];
-    const YYKEYTYPE rule_exp = keys [3 * i + 2];
+    const long len_exp = (long) keys[kix + 1];
+    const YYKEYTYPE rule_exp = keys[kix + 2];
+    *pkix = kix + 3;
     if (rule_exp == 255) {
         fprintf
             ( stderr
@@ -342,17 +360,17 @@ static int action_line247
             );
     }
     if (len_act == len_exp && rule_act == rule_exp) {
-        const YYKEYTYPE offset = keys[3 * i];
+        const YYKEYTYPE offset = keys[kix];
         *cursor = token + offset;
         return 0;
     } else {
         fprintf
             ( stderr
-            , "error: lex_line247: at position %ld (iteration %u):\n"
+            , "error: lex_line247: at position %ld (key %u):\n"
                 "\texpected: match length %ld, rule %u\n"
                 "\tactual:   match length %ld, rule %u\n"
             , pos
-            , i
+            , kix
             , len_exp
             , rule_exp
             , len_act
@@ -360,6 +378,13 @@ static int action_line247
             );
         return 1;
     }
+}
+
+static int check_key_count_line247(unsigned have, unsigned used, unsigned need)
+{
+    if (used + need <= have) return 0;
+    fprintf(stderr, "error: lex_line247: not enough keys\n");
+    return 1;
 }
 
 int lex_line247()
@@ -389,7 +414,7 @@ int lex_line247()
 
     keys = (YYKEYTYPE *) read_file
         ("scanner.--skeleton.c.line247.keys"
-        , 3 * sizeof (YYKEYTYPE)
+        , sizeof (YYKEYTYPE)
         , 0
         , &keys_count
         );
@@ -402,7 +427,7 @@ int lex_line247()
     limit = input + input_len + padding;
     eof = input + input_len;
 
-    for (i = 0; status == 0 && i < keys_count; ++i) {
+    for (i = 0; status == 0 && cursor < eof && i < keys_count;) {
         token = cursor;
         const YYCTYPE *marker = NULL;
         YYCTYPE yych;
@@ -487,7 +512,8 @@ int lex_line247()
 yy31:
         YYSKIP ();
 yy32:
-        status = action_line247(i, keys, input, token, &cursor, 22);
+        status = check_key_count_line247(keys_count, i, 3)
+             || action_line247(&i, keys, input, token, &cursor, 22);
         continue;
 yy33:
         YYSKIP ();
@@ -499,11 +525,13 @@ yy33:
         default:    goto yy35;
         }
 yy35:
-        status = action_line247(i, keys, input, token, &cursor, 20);
+        status = check_key_count_line247(keys_count, i, 3)
+             || action_line247(&i, keys, input, token, &cursor, 20);
         continue;
 yy36:
         YYSKIP ();
-        status = action_line247(i, keys, input, token, &cursor, 21);
+        status = check_key_count_line247(keys_count, i, 3)
+             || action_line247(&i, keys, input, token, &cursor, 21);
         continue;
 yy38:
         YYSKIP ();
@@ -522,7 +550,8 @@ yy39:
         default:    goto yy60;
         }
 yy40:
-        status = action_line247(i, keys, input, token, &cursor, 5);
+        status = check_key_count_line247(keys_count, i, 3)
+             || action_line247(&i, keys, input, token, &cursor, 5);
         continue;
 yy41:
         yyaccept = 1;
@@ -534,29 +563,33 @@ yy41:
         default:    goto yy66;
         }
 yy42:
-        status = action_line247(i, keys, input, token, &cursor, 6);
+        status = check_key_count_line247(keys_count, i, 3)
+             || action_line247(&i, keys, input, token, &cursor, 6);
         continue;
 yy43:
         YYSKIP ();
 yy44:
-        status = action_line247(i, keys, input, token, &cursor, 10);
+        status = check_key_count_line247(keys_count, i, 3)
+             || action_line247(&i, keys, input, token, &cursor, 10);
         continue;
 yy45:
         YYSKIP ();
-        switch ((yych = YYPEEK ())) {
+        yych = YYPEEK ();
+        switch (yych) {
         case '/':    goto yy70;
         default:    goto yy46;
         }
 yy46:
-        status = action_line247(i, keys, input, token, &cursor, 11);
+        status = check_key_count_line247(keys_count, i, 3)
+             || action_line247(&i, keys, input, token, &cursor, 11);
         continue;
 yy47:
         YYSKIP ();
-        yych = YYPEEK ();
         goto yy46;
 yy48:
         YYSKIP ();
-        status = action_line247(i, keys, input, token, &cursor, 19);
+        status = check_key_count_line247(keys_count, i, 3)
+             || action_line247(&i, keys, input, token, &cursor, 19);
         continue;
 yy50:
         YYSKIP ();
@@ -636,7 +669,8 @@ yy52:
         default:    goto yy53;
         }
 yy53:
-        status = action_line247(i, keys, input, token, &cursor, 18);
+        status = check_key_count_line247(keys_count, i, 3)
+             || action_line247(&i, keys, input, token, &cursor, 18);
         continue;
 yy54:
         yyaccept = 2;
@@ -649,7 +683,8 @@ yy54:
         default:    goto yy75;
         }
 yy55:
-        status = action_line247(i, keys, input, token, &cursor, 9);
+        status = check_key_count_line247(keys_count, i, 3)
+             || action_line247(&i, keys, input, token, &cursor, 9);
         continue;
 yy56:
         YYSKIP ();
@@ -678,7 +713,8 @@ yy57:
         default:    goto yy58;
         }
 yy58:
-        status = action_line247(i, keys, input, token, &cursor, 0);
+        status = check_key_count_line247(keys_count, i, 3)
+             || action_line247(&i, keys, input, token, &cursor, 0);
         continue;
 yy59:
         YYSKIP ();
@@ -694,17 +730,18 @@ yy60:
 yy61:
         YYRESTORE ();
         switch (yyaccept) {
-        case 0: 	goto yy40;
-        case 1: 	goto yy42;
-        case 2: 	goto yy55;
-        case 3: 	goto yy58;
-        case 4: 	goto yy83;
-        case 5: 	goto yy53;
-        default:	goto yy107;
+        case 0:     goto yy40;
+        case 1:     goto yy42;
+        case 2:     goto yy55;
+        case 3:     goto yy58;
+        case 4:     goto yy83;
+        case 5:     goto yy53;
+        default:    goto yy107;
         }
 yy62:
         YYSKIP ();
-        status = action_line247(i, keys, input, token, &cursor, 3);
+        status = check_key_count_line247(keys_count, i, 3)
+             || action_line247(&i, keys, input, token, &cursor, 3);
         continue;
 yy64:
         YYSKIP ();
@@ -727,7 +764,8 @@ yy66:
         }
 yy67:
         YYSKIP ();
-        status = action_line247(i, keys, input, token, &cursor, 4);
+        status = check_key_count_line247(keys_count, i, 3)
+             || action_line247(&i, keys, input, token, &cursor, 4);
         continue;
 yy69:
         YYSKIP ();
@@ -739,11 +777,13 @@ yy69:
         }
 yy70:
         YYSKIP ();
-        status = action_line247(i, keys, input, token, &cursor, 2);
+        status = check_key_count_line247(keys_count, i, 3)
+             || action_line247(&i, keys, input, token, &cursor, 2);
         continue;
 yy72:
         YYSKIP ();
-        status = action_line247(i, keys, input, token, &cursor, 1);
+        status = check_key_count_line247(keys_count, i, 3)
+             || action_line247(&i, keys, input, token, &cursor, 1);
         continue;
 yy74:
         YYSKIP ();
@@ -766,7 +806,8 @@ yy76:
         }
 yy77:
         YYSKIP ();
-        status = action_line247(i, keys, input, token, &cursor, 8);
+        status = check_key_count_line247(keys_count, i, 3)
+             || action_line247(&i, keys, input, token, &cursor, 8);
         continue;
 yy79:
         YYSKIP ();
@@ -788,7 +829,8 @@ yy81:
 yy82:
         YYSKIP ();
 yy83:
-        status = action_line247(i, keys, input, token, &cursor, 16);
+        status = check_key_count_line247(keys_count, i, 3)
+             || action_line247(&i, keys, input, token, &cursor, 16);
         continue;
 yy84:
         YYSKIP ();
@@ -827,7 +869,8 @@ yy87:
         }
 yy88:
         YYSKIP ();
-        status = action_line247(i, keys, input, token, &cursor, 7);
+        status = check_key_count_line247(keys_count, i, 3)
+             || action_line247(&i, keys, input, token, &cursor, 7);
         continue;
 yy90:
         YYSKIP ();
@@ -857,7 +900,8 @@ yy91:
         }
 yy92:
         YYSKIP ();
-        status = action_line247(i, keys, input, token, &cursor, 13);
+        status = check_key_count_line247(keys_count, i, 3)
+             || action_line247(&i, keys, input, token, &cursor, 13);
         continue;
 yy94:
         yyaccept = 4;
@@ -907,11 +951,13 @@ yy96:
         }
 yy98:
         YYSKIP ();
-        status = action_line247(i, keys, input, token, &cursor, 12);
+        status = check_key_count_line247(keys_count, i, 3)
+             || action_line247(&i, keys, input, token, &cursor, 12);
         continue;
 yy100:
         YYSKIP ();
-        status = action_line247(i, keys, input, token, &cursor, 15);
+        status = check_key_count_line247(keys_count, i, 3)
+             || action_line247(&i, keys, input, token, &cursor, 15);
         continue;
 yy102:
         YYSKIP ();
@@ -974,7 +1020,8 @@ yy102:
         }
 yy103:
         YYSKIP ();
-        status = action_line247(i, keys, input, token, &cursor, 14);
+        status = check_key_count_line247(keys_count, i, 3)
+             || action_line247(&i, keys, input, token, &cursor, 14);
         continue;
 yy105:
         yyaccept = 6;
@@ -1050,7 +1097,8 @@ yy105:
         default:    goto yy107;
         }
 yy107:
-        status = action_line247(i, keys, input, token, &cursor, 17);
+        status = check_key_count_line247(keys_count, i, 3)
+             || action_line247(&i, keys, input, token, &cursor, 17);
         continue;
 
     }
@@ -1062,7 +1110,7 @@ yy107:
         }
         if (i != keys_count) {
             status = 1;
-            fprintf(stderr, "error: lex_line247: unused keys left after %u iterations\n", i);
+            fprintf(stderr, "error: lex_line247: unused keys left after %u keys\n", i);
         }
     }
 
@@ -1092,7 +1140,7 @@ end:
 #define YYFILL(n) { break; }
 
 static int action_line264
-    ( unsigned int i
+    ( unsigned *pkix
     , const YYKEYTYPE *keys
     , const YYCTYPE *start
     , const YYCTYPE *token
@@ -1100,10 +1148,12 @@ static int action_line264
     , YYKEYTYPE rule_act
     )
 {
+    const unsigned kix = *pkix;
     const long pos = token - start;
     const long len_act = *cursor - token;
-    const long len_exp = (long) keys [3 * i + 1];
-    const YYKEYTYPE rule_exp = keys [3 * i + 2];
+    const long len_exp = (long) keys[kix + 1];
+    const YYKEYTYPE rule_exp = keys[kix + 2];
+    *pkix = kix + 3;
     if (rule_exp == 255) {
         fprintf
             ( stderr
@@ -1113,17 +1163,17 @@ static int action_line264
             );
     }
     if (len_act == len_exp && rule_act == rule_exp) {
-        const YYKEYTYPE offset = keys[3 * i];
+        const YYKEYTYPE offset = keys[kix];
         *cursor = token + offset;
         return 0;
     } else {
         fprintf
             ( stderr
-            , "error: lex_line264: at position %ld (iteration %u):\n"
+            , "error: lex_line264: at position %ld (key %u):\n"
                 "\texpected: match length %ld, rule %u\n"
                 "\tactual:   match length %ld, rule %u\n"
             , pos
-            , i
+            , kix
             , len_exp
             , rule_exp
             , len_act
@@ -1131,6 +1181,13 @@ static int action_line264
             );
         return 1;
     }
+}
+
+static int check_key_count_line264(unsigned have, unsigned used, unsigned need)
+{
+    if (used + need <= have) return 0;
+    fprintf(stderr, "error: lex_line264: not enough keys\n");
+    return 1;
 }
 
 int lex_line264()
@@ -1160,7 +1217,7 @@ int lex_line264()
 
     keys = (YYKEYTYPE *) read_file
         ("scanner.--skeleton.c.line264.keys"
-        , 3 * sizeof (YYKEYTYPE)
+        , sizeof (YYKEYTYPE)
         , 0
         , &keys_count
         );
@@ -1173,7 +1230,7 @@ int lex_line264()
     limit = input + input_len + padding;
     eof = input + input_len;
 
-    for (i = 0; status == 0 && i < keys_count; ++i) {
+    for (i = 0; status == 0 && cursor < eof && i < keys_count;) {
         token = cursor;
         const YYCTYPE *marker = NULL;
         YYCTYPE yych;
@@ -1191,11 +1248,13 @@ int lex_line264()
 yy110:
         YYSKIP ();
 yy111:
-        status = action_line264(i, keys, input, token, &cursor, 3);
+        status = check_key_count_line264(keys_count, i, 3)
+             || action_line264(&i, keys, input, token, &cursor, 3);
         continue;
 yy112:
         YYSKIP ();
-        status = action_line264(i, keys, input, token, &cursor, 2);
+        status = check_key_count_line264(keys_count, i, 3)
+             || action_line264(&i, keys, input, token, &cursor, 2);
         continue;
 yy114:
         YYSKIP ();
@@ -1215,11 +1274,13 @@ yy115:
         }
 yy116:
         YYSKIP ();
-        status = action_line264(i, keys, input, token, &cursor, 1);
+        status = check_key_count_line264(keys_count, i, 3)
+             || action_line264(&i, keys, input, token, &cursor, 1);
         continue;
 yy118:
         YYSKIP ();
-        status = action_line264(i, keys, input, token, &cursor, 0);
+        status = check_key_count_line264(keys_count, i, 3)
+             || action_line264(&i, keys, input, token, &cursor, 0);
         continue;
 yy120:
         YYSKIP ();
@@ -1272,7 +1333,7 @@ yy126:
         }
         if (i != keys_count) {
             status = 1;
-            fprintf(stderr, "error: lex_line264: unused keys left after %u iterations\n", i);
+            fprintf(stderr, "error: lex_line264: unused keys left after %u keys\n", i);
         }
     }
 
@@ -1300,7 +1361,7 @@ end:
 #define YYFILL(n) { break; }
 
 static int action_line281
-    ( unsigned int i
+    ( unsigned *pkix
     , const YYKEYTYPE *keys
     , const YYCTYPE *start
     , const YYCTYPE *token
@@ -1308,10 +1369,12 @@ static int action_line281
     , YYKEYTYPE rule_act
     )
 {
+    const unsigned kix = *pkix;
     const long pos = token - start;
     const long len_act = *cursor - token;
-    const long len_exp = (long) keys [3 * i + 1];
-    const YYKEYTYPE rule_exp = keys [3 * i + 2];
+    const long len_exp = (long) keys[kix + 1];
+    const YYKEYTYPE rule_exp = keys[kix + 2];
+    *pkix = kix + 3;
     if (rule_exp == 255) {
         fprintf
             ( stderr
@@ -1321,17 +1384,17 @@ static int action_line281
             );
     }
     if (len_act == len_exp && rule_act == rule_exp) {
-        const YYKEYTYPE offset = keys[3 * i];
+        const YYKEYTYPE offset = keys[kix];
         *cursor = token + offset;
         return 0;
     } else {
         fprintf
             ( stderr
-            , "error: lex_line281: at position %ld (iteration %u):\n"
+            , "error: lex_line281: at position %ld (key %u):\n"
                 "\texpected: match length %ld, rule %u\n"
                 "\tactual:   match length %ld, rule %u\n"
             , pos
-            , i
+            , kix
             , len_exp
             , rule_exp
             , len_act
@@ -1339,6 +1402,13 @@ static int action_line281
             );
         return 1;
     }
+}
+
+static int check_key_count_line281(unsigned have, unsigned used, unsigned need)
+{
+    if (used + need <= have) return 0;
+    fprintf(stderr, "error: lex_line281: not enough keys\n");
+    return 1;
 }
 
 int lex_line281()
@@ -1368,7 +1438,7 @@ int lex_line281()
 
     keys = (YYKEYTYPE *) read_file
         ("scanner.--skeleton.c.line281.keys"
-        , 3 * sizeof (YYKEYTYPE)
+        , sizeof (YYKEYTYPE)
         , 0
         , &keys_count
         );
@@ -1381,7 +1451,7 @@ int lex_line281()
     limit = input + input_len + padding;
     eof = input + input_len;
 
-    for (i = 0; status == 0 && i < keys_count; ++i) {
+    for (i = 0; status == 0 && cursor < eof && i < keys_count;) {
         token = cursor;
         YYCTYPE yych;
 
@@ -1396,11 +1466,13 @@ int lex_line281()
 yy129:
         YYSKIP ();
 yy130:
-        status = action_line281(i, keys, input, token, &cursor, 3);
+        status = check_key_count_line281(keys_count, i, 3)
+             || action_line281(&i, keys, input, token, &cursor, 3);
         continue;
 yy131:
         YYSKIP ();
-        status = action_line281(i, keys, input, token, &cursor, 2);
+        status = check_key_count_line281(keys_count, i, 3)
+             || action_line281(&i, keys, input, token, &cursor, 2);
         continue;
 yy133:
         YYSKIP ();
@@ -1418,11 +1490,13 @@ yy134:
         }
 yy135:
         YYSKIP ();
-        status = action_line281(i, keys, input, token, &cursor, 0);
+        status = check_key_count_line281(keys_count, i, 3)
+             || action_line281(&i, keys, input, token, &cursor, 0);
         continue;
 yy137:
         YYSKIP ();
-        status = action_line281(i, keys, input, token, &cursor, 1);
+        status = check_key_count_line281(keys_count, i, 3)
+             || action_line281(&i, keys, input, token, &cursor, 1);
         continue;
 
     }
@@ -1434,7 +1508,7 @@ yy137:
         }
         if (i != keys_count) {
             status = 1;
-            fprintf(stderr, "error: lex_line281: unused keys left after %u iterations\n", i);
+            fprintf(stderr, "error: lex_line281: unused keys left after %u keys\n", i);
         }
     }
 
@@ -1460,7 +1534,7 @@ end:
 #define YYFILL(n) { break; }
 
 static int action_line291
-    ( unsigned int i
+    ( unsigned *pkix
     , const YYKEYTYPE *keys
     , const YYCTYPE *start
     , const YYCTYPE *token
@@ -1468,10 +1542,12 @@ static int action_line291
     , YYKEYTYPE rule_act
     )
 {
+    const unsigned kix = *pkix;
     const long pos = token - start;
     const long len_act = *cursor - token;
-    const long len_exp = (long) keys [3 * i + 1];
-    const YYKEYTYPE rule_exp = keys [3 * i + 2];
+    const long len_exp = (long) keys[kix + 1];
+    const YYKEYTYPE rule_exp = keys[kix + 2];
+    *pkix = kix + 3;
     if (rule_exp == 255) {
         fprintf
             ( stderr
@@ -1481,17 +1557,17 @@ static int action_line291
             );
     }
     if (len_act == len_exp && rule_act == rule_exp) {
-        const YYKEYTYPE offset = keys[3 * i];
+        const YYKEYTYPE offset = keys[kix];
         *cursor = token + offset;
         return 0;
     } else {
         fprintf
             ( stderr
-            , "error: lex_line291: at position %ld (iteration %u):\n"
+            , "error: lex_line291: at position %ld (key %u):\n"
                 "\texpected: match length %ld, rule %u\n"
                 "\tactual:   match length %ld, rule %u\n"
             , pos
-            , i
+            , kix
             , len_exp
             , rule_exp
             , len_act
@@ -1499,6 +1575,13 @@ static int action_line291
             );
         return 1;
     }
+}
+
+static int check_key_count_line291(unsigned have, unsigned used, unsigned need)
+{
+    if (used + need <= have) return 0;
+    fprintf(stderr, "error: lex_line291: not enough keys\n");
+    return 1;
 }
 
 int lex_line291()
@@ -1528,7 +1611,7 @@ int lex_line291()
 
     keys = (YYKEYTYPE *) read_file
         ("scanner.--skeleton.c.line291.keys"
-        , 3 * sizeof (YYKEYTYPE)
+        , sizeof (YYKEYTYPE)
         , 0
         , &keys_count
         );
@@ -1541,7 +1624,7 @@ int lex_line291()
     limit = input + input_len + padding;
     eof = input + input_len;
 
-    for (i = 0; status == 0 && i < keys_count; ++i) {
+    for (i = 0; status == 0 && cursor < eof && i < keys_count;) {
         token = cursor;
         YYCTYPE yych;
 
@@ -1555,7 +1638,8 @@ int lex_line291()
         }
 yy141:
         YYSKIP ();
-        status = action_line291(i, keys, input, token, &cursor, 2);
+        status = check_key_count_line291(keys_count, i, 3)
+             || action_line291(&i, keys, input, token, &cursor, 2);
         continue;
 yy143:
         YYSKIP ();
@@ -1567,7 +1651,8 @@ yy143:
         default:    goto yy145;
         }
 yy145:
-        status = action_line291(i, keys, input, token, &cursor, 0);
+        status = check_key_count_line291(keys_count, i, 3)
+             || action_line291(&i, keys, input, token, &cursor, 0);
         continue;
 yy146:
         YYSKIP ();
@@ -1579,7 +1664,8 @@ yy146:
         default:    goto yy148;
         }
 yy148:
-        status = action_line291(i, keys, input, token, &cursor, 1);
+        status = check_key_count_line291(keys_count, i, 3)
+             || action_line291(&i, keys, input, token, &cursor, 1);
         continue;
 
     }
@@ -1591,7 +1677,7 @@ yy148:
         }
         if (i != keys_count) {
             status = 1;
-            fprintf(stderr, "error: lex_line291: unused keys left after %u iterations\n", i);
+            fprintf(stderr, "error: lex_line291: unused keys left after %u keys\n", i);
         }
     }
 
@@ -1619,7 +1705,7 @@ end:
 #define YYFILL(n) { break; }
 
 static int action_line305
-    ( unsigned int i
+    ( unsigned *pkix
     , const YYKEYTYPE *keys
     , const YYCTYPE *start
     , const YYCTYPE *token
@@ -1627,10 +1713,12 @@ static int action_line305
     , YYKEYTYPE rule_act
     )
 {
+    const unsigned kix = *pkix;
     const long pos = token - start;
     const long len_act = *cursor - token;
-    const long len_exp = (long) keys [3 * i + 1];
-    const YYKEYTYPE rule_exp = keys [3 * i + 2];
+    const long len_exp = (long) keys[kix + 1];
+    const YYKEYTYPE rule_exp = keys[kix + 2];
+    *pkix = kix + 3;
     if (rule_exp == 255) {
         fprintf
             ( stderr
@@ -1640,17 +1728,17 @@ static int action_line305
             );
     }
     if (len_act == len_exp && rule_act == rule_exp) {
-        const YYKEYTYPE offset = keys[3 * i];
+        const YYKEYTYPE offset = keys[kix];
         *cursor = token + offset;
         return 0;
     } else {
         fprintf
             ( stderr
-            , "error: lex_line305: at position %ld (iteration %u):\n"
+            , "error: lex_line305: at position %ld (key %u):\n"
                 "\texpected: match length %ld, rule %u\n"
                 "\tactual:   match length %ld, rule %u\n"
             , pos
-            , i
+            , kix
             , len_exp
             , rule_exp
             , len_act
@@ -1658,6 +1746,13 @@ static int action_line305
             );
         return 1;
     }
+}
+
+static int check_key_count_line305(unsigned have, unsigned used, unsigned need)
+{
+    if (used + need <= have) return 0;
+    fprintf(stderr, "error: lex_line305: not enough keys\n");
+    return 1;
 }
 
 int lex_line305()
@@ -1687,7 +1782,7 @@ int lex_line305()
 
     keys = (YYKEYTYPE *) read_file
         ("scanner.--skeleton.c.line305.keys"
-        , 3 * sizeof (YYKEYTYPE)
+        , sizeof (YYKEYTYPE)
         , 0
         , &keys_count
         );
@@ -1700,7 +1795,7 @@ int lex_line305()
     limit = input + input_len + padding;
     eof = input + input_len;
 
-    for (i = 0; status == 0 && i < keys_count; ++i) {
+    for (i = 0; status == 0 && cursor < eof && i < keys_count;) {
         token = cursor;
         const YYCTYPE *marker = NULL;
         YYCTYPE yych;
@@ -1729,7 +1824,8 @@ int lex_line305()
         default:    goto yy152;
         }
 yy151:
-        status = action_line305(i, keys, input, token, &cursor, 1);
+        status = check_key_count_line305(keys_count, i, 3)
+             || action_line305(&i, keys, input, token, &cursor, 1);
         continue;
 yy152:
         YYSKIP ();
@@ -1791,7 +1887,8 @@ yy158:
         }
 yy159:
         YYSKIP ();
-        switch ((yych = YYPEEK ())) {
+        yych = YYPEEK ();
+        switch (yych) {
         case '\t':
         case '\n':
         case '\r':
@@ -1800,7 +1897,8 @@ yy159:
         default:    goto yy152;
         }
 yy160:
-        status = action_line305(i, keys, input, token, &cursor, 0);
+        status = check_key_count_line305(keys_count, i, 3)
+             || action_line305(&i, keys, input, token, &cursor, 0);
         continue;
 yy161:
         YYSKIP ();
@@ -1875,7 +1973,6 @@ yy169:
         }
 yy170:
         YYSKIP ();
-        yych = YYPEEK ();
         goto yy151;
 yy171:
         YYSKIP ();
@@ -1903,7 +2000,7 @@ yy172:
         }
         if (i != keys_count) {
             status = 1;
-            fprintf(stderr, "error: lex_line305: unused keys left after %u iterations\n", i);
+            fprintf(stderr, "error: lex_line305: unused keys left after %u keys\n", i);
         }
     }
 
@@ -2215,8 +2312,7 @@ int main()
 
 
 
-																																																																																																																																																																																																																																																															  !#$%&,-0123456789:<>@]^_`}~ÄÅÇÉÑÖÜáàâäãåçéèêëíìîïñóòôöõúùûü†°¢£§•¶ß®©™´¨≠ÆØ∞±≤≥¥µ∂∑∏π∫ªºΩæø¿¡¬√ƒ≈∆«»… ÀÃÕŒœ–—“”‘’÷◊ÿŸ⁄€‹›ﬁﬂ‡·‚„‰ÂÊÁËÈÍÎÏÌÓÔÒÚÛÙıˆ˜¯˘˙˚¸˝˛ˇ			    			   			   			   			   
-			   			   			   			   			   			   			   			   			   			   			   !			"   #			$   %			&   '			(   )			*   +			,   -			.   /			0   1			2   3			4   5			6   7			8   9			:   ;			<   =			>   ?			@   A			B   C			D   E			F   G			H   I			J   K			L   M			N   O			P   Q			R   S			T   U			V   W			X   Y			Z   [			\   ]			^   _			`   a			b   c			d   e			f   g			h   i			j   k			l   m			n   o			p   q			r   s			t   u			v   w			x   y			z   {			|   }			~   			Ä   Å			Ç   É			Ñ   Ö			Ü   á			à   â			ä   ã			å   ç			é   è			ê   ë			í   ì			î   ï			ñ   ó			ò   ô			ö   õ			ú   ù			û   ü			†   °			¢   £			§   •			¶   ß			®   ©			™   ´			¨   ≠			Æ   Ø			∞   ±			≤   ≥			¥   µ			∂   ∑			∏   π			∫   ª			º   Ω			æ   ø			¿   ¡			¬   √			ƒ   ≈			∆   «			»   …			    À			Ã   Õ			Œ   œ			–   —			“   ”			‘   ’			÷   ◊			ÿ   Ÿ			⁄   €			‹   ›			ﬁ   ﬂ			‡   ·			‚   „			‰   Â			Ê   Á			Ë   È			Í   Î			Ï   Ì			Ó   Ô			   Ò			Ú   Û			Ù   ı			ˆ   ˜			¯   ˘			˙   ˚			¸   ˝			˛   ˇ		   		  		  		  		  
+																																																																																																																																																																																																																																																															  !#$%&,-0123456789:<>@]^_`}~ÄÅÇÉÑÖÜáàâäãåçéèêëíìîïñóòôöõúùûü†°¢£§•¶ß®©™´¨≠ÆØ∞±≤≥¥µ∂∑∏π∫ªºΩæø¿¡¬√ƒ≈∆«»… ÀÃÕŒœ–—“”‘’÷◊ÿŸ⁄€‹›ﬁﬂ‡·‚„‰ÂÊÁËÈÍÎÏÌÓÔÒÚÛÙıˆ˜¯˘˙˚¸˝˛ˇ		   		  		  		  		  
 		  		  		  		  		  		  		  		  		  		  		  !		"  #		$  %		&  '		(  )		*  +		,  -		.  /		0  1		2  3		4  5		6  7		8  9		:  ;		<  =		>  ?		@  A		B  C		D  E		F  G		H  I		J  K		L  M		N  O		P  Q		R  S		T  U		V  W		X  Y		Z  [		\  ]		^  _		`  a		b  c		d  e		f  g		h  i		j  k		l  m		n  o		p  q		r  s		t  u		v  w		x  y		z  {		|  }		~  		Ä  Å		Ç  É		Ñ  Ö		Ü  á		à  â		ä  ã		å  ç		é  è		ê  ë		í  ì		î  ï		ñ  ó		ò  ô		ö  õ		ú  ù		û  ü		†  °		¢  £		§  •		¶  ß		®  ©		™  ´		¨  ≠		Æ  Ø		∞  ±		≤  ≥		¥  µ		∂  ∑		∏  π		∫  ª		º  Ω		æ  ø		¿  ¡		¬  √		ƒ  ≈		∆  «		»  …		   À		Ã  Õ		Œ  œ		–  —		“  ”		‘  ’		÷  ◊		ÿ  Ÿ		⁄  €		‹  ›		ﬁ  ﬂ		‡  ·		‚  „		‰  Â		Ê  Á		Ë  È		Í  Î		Ï  Ì		Ó  Ô		  Ò		Ú  Û		Ù  ı		ˆ  ˜		¯  ˘		˙  ˚		¸  ˝		˛  ˇ	  	 	 	 	 
 	 	 	 	 	 	 	 	 	 	 	 !	" #	$ %	& '	( )	* +	, -	. /	0 1	2 3	4 5	6 7	8 9	: ;	< =	> ?	@ A	B C	D E	F G	H I	J K	L M	N O	P Q	R S	T U	V W	X Y	Z [	\ ]	^ _	` a	b c	d e	f g	h i	j k	l m	n o	p q	r s	t u	v w	x y	z {	| }	~ 	Ä Å	Ç É	Ñ Ö	Ü á	à â	ä ã	å ç	é è	ê ë	í ì	î ï	ñ ó	ò ô	ö õ	ú ù	û ü	† °	¢ £	§ •	¶ ß	® ©	™ ´	¨ ≠	Æ Ø	∞ ±	≤ ≥	¥ µ	∂ ∑	∏ π	∫ ª	º Ω	æ ø	¿ ¡	¬ √	ƒ ≈	∆ «	» …	  À	Ã Õ	Œ œ	– —	“ ”	‘ ’	÷ ◊	ÿ Ÿ	⁄ €	‹ ›	ﬁ ﬂ	‡ ·	‚ „	‰ Â	Ê Á	Ë È	Í Î	Ï Ì	Ó Ô	 Ò	Ú Û	Ù ı	ˆ ˜	¯ ˘	˙ ˚	¸ ˝	˛ ˇ
 
@@ -3742,8 +3838,7 @@ int main()
 '''\ ''\''\''\''\''\''\''\''\''\	''\''\''\''\''\''\''\''\''\''\''\''\''\''\''\''\''\''\''\''\''\''\ ''\!''\"''\#''\$''\%''\&''\'''\(''\)''\*''\+''\,''\-''\.''\/''\0''\1''\2''\3''\4''\5''\6''\7''\8''\9''\:''\;''\<''\=''\>''\?''\@''\A''\B''\C''\D''\E''\F''\G''\H''\I''\J''\K''\L''\M''\N''\O''\P''\Q''\R''\S''\T''\U''\V''\W''\X''\Y''\Z''\[''\\''\]''\^''\_''\`''\a''\b''\c''\d''\e''\f''\g''\h''\i''\j''\k''\l''\m''\n''\o''\p''\q''\r''\s''\t''\u''\v''\w''\x''\y''\z''\{''\|''\}''\~''\''\Ä''\Å''\Ç''\É''\Ñ''\Ö''\Ü''\á''\à''\â''\ä''\ã''\å''\ç''\é''\è''\ê''\ë''\í''\ì''\î''\ï''\ñ''\ó''\ò''\ô''\ö''\õ''\ú''\ù''\û''\ü''\†''\°''\¢''\£''\§''\•''\¶''\ß''\®''\©''\™''\´''\¨''\≠''\Æ''\Ø''\∞''\±''\≤''\≥''\¥''\µ''\∂''\∑''\∏''\π''\∫''\ª''\º''\Ω''\æ''\ø''\¿''\¡''\¬''\√''\ƒ''\≈''\∆''\«''\»''\…''\ ''\À''\Ã''\Õ''\Œ''\œ''\–''\—''\“''\”''\‘''\’''\÷''\◊''\ÿ''\Ÿ''\⁄''\€''\‹''\›''\ﬁ''\ﬂ''\‡''\·''\‚''\„''\‰''\Â''\Ê''\Á''\Ë''\È''\Í''\Î''\Ï''\Ì''\Ó''\Ô''\''\Ò''\Ú''\Û''\Ù''\ı''\ˆ''\˜''\¯''\˘''\˙''\˚''\¸''\˝''\˛''\ˇ''
 ();=\|*/* *********	*
 ********************** *!*"*#*$*%*&*'*(*)***+*,*-*.*0*1*2*3*4*5*6*7*8*9*:*;*<*=*>*?*@*A*B*C*D*E*F*G*H*I*J*K*L*M*N*O*P*Q*R*S*T*U*V*W*X*Y*Z*[*\*]*^*_*`*a*b*c*d*e*f*g*h*i*j*k*l*m*n*o*p*q*r*s*t*u*v*w*x*y*z*{*|*}*~**Ä*Å*Ç*É*Ñ*Ö*Ü*á*à*â*ä*ã*å*ç*é*è*ê*ë*í*ì*î*ï*ñ*ó*ò*ô*ö*õ*ú*ù*û*ü*†*°*¢*£*§*•*¶*ß*®*©*™*´*¨*≠*Æ*Ø*∞*±*≤*≥*¥*µ*∂*∑*∏*π*∫*ª*º*Ω*æ*ø*¿*¡*¬*√*ƒ*≈*∆*«*»*…* *À*Ã*Õ*Œ*œ*–*—*“*”*‘*’*÷*◊*ÿ*Ÿ*⁄*€*‹*›*ﬁ*ﬂ*‡*·*‚*„*‰*Â*Ê*Á*Ë*È*Í*Î*Ï*Ì*Ó*Ô**Ò*Ú*Û*Ù*ı*ˆ*˜*¯*˘*˙*˚*¸*˝*˛*ˇ+?./*/ /////////	/
-////////////////////// /!/"/#/$/%/&/'/(/)/+/,/-/.///0/1/2/3/4/5/6/7/8/9/:/;/</=/>/?/@/A/B/C/D/E/F/G/H/I/J/K/L/M/N/O/P/Q/R/S/T/U/V/W/X/Y/Z/[/\/]/^/_/`/a/b/c/d/e/f/g/h/i/j/k/l/m/n/o/p/q/r/s/t/u/v/w/x/y/z/{/|/}/~//Ä/Å/Ç/É/Ñ/Ö/Ü/á/à/â/ä/ã/å/ç/é/è/ê/ë/í/ì/î/ï/ñ/ó/ò/ô/ö/õ/ú/ù/û/ü/†/°/¢/£/§/•/¶/ß/®/©/™/´/¨/≠/Æ/Ø/∞/±/≤/≥/¥/µ/∂/∑/∏/π/∫/ª/º/Ω/æ/ø/¿/¡/¬/√/ƒ/≈/∆/«/»/…/ /À/Ã/Õ/Œ/œ/–/—/“/”/‘/’/÷/◊/ÿ/Ÿ/⁄/€/‹/›/ﬁ/ﬂ/‡/·/‚/„/‰/Â/Ê/Á/Ë/È/Í/Î/Ï/Ì/Ó/Ô//Ò/Ú/Û/Ù/ı/ˆ/˜/¯/˘/˙/˚/¸/˝/˛/ˇA00 B11C22D33E44F55G66H77I88J99	KAA
-LBBMCCNDDOEEPFFQGGRHHSIITJJUKKVLLWMMXNNYOOZPPaQQbRRcSSdTTeUUfVVgWW hXX!iYY"jZZ#kaa$lbb%mcc&ndd'oee(pff)qgg*shh+tii,ujj-vkk.wll/xmm:ynn;zoo<App=Bqq>Crr?Dss@Ett[Fuu\Gvv]Hww^Ixx_Jyy`Kzz{L00|M11}N22~O33P44ÄQ55ÅR66ÇS77ÉT88ÑU99ÖVAAÜWBBáXCCàYDDâZEEäaFFãbGGåcHHçdIIéeJJèfKKêgLLëhMMíiNNìjOOîkPPïlQQñmRRónSSòoTTôpUUöqVVõsWWútXXùuYYûvZZüwaa†xbb°ycc¢zdd£Aee§Bff•Cgg¶DhhßEii®Fjj©Gkk™Hll´Imm¨Jnn≠KooÆLppØMqq∞Nrr±Oss≤Ptt≥Quu¥RvvµSww∂Txx∑Uyy∏VzzπW00∫X11ªY22ºZ33Ωa44æb55øc66¿d77¡e88¬f99√gAAƒhBB≈iCC∆jDD«kEE»lFF…mGG nHHÀoIIÃpJJÕqKKŒsLLœtMM–uNN—vOO“wPP”xQQ‘yRR’zSS÷ATT◊BUUÿCVVŸDWW⁄EXX€FYY‹GZZ›HaaﬁIbbﬂJcc‡Kdd·Lee‚Mff„Ngg‰OhhÂPiiÊQjjÁRkkËSllÈTmmÍUnnÎVooÏWppÌXqqÓYrrÔZssattÒbuuÚcvvÛdwwÙexxıfyyˆgzz˜h00¯i11˘j22˙k33˚l44¸m55˝n66˛o77ˇA0 B1C2D3E4F5G6H7I8J9	KA
+////////////////////// /!/"/#/$/%/&/'/(/)/+/,/-/.///0/1/2/3/4/5/6/7/8/9/:/;/</=/>/?/@/A/B/C/D/E/F/G/H/I/J/K/L/M/N/O/P/Q/R/S/T/U/V/W/X/Y/Z/[/\/]/^/_/`/a/b/c/d/e/f/g/h/i/j/k/l/m/n/o/p/q/r/s/t/u/v/w/x/y/z/{/|/}/~//Ä/Å/Ç/É/Ñ/Ö/Ü/á/à/â/ä/ã/å/ç/é/è/ê/ë/í/ì/î/ï/ñ/ó/ò/ô/ö/õ/ú/ù/û/ü/†/°/¢/£/§/•/¶/ß/®/©/™/´/¨/≠/Æ/Ø/∞/±/≤/≥/¥/µ/∂/∑/∏/π/∫/ª/º/Ω/æ/ø/¿/¡/¬/√/ƒ/≈/∆/«/»/…/ /À/Ã/Õ/Œ/œ/–/—/“/”/‘/’/÷/◊/ÿ/Ÿ/⁄/€/‹/›/ﬁ/ﬂ/‡/·/‚/„/‰/Â/Ê/Á/Ë/È/Í/Î/Ï/Ì/Ó/Ô//Ò/Ú/Û/Ù/ı/ˆ/˜/¯/˘/˙/˚/¸/˝/˛/ˇA0 B1C2D3E4F5G6H7I8J9	KA
 LBMCNDOEPFQGRHSITJUKVLWMXNYOZPaQbRcSdTeUfVgW hX!iY"jZ#ka$lb%mc&nd'oe(pf)qg*sh+ti,uj-vk.wl/xm:yn;zo<Ap=Bq>Cr?Ds@Et[Fu\Gv]Hw^Ix_Jy`Kz{L0|M1}N2~O3P4ÄQ5ÅR6ÇS7ÉT8ÑU9ÖVAÜWBáXCàYDâZEäaFãbGåcHçdIéeJèfKêgLëhMíiNìjOîkPïlQñmRónSòoTôpUöqVõsWútXùuYûvZüwa†xb°yc¢zd£Ae§Bf•Cg¶DhßEi®Fj©Gk™Hl´Im¨Jn≠KoÆLpØMq∞Nr±Os≤Pt≥Qu¥RvµSw∂Tx∑Uy∏VzπW0∫X1ªY2ºZ3Ωa4æb5øc6¿d7¡e8¬f9√gAƒhB≈iC∆jD«kE»lF…mG nHÀoIÃpJÕqKŒsLœtM–uN—vO“wP”xQ‘yR’zS÷AT◊BUÿCVŸDW⁄EX€FY‹GZ›HaﬁIbﬂJc‡Kd·Le‚Mf„Ng‰OhÂPiÊQjÁRkËSlÈTmÍUnÎVoÏWpÌXqÓYrÔZsatÒbuÚcvÛdwÙexıfyˆgz˜h0¯i1˘j2˙k3˚l4¸m5˝n6˛o7ˇA BCDEFGHIJ	K
 LMNOPQRSTUVWXYZabcdefg h!i"j#k$l%m&n'o(p)q*s+t,u-v.w/x:y;z<A=B>C?D@E[F\G]H^I_J`K{L|M}N~OPÄQÅRÇSÉTÑUÖVÜWáXàYâZäaãbåcçdéeèfêgëhíiìjîkïlñmónòoôpöqõsútùuûvüw†x°y¢z£A§B•C¶DßE®F©G™H´I¨J≠KÆLØM∞N±O≤P≥Q¥RµS∂T∑U∏VπW∫XªYºZΩaæbøc¿d¡e¬f√gƒh≈i∆j«k»l…m nÀoÃpÕqŒsœt–u—v“w”x‘y’z÷A◊BÿCŸD⁄E€F‹G›HﬁIﬂJ‡K·L‚M„N‰OÂPÊQÁRËSÈTÍUÎVÏWÌXÓYÔZaÒbÚcÛdÙeıfˆg˜h¯i˘j˙k˚l¸m˝n˛oˇ[  \
 [\
@@ -5286,7 +5381,7 @@ rrrrrrrrrrrrrrrrrrrrrr r!r"r#r$r%r&r'r(r)r*r+r,r-r.r/r:r;r<
 {01{02{03{04{05{06{07{08{09{00{01{02{03{04{05{06{07{08{09{00{01{02 {03!{04"{05#{06${07%{08&{09'{00({01){02*{03+{04-{05.{06/{07:{08;{09<{00={01>{02?{03@{04A{05B{06C{07D{08E{09F{00G{01H{02I{03J{04K{05L{06M{07N{08O{09P{00Q{01R{02S{03T{04U{05V{06W{07X{08Y{09Z{00[{01\{02]{03^{04_{05`{06a{07b{08c{09d{00e{01f{02g{03h{04i{05j{06k{07l{08m{09n{00o{01p{02q{03r{04s{05t{06u{07v{08w{09x{00y{01z{02{{03|{04~{05{06Ä{07Å{08Ç{09É{00Ñ{01Ö{02Ü{03á{04à{05â{06ä{07ã{08å{09ç{00é{01è{02ê{03ë{04í{05ì{06î{07ï{08ñ{09ó{00ò{01ô{02ö{03õ{04ú{05ù{06û{07ü{08†{09°{00¢{01£{02§{03•{04¶{05ß{06®{07©{08™{09´{00¨{01≠{02Æ{03Ø{04∞{05±{06≤{07≥{08¥{09µ{00∂{01∑{02∏{03π{04∫{05ª{06º{07Ω{08æ{09ø{00¿{01¡{02¬{03√{04ƒ{05≈{06∆{07«{08»{09…{00 {01À{02Ã{03Õ{04Œ{05œ{06–{07—{08“{09”{00‘{01’{02÷{03◊{04ÿ{05Ÿ{06⁄{07€{08‹{09›{00ﬁ{01ﬂ{02‡{03·{04‚{05„{06‰{07Â{08Ê{09Á{00Ë{01È{02Í{03Î{04Ï{05Ì{06Ó{07Ô{08{09Ò{00Ú{01Û{02Ù{03ı{04ˆ{05˜{06¯{07˘{08˙{09˚{00¸{01˝{02˛{03ˇ{0,0}{0,1}{0,2}{0,3}{0,4}{0,5}{0,6}{0,7}{0,8}{0,9}{0,}{0, {0,{0,{0,{0,{0,{0,{0,{0,{0,	{0,
 {0,{0,{0,{0,{0,{0,{0,{0,{0,{0,{0,{0,{0,{0,{0,{0,{0,{0,{0,{0,{0,{0, {0,!{0,"{0,#{0,${0,%{0,&{0,'{0,({0,){0,*{0,+{0,,{0,-{0,.{0,/{0,:{0,;{0,<{0,={0,>{0,?{0,@{0,A{0,B{0,C{0,D{0,E{0,F{0,G{0,H{0,I{0,J{0,K{0,L{0,M{0,N{0,O{0,P{0,Q{0,R{0,S{0,T{0,U{0,V{0,W{0,X{0,Y{0,Z{0,[{0,\{0,]{0,^{0,_{0,`{0,a{0,b{0,c{0,d{0,e{0,f{0,g{0,h{0,i{0,j{0,k{0,l{0,m{0,n{0,o{0,p{0,q{0,r{0,s{0,t{0,u{0,v{0,w{0,x{0,y{0,z{0,{{0,|{0,~{0,{0,Ä{0,Å{0,Ç{0,É{0,Ñ{0,Ö{0,Ü{0,á{0,à{0,â{0,ä{0,ã{0,å{0,ç{0,é{0,è{0,ê{0,ë{0,í{0,ì{0,î{0,ï{0,ñ{0,ó{0,ò{0,ô{0,ö{0,õ{0,ú{0,ù{0,û{0,ü{0,†{0,°{0,¢{0,£{0,§{0,•{0,¶{0,ß{0,®{0,©{0,™{0,´{0,¨{0,≠{0,Æ{0,Ø{0,∞{0,±{0,≤{0,≥{0,¥{0,µ{0,∂{0,∑{0,∏{0,π{0,∫{0,ª{0,º{0,Ω{0,æ{0,ø{0,¿{0,¡{0,¬{0,√{0,ƒ{0,≈{0,∆{0,«{0,»{0,…{0, {0,À{0,Ã{0,Õ{0,Œ{0,œ{0,–{0,—{0,“{0,”{0,‘{0,’{0,÷{0,◊{0,ÿ{0,Ÿ{0,⁄{0,€{0,‹{0,›{0,ﬁ{0,ﬂ{0,‡{0,·{0,‚{0,„{0,‰{0,Â{0,Ê{0,Á{0,Ë{0,È{0,Í{0,Î{0,Ï{0,Ì{0,Ó{0,Ô{0,{0,Ò{0,Ú{0,Û{0,Ù{0,ı{0,ˆ{0,˜{0,¯{0,˘{0,˙{0,˚{0,¸{0,˝{0,˛{0,ˇ{0}{0 {0{0{0{0{0{0{0{0{0	{0
 {0{0{0{0{0{0{0{0{0{0{0{0{0{0{0{0{0{0{0{0{0{0 {0!{0"{0#{0${0%{0&{0'{0({0){0*{0+{0-{0.{0/{0:{0;{0<{0={0>{0?{0@{0A{0B{0C{0D{0E{0F{0G{0H{0I{0J{0K{0L{0M{0N{0O{0P{0Q{0R{0S{0T{0U{0V{0W{0X{0Y{0Z{0[{0\{0]{0^{0_{0`{0a{0b{0c{0d{0e{0f{0g{0h{0i{0j{0k{0l{0m{0n{0o{0p{0q{0r{0s{0t{0u{0v{0w{0x{0y{0z{0{{0|{0~{0{0Ä{0Å{0Ç{0É{0Ñ{0Ö{0Ü{0á{0à{0â{0ä{0ã{0å{0ç{0é{0è{0ê{0ë{0í{0ì{0î{0ï{0ñ{0ó{0ò{0ô{0ö{0õ{0ú{0ù{0û{0ü{0†{0°{0¢{0£{0§{0•{0¶{0ß{0®{0©{0™{0´{0¨{0≠{0Æ{0Ø{0∞{0±{0≤{0≥{0¥{0µ{0∂{0∑{0∏{0π{0∫{0ª{0º{0Ω{0æ{0ø{0¿{0¡{0¬{0√{0ƒ{0≈{0∆{0«{0»{0…{0 {0À{0Ã{0Õ{0Œ{0œ{0–{0—{0“{0”{0‘{0’{0÷{0◊{0ÿ{0Ÿ{0⁄{0€{0‹{0›{0ﬁ{0ﬂ{0‡{0·{0‚{0„{0‰{0Â{0Ê{0Á{0Ë{0È{0Í{0Î{0Ï{0Ì{0Ó{0Ô{0{0Ò{0Ú{0Û{0Ù{0ı{0ˆ{0˜{0¯{0˘{0˙{0˚{0¸{0˝{0˛{0ˇ{1}{2}{3}{4}{5}{6}{7}{8}{9}{ {{{{{{{{{	{
-{{{{{{{{{{{{{{{{{{{{{{ {!{"{#{${%{&{'{({){*{+{-{.{/{:{;{<{={>{?{@{A{B{C{D{E{F{G{H{I{J{K{L{M{N{O{P{Q{R{S{T{U{V{W{X{Y{Z{[{\{]{^{_{`{a{b{c{d{e{f{g{h{i{j{k{l{m{n{o{p{q{r{s{t{u{v{w{x{y{z{{{|{}{~{{Ä{Å{Ç{É{Ñ{Ö{Ü{á{à{â{ä{ã{å{ç{é{è{ê{ë{í{ì{î{ï{ñ{ó{ò{ô{ö{õ{ú{ù{û{ü{†{°{¢{£{§{•{¶{ß{®{©{™{´{¨{≠{Æ{Ø{∞{±{≤{≥{¥{µ{∂{∑{∏{π{∫{ª{º{Ω{æ{ø{¿{¡{¬{√{ƒ{≈{∆{«{»{…{ {À{Ã{Õ{Œ{œ{–{—{“{”{‘{’{÷{◊{ÿ{Ÿ{⁄{€{‹{›{ﬁ{ﬂ{‡{·{‚{„{‰{Â{Ê{Á{Ë{È{Í{Î{Ï{Ì{Ó{Ô{{Ò{Ú{Û{Ù{ı{ˆ{˜{¯{˘{˙{˚{¸{˝{˛{ˇ
+{{{{{{{{{{{{{{{{{{{{{{ {!{"{#{${%{&{'{({){*{+{-{.{/{:{;{<{={>{?{@{A{B{C{D{E{F{G{H{I{J{K{L{M{N{O{P{Q{R{S{T{U{V{W{X{Y{Z{[{\{]{^{_{`{a{b{c{d{e{f{g{h{i{j{k{l{m{n{o{p{q{r{s{t{u{v{w{x{y{z{{{|{}{~{{Ä{Å{Ç{É{Ñ{Ö{Ü{á{à{â{ä{ã{å{ç{é{è{ê{ë{í{ì{î{ï{ñ{ó{ò{ô{ö{õ{ú{ù{û{ü{†{°{¢{£{§{•{¶{ß{®{©{™{´{¨{≠{Æ{Ø{∞{±{≤{≥{¥{µ{∂{∑{∏{π{∫{ª{º{Ω{æ{ø{¿{¡{¬{√{ƒ{≈{∆{«{»{…{ {À{Ã{Õ{Œ{œ{–{—{“{”{‘{’{÷{◊{ÿ{Ÿ{⁄{€{‹{›{ﬁ{ﬂ{‡{·{‚{„{‰{Â{Ê{Á{Ë{È{Í{Î{Ï{Ì{Ó{Ô{{Ò{Ú{Û{Ù{ı{ˆ{˜{¯{˘{˙{˚{¸{˝{˛{ˇ
 
 
 
@@ -5547,7 +5642,7 @@ rrrrrrrrrrrrrrrrrrrrrr r!r"r#r$r%r&r'r(r)r*r+r,r-r.r/r:r;r<
 
 
 
-																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  	 !#$%&()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz|~ÄÅÇÉÑÖÜáàâäãåçéèêëíìîïñóòôöõúùûü†°¢£§•¶ß®©™´¨≠ÆØ∞±≤≥¥µ∂∑∏π∫ªºΩæø¿¡¬√ƒ≈∆«»… ÀÃÕŒœ–—“”‘’÷◊ÿŸ⁄€‹›ﬁﬂ‡·‚„‰ÂÊÁËÈÍÎÏÌÓÔÒÚÛÙıˆ˜¯˘˙˚¸˝˛ˇ
+																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  	 !#$%&()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz|~ÄÅÇÉÑÖÜáàâäãåçéèêëíìîïñóòôöõúùûü†°¢£§•¶ß®©™´¨≠ÆØ∞±≤≥¥µ∂∑∏π∫ªºΩæø¿¡¬√ƒ≈∆«»… ÀÃÕŒœ–—“”‘’÷◊ÿŸ⁄€‹›ﬁﬂ‡·‚„‰ÂÊÁËÈÍÎÏÌÓÔÒÚÛÙıˆ˜¯˘˙˚¸˝˛ˇ
 """ """"""""""""""""""	"""""""""""""""""""""""""""""""""""""""""""" ""!""#""$""%""&""'""("")""*""+"",""-"".""/""0""1""2""3""4""5""6""7""8""9"":"";""<""="">""?""@""A""B""C""D""E""F""G""H""I""J""K""L""M""N""O""P""Q""R""S""T""U""V""W""X""Y""Z""[""]""^""_""`""a""b""c""d""e""f""g""h""i""j""k""l""m""n""o""p""q""r""s""t""u""v""w""x""y""z""{""|""}""~""""Ä""Å""Ç""É""Ñ""Ö""Ü""á""à""â""ä""ã""å""ç""é""è""ê""ë""í""ì""î""ï""ñ""ó""ò""ô""ö""õ""ú""ù""û""ü""†""°""¢""£""§""•""¶""ß""®""©""™""´""¨""≠""Æ""Ø""∞""±""≤""≥""¥""µ""∂""∑""∏""π""∫""ª""º""Ω""æ""ø""¿""¡""¬""√""ƒ""≈""∆""«""»""…"" ""À""Ã""Õ""Œ""œ""–""—""“""”""‘""’""÷""◊""ÿ""Ÿ""⁄""€""‹""›""ﬁ""ﬂ""‡""·""‚""„""‰""Â""Ê""Á""Ë""È""Í""Î""Ï""Ì""Ó""Ô""""Ò""Ú""Û""Ù""ı""ˆ""˜""¯""˘""˙""˚""¸""˝""˛""ˇ""  """"""""""""""""""		""""""""""""""""""""""""""""""""""""""""""""  ""!!""##""$$""%%""&&""''""((""))""**""++"",,""--""..""//""00""11""22""33""44""55""66""77""88""99""::"";;""<<""=="">>""??""@@""AA""BB""CC""DD""EE""FF""GG""HH""II""JJ""KK""LL""MM""NN""OO""PP""QQ""RR""SS""TT""UU""VV""WW""XX""YY""ZZ""[[""]]""^^""__""``""aa""bb""cc""dd""ee""ff""gg""hh""ii""jj""kk""ll""mm""nn""oo""pp""qq""rr""ss""tt""uu""vv""ww""xx""yy""zz""{{""||""}}""~~""""ÄÄ""ÅÅ""ÇÇ""ÉÉ""ÑÑ""ÖÖ""ÜÜ""áá""àà""ââ""ää""ãã""åå""çç""éé""èè""êê""ëë""íí""ìì""îî""ïï""ññ""óó""òò""ôô""öö""õõ""úú""ùù""ûû""üü""††""°°""¢¢""££""§§""••""¶¶""ßß""®®""©©""™™""´´""¨¨""≠≠""ÆÆ""ØØ""∞∞""±±""≤≤""≥≥""¥¥""µµ""∂∂""∑∑""∏∏""ππ""∫∫""ªª""ºº""ΩΩ""ææ""øø""¿¿""¡¡""¬¬""√√""ƒƒ""≈≈""∆∆""««""»»""……""  ""ÀÀ""ÃÃ""ÕÕ""ŒŒ""œœ""––""——""““""””""‘‘""’’""÷÷""◊◊""ÿÿ""ŸŸ""⁄⁄""€€""‹‹""››""ﬁﬁ""ﬂﬂ""‡‡""··""‚‚""„„""‰‰""ÂÂ""ÊÊ""ÁÁ""ËË""ÈÈ""ÍÍ""ÎÎ""ÏÏ""ÌÌ""ÓÓ""ÔÔ""""ÒÒ""ÚÚ""ÛÛ""ÙÙ""ıı""ˆˆ""˜˜""¯¯""˘˘""˙˙""˚˚""¸¸""˝˝""˛˛""ˇˇ"" \ ""\""\""\""\""\""\""\""\""	\	""\""\""\""\""\""\""\""\""\""\""\""\""\""\""\""\""\""\""\""\""\"" \ ""!\!""#\"""$\#""%\$""&\%""'\&""(\'"")\(""*\)""+\*"",\+""-\,"".\-""/\.""0\/""1\0""2\1""3\2""4\3""5\4""6\5""7\6""8\7""9\8"":\9"";\:""<\;""=\<"">\=""?\>""@\?""A\@""B\A""C\B""D\C""E\D""F\E""G\F""H\G""I\H""J\I""K\J""L\K""M\L""N\M""O\N""P\O""Q\P""R\Q""S\R""T\S""U\T""V\U""W\V""X\W""Y\X""Z\Y""[\Z""]\[""^\\""_\]""`\^""a\_""b\`""c\a""d\b""e\c""f\d""g\e""h\f""i\g""j\h""k\i""l\j""m\k""n\l""o\m""p\n""q\o""r\p""s\q""t\r""u\s""v\t""w\u""x\v""y\w""z\x""{\y""|\z""}\{""~\|""\}""Ä\~""Å\""Ç\Ä""É\Å""Ñ\Ç""Ö\É""Ü\Ñ""á\Ö""à\Ü""â\á""ä\à""ã\â""å\ä""ç\ã""é\å""è\ç""ê\é""ë\è""í\ê""ì\ë""î\í""ï\ì""ñ\î""ó\ï""ò\ñ""ô\ó""ö\ò""õ\ô""ú\ö""ù\õ""û\ú""ü\ù""†\û""°\ü""¢\†""£\°""§\¢""•\£""¶\§""ß\•""®\¶""©\ß""™\®""´\©""¨\™""≠\´""Æ\¨""Ø\≠""∞\Æ""±\Ø""≤\∞""≥\±""¥\≤""µ\≥""∂\¥""∑\µ""∏\∂""π\∑""∫\∏""ª\π""º\∫""Ω\ª""æ\º""ø\Ω""¿\æ""¡\ø""¬\¿""√\¡""ƒ\¬""≈\√""∆\ƒ""«\≈""»\∆""…\«"" \»""À\…""Ã\ ""Õ\À""Œ\Ã""œ\Õ""–\Œ""—\œ""“\–""”\—""‘\“""’\”""÷\‘""◊\’""ÿ\÷""Ÿ\◊""⁄\ÿ""€\Ÿ""‹\⁄""›\€""ﬁ\‹""ﬂ\›""‡\ﬁ""·\ﬂ""‚\‡""„\·""‰\‚""Â\„""Ê\‰""Á\Â""Ë\Ê""È\Á""Í\Ë""Î\È""Ï\Í""Ì\Î""Ó\Ï""Ô\Ì""\Ó""Ò\Ô""Ú\""Û\Ò""Ù\Ú""ı\Û""ˆ\Ù""˜\ı""¯\ˆ""˘\˜""˙\¯""˚\˘""¸\˙""˝\˚""˛\¸""ˇ\˝"" \˛""\ˇ"" \
 "\
 "\
@@ -6566,13 +6661,11 @@ rrrrrrrrrrrrrrrrrrrrrr r!r"r#r$r%r&r'r(r)r*r+r,r-r.r/r:r;r<
 */* *********	*
 ********************** *!*"*#*$*%*&*'*(*)***+*,*-*.*0*1*2*3*4*5*6*7*8*9*:*;*<*=*>*?*@*A*B*C*D*E*F*G*H*I*J*K*L*M*N*O*P*Q*R*S*T*U*V*W*X*Y*Z*[*\*]*^*_*`*a*b*c*d*e*f*g*h*i*j*k*l*m*n*o*p*q*r*s*t*u*v*w*x*y*z*{*|*}*~**Ä*Å*Ç*É*Ñ*Ö*Ü*á*à*â*ä*ã*å*ç*é*è*ê*ë*í*ì*î*ï*ñ*ó*ò*ô*ö*õ*ú*ù*û*ü*†*°*¢*£*§*•*¶*ß*®*©*™*´*¨*≠*Æ*Ø*∞*±*≤*≥*¥*µ*∂*∑*∏*π*∫*ª*º*Ω*æ*ø*¿*¡*¬*√*ƒ*≈*∆*«*»*…* *À*Ã*Õ*Œ*œ*–*—*“*”*‘*’*÷*◊*ÿ*Ÿ*⁄*€*‹*›*ﬁ*ﬂ*‡*·*‚*„*‰*Â*Ê*Á*Ë*È*Í*Î*Ï*Ì*Ó*Ô**Ò*Ú*Û*Ù*ı*ˆ*˜*¯*˘*˙*˚*¸*˝*˛*ˇ/*/ /////////	/
 ////////////////////// /!/"/#/$/%/&/'/(/)/+/,/-/.///0/1/2/3/4/5/6/7/8/9/:/;/</=/>/?/@/A/B/C/D/E/F/G/H/I/J/K/L/M/N/O/P/Q/R/S/T/U/V/W/X/Y/Z/[/\/]/^/_/`/a/b/c/d/e/f/g/h/i/j/k/l/m/n/o/p/q/r/s/t/u/v/w/x/y/z/{/|/}/~//Ä/Å/Ç/É/Ñ/Ö/Ü/á/à/â/ä/ã/å/ç/é/è/ê/ë/í/ì/î/ï/ñ/ó/ò/ô/ö/õ/ú/ù/û/ü/†/°/¢/£/§/•/¶/ß/®/©/™/´/¨/≠/Æ/Ø/∞/±/≤/≥/¥/µ/∂/∑/∏/π/∫/ª/º/Ω/æ/ø/¿/¡/¬/√/ƒ/≈/∆/«/»/…/ /À/Ã/Õ/Œ/œ/–/—/“/”/‘/’/÷/◊/ÿ/Ÿ/⁄/€/‹/›/ﬁ/ﬂ/‡/·/‚/„/‰/Â/Ê/Á/Ë/È/Í/Î/Ï/Ì/Ó/Ô//Ò/Ú/Û/Ù/ı/ˆ/˜/¯/˘/˙/˚/¸/˝/˛/ˇ  
-!"#$%&'()*+,-./0123456789:;<>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz{|}~ÄÅÇÉÑÖÜáàâäãåçéèêëíìîïñóòôöõúùûü†°¢£§•¶ß®©™´¨≠ÆØ∞±≤≥¥µ∂∑∏π∫ªºΩæø¿¡¬√ƒ≈∆«»… ÀÃÕŒœ–—“”‘’÷◊ÿŸ⁄€‹›ﬁﬂ‡·‚„‰ÂÊÁËÈÍÎÏÌÓÔÒÚÛÙıˆ˜¯˘˙˚¸˝˛ˇ			    			   			   			   			   
-			   			   			   			   			   			   			   			   			   			   			   !			"   #			$   %			&   '			(   )			*   +			,   -			.   /			0   1			2   3			4   5			6   7			8   9			:   ;			<   =			>   ?			@   A			B   C			D   E			F   G			H   I			J   K			L   M			N   O			P   Q			R   S			T   U			V   W			X   Y			Z   [			\   ]			^   _			`   a			b   c			d   e			f   g			h   i			j   k			l   m			n   o			p   q			r   s			t   u			v   w			x   y			z   {			|   }			~   			Ä   Å			Ç   É			Ñ   Ö			Ü   á			à   â			ä   ã			å   ç			é   è			ê   ë			í   ì			î   ï			ñ   ó			ò   ô			ö   õ			ú   ù			û   ü			†   °			¢   £			§   •			¶   ß			®   ©			™   ´			¨   ≠			Æ   Ø			∞   ±			≤   ≥			¥   µ			∂   ∑			∏   π			∫   ª			º   Ω			æ   ø			¿   ¡			¬   √			ƒ   ≈			∆   «			»   …			    À			Ã   Õ			Œ   œ			–   —			“   ”			‘   ’			÷   ◊			ÿ   Ÿ			⁄   €			‹   ›			ﬁ   ﬂ			‡   ·			‚   „			‰   Â			Ê   Á			Ë   È			Í   Î			Ï   Ì			Ó   Ô			   Ò			Ú   Û			Ù   ı			ˆ   ˜			¯   ˘			˙   ˚			¸   ˝			˛   ˇ		   		  		  		  		  
+!"#$%&'()*+,-./0123456789:;<>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz{|}~ÄÅÇÉÑÖÜáàâäãåçéèêëíìîïñóòôöõúùûü†°¢£§•¶ß®©™´¨≠ÆØ∞±≤≥¥µ∂∑∏π∫ªºΩæø¿¡¬√ƒ≈∆«»… ÀÃÕŒœ–—“”‘’÷◊ÿŸ⁄€‹›ﬁﬂ‡·‚„‰ÂÊÁËÈÍÎÏÌÓÔÒÚÛÙıˆ˜¯˘˙˚¸˝˛ˇ		   		  		  		  		  
 		  		  		  		  		  		  		  		  		  		  		  !		"  #		$  %		&  '		(  )		*  +		,  -		.  /		0  1		2  3		4  5		6  7		8  9		:  ;		<  =		>  ?		@  A		B  C		D  E		F  G		H  I		J  K		L  M		N  O		P  Q		R  S		T  U		V  W		X  Y		Z  [		\  ]		^  _		`  a		b  c		d  e		f  g		h  i		j  k		l  m		n  o		p  q		r  s		t  u		v  w		x  y		z  {		|  }		~  		Ä  Å		Ç  É		Ñ  Ö		Ü  á		à  â		ä  ã		å  ç		é  è		ê  ë		í  ì		î  ï		ñ  ó		ò  ô		ö  õ		ú  ù		û  ü		†  °		¢  £		§  •		¶  ß		®  ©		™  ´		¨  ≠		Æ  Ø		∞  ±		≤  ≥		¥  µ		∂  ∑		∏  π		∫  ª		º  Ω		æ  ø		¿  ¡		¬  √		ƒ  ≈		∆  «		»  …		   À		Ã  Õ		Œ  œ		–  —		“  ”		‘  ’		÷  ◊		ÿ  Ÿ		⁄  €		‹  ›		ﬁ  ﬂ		‡  ·		‚  „		‰  Â		Ê  Á		Ë  È		Í  Î		Ï  Ì		Ó  Ô		  Ò		Ú  Û		Ù  ı		ˆ  ˜		¯  ˘		˙  ˚		¸  ˝		˛  ˇ	  	 	 	 	 
-	 	 	 	 	 	 	 	 	 	 	 !	" #	$ %	& '	( )	* +	, -	. /	0 1	2 3	4 5	6 7	8 9	: ;	< =	> ?	@ A	B C	D E	F G	H I	J K	L M	N O	P Q	R S	T U	V W	X Y	Z [	\ ]	^ _	` a	b c	d e	f g	h i	j k	l m	n o	p q	r s	t u	v w	x y	z {	| }	~ 	Ä Å	Ç É	Ñ Ö	Ü á	à â	ä ã	å ç	é è	ê ë	í ì	î ï	ñ ó	ò ô	ö õ	ú ù	û ü	† °	¢ £	§ •	¶ ß	® ©	™ ´	¨ ≠	Æ Ø	∞ ±	≤ ≥	¥ µ	∂ ∑	∏ π	∫ ª	º Ω	æ ø	¿ ¡	¬ √	ƒ ≈	∆ «	» …	  À	Ã Õ	Œ œ	– —	“ ”	‘ ’	÷ ◊	ÿ Ÿ	⁄ €	‹ ›	ﬁ ﬂ	‡ ·	‚ „	‰ Â	Ê Á	Ë È	Í Î	Ï Ì	Ó Ô	 Ò	Ú Û	Ù ı	ˆ ˜	¯ ˘	˙ ˚	¸ ˝	˛ ˇ=		 =  =		=  =		=  =		=  =		=  
-=		=  =		=  =		=  =		=  =		=  =		=  =		=  =		=  =		=  =		=  =		=  !=		"=  #=		$=  %=		&=  '=		(=  )=		*=  +=		,=  -=		.=  /=		0=  1=		2=  3=		4=  5=		6=  7=		8=  9=		:=  ;=		<=  ==		>=  ?=		@=  A=		B=  C=		D=  E=		F=  G=		H=  I=		J=  K=		L=  M=		N=  O=		P=  Q=		R=  S=		T=  U=		V=  W=		X=  Y=		Z=  [=		\=  ]=		^=  _=		`=  a=		b=  c=		d=  e=		f=  g=		h=  i=		j=  k=		l=  m=		n=  o=		p=  q=		r=  s=		t=  u=		v=  w=		x=  y=		z=  {=		|=  }=		~=  =		Ä=  Å=		Ç=  É=		Ñ=  Ö=		Ü=  á=		à=  â=		ä=  ã=		å=  ç=		é=  è=		ê=  ë=		í=  ì=		î=  ï=		ñ=  ó=		ò=  ô=		ö=  õ=		ú=  ù=		û=  ü=		†=  °=		¢=  £=		§=  •=		¶=  ß=		®=  ©=		™=  ´=		¨=  ≠=		Æ=  Ø=		∞=  ±=		≤=  ≥=		¥=  µ=		∂=  ∑=		∏=  π=		∫=  ª=		º=  Ω=		æ=  ø=		¿=  ¡=		¬=  √=		ƒ=  ≈=		∆=  «=		»=  …=		 =  À=		Ã=  Õ=		Œ=  œ=		–=  —=		“=  ”=		‘=  ’=		÷=  ◊=		ÿ=  Ÿ=		⁄=  €=		‹=  ›=		ﬁ=  ﬂ=		‡=  ·=		‚=  „=		‰=  Â=		Ê=  Á=		Ë=  È=		Í=  Î=		Ï=  Ì=		Ó=  Ô=		=  Ò=		Ú=  Û=		Ù=  ı=		ˆ=  ˜=		¯=  ˘=		˙=  ˚=		¸=  ˝=		˛=  ˇ=	 = =	= =	= =	= =	= 
+	 	 	 	 	 	 	 	 	 	 	 !	" #	$ %	& '	( )	* +	, -	. /	0 1	2 3	4 5	6 7	8 9	: ;	< =	> ?	@ A	B C	D E	F G	H I	J K	L M	N O	P Q	R S	T U	V W	X Y	Z [	\ ]	^ _	` a	b c	d e	f g	h i	j k	l m	n o	p q	r s	t u	v w	x y	z {	| }	~ 	Ä Å	Ç É	Ñ Ö	Ü á	à â	ä ã	å ç	é è	ê ë	í ì	î ï	ñ ó	ò ô	ö õ	ú ù	û ü	† °	¢ £	§ •	¶ ß	® ©	™ ´	¨ ≠	Æ Ø	∞ ±	≤ ≥	¥ µ	∂ ∑	∏ π	∫ ª	º Ω	æ ø	¿ ¡	¬ √	ƒ ≈	∆ «	» …	  À	Ã Õ	Œ œ	– —	“ ”	‘ ’	÷ ◊	ÿ Ÿ	⁄ €	‹ ›	ﬁ ﬂ	‡ ·	‚ „	‰ Â	Ê Á	Ë È	Í Î	Ï Ì	Ó Ô	 Ò	Ú Û	Ù ı	ˆ ˜	¯ ˘	˙ ˚	¸ ˝	˛ ˇ=	 = =	= =	= =	= =	= 
 =	= =	= =	= =	= =	= =	= =	= =	= =	= =	= =	= !=	"= #=	$= %=	&= '=	(= )=	*= +=	,= -=	.= /=	0= 1=	2= 3=	4= 5=	6= 7=	8= 9=	:= ;=	<= ==	>= ?=	@= A=	B= C=	D= E=	F= G=	H= I=	J= K=	L= M=	N= O=	P= Q=	R= S=	T= U=	V= W=	X= Y=	Z= [=	\= ]=	^= _=	`= a=	b= c=	d= e=	f= g=	h= i=	j= k=	l= m=	n= o=	p= q=	r= s=	t= u=	v= w=	x= y=	z= {=	|= }=	~= =	Ä= Å=	Ç= É=	Ñ= Ö=	Ü= á=	à= â=	ä= ã=	å= ç=	é= è=	ê= ë=	í= ì=	î= ï=	ñ= ó=	ò= ô=	ö= õ=	ú= ù=	û= ü=	†= °=	¢= £=	§= •=	¶= ß=	®= ©=	™= ´=	¨= ≠=	Æ= Ø=	∞= ±=	≤= ≥=	¥= µ=	∂= ∑=	∏= π=	∫= ª=	º= Ω=	æ= ø=	¿= ¡=	¬= √=	ƒ= ≈=	∆= «=	»= …=	 = À=	Ã= Õ=	Œ= œ=	–= —=	“= ”=	‘= ’=	÷= ◊=	ÿ= Ÿ=	⁄= €=	‹= ›=	ﬁ= ﬂ=	‡= ·=	‚= „=	‰= Â=	Ê= Á=	Ë= È=	Í= Î=	Ï= Ì=	Ó= Ô=	= Ò=	Ú= Û=	Ù= ı=	ˆ= ˜=	¯= ˘=	˙= ˚=	¸= ˝=	˛= ˇ= =========
-======================!="=#=$=%=&='=(=)=*=+=,=-=.=/=0=1=2=3=4=5=6=7=8=9=:=;=<===>=?=@=A=B=C=D=E=F=G=H=I=J=K=L=M=N=O=P=Q=R=S=T=U=V=W=X=Y=Z=[=\=]=^=_=`=a=b=c=d=e=f=g=h=i=j=k=l=m=n=o=p=q=r=s=t=u=v=w=x=y=z={=|=}=~==Ä=Å=Ç=É=Ñ=Ö=Ü=á=à=â=ä=ã=å=ç=é=è=ê=ë=í=ì=î=ï=ñ=ó=ò=ô=ö=õ=ú=ù=û=ü=†=°=¢=£=§=•=¶=ß=®=©=™=´=¨=≠=Æ=Ø=∞=±=≤=≥=¥=µ=∂=∑=∏=π=∫=ª=º=Ω=æ=ø=¿=¡=¬=√=ƒ=≈=∆=«=»=…= =À=Ã=Õ=Œ=œ=–=—=“=”=‘=’=÷=◊=ÿ=Ÿ=⁄=€=‹=›=ﬁ=ﬂ=‡=·=‚=„=‰=Â=Ê=Á=Ë=È=Í=Î=Ï=Ì=Ó=Ô==Ò=Ú=Û=Ù=ı=ˆ=˜=¯=˘=˙=˚=¸=˝=˛=ˇ                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            	
+======================!="=#=$=%=&='=(=)=*=+=,=-=.=/=0=1=2=3=4=5=6=7=8=9=:=;=<===>=?=@=A=B=C=D=E=F=G=H=I=J=K=L=M=N=O=P=Q=R=S=T=U=V=W=X=Y=Z=[=\=]=^=_=`=a=b=c=d=e=f=g=h=i=j=k=l=m=n=o=p=q=r=s=t=u=v=w=x=y=z={=|=}=~==Ä=Å=Ç=É=Ñ=Ö=Ü=á=à=â=ä=ã=å=ç=é=è=ê=ë=í=ì=î=ï=ñ=ó=ò=ô=ö=õ=ú=ù=û=ü=†=°=¢=£=§=•=¶=ß=®=©=™=´=¨=≠=Æ=Ø=∞=±=≤=≥=¥=µ=∂=∑=∏=π=∫=ª=º=Ω=æ=ø=¿=¡=¬=√=ƒ=≈=∆=«=»=…= =À=Ã=Õ=Œ=œ=–=—=“=”=‘=’=÷=◊=ÿ=Ÿ=⁄=€=‹=›=ﬁ=ﬂ=‡=·=‚=„=‰=Â=Ê=Á=Ë=È=Í=Î=Ï=Ì=Ó=Ô==Ò=Ú=Û=Ù=ı=ˆ=˜=¯=˘=˙=˚=¸=˝=˛=ˇ                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              	
  ;	
  ;	
  ;	

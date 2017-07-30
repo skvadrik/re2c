@@ -311,8 +311,8 @@ yy6:
 	if (yych <= 0xDC4F) goto yy4;
 	goto yy3;
 yy7:
-	++YYCURSOR;
-	if ((yych = *YYCURSOR) <= 0xDD3E) {
+	yych = *++YYCURSOR;
+	if (yych <= 0xDD3E) {
 		if (yych <= 0xDCBA) {
 			if (yych <= 0xDCA1) {
 				if (yych <= 0xDC55) {

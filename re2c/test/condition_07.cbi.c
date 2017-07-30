@@ -52,7 +52,6 @@ void fputl(const char *s, size_t len, FILE *stream)
 	}
 }
 
-
 enum YYCONDTYPE {
 	EStateR1,
 	EStateR2,

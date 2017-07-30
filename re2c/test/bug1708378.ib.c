@@ -3904,8 +3904,8 @@ yy891:
 yy892:
 	{RET("__APPROVALFVGT");}
 yy893:
-	++YYCURSOR;
-	if ((yych = *YYCURSOR) == ' ') goto yy1056;
+	yych = *++YYCURSOR;
+	if (yych == ' ') goto yy1056;
 	{RET("TVD_APPROVED");}
 yy895:
 	yych = *++YYCURSOR;

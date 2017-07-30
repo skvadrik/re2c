@@ -2,6 +2,7 @@
 
 #include <stdio.h>
 #include <stdlib.h> /* malloc, free */
+#include <string.h> /* memcpy */
 
 static void *read_file
     ( const char *fname
@@ -58,7 +59,7 @@ error:
 #define YYFILL(n) { break; }
 
 static int action_line66
-    ( unsigned int i
+    ( unsigned *pkix
     , const YYKEYTYPE *keys
     , const YYCTYPE *start
     , const YYCTYPE *token
@@ -66,10 +67,12 @@ static int action_line66
     , YYKEYTYPE rule_act
     )
 {
+    const unsigned kix = *pkix;
     const long pos = token - start;
     const long len_act = *cursor - token;
-    const long len_exp = (long) keys [3 * i + 1];
-    const YYKEYTYPE rule_exp = keys [3 * i + 2];
+    const long len_exp = (long) keys[kix + 1];
+    const YYKEYTYPE rule_exp = keys[kix + 2];
+    *pkix = kix + 3;
     if (rule_exp == 255) {
         fprintf
             ( stderr
@@ -79,17 +82,17 @@ static int action_line66
             );
     }
     if (len_act == len_exp && rule_act == rule_exp) {
-        const YYKEYTYPE offset = keys[3 * i];
+        const YYKEYTYPE offset = keys[kix];
         *cursor = token + offset;
         return 0;
     } else {
         fprintf
             ( stderr
-            , "error: lex_line66: at position %ld (iteration %u):\n"
+            , "error: lex_line66: at position %ld (key %u):\n"
                 "\texpected: match length %ld, rule %u\n"
                 "\tactual:   match length %ld, rule %u\n"
             , pos
-            , i
+            , kix
             , len_exp
             , rule_exp
             , len_act
@@ -97,6 +100,13 @@ static int action_line66
             );
         return 1;
     }
+}
+
+static int check_key_count_line66(unsigned have, unsigned used, unsigned need)
+{
+    if (used + need <= have) return 0;
+    fprintf(stderr, "error: lex_line66: not enough keys\n");
+    return 1;
 }
 
 int lex_line66()
@@ -126,7 +136,7 @@ int lex_line66()
 
     keys = (YYKEYTYPE *) read_file
         ("php20150211_pdo_sql_parser.ig--skeleton.c.line66.keys"
-        , 3 * sizeof (YYKEYTYPE)
+        , sizeof (YYKEYTYPE)
         , 0
         , &keys_count
         );
@@ -139,11 +149,10 @@ int lex_line66()
     limit = input + input_len + padding;
     eof = input + input_len;
 
-    for (i = 0; status == 0 && i < keys_count; ++i) {
+    for (i = 0; status == 0 && cursor < eof && i < keys_count;) {
         token = cursor;
         const YYCTYPE *marker = NULL;
         YYCTYPE yych;
-        unsigned int yyaccept = 0;
         static const unsigned char yybm[] = {
             /* table 1 .. 8: 0 */
              96,  99,  99,  99,  99,  99,  99,  99, 
@@ -254,11 +263,7 @@ int lex_line66()
         }
 yy2:
         YYRESTORE ();
-        if (yyaccept == 0) {
-            goto yy7;
-        } else {
-            goto yy5;
-        }
+        goto yy7;
 yy3:
         YYSKIP ();
         if (YYLESSTHAN (1)) YYFILL(1);
@@ -267,20 +272,19 @@ yy4:
         if (yybm[256+yych] & 32) {
             goto yy3;
         }
-yy5:
-        status = action_line66(i, keys, input, token, &cursor, 7);
+        status = check_key_count_line66(keys_count, i, 3)
+             || action_line66(&i, keys, input, token, &cursor, 7);
         continue;
 yy6:
-        yyaccept = 0;
         YYSKIP ();
         YYBACKUP ();
         yych = YYPEEK ();
         if (yych >= 0x01) goto yy15;
 yy7:
-        status = action_line66(i, keys, input, token, &cursor, 5);
+        status = check_key_count_line66(keys_count, i, 3)
+             || action_line66(&i, keys, input, token, &cursor, 5);
         continue;
 yy8:
-        yyaccept = 0;
         YYSKIP ();
         YYBACKUP ();
         yych = YYPEEK ();
@@ -294,23 +298,25 @@ yy9:
 yy10:
         YYSKIP ();
         yych = YYPEEK ();
-        if (yych == '*') goto yy27;
+        if (yych == '*') goto yy26;
         goto yy4;
 yy11:
         YYSKIP ();
         yych = YYPEEK ();
         if (yybm[0+yych] & 4) {
-            goto yy29;
+            goto yy28;
         }
         if (yych <= '/') goto yy7;
-        if (yych <= ':') goto yy32;
+        if (yych <= ':') goto yy31;
         goto yy7;
 yy12:
         YYSKIP ();
-        if (yybm[0+(yych = YYPEEK ())] & 16) {
-            goto yy35;
+        yych = YYPEEK ();
+        if (yybm[0+yych] & 16) {
+            goto yy34;
         }
-        status = action_line66(i, keys, input, token, &cursor, 4);
+        status = check_key_count_line66(keys_count, i, 3)
+             || action_line66(&i, keys, input, token, &cursor, 4);
         continue;
 yy14:
         YYSKIP ();
@@ -323,7 +329,8 @@ yy15:
         if (yych <= 0x00) goto yy2;
         if (yych >= '#') goto yy18;
         YYSKIP ();
-        status = action_line66(i, keys, input, token, &cursor, 0);
+        status = check_key_count_line66(keys_count, i, 3)
+             || action_line66(&i, keys, input, token, &cursor, 0);
         continue;
 yy18:
         YYSKIP ();
@@ -342,7 +349,8 @@ yy20:
         if (yych <= 0x00) goto yy2;
         if (yych >= '(') goto yy23;
         YYSKIP ();
-        status = action_line66(i, keys, input, token, &cursor, 1);
+        status = check_key_count_line66(keys_count, i, 3)
+             || action_line66(&i, keys, input, token, &cursor, 1);
         continue;
 yy23:
         YYSKIP ();
@@ -357,59 +365,59 @@ yy24:
         if (yybm[0+yych] & 1) {
             goto yy24;
         }
-        if (yych <= 0x00) goto yy37;
+        if (yych <= 0x00) goto yy36;
         if (yych <= '\r') goto yy3;
-        goto yy37;
+        goto yy36;
 yy26:
-        status = action_line66(i, keys, input, token, &cursor, 6);
-        continue;
-yy27:
-        yyaccept = 1;
         YYSKIP ();
-        YYBACKUP ();
         if (YYLESSTHAN (1)) YYFILL(1);
         yych = YYPEEK ();
         if (yybm[0+yych] & 2) {
-            goto yy27;
+            goto yy26;
         }
         if (yych <= '\'') goto yy39;
         if (yych <= '*') goto yy41;
         goto yy39;
-yy29:
+yy28:
         YYSKIP ();
         if (YYLESSTHAN (1)) YYFILL(1);
         yych = YYPEEK ();
         if (yybm[0+yych] & 4) {
-            goto yy29;
+            goto yy28;
         }
-        status = action_line66(i, keys, input, token, &cursor, 3);
+        status = check_key_count_line66(keys_count, i, 3)
+             || action_line66(&i, keys, input, token, &cursor, 3);
         continue;
-yy32:
+yy31:
         YYSKIP ();
         if (YYLESSTHAN (1)) YYFILL(1);
         yych = YYPEEK ();
         if (yybm[0+yych] & 8) {
-            goto yy32;
+            goto yy31;
         }
-yy34:
-        status = action_line66(i, keys, input, token, &cursor, 2);
+yy33:
+        status = check_key_count_line66(keys_count, i, 3)
+             || action_line66(&i, keys, input, token, &cursor, 2);
         continue;
-yy35:
+yy34:
         YYSKIP ();
         if (YYLESSTHAN (1)) YYFILL(1);
         yych = YYPEEK ();
         if (yybm[0+yych] & 16) {
-            goto yy35;
+            goto yy34;
         }
-        goto yy34;
-yy37:
+        goto yy33;
+yy36:
         YYSKIP ();
         if (YYLESSTHAN (1)) YYFILL(1);
         yych = YYPEEK ();
         if (yybm[0+yych] & 32) {
-            goto yy37;
+            goto yy36;
         }
-        goto yy26;
+yy38:
+        status = check_key_count_line66(keys_count, i, 3)
+             || action_line66(&i, keys, input, token, &cursor, 6);
+        continue;
 yy39:
         YYSKIP ();
         if (YYLESSTHAN (1)) YYFILL(1);
@@ -419,45 +427,43 @@ yy39:
         }
         goto yy43;
 yy41:
-        yyaccept = 1;
         YYSKIP ();
-        YYBACKUP ();
         if (YYLESSTHAN (2)) YYFILL(2);
         yych = YYPEEK ();
         {
             static void *yytarget[256] = {
-                &&yy39, &&yy27, &&yy27, &&yy27, &&yy27, &&yy27, &&yy27, &&yy27,
-                &&yy27, &&yy27, &&yy27, &&yy27, &&yy27, &&yy27, &&yy27, &&yy27,
-                &&yy27, &&yy27, &&yy27, &&yy27, &&yy27, &&yy27, &&yy27, &&yy27,
-                &&yy27, &&yy27, &&yy27, &&yy27, &&yy27, &&yy27, &&yy27, &&yy27,
-                &&yy27, &&yy27, &&yy39, &&yy27, &&yy27, &&yy27, &&yy27, &&yy39,
-                &&yy27, &&yy27, &&yy41, &&yy27, &&yy27, &&yy27, &&yy27, &&yy45,
-                &&yy27, &&yy27, &&yy27, &&yy27, &&yy27, &&yy27, &&yy27, &&yy27,
-                &&yy27, &&yy27, &&yy39, &&yy27, &&yy27, &&yy27, &&yy27, &&yy39,
-                &&yy27, &&yy27, &&yy27, &&yy27, &&yy27, &&yy27, &&yy27, &&yy27,
-                &&yy27, &&yy27, &&yy27, &&yy27, &&yy27, &&yy27, &&yy27, &&yy27,
-                &&yy27, &&yy27, &&yy27, &&yy27, &&yy27, &&yy27, &&yy27, &&yy27,
-                &&yy27, &&yy27, &&yy27, &&yy27, &&yy27, &&yy27, &&yy27, &&yy27,
-                &&yy27, &&yy27, &&yy27, &&yy27, &&yy27, &&yy27, &&yy27, &&yy27,
-                &&yy27, &&yy27, &&yy27, &&yy27, &&yy27, &&yy27, &&yy27, &&yy27,
-                &&yy27, &&yy27, &&yy27, &&yy27, &&yy27, &&yy27, &&yy27, &&yy27,
-                &&yy27, &&yy27, &&yy27, &&yy27, &&yy27, &&yy27, &&yy27, &&yy27,
-                &&yy27, &&yy27, &&yy27, &&yy27, &&yy27, &&yy27, &&yy27, &&yy27,
-                &&yy27, &&yy27, &&yy27, &&yy27, &&yy27, &&yy27, &&yy27, &&yy27,
-                &&yy27, &&yy27, &&yy27, &&yy27, &&yy27, &&yy27, &&yy27, &&yy27,
-                &&yy27, &&yy27, &&yy27, &&yy27, &&yy27, &&yy27, &&yy27, &&yy27,
-                &&yy27, &&yy27, &&yy27, &&yy27, &&yy27, &&yy27, &&yy27, &&yy27,
-                &&yy27, &&yy27, &&yy27, &&yy27, &&yy27, &&yy27, &&yy27, &&yy27,
-                &&yy27, &&yy27, &&yy27, &&yy27, &&yy27, &&yy27, &&yy27, &&yy27,
-                &&yy27, &&yy27, &&yy27, &&yy27, &&yy27, &&yy27, &&yy27, &&yy27,
-                &&yy27, &&yy27, &&yy27, &&yy27, &&yy27, &&yy27, &&yy27, &&yy27,
-                &&yy27, &&yy27, &&yy27, &&yy27, &&yy27, &&yy27, &&yy27, &&yy27,
-                &&yy27, &&yy27, &&yy27, &&yy27, &&yy27, &&yy27, &&yy27, &&yy27,
-                &&yy27, &&yy27, &&yy27, &&yy27, &&yy27, &&yy27, &&yy27, &&yy27,
-                &&yy27, &&yy27, &&yy27, &&yy27, &&yy27, &&yy27, &&yy27, &&yy27,
-                &&yy27, &&yy27, &&yy27, &&yy27, &&yy27, &&yy27, &&yy27, &&yy27,
-                &&yy27, &&yy27, &&yy27, &&yy27, &&yy27, &&yy27, &&yy27, &&yy27,
-                &&yy27, &&yy27, &&yy27, &&yy27, &&yy27, &&yy27, &&yy27, &&yy27
+                &&yy39, &&yy26, &&yy26, &&yy26, &&yy26, &&yy26, &&yy26, &&yy26,
+                &&yy26, &&yy26, &&yy26, &&yy26, &&yy26, &&yy26, &&yy26, &&yy26,
+                &&yy26, &&yy26, &&yy26, &&yy26, &&yy26, &&yy26, &&yy26, &&yy26,
+                &&yy26, &&yy26, &&yy26, &&yy26, &&yy26, &&yy26, &&yy26, &&yy26,
+                &&yy26, &&yy26, &&yy39, &&yy26, &&yy26, &&yy26, &&yy26, &&yy39,
+                &&yy26, &&yy26, &&yy41, &&yy26, &&yy26, &&yy26, &&yy26, &&yy45,
+                &&yy26, &&yy26, &&yy26, &&yy26, &&yy26, &&yy26, &&yy26, &&yy26,
+                &&yy26, &&yy26, &&yy39, &&yy26, &&yy26, &&yy26, &&yy26, &&yy39,
+                &&yy26, &&yy26, &&yy26, &&yy26, &&yy26, &&yy26, &&yy26, &&yy26,
+                &&yy26, &&yy26, &&yy26, &&yy26, &&yy26, &&yy26, &&yy26, &&yy26,
+                &&yy26, &&yy26, &&yy26, &&yy26, &&yy26, &&yy26, &&yy26, &&yy26,
+                &&yy26, &&yy26, &&yy26, &&yy26, &&yy26, &&yy26, &&yy26, &&yy26,
+                &&yy26, &&yy26, &&yy26, &&yy26, &&yy26, &&yy26, &&yy26, &&yy26,
+                &&yy26, &&yy26, &&yy26, &&yy26, &&yy26, &&yy26, &&yy26, &&yy26,
+                &&yy26, &&yy26, &&yy26, &&yy26, &&yy26, &&yy26, &&yy26, &&yy26,
+                &&yy26, &&yy26, &&yy26, &&yy26, &&yy26, &&yy26, &&yy26, &&yy26,
+                &&yy26, &&yy26, &&yy26, &&yy26, &&yy26, &&yy26, &&yy26, &&yy26,
+                &&yy26, &&yy26, &&yy26, &&yy26, &&yy26, &&yy26, &&yy26, &&yy26,
+                &&yy26, &&yy26, &&yy26, &&yy26, &&yy26, &&yy26, &&yy26, &&yy26,
+                &&yy26, &&yy26, &&yy26, &&yy26, &&yy26, &&yy26, &&yy26, &&yy26,
+                &&yy26, &&yy26, &&yy26, &&yy26, &&yy26, &&yy26, &&yy26, &&yy26,
+                &&yy26, &&yy26, &&yy26, &&yy26, &&yy26, &&yy26, &&yy26, &&yy26,
+                &&yy26, &&yy26, &&yy26, &&yy26, &&yy26, &&yy26, &&yy26, &&yy26,
+                &&yy26, &&yy26, &&yy26, &&yy26, &&yy26, &&yy26, &&yy26, &&yy26,
+                &&yy26, &&yy26, &&yy26, &&yy26, &&yy26, &&yy26, &&yy26, &&yy26,
+                &&yy26, &&yy26, &&yy26, &&yy26, &&yy26, &&yy26, &&yy26, &&yy26,
+                &&yy26, &&yy26, &&yy26, &&yy26, &&yy26, &&yy26, &&yy26, &&yy26,
+                &&yy26, &&yy26, &&yy26, &&yy26, &&yy26, &&yy26, &&yy26, &&yy26,
+                &&yy26, &&yy26, &&yy26, &&yy26, &&yy26, &&yy26, &&yy26, &&yy26,
+                &&yy26, &&yy26, &&yy26, &&yy26, &&yy26, &&yy26, &&yy26, &&yy26,
+                &&yy26, &&yy26, &&yy26, &&yy26, &&yy26, &&yy26, &&yy26, &&yy26,
+                &&yy26, &&yy26, &&yy26, &&yy26, &&yy26, &&yy26, &&yy26, &&yy26
             };
             goto *yytarget[yych];
         }
@@ -474,11 +480,10 @@ yy45:
         if (yybm[256+yych] & 32) {
             goto yy3;
         }
-        goto yy26;
+        goto yy38;
 yy46:
         YYSKIP ();
-        yych = YYPEEK ();
-        goto yy26;
+        goto yy38;
 
     }
     if (status == 0) {
@@ -489,7 +494,7 @@ yy46:
         }
         if (i != keys_count) {
             status = 1;
-            fprintf(stderr, "error: lex_line66: unused keys left after %u iterations\n", i);
+            fprintf(stderr, "error: lex_line66: unused keys left after %u keys\n", i);
         }
     }
 

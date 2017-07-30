@@ -178,14 +178,13 @@ yy38:
 #line 179 "repeater2.c"
 yy39:
 	++YYCURSOR;
-	yych = *YYCURSOR;
 	goto yy38;
 }
 #line 31 "repeater2.re"
 
 
 
-#line 189 "repeater2.c"
+#line 188 "repeater2.c"
 {
 	YYCTYPE yych;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
@@ -199,13 +198,13 @@ yy43:
 	++YYCURSOR;
 #line 34 "repeater2.re"
 	{}
-#line 203 "repeater2.c"
+#line 202 "repeater2.c"
 }
 #line 35 "repeater2.re"
 
 
 
-#line 209 "repeater2.c"
+#line 208 "repeater2.c"
 {
 	YYCTYPE yych;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
@@ -219,13 +218,13 @@ yy48:
 	++YYCURSOR;
 #line 38 "repeater2.re"
 	{}
-#line 223 "repeater2.c"
+#line 222 "repeater2.c"
 }
 #line 39 "repeater2.re"
 
 
 
-#line 229 "repeater2.c"
+#line 228 "repeater2.c"
 {
 	YYCTYPE yych;
 	if ((YYLIMIT - YYCURSOR) < 5) YYFILL(5);
@@ -242,15 +241,15 @@ yy53:
 	default:	goto yy52;
 	}
 yy54:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case 'a':	goto yy56;
 	default:	goto yy55;
 	}
 yy55:
 #line 42 "repeater2.re"
 	{}
-#line 254 "repeater2.c"
+#line 253 "repeater2.c"
 yy56:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -265,14 +264,13 @@ yy57:
 	}
 yy58:
 	++YYCURSOR;
-	yych = *YYCURSOR;
 	goto yy55;
 }
 #line 43 "repeater2.re"
 
 
 
-#line 276 "repeater2.c"
+#line 274 "repeater2.c"
 {
 	YYCTYPE yych;
 	if ((YYLIMIT - YYCURSOR) < 5) YYFILL(5);
@@ -310,13 +308,13 @@ yy66:
 	++YYCURSOR;
 #line 46 "repeater2.re"
 	{}
-#line 314 "repeater2.c"
+#line 312 "repeater2.c"
 }
 #line 47 "repeater2.re"
 
 
 
-#line 320 "repeater2.c"
+#line 318 "repeater2.c"
 {
 	YYCTYPE yych;
 	if ((YYLIMIT - YYCURSOR) < 5) YYFILL(5);
@@ -354,7 +352,7 @@ yy75:
 	++YYCURSOR;
 #line 50 "repeater2.re"
 	{}
-#line 358 "repeater2.c"
+#line 356 "repeater2.c"
 }
 #line 51 "repeater2.re"
 

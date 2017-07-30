@@ -365,8 +365,8 @@ yy6:
 		}
 	}
 yy7:
-	++YYCURSOR;
-	if ((yych = *YYCURSOR) <= 0xDD64) goto yy3;
+	yych = *++YYCURSOR;
+	if (yych <= 0xDD64) goto yy3;
 	if (yych <= 0xDD66) goto yy4;
 	if (yych <= 0xDD6C) goto yy3;
 	if (yych <= 0xDD72) goto yy4;

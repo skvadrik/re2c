@@ -68,39 +68,39 @@ char scan(Scanner *s)
 			};
 			goto *yyctable[cond];
 /* *********************************** */
-yyc_comment:
-			if ((s->lim - s->cur) < 2) { if(fill(s, 2) >= 0) break; }
-			yych = *s->cur;
-			if (yych == '*') goto yy5;
-			++s->cur;
-yy4:
-			{
-				goto yyc_comment;
-			}
-yy5:
-			yych = *++s->cur;
-			if (yych != '/') goto yy4;
-			++s->cur;
-			{
-				continue;
-			}
-/* *********************************** */
 yyc_normal:
 			if ((s->lim - s->cur) < 2) { if(fill(s, 2) >= 0) break; }
 			yych = *s->cur;
-			if (yych == '/') goto yy12;
+			if (yych == '/') goto yy5;
 			++s->cur;
-yy11:
+yy4:
 			{
 				fputc(*s->tok, stdout);
 				continue;
 			}
-yy12:
+yy5:
 			yych = *++s->cur;
-			if (yych != '*') goto yy11;
+			if (yych != '*') goto yy4;
 			++s->cur;
 			{
 				goto yyc_comment;
+			}
+/* *********************************** */
+yyc_comment:
+			if ((s->lim - s->cur) < 2) { if(fill(s, 2) >= 0) break; }
+			yych = *s->cur;
+			if (yych == '*') goto yy12;
+			++s->cur;
+yy11:
+			{
+				goto yyc_comment;
+			}
+yy12:
+			yych = *++s->cur;
+			if (yych != '/') goto yy11;
+			++s->cur;
+			{
+				continue;
 			}
 		}
 

@@ -5,10 +5,10 @@
 
 #include "src/conf/msg.h"
 #include "src/conf/warn.h"
+#include "src/skeleton/path.h"
+#include "src/skeleton/skeleton.h"
 
 namespace re2c {
-
-Warn warn;
 
 const uint32_t Warn::SILENT  = 0;
 const uint32_t Warn::WARNING = 1u << 0;
@@ -106,13 +106,35 @@ void Warn::empty_class (uint32_t line)
 	}
 }
 
-void Warn::match_empty_string (uint32_t line)
+void Warn::match_empty_string (uint32_t line, const std::string &cond)
 {
 	if (mask[MATCH_EMPTY_STRING] & WARNING)
 	{
 		const bool e = mask[MATCH_EMPTY_STRING] & ERROR;
 		error_accuml |= e;
-		warning (names[MATCH_EMPTY_STRING], line, e, "rule matches empty string");
+		warning (names[MATCH_EMPTY_STRING], line, e,
+			"rule %smatches empty string", incond(cond).c_str());
+	}
+}
+
+void Warn::nondeterministic_tags(uint32_t line, const std::string &cond,
+	const std::string *tagname, size_t nver)
+{
+	if (mask[NONDETERMINISTIC_TAGS] & WARNING) {
+		bool e = mask[NONDETERMINISTIC_TAGS] & ERROR;
+		error_accuml |= e;
+
+		warning_start(line, e);
+		if (tagname == NULL) {
+			fprintf(stderr, "trailing context");
+		} else {
+			fprintf(stderr, "tag '%s'", tagname->c_str());
+		}
+		fprintf(stderr,
+			" %shas %u%s degree of nondeterminism",
+			incond(cond).c_str(), static_cast<uint32_t>(nver),
+			nver == 2 ? "nd" : nver == 3 ? "rd" : "th");
+		warning_end(names[NONDETERMINISTIC_TAGS], e);
 	}
 }
 
@@ -126,7 +148,7 @@ void Warn::swapped_range (uint32_t line, uint32_t l, uint32_t u)
 	}
 }
 
-void Warn::undefined_control_flow (uint32_t line, const std::string & cond, std::vector<way_t> & ways, bool overflow)
+void Warn::undefined_control_flow (const Skeleton &skel, std::vector<path_t> & paths, bool overflow)
 {
 	if (mask[UNDEFINED_CONTROL_FLOW] & WARNING)
 	{
@@ -134,21 +156,21 @@ void Warn::undefined_control_flow (uint32_t line, const std::string & cond, std:
 		error_accuml |= e;
 
 		// report shorter patterns first
-		std::sort (ways.begin (), ways.end (), cmp_ways);
+		std::sort (paths.begin (), paths.end ());
 
-		warning_start (line, e);
-		fprintf (stderr, "control flow %sis undefined for strings that match ", incond (cond).c_str ());
-		const size_t count = ways.size ();
+		warning_start (skel.line, e);
+		fprintf (stderr, "control flow %sis undefined for strings that match ", incond (skel.cond).c_str ());
+		const size_t count = paths.size ();
 		if (count == 1)
 		{
-			fprint_way (stderr, ways[0]);
+			fprint_default_path (stderr, skel, paths[0]);
 		}
 		else
 		{
 			for (size_t i = 0; i < count; ++i)
 			{
 				fprintf (stderr, "\n\t");
-				fprint_way (stderr, ways[i]);
+				fprint_default_path (stderr, skel, paths[i]);
 			}
 			fprintf (stderr, "\n");
 		}
@@ -161,29 +183,27 @@ void Warn::undefined_control_flow (uint32_t line, const std::string & cond, std:
 	}
 }
 
-void Warn::unreachable_rule (const std::string & cond, const rule_info_t & rule, const rules_t & rules)
+void Warn::unreachable_rule(const std::string &cond, const Rule &rule)
 {
-	if (mask[UNREACHABLE_RULES] & WARNING)
-	{
+	if (mask[UNREACHABLE_RULES] & WARNING) {
 		const bool e = mask[UNREACHABLE_RULES] & ERROR;
 		error_accuml |= e;
-		warning_start (rule.line, e);
-		fprintf (stderr, "unreachable rule %s", incond (cond).c_str ());
-		const size_t shadows = rule.shadow.size ();
-		if (shadows > 0)
-		{
+
+		warning_start(rule.code->fline, e);
+		fprintf(stderr, "unreachable rule %s", incond(cond).c_str());
+		const size_t shadows = rule.shadow.size();
+		if (shadows > 0) {
 			const char * pl = shadows > 1
 				? "s"
 				: "";
-			std::set<rule_rank_t>::const_iterator i = rule.shadow.begin ();
-			fprintf (stderr, "(shadowed by rule%s at line%s %u", pl, pl, rules.find (*i)->second.line);
-			for (++i; i != rule.shadow.end (); ++i)
-			{
-				fprintf (stderr, ", %u", rules.find (*i)->second.line);
+			std::set<uint32_t>::const_iterator i = rule.shadow.begin();
+			fprintf (stderr, "(shadowed by rule%s at line%s %u", pl, pl, *i);
+			for (++i; i != rule.shadow.end(); ++i) {
+				fprintf(stderr, ", %u", *i);
 			}
-			fprintf (stderr, ")");
+			fprintf(stderr, ")");
 		}
-		warning_end (names[UNREACHABLE_RULES], e);
+		warning_end(names[UNREACHABLE_RULES], e);
 	}
 }
 

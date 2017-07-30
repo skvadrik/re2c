@@ -26,8 +26,7 @@ yy2:
 		{return (char*)0;}
 #line 28 "bug1682718.c"
 yy4:
-		++p;
-		yych = (unsigned char)*p;
+		yych = (unsigned char)*++p;
 		switch (yych) {
 		case '0':
 		case '1':
@@ -44,7 +43,7 @@ yy4:
 yy6:
 #line 9 "bug1682718.re"
 		{return p;}
-#line 48 "bug1682718.c"
+#line 47 "bug1682718.c"
 	}
 #line 11 "bug1682718.re"
 

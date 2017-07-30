@@ -4808,8 +4808,8 @@ yy775:
 	{}
 #line 4810 "code_points.8.c"
 yy777:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case 0x80:
 	case 0x81:
 	case 0x82:
@@ -5244,8 +5244,8 @@ yy787:
 	default:	goto yy780;
 	}
 yy788:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case 0x80:
 	case 0x81:
 	case 0x82:

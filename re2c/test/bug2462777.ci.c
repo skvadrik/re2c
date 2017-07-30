@@ -21,4 +21,4 @@ yy4:
 	{x;}
 }
 
-re2c: warning: line 2: rule matches empty string [-Wmatch-empty-string]
+re2c: warning: line 2: rule in condition 'X' matches empty string [-Wmatch-empty-string]

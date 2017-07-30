@@ -1,0 +1,45 @@
+#include <stdio.h>
+
+static int lex(const char *YYCURSOR)
+{
+    const char *YYMARKER;
+    /*!stags:re2c format = "const char *@@;"; */
+    /*!re2c
+        re2c:yyfill:enable = 0;
+        re2c:define:YYCTYPE = char;
+
+        <<<<REGEXP>>>>
+        {
+            const char *p0 = yypmatch[0], *p;
+            for (size_t i = 0; i < yynmatch; ++i) {
+                p = yypmatch[2 * i];
+                if (p) {
+                    printf("(%ld,", p - p0);
+                } else {
+                    printf("(?,");
+                }
+                p = yypmatch[2 * i + 1];
+                if (p) {
+                    printf("%ld)", p - p0);
+                } else {
+                    printf("?)");
+                }
+            }
+            printf("\n");
+            return 0;
+        }
+
+        "" {
+            printf("NOMATCH\n");
+            return 1;
+        }
+    */
+}
+
+int main(int argc, char **argv)
+{
+    for (int i = 1; i < argc; ++i) {
+        lex(argv[i]);
+    }
+    return 0;
+}

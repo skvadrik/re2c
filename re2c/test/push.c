@@ -533,8 +533,8 @@ yy40:
 	default:	goto yy28;
 	}
 yy41:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '0':
 	case '1':
 	case '2':
@@ -629,8 +629,8 @@ yy46:
 	default:	goto yy28;
 	}
 yy47:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '0':
 	case '1':
 	case '2':
@@ -725,8 +725,8 @@ yy52:
 	default:	goto yy28;
 	}
 yy53:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '0':
 	case '1':
 	case '2':
@@ -797,8 +797,8 @@ yy54:
 	{ SEND(kElse);           }
 #line 799 "push.c"
 yy55:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '0':
 	case '1':
 	case '2':
@@ -881,8 +881,8 @@ yy58:
 	default:	goto yy28;
 	}
 yy59:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '0':
 	case '1':
 	case '2':
@@ -959,8 +959,8 @@ yy61:
 	default:	goto yy28;
 	}
 yy62:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '0':
 	case '1':
 	case '2':
@@ -1031,8 +1031,8 @@ yy63:
 	{ SEND(kWhile);          }
 #line 1033 "push.c"
 yy64:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '0':
 	case '1':
 	case '2':

@@ -15,7 +15,7 @@ yy1:
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	goto yy2;
-	{}
 }
 
+re2c: warning: line 3: rule in condition 'c1' matches empty string [-Wmatch-empty-string]
 re2c: warning: line 3: unreachable rule in condition 'c1'  [-Wunreachable-rules]

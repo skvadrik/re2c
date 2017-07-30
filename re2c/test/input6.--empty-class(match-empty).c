@@ -5,19 +5,14 @@
 {
 	YYCTYPE yych;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
-	yych = *YYCURSOR;
-	goto yy3;
-#line 3 "input6.--empty-class(match-empty).re"
-	{ return 0; }
-#line 13 "input6.--empty-class(match-empty).c"
-yy3:
-	++YYCURSOR;
+	yych = *YYCURSOR++;
 #line 4 "input6.--empty-class(match-empty).re"
 	{ return 1; }
-#line 18 "input6.--empty-class(match-empty).c"
+#line 12 "input6.--empty-class(match-empty).c"
 }
 #line 6 "input6.--empty-class(match-empty).re"
 
 re2c: warning: line 3: empty character class [-Wempty-character-class]
 re2c: warning: line 3: empty character class [-Wempty-character-class]
+re2c: warning: line 3: rule matches empty string [-Wmatch-empty-string]
 re2c: warning: line 3: unreachable rule (shadowed by rule at line 4) [-Wunreachable-rules]

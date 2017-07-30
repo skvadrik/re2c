@@ -1,1 +1,1 @@
-re2c: error: line 2, column 5: newline in character class
+re2c: error: line 2, column 4: newline in character class

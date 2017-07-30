@@ -10,24 +10,19 @@
 /* *********************************** */
 yyc_c1:
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
-	yych = *YYCURSOR;
-	++YYCURSOR;
+	yych = *YYCURSOR++;
 	{ return DEFAULT-1; }
 /* *********************************** */
 yyc_c2:
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
-	yych = *YYCURSOR;
-	++YYCURSOR;
+	yych = *YYCURSOR++;
 	{ return DEFAULT-2; }
 /* *********************************** */
 yyc_c3:
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
-	yych = *YYCURSOR;
-	goto yy12;
-	{ return C3; }
-yy12:
-	++YYCURSOR;
+	yych = *YYCURSOR++;
 	{ return DEFAULT-*; }
 }
 
+re2c: warning: line 4: rule in condition 'c3' matches empty string [-Wmatch-empty-string]
 re2c: warning: line 4: unreachable rule in condition 'c3' (shadowed by rule at line 5) [-Wunreachable-rules]

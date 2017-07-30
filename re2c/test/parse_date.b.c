@@ -904,7 +904,7 @@ yy9:
 	if (yych <= '9') goto yy58;
 	goto yy5;
 yy10:
-	yych = *++YYCURSOR;
+	++YYCURSOR;
 	goto yy7;
 yy11:
 	yyaccept = 1;
@@ -1227,8 +1227,8 @@ yy16:
 	if (yych <= '9') goto yy99;
 	goto yy5;
 yy17:
-	++YYCURSOR;
-	if ((yych = *YYCURSOR) <= 'U') {
+	yych = *++YYCURSOR;
+	if (yych <= 'U') {
 		if (yych <= 'F') {
 			if (yych == ')') goto yy102;
 			if (yych >= 'A') goto yy103;
@@ -3020,7 +3020,7 @@ yy101:
 	}
 #line 3022 "parse_date.b.c"
 yy102:
-	yych = *++YYCURSOR;
+	++YYCURSOR;
 	goto yy18;
 yy103:
 	yych = *++YYCURSOR;
@@ -3554,8 +3554,8 @@ yy127:
 	if (yych <= '9') goto yy126;
 	goto yy18;
 yy128:
-	++YYCURSOR;
-	if ((yych = *YYCURSOR) <= '/') goto yy282;
+	yych = *++YYCURSOR;
+	if (yych <= '/') goto yy282;
 	if (yych <= '9') goto yy283;
 	goto yy282;
 yy129:
@@ -5184,8 +5184,8 @@ yy220:
 	if (yych <= '/') goto yy53;
 	if (yych >= ':') goto yy53;
 yy222:
-	++YYCURSOR;
-	if ((yych = *YYCURSOR) <= '/') goto yy223;
+	yych = *++YYCURSOR;
+	if (yych <= '/') goto yy223;
 	if (yych <= '9') goto yy369;
 yy223:
 #line 1073 "parse_date.b.re"
@@ -5429,8 +5429,8 @@ yy249:
 	if (yych == 'M') goto yy250;
 	if (yych != 'm') goto yy53;
 yy250:
-	++YYCURSOR;
-	if ((yych = *YYCURSOR) == '.') goto yy388;
+	yych = *++YYCURSOR;
+	if (yych == '.') goto yy388;
 yy251:
 #line 929 "parse_date.b.re"
 	{
@@ -5499,8 +5499,8 @@ yy254:
 		goto yy18;
 	}
 yy255:
-	++YYCURSOR;
-	if ((yych = *YYCURSOR) <= '@') {
+	yych = *++YYCURSOR;
+	if (yych <= '@') {
 		if (yych == ')') goto yy102;
 	} else {
 		if (yych <= 'Z') goto yy400;
@@ -5966,8 +5966,8 @@ yy273:
 		}
 	}
 yy274:
-	++YYCURSOR;
-	if ((yych = *YYCURSOR) <= 'D') {
+	yych = *++YYCURSOR;
+	if (yych <= 'D') {
 		if (yych <= ')') {
 			if (yych >= ')') goto yy102;
 		} else {
@@ -6656,8 +6656,8 @@ yy302:
 		}
 	}
 yy303:
-	++YYCURSOR;
-	if ((yych = *YYCURSOR) <= '@') {
+	yych = *++YYCURSOR;
+	if (yych <= '@') {
 		if (yych == ')') goto yy102;
 	} else {
 		if (yych <= 'Z') goto yy400;
@@ -7744,8 +7744,8 @@ yy361:
 		}
 	}
 yy362:
-	++YYCURSOR;
-	if ((yych = *YYCURSOR) == 'S') goto yy520;
+	yych = *++YYCURSOR;
+	if (yych == 'S') goto yy520;
 	if (yych == 's') goto yy520;
 yy363:
 #line 1379 "parse_date.b.re"
@@ -8058,7 +8058,7 @@ yy387:
 		}
 	}
 yy388:
-	yych = *++YYCURSOR;
+	++YYCURSOR;
 	goto yy251;
 yy389:
 	yych = *++YYCURSOR;
@@ -8770,8 +8770,8 @@ yy441:
 		}
 	}
 yy442:
-	++YYCURSOR;
-	if ((yych = *YYCURSOR) == ')') goto yy102;
+	yych = *++YYCURSOR;
+	if (yych == ')') goto yy102;
 yy443:
 #line 871 "parse_date.b.re"
 	{
@@ -9637,8 +9637,8 @@ yy503:
 		}
 	}
 yy504:
-	++YYCURSOR;
-	if ((yych = *YYCURSOR) <= 'U') {
+	yych = *++YYCURSOR;
+	if (yych <= 'U') {
 		if (yych == 'I') goto yy674;
 	} else {
 		if (yych == 'W') goto yy505;
@@ -9784,7 +9784,7 @@ yy519:
 	if (yych == 's') goto yy689;
 	goto yy53;
 yy520:
-	yych = *++YYCURSOR;
+	++YYCURSOR;
 	goto yy363;
 yy521:
 	yych = *++YYCURSOR;
@@ -10059,25 +10059,9 @@ yy561:
 	}
 yy562:
 	yych = *++YYCURSOR;
-	if (yych <= '^') {
-		if (yych <= '/') {
-			if (yych <= '.') goto yy53;
-			goto yy259;
-		} else {
-			if (yych == 'T') goto yy125;
-			goto yy53;
-		}
-	} else {
-		if (yych <= 's') {
-			if (yych <= '_') goto yy259;
-			if (yych <= '`') goto yy53;
-			goto yy559;
-		} else {
-			if (yych <= 't') goto yy561;
-			if (yych <= 'z') goto yy559;
-			goto yy53;
-		}
-	}
+	if (yych == 'T') goto yy125;
+	if (yych == 't') goto yy561;
+	goto yy560;
 yy563:
 	yych = *++YYCURSOR;
 	if (yych == 'B') goto yy609;
@@ -10187,25 +10171,9 @@ yy573:
 	goto yy560;
 yy574:
 	yych = *++YYCURSOR;
-	if (yych <= '^') {
-		if (yych <= '/') {
-			if (yych <= '.') goto yy53;
-			goto yy259;
-		} else {
-			if (yych == 'H') goto yy565;
-			goto yy53;
-		}
-	} else {
-		if (yych <= 'g') {
-			if (yych <= '_') goto yy259;
-			if (yych <= '`') goto yy53;
-			goto yy559;
-		} else {
-			if (yych <= 'h') goto yy568;
-			if (yych <= 'z') goto yy559;
-			goto yy53;
-		}
-	}
+	if (yych == 'H') goto yy565;
+	if (yych == 'h') goto yy568;
+	goto yy560;
 yy575:
 	yych = *++YYCURSOR;
 	if (yych == 'Y') goto yy704;
@@ -10294,7 +10262,7 @@ yy583:
 		TIMELIB_DEINIT;
 		return TIMELIB_DATE_NO_DAY;
 	}
-#line 10298 "parse_date.b.c"
+#line 10266 "parse_date.b.c"
 yy584:
 	yych = *++YYCURSOR;
 	if (yych <= '/') goto yy583;
@@ -10337,7 +10305,7 @@ yy586:
 		TIMELIB_DEINIT;
 		return TIMELIB_SHORTDATE_WITH_TIME;
 	}
-#line 10341 "parse_date.b.c"
+#line 10309 "parse_date.b.c"
 yy587:
 	yyaccept = 16;
 	yych = *(YYMARKER = ++YYCURSOR);
@@ -10588,25 +10556,9 @@ yy617:
 	goto yy560;
 yy618:
 	yych = *++YYCURSOR;
-	if (yych <= '^') {
-		if (yych <= '/') {
-			if (yych <= '.') goto yy53;
-			goto yy259;
-		} else {
-			if (yych == 'D') goto yy565;
-			goto yy53;
-		}
-	} else {
-		if (yych <= 'c') {
-			if (yych <= '_') goto yy259;
-			if (yych <= '`') goto yy53;
-			goto yy559;
-		} else {
-			if (yych <= 'd') goto yy568;
-			if (yych <= 'z') goto yy559;
-			goto yy53;
-		}
-	}
+	if (yych == 'D') goto yy565;
+	if (yych == 'd') goto yy568;
+	goto yy560;
 yy619:
 	yych = *++YYCURSOR;
 	if (yych == 'M') goto yy563;
@@ -10629,7 +10581,7 @@ yy622:
 		TIMELIB_DEINIT;
 		return TIMELIB_RELATIVE;
 	}
-#line 10633 "parse_date.b.c"
+#line 10585 "parse_date.b.c"
 yy623:
 	yych = *++YYCURSOR;
 	if (yych == 'R') goto yy746;
@@ -10707,8 +10659,8 @@ yy636:
 	if (yych <= '9') goto yy753;
 	goto yy192;
 yy637:
-	++YYCURSOR;
-	if ((yych = *YYCURSOR) <= '/') goto yy638;
+	yych = *++YYCURSOR;
+	if (yych <= '/') goto yy638;
 	if (yych <= '9') goto yy753;
 yy638:
 #line 1087 "parse_date.b.re"
@@ -10723,7 +10675,7 @@ yy638:
 		TIMELIB_DEINIT;
 		return TIMELIB_DATE_FULL_POINTED;
 	}
-#line 10727 "parse_date.b.c"
+#line 10679 "parse_date.b.c"
 yy639:
 	yych = *++YYCURSOR;
 	if (yych <= '/') goto yy197;
@@ -10919,7 +10871,7 @@ yy663:
 		TIMELIB_DEINIT;
 		return TIMELIB_ISO_NOCOLON;
 	}
-#line 10923 "parse_date.b.c"
+#line 10875 "parse_date.b.c"
 yy664:
 	yyaccept = 18;
 	yych = *(YYMARKER = ++YYCURSOR);
@@ -11104,7 +11056,7 @@ yy674:
 	yych = *++YYCURSOR;
 	if (yych != 'I') goto yy505;
 yy675:
-	yych = *++YYCURSOR;
+	++YYCURSOR;
 	goto yy505;
 yy676:
 	yych = *++YYCURSOR;
@@ -11229,7 +11181,7 @@ yy692:
 	if (yych == 'y') goto yy520;
 	goto yy53;
 yy693:
-	yych = *++YYCURSOR;
+	++YYCURSOR;
 	goto yy223;
 yy694:
 	yych = *++YYCURSOR;
@@ -11336,7 +11288,7 @@ yy703:
 	default:	goto yy282;
 	}
 yy704:
-	yych = *++YYCURSOR;
+	++YYCURSOR;
 	goto yy275;
 yy705:
 	yyaccept = 7;
@@ -11390,7 +11342,7 @@ yy710:
 	if (yych <= '9') goto yy801;
 	goto yy53;
 yy711:
-	yych = *++YYCURSOR;
+	++YYCURSOR;
 	goto yy129;
 yy712:
 	yych = *++YYCURSOR;
@@ -11399,25 +11351,9 @@ yy712:
 	goto yy53;
 yy713:
 	yych = *++YYCURSOR;
-	if (yych <= '^') {
-		if (yych <= '/') {
-			if (yych <= '.') goto yy53;
-			goto yy259;
-		} else {
-			if (yych == 'Y') goto yy125;
-			goto yy53;
-		}
-	} else {
-		if (yych <= 'x') {
-			if (yych <= '_') goto yy259;
-			if (yych <= '`') goto yy53;
-			goto yy559;
-		} else {
-			if (yych <= 'y') goto yy561;
-			if (yych <= 'z') goto yy559;
-			goto yy53;
-		}
-	}
+	if (yych == 'Y') goto yy125;
+	if (yych == 'y') goto yy561;
+	goto yy560;
 yy714:
 	yych = *++YYCURSOR;
 	if (yych == 'Y') goto yy802;
@@ -11579,25 +11515,9 @@ yy742:
 	goto yy53;
 yy743:
 	yych = *++YYCURSOR;
-	if (yych <= '^') {
-		if (yych <= '/') {
-			if (yych <= '.') goto yy53;
-			goto yy259;
-		} else {
-			if (yych == 'R') goto yy125;
-			goto yy53;
-		}
-	} else {
-		if (yych <= 'q') {
-			if (yych <= '_') goto yy259;
-			if (yych <= '`') goto yy53;
-			goto yy559;
-		} else {
-			if (yych <= 'r') goto yy561;
-			if (yych <= 'z') goto yy559;
-			goto yy53;
-		}
-	}
+	if (yych == 'R') goto yy125;
+	if (yych == 'r') goto yy561;
+	goto yy560;
 yy744:
 	yych = *++YYCURSOR;
 	if (yych == 'U') goto yy829;
@@ -11629,7 +11549,7 @@ yy749:
 	if (yych == 'd') goto yy834;
 	goto yy560;
 yy750:
-	yych = *++YYCURSOR;
+	++YYCURSOR;
 	goto yy474;
 yy751:
 	++YYCURSOR;
@@ -11821,7 +11741,7 @@ yy775:
 		TIMELIB_DEINIT;
 		return TIMELIB_PG_YEARDAY;
 	}
-#line 11825 "parse_date.b.c"
+#line 11745 "parse_date.b.c"
 yy776:
 	yyaccept = 19;
 	yych = *(YYMARKER = ++YYCURSOR);
@@ -11983,8 +11903,8 @@ yy789:
 	if (yych == 't') goto yy782;
 	goto yy505;
 yy790:
-	++YYCURSOR;
-	if ((yych = *YYCURSOR) <= '/') goto yy791;
+	yych = *++YYCURSOR;
+	if (yych <= '/') goto yy791;
 	if (yych <= '7') goto yy869;
 yy791:
 #line 1219 "parse_date.b.re"
@@ -12005,7 +11925,7 @@ yy791:
 		TIMELIB_DEINIT;
 		return TIMELIB_ISO_WEEK;
 	}
-#line 12009 "parse_date.b.c"
+#line 11929 "parse_date.b.c"
 yy792:
 	yych = *++YYCURSOR;
 	if (yych == 'G') goto yy871;
@@ -12065,11 +11985,11 @@ yy800:
 	if (yych == '0') goto yy878;
 	goto yy586;
 yy801:
-	yych = *++YYCURSOR;
+	++YYCURSOR;
 	goto yy586;
 yy802:
-	++YYCURSOR;
-	if ((yych = *YYCURSOR) == 'S') goto yy879;
+	yych = *++YYCURSOR;
+	if (yych == 'S') goto yy879;
 	if (yych == 's') goto yy879;
 yy803:
 #line 1323 "parse_date.b.re"
@@ -12088,7 +12008,7 @@ yy803:
 		TIMELIB_DEINIT;
 		return TIMELIB_RELATIVE;
 	}
-#line 12092 "parse_date.b.c"
+#line 12012 "parse_date.b.c"
 yy804:
 	yych = *++YYCURSOR;
 	if (yych == 'T') goto yy880;
@@ -12418,25 +12338,9 @@ yy829:
 	goto yy53;
 yy830:
 	yych = *++YYCURSOR;
-	if (yych <= '^') {
-		if (yych <= '/') {
-			if (yych <= '.') goto yy53;
-			goto yy259;
-		} else {
-			if (yych == 'S') goto yy565;
-			goto yy53;
-		}
-	} else {
-		if (yych <= 'r') {
-			if (yych <= '_') goto yy259;
-			if (yych <= '`') goto yy53;
-			goto yy559;
-		} else {
-			if (yych <= 's') goto yy568;
-			if (yych <= 'z') goto yy559;
-			goto yy53;
-		}
-	}
+	if (yych == 'S') goto yy565;
+	if (yych == 's') goto yy568;
+	goto yy560;
 yy831:
 	yych = *++YYCURSOR;
 	if (yych == 'W') goto yy899;
@@ -12458,10 +12362,10 @@ yy834:
 	if (yych == 'a') goto yy903;
 	goto yy560;
 yy835:
-	yych = *++YYCURSOR;
+	++YYCURSOR;
 	goto yy638;
 yy836:
-	yych = *++YYCURSOR;
+	++YYCURSOR;
 	goto yy197;
 yy837:
 	yych = *++YYCURSOR;
@@ -12655,7 +12559,7 @@ yy852:
 		goto yy505;
 	}
 yy853:
-	yych = *++YYCURSOR;
+	++YYCURSOR;
 	goto yy775;
 yy854:
 	yyaccept = 22;
@@ -12684,7 +12588,7 @@ yy855:
 		TIMELIB_DEINIT;
 		return TIMELIB_ISO_DATE;
 	}
-#line 12688 "parse_date.b.c"
+#line 12592 "parse_date.b.c"
 yy856:
 	yyaccept = 22;
 	yych = *(YYMARKER = ++YYCURSOR);
@@ -12764,7 +12668,7 @@ yy860:
 		TIMELIB_DEINIT;
 		return TIMELIB_DATE_NOCOLON;
 	}
-#line 12768 "parse_date.b.c"
+#line 12672 "parse_date.b.c"
 yy861:
 	yych = *++YYCURSOR;
 	if (yych <= '/') goto yy53;
@@ -12826,7 +12730,7 @@ yy869:
 		TIMELIB_DEINIT;
 		return TIMELIB_ISO_WEEK;
 	}
-#line 12830 "parse_date.b.c"
+#line 12734 "parse_date.b.c"
 yy871:
 	yych = *++YYCURSOR;
 	if (yych == 'H') goto yy926;
@@ -12848,8 +12752,8 @@ yy874:
 	if (yych <= '1') goto yy927;
 	goto yy53;
 yy875:
-	++YYCURSOR;
-	if ((yych = *YYCURSOR) <= '/') goto yy876;
+	yych = *++YYCURSOR;
+	if (yych <= '/') goto yy876;
 	if (yych <= '9') goto yy929;
 yy876:
 #line 1238 "parse_date.b.re"
@@ -12864,7 +12768,7 @@ yy876:
 		TIMELIB_DEINIT;
 		return TIMELIB_PG_TEXT;
 	}
-#line 12868 "parse_date.b.c"
+#line 12772 "parse_date.b.c"
 yy877:
 	yyaccept = 16;
 	yych = *(YYMARKER = ++YYCURSOR);
@@ -12914,7 +12818,7 @@ yy878:
 		}
 	}
 yy879:
-	yych = *++YYCURSOR;
+	++YYCURSOR;
 	goto yy803;
 yy880:
 	yych = *++YYCURSOR;
@@ -13050,7 +12954,7 @@ yy900:
 		TIMELIB_DEINIT;
 		return TIMELIB_RELATIVE;
 	}
-#line 13054 "parse_date.b.c"
+#line 12958 "parse_date.b.c"
 yy901:
 	yyaccept = 24;
 	yych = *(YYMARKER = ++YYCURSOR);
@@ -13327,7 +13231,7 @@ yy927:
 		TIMELIB_DEINIT;
 		return TIMELIB_PG_TEXT;
 	}
-#line 13331 "parse_date.b.c"
+#line 13235 "parse_date.b.c"
 yy929:
 	yych = *++YYCURSOR;
 	if (yych <= '/') goto yy876;
@@ -13455,7 +13359,7 @@ yy947:
 		TIMELIB_DEINIT;
 		return TIMELIB_RELATIVE;
 	}
-#line 13459 "parse_date.b.c"
+#line 13363 "parse_date.b.c"
 yy948:
 	yyaccept = 25;
 	yych = *(YYMARKER = ++YYCURSOR);
@@ -13511,7 +13415,7 @@ yy954:
 		}
 	}
 yy955:
-	yych = *++YYCURSOR;
+	++YYCURSOR;
 	goto yy855;
 yy956:
 	yyaccept = 22;
@@ -13703,7 +13607,7 @@ yy981:
 	if (yych <= '2') goto yy1000;
 	goto yy53;
 yy982:
-	yych = *++YYCURSOR;
+	++YYCURSOR;
 	goto yy876;
 yy983:
 	yych = *++YYCURSOR;
@@ -13935,8 +13839,8 @@ yy1018:
 	if (yych <= '5') goto yy1024;
 	goto yy53;
 yy1019:
-	++YYCURSOR;
-	if ((yych = *YYCURSOR) <= '/') goto yy1020;
+	yych = *++YYCURSOR;
+	if (yych <= '/') goto yy1020;
 	if (yych <= '9') goto yy1022;
 yy1020:
 #line 1163 "parse_date.b.re"
@@ -13962,12 +13866,12 @@ yy1020:
 		TIMELIB_DEINIT;
 		return TIMELIB_XMLRPC_SOAP;
 	}
-#line 13966 "parse_date.b.c"
+#line 13870 "parse_date.b.c"
 yy1021:
 	yych = *++YYCURSOR;
 	if (yych != '0') goto yy1020;
 yy1022:
-	yych = *++YYCURSOR;
+	++YYCURSOR;
 	goto yy1020;
 yy1023:
 	yych = *++YYCURSOR;
@@ -14073,8 +13977,8 @@ yy1040:
 		goto yy1020;
 	}
 yy1042:
-	++YYCURSOR;
-	if ((yych = *YYCURSOR) <= '/') goto yy1043;
+	yych = *++YYCURSOR;
+	if (yych <= '/') goto yy1043;
 	if (yych <= '9') goto yy1045;
 	if (yych <= ':') goto yy1047;
 yy1043:
@@ -14096,7 +14000,7 @@ yy1043:
 		TIMELIB_DEINIT;
 		return TIMELIB_CLF;
 	}
-#line 14100 "parse_date.b.c"
+#line 14004 "parse_date.b.c"
 yy1044:
 	yych = *++YYCURSOR;
 	if (yych <= '5') {
@@ -14132,7 +14036,7 @@ yy1048:
 	if (yych <= '/') goto yy1043;
 	if (yych >= ':') goto yy1043;
 yy1049:
-	yych = *++YYCURSOR;
+	++YYCURSOR;
 	goto yy1043;
 yy1050:
 	yych = *++YYCURSOR;
@@ -14157,8 +14061,8 @@ yy1052:
 	if (yych <= '9') goto yy1022;
 	if (yych >= ';') goto yy1020;
 yy1053:
-	++YYCURSOR;
-	if ((yych = *YYCURSOR) <= '/') goto yy1020;
+	yych = *++YYCURSOR;
+	if (yych <= '/') goto yy1020;
 	if (yych <= '5') goto yy1019;
 	if (yych <= '9') goto yy1022;
 	goto yy1020;
@@ -14168,6 +14072,7 @@ yy1053:
 }
 
 #define YYMAXFILL 26
+
 
 timelib_time* timelib_strtotime(char *s, int len, int *errors, timelib_tzdb *tzdb)
 {

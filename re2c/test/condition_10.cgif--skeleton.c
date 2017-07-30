@@ -2,6 +2,7 @@
 
 #include <stdio.h>
 #include <stdlib.h> /* malloc, free */
+#include <string.h> /* memcpy */
 
 static void *read_file
     ( const char *fname
@@ -48,149 +49,6 @@ error:
     return NULL;
 }
 
-enum YYCONDTYPE {
-    yycNormal,
-    yycComment,
-    yycSkiptoeol,
-    yycString,
-};
-
-
-#define YYCTYPE unsigned char
-#define YYKEYTYPE unsigned char
-#define YYPEEK() *cursor
-#define YYSKIP() ++cursor
-#define YYLESSTHAN(n) (limit - cursor) < n
-#define YYFILL(n) { break; }
-
-static int action_line126_Comment
-    ( unsigned int i
-    , const YYKEYTYPE *keys
-    , const YYCTYPE *start
-    , const YYCTYPE *token
-    , const YYCTYPE **cursor
-    , YYKEYTYPE rule_act
-    )
-{
-    const long pos = token - start;
-    const long len_act = *cursor - token;
-    const long len_exp = (long) keys [3 * i + 1];
-    const YYKEYTYPE rule_exp = keys [3 * i + 2];
-    if (rule_exp == 255) {
-        fprintf
-            ( stderr
-            , "warning: lex_line126_Comment: control flow is undefined for input"
-                " at position %ld, rerun re2c with '-W'\n"
-            , pos
-            );
-    }
-    if (len_act == len_exp && rule_act == rule_exp) {
-        const YYKEYTYPE offset = keys[3 * i];
-        *cursor = token + offset;
-        return 0;
-    } else {
-        fprintf
-            ( stderr
-            , "error: lex_line126_Comment: at position %ld (iteration %u):\n"
-                "\texpected: match length %ld, rule %u\n"
-                "\tactual:   match length %ld, rule %u\n"
-            , pos
-            , i
-            , len_exp
-            , rule_exp
-            , len_act
-            , rule_act
-            );
-        return 1;
-    }
-}
-
-int lex_line126_Comment()
-{
-    const size_t padding = 2; /* YYMAXFILL */
-    int status = 0;
-    size_t input_len = 0;
-    size_t keys_count = 0;
-    YYCTYPE *input = NULL;
-    YYKEYTYPE *keys = NULL;
-    const YYCTYPE *cursor = NULL;
-    const YYCTYPE *limit = NULL;
-    const YYCTYPE *token = NULL;
-    const YYCTYPE *eof = NULL;
-    unsigned int i = 0;
-
-    input = (YYCTYPE *) read_file
-        ("condition_10.cgif--skeleton.c.line126_Comment.input"
-        , sizeof (YYCTYPE)
-        , padding
-        , &input_len
-        );
-    if (input == NULL) {
-        status = 1;
-        goto end;
-    }
-
-    keys = (YYKEYTYPE *) read_file
-        ("condition_10.cgif--skeleton.c.line126_Comment.keys"
-        , 3 * sizeof (YYKEYTYPE)
-        , 0
-        , &keys_count
-        );
-    if (keys == NULL) {
-        status = 1;
-        goto end;
-    }
-
-    cursor = input;
-    limit = input + input_len + padding;
-    eof = input + input_len;
-
-    for (i = 0; status == 0 && i < keys_count; ++i) {
-        token = cursor;
-        YYCTYPE yych;
-
-        if (YYLESSTHAN (2)) YYFILL(2);
-        yych = YYPEEK ();
-        if (yych == '*') goto yy5;
-        YYSKIP ();
-yy4:
-        status = action_line126_Comment(i, keys, input, token, &cursor, 15);
-        continue;
-yy5:
-        YYSKIP ();
-        yych = YYPEEK ();
-        if (yych != '/') goto yy4;
-        YYSKIP ();
-        status = action_line126_Comment(i, keys, input, token, &cursor, 14);
-        continue;
-
-    }
-    if (status == 0) {
-        if (cursor != eof) {
-            status = 1;
-            const long pos = token - input;
-            fprintf(stderr, "error: lex_line126_Comment: unused input strings left at position %ld\n", pos);
-        }
-        if (i != keys_count) {
-            status = 1;
-            fprintf(stderr, "error: lex_line126_Comment: unused keys left after %u iterations\n", i);
-        }
-    }
-
-end:
-    free(input);
-    free(keys);
-
-    return status;
-}
-
-#undef YYCTYPE
-#undef YYKEYTYPE
-#undef YYPEEK
-#undef YYSKIP
-#undef YYLESSTHAN
-#undef YYFILL
-
 #define YYCTYPE unsigned char
 #define YYKEYTYPE unsigned char
 #define YYPEEK() *cursor
@@ -201,7 +59,7 @@ end:
 #define YYFILL(n) { break; }
 
 static int action_line126_Normal
-    ( unsigned int i
+    ( unsigned *pkix
     , const YYKEYTYPE *keys
     , const YYCTYPE *start
     , const YYCTYPE *token
@@ -209,10 +67,12 @@ static int action_line126_Normal
     , YYKEYTYPE rule_act
     )
 {
+    const unsigned kix = *pkix;
     const long pos = token - start;
     const long len_act = *cursor - token;
-    const long len_exp = (long) keys [3 * i + 1];
-    const YYKEYTYPE rule_exp = keys [3 * i + 2];
+    const long len_exp = (long) keys[kix + 1];
+    const YYKEYTYPE rule_exp = keys[kix + 2];
+    *pkix = kix + 3;
     if (rule_exp == 255) {
         fprintf
             ( stderr
@@ -222,17 +82,17 @@ static int action_line126_Normal
             );
     }
     if (len_act == len_exp && rule_act == rule_exp) {
-        const YYKEYTYPE offset = keys[3 * i];
+        const YYKEYTYPE offset = keys[kix];
         *cursor = token + offset;
         return 0;
     } else {
         fprintf
             ( stderr
-            , "error: lex_line126_Normal: at position %ld (iteration %u):\n"
+            , "error: lex_line126_Normal: at position %ld (key %u):\n"
                 "\texpected: match length %ld, rule %u\n"
                 "\tactual:   match length %ld, rule %u\n"
             , pos
-            , i
+            , kix
             , len_exp
             , rule_exp
             , len_act
@@ -240,6 +100,13 @@ static int action_line126_Normal
             );
         return 1;
     }
+}
+
+static int check_key_count_line126_Normal(unsigned have, unsigned used, unsigned need)
+{
+    if (used + need <= have) return 0;
+    fprintf(stderr, "error: lex_line126_Normal: not enough keys\n");
+    return 1;
 }
 
 int lex_line126_Normal()
@@ -269,7 +136,7 @@ int lex_line126_Normal()
 
     keys = (YYKEYTYPE *) read_file
         ("condition_10.cgif--skeleton.c.line126_Normal.keys"
-        , 3 * sizeof (YYKEYTYPE)
+        , sizeof (YYKEYTYPE)
         , 0
         , &keys_count
         );
@@ -282,7 +149,7 @@ int lex_line126_Normal()
     limit = input + input_len + padding;
     eof = input + input_len;
 
-    for (i = 0; status == 0 && i < keys_count; ++i) {
+    for (i = 0; status == 0 && cursor < eof && i < keys_count;) {
         token = cursor;
         const YYCTYPE *marker = NULL;
         YYCTYPE yych;
@@ -291,14 +158,106 @@ int lex_line126_Normal()
         yych = YYPEEK ();
         {
             static void *yytarget[256] = {
+                &&yy3, &&yy3, &&yy3, &&yy3, &&yy3, &&yy3, &&yy3, &&yy3,
+                &&yy3, &&yy3, &&yy3, &&yy3, &&yy3, &&yy3, &&yy3, &&yy3,
+                &&yy3, &&yy3, &&yy3, &&yy3, &&yy3, &&yy3, &&yy3, &&yy3,
+                &&yy3, &&yy3, &&yy3, &&yy3, &&yy3, &&yy3, &&yy3, &&yy3,
+                &&yy3, &&yy3, &&yy5, &&yy3, &&yy3, &&yy3, &&yy3, &&yy7,
+                &&yy3, &&yy3, &&yy3, &&yy3, &&yy3, &&yy3, &&yy3, &&yy8,
+                &&yy3, &&yy3, &&yy3, &&yy3, &&yy3, &&yy3, &&yy3, &&yy3,
+                &&yy3, &&yy3, &&yy3, &&yy3, &&yy3, &&yy3, &&yy3, &&yy9,
+                &&yy3, &&yy3, &&yy3, &&yy3, &&yy3, &&yy3, &&yy3, &&yy3,
+                &&yy3, &&yy3, &&yy3, &&yy3, &&yy3, &&yy3, &&yy3, &&yy3,
+                &&yy3, &&yy3, &&yy3, &&yy3, &&yy3, &&yy3, &&yy3, &&yy3,
+                &&yy3, &&yy3, &&yy3, &&yy3, &&yy3, &&yy3, &&yy3, &&yy3,
+                &&yy3, &&yy3, &&yy3, &&yy3, &&yy3, &&yy3, &&yy3, &&yy3,
+                &&yy3, &&yy3, &&yy3, &&yy3, &&yy3, &&yy3, &&yy3, &&yy3,
+                &&yy3, &&yy3, &&yy3, &&yy3, &&yy3, &&yy3, &&yy3, &&yy3,
+                &&yy3, &&yy3, &&yy3, &&yy3, &&yy3, &&yy3, &&yy3, &&yy3,
+                &&yy3, &&yy3, &&yy3, &&yy3, &&yy3, &&yy3, &&yy3, &&yy3,
+                &&yy3, &&yy3, &&yy3, &&yy3, &&yy3, &&yy3, &&yy3, &&yy3,
+                &&yy3, &&yy3, &&yy3, &&yy3, &&yy3, &&yy3, &&yy3, &&yy3,
+                &&yy3, &&yy3, &&yy3, &&yy3, &&yy3, &&yy3, &&yy3, &&yy3,
+                &&yy3, &&yy3, &&yy3, &&yy3, &&yy3, &&yy3, &&yy3, &&yy3,
+                &&yy3, &&yy3, &&yy3, &&yy3, &&yy3, &&yy3, &&yy3, &&yy3,
+                &&yy3, &&yy3, &&yy3, &&yy3, &&yy3, &&yy3, &&yy3, &&yy3,
+                &&yy3, &&yy3, &&yy3, &&yy3, &&yy3, &&yy3, &&yy3, &&yy3,
+                &&yy3, &&yy3, &&yy3, &&yy3, &&yy3, &&yy3, &&yy3, &&yy3,
+                &&yy3, &&yy3, &&yy3, &&yy3, &&yy3, &&yy3, &&yy3, &&yy3,
+                &&yy3, &&yy3, &&yy3, &&yy3, &&yy3, &&yy3, &&yy3, &&yy3,
+                &&yy3, &&yy3, &&yy3, &&yy3, &&yy3, &&yy3, &&yy3, &&yy3,
+                &&yy3, &&yy3, &&yy3, &&yy3, &&yy3, &&yy3, &&yy3, &&yy3,
+                &&yy3, &&yy3, &&yy3, &&yy3, &&yy3, &&yy3, &&yy3, &&yy3,
+                &&yy3, &&yy3, &&yy3, &&yy3, &&yy3, &&yy3, &&yy3, &&yy3,
+                &&yy3, &&yy3, &&yy3, &&yy3, &&yy3, &&yy3, &&yy3, &&yy3
+            };
+            goto *yytarget[yych];
+        }
+yy3:
+        YYSKIP ();
+yy4:
+        status = check_key_count_line126_Normal(keys_count, i, 3)
+             || action_line126_Normal(&i, keys, input, token, &cursor, 13);
+        continue;
+yy5:
+        YYSKIP ();
+        status = check_key_count_line126_Normal(keys_count, i, 3)
+             || action_line126_Normal(&i, keys, input, token, &cursor, 12);
+        continue;
+yy7:
+        YYSKIP ();
+        YYBACKUP ();
+        yych = YYPEEK ();
+        if (yych == '"') goto yy10;
+        if (yych == '\\') goto yy12;
+        goto yy4;
+yy8:
+        YYSKIP ();
+        yych = YYPEEK ();
+        if (yych == '*') goto yy13;
+        if (yych == '/') goto yy15;
+        goto yy4;
+yy9:
+        YYSKIP ();
+        YYBACKUP ();
+        yych = YYPEEK ();
+        if (yych == '?') goto yy17;
+        goto yy4;
+yy10:
+        YYSKIP ();
+        yych = YYPEEK ();
+        if (yych == '\'') goto yy18;
+yy11:
+        YYRESTORE ();
+        goto yy4;
+yy12:
+        YYSKIP ();
+        yych = YYPEEK ();
+        if (yych == '"') goto yy10;
+        goto yy11;
+yy13:
+        YYSKIP ();
+        status = check_key_count_line126_Normal(keys_count, i, 3)
+             || action_line126_Normal(&i, keys, input, token, &cursor, 9);
+        continue;
+yy15:
+        YYSKIP ();
+        status = check_key_count_line126_Normal(keys_count, i, 3)
+             || action_line126_Normal(&i, keys, input, token, &cursor, 10);
+        continue;
+yy17:
+        YYSKIP ();
+        yych = YYPEEK ();
+        {
+            static void *yytarget[256] = {
                 &&yy11, &&yy11, &&yy11, &&yy11, &&yy11, &&yy11, &&yy11, &&yy11,
                 &&yy11, &&yy11, &&yy11, &&yy11, &&yy11, &&yy11, &&yy11, &&yy11,
                 &&yy11, &&yy11, &&yy11, &&yy11, &&yy11, &&yy11, &&yy11, &&yy11,
                 &&yy11, &&yy11, &&yy11, &&yy11, &&yy11, &&yy11, &&yy11, &&yy11,
-                &&yy11, &&yy11, &&yy13, &&yy11, &&yy11, &&yy11, &&yy11, &&yy15,
-                &&yy11, &&yy11, &&yy11, &&yy11, &&yy11, &&yy11, &&yy11, &&yy16,
+                &&yy11, &&yy20, &&yy11, &&yy11, &&yy11, &&yy11, &&yy11, &&yy22,
+                &&yy24, &&yy26, &&yy11, &&yy11, &&yy11, &&yy28, &&yy11, &&yy30,
                 &&yy11, &&yy11, &&yy11, &&yy11, &&yy11, &&yy11, &&yy11, &&yy11,
-                &&yy11, &&yy11, &&yy11, &&yy11, &&yy11, &&yy11, &&yy11, &&yy17,
+                &&yy11, &&yy11, &&yy11, &&yy11, &&yy32, &&yy34, &&yy36, &&yy11,
                 &&yy11, &&yy11, &&yy11, &&yy11, &&yy11, &&yy11, &&yy11, &&yy11,
                 &&yy11, &&yy11, &&yy11, &&yy11, &&yy11, &&yy11, &&yy11, &&yy11,
                 &&yy11, &&yy11, &&yy11, &&yy11, &&yy11, &&yy11, &&yy11, &&yy11,
@@ -326,133 +285,55 @@ int lex_line126_Normal()
             };
             goto *yytarget[yych];
         }
-yy11:
-        YYSKIP ();
-yy12:
-        status = action_line126_Normal(i, keys, input, token, &cursor, 13);
-        continue;
-yy13:
-        YYSKIP ();
-        status = action_line126_Normal(i, keys, input, token, &cursor, 12);
-        continue;
-yy15:
-        YYSKIP ();
-        YYBACKUP ();
-        yych = YYPEEK ();
-        if (yych == '"') goto yy18;
-        if (yych == '\\') goto yy20;
-        goto yy12;
-yy16:
-        YYSKIP ();
-        yych = YYPEEK ();
-        if (yych == '*') goto yy21;
-        if (yych == '/') goto yy23;
-        goto yy12;
-yy17:
-        YYSKIP ();
-        YYBACKUP ();
-        yych = YYPEEK ();
-        if (yych == '?') goto yy25;
-        goto yy12;
 yy18:
         YYSKIP ();
-        yych = YYPEEK ();
-        if (yych == '\'') goto yy26;
-yy19:
-        YYRESTORE ();
-        goto yy12;
+        status = check_key_count_line126_Normal(keys_count, i, 3)
+             || action_line126_Normal(&i, keys, input, token, &cursor, 11);
+        continue;
 yy20:
         YYSKIP ();
-        yych = YYPEEK ();
-        if (yych == '"') goto yy18;
-        goto yy19;
-yy21:
-        YYSKIP ();
-        status = action_line126_Normal(i, keys, input, token, &cursor, 9);
+        status = check_key_count_line126_Normal(keys_count, i, 3)
+             || action_line126_Normal(&i, keys, input, token, &cursor, 7);
         continue;
-yy23:
+yy22:
         YYSKIP ();
-        status = action_line126_Normal(i, keys, input, token, &cursor, 10);
+        status = check_key_count_line126_Normal(keys_count, i, 3)
+             || action_line126_Normal(&i, keys, input, token, &cursor, 6);
         continue;
-yy25:
+yy24:
         YYSKIP ();
-        yych = YYPEEK ();
-        {
-            static void *yytarget[256] = {
-                &&yy19, &&yy19, &&yy19, &&yy19, &&yy19, &&yy19, &&yy19, &&yy19,
-                &&yy19, &&yy19, &&yy19, &&yy19, &&yy19, &&yy19, &&yy19, &&yy19,
-                &&yy19, &&yy19, &&yy19, &&yy19, &&yy19, &&yy19, &&yy19, &&yy19,
-                &&yy19, &&yy19, &&yy19, &&yy19, &&yy19, &&yy19, &&yy19, &&yy19,
-                &&yy19, &&yy28, &&yy19, &&yy19, &&yy19, &&yy19, &&yy19, &&yy30,
-                &&yy32, &&yy34, &&yy19, &&yy19, &&yy19, &&yy36, &&yy19, &&yy38,
-                &&yy19, &&yy19, &&yy19, &&yy19, &&yy19, &&yy19, &&yy19, &&yy19,
-                &&yy19, &&yy19, &&yy19, &&yy19, &&yy40, &&yy42, &&yy44, &&yy19,
-                &&yy19, &&yy19, &&yy19, &&yy19, &&yy19, &&yy19, &&yy19, &&yy19,
-                &&yy19, &&yy19, &&yy19, &&yy19, &&yy19, &&yy19, &&yy19, &&yy19,
-                &&yy19, &&yy19, &&yy19, &&yy19, &&yy19, &&yy19, &&yy19, &&yy19,
-                &&yy19, &&yy19, &&yy19, &&yy19, &&yy19, &&yy19, &&yy19, &&yy19,
-                &&yy19, &&yy19, &&yy19, &&yy19, &&yy19, &&yy19, &&yy19, &&yy19,
-                &&yy19, &&yy19, &&yy19, &&yy19, &&yy19, &&yy19, &&yy19, &&yy19,
-                &&yy19, &&yy19, &&yy19, &&yy19, &&yy19, &&yy19, &&yy19, &&yy19,
-                &&yy19, &&yy19, &&yy19, &&yy19, &&yy19, &&yy19, &&yy19, &&yy19,
-                &&yy19, &&yy19, &&yy19, &&yy19, &&yy19, &&yy19, &&yy19, &&yy19,
-                &&yy19, &&yy19, &&yy19, &&yy19, &&yy19, &&yy19, &&yy19, &&yy19,
-                &&yy19, &&yy19, &&yy19, &&yy19, &&yy19, &&yy19, &&yy19, &&yy19,
-                &&yy19, &&yy19, &&yy19, &&yy19, &&yy19, &&yy19, &&yy19, &&yy19,
-                &&yy19, &&yy19, &&yy19, &&yy19, &&yy19, &&yy19, &&yy19, &&yy19,
-                &&yy19, &&yy19, &&yy19, &&yy19, &&yy19, &&yy19, &&yy19, &&yy19,
-                &&yy19, &&yy19, &&yy19, &&yy19, &&yy19, &&yy19, &&yy19, &&yy19,
-                &&yy19, &&yy19, &&yy19, &&yy19, &&yy19, &&yy19, &&yy19, &&yy19,
-                &&yy19, &&yy19, &&yy19, &&yy19, &&yy19, &&yy19, &&yy19, &&yy19,
-                &&yy19, &&yy19, &&yy19, &&yy19, &&yy19, &&yy19, &&yy19, &&yy19,
-                &&yy19, &&yy19, &&yy19, &&yy19, &&yy19, &&yy19, &&yy19, &&yy19,
-                &&yy19, &&yy19, &&yy19, &&yy19, &&yy19, &&yy19, &&yy19, &&yy19,
-                &&yy19, &&yy19, &&yy19, &&yy19, &&yy19, &&yy19, &&yy19, &&yy19,
-                &&yy19, &&yy19, &&yy19, &&yy19, &&yy19, &&yy19, &&yy19, &&yy19,
-                &&yy19, &&yy19, &&yy19, &&yy19, &&yy19, &&yy19, &&yy19, &&yy19,
-                &&yy19, &&yy19, &&yy19, &&yy19, &&yy19, &&yy19, &&yy19, &&yy19
-            };
-            goto *yytarget[yych];
-        }
+        status = check_key_count_line126_Normal(keys_count, i, 3)
+             || action_line126_Normal(&i, keys, input, token, &cursor, 0);
+        continue;
 yy26:
         YYSKIP ();
-        status = action_line126_Normal(i, keys, input, token, &cursor, 11);
+        status = check_key_count_line126_Normal(keys_count, i, 3)
+             || action_line126_Normal(&i, keys, input, token, &cursor, 1);
         continue;
 yy28:
         YYSKIP ();
-        status = action_line126_Normal(i, keys, input, token, &cursor, 7);
+        status = check_key_count_line126_Normal(keys_count, i, 3)
+             || action_line126_Normal(&i, keys, input, token, &cursor, 8);
         continue;
 yy30:
         YYSKIP ();
-        status = action_line126_Normal(i, keys, input, token, &cursor, 6);
+        status = check_key_count_line126_Normal(keys_count, i, 3)
+             || action_line126_Normal(&i, keys, input, token, &cursor, 5);
         continue;
 yy32:
         YYSKIP ();
-        status = action_line126_Normal(i, keys, input, token, &cursor, 0);
+        status = check_key_count_line126_Normal(keys_count, i, 3)
+             || action_line126_Normal(&i, keys, input, token, &cursor, 2);
         continue;
 yy34:
         YYSKIP ();
-        status = action_line126_Normal(i, keys, input, token, &cursor, 1);
+        status = check_key_count_line126_Normal(keys_count, i, 3)
+             || action_line126_Normal(&i, keys, input, token, &cursor, 4);
         continue;
 yy36:
         YYSKIP ();
-        status = action_line126_Normal(i, keys, input, token, &cursor, 8);
-        continue;
-yy38:
-        YYSKIP ();
-        status = action_line126_Normal(i, keys, input, token, &cursor, 5);
-        continue;
-yy40:
-        YYSKIP ();
-        status = action_line126_Normal(i, keys, input, token, &cursor, 2);
-        continue;
-yy42:
-        YYSKIP ();
-        status = action_line126_Normal(i, keys, input, token, &cursor, 4);
-        continue;
-yy44:
-        YYSKIP ();
-        status = action_line126_Normal(i, keys, input, token, &cursor, 3);
+        status = check_key_count_line126_Normal(keys_count, i, 3)
+             || action_line126_Normal(&i, keys, input, token, &cursor, 3);
         continue;
 
     }
@@ -464,7 +345,7 @@ yy44:
         }
         if (i != keys_count) {
             status = 1;
-            fprintf(stderr, "error: lex_line126_Normal: unused keys left after %u iterations\n", i);
+            fprintf(stderr, "error: lex_line126_Normal: unused keys left after %u keys\n", i);
         }
     }
 
@@ -488,13 +369,11 @@ end:
 #define YYKEYTYPE unsigned char
 #define YYPEEK() *cursor
 #define YYSKIP() ++cursor
-#define YYBACKUP() marker = cursor
-#define YYRESTORE() cursor = marker
 #define YYLESSTHAN(n) (limit - cursor) < n
 #define YYFILL(n) { break; }
 
-static int action_line126_Skiptoeol
-    ( unsigned int i
+static int action_line126_Comment
+    ( unsigned *pkix
     , const YYKEYTYPE *keys
     , const YYCTYPE *start
     , const YYCTYPE *token
@@ -502,10 +381,160 @@ static int action_line126_Skiptoeol
     , YYKEYTYPE rule_act
     )
 {
+    const unsigned kix = *pkix;
     const long pos = token - start;
     const long len_act = *cursor - token;
-    const long len_exp = (long) keys [3 * i + 1];
-    const YYKEYTYPE rule_exp = keys [3 * i + 2];
+    const long len_exp = (long) keys[kix + 1];
+    const YYKEYTYPE rule_exp = keys[kix + 2];
+    *pkix = kix + 3;
+    if (rule_exp == 255) {
+        fprintf
+            ( stderr
+            , "warning: lex_line126_Comment: control flow is undefined for input"
+                " at position %ld, rerun re2c with '-W'\n"
+            , pos
+            );
+    }
+    if (len_act == len_exp && rule_act == rule_exp) {
+        const YYKEYTYPE offset = keys[kix];
+        *cursor = token + offset;
+        return 0;
+    } else {
+        fprintf
+            ( stderr
+            , "error: lex_line126_Comment: at position %ld (key %u):\n"
+                "\texpected: match length %ld, rule %u\n"
+                "\tactual:   match length %ld, rule %u\n"
+            , pos
+            , kix
+            , len_exp
+            , rule_exp
+            , len_act
+            , rule_act
+            );
+        return 1;
+    }
+}
+
+static int check_key_count_line126_Comment(unsigned have, unsigned used, unsigned need)
+{
+    if (used + need <= have) return 0;
+    fprintf(stderr, "error: lex_line126_Comment: not enough keys\n");
+    return 1;
+}
+
+int lex_line126_Comment()
+{
+    const size_t padding = 2; /* YYMAXFILL */
+    int status = 0;
+    size_t input_len = 0;
+    size_t keys_count = 0;
+    YYCTYPE *input = NULL;
+    YYKEYTYPE *keys = NULL;
+    const YYCTYPE *cursor = NULL;
+    const YYCTYPE *limit = NULL;
+    const YYCTYPE *token = NULL;
+    const YYCTYPE *eof = NULL;
+    unsigned int i = 0;
+
+    input = (YYCTYPE *) read_file
+        ("condition_10.cgif--skeleton.c.line126_Comment.input"
+        , sizeof (YYCTYPE)
+        , padding
+        , &input_len
+        );
+    if (input == NULL) {
+        status = 1;
+        goto end;
+    }
+
+    keys = (YYKEYTYPE *) read_file
+        ("condition_10.cgif--skeleton.c.line126_Comment.keys"
+        , sizeof (YYKEYTYPE)
+        , 0
+        , &keys_count
+        );
+    if (keys == NULL) {
+        status = 1;
+        goto end;
+    }
+
+    cursor = input;
+    limit = input + input_len + padding;
+    eof = input + input_len;
+
+    for (i = 0; status == 0 && cursor < eof && i < keys_count;) {
+        token = cursor;
+        YYCTYPE yych;
+
+        if (YYLESSTHAN (2)) YYFILL(2);
+        yych = YYPEEK ();
+        if (yych == '*') goto yy43;
+        YYSKIP ();
+yy42:
+        status = check_key_count_line126_Comment(keys_count, i, 3)
+             || action_line126_Comment(&i, keys, input, token, &cursor, 1);
+        continue;
+yy43:
+        YYSKIP ();
+        yych = YYPEEK ();
+        if (yych != '/') goto yy42;
+        YYSKIP ();
+        status = check_key_count_line126_Comment(keys_count, i, 3)
+             || action_line126_Comment(&i, keys, input, token, &cursor, 0);
+        continue;
+
+    }
+    if (status == 0) {
+        if (cursor != eof) {
+            status = 1;
+            const long pos = token - input;
+            fprintf(stderr, "error: lex_line126_Comment: unused input strings left at position %ld\n", pos);
+        }
+        if (i != keys_count) {
+            status = 1;
+            fprintf(stderr, "error: lex_line126_Comment: unused keys left after %u keys\n", i);
+        }
+    }
+
+end:
+    free(input);
+    free(keys);
+
+    return status;
+}
+
+#undef YYCTYPE
+#undef YYKEYTYPE
+#undef YYPEEK
+#undef YYSKIP
+#undef YYLESSTHAN
+#undef YYFILL
+
+#define YYCTYPE unsigned char
+#define YYKEYTYPE unsigned char
+#define YYPEEK() *cursor
+#define YYSKIP() ++cursor
+#define YYBACKUP() marker = cursor
+#define YYRESTORE() cursor = marker
+#define YYLESSTHAN(n) (limit - cursor) < n
+#define YYFILL(n) { break; }
+
+static int action_line126_Skiptoeol
+    ( unsigned *pkix
+    , const YYKEYTYPE *keys
+    , const YYCTYPE *start
+    , const YYCTYPE *token
+    , const YYCTYPE **cursor
+    , YYKEYTYPE rule_act
+    )
+{
+    const unsigned kix = *pkix;
+    const long pos = token - start;
+    const long len_act = *cursor - token;
+    const long len_exp = (long) keys[kix + 1];
+    const YYKEYTYPE rule_exp = keys[kix + 2];
+    *pkix = kix + 3;
     if (rule_exp == 255) {
         fprintf
             ( stderr
@@ -515,17 +544,17 @@ static int action_line126_Skiptoeol
             );
     }
     if (len_act == len_exp && rule_act == rule_exp) {
-        const YYKEYTYPE offset = keys[3 * i];
+        const YYKEYTYPE offset = keys[kix];
         *cursor = token + offset;
         return 0;
     } else {
         fprintf
             ( stderr
-            , "error: lex_line126_Skiptoeol: at position %ld (iteration %u):\n"
+            , "error: lex_line126_Skiptoeol: at position %ld (key %u):\n"
                 "\texpected: match length %ld, rule %u\n"
                 "\tactual:   match length %ld, rule %u\n"
             , pos
-            , i
+            , kix
             , len_exp
             , rule_exp
             , len_act
@@ -533,6 +562,13 @@ static int action_line126_Skiptoeol
             );
         return 1;
     }
+}
+
+static int check_key_count_line126_Skiptoeol(unsigned have, unsigned used, unsigned need)
+{
+    if (used + need <= have) return 0;
+    fprintf(stderr, "error: lex_line126_Skiptoeol: not enough keys\n");
+    return 1;
 }
 
 int lex_line126_Skiptoeol()
@@ -562,7 +598,7 @@ int lex_line126_Skiptoeol()
 
     keys = (YYKEYTYPE *) read_file
         ("condition_10.cgif--skeleton.c.line126_Skiptoeol.keys"
-        , 3 * sizeof (YYKEYTYPE)
+        , sizeof (YYKEYTYPE)
         , 0
         , &keys_count
         );
@@ -575,7 +611,7 @@ int lex_line126_Skiptoeol()
     limit = input + input_len + padding;
     eof = input + input_len;
 
-    for (i = 0; status == 0 && i < keys_count; ++i) {
+    for (i = 0; status == 0 && cursor < eof && i < keys_count;) {
         token = cursor;
         const YYCTYPE *marker = NULL;
         YYCTYPE yych;
@@ -622,11 +658,13 @@ int lex_line126_Skiptoeol()
 yy49:
         YYSKIP ();
 yy50:
-        status = action_line126_Skiptoeol(i, keys, input, token, &cursor, 20);
+        status = check_key_count_line126_Skiptoeol(keys_count, i, 3)
+             || action_line126_Skiptoeol(&i, keys, input, token, &cursor, 4);
         continue;
 yy51:
         YYSKIP ();
-        status = action_line126_Skiptoeol(i, keys, input, token, &cursor, 19);
+        status = check_key_count_line126_Skiptoeol(keys_count, i, 3)
+             || action_line126_Skiptoeol(&i, keys, input, token, &cursor, 3);
         continue;
 yy53:
         YYSKIP ();
@@ -648,7 +686,8 @@ yy55:
         goto yy50;
 yy56:
         YYSKIP ();
-        status = action_line126_Skiptoeol(i, keys, input, token, &cursor, 18);
+        status = check_key_count_line126_Skiptoeol(keys_count, i, 3)
+             || action_line126_Skiptoeol(&i, keys, input, token, &cursor, 2);
         continue;
 yy58:
         YYSKIP ();
@@ -659,7 +698,8 @@ yy59:
         goto yy50;
 yy60:
         YYSKIP ();
-        status = action_line126_Skiptoeol(i, keys, input, token, &cursor, 17);
+        status = check_key_count_line126_Skiptoeol(keys_count, i, 3)
+             || action_line126_Skiptoeol(&i, keys, input, token, &cursor, 1);
         continue;
 yy62:
         YYSKIP ();
@@ -674,11 +714,13 @@ yy63:
         goto yy59;
 yy64:
         YYSKIP ();
-        status = action_line126_Skiptoeol(i, keys, input, token, &cursor, 16);
+        status = check_key_count_line126_Skiptoeol(keys_count, i, 3)
+             || action_line126_Skiptoeol(&i, keys, input, token, &cursor, 0);
         continue;
 yy66:
         YYSKIP ();
-        if ((yych = YYPEEK ()) == '\n') goto yy64;
+        yych = YYPEEK ();
+        if (yych == '\n') goto yy64;
         goto yy59;
 
     }
@@ -690,7 +732,7 @@ yy66:
         }
         if (i != keys_count) {
             status = 1;
-            fprintf(stderr, "error: lex_line126_Skiptoeol: unused keys left after %u iterations\n", i);
+            fprintf(stderr, "error: lex_line126_Skiptoeol: unused keys left after %u keys\n", i);
         }
     }
 
@@ -718,7 +760,7 @@ end:
 #define YYFILL(n) { break; }
 
 static int action_line126_String
-    ( unsigned int i
+    ( unsigned *pkix
     , const YYKEYTYPE *keys
     , const YYCTYPE *start
     , const YYCTYPE *token
@@ -726,10 +768,12 @@ static int action_line126_String
     , YYKEYTYPE rule_act
     )
 {
+    const unsigned kix = *pkix;
     const long pos = token - start;
     const long len_act = *cursor - token;
-    const long len_exp = (long) keys [3 * i + 1];
-    const YYKEYTYPE rule_exp = keys [3 * i + 2];
+    const long len_exp = (long) keys[kix + 1];
+    const YYKEYTYPE rule_exp = keys[kix + 2];
+    *pkix = kix + 3;
     if (rule_exp == 255) {
         fprintf
             ( stderr
@@ -739,17 +783,17 @@ static int action_line126_String
             );
     }
     if (len_act == len_exp && rule_act == rule_exp) {
-        const YYKEYTYPE offset = keys[3 * i];
+        const YYKEYTYPE offset = keys[kix];
         *cursor = token + offset;
         return 0;
     } else {
         fprintf
             ( stderr
-            , "error: lex_line126_String: at position %ld (iteration %u):\n"
+            , "error: lex_line126_String: at position %ld (key %u):\n"
                 "\texpected: match length %ld, rule %u\n"
                 "\tactual:   match length %ld, rule %u\n"
             , pos
-            , i
+            , kix
             , len_exp
             , rule_exp
             , len_act
@@ -757,6 +801,13 @@ static int action_line126_String
             );
         return 1;
     }
+}
+
+static int check_key_count_line126_String(unsigned have, unsigned used, unsigned need)
+{
+    if (used + need <= have) return 0;
+    fprintf(stderr, "error: lex_line126_String: not enough keys\n");
+    return 1;
 }
 
 int lex_line126_String()
@@ -786,7 +837,7 @@ int lex_line126_String()
 
     keys = (YYKEYTYPE *) read_file
         ("condition_10.cgif--skeleton.c.line126_String.keys"
-        , 3 * sizeof (YYKEYTYPE)
+        , sizeof (YYKEYTYPE)
         , 0
         , &keys_count
         );
@@ -799,7 +850,7 @@ int lex_line126_String()
     limit = input + input_len + padding;
     eof = input + input_len;
 
-    for (i = 0; status == 0 && i < keys_count; ++i) {
+    for (i = 0; status == 0 && cursor < eof && i < keys_count;) {
         token = cursor;
         YYCTYPE yych;
 
@@ -809,18 +860,21 @@ int lex_line126_String()
         if (yych == '\\') goto yy74;
         YYSKIP ();
 yy71:
-        status = action_line126_String(i, keys, input, token, &cursor, 23);
+        status = check_key_count_line126_String(keys_count, i, 3)
+             || action_line126_String(&i, keys, input, token, &cursor, 2);
         continue;
 yy72:
         YYSKIP ();
-        status = action_line126_String(i, keys, input, token, &cursor, 22);
+        status = check_key_count_line126_String(keys_count, i, 3)
+             || action_line126_String(&i, keys, input, token, &cursor, 1);
         continue;
 yy74:
         YYSKIP ();
         yych = YYPEEK ();
         if (yych == '\n') goto yy71;
         YYSKIP ();
-        status = action_line126_String(i, keys, input, token, &cursor, 21);
+        status = check_key_count_line126_String(keys_count, i, 3)
+             || action_line126_String(&i, keys, input, token, &cursor, 0);
         continue;
 
     }
@@ -832,7 +886,7 @@ yy74:
         }
         if (i != keys_count) {
             status = 1;
-            fprintf(stderr, "error: lex_line126_String: unused keys left after %u iterations\n", i);
+            fprintf(stderr, "error: lex_line126_String: unused keys left after %u keys\n", i);
         }
     }
 
@@ -868,7 +922,7 @@ int main()
 }
  	
  !"#$%&'()+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz{|}~ÄÅÇÉÑÖÜáàâäãåçéèêëíìîïñóòôöõúùûü†°¢£§•¶ß®©™´¨≠ÆØ∞±≤≥¥µ∂∑∏π∫ªºΩæø¿¡¬√ƒ≈∆«»… ÀÃÕŒœ–—“”‘’÷◊ÿŸ⁄€‹›ﬁﬂ‡·‚„‰ÂÊÁËÈÍÎÏÌÓÔÒÚÛÙıˆ˜¯˘˙˚¸˝˛ˇ*/* *********	*
-********************** *!*"*#*$*%*&*'*(*)***+*,*-*.*0*1*2*3*4*5*6*7*8*9*:*;*<*=*>*?*@*A*B*C*D*E*F*G*H*I*J*K*L*M*N*O*P*Q*R*S*T*U*V*W*X*Y*Z*[*\*]*^*_*`*a*b*c*d*e*f*g*h*i*j*k*l*m*n*o*p*q*r*s*t*u*v*w*x*y*z*{*|*}*~**Ä*Å*Ç*É*Ñ*Ö*Ü*á*à*â*ä*ã*å*ç*é*è*ê*ë*í*ì*î*ï*ñ*ó*ò*ô*ö*õ*ú*ù*û*ü*†*°*¢*£*§*•*¶*ß*®*©*™*´*¨*≠*Æ*Ø*∞*±*≤*≥*¥*µ*∂*∑*∏*π*∫*ª*º*Ω*æ*ø*¿*¡*¬*√*ƒ*≈*∆*«*»*…* *À*Ã*Õ*Œ*œ*–*—*“*”*‘*’*÷*◊*ÿ*Ÿ*⁄*€*‹*›*ﬁ*ﬂ*‡*·*‚*„*‰*Â*Ê*Á*Ë*È*Í*Î*Ï*Ì*Ó*Ô**Ò*Ú*Û*Ù*ı*ˆ*˜*¯*˘*˙*˚*¸*˝*˛*ˇ 	
+********************** *!*"*#*$*%*&*'*(*)***+*,*-*.*0*1*2*3*4*5*6*7*8*9*:*;*<*=*>*?*@*A*B*C*D*E*F*G*H*I*J*K*L*M*N*O*P*Q*R*S*T*U*V*W*X*Y*Z*[*\*]*^*_*`*a*b*c*d*e*f*g*h*i*j*k*l*m*n*o*p*q*r*s*t*u*v*w*x*y*z*{*|*}*~**Ä*Å*Ç*É*Ñ*Ö*Ü*á*à*â*ä*ã*å*ç*é*è*ê*ë*í*ì*î*ï*ñ*ó*ò*ô*ö*õ*ú*ù*û*ü*†*°*¢*£*§*•*¶*ß*®*©*™*´*¨*≠*Æ*Ø*∞*±*≤*≥*¥*µ*∂*∑*∏*π*∫*ª*º*Ω*æ*ø*¿*¡*¬*√*ƒ*≈*∆*«*»*…* *À*Ã*Õ*Œ*œ*–*—*“*”*‘*’*÷*◊*ÿ*Ÿ*⁄*€*‹*›*ﬁ*ﬂ*‡*·*‚*„*‰*Â*Ê*Á*Ë*È*Í*Î*Ï*Ì*Ó*Ô**Ò*Ú*Û*Ù*ı*ˆ*˜*¯*˘*˙*˚*¸*˝*˛*ˇ  	
  !#$%&()*+,-.0123456789:;<=>@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz{|}~ÄÅÇÉÑÖÜáàâäãåçéèêëíìîïñóòôöõúùûü†°¢£§•¶ß®©™´¨≠ÆØ∞±≤≥¥µ∂∑∏π∫ªºΩæø¿¡¬√ƒ≈∆«»… ÀÃÕŒœ–—“”‘’÷◊ÿŸ⁄€‹›ﬁﬂ‡·‚„‰ÂÊÁËÈÍÎÏÌÓÔÒÚÛÙıˆ˜¯˘˙˚¸˝˛ˇ"'"''" '"'"'"'"'"'"'"'"'"	'"
 '"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'"'" '"!'""'"#'"$'"%'"&'"('")'"*'"+'",'"-'".'"/'"0'"1'"2'"3'"4'"5'"6'"7'"8'"9'":'";'"<'"='">'"?'"@'"A'"B'"C'"D'"E'"F'"G'"H'"I'"J'"K'"L'"M'"N'"O'"P'"Q'"R'"S'"T'"U'"V'"W'"X'"Y'"Z'"['"\'"]'"^'"_'"`'"a'"b'"c'"d'"e'"f'"g'"h'"i'"j'"k'"l'"m'"n'"o'"p'"q'"r'"s'"t'"u'"v'"w'"x'"y'"z'"{'"|'"}'"~'"'"Ä'"Å'"Ç'"É'"Ñ'"Ö'"Ü'"á'"à'"â'"ä'"ã'"å'"ç'"é'"è'"ê'"ë'"í'"ì'"î'"ï'"ñ'"ó'"ò'"ô'"ö'"õ'"ú'"ù'"û'"ü'"†'"°'"¢'"£'"§'"•'"¶'"ß'"®'"©'"™'"´'"¨'"≠'"Æ'"Ø'"∞'"±'"≤'"≥'"¥'"µ'"∂'"∑'"∏'"π'"∫'"ª'"º'"Ω'"æ'"ø'"¿'"¡'"¬'"√'"ƒ'"≈'"∆'"«'"»'"…'" '"À'"Ã'"Õ'"Œ'"œ'"–'"—'"“'"”'"‘'"’'"÷'"◊'"ÿ'"Ÿ'"⁄'"€'"‹'"›'"ﬁ'"ﬂ'"‡'"·'"‚'"„'"‰'"Â'"Ê'"Á'"Ë'"È'"Í'"Î'"Ï'"Ì'"Ó'"Ô'"'"Ò'"Ú'"Û'"Ù'"ı'"ˆ'"˜'"¯'"˘'"˙'"˚'"¸'"˝'"˛'"ˇ'\"''\" '\"'\"'\"'\"'\"'\"'\"'\"'\"	'\"
 '\"'\"'\"'\"'\"'\"'\"'\"'\"'\"'\"'\"'\"'\"'\"'\"'\"'\"'\"'\"'\"'\" '\"!'\""'\"#'\"$'\"%'\"&'\"('\")'\"*'\"+'\",'\"-'\".'\"/'\"0'\"1'\"2'\"3'\"4'\"5'\"6'\"7'\"8'\"9'\":'\";'\"<'\"='\">'\"?'\"@'\"A'\"B'\"C'\"D'\"E'\"F'\"G'\"H'\"I'\"J'\"K'\"L'\"M'\"N'\"O'\"P'\"Q'\"R'\"S'\"T'\"U'\"V'\"W'\"X'\"Y'\"Z'\"['\"\'\"]'\"^'\"_'\"`'\"a'\"b'\"c'\"d'\"e'\"f'\"g'\"h'\"i'\"j'\"k'\"l'\"m'\"n'\"o'\"p'\"q'\"r'\"s'\"t'\"u'\"v'\"w'\"x'\"y'\"z'\"{'\"|'\"}'\"~'\"'\"Ä'\"Å'\"Ç'\"É'\"Ñ'\"Ö'\"Ü'\"á'\"à'\"â'\"ä'\"ã'\"å'\"ç'\"é'\"è'\"ê'\"ë'\"í'\"ì'\"î'\"ï'\"ñ'\"ó'\"ò'\"ô'\"ö'\"õ'\"ú'\"ù'\"û'\"ü'\"†'\"°'\"¢'\"£'\"§'\"•'\"¶'\"ß'\"®'\"©'\"™'\"´'\"¨'\"≠'\"Æ'\"Ø'\"∞'\"±'\"≤'\"≥'\"¥'\"µ'\"∂'\"∑'\"∏'\"π'\"∫'\"ª'\"º'\"Ω'\"æ'\"ø'\"¿'\"¡'\"¬'\"√'\"ƒ'\"≈'\"∆'\"«'\"»'\"…'\" '\"À'\"Ã'\"Õ'\"Œ'\"œ'\"–'\"—'\"“'\"”'\"‘'\"’'\"÷'\"◊'\"ÿ'\"Ÿ'\"⁄'\"€'\"‹'\"›'\"ﬁ'\"ﬂ'\"‡'\"·'\"‚'\"„'\"‰'\"Â'\"Ê'\"Á'\"Ë'\"È'\"Í'\"Î'\"Ï'\"Ì'\"Ó'\"Ô'\"'\"Ò'\"Ú'\"Û'\"Ù'\"ı'\"ˆ'\"˜'\"¯'\"˘'\"˙'\"˚'\"¸'\"˝'\"˛'\"ˇ'\ '\'\'\'\'\'\'\'\'\	'\
@@ -885,6 +939,6 @@ int main()
 ???????????????????????????????????????????? ??!??"??#??$??%??&??'??(??)??*??+??,??-??.??0??1??2??3??4??5??6??7??8??9??:??;??<??=??>?????@??A??B??C??D??E??F??G??H??I??J??K??L??M??N??O??P??Q??R??S??T??U??V??W??X??Y??Z??[??\??]??^??_??`??a??b??c??d??e??f??g??h??i??j??k??l??m??n??o??p??q??r??s??t??u??v??w??x??y??z??{??|??}??~????Ä??Å??Ç??É??Ñ??Ö??Ü??á??à??â??ä??ã??å??ç??é??è??ê??ë??í??ì??î??ï??ñ??ó??ò??ô??ö??õ??ú??ù??û??ü??†??°??¢??£??§??•??¶??ß??®??©??™??´??¨??≠??Æ??Ø??∞??±??≤??≥??¥??µ??∂??∑??∏??π??∫??ª??º??Ω??æ??ø??¿??¡??¬??√??ƒ??≈??∆??«??»??…?? ??À??Ã??Õ??Œ??œ??–??—??“??”??‘??’??÷??◊??ÿ??Ÿ??⁄??€??‹??›??ﬁ??ﬂ??‡??·??‚??„??‰??Â??Ê??Á??Ë??È??Í??Î??Ï??Ì??Ó??Ô????Ò??Ú??Û??Ù??ı??ˆ??˜??¯??˘??˙??˚??¸??˝??˛??ˇ? ?????????	?
 ?????????????????????? ?!?"?#?$?%?&?'?(?)?*?+?,?-?.?/?0?1?2?3?4?5?6?7?8?9?:?;?<?=?>?@?A?B?C?D?E?F?G?H?I?J?K?L?M?N?O?P?Q?R?S?T?U?V?W?X?Y?Z?[?\?]?^?_?`?a?b?c?d?e?f?g?h?i?j?k?l?m?n?o?p?q?r?s?t?u?v?w?x?y?z?{?|?}?~??Ä?Å?Ç?É?Ñ?Ö?Ü?á?à?â?ä?ã?å?ç?é?è?ê?ë?í?ì?î?ï?ñ?ó?ò?ô?ö?õ?ú?ù?û?ü?†?°?¢?£?§?•?¶?ß?®?©?™?´?¨?≠?Æ?Ø?∞?±?≤?≥?¥?µ?∂?∑?∏?π?∫?ª?º?Ω?æ?ø?¿?¡?¬?√?ƒ?≈?∆?«?»?…? ?À?Ã?Õ?Œ?œ?–?—?“?”?‘?’?÷?◊?ÿ?Ÿ?⁄?€?‹?›?ﬁ?ﬂ?‡?·?‚?„?‰?Â?Ê?Á?Ë?È?Í?Î?Ï?Ì?Ó?Ô??Ò?Ú?Û?Ù?ı?ˆ?˜?¯?˘?˙?˚?¸?˝?˛?ˇ\
 \
-\ \\\\\\\\\	\\\\\\\\\\\\\\\\\\\\\\ \!\"\#\$\%\&\'\(\)\*\+\,\-\.\/\0\1\2\3\4\5\6\7\8\9\:\;\<\=\>\?\@\A\B\C\D\E\F\G\H\I\J\K\L\M\N\O\P\Q\R\S\T\U\V\W\X\Y\Z\[\\\]\^\_\`\a\b\c\d\e\f\g\h\i\j\k\l\m\n\o\p\q\r\s\t\u\v\w\x\y\z\{\|\}\~\\Ä\Å\Ç\É\Ñ\Ö\Ü\á\à\â\ä\ã\å\ç\é\è\ê\ë\í\ì\î\ï\ñ\ó\ò\ô\ö\õ\ú\ù\û\ü\†\°\¢\£\§\•\¶\ß\®\©\™\´\¨\≠\Æ\Ø\∞\±\≤\≥\¥\µ\∂\∑\∏\π\∫\ª\º\Ω\æ\ø\¿\¡\¬\√\ƒ\≈\∆\«\»\…\ \À\Ã\Õ\Œ\œ\–\—\“\”\‘\’\÷\◊\ÿ\Ÿ\⁄\€\‹\›\ﬁ\ﬂ\‡\·\‚\„\‰\Â\Ê\Á\Ë\È\Í\Î\Ï\Ì\Ó\Ô\\Ò\Ú\Û\Ù\ı\ˆ\˜\¯\˘\˙\˚\¸\˝\˛\ˇ\ \\\\\\\\\	\\\\\\\\\\\\\\\\\\\\\ \!\"\#\$\%\&\'\(\)\*\+\,\-\.\/\0\1\2\3\4\5\6\7\8\9\:\;\<\=\>\?\@\A\B\C\D\E\F\G\H\I\J\K\L\M\N\O\P\Q\R\S\T\U\V\W\X\Y\Z\[\\\]\^\_\`\a\b\c\d\e\f\g\h\i\j\k\l\m\n\o\p\q\r\s\t\u\v\w\x\y\z\{\|\}\~\\Ä\Å\Ç\É\Ñ\Ö\Ü\á\à\â\ä\ã\å\ç\é\è\ê\ë\í\ì\î\ï\ñ\ó\ò\ô\ö\õ\ú\ù\û\ü\†\°\¢\£\§\•\¶\ß\®\©\™\´\¨\≠\Æ\Ø\∞\±\≤\≥\¥\µ\∂\∑\∏\π\∫\ª\º\Ω\æ\ø\¿\¡\¬\√\ƒ\≈\∆\«\»\…\ \À\Ã\Õ\Œ\œ\–\—\“\”\‘\’\÷\◊\ÿ\Ÿ\⁄\€\‹\›\ﬁ\ﬂ\‡\·\‚\„\‰\Â\Ê\Á\Ë\È\Í\Î\Ï\Ì\Ó\Ô\\Ò\Ú\Û\Ù\ı\ˆ\˜\¯\˘\˙\˚\¸\˝\˛\ˇ 	
+\ \\\\\\\\\	\\\\\\\\\\\\\\\\\\\\\\ \!\"\#\$\%\&\'\(\)\*\+\,\-\.\/\0\1\2\3\4\5\6\7\8\9\:\;\<\=\>\?\@\A\B\C\D\E\F\G\H\I\J\K\L\M\N\O\P\Q\R\S\T\U\V\W\X\Y\Z\[\\\]\^\_\`\a\b\c\d\e\f\g\h\i\j\k\l\m\n\o\p\q\r\s\t\u\v\w\x\y\z\{\|\}\~\\Ä\Å\Ç\É\Ñ\Ö\Ü\á\à\â\ä\ã\å\ç\é\è\ê\ë\í\ì\î\ï\ñ\ó\ò\ô\ö\õ\ú\ù\û\ü\†\°\¢\£\§\•\¶\ß\®\©\™\´\¨\≠\Æ\Ø\∞\±\≤\≥\¥\µ\∂\∑\∏\π\∫\ª\º\Ω\æ\ø\¿\¡\¬\√\ƒ\≈\∆\«\»\…\ \À\Ã\Õ\Œ\œ\–\—\“\”\‘\’\÷\◊\ÿ\Ÿ\⁄\€\‹\›\ﬁ\ﬂ\‡\·\‚\„\‰\Â\Ê\Á\Ë\È\Í\Î\Ï\Ì\Ó\Ô\\Ò\Ú\Û\Ù\ı\ˆ\˜\¯\˘\˙\˚\¸\˝\˛\ˇ\ \\\\\\\\\	\\\\\\\\\\\\\\\\\\\\\ \!\"\#\$\%\&\'\(\)\*\+\,\-\.\/\0\1\2\3\4\5\6\7\8\9\:\;\<\=\>\?\@\A\B\C\D\E\F\G\H\I\J\K\L\M\N\O\P\Q\R\S\T\U\V\W\X\Y\Z\[\\\]\^\_\`\a\b\c\d\e\f\g\h\i\j\k\l\m\n\o\p\q\r\s\t\u\v\w\x\y\z\{\|\}\~\\Ä\Å\Ç\É\Ñ\Ö\Ü\á\à\â\ä\ã\å\ç\é\è\ê\ë\í\ì\î\ï\ñ\ó\ò\ô\ö\õ\ú\ù\û\ü\†\°\¢\£\§\•\¶\ß\®\©\™\´\¨\≠\Æ\Ø\∞\±\≤\≥\¥\µ\∂\∑\∏\π\∫\ª\º\Ω\æ\ø\¿\¡\¬\√\ƒ\≈\∆\«\»\…\ \À\Ã\Õ\Œ\œ\–\—\“\”\‘\’\÷\◊\ÿ\Ÿ\⁄\€\‹\›\ﬁ\ﬂ\‡\·\‚\„\‰\Â\Ê\Á\Ë\È\Í\Î\Ï\Ì\Ó\Ô\\Ò\Ú\Û\Ù\ı\ˆ\˜\¯\˘\˙\˚\¸\˝\˛\ˇ   	
  !#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[]^_`abcdefghijklmnopqrstuvwxyz{|}~ÄÅÇÉÑÖÜáàâäãåçéèêëíìîïñóòôöõúùûü†°¢£§•¶ß®©™´¨≠ÆØ∞±≤≥¥µ∂∑∏π∫ªºΩæø¿¡¬√ƒ≈∆«»… ÀÃÕŒœ–—“”‘’÷◊ÿŸ⁄€‹›ﬁﬂ‡·‚„‰ÂÊÁËÈÍÎÏÌÓÔÒÚÛÙıˆ˜¯˘˙˚¸˝˛ˇ"\ \\\\\\\\\	\\\\\\\\\\\\\\\\\\\\\\ \!\"\#\$\%\&\'\(\)\*\+\,\-\.\/\0\1\2\3\4\5\6\7\8\9\:\;\<\=\>\?\@\A\B\C\D\E\F\G\H\I\J\K\L\M\N\O\P\Q\R\S\T\U\V\W\X\Y\Z\[\\\]\^\_\`\a\b\c\d\e\f\g\h\i\j\k\l\m\n\o\p\q\r\s\t\u\v\w\x\y\z\{\|\}\~\\Ä\Å\Ç\É\Ñ\Ö\Ü\á\à\â\ä\ã\å\ç\é\è\ê\ë\í\ì\î\ï\ñ\ó\ò\ô\ö\õ\ú\ù\û\ü\†\°\¢\£\§\•\¶\ß\®\©\™\´\¨\≠\Æ\Ø\∞\±\≤\≥\¥\µ\∂\∑\∏\π\∫\ª\º\Ω\æ\ø\¿\¡\¬\√\ƒ\≈\∆\«\»\…\ \À\Ã\Õ\Œ\œ\–\—\“\”\‘\’\÷\◊\ÿ\Ÿ\⁄\€\‹\›\ﬁ\ﬂ\‡\·\‚\„\‰\Â\Ê\Á\Ë\È\Í\Î\Ï\Ì\Ó\Ô\\Ò\Ú\Û\Ù\ı\ˆ\˜\¯\˘\˙\˚\¸\˝\˛\ˇ\
-
+                                                                                                                                                                                                                                                               

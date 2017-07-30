@@ -2,6 +2,9 @@
 
 set -e
 
+echo 'RUNME: cppcheck --enable=all --inconclusive --std=posix --quiet --force -I. src/'
+echo 'RUNME: for h in $(find src/ -name ''*.h*''); do echo "CHECKING $h"; g++ -I. -c $h -o foo.o; done'
+
 if [[ $# -ne 1 ]]
 then
     echo "usage: ./release.sh <version>"

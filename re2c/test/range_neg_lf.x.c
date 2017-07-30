@@ -18,8 +18,8 @@ yy4:
 	{return 0;}
 #line 20 "range_neg_lf.x.c"
 yy5:
-	++YYCURSOR;
-	if ((yych = *YYCURSOR) <= 0xDBFF) goto yy4;
+	yych = *++YYCURSOR;
+	if (yych <= 0xDBFF) goto yy4;
 	if (yych <= 0xDFFF) goto yy3;
 	goto yy4;
 }

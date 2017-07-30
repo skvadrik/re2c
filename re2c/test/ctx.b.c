@@ -126,10 +126,13 @@ yy6:
 #line 127 "ctx.b.c"
 yy9:
 	yych = *++YYCURSOR;
-	YYCTXMARKER = YYCURSOR;
 	if (yych <= '/') goto yy3;
-	if (yych == '1') goto yy13;
+	if (yych == '1') {
+		YYCTXMARKER = YYCURSOR;
+		goto yy13;
+	}
 	if (yych >= ':') goto yy3;
+	YYCTXMARKER = YYCURSOR;
 yy10:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
@@ -140,22 +143,23 @@ yy12:
 	YYCURSOR = YYCTXMARKER;
 #line 49 "ctx.b.re"
 	{ return KEYWORD; }
-#line 144 "ctx.b.c"
+#line 147 "ctx.b.c"
 yy13:
-	++YYCURSOR;
-	if ((yych = *YYCURSOR) <= '/') goto yy14;
+	yych = *++YYCURSOR;
+	if (yych <= '/') goto yy14;
 	if (yych <= '9') goto yy10;
 yy14:
-	YYCURSOR = YYCTXMARKER;
+	YYCURSOR -= 1;
 #line 48 "ctx.b.re"
 	{ return KEYWORD; }
-#line 153 "ctx.b.c"
+#line 156 "ctx.b.c"
 }
 #line 63 "ctx.b.re"
 
 }
 
 #define YYMAXFILL 3
+
 
 int main(int,char**)
 {

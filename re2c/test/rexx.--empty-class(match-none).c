@@ -32,8 +32,8 @@ scan:
 	if ((YYLIMIT - YYCURSOR) < 13) YYFILL(13);
 	yych = *YYCURSOR;
 	switch (yych) {
-	case 0x00:	goto yy3;
-	case '\n':	goto yy7;
+	case 0x00:	goto yy2;
+	case '\n':	goto yy6;
 	case '!':
 	case '?':
 	case 'G':
@@ -50,17 +50,17 @@ scan:
 	case 'm':
 	case 'x':
 	case 'y':
-	case 'z':	goto yy9;
-	case '"':	goto yy12;
-	case '%':	goto yy13;
-	case '&':	goto yy15;
-	case '\'':	goto yy17;
-	case '(':	goto yy18;
-	case ')':	goto yy20;
-	case '*':	goto yy22;
-	case '+':	goto yy24;
-	case ',':	goto yy26;
-	case '-':	goto yy28;
+	case 'z':	goto yy8;
+	case '"':	goto yy11;
+	case '%':	goto yy12;
+	case '&':	goto yy14;
+	case '\'':	goto yy16;
+	case '(':	goto yy17;
+	case ')':	goto yy19;
+	case '*':	goto yy21;
+	case '+':	goto yy23;
+	case ',':	goto yy25;
+	case '-':	goto yy27;
 	case '.':
 	case '0':
 	case '1':
@@ -71,72 +71,68 @@ scan:
 	case '6':
 	case '7':
 	case '8':
-	case '9':	goto yy30;
-	case '/':	goto yy33;
-	case ':':	goto yy35;
-	case ';':	goto yy37;
-	case '<':	goto yy39;
-	case '=':	goto yy41;
-	case '>':	goto yy43;
+	case '9':	goto yy29;
+	case '/':	goto yy32;
+	case ':':	goto yy34;
+	case ';':	goto yy36;
+	case '<':	goto yy38;
+	case '=':	goto yy40;
+	case '>':	goto yy42;
 	case 'A':
-	case 'a':	goto yy45;
+	case 'a':	goto yy44;
 	case 'B':
-	case 'b':	goto yy46;
+	case 'b':	goto yy45;
 	case 'C':
-	case 'c':	goto yy47;
+	case 'c':	goto yy46;
 	case 'D':
-	case 'd':	goto yy48;
+	case 'd':	goto yy47;
 	case 'E':
-	case 'e':	goto yy49;
+	case 'e':	goto yy48;
 	case 'F':
-	case 'f':	goto yy50;
+	case 'f':	goto yy49;
 	case 'H':
-	case 'h':	goto yy51;
+	case 'h':	goto yy50;
 	case 'I':
-	case 'i':	goto yy52;
+	case 'i':	goto yy51;
 	case 'L':
-	case 'l':	goto yy53;
+	case 'l':	goto yy52;
 	case 'N':
-	case 'n':	goto yy54;
+	case 'n':	goto yy53;
 	case 'O':
-	case 'o':	goto yy55;
+	case 'o':	goto yy54;
 	case 'P':
-	case 'p':	goto yy56;
+	case 'p':	goto yy55;
 	case 'Q':
-	case 'q':	goto yy57;
+	case 'q':	goto yy56;
 	case 'R':
-	case 'r':	goto yy58;
+	case 'r':	goto yy57;
 	case 'S':
-	case 's':	goto yy59;
+	case 's':	goto yy58;
 	case 'T':
-	case 't':	goto yy60;
+	case 't':	goto yy59;
 	case 'U':
-	case 'u':	goto yy61;
+	case 'u':	goto yy60;
 	case 'V':
-	case 'v':	goto yy62;
+	case 'v':	goto yy61;
 	case 'W':
-	case 'w':	goto yy63;
+	case 'w':	goto yy62;
 	case '\\':
-	case '~':	goto yy64;
-	case '|':	goto yy66;
-	default:	goto yy5;
+	case '~':	goto yy63;
+	case '|':	goto yy65;
+	default:	goto yy4;
 	}
 yy2:
-#line 253 "rexx.--empty-class(match-none).re"
-	{ RETURN(SU_SYMBOL_COMPOUND); }
-#line 128 "rexx.--empty-class(match-none).c"
-yy3:
 	++YYCURSOR;
 #line 262 "rexx.--empty-class(match-none).re"
 	{ RETURN(SU_EOF); }
-#line 133 "rexx.--empty-class(match-none).c"
-yy5:
+#line 129 "rexx.--empty-class(match-none).c"
+yy4:
 	++YYCURSOR;
-yy6:
+yy5:
 #line 264 "rexx.--empty-class(match-none).re"
 	{ RETURN(SU_ERROR); }
-#line 139 "rexx.--empty-class(match-none).c"
-yy7:
+#line 135 "rexx.--empty-class(match-none).c"
+yy6:
 	++YYCURSOR;
 #line 68 "rexx.--empty-class(match-none).re"
 	{
@@ -144,12 +140,12 @@ yy7:
 		ScanCB.linePos = ScanCB.pos + (cursor - ScanCB.mrk);
 		RETURN(SU_EOL);
 	    }
-#line 148 "rexx.--empty-class(match-none).c"
-yy9:
+#line 144 "rexx.--empty-class(match-none).c"
+yy8:
 	++YYCURSOR;
 	if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
 	yych = *YYCURSOR;
-yy10:
+yy9:
 	switch (yych) {
 	case '!':
 	case '0':
@@ -215,87 +211,87 @@ yy10:
 	case 'w':
 	case 'x':
 	case 'y':
-	case 'z':	goto yy9;
-	case '.':	goto yy68;
-	default:	goto yy11;
+	case 'z':	goto yy8;
+	case '.':	goto yy67;
+	default:	goto yy10;
 	}
-yy11:
+yy10:
 #line 249 "rexx.--empty-class(match-none).re"
 	{ RETURN(SU_SYMBOL); }
-#line 226 "rexx.--empty-class(match-none).c"
-yy12:
+#line 222 "rexx.--empty-class(match-none).c"
+yy11:
 	yyaccept = 0;
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
 	case 0x00:
-	case '\n':	goto yy6;
-	default:	goto yy71;
+	case '\n':	goto yy5;
+	default:	goto yy70;
 	}
-yy13:
+yy12:
 	++YYCURSOR;
 #line 84 "rexx.--empty-class(match-none).re"
 	{ RETURN(OP_IDIV); }
-#line 239 "rexx.--empty-class(match-none).c"
-yy15:
+#line 235 "rexx.--empty-class(match-none).c"
+yy14:
 	yyaccept = 1;
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
 	case '\t':
-	case ' ':	goto yy75;
-	case '&':	goto yy77;
-	default:	goto yy16;
+	case ' ':	goto yy74;
+	case '&':	goto yy76;
+	default:	goto yy15;
 	}
-yy16:
+yy15:
 #line 114 "rexx.--empty-class(match-none).re"
 	{ RETURN(OP_AND); }
-#line 252 "rexx.--empty-class(match-none).c"
-yy17:
+#line 248 "rexx.--empty-class(match-none).c"
+yy16:
 	yyaccept = 0;
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
 	case 0x00:
-	case '\n':	goto yy6;
-	default:	goto yy80;
+	case '\n':	goto yy5;
+	default:	goto yy79;
 	}
-yy18:
+yy17:
 	++YYCURSOR;
 #line 127 "rexx.--empty-class(match-none).re"
 	{ RETURN(SU_POPEN); }
-#line 265 "rexx.--empty-class(match-none).c"
-yy20:
+#line 261 "rexx.--empty-class(match-none).c"
+yy19:
 	++YYCURSOR;
 #line 129 "rexx.--empty-class(match-none).re"
 	{ RETURN(SU_PCLOSE); }
-#line 270 "rexx.--empty-class(match-none).c"
-yy22:
+#line 266 "rexx.--empty-class(match-none).c"
+yy21:
 	yyaccept = 2;
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
 	case '\t':
-	case ' ':	goto yy82;
-	case '*':	goto yy84;
-	default:	goto yy23;
+	case ' ':	goto yy81;
+	case '*':	goto yy83;
+	default:	goto yy22;
 	}
-yy23:
+yy22:
 #line 80 "rexx.--empty-class(match-none).re"
 	{ RETURN(OP_MULT); }
-#line 283 "rexx.--empty-class(match-none).c"
-yy24:
+#line 279 "rexx.--empty-class(match-none).c"
+yy23:
 	++YYCURSOR;
 #line 76 "rexx.--empty-class(match-none).re"
 	{ RETURN(OP_PLUS); }
-#line 288 "rexx.--empty-class(match-none).c"
-yy26:
+#line 284 "rexx.--empty-class(match-none).c"
+yy25:
 	++YYCURSOR;
 #line 125 "rexx.--empty-class(match-none).re"
 	{ RETURN(SU_COMMA); }
-#line 293 "rexx.--empty-class(match-none).c"
-yy28:
+#line 289 "rexx.--empty-class(match-none).c"
+yy27:
 	++YYCURSOR;
 #line 78 "rexx.--empty-class(match-none).re"
 	{ RETURN(OP_MINUS); }
-#line 298 "rexx.--empty-class(match-none).c"
-yy30:
+#line 294 "rexx.--empty-class(match-none).c"
+yy29:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
@@ -363,39 +359,39 @@ yy30:
 	case 'w':
 	case 'x':
 	case 'y':
-	case 'z':	goto yy30;
+	case 'z':	goto yy29;
 	case 'E':
-	case 'e':	goto yy86;
-	default:	goto yy32;
+	case 'e':	goto yy85;
+	default:	goto yy31;
 	}
-yy32:
+yy31:
 #line 247 "rexx.--empty-class(match-none).re"
 	{ RETURN(SU_CONST); }
-#line 375 "rexx.--empty-class(match-none).c"
-yy33:
+#line 371 "rexx.--empty-class(match-none).c"
+yy32:
 	yyaccept = 3;
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
 	case '\t':
-	case ' ':	goto yy88;
-	case '/':	goto yy90;
-	default:	goto yy34;
+	case ' ':	goto yy87;
+	case '/':	goto yy89;
+	default:	goto yy33;
 	}
-yy34:
+yy33:
 #line 82 "rexx.--empty-class(match-none).re"
 	{ RETURN(OP_DIV); }
-#line 388 "rexx.--empty-class(match-none).c"
-yy35:
+#line 384 "rexx.--empty-class(match-none).c"
+yy34:
 	++YYCURSOR;
 #line 123 "rexx.--empty-class(match-none).re"
 	{ RETURN(SU_COLON); }
-#line 393 "rexx.--empty-class(match-none).c"
-yy37:
+#line 389 "rexx.--empty-class(match-none).c"
+yy36:
 	++YYCURSOR;
 #line 131 "rexx.--empty-class(match-none).re"
 	{ RETURN(SU_EOC); }
-#line 398 "rexx.--empty-class(match-none).c"
-yy39:
+#line 394 "rexx.--empty-class(match-none).c"
+yy38:
 	yyaccept = 4;
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -403,27 +399,27 @@ yy39:
 	case ' ':
 	case '<':
 	case '=':
-	case '>':	goto yy93;
-	default:	goto yy40;
+	case '>':	goto yy92;
+	default:	goto yy39;
 	}
-yy40:
+yy39:
 #line 96 "rexx.--empty-class(match-none).re"
 	{ RETURN(OP_LT); }
-#line 413 "rexx.--empty-class(match-none).c"
-yy41:
+#line 409 "rexx.--empty-class(match-none).c"
+yy40:
 	yyaccept = 5;
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
 	case '\t':
-	case ' ':	goto yy100;
-	case '=':	goto yy102;
-	default:	goto yy42;
+	case ' ':	goto yy99;
+	case '=':	goto yy101;
+	default:	goto yy41;
 	}
-yy42:
+yy41:
 #line 90 "rexx.--empty-class(match-none).re"
 	{ RETURN(OP_EQUAL); }
-#line 426 "rexx.--empty-class(match-none).c"
-yy43:
+#line 422 "rexx.--empty-class(match-none).c"
+yy42:
 	yyaccept = 6;
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -431,203 +427,203 @@ yy43:
 	case ' ':
 	case '<':
 	case '=':
-	case '>':	goto yy105;
-	default:	goto yy44;
+	case '>':	goto yy104;
+	default:	goto yy43;
 	}
-yy44:
+yy43:
 #line 94 "rexx.--empty-class(match-none).re"
 	{ RETURN(OP_GT); }
-#line 441 "rexx.--empty-class(match-none).c"
-yy45:
+#line 437 "rexx.--empty-class(match-none).c"
+yy44:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'D':
-	case 'd':	goto yy110;
+	case 'd':	goto yy109;
 	case 'R':
-	case 'r':	goto yy111;
-	default:	goto yy10;
+	case 'r':	goto yy110;
+	default:	goto yy9;
+	}
+yy45:
+	yych = *++YYCURSOR;
+	switch (yych) {
+	case 'Y':
+	case 'y':	goto yy111;
+	default:	goto yy9;
 	}
 yy46:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case 'Y':
-	case 'y':	goto yy112;
-	default:	goto yy10;
+	case 'A':
+	case 'a':	goto yy113;
+	default:	goto yy9;
 	}
 yy47:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case 'A':
-	case 'a':	goto yy114;
-	default:	goto yy10;
+	case 'I':
+	case 'i':	goto yy114;
+	case 'O':
+	case 'o':	goto yy115;
+	case 'R':
+	case 'r':	goto yy117;
+	default:	goto yy9;
 	}
 yy48:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case 'I':
-	case 'i':	goto yy115;
-	case 'O':
-	case 'o':	goto yy116;
+	case 'L':
+	case 'l':	goto yy118;
+	case 'N':
+	case 'n':	goto yy119;
 	case 'R':
-	case 'r':	goto yy118;
-	default:	goto yy10;
+	case 'r':	goto yy120;
+	case 'X':
+	case 'x':	goto yy121;
+	default:	goto yy9;
 	}
 yy49:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case 'L':
-	case 'l':	goto yy119;
-	case 'N':
-	case 'n':	goto yy120;
-	case 'R':
-	case 'r':	goto yy121;
-	case 'X':
-	case 'x':	goto yy122;
-	default:	goto yy10;
+	case 'A':
+	case 'a':	goto yy122;
+	case 'O':
+	case 'o':	goto yy123;
+	case 'U':
+	case 'u':	goto yy124;
+	default:	goto yy9;
 	}
 yy50:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'A':
-	case 'a':	goto yy123;
-	case 'O':
-	case 'o':	goto yy124;
-	case 'U':
-	case 'u':	goto yy125;
-	default:	goto yy10;
+	case 'a':	goto yy125;
+	default:	goto yy9;
 	}
 yy51:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case 'A':
-	case 'a':	goto yy126;
-	default:	goto yy10;
+	case 'F':
+	case 'f':	goto yy126;
+	case 'N':
+	case 'n':	goto yy128;
+	case 'T':
+	case 't':	goto yy129;
+	default:	goto yy9;
 	}
 yy52:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case 'F':
-	case 'f':	goto yy127;
-	case 'N':
-	case 'n':	goto yy129;
-	case 'T':
-	case 't':	goto yy130;
-	default:	goto yy10;
+	case 'E':
+	case 'e':	goto yy130;
+	case 'I':
+	case 'i':	goto yy131;
+	default:	goto yy9;
 	}
 yy53:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case 'E':
-	case 'e':	goto yy131;
-	case 'I':
-	case 'i':	goto yy132;
-	default:	goto yy10;
+	case 'A':
+	case 'a':	goto yy132;
+	case 'O':
+	case 'o':	goto yy133;
+	case 'U':
+	case 'u':	goto yy134;
+	default:	goto yy9;
 	}
 yy54:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case 'A':
-	case 'a':	goto yy133;
-	case 'O':
-	case 'o':	goto yy134;
-	case 'U':
-	case 'u':	goto yy135;
-	default:	goto yy10;
+	case 'F':
+	case 'f':	goto yy135;
+	case 'N':
+	case 'n':	goto yy136;
+	case 'P':
+	case 'p':	goto yy138;
+	case 'T':
+	case 't':	goto yy139;
+	default:	goto yy9;
 	}
 yy55:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case 'F':
-	case 'f':	goto yy136;
-	case 'N':
-	case 'n':	goto yy137;
-	case 'P':
-	case 'p':	goto yy139;
-	case 'T':
-	case 't':	goto yy140;
-	default:	goto yy10;
+	case 'A':
+	case 'a':	goto yy140;
+	case 'R':
+	case 'r':	goto yy141;
+	case 'U':
+	case 'u':	goto yy142;
+	default:	goto yy9;
 	}
 yy56:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case 'A':
-	case 'a':	goto yy141;
-	case 'R':
-	case 'r':	goto yy142;
 	case 'U':
 	case 'u':	goto yy143;
-	default:	goto yy10;
+	default:	goto yy9;
 	}
 yy57:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case 'U':
-	case 'u':	goto yy144;
-	default:	goto yy10;
+	case 'E':
+	case 'e':	goto yy144;
+	default:	goto yy9;
 	}
 yy58:
 	yych = *++YYCURSOR;
 	switch (yych) {
+	case 'A':
+	case 'a':	goto yy145;
+	case 'C':
+	case 'c':	goto yy146;
 	case 'E':
-	case 'e':	goto yy145;
-	default:	goto yy10;
+	case 'e':	goto yy147;
+	case 'I':
+	case 'i':	goto yy148;
+	case 'O':
+	case 'o':	goto yy149;
+	case 'Y':
+	case 'y':	goto yy150;
+	default:	goto yy9;
 	}
 yy59:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case 'A':
-	case 'a':	goto yy146;
-	case 'C':
-	case 'c':	goto yy147;
-	case 'E':
-	case 'e':	goto yy148;
-	case 'I':
-	case 'i':	goto yy149;
+	case 'H':
+	case 'h':	goto yy151;
 	case 'O':
-	case 'o':	goto yy150;
-	case 'Y':
-	case 'y':	goto yy151;
-	default:	goto yy10;
+	case 'o':	goto yy152;
+	case 'R':
+	case 'r':	goto yy154;
+	default:	goto yy9;
 	}
 yy60:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case 'H':
-	case 'h':	goto yy152;
-	case 'O':
-	case 'o':	goto yy153;
-	case 'R':
-	case 'r':	goto yy155;
-	default:	goto yy10;
+	case 'N':
+	case 'n':	goto yy155;
+	case 'P':
+	case 'p':	goto yy156;
+	default:	goto yy9;
 	}
 yy61:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case 'N':
-	case 'n':	goto yy156;
-	case 'P':
-	case 'p':	goto yy157;
-	default:	goto yy10;
+	case 'A':
+	case 'a':	goto yy157;
+	case 'E':
+	case 'e':	goto yy158;
+	default:	goto yy9;
 	}
 yy62:
 	yych = *++YYCURSOR;
 	switch (yych) {
-	case 'A':
-	case 'a':	goto yy158;
-	case 'E':
-	case 'e':	goto yy159;
-	default:	goto yy10;
+	case 'H':
+	case 'h':	goto yy159;
+	case 'I':
+	case 'i':	goto yy160;
+	default:	goto yy9;
 	}
 yy63:
-	yych = *++YYCURSOR;
-	switch (yych) {
-	case 'H':
-	case 'h':	goto yy160;
-	case 'I':
-	case 'i':	goto yy161;
-	default:	goto yy10;
-	}
-yy64:
 	yyaccept = 7;
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
@@ -635,29 +631,29 @@ yy64:
 	case ' ':
 	case '<':
 	case '=':
-	case '>':	goto yy163;
-	default:	goto yy65;
+	case '>':	goto yy162;
+	default:	goto yy64;
 	}
-yy65:
+yy64:
 #line 120 "rexx.--empty-class(match-none).re"
 	{ RETURN(OP_NOT); }
-#line 645 "rexx.--empty-class(match-none).c"
-yy66:
+#line 641 "rexx.--empty-class(match-none).c"
+yy65:
 	yyaccept = 8;
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
 	case '\t':
-	case ' ':	goto yy167;
-	case '|':	goto yy169;
-	default:	goto yy67;
+	case ' ':	goto yy166;
+	case '|':	goto yy168;
+	default:	goto yy66;
 	}
-yy67:
+yy66:
 #line 116 "rexx.--empty-class(match-none).re"
 	{ RETURN(OP_OR); }
-#line 658 "rexx.--empty-class(match-none).c"
-yy68:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+#line 654 "rexx.--empty-class(match-none).c"
+yy67:
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '!':
 	case '.':
 	case '0':
@@ -723,116 +719,116 @@ yy68:
 	case 'w':
 	case 'x':
 	case 'y':
-	case 'z':	goto yy171;
-	default:	goto yy69;
+	case 'z':	goto yy170;
+	default:	goto yy68;
 	}
-yy69:
+yy68:
 #line 251 "rexx.--empty-class(match-none).re"
 	{ RETURN(SU_SYMBOL_STEM); }
-#line 733 "rexx.--empty-class(match-none).c"
-yy70:
+#line 729 "rexx.--empty-class(match-none).c"
+yy69:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
-yy71:
+yy70:
 	switch (yych) {
 	case 0x00:
-	case '\n':	goto yy72;
-	case '"':	goto yy73;
-	default:	goto yy70;
+	case '\n':	goto yy71;
+	case '"':	goto yy72;
+	default:	goto yy69;
 	}
-yy72:
+yy71:
 	YYCURSOR = YYMARKER;
 	switch (yyaccept) {
-	case 0: 	goto yy6;
-	case 1: 	goto yy16;
-	case 2: 	goto yy23;
-	case 3: 	goto yy34;
-	case 4: 	goto yy40;
-	case 5: 	goto yy42;
-	case 6: 	goto yy44;
-	case 7: 	goto yy65;
-	case 8: 	goto yy67;
-	case 9: 	goto yy74;
-	case 10: 	goto yy32;
-	case 11: 	goto yy95;
-	case 12: 	goto yy109;
-	case 13: 	goto yy107;
-	case 14: 	goto yy99;
-	default:	goto yy97;
+	case 0: 	goto yy5;
+	case 1: 	goto yy15;
+	case 2: 	goto yy22;
+	case 3: 	goto yy33;
+	case 4: 	goto yy39;
+	case 5: 	goto yy41;
+	case 6: 	goto yy43;
+	case 7: 	goto yy64;
+	case 8: 	goto yy66;
+	case 9: 	goto yy73;
+	case 10: 	goto yy31;
+	case 11: 	goto yy94;
+	case 12: 	goto yy108;
+	case 13: 	goto yy106;
+	case 14: 	goto yy98;
+	default:	goto yy96;
 	}
-yy73:
+yy72:
 	yyaccept = 9;
 	YYMARKER = ++YYCURSOR;
 	if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
 	yych = *YYCURSOR;
 	switch (yych) {
-	case '"':	goto yy70;
+	case '"':	goto yy69;
 	case 'B':
 	case 'b':	goto yy173;
 	case 'X':
 	case 'x':	goto yy174;
-	default:	goto yy74;
+	default:	goto yy73;
 	}
-yy74:
+yy73:
 #line 255 "rexx.--empty-class(match-none).re"
 	{ RETURN(SU_LITERAL); }
-#line 781 "rexx.--empty-class(match-none).c"
-yy75:
+#line 777 "rexx.--empty-class(match-none).c"
+yy74:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	switch (yych) {
 	case '\t':
-	case ' ':	goto yy75;
-	case '&':	goto yy77;
-	default:	goto yy72;
+	case ' ':	goto yy74;
+	case '&':	goto yy76;
+	default:	goto yy71;
 	}
-yy77:
+yy76:
 	++YYCURSOR;
 #line 118 "rexx.--empty-class(match-none).re"
 	{ RETURN(OP_XOR); }
-#line 796 "rexx.--empty-class(match-none).c"
-yy79:
+#line 792 "rexx.--empty-class(match-none).c"
+yy78:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
-yy80:
+yy79:
 	switch (yych) {
 	case 0x00:
-	case '\n':	goto yy72;
-	case '\'':	goto yy81;
-	default:	goto yy79;
+	case '\n':	goto yy71;
+	case '\'':	goto yy80;
+	default:	goto yy78;
 	}
-yy81:
+yy80:
 	yyaccept = 9;
 	YYMARKER = ++YYCURSOR;
 	if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
 	yych = *YYCURSOR;
 	switch (yych) {
-	case '\'':	goto yy79;
+	case '\'':	goto yy78;
 	case 'B':
 	case 'b':	goto yy173;
 	case 'X':
 	case 'x':	goto yy174;
-	default:	goto yy74;
+	default:	goto yy73;
 	}
-yy82:
+yy81:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	switch (yych) {
 	case '\t':
-	case ' ':	goto yy82;
-	case '*':	goto yy84;
-	default:	goto yy72;
+	case ' ':	goto yy81;
+	case '*':	goto yy83;
+	default:	goto yy71;
 	}
-yy84:
+yy83:
 	++YYCURSOR;
 #line 88 "rexx.--empty-class(match-none).re"
 	{ RETURN(OP_POWER); }
-#line 835 "rexx.--empty-class(match-none).c"
-yy86:
+#line 831 "rexx.--empty-class(match-none).c"
+yy85:
 	yyaccept = 10;
 	YYMARKER = ++YYCURSOR;
 	if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
@@ -901,130 +897,130 @@ yy86:
 	case 'w':
 	case 'x':
 	case 'y':
-	case 'z':	goto yy30;
+	case 'z':	goto yy29;
 	case '+':
 	case '-':	goto yy175;
 	case 'E':
-	case 'e':	goto yy86;
-	default:	goto yy32;
+	case 'e':	goto yy85;
+	default:	goto yy31;
 	}
-yy88:
+yy87:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	switch (yych) {
 	case '\t':
-	case ' ':	goto yy88;
-	case '/':	goto yy90;
-	default:	goto yy72;
+	case ' ':	goto yy87;
+	case '/':	goto yy89;
+	default:	goto yy71;
 	}
-yy90:
+yy89:
 	++YYCURSOR;
 #line 86 "rexx.--empty-class(match-none).re"
 	{ RETURN(OP_REMAIN); }
-#line 926 "rexx.--empty-class(match-none).c"
-yy92:
+#line 922 "rexx.--empty-class(match-none).c"
+yy91:
 	++YYCURSOR;
 	if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
 	yych = *YYCURSOR;
-yy93:
+yy92:
 	switch (yych) {
 	case '\t':
-	case ' ':	goto yy92;
-	case '<':	goto yy94;
-	case '=':	goto yy96;
-	case '>':	goto yy98;
-	default:	goto yy72;
+	case ' ':	goto yy91;
+	case '<':	goto yy93;
+	case '=':	goto yy95;
+	case '>':	goto yy97;
+	default:	goto yy71;
 	}
-yy94:
+yy93:
 	yyaccept = 11;
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
 	case '\t':
 	case ' ':	goto yy176;
 	case '=':	goto yy178;
-	default:	goto yy95;
+	default:	goto yy94;
 	}
-yy95:
+yy94:
 #line 108 "rexx.--empty-class(match-none).re"
 	{ RETURN(OP_LT_STRICT); }
-#line 952 "rexx.--empty-class(match-none).c"
-yy96:
+#line 948 "rexx.--empty-class(match-none).c"
+yy95:
 	++YYCURSOR;
-yy97:
+yy96:
 #line 100 "rexx.--empty-class(match-none).re"
 	{ RETURN(OP_LE); }
-#line 958 "rexx.--empty-class(match-none).c"
-yy98:
+#line 954 "rexx.--empty-class(match-none).c"
+yy97:
 	++YYCURSOR;
-yy99:
+yy98:
 #line 92 "rexx.--empty-class(match-none).re"
 	{ RETURN(OP_EQUAL_N); }
-#line 964 "rexx.--empty-class(match-none).c"
-yy100:
+#line 960 "rexx.--empty-class(match-none).c"
+yy99:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	switch (yych) {
 	case '\t':
-	case ' ':	goto yy100;
-	case '=':	goto yy102;
-	default:	goto yy72;
+	case ' ':	goto yy99;
+	case '=':	goto yy101;
+	default:	goto yy71;
 	}
-yy102:
+yy101:
 	++YYCURSOR;
 #line 102 "rexx.--empty-class(match-none).re"
 	{ RETURN(OP_EQUAL_EQ); }
-#line 979 "rexx.--empty-class(match-none).c"
-yy104:
+#line 975 "rexx.--empty-class(match-none).c"
+yy103:
 	++YYCURSOR;
 	if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
 	yych = *YYCURSOR;
-yy105:
+yy104:
 	switch (yych) {
 	case '\t':
-	case ' ':	goto yy104;
-	case '<':	goto yy98;
-	case '=':	goto yy106;
-	case '>':	goto yy108;
-	default:	goto yy72;
+	case ' ':	goto yy103;
+	case '<':	goto yy97;
+	case '=':	goto yy105;
+	case '>':	goto yy107;
+	default:	goto yy71;
 	}
-yy106:
+yy105:
 	++YYCURSOR;
-yy107:
+yy106:
 #line 98 "rexx.--empty-class(match-none).re"
 	{ RETURN(OP_GE); }
-#line 998 "rexx.--empty-class(match-none).c"
-yy108:
+#line 994 "rexx.--empty-class(match-none).c"
+yy107:
 	yyaccept = 12;
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
 	case '\t':
 	case ' ':	goto yy180;
 	case '=':	goto yy182;
-	default:	goto yy109;
+	default:	goto yy108;
 	}
-yy109:
+yy108:
 #line 106 "rexx.--empty-class(match-none).re"
 	{ RETURN(OP_GT_STRICT); }
-#line 1011 "rexx.--empty-class(match-none).c"
-yy110:
+#line 1007 "rexx.--empty-class(match-none).c"
+yy109:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'D':
 	case 'd':	goto yy184;
-	default:	goto yy10;
+	default:	goto yy9;
 	}
-yy111:
+yy110:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'G':
 	case 'g':	goto yy185;
-	default:	goto yy10;
+	default:	goto yy9;
 	}
-yy112:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+yy111:
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '!':
 	case '0':
 	case '1':
@@ -1089,31 +1085,31 @@ yy112:
 	case 'w':
 	case 'x':
 	case 'y':
-	case 'z':	goto yy9;
-	case '.':	goto yy68;
-	default:	goto yy113;
+	case 'z':	goto yy8;
+	case '.':	goto yy67;
+	default:	goto yy112;
 	}
-yy113:
+yy112:
 #line 194 "rexx.--empty-class(match-none).re"
 	{ RETURN(RXS_BY); }
-#line 1100 "rexx.--empty-class(match-none).c"
-yy114:
+#line 1096 "rexx.--empty-class(match-none).c"
+yy113:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'L':
 	case 'l':	goto yy187;
-	default:	goto yy10;
+	default:	goto yy9;
 	}
-yy115:
+yy114:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'G':
 	case 'g':	goto yy188;
-	default:	goto yy10;
+	default:	goto yy9;
 	}
-yy116:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+yy115:
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '!':
 	case '0':
 	case '1':
@@ -1178,84 +1174,84 @@ yy116:
 	case 'w':
 	case 'x':
 	case 'y':
-	case 'z':	goto yy9;
-	case '.':	goto yy68;
-	default:	goto yy117;
+	case 'z':	goto yy8;
+	case '.':	goto yy67;
+	default:	goto yy116;
 	}
-yy117:
+yy116:
 #line 140 "rexx.--empty-class(match-none).re"
 	{ RETURN(RX_DO); }
-#line 1189 "rexx.--empty-class(match-none).c"
-yy118:
+#line 1185 "rexx.--empty-class(match-none).c"
+yy117:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'O':
 	case 'o':	goto yy189;
-	default:	goto yy10;
+	default:	goto yy9;
 	}
-yy119:
+yy118:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'S':
 	case 's':	goto yy190;
-	default:	goto yy10;
+	default:	goto yy9;
 	}
-yy120:
+yy119:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'D':
 	case 'd':	goto yy191;
 	case 'G':
 	case 'g':	goto yy193;
-	default:	goto yy10;
+	default:	goto yy9;
 	}
-yy121:
+yy120:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'R':
 	case 'r':	goto yy194;
-	default:	goto yy10;
+	default:	goto yy9;
 	}
-yy122:
+yy121:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'I':
 	case 'i':	goto yy195;
 	case 'P':
 	case 'p':	goto yy196;
-	default:	goto yy10;
+	default:	goto yy9;
 	}
-yy123:
+yy122:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'I':
 	case 'i':	goto yy197;
-	default:	goto yy10;
+	default:	goto yy9;
 	}
-yy124:
+yy123:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'R':
 	case 'r':	goto yy198;
-	default:	goto yy10;
+	default:	goto yy9;
 	}
-yy125:
+yy124:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'Z':
 	case 'z':	goto yy200;
-	default:	goto yy10;
+	default:	goto yy9;
 	}
-yy126:
+yy125:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'L':
 	case 'l':	goto yy201;
-	default:	goto yy10;
+	default:	goto yy9;
 	}
-yy127:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+yy126:
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '!':
 	case '0':
 	case '1':
@@ -1320,50 +1316,50 @@ yy127:
 	case 'w':
 	case 'x':
 	case 'y':
-	case 'z':	goto yy9;
-	case '.':	goto yy68;
-	default:	goto yy128;
+	case 'z':	goto yy8;
+	case '.':	goto yy67;
+	default:	goto yy127;
 	}
-yy128:
+yy127:
 #line 150 "rexx.--empty-class(match-none).re"
 	{ RETURN(RX_IF); }
-#line 1331 "rexx.--empty-class(match-none).c"
-yy129:
+#line 1327 "rexx.--empty-class(match-none).c"
+yy128:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'T':
 	case 't':	goto yy202;
-	default:	goto yy10;
+	default:	goto yy9;
 	}
-yy130:
+yy129:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'E':
 	case 'e':	goto yy203;
-	default:	goto yy10;
+	default:	goto yy9;
 	}
-yy131:
+yy130:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'A':
 	case 'a':	goto yy204;
-	default:	goto yy10;
+	default:	goto yy9;
 	}
-yy132:
+yy131:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'N':
 	case 'n':	goto yy205;
-	default:	goto yy10;
+	default:	goto yy9;
 	}
-yy133:
+yy132:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'M':
 	case 'm':	goto yy206;
-	default:	goto yy10;
+	default:	goto yy9;
 	}
-yy134:
+yy133:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'P':
@@ -1372,25 +1368,25 @@ yy134:
 	case 't':	goto yy209;
 	case 'V':
 	case 'v':	goto yy210;
-	default:	goto yy10;
+	default:	goto yy9;
 	}
-yy135:
+yy134:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'M':
 	case 'm':	goto yy211;
-	default:	goto yy10;
+	default:	goto yy9;
 	}
-yy136:
+yy135:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'F':
 	case 'f':	goto yy212;
-	default:	goto yy10;
+	default:	goto yy9;
 	}
-yy137:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+yy136:
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '!':
 	case '0':
 	case '1':
@@ -1455,117 +1451,117 @@ yy137:
 	case 'w':
 	case 'x':
 	case 'y':
-	case 'z':	goto yy9;
-	case '.':	goto yy68;
-	default:	goto yy138;
+	case 'z':	goto yy8;
+	case '.':	goto yy67;
+	default:	goto yy137;
 	}
-yy138:
+yy137:
 #line 192 "rexx.--empty-class(match-none).re"
 	{ RETURN(RXS_ON); }
-#line 1466 "rexx.--empty-class(match-none).c"
-yy139:
+#line 1462 "rexx.--empty-class(match-none).c"
+yy138:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'T':
 	case 't':	goto yy214;
-	default:	goto yy10;
+	default:	goto yy9;
 	}
-yy140:
+yy139:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'H':
 	case 'h':	goto yy215;
-	default:	goto yy10;
+	default:	goto yy9;
 	}
-yy141:
+yy140:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'R':
 	case 'r':	goto yy216;
-	default:	goto yy10;
+	default:	goto yy9;
 	}
-yy142:
+yy141:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'O':
 	case 'o':	goto yy217;
-	default:	goto yy10;
+	default:	goto yy9;
 	}
-yy143:
+yy142:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'L':
 	case 'l':	goto yy218;
 	case 'S':
 	case 's':	goto yy219;
-	default:	goto yy10;
+	default:	goto yy9;
 	}
-yy144:
+yy143:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'E':
 	case 'e':	goto yy220;
-	default:	goto yy10;
+	default:	goto yy9;
 	}
-yy145:
+yy144:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'T':
 	case 't':	goto yy221;
-	default:	goto yy10;
+	default:	goto yy9;
 	}
-yy146:
+yy145:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'Y':
 	case 'y':	goto yy222;
-	default:	goto yy10;
+	default:	goto yy9;
 	}
-yy147:
+yy146:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'I':
 	case 'i':	goto yy224;
-	default:	goto yy10;
+	default:	goto yy9;
 	}
-yy148:
+yy147:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'L':
 	case 'l':	goto yy225;
-	default:	goto yy10;
+	default:	goto yy9;
 	}
-yy149:
+yy148:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'G':
 	case 'g':	goto yy226;
-	default:	goto yy10;
+	default:	goto yy9;
 	}
-yy150:
+yy149:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'U':
 	case 'u':	goto yy227;
-	default:	goto yy10;
+	default:	goto yy9;
 	}
-yy151:
+yy150:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'N':
 	case 'n':	goto yy228;
-	default:	goto yy10;
+	default:	goto yy9;
 	}
-yy152:
+yy151:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'E':
 	case 'e':	goto yy229;
-	default:	goto yy10;
+	default:	goto yy9;
 	}
-yy153:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+yy152:
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '!':
 	case '0':
 	case '1':
@@ -1630,123 +1626,123 @@ yy153:
 	case 'w':
 	case 'x':
 	case 'y':
-	case 'z':	goto yy9;
-	case '.':	goto yy68;
-	default:	goto yy154;
+	case 'z':	goto yy8;
+	case '.':	goto yy67;
+	default:	goto yy153;
 	}
-yy154:
+yy153:
 #line 230 "rexx.--empty-class(match-none).re"
 	{ RETURN(RXS_TO); }
-#line 1641 "rexx.--empty-class(match-none).c"
-yy155:
+#line 1637 "rexx.--empty-class(match-none).c"
+yy154:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'A':
 	case 'a':	goto yy230;
-	default:	goto yy10;
+	default:	goto yy9;
 	}
-yy156:
+yy155:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'T':
 	case 't':	goto yy231;
-	default:	goto yy10;
+	default:	goto yy9;
 	}
-yy157:
+yy156:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'P':
 	case 'p':	goto yy232;
-	default:	goto yy10;
+	default:	goto yy9;
 	}
-yy158:
+yy157:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'L':
 	case 'l':	goto yy233;
 	case 'R':
 	case 'r':	goto yy234;
-	default:	goto yy10;
+	default:	goto yy9;
 	}
-yy159:
+yy158:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'R':
 	case 'r':	goto yy236;
-	default:	goto yy10;
+	default:	goto yy9;
 	}
-yy160:
+yy159:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'E':
 	case 'e':	goto yy237;
 	case 'I':
 	case 'i':	goto yy238;
-	default:	goto yy10;
+	default:	goto yy9;
 	}
-yy161:
+yy160:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'T':
 	case 't':	goto yy239;
-	default:	goto yy10;
+	default:	goto yy9;
 	}
-yy162:
+yy161:
 	++YYCURSOR;
 	if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
 	yych = *YYCURSOR;
-yy163:
+yy162:
 	switch (yych) {
 	case '\t':
-	case ' ':	goto yy162;
-	case '<':	goto yy164;
-	case '=':	goto yy165;
-	case '>':	goto yy166;
-	default:	goto yy72;
+	case ' ':	goto yy161;
+	case '<':	goto yy163;
+	case '=':	goto yy164;
+	case '>':	goto yy165;
+	default:	goto yy71;
 	}
-yy164:
+yy163:
 	yyaccept = 13;
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
 	case '\t':
 	case ' ':	goto yy240;
 	case '<':	goto yy182;
-	default:	goto yy107;
+	default:	goto yy106;
 	}
-yy165:
+yy164:
 	yyaccept = 14;
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
 	case '\t':
 	case ' ':	goto yy242;
 	case '=':	goto yy244;
-	default:	goto yy99;
+	default:	goto yy98;
 	}
-yy166:
+yy165:
 	yyaccept = 15;
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
 	case '\t':
 	case ' ':	goto yy246;
 	case '>':	goto yy178;
-	default:	goto yy97;
+	default:	goto yy96;
 	}
-yy167:
+yy166:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	switch (yych) {
 	case '\t':
-	case ' ':	goto yy167;
-	case '|':	goto yy169;
-	default:	goto yy72;
+	case ' ':	goto yy166;
+	case '|':	goto yy168;
+	default:	goto yy71;
 	}
-yy169:
+yy168:
 	++YYCURSOR;
 #line 74 "rexx.--empty-class(match-none).re"
 	{ RETURN(OP_CONCAT); }
-#line 1749 "rexx.--empty-class(match-none).c"
-yy171:
+#line 1745 "rexx.--empty-class(match-none).c"
+yy170:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
@@ -1816,12 +1812,15 @@ yy171:
 	case 'w':
 	case 'x':
 	case 'y':
-	case 'z':	goto yy171;
-	default:	goto yy2;
+	case 'z':	goto yy170;
+	default:	goto yy172;
 	}
+yy172:
+#line 253 "rexx.--empty-class(match-none).re"
+	{ RETURN(SU_SYMBOL_COMPOUND); }
+#line 1822 "rexx.--empty-class(match-none).c"
 yy173:
 	yych = *++YYCURSOR;
-	YYCTXMARKER = YYCURSOR;
 	switch (yych) {
 	case '!':
 	case '.':
@@ -1888,12 +1887,11 @@ yy173:
 	case 'w':
 	case 'x':
 	case 'y':
-	case 'z':	goto yy72;
+	case 'z':	goto yy71;
 	default:	goto yy248;
 	}
 yy174:
 	yych = *++YYCURSOR;
-	YYCTXMARKER = YYCURSOR;
 	switch (yych) {
 	case '!':
 	case '.':
@@ -1960,7 +1958,7 @@ yy174:
 	case 'w':
 	case 'x':
 	case 'y':
-	case 'z':	goto yy72;
+	case 'z':	goto yy71;
 	default:	goto yy250;
 	}
 yy175:
@@ -1976,7 +1974,7 @@ yy175:
 	case '7':
 	case '8':
 	case '9':	goto yy252;
-	default:	goto yy72;
+	default:	goto yy71;
 	}
 yy176:
 	++YYCURSOR;
@@ -1986,13 +1984,13 @@ yy176:
 	case '\t':
 	case ' ':	goto yy176;
 	case '=':	goto yy178;
-	default:	goto yy72;
+	default:	goto yy71;
 	}
 yy178:
 	++YYCURSOR;
 #line 112 "rexx.--empty-class(match-none).re"
 	{ RETURN(OP_LE_STRICT); }
-#line 1996 "rexx.--empty-class(match-none).c"
+#line 1994 "rexx.--empty-class(match-none).c"
 yy180:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
@@ -2001,23 +1999,23 @@ yy180:
 	case '\t':
 	case ' ':	goto yy180;
 	case '=':	goto yy182;
-	default:	goto yy72;
+	default:	goto yy71;
 	}
 yy182:
 	++YYCURSOR;
 #line 110 "rexx.--empty-class(match-none).re"
 	{ RETURN(OP_GE_STRICT); }
-#line 2011 "rexx.--empty-class(match-none).c"
+#line 2009 "rexx.--empty-class(match-none).c"
 yy184:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'R':
 	case 'r':	goto yy254;
-	default:	goto yy10;
+	default:	goto yy9;
 	}
 yy185:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '!':
 	case '0':
 	case '1':
@@ -2082,45 +2080,45 @@ yy185:
 	case 'w':
 	case 'x':
 	case 'y':
-	case 'z':	goto yy9;
-	case '.':	goto yy68;
+	case 'z':	goto yy8;
+	case '.':	goto yy67;
 	default:	goto yy186;
 	}
 yy186:
 #line 136 "rexx.--empty-class(match-none).re"
 	{ RETURN(RX_ARG); }
-#line 2093 "rexx.--empty-class(match-none).c"
+#line 2091 "rexx.--empty-class(match-none).c"
 yy187:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'L':
 	case 'l':	goto yy255;
-	default:	goto yy10;
+	default:	goto yy9;
 	}
 yy188:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'I':
 	case 'i':	goto yy257;
-	default:	goto yy10;
+	default:	goto yy9;
 	}
 yy189:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'P':
 	case 'p':	goto yy258;
-	default:	goto yy10;
+	default:	goto yy9;
 	}
 yy190:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'E':
 	case 'e':	goto yy260;
-	default:	goto yy10;
+	default:	goto yy9;
 	}
 yy191:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '!':
 	case '0':
 	case '1':
@@ -2185,52 +2183,52 @@ yy191:
 	case 'w':
 	case 'x':
 	case 'y':
-	case 'z':	goto yy9;
-	case '.':	goto yy68;
+	case 'z':	goto yy8;
+	case '.':	goto yy67;
 	default:	goto yy192;
 	}
 yy192:
 #line 146 "rexx.--empty-class(match-none).re"
 	{ RETURN(RX_END); }
-#line 2196 "rexx.--empty-class(match-none).c"
+#line 2194 "rexx.--empty-class(match-none).c"
 yy193:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'I':
 	case 'i':	goto yy262;
-	default:	goto yy10;
+	default:	goto yy9;
 	}
 yy194:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'O':
 	case 'o':	goto yy263;
-	default:	goto yy10;
+	default:	goto yy9;
 	}
 yy195:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'T':
 	case 't':	goto yy264;
-	default:	goto yy10;
+	default:	goto yy9;
 	}
 yy196:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'O':
 	case 'o':	goto yy266;
-	default:	goto yy10;
+	default:	goto yy9;
 	}
 yy197:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'L':
 	case 'l':	goto yy267;
-	default:	goto yy10;
+	default:	goto yy9;
 	}
 yy198:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '!':
 	case '0':
 	case '1':
@@ -2291,8 +2289,8 @@ yy198:
 	case 'w':
 	case 'x':
 	case 'y':
-	case 'z':	goto yy9;
-	case '.':	goto yy68;
+	case 'z':	goto yy8;
+	case '.':	goto yy67;
 	case 'E':
 	case 'e':	goto yy268;
 	case 'M':
@@ -2302,59 +2300,59 @@ yy198:
 yy199:
 #line 206 "rexx.--empty-class(match-none).re"
 	{ RETURN(RXS_FOR); }
-#line 2306 "rexx.--empty-class(match-none).c"
+#line 2304 "rexx.--empty-class(match-none).c"
 yy200:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'Z':
 	case 'z':	goto yy271;
-	default:	goto yy10;
+	default:	goto yy9;
 	}
 yy201:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'T':
 	case 't':	goto yy273;
-	default:	goto yy10;
+	default:	goto yy9;
 	}
 yy202:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'E':
 	case 'e':	goto yy275;
-	default:	goto yy10;
+	default:	goto yy9;
 	}
 yy203:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'R':
 	case 'r':	goto yy276;
-	default:	goto yy10;
+	default:	goto yy9;
 	}
 yy204:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'V':
 	case 'v':	goto yy277;
-	default:	goto yy10;
+	default:	goto yy9;
 	}
 yy205:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'E':
 	case 'e':	goto yy278;
-	default:	goto yy10;
+	default:	goto yy9;
 	}
 yy206:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'E':
 	case 'e':	goto yy279;
-	default:	goto yy10;
+	default:	goto yy9;
 	}
 yy207:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '!':
 	case '0':
 	case '1':
@@ -2419,38 +2417,38 @@ yy207:
 	case 'w':
 	case 'x':
 	case 'y':
-	case 'z':	goto yy9;
-	case '.':	goto yy68;
+	case 'z':	goto yy8;
+	case '.':	goto yy67;
 	default:	goto yy208;
 	}
 yy208:
 #line 158 "rexx.--empty-class(match-none).re"
 	{ RETURN(RX_NOP); }
-#line 2430 "rexx.--empty-class(match-none).c"
+#line 2428 "rexx.--empty-class(match-none).c"
 yy209:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'R':
 	case 'r':	goto yy281;
-	default:	goto yy10;
+	default:	goto yy9;
 	}
 yy210:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'A':
 	case 'a':	goto yy282;
-	default:	goto yy10;
+	default:	goto yy9;
 	}
 yy211:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'E':
 	case 'e':	goto yy283;
-	default:	goto yy10;
+	default:	goto yy9;
 	}
 yy212:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '!':
 	case '0':
 	case '1':
@@ -2515,73 +2513,73 @@ yy212:
 	case 'w':
 	case 'x':
 	case 'y':
-	case 'z':	goto yy9;
-	case '.':	goto yy68;
+	case 'z':	goto yy8;
+	case '.':	goto yy67;
 	default:	goto yy213;
 	}
 yy213:
 #line 190 "rexx.--empty-class(match-none).re"
 	{ RETURN(RXS_OFF); }
-#line 2526 "rexx.--empty-class(match-none).c"
+#line 2524 "rexx.--empty-class(match-none).c"
 yy214:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'I':
 	case 'i':	goto yy284;
-	default:	goto yy10;
+	default:	goto yy9;
 	}
 yy215:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'E':
 	case 'e':	goto yy285;
-	default:	goto yy10;
+	default:	goto yy9;
 	}
 yy216:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'S':
 	case 's':	goto yy286;
-	default:	goto yy10;
+	default:	goto yy9;
 	}
 yy217:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'C':
 	case 'c':	goto yy287;
-	default:	goto yy10;
+	default:	goto yy9;
 	}
 yy218:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'L':
 	case 'l':	goto yy288;
-	default:	goto yy10;
+	default:	goto yy9;
 	}
 yy219:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'H':
 	case 'h':	goto yy290;
-	default:	goto yy10;
+	default:	goto yy9;
 	}
 yy220:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'U':
 	case 'u':	goto yy292;
-	default:	goto yy10;
+	default:	goto yy9;
 	}
 yy221:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'U':
 	case 'u':	goto yy293;
-	default:	goto yy10;
+	default:	goto yy9;
 	}
 yy222:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '!':
 	case '0':
 	case '1':
@@ -2646,87 +2644,87 @@ yy222:
 	case 'w':
 	case 'x':
 	case 'y':
-	case 'z':	goto yy9;
-	case '.':	goto yy68;
+	case 'z':	goto yy8;
+	case '.':	goto yy67;
 	default:	goto yy223;
 	}
 yy223:
 #line 178 "rexx.--empty-class(match-none).re"
 	{ RETURN(RX_SAY); }
-#line 2657 "rexx.--empty-class(match-none).c"
+#line 2655 "rexx.--empty-class(match-none).c"
 yy224:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'E':
 	case 'e':	goto yy294;
-	default:	goto yy10;
+	default:	goto yy9;
 	}
 yy225:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'E':
 	case 'e':	goto yy295;
-	default:	goto yy10;
+	default:	goto yy9;
 	}
 yy226:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'N':
 	case 'n':	goto yy296;
-	default:	goto yy10;
+	default:	goto yy9;
 	}
 yy227:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'R':
 	case 'r':	goto yy297;
-	default:	goto yy10;
+	default:	goto yy9;
 	}
 yy228:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'T':
 	case 't':	goto yy298;
-	default:	goto yy10;
+	default:	goto yy9;
 	}
 yy229:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'N':
 	case 'n':	goto yy299;
-	default:	goto yy10;
+	default:	goto yy9;
 	}
 yy230:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'C':
 	case 'c':	goto yy301;
-	default:	goto yy10;
+	default:	goto yy9;
 	}
 yy231:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'I':
 	case 'i':	goto yy302;
-	default:	goto yy10;
+	default:	goto yy9;
 	}
 yy232:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'E':
 	case 'e':	goto yy303;
-	default:	goto yy10;
+	default:	goto yy9;
 	}
 yy233:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'U':
 	case 'u':	goto yy304;
-	default:	goto yy10;
+	default:	goto yy9;
 	}
 yy234:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '!':
 	case '0':
 	case '1':
@@ -2791,41 +2789,41 @@ yy234:
 	case 'w':
 	case 'x':
 	case 'y':
-	case 'z':	goto yy9;
-	case '.':	goto yy68;
+	case 'z':	goto yy8;
+	case '.':	goto yy67;
 	default:	goto yy235;
 	}
 yy235:
 #line 238 "rexx.--empty-class(match-none).re"
 	{ RETURN(RXS_VAR); }
-#line 2802 "rexx.--empty-class(match-none).c"
+#line 2800 "rexx.--empty-class(match-none).c"
 yy236:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'S':
 	case 's':	goto yy305;
-	default:	goto yy10;
+	default:	goto yy9;
 	}
 yy237:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'N':
 	case 'n':	goto yy306;
-	default:	goto yy10;
+	default:	goto yy9;
 	}
 yy238:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'L':
 	case 'l':	goto yy308;
-	default:	goto yy10;
+	default:	goto yy9;
 	}
 yy239:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'H':
 	case 'h':	goto yy309;
-	default:	goto yy10;
+	default:	goto yy9;
 	}
 yy240:
 	++YYCURSOR;
@@ -2835,7 +2833,7 @@ yy240:
 	case '\t':
 	case ' ':	goto yy240;
 	case '<':	goto yy182;
-	default:	goto yy72;
+	default:	goto yy71;
 	}
 yy242:
 	++YYCURSOR;
@@ -2845,13 +2843,13 @@ yy242:
 	case '\t':
 	case ' ':	goto yy242;
 	case '=':	goto yy244;
-	default:	goto yy72;
+	default:	goto yy71;
 	}
 yy244:
 	++YYCURSOR;
 #line 104 "rexx.--empty-class(match-none).re"
 	{ RETURN(OP_EQUAL_EQ_N); }
-#line 2855 "rexx.--empty-class(match-none).c"
+#line 2853 "rexx.--empty-class(match-none).c"
 yy246:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
@@ -2860,20 +2858,20 @@ yy246:
 	case '\t':
 	case ' ':	goto yy246;
 	case '>':	goto yy178;
-	default:	goto yy72;
+	default:	goto yy71;
 	}
 yy248:
 	++YYCURSOR;
-	YYCURSOR = YYCTXMARKER;
+	YYCURSOR -= 1;
 #line 257 "rexx.--empty-class(match-none).re"
 	{ RETURN(SU_LITERAL_BIN); }
-#line 2871 "rexx.--empty-class(match-none).c"
+#line 2869 "rexx.--empty-class(match-none).c"
 yy250:
 	++YYCURSOR;
-	YYCURSOR = YYCTXMARKER;
+	YYCURSOR -= 1;
 #line 259 "rexx.--empty-class(match-none).re"
 	{ RETURN(SU_LITERAL_HEX); }
-#line 2877 "rexx.--empty-class(match-none).c"
+#line 2875 "rexx.--empty-class(match-none).c"
 yy252:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
@@ -2889,18 +2887,18 @@ yy252:
 	case '7':
 	case '8':
 	case '9':	goto yy252;
-	default:	goto yy32;
+	default:	goto yy31;
 	}
 yy254:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'E':
 	case 'e':	goto yy311;
-	default:	goto yy10;
+	default:	goto yy9;
 	}
 yy255:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '!':
 	case '0':
 	case '1':
@@ -2965,24 +2963,24 @@ yy255:
 	case 'w':
 	case 'x':
 	case 'y':
-	case 'z':	goto yy9;
-	case '.':	goto yy68;
+	case 'z':	goto yy8;
+	case '.':	goto yy67;
 	default:	goto yy256;
 	}
 yy256:
 #line 138 "rexx.--empty-class(match-none).re"
 	{ RETURN(RX_CALL); }
-#line 2976 "rexx.--empty-class(match-none).c"
+#line 2974 "rexx.--empty-class(match-none).c"
 yy257:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'T':
 	case 't':	goto yy312;
-	default:	goto yy10;
+	default:	goto yy9;
 	}
 yy258:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '!':
 	case '0':
 	case '1':
@@ -3047,17 +3045,17 @@ yy258:
 	case 'w':
 	case 'x':
 	case 'y':
-	case 'z':	goto yy9;
-	case '.':	goto yy68;
+	case 'z':	goto yy8;
+	case '.':	goto yy67;
 	default:	goto yy259;
 	}
 yy259:
 #line 142 "rexx.--empty-class(match-none).re"
 	{ RETURN(RX_DROP); }
-#line 3058 "rexx.--empty-class(match-none).c"
+#line 3056 "rexx.--empty-class(match-none).c"
 yy260:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '!':
 	case '0':
 	case '1':
@@ -3122,31 +3120,31 @@ yy260:
 	case 'w':
 	case 'x':
 	case 'y':
-	case 'z':	goto yy9;
-	case '.':	goto yy68;
+	case 'z':	goto yy8;
+	case '.':	goto yy67;
 	default:	goto yy261;
 	}
 yy261:
 #line 144 "rexx.--empty-class(match-none).re"
 	{ RETURN(RX_ELSE); }
-#line 3133 "rexx.--empty-class(match-none).c"
+#line 3131 "rexx.--empty-class(match-none).c"
 yy262:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'N':
 	case 'n':	goto yy313;
-	default:	goto yy10;
+	default:	goto yy9;
 	}
 yy263:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'R':
 	case 'r':	goto yy314;
-	default:	goto yy10;
+	default:	goto yy9;
 	}
 yy264:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '!':
 	case '0':
 	case '1':
@@ -3211,38 +3209,38 @@ yy264:
 	case 'w':
 	case 'x':
 	case 'y':
-	case 'z':	goto yy9;
-	case '.':	goto yy68;
+	case 'z':	goto yy8;
+	case '.':	goto yy67;
 	default:	goto yy265;
 	}
 yy265:
 #line 148 "rexx.--empty-class(match-none).re"
 	{ RETURN(RX_EXIT); }
-#line 3222 "rexx.--empty-class(match-none).c"
+#line 3220 "rexx.--empty-class(match-none).c"
 yy266:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'S':
 	case 's':	goto yy316;
-	default:	goto yy10;
+	default:	goto yy9;
 	}
 yy267:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'U':
 	case 'u':	goto yy317;
-	default:	goto yy10;
+	default:	goto yy9;
 	}
 yy268:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'V':
 	case 'v':	goto yy318;
-	default:	goto yy10;
+	default:	goto yy9;
 	}
 yy269:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '!':
 	case '0':
 	case '1':
@@ -3307,17 +3305,17 @@ yy269:
 	case 'w':
 	case 'x':
 	case 'y':
-	case 'z':	goto yy9;
-	case '.':	goto yy68;
+	case 'z':	goto yy8;
+	case '.':	goto yy67;
 	default:	goto yy270;
 	}
 yy270:
 #line 210 "rexx.--empty-class(match-none).re"
 	{ RETURN(RXS_FORM); }
-#line 3318 "rexx.--empty-class(match-none).c"
+#line 3316 "rexx.--empty-class(match-none).c"
 yy271:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '!':
 	case '0':
 	case '1':
@@ -3382,17 +3380,17 @@ yy271:
 	case 'w':
 	case 'x':
 	case 'y':
-	case 'z':	goto yy9;
-	case '.':	goto yy68;
+	case 'z':	goto yy8;
+	case '.':	goto yy67;
 	default:	goto yy272;
 	}
 yy272:
 #line 212 "rexx.--empty-class(match-none).re"
 	{ RETURN(RXS_FUZZ); }
-#line 3393 "rexx.--empty-class(match-none).c"
+#line 3391 "rexx.--empty-class(match-none).c"
 yy273:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '!':
 	case '0':
 	case '1':
@@ -3457,45 +3455,45 @@ yy273:
 	case 'w':
 	case 'x':
 	case 'y':
-	case 'z':	goto yy9;
-	case '.':	goto yy68;
+	case 'z':	goto yy8;
+	case '.':	goto yy67;
 	default:	goto yy274;
 	}
 yy274:
 #line 214 "rexx.--empty-class(match-none).re"
 	{ RETURN(RXS_HALT); }
-#line 3468 "rexx.--empty-class(match-none).c"
+#line 3466 "rexx.--empty-class(match-none).c"
 yy275:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'R':
 	case 'r':	goto yy319;
-	default:	goto yy10;
+	default:	goto yy9;
 	}
 yy276:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'A':
 	case 'a':	goto yy320;
-	default:	goto yy10;
+	default:	goto yy9;
 	}
 yy277:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'E':
 	case 'e':	goto yy321;
-	default:	goto yy10;
+	default:	goto yy9;
 	}
 yy278:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'I':
 	case 'i':	goto yy323;
-	default:	goto yy10;
+	default:	goto yy9;
 	}
 yy279:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '!':
 	case '0':
 	case '1':
@@ -3560,66 +3558,66 @@ yy279:
 	case 'w':
 	case 'x':
 	case 'y':
-	case 'z':	goto yy9;
-	case '.':	goto yy68;
+	case 'z':	goto yy8;
+	case '.':	goto yy67;
 	default:	goto yy280;
 	}
 yy280:
 #line 218 "rexx.--empty-class(match-none).re"
 	{ RETURN(RXS_NAME); }
-#line 3571 "rexx.--empty-class(match-none).c"
+#line 3569 "rexx.--empty-class(match-none).c"
 yy281:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'E':
 	case 'e':	goto yy324;
-	default:	goto yy10;
+	default:	goto yy9;
 	}
 yy282:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'L':
 	case 'l':	goto yy325;
-	default:	goto yy10;
+	default:	goto yy9;
 	}
 yy283:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'R':
 	case 'r':	goto yy326;
-	default:	goto yy10;
+	default:	goto yy9;
 	}
 yy284:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'O':
 	case 'o':	goto yy327;
-	default:	goto yy10;
+	default:	goto yy9;
 	}
 yy285:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'R':
 	case 'r':	goto yy328;
-	default:	goto yy10;
+	default:	goto yy9;
 	}
 yy286:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'E':
 	case 'e':	goto yy329;
-	default:	goto yy10;
+	default:	goto yy9;
 	}
 yy287:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'E':
 	case 'e':	goto yy331;
-	default:	goto yy10;
+	default:	goto yy9;
 	}
 yy288:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '!':
 	case '0':
 	case '1':
@@ -3684,17 +3682,17 @@ yy288:
 	case 'w':
 	case 'x':
 	case 'y':
-	case 'z':	goto yy9;
-	case '.':	goto yy68;
+	case 'z':	goto yy8;
+	case '.':	goto yy67;
 	default:	goto yy289;
 	}
 yy289:
 #line 170 "rexx.--empty-class(match-none).re"
 	{ RETURN(RX_PULL); }
-#line 3695 "rexx.--empty-class(match-none).c"
+#line 3693 "rexx.--empty-class(match-none).c"
 yy290:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '!':
 	case '0':
 	case '1':
@@ -3759,66 +3757,66 @@ yy290:
 	case 'w':
 	case 'x':
 	case 'y':
-	case 'z':	goto yy9;
-	case '.':	goto yy68;
+	case 'z':	goto yy8;
+	case '.':	goto yy67;
 	default:	goto yy291;
 	}
 yy291:
 #line 172 "rexx.--empty-class(match-none).re"
 	{ RETURN(RX_PUSH); }
-#line 3770 "rexx.--empty-class(match-none).c"
+#line 3768 "rexx.--empty-class(match-none).c"
 yy292:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'E':
 	case 'e':	goto yy332;
-	default:	goto yy10;
+	default:	goto yy9;
 	}
 yy293:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'R':
 	case 'r':	goto yy334;
-	default:	goto yy10;
+	default:	goto yy9;
 	}
 yy294:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'N':
 	case 'n':	goto yy335;
-	default:	goto yy10;
+	default:	goto yy9;
 	}
 yy295:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'C':
 	case 'c':	goto yy336;
-	default:	goto yy10;
+	default:	goto yy9;
 	}
 yy296:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'A':
 	case 'a':	goto yy337;
-	default:	goto yy10;
+	default:	goto yy9;
 	}
 yy297:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'C':
 	case 'c':	goto yy338;
-	default:	goto yy10;
+	default:	goto yy9;
 	}
 yy298:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'A':
 	case 'a':	goto yy339;
-	default:	goto yy10;
+	default:	goto yy9;
 	}
 yy299:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '!':
 	case '0':
 	case '1':
@@ -3883,52 +3881,52 @@ yy299:
 	case 'w':
 	case 'x':
 	case 'y':
-	case 'z':	goto yy9;
-	case '.':	goto yy68;
+	case 'z':	goto yy8;
+	case '.':	goto yy67;
 	default:	goto yy300;
 	}
 yy300:
 #line 184 "rexx.--empty-class(match-none).re"
 	{ RETURN(RX_THEN); }
-#line 3894 "rexx.--empty-class(match-none).c"
+#line 3892 "rexx.--empty-class(match-none).c"
 yy301:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'E':
 	case 'e':	goto yy340;
-	default:	goto yy10;
+	default:	goto yy9;
 	}
 yy302:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'L':
 	case 'l':	goto yy342;
-	default:	goto yy10;
+	default:	goto yy9;
 	}
 yy303:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'R':
 	case 'r':	goto yy344;
-	default:	goto yy10;
+	default:	goto yy9;
 	}
 yy304:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'E':
 	case 'e':	goto yy346;
-	default:	goto yy10;
+	default:	goto yy9;
 	}
 yy305:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'I':
 	case 'i':	goto yy348;
-	default:	goto yy10;
+	default:	goto yy9;
 	}
 yy306:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '!':
 	case '0':
 	case '1':
@@ -3993,24 +3991,24 @@ yy306:
 	case 'w':
 	case 'x':
 	case 'y':
-	case 'z':	goto yy9;
-	case '.':	goto yy68;
+	case 'z':	goto yy8;
+	case '.':	goto yy67;
 	default:	goto yy307;
 	}
 yy307:
 #line 188 "rexx.--empty-class(match-none).re"
 	{ RETURN(RX_WHEN); }
-#line 4004 "rexx.--empty-class(match-none).c"
+#line 4002 "rexx.--empty-class(match-none).c"
 yy308:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'E':
 	case 'e':	goto yy349;
-	default:	goto yy10;
+	default:	goto yy9;
 	}
 yy309:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '!':
 	case '0':
 	case '1':
@@ -4075,38 +4073,38 @@ yy309:
 	case 'w':
 	case 'x':
 	case 'y':
-	case 'z':	goto yy9;
-	case '.':	goto yy68;
+	case 'z':	goto yy8;
+	case '.':	goto yy67;
 	default:	goto yy310;
 	}
 yy310:
 #line 244 "rexx.--empty-class(match-none).re"
 	{ RETURN(RXS_WITH); }
-#line 4086 "rexx.--empty-class(match-none).c"
+#line 4084 "rexx.--empty-class(match-none).c"
 yy311:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'S':
 	case 's':	goto yy351;
-	default:	goto yy10;
+	default:	goto yy9;
 	}
 yy312:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'S':
 	case 's':	goto yy352;
-	default:	goto yy10;
+	default:	goto yy9;
 	}
 yy313:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'E':
 	case 'e':	goto yy354;
-	default:	goto yy10;
+	default:	goto yy9;
 	}
 yy314:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '!':
 	case '0':
 	case '1':
@@ -4171,52 +4169,52 @@ yy314:
 	case 'w':
 	case 'x':
 	case 'y':
-	case 'z':	goto yy9;
-	case '.':	goto yy68;
+	case 'z':	goto yy8;
+	case '.':	goto yy67;
 	default:	goto yy315;
 	}
 yy315:
 #line 200 "rexx.--empty-class(match-none).re"
 	{ RETURN(RXS_ERROR); }
-#line 4182 "rexx.--empty-class(match-none).c"
+#line 4180 "rexx.--empty-class(match-none).c"
 yy316:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'E':
 	case 'e':	goto yy355;
-	default:	goto yy10;
+	default:	goto yy9;
 	}
 yy317:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'R':
 	case 'r':	goto yy357;
-	default:	goto yy10;
+	default:	goto yy9;
 	}
 yy318:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'E':
 	case 'e':	goto yy358;
-	default:	goto yy10;
+	default:	goto yy9;
 	}
 yy319:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'P':
 	case 'p':	goto yy359;
-	default:	goto yy10;
+	default:	goto yy9;
 	}
 yy320:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'T':
 	case 't':	goto yy360;
-	default:	goto yy10;
+	default:	goto yy9;
 	}
 yy321:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '!':
 	case '0':
 	case '1':
@@ -4281,59 +4279,59 @@ yy321:
 	case 'w':
 	case 'x':
 	case 'y':
-	case 'z':	goto yy9;
-	case '.':	goto yy68;
+	case 'z':	goto yy8;
+	case '.':	goto yy67;
 	default:	goto yy322;
 	}
 yy322:
 #line 156 "rexx.--empty-class(match-none).re"
 	{ RETURN(RX_LEAVE); }
-#line 4292 "rexx.--empty-class(match-none).c"
+#line 4290 "rexx.--empty-class(match-none).c"
 yy323:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'N':
 	case 'n':	goto yy361;
-	default:	goto yy10;
+	default:	goto yy9;
 	}
 yy324:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'A':
 	case 'a':	goto yy363;
-	default:	goto yy10;
+	default:	goto yy9;
 	}
 yy325:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'U':
 	case 'u':	goto yy364;
-	default:	goto yy10;
+	default:	goto yy9;
 	}
 yy326:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'I':
 	case 'i':	goto yy365;
-	default:	goto yy10;
+	default:	goto yy9;
 	}
 yy327:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'N':
 	case 'n':	goto yy366;
-	default:	goto yy10;
+	default:	goto yy9;
 	}
 yy328:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'W':
 	case 'w':	goto yy367;
-	default:	goto yy10;
+	default:	goto yy9;
 	}
 yy329:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '!':
 	case '0':
 	case '1':
@@ -4398,24 +4396,24 @@ yy329:
 	case 'w':
 	case 'x':
 	case 'y':
-	case 'z':	goto yy9;
-	case '.':	goto yy68;
+	case 'z':	goto yy8;
+	case '.':	goto yy67;
 	default:	goto yy330;
 	}
 yy330:
 #line 166 "rexx.--empty-class(match-none).re"
 	{ RETURN(RX_PARSE); }
-#line 4409 "rexx.--empty-class(match-none).c"
+#line 4407 "rexx.--empty-class(match-none).c"
 yy331:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'D':
 	case 'd':	goto yy368;
-	default:	goto yy10;
+	default:	goto yy9;
 	}
 yy332:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '!':
 	case '0':
 	case '1':
@@ -4480,59 +4478,59 @@ yy332:
 	case 'w':
 	case 'x':
 	case 'y':
-	case 'z':	goto yy9;
-	case '.':	goto yy68;
+	case 'z':	goto yy8;
+	case '.':	goto yy67;
 	default:	goto yy333;
 	}
 yy333:
 #line 174 "rexx.--empty-class(match-none).re"
 	{ RETURN(RX_QUEUE); }
-#line 4491 "rexx.--empty-class(match-none).c"
+#line 4489 "rexx.--empty-class(match-none).c"
 yy334:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'N':
 	case 'n':	goto yy369;
-	default:	goto yy10;
+	default:	goto yy9;
 	}
 yy335:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'T':
 	case 't':	goto yy371;
-	default:	goto yy10;
+	default:	goto yy9;
 	}
 yy336:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'T':
 	case 't':	goto yy372;
-	default:	goto yy10;
+	default:	goto yy9;
 	}
 yy337:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'L':
 	case 'l':	goto yy374;
-	default:	goto yy10;
+	default:	goto yy9;
 	}
 yy338:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'E':
 	case 'e':	goto yy376;
-	default:	goto yy10;
+	default:	goto yy9;
 	}
 yy339:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'X':
 	case 'x':	goto yy378;
-	default:	goto yy10;
+	default:	goto yy9;
 	}
 yy340:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '!':
 	case '0':
 	case '1':
@@ -4597,17 +4595,17 @@ yy340:
 	case 'w':
 	case 'x':
 	case 'y':
-	case 'z':	goto yy9;
-	case '.':	goto yy68;
+	case 'z':	goto yy8;
+	case '.':	goto yy67;
 	default:	goto yy341;
 	}
 yy341:
 #line 186 "rexx.--empty-class(match-none).re"
 	{ RETURN(RX_TRACE); }
-#line 4608 "rexx.--empty-class(match-none).c"
+#line 4606 "rexx.--empty-class(match-none).c"
 yy342:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '!':
 	case '0':
 	case '1':
@@ -4672,17 +4670,17 @@ yy342:
 	case 'w':
 	case 'x':
 	case 'y':
-	case 'z':	goto yy9;
-	case '.':	goto yy68;
+	case 'z':	goto yy8;
+	case '.':	goto yy67;
 	default:	goto yy343;
 	}
 yy343:
 #line 232 "rexx.--empty-class(match-none).re"
 	{ RETURN(RXS_UNTIL); }
-#line 4683 "rexx.--empty-class(match-none).c"
+#line 4681 "rexx.--empty-class(match-none).c"
 yy344:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '!':
 	case '0':
 	case '1':
@@ -4747,17 +4745,17 @@ yy344:
 	case 'w':
 	case 'x':
 	case 'y':
-	case 'z':	goto yy9;
-	case '.':	goto yy68;
+	case 'z':	goto yy8;
+	case '.':	goto yy67;
 	default:	goto yy345;
 	}
 yy345:
 #line 234 "rexx.--empty-class(match-none).re"
 	{ RETURN(RXS_UPPER); }
-#line 4758 "rexx.--empty-class(match-none).c"
+#line 4756 "rexx.--empty-class(match-none).c"
 yy346:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '!':
 	case '0':
 	case '1':
@@ -4822,24 +4820,24 @@ yy346:
 	case 'w':
 	case 'x':
 	case 'y':
-	case 'z':	goto yy9;
-	case '.':	goto yy68;
+	case 'z':	goto yy8;
+	case '.':	goto yy67;
 	default:	goto yy347;
 	}
 yy347:
 #line 236 "rexx.--empty-class(match-none).re"
 	{ RETURN(RXS_VALUE); }
-#line 4833 "rexx.--empty-class(match-none).c"
+#line 4831 "rexx.--empty-class(match-none).c"
 yy348:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'O':
 	case 'o':	goto yy380;
-	default:	goto yy10;
+	default:	goto yy9;
 	}
 yy349:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '!':
 	case '0':
 	case '1':
@@ -4904,24 +4902,24 @@ yy349:
 	case 'w':
 	case 'x':
 	case 'y':
-	case 'z':	goto yy9;
-	case '.':	goto yy68;
+	case 'z':	goto yy8;
+	case '.':	goto yy67;
 	default:	goto yy350;
 	}
 yy350:
 #line 242 "rexx.--empty-class(match-none).re"
 	{ RETURN(RXS_WHILE); }
-#line 4915 "rexx.--empty-class(match-none).c"
+#line 4913 "rexx.--empty-class(match-none).c"
 yy351:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'S':
 	case 's':	goto yy381;
-	default:	goto yy10;
+	default:	goto yy9;
 	}
 yy352:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '!':
 	case '0':
 	case '1':
@@ -4986,24 +4984,24 @@ yy352:
 	case 'w':
 	case 'x':
 	case 'y':
-	case 'z':	goto yy9;
-	case '.':	goto yy68;
+	case 'z':	goto yy8;
+	case '.':	goto yy67;
 	default:	goto yy353;
 	}
 yy353:
 #line 196 "rexx.--empty-class(match-none).re"
 	{ RETURN(RXS_DIGITS); }
-#line 4997 "rexx.--empty-class(match-none).c"
+#line 4995 "rexx.--empty-class(match-none).c"
 yy354:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'E':
 	case 'e':	goto yy383;
-	default:	goto yy10;
+	default:	goto yy9;
 	}
 yy355:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '!':
 	case '0':
 	case '1':
@@ -5068,45 +5066,45 @@ yy355:
 	case 'w':
 	case 'x':
 	case 'y':
-	case 'z':	goto yy9;
-	case '.':	goto yy68;
+	case 'z':	goto yy8;
+	case '.':	goto yy67;
 	default:	goto yy356;
 	}
 yy356:
 #line 202 "rexx.--empty-class(match-none).re"
 	{ RETURN(RXS_EXPOSE); }
-#line 5079 "rexx.--empty-class(match-none).c"
+#line 5077 "rexx.--empty-class(match-none).c"
 yy357:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'E':
 	case 'e':	goto yy384;
-	default:	goto yy10;
+	default:	goto yy9;
 	}
 yy358:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'R':
 	case 'r':	goto yy386;
-	default:	goto yy10;
+	default:	goto yy9;
 	}
 yy359:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'R':
 	case 'r':	goto yy388;
-	default:	goto yy10;
+	default:	goto yy9;
 	}
 yy360:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'E':
 	case 'e':	goto yy389;
-	default:	goto yy10;
+	default:	goto yy9;
 	}
 yy361:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '!':
 	case '0':
 	case '1':
@@ -5171,59 +5169,59 @@ yy361:
 	case 'w':
 	case 'x':
 	case 'y':
-	case 'z':	goto yy9;
-	case '.':	goto yy68;
+	case 'z':	goto yy8;
+	case '.':	goto yy67;
 	default:	goto yy362;
 	}
 yy362:
 #line 216 "rexx.--empty-class(match-none).re"
 	{ RETURN(RXS_LINEIN); }
-#line 5182 "rexx.--empty-class(match-none).c"
+#line 5180 "rexx.--empty-class(match-none).c"
 yy363:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'D':
 	case 'd':	goto yy391;
-	default:	goto yy10;
+	default:	goto yy9;
 	}
 yy364:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'E':
 	case 'e':	goto yy392;
-	default:	goto yy10;
+	default:	goto yy9;
 	}
 yy365:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'C':
 	case 'c':	goto yy394;
-	default:	goto yy10;
+	default:	goto yy9;
 	}
 yy366:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'S':
 	case 's':	goto yy396;
-	default:	goto yy10;
+	default:	goto yy9;
 	}
 yy367:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'I':
 	case 'i':	goto yy398;
-	default:	goto yy10;
+	default:	goto yy9;
 	}
 yy368:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'U':
 	case 'u':	goto yy399;
-	default:	goto yy10;
+	default:	goto yy9;
 	}
 yy369:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '!':
 	case '0':
 	case '1':
@@ -5288,24 +5286,24 @@ yy369:
 	case 'w':
 	case 'x':
 	case 'y':
-	case 'z':	goto yy9;
-	case '.':	goto yy68;
+	case 'z':	goto yy8;
+	case '.':	goto yy67;
 	default:	goto yy370;
 	}
 yy370:
 #line 176 "rexx.--empty-class(match-none).re"
 	{ RETURN(RX_RETURN); }
-#line 5299 "rexx.--empty-class(match-none).c"
+#line 5297 "rexx.--empty-class(match-none).c"
 yy371:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'I':
 	case 'i':	goto yy400;
-	default:	goto yy10;
+	default:	goto yy9;
 	}
 yy372:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '!':
 	case '0':
 	case '1':
@@ -5370,17 +5368,17 @@ yy372:
 	case 'w':
 	case 'x':
 	case 'y':
-	case 'z':	goto yy9;
-	case '.':	goto yy68;
+	case 'z':	goto yy8;
+	case '.':	goto yy67;
 	default:	goto yy373;
 	}
 yy373:
 #line 180 "rexx.--empty-class(match-none).re"
 	{ RETURN(RX_SELECT); }
-#line 5381 "rexx.--empty-class(match-none).c"
+#line 5379 "rexx.--empty-class(match-none).c"
 yy374:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '!':
 	case '0':
 	case '1':
@@ -5445,17 +5443,17 @@ yy374:
 	case 'w':
 	case 'x':
 	case 'y':
-	case 'z':	goto yy9;
-	case '.':	goto yy68;
+	case 'z':	goto yy8;
+	case '.':	goto yy67;
 	default:	goto yy375;
 	}
 yy375:
 #line 182 "rexx.--empty-class(match-none).re"
 	{ RETURN(RX_SIGNAL); }
-#line 5456 "rexx.--empty-class(match-none).c"
+#line 5454 "rexx.--empty-class(match-none).c"
 yy376:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '!':
 	case '0':
 	case '1':
@@ -5520,17 +5518,17 @@ yy376:
 	case 'w':
 	case 'x':
 	case 'y':
-	case 'z':	goto yy9;
-	case '.':	goto yy68;
+	case 'z':	goto yy8;
+	case '.':	goto yy67;
 	default:	goto yy377;
 	}
 yy377:
 #line 226 "rexx.--empty-class(match-none).re"
 	{ RETURN(RXS_SOURCE); }
-#line 5531 "rexx.--empty-class(match-none).c"
+#line 5529 "rexx.--empty-class(match-none).c"
 yy378:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '!':
 	case '0':
 	case '1':
@@ -5595,24 +5593,24 @@ yy378:
 	case 'w':
 	case 'x':
 	case 'y':
-	case 'z':	goto yy9;
-	case '.':	goto yy68;
+	case 'z':	goto yy8;
+	case '.':	goto yy67;
 	default:	goto yy379;
 	}
 yy379:
 #line 228 "rexx.--empty-class(match-none).re"
 	{ RETURN(RXS_SYNTAX); }
-#line 5606 "rexx.--empty-class(match-none).c"
+#line 5604 "rexx.--empty-class(match-none).c"
 yy380:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'N':
 	case 'n':	goto yy401;
-	default:	goto yy10;
+	default:	goto yy9;
 	}
 yy381:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '!':
 	case '0':
 	case '1':
@@ -5677,24 +5675,24 @@ yy381:
 	case 'w':
 	case 'x':
 	case 'y':
-	case 'z':	goto yy9;
-	case '.':	goto yy68;
+	case 'z':	goto yy8;
+	case '.':	goto yy67;
 	default:	goto yy382;
 	}
 yy382:
 #line 134 "rexx.--empty-class(match-none).re"
 	{ RETURN(RX_ADDRESS); }
-#line 5688 "rexx.--empty-class(match-none).c"
+#line 5686 "rexx.--empty-class(match-none).c"
 yy383:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'R':
 	case 'r':	goto yy403;
-	default:	goto yy10;
+	default:	goto yy9;
 	}
 yy384:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '!':
 	case '0':
 	case '1':
@@ -5759,17 +5757,17 @@ yy384:
 	case 'w':
 	case 'x':
 	case 'y':
-	case 'z':	goto yy9;
-	case '.':	goto yy68;
+	case 'z':	goto yy8;
+	case '.':	goto yy67;
 	default:	goto yy385;
 	}
 yy385:
 #line 204 "rexx.--empty-class(match-none).re"
 	{ RETURN(RXS_FAILURE); }
-#line 5770 "rexx.--empty-class(match-none).c"
+#line 5768 "rexx.--empty-class(match-none).c"
 yy386:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '!':
 	case '0':
 	case '1':
@@ -5834,24 +5832,24 @@ yy386:
 	case 'w':
 	case 'x':
 	case 'y':
-	case 'z':	goto yy9;
-	case '.':	goto yy68;
+	case 'z':	goto yy8;
+	case '.':	goto yy67;
 	default:	goto yy387;
 	}
 yy387:
 #line 208 "rexx.--empty-class(match-none).re"
 	{ RETURN(RXS_FOREVER); }
-#line 5845 "rexx.--empty-class(match-none).c"
+#line 5843 "rexx.--empty-class(match-none).c"
 yy388:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'E':
 	case 'e':	goto yy404;
-	default:	goto yy10;
+	default:	goto yy9;
 	}
 yy389:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '!':
 	case '0':
 	case '1':
@@ -5916,24 +5914,24 @@ yy389:
 	case 'w':
 	case 'x':
 	case 'y':
-	case 'z':	goto yy9;
-	case '.':	goto yy68;
+	case 'z':	goto yy8;
+	case '.':	goto yy67;
 	default:	goto yy390;
 	}
 yy390:
 #line 154 "rexx.--empty-class(match-none).re"
 	{ RETURN(RX_ITERATE); }
-#line 5927 "rexx.--empty-class(match-none).c"
+#line 5925 "rexx.--empty-class(match-none).c"
 yy391:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'Y':
 	case 'y':	goto yy405;
-	default:	goto yy10;
+	default:	goto yy9;
 	}
 yy392:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '!':
 	case '0':
 	case '1':
@@ -5998,17 +5996,17 @@ yy392:
 	case 'w':
 	case 'x':
 	case 'y':
-	case 'z':	goto yy9;
-	case '.':	goto yy68;
+	case 'z':	goto yy8;
+	case '.':	goto yy67;
 	default:	goto yy393;
 	}
 yy393:
 #line 222 "rexx.--empty-class(match-none).re"
 	{ RETURN(RXS_NOVALUE); }
-#line 6009 "rexx.--empty-class(match-none).c"
+#line 6007 "rexx.--empty-class(match-none).c"
 yy394:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '!':
 	case '0':
 	case '1':
@@ -6073,17 +6071,17 @@ yy394:
 	case 'w':
 	case 'x':
 	case 'y':
-	case 'z':	goto yy9;
-	case '.':	goto yy68;
+	case 'z':	goto yy8;
+	case '.':	goto yy67;
 	default:	goto yy395;
 	}
 yy395:
 #line 160 "rexx.--empty-class(match-none).re"
 	{ RETURN(RX_NUMERIC); }
-#line 6084 "rexx.--empty-class(match-none).c"
+#line 6082 "rexx.--empty-class(match-none).c"
 yy396:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '!':
 	case '0':
 	case '1':
@@ -6148,38 +6146,38 @@ yy396:
 	case 'w':
 	case 'x':
 	case 'y':
-	case 'z':	goto yy9;
-	case '.':	goto yy68;
+	case 'z':	goto yy8;
+	case '.':	goto yy67;
 	default:	goto yy397;
 	}
 yy397:
 #line 162 "rexx.--empty-class(match-none).re"
 	{ RETURN(RX_OPTIONS); }
-#line 6159 "rexx.--empty-class(match-none).c"
+#line 6157 "rexx.--empty-class(match-none).c"
 yy398:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'S':
 	case 's':	goto yy407;
-	default:	goto yy10;
+	default:	goto yy9;
 	}
 yy399:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'R':
 	case 'r':	goto yy408;
-	default:	goto yy10;
+	default:	goto yy9;
 	}
 yy400:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'F':
 	case 'f':	goto yy409;
-	default:	goto yy10;
+	default:	goto yy9;
 	}
 yy401:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '!':
 	case '0':
 	case '1':
@@ -6244,31 +6242,31 @@ yy401:
 	case 'w':
 	case 'x':
 	case 'y':
-	case 'z':	goto yy9;
-	case '.':	goto yy68;
+	case 'z':	goto yy8;
+	case '.':	goto yy67;
 	default:	goto yy402;
 	}
 yy402:
 #line 240 "rexx.--empty-class(match-none).re"
 	{ RETURN(RXS_VERSION); }
-#line 6255 "rexx.--empty-class(match-none).c"
+#line 6253 "rexx.--empty-class(match-none).c"
 yy403:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'I':
 	case 'i':	goto yy410;
-	default:	goto yy10;
+	default:	goto yy9;
 	}
 yy404:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'T':
 	case 't':	goto yy411;
-	default:	goto yy10;
+	default:	goto yy9;
 	}
 yy405:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '!':
 	case '0':
 	case '1':
@@ -6333,45 +6331,45 @@ yy405:
 	case 'w':
 	case 'x':
 	case 'y':
-	case 'z':	goto yy9;
-	case '.':	goto yy68;
+	case 'z':	goto yy8;
+	case '.':	goto yy67;
 	default:	goto yy406;
 	}
 yy406:
 #line 220 "rexx.--empty-class(match-none).re"
 	{ RETURN(RXS_NOTREADY); }
-#line 6344 "rexx.--empty-class(match-none).c"
+#line 6342 "rexx.--empty-class(match-none).c"
 yy407:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'E':
 	case 'e':	goto yy413;
-	default:	goto yy10;
+	default:	goto yy9;
 	}
 yy408:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'E':
 	case 'e':	goto yy415;
-	default:	goto yy10;
+	default:	goto yy9;
 	}
 yy409:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'I':
 	case 'i':	goto yy417;
-	default:	goto yy10;
+	default:	goto yy9;
 	}
 yy410:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'N':
 	case 'n':	goto yy418;
-	default:	goto yy10;
+	default:	goto yy9;
 	}
 yy411:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '!':
 	case '0':
 	case '1':
@@ -6436,17 +6434,17 @@ yy411:
 	case 'w':
 	case 'x':
 	case 'y':
-	case 'z':	goto yy9;
-	case '.':	goto yy68;
+	case 'z':	goto yy8;
+	case '.':	goto yy67;
 	default:	goto yy412;
 	}
 yy412:
 #line 152 "rexx.--empty-class(match-none).re"
 	{ RETURN(RX_INTERPRET); }
-#line 6447 "rexx.--empty-class(match-none).c"
+#line 6445 "rexx.--empty-class(match-none).c"
 yy413:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '!':
 	case '0':
 	case '1':
@@ -6511,17 +6509,17 @@ yy413:
 	case 'w':
 	case 'x':
 	case 'y':
-	case 'z':	goto yy9;
-	case '.':	goto yy68;
+	case 'z':	goto yy8;
+	case '.':	goto yy67;
 	default:	goto yy414;
 	}
 yy414:
 #line 164 "rexx.--empty-class(match-none).re"
 	{ RETURN(RX_OTHERWISE); }
-#line 6522 "rexx.--empty-class(match-none).c"
+#line 6520 "rexx.--empty-class(match-none).c"
 yy415:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '!':
 	case '0':
 	case '1':
@@ -6586,31 +6584,31 @@ yy415:
 	case 'w':
 	case 'x':
 	case 'y':
-	case 'z':	goto yy9;
-	case '.':	goto yy68;
+	case 'z':	goto yy8;
+	case '.':	goto yy67;
 	default:	goto yy416;
 	}
 yy416:
 #line 168 "rexx.--empty-class(match-none).re"
 	{ RETURN(RX_PROCEDURE); }
-#line 6597 "rexx.--empty-class(match-none).c"
+#line 6595 "rexx.--empty-class(match-none).c"
 yy417:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'C':
 	case 'c':	goto yy419;
-	default:	goto yy10;
+	default:	goto yy9;
 	}
 yy418:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'G':
 	case 'g':	goto yy421;
-	default:	goto yy10;
+	default:	goto yy9;
 	}
 yy419:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '!':
 	case '0':
 	case '1':
@@ -6675,17 +6673,17 @@ yy419:
 	case 'w':
 	case 'x':
 	case 'y':
-	case 'z':	goto yy9;
-	case '.':	goto yy68;
+	case 'z':	goto yy8;
+	case '.':	goto yy67;
 	default:	goto yy420;
 	}
 yy420:
 #line 224 "rexx.--empty-class(match-none).re"
 	{ RETURN(RXS_SCIENTIFIC); }
-#line 6686 "rexx.--empty-class(match-none).c"
+#line 6684 "rexx.--empty-class(match-none).c"
 yy421:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '!':
 	case '0':
 	case '1':
@@ -6750,14 +6748,14 @@ yy421:
 	case 'w':
 	case 'x':
 	case 'y':
-	case 'z':	goto yy9;
-	case '.':	goto yy68;
+	case 'z':	goto yy8;
+	case '.':	goto yy67;
 	default:	goto yy422;
 	}
 yy422:
 #line 198 "rexx.--empty-class(match-none).re"
 	{ RETURN(RXS_ENGINEERING); }
-#line 6761 "rexx.--empty-class(match-none).c"
+#line 6759 "rexx.--empty-class(match-none).c"
 }
 #line 265 "rexx.--empty-class(match-none).re"
 
@@ -6771,7 +6769,7 @@ bool StripToken(){
 	ScanCB.eot = cursor;
 strip:
 
-#line 6775 "rexx.--empty-class(match-none).c"
+#line 6773 "rexx.--empty-class(match-none).c"
 {
 	YYCTYPE yych;
 	if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
@@ -6791,12 +6789,12 @@ yy426:
 		blanks = TRUE;
 		goto strip;
 	    }
-#line 6795 "rexx.--empty-class(match-none).c"
+#line 6793 "rexx.--empty-class(match-none).c"
 yy428:
 	++YYCURSOR;
 #line 282 "rexx.--empty-class(match-none).re"
 	{ goto strip; }
-#line 6800 "rexx.--empty-class(match-none).c"
+#line 6798 "rexx.--empty-class(match-none).c"
 yy430:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -6810,14 +6808,14 @@ yy431:
 		depth = 1;
 		goto comment;
 	    }
-#line 6814 "rexx.--empty-class(match-none).c"
+#line 6812 "rexx.--empty-class(match-none).c"
 }
 #line 290 "rexx.--empty-class(match-none).re"
 
 
 comment:
 
-#line 6821 "rexx.--empty-class(match-none).c"
+#line 6819 "rexx.--empty-class(match-none).c"
 {
 	YYCTYPE yych;
 	if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
@@ -6833,7 +6831,7 @@ yy435:
 	++YYCURSOR;
 #line 313 "rexx.--empty-class(match-none).re"
 	{ RETURN(blanks); }
-#line 6837 "rexx.--empty-class(match-none).c"
+#line 6835 "rexx.--empty-class(match-none).c"
 yy437:
 	++YYCURSOR;
 yy438:
@@ -6841,7 +6839,7 @@ yy438:
 	{
 		goto comment;
 	    }
-#line 6845 "rexx.--empty-class(match-none).c"
+#line 6843 "rexx.--empty-class(match-none).c"
 yy439:
 	++YYCURSOR;
 #line 302 "rexx.--empty-class(match-none).re"
@@ -6850,7 +6848,7 @@ yy439:
 		ScanCB.linePos = ScanCB.pos + (cursor - ScanCB.mrk);
 		goto comment;
 	    }
-#line 6854 "rexx.--empty-class(match-none).c"
+#line 6852 "rexx.--empty-class(match-none).c"
 yy441:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -6872,7 +6870,7 @@ yy443:
 		else
 		    goto comment;
 	    }
-#line 6876 "rexx.--empty-class(match-none).c"
+#line 6874 "rexx.--empty-class(match-none).c"
 yy445:
 	++YYCURSOR;
 #line 308 "rexx.--empty-class(match-none).re"
@@ -6880,7 +6878,7 @@ yy445:
 		++depth;
 		goto comment;
 	    }
-#line 6884 "rexx.--empty-class(match-none).c"
+#line 6882 "rexx.--empty-class(match-none).c"
 }
 #line 318 "rexx.--empty-class(match-none).re"
 

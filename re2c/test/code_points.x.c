@@ -1192,8 +1192,8 @@ yy525:
 	{}
 #line 1194 "code_points.x.c"
 yy526:
-	++YYCURSOR;
-	if ((yych = *YYCURSOR) <= 0xDBFF) goto yy525;
+	yych = *++YYCURSOR;
+	if (yych <= 0xDBFF) goto yy525;
 	if (yych <= 0xDFFF) goto yy524;
 	goto yy525;
 }

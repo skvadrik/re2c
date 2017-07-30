@@ -55,8 +55,8 @@ yy8:
 			{ printf("-\n");	continue; }
 #line 57 "config6.c"
 yy10:
-			++YYCURSOR;
-			switch ((yych = *YYCURSOR)) {
+			yych = *++YYCURSOR;
+			switch (yych) {
 			case '0':
 			case '1':
 			case '2':
@@ -74,8 +74,7 @@ yy11:
 			{ printf("Num\n");	continue; }
 #line 76 "config6.c"
 yy12:
-			++YYCURSOR;
-			yych = *YYCURSOR;
+			yych = *++YYCURSOR;
 			switch (yych) {
 			case '0':
 			case '1':
@@ -92,10 +91,9 @@ yy12:
 yy14:
 #line 19 "config6.re"
 			{ printf("Num\n");	continue; }
-#line 96 "config6.c"
+#line 95 "config6.c"
 yy15:
-			++YYCURSOR;
-			yych = *YYCURSOR;
+			yych = *++YYCURSOR;
 			switch (yych) {
 			case '0':
 			case '1':
@@ -112,7 +110,7 @@ yy15:
 yy17:
 #line 18 "config6.re"
 			{ printf("Oct\n");	continue; }
-#line 116 "config6.c"
+#line 114 "config6.c"
 		}
 #line 25 "config6.re"
 

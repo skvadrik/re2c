@@ -21,8 +21,8 @@ yy3:
 	{}
 #line 23 "bug128.c"
 yy4:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case 'a':	goto yy7;
 	case 'c':	goto yy8;
 	default:	goto yy5;
@@ -959,7 +959,6 @@ yy138:
 	}
 yy139:
 	++YYCURSOR;
-	yych = *YYCURSOR;
 	goto yy5;
 }
 #line 7 "bug128.re"

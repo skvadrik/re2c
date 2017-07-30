@@ -469,8 +469,8 @@ yy45:
 	default:	goto yy20;
 	}
 yy46:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case 0x9E:
 	case 0x9F:	goto yy17;
 	default:	goto yy20;

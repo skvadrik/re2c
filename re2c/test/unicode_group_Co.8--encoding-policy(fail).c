@@ -394,8 +394,8 @@ yy12:
 	{ goto Co; }
 #line 396 "unicode_group_Co.8--encoding-policy(fail).c"
 yy14:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case 0x80:
 	case 0x81:
 	case 0x82:

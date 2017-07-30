@@ -2,6 +2,7 @@
 
 #include <stdio.h>
 #include <stdlib.h> /* malloc, free */
+#include <string.h> /* memcpy */
 
 static void *read_file
     ( const char *fname
@@ -58,7 +59,7 @@ error:
 #define YYFILL(n) { break; }
 
 static int action_line393
-    ( unsigned int i
+    ( unsigned *pkix
     , const YYKEYTYPE *keys
     , const YYCTYPE *start
     , const YYCTYPE *token
@@ -66,10 +67,12 @@ static int action_line393
     , YYKEYTYPE rule_act
     )
 {
+    const unsigned kix = *pkix;
     const long pos = token - start;
     const long len_act = *cursor - token;
-    const long len_exp = (long) keys [3 * i + 1];
-    const YYKEYTYPE rule_exp = keys [3 * i + 2];
+    const long len_exp = (long) keys[kix + 1];
+    const YYKEYTYPE rule_exp = keys[kix + 2];
+    *pkix = kix + 3;
     if (rule_exp == 255) {
         fprintf
             ( stderr
@@ -79,17 +82,17 @@ static int action_line393
             );
     }
     if (len_act == len_exp && rule_act == rule_exp) {
-        const YYKEYTYPE offset = keys[3 * i];
+        const YYKEYTYPE offset = keys[kix];
         *cursor = token + offset;
         return 0;
     } else {
         fprintf
             ( stderr
-            , "error: lex_line393: at position %ld (iteration %u):\n"
+            , "error: lex_line393: at position %ld (key %u):\n"
                 "\texpected: match length %ld, rule %u\n"
                 "\tactual:   match length %ld, rule %u\n"
             , pos
-            , i
+            , kix
             , len_exp
             , rule_exp
             , len_act
@@ -97,6 +100,13 @@ static int action_line393
             );
         return 1;
     }
+}
+
+static int check_key_count_line393(unsigned have, unsigned used, unsigned need)
+{
+    if (used + need <= have) return 0;
+    fprintf(stderr, "error: lex_line393: not enough keys\n");
+    return 1;
 }
 
 int lex_line393()
@@ -126,7 +136,7 @@ int lex_line393()
 
     keys = (YYKEYTYPE *) read_file
         ("php20150211_parse_iso_intervals.ig--skeleton.c.line393.keys"
-        , 3 * sizeof (YYKEYTYPE)
+        , sizeof (YYKEYTYPE)
         , 0
         , &keys_count
         );
@@ -139,7 +149,7 @@ int lex_line393()
     limit = input + input_len + padding;
     eof = input + input_len;
 
-    for (i = 0; status == 0 && i < keys_count; ++i) {
+    for (i = 0; status == 0 && cursor < eof && i < keys_count;) {
         token = cursor;
         const YYCTYPE *marker = NULL;
         YYCTYPE yych;
@@ -220,16 +230,19 @@ int lex_line393()
         }
 yy2:
         YYSKIP ();
-        status = action_line393(i, keys, input, token, &cursor, 5);
+        status = check_key_count_line393(keys_count, i, 3)
+             || action_line393(&i, keys, input, token, &cursor, 5);
         continue;
 yy4:
         YYSKIP ();
 yy5:
-        status = action_line393(i, keys, input, token, &cursor, 6);
+        status = check_key_count_line393(keys_count, i, 3)
+             || action_line393(&i, keys, input, token, &cursor, 6);
         continue;
 yy6:
         YYSKIP ();
-        status = action_line393(i, keys, input, token, &cursor, 4);
+        status = check_key_count_line393(keys_count, i, 3)
+             || action_line393(&i, keys, input, token, &cursor, 4);
         continue;
 yy8:
         yyaccept = 0;
@@ -248,7 +261,8 @@ yy9:
         if (yych <= '9') goto yy14;
         if (yych == 'T') goto yy15;
 yy10:
-        status = action_line393(i, keys, input, token, &cursor, 2);
+        status = check_key_count_line393(keys_count, i, 3)
+             || action_line393(&i, keys, input, token, &cursor, 2);
         continue;
 yy11:
         YYSKIP ();
@@ -324,7 +338,8 @@ yy16:
         if (yybm[0+yych] & 128) {
             goto yy16;
         }
-        status = action_line393(i, keys, input, token, &cursor, 0);
+        status = check_key_count_line393(keys_count, i, 3)
+             || action_line393(&i, keys, input, token, &cursor, 0);
         continue;
 yy19:
         YYSKIP ();
@@ -576,7 +591,6 @@ yy36:
         goto yy10;
 yy37:
         YYSKIP ();
-        yych = YYPEEK ();
         goto yy10;
 yy38:
         YYSKIP ();
@@ -913,7 +927,8 @@ yy88:
         goto yy13;
 yy89:
         YYSKIP ();
-        status = action_line393(i, keys, input, token, &cursor, 1);
+        status = check_key_count_line393(keys_count, i, 3)
+             || action_line393(&i, keys, input, token, &cursor, 1);
         continue;
 yy91:
         YYSKIP ();
@@ -932,7 +947,8 @@ yy91:
         if (yych <= '/') goto yy13;
         if (yych >= ':') goto yy13;
         YYSKIP ();
-        status = action_line393(i, keys, input, token, &cursor, 3);
+        status = check_key_count_line393(keys_count, i, 3)
+             || action_line393(&i, keys, input, token, &cursor, 3);
         continue;
 
     }
@@ -944,7 +960,7 @@ yy91:
         }
         if (i != keys_count) {
             status = 1;
-            fprintf(stderr, "error: lex_line393: unused keys left after %u iterations\n", i);
+            fprintf(stderr, "error: lex_line393: unused keys left after %u keys\n", i);
         }
     }
 
@@ -963,7 +979,6 @@ end:
 #undef YYRESTORE
 #undef YYLESSTHAN
 #undef YYFILL
-#define YYMAXFILL 20
 
 int main()
 {

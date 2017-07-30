@@ -439,8 +439,8 @@ yy40:
 	if (yych == 't') goto yy49;
 	goto yy28;
 yy41:
-	++YYCURSOR;
-	if (yybm[0+(yych = *YYCURSOR)] & 128) {
+	yych = *++YYCURSOR;
+	if (yybm[0+yych] & 128) {
 		goto yy27;
 	}
 #line 239 "push.fg.re"
@@ -463,8 +463,8 @@ yy46:
 	if (yych == 'e') goto yy53;
 	goto yy28;
 yy47:
-	++YYCURSOR;
-	if (yybm[0+(yych = *YYCURSOR)] & 128) {
+	yych = *++YYCURSOR;
+	if (yybm[0+yych] & 128) {
 		goto yy27;
 	}
 #line 240 "push.fg.re"
@@ -487,16 +487,16 @@ yy52:
 	if (yych == 'k') goto yy59;
 	goto yy28;
 yy53:
-	++YYCURSOR;
-	if (yybm[0+(yych = *YYCURSOR)] & 128) {
+	yych = *++YYCURSOR;
+	if (yybm[0+yych] & 128) {
 		goto yy27;
 	}
 #line 241 "push.fg.re"
 	{ SEND(kElse);           }
 #line 497 "push.fg.c"
 yy55:
-	++YYCURSOR;
-	if (yybm[0+(yych = *YYCURSOR)] & 128) {
+	yych = *++YYCURSOR;
+	if (yybm[0+yych] & 128) {
 		goto yy27;
 	}
 #line 242 "push.fg.re"
@@ -511,8 +511,8 @@ yy58:
 	if (yych == 'e') goto yy62;
 	goto yy28;
 yy59:
-	++YYCURSOR;
-	if (yybm[0+(yych = *YYCURSOR)] & 128) {
+	yych = *++YYCURSOR;
+	if (yybm[0+yych] & 128) {
 		goto yy27;
 	}
 #line 243 "push.fg.re"
@@ -523,16 +523,16 @@ yy61:
 	if (yych == 'n') goto yy64;
 	goto yy28;
 yy62:
-	++YYCURSOR;
-	if (yybm[0+(yych = *YYCURSOR)] & 128) {
+	yych = *++YYCURSOR;
+	if (yybm[0+yych] & 128) {
 		goto yy27;
 	}
 #line 244 "push.fg.re"
 	{ SEND(kWhile);          }
 #line 533 "push.fg.c"
 yy64:
-	++YYCURSOR;
-	if (yybm[0+(yych = *YYCURSOR)] & 128) {
+	yych = *++YYCURSOR;
+	if (yybm[0+yych] & 128) {
 		goto yy27;
 	}
 #line 245 "push.fg.re"

@@ -422,8 +422,8 @@ yy44:
 	{ RETURN(*tok); }
 #line 424 "scanner.c"
 yy45:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '/':	goto yy70;
 	default:	goto yy46;
 	}
@@ -433,7 +433,7 @@ yy46:
 				  RETURN(CLOSE); }
 #line 435 "scanner.c"
 yy47:
-	yych = *++YYCURSOR;
+	++YYCURSOR;
 	goto yy46;
 yy48:
 	++YYCURSOR;
@@ -1270,8 +1270,8 @@ yy158:
 	default:	goto yy153;
 	}
 yy159:
-	++YYCURSOR;
-	switch ((yych = *YYCURSOR)) {
+	yych = *++YYCURSOR;
+	switch (yych) {
 	case '\t':
 	case '\n':
 	case '\r':
@@ -1357,7 +1357,7 @@ yy169:
 	default:	goto yy156;
 	}
 yy170:
-	yych = *++YYCURSOR;
+	++YYCURSOR;
 	goto yy151;
 yy171:
 	++YYCURSOR;

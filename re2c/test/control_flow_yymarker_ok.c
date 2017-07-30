@@ -5,9 +5,9 @@
 {
 	YYCTYPE yych;
 	if ((YYLIMIT - YYCURSOR) < 4) YYFILL(4);
-	yych = *YYCURSOR;
-	yych = *++YYCURSOR;
-	yych = *(YYMARKER = ++YYCURSOR);
+	yych = *YYCURSOR++;
+	yych = *YYCURSOR++;
+	yych = *(YYMARKER = YYCURSOR);
 	goto yy5;
 yy4:
 #line 4 "control_flow_yymarker_ok.re"

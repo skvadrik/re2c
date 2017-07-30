@@ -1,0 +1,274 @@
+%{
+
+#include "src/ast/parser.h"
+
+#define YYMALLOC malloc
+#define YYFREE free
+
+using namespace re2c;
+
+extern "C" {
+
+int yylex(context_t &context);
+void yyerror(context_t &context, const char*);
+
+} // extern "C"
+
+/* Bison version 1.875 emits a definition that is not working
+ * with several g++ version. Hence we disable it here.
+ */
+#if defined(__GNUC__)
+#define __attribute__(x)
+#endif
+
+static spec_t &find(specs_t &specs, const std::string &name)
+{
+	for (specs_t::iterator i = specs.begin(); i != specs.end(); ++i) {
+		if (i->name == name) return *i;
+	}
+	specs.push_back(spec_t(name));
+	return specs.back();
+}
+
+%}
+
+%start	spec
+
+%lex-param   {re2c::context_t &context}
+%parse-param {re2c::context_t &context}
+
+%union {
+	const re2c::AST * regexp;
+	re2c::Code * code;
+	char op;
+	re2c::ASTBounds bounds;
+	std::string * str;
+	re2c::CondList * clist;
+};
+
+%token TOKEN_CLOSESIZE
+%token TOKEN_CODE
+%token TOKEN_CONF
+%token TOKEN_ID
+%token TOKEN_FID
+%token TOKEN_FID_END
+%token TOKEN_LINE_INFO
+%token TOKEN_REGEXP
+
+%type <op>      close closes
+%type <bounds>  TOKEN_CLOSESIZE
+%type <code>    TOKEN_CODE ccode
+%type <regexp>  TOKEN_REGEXP trailexpr rule expr diff term factor primary
+%type <str>     TOKEN_ID TOKEN_FID name
+%type <clist>   conds clist
+
+%%
+
+spec
+	: /* empty */
+	| spec TOKEN_CONF { context.input.lex_conf(context.opts); }
+	| spec def
+	| spec rule
+	| spec TOKEN_LINE_INFO
+	;
+
+def
+	: name expr enddef {
+		if (!context.symtab.insert(std::make_pair(*$1, $2)).second) {
+			fatal_l(context.input.get_cline(), "sym already defined");
+		}
+		delete $1;
+	}
+	/* errors */
+	| name expr '/' {
+		fatal_l(context.input.get_cline(),
+			"trailing contexts are not allowed in named definitions");
+	};
+
+name
+	: TOKEN_ID '=' {
+		$$ = $1;
+	}
+	| TOKEN_FID {
+		$$ = $1;
+	};
+
+enddef: ';' | TOKEN_FID_END;
+
+rule
+	: trailexpr TOKEN_CODE {
+		find(context.specs, "").rules.push_back(ASTRule($1, $2));
+	}
+
+	| '*' TOKEN_CODE {
+		find(context.specs, "").defs.push_back($2);
+	}
+
+	| '<' clist '>' trailexpr ccode {
+		for(CondList::const_iterator i = $2->begin(); i != $2->end(); ++i) {
+			find(context.specs, *i).rules.push_back(ASTRule($4, $5));
+		}
+		delete $2;
+	}
+
+	| '<' clist '>' '*' ccode {
+		for(CondList::const_iterator i = $2->begin(); i != $2->end(); ++i) {
+			find(context.specs, *i).defs.push_back($5);
+		}
+		delete $2;
+	}
+
+	| '<' '!' clist '>' TOKEN_CODE {
+		for (CondList::const_iterator i = $3->begin(); i != $3->end(); ++i) {
+			find(context.specs, *i).setup.push_back($5);
+		}
+		delete $3;
+	}
+
+	| '<' '>' ccode {
+		const AST *r = ast_nil(context.input.get_cline(), 0);
+		find(context.specs, "0").rules.push_back(ASTRule(r, $3));
+	};
+
+ccode
+	: TOKEN_CODE
+
+	| '=' '>' TOKEN_ID TOKEN_CODE {
+		$$ = $4;
+		$$->cond = *$3;
+		delete $3;
+	}
+
+	| ':' '=' '>' TOKEN_ID {
+		$$ = new Code(context.input.get_fname(), context.input.get_cline());
+		$$->cond = *$4;
+		delete $4;
+	};
+
+clist
+	: conds
+	| '*' {
+		$$ = new CondList;
+		$$->insert("*");
+	};
+
+conds
+	: TOKEN_ID {
+		$$ = new CondList;
+		$$->insert(*$1);
+		delete $1;
+	}
+
+	| conds ',' TOKEN_ID {
+		$1->insert(*$3);
+		delete $3;
+		$$ = $1;
+	};
+
+trailexpr
+	: expr {
+		$$ = ast_cap($1);
+	} | expr '/' expr {
+		$$ = ast_cat(ast_cap($1),
+			ast_cat(ast_tag(context.input.get_cline(), 0, NULL, false), $3));
+	};
+
+expr:
+		diff
+		{
+			$$ = $1;
+		}
+	|	expr '|' diff
+		{
+			$$ = ast_alt($1, $3);
+		}
+;
+
+diff:
+		term
+		{
+			$$ = $1;
+		}
+	|	diff '\\' term
+		{
+			$$ = ast_diff($1, $3);
+		}
+;
+
+term:
+		factor
+		{
+			$$ = $1;
+		}
+	|	factor term // in POSIX concatenation is right-associative
+		{
+			$$ = ast_cat($1, $2);
+		}
+;
+
+factor
+	: primary
+	| primary closes {
+		switch($2) {
+			case '*': $$ = ast_iter($1, 0, AST::MANY); break;
+			case '+': $$ = ast_iter($1, 1, AST::MANY); break;
+			case '?': $$ = ast_iter($1, 0, 1); break;
+		}
+	} | primary TOKEN_CLOSESIZE {
+		$$ = ast_iter($1, $2.min, $2.max);
+	};
+
+closes
+	: close
+	| closes close { $$ = ($1 == $2) ? $1 : '*'; }
+	;
+
+close
+	: '*' { $$ = '*'; }
+	| '+' { $$ = '+'; }
+	| '?' { $$ = '?'; }
+	;
+
+primary
+	: TOKEN_REGEXP
+	| TOKEN_ID {
+		symtab_t::iterator i = context.symtab.find(*$1);
+		if (i == context.symtab.end()) {
+			fatal_l(context.input.get_cline(),
+				"undefined symbol '%s'", $1->c_str());
+		}
+		$$ = i->second;
+		if (ast_need_wrap($$)) {
+			$$ = ast_ref($$, *$1);
+		}
+		delete $1;
+	} | '(' expr ')' {
+		$$ = ast_cap($2);
+	};
+
+%%
+
+extern "C" {
+
+void yyerror(context_t &context, const char* s)
+{
+	fatal_l(context.input.get_cline(), "%s", s);
+}
+
+int yylex(context_t &context)
+{
+	return context.input.scan(&context.opts.glob);
+}
+
+} // extern "C"
+
+namespace re2c
+{
+
+void parse(Scanner &input, specs_t &specs, symtab_t &symtab, Opt &opts)
+{
+    context_t context = {input, specs, symtab, opts};
+    yyparse(context);
+}
+
+} // namespace re2c
