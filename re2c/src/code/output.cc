@@ -89,7 +89,20 @@ OutputFile &OutputFile::wraw(const char *s, const char *e)
 {
 	if (block().opts->target == TARGET_CODE) {
 		insert_code();
-		stream().write(s, static_cast<std::streamsize>(e - s));
+
+		// convert CR LF to LF
+		std::ostream &o = stream();
+		for (const char *p = s;; ++p) {
+			std::streamsize l = p - s;
+			if (p == e) {
+				o.write(s, l);
+				break;
+			} else if (*p == '\n') {
+				if (p > s && p[-1] == '\r') --l;
+				o.write(s, l);
+				s = p;
+			}
+		}
 	}
 	return *this;
 }
@@ -400,7 +413,7 @@ bool OutputFile::emit(const uniq_vector_t<std::string> &global_types,
 		filename = "<stdout>";
 		file = stdout;
 	} else {
-		file = fopen(filename.c_str(), "wb");
+		file = fopen(filename.c_str(), "w");
 		if (!file) {
 			error("cannot open output file: %s", filename.c_str());
 			return false;
@@ -500,7 +513,7 @@ bool HeaderFile::emit(const opt_t *opts, const uniq_vector_t<std::string> &types
 	const std::string &filename = opts->header_file;
 	if (filename.empty()) return true;
 
-	FILE *file = fopen(filename.c_str(), "wb");
+	FILE *file = fopen(filename.c_str(), "w");
 	if (!file) {
 		error("cannot open header file: %s", filename.c_str());
 		return false;
