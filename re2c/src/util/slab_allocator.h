@@ -15,7 +15,8 @@
  * Works ~20 times faster, than linux's glibc allocator :]
  */
 template<uint32_t MAXIMUM_INLINE = 4 * 1024,
-	uint32_t SLAB_SIZE = 1024 * 1024>
+	uint32_t SLAB_SIZE = 1024 * 1024,
+	size_t ALIGN = 1>
 class slab_allocator_t
 {
 	typedef std::vector<char*> slabs_t;
@@ -32,6 +33,9 @@ public:
 	void *alloc(size_t size)
 	{
 		char *result;
+
+		/* alignment */
+		size += ALIGN - size % ALIGN;
 
 		/* very large objects */
 		if (size > MAXIMUM_INLINE) {
