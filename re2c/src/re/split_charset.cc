@@ -8,7 +8,6 @@ namespace re2c {
 static void split(const RE* re, std::set<uint32_t> &cs)
 {
 	switch (re->type) {
-		default: assert(false);
 		case RE::NIL: break;
 		case RE::TAG: break;
 		case RE::SYM:

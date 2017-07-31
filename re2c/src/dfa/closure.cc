@@ -118,7 +118,6 @@ static void scan(nfa_state_t *n, std::stack<nfa_state_t*> &bstack, closure_t &do
 	tagtree_t &history = tagpool.history;
 	clos_t x = done[n->clos];
 	switch (n->type) {
-		default: break;
 		case nfa_state_t::NIL:
 			x.state = n->nil.out;
 			enqueue(x, bstack, done, shadow, tagpool, tags);
@@ -134,6 +133,9 @@ static void scan(nfa_state_t *n, std::stack<nfa_state_t*> &bstack, closure_t &do
 			x.tlook = history.push(x.tlook, n->tag.info,
 				n->tag.bottom ? TAGVER_BOTTOM : TAGVER_CURSOR);
 			enqueue(x, bstack, done, shadow, tagpool, tags);
+			break;
+		case nfa_state_t::RAN:
+		case nfa_state_t::FIN:
 			break;
 	}
 }
@@ -258,7 +260,6 @@ void closure_leftmost(const closure_t &init, closure_t &done,
 		}
 
 		switch (n->type) {
-			default: break;
 			case nfa_state_t::NIL:
 				x.state = n->nil.out;
 				todo.push(x);
@@ -274,6 +275,9 @@ void closure_leftmost(const closure_t &init, closure_t &done,
 				x.tlook = tagpool.history.push(x.tlook, n->tag.info,
 					n->tag.bottom ? TAGVER_BOTTOM : TAGVER_CURSOR);
 				todo.push(x);
+				break;
+			case nfa_state_t::RAN:
+			case nfa_state_t::FIN:
 				break;
 		}
 	}

@@ -32,10 +32,12 @@ void dump_adfa(const DFA &dfa)
 		const char *attr;
 		Action::type_t action = s->action.type;
 
-		switch (action) {
-			case Action::ACCEPT: attr = "style=filled fillcolor=gray"; break;
-			case Action::RULE:   attr = "style=filled fillcolor=lightgray"; break;
-			default:             attr = ""; break;
+		if (action == Action::ACCEPT) {
+			attr = "style=filled fillcolor=gray";
+		} else if (action == Action::RULE) {
+			attr = "style=filled fillcolor=lightgray";
+		} else {
+			attr = "";
 		}
 		fprintf(stderr, "  n%p [height=0.2 width=0.2 label=\"", (void*)s);
 		if (s->fill && action != Action::MOVE) {
@@ -68,15 +70,12 @@ void dump_adfa(const DFA &dfa)
 			if (!x->to) continue;
 
 			bool eat = true;
-			switch (x->to->action.type) {
-				case Action::MOVE:
-				case Action::RULE:
-					attr = "style=dotted";
-					eat = false;
-					break;
-				default:
-					attr = "";
-					break;
+			const Action::type_t act = x->to->action.type;
+			if (act == Action::MOVE || act == Action::RULE) {
+				attr = "style=dotted";
+				eat = false;
+			} else {
+				attr = "";
 			}
 			fprintf(stderr, "  n%p -> n%p [label=\"", (void*)s, (void*)x->to);
 			if (eat) dump_adfa_range(lb, x->ub);

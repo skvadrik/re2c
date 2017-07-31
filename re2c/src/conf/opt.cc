@@ -97,7 +97,7 @@ void mutopt_t::fix(const conopt_t *globopts)
 			startlabel = Opt::baseopt.startlabel;
 			startlabel_force = Opt::baseopt.startlabel_force;
 			break;
-		default:
+		case TARGET_CODE:
 			break;
 	}
 
@@ -199,17 +199,18 @@ void mutopt_t::fix(const conopt_t *globopts)
 			indString = "    ";
 			topIndent = 2;
 			break;
-		default:
+		case TARGET_CODE:
 			break;
 	}
-	switch (encoding.type ())
-	{
+	switch (encoding.type()) {
 		case Enc::UCS2:
 		case Enc::UTF16:
 		case Enc::UTF32:
 			sFlag = true;
 			break;
-		default:
+		case Enc::ASCII:
+		case Enc::EBCDIC:
+		case Enc::UTF8:
 			break;
 	}
 	if (bFlag)

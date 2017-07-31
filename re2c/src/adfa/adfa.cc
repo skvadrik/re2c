@@ -20,15 +20,15 @@ DFA::DFA
 	, const std::vector<size_t> &fill
 	, size_t def
 	, size_t key
-	, const std::string &n
-	, const std::string &c
-	, uint32_t l
-	, const std::string &s
+	, const std::string &nm
+	, const std::string &cn
+	, uint32_t ln
+	, const std::string &su
 	)
 	: accepts ()
-	, name (n)
-	, cond (c)
-	, line (l)
+	, name (nm)
+	, cond (cn)
+	, line (ln)
 	, lbChar(0)
 	, ubChar(dfa.charset.back())
 	, nStates(0)
@@ -48,7 +48,7 @@ DFA::DFA
 	, def_rule (def)
 	, key_size (key)
 	, bitmaps (std::min(ubChar, 256u))
-	, setup(s)
+	, setup(su)
 {
 	const size_t nstates = dfa.states.size();
 	const size_t nchars = dfa.nchars;
@@ -80,11 +80,11 @@ DFA::DFA
 		for (uint32_t c = 0; c < nchars; ++j)
 		{
 			const size_t to = t->arcs[c];
-			const tcid_t tags = t->tcid[c];
-			for (;++c < nchars && t->arcs[c] == to && t->tcid[c] == tags;);
+			const tcid_t tc = t->tcid[c];
+			for (;++c < nchars && t->arcs[c] == to && t->tcid[c] == tc;);
 			s->go.span[j].to = to == dfa_t::NIL ? NULL : i2s[to];
 			s->go.span[j].ub = charset[c];
-			s->go.span[j].tags = tags;
+			s->go.span[j].tags = tc;
 		}
 		s->go.nSpans = j;
 	}

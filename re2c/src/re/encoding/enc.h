@@ -94,73 +94,68 @@ public:
 
 inline const char * Enc::name (type_t t)
 {
-	switch (t)
-	{
+	switch (t) {
 		case ASCII:  return "ASCII";
 		case EBCDIC: return "EBCDIC";
 		case UTF8:   return "UTF8";
 		case UCS2:   return "USC2";
 		case UTF16:  return "UTF16";
 		case UTF32:  return "UTF32";
-		default:     return "<bad encoding>";
 	}
+	return "<bad encoding>"; /* error */
 }
 
 inline uint32_t Enc::nCodePoints() const
 {
-	switch (type_)
-	{
+	switch (type_) {
 		case ASCII:
-		case EBCDIC:	return 0x100;
-		case UCS2:	return 0x10000;
+		case EBCDIC: return 0x100;
+		case UCS2:   return 0x10000;
 		case UTF16:
 		case UTF32:
-		case UTF8:
-		default:	return 0x110000;
+		case UTF8:   return 0x110000;
 	}
+	return 0; /* error */
 }
 
 inline uint32_t Enc::nCodeUnits() const
 {
-	switch (type_)
-	{
+	switch (type_) {
 		case ASCII:
 		case EBCDIC:
-		case UTF8:	return 0x100;
+		case UTF8:   return 0x100;
 		case UCS2:
-		case UTF16:	return 0x10000;
-		case UTF32:
-		default:	return 0x110000;
+		case UTF16:  return 0x10000;
+		case UTF32:  return 0x110000;
 	}
+	return 0; /* error */
 }
 
 // returns *maximal* code point size for encoding
 inline uint32_t Enc::szCodePoint() const
 {
-	switch (type_)
-	{
+	switch (type_) {
 		case ASCII:
-		case EBCDIC:	return 1;
-		case UCS2:	return 2;
+		case EBCDIC: return 1;
+		case UCS2:   return 2;
 		case UTF16:
 		case UTF32:
-		case UTF8:
-		default:	return 4;
+		case UTF8:   return 4;
 	}
+	return 0; /* error */
 }
 
 inline uint32_t Enc::szCodeUnit() const
 {
-	switch (type_)
-	{
+	switch (type_) {
 		case ASCII:
 		case EBCDIC:
-		case UTF8:	return 1;
+		case UTF8:   return 1;
 		case UCS2:
-		case UTF16:	return 2;
-		case UTF32:
-		default:	return 4;
+		case UTF16:  return 2;
+		case UTF32:  return 4;
 	}
+	return 0; /* error */
 }
 
 inline void Enc::set(type_t t)

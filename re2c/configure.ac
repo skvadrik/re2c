@@ -56,6 +56,7 @@ AC_DEFUN([TRY_CXXFLAG], [
     AS_VAR_SET([CXXFLAGS], ["$CXXFLAGS_BACKUP"])
     AC_MSG_RESULT([$TRY_CXXFLAG_RESULT])
 ])
+TRY_CXXFLAG([-std=c++98])
 TRY_CXXFLAG([-W])
 TRY_CXXFLAG([-Wall])
 TRY_CXXFLAG([-Wextra])
@@ -70,9 +71,10 @@ TRY_CXXFLAG([-O2])
 TRY_CXXFLAG([-Weverything], m4_join([ ],
     [-Wno-unknown-warning-option],  dnl CLANG eats some GCC options only to warn they are unknown
     [-Wno-reserved-id-macro],       dnl to allow header guards of the form '_RE2C_PATH_TO_HEADER_BASENAME_'
-    [-Wno-padded],                  dnl perhaps later
+    [-Wno-padded],
     [-Wno-old-style-cast],          dnl RE2C-generated lexer has lots of C-syle casts because of 're2c:yych:conversion = 1;'
-    [-Wno-covered-switch-default])) dnl GCC reports false positives in some cases
+    [-Wno-nested-anon-types],
+    [-Wno-global-constructors]))    dnl initialization of global constants with std::numeric_limits<...> (mostly for size_t)
 
 
 # needed by src/c99_stdint.h

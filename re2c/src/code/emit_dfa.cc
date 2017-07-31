@@ -98,10 +98,10 @@ void DFA::emit_dot(OutputFile &o, bool last_cond) const
 	}
 	for (State *s = head; s; s = s->next) {
 		if (s->action.type == Action::ACCEPT) {
-			const accept_t &accepts = *s->action.info.accepts;
-			for (uint32_t i = 0; i < accepts.size(); ++i) {
+			const accept_t &accs = *s->action.info.accepts;
+			for (uint32_t i = 0; i < accs.size(); ++i) {
 				o.wlabel(s->label).ws(" -> ")
-					.wlabel(accepts[i].first->label)
+					.wlabel(accs[i].first->label)
 					.ws(" [label=\"yyaccept=")
 					.wu32(i).ws("\"]").ws("\n");
 			}
@@ -138,11 +138,11 @@ void DFA::emit(Output & output, uint32_t& ind, bool isLastCond, bool& bPrologBra
 			}
 		}
 		for (tagver_t v = 1; v <= maxtagver; ++v) {
-			const std::string name = vartag_name(v, opts->tags_prefix);
+			const std::string s = vartag_name(v, opts->tags_prefix);
 			if (mtagvers.find(v) != mtagvers.end()) {
-				mtagnames.insert(name);
+				mtagnames.insert(s);
 			} else {
-				stagnames.insert(name);
+				stagnames.insert(s);
 			}
 		}
 		ob.stags.insert(stagnames.begin(), stagnames.end());

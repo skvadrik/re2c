@@ -1,3 +1,4 @@
+#include <assert.h>
 #include <stddef.h>
 #include "src/util/c99_stdint.h"
 #include <string>
@@ -17,11 +18,14 @@ static uint32_t unmap (Span * new_span, const Span * old_span, uint32_t old_nspa
 bool consume(const State *s)
 {
 	switch (s->action.type) {
-		default: return true;
 		case Action::RULE:
-		case Action::MOVE: 
+		case Action::MOVE:
 		case Action::ACCEPT: return false;
+		case Action::MATCH:
+		case Action::INITIAL:
+		case Action::SAVE:   return true;
 	}
+	assert(false);
 }
 
 Cases::Cases(const Span *spans, uint32_t nspans, bool skip)
@@ -32,15 +36,15 @@ Cases::Cases(const Span *spans, uint32_t nspans, bool skip)
 
 	// first case is default case
 	Case &c = cases[cases_size++];
-	const Span &s = spans[nspans - 1];
-	c.to = s.to;
-	c.tags = s.tags;
-	c.skip = skip && consume(s.to);
+	const Span *s = spans + (nspans - 1);
+	c.to = s->to;
+	c.tags = s->tags;
+	c.skip = skip && consume(s->to);
 
 	for (uint32_t i = 0, lb = 0; i < nspans; ++i) {
-		const Span &s = spans[i];
-		add(lb, s.ub, s.to, s.tags, skip && consume(s.to));
-		lb = s.ub;
+		s = spans + i;
+		add(lb, s->ub, s->to, s->tags, skip && consume(s->to));
+		lb = s->ub;
 	}
 }
 

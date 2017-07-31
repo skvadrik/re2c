@@ -1,5 +1,7 @@
 
-echo "const char *help =" > "$2"
+> "$2"
+echo "extern const char *help;" >> "$2"
+echo "const char *help =" >> "$2"
 PAGER=cat man "$1" \
     | tail -n +7 \
     | head -n -3 \

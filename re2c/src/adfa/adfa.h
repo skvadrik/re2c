@@ -87,15 +87,15 @@ struct DFA
 		, const std::vector<size_t> &fill
 		, size_t def
 		, size_t key
-		, const std::string &n
-		, const std::string &c
-		, uint32_t l
-		, const std::string &s
+		, const std::string &nm
+		, const std::string &cn
+		, uint32_t ln
+		, const std::string &su
 		);
 	~DFA ();
 	void reorder();
 	void prepare(const opt_t *opts);
-	void calc_stats(uint32_t line, bool explicit_tags);
+	void calc_stats(uint32_t ln, bool explicit_tags);
 	void emit (Output &, uint32_t &, bool, bool &);
 
 private:

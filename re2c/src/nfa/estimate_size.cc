@@ -5,7 +5,6 @@ namespace re2c {
 static size_t estimate(const RE *re)
 {
 	switch (re->type) {
-		default: assert(false);
 		case RE::NIL: return 0;
 		case RE::SYM: return 1;
 		case RE::TAG: return 1;
@@ -26,6 +25,7 @@ static size_t estimate(const RE *re)
 				: iter * max + (max - min);
 		}
 	}
+	assert(false);
 }
 
 size_t estimate_size(const std::vector<RE*> &res)

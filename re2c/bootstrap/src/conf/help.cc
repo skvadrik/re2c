@@ -1,3 +1,4 @@
+extern const char *help;
 const char *help =
 "\n"
 "       -? -h --help\n"

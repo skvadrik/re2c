@@ -7,7 +7,6 @@ static bool nullable(const RESpec &spec, const RE *re, bool &trail)
 	if (trail) return true;
 
 	switch (re->type) {
-		default: assert(false);
 		case RE::NIL: return true;
 		case RE::SYM: return false;
 		case RE::ITER:
@@ -22,6 +21,7 @@ static bool nullable(const RESpec &spec, const RE *re, bool &trail)
 			return nullable(spec, re->cat.re1, trail)
 				&& nullable(spec, re->cat.re2, trail);
 	}
+	assert(false);
 }
 
 /*

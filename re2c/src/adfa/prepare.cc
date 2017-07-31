@@ -226,7 +226,7 @@ void DFA::prepare(const opt_t *opts)
 	}
 }
 
-void DFA::calc_stats(uint32_t line, bool explicit_tags)
+void DFA::calc_stats(uint32_t ln, bool explicit_tags)
 {
 	// calculate 'YYMAXFILL'
 	max_fill = 0;
@@ -254,7 +254,7 @@ void DFA::calc_stats(uint32_t line, bool explicit_tags)
 
 	// error if tags are not enabled, but we need them
 	if (!explicit_tags && maxtagver > 1) {
-		fatal_l(line, "overlapping trailing contexts need "
+		fatal_l(ln, "overlapping trailing contexts need "
 			"multiple context markers, use '-t, --tags' "
 			"option and '/*!stags:re2c ... */' directive");
 	}
@@ -267,15 +267,15 @@ void DFA::hoist_tags()
 		const size_t nspan = s->go.nSpans;
 		if (nspan == 0) continue;
 
-		tcid_t tags = span[0].tags;
+		tcid_t ts = span[0].tags;
 		for (uint32_t i = 1; i < nspan; ++i) {
-			if (span[i].tags != tags) {
-				tags = TCID0;
+			if (span[i].tags != ts) {
+				ts = TCID0;
 				break;
 			}
 		}
-		if (tags != TCID0) {
-			s->go.tags = tags;
+		if (ts != TCID0) {
+			s->go.tags = ts;
 			for (uint32_t i = 0; i < nspan; ++i) {
 				span[i].tags = TCID0;
 			}

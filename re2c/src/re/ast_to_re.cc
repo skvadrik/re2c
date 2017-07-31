@@ -34,7 +34,6 @@ namespace re2c {
 static bool has_tags(const AST *ast)
 {
 	switch (ast->type) {
-		default: assert(false);
 		case AST::NIL:
 		case AST::STR:
 		case AST::CLS:
@@ -48,12 +47,12 @@ static bool has_tags(const AST *ast)
 		case AST::REF: return has_tags(ast->ref.ast);
 		case AST::ITER: return has_tags(ast->iter.ast);
 	}
+	assert(false);
 }
 
 static size_t fixlen(const AST *ast)
 {
 	switch (ast->type) {
-		default: assert(false);
 		case AST::NIL:
 		case AST::TAG: return 0;
 		case AST::CLS:
@@ -83,6 +82,7 @@ static size_t fixlen(const AST *ast)
 		}
 		case AST::CAP: return fixlen(ast->cap);
 	}
+	assert(false);
 }
 
 static RE *ast_to_re(RESpec &spec, const AST *ast, size_t &ncap)
@@ -93,7 +93,6 @@ static RE *ast_to_re(RESpec &spec, const AST *ast, size_t &ncap)
 	Warn &warn = spec.warn;
 
 	switch (ast->type) {
-		default: assert(false);
 		case AST::NIL:
 			return re_nil(alc);
 		case AST::STR: {
@@ -253,6 +252,7 @@ static RE *ast_to_re(RESpec &spec, const AST *ast, size_t &ncap)
 			return y;
 		}
 	}
+	assert(false);
 }
 
 RE *re_schar(RE::alc_t &alc, uint32_t line, uint32_t column, uint32_t c, const opt_t *opts)
@@ -260,11 +260,18 @@ RE *re_schar(RE::alc_t &alc, uint32_t line, uint32_t column, uint32_t c, const o
 	if (!opts->encoding.encode(c)) {
 		fatal_lc(line, column, "bad code point: '0x%X'", c);
 	}
-	switch (opts->encoding.type ()) {
-		case Enc::UTF16: return UTF16Symbol(alc, c);
-		case Enc::UTF8: return UTF8Symbol(alc, c);
-		default: return re_sym(alc, Range::sym(c));
+	switch (opts->encoding.type()) {
+		case Enc::UTF16:
+			return UTF16Symbol(alc, c);
+		case Enc::UTF8:
+			return UTF8Symbol(alc, c);
+		case Enc::ASCII:
+		case Enc::EBCDIC:
+		case Enc::UTF32:
+		case Enc::UCS2:
+			return re_sym(alc, Range::sym(c));
 	}
+	assert(false);
 }
 
 RE *re_ichar(RE::alc_t &alc, uint32_t line, uint32_t column, uint32_t c, const opt_t *opts)
@@ -290,14 +297,20 @@ RE *re_class(RE::alc_t &alc, uint32_t line, uint32_t column, const Range *r, con
 				break;
 			case EMPTY_CLASS_ERROR:
 				fatal_lc(line, column, "empty character class");
-				break;
 		}
 	}
 	switch (opts->encoding.type()) {
-		case Enc::UTF16: return UTF16Range(alc, r);
-		case Enc::UTF8: return UTF8Range(alc, r);
-		default: return re_sym(alc, r);
+		case Enc::UTF16:
+			return UTF16Range(alc, r);
+		case Enc::UTF8:
+			return UTF8Range(alc, r);
+		case Enc::ASCII:
+		case Enc::EBCDIC:
+		case Enc::UTF32:
+		case Enc::UCS2:
+			return re_sym(alc, r);
 	}
+	assert(false);
 }
 
 static void assert_tags_used_once(const Rule &rule, const std::vector<Tag> &tags)
