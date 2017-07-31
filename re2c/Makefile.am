@@ -228,6 +228,7 @@ CLEANFILES = \
 	$(DOC)
 
 $(AUTOGEN_PARSER): $(CUSTOM_PARSER)
+	$(AM_V_at)$(MKDIR_P) $(dir $@)
 	$(AM_V_GEN) if test $(BISON) = "no"; \
 	then \
 		cp $(top_srcdir)/$(BOOTSTRAP_PARSER) $@ && \
