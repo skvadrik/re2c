@@ -101,7 +101,7 @@ void emit_start(OutputFile &o, size_t maxfill, const std::string &name,
 {
 	const opt_t *opts = o.block().opts;
 	const size_t sizeof_cunit = opts->encoding.szCodeUnit();
-	const size_t norule = rule2key(Rule::NONE, sizeof_key, def);
+	const uint64_t norule = rule2key(Rule::NONE, sizeof_key, def);
 	std::string filename = opts->output_file;
 	if (filename.empty()) {
 		filename = "<stdout>";
@@ -484,7 +484,7 @@ void emit_action(OutputFile &o, uint32_t ind, const DFA &dfa, size_t rid)
 {
 	const std::string &name = dfa.name;
 	const Rule &r = dfa.rules[rid];
-	const size_t rkey = rule2key(rid, dfa.key_size, dfa.def_rule);
+	const uint64_t rkey = rule2key(rid, dfa.key_size, dfa.def_rule);
 	size_t ntag = 3;
 	for (size_t t = r.ltag; t < r.htag; ++t) {
 		const Tag &tag = dfa.tags[t];

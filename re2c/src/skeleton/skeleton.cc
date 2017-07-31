@@ -92,7 +92,7 @@ Skeleton::~Skeleton()
 	delete[] nodes;
 }
 
-size_t rule2key(size_t rule, size_t key, size_t def)
+uint64_t rule2key(size_t rule, size_t key, size_t def)
 {
 	switch (key) {
 		default: assert(false); // shouldn't happen

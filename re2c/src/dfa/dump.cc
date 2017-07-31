@@ -98,8 +98,8 @@ void dump_dfa_t::closure(const closure_t &clos, uint32_t state, bool isnew)
 		">", isnew ? "" : "i", state);
 
 	for (s = s1; s != s2; ++s) {
-		fprintf(stderr, "<TR><TD ALIGN=\"left\" PORT=\"_%u_%ld\"%s%s><FONT%s>%u",
-			index(s->state), s - s1, color, style, color, index(s->state));
+		fprintf(stderr, "<TR><TD ALIGN=\"left\" PORT=\"_%u_%d\"%s%s><FONT%s>%u",
+			index(s->state), (int)(s - s1), color, style, color, index(s->state));
 		closure_tags(s);
 		fprintf(stderr, "</FONT></TD></TR>");
 	}
@@ -122,7 +122,8 @@ void dump_dfa_t::state0(const closure_t &clos)
 	closure(clos, 0, true);
 	fprintf(stderr, "  void [shape=point]\n");
 	for (cclositer_t c = shadow->begin(); c != shadow->end(); ++c) {
-		fprintf(stderr, "  void -> 0:_%u_%ld:w [style=dotted color=lightgray fontcolor=lightgray label=\"", index(c->state), c - shadow->begin());
+		fprintf(stderr, "  void -> 0:_%u_%d:w [style=dotted color=lightgray fontcolor=lightgray label=\"",
+			index(c->state), (int)(c - shadow->begin()));
 		dump_tags(tagpool, c->ttran, c->tvers);
 		fprintf(stderr, "\"]\n");
 	}
@@ -158,8 +159,8 @@ void dump_dfa_t::state(const closure_t &clos, size_t state, size_t symbol, bool 
 		fprintf(stderr, "\"]\n");
 	}
 	for (cclositer_t b = shadow->begin(), c = b; c != shadow->end(); ++c) {
-		fprintf(stderr, "  %u:%u:e -> %s%u:_%u_%ld:w [color=lightgray fontcolor=lightgray label=\"%u",
-			x, index(c->origin), prefix, z, index(c->state), c - b, a);
+		fprintf(stderr, "  %u:%u:e -> %s%u:_%u_%d:w [color=lightgray fontcolor=lightgray label=\"%u",
+			x, index(c->origin), prefix, z, index(c->state), (int)(c - b), a);
 		dump_tags(tagpool, c->ttran, c->tvers);
 		fprintf(stderr, "\"]\n");
 	}

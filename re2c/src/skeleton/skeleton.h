@@ -99,7 +99,7 @@ template<typename key_t> key_t rule2key(size_t r, size_t def)
 	}
 }
 
-size_t rule2key(size_t rule, size_t key, size_t def);
+uint64_t rule2key(size_t rule, size_t key, size_t def);
 uint32_t maxpath(const Skeleton &skel);
 void warn_undefined_control_flow(const Skeleton &skel, Warn &warn);
 void fprint_default_path(FILE *f, const Skeleton &skel, const path_t &p);
