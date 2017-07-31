@@ -252,6 +252,7 @@ $(BOOTSTRAP_PARSER): $(CUSTOM_PARSER)
 		$(top_srcdir)/$(CUSTOM_PARSER);
 
 .re.cc:
+	$(AM_V_at)$(MKDIR_P) $(dir $@)
 	$(AM_V_GEN) if test -x $(RE2C); \
 	then \
 		$(top_builddir)/$(RE2C) $(RE2CFLAGS) -o $@ $< && \
