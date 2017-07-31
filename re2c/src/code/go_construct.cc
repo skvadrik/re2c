@@ -25,7 +25,7 @@ bool consume(const State *s)
 		case Action::INITIAL:
 		case Action::SAVE:   return true;
 	}
-	assert(false);
+	return true; /* unreachable */
 }
 
 Cases::Cases(const Span *spans, uint32_t nspans, bool skip)

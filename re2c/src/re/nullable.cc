@@ -21,7 +21,7 @@ static bool nullable(const RESpec &spec, const RE *re, bool &trail)
 			return nullable(spec, re->cat.re1, trail)
 				&& nullable(spec, re->cat.re2, trail);
 	}
-	assert(false);
+	return false; /* unreachable */
 }
 
 /*

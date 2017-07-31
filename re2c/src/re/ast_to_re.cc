@@ -47,7 +47,7 @@ static bool has_tags(const AST *ast)
 		case AST::REF: return has_tags(ast->ref.ast);
 		case AST::ITER: return has_tags(ast->iter.ast);
 	}
-	assert(false);
+	return false; /* unreachable */
 }
 
 static size_t fixlen(const AST *ast)
@@ -82,7 +82,7 @@ static size_t fixlen(const AST *ast)
 		}
 		case AST::CAP: return fixlen(ast->cap);
 	}
-	assert(false);
+	return Tag::VARDIST; /* unreachable */
 }
 
 static RE *ast_to_re(RESpec &spec, const AST *ast, size_t &ncap)
@@ -252,7 +252,7 @@ static RE *ast_to_re(RESpec &spec, const AST *ast, size_t &ncap)
 			return y;
 		}
 	}
-	assert(false);
+	return NULL; /* unreachable */
 }
 
 RE *re_schar(RE::alc_t &alc, uint32_t line, uint32_t column, uint32_t c, const opt_t *opts)
@@ -271,7 +271,7 @@ RE *re_schar(RE::alc_t &alc, uint32_t line, uint32_t column, uint32_t c, const o
 		case Enc::UCS2:
 			return re_sym(alc, Range::sym(c));
 	}
-	assert(false);
+	return NULL; /* unreachable */
 }
 
 RE *re_ichar(RE::alc_t &alc, uint32_t line, uint32_t column, uint32_t c, const opt_t *opts)
@@ -310,7 +310,7 @@ RE *re_class(RE::alc_t &alc, uint32_t line, uint32_t column, const Range *r, con
 		case Enc::UCS2:
 			return re_sym(alc, r);
 	}
-	assert(false);
+	return NULL; /* unreachable */
 }
 
 static void assert_tags_used_once(const Rule &rule, const std::vector<Tag> &tags)

@@ -25,7 +25,7 @@ static size_t estimate(const RE *re)
 				: iter * max + (max - min);
 		}
 	}
-	assert(false);
+	return 0; /* unreachable */
 }
 
 size_t estimate_size(const std::vector<RE*> &res)

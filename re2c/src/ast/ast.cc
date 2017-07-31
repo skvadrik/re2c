@@ -138,7 +138,7 @@ bool ast_need_wrap(const AST *ast)
 		case AST::REF:
 			return true;
 	}
-	assert(false);
+	return false; /* unreachable */
 }
 
 } // namespace re2c
