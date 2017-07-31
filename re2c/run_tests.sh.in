@@ -171,7 +171,11 @@ run_pack() {
 			# run re2c
 			$valgrind $wine ../../$re2c $switches "$outx" 2>"$outc.stderr" 1>&2
 			# on windows output contains CR LF, cut CR to match test results
-			[ -f "$outc" ] && lc_run sed -i 's/\r//g' "$outc" "$outc.stderr"
+			for f in "$outc" "$outc.stderr"; do
+				[ -f "$f" ] \
+					&& cat "$f" | lc_run tr -d '\r' > "$f".mod \
+					&& mv "$f".mod "$f"
+			done
 			# paste all files dropped by re2c into output file
 			rm "$outx" && find . -type f \
 				| lc_run sort \
