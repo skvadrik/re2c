@@ -68,7 +68,9 @@ void Scanner::fill (uint32_t need)
 			{
 				fatal("Out of memory");
 			}
-			memcpy (buf, bot, copy);
+			if (copy > 0) {
+				memcpy (buf, bot, copy);
+			}
 			tok = &buf[tok - bot];
 			mar = &buf[mar - bot];
 			ptr = &buf[ptr - bot];

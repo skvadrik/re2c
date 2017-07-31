@@ -125,7 +125,7 @@ cfg_bb_t::cfg_bb_t(const cfg_ix_t *sb, const cfg_ix_t *se,
 {
 	const size_t n = static_cast<size_t>(se - sb);
 	succb = new cfg_ix_t[n];
-	memcpy(succb, sb, n * sizeof(cfg_ix_t));
+	if (n > 0) memcpy(succb, sb, n * sizeof(cfg_ix_t));
 	succe = succb + n;
 }
 
