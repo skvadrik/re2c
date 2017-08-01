@@ -56,7 +56,7 @@ bool cmpby_rule_state(const clos_t &x, const clos_t &y)
 	if (rx > ry) return false;
 	if (sx < sy) return true;
 	if (sx > sy) return false;
-	assert(false);
+	// all items in closute have different states
 	return false;
 }
 
