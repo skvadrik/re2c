@@ -287,6 +287,7 @@ docs: $(DOC) $(AUTOGEN_HELP)
 $(DOC): $(BOOTSTRAP_DOC)
 	cp $(top_srcdir)/$(BOOTSTRAP_DOC) $@
 $(AUTOGEN_HELP): $(BOOTSTRAP_HELP)
+	$(AM_V_at)$(MKDIR_P) $(dir $@)
 	cp $(top_srcdir)/$(BOOTSTRAP_HELP) $@
 endif
 
