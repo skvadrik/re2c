@@ -277,6 +277,7 @@ $(DOC): $(SRC_DOC)
 	$(RST2MAN) $(top_builddir)/$(SRC_DOC) > $@
 	cp $@ $(top_srcdir)/$(BOOTSTRAP_DOC)
 $(AUTOGEN_HELP): $(CUSTOM_HELP)
+	$(AM_V_at)$(MKDIR_P) $(dir $@)
 	$(RST2MAN) $(top_builddir)/$(CUSTOM_HELP) > $@.1
 	$(top_srcdir)/genhelp.sh $@.1 $@
 	cp $@ $(top_srcdir)/$(BOOTSTRAP_HELP)
