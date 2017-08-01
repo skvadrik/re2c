@@ -37,7 +37,7 @@ sed -i -E "s/$lcontext$old$rcontext/$lcontext$new$rcontext/" re2c/configure.ac
 
 # distcheck
 builddir=.build
-cd re2c && ./distcheck.sh $builddir && cd ..
+cd re2c && ./__distcheck.sh $builddir && cd ..
 
 # commit release
 git commit -a -m "Release $version."

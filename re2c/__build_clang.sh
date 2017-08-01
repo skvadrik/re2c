@@ -1,10 +1,10 @@
 #!/bin/sh
 
-builddir=.build_mingw
+builddir=__build_clang
 rm -rf $builddir
 mkdir $builddir
 
 cd $builddir
-../configure --host i686-w64-mingw32 && \
+../configure CXX=clang++ && \
 make -j5
 cd ..

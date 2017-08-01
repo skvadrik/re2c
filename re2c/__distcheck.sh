@@ -17,8 +17,9 @@ do
     rm -rf $builddir
     mkdir $builddir
     cd $builddir
+        # 'make' implies 'make docs'; running both in parallel may cause data races
         ../configure --enable-docs \
-        && $make_prog bootstrap docs -j5 \
+        && $make_prog bootstrap -j5 \
         && $make_prog distcheck -j5
     cd ..
 done
