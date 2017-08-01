@@ -245,6 +245,7 @@ $(AUTOGEN_PARSER): $(CUSTOM_PARSER)
 $(AUTOGEN_LEX): $(AUTOGEN_PARSER)
 
 $(BOOTSTRAP_PARSER): $(CUSTOM_PARSER)
+#	target directory exists (as part of source file tree)
 	$(AM_V_GEN) test $(BISON) = "no" || \
 	$(BISON) \
 		--output=$(top_srcdir)/$@ \
@@ -274,6 +275,7 @@ bootstrap: all
 if REBUILD_DOCS
 docs: $(DOC) $(AUTOGEN_HELP)
 $(DOC): $(SRC_DOC)
+	$(AM_V_at)$(MKDIR_P) $(dir $@)
 	$(RST2MAN) $(top_builddir)/$(SRC_DOC) > $@
 	cp $@ $(top_srcdir)/$(BOOTSTRAP_DOC)
 $(AUTOGEN_HELP): $(CUSTOM_HELP)
@@ -285,6 +287,7 @@ else
 docs: $(DOC) $(AUTOGEN_HELP)
 	@echo "Reconfigure to rebuild docs: ./configure --enable-docs"
 $(DOC): $(BOOTSTRAP_DOC)
+	$(AM_V_at)$(MKDIR_P) $(dir $@)
 	cp $(top_srcdir)/$(BOOTSTRAP_DOC) $@
 $(AUTOGEN_HELP): $(BOOTSTRAP_HELP)
 	$(AM_V_at)$(MKDIR_P) $(dir $@)
