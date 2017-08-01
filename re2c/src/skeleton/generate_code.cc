@@ -202,7 +202,7 @@ void emit_start(OutputFile &o, size_t maxfill, const std::string &name,
 		o.ws("\n");
 		o.ws("\ntypedef struct yymtag_t {");
 		o.ws("\n").wind(1).ws("struct yymtag_t *pred;");
-		o.ws("\n").wind(1).ws("const YYCTYPE *tag;");
+		o.ws("\n").wind(1).ws("const YYCTYPE *elem;");
 		o.ws("\n} yymtag_t;");
 
 		o.ws("\n");
@@ -252,15 +252,15 @@ void emit_start(OutputFile &o, size_t maxfill, const std::string &name,
 		o.ws("\n");
 		o.ws("\nstatic void yymtag(yymtag_t **pt, const YYCTYPE *t, yymtagpool_t *tp)");
 		o.ws("\n{");
-		o.ws("\n").wind(1).ws("yymtag_t *t = yymtagpool_next(tp);");
-		o.ws("\n").wind(1).ws("t->pred = *pt;");
-		o.ws("\n").wind(1).ws("t->tag = t;");
-		o.ws("\n").wind(1).ws("*pt = t;");
+		o.ws("\n").wind(1).ws("yymtag_t *n = yymtagpool_next(tp);");
+		o.ws("\n").wind(1).ws("n->pred = *pt;");
+		o.ws("\n").wind(1).ws("n->elem = t;");
+		o.ws("\n").wind(1).ws("*pt = n;");
 		o.ws("\n}");
 
 		o.ws("\n");
 		o.ws("\nstatic int check_mtag_").wstring(name)
-			.ws("(unsigned *pkix, YYKEYTYPE *keys, const yymtag_t *tag,\n")
+			.ws("(unsigned *pkix, YYKEYTYPE *keys, const yymtag_t *mtag,\n")
 			.wind(1).ws("const YYCTYPE *input, const YYCTYPE *token, const char *name)");
 		o.ws("\n{");
 //		o.ws("\n").wind(1).ws("check_key_count_").wstring(name).ws("(1) && return 1;");
@@ -269,14 +269,14 @@ void emit_start(OutputFile &o, size_t maxfill, const std::string &name,
 		o.ws("\n").wind(1).ws("*pkix = kix + n + 1;");
 //		o.ws("\n").wind(1).ws("check_key_count_").wstring(name).ws("(n) && return 1;");
 		o.ws("\n").wind(1).ws("for (; n > 0; --n) {");
-		o.ws("\n").wind(2).ws("if (tag == NULL) {");
+		o.ws("\n").wind(2).ws("if (mtag == NULL) {");
 		o.ws("\n").wind(3).ws("fprintf(stderr, \"error: lex_").wstring(name).ws(": at position %ld, key %u: \"")
 			.ws("\n").wind(4).ws("\"history for tag '%s' is too short\\n\",")
 			.ws("\n").wind(4).ws("token - input, kix + n, name);");
 		o.ws("\n").wind(3).ws("return 1;");
 		o.ws("\n").wind(2).ws("}");
-		o.ws("\n").wind(2).ws("const YYCTYPE *tag = tag->offs;");
-		o.ws("\n").wind(2).ws("tag = tag->pred;");
+		o.ws("\n").wind(2).ws("const YYCTYPE *tag = mtag->elem;");
+		o.ws("\n").wind(2).ws("mtag = mtag->pred;");
 		o.ws("\n").wind(2).ws("const YYKEYTYPE\n")
 			.wind(3).ws("exp = keys[kix + n],\n")
 			.wind(3).ws("act = (YYKEYTYPE)(tag - token),\n")
@@ -288,7 +288,7 @@ void emit_start(OutputFile &o, size_t maxfill, const std::string &name,
 		o.ws("\n").wind(3).ws("return 1;");
 		o.ws("\n").wind(2).ws("}");
 		o.ws("\n").wind(1).ws("}");
-		o.ws("\n").wind(1).ws("if (tag != NULL) {");
+		o.ws("\n").wind(1).ws("if (mtag != NULL) {");
 		o.ws("\n").wind(2).ws("fprintf(stderr, \"error: lex_").wstring(name).ws(": at position %ld, key %u: \"")
 			.ws("\n").wind(3).ws("\"history for tag '%s' is too long\\n\",")
 			.ws("\n").wind(3).ws("token - input, kix, name);");

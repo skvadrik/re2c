@@ -15,24 +15,22 @@ static void closure_leftmost(const closure_t &clos1, closure_t &clos,
 static int32_t compare_posix(const clos_t &c1, const clos_t &c2, Tagpool &tagpool, const std::vector<Tag> &tags);
 static void prune(closure_t &clos, std::valarray<Rule> &rules);
 static void lower_lookahead_to_transition(closure_t &clos);
-static tcmd_t *generate_versions(closure_t &clos, const std::vector<Tag> &tags,
-	Tagpool &tagpool, tcpool_t &tcpool, tagver_t &maxver, newvers_t &newvers);
+static tcmd_t *generate_versions(dfa_t &dfa, closure_t &clos, Tagpool &tagpool, newvers_t &newvers);
 static void orders(closure_t &clos, Tagpool &tagpool, const std::vector<Tag> &tags);
 static bool cmpby_rule_state(const clos_t &x, const clos_t &y);
 
-tcmd_t *closure(closure_t &clos1, closure_t &clos2, Tagpool &tagpool,
-	tcpool_t &tcpool, std::valarray<Rule> &rules, tagver_t &maxver,
-	newvers_t &newvers, closure_t *shadow, const std::vector<Tag> &tags)
+tcmd_t *closure(dfa_t &dfa, closure_t &clos1, closure_t &clos2,
+	Tagpool &tagpool, newvers_t &newvers, closure_t *shadow)
 {
 	// build tagged epsilon-closure of the given set of NFA states
 	if (tagpool.opts->posix_captures) {
-		closure_posix(clos1, clos2, shadow, tagpool, tags);
-		prune(clos2, rules);
-		orders(clos2, tagpool, tags);
+		closure_posix(clos1, clos2, shadow, tagpool, dfa.tags);
+		prune(clos2, dfa.rules);
+		orders(clos2, tagpool, dfa.tags);
 		std::sort(clos2.begin(), clos2.end(), cmpby_rule_state);
 	} else {
 		closure_leftmost(clos1, clos2, shadow, tagpool);
-		prune(clos2, rules);
+		prune(clos2, dfa.rules);
 	}
 
 	// see note [the difference between TDFA(0) and TDFA(1)]
@@ -42,8 +40,8 @@ tcmd_t *closure(closure_t &clos1, closure_t &clos2, Tagpool &tagpool,
 	}
 
 	// merge tags from different rules, find nondeterministic tags
-	tcmd_t *cmd = generate_versions(clos2, tags, tagpool, tcpool, maxver, newvers);
-	if (shadow) generate_versions(*shadow, tags, tagpool, tcpool, maxver, newvers);
+	tcmd_t *cmd = generate_versions(dfa, clos2, tagpool, newvers);
+	if (shadow) generate_versions(dfa, *shadow, tagpool, newvers);
 
 	return cmd;
 }
@@ -339,13 +337,13 @@ void lower_lookahead_to_transition(closure_t &clos)
 	}
 }
 
-tcmd_t *generate_versions(closure_t &clos, const std::vector<Tag> &tags,
-	Tagpool &tagpool, tcpool_t &tcpool, tagver_t &maxver, newvers_t &newvers)
+tcmd_t *generate_versions(dfa_t &dfa, closure_t &clos, Tagpool &tagpool, newvers_t &newvers)
 {
 	tcmd_t *cmd = NULL;
 	const size_t ntag = tagpool.ntags;
-	tagver_t *vers = tagpool.buffer;
+	tagver_t *vers = tagpool.buffer, &maxver = dfa.maxtagver;
 	tagtree_t &tagtree = tagpool.history;
+	const std::vector<Tag> &tags = dfa.tags;
 	clositer_t b = clos.begin(), e = clos.end(), c;
 	newver_cmp_t cmp = {tagtree};
 	newvers_t newacts(cmp);
@@ -386,10 +384,15 @@ tcmd_t *generate_versions(closure_t &clos, const std::vector<Tag> &tags,
 		const hidx_t h = i->first.history;
 		const size_t t = i->first.tag;
 		if (history(tags[t])) {
-			cmd = tcpool.make_add(cmd, abs(m), abs(v), tagtree, h, t);
+			cmd = dfa.tcpool.make_add(cmd, abs(m), abs(v), tagtree, h, t);
 		} else {
-			cmd = tcpool.make_set(cmd, abs(m), tagtree.last(h, t));
+			cmd = dfa.tcpool.make_set(cmd, abs(m), tagtree.last(h, t));
 		}
+	}
+
+	// mark tags with history
+	for (newvers_t::iterator j = newvers.begin(); j != newvers.end(); ++j) {
+		if (history(tags[j->first.tag])) dfa.mtagvers.insert(abs(j->second));
 	}
 
 	// update tag versions in closure

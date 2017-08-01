@@ -53,9 +53,8 @@ struct newver_cmp_t
 
 typedef std::map<newver_t, tagver_t, newver_cmp_t> newvers_t;
 
-tcmd_t *closure(closure_t &clos1, closure_t &clos2, Tagpool &tagpool,
-	tcpool_t &tcpool, std::valarray<Rule> &rules, tagver_t &maxver,
-	newvers_t &newvers, closure_t *shadow, const std::vector<Tag> &tags);
+tcmd_t *closure(dfa_t &dfa, closure_t &clos1, closure_t &clos2,
+	Tagpool &tagpool, newvers_t &newvers, closure_t *shadow);
 
 } // namespace re2c
 
