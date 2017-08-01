@@ -228,7 +228,7 @@ CLEANFILES = \
 	$(DOC)
 
 $(AUTOGEN_PARSER): $(CUSTOM_PARSER)
-	$(AM_V_at)$(MKDIR_P) $(dir $@)
+	$(AM_V_at)$(MKDIR_P) $(@D)
 	$(AM_V_GEN) if test $(BISON) = "no"; \
 	then \
 		cp $(top_srcdir)/$(BOOTSTRAP_PARSER) $@ && \
@@ -254,7 +254,7 @@ $(BOOTSTRAP_PARSER): $(CUSTOM_PARSER)
 		$(top_srcdir)/$(CUSTOM_PARSER);
 
 .re.cc:
-	$(AM_V_at)$(MKDIR_P) $(dir $@)
+	$(AM_V_at)$(MKDIR_P) $(@D)
 	$(AM_V_GEN) if test -x $(RE2C); \
 	then \
 		$(top_builddir)/$(RE2C) $(RE2CFLAGS) -o $@ $< && \
@@ -275,11 +275,11 @@ bootstrap: all
 if REBUILD_DOCS
 docs: $(DOC) $(AUTOGEN_HELP)
 $(DOC): $(SRC_DOC)
-	$(AM_V_at)$(MKDIR_P) $(dir $@)
+	$(AM_V_at)$(MKDIR_P) $(@D)
 	$(RST2MAN) $(top_builddir)/$(SRC_DOC) > $@
 	cp $@ $(top_srcdir)/$(BOOTSTRAP_DOC)
 $(AUTOGEN_HELP): $(CUSTOM_HELP)
-	$(AM_V_at)$(MKDIR_P) $(dir $@)
+	$(AM_V_at)$(MKDIR_P) $(@D)
 	$(RST2MAN) $(top_builddir)/$(CUSTOM_HELP) > $@.1
 	$(top_srcdir)/genhelp.sh $@.1 $@
 	cp $@ $(top_srcdir)/$(BOOTSTRAP_HELP)
@@ -287,10 +287,10 @@ else
 docs: $(DOC) $(AUTOGEN_HELP)
 	@echo "Reconfigure to rebuild docs: ./configure --enable-docs"
 $(DOC): $(BOOTSTRAP_DOC)
-	$(AM_V_at)$(MKDIR_P) $(dir $@)
+	$(AM_V_at)$(MKDIR_P) $(@D)
 	cp $(top_srcdir)/$(BOOTSTRAP_DOC) $@
 $(AUTOGEN_HELP): $(BOOTSTRAP_HELP)
-	$(AM_V_at)$(MKDIR_P) $(dir $@)
+	$(AM_V_at)$(MKDIR_P) $(@D)
 	cp $(top_srcdir)/$(BOOTSTRAP_HELP) $@
 endif
 
