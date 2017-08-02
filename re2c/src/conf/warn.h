@@ -54,7 +54,7 @@ public:
 	void set (type_t t, option_t o);
 	void set_all ();
 	void set_all_error ();
-	void fail (type_t t, uint32_t line, const char * s);
+	void fail (type_t t, uint32_t line, const char * s) const;
 
 	void condition_order (uint32_t line);
 	void empty_class (uint32_t line);

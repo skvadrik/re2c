@@ -8,10 +8,8 @@
 namespace re2c
 {
 
-static void closure_posix(const closure_t &clos1, closure_t &clos,
-	closure_t *shadow, Tagpool &tagpool, const std::vector<Tag> &tags);
-static void closure_leftmost(const closure_t &clos1, closure_t &clos,
-	closure_t *shadow, Tagpool &tagpool);
+static void closure_posix(const closure_t &init, closure_t &done, closure_t *shadow, Tagpool &tagpool, const std::vector<Tag> &tags);
+static void closure_leftmost(const closure_t &init, closure_t &done, closure_t *shadow, Tagpool &tagpool);
 static int32_t compare_posix(const clos_t &c1, const clos_t &c2, Tagpool &tagpool, const std::vector<Tag> &tags);
 static void prune(closure_t &clos, std::valarray<Rule> &rules);
 static void lower_lookahead_to_transition(closure_t &clos);

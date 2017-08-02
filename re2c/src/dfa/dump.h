@@ -23,7 +23,7 @@ struct dump_dfa_t
 	void state0(const closure_t &clos);
 	void state(const closure_t &clos, size_t state, size_t symbol, bool isnew);
 	void final(size_t state, const nfa_state_t *port);
-	uint32_t index(const nfa_state_t *s);
+	uint32_t index(const nfa_state_t *s) const;
 	FORBID_COPY(dump_dfa_t);
 };
 

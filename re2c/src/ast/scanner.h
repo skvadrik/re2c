@@ -55,7 +55,7 @@ class Scanner: private ScannerState
 	Input & in;
 	Warn &warn;
 
-	void fill (uint32_t);
+	void fill(uint32_t need);
 	void lex_end_of_comment(OutputFile &out);
 	void lex_tags(OutputFile &out, bool mtags);
 	void set_sourceline ();

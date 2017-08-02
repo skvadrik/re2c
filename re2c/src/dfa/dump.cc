@@ -35,7 +35,7 @@ dump_dfa_t::~dump_dfa_t()
 	fprintf(stderr, "}\n");
 }
 
-uint32_t dump_dfa_t::index(const nfa_state_t *s)
+uint32_t dump_dfa_t::index(const nfa_state_t *s) const
 {
 	return static_cast<uint32_t>(s - base);
 }

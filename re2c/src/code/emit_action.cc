@@ -375,7 +375,7 @@ void gen_fintags(OutputFile &o, uint32_t ind, const DFA &dfa, const Rule &rule)
 	const std::string
 		&prefix = opts->tags_prefix,
 		&expression = opts->tags_expression;
-	std::string name, expr;
+	std::string expr;
 	const std::vector<Tag> &tags = dfa.tags;
 	const tagver_t *fins = dfa.finvers;
 

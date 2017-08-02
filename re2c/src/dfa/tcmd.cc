@@ -73,9 +73,7 @@ bool tcmd_t::isadd(const tcmd_t *x)
 
 bool tcmd_t::topsort(tcmd_t **phead, uint32_t *indeg)
 {
-	tcmd_t
-		*x0 = *phead, **px, *x,
-		*y0 = NULL, **py, **py1;
+	tcmd_t *x0 = *phead, *x, *y0 = NULL, **py;
 	bool nontrivial_cycles = false;
 
 	// initialize in-degree
@@ -90,8 +88,7 @@ bool tcmd_t::topsort(tcmd_t **phead, uint32_t *indeg)
 		// reached end of list
 		if (!x0) break;
 
-		px = &x0;
-		py1 = py;
+		tcmd_t **px = &x0, **py1 = py;
 		for (x = x0; x; x = x->next) {
 			if (indeg[x->lhs] == 0) {
 				--indeg[x->rhs];

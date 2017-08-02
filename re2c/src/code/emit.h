@@ -17,7 +17,7 @@ std::string vartag_name(tagver_t ver, const std::string &prefix);
 std::string vartag_expr(tagver_t ver, const std::string &prefix, const std::string &expression);
 std::string tagname(const Tag &tag);
 
-inline std::string indent(uint32_t n, const std::string s)
+inline std::string indent(uint32_t n, const std::string &s)
 {
 	std::string ind;
 	for (; n --> 0; ind += s);

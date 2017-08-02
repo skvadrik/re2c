@@ -107,7 +107,7 @@ struct nfa_t
 	std::vector<Tag> &tags;
 	nfa_state_t *root;
 
-	nfa_t(const RESpec &spec);
+	explicit nfa_t(const RESpec &spec);
 	~nfa_t();
 
 	FORBID_COPY(nfa_t);

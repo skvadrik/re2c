@@ -81,13 +81,13 @@ static void prtChOrHexForSpan(std::ostream& o, uint32_t c, uint32_t szcunit, boo
 	}
 }
 
-void printSpan(std::ostream& o, uint32_t lb, uint32_t ub, uint32_t szcunit, bool ebcdic, bool dot)
+void printSpan(std::ostream& o, uint32_t l, uint32_t u, uint32_t szcunit, bool ebcdic, bool dot)
 {
 	o << "[";
-	prtChOrHexForSpan(o, lb, szcunit, ebcdic, dot);
-	if (ub - lb > 1) {
+	prtChOrHexForSpan(o, l, szcunit, ebcdic, dot);
+	if (u - l > 1) {
 		o << "-";
-		prtChOrHexForSpan(o, ub - 1, szcunit, ebcdic, dot);
+		prtChOrHexForSpan(o, u - 1, szcunit, ebcdic, dot);
 	}
 	o << "]";
 }

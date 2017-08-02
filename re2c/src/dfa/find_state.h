@@ -64,9 +64,9 @@ private:
 	tagver_t *actlhs;
 
 public:
-	kernels_t(Tagpool &tagpool, tcpool_t &tcpool, const std::vector<Tag> &tags);
+	kernels_t(Tagpool &tagp, tcpool_t &tcp, const std::vector<Tag> &ts);
 	~kernels_t();
-	void init(tagver_t v, size_t k);
+	void init(tagver_t v, size_t nkern);
 	size_t size() const;
 	const kernel_t* operator[](size_t idx) const;
 	result_t insert(const closure_t &clos, tcmd_t *acts, tagver_t maxver);

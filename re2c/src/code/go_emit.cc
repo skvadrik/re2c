@@ -84,7 +84,7 @@ void Cases::emit(OutputFile &o, uint32_t ind, const DFA &dfa) const
 	o.wind(ind).ws("}\n");
 }
 
-void Binary::emit(OutputFile &o, uint32_t ind, const DFA &dfa)
+void Binary::emit(OutputFile &o, uint32_t ind, const DFA &dfa) const
 {
 	output_if(o, ind, cond->compare, cond->value);
 	o.ws("{\n");
@@ -94,7 +94,7 @@ void Binary::emit(OutputFile &o, uint32_t ind, const DFA &dfa)
 	o.wind(ind).ws("}\n");
 }
 
-void Linear::emit(OutputFile &o, uint32_t ind, const DFA &dfa)
+void Linear::emit(OutputFile &o, uint32_t ind, const DFA &dfa) const
 {
 	for (uint32_t i = 0; i < nbranches; ++i) {
 		const Branch &b = branches[i];
@@ -108,7 +108,7 @@ void Linear::emit(OutputFile &o, uint32_t ind, const DFA &dfa)
 	}
 }
 
-void If::emit(OutputFile &o, uint32_t ind, const DFA &dfa)
+void If::emit(OutputFile &o, uint32_t ind, const DFA &dfa) const
 {
 	switch (type) {
 		case BINARY: info.binary->emit(o, ind, dfa); break;
@@ -116,7 +116,7 @@ void If::emit(OutputFile &o, uint32_t ind, const DFA &dfa)
 	}
 }
 
-void SwitchIf::emit(OutputFile &o, uint32_t ind, const DFA &dfa)
+void SwitchIf::emit(OutputFile &o, uint32_t ind, const DFA &dfa) const
 {
 	switch (type) {
 		case SWITCH: info.cases->emit(o, ind, dfa); break;
@@ -124,7 +124,7 @@ void SwitchIf::emit(OutputFile &o, uint32_t ind, const DFA &dfa)
 	}
 }
 
-void GoBitmap::emit (OutputFile & o, uint32_t ind, const DFA &dfa)
+void GoBitmap::emit (OutputFile & o, uint32_t ind, const DFA &dfa) const
 {
 	const opt_t *opts = o.block().opts;
 	std::string yych = output_hgo (o, ind, dfa, hgo);
@@ -159,7 +159,7 @@ label_t CpgotoTable::max_label () const
 	return max;
 }
 
-void CpgotoTable::emit (OutputFile & o, uint32_t ind)
+void CpgotoTable::emit (OutputFile & o, uint32_t ind) const
 {
 	const opt_t *opts = o.block().opts;
 	o.wind(ind).ws("static void *").wstring(opts->yytarget).ws("[256] = {\n");
@@ -185,7 +185,7 @@ void CpgotoTable::emit (OutputFile & o, uint32_t ind)
 	o.wind(--ind).ws("};\n");
 }
 
-void Cpgoto::emit (OutputFile & o, uint32_t ind, const DFA &dfa)
+void Cpgoto::emit (OutputFile & o, uint32_t ind, const DFA &dfa) const
 {
 	std::string yych = output_hgo (o, ind, dfa, hgo);
 	o.ws("{\n");
@@ -194,7 +194,7 @@ void Cpgoto::emit (OutputFile & o, uint32_t ind, const DFA &dfa)
 	o.wind(--ind).ws("}\n");
 }
 
-void Dot::emit(OutputFile &o, const DFA &dfa)
+void Dot::emit(OutputFile &o, const DFA &dfa) const
 {
 	const std::string &prefix = o.block().opts->tags_prefix;
 	const uint32_t n = cases->cases_size;
@@ -220,7 +220,7 @@ void Dot::emit(OutputFile &o, const DFA &dfa)
 	}
 }
 
-void Go::emit (OutputFile & o, uint32_t ind, const DFA &dfa)
+void Go::emit (OutputFile & o, uint32_t ind, const DFA &dfa) const
 {
 	if (type == DOT) {
 		info.dot->emit (o, dfa);

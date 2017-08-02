@@ -1,6 +1,7 @@
 #ifndef _RE2C_DFA_CFG_CFG_
 #define _RE2C_DFA_CFG_CFG_
 
+#include "src/util/forbid_copy.h"
 #include "src/dfa/dfa.h"
 
 namespace re2c {
@@ -16,6 +17,7 @@ struct cfg_bb_t
 	const Rule *rule;
 
 	cfg_bb_t(const cfg_ix_t *sb, const cfg_ix_t *se, tcmd_t *&c, const Rule *r);
+	FORBID_COPY(cfg_bb_t);
 };
 
 // control flow graph

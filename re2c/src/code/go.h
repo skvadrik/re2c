@@ -49,7 +49,7 @@ struct Cases
 	Cases(const Span *spans, uint32_t nspans, bool skip);
 	~Cases();
 	void emit(OutputFile &o, uint32_t ind, const DFA &dfa) const;
-	void used_labels(std::set<label_t> &used);
+	void used_labels(std::set<label_t> &used) const;
 	FORBID_COPY(Cases);
 };
 
@@ -67,8 +67,8 @@ struct Binary
 	If * els;
 	Binary (const Span * s, uint32_t n, const State * next, bool skip);
 	~Binary ();
-	void emit (OutputFile &o, uint32_t ind, const DFA &dfa);
-	void used_labels (std::set<label_t> & used);
+	void emit (OutputFile &o, uint32_t ind, const DFA &dfa) const;
+	void used_labels (std::set<label_t> & used) const;
 
 	FORBID_COPY (Binary);
 };
@@ -89,8 +89,8 @@ struct Linear
 	Linear(const Span *s, uint32_t n, const State *next, bool skip);
 	~Linear();
 	void add_branch(const Cond *cond, const State *to, tcid_t tags, bool skip);
-	void emit(OutputFile &o, uint32_t ind, const DFA &dfa);
-	void used_labels(std::set<label_t> &used);
+	void emit(OutputFile &o, uint32_t ind, const DFA &dfa) const;
+	void used_labels(std::set<label_t> &used) const;
 	FORBID_COPY(Linear);
 };
 
@@ -108,8 +108,8 @@ struct If
 	} info;
 	If (type_t t, const Span * sp, uint32_t nsp, const State * next, bool skip);
 	~If ();
-	void emit (OutputFile & o, uint32_t ind, const DFA &dfa);
-	void used_labels (std::set<label_t> & used);
+	void emit (OutputFile & o, uint32_t ind, const DFA &dfa) const;
+	void used_labels (std::set<label_t> & used) const;
 };
 
 struct SwitchIf
@@ -126,8 +126,8 @@ struct SwitchIf
 	} info;
 	SwitchIf (const Span * sp, uint32_t nsp, const State * next, bool sflag, bool skip);
 	~SwitchIf ();
-	void emit (OutputFile & o, uint32_t ind, const DFA &dfa);
-	void used_labels (std::set<label_t> & used);
+	void emit (OutputFile & o, uint32_t ind, const DFA &dfa) const;
+	void used_labels (std::set<label_t> & used) const;
 };
 
 struct GoBitmap
@@ -140,8 +140,8 @@ struct GoBitmap
 		uint32_t hSpans, const bitmap_t * bm, const State * bm_state,
 		const State * next, bool sflag);
 	~GoBitmap ();
-	void emit (OutputFile & o, uint32_t ind, const DFA &dfa);
-	void used_labels (std::set<label_t> & used);
+	void emit (OutputFile & o, uint32_t ind, const DFA &dfa) const;
+	void used_labels (std::set<label_t> & used) const;
 
 	FORBID_COPY (GoBitmap);
 };
@@ -152,8 +152,8 @@ struct CpgotoTable
 	const State ** table;
 	CpgotoTable (const Span * span, uint32_t nSpans);
 	~CpgotoTable ();
-	void emit (OutputFile & o, uint32_t ind);
-	void used_labels (std::set<label_t> & used);
+	void emit (OutputFile & o, uint32_t ind) const;
+	void used_labels (std::set<label_t> & used) const;
 
 private:
 	label_t max_label () const;
@@ -168,8 +168,8 @@ struct Cpgoto
 	Cpgoto (const Span * span, uint32_t nSpans, const Span * hspan,
 		uint32_t hSpans, const State * next, bool sflag);
 	~Cpgoto ();
-	void emit (OutputFile & o, uint32_t ind, const DFA &dfa);
-	void used_labels (std::set<label_t> & used);
+	void emit (OutputFile & o, uint32_t ind, const DFA &dfa) const;
+	void used_labels (std::set<label_t> & used) const;
 
 	FORBID_COPY (Cpgoto);
 };
@@ -178,9 +178,9 @@ struct Dot
 {
 	const State * from;
 	Cases * cases;
-	Dot (const Span * sp, uint32_t nsp, const State * from);
+	Dot(const Span *sp, uint32_t nsp, const State *s);
 	~Dot ();
-	void emit (OutputFile & o, const DFA &dfa);
+	void emit (OutputFile & o, const DFA &dfa) const;
 
 	FORBID_COPY (Dot);
 };
@@ -210,8 +210,8 @@ struct Go
 	Go ();
 	~Go ();
 	void init(const State* from, const opt_t *opts, bitmaps_t &bitmaps);
-	void emit (OutputFile & o, uint32_t ind, const DFA &dfa);
-	void used_labels (std::set<label_t> & used);
+	void emit (OutputFile & o, uint32_t ind, const DFA &dfa) const;
+	void used_labels (std::set<label_t> & used) const;
 
 	Go (const Go & g)
 		: nSpans (g.nSpans)

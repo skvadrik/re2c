@@ -80,10 +80,10 @@ const AST *ast_cat(const AST *a1, const AST *a2)
 	return ast;
 }
 
-const AST *ast_iter(const AST *r, uint32_t n, uint32_t m)
+const AST *ast_iter(const AST *a, uint32_t n, uint32_t m)
 {
-	AST *ast = new AST(r->line, r->column, AST::ITER);
-	ast->iter.ast = r;
+	AST *ast = new AST(a->line, a->column, AST::ITER);
+	ast->iter.ast = a;
 	ast->iter.min = n;
 	ast->iter.max = m;
 	return ast;
@@ -105,24 +105,24 @@ const AST *ast_tag(uint32_t l, uint32_t c, const std::string *n, bool h)
 	return ast;
 }
 
-const AST *ast_cap(const AST *r)
+const AST *ast_cap(const AST *a)
 {
-	AST *ast = new AST(r->line, r->column, AST::CAP);
-	ast->cap = r;
+	AST *ast = new AST(a->line, a->column, AST::CAP);
+	ast->cap = a;
 	return ast;
 }
 
-const AST *ast_ref(const AST *r, const std::string &n)
+const AST *ast_ref(const AST *a, const std::string &n)
 {
-	AST *ast = new AST(r->line, r->column, AST::REF);
-	ast->ref.ast = r;
+	AST *ast = new AST(a->line, a->column, AST::REF);
+	ast->ref.ast = a;
 	ast->ref.name = new std::string(n);
 	return ast;
 }
 
-bool ast_need_wrap(const AST *ast)
+bool ast_need_wrap(const AST *a)
 {
-	switch (ast->type) {
+	switch (a->type) {
 		case AST::ITER:
 		case AST::NIL:
 		case AST::STR:

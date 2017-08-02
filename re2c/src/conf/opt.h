@@ -278,7 +278,7 @@ public:
 	void unset_encoding(Enc::type_t t)        { user.encoding.unset(t); }
 	void set_encoding_policy(Enc::policy_t p) { user.encoding.setPolicy(p); }
 #define MUTOPT1 MUTOPT
-#define MUTOPT(type, name, value) void set_##name (type arg) { user.name = arg; diverge = true; }
+#define MUTOPT(type, name, value) void set_##name (const type &arg) { user.name = arg; diverge = true; }
 	RE2C_MUTOPTS
 #undef MUTOPT1
 #undef MUTOPT

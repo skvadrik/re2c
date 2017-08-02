@@ -13,7 +13,7 @@ struct Input
 	FILE * file;
 	std::string file_name;
 
-	Input (const char * fn);
+	explicit Input (const char * fn);
 	~Input ();
 	bool open ();
 

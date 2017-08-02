@@ -119,14 +119,14 @@ const AST *ast_str(uint32_t l, uint32_t c, std::vector<ASTChar> *chars, bool ica
 const AST *ast_cls(uint32_t l, uint32_t c, std::vector<ASTRange> *ranges, bool negated);
 const AST *ast_dot(uint32_t l, uint32_t c);
 const AST *ast_default(uint32_t l, uint32_t c);
-const AST *ast_alt(const AST *r1, const AST *r2);
-const AST *ast_cat(const AST *r1, const AST *r2);
-const AST *ast_iter(const AST *r, uint32_t n, uint32_t m);
-const AST *ast_diff(const AST *r1, const AST *r2);
+const AST *ast_alt(const AST *a1, const AST *a2);
+const AST *ast_cat(const AST *a1, const AST *a2);
+const AST *ast_iter(const AST *a, uint32_t n, uint32_t m);
+const AST *ast_diff(const AST *a1, const AST *a2);
 const AST *ast_tag(uint32_t l, uint32_t c, const std::string *n, bool h);
-const AST *ast_cap(const AST *r);
-const AST *ast_ref(const AST *r, const std::string &n);
-bool ast_need_wrap(const AST *ast);
+const AST *ast_cap(const AST *a);
+const AST *ast_ref(const AST *a, const std::string &n);
+bool ast_need_wrap(const AST *a);
 
 void validate_mode(Scanner::ParseMode mode, bool rflag, bool rules, Scanner &input);
 void validate_ast(const specs_t &specs, bool cflag);

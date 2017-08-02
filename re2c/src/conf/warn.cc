@@ -74,7 +74,7 @@ void Warn::set_all_error ()
 	}
 }
 
-void Warn::fail (type_t t, uint32_t line, const char * s)
+void Warn::fail (type_t t, uint32_t line, const char * s) const
 {
 	if (mask[t] & WARNING)
 	{

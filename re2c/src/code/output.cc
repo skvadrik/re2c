@@ -22,7 +22,7 @@ OutputFragment::~OutputFragment()
 	if (type == STAGS || type == MTAGS) delete tags;
 }
 
-uint32_t OutputFragment::count_lines ()
+uint32_t OutputFragment::count_lines () const
 {
 	uint32_t lines = 0;
 	const std::string content = stream.str ();

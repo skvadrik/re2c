@@ -66,7 +66,7 @@ struct OutputFragment
 
 	OutputFragment (type_t t, uint32_t i);
 	~OutputFragment ();
-	uint32_t count_lines ();
+	uint32_t count_lines () const;
 };
 
 struct OutputBlock

@@ -16,7 +16,7 @@ class wrap_citer_t
 	citer_t cur;
 
 public:
-	wrap_citer_t(const container_t &c): beg(c.begin()), end(c.end()), cur(beg) {}
+	explicit wrap_citer_t(const container_t &c): beg(c.begin()), end(c.end()), cur(beg) {}
 	wrap_citer_t& operator++() { if (++cur == end) cur = beg; return *this; }
 	cpval_t operator->() const { return cur.operator->(); }
 };

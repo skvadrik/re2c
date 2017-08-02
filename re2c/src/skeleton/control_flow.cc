@@ -23,7 +23,7 @@ struct ucf_t
 	path_t prefix;
 	ucf_size_t size;
 
-	ucf_t(size_t nnodes): loops(nnodes), paths(),
+	explicit ucf_t(size_t nnodes): loops(nnodes), paths(),
 		prefix(0), size(ucf_size_t::from32(0u)) {}
 };
 
