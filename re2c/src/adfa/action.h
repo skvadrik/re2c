@@ -5,6 +5,7 @@
 #include <vector>
 
 #include "src/code/label.h"
+#include "src/dfa/tcmd.h"
 #include "src/util/c99_stdint.h"
 #include "src/util/uniq_vector.h"
 

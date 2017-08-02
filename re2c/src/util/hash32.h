@@ -1,6 +1,7 @@
 #ifndef _RE2C_UTIL_HASH32_
 #define _RE2C_UTIL_HASH32_
 
+#include <stddef.h>
 #include "src/util/c99_stdint.h"
 
 namespace re2c
