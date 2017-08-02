@@ -1,0 +1,22 @@
+
+In order to reproduce benchmark results, one should first generate input data.
+Random data can be generated with the following programs (written in haskell):
+
+    http/gen/gen_http.hs
+    uri/gen/gen_uri.hs
+
+Use the following scripts to build generators:
+
+    http/gen/mk_gen.sh
+    uri/gen/mk_gen.sh
+
+The size of the generated data is hard-coded in the source code of generators
+(and can be easily tweaked).
+
+Alternatively, if you don't have haskell compiler or for any other reason are
+unable to build generators, use small data samples provided for each benchmark
+(one can copy-paste them many times with 'cat' to obtain a large input file):
+
+    http/gen/sample.dat
+    uri/gen/sample.dat
+
