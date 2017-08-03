@@ -54,7 +54,7 @@ static void calc_dist(
 uint32_t maxpath(const Skeleton &skel)
 {
 	std::vector<uint8_t> loops(skel.nodes_count);
-	std::vector<uint32_t> dists(skel.nodes_count);
+	std::vector<uint32_t> dists(skel.nodes_count, DIST_ERROR);
 	calc_dist(skel, loops, dists, 0);
 	const uint32_t maxlen = dists[0];
 	if (maxlen == DIST_MAX) {
