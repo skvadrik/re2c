@@ -85,7 +85,7 @@ prop_test_re2c r1 r2 = QM.monadicIO $ do
         re2c = "../re2c"
 
     s0 <- QM.run $ do BS.writeFile "a.re" $ BS.pack re_file
-                      SP.system $ "ulimit -t 10 && " ++ re2c ++ " --no-lookahead --posix-captures -Werror-undefined-control-flow -ST a.re -o a.c 2>>re2c_last_warning || exit 42 && cp a.c b.c"
+                      SP.system $ "ulimit -t 20 && " ++ re2c ++ " --no-lookahead --posix-captures -Werror-undefined-control-flow -ST a.re -o a.c 2>>re2c_last_warning || exit 42 && cp a.c b.c"
 
     s1 <- QM.run $ do BS.writeFile "a.re" $ BS.pack re_file
                       SP.system $ "ulimit -t 10 && " ++ re2c ++ "                --posix-captures -Werror-undefined-control-flow -ST a.re -o a.c 2>>re2c_last_warning || exit 42 && gcc a.c -o a && ./a && gcc b.c -o b && ./b"

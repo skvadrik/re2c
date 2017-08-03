@@ -48,9 +48,7 @@ instance Q.Arbitrary E where
 
 arbitrary_d :: (Enum a, Eq a, Num a) => a -> Q.Gen E
 arbitrary_d 0 = do
-    t1 <- Q.choose (97, 122) :: Q.Gen Int
-    t2 <- Q.choose (97, 122) :: Q.Gen Int
-    t3 <- Q.choose (97, 122) :: Q.Gen Int
+    tag <- take 5 <$> Q.infiniteListOf (Q.choose (97, 122) :: Q.Gen Int)
     Q.frequency
         [ (1, pure Empty)
         , (1, pure A)
@@ -59,8 +57,8 @@ arbitrary_d 0 = do
         , (1, pure NA)
         , (1, pure NB)
         , (1, pure NC)
-        , (3, pure $ Tag $ map chr [t1, t2, t3])
-        , (3, pure $ HTag $ map chr [t1, t2, t3])
+        , (3, pure $ Tag $ map chr tag)
+        , (3, pure $ HTag $ map chr tag)
         ]
 arbitrary_d d = do
     n <- Q.choose (0, 1) :: Q.Gen Int

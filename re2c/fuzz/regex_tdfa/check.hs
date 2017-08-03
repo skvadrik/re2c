@@ -6,6 +6,7 @@ import qualified System.Exit as SE
 import qualified Data.ByteString.Char8 as BS
 import           Data.Char (ord)
 import qualified Text.Regex.TDFA as X
+import qualified Data.Array as A
 import           Control.Monad (when)
 
 
@@ -102,26 +103,35 @@ arbitrary_d d = do
         where d' = pred d
 
 
-parse_input :: Int -> IO [(BS.ByteString, [Int], [BS.ByteString])]
+parse_input :: Int -> IO [(BS.ByteString, [Int], [BS.ByteString], X.MatchArray)]
 parse_input ncaps = do
-    let step :: BS.ByteString -> BS.ByteString -> (BS.ByteString, [Int], [BS.ByteString], BS.ByteString)
+    let step :: BS.ByteString -> BS.ByteString -> (BS.ByteString, [Int], [BS.ByteString], X.MatchArray, BS.ByteString)
         step input key =
             let ns'@(n1:n2:_:ns) = reverse $ BS.foldl' (\xs c -> ord c : xs) [] key
                 s = BS.take n2 input
                 ss = split ns s
+                ar = A.listArray (0, ncaps) (split2 ns s)
                 rest = BS.drop n1 input
-            in (s, ns', ss, rest)
+            in (s, ns', ss, ar, rest)
 
-        go :: [BS.ByteString] -> BS.ByteString -> [(BS.ByteString, [Int], [BS.ByteString])]
+        go :: [BS.ByteString] -> BS.ByteString -> [(BS.ByteString, [Int], [BS.ByteString], X.MatchArray)]
         go [] _ = []
         go (key:keys) input =
-            let (s, ns, ss, rest) = step input key
-            in (s, ns, ss) : go keys rest
+            let (s, ns, ss, ar, rest) = step input key
+            in (s, ns, ss, ar) : go keys rest
 
         split :: [Int] -> BS.ByteString -> [BS.ByteString]
         split [] _ = []
         split (n1:n2:ns) s = (BS.drop n1 . BS.take n2) s : split ns s
         split _ _ = error "uneven number of keys"
+
+        split2 :: [Int] -> BS.ByteString -> [(Int, Int)]
+        split2 [] _ = []
+        split2 (n1:n2:ns) s = case (n1, n2) of
+            (255, 255)                 -> (-1, 0) : split2 ns s
+            _ | n1 /= 255 && n2 /= 255 -> (n1, n2 - n1) : split2 ns s
+            _                          -> error $ "bad re2c result: " ++ show (n1, n2)
+        split2 _ _ = error "uneven number of keys"
 
         split_at :: Int -> BS.ByteString -> [BS.ByteString]
         split_at _ s | s == BS.empty = []
@@ -152,10 +162,11 @@ prop_test_re2c r1 = QM.monadicIO $ do
     QM.assert $ ok0 `elem` [SE.ExitSuccess, SE.ExitFailure 42]
     when (ok0 == SE.ExitSuccess) $ do
         ss <- QM.run $ parse_input ncaps
-        mapM_ (\(s, ns, xs) -> do
+        mapM_ (\(s, ns, xs, ar) -> do
                 let s1 = map BS.unpack xs
                     s2 = ((\x -> if x == [] then [] else head x) . X.match rr . BS.unpack) s
-                    ok = s1 == s2 || (BS.filter (== '\n') s) /= BS.empty
+                    ar' = (X.match rr . BS.unpack) s :: X.MatchArray
+                    ok = (ar == ar' && s1 == s2) || (BS.filter (== '\n') s) /= BS.empty
                 QM.run $ when (not ok) $ do
                     print re_posix
                     print ncaps
@@ -163,6 +174,8 @@ prop_test_re2c r1 = QM.monadicIO $ do
                     print ns
                     print s1
                     print s2
+                    print ar
+                    print ar'
                 QM.assert ok
             ) ss
 
