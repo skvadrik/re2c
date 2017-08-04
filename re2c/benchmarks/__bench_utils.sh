@@ -45,6 +45,10 @@ run_all() {
     name2="$2"
     name="${name1}_${name2}"
 
+    echo "---------------- WARMUP (GCC -O2 lookahead) ----------------"
+    gcc     $cflags ${name}_lookahead.c    -o${name} && run ${name1} ${name2}
+    echo "---------------- END WARMUP ----------------"
+
     echo "---------------- GCC -O2 lookahead ----------------"
     gcc     $cflags ${name}_lookahead.c    -o${name} && run ${name1} ${name2}
     echo "---------------- GCC -O2 no-lookahead ----------------"
