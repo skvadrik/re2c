@@ -5,6 +5,6 @@ rm -rf $builddir
 mkdir $builddir
 
 cd $builddir
-../configure CXXFLAGS="-fsanitize=address -fno-omit-frame-pointer" LDFLAGS="-fsanitize=address" && \
+../configure CXXFLAGS="-fsanitize=address" LDFLAGS="-fsanitize=address" && \
 make -j5
 cd ..
