@@ -1050,9 +1050,9 @@ and conjecture (without a proof) that worst-case complexity is exponential.
 
 \begin{center}
 \includegraphics[width=\linewidth]{img/plot_acyc_neg_both.png}\\*
-\footnotesize{Behavior of LAU, LAU1 and GOR1 on Acyc-Neg family (left: normal scale, right: logarithmic scale on both axes).}
+\small{Behavior of LAU, LAU1 and GOR1 on Acyc-Neg family (left: normal scale, right: logarithmic scale on both axes).}
 \includegraphics[width=\linewidth]{img/plot_grid_nhard_both.png}\\*
-\footnotesize{Behavior of LAU, LAU1 and GOR1 on Grid-Nhard family (left: normal scale, right: logarithmic scale on both axes).}
+\small{Behavior of LAU, LAU1 and GOR1 on Grid-Nhard family (left: normal scale, right: logarithmic scale on both axes).}
 \end{center}
 
 \begin{multicols}{2}
@@ -1062,14 +1062,14 @@ and conjecture (without a proof) that worst-case complexity is exponential.
 %\begin{minipage}{\linewidth}
 %\begin{center}\includegraphics[width=\linewidth]{img/plot_acyc_neg_both.png}
 %\\
-%\footnotesize{Behavior of LAU, LAU1 and GOR algorithms on Acyc-Neg family
+%\small{Behavior of LAU, LAU1 and GOR algorithms on Acyc-Neg family
 %(left -- normal scale, right -- logarithmic scale on both axes).}
 %\end{center}
 %\end{minipage}
 %\begin{minipage}{\linewidth}
 %\begin{center}\includegraphics[width=\linewidth]{img/plot_grid_nhard_both.png}
 %\\
-%\footnotesize{Behavior of LAU, LAU1 and GOR algorithms on Grid-NHard family
+%\small{Behavior of LAU, LAU1 and GOR algorithms on Grid-NHard family
 %(left -- normal scale, right -- logarithmic scale on both axes).}
 %\end{center}
 %\end{minipage}
@@ -1711,7 +1711,7 @@ in general, each value is an offset list of arbitrary length,
 but in practice values may be single offsets or anything else.
 \\
 
-Laurikari determinization algorithm has the same basic principle as the usual powerset construction:
+Laurikari determinization algorithm has the same basic principle as the usual powerset construction [??]:
 simulation of nondeterministic automaton on all possible inputs combined with merging of equivalent states.
 The most tricky part is merging: extended configuration sets are no longer equal, as they contain absolute tag values.
 %(in fact, they cannot coincide in case of tagged non-empty loops in TNFA).
@@ -1801,6 +1801,29 @@ Laurikari used TDFA(0); we study both methods and argue that TDFA(1) is better.
 Determinization algorithm can handle both types of automata in a uniform way:
 it has a boolean parameter $\ell$ that enables the use of lookahead.
 The full algorithm is defined on Figure \ref{fig_det}.
+States are sets of configurations $(q, v, o, x)$,
+where $q$ is a core TNFA state, $v$ is a vector of registers that hold tag values, $o$ is the ordinal
+and $x$ is the T-string of the $\epsilon$-path by which $q$ was reached.
+The last component, $x$, is used only by TDFA(1), as it needs to check coincidence of delayed register operations;
+for TDFA(0) it is always $\epsilon$.
+During construction of $\epsilon$-closure configurations are extended to the form $(q, v, o, x, y)$,
+where $y$ is the new T-string: TDFA(0) immediately applies it to tag values,
+but TDFA(1) applies $x$ and delays $y$ until the next step.
+Registers are allocated for all new operations:
+the same register may be used on multiple outgoing transitions for operations of the same tag,
+but different tags never share registers.
+We assume an infinite number of vacant registers and allocate them freely, not trying to reuse old ones;
+this results in a more optimization-friendly automaton.
+Note also that the same set of \emph{final registers} is reused by all final states:
+this simplifies tracking of final tag values.
+Mapping of a newly constructed state $X$ to an existing state $Y$ checks coincidence of TNFA states, orders, delayed operations,
+and constructs bijection between registers of $X$ and $Y$.
+If $r_1$ in $X$ corresponds to $r_2$ in $Y$ (and they are not equal), then $r_1$ must be copied to $r_2$ on the transition to $X$
+(which will become transition to $Y$ after merging).
+It may happen so that $r_1$ itself is a left-hand side of an operation on this transition:
+in this case we simply substitute it with $r_2$ instead of copying.
+Determinization algorithm can handle both POSIX and leftmost greedy policies,
+but in the latter case it can be simplified to avoid explicit calculation of ordinals, as discussed in section \ref{section_disambiguation}.
 \\
 
 \begin{figure*}\label{fig_det}
@@ -1997,7 +2020,7 @@ The full algorithm is defined on Figure \ref{fig_det}.
 \end{multicols}
 \begin{center}
 \caption{Determinization algorithm.}
-\footnotesize{
+\small{
 Functions $reach'$ and $closure'$ are exactly as
 $reach$ from section \ref{section_tnfa} and $closure \Xund goldberg \Xund radzik$ from section \ref{section_closure},
 except for the trivial adjustments to carry around ordinals and pass them into disambiguation procedure.
@@ -2005,42 +2028,19 @@ except for the trivial adjustments to carry around ordinals and pass them into d
 \end{center}
 \end{figure*}
 
-States are sets of configurations $(q, v, o, x)$,
-where $q$ is a core TNFA state, $v$ is a vector of registers that hold tag values, $o$ is the ordinal
-and $x$ is the T-string of the $\epsilon$-path by which $q$ was reached.
-The last component, $x$, is used only by TDFA(1), as it needs to check coincidence of delayed register operations;
-for TDFA(0) it is always $\epsilon$.
-During construction of $\epsilon$-closure configurations are extended to the form $(q, v, o, x, y)$,
-where $y$ is the new T-string: TDFA(0) immediately applies it to tag values,
-but TDFA(1) applies $x$ and delays $y$ until the next step.
-Registers are allocated for all new operations:
-the same register may be used on multiple outgoing transitions for operations of the same tag,
-but different tags never share registers.
-We assume an infinite number of vacant registers and allocate them freely, not trying to reuse old ones;
-this results in a more optimization-friendly automaton.
-Note also that the same set of \emph{final registers} is reused by all final states:
-this simplifies tracking of final tag values.
-Mapping of a newly constructed state $X$ to an existing state $Y$ checks coincidence of TNFA states, orders, delayed operations,
-and constructs bijection between registers of $X$ and $Y$.
-If $r_1$ in $X$ corresponds to $r_2$ in $Y$ (and they are not equal), then $r_1$ must be copied to $r_2$ on the transition to $X$
-(which will become transition to $Y$ after merging).
-It may happen so that $r_1$ itself is a left-hand side of an operation on this transition:
-in this case we simply substitute it with $r_2$ instead of copying.
-Determinization algorithm can handle both POSIX and leftmost greedy policies,
-but in the latter case it can be simplified to avoid explicit calculation of ordinals, as discussed in section \ref{section_disambiguation}.
-
 \begin{XThe}
 Determinization algorithm terminates.
 \\[0.5em]
 \textbf{Proof.}
-We will show that for arbitrary TNFA with $t$ tags and $n$ states the number of unmappable TDFA states is finite.
+The proof is very similar to the one given by Laurikari in [Lau00]:
+we will show that for arbitrary TNFA with $t$ tags and $n$ states the number of unmappable TDFA states is finite.
 Each TDFA state with $m$ configurations (where $m \!\leq\! n$) is a combination of the following components:
 a set of $m$ TNFA states,
 $t$ $m$-vectors of registers,
 $k$ $m$-vectors of ordinals ($k \Xeq 1$ for leftmost greedy policy and $k \Xeq t$ for POSIX policy),
 and an $m$-vector of T-strings.
 Consider each component in turn.
-First, a set TNFA states: the number of different subsets of $n$ states is finite.
+First, a set of TNFA states: the number of different subsets of $n$ states is finite.
 Second, a vector of registers: we assume an infinite number of registers during determinization,
 but there is only a finite number of $m$-element vectors different up to bijection.
 Third, a vector of ordinals: the number of different weak orderings of $m$ elements is finite.
@@ -2070,175 +2070,89 @@ and short form $r b$, which means ``set $r$ to $b$''.
 Symbols $\uparrow$ and $\downarrow$ are used instead of 1 and 0 to denote \emph{current position} and \emph{default value}.
 All graphs in this section are autogenerated with RE2C, so they reflect exactly the constructed automata.
 By default we use leftmost greedy disambiguation, as it allows to study standalone tags and generate smaller pictures.
+Note that the resulting automata are not yet optimized and use more registers than necessary.
 \\
 
-The first example is $a^* 1 b^*$ (the TRE mentioned in the introduction).
-It is deterministic with respect to TDFA(1), but not TDFA(0)
-(nondeterminism degree is 2, as there are at most two different registers used in each state).
+\end{multicols}
+\begin{center}
+\includegraphics[width=0.9\linewidth]{img/example1/all.png}\\*
+\textbf{Example 1.} $a^* 1 b^*$ (the TRE mentioned in the introduction).\\*\medskip
+\small{
+(a) --- TNFA, (b) --- construction of TDFA(0), (c) --- TDFA(0), (d) --- construction of TDFA(1), (e) --- TDFA(1).\\*\medskip
 This example is very simple, but it shows an important use case:
 finding the edge between two non-overlapping components of the input string.
 As the pictures show, TDFA(0) behaves much worse than TDFA(1):
 it pulls the operation inside of loop and repeatedly rewrites tag value on each iteration,
 while TDFA(1) saves it only once, when the lookahead symbol changes from \texttt{a} to \texttt{b}.
-\begin{center}
-\includegraphics[width=\linewidth]{img/example1/tnfa.png}\\*
-\footnotesize{TNFA for $a^* 1 b^*$.} \\
-\end{center}
-\begin{center}
-\includegraphics[width=0.8\linewidth]{img/example1/tdfa0_raw.png}\\*
-\footnotesize{Construction of TDFA(0) for $a^* 1 b^*$.} \\
-\end{center}
-\begin{center}
-\includegraphics[width=0.6\linewidth]{img/example1/tdfa0.png}\\*
-\footnotesize{TDFA(0) for $a^* 1 b^*$.} \\
-\end{center}
-\begin{center}
-\includegraphics[width=0.8\linewidth]{img/example1/tdfa1_raw.png}\\*
-\footnotesize{Construction of TDFA(1) for $a^* 1 b^*$.} \\
-\end{center}
-\begin{center}
-\includegraphics[width=0.6\linewidth]{img/example1/tdfa1.png}\\*
-\footnotesize{TDFA(1) for $a^* 1 b^*$.} \\
-\end{center}
+TRE is deterministic with respect to TDFA(1)
+and has 2nd degree of nondeterminism with respect to TDFA(0)
+(as there are at most two different registers used in each state).
+}\\[1em]
 
-The next example is $a^* 1 a^* a$ --- the same TRE that Lauriakri used to explain his algorithm.
-It has a modest degree of nondeterminism: 2 for TDFA(1) and 3 for TDFA(0).
-Compare TDFA(0) with figure 3 from [Lau00]: it the same automaton up to a minor notational diffence
+\includegraphics[width=0.9\linewidth]{img/example2/all.png}\\*
+\textbf{Example 2.} $a^* 1 a^* a$ (the TRE used by Laurikari to explain his algorithm).\\*\medskip
+\small{
+(a) --- TNFA, (b) --- construction of TDFA(0), (c) --- TDFA(0), (d) --- construction of TDFA(1), (e) --- TDFA(1).\\*\medskip
+This TRE has a modest degree of nondeterminism: 2 for TDFA(1) and 3 for TDFA(0).
+Compare (c) with figure 3 from [Lau00]: it is the same automaton up to a minor notational diffence
 (in this case leftmost greedy policy agrees with POSIX).
-\begin{center}
-\includegraphics[width=\linewidth]{img/example2/tnfa.png}\\*
-\footnotesize{TNFA for $a^* 1 a^* a$.} \\
-\end{center}
-\begin{center}
-\includegraphics[width=0.8\linewidth]{img/example2/tdfa0_raw.png}\\*
-\footnotesize{Construction of TDFA(0) for $a^* 1 a^* a$.} \\
-\end{center}
-\begin{center}
-\includegraphics[width=0.55\linewidth]{img/example2/tdfa0.png}\\*
-\footnotesize{TDFA(0) for $a^* 1 a^* a$.} \\
-\end{center}
-\begin{center}
-\includegraphics[width=0.8\linewidth]{img/example2/tdfa1_raw.png}\\*
-\footnotesize{Construction of TDFA(1) for $a^* 1 a^* a$.} \\
-\end{center}
-\begin{center}
-\includegraphics[width=0.5\linewidth]{img/example2/tdfa1.png}\\*
-\footnotesize{TDFA(1) for $a^* 1 a^* a$.} \\
-\end{center}
+}\\[1em]
 
-The next example is $(1 a)^*$.
-It shows the typical difference between automata:
+\includegraphics[width=0.8\linewidth]{img/example6/all.png}\\*
+\textbf{Example 3.} $(1 a)^*$ .\\*\medskip
+\small{
+(a) --- TNFA, (b) --- construction of TDFA(0), (c) --- TDFA(0), (d) --- construction of TDFA(1), (e) --- TDFA(1).\\*\medskip
+This example shows the typical difference between automata:
 TDFA(0) has less states, but more operations; its operations are more clustered and interrelated.
 Both automata record the full history of tag on all iterations.
 TRE has 2nd degree nondeterminism for TDFA(0) and is deterministic for TDFA(1).
-\begin{center}
-\includegraphics[width=0.6\linewidth]{img/example6/tnfa.png}\\*
-\footnotesize{TNFA for $(1 a)^*$.} \\
-\end{center}
-\begin{center}
-\includegraphics[width=0.6\linewidth]{img/example6/tdfa0_raw.png}\\*
-\footnotesize{Construction of TDFA(0) for $(1 a)^*$.} \\
-\end{center}
-\begin{center}
-\includegraphics[width=0.4\linewidth]{img/example6/tdfa0.png}\\*
-\footnotesize{TDFA(0) for $(1 a)^*$.} \\
-\end{center}
-\begin{center}
-\includegraphics[width=0.9\linewidth]{img/example6/tdfa1_raw.png}\\*
-\footnotesize{Construction of TDFA(1) for $(1 a)^*$.} \\
-\end{center}
-\begin{center}
-\includegraphics[width=0.6\linewidth]{img/example6/tdfa1.png}\\*
-\footnotesize{TDFA(1) for $(1 a)^*$.} \\
-\end{center}
+}\\[1em]
 
-The next example is $(1 a^+ 2 b^+)^+$.
-Like the first example, it shows that TDFA(0) tends to pull operations inside of loops
+\includegraphics[width=0.8\linewidth]{img/example5/all.png}\\*
+\textbf{Example 4.} $(1 a^+ 2 b^+)^+$ .\\*\medskip
+\small{
+(a) --- TNFA, (b) --- construction of TDFA(0), (c) --- TDFA(0), (d) --- construction of TDFA(1), (e) --- TDFA(1).\\*\medskip
+Like Example 1, this example shows that TDFA(0) tends to pull operations inside of loops
 and behaves much worse than hypothetical hand-written code
 (only this example is bigger and gives an idea how the difference between automata changes with TRE size).
 If $a^+$ and $b^+$ match multiple iterations (which is likely in practice for TRE of such form), then the difference is considerable.
 Both tags have 2nd degree of nondeterminism for TDFA(0), and both are deterministic for TDFA(1).
-\begin{center}
-\includegraphics[width=\linewidth]{img/example5/tnfa.png}\\*
-\footnotesize{TNFA for $(1 a^+ 2 b^+)^+$.} \\
-\end{center}
-\begin{center}
-\includegraphics[width=\linewidth]{img/example5/tdfa0_raw.png}\\*
-\footnotesize{Construction of TDFA(0) for $(1 a^+ 2 b^+)^+$.} \\
-\end{center}
-\begin{center}
-\includegraphics[width=\linewidth]{img/example5/tdfa0.png}\\*
-\footnotesize{TDFA(0) for $(1 a^+ 2 b^+)^+$.} \\
-\end{center}
-\begin{center}
-\includegraphics[width=\linewidth]{img/example5/tdfa1_raw.png}\\*
-\footnotesize{Construction of TDFA(1) for $(1 a^+ 2 b^+)^+$.} \\
-\end{center}
-\begin{center}
-\includegraphics[width=0.8\linewidth]{img/example5/tdfa1.png}\\*
-\footnotesize{TDFA(1) for $(1 a^+ 2 b^+)^+$.} \\
-\end{center}
+}\\[1em]
 
-The next example is $a^* 1 a^{3}$,
-which demonstrates a pathological case for both types of automata:
+\includegraphics[width=0.9\linewidth]{img/example3/all.png}\\*
+\textbf{Example 5.} $a^* 1 a^{3}$ .\\*\medskip
+\small{
+(a) --- TNFA, (b) --- construction of TDFA(0), (c) --- TDFA(0), (d) --- construction of TDFA(1), (e) --- TDFA(1).\\*\medskip
+This example demonstrates a pathological case for both types of automata:
 nondeterminism degree grows linearly with the number of repetitions.
 As a result, for $n$ repetitions both automata contan $O(n)$ states and $O(n)$ copy operations inside of a loop.
-TDFA(0) has one more operation than TDFA(0), but for $n \!>\! 2$ this probably makes little difference.
+TDFA(0) has one more operation than TDFA(1), but for $n \!>\! 2$ this probably makes little difference.
 Obviously, for TRE of such kind both methods are impractical.
 However, bounded repetition is a problem on its own, even without tags;
 relatively small repetition numbers dramatically increase the size of automaton.
 If bounded repetition is necessary, more powerful methods should be used:
 e.g. automata with \emph{counters} described in [??].
-\begin{center}
-\includegraphics[width=\linewidth]{img/example3/tnfa.png}\\*
-\footnotesize{TNFA for $a^* 1 a^{3}$.} \\
-\end{center}
-\begin{center}
-\includegraphics[width=\linewidth]{img/example3/tdfa0_raw.png}\\*
-\footnotesize{Construction of TDFA(0) for $a^* 1 a^{3}$.} \\
-\end{center}
-\begin{center}
-\includegraphics[width=0.8\linewidth]{img/example3/tdfa0.png}\\*
-\footnotesize{TDFA(0) for $a^* 1 a^{3}$.} \\
-\end{center}
-\begin{center}
-\includegraphics[width=\linewidth]{img/example3/tdfa1_raw.png}\\*
-\footnotesize{Construction of TDFA(1) for $a^* 1 a^{3}$.} \\
-\end{center}
-\begin{center}
-\includegraphics[width=0.8\linewidth]{img/example3/tdfa1.png}\\*
-\footnotesize{TDFA(1) for $a^* 1 a^{3}$.} \\
-\end{center}
+}\\[1em]
 
-Finally, the last example is POSIX RE \texttt{(a|aa)+}, which is represented with TRE $1 (3 (a | aa) 4)^* 2$.
-An early optimization in RE2C rewrites it to $1 (3 (a | aa) )^* 4 \, 2$:
+\includegraphics[width=\linewidth]{img/example4/all.png}\\*
+\textbf{Example 6.} $1 (3 (a | aa) 4)^* 2$, corresponding to POSIX RE \texttt{(a|aa)+}.\\*\medskip
+\small{
+(a) --- TNFA, (b) --- construction of TDFA(0), (c) --- TDFA(0), (d) --- construction of TDFA(1), (e) --- TDFA(1).\\*\medskip
+This example uses POSIX disambiguation.
+An early optimization in RE2C rewrites TRE to $1 (3 (a | aa) )^* 4 \, 2$:
 orbit tag $4$ is moved out of loop, as we need only its last offset
 (disambiguation is based on maximization of tag $3$: as argued in section \ref{section_disambiguation}, checking both tags is redundant).
 The resulting automata oscillate between two final states:
-submatch result depends on the parity of symbols \texttt{a} in the input string.
+submatch result depends on the parity of symbol count in the input string.
 Tag $3$ has maximal degree of nondeterminism: $3$ for TDFA(0) and $2$ for TDFA(1).
 Tags $2$ and $4$ are deterministic for TDFA(1) and have degree $2$ for TDFA(0).
 Tag $1$ is deterministic for both automata.
-\begin{center}
-\includegraphics[width=\linewidth]{img/example4/tnfa.png}\\*
-\footnotesize{TNFA for $1 (3 (a | aa) )^* 4 \, 2$.} \\
+}\\[1em]
 \end{center}
-\begin{center}
-\includegraphics[width=\linewidth]{img/example4/tdfa0_raw.png}\\*
-\footnotesize{Construction of TDFA(0) for $1 (3 (a | aa) )^* 4 \, 2$.} \\
-\end{center}
-\begin{center}
-\includegraphics[width=\linewidth]{img/example4/tdfa0.png}\\*
-\footnotesize{TDFA(0) for $1 (3 (a | aa) )^* 4 \, 2$.} \\
-\end{center}
-\begin{center}
-\includegraphics[width=\linewidth]{img/example4/tdfa1_raw.png}\\*
-\footnotesize{Construction of TDFA(1) for $1 (3 (a | aa) )^* 4 \, 2$.} \\
-\end{center}
-\begin{center}
-\includegraphics[width=0.85\linewidth]{img/example4/tdfa1.png}\\*
-\footnotesize{TDFA(1) for $1 (3 (a | aa) )^* 4 \, 2$.} \\
-\end{center}
+
+\bigskip
+
+\begin{multicols}{2}
 
 From these examples we can draw the following conclusions.
 First, TDFA(1) are generally better than TDFA(0): delaying register operations allows to get rid of many conflicts.
@@ -2303,25 +2217,25 @@ At the next step it will see mismatch and stop.
 At that point automaton must backtrack to the latest final state,
 restoring input position and all relevant registers that might have been overwritten.
 TRE $(a 1 bc)^+$ exhibits this problem for both TDFA(0) and TDFA(1):
+%\begin{center}
+%\includegraphics[width=\linewidth]{img/fallback/tnfa.png}\\*
+%\small{TNFA for $(a 1 bc)^+$.} \\
+%\end{center}
+%\begin{center}
+%\includegraphics[width=\linewidth]{img/fallback/tdfa0_raw.png}\\*
+%\small{Construction of TDFA(0) for $(a 1 bc)^+$.} \\
+%\end{center}
 \begin{center}
-\includegraphics[width=0.8\linewidth]{img/fallback/tnfa.png}\\*
-\footnotesize{TNFA for $(a 1 bc)^+$.} \\
+\includegraphics[width=\linewidth]{img/fallback/tdfa0.png}\\*
+\small{TDFA(0) for $(a 1 bc)^+$.} \\
 \end{center}
+%\begin{center}
+%\includegraphics[width=\linewidth]{img/fallback/tdfa1_raw.png}\\*
+%\small{Construction of TDFA(1) for $(a 1 bc)^+$.} \\
+%\end{center}
 \begin{center}
-\includegraphics[width=\linewidth]{img/fallback/tdfa0_raw.png}\\*
-\footnotesize{Construction of TDFA(0) for $(a 1 bc)^+$.} \\
-\end{center}
-\begin{center}
-\includegraphics[width=0.8\linewidth]{img/fallback/tdfa0.png}\\*
-\footnotesize{TDFA(0) for $(a 1 bc)^+$.} \\
-\end{center}
-\begin{center}
-\includegraphics[width=\linewidth]{img/fallback/tdfa1_raw.png}\\*
-\footnotesize{Construction of TDFA(1) for $(a 1 bc)^+$.} \\
-\end{center}
-\begin{center}
-\includegraphics[width=0.8\linewidth]{img/fallback/tdfa1.png}\\*
-\footnotesize{TDFA(1) for $(a 1 bc)^+$.} \\
+\includegraphics[width=\linewidth]{img/fallback/tdfa1.png}\\*
+\small{TDFA(1) for $(a 1 bc)^+$.} \\
 \end{center}
 Consider execution of TDFA(0) on input string $abca$: after matching $abc$ in state 3 it will consume $a$ and transition to state 1,
 overwtiring register 3; then it will fail to match $b$ and backtrack.
@@ -2340,12 +2254,12 @@ all transitions from final state must backup it, and all fallback transitions mu
 For the above example the ``repaired'' automata look as follows
 (register 3 is renamed to 2, register 1 is backup, fallback transitions are not shown):
 \begin{center}
-\includegraphics[width=0.85\linewidth]{img/fallback/tdfa0_fallback.png}\\*
-\footnotesize{TDFA(0) with backup registers for $(a 1 bc)^+$.} \\
+\includegraphics[width=\linewidth]{img/fallback/tdfa0_fallback.png}\\*
+\small{TDFA(0) with backup registers for $(a 1 bc)^+$.} \\
 \end{center}
 \begin{center}
-\includegraphics[width=0.8\linewidth]{img/fallback/tdfa1_fallback.png}\\*
-\footnotesize{TDFA(1) with backup registers for $(a 1 bc)^+$.} \\
+\includegraphics[width=\linewidth]{img/fallback/tdfa1_fallback.png}\\*
+\small{TDFA(1) with backup registers for $(a 1 bc)^+$.} \\
 \end{center}
 Note that the total number of backup registers cannot exceed the number of tags:
 only the latest final state needs to be backuped,
@@ -2602,7 +2516,7 @@ and visualized on subsequent plots.
     \medskip
     Table 1: RFC-7230 compilant HTTP parser.\\*
     \medskip
-    \footnotesize{Total 39 tags: 34 simple and 5 with history.
+    \small{Total 39 tags: 34 simple and 5 with history.
     Nondeterminism for TDFA(0): 23 tags with degree 2, 12 tags with degree 3 and 1 tag with degree 4.
     Nondeterminism for TDFA(1): 18 tags with degree 2, 2 tags with degree 3.}
     \bigskip
@@ -2631,7 +2545,7 @@ and visualized on subsequent plots.
     \hline \hline
     \multicolumn{12}{|c|}{re2c -b} \\
     \hline
-    TDFA(0) & 18 & 70 & 32 & 15 & 19 & 31 & 31 & 7.12 & 7.31 & 31.85 & 17.47 \\
+    TDFA(0) & 18 & 70 & 31 & 15 & 19 & 31 & 31 & 7.12 & 7.31 & 31.85 & 17.47 \\
     TDFA(1) & 16 & 73 & 29 & 15 & 19 & 29 & 27 & 5.25 & 4.42 & 13.52 &  8.86 \\
     DFA     & -- & 69 & 19 & 11 & 15 & 15 & 15 & 4.66 & 3.96 & 11.00 &  5.79 \\
 %    TDFA(0) &  &  &           & 14392 & 18528 & 31336 & 30840 & 7.12 & 7.31 & 31.85 & 17.47 \\
@@ -2649,7 +2563,7 @@ and visualized on subsequent plots.
     \medskip
     Table 2: Simplified HTTP parser.\\*
     \medskip
-    \footnotesize{Total 15 tags: 12 simple and 3 with history.
+    \small{Total 15 tags: 12 simple and 3 with history.
     Nondeterminism for TDFA(0): 8 tags with degree 2.
     Nondeterminism for TDFA(1): 3 tags with degree 2.}
     \bigskip
@@ -2697,7 +2611,7 @@ and visualized on subsequent plots.
     \medskip
     Table 3: RFC-3986 compilant URI parser.\\*
     \medskip
-    \footnotesize{Total 20 tags (all simple).
+    \small{Total 20 tags (all simple).
     Nondeterminism for TDFA(0): 15 tags with degree 2 and 4 tags with degree 3.
     Nondeterminism for TDFA(1): 10 tags with degree 2.}
     \bigskip
@@ -2745,7 +2659,7 @@ and visualized on subsequent plots.
     \medskip
     Table 4: Simplified URI parser.\\*
     \medskip
-    \footnotesize{Total 14 tags (all simple).
+    \small{Total 14 tags (all simple).
     Nondeterminism for TDFA(0): 8 tags with degree 2 and 5 tags with degree 3.
     Nondeterminism for TDFA(1): 7 tags with degree 2.}
     \bigskip
