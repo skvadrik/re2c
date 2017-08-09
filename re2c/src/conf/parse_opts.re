@@ -111,6 +111,7 @@ opt_short:
 	"i" { opts.set_iFlag(true);           goto opt_short; }
 	"s" { opts.set_sFlag(true);           goto opt_short; }
 	"T" { opts.set_tags(true);            goto opt_short; }
+	"P" { opts.set_posix_captures(true);  goto opt_short; }
 	"e" { opts.set_encoding(Enc::EBCDIC); goto opt_short; }
 	"u" { opts.set_encoding(Enc::UTF32);  goto opt_short; }
 	"w" { opts.set_encoding(Enc::UCS2);   goto opt_short; }
