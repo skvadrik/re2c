@@ -1,5 +1,11 @@
-#include "src/conf/msg.h"
+#include "src/util/c99_stdint.h"
+#include <string>
+#include <vector>
+
 #include "src/ast/ast.h"
+#include "src/ast/scanner.h"
+#include "src/conf/msg.h"
+#include "src/re/rule.h"
 
 namespace re2c {
 

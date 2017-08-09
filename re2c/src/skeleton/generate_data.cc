@@ -1,20 +1,25 @@
-#include "src/util/c99_stdint.h"
 #include <assert.h>
 #include <stddef.h>
+#include "src/util/c99_stdint.h"
 #include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 #include <algorithm>
 #include <map>
 #include <string>
 #include <utility>
+#include <valarray>
 #include <vector>
 
 #include "src/conf/msg.h"
+#include "src/conf/opt.h"
+#include "src/dfa/tcmd.h"
 #include "src/re/encoding/enc.h"
+#include "src/re/rule.h"
+#include "src/re/tag.h"
 #include "src/skeleton/path.h"
 #include "src/skeleton/skeleton.h"
+#include "src/util/forbid_copy.h"
 #include "src/util/u32lim.h"
+#include "src/util/wrap_iter.h"
 
 namespace re2c
 {

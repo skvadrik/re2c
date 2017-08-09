@@ -14,6 +14,9 @@
 namespace re2c
 {
 
+struct Code;
+template <class _Ty> class free_list;
+
 struct ASTChar
 {
 	uint32_t chr;

@@ -1,4 +1,7 @@
 #include "src/re/encoding/enc.h"
+
+#include <stddef.h>
+
 #include "src/util/range.h"
 
 namespace re2c {

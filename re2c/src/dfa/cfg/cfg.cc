@@ -1,10 +1,18 @@
 #include <string.h>
+#include <algorithm>
+#include <new>
+#include <valarray>
+#include <vector>
 
 #include "src/dfa/cfg/cfg.h"
+#include "src/dfa/dfa.h"
 #include "src/util/allocate.h"
 
 namespace re2c
 {
+
+struct Rule;
+struct tcmd_t;
 
 static void map_arcs_to_bblocks(const dfa_t &dfa, cfg_ix_t *arc2bb, cfg_ix_t &nbbarc, cfg_ix_t &nbbfin, cfg_ix_t &nbbfall);
 static cfg_bb_t *create_bblocks(dfa_t &dfa, const cfg_ix_t *arc2bb, cfg_ix_t nbbfin, cfg_ix_t nbbfall);

@@ -1,6 +1,7 @@
 #ifndef _RE2C_CONF_WARN_
 #define _RE2C_CONF_WARN_
 
+#include <stddef.h>
 #include "src/util/c99_stdint.h"
 #include <string>
 #include <vector>
@@ -10,6 +11,7 @@
 namespace re2c {
 
 class path_t;
+struct Rule;
 struct Skeleton;
 
 #define RE2C_WARNING_TYPES \

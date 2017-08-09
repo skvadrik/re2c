@@ -1,13 +1,14 @@
 #include <assert.h>
+#include <algorithm>
+#include <limits>
 #include <queue>
 #include <set>
-#include <vector>
 #include <utility>
+#include <vector>
 
-#include "src/code/go.h"
 #include "src/adfa/adfa.h"
+#include "src/code/go.h"
 #include "src/dfa/dfa.h"
-#include "src/skeleton/skeleton.h"
 #include "src/util/allocate.h"
 
 namespace re2c

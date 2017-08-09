@@ -1,7 +1,9 @@
 #ifndef _RE2C_CODE_INPUT_API_
 #define _RE2C_CODE_INPUT_API_
 
+#include <stddef.h>
 #include "src/util/c99_stdint.h"
+#include <iosfwd>
 #include <string>
 
 namespace re2c

@@ -1,11 +1,21 @@
 #ifndef _RE2C_DFA_DUMP_
 #define _RE2C_DFA_DUMP_
 
+#include <stddef.h>
+#include "src/util/c99_stdint.h"
+
 #include "src/dfa/closure.h"
 #include "src/dfa/dfa.h"
+#include "src/util/forbid_copy.h"
 
 namespace re2c
 {
+
+struct Tagpool;
+struct dfa_t;
+struct nfa_state_t;
+struct nfa_t;
+struct tcmd_t;
 
 struct dump_dfa_t
 {

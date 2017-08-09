@@ -1,9 +1,8 @@
 #ifndef _RE2C_CODE_LABEL_
 #define _RE2C_CODE_LABEL_
 
-#include <iosfwd> // ostream
-
 #include "src/util/c99_stdint.h"
+#include <iosfwd> // ostream
 
 namespace re2c {
 

@@ -1,22 +1,34 @@
+#include <stddef.h>
+#include "src/util/c99_stdint.h"
 #include <algorithm>
 #include <ostream>
-#include <set>
+#include <string>
+#include <vector>
 
-#include "src/code/output.h"
-#include "src/conf/msg.h"
-#include "src/compile.h"
 #include "src/adfa/adfa.h"
 #include "src/adfa/dump.h"
+#include "src/ast/ast.h"
 #include "src/ast/parser.h"
+#include "src/ast/scanner.h"
+#include "src/code/label.h"
+#include "src/code/output.h"
+#include "src/compile.h"
+#include "src/conf/opt.h"
 #include "src/dfa/dfa.h"
 #include "src/dfa/dump.h"
 #include "src/nfa/nfa.h"
 #include "src/re/encoding/range_suffix.h"
+#include "src/re/re.h"
+#include "src/re/rule.h"
 #include "src/skeleton/skeleton.h"
-#include "src/ast/ast.h"
+#include "src/util/counter.h"
+#include "src/util/free_list.h"
+#include "src/util/range.h"
 #include "src/util/smart_ptr.h"
 
 namespace re2c {
+
+class Warn;
 
 static std::string make_name(const std::string &cond, uint32_t line)
 {

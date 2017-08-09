@@ -1,5 +1,7 @@
+#include "src/util/c99_stdint.h"
 #include <stdlib.h> // malloc
 #include <string.h> // memcpy, memcmp
+#include <algorithm>
 
 #include "src/dfa/tagpool.h"
 #include "src/util/hash32.h"

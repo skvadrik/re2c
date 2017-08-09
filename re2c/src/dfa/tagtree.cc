@@ -1,6 +1,5 @@
 #include <assert.h>
 #include <stdlib.h>
-#include <string.h>
 
 #include "src/dfa/tagtree.h"
 

@@ -1,10 +1,25 @@
+#include <stddef.h>
+#include "src/util/c99_stdint.h"
+#include <algorithm>
+#include <set>
+#include <string>
+#include <utility>
+#include <valarray>
+#include <vector>
+
+#include "src/ast/ast.h"
 #include "src/conf/msg.h"
-#include "src/re/re.h"
+#include "src/conf/opt.h"
+#include "src/conf/warn.h"
 #include "src/re/empty_class_policy.h"
 #include "src/re/encoding/case.h"
 #include "src/re/encoding/enc.h"
 #include "src/re/encoding/utf16/utf16_regexp.h"
 #include "src/re/encoding/utf8/utf8_regexp.h"
+#include "src/re/re.h"
+#include "src/re/rule.h"
+#include "src/re/tag.h"
+#include "src/util/range.h"
 
 namespace re2c {
 

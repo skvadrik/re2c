@@ -1,6 +1,11 @@
+#include "src/util/c99_stdint.h"
 #include <stdio.h>
+#include <string>
+#include <vector>
 
 #include "src/nfa/nfa.h"
+#include "src/re/tag.h"
+#include "src/util/range.h"
 
 namespace re2c
 {

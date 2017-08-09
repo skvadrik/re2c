@@ -1,12 +1,19 @@
+#include <assert.h>
 #include "src/util/c99_stdint.h"
 #include <string.h>
-#include <map>
+#include <algorithm>
+#include <utility>
+#include <valarray>
+#include <vector>
 
+#include "src/adfa/action.h"
+#include "src/adfa/adfa.h"
 #include "src/code/bitmap.h"
 #include "src/code/go.h"
 #include "src/conf/msg.h"
-#include "src/adfa/action.h"
-#include "src/adfa/adfa.h"
+#include "src/conf/opt.h"
+#include "src/dfa/tcmd.h"
+#include "src/re/rule.h"
 #include "src/util/allocate.h"
 
 namespace re2c {

@@ -5,9 +5,12 @@
 #include <utility>
 #include <vector>
 
+#include "src/adfa/action.h"
+#include "src/adfa/adfa.h"
 #include "src/code/bitmap.h"
 #include "src/code/go.h"
-#include "src/adfa/adfa.h"
+#include "src/conf/opt.h"
+#include "src/dfa/tcmd.h"
 #include "src/util/allocate.h"
 
 namespace re2c

@@ -1,10 +1,10 @@
 #ifndef _RE2C_CONF_MSG_
 #define _RE2C_CONF_MSG_
 
+#include "src/util/c99_stdint.h"
 #include <string>
 
 #include "src/util/attribute.h"
-#include "src/util/c99_stdint.h"
 
 namespace re2c {
 

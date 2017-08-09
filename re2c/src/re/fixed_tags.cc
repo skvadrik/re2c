@@ -1,4 +1,10 @@
+#include <stddef.h>
+#include <vector>
+
+#include "src/code/input_api.h"
+#include "src/conf/opt.h"
 #include "src/re/re.h"
+#include "src/re/tag.h"
 
 namespace re2c {
 

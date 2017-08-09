@@ -1,13 +1,26 @@
 #ifndef _RE2C_DFA_FIND_STATE_
 #define _RE2C_DFA_FIND_STATE_
 
+#include <stddef.h>
+#include "src/util/c99_stdint.h"
+#include <vector>
+
 #include "src/dfa/closure.h"
 #include "src/dfa/dump.h"
+#include "src/dfa/tagtree.h"
+#include "src/re/tag.h"
 #include "src/util/forbid_copy.h"
 #include "src/util/lookup.h"
 
 namespace re2c
 {
+
+class tcpool_t;
+struct Tagpool;
+struct dfa_t;
+struct dump_dfa_t;
+struct nfa_state_t;
+struct tcmd_t;
 
 struct kernel_t
 {

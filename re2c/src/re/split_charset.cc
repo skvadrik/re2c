@@ -1,8 +1,12 @@
 #include "src/util/c99_stdint.h"
 #include <set>
 #include <stack>
+#include <vector>
 
+#include "src/conf/opt.h"
+#include "src/re/encoding/enc.h"
 #include "src/re/re.h"
+#include "src/util/range.h"
 
 namespace re2c {
 

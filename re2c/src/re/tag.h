@@ -1,11 +1,11 @@
 #ifndef _RE2C_RE_TAG_
 #define _RE2C_RE_TAG_
 
+#include <stddef.h>
+#include "src/util/c99_stdint.h"
 #include <limits>
 #include <string>
 #include <vector>
-
-#include "src/util/c99_stdint.h"
 
 namespace re2c
 {

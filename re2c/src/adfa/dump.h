@@ -6,6 +6,8 @@
 namespace re2c
 {
 
+struct DFA;
+
 void dump_adfa(const DFA &dfa);
 
 } // namespace re2c

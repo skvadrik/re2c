@@ -1,8 +1,8 @@
 #ifndef _RE2C_CODE_OUTPUT_
 #define _RE2C_CODE_OUTPUT_
 
-#include "src/util/c99_stdint.h"
 #include <stddef.h>
+#include "src/util/c99_stdint.h"
 #include <stdio.h>
 #include <fstream>
 #include <set>
@@ -19,6 +19,11 @@
 
 namespace re2c
 {
+
+class Warn;
+struct Opt;
+struct opt_t;
+template <typename value_t> class uniq_vector_t;
 
 struct ConfTags
 {

@@ -1,18 +1,23 @@
-#include "src/util/c99_stdint.h"
 #include <stddef.h>
+#include "src/util/c99_stdint.h"
+#include <ostream>
 #include <set>
 #include <string>
 #include <utility>
+#include <valarray>
 #include <vector>
 
+#include "src/adfa/action.h"
+#include "src/adfa/adfa.h"
 #include "src/code/bitmap.h"
 #include "src/code/emit.h"
 #include "src/code/go.h"
 #include "src/code/input_api.h"
 #include "src/code/label.h"
 #include "src/code/output.h"
-#include "src/adfa/action.h"
-#include "src/adfa/adfa.h"
+#include "src/conf/opt.h"
+#include "src/re/rule.h"
+#include "src/re/tag.h"
 #include "src/skeleton/skeleton.h"
 #include "src/util/counter.h"
 #include "src/util/string_utils.h"

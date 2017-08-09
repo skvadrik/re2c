@@ -4,13 +4,16 @@
 #include <set>
 #include <string>
 
-#include "src/conf/msg.h"
 #include "src/ast/ast.h"
-#include "src/conf/opt.h"
 #include "src/ast/scanner.h"
+#include "src/conf/msg.h"
+#include "src/conf/opt.h"
 
 namespace re2c
 {
+
+class Scanner;
+struct Opt;
 
 typedef std::set<std::string> CondList;
 

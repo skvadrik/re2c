@@ -1,9 +1,10 @@
-#include <map>
 #include <string.h>
+#include <map>
 #include <utility>
 #include <vector>
 
 #include "src/dfa/dfa.h"
+#include "src/dfa/tcmd.h"
 
 namespace re2c
 {

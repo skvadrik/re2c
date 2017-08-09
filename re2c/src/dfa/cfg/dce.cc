@@ -1,4 +1,7 @@
 #include "src/dfa/cfg/cfg.h"
+#include "src/dfa/dfa.h"
+#include "src/dfa/tcmd.h"
+#include "src/re/tag.h"
 
 namespace re2c
 {

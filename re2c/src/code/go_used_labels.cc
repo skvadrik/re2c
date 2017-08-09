@@ -1,15 +1,14 @@
 #include <stddef.h>
 #include "src/util/c99_stdint.h"
 #include <set>
-#include <utility>
-#include <vector>
 
-#include "src/code/go.h"
-#include "src/code/label.h"
 #include "src/adfa/adfa.h"
+#include "src/code/go.h"
 
 namespace re2c
 {
+
+class label_t;
 
 void Cases::used_labels (std::set<label_t> & used) const
 {

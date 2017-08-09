@@ -1,11 +1,12 @@
 #include <stddef.h>
 #include <stdio.h>
 #include <algorithm>
-#include <utility>
+#include <set>
 
 #include "src/conf/msg.h"
 #include "src/conf/warn.h"
 #include "src/skeleton/path.h"
+#include "src/re/rule.h"
 #include "src/skeleton/skeleton.h"
 
 namespace re2c {

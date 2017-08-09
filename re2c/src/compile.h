@@ -8,6 +8,10 @@
 namespace re2c
 {
 
+class Scanner;
+struct Opt;
+struct Output;
+
 void compile(Scanner &input, Output &output, Opt &opts);
 
 } // namespace re2c

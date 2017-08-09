@@ -1,9 +1,20 @@
+#include <assert.h>
+#include "src/util/c99_stdint.h"
+#include <stdlib.h>
 #include <string.h>
+#include <algorithm>
+#include <set>
+#include <stack>
+#include <utility>
+#include <valarray>
 
+#include "src/conf/opt.h"
 #include "src/dfa/closure.h"
+#include "src/dfa/dfa.h"
 #include "src/dfa/tagpool.h"
+#include "src/dfa/tcmd.h"
 #include "src/nfa/nfa.h"
-#include "src/util/local_increment.h"
+#include "src/re/rule.h"
 
 namespace re2c
 {

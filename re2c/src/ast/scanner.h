@@ -1,22 +1,27 @@
 #ifndef _RE2C_AST_SCANNER_
 #define _RE2C_AST_SCANNER_
 
-#include "src/util/c99_stdint.h"
 #include <stddef.h>
+#include "src/util/c99_stdint.h"
+#include <sys/types.h>
 #include <string>
 
+#include "src/ast/input.h"
 #include "src/conf/opt.h"
 #include "src/conf/warn.h"
-#include "src/ast/input.h"
+#include "src/re/encoding/enc.h"
 #include "src/util/attribute.h"
 #include "src/util/forbid_copy.h"
 
 namespace re2c
 {
 
+class Warn;
+struct Opt;
+struct conopt_t;
+class OutputFile;
 class Range;
 struct AST;
-class OutputFile;
 
 struct ScannerState
 {

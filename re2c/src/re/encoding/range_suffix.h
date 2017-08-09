@@ -1,8 +1,8 @@
 #ifndef _RE2C_RE_ENCODING_RANGE_SUFFIX_
 #define _RE2C_RE_ENCODING_RANGE_SUFFIX_
 
-#include "src/util/c99_stdint.h"
 #include <stddef.h> // NULL
+#include "src/util/c99_stdint.h"
 
 #include "src/re/re.h"
 #include "src/util/forbid_copy.h"

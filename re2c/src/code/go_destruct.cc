@@ -1,6 +1,4 @@
 #include "src/util/c99_stdint.h"
-#include <utility>
-#include <vector>
 
 #include "src/code/go.h"
 

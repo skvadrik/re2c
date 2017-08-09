@@ -1,14 +1,25 @@
-#include <limits>
+#include <assert.h>
+#include "src/util/c99_stdint.h"
 #include <string.h>
+#include <algorithm>
+#include <limits>
+#include <set>
+#include <string>
+#include <valarray>
 #include <vector>
 
 #include "src/conf/opt.h"
+#include "src/conf/warn.h"
 #include "src/dfa/closure.h"
 #include "src/dfa/dfa.h"
 #include "src/dfa/dump.h"
 #include "src/dfa/find_state.h"
 #include "src/dfa/tagpool.h"
+#include "src/dfa/tagtree.h"
+#include "src/dfa/tcmd.h"
 #include "src/nfa/nfa.h"
+#include "src/re/rule.h"
+#include "src/re/tag.h"
 #include "src/util/range.h"
 
 namespace re2c

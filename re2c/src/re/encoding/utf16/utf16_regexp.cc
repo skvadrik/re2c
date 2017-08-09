@@ -1,8 +1,9 @@
+#include <stddef.h>
 #include "src/util/c99_stdint.h"
 
-#include "src/re/encoding/utf16/utf16_regexp.h"
 #include "src/re/encoding/range_suffix.h"
 #include "src/re/encoding/utf16/utf16_range.h"
+#include "src/re/encoding/utf16/utf16_regexp.h"
 #include "src/util/range.h"
 
 namespace re2c {

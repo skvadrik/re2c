@@ -1,14 +1,21 @@
 #ifndef _RE2C_DFA_CLOSURE_
 #define _RE2C_DFA_CLOSURE_
 
-#include "src/util/c99_stdint.h"
+#include <stddef.h>
 #include <map>
+#include <vector>
 
 #include "src/dfa/dfa.h"
+#include "src/dfa/tagtree.h"
 #include "src/nfa/nfa.h"
+#include "src/re/tag.h"
 
 namespace re2c
 {
+
+struct Tagpool;
+struct dfa_t;
+struct tcmd_t;
 
 struct clos_t
 {

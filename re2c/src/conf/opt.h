@@ -1,8 +1,8 @@
 #ifndef _RE2C_CONF_OPT_
 #define _RE2C_CONF_OPT_
 
-#include "src/util/c99_stdint.h"
 #include <stddef.h>
+#include "src/util/c99_stdint.h"
 #include <string>
 
 #include "src/code/input_api.h"
@@ -14,6 +14,8 @@
 
 namespace re2c
 {
+
+class Warn;
 
 enum target_t
 {

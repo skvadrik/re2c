@@ -7,26 +7,31 @@
 #include <map>
 #include <set>
 #include <string>
+#include <utility>
 #include <valarray>
 #include <vector>
-#include <utility>
 
 #include "src/code/bitmap.h"
 #include "src/conf/opt.h"
 #include "src/dfa/tcmd.h"
 #include "src/re/rule.h"
-#include "src/util/local_increment.h"
+#include "src/re/tag.h"
 #include "src/util/forbid_copy.h"
+#include "src/util/local_increment.h"
 #include "src/util/wrap_iter.h"
 
 namespace re2c
 {
 
-struct dfa_t;
-struct dfa_state_t;
-struct DFA;
 class OutputFile;
 class path_t;
+struct DFA;
+struct dfa_state_t;
+struct dfa_t;
+class Warn;
+class bitmaps_t;
+struct opt_t;
+struct tcmd_t;
 
 typedef local_increment_t<uint8_t> local_inc;
 

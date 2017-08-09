@@ -1,7 +1,18 @@
+#include "src/util/c99_stdint.h"
 #include <stdio.h>
+#include <string>
+#include <utility>
+#include <valarray>
+#include <vector>
 
-#include "src/dfa/dump.h"
+#include "src/adfa/action.h"
+#include "src/adfa/adfa.h"
 #include "src/adfa/dump.h"
+#include "src/code/go.h"
+#include "src/dfa/dump.h"
+#include "src/dfa/tcmd.h"
+#include "src/re/rule.h"
+#include "src/re/tag.h"
 
 namespace re2c
 {

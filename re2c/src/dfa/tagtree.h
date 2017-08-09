@@ -1,6 +1,9 @@
 #ifndef _RE2C_DFA_TAGTREE_
 #define _RE2C_DFA_TAGTREE_
 
+#include <stddef.h>
+#include "src/util/c99_stdint.h"
+#include <sys/types.h>
 #include <vector>
 
 #include "src/re/tag.h"

@@ -1,6 +1,12 @@
+#include "src/util/c99_stdint.h"
+#include <stdio.h>
+#include <map>
+#include <utility>
 #include <valarray>
 #include <vector>
 
+#include "src/conf/warn.h"
+#include "src/re/rule.h"
 #include "src/skeleton/path.h"
 #include "src/skeleton/skeleton.h"
 #include "src/util/u32lim.h"

@@ -1,13 +1,8 @@
 #include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
-#include <new>
 
-#include "src/conf/msg.h"
-#include "src/code/label.h"
-#include "src/code/output.h"
 #include "src/ast/scanner.h"
-#include "src/util/counter.h"
+#include "src/conf/msg.h"
 
 // used by Scanner::fatal_at and Scanner::fatalf
 #if defined(_MSC_VER) && !defined(vsnprintf)
@@ -15,6 +10,8 @@
 #endif
 
 namespace re2c {
+
+class Warn;
 
 const uint32_t Scanner::BSIZE = 8192;
 

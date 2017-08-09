@@ -1,14 +1,18 @@
-#include "src/util/c99_stdint.h"
 #include <stddef.h>
-#include <algorithm>
+#include "src/util/c99_stdint.h"
 #include <set>
 #include <string>
+#include <valarray>
+#include <vector>
 
+#include "src/adfa/adfa.h"
 #include "src/code/bitmap.h"
 #include "src/code/emit.h"
 #include "src/code/output.h"
+#include "src/conf/opt.h"
 #include "src/re/encoding/enc.h"
-#include "src/adfa/adfa.h"
+#include "src/re/rule.h"
+#include "src/re/tag.h"
 #include "src/skeleton/skeleton.h"
 
 namespace re2c

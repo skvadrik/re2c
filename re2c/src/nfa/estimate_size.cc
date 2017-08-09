@@ -1,4 +1,9 @@
-#include "src/nfa/nfa.h"
+
+#include <stddef.h>
+#include <vector>
+
+#include "src/ast/ast.h"
+#include "src/re/re.h"
 
 namespace re2c {
 

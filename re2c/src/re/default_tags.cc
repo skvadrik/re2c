@@ -1,3 +1,6 @@
+#include <stddef.h>
+#include <vector>
+
 #include "src/re/re.h"
 
 namespace re2c {

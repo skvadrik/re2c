@@ -1,20 +1,29 @@
-#include "src/util/c99_stdint.h"
+#include <assert.h>
 #include <stddef.h>
+#include "src/util/c99_stdint.h"
+#include <iosfwd>
 #include <set>
 #include <string>
+#include <utility>
+#include <valarray>
+#include <vector>
 
-#include "src/code/emit.h"
-#include "src/code/input_api.h"
-#include "src/code/output.h"
 #include "src/adfa/action.h"
 #include "src/adfa/adfa.h"
+#include "src/code/emit.h"
+#include "src/code/go.h"
+#include "src/code/input_api.h"
+#include "src/code/label.h"
+#include "src/code/output.h"
+#include "src/conf/opt.h"
+#include "src/dfa/tcmd.h"
+#include "src/re/rule.h"
+#include "src/re/tag.h"
 #include "src/skeleton/skeleton.h"
 #include "src/util/string_utils.h"
 
 namespace re2c
 {
-
-class label_t;
 
 static void need               (OutputFile &o, uint32_t ind, size_t some);
 static void emit_accept_binary (OutputFile &o, uint32_t ind, const DFA &dfa, const accept_t &acc, size_t l, size_t r);

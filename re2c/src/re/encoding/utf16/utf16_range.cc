@@ -1,4 +1,7 @@
 #include "src/re/encoding/utf16/utf16_range.h"
+
+#include <stddef.h>
+
 #include "src/re/encoding/range_suffix.h"
 
 namespace re2c {

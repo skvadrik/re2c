@@ -8,10 +8,10 @@
 
 namespace re2c {
 
+class OutputFile;
 struct Go;
 struct Span;
 struct State;
-class OutputFile;
 
 struct bitmap_t
 {

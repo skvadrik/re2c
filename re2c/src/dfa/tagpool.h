@@ -1,17 +1,19 @@
 #ifndef _RE2C_DFA_TAGPOOL_
 #define _RE2C_DFA_TAGPOOL_
 
+#include <stddef.h>
 #include <stack>
 
 #include "src/dfa/closure.h"
 #include "src/dfa/tagtree.h"
 #include "src/re/tag.h"
-#include "src/util/lookup.h"
 #include "src/util/forbid_copy.h"
+#include "src/util/lookup.h"
 
 namespace re2c
 {
 
+struct nfa_state_t;
 struct opt_t;
 
 static const size_t ZERO_TAGS = 0;

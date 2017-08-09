@@ -1,6 +1,11 @@
+#include <stddef.h>
 #include "src/util/c99_stdint.h"
 #include <algorithm>
 #include <limits>
+#include <map>
+#include <string>
+#include <utility>
+#include <vector>
 
 #include "src/conf/msg.h"
 #include "src/skeleton/skeleton.h"

@@ -1,13 +1,14 @@
 #ifndef _RE2C_RE_RULE_
 #define _RE2C_RE_RULE_
 
+#include <stddef.h>
 #include "src/util/c99_stdint.h"
 #include <set>
 #include <string>
 
 #include "src/re/tag.h"
-#include "src/util/free_list.h"
 #include "src/util/forbid_copy.h"
+#include "src/util/free_list.h"
 
 namespace re2c
 {

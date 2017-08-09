@@ -2,6 +2,7 @@
 
 set -e
 
+echo 'RUNME: configure CXX=include-what-you-use CXXFLAGS="--check-also" && make -k 2>log && python2 `which fix_inclydes.py` < log'
 echo 'RUNME: cppcheck --enable=all --inconclusive --std=posix --quiet --force -I. src/'
 echo 'RUNME: for h in $(find src/ -name ''*.h*''); do echo "CHECKING $h"; g++ -I. -c $h -o foo.o; done'
 echo "RUNME: uselex `find <objdir> -type f -name '*.o'`"

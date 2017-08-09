@@ -1,4 +1,8 @@
+#include <string>
+#include <vector>
+
 #include "src/ast/ast.h"
+#include "src/re/rule.h"
 
 namespace re2c {
 

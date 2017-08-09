@@ -1,7 +1,16 @@
+#include <assert.h>
+#include <stdlib.h>
 #include <string.h>
+#include <algorithm>
+#include <valarray>
 
+#include "src/dfa/dfa.h"
+#include "src/dfa/dump.h"
 #include "src/dfa/find_state.h"
 #include "src/dfa/tagpool.h"
+#include "src/dfa/tcmd.h"
+#include "src/nfa/nfa.h"
+#include "src/re/rule.h"
 #include "src/util/hash32.h"
 
 namespace re2c

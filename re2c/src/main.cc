@@ -1,12 +1,10 @@
-#include "src/util/c99_stdint.h"
-#include <string>
-
+#include "src/ast/input.h"
+#include "src/ast/scanner.h"
+#include "src/code/output.h"
 #include "src/compile.h"
 #include "src/conf/msg.h"
 #include "src/conf/opt.h"
 #include "src/conf/warn.h"
-#include "src/ast/input.h"
-#include "src/ast/scanner.h"
 
 using namespace re2c;
 

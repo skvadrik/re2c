@@ -1,9 +1,11 @@
-#include <algorithm> // min
 #include <string.h> // memset
+#include <algorithm> // min
 
 #include "src/code/bitmap.h"
 #include "src/code/go.h"
 #include "src/code/output.h"
+#include "src/conf/opt.h"
+#include "src/dfa/tcmd.h"
 
 namespace re2c
 {

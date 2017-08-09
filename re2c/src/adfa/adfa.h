@@ -6,11 +6,13 @@
 #include <set>
 #include <string>
 #include <valarray>
+#include <vector>
 
+#include "src/adfa/action.h"
 #include "src/code/bitmap.h"
 #include "src/code/go.h"
 #include "src/code/label.h"
-#include "src/adfa/action.h"
+#include "src/dfa/tcmd.h"
 #include "src/re/rule.h"
 #include "src/re/tag.h"
 #include "src/util/forbid_copy.h"
@@ -18,8 +20,9 @@
 namespace re2c
 {
 
-struct Output;
+struct opt_t;
 class OutputFile;
+struct Output;
 struct dfa_t;
 
 struct State

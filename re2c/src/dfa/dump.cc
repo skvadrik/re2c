@@ -1,7 +1,18 @@
 #include <stdio.h>
+#include <stdlib.h>
+#include <string>
+#include <valarray>
+#include <vector>
 
+#include "src/conf/opt.h"
+#include "src/dfa/dfa.h"
 #include "src/dfa/dump.h"
 #include "src/dfa/tagpool.h"
+#include "src/dfa/tagtree.h"
+#include "src/dfa/tcmd.h"
+#include "src/nfa/nfa.h"
+#include "src/re/rule.h"
+#include "src/re/tag.h"
 
 namespace re2c
 {

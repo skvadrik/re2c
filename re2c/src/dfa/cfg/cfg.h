@@ -1,10 +1,17 @@
 #ifndef _RE2C_DFA_CFG_CFG_
 #define _RE2C_DFA_CFG_CFG_
 
-#include "src/util/forbid_copy.h"
+#include "src/util/c99_stdint.h"
+
 #include "src/dfa/dfa.h"
+#include "src/re/tag.h"
+#include "src/util/forbid_copy.h"
 
 namespace re2c {
+
+struct Rule;
+struct dfa_t;
+struct tcmd_t;
 
 typedef uint32_t cfg_ix_t;
 

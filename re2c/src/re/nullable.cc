@@ -1,4 +1,12 @@
+#include <stddef.h>
+#include <string>
+#include <valarray>
+#include <vector>
+
+#include "src/conf/warn.h"
 #include "src/re/re.h"
+#include "src/re/rule.h"
+#include "src/re/tag.h"
 
 namespace re2c {
 

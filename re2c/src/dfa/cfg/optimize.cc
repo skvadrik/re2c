@@ -1,5 +1,9 @@
+#include <stddef.h>
+#include "src/util/c99_stdint.h"
+
 #include "src/dfa/cfg/cfg.h"
 #include "src/dfa/dfa.h"
+#include "src/re/tag.h"
 
 namespace re2c
 {

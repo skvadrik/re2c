@@ -4,14 +4,15 @@
 #include <utility>
 #include <vector>
 
+#include "src/adfa/adfa.h"
 #include "src/code/bitmap.h"
-#include "src/code/go.h"
 #include "src/code/emit.h"
-#include "src/code/input_api.h"
+#include "src/code/go.h"
 #include "src/code/label.h"
 #include "src/code/output.h"
 #include "src/code/print.h"
-#include "src/adfa/adfa.h"
+#include "src/conf/opt.h"
+#include "src/dfa/tcmd.h"
 #include "src/re/encoding/enc.h"
 
 namespace re2c

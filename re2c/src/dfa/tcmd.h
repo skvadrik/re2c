@@ -1,9 +1,11 @@
 #ifndef _RE2C_DFA_TCMD_
 #define _RE2C_DFA_TCMD_
 
+#include <stddef.h>
+#include "src/util/c99_stdint.h"
+
 #include "src/dfa/tagtree.h"
 #include "src/re/tag.h"
-#include "src/util/c99_stdint.h"
 #include "src/util/forbid_copy.h"
 #include "src/util/lookup.h"
 #include "src/util/slab_allocator.h"

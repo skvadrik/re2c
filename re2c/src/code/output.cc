@@ -2,11 +2,17 @@
 #include <time.h>
 #include <iomanip>
 
+#include "config.h"
 #include "src/code/emit.h"
+#include "src/code/input_api.h"
 #include "src/code/output.h"
 #include "src/code/print.h"
 #include "src/conf/msg.h"
+#include "src/conf/opt.h"
+#include "src/conf/warn.h"
+#include "src/re/encoding/enc.h"
 #include "src/util/string_utils.h"
+#include "src/util/uniq_vector.h"
 
 namespace re2c
 {
