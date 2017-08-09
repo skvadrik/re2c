@@ -1,14 +1,10 @@
 \documentclass{article}
 \usepackage[margin=2cm]{geometry}
-\usepackage{lipsum}
-\usepackage{amsmath}
-\usepackage{amssymb}
-\usepackage{amsthm}
-\usepackage{amsfonts}
+\usepackage{amsmath,amssymb,amsthm,amsfonts}
 \usepackage[utf8]{inputenc}
 \usepackage{graphicx}
 \usepackage{caption}
-\usepackage{listings}
+\usepackage{url}
 \usepackage{multicol}\setlength{\columnsep}{1cm}
 %\usepackage[vlined]{algorithm2e}\setlength{\algomargin}{0em}\SetArgSty{textnormal}
 \usepackage[noline,noend]{algorithm2e}
@@ -16,8 +12,6 @@
     \SetArgSty{textnormal}
     \SetNoFillComment
     \newcommand{\Xcmfont}[1]{\texttt{\footnotesize{#1}}}\SetCommentSty{Xcmfont}
-
-\setlength{\parindent}{0pt}
 
 \usepackage{enumitem}
 \setlist{nosep}
@@ -40,6 +34,8 @@
 \newenvironment{Xtab}
     {\par\medskip\noindent\minipage{\linewidth}\begin{center}}
     {\end{center}\endminipage\par\medskip}
+
+\setlength{\parindent}{0pt}
 
 \newcommand{\Xset}{\!\leftarrow\!}
 \newcommand{\Xund}{\rule{.4em}{.4pt}} % underscore
@@ -80,8 +76,9 @@
 \newtheorem{Xobs}{Observation}
 
 \title{Tagged Deterministic Finite Automata with Lookahead}
-\author{Ulya Trofimivich}
-\date{March 2017}
+\author{Ulya Trofimovich\\
+\texttt{\small{skvadrik@.gmail.com}}}
+\date{August 2017}
 
 \begin{document}
 
@@ -89,7 +86,8 @@
 
 \begin{abstract}
 \noindent
-This paper extends the work of Laurikari [Lau00] [Lau01] and Kuklewicz [Kuk??] on tagged deterministic finite automata (TDFA)
+This paper extends the work of Laurikari \cite{Lau00} \cite{Lau01}
+and Kuklewicz \cite{Kuk07} on tagged deterministic finite automata (TDFA)
 in the context of submatch extraction in regular expressions.
 The main goal of this work is application of TDFA to lexer generators that optimize for speed of the generated code.
 I suggest a number of practical improvements to Laurikari algorithm;
@@ -102,13 +100,13 @@ I formalize POSIX disambiguation algorithm suggested by Kuklewicz
 and show that the resulting TDFA are as efficient as Laurikari TDFA or TDFA that use leftmost greedy disambiguation.
 All discussed algorithms are implemented in the open source lexer generator RE2C.
 \end{abstract}
-%\vspace{1em}
+\vspace{1em}
 
 \begin{multicols}{2}
 
 \section*{Introduction}
 
-RE2C [Bum94] [web??] is a lexer generator for C: it compiles regular expressions into C code.
+RE2C is a lexer generator for C: it compiles regular expressions into C code \cite{BC93} \cite{RE2C}.
 Unlike regular expression libraries, lexer generators separate compilation and execution steps:
 they can spend considerable amount of time on compilation in order to optimize the generated code.
 Consequently, lexer generators are usually aimed at generating efficient code rather than supporting multiple extensions;
@@ -149,6 +147,7 @@ Take, for example, regular expression \texttt{a*b*}
 and suppose that we must find the position between \texttt{a} and \texttt{b} in the input string.
 The programmer would probably match all \texttt{a}, then save the input position, then match all \texttt{b}:
 
+\begin{Xfig}
 \begin{small}
 \begin{verbatim}
     while (*s++ == 'a') ;
@@ -156,9 +155,11 @@ The programmer would probably match all \texttt{a}, then save the input position
     while (*s++ == 'b') ;
 \end{verbatim}
 \end{small}
+\end{Xfig}
 
-And this is how the automaton would do:
+And this corresponds to automaton behavior:
 
+\begin{Xfig}
 \begin{small}
 \begin{verbatim}
     p = s;
@@ -166,6 +167,7 @@ And this is how the automaton would do:
     while (*s++ == 'b') ;
 \end{verbatim}
 \end{small}
+\end{Xfig}
 
 This behavior is correct (it yields the same result), but strangely inefficient:
 it repeatedly saves input position after every \texttt{a},
@@ -177,19 +179,17 @@ they ignore lookahead when recording submatches.
 But they don't have to; with a minor fix we can teach them
 to delay recording until the right lookahead symbol shows up.
 This minor fix is my first contribution.
-\\
-
+\\ \\
 Another problem that needs attention is disambiguation.
-The original paper [Lau01] claims to have POSIX semantics, but it was proved to be wrong [LTU].
-Since then Kuklewicz suggested a fix for Laurikari algorithm that does have POSIX semantics [Regex-TDFA], but he never formalized the resulting algorithm.
-The informal description [regex-wiki] is somewhat misleading as it suggests that Kuklewicz automata
+The original paper \cite{Lau01} claims to have POSIX semantics, but it was proved to be wrong \cite{LTU}.
+Since then Kuklewicz suggested a fix for Laurikari algorithm that does have POSIX semantics \cite{Regex-TDFA}, but he never formalized the resulting algorithm.
+The informal description \cite{Kuk07} is somewhat misleading as it suggests that Kuklewicz automata
 require additional run-time operations to keep track of submatch history and hence are less efficient than Laurikari automata.
 That is not true, as we shall see: all the added complexity is related to determinization,
 while the resulting automata are just the same (except they have POSIX semantics).
 Kuklewicz did not emphasize this, probably because his implementation constructs TDFA lazily at run-time.
 I formalize Kuklewicz algorithm; this is my second contribution.
-\\
-
+\\ \\
 Finally, theory is no good without practice.
 Even lookahead-aware automata contain redundant operations
 which can be reduced by basic optimizations like liveness analysis and dead code elimination.
@@ -197,8 +197,7 @@ The overall number of submatch records can be minimized using technique similar 
 I suggest another tweak of Laurikari algorithm that makes optimizations particularly easy
 and show that they are useful even in the presence of an optimizing C compiler.
 RE2C implementation of submatch extraction is the motivation and the main goal of this work.
-\\
-
+\\ \\
 The rest of this paper is arranged as follows.
 We start with theoretical foundations and gradually move towards practical algorithms.
 Section \ref{section_regular_expressions} revises the basic definition of regular expressions.
@@ -211,12 +210,13 @@ we discuss leftmost greedy and POSIX policies and the necessary properties that 
 Section \ref{section_determinization} is the main part of this paper: it describes determinization algorithm.
 Section \ref{section_implementation} highlights some practical implementation details and optimizations.
 Section \ref{section_tests_and_benchmarks} concerns correctness testing and benchmarks.
-Finally, section \ref{section_future_work} points directions for future work.
+Finally, section \ref{section_conclusions} contains conclusions
+and section \ref{section_future_work} points directions for future work.
 
 \section{Regular expressions}\label{section_regular_expressions}
 
 Regular expressions are a \emph{notation} that originates in the work of Kleene
-\emph{``Representation of Events in Nerve Nets and Finite Automata''} [Kle51] [Kle56].
+\emph{``Representation of Events in Nerve Nets and Finite Automata''} \cite{Kle51} \cite{Kle56}.
 He used this notation to describe \emph{regular events}:
 each regular event is a set of \emph{definite events},
 and the class of all regular events is defined inductively
@@ -226,16 +226,16 @@ Kleene showed that regular events form exactly the class of events that can be r
 However, generalization of regular events to other fields of mathematics remained an open problem;
 in particular, Kleene raised the question whether regular events could be reformulated
 as a deductive system based on logical axioms and algebraic laws.
-This question was thoroughly investigated by many authors (see [Koz91] for a historic overview)
+This question was thoroughly investigated by many authors (see \cite{Koz94} for a historic overview)
 and the formalism became known as \emph{the algebra of regular events} %$\mathcal{K} \Xeq (K, +, \cdot, *, 1, 0)$
 or, more generally, the \emph{Kleene algebra} $\mathcal{K} \Xeq (K, +, \cdot, *, 1, 0)$.
 Several different axiomatizations of Kleene algebra were given;
-in particular, Kozen gave a finitary axiomatization based on equations and equational implications and sound for all interpretations [Koz91].
-See also [Gra15] for extensions of Kleene algebra and generalization to the field of context-free languages.
+in particular, Kozen gave a finitary axiomatization based on equations and equational implications and sound for all interpretations \cite{Koz94}.
+See also \cite{Gra15} for extensions of Kleene algebra and generalization to the field of context-free languages.
 \\
 
 The following definition of regular expressions, with minor notational differences, is widely used in literature
-(see e.g. [HopUll], page 28):
+(see e.g. [HU90], page 28, or [SS88], page 67):
 
     \begin{Xdef}\label{re}
     \emph{Regular expression (RE)} over finite alphabet $\Sigma$ is one of the following:
@@ -308,7 +308,7 @@ and let $\Sigma^*$ denote the set of all (possibly empty) strings over $\Sigma$.
 
 Other interpretations are also possible;
 one notable example is the \emph{type interpretation},
-in which RE denote sets of parse trees [ThoBra10] [Gra15].
+in which RE denote sets of parse trees \cite{BT10} \cite{Gra15}.
 This is close to what we need for submatch extraction,
 except that we are interested in partial parse structure rather than full parse trees.
 
@@ -332,10 +332,15 @@ For the most useful RE there are special shortcuts:
 In short, tags are position markers attached to the structure of RE.
 The idea of adding such markers is not new:
 many RE flavors have \emph{capturing groups}, or the \emph{lookahead} operator, or \emph{pre-} and \emph{post-context} operators;
-all of them are used for submatch extraction of some sort.
+all of them are used for submatch extraction of some sort.\footnote{
+Position markers in RE are sometimes used in a different sence:
+Watson mentions the \emph{dotted} RE \cite{Wat93}
+that go back to DeRemers's construction of DFA, which originates in LR parsing invented by Knuth.
+The \emph{dot} itself is the well-known LR \emph{item} which separates the already parsed and yet unparsed parts of the rule.
+}
 Laurikari used the word \emph{tag}.
 He did not define tags explicitly; rather, he defined automata with tagged transitions.
-We take a slightly different approach, inspired by [ThoBra10], [Gra15] and a number of other publications.
+We take a slightly different approach, inspired by \cite{BT10}, \cite{Gra15} and a number of other publications.
 First, we define an extension of RE: tagged RE,
 and two interpretations: \emph{S-language} that ignores tags and \emph{T-language} that preserves them.
 T-language has the bare minimum of information necessary for submatch extraction;
@@ -583,8 +588,8 @@ $\varphi_i^t$ in definition \ref{tagvalfun} depend only on $\gamma_j$ such that 
 
 Both S-language and T-language of the given TRE are regular,
 and in this perspective submatch extraction reduces to the problem of translation between regular languages.
-The class of automata capable of performing such translation is known as \emph{finite state transducers (FST)} [??].
-TNFA, as defined by Laurikari in [Lau01], is a nondeterministic FST
+The class of automata capable of performing such translation is known as \emph{finite state transducers (FST)} (see e.g. [Ber13], page 68).
+TNFA, as defined by Laurikari in \cite{Lau01}, is a nondeterministic FST
 that decomposes output strings into tag value functions
 and then applies disambiguation.
 Our definition is different in the following aspects.
@@ -710,10 +715,12 @@ where $(Q, x, y, \Delta) \Xeq \XF(\XX(e))$ and $\XF$ is defined as follows:
 The above construction of TNFA has certain properties that will be used in subsequent sections.
 
 \begin{Xobs}\label{obs_tnfa_states}
-We can partition all TNFA states into three disjoint subsets: ???list
-states that have outgoing transitions on symbols,
-states that have outgoing $\epsilon$-transitions,
-and states without outgoing transitions (including the final state).
+We can partition all TNFA states into three disjoint subsets:
+\begin{enumerate}
+    \item states that have outgoing transitions on symbols;
+    \item states that have outgoing $\epsilon$-transitions;
+    \item states without outgoing transitions (including the final state);
+\end{enumerate}
 This statement can be proved by induction on the structure of TNFA:
 automata for atomic TRE $\emptyset$, $\epsilon$, $\alpha$, $t$ obviously satisfy it;
 compound automata $F_1 \cup F_2$, $F_1 \cdot F_2$, $F^{n,\infty}$ and $F^{n,m}$
@@ -869,18 +876,18 @@ later we will show that both POSIX and leftmost greedy policies have this proper
 The problem of closure construction can be expressed in terms of single-source shortest-path problem
 in directed graph with cycles and mixed (positive and negative) arc weights.
 (We assume that all initial closure states are connected to one imaginary ``source'' state).
-Most algorithms for solving shortest-path problem have the same basic structure:
+Most algorithms for solving shortest-path problem have the same basic structure (see e.g. \cite{Cor09}, chapter24):
 starting with the source node, repeatedly scan nodes;
 for each scanned node apply \emph{relaxation} to all outgoing arcs;
 if path to the given node has been improved, schedule it for further scanning.
-Such algorithms are based on the \emph{optimal substructure} principle [Cor]:
+Such algorithms are based on the \emph{optimal substructure} principle:
 any prefix of the shortest path is also a shortest path.
 In our case tags do not map directly to weights and T-strings are more complex than distances, but direct mapping is not necessary:
 optimal substructure principle still applies if the disambiguation policy is prefix-based,
 and relaxation can be implemented via T-string comparison and extension of T-string along the given transition.
 Also, we assume absence of epsilon-loops with ``negative weight'',
 which is quite reasonable for any disambiguation policy.
-Laurikari gives the following algorithm for closure construction (see Algorithm 3.4 in [Lau01]):
+Laurikari gives the following algorithm for closure construction (see Algorithm 3.4 in \cite{Lau01}):
 \\
 
     \begin{algorithm}[H] \DontPrintSemicolon \SetKwProg{Fn}{}{}{} \SetAlgoInsideSkip{medskip}
@@ -940,7 +947,7 @@ Laurikari gives the following algorithm for closure construction (see Algorithm 
 
 We will refer to the above algorithm as LAU.
 The key idea of LAU is to reorder scanned nodes so that ancestors are processed before their descendants.
-This idea works well for acyclic graphs: scanning nodes in topological order yields a linear-time algorithm [??],
+This idea works well for acyclic graphs: scanning nodes in topological order yields a linear-time algorithm \cite{Cor09} (chapter 24.2),
 so we should expect that LAU also has linear complexity on acyclic graphs.
 However, the way LAU decrements in-degree is somewhat odd: decrement only happens if relaxation was successful,
 while it seems more logical to decrement in-degree every time the node is encountered.
@@ -976,11 +983,11 @@ These observations lead us to a modification of LAU, which we call LAU1
     \end{algorithm}
 
 Still for graphs with cycles worst-case complexity of LAU and LAU1 is unclear;
-usually algorithms that schedule nodes in LIFO order (e.g. Pape-Levit) have exponential complexity [ShiWit81].
+usually algorithms that schedule nodes in LIFO order (e.g. Pape-Levit) have exponential complexity \cite{SW81}.
 However, there is another algorithm also based on the idea of topological ordering,
 which has $O(nm)$ worst-case complexity and $O(n + m)$ complexity on acyclic graphs
 (where $n$ is the number of nodes and $m$ is the number of edges).
-It is the GOR1 algorithm described in [GolRad93]
+It is the GOR1 algorithm described in \cite{GR93}
 (the version listed here is one of the possible variations of the algorithm):
 \\
 
@@ -1038,9 +1045,9 @@ It is the GOR1 algorithm described in [GolRad93]
     \end{algorithm}
 
 In order to better understand all three algorithms and compare their behavior on various classes of graphs
-I used the benchmark suite described in [CheGolRad96].
+I used the benchmark suite described in \cite{CGR96}.
 I implemented LAU, LAU1 and the above version of GOR1;
-source codes are freely available in [??] and open for suggestions and bug fixes.
+source codes are freely available in \cite{Tro17} and open for suggestions and bug fixes.
 The most important results are as follows.
 On Acyc-Neg family (acyclic graphs with mixed weights)
 LAU is non-linear and significantly slower,
@@ -1050,7 +1057,7 @@ both LAU and LAU1 are very slow (though approximation suggests polynomial, not e
 while GOR1 is fast.
 On other graph families all three algorithms behave quite well;
 it is strange that LAU is fast on Acyc-Pos family, while being so slow on Acyc-Neg family.
-See also [NonPalXue00]: they study two modifications of GOR1, one of which is very close to LAU1,
+See also \cite{NPX99}: they study two modifications of GOR1, one of which is very close to LAU1,
 and conjecture (without a proof) that worst-case complexity is exponential.
 
 \end{multicols}
@@ -1141,9 +1148,9 @@ and show that each policy is prefix-based and foldable.
 
 \subsection*{Leftmost greedy}
 
-Leftmost greedy policy was extensively studied by many authors; we will refer to [Gra15], as their setting is very close to ours.
+Leftmost greedy policy was extensively studied by many authors; we will refer to \cite{Gra15}, as their setting is very close to ours.
 We can define it as lexicographic order on the set of all bitcodes corresponding to ambiguous paths
-(see [Gra15], definition 3.25).
+(see \cite{Gra15}, definition 3.25).
 Let $\pi_1$, $\pi_2$ be two ambiguous paths which induce T-strings $x \Xeq \XT(\pi_1)$, $y \Xeq \XT(\pi_2)$
 and bitcodes $a \Xeq \XB(\pi_1)$, $b \Xeq \XB(\pi_2)$.
 Then $x \prec y$ iff $\prec_{lexicographic} (a, b)$:
@@ -1162,7 +1169,7 @@ This definition has one caveat: the existence of minimal element is not guarante
 For example, TNFA for $\epsilon^+$ has infinitely many ambiguous paths with bitcodes
 of the form $\widehat{0}^n \widehat{1}$, where $n \!\geq\! 0$,
 and each bitcode is lexicographically less than the previous one.
-Paths that contain $\epsilon$-loops are called \emph{problematic} (see [Gra15], definition 3.28).
+Paths that contain $\epsilon$-loops are called \emph{problematic} (see \cite{Gra15}, definition 3.28).
 If we limit ourselves to non-problematic paths (e.g. by cancelling loops in $\epsilon$-closure),
 then the minimal element exists and bitcodes are well-ordered.
 %The following lemma states an important property of bitcodes induced by paths gathered by $\epsilon$-closure:
@@ -1171,7 +1178,7 @@ then the minimal element exists and bitcodes are well-ordered.
 Let $\Pi$ be a set of TNFA paths that start in the same state, induce the same S-string and end in a core state
 (e.g. the set of active paths on each step of TNFA simulation).
 Then the set of bitcodes induced by paths in $\Pi$ is prefix-free
-(compare with [Gra15], lemma 3.1).
+(compare with \cite{Gra15}, lemma 3.1).
 \\[0.5em]
 \textbf{Proof.}
 Consider paths $\pi_1$ and $\pi_2$ in $\Pi$
@@ -1194,15 +1201,15 @@ Note that $\XB(\rho\sigma) \Xeq \XB(\rho)\XB(\sigma)$ for arbitrary path $\rho\s
 therefore $\XB(\pi_1\pi_3) \Xeq ac$ and $\XB(\pi_2\pi_3) \Xeq bc$.
 If $a \Xeq b$, then $ac \Xeq bc$.
 Otherwise, without loss of generality let $a \prec_{lexicographic} b$: since $a$, $b$ are prefix-free, $ac \prec_{lexicographic} bc$
-(compare with [Gra15], lemma 2.2).
+(compare with \cite{Gra15}, lemma 2.2).
 \\
 
 From lemma \ref{lemma_bitcodes} it also follows that leftmost greedy disambiguation is foldable:
 prefix-free bitcodes can be compared incrementally on each step of simulation.
 We define ``ambiguity shape'' of TDFA state as lexicographic order on bitcodes of all paths represented by configurations
-(compare with [Gra15], definition 7.14).
+(compare with \cite{Gra15}, definition 7.14).
 The number of different weak orderings of $n$ elements is finite, therefore determinization terminates
-(this number equals $\sum_{k=0}^n \Xstirling{n}{k} k!$, also known as the \emph{ordered Bell number} [??]).
+(this number equals $\sum_{k=0}^n \Xstirling{n}{k} k!$, also known as the \emph{ordered Bell number}).
 Order on configurations is represented with ordinal numbers assigned to each configuration.
 Ordinals are initialized to zero and then updated on each step of simulation by comparing bitcodes.
 Bitcodes are compared incrementally:
@@ -1234,18 +1241,19 @@ if we treat TDFA states as ordered sets,
 sort TNFA transitions by their priority
 and define $\epsilon$-closure as a simple depth-first search,
 then the first path that arrives at any state would be the leftmost.
-This approach is taken in e.g. [Karper].
+This approach is taken in e.g. \cite{Kar14}.
 Since tags are not engaged in disambiguation,
 we can use paired tags that represent capturing parentheses, or just standalone tags --- this makes no difference with leftmost greedy policy.
 
 \subsection*{POSIX}
 
-POSIX policy is defined in [??]; [Fow] gives a comprehensible interpretation of it.
+POSIX policy is defined in \cite{POSIX}; \cite{Fow03} gives a comprehensible interpretation of it.
 We will give a formal interpretation in terms of tags;
-it was first described by Laurikari in [Lau01], but the key idea should be absolutely attributed to Kuklewicz [??].
+it was first described by Laurikari in \cite{Lau01}, but the key idea should be absolutely attributed to Kuklewicz \cite{Kuk07}.
 He never fully formalized his algorithm, and our version slightly deviates from the informal description,
 so all errors should be attributed to the author of this paper.
-Fuzz-testing RE2C against Regex-TDFA revealed no difference in submatch extraction
+Fuzz-testing RE2C against Regex-TDFA revealed a couple of rare bugs in submatch extraction in Regex-TDFA,
+but for the most part the two implementations agree
 (see section \ref{section_tests_and_benchmarks} for details).
 \\
 
@@ -1705,7 +1713,7 @@ if both are $\varnothing$, disambiguation should continue with the next tag.
 Orbit tags obey the same rules as before.
 The added complexity is caused by the possible absence of tags in the left part of union and concatenation.
 We won't go into further details, as the modified algorithm is probably not very useful;
-but an experimental implementation in RE2C passed all the tests in [??].
+but an experimental implementation in RE2C passed all relevant tests in \cite{Fow03}.
 Correctness proof might be based on the limitations of POSIX RE due to the coupling of groups and submatches.
 
 \section{Determinization}\label{section_determinization}
@@ -1724,7 +1732,7 @@ in general, each value is an offset list of arbitrary length,
 but in practice values may be single offsets or anything else.
 \\
 
-Laurikari determinization algorithm has the same basic principle as the usual powerset construction [??]:
+Laurikari determinization algorithm has the same basic principle as the usual powerset construction (see e.g. \cite{HU90}, Theorem 2.1 on page 22):
 simulation of nondeterministic automaton on all possible inputs combined with merging of equivalent states.
 The most tricky part is merging: extended configuration sets are no longer equal, as they contain absolute tag values.
 %(in fact, they cannot coincide in case of tagged non-empty loops in TNFA).
@@ -1771,8 +1779,8 @@ $r_1 \Xeq r_1 1 1$ means ``append current position to $r_1$ twice''.
 \\
 
 TDFA definition looks very similar to the definition of
-\emph{deterministic streaming string transducer (DSST)}, described by Alur and Cerny in [AluCer11].
-Indeed, the two kinds of automata are similar and have similar applications: DSSTs are used for RE parsing in [Gra15].
+\emph{deterministic streaming string transducer (DSST)}, described by Alur and Cerny in \cite{AC11}.
+Indeed, the two kinds of automata are similar and have similar applications: DSSTs are used for RE parsing in \cite{Gra15}.
 However, their semantics is different: TDFA operates on tag values, while DSST operates on strings of the output language.
 What is more important, DSST is \emph{copyless}:
 its registers can be only \emph{moved}, not \emph{copied}.
@@ -1801,7 +1809,7 @@ Indeed, we can define \emph{conflict} as a situation when tag has at least two d
 Tags that induce no conflicts are \emph{deterministic};
 the maximal number of different values per state is the tag's \emph{degree of nondeterminism}.
 Accordingly, \emph{tag-deterministic} RE are those for which it is possible to build TDFA without conflicts
-(also called \emph{one-pass} in [Cox10]).
+(also called \emph{one-pass} in \cite{Cox10}).
 As with LR(0) and LR(1), many RE are tag-deterministic with respect to TDFA(1), but not TDFA(0).
 Unlike LR automata, TDFA with conflicts are correct, but they can be very inefficient:
 %tags with high degree of nondeterminizm induce a lot of register operations.
@@ -2045,7 +2053,7 @@ except for the trivial adjustments to carry around ordinals and pass them into d
 Determinization algorithm terminates.
 \\[0.5em]
 \textbf{Proof.}
-The proof is very similar to the one given by Laurikari in [Lau00]:
+The proof is very similar to the one given by Laurikari in \cite{Lau00}:
 we will show that for arbitrary TNFA with $t$ tags and $n$ states the number of unmappable TDFA states is finite.
 Each TDFA state with $m$ configurations (where $m \!\leq\! n$) is a combination of the following components:
 a set of $m$ TNFA states,
@@ -2111,7 +2119,7 @@ and has 2nd degree of nondeterminism with respect to TDFA(0)
 \textbf{Example 2.} $a^* 1 a^* a$ (the TRE used by Laurikari to explain his algorithm).\\*
 (a) --- TNFA, (b) --- construction of TDFA(0), (c) --- TDFA(0), (d) --- construction of TDFA(1), (e) --- TDFA(1).\\*
 This TRE has a modest degree of nondeterminism: 2 for TDFA(1) and 3 for TDFA(0).
-Compare (c) with figure 3 from [Lau00]: it is the same automaton up to a minor notational difference
+Compare (c) with figure 3 from \cite{Lau00}: it is the same automaton up to a minor notational difference
 (in this case leftmost greedy policy agrees with POSIX).
 \end{Xfig}
 
@@ -2148,7 +2156,7 @@ Obviously, for TRE of such kind both methods are impractical.
 However, bounded repetition is a problem on its own, even without tags;
 relatively small repetition numbers dramatically increase the size of automaton.
 If bounded repetition is necessary, more powerful methods should be used:
-e.g. automata with \emph{counters} described in [??].
+e.g. automata with \emph{counters} described in \cite{Bec09} (chapter 5.1.12).
 \end{Xfig}
 
 \begin{Xfig}
@@ -2202,7 +2210,7 @@ We use a different strategy: allocate a new register for each distinct operation
 It results in a more optimization-friendly automaton
 which has a lot of short-lived registers with independent lifetimes.
 Consequently, there is less interference between different registers and more registers can be merged.
-The resulting program form is similar to \emph{static single assignment} form [SSA],
+The resulting program form is similar to \emph{static single assignment} form \cite{SSA},
 though not exactly SSA: we cannot use efficient SSA-specific algorithms.
 However, SSA construction and deconstruction is rather complex and its usefulness on our (rather simple) programs is not so evident.
 \\
@@ -2310,7 +2318,7 @@ in this case they should be kept until disambiguation is finished;
 then they can be removed from TDFA with all associated operations.
 \\
 
-This optimization is also described in [Lau01], section 4.3.
+This optimization is also described in \cite{Lau01}, section 4.3.
 
 \subsection*{Simple tags}
 
@@ -2344,7 +2352,7 @@ What is most important, copy operations are cheap for simple tags.
 
 The most naive representation of history is a list of offsets;
 however, copy operations on lists are very inefficient.
-Fortunately, a better representation is possible: as observed by [Kar], histories form a \emph{prefix tree}:
+Fortunately, a better representation is possible: as observed by \cite{Kar14}, histories form a \emph{prefix tree}:
 each new history is a fork of some old history of the same tag.
 Prefix tree can be represented as an array of nodes $(p, o)$,
 where $p$ is the index of parent node and $o$ is the offset.
@@ -2403,7 +2411,7 @@ Then RE2C examines TDFA states and, if all outgoing transitions have the same op
 this operation is hoisted out of transitions into the state itself.
 \\
 
-Finally, RE2C converts TDFA to a tunnel automaton [??]
+Finally, RE2C converts TDFA to a tunnel automaton \cite{Gro89}
 that allows to further reduce TDFA size by merging similar states and deduplicating pieces of code.
 \\
 
@@ -2421,13 +2429,15 @@ These tests include examples of useful real-world programs
 and checks for various optimizations, errors and special cases.
 \\
 
-Second, RE2C implementation of POSIX captures was verified on the canonical POSIX test suite provided by Glenn Fowler [??].
-I used the augmented version provided by Kuklewicz [??] and excluded a few tests that check POSIX-specific extensions
+Second, RE2C implementation of POSIX captures was verified on the canonical POSIX test suite provided by Glenn Fowler \cite{Fow03}.
+I used the augmented version provided by Kuklewicz \cite{Kuk09} and excluded a few tests that check POSIX-specific extensions
 which are not supported by RE2C (e.g. start and end anchors \texttt{\^} and \texttt{\$}) ---
 the excluded tests do not contain any special cases of submatch extraction.
 \\
 
-Third, and probably most important, I used the \emph{fuzzer} contributed by Sergei Trofimovich [??] and based on haskell QuickCheck library [??].
+Third, and probably most important, I used \emph{fuzzer} contributed by Sergei Trofimovich
+(available as part of RE2C source code)
+and based on haskell QuickCheck library \cite{CH11}.
 Fuzzer generates random RE with the given \emph{constrains}
 and verifies that each generated RE satisfies certain \emph{properties}.
 By redefining the set of constraints one can control the size and the form of RE:
@@ -2439,7 +2449,7 @@ by redefining properties it is possible to chase all sorts of bugs.
 \\
 
 While RE were generated at random, each particular RE was tested extensively
-on the set of input strings generated with RE2C \texttt{--skeleton} option [??].
+on the set of input strings generated with RE2C \texttt{--skeleton} option.
 This option enables RE2C self-validation mode:
 instead of embedding the generated lexer in used-defined interface code,
 RE2C embeds it in a self-contained template program called \emph{skeleton}.
@@ -2468,7 +2478,7 @@ I used it to verify the following properties:
         I ran TDFA(0) programs on skeleton inputs generated for TDFA(1) programs and vice versa;
         it helped to reveal model-specific bugs.
 
-    \item Coherence of RE2C and Regex-TDFA (Haskell RE library written by Kuklewicz that supports POSIX submatch semantics [??]).
+    \item Coherence of RE2C and Regex-TDFA (Haskell RE library written by Kuklewicz that supports POSIX submatch semantics \cite{Regex-TDFA}).
         I ran Regex-TDFA on skeleton input strings generated by RE2C and compared match results with those of the skeleton program.
         Aside from a couple of minor discrepancies (such as newline handling and anchors)
         I found two bugs in submatch extraction in Regex-TDFA.
@@ -2492,22 +2502,22 @@ I used it to verify the following properties:
     \\
 \end{itemize}
 
-I did not compare RE2C against other libraries, such as TRE [??], RE2 [??] or POSIX regex library [??],
+I did not compare RE2C against other libraries, such as \cite{TRE} or \cite{RE2},
 as none of these libraries support POSIX submatch semantics:
-TRE and Regex have known bugs [??],
-and RE2 authors explicitly state that POSIX semantics is not supported [??].
+TRE has known bugs \cite{LTU},
+and RE2 author explicitly states that POSIX semantics is not supported \cite{Cox17}.
 
 \subsection*{Benchmarks}
 
 Benchmarks are aimed at comparison of TDFA(0) and TDFA(1);
-comparison of RE2C and other lexer generators is beyond the scope of this paper (see [Bum94]).
+comparison of RE2C and other lexer generators is beyond the scope of this paper (see \cite{BC93}).
 As we have already seen on numerous examples in section \ref{section_determinization},
 TDFA(1) has every reason to result in faster code;
 however, only a real-world program can show if there is any perceivable difference in practice.
 I used two canonical use cases for submatch extraction in RE: URI parser and HTTP parser.
-Both examples are used in literature [ThoBra] [SohTho],
+Both examples are used in literature \cite{BT10} \cite{GHRST16},
 as they are simple enough to admit regular grammar,
-but at the same time both grammars have non-trivial structure composed of multiple components of varying length and form [RFC-3986] [RFC7230].
+but at the same time both grammars have non-trivial structure composed of multiple components of varying length and form \cite{RFC-3986} \cite{RFC-7230}.
 Each example has two implementations: RFC-compliant and simplified (both forms may be useful in practice).
 The input to each parser is a 1G file of randomly generated URIs or HTTP messages; it is buffered in 4K chunks.
 Programs are written so that they spend most of the time on parsing,
@@ -2517,11 +2527,12 @@ so that benchmarks measure the efficiency of parsing, not the accompanying code 
 %Alternatively each parser can be built in ``verification mode'', in which it prints out parse results.
 For each of the four parsers there is a corresponding DFA-based recognizer:
 it sets a baseline for expectations of how fast and small the lexer can be and what is the real overhead on submatch extraction.
-Benchmarks are written in C-90 and compiled with four different C compilers:
-GCC-7.1.10 [??],
-Clang-4.0.1 [??],
-TCC-0.9.26 [??]
-and PCC-1.1.0 [??]
+Benchmarks are written in C-90 and compiled with \cite{RE2C} version 1.0
+and four different C compilers:
+\cite{GCC} version 7.1.10,
+\cite{Clang} version 4.0.1,
+\cite{TCC} version 0.9.26
+and \cite{PCC} version 1.1.0
 with optimization level \texttt{-O2} (though some compilers probably ignore it).
 RE2C was run in three different settings:
 default mode, with \texttt{-b} option (generate bit masks and nested \texttt{if}-s instead of plain \texttt{switch}-es),
@@ -2530,8 +2541,10 @@ All benchmarks were run on 64-bit Intel Core i3 machine with 3G RAM and 32K L1d,
 each result is the average of 4 subsequent runs after a proper ``warm-up''.
 Benchmark results are summarized in tables 1 --- 4
 and visualized on subsequent plots.
+\\
 
-[TARBALLL!!!]
+Benchmarks are available as part of RE2C-1.0 distribution
+in subdirectory \texttt{re2c/benchmarks}.
 
 \end{multicols}
 
@@ -2720,46 +2733,71 @@ Benchmark results show the following:
 \end{itemize}
 
 
+\section{Conclusions}\label{section_conclusions}
+
+TDFA(1) is a practical method for submatch extraction in lexer generators that optimize for speed of the generated code.
+It incurs a modest overhead compared to simple recognition,
+and the overhead depends on detalization of submatch
+(in many cases it is proportional to the number of submatches).
+One exception is the case of ambiguous submatch in the presence of bounded repetition:
+it causes high degree of nondeterminism for the corresponding tags
+and renders the method impractical compared to hand-written code.
+\\ \\
+TDFA(1) method is considerably more efficient than TDFA(0) method, both theoretically and practically.
+Experimental results show that TDFA(1) achieves 1.5x -- 2x speedup compared to TDFA(0)
+and in most cases it results in smaller binary size.
+\\ \\
+TDFA method is capable of extracting repeated submatches,
+and therefore is applicable fo full parsing.
+Efficiency of the generated parsers depends on the data structures used to hold and manipulate repeated submatch values
+(an efficient implementation is possible).
+\\ \\
+TDFA can be used in combination with various disambiguation policies;
+in particular, leftmost greedy policy and POSIX policy.
+
+
 \section{Future work}\label{section_future_work}
 
-The most interesting subject that requires further exploration and practical experiments
-is the comparison of TDFA (described in this paper) and DSST (described in [Gra15] and [SohTho])
+The most interesting subject that needs further exploration and experiments
+is the comparison of TDFA (described in this paper) and DSST (described in \cite{Gra15} and \cite{GHRST16})
 on practical problems of submatch extraction.
 Both models are aimed at generating fast parsers,
 and both depend heavily on the efficiency of particular implementation.
-For instance, DSST is applied to full parsing, which suggests that it has some overhead compared to TDFA;
-however, optimizations of the resulting program may reduce the overhead, as shown in [Gra15].
-TDFA, contrary to DSST, allows copy operations on registers;
-but in practice they can be reduced to copying scalar values, as shown in section \ref{section_implementation}.
-The construction of DSST given in [Gra15] works only for leftmost greedy disambiguation;
+For instance, DSST is applied to full parsing, which suggests that it has some overhead on submatch extraction compared to TDFA;
+however, optimizations of the resulting program may reduce the overhead, as shown in \cite{Gra15}.
+On the other hand, TDFA allows copy operations on registers, contrary to DSST;
+but in practice copy operations are cheap if the registers hold scalar values, as shown in section \ref{section_implementation}.
+The author's expectation is that on RE of modest size and submatch complexity
+optimized implementations of TDFA and DSST should result in very similar code.
+The construction of DSST given in \cite{Gra15} works only for leftmost greedy disambiguation;
 it might be interesting to construct DSST with POSIX disambiguation.
-\\
-
-There is also quite different use of position markers described in literature:
-Watson mentions so-called \emph{dotted} RE [Wat95]
-that go back to DeRemers's construction of DFA [DeRem74],
-which originates in LR parsing invented by Knuth [Knu65]
-(\emph{dot} is the well-known LR \emph{item} which separates parsed and unparsed parts of the rule).
+\\ \\
+Extending TDFA lookahead to more than one symbol (in other words, extending TDFA to \emph{multi-stride} automata described in \cite{Bec09})
+is an interesting theoretical experiment, but probably not very useful in practice.
+As in the case of LR($k$) methods for $k > 1$, TDFA($k$) would pobably be much larger and yet insufficiently expressive to resolve all conflicts.
+\\ \\
+A more practical subject is combining TDFA and the \emph{counting automata} described in \cite{Bec09}:
+it would solve the problem of tag nondeterminism in the presence of bounded repetition.
+\\ \\
+It would be interesting to implement more involved analysis and optimizations in RE2C,
+as it has stronger guarantees and deeper knowledge of the program than the C compiler.
 
 \section*{Acknowledgments}
 
-Premnogoe spasibo drugu na bukvu S ! ! ! :)
+This study would not be possible without the help of Sergei Trofimovich.
+His relentless work on open source projects
+and his aspiration to track down and fix the hardest bugs
+have always raised my spirit and helped me through tough times (morally and technically).
+\\
+
+I'm also grateful to my parents Vladimir Fokanov and Elina Fokanova for the love of mathematics,
+and to all good people who cheered me up. :)
 
 \end{multicols}
 \pagebreak
 
-\section*{References}
-
-\begin{enumerate}
-\item Laurikari 2000
-\item Laurikari 2001
-\item Karper
-\item Kuklewicz
-
-    \item \! [Cox10] Russ Cox, \textit{"Regular Expression Matching in the Wild"}, March 2010, \\
-%        \url{https://swtch.com/~rsc/regexp/regexp3.html}
-%    \item \url{https://github.com/google/re2/issues/146}
-
-\end{enumerate}
+\nocite{*}
+\bibliographystyle{abstract}
+\bibliography{bibliography}
 
 \end{document}
