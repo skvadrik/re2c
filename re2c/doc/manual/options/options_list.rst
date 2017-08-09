@@ -76,6 +76,14 @@
     contains types for the (f)lex-like condition support. This can only be
     activated when ``-c`` is in use.
 
+``-T --tags``
+    Enable submatch extraction with tags.
+    This option is implied by ``--posix-captures``.
+
+``-P --posix-captures``
+    Enable submatch extraction with POSIX-style capturing groups.
+    This option implies ``-T --tags``.
+
 ``-u --unicode``
     Generate a parser that supports UTF-32. The generated
     code can deal with any valid Unicode character up to 0x10FFFF. In this
@@ -119,6 +127,9 @@
 ``--no-generation-date``
     Suppress date output in the generated file.
 
+``--no-optimize-tags``
+    Suppress tag optimization (mostly used for debugging).
+
 ``--no-version``
     Suppress version output in the generated file.
 
@@ -156,6 +167,32 @@
     The internal algorithm used by re2c to minimize the DFA (defaults to ``moore``).
     Both the table filling algorithm and the Moore algorithm should produce the same DFA (up to states relabeling).
     The table filling algorithm is much simpler and slower; it serves as a reference implementation.
+
+``--eager-skip``
+    This option controls when the generated lexer advances to the next input symbol
+    (that is, increments YYCURSOR or invokes YYSKIP).
+    By default this happens after transition to the next state,
+    but ``--eager-skip`` option allows to override default behavior
+    and advance input position immediately after reading input symbol.
+    This option is implied by ``--no-lookahead``.
+
+``--dump-nfa``
+    Generate .dot representation of NFA and dump it on stderr.
+
+``--dump-dfa-raw``
+    Generate .dot representation of DFA under construction and dump it on stderr.
+
+``--dump-dfa-det``
+    Generate .dot representation of DFA immediately after determinization and dump it on stderr.
+
+``--dump-dfa-tagopt``
+    Generate .dot representation of DFA after tag optimizations and dump it on stderr.
+
+``--dump-dfa-min``
+    Generate .dot representation of DFA after minimization and dump it on stderr.
+
+``--dump-adfa``
+    Generate .dot representation of DFA after tunneling and dump it on stderr.
 
 ``-1 --single-pass``
     Deprecated. Does nothing (single pass is the default now).

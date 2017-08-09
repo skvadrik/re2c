@@ -274,7 +274,7 @@ bootstrap: all
 .PHONY: docs
 if REBUILD_DOCS
 docs: $(DOC) $(AUTOGEN_HELP)
-$(DOC): $(SRC_DOC)
+$(DOC): $(SRC_DOC) $(SRC_DOC_EXT)
 	$(AM_V_at)$(MKDIR_P) $(@D)
 	$(RST2MAN) $(top_builddir)/$(SRC_DOC) > $@
 	cp $@ $(top_srcdir)/$(BOOTSTRAP_DOC)
