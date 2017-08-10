@@ -46,7 +46,7 @@ depends on the particular use case.
 SYNTAX
 ------
 
-Code for ``re2c`` consists of a set of ``RULES``, ``NAMED DEFINITIONS``, and
+Code for ``re2c`` consists of a set of ``RULES``, ``NAMED DEFINITIONS``, ``CODE`` and
 ``INPLACE CONFIGURATIONS``.
 
 
@@ -90,6 +90,12 @@ REGULAR EXPRESSIONS
 ~~~~~~~~~~~~~~~~~~~
 
 .. include:: @top_srcdir@/doc/manual/syntax/regular_expressions.rst_
+
+
+SUBMATCH EXTRACTION
+-------------------
+
+.. include:: @top_srcdir@/doc/manual/features/submatch/submatch.rst_
 
 
 SCANNER WITH STORABLE STATES

@@ -1,3 +1,10 @@
+
+``YYBACKUP ()``
+    Backup current input position (used only with generic API).
+
+``YYBACKUPCTX ()``
+    Backup current input position for trailing context (used only with generic API).
+
 ``YYCONDTYPE``
     In ``-c`` mode, you can use ``-t`` to generate a file that
     contains the enumeration used as conditions. Each of the values refers
@@ -53,6 +60,9 @@
     case, the scanner will resume operations right after where the last
     ``YYFILL (n)`` was called.
 
+``YYLESSTHAN (n)``
+    Check if less than ``n`` input characters are left (used only with generic API).
+
 ``YYLIMIT``
     An expression of type ``YYCTYPE *`` that marks the end of the buffer ``YYLIMIT[-1]``
     is the last character in the buffer). The generated code repeatedly
@@ -64,8 +74,29 @@
     The generated code saves backtracking information in ``YYMARKER``. Some
     simple scanners might not use this.
 
+``YYMTAGP (t)``
+    Append current input position to the history of tag ``t``.
+
+``YYMTAGN (t)``
+    Append default value to the history of tag ``t``.
+
 ``YYMAXFILL``
     This will be automatically defined by ``/*!max:re2c*/`` blocks as explained above.
+
+``YYMAXNMATCH``
+    This will be automatically defined by ``/*!maxnmatch:re2c*/``.
+
+``YYPEEK ()``
+    Get current input character (used only with generic API).
+
+``YYRESTORE ()``
+    Restore input position (used only with generic API).
+
+``YYRESTORECTX ()``
+    Restore input position from the value of trailing context (used only with generic API).
+
+``YYRESTORETAG (t)``
+    Restore input position from the value of tag ``t`` (used only with generic API).
 
 ``YYSETCONDITION (c)``
     This define is used to set the condition in
@@ -84,4 +115,13 @@
     ``YYGETSTATE ()`` and resume execution right where it left off. The
     generated code will contain both ``YYSETSTATE (s)`` and ``YYGETSTATE`` even
     if ``YYFILL (n)`` is disabled.
+
+``YYSKIP ()``
+    Advance input position to the next character (used only with generic API).
+
+``YYSTAGP (t)``
+    Save current input position to tag ``t`` (used only with generic API).
+
+``YYSTAGN (t)``
+    Save default value to tag ``t`` (used only with generic API).
 

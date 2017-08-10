@@ -1,0 +1,68 @@
+``re2c`` supports two kinds of submatch extraction.
+
+
+The first option is ``-P --posix-captures``: it enables POSIX-compliant capturing groups.
+In this mode parentheses in regular expressions denote the beginning and the end of capturing groups;
+the whole regular expression is group number zero.
+The number of groups for the matching rule is stored in a variable ``yynmatch``,
+and submatch results are stored in ``yypmatch`` array.
+Both ``yynmatch`` and ``yypmatch`` should be defined by the user;
+note that ``yypmatch`` size must be at least ``[yynmatch * 2]``.
+``re2c`` provides a directive ``/*!maxnmatch:re2c*/`` that defines a constant ``YYMAXNMATCH``: the maximal value of ``yynmatch`` among all rules.
+Note that ``re2c`` implements POSIX-compliant disambiguation:
+each subexpression matches as long as possible,
+and subexpressions that start earlier in regular expression have priority over those starting later.
+
+
+Second option is ``-T --tags``.
+With this option one can use standalone tags of the form ``@stag`` and ``#mtag`` instead of capturing parentheses,
+where ``stag`` and ``mtag`` are arbitrary used-defined names.
+Tags can be used anywhere inside of a regular expression; semantically they are just position markers.
+Tags of the form ``@stag`` are called *s-tags*: they denote a single submatch value (the last input position where this tag matched).
+Tags of the form ``#mtag`` are called *m-tags*: they denote multiple submatch values (the whole history of repetitions of this tag).
+All tags should be defined by the user as variables with the corresponding names.
+With standalone tags ``re2c`` uses leftmost greedy disambiguation:
+submatch positions correspond to the leftmost matching path through the regular expression.
+
+
+With both ``--posix-captures`` and ``--tags`` options ``re2c`` generates a number of tag variables
+that are used by the lexer to track multiple possible versions of each tag
+(multiple versions are caused by possible ambiguity of submatch).
+When a rule matches, ambiguity is resolved and all tags of this rule (or capturing parentheses, which are also implemented as tags)
+are initialized with the values of appropriate tag variables.
+Note that there is no one-to-one correspondence between tag variables and tags:
+the same tag variable may be reused for different tags, and one tag may require multiple tag variables to hold all its ambiguous versions.
+The exact number of tag variables is unknown to the user; this number is determined by ``re2c``.
+However, tag variables should be defined by the user, because it might be necessary to update them in ``YYFILL``
+and store them between invocations of lexer with ``--storable-state`` option.
+Therefore ``re2c`` provides directives ``/*!stags:re2c ... */`` and ``/*!mtags:re2c ... */``
+that can be used to declare, initialize and manipulate tag variables.
+
+*S-tags* must support the following operations:
+
+* save input position to *s-tag*:
+  ``t = YYCURSOR`` with default API, or user-defined operation ``YYSTAGP (t)`` with generic API
+* save default value to *s-tag*:
+  ``t = NULL`` with default API, or user-defined operation ``YYSTAGN (t)`` with generic API
+* copy one *s-tag* to another:
+  ``t1 = t2``
+
+*M-tags* must support the following operations:
+
+* append input position to *m-tag*:
+  user-defined operation ``YYMTAGP (t)`` with both default and generic API
+* append default value to *m-tag*:
+  user-defined operation ``YYMTAGN (t)`` with both default and generic API
+* copy one *m-tag* to another:
+  ``t1 = t2``
+
+*S-tags* can be implemented as scalar values (pointers or offsets).
+*M-tags* need a more complex representation, as they need to store a sequence of tag values.
+The most naive and inefficient representation of *m-tag* is a list (array, vector) of tag values;
+a more efficient representation is to store all *m-tags* in a prefix-tree
+represented as array of nodes ``(v, p)``, where ``v`` is tag value and ``p`` is a pointer to parent node.
+
+
+For further details see ``http://re2c.org/examples/examples.html`` page on the website
+or ``re2c/examples/`` subdirectory of ``re2c`` distribution.
+

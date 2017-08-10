@@ -60,6 +60,13 @@
     off. If ``-F`` is active then this behaves like it was enclosed in double
     quotes and matches the string "name".
 
+``@stag``
+    save input position at which ``@stag`` matches in a variable named ``stag``
+
+``#mtag``
+    save all input positions at which ``#mtag`` matches in a variable named ``mtag``
+    (multiple positions are possible if ``#mtag`` is enclosed in a repetition subexpression that matches several times)
+
 Character classes and string literals may contain octal or hexadecimal
 character definitions and the following set of escape sequences:
 ``\a``, ``\b``, ``\f``, ``\n``, ``\r``, ``\t``, ``\v``, ``\\``. An octal character is defined by a backslash

@@ -78,11 +78,9 @@
 
 ``-T --tags``
     Enable submatch extraction with tags.
-    This option is implied by ``--posix-captures``.
 
 ``-P --posix-captures``
     Enable submatch extraction with POSIX-style capturing groups.
-    This option implies ``-T --tags``.
 
 ``-u --unicode``
     Generate a parser that supports UTF-32. The generated
@@ -127,8 +125,12 @@
 ``--no-generation-date``
     Suppress date output in the generated file.
 
+``--no-lookahead``
+    Use TDFA(0) instead of TDFA(1).
+    This option only has effect with ``--tags`` or ``--posix-captures`` options.
+
 ``--no-optimize-tags``
-    Suppress tag optimization (mostly used for debugging).
+    Suppress optimization of tag variables (mostly used for debugging).
 
 ``--no-version``
     Suppress version output in the generated file.

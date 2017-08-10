@@ -1,19 +1,15 @@
 
-    ``regular-expression { C/C++ code }``
-
-    ``regular-expression := C/C++ code``
-
-There is one special rule: the default rule (``*``)
-
-    ``* { C/C++ code }``
-
-    ``* := C/C++ code``
-
-Note that the default rule (``*``) differs from ``[^]``: the default rule has the lowest priority,
+There is one special rule that can be used instead of regular expression: the default rule ``*``.
+Note that the default rule ``*`` differs from ``[^]``: the default rule has the lowest priority,
 matches any code unit (either valid or invalid) and always consumes exactly one character.
 ``[^]``, on the other hand, matches any valid code point (not the same as a code unit) and can consume multiple
 code units. In fact, when a variable-length encoding is used, ``*``
 is the only possible way to match an invalid input character.
+
+In general, all rules have the form:
+
+    ``regular-expression-or-* code``
+
 
 If ``-c`` is active, then each regular expression is preceded by a list
 of comma-separated condition names. Besides the normal naming rules, there
@@ -29,62 +25,21 @@ the start of the loop and the ``re2c`` block unless ``re2c:cond:goto``
 is changed to ``continue``. If some code is needed before all rules (though not before simple jumps),  you
 can insert it with ``<!>`` pseudo-rules.
 
-    ``<condition-list> regular-expression { C/C++ code }``
+    ``<condition-list-or-*> regular-expression-or-* code``
 
-    ``<condition-list> regular-expression := C/C++ code``
+    ``<condition-list-or-*> regular-expression-or-* => condition code``
 
-    ``<condition-list> * { C/C++ code }``
-
-    ``<condition-list> * := C/C++ code``
-
-    ``<condition-list> regular-expression => condition { C/C++ code }``
-
-    ``<condition-list> regular-expression => condition := C/C++ code``
-
-    ``<condition-list> * => condition { C/C++ code }``
-
-    ``<condition-list> * => condition := C/C++ code``
-
-    ``<condition-list> regular-expression :=> condition``
+    ``<condition-list-or-*> regular-expression-or-* :=> condition``
 
 
-    ``<*> regular-expression { C/C++ code }``
+    ``<> code``
 
-    ``<*> regular-expression := C/C++ code``
-
-    ``<*> * { C/C++ code }``
-
-    ``<*> * := C/C++ code``
-
-    ``<*> regular-expression => condition { C/C++ code }``
-
-    ``<*> regular-expression => condition := C/C++ code``
-
-    ``<*> * => condition { C/C++ code }``
-
-    ``<*> * => condition := C/C++ code``
-
-    ``<*> regular-expression :=> condition``
-
-
-    ``<> { C/C++ code }``
-
-    ``<> := C/C++ code``
-
-    ``<> => condition { C/C++ code }``
-
-    ``<> => condition := C/C++ code``
-
-    ``<> :=> condition``
+    ``<> => condition code``
 
     ``<> :=> condition``
 
 
-    ``<! condition-list> { C/C++ code }``
+    ``<!condition-list> code``
 
-    ``<! condition-list> := C/C++ code``
-
-    ``<!> { C/C++ code }``
-
-    ``<!> := C/C++ code``
+    ``<!> code``
 

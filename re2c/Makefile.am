@@ -205,6 +205,7 @@ SRC_DOC_EXT = \
 	doc/manual/features/generic_api/generic_api.rst_ \
 	doc/manual/features/conditions/conditions.rst_ \
 	doc/manual/features/state/state.rst_ \
+	doc/manual/features/submatch/submatch.rst_ \
 	doc/manual/features/encodings/encodings.rst_ \
 	doc/manual/options/options_list.rst
 DOC = doc/re2c.1

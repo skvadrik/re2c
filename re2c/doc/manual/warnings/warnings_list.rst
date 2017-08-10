@@ -36,3 +36,7 @@
     Warn if a symbol is escaped when it shouldn't be.
     By default, re2c silently ignores such escapes, but this may as well indicate a
     typo or error in the escape sequence.
+
+``-Wnondeterministic-tags``
+    Warn if tag has ``n``-th degree of nondeterminism, where ``n`` is greater than 1.
+
