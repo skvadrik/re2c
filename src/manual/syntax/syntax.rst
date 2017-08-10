@@ -11,7 +11,7 @@ Code for ``re2c`` consists of a set of `rules`_, `definitions`_ and
 Rules
 ----------
 
-Each rule consist of a `regular expression`_ accompanied with a block of C/C++ code
+Each rule consist of a `regular expressions`_ accompanied with a block of C/C++ code
 which is to be executed when the associated regular expression is
 matched. You can either start the code with an opening curly brace or
 the sequence ``:=``. If you use an opening curly brace, ``re2c`` will count brace depth

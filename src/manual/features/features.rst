@@ -5,6 +5,7 @@ Features
 .. toctree::
     :maxdepth: 1
 
+    Submatch       <submatch/submatch>
     Conditions     <conditions/conditions>
     State          <state/state>
     Reuse          <reuse/reuse>

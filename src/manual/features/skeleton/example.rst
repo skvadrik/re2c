@@ -18,7 +18,7 @@ First, let's look at the generated strings:
 
 :download:`[example.c.line4.input] <example.c.line4.input>`
 
-.. code-block:: bash
+.. code-block:: none
 
     $ hexdump -v -e '"%08_ax " 24/1 "%02x "' -e '" |" 24/1 "%_p" "|\n"' example.c.line4.input
     00000000 00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 10 11 12 13 14 15 16 17 |........................|
@@ -60,7 +60,7 @@ For that re2c generates keys:
 
 :download:`[example.c.line4.keys] <example.c.line4.keys>`
 
-.. code-block:: bash
+.. code-block:: none
 
     $hexdump -v -e '"%08_ax " 36/1 "%02x " "\n"' example.c.line4.keys
     00000000 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe
@@ -128,7 +128,7 @@ Lexing is done by ``lex_line4``: this function contains the generated DFA.
 
 Compile and run:
 
-.. code-block:: bash
+.. code-block:: none
 
     $ gcc -o example example.c
     $ ./example
