@@ -11,13 +11,10 @@
 	default:	goto yy2;
 	}
 yy2:
-	{
-		const size_t yynmatch = 1;
-		const YYCTYPE *yypmatch[yynmatch * 2];
-		yypmatch[0] = YYCURSOR;
-		yypmatch[1] = YYCURSOR;
-		{}
-	}
+	yynmatch = 1;
+	yypmatch[0] = YYCURSOR;
+	yypmatch[1] = YYCURSOR;
+	{}
 yy3:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -38,15 +35,12 @@ yy5:
 	}
 yy7:
 	++YYCURSOR;
-	{
-		const size_t yynmatch = 2;
-		const YYCTYPE *yypmatch[yynmatch * 2];
-		yypmatch[2] = yyt1;
-		yypmatch[0] = yyt1;
-		yypmatch[1] = YYCURSOR;
-		yypmatch[3] = YYCURSOR - 2;
-		{}
-	}
+	yynmatch = 2;
+	yypmatch[2] = yyt1;
+	yypmatch[0] = yyt1;
+	yypmatch[1] = YYCURSOR;
+	yypmatch[3] = YYCURSOR - 2;
+	{}
 }
 
 re2c: warning: line 6: rule matches empty string [-Wmatch-empty-string]

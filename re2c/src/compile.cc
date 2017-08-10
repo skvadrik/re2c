@@ -109,7 +109,8 @@ static smart_ptr<DFA> ast_to_dfa(const spec_t &spec, Output &output)
 	adfa->calc_stats(line, opts->tags);
 
 	// accumulate global statistics from this particular DFA
-	output.max_fill = std::max (output.max_fill, adfa->max_fill);
+	output.max_fill = std::max(output.max_fill, adfa->max_fill);
+	output.max_nmatch = std::max(output.max_nmatch, adfa->max_nmatch);
 	if (adfa->need_accept)
 	{
 		output.source.block().used_yyaccept = true;

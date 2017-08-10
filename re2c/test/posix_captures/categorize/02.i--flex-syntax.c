@@ -18,25 +18,22 @@
 		goto yy2;
 	}
 yy2:
-	{
-		const size_t yynmatch = 7;
-		const YYCTYPE *yypmatch[yynmatch * 2];
-		yypmatch[4] = yyt1;
-		yypmatch[5] = yyt2;
-		yypmatch[6] = yyt3;
-		yypmatch[7] = yyt4;
-		yypmatch[10] = yyt5;
-		yypmatch[12] = yyt6;
-		yypmatch[0] = yyt1;
-		yypmatch[1] = YYCURSOR;
-		yypmatch[2] = yyt1;
-		yypmatch[3] = yyt5;
-		yypmatch[8] = yyt5;
-		yypmatch[9] = YYCURSOR;
-		yypmatch[11] = yyt6;
-		yypmatch[13] = YYCURSOR;
-		{}
-	}
+	yynmatch = 7;
+	yypmatch[4] = yyt1;
+	yypmatch[5] = yyt2;
+	yypmatch[6] = yyt3;
+	yypmatch[7] = yyt4;
+	yypmatch[10] = yyt5;
+	yypmatch[12] = yyt6;
+	yypmatch[0] = yyt1;
+	yypmatch[1] = YYCURSOR;
+	yypmatch[2] = yyt1;
+	yypmatch[3] = yyt5;
+	yypmatch[8] = yyt5;
+	yypmatch[9] = YYCURSOR;
+	yypmatch[11] = yyt6;
+	yypmatch[13] = YYCURSOR;
+	{}
 yy3:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);

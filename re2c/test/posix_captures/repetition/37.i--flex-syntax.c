@@ -9,13 +9,10 @@
 		goto yy3;
 	}
 yy2:
-	{
-		const size_t yynmatch = 1;
-		const YYCTYPE *yypmatch[yynmatch * 2];
-		yypmatch[0] = YYCURSOR;
-		yypmatch[1] = YYCURSOR;
-		{}
-	}
+	yynmatch = 1;
+	yypmatch[0] = YYCURSOR;
+	yypmatch[1] = YYCURSOR;
+	{}
 yy3:
 	yych = *++YYCURSOR;
 	if (yych >= 0x01) {
@@ -35,25 +32,22 @@ yy5:
 	yyt7 = yyt8 = NULL;
 	yyt10 = YYCURSOR;
 yy6:
-	{
-		const size_t yynmatch = 7;
-		const YYCTYPE *yypmatch[yynmatch * 2];
-		yypmatch[2] = yyt1;
-		yypmatch[4] = yyt2;
-		yypmatch[5] = yyt3;
-		yypmatch[6] = yyt4;
-		yypmatch[7] = yyt5;
-		yypmatch[8] = yyt6;
-		yypmatch[10] = yyt7;
-		yypmatch[11] = yyt8;
-		yypmatch[12] = yyt9;
-		yypmatch[13] = yyt10;
-		yypmatch[0] = yyt1;
-		yypmatch[1] = YYCURSOR;
-		yypmatch[3] = yyt6;
-		yypmatch[9] = YYCURSOR;
-		{}
-	}
+	yynmatch = 7;
+	yypmatch[2] = yyt1;
+	yypmatch[4] = yyt2;
+	yypmatch[5] = yyt3;
+	yypmatch[6] = yyt4;
+	yypmatch[7] = yyt5;
+	yypmatch[8] = yyt6;
+	yypmatch[10] = yyt7;
+	yypmatch[11] = yyt8;
+	yypmatch[12] = yyt9;
+	yypmatch[13] = yyt10;
+	yypmatch[0] = yyt1;
+	yypmatch[1] = YYCURSOR;
+	yypmatch[3] = yyt6;
+	yypmatch[9] = YYCURSOR;
+	{}
 yy7:
 	yych = *++YYCURSOR;
 	if (yych <= 0x00) {

@@ -46,6 +46,7 @@ static void from_le(OutputFile &o, uint32_t ind, size_t size, const char *expr)
 
 void emit_prolog(OutputFile &o)
 {
+	o.ws("\n#include <stddef.h> /* size_t */");
 	o.ws("\n#include <stdio.h>");
 	o.ws("\n#include <stdlib.h> /* malloc, free */");
 	o.ws("\n#include <string.h> /* memcpy */");
@@ -97,7 +98,7 @@ void emit_prolog(OutputFile &o)
 	o.ws("\n");
 }
 
-void emit_start(OutputFile &o, size_t maxfill, const std::string &name,
+void emit_start(OutputFile &o, size_t maxfill, size_t maxnmatch, const std::string &name,
 	size_t sizeof_key, size_t def, bool backup, bool accept, bool oldstyle_ctxmarker,
 	const std::set<std::string> &stagnames, const std::set<std::string> &stagvars,
 	const std::set<std::string> &mtagnames, const std::set<std::string> &mtagvars,
@@ -323,6 +324,10 @@ void emit_start(OutputFile &o, size_t maxfill, const std::string &name,
 	o.ws("\n").wind(1).ws("const YYCTYPE *limit = NULL;");
 	o.ws("\n").wind(1).ws("const YYCTYPE *token = NULL;");
 	o.ws("\n").wind(1).ws("const YYCTYPE *eof = NULL;");
+	if (opts->posix_captures) {
+		o.ws("\n").wind(1).ws("size_t yynmatch;");
+		o.ws("\n").wind(1).ws("const YYCTYPE *yypmatch[").wu64(maxnmatch).ws(" * 2];");
+	}
 	o.ws("\n").wind(1).ws("unsigned int i = 0;");
 	if (!mtagnames.empty()) {
 		o.ws("\n");

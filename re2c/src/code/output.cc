@@ -294,6 +294,15 @@ OutputFile & OutputFile::wdelay_yymaxfill ()
 	return *this;
 }
 
+OutputFile& OutputFile::wdelay_yymaxnmatch()
+{
+	if (block().opts->target == TARGET_CODE
+		&& block().opts->posix_captures) {
+		block().fragments.push_back (new OutputFragment (OutputFragment::YYMAXNMATCH, 0));
+	}
+	return *this;
+}
+
 OutputFile& OutputFile::wdelay_skip(uint32_t ind, bool skip)
 {
 	if (skip) {
@@ -411,7 +420,7 @@ static void foldexpr(std::vector<OutputFragment*> &frags)
 bool OutputFile::emit(const uniq_vector_t<std::string> &global_types,
 	const std::set<std::string> &global_stags,
 	const std::set<std::string> &global_mtags,
-	size_t max_fill)
+	size_t max_fill, size_t max_nmatch)
 {
 	FILE *file = NULL;
 	std::string filename = block().opts->output_file;
@@ -471,6 +480,9 @@ bool OutputFile::emit(const uniq_vector_t<std::string> &global_types,
 				break;
 			case OutputFragment::YYMAXFILL:
 				output_yymaxfill(o, ind, max_fill, bopt);
+				break;
+			case OutputFragment::YYMAXNMATCH:
+				output_yymaxnmatch(o, ind, max_nmatch, bopt);
 				break;
 			case OutputFragment::SKIP:
 				output_skip(o, ind, bopt);
@@ -542,6 +554,7 @@ Output::Output(Warn &w)
 	, header()
 	, skeletons()
 	, max_fill(1)
+	, max_nmatch(1)
 {}
 
 bool Output::emit()
@@ -557,7 +570,7 @@ bool Output::emit()
 	// global options are last block's options
 	const opt_t *opts = source.block().opts;
 
-	return source.emit(types, stags, mtags, max_fill)
+	return source.emit(types, stags, mtags, max_fill, max_nmatch)
 		&& header.emit(opts, types);
 }
 
@@ -621,6 +634,12 @@ void output_yymaxfill(std::ostream &o, uint32_t ind,
 	size_t max_fill, const opt_t *opts)
 {
 	o << indent(ind, opts->indString) << "#define YYMAXFILL " << max_fill << "\n";
+}
+
+void output_yymaxnmatch(std::ostream &o, uint32_t ind,
+	size_t max_nmatch, const opt_t *opts)
+{
+	o << indent(ind, opts->indString) << "#define YYMAXNMATCH " << max_nmatch << "\n";
 }
 
 void output_line_info(std::ostream &o, uint32_t line,

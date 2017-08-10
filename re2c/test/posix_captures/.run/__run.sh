@@ -1,7 +1,7 @@
 
 # run <regex> <string> <match> [re2c-flags]
 run() {
-    re2c=../../../.build/re2c
+    re2c="../../../__build/re2c"
     f="test_"`date +%y%m%d%H%M%S`
     fail=0
 

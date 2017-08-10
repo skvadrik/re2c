@@ -8,29 +8,23 @@
 		yyt1 = YYCURSOR;
 		goto yy3;
 	}
-	{
-		const size_t yynmatch = 1;
-		const YYCTYPE *yypmatch[yynmatch * 2];
-		yypmatch[0] = YYCURSOR;
-		yypmatch[1] = YYCURSOR;
-		{}
-	}
+	yynmatch = 1;
+	yypmatch[0] = YYCURSOR;
+	yypmatch[1] = YYCURSOR;
+	{}
 yy3:
 	yych = *++YYCURSOR;
 	if (yych >= 0x01) goto yy5;
 	yyt2 = YYCURSOR;
 yy4:
-	{
-		const size_t yynmatch = 3;
-		const YYCTYPE *yypmatch[yynmatch * 2];
-		yypmatch[2] = yyt1;
-		yypmatch[4] = yyt2;
-		yypmatch[0] = yyt1;
-		yypmatch[1] = YYCURSOR;
-		yypmatch[3] = yyt2;
-		yypmatch[5] = YYCURSOR;
-		{}
-	}
+	yynmatch = 3;
+	yypmatch[2] = yyt1;
+	yypmatch[4] = yyt2;
+	yypmatch[0] = yyt1;
+	yypmatch[1] = YYCURSOR;
+	yypmatch[3] = yyt2;
+	yypmatch[5] = YYCURSOR;
+	{}
 yy5:
 	yych = *++YYCURSOR;
 	yyt2 = YYCURSOR;

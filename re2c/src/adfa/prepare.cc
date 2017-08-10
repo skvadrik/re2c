@@ -245,6 +245,13 @@ void DFA::calc_stats(uint32_t ln, bool explicit_tags)
 		}
 	}
 
+	// calculate 'YYMAXNMATCH'
+	max_nmatch = 0;
+	const size_t nrule = rules.size();
+	for (size_t i = 0; i < nrule; ++i) {
+		max_nmatch = std::max(max_nmatch, rules[i].ncap);
+	}
+
 	// determine if 'YYMARKER' or 'YYBACKUP'/'YYRESTORE' pair is used
 	need_backup = accepts.size () > 0;
 

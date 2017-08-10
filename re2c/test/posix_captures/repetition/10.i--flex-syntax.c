@@ -9,13 +9,10 @@
 		goto yy3;
 	}
 yy2:
-	{
-		const size_t yynmatch = 1;
-		const YYCTYPE *yypmatch[yynmatch * 2];
-		yypmatch[0] = YYCURSOR;
-		yypmatch[1] = YYCURSOR;
-		{}
-	}
+	yynmatch = 1;
+	yypmatch[0] = YYCURSOR;
+	yypmatch[1] = YYCURSOR;
+	{}
 yy3:
 	yych = *++YYCURSOR;
 	if (yych >= 0x01) {
@@ -40,31 +37,28 @@ yy5:
 	yyt12 = yyt13 = NULL;
 	yyt15 = YYCURSOR;
 yy7:
-	{
-		const size_t yynmatch = 10;
-		const YYCTYPE *yypmatch[yynmatch * 2];
-		yypmatch[2] = yyt1;
-		yypmatch[4] = yyt2;
-		yypmatch[5] = yyt3;
-		yypmatch[6] = yyt4;
-		yypmatch[7] = yyt5;
-		yypmatch[8] = yyt6;
-		yypmatch[10] = yyt7;
-		yypmatch[11] = yyt8;
-		yypmatch[12] = yyt9;
-		yypmatch[13] = yyt10;
-		yypmatch[14] = yyt11;
-		yypmatch[16] = yyt12;
-		yypmatch[17] = yyt13;
-		yypmatch[18] = yyt14;
-		yypmatch[19] = yyt15;
-		yypmatch[0] = yyt1;
-		yypmatch[1] = YYCURSOR;
-		yypmatch[3] = yyt6;
-		yypmatch[9] = yyt11;
-		yypmatch[15] = YYCURSOR;
-		{}
-	}
+	yynmatch = 10;
+	yypmatch[2] = yyt1;
+	yypmatch[4] = yyt2;
+	yypmatch[5] = yyt3;
+	yypmatch[6] = yyt4;
+	yypmatch[7] = yyt5;
+	yypmatch[8] = yyt6;
+	yypmatch[10] = yyt7;
+	yypmatch[11] = yyt8;
+	yypmatch[12] = yyt9;
+	yypmatch[13] = yyt10;
+	yypmatch[14] = yyt11;
+	yypmatch[16] = yyt12;
+	yypmatch[17] = yyt13;
+	yypmatch[18] = yyt14;
+	yypmatch[19] = yyt15;
+	yypmatch[0] = yyt1;
+	yypmatch[1] = YYCURSOR;
+	yypmatch[3] = yyt6;
+	yypmatch[9] = yyt11;
+	yypmatch[15] = YYCURSOR;
+	{}
 yy8:
 	yych = *++YYCURSOR;
 	if (yych <= 0x00) {

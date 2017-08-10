@@ -97,6 +97,13 @@ echo:
 		goto echo;
 	}
 
+	"/*!maxnmatch:re2c" {
+		out.wraw(tok, ptr);
+		out.wdelay_yymaxnmatch();
+		lex_end_of_comment(out);
+		goto echo;
+	}
+
 	"/*!getstate:re2c" {
 		out.wraw(tok, ptr);
 		out.wdelay_state_goto(0);

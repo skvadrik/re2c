@@ -42,6 +42,7 @@ DFA::DFA
 	, finvers(dfa.finvers)
 	, tcpool(dfa.tcpool)
 	, max_fill (0)
+	, max_nmatch(0)
 	, need_backup (false)
 	, need_accept (false)
 	, oldstyle_ctxmarker (false)

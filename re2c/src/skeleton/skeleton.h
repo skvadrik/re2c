@@ -110,7 +110,7 @@ void warn_undefined_control_flow(const Skeleton &skel, Warn &warn);
 void fprint_default_path(FILE *f, const Skeleton &skel, const path_t &p);
 void emit_data(const Skeleton &skel);
 void emit_prolog(OutputFile & o);
-void emit_start(OutputFile &o, size_t maxfill, const std::string &name,
+void emit_start(OutputFile &o, size_t maxfill, size_t maxnmatch, const std::string &name,
 	size_t sizeof_key, size_t def, bool backup, bool accept, bool oldstyle_ctxmarker,
 	const std::set<std::string> &stagnames, const std::set<std::string> &stagvars,
 	const std::set<std::string> &mtagnames, const std::set<std::string> &mtagvars,

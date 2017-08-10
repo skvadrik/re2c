@@ -11,19 +11,16 @@
 	yyt2 = yyt3 = yyt4 = yyt5 = yyt6 = yyt7 = NULL;
 	yyt1 = YYCURSOR;
 yy2:
-	{
-		const size_t yynmatch = 4;
-		const YYCTYPE *yypmatch[yynmatch * 2];
-		yypmatch[0] = yyt1;
-		yypmatch[2] = yyt2;
-		yypmatch[3] = yyt3;
-		yypmatch[4] = yyt4;
-		yypmatch[5] = yyt5;
-		yypmatch[6] = yyt6;
-		yypmatch[7] = yyt7;
-		yypmatch[1] = YYCURSOR;
-		{}
-	}
+	yynmatch = 4;
+	yypmatch[0] = yyt1;
+	yypmatch[2] = yyt2;
+	yypmatch[3] = yyt3;
+	yypmatch[4] = yyt4;
+	yypmatch[5] = yyt5;
+	yypmatch[6] = yyt6;
+	yypmatch[7] = yyt7;
+	yypmatch[1] = YYCURSOR;
+	{}
 yy3:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);

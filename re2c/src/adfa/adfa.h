@@ -77,6 +77,7 @@ struct DFA
 	const tagver_t *finvers;
 	tcpool_t &tcpool;
 	size_t max_fill;
+	size_t max_nmatch;
 	bool need_backup;
 	bool need_accept;
 	bool oldstyle_ctxmarker;

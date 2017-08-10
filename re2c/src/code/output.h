@@ -48,6 +48,7 @@ struct OutputFragment
 		, TYPES
 		, YYACCEPT_INIT
 		, YYMAXFILL
+		, YYMAXNMATCH
 		, SKIP
 		, PEEK
 		, BACKUP
@@ -136,6 +137,7 @@ public:
 	OutputFile & wdelay_types ();
 	OutputFile & wdelay_yyaccept_init (uint32_t ind);
 	OutputFile & wdelay_yymaxfill ();
+	OutputFile& wdelay_yymaxnmatch();
 	OutputFile& wdelay_skip(uint32_t ind, bool skip);
 	OutputFile& wdelay_peek(uint32_t ind, bool peek);
 	OutputFile& wdelay_backup(uint32_t ind, bool backup);
@@ -145,7 +147,8 @@ public:
 
 	bool emit(const uniq_vector_t<std::string> &global_types,
 		const std::set<std::string> &global_stags,
-		const std::set<std::string> &global_mtags, size_t max_fill);
+		const std::set<std::string> &global_mtags,
+		size_t max_fill, size_t max_nmatch);
 
 	FORBID_COPY (OutputFile);
 };
@@ -166,6 +169,7 @@ struct Output
 	HeaderFile header;
 	std::set<std::string> skeletons;
 	size_t max_fill;
+	size_t max_nmatch;
 
 	explicit Output(Warn &w);
 	bool emit();
@@ -180,6 +184,7 @@ void output_types         (std::ostream &o, uint32_t ind, const opt_t *opts, con
 void output_version_time  (std::ostream &o, bool version, bool date);
 void output_yyaccept_init (std::ostream &o, uint32_t ind, bool, const opt_t *opts);
 void output_yymaxfill     (std::ostream &o, uint32_t ind, size_t max_fill, const opt_t *opts);
+void output_yymaxnmatch   (std::ostream &o, uint32_t ind, size_t max_nmatch, const opt_t *opts);
 
 } // namespace re2c
 

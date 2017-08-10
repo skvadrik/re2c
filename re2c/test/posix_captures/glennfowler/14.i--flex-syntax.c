@@ -10,19 +10,16 @@
 	}
 	yyt1 = yyt2 = yyt3 = YYCURSOR;
 yy2:
-	{
-		const size_t yynmatch = 4;
-		const YYCTYPE *yypmatch[yynmatch * 2];
-		yypmatch[2] = yyt1;
-		yypmatch[4] = yyt2;
-		yypmatch[6] = yyt3;
-		yypmatch[0] = yyt1;
-		yypmatch[1] = YYCURSOR;
-		yypmatch[3] = yyt2;
-		yypmatch[5] = yyt3;
-		yypmatch[7] = YYCURSOR;
-		{}
-	}
+	yynmatch = 4;
+	yypmatch[2] = yyt1;
+	yypmatch[4] = yyt2;
+	yypmatch[6] = yyt3;
+	yypmatch[0] = yyt1;
+	yypmatch[1] = YYCURSOR;
+	yypmatch[3] = yyt2;
+	yypmatch[5] = yyt3;
+	yypmatch[7] = YYCURSOR;
+	{}
 yy3:
 	yych = *++YYCURSOR;
 	if (yych <= 0x00) {

@@ -165,10 +165,7 @@ void emit_rule(OutputFile &o, uint32_t ind, const DFA &dfa, size_t rule_idx)
 	const Rule &rule = dfa.rules[rule_idx];
 	const Code *code = rule.code;
 	const std::string &cond = code->cond;
-	const bool wrap = rule.ncap > 0;
 	std::string s;
-
-	if (wrap) o.wind(ind++).ws("{\n");
 
 	gen_fintags(o, ind, dfa, rule);
 
@@ -195,8 +192,6 @@ void emit_rule(OutputFile &o, uint32_t ind, const DFA &dfa, size_t rule_idx)
 			o.wind(ind).wstring(s).ws("\n");
 		}
 	}
-
-	if (wrap) o.wind(--ind).ws("}\n");
 }
 
 void need(OutputFile &o, uint32_t ind, size_t some)
@@ -389,8 +384,7 @@ void gen_fintags(OutputFile &o, uint32_t ind, const DFA &dfa, const Rule &rule)
 	const tagver_t *fins = dfa.finvers;
 
 	if (rule.ncap > 0) {
-		o.wind(ind).ws("const size_t yynmatch = ").wu64(rule.ncap).ws(";\n");
-		o.wind(ind).ws("const ").wstring(opts->yyctype).ws(" *yypmatch[yynmatch * 2];\n");
+		o.wind(ind).ws("yynmatch = ").wu64(rule.ncap).ws(";\n");
 	}
 
 	// variable tags

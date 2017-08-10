@@ -11,13 +11,10 @@
 	default:	goto yy2;
 	}
 yy2:
-	{
-		const size_t yynmatch = 1;
-		const YYCTYPE *yypmatch[yynmatch * 2];
-		yypmatch[0] = YYCURSOR;
-		yypmatch[1] = YYCURSOR;
-		{}
-	}
+	yynmatch = 1;
+	yypmatch[0] = YYCURSOR;
+	yypmatch[1] = YYCURSOR;
+	{}
 yy3:
 	yych = *++YYCURSOR;
 	if (yych >= 0x01) goto yy8;
@@ -26,15 +23,12 @@ yy3:
 yy5:
 	++YYCURSOR;
 yy6:
-	{
-		const size_t yynmatch = 2;
-		const YYCTYPE *yypmatch[yynmatch * 2];
-		yypmatch[0] = yyt1;
-		yypmatch[1] = YYCURSOR;
-		yypmatch[2] = YYCURSOR - 2;
-		yypmatch[3] = YYCURSOR;
-		{}
-	}
+	yynmatch = 2;
+	yypmatch[0] = yyt1;
+	yypmatch[1] = YYCURSOR;
+	yypmatch[2] = YYCURSOR - 2;
+	yypmatch[3] = YYCURSOR;
+	{}
 yy7:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);

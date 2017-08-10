@@ -14,15 +14,12 @@
 		goto yy3;
 	}
 yy2:
-	{
-		const size_t yynmatch = 2;
-		const YYCTYPE *yypmatch[yynmatch * 2];
-		yypmatch[0] = yyt1;
-		yypmatch[2] = yyt1;
-		yypmatch[3] = yyt2;
-		yypmatch[1] = YYCURSOR;
-		{}
-	}
+	yynmatch = 2;
+	yypmatch[0] = yyt1;
+	yypmatch[2] = yyt1;
+	yypmatch[3] = yyt2;
+	yypmatch[1] = YYCURSOR;
+	{}
 yy3:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);

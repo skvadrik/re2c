@@ -179,9 +179,9 @@ void DFA::emit(Output & output, uint32_t& ind, bool isLastCond, bool& bPrologBra
 	if (opts->target == TARGET_SKELETON) {
 		if (output.skeletons.insert (name).second)
 		{
-			emit_start(o, max_fill, name, key_size, def_rule, need_backup,
-				need_accept, oldstyle_ctxmarker, stagnames, stagvars,
-				mtagnames, mtagvars, bitmaps);
+			emit_start(o, max_fill, max_nmatch, name, key_size, def_rule,
+				need_backup, need_accept, oldstyle_ctxmarker,
+				stagnames, stagvars, mtagnames, mtagvars, bitmaps);
 			uint32_t i = 2;
 			emit_body (o, i, used_labels, initial_label);
 			emit_end(o, name, need_backup, oldstyle_ctxmarker, mtagnames);

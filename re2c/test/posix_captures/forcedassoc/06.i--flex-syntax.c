@@ -11,13 +11,10 @@
 	default:	goto yy2;
 	}
 yy2:
-	{
-		const size_t yynmatch = 1;
-		const YYCTYPE *yypmatch[yynmatch * 2];
-		yypmatch[0] = YYCURSOR;
-		yypmatch[1] = YYCURSOR;
-		{}
-	}
+	yynmatch = 1;
+	yypmatch[0] = YYCURSOR;
+	yypmatch[1] = YYCURSOR;
+	{}
 yy3:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -48,21 +45,18 @@ yy6:
 	yyt3 = YYCURSOR;
 	goto yy11;
 yy7:
-	{
-		const size_t yynmatch = 5;
-		const YYCTYPE *yypmatch[yynmatch * 2];
-		yypmatch[4] = yyt1;
-		yypmatch[6] = yyt2;
-		yypmatch[8] = yyt3;
-		yypmatch[0] = yyt1;
-		yypmatch[1] = YYCURSOR;
-		yypmatch[2] = yyt1;
-		yypmatch[3] = yyt3;
-		yypmatch[5] = yyt2;
-		yypmatch[7] = yyt3;
-		yypmatch[9] = YYCURSOR;
-		{}
-	}
+	yynmatch = 5;
+	yypmatch[4] = yyt1;
+	yypmatch[6] = yyt2;
+	yypmatch[8] = yyt3;
+	yypmatch[0] = yyt1;
+	yypmatch[1] = YYCURSOR;
+	yypmatch[2] = yyt1;
+	yypmatch[3] = yyt3;
+	yypmatch[5] = yyt2;
+	yypmatch[7] = yyt3;
+	yypmatch[9] = YYCURSOR;
+	{}
 yy8:
 	yych = *++YYCURSOR;
 	switch (yych) {
