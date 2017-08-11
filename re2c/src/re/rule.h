@@ -7,7 +7,6 @@
 #include <string>
 
 #include "src/re/tag.h"
-#include "src/util/forbid_copy.h"
 #include "src/util/free_list.h"
 
 namespace re2c
@@ -63,7 +62,26 @@ struct Rule
 
 	Rule(): code(NULL), shadow(),
 		ltag(0), htag(0), ttag(0), ncap(0) {}
-	FORBID_COPY(Rule);
+
+	// copy ctor and assignment are required for containers on macOS
+	Rule(const Rule &r)
+		: code(r.code)
+		, shadow(r.shadow)
+		, ltag(r.ltag)
+		, htag(r.htag)
+		, ttag(r.ttag)
+		, ncap(r.ncap)
+	{}
+	Rule& operator= (const Rule &r)
+	{
+		code = r.code;
+		shadow = r.shadow;
+		ltag = r.ltag;
+		htag = r.htag;
+		ttag = r.ttag;
+		ncap = r.ncap;
+		return *this;
+	}
 };
 
 } // namespace re2c
