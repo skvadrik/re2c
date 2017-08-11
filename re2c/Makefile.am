@@ -221,6 +221,7 @@ EXTRA_DIST = \
 	autogen.sh \
 	doc/loplas.ps \
 	doc/sample.bib \
+	doc/tdfa/tdfa.pdf \
 	examples \
 	test
 
