@@ -3,7 +3,8 @@
 \usepackage{amsmath,amssymb,amsthm,amsfonts}
 \usepackage[utf8]{inputenc}
 \usepackage{graphicx}
-\usepackage{caption}
+\usepackage{enumitem}
+\usepackage[justification=centering]{caption}
 \usepackage{url}
 \usepackage{multicol}\setlength{\columnsep}{1cm}
 %\usepackage[vlined]{algorithm2e}\setlength{\algomargin}{0em}\SetArgSty{textnormal}
@@ -13,7 +14,6 @@
     \SetNoFillComment
     \newcommand{\Xcmfont}[1]{\texttt{\footnotesize{#1}}}\SetCommentSty{Xcmfont}
 
-\usepackage{enumitem}
 \setlist{nosep}
 \setlistdepth{9}
 \setlist[enumerate,1]{label=$\arabic*.$}
@@ -27,7 +27,6 @@
 \setlist[enumerate,9]{label=$\roman*$}
 \renewlist{enumerate}{enumerate}{9}
 
-\usepackage[justification=centering]{caption}
 \newenvironment{Xfig}
     {\par\medskip\noindent\minipage{\linewidth}\begin{center}}
     {\end{center}\endminipage\par\medskip}
@@ -172,7 +171,7 @@ And this corresponds to automaton behavior:
 This behavior is correct (it yields the same result), but strangely inefficient:
 it repeatedly saves input position after every \texttt{a},
 while for the programmer it is obvious that there is nothing to save until the first non-\texttt{a}.
-One might object that the compiler would optimize out the difference,
+One might object that the C compiler would optimize out the difference,
 and it probably would in simple cases like this.
 However, the flaw is common to all Laurikari automata:
 they ignore lookahead when recording submatches.
@@ -251,14 +250,14 @@ The following definition of regular expressions, with minor notational differenc
     \end{Xdef}
 
 The usual assumption is that iteration has precedence over product and product has precedence over sum,
-and redundant parenthesis may be omitted.
+and redundant parentheses may be omitted.
 $\emptyset$ and $\epsilon$ are special symbols not included in the alphabet $\Sigma$ (they correspond to $1$ and $0$ in the Kleene algebra).
 Since RE are only a notation, their exact meaning depends on the particular \emph{interpretation}.
 In the \emph{standard} interpretation RE denote \emph{languages}: sets of strings over the alphabet of RE.
 \\
 
 Let $\epsilon$ denote the \emph{empty string} (not to be confused with RE $\epsilon$),
-and let $\Sigma^*$ denote the set of all (possibly empty) strings over $\Sigma$.
+and let $\Sigma^*$ denote the set of all strings over $\Sigma$ (including the empty string $\epsilon$).
 
     \begin{Xdef}
     \emph{Language} over $\Sigma$ is a subset of $\Sigma^*$.
@@ -375,7 +374,7 @@ Generalized repetition, on the other hand, allows to express all kinds of iterat
     \end{Xdef}
 
     As usual, we assume that repetition has precedence over product and product has precedence over sum,
-    and redundant parenthesis may be omitted.
+    and redundant parentheses may be omitted.
     Additionally, the following shorthand notation may be used:
     \begin{align*}
 %        e^n     &\quad\text{for}\quad \overbrace{e \dots e}^{n} \\[-0.5em]
@@ -419,10 +418,10 @@ This interpretation retains submatch information; however, it misses one importa
 Negative submatches are implicitly encoded in the structure of TRE:
 we can always deduce the \emph{absence} of tag from its \emph{presence} on alternative branch of TRE.
 To see why this is important, consider POSIX RE \texttt{(a(b)?)*} matched against string \texttt{aba}.
-The outermost capturing group matches twice at offsets 0, 2 and 2, 3 (opening and closing parenthesis respectively).
-The innermost group matches only once at offsets 1, 2; there is no match corresponding to second outermost iteration.
+The outermost capturing group matches twice at offsets 0, 2 and 2, 3 (opening and closing parentheses respectively).
+The innermost group matches only once at offsets 1, 2; there is no match corresponding to the second outermost iteration.
 POSIX standard demands that the value on the last iteration is reported: that is, the absence of match.
-Aside from POSIX, one might be interested in the whole history of submatch.
+Even aside from POSIX, one might be interested in the whole history of submatch.
 Therefore we will rewrite TRE in a form that makes negative submatches explicit
 (by tracking tags on alternative branches and inserting negative tags at all join points).
 Negative tags are marked with bar, and $\Xbar{T}$ denotes the set of all negative tags.
@@ -819,6 +818,7 @@ is to simply gather all possible non-looping $\epsilon$-paths.
 Note that we only need paths that end in the final state
 or paths which end state has outgoing transitions on symbols:
 all other paths will be dropped by $reach$ on the next simulation step.
+Such states are called \emph{core states}; they belong to subsets 1 or 3 in observation \ref{obs_tnfa_states}.
 \\
 
     \begin{algorithm}[H] \DontPrintSemicolon \SetKwProg{Fn}{}{}{} \SetAlgoInsideSkip{medskip}
@@ -876,7 +876,7 @@ later we will show that both POSIX and leftmost greedy policies have this proper
 The problem of closure construction can be expressed in terms of single-source shortest-path problem
 in directed graph with cycles and mixed (positive and negative) arc weights.
 (We assume that all initial closure states are connected to one imaginary ``source'' state).
-Most algorithms for solving shortest-path problem have the same basic structure (see e.g. \cite{Cor09}, chapter24):
+Most algorithms for solving shortest-path problem have the same basic structure (see e.g. \cite{Cor09}, chapter 24):
 starting with the source node, repeatedly scan nodes;
 for each scanned node apply \emph{relaxation} to all outgoing arcs;
 if path to the given node has been improved, schedule it for further scanning.
@@ -1726,7 +1726,7 @@ and established that both are prefix-based and foldable.
 This makes them suitable for determinization, but also opens possibilities for more efficient simulation.
 In particular, there's no need to remember the whole T-string for each active path:
 we only need ordinals and the most recent fragment added by the $\epsilon$-closure.
-All the rest can be immediately decomposed into tag value function (or any other suitable representation).
+All the rest can be immediately decomposed into tag value function.
 Consequently, we extend configurations with vectors of \emph{tag values}:
 in general, each value is an offset list of arbitrary length,
 but in practice values may be single offsets or anything else.
@@ -1771,7 +1771,8 @@ which brings us to the following definition of TDFA:
     $\square$
     \end{Xdef}
 
-Operations on registers have the form $r_1 \Xeq r_2 b_1 \dots b_n$, where $b_1 \dots b_n$ are booleans 
+Operations on registers are associated with transitions, final states and start state,
+and have the form $r_1 \Xeq r_2 b_1 \dots b_n$, where $b_1 \dots b_n$ are booleans 
 $1$, $0$ denoting \emph{current position} and \emph{default value}.
 For example, $r_1 \Xeq 0$ means ``set $r_1$ to default value'',
 $r_1 \Xeq r_2$ means ``copy $r_2$ to $r_1$'' and
@@ -1779,7 +1780,7 @@ $r_1 \Xeq r_1 1 1$ means ``append current position to $r_1$ twice''.
 \\
 
 TDFA definition looks very similar to the definition of
-\emph{deterministic streaming string transducer (DSST)}, described by Alur and Cerny in \cite{AC11}.
+\emph{deterministic streaming string transducer (DSST)}, described by Alur and Černý in \cite{AC11}.
 Indeed, the two kinds of automata are similar and have similar applications: DSSTs are used for RE parsing in \cite{Gra15}.
 However, their semantics is different: TDFA operates on tag values, while DSST operates on strings of the output language.
 What is more important, DSST is \emph{copyless}:
@@ -1819,9 +1820,8 @@ Deterministic tags need only a single register and can be implemented without co
 \\
 
 Laurikari used TDFA(0); we study both methods and argue that TDFA(1) is better.
-Determinization algorithm can handle both types of automata in a uniform way:
-it has a boolean parameter $\ell$ that enables the use of lookahead.
-The full algorithm is defined on Figure 7.
+Determinization algorithm is defined on Figure 7;
+it handles both types of automata in a uniform way.
 States are sets of configurations $(q, v, o, x)$,
 where $q$ is a core TNFA state, $v$ is a vector of registers that hold tag values, $o$ is the ordinal
 and $x$ is the T-string of the $\epsilon$-path by which $q$ was reached.
@@ -2083,7 +2083,7 @@ Ordinals are omitted for brevity: in case of leftmost greedy policy they coincid
 Dotted states and transitions illustrate the process of mapping:
 each dotted state has a transition to solid state (labeled with reordering operations).
 Initializer and finalizers are also dotted;
-final register versions are shown in parenthesis.
+final register versions are shown in parentheses.
 Discarded ambiguous paths (if any) are shown in light gray.
 Compact form shows the resulting TDFA.
 Alphabet symbols on TNFA transitions are shown as ASCII codes.
@@ -2429,15 +2429,15 @@ These tests include examples of useful real-world programs
 and checks for various optimizations, errors and special cases.
 \\
 
-Second, RE2C implementation of POSIX captures was verified on the canonical POSIX test suite provided by Glenn Fowler \cite{Fow03}.
+Second, RE2C implementation of POSIX captures was verified on the canonical POSIX test suite composed by Glenn Fowler \cite{Fow03}.
 I used the augmented version provided by Kuklewicz \cite{Kuk09} and excluded a few tests that check POSIX-specific extensions
 which are not supported by RE2C (e.g. start and end anchors \texttt{\^} and \texttt{\$}) ---
 the excluded tests do not contain any special cases of submatch extraction.
 \\
 
-Third, and probably most important, I used \emph{fuzzer} contributed by Sergei Trofimovich
-(available as part of RE2C source code)
-and based on haskell QuickCheck library \cite{CH11}.
+Third, and probably most important, I used the \emph{fuzzer} contributed by Sergei Trofimovich
+(available as a part of RE2C source code)
+and based on the Haskell QuickCheck library \cite{CH11}.
 Fuzzer generates random RE with the given \emph{constrains}
 and verifies that each generated RE satisfies certain \emph{properties}.
 By redefining the set of constraints one can control the size and the form of RE:
@@ -2490,10 +2490,12 @@ I used it to verify the following properties:
         First bug can be triggered by RE \texttt{(((a*)|b)|b)+} and input string \texttt{ab}:
         Regex-TDFA returns incorrect submatch result for second capturing group \texttt{((a*)|b)}
         (no match instead of \texttt{b} at offset 1).
+        Some alternative variants that also fail: \texttt{(((a*)|b)|b)\{1,2\}}, \texttt{((b|(a*))|b)+}.
 
         Second bug can be triggered by RE \texttt{((a?)(())*|a)+} and input string \texttt{aa}.
         Incorrect result is for second group \texttt{(a?)} (no match instead of \texttt{a} at offset 1),
         third group \texttt{(())} and fourth group \texttt{()} (no match instead of empty match at offset 2).
+        Alternative variant that also fails: \texttt{((a?()?)|a)+}.
 
         Tested against Regex-TDFA-1.2.2.
 
@@ -2505,7 +2507,7 @@ I used it to verify the following properties:
 I did not compare RE2C against other libraries, such as \cite{TRE} or \cite{RE2},
 as none of these libraries support POSIX submatch semantics:
 TRE has known bugs \cite{LTU},
-and RE2 author explicitly states that POSIX semantics is not supported \cite{Cox17}.
+and RE2 author explicitly states that POSIX submatch semantics is not supported \cite{Cox17}.
 
 \subsection*{Benchmarks}
 
@@ -2538,7 +2540,7 @@ RE2C was run in three different settings:
 default mode, with \texttt{-b} option (generate bit masks and nested \texttt{if}-s instead of plain \texttt{switch}-es),
 and with \texttt{--no-optimize-tags} option (suppress optimizations of tag variables described in section \ref{section_implementation}).
 All benchmarks were run on 64-bit Intel Core i3 machine with 3G RAM and 32K L1d, 32K L1i, 256K L2 and 3072K L3 caches;
-each result is the average of 4 subsequent runs after a proper ``warm-up''.
+each result is the average of 4 subsequent runs after a proper warm-up.
 Benchmark results are summarized in tables 1 --- 4
 and visualized on subsequent plots.
 \\
@@ -2726,9 +2728,9 @@ Benchmark results show the following:
 
     \item Nondeterminism levels are not so high in the example programs.
 
-    \item RE2C optimizations reduce binary size, even with optimizing C compilers.
+    \item RE2C optimizations of tag variables reduce binary size, even with optimizing C compilers.
 
-    \item RE2C optimizations have less effect on execution time: usually they reduce it, but not by much.
+    \item RE2C optimizations of tag variables have less effect on execution time: usually they reduce it, but not by much.
     \\
 \end{itemize}
 
@@ -2738,7 +2740,7 @@ Benchmark results show the following:
 TDFA(1) is a practical method for submatch extraction in lexer generators that optimize for speed of the generated code.
 It incurs a modest overhead compared to simple recognition,
 and the overhead depends on detalization of submatch
-(in many cases it is proportional to the number of submatches).
+(in many cases it is proportional to the number of tags).
 One exception is the case of ambiguous submatch in the presence of bounded repetition:
 it causes high degree of nondeterminism for the corresponding tags
 and renders the method impractical compared to hand-written code.
@@ -2748,12 +2750,12 @@ Experimental results show that TDFA(1) achieves 1.5x -- 2x speedup compared to T
 and in most cases it results in smaller binary size.
 \\ \\
 TDFA method is capable of extracting repeated submatches,
-and therefore is applicable fo full parsing.
+and therefore it is applicable to full parsing.
 Efficiency of the generated parsers depends on the data structures used to hold and manipulate repeated submatch values
 (an efficient implementation is possible).
 \\ \\
 TDFA can be used in combination with various disambiguation policies;
-in particular, leftmost greedy policy and POSIX policy.
+in particular, leftmost greedy and POSIX policies.
 
 
 \section{Future work}\label{section_future_work}
@@ -2786,12 +2788,16 @@ as it has stronger guarantees and deeper knowledge of the program than the C com
 
 This study would not be possible without the help of Sergei Trofimovich.
 His relentless work on open source projects
-and his aspiration to track down and fix the hardest bugs
-have always raised my spirit and helped me through tough times (morally and technically).
+and his ability to track down and fix the hardest bugs are my highest ideal of a programmer.
+If it were not for him, I would not even know about RE2C.
 \\
 
-I'm also grateful to my parents Vladimir Fokanov and Elina Fokanova for the love of mathematics,
-and to all good people who cheered me up. :)
+All that I understand in mathematics I owe to my parents Vladimir Fokanov and Elina Fokanova,
+my school teacher Tatyana Leonidovna Ilyushenko
+and the Belarusian State University [BSU].
+\\
+
+And many thanks to all the good people who cheered me up during this work. :)
 
 \end{multicols}
 \pagebreak
