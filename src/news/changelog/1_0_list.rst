@@ -1,0 +1,91 @@
+- Added options:
+    + ``-P --posix-captures`` (POSIX-compliant capturing groups)
+    + ``-T --tags`` (standalone tags with leftmost greedy disambiguation)
+    + ``--no-lookahead``
+    + ``--no-optimize-tags``
+    + ``--eager-skip``
+    + ``--dump-nfa``
+    + ``--dump-dfa-raw``
+    + ``--dump-dfa-det``
+    + ``--dump-dfa-tagopt``
+    + ``--dump-dfa-min``
+    + ``--dump-adfa``
+- Added new syntax:
+    + ``@<stag>``
+    + ``#<mtag>``
+- Added new directives:
+    + ``/*!stags:re2c ... */``
+    + ``/*!mtags:re2c ... */``
+    + ``/*!maxnmatch:re2c ... */``
+- Added new API:
+    + ``YYSTAGN (t)``
+    + ``YYSTAGP (t)``
+    + ``YYMTAGN (t)``
+    + ``YYMTAGP (t)``
+    + ``YYRESTORETAG (t)``
+    + ``YYMAXNMATCH``
+    + ``yynmatch``
+    + ``yypmatch``
+- Added inplace confgurations:
+    + ``re2c:define:YYSTAGN``
+    + ``re2c:define:YYSTAGP``
+    + ``re2c:define:YYMTAGN``
+    + ``re2c:define:YYMTAGP``
+    + ``re2c:define:YYRESTORETAG``
+    + ``re2c:flags:8`` or ``re2c:flags:utf-8````
+    + ``re2c:flags:b`` or ``re2c:flags:bit-vectors``
+    + ``re2c:flags:case-insensitive``
+    + ``re2c:flags:case-inverted``
+    + ``re2c:flags:d`` or ``re2c:flags:debug-output``
+    + ``re2c:flags:dfa-minimization``
+    + ``re2c:flags:eager-skip``
+    + ``re2c:flags:e`` or ``re2c:flags:ecb``
+    + ``re2c:flags:empty-class``
+    + ``re2c:flags:encoding-policy``
+    + ``re2c:flags:g`` or ``re2c:flags:computed-gotos``
+    + ``re2c:flags:i`` or ``re2c:flags:no-debug-info``
+    + ``re2c:flags:input``
+    + ``re2c:flags:lookahead``
+    + ``re2c:flags:optimize-tags``
+    + ``re2c:flags:P`` or ``re2c:flags:posix-captures``
+    + ``re2c:flags:s`` or ``re2c:flags:nested-ifs``
+    + ``re2c:flags:T`` or ``re2c:flags:tags``
+    + ``re2c:flags:u`` or ``re2c:flags:unicode``
+    + ``re2c:flags:w`` or ``re2c:flags:wide-chars``
+    + ``re2c:flags:x`` or ``re2c:flags:utf-16``
+    + ``re2c:tags:expression``
+    + ``re2c:tags:prefix``
+- Added warning ``-Wnondeterministic-tags``
+- Added fuzz-testing scripts
+- Added paper "Tagged Deterministic Finite Automata with Lookahead"
+- Fixed bugs:
+    + #121 "trailing contexts are fundamentally broken"
+    + #135 "In installation ``make check`` give syntax error"
+    + #137 "run_tests.sh fail when running configure script with absolute path"
+    + #138 "website improvement"
+    + #141 "Tests under Windows"
+    + #142 "segvault with null terminated input"
+    + #145 "Values for enum YYCONDTYPE are not generated when default rules with conditions are used"
+    + #147 "Please add symbol name to "can't find symbol" error message"
+    + #152 "Line number in #line directive after enum YYCONDTYPE is 0-based"
+    + #156 "Build with Visual Studio 14 2015: symbol name conflict"
+    + #158 "Inconsistent forward declaration of struct/class vs definition"
+    + #160 "Open text files with "wb" causes issues on Windows"
+    + #162 "Reading files with "rb" causes issues in Windows"
+    + #165 "Trailing context consumed if initial expression matches it"
+    + #176 "re2c help message is too wide for most terminals"
+    + #184 "Small documentation issue"
+    + #186 "Difference operator sometimes doesn't work with utf-8"
+- Merged pull requests:
+    + #131 "Use bash-specific ``[[`` builtin"
+    + #136 "Added basic support for travis-ci.org integration"
+    + #171 "Typo fix"
+    + #172 "Grammar fixes in the docs"
+    + #173 "Grammar fixes in the manpage"
+    + #174 "more documentation fixes"
+    + #175 "more manpage fixes"
+    + #177 "sync --help output w/ manpage"
+    + #178 "Moves rts used in the manpage to master"
+    + #179 "compose manpage out of rsts from gh-pages-gen"
+    + #189 "Typo fix and small grammatical change"
+    + #191 "Makefile.am: create target directory before writing into it"
