@@ -183,7 +183,8 @@ html_static_path = ['_static']
 html_extra_path = [
     'CNAME',
     '.nojekyll',
-    'feed/'
+    'feed/',
+    'about/2017_trofimovich_tagged_deterministic_finite_automata_with_lookahead.pdf'
 ]
 
 # If not '', a 'Last updated on:' timestamp is inserted at every page bottom,

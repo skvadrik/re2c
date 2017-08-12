@@ -15,7 +15,7 @@ by Peter Bumbulis, Donald D. Cowan, 1994,
 ACM Letters on Programming Languages and Systems (LOPLAS).
 
 The implementation of submatch extraction in re2c is described in the article
-:download:`"Tagged Deterministic Finite Automata with Lookahead" <2017_trofimovich_tagged_deterministic_finite_automata_with_lookahead.pdf>`
+`"Tagged Deterministic Finite Automata with Lookahead" <../2017_trofimovich_tagged_deterministic_finite_automata_with_lookahead.pdf>`_
 by Ulya Trofimovich, 2017.
 
 Since then many people have contributed to re2c:

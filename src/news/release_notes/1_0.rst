@@ -42,7 +42,7 @@ and perform a lot of redundant operations that could be easily avoided.
 It was only logical to fix Laurikari algorithm;
 but as I worked on it, a couple of other issues showed up,
 and so it happened that I ended up writing a whole paper on the subject:
-:download:`"Tagged Deterministic Finite Automata with Lookahead" <../../about/2017_trofimovich_tagged_deterministic_finite_automata_with_lookahead.pdf>`.
+`"Tagged Deterministic Finite Automata with Lookahead" <../../2017_trofimovich_tagged_deterministic_finite_automata_with_lookahead.pdf>`_
 
 Submatch extraction in re2c comes in two flavors:
 POSIX-compliant capturing groups (with true POSIX semantics)
