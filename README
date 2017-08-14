@@ -1,0 +1,15 @@
+
+To update website http://re2c.org:
+
+  on gh-pages-gen:
+    - edit sources on gh-pages-gen
+    - test changes on localhost
+    - commit and puch changes on gh-pages-gen
+    - delete 'obj' subdirectory and rebuild from scratch
+
+  on gh-pages
+    - remove all files except '.git' subdirectory
+    - copy the contents of 'obj' subdirectory from gh-pages-gen to the root of gh-pages
+    - add and commit all files (even hidden, might be necessary to add manually)
+    - push
+
