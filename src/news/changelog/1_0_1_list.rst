@@ -1,0 +1,2 @@
+- Fixed bug #193 "1.0 build failure on macOS: error: calling a private constructor of class 're2c::Rule'"
+- Added paper "Tagged Deterministic Finite Automata with Lookahead" to distribution

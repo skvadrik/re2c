@@ -1,0 +1,11 @@
+=============
+Release 1.0.1
+=============
+
+This is a minor bug-fix release.
+It addresses the following issues:
+
+.. include:: ../changelog/1_0_1_list.rst
+
+Thanks to ilovezf for bug report.
+
