@@ -6,6 +6,7 @@ To update website http://re2c.org:
     - test changes on localhost
     - commit and puch changes on gh-pages-gen
     - delete 'obj' subdirectory and rebuild from scratch
+    - be sure to rebuild if fixed 'atom.xml'
 
   on gh-pages
     - remove all files except '.git' subdirectory
