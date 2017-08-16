@@ -21,6 +21,9 @@ re2c applies quite a few optimizations in order to speed up and compress the gen
 Another distinctive feature is its flexible interface: instead of assuming a fixed program template,
 re2c lets the programmer write most of the interface code and adapt the generated lexer to any particular environment.
 
+For a step-by-step introduction, see `examples <examples/examples.html>`_.
+For complete overview, see the `manual <manual/manual.html>`_.
+
 
 
 Features

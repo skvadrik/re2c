@@ -8,26 +8,25 @@ About
 Authors
 -------
 
-Originally written by Peter Bumbulis (peter@csg.uwaterloo.ca)
+re2c was originally written by Peter Bumbulis (peter@csg.uwaterloo.ca)
 and described in research article
-:download:`"RE2C: a more versatile scanner generator" <1994_bumbulis_cowan_re2c_a_more_versatile_scanner_generator.pdf>`
+`"RE2C: a more versatile scanner generator" <../1994_bumbulis_cowan_re2c_a_more_versatile_scanner_generator.pdf>`_
 by Peter Bumbulis, Donald D. Cowan, 1994,
 ACM Letters on Programming Languages and Systems (LOPLAS).
-
-The implementation of submatch extraction in re2c is described in the article
+Since then re2c has been maintained and developed by multiple volunteers,
+most notably,
+Brian Young (bayoung@acm.org),
+Markus Boerger (helly@users.sourceforge.net),
+Dan Nuffer (nuffer@users.sourceforge.net)
+and Ulya Trofimovich (skvadrik@gmail.com).
+Recent development of re2c is described in research article
 `"Tagged Deterministic Finite Automata with Lookahead" <../2017_trofimovich_tagged_deterministic_finite_automata_with_lookahead.pdf>`_
 by Ulya Trofimovich, 2017.
+Below is the list of re2c contributors:
+many are mentioned by their nicknames and some may be missing.
+`Let me know <skvadrik@gmail.com>`_ if you feel that this list should be amended:
 
-Since then many people have contributed to re2c:
-
-* Brian Young      bayoung@acm.org
-* Dan Nuffer       nuffer@users.sourceforge.net
-* Marcus Boerger   helly@users.sourceforge.net
-* Hartmut Kaiser   hkaiser@users.sourceforge.net
-* Emmanuel Mogenet mgix@mgix.com
-* Ulya Trofimovich skvadrik@gmail.com
-
-Let me know if I missed someone!
+.. include:: contributors.rst
 
 License
 -------
@@ -40,7 +39,6 @@ or binary, unchanged or modified. Distributors may charge whatever fees
 they can obtain for re2c. If you do make use of re2c, or incorporate it into a larger project an
 acknowledgement somewhere (documentation, research report, etc.) would
 be appreciated.
-
 re2c is distributed with no warranty whatsoever.
 The code is certain to contain errors.
 Neither the author nor any contributor takes responsibility for any consequences of its use.

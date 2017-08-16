@@ -78,6 +78,7 @@ language = None
 # directories to ignore when looking for source files.
 exclude_patterns = [
     'examples/06_braille.utf8.txt.rst',
+    'about/contributors.rst',
     'manual/features/skeleton/example.rst',
     'manual/features/skeleton/failures.rst',
     'manual/features/skeleton/generating_data.rst',
@@ -184,6 +185,7 @@ html_extra_path = [
     'CNAME',
     '.nojekyll',
     'feed/',
+    'about/1994_bumbulis_cowan_re2c_a_more_versatile_scanner_generator.pdf',
     'about/2017_trofimovich_tagged_deterministic_finite_automata_with_lookahead.pdf'
 ]
 
