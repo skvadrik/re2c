@@ -8,8 +8,10 @@ Install
 Download
 ========
 
-Tarballs
---------
+Below is the list of the latest (stable) tarballs for each branch.
+You can find other releases `here <https://sourceforge.net/projects/re2c/files/old/>`_
+(but be aware that they are hidden for a good reason:
+most of them contain bugs that have been fixed in the next minor release).
 
 * `re2c-1.0.1.tar.gz <https://github.com/skvadrik/re2c/releases/download/1.0.1/re2c-1.0.1.tar.gz>`_
 * `re2c-0.16.tar.gz <https://github.com/skvadrik/re2c/releases/download/0.16/re2c-0.16.tar.gz>`_
@@ -19,115 +21,94 @@ Tarballs
 * `re2c-0.13.6.tar.gz <https://github.com/skvadrik/re2c/releases/download/0.13.6/re2c-0.13.6.tar.gz>`_
 * `re2c-0.13.5.tar.gz <http://sourceforge.net/projects/re2c/files/re2c/0.13.5/re2c-0.13.5.tar.gz/download>`_
 
-You can find other releases `here <https://sourceforge.net/projects/re2c/files/old/>`_
-(but be aware that they are hidden for a good reason:
-most of them contain bugs that have been fixed in the next minor release).
-
-Sources
--------
-
-re2c is hosted on `github <https://github.com/skvadrik/re2c>`_:
+Source files are `on github <https://github.com/skvadrik/re2c>`_:
 
 .. code-block:: bash
 
-    $ git clone git@github.com:skvadrik/re2c.git re2c
+    $ git clone https://github.com/skvadrik/re2c.git re2c
 
 There's also a mirror on `sourceforge <https://sourceforge.net/p/re2c/code-git/ci/master/tree/>`_
 (should be in sync with github):
 
 .. code-block:: bash
 
-    $ git clone ssh://git.code.sf.net/p/re2c/code-git re2c
+    $ git clone https://git.code.sf.net/p/re2c/code-git re2c
 
-Distributions
--------------
-
-Linux
-~~~~~
-
-* `Alt <http://www.sisyphus.ru/ru/srpm/Sisyphus/re2c>`_
-* `Arch <https://www.archlinux.org/packages/extra/x86_64/re2c>`_
-* `Debian <https://packages.debian.org/search?keywords=re2c>`_
-* `Gentoo <https://packages.gentoo.org/packages/dev-util/re2c>`_
-* `Fedora <http://rpmfind.net/linux/rpm2html/search.php?query=re2c&system=fedora>`_
-* `Mageia <http://rpmfind.net/linux/rpm2html/search.php?query=re2c&system=mageia>`_
-* `Mandriva <http://rpmfind.net/linux/rpm2html/search.php?query=re2c&system=mandriva>`_
-* `OpenSuSE <http://rpmfind.net/linux/rpm2html/search.php?query=re2c&system=opensuse>`_
-* `RedHat <http://rpmfind.net/linux/rpm2html/search.php?query=re2c&system=dag>`_
-* `Slackware <http://slackbuilds.org/repository/14.1/development/re2c/?search=re2c>`_
-* `Ubuntu <http://packages.ubuntu.com/search?keywords=re2c>`_
-
-Summary of available re2c versions in many (but not all) Linux distributions
-can be found on `pkgs.org <http://pkgs.org/download/re2c>`_.
-
-BSD
-~~~
-
-* `Apple Mac OS X <http://macappstore.org/re2c/>`_
-* `FreeBSD <http://www.freebsd.org/cgi/ports.cgi?query=re2c>`_
-* `NetBSD <ftp://ftp.netbsd.org/pub/pkgsrc/current/pkgsrc/devel/re2c/README.html>`_
-* `OpenBSD <http://www.openbsd.org/4.5_packages/sh/re2c-0.13.5.tgz-long.html>`_
+Many distributions and systems provide their own packages:
+`Alt <http://www.sisyphus.ru/ru/srpm/Sisyphus/re2c>`_,
+`Apple Mac OS X <http://macappstore.org/re2c/>`_,
+`Arch <https://www.archlinux.org/packages/extra/x86_64/re2c>`_,
+`Debian <https://packages.debian.org/search?keywords=re2c>`_,
+`Gentoo <https://packages.gentoo.org/packages/dev-util/re2c>`_,
+`Fedora <http://rpmfind.net/linux/rpm2html/search.php?query=re2c&system=fedora>`_,
+`FreeBSD <http://www.freebsd.org/cgi/ports.cgi?query=re2c>`_,
+`Mageia <http://rpmfind.net/linux/rpm2html/search.php?query=re2c&system=mageia>`_,
+`Mandriva <http://rpmfind.net/linux/rpm2html/search.php?query=re2c&system=mandriva>`_,
+`NetBSD <ftp://ftp.netbsd.org/pub/pkgsrc/current/pkgsrc/devel/re2c/README.html>`_,
+`OpenSuSE <http://rpmfind.net/linux/rpm2html/search.php?query=re2c&system=opensuse>`_,
+`RedHat <http://rpmfind.net/linux/rpm2html/search.php?query=re2c&system=dag>`_,
+`Slackware <http://slackbuilds.org/repository/14.1/development/re2c/?search=re2c>`_,
+`Ubuntu <http://packages.ubuntu.com/search?keywords=re2c>`_.
 
 Build
 =====
 
-You only need a C++98 compiler to build re2c from the tarball.
-If you have bison, re2c will use it (otherwise it will use precompiled files).
+The only required build-time dependency for re2c is a C++98 compiler.
+Optional build-time dependencies are the following:
+autotools (to build re2c from source, not from distribution tarball),
+bison (to rebuild re2c parser)
+and rst2man (to rebuild documentation).
 
-If you are building re2c from source (not from a tarball), you will also need autotools:
+If you are building re2c from source, first of all you should run autoconf and automake:
 
 .. code-block:: bash
 
     $ ./autogen.sh
 
-Simple
-------
-
-This will install re2c (binary and manpage) to ``prefix`` (``/usr/local`` by default):
+The simplest possible build is an in-tree build.
+The following instructions will install re2c (binary and manpage) to ``_p_r_e_f_i_x_`` (by default ``/usr/local``):
 
 .. code-block:: bash
 
-    $ ./configure [--prefix=<prefix>]
+    $ ./configure --prefix=_p_r_e_f_i_x_
     $ make
     $ make install
 
-Bootstrapping
--------------
-
-Some parts of re2c (lexers and parser of command-line options) are written in re2c.
-These files are precompiled and packaged into the re2c distribution (so that re2c can be built without re2c).
-However, one can fully bootstrap re2c:
+Since re2c is a self-hosting lexer generator (some parts of re2c are written in re2c), it needs to be bootstrapped.
+Bootstrapping files are packaged into the re2c distribution, so that re2c can be built on a system without re2c.
+The following instructions bootstrap re2c from scratch and update precompiled files:
 
 .. code-block:: bash
 
     $ make bootstrap
 
-Out-of-source
--------------
-
-re2c supports out-of-source builds:
+re2c supports out-of-tree builds:
 
 .. code-block:: bash
 
     $ mkdir builddir && cd builddir
-    $ ../configure [--prefix=<prefix>]
+    $ ../configure
     $ make
     $ make install
-
-Windows
--------
 
 If you intend to use re2c on Windows, you can either
 use `cygwin <https://cygwin.com/>`_
-or build re2c with `mingw <http://mingw.org/>`_:
+or build re2c with `mingw <http://mingw.org/>`_
+(mingw builds are supported and tested regularly).
 
 .. code-block:: bash
 
-    $ ./configure --host i686-w64-mingw32  [--prefix=<prefix>]
+    $ ./configure --host i686-w64-mingw32
     $ make
     $ make install
 
-(mingw builds are supported and tested regularly).
+To rebuild re2c documentation:
+
+.. code-block:: bash
+
+    $ ./configure --enable-docs
+    $ make docs
+
 
 Test
 ====
