@@ -9,10 +9,10 @@ You can find more examples in the ``examples`` subdirectory in the ``re2c`` dist
 .. toctree::
     :maxdepth: 1
 
-    Recognizing integers: the sentinel method   <example_01>
-    Recognizing strings: the need for YYMAXFILL <example_02>
-    Arbitrary large input and YYFILL            <example_03>
-    Parsing integers (multiple re2c blocks)     <example_04>
+    Lexing numbers (sentinel)                   <example_01>
+    Lexing strings (YYMAXFILL)                  <example_02>
+    Large input (YYFILL)                        <example_03>
+    Parsing integers (blocks)                   <example_04>
     Parsing integers (conditions)               <example_05>
     Braille patterns (encodings)                <example_06>
     A C++98 lexer                               <example_07>

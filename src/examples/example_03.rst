@@ -1,10 +1,10 @@
-Arbitrary large input and YYFILL
---------------------------------
+Large input (YYFILL)
+--------------------
 
 In this example we suppose that our input cannot be mapped in memory at once:
 either it's too large or its size cannot be determined in advance.
 The usual thing to do in such a case is to allocate a buffer and lex the input in chunks that fit into the buffer.
-re2c allows us to refill the buffer using ``YYFILL``: see `Recognizing strings: the need for YYMAXFILL <example_02.html>`_ example
+re2c allows us to refill the buffer using ``YYFILL``: see `Lexing strings (YYMAXFILL) <example_02.html>`_ example
 for details about the program points and conditions that trigger a ``YYFILL`` invocation.
 Currently re2c provides no way to combine ``YYFILL`` with the sentinel method:
 we have to enable ``YYLIMIT``-based checks for the end of input and pad input with ``YYMAXFILL`` fake characters.
@@ -37,7 +37,7 @@ except ``YYLIMIT`` (it must point at the end of buffer):
     buffer,  YYMARKER          YYCURSOR                  YYLIMIT
     lexeme
 
-The end of input is a special case: as explained in the `Recognizing strings: the need for YYMAXFILL <example_02.html>`_ example,
+The end of input is a special case: as explained in the `Lexing strings (YYMAXFILL) <example_02.html>`_ example,
 the input must be padded with ``YYMAXFILL`` fake characters.
 In this case, ``YYLIMIT`` must point at the end of the padding:
 

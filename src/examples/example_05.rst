@@ -1,7 +1,7 @@
 Parsing integers (conditions)
 -----------------------------
 
-This example does exactly the same thing as the `Parsing integers (multiple re2c blocks) <example_04.html>`_ example,
+This example does exactly the same thing as the `Parsing integers (blocks) <example_04.html>`_ example,
 but in a slightly different manner: it uses re2c conditions instead of blocks.
 Conditions allow to encode multiple interconnected lexers within a single re2c block.
 

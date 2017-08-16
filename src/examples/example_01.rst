@@ -1,5 +1,5 @@
-Recognizing integers: the sentinel method
------------------------------------------
+Lexing numbers (sentinel)
+-------------------------
 
 This example is very simple, yet practical.
 We assume that the input is small (fits in one continuous block of memory).
@@ -40,7 +40,7 @@ A couple of things should be noted:
   but when the lexer sees ``'d'``, it must roll back.
   (You might wonder why ``YYMARKER`` is exposed at all: why not make it a local variable like ``yych``?
   The reason is, all input pointers must be updated by ``YYFILL``
-  as explained in the `Arbitrary large input and YYFILL <example_03.html>`_ example.)
+  as explained in the `Large input (YYFILL) <example_03.html>`_ example.)
 
 Generate, compile, and run:
 

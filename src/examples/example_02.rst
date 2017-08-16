@@ -1,9 +1,9 @@
-Recognizing strings: the need for YYMAXFILL
--------------------------------------------
+Lexing strings (YYMAXFILL)
+--------------------------
 
 This example is about recognizing strings.
 Strings (in the generic sense) are different from other kinds of lexemes: they can contain *arbitrary* characters.
-That makes them way more difficult to lex: unlike in the `Recognizing integers: the sentinel method <example_01.html>`_ example,
+That makes them way more difficult to lex: unlike in the `Lexing numbers (sentinel) <example_01.html>`_ example,
 we cannot use a sentinel character to stop at the end of input.
 Suppose, for example, that our strings may be single or double-quoted
 and may contain any character in range ``[0 - 0xFF]`` except quotes of the appropriate type.

@@ -1,7 +1,7 @@
-Parsing integers (multiple re2c blocks)
----------------------------------------
+Parsing integers (blocks)
+-------------------------
 
-This example is based on the `Recognizing integers: the sentinel method <example_01.html>`_ example,
+This example is based on the `Lexing numbers (sentinel) <example_01.html>`_ example,
 only now the integer literals are parsed rather than simply recognized.
 Parsing integers is simple: one can easily do it by hand.
 However, re2c-generated code *does* look like a simple handwritten parser:
