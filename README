@@ -1,4 +1,7 @@
 
+If you modify the website layout (directory structure), be sure to fix all links
+(including links on Wikipedia).
+
 To update website http://re2c.org:
 
   on gh-pages-gen:
