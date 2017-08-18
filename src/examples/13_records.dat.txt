@@ -1,0 +1,12 @@
+h4cker1970 {
+    name     = Jon Smith
+    country  = UK
+    channels = freenode/#gentoo-dev; freenode/#gentoo-arch; freenode/#alpha;
+}
+
+mitek {
+    name     = Mitrofan Rygoravich
+    country  = Belarus
+    channels = bynets/#haskell; freenode/#unix;
+}
+

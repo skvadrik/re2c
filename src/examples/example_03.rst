@@ -1,10 +1,10 @@
-Large input (YYFILL)
---------------------
+Large input
+-----------
 
 In this example we suppose that our input cannot be mapped in memory at once:
 either it's too large or its size cannot be determined in advance.
 The usual thing to do in such a case is to allocate a buffer and lex the input in chunks that fit into the buffer.
-re2c allows us to refill the buffer using ``YYFILL``: see `Lexing strings (YYMAXFILL) <example_02.html>`_ example
+re2c allows us to refill the buffer using ``YYFILL``: see `Strings <example_02.html>`_ example
 for details about the program points and conditions that trigger a ``YYFILL`` invocation.
 Currently re2c provides no way to combine ``YYFILL`` with the sentinel method:
 we have to enable ``YYLIMIT``-based checks for the end of input and pad input with ``YYMAXFILL`` fake characters.
@@ -37,7 +37,7 @@ except ``YYLIMIT`` (it must point at the end of buffer):
     buffer,  YYMARKER          YYCURSOR                  YYLIMIT
     lexeme
 
-The end of input is a special case: as explained in the `Lexing strings (YYMAXFILL) <example_02.html>`_ example,
+The end of input is a special case: as explained in the `Strings <example_02.html>`_ example,
 the input must be padded with ``YYMAXFILL`` fake characters.
 In this case, ``YYLIMIT`` must point at the end of the padding:
 
@@ -70,7 +70,7 @@ It can be used as a boundary in ``YYFILL``.
 Our example program reads ``stdin`` in chunks of 16 bytes (in the real world, the buffer size is usually ~4KiB)
 and tries to lex numbers separated by newlines.
 
-:download:`[03_arbitrary_large_input.re] <03_arbitrary_large_input.re.txt>`
+:download:`[large_input.re] <03_arbitrary_large_input.re.txt>`
 
 .. literalinclude:: 03_arbitrary_large_input.re.txt
     :language: cpp
@@ -96,27 +96,18 @@ Notes:
 * There is a special ``tok`` pointer: it points at the beginning of a lexeme (line 47)
   and serves as a boundary in ``YYFILL``.
 
-Generate, compile, and run:
+Compile:
 
 .. code-block:: bash
 
-    $ re2c -o example.cc 03_arbitrary_large_input.re
-    $ g++ -o example example.cc
-    $ ./example
-    0
-    11
-    222
-    3333
-    44444
-    555555
-    6666666
-    77777777
-    888888888
-    9999999999
-    glorious 10 numbers!
-    $ seq 123456789 | ./example
+    $ re2c -o large_input.cc large_input.re
+    $ g++ -o large_input large_input.cc
+
+Run:
+
+.. code-block:: bash
+
+    $ seq 123456789 | ./large_input
     glorious 123456789 numbers!
-    $ seq 123456789 | wc -l
-    123456789
 
 

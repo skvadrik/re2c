@@ -1,0 +1,14 @@
+GET /index.html HTTP/1.1
+Host: www.example.com
+User-Agent: Mozilla/5.0
+Accept: text/xml,application/xml,application/xhtml+xml,text/html*/*
+Accept-Language: en-us
+Accept-Charset: ISO-8859-1,utf-8
+Connection: keep-alive
+
+HTTP/1.1 200 OK
+Date: Thu, 24 Jul 2008 17:36:27 GMT
+Server: Apache-Coyote/1.1
+Content-Type: text/html;charset=UTF-8
+Content-Length: 1846
+

@@ -1,0 +1,4 @@
+http://user:pass@127.0.0.1:8000/path/data?key=val&key2=val2#frag1
+rsync://rsync.kernel.org/pub/
+http://re2c.org/manual/syntax/syntax.html#rules
+ssh://[2001:db8:85a3::8a2e:370:7334]/

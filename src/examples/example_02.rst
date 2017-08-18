@@ -1,9 +1,9 @@
-Lexing strings (YYMAXFILL)
---------------------------
+Strings
+-------
 
 This example is about recognizing strings.
 Strings (in the generic sense) are different from other kinds of lexemes: they can contain *arbitrary* characters.
-That makes them way more difficult to lex: unlike in the `Lexing numbers (sentinel) <example_01.html>`_ example,
+That makes them way more difficult to lex: unlike in the `Numbers <example_01.html>`_ example,
 we cannot use a sentinel character to stop at the end of input.
 Suppose, for example, that our strings may be single or double-quoted
 and may contain any character in range ``[0 - 0xFF]`` except quotes of the appropriate type.
@@ -38,7 +38,7 @@ A common hack is to pad the input with a few fake characters that **do not form 
 The length of the padding depends on the maximum argument to ``YYFILL``
 (this value is called ``YYMAXFILL`` and can be generated with the ``/*!max:re2c*/`` directive).
 
-:download:`[02_recognizing_strings.re] <02_recognizing_strings.re.txt>`
+:download:`[strings.re] <02_recognizing_strings.re.txt>`
 
 .. literalinclude:: 02_recognizing_strings.re.txt
     :language: cpp
@@ -66,13 +66,18 @@ Notes:
   ``YYFILL`` has to stop the lexer eventually. That's why it has to be a macro and not a function.
   One should either set ``re2c:define:YYFILL:naked = 1;`` or define ``YYFILL(n)`` as a macro.)
 
-Generate, compile, and run:
+Compile:
 
 .. code-block:: bash
 
-    $ re2c -o example.cc 02_recognizing_strings.re
-    $ g++ -o example example.cc
-    $ ./example '"a momentary"' '""' '"lap"se"' '"of' '"' '"rea""son"' ''
+    $ re2c -o strings.cc strings.re
+    $ g++ -o strings strings.cc
+
+Run:
+
+.. code-block:: bash
+
+    $ ./strings '"a momentary"' '""' '"lap"se"' '"of' '"' '"rea""son"' ''
     str: "a momentary"
     str: ""
     err: "lap"se"
@@ -80,13 +85,4 @@ Generate, compile, and run:
     err: "
     err: "rea""son"
     err: 
-    $ ./example "'a momentary'" "''" "'lap'se'" "'of" "'" "'rea''son'" ""
-    str: 'a momentary'
-    str: ''
-    err: 'lap'se'
-    err: 'of
-    err: '
-    err: 'rea''son'
-    err: 
-
 

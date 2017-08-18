@@ -1,11 +1,12 @@
-Parsing integers (conditions)
------------------------------
+Conditions
+----------
 
-This example does exactly the same thing as the `Parsing integers (blocks) <example_04.html>`_ example,
-but in a slightly different manner: it uses re2c conditions instead of blocks.
+This example demonstrates the use of conditions.
+It is similar in functionality to the `Multiple blocks <example_04.html>`_ example,
+except that individual sub-lexers are connected usding conditions rather than multiple blocks.
 Conditions allow to encode multiple interconnected lexers within a single re2c block.
 
-:download:`[05_parsing_integers_conditions.re] <05_parsing_integers_conditions.re.txt>`
+:download:`[conditions.re] <05_parsing_integers_conditions.re.txt>`
 
 .. literalinclude:: 05_parsing_integers_conditions.re.txt
     :language: cpp
@@ -37,13 +38,18 @@ Notes:
 
 * ``:=>`` jumps directly to the next condition (bypassing the initial dispatch).
 
-Generate, compile, and run:
+Compile:
 
 .. code-block:: bash
 
-    $ re2c -c -o example.cc 05_parsing_integers_conditions.re
-    $ g++ -o example example.cc
-    $ ./example 0 12345678901234567890 0xFFFFffffFFFFffff 0x1FFFFffffFFFFffff 0xAbcDEf 0x00 007 0B0 0b110101010 ""
+    $ re2c -c -o conditions.cc conditions.re
+    $ g++ -o conditions conditions.cc
+
+Run:
+
+.. code-block:: bash
+
+    $ ./conditions 0 12345678901234567890 0xFFFFffffFFFFffff 0x1FFFFffffFFFFffff 0xAbcDEf 0x00 007 0B0 0b110101010 ""
     0
     12345678901234567890
     18446744073709551615

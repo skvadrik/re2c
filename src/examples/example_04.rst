@@ -1,13 +1,11 @@
-Parsing integers (blocks)
--------------------------
+Multiple blocks
+---------------
 
-This example is based on the `Lexing numbers (sentinel) <example_01.html>`_ example,
-only now the integer literals are parsed rather than simply recognized.
-Parsing integers is simple: one can easily do it by hand.
-However, re2c-generated code *does* look like a simple handwritten parser:
-a couple of dereferences and conditional jumps. No overhead. ``:)``
+This example demonstrates the use of multiple interrelated ``/*!re2c ... */`` blocks.
+We pick a deliberately simple task (parsing integers),
+so that all complexity is associated with relations between blocks and not with the lexical grammar.
 
-:download:`[04_parsing_integers_blocks.re] <04_parsing_integers_blocks.re.txt>`
+:download:`[multiple_blocks.re] <04_parsing_integers_blocks.re.txt>`
 
 .. literalinclude:: 04_parsing_integers_blocks.re.txt
     :language: cpp
@@ -20,13 +18,18 @@ Notes:
 * Blocks don't have to be in the same function: they can be in separate functions or elsewhere
   as long as the exposed interface fits into the lexical scope.
 
-Generate, compile, and run:
+Compile:
 
 .. code-block:: bash
 
-    $ re2c -o example.cc 04_parsing_integers_blocks.re
-    $ g++ -o example example.cc
-    $ ./example 0 12345678901234567890 0xFFFFffffFFFFffff 0x1FFFFffffFFFFffff 0xAbcDEf 0x00 007 0B0 0b110101010 ""
+    $ re2c -o multiple_blocks.cc multiple_blocks.re
+    $ g++ -o multiple_blocks multiple_blocks.cc
+
+Run:
+
+.. code-block:: bash
+
+    $ ./multiple_blocks 0 12345678901234567890 0xFFFFffffFFFFffff 0x1FFFFffffFFFFffff 0xAbcDEf 0x00 007 0B0 0b110101010 ""
     0
     12345678901234567890
     18446744073709551615

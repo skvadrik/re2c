@@ -1,5 +1,5 @@
-A C++98 lexer
--------------
+C++98 lexer
+-----------
 
 This is an example of a big, real-world re2c program: a C++98 lexer.
 It conforms to the C++98 standard (except for a couple of hacks that simulate the preprocessor).
@@ -8,7 +8,7 @@ are parsed (not only recognized): numeric literals are converted to numbers, and
 Some additional checks described in the standard (e.g., overflows in integer literals) are also done.
 In fact, C++ is an easy language to lex: unlike in many other languages, the C++98 lexer can proceed without feedback from the parser.
 
-:download:`[07_cxx98.re] <07_cxx98.re.txt>`
+:download:`[cxx98.re] <07_cxx98.re.txt>`
 
 .. literalinclude:: 07_cxx98.re.txt
     :language: cpp
@@ -43,9 +43,14 @@ Generate, compile, and run:
 
 .. code-block:: bash
 
-    $ re2c -o example.cc 07_cxx98.re
-    $ g++ -o example example.cc
-    $ ./example 07_cxx98.re | fold
+    $ re2c -o cxx98.cc cxx98.re
+    $ g++ -o cxx98 cxx98.cc
+
+Run:
+
+.. code-block:: bash
+
+    $ ./cxx98 07_cxx98.re | fold
      STATIC CONST size_t SIZE = 64 * 1024; STRUCT input_t { UNSIGNED CHAR buf[SIZE +
      YYMAXFILL]; UNSIGNED CHAR *lim; UNSIGNED CHAR *cur; UNSIGNED CHAR *mar; UNSIGNE
     D CHAR *tok; BOOL eof; FILE *CONST file; input_t(FILE *f) : buf() , lim(buf + SI
