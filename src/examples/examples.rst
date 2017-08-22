@@ -19,17 +19,28 @@ Examples
     URI (RFC-3986)                              <example_10>
     HTTP (RFC-7230)                             <example_11>
     Braille patterns                            <example_06>
+    Strings in binaries                         <example_15>
+    Fake sentinel                               <example_16>
+    std::ifstream                               <example_17>
 
 Examples have been written with two goals in mind.
 First, they are practical: each example solves a distinct real-world problem,
 ranging from simple recognizers to complex parsers conforming to real-world standards and specifications.
 Second, examples show various aspects of using re2c API:
 
-  Checking for the end of input:
-  simple and efficient `sentinel method <example_01.html>`_
-  which should be used when it is possible to mark the end of input with a *sentinel character* that never appears in the middle of well-formed input;
-  and the more complex `general method <example_02.html>`_ based on ``YYLIMIT``
-  which requires apending ``YYMAXFILL`` characters of padding at the end of input.
+  Checking for the end of input: this can be done in a number of different ways.
+  The simplest and the most efficient way is the sentinel method demonstrated by `lexing numbers <example_01.html>`_ example:
+  it should be used when there is a *sentinel character* that never appears in the middle of well-formed input,
+  such as the ``NULL`` character in null-terminated strings.
+  If the input is buffered, sentinel should be `appended at the end of buffer <example_09.html>`_.
+  If appending is not possible, one can `emulate fake sentinel <example_16.html>`_ using generic API.
+  Another, more general (but also less efficient) method is based on comparison of current input position and the end position:
+  that is, comparison of ``YYCURSOR`` and ``YYLIMIT`` as explained in `parsing strings <example_02.html>`_ example,
+  or using ``YYLESSTHAN`` in case of generic API.
+  By default, this method requires padding input with ``YYMAXFILL`` fake characters;
+  if padding is undesirable or impossible, one can override the checking mechanism using generic API
+  and `perform checks on each input character <example_15.html>`_
+  (also used in `std::ifstream <example_17.html>`_ example).
 
   Handling `large input <example_03.html>`_: how to organize buffering and how to refill buffer with ``YYFILL``.
   Some additional details of handling *tags* in ``YYFILL`` are illustrated
@@ -44,6 +55,13 @@ Second, examples show various aspects of using re2c API:
   and parsing `URI <example_10.html>`_);
   using *m-tags* to handle repeated submatch and store repeated values efficiently in the form of a prefix tree
   (outlined by parsing non-recursive `records and structures <example_13.html>`_ and also used in parsing `HTTP messages <example_11.html>`_).
+
+  Using `generic API </manual/features/generic_api/generic_api.html>`_,
+  either to override the input mechanism (outlined by `std::ifstream <example_17.html>`_ example),
+  or to tweak it (as explained in
+  `fake sentinel <example_16.html>`_ and
+  `strings in binaries <example_15.html>`_
+  examples).
 
   Switching between different lexing *modes* using multiple interrelated sub-lexers:
   either in semi-automated manner with re2c `conditions <../manual/features/conditions/conditions.html>`_ feature
