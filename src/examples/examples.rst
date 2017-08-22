@@ -22,6 +22,7 @@ Examples
     Strings in binaries                         <example_15>
     Fake sentinel                               <example_16>
     std::ifstream                               <example_17>
+    Push model                                  <example_18>
 
 Examples have been written with two goals in mind.
 First, they are practical: each example solves a distinct real-world problem,
@@ -45,6 +46,12 @@ Second, examples show various aspects of using re2c API:
   Handling `large input <example_03.html>`_: how to organize buffering and how to refill buffer with ``YYFILL``.
   Some additional details of handling *tags* in ``YYFILL`` are illustrated
   in parsing `URI <example_10.html>`_ and parsing `HTTP messages <example_11.html>`_.
+
+  Using `storable state </manual/features/state/state.html>`_ feature
+  to write `push-model <example_18.html>`_ lexers:
+  it is necessary when the input comes in chunks that are controlled by the outside program.
+  In such case lexer must be stopped when there is not enough input
+  and later resumed from the same point.
 
   `Submatch extraction <../manual/features/submatch/submatch.html>`_:
   using *s-tags* to store input positions corresponding to various parts of the regular expression in variables
