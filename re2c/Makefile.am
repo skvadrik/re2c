@@ -219,6 +219,7 @@ EXTRA_DIST = \
 	NO_WARRANTY \
 	README \
 	autogen.sh \
+	genhelp.sh \
 	doc/loplas.ps \
 	doc/sample.bib \
 	doc/tdfa/tdfa.pdf \
