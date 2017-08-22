@@ -17,9 +17,9 @@ checking happens more frequently, as ``YYSKIP`` is invoked on each input charact
 while ``YYLESSTHAN`` happens only once per each strongly connected component of automaton.
 However, it allows to avoid padding.
 
-:download:`[binsyms.re] <15_binsyms.re.txt>`
+:download:`[binsyms.re] <15_binsyms.i--input(custom).re>`
 
-.. literalinclude:: 15_binsyms.re.txt
+.. literalinclude:: 15_binsyms.i--input(custom).re
     :language: cpp
     :linenos:
 

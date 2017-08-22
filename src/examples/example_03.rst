@@ -70,9 +70,9 @@ It can be used as a boundary in ``YYFILL``.
 Our example program reads ``stdin`` in chunks of 16 bytes (in the real world, the buffer size is usually ~4KiB)
 and tries to lex numbers separated by newlines.
 
-:download:`[large_input.re] <03_arbitrary_large_input.re.txt>`
+:download:`[large_input.re] <03_arbitrary_large_input.i.re>`
 
-.. literalinclude:: 03_arbitrary_large_input.re.txt
+.. literalinclude:: 03_arbitrary_large_input.i.re
     :language: cpp
     :linenos:
 

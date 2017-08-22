@@ -12,9 +12,9 @@ Below is an example:
 
 .. literalinclude:: 13_records.dat.txt
 
-:download:`[records.re] <13_records.re.txt>`
+:download:`[records.re] <13_records.i--tags.re>`
 
-.. literalinclude:: 13_records.re.txt
+.. literalinclude:: 13_records.i--tags.re
     :language: cpp
     :linenos:
 

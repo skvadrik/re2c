@@ -8,9 +8,9 @@ are parsed (not only recognized): numeric literals are converted to numbers, and
 Some additional checks described in the standard (e.g., overflows in integer literals) are also done.
 In fact, C++ is an easy language to lex: unlike in many other languages, the C++98 lexer can proceed without feedback from the parser.
 
-:download:`[cxx98.re] <07_cxx98.re.txt>`
+:download:`[cxx98.re] <07_cxx98.i.re>`
 
-.. literalinclude:: 07_cxx98.re.txt
+.. literalinclude:: 07_cxx98.i.re
     :language: cpp
     :linenos:
 

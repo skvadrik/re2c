@@ -17,9 +17,9 @@ However, this method allows to avoid padding, which would require buffering inpu
 
 
 
-:download:`[ifstream.re] <17_ifstream.re.txt>`
+:download:`[ifstream.re] <17_ifstream.i--input(custom).re>`
 
-.. literalinclude:: 17_ifstream.re.txt
+.. literalinclude:: 17_ifstream.i--input(custom).re
     :language: cpp
     :linenos:
 

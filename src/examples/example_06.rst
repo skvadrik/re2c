@@ -30,9 +30,9 @@ and some others, which we omit here for the sake of simplicity (as well as a few
 Grade-2 Braille allows contractions; those obey some rather complex rules (like those of a natural language)
 and are much harder to implement.
 
-:download:`[braille.re] <06_braille.re.txt>`
+:download:`[braille.re] <06_braille.cr8i.re>`
 
-.. literalinclude:: 06_braille.re.txt
+.. literalinclude:: 06_braille.cr8i.re
     :language: cpp
     :linenos:
 

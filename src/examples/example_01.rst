@@ -12,9 +12,9 @@ and tries to match each argument against one of four patterns:
 binary, octal, decimal, and hexadecimal integer literals.
 The numbers are not *parsed* (their numeric value is not retrieved), they are merely *recognized*.
 
-:download:`[integers.re] <01_recognizing_integers.re.txt>`
+:download:`[integers.re] <01_recognizing_integers.i.re>`
 
-.. literalinclude:: 01_recognizing_integers.re.txt
+.. literalinclude:: 01_recognizing_integers.i.re
     :language: cpp
     :linenos:
 

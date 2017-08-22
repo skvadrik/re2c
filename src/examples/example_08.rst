@@ -3,9 +3,9 @@ IPv4 address
 
 This example demonstrates how to use tags to parse simple things like IPv4 address.
 
-:download:`[ipv4.re] <08_ipv4.re.txt>`
+:download:`[ipv4.re] <08_ipv4.i--tags.re>`
 
-.. literalinclude:: 08_ipv4.re.txt
+.. literalinclude:: 08_ipv4.i--tags.re
     :language: cpp
     :linenos:
 

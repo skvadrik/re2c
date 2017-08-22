@@ -5,9 +5,9 @@ This example demonstrates the use of multiple interrelated ``/*!re2c ... */`` bl
 We pick a deliberately simple task (parsing integers),
 so that all complexity is associated with relations between blocks and not with the lexical grammar.
 
-:download:`[multiple_blocks.re] <04_parsing_integers_blocks.re.txt>`
+:download:`[multiple_blocks.re] <04_parsing_integers_blocks.i.re>`
 
-.. literalinclude:: 04_parsing_integers_blocks.re.txt
+.. literalinclude:: 04_parsing_integers_blocks.i.re
     :language: cpp
     :linenos:
 

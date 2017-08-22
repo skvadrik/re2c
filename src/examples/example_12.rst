@@ -3,9 +3,9 @@ Floating-point
 
 This example demonstrates how tags can be used to lex floating-point numbers.
 
-:download:`[float.re] <12_float.re.txt>`
+:download:`[float.re] <12_float.i--tags.re>`
 
-.. literalinclude:: 12_float.re.txt
+.. literalinclude:: 12_float.i--tags.re
     :language: cpp
     :linenos:
 

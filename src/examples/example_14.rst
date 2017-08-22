@@ -18,9 +18,9 @@ Our imaginary options are summarized below:
 
 * ``-f FORMAT``, ``--format=FORMAT``, where ``FORMAT`` is a double-quoted format string
 
-:download:`[options.re] <14_options.re.txt>`
+:download:`[options.re] <14_options.i--tags.re>`
 
-.. literalinclude:: 14_options.re.txt
+.. literalinclude:: 14_options.i--tags.re
     :language: cpp
     :linenos:
 

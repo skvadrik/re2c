@@ -17,9 +17,9 @@ Checking on every ``YYPEEK`` is less efficient than the usual sentinel method
 Note that fake sentinel method also relies on the fact that sentinel cannot appear in the middle of well-formed input.
 If the input can contain arbitrary characters, then one should utilize ``YYSKIP`` as shown in `this example <example_15.html>`_.
 
-:download:`[fake_sentinel.re] <16_fake_sentinel.re.txt>`
+:download:`[fake_sentinel.re] <16_fake_sentinel.i--input(custom).re>`
 
-.. literalinclude:: 16_fake_sentinel.re.txt
+.. literalinclude:: 16_fake_sentinel.i--input(custom).re
     :language: cpp
     :linenos:
 

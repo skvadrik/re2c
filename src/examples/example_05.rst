@@ -6,9 +6,9 @@ It is similar in functionality to the `Multiple blocks <example_04.html>`_ examp
 except that individual sub-lexers are connected usding conditions rather than multiple blocks.
 Conditions allow to encode multiple interconnected lexers within a single re2c block.
 
-:download:`[conditions.re] <05_parsing_integers_conditions.re.txt>`
+:download:`[conditions.re] <05_parsing_integers_conditions.ci.re>`
 
-.. literalinclude:: 05_parsing_integers_conditions.re.txt
+.. literalinclude:: 05_parsing_integers_conditions.ci.re
     :language: cpp
     :linenos:
 

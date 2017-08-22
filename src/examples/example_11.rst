@@ -6,9 +6,9 @@ This example was used as a benchmark in
 it is an RFC-7230 compliant HTTP message parser.
 It uses both s-tags and m-tags.
 
-:download:`[http_rfc7230.re] <11_http_rfc7230.re.txt>`
+:download:`[http_rfc7230.re] <11_http_rfc7230.i--tags.re>`
 
-.. literalinclude:: 11_http_rfc7230.re.txt
+.. literalinclude:: 11_http_rfc7230.i--tags.re
     :language: cpp
     :linenos:
 

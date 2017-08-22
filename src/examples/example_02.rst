@@ -38,9 +38,9 @@ A common hack is to pad the input with a few fake characters that **do not form 
 The length of the padding depends on the maximum argument to ``YYFILL``
 (this value is called ``YYMAXFILL`` and can be generated with the ``/*!max:re2c*/`` directive).
 
-:download:`[strings.re] <02_recognizing_strings.re.txt>`
+:download:`[strings.re] <02_recognizing_strings.i.re>`
 
-.. literalinclude:: 02_recognizing_strings.re.txt
+.. literalinclude:: 02_recognizing_strings.i.re
     :language: cpp
     :linenos:
 

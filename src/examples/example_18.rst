@@ -18,9 +18,9 @@ In this example explicit use of the directive is necessary, because we need to p
 If the directive is omitted, re2c emits state dispatch right before lexer start
 (in this case ``yy0`` should be used as the start label).
 
-:download:`[push_model.re] <18_push_model.re.txt>`
+:download:`[push_model.re] <18_push_model.if.re>`
 
-.. literalinclude:: 18_push_model.re.txt
+.. literalinclude:: 18_push_model.if.re
     :language: cpp
     :linenos:
 

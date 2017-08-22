@@ -3,8 +3,10 @@
 # sync with master (pull manpage files)
 remote=`git config branch.master.remote` \
     && git fetch $remote \
-    && git archive --remote=. remotes/$remote/master re2c/doc/manual \
-    | tar -C src/ --strip-components=2 -xpf -
+    && { git archive --remote=. remotes/$remote/master re2c/doc/manual \
+        | tar -C src/ --strip-components=2 -xpf -; } \
+    && { git archive --remote=. remotes/$remote/master re2c/examples/*.re \
+        | tar -C src/ --strip-components=1 -xpf -; }
 
 sphinx-build -b html src obj
 

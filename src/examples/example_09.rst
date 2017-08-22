@@ -7,9 +7,9 @@ Our example file is the following :download:`[/etc/passwd] <09_etc_passwd.txt>`:
 
 .. literalinclude:: 09_etc_passwd.txt
 
-:download:`[etc_passwd.re] <09_etc_passwd.re.txt>`
+:download:`[etc_passwd.re] <09_etc_passwd.i--tags.re>`
 
-.. literalinclude:: 09_etc_passwd.re.txt
+.. literalinclude:: 09_etc_passwd.i--tags.re
     :language: cpp
     :linenos:
 
