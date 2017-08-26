@@ -1,4 +1,4 @@
-AC_INIT([re2c],[1.0.1],[re2c-general@lists.sourceforge.net])
+AC_INIT([re2c],[1.0.2],[re2c-general@lists.sourceforge.net])
 AM_INIT_AUTOMAKE([foreign subdir-objects])
 AM_SILENT_RULES([yes])
 
