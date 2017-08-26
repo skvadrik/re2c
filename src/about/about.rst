@@ -26,7 +26,7 @@ Below is the list of re2c contributors:
 many are mentioned by their nicknames and some may be missing.
 `Let me know <skvadrik@gmail.com>`_ if you feel that this list should be amended:
 
-.. include:: contributors.rst
+.. include:: ../manual/contributors.rst_
 
 License
 -------
