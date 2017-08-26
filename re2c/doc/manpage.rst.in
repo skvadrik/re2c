@@ -35,34 +35,19 @@ OPTIONS
 INTERFACE CODE
 --------------
 
-The user must supply interface code either in the form of C/C++ code
-(macros, functions, variables, etc.) or in the form of ``INPLACE CONFIGURATIONS``.
-Which symbols must be defined and which are optional
-depends on the particular use case.
-
 .. include:: @top_srcdir@/doc/manual/syntax/interface.rst_
 
 
 SYNTAX
 ------
 
-Code for ``re2c`` consists of a set of ``RULES``, ``NAMED DEFINITIONS``, ``CODE`` and
-``INPLACE CONFIGURATIONS``.
+A program can contain any number of ``re2c`` blocks.
+Each block consists of a sequence of ``RULES``, ``NAMED DEFINITIONS`` and ``INPLACE CONFIGURATIONS``.
 
 
 
 RULES
 ~~~~~
-
-
-Each rule consist of a regular expression  (see ``REGULAR EXPRESSIONS``) accompanied with a block of C/C++ code
-which is to be executed when the associated regular expression is
-matched. You can either start the code with an opening curly brace or
-the sequence ``:=``. If you use an opening curly brace, ``re2c`` will count brace depth
-and stop looking for code automatically. Otherwise, curly braces are not
-allowed and ``re2c`` stops looking for code at the first line that does
-not begin with whitespace. If two or more rules overlap, the first rule
-is preferred.
 
 .. include:: @top_srcdir@/doc/manual/syntax/rules.rst_
 
@@ -70,13 +55,7 @@ is preferred.
 NAMED DEFINITIONS
 ~~~~~~~~~~~~~~~~~
 
-Named definitions are of the form:
-
-    ``name = regular-expression;``
-
-If ``-F`` is active, then named definitions are also of the form:
-
-    ``name { regular-expression }``
+.. include:: @top_srcdir@/doc/manual/syntax/named_definitions.rst_
 
 
 
@@ -98,15 +77,15 @@ SUBMATCH EXTRACTION
 .. include:: @top_srcdir@/doc/manual/features/submatch/submatch.rst_
 
 
-SCANNER WITH STORABLE STATES
-----------------------------
+STORABLE STATE
+--------------
 
 .. include:: @top_srcdir@/doc/manual/features/state/state.rst_
 
 
 
-SCANNER WITH CONDITION SUPPORT
-------------------------------
+CONDITIONS
+----------
 
 .. include:: @top_srcdir@/doc/manual/features/conditions/conditions.rst_
 
@@ -117,16 +96,10 @@ ENCODINGS
 .. include:: @top_srcdir@/doc/manual/features/encodings/encodings.rst_
 
 
-GENERIC INPUT API
------------------
+GENERIC API
+-----------
 
 .. include:: @top_srcdir@/doc/manual/features/generic_api/generic_api.rst_
-
-A couple of useful links that provide some examples:
-
-1. http://skvadrik.github.io/aleph_null/posts/re2c/2015-01-13-input_model.html
-2. http://skvadrik.github.io/aleph_null/posts/re2c/2015-01-15-input_model_custom.html
-
 
 
 SEE ALSO
@@ -136,24 +109,14 @@ You can find more information about ``re2c`` at: http://re2c.org.
 See also: flex(1), lex(1), quex (http://quex.sourceforge.net).
 
 
-
 AUTHORS
 -------
 
-Peter Bumbulis   peter@csg.uwaterloo.ca
+Originaly written by Peter Bumbulis in 1993;
+developed and maintained by Brain Young, Marcus Boerger, Dan Nuffer and Ulya Trofimovich.
+Below is a (more or less) full list of contributors retrieved from the Git history and mailing lists:
 
-Brian Young      bayoung@acm.org
-
-Dan Nuffer       nuffer@users.sourceforge.net
-
-Marcus Boerger   helly@users.sourceforge.net
-
-Hartmut Kaiser   hkaiser@users.sourceforge.net
-
-Emmanuel Mogenet mgix@mgix.com
-
-Ulya Trofimovich skvadrik@gmail.com
-
+.. include:: @top_srcdir@/doc/manual/contributors.rst_
 
 
 VERSION INFORMATION

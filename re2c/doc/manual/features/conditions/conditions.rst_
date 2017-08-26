@@ -1,31 +1,52 @@
-You can precede regular expressions with a list of condition names when
-using the ``-c`` switch. ``re2c`` will then generate a scanner block for
-each condition, and each of the generated blocks will have its own
-precondition. The precondition is given by the interface define
-``YYGETCONDITON()`` and must be of type ``YYCONDTYPE``.
+*Conditions* are enabled with ``-c`` ``--conditions``.
+This option allows to encode multiple interrelated lexers within the same re2c block.
 
-There are two special rule types. First, the rules of the condition ``<*>``
-are merged to all conditions (note that they have a lower priority than
-other rules of that condition). And second, the empty condition list
-allows to provide a code block that does not have a scanner part,
-meaning it does not allow any regular expressions. The condition value
-referring to this special block is always the one with the enumeration
-value 0. This way the code of this special rule can be used to
-initialize a scanner. It is in no way necessary to have these rules: but
-sometimes it is helpful to have a dedicated uninitialized condition
-state.
+Each lexer corresponds to a single *condition*.
+It starts with a label of the form ``yyc_name``,
+where ``name`` is *condition* name
+and ``yyc`` prefix can be adjusted with configuration ``re2c:condprefix``.
+Different lexers are separated with a comment ``/* *********************************** */``
+which can be adjusted with configuration ``re2c:cond:divider``.
 
-Non empty rules allow to specify the new condition, which makes them
-transition rules. Besides generating calls for the 
-``YYSETCONDTITION`` define, no other special code is generated.
+Furthermore, each *condition* has a unique identifier of the form ``yycname``,
+where ``name`` is condition name
+and ``yyc`` prefix can be adjusted with configuration ``re2c:condenumprefix``.
+Identifiers have the type ``YYCONDTYPE`` and should be generated with ``/*!types:re2c*/`` directive or ``-t`` ``--type-header`` option.
+Users shouldn't define these identifiers manually, as the order of *conditions* is not specified.
 
-There is another kind of special rule that allows to prepend code to any
-code block of all rules of a certain set of conditions or to all code
-blocks of all rules. This can be helpful when some operation is common
-among rules. For instance, this can be used to store the length of the
-scanned string. These special setup rules start with an exclamation mark
-followed by either a list of conditions ``<! condition, ... >`` or a star
-``<!*>``. When ``re2c`` generates the code for a rule whose state does not have a
-setup rule and a starred setup rule is present, the starred setup code will be
-used as setup code.
+Before all *conditions* re2c generates entry code that checks the current *condition* identifier
+and transfers control flow to the start label of the active *condition*.
+After matching some rule of this *condition*,
+lexer may either transfer control flow back to the entry code (after executing the associated action and optionally setting another *condition* with ``=>``),
+or use ``:=>`` shortcut and transition directly to the start label of another *condition* (skipping the action and the entry code).
+Configuration ``re2c:cond:goto`` allows to change the default behavior.
+
+Syntactically each rule must be preceded with a list of comma-separated *condition* names or a wildcard ``*``
+enclosed in angle brackets ``<`` and ``>``.
+Wildcard means "any condition" and is semantically equivalent to listing all condition names.
+Here ``regexp`` is a regular expression, ``default`` refers to the *default rule* ``*``,
+and ``action`` is a block of C/C++ code.
+
+*    ``<conditions-or-wildcard>  regexp-or-default                 action``
+
+*    ``<conditions-or-wildcard>  regexp-or-default  =>  condition  action``
+
+*    ``<conditions-or-wildcard>  regexp-or-default  :=> condition``
+
+Rules with an exclamation mark ``!`` in front of condition list have a special meaning:
+they have no regular expression,
+and the associated action is merged as an entry code to actions of normal rules.
+This might be a convenient place to peform a routine task that is common to all rules.
+
+*    ``<!conditions-or-wildcard>  action``
+
+Another special form of rules with an empty condition list ``<>`` and no regular expression
+allows to specify an "entry condition" that can be used to execute code before entering the lexer.
+It is semantically equivalent to a condition with number zero, name ``0`` and an empty regular expression.
+
+*    ``<>                 action``
+
+*    ``<>  =>  condition  action``
+
+*    ``<>  :=> condition``
 

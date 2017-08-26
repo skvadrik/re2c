@@ -1,81 +1,44 @@
 
-``"foo"``
-    literal string ``"foo"``. ANSI-C escape sequences can be used.
+re2c uses the following syntax for regular expressions:
 
-``'foo'``
-    literal string ``"foo"`` (case insensitive for characters [a-zA-Z]). 
-    ANSI-C escape sequences can be used.
+*    ``"foo"`` case-sensitive string literal
 
-``[xyz]``
-    character class; in this case, the regular expression matches ``x``, ``y``, or ``z``.
+*    ``'foo'`` case-insensitive string literal
 
-``[abj-oZ]``
-    character class with a range in it; matches ``a``, ``b``, any letter from ``j`` through ``o``, or ``Z``.
+*    ``[a-xyz]``, ``[^a-xyz]`` character class (possibly negated)
 
-``[^class]``
-    inverted character class.
+*    ``.`` any character except newline
 
-``r \ s``
-   match any ``r`` which isn't ``s``. ``r`` and ``s`` must be regular expressions
-   which can be expressed as character classes.
+*    ``R \ S`` difference of character classes ``R`` and ``S``
 
-``r*``
-    zero or more occurrences of ``r``.
+*    ``R*`` zero or more occurrences of ``R``
 
-``r+``
-    one or more occurrences of ``r``.
+*    ``R+`` zero or more occurrences of ``R``
 
-``r?``
-    optional ``r``.
+*    ``R?`` optional ``R``
 
-``(r)``
-    ``r``; parentheses are used to override precedence.
+*    ``R{n}`` repetition of ``R`` exactly ``n`` times
 
-``r s``
-    ``r`` followed by ``s`` (concatenation).
+*    ``R{n,}`` repetition of ``R`` at least ``n`` times
 
-``r | s``
-    ``r`` or ``s`` (alternative).
+*    ``R{n,m}`` repetition of ``R`` from ``n`` to ``m`` times
 
-``r`` / ``s``
-    ``r`` but only if it is followed by ``s``. Note that ``s`` is not
-    part of the matched text. This type of regular expression is called
-    "trailing context". Trailing context can only be at the end of a rule
-    and cannot be part of a named definition.
+*    ``(R)`` just ``R``; parentheses are used to override precedence or for POSIX-style submatch
 
-``r{n}``
-    matches ``r`` exactly ``n`` times.
+*    ``R S`` concatenation: ``R`` followed by ``S``
 
-``r{n,}``
-    matches ``r`` at least ``n`` times.
+*    ``R | S`` alternative: ``R or S``
 
-``r{n,m}``
-    matches ``r`` at least ``n`` times, but not more than ``m`` times.
+*    ``R / S`` loohakead: ``R`` followed by ``S``, but ``S`` is not consumed
 
-``.``
-    match any character except newline.
+*    ``name`` the regular expression defined as ``name`` (or literal string ``"name"`` in Flex compatibility mode)
 
-``name``
-    matches a named definition as specified by ``name`` only if ``-F`` is
-    off. If ``-F`` is active then this behaves like it was enclosed in double
-    quotes and matches the string "name".
+*    ``{name}`` the regular expression defined as ``name`` in Flex compatibility mode
 
-``@stag``
-    save input position at which ``@stag`` matches in a variable named ``stag``
+*    ``@stag`` an *s-tag*: saves the last input position at which ``@stag`` matches in a variable named ``stag``
 
-``#mtag``
-    save all input positions at which ``#mtag`` matches in a variable named ``mtag``
-    (multiple positions are possible if ``#mtag`` is enclosed in a repetition subexpression that matches several times)
+*    ``#mtag`` an *m-tag*: saves all input positions at which ``#mtag`` matches in a variable named ``mtag``
 
-Character classes and string literals may contain octal or hexadecimal
-character definitions and the following set of escape sequences:
-``\a``, ``\b``, ``\f``, ``\n``, ``\r``, ``\t``, ``\v``, ``\\``. An octal character is defined by a backslash
-followed by its three octal digits (e.g., ``\377``).
-Hexadecimal characters from 0 to 0xFF are defined by a backslash, a lower
-case ``x`` and two hexadecimal digits (e.g., ``\x12``). Hexadecimal characters from 0x100 to 0xFFFF are defined by a backslash, a lower case
-``\u``or an upper case ``\X``, and four hexadecimal digits (e.g., ``\u1234``).
-Hexadecimal characters from 0x10000 to 0xFFFFffff are defined by a backslash, an upper case ``\U``,
-and eight hexadecimal digits (e.g., ``\U12345678``).
-
-The only portable "any" rule is the default rule, ``*``.
+Character classes and string literals may contain the following escape sequences:
+``\a``, ``\b``, ``\f``, ``\n``, ``\r``, ``\t``, ``\v``, ``\\``, octal escapes ``\ooo`` and hexadecimal escapes ``\xhh``, ``\uhhhh`` and ``\Uhhhhhhhh``.
 

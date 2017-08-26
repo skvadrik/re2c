@@ -43,82 +43,69 @@ control and customize the generated DFA.
 .INDENT 0.0
 .TP
 .B \fB\-? \-h \-\-help\fP
-Show a short help screen:
+Show help message.
 .TP
 .B \fB\-b \-\-bit\-vectors\fP
-Implies \fB\-s\fP\&. Use bit vectors as well to try to
-coax better code out of the compiler. Most useful for
-specifications with more than a few keywords (e.g., for most programming
-languages).
+Optimize conditional jumps using bit masks. Implies \fB\-s\fP\&.
 .TP
 .B \fB\-c \-\-conditions\fP
-Used for (f)lex\-like condition support.
+Enable support of Flex\-like "conditions": multiple interrelated lexers within one block.
 .TP
 .B \fB\-d \-\-debug\-output\fP
-Creates a parser that dumps information about
-the current position and the state the parser is in.
-This is useful for debugging parser issues and states. If you use this
-switch, you need to define a \fBYYDEBUG\fP macro, which will be called like a
-function with two parameters: \fBvoid YYDEBUG (int state, char current)\fP\&.
-The first parameter receives the state or \fB\-1\fP and the second parameter
-receives the input at the current cursor.
+Emit \fBYYDEBUG\fP in the generated code.
+\fBYYDEBUG\fP should be defined by the user in the form of a void function with two parameters:
+\fBstate\fP (lexer state or \-1) and \fBsymbol\fP (current input symbol of type \fBYYCTYPE\fP).
 .TP
 .B \fB\-D \-\-emit\-dot\fP
-Emit Graphviz dot data, which can then be processed
-with e.g., \fBdot \-Tpng input.dot > output.png\fP\&. Please note that
-scanners with many states may crash dot.
+Instead of normal output generate lexer graph in DOT format.
+The output can be converted to PNG with the help of Graphviz (something like \fBdot \-Tpng \-odfa.png dfa.dot\fP).
+Note that large graphs may crash Graphviz.
 .TP
 .B \fB\-e \-\-ecb\fP
-Generate a parser that supports EBCDIC. The generated
-code can deal with any character up to 0xFF. In this mode, \fBre2c\fP assumes
-an input character size of 1 byte. This switch is incompatible with
-\fB\-w\fP, \fB\-x\fP, \fB\-u\fP, and \fB\-8\fP\&.
+Generate a lexer that reads input in EBCDIC encoding.
+\fBre2c\fP assumes that character range is 0 \-\- 0xFF an character size is 1 byte.
 .TP
 .B \fB\-f \-\-storable\-state\fP
-Generate a scanner with support for storable state.
+Generate a lexer which can store its inner state.
+This is useful in push\-model lexers which are stopped by an outer program when there is not enough input,
+and then resumed when more input becomes available.
+In this mode users should additionally define
+\fBYYGETSTATE ()\fP and \fBYYSETSTATE (state)\fP macros
+and variables \fByych\fP, \fByyaccept\fP and the \fBstate\fP as part of the lexer state.
 .TP
 .B \fB\-F \-\-flex\-syntax\fP
-Partial support for flex syntax. When this flag
-is active, named definitions must be surrounded by curly braces and
-can be defined without an equal sign and the terminating semicolon.
-Instead, names are treated as direct double quoted strings.
+Partial support for Flex syntax:
+in this mode named definitions don\(aqt need the equal sign and the terminating semicolon,
+and when used they must be surrounded by curly braces.
+Names without curly braces are treated as double\-quoted strings.
 .TP
 .B \fB\-g \-\-computed\-gotos\fP
-Generate a scanner that utilizes GCC\(aqs
-computed\-goto feature. That is, \fBre2c\fP generates jump tables whenever a
-decision is of certain complexity (e.g., a lot of if conditions would be
-otherwise necessary). This is only usable with compilers that support this feature.
-Note that this implies \fB\-b\fP and that the complexity threshold can be configured
-using the \fBcgoto:threshold\fP inplace configuration.
+Optimize conditional jumps using non\-standard "computed goto" extension (must be supported by C/C++ compiler).
+\fBre2c\fP generates jump tables only in complex cases with a lot of conditional branches.
+Complexity threshold can be configured with \fBcgoto:threshold\fP configuration.
+This option implies \fB\-b\fP\&.
 .TP
 .B \fB\-i \-\-no\-debug\-info\fP
-Do not output \fB#line\fP information. This is
-useful when you want use a CMS tool with \fBre2c\fP\(aqs output. You might
-want to do this if you do not want to impose re2c as a build requirement
-for your source.
+Do not output \fB#line\fP information.
+This is useful when the generated code is tracked by some version control system.
 .TP
 .B \fB\-o OUTPUT \-\-output=OUTPUT\fP
 Specify the \fBOUTPUT\fP file.
 .TP
 .B \fB\-r \-\-reusable\fP
-Allows reuse of scanner definitions with \fB/*!use:re2c */\fP after \fB/*!rules:re2c */\fP\&.
-In this mode, no \fB/*!re2c */\fP block and exactly one \fB/*!rules:re2c */\fP must be present.
-The rules are saved and used by every \fB/*!use:re2c */\fP block that follows.
-These blocks can contain inplace configurations, especially \fBre2c:flags:e\fP,
-\fBre2c:flags:w\fP, \fBre2c:flags:x\fP, \fBre2c:flags:u\fP, and \fBre2c:flags:8\fP\&.
-That way it is possible to create the same scanner multiple times for
-different character types, different input mechanisms, or different output mechanisms.
-The \fB/*!use:re2c */\fP blocks can also contain additional rules that will be appended
-to the set of rules in \fB/*!rules:re2c */\fP\&.
+Allows reuse of \fBre2c\fP rules with \fB/*!rules:re2c */\fP and \fB/*!use:re2c */\fP blocks.
+In this mode simple \fB/*!re2c */\fP blocks are not allowed
+and exactly one \fB/*!rules:re2c */\fP block must be present.
+The rules are saved and used by every \fB/*!use:re2c */\fP block that follows (which may add rules of their own).
+This option allows to reuse the same set of rules with different configurations.
 .TP
 .B \fB\-s \-\-nested\-ifs\fP
-Generate nested ifs for some switches. Many
-compilers need this assist to generate better code.
+Use nested \fBif\fP statements instead of \fBswitch\fP statements in conditional jumps.
+This usually results in more efficient code with non\-optimizing C/C++ compilers.
 .TP
 .B \fB\-t HEADER \-\-type\-header=HEADER\fP
-Create a \fBHEADER\fP file that
-contains types for the (f)lex\-like condition support. This can only be
-activated when \fB\-c\fP is in use.
+Generate a \fBHEADER\fP file that contains enum with condition names.
+Requires \fB\-c\fP option.
 .TP
 .B \fB\-T \-\-tags\fP
 Enable submatch extraction with tags.
@@ -127,44 +114,36 @@ Enable submatch extraction with tags.
 Enable submatch extraction with POSIX\-style capturing groups.
 .TP
 .B \fB\-u \-\-unicode\fP
-Generate a parser that supports UTF\-32. The generated
-code can deal with any valid Unicode character up to 0x10FFFF. In this
-mode, \fBre2c\fP assumes an input character size of 4 bytes. This switch is
-incompatible with \fB\-e\fP, \fB\-w\fP, \fB\-x\fP, and \fB\-8\fP\&. This implies \fB\-s\fP\&.
+Generate a lexer that reads input in UTF\-32 encoding.
+\fBre2c\fP assumes that character range is 0 \-\- 0x10FFFF and character size is 4 bytes.
+Implies \fB\-s\fP\&.
 .TP
 .B \fB\-v \-\-version\fP
 Show version information.
 .TP
 .B \fB\-V \-\-vernum\fP
-Show the version as a number in the MMmmpp (Majorm, minor, patch) format.
+Show version information in \fBMMmmpp\fP format (major, minor, patch).
 .TP
 .B \fB\-w \-\-wide\-chars\fP
-Generate a parser that supports UCS\-2. The
-generated code can deal with any valid Unicode character up to 0xFFFF.
-In this mode, \fBre2c\fP assumes an input character size of 2 bytes. This
-switch is incompatible with \fB\-e\fP, \fB\-x\fP, \fB\-u\fP, and \fB\-8\fP\&. This implies
-\fB\-s\fP\&.
+Generate a lexer that reads input in UCS\-2 encoding.
+\fBre2c\fP assumes that character range is 0 \-\- 0xFFFF and character size is 2 bytes.
+Implies \fB\-s\fP\&.
 .TP
 .B \fB\-x \-\-utf\-16\fP
-Generate a parser that supports UTF\-16. The generated
-code can deal with any valid Unicode character up to 0x10FFFF. In this
-mode, \fBre2c\fP assumes an input character size of 2 bytes. This switch is
-incompatible with \fB\-e\fP, \fB\-w\fP, \fB\-u\fP, and \fB\-8\fP\&. This implies \fB\-s\fP\&.
+Generate a lexer that reads input in UTF\-16 encoding.
+\fBre2c\fP assumes that character range is 0 \-\- 0x10FFFF and character size is 2 bytes.
+Implies \fB\-s\fP\&.
 .TP
 .B \fB\-8 \-\-utf\-8\fP
-Generate a parser that supports UTF\-8. The generated
-code can deal with any valid Unicode character up to 0x10FFFF. In this
-mode, \fBre2c\fP assumes an input character size of 1 byte. This switch is
-incompatible with \fB\-e\fP, \fB\-w\fP, \fB\-x\fP, and \fB\-u\fP\&.
+Generate a lexer that reads input in UTF\-8 encoding.
+\fBre2c\fP assumes that character range is 0 \-\- 0x10FFFF and character size is 1 byte.
 .TP
 .B \fB\-\-case\-insensitive\fP
-Makes all strings case insensitive. This makes
-"\-quoted expressions behave as \(aq\-quoted expressions.
+Treat single\-quoted and double\-quoted strings as case\-insensitive.
 .TP
 .B \fB\-\-case\-inverted\fP
-Invert the meaning of single and double quoted
-strings. With this switch, single quotes are case sensitive and double
-quotes are case insensitive.
+Invert the meaning of single\-quoted and double\-quoted strings:
+treat single\-quoted strings as case\-sensitive and double\-quoted strings as case\-insensitive.
 .TP
 .B \fB\-\-no\-generation\-date\fP
 Suppress date output in the generated file.
@@ -174,71 +153,63 @@ Use TDFA(0) instead of TDFA(1).
 This option only has effect with \fB\-\-tags\fP or \fB\-\-posix\-captures\fP options.
 .TP
 .B \fB\-\-no\-optimize\-tags\fP
-Suppress optimization of tag variables (mostly used for debugging).
+Suppress optimization of tag variables (useful for debugging or benchmarking).
 .TP
 .B \fB\-\-no\-version\fP
 Suppress version output in the generated file.
 .TP
-.B \fB\-\-no\-generation\-date\fP
-Suppress version output in the generated file.
-.TP
 .B \fB\-\-encoding\-policy POLICY\fP
-Specify how \fBre2c\fP must treat Unicode
-surrogates. \fBPOLICY\fP can be one of the following: \fBfail\fP (abort with
-an error when a surrogate is encountered), \fBsubstitute\fP (silently replace
-surrogates with the error code point 0xFFFD), \fBignore\fP (treat surrogates as
-normal code points). By default, \fBre2c\fP ignores surrogates (for backward
-compatibility). The Unicode standard says that standalone surrogates are
-invalid code points, but different libraries and programs treat them
-differently.
+Define the way \fBre2c\fP treats Unicode surrogates.
+\fBPOLICY\fP can be one of the following: \fBfail\fP (abort with an error when a surrogate is encountered),
+\fBsubstitute\fP (silently replace surrogates with the error code point 0xFFFD),
+\fBignore\fP (default, treat surrogates as normal code points).
+The Unicode standard says that standalone surrogates are invalid,
+but real\-world libraries and programs behave in different ways.
 .TP
 .B \fB\-\-input INPUT\fP
-Specify re2c\(aqs input API. \fBINPUT\fP can be either \fBdefault\fP or \fBcustom\fP\&.
+Specify \fBre2c\fP input API. \fBINPUT\fP can be either \fBdefault\fP or \fBcustom\fP (enables the use of generic API).
 .TP
 .B \fB\-S \-\-skeleton\fP
-Instead of embedding re2c\-generated code into C/C++
-source, generate a self\-contained program for the same DFA. Most useful
-for correctness and performance testing.
+Ignore user\-defined interface code and generate a self\-contained "skeleton" program.
+Additionally, generate input files with strings derived from the regular grammar
+and compressed match results that are used to verify "skeleton" behavior on all inputs.
+This option is useful for finding bugs in optimizations and code generation.
 .TP
 .B \fB\-\-empty\-class POLICY\fP
-What to do if the user uses an empty character
-class. \fBPOLICY\fP can be one of the following: \fBmatch\-empty\fP (match empty
-input: pretty illogical, but this is the default for backwards
-compatibility reasons), \fBmatch\-none\fP (fail to match on any input),
-\fBerror\fP (compilation error). Note that there are various ways to
-construct an empty class, e.g., [], [^\ex00\-\exFF],
-[\ex00\-\exFF][\ex00\-\exFF].
+Define the way \fBre2c\fP treats empty character classes.
+\fBPOLICY\fP can be one of the following: \fBmatch\-empty\fP (match empty input: illogical, but default behavior for backwards compatibility reasons),
+\fBmatch\-none\fP (fail to match on any input),
+\fBerror\fP (compilation error).
 .TP
-.B \fB\-\-dfa\-minimization <table | moore>\fP
-The internal algorithm used by re2c to minimize the DFA (defaults to \fBmoore\fP).
-Both the table filling algorithm and the Moore algorithm should produce the same DFA (up to states relabeling).
-The table filling algorithm is much simpler and slower; it serves as a reference implementation.
+.B \fB\-\-dfa\-minimization ALGORITHM\fP
+The internal algorithm used by re2c to minimize the DFA.
+\fBALGORITHM\fP can be either \fBmoore\fP (Moore algorithm, the default) or \fBtable\fP (table filling algorithm).
+Both algorithms should produce the same DFA up to states relabeling;
+table filling is much slower and serves as a reference implementation.
 .TP
 .B \fB\-\-eager\-skip\fP
-This option controls when the generated lexer advances to the next input symbol
-(that is, increments YYCURSOR or invokes YYSKIP).
-By default this happens after transition to the next state,
-but \fB\-\-eager\-skip\fP option allows to override default behavior
-and advance input position immediately after reading input symbol.
-This option is implied by \fB\-\-no\-lookahead\fP\&.
+Make the generated lexer advance the input position "eagerly":
+immediately after reading input symbol.
+By default this happens after transition to the next state.
+Implied by \fB\-\-no\-lookahead\fP\&.
 .TP
 .B \fB\-\-dump\-nfa\fP
-Generate .dot representation of NFA and dump it on stderr.
+Generate representation of NFA in DOT format and dump it on stderr.
 .TP
 .B \fB\-\-dump\-dfa\-raw\fP
-Generate .dot representation of DFA under construction and dump it on stderr.
+Generate representation of DFA in DOT format under construction and dump it on stderr.
 .TP
 .B \fB\-\-dump\-dfa\-det\fP
-Generate .dot representation of DFA immediately after determinization and dump it on stderr.
+Generate representation of DFA in DOT format immediately after determinization and dump it on stderr.
 .TP
 .B \fB\-\-dump\-dfa\-tagopt\fP
-Generate .dot representation of DFA after tag optimizations and dump it on stderr.
+Generate representation of DFA in DOT format after tag optimizations and dump it on stderr.
 .TP
 .B \fB\-\-dump\-dfa\-min\fP
-Generate .dot representation of DFA after minimization and dump it on stderr.
+Generate representation of DFA in DOT format after minimization and dump it on stderr.
 .TP
 .B \fB\-\-dump\-adfa\fP
-Generate .dot representation of DFA after tunneling and dump it on stderr.
+Generate representation of DFA in DOT format after tunneling and dump it on stderr.
 .TP
 .B \fB\-1 \-\-single\-pass\fP
 Deprecated. Does nothing (single pass is the default now).
@@ -254,13 +225,13 @@ doesn\(aqt turn on any warnings; it only affects those warnings that have
 been turned on so far or will be turned on later.
 .TP
 .B \fB\-W<warning>\fP
-Turn on a \fBwarning\fP\&.
+Turn on \fBwarning\fP\&.
 .TP
 .B \fB\-Wno\-<warning>\fP
-Turn off a \fBwarning\fP\&.
+Turn off \fBwarning\fP\&.
 .TP
 .B \fB\-Werror\-<warning>\fP
-Turn on a \fBwarning\fP and treat it as an error (this implies \fB\-W<warning>\fP).
+Turn on \fBwarning\fP and treat it as an error (this implies \fB\-W<warning>\fP).
 .TP
 .B \fB\-Wno\-error\-<warning>\fP
 Don\(aqt treat this particular \fBwarning\fP as an error. This doesn\(aqt turn off
@@ -270,23 +241,21 @@ the warning itself.
 .TP
 .B \fB\-Wcondition\-order\fP
 Warn if the generated program makes implicit
-assumptions about condition numbering. You should use either the \fB\-t, \-\-type\-header\fP option or
+assumptions about condition numbering. One should use either the \fB\-t, \-\-type\-header\fP option or
 the \fB/*!types:re2c*/\fP directive to generate a mapping of condition names to numbers and then use
 the autogenerated condition names.
 .TP
 .B \fB\-Wempty\-character\-class\fP
 Warn if a regular expression contains an empty
-character class. Rationally, trying to match an empty
-character class makes no sense: it should always fail. However, for
-backwards compatibility reasons, \fBre2c\fP allows empty character classes and
+character class. Trying to match an empty character class makes no sense: it should always fail.
+However, for backwards compatibility reasons \fBre2c\fP allows empty character classes and
 treats them as empty strings. Use the \fB\-\-empty\-class\fP option to change the default
 behavior.
 .TP
 .B \fB\-Wmatch\-empty\-string\fP
-Warn if a regular expression in a rule is
-nullable (matches an empty string). If the DFA runs in a loop and an empty match
-is unintentional (the input position in not advanced manually), the lexer may
-get stuck in an infinite loop.
+Warn if a rule is nullable (matches an empty string).
+If the lexer runs in a loop and the empty match is unintentional,
+the lexer may unexpectedly hang in an infinite loop.
 .TP
 .B \fB\-Wswapped\-range\fP
 Warn if the lower bound of a range is greater than its upper
@@ -296,8 +265,8 @@ bound. The default behavior is to silently swap the range bounds.
 Warn if some input strings cause undefined
 control flow in the lexer (the faulty patterns are reported). This is the
 most dangerous and most common mistake. It can be easily fixed by adding
-the default rule (\fB*\fP) (this rule has the lowest priority, matches any code unit, and consumes
-exactly one code unit).
+the default rule \fB*\fP which has the lowest priority, matches any code unit, and consumes
+exactly one code unit.
 .TP
 .B \fB\-Wunreachable\-rules\fP
 Warn about rules that are shadowed by other rules and will never match.
@@ -305,221 +274,162 @@ Warn about rules that are shadowed by other rules and will never match.
 .B \fB\-Wuseless\-escape\fP
 Warn if a symbol is escaped when it shouldn\(aqt be.
 By default, re2c silently ignores such escapes, but this may as well indicate a
-typo or error in the escape sequence.
+typo or an error in the escape sequence.
 .TP
 .B \fB\-Wnondeterministic\-tags\fP
-Warn if tag has \fBn\fP\-th degree of nondeterminism, where \fBn\fP is greater than 1.
+Warn if a tag has \fBn\fP\-th degree of nondeterminism, where \fBn\fP is greater than 1.
 .UNINDENT
 .SH INTERFACE CODE
 .sp
-The user must supply interface code either in the form of C/C++ code
-(macros, functions, variables, etc.) or in the form of \fBINPLACE CONFIGURATIONS\fP\&.
-Which symbols must be defined and which are optional
-depends on the particular use case.
+Below is the list of all symbols which may be used by the lexer in order to interact with the outer world.
+These symbols should be defined by the user,
+either in the form of inplace configurations,
+or as C/C++ variables, functions, macros and other language constructs.
+Which primitives are necessary depends on the particular use case.
 .INDENT 0.0
 .TP
+.B \fByyaccept\fP
+L\-value of unsigned integral type that is used to hold the number of the last matched rule.
+Explicit definition by the user is necessary only with \fB\-f\fP \fB\-\-storable\-state\fP option.
+.TP
 .B \fBYYBACKUP ()\fP
-Backup current input position (used only with generic API).
+Backup current input position (used only with \fB\-\-input custom\fP option).
 .TP
 .B \fBYYBACKUPCTX ()\fP
-Backup current input position for trailing context (used only with generic API).
+Backup current input position for trailing context (used only with  \fB\-\-input custom\fP option).
+.TP
+.B \fByych\fP
+L\-value of type \fBYYCTYPE\fP that is used to hold current input character.
+Explicit definition by the user is necessary only with \fB\-f\fP \fB\-\-storable\-state\fP option.
 .TP
 .B \fBYYCONDTYPE\fP
-In \fB\-c\fP mode, you can use \fB\-t\fP to generate a file that
-contains the enumeration used as conditions. Each of the values refers
-to a condition of a rule set.
+The type of \fIcondition\fP identifiers (used only with \fB\-c\fP \fB\-\-conditions\fP option).
+Should be generated either with \fB/*!types:re2c*/\fP directive, or with \fB\-t\fP \fB\-\-type\-header\fP option.
 .TP
 .B \fBYYCTXMARKER\fP
-l\-value of type \fBYYCTYPE *\fP\&.
-The generated code saves trailing context backtracking information in
-\fBYYCTXMARKER\fP\&. The user only needs to define this macro if a scanner
-specification uses trailing context in one or more of its regular
-expressions.
+L\-value of type \fBYYCTYPE *\fP that is used to backup input position of trailing context.
+It is needed only if regular expressions use the lookahead operator \fB/\fP\&.
 .TP
 .B \fBYYCTYPE\fP
-Type used to hold an input symbol (code unit). Usually
-\fBchar\fP or \fBunsigned char\fP for ASCII, EBCDIC  or UTF\-8, or \fIunsigned short\fP
-for UTF\-16 or UCS\-2, or \fBunsigned int\fP for UTF\-32.
+The type of the input characters (\fIcode units\fP).
+Usually it should be \fBunsigned char\fP for ASCII, EBCDIC and UTF\-8 encodings,
+\fBunsigned short\fP for UTF\-16 or UCS\-2 encodings,
+and \fBunsigned int\fP for UTF\-32 encoding.
 .TP
 .B \fBYYCURSOR\fP
-l\-value of type \fBYYCTYPE *\fP that points to the current input symbol. The generated code advances
-\fBYYCURSOR\fP as symbols are matched. On entry, \fBYYCURSOR\fP is assumed to
-point to the first character of the current token. On exit, \fBYYCURSOR\fP
-will point to the first character of the following token.
+L\-value of type \fBYYCTYPE *\fP that is used as a pointer to the current input symbol.
+Initially \fBYYCURSOR\fP points to the first character and is advanced by the lexer during matching.
+When a rule matches, \fBYYCURSOR\fP points past the last character of the matched string.
 .TP
-.B \fBYYDEBUG (state, current)\fP
-This is only needed if the \fB\-d\fP flag was
-specified. It allows easy debugging of the generated parser by calling a
-user defined function for every state. The function should have the
-following signature: \fBvoid YYDEBUG (int state, char current)\fP\&. The first
-parameter receives the state or \-1 and the second parameter receives the
-input at the current cursor.
+.B \fBYYDEBUG (state, symbol)\fP
+A function\-like primitive that is used to dump debug information (only used with \fB\-d\fP \fB\-\-debug\-output\fP option).
+\fBYYDEBUG\fP should return no value and accept two arguments:
+\fBstate\fP (either lexer state or \fB\-1\fP) and \fBsymbol\fP (current input symbol).
 .TP
 .B \fBYYFILL (n)\fP
-The generated code "calls"" \fBYYFILL (n)\fP when the
-buffer needs (re)filling: at least \fBn\fP additional characters should be
-provided. \fBYYFILL (n)\fP should adjust \fBYYCURSOR\fP, \fBYYLIMIT\fP, \fBYYMARKER\fP,
-and \fBYYCTXMARKER\fP as needed. Note that for typical programming languages
-\fBn\fP will be the length of the longest keyword plus one. The user can
-place a comment of the form \fB/*!max:re2c*/\fP to insert a \fBYYMAXFILL\fP define set to the maximum
-length value.
+A function\-like primitive that is called by the lexer when there is not enough input.
+\fBYYFILL\fP should return no value and supply at least \fBn\fP additional characters.
+Maximal value of \fBn\fP equals \fBYYMAXFILL\fP, which can be obtained with the \fB/*!max:re2c*/\fP directive.
 .TP
 .B \fBYYGETCONDITION ()\fP
-This define is used to get the condition prior to
-entering the scanner code when using the \fB\-c\fP switch. The value must be
-initialized with a value from the \fBYYCONDTYPE\fP enumeration type.
+R\-value of type \fBYYCONDTYPE\fP that represents current \fIcondition\fP identifier (used only with \fB\-c\fP \fB\-\-conditions\fP option).
 .TP
 .B \fBYYGETSTATE ()\fP
-The user only needs to define this macro if the \fB\-f\fP
-flag was specified. In that case, the generated code "calls"
-\fBYYGETSTATE ()\fP at the very beginning of the scanner in order to obtain
-the saved state. \fBYYGETSTATE ()\fP must return a signed integer. The value
-must be either \-1, indicating that the scanner is entered for the first
-time, or a value previously saved by \fBYYSETSTATE (s)\fP\&. In the second
-case, the scanner will resume operations right after where the last
-\fBYYFILL (n)\fP was called.
+R\-value of signed integral type that represents current lexer state (used only with \fB\-f\fP \fB\-\-storable\-state\fP option).
+Initial value of lexer state should be \fB\-1\fP\&.
 .TP
 .B \fBYYLESSTHAN (n)\fP
-Check if less than \fBn\fP input characters are left (used only with generic API).
+R\-value of boolean type that is \fBtrue\fP if and only if there is less than \fBn\fP input characters left (used only with  \fB\-\-input custom\fP option).
 .TP
 .B \fBYYLIMIT\fP
-An expression of type \fBYYCTYPE *\fP that marks the end of the buffer \fBYYLIMIT[\-1]\fP
-is the last character in the buffer). The generated code repeatedly
-compares \fBYYCURSOR\fP to \fBYYLIMIT\fP to determine when the buffer needs
-(re)filling.
+R\-value of type \fBYYCTYPE *\fP that marks the end of input (\fBYYLIMIT[\-1]\fP should be the last input character).
+Lexer compares \fBYYCURSOR\fP and \fBYYLIMIT\fP in order to determine if there is enough input characters left.
 .TP
 .B \fBYYMARKER\fP
-An l\-value of type \fBYYCTYPE *\fP\&.
-The generated code saves backtracking information in \fBYYMARKER\fP\&. Some
-simple scanners might not use this.
+L\-value of type \fBYYCTYPE *\fP used to backup input position of successful match.
+This might be necessary if there is an overlapping longer rule that might also match.
 .TP
 .B \fBYYMTAGP (t)\fP
-Append current input position to the history of tag \fBt\fP\&.
+Append current input position to the history of \fIm\-tag\fP \fBt\fP (used only with \fB\-T\fP \fB\-\-tags\fP option).
 .TP
 .B \fBYYMTAGN (t)\fP
-Append default value to the history of tag \fBt\fP\&.
+Append default value to the history of \fIm\-tag\fP \fBt\fP (used only with \fB\-T\fP \fB\-\-tags\fP option).
 .TP
 .B \fBYYMAXFILL\fP
-This will be automatically defined by \fB/*!max:re2c*/\fP blocks as explained above.
+Integral constant that denotes maximal value of \fBYYFILL\fP argument
+and is autogenerated by \fB/*!max:re2c*/\fP directive.
 .TP
 .B \fBYYMAXNMATCH\fP
-This will be automatically defined by \fB/*!maxnmatch:re2c*/\fP\&.
+Integral constant that denotes maximal number of capturing groups in a rule
+and is autogenerated by \fB/*!maxnmatch:re2c*/\fP directive (used only with \fB\-\-posix\-captures\fP option).
+.TP
+.B \fByynmatch\fP
+L\-value of unsigned integral type that is used to hold the number of capturing groups in the matching rule.
+Used only with \fB\-P\fP \fB\-\-posix\-captures\fP option.
 .TP
 .B \fBYYPEEK ()\fP
-Get current input character (used only with generic API).
+R\-value of type \fBYYCTYPE\fP that denotes current input character (used only with \fB\-\-input custom\fP option).
+.TP
+.B \fByypmatch\fP
+An array of l\-values that are used to hold the values of \fIs\-tags\fP
+corresponding to the capturing parentheses in the matching rule.
+The length of array must be at least \fByynmatch * 2\fP (ideally \fBYYMAXNMATCH * 2\fP).
+Used only with \fB\-P\fP \fB\-\-posix\-captures\fP option.
 .TP
 .B \fBYYRESTORE ()\fP
-Restore input position (used only with generic API).
+Restore input position (used only with \fB\-\-input custom\fP option).
 .TP
 .B \fBYYRESTORECTX ()\fP
-Restore input position from the value of trailing context (used only with generic API).
+Restore input position from the value of trailing context (used only with \fB\-\-input custom\fP option).
 .TP
 .B \fBYYRESTORETAG (t)\fP
-Restore input position from the value of tag \fBt\fP (used only with generic API).
+Restore input position from the value of \fIs\-tag\fP \fBt\fP (used only with \fB\-\-input custom\fP option).
 .TP
-.B \fBYYSETCONDITION (c)\fP
-This define is used to set the condition in
-transition rules. This is only being used when \fB\-c\fP is active and
-transition rules are being used.
+.B \fBYYSETCONDITION (condition)\fP
+Set current \fIcondition\fP identifier to \fBcondition\fP (used only with \fB\-c\fP \fB\-\-conditions\fP option).
 .TP
-.B \fBYYSETSTATE (s)\fP
-The user only needs to define this macro if the \fB\-f\fP
-flag was specified. In that case, the generated code "calls"
-\fBYYSETSTATE\fP just before calling \fBYYFILL (n)\fP\&. The parameter to
-\fBYYSETSTATE\fP is a signed integer that uniquely identifies the specific
-instance of \fBYYFILL (n)\fP that is about to be called. Should the user
-wish to save the state of the scanner and have \fBYYFILL (n)\fP return to
-the caller, all he has to do is store that unique identifier in a
-variable. Later, when the scanner is called again, it will call
-\fBYYGETSTATE ()\fP and resume execution right where it left off. The
-generated code will contain both \fBYYSETSTATE (s)\fP and \fBYYGETSTATE\fP even
-if \fBYYFILL (n)\fP is disabled.
+.B \fBYYSETSTATE (state)\fP
+Set current lexer state to \fBstate\fP (used only with \fB\-f\fP \fB\-\-storable\-state\fP option).
+Parameter \fBstate\fP is of signed integral type.
 .TP
 .B \fBYYSKIP ()\fP
 Advance input position to the next character (used only with generic API).
 .TP
 .B \fBYYSTAGP (t)\fP
-Save current input position to tag \fBt\fP (used only with generic API).
+Save current input position to \fIs\-tag\fP \fBt\fP (used only with \fB\-T\fP \fB\-\-tags\fP and \fB\-\-input custom\fP option).
 .TP
 .B \fBYYSTAGN (t)\fP
-Save default value to tag \fBt\fP (used only with generic API).
+Save default value to \fIs\-tag\fP \fBt\fP (used only with \fB\-T\fP \fB\-\-tags\fP and \fB\-\-input custom\fP options).
 .UNINDENT
 .SH SYNTAX
 .sp
-Code for \fBre2c\fP consists of a set of \fBRULES\fP, \fBNAMED DEFINITIONS\fP, \fBCODE\fP and
-\fBINPLACE CONFIGURATIONS\fP\&.
+A program can contain any number of \fBre2c\fP blocks.
+Each block consists of a sequence of \fBRULES\fP, \fBNAMED DEFINITIONS\fP and \fBINPLACE CONFIGURATIONS\fP\&.
 .SS RULES
 .sp
-Each rule consist of a regular expression  (see \fBREGULAR EXPRESSIONS\fP) accompanied with a block of C/C++ code
-which is to be executed when the associated regular expression is
-matched. You can either start the code with an opening curly brace or
-the sequence \fB:=\fP\&. If you use an opening curly brace, \fBre2c\fP will count brace depth
-and stop looking for code automatically. Otherwise, curly braces are not
-allowed and \fBre2c\fP stops looking for code at the first line that does
-not begin with whitespace. If two or more rules overlap, the first rule
-is preferred.
+Rules consist of a regular expression followed by a user\-defined action:
+a block of C/C++ code) that is executed in case of sucessful match.
+Action can be either an arbitrary block of code enclosed in curly braces \fB{\fP and \fB}\fP,
+or a block of code without curly braces preceded with \fB:=\fP and ended with a newline that is not followed by a whitespace.
 .sp
-There is one special rule that can be used instead of regular expression: the default rule \fB*\fP\&.
-Note that the default rule \fB*\fP differs from \fB[^]\fP: the default rule has the lowest priority,
-matches any code unit (either valid or invalid) and always consumes exactly one character.
-\fB[^]\fP, on the other hand, matches any valid code point (not the same as a code unit) and can consume multiple
-code units. In fact, when a variable\-length encoding is used, \fB*\fP
-is the only possible way to match an invalid input character.
+If multiple rules match, \fBre2c\fP prefers the longest match.
+If rules match the same string, the earlier rule has priority.
 .sp
-In general, all rules have the form:
-.INDENT 0.0
-.INDENT 3.5
-\fBregular\-expression\-or\-* code\fP
-.UNINDENT
-.UNINDENT
+There is one special kind of rule: the \fIdefault rule\fP with \fB*\fP instaed of the regular expression.
+It always has the lowest priority, matches any \fIcode unit\fP (either valid or invalid) and consumes exactly one \fIcode unit\fP\&.
+Note that \fIdefault rule\fP is not the same as \fB[^]\fP, which
+matches any valid \fIcode point\fP and can consume multiple \fIcode units\fP\&.
+In case of variable\-length encodings \fB*\fP is the only possible way to match invalid input character.
 .sp
-If \fB\-c\fP is active, then each regular expression is preceded by a list
-of comma\-separated condition names. Besides the normal naming rules, there
-are two special cases: \fB<*>\fP (these rules are merged to all conditions)
-and \fB<>\fP (these rules cannot have an associated regular expression;
-their code is merged to all actions). Non\-empty rules may furthermore specify the new
-condition. In that case, \fBre2c\fP will generate the necessary code to
-change the condition automatically. Rules can use \fB:=>\fP as a shortcut
-to automatically generate code that not only sets the
-new condition state but also continues execution with the new state. A
-shortcut rule should not be used in a loop where there is code between
-the start of the loop and the \fBre2c\fP block unless \fBre2c:cond:goto\fP
-is changed to \fBcontinue\fP\&. If some code is needed before all rules (though not before simple jumps),  you
-can insert it with \fB<!>\fP pseudo\-rules.
-.INDENT 0.0
-.INDENT 3.5
-\fB<condition\-list\-or\-*> regular\-expression\-or\-* code\fP
-.sp
-\fB<condition\-list\-or\-*> regular\-expression\-or\-* => condition code\fP
-.sp
-\fB<condition\-list\-or\-*> regular\-expression\-or\-* :=> condition\fP
-.sp
-\fB<> code\fP
-.sp
-\fB<> => condition code\fP
-.sp
-\fB<> :=> condition\fP
-.sp
-\fB<!condition\-list> code\fP
-.sp
-\fB<!> code\fP
-.UNINDENT
-.UNINDENT
+If \fB\-c\fP \fB\-\-conditions\fP option is used, then rules have more complex form
+described in the section about conditions.
 .SS NAMED DEFINITIONS
 .sp
-Named definitions are of the form:
-.INDENT 0.0
-.INDENT 3.5
-\fBname = regular\-expression;\fP
-.UNINDENT
-.UNINDENT
-.sp
-If \fB\-F\fP is active, then named definitions are also of the form:
-.INDENT 0.0
-.INDENT 3.5
-\fBname { regular\-expression }\fP
-.UNINDENT
-.UNINDENT
+Named definitions are of the form \fBname = regexp ;\fP
+where \fBname\fP is an identifier that consists of letters, digits and underscores,
+and \fBregexp\fP is a regular expression.
+With \fB\-F\fP \fB\-\-flex\-syntax\fP option named definitions are also of the form \fBname regexp\fP\&.
+Each name should be defined before it is used.
 .SS INPLACE CONFIGURATIONS
 .INDENT 0.0
 .TP
@@ -857,88 +767,51 @@ Controls the argument in the parentheses that follow \fBYYFILL\fP\&. If zero, th
 If non\-zero, the argument is generated unless \fBre2c:define:YYFILL:naked\fP is set to non\-zero.
 .UNINDENT
 .SS REGULAR EXPRESSIONS
+.sp
+re2c uses the following syntax for regular expressions:
 .INDENT 0.0
-.TP
-.B \fB"foo"\fP
-literal string \fB"foo"\fP\&. ANSI\-C escape sequences can be used.
-.TP
-.B \fB\(aqfoo\(aq\fP
-literal string \fB"foo"\fP (case insensitive for characters [a\-zA\-Z]).
-ANSI\-C escape sequences can be used.
-.TP
-.B \fB[xyz]\fP
-character class; in this case, the regular expression matches \fBx\fP, \fBy\fP, or \fBz\fP\&.
-.TP
-.B \fB[abj\-oZ]\fP
-character class with a range in it; matches \fBa\fP, \fBb\fP, any letter from \fBj\fP through \fBo\fP, or \fBZ\fP\&.
-.TP
-.B \fB[^class]\fP
-inverted character class.
-.TP
-.B \fBr \e s\fP
-match any \fBr\fP which isn\(aqt \fBs\fP\&. \fBr\fP and \fBs\fP must be regular expressions
-which can be expressed as character classes.
-.TP
-.B \fBr*\fP
-zero or more occurrences of \fBr\fP\&.
-.TP
-.B \fBr+\fP
-one or more occurrences of \fBr\fP\&.
-.TP
-.B \fBr?\fP
-optional \fBr\fP\&.
-.TP
-.B \fB(r)\fP
-\fBr\fP; parentheses are used to override precedence.
-.TP
-.B \fBr s\fP
-\fBr\fP followed by \fBs\fP (concatenation).
-.TP
-.B \fBr | s\fP
-\fBr\fP or \fBs\fP (alternative).
-.TP
-.B \fBr\fP / \fBs\fP
-\fBr\fP but only if it is followed by \fBs\fP\&. Note that \fBs\fP is not
-part of the matched text. This type of regular expression is called
-"trailing context". Trailing context can only be at the end of a rule
-and cannot be part of a named definition.
-.TP
-.B \fBr{n}\fP
-matches \fBr\fP exactly \fBn\fP times.
-.TP
-.B \fBr{n,}\fP
-matches \fBr\fP at least \fBn\fP times.
-.TP
-.B \fBr{n,m}\fP
-matches \fBr\fP at least \fBn\fP times, but not more than \fBm\fP times.
-.TP
-.B \fB\&.\fP
-match any character except newline.
-.TP
-.B \fBname\fP
-matches a named definition as specified by \fBname\fP only if \fB\-F\fP is
-off. If \fB\-F\fP is active then this behaves like it was enclosed in double
-quotes and matches the string "name".
-.TP
-.B \fB@stag\fP
-save input position at which \fB@stag\fP matches in a variable named \fBstag\fP
-.TP
-.B \fB#mtag\fP
-save all input positions at which \fB#mtag\fP matches in a variable named \fBmtag\fP
-(multiple positions are possible if \fB#mtag\fP is enclosed in a repetition subexpression that matches several times)
+.IP \(bu 2
+\fB"foo"\fP case\-sensitive string literal
+.IP \(bu 2
+\fB\(aqfoo\(aq\fP case\-insensitive string literal
+.IP \(bu 2
+\fB[a\-xyz]\fP, \fB[^a\-xyz]\fP character class (possibly negated)
+.IP \(bu 2
+\fB\&.\fP any character except newline
+.IP \(bu 2
+\fBR \e S\fP difference of character classes \fBR\fP and \fBS\fP
+.IP \(bu 2
+\fBR*\fP zero or more occurrences of \fBR\fP
+.IP \(bu 2
+\fBR+\fP zero or more occurrences of \fBR\fP
+.IP \(bu 2
+\fBR?\fP optional \fBR\fP
+.IP \(bu 2
+\fBR{n}\fP repetition of \fBR\fP exactly \fBn\fP times
+.IP \(bu 2
+\fBR{n,}\fP repetition of \fBR\fP at least \fBn\fP times
+.IP \(bu 2
+\fBR{n,m}\fP repetition of \fBR\fP from \fBn\fP to \fBm\fP times
+.IP \(bu 2
+\fB(R)\fP just \fBR\fP; parentheses are used to override precedence or for POSIX\-style submatch
+.IP \(bu 2
+\fBR S\fP concatenation: \fBR\fP followed by \fBS\fP
+.IP \(bu 2
+\fBR | S\fP alternative: \fBR or S\fP
+.IP \(bu 2
+\fBR / S\fP loohakead: \fBR\fP followed by \fBS\fP, but \fBS\fP is not consumed
+.IP \(bu 2
+\fBname\fP the regular expression defined as \fBname\fP (or literal string \fB"name"\fP in Flex compatibility mode)
+.IP \(bu 2
+\fB{name}\fP the regular expression defined as \fBname\fP in Flex compatibility mode
+.IP \(bu 2
+\fB@stag\fP an \fIs\-tag\fP: saves the last input position at which \fB@stag\fP matches in a variable named \fBstag\fP
+.IP \(bu 2
+\fB#mtag\fP an \fIm\-tag\fP: saves all input positions at which \fB#mtag\fP matches in a variable named \fBmtag\fP
 .UNINDENT
 .sp
-Character classes and string literals may contain octal or hexadecimal
-character definitions and the following set of escape sequences:
-\fB\ea\fP, \fB\eb\fP, \fB\ef\fP, \fB\en\fP, \fB\er\fP, \fB\et\fP, \fB\ev\fP, \fB\e\e\fP\&. An octal character is defined by a backslash
-followed by its three octal digits (e.g., \fB\e377\fP).
-Hexadecimal characters from 0 to 0xFF are defined by a backslash, a lower
-case \fBx\fP and two hexadecimal digits (e.g., \fB\ex12\fP). Hexadecimal characters from 0x100 to 0xFFFF are defined by a backslash, a lower case
-\fB\eu\(ga\(gaor an upper case \(ga\(ga\eX\fP, and four hexadecimal digits (e.g., \fB\eu1234\fP).
-Hexadecimal characters from 0x10000 to 0xFFFFffff are defined by a backslash, an upper case \fB\eU\fP,
-and eight hexadecimal digits (e.g., \fB\eU12345678\fP).
-.sp
-The only portable "any" rule is the default rule, \fB*\fP\&.
+Character classes and string literals may contain the following escape sequences:
+\fB\ea\fP, \fB\eb\fP, \fB\ef\fP, \fB\en\fP, \fB\er\fP, \fB\et\fP, \fB\ev\fP, \fB\e\e\fP, octal escapes \fB\eooo\fP and hexadecimal escapes \fB\exhh\fP, \fB\euhhhh\fP and \fB\eUhhhhhhhh\fP\&.
 .SH SUBMATCH EXTRACTION
 .sp
 \fBre2c\fP supports two kinds of submatch extraction.
@@ -1012,91 +885,96 @@ represented as array of nodes \fB(v, p)\fP, where \fBv\fP is tag value and \fBp\
 .sp
 For further details see \fBhttp://re2c.org/examples/examples.html\fP page on the website
 or \fBre2c/examples/\fP subdirectory of \fBre2c\fP distribution.
-.SH SCANNER WITH STORABLE STATES
+.SH STORABLE STATE
 .sp
-When the \fB\-f\fP flag is specified, \fBre2c\fP generates a scanner that can
-store its current state, return to its caller, and later resume
-operations exactly where it left off.
+With \fB\-f\fP \fB\-\-storable\-state\fP option re2c generates a lexer that can
+store its current state, return to the caller, and later resume operations exactly where it left off.
+The default mode of operation in re2c is a "pull" model, where the lexer "pulls" more input whenever it needs it.
+However, this mode of operation assumes that the lexer is the owner of the parsing loop, and that may not always be convenient.
 .sp
-The default mode of operation in \fBre2c\fP is a
-"pull" model, where the scanner asks for extra input whenever it needs it. However, this mode of operation assumes that the scanner is the "owner" of the parsing loop, and that may not always be convenient.
-.sp
-Typically, if there is a preprocessor ahead of the scanner in the
-stream, or for that matter, any other procedural source of data, the
-scanner cannot "ask" for more data unless both the scanner and the source
-live in separate threads.
-.sp
-The \fB\-f\fP flag is useful exactly for situations like that: it lets users design
-scanners that work in a "push" model, i.e., a model where data is fed to the
-scanner chunk by chunk. When the scanner runs out of data to consume, it
-stores its state and returns to the caller. When more input data is
-fed to the scanner, it resumes operations exactly where it left off.
+Storable state is useful exactly for situations like that: it allows to construct
+lexers that work in a "push" model, where data is fed to the lexer chunk by chunk.
+When the lexer needs more input, it stores its state and returns to the caller.
+Later, when more input becomes available, it resumes operations exactly where it stopped.
 .sp
 Changes needed compared to the "pull" model:
 .INDENT 0.0
 .IP \(bu 2
-The user has to supply macros named \fBYYSETSTATE ()\fP and \fBYYGETSTATE (state)\fP\&.
+Define \fBYYSETSTATE ()\fP and \fBYYGETSTATE (state)\fP\&.
 .IP \(bu 2
-The \fB\-f\fP option inhibits declaration of \fByych\fP and \fByyaccept\fP, so the
-user has to declare them and save and restore them where required.
-In the \fBexamples/push_model/push.re\fP example, these are declared as
-fields of a (C++) class of which the scanner is a method, so they do
-not need to be saved/restored explicitly. For C, they could, e.g., be made
-macros that select fields from a structure passed in as a parameter.
-Alternatively, they could be declared as local variables, saved with
-\fBYYFILL (n)\fP when it decides to return and restored upon entering the
-function. Also, it could be more efficient to save the state from
-\fBYYFILL (n)\fP because \fBYYSETSTATE (state)\fP is called unconditionally.
-\fBYYFILL (n)\fP however does not get \fBstate\fP as a parameter, so we would have
-to store state in a local variable by \fBYYSETSTATE (state)\fP\&.
+Define \fByych\fP, \fByyaccept\fP and \fBstate\fP variables as a part of persistent lexer state.
+\fBstate\fP should be initialized to \fB\-1\fP\&.
 .IP \(bu 2
-Modify \fBYYFILL (n)\fP to return (from the function calling it) if more input is needed.
+\fBYYFILL\fP should return to the outer program instead of trying to supply more input.
+Return code should indicate that lexer needs more input.
 .IP \(bu 2
-Modify the caller to recognize if more input is needed and respond appropriately.
+The outer program should recognize situations when lexer needs more input
+and respond appropriately.
 .IP \(bu 2
-The generated code will contain a switch block that is used to
-restore the last state by jumping behind the corresponding \fBYYFILL (n)\fP
-call. This code is automatically generated in the epilogue of the first \fB/*!re2c */\fP
-block. It is possible to trigger generation of the \fBYYGETSTATE ()\fP
-block earlier by placing a \fB/*!getstate:re2c*/\fP comment. This is especially useful when the scanner code should be
-wrapped inside a loop.
+Use \fB/*!getstate:re2c*/\fP directive if it is necessary to execute any code
+before entering the lexer.
+.IP \(bu 2
+Use configurations \fBstate:abort\fP and \fBstate:nextlabel\fP to tweak the generated code.
+.UNINDENT
+.SH CONDITIONS
+.sp
+\fIConditions\fP are enabled with \fB\-c\fP \fB\-\-conditions\fP\&.
+This option allows to encode multiple interrelated lexers within the same re2c block.
+.sp
+Each lexer corresponds to a single \fIcondition\fP\&.
+It starts with a label of the form \fByyc_name\fP,
+where \fBname\fP is \fIcondition\fP name
+and \fByyc\fP prefix can be adjusted with configuration \fBre2c:condprefix\fP\&.
+Different lexers are separated with a comment \fB/* *********************************** */\fP
+which can be adjusted with configuration \fBre2c:cond:divider\fP\&.
+.sp
+Furthermore, each \fIcondition\fP has a unique identifier of the form \fByycname\fP,
+where \fBname\fP is condition name
+and \fByyc\fP prefix can be adjusted with configuration \fBre2c:condenumprefix\fP\&.
+Identifiers have the type \fBYYCONDTYPE\fP and should be generated with \fB/*!types:re2c*/\fP directive or \fB\-t\fP \fB\-\-type\-header\fP option.
+Users shouldn\(aqt define these identifiers manually, as the order of \fIconditions\fP is not specified.
+.sp
+Before all \fIconditions\fP re2c generates entry code that checks the current \fIcondition\fP identifier
+and transfers control flow to the start label of the active \fIcondition\fP\&.
+After matching some rule of this \fIcondition\fP,
+lexer may either transfer control flow back to the entry code (after executing the associated action and optionally setting another \fIcondition\fP with \fB=>\fP),
+or use \fB:=>\fP shortcut and transition directly to the start label of another \fIcondition\fP (skipping the action and the entry code).
+Configuration \fBre2c:cond:goto\fP allows to change the default behavior.
+.sp
+Syntactically each rule must be preceded with a list of comma\-separated \fIcondition\fP names or a wildcard \fB*\fP
+enclosed in angle brackets \fB<\fP and \fB>\fP\&.
+Wildcard means "any condition" and is semantically equivalent to listing all condition names.
+Here \fBregexp\fP is a regular expression, \fBdefault\fP refers to the \fIdefault rule\fP \fB*\fP,
+and \fBaction\fP is a block of C/C++ code.
+.INDENT 0.0
+.IP \(bu 2
+\fB<conditions\-or\-wildcard>  regexp\-or\-default                 action\fP
+.IP \(bu 2
+\fB<conditions\-or\-wildcard>  regexp\-or\-default  =>  condition  action\fP
+.IP \(bu 2
+\fB<conditions\-or\-wildcard>  regexp\-or\-default  :=> condition\fP
 .UNINDENT
 .sp
-Please see \fBexamples/push_model/push.re\fP for an example of a "push" model scanner. The
-generated code can be tweaked with inplace configurations \fBstate:abort\fP
-and \fBstate:nextlabel\fP\&.
-.SH SCANNER WITH CONDITION SUPPORT
+Rules with an exclamation mark \fB!\fP in front of condition list have a special meaning:
+they have no regular expression,
+and the associated action is merged as an entry code to actions of normal rules.
+This might be a convenient place to peform a routine task that is common to all rules.
+.INDENT 0.0
+.IP \(bu 2
+\fB<!conditions\-or\-wildcard>  action\fP
+.UNINDENT
 .sp
-You can precede regular expressions with a list of condition names when
-using the \fB\-c\fP switch. \fBre2c\fP will then generate a scanner block for
-each condition, and each of the generated blocks will have its own
-precondition. The precondition is given by the interface define
-\fBYYGETCONDITON()\fP and must be of type \fBYYCONDTYPE\fP\&.
-.sp
-There are two special rule types. First, the rules of the condition \fB<*>\fP
-are merged to all conditions (note that they have a lower priority than
-other rules of that condition). And second, the empty condition list
-allows to provide a code block that does not have a scanner part,
-meaning it does not allow any regular expressions. The condition value
-referring to this special block is always the one with the enumeration
-value 0. This way the code of this special rule can be used to
-initialize a scanner. It is in no way necessary to have these rules: but
-sometimes it is helpful to have a dedicated uninitialized condition
-state.
-.sp
-Non empty rules allow to specify the new condition, which makes them
-transition rules. Besides generating calls for the
-\fBYYSETCONDTITION\fP define, no other special code is generated.
-.sp
-There is another kind of special rule that allows to prepend code to any
-code block of all rules of a certain set of conditions or to all code
-blocks of all rules. This can be helpful when some operation is common
-among rules. For instance, this can be used to store the length of the
-scanned string. These special setup rules start with an exclamation mark
-followed by either a list of conditions \fB<! condition, ... >\fP or a star
-\fB<!*>\fP\&. When \fBre2c\fP generates the code for a rule whose state does not have a
-setup rule and a starred setup rule is present, the starred setup code will be
-used as setup code.
+Another special form of rules with an empty condition list \fB<>\fP and no regular expression
+allows to specify an "entry condition" that can be used to execute code before entering the lexer.
+It is semantically equivalent to a condition with number zero, name \fB0\fP and an empty regular expression.
+.INDENT 0.0
+.IP \(bu 2
+\fB<>                 action\fP
+.IP \(bu 2
+\fB<>  =>  condition  action\fP
+.IP \(bu 2
+\fB<>  :=> condition\fP
+.UNINDENT
 .SH ENCODINGS
 .sp
 \fBre2c\fP supports the following encodings: ASCII (default), EBCDIC (\fB\-e\fP),
@@ -1156,102 +1034,96 @@ encoded stream (e.g., 0xFF byte in UTF\-8). If the generated scanner must
 check for invalid input, the only correct way to do so is to use the default
 rule (\fB*\fP). Note that the full range rule (\fB[^]\fP) won\(aqt catch invalid code units when a variable\-length encoding is used
 (\fB[^]\fP means "any valid code point", whereas the default rule (\fB*\fP) means "any possible code unit").
-.SH GENERIC INPUT API
+.SH GENERIC API
 .sp
-\fBre2c\fP usually operates on input with pointer\-like primitives
+By default \fBre2c\fP operates on input using pointer\-like primitives
 \fBYYCURSOR\fP, \fBYYMARKER\fP, \fBYYCTXMARKER\fP, and \fBYYLIMIT\fP\&.
-.sp
-The generic input API (enabled with the \fB\-\-input custom\fP switch) allows
-customizing input operations. In this mode, \fBre2c\fP will express all
-operations on input in terms of the following primitives:
+Normally pointer\-like primitives are defined as variables of type \fBYYCTYPE*\fP,
+but it is possible to use STL iterators or any other abstraction as long as it syntactically fits into the following use cases:
 .INDENT 0.0
-.INDENT 3.5
-.TS
-center;
-|l|l|.
-_
-T{
+.IP \(bu 2
+\fB++YYCURSOR;\fP
+.IP \(bu 2
+\fByych = *YYCURSOR;\fP
+.IP \(bu 2
+\fByych = *++YYCURSOR;\fP
+.IP \(bu 2
+\fByych = *(YYMARKER = YYCURSOR);\fP
+.IP \(bu 2
+\fByych = *(YYMARKER = ++YCURSOR);\fP
+.IP \(bu 2
+\fBYYMARKER = YYCURSOR;\fP
+.IP \(bu 2
+\fBYYMARKER = ++YYCURSOR;\fP
+.IP \(bu 2
+\fBYYCURSOR = YYMARKER;\fP
+.IP \(bu 2
+\fBYYCTXMARKER = YYCURSOR + 1;\fP
+.IP \(bu 2
+\fBYYCURSOR = YYCTXMARKER;\fP
+.IP \(bu 2
+\fBif (YYLIMIT <= YYCURSOR) ...\fP
+.IP \(bu 2
+\fBif ((YYLIMIT \- YYCURSOR) < n) ...\fP
+.IP \(bu 2
+\fBYYDEBUG (label, *YYCURSOR);\fP
+.UNINDENT
+.sp
+If this input model is too restrictive, then it is possible to use generic input API enabled with \fB\-\-input custom\fP option.
+In this mode all input operations are expressed in terms of the primitives below.
+These primitives can be defined in any suitable way; one doesn\(aqt have to stick to the pointer semantics.
+For example, it is possible to read input directly from file without any buffering,
+or to disable \fBYYFILL\fP mechanism and perform end\-of\-input checking on each input character from inside of \fBYYPEEK\fP or \fBYYSKIP\fP\&.
+.INDENT 0.0
+.IP \(bu 2
 \fBYYPEEK ()\fP
-T}	T{
-get current input character
-T}
-_
-T{
+.IP \(bu 2
 \fBYYSKIP ()\fP
-T}	T{
-advance to next character
-T}
-_
-T{
+.IP \(bu 2
 \fBYYBACKUP ()\fP
-T}	T{
-backup current input position
-T}
-_
-T{
+.IP \(bu 2
 \fBYYBACKUPCTX ()\fP
-T}	T{
-backup current input position for trailing context
-T}
-_
-T{
+.IP \(bu 2
 \fBYYSTAGP (t)\fP
-T}	T{
-save current input position to tag \fBt\fP
-T}
-_
-T{
+.IP \(bu 2
 \fBYYSTAGN (t)\fP
-T}	T{
-save default value to tag \fBt\fP
-T}
-_
-T{
+.IP \(bu 2
 \fBYYMTAGP (t)\fP
-T}	T{
-append input position to the history of tag \fBt\fP
-T}
-_
-T{
+.IP \(bu 2
 \fBYYMTAGN (t)\fP
-T}	T{
-append default value to the history of tag \fBt\fP
-T}
-_
-T{
+.IP \(bu 2
 \fBYYRESTORE ()\fP
-T}	T{
-restore current input position
-T}
-_
-T{
+.IP \(bu 2
 \fBYYRESTORECTX ()\fP
-T}	T{
-restore current input position for trailing context
-T}
-_
-T{
+.IP \(bu 2
 \fBYYRESTORETAG (t)\fP
-T}	T{
-restore current input position from tag \fBt\fP
-T}
-_
-T{
+.IP \(bu 2
 \fBYYLESSTHAN (n)\fP
-T}	T{
-check if less than \fBn\fP input characters are left
-T}
-_
-.TE
-.UNINDENT
 .UNINDENT
 .sp
-A couple of useful links that provide some examples:
+Default input model can be expressed in terms of generic API as follows
+(except for \fBYMTAGP\fP and \fBYYMTAGN\fP, which have no default implementation):
 .INDENT 0.0
-.IP 1. 3
-\fI\%http://skvadrik.github.io/aleph_null/posts/re2c/2015\-01\-13\-input_model.html\fP
-.IP 2. 3
-\fI\%http://skvadrik.github.io/aleph_null/posts/re2c/2015\-01\-15\-input_model_custom.html\fP
+.IP \(bu 2
+\fB#define  YYPEEK ()         *YYCURSOR\fP
+.IP \(bu 2
+\fB#define  YYSKIP ()         ++YYCURSOR\fP
+.IP \(bu 2
+\fB#define  YYBACKUP ()       YYMARKER = YYCURSOR\fP
+.IP \(bu 2
+\fB#define  YYBACKUPCTX ()    YYCTXMARKER = YYCURSOR\fP
+.IP \(bu 2
+\fB#define  YYRESTORE ()      YYCURSOR = YYMARKER\fP
+.IP \(bu 2
+\fB#define  YYRESTORECTX ()   YYCURSOR = YYCTXMARKER\fP
+.IP \(bu 2
+\fB#define  YYRESTORERAG (t)  YYCURSOR = t\fP
+.IP \(bu 2
+\fB#define  YYLESSTHAN (n)    YYLIMIT \- YYCURSOR < n\fP
+.IP \(bu 2
+\fB#define  YYSTAGP (t)       t = YYCURSOR\fP
+.IP \(bu 2
+\fB#define  YYSTAGN (t)       t = NULL\fP
 .UNINDENT
 .SH SEE ALSO
 .sp
@@ -1259,21 +1131,46 @@ You can find more information about \fBre2c\fP at: \fI\%http://re2c.org\fP\&.
 See also: flex(1), lex(1), quex (\fI\%http://quex.sourceforge.net\fP).
 .SH AUTHORS
 .sp
-Peter Bumbulis   \fI\%peter@csg.uwaterloo.ca\fP
+Originaly written by Peter Bumbulis in 1993;
+developed and maintained by Brain Young, Marcus Boerger, Dan Nuffer and Ulya Trofimovich.
+Below is a (more or less) full list of contributors retrieved from the Git history and mailing lists:
 .sp
-Brian Young      \fI\%bayoung@acm.org\fP
-.sp
-Dan Nuffer       \fI\%nuffer@users.sourceforge.net\fP
-.sp
-Marcus Boerger   \fI\%helly@users.sourceforge.net\fP
-.sp
-Hartmut Kaiser   \fI\%hkaiser@users.sourceforge.net\fP
-.sp
-Emmanuel Mogenet \fI\%mgix@mgix.com\fP
-.sp
-Ulya Trofimovich \fI\%skvadrik@gmail.com\fP
+Abs62,
+asmwarrior,
+Ben Smith,
+Brian Young,
+CRCinAU,
+Dan Nuffer,
+Derick Rethans,
+Dimitri John Ledkov,
+Eldar Zakirov,
+Emmanuel Mogenet,
+Hartmut Kaiser,
+jcfp,
+Jean\-Claude Wippler,
+Jeff Trull,
+Jérôme Dumesnil,
+Jesse Buesking,
+joscherl,
+Julian Andres Klode,
+Marcus Boerger,
+Mike Gilbert,
+nuno\-lopes,
+Oleksii Taran,
+paulmcq,
+Paulo Custodio,
+Perry E. Metzger,
+philippschaefer,
+Ross Burton,
+Rui Maciel,
+Ryan Mast,
+Samuel006,
+Sergei Trofimovich,
+sirzooro,
+Tim Kelly,
+Ulya Trofimovich
 .SH VERSION INFORMATION
 .sp
-This manpage describes \fBre2c\fP version 1.0.1, package date 11 Aug 2017.
+This manpage describes \fBre2c\fP version 1.0.1, package date 25 Aug 2017.
 .\" Generated by docutils manpage writer.
 .

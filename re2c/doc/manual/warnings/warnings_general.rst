@@ -8,13 +8,13 @@
     been turned on so far or will be turned on later.
 
 ``-W<warning>``
-    Turn on a ``warning``.
+    Turn on ``warning``.
 
 ``-Wno-<warning>``
-    Turn off a ``warning``.
+    Turn off ``warning``.
 
 ``-Werror-<warning>``
-    Turn on a ``warning`` and treat it as an error (this implies ``-W<warning>``).
+    Turn on ``warning`` and treat it as an error (this implies ``-W<warning>``).
 
 ``-Wno-error-<warning>``
     Don't treat this particular ``warning`` as an error. This doesn't turn off

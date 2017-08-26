@@ -1,0 +1,6 @@
+
+Named definitions are of the form ``name = regexp ;``
+where ``name`` is an identifier that consists of letters, digits and underscores,
+and ``regexp`` is a regular expression.
+With ``-F`` ``--flex-syntax`` option named definitions are also of the form ``name regexp``.
+Each name should be defined before it is used.

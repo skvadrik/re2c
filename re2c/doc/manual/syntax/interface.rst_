@@ -1,127 +1,119 @@
+Below is the list of all symbols which may be used by the lexer in order to interact with the outer world.
+These symbols should be defined by the user,
+either in the form of inplace configurations,
+or as C/C++ variables, functions, macros and other language constructs.
+Which primitives are necessary depends on the particular use case.
+
+``yyaccept``
+    L-value of unsigned integral type that is used to hold the number of the last matched rule.
+    Explicit definition by the user is necessary only with ``-f`` ``--storable-state`` option.
 
 ``YYBACKUP ()``
-    Backup current input position (used only with generic API).
+    Backup current input position (used only with ``--input custom`` option).
 
 ``YYBACKUPCTX ()``
-    Backup current input position for trailing context (used only with generic API).
+    Backup current input position for trailing context (used only with  ``--input custom`` option).
+
+``yych``
+    L-value of type ``YYCTYPE`` that is used to hold current input character.
+    Explicit definition by the user is necessary only with ``-f`` ``--storable-state`` option.
 
 ``YYCONDTYPE``
-    In ``-c`` mode, you can use ``-t`` to generate a file that
-    contains the enumeration used as conditions. Each of the values refers
-    to a condition of a rule set.
+    The type of *condition* identifiers (used only with ``-c`` ``--conditions`` option).
+    Should be generated either with ``/*!types:re2c*/`` directive, or with ``-t`` ``--type-header`` option.
 
 ``YYCTXMARKER``
-    l-value of type ``YYCTYPE *``.
-    The generated code saves trailing context backtracking information in
-    ``YYCTXMARKER``. The user only needs to define this macro if a scanner
-    specification uses trailing context in one or more of its regular
-    expressions.
+    L-value of type ``YYCTYPE *`` that is used to backup input position of trailing context.
+    It is needed only if regular expressions use the lookahead operator ``/``.
 
 ``YYCTYPE``
-    Type used to hold an input symbol (code unit). Usually
-    ``char`` or ``unsigned char`` for ASCII, EBCDIC  or UTF-8, or *unsigned short*
-    for UTF-16 or UCS-2, or ``unsigned int`` for UTF-32.
+    The type of the input characters (*code units*).
+    Usually it should be ``unsigned char`` for ASCII, EBCDIC and UTF-8 encodings,
+    ``unsigned short`` for UTF-16 or UCS-2 encodings,
+    and ``unsigned int`` for UTF-32 encoding.
 
 ``YYCURSOR``
-    l-value of type ``YYCTYPE *`` that points to the current input symbol. The generated code advances
-    ``YYCURSOR`` as symbols are matched. On entry, ``YYCURSOR`` is assumed to
-    point to the first character of the current token. On exit, ``YYCURSOR``
-    will point to the first character of the following token.
+    L-value of type ``YYCTYPE *`` that is used as a pointer to the current input symbol.
+    Initially ``YYCURSOR`` points to the first character and is advanced by the lexer during matching.
+    When a rule matches, ``YYCURSOR`` points past the last character of the matched string.
 
-``YYDEBUG (state, current)``
-    This is only needed if the ``-d`` flag was
-    specified. It allows easy debugging of the generated parser by calling a
-    user defined function for every state. The function should have the
-    following signature: ``void YYDEBUG (int state, char current)``. The first
-    parameter receives the state or -1 and the second parameter receives the
-    input at the current cursor.
+``YYDEBUG (state, symbol)``
+    A function-like primitive that is used to dump debug information (only used with ``-d`` ``--debug-output`` option).
+    ``YYDEBUG`` should return no value and accept two arguments:
+    ``state`` (either lexer state or ``-1``) and ``symbol`` (current input symbol).
 
 ``YYFILL (n)``
-    The generated code "calls"" ``YYFILL (n)`` when the
-    buffer needs (re)filling: at least ``n`` additional characters should be
-    provided. ``YYFILL (n)`` should adjust ``YYCURSOR``, ``YYLIMIT``, ``YYMARKER``,
-    and ``YYCTXMARKER`` as needed. Note that for typical programming languages
-    ``n`` will be the length of the longest keyword plus one. The user can
-    place a comment of the form ``/*!max:re2c*/`` to insert a ``YYMAXFILL`` define set to the maximum
-    length value.
+    A function-like primitive that is called by the lexer when there is not enough input.
+    ``YYFILL`` should return no value and supply at least ``n`` additional characters.
+    Maximal value of ``n`` equals ``YYMAXFILL``, which can be obtained with the ``/*!max:re2c*/`` directive.
 
 ``YYGETCONDITION ()``
-    This define is used to get the condition prior to
-    entering the scanner code when using the ``-c`` switch. The value must be
-    initialized with a value from the ``YYCONDTYPE`` enumeration type.
+    R-value of type ``YYCONDTYPE`` that represents current *condition* identifier (used only with ``-c`` ``--conditions`` option).
 
 ``YYGETSTATE ()``
-    The user only needs to define this macro if the ``-f``
-    flag was specified. In that case, the generated code "calls"
-    ``YYGETSTATE ()`` at the very beginning of the scanner in order to obtain
-    the saved state. ``YYGETSTATE ()`` must return a signed integer. The value
-    must be either -1, indicating that the scanner is entered for the first
-    time, or a value previously saved by ``YYSETSTATE (s)``. In the second
-    case, the scanner will resume operations right after where the last
-    ``YYFILL (n)`` was called.
+    R-value of signed integral type that represents current lexer state (used only with ``-f`` ``--storable-state`` option).
+    Initial value of lexer state should be ``-1``.
 
 ``YYLESSTHAN (n)``
-    Check if less than ``n`` input characters are left (used only with generic API).
+    R-value of boolean type that is ``true`` if and only if there is less than ``n`` input characters left (used only with  ``--input custom`` option).
 
 ``YYLIMIT``
-    An expression of type ``YYCTYPE *`` that marks the end of the buffer ``YYLIMIT[-1]``
-    is the last character in the buffer). The generated code repeatedly
-    compares ``YYCURSOR`` to ``YYLIMIT`` to determine when the buffer needs
-    (re)filling.
+    R-value of type ``YYCTYPE *`` that marks the end of input (``YYLIMIT[-1]`` should be the last input character).
+    Lexer compares ``YYCURSOR`` and ``YYLIMIT`` in order to determine if there is enough input characters left.
 
 ``YYMARKER``
-    An l-value of type ``YYCTYPE *``.
-    The generated code saves backtracking information in ``YYMARKER``. Some
-    simple scanners might not use this.
+    L-value of type ``YYCTYPE *`` used to backup input position of successful match.
+    This might be necessary if there is an overlapping longer rule that might also match.
 
 ``YYMTAGP (t)``
-    Append current input position to the history of tag ``t``.
+    Append current input position to the history of *m-tag* ``t`` (used only with ``-T`` ``--tags`` option).
 
 ``YYMTAGN (t)``
-    Append default value to the history of tag ``t``.
+    Append default value to the history of *m-tag* ``t`` (used only with ``-T`` ``--tags`` option).
 
 ``YYMAXFILL``
-    This will be automatically defined by ``/*!max:re2c*/`` blocks as explained above.
+    Integral constant that denotes maximal value of ``YYFILL`` argument
+    and is autogenerated by ``/*!max:re2c*/`` directive.
 
 ``YYMAXNMATCH``
-    This will be automatically defined by ``/*!maxnmatch:re2c*/``.
+    Integral constant that denotes maximal number of capturing groups in a rule
+    and is autogenerated by ``/*!maxnmatch:re2c*/`` directive (used only with ``--posix-captures`` option).
+
+``yynmatch``
+    L-value of unsigned integral type that is used to hold the number of capturing groups in the matching rule.
+    Used only with ``-P`` ``--posix-captures`` option.
 
 ``YYPEEK ()``
-    Get current input character (used only with generic API).
+    R-value of type ``YYCTYPE`` that denotes current input character (used only with ``--input custom`` option).
+
+``yypmatch``
+    An array of l-values that are used to hold the values of *s-tags* 
+    corresponding to the capturing parentheses in the matching rule.
+    The length of array must be at least ``yynmatch * 2`` (ideally ``YYMAXNMATCH * 2``).
+    Used only with ``-P`` ``--posix-captures`` option.
 
 ``YYRESTORE ()``
-    Restore input position (used only with generic API).
+    Restore input position (used only with ``--input custom`` option).
 
 ``YYRESTORECTX ()``
-    Restore input position from the value of trailing context (used only with generic API).
+    Restore input position from the value of trailing context (used only with ``--input custom`` option).
 
 ``YYRESTORETAG (t)``
-    Restore input position from the value of tag ``t`` (used only with generic API).
+    Restore input position from the value of *s-tag* ``t`` (used only with ``--input custom`` option).
 
-``YYSETCONDITION (c)``
-    This define is used to set the condition in
-    transition rules. This is only being used when ``-c`` is active and
-    transition rules are being used.
+``YYSETCONDITION (condition)``
+    Set current *condition* identifier to ``condition`` (used only with ``-c`` ``--conditions`` option).
 
-``YYSETSTATE (s)``
-    The user only needs to define this macro if the ``-f``
-    flag was specified. In that case, the generated code "calls"
-    ``YYSETSTATE`` just before calling ``YYFILL (n)``. The parameter to
-    ``YYSETSTATE`` is a signed integer that uniquely identifies the specific
-    instance of ``YYFILL (n)`` that is about to be called. Should the user
-    wish to save the state of the scanner and have ``YYFILL (n)`` return to
-    the caller, all he has to do is store that unique identifier in a
-    variable. Later, when the scanner is called again, it will call
-    ``YYGETSTATE ()`` and resume execution right where it left off. The
-    generated code will contain both ``YYSETSTATE (s)`` and ``YYGETSTATE`` even
-    if ``YYFILL (n)`` is disabled.
+``YYSETSTATE (state)``
+    Set current lexer state to ``state`` (used only with ``-f`` ``--storable-state`` option).
+    Parameter ``state`` is of signed integral type.
 
 ``YYSKIP ()``
     Advance input position to the next character (used only with generic API).
 
 ``YYSTAGP (t)``
-    Save current input position to tag ``t`` (used only with generic API).
+    Save current input position to *s-tag* ``t`` (used only with ``-T`` ``--tags`` and ``--input custom`` option).
 
 ``YYSTAGN (t)``
-    Save default value to tag ``t`` (used only with generic API).
+    Save default value to *s-tag* ``t`` (used only with ``-T`` ``--tags`` and ``--input custom`` options).
 

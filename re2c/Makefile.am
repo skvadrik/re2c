@@ -196,9 +196,11 @@ CUSTOM = \
 # docs
 SRC_DOC = doc/manpage.rst
 SRC_DOC_EXT = \
+	doc/manual/contributors.rst_ \
 	doc/manual/syntax/rules.rst_ \
 	doc/manual/syntax/interface.rst_ \
 	doc/manual/syntax/configurations.rst_ \
+	doc/manual/syntax/named_definitions.rst_ \
 	doc/manual/syntax/regular_expressions.rst_ \
 	doc/manual/warnings/warnings_list.rst \
 	doc/manual/warnings/warnings_general.rst \

@@ -1,45 +1,17 @@
 
-There is one special rule that can be used instead of regular expression: the default rule ``*``.
-Note that the default rule ``*`` differs from ``[^]``: the default rule has the lowest priority,
-matches any code unit (either valid or invalid) and always consumes exactly one character.
-``[^]``, on the other hand, matches any valid code point (not the same as a code unit) and can consume multiple
-code units. In fact, when a variable-length encoding is used, ``*``
-is the only possible way to match an invalid input character.
+Rules consist of a regular expression followed by a user-defined action:
+a block of C/C++ code) that is executed in case of sucessful match.
+Action can be either an arbitrary block of code enclosed in curly braces ``{`` and ``}``,
+or a block of code without curly braces preceded with ``:=`` and ended with a newline that is not followed by a whitespace.
 
-In general, all rules have the form:
+If multiple rules match, ``re2c`` prefers the longest match.
+If rules match the same string, the earlier rule has priority.
 
-    ``regular-expression-or-* code``
+There is one special kind of rule: the *default rule* with ``*`` instaed of the regular expression.
+It always has the lowest priority, matches any *code unit* (either valid or invalid) and consumes exactly one *code unit*.
+Note that *default rule* is not the same as ``[^]``, which
+matches any valid *code point* and can consume multiple *code units*.
+In case of variable-length encodings ``*`` is the only possible way to match invalid input character.
 
-
-If ``-c`` is active, then each regular expression is preceded by a list
-of comma-separated condition names. Besides the normal naming rules, there
-are two special cases: ``<*>`` (these rules are merged to all conditions)
-and ``<>`` (these rules cannot have an associated regular expression;
-their code is merged to all actions). Non-empty rules may furthermore specify the new
-condition. In that case, ``re2c`` will generate the necessary code to
-change the condition automatically. Rules can use ``:=>`` as a shortcut
-to automatically generate code that not only sets the
-new condition state but also continues execution with the new state. A
-shortcut rule should not be used in a loop where there is code between
-the start of the loop and the ``re2c`` block unless ``re2c:cond:goto``
-is changed to ``continue``. If some code is needed before all rules (though not before simple jumps),  you
-can insert it with ``<!>`` pseudo-rules.
-
-    ``<condition-list-or-*> regular-expression-or-* code``
-
-    ``<condition-list-or-*> regular-expression-or-* => condition code``
-
-    ``<condition-list-or-*> regular-expression-or-* :=> condition``
-
-
-    ``<> code``
-
-    ``<> => condition code``
-
-    ``<> :=> condition``
-
-
-    ``<!condition-list> code``
-
-    ``<!> code``
-
+If ``-c`` ``--conditions`` option is used, then rules have more complex form
+described in the section about conditions.
