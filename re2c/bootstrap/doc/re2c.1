@@ -408,14 +408,14 @@ Each block consists of a sequence of \fBRULES\fP, \fBNAMED DEFINITIONS\fP and \f
 .SS RULES
 .sp
 Rules consist of a regular expression followed by a user\-defined action:
-a block of C/C++ code) that is executed in case of sucessful match.
-Action can be either an arbitrary block of code enclosed in curly braces \fB{\fP and \fB}\fP,
+a block of C/C++ code that is executed in case of sucessful match.
+Action can be either an arbitrary block of code enclosed in curly braces \fB{\fP and \fB}\fP
 or a block of code without curly braces preceded with \fB:=\fP and ended with a newline that is not followed by a whitespace.
 .sp
 If multiple rules match, \fBre2c\fP prefers the longest match.
 If rules match the same string, the earlier rule has priority.
 .sp
-There is one special kind of rule: the \fIdefault rule\fP with \fB*\fP instaed of the regular expression.
+There is one special kind of rule: the \fIdefault rule\fP with \fB*\fP instead of the regular expression.
 It always has the lowest priority, matches any \fIcode unit\fP (either valid or invalid) and consumes exactly one \fIcode unit\fP\&.
 Note that \fIdefault rule\fP is not the same as \fB[^]\fP, which
 matches any valid \fIcode point\fP and can consume multiple \fIcode units\fP\&.
@@ -434,40 +434,28 @@ Each name should be defined before it is used.
 .INDENT 0.0
 .TP
 .B \fBre2c:cgoto:threshold = 9;\fP
-When \fB\-g\fP is active, this value specifies
+With \fB\-g\fP \fB\-\-computed\-gotos\fP option this value specifies
 the complexity threshold that triggers the generation of jump tables rather
-than nested ifs and decision bitfields. The threshold is compared
-against a calculated estimation of ifs needed where every used bitmap
-divides the threshold by 2.
+than nested \fBif\fP statements and bit masks.
 .TP
 .B \fBre2c:cond:divider = \(aq/* *********************************** */\(aq;\fP
-Allows to customize the divider for condition blocks. You can use \fB@@\fP
-to put the name of the condition or customize the placeholder using
-\fBre2c:cond:divider@cond\fP\&.
+Allows to customize the divider for condition blocks. One can use \fB@@\fP to insert condition name.
 .TP
 .B \fBre2c:cond:divider@cond = @@;\fP
-Specifies the placeholder that will be
-replaced with the condition name in \fBre2c:cond:divider\fP\&.
+Specifies the placeholder that will be replaced with condition name in \fBre2c:cond:divider\fP\&.
 .TP
 .B \fBre2c:condenumprefix = yyc;\fP
-Allows to specify the prefix used for
-condition values. That is, the text to be prepended to condition enum
-values in the generated output file.
+Specifies the prefix used for condition identifiers.
 .TP
 .B \fBre2c:cond:goto@cond = @@;\fP
-Specifies the placeholder that will be replaced with the condition label in \fBre2c:cond:goto\fP\&.
+Specifies the placeholder that will be replaced with condition label in \fBre2c:cond:goto\fP\&.
 .TP
 .B \fBre2c:cond:goto = \(aqgoto @@;\(aq;\fP
-Allows to customize the condition goto statements used with \fB:=>\fP style rules. You can use \fB@@\fP
-to put the name of the condition or customize the placeholder using
-\fBre2c:cond:goto@cond\fP\&. You can also change this to \fBcontinue;\fP, which
-would allow you to continue with the next loop cycle including any code
-between your loop start and your re2c block.
+Allows to customize \fBgoto\fP statements used with \fB:=>\fP style rules.
+One can use \fB@@\fP to insert the condition name.
 .TP
 .B \fBre2c:condprefix = yyc;\fP
-Allows to specify the prefix used for
-condition labels. That is, the text to be prepended to condition labels
-in the generated output file.
+Specifies the prefix used for condition labels.
 .TP
 .B \fBre2c:define:YYBACKUPCTX = \(aqYYBACKUPCTX\(aq;\fP
 Replaces \fBYYBACKUPCTX\fP identifier with the specified string.
@@ -476,7 +464,7 @@ Replaces \fBYYBACKUPCTX\fP identifier with the specified string.
 Replaces \fBYYBACKUP\fP identifier with the specified string.
 .TP
 .B \fBre2c:define:YYCONDTYPE = \(aqYYCONDTYPE\(aq;\fP
-Enumeration used for condition support with \fB\-c\fP mode.
+Enumeration type used for condition identifiers.
 .TP
 .B \fBre2c:define:YYCTXMARKER = \(aqYYCTXMARKER\(aq;\fP
 Replaces the \fBYYCTXMARKER\fP placeholder with the specified identifier.
@@ -491,52 +479,43 @@ Replaces the \fBYYCURSOR\fP placeholder with the specified identifier.
 Replaces the \fBYYDEBUG\fP placeholder with the specified identifier.
 .TP
 .B \fBre2c:define:YYFILL@len = \(aq@@\(aq;\fP
-Any occurrence of this text
-inside of a \fBYYFILL\fP call will be replaced with the actual argument.
+Any occurrence of this text inside of a \fBYYFILL\fP will be replaced with the actual argument.
 .TP
 .B \fBre2c:define:YYFILL:naked = 0;\fP
-Controls the argument in the parentheses after \fBYYFILL\fP and
-the following semicolon. If zero, both the argument and the semicolon are
-omitted. If non\-zero, the argument is generated unless
-\fBre2c:yyfill:parameter\fP is set to zero; the semicolon is generated
-unconditionally.
+Controls the argument in the parentheses after \fBYYFILL\fP and the following semicolon.
+If zero, both the argument and the semicolon are omitted.
+If non\-zero, the argument is generated unless \fBre2c:yyfill:parameter\fP is set to zero;
+the semicolon is generated unconditionally.
 .TP
 .B \fBre2c:define:YYFILL = \(aqYYFILL\(aq;\fP
-Define a substitution for \fBYYFILL\fP\&. Note that by default,
-\fBre2c\fP generates an argument in parentheses and a semicolon after
-\fBYYFILL\fP\&. If you need to make \fBYYFILL\fP an arbitrary statement rather
-than a call, set \fBre2c:define:YYFILL:naked\fP to a non\-zero value and use
-\fBre2c:define:YYFILL@len\fP to set a placeholder for the formal parameter inside of your \fBYYFILL\fP
-body.
+Define a substitution for \fBYYFILL\fP\&.
+By default re2c generates an argument in parentheses and a semicolon after \fBYYFILL\fP\&.
+If you need to make \fBYYFILL\fP an arbitrary statement rather than a call,
+set \fBre2c:define:YYFILL:naked\fP to a non\-zero value.
 .TP
 .B \fBre2c:define:YYGETCONDITION:naked = 0;\fP
-Controls the parentheses after
-\fBYYGETCONDITION\fP\&. If zero, the parentheses are omitted. If non\-zero, the parentheses are
-generated.
+Controls the parentheses after \fBYYGETCONDITION\fP\&.
+If zero, the parentheses are omitted. If non\-zero, the parentheses are generated.
 .TP
 .B \fBre2c:define:YYGETCONDITION = \(aqYYGETCONDITION\(aq;\fP
-Substitution for
-\fBYYGETCONDITION\fP\&. Note that by default, \fBre2c\fP generates parentheses after
-\fBYYGETCONDITION\fP\&. Set \fBre2c:define:YYGETCONDITION:naked\fP to non\-zero to
-omit the parentheses.
+Substitution for \fBYYGETCONDITION\fP\&.
+By default re2c generates parentheses after \fBYYGETCONDITION\fP\&.
+Set \fBre2c:define:YYGETCONDITION:naked\fP to non\-zero in order to omit the parentheses.
 .TP
 .B \fBre2c:define:YYGETSTATE:naked = 0;\fP
-Controls the parentheses that follow
-\fBYYGETSTATE\fP\&. If zero, the parentheses are omitted. If non\-zero, they are
-generated.
+Controls the parentheses that follow \fBYYGETSTATE\fP\&.
+If zero, the parentheses are omitted. If non\-zero, they are generated.
 .TP
 .B \fBre2c:define:YYGETSTATE = \(aqYYGETSTATE\(aq;\fP
-Substitution for
-\fBYYGETSTATE\fP\&. Note that by default, \fBre2c\fP generates parentheses after
-\fBYYGETSTATE\fP\&. Set \fBre2c:define:YYGETSTATE:naked\fP to non\-zero to omit
-the parentheses.
+Substitution for \fBYYGETSTATE\fP\&.
+By default re2c generates parentheses after \fBYYGETSTATE\fP\&.
+Set \fBre2c:define:YYGETSTATE:naked\fP to non\-zero to omit the parentheses.
 .TP
 .B \fBre2c:define:YYLESSTHAN = \(aqYYLESSTHAN\(aq;\fP
 Replaces \fBYYLESSTHAN\fP identifier with the specified string.
 .TP
 .B \fBre2c:define:YYLIMIT = \(aqYYLIMIT\(aq;\fP
 Replaces the \fBYYLIMIT\fP placeholder with the specified identifier.
-needed.
 .TP
 .B \fBre2c:define:YYMARKER = \(aqYYMARKER\(aq;\fP
 Replaces the \fBYYMARKER\fP placeholder with the specified identifier.
@@ -561,8 +540,7 @@ Replaces \fBYYRESTORETAG\fP identifier with the specified string.
 .TP
 .B \fBre2c:define:YYSETCONDITION@cond = \(aq@@\(aq;\fP
 Any occurrence of this
-text inside of \fBYYSETCONDITION\fP will be replaced with the actual
-argument.
+text inside of \fBYYSETCONDITION\fP will be replaced with the actual argument.
 .TP
 .B \fBre2c:define:YYSETCONDITION:naked = 0;\fP
 Controls the argument in parentheses
@@ -572,12 +550,10 @@ generated.
 .TP
 .B \fBre2c:define:YYSETCONDITION = \(aqYYSETCONDITION\(aq;\fP
 Substitution for
-\fBYYSETCONDITION\fP\&. Note that by default, \fBre2c\fP generates an argument in
+\fBYYSETCONDITION\fP\&. By default re2c generates an argument in
 parentheses followed by semicolon after \fBYYSETCONDITION\fP\&. If you need to make
 \fBYYSETCONDITION\fP an arbitrary statement rather than a call, set
-\fBre2c:define:YYSETCONDITION:naked\fP to non\-zero and use
-\fBre2c:define:YYSETCONDITION@cond\fP to denote the formal parameter inside of the
-\fBYYSETCONDITION\fP body.
+\fBre2c:define:YYSETCONDITION:naked\fP to non\-zero.
 .TP
 .B \fBre2c:define:YYSETSTATE:naked = 0;\fP
 Controls the argument in parentheses and the
@@ -590,12 +566,10 @@ inside of \fBYYSETSTATE\fP will be replaced with the actual argument.
 .TP
 .B \fBre2c:define:YYSETSTATE = \(aqYYSETSTATE\(aq;\fP
 Substitution for
-\fBYYSETSTATE\fP\&. Note that by default, \fBre2c\fP generates an argument in parentheses
+\fBYYSETSTATE\fP\&. By default re2c generates an argument in parentheses
 followed by a semicolon after \fBYYSETSTATE\fP\&. If you need to make \fBYYSETSTATE\fP an
 arbitrary statement rather than a call, set
-\fBre2c:define:YYSETSTATE:naked\fP to non\-zero and use
-\fBre2c:define:YYSETSTATE@cond\fP to denote formal parameter inside of
-your \fBYYSETSTATE\fP body.
+\fBre2c:define:YYSETSTATE:naked\fP to non\-zero.
 .TP
 .B \fBre2c:define:YYSKIP = \(aqYYSKIP\(aq;\fP
 Replaces \fBYYSKIP\fP identifier with the specified string.
@@ -670,10 +644,10 @@ Same as \fB\-w \-\-wide\-chars\fP command\-line option.
 Same as \fB\-x \-\-utf\-16\fP command\-line option.
 .TP
 .B \fBre2c:indent:string = \(aq\et\(aq;\fP
-Specifies the string to use for indentation. Requires a string that should
-contain only whitespace unless you need something else for external tools. The easiest
+Specifies the string to use for indentation. Requires a string that contains
+only whitespace (unless you need something else for external tools). The easiest
 way to specify spaces is to enclose them in single or double quotes.
-If you do  not want any indentation at all, you can simply set this to \(aq\(aq.
+If you do  not want any indentation at all, you can set this to \(aq\(aq.
 .TP
 .B \fBre2c:indent:top = 0;\fP
 Specifies the minimum amount of indentation to
@@ -699,12 +673,12 @@ text will be generated regardless of whether the normal start label is
 used or not. This setting is reset to 0 after a start label has been generated.
 .TP
 .B \fBre2c:state:abort = 0;\fP
-When not zero and the \fB\-f\fP switch is active, then
+When not zero and the \fB\-f\fP \fB\-\-storable\-state\fP switch is active, then
 the \fBYYGETSTATE\fP block will contain a default case that aborts and a \-1
 case will be used for initialization.
 .TP
 .B \fBre2c:state:nextlabel = 0;\fP
-Used when \fB\-f\fP is active to control
+Used when \fB\-f\fP \fB\-\-storable\-state\fP is active to control
 whether the \fBYYGETSTATE\fP block is followed by a \fByyNext:\fP label line.
 Instead of using \fByyNext\fP, you can usually also use configuration
 \fBstartlabel\fP to force a specific start label or default to \fByy0\fP as
@@ -713,7 +687,7 @@ separate the \fBYYGETSTATE\fP code from the actual scanner code by placing a
 \fB/*!getstate:re2c*/\fP comment.
 .TP
 .B \fBre2c:tags:expression = \(aq@@\(aq;\fP
-Allows to customize the way \fBre2c\fP addresses tag variables:
+Allows to customize the way re2c addresses tag variables:
 by default it emits expressions of the form \fByyt<N>\fP,
 but this might be inconvenient if tag variables are defined as fields in a struct,
 or for any other reason require special accessors.
@@ -732,7 +706,8 @@ Overrides the name of the \fByybm\fP variable.
 Overrides the name of the \fByych\fP variable.
 .TP
 .B \fBre2c:variable:yyctable = \(aqyyctable\(aq;\fP
-When both \fB\-c\fP and \fB\-g\fP are active, \fBre2c\fP will use this variable to generate a static jump table
+When both \fB\-c\fP \fB\-\-conditions\fP and \fB\-g\fP \fB\-\-computed\-gotos\fP are active,
+re2c will use this variable to generate a static jump table
 for \fBYYGETCONDITION\fP\&.
 .TP
 .B \fBre2c:variable:yystable = \(aqyystable\(aq;\fP
@@ -745,7 +720,7 @@ Overrides the name of the \fByytarget\fP variable.
 If set to zero, a decimal table will be used. Otherwise, a hexadecimal table will be generated.
 .TP
 .B \fBre2c:yych:conversion = 0;\fP
-When this setting is non zero, \fBre2c\fP automatically generates
+When this setting is non zero, re2c automatically generates
 conversion code whenever yych gets read. In this case, the type must be
 defined using \fBre2c:define:YYCTYPE\fP\&.
 .TP
