@@ -1,0 +1,2 @@
+- Fixed bug #194 "Build with ``--enable-docs``"
+- Updated documentation.

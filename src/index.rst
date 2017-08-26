@@ -48,6 +48,7 @@ Features
 News & updates
 --------------
 
+* `Release 1.0.2 <news/release_notes/1_0_2.html>`_
 * `Release 1.0.1 <news/release_notes/1_0_1.html>`_
 * `Release 1.0 <news/release_notes/1_0.html>`_
 * ... and `older news <news/news.html>`_

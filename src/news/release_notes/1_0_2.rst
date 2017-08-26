@@ -1,0 +1,13 @@
+=============
+Release 1.0.2
+=============
+
+*by Ulya Trofimovich*
+
+This is another minor bug-fix release in the 1.0.x series; see `release 1.0 <./1_0.html>`_ for details.
+This release addresses the following issues:
+
+.. include:: ../changelog/1_0_2_list.rst
+
+Thanks to Ziris85 for the bug report.
+
