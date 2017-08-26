@@ -1,6 +1,7 @@
-Version 1.0.2 (2017-08-22)
+Version 1.0.2 (2017-08-26)
 --------------------------
 - Fixed bug #194 Build with "--enable-docs"
+- Updated documentation.
 
 Version 1.0.1 (2017-08-11)
 --------------------------
