@@ -10,7 +10,6 @@ Examples
     Large input                                 <example_03>
     Multiple blocks                             <example_04>
     Conditions                                  <example_05>
-    Floating-point                              <example_12>
     IPv4 address                                <example_08>
     /etc/passwd                                 <example_09>
     Options & arguments                         <example_14>
@@ -56,7 +55,6 @@ Second, examples show various aspects of using re2c API:
   `Submatch extraction <../manual/features/submatch/submatch.html>`_:
   using *s-tags* to store input positions corresponding to various parts of the regular expression in variables
   (outlined by parsing `IPv4 address <example_08.html>`_ and also used in
-  parsing `floating-point <example_12.html>`_ numbers,
   parsing `/etc/passwd <example_09.html>`_ file format,
   parsing command-line `options and arguments <example_14.html>`_
   and parsing `URI <example_10.html>`_);
