@@ -13,7 +13,7 @@ re2c uses the following syntax for regular expressions:
 
 *    ``R*`` zero or more occurrences of ``R``
 
-*    ``R+`` zero or more occurrences of ``R``
+*    ``R+`` one or more occurrences of ``R``
 
 *    ``R?`` optional ``R``
 
