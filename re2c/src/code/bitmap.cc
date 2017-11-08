@@ -27,7 +27,8 @@ bitmaps_t::~bitmaps_t()
 
 void bitmaps_t::insert(const Go *go, const State *s)
 {
-	for (rciter_t i = maps.rbegin(); i != maps.rend(); ++i) {
+	rciter_t i = maps.rbegin(), e = maps.rend();
+	for (; i != e; ++i) {
 		if (matches(i->go, i->on, go, s)) return;
 	}
 
@@ -37,7 +38,8 @@ void bitmaps_t::insert(const Go *go, const State *s)
 
 const bitmap_t *bitmaps_t::find(const Go *go, const State *s) const
 {
-	for (rciter_t i = maps.rbegin(); i != maps.rend(); ++i) {
+	rciter_t i = maps.rbegin(), e = maps.rend();
+	for (; i != e; ++i) {
 		if (i->on == s && matches(i->go, i->on, go, s)) return &(*i);
 	}
 	return NULL;
