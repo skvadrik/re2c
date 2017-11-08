@@ -1,0 +1,12 @@
+=============
+Release 1.0.3
+=============
+
+*by Ulya Trofimovich*
+
+Yet another minor bug-fix release in the 1.0.x series; see `release 1.0 <./1_0.html>`_ for details.
+This release fixes build failure on Mac OS X 10.5.8 with with GCC version 4.2.1.
+Thanks to Ryan Shmidt for the bug report.
+
+.. include:: ../changelog/1_0_3_list.rst
+

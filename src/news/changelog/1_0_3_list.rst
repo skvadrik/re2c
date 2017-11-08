@@ -1,0 +1,1 @@
+- Fixed bug #198 (build error on MacOS with GCC-4.2.1)
