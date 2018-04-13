@@ -1,11 +1,15 @@
 #include "src/ast/input.h"
+#include "src/util/string_utils.h"
 
 namespace re2c {
 
 Input::Input (const char * fn)
 	: file (NULL)
 	, file_name (fn)
-{}
+	, escaped_file_name (fn)
+{
+	strrreplace (escaped_file_name, "\\", "\\\\");
+}
 
 bool Input::open ()
 {

@@ -15,11 +15,12 @@ template<typename type_t> void strrreplace(
 	std::ostringstream sv;
 	sv << v;
 	const std::string &s2 = sv.str();
-	const size_t l = s1.length();
-	if (l != 0) {
-		std::string::size_type pos;
-		while ((pos = s.find(s1)) != std::string::npos) {
-			s.replace(pos, l, s2);
+	const size_t l1 = s1.length(), l2 = s2.length();
+	if (l1 != 0) {
+		std::string::size_type pos = s.find(s1);
+		while (pos != std::string::npos) {
+			s.replace(pos, l1, s2);
+			pos = s.find(s1, pos + l2);
 		}
 	}
 }

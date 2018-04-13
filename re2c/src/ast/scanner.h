@@ -102,7 +102,7 @@ inline size_t Scanner::tok_len () const
 
 inline const std::string & Scanner::get_fname () const
 {
-	return in.file_name;
+	return in.escaped_file_name;
 }
 
 inline uint32_t Scanner::get_cline() const

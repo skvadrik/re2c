@@ -11,7 +11,8 @@ namespace re2c {
 struct Input
 {
 	FILE * file;
-	std::string file_name;
+	const std::string file_name;
+	std::string escaped_file_name;
 
 	explicit Input (const char * fn);
 	~Input ();

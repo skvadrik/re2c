@@ -15,6 +15,7 @@
 #include "src/ast/unescape.h"
 #include "src/util/range.h"
 #include "src/util/s_to_n32_unsafe.h"
+#include "src/util/string_utils.h"
 #include "y.tab.h"
 
 extern YYSTYPE yylval;
@@ -490,20 +491,6 @@ nextLine:
 */
 }
 
-static void escape (std::string & dest, const std::string & src)
-{
-	dest = src;
-	size_t l = dest.length();
-	for (size_t p = 0; p < l; ++p)
-	{
-		if (dest[p] == '\\')
-		{
-			dest.insert(++p, "\\");
-			++l;
-		}
-	}
-}
-
 const AST *Scanner::lex_cls(bool neg)
 {
 	std::vector<ASTRange> *cls = new std::vector<ASTRange>;
@@ -614,32 +601,30 @@ void Scanner::set_sourceline ()
 sourceline:
 	tok = cur;
 /*!re2c	
-	lineno		{
-					if (!s_to_u32_unsafe (tok, cur, cline))
-					{
-						fatal_lc(get_cline(), get_column(), "line number overflow");
-					}
-					goto sourceline; 
-				}
-	dstring		{
-					escape (in.file_name, std::string (tok + 1, tok_len () - 2)); // -2 to omit quotes
-			  		goto sourceline; 
-				}
-	"\n"			{
-  					if (cur == eof)
-  					{
-						--cur; 
-					}
-			  		else
-			  		{
-			  			pos = cur; 
-			  		}
-			  		tok = cur;
-			  		return; 
-				}
-	*			{
-  					goto sourceline;
-  				}
+	lineno {
+		if (!s_to_u32_unsafe (tok, cur, cline)) {
+			fatal_lc(get_cline(), get_column(), "line number overflow");
+		}
+		goto sourceline;
+	}
+
+	dstring {
+		in.escaped_file_name = std::string (tok + 1, tok_len () - 2); // -2 to omit quotes
+		strrreplace (in.escaped_file_name, "\\", "\\\\");
+		goto sourceline;
+	}
+
+	"\n" {
+		if (cur == eof) {
+			--cur;
+		} else {
+			pos = cur;
+		}
+		tok = cur;
+		return;
+	}
+
+	* { goto sourceline; }
 */
 }
 
