@@ -184,9 +184,9 @@ void emit_rule(OutputFile &o, uint32_t ind, const DFA &dfa, size_t rule_idx)
 			if (!dfa.setup.empty()) {
 				o.wind(ind).wstring(dfa.setup).ws("\n");
 			}
-			o.wline_info(code->fline, code->fname.c_str())
+			o.wdelay_line_info_input(code->fline, code->fname)
 				.wind(ind).wstring(code->text).ws("\n")
-				.wdelay_line_info();
+				.wdelay_line_info_output();
 		} else if (!cond.empty()) {
 			strrreplace(s = opts->condGoto, opts->condGotoParam, opts->condPrefix + cond);
 			o.wind(ind).wstring(s).ws("\n");

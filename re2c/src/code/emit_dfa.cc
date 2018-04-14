@@ -192,7 +192,7 @@ void DFA::emit(Output & output, uint32_t& ind, bool isLastCond, bool& bPrologBra
 		// Generate prolog
 		if (bProlog)
 		{
-			o.ws("\n").wdelay_line_info ();
+			o.ws("\n").wdelay_line_info_output ();
 			if ((!opts->fFlag && ob.used_yyaccept)
 			||  (!opts->fFlag && opts->bEmitYYCh)
 			||  (opts->bFlag && !opts->cFlag && !bitmaps.empty())

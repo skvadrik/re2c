@@ -214,7 +214,6 @@ struct opt_t
 #		undef MUTOPT1
 #		undef MUTOPT
 	{}
-	FORBID_COPY(opt_t);
 };
 
 // see note [constant and mutable options]

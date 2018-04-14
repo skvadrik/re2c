@@ -25,7 +25,11 @@ OutputFragment::OutputFragment (type_t t, uint32_t i)
 
 OutputFragment::~OutputFragment()
 {
-	if (type == STAGS || type == MTAGS) delete tags;
+	if (type == STAGS || type == MTAGS) {
+		delete tags;
+	} else if (type == LINE_INFO_INPUT) {
+		delete line_info;
+	}
 }
 
 uint32_t OutputFragment::count_lines () const
@@ -46,6 +50,7 @@ uint32_t OutputFragment::count_lines () const
 OutputBlock::OutputBlock ()
 	: fragments ()
 	, used_yyaccept (false)
+	, have_user_code (false)
 	, line (0)
 	, types ()
 	, stags ()
@@ -93,8 +98,14 @@ std::ostream & OutputFile::stream ()
 
 OutputFile &OutputFile::wraw(const char *s, const char *e)
 {
-	if (block().opts->target == TARGET_CODE) {
+	if (s != e && block().opts->target == TARGET_CODE) {
 		insert_code();
+
+		// scan for non-whitespace characters
+		bool &code = block().have_user_code;
+		for (const char *p = s; !code && p < e; ++p) {
+			code = !isspace(*p);
+		}
 
 		// convert CR LF to LF
 		std::ostream &o = stream();
@@ -143,13 +154,6 @@ OutputFile & OutputFile::wu32_width (uint32_t n, int w)
 	insert_code();
 	stream () << std::setw (w);
 	stream () << n;
-	return *this;
-}
-
-OutputFile & OutputFile::wline_info (uint32_t l, const char * fn)
-{
-	insert_code();
-	output_line_info (stream (), l, fn, block().opts->iFlag);
 	return *this;
 }
 
@@ -238,9 +242,17 @@ OutputFile &OutputFile::wdelay_tags(const ConfTags *cf, bool mtags)
 	return *this;
 }
 
-OutputFile & OutputFile::wdelay_line_info ()
+OutputFile & OutputFile::wdelay_line_info_input (uint32_t l, const std::string &fn)
 {
-	block().fragments.push_back (new OutputFragment (OutputFragment::LINE_INFO, 0));
+	OutputFragment *frag = new OutputFragment(OutputFragment::LINE_INFO_INPUT, 0);
+	frag->line_info = new LineInfo(l, fn);
+	blocks.back()->fragments.push_back(frag);
+	return *this;
+}
+
+OutputFile & OutputFile::wdelay_line_info_output ()
+{
+	block().fragments.push_back (new OutputFragment (OutputFragment::LINE_INFO_OUTPUT, 0));
 	return *this;
 }
 
@@ -341,6 +353,21 @@ void OutputFile::new_block(Opt &opts)
 	opts.reset_startlabel();
 }
 
+void OutputFile::fix_first_block_opts()
+{
+	// If the initial block contains only whitespace and no user code,
+	// then re2c options specified in the first re2c block are also
+	// applied to the initial block.
+	if (blocks.size() >= 2) {
+		OutputBlock
+			*fst = blocks[0],
+			*snd = blocks[1];
+		if (!fst->have_user_code) {
+			*const_cast<opt_t *>(fst->opts) = *snd->opts;
+		}
+	}
+}
+
 void OutputFile::global_lists(uniq_vector_t<std::string> &types,
 	std::set<std::string> &stags, std::set<std::string> &mtags) const
 {
@@ -435,6 +462,8 @@ bool OutputFile::emit(const uniq_vector_t<std::string> &global_types,
 		}
 	}
 
+	fix_first_block_opts();
+
 	unsigned int line_count = 1;
 	for (unsigned int j = 0; j < blocks.size(); ++j) {
 		OutputBlock & b = * blocks[j];
@@ -453,7 +482,10 @@ bool OutputFile::emit(const uniq_vector_t<std::string> &global_types,
 			switch (f.type) {
 			case OutputFragment::EMPTY:
 			case OutputFragment::CODE: break;
-			case OutputFragment::LINE_INFO:
+			case OutputFragment::LINE_INFO_INPUT:
+				output_line_info(o, f.line_info->line, f.line_info->filename, bopt->iFlag);
+				break;
+			case OutputFragment::LINE_INFO_OUTPUT:
 				output_line_info(o, line_count + 1, filename, bopt->iFlag);
 				break;
 			case OutputFragment::COND_GOTO:

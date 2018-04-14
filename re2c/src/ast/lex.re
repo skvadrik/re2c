@@ -114,9 +114,9 @@ echo:
 
 	"/*!types:re2c" {
 		out.wraw(tok, ptr);
-		out.wdelay_line_info();
+		out.wdelay_line_info_output();
 		out.wdelay_types();
-		out.wline_info(cline, get_fname().c_str());
+		out.wdelay_line_info_input(cline, get_fname());
 		lex_end_of_comment(out);
 		goto echo;
 	}
@@ -165,7 +165,7 @@ void Scanner::lex_end_of_comment(OutputFile &out)
 		eoc  {
 			if (ignored > 0) {
 				cline += ignored;
-				out.wline_info(cline, get_fname().c_str());
+				out.wdelay_line_info_input(cline, get_fname());
 			}
 			tok = pos = cur;
 			return;

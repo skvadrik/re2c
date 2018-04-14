@@ -129,16 +129,19 @@ void compile(Scanner &input, Output &output, Opt &opts)
 	typedef std::vector<smart_ptr<DFA> > dfas_t;
 
 	o.new_block(opts);
-	o.wversion_time().wline_info(input.get_cline(), input.get_fname().c_str());
+	o.wversion_time();
+	o.wdelay_line_info_input(input.get_cline(), input.get_fname());
 	if (globopts->target == TARGET_SKELETON) {
 		emit_prolog(o);
 	}
 
-	for (Scanner::ParseMode mode; (mode = input.echo(o)) != Scanner::Stop;) {
-
+	for (;;) {
+		// parse everything up to the next re2c block
+		Scanner::ParseMode mode = input.echo(o);
+		if (mode == Scanner::Stop) break;
 		validate_mode(mode, globopts->rFlag, ropts, input);
 
-		// parse next re2c block
+		// parse the next re2c block
 		specs_t specs;
 		if (mode == Scanner::Reuse) {
 			specs = rspecs;
@@ -177,7 +180,7 @@ void compile(Scanner &input, Output &output, Opt &opts)
 			}
 		}
 
-		o.wline_info (input.get_cline (), input.get_fname ().c_str ());
+		o.wdelay_line_info_input(input.get_cline(), input.get_fname());
 	}
 
 	if (globopts->target == TARGET_SKELETON) {

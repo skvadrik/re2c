@@ -34,6 +34,15 @@ struct ConfTags
 		: format(f), separator(s) {}
 };
 
+struct LineInfo
+{
+	uint32_t line;
+	std::string filename;
+
+	LineInfo(uint32_t l, const std::string &fn)
+		: line(l), filename(fn) {}
+};
+
 struct OutputFragment
 {
 	enum type_t
@@ -41,7 +50,8 @@ struct OutputFragment
 //		, CONFIG
 		, COND_GOTO
 		, COND_TABLE
-		, LINE_INFO
+		, LINE_INFO_INPUT
+		, LINE_INFO_OUTPUT
 		, STATE_GOTO
 		, STAGS
 		, MTAGS
@@ -67,7 +77,8 @@ struct OutputFragment
 	uint32_t indent;
 	union
 	{
-		const ConfTags* tags;
+		const ConfTags *tags;
+		const LineInfo *line_info;
 	};
 
 	OutputFragment (type_t t, uint32_t i);
@@ -79,6 +90,7 @@ struct OutputBlock
 {
 	std::vector<OutputFragment *> fragments;
 	bool used_yyaccept;
+	bool have_user_code;
 	uint32_t line;
 	std::vector<std::string> types;
 	std::set<std::string> stags;
@@ -123,14 +135,14 @@ public:
 	OutputFile & ws (const char * s);
 	OutputFile & wlabel (label_t l);
 	OutputFile & wrange (uint32_t u, uint32_t l);
-	OutputFile & wline_info (uint32_t l, const char * fn);
 	OutputFile & wversion_time ();
 	OutputFile & wuser_start_label ();
 	OutputFile & wind (uint32_t ind);
 
 	// delayed output
 	OutputFile & wdelay_tags(const ConfTags *cf, bool mtags);
-	OutputFile & wdelay_line_info ();
+	OutputFile & wdelay_line_info_input (uint32_t l, const std::string &fn);
+	OutputFile & wdelay_line_info_output ();
 	OutputFile & wdelay_cond_goto(uint32_t ind);
 	OutputFile & wdelay_cond_table(uint32_t ind);
 	OutputFile & wdelay_state_goto (uint32_t ind);
@@ -142,6 +154,7 @@ public:
 	OutputFile& wdelay_peek(uint32_t ind, bool peek);
 	OutputFile& wdelay_backup(uint32_t ind, bool backup);
 
+	void fix_first_block_opts();
 	void global_lists(uniq_vector_t<std::string> &types,
 		std::set<std::string> &stags, std::set<std::string> &mtags) const;
 
