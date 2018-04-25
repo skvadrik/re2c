@@ -160,6 +160,8 @@ prop_test_re2c r1 = QM.monadicIO $ do
             ++ " --posix-captures -Werror-undefined-control-flow -ST a.re -o a.c 2>>re2c_last_warning"
             ++ " || exit 42 && gcc a.c -o a && ./a"
     QM.assert $ ok0 `elem` [SE.ExitSuccess, SE.ExitFailure 42]
+    when (ok0 == SE.ExitFailure 42) $ do
+        QM.run $ print re_posix
     when (ok0 == SE.ExitSuccess) $ do
         ss <- QM.run $ parse_input ncaps
         mapM_ (\(s, ns, xs, ar) -> do
