@@ -1,0 +1,6 @@
+- synthesize rathar than inherit
+- examples for how mark + enum work
+- more examples
+- root position always has nonzero explicit submatch index
+- double explicit submatch group that maps to the same implicit submatch group: ((...)) is collapsed in mark() and enum ()
+- example of tracing mark() and enum()

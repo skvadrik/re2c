@@ -1,0 +1,334 @@
+
+\documentclass[tikz,border=10pt]{standalone}
+
+
+\RequirePackage{luatex85}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath, amssymb, amsfonts, accents}
+\usetikzlibrary{graphdrawing, graphs, arrows, shapes, automata, calc, decorations.pathmorphing}
+\usegdlibrary{trees, layered}
+\usepackage{stix}
+
+
+\newcommand{\Xund}{\rule{.4em}{.4pt}}
+\newcommand{\Xl}{\langle}
+\newcommand{\Xr}{\rangle}
+\newcommand{\Xm}{\langle\!\rangle}
+
+
+\begin{document}
+
+\begin{tikzpicture}[
+    >=stealth,
+    ->,
+    auto,
+    node distance=0.7in,
+    decoration = snake
+    ]
+
+\tikzstyle{every node}=[draw=none]
+\tikzstyle{every state}=[rectangle, rounded corners = 5, minimum size=0.18in, inner sep = 3pt]
+
+\def\offsac{-0.35in}
+\def\offsad{-0.45in}
+\def\widc{1.1in}
+\def\widd{0.8in}
+
+
+
+\begin{scope}[xshift=1.7in, yshift=3.6in]
+
+    \node (a0) {};
+    \node[state, above right of = a0, xshift=-0.3in, yshift=-0.3in] (a) {$z_0$};
+
+    \node[state, above right of = a] (d0) {$x_0$};
+    \node[state, above right of = d0, xshift = 0.2in, yshift = -0.25in] (d01) {$z_1$};
+    \node[state, below right of = d0, xshift = 0.2in, yshift = +0.25in] (d02) {$z_2$};
+    \node[state, above right of = d01] (d1) {$x_1$};
+    \node[state, above right of = d02] (d2) {$x_2$};
+    \node[state, rounded corners = 10, minimum width = \widd, minimum height = 0.3in, xshift = \offsad, right of = d1] (d11) {$f_1$};
+    \node[state, rounded corners = 10, minimum width = \widd, minimum height = 0.3in, xshift = \offsad, right of = d2] (d22) {$f_2$};
+    \node[state, xshift = \offsad, right of = d11] (d3) {$y_1$};
+    \node[state, xshift = \offsad, right of = d22] (d4) {$y_2$};
+    \node[state, below right of = d3] (d33) {$w_1$};
+    \node[state, below right of = d4] (d44) {$w_2$};
+    \node[state, below right of = d33, xshift = 0.2in, yshift = +0.25in] (d5) {$y_0$};
+
+    \node[state, accepting, below right of = d5] (e) {$w_0$};
+    \node[below right of = e, xshift=-0.3in, yshift=0.3in] (e0) {};
+
+    \path [draw]
+        (a0) edge node {} (a)
+        (a) edge node {$ 2i-1 $} (d0)
+        %
+        (d0) edge [bend left = 20] node {$ \epsilon $} (d01)
+        (d0) edge [below left, near end, bend right = 20] node {$ -(2i_1-1) $} (d02)
+        (d3) edge [above right, near end] node {$ 2i_1 $} (d33)
+        (d4) edge [above right, near end] node {$ 2i_2 $} (d44)
+        (d01) edge [above left, near start] node {$ 2i_1-1 $} (d1)
+        (d02) edge [above left, near start] node {$ 2i_2-1 $} (d2)
+        (d33) edge [bend left = 20] node {$ -(2i_2-1) $} (d5)
+        (d44) edge [below right, bend right = 20] node {$ \epsilon $} (d5)
+        %
+        (d5) edge node {$ 2i $} (e)
+        (e) edge node {} (e0)
+        %
+    ;
+    \path (a) edge [draw=none] node [below=0.2in, midway] {
+    (a) \quad $F \big( (i, \Xund, (i_1, \Xund, r_1) \mid (i_2, \Xund, r_2)) \big)$ where
+    $f_i = F(0,0,r_i) \; \forall i = \overline{1,2}$
+    } (e);
+\end{scope}
+
+
+
+\begin{scope}[xshift=1.7in, yshift=1.8in]
+
+    \node (a0) {};
+    \node[state, above right of = a0, xshift=-0.3in, yshift=-0.3in] (a) {$z_0$};
+
+    \node[state, above right of = a] (b1) {$x_0$};
+    \node[state, above right of = b1] (b2) {$x_1$};
+    \node[state, rounded corners = 10, minimum width = \widd, minimum height = 0.3in, xshift = \offsad, right of = b2] (b) {$f_1$};
+    \node[state, xshift = \offsad, right of = b] (b3) {$y_1$};
+    \node[state, below right of = b3] (c1) {$w_1$};
+
+    \node[state, above right of = c1] (c2) {$x_2$};
+    \node[state, rounded corners = 10, minimum width = \widd, minimum height = 0.3in, xshift = \offsad, right of = c2] (c) {$f_2$};
+    \node[state, xshift = \offsad, right of = c] (c3) {$y_2$};
+    \node[state, below right of = c3] (c4) {$y_0$};
+
+    \node[state, accepting, below right of = c4] (e) {$w_0$};
+    \node[below right of = e, xshift=-0.3in, yshift=0.3in] (e0) {};
+
+    \path [draw]
+        (a0) edge node {} (a)
+        (a) edge node {$ 2i-1 $} (b1)
+        %
+        (b1) edge node {$ 2i_1-1 $} (b2)
+        (b3) edge [below left] node {$ 2i_1 $} (c1)
+        %
+        (c1) edge node {$ 2i_2-1 $} (c2)
+        (c3) edge [below left] node {$ 2i_2 $} (c4)
+        %
+        (c4) edge [below left] node {$ 2i $} (e)
+        (e) edge node {} (e0)
+        %
+    ;
+    \path (a) edge [draw=none] node [below=0.2in, midway] {
+    (b) \quad $F \big( (i, \Xund, (i_1, \Xund, r_1) \cdot (i_2, \Xund, r_2)) \big)$ where
+    $f_i = F(0,0,r_i) \; \forall i = \overline{1,2}$
+    } (e);
+\end{scope}
+
+
+
+
+\begin{scope}[xshift=0.7in, yshift=-0in]
+
+    \node (a0) {};
+    \node[state, above right of = a0, xshift=-0.3in, yshift=-0.3in] (a) {$z_0$};
+
+    \node[state, above right of = a] (c0) {$x_0$};
+    \node[state, right of = c0] (c1) {$z_{1}$};
+    \node[state, above right of = c1] (c2) {$x_1$};
+    \node[state, rounded corners = 10, minimum width = \widd, minimum height = 0.3in, xshift = \offsad, right of = c2] (c) {$f_1$};
+    \node[state, xshift = \offsad, right of = c] (c3) {$y_1$};
+    \node[state, below right of = c3] (c4) {$w_{1}$};
+    \node[state, right of = c4] (c5) {$z_{2}$};
+
+    \node[state, right of = c5] (d1) {$z_{m}$};
+    \node[state, above right of = d1] (d2) {$x_m$};
+    \node[state, rounded corners = 10, minimum width = \widd, minimum height = 0.3in, xshift = \offsad, right of = d2] (d) {$f_m$};
+    \node[state, xshift = \offsad, right of = d] (d3) {$y_m$};
+    \node[state, below right of = d3] (d4) {$y_0$};
+
+    \node[state, accepting, below right of = d4] (e) {$w_0$};
+    \node[below right of = e, xshift=-0.3in, yshift=0.3in] (e0) {};
+
+    \path [draw, decorate] (c5) -- node {} (d1);
+    \path [draw]
+        (a0) edge node {} (a)
+        (a) edge node {$ 2i-1 $} (c0)
+        %
+        (c0) edge node {$ \epsilon $} (c1)
+        (c1) edge node {$ 2i_1-1 $} (c2)
+        (c3) edge [below left] node {$ 2i_1 $} (c4)
+        (c4) edge node {$ \epsilon $} (c5)
+        %
+        (d1) edge node {$ 2i_1-1 $} (d2)
+        (d3) edge [below left] node {$ 2i_1 $} (d4)
+        %
+        (d4) edge [below left] node {$ 2i $} (e)
+        (e) edge node {} (e0)
+        %
+    ;
+    \draw (c4) .. controls ($ (c4) + (1.5, -1.0) $) and ($ (d4) + (-1.5, -1.0) $) .. node {$ \epsilon $} (d4);
+    \draw (c0) .. controls ($ (c0) + (1.5, -1.5) $) and ($ (d4) + (-1.5, -1.5) $) .. node [above] {$ -(2i_1-1) $} (d4);
+    \path (a) edge [draw=none] node [below, midway] {
+    (c) \quad $F \big( (i, \Xund, (i_1, \Xund, r_1)^{0, m}) \big)$ where
+    $0 < m < \infty$,
+    $f_i = F(0,0,r_1) \; \forall i = \overline{1,m}$
+    } (e);
+\end{scope}
+
+
+
+\begin{scope}[xshift=0in, yshift=-1.6in]
+
+    \node (a0) {};
+    \node[state, above right of = a0, xshift=-0.3in, yshift=-0.3in] (a) {$z_0$};
+
+    \node[state, above right of = a] (b1) {$x_0$};
+    \node[state, above right of = b1] (b2) {$x_1$};
+    \node[state, rounded corners = 10, minimum width = \widd, minimum height = 0.3in, xshift = \offsad, right of = b2] (b) {$f_{1}$};
+    \node[state, xshift = \offsad, right of = b] (b3) {$y_1$};
+    \node[state, below right of = b3] (b4) {$w_1$};
+
+    \node[state, right of = b4] (c1) {$w_{n-1}$};
+    \node[state, above right of = c1] (c2) {$x_n$};
+    \node[state, rounded corners = 10, minimum width = \widd, minimum height = 0.3in, xshift = \offsad, right of = c2] (c) {$f_{n}$};
+    \node[state, xshift = \offsad, right of = c] (c3) {$y_n$};
+    \node[state, below right of = c3] (c4) {$w_{n}$};
+    \node[state, right of = c4] (c5) {$z_{n+1}$};
+
+    \node[state, right of = c5] (d1) {$z_m$};
+    \node[state, above right of = d1] (d2) {$x_m$};
+    \node[state, rounded corners = 10, minimum width = \widd, minimum height = 0.3in, xshift = \offsad, right of = d2] (d) {$f_m$};
+    \node[state, xshift = \offsad, right of = d] (d3) {$y_m$};
+    \node[state, below right of = d3] (d4) {$y_0$};
+
+    \node[state, accepting, below right of = d4] (e) {$w_0$};
+    \node[below right of = e, xshift=-0.3in, yshift=0.3in] (e0) {};
+
+    \path [draw, decorate] (b4) -- node {} (c1);
+    \path [draw, decorate] (c5) -- node {} (d1);
+    \path [draw]
+        (a0) edge node {} (a)
+        (a) edge node {$ 2i-1 $} (b1)
+        %
+        (b1) edge node {$ 2i_1-1 $} (b2)
+        (b3) edge [below left] node {$ 2i_1 $} (b4)
+        %
+        (c1) edge node {$ 2i_1-1 $} (c2)
+        (c3) edge [below left] node {$ 2i_1 $} (c4)
+        (c4) edge node {$ \epsilon $} (c5)
+        %
+        (d1) edge node {$ 2i_1-1 $} (d2)
+        (d3) edge [below left] node {$ 2i_1 $} (d4)
+        (d4) edge [below left] node {$ 2i $} (e)
+        %
+        (e) edge node {} (e0)
+        %
+    ;
+    \draw (c4) .. controls ($ (c4) + (1.5, -1.0) $) and ($ (d4) + (-1.5, -1.0) $) .. node {$ \epsilon $} (d4);
+    \path (a) edge [draw=none] node [below=-0.1in, midway] {
+    (d) \quad $F \big( (i, \Xund, (i_1, \Xund, r_1)^{n, m}) \big)$ where
+    $0 < n \leq m < \infty$,
+    $f_i = F(0,0,r_1) \; \forall i = \overline{1,n}$
+    } (e);
+\end{scope}
+
+
+
+\begin{scope}[xshift=1.7in, yshift=-3.1in]
+
+    \node (a0) {};
+    \node[state, above right of = a0, xshift=-0.3in, yshift=-0.3in] (a) {$z_0$};
+
+    \node[state, above right of = a] (d0) {$x_0$};
+    \node[state, right of = d0] (d1) {$z_{1}$};
+    \node[state, above right of = d1] (d2) {$x_1$};
+    \node[state, rounded corners = 10, minimum width = \widd, minimum height = 0.3in, xshift = \offsad, right of = d2] (d) {$f_1$};
+    \node[state, xshift = \offsad, right of = d] (d3) {$y_1$};
+    \node[state, below right of = d3] (d4) {$w_{1}$};
+    \node[state, right of = d4] (d5) {$y_0$};
+
+    \node[state, accepting, below right of = d5] (e) {$w_0$};
+    \node[below right of = e, xshift=-0.3in, yshift=0.3in] (e0) {};
+
+    \path [draw]
+        (a0) edge node {} (a)
+        (a) edge node {$ 2i-1 $} (d0)
+        %
+        (d0) edge node {$ \epsilon $} (d1)
+        (d1) edge node {$ 2i_1-1 $} (d2)
+        (d3) edge [below left] node {$ 2i_1 $} (d4)
+        (d4) edge node {$ \epsilon $} (d5)
+        %
+        (d5) edge [below left] node {$ 2i $} (e)
+        (e) edge node {} (e0)
+        %
+    ;
+    \draw (d4) .. controls ($ (d4) + (-1, -0.3) $) and ($ (d1) + (1, -0.3) $) .. node [above] {$ \epsilon $} (d1);
+    \draw (d0) .. controls ($ (d0) + (1.5, -1) $) and ($ (d5) + (-1.5, -1) $) .. node [above] {$ -(2i_1-1) $} (d5);
+    \path (a) edge [draw=none] node [below=0.1in, midway] {
+    (e) \quad $F \big( (i, \Xund, (i_1, \Xund, r_1)^{0, \infty}) \big)$ where
+    $f_1 = F(0,0,r_1)$
+    } (e);
+\end{scope}
+
+
+
+\begin{scope}[xshift=0.2in, yshift=-4.8in]
+
+    \node (a0) {};
+    \node[state, above right of = a0, xshift=-0.3in, yshift=-0.3in] (a) {$z_0$};
+
+    \node[state, above right of = a] (b1) {$x_0$};
+    \node[state, above right of = b1] (b2) {$x_1$};
+    \node[state, rounded corners = 10, minimum width = \widd, minimum height = 0.3in, xshift = \offsad, right of = b2] (b) {$f_{1}$};
+    \node[state, xshift = \offsad, right of = b] (b3) {$y_1$};
+    \node[state, below right of = b3] (b4) {$w_1$};
+
+    \node[state, right of = b4] (c1) {$w_{n-2}$};
+    \node[state, above right of = c1] (c2) {$x_{n-1}$};
+    \node[state, rounded corners = 10, minimum width = \widc, minimum height = 0.3in, xshift = \offsac, right of = c2] (c) {$f_{n-1}$};
+    \node[state, xshift = \offsac, right of = c] (c3) {$y_{n-1}$};
+    \node[state, below right of = c3] (d1) {$w_{n-1}$};
+
+    \node[state, above right of = d1] (d2) {$x_n$};
+    \node[state, rounded corners = 10, minimum width = \widd, minimum height = 0.3in, xshift = \offsad, right of = d2] (d) {$f_n$};
+    \node[state, xshift = \offsad, right of = d] (d3) {$y_n$};
+    \node[state, below right of = d3] (d4) {$w_{n}$};
+    \node[state, right of = d4] (d5) {$y_0$};
+
+    \node[state, accepting, below right of = d5] (e) {$w_0$};
+    \node[below right of = e, xshift=-0.3in, yshift=0.3in] (e0) {};
+
+    \path [draw, decorate] (b4) -- node {} (c1);
+    \path [draw]
+        (a0) edge node {} (a)
+        (a) edge node {$ 2i-1 $} (b1)
+        %
+        (b1) edge node {$ 2i_1-1 $} (b2)
+        (b3) edge [below left] node {$ 2i_1 $} (b4)
+        %
+        (c1) edge node {$ 2i_1-1 $} (c2)
+        (c3) edge [below left] node {$ 2i_1 $} (d1)
+        %
+        (d1) edge node {$ 2i_1-1 $} (d2)
+        (d3) edge [below left] node {$ 2i_1 $} (d4)
+        (d4) edge node {$ \epsilon $} (d5)
+%        (d4) edge node [below=0.05in] {$\epsilon $} (d1)
+        %
+        (d5) edge [below left] node {$ 2i $} (e)
+        (e) edge node {} (e0)
+        %
+    ;
+    \draw (d4) .. controls ($ (d4) + (-1, -0.3) $) and ($ (d1) + (1, -0.3) $) .. node [above] {$ \epsilon $} (d1);
+    \path (a) edge [draw=none] node [below=-0.1in, midway] {
+    (f) \quad $F \big( (i, \Xund, (i_1, \Xund, r_1)^{n, \infty}) \big)$ where
+    $0 < n < \infty$,
+    $f_i = F(0,0,r_1) \; \forall i = \overline{1,n}$
+    } (e);
+\end{scope}
+
+
+
+
+\end{tikzpicture}
+
+
+\end{document}
+
