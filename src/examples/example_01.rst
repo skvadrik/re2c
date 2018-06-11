@@ -53,7 +53,7 @@ Run:
 
 .. code-block:: bash
 
-    $ ./integers 123 0xfF 010 0B101 ?
+    $ ./integers 123 0xfF 010 0B101 oO0
     decimal
     hexadecimal
     octal

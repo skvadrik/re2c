@@ -34,7 +34,7 @@ div.document table, tr, td, th {
 }
 div.document img {
     display: block;
-    border: 1px dotted;
+/*    border: 1px dotted; */
     margin: auto;
 }
 div.document img.feed {
