@@ -4,8 +4,9 @@
 ``-b --bit-vectors``
     Optimize conditional jumps using bit masks. Implies ``-s``.
 
-``-c --conditions``
+``-c --conditions --start-conditions``
     Enable support of Flex-like "conditions": multiple interrelated lexers within one block.
+    Option ``--start-conditions`` is a legacy alias; use ``--conditions`` instead.
 
 ``-d --debug-output``
     Emit ``YYDEBUG`` in the generated code.

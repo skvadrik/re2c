@@ -135,7 +135,7 @@ opt_long:
 	"version"               end { version (); return EXIT_OK; }
 	"vernum"                end { vernum ();  return EXIT_OK; }
 
-	"start-conditions"      end { globopts.cFlag = true;             goto opt; }
+	"start-"? "conditions"  end { globopts.cFlag = true;             goto opt; }
 	"emit-dot"              end { globopts.target = TARGET_DOT;      goto opt; }
 	"storable-state"        end { globopts.fFlag = true;             goto opt; }
 	"flex-syntax"           end { globopts.FFlag = true;             goto opt; }
