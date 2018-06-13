@@ -104,7 +104,7 @@ First, the new algorithm can handle bounded repetition.
 Second, it explores only a part of the regular expression structure
 necessary to disambiguate submatch extraction,
 which reduces the overhead for expressions with few submatch groups.
-Third, we use Thompson automaton instead of position automaton
+Third, we use Thompson automata instead of position automata
 and give an efficient algorithm for $\epsilon$-closure construction,
 which allows us to skip the pre-processing step of Okui-Suzuki algorithm.
 %based on the Goldberg-Radzik shortest path finding algorithm.
@@ -166,13 +166,13 @@ Regular expressions originate in the work of Kleene\cite{Kle51}.
 A rigorous definition of regular expressions is given in terms of Kleene algebra\cite{Koz94}.}:
 
     \begin{Xdef}
-    \emph{Regular expressions (RE)} over finite alphabet $\Sigma$, denoted $\XE_\Sigma$, are:
+    \emph{Regular expressions (REs)} over finite alphabet $\Sigma$, denoted $\XE_\Sigma$, are:
     \begin{enumerate}
-        \item Atomic RE:
+        \item Atomic REs:
 %          \emph{empty set} $\emptyset \in \XE_\Sigma$,
           \emph{empty word} $\epsilon \in \XE_\Sigma$ and
           \emph{unit word} $\alpha \in \XE_\Sigma$, where $\alpha \in \Sigma$.
-        \item Compound RE: if $e_1, e_2 \in \XE_\Sigma$, then
+        \item Compound REs: if $e_1, e_2 \in \XE_\Sigma$, then
           \emph{union} $e_1 | e_2 \in \XE_\Sigma$,
           \emph{product} $e_1 e_2 \in \XE_\Sigma$,
           \emph{repetition} $e_1^{n, m} \in \XE_\Sigma$ (where $0 \leq n \leq m \leq \infty$), and
@@ -199,11 +199,11 @@ and parentheses may be used to override it (all parentheses are capturing).
 % %in which every RE denotes a set of \emph{parse trees}.
 \\
 
-First of all, we rewrite RE in a form where, instead of submatch groups,
+First of all, we rewrite REs in a form where, instead of submatch groups,
 every subexpression has a pair of integer indices indicating its significance for submatch extraction.
-Second index indicates \emph{explicit} submatch groups:
+The second index indicates \emph{explicit} submatch groups:
 its value is equal to the number of submatch group, otherwize zero.
-First index is like the second one, but it also accounts for \emph{implicit} submatch groups:
+The first index is like the second one, but it also accounts for \emph{implicit} submatch groups:
 subexpressions that are not themselves parenthesized, but have nested or sibling parenthesized subexpressions.
 If both indices are zero, it means that the subexpression is ignored from submatch extraction perspective.
 If only the second index is zero, it means that the subexpression itself is not interesting,
@@ -214,7 +214,7 @@ We call this representation \emph{regular expression trees}.
 An example of RT can be seen on figure \ref{fig_parse_trees}.
 
     \begin{Xdef}
-    \emph{Regular expression trees (RT)} over finite alphabet $\Sigma$, denoted $\XR_\Sigma$, are:
+    \emph{Regular expression trees (RTs)} over finite alphabet $\Sigma$, denoted $\XR_\Sigma$, are:
     \begin{enumerate}
         \item Atomic RT:
           \emph{empty tree} $(i, j, \epsilon) \in \XR_\Sigma$ and
@@ -227,11 +227,11 @@ An example of RT can be seen on figure \ref{fig_parse_trees}.
     \end{enumerate}
     \end{Xdef}
 
-Function $RT : \XE_\Sigma \rightarrow \XR_\Sigma$ transforms RE into RT.
+The function $RT : \XE_\Sigma \rightarrow \XR_\Sigma$ transforms REs into RTs.
 It is defined via a composition of two functions,
-$mark$ that transforms RE into RT with submatch indices in the boolean range $\{0, 1\}$
+$mark$ that transforms REs into RTs with submatch indices in the boolean range $\{0, 1\}$
 (indicating if the given subexpression is an implicit/explicit submatch group),
-and $enum$ that substitutes boolean indices with the actual numbers:
+and $enum$ that substitutes boolean indices with the consecutive numbers:
 $RT(e) = r$ where $(\Xund, \Xund, r) = enum(1, 1, mark(e))$.
 %
     \begin{align*}
@@ -297,7 +297,7 @@ Explicit submatch index is dropped, as there is no use for it in the context of 
 Note that our parse trees are different from \ref{OS13}:
 we have a \emph{nil} tree (a placeholder for absent alternative and zero repetitions)
 and do not differentiate between various kinds of compound trees.
-Tree interpretation of RT is given by operator $PT: \XR_\Sigma \rightarrow 2^{\XT_\Sigma}$:
+The operator $PT: \XR_\Sigma \rightarrow 2^{\XT_\Sigma}$ defines the set of all parse trees that are denoted by an $RT$:
     \begin{align*}
         PT\big((i, \Xund, \epsilon)\big) &= \{ {\epsilon}^{i} \}
         \\
@@ -328,7 +328,7 @@ For an RT $r$ and a string $w$, we write $PT(r, w)$ to denote the set $\{ t \in 
 
 Following \cite{OS13}, we assign \emph{positions} to the nodes of RT and PT.
 The root position is $\Lambda$, and position of the $i$-th subtree of a tree with position $p$ is $p.i$.
-The \emph{length} of position $p$, denoted $|p|$, is defined as $0$ for $\Lambda$ and $|p| + i$ for $p.i$.
+The \emph{length} of position $p$, denoted $|p|$, is defined as $0$ for $\Lambda$ and $|p| + 1$ for $p.i$.
 %The set of all positions is denoted $\XP$.
 The subtree of a tree $t$ at position $p$ is denoted $t|_p$.
 Position $p$ is a \emph{prefix} of position $q$ iff $q = p.p'$ for some $p'$,
@@ -338,13 +338,13 @@ Positions are ordered lexicographically, as in \ref{OS13}.
 The set of all positions of a tree $t$ is denoted $Pos(t)$.
 The set of \emph{submatch positions} of a tree $t$
 is the subset of $Pos(t)$ containing positions of subtrees with nonzero submatch index:
-$Sub(t) = \{ p \mid \exists i \neq 0, s: t|_p = s^i \}$.
+$Sub(t) = \{ p \mid t|_p = s^i \text{ where } i \neq 0 \}$.
 Examples of parse trees can be seen on figure \ref{fig_parse_trees}.
 
 \begin{figure}\label{fig_parse_trees}
 \includegraphics[width=\linewidth]{img/trees.pdf}
 \caption{
-RT and examples of PT for RE $(\epsilon|a^{0,\infty})(a|\epsilon)^{0,\infty}$ and string $a$.\\
+RT and examples of PTs for RE $(\epsilon|a^{0,\infty})(a|\epsilon)^{0,\infty}$ and string $a$.\\
 Order:
 $s <_1 t$,
 $s <_1 u$,
@@ -368,8 +368,8 @@ $t <^{os}_{1.1} u$.
     $$
     \|t\|_p =
         \begin{cases}
-            -1          &\text{if } \exists i \neq 0, s = \varnothing: t|_p = s^i \\
-            |str(t|_p)| &\text{if } \exists i \neq 0, s \neq \varnothing: t|_p = s^i \\
+            -1          &\text{if } t|_p = s^i \text{ where } i \neq 0, s = \varnothing  \\
+            |str(t|_p)| &\text{if } t|_p = s^i \text{ where } i \neq 0, s \neq \varnothing \\
             \infty      &\text{otherwise}
         \end{cases}
     $$
@@ -392,19 +392,19 @@ We shorten $\|t\|_\Lambda$ as $\|t\|$.
     \end{Xdef}
 
     \begin{XLem}\label{lemma_ptorder_antisymmetry}
-    Order on parse trees is antisymmetric: if $t < s$, then $s \not< t$.
+    The order on parse trees is antisymmetric: if $t < s$, then $s \not< t$.
     \\
     Proof.
     Suppose, on the contrary, that $t <_p s$ and $s <_q t$ for some $p$, $q$.
     Without loss of generality let $p \leq q$.
     On one hand $t <_p s$ implies $\|t\|_p > \|s\|_p$.
     On the other hand $s <_q t$ implies $\|t\|_p \leq \|s\|_p$.
-    Contradiction.
+    Contradicting the assumption.
     $\square$
     \end{XLem}
 
     \begin{XLem}\label{lemma_ptorder_transitivity}
-    Order on parse trees is transitive: if $t < s$ and $s < u$, then $t < u$.
+    The order on parse trees is transitive: if $t < s$ and $s < u$, then $t < u$.
     \\
     Proof.
     Let $t <_p s$ and $s <_q u$ for some positions $p$, $q$, and let $r = min (p, q)$.
@@ -463,7 +463,7 @@ We shorten $\|t\|_\Lambda$ as $\|t\|$.
     \\
     \medskip
     Proof.
-    Follows from
+    It follows from
     lemma \ref{lemma_ptorder_antisymmetry},
     lemma \ref{lemma_ptorder_transitivity} and
     lemma \ref{lemma_ptorder_transitivity_of_incomparability}.
@@ -478,7 +478,7 @@ While it is not true in general that $<^{os}$ is an extension of $<$
 (see the counterexample on figure \ref{fig_parse_trees}),
 the two orders are compatible in the sense that the $<^{os}$-minimal tree
 is included in the class of $<$-minimal trees.
-Intuitively, this means that if we keep ``refining'' submatch detalization
+Intuitively, this means that if we keep ``refining'' submatch results
 by adding parentheses in subexpressions,
 we will gradually narrow down the class of $<$-minimal trees,
 until we are left with a single $<^{os}$-minimal tree.
@@ -574,7 +574,7 @@ In this section we introduce linearised representation of parse trees: \emph{par
 %however there are subtle, but important differences in some of the definitions and proofs.
 
     \begin{Xdef}
-    \emph{Parenthesized expressions (PE)} over finite alphabet $\Sigma$, denoted $\XP_\Sigma$, are:
+    \emph{Parenthesized expressions (PEs)} over finite alphabet $\Sigma$, denoted $\XP_\Sigma$, are:
     \begin{enumerate}
         \item Atomic PE:
           \emph{nil expression} $\Xm \in \XP_\Sigma$,
@@ -595,8 +595,8 @@ For convenience we sometimes explicitly denote height with subscript:
 this allows us to consider (not necessarily correctly nested) fragments of the given PE in isolation,
 without losing the context of the whole PE.
 However, height is not a part of parenthesis itself
-and is not taken into account when comparing the elements of PE.
-Function $\Phi : \YZ \times \XT_\Sigma \rightarrow \XP_\Sigma$ transforms PT into PE:
+and is not taken into account when comparing the elements of PEs.
+Function $\Phi : \YZ \times \XT_\Sigma \rightarrow \XP_\Sigma$ transforms PTs into PEs:
     $$
     \Phi_{h}(t^{i}) = \begin{cases}
         str(t^{i})                                            &\text{if } i = 0 \\

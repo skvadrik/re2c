@@ -4,3 +4,11 @@
 - root position always has nonzero explicit submatch index
 - double explicit submatch group that maps to the same implicit submatch group: ((...)) is collapsed in mark() and enum ()
 - example of tracing mark() and enum()
+- This is what I had to do in GOR correcness proof anyway --- first get rid of epsilon-loops (aka "problematic" paths), then prove right distributivity of comparison over concatenation for the rest. In the presence of epsilon-loops right distributivity doesn't hold --- I can give an example when a < b, but ac > bc (but then neither ac, nor bc correspond to the minimal path, so wrong comparison results for a and b does not cause any trouble). (We shall say it in the paper and mention the example, I think.
+- A:
+    The paragraph after theorem 1 states that we obtain the Okui ordering by replacing sub with pos.
+    I am thinking of it because Okui ranks missing positions in a tree with a norm that is -1, while we rank it infinite.
+  Me:
+    Rephrase that paragrapgh to say that the minimal tree for fully-tagged trees is included
+    in the class of minimal trees for partially-tagged trees.
+
