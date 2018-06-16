@@ -159,11 +159,13 @@ Contributions.
 \\ \\
 The rest of this paper is arranged as follows.
 
-\section{Regular Expressions as Parse Trees}
+\section{Regular Expressions and Ordered Parse Trees}
 
-We define regular expressions as follows\footnote{
-Regular expressions originate in the work of Kleene\cite{Kle51}.
-A rigorous definition of regular expressions is given in terms of Kleene algebra\cite{Koz94}.}:
+In this section we revise the basic definitions of
+regular expressions,
+parse trees,
+ambiguity
+and the order on parse trees.
 
     \begin{Xdef}
     \emph{Regular expressions (REs)} over finite alphabet $\Sigma$, denoted $\XE_\Sigma$, are:
@@ -180,8 +182,10 @@ A rigorous definition of regular expressions is given in terms of Kleene algebra
     \end{enumerate}
     \end{Xdef}
 
-This definition is somewhat different from the usual definition\cite{HU90}\cite{SS88};
-it is adapted to the POSIX standard.
+REs originate in the work of Kleene\cite{Kle51}.
+A mathematically rigorous definition of REs is given in terms of the Kleene algebra\cite{Koz94}.
+Our definition is close to the one widely used in literature\cite{HU90}\cite{SS88},
+with a couple of minor adaptations to the POSIX standard.
 First, we consider parentheses as a distinct construct: in POSIX $(e)$ is semantically different from $e$.
 Second, we use generalized repetition $e^{n, m}$ instead of iteration $e^*$:
 expressing repetition in terms of iteration and product requires duplication of the subexpression,
@@ -197,7 +201,111 @@ and parentheses may be used to override it (all parentheses are capturing).
 % %
 % %One possible interpretation of RE is the \emph{tree} interpretation,
 % %in which every RE denotes a set of \emph{parse trees}.
-\\
+
+    \begin{Xdef}
+    \emph{Parse trees (PT)} over finite alphabet $\Sigma$, denoted $\XT_\Sigma$, are:
+    \begin{enumerate}
+        \item Atomic PT:
+          \emph{nil tree} ${\varnothing} \in \XT_\Sigma$,
+          \emph{empty tree} ${\epsilon} \in \XT_\Sigma$ and
+          \emph{unit tree} ${\alpha} \in \XT_\Sigma$, where $\alpha \in \Sigma$.
+        \item Compound PT: if $t_1, \dots, t_n \in \XT_\Sigma$, where $n \geq 1$, then
+          ${T}(t_1, \dots, t_n) \in \XT_\Sigma$.
+    \end{enumerate}
+    \end{Xdef}
+
+Note that our PTs are different from \ref{OS13}:
+we have a \emph{nil} tree (a placeholder for absent alternative and zero repetitions)
+and do not differentiate between various kinds of compound trees.
+Each RE denotes a set of PTs given by the operator $PT: \XE_\Sigma \rightarrow 2^{\XT_\Sigma}$:
+    \begin{align*}
+        PT(\epsilon) &= \{ {\epsilon} \}
+        \\
+        PT(\alpha) &= \{ {\alpha} \}
+        \\
+        PT(r_1 \mid r_2) &=
+            \big\{ {T}(t, \varnothing) \mid t \in PT(r_1) \big\} \cup
+            \big\{ {T}(\varnothing, t) \mid t \in PT(r_2) \big\}
+        \\
+        PT(r_1 \cdot r_2) &=
+            \big\{ {T}(t_1, t_2) \mid
+                t_1 \in PT(r_1),
+                t_2 \in PT(r_2)
+            \big\} \\
+        PT(r^{n, m}) &=
+            \begin{cases}
+                \big\{ {T}(t_1, \dots, t_m) \mid t_i \in PT(r) \;
+                    \forall i = \overline{1, m} \big\} \cup \{ {T}(\varnothing) \} &\text{if } n = 0 \\
+                \big\{ {T}(t_n, \dots, t_m) \mid t_i \in PT(r) \;
+                    \forall i = \overline{n, m} \big\} &\text{if } n > 0
+            \end{cases}
+        \\
+        PT( (r) ) &= PT(r)
+    \end{align*}
+
+The \emph{string} induced by a tree $t$, denoted $str(t)$, is the concatenation of all alphabet symbols in the left-to-right traversal of $t$.
+For an RT $r$ and a string $w$, we write $PT(r, w)$ to denote the set $\{ t \in PT(r) \mid str(t) = w \}$
+(note that this set is potentially infinite).
+
+    \begin{Xdef}\label{ambiguity_of_parse_trees}
+    PTs $s$ and $t$ are \emph{ambiguous} iff $s \neq t$ and $s, t \in PT(r, w)$ for some RE $r$ and string $w$.
+    $\square$
+    \end{Xdef}
+
+Following \cite{OS13}, we assign \emph{positions} to the nodes of RT and PT.
+The root position is $\Lambda$, and position of the $i$-th subtree of a tree with position $p$ is $p.i$.
+The \emph{length} of position $p$, denoted $|p|$, is defined as $0$ for $\Lambda$ and $|p| + 1$ for $p.i$.
+%The set of all positions is denoted $\XP$.
+The subtree of a tree $t$ at position $p$ is denoted $t|_p$.
+Position $p$ is a \emph{prefix} of position $q$ iff $q = p.p'$ for some $p'$,
+and a \emph{proper prefix} if additionaly $p \neq q$.
+Position $p$ is a \emph{sibling} of position $q$ iff $q = q'.i, p = q'.j$ for some $q'$ and $i,j \in \YN$.
+Positions are ordered lexicographically, as in \ref{OS13}.
+The set of all positions of a tree $t$ is denoted $Pos(t)$.
+
+    \begin{Xdef}\label{norm_of_parse_tree}
+    The \emph{norm} of PT $t$ at position $p$ is:
+    $$
+    \|t\|_p =
+        \begin{cases}
+            -1          &\text{if } p \in Pos(t) \text{ and } t|_p = \varnothing  \\
+            |str(t|_p)| &\text{if } p \in Pos(t) \text{ and } t|_p \neq \varnothing \\
+            \infty      &\text{if } p \not\in Pos(t)
+        \end{cases}
+    $$
+    \end{Xdef}
+
+We shorten $\|t\|_\Lambda$ as $\|t\|$.
+Generally the norm of a subtree means the number of alphabet symbols in the leaves of this subtree, with two exceptions.
+First, for nil subtrees the norm is $-1$: intuitively, they have the lowest ``ranking'' among all possible subtrees.
+Second, for inexistent subtrees (those with positions out of $Pos(t)$) the norm is infinite.
+This may seem counterintuitive at first, but it makes sense in the presense of REs with empty repetition.
+According to the POSIX standard, optional empty repetitions are not allowed,
+and our definition of the norm reflects this:
+if a tree $s$ has a subtree $s|_p$ corresponding to an empty repetition,
+and another tree $t$ has no subtree at position $p$ ($p \not\in Pos(t)$),
+then the infinite norm $\|t\|_p$ ``outranks'' $\|s\|_p$.
+
+    \begin{Xdef}\label{order_on_parse_trees}
+    \emph{Order on parse trees.}
+    Given parse trees $t, s \in PT(e, w)$, we say that $t <_p s$ w.r.t. \emph{desision position} $p$ % $p \in Sub(t) \cup Sub(s)$
+    iff $\|t\|_p > \|s\|_p$ and $\|t\|_q = \|s\|_q \; \forall q < p$.
+    We say that $t < s$ iff $t <_p s$ for some $p$.
+    \end{Xdef}
+
+Note that in the definition \ref{order_on_parse_trees}
+we do not explicitly demand that $p, q \in Pos(t) \cup Pos(s)$:
+if this is not the case, the norms of both subtrees are $\infty$ and thus equal.
+
+    \begin{XThe}
+    Relation $<$ is strict total order on parse trees.
+    \\
+    \medskip
+    Proof. YET TO BE GIVEN
+    $\square$
+    \end{XThe}
+
+\section{Partially Ordered Parse Trees}
 
 First of all, we rewrite REs in a form where, instead of submatch groups,
 every subexpression has a pair of integer indices indicating its significance for submatch extraction.
@@ -314,10 +422,10 @@ The operator $PT: \XR_\Sigma \rightarrow 2^{\XT_\Sigma}$ defines the set of all 
             \big\} \\
         PT\big((i, \Xund, (i_1, j_1, r_1)^{n, m})\big) &=
             \begin{cases}
-                \big\{ {T}^{i}(t_1, \dots, t_m) \mid t_i \in PT\big((i_1, j_1, r_1)\big) \;
-                    \forall i = \overline{1, m} \big\} \cup \{ {T}^{i}(\varnothing^{i_1}) \} &\text{if } n = 0 \\
-                \big\{ {T}^{i}(t_n, \dots, t_m) \mid t_i \in PT\big((i_1, j_1, r_1)\big) \;
-                    \forall i = \overline{n, m} \big\} &\text{if } n > 0
+                \big\{ {T}^{i}(t_1, \dots, t_m) \mid t_k \in PT\big((i_1, j_1, r_1)\big) \;
+                    \forall k = \overline{1, m} \big\} \cup \{ {T}^{i}(\varnothing^{i_1}) \} &\text{if } n = 0 \\
+                \big\{ {T}^{i}(t_n, \dots, t_m) \mid t_k \in PT\big((i_1, j_1, r_1)\big) \;
+                    \forall k = \overline{n, m} \big\} &\text{if } n > 0
             \end{cases}
     \end{align*}
 
@@ -348,11 +456,11 @@ RT and examples of PTs for RE $(\epsilon|a^{0,\infty})(a|\epsilon)^{0,\infty}$ a
 Order:
 $s <_1 t$,
 $s <_1 u$,
-$u <_{2.2} t$.
+$t <_{2.2} u$.
 Okui-Suzuki order:
 $s <^{os}_1 t$,
 $s <^{os}_1 u$,
-$t <^{os}_{1.1} u$.
+$u <^{os}_{1.1} t$.
 }
 \end{figure}
 
