@@ -49,6 +49,8 @@
 \newcommand{\XE}{\mathcal{E}}
 \newcommand{\XF}{\mathcal{F}}
 \newcommand{\XI}{\mathcal{I}}
+\newcommand{\XIT}{\XI\!\XT}
+\newcommand{\XIR}{\XI\!\XR}
 \newcommand{\XL}{\mathcal{L}}
 \newcommand{\XN}{\mathcal{N}}
 \newcommand{\XM}{\mathcal{M}}
@@ -64,6 +66,8 @@
 \newcommand{\YT}{\mathbb{T}}
 \newcommand{\YQ}{\mathbb{Q}}
 \newcommand{\YZ}{\mathbb{Z}}
+\newcommand{\IPT}{I\!PT}
+\newcommand{\IRE}{I\!RE}
 
 \newcommand{\Xstirling}[2]{\genfrac{\{}{\}}{0pt}{}{#1}{#2}}
 \newcommand*{\Xbar}[1]{\overline{#1\vphantom{\bar{#1}}}}
@@ -168,17 +172,17 @@ ambiguity
 and the order on parse trees.
 
     \begin{Xdef}
-    \emph{Regular expressions (REs)} over finite alphabet $\Sigma$, denoted $\XE_\Sigma$, are:
+    \emph{Regular expressions (REs)} over finite alphabet $\Sigma$, denoted $\XR_\Sigma$, are:
     \begin{enumerate}
         \item Atomic REs:
 %          \emph{empty set} $\emptyset \in \XE_\Sigma$,
-          \emph{empty word} $\epsilon \in \XE_\Sigma$ and
-          \emph{unit word} $\alpha \in \XE_\Sigma$, where $\alpha \in \Sigma$.
-        \item Compound REs: if $e_1, e_2 \in \XE_\Sigma$, then
-          \emph{union} $e_1 | e_2 \in \XE_\Sigma$,
-          \emph{product} $e_1 e_2 \in \XE_\Sigma$,
-          \emph{repetition} $e_1^{n, m} \in \XE_\Sigma$ (where $0 \leq n \leq m \leq \infty$), and
-          \emph{submatch group} $(e_1) \in \XE_\Sigma$.
+          \emph{empty word} $\epsilon \in \XR_\Sigma$ and
+          \emph{unit word} $\alpha \in \XR_\Sigma$, where $\alpha \in \Sigma$.
+        \item Compound REs: if $e_1, e_2 \in \XR_\Sigma$, then
+          \emph{union} $e_1 | e_2 \in \XR_\Sigma$,
+          \emph{product} $e_1 e_2 \in \XR_\Sigma$,
+          \emph{repetition} $e_1^{n, m} \in \XR_\Sigma$ (where $0 \leq n \leq m \leq \infty$), and
+          \emph{submatch group} $(e_1) \in \XR_\Sigma$.
     \end{enumerate}
     \end{Xdef}
 
@@ -217,7 +221,7 @@ and parentheses may be used to override it (all parentheses are capturing).
 Note that our PTs are different from \ref{OS13}:
 we have a \emph{nil} tree (a placeholder for absent alternative and zero repetitions)
 and do not differentiate between various kinds of compound trees.
-Each RE denotes a set of PTs given by the operator $PT: \XE_\Sigma \rightarrow 2^{\XT_\Sigma}$:
+Each RE denotes a set of PTs given by the operator $PT: \XR_\Sigma \rightarrow 2^{\XT_\Sigma}$:
     \begin{align*}
         PT(\epsilon) &= \{ {\epsilon} \}
         \\
@@ -307,44 +311,61 @@ if this is not the case, the norms of both subtrees are $\infty$ and thus equal.
 
 \section{Partially Ordered Parse Trees}
 
-First of all, we rewrite REs in a form where, instead of submatch groups,
-every subexpression has a pair of integer indices indicating its significance for submatch extraction.
-The second index indicates \emph{explicit} submatch groups:
-its value is equal to the number of submatch group, otherwize zero.
-The first index is like the second one, but it also accounts for \emph{implicit} submatch groups:
-subexpressions that are not themselves parenthesized, but have nested or sibling parenthesized subexpressions.
-If both indices are zero, it means that the subexpression is ignored from submatch extraction perspective.
-If only the second index is zero, it means that the subexpression itself is not interesting,
-but some other submatch groups depend on it.
-Explicit indices are convenient because they allow us to consider individual subexpressions
-without loosing submatch context of the whole RE.
-We call this representation \emph{regular expression trees}.
-An example of RT can be seen on figure \ref{fig_parse_trees}.
+The POSIX standard uses the terms \emph{subexpression} and \emph{subpattern}
+when speaking about parenthesized and non-parenthesized sub-REs respectively.
+The difference between them is that
+subexpressions (also called \emph{submatch groups}) are subject to submatch extraction:
+if a RE matches some string, we need to know what part of the string matches each subexpression.
+For subpatterns we don't need this information.
+According to the POSIX standard, both subexpressions and subpatterns
+obey the same hierarchical rules,
+where the outer sub-REs are prior to the inner sub-REs and the left sub-REs are prior to the right sub-REs.
+Disambiguation starts with the topmost sub-RE and proceeds down to each most nested subexpression,
+considering all prior sub-RE on its way (both subexpressions and subpatterns),
+and stopping at the first difference.
+%
+In order to reflect these disambiguation rules, we introduce the notion of explicit and implicit submatch groups:
+\emph{explicit submatch group} is a subexpression
+and \emph{implicit submatch group} is either a subexpression, or a subpattern which contains nested or sibling subexpressions.
+In this section we rewrite REs in a form
+where every sub-RE is equipped with a pair of numbers called
+\emph{implicit submatch index} and \emph{explicit submatch index}.
+As the reader might guess, these numbers indicate if the given sub-RE is an implicit or explicit submatch group.
+%
+For a given sub-RE,
+if both indices are zero, it means that this sub-RE is ignored from submatch extraction perspective.
+If only the second index is zero, it means that the sub-RE itself is not subject to submatch extraction,
+but it may be involved in disambiguation.
+If both indices are non-zero, then the sub-RE is a submatch group.
+%
+Indices are convenient because they allow us to consider individual sub-REs
+without loosing the submatch context of the whole RE.
+We call this representation \emph{indexed regular expressions (IREs)}.
+An example of IRE can be seen on figure \ref{fig_parse_trees}.
 
     \begin{Xdef}
-    \emph{Regular expression trees (RTs)} over finite alphabet $\Sigma$, denoted $\XR_\Sigma$, are:
+    \emph{Indexed regular expressions (IREs)} over finite alphabet $\Sigma$, denoted $\XIR_\Sigma$, are:
     \begin{enumerate}
-        \item Atomic RT:
-          \emph{empty tree} $(i, j, \epsilon) \in \XR_\Sigma$ and
-          \emph{unit tree} $(i, j, \alpha) \in \XR_\Sigma$, where $\alpha \in \Sigma$ and $i, j \in \YZ$.
+        \item Atomic IREs:
+          \emph{empty tree} $(i, j, \epsilon) \in \XIR_\Sigma$ and
+          \emph{unit tree} $(i, j, \alpha) \in \XIR_\Sigma$, where $\alpha \in \Sigma$ and $i, j \in \YZ$.
 
-        \item Compound RT: if $r_1, r_2 \in \XR_\Sigma$ and $i, j \in \YZ$, then
-          \emph{union} $(i, j, r_1 \mid r_2) \in \XR_\Sigma$,
-          \emph{product} $(i, j, r_1 \cdot r_2) \in \XR_\Sigma$ and
-          \emph{repetition} $(i, j, r_1^{n, m}) \in \XR_\Sigma$ (where $0 \leq n \leq m \leq \infty$).
+        \item Compound IREs: if $r_1, r_2 \in \XIR_\Sigma$ and $i, j \in \YZ$, then
+          \emph{union} $(i, j, r_1 \mid r_2) \in \XIR_\Sigma$,
+          \emph{product} $(i, j, r_1 \cdot r_2) \in \XIR_\Sigma$ and
+          \emph{repetition} $(i, j, r_1^{n, m}) \in \XIR_\Sigma$ (where $0 \leq n \leq m \leq \infty$).
     \end{enumerate}
     \end{Xdef}
 
-The function $RT : \XE_\Sigma \rightarrow \XR_\Sigma$ transforms REs into RTs.
+The function $\IRE : \XR_\Sigma \rightarrow \XIR_\Sigma$ transforms REs into IREs.
 It is defined via a composition of two functions,
-$mark$ that transforms REs into RTs with submatch indices in the boolean range $\{0, 1\}$
-(indicating if the given subexpression is an implicit/explicit submatch group),
-and $enum$ that substitutes boolean indices with the consecutive numbers:
-$RT(e) = r$ where $(\Xund, \Xund, r) = enum(1, 1, mark(e))$.
-%
+$mark$ that transforms REs into IREs with submatch indices in the boolean range $\{0, 1\}$,
+and $enum$ that substitutes boolean indices with consecutive numbers:
+$\IRE(e) = r$ where $(\Xund, \Xund, r) = enum(1, 1, mark(e))$.
+
     \begin{align*}
     &\begin{aligned}
-        mark &: \XE_\Sigma \longrightarrow \XR_\Sigma \\
+        mark &: \XR_\Sigma \longrightarrow \XIR_\Sigma \\
         mark &(x) = (0, 0, x) \\
             &\text{where } x \in \{\epsilon, \alpha\}
         \\
@@ -366,7 +387,7 @@ $RT(e) = r$ where $(\Xund, \Xund, r) = enum(1, 1, mark(e))$.
     \end{aligned}
     %
     &&\begin{aligned}
-        enum &: \YZ \times \YZ \times \XR_\Sigma \longrightarrow \YZ \times \YZ \times \XR_\Sigma \\
+        enum &: \YZ \times \YZ \times \XIR_\Sigma \longrightarrow \YZ \times \YZ \times \XIR_\Sigma \\
         enum &(\bar{i}, \bar{j}, (i, j, x)) = (\bar{i} + i, \bar{j} + j, (\bar{i} \times i, \bar{j} \times j, x)) \\
             &\text{where } x \in \{\epsilon, \alpha\}
         \\
@@ -381,86 +402,74 @@ $RT(e) = r$ where $(\Xund, \Xund, r) = enum(1, 1, mark(e))$.
     \end{aligned}
     \end{align*}
 
-RE and RT are equivalent representations
-(we can transform RT back to RE
-by erasing all submatch indices
-and adding parentheses around subexpressions with nonzero explicit submatch index).
-Each RT (and the corresponding RE) denotes a set of \emph{parse trees}.
-Tree nodes inherit implicit submatch index from RT nodes
-(we mark it with superscript).
-Explicit submatch index is dropped, as there is no use for it in the context of parse trees (in the current paper).
+The reverse transformation is also possible:
+we can transform IRE back to RE
+by erasing all indices
+and adding parentheses around subexpressions with nonzero explicit submatch index.
+Therefore RE and IRE are equivalent representations.
+\\
 
-    \begin{Xdef}
-    \emph{Parse trees (PT)} over finite alphabet $\Sigma$, denoted $\XT_\Sigma$, are:
-    \begin{enumerate}
-        \item Atomic PT:
-          \emph{nil tree} ${\varnothing}^i \in \XT_\Sigma$,
-          \emph{empty tree} ${\epsilon}^i \in \XT_\Sigma$ and
-          \emph{unit tree} ${\alpha}^i \in \XT_\Sigma$, where $\alpha \in \Sigma$ and $i \in \YZ$.
-        \item Compound PT: if $t_1, \dots, t_n \in \XT_\Sigma$, where $n \geq 1$, and $i \in \YZ$, then
-          ${T}^i(t_1, \dots, t_n) \in \XT_\Sigma$.
-    \end{enumerate}
-    \end{Xdef}
+Just like REs denote sets of PTs, IREs denote sets of \emph{IPTs} --- \emph{indexed parse trees},
+which are exactly like PTs except that each IPT is superscripted with
+the implicit submatch index inherited from the corresponding IRE node.
+Explicit submatch index is not used in IPTs.
+The set of all IPTs is denoted $\XIT$.
+%
+%    \begin{Xdef}
+%    \emph{Parse trees (PT)} over finite alphabet $\Sigma$, denoted $\XT_\Sigma$, are:
+%    \begin{enumerate}
+%        \item Atomic PT:
+%          \emph{nil tree} ${\varnothing}^i \in \XT_\Sigma$,
+%          \emph{empty tree} ${\epsilon}^i \in \XT_\Sigma$ and
+%          \emph{unit tree} ${\alpha}^i \in \XT_\Sigma$, where $\alpha \in \Sigma$ and $i \in \YZ$.
+%        \item Compound PT: if $t_1, \dots, t_n \in \XT_\Sigma$, where $n \geq 1$, and $i \in \YZ$, then
+%          ${T}^i(t_1, \dots, t_n) \in \XT_\Sigma$.
+%    \end{enumerate}
+%    \end{Xdef}
+%
+The operator $\IPT: \XIR_\Sigma \rightarrow 2^{\XIT_\Sigma}$ gives the set of all IPTs denoted by the given IRE
+(its definition is very similar to the one of operator $PT$):
 
-Note that our parse trees are different from \ref{OS13}:
-we have a \emph{nil} tree (a placeholder for absent alternative and zero repetitions)
-and do not differentiate between various kinds of compound trees.
-The operator $PT: \XR_\Sigma \rightarrow 2^{\XT_\Sigma}$ defines the set of all parse trees that are denoted by an $RT$:
     \begin{align*}
-        PT\big((i, \Xund, \epsilon)\big) &= \{ {\epsilon}^{i} \}
+        \IPT\big((i, \Xund, \epsilon)\big) &= \{ {\epsilon}^{i} \}
         \\
-        PT\big((i, \Xund, \alpha)\big) &= \{ {\alpha}^{i} \}
+        \IPT\big((i, \Xund, \alpha)\big) &= \{ {\alpha}^{i} \}
         \\
-        PT\big((i, \Xund, (i_1, j_1, r_1) \mid (i_2, j_2, r_2))\big) &=
-            \big\{ {T}^{i}(t, \varnothing^{i_2}) \mid t \in PT\big((i_1, j_1, r_1)\big) \big\} \cup
-            \big\{ {T}^{i}(\varnothing^{i_1}, t) \mid t \in PT\big((i_2, j_2, r_2)\big) \big\}
+        \IPT\big((i, \Xund, (i_1, j_1, r_1) \mid (i_2, j_2, r_2))\big) &=
+            \big\{ {T}^{i}(t, \varnothing^{i_2}) \mid t \in \IPT\big((i_1, j_1, r_1)\big) \big\} \cup
+            \big\{ {T}^{i}(\varnothing^{i_1}, t) \mid t \in \IPT\big((i_2, j_2, r_2)\big) \big\}
         \\
-        PT\big((i, \Xund, (i_1, j_1, r_1) \cdot (i_2, j_2, r_2))\big) &=
+        \IPT\big((i, \Xund, (i_1, j_1, r_1) \cdot (i_2, j_2, r_2))\big) &=
             \big\{ {T}^{i}(t_1, t_2) \mid
-                t_1 \in PT\big((i_1, j_1, r_1)\big),
-                t_2 \in PT\big((i_2, j_2, r_2)\big)
+                t_1 \in \IPT\big((i_1, j_1, r_1)\big),
+                t_2 \in \IPT\big((i_2, j_2, r_2)\big)
             \big\} \\
-        PT\big((i, \Xund, (i_1, j_1, r_1)^{n, m})\big) &=
+        \IPT\big((i, \Xund, (i_1, j_1, r_1)^{n, m})\big) &=
             \begin{cases}
-                \big\{ {T}^{i}(t_1, \dots, t_m) \mid t_k \in PT\big((i_1, j_1, r_1)\big) \;
+                \big\{ {T}^{i}(t_1, \dots, t_m) \mid t_k \in \IPT\big((i_1, j_1, r_1)\big) \;
                     \forall k = \overline{1, m} \big\} \cup \{ {T}^{i}(\varnothing^{i_1}) \} &\text{if } n = 0 \\
-                \big\{ {T}^{i}(t_n, \dots, t_m) \mid t_k \in PT\big((i_1, j_1, r_1)\big) \;
+                \big\{ {T}^{i}(t_n, \dots, t_m) \mid t_k \in \IPT\big((i_1, j_1, r_1)\big) \;
                     \forall k = \overline{n, m} \big\} &\text{if } n > 0
             \end{cases}
     \end{align*}
 
-The \emph{string} induced by a tree $t$, denoted $str(t)$, is the concatenation of all alphabet symbols in the left-to-right traversal of $t$.
-For an RT $r$ and a string $w$, we write $PT(r, w)$ to denote the set $\{ t \in PT(r) \mid str(t) = w \}$
-(note that this set is potentially infinite).
-\\
-
-Following \cite{OS13}, we assign \emph{positions} to the nodes of RT and PT.
-The root position is $\Lambda$, and position of the $i$-th subtree of a tree with position $p$ is $p.i$.
-The \emph{length} of position $p$, denoted $|p|$, is defined as $0$ for $\Lambda$ and $|p| + 1$ for $p.i$.
-%The set of all positions is denoted $\XP$.
-The subtree of a tree $t$ at position $p$ is denoted $t|_p$.
-Position $p$ is a \emph{prefix} of position $q$ iff $q = p.p'$ for some $p'$,
-and a \emph{proper prefix} if additionaly $p \neq q$.
-Position $p$ is a \emph{sibling} of position $q$ iff $q = q'.i, p = q'.j$ for some $q'$ and $i,j \in \YN$.
-Positions are ordered lexicographically, as in \ref{OS13}.
-The set of all positions of a tree $t$ is denoted $Pos(t)$.
-The set of \emph{submatch positions} of a tree $t$
+The set of \emph{submatch positions} of an IPT $t$
 is the subset of $Pos(t)$ containing positions of subtrees with nonzero submatch index:
-$Sub(t) = \{ p \mid t|_p = s^i \text{ where } i \neq 0 \}$.
-Examples of parse trees can be seen on figure \ref{fig_parse_trees}.
+$Sub(t) = \{ p \mid \exists t|_p = s^i \text{ such that } i \neq 0 \}$.
+Examples of IPT can be seen on figure \ref{fig_parse_trees}.
 
 \begin{figure}\label{fig_parse_trees}
 \includegraphics[width=\linewidth]{img/trees.pdf}
 \caption{
-RT and examples of PTs for RE $(\epsilon|a^{0,\infty})(a|\epsilon)^{0,\infty}$ and string $a$.\\
-Order:
+IRE and examples of IPTs for RE $(\epsilon|a^{0,\infty})(a|\epsilon)^{0,\infty}$ and string $a$.\\
+Partial order:
+$s \prec_1 t$,
+$s \prec_1 u$,
+$t \prec_{2.2} u$.
+Total order:
 $s <_1 t$,
 $s <_1 u$,
-$t <_{2.2} u$.
-Okui-Suzuki order:
-$s <^{os}_1 t$,
-$s <^{os}_1 u$,
-$u <^{os}_{1.1} t$.
+$u <_{1.1} t$.
 }
 \end{figure}
 
@@ -472,13 +481,13 @@ $u <^{os}_{1.1} t$.
 %    \end{Xdef}
 
     \begin{Xdef}\label{norm_of_parse_tree}
-    The \emph{norm} of PT $t$ at position $p$ is:
+    The \emph{norm} of IPT $t$ at position $p$ is:
     $$
     \|t\|_p =
         \begin{cases}
-            -1          &\text{if } t|_p = s^i \text{ where } i \neq 0, s = \varnothing  \\
-            |str(t|_p)| &\text{if } t|_p = s^i \text{ where } i \neq 0, s \neq \varnothing \\
-            \infty      &\text{otherwise}
+            -1          &\text{if } p \in Sub(t) \text{ and } t|_p = \varnothing^i  \\
+            |str(t|_p)| &\text{if } p \in Sub(t) \text{ and } t|_p = s^i \text{ where } s \neq \varnothing \\
+            \infty      &\text{if } p \not\in Sub(t) \text{ and }
         \end{cases}
     $$
     \end{Xdef}
