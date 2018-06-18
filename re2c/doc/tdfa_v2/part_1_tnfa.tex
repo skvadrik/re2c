@@ -407,29 +407,92 @@ we can transform IRE back to RE
 by erasing all indices
 and adding parentheses around subexpressions with nonzero explicit submatch index.
 Therefore RE and IRE are equivalent representations.
-\\
+%
+Below is an example of IRE construction for RE $(\epsilon|a^{0,\infty})(\epsilon|a)^{0,\infty} )$
+(the resulting IRE can be seen on figure \ref{fig_parse_trees}):
 
-Just like REs denote sets of PTs, IREs denote sets of \emph{IPTs} --- \emph{indexed parse trees},
-which are exactly like PTs except that each IPT is superscripted with
-the implicit submatch index inherited from the corresponding IRE node.
+    \begin{align*}
+    &\begin{aligned}
+        & mark ( (\epsilon|a^{0,\infty})(\epsilon|a)^{0,\infty} ) ) = \big[ \\
+        %
+        & \quad mark ( (\epsilon|a^{0,\infty}) ) = \big[ \\
+        & \quad mark ( \epsilon|a^{0,\infty} ) = \big[ \\
+        & \quad\quad\quad mark ( \epsilon ) = (0,0,\epsilon), \\
+        & \quad\quad\quad mark ( a^{0,\infty} ) = \big[ \\
+        & \quad\quad\quad\quad mark ( a ) = (0,0,a) \\
+        & \quad\quad\quad \big] = (0,0,(0,0,a)^{0,\infty}) \\
+        & \quad\quad \big] = (0,0,(0,0,\epsilon) \mid (0,0,(0,0,a)^{0,\infty})) \\
+        & \quad \big] = (1,1,(0,0,\epsilon)|(0,0,(0,0,a)^{0,\infty})) \\
+        %
+        & \quad mark ( (\epsilon|a)^{0,\infty} ) = \big[ \\
+        & \quad\quad mark ( (\epsilon|a) ) = \big[ \\
+        & \quad\quad\quad mark ( \epsilon|a ) = \big [ \\
+        & \quad\quad\quad\quad mark ( \epsilon ) = (0,0,\epsilon) \\
+        & \quad\quad\quad\quad mark ( a ) = (0,0,a) \\
+        & \quad\quad\quad \big] = (0,0,(0,0,\epsilon)|(0,0,a)) \\
+        & \quad\quad \big] = (1,1,(0,0,\epsilon) \mid (0,0,a)) \\
+        & \quad \big] = (1,0,(1,1,(0,0,\epsilon) \mid (0,0,a))^{0,\infty}) \\
+        %
+        & \big] = (1,1,
+           (1,1,(0,0,\epsilon) \mid (0,0,(0,0,a)^{0,\infty})) \\
+           & \quad\quad\quad \cdot (1,0,(1,1,(0,0,\epsilon) \mid (0,0,a))^{0,\infty})
+           )
+    \end{aligned}
+    %
+    &&\begin{aligned}
+        & enum (1,1,(1,1,
+            (1,1,(0,0,\epsilon) \mid (0,0,(0,0,a)^{0,\infty})) \\
+            & \quad\quad\quad\quad\quad \cdot (1,0,(1,1,(0,0,\epsilon) \mid (0,0,a))^{0,\infty}))) = \big[ \\
+        & \quad enum (2,2,(1,1,(0,0,\epsilon) \mid (0,0,(0,0,a)^{0,\infty}))) = \big[ \\
+        & \quad\quad enum (3,3,(0,0,\epsilon)) = (3,3,(0,0,\epsilon)) \\
+        & \quad\quad enum (3,3,(0,0,(0,0,a)^{0,\infty})) = \big[ \\
+        & \quad\quad\quad enum (3,3,(0,0,a)) = (3,3,(0,0,a)) \\
+        & \quad\quad \big] = (3,3,(0,0,(0,0,a)^{0,\infty})) \\
+        & \quad \big] = (3,3,(2,2,(0,0,\epsilon) \mid (0,0,(0,0,a)^{0,\infty}))) \\
+        %
+        & \quad enum (3,3, (1,0,(1,1,(0,0,\epsilon) \mid (0,0,a))^{0,\infty}) ) = \big[ \\
+        & \quad\quad enum (4,3, (1,1,(0,0,\epsilon) \mid (0,0,a)) ) = \big[ \\
+        & \quad\quad\quad enum (5,4, (0,0,\epsilon) ) = (0,0,\epsilon) \\
+        & \quad\quad\quad enum (5,4, (0,0,a) ) = (0,0,a) \\
+        & \quad\quad \big] = (5,4,(4,3,(0,0,\epsilon) \mid (0,0,a))) \\
+        & \quad \big] = (5,4,(3,0,(4,3,(0,0,\epsilon) \mid (0,0,a))^{0,\infty})) \\
+        %
+        & \big] = (5,4,(1,1,
+           (2,2,(0,0,\epsilon) \mid (0,0,(0,0,a)^{0,\infty})) \\
+           & \quad\quad\quad\quad\quad \cdot (3,0,(4,3,(0,0,\epsilon) \mid (0,0,a))^{0,\infty})
+           ))
+    \end{aligned}
+    \end{align*}
+
+Just like REs denote sets of PTs, IREs denote sets of \emph{IPTs} --- \emph{indexed parse trees}.
+The only difference between PTs and IPTs is that each node of an IPT has an associated number ---
+the implicit submatch index inherited from the corresponding IRE node (denoted with a superscript).
 Explicit submatch index is not used in IPTs.
-The set of all IPTs is denoted $\XIT$.
-%
-%    \begin{Xdef}
-%    \emph{Parse trees (PT)} over finite alphabet $\Sigma$, denoted $\XT_\Sigma$, are:
-%    \begin{enumerate}
-%        \item Atomic PT:
-%          \emph{nil tree} ${\varnothing}^i \in \XT_\Sigma$,
-%          \emph{empty tree} ${\epsilon}^i \in \XT_\Sigma$ and
-%          \emph{unit tree} ${\alpha}^i \in \XT_\Sigma$, where $\alpha \in \Sigma$ and $i \in \YZ$.
-%        \item Compound PT: if $t_1, \dots, t_n \in \XT_\Sigma$, where $n \geq 1$, and $i \in \YZ$, then
-%          ${T}^i(t_1, \dots, t_n) \in \XT_\Sigma$.
-%    \end{enumerate}
-%    \end{Xdef}
-%
-The operator $\IPT: \XIR_\Sigma \rightarrow 2^{\XIT_\Sigma}$ gives the set of all IPTs denoted by the given IRE
-(its definition is very similar to the one of operator $PT$):
 
+    \begin{Xdef}
+    \emph{Indexed parse trees (IPT)} over finite alphabet $\Sigma$, denoted $\XIT_\Sigma$, are:
+    \begin{enumerate}
+        \item Atomic IPTs:
+          \emph{nil tree} ${\varnothing}^i \in \XIT_\Sigma$,
+          \emph{empty tree} ${\epsilon}^i \in \XIT_\Sigma$ and
+          \emph{unit tree} ${\alpha}^i \in \XIT_\Sigma$, where $\alpha \in \Sigma$ and $i \in \YZ$.
+        \item Compound IPTs: if $t_1, \dots, t_n \in \XIT_\Sigma$, where $n \geq 1$, and $i \in \YZ$, then
+          ${T}^i(t_1, \dots, t_n) \in \XIT_\Sigma$.
+    \end{enumerate}
+    \end{Xdef}
+
+\iffalse
+\begin{figure}\label{fig_mark_enum}
+\includegraphics[width=\linewidth]{img/mark_enum.pdf}
+\caption{
+The process of constructing IRE for RE $(\epsilon|a^{0,\infty})(\epsilon|a)^{0,\infty} )$
+and the result visualized as a tree.
+}
+\end{figure}
+\fi
+
+The operator $\IPT: \XIR_\Sigma \rightarrow 2^{\XIT_\Sigma}$ gives the set of all IPTs denoted by the given IRE:
+%(its definition is very similar to the one of operator $PT$):
     \begin{align*}
         \IPT\big((i, \Xund, \epsilon)\big) &= \{ {\epsilon}^{i} \}
         \\

@@ -9,13 +9,14 @@
 \usegdlibrary{trees}
 \usepackage{stix}
 
+\newcommand{\IRE}{I\!RE}
 
 \begin{document}
 
 %\begin{tikzpicture}[>=stealth, every node/.style={rectangle, rounded corners, draw, minimum size=0.1in}]
 \begin{tikzpicture}[>=stealth, every node/.style={draw=none, minimum size=0.1}]
 
-\begin{scope}[xshift=2in]
+\begin{scope}[xshift=2.5in]
 %    \node [rectangle, rounded corners, draw, minimum width=3.7in, minimum height=1.9in, yshift=-0.7in] {};
 %    \node[yshift=0.3in, draw=none] {$t_1: T(T(\varnothing, T(a)), T(\varnothing))$};
     \graph [tree layout, grow=down, fresh nodes] {
@@ -36,20 +37,9 @@
     };
     \node[xshift=0in, yshift=-1.5in, draw=none]
     {\small{$
-    \Big(1, 1,
-        \big(2, 2,
-            (0, 0, \epsilon ) \mid
-            (0, 0,
-                (0, 0, a)^{0, \infty}
-            )
-        \big) \cdot
-        \big(3, 0,
-            (4, 3,
-                (0, 0, a) \mid
-                (0, 0, \epsilon)
-            )^{0, \infty}
-        \big)
-    \Big)$}};
+    \IRE ((\epsilon|a^{0,\infty})(\epsilon|a)^{0,\infty} )) = (1,1,(2,2,(0,0,\epsilon) \mid (0,0,(0,0,a)^{0,\infty}))
+        \cdot (3,0,(4,3,(0,0,\epsilon) \mid (0,0,a))^{0,\infty}))
+    $}};
 %    \node[xshift=0in, yshift=-1.7in, draw=none] {$(\epsilon | a^{0,\infty})(a | \epsilon)^{0,\infty}$};
 \end{scope}
 
