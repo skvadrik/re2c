@@ -12,3 +12,46 @@
     Rephrase that paragrapgh to say that the minimal tree for fully-tagged trees is included
     in the class of minimal trees for partially-tagged trees.
 
+
+
+> The definition of lastht() and first() mentions the case in
+> which the argument begins with a letter.
+> However, they seems to be applied only to frames (that do not
+> contain letters). Are there cases in
+> which they are applied to something other than frames?
+
+
+> P.S. I am still a bit uncertain about the usefulness of the
+> subdivision in frames of PEs. Its usefulness is
+> obvious in the case of Okui's PAT because them have sequences of
+> parentheses on the arcs, corresponding
+> to frames (and have no closure to be done). But in our case we
+> have GOR1 that compares fragments
+> of PEs that are not frames, and still uses a notion of rho that
+> is somehow different.
+> So, my question is how will we make use of frames in our context?
+
+
+
+
+
+> I was thinking how to demonstrate Theorem 1. This is an attempt to do it.
+> 
+> Taken two distinct trees s and t, since the norms are defined over
+> Pos(s) union Pos(t),
+..well, strictly speaking, norms are defined everywhere: that's one of the differences with Okui definition of the norm, and it comes in really handy in the proof of theorem 2 (the one that states that partial order on IRE is a strict weak order): without that extension of the norm to the infinite set of possible positions, the proofs get twice as long (because we have to track domains everywhere and prove obvious things that follow from fact that ||s||_p = ||t||_p if p is not in Pos(s) and not in Pos(t)).
+> then it is either s < t or t < s (i.e. the ordering is total).
+> Suppose it is s < t. Then, there is a position p for which ||s||_p >
+> ||t||_p and all preceding
+> positions have equal norms. Clearly, it cannot also be t < s.
+..agreed..
+> Suppose it is t < s, then for the same reason, it cannot be s < t.
+> Then, the ordering is strict.
+..this is, I think, not needed: we just need to say, "without loss of generality, suppose that s < t".
+I will put that in the paper.
+
+
+
+OKUI SLIDES!!!
+
+

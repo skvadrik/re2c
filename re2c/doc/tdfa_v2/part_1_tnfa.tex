@@ -35,6 +35,7 @@
 \usepackage{enumitem}
 \usepackage[justification=centering]{caption}
 \usepackage{url}
+\usepackage[section]{placeins}
 
 \newcommand{\Xl}{\langle}
 \newcommand{\Xr}{\rangle}
@@ -402,12 +403,15 @@ $\IRE(e) = r$ where $(\Xund, \Xund, r) = enum(1, 1, mark(e))$.
     \end{aligned}
     \end{align*}
 
+An example of constructing an IRE from a RE is given on figure \ref{fig_mark_enum}.
 The reverse transformation is also possible:
 we can transform IRE back to RE
 by erasing all indices
 and adding parentheses around subexpressions with nonzero explicit submatch index.
 Therefore RE and IRE are equivalent representations.
-%
+\\
+
+\iffalse
 Below is an example of IRE construction for RE $(\epsilon|a^{0,\infty})(\epsilon|a)^{0,\infty} )$
 (the resulting IRE can be seen on figure \ref{fig_parse_trees}):
 
@@ -463,6 +467,17 @@ Below is an example of IRE construction for RE $(\epsilon|a^{0,\infty})(\epsilon
            ))
     \end{aligned}
     \end{align*}
+\fi
+
+%\iffalse
+\begin{figure}\label{fig_mark_enum}
+\includegraphics[width=\linewidth]{img/mark_enum.pdf}
+\caption{
+The process of constructing IRE for RE $(\epsilon|a^{0,\infty})(\epsilon|a)^{0,\infty} )$ using $mark$ and $enum$,\\
+the resulting IRE and examples of IPT for it.
+}
+\end{figure}
+%\fi
 
 Just like REs denote sets of PTs, IREs denote sets of \emph{IPTs} --- \emph{indexed parse trees}.
 The only difference between PTs and IPTs is that each node of an IPT has an associated number ---
@@ -480,16 +495,6 @@ Explicit submatch index is not used in IPTs.
           ${T}^i(t_1, \dots, t_n) \in \XIT_\Sigma$.
     \end{enumerate}
     \end{Xdef}
-
-\iffalse
-\begin{figure}\label{fig_mark_enum}
-\includegraphics[width=\linewidth]{img/mark_enum.pdf}
-\caption{
-The process of constructing IRE for RE $(\epsilon|a^{0,\infty})(\epsilon|a)^{0,\infty} )$
-and the result visualized as a tree.
-}
-\end{figure}
-\fi
 
 The operator $\IPT: \XIR_\Sigma \rightarrow 2^{\XIT_\Sigma}$ gives the set of all IPTs denoted by the given IRE:
 %(its definition is very similar to the one of operator $PT$):
@@ -521,6 +526,9 @@ is the subset of $Pos(t)$ containing positions of subtrees with nonzero submatch
 $Sub(t) = \{ p \mid \exists t|_p = s^i \text{ such that } i \neq 0 \}$.
 Examples of IPT can be seen on figure \ref{fig_parse_trees}.
 
+\FloatBarrier
+
+\iffalse
 \begin{figure}\label{fig_parse_trees}
 \includegraphics[width=\linewidth]{img/trees.pdf}
 \caption{
@@ -535,6 +543,7 @@ $s <_1 u$,
 $u <_{1.1} t$.
 }
 \end{figure}
+\fi
 
 %    \begin{Xdef}
 %    \emph{Lexicographic order on positions.}
