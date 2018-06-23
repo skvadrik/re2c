@@ -25,8 +25,8 @@
 \begin{scope}[xshift=0.5in, yshift=0in]
     \node (a) {\small{
     $\begin{aligned}
-        & mark (((\epsilon|a^{0,\infty})(\epsilon|a)^{0,\infty} ))) = \big[ \\
-        & \quad mark ( (\epsilon|a^{0,\infty})(\epsilon|a)^{0,\infty} ) ) = \big[ \\
+        & mark (((\epsilon|a^{0,\infty})(a|\epsilon)^{0,3} ))) = \big[ \\
+        & \quad mark ( (\epsilon|a^{0,\infty})(a|\epsilon)^{0,3} ) ) = \big[ \\
         %
         & \quad\quad mark ( (\epsilon|a^{0,\infty}) ) = \big[ \\
         & \quad\quad mark ( \epsilon|a^{0,\infty} ) = \big[ \\
@@ -37,22 +37,22 @@
         & \quad\quad\quad \big] = (0,0,(0,0,\epsilon) \mid (0,0,(0,0,a)^{0,\infty})) \\
         & \quad\quad \big] = (1,1,(0,0,\epsilon)|(0,0,(0,0,a)^{0,\infty})) \\
         %
-        & \quad\quad mark ( (\epsilon|a)^{0,\infty} ) = \big[ \\
-        & \quad\quad\quad mark ( (\epsilon|a) ) = \big[ \\
-        & \quad\quad\quad\quad mark ( \epsilon|a ) = \big [ \\
-        & \quad\quad\quad\quad\quad mark ( \epsilon ) = (0,0,\epsilon) \\
+        & \quad\quad mark ( (a|\epsilon)^{0,3} ) = \big[ \\
+        & \quad\quad\quad mark ( (a|\epsilon) ) = \big[ \\
+        & \quad\quad\quad\quad mark ( a|\epsilon ) = \big [ \\
         & \quad\quad\quad\quad\quad mark ( a ) = (0,0,a) \\
-        & \quad\quad\quad\quad \big] = (0,0,(0,0,\epsilon)|(0,0,a)) \\
-        & \quad\quad\quad \big] = (1,1,(0,0,\epsilon) \mid (0,0,a)) \\
-        & \quad\quad \big] = (1,0,(1,1,(0,0,\epsilon) \mid (0,0,a))^{0,\infty}) \\
+        & \quad\quad\quad\quad\quad mark ( \epsilon ) = (0,0,\epsilon) \\
+        & \quad\quad\quad\quad \big] = (0,0,(0,0,a) \mid (0,0,\epsilon)) \\
+        & \quad\quad\quad \big] = (1,1,(0,0,a) \mid (0,0,\epsilon)) \\
+        & \quad\quad \big] = (1,0,(1,1,(0,0,a) \mid (0,0,\epsilon))^{0,3}) \\
         %
         & \quad\big] = (1,0,
            (1,1,(0,0,\epsilon) \mid (0,0,(0,0,a)^{0,\infty})) \\
-           & \quad\quad\quad\quad \cdot (1,0,(1,1,(0,0,\epsilon) \mid (0,0,a))^{0,\infty})
+           & \quad\quad\quad\quad \cdot (1,0,(1,1,(0,0,a) \mid (0,0,\epsilon))^{0,3})
            ) \\
         & \big] = (1,1,
            (1,1,(0,0,\epsilon) \mid (0,0,(0,0,a)^{0,\infty})) \\
-           & \quad\quad\quad \cdot (1,0,(1,1,(0,0,\epsilon) \mid (0,0,a))^{0,\infty})
+           & \quad\quad\quad \cdot (1,0,(1,1,(0,0,a) \mid (0,0,\epsilon))^{0,3})
            )
     \end{aligned}$
     }};
@@ -63,7 +63,7 @@
     $\begin{aligned}
         & enum (1,1,(1,1,
             (1,1,(0,0,\epsilon) \mid (0,0,(0,0,a)^{0,\infty})) \\
-            & \quad\quad\quad\quad\quad \cdot (1,0,(1,1,(0,0,\epsilon) \mid (0,0,a))^{0,\infty}))) = \big[ \\
+            & \quad\quad\quad\quad\quad \cdot (1,0,(1,1,(0,0,a) \mid (0,0,\epsilon))^{0,3}))) = \big[ \\
         & \quad enum (2,2,(1,1,(0,0,\epsilon) \mid (0,0,(0,0,a)^{0,\infty}))) = \big[ \\
         & \quad\quad enum (3,3,(0,0,\epsilon)) = (3,3,(0,0,\epsilon)) \\
         & \quad\quad enum (3,3,(0,0,(0,0,a)^{0,\infty})) = \big[ \\
@@ -71,40 +71,27 @@
         & \quad\quad \big] = (3,3,(0,0,(0,0,a)^{0,\infty})) \\
         & \quad \big] = (3,3,(2,2,(0,0,\epsilon) \mid (0,0,(0,0,a)^{0,\infty}))) \\
         %
-        & \quad enum (3,3, (1,0,(1,1,(0,0,\epsilon) \mid (0,0,a))^{0,\infty}) ) = \big[ \\
-        & \quad\quad enum (4,3, (1,1,(0,0,\epsilon) \mid (0,0,a)) ) = \big[ \\
-        & \quad\quad\quad enum (5,4, (0,0,\epsilon) ) = (0,0,\epsilon) \\
+        & \quad enum (3,3, (1,0,(1,1,(0,0,a) \mid (0,0,\epsilon))^{0,3}) ) = \big[ \\
+        & \quad\quad enum (4,3, (1,1,(0,0,a) \mid (0,0,\epsilon)) ) = \big[ \\
         & \quad\quad\quad enum (5,4, (0,0,a) ) = (0,0,a) \\
-        & \quad\quad \big] = (5,4,(4,3,(0,0,\epsilon) \mid (0,0,a))) \\
-        & \quad \big] = (5,4,(3,0,(4,3,(0,0,\epsilon) \mid (0,0,a))^{0,\infty})) \\
+        & \quad\quad\quad enum (5,4, (0,0,\epsilon) ) = (0,0,\epsilon) \\
+        & \quad\quad \big] = (5,4,(4,3,(0,0,a) \mid (0,0,\epsilon))) \\
+        & \quad \big] = (5,4,(3,0,(4,3,(0,0,a) \mid (0,0,\epsilon))^{0,3})) \\
         %
         & \big] = (5,4,(1,1,
             (2,2,(0,0,\epsilon) \mid (0,0,(0,0,a)^{0,\infty})) \\
-            & \quad\quad\quad\quad\quad \cdot (3,0,(4,3,(0,0,\epsilon) \mid (0,0,a))^{0,\infty})
+            & \quad\quad\quad\quad\quad \cdot (3,0,(4,3,(0,0,a) \mid (0,0,\epsilon))^{0,3})
             )) \\
         \\
         \\
-        & \IRE ((\epsilon|a^{0,\infty})(\epsilon|a)^{0,\infty} )) = \\
+        & \IRE ((\epsilon|a^{0,\infty})(a|\epsilon)^{0,3} )) = \\
         & \quad\quad\quad = (1,1, (2,2,(0,0,\epsilon) \mid (0,0,(0,0,a)^{0,\infty})) \\
-            & \quad\quad\quad\quad\quad\quad \cdot (3,0,(4,3,(0,0,\epsilon) \mid (0,0,a))^{0,\infty}))
+            & \quad\quad\quad\quad\quad\quad \cdot (3,0,(4,3,(0,0,a) \mid (0,0,\epsilon))^{0,3}))
         \\
         \\
         \end{aligned}$
     }};
 \end{scope}
-
-\iffalse
-\begin{scope}[xshift=4in, yshift=-2in]
-    \node[draw=none]
-    {\small{
-    $\begin{aligned}
-    & \IRE ((\epsilon|a^{0,\infty})(\epsilon|a)^{0,\infty} )) = \\
-    & \quad\quad\quad = (1,1, (2,2,(0,0,\epsilon) \mid (0,0,(0,0,a)^{0,\infty})) \\
-        & \quad\quad\quad\quad\quad\quad \cdot (3,0,(4,3,(0,0,\epsilon) \mid (0,0,a))^{0,\infty}))
-    \end{aligned}$
-    }};
-\end{scope}
-\fi
 
 \begin{scope}[xshift=2.5in, yshift=-2.4in]
     \graph [tree layout, grow=down, fresh nodes] {
@@ -115,7 +102,7 @@
                     "${(0, 0, a)}_{1.2.1}$"[draw=none]
                 }
             },
-            "${(3, 0, \{0,\infty\})}_{2}$" -- {
+            "${(3, 0, \{0,3\})}_{2}$" -- {
                 "${(4, 3, |)}_{2.1}$" -- {
                     "${(0, 0, a)}_{2.1.1}$"[draw=none],
                     "${(0, 0, \epsilon)}_{2.1.2}$"[draw=none]
