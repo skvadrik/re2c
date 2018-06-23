@@ -1,57 +1,46 @@
-- synthesize rathar than inherit
-- examples for how mark + enum work
 - more examples
+
 - root position always has nonzero explicit submatch index
+
 - double explicit submatch group that maps to the same implicit submatch group: ((...)) is collapsed in mark() and enum ()
-- example of tracing mark() and enum()
-- This is what I had to do in GOR correcness proof anyway --- first get rid of epsilon-loops (aka "problematic" paths), then prove right distributivity of comparison over concatenation for the rest. In the presence of epsilon-loops right distributivity doesn't hold --- I can give an example when a < b, but ac > bc (but then neither ac, nor bc correspond to the minimal path, so wrong comparison results for a and b does not cause any trouble). (We shall say it in the paper and mention the example, I think.
-- A:
-    The paragraph after theorem 1 states that we obtain the Okui ordering by replacing sub with pos.
-    I am thinking of it because Okui ranks missing positions in a tree with a norm that is -1, while we rank it infinite.
-  Me:
-    Rephrase that paragrapgh to say that the minimal tree for fully-tagged trees is included
-    in the class of minimal trees for partially-tagged trees.
 
+- This is what I had to do in GOR correcness proof anyway --- first get rid of epsilon-loops (aka "problematic" paths),
+  then prove right distributivity of comparison over concatenation for the rest. In the presence of epsilon-loops
+  right distributivity doesn't hold --- I can give an example when a < b, but ac > bc (but then neither ac, nor bc
+  correspond to the minimal path, so wrong comparison results for a and b does not cause any trouble). (We shall
+  say it in the paper and mention the example, I think.
 
+- The definition of lastht() and first() mentions the case in which the argument begins with a letter.
+  However, they seems to be applied only to frames (that do not contain letters). Are there cases in
+  which they are applied to something other than frames?
 
-> The definition of lastht() and first() mentions the case in
-> which the argument begins with a letter.
-> However, they seems to be applied only to frames (that do not
-> contain letters). Are there cases in
-> which they are applied to something other than frames?
+- P.S. I am still a bit uncertain about the usefulness of the subdivision in frames of PEs. Its usefulness is
+  obvious in the case of Okui's PAT because them have sequences of parentheses on the arcs, corresponding
+  to frames (and have no closure to be done). But in our case we have GOR1 that compares fragments
+  of PEs that are not frames, and still uses a notion of rho that is somehow different.
+  So, my question is how will we make use of frames in our context?
 
+- I was thinking how to demonstrate Theorem 1. This is an attempt to do it.
+  Taken two distinct trees s and t, since the norms are defined over Pos(s) union Pos(t),
+  then it is either s < t or t < s (i.e. the ordering is total). Suppose WLOG it is s < t. Then, there is a position p
+  for which ||s||_p > ||t||_p and all preceding positions have equal norms. Clearly, it cannot also be t < s.
 
-> P.S. I am still a bit uncertain about the usefulness of the
-> subdivision in frames of PEs. Its usefulness is
-> obvious in the case of Okui's PAT because them have sequences of
-> parentheses on the arcs, corresponding
-> to frames (and have no closure to be done). But in our case we
-> have GOR1 that compares fragments
-> of PEs that are not frames, and still uses a notion of rho that
-> is somehow different.
-> So, my question is how will we make use of frames in our context?
-
-
-
-
-
-> I was thinking how to demonstrate Theorem 1. This is an attempt to do it.
-> 
-> Taken two distinct trees s and t, since the norms are defined over
-> Pos(s) union Pos(t),
-..well, strictly speaking, norms are defined everywhere: that's one of the differences with Okui definition of the norm, and it comes in really handy in the proof of theorem 2 (the one that states that partial order on IRE is a strict weak order): without that extension of the norm to the infinite set of possible positions, the proofs get twice as long (because we have to track domains everywhere and prove obvious things that follow from fact that ||s||_p = ||t||_p if p is not in Pos(s) and not in Pos(t)).
-> then it is either s < t or t < s (i.e. the ordering is total).
-> Suppose it is s < t. Then, there is a position p for which ||s||_p >
-> ||t||_p and all preceding
-> positions have equal norms. Clearly, it cannot also be t < s.
-..agreed..
-> Suppose it is t < s, then for the same reason, it cannot be s < t.
-> Then, the ordering is strict.
-..this is, I think, not needed: we just need to say, "without loss of generality, suppose that s < t".
-I will put that in the paper.
-
-
-
-OKUI SLIDES!!!
-
-
+- here are some examples to show why we define the norm as we do in Definition 4, and the rho and
+  subsetting as we do in Definitions 7-10.
+     (a|ε)* string a
+           s: T^1(T^2(a^0))
+           t: T^1(T^2(a^0,ε^0))
+           s < t  because the norm for position 1.2 is infinite since it is missing
+           it shows subsetting: the first tree has one branch less
+     (a|aa)* string aa
+           s: T^1(T^2(T^3(a^0,a^0)))
+           t: T^1(T^2(T^3(a^0),T^4(a^ 0)))
+           s < t because the norm at position 1 is 2 > that of the other, which is 1
+           it shows the first tree has the branch for the second a further away from the
+           root than the second (bigger rho)
+     a|a   string a
+           s: T^1(a^0,Φ^0)
+           t: T^1(Φ^0,a^0)
+           s < t because the norm at position 1 is > of the other which is -1 (missing alternative)
+           it shows subsetting: the second tree has one null branch where the first has a
+           non-null one

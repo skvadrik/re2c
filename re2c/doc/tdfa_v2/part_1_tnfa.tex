@@ -362,7 +362,10 @@ The function $\IRE : \XR_\Sigma \rightarrow \XIR_\Sigma$ transforms REs into IRE
 It is defined via a composition of two functions,
 $mark$ that transforms REs into IREs with submatch indices in the boolean range $\{0, 1\}$,
 and $enum$ that substitutes boolean indices with consecutive numbers:
-$\IRE(e) = r$ where $(\Xund, \Xund, r) = enum(1, 1, mark(e))$.
+$\IRE(e) = r$ where $(\Xund, \Xund, r) = enum(1, 1, mark((e)))$.
+Note the extra pair of parentheses around $e$:
+according to the POSIX standard the root sub-RE is always the submatch group number zero,
+even if it has no explicit parentheses.
 
     \begin{align*}
     &\begin{aligned}
@@ -411,78 +414,77 @@ and adding parentheses around subexpressions with nonzero explicit submatch inde
 Therefore RE and IRE are equivalent representations.
 \\
 
-\iffalse
-Below is an example of IRE construction for RE $(\epsilon|a^{0,\infty})(\epsilon|a)^{0,\infty} )$
-(the resulting IRE can be seen on figure \ref{fig_parse_trees}):
-
-    \begin{align*}
-    &\begin{aligned}
-        & mark ( (\epsilon|a^{0,\infty})(\epsilon|a)^{0,\infty} ) ) = \big[ \\
-        %
-        & \quad mark ( (\epsilon|a^{0,\infty}) ) = \big[ \\
-        & \quad mark ( \epsilon|a^{0,\infty} ) = \big[ \\
-        & \quad\quad\quad mark ( \epsilon ) = (0,0,\epsilon), \\
-        & \quad\quad\quad mark ( a^{0,\infty} ) = \big[ \\
-        & \quad\quad\quad\quad mark ( a ) = (0,0,a) \\
-        & \quad\quad\quad \big] = (0,0,(0,0,a)^{0,\infty}) \\
-        & \quad\quad \big] = (0,0,(0,0,\epsilon) \mid (0,0,(0,0,a)^{0,\infty})) \\
-        & \quad \big] = (1,1,(0,0,\epsilon)|(0,0,(0,0,a)^{0,\infty})) \\
-        %
-        & \quad mark ( (\epsilon|a)^{0,\infty} ) = \big[ \\
-        & \quad\quad mark ( (\epsilon|a) ) = \big[ \\
-        & \quad\quad\quad mark ( \epsilon|a ) = \big [ \\
-        & \quad\quad\quad\quad mark ( \epsilon ) = (0,0,\epsilon) \\
-        & \quad\quad\quad\quad mark ( a ) = (0,0,a) \\
-        & \quad\quad\quad \big] = (0,0,(0,0,\epsilon)|(0,0,a)) \\
-        & \quad\quad \big] = (1,1,(0,0,\epsilon) \mid (0,0,a)) \\
-        & \quad \big] = (1,0,(1,1,(0,0,\epsilon) \mid (0,0,a))^{0,\infty}) \\
-        %
-        & \big] = (1,1,
-           (1,1,(0,0,\epsilon) \mid (0,0,(0,0,a)^{0,\infty})) \\
-           & \quad\quad\quad \cdot (1,0,(1,1,(0,0,\epsilon) \mid (0,0,a))^{0,\infty})
-           )
-    \end{aligned}
-    %
-    &&\begin{aligned}
-        & enum (1,1,(1,1,
-            (1,1,(0,0,\epsilon) \mid (0,0,(0,0,a)^{0,\infty})) \\
-            & \quad\quad\quad\quad\quad \cdot (1,0,(1,1,(0,0,\epsilon) \mid (0,0,a))^{0,\infty}))) = \big[ \\
-        & \quad enum (2,2,(1,1,(0,0,\epsilon) \mid (0,0,(0,0,a)^{0,\infty}))) = \big[ \\
-        & \quad\quad enum (3,3,(0,0,\epsilon)) = (3,3,(0,0,\epsilon)) \\
-        & \quad\quad enum (3,3,(0,0,(0,0,a)^{0,\infty})) = \big[ \\
-        & \quad\quad\quad enum (3,3,(0,0,a)) = (3,3,(0,0,a)) \\
-        & \quad\quad \big] = (3,3,(0,0,(0,0,a)^{0,\infty})) \\
-        & \quad \big] = (3,3,(2,2,(0,0,\epsilon) \mid (0,0,(0,0,a)^{0,\infty}))) \\
-        %
-        & \quad enum (3,3, (1,0,(1,1,(0,0,\epsilon) \mid (0,0,a))^{0,\infty}) ) = \big[ \\
-        & \quad\quad enum (4,3, (1,1,(0,0,\epsilon) \mid (0,0,a)) ) = \big[ \\
-        & \quad\quad\quad enum (5,4, (0,0,\epsilon) ) = (0,0,\epsilon) \\
-        & \quad\quad\quad enum (5,4, (0,0,a) ) = (0,0,a) \\
-        & \quad\quad \big] = (5,4,(4,3,(0,0,\epsilon) \mid (0,0,a))) \\
-        & \quad \big] = (5,4,(3,0,(4,3,(0,0,\epsilon) \mid (0,0,a))^{0,\infty})) \\
-        %
-        & \big] = (5,4,(1,1,
-           (2,2,(0,0,\epsilon) \mid (0,0,(0,0,a)^{0,\infty})) \\
-           & \quad\quad\quad\quad\quad \cdot (3,0,(4,3,(0,0,\epsilon) \mid (0,0,a))^{0,\infty})
-           ))
-    \end{aligned}
-    \end{align*}
-\fi
-
 %\iffalse
+%Below is an example of IRE construction for RE $(\epsilon|a^{0,\infty})(\epsilon|a)^{0,\infty} )$
+%(the resulting IRE can be seen on figure \ref{fig_parse_trees}):
+%
+%    \begin{align*}
+%    &\begin{aligned}
+%        & mark ( (\epsilon|a^{0,\infty})(\epsilon|a)^{0,\infty} ) ) = \big[ \\
+%        %
+%        & \quad mark ( (\epsilon|a^{0,\infty}) ) = \big[ \\
+%        & \quad mark ( \epsilon|a^{0,\infty} ) = \big[ \\
+%        & \quad\quad\quad mark ( \epsilon ) = (0,0,\epsilon), \\
+%        & \quad\quad\quad mark ( a^{0,\infty} ) = \big[ \\
+%        & \quad\quad\quad\quad mark ( a ) = (0,0,a) \\
+%        & \quad\quad\quad \big] = (0,0,(0,0,a)^{0,\infty}) \\
+%        & \quad\quad \big] = (0,0,(0,0,\epsilon) \mid (0,0,(0,0,a)^{0,\infty})) \\
+%        & \quad \big] = (1,1,(0,0,\epsilon)|(0,0,(0,0,a)^{0,\infty})) \\
+%        %
+%        & \quad mark ( (\epsilon|a)^{0,\infty} ) = \big[ \\
+%        & \quad\quad mark ( (\epsilon|a) ) = \big[ \\
+%        & \quad\quad\quad mark ( \epsilon|a ) = \big [ \\
+%        & \quad\quad\quad\quad mark ( \epsilon ) = (0,0,\epsilon) \\
+%        & \quad\quad\quad\quad mark ( a ) = (0,0,a) \\
+%        & \quad\quad\quad \big] = (0,0,(0,0,\epsilon)|(0,0,a)) \\
+%        & \quad\quad \big] = (1,1,(0,0,\epsilon) \mid (0,0,a)) \\
+%        & \quad \big] = (1,0,(1,1,(0,0,\epsilon) \mid (0,0,a))^{0,\infty}) \\
+%        %
+%        & \big] = (1,1,
+%           (1,1,(0,0,\epsilon) \mid (0,0,(0,0,a)^{0,\infty})) \\
+%           & \quad\quad\quad \cdot (1,0,(1,1,(0,0,\epsilon) \mid (0,0,a))^{0,\infty})
+%           )
+%    \end{aligned}
+%    %
+%    &&\begin{aligned}
+%        & enum (1,1,(1,1,
+%            (1,1,(0,0,\epsilon) \mid (0,0,(0,0,a)^{0,\infty})) \\
+%            & \quad\quad\quad\quad\quad \cdot (1,0,(1,1,(0,0,\epsilon) \mid (0,0,a))^{0,\infty}))) = \big[ \\
+%        & \quad enum (2,2,(1,1,(0,0,\epsilon) \mid (0,0,(0,0,a)^{0,\infty}))) = \big[ \\
+%        & \quad\quad enum (3,3,(0,0,\epsilon)) = (3,3,(0,0,\epsilon)) \\
+%        & \quad\quad enum (3,3,(0,0,(0,0,a)^{0,\infty})) = \big[ \\
+%        & \quad\quad\quad enum (3,3,(0,0,a)) = (3,3,(0,0,a)) \\
+%        & \quad\quad \big] = (3,3,(0,0,(0,0,a)^{0,\infty})) \\
+%        & \quad \big] = (3,3,(2,2,(0,0,\epsilon) \mid (0,0,(0,0,a)^{0,\infty}))) \\
+%        %
+%        & \quad enum (3,3, (1,0,(1,1,(0,0,\epsilon) \mid (0,0,a))^{0,\infty}) ) = \big[ \\
+%        & \quad\quad enum (4,3, (1,1,(0,0,\epsilon) \mid (0,0,a)) ) = \big[ \\
+%        & \quad\quad\quad enum (5,4, (0,0,\epsilon) ) = (0,0,\epsilon) \\
+%        & \quad\quad\quad enum (5,4, (0,0,a) ) = (0,0,a) \\
+%        & \quad\quad \big] = (5,4,(4,3,(0,0,\epsilon) \mid (0,0,a))) \\
+%        & \quad \big] = (5,4,(3,0,(4,3,(0,0,\epsilon) \mid (0,0,a))^{0,\infty})) \\
+%        %
+%        & \big] = (5,4,(1,1,
+%           (2,2,(0,0,\epsilon) \mid (0,0,(0,0,a)^{0,\infty})) \\
+%           & \quad\quad\quad\quad\quad \cdot (3,0,(4,3,(0,0,\epsilon) \mid (0,0,a))^{0,\infty})
+%           ))
+%    \end{aligned}
+%    \end{align*}
+%\fi
+
 \begin{figure}\label{fig_mark_enum}
 \includegraphics[width=\linewidth]{img/mark_enum.pdf}
 \caption{
-The process of constructing IRE for RE $(\epsilon|a^{0,\infty})(\epsilon|a)^{0,\infty} )$ using $mark$ and $enum$,\\
-the resulting IRE and examples of IPT for it.
+An example of constructing IRE for RE $(\epsilon|a^{0,\infty})(\epsilon|a)^{0,\infty} )$ using $mark$ and $enum$\\
+and some examples of IPT for the resulting IRE.
 }
 \end{figure}
-%\fi
 
 Just like REs denote sets of PTs, IREs denote sets of \emph{IPTs} --- \emph{indexed parse trees}.
 The only difference between PTs and IPTs is that each node of an IPT has an associated number ---
 the implicit submatch index inherited from the corresponding IRE node (denoted with a superscript).
 Explicit submatch index is not used in IPTs.
+Examples of IPTs can be seen on figure \ref{fig_mark_enum}.
 
     \begin{Xdef}
     \emph{Indexed parse trees (IPT)} over finite alphabet $\Sigma$, denoted $\XIT_\Sigma$, are:
@@ -521,30 +523,36 @@ The operator $\IPT: \XIR_\Sigma \rightarrow 2^{\XIT_\Sigma}$ gives the set of al
             \end{cases}
     \end{align*}
 
-The set of \emph{submatch positions} of an IPT $t$
-is the subset of $Pos(t)$ containing positions of subtrees with nonzero submatch index:
-$Sub(t) = \{ p \mid \exists t|_p = s^i \text{ such that } i \neq 0 \}$.
-Examples of IPT can be seen on figure \ref{fig_parse_trees}.
+IPTs have the same notion of \emph{positions} as PTs.
+Additionally, they have the notion of \emph{submatch positions}:
+for a given IPT $t$ the set of submatch positions is defined as
+$Sub(t) = \{ p \mid \exists t|_p = s^i \wedge i \neq 0 \}$.
+In other words, $Sub(t)$ is a subset of $Pos(t)$ that contains positions of subtrees with nonzero implicit submatch index.
+Intuitively, this is the set of positions that are important for submatch extraction:
+in the case of ambiguity we do not need to consider the full trees,
+just the relevant parts of them.
+%
+The definition of norm for IPTs is the same as for PTs, except that $Sub(t)$ is used instead of $Pos(t)$:
 
 \FloatBarrier
 
-\iffalse
-\begin{figure}\label{fig_parse_trees}
-\includegraphics[width=\linewidth]{img/trees.pdf}
-\caption{
-IRE and examples of IPTs for RE $(\epsilon|a^{0,\infty})(a|\epsilon)^{0,\infty}$ and string $a$.\\
-Partial order:
-$s \prec_1 t$,
-$s \prec_1 u$,
-$t \prec_{2.2} u$.
-Total order:
-$s <_1 t$,
-$s <_1 u$,
-$u <_{1.1} t$.
-}
-\end{figure}
-\fi
-
+%\iffalse
+%\begin{figure}\label{fig_parse_trees}
+%\includegraphics[width=\linewidth]{img/trees.pdf}
+%\caption{
+%IRE and examples of IPTs for RE $(\epsilon|a^{0,\infty})(a|\epsilon)^{0,\infty}$ and string $a$.\\
+%Partial order:
+%$s \prec_1 t$,
+%$s \prec_1 u$,
+%$t \prec_{2.2} u$.
+%Total order:
+%$s <_1 t$,
+%$s <_1 u$,
+%$u <_{1.1} t$.
+%}
+%\end{figure}
+%\fi
+%
 %    \begin{Xdef}
 %    \emph{Lexicographic order on positions.}
 %    Given positions $p = p_1. \dots .p_n$ and $q = q_1. \dots q_m$, we say that $p < q$ iff either
@@ -559,105 +567,53 @@ $u <_{1.1} t$.
         \begin{cases}
             -1          &\text{if } p \in Sub(t) \text{ and } t|_p = \varnothing^i  \\
             |str(t|_p)| &\text{if } p \in Sub(t) \text{ and } t|_p = s^i \text{ where } s \neq \varnothing \\
-            \infty      &\text{if } p \not\in Sub(t) \text{ and }
+            \infty      &\text{if } p \not\in Sub(t)
         \end{cases}
     $$
     \end{Xdef}
 
-In other words, the norm is infinite for all positions not in $Sub(t)$,
-and for positions in $Sub(t)$ it depends on the form of subtree:
-for nil subtrees it equals $-1$,
-and for other subtrees it equals the number of symbols.
-We shorten $\|t\|_\Lambda$ as $\|t\|$.
+%In other words, the norm is infinite for all positions not in $Sub(t)$,
+%and for positions in $Sub(t)$ it depends on the form of subtree:
+%for nil subtrees it equals $-1$,
+%and for other subtrees it equals the number of symbols.
+%We shorten $\|t\|_\Lambda$ as $\|t\|$.
+
+The definition of order on IPTs is exactly the same as on PTs:
 
     \begin{Xdef}\label{order_on_parse_trees}
-    \emph{Order on parse trees.}
+    \emph{Order on IPTs.}
     Given parse trees $t, s \in PT(e, w)$, we say that $t <_p s$ w.r.t. \emph{desision position} $p$ % $p \in Sub(t) \cup Sub(s)$
     iff $\|t\|_p > \|s\|_p$ and $\|t\|_q = \|s\|_q \; \forall q < p$.
-    (Note that we do not explicitly demand that $p, q \in Sub(t) \cup Sub(s)$:
-    if this is not the case, the norms of both subtrees are $\infty$ and thus equal.)
     We say that $t < s$ iff $t <_p s$ for some $p$.
-    If neither $t < s$, nor $s < t$, we say that $t$ and $s$ are \emph{incomparable}: $t \sim s$.
     \end{Xdef}
 
-    \begin{XLem}\label{lemma_ptorder_antisymmetry}
-    The order on parse trees is antisymmetric: if $t < s$, then $s \not< t$.
-    \\
-    Proof.
-    Suppose, on the contrary, that $t <_p s$ and $s <_q t$ for some $p$, $q$.
-    Without loss of generality let $p \leq q$.
-    On one hand $t <_p s$ implies $\|t\|_p > \|s\|_p$.
-    On the other hand $s <_q t$ implies $\|t\|_p \leq \|s\|_p$.
-    Contradicting the assumption.
-    $\square$
-    \end{XLem}
+As in the case of PTs, we do not explicitly demand that $p, q \in Sub(t) \cup Sub(s)$:
+if this is not true, then the norms of both subtrees are $\infty$ and therefore equal.
+However, unlike PTs, the order on IPTs is not total:
+there might be two distinct IPTs that coincide in all submatch positions, yet differ in some non-submatch positions.
+For such trees the order is not defined: none of them is less than the other one.
+From submatch perspective, these trees are indistinguishable
+and therefore called \emph{incomparable}:
 
-    \begin{XLem}\label{lemma_ptorder_transitivity}
-    The order on parse trees is transitive: if $t < s$ and $s < u$, then $t < u$.
-    \\
-    Proof.
-    Let $t <_p s$ and $s <_q u$ for some positions $p$, $q$, and let $r = min (p, q)$.
+    \begin{Xdef}\label{order_on_parse_trees}
+    IPTs $t$ and $s$ are \emph{incomparable}, denoted $t \sim s$,
+    iff neither $t < s$, nor $s < t$.
+    \end{Xdef}
 
-    \medskip
+Incomparability relation is an equivalence relation: it is
+reflexive (obviously $s \sim s$),
+symmetric (obviously $s \sim t$ implies $t \sim s$) and
+transitive (lemma \ref{lemma_ptorder_transitivity_of_incomparability} in appendix shows that $s \sim t \wedge t \sim u$ implies $s \sim u$).
+Therefore all IPTs of a given RE can be partitioned into \emph{incomparability classes}.
+%
+Unlike the case of PTs, where the minimal PT is unique,
+in case of IPTs there is whole class of minimal trees:
+$\IPT_{min}(r,w) = \{ t \in \IPT(r,w) \mid \forall u \in \IPT(r,w) : t \sim u \vee t < u \}$.
 
-    First, we show that $\|t\|_r > \|u\|_r$.
-    If $p \leq q$, we have $\|t\|_p > \|s\|_p$ (implied by $t <_p s$)
-    and $\|s\|_p \geq \|u\|_p$ (implied by conjunction $s <_q u \wedge p \leq q$),
-    therefore $\|t\|_p > \|u\|_p$.
-    Otherwise $p > q$, we have $\|s\|_q > \|u\|_q$ (implied by $s <_q u$)
-    and $\|t\|_q = \|s\|_q$ (implied by conjunction $t <_p s \wedge q < p$),
-    therefore $\|t\|_q > \|u\|_q$.
-
-    \medskip
-
-    Second, we show that $\forall r' < r$ it holds that $\|t\|_{r'} = \|u\|_{r'}$.
-    We have $\|t\|_{r'} = \|s\|_{r'}$ (implied by conjunction $t <_p s \wedge r' < p$)
-    and $\|s\|_{r'} = \|u\|_{r'}$ (implied by conjunction $s <_q u \wedge r' < q$),
-    therefore $\|t\|_{r'} = \|u\|_{r'}$.
-    $\square$
-    \end{XLem}
-
-    \begin{XLem}\label{incomparability_equivdef}
-    $t \sim s \Leftrightarrow \; \forall p : \|t\|_p = \|s\|_p$.
-    \\
-    Proof.
-
-    $\Rightarrow$. %First, we show $t \sim s \Rightarrow \forall p : \|t\|_p = \|s\|_p$.
-    Suppose, on the contrary, that $\exists p = min \{ q \mid \|t\|_q \neq \|s\|_q \}$,
-    then either $t <_p s$ (if $\|t\|_p > \|s\|_p$), or $s <_p t$ (if $\|t\|_p < \|s\|_p$).
-    Both cases contradict $t \sim s$.
-
-    \medskip
-
-    $\Leftarrow$.
-    $\forall p : \|t\|_p = \|s\|_p$ implies
-    $\nexists p : t <_p s$ and $\nexists q : s <_q t$,
-    which implies $t \sim s$.
-    $\square$
-    \end{XLem}
-
-    \begin{XLem}\label{lemma_ptorder_transitivity_of_incomparability}
-    Incomparability relation on parse trees is transitive: if $t \sim s$ and $s \sim u$, then $t \sim u$.
-    \\
-    Proof.
-    By lemma \ref{incomparability_equivdef} we have
-    $t \sim s \Rightarrow \forall p : \|t\|_p = \|s\|_p$ and
-    $s \sim u \Rightarrow \forall p : \|s\|_p = \|u\|_p$,
-    therefore by lemma \ref{incomparability_equivdef} $\forall p : \|t\|_p = \|u\|_p \Rightarrow t \sim u$.
-    $\square$
-    \end{XLem}
-
-    \begin{XThe}
-    Relation $<$ is strict weak order on parse trees.
-    \\
-    \medskip
-    Proof.
-    It follows from
-    lemma \ref{lemma_ptorder_antisymmetry},
-    lemma \ref{lemma_ptorder_transitivity} and
-    lemma \ref{lemma_ptorder_transitivity_of_incomparability}.
-    $\square$
+    \begin{XThe}\label{theorem_order_on_IPTs}
+    Relation $<$ is strict weak order on IPTs.
     \end{XThe}
+
 
 If in Definition \ref{norm_of_parse_tree} and Definition \ref{order_on_parse_trees}
 we use $Pos(t)$ instead of $Sub(t)$, then our strict weak order $<$
@@ -756,7 +712,7 @@ if the norms of all preceding submatch positions are equal.
     $\square$
     \end{XThe}
 
-\section{Parenthezised expressions}
+\section{Parenthesized expressions}
 
 In this section we introduce linearised representation of parse trees: \emph{parenthesized expressions}.
 %The structure of the section follows \cite{OS13},
@@ -846,7 +802,7 @@ the index of the first distinct pair of frames is called \emph{fork}.
 %    $$
     If neither $\alpha \sqsubset \beta$, nor $\beta \sqsubset \alpha$,
     then $\alpha$, $\beta$ are \emph{longest-equivalent}: $\alpha \sim \beta$
-    (note that in this case $\rho_i > \rho'_i \; \forall i = \overline {1, n}$).
+    (note that in this case $\rho_i = \rho'_i \; \forall i = \overline {1, n}$).
     \end{Xdef}
 
     \begin{Xdef}\label{prec2}
@@ -1864,6 +1820,87 @@ Sub-TNFA for individual sub-RT with submatch groups: \\
 The final algorithm, complexity estimates.
 
 \section{Conclusions}
+
+\FloatBarrier
+\pagebreak
+
+\section*{Appendix}
+
+\subsection*{Proof of Theorem \ref{theorem_order_on_IPTs}}
+
+    \begin{XLem}\label{lemma_ptorder_antisymmetry}
+    The order on IPTs is antisymmetric: if $t < s$, then $s \not< t$.
+    \\
+    Proof.
+
+    Suppose, on the contrary, that $t <_p s$ and $s <_q t$ for some $p$, $q$.
+    Without loss of generality let $p \leq q$.
+    On one hand $t <_p s$ implies $\|t\|_p > \|s\|_p$.
+    On the other hand $s <_q t$ implies $\|t\|_p \leq \|s\|_p$.
+    Contradicting the assumption.
+    $\square$
+    \end{XLem}
+
+    \begin{XLem}\label{lemma_ptorder_transitivity}
+    The order on IPTs is transitive: if $t < s$ and $s < u$, then $t < u$.
+    \\
+    Proof.
+
+    Let $t <_p s$ and $s <_q u$ for some positions $p$, $q$, and let $r = min (p, q)$.
+    \\[-1em]
+
+    First, we show that $\|t\|_r > \|u\|_r$.
+    If $p \leq q$, we have $\|t\|_p > \|s\|_p$ (implied by $t <_p s$)
+    and $\|s\|_p \geq \|u\|_p$ (implied by conjunction $s <_q u \wedge p \leq q$),
+    therefore $\|t\|_p > \|u\|_p$.
+    Otherwise $p > q$, we have $\|s\|_q > \|u\|_q$ (implied by $s <_q u$)
+    and $\|t\|_q = \|s\|_q$ (implied by conjunction $t <_p s \wedge q < p$),
+    therefore $\|t\|_q > \|u\|_q$.
+    \\[-1em]
+
+    Second, we show that $\forall r' < r$ it holds that $\|t\|_{r'} = \|u\|_{r'}$.
+    We have $\|t\|_{r'} = \|s\|_{r'}$ (implied by conjunction $t <_p s \wedge r' < p$)
+    and $\|s\|_{r'} = \|u\|_{r'}$ (implied by conjunction $s <_q u \wedge r' < q$),
+    therefore $\|t\|_{r'} = \|u\|_{r'}$.
+    $\square$
+    \end{XLem}
+
+    \begin{XLem}\label{incomparability_equivdef}
+    $t \sim s \Leftrightarrow \; \forall p : \|t\|_p = \|s\|_p$.
+    \\
+    Proof.
+
+    $\Rightarrow$. %First, we show $t \sim s \Rightarrow \forall p : \|t\|_p = \|s\|_p$.
+    Suppose, on the contrary, that $\exists p = min \{ q \mid \|t\|_q \neq \|s\|_q \}$,
+    then either $t <_p s$ (if $\|t\|_p > \|s\|_p$), or $s <_p t$ (if $\|t\|_p < \|s\|_p$).
+    Both cases contradict $t \sim s$.
+    \\[-1em]
+
+    $\Leftarrow$.
+    $\forall p : \|t\|_p = \|s\|_p$ implies
+    $\nexists p : t <_p s$ and $\nexists q : s <_q t$,
+    which implies $t \sim s$.
+    $\square$
+    \end{XLem}
+
+    \begin{XLem}\label{lemma_ptorder_transitivity_of_incomparability}
+    Incomparability relation on parse trees is transitive: if $t \sim s$ and $s \sim u$, then $t \sim u$.
+    \\
+    Proof.
+
+    By lemma \ref{incomparability_equivdef} we have
+    $t \sim s \Rightarrow \forall p : \|t\|_p = \|s\|_p$ and
+    $s \sim u \Rightarrow \forall p : \|s\|_p = \|u\|_p$,
+    therefore by lemma \ref{incomparability_equivdef} $\forall p : \|t\|_p = \|u\|_p \Rightarrow t \sim u$.
+    $\square$
+    \end{XLem}
+
+The proof of theorem \ref{theorem_order_on_IPTs}
+follows from
+the lemma \ref{lemma_ptorder_antisymmetry},
+the lemma \ref{lemma_ptorder_transitivity} and
+the lemma \ref{lemma_ptorder_transitivity_of_incomparability}.
+
 
 \end{document}
 
