@@ -248,8 +248,8 @@ Each RE denotes a set of PTs given by the operator $PT: \XR_\Sigma \rightarrow 2
         PT( (r) ) &= PT(r)
     \end{align*}
 
-The \emph{string} induced by a tree $t$, denoted $str(t)$, is the concatenation of all alphabet symbols in the left-to-right traversal of $t$.
-For an RT $r$ and a string $w$, we write $PT(r, w)$ to denote the set $\{ t \in PT(r) \mid str(t) = w \}$
+The \emph{string} induced by a PT $t$, denoted $str(t)$, is the concatenation of all alphabet symbols in the left-to-right traversal of $t$.
+For a RE $r$ and a string $w$, we write $PT(r, w)$ to denote the set $\{ t \in PT(r) \mid str(t) = w \}$
 (note that this set is potentially infinite).
 
     \begin{Xdef}\label{ambiguity_of_parse_trees}
@@ -257,7 +257,7 @@ For an RT $r$ and a string $w$, we write $PT(r, w)$ to denote the set $\{ t \in 
     $\square$
     \end{Xdef}
 
-Following \cite{OS13}, we assign \emph{positions} to the nodes of RT and PT.
+Following \ref{OS13}, we assign \emph{positions} to the nodes of RE and PT.
 The root position is $\Lambda$, and position of the $i$-th subtree of a tree with position $p$ is $p.i$.
 The \emph{length} of position $p$, denoted $|p|$, is defined as $0$ for $\Lambda$ and $|p| + 1$ for $p.i$.
 %The set of all positions is denoted $\XP$.
@@ -270,14 +270,14 @@ The set of all positions of a tree $t$ is denoted $Pos(t)$.
 
     \begin{Xdef}\label{norm_of_parse_tree}
     The \emph{norm} of PT $t$ at position $p$ is:
-    $$
-    \|t\|_p =
+    \begin{align*}
+    \|t\|_p &=
         \begin{cases}
             -1          &\text{if } p \in Pos(t) \text{ and } t|_p = \varnothing  \\
             |str(t|_p)| &\text{if } p \in Pos(t) \text{ and } t|_p \neq \varnothing \\
             \infty      &\text{if } p \not\in Pos(t)
         \end{cases}
-    $$
+    \end{align*}
     \end{Xdef}
 
 We shorten $\|t\|_\Lambda$ as $\|t\|$.
@@ -291,24 +291,27 @@ if a tree $s$ has a subtree $s|_p$ corresponding to an empty repetition,
 and another tree $t$ has no subtree at position $p$ ($p \not\in Pos(t)$),
 then the infinite norm $\|t\|_p$ ``outranks'' $\|s\|_p$.
 
-    \begin{Xdef}\label{order_on_parse_trees}
-    \emph{Order on parse trees.}
-    Given parse trees $t, s \in PT(e, w)$, we say that $t <_p s$ w.r.t. \emph{desision position} $p$ % $p \in Sub(t) \cup Sub(s)$
+    \begin{Xdef}\label{order_on_PTs}
+    \emph{Order on PTs.}
+    Given parse trees $t, s \in PT(e, w)$, we say that $t \lessdot_p s$ w.r.t. \emph{desision position} $p$ % $p \in Sub(t) \cup Sub(s)$
     iff $\|t\|_p > \|s\|_p$ and $\|t\|_q = \|s\|_q \; \forall q < p$.
-    We say that $t < s$ iff $t <_p s$ for some $p$.
+    We say that $t \lessdot s$ iff $t \lessdot_p s$ for some $p$.
     \end{Xdef}
 
-Note that in the definition \ref{order_on_parse_trees}
+Note that in the definition \ref{order_on_PTs}
 we do not explicitly demand that $p, q \in Pos(t) \cup Pos(s)$:
 if this is not the case, the norms of both subtrees are $\infty$ and thus equal.
+Also note that our definition of order differs from the one given by Okui and Suzuki \ref{OS13}:
+we define order on the whole set of PTs,
+while they defined it on a finite subset of PTs called \emph{canonical parse trees (CPTs)} ---
+a subset of PTs that do not contain subtrees corresponding to optional empty repetitions.
+We extend their definition to non-canonical PTs.
 
     \begin{XThe}
-    Relation $<$ is strict total order on parse trees.
-    \\
-    \medskip
-    Proof. YET TO BE GIVEN
-    $\square$
+    Relation $\lessdot$ is strict total order on PTs.
     \end{XThe}
+
+
 
 \section{Partially Ordered Parse Trees}
 
@@ -366,7 +369,6 @@ $\IRE(e) = r$ where $(\Xund, \Xund, r) = enum(1, 1, mark((e)))$.
 Note the extra pair of parentheses around $e$:
 according to the POSIX standard the root sub-RE is always the submatch group number zero,
 even if it has no explicit parentheses.
-
     \begin{align*}
     &\begin{aligned}
         mark &: \XR_\Sigma \longrightarrow \XIR_\Sigma \\
@@ -484,6 +486,10 @@ Just like REs denote sets of PTs, IREs denote sets of \emph{IPTs} --- \emph{inde
 The only difference between PTs and IPTs is that each node of an IPT has an associated number ---
 the implicit submatch index inherited from the corresponding IRE node (denoted with a superscript).
 Explicit submatch index is not used in IPTs.
+%
+As for PTs, $str(t)$ denotes the string formed by concatenation of all alphabet symbols in the left-to-right traversal of $t$,
+and $\IPT(r, w) = \{ t \in \IPT(r) \mid str(t) = w \}$ is the set of all IPTs for an IRE $r$ and a string $w$.
+%
 Examples of IPTs can be seen on figure \ref{fig_mark_enum}.
 
     \begin{Xdef}
@@ -593,7 +599,7 @@ However, unlike PTs, the order on IPTs is not total:
 there might be two distinct IPTs that coincide in all submatch positions, yet differ in some non-submatch positions.
 For such trees the order is not defined: none of them is less than the other one.
 From submatch perspective, these trees are indistinguishable
-and therefore called \emph{incomparable}:
+and therefore called \emph{incomparable}.
 
     \begin{Xdef}\label{order_on_parse_trees}
     IPTs $t$ and $s$ are \emph{incomparable}, denoted $t \sim s$,
@@ -607,110 +613,49 @@ transitive (lemma \ref{lemma_ptorder_transitivity_of_incomparability} in appendi
 Therefore all IPTs of a given RE can be partitioned into \emph{incomparability classes}.
 %
 Unlike the case of PTs, where the minimal PT is unique,
-in case of IPTs there is whole class of minimal trees:
+in case of IPTs there is a whole class of minimal trees:
 $\IPT_{min}(r,w) = \{ t \in \IPT(r,w) \mid \forall u \in \IPT(r,w) : t \sim u \vee t < u \}$.
 
     \begin{XThe}\label{theorem_order_on_IPTs}
-    Relation $<$ is strict weak order on IPTs.
+    Relation $<$ is a strict weak order on IPTs.
     \end{XThe}
 
+What is the relation between the total order $\lessdot$ on PTs and the partial order $<$ on IPTs?
+Or, put otherwise, are the two orders ``compatible'' in the sense that
+the relation between any pair of comparable IPTs is the same as the relation between the corresponding pair of PTs?
+To answer this question, let us first formalize the correspondence between PTs and IPTs.
+Namely, the operator $unindex : \XIT_\Sigma \rightarrow \XT_\Sigma$ transforms IPTs to PTs by erasing submatch indices:
+    \begin{align*}
+        unindex(x^i)                  &= x \text{ where } x \in \{ \varnothing, \epsilon \} \cup \Sigma \\
+        unindex(T^i(t_1, \hdots, t_n) &= T(unindex(t_1), \hdots, unindex(t_n))
+    \end{align*}
 
-If in Definition \ref{norm_of_parse_tree} and Definition \ref{order_on_parse_trees}
-we use $Pos(t)$ instead of $Sub(t)$, then our strict weak order $<$
-coincides with Okui-Suzuki strict total order on parse trees \cite{OS13} (we denote the latter with $<^{os}$).
-%TODO: the existense of minimal element remains to be shown, as we don't have CPT.
-While it is not true in general that $<^{os}$ is an extension of $<$
-(see the counterexample on figure \ref{fig_parse_trees}),
-the two orders are compatible in the sense that the $<^{os}$-minimal tree
-is included in the class of $<$-minimal trees.
-Intuitively, this means that if we keep ``refining'' submatch results
-by adding parentheses in subexpressions,
-we will gradually narrow down the class of $<$-minimal trees,
-until we are left with a single $<^{os}$-minimal tree.
-Theorem \ref{lemma_order_compat} shows this,
-and lemma \ref{lemma_subtrees} shows that comparison of subtrees is justified
-if the norms of all preceding submatch positions are equal.
+It is easy to see that for a given RE $r$ and string $w$
+we have $PT(r,w) = \{ unindex(t) \mid t \in \IPT(\IRE(r), w) \}$.
+%
+We show by example that the orders on PTs and IPTs are not necessarily ``compatible''.
+Consider IPTs $t$ and $u$ on figure \ref{fig_mark_enum}.
+On one hand, we have $t <_{2.2} u$, because $\|t\|_{2.2} = \infty > 0 = \|u\|_{2.2}$ and norms at all preceding submatch positions agree.
+On the other hand, $unindex(u) \lessdot_{1.1} unindex(t)$, because $\|unindex(t)\|_{1.1} = -1 < 0 = \|unindex(u)\|_{1.1}$
+and norms at all preceding positions agree.
+%
+However, the two orders are ``compatible'' in a weaker sense of the word:
+they agree on the notion of the minimal tree --- a fact that is formalized by theorem \ref{theorem_order_compat}.
+%
+This is an important result becuse it means that
+if we keep refining submatch granularity by tunrning more and more sub-RE into submatch groups,
+we will continuously narrow down the class of $<$-minimal trees,
+until we are left with a unique $\lessdot$-minimal tree.
+In practice this means that adding a few parentheses in RE will not drastically change the previous results of submatch extraction;
+it will only add more details.
 
-    \begin{XLem}\label{lemma_subtrees}
-    If $t, s \in PT(r, w)$ and $\exists p \in Sub(t) \cup Sub(s)$ such that $\|t\|_q = \|s\|_q \; \forall q \leq p$,
-    then $\exists \widetilde{r}, \widetilde{w} : t|_p, s|_p \in PT(\widetilde{r}, \widetilde{w})$.
-    \\
-    Proof.
-    By induction on position $p$.
-
-    \medskip
-
-    Induction basis: the case of $p = \Lambda$ is trivial: let $\widetilde{r} = r$, $\widetilde{w} = w$.
-
-    \medskip
-
-    Induction step: we have $|p| > 0$, let $p = p'.i$, where $i \in \YN$.
-    Let $t' = t|_{p'} = P(t_1, \dots, t_n)$,
-        $s' = s|_{p'} = P(s_1, \dots, s_m)$.
-    By induction hypothesis $\exists r', w' : t', s' \in PT(r', w')$,
-    where $w' = str(t_1) \dots str(t_n) = str(s_1) \dots str(s_m)$.
-
-    \medskip
-
-    Next, we show that $str(t_i) = str(s_i)$.
-    It must be that $i \in Sub(s') \cap Sub(t')$,
-    otherwise only one of $\|t'\|_i$, $\|s'\|_i$ is $\infty$,
-    which contradicts lemma condiiton $\|t\|_p = \|s\|_p$.
-    Consider position $j \leq i$.
-    Because the set of submatch positions contains siblings, we have $j \in Sub(s') \cap Sub(t')$.
-    Consequently, $\|t'\|_j = |str(t_j)|$ and $\|s\|_j = |str(s_j)|$.
-    By lemma condition we have $\|t\|_{p'.j} = \|s\|_{p'.j}$,
-    therefore $\|t'\|_j = \|s'\|_j$,
-    therefore $|str(t_j)| = |str(s_j)|$.
-    Because $str(t_1) \dots str(t_n) = str(s_1) \dots str(s_m)$,
-    we have $str(t_i) = str(s_i)$.
-
-    \medskip
-
-    Now, let $\widetilde{w} = str(t_i)$.
-    If $r' = r_1|r_2$ or $r' = r_1 r_2$, let $\widetilde{r} = r_i$.
-    Otherwise, $r' = r_1^{k,l}$, let $\widetilde{r} = r_1$.
-    $\square$
-    \end{XLem}
-
-    \begin{XThe}\label{lemma_order_compat}
-    For a set of parse trees $P = PT(r, w)$,
-    let $s$ be the $<^{os}$-minimal tree,
-    and $P_{min} = \{ t \in P \mid \forall u \in P : t = u \vee t < u \}$ the class of $<$-minimal trees.
-    Then $s \in P_{min}$.
-%    let $s$ be the $\prec$-minimal tree: $s = min_{<^{os}} P$,
-%    and $t$ one of the $<$-minimal trees: $t \in \{ u \in P \mid \forall u' \in P : u = u' \vee u < u' \}$.
-%    Then $s \sim t$.
-    \\
-    Proof.
-
-    Consider any $t \in P_{min}$.
-    For each position $p \in Sub(t)$ which is not itself a prefix of another position in $Sub(t)$,
-    consider subtree $t' = t|_p$.
-    It is a parse tree for some subexpression $r'$ and substring $w'$: $t' \in PT(r', w')$.
-    Let $t''$ be the $<^{os}$-minimal tree in $PT(r', w')$ and substitute $t'$ with $t''$ in $t$.
-    (Note that substitutions are independent and can be performed in any order.)
-    Let $u$ be the tree resulting from all such substitutions.
-    By lemma \ref{incomparability_equivdef} we have $u \sim t$
-    (substitutions preserve the norm of subtrees at positions in $Sub(t)$),
-    and so $u \in P_{min}$.
-
-    \medskip
-
-    Next, we show that $u = s$.
-    Suppose, on the contrary, that $u \neq s$.
-    Then, on one hand, $u <_q s$ for some $q \in Sub(s) \cup Sub(u)$ (because $u \in P_{min}$).
-    On the other hand, $s <^{os}_p u$ for some $p \in Pos(s) \cup Pos(u)$, such that $p < q$ (because $s$ is $<^{os}$-minimal).
-    Let $p = p'.p''$, where $p'$ is the longest prefix of $p$ in $Sub(s) \cup Sub(u)$.
-    It must be $\|u\|_{q'} = \|s\|_{q'} \forall q' \leq p'$ (because $p' < q$ and $u <_q s$),
-    and $p' \in Sub(u)$ (otherwise $\|u\|_{p'} = \infty \neq \|s\|_{p'}$).
-    Now, by lemma \ref{lemma_subtrees} we have $\exists r', w' : u|_{p'}, s|_{p'} \in PT(r', w')$,
-    therefore $s <^{os}_{p'.p''} u$ implies $s|_{p'} <^{os}_{p''} u|_{p'}$.
-    But $p' \in Sub(u)$ and $p'$ is not itself a prefix of another position in $Sub(u)$,
-    therefore $u|_{p'}$ is $<^{os}$-minimal by construction of $u$.
-    Contradiction.
-    $\square$
+    \begin{XThe}\label{theorem_order_compat}
+    For a RE $r$ and string $w$,
+    let $s$ be the $\lessdot$-minimal PT in $PT(r,w)$
+    and let $P_{min}$ be the class of the $<$-minimal trees in $\IPT(\IRE(r),w)$.
+    Then there is an IPT $u \in P_{min}$ such that $unindex(u) = s$.
     \end{XThe}
+
 
 \section{Parenthesized expressions}
 
@@ -1900,6 +1845,89 @@ follows from
 the lemma \ref{lemma_ptorder_antisymmetry},
 the lemma \ref{lemma_ptorder_transitivity} and
 the lemma \ref{lemma_ptorder_transitivity_of_incomparability}.
+
+
+\subsection*{Proof of Theorem \ref{theorem_order_compat}}
+
+First, we prove an auxilary lemma \ref{lemma_subtrees} which
+shows that comparison of sub-IPT is justified
+if the norms at all preceding submatch positions are equal.
+
+    \begin{XLem}\label{lemma_subtrees}
+    If $t, s \in PT(r, w)$ and $\exists p \in Sub(t) \cup Sub(s)$ such that $\|t\|_q = \|s\|_q \; \forall q \leq p$,
+    then $\exists \widetilde{r}, \widetilde{w} : t|_p, s|_p \in PT(\widetilde{r}, \widetilde{w})$.
+    \\
+    Proof.
+    By induction on position $p$.
+
+    \medskip
+
+    Induction basis: the case of $p = \Lambda$ is trivial: let $\widetilde{r} = r$, $\widetilde{w} = w$.
+
+    \medskip
+
+    Induction step: we have $|p| > 0$, let $p = p'.i$, where $i \in \YN$.
+    Let $t' = t|_{p'} = P(t_1, \dots, t_n)$,
+        $s' = s|_{p'} = P(s_1, \dots, s_m)$.
+    By induction hypothesis $\exists r', w' : t', s' \in PT(r', w')$,
+    where $w' = str(t_1) \dots str(t_n) = str(s_1) \dots str(s_m)$.
+
+    \medskip
+
+    Next, we show that $str(t_i) = str(s_i)$.
+    It must be that $i \in Sub(s') \cap Sub(t')$,
+    otherwise only one of $\|t'\|_i$, $\|s'\|_i$ is $\infty$,
+    which contradicts lemma condiiton $\|t\|_p = \|s\|_p$.
+    Consider position $j \leq i$.
+    Because the set of submatch positions contains siblings, we have $j \in Sub(s') \cap Sub(t')$.
+    Consequently, $\|t'\|_j = |str(t_j)|$ and $\|s\|_j = |str(s_j)|$.
+    By lemma condition we have $\|t\|_{p'.j} = \|s\|_{p'.j}$,
+    therefore $\|t'\|_j = \|s'\|_j$,
+    therefore $|str(t_j)| = |str(s_j)|$.
+    Because $str(t_1) \dots str(t_n) = str(s_1) \dots str(s_m)$,
+    we have $str(t_i) = str(s_i)$.
+
+    \medskip
+
+    Now, let $\widetilde{w} = str(t_i)$.
+    If $r' = r_1|r_2$ or $r' = r_1 r_2$, let $\widetilde{r} = r_i$.
+    Otherwise, $r' = r_1^{k,l}$, let $\widetilde{r} = r_1$.
+    $\square$
+    \end{XLem}
+
+Now, we give the proof of the theorem \ref{theorem_order_compat}.
+\\[-1em]
+
+    Consider any $t \in P_{min}$.
+    For each position $p \in Sub(t)$ which is not itself a prefix of another position in $Sub(t)$,
+    consider subtree $t' = t|_p$.
+    It is a parse tree for some subexpression $r'$ and substring $w'$: $t' \in \IPT(r', w')$.
+    Let $t''$ be the $<^{os}$-minimal tree in $\IPT(r', w')$ and substitute $t'$ with $t''$ in $t$.
+    (Note that substitutions are independent and can be performed in any order.)
+    Let $u$ be the tree resulting from all such substitutions.
+    By lemma \ref{incomparability_equivdef} we have $u \sim t$
+    (substitutions preserve the norm of subtrees at positions in $Sub(t)$),
+    and so $u \in P_{min}$.
+\\[-1em]
+
+    Next, we show that $unindex(u) = s$.
+    Let $\widetilde{u} = unindex(u)$.
+    Suppose, on the contrary, that $\widetilde{u} \neq s$.
+    Then there is some other IPT $\widetilde{s}$ such that $unindex(\widetilde{s}) = s$.
+    %
+    On one hand, $u <_q \widetilde{s}$ for some submatch position $q$ (because $u \in P_{min}$).
+    On the other hand, $s \lessdot_p \widetilde{u}$ for some non-submatch position $p < q$ (because $s$ is $\lessdot$-minimal).
+    %
+    Let $p = p'.p''$, where $p'$ is the longest prefix of $p$ in $Sub(\widetilde{s}) \cup Sub(u)$.
+    It must be $\|u\|_{q'} = \|\widetilde{s}\|_{q'} \forall q' \leq p'$ (because $p' < q$ and $u <_q \widetilde{s}$),
+    and $p' \in Sub(u)$ (otherwise $\|u\|_{p'} = \infty \neq \|\widetilde{s}\|_{p'}$).
+    %
+    Now, by lemma \ref{lemma_subtrees} we have $\exists r', w' : u|_{p'}, \widetilde{s}|_{p'} \in PT(r', w')$,
+    therefore $s \lessdot_{p'.p''} u$ implies $s|_{p'} \lessdot_{p''} \widetilde{u}|_{p'}$.
+    But $p' \in Sub(u)$ and $p'$ is not itself a prefix of another position in $Sub(u)$,
+    therefore $\widetilde{u}|_{p'}$ is $\lessdot$-minimal by construction of $u$.
+    Contradiction.
+    $\square$
 
 
 \end{document}

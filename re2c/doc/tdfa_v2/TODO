@@ -44,3 +44,14 @@
            s < t because the norm at position 1 is > of the other which is -1 (missing alternative)
            it shows subsetting: the second tree has one null branch where the first has a
            non-null one
+
+- Lemma 5. I think that it could be useful to add a couple of lines to explain it, otherwise the reader would not
+  understand its usefulness. Basically, it says that there isa RE e, a string w, and two trees for it, s and t,
+  which are identical up to a position p. Then it sais, that in such a case there is another RE (r~) and another
+  string (w~) and that the subtrees of t and s at position p belong to the trees of this new RE and string.
+
+- again on Lemma 5: last line, I suggest to add: Then r~ can be defined as follows: if r'= r1|r2 ...
+
+- The question is that Okui defined the ordering on trees that are a bit different from ours (and
+  that were similar to our PTs rather than to IPTs). Perhaps we should tell how his trees correspond to ours?
+
