@@ -24,7 +24,7 @@ extern YYSTYPE yylval;
 #define	YYCURSOR	cur
 #define	YYLIMIT		lim
 #define	YYMARKER	mar
-#define	YYCTXMARKER ctx
+#define	YYCTXMARKER	ctx
 #define	YYFILL(n)	{ fill (n); }
 
 namespace re2c
@@ -38,7 +38,7 @@ namespace re2c
 */
 
 /*!re2c
-zero    = "\000";
+eof     = "\000";
 dstring = "\"" ((. \ [\\"] ) | "\\" .)* "\"";
 sstring = "'"  ((. \ [\\'] ) | "\\" .)* "'" ;
 letter  = [a-zA-Z];
@@ -133,13 +133,14 @@ echo:
 		goto echo;
 	}
 
-	zero {
+	eof {
 		if (cur != eof) goto echo;
 		out.wraw(tok, ptr);
 		return Stop;
 	}
 
 	eol space* "#" space* "line" space+ / lineinf {
+		out.wraw(tok, ptr + 1);
 		set_sourceline();
 		goto echo;
 	}
@@ -158,7 +159,7 @@ void Scanner::lex_end_of_comment(OutputFile &out)
 {
 	uint32_t ignored = 0;
 	for (;;) {/*!re2c
-		zero { fatal_lc(get_cline(), get_column(), "expected end of block"); }
+		eof { fatal_lc(get_cline(), get_column(), "expected end of block"); }
 
 		*    { continue; }
 		eol  { ++ignored; continue; }
@@ -416,7 +417,7 @@ code:
 					cline++;
 					goto code;
 				}
-	zero		{
+	eof		{
 					if (cur == eof)
 					{
 						if (depth)
@@ -609,17 +610,18 @@ sourceline:
 	}
 
 	dstring {
-		in.escaped_file_name = std::string (tok + 1, tok_len () - 2); // -2 to omit quotes
+		in.escaped_file_name = std::string (tok + 1, tok_len () - 2); // strip quotes
 		strrreplace (in.escaped_file_name, "\\", "\\\\");
 		goto sourceline;
 	}
 
-	"\n" {
-		if (cur == eof) {
-			--cur;
-		} else {
-			pos = cur;
-		}
+	eol {
+		tok = cur;
+		return;
+	}
+
+	eof {
+		--cur;
 		tok = cur;
 		return;
 	}
