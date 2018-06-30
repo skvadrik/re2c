@@ -55,3 +55,18 @@
 - The question is that Okui defined the ordering on trees that are a bit different from ours (and
   that were similar to our PTs rather than to IPTs). Perhaps we should tell how his trees correspond to ours?
 
+- Lemma 1, last line. Before "If r' ..." I would suggest to add: "Then r~ can be defined as follows."
+
+- Theorem 2: I think that is proof is just above it. Perhaps we should move it below.
+
+- in Figure 3. closure() is missing
+
+- >    Hmm... I think that would be hard, and also needless effort.
+  I was trying to prevent a question from some reviewer. Well, we could tell that we deliver an unspecified one that provides the correct submatches.
+
+- >    You mean, mentioning that the user can specify the set of the implicit
+  >    submatch indices using a different mechanism than parentheses?
+  Yes, this is what tagged automata are all about: letting the user specify the parts for which the submatch has to
+  be delivered. What I mean is that our algorithm can do it, and this is more general than Posix subexpressions.
+  Indeed, it can go from full-parsing to any user-defined submatch extraction.
+

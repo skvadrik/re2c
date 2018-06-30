@@ -347,7 +347,7 @@ If both indices are non-zero, then the sub-RE is a submatch group.
 Indices are convenient because they allow us to consider individual sub-REs
 without loosing the submatch context of the whole RE.
 We call this representation \emph{indexed regular expressions (IREs)}.
-An example of IRE can be seen on figure \ref{fig_parse_trees}.
+%An example of IRE can be seen on figure \ref{fig_parse_trees}.
 
     \begin{Xdef}
     \emph{Indexed regular expressions (IREs)} over finite alphabet $\Sigma$, denoted $\XIR_\Sigma$, are:
@@ -479,8 +479,8 @@ Therefore RE and IRE are equivalent representations.
 \begin{figure}\label{fig_mark_enum}
 \includegraphics[width=\linewidth]{img/mark_enum.pdf}
 \caption{
-An example of constructing IRE for RE $(\epsilon|a^{0,\infty})(a|\epsilon)^{0,3} )$ using $mark$ and $enum$\\
-and some examples of IPT for the resulting IRE.
+An example of constructing IRE for RE $(\epsilon|a^{0,\infty})(a|\epsilon)^{0,3}$ using $mark$ and $enum$\\
+and some examples of IPT for the resulting IRE and string ``$a$''.
 }
 \end{figure}
 
@@ -643,9 +643,11 @@ it will only add more details.
     \begin{XThe}\label{theorem_order_compat}
     For an IRE $r$ and string $w$,
     let $t_{min}$ be the $<$-minimal tree in $\IPT(r,w)$
-    and let $T_{min}$ be the class of the $\prec$-minimal trees in $\IPT(r,w)$.
+    and let $T_{min} = \IPT_{min}(r,w)$ be the class of the $\prec$-minimal trees in $\IPT(r,w)$.
     Then $t_{min} \in T_{min}$.
     \end{XThe}
+
+In the rest of the paper the words ``order'' and ``norm`` refer to s-order and s-norm.
 
 
 \section{Parenthesized expressions}
@@ -694,8 +696,8 @@ If $\alpha, \beta \in PE(r, w)$ for some $r$ and $w$, we say that $\alpha$ and $
 For PE $\alpha$, $\beta$,
 $\alpha \sqcap \beta$ denotes the longest common prefix of $\alpha$ and $\beta$,
 $\alpha \backslash \beta$ denotes the suffix of $\alpha$ after removing $\alpha \sqcap \beta$,
-$lastht(\alpha)$ denotes the height of the last parenthesis in $\alpha$ or $\infty$ if $\alpha$ is empty or begins with a letter,
-$minht(\alpha)$ denotes the minimal height of parenthesis in $\alpha$ or $\infty$ if $\alpha$ is empty or begins with a letter,
+$lasth(\alpha)$ denotes the height of the last parenthesis in $\alpha$ or $\infty$ if $\alpha$ is empty or begins with a letter,
+$minh(\alpha)$ denotes the minimal height of parenthesis in $\alpha$ or $\infty$ if $\alpha$ is empty or begins with a letter,
 $first(\alpha)$ denotes the first parenthesis in $\alpha$ or $\bot$ if $\alpha$ is empty or begins with a letter.
 Each PE $\alpha$ can be represented as $\alpha_0 a_1 \alpha_1 \dots a_n \alpha_n$,
 where $\alpha_i$ is the $i$-th \emph{frame} --- the possibly empty sequence of parentheses between
@@ -712,13 +714,23 @@ the index of the first distinct pair of frames is called \emph{fork}.
     $$
     \rho_i = \begin{cases}
         -1 &\text{if } i < k \\
-        min (lastht (\alpha_i \sqcap \beta_i), minht(\alpha_i \backslash \beta_i)) &\text{if } i = k \\
-        min (\rho_{i-1}, minht(\alpha_i)) &\text{if } i > k
+        min (lasth (\alpha_i \sqcap \beta_i), minh(\alpha_i \backslash \beta_i)) &\text{if } i = k \\
+        min (\rho_{i-1}, minh(\alpha_i)) &\text{if } i > k
     \end{cases}
     $$
     We write $traces(\alpha, \beta)$ to denote $\big( trace (\alpha, \beta), trace (\beta, \alpha) \big)$.
-    $\square$
     \end{Xdef}
+
+\begin{figure}\label{fig_pe}
+\includegraphics[width=\linewidth]{img/pe.pdf}
+\caption{
+An example of PEs for IPTs from figure \ref{fig_mark_enum} and the computation of $traces$ for each pair of PEs.\\
+Here $\alpha \sqsubset \beta$ and $\alpha \sqsubset \gamma$, while
+$\beta \sim \gamma$ and $\beta \subset \gamma$,
+because $first (\beta \backslash \gamma) = \Xr < \Xl = first (\gamma \backslash \beta)$.
+Therefore $\alpha < \beta < \gamma$.
+}
+\end{figure}
 
     \begin{Xdef}\label{prec1}
     Let $\alpha$, $\beta$ be comparable PE and
@@ -786,356 +798,12 @@ the index of the first distinct pair of frames is called \emph{fork}.
 %    \end{align*}
     \end{Xdef}
 
-    \begin{XLem}\label{lemma_pe_order_antisymm}
-    The longest-leftmost-precedence relation $<$ is antisymmetric:
-    if $\alpha < \beta$, then $\beta \not< \alpha$.
-    \\
-    Proof.
-    Suppose, on the contrary, that $\alpha < \beta$ and $\beta < \alpha$.
-    Let $\big( (\rho_0, \dots, \rho_n), (\rho'_0, \dots, \rho'_n) \big) = traces(\alpha, \beta)$.
-
-    \medskip
-
-    If $\exists i = max \{j \mid \rho_j \neq \rho'_j \}$, then
-    $\alpha < \beta \implies \alpha \sqsubset \beta \implies \rho_i > \rho'_i$, but
-    $\beta < \alpha \implies \beta \sqsubset \alpha \implies \rho'_i > \rho_i$. Contradiction.
-
-    \medskip
-
-    Otherwise $\rho_i = \rho'_i \; \forall i$, then
-    $\alpha < \beta \implies \alpha \sim \beta \wedge \alpha \subset \beta$ and
-    $\beta < \alpha \implies \beta \sim \alpha \wedge \beta \subset \alpha$.
-    Let
-    $x = first (\alpha \backslash \beta)$,
-    $y = first (\beta \backslash \alpha)$, then
-    $\alpha \subset \beta \implies x < y$, but
-    $\beta \subset \alpha \implies y < x$. Contradiction.
-    $\square$
-    \end{XLem}
-
-
-    \begin{XLem}\label{lemma_pe_equiv}
-    Let $s, t \in PT(r, w)$.
-    If $s \sim t$, then $\Phi_{h}(h, s) = \Phi_{h}(t) \; \forall h$.
-    \\
-    Proof.
-    By induction on the height of $r$.
-
-    \medskip
-
-    Induction basis.
-    For RT of height $1$ we have
-    $| PT(r, w) | \leq 1 \; \forall w$,
-    therefore $s = t$ and $\Phi_{h}(s) = \Phi_{h}(t)$.
-
-    \medskip
-
-    Induction step.
-    We have
-    $s = T^{d} (s_1, \dots, s_n)$ and
-    $t = T^{d} (t_1, \dots, t_m)$.
-    If $d = 0$, then $\Phi_{h}(s) = str(s) = w = str(t) = \Phi_{h}(t)$.
-    Otherwise $d \neq 0$.
-    By lemma \ref{incomparability_equivdef} we have $s \sim t \Rightarrow \forall p: \|s\|_p = \|t\|_p$.
-    This implies $n = m$ (otherwise the norm of subtree at position $min(n,m)+1$ is $\infty$ for only one of $s$, $t$).
-    Therefore
-    $\Phi_{h}(s) = \Xl_{h+1} \Phi_{h+1}(s_1), \dots, \Phi_{h+1}(s_n) \Xr_h$ and
-    $\Phi_{h}(t) = \Xl_{h+1} \Phi_{h+1}(t_1), \dots, \Phi_{h+1}(t_n) \Xr_h$.
-%    Consider any $i \leq n$.
-    It suffices to show that $\forall i \leq n: \Phi_{h+1}(s_i) = \Phi_{h+1}(t_i)$.
-    We have $\forall p: \|s_i\|_p = \|t_i\|_p$ (implied by $\forall p: \|s\|_p = \|t\|_p$),
-    therefore by lemma \ref{incomparability_equivdef} we have $s_i \sim t_i$,
-    and by lemma \ref{lemma_subtrees} $\exists r', w': s_i, t_i \in PT(r', w')$,
-    where the height of $r'$ is less than the height of $r$.
-    By induction hypothesis $\Phi_{h+1}(s_i) = \Phi_{h+1}(t_i)$.
-    $\square$
-    \end{XLem}
-
-
-    \begin{XLem}\label{lemma_pe_less_1}
-    Let $s, t \in PT(r, w)$.
-    If $s <_p t$ and $|p| = 1$, then $\Phi_{h}(s) < \Phi_{h}(t) \; \forall h$.
-    \\
-    Proof.
-
-    By lemma conditions $|p| = 1$, which implies that $s$ and $t$ are compound PT
-    $s = T^{d} (s_1, \dots, s_n)$ and 
-    $t = T^{d} (t_1, \dots, t_m)$, where
-    $d \neq 0$
-    (because $\Lambda$ is a prefix of decision position $p$).
-    Therefore $\Phi_{h}(s)$, $\Phi_{h}(t)$ can be represented as follows,
-    where $k$ is the number of frames and $j$ is the fork:
-    \begin{alignat*}{7}
-        \Phi_{h}(s) &\;=\; \Xl_{h+1} &&\Phi_{h+1}(s_1) &&\dots &&\Phi_{h+1}(s_n) \Xr_h
-            &&\;=\; \beta_0 a_1 \dots a_j \beta_j &&\;\big|\; && \gamma_j a_{j + 1} \dots a_k \gamma_k \\[-0.5em]
-        \Phi_{h}(t) &\;=\; \Xl_{h+1} &&\Phi_{h+1}(t_1) &&\dots &&\Phi_{h+1}(t_m) \Xr_h
-            &&\;=\; \beta_0 a_1 \dots a_j \beta_j &&\;\big|\; && \delta_j a_{j + 1} \dots a_k \delta_k
-    \end{alignat*}
-%
-    By lemma conditions $|p| = 1$, therefore $p \in \YN$.
-    Consider any $i \in \YN$ such that $i < p$.
-    By lemma conditions $s <_p t$, which means
-    $\|s\|_p > \|t\|_p \wedge \|s\|_q = \|t\|_q \;\forall q < p$.
-    In particular $\|s_i\|_q = \|t_i\|_q \;\forall q$,
-    therefore by lemma \ref{incomparability_equivdef} $s_i \sim t_i$
-    and by lemma \ref{lemma_pe_equiv} we have $\Phi(s_i) = \Phi(t_i)$.
-    Let $traces (\Phi_{h}(s), \Phi_{h}(t)) = \big( (\rho_0, \dots, \rho_k), (\rho'_0, \dots, \rho'_k) \big)$
-    and consider the following cases.
-
-    \medskip
-
-    First case:
-    $\infty = \|s_p\| > \|t_p\|$.
-    In this case $s|_p$ does not exist
-    (because $p$ corresponds to a submatch position in $r$,
-    therefore $p \in Pos(s)$ implies $p \in Sub(s)$,
-    which contradicts $\|s_p\| = \infty$).
-    Fork happens immediately after $\Phi_{h+1}(s_{p-1})$, $\Phi_{h+1}(t_{p-1})$:
-    \begin{alignat*}{7}
-        \Phi_{h}(s) &\;=\; \Xl_{h+1} &&\Phi_{h+1}(s_1) &&\dots &&\Phi_{h+1}(s_{p-1})
-            &&\;\big|\; \Xr_{h}         &&      && \\[-0.5em]
-        \Phi_{h}(t) &\;=\; \Xl_{h+1} &&\Phi_{h+1}(t_1) &&\dots &&\Phi_{h+1}(t_{p-1})
-            &&\;\big|\; \Phi_{h+1}(t_p) &&\dots &&\Phi_{h+1}(t_m) \Xr_{h}
-    \end{alignat*}
-    %
-    In this case fork frame is the last frame: $j = k$, and therefore $\rho_j = \rho'_j = h$
-    (because $\gamma_j$ and $\delta_j$ contain the closing parenthesis $\Xr_{h}$).
-    For all $i < j$ we have $\rho_i = \rho'_i = -1$, therefore $\Phi_{h}(s) \sim \Phi_{h}(t)$.
-    Furthermore, $first(\gamma_j)$ is $\Xr$ and $first(\delta_j)$ is one of $\Xl$ and $\Xm$,
-    therefore $\Phi_{h}(s) \subset \Phi_{h}(t)$.
-    Consequently $\Phi_{h}(s) < \Phi_{h}(t)$.
-
-    \medskip
-
-    Second case: $\infty > \|s_p\| > \|t_p\| = -1$.
-    In this case both $s_p$ and $t_p$ exist,
-    $s_p$ is not $\varnothing$ and $t_p$ is $\varnothing$,
-    and fork happens immediately after $\Phi_{h+1}(s_{p-1})$, $\Phi_{h+1}(t_{p-1})$:
-    \begin{alignat*}{8}
-        \Phi_{h}(s) &\;=\; \Xl_{h+1} &&\Phi_{h+1}(s_1) &&\dots &&\Phi_{h+1}(s_{p-1})
-            &&\;\big|\; \Xl_{h+1} \; x \; \Xr_{h+1} \; &&\Phi_{h+1}(s_{p+1}) &&\dots &&\Phi_{h+1}(s_n) \Xr_{h} \\[-0.5em]
-        \Phi_{h}(t) &\;=\; \Xl_{h+1} &&\Phi_{h+1}(t_1) &&\dots &&\Phi_{h+1}(t_{p-1})
-            &&\;\big|\; \Xm_{h+1} \;\;\;\;\;\;         &&\Phi_{h+1}(t_{p+1}) &&\dots &&\Phi_{h+1}(t_m) \Xr_{h}
-    \end{alignat*}
-    %
-    If $j$-th frame is the last, we have $\rho_j = \rho'_j = h$ like in the first case.
-    Otherwise we have $\rho_j = \rho'_j = h + 1$,
-    because $minht(\gamma_j)$, $minht(\delta_j) \geq h + 1$
-    and $lastht (\beta_j) = h + 1$
-    (because if $p = 1$ then $\beta_j = \Xl_{h+1}$, otherwise
-    $s_{p-1}$ exists and the last parenthesis in $\beta_j$
-    is last parenthesis of $\Phi_{h+1}(s_{p-1})$, which is either $\Xr_{h+1}$ or $\Xm_{h+1}$).
-    For subsequent frames $i$ such that $j < i < k$ we have $\rho_i = \rho'_i = h + 1$
-    (because $minht(\gamma_j)$, $minht(\delta_j) \geq h + 1$),
-    and for the last pair of frames we have $\rho_k = \rho'_k = h$.
-    So in this case again $\Phi_{h}(s) \sim \Phi_{h}(t)$.
-    Furthermore, $first (\gamma_j) = \Xl < \Xm = first (\delta_j)$, therefore $\Phi_{h}(s) \subset \Phi_{h}(t)$
-    and $\Phi_{h}(s) < \Phi_{h}(t)$.
-
-    \medskip
-
-    Third case: $\infty > \|s_p\| > \|t_p\| \geq 0$.
-    In this case both $s_p$ and $t_p$ exist and none of them is $\varnothing$,
-    and fork happens somewhere after the opening parenthesis $\Xl$
-    and before the closing parenthesis $\Xr$ in $\Phi_{h}(s_p)$, $\Phi_{h}(t_p)$:
-    \begin{alignat*}{9}
-        \Phi_{h}(s) &\;=\; \Xl_{h+1} &&\Phi_{h+1}(s_1) &&\dots &&\Phi_{h+1}(s_{p-1}) &&\; \Xl_{h+2} \; x
-            &&\;\big|\; y \; \Xr_{h+1} \; &&\Phi_{h+1}(s_{p+1}) &&\dots &&\Phi_{h+1}(s_n) \Xr_{h} \\[-0.5em]
-        \Phi_{h}(t) &\;=\; \Xl_{h+1} &&\Phi_{h+1}(t_1) &&\dots &&\Phi_{h+1}(t_{p-1}) &&\; \Xl_{h+2} \; x
-            &&\;\big|\; z \; \Xr_{h+1} \; &&\Phi_{h+1}(t_{p+1}) &&\dots &&\Phi_{h+1}(t_m) \Xr_{h}
-    \end{alignat*}
-    %
-    Let $\delta_l$ be the frame containing the closing parenthesis $\Xr_{h+1}$ of $\Phi_{h+1}(t_p)$.
-    Because $\|s_p\| > \|t_p\|$,
-    the closing parenthesis $\Xr_{h+1}$ of $\Phi_{h+1}(s_p)$ is not contained in $\gamma_{l}$,
-    and $l$-th frame is not the last one.
-    Therefore $minht (\gamma_l) \geq h+2$ and $minht (\delta_l) = h+1$.
-    Furthermore, $minht(x)$, $minht(y)$, $minht(z) \geq h + 2$,
-    therefore $lastht(\beta_j) = lastht(\Xl_{h+2} \; x) \geq h+2$ and we have
-    $\rho_i, \rho'_i \geq h+2$ for all frames $j \leq i < l$
-    (note that it might be $\rho_i < \rho'_i$),
-    and for the $l$-th frame $\rho_l \geq h+2 > h+1 = \rho'_l$.
-    For subsequent frames $\gamma_i$, $\delta_i$ such that $l < i < k$ we have
-    $minht(\gamma_i)$, $minht(\delta_i) \geq h + 1$,
-    therefore $\rho_i \geq h+1 = \rho'_i$.
-    For the last pair of frames $\rho_k = \rho'_k = h$.
-    Therefore in this case $\Phi_{h}(s) \sqsubset \Phi_{h}(t)$,
-    which implies $\Phi_{h}(s) < \Phi_{h}(t)$.
-    $\square$
-    \end{XLem}
-
-
-    \begin{XLem}\label{lemma_pe_less}
-    Let $s, t \in PT(r, w)$.
-    If $s <_p t$, then $\Phi_{h}(s) < \Phi_{h}(t) \; \forall h$.
-    \\
-    Proof.
-    By induction on the length of $p$.
-
-    \medskip
-
-    Induction basis for $|p| = 1$ is given by lemma \ref{lemma_pe_less_1}.
-
-    \medskip
-
-    Induction step.
-    Let $|p| \geq 2$, then $s$ and $t$ are compound PT
-    $s = T^{d} (s_1, \dots, s_n)$ and
-    $t = T^{d} (t_1, \dots, t_m)$, where
-    $d \neq 0$ (because $\Lambda$ is a prefix of decision position $p$).
-    %
-    Furthermore, let $p = p'.p''$, where $p' \in \YN$.
-    Subtrees $s' = s_{p'}$ and $t' = t_{p'}$ exist, because $p'$ a proper prefix of decision position $p$,
-    and they also must be compount PT
-    $s' = T^{d'} (s'_1, \dots, s'_{n'})$ and
-    $t' = T^{d'} (t'_1, \dots, t'_{m'})$,
-    because $|p''| > 0$, and it must be
-    $d' \neq 0$ (because $p'$ is a prefix of decision position $p$).
-    %
-    For subtrees $s_i$ and $t_i$ where $i < p'$ we have
-    $\|s_i\|_q = \|t_i\|_q \;\forall q$ (implied by $s <_p t$),
-    therefore by lemma \ref{incomparability_equivdef}
-    $s_i \sim t_i$, and by lemma \ref{lemma_pe_equiv} we have $\Phi_{h+1}(s_i) = \Phi_{h+1}(t_i)$.
-    %
-    Therefore $\Phi_{h}(s)$, $\Phi_{h}(t)$ can be represented as follows:
-    \begin{alignat*}{9}
-        \Phi_{h}(s)
-            \;&=
-                \;&& \Xl_{h+1} \Phi_{h+1}(s_1) \dots \Phi_{h+1}(s_{p'-1})
-                \;&& \overbrace {\Xl_{h+2} \Phi_{h+2}(s'_1) \dots \Phi_{h+2}(s'_{n'}) \Xr_{h+1}}^{\Phi_{h+1}(s')}
-                \;&& \Phi_{h+1}(s_{p'+1}) \Phi_{h+1}(s_n) \Xr_{h}
-                \\
-        \Phi_{h}(t)
-            \;&=
-                \;&& \Xl_{h+1} \Phi_{h+1}(t_1) \dots \Phi_{h+1}(t_{p'-1})
-                \;&& \underbrace {\Xl_{h+2} \Phi_{h+2}(t'_1) \dots \Phi_{h+2}(t'_{m'}) \Xr_{h+1}}_{\Phi_{h+1}(t')}
-                \;&& \Phi_{h+1}(t_{p'+1}) \Phi_{h+1}(t_m) \Xr_{h}
-    \end{alignat*}
-
-    We have $\|s\|_q = \|t\|_q \;\forall q < p'$ (implied by $s <_p t$),
-    therefore by lemma \ref{lemma_subtrees} $\exists r', w' : s', t' \in PT(r', w')$.
-    Moreover, $s' <_{p''} t'$ and $|p''| < |p|$, therefore by induction hypothesis $\Phi_{p+1}(s') < \Phi_{p+1}(t')$.
-    %
-    On the other hand, if $j$ is the fork and $f \leq j \leq k$ then
-    $\Phi_{h}(s)$, $\Phi_{h}(t)$ can be represented as:
-    \begin{alignat*}{9}
-        \Phi_{h}(s)
-            \;&=
-                \;&& \beta_0 a_1 \dots a_f \beta_f^1
-                \;&& \overbrace {\beta_f^2  a_{f+1} \dots a_j \beta_j \;\big|\; \gamma_j a_{j+1} \dots a_k \gamma_k^1}^{\Phi_{h+1}(s')}
-                \;&& \gamma_k^2 a_{k+1} \dots a_l \gamma_l
-                \\[-0.5em]
-        \Phi_{h}(t)
-            \;&=
-                \;&& \beta_0 a_1 \dots a_f \beta_f^1
-                \;&& \underbrace {\beta_f^2  a_{f+1} \dots a_j \beta_j \;\big|\; \delta_j a_{j+1} \dots a_k \delta_k^1}_{\Phi_{h+1}(t')}
-                \;&& \delta_k^2 a_{k+1} \dots a_l \delta_l
-    \end{alignat*}
-
-%    \begin{alignat*}{9}
-%        \Phi_{h}(s)
-%            \;&=
-%                \;&&\overbrace  {\Xl_{h+1} \Phi_{h+1}(s_1) \dots \Phi_{h+1}(s_{p'-1})}
-%                    ^{\beta_0 a_1 \dots a_i \beta_i^1}
-%                \;&&\overbrace  {\Xl_{h+2} \Phi_{h+2}(s'_1) \dots \Phi_{h+2}(s'_{n'}) \Xr_{h+1}}
-%                    ^{\beta_i^2  a_{i+1} \dots a_j \beta_j \;\big|\; \gamma_j a_{j+1} \dots a_k \gamma_k^1}
-%                \;&&\overbrace  {\Phi_{h+1}(s_{p'+1}) \Phi_{h+1}(s_n) \Xr_{h}}
-%                    ^{\gamma_k^2 a_{k+1} \dots a_l \gamma_l}
-%                \\
-%        \Phi_{h}(t)
-%            \;&=
-%                \;&&\underbrace {\Xl_{h+1} \Phi_{h+1}(t_1) \dots \Phi_{h+1}(t_{p'-1})}
-%                    _{\beta_0 a_1 \dots a_i \beta_i^1}
-%                \;&&\underbrace {\Xl_{h+2} \Phi_{h+2}(t'_1) \dots \Phi_{h+2}(t'_{m'}) \Xr_{h+1}}
-%                    _{\beta_i^2  a_{i+1} \dots a_j \beta_j \;\big|\; \delta_j a_{j+1} \dots a_k \delta_k^1}
-%                \;&&\underbrace {\Phi_{h+1}(t_{p'+1}) \Phi_{h+1}(t_m) \Xr_{h}}
-%                    _{\delta_k^2 a_{k+1} \dots a_l \delta_l}
-%    \end{alignat*}
-
-    Let $traces (\Phi_{h}(s), \Phi_{h}(t)) = \big( (\rho_0, \dots, \rho_l), (\rho'_0, \dots, \rho'_l) \big)$
-    and $traces (\Phi_{h+1}(s'), \Phi_{h+1}(t')) = \big( (\sigma_h, \dots, \sigma_k), (\sigma'_h, \dots, \sigma'_k) \big)$.
-    %
-    We show that for frames $i$ such that $j \leq i < k$ we have
-    $\rho_i = \sigma_i \wedge \rho'_i = \sigma'_i$,
-    and for subsequent frames $k \leq i \leq l$ we have $\rho_i = \rho'_i$.
-
-    \medskip
-
-    First case: $i = j \leq k \leq l$ (the fork frame).
-    Because $\Phi_{h+1}(s')$ and $\Phi_{h+1}(t')$ have nonempty common prefix $\Xl_{h+2}$,
-    we have $lasht (\Phi_{h}(s) \sqcap \Phi_{h}(t)) = lastht (\Phi_{h+1}(s') \sqcap \Phi_{h+1}(t')) \geq h + 2$.
-    %
-    If $j < k$ then $minht (\gamma_j)$, $minht (\delta_j)$ are not affected by appending
-    $\gamma^2_k$, $\delta^2_k$ and therefore $\rho_j = \sigma_j \wedge \rho'_j = \sigma'_j$.
-    %
-    Else if $j = k < l$ then we have $minht (\gamma^1_k) = minht (\delta^1_k) = h + 1$ and
-    $minht (\gamma^2_k) = minht (\delta^2_k) \geq h + 1$, and
-    therefore $\rho_j = \rho'_j = h + 1$.
-    %
-    Finally, if $j = l$ then $minht (\gamma_j) = minht (\delta_j) = h$ and $\rho_j = \rho'_j = h$.
-
-    \medskip
-
-    Second case: $j < i < k$.
-    In this case the calculation of $\rho_i$, $\rho'_i$ depends on $\rho_j$, $\rho'_j$
-    (for which we have shown $\rho_j = \sigma_j \wedge \rho'_j = \sigma'_j$) and
-    is not affected by the appended $\gamma^2_k$, $\delta^2_k$, therefore
-    $\rho_i = \sigma_i \wedge \rho'_i = \sigma'_i$.
-
-    \medskip
-
-    Third case: $j < i = k < l$. We have
-    $minht (\gamma^1_k) = minht (\delta^1_k) = h + 1$ and
-    $minht (\gamma^2_k) = minht (\delta^2_k) \geq h + 1$,
-    and none of the preceding frames after the fork contain parentheses with height less than $h + 1$,
-    therefore $\rho_k = \rho'_k = h + 1$.
-
-    \medskip
-
-    Fourth case: $k < i < l$.
-    We have $\rho_i = \rho'_i = h + 1$,
-    because $\rho_k = \rho'_k = h + 1$ and $minht(\gamma_i)$, $minht(\delta_i) \geq h + 1$.
-
-    \medskip
-
-    Fifth case: $i = l$.
-    We have $\rho_l = \rho'_l = h$.
-
-    \medskip
-
-    So, we have shown that $\rho_i = \sigma_i \wedge \rho'_i = \sigma'_i$ for $j \leq i < k$
-    and $\rho_i = \rho'_i$ for $k \leq i \leq l$.
-    It trivially follows that $\Phi_{h+1}(s') \sqsubset \Phi_{h+1}(t')$ implies $\Phi_{h}(s) \sqsubset \Phi_{h}(t)$, and
-    $\Phi_{h+1}(s') \sim \Phi_{h+1}(t')$ implies $\Phi_{h}(s) \sim \Phi_{h}(t)$.
-    Because none of $\Phi_{h+1}(s')$, $\Phi_{h+1}(t')$ is a proper prefix of another,
-    $\Phi_{h+1}(s') \subset \Phi_{h+1}(t')$ implies $\Phi_{h}(s) \subset \Phi_{h}(t)$.
-    Therefore $\Phi_{h+1}(s') < \Phi_{h+1}(t')$ implies $\Phi_{h}(s) < \Phi_{h}(t)$.
-    $\square$
-    \end{XLem}
-
-
-    \begin{XThe}
+    \begin{XThe}\label{theorem_order_on_pe_same_as_on_pt}
     Let $s, t \in PT(r, w)$, then
     $s <_p t \Leftrightarrow \Phi_{h}(s) < \Phi_{h}(t) \; \forall h$.
-    \\
-    Proof.
-
-    \medskip
-
-    $\Rightarrow$. Given by lemma \ref{lemma_pe_less}.
-
-    \medskip
-
-    $\Leftarrow$.
-    We have $\Phi_{h}(s) < \Phi_{h}(t) \; \forall h$.
-    Suppose that $\nexists p: s <_p t$.
-    By lemma \ref{lemma_pe_order_antisymm} either $s = t$
-    (in which case $\Phi_{h}(s) = \Phi_{h}(t)$, contradiction)
-    or $t <_q s$ for some $q$
-    (in which case $\Phi_{h}(t) < \Phi_{h}(s)$ by lemma \ref{lemma_pe_less}, contradiction).
-    Therefore $\exists p: s <_p t$.
-    $\square$
     \end{XThe}
+
+\FloatBarrier
 
 
 \section{Tagged NFA}
@@ -1498,7 +1166,7 @@ Sub-TNFA for individual sub-RT with submatch groups: \\
     \begin{XLem}\label{gor1_path_containment}
     Let $r$ be a RE, $\pi = q_1 \overset {\alpha} {\rightsquigarrow} q_2$ a tagged path in TNFA $F(r)$,
     where $\alpha \neq \epsilon$,
-    and $h = minht (\alpha)$ the minimal tag height on path $\pi$.
+    and $h = minh (\alpha)$ the minimal tag height on path $\pi$.
     The following statements are true:
     \begin{enumerate}
         \item There is a position $p$ of length $|p| = h$
@@ -1546,7 +1214,7 @@ Sub-TNFA for individual sub-RT with submatch groups: \\
     \end{alignat*}
     %
     It must be $\alpha \beta \gamma \sim \alpha \gamma$,
-    because $minht (\beta) = h > h - 1 = minht (first (\gamma))$,
+    because $minh (\beta) = h > h - 1 = minh (first (\gamma))$,
     so at the fork frame $k$ we have $\rho_k = \rho'_k \leq h - 1$.
     %
     Furthermore, it must be $\alpha \gamma \subset \alpha \beta \gamma$,
@@ -1618,9 +1286,9 @@ Sub-TNFA for individual sub-RT with submatch groups: \\
     First case: $\alpha' = \alpha$.
     Because $\alpha$ is a proper prefix of $\alpha \gamma$,
     fork happens at the last frame and we have
-    $\rho_k = lastht(\alpha)$ and
-    $\rho'_k = min (lastht(\alpha), minht(\gamma))$.
-    If $lastht(\alpha) > minht(\gamma)$, then $\rho_k > \rho'_k$ and $\alpha \sqsubset \alpha \gamma$.
+    $\rho_k = lasth(\alpha)$ and
+    $\rho'_k = min (lasth(\alpha), minh(\gamma))$.
+    If $lasth(\alpha) > minh(\gamma)$, then $\rho_k > \rho'_k$ and $\alpha \sqsubset \alpha \gamma$.
     Otherwise $\rho_k = \rho'_k$ and $\alpha \sim \alpha \gamma$,
     and we have $first(\alpha \backslash \alpha \gamma) = \bot$ and $first(\alpha \gamma \backslash \alpha) \neq \bot$,
     therefore $\alpha \subset \alpha \gamma$.
@@ -1628,8 +1296,8 @@ Sub-TNFA for individual sub-RT with submatch groups: \\
 
     Second case: $\alpha' < \alpha$.
     Let $\big( (\sigma_1, \hdots, \sigma_k), (\sigma'_1, \hdots, \sigma'_k) \big) = traces (\alpha', \alpha)$.
-    We have $\rho_k = \sigma_k$ and $\rho'_k = min (\sigma'_k, minht(\gamma)) \leq \sigma_k$.
-    If $minht(\gamma) < \sigma'_k$ then $\rho_k > \rho'_k$ and $\alpha' \sqsubset \alpha \gamma$.
+    We have $\rho_k = \sigma_k$ and $\rho'_k = min (\sigma'_k, minh(\gamma)) \leq \sigma_k$.
+    If $minh(\gamma) < \sigma'_k$ then $\rho_k > \rho'_k$ and $\alpha' \sqsubset \alpha \gamma$.
     Otherwise $\rho'_k = \sigma'_k$.
     If $\alpha' \sqsubset \alpha$ then $\alpha' \sqsubset \alpha \gamma$.
     Otherwise $\alpha' \sim \alpha$ and $\alpha' \subset \alpha$.
@@ -1666,8 +1334,8 @@ Sub-TNFA for individual sub-RT with submatch groups: \\
     $\big( (\sigma_1, \hdots, \sigma_k),$ $(\sigma'_1, \hdots, \sigma'_k) \big) = traces (\alpha \gamma, \beta \gamma)$.
     Obviously for frames $i < k$ we have $\rho_i = \sigma_i$ and $\rho'_i = \sigma'_i$,
     and for the last frame $k$ we have
-    $\sigma_k = min (\rho_k, minht (\gamma))$ and
-    $\sigma'_k = min (\rho'_k, minht (\gamma))$.
+    $\sigma_k = min (\rho_k, minh (\gamma))$ and
+    $\sigma'_k = min (\rho'_k, minh (\gamma))$.
     Consider two possible cases.
 
     First case: $\alpha \sim \beta \wedge \alpha \subset \beta$.
@@ -1699,13 +1367,13 @@ Sub-TNFA for individual sub-RT with submatch groups: \\
     If $\rho_k = \rho'_k$ then $\sigma_k = \sigma'_k$
     and obviously $\alpha \gamma \sqsubset \beta \gamma$.
     Else it must be $\rho_k > \rho'_k$.
-    In this case, if $minht (\gamma) > \rho'_k$, then $\sigma_k > \sigma'_k$ and again $\alpha \gamma \sqsubset \beta \gamma$.
-    Else $minht (\gamma) \leq \rho'_k$ and $\sigma_k = \sigma'_k$.
+    In this case, if $minh (\gamma) > \rho'_k$, then $\sigma_k > \sigma'_k$ and again $\alpha \gamma \sqsubset \beta \gamma$.
+    Else $minh (\gamma) \leq \rho'_k$ and $\sigma_k = \sigma'_k$.
     In this case, if $k > 1$ and $\rho_{k-1} > \rho'_{k-1}$ then again $\alpha \gamma \sqsubset \beta \gamma$.
     %
     In other words, the only possible case when $\gamma$ can change comparison result is
     when at the last frame we have $\rho_k > \rho'_k$,
-    the appended suffix $\gamma$ contains parentheses with low height $minht (\gamma) \leq \rho'_k$
+    the appended suffix $\gamma$ contains parentheses with low height $minh (\gamma) \leq \rho'_k$
     (so that $\sigma_k = \sigma'_k$),
     and the previous frame doesn't exist
     or compares differently from the last frame: $k = 1$ or $\rho_{k-1} \leq \rho'_{k-1}$.
@@ -1716,11 +1384,11 @@ Sub-TNFA for individual sub-RT with submatch groups: \\
     including (if it exists) the $\epsilon$-transition to the fork state:
     $\pi_\alpha' = q_2 \overset {u | \alpha'} {\rightsquigarrow} q_1$ and
     $\pi_\beta' = q_2 \overset {u | \beta'} {\rightsquigarrow} q_1$.
-    We know that $minht (\alpha') = \rho_k$.
+    We know that $minh (\alpha') = \rho_k$.
 %    (because $\rho_k$ is set to the minimal parenthesis height on the path from fork to join).
     Therefore by lemma \ref{gor1_path_containment}
     we know that $\pi_\alpha'$ is contained in a subautomaton $f$ of height $\rho_k$.
-    Likewise we know that $\pi_\beta'$ is not contained in $f$, because $minht (\beta') = \rho'_k < \rho_k$.
+    Likewise we know that $\pi_\beta'$ is not contained in $f$, because $minh (\beta') = \rho'_k < \rho_k$.
     %
     Let $\pi_\beta''$ be the part of $\pi_\beta'$ containing the last $k$-th frame,
     and note the following:
@@ -1735,7 +1403,7 @@ Sub-TNFA for individual sub-RT with submatch groups: \\
         \item[(c)] the end state of $\pi_\beta''$ is contained in $f$
             (because it's the join state $q_1$ of $\pi_\alpha'$ and $\pi_\beta'$)
         \item[(d)] $\pi_\gamma$ is not contained in $f$
-            (because by our assumption $minht (\gamma) \leq \rho'_k$ and consequently $minht (\gamma) < \rho_k$)
+            (because by our assumption $minh (\gamma) \leq \rho'_k$ and consequently $minh (\gamma) < \rho_k$)
     \end{enumerate}
     %
     Put together, items (a) - (d) mean that the $\epsilon$-path $\pi_\beta'' \pi_\gamma$
@@ -1932,6 +1600,353 @@ if the s-norms at all preceding submatch positions are equal.
 %    But $p' \in Sub(u)$ and $p'$ is not itself a prefix of another position in $Sub(u)$,
 %    therefore $\widetilde{u}|_{p'}$ is $\lessdot$-minimal by construction of $u$.
 %    Contradiction.
+    $\square$
+
+
+\subsection*{Proof of Theorem \ref{theorem_order_on_pe_same_as_on_pt}}
+
+    \begin{XLem}\label{lemma_pe_order_antisymm}
+    The longest-leftmost-precedence relation $<$ is antisymmetric:
+    if $\alpha < \beta$, then $\beta \not< \alpha$.
+    \\
+    Proof.
+    Suppose, on the contrary, that $\alpha < \beta$ and $\beta < \alpha$.
+    Let $\big( (\rho_0, \dots, \rho_n), (\rho'_0, \dots, \rho'_n) \big) = traces(\alpha, \beta)$.
+
+    \medskip
+
+    If $\exists i = max \{j \mid \rho_j \neq \rho'_j \}$, then
+    $\alpha < \beta \implies \alpha \sqsubset \beta \implies \rho_i > \rho'_i$, but
+    $\beta < \alpha \implies \beta \sqsubset \alpha \implies \rho'_i > \rho_i$. Contradiction.
+
+    \medskip
+
+    Otherwise $\rho_i = \rho'_i \; \forall i$, then
+    $\alpha < \beta \implies \alpha \sim \beta \wedge \alpha \subset \beta$ and
+    $\beta < \alpha \implies \beta \sim \alpha \wedge \beta \subset \alpha$.
+    Let
+    $x = first (\alpha \backslash \beta)$,
+    $y = first (\beta \backslash \alpha)$, then
+    $\alpha \subset \beta \implies x < y$, but
+    $\beta \subset \alpha \implies y < x$. Contradiction.
+    $\square$
+    \end{XLem}
+
+
+    \begin{XLem}\label{lemma_pe_equiv}
+    Let $s, t \in PT(r, w)$.
+    If $s \sim t$, then $\Phi_{h}(s) = \Phi_{h}(t) \; \forall h$.
+    \\
+    Proof.
+    By induction on the height of $r$.
+
+    \medskip
+
+    Induction basis.
+    For RT of height $1$ we have
+    $| PT(r, w) | \leq 1 \; \forall w$,
+    therefore $s = t$ and $\Phi_{h}(s) = \Phi_{h}(t)$.
+
+    \medskip
+
+    Induction step.
+    We have
+    $s = T^{d} (s_1, \dots, s_n)$ and
+    $t = T^{d} (t_1, \dots, t_m)$.
+    If $d = 0$, then $\Phi_{h}(s) = str(s) = w = str(t) = \Phi_{h}(t)$.
+    Otherwise $d \neq 0$.
+    By lemma \ref{incomparability_equivdef} we have $s \sim t \Rightarrow \forall p: \|s\|_p = \|t\|_p$.
+    This implies $n = m$ (otherwise the norm of subtree at position $min(n,m)+1$ is $\infty$ for only one of $s$, $t$).
+    Therefore
+    $\Phi_{h}(s) = \Xl_{h+1} \Phi_{h+1}(s_1), \dots, \Phi_{h+1}(s_n) \Xr_h$ and
+    $\Phi_{h}(t) = \Xl_{h+1} \Phi_{h+1}(t_1), \dots, \Phi_{h+1}(t_n) \Xr_h$.
+%    Consider any $i \leq n$.
+    It suffices to show that $\forall i \leq n: \Phi_{h+1}(s_i) = \Phi_{h+1}(t_i)$.
+    We have $\forall p: \|s_i\|_p = \|t_i\|_p$ (implied by $\forall p: \|s\|_p = \|t\|_p$),
+    therefore by lemma \ref{incomparability_equivdef} we have $s_i \sim t_i$,
+    and by lemma \ref{lemma_subtrees} $\exists r', w': s_i, t_i \in PT(r', w')$,
+    where the height of $r'$ is less than the height of $r$.
+    By induction hypothesis $\Phi_{h+1}(s_i) = \Phi_{h+1}(t_i)$.
+    $\square$
+    \end{XLem}
+
+
+    \begin{XLem}\label{lemma_pe_less_1}
+    Let $s, t \in PT(r, w)$.
+    If $s <_p t$ and $|p| = 1$, then $\Phi_{h}(s) < \Phi_{h}(t) \; \forall h$.
+    \\
+    Proof.
+
+    By lemma conditions $|p| = 1$, which implies that $s$ and $t$ are compound PT
+    $s = T^{d} (s_1, \dots, s_n)$ and 
+    $t = T^{d} (t_1, \dots, t_m)$, where
+    $d \neq 0$
+    (because $\Lambda$ is a prefix of decision position $p$).
+    Therefore $\Phi_{h}(s)$, $\Phi_{h}(t)$ can be represented as follows,
+    where $k$ is the number of frames and $j$ is the fork:
+    \begin{alignat*}{7}
+        \Phi_{h}(s) &\;=\; \Xl_{h+1} &&\Phi_{h+1}(s_1) &&\dots &&\Phi_{h+1}(s_n) \Xr_h
+            &&\;=\; \beta_0 a_1 \dots a_j \beta_j &&\;\big|\; && \gamma_j a_{j + 1} \dots a_k \gamma_k \\[-0.5em]
+        \Phi_{h}(t) &\;=\; \Xl_{h+1} &&\Phi_{h+1}(t_1) &&\dots &&\Phi_{h+1}(t_m) \Xr_h
+            &&\;=\; \beta_0 a_1 \dots a_j \beta_j &&\;\big|\; && \delta_j a_{j + 1} \dots a_k \delta_k
+    \end{alignat*}
+%
+    By lemma conditions $|p| = 1$, therefore $p \in \YN$.
+    Consider any $i \in \YN$ such that $i < p$.
+    By lemma conditions $s <_p t$, which means
+    $\|s\|_p > \|t\|_p \wedge \|s\|_q = \|t\|_q \;\forall q < p$.
+    In particular $\|s_i\|_q = \|t_i\|_q \;\forall q$,
+    therefore by lemma \ref{incomparability_equivdef} $s_i \sim t_i$
+    and by lemma \ref{lemma_pe_equiv} we have $\Phi(s_i) = \Phi(t_i)$.
+    Let $traces (\Phi_{h}(s), \Phi_{h}(t)) = \big( (\rho_0, \dots, \rho_k), (\rho'_0, \dots, \rho'_k) \big)$
+    and consider the following cases.
+
+    \medskip
+
+    First case:
+    $\infty = \|s_p\| > \|t_p\|$.
+    In this case $s|_p$ does not exist
+    (because $p$ corresponds to a submatch position in $r$,
+    therefore $p \in Pos(s)$ implies $p \in Sub(s)$,
+    which contradicts $\|s_p\| = \infty$).
+    Fork happens immediately after $\Phi_{h+1}(s_{p-1})$, $\Phi_{h+1}(t_{p-1})$:
+    \begin{alignat*}{7}
+        \Phi_{h}(s) &\;=\; \Xl_{h+1} &&\Phi_{h+1}(s_1) &&\dots &&\Phi_{h+1}(s_{p-1})
+            &&\;\big|\; \Xr_{h}         &&      && \\[-0.5em]
+        \Phi_{h}(t) &\;=\; \Xl_{h+1} &&\Phi_{h+1}(t_1) &&\dots &&\Phi_{h+1}(t_{p-1})
+            &&\;\big|\; \Phi_{h+1}(t_p) &&\dots &&\Phi_{h+1}(t_m) \Xr_{h}
+    \end{alignat*}
+    %
+    In this case fork frame is the last frame: $j = k$, and therefore $\rho_j = \rho'_j = h$
+    (because $\gamma_j$ and $\delta_j$ contain the closing parenthesis $\Xr_{h}$).
+    For all $i < j$ we have $\rho_i = \rho'_i = -1$, therefore $\Phi_{h}(s) \sim \Phi_{h}(t)$.
+    Furthermore, $first(\gamma_j)$ is $\Xr$ and $first(\delta_j)$ is one of $\Xl$ and $\Xm$,
+    therefore $\Phi_{h}(s) \subset \Phi_{h}(t)$.
+    Consequently $\Phi_{h}(s) < \Phi_{h}(t)$.
+
+    \medskip
+
+    Second case: $\infty > \|s_p\| > \|t_p\| = -1$.
+    In this case both $s_p$ and $t_p$ exist,
+    $s_p$ is not $\varnothing$ and $t_p$ is $\varnothing$,
+    and fork happens immediately after $\Phi_{h+1}(s_{p-1})$, $\Phi_{h+1}(t_{p-1})$:
+    \begin{alignat*}{8}
+        \Phi_{h}(s) &\;=\; \Xl_{h+1} &&\Phi_{h+1}(s_1) &&\dots &&\Phi_{h+1}(s_{p-1})
+            &&\;\big|\; \Xl_{h+1} \; x \; \Xr_{h+1} \; &&\Phi_{h+1}(s_{p+1}) &&\dots &&\Phi_{h+1}(s_n) \Xr_{h} \\[-0.5em]
+        \Phi_{h}(t) &\;=\; \Xl_{h+1} &&\Phi_{h+1}(t_1) &&\dots &&\Phi_{h+1}(t_{p-1})
+            &&\;\big|\; \Xm_{h+1} \;\;\;\;\;\;         &&\Phi_{h+1}(t_{p+1}) &&\dots &&\Phi_{h+1}(t_m) \Xr_{h}
+    \end{alignat*}
+    %
+    If $j$-th frame is the last, we have $\rho_j = \rho'_j = h$ like in the first case.
+    Otherwise we have $\rho_j = \rho'_j = h + 1$,
+    because $minh(\gamma_j)$, $minh(\delta_j) \geq h + 1$
+    and $lasth (\beta_j) = h + 1$
+    (because if $p = 1$ then $\beta_j = \Xl_{h+1}$, otherwise
+    $s_{p-1}$ exists and the last parenthesis in $\beta_j$
+    is last parenthesis of $\Phi_{h+1}(s_{p-1})$, which is either $\Xr_{h+1}$ or $\Xm_{h+1}$).
+    For subsequent frames $i$ such that $j < i < k$ we have $\rho_i = \rho'_i = h + 1$
+    (because $minh(\gamma_j)$, $minh(\delta_j) \geq h + 1$),
+    and for the last pair of frames we have $\rho_k = \rho'_k = h$.
+    So in this case again $\Phi_{h}(s) \sim \Phi_{h}(t)$.
+    Furthermore, $first (\gamma_j) = \Xl < \Xm = first (\delta_j)$, therefore $\Phi_{h}(s) \subset \Phi_{h}(t)$
+    and $\Phi_{h}(s) < \Phi_{h}(t)$.
+
+    \medskip
+
+    Third case: $\infty > \|s_p\| > \|t_p\| \geq 0$.
+    In this case both $s_p$ and $t_p$ exist and none of them is $\varnothing$,
+    and fork happens somewhere after the opening parenthesis $\Xl$
+    and before the closing parenthesis $\Xr$ in $\Phi_{h}(s_p)$, $\Phi_{h}(t_p)$:
+    \begin{alignat*}{9}
+        \Phi_{h}(s) &\;=\; \Xl_{h+1} &&\Phi_{h+1}(s_1) &&\dots &&\Phi_{h+1}(s_{p-1}) &&\; \Xl_{h+2} \; x
+            &&\;\big|\; y \; \Xr_{h+1} \; &&\Phi_{h+1}(s_{p+1}) &&\dots &&\Phi_{h+1}(s_n) \Xr_{h} \\[-0.5em]
+        \Phi_{h}(t) &\;=\; \Xl_{h+1} &&\Phi_{h+1}(t_1) &&\dots &&\Phi_{h+1}(t_{p-1}) &&\; \Xl_{h+2} \; x
+            &&\;\big|\; z \; \Xr_{h+1} \; &&\Phi_{h+1}(t_{p+1}) &&\dots &&\Phi_{h+1}(t_m) \Xr_{h}
+    \end{alignat*}
+    %
+    Let $\delta_l$ be the frame containing the closing parenthesis $\Xr_{h+1}$ of $\Phi_{h+1}(t_p)$.
+    Because $\|s_p\| > \|t_p\|$,
+    the closing parenthesis $\Xr_{h+1}$ of $\Phi_{h+1}(s_p)$ is not contained in $\gamma_{l}$,
+    and $l$-th frame is not the last one.
+    Therefore $minh (\gamma_l) \geq h+2$ and $minh (\delta_l) = h+1$.
+    Furthermore, $minh(x)$, $minh(y)$, $minh(z) \geq h + 2$,
+    therefore $lasth(\beta_j) = lasth(\Xl_{h+2} \; x) \geq h+2$ and we have
+    $\rho_i, \rho'_i \geq h+2$ for all frames $j \leq i < l$
+    (note that it might be $\rho_i < \rho'_i$),
+    and for the $l$-th frame $\rho_l \geq h+2 > h+1 = \rho'_l$.
+    For subsequent frames $\gamma_i$, $\delta_i$ such that $l < i < k$ we have
+    $minh(\gamma_i)$, $minh(\delta_i) \geq h + 1$,
+    therefore $\rho_i \geq h+1 = \rho'_i$.
+    For the last pair of frames $\rho_k = \rho'_k = h$.
+    Therefore in this case $\Phi_{h}(s) \sqsubset \Phi_{h}(t)$,
+    which implies $\Phi_{h}(s) < \Phi_{h}(t)$.
+    $\square$
+    \end{XLem}
+
+
+    \begin{XLem}\label{lemma_pe_less}
+    Let $s, t \in PT(r, w)$.
+    If $s <_p t$, then $\Phi_{h}(s) < \Phi_{h}(t) \; \forall h$.
+    \\
+    Proof.
+    By induction on the length of $p$.
+
+    \medskip
+
+    Induction basis for $|p| = 1$ is given by lemma \ref{lemma_pe_less_1}.
+
+    \medskip
+
+    Induction step.
+    Let $|p| \geq 2$, then $s$ and $t$ are compound PT
+    $s = T^{d} (s_1, \dots, s_n)$ and
+    $t = T^{d} (t_1, \dots, t_m)$, where
+    $d \neq 0$ (because $\Lambda$ is a prefix of decision position $p$).
+    %
+    Furthermore, let $p = p'.p''$, where $p' \in \YN$.
+    Subtrees $s' = s_{p'}$ and $t' = t_{p'}$ exist, because $p'$ a proper prefix of decision position $p$,
+    and they also must be compount PT
+    $s' = T^{d'} (s'_1, \dots, s'_{n'})$ and
+    $t' = T^{d'} (t'_1, \dots, t'_{m'})$,
+    because $|p''| > 0$, and it must be
+    $d' \neq 0$ (because $p'$ is a prefix of decision position $p$).
+    %
+    For subtrees $s_i$ and $t_i$ where $i < p'$ we have
+    $\|s_i\|_q = \|t_i\|_q \;\forall q$ (implied by $s <_p t$),
+    therefore by lemma \ref{incomparability_equivdef}
+    $s_i \sim t_i$, and by lemma \ref{lemma_pe_equiv} we have $\Phi_{h+1}(s_i) = \Phi_{h+1}(t_i)$.
+    %
+    Therefore $\Phi_{h}(s)$, $\Phi_{h}(t)$ can be represented as follows:
+    \begin{alignat*}{9}
+        \Phi_{h}(s)
+            \;&=
+                \;&& \Xl_{h+1} \Phi_{h+1}(s_1) \dots \Phi_{h+1}(s_{p'-1})
+                \;&& \overbrace {\Xl_{h+2} \Phi_{h+2}(s'_1) \dots \Phi_{h+2}(s'_{n'}) \Xr_{h+1}}^{\Phi_{h+1}(s')}
+                \;&& \Phi_{h+1}(s_{p'+1}) \Phi_{h+1}(s_n) \Xr_{h}
+                \\
+        \Phi_{h}(t)
+            \;&=
+                \;&& \Xl_{h+1} \Phi_{h+1}(t_1) \dots \Phi_{h+1}(t_{p'-1})
+                \;&& \underbrace {\Xl_{h+2} \Phi_{h+2}(t'_1) \dots \Phi_{h+2}(t'_{m'}) \Xr_{h+1}}_{\Phi_{h+1}(t')}
+                \;&& \Phi_{h+1}(t_{p'+1}) \Phi_{h+1}(t_m) \Xr_{h}
+    \end{alignat*}
+
+    We have $\|s\|_q = \|t\|_q \;\forall q < p'$ (implied by $s <_p t$),
+    therefore by lemma \ref{lemma_subtrees} $\exists r', w' : s', t' \in PT(r', w')$.
+    Moreover, $s' <_{p''} t'$ and $|p''| < |p|$, therefore by induction hypothesis $\Phi_{p+1}(s') < \Phi_{p+1}(t')$.
+    %
+    On the other hand, if $j$ is the fork and $f \leq j \leq k$ then
+    $\Phi_{h}(s)$, $\Phi_{h}(t)$ can be represented as:
+    \begin{alignat*}{9}
+        \Phi_{h}(s)
+            \;&=
+                \;&& \beta_0 a_1 \dots a_f \beta_f^1
+                \;&& \overbrace {\beta_f^2  a_{f+1} \dots a_j \beta_j \;\big|\; \gamma_j a_{j+1} \dots a_k \gamma_k^1}^{\Phi_{h+1}(s')}
+                \;&& \gamma_k^2 a_{k+1} \dots a_l \gamma_l
+                \\[-0.5em]
+        \Phi_{h}(t)
+            \;&=
+                \;&& \beta_0 a_1 \dots a_f \beta_f^1
+                \;&& \underbrace {\beta_f^2  a_{f+1} \dots a_j \beta_j \;\big|\; \delta_j a_{j+1} \dots a_k \delta_k^1}_{\Phi_{h+1}(t')}
+                \;&& \delta_k^2 a_{k+1} \dots a_l \delta_l
+    \end{alignat*}
+
+%    \begin{alignat*}{9}
+%        \Phi_{h}(s)
+%            \;&=
+%                \;&&\overbrace  {\Xl_{h+1} \Phi_{h+1}(s_1) \dots \Phi_{h+1}(s_{p'-1})}
+%                    ^{\beta_0 a_1 \dots a_i \beta_i^1}
+%                \;&&\overbrace  {\Xl_{h+2} \Phi_{h+2}(s'_1) \dots \Phi_{h+2}(s'_{n'}) \Xr_{h+1}}
+%                    ^{\beta_i^2  a_{i+1} \dots a_j \beta_j \;\big|\; \gamma_j a_{j+1} \dots a_k \gamma_k^1}
+%                \;&&\overbrace  {\Phi_{h+1}(s_{p'+1}) \Phi_{h+1}(s_n) \Xr_{h}}
+%                    ^{\gamma_k^2 a_{k+1} \dots a_l \gamma_l}
+%                \\
+%        \Phi_{h}(t)
+%            \;&=
+%                \;&&\underbrace {\Xl_{h+1} \Phi_{h+1}(t_1) \dots \Phi_{h+1}(t_{p'-1})}
+%                    _{\beta_0 a_1 \dots a_i \beta_i^1}
+%                \;&&\underbrace {\Xl_{h+2} \Phi_{h+2}(t'_1) \dots \Phi_{h+2}(t'_{m'}) \Xr_{h+1}}
+%                    _{\beta_i^2  a_{i+1} \dots a_j \beta_j \;\big|\; \delta_j a_{j+1} \dots a_k \delta_k^1}
+%                \;&&\underbrace {\Phi_{h+1}(t_{p'+1}) \Phi_{h+1}(t_m) \Xr_{h}}
+%                    _{\delta_k^2 a_{k+1} \dots a_l \delta_l}
+%    \end{alignat*}
+
+    Let $traces (\Phi_{h}(s), \Phi_{h}(t)) = \big( (\rho_0, \dots, \rho_l), (\rho'_0, \dots, \rho'_l) \big)$
+    and $traces (\Phi_{h+1}(s'), \Phi_{h+1}(t')) = \big( (\sigma_h, \dots, \sigma_k), (\sigma'_h, \dots, \sigma'_k) \big)$.
+    %
+    We show that for frames $i$ such that $j \leq i < k$ we have
+    $\rho_i = \sigma_i \wedge \rho'_i = \sigma'_i$,
+    and for subsequent frames $k \leq i \leq l$ we have $\rho_i = \rho'_i$.
+
+    \medskip
+
+    First case: $i = j \leq k \leq l$ (the fork frame).
+    Because $\Phi_{h+1}(s')$ and $\Phi_{h+1}(t')$ have nonempty common prefix $\Xl_{h+2}$,
+    we have $lasht (\Phi_{h}(s) \sqcap \Phi_{h}(t)) = lasth (\Phi_{h+1}(s') \sqcap \Phi_{h+1}(t')) \geq h + 2$.
+    %
+    If $j < k$ then $minh (\gamma_j)$, $minh (\delta_j)$ are not affected by appending
+    $\gamma^2_k$, $\delta^2_k$ and therefore $\rho_j = \sigma_j \wedge \rho'_j = \sigma'_j$.
+    %
+    Else if $j = k < l$ then we have $minh (\gamma^1_k) = minh (\delta^1_k) = h + 1$ and
+    $minh (\gamma^2_k) = minh (\delta^2_k) \geq h + 1$, and
+    therefore $\rho_j = \rho'_j = h + 1$.
+    %
+    Finally, if $j = l$ then $minh (\gamma_j) = minh (\delta_j) = h$ and $\rho_j = \rho'_j = h$.
+
+    \medskip
+
+    Second case: $j < i < k$.
+    In this case the calculation of $\rho_i$, $\rho'_i$ depends on $\rho_j$, $\rho'_j$
+    (for which we have shown $\rho_j = \sigma_j \wedge \rho'_j = \sigma'_j$) and
+    is not affected by the appended $\gamma^2_k$, $\delta^2_k$, therefore
+    $\rho_i = \sigma_i \wedge \rho'_i = \sigma'_i$.
+
+    \medskip
+
+    Third case: $j < i = k < l$. We have
+    $minh (\gamma^1_k) = minh (\delta^1_k) = h + 1$ and
+    $minh (\gamma^2_k) = minh (\delta^2_k) \geq h + 1$,
+    and none of the preceding frames after the fork contain parentheses with height less than $h + 1$,
+    therefore $\rho_k = \rho'_k = h + 1$.
+
+    \medskip
+
+    Fourth case: $k < i < l$.
+    We have $\rho_i = \rho'_i = h + 1$,
+    because $\rho_k = \rho'_k = h + 1$ and $minh(\gamma_i)$, $minh(\delta_i) \geq h + 1$.
+
+    \medskip
+
+    Fifth case: $i = l$.
+    We have $\rho_l = \rho'_l = h$.
+
+    \medskip
+
+    So, we have shown that $\rho_i = \sigma_i \wedge \rho'_i = \sigma'_i$ for $j \leq i < k$
+    and $\rho_i = \rho'_i$ for $k \leq i \leq l$.
+    It trivially follows that $\Phi_{h+1}(s') \sqsubset \Phi_{h+1}(t')$ implies $\Phi_{h}(s) \sqsubset \Phi_{h}(t)$, and
+    $\Phi_{h+1}(s') \sim \Phi_{h+1}(t')$ implies $\Phi_{h}(s) \sim \Phi_{h}(t)$.
+    Because none of $\Phi_{h+1}(s')$, $\Phi_{h+1}(t')$ is a proper prefix of another,
+    $\Phi_{h+1}(s') \subset \Phi_{h+1}(t')$ implies $\Phi_{h}(s) \subset \Phi_{h}(t)$.
+    Therefore $\Phi_{h+1}(s') < \Phi_{h+1}(t')$ implies $\Phi_{h}(s) < \Phi_{h}(t)$.
+    $\square$
+    \end{XLem}
+
+
+    Proof of theorem \ref{theorem_order_on_pe_same_as_on_pt}.
+    \\[-1em]
+
+    $\Rightarrow$. Given by lemma \ref{lemma_pe_less}.
+    \\[-1em]
+
+    $\Leftarrow$.
+    We have $\Phi_{h}(s) < \Phi_{h}(t) \; \forall h$.
+    Suppose that $\nexists p: s <_p t$.
+    By lemma \ref{lemma_pe_order_antisymm} either $s = t$
+    (in which case $\Phi_{h}(s) = \Phi_{h}(t)$, contradiction)
+    or $t <_q s$ for some $q$
+    (in which case $\Phi_{h}(t) < \Phi_{h}(s)$ by lemma \ref{lemma_pe_less}, contradiction).
+    Therefore $\exists p: s <_p t$.
     $\square$
 
 
