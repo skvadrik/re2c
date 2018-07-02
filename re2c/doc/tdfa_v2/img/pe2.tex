@@ -1,0 +1,422 @@
+
+\documentclass[tikz,border=10pt]{standalone}
+
+
+\RequirePackage{luatex85}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath, amssymb, amsfonts, accents}
+\usetikzlibrary{graphdrawing, graphs, arrows, shapes, automata, calc}
+\usegdlibrary{trees, layered}
+\usepackage{stix}
+
+
+%\newcommand{\Xund}{\rule{.4em}{.4pt}}
+%\newcommand{\IRE}{I\!RE}
+
+\newcommand{\Xund}{\rule{.4em}{.4pt}}
+\newcommand{\Xl}{\langle}
+\newcommand{\Xr}{\rangle}
+\newcommand{\Xm}{\langle\!\rangle}
+
+
+\begin{document}
+
+\begin{tikzpicture}[>=stealth, ->, auto, sibling distance = 0.3in, inner sep = 1.5pt]
+
+\tikzstyle{every node}=[draw, shape = circle]
+
+\begin{scope}[xshift=0in, yshift=0in]
+    \graph [tree layout, grow=down, fresh nodes] {
+        "$1$"[draw] -- {
+            ""[draw] -- {
+                ""[draw] -- { "$a$", "$a$", "$a$" }
+            }
+        }
+        , "$2$"[draw] -- {
+            ""[draw] -- {
+                ""[draw] -- { "$a$", "$a$" },
+                ""[draw] -- { "$a$" }
+            }
+        }
+        , "$3$"[draw] -- {
+            ""[draw] -- {
+                ""[draw] -- { "$a$" },
+                ""[draw] -- { "$a$", "$a$" }
+            }
+        }
+        , "$4$"[draw] -- {
+            ""[draw] -- {
+                ""[draw] -- { "$a$" },
+                ""[draw] -- { "$a$" },
+                ""[draw] -- { "$a$" }
+            }
+        }
+        , "$5$"[draw] -- {
+            ""[draw] -- {
+                ""[draw] -- { "$a$", "$a$" }
+            },
+            ""[draw] -- {
+                ""[draw] -- { "$a$" }
+            }
+        }
+        , "$6$"[draw] -- {
+            ""[draw] -- {
+                ""[draw] -- { "$a$" }
+            },
+            ""[draw] -- {
+                ""[draw] -- { "$a$", "$a$" }
+            }
+        }
+        , "$7$"[draw] -- {
+            ""[draw] -- {
+                ""[draw] -- { "$a$"},
+                ""[draw] -- { "$a$"}
+            },
+            ""[draw] -- {
+                ""[draw] -- { "$a$" }
+            }
+        }
+        , "$8$"[draw] -- {
+            ""[draw] -- {
+                ""[draw] -- { "$a$"}
+            },
+            ""[draw] -- {
+                ""[draw] -- { "$a$"},
+                ""[draw] -- { "$a$" }
+            }
+        }
+        , "$9$"[draw] -- {
+            ""[draw] -- {
+                ""[draw] -- { "$a$" }
+            },
+            ""[draw] -- {
+                ""[draw] -- { "$a$" }
+            },
+            ""[draw] -- {
+                ""[draw] -- { "$a$" }
+            }
+        }
+    };
+\end{scope}
+
+\begin{scope}[xshift=1in, yshift=0in]
+    \draw [dash pattern = on 2pt off 2pt, rounded corners] (2,-0.3) -- (2,-1) -- (1.45,-1.9) -- (1.45,-2.75);
+    \draw [dash pattern = on 2pt off 2pt, rounded corners] (1.75,-2.75) -- (1.75,-2) -- (2.2,-1.3) -- (2.6,-2) -- (2.3,-2.75);
+    \draw [dash pattern = on 2pt off 2pt, rounded corners] (2.55,-2.8) -- (2.75,-2.3) -- (2.9,-2.8);
+    \draw [dash pattern = on 2pt off 2pt, rounded corners] (3.2,-2.75) -- (2.9,-1.9) -- (2.35,-1) -- (2.35,-0.3);
+\end{scope}
+
+%\begin{scope}[xshift=0in, yshift=0.1in]
+%    \node (a1) {1};
+%    \node [right of = a1, xshift = 0.5in] (a2) {2};
+%    \node [right of = a2, xshift = 0.35in] (a3) {3};
+%    \node [right of = a3, xshift = 0.45in] (a4) {4};
+%    \node [right of = a4, xshift = 0.45in] (a5) {5};
+%\end{scope}
+
+\begin{scope}[xshift=6.5in, yshift=-3.1in]
+    \node [shape=rectangle, draw = none] (a) {
+    $\begin{aligned}
+        &1 &&\overbracket {\Xl_1 \Xl_2 \Xl_3 \Xl_4} a \overbracket {\Xr_3 \Xl_4} a \overbracket {\Xr_3 \Xl_4} a \overbracket {\Xr_3 \Xr_2 \Xr_1 \Xr_0} \\
+        &2 &&\overbracket {\Xl_1 \Xl_2 \Xl_3 \Xl_4} a \overbracket {\Xr_3 \Xl_4} a \overbracket {\Xr_3 \Xr_2 \Xl_3 \Xl_4} a \overbracket {\Xr_3 \Xr_2 \Xr_1 \Xr_0} \\
+        &3 &&\overbracket {\Xl_1 \Xl_2 \Xl_3 \Xl_4} a \overbracket {\Xr_3 \Xr_2 \Xl_3 \Xl_4} a \overbracket {\Xr_3 \Xl_4} a \overbracket {\Xr_3 \Xr_2 \Xr_1 \Xr_0} \\
+        &4 &&\overbracket {\Xl_1 \Xl_2 \Xl_3 \Xl_4} a \overbracket {\Xr_3 \Xr_2 \Xl_3 \Xl_4} a \overbracket {\Xr_3 \Xr_2 \Xl_3 \Xl_4} a \overbracket {\Xr_3 \Xr_2 \Xr_1 \Xr_0} \\
+        &5 &&\overbracket {\Xl_1 \Xl_2 \Xl_3 \Xl_4} a \overbracket {\Xr_3 \Xl_4} a \overbracket {\Xr_3 \Xr_2 \Xr_1 \Xl_2 \Xl_3 \Xl_4} a \overbracket {\Xr_3 \Xr_2 \Xr_1 \Xr_0} \\
+        &6 &&\overbracket {\Xl_1 \Xl_2 \Xl_3 \Xl_4} a \overbracket {\Xr_3 \Xr_2 \Xr_1 \Xl_2 \Xl_3 \Xl_4} a \overbracket {\Xr_3 \Xl_4} a \overbracket {\Xr_3 \Xr_2 \Xr_1 \Xr_0} \\
+        &7 &&\overbracket {\Xl_1 \Xl_2 \Xl_3 \Xl_4} a \overbracket {\Xr_3 \Xr_2 \Xl_3 \Xl_4} a \overbracket {\Xr_3 \Xr_2 \Xr_1 \Xl_2 \Xl_3 \Xl_4} a \overbracket {\Xr_3 \Xr_2 \Xr_1 \Xr_0} \\
+        &8 &&\overbracket {\Xl_1 \Xl_2 \Xl_3 \Xl_4} a \overbracket {\Xr_3 \Xr_2 \Xr_1 \Xl_2 \Xl_3 \Xl_4} a \overbracket {\Xr_3 \Xr_2 \Xl_3 \Xl_4} a \overbracket {\Xr_3 \Xr_2 \Xr_1 \Xr_0} \\
+        &9 &&\overbracket {\Xl_1 \Xl_2 \Xl_3 \Xl_4} a \overbracket {\Xr_3 \Xr_2 \Xr_1 \Xl_2 \Xl_3 \Xl_4} a \overbracket {\Xr_3 \Xr_2 \Xr_1 \Xl_2 \Xl_3 \Xl_4} a \overbracket {\Xr_3 \Xr_2 \Xr_1 \Xr_0}
+    \end{aligned}$
+    };
+\end{scope}
+
+\begin{scope}[xshift=2.2in, yshift=-3.1in]
+    \node [shape=rectangle, draw = none] (a) {
+    \setlength\tabcolsep{2pt}
+    \renewcommand{\arraystretch}{1.1}
+    $\begin{aligned}
+        &\begin{tabular}{c ccccccccc}
+              2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 \\
+            %
+                \begin{tabular}{|cccc|}
+                \hline
+                -1 & \!-1 & 3 & 0 \\[-3pt]
+                -1 & \!-1 & 2 & 0 \\
+                \hline
+                \end{tabular}
+            &
+                \begin{tabular}{|cccc|}
+                \hline
+                -1 & 3 & 3 & 0 \\[-3pt]
+                -1 & 2 & 2 & 0 \\
+                \hline
+                \end{tabular}
+            &
+                \begin{tabular}{|cccc|}
+                \hline
+                -1 & 3 & 3 & 0 \\[-3pt]
+                -1 & 2 & 2 & 0 \\
+                \hline
+                \end{tabular}
+            &
+                \begin{tabular}{|cccc|}
+                \hline
+                -1 & \!-1 & 3 & 0 \\[-3pt]
+                -1 & \!-1 & 1 & 0 \\
+                \hline
+                \end{tabular}
+            &
+                \begin{tabular}{|cccc|}
+                \hline
+                -1 & 3 & 3 & 0 \\[-3pt]
+                -1 & 1 & 1 & 0 \\
+                \hline
+                \end{tabular}
+            &
+                \begin{tabular}{|cccc|}
+                \hline
+                -1 & 3 & 3 & 0 \\[-3pt]
+                -1 & 2 & 1 & 0 \\
+                \hline
+                \end{tabular}
+            &
+                \begin{tabular}{|cccc|}
+                \hline
+                -1 & 3 & 3 & 0 \\[-3pt]
+                -1 & 1 & 1 & 0 \\
+                \hline
+                \end{tabular}
+            &
+                \begin{tabular}{|cccc|}
+                \hline
+                -1 & 3 & 3 & 0 \\[-3pt]
+                -1 & 1 & 1 & 0 \\
+                \hline
+                \end{tabular}
+            & 1
+            \\[1em]
+%
+            &
+                \begin{tabular}{|cccc|}
+                \hline
+                -1 & 3 & 2 & 0 \\[-3pt]
+                -1 & 2 & 2 & 0 \\
+                \hline
+                \end{tabular}
+            &
+                \begin{tabular}{|cccc|}
+                \hline
+                -1 & 3 & 2 & 0 \\[-3pt]
+                -1 & 2 & 2 & 0 \\
+                \hline
+                \end{tabular}
+            &
+                \begin{tabular}{|cccc|}
+                \hline
+                -1 & \!-1 & 2 & 0 \\[-3pt]
+                -1 & \!-1 & 1 & 0 \\
+                \hline
+                \end{tabular}
+            &
+                \begin{tabular}{|cccc|}
+                \hline
+                -1 & 3 & 2 & 0 \\[-3pt]
+                -1 & 1 & 1 & 0 \\
+                \hline
+                \end{tabular}
+            &
+                \begin{tabular}{|cccc|}
+                \hline
+                -1 & 3 & 2 & 0 \\[-3pt]
+                -1 & 2 & 1 & 0 \\
+                \hline
+                \end{tabular}
+            &
+                \begin{tabular}{|cccc|}
+                \hline
+                -1 & 3 & 2 & 0 \\[-3pt]
+                -1 & 1 & 1 & 0 \\
+                \hline
+                \end{tabular}
+            &
+                \begin{tabular}{|cccc|}
+                \hline
+                -1 & 3 & 2 & 0 \\[-3pt]
+                -1 & 1 & 1 & 0 \\
+                \hline
+                \end{tabular}
+            & 2
+            \\[1em]
+%
+            & &
+                \begin{tabular}{|cccc|}
+                \hline
+                -1 & \!-1 & 3 & 0 \\[-3pt]
+                -1 & \!-1 & 2 & 0 \\
+                \hline
+                \end{tabular}
+            &
+                \begin{tabular}{|cccc|}
+                \hline
+                -1 & 2 & 2 & 0 \\[-3pt]
+                -1 & 3 & 1 & 0 \\
+                \hline
+                \end{tabular}
+            &
+                \begin{tabular}{|cccc|}
+                \hline
+                -1 & 2 & 2 & 0 \\[-3pt]
+                -1 & 1 & 1 & 0 \\
+                \hline
+                \end{tabular}
+            &
+                \begin{tabular}{|cccc|}
+                \hline
+                -1 & \!-1 & 3 & 0 \\[-3pt]
+                -1 & \!-1 & 1 & 0 \\
+                \hline
+                \end{tabular}
+            &
+                \begin{tabular}{|cccc|}
+                \hline
+                -1 & 2 & 2 & 0 \\[-3pt]
+                -1 & 1 & 1 & 0 \\
+                \hline
+                \end{tabular}
+            &
+                \begin{tabular}{|cccc|}
+                \hline
+                -1 & 2 & 2 & 0 \\[-3pt]
+                -1 & 1 & 1 & 0 \\
+                \hline
+                \end{tabular}
+            & 3
+            \\[1em]
+%
+            & & &
+                \begin{tabular}{|cccc|}
+                \hline
+                -1 & 2 & 2 & 0 \\[-3pt]
+                -1 & 3 & 1 & 0 \\
+                \hline
+                \end{tabular}
+            &
+                \begin{tabular}{|cccc|}
+                \hline
+                -1 & 2 & 2 & 0 \\[-3pt]
+                -1 & 1 & 1 & 0 \\
+                \hline
+                \end{tabular}
+            &
+                \begin{tabular}{|cccc|}
+                \hline
+                -1 & \!-1 & 2 & 0 \\[-3pt]
+                -1 & \!-1 & 1 & 0 \\
+                \hline
+                \end{tabular}
+            &
+                \begin{tabular}{|cccc|}
+                \hline
+                -1 & 2 & 2 & 0 \\[-3pt]
+                -1 & 1 & 1 & 0 \\
+                \hline
+                \end{tabular}
+            &
+                \begin{tabular}{|cccc|}
+                \hline
+                -1 & 2 & 2 & 0 \\[-3pt]
+                -1 & 1 & 1 & 0 \\
+                \hline
+                \end{tabular}
+            & 4
+            \\[1em]
+%
+            & & & &
+                \begin{tabular}{|cccc|}
+                \hline
+                -1 & 3 & 1 & 0 \\[-3pt]
+                -1 & 1 & 1 & 0 \\
+                \hline
+                \end{tabular}
+            &
+                \begin{tabular}{|cccc|}
+                \hline
+                -1 & 3 & 1 & 0 \\[-3pt]
+                -1 & 2 & 1 & 0 \\
+                \hline
+                \end{tabular}
+            &
+                \begin{tabular}{|cccc|}
+                \hline
+                -1 & 3 & 1 & 0 \\[-3pt]
+                -1 & 1 & 1 & 0 \\
+                \hline
+                \end{tabular}
+            &
+                \begin{tabular}{|cccc|}
+                \hline
+                -1 & 3 & 1 & 0 \\[-3pt]
+                -1 & 1 & 1 & 0 \\
+                \hline
+                \end{tabular}
+            & 5
+            \\[1em]
+%
+            & & & & &
+                \begin{tabular}{|cccc|}
+                \hline
+                -1 & 1 & 1 & 0 \\[-3pt]
+                -1 & 2 & 1 & 0 \\
+                \hline
+                \end{tabular}
+            &
+                \begin{tabular}{|cccc|}
+                \hline
+                -1 & \!-1 & 3 & 0 \\[-3pt]
+                -1 & \!-1 & 2 & 0 \\
+                \hline
+                \end{tabular}
+            &
+                \begin{tabular}{|cccc|}
+                \hline
+                -1 & \!-1 & 3 & 0 \\[-3pt]
+                -1 & \!-1 & 1 & 0 \\
+                \hline
+                \end{tabular}
+            & 6
+            \\[1em]
+%
+            & & & & & &
+                \begin{tabular}{|cccc|}
+                \hline
+                -1 & 2 & 1 & 0 \\[-3pt]
+                -1 & 1 & 1 & 0 \\
+                \hline
+                \end{tabular}
+            &
+                \begin{tabular}{|cccc|}
+                \hline
+                -1 & 2 & 1 & 0 \\[-3pt]
+                -1 & 1 & 1 & 0 \\
+                \hline
+                \end{tabular}
+            & 7
+            \\[1em]
+%
+            & & & & & & &
+                \begin{tabular}{|cccc|}
+                \hline
+                -1 & \!-1 & 2 & 0 \\[-3pt]
+                -1 & \!-1 & 1 & 0 \\
+                \hline
+                \end{tabular}
+            & 8
+        \end{tabular}
+    \end{aligned}$
+    };
+\end{scope}
+
+\end{tikzpicture}
+
+\end{document}
+

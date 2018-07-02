@@ -23,14 +23,14 @@
 
 \begin{tikzpicture}[>=stealth, ->, auto, node distance=0.2in]
 
-\tikzstyle{every node}=[draw=none]
+\tikzstyle{every node}=[draw=none, shape=rectangle]
 
 % $(\epsilon|a^{0,\infty})(a|\epsilon)^{0,\infty}$
 
 \begin{scope}[xshift=0in, yshift=0in]
     \node (a) {{
     $\begin{aligned}
-        \quad
+        \quad\quad
         & \Phi_0 \big(
             {T}^{1} (
                 {T}^{2} (
@@ -53,7 +53,7 @@
             && \overbracket { \Xr_1 \Xl_2 \Xm_2 \Xr_1 \Xr_0 }%^{\alpha_1}
 %            &&= \alpha_0 a \alpha_1 
             &&= \alpha
-        \\[-0.3em]
+        \\[-0.4em]
         & \Phi_0 \big(
             {T}^{1} (
                 {T}^{2}(
@@ -78,7 +78,7 @@
             && \overbracket { \Xr_2 \Xr_1 \Xr_0 }%^{\beta_1}
 %            &&= \beta_0 a \beta_1
             &&= \beta
-        \\[-0.3em]
+        \\[-0.4em]
         & \Phi_0 \big(
             {T}^{1} (
                 {T}^{2}(
@@ -106,54 +106,54 @@
             && \overbracket { \Xr_2 \Xl_3 \Xr_2 \Xr_1 \Xr_0 }%^{\gamma_1}
 %            &&= \gamma_0 a \gamma_1
             &&= \gamma
-        \quad
+        \quad\quad
     \end{aligned}$
     }};
 \end{scope}
 
-\begin{scope}[xshift=0in, yshift=-2.1in]
+\begin{scope}[xshift=0in, yshift=-1.7in]
     \node (a) {
     $\begin{aligned}
         &\begin{tabular}{c|ll}
             $traces (\alpha, \beta)$ & 0 & 1 \\
-            \hline \\[-0.5em]
-            $\rho^{\alpha/\beta}$ & 2 & 0 \\
-            $\rho^{\beta/\alpha}$ & 1 & 0 \\
+            \hline \\[-1em]
+            $\rho$ & 2 & 0 \\
+            $\rho'$ & 1 & 0 \\
         \end{tabular}
         &&\quad
         \left[\begin{aligned}
-            \rho^{\alpha/\beta}_0  &= min (lasth (\Xl_1 \Xl_2), minh (\epsilon))          = min (2, \infty) = 2 \\[-0.3em]
-            \rho^{\beta/\alpha}_0  &= min (lasth (\Xl_1 \Xl_2), minh (\Xr_1 \Xl_2 \Xl_3)) = min (2, 1)      = 1 \\[-0.3em]
-            \rho^{\alpha/\beta}_1  &= min (\rho^{\alpha/\beta}_0, minh (\Xr_1 \Xl_2 \Xm_2 \Xr_1 \Xr_0)) = min (2,0) = 0 \\[-0.3em]
-            \rho^{\beta/\alpha}_1  &= min (\rho^{\beta/\alpha}_0, minh (\Xr_2 \Xr_1 \Xr_0))             = min (1,0) = 0
+            \rho_0  &= min (lasth (\Xl_1 \Xl_2), minh (\epsilon))          = min (2, \infty) = 2 \\[-0.3em]
+            \rho'_0  &= min (lasth (\Xl_1 \Xl_2), minh (\Xr_1 \Xl_2 \Xl_3)) = min (2, 1)      = 1 \\[-0.3em]
+            \rho_1  &= min (\rho_0, minh (\Xr_1 \Xl_2 \Xm_2 \Xr_1 \Xr_0)) = min (2,0) = 0 \\[-0.3em]
+            \rho'_1  &= min (\rho'_0, minh (\Xr_2 \Xr_1 \Xr_0))             = min (1,0) = 0
         \end{aligned}\right.
-        \\[1em]
+        \\[0.5em]
         &\begin{tabular}{c|ll}
             $traces (\beta, \gamma)$ & 0 & 1 \\
-            \hline \\[-0.5em]
-            $\rho^{\beta/\gamma}$ & -1 & 0 \\
-            $\rho^{\gamma/\beta}$ & -1 & 0 \\
+            \hline \\[-1em]
+            $\rho$ & \!-1 & 0 \\
+            $\rho'$ & \!-1 & 0 \\
         \end{tabular}
         &&\quad
         \left[\begin{aligned}
-            \rho^{\beta/\gamma}_0  &= -1 \\[-0.3em]
-            \rho^{\gamma/\beta}_0  &= -1 \\[-0.3em]
-            \rho^{\beta/\gamma}_1  &= min (lasth (\Xr_2), minh (\Xr_1 \Xr_0))             = min (2,0) = 0 \\[-0.3em]
-            \rho^{\gamma/\beta}_1  &= min (lasth (\Xr_2), minh (\Xl_3 \Xr_2 \Xr_1 \Xr_0)) = min (2,0) = 0
+            \rho_0  &= -1 \\[-0.3em]
+            \rho'_0  &= -1 \\[-0.3em]
+            \rho_1  &= min (lasth (\Xr_2), minh (\Xr_1 \Xr_0))             = min (2,0) = 0 \\[-0.3em]
+            \rho'_1  &= min (lasth (\Xr_2), minh (\Xl_3 \Xr_2 \Xr_1 \Xr_0)) = min (2,0) = 0
         \end{aligned}\right.
-        \\[1em]
+        \\[0.5em]
         &\begin{tabular}{c|ll}
             $traces (\alpha, \gamma)$ & 0 & 1 \\
-            \hline \\[-0.5em]
-            $\rho^{\alpha/\gamma}$ & 2 & 0 \\
-            $\rho^{\gamma/\alpha}$ & 1 & 0 \\
+            \hline \\[-1em]
+            $\rho$ & 2 & 0 \\
+            $\rho'$ & 1 & 0 \\
         \end{tabular}
         &&\quad
         \left[\begin{aligned}
-            \rho^{\alpha/\gamma}_0  &= min (lasth (\Xl_1 \Xl_2), minh (\epsilon))          = min (2, \infty) = 2 \\[-0.3em]
-            \rho^{\gamma/\alpha}_0  &= min (lasth (\Xl_1 \Xl_2), minh (\Xr_1 \Xl_2 \Xl_3)) = min (2, 1)      = 1 \\[-0.3em]
-            \rho^{\alpha/\gamma}_1  &= min (\rho^{\alpha/\gamma}_0, minh (\Xr_1 \Xl_2 \Xm_2 \Xr_1 \Xr_0)) = min (2,0) = 0 \\[-0.3em]
-            \rho^{\gamma/\alpha}_1  &= min (\rho^{\gamma/\alpha}_0, minh (\Xr_2 \Xl_3 \Xr_2 \Xr_1 \Xr_0)) = min (1,0) = 0
+            \rho_0  &= min (lasth (\Xl_1 \Xl_2), minh (\epsilon))          = min (2, \infty) = 2 \\[-0.3em]
+            \rho'_0  &= min (lasth (\Xl_1 \Xl_2), minh (\Xr_1 \Xl_2 \Xl_3)) = min (2, 1)      = 1 \\[-0.3em]
+            \rho_1  &= min (\rho_0, minh (\Xr_1 \Xl_2 \Xm_2 \Xr_1 \Xr_0)) = min (2,0) = 0 \\[-0.3em]
+            \rho'_1  &= min (\rho'_0, minh (\Xr_2 \Xl_3 \Xr_2 \Xr_1 \Xr_0)) = min (1,0) = 0
         \end{aligned}\right.
     \end{aligned}$
     };
