@@ -70,3 +70,63 @@
   be delivered. What I mean is that our algorithm can do it, and this is more general than Posix subexpressions.
   Indeed, it can go from full-parsing to any user-defined submatch extraction.
 
+- Definition 17: F is used both to denote the set of final states and the function defined in Figure 2.
+  Perhaps it could be better to use two letters?
+
+- Figure 2,
+  - first graph: in it F(i,j,r) is defined for i != 0. However, an F with a first argument that is not zero is
+    never used. Perhaps there is a need to give some explanation
+  - graph for alternative: why the tags are defined only in the incoming arc of the second term, and the ougoing of the first?
+
+- in Figure 3:
+   - in match(), closure is called with a first argument that should
+be the set containing the initial
+     configuration, that in the call is a 4-tuple. However, closure
+expects configurations as 2-ples.
+   - in the first configuration there is a t_0 that is not defined
+   - reach() is called with three arguments, while in its definition
+it has two. I think that its signature
+     should be reach(X,Delta,alpha).
+     Configurations are 4-ples: (origin-state, target-state,
+input-symbol, tag), correct? The origin-state
+     is there for precedence(), and was the 'origin' in the pseudocode.
+
+- in Figure 4, closure_goldberg_radzik should be closure, and it
+should handle 4-ples configurations.
+Figure 4:
+
+  - relax. At the beginning all the values of result() are _|_, thus
+relax() should take care of it.
+    I suggest to replace the first two lines with:
+
+         if relax = _|_ or precedence(x,result(q),B,D then
+
+  - closure_goldberg_radzik, 2nd and 3rd lines: here result and status
+are initialized for all the states.
+    To prevent some reviewer to point out that "q" is not defined, I
+suggest to enclose the two
+     statements in a foreach q in Q
+  - same, line 14: here scan() is called, which in turn calls relax(),
+which accesses "status". Thus,
+    "status" should be passed as argument to both
+
+  - relax: its signature has B and D as last 5th and 6th arguments, but
+they are never passed when called.
+    They should be passed all along closure_goldberg_radzik  and scan.
+ 
+    Comparing it with calc_rho_prec() in the pseudocode:
+    - the first two "if" statements can be merged
+    - the statement: h_1 = h_2 = height(...) can only be executed if k >
+1 (otherwise it accesses a_0 ...)
+    - the statement: "if  a_k > b_k then l = -1"  and the following, are
+different from the ones in the
+      pseudocode (if nonnegative (a[i]) return LT, etc.)
+   Comparing it with update_rho in the pseudocode:
+    - the pseudocode initializes h_1 and h_2 with the values read from
+B, while here it does so when
+      k > 1, which is never the case when q_1 != q_2
+
+
+- the statement: "if  a_k > b_k then l = -1"  and the following, are
+  different from the ones in the pseudocode (if nonnegative (a[i]) return LT, etc.)
+

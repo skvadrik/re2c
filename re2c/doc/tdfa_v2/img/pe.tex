@@ -30,8 +30,9 @@
 \begin{scope}[xshift=0in, yshift=0in]
     \node (a) {{
     $\begin{aligned}
-        \quad\quad
-        & \Phi_0 \big(
+        &\alpha
+        = \Phi_0 (s)
+        = \Phi_0 \big(
             {T}^{1} (
                 {T}^{2} (
                     {\varnothing}^{0},
@@ -39,22 +40,15 @@
                 ), {T}^{3}(
                     {\varnothing}^{4}
                 )
-            )\big) &&=
-            \Xl_1
-                \Xl_2
-                    a
-                \Xr_1
-                \Xl_2
-                    \Xm_2
-                \Xr_1
-            \Xr_0
-            &&= \overbracket {\Xl_1 \Xl_2 }%^{\alpha_0}
-            && a
-            && \overbracket { \Xr_1 \Xl_2 \Xm_2 \Xr_1 \Xr_0 }%^{\alpha_1}
-%            &&= \alpha_0 a \alpha_1 
-            &&= \alpha
+            )\big)
+            &&\!\!\!\!=\;
+            \overbracket {\Xl_1 \Xl_2 }%^{\alpha_0}
+            \;a\;
+            \overbracket { \Xr_1 \Xl_2 \Xm_2 \Xr_1 \Xr_0 }%^{\alpha_1}
         \\[-0.4em]
-        & \Phi_0 \big(
+        &\beta
+        = \Phi_0 (t)
+        = \Phi_0 \big(
             {T}^{1} (
                 {T}^{2}(
                     {\varnothing}^{0},
@@ -63,23 +57,15 @@
                 {T}^{3}\big(
                     {T}^{4}({a}^{0},{\varnothing}^{0})
                 )
-            )\big) &&=
-            \Xl_1
-                \Xl_2
-                \Xr_1
-                \Xl_2
-                    \Xl_3
-                        a
-                    \Xr_2
-                \Xr_1
-            \Xr_0
-            &&= \overbracket { \Xl_1 \Xl_2 \Xr_1 \Xl_2 \Xl_3 }%^{\beta_0}
-            && a
-            && \overbracket { \Xr_2 \Xr_1 \Xr_0 }%^{\beta_1}
-%            &&= \beta_0 a \beta_1
-            &&= \beta
+            )\big)
+            &&\!\!\!\!=\;
+            \overbracket { \Xl_1 \Xl_2 \Xr_1 \Xl_2 \Xl_3 }%^{\beta_0}
+            \;a\;
+            \overbracket { \Xr_2 \Xr_1 \Xr_0 }%^{\beta_1}
         \\[-0.4em]
-        & \Phi_0 \big(
+        &\gamma
+        = \Phi_0 (u)
+        = \Phi_0 \big(
             {T}^{1} (
                 {T}^{2}(
                     {\epsilon}^{0},
@@ -89,29 +75,19 @@
                     {T}^{4}({a}^{0},{\varnothing}^{0}),
                     {T}^{4}({\varnothing}^{0}, {\epsilon}^{0})
                 )
-            )\big) &&=
-            \Xl_1
-                \Xl_2
-                \Xr_1
-                \Xl_2
-                    \Xl_3
-                        a
-                    \Xr_2
-                    \Xl_3
-                    \Xr_2
-                \Xr_1
-            \Xr_0
-            &&= \overbracket { \Xl_1 \Xl_2 \Xr_1 \Xl_2 \Xl_3 }%^{\gamma_0}
-            && a
-            && \overbracket { \Xr_2 \Xl_3 \Xr_2 \Xr_1 \Xr_0 }%^{\gamma_1}
-%            &&= \gamma_0 a \gamma_1
-            &&= \gamma
-        \quad\quad
+            )\big)
+            &&\!\!\!\!=\;
+            \overbracket { \Xl_1 \Xl_2 \Xr_1 \Xl_2 \Xl_3 }%^{\gamma_0}
+            \;a\;
+            \overbracket { \Xr_2 \Xl_3 \Xr_2 \Xr_1 \Xr_0 }%^{\gamma_1}
     \end{aligned}$
     }};
 \end{scope}
 
-\begin{scope}[xshift=0in, yshift=-1.7in]
+\setlength\tabcolsep{3pt}
+%\renewcommand{\arraystretch}{1.1}
+
+\begin{scope}[xshift=0in, yshift=-1.75in]
     \node (a) {
     $\begin{aligned}
         &\begin{tabular}{c|ll}
@@ -127,7 +103,7 @@
             \rho_1  &= min (\rho_0, minh (\Xr_1 \Xl_2 \Xm_2 \Xr_1 \Xr_0)) = min (2,0) = 0 \\[-0.3em]
             \rho'_1  &= min (\rho'_0, minh (\Xr_2 \Xr_1 \Xr_0))             = min (1,0) = 0
         \end{aligned}\right.
-        \\[0.5em]
+        \\[0.7em]
         &\begin{tabular}{c|ll}
             $traces (\beta, \gamma)$ & 0 & 1 \\
             \hline \\[-1em]
@@ -141,7 +117,7 @@
             \rho_1  &= min (lasth (\Xr_2), minh (\Xr_1 \Xr_0))             = min (2,0) = 0 \\[-0.3em]
             \rho'_1  &= min (lasth (\Xr_2), minh (\Xl_3 \Xr_2 \Xr_1 \Xr_0)) = min (2,0) = 0
         \end{aligned}\right.
-        \\[0.5em]
+        \\[0.7em]
         &\begin{tabular}{c|ll}
             $traces (\alpha, \gamma)$ & 0 & 1 \\
             \hline \\[-1em]
@@ -158,6 +134,72 @@
     \end{aligned}$
     };
 \end{scope}
+
+
+
+\tikzstyle{every node}=[draw=none, shape=rectangle, sibling distance=0, level distance=0, outer sep = 0]
+
+\small{
+\begin{scope}[xshift=-3.5in, yshift=0.3in]
+    \node[xshift=-0.2in, draw=none] {$s:$};
+    \graph [tree layout, grow=down, fresh nodes] {
+        "${T}^{1}$" -- {
+            "${T}^{2}$" -- {
+                "${\varnothing}^{0}$"[draw=none],
+                "${T}^{0}$"[draw=none] -- {
+                    "${a}^{0}$"[draw=none]
+                }
+            },
+            "${T}^{3}$" -- {
+                "${\varnothing}^{4}$"
+            }
+        }
+    };
+\end{scope}
+
+\begin{scope}[xshift=-3.5in, yshift=-0.85in]
+    \node[xshift=-0.2in, draw=none] {$t:$};
+    \graph [tree layout, grow=down, fresh nodes] {
+        "${T}^{1}$" -- {
+            "${T}^{2}$" -- {
+                "${\varnothing}^{0}$"[draw=none],
+                "${T}^{0}$"[draw=none] -- {
+                    "${\varnothing}^{0}$"[draw=none]
+                }
+            },
+            "${T}^{3}$" -- {
+                "${T}^{4}$" -- {
+                    "${a}^{0}$"[draw=none],
+                    "${\varnothing}^{0}$"[draw=none]
+                }
+            }
+        }
+    };
+\end{scope}
+
+\begin{scope}[xshift=-3.5in, yshift=-2in]
+    \node[xshift=-0.2in, draw=none] {$u:$};
+    \graph [tree layout, grow=down, fresh nodes] {
+        "${T}^{1}$" -- {
+            "${T}^{2}$" -- {
+                "${\epsilon}^{0}$"[draw=none],
+                "${\varnothing}^{0}$"[draw=none]
+            },
+            "${T}^{3}$" -- {
+                "${T}^{4}$" -- {
+                    "${a}^{0}$"[draw=none],
+                    "${\varnothing}^{0}$"[draw=none]
+                },
+                "${T}^{4}$" -- {
+                    "${\varnothing}^{0}$"[draw=none],
+                    "${\epsilon}^{0}$"[draw=none]
+                }
+            }
+        }
+    };
+\end{scope}
+}
+
 
 \end{tikzpicture}
 
