@@ -14,12 +14,22 @@
 \let\endprocedure\relax
 
 %\usepackage[ruled]{algorithm2e} % For algorithms
-\usepackage[noline, noend, nofillcomment]{algorithm2e}
+
+\usepackage[noline, noend, nofillcomment, linesnumbered]{algorithm2e}
+%\usepackage[noline, noend, nofillcomment]{algorithm2e}
 %\usepackage[noline, noend, nofillcomment, linesnumbered]{algorithm2e}
 %    \setlength{\algomargin}{0em}
-    \SetArgSty{textnormal}
-%    \SetNoFillComment
-%    \newcommand{\Xcmfont}[1]{\texttt{\footnotesize{#1}}}\SetCommentSty{Xcmfont}
+
+\usepackage{setspace}
+
+\SetArgSty{textnormal}
+
+% comments in the pseudocode
+\newcommand{\Xcmfont}[1]{{\texttt{#1}}}
+\SetCommentSty{Xcmfont}
+
+\SetNlSty{textnormal}{}{}
+
 \renewcommand{\algorithmcfname}{ALGORITHM}
 %\SetAlFnt{\small}
 %\SetAlCapFnt{\small}
@@ -481,6 +491,7 @@ Therefore RE and IRE are equivalent representations.
 \caption{
 An example of constructing IRE for RE $(\epsilon|a^{0,\infty})(a|\epsilon)^{0,3}$ using $mark$ and $enum$\\
 and some examples of IPT for the resulting IRE and string ``$a$''.
+S-norm of each subtree is marked with $\#$.
 }
 \end{figure}
 
@@ -493,6 +504,8 @@ As for PTs, $str(t)$ denotes the string formed by concatenation of all alphabet 
 and $\IPT(r, w) = \{ t \in \IPT(r) \mid str(t) = w \}$ is the set of all IPTs for an IRE $r$ and a string $w$.
 %
 Examples of IPTs can be seen on figure \ref{fig_mark_enum}.
+
+\FloatBarrier
 
     \begin{Xdef}
     \emph{Indexed parse trees (IPT)} over finite alphabet $\Sigma$, denoted $\XIT_\Sigma$, are:
@@ -542,8 +555,6 @@ just the relevant parts of them.
 %
 IPTs have two definitions of norm, one for $Pos$ and one for $Sub$,
 which we call \emph{p-norm} and \emph{s-norm} respectively:
-
-\FloatBarrier
 
     \begin{Xdef}\label{tnorm_of_IPTs}
     The \emph{p-norm} and \emph{s-norm} of an IPT $t$ at position $p$ are:
@@ -735,9 +746,12 @@ Therefore $\alpha < \beta < \gamma$.
 \begin{figure}\label{fig_pe2}
 \includegraphics[width=\linewidth]{img/pe2.pdf}
 \caption{
-An example of all possible IPTs for RE $((a^{1,3})^{1,3})^{1,3}$ and string $aaa$, the corresponding PEs\\
-and the table of their pairwise traces.
-IPTs $t_3$ and $t_5$ are showed in more detail below.
+All possible IPTs for RE $(((a)^{1,3})^{1,3})^{1,3}$ and string $aaa$, the corresponding PEs,\\
+and the table of traces for each pair of PEs.
+Table entry for row $t_i$ and column $t_j$ contains $traces(\Phi_0(t_i), \Phi_0(t_j))$.\\
+IPTs $t_3$ and $t_5$ are showed in more detail
+(dashed lines correspond to frames);
+traces for them are marked in bold.
 }
 \end{figure}
 
@@ -1136,6 +1150,196 @@ TNFA construction.
         }
     }
     \end{algorithm}
+
+\end{multicols}
+\begin{center}
+\caption{GOR1.}
+\end{center}
+\end{figure*}
+
+
+\clearpage
+\pagebreak
+
+
+\begin{figure*}
+\begin{multicols}{2}
+
+    \newcommand \NOPASS {N\!O\!P\!A\!S\!S}
+    \newcommand \TOPSORT {T\!O\!P\!S\!O\!RT}
+    \newcommand \LINEAR {L\!I\!N\!E\!A\!R}
+
+    \setstretch{0.9}
+
+    \begin{algorithm}[H] \DontPrintSemicolon \SetKwProg{Fn}{}{}{} \SetAlgoInsideSkip{medskip}
+    \Fn {$\underline{closure \Xund goldberg \Xund radzik(X, Q, F, \Delta, B, D)} \smallskip$} {
+
+        \tcc {set up context}
+        $C = context(Q, \Delta)$ \;
+
+        \BlankLine
+        \tcc {add start configurations}
+        \For {$(q, x) \in X$} {
+            $y = result(q)$ \;
+            \If {$y = \bot \vee relax(x, y, B, D)$} {
+                $result(q) = x$ \;
+                $status(q) = \TOPSORT$ \;
+                $push(topsort, q)$ \;
+            }
+        }
+
+        \BlankLine
+        \While {$topsort$ is not empty} {
+
+            \BlankLine
+            \tcc {1st pass: topological sorting}
+            \While {$topsort$ is not empty} {
+                $q = pop(topsort)$ \;
+
+                \If {$status(q) \neq \LINEAR$} {
+                    $status(q) = \TOPSORT$ \;
+
+                    %\BlankLine
+                    \tcc {find next admissible arc}
+                    \While {$(p = explore(q, C, B, D)) \neq \bot$ \\
+                         \quad and $status(p) \neq \NOPASS$ } {
+                        $active(p) = 1$
+                    }
+
+                    %\BlankLine
+                    \If {$p \neq \bot$} {
+                        \tcc {follow admissible arc}
+                        $push(topsort, q)$ \;
+                        $push(topsort, p)$ \;
+                        $next(p) = 1$
+                    }
+                    \Else {
+                        \tcc {done: all deps visited}
+                        $status(q) = \LINEAR$ \;
+                        $push(linear, q)$
+                    }
+                }
+            }
+
+            \BlankLine
+            \tcc {2nd pass: linear scan}
+            \While {$linear$ is not empty} {
+                $q = pop(linear)$ \;
+
+                %\BlankLine
+                \If {$active(q)$} {
+
+                    \tcc {scan admissible arcs}
+                    $next(q) = 1$ \;
+                    \While {$(p = explore(q, C, B, D)) \neq \bot$} {
+
+                        \If {$status(p) = \NOPASS$} {
+                            $push(topsort, p)$ \;
+                            $next(p) = 1$ \;
+                        }
+                        \ElseIf {$status(p) = \LINEAR$} {
+                            $active(p) = 1$ \;
+                        }
+                    }
+                }
+
+                %\BlankLine
+                $status(q) = \NOPASS$ \;
+                $active(q) = 0$ \;
+            }
+        }
+
+%TRIE!!!!!!!
+        \BlankLine
+        \Return $\big\{ (q, x) \mid x = result(q) \wedge core(q, F, \Delta) \}$ \;
+    }
+    \end{algorithm}
+
+    \columnbreak
+
+    \begin{algorithm}[H] \DontPrintSemicolon \SetKwProg{Fn}{}{}{} \SetAlgoInsideSkip{medskip}
+    \Fn {$\underline{context(Q, \Delta)} \smallskip$} {
+        $C : (\; topsort : \text{stack of } q \in Q$ \;
+        \Indp
+        $,\; linear  : \text{stack of } q \in Q$ \;
+        $,\; result  : Q \rightarrow (\YZ \times \YZ)^* \texttt{ /* tag histories */}$ \;
+        $,\; status  : Q \rightarrow \{ \NOPASS, \TOPSORT, \LINEAR \}$ \;
+        $,\; indeg   : Q \rightarrow \YZ \texttt{ /* in-degrees */}$ \;
+        $,\; active  : Q \rightarrow \YB \texttt{ /* true if needs rescan */}$ \;
+        $,\; arcs    : Q \rightarrow 2^\Delta \texttt{ /* linearly ordered */}$ \;
+        $,\; next    : Q \rightarrow \YZ) \texttt{ /* next arc to visit */}$ \;
+        \Indm
+
+        \BlankLine
+        \For {$q \in Q$} {
+            $topsort   = \emptyset$ \;
+            $linear    = \emptyset$ \;
+            $result(q) = \bot$ \;
+            $status(q) = \NOPASS$ \;
+            $indeg(q)  = | \{ (q, \Xund, \Xund, \Xund) \in \Delta \} |$ \;
+            $active(q) = 0$ \;
+            $arcs(q)   = \{ (q, \epsilon, \Xund, \Xund) \in \Delta \}$ \;
+            $next(q)   = 1$ \;
+        }
+
+        \BlankLine
+        \Return $C$ \;
+    }
+    \end{algorithm}
+
+    \begin{algorithm}[H] \DontPrintSemicolon \SetKwProg{Fn}{}{}{} \SetAlgoInsideSkip{medskip}
+    \Fn {$\underline{explore (q, context, B, D)} \smallskip$} {
+        $\{ a_1, \dots, a_n \} = arcs (q)$ \;
+        $i = next (q)$ \;
+
+        %\BlankLine
+        \While {$i < n$} {
+
+            $(q, \epsilon, \chi, p) = a_i$ \;
+            $i = i + 1$ \;
+            $next(q) = i$ \;
+            $x = result(q) \chi$ \;
+            $y = result(p)$ \;
+
+            %\BlankLine
+            \If {$y = \bot$ \texttt{ /* never seen this state */} \\
+            or $indeg(p) < 2$ \texttt{ /* not a join point */}  \\
+            or $relax(x, y, B, D)$} {
+                $result(p) = x$ \;
+                \Return $p$ \;
+            }
+        }
+
+        %\BlankLine
+        \Return $\bot$ \;
+    }
+    \end{algorithm}
+
+
+    \begin{algorithm}[H] \DontPrintSemicolon \SetKwProg{Fn}{}{}{} \SetAlgoInsideSkip{medskip}
+    \Fn {$\underline{relax (x, y, B, D)} \smallskip$} {
+        $(\Xund, \Xund, l) = precedence (x, y, B, D)$ \;
+        \Return $l = -1$ \;
+    }
+    \end{algorithm}
+
+    \begin{algorithm}[H] \DontPrintSemicolon \SetKwProg{Fn}{}{}{} \SetAlgoInsideSkip{medskip}
+    \Fn {$\underline{core (q, F, \Delta)} \smallskip$} {
+        \tcc{is final or has outgoing transitions on symbols}
+        \Return $q \in F \vee \; \exists (q, \alpha, \Xund, \Xund) \in \Delta^\Sigma$ \;
+    }
+    \end{algorithm}
+
+%    \begin{algorithm}[H] \DontPrintSemicolon \SetKwProg{Fn}{}{}{} \SetAlgoInsideSkip{medskip}
+%    \Fn {$\underline{find \Xund indegree (q, indegree)} \smallskip$} {
+%        $indegree(q) = indegree(q) + 1$ \;
+%        \If {$indegree(q) \leq 1$} {
+%            \ForEach {outgoing arc $(q, \epsilon, \chi, p) \in \Delta$} {
+%                $find \Xund indegree (p, indegree)$ \;
+%            }
+%        }
+%    }
+%    \end{algorithm}
 
 \end{multicols}
 \begin{center}
