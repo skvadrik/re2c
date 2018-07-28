@@ -44,6 +44,8 @@ static uint32_t calc_dist(const Skeleton &skel
 		return 0;
 	}
 
+	// unroll one iteration of loops
+	// (must be consistent with skeleton data generation)
 	else {
 		local_inc _(loops[i]);
 
@@ -51,6 +53,7 @@ static uint32_t calc_dist(const Skeleton &skel
 			arc = node.arcs.begin(),
 			end = node.arcs.end();
 
+		// handle all child states before setting this state's suffix
 		for (; arc != end; ++arc) {
 			const uint32_t d = calc_dist(skel, loops, dists, arc->first);
 

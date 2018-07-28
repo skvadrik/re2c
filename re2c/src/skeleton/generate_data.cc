@@ -319,7 +319,7 @@ template <typename cunit_t, typename key_t> static void gencover(
 	path_t &prefix = cover.prefix;
 	cover_size_t &size = cover.size;
 
-	if (node.end() && !suffix.init) {
+	if (node.end()) {
 		suffix.init = true;
 	}
 
@@ -328,12 +328,20 @@ template <typename cunit_t, typename key_t> static void gencover(
 		prefix.push_sfx(suffix);
 		size = size + cover_one<cunit_t, key_t>(skel, cover);
 		prefix.pop_sfx(suffix);
-	} else if (loop < 2) {
+	}
+
+	// unroll one iteration of the loop
+	else if (loop < 2) {
 		local_inc _(loop);
 
 		Node::arcs_t::const_iterator
 			arc = node.arcs.begin(),
 			end = node.arcs.end();
+		const suffix_t *min_sfx = NULL;
+		size_t min_idx;
+
+		// pick the shortest suffix to minimize cover size
+		// handle all child states before setting this state's suffix
 		for (; arc != end && !size.overflow(); ++arc) {
 			const size_t j = arc->first;
 
@@ -342,10 +350,19 @@ template <typename cunit_t, typename key_t> static void gencover(
 			prefix.pop();
 
 			const suffix_t &sfx = cover.suffixes[j];
-			if (sfx.init && !suffix.init) {
-				suffix = sfx;
-				suffix.push(j);
+			if (sfx.init && (!min_sfx || sfx.length() < min_sfx->length())) {
+				min_sfx = &sfx;
+				min_idx = j;
 			}
+		}
+
+		if (min_sfx == NULL) {
+			// all outgoing paths loop back into this node
+			// this can happen in cases like [^]*
+		}
+		else {
+			suffix = *min_sfx;
+			suffix.push(min_idx);
 		}
 	}
 }

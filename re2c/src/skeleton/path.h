@@ -19,6 +19,10 @@ private:
 public:
 
 	suffix_t(): init(false), arcs() {}
+	size_t length () const
+	{
+		return arcs.size ();
+	}
 	void push(size_t i)
 	{
 		arcs.push_back(i);
