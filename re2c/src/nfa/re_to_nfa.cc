@@ -89,6 +89,29 @@ static nfa_state_t *re_to_nfa(nfa_t &nfa, size_t nrule, const RE *re, nfa_state_
 	return s;
 }
 
+void calc_indegrees(nfa_state_t *n)
+{
+	++n->indeg;
+	if (n->indeg > 1) return;
+
+	switch (n->type) {
+		case nfa_state_t::NIL:
+			calc_indegrees(n->nil.out);
+			break;
+		case nfa_state_t::ALT:
+			calc_indegrees(n->alt.out1);
+			calc_indegrees(n->alt.out2);
+			break;
+		case nfa_state_t::TAG:
+			calc_indegrees(n->tag.out);
+			break;
+		case nfa_state_t::RAN:
+			calc_indegrees(n->ran.out);
+		case nfa_state_t::FIN:
+			break;
+	}
+}
+
 nfa_t::nfa_t(const RESpec &spec)
 	: max_size(estimate_size(spec.res))
 	, size(0)
@@ -115,6 +138,8 @@ nfa_t::nfa_t(const RESpec &spec)
 			root = s;
 		}
 	}
+
+	calc_indegrees(root);
 }
 
 nfa_t::~nfa_t()

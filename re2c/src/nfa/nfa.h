@@ -18,7 +18,7 @@ namespace re2c
 struct clos_t;
 
 // Goldberg-Radzik 'shortest path' algorithm
-enum gor_status_t {GOR_OFFSTACK, GOR_NEWPASS, GOR_TOPSORT};
+enum gor_status_t {GOR_NOPASS = 0u, GOR_TOPSORT = 1u, GOR_LINEAR = 2u};
 
 static const uint32_t NOCLOS = ~0u;
 
@@ -49,26 +49,37 @@ struct nfa_state_t
 		} nil;
 	};
 	size_t rule;
+
+	// stuff needed for GOR1
 	uint32_t clos;
-	gor_status_t status;
+	gor_status_t status : 2;  // values 0, 1, 2
+	uint32_t arcidx     : 2;  // maximum out-dergee is 2
+	uint32_t active     : 1;  // boolean
+	uint32_t indeg      : 27; // the rest; we are unlikely to have more than 2^27 states
+
+	void init(size_t r)
+	{
+		rule = r;
+		clos = NOCLOS;
+		status = GOR_NOPASS;
+		arcidx = 0;
+		active = 0;
+		indeg = 0;
+	}
 
 	void make_alt(size_t r, nfa_state_t *s1, nfa_state_t *s2)
 	{
 		type = ALT;
 		alt.out1 = s1;
 		alt.out2 = s2;
-		rule = r;
-		clos = NOCLOS;
-		status = GOR_OFFSTACK;
+		init(r);
 	}
 	void make_ran(size_t r, nfa_state_t *s, const Range *p)
 	{
 		type = RAN;
 		ran.out = s;
 		ran.ran = p;
-		rule = r;
-		clos = NOCLOS;
-		status = GOR_OFFSTACK;
+		init(r);
 	}
 	void make_tag(size_t r, nfa_state_t *s, size_t i, bool bottom)
 	{
@@ -76,24 +87,18 @@ struct nfa_state_t
 		tag.out = s;
 		tag.info = i;
 		tag.bottom = bottom;
-		rule = r;
-		clos = NOCLOS;
-		status = GOR_OFFSTACK;
+		init(r);
 	}
 	void make_fin(size_t r)
 	{
 		type = FIN;
-		rule = r;
-		clos = NOCLOS;
-		status = GOR_OFFSTACK;
+		init(r);
 	}
 	void make_nil(size_t r, nfa_state_t *s)
 	{
 		type = NIL;
 		nil.out = s;
-		rule = r;
-		clos = NOCLOS;
-		status = GOR_OFFSTACK;
+		init(r);
 	}
 };
 

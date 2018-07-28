@@ -97,109 +97,169 @@ static bool redundant(size_t t, const std::vector<Tag> &tags) {
  * Both disambiguation policies forbid epsilon-cycles with negative weight.
  */
 
-static void enqueue(clos_t x, std::stack<nfa_state_t*> &bstack, closure_t &done,
+static nfa_state_t *relax(clos_t x, closure_t &done,
 	closure_t *shadow, Tagpool &tagpool, const std::vector<Tag> &tags)
 {
-	nfa_state_t *n = x.state;
-	uint32_t &i = n->clos;
+	nfa_state_t *q = x.state;
+	uint32_t &i = q->clos;
 
+	// first time we see this state
 	if (i == NOCLOS) {
 		i = static_cast<uint32_t>(done.size());
 		done.push_back(x);
-	} else {
-		const int32_t cmp = compare_posix(x, done[i], tagpool, tags);
-		if (cmp < 0) std::swap(x, done[i]);
+	}
+	// States of in-degree less than 2 are not joint points;
+	// the fact that we are re-scanning this state means that we found
+	// a better path to some previous state. Due to the right distributivity
+	// of path comparison over path concatenation (X < Y => XZ < YZ) we
+	// can just propagate the new path up to the next join point.
+	else if (q->indeg < 2) {
+		std::swap(x, done[i]);
+		if (shadow) shadow->push_back(x);
+	}
+	// join point; compare the new path and the old path
+	else {
+		clos_t &y = done[i];
+		const int32_t cmp = compare_posix(x, y, tagpool, tags);
+		if (cmp < 0) std::swap(x, y);
 		if (shadow && cmp != 0) shadow->push_back(x);
-		if (cmp >= 0) return;
+		if (cmp >= 0) q = NULL;
 	}
 
-	if (n->status != GOR_TOPSORT) {
-		bstack.push(n);
-		n->status = GOR_NEWPASS;
-	}
+	return q;
 }
 
-static void scan(nfa_state_t *n, std::stack<nfa_state_t*> &bstack, closure_t &done,
+static nfa_state_t *explore(nfa_state_t *q, closure_t &done,
 	closure_t *shadow, Tagpool &tagpool, const std::vector<Tag> &tags)
 {
-	tagtree_t &history = tagpool.history;
-	clos_t x = done[n->clos];
-	switch (n->type) {
+	// find the next admissible transition, adjust the index
+	// of the next transition and return the to-state
+	nfa_state_t *p = NULL;
+	clos_t x = done[q->clos];
+	switch (q->type) {
 		case nfa_state_t::NIL:
-			x.state = n->nil.out;
-			enqueue(x, bstack, done, shadow, tagpool, tags);
+			if (q->arcidx == 0) {
+				x.state = q->nil.out;
+				p = relax(x, done, shadow, tagpool, tags);
+				++q->arcidx;
+			}
 			break;
 		case nfa_state_t::ALT:
-			x.state = n->alt.out2;
-			enqueue(x, bstack, done, shadow, tagpool, tags);
-			x.state = n->alt.out1;
-			enqueue(x, bstack, done, shadow, tagpool, tags);
+			if (q->arcidx == 0) {
+				x.state = q->alt.out1;
+				p = relax(x, done, shadow, tagpool, tags);
+				++q->arcidx;
+			}
+			if (q->arcidx == 1 && !p) {
+				x.state = q->alt.out2;
+				p = relax(x, done, shadow, tagpool, tags);
+				++q->arcidx;
+			}
 			break;
 		case nfa_state_t::TAG:
-			x.state = n->tag.out;
-			x.tlook = history.push(x.tlook, n->tag.info,
-				n->tag.bottom ? TAGVER_BOTTOM : TAGVER_CURSOR);
-			enqueue(x, bstack, done, shadow, tagpool, tags);
+			if (q->arcidx == 0) {
+				x.state = q->tag.out;
+				x.tlook = tagpool.history.push(x.tlook, q->tag.info,
+					q->tag.bottom ? TAGVER_BOTTOM : TAGVER_CURSOR);
+				p = relax(x, done, shadow, tagpool, tags);
+				++q->arcidx;
+			}
 			break;
 		case nfa_state_t::RAN:
 		case nfa_state_t::FIN:
 			break;
 	}
+	return p;
 }
 
 void closure_posix(const closure_t &init, closure_t &done,
 	closure_t *shadow, Tagpool &tagpool, const std::vector<Tag> &tags)
 {
 	std::stack<nfa_state_t*>
-		&astack = tagpool.astack,
-		&bstack = tagpool.bstack;
+		&topsort = tagpool.astack,
+		&linear = tagpool.bstack;
+	nfa_state_t *q, *p;
 
-	// enqueue all initial states
 	done.clear();
 	if (shadow) shadow->clear();
+
+	// enqueue all initial states (there might be duplicates)
 	for (cclositer_t c = init.begin(); c != init.end(); ++c) {
-		enqueue(*c, bstack, done, shadow, tagpool, tags);
+		q = relax(*c, done, shadow, tagpool, tags);
+		if (q) {
+			topsort.push(q);
+			q->status = GOR_TOPSORT;
+		}
 	}
 
 	// Gordberg-Radzik 'shortest path' algorithm.
 	// Papers: 1993, "A heuristic improvement of the Bellman-Ford
 	// algorithm" by Goldberg, Radzik and 1996, Shortest paths algorithms:
-	// Theory andexperimental evaluation" by Cherkassky, Goldberg, Radzik.
+	// Theory and experimental evaluation" by Cherkassky, Goldberg, Radzik.
 	// Complexity for digraph G=(V,E) is O(|V|*|E|).
-	for (; !bstack.empty(); ) {
+	for (; !topsort.empty(); ) {
 
-		// 1st step: find admissible subgraph reachable from B-stack
+		// 1st pass: scan admissible subgraph reachable from B-stack
 		// and topologically sort it (this can be done by a single
-		// depth-first search that scans each state and pushes traversed
-		// states to A-stack in postorder)
-		for (; !bstack.empty(); ) {
-			nfa_state_t *n = bstack.top();
-			if (n->status == GOR_NEWPASS) {
-				n->status = GOR_TOPSORT;
-				scan(n, bstack, done, shadow, tagpool, tags);
-			} else if (n->status == GOR_TOPSORT) {
-				bstack.pop();
-				astack.push(n);
-			} else { // GOR_OFFSTACK
-				bstack.pop();
+		// depth-first postorder traversal)
+		for (; !topsort.empty(); ) {
+			q = topsort.top();
+			topsort.pop();
+
+			if (q->status != GOR_LINEAR) {
+				q->status = GOR_TOPSORT;
+
+				// find next admissible transition
+				while ((p = explore(q, done, shadow, tagpool, tags))
+					&& p->status != GOR_NOPASS) {
+					p->active = 1;
+				}
+
+				// follow the admissible transition
+				if (p) {
+					topsort.push(q);
+					topsort.push(p);
+					p->arcidx = 0;
+				}
+				// done with this state: all deps visited
+				else {
+					q->status = GOR_LINEAR;
+					linear.push(q);
+				}
 			}
 		}
 
-		// 2nd step: scan topologically ordered states from A-stack
+		// 2nd pass: scan topologically ordered states from A-stack
 		// and push head states of relaxed transitions to B-stack
-		for (; !astack.empty(); ) {
-			nfa_state_t *n = astack.top();
-			astack.pop();
-			scan(n, bstack, done, shadow, tagpool, tags);
-			n->status = GOR_OFFSTACK;
+		for (; !linear.empty(); ) {
+			q = linear.top();
+			linear.pop();
+
+			if (q->active) {
+				// scan admissible transitions
+				q->arcidx = 0;
+				while ((p = explore(q, done, shadow, tagpool, tags))) {
+					if (p->status == GOR_NOPASS) {
+						topsort.push(p);
+						p->arcidx = 0;
+					}
+					else if (p->status == GOR_LINEAR) {
+						p->active = 1;
+					}
+				}
+			}
+
+			q->status = GOR_NOPASS;
+			q->active = 0;
+			q->arcidx = 0;
 		}
 	}
 
-	// reset associated closure items and check status
-	// (do this before removing any states from closure)
+	// clean up (do this before removing any states from closure)
 	for (clositer_t i = done.begin(); i != done.end(); ++i) {
-		i->state->clos = NOCLOS;
-		assert(i->state->status == GOR_OFFSTACK);
+		q = i->state;
+		q->clos = NOCLOS;
+		assert(q->status == GOR_NOPASS && q->active == 0 && q->arcidx == 0);
 	}
 }
 

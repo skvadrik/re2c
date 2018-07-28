@@ -20,13 +20,13 @@ void dump_nfa(const nfa_t &nfa)
 	fprintf(stderr,
 		"digraph NFA {\n"
 		"  rankdir=LR\n"
-		"  node[shape=Mrecord fontname=fixed height=0.2 width=0.2]\n"
-		"  edge[arrowhead=vee fontname=fixed label=\" \"]\n\n");
+		"  node[shape=Mrecord fontname=Courier height=0.2 width=0.2]\n"
+		"  edge[arrowhead=vee fontname=Courier label=\" \"]\n\n");
 
 	for (uint32_t i = static_cast<uint32_t>(nfa.size); i --> 0;) {
 		const nfa_state_t *n = &nfa.states[i];
 
-		fprintf(stderr, "  n%u [label=\"%u\"]", i, i);
+		fprintf(stderr, "  n%u [label=\"%u(%d)\"]", i, i, n->indeg);
 		if (n->type == nfa_state_t::FIN) {
 			fprintf(stderr, " [fillcolor=gray]");
 		}
