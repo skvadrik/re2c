@@ -7,7 +7,7 @@
 
 static int lex(const char *YYCURSOR)
 {
-    const char *YYMARKER, *n, *p, *u, *g, *i, *h, *c;
+    const char *YYMARKER, *n, *p, *u, *g, *f, *h, *c;
     const char *yyt1;const char *yyt2;const char *yyt3;const char *yyt4;const char *yyt5;const char *yyt6;const char *yyt7;
 loop:
     
@@ -193,15 +193,15 @@ yy28:
 	p = yyt2;
 	u = yyt3;
 	g = yyt4;
-	i = yyt5;
+	f = yyt5;
 	h = yyt6;
 	c = yyt7;
 	{
             printf("user:     %.*s\n", (int)(p - n) - 1, n);
             printf("password: %.*s\n", (int)(u - p) - 1, p);
             printf("UID:      %.*s\n", (int)(g - u) - 1, u);
-            printf("GID:      %.*s\n", (int)(i - g) - 1, g);
-            printf("info:     %.*s\n", (int)(h - i) - 1, i);
+            printf("GID:      %.*s\n", (int)(f - g) - 1, g);
+            printf("info:     %.*s\n", (int)(h - f) - 1, f);
             printf("home:     %.*s\n", (int)(c - h) - 1, h);
             printf("command:  %.*s\n", (int)(YYCURSOR - c - 1), c);
             printf("\n");
