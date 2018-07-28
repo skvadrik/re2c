@@ -25,8 +25,10 @@
 \SetArgSty{textnormal}
 
 % comments in the pseudocode
-\newcommand{\Xcmfont}[1]{{\texttt{#1}}}
-\SetCommentSty{Xcmfont}
+% note: on my sistem \texttt is broken with \small font size (too small)
+\newcommand\Xcommentfont[1]{\fontsize{9pt}{0pt}\selectfont\texttt{#1}}
+\SetCommentSty{Xcommentfont}
+\SetNoFillComment
 
 \SetNlSty{textnormal}{}{}
 
@@ -1168,6 +1170,9 @@ TNFA construction.
     \newcommand \NOPASS {N\!O\!P\!A\!S\!S}
     \newcommand \TOPSORT {T\!O\!P\!S\!O\!RT}
     \newcommand \LINEAR {L\!I\!N\!E\!A\!R}
+    \newcommand \Xfalse {f\!al\!se}
+    \newcommand \longprec {longprec}
+    \newcommand \leftprec {le\!f\!tprec}
 
     \setstretch{0.9}
 
@@ -1175,15 +1180,17 @@ TNFA construction.
     \Fn {$\underline{closure \Xund goldberg \Xund radzik(X, Q, F, \Delta, B, D)} \smallskip$} {
 
         \tcc {set up context}
-        $C = context(Q, \Delta)$ \;
+        $C = context(Q, \Delta, B, D)$ \;
 
         \BlankLine
         \tcc {add start configurations}
-        \For {$(q, x) \in X$} {
+        \For {$(o, q, \epsilon, t) \in X$} {
+            $x = (o, \epsilon, t)$ \;
             $y = result(q)$ \;
-            \If {$y = \bot \vee relax(x, y, B, D)$} {
+            \If {$y = \bot \vee relax(x, y, C)$} {
                 $result(q) = x$ \;
                 $status(q) = \TOPSORT$ \;
+                $next(q)   = 1$ \;
                 $push(topsort, q)$ \;
             }
         }
@@ -1201,9 +1208,9 @@ TNFA construction.
 
                     %\BlankLine
                     \tcc {find next admissible arc}
-                    \While {$(p = explore(q, C, B, D)) \neq \bot$ \\
+                    \While {$(p = explore(q, C)) \neq \bot$ \\
                          \quad and $status(p) \neq \NOPASS$ } {
-                        $active(p) = 1$
+                        $active(p) = true$
                     }
 
                     %\BlankLine
@@ -1231,43 +1238,45 @@ TNFA construction.
 
                     \tcc {scan admissible arcs}
                     $next(q) = 1$ \;
-                    \While {$(p = explore(q, C, B, D)) \neq \bot$} {
+                    \While {$(p = explore(q, C)) \neq \bot$} {
 
                         \If {$status(p) = \NOPASS$} {
                             $push(topsort, p)$ \;
                             $next(p) = 1$ \;
                         }
                         \ElseIf {$status(p) = \LINEAR$} {
-                            $active(p) = 1$ \;
+                            $active(p) = true$ \;
                         }
                     }
                 }
 
                 %\BlankLine
                 $status(q) = \NOPASS$ \;
-                $active(q) = 0$ \;
+                $active(q) = \Xfalse$ \;
             }
         }
 
 %TRIE!!!!!!!
         \BlankLine
-        \Return $\big\{ (q, x) \mid x = result(q) \wedge core(q, F, \Delta) \}$ \;
+        \Return $\big\{ (o, q, u, t) \mid (o, u, t) = result(q)$ \;
+            \hspace{7em} $\wedge \; core(q, F, \Delta) \}$
     }
     \end{algorithm}
 
     \columnbreak
 
     \begin{algorithm}[H] \DontPrintSemicolon \SetKwProg{Fn}{}{}{} \SetAlgoInsideSkip{medskip}
-    \Fn {$\underline{context(Q, \Delta)} \smallskip$} {
+    \Fn {$\underline{context(Q, \Delta, B, D)} \smallskip$} {
         $C : (\; topsort : \text{stack of } q \in Q$ \;
         \Indp
-        $,\; linear  : \text{stack of } q \in Q$ \;
-        $,\; result  : Q \rightarrow (\YZ \times \YZ)^* \texttt{ /* tag histories */}$ \;
-        $,\; status  : Q \rightarrow \{ \NOPASS, \TOPSORT, \LINEAR \}$ \;
-        $,\; indeg   : Q \rightarrow \YZ \texttt{ /* in-degrees */}$ \;
-        $,\; active  : Q \rightarrow \YB \texttt{ /* true if needs rescan */}$ \;
-        $,\; arcs    : Q \rightarrow 2^\Delta \texttt{ /* linearly ordered */}$ \;
-        $,\; next    : Q \rightarrow \YZ) \texttt{ /* next arc to visit */}$ \;
+        $,\, linear  : \text{stack of } q \in Q$ \;
+        $,\, result  : Q \rightarrow \YZ^*$                        \tcc*{tag histories}
+        $,\, status  : Q \rightarrow \{ \NOPASS, \TOPSORT, \LINEAR \}$
+        $,\, indeg   : Q \rightarrow \YZ$                          \tcc*{in-degrees}
+        $,\, active  : Q \rightarrow \YB$                          \tcc*{true if needs rescan}
+        $,\, arcs    : Q \rightarrow 2^\Delta$                     \tcc*{linearly ordered}
+        $,\, \longprec : Q \times Q \rightarrow \YZ$               \tcc*{longest  rel.}
+        $,\, \leftprec : Q \times Q \rightarrow \{ -\!1, 0, 1 \})$ \tcc*{leftmost rel.}
         \Indm
 
         \BlankLine
@@ -1276,11 +1285,12 @@ TNFA construction.
             $linear    = \emptyset$ \;
             $result(q) = \bot$ \;
             $status(q) = \NOPASS$ \;
-            $indeg(q)  = | \{ (q, \Xund, \Xund, \Xund) \in \Delta \} |$ \;
-            $active(q) = 0$ \;
+            $indeg(q)  = | \{ (\Xund, \Xund, \Xund, q) \in \Delta \} |$ \;
+            $active(q) = \Xfalse$ \;
             $arcs(q)   = \{ (q, \epsilon, \Xund, \Xund) \in \Delta \}$ \;
-            $next(q)   = 1$ \;
         }
+        $\longprec = B$ \;
+        $\leftprec = D$ \;
 
         \BlankLine
         \Return $C$ \;
@@ -1288,44 +1298,44 @@ TNFA construction.
     \end{algorithm}
 
     \begin{algorithm}[H] \DontPrintSemicolon \SetKwProg{Fn}{}{}{} \SetAlgoInsideSkip{medskip}
-    \Fn {$\underline{explore (q, context, B, D)} \smallskip$} {
+    \Fn {$\underline{explore (q, C)} \smallskip$} {
         $\{ a_1, \dots, a_n \} = arcs (q)$ \;
         $i = next (q)$ \;
 
         %\BlankLine
         \While {$i < n$} {
 
-            $(q, \epsilon, \chi, p) = a_i$ \;
+            $(q, \epsilon, \tau, p) = a_i$ \;
             $i = i + 1$ \;
-            $next(q) = i$ \;
-            $x = result(q) \chi$ \;
+            $next(q) = i$       \tcc*{side-effect: set next arc}
+            $x = (o, u \tau, t)$ where $(o, u, t) = result(q)$ \;
             $y = result(p)$ \;
 
             %\BlankLine
-            \If {$y = \bot$ \texttt{ /* never seen this state */} \\
-            or $indeg(p) < 2$ \texttt{ /* not a join point */}  \\
-            or $relax(x, y, B, D)$} {
-                $result(p) = x$ \;
-                \Return $p$ \;
+            \If {$y = \bot$     \tcc*{never seen this state}
+            or $indeg(p) < 2$   \tcc*{not a join state}
+            or $relax(x, y, C)$ \tcc*{new path is shorter}} {
+                $result(p) = x$ \tcc*{side-effect: set result}
+                \Return $p$
             }
         }
 
         %\BlankLine
-        \Return $\bot$ \;
+        \Return $\bot$
     }
     \end{algorithm}
 
 
     \begin{algorithm}[H] \DontPrintSemicolon \SetKwProg{Fn}{}{}{} \SetAlgoInsideSkip{medskip}
-    \Fn {$\underline{relax (x, y, B, D)} \smallskip$} {
-        $(\Xund, \Xund, l) = precedence (x, y, B, D)$ \;
+    \Fn {$\underline{relax (x, y, C)} \smallskip$} {
+        $(\Xund, \Xund, l) = precedence (x, y, \longprec, \leftprec)$ \;
         \Return $l = -1$ \;
     }
     \end{algorithm}
 
     \begin{algorithm}[H] \DontPrintSemicolon \SetKwProg{Fn}{}{}{} \SetAlgoInsideSkip{medskip}
     \Fn {$\underline{core (q, F, \Delta)} \smallskip$} {
-        \tcc{is final or has outgoing transitions on symbols}
+        \tcc{is final or has out-transitions on symbols}
         \Return $q \in F \vee \; \exists (q, \alpha, \Xund, \Xund) \in \Delta^\Sigma$ \;
     }
     \end{algorithm}
