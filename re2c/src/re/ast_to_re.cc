@@ -152,7 +152,8 @@ static RE *ast_to_re(RESpec &spec, const AST *ast, size_t &ncap)
 			// see note [default regexp]
 			return re_sym(alc, Range::ran(0, opts->encoding.nCodeUnits()));
 		case AST::ALT: {
-			RE *t1 = NULL, *t2 = NULL, *x, *y;
+			RE *t1 = NULL, *t2 = NULL, *t3 = NULL, *t4 = NULL, *x, *y;
+
 			if (opts->posix_captures && has_tags(ast)
 				&& ast->alt.ast1->type != AST::CAP) {
 				// see note [POSIX subexpression hierarchy]
@@ -163,7 +164,18 @@ static RE *ast_to_re(RESpec &spec, const AST *ast, size_t &ncap)
 			}
 			x = ast_to_re(spec, ast->alt.ast1, ncap);
 			x = re_cat(alc, t1, re_cat(alc, x, t2));
+
+			if (opts->posix_captures && has_tags(ast)
+				&& ast->alt.ast2->type != AST::CAP) {
+				// see note [POSIX subexpression hierarchy]
+				t3 = re_tag(alc, tags.size(), false);
+				tags.push_back(Tag(Tag::FICTIVE, false));
+				t4 = re_tag(alc, tags.size(), false);
+				tags.push_back(Tag(Tag::FICTIVE, false));
+			}
 			y = ast_to_re(spec, ast->alt.ast2, ncap);
+			y = re_cat(alc, t3, re_cat(alc, y, t4));
+
 			return re_alt(alc, x, y);
 		}
 		case AST::DIFF: {
@@ -175,10 +187,11 @@ static RE *ast_to_re(RESpec &spec, const AST *ast, size_t &ncap)
 			return re_class(alc, ast->line, ast->column, Range::sub(x->sym, y->sym), opts, warn);
 		}
 		case AST::CAT: {
-			RE *t1 = NULL, *t2 = NULL, *x, *y;
+			RE *t1 = NULL, *t2 = NULL, *t3 = NULL, *t4 = NULL, *x, *y;
+
 			const AST *a1 = ast->alt.ast1;
 			if (opts->posix_captures && has_tags(ast)
-				&& a1->type != AST::CAP && fixlen(a1) == Tag::VARDIST) {
+				&& a1->type != AST::CAP) {
 				// see note [POSIX subexpression hierarchy]
 				t1 = re_tag(alc, tags.size(), false);
 				tags.push_back(Tag(Tag::FICTIVE, false));
@@ -187,7 +200,19 @@ static RE *ast_to_re(RESpec &spec, const AST *ast, size_t &ncap)
 			}
 			x = ast_to_re(spec, ast->cat.ast1, ncap);
 			x = re_cat(alc, t1, re_cat(alc, x, t2));
+
+			const AST *a2 = ast->alt.ast2;
+			if (opts->posix_captures && has_tags(ast)
+				&& a2->type != AST::CAP) {
+				// see note [POSIX subexpression hierarchy]
+				t3 = re_tag(alc, tags.size(), false);
+				tags.push_back(Tag(Tag::FICTIVE, false));
+				t4 = re_tag(alc, tags.size(), false);
+				tags.push_back(Tag(Tag::FICTIVE, false));
+			}
 			y = ast_to_re(spec, ast->cat.ast2, ncap);
+			y = re_cat(alc, t3, re_cat(alc, y, t4));
+
 			return re_cat(alc, x, y);
 		}
 		case AST::TAG: {
