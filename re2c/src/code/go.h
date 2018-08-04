@@ -24,8 +24,6 @@ struct Span
 	uint32_t ub;
 	State * to;
 	tcid_t tags;
-
-	FORBID_COPY (Span);
 };
 
 struct Case
