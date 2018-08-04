@@ -28,11 +28,12 @@ yy4:
 	goto yy2;
 yy5:
 	++YYCURSOR;
+	yyt3 = YYCURSOR;
 	yynmatch = 2;
 	yypmatch[0] = yyt1;
 	yypmatch[2] = yyt2;
+	yypmatch[3] = yyt3;
 	yypmatch[1] = YYCURSOR;
-	yypmatch[3] = YYCURSOR;
 	{}
 }
 

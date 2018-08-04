@@ -258,8 +258,8 @@ static RE *ast_to_re(RESpec &spec, const AST *ast, size_t &ncap)
 			} else  {
 				y = ast_to_re(spec, x, ncap);
 				y = re_cat(alc, t1, y);
-				y = re_iter(alc, y, n1, m);
 				y = re_cat(alc, y, t2);
+				y = re_iter(alc, y, n1, m);
 			}
 			if (n == 0) {
 				y = re_alt(alc, y, re_nil(alc));

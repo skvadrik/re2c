@@ -48,9 +48,9 @@ yy5:
 	yynmatch = 3;
 	yypmatch[0] = yyt1;
 	yypmatch[2] = yyt2;
+	yypmatch[3] = yyt3;
 	yypmatch[4] = yyt3;
 	yypmatch[1] = YYCURSOR;
-	yypmatch[3] = yyt3;
 	yypmatch[5] = YYCURSOR;
 	{}
 yy6:

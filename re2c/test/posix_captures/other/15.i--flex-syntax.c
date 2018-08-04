@@ -21,17 +21,20 @@ yy3:
 	case 'y':
 		yyt2 = YYCURSOR;
 		goto yy5;
-	default:	goto yy4;
+	default:
+		yyt3 = YYCURSOR;
+		goto yy4;
 	}
 yy4:
 	yynmatch = 2;
 	yypmatch[0] = yyt1;
 	yypmatch[2] = yyt2;
+	yypmatch[3] = yyt3;
 	yypmatch[1] = YYCURSOR;
-	yypmatch[3] = YYCURSOR;
 	{}
 yy5:
 	++YYCURSOR;
+	yyt3 = YYCURSOR;
 	goto yy4;
 }
 

@@ -21,7 +21,7 @@ yy3:
 	switch (yych) {
 	case 0x00:	goto yy4;
 	case 'Y':
-		yyt2 = YYCURSOR;
+		yyt2 = yyt3 = YYCURSOR;
 		goto yy6;
 	default:	goto yy5;
 	}
@@ -36,7 +36,7 @@ yy5:
 	yych = *++YYCURSOR;
 	switch (yych) {
 	case 'Y':
-		yyt3 = YYCURSOR;
+		yyt3 = yyt4 = YYCURSOR;
 		goto yy10;
 	default:	goto yy9;
 	}
@@ -46,18 +46,18 @@ yy6:
 	switch (yych) {
 	case 0x00:	goto yy7;
 	case 'Y':
-		yyt3 = YYCURSOR;
+		yyt3 = yyt4 = YYCURSOR;
 		goto yy10;
 	default:
-		yyt3 = YYCURSOR;
+		yyt4 = YYCURSOR;
 		goto yy8;
 	}
 yy7:
 	yynmatch = 2;
 	yypmatch[0] = yyt1;
 	yypmatch[2] = yyt2;
+	yypmatch[3] = yyt3;
 	yypmatch[1] = YYCURSOR;
-	yypmatch[3] = YYCURSOR - 1;
 	{}
 yy8:
 	++YYCURSOR;
@@ -67,10 +67,10 @@ yy9:
 	switch (yych) {
 	case 0x00:	goto yy4;
 	case 'Y':
-		yyt2 = YYCURSOR;
+		yyt2 = yyt3 = YYCURSOR;
 		goto yy11;
 	default:
-		yyt3 = YYCURSOR;
+		yyt4 = YYCURSOR;
 		goto yy8;
 	}
 yy10:
@@ -78,7 +78,7 @@ yy10:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
 	case 'Y':
-		yyt2 = YYCURSOR;
+		yyt2 = yyt3 = YYCURSOR;
 		goto yy11;
 	default:	goto yy12;
 	}
@@ -90,15 +90,15 @@ yy11:
 yy12:
 	switch (yych) {
 	case 0x00:
-		yyt2 = yyt3;
+		yyt2 = yyt4;
 		goto yy7;
 	case 'Y':
-		yyt3 = yyt2;
-		yyt2 = YYCURSOR;
+		yyt4 = yyt2;
+		yyt2 = yyt3 = YYCURSOR;
 		goto yy11;
 	default:
-		yyt2 = yyt3;
-		yyt3 = YYCURSOR;
+		yyt2 = yyt4;
+		yyt4 = YYCURSOR;
 		goto yy8;
 	}
 }

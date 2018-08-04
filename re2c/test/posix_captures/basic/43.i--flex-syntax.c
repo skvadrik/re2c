@@ -2,16 +2,16 @@
 
 {
 	YYCTYPE yych;
-	if ((YYLIMIT - YYCURSOR) < 3) YYFILL(3);
+	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *(YYMARKER = YYCURSOR);
 	switch (yych) {
 	case 'a':
 	case 'c':
-		yyt1 = yyt3 = YYCURSOR;
+		yyt1 = yyt4 = YYCURSOR;
 		goto yy3;
 	case 'b':
-		yyt2 = yyt4 = NULL;
-		yyt1 = yyt3 = YYCURSOR;
+		yyt2 = yyt3 = NULL;
+		yyt1 = yyt4 = YYCURSOR;
 		goto yy6;
 	default:	goto yy2;
 	}
@@ -24,75 +24,59 @@ yy3:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
-yy4:
 	switch (yych) {
 	case 'a':
 	case 'c':
-		yyt3 = YYCURSOR;
+		yyt4 = YYCURSOR;
 		goto yy3;
 	case 'b':
-		yyt2 = yyt4 = YYCURSOR;
-		goto yy7;
+		yyt2 = yyt4;
+		yyt3 = yyt4 = YYCURSOR;
+		goto yy6;
 	default:	goto yy5;
 	}
 yy5:
 	YYCURSOR = YYMARKER;
 	goto yy2;
 yy6:
-	yych = *++YYCURSOR;
-	switch (yych) {
-	case 'c':
-		yyt3 = YYCURSOR;
-		goto yy9;
-	default:	goto yy4;
-	}
-yy7:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	switch (yych) {
 	case 'a':
-		yyt3 = YYCURSOR;
+		yyt4 = YYCURSOR;
 		goto yy3;
 	case 'b':
-		yyt3 = yyt2;
-		yyt2 = yyt4 = YYCURSOR;
-		goto yy7;
+		yyt2 = yyt4;
+		yyt3 = yyt4 = YYCURSOR;
+		goto yy6;
 	case 'c':
-		yyt2 = YYCURSOR;
-		goto yy10;
+		yyt4 = YYCURSOR;
+		goto yy8;
+	default:	goto yy5;
+	}
+yy8:
+	++YYCURSOR;
+	if (YYLIMIT <= YYCURSOR) YYFILL(1);
+	yych = *YYCURSOR;
+	switch (yych) {
+	case 'a':
+	case 'c':
+		yyt4 = YYCURSOR;
+		goto yy3;
+	case 'b':
+		yyt2 = yyt4;
+		yyt3 = yyt4 = YYCURSOR;
+		goto yy6;
+	case 'd':	goto yy9;
 	default:	goto yy5;
 	}
 yy9:
-	yych = *++YYCURSOR;
-	switch (yych) {
-	case 'd':	goto yy11;
-	default:	goto yy4;
-	}
-yy10:
-	++YYCURSOR;
-	if (YYLIMIT <= YYCURSOR) YYFILL(1);
-	yych = *YYCURSOR;
-	switch (yych) {
-	case 'a':
-	case 'c':
-		yyt3 = YYCURSOR;
-		goto yy3;
-	case 'b':
-		yyt3 = yyt2;
-		yyt2 = yyt4 = YYCURSOR;
-		goto yy7;
-	case 'd':
-		yyt2 = yyt3;
-		goto yy11;
-	default:	goto yy5;
-	}
-yy11:
 	++YYCURSOR;
 	yynmatch = 2;
 	yypmatch[0] = yyt1;
 	yypmatch[2] = yyt2;
-	yypmatch[3] = yyt4;
+	yypmatch[3] = yyt3;
 	yypmatch[1] = YYCURSOR;
 	{}
 }

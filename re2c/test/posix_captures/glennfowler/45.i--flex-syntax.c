@@ -2,7 +2,7 @@
 
 {
 	YYCTYPE yych;
-	if ((YYLIMIT - YYCURSOR) < 6) YYFILL(6);
+	if ((YYLIMIT - YYCURSOR) < 4) YYFILL(4);
 	yych = *(YYMARKER = YYCURSOR);
 	if (yych >= 0x01) {
 		yyt2 = yyt4 = NULL;
@@ -43,45 +43,29 @@ yy5:
 		yyt2 = yyt6 = YYCURSOR;
 		goto yy2;
 	}
-	yych = *++YYCURSOR;
+yy7:
+	++YYCURSOR;
+	if (YYLIMIT <= YYCURSOR) YYFILL(1);
+	yych = *YYCURSOR;
 	if (yych <= 0x00) {
 		yyt3 = yyt6;
 		yyt5 = yyt6 = NULL;
 		yyt2 = yyt4 = YYCURSOR;
 		goto yy2;
 	}
-	yyt2 = yyt4 = yyt5 = YYCURSOR;
-	yych = *++YYCURSOR;
+	yyt2 = YYCURSOR;
+	++YYCURSOR;
+	if (YYLIMIT <= YYCURSOR) YYFILL(1);
+	yych = *YYCURSOR;
 	if (yych <= 0x00) {
 		yyt4 = yyt6;
 		yyt5 = yyt6;
 		yyt2 = yyt6 = YYCURSOR;
 		goto yy2;
 	}
-yy9:
-	++YYCURSOR;
-	if (YYLIMIT <= YYCURSOR) YYFILL(1);
-	yych = *YYCURSOR;
-	if (yych <= 0x00) {
-		yyt3 = yyt2;
-		yyt5 = yyt6 = NULL;
-		yyt2 = yyt4 = YYCURSOR;
-		goto yy2;
-	}
-	yyt3 = YYCURSOR;
-	++YYCURSOR;
-	if (YYLIMIT <= YYCURSOR) YYFILL(1);
-	yych = *YYCURSOR;
-	if (yych <= 0x00) {
-		yyt3 = yyt6;
-		yyt2 = yyt6 = YYCURSOR;
-		goto yy2;
-	}
-	yyt4 = yyt3;
-	yyt5 = yyt3;
+	yyt3 = yyt6;
 	yyt6 = yyt2;
-	yyt2 = yyt3;
-	goto yy9;
+	goto yy7;
 }
 
 re2c: warning: line 5: rule matches empty string [-Wmatch-empty-string]
