@@ -119,10 +119,6 @@ inline RE *re_tag(RE::alc_t &alc, size_t i, bool b)
 	return x;
 }
 
-RE *re_schar(RE::alc_t &alc, uint32_t line, uint32_t column, uint32_t c, const opt_t *opts);
-RE *re_ichar(RE::alc_t &alc, uint32_t line, uint32_t column, uint32_t c, const opt_t *opts);
-RE *re_class(RE::alc_t &alc, uint32_t line, uint32_t column, const Range *r, const opt_t *opts, Warn &warn);
-
 } // namespace re2c
 
 #endif // _RE2C_RE_RE_

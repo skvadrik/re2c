@@ -63,6 +63,7 @@ void dump_nfa(const nfa_t &nfa)
 				} else {
 					fprintf(stderr, "&uarr;");
 				}
+				fprintf(stderr, "(%d)", tag.height);
 				fprintf(stderr, "\"]\n");
 				break;
 			}

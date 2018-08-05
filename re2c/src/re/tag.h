@@ -5,16 +5,17 @@
 #include "src/util/c99_stdint.h"
 #include <limits>
 #include <string>
-#include <vector>
 
 namespace re2c
 {
 
 typedef int32_t tagver_t;
 
+
 static const tagver_t TAGVER_BOTTOM = std::numeric_limits<tagver_t>::min(); // default value, lowest priority
 static const tagver_t TAGVER_ZERO = 0; // absense of tag
 static const tagver_t TAGVER_CURSOR = std::numeric_limits<tagver_t>::max(); // current position, highest priority
+
 
 struct Tag
 {
@@ -28,49 +29,42 @@ struct Tag
 	size_t dist;
 	bool history;
 	bool orbit;
+	uint32_t height;
 
-	Tag(const std::string *n, bool h)
-		: name(n)
-		, ncap(Tag::RIGHTMOST)
-		, base(Tag::RIGHTMOST)
-		, dist(Tag::VARDIST)
-		, history(h)
-		, orbit(false)
-	{}
-	Tag(size_t c, bool o)
-		: name(NULL)
-		, ncap(c)
-		, base(Tag::RIGHTMOST)
-		, dist(Tag::VARDIST)
-		, history(false)
-		, orbit(o)
-	{}
+	Tag(const std::string *nm, bool hi, uint32_t ht);
+	Tag(size_t nc, bool ob, uint32_t ht);
 };
+
 
 inline bool fixed(const Tag &tag)
 {
 	return tag.dist != Tag::VARDIST;
 }
 
+
 inline bool fictive(const Tag &tag)
 {
 	return tag.ncap == Tag::FICTIVE;
 }
+
 
 inline bool capture(const Tag &tag)
 {
 	return tag.ncap != Tag::RIGHTMOST;
 }
 
+
 inline bool orbit(const Tag &tag)
 {
 	return tag.orbit;
 }
 
+
 inline bool trailing(const Tag &tag)
 {
 	return !capture(tag) && tag.name == NULL;
 }
+
 
 inline bool history(const Tag &tag)
 {
