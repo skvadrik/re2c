@@ -40,8 +40,7 @@ struct nfa_state_t
 		struct
 		{
 			nfa_state_t *out;
-			size_t info;
-			bool bottom;
+			tag_info_t info;
 		} tag;
 		struct
 		{
@@ -81,12 +80,11 @@ struct nfa_state_t
 		ran.ran = p;
 		init(r);
 	}
-	void make_tag(size_t r, nfa_state_t *s, size_t i, bool bottom)
+	void make_tag(size_t r, nfa_state_t *s, tag_info_t info)
 	{
 		type = TAG;
 		tag.out = s;
-		tag.info = i;
-		tag.bottom = bottom;
+		tag.info = info;
 		init(r);
 	}
 	void make_fin(size_t r)

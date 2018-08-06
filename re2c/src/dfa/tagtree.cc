@@ -10,15 +10,15 @@ static const tagver_t DELIM = TAGVER_CURSOR - 1;
 
 tagtree_t::tagtree_t(): nodes(), path1(), path2() {}
 
-tagver_t tagtree_t::elem(hidx_t i) const { return nodes[i].elem; }
+tagver_t tagtree_t::elem(hidx_t i) const { return nodes[i].info.neg ? TAGVER_BOTTOM : TAGVER_CURSOR; }
 
 hidx_t tagtree_t::pred(hidx_t i) const { return nodes[i].pred; }
 
-size_t tagtree_t::tag(hidx_t i) const { return nodes[i].tag; }
+size_t tagtree_t::tag(hidx_t i) const { return nodes[i].info.idx; }
 
-hidx_t tagtree_t::push(hidx_t i, size_t t, tagver_t v)
+hidx_t tagtree_t::push(hidx_t idx, tag_info_t info)
 {
-	node_t x = {i, v, t};
+	node_t x = {idx, info};
 	nodes.push_back(x);
 	return static_cast<hidx_t>(nodes.size() - 1);
 }

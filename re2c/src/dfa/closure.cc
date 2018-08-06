@@ -159,8 +159,7 @@ static nfa_state_t *explore(nfa_state_t *q, closure_t &done,
 		case nfa_state_t::TAG:
 			if (q->arcidx == 0) {
 				x.state = q->tag.out;
-				x.tlook = tagpool.history.push(x.tlook, q->tag.info,
-					q->tag.bottom ? TAGVER_BOTTOM : TAGVER_CURSOR);
+				x.tlook = tagpool.history.push(x.tlook, q->tag.info);
 				p = relax(x, done, shadow, tagpool, tags);
 				++q->arcidx;
 			}
@@ -339,8 +338,7 @@ void closure_leftmost(const closure_t &init, closure_t &done,
 				break;
 			case nfa_state_t::TAG:
 				x.state = n->tag.out;
-				x.tlook = tagpool.history.push(x.tlook, n->tag.info,
-					n->tag.bottom ? TAGVER_BOTTOM : TAGVER_CURSOR);
+				x.tlook = tagpool.history.push(x.tlook, n->tag.info);
 				todo.push(x);
 				break;
 			case nfa_state_t::RAN:

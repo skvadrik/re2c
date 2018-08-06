@@ -22,8 +22,7 @@ struct tagtree_t
 	// (a bunch of separate subtrees for each tag with common root)
 	struct node_t {
 		hidx_t pred;
-		tagver_t elem;
-		size_t tag;
+		tag_info_t info;
 	};
 	std::vector<node_t> nodes;
 
@@ -35,7 +34,7 @@ struct tagtree_t
 	hidx_t pred(hidx_t i) const;
 	tagver_t elem(hidx_t i) const;
 	size_t tag(hidx_t i) const;
-	hidx_t push(hidx_t i, size_t t, tagver_t v);
+	hidx_t push(hidx_t idx, tag_info_t info);
 	int32_t compare_plain(hidx_t x, hidx_t y, size_t t);
 	int32_t compare_histories(hidx_t x, hidx_t y, tagver_t ox, tagver_t oy, size_t t);
 	int32_t compare_last_subhistories(hidx_t x, hidx_t y, tagver_t ox, tagver_t oy, size_t t);

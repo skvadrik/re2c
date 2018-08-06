@@ -32,10 +32,7 @@ struct RE
 			uint32_t min;
 			uint32_t max;
 		} iter;
-		struct {
-			size_t idx;
-			bool bottom;
-		} tag;
+		tag_info_t tag;
 	};
 };
 
@@ -110,12 +107,13 @@ inline RE *re_iter(RE::alc_t &alc, RE *x, uint32_t n, uint32_t m)
 	return y;
 }
 
-inline RE *re_tag(RE::alc_t &alc, size_t i, bool b)
+inline RE *re_tag(RE::alc_t &alc, size_t idx, bool neg)
 {
 	RE *x = alc.alloct<RE>(1);
 	x->type = RE::TAG;
-	x->tag.idx = i;
-	x->tag.bottom = b;
+	x->tag.idx = idx & 0x7FFFffff;
+	assert(idx == x->tag.idx);
+	x->tag.neg = neg;
 	return x;
 }
 

@@ -81,7 +81,7 @@ static nfa_state_t *re_to_nfa(nfa_t &nfa, size_t nrule, const RE *re, nfa_state_
 				s = t;
 			} else {
 				s = &nfa.states[nfa.size++];
-				s->make_tag(nrule, t, re->tag.idx, re->tag.bottom);
+				s->make_tag(nrule, t, re->tag);
 			}
 			break;
 		}

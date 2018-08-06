@@ -17,6 +17,13 @@ static const tagver_t TAGVER_ZERO = 0; // absense of tag
 static const tagver_t TAGVER_CURSOR = std::numeric_limits<tagver_t>::max(); // current position, highest priority
 
 
+struct tag_info_t
+{
+	uint32_t idx : 31;
+	uint32_t neg : 1;
+};
+
+
 struct Tag
 {
 	static const size_t RIGHTMOST;

@@ -51,14 +51,14 @@ void dump_nfa(const nfa_t &nfa)
 				break;
 			}
 			case nfa_state_t::TAG: {
-				const Tag &tag = nfa.tags[n->tag.info];
+				const Tag &tag = nfa.tags[n->tag.info.idx];
 				fprintf(stderr, "  n%u -> n%u [label=\"/", i, index(nfa, n->tag.out));
 				if (capture(tag)) {
 					fprintf(stderr, "%u", (uint32_t)tag.ncap);
 				} else if (!trailing(tag)) {
 					fprintf(stderr, "%s", tag.name->c_str());
 				}
-				if (n->tag.bottom) {
+				if (n->tag.info.neg) {
 					fprintf(stderr, "&darr;");
 				} else {
 					fprintf(stderr, "&uarr;");
