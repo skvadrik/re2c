@@ -25,9 +25,7 @@ Tagpool::Tagpool(const opt_t *o, size_t n)
 	, opts(o)
 	, ntags(n)
 	, buffer(new tagver_t[n])
-	, maxclos(0)
-	, orders(NULL)
-	, closes(NULL)
+	, alc()
 	, history()
 	, astack()
 	, bstack()
@@ -41,8 +39,6 @@ Tagpool::~Tagpool()
 	for (size_t i = 0; i < n; ++i) {
 		free(const_cast<tagver_t*>(lookup[i]));
 	}
-	delete[] orders;
-	delete[] closes;
 }
 
 size_t Tagpool::insert_const(tagver_t ver)

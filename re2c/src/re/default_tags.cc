@@ -17,7 +17,7 @@ static void insert_default_tags(RESpec &spec, RE *re, size_t *&tidx)
 		case RE::SYM: break;
 		case RE::ALT: {
 			size_t *i = tidx;
-			RE *x = re_nil(alc), *y = re_nil(alc);
+			RE *x = NULL, *y = NULL;
 			insert_default_tags(spec, re->alt.re1, tidx);
 			for (; i < tidx; ++i) {
 				x = re_cat(alc, x, re_tag(alc, *i, true));
@@ -27,7 +27,9 @@ static void insert_default_tags(RESpec &spec, RE *re, size_t *&tidx)
 				y = re_cat(alc, y, re_tag(alc, *i, true));
 			}
 			re->alt.re1 = re_cat(alc, re->alt.re1, y);
-			re->alt.re2 = re_cat(alc, re->alt.re2, x);
+			re->alt.re2 = spec.opts->posix_captures
+				? re_cat(alc, x, re->alt.re2)
+				: re_cat(alc, re->alt.re2, x);
 			break;
 		}
 		case RE::CAT:

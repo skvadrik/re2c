@@ -25,14 +25,13 @@ struct tcmd_t;
 struct kernel_t
 {
 	size_t size;
+	const prectable_t *prectbl;
 	nfa_state_t **state;
 	size_t *tvers; // tag versions
 	hidx_t *tlook; // lookahead tags
-	size_t *order; // see note [orbit order of closure items]
 
-	explicit kernel_t(size_t n);
-	~kernel_t();
-	static kernel_t *copy(const kernel_t &k);
+	static kernel_t *make_init(size_t size, Tagpool &tagpool);
+	static kernel_t *make_copy(const kernel_t &k, Tagpool &tagpool);
 	FORBID_COPY(kernel_t);
 };
 
@@ -78,17 +77,16 @@ private:
 
 public:
 	kernels_t(Tagpool &tagp, tcpool_t &tcp, const std::vector<Tag> &ts);
-	~kernels_t();
 	void init(tagver_t v, size_t nkern);
 	size_t size() const;
 	const kernel_t* operator[](size_t idx) const;
-	result_t insert(const closure_t &clos, tcmd_t *acts, tagver_t maxver);
+	result_t insert(const closure_t &clos, tcmd_t *acts, tagver_t maxver, const prectable_t *prectbl);
 	bool operator()(const kernel_t *k1, const kernel_t *k2);
 	FORBID_COPY(kernels_t);
 };
 
 void find_state(dfa_t &dfa, size_t state, size_t symbol, kernels_t &kernels,
-	const closure_t &closure, tcmd_t *acts, dump_dfa_t &dump);
+	const closure_t &closure, tcmd_t *acts, dump_dfa_t &dump, const prectable_t *prectbl);
 
 } // namespace re2c
 

@@ -16,31 +16,41 @@
 namespace re2c
 {
 
-kernel_t::kernel_t(size_t n)
-	: size(n)
-	, state(new nfa_state_t*[size])
-	, tvers(new size_t[size])
-	, tlook(new hidx_t[size])
-	, order(new size_t[size])
-{}
-
-kernel_t *kernel_t::copy(const kernel_t &k)
+kernel_t *kernel_t::make_init(size_t size, Tagpool &tagpool)
 {
-	const size_t n = k.size;
-	kernel_t *kcopy = new kernel_t(n);
-	memcpy(kcopy->state, k.state, n * sizeof(void*));
-	memcpy(kcopy->tvers, k.tvers, n * sizeof(size_t));
-	memcpy(kcopy->tlook, k.tlook, n * sizeof(hidx_t));
-	memcpy(kcopy->order, k.order, n * sizeof(size_t));
+	kernel_t *kcopy = tagpool.alc.alloct<kernel_t>(1);
+	kcopy->size = size;
+	kcopy->prectbl = NULL;
+	kcopy->state = tagpool.alc.alloct<nfa_state_t*>(size);
+	kcopy->tvers = tagpool.alc.alloct<size_t>(size);
+	kcopy->tlook = tagpool.alc.alloct<hidx_t>(size);
 	return kcopy;
 }
 
-kernel_t::~kernel_t()
+kernel_t *kernel_t::make_copy(const kernel_t &k, Tagpool &tagpool)
 {
-	delete[] state;
-	delete[] tvers;
-	delete[] tlook;
-	delete[] order;
+	kernel_t *kcopy = tagpool.alc.alloct<kernel_t>(1);
+
+	const size_t size = k.size;
+	kcopy->size = size;
+
+	prectable_t *prectbl = NULL;
+	if (k.prectbl) {
+		prectbl = tagpool.alc.alloct<prectable_t>(size * size);
+		memcpy(prectbl, k.prectbl, size * size * sizeof(prectable_t));
+	}
+	kcopy->prectbl = prectbl;
+
+	kcopy->state = tagpool.alc.alloct<nfa_state_t*>(size);
+	memcpy(kcopy->state, k.state, size * sizeof(void*));
+
+	kcopy->tvers = tagpool.alc.alloct<size_t>(size);
+	memcpy(kcopy->tvers, k.tvers, size * sizeof(size_t));
+
+	kcopy->tlook = tagpool.alc.alloct<hidx_t>(size);
+	memcpy(kcopy->tlook, k.tlook, size * sizeof(hidx_t));
+
+	return kcopy;
 }
 
 static bool equal_lookahead_tags(const kernel_t *x, const kernel_t *y,
@@ -54,10 +64,10 @@ static bool equal_lookahead_tags(const kernel_t *x, const kernel_t *y,
 		const hidx_t xl = x->tlook[i], yl = y->tlook[i];
 		for (size_t t = 0; t < tagpool.ntags; ++t) {
 			if (history(tags[t])) {
-				// compare subhistories
-				if (h.compare_plain(xl, yl, t) != 0) return false;
+				// compare full tag sequences
+				if (h.compare_reversed(xl, yl, t) != 0) return false;
 			} else {
-				// compare only the last tags
+				// compare only the last pair of tags
 				if (h.last(xl, t) != h.last(yl, t)) return false;
 			}
 		}
@@ -74,7 +84,7 @@ struct kernel_eq_t
 		return x->size == y->size
 			&& memcmp(x->state, y->state, x->size * sizeof(void*)) == 0
 			&& memcmp(x->tvers, y->tvers, x->size * sizeof(size_t)) == 0
-			&& memcmp(x->order, y->order, x->size * sizeof(size_t)) == 0
+			&& (!x->prectbl || memcmp(x->prectbl, y->prectbl, x->size * x->size * sizeof(prectable_t)) == 0)
 			&& equal_lookahead_tags(x, y, tagpool, tags);
 	}
 };
@@ -122,7 +132,7 @@ bool kernels_t::operator()(const kernel_t *k1, const kernel_t *k2)
 	// check that kernel sizes, NFA states and orders coincide
 	const bool compatible = k1->size == k2->size
 		&& memcmp(k1->state, k2->state, k1->size * sizeof(void*)) == 0
-		&& memcmp(k1->order, k2->order, k1->size * sizeof(size_t)) == 0
+		&& (! k1->prectbl || memcmp(k1->prectbl, k2->prectbl, k1->size * k1->size * sizeof(prectable_t)) == 0)
 		&& equal_lookahead_tags(k1, k2, tagpool, tags);
 	if (!compatible) return false;
 
@@ -215,7 +225,7 @@ kernels_t::kernels_t(Tagpool &tagp, tcpool_t &tcp, const std::vector<Tag> &ts)
 	, tags(ts)
 
 	, maxsize(0) // usually ranges from one to some twenty
-	, buffer(new kernel_t(maxsize))
+	, buffer(kernel_t::make_init(maxsize, tagp))
 
 	, cap(0)
 	, max(0)
@@ -230,23 +240,11 @@ kernels_t::kernels_t(Tagpool &tagp, tcpool_t &tcp, const std::vector<Tag> &ts)
 	, actlhs(NULL)
 {}
 
-kernels_t::~kernels_t()
-{
-	delete buffer;
-	delete[] mem;
-
-	const size_t n = lookup.size();
-	for (size_t i = 0; i < n; ++i) {
-		delete lookup[i];
-	}
-}
-
 void kernels_t::init(tagver_t v, size_t nkern)
 {
 	if (maxsize < nkern) {
 		maxsize = nkern * 2; // in advance
-		delete buffer;
-		buffer = new kernel_t(maxsize);
+		buffer = kernel_t::make_init(maxsize, tagpool);
 	}
 
 	// +1 to ensure max tag version is not forgotten in loops
@@ -262,8 +260,7 @@ void kernels_t::init(tagver_t v, size_t nkern)
 			sz_actnext = n * sizeof(tcmd_t*),
 			sz_actlhs = n * sizeof(tagver_t),
 			sz_indeg = n * sizeof(uint32_t);
-		delete[] mem;
-		mem = new char[sz_x2y + sz_x2t + sz_actnext + sz_actlhs + sz_indeg];
+		mem = tagpool.alc.alloct<char>(sz_x2y + sz_x2t + sz_actnext + sz_actlhs + sz_indeg);
 
 		// point to the center (zero index) of each buffer
 		// indexes in range [-N .. N] must be valid, where N is capacity
@@ -307,7 +304,7 @@ const kernel_t *kernels_t::operator[](size_t idx) const
  */
 
 kernels_t::result_t kernels_t::insert(const closure_t &clos,
-	tcmd_t *acts, tagver_t maxver)
+	tcmd_t *acts, tagver_t maxver, const prectable_t *prectbl)
 {
 	const size_t nkern = clos.size();
 	size_t x = dfa_t::NIL;
@@ -320,18 +317,20 @@ kernels_t::result_t kernels_t::insert(const closure_t &clos,
 
 	// copy closure to buffer kernel and find its normal form
 	buffer->size = nkern;
+	buffer->prectbl = prectbl;
 	for (size_t i = 0; i < nkern; ++i) {
 		const clos_t &c = clos[i];
 		buffer->state[i] = c.state;
 		buffer->tvers[i] = c.tvers;
 		buffer->tlook[i] = c.tlook;
-		buffer->order[i] = c.order;
 	}
 
 	// get kernel hash
 	uint32_t hash = static_cast<uint32_t>(nkern); // seed
 	hash = hash32(hash, buffer->state, nkern * sizeof(void*));
-	hash = hash32(hash, buffer->order, nkern * sizeof(size_t));
+	if (prectbl) {
+		hash = hash32(hash, buffer->prectbl, nkern * nkern * sizeof(prectable_t));
+	}
 
 	// try to find identical kernel
 	kernel_eq_t eq = {tagpool, tags};
@@ -345,7 +344,7 @@ kernels_t::result_t kernels_t::insert(const closure_t &clos,
 	if (x != index_t::NIL) return result_t(x, acts, false);
 
 	// otherwise add new kernel
-	x = lookup.push(hash, kernel_t::copy(*buffer));
+	x = lookup.push(hash, kernel_t::make_copy(*buffer, tagpool));
 	return result_t(x, acts, true);
 }
 
@@ -382,10 +381,10 @@ static tcmd_t *finalizer(const clos_t &clos, size_t ridx,
 }
 
 void find_state(dfa_t &dfa, size_t state, size_t symbol, kernels_t &kernels,
-	const closure_t &closure, tcmd_t *acts, dump_dfa_t &dump)
+	const closure_t &closure, tcmd_t *acts, dump_dfa_t &dump, const prectable_t *prectbl)
 {
 	const kernels_t::result_t
-		result = kernels.insert(closure, acts, dfa.maxtagver);
+		result = kernels.insert(closure, acts, dfa.maxtagver, prectbl);
 
 	if (result.isnew) {
 		// create new DFA state

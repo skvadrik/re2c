@@ -6,6 +6,7 @@
 	yych = *YYCURSOR;
 	switch (yych) {
 	case 'a':
+		yyt4 = yyt5 = NULL;
 		yyt1 = yyt2 = YYCURSOR;
 		goto yy3;
 	case 'z':
@@ -31,13 +32,13 @@ yy3:
 	yych = *YYCURSOR;
 	switch (yych) {
 	case 'a':
+		yyt4 = yyt5 = NULL;
 		yyt2 = YYCURSOR;
 		goto yy3;
 	case 'z':
 		yyt2 = yyt4 = YYCURSOR;
 		goto yy5;
 	default:
-		yyt4 = yyt5 = NULL;
 		yyt3 = YYCURSOR;
 		goto yy2;
 	}
@@ -47,6 +48,7 @@ yy5:
 	yych = *YYCURSOR;
 	switch (yych) {
 	case 'a':
+		yyt4 = yyt5 = NULL;
 		yyt2 = YYCURSOR;
 		goto yy3;
 	case 'z':

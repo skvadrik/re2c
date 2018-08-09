@@ -7,6 +7,7 @@
 #include "src/conf/opt.h"
 #include "src/dfa/dfa.h"
 #include "src/dfa/dump.h"
+#include "src/dfa/find_state.h"
 #include "src/dfa/tagpool.h"
 #include "src/dfa/tagtree.h"
 #include "src/dfa/tcmd.h"
@@ -78,14 +79,10 @@ void dump_dfa_t::closure_tags(cclositer_t c)
 
 	const hidx_t l = c->tlook;
 	const tagver_t *vers = tagpool[c->tvers];
-//	const tagver_t *ords = tagpool[c->order];
 	const size_t ntag = tagpool.ntags;
 
 	for (size_t t = 0; t < ntag; ++t) {
 		fprintf(stderr, " %s%d", tagname(dfa.tags[t]), abs(vers[t]));
-//		if (tagpool.opts->posix_captures) {
-//			fprintf(stderr, "[%d]", ords[t]);
-//		}
 	}
 
 	if (l != HROOT) {
@@ -102,24 +99,27 @@ void dump_dfa_t::closure(const closure_t &clos, uint32_t state, bool isnew)
 	const char
 		*style = isnew ? "" : " STYLE=\"dotted\"",
 		*color = " COLOR=\"lightgray\"";
+	uint32_t i;
 
 	fprintf(stderr, "  %s%u [label=<<TABLE"
 		" BORDER=\"0\""
 		" CELLBORDER=\"1\""
 		">", isnew ? "" : "i", state);
 
-	for (s = s1; s != s2; ++s) {
-		fprintf(stderr, "<TR><TD ALIGN=\"left\" PORT=\"_%u_%d\"%s%s><FONT%s>%u",
-			index(s->state), (int)(s - s1), color, style, color, index(s->state));
+	i = 0;
+	for (s = s1; s != s2; ++s, ++i) {
+		fprintf(stderr, "<TR><TD ALIGN=\"left\" PORT=\"_%u_%u\"%s%s><FONT%s>%u",
+			i, i, color, style, color, index(s->state));
 		closure_tags(s);
 		fprintf(stderr, "</FONT></TD></TR>");
 	}
 	if (!shadow->empty()) {
 		fprintf(stderr, "<TR><TD BORDER=\"0\"></TD></TR>");
 	}
-	for (c = c1; c != c2; ++c) {
+	i = 0;
+	for (c = c1; c != c2; ++c, ++i) {
 		fprintf(stderr, "<TR><TD ALIGN=\"left\" PORT=\"%u\"%s>%u",
-			index(c->state), style, index(c->state));
+			i, style, index(c->state));
 		closure_tags(c);
 		fprintf(stderr, "</TD></TR>");
 	}
@@ -130,16 +130,19 @@ void dump_dfa_t::state0(const closure_t &clos)
 {
 	if (!debug) return;
 
+	uint32_t i;
 	closure(clos, 0, true);
 	fprintf(stderr, "  void [shape=point]\n");
-	for (cclositer_t c = shadow->begin(); c != shadow->end(); ++c) {
-		fprintf(stderr, "  void -> 0:_%u_%d:w [style=dotted color=lightgray fontcolor=lightgray label=\"",
-			index(c->state), (int)(c - shadow->begin()));
+	i = 0;
+	for (cclositer_t c = shadow->begin(); c != shadow->end(); ++c, ++i) {
+		fprintf(stderr, "  void -> 0:_%u_%u:w [style=dotted color=lightgray fontcolor=lightgray label=\"",
+			i, i);
 		dump_tags(tagpool, c->ttran, c->tvers);
 		fprintf(stderr, "\"]\n");
 	}
-	for (cclositer_t c = clos.begin(); c != clos.end(); ++c) {
-		fprintf(stderr, "  void -> 0:%u:w [style=dotted label=\"", index(c->state));
+	i = 0;
+	for (cclositer_t c = clos.begin(); c != clos.end(); ++c, ++i) {
+		fprintf(stderr, "  void -> 0:%u:w [style=dotted label=\"", i);
 		dump_tags(tagpool, c->ttran, c->tvers);
 		fprintf(stderr, "\"]\n");
 	}
@@ -161,6 +164,7 @@ void dump_dfa_t::state(const closure_t &clos, size_t state, size_t symbol, bool 
 		y = static_cast<uint32_t>(state2),
 		z = isnew ? y : ++uniqidx;
 	const char *prefix = isnew ? "" : "i";
+	uint32_t i;
 
 	closure(clos, z, isnew);
 	if (!isnew) {
@@ -169,15 +173,17 @@ void dump_dfa_t::state(const closure_t &clos, size_t state, size_t symbol, bool 
 		dump_tcmd(cmd);
 		fprintf(stderr, "\"]\n");
 	}
-	for (cclositer_t b = shadow->begin(), c = b; c != shadow->end(); ++c) {
-		fprintf(stderr, "  %u:%u:e -> %s%u:_%u_%d:w [color=lightgray fontcolor=lightgray label=\"%u",
-			x, index(c->origin), prefix, z, index(c->state), (int)(c - b), a);
+	i = 0;
+	for (cclositer_t b = shadow->begin(), c = b; c != shadow->end(); ++c, ++i) {
+		fprintf(stderr, "  %u:%u:e -> %s%u:_%u_%u:w [color=lightgray fontcolor=lightgray label=\"%u",
+			x, c->origin, prefix, z, i, i, a);
 		dump_tags(tagpool, c->ttran, c->tvers);
 		fprintf(stderr, "\"]\n");
 	}
-	for (cclositer_t c = clos.begin(); c != clos.end(); ++c) {
+	i = 0;
+	for (cclositer_t c = clos.begin(); c != clos.end(); ++c, ++i) {
 		fprintf(stderr, "  %u:%u:e -> %s%u:%u:w [label=\"%u",
-			x, index(c->origin), prefix, z, index(c->state), a);
+			x, c->origin, prefix, z, i, a);
 		dump_tags(tagpool, c->ttran, c->tvers);
 		fprintf(stderr, "\"]\n");
 	}

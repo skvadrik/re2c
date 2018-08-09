@@ -16,6 +16,7 @@ struct dfa_t;
 struct nfa_state_t;
 struct nfa_t;
 struct tcmd_t;
+struct kernels_t;
 
 struct dump_dfa_t
 {

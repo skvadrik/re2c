@@ -16,6 +16,7 @@ yy2:
 yy3:
 	yych = *++YYCURSOR;
 	if (yych >= 0x01) {
+		yyt4 = yyt5 = NULL;
 		yyt2 = yyt6 = YYCURSOR;
 		goto yy5;
 	}
@@ -24,10 +25,10 @@ yy3:
 yy5:
 	yych = *++YYCURSOR;
 	if (yych >= 0x01) {
-		yyt2 = yyt4 = yyt6 = YYCURSOR;
+		yyt4 = yyt5 = NULL;
+		yyt2 = yyt6 = YYCURSOR;
 		goto yy7;
 	}
-	yyt4 = yyt5 = NULL;
 	yyt3 = yyt7 = YYCURSOR;
 yy6:
 	yynmatch = 4;
@@ -43,11 +44,11 @@ yy6:
 yy7:
 	yych = *++YYCURSOR;
 	if (yych <= 0x00) {
-		yyt4 = yyt5 = NULL;
 		yyt3 = yyt7 = YYCURSOR;
 		goto yy6;
 	}
 	++YYCURSOR;
+	yyt4 = yyt2;
 	yyt6 = yyt7 = NULL;
 	yyt3 = yyt5 = YYCURSOR;
 	goto yy6;

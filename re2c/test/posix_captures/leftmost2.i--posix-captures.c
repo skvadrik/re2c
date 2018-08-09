@@ -8,7 +8,9 @@
 	case 'a':
 		yyt1 = YYCURSOR;
 		goto yy3;
-	case 'b':	goto yy5;
+	case 'b':
+		yyt1 = yyt2 = NULL;
+		goto yy5;
 	default:	goto yy2;
 	}
 yy2:
@@ -33,7 +35,7 @@ yy4:
 	{}
 yy5:
 	++YYCURSOR;
-	yyt1 = yyt2 = yyt3 = NULL;
+	yyt3 = NULL;
 	goto yy4;
 }
 

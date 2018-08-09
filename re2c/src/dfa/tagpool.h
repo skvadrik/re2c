@@ -9,6 +9,7 @@
 #include "src/re/tag.h"
 #include "src/util/forbid_copy.h"
 #include "src/util/lookup.h"
+#include "src/util/slab_allocator.h"
 
 namespace re2c
 {
@@ -29,9 +30,8 @@ public:
 	const size_t ntags;
 	tagver_t *buffer;
 
-	size_t maxclos;
-	tagver_t *orders;
-	cclositer_t *closes;
+	typedef slab_allocator_t<> alc_t;
+	alc_t alc;
 
 	tagtree_t history;
 	std::stack<nfa_state_t*> astack;

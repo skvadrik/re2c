@@ -47,7 +47,7 @@ namespace re2c {
  */
 
 static bool has_tags(const AST *);
-static RE *ast_to_re(RESpec &, const AST *, size_t &, uint32_t);
+static RE *ast_to_re(RESpec &, const AST *, size_t &, int32_t);
 static RE *re_schar(RE::alc_t &, uint32_t, uint32_t, uint32_t, const opt_t *);
 static RE *re_ichar(RE::alc_t &, uint32_t, uint32_t, uint32_t, const opt_t *);
 static RE *re_class(RE::alc_t &, uint32_t, uint32_t, const Range *, const opt_t *, Warn &);
@@ -92,7 +92,7 @@ bool has_tags(const AST *ast)
 }
 
 
-RE *ast_to_re(RESpec &spec, const AST *ast, size_t &ncap, uint32_t height)
+RE *ast_to_re(RESpec &spec, const AST *ast, size_t &ncap, int32_t height)
 {
 	RE::alc_t &alc = spec.alc;
 	std::vector<Tag> &tags = spec.tags;
@@ -147,29 +147,25 @@ RE *ast_to_re(RESpec &spec, const AST *ast, size_t &ncap, uint32_t height)
 			return re_sym(alc, Range::ran(0, opts->encoding.nCodeUnits()));
 		case AST::ALT: {
 			RE *t1 = NULL, *t2 = NULL, *t3 = NULL, *t4 = NULL, *x, *y;
-
-			if (opts->posix_captures && has_tags(ast)
-				&& ast->alt.ast1->type != AST::CAP) {
+			if (opts->posix_captures && has_tags(ast)) {
 				// see note [POSIX subexpression hierarchy]
-				t1 = re_tag(alc, tags.size(), false);
-				tags.push_back(Tag(Tag::FICTIVE, false, height));
-				t2 = re_tag(alc, tags.size(), false);
-				tags.push_back(Tag(Tag::FICTIVE, false, height));
+				if (ast->cat.ast1->type != AST::CAP) {
+					t1 = re_tag(alc, tags.size(), false);
+					tags.push_back(Tag(Tag::FICTIVE, false, height + 1));
+					t2 = re_tag(alc, tags.size(), false);
+					tags.push_back(Tag(Tag::FICTIVE, false, height));
+				}
+				if (ast->cat.ast2->type != AST::CAP) {
+					t3 = re_tag(alc, tags.size(), false);
+					tags.push_back(Tag(Tag::FICTIVE, false, height + 1));
+					t4 = re_tag(alc, tags.size(), false);
+					tags.push_back(Tag(Tag::FICTIVE, false, height));
+				}
 			}
 			x = ast_to_re(spec, ast->alt.ast1, ncap, height);
 			x = re_cat(alc, t1, re_cat(alc, x, t2));
-
-			if (opts->posix_captures && has_tags(ast)
-				&& ast->alt.ast2->type != AST::CAP) {
-				// see note [POSIX subexpression hierarchy]
-				t3 = re_tag(alc, tags.size(), false);
-				tags.push_back(Tag(Tag::FICTIVE, false, height));
-				t4 = re_tag(alc, tags.size(), false);
-				tags.push_back(Tag(Tag::FICTIVE, false, height));
-			}
 			y = ast_to_re(spec, ast->alt.ast2, ncap, height);
 			y = re_cat(alc, t3, re_cat(alc, y, t4));
-
 			return re_alt(alc, x, y);
 		}
 		case AST::DIFF: {
@@ -182,31 +178,25 @@ RE *ast_to_re(RESpec &spec, const AST *ast, size_t &ncap, uint32_t height)
 		}
 		case AST::CAT: {
 			RE *t1 = NULL, *t2 = NULL, *t3 = NULL, *t4 = NULL, *x, *y;
-
-			const AST *a1 = ast->alt.ast1;
-			if (opts->posix_captures && has_tags(ast)
-				&& a1->type != AST::CAP) {
+			if (opts->posix_captures && has_tags(ast)) {
 				// see note [POSIX subexpression hierarchy]
-				t1 = re_tag(alc, tags.size(), false);
-				tags.push_back(Tag(Tag::FICTIVE, false, height));
-				t2 = re_tag(alc, tags.size(), false);
-				tags.push_back(Tag(Tag::FICTIVE, false, height));
+				if (ast->cat.ast1->type != AST::CAP) {
+					t1 = re_tag(alc, tags.size(), false);
+					tags.push_back(Tag(Tag::FICTIVE, false, height + 1));
+					t2 = re_tag(alc, tags.size(), false);
+					tags.push_back(Tag(Tag::FICTIVE, false, height));
+				}
+				if (ast->cat.ast2->type != AST::CAP) {
+					t3 = re_tag(alc, tags.size(), false);
+					tags.push_back(Tag(Tag::FICTIVE, false, height + 1));
+					t4 = re_tag(alc, tags.size(), false);
+					tags.push_back(Tag(Tag::FICTIVE, false, height));
+				}
 			}
 			x = ast_to_re(spec, ast->cat.ast1, ncap, height);
 			x = re_cat(alc, t1, re_cat(alc, x, t2));
-
-			const AST *a2 = ast->alt.ast2;
-			if (opts->posix_captures && has_tags(ast)
-				&& a2->type != AST::CAP) {
-				// see note [POSIX subexpression hierarchy]
-				t3 = re_tag(alc, tags.size(), false);
-				tags.push_back(Tag(Tag::FICTIVE, false, height));
-				t4 = re_tag(alc, tags.size(), false);
-				tags.push_back(Tag(Tag::FICTIVE, false, height));
-			}
 			y = ast_to_re(spec, ast->cat.ast2, ncap, height);
 			y = re_cat(alc, t3, re_cat(alc, y, t4));
-
 			return re_cat(alc, x, y);
 		}
 		case AST::TAG: {
@@ -230,7 +220,7 @@ RE *ast_to_re(RESpec &spec, const AST *ast, size_t &ncap, uint32_t height)
 			if (x->type == AST::REF) x = x->ref.ast;
 
 			RE *t1 = re_tag(alc, tags.size(), false);
-			tags.push_back(Tag(2 * ncap, false, height));
+			tags.push_back(Tag(2 * ncap, false, height + 1));
 
 			RE *t2 = re_tag(alc, tags.size(), false);
 			tags.push_back(Tag(2 * ncap + 1, false, height));
@@ -260,7 +250,7 @@ RE *ast_to_re(RESpec &spec, const AST *ast, size_t &ncap, uint32_t height)
 				if (x->type == AST::REF) x = x->ref.ast;
 
 				t1 = re_tag(alc, tags.size(), false);
-				tags.push_back(Tag(2 * ncap, m > 1, height));
+				tags.push_back(Tag(2 * ncap, m > 1, height + 1));
 
 				t2 = re_tag(alc, tags.size(), false);
 				tags.push_back(Tag(2 * ncap + 1, m > 1, height));
