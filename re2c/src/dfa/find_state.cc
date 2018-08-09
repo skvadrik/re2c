@@ -16,6 +16,15 @@
 namespace re2c
 {
 
+struct kernel_eq_t
+{
+	Tagpool &tagpool;
+	const std::vector<Tag> &tags;
+
+	bool operator()(const kernel_t *, const kernel_t *) const;
+};
+
+
 kernel_t *kernel_t::make_init(size_t size, Tagpool &tagpool)
 {
 	kernel_t *kcopy = tagpool.alc.alloct<kernel_t>(1);
@@ -75,19 +84,18 @@ static bool equal_lookahead_tags(const kernel_t *x, const kernel_t *y,
 	return true;
 }
 
-struct kernel_eq_t
+
+bool kernel_eq_t::operator()(const kernel_t *x, const kernel_t *y) const
 {
-	Tagpool &tagpool;
-	const std::vector<Tag> &tags;
-	bool operator()(const kernel_t *x, const kernel_t *y) const
-	{
-		return x->size == y->size
-			&& memcmp(x->state, y->state, x->size * sizeof(void*)) == 0
-			&& memcmp(x->tvers, y->tvers, x->size * sizeof(size_t)) == 0
-			&& (!x->prectbl || memcmp(x->prectbl, y->prectbl, x->size * x->size * sizeof(prectable_t)) == 0)
-			&& equal_lookahead_tags(x, y, tagpool, tags);
-	}
-};
+	// check that kernel sizes, NFA states, tags versions,
+	// lookahead tags and precedence table coincide
+	const size_t n = x->size;
+	return n == y->size
+		&& memcmp(x->state, y->state, n * sizeof(void*)) == 0
+		&& memcmp(x->tvers, y->tvers, n * sizeof(size_t)) == 0
+		&& (!x->prectbl || memcmp(x->prectbl, y->prectbl, n * n * sizeof(prectable_t)) == 0)
+		&& equal_lookahead_tags(x, y, tagpool, tags);
+}
 
 /* note [mapping ignores items with lookahead tags]
  *
@@ -127,13 +135,15 @@ struct kernel_eq_t
  * cannot affect the check.
 */
 
-bool kernels_t::operator()(const kernel_t *k1, const kernel_t *k2)
+bool kernels_t::operator()(const kernel_t *x, const kernel_t *y)
 {
-	// check that kernel sizes, NFA states and orders coincide
-	const bool compatible = k1->size == k2->size
-		&& memcmp(k1->state, k2->state, k1->size * sizeof(void*)) == 0
-		&& (! k1->prectbl || memcmp(k1->prectbl, k2->prectbl, k1->size * k1->size * sizeof(prectable_t)) == 0)
-		&& equal_lookahead_tags(k1, k2, tagpool, tags);
+	// check that kernel sizes, NFA states lookahead tags
+	// and precedence table coincide (versions might differ)
+	const size_t n = x->size;
+	const bool compatible = n == y->size
+		&& memcmp(x->state, y->state, n * sizeof(void*)) == 0
+		&& (!x->prectbl || memcmp(x->prectbl, y->prectbl, n * n * sizeof(prectable_t)) == 0)
+		&& equal_lookahead_tags(x, y, tagpool, tags);
 	if (!compatible) return false;
 
 	// map tag versions of one kernel to that of another
@@ -141,25 +151,25 @@ bool kernels_t::operator()(const kernel_t *k1, const kernel_t *k2)
 	const size_t ntag = tagpool.ntags;
 	std::fill(x2y - max, x2y + max, TAGVER_ZERO);
 	std::fill(y2x - max, y2x + max, TAGVER_ZERO);
-	for (size_t i = 0; i < k1->size; ++i) {
+	for (size_t i = 0; i < n; ++i) {
 		const tagver_t
-			*xv = tagpool[k1->tvers[i]],
-			*yv = tagpool[k2->tvers[i]];
-		const hidx_t xl = k1->tlook[i];
+			*xvs = tagpool[x->tvers[i]],
+			*yvs = tagpool[y->tvers[i]];
+		const hidx_t xl = x->tlook[i];
 
 		for (size_t t = 0; t < ntag; ++t) {
 			// see note [mapping ignores items with lookahead tags]
 			if (tagpool.history.last(xl, t) != TAGVER_ZERO
 				&& !history(tags[t])) continue;
 
-			const tagver_t x = xv[t], y = yv[t];
-			tagver_t &x0 = y2x[y], &y0 = x2y[x];
+			const tagver_t xv = xvs[t], yv = yvs[t];
+			tagver_t &xv0 = y2x[yv], &yv0 = x2y[xv];
 
-			if (y0 == TAGVER_ZERO && x0 == TAGVER_ZERO) {
-				x0 = x;
-				y0 = y;
-				x2t[x] = t;
-			} else if (y != y0 || x != x0) {
+			if (yv0 == TAGVER_ZERO && xv0 == TAGVER_ZERO) {
+				xv0 = xv;
+				yv0 = yv;
+				x2t[xv] = t;
+			} else if (yv != yv0 || xv != xv0) {
 				return false;
 			}
 		}
@@ -181,18 +191,18 @@ bool kernels_t::operator()(const kernel_t *k1, const kernel_t *k2)
 	// see note [save(X), copy(Y,X) optimization]
 	for (a = *pacts; a; a = a->next) {
 		const tagver_t
-			y = a->lhs * (a->history[0] == TAGVER_BOTTOM ? -1 : 1),
-			x = y2x[y];
-		a->lhs = abs(x);
-		y2x[y] = x2y[x] = TAGVER_ZERO;
+			yv = a->lhs * (a->history[0] == TAGVER_BOTTOM ? -1 : 1),
+			xv = y2x[yv];
+		a->lhs = abs(xv);
+		y2x[yv] = x2y[xv] = TAGVER_ZERO;
 	}
 
 	// create 'copy' commands
-	for (tagver_t x = -max; x < max; ++x) {
-		const tagver_t y = x2y[x], ax = abs(x), ay = abs(y);
-		if (y != TAGVER_ZERO && x != y && !fixed(tags[x2t[x]])) {
-			assert(ax != ay);
-			copy = tcpool.make_copy(copy, ax, ay);
+	for (tagver_t xv = -max; xv < max; ++xv) {
+		const tagver_t yv = x2y[xv], axv = abs(xv), ayv = abs(yv);
+		if (yv != TAGVER_ZERO && xv != yv && !fixed(tags[x2t[xv]])) {
+			assert(axv != ayv);
+			copy = tcpool.make_copy(copy, axv, ayv);
 		}
 	}
 
@@ -333,8 +343,8 @@ kernels_t::result_t kernels_t::insert(const closure_t &clos,
 	}
 
 	// try to find identical kernel
-	kernel_eq_t eq = {tagpool, tags};
-	x = lookup.find_with(hash, buffer, eq);
+	kernel_eq_t cmp_eq = {tagpool, tags};
+	x = lookup.find_with(hash, buffer, cmp_eq);
 	if (x != index_t::NIL) return result_t(x, acts, false);
 
 	// else try to find mappable kernel
