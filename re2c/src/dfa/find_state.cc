@@ -40,8 +40,7 @@ kernel_buffers_t::kernel_buffers_t(allocator_t &alc)
 	, y2x(NULL)
 	, x2t(NULL)
 	, indegree(NULL)
-	, actnext(NULL)
-	, actlhs(NULL)
+	, backup_actions(NULL)
 {}
 
 
@@ -106,11 +105,10 @@ void reserve_buffers(kernel_buffers_t &kbufs, allocator_t &alc,
 			m = 2 * n + 1,
 			sz_x2y = 2 * m * sizeof(tagver_t),
 			sz_x2t = m * sizeof(size_t),
-			sz_actnext = n * sizeof(tcmd_t*),
-			sz_actlhs = n * sizeof(tagver_t),
-			sz_indeg = n * sizeof(uint32_t);
+			sz_idg = n * sizeof(uint32_t),
+			sz_act = n * sizeof(tcmd_t);
 
-		char *p = alc.alloct<char>(sz_x2y + sz_x2t + sz_actnext + sz_actlhs + sz_indeg);
+		char *p = alc.alloct<char>(sz_x2y + sz_x2t + sz_idg + sz_act);
 		kbufs.memory = p;
 
 		// point to the center (zero index) of each buffer
@@ -120,11 +118,9 @@ void reserve_buffers(kernel_buffers_t &kbufs, allocator_t &alc,
 		p += sz_x2y;
 		kbufs.x2t = reinterpret_cast<size_t*>(p) + n;
 		p += sz_x2t;
-		kbufs.actnext = reinterpret_cast<tcmd_t**>(p);
-		p += sz_actnext;
-		kbufs.actlhs = reinterpret_cast<tagver_t*>(p);
-		p += sz_actlhs;
 		kbufs.indegree = reinterpret_cast<uint32_t*>(p);
+		p += sz_idg;
+		kbufs.backup_actions = reinterpret_cast<tcmd_t*>(p);
 	}
 }
 
@@ -246,16 +242,12 @@ bool kernels_t::operator()(const kernel_t *x, const kernel_t *y)
 	}
 
 	// we have bijective mapping; now try to create list of commands
-	tcmd_t **actnext = buffers.actnext, *a, **pa, *copy = NULL;
-	tagver_t *actlhs = buffers.actlhs;
+	tcmd_t *b1 = buffers.backup_actions, *b2 = b1, *a, **pa, *copy = NULL;
 
 	// backup 'save' commands: if topsort finds cycles, this mapping
 	// will be rejected and we'll have to revert all changes
-	size_t nact = 0;
-	for (a = *pacts; a; a = a->next) {
-		actnext[nact] = a;
-		actlhs[nact] = a->lhs;
-		++nact;
+	for (b2->next = a = *pacts; a; a = a->next) {
+		*++b2 = *a;
 	}
 
 	// fix LHS of 'save' commands to reuse old version
@@ -287,13 +279,9 @@ bool kernels_t::operator()(const kernel_t *x, const kernel_t *y)
 
 	// in case of cycles restore 'save' commands and fail
 	if (nontrivial_cycles) {
-		pa = pacts;
-		for (size_t i = 0; i < nact; ++i) {
-			*pa = a = actnext[i];
-			a->lhs = actlhs[i];
-			pa = &a->next;
+		for (*pacts = a = b1->next; a; a = a->next) {
+			*a = *++b1;
 		}
-		*pa = NULL;
 	}
 
 	return !nontrivial_cycles;

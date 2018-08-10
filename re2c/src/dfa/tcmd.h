@@ -6,7 +6,6 @@
 
 #include "src/dfa/tagtree.h"
 #include "src/re/tag.h"
-#include "src/util/forbid_copy.h"
 #include "src/util/lookup.h"
 #include "src/util/slab_allocator.h"
 
@@ -26,7 +25,6 @@ struct tcmd_t
 	static bool iscopy(const tcmd_t *x);
 	static bool isset(const tcmd_t *x);
 	static bool isadd(const tcmd_t *x);
-	FORBID_COPY(tcmd_t);
 };
 
 typedef uint32_t tcid_t;

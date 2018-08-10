@@ -44,8 +44,7 @@ struct kernel_buffers_t
 	tagver_t *y2x;
 	size_t *x2t;
 	uint32_t *indegree;
-	tcmd_t **actnext;
-	tagver_t *actlhs;
+	tcmd_t *backup_actions;
 
 	explicit kernel_buffers_t(allocator_t &alc);
 };
