@@ -51,20 +51,6 @@ struct kernel_buffers_t
 
 struct kernels_t
 {
-	struct result_t
-	{
-		size_t state;
-		tcmd_t *cmd;
-		bool isnew;
-
-		result_t(size_t s, tcmd_t *p, bool n)
-			: state(s)
-			, cmd(p)
-			, isnew(n)
-		{}
-	};
-
-private:
 	typedef lookup_t<const kernel_t*> index_t;
 	index_t lookup;
 
@@ -82,7 +68,7 @@ public:
 	kernels_t(Tagpool &tagp, tcpool_t &tcp, const std::vector<Tag> &ts);
 	inline size_t size() const { return lookup.size(); }
 	inline const kernel_t* operator[](size_t idx) const { return lookup[idx]; }
-	result_t insert(const closure_t &clos, tcmd_t *acts, tagver_t maxver, const prectable_t *prectbl);
+	size_t insert(const closure_t &clos, tagver_t maxver, const prectable_t *prectbl, tcmd_t *&acts, bool &is_new);
 	bool operator()(const kernel_t *k1, const kernel_t *k2);
 	FORBID_COPY(kernels_t);
 };

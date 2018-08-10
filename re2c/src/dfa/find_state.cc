@@ -307,14 +307,18 @@ bool kernels_t::operator()(const kernel_t *x, const kernel_t *y)
  * more complex analysis (and are not so useful after all), so we drop them.
  */
 
-kernels_t::result_t kernels_t::insert(const closure_t &clos,
-	tcmd_t *acts, tagver_t maxver, const prectable_t *prectbl)
+size_t kernels_t::insert(const closure_t &clos, tagver_t maxver,
+	const prectable_t *prectbl, tcmd_t *&acts, bool &is_new)
 {
 	const size_t nkern = clos.size();
 	size_t x = dfa_t::NIL;
+	is_new = false;
 
 	// empty closure corresponds to default state
-	if (nkern == 0) return result_t(x, NULL, false);
+	if (nkern == 0) {
+		acts = NULL;
+		return x;
+	}
 
 	// resize buffer if closure is too large
 	reserve_buffers(buffers, tagpool.alc, maxver, nkern);
@@ -340,17 +344,18 @@ kernels_t::result_t kernels_t::insert(const closure_t &clos,
 	// try to find identical kernel
 	kernel_eq_t cmp_eq = {tagpool, tags};
 	x = lookup.find_with(hash, k, cmp_eq);
-	if (x != index_t::NIL) return result_t(x, acts, false);
+	if (x != index_t::NIL) return x;
 
 	// else try to find mappable kernel
 	// see note [bijective mappings]
 	this->pacts = &acts;
 	x = lookup.find_with(hash, k, *this);
-	if (x != index_t::NIL) return result_t(x, acts, false);
+	if (x != index_t::NIL) return x;
 
 	// otherwise add new kernel
 	x = lookup.push(hash, make_kernel_copy(k, tagpool.alc));
-	return result_t(x, acts, true);
+	is_new = true;
+	return x;
 }
 
 static tcmd_t *finalizer(const clos_t &clos, size_t ridx,
@@ -385,13 +390,13 @@ static tcmd_t *finalizer(const clos_t &clos, size_t ridx,
 	return copy;
 }
 
-void find_state(dfa_t &dfa, size_t state, size_t symbol, kernels_t &kernels,
+void find_state(dfa_t &dfa, size_t origin, size_t symbol, kernels_t &kernels,
 	const closure_t &closure, tcmd_t *acts, dump_dfa_t &dump, const prectable_t *prectbl)
 {
-	const kernels_t::result_t
-		result = kernels.insert(closure, acts, dfa.maxtagver, prectbl);
+	bool is_new;
+	const size_t state = kernels.insert(closure, dfa.maxtagver, prectbl, acts, is_new);
 
-	if (result.isnew) {
+	if (is_new) {
 		// create new DFA state
 		dfa_state_t *t = new dfa_state_t(dfa.nchars);
 		dfa.states.push_back(t);
@@ -404,18 +409,18 @@ void find_state(dfa_t &dfa, size_t state, size_t symbol, kernels_t &kernels,
 			t->rule = c->state->rule;
 			t->tcmd[dfa.nchars] = finalizer(*c, t->rule, dfa,
 				kernels.tagpool, kernels.tags);
-			dump.final(result.state, c->state);
+			dump.final(state, c->state);
 		}
 	}
 
-	if (state == dfa_t::NIL) { // initial state
-		dfa.tcmd0 = result.cmd;
+	if (origin == dfa_t::NIL) { // initial state
+		dfa.tcmd0 = acts;
 		dump.state0(closure);
 	} else {
-		dfa_state_t *s = dfa.states[state];
-		s->arcs[symbol] = result.state;
-		s->tcmd[symbol] = result.cmd;
-		dump.state(closure, state, symbol, result.isnew);
+		dfa_state_t *s = dfa.states[origin];
+		s->arcs[symbol] = state;
+		s->tcmd[symbol] = acts;
+		dump.state(closure, origin, symbol, is_new);
 	}
 }
 
