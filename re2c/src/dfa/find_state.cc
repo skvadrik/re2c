@@ -28,6 +28,8 @@ struct kernel_eq_t
 static void reserve_buffers(kernel_buffers_t &, allocator_t &, tagver_t, size_t);
 static kernel_t *make_new_kernel(size_t, allocator_t &);
 static kernel_t *make_kernel_copy(const kernel_t *, allocator_t &);
+static uint32_t hash_kernel(const kernel_t *kernel);
+static void copy_to_buffer_kernel(const closure_t &, const prectable_t *, kernel_t *);
 
 
 kernel_buffers_t::kernel_buffers_t(allocator_t &alc)
@@ -121,6 +123,43 @@ void reserve_buffers(kernel_buffers_t &kbufs, allocator_t &alc,
 		kbufs.indegree = reinterpret_cast<uint32_t*>(p);
 		p += sz_idg;
 		kbufs.backup_actions = reinterpret_cast<tcmd_t*>(p);
+	}
+}
+
+
+uint32_t hash_kernel(const kernel_t *kernel)
+{
+	const size_t n = kernel->size;
+
+	// seed
+	uint32_t h = static_cast<uint32_t>(n);
+
+	// TNFA states
+	h = hash32(h, kernel->state, n * sizeof(void*));
+
+	// precedence table
+	if (kernel->prectbl) {
+		h = hash32(h, kernel->prectbl, n * n * sizeof(prectable_t));
+	}
+
+	return h;
+}
+
+
+void copy_to_buffer_kernel(const closure_t &closure,
+	const prectable_t *prectbl, kernel_t *buffer)
+{
+	const size_t n = closure.size();
+
+	buffer->size = n;
+
+	buffer->prectbl = prectbl;
+
+	for (size_t i = 0; i < n; ++i) {
+		const clos_t &c = closure[i];
+		buffer->state[i] = c.state;
+		buffer->tvers[i] = c.tvers;
+		buffer->tlook[i] = c.tlook;
 	}
 }
 
@@ -307,10 +346,10 @@ bool kernels_t::operator()(const kernel_t *x, const kernel_t *y)
  * more complex analysis (and are not so useful after all), so we drop them.
  */
 
-size_t kernels_t::insert(const closure_t &clos, tagver_t maxver,
+size_t kernels_t::insert(const closure_t &closure, tagver_t maxver,
 	const prectable_t *prectbl, tcmd_t *&acts, bool &is_new)
 {
-	const size_t nkern = clos.size();
+	const size_t nkern = closure.size();
 	size_t x = dfa_t::NIL;
 	is_new = false;
 
@@ -322,24 +361,13 @@ size_t kernels_t::insert(const closure_t &clos, tagver_t maxver,
 
 	// resize buffer if closure is too large
 	reserve_buffers(buffers, tagpool.alc, maxver, nkern);
-
-	// copy closure to buffer kernel and find its normal form
 	kernel_t *k = buffers.kernel;
-	k->size = nkern;
-	k->prectbl = prectbl;
-	for (size_t i = 0; i < nkern; ++i) {
-		const clos_t &c = clos[i];
-		k->state[i] = c.state;
-		k->tvers[i] = c.tvers;
-		k->tlook[i] = c.tlook;
-	}
 
-	// get kernel hash
-	uint32_t hash = static_cast<uint32_t>(nkern); // seed
-	hash = hash32(hash, k->state, nkern * sizeof(void*));
-	if (prectbl) {
-		hash = hash32(hash, k->prectbl, nkern * nkern * sizeof(prectable_t));
-	}
+	// copy closure to buffer kernel
+	copy_to_buffer_kernel(closure, prectbl, k);
+
+	// hash "static" part of the kernel
+	const uint32_t hash = hash_kernel(k);
 
 	// try to find identical kernel
 	kernel_eq_t cmp_eq = {tagpool, tags};
