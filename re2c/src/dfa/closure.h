@@ -9,6 +9,7 @@
 #include "src/dfa/tagtree.h"
 #include "src/nfa/nfa.h"
 #include "src/re/tag.h"
+#include "src/util/slab_allocator.h"
 
 namespace re2c
 {
@@ -16,6 +17,8 @@ namespace re2c
 struct Tagpool;
 struct dfa_t;
 struct tcmd_t;
+
+typedef slab_allocator_t<> allocator_t;
 
 struct clos_t
 {

@@ -30,9 +30,24 @@ struct kernel_t
 	size_t *tvers; // tag versions
 	hidx_t *tlook; // lookahead tags
 
-	static kernel_t *make_init(size_t size, Tagpool &tagpool);
-	static kernel_t *make_copy(const kernel_t &k, Tagpool &tagpool);
 	FORBID_COPY(kernel_t);
+};
+
+struct kernel_buffers_t
+{
+	size_t maxsize;
+	kernel_t *kernel;
+	tagver_t cap; // capacity (greater or equal to max)
+	tagver_t max; // maximal tag version
+	char *memory;
+	tagver_t *x2y;
+	tagver_t *y2x;
+	size_t *x2t;
+	uint32_t *indegree;
+	tcmd_t **actnext;
+	tagver_t *actlhs;
+
+	explicit kernel_buffers_t(allocator_t &alc);
 };
 
 struct kernels_t
@@ -60,26 +75,14 @@ public:
 	const std::vector<Tag> &tags;
 
 private:
-	size_t maxsize;
-	kernel_t *buffer;
-
-	tagver_t cap; // capacity (greater or equal to max)
-	tagver_t max; // maximal tag version
-	char *mem;
-	tagver_t *x2y;
-	tagver_t *y2x;
-	size_t *x2t;
-	uint32_t *indeg;
+	kernel_buffers_t buffers;
 
 	tcmd_t **pacts;
-	tcmd_t **actnext;
-	tagver_t *actlhs;
 
 public:
 	kernels_t(Tagpool &tagp, tcpool_t &tcp, const std::vector<Tag> &ts);
-	void init(tagver_t v, size_t nkern);
-	size_t size() const;
-	const kernel_t* operator[](size_t idx) const;
+	inline size_t size() const { return lookup.size(); }
+	inline const kernel_t* operator[](size_t idx) const { return lookup[idx]; }
 	result_t insert(const closure_t &clos, tcmd_t *acts, tagver_t maxver, const prectable_t *prectbl);
 	bool operator()(const kernel_t *k1, const kernel_t *k2);
 	FORBID_COPY(kernels_t);

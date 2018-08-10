@@ -25,42 +25,109 @@ struct kernel_eq_t
 };
 
 
-kernel_t *kernel_t::make_init(size_t size, Tagpool &tagpool)
+static void reserve_buffers(kernel_buffers_t &, allocator_t &, tagver_t, size_t);
+static kernel_t *make_new_kernel(size_t, allocator_t &);
+static kernel_t *make_kernel_copy(const kernel_t *, allocator_t &);
+
+
+kernel_buffers_t::kernel_buffers_t(allocator_t &alc)
+	: maxsize(0) // usually ranges from one to some twenty
+	, kernel(make_new_kernel(maxsize, alc))
+	, cap(0)
+	, max(0)
+	, memory(NULL)
+	, x2y(NULL)
+	, y2x(NULL)
+	, x2t(NULL)
+	, indegree(NULL)
+	, actnext(NULL)
+	, actlhs(NULL)
+{}
+
+
+kernels_t::kernels_t(Tagpool &tagp, tcpool_t &tcp, const std::vector<Tag> &ts)
+	: lookup()
+	, tagpool(tagp)
+	, tcpool(tcp)
+	, tags(ts)
+	, buffers(tagp.alc)
+	, pacts(NULL)
+{}
+
+
+kernel_t *make_new_kernel(size_t size, allocator_t &alc)
 {
-	kernel_t *kcopy = tagpool.alc.alloct<kernel_t>(1);
-	kcopy->size = size;
-	kcopy->prectbl = NULL;
-	kcopy->state = tagpool.alc.alloct<nfa_state_t*>(size);
-	kcopy->tvers = tagpool.alc.alloct<size_t>(size);
-	kcopy->tlook = tagpool.alc.alloct<hidx_t>(size);
-	return kcopy;
+	kernel_t *k = alc.alloct<kernel_t>(1);
+	k->size = size;
+	k->prectbl = NULL;
+	k->state = alc.alloct<nfa_state_t*>(size);
+	k->tvers = alc.alloct<size_t>(size);
+	k->tlook = alc.alloct<hidx_t>(size);
+	return k;
 }
 
-kernel_t *kernel_t::make_copy(const kernel_t &k, Tagpool &tagpool)
+
+kernel_t *make_kernel_copy(const kernel_t *kernel, allocator_t &alc)
 {
-	kernel_t *kcopy = tagpool.alc.alloct<kernel_t>(1);
+	const size_t n = kernel->size;
 
-	const size_t size = k.size;
-	kcopy->size = size;
+	kernel_t *k = make_new_kernel(n, alc);
 
-	prectable_t *prectbl = NULL;
-	if (k.prectbl) {
-		prectbl = tagpool.alc.alloct<prectable_t>(size * size);
-		memcpy(prectbl, k.prectbl, size * size * sizeof(prectable_t));
+	memcpy(k->state, kernel->state, n * sizeof(void*));
+	memcpy(k->tvers, kernel->tvers, n * sizeof(size_t));
+	memcpy(k->tlook, kernel->tlook, n * sizeof(hidx_t));
+
+	prectable_t *ptbl = NULL;
+	if (kernel->prectbl) {
+		ptbl = alc.alloct<prectable_t>(n * n);
+		memcpy(ptbl, kernel->prectbl, n * n * sizeof(prectable_t));
 	}
-	kcopy->prectbl = prectbl;
+	k->prectbl = ptbl;
 
-	kcopy->state = tagpool.alc.alloct<nfa_state_t*>(size);
-	memcpy(kcopy->state, k.state, size * sizeof(void*));
-
-	kcopy->tvers = tagpool.alc.alloct<size_t>(size);
-	memcpy(kcopy->tvers, k.tvers, size * sizeof(size_t));
-
-	kcopy->tlook = tagpool.alc.alloct<hidx_t>(size);
-	memcpy(kcopy->tlook, k.tlook, size * sizeof(hidx_t));
-
-	return kcopy;
+	return k;
 }
+
+
+void reserve_buffers(kernel_buffers_t &kbufs, allocator_t &alc,
+	tagver_t maxver, size_t maxkern)
+{
+	if (kbufs.maxsize < maxkern) {
+		kbufs.maxsize = maxkern * 2; // in advance
+		kbufs.kernel = make_new_kernel(kbufs.maxsize, alc);
+	}
+
+	// +1 to ensure max tag version is not forgotten in loops
+	kbufs.max = maxver + 1;
+	if (kbufs.cap < kbufs.max) {
+		kbufs.cap = kbufs.max * 2; // in advance
+
+		const size_t
+			n = static_cast<size_t>(kbufs.cap),
+			m = 2 * n + 1,
+			sz_x2y = 2 * m * sizeof(tagver_t),
+			sz_x2t = m * sizeof(size_t),
+			sz_actnext = n * sizeof(tcmd_t*),
+			sz_actlhs = n * sizeof(tagver_t),
+			sz_indeg = n * sizeof(uint32_t);
+
+		char *p = alc.alloct<char>(sz_x2y + sz_x2t + sz_actnext + sz_actlhs + sz_indeg);
+		kbufs.memory = p;
+
+		// point to the center (zero index) of each buffer
+		// indexes in range [-N .. N] must be valid, where N is capacity
+		kbufs.x2y = reinterpret_cast<tagver_t*>(p) + n;
+		kbufs.y2x = kbufs.x2y + m;
+		p += sz_x2y;
+		kbufs.x2t = reinterpret_cast<size_t*>(p) + n;
+		p += sz_x2t;
+		kbufs.actnext = reinterpret_cast<tcmd_t**>(p);
+		p += sz_actnext;
+		kbufs.actlhs = reinterpret_cast<tagver_t*>(p);
+		p += sz_actlhs;
+		kbufs.indegree = reinterpret_cast<uint32_t*>(p);
+	}
+}
+
 
 static bool equal_lookahead_tags(const kernel_t *x, const kernel_t *y,
 	Tagpool &tagpool, const std::vector<Tag> &tags)
@@ -146,6 +213,9 @@ bool kernels_t::operator()(const kernel_t *x, const kernel_t *y)
 		&& equal_lookahead_tags(x, y, tagpool, tags);
 	if (!compatible) return false;
 
+	tagver_t *x2y = buffers.x2y, *y2x = buffers.y2x, max = buffers.max;
+	size_t *x2t = buffers.x2t;
+
 	// map tag versions of one kernel to that of another
 	// and check that lookahead versions (if any) coincide
 	const size_t ntag = tagpool.ntags;
@@ -176,7 +246,8 @@ bool kernels_t::operator()(const kernel_t *x, const kernel_t *y)
 	}
 
 	// we have bijective mapping; now try to create list of commands
-	tcmd_t *a, **pa, *copy = NULL;
+	tcmd_t **actnext = buffers.actnext, *a, **pa, *copy = NULL;
+	tagver_t *actlhs = buffers.actlhs;
 
 	// backup 'save' commands: if topsort finds cycles, this mapping
 	// will be rejected and we'll have to revert all changes
@@ -212,7 +283,7 @@ bool kernels_t::operator()(const kernel_t *x, const kernel_t *y)
 	*pacts = copy;
 
 	// see note [topological ordering of copy commands]
-	const bool nontrivial_cycles = tcmd_t::topsort(pacts, indeg);
+	const bool nontrivial_cycles = tcmd_t::topsort(pacts, buffers.indegree);
 
 	// in case of cycles restore 'save' commands and fail
 	if (nontrivial_cycles) {
@@ -226,71 +297,6 @@ bool kernels_t::operator()(const kernel_t *x, const kernel_t *y)
 	}
 
 	return !nontrivial_cycles;
-}
-
-kernels_t::kernels_t(Tagpool &tagp, tcpool_t &tcp, const std::vector<Tag> &ts)
-	: lookup()
-	, tagpool(tagp)
-	, tcpool(tcp)
-	, tags(ts)
-
-	, maxsize(0) // usually ranges from one to some twenty
-	, buffer(kernel_t::make_init(maxsize, tagp))
-
-	, cap(0)
-	, max(0)
-	, mem(NULL)
-	, x2y(NULL)
-	, y2x(NULL)
-	, x2t(NULL)
-	, indeg(NULL)
-
-	, pacts(NULL)
-	, actnext(NULL)
-	, actlhs(NULL)
-{}
-
-void kernels_t::init(tagver_t v, size_t nkern)
-{
-	if (maxsize < nkern) {
-		maxsize = nkern * 2; // in advance
-		buffer = kernel_t::make_init(maxsize, tagpool);
-	}
-
-	// +1 to ensure max tag version is not forgotten in loops
-	max = v + 1;
-	if (cap < max) {
-		cap = max * 2; // in advance
-
-		const size_t
-			n = static_cast<size_t>(cap),
-			m = 2 * n + 1,
-			sz_x2y = 2 * m * sizeof(tagver_t),
-			sz_x2t = m * sizeof(size_t),
-			sz_actnext = n * sizeof(tcmd_t*),
-			sz_actlhs = n * sizeof(tagver_t),
-			sz_indeg = n * sizeof(uint32_t);
-		mem = tagpool.alc.alloct<char>(sz_x2y + sz_x2t + sz_actnext + sz_actlhs + sz_indeg);
-
-		// point to the center (zero index) of each buffer
-		// indexes in range [-N .. N] must be valid, where N is capacity
-		x2y     = reinterpret_cast<tagver_t*>(mem) + cap;
-		y2x     = x2y + m;
-		x2t     = reinterpret_cast<size_t*>(mem + sz_x2y) + cap;
-		actnext = reinterpret_cast<tcmd_t**>(mem + sz_x2y + sz_x2t);
-		actlhs  = reinterpret_cast<tagver_t*>(mem + sz_x2y + sz_x2t + sz_actnext);
-		indeg   = reinterpret_cast<uint32_t*>(mem + sz_x2y + sz_x2t + sz_actnext + sz_actlhs);
-	}
-}
-
-size_t kernels_t::size() const
-{
-	return lookup.size();
-}
-
-const kernel_t *kernels_t::operator[](size_t idx) const
-{
-	return lookup[idx];
 }
 
 /* note [bijective mappings]
@@ -323,38 +329,39 @@ kernels_t::result_t kernels_t::insert(const closure_t &clos,
 	if (nkern == 0) return result_t(x, NULL, false);
 
 	// resize buffer if closure is too large
-	init(maxver, nkern);
+	reserve_buffers(buffers, tagpool.alc, maxver, nkern);
 
 	// copy closure to buffer kernel and find its normal form
-	buffer->size = nkern;
-	buffer->prectbl = prectbl;
+	kernel_t *k = buffers.kernel;
+	k->size = nkern;
+	k->prectbl = prectbl;
 	for (size_t i = 0; i < nkern; ++i) {
 		const clos_t &c = clos[i];
-		buffer->state[i] = c.state;
-		buffer->tvers[i] = c.tvers;
-		buffer->tlook[i] = c.tlook;
+		k->state[i] = c.state;
+		k->tvers[i] = c.tvers;
+		k->tlook[i] = c.tlook;
 	}
 
 	// get kernel hash
 	uint32_t hash = static_cast<uint32_t>(nkern); // seed
-	hash = hash32(hash, buffer->state, nkern * sizeof(void*));
+	hash = hash32(hash, k->state, nkern * sizeof(void*));
 	if (prectbl) {
-		hash = hash32(hash, buffer->prectbl, nkern * nkern * sizeof(prectable_t));
+		hash = hash32(hash, k->prectbl, nkern * nkern * sizeof(prectable_t));
 	}
 
 	// try to find identical kernel
 	kernel_eq_t cmp_eq = {tagpool, tags};
-	x = lookup.find_with(hash, buffer, cmp_eq);
+	x = lookup.find_with(hash, k, cmp_eq);
 	if (x != index_t::NIL) return result_t(x, acts, false);
 
 	// else try to find mappable kernel
 	// see note [bijective mappings]
 	this->pacts = &acts;
-	x = lookup.find_with(hash, buffer, *this);
+	x = lookup.find_with(hash, k, *this);
 	if (x != index_t::NIL) return result_t(x, acts, false);
 
 	// otherwise add new kernel
-	x = lookup.push(hash, kernel_t::make_copy(*buffer, tagpool));
+	x = lookup.push(hash, make_kernel_copy(k, tagpool.alc));
 	return result_t(x, acts, true);
 }
 
