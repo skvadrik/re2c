@@ -8,21 +8,6 @@
 namespace re2c
 {
 
-static const size_t SCC_INF = std::numeric_limits<size_t>::max();
-static const size_t SCC_UND = SCC_INF - 1;
-
-static bool loopback(size_t node, size_t narcs, const size_t *arcs)
-{
-	for (size_t i = 0; i < narcs; ++i)
-	{
-		if (arcs[i] == node)
-		{
-			return true;
-		}
-	}
-	return false;
-}
-
 /*
  * node [finding strongly connected components of DFA]
  *
@@ -47,6 +32,25 @@ static bool loopback(size_t node, size_t narcs, const size_t *arcs)
  * stack (SCC_INF).
  *
  */
+
+
+static const size_t SCC_INF = std::numeric_limits<size_t>::max();
+static const size_t SCC_UND = SCC_INF - 1;
+
+
+static bool loopback(size_t node, size_t narcs, const size_t *arcs)
+{
+	for (size_t i = 0; i < narcs; ++i)
+	{
+		if (arcs[i] == node)
+		{
+			return true;
+		}
+	}
+	return false;
+}
+
+
 static void scc(
 	const dfa_t &dfa,
 	std::stack<size_t> &stack,
@@ -94,6 +98,7 @@ static void scc(
 	}
 }
 
+
 static void calc_fill(
 	const dfa_t &dfa,
 	const std::vector<bool> &trivial,
@@ -123,6 +128,7 @@ static void calc_fill(
 		}
 	}
 }
+
 
 void fillpoints(const dfa_t &dfa, std::vector<size_t> &fill)
 {

@@ -9,15 +9,21 @@ namespace re2c
 
 static const tagver_t DELIM = TAGVER_CURSOR - 1;
 
+
 tagtree_t::tagtree_t(): nodes(), path1(), path2() {}
+
 
 hidx_t tagtree_t::pred(hidx_t i) const { return nodes[i].pred; }
 
+
 tag_info_t tagtree_t::info(hidx_t i) const { return nodes[i].info; }
+
 
 tagver_t tagtree_t::elem(hidx_t i) const { return nodes[i].info.neg ? TAGVER_BOTTOM : TAGVER_CURSOR; }
 
+
 size_t tagtree_t::tag(hidx_t i) const { return nodes[i].info.idx; }
+
 
 hidx_t tagtree_t::push(hidx_t idx, tag_info_t info)
 {
@@ -26,6 +32,7 @@ hidx_t tagtree_t::push(hidx_t idx, tag_info_t info)
 	return static_cast<hidx_t>(nodes.size() - 1);
 }
 
+
 tagver_t tagtree_t::last(hidx_t i, size_t t) const
 {
 	for (; i != HROOT; i = pred(i)) {
@@ -33,6 +40,7 @@ tagver_t tagtree_t::last(hidx_t i, size_t t) const
 	}
 	return TAGVER_ZERO;
 }
+
 
 int32_t tagtree_t::compare_reversed(hidx_t x, hidx_t y, size_t t) const
 {
@@ -51,6 +59,7 @@ int32_t tagtree_t::compare_reversed(hidx_t x, hidx_t y, size_t t) const
 	}
 }
 
+
 static void reconstruct_history(const tagtree_t &history,
 	std::vector<tag_info_t> &path, hidx_t idx)
 {
@@ -60,17 +69,20 @@ static void reconstruct_history(const tagtree_t &history,
 	}
 }
 
+
 static inline int32_t unpack_longest(int32_t value)
 {
 	// lower 30 bits
 	return value & 0x3fffFFFF;
 }
 
+
 static inline int32_t unpack_leftmost(int32_t value)
 {
 	// higher 2 bits
 	return value >> 30u;
 }
+
 
 int32_t tagtree_t::precedence(const clos_t &x, const clos_t &y,
 	int32_t &rhox, int32_t &rhoy, const prectable_t *prectbl,

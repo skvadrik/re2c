@@ -9,8 +9,6 @@
 namespace re2c
 {
 
-static void find_overwritten_tags(const dfa_t &dfa, size_t state, bool *been, bool *owrt);
-
 /* note [fallback tags]
  *
  * We need to backup tags in fallback states, because they may be
@@ -36,6 +34,10 @@ static void find_overwritten_tags(const dfa_t &dfa, size_t state, bool *been, bo
  * only create backup if the origin is overwritten on some path.
  */
 
+
+static void find_overwritten_tags(const dfa_t &dfa, size_t state, bool *been, bool *owrt);
+
+
 void find_overwritten_tags(const dfa_t &dfa, size_t state,
 	bool *been, bool *owrt)
 {
@@ -55,6 +57,7 @@ void find_overwritten_tags(const dfa_t &dfa, size_t state,
 	}
 }
 
+
 // overwritten tags need 'copy' on all outgoing non-accepting paths
 // ('copy' commands must go first, before potential overwrites)
 static void backup(dfa_t &dfa, dfa_state_t *s, tagver_t l, tagver_t r)
@@ -67,6 +70,7 @@ static void backup(dfa_t &dfa, dfa_state_t *s, tagver_t l, tagver_t r)
 		}
 	}
 }
+
 
 // WARNING: this function assumes that falthrough and fallback
 // attributes of DFA states have already been calculated, see

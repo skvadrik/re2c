@@ -20,6 +20,7 @@ struct eqtag_t
 	}
 };
 
+
 Tagpool::Tagpool(const opt_t *o, size_t n)
 	: lookup()
 	, opts(o)
@@ -32,6 +33,7 @@ Tagpool::Tagpool(const opt_t *o, size_t n)
 	, cstack()
 {}
 
+
 Tagpool::~Tagpool()
 {
 	delete[] buffer;
@@ -41,11 +43,13 @@ Tagpool::~Tagpool()
 	}
 }
 
+
 size_t Tagpool::insert_const(tagver_t ver)
 {
 	std::fill(buffer, buffer + ntags, ver);
 	return insert(buffer);
 }
+
 
 size_t Tagpool::insert_succ(tagver_t fst)
 {
@@ -54,6 +58,7 @@ size_t Tagpool::insert_succ(tagver_t fst)
 	}
 	return insert(buffer);
 }
+
 
 size_t Tagpool::insert(const tagver_t *tags)
 {
@@ -70,6 +75,7 @@ size_t Tagpool::insert(const tagver_t *tags)
 	memcpy(copy, tags, size);
 	return lookup.push(hash, copy);
 }
+
 
 const tagver_t *Tagpool::operator[](size_t idx) const
 {

@@ -23,6 +23,34 @@ namespace re2c
  * the same symbol that go to distinguishable states. The algorithm
  * loops until the matrix stops changing.
  */
+
+
+/*
+ * note [DFA minimization: Moore algorithm]
+ *
+ * The algorithm maintains partition of DFA states.
+ * Initial partition is coarse: states are distinguished according
+ * to their rule and tag set. Partition is gradually refined: each
+ * set of states is split into minimal number of subsets such that
+ * for all states in a subset transitions on the same symbol go to
+ * the same set of states.
+ * The algorithm loops until partition stops changing.
+ */
+
+
+/* note [distinguish states by tags]
+ *
+ * Final states may have 'rule' tags: tags that must be set when lexer
+ * takes epsilon-transition to the binded action. Final states with
+ * the same rule but different sets on 'rule' tags cannot be merged.
+ *
+ * Compare the following two cases:
+ *     "ac" | "bc"
+ *     "ac" @p | "bc"
+ * Tail "c" can be deduplicated in the 1st case, but not in the 2nd.
+ */
+
+
 static void minimization_table(
 	size_t *part,
 	const std::vector<dfa_state_t*> &states,
@@ -112,17 +140,7 @@ static void minimization_table(
 	delete[] tbl;
 }
 
-/*
- * note [DFA minimization: Moore algorithm]
- *
- * The algorithm maintains partition of DFA states.
- * Initial partition is coarse: states are distinguished according
- * to their rule and tag set. Partition is gradually refined: each
- * set of states is split into minimal number of subsets such that
- * for all states in a subset transitions on the same symbol go to
- * the same set of states.
- * The algorithm loops until partition stops changing.
- */
+
 static void minimization_moore(
 	size_t *part,
 	const std::vector<dfa_state_t*> &states,
@@ -213,17 +231,6 @@ static void minimization_moore(
 	delete[] next;
 }
 
-/* note [distinguish states by tags]
- *
- * Final states may have 'rule' tags: tags that must be set when lexer
- * takes epsilon-transition to the binded action. Final states with
- * the same rule but different sets on 'rule' tags cannot be merged.
- *
- * Compare the following two cases:
- *     "ac" | "bc"
- *     "ac" @p | "bc"
- * Tail "c" can be deduplicated in the 1st case, but not in the 2nd.
- */
 
 void minimization(dfa_t &dfa, dfa_minimization_t type)
 {

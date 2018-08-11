@@ -19,6 +19,63 @@
 namespace re2c
 {
 
+/* note [epsilon-closures in tagged NFA]
+ *
+ * The closure includes all NFA states that are reachable by epsilon-paths
+ * from the given set of states and either are final or have non-epsilon
+ * transitions. Note that by construction NFA states cannot have both
+ * epsilon and non-epsilon transitions.
+ *
+ * Each closure state might be reachable by multiple epsilon-paths with
+ * different tags: this means that the regular expression is ambiguous
+ * and can be parsed in different ways. Which parse to choose depends on the
+ * disambiguation policy. RE2C supports two policies: leftmost greedy and
+ * POSIX.
+ *
+ * We use Goldber-Radzik algorithm to find the "shortest path".
+ * Both disambiguation policies forbid epsilon-cycles with negative weight.
+ */
+
+
+/* note [at most one final item per closure]
+ *
+ * By construction NFA has exactly one final state per rule. Thus closure
+ * has at most one final item per rule (in other words, all final items
+ * in closure belong to different rules). The rule with the highest priority
+ * shadowes all other rules. Final items that correspond to shadowed rules
+ * are useless and should be removed as early as possible.
+ *
+ * If we let such items remain in closure, they may prevent the new DFA
+ * state from being merged with other states. This won't affect the final
+ * program: meaningless finalizing tags will be removed by dead code
+ * elimination and subsequent minimization will merge equivalent final
+ * states. However, it's better not to add useless final items at all.
+ *
+ * Note that the first final item reached by the epsilon-closure it the one
+ * with the highest priority (see note [closure items are sorted by rule]).
+ */
+
+
+/* note [the difference between TDFA(0) and TDFA(1)]
+ *
+ * TDFA(0) performs epsilon-closure after transition on symbol,
+ * while TDFA(1) performs it before the transition and uses the lookahead
+ * symbol to filter the closure.
+ *
+ * TDFA(0) is one step ahead of TDFA(1): it consumes a symol, then builds
+ * epsilon-closure, eagerly applies all tags reachable by it and goes to
+ * the next state.
+ *
+ * TDFA(1) is more lazy: it builds epsilon-closure, then filters it with
+ * respect to the current symbol (uses only those states which have outgoing
+ * transitions on this symbol), then applies corresponding tags (probably
+ * not all tags applied by TDFA(0)) and then consumes the symbol and goes
+ * to the next state.
+ *
+ * Thus in general TDFA(1) raises less conflicts than TDFA(0).
+ */
+
+
 static void closure_posix(const closure_t &init, closure_t &done, closure_t *shadow, Tagpool &tagpool, const std::vector<Tag> &tags, const prectable_t *prectbl, size_t noldclos);
 static void closure_leftmost(const closure_t &init, closure_t &done, closure_t *shadow, Tagpool &tagpool);
 static void prune(closure_t &clos, std::valarray<Rule> &rules);
@@ -27,6 +84,7 @@ static tcmd_t *generate_versions(dfa_t &dfa, closure_t &clos, Tagpool &tagpool, 
 static void orders(closure_t &clos, Tagpool &tagpool, const std::vector<Tag> &tags,
 	const prectable_t *prectbl_old, prectable_t *&prectbl_new, size_t noldclos);
 static bool cmpby_rule_state(const clos_t &x, const clos_t &y);
+
 
 tcmd_t *closure(dfa_t &dfa, closure_t &clos1, closure_t &clos2,
 	Tagpool &tagpool, newvers_t &newvers, closure_t *shadow,
@@ -56,6 +114,7 @@ tcmd_t *closure(dfa_t &dfa, closure_t &clos1, closure_t &clos2,
 	return cmd;
 }
 
+
 bool cmpby_rule_state(const clos_t &x, const clos_t &y)
 {
 	const nfa_state_t *sx = x.state, *sy = y.state;
@@ -68,23 +127,6 @@ bool cmpby_rule_state(const clos_t &x, const clos_t &y)
 	return false;
 }
 
-
-/* note [epsilon-closures in tagged NFA]
- *
- * The closure includes all NFA states that are reachable by epsilon-paths
- * from the given set of states and either are final or have non-epsilon
- * transitions. Note that by construction NFA states cannot have both
- * epsilon and non-epsilon transitions.
- *
- * Each closure state might be reachable by multiple epsilon-paths with
- * different tags: this means that the regular expression is ambiguous
- * and can be parsed in different ways. Which parse to choose depends on the
- * disambiguation policy. RE2C supports two policies: leftmost greedy and
- * POSIX.
- *
- * We use Goldber-Radzik algorithm to find the "shortest path".
- * Both disambiguation policies forbid epsilon-cycles with negative weight.
- */
 
 static nfa_state_t *relax(clos_t x, closure_t &done,
 	closure_t *shadow, Tagpool &tagpool, const std::vector<Tag> &tags,
@@ -119,6 +161,7 @@ static nfa_state_t *relax(clos_t x, closure_t &done,
 
 	return q;
 }
+
 
 static nfa_state_t *explore(nfa_state_t *q, closure_t &done,
 	closure_t *shadow, Tagpool &tagpool, const std::vector<Tag> &tags,
@@ -162,6 +205,7 @@ static nfa_state_t *explore(nfa_state_t *q, closure_t &done,
 	}
 	return p;
 }
+
 
 void closure_posix(const closure_t &init, closure_t &done,
 	closure_t *shadow, Tagpool &tagpool, const std::vector<Tag> &tags,
@@ -255,23 +299,6 @@ void closure_posix(const closure_t &init, closure_t &done,
 	}
 }
 
-/* note [at most one final item per closure]
- *
- * By construction NFA has exactly one final state per rule. Thus closure
- * has at most one final item per rule (in other words, all final items
- * in closure belong to different rules). The rule with the highest priority
- * shadowes all other rules. Final items that correspond to shadowed rules
- * are useless and should be removed as early as possible.
- *
- * If we let such items remain in closure, they may prevent the new DFA
- * state from being merged with other states. This won't affect the final
- * program: meaningless finalizing tags will be removed by dead code
- * elimination and subsequent minimization will merge equivalent final
- * states. However, it's better not to add useless final items at all.
- *
- * Note that the first final item reached by the epsilon-closure it the one
- * with the highest priority (see note [closure items are sorted by rule]).
- */
 
 void closure_leftmost(const closure_t &init, closure_t &done,
 	closure_t *shadow, Tagpool &tagpool)
@@ -328,6 +355,7 @@ void closure_leftmost(const closure_t &init, closure_t &done,
 	}
 }
 
+
 void prune(closure_t &clos, std::valarray<Rule> &rules)
 {
 	clositer_t b = clos.begin(), e = clos.end(), i, j;
@@ -351,24 +379,6 @@ void prune(closure_t &clos, std::valarray<Rule> &rules)
 	clos.resize(n);
 }
 
-/* note [the difference between TDFA(0) and TDFA(1)]
- *
- * TDFA(0) performs epsilon-closure after transition on symbol,
- * while TDFA(1) performs it before the transition and uses the lookahead
- * symbol to filter the closure.
- *
- * TDFA(0) is one step ahead of TDFA(1): it consumes a symol, then builds
- * epsilon-closure, eagerly applies all tags reachable by it and goes to
- * the next state.
- *
- * TDFA(1) is more lazy: it builds epsilon-closure, then filters it with
- * respect to the current symbol (uses only those states which have outgoing
- * transitions on this symbol), then applies corresponding tags (probably
- * not all tags applied by TDFA(0)) and then consumes the symbol and goes
- * to the next state.
- *
- * Thus in general TDFA(1) raises less conflicts than TDFA(0).
- */
 
 void lower_lookahead_to_transition(closure_t &clos)
 {
@@ -377,6 +387,7 @@ void lower_lookahead_to_transition(closure_t &clos)
 		c->tlook = HROOT;
 	}
 }
+
 
 tcmd_t *generate_versions(dfa_t &dfa, closure_t &clos, Tagpool &tagpool, newvers_t &newvers)
 {
@@ -460,11 +471,13 @@ tcmd_t *generate_versions(dfa_t &dfa, closure_t &clos, Tagpool &tagpool, newvers
 	return cmd;
 }
 
+
 static inline int32_t pack(int32_t longest, int32_t leftmost)
 {
 	// leftmost: higher 2 bits, longest: lower 30 bits
 	return longest | (leftmost << 30);
 }
+
 
 void orders(closure_t &clos, Tagpool &tagpool, const std::vector<Tag> &tags,
 	const prectable_t *prectbl_old, prectable_t *&prectbl_new, size_t noldclos)

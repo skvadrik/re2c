@@ -16,6 +16,67 @@
 namespace re2c
 {
 
+/* note [mapping ignores items with lookahead tags]
+ *
+ * Consider two items X and Y being mapped.
+ *
+ * If tag T belongs to lookahead tags of item X, then all
+ * outgoing transitions from item X update T. Which means
+ * that it doesn't matter what particular version T has in X:
+ * whatever version it has, it will be overwritten by any
+ * outgoing transition.
+ *
+ * Note that lookahead tags are identical for both items
+ * X and Y, because we only try to map DFA states with
+ * identical lookahead tags.
+ */
+
+
+/* note [save(X), copy(Y,X) optimization]
+ *
+ * save(X) command followed by a copy(Y,X) command can be optimized to
+ * save(Y). This helps reduce the number commands and versions (new version
+ * X is gone), but what is more important, it allows to put copy commands
+ * in front of save commands. This order is necessary when it comes to
+ * fallback commands.
+ *
+ * Note that in case of injective mapping there may be more than one copy
+ * command matching the same save command: save(X), copy(Y,X), copy(Z,X).
+ * In this case save command must be replicated for each copy command:
+ * save(Y), save(Z).
+ *
+ * For each save(X) command there must be at least one copy(Y,X) command
+ * (exactly one case of bijective mapping). This is because X version in
+ * save(X) command must be a new version which cannot occur in the older
+ * DFA state. Thus all save commands are transformed (maybe replicated) by
+ * copy commands, and some copy commands are erased by save commands.
+ *
+ * This optimization is applied after checking priority violation, so it
+ * cannot affect the check.
+*/
+
+
+/* note [bijective mappings]
+ *
+ * Suppose we have just constructed a new DFA state Y and want to map it
+ * to an existing DFA state X. States must have identical sets of NFA
+ * substates and identical sets of lookahead tags for each substate.
+ * Furtermore, there must be bijective mapping between versions of X and Y
+ * and this mapping must preserve version order (respect priorities).
+ *
+ * Bijective mappings have a nice property: there is only one possible state
+ * X to which Y can be mapped. Indeed, if there was another state Z that
+ * can be bijectively mapped to Y preserving priorities, then Z itself can
+ * be mapped to X: both (1) and (2) are symmetrical in case of bijection
+ * and the relation is transitive. So the existence of Z is a contradiction.
+ *
+ * In principle, non-bijective mappings are also possible if the new state
+ * is less versatile than the old one (surjection from X to Y). However,
+ * non-bijective mappings lack the 'unique counterpart' property and need
+ * more complex analysis (and are not so useful after all), so we drop them.
+ */
+
+
 struct kernel_eq_t
 {
 	Tagpool &tagpool;
@@ -199,43 +260,6 @@ bool kernel_eq_t::operator()(const kernel_t *x, const kernel_t *y) const
 		&& equal_lookahead_tags(x, y, tagpool, tags);
 }
 
-/* note [mapping ignores items with lookahead tags]
- *
- * Consider two items X and Y being mapped.
- *
- * If tag T belongs to lookahead tags of item X, then all
- * outgoing transitions from item X update T. Which means
- * that it doesn't matter what particular version T has in X:
- * whatever version it has, it will be overwritten by any
- * outgoing transition.
- *
- * Note that lookahead tags are identical for both items
- * X and Y, because we only try to map DFA states with
- * identical lookahead tags.
- */
-
-/* note [save(X), copy(Y,X) optimization]
- *
- * save(X) command followed by a copy(Y,X) command can be optimized to
- * save(Y). This helps reduce the number commands and versions (new version
- * X is gone), but what is more important, it allows to put copy commands
- * in front of save commands. This order is necessary when it comes to
- * fallback commands.
- *
- * Note that in case of injective mapping there may be more than one copy
- * command matching the same save command: save(X), copy(Y,X), copy(Z,X).
- * In this case save command must be replicated for each copy command:
- * save(Y), save(Z).
- *
- * For each save(X) command there must be at least one copy(Y,X) command
- * (exactly one case of bijective mapping). This is because X version in
- * save(X) command must be a new version which cannot occur in the older
- * DFA state. Thus all save commands are transformed (maybe replicated) by
- * copy commands, and some copy commands are erased by save commands.
- *
- * This optimization is applied after checking priority violation, so it
- * cannot affect the check.
-*/
 
 bool kernels_t::operator()(const kernel_t *x, const kernel_t *y)
 {
@@ -326,25 +350,6 @@ bool kernels_t::operator()(const kernel_t *x, const kernel_t *y)
 	return !nontrivial_cycles;
 }
 
-/* note [bijective mappings]
- *
- * Suppose we have just constructed a new DFA state Y and want to map it
- * to an existing DFA state X. States must have identical sets of NFA
- * substates and identical sets of lookahead tags for each substate.
- * Furtermore, there must be bijective mapping between versions of X and Y
- * and this mapping must preserve version order (respect priorities).
- *
- * Bijective mappings have a nice property: there is only one possible state
- * X to which Y can be mapped. Indeed, if there was another state Z that
- * can be bijectively mapped to Y preserving priorities, then Z itself can
- * be mapped to X: both (1) and (2) are symmetrical in case of bijection
- * and the relation is transitive. So the existence of Z is a contradiction.
- *
- * In principle, non-bijective mappings are also possible if the new state
- * is less versatile than the old one (surjection from X to Y). However,
- * non-bijective mappings lack the 'unique counterpart' property and need
- * more complex analysis (and are not so useful after all), so we drop them.
- */
 
 size_t kernels_t::insert(const closure_t &closure, tagver_t maxver,
 	const prectable_t *prectbl, tcmd_t *&acts, bool &is_new)
@@ -386,6 +391,7 @@ size_t kernels_t::insert(const closure_t &closure, tagver_t maxver,
 	return x;
 }
 
+
 static tcmd_t *finalizer(const clos_t &clos, size_t ridx,
 	dfa_t &dfa, const Tagpool &tagpool, const std::vector<Tag> &tags)
 {
@@ -417,6 +423,7 @@ static tcmd_t *finalizer(const clos_t &clos, size_t ridx,
 
 	return copy;
 }
+
 
 void find_state(dfa_t &dfa, size_t origin, size_t symbol, kernels_t &kernels,
 	const closure_t &closure, tcmd_t *acts, dump_dfa_t &dump, const prectable_t *prectbl)

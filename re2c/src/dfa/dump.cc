@@ -22,6 +22,7 @@ static void dump_tcmd_or_tcid(tcmd_t *const *tcmd, const tcid_t *tcid, size_t sy
 static const char *tagname(const Tag &t);
 static void dump_tags(const Tagpool &tagpool, hidx_t ttran, size_t tvers);
 
+
 dump_dfa_t::dump_dfa_t(const dfa_t &d, const Tagpool &pool, const nfa_t &n)
 	: debug(pool.opts->dump_dfa_raw)
 	, dfa(d)
@@ -39,6 +40,7 @@ dump_dfa_t::dump_dfa_t(const dfa_t &d, const Tagpool &pool, const nfa_t &n)
 		"  edge[arrowhead=vee fontname=fixed]\n\n");
 }
 
+
 dump_dfa_t::~dump_dfa_t()
 {
 	if (!debug) return;
@@ -47,10 +49,12 @@ dump_dfa_t::~dump_dfa_t()
 	fprintf(stderr, "}\n");
 }
 
+
 uint32_t dump_dfa_t::index(const nfa_state_t *s) const
 {
 	return static_cast<uint32_t>(s - base);
 }
+
 
 static void dump_history(const dfa_t &dfa, const tagtree_t &h, hidx_t i)
 {
@@ -72,6 +76,7 @@ static void dump_history(const dfa_t &dfa, const tagtree_t &h, hidx_t i)
 	fprintf(stderr, " ");
 }
 
+
 void dump_dfa_t::closure_tags(cclositer_t c)
 {
 	if (!debug) return;
@@ -89,6 +94,7 @@ void dump_dfa_t::closure_tags(cclositer_t c)
 		dump_history(dfa, tagpool.history, l);
 	}
 }
+
 
 void dump_dfa_t::closure(const closure_t &clos, uint32_t state, bool isnew)
 {
@@ -126,6 +132,7 @@ void dump_dfa_t::closure(const closure_t &clos, uint32_t state, bool isnew)
 	fprintf(stderr, "</TABLE>>]\n");
 }
 
+
 void dump_dfa_t::state0(const closure_t &clos)
 {
 	if (!debug) return;
@@ -147,6 +154,7 @@ void dump_dfa_t::state0(const closure_t &clos)
 		fprintf(stderr, "\"]\n");
 	}
 }
+
 
 void dump_dfa_t::state(const closure_t &clos, size_t state, size_t symbol, bool isnew)
 {
@@ -189,6 +197,7 @@ void dump_dfa_t::state(const closure_t &clos, size_t state, size_t symbol, bool 
 	}
 }
 
+
 void dump_dfa_t::final(size_t state, const nfa_state_t *port)
 {
 	if (!debug) return;
@@ -209,6 +218,7 @@ void dump_dfa_t::final(size_t state, const nfa_state_t *port)
 	dump_tcmd(cmd);
 	fprintf(stderr, "\"]\n");
 }
+
 
 void dump_dfa(const dfa_t &dfa)
 {
@@ -273,12 +283,14 @@ void dump_dfa(const dfa_t &dfa)
 	fprintf(stderr, "}\n");
 }
 
+
 void dump_tcmd_or_tcid(tcmd_t *const *tcmd, const tcid_t *tcid,
 	size_t sym, const tcpool_t &tcpool)
 {
 	const tcmd_t *cmd = tcmd ? tcmd[sym] : tcpool[tcid[sym]];
 	dump_tcmd(cmd);
 }
+
 
 void dump_tcmd(const tcmd_t *p)
 {
@@ -302,10 +314,12 @@ void dump_tcmd(const tcmd_t *p)
 	}
 }
 
+
 const char *tagname(const Tag &t)
 {
 	return t.name ? t.name->c_str() : "";
 }
+
 
 void dump_tags(const Tagpool &tagpool, hidx_t ttran, size_t tvers)
 {

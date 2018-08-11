@@ -31,7 +31,9 @@ static void warn_nondeterministic_tags(const kernels_t &kernels,
 	const Tagpool &tagpool, const std::vector<Tag> &tags,
 	const std::valarray<Rule> &rules, const std::string &cond, Warn &warn);
 
+
 const size_t dfa_t::NIL = std::numeric_limits<size_t>::max();
+
 
 nfa_state_t *transition(nfa_state_t *state, uint32_t symbol)
 {
@@ -46,6 +48,7 @@ nfa_state_t *transition(nfa_state_t *state, uint32_t symbol)
 	return NULL;
 }
 
+
 void reach(const kernel_t *kernel, closure_t &clos, uint32_t symbol)
 {
 	clos.clear();
@@ -57,6 +60,7 @@ void reach(const kernel_t *kernel, closure_t &clos, uint32_t symbol)
 		}
 	}
 }
+
 
 dfa_t::dfa_t(const nfa_t &nfa, const opt_t *opts,
 	const std::string &cond, Warn &warn)
@@ -128,13 +132,11 @@ dfa_t::dfa_t(const nfa_t &nfa, const opt_t *opts,
 	}
 }
 
-/*
- * For each tag, find maximal number of parallel versions of this tag
- * used in each kernel (degree of non-determinism) and warn about tags with
- * maximum degree two or more.
- *
- * WARNING: this function assumes that kernel items are grouped by rule
- */
+
+// For each tag, find maximal number of parallel versions of this tag
+// used in each kernel (degree of non-determinism) and warn about tags with
+// maximum degree two or more.
+// WARNING: this function assumes that kernel items are grouped by rule
 void warn_nondeterministic_tags(const kernels_t &kernels,
 	const Tagpool &tagpool, const std::vector<Tag> &tags,
 	const std::valarray<Rule> &rules, const std::string &cond, Warn &warn)
@@ -178,6 +180,7 @@ void warn_nondeterministic_tags(const kernels_t &kernels,
 		}
 	}
 }
+
 
 dfa_t::~dfa_t()
 {

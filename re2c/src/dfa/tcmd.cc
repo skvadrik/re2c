@@ -7,24 +7,6 @@
 namespace re2c
 {
 
-static uint32_t hash_tcmd(const tcmd_t *tcmd);
-
-bool tcmd_t::equal(const tcmd_t &x, const tcmd_t &y)
-{
-	return x.lhs == y.lhs
-		&& x.rhs == y.rhs
-		&& equal_history(x.history, y.history);
-}
-
-bool tcmd_t::equal_history(const tagver_t *h, const tagver_t *g)
-{
-	for (;;) {
-		if (*h != *g) return false;
-		if (*h == TAGVER_ZERO) return true;
-		++h; ++g;
-	}
-}
-
 /* note [topological ordering of copy commands]
  *
  * The order in which copy commands are executed is important:
@@ -52,10 +34,33 @@ bool tcmd_t::equal_history(const tagver_t *h, const tagver_t *g)
  * The algorithm starts and ends with all-zero in-degree buffer.
  */
 
+
+static uint32_t hash_tcmd(const tcmd_t *tcmd);
+
+
+bool tcmd_t::equal(const tcmd_t &x, const tcmd_t &y)
+{
+	return x.lhs == y.lhs
+		&& x.rhs == y.rhs
+		&& equal_history(x.history, y.history);
+}
+
+
+bool tcmd_t::equal_history(const tagver_t *h, const tagver_t *g)
+{
+	for (;;) {
+		if (*h != *g) return false;
+		if (*h == TAGVER_ZERO) return true;
+		++h; ++g;
+	}
+}
+
+
 bool tcmd_t::iscopy(const tcmd_t *x)
 {
 	return x->rhs != TAGVER_ZERO && x->history[0] == TAGVER_ZERO;
 }
+
 
 bool tcmd_t::isset(const tcmd_t *x)
 {
@@ -66,10 +71,12 @@ bool tcmd_t::isset(const tcmd_t *x)
 	return false;
 }
 
+
 bool tcmd_t::isadd(const tcmd_t *x)
 {
 	return x->rhs != TAGVER_ZERO && x->history[0] != TAGVER_ZERO;
 }
+
 
 bool tcmd_t::topsort(tcmd_t **phead, uint32_t *indeg)
 {
@@ -115,6 +122,7 @@ bool tcmd_t::topsort(tcmd_t **phead, uint32_t *indeg)
 	return nontrivial_cycles;
 }
 
+
 tcpool_t::tcpool_t()
 	: alc()
 	, index()
@@ -122,6 +130,7 @@ tcpool_t::tcpool_t()
 	// empty command must have static number zero
 	assert(TCID0 == insert(NULL));
 }
+
 
 tcmd_t *tcpool_t::make_copy(tcmd_t *next, tagver_t lhs, tagver_t rhs)
 {
@@ -132,6 +141,7 @@ tcmd_t *tcpool_t::make_copy(tcmd_t *next, tagver_t lhs, tagver_t rhs)
 	p->history[0] = TAGVER_ZERO;
 	return p;
 }
+
 
 tcmd_t *tcpool_t::make_set(tcmd_t *next, tagver_t lhs, tagver_t set)
 {
@@ -144,6 +154,7 @@ tcmd_t *tcpool_t::make_set(tcmd_t *next, tagver_t lhs, tagver_t set)
 	p->history[1] = TAGVER_ZERO;
 	return p;
 }
+
 
 tcmd_t *tcpool_t::make_add(tcmd_t *next, tagver_t lhs, tagver_t rhs,
 	const tagtree_t &history, hidx_t hidx, size_t tag)
@@ -168,6 +179,7 @@ tcmd_t *tcpool_t::make_add(tcmd_t *next, tagver_t lhs, tagver_t rhs,
 	return p;
 }
 
+
 tcmd_t *tcpool_t::copy_add(tcmd_t *next, tagver_t lhs, tagver_t rhs,
 	const tagver_t *history)
 {
@@ -183,6 +195,7 @@ tcmd_t *tcpool_t::copy_add(tcmd_t *next, tagver_t lhs, tagver_t rhs,
 	return p;
 }
 
+
 uint32_t hash_tcmd(const tcmd_t *tcmd)
 {
 	uint32_t h = 0;
@@ -193,6 +206,7 @@ uint32_t hash_tcmd(const tcmd_t *tcmd)
 	}
 	return h;
 }
+
 
 struct tcmd_eq_t
 {
@@ -208,6 +222,7 @@ struct tcmd_eq_t
 	}
 };
 
+
 tcid_t tcpool_t::insert(const tcmd_t *tcmd)
 {
 	const uint32_t h = hash_tcmd(tcmd);
@@ -220,6 +235,7 @@ tcid_t tcpool_t::insert(const tcmd_t *tcmd)
 
 	return static_cast<tcid_t>(id);
 }
+
 
 const tcmd_t *tcpool_t::operator[](tcid_t id) const
 {

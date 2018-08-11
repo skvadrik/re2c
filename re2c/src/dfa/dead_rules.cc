@@ -45,6 +45,24 @@ struct tcmd_t;
  * which is further propagated back to the start state of DFA.
  */
 
+
+/* note [fallback states]
+ *
+ * Find states that are accepting, but may be shadowed
+ * by other accepting states: when the short rule matches,
+ * lexer must try to match longer rules; if this attempt is
+ * unsuccessful it must fallback to the short match.
+ *
+ * In order to find fallback states we need to know if
+ * "none-rule" is reachable from the given state, the information
+ * we have after rule liveness analyses. Fallback states are
+ * needed at different points in time (both before and after
+ * certain transformations on DFA). Fortunately, fallback states
+ * are not affected by these transformations, so we can calculate
+ * them here and save for future use.
+ */
+
+
 // reversed DFA
 struct rdfa_t
 {
@@ -106,6 +124,7 @@ struct rdfa_t
 	FORBID_COPY(rdfa_t);
 };
 
+
 static void backprop(const rdfa_t &rdfa, bool *live,
 	size_t rule, size_t state)
 {
@@ -128,6 +147,7 @@ static void backprop(const rdfa_t &rdfa, bool *live,
 	}
 }
 
+
 static void liveness_analyses(const rdfa_t &rdfa, bool *live)
 {
 	for (size_t i = 0; i < rdfa.nstates; ++i) {
@@ -137,6 +157,7 @@ static void liveness_analyses(const rdfa_t &rdfa, bool *live)
 		}
 	}
 }
+
 
 static void warn_dead_rules(const dfa_t &dfa, size_t defrule,
 	const std::string &cond, const bool *live, Warn &warn)
@@ -163,6 +184,7 @@ static void warn_dead_rules(const dfa_t &dfa, size_t defrule,
 		}
 	}
 }
+
 
 static void remove_dead_final_states(dfa_t &dfa, const bool *fallthru)
 {
@@ -192,21 +214,7 @@ static void remove_dead_final_states(dfa_t &dfa, const bool *fallthru)
 	}
 }
 
-/* note [fallback states]
- *
- * Find states that are accepting, but may be shadowed
- * by other accepting states: when the short rule matches,
- * lexer must try to match longer rules; if this attempt is
- * unsuccessful it must fallback to the short match.
- *
- * In order to find fallback states we need to know if
- * "none-rule" is reachable from the given state, the information
- * we have after rule liveness analyses. Fallback states are
- * needed at different points in time (both before and after
- * certain transformations on DFA). Fortunately, fallback states
- * are not affected by these transformations, so we can calculate
- * them here and save for future use.
- */
+
 static void find_fallback_states(dfa_t &dfa, const bool *fallthru)
 {
 	const size_t
@@ -229,6 +237,7 @@ static void find_fallback_states(dfa_t &dfa, const bool *fallthru)
 		}
 	}
 }
+
 
 void cutoff_dead_rules(dfa_t &dfa, size_t defrule, const std::string &cond, Warn &warn)
 {
