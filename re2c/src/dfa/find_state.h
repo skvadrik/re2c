@@ -49,32 +49,7 @@ struct kernel_buffers_t
 	explicit kernel_buffers_t(allocator_t &alc);
 };
 
-struct kernels_t
-{
-	typedef lookup_t<const kernel_t*> index_t;
-	index_t lookup;
-
-public:
-	Tagpool &tagpool;
-	tcpool_t &tcpool;
-	const std::vector<Tag> &tags;
-
-private:
-	kernel_buffers_t buffers;
-
-	tcmd_t **pacts;
-
-public:
-	kernels_t(Tagpool &tagp, tcpool_t &tcp, const std::vector<Tag> &ts);
-	inline size_t size() const { return lookup.size(); }
-	inline const kernel_t* operator[](size_t idx) const { return lookup[idx]; }
-	size_t insert(const closure_t &clos, tagver_t maxver, const prectable_t *prectbl, tcmd_t *&acts, bool &is_new);
-	bool operator()(const kernel_t *k1, const kernel_t *k2);
-	FORBID_COPY(kernels_t);
-};
-
-void find_state(dfa_t &dfa, size_t state, size_t symbol, kernels_t &kernels,
-	const closure_t &closure, tcmd_t *acts, dump_dfa_t &dump, const prectable_t *prectbl);
+typedef lookup_t<const kernel_t*> kernels_t;
 
 } // namespace re2c
 

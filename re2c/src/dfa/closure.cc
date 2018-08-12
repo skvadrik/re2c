@@ -10,6 +10,7 @@
 
 #include "src/conf/opt.h"
 #include "src/dfa/closure.h"
+#include "src/dfa/determinization.h"
 #include "src/dfa/dfa.h"
 #include "src/dfa/tagpool.h"
 #include "src/dfa/tcmd.h"
@@ -76,42 +77,40 @@ namespace re2c
  */
 
 
-static void closure_posix(const closure_t &init, closure_t &done, closure_t *shadow, Tagpool &tagpool, const std::vector<Tag> &tags, const prectable_t *prectbl, size_t noldclos);
-static void closure_leftmost(const closure_t &init, closure_t &done, closure_t *shadow, Tagpool &tagpool);
-static void prune(closure_t &clos, std::valarray<Rule> &rules);
-static void lower_lookahead_to_transition(closure_t &clos);
-static tcmd_t *generate_versions(dfa_t &dfa, closure_t &clos, Tagpool &tagpool, newvers_t &newvers);
-static void orders(closure_t &clos, Tagpool &tagpool, const std::vector<Tag> &tags,
-	const prectable_t *prectbl_old, prectable_t *&prectbl_new, size_t noldclos);
-static bool cmpby_rule_state(const clos_t &x, const clos_t &y);
+static void closure_posix(determ_context_t &);
+static nfa_state_t *relax(determ_context_t &, clos_t);
+static nfa_state_t *explore(determ_context_t &, nfa_state_t *);
+static void closure_leftmost(determ_context_t &);
+static void prune(closure_t &, std::valarray<Rule> &);
+static void lower_lookahead_to_transition(closure_t &);
+static void generate_versions(determ_context_t &);
+static void orders(determ_context_t &);
+static bool cmpby_rule_state(const clos_t &, const clos_t &);
+static int32_t pack(int32_t, int32_t);
 
 
-tcmd_t *closure(dfa_t &dfa, closure_t &clos1, closure_t &clos2,
-	Tagpool &tagpool, newvers_t &newvers, closure_t *shadow,
-	const prectable_t *prectbl_old, prectable_t *&prectbl_new, size_t noldclos)
+void tagged_epsilon_closure(determ_context_t &ctx)
 {
+	closure_t &closure = ctx.dc_closure;
+
 	// build tagged epsilon-closure of the given set of NFA states
-	if (tagpool.opts->posix_captures) {
-		closure_posix(clos1, clos2, shadow, tagpool, dfa.tags, prectbl_old, noldclos);
-		prune(clos2, dfa.rules);
-		std::sort(clos2.begin(), clos2.end(), cmpby_rule_state);
-		orders(clos2, tagpool, dfa.tags, prectbl_old, prectbl_new, noldclos);
+	if (ctx.dc_opts->posix_captures) {
+		closure_posix(ctx);
+		prune(closure, ctx.dc_nfa.rules);
+		std::sort(closure.begin(), closure.end(), cmpby_rule_state);
+		orders(ctx);
 	} else {
-		closure_leftmost(clos1, clos2, shadow, tagpool);
-		prune(clos2, dfa.rules);
+		closure_leftmost(ctx);
+		prune(closure, ctx.dc_nfa.rules);
 	}
 
 	// see note [the difference between TDFA(0) and TDFA(1)]
-	if (!tagpool.opts->lookahead) {
-		lower_lookahead_to_transition(clos2);
-		if (shadow) lower_lookahead_to_transition(*shadow);
+	if (!ctx.dc_opts->lookahead) {
+		lower_lookahead_to_transition(closure);
 	}
 
 	// merge tags from different rules, find nondeterministic tags
-	tcmd_t *cmd = generate_versions(dfa, clos2, tagpool, newvers);
-	if (shadow) generate_versions(dfa, *shadow, tagpool, newvers);
-
-	return cmd;
+	generate_versions(ctx);
 }
 
 
@@ -128,74 +127,73 @@ bool cmpby_rule_state(const clos_t &x, const clos_t &y)
 }
 
 
-static nfa_state_t *relax(clos_t x, closure_t &done,
-	closure_t *shadow, Tagpool &tagpool, const std::vector<Tag> &tags,
-	const prectable_t *prectbl, size_t noldclos)
+nfa_state_t *relax(determ_context_t &ctx, clos_t x)
 {
+	closure_t &done = ctx.dc_closure;
 	nfa_state_t *q = x.state;
-	uint32_t &i = q->clos;
+	const uint32_t idx = q->clos;
+	int32_t h1, h2;
 
 	// first time we see this state
-	if (i == NOCLOS) {
-		i = static_cast<uint32_t>(done.size());
+	if (idx == NOCLOS) {
+		q->clos = static_cast<uint32_t>(done.size());
 		done.push_back(x);
 	}
+
 	// States of in-degree less than 2 are not joint points;
 	// the fact that we are re-scanning this state means that we found
 	// a better path to some previous state. Due to the right distributivity
 	// of path comparison over path concatenation (X < Y => XZ < YZ) we
 	// can just propagate the new path up to the next join point.
 	else if (q->indeg < 2) {
-		std::swap(x, done[i]);
-		if (shadow) shadow->push_back(x);
+		done[idx] = x;
 	}
+
 	// join point; compare the new path and the old path
+	else if (precedence(ctx, x, done[idx], h1, h2) < 0) {
+		done[idx] = x;
+	}
+
+	// the previous path was better, discard the new one
 	else {
-		clos_t &y = done[i];
-		int h1, h2, l;
-		l = tagpool.history.precedence (x, y, h1, h2, prectbl, tags, noldclos);
-		if (l < 0) std::swap(x, y);
-		if (shadow && l != 0) shadow->push_back(x);
-		if (l >= 0) q = NULL;
+		q = NULL;
 	}
 
 	return q;
 }
 
 
-static nfa_state_t *explore(nfa_state_t *q, closure_t &done,
-	closure_t *shadow, Tagpool &tagpool, const std::vector<Tag> &tags,
-	const prectable_t *prectbl, size_t noldclos)
+nfa_state_t *explore(determ_context_t &ctx, nfa_state_t *q)
 {
 	// find the next admissible transition, adjust the index
 	// of the next transition and return the to-state
 	nfa_state_t *p = NULL;
-	clos_t x = done[q->clos];
+	clos_t x = ctx.dc_closure[q->clos];
 	switch (q->type) {
 		case nfa_state_t::NIL:
 			if (q->arcidx == 0) {
 				x.state = q->nil.out;
-				p = relax(x, done, shadow, tagpool, tags, prectbl, noldclos);
+				p = relax(ctx, x);
 				++q->arcidx;
 			}
 			break;
 		case nfa_state_t::ALT:
 			if (q->arcidx == 0) {
 				x.state = q->alt.out1;
-				p = relax(x, done, shadow, tagpool, tags, prectbl, noldclos);
+				p = relax(ctx, x);
 				++q->arcidx;
 			}
 			if (q->arcidx == 1 && !p) {
 				x.state = q->alt.out2;
-				p = relax(x, done, shadow, tagpool, tags, prectbl, noldclos);
+				p = relax(ctx, x);
 				++q->arcidx;
 			}
 			break;
 		case nfa_state_t::TAG:
 			if (q->arcidx == 0) {
 				x.state = q->tag.out;
-				x.tlook = tagpool.history.push(x.tlook, q->tag.info);
-				p = relax(x, done, shadow, tagpool, tags, prectbl, noldclos);
+				x.tlook = ctx.dc_tagtrie.push(x.tlook, q->tag.info);
+				p = relax(ctx, x);
 				++q->arcidx;
 			}
 			break;
@@ -207,21 +205,20 @@ static nfa_state_t *explore(nfa_state_t *q, closure_t &done,
 }
 
 
-void closure_posix(const closure_t &init, closure_t &done,
-	closure_t *shadow, Tagpool &tagpool, const std::vector<Tag> &tags,
-	const prectable_t *prectbl, size_t noldclos)
+void closure_posix(determ_context_t &ctx)
 {
+	const closure_t &init = ctx.dc_reached;
+	closure_t &done = ctx.dc_closure;
 	std::stack<nfa_state_t*>
-		&topsort = tagpool.astack,
-		&linear = tagpool.bstack;
+		&topsort = ctx.dc_tagpool.astack,
+		&linear = ctx.dc_tagpool.bstack;
 	nfa_state_t *q, *p;
 
 	done.clear();
-	if (shadow) shadow->clear();
 
 	// enqueue all initial states (there might be duplicates)
 	for (cclositer_t c = init.begin(); c != init.end(); ++c) {
-		q = relax(*c, done, shadow, tagpool, tags, prectbl, noldclos);
+		q = relax(ctx, *c);
 		if (q) {
 			topsort.push(q);
 			q->status = GOR_TOPSORT;
@@ -246,7 +243,7 @@ void closure_posix(const closure_t &init, closure_t &done,
 				q->status = GOR_TOPSORT;
 
 				// find next admissible transition
-				while ((p = explore(q, done, shadow, tagpool, tags, prectbl, noldclos))
+				while ((p = explore(ctx, q))
 					&& p->status != GOR_NOPASS) {
 					p->active = 1;
 				}
@@ -274,7 +271,7 @@ void closure_posix(const closure_t &init, closure_t &done,
 			if (q->active) {
 				// scan admissible transitions
 				q->arcidx = 0;
-				while ((p = explore(q, done, shadow, tagpool, tags, prectbl, noldclos))) {
+				while ((p = explore(ctx, q))) {
 					if (p->status == GOR_NOPASS) {
 						topsort.push(p);
 						p->arcidx = 0;
@@ -287,7 +284,6 @@ void closure_posix(const closure_t &init, closure_t &done,
 
 			q->status = GOR_NOPASS;
 			q->active = 0;
-			q->arcidx = 0;
 		}
 	}
 
@@ -295,19 +291,20 @@ void closure_posix(const closure_t &init, closure_t &done,
 	for (clositer_t i = done.begin(); i != done.end(); ++i) {
 		q = i->state;
 		q->clos = NOCLOS;
-		assert(q->status == GOR_NOPASS && q->active == 0 && q->arcidx == 0);
+		q->arcidx = 0;
+		assert(q->status == GOR_NOPASS && q->active == 0);
 	}
 }
 
 
-void closure_leftmost(const closure_t &init, closure_t &done,
-	closure_t *shadow, Tagpool &tagpool)
+void closure_leftmost(determ_context_t &ctx)
 {
-	std::stack<clos_t> &todo = tagpool.cstack;
+	const closure_t &init = ctx.dc_reached;
+	closure_t &done = ctx.dc_closure;
+	std::stack<clos_t> &todo = ctx.dc_tagpool.cstack;
 
 	// enqueue all initial states
 	done.clear();
-	if (shadow) shadow->clear();
 	for (rcclositer_t c = init.rbegin(); c != init.rend(); ++c) {
 		todo.push(*c);
 	}
@@ -321,30 +318,27 @@ void closure_leftmost(const closure_t &init, closure_t &done,
 		if (n->clos == NOCLOS) {
 			n->clos = static_cast<uint32_t>(done.size());
 			done.push_back(x);
-		} else {
-			if (shadow) shadow->push_back(x);
-			continue;
-		}
 
-		switch (n->type) {
-			case nfa_state_t::NIL:
-				x.state = n->nil.out;
-				todo.push(x);
-				break;
-			case nfa_state_t::ALT:
-				x.state = n->alt.out2;
-				todo.push(x);
-				x.state = n->alt.out1;
-				todo.push(x);
-				break;
-			case nfa_state_t::TAG:
-				x.state = n->tag.out;
-				x.tlook = tagpool.history.push(x.tlook, n->tag.info);
-				todo.push(x);
-				break;
-			case nfa_state_t::RAN:
-			case nfa_state_t::FIN:
-				break;
+			switch (n->type) {
+				case nfa_state_t::NIL:
+					x.state = n->nil.out;
+					todo.push(x);
+					break;
+				case nfa_state_t::ALT:
+					x.state = n->alt.out2;
+					todo.push(x);
+					x.state = n->alt.out1;
+					todo.push(x);
+					break;
+				case nfa_state_t::TAG:
+					x.state = n->tag.out;
+					x.tlook = ctx.dc_tagtrie.push(x.tlook, n->tag.info);
+					todo.push(x);
+					break;
+				case nfa_state_t::RAN:
+				case nfa_state_t::FIN:
+					break;
+			}
 		}
 	}
 
@@ -356,9 +350,9 @@ void closure_leftmost(const closure_t &init, closure_t &done,
 }
 
 
-void prune(closure_t &clos, std::valarray<Rule> &rules)
+void prune(closure_t &closure, std::valarray<Rule> &rules)
 {
-	clositer_t b = clos.begin(), e = clos.end(), i, j;
+	clositer_t b = closure.begin(), e = closure.end(), i, j;
 
 	// drop "inner" states (non-final without outgoing non-epsilon transitions)
 	j = std::stable_partition(b, e, clos_t::ran);
@@ -376,29 +370,35 @@ void prune(closure_t &clos, std::valarray<Rule> &rules)
 		n = static_cast<size_t>(j - b) + 1;
 	}
 
-	clos.resize(n);
+	closure.resize(n);
 }
 
 
-void lower_lookahead_to_transition(closure_t &clos)
+void lower_lookahead_to_transition(closure_t &closure)
 {
-	for (clositer_t c = clos.begin(); c != clos.end(); ++c) {
+	for (clositer_t c = closure.begin(); c != closure.end(); ++c) {
 		c->ttran = c->tlook;
 		c->tlook = HROOT;
 	}
 }
 
 
-tcmd_t *generate_versions(dfa_t &dfa, closure_t &clos, Tagpool &tagpool, newvers_t &newvers)
+void generate_versions(determ_context_t &ctx)
 {
-	tcmd_t *cmd = NULL;
-	const size_t ntag = tagpool.ntags;
-	tagver_t *vers = tagpool.buffer, &maxver = dfa.maxtagver;
-	tagtree_t &tagtree = tagpool.history;
+	dfa_t &dfa = ctx.dc_dfa;
 	const std::vector<Tag> &tags = dfa.tags;
+	const size_t ntag = tags.size();
+	tagver_t &maxver = dfa.maxtagver;
+	Tagpool &tagpool = ctx.dc_tagpool;
+	tagver_t *vers = tagpool.buffer;
+	closure_t &clos = ctx.dc_closure;
+	tagtree_t &tagtree = ctx.dc_tagtrie;
+	newvers_t &newvers = ctx.dc_newvers;
+
 	clositer_t b = clos.begin(), e = clos.end(), c;
-	newver_cmp_t cmp = {tagtree};
+	newver_cmp_t cmp(tagtree);
 	newvers_t newacts(cmp);
+	tcmd_t *cmd = NULL;
 
 	// for each tag, if there is at least one tagged transition,
 	// allocate new version (negative for bottom and positive for
@@ -468,32 +468,35 @@ tcmd_t *generate_versions(dfa_t &dfa, closure_t &clos, Tagpool &tagpool, newvers
 		c->tvers = tagpool.insert(vers);
 	}
 
-	return cmd;
+	ctx.dc_actions = cmd;
 }
 
 
-static inline int32_t pack(int32_t longest, int32_t leftmost)
+int32_t pack(int32_t longest, int32_t leftmost)
 {
 	// leftmost: higher 2 bits, longest: lower 30 bits
 	return longest | (leftmost << 30);
 }
 
 
-void orders(closure_t &clos, Tagpool &tagpool, const std::vector<Tag> &tags,
-	const prectable_t *prectbl_old, prectable_t *&prectbl_new, size_t noldclos)
+void orders(determ_context_t &ctx)
 {
-	const size_t nclos = clos.size();
-	prectbl_new = tagpool.alc.alloct<prectable_t>(nclos * nclos);
+	closure_t &closure = ctx.dc_closure;
+	const size_t nclos = closure.size();
+
+	prectable_t *prectbl = ctx.dc_allocator.alloct<prectable_t>(nclos * nclos);
 
 	for (size_t i = 0; i < nclos; ++i) {
 		for (size_t j = i + 1; j < nclos; ++j) {
 			int32_t rho1, rho2, l;
-			l = tagpool.history.precedence (clos[i], clos[j], rho1, rho2, prectbl_old, tags, noldclos);
-			prectbl_new[i * nclos + j] = pack(rho1, l);
-			prectbl_new[j * nclos + i] = pack(rho2, -l);
+			l = precedence (ctx, closure[i], closure[j], rho1, rho2);
+			prectbl[i * nclos + j] = pack(rho1, l);
+			prectbl[j * nclos + i] = pack(rho2, -l);
 		}
-		prectbl_new[i * nclos + i] = 0;
+		prectbl[i * nclos + i] = 0;
 	}
+
+	ctx.dc_prectbl = prectbl;
 }
 
 } // namespace re2c

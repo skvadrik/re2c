@@ -2,6 +2,7 @@
 #include <stdlib.h>
 
 #include "src/dfa/closure.h"
+#include "src/dfa/determinization.h"
 #include "src/dfa/tagtree.h"
 
 namespace re2c
@@ -61,7 +62,7 @@ int32_t tagtree_t::compare_reversed(hidx_t x, hidx_t y, size_t t) const
 
 
 static void reconstruct_history(const tagtree_t &history,
-	std::vector<tag_info_t> &path, hidx_t idx)
+	tag_path_t &path, hidx_t idx)
 {
 	path.clear();
 	for (; idx != HROOT; idx = history.pred(idx)) {
@@ -84,9 +85,8 @@ static inline int32_t unpack_leftmost(int32_t value)
 }
 
 
-int32_t tagtree_t::precedence(const clos_t &x, const clos_t &y,
-	int32_t &rhox, int32_t &rhoy, const prectable_t *prectbl,
-	const std::vector<Tag> &tags, size_t nclos)
+int32_t precedence(determ_context_t &ctx,
+	const clos_t &x, const clos_t &y, int32_t &rhox, int32_t &rhoy)
 {
 	const hidx_t xl = x.tlook, yl = y.tlook;
 	const uint32_t xo = x.origin, yo = y.origin;
@@ -96,23 +96,36 @@ int32_t tagtree_t::precedence(const clos_t &x, const clos_t &y,
 		return 0;
 	}
 
-	reconstruct_history(*this, path1, xl);
-	reconstruct_history(*this, path2, yl);
-	std::vector<tag_info_t>::const_reverse_iterator
-		i1 = path1.rbegin(), e1 = path1.rend(), j1 = i1, g1,
-		i2 = path2.rbegin(), e2 = path2.rend(), j2 = i2, g2;
+	tagtree_t &trie = ctx.dc_tagtrie;
+	tag_path_t &p1 = trie.path1, &p2 = trie.path2;
+	reconstruct_history(trie, p1, xl);
+	reconstruct_history(trie, p2, yl);
+	tag_path_t::const_reverse_iterator
+		i1 = p1.rbegin(), e1 = p1.rend(), j1 = i1, g1,
+		i2 = p2.rbegin(), e2 = p2.rend(), j2 = i2, g2;
+
+	const std::vector<Tag> &tags = ctx.dc_dfa.tags;
+	size_t nclos = 0;
+	const prectable_t *prectbl = NULL;
 	const bool fork_frame = xo == yo;
 
-	// find fork
 	if (fork_frame) {
+		// find fork
 		for (; j1 != e1 && j2 != e2 && *j1 == *j2; ++j1, ++j2);
+	}
+	else {
+		// get precedence table and size of the origin state
+		const kernel_t *k = ctx.dc_kernels[ctx.dc_origin];
+		nclos = k->size;
+		prectbl = k->prectbl;
 	}
 
 	// longest precedence
 	if (!fork_frame) {
 		rhox = unpack_longest(prectbl[xo * nclos + yo]);
 		rhoy = unpack_longest(prectbl[yo * nclos + xo]);
-	} else {
+	}
+	else {
 		rhox = rhoy = std::numeric_limits<int>::max();
 		if (j1 > i1) rhox = rhoy = tags[(j1 - 1)->idx].height;
 	}

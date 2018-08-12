@@ -18,6 +18,8 @@ struct clos_t;
 
 static const hidx_t HROOT = ~0u;
 
+typedef std::vector<tag_info_t> tag_path_t;
+
 struct tagtree_t
 {
 	// the whole tree of tags found by the epsilon-closure
@@ -29,8 +31,8 @@ struct tagtree_t
 	std::vector<node_t> nodes;
 
 	// reconstruct paths for comparison
-	std::vector<tag_info_t> path1;
-	std::vector<tag_info_t> path2;
+	tag_path_t path1;
+	tag_path_t path2;
 
 	tagtree_t();
 	hidx_t pred(hidx_t i) const;
@@ -40,8 +42,6 @@ struct tagtree_t
 	hidx_t push(hidx_t i, tag_info_t info);
 	tagver_t last(hidx_t i, size_t t) const;
 	int32_t compare_reversed(hidx_t x, hidx_t y, size_t t) const;
-	int32_t precedence(const clos_t &x, const clos_t &y, int32_t &rhox, int32_t &rhoy,
-		const prectable_t *prectbl, const std::vector<Tag> &tags, size_t nclos);
 
 	FORBID_COPY(tagtree_t);
 };

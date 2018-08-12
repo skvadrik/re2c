@@ -4,6 +4,7 @@
 #include <algorithm>
 #include <valarray>
 
+#include "src/dfa/determinization.h"
 #include "src/dfa/dfa.h"
 #include "src/dfa/dump.h"
 #include "src/dfa/find_state.h"
@@ -79,18 +80,26 @@ namespace re2c
 
 struct kernel_eq_t
 {
-	Tagpool &tagpool;
-	const std::vector<Tag> &tags;
-
+	const determ_context_t &ctx;
 	bool operator()(const kernel_t *, const kernel_t *) const;
 };
 
 
-static void reserve_buffers(kernel_buffers_t &, allocator_t &, tagver_t, size_t);
+struct kernel_map_t
+{
+	determ_context_t &ctx;
+	bool operator()(const kernel_t *, const kernel_t *);
+};
+
+
 static kernel_t *make_new_kernel(size_t, allocator_t &);
 static kernel_t *make_kernel_copy(const kernel_t *, allocator_t &);
-static uint32_t hash_kernel(const kernel_t *kernel);
 static void copy_to_buffer_kernel(const closure_t &, const prectable_t *, kernel_t *);
+static void reserve_buffers(determ_context_t &);
+static uint32_t hash_kernel(const kernel_t *kernel);
+static bool equal_lookahead_tags(const kernel_t *, const kernel_t *, const determ_context_t &);
+static bool do_find_state(determ_context_t &ctx);
+static tcmd_t *final_actions(determ_context_t &ctx, const clos_t &fin);
 
 
 kernel_buffers_t::kernel_buffers_t(allocator_t &alc)
@@ -104,16 +113,6 @@ kernel_buffers_t::kernel_buffers_t(allocator_t &alc)
 	, x2t(NULL)
 	, indegree(NULL)
 	, backup_actions(NULL)
-{}
-
-
-kernels_t::kernels_t(Tagpool &tagp, tcpool_t &tcp, const std::vector<Tag> &ts)
-	: lookup()
-	, tagpool(tagp)
-	, tcpool(tcp)
-	, tags(ts)
-	, buffers(tagp.alc)
-	, pacts(NULL)
 {}
 
 
@@ -150,11 +149,15 @@ kernel_t *make_kernel_copy(const kernel_t *kernel, allocator_t &alc)
 }
 
 
-void reserve_buffers(kernel_buffers_t &kbufs, allocator_t &alc,
-	tagver_t maxver, size_t maxkern)
+void reserve_buffers(determ_context_t &ctx)
 {
-	if (kbufs.maxsize < maxkern) {
-		kbufs.maxsize = maxkern * 2; // in advance
+	kernel_buffers_t &kbufs = ctx.dc_buffers;
+	allocator_t &alc = ctx.dc_allocator;
+	const tagver_t maxver = ctx.dc_dfa.maxtagver;
+	const size_t nkern = ctx.dc_closure.size();
+
+	if (kbufs.maxsize < nkern) {
+		kbufs.maxsize = nkern * 2; // in advance
 		kbufs.kernel = make_new_kernel(kbufs.maxsize, alc);
 	}
 
@@ -225,25 +228,31 @@ void copy_to_buffer_kernel(const closure_t &closure,
 }
 
 
-static bool equal_lookahead_tags(const kernel_t *x, const kernel_t *y,
-	Tagpool &tagpool, const std::vector<Tag> &tags)
+bool equal_lookahead_tags(const kernel_t *x, const kernel_t *y, const determ_context_t &ctx)
 {
+	assert(x->size == y->size);
+
 	if (memcmp(x->tlook, y->tlook, x->size * sizeof(hidx_t)) == 0) {
 		return true;
 	}
-	tagtree_t &h = tagpool.history;
+
+	tagtree_t &trie = ctx.dc_tagtrie;
+	const Tagpool &tagpool = ctx.dc_tagpool;
+	const std::vector<Tag> &tags = ctx.dc_dfa.tags;
+
 	for (size_t i = 0; i < x->size; ++i) {
 		const hidx_t xl = x->tlook[i], yl = y->tlook[i];
 		for (size_t t = 0; t < tagpool.ntags; ++t) {
 			if (history(tags[t])) {
 				// compare full tag sequences
-				if (h.compare_reversed(xl, yl, t) != 0) return false;
+				if (trie.compare_reversed(xl, yl, t) != 0) return false;
 			} else {
 				// compare only the last pair of tags
-				if (h.last(xl, t) != h.last(yl, t)) return false;
+				if (trie.last(xl, t) != trie.last(yl, t)) return false;
 			}
 		}
 	}
+
 	return true;
 }
 
@@ -257,11 +266,11 @@ bool kernel_eq_t::operator()(const kernel_t *x, const kernel_t *y) const
 		&& memcmp(x->state, y->state, n * sizeof(void*)) == 0
 		&& memcmp(x->tvers, y->tvers, n * sizeof(size_t)) == 0
 		&& (!x->prectbl || memcmp(x->prectbl, y->prectbl, n * n * sizeof(prectable_t)) == 0)
-		&& equal_lookahead_tags(x, y, tagpool, tags);
+		&& equal_lookahead_tags(x, y, ctx);
 }
 
 
-bool kernels_t::operator()(const kernel_t *x, const kernel_t *y)
+bool kernel_map_t::operator()(const kernel_t *x, const kernel_t *y)
 {
 	// check that kernel sizes, NFA states lookahead tags
 	// and precedence table coincide (versions might differ)
@@ -269,26 +278,28 @@ bool kernels_t::operator()(const kernel_t *x, const kernel_t *y)
 	const bool compatible = n == y->size
 		&& memcmp(x->state, y->state, n * sizeof(void*)) == 0
 		&& (!x->prectbl || memcmp(x->prectbl, y->prectbl, n * n * sizeof(prectable_t)) == 0)
-		&& equal_lookahead_tags(x, y, tagpool, tags);
+		&& equal_lookahead_tags(x, y, ctx);
 	if (!compatible) return false;
 
-	tagver_t *x2y = buffers.x2y, *y2x = buffers.y2x, max = buffers.max;
-	size_t *x2t = buffers.x2t;
+	const std::vector<Tag> &tags = ctx.dc_dfa.tags;
+	const size_t ntag = tags.size();
+	kernel_buffers_t &bufs = ctx.dc_buffers;
+	tagver_t *x2y = bufs.x2y, *y2x = bufs.y2x, max = bufs.max;
+	size_t *x2t = bufs.x2t;
 
 	// map tag versions of one kernel to that of another
 	// and check that lookahead versions (if any) coincide
-	const size_t ntag = tagpool.ntags;
 	std::fill(x2y - max, x2y + max, TAGVER_ZERO);
 	std::fill(y2x - max, y2x + max, TAGVER_ZERO);
 	for (size_t i = 0; i < n; ++i) {
 		const tagver_t
-			*xvs = tagpool[x->tvers[i]],
-			*yvs = tagpool[y->tvers[i]];
+			*xvs = ctx.dc_tagpool[x->tvers[i]],
+			*yvs = ctx.dc_tagpool[y->tvers[i]];
 		const hidx_t xl = x->tlook[i];
 
 		for (size_t t = 0; t < ntag; ++t) {
 			// see note [mapping ignores items with lookahead tags]
-			if (tagpool.history.last(xl, t) != TAGVER_ZERO
+			if (ctx.dc_tagtrie.last(xl, t) != TAGVER_ZERO
 				&& !history(tags[t])) continue;
 
 			const tagver_t xv = xvs[t], yv = yvs[t];
@@ -305,7 +316,8 @@ bool kernels_t::operator()(const kernel_t *x, const kernel_t *y)
 	}
 
 	// we have bijective mapping; now try to create list of commands
-	tcmd_t *b1 = buffers.backup_actions, *b2 = b1, *a, **pa, *copy = NULL;
+	tcmd_t **pacts = &ctx.dc_actions, *a, **pa, *copy = NULL;
+	tcmd_t *b1 = bufs.backup_actions, *b2 = b1;
 
 	// backup 'save' commands: if topsort finds cycles, this mapping
 	// will be rejected and we'll have to revert all changes
@@ -328,7 +340,7 @@ bool kernels_t::operator()(const kernel_t *x, const kernel_t *y)
 		const tagver_t yv = x2y[xv], axv = abs(xv), ayv = abs(yv);
 		if (yv != TAGVER_ZERO && xv != yv && !fixed(tags[x2t[xv]])) {
 			assert(axv != ayv);
-			copy = tcpool.make_copy(copy, axv, ayv);
+			copy = ctx.dc_dfa.tcpool.make_copy(copy, axv, ayv);
 		}
 	}
 
@@ -338,7 +350,7 @@ bool kernels_t::operator()(const kernel_t *x, const kernel_t *y)
 	*pacts = copy;
 
 	// see note [topological ordering of copy commands]
-	const bool nontrivial_cycles = tcmd_t::topsort(pacts, buffers.indegree);
+	const bool nontrivial_cycles = tcmd_t::topsort(pacts, bufs.indegree);
 
 	// in case of cycles restore 'save' commands and fail
 	if (nontrivial_cycles) {
@@ -351,59 +363,59 @@ bool kernels_t::operator()(const kernel_t *x, const kernel_t *y)
 }
 
 
-size_t kernels_t::insert(const closure_t &closure, tagver_t maxver,
-	const prectable_t *prectbl, tcmd_t *&acts, bool &is_new)
+bool do_find_state(determ_context_t &ctx)
 {
-	const size_t nkern = closure.size();
-	size_t x = dfa_t::NIL;
-	is_new = false;
+	kernels_t &kernels = ctx.dc_kernels;
+	const closure_t &closure = ctx.dc_closure;
 
 	// empty closure corresponds to default state
-	if (nkern == 0) {
-		acts = NULL;
-		return x;
+	if (closure.size() == 0) {
+		ctx.dc_target = dfa_t::NIL;
+		ctx.dc_actions = NULL;
+		return false;
 	}
 
 	// resize buffer if closure is too large
-	reserve_buffers(buffers, tagpool.alc, maxver, nkern);
-	kernel_t *k = buffers.kernel;
+	reserve_buffers(ctx);
+	kernel_t *k = ctx.dc_buffers.kernel;
 
 	// copy closure to buffer kernel
-	copy_to_buffer_kernel(closure, prectbl, k);
+	copy_to_buffer_kernel(closure, ctx.dc_prectbl, k);
 
 	// hash "static" part of the kernel
 	const uint32_t hash = hash_kernel(k);
 
 	// try to find identical kernel
-	kernel_eq_t cmp_eq = {tagpool, tags};
-	x = lookup.find_with(hash, k, cmp_eq);
-	if (x != index_t::NIL) return x;
+	kernel_eq_t cmp_eq = {ctx};
+	ctx.dc_target = kernels.find_with(hash, k, cmp_eq);
+	if (ctx.dc_target != kernels_t::NIL) return false;
 
 	// else try to find mappable kernel
 	// see note [bijective mappings]
-	this->pacts = &acts;
-	x = lookup.find_with(hash, k, *this);
-	if (x != index_t::NIL) return x;
+	kernel_map_t cmp_map = {ctx};
+	ctx.dc_target = kernels.find_with(hash, k, cmp_map);
+	if (ctx.dc_target != kernels_t::NIL) return false;
 
 	// otherwise add new kernel
-	x = lookup.push(hash, make_kernel_copy(k, tagpool.alc));
-	is_new = true;
-	return x;
+	kernel_t *kcopy = make_kernel_copy(k, ctx.dc_allocator);
+	ctx.dc_target = kernels.push(hash, kcopy);
+	return true;
 }
 
 
-static tcmd_t *finalizer(const clos_t &clos, size_t ridx,
-	dfa_t &dfa, const Tagpool &tagpool, const std::vector<Tag> &tags)
+tcmd_t *final_actions(determ_context_t &ctx, const clos_t &fin)
 {
+	dfa_t &dfa = ctx.dc_dfa;
+	const Rule &rule = dfa.rules[fin.state->rule];
+	const tagver_t *vers = ctx.dc_tagpool[fin.tvers];
+	const hidx_t look = fin.tlook;
+	const tagtree_t &hist = ctx.dc_tagtrie;
 	tcpool_t &tcpool = dfa.tcpool;
-	const Rule &rule = dfa.rules[ridx];
-	const tagver_t *vers = tagpool[clos.tvers];
-	const tagtree_t &hist = tagpool.history;
-	const hidx_t look = clos.tlook;
 	tcmd_t *copy = NULL, *save = NULL, **p;
 
 	for (size_t t = rule.ltag; t < rule.htag; ++t) {
-		const Tag &tag = tags[t];
+
+		const Tag &tag = dfa.tags[t];
 		if (fixed(tag)) continue;
 
 		const tagver_t v = abs(vers[t]), l = hist.last(look, t);
@@ -425,11 +437,12 @@ static tcmd_t *finalizer(const clos_t &clos, size_t ridx,
 }
 
 
-void find_state(dfa_t &dfa, size_t origin, size_t symbol, kernels_t &kernels,
-	const closure_t &closure, tcmd_t *acts, dump_dfa_t &dump, const prectable_t *prectbl)
+void find_state(determ_context_t &ctx)
 {
-	bool is_new;
-	const size_t state = kernels.insert(closure, dfa.maxtagver, prectbl, acts, is_new);
+	dfa_t &dfa = ctx.dc_dfa;
+
+	// find or add the new state in the existing set of states
+	const bool is_new = do_find_state(ctx);
 
 	if (is_new) {
 		// create new DFA state
@@ -438,25 +451,27 @@ void find_state(dfa_t &dfa, size_t origin, size_t symbol, kernels_t &kernels,
 
 		// check if the new state is final
 		// see note [at most one final item per closure]
-		cclositer_t c1 = closure.begin(), c2 = closure.end(),
-			c = std::find_if(c1, c2, clos_t::fin);
-		if (c != c2) {
-			t->rule = c->state->rule;
-			t->tcmd[dfa.nchars] = finalizer(*c, t->rule, dfa,
-				kernels.tagpool, kernels.tags);
-			dump.final(state, c->state);
+		cclositer_t
+			b = ctx.dc_closure.begin(),
+			e = ctx.dc_closure.end(),
+			f = std::find_if(b, e, clos_t::fin);
+		if (f != e) {
+			t->tcmd[dfa.nchars] = final_actions(ctx, *f);
+			t->rule = f->state->rule;
 		}
 	}
 
-	if (origin == dfa_t::NIL) { // initial state
-		dfa.tcmd0 = acts;
-		dump.state0(closure);
-	} else {
-		dfa_state_t *s = dfa.states[origin];
-		s->arcs[symbol] = state;
-		s->tcmd[symbol] = acts;
-		dump.state(closure, origin, symbol, is_new);
+	if (ctx.dc_origin == dfa_t::NIL) {
+		// initial state
+		dfa.tcmd0 = ctx.dc_actions;
 	}
+	else {
+		dfa_state_t *s = dfa.states[ctx.dc_origin];
+		s->arcs[ctx.dc_symbol] = ctx.dc_target;
+		s->tcmd[ctx.dc_symbol] = ctx.dc_actions;
+	}
+
+	ctx.dc_dump.state(ctx, is_new);
 }
 
 } // namespace re2c

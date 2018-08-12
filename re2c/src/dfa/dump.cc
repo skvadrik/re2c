@@ -6,6 +6,7 @@
 
 #include "src/conf/opt.h"
 #include "src/dfa/dfa.h"
+#include "src/dfa/determinization.h"
 #include "src/dfa/dump.h"
 #include "src/dfa/find_state.h"
 #include "src/dfa/tagpool.h"
@@ -20,24 +21,19 @@ namespace re2c
 
 static void dump_tcmd_or_tcid(tcmd_t *const *tcmd, const tcid_t *tcid, size_t sym, const tcpool_t &tcpool);
 static const char *tagname(const Tag &t);
-static void dump_tags(const Tagpool &tagpool, hidx_t ttran, size_t tvers);
+static void dump_tags(const Tagpool &tagpool, hidx_t ttran, uint32_t tvers);
 
 
-dump_dfa_t::dump_dfa_t(const dfa_t &d, const Tagpool &pool, const nfa_t &n)
-	: debug(pool.opts->dump_dfa_raw)
-	, dfa(d)
-	, tagpool(pool)
+dump_dfa_t::dump_dfa_t(const opt_t *opts)
+	: debug(opts->dump_dfa_raw)
 	, uniqidx(0)
-	, base(n.states)
-	, shadow(NULL)
 {
 	if (!debug) return;
 
-	shadow = new closure_t;
 	fprintf(stderr, "digraph DFA {\n"
 		"  rankdir=LR\n"
-		"  node[shape=plaintext fontname=fixed]\n"
-		"  edge[arrowhead=vee fontname=fixed]\n\n");
+		"  node[shape=plaintext fontname=Courier]\n"
+		"  edge[arrowhead=vee fontname=Courier]\n\n");
 }
 
 
@@ -45,14 +41,7 @@ dump_dfa_t::~dump_dfa_t()
 {
 	if (!debug) return;
 
-	delete shadow;
 	fprintf(stderr, "}\n");
-}
-
-
-uint32_t dump_dfa_t::index(const nfa_state_t *s) const
-{
-	return static_cast<uint32_t>(s - base);
 }
 
 
@@ -77,146 +66,107 @@ static void dump_history(const dfa_t &dfa, const tagtree_t &h, hidx_t i)
 }
 
 
-void dump_dfa_t::closure_tags(cclositer_t c)
-{
-	if (!debug) return;
-	if (c->tvers == ZERO_TAGS) return;
-
-	const hidx_t l = c->tlook;
-	const tagver_t *vers = tagpool[c->tvers];
-	const size_t ntag = tagpool.ntags;
-
-	for (size_t t = 0; t < ntag; ++t) {
-		fprintf(stderr, " %s%d", tagname(dfa.tags[t]), abs(vers[t]));
-	}
-
-	if (l != HROOT) {
-		dump_history(dfa, tagpool.history, l);
-	}
-}
-
-
-void dump_dfa_t::closure(const closure_t &clos, uint32_t state, bool isnew)
+void dump_dfa_t::state(const determ_context_t &ctx, bool isnew)
 {
 	if (!debug) return;
 
-	cclositer_t c1 = clos.begin(), c2 = clos.end(), c,
-		s1 = shadow->begin(), s2 = shadow->end(), s;
-	const char
-		*style = isnew ? "" : " STYLE=\"dotted\"",
-		*color = " COLOR=\"lightgray\"";
+	const closure_t &closure = ctx.dc_closure;
+	cclositer_t b = closure.begin(), e = closure.end(), c;
+	const uint32_t origin = ctx.dc_origin;
+	const uint32_t target = ctx.dc_target;
+	const uint32_t symbol = ctx.dc_symbol;
+	const dfa_t &dfa = ctx.dc_dfa;
+	const Tagpool &tagpool = ctx.dc_tagpool;
 	uint32_t i;
 
+	if (target == dfa_t::NIL) return;
+
+	const uint32_t state = isnew ? target : ++uniqidx;
+	const char *prefix = isnew ? "" : "i";
+	const char *style = isnew ? "" : " STYLE=\"dotted\"";
+
+	// closure
 	fprintf(stderr, "  %s%u [label=<<TABLE"
 		" BORDER=\"0\""
 		" CELLBORDER=\"1\""
-		">", isnew ? "" : "i", state);
-
+		">", prefix, state);
 	i = 0;
-	for (s = s1; s != s2; ++s, ++i) {
-		fprintf(stderr, "<TR><TD ALIGN=\"left\" PORT=\"_%u_%u\"%s%s><FONT%s>%u",
-			i, i, color, style, color, index(s->state));
-		closure_tags(s);
-		fprintf(stderr, "</FONT></TD></TR>");
-	}
-	if (!shadow->empty()) {
-		fprintf(stderr, "<TR><TD BORDER=\"0\"></TD></TR>");
-	}
-	i = 0;
-	for (c = c1; c != c2; ++c, ++i) {
+	for (c = b; c != e; ++c, ++i) {
 		fprintf(stderr, "<TR><TD ALIGN=\"left\" PORT=\"%u\"%s>%u",
-			i, style, index(c->state));
-		closure_tags(c);
+			i, style, static_cast<uint32_t>(c->state - ctx.dc_nfa.states));
+
+		if (c->tvers != ZERO_TAGS) {
+			const tagver_t *vers = tagpool[c->tvers];
+			const size_t ntag = dfa.tags.size();
+
+			for (size_t t = 0; t < ntag; ++t) {
+				fprintf(stderr, " %s%d", tagname(dfa.tags[t]), abs(vers[t]));
+			}
+
+			if (c->tlook != HROOT) {
+				dump_history(dfa, ctx.dc_tagtrie, c->tlook);
+			}
+		}
+
 		fprintf(stderr, "</TD></TR>");
 	}
 	fprintf(stderr, "</TABLE>>]\n");
-}
 
+	// transitions (initial state)
+	if (origin == dfa_t::NIL) {
+		fprintf(stderr, "  void [shape=point]\n");
 
-void dump_dfa_t::state0(const closure_t &clos)
-{
-	if (!debug) return;
-
-	uint32_t i;
-	closure(clos, 0, true);
-	fprintf(stderr, "  void [shape=point]\n");
-	i = 0;
-	for (cclositer_t c = shadow->begin(); c != shadow->end(); ++c, ++i) {
-		fprintf(stderr, "  void -> 0:_%u_%u:w [style=dotted color=lightgray fontcolor=lightgray label=\"",
-			i, i);
-		dump_tags(tagpool, c->ttran, c->tvers);
-		fprintf(stderr, "\"]\n");
+		uint32_t i = 0;
+		for (c = b; c != e; ++c, ++i) {
+			fprintf(stderr, "  void -> 0:%u:w [style=dotted label=\"", i);
+			dump_tags(tagpool, c->ttran, c->tvers);
+			fprintf(stderr, "\"]\n");
+		}
 	}
-	i = 0;
-	for (cclositer_t c = clos.begin(); c != clos.end(); ++c, ++i) {
-		fprintf(stderr, "  void -> 0:%u:w [style=dotted label=\"", i);
-		dump_tags(tagpool, c->ttran, c->tvers);
-		fprintf(stderr, "\"]\n");
+
+	// transitions (other states)
+	else {
+		if (!isnew) {
+			fprintf(stderr,
+				"  i%u [style=dotted]\n"
+				"  i%u:s -> %u:s [style=dotted label=\"",
+				state, state, origin);
+			dump_tcmd(dfa.states[origin]->tcmd[symbol]);
+			fprintf(stderr, "\"]\n");
+		}
+
+		uint32_t i = 0;
+		for (c = b; c != e; ++c, ++i) {
+			fprintf(stderr,
+				"  %u:%u:e -> %s%u:%u:w [label=\"%u",
+				origin, c->origin, prefix, state, i, symbol);
+			dump_tags(tagpool, c->ttran, c->tvers);
+			fprintf(stderr, "\"]\n");
+		}
 	}
-}
 
+	// if final state, dump finalizer
+	const dfa_state_t *t = dfa.states[target];
+	if (t->rule != Rule::NONE) {
+		const Rule &r = dfa.rules[t->rule];
+		const tcmd_t *cmd = t->tcmd[dfa.nchars];
 
-void dump_dfa_t::state(const closure_t &clos, size_t state, size_t symbol, bool isnew)
-{
-	if (!debug) return;
+		// see note [at most one final item per closure]
+		c = std::find_if(b, e, clos_t::fin);
+		assert(c != e);
 
-	const dfa_state_t *s = dfa.states[state];
-	const size_t state2 = s->arcs[symbol];
+		fprintf(stderr, "  r%u [shape=none label=\"(", state);
+		for (size_t t = r.ltag; t < r.htag; ++t) {
+			if (t > r.ltag) fprintf(stderr, " ");
+			fprintf(stderr, "%s%d", tagname(dfa.tags[t]), abs(dfa.finvers[t]));
+		}
+		fprintf(stderr, ")\"]\n");
 
-	if (state2 == dfa_t::NIL) return;
-
-	const tcmd_t *cmd = s->tcmd[symbol];
-	const uint32_t
-		a = static_cast<uint32_t>(symbol),
-		x = static_cast<uint32_t>(state),
-		y = static_cast<uint32_t>(state2),
-		z = isnew ? y : ++uniqidx;
-	const char *prefix = isnew ? "" : "i";
-	uint32_t i;
-
-	closure(clos, z, isnew);
-	if (!isnew) {
-		fprintf(stderr, "  i%u [style=dotted]\n"
-			"  i%u:s -> %u:s [style=dotted label=\"", z, z, y);
+		fprintf(stderr, "  %u:%u:e -> r%u [style=dotted label=\"",
+			state, c->origin, state);
 		dump_tcmd(cmd);
 		fprintf(stderr, "\"]\n");
 	}
-	i = 0;
-	for (cclositer_t b = shadow->begin(), c = b; c != shadow->end(); ++c, ++i) {
-		fprintf(stderr, "  %u:%u:e -> %s%u:_%u_%u:w [color=lightgray fontcolor=lightgray label=\"%u",
-			x, c->origin, prefix, z, i, i, a);
-		dump_tags(tagpool, c->ttran, c->tvers);
-		fprintf(stderr, "\"]\n");
-	}
-	i = 0;
-	for (cclositer_t c = clos.begin(); c != clos.end(); ++c, ++i) {
-		fprintf(stderr, "  %u:%u:e -> %s%u:%u:w [label=\"%u",
-			x, c->origin, prefix, z, i, a);
-		dump_tags(tagpool, c->ttran, c->tvers);
-		fprintf(stderr, "\"]\n");
-	}
-}
-
-
-void dump_dfa_t::final(size_t state, const nfa_state_t *port)
-{
-	if (!debug) return;
-
-	const dfa_state_t *s = dfa.states[state];
-	const Rule &r = dfa.rules[s->rule];
-	const tcmd_t *cmd = s->tcmd[dfa.nchars];
-	const uint32_t x = static_cast<uint32_t>(state);
-
-	fprintf(stderr, "  r%u [shape=none label=\"(", x);
-	for (size_t t = r.ltag; t < r.htag; ++t) {
-		if (t > r.ltag) fprintf(stderr, " ");
-		fprintf(stderr, "%s%d", tagname(dfa.tags[t]), abs(dfa.finvers[t]));
-	}
-	fprintf(stderr, ")\"]\n");
-
-	fprintf(stderr, "  %u:%u:e -> r%u [style=dotted label=\"", x, index(port), x);
-	dump_tcmd(cmd);
-	fprintf(stderr, "\"]\n");
 }
 
 
@@ -229,8 +179,8 @@ void dump_dfa(const dfa_t &dfa)
 	fprintf(stderr,
 		"digraph DFA {\n"
 		"  rankdir=LR\n"
-		"  node[shape=Mrecord fontname=fixed]\n"
-		"  edge[arrowhead=vee fontname=fixed]\n\n");
+		"  node[shape=Mrecord fontname=Courier]\n"
+		"  edge[arrowhead=vee fontname=Courier]\n\n");
 
 	// initializer
 	fprintf(stderr,
@@ -321,7 +271,7 @@ const char *tagname(const Tag &t)
 }
 
 
-void dump_tags(const Tagpool &tagpool, hidx_t ttran, size_t tvers)
+void dump_tags(const Tagpool &tagpool, hidx_t ttran, uint32_t tvers)
 {
 	if (ttran == HROOT) return;
 

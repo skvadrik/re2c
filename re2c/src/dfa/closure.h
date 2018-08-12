@@ -23,10 +23,10 @@ typedef slab_allocator_t<> allocator_t;
 struct clos_t
 {
 	nfa_state_t *state;
+	uint32_t origin;
 	uint32_t tvers; // vector of tag versions (including lookahead tags)
 	hidx_t ttran; // history of transition tags
 	hidx_t tlook; // history of lookahead tags
-	uint32_t origin;
 
 	static inline bool fin(const clos_t &c) { return c.state->type == nfa_state_t::FIN; }
 	static inline bool ran(const clos_t &c) { return c.state->type == nfa_state_t::RAN; }
@@ -48,6 +48,9 @@ struct newver_t
 struct newver_cmp_t
 {
 	tagtree_t &history;
+
+	explicit newver_cmp_t(tagtree_t &h) : history(h) {}
+
 	bool operator()(const newver_t &x, const newver_t &y) const
 	{
 		if (x.tag < y.tag) return true;
@@ -61,10 +64,6 @@ struct newver_cmp_t
 };
 
 typedef std::map<newver_t, tagver_t, newver_cmp_t> newvers_t;
-
-tcmd_t *closure(dfa_t &dfa, closure_t &clos1, closure_t &clos2,
-	Tagpool &tagpool, newvers_t &newvers, closure_t *shadow,
-	const prectable_t *prectbl_old, prectable_t *&prectbl_new, size_t noldclos);
 
 } // namespace re2c
 

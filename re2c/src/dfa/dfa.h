@@ -47,7 +47,7 @@ struct dfa_state_t
 
 struct dfa_t
 {
-	static const size_t NIL;
+	static const uint32_t NIL;
 
 	std::vector<dfa_state_t*> states;
 	const size_t nchars;
