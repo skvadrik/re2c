@@ -27,7 +27,7 @@ struct kernel_t
 	size_t size;
 	const prectable_t *prectbl;
 	nfa_state_t **state;
-	size_t *tvers; // tag versions
+	uint32_t *tvers; // tag versions
 	hidx_t *tlook; // lookahead tags
 
 	FORBID_COPY(kernel_t);

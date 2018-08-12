@@ -23,7 +23,7 @@ typedef slab_allocator_t<> allocator_t;
 struct clos_t
 {
 	nfa_state_t *state;
-	size_t tvers; // vector of tag versions (including lookahead tags)
+	uint32_t tvers; // vector of tag versions (including lookahead tags)
 	hidx_t ttran; // history of transition tags
 	hidx_t tlook; // history of lookahead tags
 	uint32_t origin;

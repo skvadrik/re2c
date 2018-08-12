@@ -38,35 +38,35 @@ Tagpool::~Tagpool()
 {
 	delete[] buffer;
 	const size_t n = lookup.size();
-	for (size_t i = 0; i < n; ++i) {
+	for (uint32_t i = 0; i < n; ++i) {
 		free(const_cast<tagver_t*>(lookup[i]));
 	}
 }
 
 
-size_t Tagpool::insert_const(tagver_t ver)
+uint32_t Tagpool::insert_const(tagver_t ver)
 {
 	std::fill(buffer, buffer + ntags, ver);
 	return insert(buffer);
 }
 
 
-size_t Tagpool::insert_succ(tagver_t fst)
+uint32_t Tagpool::insert_succ(tagver_t fst)
 {
-	for (size_t i = 0; i < ntags; ++i) {
+	for (uint32_t i = 0; i < ntags; ++i) {
 		buffer[i] = fst++;
 	}
 	return insert(buffer);
 }
 
 
-size_t Tagpool::insert(const tagver_t *tags)
+uint32_t Tagpool::insert(const tagver_t *tags)
 {
 	const size_t size = ntags * sizeof(tagver_t);
 	const uint32_t hash = hash32(0, tags, size);
 
 	eqtag_t eq(ntags);
-	const size_t idx = lookup.find_with(hash, tags, eq);
+	const uint32_t idx = lookup.find_with(hash, tags, eq);
 	if (idx != taglookup_t::NIL) {
 		return idx;
 	}
@@ -77,7 +77,7 @@ size_t Tagpool::insert(const tagver_t *tags)
 }
 
 
-const tagver_t *Tagpool::operator[](size_t idx) const
+const tagver_t *Tagpool::operator[](uint32_t idx) const
 {
 	return lookup[idx];
 }

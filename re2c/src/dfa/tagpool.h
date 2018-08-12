@@ -38,10 +38,10 @@ public:
 
 	Tagpool(const opt_t *o, size_t n);
 	~Tagpool();
-	size_t insert_const(tagver_t ver);
-	size_t insert_succ(tagver_t fst);
-	size_t insert(const tagver_t *tags);
-	const tagver_t *operator[](size_t idx) const;
+	uint32_t insert_const(tagver_t ver);
+	uint32_t insert_succ(tagver_t fst);
+	uint32_t insert(const tagver_t *tags);
+	const tagver_t *operator[](uint32_t idx) const;
 	FORBID_COPY(Tagpool);
 };
 

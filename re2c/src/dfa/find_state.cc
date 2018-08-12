@@ -123,7 +123,7 @@ kernel_t *make_new_kernel(size_t size, allocator_t &alc)
 	k->size = size;
 	k->prectbl = NULL;
 	k->state = alc.alloct<nfa_state_t*>(size);
-	k->tvers = alc.alloct<size_t>(size);
+	k->tvers = alc.alloct<uint32_t>(size);
 	k->tlook = alc.alloct<hidx_t>(size);
 	return k;
 }

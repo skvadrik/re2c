@@ -150,7 +150,8 @@ void warn_nondeterministic_tags(const kernels_t &kernels,
 	for (size_t i = 0; i < nkrn; ++i) {
 		const kernel_t *k = kernels[i];
 		nfa_state_t **s = k->state;
-		const size_t n = k->size, *v = k->tvers;
+		const size_t n = k->size;
+		const uint32_t *v = k->tvers;
 
 		for (size_t u = 0; u < n;) {
 			const size_t r = s[u]->rule;
