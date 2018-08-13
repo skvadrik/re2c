@@ -2,7 +2,7 @@
 #include <stdlib.h>
 
 #include "src/dfa/determinization.h"
-#include "src/dfa/tagtree.h"
+#include "src/dfa/tag_history.h"
 
 
 namespace re2c
@@ -11,22 +11,22 @@ namespace re2c
 static const tagver_t DELIM = TAGVER_CURSOR - 1;
 
 
-tagtree_t::tagtree_t(): nodes(), path1(), path2() {}
+tag_history_t::tag_history_t(): nodes(), path1(), path2() {}
 
 
-hidx_t tagtree_t::pred(hidx_t i) const { return nodes[i].pred; }
+hidx_t tag_history_t::pred(hidx_t i) const { return nodes[i].pred; }
 
 
-tag_info_t tagtree_t::info(hidx_t i) const { return nodes[i].info; }
+tag_info_t tag_history_t::info(hidx_t i) const { return nodes[i].info; }
 
 
-tagver_t tagtree_t::elem(hidx_t i) const { return nodes[i].info.neg ? TAGVER_BOTTOM : TAGVER_CURSOR; }
+tagver_t tag_history_t::elem(hidx_t i) const { return nodes[i].info.neg ? TAGVER_BOTTOM : TAGVER_CURSOR; }
 
 
-size_t tagtree_t::tag(hidx_t i) const { return nodes[i].info.idx; }
+size_t tag_history_t::tag(hidx_t i) const { return nodes[i].info.idx; }
 
 
-hidx_t tagtree_t::push(hidx_t idx, tag_info_t info)
+hidx_t tag_history_t::push(hidx_t idx, tag_info_t info)
 {
 	node_t x = {idx, info};
 	nodes.push_back(x);
@@ -34,7 +34,7 @@ hidx_t tagtree_t::push(hidx_t idx, tag_info_t info)
 }
 
 
-tagver_t tagtree_t::last(hidx_t i, size_t t) const
+tagver_t tag_history_t::last(hidx_t i, size_t t) const
 {
 	for (; i != HROOT; i = pred(i)) {
 		if (tag(i) == t) return elem(i);
@@ -43,7 +43,7 @@ tagver_t tagtree_t::last(hidx_t i, size_t t) const
 }
 
 
-int32_t tagtree_t::compare_reversed(hidx_t x, hidx_t y, size_t t) const
+int32_t tag_history_t::compare_reversed(hidx_t x, hidx_t y, size_t t) const
 {
 	// compare in reverse, from tail to head: direction makes
 	// no difference when comparing for exact coincidence
@@ -61,7 +61,7 @@ int32_t tagtree_t::compare_reversed(hidx_t x, hidx_t y, size_t t) const
 }
 
 
-static void reconstruct_history(const tagtree_t &history,
+static void reconstruct_history(const tag_history_t &history,
 	tag_path_t &path, hidx_t idx)
 {
 	path.clear();
@@ -96,10 +96,10 @@ int32_t precedence(determ_context_t &ctx,
 		return 0;
 	}
 
-	tagtree_t &trie = ctx.dc_tagtrie;
-	tag_path_t &p1 = trie.path1, &p2 = trie.path2;
-	reconstruct_history(trie, p1, xl);
-	reconstruct_history(trie, p2, yl);
+	tag_history_t &thist = ctx.dc_taghistory;
+	tag_path_t &p1 = thist.path1, &p2 = thist.path2;
+	reconstruct_history(thist, p1, xl);
+	reconstruct_history(thist, p2, yl);
 	tag_path_t::const_reverse_iterator
 		i1 = p1.rbegin(), e1 = p1.rend(), j1 = i1, g1,
 		i2 = p2.rbegin(), e2 = p2.rend(), j2 = i2, g2;

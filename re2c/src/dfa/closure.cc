@@ -11,7 +11,6 @@
 #include "src/conf/opt.h"
 #include "src/dfa/determinization.h"
 #include "src/dfa/dfa.h"
-#include "src/dfa/tagpool.h"
 #include "src/dfa/tcmd.h"
 #include "src/nfa/nfa.h"
 #include "src/re/rule.h"
@@ -192,7 +191,7 @@ nfa_state_t *explore(determ_context_t &ctx, nfa_state_t *q)
 		case nfa_state_t::TAG:
 			if (q->arcidx == 0) {
 				x.state = q->tag.out;
-				x.tlook = ctx.dc_tagtrie.push(x.tlook, q->tag.info);
+				x.tlook = ctx.dc_taghistory.push(x.tlook, q->tag.info);
 				p = relax(ctx, x);
 				++q->arcidx;
 			}
@@ -332,7 +331,7 @@ void closure_leftmost(determ_context_t &ctx)
 					break;
 				case nfa_state_t::TAG:
 					x.state = n->tag.out;
-					x.tlook = ctx.dc_tagtrie.push(x.tlook, n->tag.info);
+					x.tlook = ctx.dc_taghistory.push(x.tlook, n->tag.info);
 					todo.push(x);
 					break;
 				case nfa_state_t::RAN:
@@ -389,14 +388,14 @@ void generate_versions(determ_context_t &ctx)
 	const std::vector<Tag> &tags = dfa.tags;
 	const size_t ntag = tags.size();
 	tagver_t &maxver = dfa.maxtagver;
-	Tagpool &tagpool = ctx.dc_tagpool;
-	tagver_t *vers = tagpool.buffer;
+	tagver_table_t &tvtbl = ctx.dc_tagvertbl;
+	tagver_t *vers = tvtbl.buffer;
 	closure_t &clos = ctx.dc_closure;
-	tagtree_t &tagtree = ctx.dc_tagtrie;
+	tag_history_t &thist = ctx.dc_taghistory;
 	newvers_t &newvers = ctx.dc_newvers;
 
 	clositer_t b = clos.begin(), e = clos.end(), c;
-	newver_cmp_t cmp(tagtree);
+	newver_cmp_t cmp(thist);
 	newvers_t newacts(cmp);
 	tcmd_t *cmd = NULL;
 
@@ -408,12 +407,12 @@ void generate_versions(determ_context_t &ctx)
 		const hidx_t l = c->tlook, h = c->ttran;
 		if (h == HROOT) continue;
 
-		const tagver_t *vs = tagpool[c->tvers];
+		const tagver_t *vs = tvtbl[c->tvers];
 		for (size_t t = 0; t < ntag; ++t) {
 			const Tag &tag = tags[t];
 			const tagver_t
-				h0 = tagtree.last(h, t),
-				l0 = tagtree.last(l, t);
+				h0 = thist.last(h, t),
+				l0 = thist.last(l, t);
 
 			if (h0 == TAGVER_ZERO) continue;
 
@@ -436,15 +435,17 @@ void generate_versions(determ_context_t &ctx)
 		const hidx_t h = i->first.history;
 		const size_t t = i->first.tag;
 		if (history(tags[t])) {
-			cmd = dfa.tcpool.make_add(cmd, abs(m), abs(v), tagtree, h, t);
+			cmd = dfa.tcpool.make_add(cmd, abs(m), abs(v), thist, h, t);
 		} else {
-			cmd = dfa.tcpool.make_set(cmd, abs(m), tagtree.last(h, t));
+			cmd = dfa.tcpool.make_set(cmd, abs(m), thist.last(h, t));
 		}
 	}
 
 	// mark tags with history
 	for (newvers_t::iterator j = newvers.begin(); j != newvers.end(); ++j) {
-		if (history(tags[j->first.tag])) dfa.mtagvers.insert(abs(j->second));
+		if (history(tags[j->first.tag])) {
+			dfa.mtagvers.insert(abs(j->second));
+		}
 	}
 
 	// update tag versions in closure
@@ -452,11 +453,11 @@ void generate_versions(determ_context_t &ctx)
 		const hidx_t h = c->ttran;
 		if (h == HROOT) continue;
 
-		const tagver_t *vs = tagpool[c->tvers];
+		const tagver_t *vs = tvtbl[c->tvers];
 		for (size_t t = 0; t < ntag; ++t) {
 			const tagver_t
 				v0 = vs[t],
-				h0 = tagtree.last(h, t),
+				h0 = thist.last(h, t),
 				v = history(tags[t]) ? v0 : TAGVER_ZERO;
 			if (h0 == TAGVER_ZERO) {
 				vers[t] = v0;
@@ -465,7 +466,7 @@ void generate_versions(determ_context_t &ctx)
 				vers[t] = newvers[x];
 			}
 		}
-		c->tvers = tagpool.insert(vers);
+		c->tvers = tvtbl.insert(vers);
 	}
 
 	ctx.dc_actions = cmd;

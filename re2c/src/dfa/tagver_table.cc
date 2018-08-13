@@ -2,7 +2,7 @@
 #include <string.h> // memcpy, memcmp
 #include <algorithm>
 
-#include "src/dfa/tagpool.h"
+#include "src/dfa/tagver_table.h"
 #include "src/util/hash32.h"
 
 namespace re2c
@@ -20,14 +20,14 @@ struct eqtag_t
 };
 
 
-Tagpool::Tagpool(size_t n)
+tagver_table_t::tagver_table_t(size_t n)
 	: lookup()
 	, ntags(n)
 	, buffer(new tagver_t[n])
 {}
 
 
-Tagpool::~Tagpool()
+tagver_table_t::~tagver_table_t()
 {
 	delete[] buffer;
 	const size_t n = lookup.size();
@@ -37,14 +37,14 @@ Tagpool::~Tagpool()
 }
 
 
-uint32_t Tagpool::insert_const(tagver_t ver)
+uint32_t tagver_table_t::insert_const(tagver_t ver)
 {
 	std::fill(buffer, buffer + ntags, ver);
 	return insert(buffer);
 }
 
 
-uint32_t Tagpool::insert_succ(tagver_t fst)
+uint32_t tagver_table_t::insert_succ(tagver_t fst)
 {
 	for (uint32_t i = 0; i < ntags; ++i) {
 		buffer[i] = fst++;
@@ -53,7 +53,7 @@ uint32_t Tagpool::insert_succ(tagver_t fst)
 }
 
 
-uint32_t Tagpool::insert(const tagver_t *tags)
+uint32_t tagver_table_t::insert(const tagver_t *tags)
 {
 	const size_t size = ntags * sizeof(tagver_t);
 	const uint32_t hash = hash32(0, tags, size);
@@ -70,7 +70,7 @@ uint32_t Tagpool::insert(const tagver_t *tags)
 }
 
 
-const tagver_t *Tagpool::operator[](uint32_t idx) const
+const tagver_t *tagver_table_t::operator[](uint32_t idx) const
 {
 	return lookup[idx];
 }

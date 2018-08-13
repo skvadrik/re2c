@@ -1,5 +1,5 @@
-#ifndef _RE2C_DFA_TAGTREE_
-#define _RE2C_DFA_TAGTREE_
+#ifndef _RE2C_DFA_TAG_HISTORY_
+#define _RE2C_DFA_TAG_HISTORY_
 
 #include <stddef.h>
 #include "src/util/c99_stdint.h"
@@ -20,7 +20,7 @@ static const hidx_t HROOT = ~0u;
 
 typedef std::vector<tag_info_t> tag_path_t;
 
-struct tagtree_t
+struct tag_history_t
 {
 	// the whole tree of tags found by the epsilon-closure
 	// (a bunch of separate subtrees for each tag with common root)
@@ -34,7 +34,7 @@ struct tagtree_t
 	tag_path_t path1;
 	tag_path_t path2;
 
-	tagtree_t();
+	tag_history_t();
 	hidx_t pred(hidx_t i) const;
 	tag_info_t info(hidx_t i) const;
 	tagver_t elem(hidx_t i) const;
@@ -43,9 +43,9 @@ struct tagtree_t
 	tagver_t last(hidx_t i, size_t t) const;
 	int32_t compare_reversed(hidx_t x, hidx_t y, size_t t) const;
 
-	FORBID_COPY(tagtree_t);
+	FORBID_COPY(tag_history_t);
 };
 
 } // namespace re2c
 
-#endif // _RE2C_DFA_TAGTREE_
+#endif // _RE2C_DFA_TAG_HISTORY_

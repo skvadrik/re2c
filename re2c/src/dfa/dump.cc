@@ -8,8 +8,8 @@
 #include "src/dfa/dfa.h"
 #include "src/dfa/determinization.h"
 #include "src/dfa/dump.h"
-#include "src/dfa/tagpool.h"
-#include "src/dfa/tagtree.h"
+#include "src/dfa/tag_history.h"
+#include "src/dfa/tagver_table.h"
 #include "src/dfa/tcmd.h"
 #include "src/nfa/nfa.h"
 #include "src/re/rule.h"
@@ -21,7 +21,7 @@ namespace re2c
 
 static void dump_tcmd_or_tcid(tcmd_t *const *, const tcid_t *, size_t, const tcpool_t &);
 static const char *tagname(const Tag &);
-static void dump_tags(const Tagpool &, const tagtree_t &, hidx_t, uint32_t);
+static void dump_tags(const tagver_table_t &, const tag_history_t &, hidx_t, uint32_t);
 
 
 dump_dfa_t::dump_dfa_t(const opt_t *opts)
@@ -45,7 +45,7 @@ dump_dfa_t::~dump_dfa_t()
 }
 
 
-static void dump_history(const dfa_t &dfa, const tagtree_t &h, hidx_t i)
+static void dump_history(const dfa_t &dfa, const tag_history_t &h, hidx_t i)
 {
 	if (i == HROOT) {
 		fprintf(stderr, " /");
@@ -76,7 +76,8 @@ void dump_dfa_t::state(const determ_context_t &ctx, bool isnew)
 	const uint32_t target = ctx.dc_target;
 	const uint32_t symbol = ctx.dc_symbol;
 	const dfa_t &dfa = ctx.dc_dfa;
-	const Tagpool &tagpool = ctx.dc_tagpool;
+	const tagver_table_t &tvtbl = ctx.dc_tagvertbl;
+	const tag_history_t &thist = ctx.dc_taghistory;
 	uint32_t i;
 
 	if (target == dfa_t::NIL) return;
@@ -96,7 +97,7 @@ void dump_dfa_t::state(const determ_context_t &ctx, bool isnew)
 			i, style, static_cast<uint32_t>(c->state - ctx.dc_nfa.states));
 
 		if (c->tvers != ZERO_TAGS) {
-			const tagver_t *vers = tagpool[c->tvers];
+			const tagver_t *vers = tvtbl[c->tvers];
 			const size_t ntag = dfa.tags.size();
 
 			for (size_t t = 0; t < ntag; ++t) {
@@ -104,7 +105,7 @@ void dump_dfa_t::state(const determ_context_t &ctx, bool isnew)
 			}
 
 			if (c->tlook != HROOT) {
-				dump_history(dfa, ctx.dc_tagtrie, c->tlook);
+				dump_history(dfa, thist, c->tlook);
 			}
 		}
 
@@ -119,7 +120,7 @@ void dump_dfa_t::state(const determ_context_t &ctx, bool isnew)
 		uint32_t i = 0;
 		for (c = b; c != e; ++c, ++i) {
 			fprintf(stderr, "  void -> 0:%u:w [style=dotted label=\"", i);
-			dump_tags(tagpool, ctx.dc_tagtrie, c->ttran, c->tvers);
+			dump_tags(tvtbl, thist, c->ttran, c->tvers);
 			fprintf(stderr, "\"]\n");
 		}
 	}
@@ -140,7 +141,7 @@ void dump_dfa_t::state(const determ_context_t &ctx, bool isnew)
 			fprintf(stderr,
 				"  %u:%u:e -> %s%u:%u:w [label=\"%u",
 				origin, c->origin, prefix, state, i, symbol);
-			dump_tags(tagpool, ctx.dc_tagtrie, c->ttran, c->tvers);
+			dump_tags(tvtbl, thist, c->ttran, c->tvers);
 			fprintf(stderr, "\"]\n");
 		}
 	}
@@ -271,25 +272,25 @@ const char *tagname(const Tag &t)
 }
 
 
-void dump_tags(const Tagpool &tagpool, const tagtree_t &tagtrie,
+void dump_tags(const tagver_table_t &tagvertbl, const tag_history_t &taghistory,
 	hidx_t ttran, uint32_t tvers)
 {
 	if (ttran == HROOT) return;
 
 	fprintf(stderr, "/");
-	const tagver_t *vers = tagpool[tvers];
-	for (size_t i = 0; i < tagpool.ntags; ++i) {
+	const tagver_t *vers = tagvertbl[tvers];
+	for (size_t i = 0; i < tagvertbl.ntags; ++i) {
 
-		if (tagtrie.last(ttran, i) == TAGVER_ZERO) {
+		if (taghistory.last(ttran, i) == TAGVER_ZERO) {
 			continue;
 		}
 
 		fprintf(stderr, "%d", abs(vers[i]));
-		for (hidx_t t = ttran; t != HROOT; t = tagtrie.pred(t)) {
-			if (tagtrie.tag(t) != i) {
+		for (hidx_t t = ttran; t != HROOT; t = taghistory.pred(t)) {
+			if (taghistory.tag(t) != i) {
 				continue;
 			}
-			else if (tagtrie.elem(t) < TAGVER_ZERO) {
+			else if (taghistory.elem(t) < TAGVER_ZERO) {
 				fprintf(stderr, "&darr;");
 			}
 			else if (t > TAGVER_ZERO) {

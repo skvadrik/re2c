@@ -17,7 +17,6 @@ namespace re2c
 
 struct nfa_t;
 struct opt_t;
-struct Tagpool;
 
 struct dfa_state_t
 {

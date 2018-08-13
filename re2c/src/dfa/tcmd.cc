@@ -157,7 +157,7 @@ tcmd_t *tcpool_t::make_set(tcmd_t *next, tagver_t lhs, tagver_t set)
 
 
 tcmd_t *tcpool_t::make_add(tcmd_t *next, tagver_t lhs, tagver_t rhs,
-	const tagtree_t &history, hidx_t hidx, size_t tag)
+	const tag_history_t &history, hidx_t hidx, size_t tag)
 {
 	size_t hlen = 0;
 	for (hidx_t i = hidx; i != HROOT; i = history.pred(i)) {

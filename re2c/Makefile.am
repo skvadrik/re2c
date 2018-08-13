@@ -26,8 +26,8 @@ SRC_HDR = \
 	src/dfa/determinization.h \
 	src/dfa/dfa.h \
 	src/dfa/dump.h \
-	src/dfa/tagpool.h \
-	src/dfa/tagtree.h \
+	src/dfa/tag_history.h \
+	src/dfa/tagver_table.h \
 	src/dfa/tcmd.h \
 	src/nfa/nfa.h \
 	src/re/encoding/case.h \
@@ -109,8 +109,8 @@ SRC = \
 	src/dfa/fillpoints.cc \
 	src/dfa/find_state.cc \
 	src/dfa/minimization.cc \
-	src/dfa/tagpool.cc \
-	src/dfa/tagtree.cc \
+	src/dfa/tag_history.cc \
+	src/dfa/tagver_table.cc \
 	src/dfa/tcmd.cc \
 	src/re/encoding/enc.cc \
 	src/re/encoding/range_suffix.cc \

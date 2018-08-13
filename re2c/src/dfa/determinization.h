@@ -10,8 +10,8 @@
 
 #include "src/nfa/nfa.h"
 #include "src/dfa/dump.h"
-#include "src/dfa/tagpool.h"
-#include "src/dfa/tagtree.h"
+#include "src/dfa/tagver_table.h"
+#include "src/dfa/tag_history.h"
 #include "src/util/forbid_copy.h"
 #include "src/util/lookup.h"
 #include "src/util/slab_allocator.h"
@@ -60,9 +60,9 @@ struct newver_t
 
 struct newver_cmp_t
 {
-	tagtree_t &history;
+	tag_history_t &history;
 
-	explicit newver_cmp_t(tagtree_t &h) : history(h) {}
+	explicit newver_cmp_t(tag_history_t &h) : history(h) {}
 	bool operator()(const newver_t &, const newver_t &) const;
 };
 
@@ -105,26 +105,26 @@ typedef lookup_t<const kernel_t*> kernels_t;
 struct determ_context_t
 {
 	// determinization input
-	const opt_t             *dc_opts;      // options
-	Warn                    &dc_warn;      // warnings
-	const std::string       &dc_condname;  // the name of current condition (with -c)
-	const nfa_t             &dc_nfa;       // TNFA
+	const opt_t             *dc_opts;       // options
+	Warn                    &dc_warn;       // warnings
+	const std::string       &dc_condname;   // the name of current condition (with -c)
+	const nfa_t             &dc_nfa;        // TNFA
 
 	// determinization output
-	dfa_t                   &dc_dfa;       // resulting TDFA
+	dfa_t                   &dc_dfa;        // resulting TDFA
 
 	// temporary structures used by determinization
 	allocator_t              dc_allocator;
-	uint32_t                 dc_origin;    // from-state of the current transition
-	uint32_t                 dc_target;    // to-state of the current transition
-	uint32_t                 dc_symbol;    // alphabet symbol of the current transition
-	tcmd_t                  *dc_actions;   // tag actions of the current transition
+	uint32_t                 dc_origin;     // from-state of the current transition
+	uint32_t                 dc_target;     // to-state of the current transition
+	uint32_t                 dc_symbol;     // alphabet symbol of the current transition
+	tcmd_t                  *dc_actions;    // tag actions of the current transition
 	closure_t                dc_reached;
 	closure_t                dc_closure;
-	prectable_t             *dc_prectbl;   // precedence table for Okui POSIX disambiguation
-	Tagpool                  dc_tagpool;
-	tagtree_t                dc_tagtrie;   // prefix trie of tag histories
-	kernels_t                dc_kernels;   // TDFA states under construction
+	prectable_t             *dc_prectbl;    // precedence table for Okui POSIX disambiguation
+	tagver_table_t           dc_tagvertbl;
+	tag_history_t            dc_taghistory; // prefix trie of tag histories
+	kernels_t                dc_kernels;    // TDFA states under construction
 	kernel_buffers_t         dc_buffers;
 	newvers_t                dc_newvers;
 	std::stack<nfa_state_t*> dc_stack_topsort;

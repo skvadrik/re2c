@@ -7,7 +7,6 @@
 #include "src/dfa/determinization.h"
 #include "src/dfa/dfa.h"
 #include "src/dfa/dump.h"
-#include "src/dfa/tagpool.h"
 #include "src/dfa/tcmd.h"
 #include "src/nfa/nfa.h"
 #include "src/re/rule.h"
@@ -236,19 +235,19 @@ bool equal_lookahead_tags(const kernel_t *x, const kernel_t *y, const determ_con
 		return true;
 	}
 
-	const tagtree_t &trie = ctx.dc_tagtrie;
-	const Tagpool &tagpool = ctx.dc_tagpool;
+	const tag_history_t &thist = ctx.dc_taghistory;
+	const tagver_table_t &tvtbl = ctx.dc_tagvertbl;
 	const std::vector<Tag> &tags = ctx.dc_dfa.tags;
 
 	for (size_t i = 0; i < x->size; ++i) {
 		const hidx_t xl = x->tlook[i], yl = y->tlook[i];
-		for (size_t t = 0; t < tagpool.ntags; ++t) {
+		for (size_t t = 0; t < tvtbl.ntags; ++t) {
 			if (history(tags[t])) {
 				// compare full tag sequences
-				if (trie.compare_reversed(xl, yl, t) != 0) return false;
+				if (thist.compare_reversed(xl, yl, t) != 0) return false;
 			} else {
 				// compare only the last pair of tags
-				if (trie.last(xl, t) != trie.last(yl, t)) return false;
+				if (thist.last(xl, t) != thist.last(yl, t)) return false;
 			}
 		}
 	}
@@ -293,13 +292,13 @@ bool kernel_map_t::operator()(const kernel_t *x, const kernel_t *y)
 	std::fill(y2x - max, y2x + max, TAGVER_ZERO);
 	for (size_t i = 0; i < n; ++i) {
 		const tagver_t
-			*xvs = ctx.dc_tagpool[x->tvers[i]],
-			*yvs = ctx.dc_tagpool[y->tvers[i]];
+			*xvs = ctx.dc_tagvertbl[x->tvers[i]],
+			*yvs = ctx.dc_tagvertbl[y->tvers[i]];
 		const hidx_t xl = x->tlook[i];
 
 		for (size_t t = 0; t < ntag; ++t) {
 			// see note [mapping ignores items with lookahead tags]
-			if (ctx.dc_tagtrie.last(xl, t) != TAGVER_ZERO
+			if (ctx.dc_taghistory.last(xl, t) != TAGVER_ZERO
 				&& !history(tags[t])) continue;
 
 			const tagver_t xv = xvs[t], yv = yvs[t];
@@ -407,9 +406,9 @@ tcmd_t *final_actions(determ_context_t &ctx, const clos_t &fin)
 {
 	dfa_t &dfa = ctx.dc_dfa;
 	const Rule &rule = dfa.rules[fin.state->rule];
-	const tagver_t *vers = ctx.dc_tagpool[fin.tvers];
+	const tagver_t *vers = ctx.dc_tagvertbl[fin.tvers];
 	const hidx_t look = fin.tlook;
-	const tagtree_t &hist = ctx.dc_tagtrie;
+	const tag_history_t &thist = ctx.dc_taghistory;
 	tcpool_t &tcpool = dfa.tcpool;
 	tcmd_t *copy = NULL, *save = NULL, **p;
 
@@ -418,12 +417,12 @@ tcmd_t *final_actions(determ_context_t &ctx, const clos_t &fin)
 		const Tag &tag = dfa.tags[t];
 		if (fixed(tag)) continue;
 
-		const tagver_t v = abs(vers[t]), l = hist.last(look, t);
+		const tagver_t v = abs(vers[t]), l = thist.last(look, t);
 		tagver_t &f = dfa.finvers[t];
 		if (l == TAGVER_ZERO) {
 			copy = tcpool.make_copy(copy, f, v);
 		} else if (history(tag)) {
-			save = tcpool.make_add(save, f, v, hist, look, t);
+			save = tcpool.make_add(save, f, v, thist, look, t);
 		} else {
 			save = tcpool.make_set(save, f, l);
 		}

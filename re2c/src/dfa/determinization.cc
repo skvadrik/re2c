@@ -13,8 +13,6 @@
 #include "src/dfa/dfa.h"
 #include "src/dfa/determinization.h"
 #include "src/dfa/dump.h"
-#include "src/dfa/tagpool.h"
-#include "src/dfa/tagtree.h"
 #include "src/dfa/tcmd.h"
 #include "src/nfa/nfa.h"
 #include "src/re/rule.h"
@@ -70,10 +68,10 @@ static uint32_t init_tag_versions(determ_context_t &ctx)
 	const size_t ntags = dfa.tags.size();
 
 	// all-zero tag configuration must have static number zero
-	assert(ZERO_TAGS == ctx.dc_tagpool.insert_const(TAGVER_ZERO));
+	assert(ZERO_TAGS == ctx.dc_tagvertbl.insert_const(TAGVER_ZERO));
 
 	// initial tag versions: [1 .. N]
-	const uint32_t INITIAL_TAGS = ctx.dc_tagpool.insert_succ(1);
+	const uint32_t INITIAL_TAGS = ctx.dc_tagvertbl.insert_succ(1);
 
 	// other versions: [ .. -(N + 1)] and [N + 1 .. ]
 	dfa.maxtagver = static_cast<tagver_t>(ntags);
@@ -178,7 +176,7 @@ void warn_nondeterministic_tags(const determ_context_t &ctx)
 			for (size_t t = rule.ltag; t < rule.htag; ++t) {
 				uniq.clear();
 				for (size_t m = l; m < u; ++m) {
-					uniq.insert(ctx.dc_tagpool[v[m]][t]);
+					uniq.insert(ctx.dc_tagvertbl[v[m]][t]);
 				}
 				maxv[t] = std::max(maxv[t], uniq.size());
 			}
@@ -213,11 +211,11 @@ determ_context_t::determ_context_t(const opt_t *opts, Warn &warn
 	, dc_reached()
 	, dc_closure()
 	, dc_prectbl(NULL)
-	, dc_tagpool(nfa.tags.size())
-	, dc_tagtrie()
+	, dc_tagvertbl(nfa.tags.size())
+	, dc_taghistory()
 	, dc_kernels()
 	, dc_buffers(dc_allocator)
-	, dc_newvers(newver_cmp_t(dc_tagtrie))
+	, dc_newvers(newver_cmp_t(dc_taghistory))
 	, dc_stack_topsort()
 	, dc_stack_linear()
 	, dc_stack_dfs()
