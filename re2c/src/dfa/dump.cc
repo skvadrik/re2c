@@ -19,6 +19,7 @@
 namespace re2c
 {
 
+static void dump_history(const dfa_t &, const tag_history_t &, hidx_t);
 static void dump_tcmd_or_tcid(tcmd_t *const *, const tcid_t *, size_t, const tcpool_t &);
 static const char *tagname(const Tag &);
 static void dump_tags(const tagver_table_t &, const tag_history_t &, hidx_t, uint32_t);
@@ -42,27 +43,6 @@ dump_dfa_t::~dump_dfa_t()
     if (!debug) return;
 
     fprintf(stderr, "}\n");
-}
-
-
-static void dump_history(const dfa_t &dfa, const tag_history_t &h, hidx_t i)
-{
-    if (i == HROOT) {
-        fprintf(stderr, " /");
-        return;
-    }
-
-    dump_history(dfa, h, h.pred(i));
-
-    const Tag &t = dfa.tags[h.tag(i)];
-    const tagver_t v = h.elem(i);
-    if (capture(t)) {
-        fprintf(stderr, "%u", (uint32_t)t.ncap);
-    } else if (!trailing(t)) {
-        fprintf(stderr, "%s", t.name->c_str());
-    }
-    fprintf(stderr, v == TAGVER_BOTTOM ? "&darr;" : "&uarr;");
-    fprintf(stderr, " ");
 }
 
 
@@ -168,6 +148,27 @@ void dump_dfa_t::state(const determ_context_t &ctx, bool isnew)
         dump_tcmd(cmd);
         fprintf(stderr, "\"]\n");
     }
+}
+
+
+void dump_history(const dfa_t &dfa, const tag_history_t &h, hidx_t i)
+{
+    if (i == HROOT) {
+        fprintf(stderr, " /");
+        return;
+    }
+
+    dump_history(dfa, h, h.pred(i));
+
+    const Tag &t = dfa.tags[h.tag(i)];
+    const tagver_t v = h.elem(i);
+    if (capture(t)) {
+        fprintf(stderr, "%u", (uint32_t)t.ncap);
+    } else if (!trailing(t)) {
+        fprintf(stderr, "%s", t.name->c_str());
+    }
+    fprintf(stderr, v == TAGVER_BOTTOM ? "&darr;" : "&uarr;");
+    fprintf(stderr, " ");
 }
 
 

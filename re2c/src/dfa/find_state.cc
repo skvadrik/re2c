@@ -2,11 +2,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include <algorithm>
-#include <valarray>
 
 #include "src/dfa/determinization.h"
 #include "src/dfa/dfa.h"
-#include "src/dfa/dump.h"
 #include "src/dfa/tcmd.h"
 #include "src/nfa/nfa.h"
 #include "src/re/rule.h"
@@ -101,6 +99,118 @@ static bool do_find_state(determ_context_t &ctx);
 static tcmd_t *final_actions(determ_context_t &ctx, const clos_t &fin);
 
 
+void find_state(determ_context_t &ctx)
+{
+    dfa_t &dfa = ctx.dc_dfa;
+
+    // find or add the new state in the existing set of states
+    const bool is_new = do_find_state(ctx);
+
+    if (is_new) {
+        // create new DFA state
+        dfa_state_t *t = new dfa_state_t(dfa.nchars);
+        dfa.states.push_back(t);
+
+        // check if the new state is final
+        // see note [at most one final item per closure]
+        cclositer_t
+            b = ctx.dc_closure.begin(),
+            e = ctx.dc_closure.end(),
+            f = std::find_if(b, e, clos_t::fin);
+        if (f != e) {
+            t->tcmd[dfa.nchars] = final_actions(ctx, *f);
+            t->rule = f->state->rule;
+        }
+    }
+
+    if (ctx.dc_origin == dfa_t::NIL) {
+        // initial state
+        dfa.tcmd0 = ctx.dc_actions;
+    }
+    else {
+        dfa_state_t *s = dfa.states[ctx.dc_origin];
+        s->arcs[ctx.dc_symbol] = ctx.dc_target;
+        s->tcmd[ctx.dc_symbol] = ctx.dc_actions;
+    }
+
+    ctx.dc_dump.state(ctx, is_new);
+}
+
+
+bool do_find_state(determ_context_t &ctx)
+{
+    kernels_t &kernels = ctx.dc_kernels;
+    const closure_t &closure = ctx.dc_closure;
+
+    // empty closure corresponds to default state
+    if (closure.size() == 0) {
+        ctx.dc_target = dfa_t::NIL;
+        ctx.dc_actions = NULL;
+        return false;
+    }
+
+    // resize buffer if closure is too large
+    reserve_buffers(ctx);
+    kernel_t *k = ctx.dc_buffers.kernel;
+
+    // copy closure to buffer kernel
+    copy_to_buffer_kernel(closure, ctx.dc_prectbl, k);
+
+    // hash "static" part of the kernel
+    const uint32_t hash = hash_kernel(k);
+
+    // try to find identical kernel
+    kernel_eq_t cmp_eq = {ctx};
+    ctx.dc_target = kernels.find_with(hash, k, cmp_eq);
+    if (ctx.dc_target != kernels_t::NIL) return false;
+
+    // else try to find mappable kernel
+    // see note [bijective mappings]
+    kernel_map_t cmp_map = {ctx};
+    ctx.dc_target = kernels.find_with(hash, k, cmp_map);
+    if (ctx.dc_target != kernels_t::NIL) return false;
+
+    // otherwise add new kernel
+    kernel_t *kcopy = make_kernel_copy(k, ctx.dc_allocator);
+    ctx.dc_target = kernels.push(hash, kcopy);
+    return true;
+}
+
+
+tcmd_t *final_actions(determ_context_t &ctx, const clos_t &fin)
+{
+    dfa_t &dfa = ctx.dc_dfa;
+    const Rule &rule = dfa.rules[fin.state->rule];
+    const tagver_t *vers = ctx.dc_tagvertbl[fin.tvers];
+    const hidx_t look = fin.tlook;
+    const tag_history_t &thist = ctx.dc_taghistory;
+    tcpool_t &tcpool = dfa.tcpool;
+    tcmd_t *copy = NULL, *save = NULL, **p;
+
+    for (size_t t = rule.ltag; t < rule.htag; ++t) {
+
+        const Tag &tag = dfa.tags[t];
+        if (fixed(tag)) continue;
+
+        const tagver_t v = abs(vers[t]), l = thist.last(look, t);
+        tagver_t &f = dfa.finvers[t];
+        if (l == TAGVER_ZERO) {
+            copy = tcpool.make_copy(copy, f, v);
+        } else if (history(tag)) {
+            save = tcpool.make_add(save, f, v, thist, look, t);
+        } else {
+            save = tcpool.make_set(save, f, l);
+        }
+    }
+
+    // join 'copy' and 'save' commands
+    for (p = &copy; *p; p = &(*p)->next);
+    *p = save;
+
+    return copy;
+}
+
+
 kernel_buffers_t::kernel_buffers_t(allocator_t &alc)
     : maxsize(0) // usually ranges from one to some twenty
     , kernel(make_new_kernel(maxsize, alc))
@@ -148,6 +258,43 @@ kernel_t *make_kernel_copy(const kernel_t *kernel, allocator_t &alc)
 }
 
 
+uint32_t hash_kernel(const kernel_t *kernel)
+{
+    const size_t n = kernel->size;
+
+    // seed
+    uint32_t h = static_cast<uint32_t>(n);
+
+    // TNFA states
+    h = hash32(h, kernel->state, n * sizeof(void*));
+
+    // precedence table
+    if (kernel->prectbl) {
+        h = hash32(h, kernel->prectbl, n * n * sizeof(prectable_t));
+    }
+
+    return h;
+}
+
+
+void copy_to_buffer_kernel(const closure_t &closure,
+    const prectable_t *prectbl, kernel_t *buffer)
+{
+    const size_t n = closure.size();
+
+    buffer->size = n;
+
+    buffer->prectbl = prectbl;
+
+    for (size_t i = 0; i < n; ++i) {
+        const clos_t &c = closure[i];
+        buffer->state[i] = c.state;
+        buffer->tvers[i] = c.tvers;
+        buffer->tlook[i] = c.tlook;
+    }
+}
+
+
 void reserve_buffers(determ_context_t &ctx)
 {
     kernel_buffers_t &kbufs = ctx.dc_buffers;
@@ -186,43 +333,6 @@ void reserve_buffers(determ_context_t &ctx)
         kbufs.indegree = reinterpret_cast<uint32_t*>(p);
         p += sz_idg;
         kbufs.backup_actions = reinterpret_cast<tcmd_t*>(p);
-    }
-}
-
-
-uint32_t hash_kernel(const kernel_t *kernel)
-{
-    const size_t n = kernel->size;
-
-    // seed
-    uint32_t h = static_cast<uint32_t>(n);
-
-    // TNFA states
-    h = hash32(h, kernel->state, n * sizeof(void*));
-
-    // precedence table
-    if (kernel->prectbl) {
-        h = hash32(h, kernel->prectbl, n * n * sizeof(prectable_t));
-    }
-
-    return h;
-}
-
-
-void copy_to_buffer_kernel(const closure_t &closure,
-    const prectable_t *prectbl, kernel_t *buffer)
-{
-    const size_t n = closure.size();
-
-    buffer->size = n;
-
-    buffer->prectbl = prectbl;
-
-    for (size_t i = 0; i < n; ++i) {
-        const clos_t &c = closure[i];
-        buffer->state[i] = c.state;
-        buffer->tvers[i] = c.tvers;
-        buffer->tlook[i] = c.tlook;
     }
 }
 
@@ -359,118 +469,6 @@ bool kernel_map_t::operator()(const kernel_t *x, const kernel_t *y)
     }
 
     return !nontrivial_cycles;
-}
-
-
-bool do_find_state(determ_context_t &ctx)
-{
-    kernels_t &kernels = ctx.dc_kernels;
-    const closure_t &closure = ctx.dc_closure;
-
-    // empty closure corresponds to default state
-    if (closure.size() == 0) {
-        ctx.dc_target = dfa_t::NIL;
-        ctx.dc_actions = NULL;
-        return false;
-    }
-
-    // resize buffer if closure is too large
-    reserve_buffers(ctx);
-    kernel_t *k = ctx.dc_buffers.kernel;
-
-    // copy closure to buffer kernel
-    copy_to_buffer_kernel(closure, ctx.dc_prectbl, k);
-
-    // hash "static" part of the kernel
-    const uint32_t hash = hash_kernel(k);
-
-    // try to find identical kernel
-    kernel_eq_t cmp_eq = {ctx};
-    ctx.dc_target = kernels.find_with(hash, k, cmp_eq);
-    if (ctx.dc_target != kernels_t::NIL) return false;
-
-    // else try to find mappable kernel
-    // see note [bijective mappings]
-    kernel_map_t cmp_map = {ctx};
-    ctx.dc_target = kernels.find_with(hash, k, cmp_map);
-    if (ctx.dc_target != kernels_t::NIL) return false;
-
-    // otherwise add new kernel
-    kernel_t *kcopy = make_kernel_copy(k, ctx.dc_allocator);
-    ctx.dc_target = kernels.push(hash, kcopy);
-    return true;
-}
-
-
-tcmd_t *final_actions(determ_context_t &ctx, const clos_t &fin)
-{
-    dfa_t &dfa = ctx.dc_dfa;
-    const Rule &rule = dfa.rules[fin.state->rule];
-    const tagver_t *vers = ctx.dc_tagvertbl[fin.tvers];
-    const hidx_t look = fin.tlook;
-    const tag_history_t &thist = ctx.dc_taghistory;
-    tcpool_t &tcpool = dfa.tcpool;
-    tcmd_t *copy = NULL, *save = NULL, **p;
-
-    for (size_t t = rule.ltag; t < rule.htag; ++t) {
-
-        const Tag &tag = dfa.tags[t];
-        if (fixed(tag)) continue;
-
-        const tagver_t v = abs(vers[t]), l = thist.last(look, t);
-        tagver_t &f = dfa.finvers[t];
-        if (l == TAGVER_ZERO) {
-            copy = tcpool.make_copy(copy, f, v);
-        } else if (history(tag)) {
-            save = tcpool.make_add(save, f, v, thist, look, t);
-        } else {
-            save = tcpool.make_set(save, f, l);
-        }
-    }
-
-    // join 'copy' and 'save' commands
-    for (p = &copy; *p; p = &(*p)->next);
-    *p = save;
-
-    return copy;
-}
-
-
-void find_state(determ_context_t &ctx)
-{
-    dfa_t &dfa = ctx.dc_dfa;
-
-    // find or add the new state in the existing set of states
-    const bool is_new = do_find_state(ctx);
-
-    if (is_new) {
-        // create new DFA state
-        dfa_state_t *t = new dfa_state_t(dfa.nchars);
-        dfa.states.push_back(t);
-
-        // check if the new state is final
-        // see note [at most one final item per closure]
-        cclositer_t
-            b = ctx.dc_closure.begin(),
-            e = ctx.dc_closure.end(),
-            f = std::find_if(b, e, clos_t::fin);
-        if (f != e) {
-            t->tcmd[dfa.nchars] = final_actions(ctx, *f);
-            t->rule = f->state->rule;
-        }
-    }
-
-    if (ctx.dc_origin == dfa_t::NIL) {
-        // initial state
-        dfa.tcmd0 = ctx.dc_actions;
-    }
-    else {
-        dfa_state_t *s = dfa.states[ctx.dc_origin];
-        s->arcs[ctx.dc_symbol] = ctx.dc_target;
-        s->tcmd[ctx.dc_symbol] = ctx.dc_actions;
-    }
-
-    ctx.dc_dump.state(ctx, is_new);
 }
 
 } // namespace re2c

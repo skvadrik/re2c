@@ -23,78 +23,13 @@
 namespace re2c
 {
 
-static nfa_state_t *transition(nfa_state_t *, uint32_t);
 static void reach_on_symbol(determ_context_t &);
+static nfa_state_t *transition(nfa_state_t *, uint32_t);
+static uint32_t init_tag_versions(determ_context_t &);
 static void warn_nondeterministic_tags(const determ_context_t &);
 
 
 const uint32_t dfa_t::NIL = ~0u;
-
-
-nfa_state_t *transition(nfa_state_t *state, uint32_t symbol)
-{
-    if (state->type != nfa_state_t::RAN) {
-        return NULL;
-    }
-    for (const Range *r = state->ran.ran; r; r = r->next()) {
-        if ((r->lower() <= symbol) && (symbol < r->upper())) {
-            return state->ran.out;
-        }
-    }
-    return NULL;
-}
-
-
-void reach_on_symbol(determ_context_t &ctx)
-{
-    const kernel_t *kernel = ctx.dc_kernels[ctx.dc_origin];
-    closure_t &reached = ctx.dc_reached;
-    const uint32_t symbol = ctx.dc_dfa.charset[ctx.dc_symbol];
-
-    reached.clear();
-    for (uint32_t i = 0; i < kernel->size; ++i) {
-        nfa_state_t *s = transition(kernel->state[i], symbol);
-        if (s) {
-            clos_t c = {s, i, kernel->tvers[i], kernel->tlook[i], HROOT};
-            reached.push_back(c);
-        }
-    }
-}
-
-
-static uint32_t init_tag_versions(determ_context_t &ctx)
-{
-    dfa_t &dfa = ctx.dc_dfa;
-    const size_t ntags = dfa.tags.size();
-
-    // all-zero tag configuration must have static number zero
-    assert(ZERO_TAGS == ctx.dc_tagvertbl.insert_const(TAGVER_ZERO));
-
-    // initial tag versions: [1 .. N]
-    const uint32_t INITIAL_TAGS = ctx.dc_tagvertbl.insert_succ(1);
-
-    // other versions: [ .. -(N + 1)] and [N + 1 .. ]
-    dfa.maxtagver = static_cast<tagver_t>(ntags);
-
-    // final/fallback versions will be assigned on the go
-    dfa.finvers = new tagver_t[ntags];
-    for (size_t i = 0; i < ntags; ++i) {
-        dfa.finvers[i] = fixed(dfa.tags[i]) ? TAGVER_ZERO : ++dfa.maxtagver;
-    }
-
-    // mark tags with history (initial and final)
-    for (size_t i = 0; i < ntags; ++i) {
-        if (history(dfa.tags[i])) {
-            tagver_t v = static_cast<tagver_t>(i) + 1, f = dfa.finvers[i];
-            if (f != TAGVER_ZERO) {
-                dfa.mtagvers.insert(f);
-            }
-            dfa.mtagvers.insert(v);
-        }
-    }
-
-    return INITIAL_TAGS;
-}
 
 
 dfa_t::dfa_t(const nfa_t &nfa, const opt_t *opts, const std::string &cond, Warn &warn)
@@ -138,6 +73,72 @@ dfa_t::dfa_t(const nfa_t &nfa, const opt_t *opts, const std::string &cond, Warn 
     }
 
     warn_nondeterministic_tags(ctx);
+}
+
+
+void reach_on_symbol(determ_context_t &ctx)
+{
+    const kernel_t *kernel = ctx.dc_kernels[ctx.dc_origin];
+    closure_t &reached = ctx.dc_reached;
+    const uint32_t symbol = ctx.dc_dfa.charset[ctx.dc_symbol];
+
+    reached.clear();
+    for (uint32_t i = 0; i < kernel->size; ++i) {
+        nfa_state_t *s = transition(kernel->state[i], symbol);
+        if (s) {
+            clos_t c = {s, i, kernel->tvers[i], kernel->tlook[i], HROOT};
+            reached.push_back(c);
+        }
+    }
+}
+
+
+nfa_state_t *transition(nfa_state_t *state, uint32_t symbol)
+{
+    if (state->type != nfa_state_t::RAN) {
+        return NULL;
+    }
+    for (const Range *r = state->ran.ran; r; r = r->next()) {
+        if ((r->lower() <= symbol) && (symbol < r->upper())) {
+            return state->ran.out;
+        }
+    }
+    return NULL;
+}
+
+
+uint32_t init_tag_versions(determ_context_t &ctx)
+{
+    dfa_t &dfa = ctx.dc_dfa;
+    const size_t ntags = dfa.tags.size();
+
+    // all-zero tag configuration must have static number zero
+    assert(ZERO_TAGS == ctx.dc_tagvertbl.insert_const(TAGVER_ZERO));
+
+    // initial tag versions: [1 .. N]
+    const uint32_t INITIAL_TAGS = ctx.dc_tagvertbl.insert_succ(1);
+
+    // other versions: [ .. -(N + 1)] and [N + 1 .. ]
+    dfa.maxtagver = static_cast<tagver_t>(ntags);
+
+    // final/fallback versions will be assigned on the go
+    dfa.finvers = new tagver_t[ntags];
+    for (size_t i = 0; i < ntags; ++i) {
+        dfa.finvers[i] = fixed(dfa.tags[i]) ? TAGVER_ZERO : ++dfa.maxtagver;
+    }
+
+    // mark tags with history (initial and final)
+    for (size_t i = 0; i < ntags; ++i) {
+        if (history(dfa.tags[i])) {
+            tagver_t v = static_cast<tagver_t>(i) + 1, f = dfa.finvers[i];
+            if (f != TAGVER_ZERO) {
+                dfa.mtagvers.insert(f);
+            }
+            dfa.mtagvers.insert(v);
+        }
+    }
+
+    return INITIAL_TAGS;
 }
 
 
