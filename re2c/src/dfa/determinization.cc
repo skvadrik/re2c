@@ -10,11 +10,9 @@
 
 #include "src/conf/opt.h"
 #include "src/conf/warn.h"
-#include "src/dfa/closure.h"
 #include "src/dfa/dfa.h"
 #include "src/dfa/determinization.h"
 #include "src/dfa/dump.h"
-#include "src/dfa/find_state.h"
 #include "src/dfa/tagpool.h"
 #include "src/dfa/tagtree.h"
 #include "src/dfa/tcmd.h"
@@ -22,6 +20,7 @@
 #include "src/re/rule.h"
 #include "src/re/tag.h"
 #include "src/util/range.h"
+
 
 namespace re2c
 {
@@ -206,6 +205,7 @@ determ_context_t::determ_context_t(const opt_t *opts, Warn &warn
 	, dc_condname(condname)
 	, dc_nfa(nfa)
 	, dc_dfa(dfa)
+	, dc_allocator()
 	, dc_origin(dfa_t::NIL)
 	, dc_target(dfa_t::NIL)
 	, dc_symbol(0)
@@ -213,12 +213,14 @@ determ_context_t::determ_context_t(const opt_t *opts, Warn &warn
 	, dc_reached()
 	, dc_closure()
 	, dc_prectbl(NULL)
-	, dc_tagpool(opts, nfa.tags.size())
-	, dc_allocator(dc_tagpool.alc)
-	, dc_tagtrie(dc_tagpool.history)
+	, dc_tagpool(nfa.tags.size())
+	, dc_tagtrie()
 	, dc_kernels()
 	, dc_buffers(dc_allocator)
 	, dc_newvers(newver_cmp_t(dc_tagtrie))
+	, dc_stack_topsort()
+	, dc_stack_linear()
+	, dc_stack_dfs()
 	, dc_dump(opts)
 {}
 
@@ -232,6 +234,18 @@ dfa_t::~dfa_t()
 	{
 		delete *i;
 	}
+}
+
+
+bool newver_cmp_t::operator()(const newver_t &x, const newver_t &y) const
+{
+	if (x.tag < y.tag) return true;
+	if (x.tag > y.tag) return false;
+
+	if (x.base < y.base) return true;
+	if (x.base > y.base) return false;
+
+	return history.compare_reversed(x.history, y.history, x.tag) < 0;
 }
 
 } // namespace re2c

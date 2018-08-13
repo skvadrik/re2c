@@ -1,9 +1,9 @@
 #include <assert.h>
 #include <stdlib.h>
 
-#include "src/dfa/closure.h"
 #include "src/dfa/determinization.h"
 #include "src/dfa/tagtree.h"
+
 
 namespace re2c
 {

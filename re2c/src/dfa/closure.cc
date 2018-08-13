@@ -9,13 +9,13 @@
 #include <valarray>
 
 #include "src/conf/opt.h"
-#include "src/dfa/closure.h"
 #include "src/dfa/determinization.h"
 #include "src/dfa/dfa.h"
 #include "src/dfa/tagpool.h"
 #include "src/dfa/tcmd.h"
 #include "src/nfa/nfa.h"
 #include "src/re/rule.h"
+
 
 namespace re2c
 {
@@ -210,8 +210,8 @@ void closure_posix(determ_context_t &ctx)
 	const closure_t &init = ctx.dc_reached;
 	closure_t &done = ctx.dc_closure;
 	std::stack<nfa_state_t*>
-		&topsort = ctx.dc_tagpool.astack,
-		&linear = ctx.dc_tagpool.bstack;
+		&topsort = ctx.dc_stack_topsort,
+		&linear = ctx.dc_stack_linear;
 	nfa_state_t *q, *p;
 
 	done.clear();
@@ -301,7 +301,7 @@ void closure_leftmost(determ_context_t &ctx)
 {
 	const closure_t &init = ctx.dc_reached;
 	closure_t &done = ctx.dc_closure;
-	std::stack<clos_t> &todo = ctx.dc_tagpool.cstack;
+	std::stack<clos_t> &todo = ctx.dc_stack_dfs;
 
 	// enqueue all initial states
 	done.clear();

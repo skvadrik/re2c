@@ -1,4 +1,3 @@
-#include "src/util/c99_stdint.h"
 #include <stdlib.h> // malloc
 #include <string.h> // memcpy, memcmp
 #include <algorithm>
@@ -21,16 +20,10 @@ struct eqtag_t
 };
 
 
-Tagpool::Tagpool(const opt_t *o, size_t n)
+Tagpool::Tagpool(size_t n)
 	: lookup()
-	, opts(o)
 	, ntags(n)
 	, buffer(new tagver_t[n])
-	, alc()
-	, history()
-	, astack()
-	, bstack()
-	, cstack()
 {}
 
 

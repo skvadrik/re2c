@@ -2,19 +2,15 @@
 #define _RE2C_DFA_TAGPOOL_
 
 #include <stddef.h>
-#include <stack>
+#include "src/util/c99_stdint.h"
 
-#include "src/dfa/closure.h"
-#include "src/dfa/tagtree.h"
 #include "src/re/tag.h"
 #include "src/util/forbid_copy.h"
 #include "src/util/lookup.h"
 
+
 namespace re2c
 {
-
-struct nfa_state_t;
-struct opt_t;
 
 static const size_t ZERO_TAGS = 0;
 
@@ -25,18 +21,10 @@ private:
 	taglookup_t lookup;
 
 public:
-	const opt_t *opts;
 	const size_t ntags;
 	tagver_t *buffer;
 
-	allocator_t alc;
-
-	tagtree_t history;
-	std::stack<nfa_state_t*> astack;
-	std::stack<nfa_state_t*> bstack;
-	std::stack<clos_t> cstack;
-
-	Tagpool(const opt_t *o, size_t n);
+	explicit Tagpool(size_t n);
 	~Tagpool();
 	uint32_t insert_const(tagver_t ver);
 	uint32_t insert_succ(tagver_t fst);

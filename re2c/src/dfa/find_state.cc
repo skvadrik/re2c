@@ -7,12 +7,12 @@
 #include "src/dfa/determinization.h"
 #include "src/dfa/dfa.h"
 #include "src/dfa/dump.h"
-#include "src/dfa/find_state.h"
 #include "src/dfa/tagpool.h"
 #include "src/dfa/tcmd.h"
 #include "src/nfa/nfa.h"
 #include "src/re/rule.h"
 #include "src/util/hash32.h"
+
 
 namespace re2c
 {
@@ -236,7 +236,7 @@ bool equal_lookahead_tags(const kernel_t *x, const kernel_t *y, const determ_con
 		return true;
 	}
 
-	tagtree_t &trie = ctx.dc_tagtrie;
+	const tagtree_t &trie = ctx.dc_tagtrie;
 	const Tagpool &tagpool = ctx.dc_tagpool;
 	const std::vector<Tag> &tags = ctx.dc_dfa.tags;
 

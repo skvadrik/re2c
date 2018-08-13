@@ -8,7 +8,6 @@
 #include "src/dfa/dfa.h"
 #include "src/dfa/determinization.h"
 #include "src/dfa/dump.h"
-#include "src/dfa/find_state.h"
 #include "src/dfa/tagpool.h"
 #include "src/dfa/tagtree.h"
 #include "src/dfa/tcmd.h"
@@ -16,12 +15,13 @@
 #include "src/re/rule.h"
 #include "src/re/tag.h"
 
+
 namespace re2c
 {
 
-static void dump_tcmd_or_tcid(tcmd_t *const *tcmd, const tcid_t *tcid, size_t sym, const tcpool_t &tcpool);
-static const char *tagname(const Tag &t);
-static void dump_tags(const Tagpool &tagpool, hidx_t ttran, uint32_t tvers);
+static void dump_tcmd_or_tcid(tcmd_t *const *, const tcid_t *, size_t, const tcpool_t &);
+static const char *tagname(const Tag &);
+static void dump_tags(const Tagpool &, const tagtree_t &, hidx_t, uint32_t);
 
 
 dump_dfa_t::dump_dfa_t(const opt_t *opts)
@@ -119,7 +119,7 @@ void dump_dfa_t::state(const determ_context_t &ctx, bool isnew)
 		uint32_t i = 0;
 		for (c = b; c != e; ++c, ++i) {
 			fprintf(stderr, "  void -> 0:%u:w [style=dotted label=\"", i);
-			dump_tags(tagpool, c->ttran, c->tvers);
+			dump_tags(tagpool, ctx.dc_tagtrie, c->ttran, c->tvers);
 			fprintf(stderr, "\"]\n");
 		}
 	}
@@ -140,7 +140,7 @@ void dump_dfa_t::state(const determ_context_t &ctx, bool isnew)
 			fprintf(stderr,
 				"  %u:%u:e -> %s%u:%u:w [label=\"%u",
 				origin, c->origin, prefix, state, i, symbol);
-			dump_tags(tagpool, c->ttran, c->tvers);
+			dump_tags(tagpool, ctx.dc_tagtrie, c->ttran, c->tvers);
 			fprintf(stderr, "\"]\n");
 		}
 	}
@@ -271,23 +271,28 @@ const char *tagname(const Tag &t)
 }
 
 
-void dump_tags(const Tagpool &tagpool, hidx_t ttran, uint32_t tvers)
+void dump_tags(const Tagpool &tagpool, const tagtree_t &tagtrie,
+	hidx_t ttran, uint32_t tvers)
 {
 	if (ttran == HROOT) return;
 
-	const tagver_t *vers = tagpool[tvers];
-	const tagtree_t &h = tagpool.history;
-
 	fprintf(stderr, "/");
+	const tagver_t *vers = tagpool[tvers];
 	for (size_t i = 0; i < tagpool.ntags; ++i) {
-		if (h.last(ttran, i) == TAGVER_ZERO) continue;
+
+		if (tagtrie.last(ttran, i) == TAGVER_ZERO) {
+			continue;
+		}
 
 		fprintf(stderr, "%d", abs(vers[i]));
-		for (hidx_t t = ttran; t != HROOT; t = h.pred(t)) {
-			if (h.tag(t) != i) continue;
-			if (h.elem(t) < TAGVER_ZERO) {
+		for (hidx_t t = ttran; t != HROOT; t = tagtrie.pred(t)) {
+			if (tagtrie.tag(t) != i) {
+				continue;
+			}
+			else if (tagtrie.elem(t) < TAGVER_ZERO) {
 				fprintf(stderr, "&darr;");
-			} else if (t > TAGVER_ZERO) {
+			}
+			else if (t > TAGVER_ZERO) {
 				fprintf(stderr, "&uarr;");
 			}
 		}

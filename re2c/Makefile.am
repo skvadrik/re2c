@@ -23,11 +23,9 @@ SRC_HDR = \
 	src/adfa/adfa.h \
 	src/adfa/dump.h \
 	src/dfa/cfg/cfg.h \
-	src/dfa/closure.h \
 	src/dfa/determinization.h \
 	src/dfa/dfa.h \
 	src/dfa/dump.h \
-	src/dfa/find_state.h \
 	src/dfa/tagpool.h \
 	src/dfa/tagtree.h \
 	src/dfa/tcmd.h \
