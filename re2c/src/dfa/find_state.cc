@@ -244,7 +244,7 @@ kernel_t *make_kernel_copy(const kernel_t *kernel, allocator_t &alc)
     kernel_t *k = make_new_kernel(n, alc);
 
     memcpy(k->state, kernel->state, n * sizeof(void*));
-    memcpy(k->tvers, kernel->tvers, n * sizeof(size_t));
+    memcpy(k->tvers, kernel->tvers, n * sizeof(uint32_t));
     memcpy(k->tlook, kernel->tlook, n * sizeof(hidx_t));
 
     prectable_t *ptbl = NULL;
@@ -373,7 +373,7 @@ bool kernel_eq_t::operator()(const kernel_t *x, const kernel_t *y) const
     const size_t n = x->size;
     return n == y->size
         && memcmp(x->state, y->state, n * sizeof(void*)) == 0
-        && memcmp(x->tvers, y->tvers, n * sizeof(size_t)) == 0
+        && memcmp(x->tvers, y->tvers, n * sizeof(uint32_t)) == 0
         && (!x->prectbl || memcmp(x->prectbl, y->prectbl, n * n * sizeof(prectable_t)) == 0)
         && equal_lookahead_tags(x, y, ctx);
 }
