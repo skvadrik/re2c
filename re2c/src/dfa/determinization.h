@@ -32,14 +32,14 @@ typedef slab_allocator_t<> allocator_t;
 
 struct clos_t
 {
-	nfa_state_t *state;
-	uint32_t origin;
-	uint32_t tvers; // vector of tag versions (including lookahead tags)
-	hidx_t ttran; // history of transition tags
-	hidx_t tlook; // history of lookahead tags
+    nfa_state_t *state;
+    uint32_t origin;
+    uint32_t tvers; // vector of tag versions (including lookahead tags)
+    hidx_t ttran; // history of transition tags
+    hidx_t tlook; // history of lookahead tags
 
-	static inline bool fin(const clos_t &c) { return c.state->type == nfa_state_t::FIN; }
-	static inline bool ran(const clos_t &c) { return c.state->type == nfa_state_t::RAN; }
+    static inline bool fin(const clos_t &c) { return c.state->type == nfa_state_t::FIN; }
+    static inline bool ran(const clos_t &c) { return c.state->type == nfa_state_t::RAN; }
 };
 
 
@@ -52,18 +52,18 @@ typedef closure_t::const_reverse_iterator rcclositer_t;
 
 struct newver_t
 {
-	size_t tag;
-	tagver_t base;
-	hidx_t history;
+    size_t tag;
+    tagver_t base;
+    hidx_t history;
 };
 
 
 struct newver_cmp_t
 {
-	tag_history_t &history;
+    tag_history_t &history;
 
-	explicit newver_cmp_t(tag_history_t &h) : history(h) {}
-	bool operator()(const newver_t &, const newver_t &) const;
+    explicit newver_cmp_t(tag_history_t &h) : history(h) {}
+    bool operator()(const newver_t &, const newver_t &) const;
 };
 
 
@@ -72,30 +72,30 @@ typedef std::map<newver_t, tagver_t, newver_cmp_t> newvers_t;
 
 struct kernel_t
 {
-	size_t size;
-	const prectable_t *prectbl;
-	nfa_state_t **state;
-	uint32_t *tvers; // tag versions
-	hidx_t *tlook; // lookahead tags
+    size_t size;
+    const prectable_t *prectbl;
+    nfa_state_t **state;
+    uint32_t *tvers; // tag versions
+    hidx_t *tlook; // lookahead tags
 
-	FORBID_COPY(kernel_t);
+    FORBID_COPY(kernel_t);
 };
 
 
 struct kernel_buffers_t
 {
-	size_t maxsize;
-	kernel_t *kernel;
-	tagver_t cap; // capacity (greater or equal to max)
-	tagver_t max; // maximal tag version
-	char *memory;
-	tagver_t *x2y;
-	tagver_t *y2x;
-	size_t *x2t;
-	uint32_t *indegree;
-	tcmd_t *backup_actions;
+    size_t maxsize;
+    kernel_t *kernel;
+    tagver_t cap; // capacity (greater or equal to max)
+    tagver_t max; // maximal tag version
+    char *memory;
+    tagver_t *x2y;
+    tagver_t *y2x;
+    size_t *x2t;
+    uint32_t *indegree;
+    tcmd_t *backup_actions;
 
-	explicit kernel_buffers_t(allocator_t &alc);
+    explicit kernel_buffers_t(allocator_t &alc);
 };
 
 
@@ -104,36 +104,36 @@ typedef lookup_t<const kernel_t*> kernels_t;
 
 struct determ_context_t
 {
-	// determinization input
-	const opt_t             *dc_opts;       // options
-	Warn                    &dc_warn;       // warnings
-	const std::string       &dc_condname;   // the name of current condition (with -c)
-	const nfa_t             &dc_nfa;        // TNFA
+    // determinization input
+    const opt_t             *dc_opts;       // options
+    Warn                    &dc_warn;       // warnings
+    const std::string       &dc_condname;   // the name of current condition (with -c)
+    const nfa_t             &dc_nfa;        // TNFA
 
-	// determinization output
-	dfa_t                   &dc_dfa;        // resulting TDFA
+    // determinization output
+    dfa_t                   &dc_dfa;        // resulting TDFA
 
-	// temporary structures used by determinization
-	allocator_t              dc_allocator;
-	uint32_t                 dc_origin;     // from-state of the current transition
-	uint32_t                 dc_target;     // to-state of the current transition
-	uint32_t                 dc_symbol;     // alphabet symbol of the current transition
-	tcmd_t                  *dc_actions;    // tag actions of the current transition
-	closure_t                dc_reached;
-	closure_t                dc_closure;
-	prectable_t             *dc_prectbl;    // precedence table for Okui POSIX disambiguation
-	tagver_table_t           dc_tagvertbl;
-	tag_history_t            dc_taghistory; // prefix trie of tag histories
-	kernels_t                dc_kernels;    // TDFA states under construction
-	kernel_buffers_t         dc_buffers;
-	newvers_t                dc_newvers;
-	std::stack<nfa_state_t*> dc_stack_topsort;
-	std::stack<nfa_state_t*> dc_stack_linear;
-	std::stack<clos_t>       dc_stack_dfs;
-	dump_dfa_t               dc_dump;
+    // temporary structures used by determinization
+    allocator_t              dc_allocator;
+    uint32_t                 dc_origin;     // from-state of the current transition
+    uint32_t                 dc_target;     // to-state of the current transition
+    uint32_t                 dc_symbol;     // alphabet symbol of the current transition
+    tcmd_t                  *dc_actions;    // tag actions of the current transition
+    closure_t                dc_reached;
+    closure_t                dc_closure;
+    prectable_t             *dc_prectbl;    // precedence table for Okui POSIX disambiguation
+    tagver_table_t           dc_tagvertbl;
+    tag_history_t            dc_taghistory; // prefix trie of tag histories
+    kernels_t                dc_kernels;    // TDFA states under construction
+    kernel_buffers_t         dc_buffers;
+    newvers_t                dc_newvers;
+    std::stack<nfa_state_t*> dc_stack_topsort;
+    std::stack<nfa_state_t*> dc_stack_linear;
+    std::stack<clos_t>       dc_stack_dfs;
+    dump_dfa_t               dc_dump;
 
-	determ_context_t(const opt_t *, Warn &, const std::string &, const nfa_t &, dfa_t &);
-	FORBID_COPY(determ_context_t);
+    determ_context_t(const opt_t *, Warn &, const std::string &, const nfa_t &, dfa_t &);
+    FORBID_COPY(determ_context_t);
 };
 
 

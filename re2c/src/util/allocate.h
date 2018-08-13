@@ -10,8 +10,8 @@ namespace re2c {
 // this can be unacceptable for performance reasons
 template <typename T> T * allocate (size_t n)
 {
-	void * p = operator new (n * sizeof (T));
-	return static_cast<T *> (p);
+    void * p = operator new (n * sizeof (T));
+    return static_cast<T *> (p);
 }
 
 } // namespace re2c

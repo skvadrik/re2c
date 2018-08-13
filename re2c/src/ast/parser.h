@@ -19,10 +19,10 @@ typedef std::set<std::string> CondList;
 
 struct context_t
 {
-	Scanner &input;
-	specs_t &specs;
-	symtab_t &symtab;
-	Opt &opts;
+    Scanner &input;
+    specs_t &specs;
+    symtab_t &symtab;
+    Opt &opts;
 };
 
 void parse(Scanner &input, specs_t &specs, symtab_t &symtab, Opt &opts);

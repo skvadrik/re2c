@@ -15,32 +15,32 @@ struct State;
 
 struct bitmap_t
 {
-	const Go *go;
-	const State *on;
-	uint32_t i;
-	uint32_t m;
+    const Go *go;
+    const State *on;
+    uint32_t i;
+    uint32_t m;
 };
 
 class bitmaps_t
 {
-	typedef std::vector<bitmap_t> maps_t;
-	typedef maps_t::reverse_iterator riter_t;
-	typedef maps_t::const_reverse_iterator rciter_t;
+    typedef std::vector<bitmap_t> maps_t;
+    typedef maps_t::reverse_iterator riter_t;
+    typedef maps_t::const_reverse_iterator rciter_t;
 
-	maps_t maps;
-	uint32_t ncunit;
-	uint32_t *buffer;
+    maps_t maps;
+    uint32_t ncunit;
+    uint32_t *buffer;
 
 public:
-	bool used;
+    bool used;
 
-	explicit bitmaps_t(uint32_t n);
-	~bitmaps_t();
-	void insert(const Go *go, const State *s);
-	const bitmap_t *find(const Go *go, const State *s) const;
-	bool empty() const;
-	void gen(OutputFile &o, uint32_t ind);
-	FORBID_COPY(bitmaps_t);
+    explicit bitmaps_t(uint32_t n);
+    ~bitmaps_t();
+    void insert(const Go *go, const State *s);
+    const bitmap_t *find(const Go *go, const State *s) const;
+    bool empty() const;
+    void gen(OutputFile &o, uint32_t ind);
+    FORBID_COPY(bitmaps_t);
 };
 
 } // namespace re2c

@@ -13,8 +13,8 @@ struct opt_t;
 
 enum input_api_t
 {
-	INPUT_DEFAULT,
-	INPUT_CUSTOM
+    INPUT_DEFAULT,
+    INPUT_CUSTOM
 };
 
 std::string output_expr_peek     (const opt_t *opts);

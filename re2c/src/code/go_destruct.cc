@@ -7,91 +7,91 @@ namespace re2c
 
 Cases::~Cases ()
 {
-	delete [] cases;
+    delete [] cases;
 }
 
 Binary::~Binary ()
 {
-	delete cond;
-	delete thn;
-	delete els;
+    delete cond;
+    delete thn;
+    delete els;
 }
 
 Linear::~Linear ()
 {
-	for (uint32_t i = 0; i < nbranches; ++i) {
-		delete branches[i].cond;
-	}
-	delete[] branches;
+    for (uint32_t i = 0; i < nbranches; ++i) {
+        delete branches[i].cond;
+    }
+    delete[] branches;
 }
 
 If::~If ()
 {
-	switch (type)
-	{
-		case BINARY:
-			delete info.binary;
-			break;
-		case LINEAR:
-			delete info.linear;
-			break;
-	}
+    switch (type)
+    {
+        case BINARY:
+            delete info.binary;
+            break;
+        case LINEAR:
+            delete info.linear;
+            break;
+    }
 }
 
 SwitchIf::~SwitchIf ()
 {
-	switch (type)
-	{
-		case SWITCH:
-			delete info.cases;
-			break;
-		case IF:
-			delete info.ifs;
-			break;
-	}
+    switch (type)
+    {
+        case SWITCH:
+            delete info.cases;
+            break;
+        case IF:
+            delete info.ifs;
+            break;
+    }
 }
 
 GoBitmap::~GoBitmap ()
 {
-	delete hgo;
-	delete lgo;
+    delete hgo;
+    delete lgo;
 }
 
 CpgotoTable::~CpgotoTable ()
 {
-	delete [] table;
+    delete [] table;
 }
 
 Cpgoto::~Cpgoto ()
 {
-	delete hgo;
-	delete table;
+    delete hgo;
+    delete table;
 }
 
 Dot::~Dot ()
 {
-	delete cases;
+    delete cases;
 }
 
 Go::~Go ()
 {
-	switch (type)
-	{
-		case EMPTY:
-			break;
-		case SWITCH_IF:
-			delete info.switchif;
-			break;
-		case BITMAP:
-			delete info.bitmap;
-			break;
-		case CPGOTO:
-			delete info.cpgoto;
-			break;
-		case DOT:
-			delete info.dot;
-			break;
-	}
+    switch (type)
+    {
+        case EMPTY:
+            break;
+        case SWITCH_IF:
+            delete info.switchif;
+            break;
+        case BITMAP:
+            delete info.bitmap;
+            break;
+        case CPGOTO:
+            delete info.cpgoto;
+            break;
+        case DOT:
+            delete info.dot;
+            break;
+    }
 }
 
 } // namespace re2c

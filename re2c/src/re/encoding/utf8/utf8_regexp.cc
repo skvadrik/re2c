@@ -10,13 +10,13 @@ namespace re2c {
 
 RE *UTF8Symbol(RE::alc_t &alc, utf8::rune r)
 {
-	uint32_t chars[utf8::MAX_RUNE_LENGTH];
-	const uint32_t chars_count = utf8::rune_to_bytes(chars, r);
-	RE *re = re_sym(alc, Range::sym(chars[0]));
-	for (uint32_t i = 1; i < chars_count; ++i) {
-		re = re_cat(alc, re, re_sym(alc, Range::sym(chars[i])));
-	}
-	return re;
+    uint32_t chars[utf8::MAX_RUNE_LENGTH];
+    const uint32_t chars_count = utf8::rune_to_bytes(chars, r);
+    RE *re = re_sym(alc, Range::sym(chars[0]));
+    for (uint32_t i = 1; i < chars_count; ++i) {
+        re = re_cat(alc, re, re_sym(alc, Range::sym(chars[i])));
+    }
+    return re;
 }
 
 /*
@@ -27,10 +27,10 @@ RE *UTF8Symbol(RE::alc_t &alc, utf8::rune r)
  */
 RE *UTF8Range(RE::alc_t &alc, const Range *r)
 {
-	RangeSuffix * root = NULL;
-	for (; r != NULL; r = r->next ())
-		UTF8splitByRuneLength(root, r->lower (), r->upper () - 1);
-	return to_regexp(alc, root);
+    RangeSuffix * root = NULL;
+    for (; r != NULL; r = r->next ())
+        UTF8splitByRuneLength(root, r->lower (), r->upper () - 1);
+    return to_regexp(alc, root);
 }
 
 } // namespace re2c

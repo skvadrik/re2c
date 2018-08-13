@@ -12,23 +12,23 @@ namespace re2c {
 
 struct RangeSuffix
 {
-	static free_list<RangeSuffix *> freeList;
+    static free_list<RangeSuffix *> freeList;
 
-	uint32_t l;
-	uint32_t h;
-	RangeSuffix * next;
-	RangeSuffix * child;
+    uint32_t l;
+    uint32_t h;
+    RangeSuffix * next;
+    RangeSuffix * child;
 
-	RangeSuffix (uint32_t lo, uint32_t hi)
-		: l     (lo)
-		, h     (hi)
-		, next  (NULL)
-		, child (NULL)
-	{
-		freeList.insert(this);
-	}
+    RangeSuffix (uint32_t lo, uint32_t hi)
+        : l     (lo)
+        , h     (hi)
+        , next  (NULL)
+        , child (NULL)
+    {
+        freeList.insert(this);
+    }
 
-	FORBID_COPY (RangeSuffix);
+    FORBID_COPY (RangeSuffix);
 };
 
 RE *to_regexp(RE::alc_t &alc, RangeSuffix *p);

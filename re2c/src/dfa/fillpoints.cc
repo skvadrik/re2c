@@ -40,122 +40,122 @@ static const size_t SCC_UND = SCC_INF - 1;
 
 static bool loopback(size_t node, size_t narcs, const size_t *arcs)
 {
-	for (size_t i = 0; i < narcs; ++i)
-	{
-		if (arcs[i] == node)
-		{
-			return true;
-		}
-	}
-	return false;
+    for (size_t i = 0; i < narcs; ++i)
+    {
+        if (arcs[i] == node)
+        {
+            return true;
+        }
+    }
+    return false;
 }
 
 
 static void scc(
-	const dfa_t &dfa,
-	std::stack<size_t> &stack,
-	std::vector<size_t> &lowlink,
-	std::vector<bool> &trivial,
-	size_t i)
+    const dfa_t &dfa,
+    std::stack<size_t> &stack,
+    std::vector<size_t> &lowlink,
+    std::vector<bool> &trivial,
+    size_t i)
 {
-	const size_t link = stack.size();
-	lowlink[i] = link;
-	stack.push(i);
+    const size_t link = stack.size();
+    lowlink[i] = link;
+    stack.push(i);
 
-	const size_t *arcs = dfa.states[i]->arcs;
-	for (size_t c = 0; c < dfa.nchars; ++c)
-	{
-		const size_t j = arcs[c];
-		if (j != dfa_t::NIL)
-		{
-			if (lowlink[j] == SCC_UND)
-			{
-				scc(dfa, stack, lowlink, trivial, j);
-			}
-			if (lowlink[j] < lowlink[i])
-			{
-				lowlink[i] = lowlink[j];
-			}
-		}
-	}
+    const size_t *arcs = dfa.states[i]->arcs;
+    for (size_t c = 0; c < dfa.nchars; ++c)
+    {
+        const size_t j = arcs[c];
+        if (j != dfa_t::NIL)
+        {
+            if (lowlink[j] == SCC_UND)
+            {
+                scc(dfa, stack, lowlink, trivial, j);
+            }
+            if (lowlink[j] < lowlink[i])
+            {
+                lowlink[i] = lowlink[j];
+            }
+        }
+    }
 
-	if (lowlink[i] == link)
-	{
-		// SCC is non-trivial (has loops) iff it either:
-		//   - consists of multiple nodes (they all must be interconnected)
-		//   - consists of single node which loops back to itself
-		trivial[i] = i == stack.top()
-			&& !loopback(i, dfa.nchars, arcs);
+    if (lowlink[i] == link)
+    {
+        // SCC is non-trivial (has loops) iff it either:
+        //   - consists of multiple nodes (they all must be interconnected)
+        //   - consists of single node which loops back to itself
+        trivial[i] = i == stack.top()
+            && !loopback(i, dfa.nchars, arcs);
 
-		size_t j;
-		do
-		{
-			j = stack.top();
-			stack.pop();
-			lowlink[j] = SCC_INF;
-		}
-		while (j != i);
-	}
+        size_t j;
+        do
+        {
+            j = stack.top();
+            stack.pop();
+            lowlink[j] = SCC_INF;
+        }
+        while (j != i);
+    }
 }
 
 
 static void calc_fill(
-	const dfa_t &dfa,
-	const std::vector<bool> &trivial,
-	std::vector<size_t> &fill,
-	size_t i)
+    const dfa_t &dfa,
+    const std::vector<bool> &trivial,
+    std::vector<size_t> &fill,
+    size_t i)
 {
-	if (fill[i] == SCC_UND)
-	{
-		fill[i] = 0;
-		const size_t *arcs = dfa.states[i]->arcs;
-		for (size_t c = 0; c < dfa.nchars; ++c)
-		{
-			const size_t j = arcs[c];
-			if (j != dfa_t::NIL)
-			{
-				calc_fill(dfa, trivial, fill, j);
-				size_t max = 1;
-				if (trivial[j])
-				{
-					max += fill[j];
-				}
-				if (max > fill[i])
-				{
-					fill[i] = max;
-				}
-			}
-		}
-	}
+    if (fill[i] == SCC_UND)
+    {
+        fill[i] = 0;
+        const size_t *arcs = dfa.states[i]->arcs;
+        for (size_t c = 0; c < dfa.nchars; ++c)
+        {
+            const size_t j = arcs[c];
+            if (j != dfa_t::NIL)
+            {
+                calc_fill(dfa, trivial, fill, j);
+                size_t max = 1;
+                if (trivial[j])
+                {
+                    max += fill[j];
+                }
+                if (max > fill[i])
+                {
+                    fill[i] = max;
+                }
+            }
+        }
+    }
 }
 
 
 void fillpoints(const dfa_t &dfa, std::vector<size_t> &fill)
 {
-	const size_t size = dfa.states.size();
+    const size_t size = dfa.states.size();
 
-	// find DFA states that belong to non-trivial SCC
-	std::stack<size_t> stack;
-	std::vector<size_t> lowlink(size, SCC_UND);
-	std::vector<bool> trivial(size, false);
-	scc(dfa, stack, lowlink, trivial, 0);
+    // find DFA states that belong to non-trivial SCC
+    std::stack<size_t> stack;
+    std::vector<size_t> lowlink(size, SCC_UND);
+    std::vector<bool> trivial(size, false);
+    scc(dfa, stack, lowlink, trivial, 0);
 
-	// for each DFA state, calculate YYFILL argument:
-	// maximal path length to the next YYFILL state
-	fill.resize(size, SCC_UND);
-	calc_fill(dfa, trivial, fill, 0);
+    // for each DFA state, calculate YYFILL argument:
+    // maximal path length to the next YYFILL state
+    fill.resize(size, SCC_UND);
+    calc_fill(dfa, trivial, fill, 0);
 
-	// The following states must trigger YYFILL:
-	//   - inital state
-	//   - all states in non-trivial SCCs
-	// for other states, reset YYFILL argument to zero
-	for (size_t i = 1; i < size; ++i)
-	{
-		if (trivial[i])
-		{
-			fill[i] = 0;
-		}
-	}
+    // The following states must trigger YYFILL:
+    //   - inital state
+    //   - all states in non-trivial SCCs
+    // for other states, reset YYFILL argument to zero
+    for (size_t i = 1; i < size; ++i)
+    {
+        if (trivial[i])
+        {
+            fill[i] = 0;
+        }
+    }
 }
 
 } // namespace re2c

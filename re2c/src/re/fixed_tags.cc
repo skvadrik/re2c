@@ -29,56 +29,56 @@ namespace re2c {
  */
 
 static void find_fixed_tags(RE *re, std::vector<Tag> &tags,
-	size_t &dist, size_t &base, bool toplevel)
+    size_t &dist, size_t &base, bool toplevel)
 {
-	switch (re->type) {
-		case RE::NIL: break;
-		case RE::SYM:
-			if (dist != Tag::VARDIST) ++dist;
-			break;
-		case RE::ALT: {
-			size_t d1 = dist, d2 = dist;
-			find_fixed_tags(re->alt.re1, tags, d1, base, false);
-			find_fixed_tags(re->alt.re2, tags, d2, base, false);
-			dist = (d1 == d2) ? d1 : Tag::VARDIST;
-			break;
-		}
-		case RE::CAT:
-			find_fixed_tags(re->cat.re2, tags, dist, base, toplevel);
-			find_fixed_tags(re->cat.re1, tags, dist, base, toplevel);
-			break;
-		case RE::ITER:
-			find_fixed_tags(re->iter.re, tags, dist, base, false);
-			dist = Tag::VARDIST;
-			break;
-		case RE::TAG: {
-			// see note [fixed and variable tags]
-			Tag &tag = tags[re->tag.idx];
-			if (fictive(tag)) {
-				tag.base = tag.dist = 0;
-			} else if (toplevel && dist != Tag::VARDIST && !history(tag)) {
-				tag.base = base;
-				tag.dist = dist;
-			} else if (toplevel) {
-				base = re->tag.idx;
-				dist = 0;
-			}
-			if (trailing(tag)) dist = 0;
-			break;
-		}
-	}
+    switch (re->type) {
+        case RE::NIL: break;
+        case RE::SYM:
+            if (dist != Tag::VARDIST) ++dist;
+            break;
+        case RE::ALT: {
+            size_t d1 = dist, d2 = dist;
+            find_fixed_tags(re->alt.re1, tags, d1, base, false);
+            find_fixed_tags(re->alt.re2, tags, d2, base, false);
+            dist = (d1 == d2) ? d1 : Tag::VARDIST;
+            break;
+        }
+        case RE::CAT:
+            find_fixed_tags(re->cat.re2, tags, dist, base, toplevel);
+            find_fixed_tags(re->cat.re1, tags, dist, base, toplevel);
+            break;
+        case RE::ITER:
+            find_fixed_tags(re->iter.re, tags, dist, base, false);
+            dist = Tag::VARDIST;
+            break;
+        case RE::TAG: {
+            // see note [fixed and variable tags]
+            Tag &tag = tags[re->tag.idx];
+            if (fictive(tag)) {
+                tag.base = tag.dist = 0;
+            } else if (toplevel && dist != Tag::VARDIST && !history(tag)) {
+                tag.base = base;
+                tag.dist = dist;
+            } else if (toplevel) {
+                base = re->tag.idx;
+                dist = 0;
+            }
+            if (trailing(tag)) dist = 0;
+            break;
+        }
+    }
 }
 
 void find_fixed_tags(RESpec &spec)
 {
-	const bool generic = spec.opts->input_api == INPUT_CUSTOM;
-	std::vector<RE*>::iterator
-		i = spec.res.begin(),
-		e = spec.res.end();
-	for (; i != e; ++i) {
-		size_t base = Tag::RIGHTMOST, dist = 0;
-		find_fixed_tags(*i, spec.tags, dist, base, !generic);
-	}
+    const bool generic = spec.opts->input_api == INPUT_CUSTOM;
+    std::vector<RE*>::iterator
+        i = spec.res.begin(),
+        e = spec.res.end();
+    for (; i != e; ++i) {
+        size_t base = Tag::RIGHTMOST, dist = 0;
+        find_fixed_tags(*i, spec.tags, dist, base, !generic);
+    }
 }
 
 } // namespace re2c

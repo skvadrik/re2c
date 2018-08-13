@@ -22,28 +22,28 @@ typedef std::vector<tag_info_t> tag_path_t;
 
 struct tag_history_t
 {
-	// the whole tree of tags found by the epsilon-closure
-	// (a bunch of separate subtrees for each tag with common root)
-	struct node_t {
-		hidx_t pred;
-		tag_info_t info;
-	};
-	std::vector<node_t> nodes;
+    // the whole tree of tags found by the epsilon-closure
+    // (a bunch of separate subtrees for each tag with common root)
+    struct node_t {
+        hidx_t pred;
+        tag_info_t info;
+    };
+    std::vector<node_t> nodes;
 
-	// reconstruct paths for comparison
-	tag_path_t path1;
-	tag_path_t path2;
+    // reconstruct paths for comparison
+    tag_path_t path1;
+    tag_path_t path2;
 
-	tag_history_t();
-	hidx_t pred(hidx_t i) const;
-	tag_info_t info(hidx_t i) const;
-	tagver_t elem(hidx_t i) const;
-	size_t tag(hidx_t i) const;
-	hidx_t push(hidx_t i, tag_info_t info);
-	tagver_t last(hidx_t i, size_t t) const;
-	int32_t compare_reversed(hidx_t x, hidx_t y, size_t t) const;
+    tag_history_t();
+    hidx_t pred(hidx_t i) const;
+    tag_info_t info(hidx_t i) const;
+    tagver_t elem(hidx_t i) const;
+    size_t tag(hidx_t i) const;
+    hidx_t push(hidx_t i, tag_info_t info);
+    tagver_t last(hidx_t i, size_t t) const;
+    int32_t compare_reversed(hidx_t x, hidx_t y, size_t t) const;
 
-	FORBID_COPY(tag_history_t);
+    FORBID_COPY(tag_history_t);
 };
 
 } // namespace re2c

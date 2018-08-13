@@ -17,100 +17,100 @@ namespace re2c
 const size_t Initial::NOSAVE = std::numeric_limits<size_t>::max();
 
 DFA::DFA
-	( const dfa_t &dfa
-	, const std::vector<size_t> &fill
-	, size_t def
-	, size_t key
-	, const std::string &nm
-	, const std::string &cn
-	, uint32_t ln
-	, const std::string &su
-	)
-	: accepts ()
-	, name (nm)
-	, cond (cn)
-	, line (ln)
-	, lbChar(0)
-	, ubChar(dfa.charset.back())
-	, nStates(0)
-	, head(NULL)
-	, tags0(dfa.tcid0)
-	, charset(dfa.charset)
-	, rules(dfa.rules)
-	, tags(dfa.tags)
-	, mtagvers(dfa.mtagvers)
-	, finvers(dfa.finvers)
-	, tcpool(dfa.tcpool)
-	, max_fill (0)
-	, max_nmatch(0)
-	, need_backup (false)
-	, need_accept (false)
-	, oldstyle_ctxmarker (false)
-	, maxtagver (dfa.maxtagver)
-	, def_rule (def)
-	, key_size (key)
-	, bitmaps (std::min(ubChar, 256u))
-	, setup(su)
+    ( const dfa_t &dfa
+    , const std::vector<size_t> &fill
+    , size_t def
+    , size_t key
+    , const std::string &nm
+    , const std::string &cn
+    , uint32_t ln
+    , const std::string &su
+    )
+    : accepts ()
+    , name (nm)
+    , cond (cn)
+    , line (ln)
+    , lbChar(0)
+    , ubChar(dfa.charset.back())
+    , nStates(0)
+    , head(NULL)
+    , tags0(dfa.tcid0)
+    , charset(dfa.charset)
+    , rules(dfa.rules)
+    , tags(dfa.tags)
+    , mtagvers(dfa.mtagvers)
+    , finvers(dfa.finvers)
+    , tcpool(dfa.tcpool)
+    , max_fill (0)
+    , max_nmatch(0)
+    , need_backup (false)
+    , need_accept (false)
+    , oldstyle_ctxmarker (false)
+    , maxtagver (dfa.maxtagver)
+    , def_rule (def)
+    , key_size (key)
+    , bitmaps (std::min(ubChar, 256u))
+    , setup(su)
 {
-	const size_t nstates = dfa.states.size();
-	const size_t nchars = dfa.nchars;
+    const size_t nstates = dfa.states.size();
+    const size_t nchars = dfa.nchars;
 
-	State **i2s = new State*[nstates];
-	for (size_t i = 0; i < nstates; ++i)
-	{
-		i2s[i] = new State;
-	}
+    State **i2s = new State*[nstates];
+    for (size_t i = 0; i < nstates; ++i)
+    {
+        i2s[i] = new State;
+    }
 
-	State **p = &head;
-	for (size_t i = 0; i < nstates; ++i)
-	{
-		dfa_state_t *t = dfa.states[i];
-		State *s = i2s[i];
+    State **p = &head;
+    for (size_t i = 0; i < nstates; ++i)
+    {
+        dfa_state_t *t = dfa.states[i];
+        State *s = i2s[i];
 
-		++nStates;
-		*p = s;
-		p = &s->next;
+        ++nStates;
+        *p = s;
+        p = &s->next;
 
-		s->rule = t->rule;
-		s->rule_tags = t->tcid[dfa.nchars];
-		s->fall_tags = t->tcid[dfa.nchars + 1];
-		s->fill = fill[i];
-		s->fallback = t->fallback; // see note [fallback states]
+        s->rule = t->rule;
+        s->rule_tags = t->tcid[dfa.nchars];
+        s->fall_tags = t->tcid[dfa.nchars + 1];
+        s->fill = fill[i];
+        s->fallback = t->fallback; // see note [fallback states]
 
-		s->go.span = allocate<Span>(nchars);
-		uint32_t j = 0;
-		for (uint32_t c = 0; c < nchars; ++j)
-		{
-			const size_t to = t->arcs[c];
-			const tcid_t tc = t->tcid[c];
-			for (;++c < nchars && t->arcs[c] == to && t->tcid[c] == tc;);
-			s->go.span[j].to = to == dfa_t::NIL ? NULL : i2s[to];
-			s->go.span[j].ub = charset[c];
-			s->go.span[j].tags = tc;
-		}
-		s->go.nSpans = j;
-	}
-	*p = NULL;
+        s->go.span = allocate<Span>(nchars);
+        uint32_t j = 0;
+        for (uint32_t c = 0; c < nchars; ++j)
+        {
+            const size_t to = t->arcs[c];
+            const tcid_t tc = t->tcid[c];
+            for (;++c < nchars && t->arcs[c] == to && t->tcid[c] == tc;);
+            s->go.span[j].to = to == dfa_t::NIL ? NULL : i2s[to];
+            s->go.span[j].ub = charset[c];
+            s->go.span[j].tags = tc;
+        }
+        s->go.nSpans = j;
+    }
+    *p = NULL;
 
-	delete[] i2s;
+    delete[] i2s;
 }
 
 DFA::~DFA()
 {
-	State *s;
+    State *s;
 
-	while ((s = head))
-	{
-		head = s->next;
-		delete s;
-	}
+    while ((s = head))
+    {
+        head = s->next;
+        delete s;
+    }
 
-	delete &charset;
-	delete &rules;
-	delete &tags;
-	delete &mtagvers;
-	delete[] finvers;
-	delete &tcpool;
+    delete &charset;
+    delete &rules;
+    delete &tags;
+    delete &mtagvers;
+    delete[] finvers;
+    delete &tcpool;
 }
 
 /* note [reordering DFA states]
@@ -133,44 +133,44 @@ DFA::~DFA()
  */
 void DFA::reorder()
 {
-	std::vector<State*> ord;
-	ord.reserve(nStates);
+    std::vector<State*> ord;
+    ord.reserve(nStates);
 
-	std::queue<State*> todo;
-	todo.push(head);
+    std::queue<State*> todo;
+    todo.push(head);
 
-	std::set<State*> done;
-	done.insert(head);
+    std::set<State*> done;
+    done.insert(head);
 
-	for(;!todo.empty();)
-	{
-		State *s = todo.front();
-		todo.pop();
-		ord.push_back(s);
-		for(uint32_t i = 0; i < s->go.nSpans; ++i)
-		{
-			State *q = s->go.span[i].to;
-			if(q && done.insert(q).second)
-			{
-				todo.push(q);
-			}
-		}
-	}
+    for(;!todo.empty();)
+    {
+        State *s = todo.front();
+        todo.pop();
+        ord.push_back(s);
+        for(uint32_t i = 0; i < s->go.nSpans; ++i)
+        {
+            State *q = s->go.span[i].to;
+            if(q && done.insert(q).second)
+            {
+                todo.push(q);
+            }
+        }
+    }
 
-	assert(nStates == ord.size());
+    assert(nStates == ord.size());
 
-	ord.push_back(NULL);
-	for(uint32_t i = 0; i < nStates; ++i)
-	{
-		ord[i]->next = ord[i + 1];
-	}
+    ord.push_back(NULL);
+    for(uint32_t i = 0; i < nStates; ++i)
+    {
+        ord[i]->next = ord[i + 1];
+    }
 }
 
 void DFA::addState(State *s, State *next)
 {
-	++nStates;
-	s->next = next->next;
-	next->next = s;
+    ++nStates;
+    s->next = next->next;
+    next->next = s;
 }
 
 } // namespace re2c

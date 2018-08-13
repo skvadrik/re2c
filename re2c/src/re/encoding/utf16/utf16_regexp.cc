@@ -10,15 +10,15 @@ namespace re2c {
 
 RE *UTF16Symbol(RE::alc_t &alc, utf16::rune r)
 {
-	if (r <= utf16::MAX_1WORD_RUNE) {
-		return re_sym(alc, Range::sym(r));
-	} else {
-		const uint32_t ld = utf16::lead_surr(r);
-		const uint32_t tr = utf16::trail_surr(r);
-		return re_cat(alc,
-			re_sym(alc, Range::sym(ld)),
-			re_sym(alc, Range::sym(tr)));
-	}
+    if (r <= utf16::MAX_1WORD_RUNE) {
+        return re_sym(alc, Range::sym(r));
+    } else {
+        const uint32_t ld = utf16::lead_surr(r);
+        const uint32_t tr = utf16::trail_surr(r);
+        return re_cat(alc,
+            re_sym(alc, Range::sym(ld)),
+            re_sym(alc, Range::sym(tr)));
+    }
 }
 
 /*
@@ -29,10 +29,10 @@ RE *UTF16Symbol(RE::alc_t &alc, utf16::rune r)
  */
 RE *UTF16Range(RE::alc_t &alc, const Range *r)
 {
-	RangeSuffix * root = NULL;
-	for (; r != NULL; r = r->next ())
-		UTF16splitByRuneLength(root, r->lower (), r->upper () - 1);
-	return to_regexp(alc, root);
+    RangeSuffix * root = NULL;
+    for (; r != NULL; r = r->next ())
+        UTF16splitByRuneLength(root, r->lower (), r->upper () - 1);
+    return to_regexp(alc, root);
 }
 
 } // namespace re2c

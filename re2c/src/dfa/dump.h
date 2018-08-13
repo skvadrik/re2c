@@ -14,12 +14,12 @@ struct tcmd_t;
 
 struct dump_dfa_t
 {
-	const bool debug;
-	uint32_t uniqidx;
+    const bool debug;
+    uint32_t uniqidx;
 
-	explicit dump_dfa_t(const opt_t *);
-	~dump_dfa_t();
-	void state(const determ_context_t &, bool);
+    explicit dump_dfa_t(const opt_t *);
+    ~dump_dfa_t();
+    void state(const determ_context_t &, bool);
 };
 
 void dump_dfa(const dfa_t &dfa);

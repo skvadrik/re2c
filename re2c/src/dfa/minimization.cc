@@ -52,233 +52,233 @@ namespace re2c
 
 
 static void minimization_table(
-	size_t *part,
-	const std::vector<dfa_state_t*> &states,
-	size_t nchars)
+    size_t *part,
+    const std::vector<dfa_state_t*> &states,
+    size_t nchars)
 {
-	const size_t count = states.size();
+    const size_t count = states.size();
 
-	bool **tbl = new bool*[count];
-	tbl[0] = new bool[count * (count - 1) / 2];
-	for (size_t i = 0; i < count - 1; ++i)
-	{
-		tbl[i + 1] = tbl[i] + i;
-	}
+    bool **tbl = new bool*[count];
+    tbl[0] = new bool[count * (count - 1) / 2];
+    for (size_t i = 0; i < count - 1; ++i)
+    {
+        tbl[i + 1] = tbl[i] + i;
+    }
 
-	// see note [distinguish states by tags]
-	for (size_t i = 0; i < count; ++i)
-	{
-		dfa_state_t *s1 = states[i];
-		for (size_t j = 0; j < i; ++j)
-		{
-			dfa_state_t *s2 = states[j];
-			tbl[i][j] = s1->rule != s2->rule
-				|| s1->tcid[nchars] != s2->tcid[nchars];
-		}
-	}
+    // see note [distinguish states by tags]
+    for (size_t i = 0; i < count; ++i)
+    {
+        dfa_state_t *s1 = states[i];
+        for (size_t j = 0; j < i; ++j)
+        {
+            dfa_state_t *s2 = states[j];
+            tbl[i][j] = s1->rule != s2->rule
+                || s1->tcid[nchars] != s2->tcid[nchars];
+        }
+    }
 
-	for (bool loop = true; loop;)
-	{
-		loop = false;
-		for (size_t i = 0; i < count; ++i)
-		{
-			for (size_t j = 0; j < i; ++j)
-			{
-				if (!tbl[i][j])
-				{
-					for (size_t k = 0; k < nchars; ++k)
-					{
-						size_t oi = states[i]->arcs[k];
-						size_t oj = states[j]->arcs[k];
-						if (oi < oj)
-						{
-							std::swap(oi, oj);
-						}
-						if (states[i]->tcid[k] != states[j]->tcid[k]
-							|| (oi != oj
-								&& (oi == dfa_t::NIL
-								|| oj == dfa_t::NIL
-								|| tbl[oi][oj])))
-						{
-							tbl[i][j] = true;
-							loop = true;
-							break;
-						}
-					}
-				}
-			}
-		}
-	}
+    for (bool loop = true; loop;)
+    {
+        loop = false;
+        for (size_t i = 0; i < count; ++i)
+        {
+            for (size_t j = 0; j < i; ++j)
+            {
+                if (!tbl[i][j])
+                {
+                    for (size_t k = 0; k < nchars; ++k)
+                    {
+                        size_t oi = states[i]->arcs[k];
+                        size_t oj = states[j]->arcs[k];
+                        if (oi < oj)
+                        {
+                            std::swap(oi, oj);
+                        }
+                        if (states[i]->tcid[k] != states[j]->tcid[k]
+                            || (oi != oj
+                                && (oi == dfa_t::NIL
+                                || oj == dfa_t::NIL
+                                || tbl[oi][oj])))
+                        {
+                            tbl[i][j] = true;
+                            loop = true;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+    }
 
-	// Equivalence relation defined by the matrix is transitive
-	// by construction. Thus we can simply find the first state
-	// which is not distinguishable from current and choose it as a
-	// representative: all other states with the same representative
-	// have to be equivalent to current state due to transitivity.
-	//
-	// The only requirement is to deterministically choose the
-	// representative: e.g. always choose the one with the lowest
-	// index.
-	//
-	// Note that transitivity is crucial: without it the problem
-	// would be equivalent to the clique cover problem.
+    // Equivalence relation defined by the matrix is transitive
+    // by construction. Thus we can simply find the first state
+    // which is not distinguishable from current and choose it as a
+    // representative: all other states with the same representative
+    // have to be equivalent to current state due to transitivity.
+    //
+    // The only requirement is to deterministically choose the
+    // representative: e.g. always choose the one with the lowest
+    // index.
+    //
+    // Note that transitivity is crucial: without it the problem
+    // would be equivalent to the clique cover problem.
 
-	for (size_t i = 0; i < count; ++i)
-	{
-		part[i] = i;
-		for (size_t j = 0; j < i; ++j)
-		{
-			if (!tbl[i][j])
-			{
-				part[i] = j;
-				break;
-			}
-		}
-	}
+    for (size_t i = 0; i < count; ++i)
+    {
+        part[i] = i;
+        for (size_t j = 0; j < i; ++j)
+        {
+            if (!tbl[i][j])
+            {
+                part[i] = j;
+                break;
+            }
+        }
+    }
 
-	delete[] tbl[0];
-	delete[] tbl;
+    delete[] tbl[0];
+    delete[] tbl;
 }
 
 
 static void minimization_moore(
-	size_t *part,
-	const std::vector<dfa_state_t*> &states,
-	size_t nchars)
+    size_t *part,
+    const std::vector<dfa_state_t*> &states,
+    size_t nchars)
 {
-	const size_t count = states.size();
+    const size_t count = states.size();
 
-	size_t *next = new size_t[count];
+    size_t *next = new size_t[count];
 
-	// see note [distinguish states by tags]
-	std::map<std::pair<size_t, tcid_t>, size_t> init;
-	for (size_t i = 0; i < count; ++i)
-	{
-		dfa_state_t *s = states[i];
-		std::pair<size_t, tcid_t> key(s->rule, s->tcid[nchars]);
-		if (init.insert(std::make_pair(key, i)).second)
-		{
-			part[i] = i;
-			next[i] = dfa_t::NIL;
-		}
-		else
-		{
-			const size_t j = init[key];
-			part[i] = j;
-			next[i] = next[j];
-			next[j] = i;
-		}
-	}
+    // see note [distinguish states by tags]
+    std::map<std::pair<size_t, tcid_t>, size_t> init;
+    for (size_t i = 0; i < count; ++i)
+    {
+        dfa_state_t *s = states[i];
+        std::pair<size_t, tcid_t> key(s->rule, s->tcid[nchars]);
+        if (init.insert(std::make_pair(key, i)).second)
+        {
+            part[i] = i;
+            next[i] = dfa_t::NIL;
+        }
+        else
+        {
+            const size_t j = init[key];
+            part[i] = j;
+            next[i] = next[j];
+            next[j] = i;
+        }
+    }
 
-	size_t *out = new size_t[nchars * count];
-	size_t *diff = new size_t[count];
-	for (bool loop = true; loop;)
-	{
-		loop = false;
-		for (size_t i = 0; i < count; ++i)
-		{
-			if (i != part[i] || next[i] == dfa_t::NIL)
-			{
-				continue;
-			}
+    size_t *out = new size_t[nchars * count];
+    size_t *diff = new size_t[count];
+    for (bool loop = true; loop;)
+    {
+        loop = false;
+        for (size_t i = 0; i < count; ++i)
+        {
+            if (i != part[i] || next[i] == dfa_t::NIL)
+            {
+                continue;
+            }
 
-			for (size_t j = i; j != dfa_t::NIL; j = next[j])
-			{
-				size_t *o = &out[j * nchars];
-				size_t *a = states[j]->arcs;
-				for (size_t c = 0; c < nchars; ++c)
-				{
-					o[c] = a[c] == dfa_t::NIL
-						? dfa_t::NIL
-						: part[a[c]];
-				}
-			}
+            for (size_t j = i; j != dfa_t::NIL; j = next[j])
+            {
+                size_t *o = &out[j * nchars];
+                size_t *a = states[j]->arcs;
+                for (size_t c = 0; c < nchars; ++c)
+                {
+                    o[c] = a[c] == dfa_t::NIL
+                        ? dfa_t::NIL
+                        : part[a[c]];
+                }
+            }
 
-			size_t diff_count = 0;
-			for (size_t j = i; j != dfa_t::NIL;)
-			{
-				const size_t j_next = next[j];
-				size_t n = 0;
-				for (; n < diff_count; ++n)
-				{
-					size_t k = diff[n];
-					if (memcmp(&out[j * nchars],
-						&out[k * nchars],
-						nchars * sizeof(size_t)) == 0
-					 && memcmp(states[j]->tcid,
-						states[k]->tcid,
-						nchars * sizeof(tcid_t)) == 0
-					 ) {
-						part[j] = k;
-						next[j] = next[k];
-						next[k] = j;
-						break;
-					}
-				}
-				if (n == diff_count)
-				{
-					diff[diff_count++] = j;
-					part[j] = j;
-					next[j] = dfa_t::NIL;
-				}
-				j = j_next;
-			}
-			loop |= diff_count > 1;
-		}
-	}
-	delete[] out;
-	delete[] diff;
-	delete[] next;
+            size_t diff_count = 0;
+            for (size_t j = i; j != dfa_t::NIL;)
+            {
+                const size_t j_next = next[j];
+                size_t n = 0;
+                for (; n < diff_count; ++n)
+                {
+                    size_t k = diff[n];
+                    if (memcmp(&out[j * nchars],
+                        &out[k * nchars],
+                        nchars * sizeof(size_t)) == 0
+                     && memcmp(states[j]->tcid,
+                        states[k]->tcid,
+                        nchars * sizeof(tcid_t)) == 0
+                     ) {
+                        part[j] = k;
+                        next[j] = next[k];
+                        next[k] = j;
+                        break;
+                    }
+                }
+                if (n == diff_count)
+                {
+                    diff[diff_count++] = j;
+                    part[j] = j;
+                    next[j] = dfa_t::NIL;
+                }
+                j = j_next;
+            }
+            loop |= diff_count > 1;
+        }
+    }
+    delete[] out;
+    delete[] diff;
+    delete[] next;
 }
 
 
 void minimization(dfa_t &dfa, dfa_minimization_t type)
 {
-	const size_t count = dfa.states.size();
+    const size_t count = dfa.states.size();
 
-	size_t *part = new size_t[count];
+    size_t *part = new size_t[count];
 
-	switch (type) {
-	case DFA_MINIMIZATION_TABLE:
-		minimization_table(part, dfa.states, dfa.nchars); break;
-	case DFA_MINIMIZATION_MOORE:
-		minimization_moore(part, dfa.states, dfa.nchars); break;
-	}
+    switch (type) {
+    case DFA_MINIMIZATION_TABLE:
+        minimization_table(part, dfa.states, dfa.nchars); break;
+    case DFA_MINIMIZATION_MOORE:
+        minimization_moore(part, dfa.states, dfa.nchars); break;
+    }
 
-	size_t *compact = new size_t[count];
-	for (size_t i = 0, j = 0; i < count; ++i)
-	{
-		if (i == part[i])
-		{
-			compact[i] = j++;
-		}
-	}
+    size_t *compact = new size_t[count];
+    for (size_t i = 0, j = 0; i < count; ++i)
+    {
+        if (i == part[i])
+        {
+            compact[i] = j++;
+        }
+    }
 
-	size_t new_count = 0;
-	for (size_t i = 0; i < count; ++i)
-	{
-		dfa_state_t *s = dfa.states[i];
-		if (i == part[i])
-		{
-			size_t *arcs = s->arcs;
-			for (size_t c = 0; c < dfa.nchars; ++c)
-			{
-				if (arcs[c] != dfa_t::NIL)
-				{
-					arcs[c] = compact[part[arcs[c]]];
-				}
-			}
-			dfa.states[new_count++] = s;
-		}
-		else
-		{
-			delete s;
-		}
-	}
-	dfa.states.resize(new_count);
+    size_t new_count = 0;
+    for (size_t i = 0; i < count; ++i)
+    {
+        dfa_state_t *s = dfa.states[i];
+        if (i == part[i])
+        {
+            size_t *arcs = s->arcs;
+            for (size_t c = 0; c < dfa.nchars; ++c)
+            {
+                if (arcs[c] != dfa_t::NIL)
+                {
+                    arcs[c] = compact[part[arcs[c]]];
+                }
+            }
+            dfa.states[new_count++] = s;
+        }
+        else
+        {
+            delete s;
+        }
+    }
+    dfa.states.resize(new_count);
 
-	delete[] compact;
-	delete[] part;
+    delete[] compact;
+    delete[] part;
 }
 
 } // namespace re2c

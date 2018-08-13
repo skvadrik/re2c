@@ -18,64 +18,64 @@ static const tagver_t TAGVER_CURSOR = std::numeric_limits<tagver_t>::max(); // c
 
 struct tag_info_t
 {
-	uint32_t idx : 31;
-	uint32_t neg : 1;
+    uint32_t idx : 31;
+    uint32_t neg : 1;
 };
 
 struct Tag
 {
-	static const size_t RIGHTMOST;
-	static const size_t VARDIST;
-	static const size_t FICTIVE;
+    static const size_t RIGHTMOST;
+    static const size_t VARDIST;
+    static const size_t FICTIVE;
 
-	const std::string *name;
-	size_t ncap;
-	size_t base;
-	size_t dist;
-	bool history;
-	bool orbit;
-	int32_t height;
+    const std::string *name;
+    size_t ncap;
+    size_t base;
+    size_t dist;
+    bool history;
+    bool orbit;
+    int32_t height;
 
-	Tag(const std::string *nm, bool hi, int32_t ht);
-	Tag(size_t nc, bool ob, int32_t ht);
+    Tag(const std::string *nm, bool hi, int32_t ht);
+    Tag(size_t nc, bool ob, int32_t ht);
 };
 
 inline bool operator == (const tag_info_t &x, const tag_info_t &y)
 {
-	// per-component comparison is slower
-	RE2C_STATIC_ASSERT(sizeof(tag_info_t) == sizeof(uint32_t));
-	return *reinterpret_cast<const uint32_t*>(&x)
-		== *reinterpret_cast<const uint32_t*>(&y);
+    // per-component comparison is slower
+    RE2C_STATIC_ASSERT(sizeof(tag_info_t) == sizeof(uint32_t));
+    return *reinterpret_cast<const uint32_t*>(&x)
+        == *reinterpret_cast<const uint32_t*>(&y);
 }
 
 inline bool fixed(const Tag &tag)
 {
-	return tag.dist != Tag::VARDIST;
+    return tag.dist != Tag::VARDIST;
 }
 
 inline bool fictive(const Tag &tag)
 {
-	return tag.ncap == Tag::FICTIVE;
+    return tag.ncap == Tag::FICTIVE;
 }
 
 inline bool capture(const Tag &tag)
 {
-	return tag.ncap != Tag::RIGHTMOST;
+    return tag.ncap != Tag::RIGHTMOST;
 }
 
 inline bool orbit(const Tag &tag)
 {
-	return tag.orbit;
+    return tag.orbit;
 }
 
 inline bool trailing(const Tag &tag)
 {
-	return !capture(tag) && tag.name == NULL;
+    return !capture(tag) && tag.name == NULL;
 }
 
 inline bool history(const Tag &tag)
 {
-	return tag.history;
+    return tag.history;
 }
 
 } // namespace re2c

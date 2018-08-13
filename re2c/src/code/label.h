@@ -19,18 +19,18 @@ template <typename num_t> class counter_t;
 //     - get next label
 class label_t
 {
-	static const uint32_t FIRST;
-	uint32_t value;
-	label_t ();
-	void inc ();
+    static const uint32_t FIRST;
+    uint32_t value;
+    label_t ();
+    void inc ();
 
 public:
-	static label_t first ();
-	bool operator < (const label_t & l) const;
-	uint32_t width () const;
-	friend std::ostream & operator << (std::ostream & o, label_t l);
+    static label_t first ();
+    bool operator < (const label_t & l) const;
+    uint32_t width () const;
+    friend std::ostream & operator << (std::ostream & o, label_t l);
 
-	friend class counter_t<label_t>;
+    friend class counter_t<label_t>;
 };
 
 } // namespace re2c

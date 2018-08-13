@@ -11,21 +11,21 @@ namespace re2c {
  */
 void UTF16addContinuous1(RangeSuffix * & root, uint32_t l, uint32_t h)
 {
-	RangeSuffix ** p = &root;
-	for (;;)
-	{
-		if (*p == NULL)
-		{
-			*p = new RangeSuffix(l, h);
-			break;
-		}
-		else if ((*p)->l == l && (*p)->h == h)
-		{
-			break;
-		}
-		else
-			p = &(*p)->next;
-	}
+    RangeSuffix ** p = &root;
+    for (;;)
+    {
+        if (*p == NULL)
+        {
+            *p = new RangeSuffix(l, h);
+            break;
+        }
+        else if ((*p)->l == l && (*p)->h == h)
+        {
+            break;
+        }
+        else
+            p = &(*p)->next;
+    }
 }
 
 /*
@@ -34,37 +34,37 @@ void UTF16addContinuous1(RangeSuffix * & root, uint32_t l, uint32_t h)
  */
 void UTF16addContinuous2(RangeSuffix * & root, uint32_t l_ld, uint32_t h_ld, uint32_t l_tr, uint32_t h_tr)
 {
-	RangeSuffix ** p = &root;
-	for (;;)
-	{
-		if (*p == NULL)
-		{
-			*p = new RangeSuffix(l_tr, h_tr);
-			p = &(*p)->child;
-			break;
-		}
-		else if ((*p)->l == l_tr && (*p)->h == h_tr)
-		{
-			p = &(*p)->child;
-			break;
-		}
-		else
-			p = &(*p)->next;
-	}
-	for (;;)
-	{
-		if (*p == NULL)
-		{
-			*p = new RangeSuffix(l_ld, h_ld);
-			break;
-		}
-		else if ((*p)->l == l_ld && (*p)->h == h_ld)
-		{
-			break;
-		}
-		else
-			p = &(*p)->next;
-	}
+    RangeSuffix ** p = &root;
+    for (;;)
+    {
+        if (*p == NULL)
+        {
+            *p = new RangeSuffix(l_tr, h_tr);
+            p = &(*p)->child;
+            break;
+        }
+        else if ((*p)->l == l_tr && (*p)->h == h_tr)
+        {
+            p = &(*p)->child;
+            break;
+        }
+        else
+            p = &(*p)->next;
+    }
+    for (;;)
+    {
+        if (*p == NULL)
+        {
+            *p = new RangeSuffix(l_ld, h_ld);
+            break;
+        }
+        else if ((*p)->l == l_ld && (*p)->h == h_ld)
+        {
+            break;
+        }
+        else
+            p = &(*p)->next;
+    }
 }
 
 /*
@@ -78,8 +78,8 @@ void UTF16addContinuous2(RangeSuffix * & root, uint32_t l_ld, uint32_t h_ld, uin
  * This is only possible if the following condition holds:
  * if L1 /= H1, then L2 == 0xdc00 and H2 == 0xdfff.
  * This condition ensures that:
- * 	1) all possible UTF-16 sequences between L and H are allowed
- * 	2) no word ranges [w1 - w2] appear, such that w1 > w2
+ *     1) all possible UTF-16 sequences between L and H are allowed
+ *     2) no word ranges [w1 - w2] appear, such that w1 > w2
  *
  * E.g.:
  * [\U00010001-\U00010400] => [d800-d801],[dc01-dc00].
@@ -95,22 +95,22 @@ void UTF16addContinuous2(RangeSuffix * & root, uint32_t l_ld, uint32_t h_ld, uin
  */
 void UTF16splitByContinuity(RangeSuffix * & root, uint32_t l_ld, uint32_t h_ld, uint32_t l_tr, uint32_t h_tr)
 {
-	if (l_ld != h_ld)
-	{
-		if (l_tr > utf16::MIN_TRAIL_SURR)
-		{
-			UTF16splitByContinuity(root, l_ld, l_ld, l_tr, utf16::MAX_TRAIL_SURR);
-			UTF16splitByContinuity(root, l_ld + 1, h_ld, utf16::MIN_TRAIL_SURR, h_tr);
-			return;
-		}
-		if (h_tr < utf16::MAX_TRAIL_SURR)
-		{
-			UTF16splitByContinuity(root, l_ld, h_ld - 1, l_tr, utf16::MAX_TRAIL_SURR);
-			UTF16splitByContinuity(root, h_ld, h_ld, utf16::MIN_TRAIL_SURR, h_tr);
-			return;
-		}
-	}
-	UTF16addContinuous2(root, l_ld, h_ld, l_tr, h_tr);
+    if (l_ld != h_ld)
+    {
+        if (l_tr > utf16::MIN_TRAIL_SURR)
+        {
+            UTF16splitByContinuity(root, l_ld, l_ld, l_tr, utf16::MAX_TRAIL_SURR);
+            UTF16splitByContinuity(root, l_ld + 1, h_ld, utf16::MIN_TRAIL_SURR, h_tr);
+            return;
+        }
+        if (h_tr < utf16::MAX_TRAIL_SURR)
+        {
+            UTF16splitByContinuity(root, l_ld, h_ld - 1, l_tr, utf16::MAX_TRAIL_SURR);
+            UTF16splitByContinuity(root, h_ld, h_ld, utf16::MIN_TRAIL_SURR, h_tr);
+            return;
+        }
+    }
+    UTF16addContinuous2(root, l_ld, h_ld, l_tr, h_tr);
 }
 
 /*
@@ -122,28 +122,28 @@ void UTF16splitByContinuity(RangeSuffix * & root, uint32_t l_ld, uint32_t h_ld, 
  */
 void UTF16splitByRuneLength(RangeSuffix * & root, utf16::rune l, utf16::rune h)
 {
-	if (l <= utf16::MAX_1WORD_RUNE)
-	{
-		if (h <= utf16::MAX_1WORD_RUNE)
-		{
-			UTF16addContinuous1(root, l, h);
-		}
-		else
-		{
-			UTF16addContinuous1(root, l, utf16::MAX_1WORD_RUNE);
-			const uint32_t h_ld = utf16::lead_surr(h);
-			const uint32_t h_tr = utf16::trail_surr(h);
-			UTF16splitByContinuity(root, utf16::MIN_LEAD_SURR, h_ld, utf16::MIN_TRAIL_SURR, h_tr);
-		}
-	}
-	else
-	{
-			const uint32_t l_ld = utf16::lead_surr(l);
-			const uint32_t l_tr = utf16::trail_surr(l);
-			const uint32_t h_ld = utf16::lead_surr(h);
-			const uint32_t h_tr = utf16::trail_surr(h);
-			UTF16splitByContinuity(root, l_ld, h_ld, l_tr, h_tr);
-	}
+    if (l <= utf16::MAX_1WORD_RUNE)
+    {
+        if (h <= utf16::MAX_1WORD_RUNE)
+        {
+            UTF16addContinuous1(root, l, h);
+        }
+        else
+        {
+            UTF16addContinuous1(root, l, utf16::MAX_1WORD_RUNE);
+            const uint32_t h_ld = utf16::lead_surr(h);
+            const uint32_t h_tr = utf16::trail_surr(h);
+            UTF16splitByContinuity(root, utf16::MIN_LEAD_SURR, h_ld, utf16::MIN_TRAIL_SURR, h_tr);
+        }
+    }
+    else
+    {
+            const uint32_t l_ld = utf16::lead_surr(l);
+            const uint32_t l_tr = utf16::trail_surr(l);
+            const uint32_t h_ld = utf16::lead_surr(h);
+            const uint32_t h_tr = utf16::trail_surr(h);
+            UTF16splitByContinuity(root, l_ld, h_ld, l_tr, h_tr);
+    }
 }
 
 } // namespace re2c

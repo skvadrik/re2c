@@ -64,39 +64,39 @@ const uint32_t Enc::ebc2asc[256] =
  */
 bool Enc::encode(uint32_t & c) const
 {
-	if (c >= nCodePoints ())
-	{
-		return false;
-	}
+    if (c >= nCodePoints ())
+    {
+        return false;
+    }
 
-	switch (type_)
-	{
-		case ASCII:
-			return true;
-		case EBCDIC:
-			c = asc2ebc[c];
-			return true;
-		case UCS2:
-		case UTF16:
-		case UTF32:
-		case UTF8:
-			if (c < SURR_MIN || c > SURR_MAX)
-				return true;
-			else
-			{
-				switch (policy_)
-				{
-					case POLICY_FAIL:
-						return false;
-					case POLICY_SUBSTITUTE:
-						c = UNICODE_ERROR;
-						return true;
-					case POLICY_IGNORE:
-						return true;
-				}
-			}
-	}
-	return false; // to silence gcc warning
+    switch (type_)
+    {
+        case ASCII:
+            return true;
+        case EBCDIC:
+            c = asc2ebc[c];
+            return true;
+        case UCS2:
+        case UTF16:
+        case UTF32:
+        case UTF8:
+            if (c < SURR_MIN || c > SURR_MAX)
+                return true;
+            else
+            {
+                switch (policy_)
+                {
+                    case POLICY_FAIL:
+                        return false;
+                    case POLICY_SUBSTITUTE:
+                        c = UNICODE_ERROR;
+                        return true;
+                    case POLICY_IGNORE:
+                        return true;
+                }
+            }
+    }
+    return false; // to silence gcc warning
 }
 
 /*
@@ -105,19 +105,19 @@ bool Enc::encode(uint32_t & c) const
  */
 uint32_t Enc::decodeUnsafe(uint32_t c) const
 {
-	switch (type_)
-	{
-		case EBCDIC:
-			c = ebc2asc[c & 0xFF];
-			break;
-		case ASCII:
-		case UCS2:
-		case UTF16:
-		case UTF32:
-		case UTF8:
-			break;
-	}
-	return c;
+    switch (type_)
+    {
+        case EBCDIC:
+            c = ebc2asc[c & 0xFF];
+            break;
+        case ASCII:
+        case UCS2:
+        case UTF16:
+        case UTF32:
+        case UTF8:
+            break;
+    }
+    return c;
 }
 
 /*
@@ -134,55 +134,55 @@ uint32_t Enc::decodeUnsafe(uint32_t c) const
  */
 Range * Enc::encodeRange(uint32_t l, uint32_t h) const
 {
-	if (l >= nCodePoints () || h >= nCodePoints ())
-	{
-		return NULL;
-	}
+    if (l >= nCodePoints () || h >= nCodePoints ())
+    {
+        return NULL;
+    }
 
-	Range * r = NULL;
-	switch (type_)
-	{
-		case ASCII:
-			r = Range::ran (l, h + 1);
-			break;
-		case EBCDIC:
-		{
-			const uint32_t el = asc2ebc[l];
-			r = Range::sym (el);
-			for (uint32_t c = l + 1; c <= h; ++c)
-			{
-				const uint32_t ec = asc2ebc[c];
-				r = Range::add (r, Range::sym (ec));
-			}
-			break;
-		}
-		case UCS2:
-		case UTF16:
-		case UTF32:
-		case UTF8:
-			r = Range::ran (l, h + 1);
-			if (l <= SURR_MAX && h >= SURR_MIN)
-			{
-				switch (policy_)
-				{
-					case POLICY_FAIL:
-						r = NULL;
-						break;
-					case POLICY_SUBSTITUTE:
-					{
-						Range * surrs = Range::ran (SURR_MIN, SURR_MAX + 1);
-						Range * error = Range::sym (UNICODE_ERROR);
-						r = Range::sub (r, surrs);
-						r = Range::add (r, error);
-						break;
-					}
-					case POLICY_IGNORE:
-						break;
-				}
-			}
-			break;
-	}
-	return r;
+    Range * r = NULL;
+    switch (type_)
+    {
+        case ASCII:
+            r = Range::ran (l, h + 1);
+            break;
+        case EBCDIC:
+        {
+            const uint32_t el = asc2ebc[l];
+            r = Range::sym (el);
+            for (uint32_t c = l + 1; c <= h; ++c)
+            {
+                const uint32_t ec = asc2ebc[c];
+                r = Range::add (r, Range::sym (ec));
+            }
+            break;
+        }
+        case UCS2:
+        case UTF16:
+        case UTF32:
+        case UTF8:
+            r = Range::ran (l, h + 1);
+            if (l <= SURR_MAX && h >= SURR_MIN)
+            {
+                switch (policy_)
+                {
+                    case POLICY_FAIL:
+                        r = NULL;
+                        break;
+                    case POLICY_SUBSTITUTE:
+                    {
+                        Range * surrs = Range::ran (SURR_MIN, SURR_MAX + 1);
+                        Range * error = Range::sym (UNICODE_ERROR);
+                        r = Range::sub (r, surrs);
+                        r = Range::add (r, error);
+                        break;
+                    }
+                    case POLICY_IGNORE:
+                        break;
+                }
+            }
+            break;
+    }
+    return r;
 }
 
 /*
@@ -197,13 +197,13 @@ Range * Enc::encodeRange(uint32_t l, uint32_t h) const
  */
 Range * Enc::fullRange() const
 {
-	Range * r = Range::ran (0, nCodePoints());
-	if (policy_ != POLICY_IGNORE)
-	{
-		Range * surrs = Range::ran (SURR_MIN, SURR_MAX + 1);
-		r = Range::sub (r, surrs);
-	}
-	return r;
+    Range * r = Range::ran (0, nCodePoints());
+    if (policy_ != POLICY_IGNORE)
+    {
+        Range * surrs = Range::ran (SURR_MIN, SURR_MAX + 1);
+        r = Range::sub (r, surrs);
+    }
+    return r;
 }
 
 } // namespace re2c

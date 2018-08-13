@@ -24,96 +24,96 @@ static const uint32_t NOCLOS = ~0u;
 
 struct nfa_state_t
 {
-	enum type_t {ALT, RAN, TAG, FIN, NIL} type;
-	union
-	{
-		struct
-		{
-			nfa_state_t *out1;
-			nfa_state_t *out2;
-		} alt;
-		struct
-		{
-			nfa_state_t *out;
-			const Range *ran;
-		} ran;
-		struct
-		{
-			nfa_state_t *out;
-			tag_info_t info;
-		} tag;
-		struct
-		{
-			nfa_state_t *out;
-		} nil;
-	};
-	size_t rule;
+    enum type_t {ALT, RAN, TAG, FIN, NIL} type;
+    union
+    {
+        struct
+        {
+            nfa_state_t *out1;
+            nfa_state_t *out2;
+        } alt;
+        struct
+        {
+            nfa_state_t *out;
+            const Range *ran;
+        } ran;
+        struct
+        {
+            nfa_state_t *out;
+            tag_info_t info;
+        } tag;
+        struct
+        {
+            nfa_state_t *out;
+        } nil;
+    };
+    size_t rule;
 
-	// stuff needed for GOR1
-	uint32_t clos;
-	gor_status_t status : 2;  // values 0, 1, 2
-	uint32_t arcidx     : 2;  // maximum out-dergee is 2
-	uint32_t active     : 1;  // boolean
-	uint32_t indeg      : 27; // the rest; we are unlikely to have more than 2^27 states
+    // stuff needed for GOR1
+    uint32_t clos;
+    gor_status_t status : 2;  // values 0, 1, 2
+    uint32_t arcidx     : 2;  // maximum out-dergee is 2
+    uint32_t active     : 1;  // boolean
+    uint32_t indeg      : 27; // the rest; we are unlikely to have more than 2^27 states
 
-	void init(size_t r)
-	{
-		rule = r;
-		clos = NOCLOS;
-		status = GOR_NOPASS;
-		arcidx = 0;
-		active = 0;
-		indeg = 0;
-	}
+    void init(size_t r)
+    {
+        rule = r;
+        clos = NOCLOS;
+        status = GOR_NOPASS;
+        arcidx = 0;
+        active = 0;
+        indeg = 0;
+    }
 
-	void make_alt(size_t r, nfa_state_t *s1, nfa_state_t *s2)
-	{
-		type = ALT;
-		alt.out1 = s1;
-		alt.out2 = s2;
-		init(r);
-	}
-	void make_ran(size_t r, nfa_state_t *s, const Range *p)
-	{
-		type = RAN;
-		ran.out = s;
-		ran.ran = p;
-		init(r);
-	}
-	void make_tag(size_t r, nfa_state_t *s, tag_info_t info)
-	{
-		type = TAG;
-		tag.out = s;
-		tag.info = info;
-		init(r);
-	}
-	void make_fin(size_t r)
-	{
-		type = FIN;
-		init(r);
-	}
-	void make_nil(size_t r, nfa_state_t *s)
-	{
-		type = NIL;
-		nil.out = s;
-		init(r);
-	}
+    void make_alt(size_t r, nfa_state_t *s1, nfa_state_t *s2)
+    {
+        type = ALT;
+        alt.out1 = s1;
+        alt.out2 = s2;
+        init(r);
+    }
+    void make_ran(size_t r, nfa_state_t *s, const Range *p)
+    {
+        type = RAN;
+        ran.out = s;
+        ran.ran = p;
+        init(r);
+    }
+    void make_tag(size_t r, nfa_state_t *s, tag_info_t info)
+    {
+        type = TAG;
+        tag.out = s;
+        tag.info = info;
+        init(r);
+    }
+    void make_fin(size_t r)
+    {
+        type = FIN;
+        init(r);
+    }
+    void make_nil(size_t r, nfa_state_t *s)
+    {
+        type = NIL;
+        nil.out = s;
+        init(r);
+    }
 };
 
 struct nfa_t
 {
-	size_t max_size;
-	size_t size;
-	nfa_state_t *states;
-	std::vector<uint32_t> &charset;
-	std::valarray<Rule> &rules;
-	std::vector<Tag> &tags;
-	nfa_state_t *root;
+    size_t max_size;
+    size_t size;
+    nfa_state_t *states;
+    std::vector<uint32_t> &charset;
+    std::valarray<Rule> &rules;
+    std::vector<Tag> &tags;
+    nfa_state_t *root;
 
-	explicit nfa_t(const RESpec &spec);
-	~nfa_t();
+    explicit nfa_t(const RESpec &spec);
+    ~nfa_t();
 
-	FORBID_COPY(nfa_t);
+    FORBID_COPY(nfa_t);
 };
 
 size_t estimate_size(const std::vector<RE*> &res);

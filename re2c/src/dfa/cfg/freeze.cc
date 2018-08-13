@@ -21,35 +21,35 @@ namespace re2c
  */
 void freeze_tags(dfa_t &dfa)
 {
-	tcpool_t &pool = dfa.tcpool;
-	const size_t
-		nstate = dfa.states.size(),
-		nsym = dfa.nchars;
+    tcpool_t &pool = dfa.tcpool;
+    const size_t
+        nstate = dfa.states.size(),
+        nsym = dfa.nchars;
 
-	dfa.tcid0 = pool.insert(dfa.tcmd0);
-	dfa.tcmd0 = NULL;
+    dfa.tcid0 = pool.insert(dfa.tcmd0);
+    dfa.tcmd0 = NULL;
 
-	for (size_t i = 0; i < nstate; ++i) {
-		dfa_state_t *s = dfa.states[i];
-		tcmd_t **cmd = s->tcmd,
-			**const fin = cmd + nsym,
-			**const fall = fin + 1;
-		tcid_t *id = s->tcid = new tcid_t[nsym + 2];
+    for (size_t i = 0; i < nstate; ++i) {
+        dfa_state_t *s = dfa.states[i];
+        tcmd_t **cmd = s->tcmd,
+            **const fin = cmd + nsym,
+            **const fall = fin + 1;
+        tcid_t *id = s->tcid = new tcid_t[nsym + 2];
 
-		// transition commands
-		for(; cmd < fin; ++cmd) {
-			*id++ = pool.insert(*cmd);
-		}
+        // transition commands
+        for(; cmd < fin; ++cmd) {
+            *id++ = pool.insert(*cmd);
+        }
 
-		// final epsilon-transition command
-		*id++ = pool.insert(*fin);
+        // final epsilon-transition command
+        *id++ = pool.insert(*fin);
 
-		// fallback epsilon-transition command
-		*id++ = pool.insert(*fall);
+        // fallback epsilon-transition command
+        *id++ = pool.insert(*fall);
 
-		delete[] s->tcmd;
-		s->tcmd = NULL;
-	}
+        delete[] s->tcmd;
+        s->tcmd = NULL;
+    }
 }
 
 } // namespace re2c

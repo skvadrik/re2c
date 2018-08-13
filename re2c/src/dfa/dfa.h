@@ -20,57 +20,57 @@ struct opt_t;
 
 struct dfa_state_t
 {
-	size_t *arcs;
-	tcmd_t **tcmd;
-	tcid_t *tcid;
-	size_t rule;
-	bool fallthru;
-	bool fallback;
+    size_t *arcs;
+    tcmd_t **tcmd;
+    tcid_t *tcid;
+    size_t rule;
+    bool fallthru;
+    bool fallback;
 
-	explicit dfa_state_t(size_t nchars)
-		: arcs(new size_t[nchars])
-		, tcmd(new tcmd_t*[nchars + 2]()) // +2 for final and fallback epsilon-transitions
-		, tcid(NULL)
-		, rule(Rule::NONE)
-		, fallthru(false)
-		, fallback(false)
-	{}
-	~dfa_state_t()
-	{
-		delete[] arcs;
-		delete[] tcmd;
-		delete[] tcid;
-	}
-	FORBID_COPY(dfa_state_t);
+    explicit dfa_state_t(size_t nchars)
+        : arcs(new size_t[nchars])
+        , tcmd(new tcmd_t*[nchars + 2]()) // +2 for final and fallback epsilon-transitions
+        , tcid(NULL)
+        , rule(Rule::NONE)
+        , fallthru(false)
+        , fallback(false)
+    {}
+    ~dfa_state_t()
+    {
+        delete[] arcs;
+        delete[] tcmd;
+        delete[] tcid;
+    }
+    FORBID_COPY(dfa_state_t);
 };
 
 struct dfa_t
 {
-	static const uint32_t NIL;
+    static const uint32_t NIL;
 
-	std::vector<dfa_state_t*> states;
-	const size_t nchars;
-	std::vector<uint32_t> &charset;
-	std::valarray<Rule> &rules;
-	std::vector<Tag> &tags;
-	std::set<tagver_t> &mtagvers;
-	tagver_t *finvers;
-	tcpool_t &tcpool;
-	tagver_t maxtagver;
-	tcmd_t *tcmd0;
-	tcid_t tcid0;
+    std::vector<dfa_state_t*> states;
+    const size_t nchars;
+    std::vector<uint32_t> &charset;
+    std::valarray<Rule> &rules;
+    std::vector<Tag> &tags;
+    std::set<tagver_t> &mtagvers;
+    tagver_t *finvers;
+    tcpool_t &tcpool;
+    tagver_t maxtagver;
+    tcmd_t *tcmd0;
+    tcid_t tcid0;
 
-	dfa_t(const nfa_t &nfa, const opt_t *opts,
-		const std::string &cond, Warn &warn);
-	~dfa_t();
+    dfa_t(const nfa_t &nfa, const opt_t *opts,
+        const std::string &cond, Warn &warn);
+    ~dfa_t();
 
-	FORBID_COPY(dfa_t);
+    FORBID_COPY(dfa_t);
 };
 
 enum dfa_minimization_t
 {
-	DFA_MINIMIZATION_TABLE,
-	DFA_MINIMIZATION_MOORE
+    DFA_MINIMIZATION_TABLE,
+    DFA_MINIMIZATION_MOORE
 };
 
 void minimization(dfa_t &dfa, dfa_minimization_t type);

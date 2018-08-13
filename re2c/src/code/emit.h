@@ -19,9 +19,9 @@ std::string tagname(const Tag &tag);
 
 inline std::string indent(uint32_t n, const std::string &s)
 {
-	std::string ind;
-	for (; n --> 0; ind += s);
-	return ind;
+    std::string ind;
+    for (; n --> 0; ind += s);
+    return ind;
 }
 
 } // namespace re2c

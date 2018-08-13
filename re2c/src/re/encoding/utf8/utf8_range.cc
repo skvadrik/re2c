@@ -12,33 +12,33 @@ namespace re2c {
  */
 void UTF8addContinuous(RangeSuffix * & root, utf8::rune l, utf8::rune h, uint32_t n)
 {
-	uint32_t lcs[utf8::MAX_RUNE_LENGTH];
-	uint32_t hcs[utf8::MAX_RUNE_LENGTH];
-	utf8::rune_to_bytes(lcs, l);
-	utf8::rune_to_bytes(hcs, h);
+    uint32_t lcs[utf8::MAX_RUNE_LENGTH];
+    uint32_t hcs[utf8::MAX_RUNE_LENGTH];
+    utf8::rune_to_bytes(lcs, l);
+    utf8::rune_to_bytes(hcs, h);
 
-	RangeSuffix ** p = &root;
-	for (uint32_t i = 1; i <= n; ++i)
-	{
-		const uint32_t lc = lcs[n - i];
-		const uint32_t hc = hcs[n - i];
-		for (;;)
-		{
-			if (*p == NULL)
-			{
-				*p = new RangeSuffix(lc, hc);
-				p = &(*p)->child;
-				break;
-			}
-			else if ((*p)->l == lc && (*p)->h == hc)
-			{
-				p = &(*p)->child;
-				break;
-			}
-			else
-				p = &(*p)->next;
-		}
-	}
+    RangeSuffix ** p = &root;
+    for (uint32_t i = 1; i <= n; ++i)
+    {
+        const uint32_t lc = lcs[n - i];
+        const uint32_t hc = hcs[n - i];
+        for (;;)
+        {
+            if (*p == NULL)
+            {
+                *p = new RangeSuffix(lc, hc);
+                p = &(*p)->child;
+                break;
+            }
+            else if ((*p)->l == lc && (*p)->h == hc)
+            {
+                p = &(*p)->child;
+                break;
+            }
+            else
+                p = &(*p)->next;
+        }
+    }
 }
 
 /*
@@ -52,8 +52,8 @@ void UTF8addContinuous(RangeSuffix * & root, utf8::rune l, utf8::rune h, uint32_
  * This is only possible if for all i > 1:
  * if L_i /= H_i, then L_(i+1) == 0x80 and H_(i+1) == 0xbf.
  * This condition ensures that:
- * 	1) all possible UTF-8 sequences between L and H are allowed
- * 	2) no byte ranges [b1 - b2] appear, such that b1 > b2
+ *     1) all possible UTF-8 sequences between L and H are allowed
+ *     2) no byte ranges [b1 - b2] appear, such that b1 > b2
  *
  * E.g.:
  * [\U000e0031-\U000e0043] => [f3-f3],[a0-a0],[80-81],[b1-83].
@@ -69,26 +69,26 @@ void UTF8addContinuous(RangeSuffix * & root, utf8::rune l, utf8::rune h, uint32_
  */
 void UTF8splitByContinuity(RangeSuffix * & root, utf8::rune l, utf8::rune h, uint32_t n)
 {
-	for (uint32_t i = 1; i < n; ++i)
-	{
-		uint32_t m = (1u << (6u * i)) - 1u; // last i bytes of a UTF-8 sequence
-		if ((l & ~m) != (h & ~m))
-		{
-			if ((l & m) != 0)
-			{
-				UTF8splitByContinuity(root, l, l | m, n);
-				UTF8splitByContinuity(root, (l | m) + 1, h, n);
-				return;
-			}
-			if ((h & m) != m)
-			{
-				UTF8splitByContinuity(root, l, (h & ~m) - 1, n);
-				UTF8splitByContinuity(root, h & ~m, h, n);
-				return;
-			}
-		}
-	}
-	UTF8addContinuous(root, l, h, n);
+    for (uint32_t i = 1; i < n; ++i)
+    {
+        uint32_t m = (1u << (6u * i)) - 1u; // last i bytes of a UTF-8 sequence
+        if ((l & ~m) != (h & ~m))
+        {
+            if ((l & m) != 0)
+            {
+                UTF8splitByContinuity(root, l, l | m, n);
+                UTF8splitByContinuity(root, (l | m) + 1, h, n);
+                return;
+            }
+            if ((h & m) != m)
+            {
+                UTF8splitByContinuity(root, l, (h & ~m) - 1, n);
+                UTF8splitByContinuity(root, h & ~m, h, n);
+                return;
+            }
+        }
+    }
+    UTF8addContinuous(root, l, h, n);
 }
 
 /*
@@ -102,14 +102,14 @@ void UTF8splitByContinuity(RangeSuffix * & root, utf8::rune l, utf8::rune h, uin
  */
 void UTF8splitByRuneLength(RangeSuffix * & root, utf8::rune l, utf8::rune h)
 {
-	const uint32_t nh = utf8::rune_length(h);
-	for (uint32_t nl = utf8::rune_length(l); nl < nh; ++nl)
-	{
-		utf8::rune r = utf8::max_rune(nl);
-		UTF8splitByContinuity(root, l, r, nl);
-		l = r + 1;
-	}
-	UTF8splitByContinuity(root, l, h, nh);
+    const uint32_t nh = utf8::rune_length(h);
+    for (uint32_t nl = utf8::rune_length(l); nl < nh; ++nl)
+    {
+        utf8::rune r = utf8::max_rune(nl);
+        UTF8splitByContinuity(root, l, r, nl);
+        l = r + 1;
+    }
+    UTF8splitByContinuity(root, l, h, nh);
 }
 
 } // namespace re2c

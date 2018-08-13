@@ -39,22 +39,22 @@ static void find_overwritten_tags(const dfa_t &dfa, size_t state, bool *been, bo
 
 
 void find_overwritten_tags(const dfa_t &dfa, size_t state,
-	bool *been, bool *owrt)
+    bool *been, bool *owrt)
 {
-	if (been[state]) return;
-	been[state] = true;
+    if (been[state]) return;
+    been[state] = true;
 
-	const dfa_state_t *s = dfa.states[state];
-	for (size_t c = 0; c < dfa.nchars; ++c) {
-		for (const tcmd_t *p = s->tcmd[c]; p; p = p->next) {
-			owrt[p->lhs] = true;
-		}
+    const dfa_state_t *s = dfa.states[state];
+    for (size_t c = 0; c < dfa.nchars; ++c) {
+        for (const tcmd_t *p = s->tcmd[c]; p; p = p->next) {
+            owrt[p->lhs] = true;
+        }
 
-		size_t dest = s->arcs[c];
-		if (dest != dfa_t::NIL && dfa.states[dest]->fallthru) {
-			find_overwritten_tags(dfa, dest, been, owrt);
-		}
-	}
+        size_t dest = s->arcs[c];
+        if (dest != dfa_t::NIL && dfa.states[dest]->fallthru) {
+            find_overwritten_tags(dfa, dest, been, owrt);
+        }
+    }
 }
 
 
@@ -62,13 +62,13 @@ void find_overwritten_tags(const dfa_t &dfa, size_t state,
 // ('copy' commands must go first, before potential overwrites)
 static void backup(dfa_t &dfa, dfa_state_t *s, tagver_t l, tagver_t r)
 {
-	for (size_t c = 0; c < dfa.nchars; ++c) {
-		size_t i = s->arcs[c];
-		if (i != dfa_t::NIL && dfa.states[i]->fallthru) {
-			tcmd_t *&p = s->tcmd[c];
-			p = dfa.tcpool.make_copy(p, l, r);
-		}
-	}
+    for (size_t c = 0; c < dfa.nchars; ++c) {
+        size_t i = s->arcs[c];
+        if (i != dfa_t::NIL && dfa.states[i]->fallthru) {
+            tcmd_t *&p = s->tcmd[c];
+            p = dfa.tcpool.make_copy(p, l, r);
+        }
+    }
 }
 
 
@@ -77,60 +77,60 @@ static void backup(dfa_t &dfa, dfa_state_t *s, tagver_t l, tagver_t r)
 // note [fallback states]
 void insert_fallback_tags(dfa_t &dfa)
 {
-	tcpool_t &pool = dfa.tcpool;
-	const size_t
-		nstates = dfa.states.size(),
-		nsym = dfa.nchars,
-		nver = static_cast<size_t>(dfa.maxtagver) + 1;
-	bool *been = new bool[nstates];
-	bool *owrt = new bool[nver];
+    tcpool_t &pool = dfa.tcpool;
+    const size_t
+        nstates = dfa.states.size(),
+        nsym = dfa.nchars,
+        nver = static_cast<size_t>(dfa.maxtagver) + 1;
+    bool *been = new bool[nstates];
+    bool *owrt = new bool[nver];
 
-	for (size_t i = 0; i < nstates; ++i) {
-		dfa_state_t *s = dfa.states[i];
-		if (!s->fallback) continue;
+    for (size_t i = 0; i < nstates; ++i) {
+        dfa_state_t *s = dfa.states[i];
+        if (!s->fallback) continue;
 
-		std::fill(been, been + nstates, false);
-		std::fill(owrt, owrt + nver, false);
-		find_overwritten_tags(dfa, i, been, owrt);
+        std::fill(been, been + nstates, false);
+        std::fill(owrt, owrt + nver, false);
+        find_overwritten_tags(dfa, i, been, owrt);
 
-		tcmd_t *p = s->tcmd[nsym],
-			*save = NULL, **ps = &save,
-			**pc = &s->tcmd[nsym + 1];
-		for (; p; p = p->next) {
-			const tagver_t l = p->lhs, r = p->rhs, *h = p->history;
+        tcmd_t *p = s->tcmd[nsym],
+            *save = NULL, **ps = &save,
+            **pc = &s->tcmd[nsym + 1];
+        for (; p; p = p->next) {
+            const tagver_t l = p->lhs, r = p->rhs, *h = p->history;
 
-			// 'copy' commands
-			if (tcmd_t::iscopy(p)) {
-				if (!owrt[r]) {
-					*pc = pool.make_copy(NULL, l, r);
-					pc = &(*pc)->next;
-				} else {
-					backup(dfa, s, l, r);
-				}
+            // 'copy' commands
+            if (tcmd_t::iscopy(p)) {
+                if (!owrt[r]) {
+                    *pc = pool.make_copy(NULL, l, r);
+                    pc = &(*pc)->next;
+                } else {
+                    backup(dfa, s, l, r);
+                }
 
-			// 'save without history' commands
-			} else if (tcmd_t::isset(p)) {
-				*ps = pool.make_set(*ps, l, h[0]);
-				ps = &(*ps)->next;
+            // 'save without history' commands
+            } else if (tcmd_t::isset(p)) {
+                *ps = pool.make_set(*ps, l, h[0]);
+                ps = &(*ps)->next;
 
-			// 'save with history' commands
-			} else {
-				if (!owrt[r]) {
-					*ps = pool.copy_add(NULL, l, r, h);
-				} else {
-					*ps = pool.copy_add(NULL, l, l, h);
-					backup(dfa, s, l, r);
-				}
-				ps = &(*ps)->next;
-			}
-		}
+            // 'save with history' commands
+            } else {
+                if (!owrt[r]) {
+                    *ps = pool.copy_add(NULL, l, r, h);
+                } else {
+                    *ps = pool.copy_add(NULL, l, l, h);
+                    backup(dfa, s, l, r);
+                }
+                ps = &(*ps)->next;
+            }
+        }
 
-		// join 'copy' (fallback) and 'save' commands
-		*pc = save;
-	}
+        // join 'copy' (fallback) and 'save' commands
+        *pc = save;
+    }
 
-	delete[] been;
-	delete[] owrt;
+    delete[] been;
+    delete[] owrt;
 }
 
 } // namespace re2c

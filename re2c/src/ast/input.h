@@ -10,15 +10,15 @@ namespace re2c {
 
 struct Input
 {
-	FILE * file;
-	const std::string file_name;
-	std::string escaped_file_name;
+    FILE * file;
+    const std::string file_name;
+    std::string escaped_file_name;
 
-	explicit Input (const char * fn);
-	~Input ();
-	bool open ();
+    explicit Input (const char * fn);
+    ~Input ();
+    bool open ();
 
-	FORBID_COPY (Input);
+    FORBID_COPY (Input);
 };
 
 } // namespace re2c

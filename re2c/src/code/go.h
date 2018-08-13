@@ -21,214 +21,214 @@ struct If;
 
 struct Span
 {
-	uint32_t ub;
-	State * to;
-	tcid_t tags;
+    uint32_t ub;
+    State * to;
+    tcid_t tags;
 };
 
 struct Case
 {
-	std::vector<std::pair<uint32_t, uint32_t> > ranges;
-	const State *to;
-	tcid_t tags;
-	bool skip;
+    std::vector<std::pair<uint32_t, uint32_t> > ranges;
+    const State *to;
+    tcid_t tags;
+    bool skip;
 
-	void emit(OutputFile &o, uint32_t ind) const;
-	inline Case(): ranges(), to(NULL), tags(TCID0), skip(false) {}
-	FORBID_COPY(Case);
+    void emit(OutputFile &o, uint32_t ind) const;
+    inline Case(): ranges(), to(NULL), tags(TCID0), skip(false) {}
+    FORBID_COPY(Case);
 };
 
 struct Cases
 {
-	Case *cases;
-	uint32_t cases_size;
+    Case *cases;
+    uint32_t cases_size;
 
-	void add(uint32_t lb, uint32_t ub, State *to, tcid_t tags, bool skip);
-	Cases(const Span *spans, uint32_t nspans, bool skip);
-	~Cases();
-	void emit(OutputFile &o, uint32_t ind, const DFA &dfa) const;
-	void used_labels(std::set<label_t> &used) const;
-	FORBID_COPY(Cases);
+    void add(uint32_t lb, uint32_t ub, State *to, tcid_t tags, bool skip);
+    Cases(const Span *spans, uint32_t nspans, bool skip);
+    ~Cases();
+    void emit(OutputFile &o, uint32_t ind, const DFA &dfa) const;
+    void used_labels(std::set<label_t> &used) const;
+    FORBID_COPY(Cases);
 };
 
 struct Cond
 {
-	std::string compare;
-	uint32_t value;
-	Cond (const std::string & cmp, uint32_t val);
+    std::string compare;
+    uint32_t value;
+    Cond (const std::string & cmp, uint32_t val);
 };
 
 struct Binary
 {
-	Cond * cond;
-	If * thn;
-	If * els;
-	Binary (const Span * s, uint32_t n, const State * next, bool skip);
-	~Binary ();
-	void emit (OutputFile &o, uint32_t ind, const DFA &dfa) const;
-	void used_labels (std::set<label_t> & used) const;
+    Cond * cond;
+    If * thn;
+    If * els;
+    Binary (const Span * s, uint32_t n, const State * next, bool skip);
+    ~Binary ();
+    void emit (OutputFile &o, uint32_t ind, const DFA &dfa) const;
+    void used_labels (std::set<label_t> & used) const;
 
-	FORBID_COPY (Binary);
+    FORBID_COPY (Binary);
 };
 
 struct Linear
 {
-	struct Branch
-	{
-		const Cond *cond;
-		const State *to;
-		tcid_t tags;
-		bool skip;
-	};
+    struct Branch
+    {
+        const Cond *cond;
+        const State *to;
+        tcid_t tags;
+        bool skip;
+    };
 
-	size_t nbranches;
-	Branch *branches;
+    size_t nbranches;
+    Branch *branches;
 
-	Linear(const Span *s, uint32_t n, const State *next, bool skip);
-	~Linear();
-	void add_branch(const Cond *cond, const State *to, tcid_t tags, bool skip);
-	void emit(OutputFile &o, uint32_t ind, const DFA &dfa) const;
-	void used_labels(std::set<label_t> &used) const;
-	FORBID_COPY(Linear);
+    Linear(const Span *s, uint32_t n, const State *next, bool skip);
+    ~Linear();
+    void add_branch(const Cond *cond, const State *to, tcid_t tags, bool skip);
+    void emit(OutputFile &o, uint32_t ind, const DFA &dfa) const;
+    void used_labels(std::set<label_t> &used) const;
+    FORBID_COPY(Linear);
 };
 
 struct If
 {
-	enum type_t
-	{
-		BINARY,
-		LINEAR
-	} type;
-	union
-	{
-		Binary * binary;
-		Linear * linear;
-	} info;
-	If (type_t t, const Span * sp, uint32_t nsp, const State * next, bool skip);
-	~If ();
-	void emit (OutputFile & o, uint32_t ind, const DFA &dfa) const;
-	void used_labels (std::set<label_t> & used) const;
+    enum type_t
+    {
+        BINARY,
+        LINEAR
+    } type;
+    union
+    {
+        Binary * binary;
+        Linear * linear;
+    } info;
+    If (type_t t, const Span * sp, uint32_t nsp, const State * next, bool skip);
+    ~If ();
+    void emit (OutputFile & o, uint32_t ind, const DFA &dfa) const;
+    void used_labels (std::set<label_t> & used) const;
 };
 
 struct SwitchIf
 {
-	enum
-	{
-		SWITCH,
-		IF
-	} type;
-	union
-	{
-		Cases * cases;
-		If * ifs;
-	} info;
-	SwitchIf (const Span * sp, uint32_t nsp, const State * next, bool sflag, bool skip);
-	~SwitchIf ();
-	void emit (OutputFile & o, uint32_t ind, const DFA &dfa) const;
-	void used_labels (std::set<label_t> & used) const;
+    enum
+    {
+        SWITCH,
+        IF
+    } type;
+    union
+    {
+        Cases * cases;
+        If * ifs;
+    } info;
+    SwitchIf (const Span * sp, uint32_t nsp, const State * next, bool sflag, bool skip);
+    ~SwitchIf ();
+    void emit (OutputFile & o, uint32_t ind, const DFA &dfa) const;
+    void used_labels (std::set<label_t> & used) const;
 };
 
 struct GoBitmap
 {
-	const bitmap_t * bitmap;
-	const State * bitmap_state;
-	SwitchIf * hgo;
-	SwitchIf * lgo;
-	GoBitmap (const Span * span, uint32_t nSpans, const Span * hspan,
-		uint32_t hSpans, const bitmap_t * bm, const State * bm_state,
-		const State * next, bool sflag);
-	~GoBitmap ();
-	void emit (OutputFile & o, uint32_t ind, const DFA &dfa) const;
-	void used_labels (std::set<label_t> & used) const;
+    const bitmap_t * bitmap;
+    const State * bitmap_state;
+    SwitchIf * hgo;
+    SwitchIf * lgo;
+    GoBitmap (const Span * span, uint32_t nSpans, const Span * hspan,
+        uint32_t hSpans, const bitmap_t * bm, const State * bm_state,
+        const State * next, bool sflag);
+    ~GoBitmap ();
+    void emit (OutputFile & o, uint32_t ind, const DFA &dfa) const;
+    void used_labels (std::set<label_t> & used) const;
 
-	FORBID_COPY (GoBitmap);
+    FORBID_COPY (GoBitmap);
 };
 
 struct CpgotoTable
 {
-	static const uint32_t TABLE_SIZE;
-	const State ** table;
-	CpgotoTable (const Span * span, uint32_t nSpans);
-	~CpgotoTable ();
-	void emit (OutputFile & o, uint32_t ind) const;
-	void used_labels (std::set<label_t> & used) const;
+    static const uint32_t TABLE_SIZE;
+    const State ** table;
+    CpgotoTable (const Span * span, uint32_t nSpans);
+    ~CpgotoTable ();
+    void emit (OutputFile & o, uint32_t ind) const;
+    void used_labels (std::set<label_t> & used) const;
 
 private:
-	label_t max_label () const;
+    label_t max_label () const;
 
-	FORBID_COPY (CpgotoTable);
+    FORBID_COPY (CpgotoTable);
 };
 
 struct Cpgoto
 {
-	SwitchIf * hgo;
-	CpgotoTable * table;
-	Cpgoto (const Span * span, uint32_t nSpans, const Span * hspan,
-		uint32_t hSpans, const State * next, bool sflag);
-	~Cpgoto ();
-	void emit (OutputFile & o, uint32_t ind, const DFA &dfa) const;
-	void used_labels (std::set<label_t> & used) const;
+    SwitchIf * hgo;
+    CpgotoTable * table;
+    Cpgoto (const Span * span, uint32_t nSpans, const Span * hspan,
+        uint32_t hSpans, const State * next, bool sflag);
+    ~Cpgoto ();
+    void emit (OutputFile & o, uint32_t ind, const DFA &dfa) const;
+    void used_labels (std::set<label_t> & used) const;
 
-	FORBID_COPY (Cpgoto);
+    FORBID_COPY (Cpgoto);
 };
 
 struct Dot
 {
-	const State * from;
-	Cases * cases;
-	Dot(const Span *sp, uint32_t nsp, const State *s);
-	~Dot ();
-	void emit (OutputFile & o, const DFA &dfa) const;
+    const State * from;
+    Cases * cases;
+    Dot(const Span *sp, uint32_t nsp, const State *s);
+    ~Dot ();
+    void emit (OutputFile & o, const DFA &dfa) const;
 
-	FORBID_COPY (Dot);
+    FORBID_COPY (Dot);
 };
 
 struct Go
 {
-	uint32_t nSpans; // number of spans
-	Span * span;
-	tcid_t tags;
-	bool skip;
-	enum
-	{
-		EMPTY,
-		SWITCH_IF,
-		BITMAP,
-		CPGOTO,
-		DOT
-	} type;
-	union
-	{
-		SwitchIf * switchif;
-		GoBitmap * bitmap;
-		Cpgoto * cpgoto;
-		Dot * dot;
-	} info;
+    uint32_t nSpans; // number of spans
+    Span * span;
+    tcid_t tags;
+    bool skip;
+    enum
+    {
+        EMPTY,
+        SWITCH_IF,
+        BITMAP,
+        CPGOTO,
+        DOT
+    } type;
+    union
+    {
+        SwitchIf * switchif;
+        GoBitmap * bitmap;
+        Cpgoto * cpgoto;
+        Dot * dot;
+    } info;
 
-	Go ();
-	~Go ();
-	void init(const State* from, const opt_t *opts, bitmaps_t &bitmaps);
-	void emit (OutputFile & o, uint32_t ind, const DFA &dfa) const;
-	void used_labels (std::set<label_t> & used) const;
+    Go ();
+    ~Go ();
+    void init(const State* from, const opt_t *opts, bitmaps_t &bitmaps);
+    void emit (OutputFile & o, uint32_t ind, const DFA &dfa) const;
+    void used_labels (std::set<label_t> & used) const;
 
-	Go (const Go & g)
-		: nSpans (g.nSpans)
-		, span (g.span)
-		, tags (g.tags)
-		, skip (g.skip)
-		, type (g.type)
-		, info (g.info)
-	{}
-	Go & operator = (const Go & g)
-	{
-		nSpans = g.nSpans;
-		span = g.span;
-		tags = g.tags;
-		skip = g.skip;
-		type = g.type;
-		info = g.info;
-		return * this;
-	}
+    Go (const Go & g)
+        : nSpans (g.nSpans)
+        , span (g.span)
+        , tags (g.tags)
+        , skip (g.skip)
+        , type (g.type)
+        , info (g.info)
+    {}
+    Go & operator = (const Go & g)
+    {
+        nSpans = g.nSpans;
+        span = g.span;
+        tags = g.tags;
+        skip = g.skip;
+        type = g.type;
+        info = g.info;
+        return * this;
+    }
 };
 
 bool consume(const State *s);

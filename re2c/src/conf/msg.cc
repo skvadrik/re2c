@@ -12,130 +12,130 @@ namespace re2c {
 
 void error (const char * fmt, ...)
 {
-	fprintf (stderr, "re2c: error: ");
+    fprintf (stderr, "re2c: error: ");
 
-	va_list args;
-	va_start (args, fmt);
-	vfprintf (stderr, fmt, args);
-	va_end (args);
+    va_list args;
+    va_start (args, fmt);
+    vfprintf (stderr, fmt, args);
+    va_end (args);
 
-	fprintf (stderr, "\n");
+    fprintf (stderr, "\n");
 }
 
 void fatal(const char *fmt, ...)
 {
-	fprintf (stderr, "re2c: error: ");
+    fprintf (stderr, "re2c: error: ");
 
-	va_list args;
-	va_start (args, fmt);
-	vfprintf (stderr, fmt, args);
-	va_end (args);
+    va_list args;
+    va_start (args, fmt);
+    vfprintf (stderr, fmt, args);
+    va_end (args);
 
-	fprintf (stderr, "\n");
-	exit(1);
+    fprintf (stderr, "\n");
+    exit(1);
 }
 
 void fatal_l(uint32_t line, const char *fmt, ...)
 {
-	fprintf (stderr, "re2c: error: line %u: ", line);
+    fprintf (stderr, "re2c: error: line %u: ", line);
 
-	va_list args;
-	va_start (args, fmt);
-	vfprintf (stderr, fmt, args);
-	va_end (args);
+    va_list args;
+    va_start (args, fmt);
+    vfprintf (stderr, fmt, args);
+    va_end (args);
 
-	fprintf (stderr, "\n");
-	exit(1);
+    fprintf (stderr, "\n");
+    exit(1);
 }
 
 void fatal_lc(uint32_t line, uint32_t column, const char *fmt, ...)
 {
-	fprintf (stderr, "re2c: error: line %u, column %u: ", line, column);
+    fprintf (stderr, "re2c: error: line %u, column %u: ", line, column);
 
-	va_list args;
-	va_start (args, fmt);
-	vfprintf (stderr, fmt, args);
-	va_end (args);
+    va_list args;
+    va_start (args, fmt);
+    vfprintf (stderr, fmt, args);
+    va_end (args);
 
-	fprintf (stderr, "\n");
-	exit(1);
+    fprintf (stderr, "\n");
+    exit(1);
 }
 
 void error_arg (const char * option)
 {
-	error ("expected argument to option %s", option);
+    error ("expected argument to option %s", option);
 }
 
 void warning_start (uint32_t line, bool error)
 {
-	const char * msg = error ? "error" : "warning";
-	fprintf (stderr, "re2c: %s: line %u: ", msg, line);
+    const char * msg = error ? "error" : "warning";
+    fprintf (stderr, "re2c: %s: line %u: ", msg, line);
 }
 
 void warning_end (const char * type, bool error)
 {
-	if (type != NULL)
-	{
-		const char * prefix = error ? "error-" : "";
-		fprintf (stderr, " [-W%s%s]", prefix, type);
-	}
-	fprintf (stderr, "\n");
+    if (type != NULL)
+    {
+        const char * prefix = error ? "error-" : "";
+        fprintf (stderr, " [-W%s%s]", prefix, type);
+    }
+    fprintf (stderr, "\n");
 }
 
 void warning (const char * type, uint32_t line, bool error, const char * fmt, ...)
 {
-	warning_start (line, error);
+    warning_start (line, error);
 
-	va_list args;
-	va_start (args, fmt);
-	vfprintf (stderr, fmt, args);
-	va_end (args);
+    va_list args;
+    va_start (args, fmt);
+    vfprintf (stderr, fmt, args);
+    va_end (args);
 
-	warning_end (type, error);
+    warning_end (type, error);
 }
 
 void usage()
 {
-	fprintf(stdout, "%s", help);
+    fprintf(stdout, "%s", help);
 }
 
 void vernum ()
 {
-	std::string vernum (PACKAGE_VERSION);
-	if (vernum[1] == '.')
-	{
-		vernum.insert(0, "0");
-	}
-	vernum.erase(2, 1);
-	if (vernum[3] == '.')
-	{
-		vernum.insert(2, "0");
-	}
-	vernum.erase(4, 1);
-	if (vernum.length() < 6 || vernum[5] < '0' || vernum[5] > '9')
-	{
-		vernum.insert(4, "0");
-	}
-	vernum.resize(6, '0');
+    std::string vernum (PACKAGE_VERSION);
+    if (vernum[1] == '.')
+    {
+        vernum.insert(0, "0");
+    }
+    vernum.erase(2, 1);
+    if (vernum[3] == '.')
+    {
+        vernum.insert(2, "0");
+    }
+    vernum.erase(4, 1);
+    if (vernum.length() < 6 || vernum[5] < '0' || vernum[5] > '9')
+    {
+        vernum.insert(4, "0");
+    }
+    vernum.resize(6, '0');
 
-	printf ("%s\n", vernum.c_str ());
+    printf ("%s\n", vernum.c_str ());
 }
 
 void version ()
 {
-	printf ("re2c %s\n", PACKAGE_VERSION);
+    printf ("re2c %s\n", PACKAGE_VERSION);
 }
 
 std::string incond (const std::string & cond)
 {
-	std::string s;
-	if (!cond.empty ())
-	{
-		s += "in condition '";
-		s += cond;
-		s += "' ";
-	}
-	return s;
+    std::string s;
+    if (!cond.empty ())
+    {
+        s += "in condition '";
+        s += cond;
+        s += "' ";
+    }
+    return s;
 }
 
 } // namespace re2c
