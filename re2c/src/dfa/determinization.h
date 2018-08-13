@@ -138,6 +138,9 @@ struct determ_context_t
 
 
 void tagged_epsilon_closure(determ_context_t &ctx);
+void closure_posix(determ_context_t &);
+void closure_leftmost(determ_context_t &);
+void orders(determ_context_t &);
 void find_state(determ_context_t &ctx);
 int32_t precedence(determ_context_t &, const clos_t &, const clos_t &, int32_t &, int32_t &);
 

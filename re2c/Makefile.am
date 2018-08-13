@@ -102,6 +102,8 @@ SRC = \
 	src/dfa/cfg/rename.cc \
 	src/dfa/cfg/varalloc.cc \
 	src/dfa/closure.cc \
+	src/dfa/closure_leftmost.cc \
+	src/dfa/closure_posix.cc \
 	src/dfa/dead_rules.cc \
 	src/dfa/determinization.cc \
 	src/dfa/dump.cc \
