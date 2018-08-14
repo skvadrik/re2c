@@ -27,7 +27,7 @@ struct dfa_t;
 struct tcmd_t;
 
 
-typedef slab_allocator_t<> allocator_t;
+typedef slab_allocator_t<4 * 1024, 1024 * 1024, sizeof(void*)> allocator_t;
 
 
 struct clos_t
