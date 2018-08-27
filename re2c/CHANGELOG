@@ -1,3 +1,15 @@
+Version 1.1 (2018-08-27)
+--------------------------
+- Replaced Kuklewicz POSIX disambiguation algorithm with Okui algorithm.
+- Optimized GOR1 algorithm (computation of tagged epsilon-closure).
+- Added option "--conditions" (an alias for "-c" and "--start-conditions").
+- Fixed bug #201 Bugs with option: 're2c:flags:no-debug-info'.
+- Reworked first part of TDFA paper.
+
+Version 1.0.3 (2017-11-08)
+--------------------------
+- Fixed bug #198 (build error on MacOS with GCC-4.2.1)
+
 Version 1.0.2 (2017-08-26)
 --------------------------
 - Fixed bug #194 Build with "--enable-docs"
