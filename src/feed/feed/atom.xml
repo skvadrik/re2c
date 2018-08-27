@@ -153,4 +153,21 @@
         </author>
     </entry>
 
+
+    <entry>
+        <title>Release 1.1</title>
+        <link href="http://re2c.org/news/release_notes/1_1.html"/>
+        <id>http://re2c.org/news/release_notes/1_1.html</id>
+        <updated>2018-08-27T23:00:00Z</updated>
+        <summary type="xhtml">
+            <div xmlns="http://www.w3.org/1999/xhtml">
+                Release re2c-1.1 (<a href="http://re2c.org/news/release_notes/1_1.html">release notes</a>).
+            </div>
+        </summary>
+        <author>
+            <name>Ulya Trofimovich</name>
+            <email>skvadrik@gmail.com</email>
+        </author>
+    </entry>
+
 </feed>

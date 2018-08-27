@@ -13,6 +13,7 @@ You can find other releases `here <https://sourceforge.net/projects/re2c/files/o
 (but be aware that they are hidden for a good reason:
 most of them contain bugs that have been fixed in the next minor release).
 
+* `re2c-1.1.tar.gz <https://github.com/skvadrik/re2c/releases/download/1.1/re2c-1.1.tar.gz>`_
 * `re2c-1.0.3.tar.gz <https://github.com/skvadrik/re2c/releases/download/1.0.3/re2c-1.0.3.tar.gz>`_
 * `re2c-0.16.tar.gz <https://github.com/skvadrik/re2c/releases/download/0.16/re2c-0.16.tar.gz>`_
 * `re2c-0.15.3.tar.gz <https://github.com/skvadrik/re2c/releases/download/0.15.3/re2c-0.15.3.tar.gz>`_

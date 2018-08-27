@@ -1,0 +1,5 @@
+- Replaced Kuklewicz POSIX disambiguation algorithm with Okui algorithm.
+- Optimized GOR1 algorithm (computation of tagged epsilon-closure).
+- Added option ``--conditions`` (an alias for ``-c --start-conditions``).
+- Fixed bug #201 Bugs with option: ``re2c:flags:no-debug-info``.
+- Reworked first part of TDFA paper.
