@@ -21,26 +21,30 @@
 
 \begin{document}
 
-\begin{tikzpicture}[>=stealth, ->, auto, node distance=0.2in]
+\begin{tikzpicture}[>=stealth]
 
 \tikzstyle{every node}=[draw=none, shape=rectangle]
 
 % $(\epsilon|a^{0,\infty})(a|\epsilon)^{0,\infty}$
 
 \begin{scope}[xshift=0in, yshift=0in]
+    \draw [draw=none] (-1.5in,0) rectangle (6.5in,0);
+\end{scope}
+
+\begin{scope}[xshift=3.7in, yshift=-0.4in]
     \node (a) {{
     $\begin{aligned}
         &\alpha
         = \Phi_0 (s)
-        = \Phi_0 \big(
-            {T}^{1} (
-                {T}^{2} (
-                    {\varnothing}^{0},
-                    {T}^{0}({a}^{0})
-                ), {T}^{3}(
-                    {\varnothing}^{4}
-                )
-            )\big)
+%        = \Phi_0 \big(
+%            {T}^{1} (
+%                {T}^{2} (
+%                    {\varnothing}^{0},
+%                    {T}^{0}({a}^{0})
+%                ), {T}^{3}(
+%                    {\varnothing}^{4}
+%                )
+%            )\big)
             &&\!\!\!\!=\;
             \overbracket {\Xl_1 \Xl_2 }%^{\alpha_0}
             \;a\;
@@ -48,16 +52,16 @@
         \\[-0.4em]
         &\beta
         = \Phi_0 (t)
-        = \Phi_0 \big(
-            {T}^{1} (
-                {T}^{2}(
-                    {\varnothing}^{0},
-                    {T}^{0}({\varnothing}^{0})
-                ),
-                {T}^{3}\big(
-                    {T}^{4}({a}^{0},{\varnothing}^{0})
-                )
-            )\big)
+%        = \Phi_0 \big(
+%            {T}^{1} (
+%                {T}^{2}(
+%                    {\varnothing}^{0},
+%                    {T}^{0}({\varnothing}^{0})
+%                ),
+%                {T}^{3}\big(
+%                    {T}^{4}({a}^{0},{\varnothing}^{0})
+%                )
+%            )\big)
             &&\!\!\!\!=\;
             \overbracket { \Xl_1 \Xl_2 \Xr_1 \Xl_2 \Xl_3 }%^{\beta_0}
             \;a\;
@@ -65,17 +69,17 @@
         \\[-0.4em]
         &\gamma
         = \Phi_0 (u)
-        = \Phi_0 \big(
-            {T}^{1} (
-                {T}^{2}(
-                    {\epsilon}^{0},
-                    {\varnothing}^{0}
-                ),
-                {T}^{3} (
-                    {T}^{4}({a}^{0},{\varnothing}^{0}),
-                    {T}^{4}({\varnothing}^{0}, {\epsilon}^{0})
-                )
-            )\big)
+%        = \Phi_0 \big(
+%            {T}^{1} (
+%                {T}^{2}(
+%                    {\epsilon}^{0},
+%                    {\varnothing}^{0}
+%                ),
+%                {T}^{3} (
+%                    {T}^{4}({a}^{0},{\varnothing}^{0}),
+%                    {T}^{4}({\varnothing}^{0}, {\epsilon}^{0})
+%                )
+%            )\big)
             &&\!\!\!\!=\;
             \overbracket { \Xl_1 \Xl_2 \Xr_1 \Xl_2 \Xl_3 }%^{\gamma_0}
             \;a\;
@@ -87,7 +91,7 @@
 \setlength\tabcolsep{3pt}
 %\renewcommand{\arraystretch}{1.1}
 
-\begin{scope}[xshift=0in, yshift=-1.75in]
+\begin{scope}[xshift=3.7in, yshift=-2.3in]
     \node (a) {
     $\begin{aligned}
         &\begin{tabular}{c|ll}
@@ -98,9 +102,9 @@
         \end{tabular}
         &&\quad
         \left[\begin{aligned}
-            \rho_0  &= min (lasth (\Xl_1 \Xl_2), minh (\epsilon))          = min (2, \infty) = 2 \\[-0.3em]
-            \rho'_0  &= min (lasth (\Xl_1 \Xl_2), minh (\Xr_1 \Xl_2 \Xl_3)) = min (2, 1)      = 1 \\[-0.3em]
-            \rho_1  &= min (\rho_0, minh (\Xr_1 \Xl_2 \Xm_2 \Xr_1 \Xr_0)) = min (2,0) = 0 \\[-0.3em]
+            \rho_0  &= min (lasth (\Xl_1 \Xl_2), minh (\epsilon))          = min (2, \infty) = 2 \\[-0.2em]
+            \rho'_0  &= min (lasth (\Xl_1 \Xl_2), minh (\Xr_1 \Xl_2 \Xl_3)) = min (2, 1)      = 1 \\[-0.2em]
+            \rho_1  &= min (\rho_0, minh (\Xr_1 \Xl_2 \Xm_2 \Xr_1 \Xr_0)) = min (2,0) = 0 \\[-0.2em]
             \rho'_1  &= min (\rho'_0, minh (\Xr_2 \Xr_1 \Xr_0))             = min (1,0) = 0
         \end{aligned}\right.
         \\[0.7em]
@@ -112,9 +116,9 @@
         \end{tabular}
         &&\quad
         \left[\begin{aligned}
-            \rho_0  &= -1 \\[-0.3em]
-            \rho'_0  &= -1 \\[-0.3em]
-            \rho_1  &= min (lasth (\Xr_2), minh (\Xr_1 \Xr_0))             = min (2,0) = 0 \\[-0.3em]
+            \rho_0  &= -1 \\[-0.2em]
+            \rho'_0  &= -1 \\[-0.2em]
+            \rho_1  &= min (lasth (\Xr_2), minh (\Xr_1 \Xr_0))             = min (2,0) = 0 \\[-0.2em]
             \rho'_1  &= min (lasth (\Xr_2), minh (\Xl_3 \Xr_2 \Xr_1 \Xr_0)) = min (2,0) = 0
         \end{aligned}\right.
         \\[0.7em]
@@ -126,9 +130,9 @@
         \end{tabular}
         &&\quad
         \left[\begin{aligned}
-            \rho_0  &= min (lasth (\Xl_1 \Xl_2), minh (\epsilon))          = min (2, \infty) = 2 \\[-0.3em]
-            \rho'_0  &= min (lasth (\Xl_1 \Xl_2), minh (\Xr_1 \Xl_2 \Xl_3)) = min (2, 1)      = 1 \\[-0.3em]
-            \rho_1  &= min (\rho_0, minh (\Xr_1 \Xl_2 \Xm_2 \Xr_1 \Xr_0)) = min (2,0) = 0 \\[-0.3em]
+            \rho_0  &= min (lasth (\Xl_1 \Xl_2), minh (\epsilon))          = min (2, \infty) = 2 \\[-0.2em]
+            \rho'_0  &= min (lasth (\Xl_1 \Xl_2), minh (\Xr_1 \Xl_2 \Xl_3)) = min (2, 1)      = 1 \\[-0.2em]
+            \rho_1  &= min (\rho_0, minh (\Xr_1 \Xl_2 \Xm_2 \Xr_1 \Xr_0)) = min (2,0) = 0 \\[-0.2em]
             \rho'_1  &= min (\rho'_0, minh (\Xr_2 \Xl_3 \Xr_2 \Xr_1 \Xr_0)) = min (1,0) = 0
         \end{aligned}\right.
     \end{aligned}$
@@ -137,66 +141,269 @@
 
 
 
-\tikzstyle{every node}=[draw=none, shape=rectangle, sibling distance=0, level distance=0, outer sep = 0]
+\tikzstyle{styleA}=[draw=none
+    , shape=rectangle
+    , rounded corners=4
+    , level distance=0.35in
+    , sibling distance=0.45in
+    , minimum size = 0.2in
+    , inner sep = 0pt
+    , outer sep = 0pt
+    ]
+\tikzstyle{styleB}=[->
+    %, color = lightgray
+    , rounded corners=3.5
+    %, line width = 0
+    , dash pattern = on 1pt off 2.5pt
+    ]
+\newcommand\w{\hspace{2em}}
 
 \small{
-\begin{scope}[xshift=-3.5in, yshift=0.3in]
-    \node[xshift=-0.2in, draw=none] {$s:$};
+\begin{scope}[xshift=0in, yshift=0in]
+    \tikzstyle{every node}=[styleA]
+    %\tikzstyle{every edge}=[draw=none]
+    \node[xshift=-0.4in, draw=none] {$s:$};
     \graph [tree layout, grow=down, fresh nodes] {
-        "${T}^{1}$" -- {
-            "${T}^{2}$" -- {
-                "${\varnothing}^{0}$"[draw=none],
-                "${T}^{0}$"[draw=none] -- {
-                    "${a}^{0}$"[draw=none]
+        s1/"${T}^{1}$" -- {
+            s11/"${T}^{2}$" -- {
+                s111/"${\varnothing}^{0}$",
+                s112/"${T}^{0}$" -- {
+                    s1121/"${a}^{0}$"
                 }
             },
-            "${T}^{3}$" -- {
-                "${\varnothing}^{4}$"
+            s12/"${T}^{3}$" -- {
+                s121/"${\varnothing}^{4}$"
             }
         }
     };
+    \node at (s1)    {$\Xl_1 \w \Xr_0$};
+    \node at (s11)   {$\Xl_2 \w \Xr_1$};
+    \node at (s12)   {$\Xl_2 \w \Xr_1$};
+    \node at (s121)  {$\Xl_3 \w \Xr_2$};
+    \draw [->, styleB] ($(s1.west)$)
+        -- ($(s1.south west)$)
+        -- ($(s11.north west)$)
+        -- ($(s11.west)$)
+        -- ($(s11.south west)$)
+        -- ($(s111.north west)$)
+        -- ($(s111.west)$)
+        -- ($(s111.south west)$)
+        -- ($(s111.south)$)
+        -- ($(s111.south east)$)
+        -- ($(s111.east)$)
+        -- ($(s111.north east)$)
+        -- ($(s11.south)$)
+        -- ($(s112.north west)$)
+        -- ($(s112.west)$)
+        -- ($(s112.south west)$)
+        -- ($(s1121.north west)$)
+        -- ($(s1121.west)$);
+    \draw [->, styleB] ($(s1121.east)$)
+        -- ($(s1121.north east)$)
+        -- ($(s112.south east)$)
+        -- ($(s112.east)$)
+        -- ($(s112.north east)$)
+        -- ($(s11.south east)$)
+        -- ($(s11.east)$)
+        -- ($(s11.north east)$)
+        -- ($(s1.south)$)
+        -- ($(s12.north west)$)
+        -- ($(s12.west)$)
+        -- ($(s12.south west)$)
+        -- ($(s121.north west)$)
+        -- ($(s121.west)$)
+        -- ($(s121.south west)$)
+        -- ($(s121.south)$)
+        -- ($(s121.south east)$)
+        -- ($(s121.east)$)
+        -- ($(s121.north east)$)
+        -- ($(s12.south east)$)
+        -- ($(s12.east)$)
+        -- ($(s12.north east)$)
+        -- ($(s1.south east)$)
+        -- ($(s1.east)$);
 \end{scope}
 
-\begin{scope}[xshift=-3.5in, yshift=-0.85in]
-    \node[xshift=-0.2in, draw=none] {$t:$};
+\begin{scope}[xshift=0in, yshift=-1.3in]
+    \tikzstyle{every node}=[styleA]
+    \node[xshift=-0.4in, draw=none] {$t:$};
     \graph [tree layout, grow=down, fresh nodes] {
-        "${T}^{1}$" -- {
-            "${T}^{2}$" -- {
-                "${\varnothing}^{0}$"[draw=none],
-                "${T}^{0}$"[draw=none] -- {
-                    "${\varnothing}^{0}$"[draw=none]
+        t1/"${T}^{1}$" -- {
+            t11/"${T}^{2}$" -- {
+                t111/"${\varnothing}^{0}$",
+                t112/"${T}^{0}$" -- {
+                    t1121/"${\varnothing}^{0}$"
                 }
             },
-            "${T}^{3}$" -- {
-                "${T}^{4}$" -- {
-                    "${a}^{0}$"[draw=none],
-                    "${\varnothing}^{0}$"[draw=none]
+            t12/"${T}^{3}$" -- {
+                t121/"${T}^{4}$" -- {
+                    t1211/"${a}^{0}$",
+                    t1212/"${\varnothing}^{0}$"
                 }
             }
         }
     };
+    \node at (t1)    {$\Xl_1 \w \Xr_0$};
+    \node at (t11)   {$\Xl_2 \w \Xr_1$};
+    \node at (t12)   {$\Xl_2 \w \Xr_1$};
+    \node at (t121)  {$\Xl_3 \w \Xr_2$};
+    \draw [->, styleB] ($(t1.west)$)
+        -- ($(t1.south west)$)
+        -- ($(t11.north west)$)
+        -- ($(t11.west)$)
+        -- ($(t11.south west)$)
+        -- ($(t111.north west)$)
+        -- ($(t111.west)$)
+        -- ($(t111.south west)$)
+        -- ($(t111.south)$)
+        -- ($(t111.south east)$)
+        -- ($(t111.east)$)
+        -- ($(t111.north east)$)
+        -- ($(t11.south)$)
+        -- ($(t112.north west)$)
+        -- ($(t112.west)$)
+        -- ($(t112.south west)$)
+        -- ($(t1121.north west)$)
+        -- ($(t1121.west)$)
+        -- ($(t1121.south west)$)
+        -- ($(t1121.south)$)
+        -- ($(t1121.south east)$)
+        -- ($(t1121.east)$)
+        -- ($(t1121.north east)$)
+        -- ($(t112.south east)$)
+        -- ($(t112.east)$)
+        -- ($(t112.north east)$)
+        -- ($(t11.south east)$)
+        -- ($(t11.east)$)
+        -- ($(t11.north east)$)
+        -- ($(t1.south)$)
+        -- ($(t12.north west)$)
+        -- ($(t12.west)$)
+        -- ($(t12.south west)$)
+        -- ($(t121.north west)$)
+        -- ($(t121.west)$)
+        -- ($(t121.south west)$)
+        -- ($(t1211.north west)$)
+        -- ($(t1211.west)$);
+    \draw [->, styleB]
+        ($(t1211.east)$)
+        -- ($(t121.south)$)
+        -- ($(t1212.north west)$)
+        -- ($(t1212.west)$)
+        -- ($(t1212.south west)$)
+        -- ($(t1212.south)$)
+        -- ($(t1212.south east)$)
+        -- ($(t1212.east)$)
+        -- ($(t1212.north east)$)
+        -- ($(t121.south east)$)
+        -- ($(t121.east)$)
+        -- ($(t121.north east)$)
+        -- ($(t12.south east)$)
+        -- ($(t12.east)$)
+        -- ($(t12.north east)$)
+        -- ($(t1.south east)$)
+        -- ($(t1.east)$);
 \end{scope}
 
-\begin{scope}[xshift=-3.5in, yshift=-2in]
-    \node[xshift=-0.2in, draw=none] {$u:$};
+\begin{scope}[xshift=0in, yshift=-2.6in]
+    \tikzstyle{every node}=[styleA]
+    \node[xshift=-0.4in, draw=none] {$u:$};
     \graph [tree layout, grow=down, fresh nodes] {
-        "${T}^{1}$" -- {
-            "${T}^{2}$" -- {
-                "${\epsilon}^{0}$"[draw=none],
-                "${\varnothing}^{0}$"[draw=none]
+        t1/"${T}^{1}$" -- {
+            t11/"${T}^{2}$" -- {
+                t111/"${\epsilon}^{0}$",
+                t112/"${\varnothing}^{0}$"
             },
-            "${T}^{3}$" -- {
-                "${T}^{4}$" -- {
-                    "${a}^{0}$"[draw=none],
-                    "${\varnothing}^{0}$"[draw=none]
+            t12/"${T}^{3}$" -- {
+                t121/"${T}^{4}$" -- {
+                    t1211/"${a}^{0}$",
+                    t1212/"${\varnothing}^{0}$"
                 },
-                "${T}^{4}$" -- {
-                    "${\varnothing}^{0}$"[draw=none],
-                    "${\epsilon}^{0}$"[draw=none]
+                t122/"${T}^{4}$" -- {
+                    t1221/"${\varnothing}^{0}$",
+                    t1222/"${\epsilon}^{0}$"
                 }
             }
         }
     };
+    \node at (t1)    {$\Xl_1 \w \Xr_0$};
+    \node at (t11)   {$\Xl_2 \w \Xr_1$};
+    \node at (t12)   {$\Xl_2 \w \Xr_1$};
+    \node at (t121)  {$\Xl_3 \w \Xr_2$};
+    \node at (t122)  {$\Xl_3 \w \Xr_2$};
+    \draw [->, styleB]
+           ($(t1.west)$)
+        -- ($(t1.south west)$)
+        -- ($(t11.north west)$)
+        -- ($(t11.west)$)
+        -- ($(t11.south west)$)
+        -- ($(t111.north west)$)
+        -- ($(t111.west)$)
+        -- ($(t111.south west)$)
+        -- ($(t111.south)$)
+        -- ($(t111.south east)$)
+        -- ($(t111.east)$)
+        -- ($(t111.north east)$)
+        -- ($(t11.south)$)
+        -- ($(t112.north west)$)
+        -- ($(t112.west)$)
+        -- ($(t112.south west)$)
+        -- ($(t112.south)$)
+        -- ($(t112.south east)$)
+        -- ($(t112.east)$)
+        -- ($(t112.north east)$)
+        -- ($(t11.south east)$)
+        -- ($(t11.east)$)
+        -- ($(t11.north east)$)
+        -- ($(t1.south)$)
+        -- ($(t12.north west)$)
+        -- ($(t12.west)$)
+        -- ($(t12.south west)$)
+        -- ($(t121.north west)$)
+        -- ($(t121.west)$)
+        -- ($(t121.south west)$)
+        -- ($(t1211.north west)$)
+        -- ($(t1211.west)$);
+    \draw [->, styleB]
+        ($(t1211.east)$)
+        -- ($(t121.south)$)
+        -- ($(t1212.north west)$)
+        -- ($(t1212.west)$)
+        -- ($(t1212.south west)$)
+        -- ($(t1212.south)$)
+        -- ($(t1212.south east)$)
+        -- ($(t1212.east)$)
+        -- ($(t1212.north east)$)
+        -- ($(t121.south east)$)
+        -- ($(t121.east)$)
+        -- ($(t121.north east)$)
+        -- ($(t12.south)$)
+        -- ($(t122.north west)$)
+        -- ($(t122.west)$)
+        -- ($(t122.south west)$)
+        -- ($(t1221.north west)$)
+        -- ($(t1221.west)$)
+        -- ($(t1221.south west)$)
+        -- ($(t1221.south)$)
+        -- ($(t1221.south east)$)
+        -- ($(t1221.east)$)
+        -- ($(t1221.north east)$)
+        -- ($(t122.south)$)
+        -- ($(t1222.north west)$)
+        -- ($(t1222.west)$)
+        -- ($(t1222.south west)$)
+        -- ($(t1222.south)$)
+        -- ($(t1222.south east)$)
+        -- ($(t1222.east)$)
+        -- ($(t1222.north east)$)
+        -- ($(t122.south east)$)
+        -- ($(t122.east)$)
+        -- ($(t122.north east)$)
+        -- ($(t12.south east)$)
+        -- ($(t12.east)$)
+        -- ($(t12.north east)$)
+        -- ($(t1.south east)$)
+        -- ($(t1.east)$);
 \end{scope}
 }
 

@@ -21,198 +21,213 @@
 
 \begin{document}
 
-\begin{tikzpicture}[>=stealth, auto, sibling distance = 0.3in, inner sep = 1.5pt]
+\begin{tikzpicture}[>=stealth, auto, sibling distance = 0.2in, inner sep = 1pt, outer sep = 0pt]
 
 \tikzstyle{every node}=[draw, shape = circle]
 
-\begin{scope}[xshift=0in, yshift=0in]
-    \graph [tree layout, grow=down, fresh nodes] {
-        "$t_1$"[draw] -- {
-            ""[draw] -- {
-                ""[draw] -- { "$a$", "$a$", "$a$" }
+\small{
+\begin{scope}[xshift=0in, yshift=-0in]
+    \tikzstyle{every node}=[draw, shape = circle]
+    \graph [tree layout, grow=down, fresh nodes, level distance = 0.2in] {
+        "$t_1$" -- {
+            "" -- {
+                "" -- { "$a$", "$a$", "$a$" }
             }
         }
-        , "$t_2$"[draw] -- {
-            ""[draw] -- {
-                ""[draw] -- { "$a$", "$a$" },
-                ""[draw] -- { "$a$" }
+        , "$t_2$" -- {
+            "" -- {
+                "" -- { "$a$", "$a$" },
+                "" -- { "$a$" }
             }
         }
-        , "$t_3$"[draw] -- {
-            ""[draw] -- {
-                ""[draw] -- { "$a$" },
-                ""[draw] -- { "$a$", "$a$" }
+        , t31/"$t_3$" -- {
+            t311/"" -- {
+                t3111/"" -- { t31111/"$a$" },
+                t3112/"" -- { t31121/"$a$", t31122/"$a$" }
             }
         }
-        , "$t_4$"[draw] -- {
-            ""[draw] -- {
-                ""[draw] -- { "$a$" },
-                ""[draw] -- { "$a$" },
-                ""[draw] -- { "$a$" }
+        , "$t_4$" -- {
+            "" -- {
+                "" -- { "$a$" },
+                "" -- { "$a$" },
+                "" -- { "$a$" }
             }
         }
-        , "$t_5$"[draw] -- {
-            ""[draw] -- {
-                ""[draw] -- { "$a$", "$a$" }
+        , t51/"$t_5$" -- {
+            t511/"" -- {
+                t5111/"" -- { t51111/"$a$", t51112/"$a$" }
             },
-            ""[draw] -- {
-                ""[draw] -- { "$a$" }
+            t512/"" -- {
+                t5121/"" -- { t51211/"$a$" }
             }
         }
-        , "$t_6$"[draw] -- {
-            ""[draw] -- {
-                ""[draw] -- { "$a$" }
+        , "$t_6$" -- {
+            "" -- {
+                "" -- { "$a$" }
             },
-            ""[draw] -- {
-                ""[draw] -- { "$a$", "$a$" }
+            "" -- {
+                "" -- { "$a$", "$a$" }
             }
         }
-        , "$t_7$"[draw] -- {
-            ""[draw] -- {
-                ""[draw] -- { "$a$"},
-                ""[draw] -- { "$a$"}
+        , "$t_7$" -- {
+            "" -- {
+                "" -- { "$a$"},
+                "" -- { "$a$"}
             },
-            ""[draw] -- {
-                ""[draw] -- { "$a$" }
+            "" -- {
+                "" -- { "$a$" }
             }
         }
-        , "$t_8$"[draw] -- {
-            ""[draw] -- {
-                ""[draw] -- { "$a$"}
+        , "$t_8$" -- {
+            "" -- {
+                "" -- { "$a$"}
             },
-            ""[draw] -- {
-                ""[draw] -- { "$a$"},
-                ""[draw] -- { "$a$" }
+            "" -- {
+                "" -- { "$a$"},
+                "" -- { "$a$" }
             }
         }
-        , "$t_9$"[draw] -- {
-            ""[draw] -- {
-                ""[draw] -- { "$a$" }
+        , "$t_9$" -- {
+            "" -- {
+                "" -- { "$a$" }
             },
-            ""[draw] -- {
-                ""[draw] -- { "$a$" }
+            "" -- {
+                "" -- { "$a$" }
             },
-            ""[draw] -- {
-                ""[draw] -- { "$a$" }
+            "" -- {
+                "" -- { "$a$" }
             }
         }
     };
 \end{scope}
+}
 
-\tikzstyle{styleD}=[rounded corners, thick, dash pattern=on 1pt off 3pt]
-\tikzstyle{styleC}=[rounded corners, thick, dash pattern=on 3pt off 2pt]
-\tikzstyle{styleB}=[rounded corners, thick, dash pattern=on 5pt off 2pt]
-\tikzstyle{styleA}=[rounded corners, thick, dash pattern=on 8pt off 2pt]
 
-\begin{scope}[xshift=0in, yshift=-3.35in]
-%    \tikzstyle{every node}=[draw, shape=circle]
-    \tikzstyle{every node}=[draw=none, shape=rectangle, inner sep = 0, level distance=0.45in]
-    \graph [tree layout, grow=down, fresh nodes, sibling distance=0.45in] {
-        a1/""[label=above:$t_3$]{} -- {
-            a11/"" -- {
-                a111/"" -- { a1111/""[label=below:$a$] },
-                a112/"" -- { a1121/""[label=below:$a$], a1122/""[label=below:$a$] }
+\tikzstyle{styleA}=[draw=none
+    , shape=circle
+    , minimum size = 0.2in
+    , inner sep = 0pt
+    , outer sep = 0pt
+    ]
+
+\tikzstyle{styleB}=[->
+    , rounded corners=3.5
+    %, color = lightgray
+    , dash pattern = on 1pt off 2.5pt
+    ]
+
+\newcommand\w{\hspace{2em}}
+
+\begin{scope}[xshift=0in, yshift=-2.5in]
+    \tikzstyle{every node}=[draw = none, shape = circle, inner sep = 0]
+    \node[xshift=-0.4in, draw=none] {$t_3:$};
+    \graph [tree layout, grow=down, fresh nodes, sibling distance = 0.45in, level distance = 0.35in] {
+        t31/"$T^1$" -- {
+            t311/"$T^2$" -- {
+                t3111/"$T^3$" -- { t31111/"$a^4$" },
+                t3112/"$T^5$" -- { t31121/"$a^6$", t31122/"$a^7$" }
             }
         }
     };
-    \tikzstyle{every node}=[draw=none, shape=rectangle]
-    \newcommand\e{1.3em}
-    \node (x1)    at (a1)    {$\Xl_1 \hspace{\e} \Xr_0$};
-    \node (x11)   at (a11)   {$\Xl_2 \hspace{\e} \Xr_1$};
-    \node (x111)  at (a111)  {$\Xl_3 \hspace{\e} \Xr_2$};
-    \node (x112)  at (a112)  {$\Xl_3 \hspace{\e} \Xr_2$};
-    \node (x1111) at (a1111) {$\Xl_4 \hspace{\e} \Xr_3$};
-    \node (x1121) at (a1121) {$\Xl_4 \hspace{\e} \Xr_3$};
-    \node (x1122) at (a1122) {$\Xl_4 \hspace{\e} \Xr_3$};
-
-    \newcommand\xxx{
-        \tikzstyle{every node}=[outer sep=0]
-        \newcommand\w{0.12}
-        \draw [->, styleA, lightgray, very thick] ($(a1.center)+(-\w,0)$) -- ($(a11.center)+(-\w,0)$) -- ($(a111.center)+(-\w,0)$) -- ($(a1111.center)+(-\w,0)$);
-        \draw [    styleB, lightgray, very thick] ($(a1111.center)+(\w,0)$) -- ($(a111.center)+(\w,0)$);
-        \draw [->, styleB] ($(a111.center)+(\w,0)$) -- ($(a11.center)+(0,-0.18)$) -- ($(a112.center)+(-\w,0)$) -- ($(a1121)+(-\w,0)$);
-        \draw [->, styleC] ($(a1121.center)+(\w,0)$) -- ($(a112.center)+(0,-0.18)$) -- ($(a1122.center)+(-\w,0)$);
-        \draw [->, styleD] ($(a1122.center)+(\w,0)$) -- ($(a112.center)+(\w,0)$) -- ($(a11.center)+(\w,0)$) -- ($(a1.center)+(\w,0)$);
-    }
-    \xxx
-
-%    \node (f) [draw, shape=ellipse, fill] at ($(a111.center)+(\w,0)$) {};
+    \node at (t31)    [styleA] {$\Xl_1 \w \Xr_0$};
+    \node at (t311)   [styleA] {$\Xl_2 \w \Xr_1$};
+    \node at (t3111)  [styleA] {$\Xl_3 \w \Xr_2$};
+    \node at (t3112)  [styleA] {$\Xl_3 \w \Xr_2$};
+    \node at (t31111) [styleA] {$\Xl_4 \w \Xr_3$};
+    \node at (t31121) [styleA] {$\Xl_4 \w \Xr_3$};
+    \node at (t31122) [styleA] {$\Xl_4 \w \Xr_3$};
+    %
+    \node at (t31)    [styleA] (tt31)    {};
+    \node at (t311)   [styleA] (tt311)   {};
+    \node at (t3111)  [styleA] (tt3111)  {};
+    \node at (t3112)  [styleA] (tt3112)  {};
+    \node at (t31111) [styleA] (tt31111) {};
+    \node at (t31121) [styleA] (tt31121) {};
+    \node at (t31122) [styleA] (tt31122) {};
+    %
+    \draw [->, styleB] ($(tt31.west)$)
+        -- ($(tt311.west)$)
+        -- ($(tt3111.west)$)
+        -- ($(tt31111.west)$);
+    \draw [->, styleB] ($(tt31111.east)$)
+        -- ($(tt3111.east)$)
+        -- ($(tt311.south)$)
+        -- ($(tt3112.west)$)
+        -- ($(tt31121.west)$);
+    \draw [->, styleB] ($(tt31121.east)$)
+        -- ($(tt3112.south)$)
+        -- ($(tt31122.west)$);
+    \draw [->, styleB] ($(tt31122.east)$)
+        -- ($(tt3112.east)$)
+        -- ($(tt311.east)$)
+        -- ($(tt31.east)$);
 \end{scope}
 
-\begin{scope}[xshift=1.65in, yshift=-3.35in]
-%    \tikzstyle{every node}=[draw, shape=circle]
-    \tikzstyle{every node}=[draw=none, shape=rectangle, inner sep = 0, level distance=0.45in]
-    \graph [tree layout, grow=down, fresh nodes, sibling distance=0.45in] {
-        b1/""[label=above:$t_5$]{} -- {
-            b11/"" -- {
-                b111/"" -- { b1111/""[label=below:$a$]{}, b1112/""[label=below:$a$] }
+\begin{scope}[xshift=1.6in, yshift=-2.5in]
+    \tikzstyle{every node}=[draw = none, shape = circle, inner sep = 0]
+    \node[xshift=-0.4in, draw=none] {$t_5:$};
+    \graph [tree layout, grow=down, fresh nodes, sibling distance = 0.45in, level distance = 0.35in] {
+        t51/"$T^1$" -- {
+            t511/"$T^2$" -- {
+                t5111/"$T^3$" -- { t51111/"$a^4$", t51112/"$a^5$" }
             },
-            b12/"" -- {
-                b121/"" -- { b1211/""[label=below:$a$] }
+            t512/"$T^6$" -- {
+                t5121/"$T^7$" -- { t51211/"$a^8$" }
             }
         }
     };
-    \tikzstyle{every node}=[draw=none, shape=rectangle]
-    \newcommand\e{1.3em}
-    \node (y1)    at (b1)    {$\Xl_1 \hspace{\e} \Xr_0$};
-    \node (y11)   at (b11)   {$\Xl_2 \hspace{\e} \Xr_1$};
-    \node (y12)   at (b12)   {$\Xl_2 \hspace{\e} \Xr_1$};
-    \node (y111)  at (b111)  {$\Xl_3 \hspace{\e} \Xr_2$};
-    \node (y121)  at (b121)  {$\Xl_3 \hspace{\e} \Xr_2$};
-    \node (y1111) at (b1111) {$\Xl_4 \hspace{\e} \Xr_3$};
-    \node (y1112) at (b1112) {$\Xl_4 \hspace{\e} \Xr_3$};
-    \node (y1211) at (b1211) {$\Xl_4 \hspace{\e} \Xr_3$};
-
-    \newcommand\yyy{
-        \tikzstyle{every node}=[outer sep=0]
-        \newcommand\w{0.12}
-        \draw [->, lightgray, very thick, styleA] ($(b1.center)+(-\w,0)$) -- ($(b11.center)+(-\w,0)$) -- ($(b111.center)+(-\w,0)$) -- ($(b1111.center)+(-\w,0)$);
-        \draw [    lightgray, very thick, styleB] ($(b1111.center)+(\w,0)$) -- ($(b111.center)+(0,-0.18)$);
-        \draw [->, styleB] ($(b111.center)+(0,-0.18)$) -- ($(b1112.center)+(-\w,0)$);
-        \draw [->, styleC] ($(b1112.center)+(\w,0)$) -- ($(b111.center)+(\w,0)$) -- ($(b11.center)+(\w,0)$) -- ($(b1.center)+(0,-0.18)$)
-                -- ($(b12.center)+(-\w,0)$) -- ($(b121.center)+(-\w,0)$) -- ($(b1211.center)+(-\w,0)$);
-        \draw [->, styleD] ($(b1211.center)+(\w,0)$) -- ($(b121.center)+(\w,0)$) -- ($(b12.center)+(\w,0)$) -- ($(b1.center)+(\w,0)$);
-    }
-    \yyy
-
-%    \node (f) [draw, shape=ellipse, fill] at ($(b111.center)+(0,-0.25)$) {};
+    \node at (t51)    [styleA] {$\Xl_1 \w \Xr_0$};
+    \node at (t511)   [styleA] {$\Xl_2 \w \Xr_1$};
+    \node at (t5111)  [styleA] {$\Xl_3 \w \Xr_2$};
+    \node at (t51111) [styleA] {$\Xl_4 \w \Xr_3$};
+    \node at (t51112) [styleA] {$\Xl_4 \w \Xr_3$};
+    \node at (t512)   [styleA] {$\Xl_2 \w \Xr_1$};
+    \node at (t5121)  [styleA] {$\Xl_3 \w \Xr_2$};
+    \node at (t51211) [styleA] {$\Xl_4 \w \Xr_3$};
+    %
+    \node at (t51)    [styleA] (tt51)    {};
+    \node at (t511)   [styleA] (tt511)   {};
+    \node at (t5111)  [styleA] (tt5111)  {};
+    \node at (t51111) [styleA] (tt51111) {};
+    \node at (t51112) [styleA] (tt51112) {};
+    \node at (t512)   [styleA] (tt512)   {};
+    \node at (t5121)  [styleA] (tt5121)  {};
+    \node at (t51211) [styleA] (tt51211) {};
+    %
+    \draw [->, styleB] ($(tt51.west)$)
+        -- ($(tt511.west)$)
+        -- ($(tt5111.west)$)
+        -- ($(tt51111.west)$);
+    \draw [->, styleB] ($(tt51111.east)$)
+        -- ($(tt5111.south)$)
+        -- ($(tt51112.west)$);
+    \draw [->, styleB] ($(tt51112.east)$)
+        -- ($(tt5111.east)$)
+        -- ($(tt511.east)$)
+        -- ($(tt51.south)$)
+        -- ($(tt512.west)$)
+        -- ($(tt5121.west)$)
+        -- ($(tt51211.west)$);
+    \draw [->, styleB] ($(tt51211.east)$)
+        -- ($(tt5121.east)$)
+        -- ($(tt512.east)$)
+        -- ($(tt51.east)$);
 \end{scope}
 
-\begin{scope}[xshift=2.8in, yshift=-4.95in]
-    \tikzstyle{every node}=[draw=none, shape=rectangle]
-    \newcommand\z{0.3}
-    \node (a1) at (0,0) {};
-    \node at ($(a1)+(0,5*\z)$) [label=left:{{frame 0}}]{};
-    \draw[->, styleA] ($(a1)+(0,5*\z)+(0,0)$) -- ($(a1)+(0,5*\z)+(1.2,0)$);
-    \node at ($(a1)+(0,4*\z)$) [label=left:{{frame 1}}]{};
-    \draw[->, styleB] ($(a1)+(0,4*\z)+(0,0)$) -- ($(a1)+(0,4*\z)+(1.2,0)$);
-    \node at ($(a1)+(0,3*\z)$) [label=left:{{frame 2}}]{};
-    \draw[->, styleC] ($(a1)+(0,3*\z)+(0,0)$) -- ($(a1)+(0,3*\z)+(1.2,0)$);
-    \node at ($(a1)+(0,2*\z)$) [label=left:{{frame 3}}]{};
-    \draw[->, styleD] ($(a1)+(0,2*\z)+(0,0)$) -- ($(a1)+(0,2*\z)+(1.2,0)$);
-\end{scope}
 
-%\begin{scope}[xshift=0in, yshift=0.1in]
-%    \node (a1) {1};
-%    \node [right of = a1, xshift = 0.5in] (a2) {2};
-%    \node [right of = a2, xshift = 0.35in] (a3) {3};
-%    \node [right of = a3, xshift = 0.45in] (a4) {4};
-%    \node [right of = a4, xshift = 0.45in] (a5) {5};
-%\end{scope}
-
-\begin{scope}[xshift=6.7in, yshift=-3.2in]
+\begin{scope}[xshift=5.7in, yshift=-2.3in]
     \node [shape=rectangle, draw = none] (a) {
     $\begin{aligned}
         &\begin{aligned}
-            &t_1 &&\overbracket {\Xl_1 \Xl_2 \Xl_3 \Xl_4} a \overbracket {\Xr_3 \Xl_4} a \overbracket {\Xr_3 \Xl_4} a \overbracket {\Xr_3 \Xr_2 \Xr_1 \Xr_0} \\
-            &t_2 &&\overbracket {\Xl_1 \Xl_2 \Xl_3 \Xl_4} a \overbracket {\Xr_3 \Xl_4} a \overbracket {\Xr_3 \Xr_2 \Xl_3 \Xl_4} a \overbracket {\Xr_3 \Xr_2 \Xr_1 \Xr_0} \\
-            &t_3 &&\overbracket {\Xl_1 \Xl_2 \Xl_3 \Xl_4} a \overbracket {\Xr_3 \Xr_2 \Xl_3 \Xl_4} a \overbracket {\Xr_3 \Xl_4} a \overbracket {\Xr_3 \Xr_2 \Xr_1 \Xr_0} \\
-            &t_4 &&\overbracket {\Xl_1 \Xl_2 \Xl_3 \Xl_4} a \overbracket {\Xr_3 \Xr_2 \Xl_3 \Xl_4} a \overbracket {\Xr_3 \Xr_2 \Xl_3 \Xl_4} a \overbracket {\Xr_3 \Xr_2 \Xr_1 \Xr_0} \\
-            &t_5 &&\overbracket {\Xl_1 \Xl_2 \Xl_3 \Xl_4} a \overbracket {\Xr_3 \Xl_4} a \overbracket {\Xr_3 \Xr_2 \Xr_1 \Xl_2 \Xl_3 \Xl_4} a \overbracket {\Xr_3 \Xr_2 \Xr_1 \Xr_0} \\
-            &t_6 &&\overbracket {\Xl_1 \Xl_2 \Xl_3 \Xl_4} a \overbracket {\Xr_3 \Xr_2 \Xr_1 \Xl_2 \Xl_3 \Xl_4} a \overbracket {\Xr_3 \Xl_4} a \overbracket {\Xr_3 \Xr_2 \Xr_1 \Xr_0} \\
-            &t_7 &&\overbracket {\Xl_1 \Xl_2 \Xl_3 \Xl_4} a \overbracket {\Xr_3 \Xr_2 \Xl_3 \Xl_4} a \overbracket {\Xr_3 \Xr_2 \Xr_1 \Xl_2 \Xl_3 \Xl_4} a \overbracket {\Xr_3 \Xr_2 \Xr_1 \Xr_0} \\
-            &t_8 &&\overbracket {\Xl_1 \Xl_2 \Xl_3 \Xl_4} a \overbracket {\Xr_3 \Xr_2 \Xr_1 \Xl_2 \Xl_3 \Xl_4} a \overbracket {\Xr_3 \Xr_2 \Xl_3 \Xl_4} a \overbracket {\Xr_3 \Xr_2 \Xr_1 \Xr_0} \\
-            &t_9 &&\overbracket {\Xl_1 \Xl_2 \Xl_3 \Xl_4} a \overbracket {\Xr_3 \Xr_2 \Xr_1 \Xl_2 \Xl_3 \Xl_4} a \overbracket {\Xr_3 \Xr_2 \Xr_1 \Xl_2 \Xl_3 \Xl_4} a \overbracket {\Xr_3 \Xr_2 \Xr_1 \Xr_0}
+            &\Phi_0(t_1) = \overbracket {\Xl_1 \Xl_2 \Xl_3 \Xl_4} a \overbracket {\Xr_3 \Xl_4} a \overbracket {\Xr_3 \Xl_4} a \overbracket {\Xr_3 \Xr_2 \Xr_1 \Xr_0} \\
+            &\Phi_0(t_2) = \overbracket {\Xl_1 \Xl_2 \Xl_3 \Xl_4} a \overbracket {\Xr_3 \Xl_4} a \overbracket {\Xr_3 \Xr_2 \Xl_3 \Xl_4} a \overbracket {\Xr_3 \Xr_2 \Xr_1 \Xr_0} \\
+            &\Phi_0(t_3) = \overbracket {\Xl_1 \Xl_2 \Xl_3 \Xl_4} a \overbracket {\Xr_3 \Xr_2 \Xl_3 \Xl_4} a \overbracket {\Xr_3 \Xl_4} a \overbracket {\Xr_3 \Xr_2 \Xr_1 \Xr_0} \\
+            &\Phi_0(t_4) = \overbracket {\Xl_1 \Xl_2 \Xl_3 \Xl_4} a \overbracket {\Xr_3 \Xr_2 \Xl_3 \Xl_4} a \overbracket {\Xr_3 \Xr_2 \Xl_3 \Xl_4} a \overbracket {\Xr_3 \Xr_2 \Xr_1 \Xr_0} \\
+            &\Phi_0(t_5) = \overbracket {\Xl_1 \Xl_2 \Xl_3 \Xl_4} a \overbracket {\Xr_3 \Xl_4} a \overbracket {\Xr_3 \Xr_2 \Xr_1 \Xl_2 \Xl_3 \Xl_4} a \overbracket {\Xr_3 \Xr_2 \Xr_1 \Xr_0} \\
+            &\Phi_0(t_6) = \overbracket {\Xl_1 \Xl_2 \Xl_3 \Xl_4} a \overbracket {\Xr_3 \Xr_2 \Xr_1 \Xl_2 \Xl_3 \Xl_4} a \overbracket {\Xr_3 \Xl_4} a \overbracket {\Xr_3 \Xr_2 \Xr_1 \Xr_0} \\
+            &\Phi_0(t_7) = \overbracket {\Xl_1 \Xl_2 \Xl_3 \Xl_4} a \overbracket {\Xr_3 \Xr_2 \Xl_3 \Xl_4} a \overbracket {\Xr_3 \Xr_2 \Xr_1 \Xl_2 \Xl_3 \Xl_4} a \overbracket {\Xr_3 \Xr_2 \Xr_1 \Xr_0} \\
+            &\Phi_0(t_8) = \overbracket {\Xl_1 \Xl_2 \Xl_3 \Xl_4} a \overbracket {\Xr_3 \Xr_2 \Xr_1 \Xl_2 \Xl_3 \Xl_4} a \overbracket {\Xr_3 \Xr_2 \Xl_3 \Xl_4} a \overbracket {\Xr_3 \Xr_2 \Xr_1 \Xr_0} \\
+            &\Phi_0(t_9) = \overbracket {\Xl_1 \Xl_2 \Xl_3 \Xl_4} a \overbracket {\Xr_3 \Xr_2 \Xr_1 \Xl_2 \Xl_3 \Xl_4} a \overbracket {\Xr_3 \Xr_2 \Xr_1 \Xl_2 \Xl_3 \Xl_4} a \overbracket {\Xr_3 \Xr_2 \Xr_1 \Xr_0}
         \end{aligned}
     \\[1em]
         & \quad\quad t_1 < t_2 < t_3 < t_4 < t_5 < t_7 < t_6 < t_8 < t_9
@@ -220,9 +235,9 @@
     };
 \end{scope}
 
-\begin{scope}[xshift=2.4in, yshift=-3.1in]
+\begin{scope}[xshift=2.1in, yshift=-2.2in]
     \node [shape=rectangle, draw = none] (a) {
-    \setlength\tabcolsep{2pt}
+    \setlength\tabcolsep{1.5pt}
     \renewcommand{\arraystretch}{1.1}
     $\begin{aligned}
         &\begin{tabular}{c ccccccccc}
