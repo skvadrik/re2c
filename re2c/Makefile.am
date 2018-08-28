@@ -18,6 +18,7 @@ SRC_HDR = \
 	src/code/print.h \
 	src/conf/msg.h \
 	src/conf/opt.h \
+	src/conf/ver_to_vernum.h \
 	src/conf/warn.h \
 	src/adfa/action.h \
 	src/adfa/adfa.h \
@@ -83,6 +84,7 @@ SRC = \
 	src/code/print.cc \
 	src/conf/msg.cc \
 	src/conf/opt.cc \
+	src/conf/ver_to_vernum.cc \
 	src/conf/warn.cc \
 	src/nfa/dump.cc \
 	src/nfa/estimate_size.cc \
@@ -329,8 +331,14 @@ testston32unsafe_SOURCES = \
 	src/test/s_to_n32_unsafe/test.cc \
 	src/util/s_to_n32_unsafe.cc
 
+TST_VER_TO_VERNUM = testvertovernum
+testvertovernum_SOURCES = \
+	src/test/ver_to_vernum/test.cc \
+	src/conf/ver_to_vernum.cc
+
 check_PROGRAMS = \
 	$(TST_RANGE) \
-	$(TST_S_TO_N32_UNSAFE)
+	$(TST_S_TO_N32_UNSAFE) \
+	$(TST_VER_TO_VERNUM)
 
 TESTS = $(TST_SUITE) $(check_PROGRAMS)
