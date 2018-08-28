@@ -102,23 +102,22 @@ void usage()
 void vernum ()
 {
     std::string vernum (PACKAGE_VERSION);
-    if (vernum[1] == '.')
-    {
-        vernum.insert(0, "0");
-    }
-    vernum.erase(2, 1);
-    if (vernum[3] == '.')
-    {
-        vernum.insert(2, "0");
-    }
-    vernum.erase(4, 1);
-    if (vernum.length() < 6 || vernum[5] < '0' || vernum[5] > '9')
-    {
-        vernum.insert(4, "0");
-    }
-    vernum.resize(6, '0');
+    std::string parts[3];
+    unsigned p = 0;
 
-    printf ("%s\n", vernum.c_str ());
+    for (unsigned i = 0; p < 3 && i < vernum.length (); i++)
+    {
+        if (vernum[i] == '.')
+            p++;
+        else
+            parts[p].push_back (vernum[i]);
+    }
+
+    for (p = 0; p < 3; p++)
+        while (parts[p].length () < 2)
+            parts[p].insert (0, 1, '0');
+
+    printf ("%s%s%s\n", parts[0].c_str (), parts[1].c_str (), parts[2].c_str ());
 }
 
 void version ()
