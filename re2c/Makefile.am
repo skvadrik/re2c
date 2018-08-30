@@ -280,9 +280,7 @@ $(BOOTSTRAP_PARSER): $(CUSTOM_PARSER)
 # rebuild all re2c sources using newly built re2c
 .PHONY: bootstrap
 bootstrap: all
-	rm $(top_builddir)/$(AUTOGEN_LEX)
-	rm $(top_builddir)/$(AUTOGEN_LEX_CONF)
-	rm $(top_builddir)/$(AUTOGEN_PARSEOPT)
+	rm $(AUTOGEN)
 	$(MAKE) all
 
 .PHONY: docs
