@@ -88,11 +88,11 @@ void yyerror(context_t &context, const char*);
 
 static spec_t &find(specs_t &specs, const std::string &name)
 {
-	for (specs_t::iterator i = specs.begin(); i != specs.end(); ++i) {
-		if (i->name == name) return *i;
-	}
-	specs.push_back(spec_t(name));
-	return specs.back();
+    for (specs_t::iterator i = specs.begin(); i != specs.end(); ++i) {
+        if (i->name == name) return *i;
+    }
+    specs.push_back(spec_t(name));
+    return specs.back();
 }
 
 
@@ -149,12 +149,12 @@ union YYSTYPE
 {
 
 
-	const re2c::AST * regexp;
-	re2c::Code * code;
-	char op;
-	re2c::ASTBounds bounds;
-	std::string * str;
-	re2c::CondList * clist;
+    const re2c::AST * regexp;
+    re2c::Code * code;
+    char op;
+    re2c::ASTBounds bounds;
+    std::string * str;
+    re2c::CondList * clist;
 
 
 };
@@ -1303,228 +1303,228 @@ yyreduce:
   case 7:
 
     {
-		if (!context.symtab.insert(std::make_pair(*(yyvsp[-2].str), (yyvsp[-1].regexp))).second) {
-			fatal_l(context.input.get_cline(), "sym already defined");
-		}
-		delete (yyvsp[-2].str);
-	}
+        if (!context.symtab.insert(std::make_pair(*(yyvsp[-2].str), (yyvsp[-1].regexp))).second) {
+            fatal_l(context.input.get_cline(), "sym already defined");
+        }
+        delete (yyvsp[-2].str);
+    }
 
     break;
 
   case 8:
 
     {
-		fatal_l(context.input.get_cline(),
-			"trailing contexts are not allowed in named definitions");
-	}
+        fatal_l(context.input.get_cline(),
+            "trailing contexts are not allowed in named definitions");
+    }
 
     break;
 
   case 9:
 
     {
-		(yyval.str) = (yyvsp[-1].str);
-	}
+        (yyval.str) = (yyvsp[-1].str);
+    }
 
     break;
 
   case 10:
 
     {
-		(yyval.str) = (yyvsp[0].str);
-	}
+        (yyval.str) = (yyvsp[0].str);
+    }
 
     break;
 
   case 13:
 
     {
-		find(context.specs, "").rules.push_back(ASTRule((yyvsp[-1].regexp), (yyvsp[0].code)));
-	}
+        find(context.specs, "").rules.push_back(ASTRule((yyvsp[-1].regexp), (yyvsp[0].code)));
+    }
 
     break;
 
   case 14:
 
     {
-		find(context.specs, "").defs.push_back((yyvsp[0].code));
-	}
+        find(context.specs, "").defs.push_back((yyvsp[0].code));
+    }
 
     break;
 
   case 15:
 
     {
-		for(CondList::const_iterator i = (yyvsp[-3].clist)->begin(); i != (yyvsp[-3].clist)->end(); ++i) {
-			find(context.specs, *i).rules.push_back(ASTRule((yyvsp[-1].regexp), (yyvsp[0].code)));
-		}
-		delete (yyvsp[-3].clist);
-	}
+        for(CondList::const_iterator i = (yyvsp[-3].clist)->begin(); i != (yyvsp[-3].clist)->end(); ++i) {
+            find(context.specs, *i).rules.push_back(ASTRule((yyvsp[-1].regexp), (yyvsp[0].code)));
+        }
+        delete (yyvsp[-3].clist);
+    }
 
     break;
 
   case 16:
 
     {
-		for(CondList::const_iterator i = (yyvsp[-3].clist)->begin(); i != (yyvsp[-3].clist)->end(); ++i) {
-			find(context.specs, *i).defs.push_back((yyvsp[0].code));
-		}
-		delete (yyvsp[-3].clist);
-	}
+        for(CondList::const_iterator i = (yyvsp[-3].clist)->begin(); i != (yyvsp[-3].clist)->end(); ++i) {
+            find(context.specs, *i).defs.push_back((yyvsp[0].code));
+        }
+        delete (yyvsp[-3].clist);
+    }
 
     break;
 
   case 17:
 
     {
-		for (CondList::const_iterator i = (yyvsp[-2].clist)->begin(); i != (yyvsp[-2].clist)->end(); ++i) {
-			find(context.specs, *i).setup.push_back((yyvsp[0].code));
-		}
-		delete (yyvsp[-2].clist);
-	}
+        for (CondList::const_iterator i = (yyvsp[-2].clist)->begin(); i != (yyvsp[-2].clist)->end(); ++i) {
+            find(context.specs, *i).setup.push_back((yyvsp[0].code));
+        }
+        delete (yyvsp[-2].clist);
+    }
 
     break;
 
   case 18:
 
     {
-		const AST *r = ast_nil(context.input.get_cline(), 0);
-		find(context.specs, "0").rules.push_back(ASTRule(r, (yyvsp[0].code)));
-	}
+        const AST *r = ast_nil(context.input.get_cline(), 0);
+        find(context.specs, "0").rules.push_back(ASTRule(r, (yyvsp[0].code)));
+    }
 
     break;
 
   case 20:
 
     {
-		(yyval.code) = (yyvsp[0].code);
-		(yyval.code)->cond = *(yyvsp[-1].str);
-		delete (yyvsp[-1].str);
-	}
+        (yyval.code) = (yyvsp[0].code);
+        (yyval.code)->cond = *(yyvsp[-1].str);
+        delete (yyvsp[-1].str);
+    }
 
     break;
 
   case 21:
 
     {
-		(yyval.code) = new Code(context.input.get_fname(), context.input.get_cline());
-		(yyval.code)->cond = *(yyvsp[0].str);
-		delete (yyvsp[0].str);
-	}
+        (yyval.code) = new Code(context.input.get_fname(), context.input.get_cline());
+        (yyval.code)->cond = *(yyvsp[0].str);
+        delete (yyvsp[0].str);
+    }
 
     break;
 
   case 23:
 
     {
-		(yyval.clist) = new CondList;
-		(yyval.clist)->insert("*");
-	}
+        (yyval.clist) = new CondList;
+        (yyval.clist)->insert("*");
+    }
 
     break;
 
   case 24:
 
     {
-		(yyval.clist) = new CondList;
-		(yyval.clist)->insert(*(yyvsp[0].str));
-		delete (yyvsp[0].str);
-	}
+        (yyval.clist) = new CondList;
+        (yyval.clist)->insert(*(yyvsp[0].str));
+        delete (yyvsp[0].str);
+    }
 
     break;
 
   case 25:
 
     {
-		(yyvsp[-2].clist)->insert(*(yyvsp[0].str));
-		delete (yyvsp[0].str);
-		(yyval.clist) = (yyvsp[-2].clist);
-	}
+        (yyvsp[-2].clist)->insert(*(yyvsp[0].str));
+        delete (yyvsp[0].str);
+        (yyval.clist) = (yyvsp[-2].clist);
+    }
 
     break;
 
   case 26:
 
     {
-		(yyval.regexp) = ast_cap((yyvsp[0].regexp));
-	}
+        (yyval.regexp) = ast_cap((yyvsp[0].regexp));
+    }
 
     break;
 
   case 27:
 
     {
-		(yyval.regexp) = ast_cat(ast_cap((yyvsp[-2].regexp)),
-			ast_cat(ast_tag(context.input.get_cline(), 0, NULL, false), (yyvsp[0].regexp)));
-	}
+        (yyval.regexp) = ast_cat(ast_cap((yyvsp[-2].regexp)),
+            ast_cat(ast_tag(context.input.get_cline(), 0, NULL, false), (yyvsp[0].regexp)));
+    }
 
     break;
 
   case 28:
 
     {
-			(yyval.regexp) = (yyvsp[0].regexp);
-		}
+            (yyval.regexp) = (yyvsp[0].regexp);
+        }
 
     break;
 
   case 29:
 
     {
-			(yyval.regexp) = ast_alt((yyvsp[-2].regexp), (yyvsp[0].regexp));
-		}
+            (yyval.regexp) = ast_alt((yyvsp[-2].regexp), (yyvsp[0].regexp));
+        }
 
     break;
 
   case 30:
 
     {
-			(yyval.regexp) = (yyvsp[0].regexp);
-		}
+            (yyval.regexp) = (yyvsp[0].regexp);
+        }
 
     break;
 
   case 31:
 
     {
-			(yyval.regexp) = ast_diff((yyvsp[-2].regexp), (yyvsp[0].regexp));
-		}
+            (yyval.regexp) = ast_diff((yyvsp[-2].regexp), (yyvsp[0].regexp));
+        }
 
     break;
 
   case 32:
 
     {
-			(yyval.regexp) = (yyvsp[0].regexp);
-		}
+            (yyval.regexp) = (yyvsp[0].regexp);
+        }
 
     break;
 
   case 33:
 
     {
-			(yyval.regexp) = ast_cat((yyvsp[-1].regexp), (yyvsp[0].regexp));
-		}
+            (yyval.regexp) = ast_cat((yyvsp[-1].regexp), (yyvsp[0].regexp));
+        }
 
     break;
 
   case 35:
 
     {
-		switch((yyvsp[0].op)) {
-			case '*': (yyval.regexp) = ast_iter((yyvsp[-1].regexp), 0, AST::MANY); break;
-			case '+': (yyval.regexp) = ast_iter((yyvsp[-1].regexp), 1, AST::MANY); break;
-			case '?': (yyval.regexp) = ast_iter((yyvsp[-1].regexp), 0, 1); break;
-		}
-	}
+        switch((yyvsp[0].op)) {
+            case '*': (yyval.regexp) = ast_iter((yyvsp[-1].regexp), 0, AST::MANY); break;
+            case '+': (yyval.regexp) = ast_iter((yyvsp[-1].regexp), 1, AST::MANY); break;
+            case '?': (yyval.regexp) = ast_iter((yyvsp[-1].regexp), 0, 1); break;
+        }
+    }
 
     break;
 
   case 36:
 
     {
-		(yyval.regexp) = ast_iter((yyvsp[-1].regexp), (yyvsp[0].bounds).min, (yyvsp[0].bounds).max);
-	}
+        (yyval.regexp) = ast_iter((yyvsp[-1].regexp), (yyvsp[0].bounds).min, (yyvsp[0].bounds).max);
+    }
 
     break;
 
@@ -1555,25 +1555,25 @@ yyreduce:
   case 43:
 
     {
-		symtab_t::iterator i = context.symtab.find(*(yyvsp[0].str));
-		if (i == context.symtab.end()) {
-			fatal_l(context.input.get_cline(),
-				"undefined symbol '%s'", (yyvsp[0].str)->c_str());
-		}
-		(yyval.regexp) = i->second;
-		if (ast_need_wrap((yyval.regexp))) {
-			(yyval.regexp) = ast_ref((yyval.regexp), *(yyvsp[0].str));
-		}
-		delete (yyvsp[0].str);
-	}
+        symtab_t::iterator i = context.symtab.find(*(yyvsp[0].str));
+        if (i == context.symtab.end()) {
+            fatal_l(context.input.get_cline(),
+                "undefined symbol '%s'", (yyvsp[0].str)->c_str());
+        }
+        (yyval.regexp) = i->second;
+        if (ast_need_wrap((yyval.regexp))) {
+            (yyval.regexp) = ast_ref((yyval.regexp), *(yyvsp[0].str));
+        }
+        delete (yyvsp[0].str);
+    }
 
     break;
 
   case 44:
 
     {
-		(yyval.regexp) = ast_cap((yyvsp[-1].regexp));
-	}
+        (yyval.regexp) = ast_cap((yyvsp[-1].regexp));
+    }
 
     break;
 
@@ -1813,12 +1813,12 @@ extern "C" {
 
 void yyerror(context_t &context, const char* s)
 {
-	fatal_l(context.input.get_cline(), "%s", s);
+    fatal_l(context.input.get_cline(), "%s", s);
 }
 
 int yylex(context_t &context)
 {
-	return context.input.scan(&context.opts.glob);
+    return context.input.scan(&context.opts.glob);
 }
 
 } // extern "C"
