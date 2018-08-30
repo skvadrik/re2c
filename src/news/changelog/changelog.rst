@@ -5,6 +5,7 @@ Changelog
 .. toctree::
     :hidden:
 
+.. include:: 1_1.rst
 .. include:: 1_0.rst
 .. include:: 0_16.rst
 .. include:: 0_15.rst

@@ -1,0 +1,1 @@
+- Fixed bug #211 re2c ``-V`` throws ``std::out_of_range`` (version to vernum conversion).

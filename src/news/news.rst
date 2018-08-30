@@ -5,6 +5,7 @@ News
 .. toctree::
     :maxdepth: 1
 
+    Release 1.1.1 <release_notes/1_1_1>
     Release 1.1 <release_notes/1_1>
     Release 1.0.3 <release_notes/1_0_3>
     Release 1.0.2 <release_notes/1_0_2>
