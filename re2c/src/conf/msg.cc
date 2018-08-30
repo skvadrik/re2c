@@ -102,7 +102,12 @@ void usage()
 
 void vernum ()
 {
-    printf ("%s\n", ver_to_vernum(PACKAGE_VERSION).c_str ());
+    const std::string vn = ver_to_vernum(PACKAGE_VERSION);
+    if (vn.empty()) {
+        error("failed to convert version to vernum");
+        exit(1);
+    }
+    printf ("%s\n", vn.c_str ());
 }
 
 void version ()

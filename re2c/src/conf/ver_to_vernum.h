@@ -5,7 +5,7 @@
 
 namespace re2c {
 
-std::string ver_to_vernum(const std::string & ver);
+std::string ver_to_vernum(const char *ver);
 
 } // namespace re2c
 

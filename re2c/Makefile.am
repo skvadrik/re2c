@@ -84,7 +84,6 @@ SRC = \
 	src/code/print.cc \
 	src/conf/msg.cc \
 	src/conf/opt.cc \
-	src/conf/ver_to_vernum.cc \
 	src/conf/warn.cc \
 	src/nfa/dump.cc \
 	src/nfa/estimate_size.cc \
@@ -155,6 +154,7 @@ re2c_SOURCES = \
 AUTOGEN_LEX = src/ast/lex.cc
 AUTOGEN_LEX_CONF = src/ast/lex_conf.cc
 AUTOGEN_PARSEOPT = src/conf/parse_opts.cc
+AUTOGEN_VERTOVERNUM = src/conf/ver_to_vernum.cc
 AUTOGEN_PARSER = src/ast/parser.cc
 AUTOGEN_PARSER_HDR = src/ast/y.tab.h
 AUTOGEN_HELP = src/conf/help.cc
@@ -164,6 +164,7 @@ AUTOGEN = \
 	$(AUTOGEN_PARSER) \
 	$(AUTOGEN_PARSER_HDR) \
 	$(AUTOGEN_PARSEOPT)\
+	$(AUTOGEN_VERTOVERNUM)\
 	$(AUTOGEN_HELP)
 nodist_re2c_SOURCES = $(AUTOGEN)
 
@@ -171,6 +172,7 @@ nodist_re2c_SOURCES = $(AUTOGEN)
 BOOTSTRAP_LEX = bootstrap/src/ast/lex.cc
 BOOTSTRAP_LEX_CONF = bootstrap/src/ast/lex_conf.cc
 BOOTSTRAP_PARSEOPT = bootstrap/src/conf/parse_opts.cc
+BOOTSTRAP_VERTOVERNUM = bootstrap/src/conf/ver_to_vernum.cc
 BOOTSTRAP_PARSER = bootstrap/src/ast/parser.cc
 BOOTSTRAP_PARSER_HDR = bootstrap/src/ast/y.tab.h
 BOOTSTRAP_DOC = bootstrap/doc/re2c.1
@@ -182,12 +184,14 @@ BOOTSTRAP = \
 	$(BOOTSTRAP_HELP) \
 	$(BOOTSTRAP_PARSER) \
 	$(BOOTSTRAP_PARSER_HDR) \
-	$(BOOTSTRAP_PARSEOPT)
+	$(BOOTSTRAP_PARSEOPT) \
+	$(BOOTSTRAP_VERTOVERNUM)
 
 # custom sources
 CUSTOM_LEX = src/ast/lex.re
 CUSTOM_LEX_CONF = src/ast/lex_conf.re
 CUSTOM_PARSEOPT = src/conf/parse_opts.re
+CUSTOM_VERTOVERNUM = src/conf/ver_to_vernum.re
 CUSTOM_PARSER = src/ast/parser.ypp
 CUSTOM_HELP = doc/help.rst
 CUSTOM = \
@@ -195,6 +199,7 @@ CUSTOM = \
 	$(CUSTOM_LEX_CONF) \
 	$(CUSTOM_PARSER) \
 	$(CUSTOM_PARSEOPT) \
+	$(CUSTOM_VERTOVERNUM) \
 	$(CUSTOM_HELP)
 
 # docs
@@ -331,14 +336,14 @@ testston32unsafe_SOURCES = \
 	src/test/s_to_n32_unsafe/test.cc \
 	src/util/s_to_n32_unsafe.cc
 
-TST_VER_TO_VERNUM = testvertovernum
+TST_VERTOVERNUM = testvertovernum
 testvertovernum_SOURCES = \
 	src/test/ver_to_vernum/test.cc \
-	src/conf/ver_to_vernum.cc
+	$(AUTOGEN_VERTOVERNUM)
 
 check_PROGRAMS = \
 	$(TST_RANGE) \
 	$(TST_S_TO_N32_UNSAFE) \
-	$(TST_VER_TO_VERNUM)
+	$(TST_VERTOVERNUM)
 
 TESTS = $(TST_SUITE) $(check_PROGRAMS)
