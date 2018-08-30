@@ -1,3 +1,7 @@
+Version 1.1.1 (2018-08-30)
+--------------------------
+- Fixed bug #211 re2c '-V' throws 'std::out_of_range' (version to vernum conversion).
+
 Version 1.1 (2018-08-27)
 --------------------------
 - Replaced Kuklewicz POSIX disambiguation algorithm with Okui algorithm.
