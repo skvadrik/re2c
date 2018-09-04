@@ -15,8 +15,11 @@ addons:
 env:
  - BUILD_DIR=.      CONFIG_DIR=.
  - BUILD_DIR=.build CONFIG_DIR=..
+ - BUILD_DIR=.      CONFIG_DIR=. COMMON_FLAGS=-fsanitize=address
+ - BUILD_DIR=.      CONFIG_DIR=. COMMON_FLAGS=-fsanitize=undefined
 
 script:
+  - BASE_FLAGS="-O2 -g"
   - ./autogen.sh
   - mkdir -p $BUILD_DIR && cd $BUILD_DIR
   - |
@@ -24,7 +27,11 @@ script:
         --prefix="$(pwd)"/re2c-install \
         --enable-docs \
         --enable-debug \
-        --enable-libs
+        --enable-libs \
+        CFLAGS="${BASE_FLAGS} ${COMMON_FLAGS}" \
+        CXXFLAGS="${BASE_FLAGS} ${COMMON_FLAGS}" \
+        LDFLAGS="${BASE_FLAGS} ${COMMON_FLAGS}" || \
+    cat config.log
   - make -j$(nproc)
   - make -j$(nproc) check VERBOSE=1
   - make -j$(nproc) install
