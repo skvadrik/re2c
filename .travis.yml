@@ -27,5 +27,5 @@ script:
         --prefix="$(pwd)"/re2c-install \
         --enable-docs
   - make -j$(nproc)
-  - ./run_tests.sh
+  - make -j$(nproc) check VERBOSE=1
   - make -j$(nproc) install
