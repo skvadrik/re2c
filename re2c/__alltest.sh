@@ -1,10 +1,10 @@
 #!/bin/sh
 
 # normal tests
-for d in __build{,_asan,_ubsan,_lsan,_clang,_m32} ; do
+for d in __build{,_asan,_ubsan,_lsan,_clang,_clang_msan,_m32} ; do
     ./${d}.sh \
         && cd ${d} \
-        && make tests \
+        && make check VERBOSE=1 \
         && cd .. \
         || { cd .. ; echo "*** ${d} failed ***"; exit 1; }
 done
