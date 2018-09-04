@@ -5,6 +5,6 @@ rm -rf $builddir
 mkdir $builddir
 
 cd $builddir
-../configure CXX=clang++ && \
+../configure CC=clang CXX=clang++ && \
 make -j5
 cd ..
