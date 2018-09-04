@@ -11,11 +11,15 @@ static const uint32_t DIGITS = 256;
 // no terminating null as we don't need it
 static char * u64_to_s_fastest_ever (uint64_t u, char * s)
 {
-    while (u > 0)
-    {
-        const uint64_t d = u % 10 + '0';
-        *--s = static_cast<char> (d);
-        u /= 10;
+    if (u == 0) {
+        *--s = '0';
+    }
+    else {
+        while (u > 0) {
+            const uint64_t d = u % 10 + '0';
+            *--s = static_cast<char> (d);
+            u /= 10;
+        }
     }
     return s;
 }
