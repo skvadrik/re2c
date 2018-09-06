@@ -1,0 +1,411 @@
+
+\documentclass[tikz,border=10pt]{standalone}
+
+
+\RequirePackage{luatex85}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath, amssymb, amsfonts, accents}
+\usetikzlibrary{graphdrawing, graphs, arrows, shapes, automata, calc}
+\usegdlibrary{trees, layered}
+\usepackage{stix}
+
+
+%\newcommand{\Xund}{\rule{.4em}{.4pt}}
+%\newcommand{\IRE}{I\!RE}
+
+\newcommand{\Xund}{\rule{.4em}{.4pt}}
+\newcommand{\Xl}{\langle}
+\newcommand{\Xr}{\rangle}
+\newcommand{\Xm}{\langle\!\rangle}
+
+
+\begin{document}
+
+\begin{tikzpicture}[>=stealth]
+
+\tikzstyle{every node}=[draw=none, shape=rectangle]
+
+
+\tikzstyle{styleA}=[draw=none
+    , shape=rectangle
+    , minimum size = 0.2in
+    , level distance=0.35in
+    , sibling distance=0.5in
+    , inner sep = 0pt
+    , outer sep = 0pt
+    ]
+\tikzstyle{styleB}=[->, rounded corners=3, dash pattern = on 1pt off 2.5pt]
+\newcommand\w{\hspace{2em}}
+
+\small {
+\begin{scope}[xshift=0in, yshift=0in]
+    \tikzstyle{every node}=[styleA, sibling distance = 0.4in]
+
+    \begin{scope}[xshift=0in, yshift=0in]
+    \node[xshift=0in, yshift=-1.25in, draw=none] {$s = T^1 (T^2 (\varnothing^0, T^0 (a^0, a^0)))$};
+    \graph [tree layout, grow=down, fresh nodes] {
+        s1/"${T}^{1}$" -- {
+            s11/"${T}^{2}$" -- {
+                s111/"${\varnothing}^{0}$",
+                s112/"${T}^{0}$" -- {
+                    s1121/"${a}^{0}$",
+                    s1122/"${a}^{0}$"
+                }
+            }
+        }
+    };
+    \node at (s1)   {$\Xl_1 \w \Xr_0$};
+    \node at (s11)  {$\Xl_2 \w \Xr_1$};
+    \draw [styleB]
+        ($(s1.west)$)
+        -- ($(s11.west)$)
+        -- ($(s111.west)$)
+        -- ($(s111.south)$)
+        -- ($(s111.east)$)
+        -- ($(s11.south)$)
+        -- ($(s112.west)$)
+        -- ($(s1121.west)$);
+    \draw [styleB]
+        ($(s1121.east)$)
+        -- ($(s112.south)$)
+        -- ($(s1122.west)$);
+    \draw [styleB]
+        ($(s1122.east)$)
+        -- ($(s112.east)$)
+        -- ($(s11.east)$)
+        -- ($(s1.east)$);
+    \end{scope}
+
+    \begin{scope}[xshift=1.4in, yshift=0in]
+    \node[xshift=0in, yshift=-0.9in, draw=none] {$t = T^1 (T^2 (a^0, \varnothing^0), T^2 (a^0, \varnothing^0))$};
+    \graph [tree layout, grow=down, fresh nodes] {
+        s1/"${T}^{1}$" -- {
+            s11/"${T}^{2}$" -- {
+                s111/"${a}^{0}$",
+                s112/"${\varnothing}^{0}$"
+            },
+            s12/"${T}^{2}$" -- {
+                s121/"${a}^{0}$",
+                s122/"${\varnothing}^{0}$"
+            }
+        }
+    };
+    \node at (s1)   {$\Xl_1 \w \Xr_0$};
+    \node at (s11)  {$\Xl_2 \w \Xr_1$};
+    \node at (s12)  {$\Xl_2 \w \Xr_1$};
+    \draw [styleB]
+        ($(s1.west)$)
+        -- ($(s11.west)$)
+        -- ($(s111.west)$);
+    \draw [styleB]
+        ($(s111.east)$)
+        -- ($(s11.south)$)
+        -- ($(s112.west)$)
+        -- ($(s112.south)$)
+        -- ($(s112.east)$)
+        -- ($(s11.east)$)
+        -- ($(s1.south)$)
+        -- ($(s12.west)$)
+        -- ($(s121.west)$);
+    \draw [styleB]
+        ($(s121.east)$)
+        -- ($(s12.south)$)
+        -- ($(s122.west)$)
+        -- ($(s122.south)$)
+        -- ($(s122.east)$)
+        -- ($(s12.east)$)
+        -- ($(s1.east)$);
+    \end{scope}
+
+    \begin{scope}[xshift=4in, yshift=-0.65in]
+        \node (a) {{
+        $\begin{aligned}
+        &\begin{aligned}
+            \alpha = \Phi_0(s) &=
+                \overbracket {\Xl_1 \Xl_2 }
+                a
+                \overbracket {\vphantom{\Xm}}
+                a
+                \overbracket { \Xr_1 \Xr_0 }
+                \\[-0.5em]
+            \beta = \Phi_0(t) &=
+                \overbracket {\Xl_1 \Xl_2 }
+                a
+                \overbracket { \Xr_1 \Xl_2 }
+                a
+                \overbracket { \Xr_1 \Xr_0 }
+        \end{aligned}
+        \\
+        &traces (\alpha, \beta) =
+        \left[\begin{aligned}
+            \rho_0   &= -1 \\[-0.4em]
+            \rho'_0  &= -1 \\[-0.4em]
+            \rho_1   &= min (lasth(\Xl_1 \Xl_2), minh (\epsilon))    = min (2, \infty) = 2 \\[-0.4em]
+            \rho'_1  &= min (lasth(\Xl_1 \Xl_2), minh (\Xr_1 \Xl_2)) = min (2, 1)      = 1 \\[-0.4em]
+            \rho_2   &= min (\rho_1,  minh (\Xr_1 \Xr_0)) = min (2, 0) = 0 \\[-0.4em]
+            \rho'_2  &= min (\rho'_1, minh (\Xr_1 \Xr_0)) = min (1, 0) = 0
+        \end{aligned}\right.
+        \end{aligned}$
+        }};
+    \end{scope}
+\end{scope}
+}
+\node (x1)
+    [ xshift=2.5in
+    , yshift=-1.5in
+    , draw=none
+    ] {(a) -- Rule 1: longest precedence.
+        The case of RE $(a|aa)^{0,\infty}$
+        and string $aa$. };
+\node (x2)
+    [ below of = x1
+    , yshift=0.25in
+    , draw=none
+    ] {Order on IPTs: $s <_1 t$ because
+        $\|s\|^{Sub}_1 = 2 > 1 = \|t\|^{Sub}_1$ and $\|s\|^{Sub}_p = \|t\|^{Sub}_p \;\forall p < 1$
+    .};
+\node
+    [ below of = x2
+    , yshift=0.25in
+    , draw=none
+    ] {Order on PEs: $\alpha < \beta$ because
+        $\rho_1 > \rho'_1 \;\wedge\; \rho_2 = \rho'_2 \;\Rightarrow\; \alpha \sqsubset \beta$
+    .};
+
+
+\small{
+\begin{scope}[xshift=0in, yshift=-2.2in]
+    \tikzstyle{every node}=[styleA]
+
+    \begin{scope}[xshift=0in, yshift=0in]
+    \node[xshift=0in, yshift=-0.6in, draw=none] {$s = T^1 (a^2, \varnothing^3)$};
+    \graph [tree layout, grow=down, fresh nodes] {
+        s1/"${T}^{1}$" -- {
+            s11/"${a}^{2}$",
+            s12/"${\varnothing}^{3}$"
+        }
+    };
+    \node at (s1)  {$\Xl_1 \w \Xr_0$};
+    \node at (s11) {$\Xl_2 \w \Xr_1$};
+    \node at (s12) {$\Xl_2 \w \Xr_1$};
+    \draw [styleB]
+        ($(s1.west)$)
+        -- ($(s11.west)$);
+    \draw [styleB]
+        ($(s11.east)$)
+        -- ($(s1.south)$)
+        -- ($(s12.west)$)
+        -- ($(s12.south)$)
+        -- ($(s12.east)$)
+        -- ($(s1.east)$);
+    \end{scope}
+
+    \begin{scope}[xshift=1.4in, yshift=0in]
+    \node[xshift=0in, yshift=-0.6in, draw=none] {$t = T^1 (\varnothing^2, a^3)$};
+    \graph [tree layout, grow=down, fresh nodes] {
+        t1/"${T}^{1}$" -- {
+            t11/"${\varnothing}^{2}$",
+            t12/"${a}^{3}$"
+        }
+    };
+    \node at (t1)  {$\Xl_1 \w \Xr_0$};
+    \node at (t11) {$\Xl_2 \w \Xr_1$};
+    \node at (t12) {$\Xl_2 \w \Xr_1$};
+    \draw [styleB]
+        ($(t1.west)$)
+        -- ($(t11.west)$)
+        -- ($(t11.south)$)
+        -- ($(t11.east)$)
+        -- ($(t1.south)$)
+        -- ($(t12.west)$);
+    \draw [styleB]
+        ($(t12.east)$)
+        -- ($(t1.east)$);
+    \end{scope}
+
+    \begin{scope}[xshift=4in, yshift=-0.4in]
+        \node (a) {{
+        $\begin{aligned}
+        &\begin{aligned}
+            \alpha = \Phi_0(s) &=
+                \overbracket {\Xl_1 \Xl_2 }
+                a
+                \overbracket { \Xr_1 \Xm_1 \Xr_0 }
+                \\[-0.5em]
+            \beta = \Phi_0(t) &=
+                \overbracket {\Xl_1 \Xm_1 \Xl_2 }
+                a
+                \overbracket { \Xr_1 \Xr_0 }
+        \end{aligned}
+        \\
+        &traces (\alpha, \beta) =
+        \left[\begin{aligned}
+            \rho_0   &= min (lasth (\Xl_1), minh (\Xl_2))       = min (1, 2) = 1 \\[-0.4em]
+            \rho'_0  &= min (lasth (\Xl_1), minh (\Xm_1 \Xl_2)) = min (1, 1) = 1 \\[-0.4em]
+            \rho_1   &= min (\rho_0,  minh (\Xr_1 \Xm_1 \Xr_0)) = min (1, 0) = 0 \\[-0.4em]
+            \rho'_1  &= min (\rho'_0, minh (\Xr_1 \Xr_0))       = min (1, 0) = 0
+        \end{aligned}\right.
+        \end{aligned}$
+        }};
+    \end{scope}
+
+\end{scope}
+}
+\node (y1)
+    [ xshift=2.5in
+    , yshift=-3.3in
+    , draw=none
+    ] {(b) -- Rule 2: leftmost precedence.
+        The case of RE $(a)|(a)$
+        and string $a$.};
+\node (y2)
+    [ below of = y1
+    , yshift=0.25in
+    , draw=none
+    ] {Order on IPTs: $s <_1 t$ because
+        $\|s\|^{Sub}_1 = 1 > -1 = \|t\|^{Sub}_1$ and $\|s\|^{Sub}_p = \|t\|^{Sub}_p \;\forall p < 1$
+    .};
+\node
+    [ below of = y2
+    , yshift=0.25in
+    , draw=none
+    ] {Order on PEs: $\alpha < \beta$ because
+        $\rho_i = \rho'_i \;\forall i \;\Rightarrow\; \alpha \sim \beta$
+        and
+        $first(\alpha \backslash \beta) = \Xl < \Xm = first(\beta \backslash \alpha)
+        \;\Rightarrow\;
+        \alpha \subset \beta$
+    .};
+
+
+\small{
+\begin{scope}[xshift=0in, yshift=-4in]
+    \tikzstyle{every node}=[styleA, sibling distance = 0.4in]
+
+    \node[yshift=-0.95in, draw=none] {$s = T^1(T^2(a^0, \varnothing^0))$};
+    \begin{scope}[xshift=0in, yshift=0in]
+    \graph [tree layout, grow=down, fresh nodes] {
+        s1/"${T}^{1}$" -- {
+            s11/"${T}^{2}$" -- {
+                s111/"${a}^{0}$",
+                s112/"${\varnothing}^{0}$"
+            }
+        }
+    };
+    \node at (s1)   {$\Xl_1 \w \Xr_0$};
+    \node at (s11)  {$\Xl_2 \w \Xr_1$};
+    \node at (s12)  {$\Xl_2 \w \Xr_1$};
+    \draw [styleB]
+        ($(s1.west)$)
+        -- ($(s11.west)$)
+        -- ($(s111.west)$);
+    \draw [styleB]
+        ($(s111.east)$)
+        -- ($(s11.south)$)
+        -- ($(s112.west)$)
+        -- ($(s112.south)$)
+        -- ($(s112.east)$)
+        -- ($(s11.east)$)
+        -- ($(s1.east)$);
+    \end{scope}
+
+    \node[xshift=1.4in, yshift=-0.95in, draw=none] {$t = T^1 (T^2 (a^0, \varnothing^0), T^2(\varnothing^0, \epsilon^0))$};
+    \begin{scope}[xshift=1.4in, yshift=0in]
+    \graph [tree layout, grow=down, fresh nodes] {
+        s1/"${T}^{1}$" -- {
+            s11/"${T}^{2}$" -- {
+                s111/"${a}^{0}$",
+                s112/"${\varnothing}^{0}$"
+            },
+            s12/"${T}^{2}$" -- {
+                s121/"${\varnothing}^{0}$",
+                s122/"${\epsilon}^{0}$"
+            }
+        }
+    };
+    \node at (s1)   {$\Xl_1 \w \Xr_0$};
+    \node at (s11)  {$\Xl_2 \w \Xr_1$};
+    \node at (s12)  {$\Xl_2 \w \Xr_1$};
+    \draw [styleB]
+        ($(s1.west)$)
+        -- ($(s11.west)$)
+        -- ($(s111.west)$);
+    \draw [styleB]
+        ($(s111.east)$)
+        -- ($(s11.south)$)
+        -- ($(s112.west)$)
+        -- ($(s112.south)$)
+        -- ($(s112.east)$)
+        -- ($(s11.east)$)
+        -- ($(s1.south)$)
+        -- ($(s12.west)$)
+        -- ($(s121.west)$)
+        -- ($(s121.south)$)
+        -- ($(s121.east)$)
+        -- ($(s12.south)$)
+        -- ($(s122.west)$)
+        -- ($(s122.south)$)
+        -- ($(s122.east)$)
+        -- ($(s12.east)$)
+        -- ($(s1.east)$);
+    \end{scope}
+
+    \begin{scope}[xshift=4in, yshift=-0.45in]
+        \node (a) {{
+        $\begin{aligned}
+        &\begin{aligned}
+            \alpha = \Phi_0(s) &=
+                \overbracket {\Xl_1 \Xl_2 }
+                a
+                \overbracket { \Xr_1 \Xr_0 }
+                \\[-0.5em]
+            \beta = \Phi_0(t) &=
+                \overbracket { \Xl_1 \Xl_2 }
+                a
+                \overbracket { \Xr_1 \Xl_2 \Xr_1 \Xr_0 }
+        \end{aligned}
+        \\
+        &traces (\alpha, \beta) =
+        \left[\begin{aligned}
+            \rho_0   &= -1 \\[-0.4em]
+            \rho'_0  &= -1 \\[-0.4em]
+            \rho_1   &= min (lasth (\Xr_1), minh (\Xr_0))             = min (1, 0) = 0 \\[-0.4em]
+            \rho'_1  &= min (lasth (\Xr_1), minh (\Xl_2 \Xr_1 \Xr_0)) = min (1, 0) = 0
+        \end{aligned}\right.
+        \end{aligned}$
+        }};
+    \end{scope}
+
+\end{scope}
+}
+\node (z1)
+    [ xshift=2.5in
+    , yshift=-5.2in
+    , draw=none
+    ] {(c) -- Rule 3: absence of optional empty iterations.
+        The case of RE $(a|\epsilon)^{0,\infty}$
+        and string $a$.};
+\node (z2)
+    [ below of = z1
+    , yshift=0.25in
+    , draw=none
+    ] {Order on IPTs: $s <_1 t$ because
+        $\|s\|^{Sub}_2 = \infty > 0 = \|t\|^{Sub}_2$ and $\|s\|^{Sub}_p = \|t\|^{Sub}_p \;\forall p < 2$
+    .};
+\node
+    [ below of = z2
+    , yshift=0.25in
+    , draw=none
+    ] {Order on PEs: $\alpha < \beta$ because
+        $\rho_i = \rho'_i \;\forall i \;\Rightarrow\; \alpha \sim \beta$
+        and
+        $first(\alpha \backslash \beta) = \Xr < \Xl = first(\beta \backslash \alpha)
+        \;\Rightarrow\;
+        \alpha \subset \beta$
+    .};
+
+
+\end{tikzpicture}
+
+\end{document}
+

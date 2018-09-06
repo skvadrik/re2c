@@ -28,10 +28,10 @@
 % $(\epsilon|a^{0,\infty})(a|\epsilon)^{0,\infty}$
 
 \begin{scope}[xshift=0in, yshift=0in]
-    \draw [draw=none] (-1.5in,0) rectangle (6.5in,0);
+    \draw [draw=none] (-1in,0) rectangle (6.5in,0);
 \end{scope}
 
-\begin{scope}[xshift=3.7in, yshift=-0.4in]
+\begin{scope}[xshift=4in, yshift=-0.4in]
     \node (a) {{
     $\begin{aligned}
         &\alpha
@@ -91,11 +91,11 @@
 \setlength\tabcolsep{3pt}
 %\renewcommand{\arraystretch}{1.1}
 
-\begin{scope}[xshift=3.7in, yshift=-2.3in]
+\begin{scope}[xshift=4in, yshift=-2.3in]
     \node (a) {
     $\begin{aligned}
-        &\begin{tabular}{c|ll}
-            $traces (\alpha, \beta)$ & 0 & 1 \\
+        &\begin{tabular}{c|cc}
+            $traces (\alpha, \beta)$ & frame 0 & frame 1 \\
             \hline \\[-1em]
             $\rho$ & 2 & 0 \\
             $\rho'$ & 1 & 0 \\
@@ -108,8 +108,8 @@
             \rho'_1  &= min (\rho'_0, minh (\Xr_2 \Xr_1 \Xr_0))             = min (1,0) = 0
         \end{aligned}\right.
         \\[0.7em]
-        &\begin{tabular}{c|ll}
-            $traces (\beta, \gamma)$ & 0 & 1 \\
+        &\begin{tabular}{c|cc}
+            $traces (\beta, \gamma)$ & frame 0 & frame 1 \\
             \hline \\[-1em]
             $\rho$ & \!-1 & 0 \\
             $\rho'$ & \!-1 & 0 \\
@@ -122,8 +122,8 @@
             \rho'_1  &= min (lasth (\Xr_2), minh (\Xl_3 \Xr_2 \Xr_1 \Xr_0)) = min (2,0) = 0
         \end{aligned}\right.
         \\[0.7em]
-        &\begin{tabular}{c|ll}
-            $traces (\alpha, \gamma)$ & 0 & 1 \\
+        &\begin{tabular}{c|cc}
+            $traces (\alpha, \gamma)$ & frame 0 & frame 1 \\
             \hline \\[-1em]
             $\rho$ & 2 & 0 \\
             $\rho'$ & 1 & 0 \\
@@ -143,7 +143,7 @@
 
 \tikzstyle{styleA}=[draw=none
     , shape=rectangle
-    , rounded corners=4
+    , rounded corners=3
     , level distance=0.35in
     , sibling distance=0.45in
     , minimum size = 0.2in
@@ -152,7 +152,7 @@
     ]
 \tikzstyle{styleB}=[->
     %, color = lightgray
-    , rounded corners=3.5
+    , rounded corners=3
     %, line width = 0
     , dash pattern = on 1pt off 2.5pt
     ]
@@ -181,46 +181,22 @@
     \node at (s12)   {$\Xl_2 \w \Xr_1$};
     \node at (s121)  {$\Xl_3 \w \Xr_2$};
     \draw [->, styleB] ($(s1.west)$)
-        -- ($(s1.south west)$)
-        -- ($(s11.north west)$)
         -- ($(s11.west)$)
-        -- ($(s11.south west)$)
-        -- ($(s111.north west)$)
         -- ($(s111.west)$)
-        -- ($(s111.south west)$)
         -- ($(s111.south)$)
-        -- ($(s111.south east)$)
         -- ($(s111.east)$)
-        -- ($(s111.north east)$)
         -- ($(s11.south)$)
-        -- ($(s112.north west)$)
         -- ($(s112.west)$)
-        -- ($(s112.south west)$)
-        -- ($(s1121.north west)$)
         -- ($(s1121.west)$);
     \draw [->, styleB] ($(s1121.east)$)
-        -- ($(s1121.north east)$)
-        -- ($(s112.south east)$)
         -- ($(s112.east)$)
-        -- ($(s112.north east)$)
-        -- ($(s11.south east)$)
         -- ($(s11.east)$)
-        -- ($(s11.north east)$)
         -- ($(s1.south)$)
-        -- ($(s12.north west)$)
         -- ($(s12.west)$)
-        -- ($(s12.south west)$)
-        -- ($(s121.north west)$)
         -- ($(s121.west)$)
-        -- ($(s121.south west)$)
         -- ($(s121.south)$)
-        -- ($(s121.south east)$)
         -- ($(s121.east)$)
-        -- ($(s121.north east)$)
-        -- ($(s12.south east)$)
         -- ($(s12.east)$)
-        -- ($(s12.north east)$)
-        -- ($(s1.south east)$)
         -- ($(s1.east)$);
 \end{scope}
 
@@ -248,60 +224,29 @@
     \node at (t12)   {$\Xl_2 \w \Xr_1$};
     \node at (t121)  {$\Xl_3 \w \Xr_2$};
     \draw [->, styleB] ($(t1.west)$)
-        -- ($(t1.south west)$)
-        -- ($(t11.north west)$)
         -- ($(t11.west)$)
-        -- ($(t11.south west)$)
-        -- ($(t111.north west)$)
         -- ($(t111.west)$)
-        -- ($(t111.south west)$)
         -- ($(t111.south)$)
-        -- ($(t111.south east)$)
         -- ($(t111.east)$)
-        -- ($(t111.north east)$)
         -- ($(t11.south)$)
-        -- ($(t112.north west)$)
         -- ($(t112.west)$)
-        -- ($(t112.south west)$)
-        -- ($(t1121.north west)$)
         -- ($(t1121.west)$)
-        -- ($(t1121.south west)$)
         -- ($(t1121.south)$)
-        -- ($(t1121.south east)$)
         -- ($(t1121.east)$)
-        -- ($(t1121.north east)$)
-        -- ($(t112.south east)$)
         -- ($(t112.east)$)
-        -- ($(t112.north east)$)
-        -- ($(t11.south east)$)
         -- ($(t11.east)$)
-        -- ($(t11.north east)$)
         -- ($(t1.south)$)
-        -- ($(t12.north west)$)
         -- ($(t12.west)$)
-        -- ($(t12.south west)$)
-        -- ($(t121.north west)$)
         -- ($(t121.west)$)
-        -- ($(t121.south west)$)
-        -- ($(t1211.north west)$)
         -- ($(t1211.west)$);
     \draw [->, styleB]
         ($(t1211.east)$)
         -- ($(t121.south)$)
-        -- ($(t1212.north west)$)
         -- ($(t1212.west)$)
-        -- ($(t1212.south west)$)
         -- ($(t1212.south)$)
-        -- ($(t1212.south east)$)
         -- ($(t1212.east)$)
-        -- ($(t1212.north east)$)
-        -- ($(t121.south east)$)
         -- ($(t121.east)$)
-        -- ($(t121.north east)$)
-        -- ($(t12.south east)$)
         -- ($(t12.east)$)
-        -- ($(t12.north east)$)
-        -- ($(t1.south east)$)
         -- ($(t1.east)$);
 \end{scope}
 
@@ -333,76 +278,37 @@
     \node at (t122)  {$\Xl_3 \w \Xr_2$};
     \draw [->, styleB]
            ($(t1.west)$)
-        -- ($(t1.south west)$)
-        -- ($(t11.north west)$)
         -- ($(t11.west)$)
-        -- ($(t11.south west)$)
-        -- ($(t111.north west)$)
         -- ($(t111.west)$)
-        -- ($(t111.south west)$)
         -- ($(t111.south)$)
-        -- ($(t111.south east)$)
         -- ($(t111.east)$)
-        -- ($(t111.north east)$)
         -- ($(t11.south)$)
-        -- ($(t112.north west)$)
         -- ($(t112.west)$)
-        -- ($(t112.south west)$)
         -- ($(t112.south)$)
-        -- ($(t112.south east)$)
         -- ($(t112.east)$)
-        -- ($(t112.north east)$)
-        -- ($(t11.south east)$)
         -- ($(t11.east)$)
-        -- ($(t11.north east)$)
         -- ($(t1.south)$)
-        -- ($(t12.north west)$)
         -- ($(t12.west)$)
-        -- ($(t12.south west)$)
-        -- ($(t121.north west)$)
         -- ($(t121.west)$)
-        -- ($(t121.south west)$)
-        -- ($(t1211.north west)$)
         -- ($(t1211.west)$);
     \draw [->, styleB]
         ($(t1211.east)$)
         -- ($(t121.south)$)
-        -- ($(t1212.north west)$)
         -- ($(t1212.west)$)
-        -- ($(t1212.south west)$)
         -- ($(t1212.south)$)
-        -- ($(t1212.south east)$)
         -- ($(t1212.east)$)
-        -- ($(t1212.north east)$)
-        -- ($(t121.south east)$)
         -- ($(t121.east)$)
-        -- ($(t121.north east)$)
         -- ($(t12.south)$)
-        -- ($(t122.north west)$)
         -- ($(t122.west)$)
-        -- ($(t122.south west)$)
-        -- ($(t1221.north west)$)
         -- ($(t1221.west)$)
-        -- ($(t1221.south west)$)
         -- ($(t1221.south)$)
-        -- ($(t1221.south east)$)
         -- ($(t1221.east)$)
-        -- ($(t1221.north east)$)
         -- ($(t122.south)$)
-        -- ($(t1222.north west)$)
         -- ($(t1222.west)$)
-        -- ($(t1222.south west)$)
         -- ($(t1222.south)$)
-        -- ($(t1222.south east)$)
         -- ($(t1222.east)$)
-        -- ($(t1222.north east)$)
-        -- ($(t122.south east)$)
         -- ($(t122.east)$)
-        -- ($(t122.north east)$)
-        -- ($(t12.south east)$)
         -- ($(t12.east)$)
-        -- ($(t12.north east)$)
-        -- ($(t1.south east)$)
         -- ($(t1.east)$);
 \end{scope}
 }

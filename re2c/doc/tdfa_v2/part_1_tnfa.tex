@@ -734,14 +734,21 @@ the index of the first distinct pair of frames is called \emph{fork}.
     We write $traces(\alpha, \beta)$ to denote $\big( trace (\alpha, \beta), trace (\beta, \alpha) \big)$.
     \end{Xdef}
 
-\begin{figure}\label{fig_pe}
-\includegraphics[width=\linewidth]{img/pe.pdf}
+%\begin{figure}\label{fig_pe}
+%\includegraphics[width=\linewidth]{img/pe.pdf}
+%\caption{
+%An example of PEs for IPTs from figure \ref{fig_mark_enum} and the computation of $traces$ for each pair of PEs.\\
+%Here $\alpha \sqsubset \beta$ and $\alpha \sqsubset \gamma$, while
+%$\beta \sim \gamma$ and $\beta \subset \gamma$,
+%because $first (\beta \backslash \gamma) = \Xr < \Xl = first (\gamma \backslash \beta)$.
+%Therefore $\alpha < \beta < \gamma$.
+%}
+%\end{figure}
+
+\begin{figure}\label{fig_pe3}
+\includegraphics[width=\linewidth]{img/pe3.pdf}
 \caption{
-An example of PEs for IPTs from figure \ref{fig_mark_enum} and the computation of $traces$ for each pair of PEs.\\
-Here $\alpha \sqsubset \beta$ and $\alpha \sqsubset \gamma$, while
-$\beta \sim \gamma$ and $\beta \subset \gamma$,
-because $first (\beta \backslash \gamma) = \Xr < \Xl = first (\gamma \backslash \beta)$.
-Therefore $\alpha < \beta < \gamma$.
+Examples for the three rules of POSIX comparison.
 }
 \end{figure}
 
@@ -1986,16 +1993,18 @@ if the s-norms at all preceding submatch positions are equal.
             &&\;\big|\; z \; \Xr_{h+1} \; &&\Phi_{h+1}(t_{p+1}) &&\dots &&\Phi_{h+1}(t_m) \Xr_{h}
     \end{alignat*}
     %
-    Let $\delta_l$ be the frame containing the closing parenthesis $\Xr_{h+1}$ of $\Phi_{h+1}(t_p)$.
+    Let $l$ be an index such that the frame $\delta_l$ contains the closing parenthesis $\Xr_{h+1}$ of $\Phi_{h+1}(t_p)$.
+    It must be $l \geq j$ (equality is possible due to non-fully parenthesized expressions,
+    as in the example $(a|aa)^{0,\infty}$ shown on figure \ref{fig_pe3}).
     Because $\|s_p\| > \|t_p\|$,
     the closing parenthesis $\Xr_{h+1}$ of $\Phi_{h+1}(s_p)$ is not contained in $\gamma_{l}$,
     and $l$-th frame is not the last one.
     Therefore $minh (\gamma_l) \geq h+2$ and $minh (\delta_l) = h+1$.
     Furthermore, $minh(x)$, $minh(y)$, $minh(z) \geq h + 2$,
-    therefore $lasth(\beta_j) = lasth(\Xl_{h+2} \; x) \geq h+2$ and we have
-    $\rho_i, \rho'_i \geq h+2$ for all frames $j \leq i < l$
-    (note that it might be $\rho_i < \rho'_i$),
-    and for the $l$-th frame $\rho_l \geq h+2 > h+1 = \rho'_l$.
+    therefore $lasth(\beta_j) \geq h+2$ and
+    for all frames $j \leq i < l$ (if such $i$ exist) we have $\rho_i, \rho'_i \geq h+2$
+    (note that it might be $\rho_i < \rho'_i$).
+    For the $l$-th frame $\rho_l \geq h+2 > h+1 = \rho'_l$.
     For subsequent frames $\gamma_i$, $\delta_i$ such that $l < i < k$ we have
     $minh(\gamma_i)$, $minh(\delta_i) \geq h + 1$,
     therefore $\rho_i \geq h+1 = \rho'_i$.
