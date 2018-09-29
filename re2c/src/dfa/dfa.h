@@ -5,6 +5,7 @@
 #include <valarray>
 #include <vector>
 #include <set>
+#include <string.h>
 
 #include "src/conf/warn.h"
 #include "src/dfa/tcmd.h"
@@ -29,12 +30,16 @@ struct dfa_state_t
 
     explicit dfa_state_t(size_t nchars)
         : arcs(new size_t[nchars])
-        , tcmd(new tcmd_t*[nchars + 2]()) // +2 for final and fallback epsilon-transitions
+        , tcmd(NULL)
         , tcid(NULL)
         , rule(Rule::NONE)
         , fallthru(false)
         , fallback(false)
-    {}
+    {
+        size_t sz = nchars + 2; // +2 for final and fallback epsilon-transitions
+        tcmd = new tcmd_t*[sz];
+        memset(tcmd, 0, sizeof (tcmd_t*) * sz);
+    }
     ~dfa_state_t()
     {
         delete[] arcs;
