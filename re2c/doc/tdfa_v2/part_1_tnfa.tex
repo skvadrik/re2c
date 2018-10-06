@@ -1100,72 +1100,6 @@ TNFA construction.
 \end{figure*}
 
 
-\begin{figure*}
-\begin{multicols}{2}
-
-    \begin{algorithm}[H] \DontPrintSemicolon \SetKwProg{Fn}{}{}{} \SetAlgoInsideSkip{medskip}
-    \Fn {$\underline{closure \Xund goldberg \Xund radzik(X, F, \Delta)} \smallskip$} {
-        empty stacks $topsort$, $newpass$ \;
-        $result(q) \equiv \bot$ \;
-        $status(q) \equiv \mathit{OFFSTACK}$ \;
-        \For {$(q, x) \in X$} {
-            $relax(q, x, result, topsort)$ \;
-        }
-        \While {$topsort$ is not empty} {
-            \While {$topsort$ is not empty} {
-                $q = pop(topsort)$ \;
-
-                \If {$status(q) = \mathit{TOPSORT}$} {
-                    $push(newpass, n)$ \;
-                } \ElseIf {$status(q) = \mathit{NEWPASS}$} {
-                    $status(q) = \mathit{TOPSORT}$ \;
-                    $push(topsort, q)$ \;
-                    $scan(q, result, topsort)$ \;
-                }
-            }
-            \While {$newpass$ is not empty} {
-                $q = pop(newpass)$ \;
-                $scan(q, result, topsort)$ \;
-                $status(q) = \mathit{OFFSTACK}$ \;
-            }
-        }
-        \Return $\big\{ (q, x) \mid x = result(q) \; \wedge$ \;
-        $\hspace{6em} \big(q \in F \vee \exists (p, \alpha, \Xund, \Xund) \in \Delta^\Sigma \big) \big\}$ \;
-    }
-    \end{algorithm}
-
-    \columnbreak
-
-    \begin{algorithm}[H] \DontPrintSemicolon \SetKwProg{Fn}{}{}{} \SetAlgoInsideSkip{medskip}
-    \Fn {$\underline{scan(q, result, topsort)} \smallskip$} {
-        \ForEach {outgoing arc $(q, \epsilon, \chi, p) \in \Delta$} {
-            $x = result(q) \chi$ \;
-            $relax(p, x, result, topsort)$ \;
-        }
-    }
-    \end{algorithm}
-
-
-    \begin{algorithm}[H] \DontPrintSemicolon \SetKwProg{Fn}{}{}{} \SetAlgoInsideSkip{medskip}
-    \Fn {$\underline{relax(q, x, result, topsort, B, D)} \smallskip$} {
-        $(\Xund, \Xund, l) = precedence (x, result(q), B, D)$ \;
-        \If {$l = -1$} {
-            $result(q) = x$ \;
-            \If {$status(q) \neq \mathit{TOPSORT}$} {
-                $push(topsort, q)$ \;
-                $status(q) = \mathit{NEWPASS}$ \;
-            }
-        }
-    }
-    \end{algorithm}
-
-\end{multicols}
-\begin{center}
-\caption{GOR1.}
-\end{center}
-\end{figure*}
-
-
 \clearpage
 \pagebreak
 
@@ -1173,19 +1107,37 @@ TNFA construction.
 \begin{figure*}
 \begin{multicols}{2}
 
-    \newcommand \NOPASS {N\!O\!P\!A\!S\!S}
-    \newcommand \TOPSORT {T\!O\!P\!S\!O\!RT}
-    \newcommand \LINEAR {L\!I\!N\!E\!A\!R}
+    \newcommand \NOPASS {O\!F\!F}
+    \newcommand \TOPSORT {T\!O\!P}
+    \newcommand \LINEAR {L\!I\!N}
+    \newcommand \INQUEUE {I\!N}
+    \newcommand \OFFQUEUE {OUT}
     \newcommand \Xfalse {f\!al\!se}
-    \newcommand \longprec {longprec}
-    \newcommand \leftprec {le\!f\!tprec}
 
-    \setstretch{0.9}
+    \setstretch{0.85}
 
     \begin{algorithm}[H] \DontPrintSemicolon \SetKwProg{Fn}{}{}{} \SetAlgoInsideSkip{medskip}
-    \Fn {$\underline{closure \Xund cgr(X, Q, F, \Delta, B, D)} \smallskip$} {
+    \Fn {$\underline{closure \Xund gor1(X, Q, F, \Delta, P_1, P_2)} \smallskip$} {
 
-        $C = context(Q, \Delta, B, D)$ \;
+        $C = (\; Q, F, \Delta, P_1, P_2$ \;
+        \Indp
+        $,\, topsort, linear : \text{stacks of elements } q \in Q$ \;
+        $,\, result  : Q \rightarrow \YZ^*$                        \tcc{tag historiy}
+        $,\, status  : Q \rightarrow \{ \NOPASS, \TOPSORT, \LINEAR \}$ \;
+        $,\, indeg   : Q \rightarrow \YZ$                          \tcc{in-degree}
+        $,\, active  : Q \rightarrow \YB$                          \tcc{true if needs rescan}
+        $,\, arcs    : Q \rightarrow 2^\Delta$                     \tcc{ordered set of arcs}
+        $,\, next    : Q \rightarrow \YZ)$                         \tcc{arc index}
+        \Indm
+
+        \BlankLine
+        \For {$q \in Q$} {
+            $result(q) = \bot$ \;
+            $status(q) = \NOPASS$ \;
+            $indeg(q)  = | \{ (\Xund, \Xund, \Xund, q) \in \Delta \} |$ \;
+            $active(q) = \Xfalse$ \;
+            $arcs(q)   = \{ (q, \epsilon, \Xund, \Xund) \in \Delta \}$ \;
+        }
 
         \BlankLine
         \For {$(o, q, \epsilon, t) \in X$} {
@@ -1253,40 +1205,72 @@ TNFA construction.
 
 %TRIE!!!!!!!
         \BlankLine
-        \Return $\big\{ (o, q, u, t) \mid (o, u, t) = result(q) \wedge core(q, F, \Delta) \}$
+        \Return $\big\{ (o, q, u, t) \mid (o, u, t) = result(q) \wedge core(q, C) \}$
     }
     \end{algorithm}
 
     \columnbreak
 
     \begin{algorithm}[H] \DontPrintSemicolon \SetKwProg{Fn}{}{}{} \SetAlgoInsideSkip{medskip}
-    \Fn {$\underline{context(Q, \Delta, B, D)} \smallskip$} {
-        $C : (\; topsort : \text{stack of elements } q \in Q$ \;
+    \Fn {$\underline{closure \Xund gtop(X, Q, F, \Delta, P_1, P_2)} \smallskip$} {
+
+        $C = (\; Q, F, \Delta, P_1, P_2$ \;
         \Indp
-        $,\, linear  : \text{stack of elements } q \in Q$ \;
-        $,\, result  : Q \rightarrow \YZ^*$                        \tcc{tag histories}
-        $,\, status  : Q \rightarrow \{ \NOPASS, \TOPSORT, \LINEAR \}$ \;
-        $,\, indeg   : Q \rightarrow \YZ$                          \tcc{in-degrees}
-        $,\, active  : Q \rightarrow \YB$                          \tcc{true if needs rescan}
-        $,\, arcs    : Q \rightarrow 2^\Delta$                     \tcc{linearly ordered}
-        $,\, \longprec : Q \times Q \rightarrow \YZ$ \;
-        $,\, \leftprec : Q \times Q \rightarrow \{ -1, 0, 1 \})$ \;
+        $,\, queue : \text{priority queue of elements } q \in Q$ \;
+        $,\, result  : Q \rightarrow \YZ^*$                        \tcc{tag historiy}
+        $,\, status  : Q \rightarrow \{ \INQUEUE, \OFFQUEUE\}$     \;
+        $,\, indeg   : Q \rightarrow \YZ$                          \tcc{in-degree}
+        $,\, topord  : Q \rightarrow \YZ$                          \tcc{topological index}
+        $,\, arcs    : Q \rightarrow 2^\Delta$                     \tcc{ordered set of arcs}
+        $,\, next    : Q \rightarrow \YZ)$                         \tcc{arc index}
         \Indm
 
         \BlankLine
         \For {$q \in Q$} {
             $result(q) = \bot$ \;
-            $status(q) = \NOPASS$ \;
+            $status(q) = \OFFQUEUE$ \;
             $indeg(q)  = | \{ (\Xund, \Xund, \Xund, q) \in \Delta \} |$ \;
-            $active(q) = \Xfalse$ \;
+            $topord(q) = \text{ topological index of } q \text { in TNFA}$ \;
             $arcs(q)   = \{ (q, \epsilon, \Xund, \Xund) \in \Delta \}$ \;
         }
-        $\longprec = B, \; \leftprec = D$ \;
 
         \BlankLine
-        \Return $C$ \;
+        \For {$(o, q, \epsilon, t) \in X$} {
+            $x = (o, \epsilon, t)$ \;
+            $y = result(q)$ \;
+            \If {$y = \bot \vee relax(x, y, C)$} {
+                $result(q) = x$ \;
+                \If {$status(q) \neq \INQUEUE$} {
+                    $insert \Xund with \Xund priority(queue, q, topord(q))$ \;
+                    $status(q) = \INQUEUE$ \;
+                }
+            }
+        }
+
+        \BlankLine
+        \While {$queue$ is not empty} {
+
+            $q = extract \Xund min(queue)$ \;
+            $status(q) = \OFFQUEUE$ \;
+            $next(q) = 1$ \;
+
+            \While {$true$} {
+                $p = next \Xund admissible \Xund arc(q, C)$ \;
+                \lIf {$p = \bot$} {$break$}
+                \ElseIf {$status(p) \neq \INQUEUE$} {
+                    $insert \Xund with \Xund priority(queue, p, topord(p))$ \;
+                    $status(p) = \INQUEUE$ \;
+                }
+            }
+        }
+
+%TRIE!!!!!!!
+        \BlankLine
+        \Return $\big\{ (o, q, u, t) \mid (o, u, t) = result(q) \wedge core(q, C) \}$
     }
     \end{algorithm}
+
+
 
     \begin{algorithm}[H] \DontPrintSemicolon \SetKwProg{Fn}{}{}{} \SetAlgoInsideSkip{medskip}
     \Fn {$\underline{next \Xund admissible \Xund arc (q, C)} \smallskip$} {
@@ -1318,32 +1302,21 @@ TNFA construction.
 
     \begin{algorithm}[H] \DontPrintSemicolon \SetKwProg{Fn}{}{}{} \SetAlgoInsideSkip{medskip}
     \Fn {$\underline{relax (x, y, C)} \smallskip$} {
-        $(\Xund, \Xund, l) = precedence (x, y, \longprec, \leftprec)$ \;
+        $(\Xund, \Xund, l) = precedence (x, y, P_1, P_2)$ \;
         \Return $l = -1$ \tcc{true if x precedes y}
     }
     \end{algorithm}
 
     \begin{algorithm}[H] \DontPrintSemicolon \SetKwProg{Fn}{}{}{} \SetAlgoInsideSkip{medskip}
-    \Fn {$\underline{core (q, F, \Delta)} \smallskip$} {
+    \Fn {$\underline{core (q, C)} \smallskip$} {
         \tcc{is final or has out-transitions on symbols}
-        \Return $q \in F \vee \; \exists (q, \alpha, \Xund, \Xund) \in \Delta^\Sigma$ \;
+        \Return $q \in F \vee \exists (q, \alpha, \Xund, \Xund) \in \Delta^\Sigma$ \;
     }
     \end{algorithm}
 
-%    \begin{algorithm}[H] \DontPrintSemicolon \SetKwProg{Fn}{}{}{} \SetAlgoInsideSkip{medskip}
-%    \Fn {$\underline{find \Xund indegree (q, indegree)} \smallskip$} {
-%        $indegree(q) = indegree(q) + 1$ \;
-%        \If {$indegree(q) \leq 1$} {
-%            \ForEach {outgoing arc $(q, \epsilon, \chi, p) \in \Delta$} {
-%                $find \Xund indegree (p, indegree)$ \;
-%            }
-%        }
-%    }
-%    \end{algorithm}
-
 \end{multicols}
 \begin{center}
-\caption{GOR1.}
+\caption{GOR1 and GTOP closure algorithms.}
 \end{center}
 \end{figure*}
 
