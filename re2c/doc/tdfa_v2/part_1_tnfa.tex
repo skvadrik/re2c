@@ -1183,13 +1183,11 @@ TNFA construction.
     \setstretch{0.9}
 
     \begin{algorithm}[H] \DontPrintSemicolon \SetKwProg{Fn}{}{}{} \SetAlgoInsideSkip{medskip}
-    \Fn {$\underline{closure \Xund goldberg \Xund radzik(X, Q, F, \Delta, B, D)} \smallskip$} {
+    \Fn {$\underline{closure \Xund cgr(X, Q, F, \Delta, B, D)} \smallskip$} {
 
-        \tcc {set up context}
         $C = context(Q, \Delta, B, D)$ \;
 
         \BlankLine
-        \tcc {add start configurations}
         \For {$(o, q, \epsilon, t) \in X$} {
             $x = (o, \epsilon, t)$ \;
             $y = result(q)$ \;
@@ -1205,48 +1203,40 @@ TNFA construction.
         \While {$topsort$ is not empty} {
 
             \BlankLine
-            \tcc {1st pass: topological sorting}
             \While {$topsort$ is not empty} {
                 $q = pop(topsort)$ \;
 
                 \If {$status(q) \neq \LINEAR$} {
                     $status(q) = \TOPSORT$ \;
 
-                    %\BlankLine
-                    \tcc {find next admissible arc}
-                    \While {$(p = explore(q, C)) \neq \bot$ \\
-                         \quad and $status(p) \neq \NOPASS$ } {
-                        $active(p) = true$
-                    }
-
-                    %\BlankLine
-                    \If {$p \neq \bot$} {
-                        \tcc {follow admissible arc}
-                        $push(topsort, q)$ \;
-                        $push(topsort, p)$ \;
-                        $next(p) = 1$
-                    }
-                    \Else {
-                        \tcc {done: all deps visited}
-                        $status(q) = \LINEAR$ \;
-                        $push(linear, q)$
+                    \While {$true$} {
+                        $p = next \Xund admissible \Xund arc(q, C)$ \;
+                        \If {$p = \bot$} {
+                            $status(q) = \LINEAR$ \;
+                            $push(linear, q)$ \;
+                            $break$
+                        }
+                        \ElseIf {$status(p) = \NOPASS$} {
+                            $push(topsort, q)$ \;
+                            $push(topsort, p)$ \;
+                            $next(p) = 1$ \;
+                            $break$
+                        }
+                        \lElse {$active(p) = true$}
                     }
                 }
             }
 
             \BlankLine
-            \tcc {2nd pass: linear scan}
             \While {$linear$ is not empty} {
                 $q = pop(linear)$ \;
 
-                %\BlankLine
                 \If {$active(q)$} {
-
-                    \tcc {scan admissible arcs}
                     $next(q) = 1$ \;
-                    \While {$(p = explore(q, C)) \neq \bot$} {
-
-                        \If {$status(p) = \NOPASS$} {
+                    \While {$true$} {
+                        $p = next \Xund admissible \Xund arc(q, C)$ \;
+                        \lIf {$p = \bot$} {$break$}
+                        \ElseIf {$status(p) = \NOPASS$} {
                             $push(topsort, p)$ \;
                             $next(p) = 1$ \;
                         }
@@ -1256,7 +1246,6 @@ TNFA construction.
                     }
                 }
 
-                %\BlankLine
                 $status(q) = \NOPASS$ \;
                 $active(q) = \Xfalse$ \;
             }
@@ -1264,8 +1253,7 @@ TNFA construction.
 
 %TRIE!!!!!!!
         \BlankLine
-        \Return $\big\{ (o, q, u, t) \mid (o, u, t) = result(q)$ \;
-            \hspace{7em} $\wedge \; core(q, F, \Delta) \}$
+        \Return $\big\{ (o, q, u, t) \mid (o, u, t) = result(q) \wedge core(q, F, \Delta) \}$
     }
     \end{algorithm}
 
@@ -1273,30 +1261,27 @@ TNFA construction.
 
     \begin{algorithm}[H] \DontPrintSemicolon \SetKwProg{Fn}{}{}{} \SetAlgoInsideSkip{medskip}
     \Fn {$\underline{context(Q, \Delta, B, D)} \smallskip$} {
-        $C : (\; topsort : \text{stack of } q \in Q$ \;
+        $C : (\; topsort : \text{stack of elements } q \in Q$ \;
         \Indp
-        $,\, linear  : \text{stack of } q \in Q$ \;
-        $,\, result  : Q \rightarrow \YZ^*$                        \tcc*{tag histories}
-        $,\, status  : Q \rightarrow \{ \NOPASS, \TOPSORT, \LINEAR \}$
-        $,\, indeg   : Q \rightarrow \YZ$                          \tcc*{in-degrees}
-        $,\, active  : Q \rightarrow \YB$                          \tcc*{true if needs rescan}
-        $,\, arcs    : Q \rightarrow 2^\Delta$                     \tcc*{linearly ordered}
-        $,\, \longprec : Q \times Q \rightarrow \YZ$               \tcc*{longest  rel.}
-        $,\, \leftprec : Q \times Q \rightarrow \{ -\!1, 0, 1 \})$ \tcc*{leftmost rel.}
+        $,\, linear  : \text{stack of elements } q \in Q$ \;
+        $,\, result  : Q \rightarrow \YZ^*$                        \tcc{tag histories}
+        $,\, status  : Q \rightarrow \{ \NOPASS, \TOPSORT, \LINEAR \}$ \;
+        $,\, indeg   : Q \rightarrow \YZ$                          \tcc{in-degrees}
+        $,\, active  : Q \rightarrow \YB$                          \tcc{true if needs rescan}
+        $,\, arcs    : Q \rightarrow 2^\Delta$                     \tcc{linearly ordered}
+        $,\, \longprec : Q \times Q \rightarrow \YZ$ \;
+        $,\, \leftprec : Q \times Q \rightarrow \{ -1, 0, 1 \})$ \;
         \Indm
 
         \BlankLine
         \For {$q \in Q$} {
-            $topsort   = \emptyset$ \;
-            $linear    = \emptyset$ \;
             $result(q) = \bot$ \;
             $status(q) = \NOPASS$ \;
             $indeg(q)  = | \{ (\Xund, \Xund, \Xund, q) \in \Delta \} |$ \;
             $active(q) = \Xfalse$ \;
             $arcs(q)   = \{ (q, \epsilon, \Xund, \Xund) \in \Delta \}$ \;
         }
-        $\longprec = B$ \;
-        $\leftprec = D$ \;
+        $\longprec = B, \; \leftprec = D$ \;
 
         \BlankLine
         \Return $C$ \;
@@ -1304,7 +1289,7 @@ TNFA construction.
     \end{algorithm}
 
     \begin{algorithm}[H] \DontPrintSemicolon \SetKwProg{Fn}{}{}{} \SetAlgoInsideSkip{medskip}
-    \Fn {$\underline{explore (q, C)} \smallskip$} {
+    \Fn {$\underline{next \Xund admissible \Xund arc (q, C)} \smallskip$} {
         $\{ a_1, \dots, a_n \} = arcs (q)$ \;
         $i = next (q)$ \;
 
@@ -1312,16 +1297,15 @@ TNFA construction.
         \While {$i < n$} {
 
             $(q, \epsilon, \tau, p) = a_i$ \;
-            $i = i + 1$ \;
-            $next(q) = i$       \tcc*{side-effect: set next arc}
-            $x = (o, u \tau, t)$ where $(o, u, t) = result(q)$ \;
+            $next(q) = i = i + 1$ \;
+            $x = (o, u \tau, t)$, where $(o, u, t) = result(q)$ \;
             $y = result(p)$ \;
 
             %\BlankLine
-            \If {$y = \bot$     \tcc*{never seen this state}
-            or $indeg(p) < 2$   \tcc*{not a join state}
-            or $relax(x, y, C)$ \tcc*{new path is shorter}} {
-                $result(p) = x$ \tcc*{side-effect: set result}
+            \If {$y = \bot
+                \vee indeg(p) < 2
+                \vee relax(x, y, C)$} {
+                $result(p) = x$ \;
                 \Return $p$
             }
         }
@@ -1335,7 +1319,7 @@ TNFA construction.
     \begin{algorithm}[H] \DontPrintSemicolon \SetKwProg{Fn}{}{}{} \SetAlgoInsideSkip{medskip}
     \Fn {$\underline{relax (x, y, C)} \smallskip$} {
         $(\Xund, \Xund, l) = precedence (x, y, \longprec, \leftprec)$ \;
-        \Return $l = -1$ \;
+        \Return $l = -1$ \tcc{true if x precedes y}
     }
     \end{algorithm}
 
