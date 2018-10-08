@@ -935,6 +935,8 @@ TNFA construction.
 \begin{figure*}
 \begin{multicols}{2}
 
+    \setstretch{0.85}
+
     \begin{algorithm}[H] \DontPrintSemicolon \SetKwProg{Fn}{}{}{} \SetAlgoInsideSkip{medskip}
     \Fn {$\underline{match (\XN, \alpha_1 \dots \alpha_n)} \smallskip$} {
         $(\Sigma, T, P, Q, F, q_0, T, \Delta) = \XN$ \;
@@ -960,59 +962,10 @@ TNFA construction.
 
     \begin{algorithm}[H] \DontPrintSemicolon \SetKwProg{Fn}{}{}{} \SetAlgoInsideSkip{medskip}
     \Fn {$\underline{reach (X, \alpha)} \smallskip$} {
-        \Return $\{ (p, p', \epsilon, t) \mid$ \;
-        $\qquad (\Xund, p, \Xund, t) \in X \wedge
-            (p, \alpha, \epsilon, p') \in \Delta^\Sigma \}$
+        \Return $\{ (q, p, \epsilon, t) \mid (\Xund, q, \Xund, t) \in X \wedge
+            (q, \alpha, \epsilon, p) \in \Delta^\Sigma \}$
     }
     \end{algorithm}
-
-
-\iffalse
-    \begin{algorithm}[H] \DontPrintSemicolon \SetKwProg{Fn}{}{}{} \SetAlgoInsideSkip{medskip}
-    \Fn {$\underline{closure(k, X, B, D)} \smallskip$} {
-
-        $Y = \emptyset$ \;
-        \For {$x \in X$} {
-            Y = $rclosure (x, Y, B, D)$
-        }
-
-        \Return $Y$ \;
-    }
-    \end{algorithm}
-
-
-    \begin{algorithm}[H] \DontPrintSemicolon \SetKwProg{Fn}{}{}{} \SetAlgoInsideSkip{medskip}
-    \Fn {$\underline{rclosure(x, Y, B, D)} \smallskip$} {
-        $(q, p, u, t) = x$ \;
-        \If {unmarked $p$} {
-        mark $p$ \;
-
-        \If {$p \in F \vee \exists (p, \alpha, \Xund, \Xund) \in \Delta^\Sigma$} {
-            \If {$\nexists y = (\Xund, p, \Xund, \Xund) \in Y$} {
-                $Y = Y \cup \{ x \}$
-            } \ElseIf { $less (x, y, B, D)$} {
-                $Y = Y \cup \{ x \} \setminus \{ y \}$
-            }
-        }
-
-        \BlankLine
-        \ForEach {$(p, \epsilon, w, p') \in \Delta^\epsilon$} {
-            Y = $rclosure ((q, p', u w, t), Y, B, D)$ \;
-        }
-
-        unmark $p$ \;
-        }
-        \Return $Y$ \;
-    }
-    \end{algorithm}
-
-    \begin{algorithm}[H] \DontPrintSemicolon \SetKwProg{Fn}{}{}{}
-    \Fn {$\underline {less (x, y, B, D)} \smallskip$} {
-        $(\Xund, \Xund, l) = precedence (x, y, B, D)$ \;
-        \Return $l$ \;
-    }
-    \end{algorithm}
-\fi
 
 
     \begin{algorithm}[H] \DontPrintSemicolon \SetKwProg{Fn}{}{}{} \SetAlgoInsideSkip{medskip}
@@ -1046,39 +999,41 @@ TNFA construction.
     \columnbreak
 
 
+    \newcommand \ff {f\!\!f}
+
     \begin{algorithm}[H] \DontPrintSemicolon \SetKwProg{Fn}{}{}{}
-    \Fn {$\underline {precedence (x_1, x_2, B, D)} \smallskip$} {
-        $(q_1, \Xund, a_1 \dots a_n, \Xund) = x_1$ \;
-        $(q_2, \Xund, b_1 \dots b_m, \Xund) = x_2$ \;
-        $k = 1, \; h_1 = h_2 = \infty, \; l = 0$ \;
+    \Fn {$\underline {precedence (x, y, P_1, P_2)} \smallskip$} {
+        $(q, \Xund, a_1 \dots a_n, \Xund) = x$ \;
+        $(p, \Xund, b_1 \dots b_m, \Xund) = y$ \;
+        $k = 1, \; hx = hy = \infty, \; l = 0$ \;
+        $\ff = (q = p)$ \tcc{fork frame ?}
 
         \BlankLine
-        \tcc {if fork frame, find fork}
-        \If { $q_1 = q_2$ } {
-            \While {$k < min (n, m)$ and $a_k = b_k$} {
+        \If { $\ff$ } {
+            \lWhile {$k < min (n, m) \wedge a_k = b_k$} {
               $k = k + 1$
             }
         }
 
         \BlankLine
         \tcc {longest-precedence}
-        \If { $q_1 = q_2$ } {
-            $h_1 = h_2 = height (a_{k-1})$
-        } \ElseIf {$k > 1$} {
-            $h_1 = B [q_1] [q_2], \; h_2 = B [q_2] [q_1]$
+        \lIf { $\ff$ } {
+            $hx = hy = height (a_{k-1})$
+        } \lElse {
+            $hx = P_1 [q] [p], \; hy = P_1 [p] [q]$
         }
         \lFor {$i = \overline{k, n}$} {
-            $h_1 = min (h_1, height (a_i))$
+            $hx = min (hx, height (a_i))$
         }
         \lFor {$i = \overline{k, m}$} {
-            $h_2 = min (h_2, height (b_i))$
+            $hy = min (hy, height (b_i))$
         }
-        \lIf {$h_1 > h_2$} {\Return $(h_1, h_2, -1)$}
-        \lIf {$h_1 < h_2$} {\Return $(h_1, h_2, 1)$}
+        \lIf {$hx > hy$} {\Return $(hx, hy, -1)$}
+        \lIf {$hx < hy$} {\Return $(hx, hy, 1)$}
 
         \BlankLine
         \tcc {leftmost-precedence}
-        \If { $q_1 = q_2$ } {
+        \If { $\ff$ } {
             \lIf {$k = n = m$} { $l = 0$ }
             \lElseIf {$k = n$} { $l = -1$ }
             \lElseIf {$k = m$} { $l = 1$ }
@@ -1086,10 +1041,10 @@ TNFA construction.
             \lElseIf {$b_k mod 2 \equiv 0$} { $l = 1$ }
             \lElseIf {$a_k > b_k$} { $l = -1$ }
             \lElseIf {$a_k < b_k$} { $l = 1$ }
-        } \Else {
-            $l = D [q_1] [q_2]$
+        } \lElse {
+            $l = P_2 [q] [p]$
         }
-        \Return $(h_1, h_2, l)$
+        \Return $(hx, hy, l)$
     }
     \end{algorithm}
 
