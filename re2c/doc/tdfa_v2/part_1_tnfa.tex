@@ -379,41 +379,43 @@ The function $\IRE : \XR_\Sigma \rightarrow \XIR_\Sigma$ transforms REs into IRE
 It is defined via a composition of two functions,
 $mark$ that transforms REs into IREs with submatch indices in the boolean range $\{0, 1\}$,
 and $enum$ that substitutes boolean indices with consecutive numbers:
-$\IRE(e) = r$ where $(\Xund, \Xund, r) = enum(1, 1, mark((e)))$.
-Note the extra pair of parentheses around $e$:
-according to the POSIX standard the root sub-RE is always the submatch group number zero,
-even if it has no explicit parentheses.
+$\IRE(e) = r$ where $(\Xund, \Xund, r) = enum(1, 1, mark(e))$.
+Note that we consider $(e)$ as a special case of repetition $(e)^{1,1}$:
+this allows us to handle all parenthesized sub-RE uniformly.
+An example of constructing an IRE from a RE is given on figure \ref{fig_mark_enum}.
+The reverse transformation is also possible by erasing all indices
+and adding parentheses around subexpressions with nonzero explicit submatch index.
+Therefore RE and IRE are equivalent representations.
     \begin{align*}
     &\begin{aligned}
         mark &: \XR_\Sigma \longrightarrow \XIR_\Sigma \\
-        mark &(x) = (0, 0, x) \\
-            &\text{where } x \in \{\epsilon, \alpha\}
-        \\
+        mark &(x) \mid_{x \in \{\epsilon, \alpha\}} = (0, 0, x) \\
         %
-        mark &(e_1 \circ e_2) = (i, 0,
+        mark &(e_1 \circ e_2) \mid_{\circ \in \{|,\cdot\}} = (i, 0,
             (i, j_1, r_1) \circ
             (i, j_2, r_2)
             ) \\
-            &\text{where } \circ \in \{|,\cdot\} \\
-            &\space{\hphantom{where }}(i_1, j_1, r_1) = mark(e_1) \\
-            &\space{\hphantom{where }}(i_2, j_2, r_1) = mark(e_2) \\
+            &\text{where }            (i_1, j_1, r_1) = mark(e_1) \\
+            &\space{\hphantom{where }}(i_2, j_2, r_2) = mark(e_2) \\
             &\space{\hphantom{where }}i = i_1 \vee i_2 \\
         %
-        mark &(e^{n, m}) = (i, 0, (i, j, r)^{n, m}) \\
+        mark &(e^{n, m}) \mid_{e = (e_1)} = (1, 0, (1, 1, r)) \\
+            &\text{where } (\Xund, \Xund, r) = mark(e_1) \\
+        %
+        mark &(e^{n, m}) \mid_{e \neq (e_1)} = (i, 0, (i, j, r)) \\
             &\text{where } (i, j, r) = mark(e) \\
         %
-        mark &((e)) = (1, 1, r) \\
-            &\text{where } (\Xund, \Xund, r) = mark(e)
+        mark &((e)) = mark((e)^{1, 1})
     \end{aligned}
     %
     &&\begin{aligned}
         enum &: \YZ \times \YZ \times \XIR_\Sigma \longrightarrow \YZ \times \YZ \times \XIR_\Sigma \\
-        enum &(\bar{i}, \bar{j}, (i, j, x)) = (\bar{i} + i, \bar{j} + j, (\bar{i} \times i, \bar{j} \times j, x)) \\
-            &\text{where } x \in \{\epsilon, \alpha\}
+        enum &(\bar{i}, \bar{j}, (i, j, x)) \mid_{x \in \{\epsilon, \alpha\}}
+            = (\bar{i} + i, \bar{j} + j, (\bar{i} \times i, \bar{j} \times j, x))
         \\
-        enum &(\bar{i}, \bar{j}, (i, j, r_1 \circ r_2)) = (i_2, j_2, (\bar{i} \times i, \bar{j} \times j, \bar{r}_1 \circ \bar{r}_2)) \\
-            &\text{where } \circ \in \{|,\cdot\} \\
-            &\space{\hphantom{where }}(i_1, j_1, \bar{r}_1) = enum(\bar{i} + i, \bar{j} + j, r_1) \\
+        enum &(\bar{i}, \bar{j}, (i, j, r_1 \circ r_2)) \mid_{\circ \in \{|,\cdot\}}
+            = (i_2, j_2, (\bar{i} \times i, \bar{j} \times j, \bar{r}_1 \circ \bar{r}_2)) \\
+            &\text{where }            (i_1, j_1, \bar{r}_1) = enum(\bar{i} + i, \bar{j} + j, r_1) \\
             &\space{\hphantom{where }}(i_2, j_2, \bar{r}_2) = enum(i_1, j_1, r_2)
         \\
         enum &(\bar{i}, \bar{j}, (i, j, r^{n,m})) = (i_1, j_1, (\bar{i} \times i, \bar{j} \times j, \bar{r}^{n,m})) \\
@@ -421,81 +423,6 @@ even if it has no explicit parentheses.
                 (i_1, j_1, \bar{r}) = enum(\bar{i} + i, \bar{j} + j, r)
     \end{aligned}
     \end{align*}
-
-An example of constructing an IRE from a RE is given on figure \ref{fig_mark_enum}.
-The reverse transformation is also possible:
-we can transform IRE back to RE
-by erasing all indices
-and adding parentheses around subexpressions with nonzero explicit submatch index.
-Therefore RE and IRE are equivalent representations.
-\\
-
-%\iffalse
-%Below is an example of IRE construction for RE $(\epsilon|a^{0,\infty})(\epsilon|a)^{0,\infty} )$
-%(the resulting IRE can be seen on figure \ref{fig_parse_trees}):
-%
-%    \begin{align*}
-%    &\begin{aligned}
-%        & mark ( (\epsilon|a^{0,\infty})(\epsilon|a)^{0,\infty} ) ) = \big[ \\
-%        %
-%        & \quad mark ( (\epsilon|a^{0,\infty}) ) = \big[ \\
-%        & \quad mark ( \epsilon|a^{0,\infty} ) = \big[ \\
-%        & \quad\quad\quad mark ( \epsilon ) = (0,0,\epsilon), \\
-%        & \quad\quad\quad mark ( a^{0,\infty} ) = \big[ \\
-%        & \quad\quad\quad\quad mark ( a ) = (0,0,a) \\
-%        & \quad\quad\quad \big] = (0,0,(0,0,a)^{0,\infty}) \\
-%        & \quad\quad \big] = (0,0,(0,0,\epsilon) \mid (0,0,(0,0,a)^{0,\infty})) \\
-%        & \quad \big] = (1,1,(0,0,\epsilon)|(0,0,(0,0,a)^{0,\infty})) \\
-%        %
-%        & \quad mark ( (\epsilon|a)^{0,\infty} ) = \big[ \\
-%        & \quad\quad mark ( (\epsilon|a) ) = \big[ \\
-%        & \quad\quad\quad mark ( \epsilon|a ) = \big [ \\
-%        & \quad\quad\quad\quad mark ( \epsilon ) = (0,0,\epsilon) \\
-%        & \quad\quad\quad\quad mark ( a ) = (0,0,a) \\
-%        & \quad\quad\quad \big] = (0,0,(0,0,\epsilon)|(0,0,a)) \\
-%        & \quad\quad \big] = (1,1,(0,0,\epsilon) \mid (0,0,a)) \\
-%        & \quad \big] = (1,0,(1,1,(0,0,\epsilon) \mid (0,0,a))^{0,\infty}) \\
-%        %
-%        & \big] = (1,1,
-%           (1,1,(0,0,\epsilon) \mid (0,0,(0,0,a)^{0,\infty})) \\
-%           & \quad\quad\quad \cdot (1,0,(1,1,(0,0,\epsilon) \mid (0,0,a))^{0,\infty})
-%           )
-%    \end{aligned}
-%    %
-%    &&\begin{aligned}
-%        & enum (1,1,(1,1,
-%            (1,1,(0,0,\epsilon) \mid (0,0,(0,0,a)^{0,\infty})) \\
-%            & \quad\quad\quad\quad\quad \cdot (1,0,(1,1,(0,0,\epsilon) \mid (0,0,a))^{0,\infty}))) = \big[ \\
-%        & \quad enum (2,2,(1,1,(0,0,\epsilon) \mid (0,0,(0,0,a)^{0,\infty}))) = \big[ \\
-%        & \quad\quad enum (3,3,(0,0,\epsilon)) = (3,3,(0,0,\epsilon)) \\
-%        & \quad\quad enum (3,3,(0,0,(0,0,a)^{0,\infty})) = \big[ \\
-%        & \quad\quad\quad enum (3,3,(0,0,a)) = (3,3,(0,0,a)) \\
-%        & \quad\quad \big] = (3,3,(0,0,(0,0,a)^{0,\infty})) \\
-%        & \quad \big] = (3,3,(2,2,(0,0,\epsilon) \mid (0,0,(0,0,a)^{0,\infty}))) \\
-%        %
-%        & \quad enum (3,3, (1,0,(1,1,(0,0,\epsilon) \mid (0,0,a))^{0,\infty}) ) = \big[ \\
-%        & \quad\quad enum (4,3, (1,1,(0,0,\epsilon) \mid (0,0,a)) ) = \big[ \\
-%        & \quad\quad\quad enum (5,4, (0,0,\epsilon) ) = (0,0,\epsilon) \\
-%        & \quad\quad\quad enum (5,4, (0,0,a) ) = (0,0,a) \\
-%        & \quad\quad \big] = (5,4,(4,3,(0,0,\epsilon) \mid (0,0,a))) \\
-%        & \quad \big] = (5,4,(3,0,(4,3,(0,0,\epsilon) \mid (0,0,a))^{0,\infty})) \\
-%        %
-%        & \big] = (5,4,(1,1,
-%           (2,2,(0,0,\epsilon) \mid (0,0,(0,0,a)^{0,\infty})) \\
-%           & \quad\quad\quad\quad\quad \cdot (3,0,(4,3,(0,0,\epsilon) \mid (0,0,a))^{0,\infty})
-%           ))
-%    \end{aligned}
-%    \end{align*}
-%\fi
-
-\begin{figure}\label{fig_mark_enum}
-\includegraphics[width=\linewidth]{img/mark_enum.pdf}
-\caption{
-An example of constructing IRE for RE $(\epsilon|a^{0,\infty})(a|\epsilon)^{0,3}$ using $mark$ and $enum$\\
-and some examples of IPT for the resulting IRE and string ``$a$''.
-S-norm of each subtree is marked with $\#$.
-}
-\end{figure}
 
 Just like REs denote sets of PTs, IREs denote sets of \emph{IPTs} --- \emph{indexed parse trees}.
 The only difference between PTs and IPTs is that each node of an IPT has an associated number ---
@@ -506,8 +433,6 @@ As for PTs, $str(t)$ denotes the string formed by concatenation of all alphabet 
 and $\IPT(r, w) = \{ t \in \IPT(r) \mid str(t) = w \}$ is the set of all IPTs for an IRE $r$ and a string $w$.
 %
 Examples of IPTs can be seen on figure \ref{fig_mark_enum}.
-
-\FloatBarrier
 
     \begin{Xdef}
     \emph{Indexed parse trees (IPT)} over finite alphabet $\Sigma$, denoted $\XIT_\Sigma$, are:
@@ -557,6 +482,8 @@ just the relevant parts of them.
 %
 IPTs have two definitions of norm, one for $Pos$ and one for $Sub$,
 which we call \emph{p-norm} and \emph{s-norm} respectively:
+
+\FloatBarrier
 
     \begin{Xdef}\label{tnorm_of_IPTs}
     The \emph{p-norm} and \emph{s-norm} of an IPT $t$ at position $p$ are:
@@ -634,6 +561,15 @@ $\IPT_{min}(r,w) = \{ t \in \IPT(r,w) \mid \forall u \in \IPT(r,w) : t \sim u \v
     S-order $\prec$ is a strict weak order on IPTs.
     \end{XThe}
 
+\begin{figure}\label{fig_mark_enum}
+\includegraphics[width=\linewidth]{img/mark_enum.pdf}
+\caption{
+An example of constructing IRE for RE $(\epsilon|a^{0,\infty})(a|\epsilon)^{0,3}$ using $mark$ and $enum$\\
+and some examples of IPT for the resulting IRE and string ``$a$''.
+S-norm of each subtree is marked with $\#$.
+}
+\end{figure}
+
 What is the relation between the total p-order $<$ and the partial s-order $\prec$ on IPTs?
 Can we say that p-order is an extension of s-order on non-comparable IPTs?
 We show by the means of a counterexample that the answer to the above question is negative.
@@ -662,6 +598,7 @@ it will only add more details.
 
 In the rest of the paper the words ``order'' and ``norm`` refer to s-order and s-norm.
 
+\FloatBarrier
 
 \section{Parenthesized expressions}
 
