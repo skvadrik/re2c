@@ -781,45 +781,55 @@ dotted paths correspond to frames and the table entry is in bold.
     is a structure $(\Sigma, Q, F, q_0, \Delta)$, where:
     \begin{itemize}
         \item[] $\Sigma$ is a finite set of symbols (\emph{alphabet})
-%        \item[] $T$ is a finite set of \emph{tags}
-%        \item[] $P$ is a finite set of \emph{priorities}
         \item[] $Q$ is a finite set of \emph{states}
         \item[] $F \subseteq Q$ is the set of \emph{final} states
         \item[] $q_0 \in Q$ is the \emph{initial} state
 
+%        \item[] $T \subseteq \YN$ is a finite set of \emph{tags}
+%        \item[] $P \subseteq \YN$ is a finite set of \emph{priorities}
+
         \item[] $\Delta = \Delta^\Sigma \sqcup \Delta^\epsilon$ is the \emph{transition} relation, where:
         \begin{itemize}
-            \item[] $\Delta^\Sigma \subseteq Q \times \Sigma \times \{\epsilon\} \times Q$
-            \item[] $\Delta^\epsilon \subseteq Q \times \{\epsilon\} \times \big( (\YZ \times \YZ) \cup \{\epsilon\} \big) \times Q$
+            \item[] $\Delta^\Sigma \subseteq Q \times \Sigma \times \{\epsilon\} \times Q$ (transitions on symbols)
+            \item[] $\Delta^\epsilon \subseteq Q \times \YN \times \big( \YN \cup \{\epsilon\} \big) \times Q$ ($\epsilon$-transitions)
         \end{itemize}
-%        and all $\epsilon$-transitions from the same state have different priorities:
-%        $\forall (x, r, \epsilon, y), (\widetilde{x}, \widetilde{r}, \epsilon, \widetilde{y}) \in \Delta^\epsilon:
-%        x = \widetilde{x} \wedge y = \widetilde{y} \Rightarrow r \!\neq\! \widetilde{r}$.
+        and the property that all $\epsilon$-transitions from the same state have different priority:
+        $\forall (q, n, \Xund, \Xund), (q, m, \Xund, \Xund) \in \Delta^\epsilon: n \neq m$.
     \end{itemize}
     \end{Xdef}
 
 TNFA construction is given by the $F$ function defined on figure \ref{fig_tnfa}.
 
-    \begin{align*}
-    otag \big( (i, j, r) \big) &=
-        \begin{cases}
-            \epsilon         &\text{if } i = 0 \\[-0.5em]
-            (2i - 1, 2j - 1) &\text{if } i \neq 0
-        \end{cases}
-    \\
-    ctag \big( (i, j, r) \big) &=
-        \begin{cases}
-            \epsilon &\text{if } i = 0 \\[-0.5em]
-            (2i, 2j) \hphantom{{} - 1 {} - 1} &\text{if } i \neq 0
-        \end{cases}
-    \\
-    ntag \big( (i, j, r) \big) &=
-        \begin{cases}
-            \epsilon         &\text{if } i = 0 \\[-0.5em]
-            (1 - 2i, 1 - 2j) &\text{if } i \neq 0
-        \end{cases}
-    \end{align*}
+\begin{figure}\label{fig_tnfa}
+\includegraphics[width=\linewidth]{img/tnfa.pdf}
+\caption{
+TNFA construction.
+}
+\end{figure}
 
+\FloatBarrier
+
+%    \begin{align*}
+%    otag \big( (i, j, r) \big) =
+%        \begin{cases}
+%            \epsilon &\text{if } i = 0 \\[-0.5em]
+%            2i - 1   &\text{if } i \neq 0
+%        \end{cases}
+%    &&
+%    ctag \big( (i, j, r) \big) =
+%        \begin{cases}
+%            \epsilon &\text{if } i = 0 \\[-0.5em]
+%            2i       &\text{if } i \neq 0
+%        \end{cases}
+%    &&
+%    ntag \big( (i, j, r) \big) =
+%        \begin{cases}
+%            \epsilon  &\text{if } i = 0 \\[-0.5em]
+%            1 - 2i    &\text{if } i \neq 0
+%        \end{cases}
+%    \end{align*}
+
+\iffalse
 %    \begin{align*}
 %    F \big( (0, 0, r_1 \mid r_2) \big) &= (\Sigma, Q_1 \cup Q_2 \cup \{ x, y \}, x, \{y\}, \Delta) \\
 %        \text{where }
@@ -858,13 +868,7 @@ TNFA construction is given by the $F$ function defined on figure \ref{fig_tnfa}.
 %                \cup \{ (y_i, \epsilon, \epsilon, x_{i+1}), (y_i, \epsilon, \epsilon, y_m) \}_{i=1}^{m-1}
 %    \\
 %    \end{align*}
-
-\begin{figure}\label{fig_tnfa}
-\includegraphics[width=\linewidth]{img/tnfa.pdf}
-\caption{
-TNFA construction.
-}
-\end{figure}
+\fi
 
 
 
@@ -876,15 +880,15 @@ TNFA construction.
 
     \begin{algorithm}[H] \DontPrintSemicolon \SetKwProg{Fn}{}{}{} \SetAlgoInsideSkip{medskip}
     \Fn {$\underline{match (\XN, \alpha_1 \dots \alpha_n)} \smallskip$} {
-        $(\Sigma, T, P, Q, F, q_0, T, \Delta) = \XN$ \;
+        $(\Sigma, Q, F, q_0, T, \Delta) = \XN$ \;
         $X = closure(\{ (\bot, q_0, \epsilon, t_0) \}, F, \Delta)$ \;
-        $(X, B, D) = step(0, X, B, D)$ \;
+        $(X, B, D) = step(0, X, P_1, P_2)$ \;
 
         \BlankLine
         \For {$i = \overline{1,n}$} {
             $X = reach(X, \Delta, \alpha_i)$ \;
-            $X = closure(X, B, D)$ \;
-            $(X, B, D) = step(i, X, B, D)$ \;
+            $X = closure(X, Q, F, \Delta, P_1, P_2)$ \;
+            $(X, P_1, P_2) = step(i, X, P_1, P_2)$ \;
         }
 
         \BlankLine
@@ -906,11 +910,11 @@ TNFA construction.
 
 
     \begin{algorithm}[H] \DontPrintSemicolon \SetKwProg{Fn}{}{}{} \SetAlgoInsideSkip{medskip}
-    \Fn {$\underline{step(k, X, B, D)} \smallskip$} {
+    \Fn {$\underline{step(k, X, P_1, P_2)} \smallskip$} {
         let $\{ x_i \}_{i=1}^{n} = \{(q_i, p_i, u_i, t_i) \}_{i=1}^{n} = X$
 
         \BlankLine
-        \tcc {update tag values in $X$}
+%        \tcc {update tag values in $X$}
         \For {$i = \overline {1, n}$} {
             $b_1 \dots b_m = u_i$ \;
             \lFor {$j = \overline{1, m}$} {
@@ -919,17 +923,17 @@ TNFA construction.
         }
 
         \BlankLine
-        \tcc {update $B$ and $D$ matrices}
+%        \tcc {update $B$ and $D$ matrices}
         \For {$i = \overline {1, n}$} {
             \For {$j = \overline {1, n}$} {
-                $(h_1, h_2, l) = precedence (x_i, x_j, B, D)$ \;
-                $B' [p_i] [p_j] = h_1, \; D' [p_i] [p_j] = l$ \;
-                $B' [p_j] [p_i] = h_2, \; D' [p_j] [p_i] = -l$ \;
+                $(h_1, h_2, l) = precedence (x_i, x_j, P_1, P_2)$ \;
+                $P_1' [p_i] [p_j] = h_1, \; P_2' [p_i] [p_j] = l$ \;
+                $P_1' [p_j] [p_i] = h_2, \; P_2' [p_j] [p_i] = -l$ \;
             }
         }
 
         \BlankLine
-        \Return $(X, B', D')$ \;
+        \Return $(X, P_1', P_2')$ \;
     }
     \end{algorithm}
 
