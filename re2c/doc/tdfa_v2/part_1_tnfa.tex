@@ -671,32 +671,12 @@ the index of the first distinct pair of frames is called \emph{fork}.
     We write $traces(\alpha, \beta)$ to denote $\big( trace (\alpha, \beta), trace (\beta, \alpha) \big)$.
     \end{Xdef}
 
-%\begin{figure}\label{fig_pe}
-%\includegraphics[width=\linewidth]{img/pe.pdf}
-%\caption{
-%An example of PEs for IPTs from figure \ref{fig_mark_enum} and the computation of $traces$ for each pair of PEs.\\
-%Here $\alpha \sqsubset \beta$ and $\alpha \sqsubset \gamma$, while
-%$\beta \sim \gamma$ and $\beta \subset \gamma$,
-%because $first (\beta \backslash \gamma) = \Xr < \Xl = first (\gamma \backslash \beta)$.
-%Therefore $\alpha < \beta < \gamma$.
-%}
-%\end{figure}
-
-\begin{figure}\label{fig_pe3}
-\includegraphics[width=\linewidth]{img/pe3.pdf}
+\begin{figure}\label{fig_pe}
+\includegraphics[width=\linewidth]{img/pe.pdf}
 \caption{
-Examples for the three rules of POSIX comparison.
-}
-\end{figure}
-
-\begin{figure}\label{fig_pe2}
-\includegraphics[width=\linewidth]{img/pe2.pdf}
-\caption{
-All possible IPTs for RE $(((a)^{1,3})^{1,3})^{1,3}$ and string $aaa$, the corresponding PEs,\\
-and the table of traces for each pair of PEs.
-Table entry for row $t_i$ and column $t_j$ contains $traces(\Phi_0(t_i), \Phi_0(t_j))$.\\
-$t_3$ and $t_5$ are shown in more detail:
-dotted paths correspond to frames and the table entry is in bold.
+(a) -- (c): examples of the three rules of POSIX comparison,
+(d) -- example of comparison for all possible parses.
+Dotted paths correspond to frames.
 }
 \end{figure}
 
