@@ -27,44 +27,45 @@
 \tikzset{style1/.style={draw, rectangle, rounded corners = 10, minimum width = \widd, minimum height = 0.3in, xshift = \offs}}
 \tikzset{style2/.style={state, accepting, xshift = \offs}}
 
-\begin{scope}[xshift=3.3in, yshift=-7.2in]
-    \node[draw=none, shape=rectangle] (x) {$
-    \begin{aligned}
-    otag \big( (i, j, r) \big) =
+\begin{scope}[xshift=4.3in, yshift=1in]
+    \node [label={[label distance=0.1in, below left]270:\large{(f)}}] (a) {};
+    \node [label={[label distance=0.1in, below right]270:
+    $\begin{aligned}
+    &otag \big( (i, j, r) \big) =
         \begin{cases}
             \epsilon &\text{if } i = 0 \\[-0.5em]
             2i - 1   &\text{if } i \neq 0
         \end{cases}
-    \qquad\qquad
-    ctag \big( (i, j, r) \big) =
+    \\
+    &ctag \big( (i, j, r) \big) =
         \begin{cases}
             \epsilon &\text{if } i = 0 \\[-0.5em]
             2i       &\text{if } i \neq 0
         \end{cases}
-    \qquad\qquad
-    ntag \big( (i, j, r) \big) =
+    \\
+    &ntag \big( (i, j, r) \big) =
         \begin{cases}
             \epsilon  &\text{if } i = 0 \\[-0.5em]
             1 - 2i    &\text{if } i \neq 0
         \end{cases}
-    \end{aligned}
-$};
+    \end{aligned}$}] (a) {};
 \end{scope}
 
-\begin{scope}[xshift=0in]
+\begin{scope}[xshift=0in, yshift=0in]
     \def\offs{-0.5in}
     \def\widd{1.3in}
 
     \node[state] (a) {$x$};
-    \node[state, accepting, right of=a] (b1) {$x_1$};
+    \node[state, accepting, above right of=a, xshift=-0.1in, yshift=-0.1in] (b1) {$x_1$};
     \node[style1, right of = b1] (b) {$F \big( (0, 0, r_1) \big)$};
     \node[style2, right of = b] (b2) {$y_1$};
-    \node[state, accepting, right of=b2] (d) {$y$};
+    \node[state, accepting, below right of=b2, xshift=-0.1in, yshift=0.1in] (d) {$y$};
     \path
         (a) edge node {$1 / otag(r) $} (b1)
         (b2) edge node {$1 / ctag(r) $} (d)
     ;
-    \path (a) edge [draw=none] node [below=0.15in, midway] {
+    \node [label={[label distance=0.1in, below left]270:\large{(a)}}] (a) {};
+    \node [label={[label distance=0.1in, below right]270:
     $\begin{aligned}
     F \big( r \big) \mid_{r \;=\; (i, \Xund, r_1) \;\wedge\; i \;\neq\; 0} &= (\Sigma, Q, x, \{y\}, \Delta) \\
         \text{where }
@@ -73,29 +74,30 @@ $};
             \Delta &= \Delta_1 \cup
                 \big\{ (x, 1, otag(r), x_1), (y_1, 1, ctag(r), y) \big\}
     \end{aligned}$
-    } (d);
+    }] (a) {};
 \end{scope}
 
-\begin{scope}[xshift=0.5in, yshift=-1.4in]
+\begin{scope}[xshift=0in, yshift=-1.4in]
     \node[state] (a) {$x$};
     \node[state, accepting, right of=a] (b) {$y$};
     \path (a) edge node {$1 / \epsilon$} (b);
-    \path (a) edge [draw=none] node [below=0.15in, midway] {
+    \node [label={[label distance=0.1in, below left]270:\large{(b)}}] (a) {};
+    \node [label={[label distance=0.1in, below right]270:
     $F \big( (0, 0, \epsilon) \big) = \big(
         \Sigma,
         \{x, y\},
         x,
         \{y\},
         \{ (x, 1, \epsilon, y) \}
-    \big)$
-    } (b);
+    \big)$}] (a) {};
 \end{scope}
 
-\begin{scope}[xshift=0.5in, yshift=-2.2in]
+\begin{scope}[xshift=0in, yshift=-2.2in]
     \node[state] (a) {$x$};
     \node[state, accepting, right of=a] (b) {$y$};
     \path (a) edge node {$\alpha / \epsilon$} (b);
-    \path (a) edge [draw=none] node [below=0.15in, midway] {
+    \node [label={[label distance=0.1in, below left]270:\large{(c)}}] (a) {};
+    \node [label={[label distance=0.1in, below right]270:
     $F \big( (0, 0, \alpha) \big) = \big(
         \Sigma,
         \{x, y\},
@@ -103,10 +105,10 @@ $};
         \{y\},
         \{ (x, \alpha, \epsilon, y) \}
     \big)$
-    } (b);
+    }] (a) {};
 \end{scope}
 
-\begin{scope}[xshift=0.5in, yshift=-3in]
+\begin{scope}[xshift=0in, yshift=-3.1in]
     \def\offs{-0.65in}
     \def\widd{1in}
 
@@ -115,7 +117,8 @@ $};
     \node[style2, right of = a] (a2) {$y_1$};
     \node[style1, right of = a2] (b) {$F(r_2)$};
     \node[style2, right of = b] (b2) {$y_2$};
-    \path (a1) edge [draw=none] node [below=0.25in, midway] {
+    \node [label={[label distance=0.2in, below left]270:\large{(d)}}] (a) {};
+    \node [label={[label distance=0.2in, below right]270:
     $\begin{aligned}
     F \big( (0, 0, r_1 \cdot r_2) \big) &= (\Sigma, Q, x_1, \{y_2\}, \Delta) \\
         \text{where }
@@ -123,10 +126,10 @@ $};
             Q &= Q_1 \cup Q_2 \setminus \{ x_2 \}\\
             \Delta &= \Delta_1 \cup
                 \big\{ (y_1, \alpha, \beta, z) \mid (x_2, \alpha, \beta, z) \in \Delta_2 \big\}
-    \end{aligned}$} (b2);
+    \end{aligned}$}] (a1) {};
 \end{scope}
 
-\begin{scope}[xshift=0in, yshift=-5in]
+\begin{scope}[xshift=0in, yshift=-5.1in]
     \node[state] (a) {$x$};
     \node[state, above right of=a, yshift = -0.4in] (b1) {$x_1$};
     \node[style1, right of = b1] (b) {$F \big( r_1 \big)$};
@@ -145,7 +148,8 @@ $};
         (c2) edge [bend right] node [below right] {$1 / \epsilon$} (d)
     ;
 %    \path (a) edge [draw=none] node [below=0.6in, midway] {$F \big( (0, 0, (i_1, j_1, r_1) \mid (i_2, j_2, r_2)) \big)$} (d);
-    \path (a) edge [draw=none] node [below=0.6in, midway] {
+    \node [label={[label distance=0.5in, below left]270:\large{(e)}}] (a) {};
+    \node [label={[label distance=0.5in, below right]270:
     $\begin{aligned}
     F \big( (0, 0, r_1 \mid r_2) \big) &= (\Sigma, Q, x, \{y\}, \Delta) \\
         \text{where }
@@ -155,10 +159,10 @@ $};
                 \big\{ (x, 1, \epsilon, x_1), (y_2, 1, \epsilon, y), \\
                     & (y_1, 1, ntag(r_2), y), (x, 2, ntag(r_1), x_2)
             \big\}
-    \end{aligned}$} (d);
+    \end{aligned}$}] (a) {};
 \end{scope}
 
-\begin{scope}[xshift=4in, yshift=0in]
+\begin{scope}[xshift=4.3in, yshift=-0.7in]
     \def\offs{-0.65in}
     \def\widd{1in}
 
@@ -167,13 +171,14 @@ $};
     \node[style2, right of = a] (a2) {};
     \node[style1, right of = a2, minimum width = 1.8in, xshift = 0.4in] (b) {$F \big( (0, 0, r^{n-1, m-1}) \big)$};
     \node[style2, right of = b, xshift = 0.4in] (b2) {};
-    \path (a1) edge [draw=none] node [below=0.25in, midway] {
+    \node [label={[label distance=0.2in, below left]270:\large{(g)}}] (a) {};
+    \node [label={[label distance=0.2in, below right]270:
     $\begin{aligned}
     F \big( (0, 0, r^{n, m}) \big) \mid_{n \;>\; 1} &= F \big( (0, 0, r \cdot (0, 0, r^{n-1, m-1})) \big)
-    \end{aligned}$} (b2);
+    \end{aligned}$}] (a1) {};
 \end{scope}
 
-\begin{scope}[xshift=4in, yshift=-1.5in]
+\begin{scope}[xshift=4.3in, yshift=-2in]
     \def\offs{-0.25in}
     \def\widd{1.4in}
     \def\dist{0.8in}
@@ -188,7 +193,8 @@ $};
         (a) edge node {$1 / \epsilon$} (b1)
     ;
     \draw (a) .. controls ($ (a) + (0, 1.5) $) and ($ (b2) + (-1, 1) $) .. node [above] {$2 / ntag(r)$} (b2);
-    \path (a) edge [draw=none] node [below=0.3in, midway] {
+    \node [label={[label distance=0.2in, below left]270:\large{(h)}}] (a) {};
+    \node [label={[label distance=0.2in, below right]270:
     $\begin{aligned}
     F \big( (0, 0, r^{0, m}) \big) &= (\Sigma, Q, x, \{y_1\}, \Delta) \\
         \text{where }
@@ -196,10 +202,10 @@ $};
             Q &= Q_1 \cup \{ x \} \\
             \Delta &= \Delta_1 \cup
                 \big\{ (x, 1, \epsilon, x_1), (x, 2, ntag(r), y_1) \big\}
-    \end{aligned}$} (b2);
+    \end{aligned}$}] (a) {};
 \end{scope}
 
-\begin{scope}[xshift=4.5in, yshift=-3.5in]
+\begin{scope}[xshift=4.3in, yshift=-3.8in]
     \def\offs{-0.45in}
     \def\widd{1in}
     \def\dist{0.8in}
@@ -214,7 +220,8 @@ $};
         (b2) edge node {$1 / \epsilon$} (c)
     ;
     \draw (b2) .. controls ($ (b2) + (1, 1.5) $) and ($ (b1) + (-1, 1.5) $) .. node [above] {$2 / \epsilon$} (b1);
-    \path (b1) edge [draw=none] node [below=0.3in, midway] {
+    \node [label={[label distance=0.2in, below left]270:\large{(i)}}] (a) {};
+    \node [label={[label distance=0.2in, below right]270:
     $\begin{aligned}
     F \big( (0, 0, r^{1, \infty}) \big) &= (\Sigma, Q, x_1, \{y\}, \Delta) \\
         \text{where }
@@ -222,10 +229,10 @@ $};
             Q &= Q_1 \cup \{ y \} \\
             \Delta &= \Delta_1 \cup
                 \big\{ (y_1, 2, \epsilon, x_1), (y_1, 1, \epsilon, y) \big\}
-    \end{aligned}$} (c);
+    \end{aligned}$}] (b1) {};
 \end{scope}
 
-\begin{scope}[xshift=3.2in, yshift=-5.5in]
+\begin{scope}[xshift=4.3in, yshift=-5.8in]
     \def\offs{-0.55in}
     \def\widd{0.8in}
     \def\dist{0.8in}
@@ -251,7 +258,8 @@ $};
     ;
     \draw (b2) .. controls ($ (b2) + (0, 2) $) and ($ (d2) + (-2, 2) $) .. node [very near start] {$1 / \epsilon$} (d2);
     \draw (c2) .. controls ($ (c2) + (0, 1) $) and ($ (d2) + (-2, 1) $) .. node [very near start] {$1 / \epsilon$} (d2);
-    \path (b1) edge [draw=none] node [below=0.3in, midway] {
+    \node [label={[label distance=0.2in, below left]270:\large{(j)}}] (a) {};
+    \node [label={[label distance=0.2in, below right]270:
     $\begin{aligned}
     F \big( (0, 0, r^{1, m}) \big) \mid m \neq \infty &= (\Sigma, Q, x_1, \{y_m\}, \Delta) \\
         \text{where }
@@ -259,7 +267,141 @@ $};
             Q &= Q_1 \cup \hdots \cup Q_m \\
             \Delta &= \Delta_1 \cup \hdots \cup \Delta_m
                 \cup \big\{ (y_i, 2, \epsilon, x_{i+1}), (y_i, 1, \epsilon, y_m) \big\}_{i=1}^{m-1}
-    \end{aligned}$} (d2);
+    \end{aligned}$}] (b1) {};
+\end{scope}
+
+
+
+\tikzstyle{every node}=[]
+\tikzstyle{every state}=[circle
+    , minimum size=0.13in
+    , rectangle
+    , rounded corners=4
+    , inner sep = 2pt
+    , outer sep = 0pt
+    , node distance = 0.35in]
+
+\newcommand{\zz}{0.06in}
+\newcommand{\ww}{1pt}
+
+\begin{scope}[xshift=-0.5in, yshift=-8.3in]
+    %\footnotesize
+    \scriptsize
+
+    % ((epsilon|a*)((a|epsilon){0,3}))
+
+    \node[state] (x0) {$1$};
+    \node[state, above right of = x0] (x1) {$2$};
+
+    \node[state, above right of = x1] (z0) {$3$};
+
+    \node[state, right of = z0] (x15) {$4$};
+    \node[state, above right of = x15] (x16) {$5$};
+    \node[state, above right of = x16, xshift = \zz, yshift = -\zz] (x17) {$6$};
+    \node[state, below right of = x16, xshift = \zz, yshift = +\zz] (x18) {$8$};
+    \node[state, right of = x17] (x19) {$7$};
+    \node[state, right of = x18] (x20) {$9$};
+    \node[state, below right of = x19, xshift = \zz, yshift = +\zz] (x21) {$10$};
+    \node[state, below right of = x21] (x22) {$11$};
+
+    \node[state, right of = x22] (y15) {$12$};
+
+    \node[state, above right of = y15] (y16) {$13$};
+    \node[state, above right of = y16, xshift = \zz, yshift = -\zz] (y17) {$14$};
+    \node[state, below right of = y16, xshift = \zz, yshift = +\zz] (y18) {$16$};
+    \node[state, right of = y17] (y19) {$15$};
+    \node[state, right of = y18] (y20) {$17$};
+    \node[state, below right of = y19, xshift = \zz, yshift = +\zz] (y21) {$18$};
+    \node[state, below right of = y21] (y22) {$19$};
+
+    \node[state, right of = y22] (z15) {$20$};
+
+    \node[state, above right of = z15] (z16) {$21$};
+    \node[state, above right of = z16, xshift = \zz, yshift = -\zz] (z17) {$22$};
+    \node[state, below right of = z16, xshift = \zz, yshift = +\zz] (z18) {$24$};
+    \node[state, right of = z17] (z19) {$23$};
+    \node[state, right of = z18] (z20) {$25$};
+    \node[state, below right of = z19, xshift = \zz, yshift = +\zz] (z21) {$26$};
+    \node[state, below right of = z21] (z22) {$27$};
+    \node[state, right of = z22] (z23) {$28$};
+
+    \node[state, below right of = z23] (x23) {$29$};
+
+    \node[state, above right of = x23] (x2) {$30$};
+    \node[state, above right of = x2, xshift = \zz, yshift = -\zz] (x4) {$31$};
+    \node[state, below right of = x2, xshift = \zz, yshift = +\zz, draw=none] (x3) {$$};
+    \node[state, right of = x3] (x3X) {$35$};
+    \node[state, right of = x4] (x5) {$32$};
+    \node[state, right of = x5] (x6) {$33$};
+    \node[state, right of = x6] (x7) {$34$};
+    \node[state, below right of = x7, xshift = \zz, yshift = +\zz] (x12) {$37$};
+    \node[state, below left of = x12, xshift = -\zz, yshift = +\zz, draw=none] (x13) {$$};
+    \node[state, left of = x13] (x13X) {$36$};
+    \node[state, below right of = x12] (x14) {$38$};
+
+    \node[state, accepting, below right of = x14] (x24) {$39$};
+
+    \path
+        (x0) edge node [above left] {$1/1$} (x1)
+        (x1) edge node [above left] {$1/3$} (z0)
+        (z0) edge node {$1/\epsilon$} (x15)
+
+        (x15) edge node [above left] {$1/5$} (x16)
+        (x16) edge [bend left]  node [above]           {$1/\epsilon$} (x17)
+        (x16) edge [bend right] node [above, near end] {$2/\epsilon$} (x18)
+        (x17) edge [line width=\ww] node {$a/\epsilon$} (x19)
+        (x18) edge node {$1/\epsilon$} (x20)
+        (x19) edge [bend left]  node [above]             {$1/\epsilon$} (x21)
+        (x20) edge [bend right] node [above, near start] {$1/\epsilon$} (x21)
+        (x21) edge node [above right] {$1/6$} (x22)
+
+        (x22) edge node [above] {$2/\epsilon$} (y15)
+
+        (y15) edge node [above left] {$1/5$} (y16)
+        (y16) edge [bend left]  node [above]           {$1/\epsilon$} (y17)
+        (y16) edge [bend right] node [above, near end] {$2/\epsilon$} (y18)
+        (y17) edge [line width=\ww] node {$a/\epsilon$} (y19)
+        (y18) edge node {$1/\epsilon$} (y20)
+        (y19) edge [bend left]  node [above]             {$1/\epsilon$} (y21)
+        (y20) edge [bend right] node [above, near start] {$1/\epsilon$} (y21)
+        (y21) edge node [above right] {$1/6$} (y22)
+
+        (y22) edge node [above] {$2/\epsilon$} (z15)
+
+        (z15) edge node [above left] {$1/5$} (z16)
+        (z16) edge [bend left]  node [above]           {$1/\epsilon$} (z17)
+        (z16) edge [bend right] node [above, near end] {$2/\epsilon$} (z18)
+        (z17) edge [line width=\ww] node {$a/\epsilon$} (z19)
+        (z18) edge node {$1/\epsilon$} (z20)
+        (z19) edge [bend left]  node [above]             {$1/\epsilon$} (z21)
+        (z20) edge [bend right] node [above, near start] {$1/\epsilon$} (z21)
+        (z21) edge node [above right] {$1/6$} (z22)
+
+        (z22) edge node [above] {$1/\epsilon$} (z23)
+        (z23) edge node [above right] {$1/4$} (x23)
+
+        (x23) edge node [below right] {$1/7$} (x2)
+        (x2) edge [bend left] node [above] {$1/\epsilon$} (x4)
+        (x2) edge [bend right = 20] node [above] {$2/\epsilon$} (x3X)
+        (x4) edge node [above] {$1/\epsilon$} (x5)
+        (x5) edge [line width=\ww] node [above] {$a/\epsilon$} (x6)
+        (x6) edge node [above] {$1/\epsilon$} (x7)
+        (x7) edge [bend left] node [above] {$1/\epsilon$} (x12)
+        (x3X) edge node [above] {$1/\epsilon$} (x13X)
+        (x13X) edge [bend right = 20] node [above] {$1/\epsilon$} (x12)
+        (x12) edge node [above right] {$1/8$} (x14)
+
+        (x14) edge node [above right] {$1/2$} (x24)
+    ;
+
+    \draw (y22) .. controls ($ (y22) + (0.5, -0.5) $) and ($ (z22) + (-0.5, -0.5) $) .. node [above] {$1/\epsilon$} (z22);
+    \draw (x22) .. controls ($ (x22) + (0.8, -0.8) $) and ($ (z22) + (-0.8, -0.8) $) .. node [above, near start] {$1/\epsilon$} (z22);
+    \draw (z0) .. controls ($ (z0) + (1.0, -1.0) $) and ($ (z23) + (-1.0, -1.0) $) .. node [above, near start] {$2/-\!\!5$} (z23);
+    \draw (x6) .. controls ($ (x6) + (0.4, 0.8) $) and ($ (x5) + (-0.4, 0.8) $) .. node [above] {$2/\epsilon$} (x5);
+    \draw (x4) .. controls ($ (x4) + (0.6, -0.6) $) and ($ (x7) + (-0.6, -0.6) $) .. node [above] {$2/\epsilon$} (x7);
+
+    \path (x0) edge [draw=none] node [below=0.1in, midway] {\large{(k)} -- TNFA for RE $(a|\epsilon)^{0,3}(a^{0,\infty}|\epsilon)$} (x24);
+
 \end{scope}
 
 \end{tikzpicture}
