@@ -94,7 +94,7 @@ Projects that use re2c
 * `PHP <http://php.net/>`_ (general-purpose scripting language)
 * `ninja <https://ninja-build.org/>`_ (small build system with a focus on speed)
 * `yasm <http://yasm.tortall.net/>`_ (assembler)
-* `spamasassin <https://spamassassin.apache.org/>`_ (anti-spam platform)
+* `spamassassin <https://spamassassin.apache.org/>`_ (anti-spam platform)
 * `BRL-CAD <http://brlcad.org/>`_ (cross-platform solid modeling system)
 * ... last but not least, `re2c <http://re2c.org>`_
 
