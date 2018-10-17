@@ -29,7 +29,7 @@ re2c uses the following syntax for regular expressions:
 
 *    ``R | S`` alternative: ``R or S``
 
-*    ``R / S`` loohakead: ``R`` followed by ``S``, but ``S`` is not consumed
+*    ``R / S`` lookahead: ``R`` followed by ``S``, but ``S`` is not consumed
 
 *    ``name`` the regular expression defined as ``name`` (or literal string ``"name"`` in Flex compatibility mode)
 
