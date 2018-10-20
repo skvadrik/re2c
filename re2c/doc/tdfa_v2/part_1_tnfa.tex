@@ -675,7 +675,7 @@ the index of the first distinct pair of frames is called \emph{fork}.
 \includegraphics[width=\linewidth]{img/pe.pdf}
 \caption{
 Examples: (a) -- (d): four main rules of POSIX comparison,
-(e) -- pairwise comparison of all possible parses.
+(e) -- pairwise comparison of PEs.
 }
 \end{figure}
 
@@ -896,8 +896,9 @@ TNFA construction.
 %        \tcc {update tag values in $X$}
         \For {$i = \overline {1, n}$} {
             $b_1 \dots b_m = u_i$ \;
-            \lFor {$j = \overline{1, m}$} {
-                $t_i[b_j] = k$
+            \For {$j = \overline{1, m}$} {
+                \lIf {$b_j < 0$} {$t_i[b_j] = -1$}
+                \lElse {$t_i[b_j] = k$}
             }
         }
 
@@ -997,7 +998,7 @@ TNFA construction.
         $C = (\; Q, F, \Delta, P_1, P_2$ \;
         \Indp
         $,\, topsort, linear : \text{stacks of elements } q \in Q$ \;
-        $,\, result  : Q \rightarrow \YZ^*$                        \tcc{tag historiy}
+        $,\, result  : Q \rightarrow (Q \times Q \times \YZ^* \times \YZ^*) \cup \{ \bot \}$
         $,\, status  : Q \rightarrow \{ \NOPASS, \TOPSORT, \LINEAR \}$ \;
         $,\, indeg   : Q \rightarrow \YZ$                          \tcc{in-degree}
         $,\, active  : Q \rightarrow \YB$                          \tcc{true if needs rescan}
@@ -1015,15 +1016,15 @@ TNFA construction.
         }
 
         \BlankLine
-        \For {$(o, q, \epsilon, t) \in X$} {
-            $x = (o, \epsilon, t)$ \;
-            $y = result(q)$ \;
-            \If {$y = \bot \vee relax(x, y, C)$} {
+        $Y = sort \Xund with (X, less(x, y) = precede(x, y, C))$ \;
+        \For {$x = (\Xund, q, \Xund, \Xund) \in Y$} {
+            \If {$result(q) = \bot$} {
                 $result(q) = x$ \;
-                $status(q) = \TOPSORT$ \;
-                $next(q)   = 1$ \;
-                $push(topsort, q)$ \;
+                $push(linear, q)$ \;
             }
+        }
+        \While {$linear$ is not empty} {
+            $push(topsort, pop(linear))$ \;
         }
 
         \BlankLine
@@ -1080,11 +1081,13 @@ TNFA construction.
 
 %TRIE!!!!!!!
         \BlankLine
-        \Return $\big\{ (o, q, u, t) \mid (o, u, t) = result(q) \wedge core(q, C) \}$
+        \Return $\big\{ (\Xund, q, \Xund, \Xund) = result(q) \mid core(q, C) \}$
     }
     \end{algorithm}
 
+
     \columnbreak
+
 
     \begin{algorithm}[H] \DontPrintSemicolon \SetKwProg{Fn}{}{}{} \SetAlgoInsideSkip{medskip}
     \Fn {$\underline{closure \Xund gtop(X, Q, F, \Delta, P_1, P_2)} \smallskip$} {
@@ -1092,7 +1095,7 @@ TNFA construction.
         $C = (\; Q, F, \Delta, P_1, P_2$ \;
         \Indp
         $,\, queue : \text{priority queue of elements } q \in Q$ \;
-        $,\, result  : Q \rightarrow \YZ^*$                        \tcc{tag historiy}
+        $,\, result  : Q \rightarrow (Q \times Q \times \YZ^* \times \YZ^*) \cup \{ \bot \}$
         $,\, status  : Q \rightarrow \{ \INQUEUE, \OFFQUEUE\}$     \;
         $,\, indeg   : Q \rightarrow \YZ$                          \tcc{in-degree}
         $,\, topord  : Q \rightarrow \YZ$                          \tcc{topological index}
@@ -1110,10 +1113,9 @@ TNFA construction.
         }
 
         \BlankLine
-        \For {$(o, q, \epsilon, t) \in X$} {
-            $x = (o, \epsilon, t)$ \;
+        \For {$x = (\Xund, q, \Xund, \Xund) \in X$} {
             $y = result(q)$ \;
-            \If {$y = \bot \vee relax(x, y, C)$} {
+            \If {$y = \bot \vee precede(x, y, C)$} {
                 $result(q) = x$ \;
                 \If {$status(q) \neq \INQUEUE$} {
                     $insert \Xund with \Xund priority(queue, q, topord(q))$ \;
@@ -1141,7 +1143,7 @@ TNFA construction.
 
 %TRIE!!!!!!!
         \BlankLine
-        \Return $\big\{ (o, q, u, t) \mid (o, u, t) = result(q) \wedge core(q, C) \}$
+        \Return $\big\{ (\Xund, q, \Xund, \Xund) = result(q) \mid core(q, C) \}$
     }
     \end{algorithm}
 
@@ -1163,7 +1165,7 @@ TNFA construction.
             %\BlankLine
             \If {$y = \bot
                 \vee indeg(p) < 2
-                \vee relax(x, y, C)$} {
+                \vee precede(x, y, C)$} {
                 $result(p) = x$ \;
                 \Return $p$
             }
@@ -1176,9 +1178,9 @@ TNFA construction.
 
 
     \begin{algorithm}[H] \DontPrintSemicolon \SetKwProg{Fn}{}{}{} \SetAlgoInsideSkip{medskip}
-    \Fn {$\underline{relax (x, y, C)} \smallskip$} {
+    \Fn {$\underline{precede (x, y, C)} \smallskip$} {
         $(\Xund, \Xund, l) = precedence (x, y, P_1, P_2)$ \;
-        \Return $l = -1$ \tcc{true if x precedes y}
+        \Return $l = -1$ %\tcc{true if x precedes y}
     }
     \end{algorithm}
 
@@ -1191,7 +1193,10 @@ TNFA construction.
 
 \end{multicols}
 \begin{center}
-\caption{GOR1 and GTOP closure algorithms.}
+\caption{GOR1 and GTOP closure algorithms.
+The definitions of $sort \Xund with$, $push$, $pop$, $insert \Xund with \Xund priority$ \\
+and $extract \Xund min$ are omitted;
+topological sorting of TNFA states is also left for the reader.}
 \end{center}
 \end{figure*}
 
