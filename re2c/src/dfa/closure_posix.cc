@@ -201,10 +201,19 @@ void orders(determ_context_t &ctx)
 }
 
 
-int32_t pack(int32_t longest, int32_t leftmost)
+static uint32_t pack_u32(uint32_t longest, uint32_t leftmost)
 {
     // leftmost: higher 2 bits, longest: lower 30 bits
     return longest | (leftmost << 30);
+}
+
+static int32_t pack(int32_t longest, int32_t leftmost)
+{
+    // avoid signed overflows by using unsigned arithmetics
+    uint32_t u_longest = static_cast<uint32_t>(longest);
+    uint32_t u_leftmost = static_cast<uint32_t>(leftmost);
+    uint32_t u_result = pack_u32(u_longest, u_leftmost);
+    return static_cast<int32_t>(u_result);
 }
 
 } // namespace re2c
