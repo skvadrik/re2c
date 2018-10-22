@@ -204,6 +204,7 @@ void orders(determ_context_t &ctx)
 static uint32_t pack_u32(uint32_t longest, uint32_t leftmost)
 {
     // leftmost: higher 2 bits, longest: lower 30 bits
+    longest &= ~0u >> 2;
     return longest | (leftmost << 30);
 }
 
