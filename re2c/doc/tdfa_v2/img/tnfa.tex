@@ -5,7 +5,7 @@
 \RequirePackage{luatex85}
 \usepackage[utf8]{inputenc}
 \usepackage{amsmath, amssymb, amsfonts, accents}
-\usetikzlibrary{graphdrawing, graphs, arrows, shapes, automata, calc}
+\usetikzlibrary{graphdrawing, graphs, arrows, shapes, automata, calc, decorations}
 \usegdlibrary{trees, layered}
 \usepackage{stix}
 
@@ -217,9 +217,9 @@
     \node[state, accepting, right of = b2] (c) {$y$};
 
     \path
-        (b2) edge node {$1 / \epsilon$} (c)
+        (b2) edge node {$2 / \epsilon$} (c)
     ;
-    \draw (b2) .. controls ($ (b2) + (1, 1.5) $) and ($ (b1) + (-1, 1.5) $) .. node [above] {$2 / \epsilon$} (b1);
+    \draw (b2) .. controls ($ (b2) + (0.7, 1.5) $) and ($ (b1) + (-0.7, 1.5) $) .. node [above] {$1 / \epsilon$} (b1);
     \node [label={[label distance=0.2in, below left]270:\large{(i)}}] (a) {};
     \node [label={[label distance=0.2in, below right]270:
     $\begin{aligned}
@@ -279,14 +279,13 @@
     , rounded corners=4
     , inner sep = 2pt
     , outer sep = 0pt
-    , node distance = 0.35in]
+    , node distance = 0.37in]
 
 \newcommand{\zz}{0.06in}
-\newcommand{\ww}{1pt}
 
-\begin{scope}[xshift=-0.5in, yshift=-8.3in]
-    %\footnotesize
-    \scriptsize
+\begin{scope}[xshift=-0.8in, yshift=-8.5in]
+    \footnotesize
+    %\scriptsize
 
     % ((epsilon|a*)((a|epsilon){0,3}))
 
@@ -297,7 +296,7 @@
 
     \node[state, right of = z0] (x15) {$4$};
     \node[state, above right of = x15] (x16) {$5$};
-    \node[state, above right of = x16, xshift = \zz, yshift = -\zz] (x17) {$6$};
+    \node[state, fill=lightgray, above right of = x16, xshift = \zz, yshift = -\zz] (x17) {$6$};
     \node[state, below right of = x16, xshift = \zz, yshift = +\zz] (x18) {$8$};
     \node[state, right of = x17] (x19) {$7$};
     \node[state, right of = x18] (x20) {$9$};
@@ -307,7 +306,7 @@
     \node[state, right of = x22] (y15) {$12$};
 
     \node[state, above right of = y15] (y16) {$13$};
-    \node[state, above right of = y16, xshift = \zz, yshift = -\zz] (y17) {$14$};
+    \node[state, fill=lightgray, above right of = y16, xshift = \zz, yshift = -\zz] (y17) {$14$};
     \node[state, below right of = y16, xshift = \zz, yshift = +\zz] (y18) {$16$};
     \node[state, right of = y17] (y19) {$15$};
     \node[state, right of = y18] (y20) {$17$};
@@ -317,29 +316,32 @@
     \node[state, right of = y22] (z15) {$20$};
 
     \node[state, above right of = z15] (z16) {$21$};
-    \node[state, above right of = z16, xshift = \zz, yshift = -\zz] (z17) {$22$};
+    \node[state, fill=lightgray, above right of = z16, xshift = \zz, yshift = -\zz] (z17) {$22$};
     \node[state, below right of = z16, xshift = \zz, yshift = +\zz] (z18) {$24$};
     \node[state, right of = z17] (z19) {$23$};
     \node[state, right of = z18] (z20) {$25$};
     \node[state, below right of = z19, xshift = \zz, yshift = +\zz] (z21) {$26$};
     \node[state, below right of = z21] (z22) {$27$};
-    \node[state, right of = z22] (z23) {$28$};
 
-    \node[state, below right of = z23] (x23) {$29$};
+    \node[state, below right of = z22] (x23) {$28$};
 
-    \node[state, above right of = x23] (x2) {$30$};
-    \node[state, above right of = x2, xshift = \zz, yshift = -\zz] (x4) {$31$};
-    \node[state, below right of = x2, xshift = \zz, yshift = +\zz, draw=none] (x3) {$$};
-    \node[state, right of = x3] (x3X) {$35$};
-    \node[state, right of = x4] (x5) {$32$};
+    \node[state, above right of = x23] (x2) {$29$};
+    \node[state, above right of = x2, xshift = \zz, yshift = -\zz] (x4X) {$30$};
+    \node[state, above right of = x4X] (x4) {$31$};
+    \node[state, below right of = x2, xshift = \zz, yshift = +\zz, draw=none] (x3) {};
+    \node[state, right of = x3] (x3Y) {$36$};
+    \node[state, above right of = x3Y] (x3X) {$37$};
+    \node[state, fill=lightgray, right of = x4] (x5) {$32$};
     \node[state, right of = x5] (x6) {$33$};
     \node[state, right of = x6] (x7) {$34$};
-    \node[state, below right of = x7, xshift = \zz, yshift = +\zz] (x12) {$37$};
-    \node[state, below left of = x12, xshift = -\zz, yshift = +\zz, draw=none] (x13) {$$};
-    \node[state, left of = x13] (x13X) {$36$};
-    \node[state, below right of = x12] (x14) {$38$};
+    \node[state, below right of = x7] (x7X) {$35$};
+    \node[state, below right of = x7X, xshift = \zz, yshift = +\zz] (x12) {$40$};
+    \node[state, below left of = x12, xshift = -\zz, yshift = +\zz, draw=none] (x13) {};
+    \node[state, left of = x13] (x13X) {$39$};
+    \node[state, above left of = x13X] (x13Y) {$38$};
+    \node[state, below right of = x12] (x14) {$41$};
 
-    \node[state, accepting, below right of = x14] (x24) {$39$};
+    \node[state, fill=lightgray, accepting, below right of = x14] (x24) {$42$};
 
     \path
         (x0) edge node [above left] {$1/1$} (x1)
@@ -349,7 +351,7 @@
         (x15) edge node [above left] {$1/5$} (x16)
         (x16) edge [bend left]  node [above]           {$1/\epsilon$} (x17)
         (x16) edge [bend right] node [above, near end] {$2/\epsilon$} (x18)
-        (x17) edge [line width=\ww] node {$a/\epsilon$} (x19)
+        (x17) edge node {$a/\epsilon$} (x19)
         (x18) edge node {$1/\epsilon$} (x20)
         (x19) edge [bend left]  node [above]             {$1/\epsilon$} (x21)
         (x20) edge [bend right] node [above, near start] {$1/\epsilon$} (x21)
@@ -360,7 +362,7 @@
         (y15) edge node [above left] {$1/5$} (y16)
         (y16) edge [bend left]  node [above]           {$1/\epsilon$} (y17)
         (y16) edge [bend right] node [above, near end] {$2/\epsilon$} (y18)
-        (y17) edge [line width=\ww] node {$a/\epsilon$} (y19)
+        (y17) edge node {$a/\epsilon$} (y19)
         (y18) edge node {$1/\epsilon$} (y20)
         (y19) edge [bend left]  node [above]             {$1/\epsilon$} (y21)
         (y20) edge [bend right] node [above, near start] {$1/\epsilon$} (y21)
@@ -371,38 +373,113 @@
         (z15) edge node [above left] {$1/5$} (z16)
         (z16) edge [bend left]  node [above]           {$1/\epsilon$} (z17)
         (z16) edge [bend right] node [above, near end] {$2/\epsilon$} (z18)
-        (z17) edge [line width=\ww] node {$a/\epsilon$} (z19)
+        (z17) edge node {$a/\epsilon$} (z19)
         (z18) edge node {$1/\epsilon$} (z20)
         (z19) edge [bend left]  node [above]             {$1/\epsilon$} (z21)
         (z20) edge [bend right] node [above, near start] {$1/\epsilon$} (z21)
         (z21) edge node [above right] {$1/6$} (z22)
 
-        (z22) edge node [above] {$1/\epsilon$} (z23)
-        (z23) edge node [above right] {$1/4$} (x23)
+        (z22) edge node [above right] {$1/4$} (x23)
 
         (x23) edge node [below right] {$1/7$} (x2)
-        (x2) edge [bend left] node [above] {$1/\epsilon$} (x4)
-        (x2) edge [bend right = 20] node [above] {$2/\epsilon$} (x3X)
+        (x2) edge [bend left] node [above] {$1/\epsilon$} (x4X)
+        (x2) edge [bend right = 20] node [above] {$2/-\!\!9$} (x3Y)
+        (x4X) edge node {$1/9$} (x4)
         (x4) edge node [above] {$1/\epsilon$} (x5)
-        (x5) edge [line width=\ww] node [above] {$a/\epsilon$} (x6)
-        (x6) edge node [above] {$1/\epsilon$} (x7)
-        (x7) edge [bend left] node [above] {$1/\epsilon$} (x12)
-        (x3X) edge node [above] {$1/\epsilon$} (x13X)
+        (x5) edge node [above] {$a/\epsilon$} (x6)
+        (x6) edge node [above] {$2/\epsilon$} (x7)
+        (x7) edge node {$1/10$} (x7X)
+        (x7X) edge [bend left] node {$1/-\!\!11$} (x12)
+        (x3Y) edge node {$1/11$} (x3X)
+        (x3X) edge node [above] {$1/\epsilon$} (x13Y)
+        (x13Y) edge node {$1/12$} (x13X)
         (x13X) edge [bend right = 20] node [above] {$1/\epsilon$} (x12)
         (x12) edge node [above right] {$1/8$} (x14)
 
         (x14) edge node [above right] {$1/2$} (x24)
     ;
 
-    \draw (y22) .. controls ($ (y22) + (0.5, -0.5) $) and ($ (z22) + (-0.5, -0.5) $) .. node [above] {$1/\epsilon$} (z22);
+    \draw (y22) .. controls ($ (y22) + (0.5, -0.6) $) and ($ (z22) + (-0.5, -0.6) $) .. node [above] {$1/\epsilon$} (z22);
     \draw (x22) .. controls ($ (x22) + (0.8, -0.8) $) and ($ (z22) + (-0.8, -0.8) $) .. node [above, near start] {$1/\epsilon$} (z22);
-    \draw (z0) .. controls ($ (z0) + (1.0, -1.0) $) and ($ (z23) + (-1.0, -1.0) $) .. node [above, near start] {$2/-\!\!5$} (z23);
-    \draw (x6) .. controls ($ (x6) + (0.4, 0.8) $) and ($ (x5) + (-0.4, 0.8) $) .. node [above] {$2/\epsilon$} (x5);
+    \draw (z0) .. controls ($ (z0) + (1.0, -1.0) $) and ($ (z22) + (-1.0, -1.0) $) .. node [above, near start] {$2/-\!\!5$} (z22);
+    \draw (x6) .. controls ($ (x6) + (0.3, 0.8) $) and ($ (x5) + (-0.3, 0.8) $) .. node [above] {$1/\epsilon$} (x5);
     \draw (x4) .. controls ($ (x4) + (0.6, -0.6) $) and ($ (x7) + (-0.6, -0.6) $) .. node [above] {$2/\epsilon$} (x7);
 
-    \path (x0) edge [draw=none] node [below=0.1in, midway] {\large{(k)} -- TNFA for RE $(a|\epsilon)^{0,3}(a^{0,\infty}|\epsilon)$} (x24);
+    \path (x0) edge [draw=none] node [below=0.1in, midway] {\large{(k)} -- TNFA for RE $(a|\epsilon)^{0,3}((a^{0,\infty})|(\epsilon))$} (x24);
 
 \end{scope}
+
+\iffalse
+\tikzstyle{every node}=[draw=none, rectangle, rounded corners, node distance = 0.2in];
+\begin{scope}[xshift=-0.5in, yshift=-9in]
+    %\footnotesize
+    \scriptsize
+
+    \node (n1) {$1$};
+    \node [right of = n1] (n2) {$2$};
+    \node [right of = n2] (n3) {$3$};
+    \node [right of = n3] (n4) {$4$};
+    \node [right of = n4] (n5) {$5$};
+    \node [right of = n5, draw] (n6) {$6$};
+
+    \node [below of = n6] (n8) {$8$};
+    \node [right of = n8] (n9) {$9$};
+    \node [right of = n9] (n10) {$10$};
+    \node [right of = n10] (n11) {$11$};
+    \node [right of = n11] (n27) {$27$};
+    \node [right of = n27] (n29) {$28$};
+    \node [right of = n29] (n30) {$29$};
+    \node [right of = n30] (n31) {$30$};
+    \node [right of = n31, draw] (n32) {$31$};
+
+    \node [below of = n32] (n34) {$33$};
+    \node [right of = n34] (n37) {$36$};
+    \node [right of = n37] (n38) {$37$};
+    \node [right of = n38, draw] (n39) {$38$};
+
+    \node [below of = n31] (n31X) {};
+    \node [below of = n34] (n35X) {$34$};
+    \node [right of = n35X] (n36X) {$35$};
+    \node [right of = n36X, draw, cross out] (n37X) {$36$};
+
+    \node [below of = n30] (n28Y) {};
+    \node [below of = n28Y] (n28YY) {};
+    \node [below of = n28YY] (n12Y) {$12$};
+    \node [right of = n12Y] (n13Y) {$13$};
+    \node [right of = n13Y, draw] (n14Y) {$14$};
+
+    \node [below of = n14Y] (n16Z) {$16$};
+    \node [right of = n16Z] (n17Z) {$17$};
+    \node [right of = n17Z] (n18Z) {$18$};
+    \node [right of = n18Z] (n19Z) {$19$};
+    \node [right of = n19Z, draw, cross out] (n27Z) {$27$};
+
+    \node [below of = n27Z] (n20W) {$20$};
+    \node [right of = n20W] (n21W) {$21$};
+    \node [right of = n21W, draw] (n22W) {$22$};
+
+    \node [below of = n27] (n27U) {};
+    \node [below of = n27U] (n27UU) {};
+    \node [below of = n27UU] (n27UUU) {};
+    \node [below of = n27UUU] (n27UUUU) {};
+    \node [below of = n27UUUU] (n27UUUUU) {};
+    \node [below of = n27UUUUU, draw, cross out] (n27UUUUU) {$27$};
+
+    \draw [-] (n1) -- (n2) -- (n3) -- (n4) -- (n5) -- (n6);
+    \draw [-] (n5) -- (n8) -- (n9) -- (n10) -- (n11) -- (n27) -- (n29) -- (n30) -- (n31) -- (n32);
+    \draw [-] (n31) -- (n34) -- (n37) -- (n38) -- (n39);
+    \draw [-] (n30) -- (n35X) -- (n36X) -- (n37X);
+    \draw [-] (n11) -- (n12Y) -- (n13Y) -- (n14Y);
+    \draw [-] (n13Y) --(n16Z) -- (n17Z) -- (n18Z) -- (n19Z) -- (n27Z);
+    \draw [-] (n19Z) -- (n20W) -- (n21W) -- (n22W);
+    \draw [-] (n3) -- (n27UUUUU);
+
+MATCH a.
+THIS ALLOWS TO SHOW ALL RULES OF COMPARISON (some on the 1st epsilon-closure, some on second).
+
+
+\end{scope}
+\fi
 
 \end{tikzpicture}
 
