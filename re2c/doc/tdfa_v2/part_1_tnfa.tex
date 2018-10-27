@@ -757,23 +757,21 @@ Examples: (a) -- (d): four main rules of POSIX comparison,
 
     \begin{Xdef}
     \emph{Tagged Nondeterministic Finite Automaton (TNFA)}
-    is a structure $(\Sigma, Q, F, q_0, \Delta)$, where:
+    is a structure $(\Sigma, Q, T, \Delta, q_0, q_f)$, where:
     \begin{itemize}
         \item[] $\Sigma$ is a finite set of symbols (\emph{alphabet})
         \item[] $Q$ is a finite set of \emph{states}
-        \item[] $F \subseteq Q$ is the set of \emph{final} states
-        \item[] $q_0 \in Q$ is the \emph{initial} state
-
-%        \item[] $T \subseteq \YN$ is a finite set of \emph{tags}
-%        \item[] $P \subseteq \YN$ is a finite set of \emph{priorities}
-
+        \item[] $T\subset\YN$ is a finite set of \emph{tags}
         \item[] $\Delta = \Delta^\Sigma \sqcup \Delta^\epsilon$ is the \emph{transition} relation, where:
         \begin{itemize}
             \item[] $\Delta^\Sigma \subseteq Q \times \Sigma \times \{\epsilon\} \times Q$ (transitions on symbols)
             \item[] $\Delta^\epsilon \subseteq Q \times \YN \times \big( \YN \cup \{\epsilon\} \big) \times Q$ ($\epsilon$-transitions)
+            \item[]
+                and all $\epsilon$-transitions from the same state have different priority:
+                $\forall (q, n, \Xund, \Xund), (q, m, \Xund, \Xund) \in \Delta^\epsilon: n \neq m$.
         \end{itemize}
-        and the property that all $\epsilon$-transitions from the same state have different priority:
-        $\forall (q, n, \Xund, \Xund), (q, m, \Xund, \Xund) \in \Delta^\epsilon: n \neq m$.
+        \item[] $q_0 \in Q$ is the \emph{initial} state
+        \item[] $q_f \in Q$ is the \emph{final} state
     \end{itemize}
     \end{Xdef}
 
@@ -782,7 +780,12 @@ TNFA construction is given by the $F$ function defined on figure \ref{fig_tnfa}.
 \begin{figure}\label{fig_tnfa}
 \includegraphics[width=\linewidth]{img/tnfa.pdf}
 \caption{
-TNFA construction.
+TNFA construction:
+(a) -- operations of concatenation, union, closure on automata, \\
+(b) -- subautomaton for submatch IRE,
+(c) -- subautomaton for negative tags,
+(d) -- (k) -- subautomata for non-submatch IRE, \\
+(l) -- example TNFA for RE $(a|\epsilon)^{0,3}((a^{0,\infty})|(\epsilon))$.
 }
 \end{figure}
 
