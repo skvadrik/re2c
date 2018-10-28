@@ -20,16 +20,26 @@ model.
 --------------------------------------------------------------------------------
 
 
+DOCUMENTATION
+--------------------------------------------------------------------------------
+Man page:
+    $ man re2c
+
+Official website:
+    re2c.org
+
+Examples can also be found in 'examples' directory.
+--------------------------------------------------------------------------------
+
+
 DOWNLOAD
 --------------------------------------------------------------------------------
-The re2c distribution can be found at:
-    https://sourceforge.net/projects/re2c/
+Tarballs:
+    https://github.com/skvadrik/re2c/releases
 
-Download the latest tarball:
-    https://sourceforge.net/projects/re2c/files/latest/download
-
-Clone git repo:
-    git clone git://git.code.sf.net/p/re2c/code-git
+Source code (github is the primary repo, sf can be a bit outdated):
+    $ git clone https://github.com/skvadrik/re2c.git
+    $ git clone https://git.code.sf.net/p/re2c/code-git
 --------------------------------------------------------------------------------
 
 
@@ -92,26 +102,6 @@ This will result into an executable re2c.exe, which can be tested with wine:
 --------------------------------------------------------------------------------
 
 
-INFO
---------------------------------------------------------------------------------
-    $ man re2c
-
-re2c home page:
-    re2c.org
-
-re2c manual:
-    re2c.org/manual.html
-
-Ulya Trofimovich's blog on re2c:
-    skvadrik.github.io/aleph_null/re2c.html
-
-Original paper on re2c: "RE2C: a More Versatile Parser Generator" (1994, Peter
-Bumbulis and Donald D. Cowan).
-
-Examples can be found in 'examples' directory.
---------------------------------------------------------------------------------
-
-
 MAILING LISTS
 --------------------------------------------------------------------------------
 re2c-general:
@@ -126,7 +116,7 @@ You are welcome to ask for help or share your thoughts and ideas about re2c :)
 BUGS
 --------------------------------------------------------------------------------
 Please report any bugs and send feature requests to:
-    https://sourceforge.net/p/re2c/_list/tickets
+    https://github.com/skvadrik/re2c/issues
 --------------------------------------------------------------------------------
 
 
