@@ -206,11 +206,7 @@ scan:
     "//" { lex_cpp_comment(); goto scan; }
     "/*" { lex_c_comment(); goto scan; }
 
-   endRE    =  "%}" | "*/";
-   endRE    {
-                    tok = cur;
-                    return 0;
-                }
+    "%}" | "*""/" { tok = cur; return 0; }
 
     "'"  { yylval.regexp = lex_str('\''); return TOKEN_REGEXP; }
     "\"" { yylval.regexp = lex_str('"'); return TOKEN_REGEXP; }
@@ -225,94 +221,89 @@ scan:
 
     [*+?<>!,()|=;/\\] { return *tok; }
 
-    "{" [0-9]+ "}"    {
-                    if (!s_to_u32_unsafe (tok + 1, cur - 1, yylval.bounds.min))
-                    {
-                        fatal_lc(get_cline(), get_column(), "repetition count overflow");
-                    }
-                    yylval.bounds.max = yylval.bounds.min;
-                    return TOKEN_CLOSESIZE;
-                }
+    "{" [0-9]+ "}" {
+        if (!s_to_u32_unsafe (tok + 1, cur - 1, yylval.bounds.min)) {
+            fatal_lc(get_cline(), get_column(), "repetition count overflow");
+        }
+        yylval.bounds.max = yylval.bounds.min;
+        return TOKEN_CLOSESIZE;
+    }
 
-    "{" [0-9]+ "," [0-9]+ "}"    {
-                    const char * p = strchr (tok, ',');
-                    if (!s_to_u32_unsafe (tok + 1, p, yylval.bounds.min))
-                    {
-                        fatal_lc(get_cline(), get_column(), "repetition lower bound overflow");
-                    }
-                    if (!s_to_u32_unsafe (p + 1, cur - 1, yylval.bounds.max))
-                    {
-                        fatal_lc(get_cline(), get_column(), "repetition upper bound overflow");
-                    }
-                    return TOKEN_CLOSESIZE;
-                }
+    "{" [0-9]+ "," [0-9]+ "}" {
+        const char * p = strchr (tok, ',');
+        if (!s_to_u32_unsafe (tok + 1, p, yylval.bounds.min)) {
+            fatal_lc(get_cline(), get_column(), "repetition lower bound overflow");
+        }
+        if (!s_to_u32_unsafe (p + 1, cur - 1, yylval.bounds.max)) {
+            fatal_lc(get_cline(), get_column(), "repetition upper bound overflow");
+        }
+        return TOKEN_CLOSESIZE;
+    }
 
-    "{" [0-9]+ ",}"        {
-                    if (!s_to_u32_unsafe (tok + 1, cur - 2, yylval.bounds.min))
-                    {
-                        fatal_lc(get_cline(), get_column(), "repetition lower bound overflow");
-                    }
-                    yylval.bounds.max = std::numeric_limits<uint32_t>::max();
-                    return TOKEN_CLOSESIZE;
-                }
+    "{" [0-9]+ ",}" {
+        if (!s_to_u32_unsafe (tok + 1, cur - 2, yylval.bounds.min)) {
+            fatal_lc(get_cline(), get_column(), "repetition lower bound overflow");
+        }
+        yylval.bounds.max = std::numeric_limits<uint32_t>::max();
+        return TOKEN_CLOSESIZE;
+    }
 
-    "{" [0-9]* ","        {
-                    fatal_lc(get_cline(), get_column(), "illegal closure form, use '{n}', '{n,}', '{n,m}' where n and m are numbers");
-                }
+    "{" [0-9]* "," {
+        fatal_lc(get_cline(), get_column(),
+            "illegal closure form, use '{n}', '{n,}', '{n,m}' where n and m are numbers");
+    }
 
-    "{" name "}"    {
-                    if (!globopts->FFlag) {
-                        fatal_lc(get_cline(), get_column(), "curly braces for names only allowed with -F switch");
-                    }
-                    yylval.str = new std::string (tok + 1, tok_len () - 2); // -2 to omit braces
-                    return TOKEN_ID;
-                }
+    "{" name "}" {
+        if (!globopts->FFlag) {
+            fatal_lc(get_cline(), get_column(),
+                "curly braces for names only allowed with -F switch");
+        }
+        yylval.str = new std::string (tok + 1, tok_len () - 2); // -2 to omit braces
+        return TOKEN_ID;
+    }
 
     "re2c:" { return TOKEN_CONF; }
 
-    name / (space+ [^=>,])    {
-                    yylval.str = new std::string (tok, tok_len ());
-                    if (globopts->FFlag)
-                    {
-                        lexer_state = LEX_FLEX_NAME;
-                        return TOKEN_FID;
-                    }
-                    else
-                    {
-                        return TOKEN_ID;
-                    }
-                }
+    name / (space+ [^=>,]) {
+        yylval.str = new std::string (tok, tok_len ());
+        if (globopts->FFlag) {
+            lexer_state = LEX_FLEX_NAME;
+            return TOKEN_FID;
+        }
+        else {
+            return TOKEN_ID;
+        }
+    }
 
-    name / (space* [=>,])    {
-                    yylval.str = new std::string (tok, tok_len ());
-                    return TOKEN_ID;
-                }
+    name / (space* [=>,]) {
+        yylval.str = new std::string (tok, tok_len ());
+        return TOKEN_ID;
+    }
 
-    name / [^]    {
-                    if (!globopts->FFlag) {
-                        yylval.str = new std::string (tok, tok_len());
-                        return TOKEN_ID;
-                    } else {
-                        std::vector<ASTChar> *str = new std::vector<ASTChar>;
-                        for (char *s = tok; s < cur; ++s) {
-                            const uint32_t
-                                chr = static_cast<uint8_t>(*s),
-                                col = static_cast<uint32_t>(s - tok);
-                            str->push_back(ASTChar(chr, col));
-                        }
-                        yylval.regexp = ast_str(cline, get_column(), str, false);
-                        return TOKEN_REGEXP;
-                    }
-                }
+    name / [^] {
+        if (!globopts->FFlag) {
+            yylval.str = new std::string (tok, tok_len());
+            return TOKEN_ID;
+        }
+        else {
+            std::vector<ASTChar> *str = new std::vector<ASTChar>;
+            for (char *s = tok; s < cur; ++s) {
+                const uint32_t
+                    chr = static_cast<uint8_t>(*s),
+                    col = static_cast<uint32_t>(s - tok);
+                str->push_back(ASTChar(chr, col));
+            }
+            yylval.regexp = ast_str(cline, get_column(), str, false);
+            return TOKEN_REGEXP;
+        }
+    }
 
-    "."            {
-                    yylval.regexp = ast_dot(cline, get_column());
-                    return TOKEN_REGEXP;
-                }
+    "." {
+        yylval.regexp = ast_dot(cline, get_column());
+        return TOKEN_REGEXP;
+    }
 
-    space+        {
-                    goto scan;
-                }
+    space+ { goto scan; }
 
     eol space* "#" space* "line" space+ / lineinf {
         set_sourceline ();
@@ -326,15 +317,16 @@ scan:
         if (lexer_state == LEX_FLEX_NAME) {
             lexer_state = LEX_NORMAL;
             return TOKEN_FID_END;
-        } else {
+        }
+        else {
             goto scan;
         }
     }
 
-    *            {
-                    fatal_lc(get_cline(), get_column(), "unexpected character: '%c'", *tok);
-                    goto scan;
-                }
+    * {
+        fatal_lc(get_cline(), get_column(), "unexpected character: '%c'", *tok);
+        goto scan;
+    }
 */
 }
 
