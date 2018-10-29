@@ -62,6 +62,10 @@ class Scanner: private ScannerState
 
     void fill(uint32_t need);
     void lex_end_of_comment(OutputFile &out);
+    void lex_code(uint32_t depth);
+    void lex_c_comment();
+    void lex_cpp_comment();
+    void lex_string(char delim);
     void lex_tags(OutputFile &out, bool mtags);
     void set_sourceline ();
     uint32_t lex_cls_chr();

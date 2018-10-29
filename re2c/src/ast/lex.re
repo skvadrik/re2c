@@ -20,11 +20,11 @@
 
 extern YYSTYPE yylval;
 
-#define    YYCTYPE        unsigned char
-#define    YYCURSOR    cur
-#define    YYLIMIT        lim
-#define    YYMARKER    mar
-#define    YYCTXMARKER    ctx
+#define    YYCTYPE      unsigned char
+#define    YYCURSOR     cur
+#define    YYLIMIT      lim
+#define    YYMARKER     mar
+#define    YYCTXMARKER  ctx
 #define    YYFILL(n)    { fill (n); }
 
 namespace re2c
@@ -39,8 +39,8 @@ namespace re2c
 
 /*!re2c
 eof     = "\000";
-dstring = "\"" ((. \ [\\"] ) | "\\" .)* "\"";
-sstring = "'"  ((. \ [\\'] ) | "\\" .)* "'" ;
+dstring = "\"" ([^\x00\n\\"] | "\\" [^\x00\n])* "\"";
+sstring = "'"  ([^\x00\n\\'] | "\\" [^\x00\n])* "'" ;
 letter  = [a-zA-Z];
 digit   = [0-9];
 lineno  = [1-9] digit*;
@@ -195,35 +195,16 @@ void Scanner::lex_tags(OutputFile &out, bool mtags)
 
 int Scanner::scan(const conopt_t *globopts)
 {
-    uint32_t depth, code_line;
 scan:
     tchar = cur - pos;
     tok = cur;
 /*!re2c
-    "{"            {
-                    depth = 1;
-                    code_line = cline;
-                    goto code;
-                }
+    "{"        { lex_code(1); return TOKEN_CODE; }
+    ":="       { tok += 2; lex_code(0); return TOKEN_CODE; }
+    ":" / "=>" { return *tok; }
 
-    ":" / "=>"    {
-                    return *tok;
-                }
-
-    ":="        {
-                    tok += 2; /* skip ":=" */
-                    depth = 0;
-                    code_line = cline;
-                    goto code;
-                }
-
-        "//"            {
-                goto nextLine;
-            }
-    "/*"        {
-                    depth = 1;
-                    goto comment;
-                }
+    "//" { lex_cpp_comment(); goto scan; }
+    "/*" { lex_c_comment(); goto scan; }
 
    endRE    =  "%}" | "*/";
    endRE    {
@@ -355,140 +336,106 @@ scan:
                     goto scan;
                 }
 */
+}
 
+void Scanner::lex_code(uint32_t depth)
+{
+    const uint32_t line = cline;
 code:
 /*!re2c
-    "}"            {
-                    if (depth == 0)
-                    {
-                        fatal_l(get_cline(), "Curly braces are not allowed after ':='");
-                    }
-                    else if (--depth == 0)
-                    {
-                        yylval.code = new Code(get_fname (), code_line, tok, tok_len ());
-                        return TOKEN_CODE;
-                    }
-                    goto code;
-                }
-    "{"            {
-                    if (depth == 0)
-                    {
-                        fatal_l(get_cline(), "Curly braces are not allowed after ':='");
-                    }
-                    else
-                    {
-                        ++depth;
-                    }
-                    goto code;
-                }
-    "\n" space* "#" space* "line" space+ / lineinf {
-                    set_sourceline ();
-                    goto code;
-                }
-    "\n" /  ws    {
-                    if (depth == 0)
-                    {
-                        goto code;
-                    }
-                    else if (cur == eof)
-                    {
-                        fatal_l(get_cline(), "missing '}'");
-                    }
-                    pos = cur;
-                    cline++;
-                    goto code;
-                }
-    "\n"        {
-                    if (depth == 0)
-                    {
-                        tok += strspn(tok, " \t\r\n");
-                        while (cur > tok && strchr(" \t\r\n", cur[-1]))
-                        {
-                            --cur;
-                        }
-                        yylval.code = new Code(get_fname (), code_line, tok, tok_len ());
-                        return TOKEN_CODE;
-                    }
-                    else if (cur == eof)
-                    {
-                        fatal_l(get_cline(), "missing '}'");
-                    }
-                    pos = cur;
-                    cline++;
-                    goto code;
-                }
-    eof        {
-                    if (cur == eof)
-                    {
-                        if (depth)
-                        {
-                            fatal_l(get_cline(), "missing '}'");
-                        }
-                        return 0;
-                    }
-                    goto code;
-                }
-    dstring | sstring    {
-                    goto code;
-                }
-    *            {
-                    goto code;
-                }
-*/
+    "}" {
+        if (depth == 0) {
+            fatal_l(get_cline(), "Curly braces are not allowed after ':='");
+        }
+        else if (--depth == 0) {
+            yylval.code = new Code(get_fname (), line, tok, tok_len ());
+            return;
+        }
+        goto code;
+    }
 
-comment:
+    "{" {
+        if (depth == 0) {
+            fatal_l(get_cline(), "Curly braces are not allowed after ':='");
+        }
+        else {
+            ++depth;
+        }
+        goto code;
+    }
+
+    eol space* "#" space* "line" space+ / lineinf {
+        set_sourceline ();
+        goto code;
+    }
+
+    eol / ws {
+        if (depth == 0) goto code;
+        else if (cur == eof) fatal_l(get_cline(), "missing '}'");
+        pos = cur;
+        cline++;
+        goto code;
+    }
+
+    eol {
+        if (depth == 0) {
+            tok += strspn(tok, " \t\r\n");
+            while (cur > tok && strchr(" \t\r\n", cur[-1])) --cur;
+            yylval.code = new Code(get_fname (), line, tok, tok_len ());
+            return;
+        }
+        else if (cur == eof) {
+            fatal_l(get_cline(), "missing '}'");
+        }
+        pos = cur;
+        cline++;
+        goto code;
+    }
+
+    eof {
+        if (cur == eof) {
+            if (depth) fatal_l(get_cline(), "missing '}'");
+        }
+        goto code;
+    }
+
+    "/*" { lex_c_comment(); goto code; }
+    "//" { lex_cpp_comment(); goto code; }
+    ["'] { lex_string(cur[-1]); goto code; }
+    *    { goto code; }
+*/
+}
+
+void Scanner::lex_string(char delim)
+{
+loop:
 /*!re2c
-    "*" "/"        {
-                    if (--depth == 0)
-                    {
-                        goto scan;
-                    }
-                    else
-                    {
-                        goto comment;
-                    }
-                }
-    "/" "*"        {
-                    ++depth;
-                    fatal_lc(get_cline(), get_column(), "ambiguous /* found");
-                    goto comment;
-                }
-    "\n" space* "#" space* "line" space+ / lineinf {
-                    set_sourceline ();
-                    goto comment;
-                }
-    "\n"        {
-                    if (cur == eof)
-                    {
-                        return 0;
-                    }
-                    tok = pos = cur;
-                    cline++;
-                    goto comment;
-                }
-    *            {
-                    if (cur == eof)
-                    {
-                        return 0;
-                    }
-                    goto comment;
-                }
+    ["']       { if (cur[-1] == delim) return; else goto loop; }
+    esc [\\"'] { goto loop; }
+    eol        { pos = cur; ++cline; goto loop; }
+    eof        { if (cur == eof) fatal_l(get_cline(), "unexpected end of input"); else goto loop; }
+    *          { goto loop; }
 */
+}
 
-nextLine:
-/*!re2c                                  /* resync emacs */
-   "\n"     { if(cur == eof) {
-                  return 0;
-               }
-               tok = pos = cur;
-               cline++;
-               goto scan;
-            }
-   *        {  if(cur == eof) {
-                  return 0;
-               }
-               goto nextLine;
-            }
+void Scanner::lex_c_comment()
+{
+loop:
+/*!re2c
+    eoc { return; }
+    eol { pos = cur; ++cline; goto loop; }
+    eof { if (cur == eof) fatal_l(get_cline(), "end of input in comment"); else goto loop; }
+    *   { goto loop; }
+*/
+}
+
+void Scanner::lex_cpp_comment()
+{
+loop:
+/*!re2c
+    eol { pos = cur; ++cline; return; }
+    eof { if (cur == eof) fatal_l(get_cline(), "end of input in comment"); else goto loop; }
+    *   { goto loop; }
 */
 }
 
