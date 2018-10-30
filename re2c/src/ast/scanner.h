@@ -62,7 +62,8 @@ class Scanner: private ScannerState
 
     void fill(uint32_t need);
     void lex_end_of_comment(OutputFile &out);
-    void lex_code(uint32_t depth);
+    void lex_code_oneline();
+    void lex_code_multiline();
     void lex_c_comment();
     void lex_cpp_comment();
     void lex_string(char delim);
@@ -82,7 +83,8 @@ class Scanner: private ScannerState
     int32_t lex_conf_number();
     bool lex_conf_bool();
     std::string lex_conf_string();
-    size_t tok_len () const;
+    size_t tok_len() const;
+    void fail_if_eof() const;
 
 public:
     enum ParseMode {Stop, Parse, Reuse, Rules};

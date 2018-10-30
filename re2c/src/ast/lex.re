@@ -49,6 +49,7 @@ space   = [ \t];
 ws      = (space | [\r\n]);
 eol     = "\r"? "\n";
 eoc     = "*" "/";
+linedir = eol space* "#" space* "line" space+;
 lineinf = lineno (space+ dstring)? eol;
 
     esc = "\\";
@@ -139,7 +140,7 @@ echo:
         return Stop;
     }
 
-    eol space* "#" space* "line" space+ / lineinf {
+    linedir / lineinf {
         out.wraw(tok, ptr + 1);
         set_sourceline();
         goto echo;
@@ -199,8 +200,8 @@ scan:
     tchar = cur - pos;
     tok = cur;
 /*!re2c
-    "{"        { lex_code(1); return TOKEN_CODE; }
-    ":="       { tok += 2; lex_code(0); return TOKEN_CODE; }
+    "{"        { lex_code_multiline(); return TOKEN_CODE; }
+    ":="       { tok += 2; lex_code_oneline(); return TOKEN_CODE; }
     ":" / "=>" { return *tok; }
 
     "//" { lex_cpp_comment(); goto scan; }
@@ -305,13 +306,12 @@ scan:
 
     space+ { goto scan; }
 
-    eol space* "#" space* "line" space+ / lineinf {
+    linedir / lineinf {
         set_sourceline ();
         return TOKEN_LINE_INFO;
     }
 
     eol {
-        if (cur == eof) return 0;
         pos = cur;
         cline++;
         if (lexer_state == LEX_FLEX_NAME) {
@@ -330,71 +330,50 @@ scan:
 */
 }
 
-void Scanner::lex_code(uint32_t depth)
+void Scanner::lex_code_oneline()
 {
     const uint32_t line = cline;
 code:
 /*!re2c
-    "}" {
-        if (depth == 0) {
-            fatal_l(get_cline(), "Curly braces are not allowed after ':='");
-        }
-        else if (--depth == 0) {
-            yylval.code = new Code(get_fname (), line, tok, tok_len ());
-            return;
-        }
-        goto code;
-    }
-
-    "{" {
-        if (depth == 0) {
-            fatal_l(get_cline(), "Curly braces are not allowed after ':='");
-        }
-        else {
-            ++depth;
-        }
-        goto code;
-    }
-
-    eol space* "#" space* "line" space+ / lineinf {
-        set_sourceline ();
-        goto code;
-    }
-
-    eol / ws {
-        if (depth == 0) goto code;
-        else if (cur == eof) fatal_l(get_cline(), "missing '}'");
-        pos = cur;
-        cline++;
-        goto code;
-    }
-
+    eol / ws { goto code; }
     eol {
-        if (depth == 0) {
-            tok += strspn(tok, " \t\r\n");
-            while (cur > tok && strchr(" \t\r\n", cur[-1])) --cur;
+        tok += strspn(tok, " \t\r\n");
+        while (cur > tok && strchr(" \t\r\n", cur[-1])) --cur;
+        yylval.code = new Code(get_fname (), line, tok, tok_len ());
+        return;
+    }
+
+    eof      { fail_if_eof(); goto code; }
+    [{}]     { fatal_l(get_cline(), "Curly braces are not allowed after ':='"); }
+    "/*"     { lex_c_comment(); goto code; }
+    "//"     { lex_cpp_comment(); goto code; }
+    ["']     { lex_string(cur[-1]); goto code; }
+    *        { goto code; }
+*/
+}
+
+void Scanner::lex_code_multiline()
+{
+    const uint32_t line = cline;
+    uint32_t depth = 1;
+code:
+/*!re2c
+    "}" {
+        if (--depth == 0) {
             yylval.code = new Code(get_fname (), line, tok, tok_len ());
             return;
         }
-        else if (cur == eof) {
-            fatal_l(get_cline(), "missing '}'");
-        }
-        pos = cur;
-        cline++;
         goto code;
     }
 
-    eof {
-        if (cur == eof) {
-            if (depth) fatal_l(get_cline(), "missing '}'");
-        }
-        goto code;
-    }
-
-    "/*" { lex_c_comment(); goto code; }
-    "//" { lex_cpp_comment(); goto code; }
-    ["'] { lex_string(cur[-1]); goto code; }
-    *    { goto code; }
+    "{"               { ++depth; goto code; }
+    linedir / lineinf { set_sourceline (); goto code; }
+    eol               { pos = cur; cline++; goto code; }
+    eof               { fail_if_eof(); goto code; }
+    "/*"              { lex_c_comment(); goto code; }
+    "//"              { lex_cpp_comment(); goto code; }
+    ["']              { lex_string(cur[-1]); goto code; }
+    *                 { goto code; }
 */
 }
 
@@ -405,7 +384,7 @@ loop:
     ["']       { if (cur[-1] == delim) return; else goto loop; }
     esc [\\"'] { goto loop; }
     eol        { pos = cur; ++cline; goto loop; }
-    eof        { if (cur == eof) fatal_l(get_cline(), "unexpected end of input"); else goto loop; }
+    eof        { fail_if_eof(); goto loop; }
     *          { goto loop; }
 */
 }
@@ -416,7 +395,7 @@ loop:
 /*!re2c
     eoc { return; }
     eol { pos = cur; ++cline; goto loop; }
-    eof { if (cur == eof) fatal_l(get_cline(), "end of input in comment"); else goto loop; }
+    eof { fail_if_eof(); goto loop; }
     *   { goto loop; }
 */
 }
@@ -426,7 +405,7 @@ void Scanner::lex_cpp_comment()
 loop:
 /*!re2c
     eol { pos = cur; ++cline; return; }
-    eof { if (cur == eof) fatal_l(get_cline(), "end of input in comment"); else goto loop; }
+    eof { fail_if_eof(); goto loop; }
     *   { goto loop; }
 */
 }
@@ -465,6 +444,7 @@ uint32_t Scanner::lex_cls_chr()
     const uint32_t l = get_cline(), c = get_column();
     /*!re2c
         *          { fatal_lc(l, c, "syntax error"); }
+        eof        { fail_if_eof(); return 0; }
         esc? eol   { fatal_lc(l, c, "newline in character class"); }
         esc [xXuU] { fatal_lc(l, c, "syntax error in hexadecimal escape sequence"); }
         esc [0-7]  { fatal_lc(l, c, "syntax error in octal escape sequence"); }
@@ -497,6 +477,7 @@ uint32_t Scanner::lex_str_chr(char quote, bool &end)
     const uint32_t l = get_cline(), c = get_column();
     /*!re2c
         *          { fatal_lc(l, c, "syntax error"); }
+        eof        { fail_if_eof(); return 0; }
         esc? eol   { fatal_lc(l, c, "newline in character string"); }
         esc [xXuU] { fatal_lc(l, c, "syntax error in hexadecimal escape sequence"); }
         esc [0-7]  { fatal_lc(l, c, "syntax error in octal escape sequence"); }
@@ -567,6 +548,14 @@ sourceline:
 
     * { goto sourceline; }
 */
+}
+
+void Scanner::fail_if_eof() const
+{
+    if (cur == eof) {
+        const uint32_t col = static_cast<uint32_t>(cur - pos) - 1;
+        fatal_lc(get_cline(), col, "unexpected end of input");
+    }
 }
 
 } // end namespace re2c
