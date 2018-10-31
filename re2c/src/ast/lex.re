@@ -463,7 +463,7 @@ uint32_t Scanner::lex_cls_chr()
         esc "\\"   { return static_cast<uint8_t>('\\'); }
         esc "-"    { return static_cast<uint8_t>('-'); }
         esc "]"    { return static_cast<uint8_t>(']'); }
-        esc .      {
+        esc (.\eof){
             warn.useless_escape(cline, get_column(), tok[1]);
             return static_cast<uint8_t>(tok[1]);
         }
@@ -497,7 +497,7 @@ uint32_t Scanner::lex_str_chr(char quote, bool &end)
         esc "t"    { return static_cast<uint8_t>('\t'); }
         esc "v"    { return static_cast<uint8_t>('\v'); }
         esc "\\"   { return static_cast<uint8_t>('\\'); }
-        esc .      {
+        esc (.\eof){
             if (tok[1] != quote) {
                 warn.useless_escape(cline, get_column(), tok[1]);
             }

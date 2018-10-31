@@ -1,1 +1,1 @@
-re2c: error: line 1, column 4: unexpected end of input
+re2c: error: line 1, column 9: unexpected end of input
