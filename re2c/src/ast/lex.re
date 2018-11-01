@@ -200,8 +200,8 @@ scan:
     tchar = cur - pos;
     tok = cur;
 /*!re2c
-    "{"        { lex_code_multiline(); return TOKEN_CODE; }
-    ":="       { tok += 2; lex_code_oneline(); return TOKEN_CODE; }
+    "{"        { lex_code_in_braces(); return TOKEN_CODE; }
+    ":="       { lex_code_indented(); return TOKEN_CODE; }
     ":" / "=>" { return *tok; }
 
     "//" { lex_cpp_comment(); goto scan; }
@@ -330,15 +330,16 @@ scan:
 */
 }
 
-void Scanner::lex_code_oneline()
+void Scanner::lex_code_indented()
 {
     const uint32_t line = cline;
+    tok = cur;
 code:
 /*!re2c
     eol / ws { goto code; }
     eol {
-        tok += strspn(tok, " \t\r\n");
-        while (cur > tok && strchr(" \t\r\n", cur[-1])) --cur;
+        while (isspace(tok[0])) ++tok;
+        while (cur > tok && isspace(cur[-1])) --cur;
         yylval.code = new Code(get_fname (), line, tok, tok_len ());
         return;
     }
@@ -352,7 +353,7 @@ code:
 */
 }
 
-void Scanner::lex_code_multiline()
+void Scanner::lex_code_in_braces()
 {
     const uint32_t line = cline;
     uint32_t depth = 1;

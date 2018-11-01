@@ -62,8 +62,8 @@ class Scanner: private ScannerState
 
     void fill(uint32_t need);
     void lex_end_of_comment(OutputFile &out);
-    void lex_code_oneline();
-    void lex_code_multiline();
+    void lex_code_indented();
+    void lex_code_in_braces();
     void lex_c_comment();
     void lex_cpp_comment();
     void lex_string(char delim);
