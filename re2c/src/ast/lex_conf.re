@@ -28,7 +28,7 @@ namespace re2c
 
     conf_assign = space* "=" space*;
 
-    naked_char = . \ (space | [;]);
+    naked_char = [^\x00\n] \ (space | [;]);
     naked      = (naked_char \ ['"]) naked_char*;
 
     number = "0" | ("-"? [1-9] [0-9]*);
