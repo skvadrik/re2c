@@ -30,32 +30,28 @@ extern YYSTYPE yylval;
 namespace re2c
 {
 
-// source code is in ASCII: pointers have type 'char *'
-// but re2c makes an implicit assumption that YYCTYPE is unsigned
-// when it generates comparisons
 /*!re2c
+    // source code is in ASCII: pointers have type 'char *', but re2c makes
+    // assumes that YYCTYPE is unsigned when generating comparisons
     re2c:yych:conversion = 1;
-*/
 
-/*!re2c
-eof     = "\000";
-dstring = "\"" ([^\x00\n\\"] | "\\" [^\x00\n])* "\"";
-sstring = "'"  ([^\x00\n\\'] | "\\" [^\x00\n])* "'" ;
-letter  = [a-zA-Z];
-digit   = [0-9];
-lineno  = [1-9] digit*;
-name    = (letter|"_") (letter|digit|"_")*;
-space   = [ \t];
-ws      = (space | [\r\n]);
-eol     = "\r"? "\n";
-eoc     = "*" "/";
-linedir = eol space* "#" space* "line" space+;
-lineinf = lineno (space+ dstring)? eol;
-
-    esc = "\\";
-    hex_digit = [0-9a-fA-F];
-    esc_hex = esc ("x" hex_digit{2} | [uX] hex_digit{4} | "U" hex_digit{8});
-    esc_oct = esc [0-3] [0-7]{2}; // max 1-byte octal value is '\377'
+    eof        = "\000";
+    dstring    = "\"" ([^\x00\n\\"] | "\\" [^\x00\n])* "\"";
+    sstring    = "'"  ([^\x00\n\\'] | "\\" [^\x00\n])* "'" ;
+    letter     = [a-zA-Z];
+    digit      = [0-9];
+    lineno     = [1-9] digit*;
+    name       = (letter|"_") (letter|digit|"_")*;
+    space      = [ \t];
+    ws         = (space | [\r\n]);
+    eol        = "\r"? "\n";
+    eoc        = "*" "/";
+    linedir    = eol space* "#" space* "line" space+;
+    lineinf    = lineno (space+ dstring)? eol;
+    esc        = "\\";
+    hex_digit  = [0-9a-fA-F];
+    esc_hex    = esc ("x" hex_digit{2} | [uX] hex_digit{4} | "U" hex_digit{8});
+    esc_oct    = esc [0-3] [0-7]{2}; // max 1-byte octal value is '\377'
     esc_simple = esc [abfnrtv\\];
 */
 
