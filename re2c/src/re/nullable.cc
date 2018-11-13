@@ -39,6 +39,9 @@ static bool nullable(const RESpec &spec, const RE *re, bool &trail)
  */
 void warn_nullable(const RESpec &spec, const std::string &cond)
 {
+    // rule for <> is special -- it doesn't have a regexp
+    if (cond == "0") return;
+
     const size_t nre = spec.res.size();
     for (size_t i = 0; i < nre; ++i) {
         bool trail = false;
