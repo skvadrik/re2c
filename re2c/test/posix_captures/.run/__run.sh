@@ -1,7 +1,10 @@
+#!/bin/bash
+
+test $# -ne 1 && { echo "usage: ./__run.sh <path-to-re2c>"; exit 1; }
+re2c="$1"
 
 # run <regex> <string> <match> [re2c-flags]
 run() {
-    re2c="../../../__build/re2c"
     f="test_"`date +%y%m%d%H%M%S`
     fail=0
 

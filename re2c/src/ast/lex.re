@@ -196,9 +196,12 @@ scan:
     tchar = cur - pos;
     tok = cur;
 /*!re2c
-    "{"        { lex_code_in_braces(); return TOKEN_CODE; }
-    ":="       { lex_code_indented(); return TOKEN_CODE; }
-    ":" / "=>" { return *tok; }
+    "{"  { lex_code_in_braces(); return TOKEN_CODE; }
+    ":=" { lex_code_indented(); return TOKEN_CODE; }
+
+    "=>"  { lex_cgoto(); return TOKEN_CNEXT; }
+    ":=>" { lex_cgoto(); return TOKEN_CJUMP; }
+    "<"   { return lex_clist(); }
 
     "//" { lex_cpp_comment(); goto scan; }
     "/*" { lex_c_comment(); goto scan; }
@@ -216,7 +219,7 @@ scan:
         return TOKEN_REGEXP;
     }
 
-    [*+?<>!,()|=;/\\] { return *tok; }
+    [*+?()|;/\\=] { return *tok; }
 
     "{" [0-9]+ "}" {
         if (!s_to_u32_unsafe (tok + 1, cur - 1, yylval.bounds.min)) {
@@ -261,30 +264,19 @@ scan:
 
     "re2c:" { return TOKEN_CONF; }
 
-    name / (space+ [^=>,]) {
-        yylval.str = new std::string (tok, tok_len ());
-        if (globopts->FFlag) {
+    name {
+        if (!globopts->FFlag || lex_namedef_context_re2c()) {
+            yylval.str = new std::string (tok, tok_len());
+            return TOKEN_ID;
+        }
+        else if (lex_namedef_context_flex()) {
+            yylval.str = new std::string (tok, tok_len());
             lexer_state = LEX_FLEX_NAME;
             return TOKEN_FID;
         }
         else {
-            return TOKEN_ID;
-        }
-    }
-
-    name / (space* [=>,]) {
-        yylval.str = new std::string (tok, tok_len ());
-        return TOKEN_ID;
-    }
-
-    name / [^] {
-        if (!globopts->FFlag) {
-            yylval.str = new std::string (tok, tok_len());
-            return TOKEN_ID;
-        }
-        else {
             std::vector<ASTChar> *str = new std::vector<ASTChar>;
-            for (char *s = tok; s < cur; ++s) {
+            for (const char *s = tok; s < cur; ++s) {
                 const uint32_t
                     chr = static_cast<uint8_t>(*s),
                     col = static_cast<uint32_t>(s - tok);
@@ -323,6 +315,73 @@ scan:
         fatal_lc(get_cline(), get_column(), "unexpected character: '%c'", *tok);
         goto scan;
     }
+*/
+}
+
+bool Scanner::lex_namedef_context_re2c()
+{
+/*!re2c
+    "" / space* "=" [^>] { return true; }
+    ""                   { return false; }
+*/
+}
+
+bool Scanner::lex_namedef_context_flex()
+{
+/*!re2c
+    "" / space+ [=:{] { return false; } // exclude lookahead ("=" | "=>" | ":=>" | ":=" | "{")
+    "" / space+       { return true; }
+    ""                { return false; }
+*/
+}
+
+int Scanner::lex_clist()
+{
+    int kind = TOKEN_CLIST;
+    CondList *cl = NULL;
+/*!re2c
+    space* "!" space* { kind = TOKEN_CSETUP; goto fst; }
+    space* ">"        { kind = TOKEN_CZERO; goto end; }
+    space*            { goto fst; }
+*/
+fst:
+    cl = new CondList;
+    tok = cur;
+/*!re2c
+    "*" space* ">"    { cl->insert("*"); goto end; }
+    name              { cl->insert(std::string(tok, tok_len())); goto sep; }
+    *                 { goto error; }
+*/
+sep:
+/*!re2c
+    space* "," space* { goto next; }
+    space* ">"        { goto end; }
+    *                 { goto error; }
+*/
+next:
+    tok = cur;
+/*!re2c
+    name              { cl->insert(std::string(tok, tok_len())); goto sep; }
+    *                 { goto error; }
+*/
+end:
+    yylval.clist = cl;
+    return kind;
+error:
+    delete cl;
+    fatal_l(get_cline(), "syntax error in condition list");
+}
+
+void Scanner::lex_cgoto()
+{
+/*!re2c
+    space* { goto name; }
+*/
+name:
+    tok = cur;
+/*!re2c
+    name   { yylval.str = new std::string (tok, tok_len ()); return; }
+    *      { fatal_l(get_cline(), "syntax error in condition goto"); }
 */
 }
 

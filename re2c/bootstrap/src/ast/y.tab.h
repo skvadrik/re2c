@@ -45,14 +45,19 @@ extern int yydebug;
 # define YYTOKENTYPE
   enum yytokentype
   {
-    TOKEN_CLOSESIZE = 258,
-    TOKEN_CODE = 259,
-    TOKEN_CONF = 260,
-    TOKEN_ID = 261,
-    TOKEN_FID = 262,
-    TOKEN_FID_END = 263,
-    TOKEN_LINE_INFO = 264,
-    TOKEN_REGEXP = 265
+    TOKEN_CJUMP = 258,
+    TOKEN_CNEXT = 259,
+    TOKEN_CLIST = 260,
+    TOKEN_CSETUP = 261,
+    TOKEN_CZERO = 262,
+    TOKEN_CLOSESIZE = 263,
+    TOKEN_CODE = 264,
+    TOKEN_CONF = 265,
+    TOKEN_ID = 266,
+    TOKEN_FID = 267,
+    TOKEN_FID_END = 268,
+    TOKEN_LINE_INFO = 269,
+    TOKEN_REGEXP = 270
   };
 #endif
 

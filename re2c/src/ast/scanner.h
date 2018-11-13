@@ -66,6 +66,10 @@ class Scanner: private ScannerState
     void lex_code_in_braces();
     void lex_c_comment();
     void lex_cpp_comment();
+    bool lex_namedef_context_re2c();
+    bool lex_namedef_context_flex();
+    int lex_clist();
+    void lex_cgoto();
     void lex_string(char delim);
     void lex_tags(OutputFile &out, bool mtags);
     void set_sourceline ();

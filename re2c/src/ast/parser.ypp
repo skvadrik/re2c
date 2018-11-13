@@ -46,6 +46,11 @@ static spec_t &find(specs_t &specs, const std::string &name)
     re2c::CondList * clist;
 };
 
+%token TOKEN_CJUMP
+%token TOKEN_CNEXT
+%token TOKEN_CLIST
+%token TOKEN_CSETUP
+%token TOKEN_CZERO
 %token TOKEN_CLOSESIZE
 %token TOKEN_CODE
 %token TOKEN_CONF
@@ -59,8 +64,8 @@ static spec_t &find(specs_t &specs, const std::string &name)
 %type <bounds>  TOKEN_CLOSESIZE
 %type <code>    TOKEN_CODE ccode
 %type <regexp>  TOKEN_REGEXP trailexpr rule expr diff term factor primary
-%type <str>     TOKEN_ID TOKEN_FID name
-%type <clist>   conds clist
+%type <str>     TOKEN_CNEXT TOKEN_CJUMP TOKEN_ID TOKEN_FID name
+%type <clist>   TOKEN_CLIST TOKEN_CSETUP TOKEN_CZERO
 
 %%
 
@@ -104,65 +109,45 @@ rule
         find(context.specs, "").defs.push_back($2);
     }
 
-    | '<' clist '>' trailexpr ccode {
-        for(CondList::const_iterator i = $2->begin(); i != $2->end(); ++i) {
-            find(context.specs, *i).rules.push_back(ASTRule($4, $5));
+    | TOKEN_CLIST trailexpr ccode {
+        for(CondList::const_iterator i = $1->begin(); i != $1->end(); ++i) {
+            find(context.specs, *i).rules.push_back(ASTRule($2, $3));
         }
-        delete $2;
+        delete $1;
     }
 
-    | '<' clist '>' '*' ccode {
-        for(CondList::const_iterator i = $2->begin(); i != $2->end(); ++i) {
-            find(context.specs, *i).defs.push_back($5);
+    | TOKEN_CLIST '*' ccode {
+        for(CondList::const_iterator i = $1->begin(); i != $1->end(); ++i) {
+            find(context.specs, *i).defs.push_back($3);
         }
-        delete $2;
+        delete $1;
     }
 
-    | '<' '!' clist '>' TOKEN_CODE {
-        for (CondList::const_iterator i = $3->begin(); i != $3->end(); ++i) {
-            find(context.specs, *i).setup.push_back($5);
+    | TOKEN_CSETUP TOKEN_CODE {
+        for (CondList::const_iterator i = $1->begin(); i != $1->end(); ++i) {
+            find(context.specs, *i).setup.push_back($2);
         }
-        delete $3;
+        delete $1;
     }
 
-    | '<' '>' ccode {
+    | TOKEN_CZERO ccode {
         const AST *r = ast_nil(context.input.get_cline(), 0);
-        find(context.specs, "0").rules.push_back(ASTRule(r, $3));
+        find(context.specs, "0").rules.push_back(ASTRule(r, $2));
     };
 
 ccode
     : TOKEN_CODE
 
-    | '=' '>' TOKEN_ID TOKEN_CODE {
-        $$ = $4;
-        $$->cond = *$3;
-        delete $3;
-    }
-
-    | ':' '=' '>' TOKEN_ID {
-        $$ = new Code(context.input.get_fname(), context.input.get_cline());
-        $$->cond = *$4;
-        delete $4;
-    };
-
-clist
-    : conds
-    | '*' {
-        $$ = new CondList;
-        $$->insert("*");
-    };
-
-conds
-    : TOKEN_ID {
-        $$ = new CondList;
-        $$->insert(*$1);
+    | TOKEN_CNEXT TOKEN_CODE {
+        $$ = $2;
+        $$->cond = *$1;
         delete $1;
     }
 
-    | conds ',' TOKEN_ID {
-        $1->insert(*$3);
-        delete $3;
-        $$ = $1;
+    | TOKEN_CJUMP {
+        $$ = new Code(context.input.get_fname(), context.input.get_cline());
+        $$->cond = *$1;
+        delete $1;
     };
 
 trailexpr
