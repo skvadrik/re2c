@@ -31,6 +31,7 @@ void validate_mode(Scanner::ParseMode mode, bool rflag, bool rules, Scanner &inp
 
 void validate_ast(const specs_t &specs, bool cflag)
 {
+    static const uint32_t NONE = ~0u;
     specs_t::const_iterator i,
         b = specs.begin(),
         e = specs.end();
@@ -46,16 +47,26 @@ void validate_ast(const specs_t &specs, bool cflag)
     if (!cflag) {
         for (i = b; i != e; ++i) {
             if (i->name != "") {
-                fatal_l(i->rules[0].code->fline,
-                    "conditions are only allowed with '-c', '--conditions' option");
+                const uint32_t l = !i->rules.empty()
+                    ? i->rules[0].code->fline : !i->defs.empty()
+                        ? i->defs[0]->fline : NONE;
+                if (l != NONE) {
+                    fatal_l(l, "conditions are only allowed with '-c', "
+                        "'--conditions' option");
+                }
+
             }
         }
     } else {
         for (i = b; i != e; ++i) {
             if (i->name == "") {
-                fatal_l(i->rules[0].code->fline,
-                    "non-conditional rules are not allowed"
-                    " with '-c', '--conditions' option");
+                const uint32_t l = !i->rules.empty()
+                    ? i->rules[0].code->fline : !i->defs.empty()
+                        ? i->defs[0]->fline : NONE;
+                if (l != NONE) {
+                    fatal_l(l, "non-conditional rules are not allowed with "
+                        "'-c', '--conditions' option");
+                }
             }
         }
 
