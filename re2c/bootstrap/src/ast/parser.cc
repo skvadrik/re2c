@@ -478,10 +478,10 @@ static const yytype_uint8 yytranslate[] =
 static const yytype_uint8 yyrline[] =
 {
        0,    72,    72,    74,    75,    76,    77,    81,    88,    94,
-      97,   101,   101,   104,   108,   112,   119,   126,   133,   139,
-     141,   147,   154,   156,   162,   166,   173,   177,   184,   188,
-     195,   196,   202,   207,   208,   212,   213,   214,   218,   219,
-     230
+      97,   101,   101,   104,   108,   112,   119,   126,   133,   140,
+     142,   148,   155,   157,   163,   167,   174,   178,   185,   189,
+     196,   197,   203,   208,   209,   213,   214,   215,   219,   220,
+     231
 };
 #endif
 
@@ -1386,6 +1386,7 @@ yyreduce:
     {
         const AST *r = ast_nil(context.input.get_cline(), 0);
         find(context.specs, "0").rules.push_back(ASTRule(r, (yyvsp[0].code)));
+        delete (yyvsp[-1].clist);
     }
 
     break;

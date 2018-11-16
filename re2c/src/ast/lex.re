@@ -338,30 +338,23 @@ bool Scanner::lex_namedef_context_flex()
 int Scanner::lex_clist()
 {
     int kind = TOKEN_CLIST;
-    CondList *cl = NULL;
+    CondList *cl = new CondList;
 /*!re2c
-    space* "!" space* { kind = TOKEN_CSETUP; goto fst; }
+    space* "!" space* { kind = TOKEN_CSETUP; goto cond; }
     space* ">"        { kind = TOKEN_CZERO; goto end; }
-    space*            { goto fst; }
+    space*            { goto cond; }
 */
-fst:
-    cl = new CondList;
+cond:
     tok = cur;
 /*!re2c
-    "*" space* ">"    { cl->insert("*"); goto end; }
-    name              { cl->insert(std::string(tok, tok_len())); goto sep; }
-    *                 { goto error; }
-*/
-sep:
-/*!re2c
-    space* "," space* { goto next; }
-    space* ">"        { goto end; }
+    name              { cl->insert(std::string(tok, tok_len())); goto next; }
+    "*"               { if (!cl->empty()) goto error; cl->insert("*"); goto next; }
     *                 { goto error; }
 */
 next:
-    tok = cur;
 /*!re2c
-    name              { cl->insert(std::string(tok, tok_len())); goto sep; }
+    space* "," space* { goto cond; }
+    space* ">"        { goto end; }
     *                 { goto error; }
 */
 end:

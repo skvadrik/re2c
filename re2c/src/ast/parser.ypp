@@ -133,6 +133,7 @@ rule
     | TOKEN_CZERO ccode {
         const AST *r = ast_nil(context.input.get_cline(), 0);
         find(context.specs, "0").rules.push_back(ASTRule(r, $2));
+        delete $1;
     };
 
 ccode
