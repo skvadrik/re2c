@@ -184,7 +184,7 @@ opt_output:
         error ("bad argument to option -o, --output: %s", *argv);
         return EXIT_FAIL;
     }
-    filename end { globopts.output_file = *argv; goto opt; }
+    filename end { opts.set_output_file (*argv); goto opt; }
 */
 
 opt_header:
@@ -194,7 +194,7 @@ opt_header:
         error ("bad argument to option -t, --type-header: %s", *argv);
         return EXIT_FAIL;
     }
-    filename end { globopts.header_file = *argv; goto opt; }
+    filename end { opts.set_header_file (*argv); goto opt; }
 */
 
 opt_encoding_policy:

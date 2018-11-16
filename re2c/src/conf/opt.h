@@ -42,8 +42,6 @@ enum target_t
 
 #define RE2C_CONSTOPTS \
     CONSTOPT1 (target_t, target, TARGET_CODE) \
-    CONSTOPT (std::string, output_file, "") \
-    CONSTOPT (std::string, header_file, "") \
     CONSTOPT (bool, bNoGenerationDate, false) \
     CONSTOPT (bool, version, true) \
     CONSTOPT (bool, cFlag, false) \
@@ -59,8 +57,11 @@ enum target_t
     CONSTOPT (bool, dump_adfa, false)
 
 #define RE2C_MUTOPTS \
+    /* output files */ \
+    MUTOPT1 (std::string, output_file, "") \
+    MUTOPT (std::string, header_file, "") \
     /* regular expressions */ \
-    MUTOPT1 (Enc, encoding, Enc ()) \
+    MUTOPT (Enc, encoding, Enc ()) \
     MUTOPT (bool, bCaseInsensitive, false) \
     MUTOPT (bool, bCaseInverted, false) \
     MUTOPT (empty_class_policy_t, empty_class_policy, EMPTY_CLASS_MATCH_EMPTY) \

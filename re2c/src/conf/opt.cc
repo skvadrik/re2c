@@ -8,7 +8,6 @@ void conopt_t::fix()
 {
     if (target == TARGET_SKELETON) {
         fFlag = false;
-        header_file = "";
     }
 }
 
@@ -27,6 +26,8 @@ void mutopt_t::fix(const conopt_t *globopts)
             yybmHexTable = Opt::baseopt.yybmHexTable;
             // fallthrough
         case TARGET_SKELETON:
+            // output files
+            header_file = "";
             // default line information
             iFlag = Opt::baseopt.iFlag;
             // default environment-sensitive formatting
