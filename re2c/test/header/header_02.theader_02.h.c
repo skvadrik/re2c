@@ -3,6 +3,7 @@
 #line 1 "header/header_02.theader_02.h.re"
 
 
+#line 11 "header/header_02.theader_02.h.re"
 
 
 #include "header_02.h"
@@ -11,7 +12,7 @@ void lex(const YYCTYPE *s, tags_t &tags)
 {
     const YYCTYPE *YYCURSOR = s, *x, *y;
     
-#line 15 "header/header_02.theader_02.h.c"
+#line 16 "header/header_02.theader_02.h.c"
 {
 	YYCTYPE yych;
 	goto yy0;
@@ -36,7 +37,7 @@ yy3:
 	y = tags.yyt2;
 #line 22 "header/header_02.theader_02.h.re"
 	{ return; }
-#line 40 "header/header_02.theader_02.h.c"
+#line 41 "header/header_02.theader_02.h.c"
 yy4:
 	yych = *++YYCURSOR;
 	switch (yych) {

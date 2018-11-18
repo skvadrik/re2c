@@ -1,6 +1,6 @@
 /*!re2c re2c:flags:tags = 1; */
 
-/*!header:re2c:1*/
+/*!header:re2c:on*/
 #define YYCTYPE char
 struct tags_t
 {
@@ -8,7 +8,7 @@ struct tags_t
 };
 
 void lex(const YYCTYPE *, tags_t &);
-/*!header:re2c:0*/
+/*!header:re2c:off*/
 
 #include "header_02.h"
 

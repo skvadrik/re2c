@@ -1,6 +1,6 @@
-/*!header:re2c:1*/
+/*!header:re2c:on*/
 bool lex(const char *);
-/*!header:re2c:0*/
+/*!header:re2c:off*/
 
 #include "header_01.h"
 

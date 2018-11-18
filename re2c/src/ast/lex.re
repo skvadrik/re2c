@@ -130,9 +130,17 @@ echo:
         goto echo;
     }
 
-    "/*!header:re2c:" [01] {
+    "/*!header:re2c:on" {
         out.wraw(tok, ptr);
-        out.header_mode(cur[-1] == '1');
+        out.header_mode(true);
+        lex_end_of_comment(out);
+        goto echo;
+    }
+
+    "/*!header:re2c:off" {
+        out.wraw(tok, ptr);
+        out.header_mode(false);
+        out.wdelay_line_info_input(cline, get_fname());
         lex_end_of_comment(out);
         goto echo;
     }
