@@ -25,6 +25,14 @@ struct Opt;
 struct opt_t;
 template <typename value_t> class uniq_vector_t;
 
+struct OutputFragment;
+struct OutputBlock;
+
+typedef std::vector<OutputFragment *> frags_t;
+typedef std::vector<OutputBlock *> blocks_t;
+typedef frags_t::const_iterator frags_citer_t;
+typedef blocks_t::const_iterator blocks_citer_t;
+
 struct ConfTags
 {
     std::string format;
@@ -88,7 +96,7 @@ struct OutputFragment
 
 struct OutputBlock
 {
-    std::vector<OutputFragment *> fragments;
+    frags_t fragments;
     bool used_yyaccept;
     bool have_user_code;
     uint32_t line;
@@ -104,7 +112,9 @@ struct OutputBlock
 
 class OutputFile
 {
-    std::vector<OutputBlock *> blocks;
+    blocks_t cblocks; /* .c file */
+    blocks_t hblocks; /* .h file */
+    blocks_t *blocks; /* selector */
 
 public:
     counter_t<label_t> label_counter;
@@ -122,6 +132,7 @@ public:
     void insert_code ();
     bool open ();
     void new_block(Opt &opts);
+    void header_mode(bool on);
 
     // immediate output
     OutputFile & wraw (const char *s, const char *e);
@@ -154,11 +165,11 @@ public:
     OutputFile& wdelay_peek(uint32_t ind, bool peek);
     OutputFile& wdelay_backup(uint32_t ind, bool backup);
 
-    void fix_first_block_opts();
-    void global_lists(uniq_vector_t<std::string> &types,
-        std::set<std::string> &stags, std::set<std::string> &mtags) const;
+    bool emit(size_t max_fill, size_t max_nmatch);
 
-    bool emit(const uniq_vector_t<std::string> &global_types,
+    void emit_blocks(const std::string &filename,
+        FILE *file, blocks_t &blocks,
+        const uniq_vector_t<std::string> &global_types,
         const std::set<std::string> &global_stags,
         const std::set<std::string> &global_mtags,
         size_t max_fill, size_t max_nmatch);
@@ -166,20 +177,9 @@ public:
     FORBID_COPY (OutputFile);
 };
 
-class HeaderFile
-{
-    std::ostringstream stream;
-
-public:
-    HeaderFile(): stream() {}
-    bool emit(const opt_t *opts, const uniq_vector_t<std::string> &types);
-    FORBID_COPY (HeaderFile);
-};
-
 struct Output
 {
     OutputFile source;
-    HeaderFile header;
     std::set<std::string> skeletons;
     size_t max_fill;
     size_t max_nmatch;

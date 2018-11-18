@@ -10,9 +10,6 @@ void conopt_t::fix()
         fFlag = false;
         header_file = "";
     }
-    if (!cFlag) {
-        header_file = "";
-    }
 }
 
 void mutopt_t::fix(const conopt_t *globopts)

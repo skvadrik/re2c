@@ -70,8 +70,10 @@ OutputBlock::~OutputBlock ()
 }
 
 OutputFile::OutputFile(Warn &w)
-    : blocks ()
-    , label_counter ()
+    : cblocks()
+    , hblocks()
+    , blocks(&cblocks)
+    , label_counter()
     , fill_index(0)
     , state_goto(false)
     , cond_goto(false)
@@ -81,14 +83,18 @@ OutputFile::OutputFile(Warn &w)
 
 OutputFile::~OutputFile ()
 {
-    for (unsigned int i = 0; i < blocks.size(); ++i) {
-        delete blocks[i];
-    }
+    for (uint32_t i = 0; i < cblocks.size(); ++i) delete cblocks[i];
+    for (uint32_t i = 0; i < hblocks.size(); ++i) delete hblocks[i];
+}
+
+void OutputFile::header_mode(bool on)
+{
+    blocks = on ? &hblocks : &cblocks;
 }
 
 OutputBlock& OutputFile::block()
 {
-    return *blocks.back();
+    return *blocks->back();
 }
 
 std::ostream & OutputFile::stream ()
@@ -237,7 +243,7 @@ OutputFile &OutputFile::wdelay_tags(const ConfTags *cf, bool mtags)
         OutputFragment *frag = new OutputFragment(
             mtags ? OutputFragment::MTAGS : OutputFragment::STAGS, 0);
         frag->tags = cf;
-        blocks.back()->fragments.push_back(frag);
+        blocks->back()->fragments.push_back(frag);
     }
     return *this;
 }
@@ -246,7 +252,7 @@ OutputFile & OutputFile::wdelay_line_info_input (uint32_t l, const std::string &
 {
     OutputFragment *frag = new OutputFragment(OutputFragment::LINE_INFO_INPUT, 0);
     frag->line_info = new LineInfo(l, fn);
-    blocks.back()->fragments.push_back(frag);
+    blocks->back()->fragments.push_back(frag);
     return *this;
 }
 
@@ -346,42 +352,23 @@ void OutputFile::new_block(Opt &opts)
 {
     OutputBlock *b = new OutputBlock;
     b->opts = opts.snapshot();
-    blocks.push_back(b);
+    blocks->push_back(b);
 
     // start label hapens to be the only option
     // that must be reset for each new block
     opts.reset_startlabel();
 }
 
-void OutputFile::fix_first_block_opts()
+static void fix_first_block_opts(blocks_t &blocks)
 {
     // If the initial block contains only whitespace and no user code,
     // then re2c options specified in the first re2c block are also
     // applied to the initial block.
     if (blocks.size() >= 2) {
-        OutputBlock
-            *fst = blocks[0],
-            *snd = blocks[1];
+        OutputBlock *fst = blocks[0], *snd = blocks[1];
         if (!fst->have_user_code) {
             *const_cast<opt_t *>(fst->opts) = *snd->opts;
         }
-    }
-}
-
-void OutputFile::global_lists(uniq_vector_t<std::string> &types,
-    std::set<std::string> &stags, std::set<std::string> &mtags) const
-{
-    for (unsigned int i = 0; i < blocks.size(); ++i) {
-        const std::vector<std::string> &cs = blocks[i]->types;
-        for (size_t j = 0; j < cs.size(); ++j) {
-            types.find_or_add(cs[j]);
-        }
-
-        const std::set<std::string>
-            &st = blocks[i]->stags,
-            &mt = blocks[i]->mtags;
-        stags.insert(st.begin(), st.end());
-        mtags.insert(mt.begin(), mt.end());
     }
 }
 
@@ -444,29 +431,18 @@ static void foldexpr(std::vector<OutputFragment*> &frags)
     }
 }
 
-bool OutputFile::emit(const uniq_vector_t<std::string> &global_types,
+void OutputFile::emit_blocks(const std::string &filename,
+    FILE *file, blocks_t &blocks,
+    const uniq_vector_t<std::string> &global_types,
     const std::set<std::string> &global_stags,
     const std::set<std::string> &global_mtags,
     size_t max_fill, size_t max_nmatch)
 {
-    FILE *file = NULL;
-    std::string filename = block().opts->output_file;
-    if (filename.empty()) {
-        filename = "<stdout>";
-        file = stdout;
-    } else {
-        file = fopen(filename.c_str(), "w");
-        if (!file) {
-            error("cannot open output file: %s", filename.c_str());
-            return false;
-        }
-    }
-
-    fix_first_block_opts();
+    fix_first_block_opts(blocks);
 
     unsigned int line_count = 1;
     for (unsigned int j = 0; j < blocks.size(); ++j) {
-        OutputBlock & b = * blocks[j];
+        OutputBlock & b = *blocks[j];
         const opt_t *bopt = b.opts;
 
         if (bopt->input_api == INPUT_DEFAULT) {
@@ -553,37 +529,97 @@ bool OutputFile::emit(const uniq_vector_t<std::string> &global_types,
             line_count += f.count_lines();
         }
     }
-
-    fclose(file);
-    return true;
 }
 
-bool HeaderFile::emit(const opt_t *opts, const uniq_vector_t<std::string> &types)
+static bool have_cond_frag(const blocks_t &blocks)
 {
-    const std::string &filename = opts->header_file;
-    if (filename.empty()) return true;
+    for (blocks_citer_t b = blocks.begin(); b != blocks.end(); ++b) {
+        const frags_t &fs = (*b)->fragments;
+        for (frags_citer_t f = fs.begin(); f != fs.end(); ++f) {
+            if ((*f)->type == OutputFragment::TYPES) {
+                return true;
+            }
+        }
+    }
+    return false;
+}
 
-    FILE *file = fopen(filename.c_str(), "w");
-    if (!file) {
-        error("cannot open header file: %s", filename.c_str());
-        return false;
+static void add_symbols(const OutputBlock &block,
+    uniq_vector_t<std::string> &conds,
+    std::set<std::string> &stags,
+    std::set<std::string> &mtags)
+{
+    const std::vector<std::string> &cs = block.types;
+    for (size_t j = 0; j < cs.size(); ++j) {
+        conds.find_or_add(cs[j]);
     }
 
-    output_version_time(stream, opts->version, !opts->bNoGenerationDate);
-    output_line_info(stream, 3, filename, opts->iFlag);
-    stream << "\n";
-    output_types(stream, 0, opts, types);
+    const std::set<std::string> &st = block.stags, &mt = block.mtags;
+    stags.insert(st.begin(), st.end());
+    mtags.insert(mt.begin(), mt.end());
+}
 
-    std::string content = stream.str();
-    fwrite(content.c_str(), 1, content.size(), file);
+bool OutputFile::emit(size_t maxfill, size_t nmatch)
+{
+    if (warn.error()) return false;
 
+    // gather global lists of conditions and tags
+    uniq_vector_t<std::string> conds;
+    std::set<std::string> stags, mtags;
+    for (uint32_t i = 0; i < cblocks.size(); ++i) {
+        add_symbols (*cblocks[i], conds, stags, mtags);
+    }
+    for (uint32_t i = 0; i < hblocks.size(); ++i) {
+        add_symbols (*hblocks[i], conds, stags, mtags);
+    }
+
+    // global options are last block's options
+    const opt_t *opts = block().opts;
+
+    // emit .h file
+    const std::string &header = opts->header_file;
+    if (!header.empty()) {
+        FILE *file = fopen(header.c_str(), "w");
+
+        if (!file) {
+            error("cannot open header file: %s", header.c_str());
+            return false;
+        }
+
+        emit_blocks(header, file, hblocks, conds, stags, mtags, maxfill, nmatch);
+
+        if (!conds.empty() && !have_cond_frag(hblocks)) {
+            std::ostringstream os;
+            os << std::endl;
+            output_types(os, 0, opts, conds);
+            fwrite(os.str().c_str(), 1, os.str().size(), file);
+        }
+
+        fclose(file);
+    }
+
+    // emit .c file
+    FILE *file = NULL;
+    std::string filename = cblocks.back()->opts->output_file;
+    if (filename.empty()) {
+        filename = "<stdout>";
+        file = stdout;
+    }
+    else {
+        file = fopen(filename.c_str(), "w");
+        if (!file) {
+            error("cannot open output file: %s", filename.c_str());
+            return false;
+        }
+    }
+    emit_blocks(filename, file, cblocks, conds, stags, mtags, maxfill, nmatch);
     fclose(file);
+
     return true;
 }
 
 Output::Output(Warn &w)
     : source(w)
-    , header()
     , skeletons()
     , max_fill(1)
     , max_nmatch(1)
@@ -591,19 +627,7 @@ Output::Output(Warn &w)
 
 bool Output::emit()
 {
-    if (source.warn.error()) {
-        return false;
-    }
-
-    uniq_vector_t<std::string> types;
-    std::set<std::string> stags, mtags;
-    source.global_lists(types, stags, mtags);
-
-    // global options are last block's options
-    const opt_t *opts = source.block().opts;
-
-    return source.emit(types, stags, mtags, max_fill, max_nmatch)
-        && header.emit(opts, types);
+    return source.emit(max_fill, max_nmatch);
 }
 
 void output_tags(std::ostream &o, uint32_t ind, const ConfTags &conf,

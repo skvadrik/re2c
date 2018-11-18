@@ -3,8 +3,7 @@
 
 #include <vector>
 
-namespace re2c
-{
+namespace re2c {
 
 // wrapper over std::vector
 // O(n) lookup
@@ -14,25 +13,19 @@ class uniq_vector_t
 {
     typedef std::vector<value_t> elems_t;
     elems_t elems;
-public:
-    uniq_vector_t ()
-        : elems ()
-    {}
-    size_t size () const
-    {
-        return elems.size ();
-    }
-    const value_t & operator [] (size_t i) const
-    {
-        return elems[i];
-    }
-    size_t find_or_add (const value_t & v)
+
+  public:
+    uniq_vector_t() : elems () {}
+
+    inline bool empty() const { return elems.empty(); }
+    inline size_t size() const { return elems.size(); }
+    inline const value_t &operator[](size_t i) const { return elems[i]; }
+
+    size_t find_or_add(const value_t &v)
     {
         const size_t size = elems.size ();
-        for (size_t i = 0; i < size; ++i)
-        {
-            if (elems[i] == v)
-            {
+        for (size_t i = 0; i < size; ++i) {
+            if (elems[i] == v) {
                 return i;
             }
         }

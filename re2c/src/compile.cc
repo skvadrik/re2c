@@ -128,9 +128,15 @@ void compile(Scanner &input, Output &output, Opt &opts)
     OutputFile &o = output.source;
     typedef std::vector<smart_ptr<DFA> > dfas_t;
 
+    o.header_mode(1);
+    o.new_block(opts);
+    o.wversion_time();
+
+    o.header_mode(0);
     o.new_block(opts);
     o.wversion_time();
     o.wdelay_line_info_input(input.get_cline(), input.get_fname());
+
     if (globopts->target == TARGET_SKELETON) {
         emit_prolog(o);
     }

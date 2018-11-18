@@ -130,6 +130,13 @@ echo:
         goto echo;
     }
 
+    "/*!header:re2c:" [01] {
+        out.wraw(tok, ptr);
+        out.header_mode(cur[-1] == '1');
+        lex_end_of_comment(out);
+        goto echo;
+    }
+
     eof {
         if (cur != eof) goto echo;
         out.wraw(tok, ptr);
