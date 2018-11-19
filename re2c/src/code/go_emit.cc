@@ -18,15 +18,15 @@
 namespace re2c
 {
 
-static void output_if (OutputFile & o, uint32_t ind, const std::string & compare, uint32_t value);
-static std::string output_hgo (OutputFile & o, uint32_t ind, const DFA &dfa, SwitchIf * hgo);
+static void output_if (Output & o, uint32_t ind, const std::string & compare, uint32_t value);
+static std::string output_hgo (Output & o, uint32_t ind, const DFA &dfa, SwitchIf * hgo);
 
-void output_if (OutputFile & o, uint32_t ind, const std::string & compare, uint32_t value)
+void output_if (Output & o, uint32_t ind, const std::string & compare, uint32_t value)
 {
     o.wind(ind).ws("if (").wstring(o.block().opts->yych).ws(" ").wstring(compare).ws(" ").wc_hex (value).ws(") ");
 }
 
-std::string output_hgo (OutputFile & o, uint32_t ind, const DFA &dfa, SwitchIf * hgo)
+std::string output_hgo (Output & o, uint32_t ind, const DFA &dfa, SwitchIf * hgo)
 {
     const opt_t *opts = o.block().opts;
     std::string yych = opts->yych;
@@ -44,7 +44,7 @@ std::string output_hgo (OutputFile & o, uint32_t ind, const DFA &dfa, SwitchIf *
     return yych;
 }
 
-void Case::emit (OutputFile & o, uint32_t ind) const
+void Case::emit (Output & o, uint32_t ind) const
 {
     const opt_t *opts = o.block().opts;
     for (uint32_t i = 0; i < ranges.size (); ++i)
@@ -67,7 +67,7 @@ void Case::emit (OutputFile & o, uint32_t ind) const
     }
 }
 
-void Cases::emit(OutputFile &o, uint32_t ind, const DFA &dfa) const
+void Cases::emit(Output &o, uint32_t ind, const DFA &dfa) const
 {
     o.wind(ind).ws("switch (").wstring(o.block().opts->yych).ws(") {\n");
 
@@ -85,7 +85,7 @@ void Cases::emit(OutputFile &o, uint32_t ind, const DFA &dfa) const
     o.wind(ind).ws("}\n");
 }
 
-void Binary::emit(OutputFile &o, uint32_t ind, const DFA &dfa) const
+void Binary::emit(Output &o, uint32_t ind, const DFA &dfa) const
 {
     output_if(o, ind, cond->compare, cond->value);
     o.ws("{\n");
@@ -95,7 +95,7 @@ void Binary::emit(OutputFile &o, uint32_t ind, const DFA &dfa) const
     o.wind(ind).ws("}\n");
 }
 
-void Linear::emit(OutputFile &o, uint32_t ind, const DFA &dfa) const
+void Linear::emit(Output &o, uint32_t ind, const DFA &dfa) const
 {
     for (uint32_t i = 0; i < nbranches; ++i) {
         const Branch &b = branches[i];
@@ -109,7 +109,7 @@ void Linear::emit(OutputFile &o, uint32_t ind, const DFA &dfa) const
     }
 }
 
-void If::emit(OutputFile &o, uint32_t ind, const DFA &dfa) const
+void If::emit(Output &o, uint32_t ind, const DFA &dfa) const
 {
     switch (type) {
         case BINARY: info.binary->emit(o, ind, dfa); break;
@@ -117,7 +117,7 @@ void If::emit(OutputFile &o, uint32_t ind, const DFA &dfa) const
     }
 }
 
-void SwitchIf::emit(OutputFile &o, uint32_t ind, const DFA &dfa) const
+void SwitchIf::emit(Output &o, uint32_t ind, const DFA &dfa) const
 {
     switch (type) {
         case SWITCH: info.cases->emit(o, ind, dfa); break;
@@ -125,7 +125,7 @@ void SwitchIf::emit(OutputFile &o, uint32_t ind, const DFA &dfa) const
     }
 }
 
-void GoBitmap::emit (OutputFile & o, uint32_t ind, const DFA &dfa) const
+void GoBitmap::emit (Output & o, uint32_t ind, const DFA &dfa) const
 {
     const opt_t *opts = o.block().opts;
     std::string yych = output_hgo (o, ind, dfa, hgo);
@@ -160,7 +160,7 @@ label_t CpgotoTable::max_label () const
     return max;
 }
 
-void CpgotoTable::emit (OutputFile & o, uint32_t ind) const
+void CpgotoTable::emit (Output & o, uint32_t ind) const
 {
     const opt_t *opts = o.block().opts;
     o.wind(ind).ws("static void *").wstring(opts->yytarget).ws("[256] = {\n");
@@ -186,7 +186,7 @@ void CpgotoTable::emit (OutputFile & o, uint32_t ind) const
     o.wind(--ind).ws("};\n");
 }
 
-void Cpgoto::emit (OutputFile & o, uint32_t ind, const DFA &dfa) const
+void Cpgoto::emit (Output & o, uint32_t ind, const DFA &dfa) const
 {
     std::string yych = output_hgo (o, ind, dfa, hgo);
     o.ws("{\n");
@@ -195,7 +195,7 @@ void Cpgoto::emit (OutputFile & o, uint32_t ind, const DFA &dfa) const
     o.wind(--ind).ws("}\n");
 }
 
-void Dot::emit(OutputFile &o, const DFA &dfa) const
+void Dot::emit(Output &o, const DFA &dfa) const
 {
     const std::string &prefix = o.block().opts->tags_prefix;
     const uint32_t n = cases->cases_size;
@@ -221,7 +221,7 @@ void Dot::emit(OutputFile &o, const DFA &dfa) const
     }
 }
 
-void Go::emit (OutputFile & o, uint32_t ind, const DFA &dfa) const
+void Go::emit (Output & o, uint32_t ind, const DFA &dfa) const
 {
     if (type == DOT) {
         info.dot->emit (o, dfa);

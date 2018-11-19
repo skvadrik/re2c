@@ -110,7 +110,7 @@ struct OutputBlock
     FORBID_COPY(OutputBlock);
 };
 
-class OutputFile
+class Output
 {
     blocks_t cblocks; /* .c file */
     blocks_t hblocks; /* .h file */
@@ -124,9 +124,12 @@ public:
     bool warn_condition_order;
     bool need_header;
     Warn &warn;
+    std::set<std::string> skeletons;
+    size_t max_fill;
+    size_t max_nmatch;
 
-    explicit OutputFile(Warn &w);
-    ~OutputFile();
+    explicit Output(Warn &w);
+    ~Output();
 
     std::ostream & stream ();
     OutputBlock &block();
@@ -136,56 +139,43 @@ public:
     void header_mode(bool on);
 
     // immediate output
-    OutputFile & wraw (const char *s, const char *e);
-    OutputFile & wc (char c);
-    OutputFile & wc_hex (uint32_t n);
-    OutputFile & wu32 (uint32_t n);
-    OutputFile & wu32_hex (uint32_t n);
-    OutputFile & wu32_width (uint32_t n, int w);
-    OutputFile & wu64 (uint64_t n);
-    OutputFile & wstring (const std::string & s);
-    OutputFile & ws (const char * s);
-    OutputFile & wlabel (label_t l);
-    OutputFile & wrange (uint32_t u, uint32_t l);
-    OutputFile & wversion_time ();
-    OutputFile & wuser_start_label ();
-    OutputFile & wind (uint32_t ind);
+    Output & wraw (const char *s, const char *e);
+    Output & wc (char c);
+    Output & wc_hex (uint32_t n);
+    Output & wu32 (uint32_t n);
+    Output & wu32_hex (uint32_t n);
+    Output & wu32_width (uint32_t n, int w);
+    Output & wu64 (uint64_t n);
+    Output & wstring (const std::string & s);
+    Output & ws (const char * s);
+    Output & wlabel (label_t l);
+    Output & wrange (uint32_t u, uint32_t l);
+    Output & wversion_time ();
+    Output & wuser_start_label ();
+    Output & wind (uint32_t ind);
 
     // delayed output
-    OutputFile & wdelay_tags(const ConfTags *cf, bool mtags);
-    OutputFile & wdelay_line_info_input (uint32_t l, const std::string &fn);
-    OutputFile & wdelay_line_info_output ();
-    OutputFile & wdelay_cond_goto(uint32_t ind);
-    OutputFile & wdelay_cond_table(uint32_t ind);
-    OutputFile & wdelay_state_goto (uint32_t ind);
-    OutputFile & wdelay_types ();
-    OutputFile & wdelay_yyaccept_init (uint32_t ind);
-    OutputFile & wdelay_yymaxfill ();
-    OutputFile& wdelay_yymaxnmatch();
-    OutputFile& wdelay_skip(uint32_t ind, bool skip);
-    OutputFile& wdelay_peek(uint32_t ind, bool peek);
-    OutputFile& wdelay_backup(uint32_t ind, bool backup);
+    Output & wdelay_tags(const ConfTags *cf, bool mtags);
+    Output & wdelay_line_info_input (uint32_t l, const std::string &fn);
+    Output & wdelay_line_info_output ();
+    Output & wdelay_cond_goto(uint32_t ind);
+    Output & wdelay_cond_table(uint32_t ind);
+    Output & wdelay_state_goto (uint32_t ind);
+    Output & wdelay_types ();
+    Output & wdelay_yyaccept_init (uint32_t ind);
+    Output & wdelay_yymaxfill ();
+    Output& wdelay_yymaxnmatch();
+    Output& wdelay_skip(uint32_t ind, bool skip);
+    Output& wdelay_peek(uint32_t ind, bool peek);
+    Output& wdelay_backup(uint32_t ind, bool backup);
 
-    bool emit(size_t max_fill, size_t max_nmatch);
-
+    bool emit();
     bool emit_blocks(const std::string &fname, blocks_t &blocks,
         const uniq_vector_t<std::string> &global_types,
         const std::set<std::string> &global_stags,
-        const std::set<std::string> &global_mtags,
-        size_t max_fill, size_t max_nmatch);
+        const std::set<std::string> &global_mtags);
 
-    FORBID_COPY (OutputFile);
-};
-
-struct Output
-{
-    OutputFile source;
-    std::set<std::string> skeletons;
-    size_t max_fill;
-    size_t max_nmatch;
-
-    explicit Output(Warn &w);
-    bool emit();
+    FORBID_COPY (Output);
 };
 
 void output_tags          (std::ostream &o, uint32_t ind, const ConfTags &conf, const std::set<std::string> &tags, const opt_t *opts);

@@ -55,7 +55,7 @@ namespace re2c
     esc_simple = esc [abfnrtv\\];
 */
 
-Scanner::ParseMode Scanner::echo(OutputFile &out)
+Scanner::ParseMode Scanner::echo(Output &out)
 {
     if (eof && cur == eof) // Catch EOF
     {
@@ -168,7 +168,7 @@ echo:
 */
 }
 
-void Scanner::lex_end_of_comment(OutputFile &out)
+void Scanner::lex_end_of_comment(Output &out)
 {
     uint32_t ignored = 0;
     for (;;) {/*!re2c
@@ -187,7 +187,7 @@ void Scanner::lex_end_of_comment(OutputFile &out)
     */}
 }
 
-void Scanner::lex_tags(OutputFile &out, bool mtags)
+void Scanner::lex_tags(Output &out, bool mtags)
 {
     std::string fmt, sep;
     for (;;) {/*!re2c

@@ -69,7 +69,7 @@ OutputBlock::~OutputBlock ()
     delete opts;
 }
 
-OutputFile::OutputFile(Warn &w)
+Output::Output(Warn &w)
     : cblocks()
     , hblocks()
     , blocks(&cblocks)
@@ -80,30 +80,33 @@ OutputFile::OutputFile(Warn &w)
     , warn_condition_order(true)
     , need_header(false)
     , warn(w)
+    , skeletons()
+    , max_fill(1)
+    , max_nmatch(1)
 {}
 
-OutputFile::~OutputFile ()
+Output::~Output ()
 {
     for (uint32_t i = 0; i < cblocks.size(); ++i) delete cblocks[i];
     for (uint32_t i = 0; i < hblocks.size(); ++i) delete hblocks[i];
 }
 
-void OutputFile::header_mode(bool on)
+void Output::header_mode(bool on)
 {
     blocks = on ? &hblocks : &cblocks;
 }
 
-OutputBlock& OutputFile::block()
+OutputBlock& Output::block()
 {
     return *blocks->back();
 }
 
-std::ostream & OutputFile::stream ()
+std::ostream & Output::stream ()
 {
     return block().fragments.back ()->stream;
 }
 
-OutputFile &OutputFile::wraw(const char *s, const char *e)
+Output &Output::wraw(const char *s, const char *e)
 {
     if (s != e && block().opts->target == TARGET_CODE) {
         insert_code();
@@ -131,14 +134,14 @@ OutputFile &OutputFile::wraw(const char *s, const char *e)
     return *this;
 }
 
-OutputFile & OutputFile::wu32_hex (uint32_t n)
+Output & Output::wu32_hex (uint32_t n)
 {
     insert_code();
     prtHex(stream(), n, block().opts->encoding.szCodeUnit());
     return *this;
 }
 
-OutputFile & OutputFile::wc_hex (uint32_t n)
+Output & Output::wc_hex (uint32_t n)
 {
     insert_code();
     const opt_t *opts = block().opts;
@@ -147,7 +150,7 @@ OutputFile & OutputFile::wc_hex (uint32_t n)
     return *this;
 }
 
-OutputFile & OutputFile::wrange (uint32_t l, uint32_t u)
+Output & Output::wrange (uint32_t l, uint32_t u)
 {
     insert_code();
     const opt_t *opts = block().opts;
@@ -156,7 +159,7 @@ OutputFile & OutputFile::wrange (uint32_t l, uint32_t u)
     return *this;
 }
 
-OutputFile & OutputFile::wu32_width (uint32_t n, int w)
+Output & Output::wu32_width (uint32_t n, int w)
 {
     insert_code();
     stream () << std::setw (w);
@@ -164,14 +167,14 @@ OutputFile & OutputFile::wu32_width (uint32_t n, int w)
     return *this;
 }
 
-OutputFile & OutputFile::wversion_time ()
+Output & Output::wversion_time ()
 {
     insert_code();
     output_version_time(stream(), block().opts->version, !block().opts->bNoGenerationDate);
     return *this;
 }
 
-OutputFile & OutputFile::wuser_start_label ()
+Output & Output::wuser_start_label ()
 {
     insert_code();
     const std::string label = block().opts->startlabel;
@@ -182,63 +185,63 @@ OutputFile & OutputFile::wuser_start_label ()
     return *this;
 }
 
-OutputFile & OutputFile::wc (char c)
+Output & Output::wc (char c)
 {
     insert_code();
     stream () << c;
     return *this;
 }
 
-OutputFile & OutputFile::wu32 (uint32_t n)
+Output & Output::wu32 (uint32_t n)
 {
     insert_code();
     stream () << n;
     return *this;
 }
 
-OutputFile & OutputFile::wu64 (uint64_t n)
+Output & Output::wu64 (uint64_t n)
 {
     insert_code();
     stream () << n;
     return *this;
 }
 
-OutputFile & OutputFile::wstring (const std::string & s)
+Output & Output::wstring (const std::string & s)
 {
     insert_code();
     stream () << s;
     return *this;
 }
 
-OutputFile & OutputFile::ws (const char * s)
+Output & Output::ws (const char * s)
 {
     insert_code();
     stream () << s;
     return *this;
 }
 
-OutputFile & OutputFile::wlabel (label_t l)
+Output & Output::wlabel (label_t l)
 {
     insert_code();
     stream () << l;
     return *this;
 }
 
-OutputFile & OutputFile::wind (uint32_t ind)
+Output & Output::wind (uint32_t ind)
 {
     insert_code();
     stream () << indent(ind, block().opts->indString);
     return *this;
 }
 
-void OutputFile::insert_code ()
+void Output::insert_code ()
 {
     if (block().fragments.back()->type != OutputFragment::CODE) {
         block().fragments.push_back(new OutputFragment(OutputFragment::CODE, 0));
     }
 }
 
-OutputFile &OutputFile::wdelay_tags(const ConfTags *cf, bool mtags)
+Output &Output::wdelay_tags(const ConfTags *cf, bool mtags)
 {
     if (block().opts->target == TARGET_CODE) {
         OutputFragment *frag = new OutputFragment(
@@ -249,7 +252,7 @@ OutputFile &OutputFile::wdelay_tags(const ConfTags *cf, bool mtags)
     return *this;
 }
 
-OutputFile & OutputFile::wdelay_line_info_input (uint32_t l, const std::string &fn)
+Output & Output::wdelay_line_info_input (uint32_t l, const std::string &fn)
 {
     OutputFragment *frag = new OutputFragment(OutputFragment::LINE_INFO_INPUT, 0);
     frag->line_info = new LineInfo(l, fn);
@@ -257,13 +260,13 @@ OutputFile & OutputFile::wdelay_line_info_input (uint32_t l, const std::string &
     return *this;
 }
 
-OutputFile & OutputFile::wdelay_line_info_output ()
+Output & Output::wdelay_line_info_output ()
 {
     block().fragments.push_back (new OutputFragment (OutputFragment::LINE_INFO_OUTPUT, 0));
     return *this;
 }
 
-OutputFile & OutputFile::wdelay_cond_goto(uint32_t ind)
+Output & Output::wdelay_cond_goto(uint32_t ind)
 {
     if (block().opts->cFlag && !cond_goto) {
         block().fragments.push_back(new OutputFragment(OutputFragment::COND_GOTO, ind));
@@ -272,7 +275,7 @@ OutputFile & OutputFile::wdelay_cond_goto(uint32_t ind)
     return *this;
 }
 
-OutputFile & OutputFile::wdelay_cond_table(uint32_t ind)
+Output & Output::wdelay_cond_table(uint32_t ind)
 {
     if (block().opts->gFlag && block().opts->cFlag && !cond_goto) {
         block().fragments.push_back(new OutputFragment(OutputFragment::COND_TABLE, ind));
@@ -280,7 +283,7 @@ OutputFile & OutputFile::wdelay_cond_table(uint32_t ind)
     return *this;
 }
 
-OutputFile & OutputFile::wdelay_state_goto (uint32_t ind)
+Output & Output::wdelay_state_goto (uint32_t ind)
 {
     if (block().opts->target == TARGET_CODE
         && block().opts->fFlag && !state_goto) {
@@ -290,7 +293,7 @@ OutputFile & OutputFile::wdelay_state_goto (uint32_t ind)
     return *this;
 }
 
-OutputFile & OutputFile::wdelay_types ()
+Output & Output::wdelay_types ()
 {
     if (block().opts->target == TARGET_CODE) {
         warn_condition_order = false; // see note [condition order]
@@ -299,13 +302,13 @@ OutputFile & OutputFile::wdelay_types ()
     return *this;
 }
 
-OutputFile & OutputFile::wdelay_yyaccept_init (uint32_t ind)
+Output & Output::wdelay_yyaccept_init (uint32_t ind)
 {
     block().fragments.push_back (new OutputFragment (OutputFragment::YYACCEPT_INIT, ind));
     return *this;
 }
 
-OutputFile & OutputFile::wdelay_yymaxfill ()
+Output & Output::wdelay_yymaxfill ()
 {
     if (block().opts->target == TARGET_CODE) {
         block().fragments.push_back (new OutputFragment (OutputFragment::YYMAXFILL, 0));
@@ -313,7 +316,7 @@ OutputFile & OutputFile::wdelay_yymaxfill ()
     return *this;
 }
 
-OutputFile& OutputFile::wdelay_yymaxnmatch()
+Output& Output::wdelay_yymaxnmatch()
 {
     if (block().opts->target == TARGET_CODE
         && block().opts->posix_captures) {
@@ -322,7 +325,7 @@ OutputFile& OutputFile::wdelay_yymaxnmatch()
     return *this;
 }
 
-OutputFile& OutputFile::wdelay_skip(uint32_t ind, bool skip)
+Output& Output::wdelay_skip(uint32_t ind, bool skip)
 {
     if (skip) {
         OutputFragment *f = new OutputFragment(OutputFragment::SKIP, ind);
@@ -331,7 +334,7 @@ OutputFile& OutputFile::wdelay_skip(uint32_t ind, bool skip)
     return *this;
 }
 
-OutputFile& OutputFile::wdelay_peek(uint32_t ind, bool peek)
+Output& Output::wdelay_peek(uint32_t ind, bool peek)
 {
     if (peek) {
         OutputFragment *f = new OutputFragment(OutputFragment::PEEK, ind);
@@ -340,7 +343,7 @@ OutputFile& OutputFile::wdelay_peek(uint32_t ind, bool peek)
     return *this;
 }
 
-OutputFile& OutputFile::wdelay_backup(uint32_t ind, bool backup)
+Output& Output::wdelay_backup(uint32_t ind, bool backup)
 {
     if (backup) {
         OutputFragment *f = new OutputFragment(OutputFragment::BACKUP, ind);
@@ -349,7 +352,7 @@ OutputFile& OutputFile::wdelay_backup(uint32_t ind, bool backup)
     return *this;
 }
 
-void OutputFile::new_block(Opt &opts)
+void Output::new_block(Opt &opts)
 {
     OutputBlock *b = new OutputBlock;
     b->opts = opts.snapshot();
@@ -432,11 +435,10 @@ static void foldexpr(std::vector<OutputFragment*> &frags)
     }
 }
 
-bool OutputFile::emit_blocks(const std::string &fname, blocks_t &blocks,
+bool Output::emit_blocks(const std::string &fname, blocks_t &blocks,
     const uniq_vector_t<std::string> &global_types,
     const std::set<std::string> &global_stags,
-    const std::set<std::string> &global_mtags,
-    size_t max_fill, size_t max_nmatch)
+    const std::set<std::string> &global_mtags)
 {
     FILE *file = NULL;
     std::string filename = fname;
@@ -576,7 +578,7 @@ static void add_symbols(const OutputBlock &block,
     mtags.insert(mt.begin(), mt.end());
 }
 
-bool OutputFile::emit(size_t maxfill, size_t nmatch)
+bool Output::emit()
 {
     if (warn.error()) return false;
 
@@ -603,25 +605,13 @@ bool OutputFile::emit(size_t maxfill, size_t nmatch)
             output_types(os, 0, opts, conds);
         }
 
-        ok &= emit_blocks(opts->header_file, hblocks, conds, stags, mtags, maxfill, nmatch);
+        ok &= emit_blocks(opts->header_file, hblocks, conds, stags, mtags);
     }
 
     // emit .c file
-    ok &= emit_blocks(opts->output_file, cblocks, conds, stags, mtags, maxfill, nmatch);
+    ok &= emit_blocks(opts->output_file, cblocks, conds, stags, mtags);
 
     return ok;
-}
-
-Output::Output(Warn &w)
-    : source(w)
-    , skeletons()
-    , max_fill(1)
-    , max_nmatch(1)
-{}
-
-bool Output::emit()
-{
-    return source.emit(max_fill, max_nmatch);
 }
 
 void output_tags(std::ostream &o, uint32_t ind, const ConfTags &conf,

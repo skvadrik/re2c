@@ -19,7 +19,7 @@ namespace re2c
 class Warn;
 struct Opt;
 struct conopt_t;
-class OutputFile;
+class Output;
 class Range;
 struct AST;
 
@@ -61,7 +61,7 @@ class Scanner: private ScannerState
     Warn &warn;
 
     void fill(uint32_t need);
-    void lex_end_of_comment(OutputFile &out);
+    void lex_end_of_comment(Output &out);
     void lex_code_indented();
     void lex_code_in_braces();
     void lex_c_comment();
@@ -71,7 +71,7 @@ class Scanner: private ScannerState
     int lex_clist();
     void lex_cgoto();
     void lex_string(char delim);
-    void lex_tags(OutputFile &out, bool mtags);
+    void lex_tags(Output &out, bool mtags);
     void set_sourceline ();
     uint32_t lex_cls_chr();
     uint32_t lex_str_chr(char quote, bool &end);
@@ -95,7 +95,7 @@ public:
 
     Scanner(Input&, Warn &w);
     ~Scanner();
-    ParseMode echo(OutputFile &out);
+    ParseMode echo(Output &out);
     int scan(const conopt_t *globopts);
     void lex_conf(Opt &opts);
     uint32_t get_cline() const;

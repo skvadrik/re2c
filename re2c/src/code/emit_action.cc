@@ -25,15 +25,15 @@
 namespace re2c
 {
 
-static void need               (OutputFile &o, uint32_t ind, size_t some);
-static void emit_accept_binary (OutputFile &o, uint32_t ind, const DFA &dfa, const accept_t &acc, size_t l, size_t r);
-static void emit_accept        (OutputFile &o, uint32_t ind, const DFA &dfa, const accept_t &acc);
-static void emit_rule          (OutputFile &o, uint32_t ind, const DFA &dfa, size_t rule_idx);
-static void gen_fintags        (OutputFile &o, uint32_t ind, const DFA &dfa, const Rule &rule);
+static void need               (Output &o, uint32_t ind, size_t some);
+static void emit_accept_binary (Output &o, uint32_t ind, const DFA &dfa, const accept_t &acc, size_t l, size_t r);
+static void emit_accept        (Output &o, uint32_t ind, const DFA &dfa, const accept_t &acc);
+static void emit_rule          (Output &o, uint32_t ind, const DFA &dfa, size_t rule_idx);
+static void gen_fintags        (Output &o, uint32_t ind, const DFA &dfa, const Rule &rule);
 static void gen_goto           (code_lines_t &code, const State *to, const DFA &dfa, tcid_t tcid, const opt_t *opts, bool skip);
 static bool endstate           (const State *s);
 
-void emit_action(OutputFile &o, uint32_t ind, const DFA &dfa,
+void emit_action(Output &o, uint32_t ind, const DFA &dfa,
     const State *s, const std::set<label_t> &used_labels)
 {
     const opt_t *opts = o.block().opts;
@@ -84,7 +84,7 @@ void emit_action(OutputFile &o, uint32_t ind, const DFA &dfa,
     }
 }
 
-void emit_accept_binary(OutputFile &o, uint32_t ind, const DFA &dfa,
+void emit_accept_binary(Output &o, uint32_t ind, const DFA &dfa,
     const accept_t &acc, size_t l, size_t r)
 {
     const opt_t *opts = o.block().opts;
@@ -101,7 +101,7 @@ void emit_accept_binary(OutputFile &o, uint32_t ind, const DFA &dfa,
     }
 }
 
-void emit_accept(OutputFile &o, uint32_t ind, const DFA &dfa, const accept_t &acc)
+void emit_accept(Output &o, uint32_t ind, const DFA &dfa, const accept_t &acc)
 {
     const opt_t *opts = o.block().opts;
     const size_t nacc = acc.size();
@@ -159,7 +159,7 @@ void emit_accept(OutputFile &o, uint32_t ind, const DFA &dfa, const accept_t &ac
     o.wind(ind).ws("}\n");
 }
 
-void emit_rule(OutputFile &o, uint32_t ind, const DFA &dfa, size_t rule_idx)
+void emit_rule(Output &o, uint32_t ind, const DFA &dfa, size_t rule_idx)
 {
     const opt_t *opts = o.block().opts;
     const Rule &rule = dfa.rules[rule_idx];
@@ -194,7 +194,7 @@ void emit_rule(OutputFile &o, uint32_t ind, const DFA &dfa, size_t rule_idx)
     }
 }
 
-void need(OutputFile &o, uint32_t ind, size_t some)
+void need(Output &o, uint32_t ind, size_t some)
 {
     if (some == 0) return;
 
@@ -232,7 +232,7 @@ void need(OutputFile &o, uint32_t ind, size_t some)
     }
 }
 
-void gen_goto_case(OutputFile &o, uint32_t ind, const State *to,
+void gen_goto_case(Output &o, uint32_t ind, const State *to,
     const DFA &dfa, tcid_t tcid, bool skip)
 {
     code_lines_t code;
@@ -249,7 +249,7 @@ void gen_goto_case(OutputFile &o, uint32_t ind, const State *to,
     }
 }
 
-void gen_goto_if(OutputFile &o, uint32_t ind, const State *to,
+void gen_goto_if(Output &o, uint32_t ind, const State *to,
     const DFA &dfa, tcid_t tcid, bool skip)
 {
     code_lines_t code;
@@ -267,7 +267,7 @@ void gen_goto_if(OutputFile &o, uint32_t ind, const State *to,
     }
 }
 
-void gen_goto_plain(OutputFile &o, uint32_t ind, const State *to,
+void gen_goto_plain(Output &o, uint32_t ind, const State *to,
     const DFA &dfa, tcid_t tcid, bool skip)
 {
     code_lines_t code;
@@ -372,7 +372,7 @@ void gen_settags(code_lines_t &code, const DFA &dfa, tcid_t tcid, const opt_t *o
     }
 }
 
-void gen_fintags(OutputFile &o, uint32_t ind, const DFA &dfa, const Rule &rule)
+void gen_fintags(Output &o, uint32_t ind, const DFA &dfa, const Rule &rule)
 {
     const opt_t *opts = o.block().opts;
     const bool generic = opts->input_api == INPUT_CUSTOM;

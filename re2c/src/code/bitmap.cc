@@ -47,7 +47,7 @@ const bitmap_t *bitmaps_t::find(const Go *go, const State *s) const
 
 bool bitmaps_t::empty() const { return maps.empty(); }
 
-void bitmaps_t::gen(OutputFile &o, uint32_t ind)
+void bitmaps_t::gen(Output &o, uint32_t ind)
 {
     if (empty() || !used) return;
 

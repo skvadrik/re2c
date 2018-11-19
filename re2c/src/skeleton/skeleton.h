@@ -23,7 +23,7 @@
 namespace re2c
 {
 
-class OutputFile;
+class Output;
 class path_t;
 struct DFA;
 struct dfa_state_t;
@@ -109,16 +109,16 @@ uint32_t maxpath(const Skeleton &skel);
 void warn_undefined_control_flow(const Skeleton &skel, Warn &warn);
 void fprint_default_path(FILE *f, const Skeleton &skel, const path_t &p);
 void emit_data(const Skeleton &skel);
-void emit_prolog(OutputFile & o);
-void emit_start(OutputFile &o, size_t maxfill, size_t maxnmatch, const std::string &name,
+void emit_prolog(Output & o);
+void emit_start(Output &o, size_t maxfill, size_t maxnmatch, const std::string &name,
     size_t sizeof_key, size_t def, bool backup, bool accept, bool oldstyle_ctxmarker,
     const std::set<std::string> &stagnames, const std::set<std::string> &stagvars,
     const std::set<std::string> &mtagnames, const std::set<std::string> &mtagvars,
     bitmaps_t &bitmaps);
-void emit_end(OutputFile &o, const std::string &name, bool backup, bool oldstyle_ctxmarker,
+void emit_end(Output &o, const std::string &name, bool backup, bool oldstyle_ctxmarker,
     const std::set<std::string> &mtagnames);
-void emit_epilog(OutputFile &o, const std::set<std::string> &names);
-void emit_action(OutputFile &o, uint32_t ind, const DFA &dfa, size_t rid);
+void emit_epilog(Output &o, const std::set<std::string> &names);
+void emit_action(Output &o, uint32_t ind, const DFA &dfa, size_t rid);
 
 } // namespace re2c
 

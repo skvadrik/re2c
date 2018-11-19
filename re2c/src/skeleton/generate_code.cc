@@ -18,7 +18,7 @@
 namespace re2c
 {
 
-static void exact_uint(OutputFile &o, size_t width)
+static void exact_uint(Output &o, size_t width)
 {
     if (width == sizeof(char)) {
         o.ws("unsigned char");
@@ -33,7 +33,7 @@ static void exact_uint(OutputFile &o, size_t width)
     }
 }
 
-static void from_le(OutputFile &o, uint32_t ind, size_t size, const char *expr)
+static void from_le(Output &o, uint32_t ind, size_t size, const char *expr)
 {
     o.ws("\n").wind(ind).ws("/* from little-endian to host-endian */");
     o.ws("\n").wind(ind).ws("unsigned char *p = (unsigned char*)&").ws(expr).ws(";");
@@ -44,7 +44,7 @@ static void from_le(OutputFile &o, uint32_t ind, size_t size, const char *expr)
     o.ws(";");
 }
 
-void emit_prolog(OutputFile &o)
+void emit_prolog(Output &o)
 {
     o.ws("\n#include <stddef.h> /* size_t */");
     o.ws("\n#include <stdio.h>");
@@ -98,7 +98,7 @@ void emit_prolog(OutputFile &o)
     o.ws("\n");
 }
 
-void emit_start(OutputFile &o, size_t maxfill, size_t maxnmatch, const std::string &name,
+void emit_start(Output &o, size_t maxfill, size_t maxnmatch, const std::string &name,
     size_t sizeof_key, size_t def, bool backup, bool accept, bool oldstyle_ctxmarker,
     const std::set<std::string> &stagnames, const std::set<std::string> &stagvars,
     const std::set<std::string> &mtagnames, const std::set<std::string> &mtagvars,
@@ -425,7 +425,7 @@ void emit_start(OutputFile &o, size_t maxfill, size_t maxnmatch, const std::stri
     o.ws("\n");
 }
 
-void emit_end(OutputFile &o, const std::string &name, bool backup, bool oldstyle_ctxmarker,
+void emit_end(Output &o, const std::string &name, bool backup, bool oldstyle_ctxmarker,
     const std::set<std::string> &mtagnames)
 {
     o.ws("\n").wind(1).ws("}");
@@ -473,7 +473,7 @@ void emit_end(OutputFile &o, const std::string &name, bool backup, bool oldstyle
     o.ws("\n");
 }
 
-void emit_epilog(OutputFile &o, const std::set<std::string> &names)
+void emit_epilog(Output &o, const std::set<std::string> &names)
 {
     o.ws("\n").ws("int main()");
     o.ws("\n").ws("{");
@@ -489,7 +489,7 @@ void emit_epilog(OutputFile &o, const std::set<std::string> &names)
     o.ws("\n");
 }
 
-void emit_action(OutputFile &o, uint32_t ind, const DFA &dfa, size_t rid)
+void emit_action(Output &o, uint32_t ind, const DFA &dfa, size_t rid)
 {
     const std::string &name = dfa.name;
     const Rule &r = dfa.rules[rid];

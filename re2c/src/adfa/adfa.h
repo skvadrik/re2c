@@ -21,7 +21,7 @@ namespace re2c
 {
 
 struct opt_t;
-class OutputFile;
+class Output;
 struct Output;
 struct dfa_t;
 
@@ -109,8 +109,8 @@ private:
     void hoist_tags();
     void hoist_tags_and_skip(const opt_t *opts);
     void count_used_labels(std::set<label_t> &used, label_t start, label_t initial, bool force_start, bool fFlag) const;
-    void emit_body (OutputFile &, uint32_t &, const std::set<label_t> & used_labels, label_t initial) const;
-    void emit_dot(OutputFile &o, bool last_cond) const;
+    void emit_body (Output &, uint32_t &, const std::set<label_t> & used_labels, label_t initial) const;
+    void emit_dot(Output &o, bool last_cond) const;
 
     FORBID_COPY (DFA);
 };

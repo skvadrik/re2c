@@ -8,7 +8,7 @@
 
 namespace re2c {
 
-class OutputFile;
+class Output;
 struct Go;
 struct Span;
 struct State;
@@ -39,7 +39,7 @@ public:
     void insert(const Go *go, const State *s);
     const bitmap_t *find(const Go *go, const State *s) const;
     bool empty() const;
-    void gen(OutputFile &o, uint32_t ind);
+    void gen(Output &o, uint32_t ind);
     FORBID_COPY(bitmaps_t);
 };
 

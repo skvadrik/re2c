@@ -25,9 +25,9 @@
 namespace re2c
 {
 
-static void emit_state(OutputFile & o, uint32_t ind, const State * s, bool used_label);
+static void emit_state(Output & o, uint32_t ind, const State * s, bool used_label);
 
-void emit_state (OutputFile & o, uint32_t ind, const State * s, bool used_label)
+void emit_state (Output & o, uint32_t ind, const State * s, bool used_label)
 {
     const opt_t *opts = o.block().opts;
     if (used_label)
@@ -67,7 +67,7 @@ void DFA::count_used_labels (std::set<label_t> & used, label_t start,
     }
 }
 
-void DFA::emit_body(OutputFile &o, uint32_t& ind,
+void DFA::emit_body(Output &o, uint32_t& ind,
     const std::set<label_t> &used_labels, label_t initial) const
 {
     code_lines_t code;
@@ -91,7 +91,7 @@ void DFA::emit_body(OutputFile &o, uint32_t& ind,
     }
 }
 
-void DFA::emit_dot(OutputFile &o, bool last_cond) const
+void DFA::emit_dot(Output &o, bool last_cond) const
 {
     const opt_t *opts = o.block().opts;
     if (!opts->cFlag || !o.cond_goto) {
@@ -128,8 +128,7 @@ void DFA::emit_dot(OutputFile &o, bool last_cond) const
 
 void DFA::emit(Output & output, uint32_t& ind, bool isLastCond, bool& bPrologBrace)
 {
-    OutputFile &o = output.source;
-    OutputBlock &ob = o.block();
+    OutputBlock &ob = output.block();
     const opt_t *opts = ob.opts;
 
     std::set<std::string> stagnames, stagvars, mtagnames, mtagvars;
@@ -153,22 +152,22 @@ void DFA::emit(Output & output, uint32_t& ind, bool isLastCond, bool& bPrologBra
         ob.stags.insert(stagnames.begin(), stagnames.end());
         ob.mtags.insert(mtagnames.begin(), mtagnames.end());
     }
-    if (!cond.empty()) o.block().types.push_back(cond);
+    if (!cond.empty()) output.block().types.push_back(cond);
 
-    bool bProlog = (!opts->cFlag || !o.cond_goto);
+    bool bProlog = (!opts->cFlag || !output.cond_goto);
 
     // start_label points to the beginning of current re2c block
     // (prior to condition dispatch in '-c' mode)
     // it can forced by configuration 're2c:startlabel = <integer>;'
-    label_t start_label = o.label_counter.next ();
+    label_t start_label = output.label_counter.next ();
     // initial_label points to the beginning of DFA
     // in '-c' mode this is NOT equal to start_label
     label_t initial_label = bProlog && opts->cFlag
-        ? o.label_counter.next ()
+        ? output.label_counter.next ()
         : start_label;
     for (State * s = head; s; s = s->next)
     {
-        s->label = o.label_counter.next ();
+        s->label = output.label_counter.next ();
     }
     std::set<label_t> used_labels;
     count_used_labels (used_labels, start_label, initial_label,
@@ -179,29 +178,29 @@ void DFA::emit(Output & output, uint32_t& ind, bool isLastCond, bool& bPrologBra
     if (opts->target == TARGET_SKELETON) {
         if (output.skeletons.insert (name).second)
         {
-            emit_start(o, max_fill, max_nmatch, name, key_size, def_rule,
+            emit_start(output, max_fill, max_nmatch, name, key_size, def_rule,
                 need_backup, need_accept, oldstyle_ctxmarker,
                 stagnames, stagvars, mtagnames, mtagvars, bitmaps);
             uint32_t i = 2;
-            emit_body (o, i, used_labels, initial_label);
-            emit_end(o, name, need_backup, oldstyle_ctxmarker, mtagnames);
+            emit_body (output, i, used_labels, initial_label);
+            emit_end(output, name, need_backup, oldstyle_ctxmarker, mtagnames);
         }
     } else if (opts->target == TARGET_DOT) {
-        emit_dot(o, isLastCond);
+        emit_dot(output, isLastCond);
     } else {
         // Generate prolog
         if (bProlog)
         {
-            o.ws("\n").wdelay_line_info_output ();
+            output.ws("\n").wdelay_line_info_output ();
             if ((!opts->fFlag && ob.used_yyaccept)
             ||  (!opts->fFlag && opts->bEmitYYCh)
             ||  (opts->bFlag && !opts->cFlag && !bitmaps.empty())
-            ||  (opts->cFlag && !o.cond_goto && opts->gFlag)
-            ||  (opts->fFlag && !o.state_goto && opts->gFlag)
+            ||  (opts->cFlag && !output.cond_goto && opts->gFlag)
+            ||  (opts->fFlag && !output.state_goto && opts->gFlag)
             )
             {
                 bPrologBrace = true;
-                o.wind(ind++).ws("{\n");
+                output.wind(ind++).ws("{\n");
             }
             else if (ind == 0)
             {
@@ -211,32 +210,32 @@ void DFA::emit(Output & output, uint32_t& ind, bool isLastCond, bool& bPrologBra
             {
                 if (opts->bEmitYYCh)
                 {
-                    o.wind(ind).wstring(opts->yyctype).ws(" ").wstring(opts->yych).ws(";\n");
+                    output.wind(ind).wstring(opts->yyctype).ws(" ").wstring(opts->yych).ws(";\n");
                 }
-                o.wdelay_yyaccept_init (ind);
+                output.wdelay_yyaccept_init (ind);
             }
             else
             {
-                o.ws("\n");
+                output.ws("\n");
             }
         }
         if (opts->bFlag && !opts->cFlag)
         {
-            bitmaps.gen(o, ind);
+            bitmaps.gen(output, ind);
         }
         if (bProlog)
         {
-            o.wdelay_cond_table(ind);
-            o.wdelay_state_goto (ind);
+            output.wdelay_cond_table(ind);
+            output.wdelay_state_goto (ind);
             if (opts->cFlag)
             {
                 if (used_labels.count(start_label))
                 {
-                    o.wstring(opts->labelPrefix).wlabel(start_label).ws(":\n");
+                    output.wstring(opts->labelPrefix).wlabel(start_label).ws(":\n");
                 }
             }
-            o.wuser_start_label ();
-            o.wdelay_cond_goto(ind);
+            output.wuser_start_label ();
+            output.wdelay_cond_goto(ind);
         }
         if (opts->cFlag && !cond.empty())
         {
@@ -244,25 +243,25 @@ void DFA::emit(Output & output, uint32_t& ind, bool isLastCond, bool& bPrologBra
             {
                 std::string divider = opts->condDivider;
                 strrreplace(divider, opts->condDividerParam, cond);
-                o.wstring(divider).ws("\n");
+                output.wstring(divider).ws("\n");
             }
-            o.wstring(opts->condPrefix).wstring(cond).ws(":\n");
+            output.wstring(opts->condPrefix).wstring(cond).ws(":\n");
         }
         if (opts->cFlag && opts->bFlag && !bitmaps.empty())
         {
-            o.wind(ind++).ws("{\n");
-            bitmaps.gen(o, ind);
+            output.wind(ind++).ws("{\n");
+            bitmaps.gen(output, ind);
         }
         // Generate code
-        emit_body (o, ind, used_labels, initial_label);
+        emit_body (output, ind, used_labels, initial_label);
         if (opts->cFlag && opts->bFlag && !bitmaps.empty())
         {
-            o.wind(--ind).ws("}\n");
+            output.wind(--ind).ws("}\n");
         }
         // Generate epilog
         if ((!opts->cFlag || isLastCond) && bPrologBrace)
         {
-            o.wind(--ind).ws("}\n");
+            output.wind(--ind).ws("}\n");
         }
     }
 }

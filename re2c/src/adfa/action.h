@@ -12,7 +12,7 @@
 namespace re2c
 {
 
-class OutputFile;
+class Output;
 struct State;
 
 struct Initial

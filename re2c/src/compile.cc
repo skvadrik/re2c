@@ -45,13 +45,13 @@ static std::string make_name(const std::string &cond, uint32_t line)
 
 static smart_ptr<DFA> ast_to_dfa(const spec_t &spec, Output &output)
 {
-    const opt_t *opts = output.source.block().opts;
-    Warn &warn = output.source.warn;
+    const opt_t *opts = output.block().opts;
+    Warn &warn = output.warn;
     const std::vector<ASTRule> &rules = spec.rules;
     const size_t defrule = spec.defs.empty()
         ? Rule::NONE
         : rules.size() - 1;
-    const uint32_t line = output.source.block().line;
+    const uint32_t line = output.block().line;
     const std::string
         &cond = spec.name,
         name = make_name(cond, line),
@@ -111,9 +111,8 @@ static smart_ptr<DFA> ast_to_dfa(const spec_t &spec, Output &output)
     // accumulate global statistics from this particular DFA
     output.max_fill = std::max(output.max_fill, adfa->max_fill);
     output.max_nmatch = std::max(output.max_nmatch, adfa->max_nmatch);
-    if (adfa->need_accept)
-    {
-        output.source.block().used_yyaccept = true;
+    if (adfa->need_accept) {
+        output.block().used_yyaccept = true;
     }
 
     return make_smart_ptr(adfa);
@@ -125,25 +124,24 @@ void compile(Scanner &input, Output &output, Opt &opts)
     symtab_t symtab;
     const conopt_t *globopts = &opts.glob;
     const opt_t *ropts = NULL;
-    OutputFile &o = output.source;
     typedef std::vector<smart_ptr<DFA> > dfas_t;
 
-    o.header_mode(1);
-    o.new_block(opts);
-    o.wversion_time();
+    output.header_mode(1);
+    output.new_block(opts);
+    output.wversion_time();
 
-    o.header_mode(0);
-    o.new_block(opts);
-    o.wversion_time();
-    o.wdelay_line_info_input(input.get_cline(), input.get_fname());
+    output.header_mode(0);
+    output.new_block(opts);
+    output.wversion_time();
+    output.wdelay_line_info_input(input.get_cline(), input.get_fname());
 
     if (globopts->target == TARGET_SKELETON) {
-        emit_prolog(o);
+        emit_prolog(output);
     }
 
     for (;;) {
         // parse everything up to the next re2c block
-        Scanner::ParseMode mode = input.echo(o);
+        Scanner::ParseMode mode = input.echo(output);
         if (mode == Scanner::Stop) break;
         validate_mode(mode, globopts->rFlag, ropts, input);
 
@@ -153,26 +151,26 @@ void compile(Scanner &input, Output &output, Opt &opts)
             specs = rspecs;
             opts.restore(ropts);
             opts.reset_mapCodeName();
-            o.label_counter.reset();
-            o.fill_index = 0;
-            o.state_goto = false;
-            o.cond_goto = false;
+            output.label_counter.reset();
+            output.fill_index = 0;
+            output.state_goto = false;
+            output.cond_goto = false;
         }
         parse(input, specs, symtab, opts);
 
         // start new output block with accumulated options
-        o.new_block(opts);
+        output.new_block(opts);
 
         if (mode == Scanner::Rules) {
             // save AST and options for future use
             rspecs = specs;
-            ropts = o.block().opts;
+            ropts = output.block().opts;
         } else {
             validate_ast(specs, globopts->cFlag);
             normalize_ast(specs);
 
             // compile AST to DFA
-            o.block().line = input.get_cline();
+            output.block().line = input.get_cline();
             dfas_t dfas;
             for (specs_t::const_iterator i = specs.begin(); i != specs.end(); ++i) {
                 dfas.push_back(ast_to_dfa(*i, output));
@@ -180,17 +178,17 @@ void compile(Scanner &input, Output &output, Opt &opts)
 
             // compile DFA to code
             bool prolog = false;
-            uint32_t ind = o.block().opts->topIndent;
+            uint32_t ind = output.block().opts->topIndent;
             for (dfas_t::const_iterator i = dfas.begin(); i != dfas.end(); ++i) {
                 (*i)->emit(output, ind, (i + 1) == dfas.end(), prolog);
             }
         }
 
-        o.wdelay_line_info_input(input.get_cline(), input.get_fname());
+        output.wdelay_line_info_input(input.get_cline(), input.get_fname());
     }
 
     if (globopts->target == TARGET_SKELETON) {
-        emit_epilog (o, output.skeletons);
+        emit_epilog (output, output.skeletons);
     }
 
     AST::flist.clear();
